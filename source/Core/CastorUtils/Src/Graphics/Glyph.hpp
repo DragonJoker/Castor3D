@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CASTOR_GLYPH_H___
 #define ___CASTOR_GLYPH_H___
@@ -27,7 +8,7 @@ SOFTWARE.
 #include "Position.hpp"
 #include "Size.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -88,7 +69,7 @@ namespace Castor
 		 *\brief		Récupère le caractère de la glyphe
 		 *\return		La valeur
 		 */
-		inline char32_t GetCharacter()const
+		inline char32_t getCharacter()const
 		{
 			return m_character;
 		}
@@ -100,7 +81,7 @@ namespace Castor
 		 *\brief		Récupère les dimensions de la glyphe
 		 *\return		Les dimensions de la glyphe
 		 */
-		inline Size const & GetSize()const
+		inline Size const & getSize()const
 		{
 			return m_size;
 		}
@@ -110,7 +91,7 @@ namespace Castor
 		 *\~french
 		 *\return		La position de la glyphe par rapport au curseur.
 		 */
-		inline Position const & GetBearing()const
+		inline Position const & getBearing()const
 		{
 			return m_bearing;
 		}
@@ -122,7 +103,7 @@ namespace Castor
 		 *\brief		Récupère le nombre de pixels pour place la prchaine glyphe
 		 *\return		La valeur
 		 */
-		inline uint32_t GetAdvance()const
+		inline uint32_t getAdvance()const
 		{
 			return m_advance;
 		}
@@ -134,7 +115,7 @@ namespace Castor
 		 *\brief		Récupère l'image de la glyphe
 		 *\return		Une référence constante sur l'image de la glyphe
 		 */
-		inline ByteArray const & GetBitmap()const
+		inline ByteArray const & getBitmap()const
 		{
 			return m_bitmap;
 		}
@@ -161,7 +142,7 @@ namespace Castor
 	 */
 	inline bool operator==( Glyph const & p_lhs, Glyph const & p_rhs )
 	{
-		return p_lhs.GetCharacter() == p_rhs.GetCharacter();
+		return p_lhs.getCharacter() == p_rhs.getCharacter();
 	}
 	/**
 	 *\~english
@@ -173,7 +154,7 @@ namespace Castor
 	 */
 	inline bool operator!=( Glyph const & p_lhs, Glyph const & p_rhs )
 	{
-		return p_lhs.GetCharacter() != p_rhs.GetCharacter();
+		return p_lhs.getCharacter() != p_rhs.getCharacter();
 	}
 	/**
 	 *\~english
@@ -185,7 +166,7 @@ namespace Castor
 	 */
 	inline bool operator<( Glyph const & p_lhs, Glyph const & p_rhs )
 	{
-		return p_lhs.GetCharacter() < p_rhs.GetCharacter();
+		return p_lhs.getCharacter() < p_rhs.getCharacter();
 	}
 	/**
 	 *\~english
@@ -197,7 +178,7 @@ namespace Castor
 	 */
 	inline bool operator>( Glyph const & p_lhs, Glyph const & p_rhs )
 	{
-		return p_lhs.GetCharacter() > p_rhs.GetCharacter();
+		return p_lhs.getCharacter() > p_rhs.getCharacter();
 	}
 	/**
 	 *\~english
@@ -209,7 +190,7 @@ namespace Castor
 	 */
 	inline bool operator<=( Glyph const & p_lhs, Glyph const & p_rhs )
 	{
-		return p_lhs.GetCharacter() <= p_rhs.GetCharacter();
+		return p_lhs.getCharacter() <= p_rhs.getCharacter();
 	}
 	/**
 	 *\~english
@@ -221,7 +202,7 @@ namespace Castor
 	 */
 	inline bool operator>=( Glyph const & p_lhs, Glyph const & p_rhs )
 	{
-		return p_lhs.GetCharacter() >= p_rhs.GetCharacter();
+		return p_lhs.getCharacter() >= p_rhs.getCharacter();
 	}
 }
 

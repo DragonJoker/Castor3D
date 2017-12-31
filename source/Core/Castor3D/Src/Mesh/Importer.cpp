@@ -8,144 +8,182 @@
 #include "Material/Pass.hpp"
 #include "Mesh/Mesh.hpp"
 #include "Mesh/Submesh.hpp"
+#include "Mesh/Vertex.hpp"
 #include "Scene/Geometry.hpp"
 #include "Scene/Scene.hpp"
 #include "Texture/TextureImage.hpp"
 #include "Texture/TextureLayout.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-	Importer::Importer( Engine & p_engine )
-		: OwnedBy< Engine >( p_engine )
+	Importer::Importer( Engine & engine )
+		: OwnedBy< Engine >( engine )
 		, m_fileName()
 	{
 	}
 
-	bool Importer::ImportScene( Scene & p_scene, Path const & p_fileName, Parameters const & p_parameters )
+	bool Importer::importScene( Scene & scene
+		, Path const & fileName
+		, Parameters const & parameters )
 	{
-		m_fileName = p_fileName;
-		m_filePath = m_fileName.GetPath();
-		m_parameters = p_parameters;
+		bool splitSubmeshes = false;
+		m_parameters.get( cuT( "split_mesh" ), splitSubmeshes );
+		m_fileName = fileName;
+		m_filePath = m_fileName.getPath();
+		m_parameters = parameters;
 		m_nodes.clear();
 		m_geometries.clear();
-		bool l_return = DoImportScene( p_scene );
+		bool result = doImportScene( scene );
 
-		if ( l_return )
+		if ( result )
 		{
-			for ( auto l_it : m_geometries )
+			for ( auto it : m_geometries )
 			{
-				auto l_mesh = l_it.second->GetMesh();
-				l_mesh->ComputeContainers();
-				l_mesh->ComputeNormals();
+				auto mesh = it.second->getMesh();
+				mesh->computeContainers();
+				mesh->computeNormals();
 
-				for ( auto l_submesh : *l_mesh )
+				for ( auto submesh : *mesh )
 				{
-					p_scene.GetListener().PostEvent( MakeInitialiseEvent( *l_submesh ) );
+					scene.getListener().postEvent( makeInitialiseEvent( *submesh ) );
 				}
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
-	bool Importer::ImportMesh( Mesh & p_mesh, Path const & p_fileName, Parameters const & p_parameters, bool p_initialise )
+	bool Importer::importMesh( Mesh & mesh
+		, Path const & fileName
+		, Parameters const & parameters
+		, bool initialise )
 	{
-		m_fileName = p_fileName;
-		m_filePath = m_fileName.GetPath();
-		m_parameters = p_parameters;
+		bool splitSubmeshes = false;
+		m_parameters.get( cuT( "split_mesh" ), splitSubmeshes );
+		m_fileName = fileName;
+		m_filePath = m_fileName.getPath();
+		m_parameters = parameters;
 		m_nodes.clear();
 		m_geometries.clear();
-		bool l_return = true;
+		bool result = true;
 
-		if ( !p_mesh.GetSubmeshCount() )
+		if ( !mesh.getSubmeshCount() )
 		{
-			l_return = DoImportMesh( p_mesh );
+			result = doImportMesh( mesh );
 
-			if ( l_return && p_initialise )
+			if ( result && initialise )
 			{
-				p_mesh.ComputeContainers();
+				float scale = 1.0f;
 
-				for ( auto l_submesh : p_mesh )
+				if ( m_parameters.get( cuT( "rescale" ), scale )
+					&& std::abs( scale - 1.0f ) > 0.01f )
 				{
-					p_mesh.GetScene()->GetListener().PostEvent( MakeInitialiseEvent( *l_submesh ) );
+					for ( auto submesh : mesh )
+					{
+						for ( auto & vertex : submesh->getPoints() )
+						{
+							Coords3r position;
+							Vertex::getPosition( vertex, position );
+							position *= scale;
+						}
+					}
+				}
+
+				mesh.computeContainers();
+
+				for ( auto submesh : mesh )
+				{
+					mesh.getScene()->getListener().postEvent( makeInitialiseEvent( *submesh ) );
 				}
 			}
 		}
 		else
 		{
-			for ( auto l_submesh : p_mesh )
+			for ( auto submesh : mesh )
 			{
-				l_submesh->Ref( l_submesh->GetDefaultMaterial() );
+				submesh->setMaterial( nullptr, submesh->getDefaultMaterial(), false );
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
-	TextureUnitSPtr Importer::LoadTexture( Path const & p_path, Pass & p_pass, TextureChannel p_channel )const
+	TextureUnitSPtr Importer::loadTexture( Path const & path
+		, Pass & pass
+		, TextureChannel channel )const
 	{
-		TextureUnitSPtr l_unit;
-		Path l_relative;
-		Path l_folder;
+		TextureUnitSPtr unit;
+		Path relative;
+		Path folder;
 
-		if ( File::FileExists( p_path ) )
+		if ( File::fileExists( path ) )
 		{
-			l_relative = p_path;
+			relative = path;
+		}
+		else if ( File::fileExists( m_filePath / path ) )
+		{
+			auto fullPath = m_filePath / path;
+			folder = fullPath.getPath();
+			relative = fullPath.getFileName( true );;
 		}
 		else
 		{
-			PathArray l_files;
-			String l_fileName = p_path.GetFileName( true );
-			File::ListDirectoryFiles( m_filePath, l_files, true );
-			auto l_it = std::find_if( l_files.begin(), l_files.end(), [&l_fileName]( Path const & p_file )
-			{
-				return p_file.GetFileName( true ) == l_fileName
-					   || p_file.GetFileName( true ).find( l_fileName ) == 0;
-			} );
+			PathArray files;
+			String fileName = path.getFileName( true );
+			File::listDirectoryFiles( m_filePath, files, true );
+			auto it = std::find_if( files.begin()
+				, files.end()
+				, [&fileName]( Path const & p_file )
+				{
+					return p_file.getFileName( true ) == fileName
+						   || p_file.getFileName( true ).find( fileName ) == 0;
+				} );
 
-			l_folder = m_filePath;
+			folder = m_filePath;
 
-			if ( l_it != l_files.end() )
+			if ( it != files.end() )
 			{
-				l_relative = *l_it;
-				l_relative = Path{ l_relative.substr( l_folder.size() + 1 ) };
+				relative = *it;
+				relative = Path{ relative.substr( folder.size() + 1 ) };
 			}
 			else
 			{
-				l_relative = Path{ l_fileName };
+				relative = Path{ fileName };
 			}
 		}
 
-		if ( File::FileExists( l_folder / l_relative ) )
+		if ( File::fileExists( folder / relative ) )
 		{
 			try
 			{
-				TextureUnitSPtr l_unit = std::make_shared< TextureUnit >( *p_pass.GetOwner()->GetEngine() );
-				l_unit->SetAutoMipmaps( true );
-				auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead );
-				l_texture->SetSource( l_folder, l_relative );
-				l_unit->SetTexture( l_texture );
-				l_unit->SetChannel( p_channel );
-				p_pass.AddTextureUnit( l_unit );
+				TextureUnitSPtr unit = std::make_shared< TextureUnit >( *pass.getOwner()->getEngine() );
+				unit->setAutoMipmaps( true );
+				auto texture = getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
+					, AccessType::eRead
+					, AccessType::eRead );
+				texture->setSource( folder, relative );
+				unit->setTexture( texture );
+				unit->setChannel( channel );
+				pass.addTextureUnit( unit );
 			}
 			catch ( std::exception & p_exc )
 			{
-				l_unit.reset();
-				Logger::LogWarning( StringStream() << cuT( "Error encountered while loading texture file " ) << p_path << cuT( ":\n" ) << p_exc.what() );
+				unit.reset();
+				Logger::logWarning( StringStream() << cuT( "Error encountered while loading texture file " ) << path << cuT( ":\n" ) << p_exc.what() );
 			}
 			catch ( ... )
 			{
-				l_unit.reset();
-				Logger::LogWarning( cuT( "Unknown error encountered while loading texture file " ) + p_path );
+				unit.reset();
+				Logger::logWarning( cuT( "Unknown error encountered while loading texture file " ) + path );
 			}
 		}
 		else
 		{
-			Logger::LogWarning( StringStream() << cuT( "Couldn't load texture file " ) << p_path << cuT( ":\nFile does not exist." ) );
+			Logger::logWarning( StringStream() << cuT( "Couldn't load texture file " ) << path << cuT( ":\nFile does not exist." ) );
 		}
 
-		return l_unit;
+		return unit;
 	}
 }

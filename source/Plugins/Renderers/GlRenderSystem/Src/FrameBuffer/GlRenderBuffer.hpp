@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___GL_RENDER_BUFFER_H___
 #define ___GL_RENDER_BUFFER_H___
@@ -60,7 +41,7 @@ namespace GlRender
 		 *\param[in]	p_internal		Le format OpenGL des pixels.
 		 *\param[in]	p_renderBuffer	Le tampon de rendu parent.
 		 */
-		GlRenderBuffer( OpenGl & p_gl, GlInternal p_internal, Castor3D::RenderBuffer & p_renderBuffer );
+		GlRenderBuffer( OpenGl & p_gl, GlInternal p_internal, castor3d::RenderBuffer & p_renderBuffer );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -78,14 +59,14 @@ namespace GlRender
 		 *\param[in]	p_size	Les dimensions.
 		 *\return		\p true si tout s'est bien passà.
 		 */
-		bool Initialise( Castor::Size const & p_size );
+		bool initialise( castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Cleans the render buffer up.
 		 *\~french
 		 *\brief		Nettoie le tampon de rendu.
 		 */
-		void Cleanup();
+		void cleanup();
 		/**
 		 *\~english
 		 *\brief		Resizes the render buffer to given size.
@@ -96,22 +77,22 @@ namespace GlRender
 		 *\param[in]	p_size	Les dimensions.
 		 *\return		\p true si tout s'est bien passà.
 		 */
-		bool Resize( Castor::Size const & p_size );
+		bool resize( castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\return		The OpenGL pixels format.
 		 *\~french
 		 *\return		Le format OpenGL des pixels.
 		 */
-		inline GlInternal GetInternal()const
+		inline GlInternal getInternal()const
 		{
 			return m_internal;
 		}
 
 	private:
 		GlInternal m_internal;
-		Castor::Size m_size;
-		Castor3D::RenderBuffer & m_renderBuffer;
+		castor::Size m_size;
+		castor3d::RenderBuffer & m_renderBuffer;
 	};
 }
 

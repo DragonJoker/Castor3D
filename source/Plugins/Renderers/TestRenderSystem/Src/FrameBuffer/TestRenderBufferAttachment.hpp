@@ -1,25 +1,4 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
+/* See LICENSE file in root folder */
 #ifndef ___TRS_RENDER_BUFFER_ATTACHMENT_H___
 #define ___TRS_RENDER_BUFFER_ATTACHMENT_H___
 
@@ -30,7 +9,7 @@ SOFTWARE.
 namespace TestRender
 {
 	class TestRenderBufferAttachment
-		: public Castor3D::RenderBufferAttachment
+		: public castor3d::RenderBufferAttachment
 	{
 	public:
 		/**
@@ -43,7 +22,7 @@ namespace TestRender
 		 *\para[in]		p_gl			Les APIs OpenGL.
 		 *\param[in]	p_renderBuffer	Le tampon de rendu.
 		 */
-		TestRenderBufferAttachment( Castor3D::RenderBufferSPtr p_renderBuffer );
+		explicit TestRenderBufferAttachment( castor3d::RenderBufferSPtr p_renderBuffer );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -54,17 +33,34 @@ namespace TestRender
 
 	private:
 		/**
-		 *\copydoc		Castor3D::FrameBufferAttachment::DoAttach
+		 *\copydoc		castor3d::FrameBufferAttachment::doDownload
 		 */
-		void DoAttach()override;
+		void doDownload( castor::Position const & p_offset
+			, castor::PxBufferBase & p_buffer )const override;
 		/**
-		 *\copydoc		Castor3D::FrameBufferAttachment::DoDetach
+		 *\copydoc		castor3d::FrameBufferAttachment::doAttach
 		 */
-		void DoDetach()override;
+		void doAttach()override;
 		/**
-		 *\copydoc		Castor3D::FrameBufferAttachment::DoClear
+		 *\copydoc		castor3d::FrameBufferAttachment::doDetach
 		 */
-		void DoClear( Castor3D::BufferComponent p_component )const override;
+		void doDetach()override;
+		/**
+		 *\copydoc		castor3d::FrameBufferAttachment::doClear
+		 */
+		void doClear( castor::RgbaColour const & p_colour )const override;
+		/**
+		 *\copydoc		castor3d::FrameBufferAttachment::doClear
+		 */
+		void doClear( float p_depth )const override;
+		/**
+		 *\copydoc		castor3d::FrameBufferAttachment::doClear
+		 */
+		void doClear( int p_stencil )const override;
+		/**
+		*\copydoc		castor3d::FrameBufferAttachment::doClear
+		*/
+		void doClear( float p_depth, int p_stencil )const override;
 	};
 }
 

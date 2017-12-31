@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CASTOR_UTILS_PREREQUISITES_H___
 #define ___CASTOR_UTILS_PREREQUISITES_H___
@@ -52,16 +33,16 @@ SOFTWARE.
 #	undef abs
 #endif
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author Sylvain DOREMUS
 	\version 0.6.1.0
 	\date 19/10/2011
 	\~english
-	\brief Castor::Loader supported file types enumeration
+	\brief castor::Loader supported file types enumeration
 	\~french
-	\brief Enumération des types de fichier supportés par Castor::Loader
+	\brief Enumération des types de fichier supportés par castor::Loader
 	*/
 	enum class FileType
 		: uint8_t
@@ -125,12 +106,24 @@ namespace Castor
 		//!\~english	24 bits 888 BGR.
 		//!\~french		24 bits 888 BGR.
 		eB8G8R8,
+		//!\~english	24 bits 888 RGB in sRGB colour space.
+		//!\~french		24 bits 888 RGB dans l'espace de couleurs sRGB.
+		eR8G8B8_SRGB,
+		//!\~english	24 bits 888 BGR in sRGB colour space.
+		//!\~french		24 bits 888 BGR dans l'espace de couleurs sRGB.
+		eB8G8R8_SRGB,
 		//!\~english	32 bits 8888 ARGB.
 		//!\~french		32 bits 8888 ARGB.
 		eA8R8G8B8,
 		//!\~english	32 bits 8888 ABGR.
 		//!\~french		32 bits 8888 ABGR.
 		eA8B8G8R8,
+		//!\~english	32 bits 8888 ARGB in sRGB colour space.
+		//!\~french		32 bits 8888 sRGB dans l'espace de couleurs sRGB.
+		eA8R8G8B8_SRGB,
+		//!\~english	32 bits 8888 ABGR in sRGB colour space.
+		//!\~french		32 bits 8888 ABGR dans l'espace de couleurs sRGB.
+		eA8B8G8R8_SRGB,
 		//!\~english	Half float RGB.
 		//!\~french		Half float RGB.
 		eRGB16F,
@@ -214,17 +207,24 @@ namespace Castor
 	};
 
 #if CASTOR_USE_DOUBLE
-	typedef double real;
+	using real = double;
 #else
-	typedef float real;
+	using real = float;
 #endif
 
-	typedef std::basic_string< xchar > String;
-	typedef std::basic_regex< xchar > Regex;
-	typedef std::regex_iterator< String::const_iterator > SRegexIterator;
-	typedef std::match_results< String::const_iterator > MatchResults;
-	typedef std::basic_stringstream< xchar > StringStream;
-	typedef std::basic_ostream< xchar > OutputStream;
+	using String = std::basic_string< xchar >;
+	using Regex = std::basic_regex< xchar >;
+	using RegexIterator = std::regex_iterator< String::const_iterator >;
+	using MatchResults = std::match_results< String::const_iterator >;
+	using StringStream = std::basic_stringstream< xchar >;
+	using OutputStringStream = std::basic_ostringstream< xchar >;
+	using InputStringStream = std::basic_istringstream< xchar >;
+	using OutputStream = std::basic_ostream< xchar >;
+	using InputStream = std::basic_istream< xchar >;
+	using Seconds = std::chrono::seconds;
+	using Milliseconds = std::chrono::milliseconds;
+	using Microseconds = std::chrono::microseconds;
+	using Nanoseconds = std::chrono::nanoseconds;
 
 	/*!
 	\author		Sylvain DOREMUS
@@ -248,14 +248,15 @@ namespace Castor
 	template< typename T, typename Key >
 	class Collection;
 	template< uint8_t Dimension >
-	class ContainerBox;
+	class BoundingContainer;
 	template< typename T, uint32_t Count >
 	class Coords;
-	class CubeBox;
+	class BoundingBox;
 	class File;
 	class FileParser;
 	class FileParserContext;
-	template< typename FlagType, typename BaseType = typename BaseTypeFromSize< sizeof( FlagType ) >::Type >
+	template< typename FlagType
+		, typename BaseType = typename BaseTypeFromSize< sizeof( FlagType ) >::Type >
 	class FlagCombination;
 	class Font;
 	class FontCache;
@@ -265,9 +266,13 @@ namespace Castor
 	class ColourComponent;
 	class HdrColourComponent;
 	template< typename ComponentType >
-	class ColourT;
-	using Colour = ColourT< ColourComponent >;
-	using HdrColour = ColourT< HdrColourComponent >;
+	class RgbColourT;
+	template< typename ComponentType >
+	class RgbaColourT;
+	using RgbColour = RgbColourT< ColourComponent >;
+	using RgbaColour = RgbaColourT< ColourComponent >;
+	using HdrRgbColour = RgbColourT< HdrColourComponent >;
+	using HdrRgbaColour = RgbaColourT< HdrColourComponent >;
 	template< typename T >
 	class Line2D;
 	template< typename T >
@@ -283,7 +288,6 @@ namespace Castor
 	class ParserParameterBase;
 	template< PixelFormat FT >
 	class Pixel;
-	template< typename T >
 	class PlaneEquation;
 	template< typename T, uint32_t Count >
 	class Point;
@@ -297,18 +301,18 @@ namespace Castor
 	template< typename T >
 	class Resource;
 	class Size;
-	class SphereBox;
+	class BoundingSphere;
 	class SphericalVertex;
 	template< typename T, uint32_t Rows >
 	class SquareMatrix;
 	class TextFile;
 	template< class T >
 	class TextLoader;
-	template< class Obj,
-			  class Key,
-			  class PtrType = std::shared_ptr< Obj >,
-			  typename PFNCreate = std::function< PtrType() >,
-			  class Predicate = std::less< Key > >
+	template< class Obj
+		, class Key
+		, class PtrType = std::shared_ptr< Obj >
+		, typename PFNCreate = std::function< PtrType() >
+		, class Predicate = std::less< Key > >
 	class Factory;
 	class Path;
 	class DynamicLibrary;
@@ -324,7 +328,7 @@ namespace Castor
 	\~french
 	\brief		Typedef sur un buffer de pixels au format A8R8G8B8
 	*/
-	typedef PxBuffer< PixelFormat::eA8R8G8B8 > PixelBuffer;
+	using PixelBuffer = PxBuffer< PixelFormat::eA8R8G8B8 >;
 
 	template< typename T > using Point2 = Point< T, 2 >;
 	template< typename T > using Point3 = Point< T, 3 >;
@@ -333,6 +337,10 @@ namespace Castor
 	template< typename T > using Coords2 = Coords< T, 2 >;
 	template< typename T > using Coords3 = Coords< T, 3 >;
 	template< typename T > using Coords4 = Coords< T, 4 >;
+
+	template< typename T > using Matrix2x2 = SquareMatrix< T, 2 >;
+	template< typename T > using Matrix3x3 = SquareMatrix< T, 3 >;
+	template< typename T > using Matrix4x4 = SquareMatrix< T, 4 >;
 
 	using Angle = AngleT< real >;
 	using Quaternion = QuaternionT< real >;
@@ -500,8 +508,8 @@ namespace Castor
 
 	DECLARE_SMART_PTR( Quaternion );
 	DECLARE_SMART_PTR( SphericalVertex );
-	DECLARE_SMART_PTR( CubeBox );
-	DECLARE_SMART_PTR( SphereBox );
+	DECLARE_SMART_PTR( BoundingBox );
+	DECLARE_SMART_PTR( BoundingSphere );
 	DECLARE_SMART_PTR( Image );
 	DECLARE_SMART_PTR( Font );
 	DECLARE_SMART_PTR( PxBufferBase );
@@ -540,20 +548,20 @@ namespace Castor
 		bool m_newLine;
 	};
 	//! The message queue.
-	typedef std::deque< Message > MessageQueue;
+	using MessageQueue = std::deque< Message >;
 	/**
 	 *\~english
-	 *\brief		Logging callback function
-	 *\param[in]	p_pCaller	Pointer to the caller
-	 *\param[in]	p_strLog	The logged text
-	 *\param[in]	p_eLogType	The log type
+	 *\brief		Logging callback function.
+	 *\param[in]	text	The logged text.
+	 *\param[in]	type	The log type.
+	 *\param[in]	newLine	Tells if we add the end line character.
 	 *\~french
-	 *\brief		Fonction de callback de log
-	 *\param[in]	p_pCaller	Pointeur sur l'appelant
-	 *\param[in]	p_strLog	Le texte écrit
-	 *\param[in]	p_eLogType	Le type de log
+	 *\brief		Fonction de callback de log.
+	 *\param[in]	text	Le texte écrit.
+	 *\param[in]	type	Le type de log.
+	 *\param[in]	newLine	Dit si on ajoute le caractère de fin de ligne.
 	 */
-	typedef std::function< void ( String const & p_strLog, LogType p_eLogType, bool p_newLine ) > LogCallback;
+	using LogCallback = std::function< void ( String const & text, LogType type, bool newLine ) >;
 
 	/*!
 	\~english
@@ -581,29 +589,29 @@ namespace Castor
 	template< typename Object > class FixedGrowingSizeMarkedMemoryData;
 }
 
-constexpr Castor::real operator "" _r( long double p_value )
+constexpr castor::real operator "" _r( long double value )
 {
-	return Castor::real( p_value );
+	return castor::real( value );
 }
 
-constexpr std::chrono::seconds operator "" _s( unsigned long long p_value )
+constexpr castor::Seconds operator "" _s( unsigned long long value )
 {
-	return std::chrono::seconds( int64_t( p_value ) );
+	return castor::Seconds( int64_t( value ) );
 }
 
-constexpr std::chrono::milliseconds operator "" _ms( unsigned long long p_value )
+constexpr castor::Milliseconds operator "" _ms( unsigned long long value )
 {
-	return std::chrono::milliseconds( int64_t( p_value ) );
+	return castor::Milliseconds( int64_t( value ) );
 }
 
-constexpr std::chrono::microseconds operator "" _us( unsigned long long p_value )
+constexpr castor::Microseconds operator "" _us( unsigned long long value )
 {
-	return std::chrono::microseconds( int64_t( p_value ) );
+	return castor::Microseconds( int64_t( value ) );
 }
 
-constexpr std::chrono::nanoseconds operator "" _ns( unsigned long long p_value )
+constexpr castor::Nanoseconds operator "" _ns( unsigned long long value )
 {
-	return std::chrono::nanoseconds( int64_t( p_value ) );
+	return castor::Nanoseconds( int64_t( value ) );
 }
 
 #include "Miscellaneous/Debug.hpp"

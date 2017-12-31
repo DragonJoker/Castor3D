@@ -5,7 +5,9 @@
 #include "Event/Frame/FrameListener.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Event/Frame/CleanupEvent.hpp"
+#include "Material/Pass.hpp"
 #include "Render/RenderSystem.hpp"
+#include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
 #include "Shader/UniformBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -14,62 +16,68 @@
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureImage.hpp"
 
-using namespace Castor;
+#include <Design/ArrayView.hpp>
 
-namespace Castor3D
+using namespace castor;
+
+namespace castor3d
 {
 	template<> const String ObjectCacheTraits< Light, String >::Name = cuT( "Light" );
 
 	namespace
 	{
-		struct LightInitialiser
+		class LightInitialiser
 		{
-			LightInitialiser( LightsMap & p_typeSortedLights )
+		public:
+			explicit LightInitialiser( LightsMap & p_typeSortedLights )
 				: m_typeSortedLights{ p_typeSortedLights }
 			{
 			}
 
 			inline void operator()( LightSPtr p_element )
 			{
-				auto l_index = size_t( p_element->GetLightType() );
-				auto l_it = std::find( m_typeSortedLights[l_index].begin()
-					, m_typeSortedLights[l_index].end()
+				auto index = size_t( p_element->getLightType() );
+				auto it = std::find( m_typeSortedLights[index].begin()
+					, m_typeSortedLights[index].end()
 					, p_element );
 
-				if ( l_it == m_typeSortedLights[l_index].end() )
+				if ( it == m_typeSortedLights[index].end() )
 				{
-					m_typeSortedLights[l_index].push_back( p_element );
+					m_typeSortedLights[index].push_back( p_element );
 				}
 			}
 
+		private:
 			LightsMap & m_typeSortedLights;
 		};
 
-		struct LightCleaner
+		class LightCleaner
 		{
-			LightCleaner( LightsMap & p_typeSortedLights )
+		public:
+			explicit LightCleaner( LightsMap & p_typeSortedLights )
 				: m_typeSortedLights{ p_typeSortedLights }
 			{
 			}
 
 			inline void operator()( LightSPtr p_element )
 			{
-				auto l_index = size_t( p_element->GetLightType() );
-				auto l_it = std::find( m_typeSortedLights[l_index].begin()
-					, m_typeSortedLights[l_index].end()
+				auto index = size_t( p_element->getLightType() );
+				auto it = std::find( m_typeSortedLights[index].begin()
+					, m_typeSortedLights[index].end()
 					, p_element );
 
-				if ( l_it != m_typeSortedLights[l_index].end() )
+				if ( it != m_typeSortedLights[index].end() )
 				{
-					m_typeSortedLights[l_index].erase( l_it );
+					m_typeSortedLights[index].erase( it );
 				}
 			}
 
+		private:
 			LightsMap & m_typeSortedLights;
 		};
 	}
 
-	ObjectCache< Light, Castor::String >::ObjectCache( Engine & p_engine
+	ObjectCache< Light, castor::String >::ObjectCache( Engine & engine
 		, Scene & p_scene
 		, SceneNodeSPtr p_rootNode
 		, SceneNodeSPtr p_rootCameraNode
@@ -80,7 +88,7 @@ namespace Castor3D
 		, Merger && p_merge
 		, Attacher && p_attach
 		, Detacher && p_detach )
-		: MyObjectCache( p_engine
+		: MyObjectCache( engine
 			, p_scene
 			, p_rootNode
 			, p_rootCameraNode
@@ -91,72 +99,175 @@ namespace Castor3D
 			, std::move( p_merge )
 			, std::move( p_attach )
 			, std::move( p_detach ) )
-		, m_lightsTexture{ std::make_shared< TextureUnit >( *GetEngine() ) }
+		, m_lightsTexture{ *getEngine() }
 	{
 	}
 
-	ObjectCache< Light, Castor::String >::~ObjectCache()
+	ObjectCache< Light, castor::String >::~ObjectCache()
 	{
-		m_lightsTexture.reset();
 	}
 
-	void ObjectCache< Light, Castor::String >::Initialise()
+	void ObjectCache< Light, castor::String >::initialise()
 	{
-		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eBuffer
+		auto texture = getEngine()->getRenderSystem()->createTexture( TextureType::eBuffer
 			, AccessType::eWrite
 			, AccessType::eRead
 			, PixelFormat::eRGBA32F
 			, Size( 1000, 1 ) );
-		l_texture->GetImage().InitialiseSource();
-		SamplerSPtr l_sampler = GetEngine()->GetLightsSampler();
-		m_lightsTexture->SetAutoMipmaps( false );
-		m_lightsTexture->SetSampler( l_sampler );
-		m_lightsTexture->SetTexture( l_texture );
-		m_scene.GetListener().PostEvent( MakeInitialiseEvent( *m_lightsTexture ) );
+		texture->getImage().initialiseSource();
+		SamplerSPtr sampler = getEngine()->getLightsSampler();
+		m_lightsTexture.setAutoMipmaps( false );
+		m_lightsTexture.setSampler( sampler );
+		m_lightsTexture.setTexture( texture );
+		m_lightsTexture.setIndex( LightBufferIndex );
+		m_scene.getListener().postEvent( makeInitialiseEvent( m_lightsTexture ) );
+		m_lightsBuffer = texture->getImage().getBuffer();
 	}
 
-	void ObjectCache< Light, Castor::String >::Cleanup()
+	void ObjectCache< Light, castor::String >::cleanup()
 	{
-		m_scene.GetListener().PostEvent( MakeCleanupEvent( *m_lightsTexture ) );
-		MyObjectCache::Cleanup();
+		m_scene.getListener().postEvent( makeCleanupEvent( m_lightsTexture ) );
+		m_dirtyLights.clear();
+		m_connections.clear();
+		MyObjectCache::cleanup();
 	}
 
-	void ObjectCache< Light, Castor::String >::UpdateLights()const
+	ObjectCache< Light, castor::String >::ElementPtr ObjectCache< Light, castor::String >::add( Key const & p_name, ElementPtr p_element )
 	{
-		auto l_layout = m_lightsTexture->GetTexture();
+		ElementPtr result{ p_element };
 
-		if ( l_layout )
+		if ( p_element )
 		{
-			auto const & l_image = l_layout->GetImage();
-			auto l_buffer = l_image.GetBuffer();
-			int l_index = 0;
+			auto lock = castor::makeUniqueLock( m_elements );
 
-			for ( auto l_lights : m_typeSortedLights )
+			if ( m_elements.has( p_name ) )
 			{
-				for ( auto l_light : l_lights )
-				{
-					l_light->Bind( *l_buffer, l_index++ );
-				}
+				castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << p_name );
+				result = m_elements.find( p_name );
+				m_dirtyLights.emplace_back( result.get() );
+				m_connections.emplace( result.get()
+					, result->onChanged.connect( std::bind( &ObjectCache< Light, String >::onLightChanged
+						, this
+						, std::placeholders::_1 ) ) );
 			}
-
-			auto l_locked = l_layout->Lock( AccessType::eWrite );
-
-			if ( l_locked )
+			else
 			{
-				memcpy( l_locked, l_image.GetBuffer()->const_ptr(), l_image.GetBuffer()->size() );
+				m_elements.insert( p_name, p_element );
+				onChanged();
 			}
+		}
+		else
+		{
+			castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_NULL_OBJECT << getObjectTypeName() << cuT( ": " ) );
+		}
 
-			l_layout->Unlock( true );
+		return result;
+	}
+
+	ObjectCache< Light, castor::String >::ElementPtr ObjectCache< Light, String >::add( Key const & p_name, SceneNodeSPtr p_parent, LightType p_type )
+	{
+		auto lock = castor::makeUniqueLock( m_elements );
+		ElementPtr result;
+
+		if ( !m_elements.has( p_name ) )
+		{
+			result = m_produce( p_name, p_parent, p_type );
+			m_initialise( result );
+			m_elements.insert( p_name, result );
+			m_attach( result, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
+			castor::Logger::logDebug( castor::StringStream() << INFO_CACHE_CREATED_OBJECT << getObjectTypeName() << cuT( ": " ) << p_name );
+			m_dirtyLights.emplace_back( result.get() );
+			m_connections.emplace( result.get()
+				, result->onChanged.connect( std::bind( &ObjectCache< Light, String >::onLightChanged
+					, this
+					, std::placeholders::_1 ) ) );
+			onChanged();
+		}
+		else
+		{
+			result = m_elements.find( p_name );
+			castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << p_name );
+		}
+
+		return result;
+	}
+
+	void ObjectCache< Light, castor::String >::remove( Key const & p_name )
+	{
+		auto lock = castor::makeUniqueLock( m_elements );
+
+		if ( m_elements.has( p_name ) )
+		{
+			auto element = m_elements.find( p_name );
+			m_detach( element );
+			m_connections.erase( element.get() );
+			m_elements.erase( p_name );
+			onChanged();
 		}
 	}
 
-	void ObjectCache< Light, Castor::String >::BindLights()const
+	void ObjectCache< Light, castor::String >::update()
 	{
-		m_lightsTexture->Bind();
+		if ( !m_dirtyLights.empty() )
+		{
+			LightsRefArray dirty;
+			std::swap( m_dirtyLights, dirty );
+			auto end = std::unique( dirty.begin(), dirty.end() );
+
+			std::for_each( dirty.begin()
+				, end
+				, []( Light * light )
+				{
+					light->update();
+				} );
+		}
 	}
 
-	void ObjectCache< Light, Castor::String >::UnbindLights()const
+	void ObjectCache< Light, castor::String >::updateLightsTexture( Camera const & camera )const
 	{
-		m_lightsTexture->Unbind();
+		auto layout = m_lightsTexture.getTexture();
+
+		if ( layout )
+		{
+			auto const & image = layout->getImage();
+			int index = 0;
+
+			for ( auto lights : m_typeSortedLights )
+			{
+				for ( auto light : lights )
+				{
+					if ( light->getLightType() == LightType::eDirectional
+						|| camera.isVisible( light->getBoundingBox()
+							, light->getParent()->getDerivedTransformationMatrix() ) )
+					{
+						light->bind( *m_lightsBuffer, index++ );
+					}
+				}
+			}
+
+			auto locked = layout->lock( AccessType::eWrite );
+
+			if ( locked )
+			{
+				memcpy( locked, m_lightsBuffer->constPtr(), m_lightsBuffer->size() );
+			}
+
+			layout->unlock( true );
+		}
+	}
+
+	void ObjectCache< Light, castor::String >::bindLights()const
+	{
+		m_lightsTexture.bind();
+	}
+
+	void ObjectCache< Light, castor::String >::unbindLights()const
+	{
+		m_lightsTexture.unbind();
+	}
+
+	void ObjectCache< Light, castor::String >::onLightChanged( Light & light )
+	{
+		m_dirtyLights.emplace_back( &light );
 	}
 }

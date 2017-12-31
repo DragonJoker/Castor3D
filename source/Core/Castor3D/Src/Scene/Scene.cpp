@@ -2,6 +2,7 @@
 
 #include "Camera.hpp"
 #include "BillboardList.hpp"
+#include "ColourSkybox.hpp"
 #include "Geometry.hpp"
 #include "Skybox.hpp"
 
@@ -9,9 +10,12 @@
 #include "Event/Frame/CleanupEvent.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Material/Material.hpp"
+#include "Material/Pass.hpp"
 #include "Mesh/Mesh.hpp"
 #include "ParticleSystem/ParticleSystem.hpp"
+#include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Render/RenderLoop.hpp"
+#include "Render/RenderTarget.hpp"
 #include "Render/RenderWindow.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
@@ -20,9 +24,9 @@
 #include <Graphics/Font.hpp>
 #include <Graphics/Image.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*************************************************************************************************
 
@@ -33,30 +37,57 @@ namespace Castor3D
 			, typename CacheType
 			, typename Initialiser
 			, typename Cleaner >
-		std::unique_ptr< CacheView< ResourceType, CacheType, EventType > > MakeCacheView( Castor::String const & p_name
-			, Initialiser && p_initialise
-			, Cleaner && p_clean
-			, CacheType & p_cache )
+		std::unique_ptr< CacheView< ResourceType, CacheType, EventType > > makeCacheView( castor::String const & name
+			, Initialiser && initialise
+			, Cleaner && clean
+			, CacheType & cache )
 		{
-			return std::make_unique< CacheView< ResourceType, CacheType, EventType > >( p_name
-				, std::move( p_initialise )
-				, std::move( p_clean )
-				, p_cache );
+			return std::make_unique< CacheView< ResourceType, CacheType, EventType > >( name
+				, std::move( initialise )
+				, std::move( clean )
+				, cache );
+		}
+
+		template< typename ObjType, typename ViewType >
+		bool writeView( ViewType const & view
+			, String const & elemsName
+			, String const & tabs
+			, TextFile & file )
+		{
+			bool result = true;
+
+			if ( !view.isEmpty() )
+			{
+				result = file.writeText( cuT( "\n" ) + tabs + cuT( "\t// " ) + elemsName + cuT( "\n" ) ) > 0;
+
+					if ( result )
+					{
+						Logger::logInfo( cuT( "Scene::write - " ) + elemsName );
+
+						for ( auto const & name : view )
+						{
+							auto elem = view.find( name );
+							result &= typename ObjType::TextWriter{ tabs + cuT( "\t" ) }( *elem, file );
+						}
+					}
+			}
+
+			return result;
 		}
 	}
 
 	//*************************************************************************************************
 
 	template<>
-	inline void CacheView< Overlay, OverlayCache, EventType::ePreRender >::Clear()
+	inline void CacheView< Overlay, OverlayCache, EventType::ePreRender >::clear()
 	{
-		for ( auto l_name : m_createdElements )
+		for ( auto name : m_createdElements )
 		{
-			auto l_resource = m_cache.Find( l_name );
+			auto resource = m_cache.find( name );
 
-			if ( l_resource )
+			if ( resource )
 			{
-				m_cache.Remove( l_name );
+				m_cache.remove( name );
 			}
 		}
 	}
@@ -64,244 +95,347 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	template<>
-	inline void CacheView< Font, FontCache, EventType::ePreRender >::Clear()
+	inline void CacheView< Font, FontCache, EventType::ePreRender >::clear()
 	{
-		for ( auto l_name : m_createdElements )
+		for ( auto name : m_createdElements )
 		{
-			auto l_resource = m_cache.Find( l_name );
+			auto resource = m_cache.find( name );
 
-			if ( l_resource )
+			if ( resource )
 			{
-				m_cache.Remove( l_name );
+				m_cache.remove( name );
 			}
 		}
 	}
 
 	//*************************************************************************************************
 
-	Scene::TextWriter::TextWriter( String const & p_tabs )
-		: Castor::TextWriter< Scene >{ p_tabs }
+	Scene::TextWriter::TextWriter( String const & tabs )
+		: castor::TextWriter< Scene >{ tabs }
 	{
 	}
 
-	bool Scene::TextWriter::operator()( Scene const & p_scene, TextFile & p_file )
+	bool Scene::TextWriter::operator()( Scene const & scene, TextFile & file )
 	{
-		static std::map< GLSL::FogType, Castor::String > const FogTypes
+		static std::map< FogType, castor::String > const FogTypes
 		{
-			{ GLSL::FogType::eLinear, cuT( "linear" ) },
-			{ GLSL::FogType::eExponential, cuT( "exponential" ) },
-			{ GLSL::FogType::eSquaredExponential, cuT( "squared_exponential" ) },
+			{ FogType::eLinear, cuT( "linear" ) },
+			{ FogType::eExponential, cuT( "exponential" ) },
+			{ FogType::eSquaredExponential, cuT( "squared_exponential" ) },
 		};
 
-		Logger::LogInfo( cuT( "Scene::Write - Scene Name" ) );
-
-		bool l_return = true;
-
-		if ( p_scene.GetEngine()->GetRenderLoop().HasDebugOverlays() )
+		static std::map< MaterialType, castor::String > const MaterialTypes
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "debug_overlays true\n" ) ) > 0;
-			Castor::TextWriter< Scene >::CheckError( l_return, "Scene debug overlays" );
+			{ MaterialType::eLegacy, cuT( "legacy" ) },
+			{ MaterialType::ePbrMetallicRoughness, cuT( "pbr_metallic_roughness" ) },
+			{ MaterialType::ePbrSpecularGlossiness, cuT( "pbr_specular_glossiness" ) },
+		};
+
+		Logger::logInfo( cuT( "Scene::write - Scene Name" ) );
+
+		bool result = true;
+
+		if ( result )
+		{
+			result = file.writeText( m_tabs + cuT( "// Global configuration\n" ) ) > 0;
 		}
 
-		if ( l_return )
+		if ( scene.getEngine()->getRenderLoop().hasDebugOverlays() )
 		{
-			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "scene \"" ) + p_scene.GetName() + cuT( "\"\n" ) ) > 0
-					   && p_file.WriteText( m_tabs + cuT( "{" ) ) > 0;
-			Castor::TextWriter< Scene >::CheckError( l_return, "Scene name" );
+			result = file.writeText( m_tabs + cuT( "debug_overlays true\n" ) ) > 0;
+			castor::TextWriter< Scene >::checkError( result, "Debug overlays" );
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			Logger::LogInfo( cuT( "Scene::Write - Fonts" ) );
+			result = file.writeText( m_tabs + cuT( "materials " ) + MaterialTypes.find( scene.getMaterialsType() )->second + cuT( "\n" ) ) > 0;
+			castor::TextWriter< Scene >::checkError( result, "Materials type" );
+		}
 
-			for ( auto const & l_name : p_scene.GetFontView() )
+		if ( result )
+		{
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "scene \"" ) + scene.getName() + cuT( "\"\n" ) ) > 0
+				&& file.writeText( m_tabs + cuT( "{" ) ) > 0;
+			castor::TextWriter< Scene >::checkError( result, "Scene name" );
+		}
+
+		if ( result )
+		{
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Scene configuration\n" ) ) > 0;
+		}
+
+		if ( result )
+		{
+			Logger::logInfo( cuT( "Scene::write - Background colour" ) );
+			result = file.print( 256, cuT( "\n%s\tbackground_colour " ), m_tabs.c_str() ) > 0
+				&& RgbColour::TextWriter( String() )( scene.getBackgroundColour(), file )
+				&& file.writeText( cuT( "\n" ) ) > 0;
+			castor::TextWriter< Scene >::checkError( result, "Scene background colour" );
+		}
+
+		if ( result && scene.getBackgroundImage() )
+		{
+			Logger::logInfo( cuT( "Scene::write - Background image" ) );
+			Path relative = Scene::TextWriter::copyFile( Path{ scene.getBackgroundImage()->getImage().toString() }, file.getFilePath(), Path{ cuT( "Textures" ) } );
+			result = file.writeText( m_tabs + cuT( "\tbackground_image \"" ) + relative + cuT( "\"\n" ) ) > 0;
+			castor::TextWriter< Scene >::checkError( result, "Scene background image" );
+		}
+
+		if ( result )
+		{
+			Logger::logInfo( cuT( "Scene::write - Ambient light" ) );
+			result = file.print( 256, cuT( "%s\tambient_light " ), m_tabs.c_str() ) > 0
+				&& RgbColour::TextWriter( String() )( scene.getAmbientLight(), file )
+				&& file.writeText( cuT( "\n" ) ) > 0;
+			castor::TextWriter< Scene >::checkError( result, "Scene ambient light" );
+		}
+
+		if ( result && scene.getFog().getType() != FogType::eDisabled )
+		{
+			Logger::logInfo( cuT( "Scene::write - Fog type" ) );
+			result = file.writeText( m_tabs + cuT( "\tfog_type " ) + FogTypes.find( scene.getFog().getType() )->second + cuT( "\n" ) ) > 0;
+			castor::TextWriter< Scene >::checkError( result, "Scene fog type" );
+
+			if ( result )
 			{
-				auto l_font = p_scene.GetFontView().Find( l_name );
-				l_return &= Font::TextWriter( m_tabs + cuT( "\t" ) )( *l_font, p_file );
+				Logger::logInfo( cuT( "Scene::write - Fog density" ) );
+				result = file.writeText( m_tabs + cuT( "\tfog_density " ) + string::toString( scene.getFog().getDensity() ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< Scene >::checkError( result, "Scene fog density" );
 			}
 		}
 
-		if ( l_return )
+		if ( result && scene.hasSkybox() )
 		{
-			Logger::LogInfo( cuT( "Scene::Write - Samplers" ) );
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// HDR Configuration\n" ) ) > 0;
 
-			for ( auto const & l_name : p_scene.GetSamplerView() )
+			if ( result )
 			{
-				auto l_sampler = p_scene.GetSamplerView().Find( l_name );
-				l_return &= Sampler::TextWriter( m_tabs + cuT( "\t" ) )( *l_sampler, p_file );
+				Logger::logInfo( cuT( "Scene::write - HDR Config" ) );
+				result = HdrConfig::TextWriter( m_tabs + cuT( "\t" ) )( scene.getHdrConfig(), file );
 			}
 		}
 
-		if ( l_return )
+		if ( result && scene.hasSkybox() )
 		{
-			Logger::LogInfo( cuT( "Scene::Write - Materials" ) );
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Skybox\n" ) ) > 0;
 
-			for ( auto const & l_name : p_scene.GetMaterialView() )
+			if ( result )
 			{
-				auto l_material = p_scene.GetMaterialView().Find( l_name );
-				l_return &= Material::TextWriter( m_tabs + cuT( "\t" ) )( *l_material, p_file );
+				Logger::logInfo( cuT( "Scene::write - Skybox" ) );
+				result = Skybox::TextWriter( m_tabs + cuT( "\t" ) )( scene.getSkybox(), file );
 			}
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			Logger::LogInfo( cuT( "Scene::Write - Overlays" ) );
+			result = writeView< Font >( scene.getFontView()
+				, cuT( "Fonts" )
+				, m_tabs
+				, file );
+		}
 
-			for ( auto const & l_name : p_scene.GetOverlayView() )
+		if ( result )
+		{
+			result = writeView< Sampler >( scene.getSamplerView()
+				, cuT( "Samplers" )
+				, m_tabs
+				, file );
+		}
+
+		if ( result )
+		{
+			result = writeView< Material >( scene.getMaterialView()
+				, cuT( "Materials" )
+				, m_tabs
+				, file );
+		}
+
+		if ( result && !scene.getOverlayView().isEmpty() )
+		{
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Overlays\n" ) ) > 0;
+
+			if ( result )
 			{
-				auto l_overlay = p_scene.GetOverlayView().Find( l_name );
+				Logger::logInfo( cuT( "Scene::write - Overlays" ) );
 
-				if ( !l_overlay->GetParent() )
+				for ( auto const & name : scene.getOverlayView() )
 				{
-					l_return &= Overlay::TextWriter( m_tabs + cuT( "\t" ) )( *l_overlay, p_file );
+					auto overlay = scene.getOverlayView().find( name );
+
+					if ( !overlay->getParent() )
+					{
+						result &= Overlay::TextWriter( m_tabs + cuT( "\t" ) )( *overlay, file );
+					}
 				}
 			}
 		}
 
-		if ( l_return )
+		if ( result && !scene.getMeshCache().isEmpty() )
 		{
-			Logger::LogInfo( cuT( "Scene::Write - Background colour" ) );
-			l_return = p_file.Print( 256, cuT( "\n%s\tbackground_colour " ), m_tabs.c_str() ) > 0
-					   && Colour::TextWriter( String() )( p_scene.GetBackgroundColour(), p_file )
-					   && p_file.WriteText( cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Scene >::CheckError( l_return, "Scene background colour" );
-		}
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Meshes\n" ) ) > 0;
 
-		if ( l_return && p_scene.GetBackgroundImage() )
-		{
-			Logger::LogInfo( cuT( "Scene::Write - Background image" ) );
-			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_scene.GetBackgroundImage()->GetImage().ToString() }, p_file.GetFilePath(), Path{ cuT( "Textures" ) } );
-			l_return = p_file.WriteText( m_tabs + cuT( "\tbackground_image \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
-			Castor::TextWriter< Scene >::CheckError( l_return, "Scene background image" );
-		}
-
-		if ( l_return )
-		{
-			Logger::LogInfo( cuT( "Scene::Write - Ambient light" ) );
-			l_return = p_file.Print( 256, cuT( "%s\tambient_light " ), m_tabs.c_str() ) > 0
-					   && Colour::TextWriter( String() )( p_scene.GetAmbientLight(), p_file )
-					   && p_file.WriteText( cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Scene >::CheckError( l_return, "Scene ambient light" );
-		}
-
-		if ( l_return && p_scene.GetFog().GetType() != GLSL::FogType::eDisabled )
-		{
-			Logger::LogInfo( cuT( "Scene::Write - Fog type" ) );
-			l_return = p_file.WriteText( m_tabs + cuT( "\tfog_type " ) + FogTypes.find( p_scene.GetFog().GetType() )->second + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Scene >::CheckError( l_return, "Scene fog type" );
-
-			if ( l_return )
+			if ( result )
 			{
-				Logger::LogInfo( cuT( "Scene::Write - Fog density" ) );
-				l_return = p_file.WriteText( m_tabs + cuT( "\tfog_density " ) + string::to_string( p_scene.GetFog().GetDensity() ) + cuT( "\n" ) ) > 0;
-				Castor::TextWriter< Scene >::CheckError( l_return, "Scene fog density" );
-			}
-		}
+				Logger::logInfo( cuT( "Scene::write - Meshes" ) );
+				auto lock = makeUniqueLock( scene.getMeshCache() );
 
-		if ( l_return && p_scene.HasSkybox() )
-		{
-			Logger::LogInfo( cuT( "Scene::Write - Skybox" ) );
-			l_return = Skybox::TextWriter( m_tabs + cuT( "\t" ) )( p_scene.GetSkybox(), p_file );
-		}
-
-		if ( l_return )
-		{
-			Logger::LogInfo( cuT( "Scene::Write - Cameras nodes" ) );
-
-			for ( auto const & l_it : p_scene.GetCameraRootNode()->GetChilds() )
-			{
-				if ( l_return
-					 && l_it.first.find( cuT( "_REye" ) ) == String::npos
-					 && l_it.first.find( cuT( "_LEye" ) ) == String::npos )
+				for ( auto const & it : scene.getMeshCache() )
 				{
-					l_return = SceneNode::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second.lock(), p_file );
+					if ( result && it.second->isSerialisable() )
+					{
+						result = Mesh::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+					}
 				}
 			}
 		}
 
-		if ( l_return )
+		if ( result && !scene.getCameraRootNode()->getChildren().empty() )
 		{
-			Logger::LogInfo( cuT( "Scene::Write - Objects nodes" ) );
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Cameras nodes\n" ) ) > 0;
 
-			for ( auto const & l_it : p_scene.GetObjectRootNode()->GetChilds() )
+			if ( result )
 			{
-				l_return &= SceneNode::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second.lock(), p_file );
-			}
-		}
+				Logger::logInfo( cuT( "Scene::write - Cameras nodes" ) );
 
-		if ( l_return )
-		{
-			Logger::LogInfo( cuT( "Scene::Write - Cameras" ) );
-			auto l_lock = make_unique_lock( p_scene.GetCameraCache() );
-
-			for ( auto const & l_it : p_scene.GetCameraCache() )
-			{
-				if ( l_return
-					 && l_it.first.find( cuT( "_REye" ) ) == String::npos
-					 && l_it.first.find( cuT( "_LEye" ) ) == String::npos )
+				for ( auto const & it : scene.getCameraRootNode()->getChildren() )
 				{
-					l_return = Camera::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
+					if ( result
+						&& it.first.find( cuT( "_REye" ) ) == String::npos
+						&& it.first.find( cuT( "_LEye" ) ) == String::npos )
+					{
+						result = SceneNode::TextWriter( m_tabs + cuT( "\t" ) )( *it.second.lock(), file );
+					}
 				}
 			}
 		}
 
-		if ( l_return )
+		if ( result && !scene.getCameraCache().isEmpty() )
 		{
-			Logger::LogInfo( cuT( "Scene::Write - Lights" ) );
-			auto l_lock = make_unique_lock( p_scene.GetLightCache() );
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Cameras\n" ) ) > 0;
 
-			for ( auto const & l_it : p_scene.GetLightCache() )
+			if ( result )
 			{
-				l_return &= Light::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
+				Logger::logInfo( cuT( "Scene::write - Cameras" ) );
+				auto lock = makeUniqueLock( scene.getCameraCache() );
+
+				for ( auto const & it : scene.getCameraCache() )
+				{
+					if ( result
+						&& it.first.find( cuT( "_REye" ) ) == String::npos
+						&& it.first.find( cuT( "_LEye" ) ) == String::npos )
+					{
+						result = Camera::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+					}
+				}
 			}
 		}
 
-		if ( l_return )
+		if ( result && !scene.getObjectRootNode()->getChildren().empty() )
 		{
-			Logger::LogInfo( cuT( "Scene::Write - Geometries" ) );
-			auto l_lock = make_unique_lock( p_scene.GetGeometryCache() );
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Objects nodes\n" ) ) > 0;
 
-			for ( auto const & l_it : p_scene.GetGeometryCache() )
+			if ( result )
 			{
-				l_return &= Geometry::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
+				Logger::logInfo( cuT( "Scene::write - Objects nodes" ) );
+
+				for ( auto const & it : scene.getObjectRootNode()->getChildren() )
+				{
+					result &= SceneNode::TextWriter( m_tabs + cuT( "\t" ) )( *it.second.lock(), file );
+				}
 			}
 		}
 
-		if ( l_return )
+		if ( result && !scene.getLightCache() .isEmpty() )
 		{
-			Logger::LogInfo( cuT( "Scene::Write - Particle systems" ) );
-			auto l_lock = make_unique_lock( p_scene.GetParticleSystemCache() );
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Lights\n" ) ) > 0;
 
-			for ( auto const & l_it : p_scene.GetParticleSystemCache() )
+			if ( result )
 			{
-				l_return &= ParticleSystem::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
+				Logger::logInfo( cuT( "Scene::write - Lights" ) );
+				auto lock = makeUniqueLock( scene.getLightCache() );
+
+				for ( auto const & it : scene.getLightCache() )
+				{
+					result &= Light::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+				}
 			}
 		}
 
-		if ( l_return )
+		if ( result && !scene.getGeometryCache().isEmpty() )
 		{
-			Logger::LogInfo( cuT( "Scene::Write - Animated object groups" ) );
-			auto l_lock = make_unique_lock( p_scene.GetAnimatedObjectGroupCache() );
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Geometries\n" ) ) > 0;
 
-			for ( auto const & l_it : p_scene.GetAnimatedObjectGroupCache() )
+			if ( result )
 			{
-				l_return &= AnimatedObjectGroup::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
+				Logger::logInfo( cuT( "Scene::write - Geometries" ) );
+				auto lock = makeUniqueLock( scene.getGeometryCache() );
+
+				for ( auto const & it : scene.getGeometryCache() )
+				{
+					if ( result
+						&& it.second->getMesh()
+						&& it.second->getMesh()->isSerialisable() )
+					{
+						result = Geometry::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+					}
+				}
 			}
 		}
 
-		if ( l_return )
+		if ( result && !scene.getParticleSystemCache().isEmpty() )
 		{
-			Logger::LogInfo( cuT( "Scene::Write - Windows" ) );
-			auto l_lock = make_unique_lock( p_scene.GetRenderWindowCache() );
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Particle systems\n" ) ) > 0;
 
-			for ( auto const & l_it : p_scene.GetRenderWindowCache() )
+			if ( result )
 			{
-				l_return &= RenderWindow::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
+				Logger::logInfo( cuT( "Scene::write - Particle systems" ) );
+				auto lock = makeUniqueLock( scene.getParticleSystemCache() );
+
+				for ( auto const & it : scene.getParticleSystemCache() )
+				{
+					result &= ParticleSystem::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+				}
 			}
 		}
 
-		p_file.WriteText( cuT( "}\n" ) );
-		return l_return;
+		if ( result && !scene.getAnimatedObjectGroupCache().isEmpty() )
+		{
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Animated object groups\n" ) ) > 0;
+
+			if ( result )
+			{
+				Logger::logInfo( cuT( "Scene::write - Animated object groups" ) );
+				auto lock = makeUniqueLock( scene.getAnimatedObjectGroupCache() );
+
+				for ( auto const & it : scene.getAnimatedObjectGroupCache() )
+				{
+					result &= AnimatedObjectGroup::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+				}
+			}
+		}
+
+		file.writeText( cuT( "}\n" ) );
+
+		if ( result )
+		{
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "// Windows\n" ) ) > 0;
+		}
+
+		if ( result )
+		{
+			Logger::logInfo( cuT( "Scene::write - Windows" ) );
+			auto lock = makeUniqueLock( scene.getEngine()->getRenderWindowCache() );
+
+			for ( auto const & it : scene.getEngine()->getRenderWindowCache() )
+			{
+				if ( it.second->getRenderTarget()->getScene()->getName() == scene.getName() )
+				{
+					result &= RenderWindow::TextWriter( m_tabs )( *it.second, file );
+				}
+			}
+		}
+
+		return result;
 	}
 
 	//*************************************************************************************************
@@ -310,298 +444,304 @@ namespace Castor3D
 	String Scene::CameraRootNode = cuT( "CameraRootNode" );
 	String Scene::ObjectRootNode = cuT( "ObjectRootNode" );
 
-	Scene::Scene( String const & p_name, Engine & p_engine )
-		: OwnedBy< Engine >{ p_engine }
-		, Named{ p_name }
-		, m_listener{ p_engine.GetFrameListenerCache().Add( cuT( "Scene_" ) + p_name + string::to_string( (size_t)this ) ) }
+	Scene::Scene( String const & name, Engine & engine )
+		: OwnedBy< Engine >{ engine }
+		, Named{ name }
+		, m_listener{ engine.getFrameListenerCache().add( cuT( "Scene_" ) + name + string::toString( (size_t)this ) ) }
+		, m_animationUpdater{ std::max( 2u, engine.getCpuInformations().getCoreCount() - ( engine.isThreaded() ? 2u : 1u ) ) }
+		, m_backgroundColourSkybox{ engine }
 	{
-		auto l_mergeObject = [this]( auto const & p_source
-			, auto & p_destination
-			, auto p_element
-			, SceneNodeSPtr p_rootCameraNode
-			, SceneNodeSPtr p_rootObjectNode )
+		auto mergeObject = [this]( auto const & source
+			, auto & destination
+			, auto element
+			, SceneNodeSPtr rootCameraNode
+			, SceneNodeSPtr rootObjectNode )
 		{
-			if ( p_element->GetParent()->GetName() == p_rootCameraNode->GetName() )
+			if ( element->getParent()->getName() == rootCameraNode->getName() )
 			{
-				p_element->Detach();
-				p_element->AttachTo( p_rootCameraNode );
+				element->detach();
+				element->attachTo( rootCameraNode );
 			}
-			else if ( p_element->GetParent()->GetName() == p_rootObjectNode->GetName() )
+			else if ( element->getParent()->getName() == rootObjectNode->getName() )
 			{
-				p_element->Detach();
-				p_element->AttachTo( p_rootObjectNode );
-			}
-
-			String l_name = p_element->GetName();
-
-			while ( p_destination.has( l_name ) )
-			{
-				l_name = this->GetName() + cuT( "_" ) + l_name;
+				element->detach();
+				element->attachTo( rootObjectNode );
 			}
 
-			p_element->SetName( l_name );
-			p_destination.insert( l_name, p_element );
-		};
-		auto l_mergeResource = [this]( auto const & p_source
-			, auto & p_destination
-			, auto p_element )
-		{
-			String l_name = p_element->GetName();
+			String name = element->getName();
 
-			if ( !p_destination.has( l_name ) )
+			while ( destination.has( name ) )
 			{
-				l_name = this->GetName() + cuT( "_" ) + l_name;
+				name = this->getName() + cuT( "_" ) + name;
 			}
 
-			p_element->SetName( l_name );
-			p_destination.insert( l_name, p_element );
+			element->setName( name );
+			destination.insert( name, element );
 		};
-		auto l_eventInitialise = [this]( auto p_element )
+		auto mergeResource = [this]( auto const & source
+			, auto & destination
+			, auto element )
 		{
-			this->GetListener().PostEvent( MakeInitialiseEvent( *p_element ) );
-		};
-		auto l_eventClean = [this]( auto p_element )
-		{
-			this->GetListener().PostEvent( MakeCleanupEvent( *p_element ) );
-		};
-		auto l_attachObject = []( auto p_element
-			, SceneNodeSPtr p_parent
-			, SceneNodeSPtr p_rootNode
-			, SceneNodeSPtr p_rootCameraNode
-			, SceneNodeSPtr p_rootObjectNode )
-		{
-			if ( p_parent )
+			String name = element->getName();
+
+			if ( !destination.has( name ) )
 			{
-				p_parent->AttachObject( *p_element );
+				name = this->getName() + cuT( "_" ) + name;
+			}
+
+			element->setName( name );
+			destination.insert( name, element );
+		};
+		auto eventInitialise = [this]( auto element )
+		{
+			this->getListener().postEvent( makeInitialiseEvent( *element ) );
+		};
+		auto eventClean = [this]( auto element )
+		{
+			this->getListener().postEvent( makeCleanupEvent( *element ) );
+		};
+		auto attachObject = []( auto element
+			, SceneNodeSPtr parent
+			, SceneNodeSPtr rootNode
+			, SceneNodeSPtr rootCameraNode
+			, SceneNodeSPtr rootObjectNode )
+		{
+			if ( parent )
+			{
+				parent->attachObject( *element );
 			}
 			else
 			{
-				p_rootObjectNode->AttachObject( *p_element );
+				rootObjectNode->attachObject( *element );
 			}
 		};
-		auto l_attachCamera = []( auto p_element
-			, SceneNodeSPtr p_parent
-			, SceneNodeSPtr p_rootNode
-			, SceneNodeSPtr p_rootCameraNode
-			, SceneNodeSPtr p_rootObjectNode )
+		auto attachCamera = []( auto element
+			, SceneNodeSPtr parent
+			, SceneNodeSPtr rootNode
+			, SceneNodeSPtr rootCameraNode
+			, SceneNodeSPtr rootObjectNode )
 		{
-			if ( p_parent )
+			if ( parent )
 			{
-				p_parent->AttachObject( *p_element );
+				parent->attachObject( *element );
 			}
 			else
 			{
-				p_rootCameraNode->AttachObject( *p_element );
+				rootCameraNode->attachObject( *element );
 			}
 		};
-		auto l_attachNode = []( auto p_element
-			, SceneNodeSPtr p_parent
-			, SceneNodeSPtr p_rootNode
-			, SceneNodeSPtr p_rootCameraNode
-			, SceneNodeSPtr p_rootObjectNode )
+		auto attachNode = []( auto element
+			, SceneNodeSPtr parent
+			, SceneNodeSPtr rootNode
+			, SceneNodeSPtr rootCameraNode
+			, SceneNodeSPtr rootObjectNode )
 		{
-			if ( p_parent )
+			if ( parent )
 			{
-				p_element->AttachTo( p_parent );
+				element->attachTo( parent );
 			}
 			else
 			{
-				p_element->AttachTo( p_rootNode );
+				element->attachTo( rootNode );
 			}
 		};
-		auto l_dummy = []( auto p_element )
+		auto dummy = []( auto element )
 		{
 		};
 
 		m_rootNode = std::make_shared< SceneNode >( RootNode, *this );
 		m_rootCameraNode = std::make_shared< SceneNode >( CameraRootNode, *this );
 		m_rootObjectNode = std::make_shared< SceneNode >( ObjectRootNode, *this );
-		m_rootCameraNode->AttachTo( m_rootNode );
-		m_rootObjectNode->AttachTo( m_rootNode );
+		m_rootCameraNode->attachTo( m_rootNode );
+		m_rootObjectNode->attachTo( m_rootNode );
 
-		m_billboardCache = MakeObjectCache< BillboardList, String >( p_engine
+		m_billboardCache = makeObjectCache< BillboardList, String >( engine
 			, *this
 			, m_rootNode
 			, m_rootCameraNode
 			, m_rootObjectNode
-			, [this]( String const & p_name, SceneNodeSPtr p_parent )
+			, [this]( String const & name, SceneNodeSPtr parent )
 			{
-				return std::make_shared< BillboardList >( p_name
+				return std::make_shared< BillboardList >( name
 					, *this
-					, p_parent );
+					, parent );
 			}
-			, l_eventInitialise
-			, l_eventClean
-			, l_mergeObject
-			, l_attachObject
-			, [this]( BillboardListSPtr p_element )
+			, eventInitialise
+			, eventClean
+			, mergeObject
+			, attachObject
+			, [this]( BillboardListSPtr element )
 			{
-				p_element->Detach();
+				element->detach();
 			} );
-		m_cameraCache = MakeObjectCache< Camera, String >( p_engine
+		m_cameraCache = makeObjectCache< Camera, String >( engine
 			, *this
 			, m_rootNode
 			, m_rootCameraNode
 			, m_rootObjectNode
-			, [this]( String const & p_name
-				, SceneNodeSPtr p_parent
-				, Viewport && p_viewport )
+			, [this]( String const & name
+				, SceneNodeSPtr parent
+				, Viewport && viewport )
 			{
-				return std::make_shared< Camera >( p_name
+				return std::make_shared< Camera >( name
 					, *this
-					, p_parent
-					, std::move( p_viewport ) );
+					, parent
+					, std::move( viewport ) );
 			}
-			, l_dummy
-			, l_dummy
-			, l_mergeObject
-			, l_attachCamera
-			, [this]( CameraSPtr p_element )
+			, dummy
+			, dummy
+			, mergeObject
+			, attachCamera
+			, [this]( CameraSPtr element )
 			{
-				p_element->Detach();
+				element->detach();
 			} );
-		m_geometryCache = MakeObjectCache< Geometry, String >( p_engine
+		m_geometryCache = makeObjectCache< Geometry, String >( engine
 			, *this
 			, m_rootNode
 			, m_rootCameraNode
 			, m_rootObjectNode
-			, [this]( String const & p_name
-				, SceneNodeSPtr p_parent
-				, MeshSPtr p_mesh )
+			, [this]( String const & name
+				, SceneNodeSPtr parent
+				, MeshSPtr mesh )
 			{
-				return std::make_shared< Geometry >( p_name
+				return std::make_shared< Geometry >( name
 					, *this
-					, p_parent
-					, p_mesh );
+					, parent
+					, mesh );
 			}
-			, l_dummy
-			, l_dummy
-			, l_mergeObject
-			, l_attachObject
-			, [this]( GeometrySPtr p_element )
+			, dummy
+			, dummy
+			, mergeObject
+			, attachObject
+			, [this]( GeometrySPtr element )
 			{
-				p_element->Detach();
+				element->detach();
 			} );
-		m_lightCache = MakeObjectCache< Light, String >( p_engine
+		m_lightCache = makeObjectCache< Light, String >( engine
 			, *this
 			, m_rootNode
 			, m_rootCameraNode
 			, m_rootObjectNode
-			, [this]( String const & p_name
-				, SceneNodeSPtr p_node
-				, LightType p_lightType )
+			, [this]( String const & name
+				, SceneNodeSPtr node
+				, LightType lightType )
 			{
-				return std::make_shared< Light >( p_name
+				return std::make_shared< Light >( name
 					, *this
-					, p_node
+					, node
 					, m_lightFactory
-					, p_lightType );
+					, lightType );
 			}
-			, l_dummy
-			, l_dummy
-			, l_mergeObject
-			, l_attachObject
-			, [this]( LightSPtr p_element )
+			, dummy
+			, dummy
+			, mergeObject
+			, attachObject
+			, [this]( LightSPtr element )
 			{
-				p_element->Detach();
+				element->detach();
 			} );
-		m_particleSystemCache = MakeObjectCache< ParticleSystem, String >( p_engine
+		m_particleSystemCache = makeObjectCache< ParticleSystem, String >( engine
 			, *this
 			, m_rootNode
 			, m_rootCameraNode
 			, m_rootObjectNode
-			, [this]( String const & p_name
-				, SceneNodeSPtr p_parent
-				, uint32_t p_count )
+			, [this]( String const & name
+				, SceneNodeSPtr parent
+				, uint32_t count )
 			{
-				return std::make_shared< ParticleSystem >( p_name
+				return std::make_shared< ParticleSystem >( name
 					, *this
-					, p_parent
-					, p_count );
+					, parent
+					, count );
 			}
-			, l_eventInitialise
-			, l_eventClean
-			, l_mergeObject
-			, l_attachObject
-			, [this]( ParticleSystemSPtr p_element )
+			, eventInitialise
+			, eventClean
+			, mergeObject
+			, attachObject
+			, [this]( ParticleSystemSPtr element )
 			{
-				p_element->Detach();
+				element->detach();
 			} );
-		m_sceneNodeCache = MakeObjectCache< SceneNode, String >( p_engine
+		m_sceneNodeCache = makeObjectCache< SceneNode, String >( engine
 			, *this
 			, m_rootNode
 			, m_rootCameraNode
 			, m_rootObjectNode
-			, [this]( String const & p_name )
+			, [this]( String const & name )
 			{
-				return std::make_shared< SceneNode >( p_name
-					, *this );
+				return std::make_shared< SceneNode >( name, *this );
 			}
-			, l_dummy
-			, l_dummy
-			, l_mergeObject
-			, l_attachNode
-			, [this]( SceneNodeSPtr p_element )
+			, dummy
+			, dummy
+			, mergeObject
+			, attachNode
+			, [this]( SceneNodeSPtr element )
 			{
-				p_element->Detach();
+				element->detach();
 			} );
-		m_animatedObjectGroupCache = MakeCache< AnimatedObjectGroup, String >( p_engine
-			, [this]( Castor::String const & p_name )
+		m_animatedObjectGroupCache = makeCache< AnimatedObjectGroup, String >( engine
+			, [this]( castor::String const & name )
 			{
-				return std::make_shared< AnimatedObjectGroup >( p_name
+				return std::make_shared< AnimatedObjectGroup >( name, *this );
+			}
+			, dummy
+			, dummy
+			, mergeResource );
+		m_meshCache = makeCache< Mesh, String >( engine
+			, [this]( castor::String const & name )
+			{
+				return std::make_shared< Mesh >( name
 					, *this );
 			}
-			, l_dummy
-			, l_dummy
-			, l_mergeResource );
-		m_meshCache = MakeCache< Mesh, String >( p_engine
-			, [this]( Castor::String const & p_name )
-			{
-				return std::make_shared< Mesh >( p_name
-					, *this );
-			}
-			, l_dummy
-			, l_eventClean
-			, l_mergeResource );
-		m_windowCache = MakeCache < RenderWindow, String >(	p_engine
-			, [this]( Castor::String const & p_name )
-			{
-				return std::make_shared< RenderWindow >( p_name
-					, *GetEngine() );
-			}
-			, l_dummy
-			, l_eventClean
-			, l_mergeResource );
+			, dummy
+			, eventClean
+			, mergeResource );
 
-		m_materialCacheView = MakeCacheView< Material, EventType::ePreRender >( GetName()
-			, l_eventInitialise
-			, l_eventClean
-			, GetEngine()->GetMaterialCache() );
-		m_samplerCacheView = MakeCacheView< Sampler, EventType::ePreRender >( GetName()
-			, l_eventInitialise
-			, l_eventClean
-			, GetEngine()->GetSamplerCache() );
-		m_overlayCacheView = MakeCacheView< Overlay, EventType::ePreRender >( GetName()
-			, std::bind( OverlayCache::OverlayInitialiser{ GetEngine()->GetOverlayCache() }, std::placeholders::_1 )
-			, std::bind( OverlayCache::OverlayCleaner{ GetEngine()->GetOverlayCache() }, std::placeholders::_1 )
-			, GetEngine()->GetOverlayCache() );
-		m_fontCacheView = MakeCacheView< Font, EventType::ePreRender >( GetName()
-			, l_dummy
-			, l_dummy
-			, GetEngine()->GetFontCache() );
+		m_materialCacheView = makeCacheView< Material, EventType::ePreRender >( getName()
+			, [this]( MaterialSPtr element )
+			{
+				this->getListener().postEvent( makeInitialiseEvent( *element ) );
+				this->m_materialsListeners.emplace( element
+					, element->onChanged.connect( std::bind( &Scene::onMaterialChanged
+						, this
+						, std::placeholders::_1 ) ) );
+				m_dirtyMaterials = true;
+			}
+			, [this]( MaterialSPtr element )
+			{
+				m_dirtyMaterials = true;
+				this->m_materialsListeners.erase( element );
+				this->getListener().postEvent( makeCleanupEvent( *element ) );
+			}
+			, getEngine()->getMaterialCache() );
+		m_samplerCacheView = makeCacheView< Sampler, EventType::ePreRender >( getName()
+			, eventInitialise
+			, eventClean
+			, getEngine()->getSamplerCache() );
+		m_overlayCacheView = makeCacheView< Overlay, EventType::ePreRender >( getName()
+			, std::bind( OverlayCache::OverlayInitialiser{ getEngine()->getOverlayCache() }, std::placeholders::_1 )
+			, std::bind( OverlayCache::OverlayCleaner{ getEngine()->getOverlayCache() }, std::placeholders::_1 )
+			, getEngine()->getOverlayCache() );
+		m_fontCacheView = makeCacheView< Font, EventType::ePreRender >( getName()
+			, dummy
+			, dummy
+			, getEngine()->getFontCache() );
 
-		auto l_notify = [this]()
+		auto notify = [this]()
 		{
-			SetChanged();
+			setChanged();
 		};
 
-		m_sceneNodeCache->Add( cuT( "ObjectRootNode" ), m_rootObjectNode );
-		m_sceneNodeCache->Add( cuT( "CameraRootNode" ), m_rootCameraNode );
+		m_sceneNodeCache->add( cuT( "ObjectRootNode" ), m_rootObjectNode );
+		m_sceneNodeCache->add( cuT( "CameraRootNode" ), m_rootCameraNode );
 
-		m_onParticleSystemChanged = m_particleSystemCache->onChanged.connect( std::bind( &Scene::SetChanged, this ) );
-		m_onBillboardListChanged = m_billboardCache->onChanged.connect( std::bind( &Scene::SetChanged, this ) );
-		m_onGeometryChanged = m_geometryCache->onChanged.connect( std::bind( &Scene::SetChanged, this ) );
-		m_onSceneNodeChanged = m_sceneNodeCache->onChanged.connect( std::bind( &Scene::SetChanged, this ) );
+		m_onParticleSystemChanged = m_particleSystemCache->onChanged.connect( std::bind( &Scene::setChanged, this ) );
+		m_onBillboardListChanged = m_billboardCache->onChanged.connect( std::bind( &Scene::setChanged, this ) );
+		m_onGeometryChanged = m_geometryCache->onChanged.connect( std::bind( &Scene::setChanged, this ) );
+		m_onSceneNodeChanged = m_sceneNodeCache->onChanged.connect( std::bind( &Scene::setChanged, this ) );
+		m_backgroundColourSkybox.setScene( *this );
+		m_backgroundColourSkybox.setColour( m_backgroundColour );
 	}
 
 	Scene::~Scene()
@@ -611,8 +751,10 @@ namespace Castor3D
 		m_onBillboardListChanged.disconnect();
 		m_onParticleSystemChanged.disconnect();
 
-		m_meshCache->Clear();
-		m_windowCache->Clear();
+		m_meshCache->clear();
+
+		m_reflectionMapsArray.clear();
+		m_reflectionMaps.clear();
 
 		m_skybox.reset();
 		m_animatedObjectGroupCache.reset();
@@ -624,13 +766,13 @@ namespace Castor3D
 
 		if ( m_rootCameraNode )
 		{
-			m_rootCameraNode->Detach();
+			m_rootCameraNode->detach();
 			m_rootCameraNode.reset();
 		}
 
 		if ( m_rootObjectNode )
 		{
-			m_rootObjectNode->Detach();
+			m_rootObjectNode->detach();
 			m_rootObjectNode.reset();
 		}
 
@@ -639,270 +781,414 @@ namespace Castor3D
 		m_meshCache.reset();
 		m_materialCacheView.reset();
 		m_samplerCacheView.reset();
-		m_windowCache.reset();
 		m_overlayCacheView.reset();
 		m_fontCacheView.reset();
 
 		if ( m_rootNode )
 		{
-			m_rootNode->Detach();
+			m_rootNode->detach();
 		}
 
 		m_rootNode.reset();
-		GetEngine()->GetFrameListenerCache().Remove( m_listener.lock()->GetName() );
+		getEngine()->getFrameListenerCache().remove( m_listener.lock()->getName() );
 	}
 
-	void Scene::Initialise()
+	void Scene::initialise()
 	{
-		m_lightCache->Initialise();
+		m_lightCache->initialise();
 
-		GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
+		getListener().postEvent( makeFunctorEvent( EventType::ePreRender
+			, [this]()
+			{
+				m_backgroundColourSkybox.initialise();
+				m_colour = std::make_unique< TextureProjection >( *getEngine()->getRenderSystem()->getCurrentContext() );
+				m_colour->initialise();
+			} ) );
+
+		m_initialised = true;
+	}
+
+	void Scene::cleanup()
+	{
+		m_initialised = false;
+		m_animatedObjectGroupCache->cleanup();
+		m_cameraCache->cleanup();
+		m_billboardCache->cleanup();
+		m_particleSystemCache->cleanup();
+		m_geometryCache->cleanup();
+		m_lightCache->cleanup();
+		m_sceneNodeCache->cleanup();
+
+		for ( auto & pass : m_reflectionMapsArray )
 		{
-			m_colour = std::make_unique< TextureProjection >( *GetEngine()->GetRenderSystem()->GetCurrentContext() );
-			m_colour->Initialise();
-		} ) );
-	}
+			getListener().postEvent( makeFunctorEvent( EventType::ePreRender
+				, [&pass]()
+				{
+					pass.get().cleanup();
+				} ) );
+		}
 
-	void Scene::Cleanup()
-	{
-		m_animatedObjectGroupCache->Cleanup();
-		m_cameraCache->Cleanup();
-		m_billboardCache->Cleanup();
-		m_particleSystemCache->Cleanup();
-		m_geometryCache->Cleanup();
-		m_lightCache->Cleanup();
-		m_sceneNodeCache->Cleanup();
-
-		m_materialCacheView->Clear();
-		m_samplerCacheView->Clear();
-		m_overlayCacheView->Clear();
-		m_fontCacheView->Clear();
+		m_materialCacheView->clear();
+		m_samplerCacheView->clear();
+		m_overlayCacheView->clear();
+		m_fontCacheView->clear();
 
 		// These ones, being ResourceCache, need to be cleared in destructor only
-		m_meshCache->Cleanup();
-		m_windowCache->Cleanup();
+		m_meshCache->cleanup();
 
-		GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
-		{
-			if ( m_colour )
+		getListener().postEvent( makeFunctorEvent( EventType::ePreRender
+			, [this]()
 			{
-				m_colour->Cleanup();
-				m_colour.reset();
-			}
-		} ) );
+				if ( m_colour )
+				{
+					m_colour->cleanup();
+					m_colour.reset();
+				}
+			} ) );
 
 		if ( m_backgroundImage )
 		{
-			GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
-			{
-				m_backgroundImage->Cleanup();
-			} ) );
+			getListener().postEvent( makeFunctorEvent( EventType::ePreRender
+				, [this]()
+				{
+					m_backgroundImage->cleanup();
+				} ) );
 		}
 
 		if ( m_skybox )
 		{
-			GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
+			getListener().postEvent( makeFunctorEvent( EventType::ePreRender
+				, [this]()
+				{
+					m_skybox->cleanup();
+				} ) );
+		}
+
+		getListener().postEvent( makeFunctorEvent( EventType::ePreRender
+			, [this]()
 			{
-				m_skybox->Cleanup();
+				m_backgroundColourSkybox.cleanup();
 			} ) );
-		}
 	}
 
-	void Scene::RenderBackground( Size const & p_size, Camera const & p_camera )
+	void Scene::renderBackground( Size const & size, Camera const & camera )
 	{
-		if ( m_backgroundImage && m_backgroundImage->IsInitialised() )
+		if ( m_fog.getType() == FogType::eDisabled )
 		{
-			m_colour->Render( *m_backgroundImage
-				, p_camera );
-		}
-		else if ( m_skybox )
-		{
-			m_skybox->Render( p_camera );
-		}
-	}
-
-	void Scene::Update()
-	{
-		m_rootNode->Update();
-
-		m_animatedObjectGroupCache->ForEach( []( AnimatedObjectGroup & p_group )
-		{
-			p_group.Update();
-		} );
-
-		if ( !m_skybox && !m_backgroundImage )
-		{
-			m_skybox = std::make_unique< Skybox >( *GetEngine() );
-			Size l_size{ 16, 16 };
-			constexpr PixelFormat l_format{ PixelFormat::eR8G8B8 };
-			UbPixel l_pixel{ true };
-			uint8_t l_c;
-			l_pixel.set< l_format >( { { m_backgroundColour.red().convert_to( l_c )
-				, m_backgroundColour.green().convert_to( l_c )
-				, m_backgroundColour.blue().convert_to( l_c ) } } );
-			auto l_buffer = PxBufferBase::create( l_size, l_format );
-			auto l_data = l_buffer->ptr();
-
-			for ( uint32_t i = 0u; i < 256; ++i )
+			if ( m_backgroundImage && m_backgroundImage->isInitialised())
 			{
-				std::memcpy( l_data, l_pixel.const_ptr(), 3 );
-				l_data += 3;
+				m_colour->render( *m_backgroundImage
+					, camera );
 			}
-
-			m_skybox->GetTexture().GetImage( 0u ).InitialiseSource( l_buffer );
-			m_skybox->GetTexture().GetImage( 1u ).InitialiseSource( l_buffer );
-			m_skybox->GetTexture().GetImage( 2u ).InitialiseSource( l_buffer );
-			m_skybox->GetTexture().GetImage( 3u ).InitialiseSource( l_buffer );
-			m_skybox->GetTexture().GetImage( 4u ).InitialiseSource( l_buffer );
-			m_skybox->GetTexture().GetImage( 5u ).InitialiseSource( l_buffer );
-			GetListener().PostEvent( MakeInitialiseEvent( *m_skybox ) );
+			else if ( m_skybox )
+			{
+				m_skybox->render( camera );
+			}
+			else
+			{
+				m_backgroundColourSkybox.setColour( m_backgroundColour );
+				m_backgroundColourSkybox.update();
+				m_backgroundColourSkybox.render( camera );
+			}
 		}
+		else if ( getMaterialsType() == MaterialType::ePbrMetallicRoughness
+			|| getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
+		{
+			m_backgroundColourSkybox.setColour( m_backgroundColour );
+			m_backgroundColourSkybox.update();
+			m_backgroundColourSkybox.render( camera );
+		}
+	}
 
+	void Scene::update()
+	{
+		m_rootNode->update();
+		doUpdateAnimations();
+		doUpdateNoSkybox();
+		doUpdateMaterials();
+		getLightCache().update();
+		onUpdate( *this );
 		m_changed = false;
 	}
 
-	bool Scene::SetBackground( Path const & p_folder, Path const & p_relative )
+	bool Scene::setBackground( Path const & folder, Path const & relative )
 	{
-		bool l_return = false;
+		bool result = false;
 
 		try
 		{
-			auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead );
-			l_texture->SetSource( p_folder, p_relative );
-			m_backgroundImage = l_texture;
-			GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
+			auto texture = getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead );
+			texture->setSource( folder, relative );
+			m_backgroundImage = texture;
+			getListener().postEvent( makeFunctorEvent( EventType::ePreRender, [this]()
 			{
-				m_backgroundImage->Initialise();
-				m_backgroundImage->Bind( 0 );
-				m_backgroundImage->GenerateMipmaps();
-				m_backgroundImage->Unbind( 0 );
+				m_backgroundImage->initialise();
+				m_backgroundImage->bind( 0 );
+				m_backgroundImage->generateMipmaps();
+				m_backgroundImage->unbind( 0 );
 			} ) );
-			l_return = true;
+			result = true;
 		}
-		catch ( Castor::Exception & p_exc )
+		catch ( castor::Exception & p_exc )
 		{
-			Logger::LogError( p_exc.what() );
+			Logger::logError( p_exc.what() );
 		}
 
-		return l_return;
+		return result;
 	}
 
-	bool Scene::SetForeground( SkyboxUPtr && p_skybox )
+	bool Scene::setForeground( SkyboxUPtr && skybox )
 	{
-		m_skybox = std::move( p_skybox );
-		GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
+		m_skybox = std::move( skybox );
+		m_skybox->setScene( *this );
+		getListener().postEvent( makeFunctorEvent( EventType::ePreRender, [this]()
 		{
-			m_skybox->Initialise();
+			m_skybox->initialise();
 		} ) );
 		return true;
 	}
 
-	void Scene::Merge( SceneSPtr p_scene )
+	void Scene::merge( SceneSPtr scene )
 	{
 		{
-			p_scene->GetAnimatedObjectGroupCache().MergeInto( *m_animatedObjectGroupCache );
-			p_scene->GetCameraCache().MergeInto( *m_cameraCache );
-			p_scene->GetBillboardListCache().MergeInto( *m_billboardCache );
-			p_scene->GetParticleSystemCache().MergeInto( *m_particleSystemCache );
-			p_scene->GetGeometryCache().MergeInto( *m_geometryCache );
-			p_scene->GetLightCache().MergeInto( *m_lightCache );
-			p_scene->GetSceneNodeCache().MergeInto( *m_sceneNodeCache );
-			m_ambientLight = p_scene->GetAmbientLight();
-			SetChanged();
+			scene->getAnimatedObjectGroupCache().mergeInto( *m_animatedObjectGroupCache );
+			scene->getCameraCache().mergeInto( *m_cameraCache );
+			scene->getBillboardListCache().mergeInto( *m_billboardCache );
+			scene->getParticleSystemCache().mergeInto( *m_particleSystemCache );
+			scene->getGeometryCache().mergeInto( *m_geometryCache );
+			scene->getLightCache().mergeInto( *m_lightCache );
+			scene->getSceneNodeCache().mergeInto( *m_sceneNodeCache );
+			m_ambientLight = scene->getAmbientLight();
+			setChanged();
 		}
 
-		p_scene->Cleanup();
+		scene->cleanup();
 	}
 
-	bool Scene::ImportExternal( Path const & p_fileName, Importer & p_importer )
+	bool Scene::importExternal( Path const & fileName, Importer & importer )
 	{
-		SetChanged();
-		return p_importer.ImportScene( *this, p_fileName, Parameters() );
+		setChanged();
+		return importer.importScene( *this, fileName, Parameters() );
 	}
 
-	uint32_t Scene::GetVertexCount()const
+	uint32_t Scene::getVertexCount()const
 	{
-		uint32_t l_return = 0;
-		auto l_lock = make_unique_lock( *m_geometryCache );
+		uint32_t result = 0;
+		auto lock = makeUniqueLock( *m_geometryCache );
 
-		for ( auto l_pair : *m_geometryCache )
+		for ( auto pair : *m_geometryCache )
 		{
-			auto l_mesh = l_pair.second->GetMesh();
+			auto mesh = pair.second->getMesh();
 
-			if ( l_mesh )
+			if ( mesh )
 			{
-				l_return += l_pair.second->GetMesh()->GetVertexCount();
+				result += pair.second->getMesh()->getVertexCount();
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
-	uint32_t Scene::GetFaceCount()const
+	uint32_t Scene::getFaceCount()const
 	{
-		uint32_t l_return = 0;
-		auto l_lock = make_unique_lock( *m_geometryCache );
+		uint32_t result = 0;
+		auto lock = makeUniqueLock( *m_geometryCache );
 
-		for ( auto l_pair : *m_geometryCache )
+		for ( auto pair : *m_geometryCache )
 		{
-			auto l_mesh = l_pair.second->GetMesh();
+			auto mesh = pair.second->getMesh();
 
-			if ( l_mesh )
+			if ( mesh )
 			{
-				l_return += l_mesh->GetFaceCount();
+				result += mesh->getFaceCount();
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
-	SceneFlags Scene::GetFlags()const
+	SceneFlags Scene::getFlags()const
 	{
-		SceneFlags l_result;
+		SceneFlags result;
 
-		switch ( m_fog.GetType() )
+		switch ( m_fog.getType() )
 		{
-		case GLSL::FogType::eLinear:
-			l_result |= SceneFlag::eFogLinear;
+		case FogType::eLinear:
+			result |= SceneFlag::eFogLinear;
 			break;
 
-		case GLSL::FogType::eExponential:
-			l_result |= SceneFlag::eFogExponential;
+		case FogType::eExponential:
+			result |= SceneFlag::eFogExponential;
 			break;
 
-		case GLSL::FogType::eSquaredExponential:
-			l_result |= SceneFlag::eFogSquaredExponential;
+		case FogType::eSquaredExponential:
+			result |= SceneFlag::eFogSquaredExponential;
 			break;
 		}
 
-		if ( HasShadows() )
+		if ( hasShadows() )
 		{
-			switch ( m_shadow.GetFilterType() )
+			switch ( m_shadow.getFilterType() )
 			{
-			case GLSL::ShadowType::eRaw:
-				l_result |= SceneFlag::eShadowFilterRaw;
-				break;
-
-			case GLSL::ShadowType::ePoisson:
-				l_result |= SceneFlag::eShadowFilterPoisson;
-				break;
-
-			case GLSL::ShadowType::eStratifiedPoisson:
-				l_result |= SceneFlag::eShadowFilterStratifiedPoisson;
+			case ShadowType::ePCF:
+				result |= SceneFlag::eShadowFilterPcf;
 				break;
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
-	bool Scene::HasShadows()const
+	bool Scene::hasShadows()const
 	{
-		auto l_lock = make_unique_lock( GetLightCache() );
+		auto lock = makeUniqueLock( getLightCache() );
 
-		return GetLightCache().end() != std::find_if( GetLightCache().begin(), GetLightCache().end(), []( std::pair< String, LightSPtr > const & p_it )
+		return getLightCache().end() != std::find_if( getLightCache().begin(), getLightCache().end(), []( std::pair< String, LightSPtr > const & p_it )
 		{
-			return p_it.second->IsShadowProducer();
+			return p_it.second->isShadowProducer();
 		} );
+	}
+
+	void Scene::createEnvironmentMap( SceneNode & node )
+	{
+		if ( !hasEnvironmentMap( node ) )
+		{
+			auto it = m_reflectionMaps.emplace( &node, std::make_unique< EnvironmentMap >( *getEngine(), node ) ).first;
+			auto & pass = *it->second;
+			m_reflectionMapsArray.emplace_back( pass );
+
+			getListener().postEvent( makeFunctorEvent( EventType::ePreRender
+				, [&pass]()
+				{
+					pass.initialise();
+				} ) );
+		}
+	}
+
+	bool Scene::hasEnvironmentMap( SceneNode const & node )const
+	{
+		return m_reflectionMaps.end() != m_reflectionMaps.find( &node );
+	}
+
+	EnvironmentMap & Scene::getEnvironmentMap( SceneNode const & node )
+	{
+		REQUIRE( hasEnvironmentMap( node ) );
+		return *m_reflectionMaps.find( &node )->second;
+	}
+
+	IblTextures const & Scene::getIbl( SceneNode const & node )const
+	{
+		return getSkybox().getIbl();
+	}
+
+	Skybox const & Scene::getSkybox()const
+	{
+		if ( m_fog.getType() == FogType::eDisabled
+			&& m_skybox )
+		{
+			return *m_skybox;
+		}
+
+		return m_backgroundColourSkybox;
+	}
+
+	void Scene::doUpdateAnimations()
+	{
+		std::vector< std::reference_wrapper< AnimatedObjectGroup > > groups;
+
+		m_animatedObjectGroupCache->forEach( [&groups]( AnimatedObjectGroup & group )
+		{
+			groups.push_back( group );
+		} );
+
+		if ( groups.size() > m_animationUpdater.getCount() )
+		{
+			for ( auto & group : groups )
+			{
+				m_animationUpdater.pushJob( [&group]()
+				{
+					group.get().update();
+				} );
+			}
+
+			m_animationUpdater.waitAll( Milliseconds::max() );
+		}
+		else
+		{
+			for ( auto & group : groups )
+			{
+				group.get().update();
+			}
+		}
+	}
+
+	void Scene::doUpdateNoSkybox()
+	{
+		if ( !m_skybox
+			&& !m_backgroundImage
+			&& getMaterialsType() == MaterialType::eLegacy )
+		{
+			m_skybox = std::make_unique< Skybox >( *getEngine() );
+			m_skybox->setScene( *this );
+			Size size{ 16, 16 };
+			constexpr PixelFormat format{ PixelFormat::eR8G8B8 };
+			UbPixel pixel{ true };
+			uint8_t c;
+			pixel.set< format >( { { m_backgroundColour.red().convertTo( c )
+				, m_backgroundColour.green().convertTo( c )
+				, m_backgroundColour.blue().convertTo( c ) } } );
+			auto buffer = PxBufferBase::create( size, format );
+			auto data = buffer->ptr();
+
+			for ( uint32_t i = 0u; i < 256; ++i )
+			{
+				std::memcpy( data, pixel.constPtr(), 3 );
+				data += 3;
+			}
+
+			m_skybox->getTexture().getImage( 0u ).initialiseSource( buffer );
+			m_skybox->getTexture().getImage( 1u ).initialiseSource( buffer );
+			m_skybox->getTexture().getImage( 2u ).initialiseSource( buffer );
+			m_skybox->getTexture().getImage( 3u ).initialiseSource( buffer );
+			m_skybox->getTexture().getImage( 4u ).initialiseSource( buffer );
+			m_skybox->getTexture().getImage( 5u ).initialiseSource( buffer );
+			getListener().postEvent( makeInitialiseEvent( *m_skybox ) );
+		}
+	}
+
+	void Scene::doUpdateMaterials()
+	{
+		if ( m_dirtyMaterials )
+		{
+			auto & cache = getEngine()->getMaterialCache();
+			cache.lock();
+			m_needsSubsurfaceScattering = false;
+			m_hasTransparentObjects = false;
+			m_hasOpaqueObjects = false;
+
+			for ( auto & matName : *m_materialCacheView )
+			{
+				if ( cache.has( matName ) )
+				{
+					auto material = cache.find( matName );
+
+					m_needsSubsurfaceScattering |= material->hasSubsurfaceScattering();
+
+					for ( auto & pass : *material )
+					{
+						m_hasTransparentObjects |= pass->hasAlphaBlending();
+						m_hasOpaqueObjects |= !pass->hasAlphaBlending();
+					}
+				}
+			}
+
+			cache.unlock();
+			m_dirtyMaterials = false;
+		}
+	}
+
+	void Scene::onMaterialChanged( Material const & material )
+	{
+		m_dirtyMaterials = true;
 	}
 }

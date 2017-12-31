@@ -1,122 +1,130 @@
-﻿#include "ToneMapping.hpp"
+#include "ToneMapping.hpp"
 
 #include "Engine.hpp"
 
+#include "HDR/HdrConfig.hpp"
+#include "RenderToTexture/RenderColourToTexture.hpp"
+#include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Shader/ShaderProgram.hpp"
+#include "Shader/Ubos/HdrConfigUbo.hpp"
 
 #include <GlslSource.hpp>
 
-using namespace Castor;
-using namespace GLSL;
+using namespace castor;
+using namespace glsl;
 
-namespace Castor3D
+namespace castor3d
 {
-	String const ToneMapping::HdrConfig = cuT( "HdrConfig" );
-	String const ToneMapping::Exposure = cuT( "c3d_exposure" );
-
-	ToneMapping::ToneMapping( Castor::String const & p_name, Engine & p_engine, Parameters const & p_parameters )
-		: OwnedBy< Engine >{ p_engine }
-		, Named{ p_name }
-		, m_exposure{ 1.0f }
-		, m_matrixUbo{ ShaderProgram::BufferMatrix, *p_engine.GetRenderSystem() }
-		, m_configUbo{ ToneMapping::HdrConfig, *p_engine.GetRenderSystem() }
+	ToneMapping::ToneMapping( castor::String const & name
+		, Engine & engine
+		, Parameters const & parameters )
+		: OwnedBy< Engine >{ engine }
+		, Named{ name }
+		, m_matrixUbo{ engine }
+		, m_configUbo{ engine }
 	{
-		UniformBuffer::FillMatrixBuffer( m_matrixUbo );
-		m_exposureVar = m_configUbo.CreateUniform < UniformType::eFloat > (ToneMapping::Exposure);
-		
-		String l_param;
-
-		if ( p_parameters.Get( cuT( "Exposure" ), l_param ) )
-		{
-			m_exposure = string::to_float( l_param );
-		}
 	}
 
 	ToneMapping::~ToneMapping()
 	{
 	}
 
-	bool ToneMapping::Initialise()
+	bool ToneMapping::initialise()
 	{
-		auto l_program = GetEngine()->GetShaderProgramCache().GetNewProgram( false );
-		bool l_return = l_program != nullptr;
+		auto program = getEngine()->getShaderProgramCache().getNewProgram( false );
+		bool result = program != nullptr;
 
-		if ( l_return )
+		if ( result )
 		{
-			String l_vtx;
+			glsl::Shader vtx;
 			{
-				auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
+				auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 
-				UBO_MATRIX( l_writer );
+				UBO_MATRIX( writer );
 
 				// Shader inputs
-				auto position = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
-				auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture );
+				auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
+				auto texture = writer.declAttribute< Vec2 >( ShaderProgram::Texture );
 
 				// Shader outputs
-				auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ) );
-				auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+				auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
+				auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
-				l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+				writer.implementFunction< void >( cuT( "main" ), [&]()
 				{
 					vtx_texture = texture;
-					gl_Position = c3d_mtxProjection * vec4( position.x(), position.y(), 0.0, 1.0 );
+					gl_Position = c3d_projection * vec4( position.x(), position.y(), 0.0, 1.0 );
 				} );
 
-				l_vtx = l_writer.Finalise();
+				vtx = writer.finalise();
 			}
 
-			l_program->CreateObject( ShaderType::eVertex );
-			l_program->CreateObject( ShaderType::ePixel );
-			auto l_pxl = DoCreate();
-			auto l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
-			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
-			l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
-			l_return = l_program->Initialise();
+			program->createObject( ShaderType::eVertex );
+			program->createObject( ShaderType::ePixel );
+			auto pxl = doCreate();
+			program->setSource( ShaderType::eVertex, vtx );
+			program->setSource( ShaderType::ePixel, pxl );
+			program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
+			result = program->initialise();
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			DepthStencilState l_dsState;
-			l_dsState.SetDepthTest( false );
-			l_dsState.SetDepthMask( WritingMask::eZero );
-			m_pipeline = GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
-			m_pipeline->AddUniformBuffer( m_matrixUbo );
-			m_pipeline->AddUniformBuffer( m_configUbo );
+			DepthStencilState dsState;
+			dsState.setDepthTest( false );
+			dsState.setDepthMask( WritingMask::eZero );
+			m_pipeline = getEngine()->getRenderSystem()->createRenderPipeline( std::move( dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, *program, PipelineFlags{} );
+			m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
+			m_pipeline->addUniformBuffer( m_configUbo.getUbo() );
+
+			m_colour = std::make_unique< RenderColourToTexture >( *getEngine()->getRenderSystem()->getMainContext(), m_matrixUbo );
+			m_colour->initialise();
+
+			m_timer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Tone mapping" ), cuT( "Tone mapping" ) );
 		}
 
-		return l_return;
+		return result;
 	}
 
-	void ToneMapping::Cleanup()
+	void ToneMapping::cleanup()
 	{
-		DoDestroy();
-		m_exposureVar.reset();
-		m_configUbo.Cleanup();
-		m_matrixUbo.Cleanup();
+		m_timer.reset();
+		doDestroy();
+
+		if ( m_colour )
+		{
+			m_colour->cleanup();
+			m_colour.reset();
+		}
 
 		if ( m_pipeline )
 		{
-			m_pipeline->Cleanup();
+			m_pipeline->cleanup();
 			m_pipeline.reset();
 		}
+
+		m_configUbo.getUbo().cleanup();
+		m_matrixUbo.getUbo().cleanup();
 	}
 
-	void ToneMapping::Apply( Size const & p_size, TextureLayout const & p_texture )
+	void ToneMapping::update( HdrConfig const & config )
 	{
-		m_exposureVar->SetValue( m_exposure );
-		DoUpdate();
-		m_configUbo.Update();
-		GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderTexture( p_size
-			, p_texture
-			, *m_pipeline
-			, m_matrixUbo );
+		m_configUbo.update( config );
+		doUpdate();
 	}
 
-	bool ToneMapping::WriteInto( Castor::TextFile & p_file )
+	void ToneMapping::apply( Size const & size
+		, TextureLayout const & texture
+		, RenderInfo & info )
 	{
-		return p_file.WriteText( cuT( " -Exposure " ) + string::to_string( m_exposure ) ) > 0
-			   && DoWriteInto( p_file );
+		static Position const position;
+		m_timer->start();
+		m_colour->render( position
+			, size
+			, texture
+			, m_matrixUbo
+			, *m_pipeline );
+		m_timer->stop();
 	}
 }

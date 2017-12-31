@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_DEPTH_STENCIL_STATE_H___
 #define ___C3D_DEPTH_STENCIL_STATE_H___
@@ -27,7 +8,7 @@ SOFTWARE.
 
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -49,7 +30,7 @@ namespace Castor3D
 		 *\brief		Définit le statut du test de profondeur
 		 *\param[in]	p_enable	Le nouveau statut
 		 */
-		inline void SetDepthTest( bool p_enable )
+		inline void setDepthTest( bool p_enable )
 		{
 			m_bDepthTest = p_enable;
 		}
@@ -61,7 +42,7 @@ namespace Castor3D
 		 *\brief		Récupère le statut du test de profondeur
 		 *\return		Le statut
 		 */
-		inline bool GetDepthTest()const
+		inline bool getDepthTest()const
 		{
 			return m_bDepthTest;
 		}
@@ -73,7 +54,7 @@ namespace Castor3D
 		 *\brief		Définit la fonction de profondeur
 		 *\param[in]	p_func	La fonction
 		 */
-		inline void SetDepthFunc( DepthFunc p_func )
+		inline void setDepthFunc( DepthFunc p_func )
 		{
 			m_eDepthFunc = p_func;
 		}
@@ -85,7 +66,7 @@ namespace Castor3D
 		 *\brief		Récupère la fonction de profondeur
 		 *\return		La fonction
 		 */
-		inline DepthFunc GetDepthFunc()const
+		inline DepthFunc getDepthFunc()const
 		{
 			return m_eDepthFunc;
 		}
@@ -99,7 +80,7 @@ namespace Castor3D
 		 *\param[in]	p_near	La borne inférieure
 		 *\param[in]	p_far	La borne supérieure
 		 */
-		inline void SetDepthRange( double p_near, double p_far )
+		inline void setDepthRange( double p_near, double p_far )
 		{
 			m_dDepthNear = p_near;
 			m_dDepthFar = p_far;
@@ -112,7 +93,7 @@ namespace Castor3D
 		 *\brief		Récupère la valeur proche pour la profondeur
 		 *\return		La valeur
 		 */
-		inline double GetDepthNear()const
+		inline double getDepthNear()const
 		{
 			return m_dDepthNear;
 		}
@@ -124,7 +105,7 @@ namespace Castor3D
 		 *\brief		Récupère la valeur lointaine pour la profondeur
 		 *\return		La valeur
 		 */
-		inline double GetDepthFar()const
+		inline double getDepthFar()const
 		{
 			return m_dDepthFar;
 		}
@@ -136,7 +117,7 @@ namespace Castor3D
 		 *\brief		Définit le masque d'écriture de la profondeur
 		 *\param[in]	p_eMask	Le masque
 		 */
-		inline void SetDepthMask( WritingMask p_eMask )
+		inline void setDepthMask( WritingMask p_eMask )
 		{
 			m_eDepthMask = p_eMask;
 		}
@@ -148,7 +129,7 @@ namespace Castor3D
 		 *\brief		Récupère le masque d'écriture de la profondeur
 		 *\return		Le masque
 		 */
-		inline WritingMask GetDepthMask()const
+		inline WritingMask getDepthMask()const
 		{
 			return m_eDepthMask;
 		}
@@ -160,7 +141,7 @@ namespace Castor3D
 		 *\brief		Définit le statut du test de stencil
 		 *\param[in]	p_enable	Le nouveau statut
 		 */
-		inline void SetStencilTest( bool p_enable )
+		inline void setStencilTest( bool p_enable )
 		{
 			m_bStencilTest = p_enable;
 		}
@@ -172,7 +153,7 @@ namespace Castor3D
 		 *\brief		Récupère le statut du test de stencil
 		 *\return		Le statut
 		 */
-		inline bool GetStencilTest()const
+		inline bool getStencilTest()const
 		{
 			return m_bStencilTest;
 		}
@@ -184,7 +165,7 @@ namespace Castor3D
 		 *\brief		Définit le masque de lecture du stencil
 		 *\param[in]	p_uiMask	Le masque
 		 */
-		inline void SetStencilReadMask( uint32_t p_uiMask )
+		inline void setStencilReadMask( uint32_t p_uiMask )
 		{
 			m_uiStencilReadMask = p_uiMask;
 		}
@@ -196,7 +177,7 @@ namespace Castor3D
 		 *\brief		Récupère le masque de lecture du stencil
 		 *\return		Le masque
 		 */
-		inline uint32_t GetStencilReadMask()const
+		inline uint32_t getStencilReadMask()const
 		{
 			return m_uiStencilReadMask;
 		}
@@ -208,7 +189,7 @@ namespace Castor3D
 		 *\brief		Définit le masque d'écriture du stencil
 		 *\param[in]	p_uiMask	Le masque
 		 */
-		inline void SetStencilWriteMask( uint32_t p_uiMask )
+		inline void setStencilWriteMask( uint32_t p_uiMask )
 		{
 			m_uiStencilWriteMask = p_uiMask;
 		}
@@ -220,7 +201,7 @@ namespace Castor3D
 		 *\brief		Récupère le masque d'écriture du stencil
 		 *\return		Le masque
 		 */
-		inline uint32_t GetStencilWriteMask()const
+		inline uint32_t getStencilWriteMask()const
 		{
 			return m_uiStencilWriteMask;
 		}
@@ -232,7 +213,7 @@ namespace Castor3D
 		 *\brief		Définit la valeur de référence de stencil pour les faces avant
 		 *\param[in]	p_ref	La valeur de référence
 		 */
-		inline void SetStencilFrontRef( uint32_t p_ref )
+		inline void setStencilFrontRef( uint32_t p_ref )
 		{
 			m_stStencilFront.m_ref = p_ref;
 		}
@@ -244,7 +225,7 @@ namespace Castor3D
 		 *\brief		Récupère la valeur de référence de stencil pour les faces avant
 		 *\return		La valeur de référence
 		 */
-		inline uint32_t GetStencilFrontRef()const
+		inline uint32_t getStencilFrontRef()const
 		{
 			return m_stStencilFront.m_ref;
 		}
@@ -256,7 +237,7 @@ namespace Castor3D
 		 *\brief		Définit la fonction de stencil pour les faces avant
 		 *\param[in]	p_func	La fonction
 		 */
-		inline void SetStencilFrontFunc( StencilFunc p_func )
+		inline void setStencilFrontFunc( StencilFunc p_func )
 		{
 			m_stStencilFront.m_eFunc = p_func;
 		}
@@ -268,7 +249,7 @@ namespace Castor3D
 		 *\brief		Récupère la fonction de stencil pour les faces avant
 		 *\return		La fonction
 		 */
-		inline StencilFunc GetStencilFrontFunc()const
+		inline StencilFunc getStencilFrontFunc()const
 		{
 			return m_stStencilFront.m_eFunc;
 		}
@@ -280,7 +261,7 @@ namespace Castor3D
 		 *\brief		Définit l'opération lors de l'échec du test de stencil, pour les faces avant
 		 *\param[in]	p_op	L'opération
 		 */
-		inline void SetStencilFrontFailOp( StencilOp p_op )
+		inline void setStencilFrontFailOp( StencilOp p_op )
 		{
 			m_stStencilFront.m_failOp = p_op;
 		}
@@ -292,7 +273,7 @@ namespace Castor3D
 		 *\brief		Récupère l'opération lors de l'échec du test de stencil, pour les faces avant
 		 *\return		L'opération
 		 */
-		inline StencilOp GetStencilFrontFailOp()const
+		inline StencilOp getStencilFrontFailOp()const
 		{
 			return m_stStencilFront.m_failOp;
 		}
@@ -304,7 +285,7 @@ namespace Castor3D
 		 *\brief		Définit l'opération lors de la réussite du test de stencil mais de l'échec du test de profondeur, pour les faces avant
 		 *\param[in]	p_op	L'opération
 		 */
-		inline void SetStencilFrontDepthFailOp( StencilOp p_op )
+		inline void setStencilFrontDepthFailOp( StencilOp p_op )
 		{
 			m_stStencilFront.m_depthFailOp = p_op;
 		}
@@ -316,7 +297,7 @@ namespace Castor3D
 		 *\brief		Récupère l'opération lors de la réussite du test de stencil mais de l'échec du test de profondeur, pour les faces avant
 		 *\return		L'opération
 		 */
-		inline StencilOp GetStencilFrontDepthFailOp()const
+		inline StencilOp getStencilFrontDepthFailOp()const
 		{
 			return m_stStencilFront.m_depthFailOp;
 		}
@@ -328,7 +309,7 @@ namespace Castor3D
 		 *\brief		Définit l'opération lors de la réussite des tests de stencil et de profondeur, pour les faces avant
 		 *\param[in]	p_op	L'opération
 		 */
-		inline void SetStencilFrontPassOp( StencilOp p_op )
+		inline void setStencilFrontPassOp( StencilOp p_op )
 		{
 			m_stStencilFront.m_passOp = p_op;
 		}
@@ -340,7 +321,7 @@ namespace Castor3D
 		 *\brief		Récupère l'opération lors de la réussite des tests de stencil et de profondeur, pour les faces avant
 		 *\return		L'opération
 		 */
-		inline StencilOp GetStencilFrontPassOp()const
+		inline StencilOp getStencilFrontPassOp()const
 		{
 			return m_stStencilFront.m_passOp;
 		}
@@ -356,7 +337,7 @@ namespace Castor3D
 		 *\param[in]	p_depthFail	L'opération de réussite stencil, échec profondeur
 		 *\param[in]	p_pass		L'opération de réussite stencil, réussite profondeur
 		 */
-		inline void SetStencilFrontOps( StencilOp p_fail, StencilOp p_depthFail, StencilOp p_pass )
+		inline void setStencilFrontOps( StencilOp p_fail, StencilOp p_depthFail, StencilOp p_pass )
 		{
 			m_stStencilFront.m_failOp = p_fail;
 			m_stStencilFront.m_depthFailOp = p_depthFail;
@@ -370,7 +351,7 @@ namespace Castor3D
 		 *\brief		Définit la valeur de référence de stencil pour les faces arrières
 		 *\param[in]	p_ref	La valeur de référence
 		 */
-		inline void SetStencilBackRef( uint32_t p_ref )
+		inline void setStencilBackRef( uint32_t p_ref )
 		{
 			m_stStencilBack.m_ref = p_ref;
 		}
@@ -382,7 +363,7 @@ namespace Castor3D
 		 *\brief		Récupère la valeur de référence de stencil pour les faces arrières
 		 *\return		La valeur de référence
 		 */
-		inline uint32_t GetStencilBackRef()const
+		inline uint32_t getStencilBackRef()const
 		{
 			return m_stStencilBack.m_ref;
 		}
@@ -394,7 +375,7 @@ namespace Castor3D
 		 *\brief		Définit la fonction de stencil pour les faces arrières
 		 *\param[in]	p_func	La fonction
 		 */
-		inline void SetStencilBackFunc( StencilFunc p_func )
+		inline void setStencilBackFunc( StencilFunc p_func )
 		{
 			m_stStencilBack.m_eFunc = p_func;
 		}
@@ -406,7 +387,7 @@ namespace Castor3D
 		 *\brief		Récupère la fonction de stencil pour les faces arrières
 		 *\return		La fonction
 		 */
-		inline StencilFunc GetStencilBackFunc()const
+		inline StencilFunc getStencilBackFunc()const
 		{
 			return m_stStencilBack.m_eFunc;
 		}
@@ -418,7 +399,7 @@ namespace Castor3D
 		 *\brief		Définit l'opération lors de l'échec du test de stencil, pour les faces arrières
 		 *\param[in]	p_op	L'opération
 		 */
-		inline void SetStencilBackFailOp( StencilOp p_op )
+		inline void setStencilBackFailOp( StencilOp p_op )
 		{
 			m_stStencilBack.m_failOp = p_op;
 		}
@@ -430,7 +411,7 @@ namespace Castor3D
 		 *\brief		Récupère l'opération lors de l'échec du test de stencil, pour les faces arrières
 		 *\return		L'opération
 		 */
-		inline StencilOp GetStencilBackFailOp()const
+		inline StencilOp getStencilBackFailOp()const
 		{
 			return m_stStencilBack.m_failOp;
 		}
@@ -442,7 +423,7 @@ namespace Castor3D
 		 *\brief		Définit l'opération lors de la réussite du test de stencil mais de l'échec du test de profondeur, pour les faces arrières
 		 *\param[in]	p_op	L'opération
 		 */
-		inline void SetStencilBackDepthFailOp( StencilOp p_op )
+		inline void setStencilBackDepthFailOp( StencilOp p_op )
 		{
 			m_stStencilBack.m_depthFailOp = p_op;
 		}
@@ -454,7 +435,7 @@ namespace Castor3D
 		 *\brief		Récupère l'opération lors de la réussite du test de stencil mais de l'échec du test de profondeur, pour les faces arrières
 		 *\return		L'opération
 		 */
-		inline StencilOp GetStencilBackDepthFailOp()const
+		inline StencilOp getStencilBackDepthFailOp()const
 		{
 			return m_stStencilBack.m_depthFailOp;
 		}
@@ -466,7 +447,7 @@ namespace Castor3D
 		 *\brief		Définit l'opération lors de la réussite des tests de stencil et de profondeur, pour les faces arrières
 		 *\param[in]	p_op	L'opération
 		 */
-		inline void SetStencilBackPassOp( StencilOp p_op )
+		inline void setStencilBackPassOp( StencilOp p_op )
 		{
 			m_stStencilBack.m_passOp = p_op;
 		}
@@ -482,7 +463,7 @@ namespace Castor3D
 		 *\param[in]	p_depthFail	L'opération de réussite stencil, échec profondeur
 		 *\param[in]	p_pass		L'opération de réussite stencil, réussite profondeur
 		 */
-		inline void SetStencilBackOps( StencilOp p_fail, StencilOp p_depthFail, StencilOp p_pass )
+		inline void setStencilBackOps( StencilOp p_fail, StencilOp p_depthFail, StencilOp p_pass )
 		{
 			m_stStencilBack.m_failOp = p_fail;
 			m_stStencilBack.m_depthFailOp = p_depthFail;
@@ -496,7 +477,7 @@ namespace Castor3D
 		 *\brief		Récupère l'opération lors de la réussite des tests de stencil et de profondeur, pour les faces arrières
 		 *\return		L'opération
 		 */
-		inline StencilOp GetStencilBackPassOp()const
+		inline StencilOp getStencilBackPassOp()const
 		{
 			return m_stStencilBack.m_passOp;
 		}
@@ -508,7 +489,7 @@ namespace Castor3D
 		 *\brief		Définit la valeur de référence de stencil
 		 *\param[in]	p_ref	La valeur de référence
 		 */
-		inline void SetStencilRef( uint32_t p_ref )
+		inline void setStencilRef( uint32_t p_ref )
 		{
 			m_stStencilFront.m_ref = p_ref;
 			m_stStencilBack.m_ref = p_ref;
@@ -521,7 +502,7 @@ namespace Castor3D
 		 *\brief		Définit la fonction de stencil
 		 *\param[in]	p_func	La fonction
 		 */
-		inline void SetStencilFunc( StencilFunc p_func )
+		inline void setStencilFunc( StencilFunc p_func )
 		{
 			m_stStencilFront.m_eFunc = p_func;
 			m_stStencilBack.m_eFunc = p_func;
@@ -534,7 +515,7 @@ namespace Castor3D
 		 *\brief		Définit l'opération lors de l'échec du test de stencil
 		 *\param[in]	p_op	L'opération
 		 */
-		inline void SetStencilFailOp( StencilOp p_op )
+		inline void setStencilFailOp( StencilOp p_op )
 		{
 			m_stStencilFront.m_failOp = p_op;
 			m_stStencilBack.m_failOp = p_op;
@@ -547,7 +528,7 @@ namespace Castor3D
 		 *\brief		Définit l'opération lors de la réussite du test de stencil mais de l'échec du test de profondeur
 		 *\param[in]	p_op	L'opération
 		 */
-		inline void SetStencilDepthFailOp( StencilOp p_op )
+		inline void setStencilDepthFailOp( StencilOp p_op )
 		{
 			m_stStencilFront.m_depthFailOp = p_op;
 			m_stStencilBack.m_depthFailOp = p_op;
@@ -560,7 +541,7 @@ namespace Castor3D
 		 *\brief		Définit l'opération lors de la réussite des tests de stencil et de profondeur
 		 *\param[in]	p_op	L'opération
 		 */
-		inline void SetStencilPassOp( StencilOp p_op )
+		inline void setStencilPassOp( StencilOp p_op )
 		{
 			m_stStencilFront.m_passOp = p_op;
 			m_stStencilBack.m_passOp = p_op;
@@ -577,7 +558,7 @@ namespace Castor3D
 		 *\param[in]	p_depthFail	L'opération de réussite stencil, échec profondeur
 		 *\param[in]	p_pass		L'opération de réussite stencil, réussite profondeur
 		 */
-		inline void SetStencilOps( StencilOp p_fail, StencilOp p_depthFail, StencilOp p_pass )
+		inline void setStencilOps( StencilOp p_fail, StencilOp p_depthFail, StencilOp p_pass )
 		{
 			m_stStencilFront.m_failOp = p_fail;
 			m_stStencilFront.m_depthFailOp = p_depthFail;

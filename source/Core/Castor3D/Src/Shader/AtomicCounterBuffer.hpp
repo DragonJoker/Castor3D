@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_AtomicCounterBuffer_H___
 #define ___C3D_AtomicCounterBuffer_H___
@@ -28,7 +9,7 @@ SOFTWARE.
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -41,23 +22,21 @@ namespace Castor3D
 	\brief		Interface de tampon de compteur atomique.
 	*/
 	class AtomicCounterBuffer
-		: public Castor::OwnedBy< ShaderProgram >
+		: public castor::OwnedBy< ShaderProgram >
 	{
-	private:
-		using GpuBufferUPtr = std::unique_ptr< GpuBuffer< uint32_t > >;
-
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_name		The buffer name.
-		 *\param[in]	p_program	The parent program.
+		 *\param[in]	name	The buffer name.
+		 *\param[in]	program	The parent program.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_name		Le nom du tampon.
-		 *\param[in]	p_program	Le programme parent.
+		 *\param[in]	name	Le nom du tampon.
+		 *\param[in]	program	Le programme parent.
 		 */
-		C3D_API AtomicCounterBuffer( Castor::String const & p_name, ShaderProgram & p_program );
+		C3D_API AtomicCounterBuffer( castor::String const & name
+			, ShaderProgram & program );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -68,40 +47,43 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Initialises the GPU buffer.
-		 *\param[in]	p_size	The buffer size.
-		 *\param[in]	p_index	The buffer's binding point.
+		 *\param[in]	size	The buffer size.
+		 *\param[in]	index	The buffer's binding point.
 		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Initialise le tampon GPU.
-		 *\param[in]	p_size	Taille du tampon.
-		 *\param[in]	p_index	Le point d'attache du tampon.
+		 *\param[in]	size	Taille du tampon.
+		 *\param[in]	index	Le point d'attache du tampon.
 		 *\return		\p false if any problem occured.
 		 */
-		C3D_API bool Initialise( uint32_t p_size, uint32_t p_index );
+		C3D_API bool initialise( uint32_t size
+			, uint32_t index );
 		/**
 		 *\~english
 		 *\brief		Cleans all the variables up and the GPU buffer associated.
 		 *\~french
 		 *\brief		Nettoie toutes les variables et le tampon GPU associé.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Locks the buffer, id est maps it into memory so we can modify it.
 		 *\remarks		Maps from buffer[p_offset*sizeof( T )] to buffer[(p_offset+p_uiSize-1)*sizeof( T )].
-		 *\param[in]	p_offset	The start offset in the buffer.
-		 *\param[in]	p_count		The mapped elements count.
-		 *\param[in]	p_flags		The lock flags.
+		 *\param[in]	offset	The start offset in the buffer.
+		 *\param[in]	count	The mapped elements count.
+		 *\param[in]	flags	The lock flags.
 		 *\return		The mapped buffer address.
 		 *\~french
 		 *\brief		Locke le tampon, càd le mappe en mémoire ram afin d'y autoriser des modifications.
 		 *\remarks		Mappe de tampon[p_offset*sizeof( T )] à tampon[(p_offset+p_uiSize-1) * sizeof( T )].
-		 *\param[in]	p_offset	L'offset de départ.
-		 *\param[in]	p_count		Le nombre d'éléments à mapper.
-		 *\param[in]	p_flags		Les flags de lock.
+		 *\param[in]	offset	L'offset de départ.
+		 *\param[in]	count	Le nombre d'éléments à mapper.
+		 *\param[in]	flags	Les flags de lock.
 		 *\return		L'adresse du tampon mappé.
 		 */
-		C3D_API uint32_t * Lock( uint32_t p_offset, uint32_t p_count, AccessTypes const & p_flags );
+		C3D_API uint32_t * lock( uint32_t offset
+			, uint32_t count
+			, AccessTypes const & flags );
 		/**
 		 *\~english
 		 *\brief		Unlocks the buffer, id est unmaps it from memory so no modification can be made after that.
@@ -110,44 +92,48 @@ namespace Castor3D
 		 *\brief		Un locke le tampon, càd l'unmappe de la mémoire ram afin de ne plus autoriser de modifications dessus.
 		 *\remarks		Toutes les modifications qui avaient été effectuées sur le tampon mappé sont rapatriées dans la mémoire GPU.
 		 */
-		C3D_API void Unlock();
+		C3D_API void unlock();
 		/**
 		 *\~english
 		 *\brief		Transfers data to the GPU buffer from RAM.
 		 *\remarks		Transfers data from buffer[p_offset*sizeof( T )] to buffer[(p_offset+p_count-1)*sizeof( T )].
-		 *\param[in]	p_offset	The start offset.
-		 *\param[in]	p_count		Elements count.
-		 *\param[in]	p_buffer	The data.
+		 *\param[in]	offset	The start offset.
+		 *\param[in]	count	Elements count.
+		 *\param[in]	buffer	The data.
 		 *\~french
 		 *\brief		Transfère des données au tampon GPU à partir de la RAM.
 		 *\remarks		Transfère les données de tampon[p_offset*sizeof( T )] à tampon[(p_offset+p_count-1) * sizeof( T )].
-		 *\param[in]	p_offset	L'offset de départ.
-		 *\param[in]	p_count		Nombre d'éléments.
-		 *\param[in]	p_buffer	Les données.
+		 *\param[in]	offset	L'offset de départ.
+		 *\param[in]	count	Nombre d'éléments.
+		 *\param[in]	buffer	Les données.
 		 */
-		C3D_API void Upload( uint32_t p_offset, uint32_t p_count, uint32_t const * p_buffer );
+		C3D_API void upload( uint32_t offset
+			, uint32_t count
+			, uint32_t const * buffer );
 		/**
 		 *\~english
 		 *\brief		Transfers data from the GPU buffer to RAM.
 		 *\remarks		Transfers data from buffer[p_offset*sizeof( T )] to buffer[(p_offset+p_count-1)*sizeof( T )].
-		 *\param[in]	p_offset	The start offset.
-		 *\param[in]	p_count		Elements count.
-		 *\param[in]	p_buffer	The data.
+		 *\param[in]	offset	The start offset.
+		 *\param[in]	count	Elements count.
+		 *\param[in]	buffer	The data.
 		 *\~french
 		 *\brief		Transfère des données du tampon GPU vers la RAM.
 		 *\remarks		Transfère les données de tampon[p_offset*sizeof( T )] à tampon[(p_offset+p_count-1) * sizeof( T )].
-		 *\param[in]	p_offset	L'offset de départ.
-		 *\param[in]	p_count		Nombre d'éléments.
-		 *\param[in]	p_buffer	Les données.
+		 *\param[in]	offset	L'offset de départ.
+		 *\param[in]	count	Nombre d'éléments.
+		 *\param[in]	buffer	Les données.
 		 */
-		C3D_API void Download( uint32_t p_offset, uint32_t p_count, uint32_t * p_buffer );
+		C3D_API void download( uint32_t offset
+			, uint32_t count
+			, uint32_t * buffer );
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active.
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé.
 		 */
-		C3D_API void Bind();
+		C3D_API void bind();
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive.
@@ -156,27 +142,31 @@ namespace Castor3D
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API void Unbind();
+		C3D_API void unbind();
 		/**
 		 *\~english
 		 *\brief		Copies data from given buffer to this one.
-		 *\param[in]	p_src	The cource buffer.
-		 *\param[in]	p_size	The number of elements to copy.
+		 *\param[in]	src			The source buffer.
+		 *\param[in]	srcOffset	The offset in the source buffer.
+		 *\param[in]	size		The number of elements to copy.
 		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Copie les données du tampon donné dans celui-ci.
-		 *\param[in]	p_src	Le tampon source.
-		 *\param[in]	p_size	Le nombre d'éléments à copier.
+		 *\param[in]	src			Le tampon source.
+		 *\param[in]	srcOffset	Le décalage dans le tampon source.
+		 *\param[in]	size		Le nombre d'éléments à copier.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API void Copy( GpuBuffer< uint32_t > const & p_src, uint32_t p_size );
+		C3D_API void copy( GpuBuffer const & src
+			, uint32_t srcOffset
+			, uint32_t size );
 		/**
 		 *\~english
 		 *\return		The GPU buffer.
 		 *\~french
 		 *\return		Le tampon GPU.
 		 */
-		inline GpuBuffer< uint32_t > const & GetGpuBuffer()const
+		inline GpuBuffer const & getGpuBuffer()const
 		{
 			REQUIRE( m_gpuBuffer );
 			return *m_gpuBuffer;
@@ -185,7 +175,10 @@ namespace Castor3D
 	protected:
 		//!\~english	The GPU buffer.
 		//!\~french		Le tampon GPU.
-		GpuBufferUPtr m_gpuBuffer;
+		GpuBufferSPtr m_gpuBuffer;
+		//!\~english	The offset in the GPU buffer.
+		//!\~french		Le décalage dans le tampon GPU.
+		uint32_t m_offset{ 0u };
 	};
 }
 

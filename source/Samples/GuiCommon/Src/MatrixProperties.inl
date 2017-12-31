@@ -5,37 +5,37 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template<>
-	inline Castor::SquareMatrix< float, 2 > const & MatrixRefFromVariant< float, 2 >( wxVariant const & p_variant )
+	inline castor::SquareMatrix< float, 2 > const & matrixRefFromVariant< float, 2 >( wxVariant const & p_variant )
 	{
 		return Matrix2x2fRefFromVariant( p_variant );
 	}
 
 	template<>
-	inline Castor::SquareMatrix< float, 3 > const & MatrixRefFromVariant< float, 3 >( wxVariant const & p_variant )
+	inline castor::SquareMatrix< float, 3 > const & matrixRefFromVariant< float, 3 >( wxVariant const & p_variant )
 	{
 		return Matrix3x3fRefFromVariant( p_variant );
 	}
 
 	template<>
-	inline Castor::SquareMatrix< float, 4 > const & MatrixRefFromVariant< float, 4 >( wxVariant const & p_variant )
+	inline castor::SquareMatrix< float, 4 > const & matrixRefFromVariant< float, 4 >( wxVariant const & p_variant )
 	{
 		return Matrix4x4fRefFromVariant( p_variant );
 	}
 
 	template<>
-	inline Castor::SquareMatrix< double, 2 > const & MatrixRefFromVariant< double, 2 >( wxVariant const & p_variant )
+	inline castor::SquareMatrix< double, 2 > const & matrixRefFromVariant< double, 2 >( wxVariant const & p_variant )
 	{
 		return Matrix2x2dRefFromVariant( p_variant );
 	}
 
 	template<>
-	inline Castor::SquareMatrix< double, 3 > const & MatrixRefFromVariant< double, 3 >( wxVariant const & p_variant )
+	inline castor::SquareMatrix< double, 3 > const & matrixRefFromVariant< double, 3 >( wxVariant const & p_variant )
 	{
 		return Matrix3x3dRefFromVariant( p_variant );
 	}
 
 	template<>
-	inline Castor::SquareMatrix< double, 4 > const & MatrixRefFromVariant< double, 4 >( wxVariant const & p_variant )
+	inline castor::SquareMatrix< double, 4 > const & matrixRefFromVariant< double, 4 >( wxVariant const & p_variant )
 	{
 		return Matrix4x4dRefFromVariant( p_variant );
 	}
@@ -43,130 +43,130 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template<>
-	inline Castor::SquareMatrix< float, 2 > & MatrixRefFromVariant< float, 2 >( wxVariant & p_variant )
+	inline castor::SquareMatrix< float, 2 > & matrixRefFromVariant< float, 2 >( wxVariant & p_variant )
 	{
 		return Matrix2x2fRefFromVariant( p_variant );
 	}
 
 	template<>
-	inline Castor::SquareMatrix< float, 3 > & MatrixRefFromVariant< float, 3 >( wxVariant & p_variant )
+	inline castor::SquareMatrix< float, 3 > & matrixRefFromVariant< float, 3 >( wxVariant & p_variant )
 	{
 		return Matrix3x3fRefFromVariant( p_variant );
 	}
 
 	template<>
-	inline Castor::SquareMatrix< float, 4 > & MatrixRefFromVariant< float, 4 >( wxVariant & p_variant )
+	inline castor::SquareMatrix< float, 4 > & matrixRefFromVariant< float, 4 >( wxVariant & p_variant )
 	{
 		return Matrix4x4fRefFromVariant( p_variant );
 	}
 
 	template<>
-	inline Castor::SquareMatrix< double, 2 > & MatrixRefFromVariant< double, 2 >( wxVariant & p_variant )
+	inline castor::SquareMatrix< double, 2 > & matrixRefFromVariant< double, 2 >( wxVariant & p_variant )
 	{
 		return Matrix2x2dRefFromVariant( p_variant );
 	}
 
 	template<>
-	inline Castor::SquareMatrix< double, 3 > & MatrixRefFromVariant< double, 3 >( wxVariant & p_variant )
+	inline castor::SquareMatrix< double, 3 > & matrixRefFromVariant< double, 3 >( wxVariant & p_variant )
 	{
 		return Matrix3x3dRefFromVariant( p_variant );
 	}
 
 	template<>
-	inline Castor::SquareMatrix< double, 4 > & MatrixRefFromVariant< double, 4 >( wxVariant & p_variant )
+	inline castor::SquareMatrix< double, 4 > & matrixRefFromVariant< double, 4 >( wxVariant & p_variant )
 	{
 		return Matrix4x4dRefFromVariant( p_variant );
 	}
 
 	//************************************************************************************************
 
-	template< typename Type, size_t Count > void SetVariantFromMatrix( wxVariant & p_variant, Castor::SquareMatrix< Type, Count > const & p_value )
+	template< typename Type, size_t Count > void setVariantFromMatrix( wxVariant & p_variant, castor::SquareMatrix< Type, Count > const & p_value )
 	{
-		MatrixRefFromVariant< Type, Count >( p_variant ) = p_value;
+		matrixRefFromVariant< Type, Count >( p_variant ) = p_value;
 	}
 
 	//************************************************************************************************
 
 	template< typename T, size_t Count > struct MatrixPropertyHelper
 	{
-		static void AddChildren( MatrixProperty< T, Count > * p_prop, wxString const * p_rowNames, wxString const * p_colNames, Castor::SquareMatrix< T, Count > const & p_value )
+		static void addChildren( MatrixProperty< T, Count > * p_prop, wxString const * p_rowNames, wxString const * p_colNames, castor::SquareMatrix< T, Count > const & p_value )
 		{
 			for ( size_t i = 0; i < Count; ++i )
 			{
-				wxString l_names[Count];
+				wxString names[Count];
 
 				for ( size_t j = 0; j < Count; ++j )
 				{
-					l_names[j] << p_colNames[i] << wxT( "." ) << p_rowNames[j];
+					names[j] << p_colNames[i] << wxT( "." ) << p_rowNames[j];
 				}
 
-				wxPGProperty * l_property = new PointProperty< T, Count >( l_names, wxString() << _( "Col " ) << p_rowNames[i], wxPG_LABEL, Castor::Point< T, Count >( p_value[i].const_ptr() ) );
-				l_property->Enable( false );
-				p_prop->AddPrivateChild( l_property );
+				wxPGProperty * property = new PointProperty< T, Count >( names, wxString() << _( "Col " ) << p_rowNames[i], wxPG_LABEL, castor::Point< T, Count >( p_value[i].constPtr() ) );
+				property->Enable( false );
+				p_prop->AddPrivateChild( property );
 			}
 		}
-		static void RefreshChildren( MatrixProperty< T, Count > * p_prop )
+		static void refreshChildren( MatrixProperty< T, Count > * p_prop )
 		{
-			Castor::SquareMatrix< T, Count > const & l_matrix = MatrixRefFromVariant< T, Count >( p_prop->GetValue() );
+			castor::SquareMatrix< T, Count > const & matrix = matrixRefFromVariant< T, Count >( p_prop->GetValue() );
 
 			for ( size_t i = 0; i < Count; ++i )
 			{
-				wxVariant l_value = p_prop->Item( i )->GetValue();
-				SetVariantFromPoint< T, Count >( l_value, Castor::Point< T, Count >( l_matrix[i].const_ptr() ) );
-				p_prop->Item( i )->SetValue( l_value );
+				wxVariant value = p_prop->Item( i )->GetValue();
+				setVariantFromPoint< T, Count >( value, castor::Point< T, Count >( matrix[i].constPtr() ) );
+				p_prop->Item( i )->SetValue( value );
 			}
 		}
-		static wxVariant ChildChanged( wxVariant & p_thisValue, int p_index, wxVariant & p_newValue )
+		static wxVariant childChanged( wxVariant & p_thisValue, int p_index, wxVariant & p_newValue )
 		{
-			Castor::SquareMatrix< T, Count > & l_matrix = MatrixRefFromVariant< T, Count >( p_thisValue );
-			Castor::Point< T, Count > const & l_row = PointRefFromVariant< T, Count >( p_newValue );
-			l_matrix.set_row( p_index, l_row );
-			wxVariant l_return;
-			l_return << l_matrix;
-			return l_return;
+			castor::SquareMatrix< T, Count > & matrix = matrixRefFromVariant< T, Count >( p_thisValue );
+			castor::Point< T, Count > const & row = PointRefFromVariant< T, Count >( p_newValue );
+			matrix.setRow( p_index, row );
+			wxVariant result;
+			result << matrix;
+			return result;
 		}
 	};
 
 	//************************************************************************************************
 
-	template< size_t Count > wxString const * GetMatrixRowDefaultNames();
+	template< size_t Count > wxString const * getMatrixRowDefaultNames();
 
 	template<>
-	inline wxString const * GetMatrixRowDefaultNames< 2 >()
+	inline wxString const * getMatrixRowDefaultNames< 2 >()
 	{
 		return GC_POINT_12;
 	}
 
 	template<>
-	inline wxString const * GetMatrixRowDefaultNames< 3 >()
+	inline wxString const * getMatrixRowDefaultNames< 3 >()
 	{
 		return GC_POINT_123;
 	}
 
 	template<>
-	inline wxString const * GetMatrixRowDefaultNames< 4 >()
+	inline wxString const * getMatrixRowDefaultNames< 4 >()
 	{
 		return GC_POINT_1234;
 	}
 
 	//************************************************************************************************
 
-	template< size_t Count > wxString const * GetMatrixColDefaultNames();
+	template< size_t Count > wxString const * getMatrixColDefaultNames();
 
 	template<>
-	inline wxString const * GetMatrixColDefaultNames< 2 >()
+	inline wxString const * getMatrixColDefaultNames< 2 >()
 	{
 		return GC_POINT_12;
 	}
 
 	template<>
-	inline wxString const * GetMatrixColDefaultNames< 3 >()
+	inline wxString const * getMatrixColDefaultNames< 3 >()
 	{
 		return GC_POINT_123;
 	}
 
 	template<>
-	inline wxString const * GetMatrixColDefaultNames< 4 >()
+	inline wxString const * getMatrixColDefaultNames< 4 >()
 	{
 		return GC_POINT_1234;
 	}
@@ -174,19 +174,19 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template< typename T, size_t Count >
-	MatrixProperty< T, Count >::MatrixProperty( wxString const & label, wxString const & name, Castor::SquareMatrix< T, Count > const & value )
+	MatrixProperty< T, Count >::MatrixProperty( wxString const & label, wxString const & name, castor::SquareMatrix< T, Count > const & value )
 		: wxPGProperty( label, name )
 	{
-		SetValueI( value );
-		MatrixPropertyHelper< T, Count >::AddChildren( this, GetMatrixRowDefaultNames< Count >(), GetMatrixColDefaultNames< Count >(), value );
+		setValueI( value );
+		MatrixPropertyHelper< T, Count >::addChildren( this, getMatrixRowDefaultNames< Count >(), getMatrixColDefaultNames< Count >(), value );
 	}
 
 	template< typename T, size_t Count >
-	MatrixProperty< T, Count >::MatrixProperty( wxString const( & p_rowNames )[Count], wxString const( & p_colNames )[Count], wxString const & label, wxString const & name, Castor::SquareMatrix< T, Count > const & value )
+	MatrixProperty< T, Count >::MatrixProperty( wxString const( & p_rowNames )[Count], wxString const( & p_colNames )[Count], wxString const & label, wxString const & name, castor::SquareMatrix< T, Count > const & value )
 		: wxPGProperty( label, name )
 	{
-		SetValueI( value );
-		MatrixPropertyHelper< T, Count >::AddChildren( this, p_rowNames, p_colNames, value );
+		setValueI( value );
+		MatrixPropertyHelper< T, Count >::addChildren( this, p_rowNames, p_colNames, value );
 	}
 
 	template< typename T, size_t Count >
@@ -199,18 +199,18 @@ namespace GuiCommon
 	{
 		if ( GetChildCount() )
 		{
-			MatrixPropertyHelper< T, Count >::RefreshChildren( this );
+			MatrixPropertyHelper< T, Count >::refreshChildren( this );
 		}
 	}
 
 	template< typename T, size_t Count >
 	wxVariant MatrixProperty< T, Count >::ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const
 	{
-		return MatrixPropertyHelper< T, Count >::ChildChanged( thisValue, childIndex, childValue );
+		return MatrixPropertyHelper< T, Count >::childChanged( thisValue, childIndex, childValue );
 	}
 
 	template< typename T, size_t Count >
-	inline void MatrixProperty< T, Count >::SetValueI( Castor::SquareMatrix< T, Count > const & value )
+	inline void MatrixProperty< T, Count >::setValueI( castor::SquareMatrix< T, Count > const & value )
 	{
 		m_value = WXVARIANT( value );
 	}

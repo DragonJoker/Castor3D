@@ -1,30 +1,15 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_PREREQUISITES_SHADER_H___
 #define ___C3D_PREREQUISITES_SHADER_H___
 
-namespace Castor3D
+namespace castor3d
 {
+	static uint32_t constexpr PassBufferIndex = 0u;
+	static uint32_t constexpr LightBufferIndex = 1u;
+	static uint32_t constexpr MinTextureIndex = 2u;
+
 	/**@name Shader */
 	//@{
 
@@ -68,11 +53,11 @@ namespace Castor3D
 	enum class ShaderStatus
 		: uint8_t
 	{
-		eDontExist,
+		edontExist,
 		eNotCompiled,
 		eError,
 		eCompiled,
-		CASTOR_SCOPED_ENUM_BOUNDS( eDontExist )
+		CASTOR_SCOPED_ENUM_BOUNDS( edontExist )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -152,30 +137,33 @@ namespace Castor3D
 		//!\~english	Program using per-vertex animations.
 		//!\~french		Programme utilisant les animations par sommet.
 		eMorphing = 0x0008,
-		//!\~english	Program used in transparent pipeline.
-		//!\~french		Programme utilisé dans le pipeline des objets transparents.
-		eAlphaBlending = 0x0010,
 		//!\~english	Picking pass program.
 		//\~french		Programme de passe de picking.
-		ePicking = 0x0020,
+		ePicking = 0x0010,
 		//!\~english	Shader supporting lighting.
 		//\~french		Shader supportant les éclairages.
-		eLighting = 0x0040,
+		eLighting = 0x0020,
 		//!\~english	Shader for spherical billboards.
 		//\~french		Shader pour les billboards sphériques.
-		eSpherical = 0x0080,
+		eSpherical = 0x0040,
 		//!\~english	Shader for fixed size billboards.
 		//\~french		Shader pour les billboards à dimensions fixes.
-		eFixedSize = 0x0100,
+		eFixedSize = 0x0080,
 		//!\~english	Shader used to render a shadow map for directional light.
 		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière directionnalle.
-		eShadowMapDirectional = 0x0200,
+		eShadowMapDirectional = 0x0100,
 		//!\~english	Shader used to render a shadow map for spot light.
 		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière projecteur.
-		eShadowMapSpot = 0x0400,
+		eShadowMapSpot = 0x0200,
 		//!\~english	Shader used to render a shadow map for point light.
 		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière omnidirectionnelle.
-		eShadowMapPoint = 0x0800,
+		eShadowMapPoint = 0x0400,
+		//!\~english	Shader used to render an environment map.
+		//\~french		Shader utilisé pour dessiner une texture d'environnement.
+		eEnvironmentMapping = 0x0800,
+		//!\~english	Shader for the depth pre-pass.
+		//\~french		Shader pour la pré-passe de profondeur.
+		eDepthPass = 0x1000,
 	};
 	IMPLEMENT_FLAGS( ProgramFlag )
 	/**
@@ -188,7 +176,7 @@ namespace Castor3D
 	 *\param[in]	p_flags	Les indicateurs à vérifier.
 	 *\return		\p true si p_flags contient l'un de ProgramFlag::eShadowMapDirectional, ProgramFlag::eShadowMapSpot, ou ProgramFlag::eShadowMapPoint.
 	 */
-	bool IsShadowMapProgram( ProgramFlags const & p_flags );
+	bool isShadowMapProgram( ProgramFlags const & p_flags );
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -363,6 +351,14 @@ namespace Castor3D
 	class UniformBufferBinding;
 	class ShaderStorageBuffer;
 	class AtomicCounterBuffer;
+	class BillboardUbo;
+	class MatrixUbo;
+	class ModelUbo;
+	class ModelMatrixUbo;
+	class MorphingUbo;
+	class SceneUbo;
+	class SkinningUbo;
+	class PassBuffer;
 	template< UniformType Type >
 	class TUniform;
 	template< UniformType Type >
@@ -704,89 +700,246 @@ namespace Castor3D
 	DECLARE_LIST( UniformBufferSPtr, UniformBufferPtr );
 	DECLARE_LIST( ShaderStorageBufferSPtr, ShaderStorageBufferPtr );
 	DECLARE_LIST( AtomicCounterBufferSPtr, AtomicCounterBufferPtr );
-	DECLARE_MAP( Castor::String, PushUniformWPtr, PushUniform );
-	DECLARE_MAP( Castor::String, UniformWPtr, Uniform );
+	DECLARE_MAP( castor::String, PushUniformWPtr, PushUniform );
+	DECLARE_MAP( castor::String, UniformWPtr, Uniform );
 	DECLARE_MAP( ShaderProgramRPtr, UniformBufferBindingUPtr, UniformBufferBinding );
-	DECLARE_MAP( Castor::String, UniformBufferWPtr, UniformBufferPtrStr );
-	DECLARE_MAP( Castor::String, ShaderStorageBufferWPtr, ShaderStorageBufferPtrStr );
-	DECLARE_MAP( Castor::String, AtomicCounterBufferWPtr, AtomicCounterBufferPtrStr );
+	DECLARE_MAP( castor::String, UniformBufferWPtr, UniformBufferPtrStr );
+	DECLARE_MAP( castor::String, ShaderStorageBufferWPtr, ShaderStorageBufferPtrStr );
+	DECLARE_MAP( castor::String, AtomicCounterBufferWPtr, AtomicCounterBufferPtrStr );
 	DECLARE_MAP( ShaderType, UniformBufferWPtr, UniformBufferPtrShader );
 	DECLARE_MAP( ShaderType, ShaderStorageBufferWPtr, ShaderStorageBufferPtrShader );
 	DECLARE_MAP( ShaderType, AtomicCounterBufferWPtr, AtomicCounterBufferPtrShader );
 
 	//@}
 
-#define UBO_MATRIX( Writer )\
-	GLSL::Ubo l_matrices{ l_writer, ShaderProgram::BufferMatrix };\
-	auto c3d_mtxProjection = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxProjection );\
-	auto c3d_mtxView = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxView );\
-	l_matrices.End()
+	namespace shader
+	{
+		enum class TypeName
+		{
+			eLight = int( glsl::TypeName::eCount ),
+			eDirectionalLight,
+			ePointLight,
+			eSpotLight,
+			eMaterial,
+			eLegacyMaterial,
+			eMetallicRoughnessMaterial,
+			eSpecularGlossinessMaterial,
+		};
 
-#define UBO_MODEL_MATRIX( Writer )\
-	GLSL::Ubo l_modelMatrices{ l_writer, ShaderProgram::BufferModelMatrix };\
-	auto c3d_mtxModel = l_modelMatrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxModel );\
-	auto c3d_mtxNormal = l_modelMatrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxNormal );\
-	l_modelMatrices.End()
+		static constexpr uint32_t SpotShadowMapCount = 10u;
+		static constexpr uint32_t PointShadowMapCount = 6u;
+		static constexpr int BaseLightComponentsCount = 2;
+		static constexpr int MaxLightComponentsCount = 14;
+		static constexpr float LightComponentsOffset = MaxLightComponentsCount * 0.001f;
 
-#define UBO_SCENE( Writer )\
-	GLSL::Ubo l_scene{ l_writer, ShaderProgram::BufferScene };\
-	auto c3d_v4AmbientLight = l_scene.GetUniform< GLSL::Vec4 >( ShaderProgram::AmbientLight );\
-	auto c3d_v4BackgroundColour = l_scene.GetUniform< GLSL::Vec4 >( ShaderProgram::BackgroundColour );\
-	auto c3d_iLightsCount = l_scene.GetUniform< GLSL::IVec4 >( ShaderProgram::LightsCount );\
-	auto c3d_v3CameraPosition = l_scene.GetUniform< GLSL::Vec3 >( ShaderProgram::CameraPos );\
-	auto c3d_iFogType = l_scene.GetUniform< GLSL::Int >( ShaderProgram::FogType );\
-	auto c3d_fFogDensity = l_scene.GetUniform< GLSL::Float >( ShaderProgram::FogDensity );\
-	l_scene.End()
 
-#define UBO_PASS( Writer )\
-	GLSL::Ubo l_pass{ l_writer, ShaderProgram::BufferPass };\
-	auto c3d_mtxTexture0 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[0] );\
-	auto c3d_mtxTexture1 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[1] );\
-	auto c3d_mtxTexture2 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[2] );\
-	auto c3d_mtxTexture3 = l_pass.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[3] );\
-	auto c3d_v4MatAmbient = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatAmbient );\
-	auto c3d_v4MatDiffuse = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatDiffuse );\
-	auto c3d_v4MatEmissive = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatEmissive );\
-	auto c3d_v4MatSpecular = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatSpecular );\
-	auto c3d_fMatShininess = l_pass.GetUniform< GLSL::Float >( ShaderProgram::MatShininess );\
-	auto c3d_fMatOpacity = l_pass.GetUniform< GLSL::Float >( ShaderProgram::MatOpacity );\
-	l_pass.End()
+		class Shadow;
+		struct Light;
+		struct DirectionalLight;
+		struct PointLight;
+		struct SpotLight;
+		class Materials;
+		class LightingModel;
+		class PhongLightingModel;
+		class MetallicBrdfLightingModel;
+		class SpecularBrdfLightingModel;
+		struct BaseMaterial;
+		struct LegacyMaterial;
+		struct MetallicRoughnessMaterial;
+		struct SpecularGlossinessMaterial;
 
-#define UBO_MODEL( Writer )\
-	GLSL::Ubo l_model{ l_writer, ShaderProgram::BufferModel };\
-	auto c3d_iShadowReceiver = l_model.GetUniform< GLSL::Int >( ShaderProgram::ShadowReceiver );\
-	l_model.End()
+		namespace legacy
+		{
+			C3D_API void computePreLightingMapContributions( glsl::GlslWriter & writer
+				, glsl::Vec3 & p_normal
+				, glsl::Float & p_shininess
+				, TextureChannels const & textureFlags
+				, ProgramFlags const & programFlags
+				, SceneFlags const & sceneFlags
+				, PassFlags const & passFlags );
 
-#define UBO_BILLBOARD( Writer )\
-	GLSL::Ubo l_billboard{ l_writer, ShaderProgram::BufferBillboards };\
-	auto c3d_v2iDimensions = l_billboard.GetUniform< IVec2 >( ShaderProgram::Dimensions );\
-	auto c3d_v2iWindowSize = l_billboard.GetUniform< IVec2 >( ShaderProgram::WindowSize );\
-	l_billboard.End()
+			C3D_API void computePostLightingMapContributions( glsl::GlslWriter & writer
+				, glsl::Vec3 & p_diffuse
+				, glsl::Vec3 & p_specular
+				, glsl::Vec3 & p_emissive
+				, glsl::Float const & p_gamma
+				, TextureChannels const & textureFlags
+				, ProgramFlags const & programFlags
+				, SceneFlags const & sceneFlags );
 
-#define UBO_SKINNING( Writer, Flags )\
-	GLSL::Ubo l_skinning{ l_writer, ShaderProgram::BufferSkinning };\
-	auto c3d_mtxBones = l_skinning.GetUniform< GLSL::Mat4 >( ShaderProgram::Bones, 400, CheckFlag( Flags, ProgramFlag::eSkinning ) );\
-	l_skinning.End()
+			C3D_API std::shared_ptr< PhongLightingModel > createLightingModel( glsl::GlslWriter & writer
+				, ShadowType shadows
+				, uint32_t & index );
 
-#define UBO_MORPHING( Writer, Flags )\
-	GLSL::Ubo l_morphing{ l_writer, ShaderProgram::BufferMorphing };\
-	auto c3d_fTime = l_morphing.GetUniform< GLSL::Float >( ShaderProgram::Time, CheckFlag( Flags, ProgramFlag::eMorphing ) );\
-	l_morphing.End()
+			C3D_API std::shared_ptr< PhongLightingModel > createLightingModel( glsl::GlslWriter & writer
+				, LightType light
+				, ShadowType shadows
+				, uint32_t & index );
+		}
 
-#define UBO_OVERLAY( Writer )\
-	GLSL::Ubo l_overlay{ l_writer, ShaderProgram::BufferOverlay };\
-	auto c3d_v2iPosition = l_overlay.GetUniform< GLSL::IVec2 >( ShaderProgram::OvPosition );\
-	l_overlay.End()
+		namespace pbr
+		{
+			namespace mr
+			{
+				C3D_API void computePreLightingMapContributions( glsl::GlslWriter & writer
+					, glsl::Vec3 & p_normal
+					, glsl::Float & p_metallic
+					, glsl::Float & p_roughness
+					, TextureChannels const & textureFlags
+					, ProgramFlags const & programFlags
+					, SceneFlags const & sceneFlags
+					, PassFlags const & passFlags );
 
-#define STRUCT_VTX_OUTPUT( Writer )\
-	GLSL::Struct VtxOutput{ l_writer, cuT( "VtxOutput" ) };\
-	auto vtx_worldSpacePosition = VtxOutput.GetMember< GLSL::Vec3 >( cuT( "vtx_worldSpacePosition" ) );\
-	auto vtx_normal = VtxOutput.GetMember< GLSL::Vec3 >( cuT( "vtx_normal" ) );\
-	auto vtx_tangent = VtxOutput.GetMember< GLSL::Vec3 >( cuT( "vtx_tangent" ) );\
-	auto vtx_bitangent = VtxOutput.GetMember< GLSL::Vec3 >( cuT( "vtx_bitangent" ) );\
-	auto vtx_texture = VtxOutput.GetMember< GLSL::Vec3 >( cuT( "vtx_texture" ) );\
-	auto vtx_instance = VtxOutput.GetMember< GLSL::Int >( cuT( "vtx_instance" ) );\
-	VtxOutput.End()
+				C3D_API void computePostLightingMapContributions( glsl::GlslWriter & writer
+					, glsl::Vec3 & p_albedo
+					, glsl::Vec3 & p_emissive
+					, glsl::Float const & p_gamma
+					, TextureChannels const & textureFlags
+					, ProgramFlags const & programFlags
+					, SceneFlags const & sceneFlags );
+
+				C3D_API std::shared_ptr< MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
+					, ShadowType shadows
+					, uint32_t & index );
+
+				C3D_API std::shared_ptr< MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
+					, LightType light
+					, ShadowType shadows
+					, uint32_t & index );
+			}
+
+			namespace sg
+			{
+				C3D_API void computePreLightingMapContributions( glsl::GlslWriter & writer
+					, glsl::Vec3 & normal
+					, glsl::Vec3 & specular
+					, glsl::Float & glossiness
+					, TextureChannels const & textureFlags
+					, ProgramFlags const & programFlags
+					, SceneFlags const & sceneFlags
+					, PassFlags const & passFlags );
+
+				C3D_API void computePostLightingMapContributions( glsl::GlslWriter & writer
+					, glsl::Vec3 & diffuse
+					, glsl::Vec3 & emissive
+					, glsl::Float const & gamma
+					, TextureChannels const & textureFlags
+					, ProgramFlags const & programFlags
+					, SceneFlags const & sceneFlags );
+
+				C3D_API std::shared_ptr< SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
+					, ShadowType shadows
+					, uint32_t & index );
+
+				C3D_API std::shared_ptr< SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
+					, LightType light
+					, ShadowType shadows
+					, uint32_t & index );
+			}
+		}
+		/**
+		 *\~english
+		 *\brief		Creates the appropriate GLSL materials buffer.
+		 *\param[in]	writer		The GLSL writer.
+		 *\param		passFlags	The pass flags.
+		 *\~french
+		 *\brief		Crée le tampon de matériaux GLSL approprié.
+		 *\param[in]	writer		Le writer GLSL.
+		 *\param		passFlags	Les indicateurs de passe.
+		 */
+		C3D_API std::unique_ptr< Materials > createMaterials( glsl::GlslWriter & writer
+			, PassFlags const & passFlags );
+		/**
+		 *\~english
+		 *\brief		Writes the alpha function in GLSL.
+		 *\param[in]	writer		The GLSL writer.
+		 *\param		alphaFunc	The alpha function.
+		 *\param[in]	alpha		The alpha TypeEnum.
+		 *\param[in]	alphaRef	The alpha comparison reference TypeEnum.
+		 *\~french
+		 *\brief		Ecrit la fonction d'opacité en GLSL.
+		 *\param[in]	writer		Le writer GLSL.
+		 *\param		alphaFunc	La fonction d'opacité.
+		 *\param[in]	alpha		La valeur d'opacité.
+		 *\param[in]	alphaRef	La valeur de référence pour la comparaison alpha.
+		 */
+		C3D_API void applyAlphaFunc( glsl::GlslWriter & writer
+			, ComparisonFunc alphaFunc
+			, glsl::Float const & alpha
+			, glsl::Float const & alphaRef );
+
+		using ParallaxFunction = glsl::Function< glsl::Vec2, glsl::InParam< glsl::Vec2 >, glsl::InParam< glsl::Vec3 > >;
+		using ParallaxShadowFunction = glsl::Function< glsl::Float, glsl::InParam< glsl::Vec3 >, glsl::InParam< glsl::Vec2 >, glsl::InParam< glsl::Float > >;
+
+		C3D_API ParallaxFunction declareParallaxMappingFunc( glsl::GlslWriter & writer
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags );
+
+		C3D_API ParallaxShadowFunction declareParallaxShadowFunc( glsl::GlslWriter & writer
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags );
+
+		DECLARE_GLSL_PARAMETER( Light );
+	}
+}
+
+namespace glsl
+{
+	template<>
+	struct TypeTraits< castor3d::shader::Light >
+	{
+		static TypeName const TypeEnum = TypeName( castor3d::shader::TypeName::eLight );
+		C3D_API static castor::String const Name;
+	};
+
+	template<>
+	struct TypeTraits< castor3d::shader::DirectionalLight >
+	{
+		static TypeName const TypeEnum = TypeName( castor3d::shader::TypeName::eDirectionalLight );
+		C3D_API static castor::String const Name;
+	};
+
+	template<>
+	struct TypeTraits< castor3d::shader::PointLight >
+	{
+		static TypeName const TypeEnum = TypeName( castor3d::shader::TypeName::ePointLight );
+		C3D_API static castor::String const Name;
+	};
+
+	template<>
+	struct TypeTraits< castor3d::shader::SpotLight >
+	{
+		static TypeName const TypeEnum = TypeName( castor3d::shader::TypeName::eSpotLight );
+		C3D_API static castor::String const Name;
+	};
+
+	template<>
+	struct TypeTraits< castor3d::shader::BaseMaterial >
+	{
+		static TypeName const TypeEnum = TypeName( castor3d::shader::TypeName::eMaterial );
+		C3D_API static castor::String const Name;
+	};
+
+	template<>
+	struct TypeTraits< castor3d::shader::LegacyMaterial >
+	{
+		static TypeName const TypeEnum = TypeName( castor3d::shader::TypeName::eLegacyMaterial );
+		C3D_API static castor::String const Name;
+	};
+
+	template<>
+	struct TypeTraits< castor3d::shader::MetallicRoughnessMaterial >
+	{
+		static TypeName const TypeEnum = TypeName( castor3d::shader::TypeName::eMetallicRoughnessMaterial );
+		C3D_API static castor::String const Name;
+	};
+
+	template<>
+	struct TypeTraits< castor3d::shader::SpecularGlossinessMaterial >
+	{
+		static TypeName const TypeEnum = TypeName( castor3d::shader::TypeName::eSpecularGlossinessMaterial );
+		C3D_API static castor::String const Name;
+	};
 }
 
 #endif

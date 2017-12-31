@@ -1,4 +1,4 @@
-﻿#include "PostEffect.hpp"
+#include "PostEffect.hpp"
 
 #include "Engine.hpp"
 
@@ -8,52 +8,60 @@
 
 #include "Texture/TextureLayout.hpp"
 
-using namespace Castor;
-namespace Castor3D
+using namespace castor;
+namespace castor3d
 {
 	//*********************************************************************************************
 
-	PostEffect::PostEffectSurface::PostEffectSurface( Engine & p_engine )
-		: m_colourTexture( p_engine )
+	PostEffect::PostEffectSurface::PostEffectSurface( Engine & engine )
+		: m_colourTexture( engine )
 	{
 	}
 
-	bool PostEffect::PostEffectSurface::Initialise( RenderTarget & p_renderTarget, Size const & p_size, uint32_t p_index, SamplerSPtr p_sampler )
+	bool PostEffect::PostEffectSurface::initialise( RenderTarget & renderTarget
+		, Size const & size
+		, uint32_t index
+		, SamplerSPtr sampler
+		, PixelFormat format )
 	{
-		m_size = p_size;
-		m_colourTexture.SetIndex( p_index );
+		m_size = size;
+		m_colourTexture.setIndex( index );
 
-		m_fbo = p_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-		auto l_colourTexture = p_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead | AccessType::eWrite, PixelFormat::eA8R8G8B8, p_size );
+		m_fbo = renderTarget.getEngine()->getRenderSystem()->createFrameBuffer();
+		auto colourTexture = renderTarget.getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
+			, AccessType::eRead
+			, AccessType::eRead | AccessType::eWrite
+			, format
+			, size );
 
-		m_colourTexture.SetSampler( p_sampler );
-		l_colourTexture->GetImage().InitialiseSource();
-		m_colourAttach = m_fbo->CreateAttachment( l_colourTexture );
+		m_colourTexture.setSampler( sampler );
+		colourTexture->getImage().initialiseSource();
+		m_colourAttach = m_fbo->createAttachment( colourTexture );
 
-		m_fbo->Create();
-		m_colourTexture.SetTexture( l_colourTexture );
-		m_colourTexture.Initialise();
-		m_fbo->Initialise( p_size );
-		m_fbo->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
+		m_colourTexture.setTexture( colourTexture );
+		m_colourTexture.initialise();
+		m_fbo->initialise();
+		m_fbo->setClearColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueBlack ) );
 
-		m_fbo->Bind();
-		m_fbo->Attach( AttachmentPoint::eColour, 0, m_colourAttach, l_colourTexture->GetType() );
-		m_fbo->SetDrawBuffer( m_colourAttach );
-		bool l_return = m_fbo->IsComplete();
-		m_fbo->Unbind();
+		m_fbo->bind();
+		m_fbo->attach( AttachmentPoint::eColour, 0, m_colourAttach, colourTexture->getType() );
+		m_fbo->setDrawBuffer( m_colourAttach );
+		bool result = m_fbo->isComplete();
+		REQUIRE( result );
+		m_fbo->unbind();
 
-		return l_return;
+		return result;
 	}
 
-	void PostEffect::PostEffectSurface::Cleanup()
+	void PostEffect::PostEffectSurface::cleanup()
 	{
-		m_fbo->Bind();
-		m_fbo->DetachAll();
-		m_fbo->Unbind();
-		m_fbo->Cleanup();
+		m_fbo->bind();
+		m_fbo->detachAll();
+		m_fbo->unbind();
+		m_fbo->cleanup();
 
-		m_colourTexture.Cleanup();
-		m_fbo->Destroy();
+		m_colourTexture.cleanup();
+		m_fbo->cleanup();
 
 		m_fbo.reset();
 		m_colourAttach.reset();
@@ -61,10 +69,15 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	PostEffect::PostEffect( String const & p_name, RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & CU_PARAM_UNUSED( p_param ) )
-		: OwnedBy< RenderSystem >{ p_renderSystem }
-		, Named{ p_name }
-		, m_renderTarget{ p_renderTarget }
+	PostEffect::PostEffect( String const & name
+		, RenderTarget & renderTarget
+		, RenderSystem & renderSystem
+		, Parameters const & CU_PARAM_UNUSED( parameters )
+		, bool postToneMapping )
+		: OwnedBy< RenderSystem >{ renderSystem }
+		, Named{ name }
+		, m_renderTarget{ renderTarget }
+		, m_postToneMapping{ postToneMapping }
 	{
 	}
 
@@ -72,9 +85,9 @@ namespace Castor3D
 	{
 	}
 
-	bool PostEffect::WriteInto( Castor::TextFile & p_file )
+	bool PostEffect::writeInto( castor::TextFile & p_file )
 	{
-		return DoWriteInto( p_file );
+		return doWriteInto( p_file );
 	}
 
 	//*********************************************************************************************

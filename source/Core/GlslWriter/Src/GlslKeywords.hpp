@@ -1,236 +1,153 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___GLSL_KEYWORDS_H___
 #define ___GLSL_KEYWORDS_H___
 
-#include "GlslWriterPrerequisites.hpp"
+#include "GlslUbo.hpp"
+#include "GlslSsbo.hpp"
 
-#include <Stream/StreamIndentManipulators.hpp>
-
-#ifdef max
-#	undef max
-#	undef min
-#	undef abs
-#endif
-
-#ifdef OUT
-#	undef OUT
-#endif
-
-#ifdef IN
-#	undef IN
-#endif
-
-namespace GLSL
+namespace glsl
 {
 	class KeywordsBase
 	{
 	public:
-		GlslWriter_API static std::unique_ptr< GLSL::KeywordsBase > Get( GlslWriterConfig const & p_rs );
-		inline Castor::String GetUboLayout( UboLayout p_layout, uint32_t p_index )const;
-		inline Castor::String const & GetVersion()const;
-		inline Castor::String const & GetIn()const;
-		inline Castor::String const & GetOut()const;
-		inline Castor::String const & GetTexture1D()const;
-		inline Castor::String const & GetTexture1DLod()const;
-		inline Castor::String const & GetTexture1DOffset()const;
-		inline Castor::String const & GetTexture1DOffsetLod()const;
-		inline Castor::String const & GetTexture1DLodOffset()const;
-		inline Castor::String const & GetTexture2D()const;
-		inline Castor::String const & GetTexture2DLod()const;
-		inline Castor::String const & GetTexture2DOffset()const;
-		inline Castor::String const & GetTexture2DOffsetLod()const;
-		inline Castor::String const & GetTexture2DLodOffset()const;
-		inline Castor::String const & GetTexture3D()const;
-		inline Castor::String const & GetTexture3DLod()const;
-		inline Castor::String const & GetTexture3DOffset()const;
-		inline Castor::String const & GetTexture3DOffsetLod()const;
-		inline Castor::String const & GetTexture3DLodOffset()const;
-		inline Castor::String const & GetTextureCube()const;
-		inline Castor::String const & GetTextureCubeLod()const;
-		inline Castor::String const & GetTexture1DArray()const;
-		inline Castor::String const & GetTexture1DArrayLod()const;
-		inline Castor::String const & GetTexture1DArrayOffset()const;
-		inline Castor::String const & GetTexture1DArrayOffsetLod()const;
-		inline Castor::String const & GetTexture1DArrayLodOffset()const;
-		inline Castor::String const & GetTexture2DArray()const;
-		inline Castor::String const & GetTexture2DArrayLod()const;
-		inline Castor::String const & GetTexture2DArrayOffset()const;
-		inline Castor::String const & GetTexture2DArrayOffsetLod()const;
-		inline Castor::String const & GetTexture2DArrayLodOffset()const;
-		inline Castor::String const & GetTextureCubeArray()const;
-		inline Castor::String const & GetTextureCubeArrayLod()const;
-		inline Castor::String const & GetTexture1DShadow()const;
-		inline Castor::String const & GetTexture1DShadowLod()const;
-		inline Castor::String const & GetTexture1DShadowOffset()const;
-		inline Castor::String const & GetTexture1DShadowOffsetLod()const;
-		inline Castor::String const & GetTexture1DShadowLodOffset()const;
-		inline Castor::String const & GetTexture2DShadow()const;
-		inline Castor::String const & GetTexture2DShadowLod()const;
-		inline Castor::String const & GetTexture2DShadowOffset()const;
-		inline Castor::String const & GetTexture2DShadowOffsetLod()const;
-		inline Castor::String const & GetTexture2DShadowLodOffset()const;
-		inline Castor::String const & GetTextureCubeShadow()const;
-		inline Castor::String const & GetTextureCubeShadowLod()const;
-		inline Castor::String const & GetTexture1DArrayShadow()const;
-		inline Castor::String const & GetTexture1DArrayShadowLod()const;
-		inline Castor::String const & GetTexture1DArrayShadowOffset()const;
-		inline Castor::String const & GetTexture1DArrayShadowOffsetLod()const;
-		inline Castor::String const & GetTexture1DArrayShadowLodOffset()const;
-		inline Castor::String const & GetTexture2DArrayShadow()const;
-		inline Castor::String const & GetTexture2DArrayShadowLod()const;
-		inline Castor::String const & GetTexture2DArrayShadowOffset()const;
-		inline Castor::String const & GetTexture2DArrayShadowOffsetLod()const;
-		inline Castor::String const & GetTexture2DArrayShadowLodOffset()const;
-		inline Castor::String const & GetTextureCubeArrayShadow()const;
-		inline Castor::String const & GetTextureCubeArrayShadowLod()const;
-		inline Castor::String const & GetTexelFetchBuffer()const;
-		inline Castor::String const & GetTexelFetch1D()const;
-		inline Castor::String const & GetTexelFetch2D()const;
-		inline Castor::String const & GetTexelFetch3D()const;
-		inline Castor::String const & GetPixelOut()const;
-		inline Castor::String const & GetPixelOutputName()const;
-		inline Castor::String const & GetGSOutPositionName()const;
-		inline Castor::String const & GetGSOutNormalName()const;
-		inline Castor::String const & GetGSOutTangentName()const;
-		inline Castor::String const & GetGSOutBitangentName()const;
-		inline Castor::String const & GetGSOutDiffuseName()const;
-		inline Castor::String const & GetGSOutSpecularName()const;
-		inline Castor::String const & GetGSOutEmissiveName()const;
-		inline Castor::String const & GetGSOutPositionDecl()const;
-		inline Castor::String const & GetGSOutNormalDecl()const;
-		inline Castor::String const & GetGSOutTangentDecl()const;
-		inline Castor::String const & GetGSOutBitangentDecl()const;
-		inline Castor::String const & GetGSOutDiffuseDecl()const;
-		inline Castor::String const & GetGSOutSpecularDecl()const;
-		inline Castor::String const & GetGSOutEmissiveDecl()const;
+		GlslWriter_API static std::unique_ptr< glsl::KeywordsBase > get( GlslWriterConfig const & p_rs );
+		GlslWriter_API castor::String getLayout (Ubo::Layout p_layout, uint32_t p_index)const;
+		GlslWriter_API castor::String getLayout( Ssbo::Layout p_layout, uint32_t p_index )const;
 
-		GlslWriter_API virtual Castor::String GetLayout( uint32_t p_index )const = 0;
-		GlslWriter_API virtual Castor::String GetAttribute( uint32_t p_index )const;
-		GlslWriter_API virtual bool HasNamedFragData()const = 0;
-		GlslWriter_API virtual Castor::String GetFragData( uint32_t p_index )const = 0;
+		inline castor::String const & getVersion()const;
+		inline castor::String const & getIn()const;
+		inline castor::String const & getOut()const;
+		inline castor::String const & getTexture1D()const;
+		inline castor::String const & getTexture1DLod()const;
+		inline castor::String const & getTexture1DOffset()const;
+		inline castor::String const & getTexture1DOffsetLod()const;
+		inline castor::String const & getTexture1DLodOffset()const;
+		inline castor::String const & getTexture2D()const;
+		inline castor::String const & getTexture2DLod()const;
+		inline castor::String const & getTexture2DOffset()const;
+		inline castor::String const & getTexture2DOffsetLod()const;
+		inline castor::String const & getTexture2DLodOffset()const;
+		inline castor::String const & getTexture3D()const;
+		inline castor::String const & getTexture3DLod()const;
+		inline castor::String const & getTexture3DOffset()const;
+		inline castor::String const & getTexture3DOffsetLod()const;
+		inline castor::String const & getTexture3DLodOffset()const;
+		inline castor::String const & getTextureCube()const;
+		inline castor::String const & getTextureCubeLod()const;
+		inline castor::String const & getTexture1DArray()const;
+		inline castor::String const & getTexture1DArrayLod()const;
+		inline castor::String const & getTexture1DArrayOffset()const;
+		inline castor::String const & getTexture1DArrayOffsetLod()const;
+		inline castor::String const & getTexture1DArrayLodOffset()const;
+		inline castor::String const & getTexture2DArray()const;
+		inline castor::String const & getTexture2DArrayLod()const;
+		inline castor::String const & getTexture2DArrayOffset()const;
+		inline castor::String const & getTexture2DArrayOffsetLod()const;
+		inline castor::String const & getTexture2DArrayLodOffset()const;
+		inline castor::String const & getTextureCubeArray()const;
+		inline castor::String const & getTextureCubeArrayLod()const;
+		inline castor::String const & getTexture1DShadow()const;
+		inline castor::String const & getTexture1DShadowLod()const;
+		inline castor::String const & getTexture1DShadowOffset()const;
+		inline castor::String const & getTexture1DShadowOffsetLod()const;
+		inline castor::String const & getTexture1DShadowLodOffset()const;
+		inline castor::String const & getTexture2DShadow()const;
+		inline castor::String const & getTexture2DShadowLod()const;
+		inline castor::String const & getTexture2DShadowOffset()const;
+		inline castor::String const & getTexture2DShadowOffsetLod()const;
+		inline castor::String const & getTexture2DShadowLodOffset()const;
+		inline castor::String const & getTextureCubeShadow()const;
+		inline castor::String const & getTextureCubeShadowLod()const;
+		inline castor::String const & getTexture1DArrayShadow()const;
+		inline castor::String const & getTexture1DArrayShadowLod()const;
+		inline castor::String const & getTexture1DArrayShadowOffset()const;
+		inline castor::String const & getTexture1DArrayShadowOffsetLod()const;
+		inline castor::String const & getTexture1DArrayShadowLodOffset()const;
+		inline castor::String const & getTexture2DArrayShadow()const;
+		inline castor::String const & getTexture2DArrayShadowLod()const;
+		inline castor::String const & getTexture2DArrayShadowOffset()const;
+		inline castor::String const & getTexture2DArrayShadowOffsetLod()const;
+		inline castor::String const & getTexture2DArrayShadowLodOffset()const;
+		inline castor::String const & getTextureCubeArrayShadow()const;
+		inline castor::String const & getTextureCubeArrayShadowLod()const;
+		inline castor::String const & getTexelFetchBuffer()const;
+		inline castor::String const & getTexelFetch1D()const;
+		inline castor::String const & getTexelFetch2D()const;
+		inline castor::String const & getTexelFetch3D()const;
+
+		GlslWriter_API virtual castor::String getLayout( uint32_t p_index )const = 0;
+		GlslWriter_API virtual castor::String getAttribute( uint32_t p_index )const;
+		GlslWriter_API virtual bool hasNamedFragData()const = 0;
+		GlslWriter_API virtual castor::String getFragData( uint32_t p_index )const = 0;
 
 	protected:
-		Castor::String m_strUboLayout;
-		Castor::String m_strUboBinding;
-		Castor::String m_version;
-		Castor::String m_strAttribute;
-		Castor::String m_strIn;
-		Castor::String m_strOut;
-		Castor::String m_strTexture1D;
-		Castor::String m_strTexture1DLod;
-		Castor::String m_strTexture1DOffset;
-		Castor::String m_strTexture1DOffsetLod;
-		Castor::String m_strTexture1DLodOffset;
-		Castor::String m_strTexture2D;
-		Castor::String m_strTexture2DLod;
-		Castor::String m_strTexture2DOffset;
-		Castor::String m_strTexture2DOffsetLod;
-		Castor::String m_strTexture2DLodOffset;
-		Castor::String m_strTexture3D;
-		Castor::String m_strTexture3DLod;
-		Castor::String m_strTexture3DOffset;
-		Castor::String m_strTexture3DOffsetLod;
-		Castor::String m_strTexture3DLodOffset;
-		Castor::String m_strTextureCube;
-		Castor::String m_strTextureCubeLod;
-		Castor::String m_strTexture1DArray;
-		Castor::String m_strTexture1DArrayLod;
-		Castor::String m_strTexture1DArrayOffset;
-		Castor::String m_strTexture1DArrayOffsetLod;
-		Castor::String m_strTexture1DArrayLodOffset;
-		Castor::String m_strTexture2DArray;
-		Castor::String m_strTexture2DArrayLod;
-		Castor::String m_strTexture2DArrayOffset;
-		Castor::String m_strTexture2DArrayOffsetLod;
-		Castor::String m_strTexture2DArrayLodOffset;
-		Castor::String m_strTextureCubeArray;
-		Castor::String m_strTextureCubeArrayLod;
-		Castor::String m_strTexture1DShadow;
-		Castor::String m_strTexture1DShadowLod;
-		Castor::String m_strTexture1DShadowOffset;
-		Castor::String m_strTexture1DShadowOffsetLod;
-		Castor::String m_strTexture1DShadowLodOffset;
-		Castor::String m_strTexture2DShadow;
-		Castor::String m_strTexture2DShadowLod;
-		Castor::String m_strTexture2DShadowOffset;
-		Castor::String m_strTexture2DShadowOffsetLod;
-		Castor::String m_strTexture2DShadowLodOffset;
-		Castor::String m_strTextureCubeShadow;
-		Castor::String m_strTextureCubeShadowLod;
-		Castor::String m_strTexture1DArrayShadow;
-		Castor::String m_strTexture1DArrayShadowLod;
-		Castor::String m_strTexture1DArrayShadowOffset;
-		Castor::String m_strTexture1DArrayShadowOffsetLod;
-		Castor::String m_strTexture1DArrayShadowLodOffset;
-		Castor::String m_strTexture2DArrayShadow;
-		Castor::String m_strTexture2DArrayShadowLod;
-		Castor::String m_strTexture2DArrayShadowOffset;
-		Castor::String m_strTexture2DArrayShadowOffsetLod;
-		Castor::String m_strTexture2DArrayShadowLodOffset;
-		Castor::String m_strTextureCubeArrayShadow;
-		Castor::String m_strTextureCubeArrayShadowLod;
-		Castor::String m_strTexelFetchBuffer;
-		Castor::String m_strTexelFetch1D;
-		Castor::String m_strTexelFetch2D;
-		Castor::String m_strTexelFetch3D;
-		Castor::String m_strPixelOut;
-		Castor::String m_strPixelOutputName;
-		Castor::String m_strGSOutPositionName;
-		Castor::String m_strGSOutNormalName;
-		Castor::String m_strGSOutTangentName;
-		Castor::String m_strGSOutBitangentName;
-		Castor::String m_strGSOutDiffuseName;
-		Castor::String m_strGSOutSpecularName;
-		Castor::String m_strGSOutEmissiveName;
-		Castor::String m_strGSOutPositionDecl;
-		Castor::String m_strGSOutNormalDecl;
-		Castor::String m_strGSOutTangentDecl;
-		Castor::String m_strGSOutBitangentDecl;
-		Castor::String m_strGSOutDiffuseDecl;
-		Castor::String m_strGSOutSpecularDecl;
-		Castor::String m_strGSOutEmissiveDecl;
-	};
-
-	//! Language keywords
-	struct Version
-	{
-	};
-	struct Attribute
-	{
-	};
-	struct In
-	{
-	};
-	struct Out
-	{
-	};
-	struct Layout
-	{
-		int m_index;
-	};
-	struct Uniform
-	{
+		castor::String m_strUboLayout;
+		castor::String m_strUboBinding;
+		castor::String m_strSsboLayout;
+		castor::String m_strSsboBinding;
+		castor::String m_version;
+		castor::String m_strAttribute;
+		castor::String m_strIn;
+		castor::String m_strOut;
+		castor::String m_strTexture1D;
+		castor::String m_strTexture1DLod;
+		castor::String m_strTexture1DOffset;
+		castor::String m_strTexture1DOffsetLod;
+		castor::String m_strTexture1DLodOffset;
+		castor::String m_strTexture2D;
+		castor::String m_strTexture2DLod;
+		castor::String m_strTexture2DOffset;
+		castor::String m_strTexture2DOffsetLod;
+		castor::String m_strTexture2DLodOffset;
+		castor::String m_strTexture3D;
+		castor::String m_strTexture3DLod;
+		castor::String m_strTexture3DOffset;
+		castor::String m_strTexture3DOffsetLod;
+		castor::String m_strTexture3DLodOffset;
+		castor::String m_strTextureCube;
+		castor::String m_strTextureCubeLod;
+		castor::String m_strTexture1DArray;
+		castor::String m_strTexture1DArrayLod;
+		castor::String m_strTexture1DArrayOffset;
+		castor::String m_strTexture1DArrayOffsetLod;
+		castor::String m_strTexture1DArrayLodOffset;
+		castor::String m_strTexture2DArray;
+		castor::String m_strTexture2DArrayLod;
+		castor::String m_strTexture2DArrayOffset;
+		castor::String m_strTexture2DArrayOffsetLod;
+		castor::String m_strTexture2DArrayLodOffset;
+		castor::String m_strTextureCubeArray;
+		castor::String m_strTextureCubeArrayLod;
+		castor::String m_strTexture1DShadow;
+		castor::String m_strTexture1DShadowLod;
+		castor::String m_strTexture1DShadowOffset;
+		castor::String m_strTexture1DShadowOffsetLod;
+		castor::String m_strTexture1DShadowLodOffset;
+		castor::String m_strTexture2DShadow;
+		castor::String m_strTexture2DShadowLod;
+		castor::String m_strTexture2DShadowOffset;
+		castor::String m_strTexture2DShadowOffsetLod;
+		castor::String m_strTexture2DShadowLodOffset;
+		castor::String m_strTextureCubeShadow;
+		castor::String m_strTextureCubeShadowLod;
+		castor::String m_strTexture1DArrayShadow;
+		castor::String m_strTexture1DArrayShadowLod;
+		castor::String m_strTexture1DArrayShadowOffset;
+		castor::String m_strTexture1DArrayShadowOffsetLod;
+		castor::String m_strTexture1DArrayShadowLodOffset;
+		castor::String m_strTexture2DArrayShadow;
+		castor::String m_strTexture2DArrayShadowLod;
+		castor::String m_strTexture2DArrayShadowOffset;
+		castor::String m_strTexture2DArrayShadowOffsetLod;
+		castor::String m_strTexture2DArrayShadowLodOffset;
+		castor::String m_strTextureCubeArrayShadow;
+		castor::String m_strTextureCubeArrayShadowLod;
+		castor::String m_strTexelFetchBuffer;
+		castor::String m_strTexelFetch1D;
+		castor::String m_strTexelFetch2D;
+		castor::String m_strTexelFetch3D;
 	};
 }
 

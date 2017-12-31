@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_GEOMETRY_H___
 #define ___C3D_GEOMETRY_H___
@@ -28,8 +9,12 @@ SOFTWARE.
 #include "MovableObject.hpp"
 #include "RenderedObject.hpp"
 
-namespace Castor3D
+#include <Graphics/BoundingBox.hpp>
+#include <Graphics/BoundingSphere.hpp>
+
+namespace castor3d
 {
+	class InstantiationComponent;
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		09/02/2010
@@ -54,7 +39,7 @@ namespace Castor3D
 		\brief		Loader de Geometry
 		*/
 		class TextWriter
-			: public Castor::TextWriter< Geometry >
+			: public castor::TextWriter< Geometry >
 		{
 		public:
 			/**
@@ -63,108 +48,122 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a geometry into a text file
-			 *\param[in]	p_file		The file to save the cameras in
-			 *\param[in]	p_geometry	The geometry to save
+			 *\param[in]	file		The file to save the cameras in
+			 *\param[in]	geometry	The geometry to save
 			 *\~french
 			 *\brief		Ecrit une géométrie dans un fichier texte
-			 *\param[in]	p_file		Le fichier
-			 *\param[in]	p_geometry	La géométrie
+			 *\param[in]	file		Le fichier
+			 *\param[in]	geometry	La géométrie
 			 */
-			C3D_API bool operator()( Geometry const & p_geometry, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( Geometry const & geometry, castor::TextFile & file )override;
 		};
 
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\remarks		Not to be used by the user, use Scene::CreatePrimitive function
-		 *\param[in]	p_name		The geometry name
-		 *\param[in]	p_scene		The parent scene
-		 *\param[in]	p_mesh		The mesh, default is nullptr
-		 *\param[in]	p_sn		The scene node to which the geometry is attached
+		 *\brief		Constructor.
+		 *\param[in]	name	The geometry name.
+		 *\param[in]	scene	The parent scene.
+		 *\param[in]	mesh	The mesh, default is nullptr.
+		 *\param[in]	node	The scene node to which the geometry is attached.
 		 *\~french
-		 *\brief		Constructeur
-		 *\remarks		A ne pas utiliser directement, utilisez Scene::CreatePrimitive
-		 *\param[in]	p_name		Nom de la géométrie
-		 *\param[in]	p_scene		La scène parente
-		 *\param[in]	p_mesh		Le maillage, par défaut nullptr
-		 *\param[in]	p_sn		Le scene node auquel la géométrie est attachée
+		 *\brief		Constructeur.
+		 *\param[in]	name	Nom de la géométrie.
+		 *\param[in]	scene	La scène parente.
+		 *\param[in]	mesh	Le maillage, par défaut nullptr.
+		 *\param[in]	node	Le scene node auquel la géométrie est attachée.
 		 */
-		C3D_API Geometry( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_sn, MeshSPtr p_mesh = nullptr );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API virtual ~Geometry();
-		/**
-		 *\~english
-		 *\brief		Cleans all the object owned and created by the geometry
-		 *\~french
-		 *\brief		Nettoie tous les objets créés par la géométrie
-		 */
-		C3D_API void Cleanup();
+		C3D_API Geometry( castor::String const & name
+			, Scene & scene
+			, SceneNodeSPtr node
+			, MeshSPtr mesh = nullptr );
 		/**
 		 *\~english
 		 *brief			Creates the mesh buffers
-		 *\param[out]	p_nbFaces	Used to retrieve the faces number
-		 *\param[out]	p_nbVertex	Used to retrieve the vertexes number
+		 *\param[out]	nbFaces		Used to retrieve the faces number
+		 *\param[out]	nbVertex	Used to retrieve the vertexes number
 		 *\~french
 		 *brief			Crée les buffers du mesh
-		 *\param[out]	p_nbFaces	Reçoit le nombre de faces du mesh
-		 *\param[out]	p_nbVertex	Reçoit le nombre de vertex du mesh
+		 *\param[out]	nbFaces		Reçoit le nombre de faces du mesh
+		 *\param[out]	nbVertex	Reçoit le nombre de vertex du mesh
 		 */
-		C3D_API void CreateBuffers( uint32_t & p_nbFaces, uint32_t & p_nbVertex );
+		C3D_API void prepare( uint32_t & nbFaces, uint32_t & nbVertex );
 		/**
 		 *\~english
-		 *\brief		Renders the geometry in a given display mode
+		 *\brief		Defines this geometry's mesh.
+		 *\param[in]	mesh	The mesh.
 		 *\~french
-		 *\brief		Rend la géometrie dans un mode d'affichage donné
+		 *\brief		Définit le maillage de la géométrie.
+		 *\param[in]	mesh	Le maillage.
 		 */
-		C3D_API virtual void Render();
+		C3D_API void setMesh( MeshSPtr mesh );
 		/**
 		 *\~english
-		 *\brief		End render function, dummy
+		 *\brief		Retrieves the submesh material.
+		 *\param[in]	submesh	The submesh.
+		 *\return		The material.
 		 *\~french
-		 *\brief		Fonction de fin de rendu, inutilisée
+		 *\brief		Récupère le matériau du sous-maillage.
+		 *\param[in]	submesh	Le sous-maillage.
+		 *\return		Le matériau.
 		 */
-		C3D_API virtual void EndRender() {}
+		C3D_API MaterialSPtr getMaterial( Submesh const & submesh )const;
 		/**
 		 *\~english
-		 *\brief		Defines this geometry's mesh
-		 *\param[in]	p_mesh	The mesh
+		 *\brief		Defines a submesh material.
+		 *\param[in]	submesh			The submesh.
+		 *\param[in]	material		The material.
+		 *\param[in]	updateSubmesh	Tells if the submesh's buffers need to be updated.
 		 *\~french
-		 *\brief		Définit le maillage de la géométrie
-		 *\param[in]	p_mesh	Le maillage
+		 *\brief		Définit le matériau d'un sous-maillage.
+		 *\param[in]	submesh			Le sous-maillage.
+		 *\param[in]	material		Le matériau.
+		 *\param[in]	updateSubmesh	Dit si les tampons du sous-maillage doivent être mis à jour.
 		 */
-		C3D_API void SetMesh( MeshSPtr p_mesh );
+		C3D_API void setMaterial( Submesh & submesh
+			, MaterialSPtr material
+			, bool updateSubmesh = true );
 		/**
 		 *\~english
-		 *\brief		Retrieves the submesh material
-		 *\param[in]	p_submesh	The submesh
-		 *\return		The material
+		 *\brief		Computes the bounding box from the given submeshes boxes.
 		 *\~french
-		 *\brief		Récupère le matériau du sous-maillage
-		 *\param[in]	p_submesh	Le sous-maillage
-		 *\return		Le matériau
+		 *\brief		Calcule les bounding box et sphere depuis boxes des sous-maillages données.
 		 */
-		C3D_API MaterialSPtr GetMaterial( Submesh const & p_submesh )const;
+		C3D_API void updateContainers( SubmeshBoundingBoxList const & boxes );
 		/**
 		 *\~english
-		 *\brief		Defines a submesh material
-		 *\param[in]	p_submesh	The submesh
-		 *\param[in]	p_material	The material
+		 *\param[in]	submesh	The submesh.
+		 *\return		The collision box for given submesh.
 		 *\~french
-		 *\brief		Définit le matériau d'un sous-maillage
-		 *\param[in]	p_submesh	Le sous-maillage
-		 *\param[in]	p_material	Le matériau
+		 *\param[in]	submesh	Le sous-maillage.
+		 *\return		La boîte de collision pour le sous-maillage donné.
 		 */
-		C3D_API void SetMaterial( Submesh & p_submesh, MaterialSPtr p_material );
+		C3D_API castor::BoundingBox const & getBoundingBox( Submesh const & submesh )const;
+		/**
+		 *\~english
+		 *\param[in]	submesh	The submesh.
+		 *\return		The collision sphere for given submesh.
+		 *\~french
+		 *\param[in]	submesh	Le sous-maillage.
+		 *\return		La sphère de collision pour le sous-maillage donné.
+		 */
+		C3D_API castor::BoundingSphere const & getBoundingSphere( Submesh const & submesh )const;
+		/**
+		 *\~english
+		 *\brief		Sets the bounding box for given submesh.
+		 *\param[in]	submesh	The submesh.
+		 *\param[in]	box		The bounding box.
+		 *\~french
+		 *\brief		Définit la bounding box pour le sous-maillage donné.
+		 *\param[in]	submesh	Le sous-maillage.
+		 *\param[in]	box		La bounding box.
+		 */
+		C3D_API void setBoundingBox( Submesh const & submesh
+			, castor::BoundingBox const & box );
 		/**
 		 *\~english
 		 *\brief		Retrieves the mesh
@@ -173,18 +172,46 @@ namespace Castor3D
 		 *\brief		Récupère le maillage
 		 *\return		Le maillage
 		 */
-		inline MeshSPtr GetMesh()const
+		inline MeshSPtr getMesh()const
 		{
 			return m_mesh.lock();
 		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the collision box
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la boîte de collision
+		 *\return		La valeur
+		 */
+		inline castor::BoundingBox const & getBoundingBox()const
+		{
+			return m_box;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the collision sphere
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la sphère de collision
+		 *\return		La valeur
+		 */
+		inline castor::BoundingSphere const & getBoundingSphere()const
+		{
+			return m_sphere;
+		}
 
-	protected:
+	private:
+		void doUpdateMesh();
+		void doUpdateContainers();
+
+	private:
 		//!\~english	The mesh.
 		//!\~french		Le maillage.
 		MeshWPtr m_mesh;
 		//!\~english	The mesh name
 		//!\~french		Le nom du maillage.
-		Castor::String m_strMeshName;
+		castor::String m_meshName;
 		//!\~english	Tells if the geometry has changed.
 		//!\~french		Dit si la géométrie a changé.
 		bool m_changed{ true };
@@ -193,7 +220,19 @@ namespace Castor3D
 		bool m_listCreated{ false };
 		//!\~english	The submeshes materials.
 		//!\~french		Les matériaux des sous maillages.
-		std::map< Submesh const *, MaterialWPtr > m_submeshesMaterials;
+		SubmeshMaterialMap m_submeshesMaterials;
+		//!\~english	The submeshes bounding boxes.
+		//!\~french		Les bounding box des sous-maillages.
+		SubmeshBoundingBoxMap m_submeshesBoxes;
+		//!\~english	The submeshes bounding spheres.
+		//!\~french		Les bounding spheres des sous-maillages.
+		SubmeshBoundingSphereMap m_submeshesSpheres;
+		//!\~english	The whole geometry bounding box.
+		//!\~french		La bounding box de la géométrie complète.
+		castor::BoundingBox m_box;
+		//!\~english	The whole geometry bounding sphere.
+		//!\~french		La bounding sphere de la géométrie complète.
+		castor::BoundingSphere m_sphere;
 	};
 }
 

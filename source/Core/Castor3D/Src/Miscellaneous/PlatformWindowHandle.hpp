@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_PLATFORM_WINDOW_HANDLE_H___
 #define ___C3D_PLATFORM_WINDOW_HANDLE_H___
@@ -41,7 +22,7 @@ SOFTWARE.
 #	error "Yet unsupported OS"
 #endif
 
-namespace Castor3D
+namespace castor3d
 {
 
 #if defined( CASTOR_PLATFORM_WINDOWS )
@@ -50,7 +31,7 @@ namespace Castor3D
 		: public IWindowHandle
 	{
 	public:
-		IMswWindowHandle( HWND p_hWnd )
+		explicit IMswWindowHandle( HWND p_hWnd )
 			: m_hWnd{ p_hWnd }
 		{
 		}
@@ -64,7 +45,7 @@ namespace Castor3D
 			return m_hWnd != nullptr;
 		}
 
-		inline HWND GetHwnd()const
+		inline HWND getHwnd()const
 		{
 			return m_hWnd;
 		}
@@ -94,11 +75,11 @@ namespace Castor3D
 			return m_drawable != 0 && m_display != nullptr;
 		}
 
-		inline GLXDrawable GetDrawable()const
+		inline GLXDrawable getDrawable()const
 		{
 			return m_drawable;
 		}
-		inline Display * GetDisplay()const
+		inline Display * getDisplay()const
 		{
 			return m_display;
 		}
@@ -129,12 +110,12 @@ namespace Castor3D
 			return m_window != 0 && m_display != 0;
 		}
 
-		inline EGLNativeWindowType GetWindow()const
+		inline EGLNativeWindowType getWindow()const
 		{
 			return m_window;
 		}
 
-		inline EGLDisplay GetDisplay()const
+		inline EGLDisplay getDisplay()const
 		{
 			return m_display;
 		}

@@ -3,14 +3,14 @@
 #include "Common/OpenGl.hpp"
 #include "Render/GlRenderSystem.hpp"
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GlRender
 {
-	GlViewport::GlViewport( GlRenderSystem & p_renderSystem, Viewport & p_viewport )
-		: IViewportImpl{ p_renderSystem, p_viewport }
-		, Holder{ p_renderSystem.GetOpenGl() }
+	GlViewport::GlViewport( GlRenderSystem & renderSystem, Viewport & p_viewport )
+		: IViewportImpl{ renderSystem, p_viewport }
+		, Holder{ renderSystem.getOpenGl() }
 	{
 	}
 
@@ -18,11 +18,11 @@ namespace GlRender
 	{
 	}
 
-	void GlViewport::Apply()const
+	void GlViewport::apply()const
 	{
-		GetOpenGl().Viewport( m_viewport.GetPosition().x()
-			, m_viewport.GetPosition().y()
-			, m_viewport.GetWidth()
-			, m_viewport.GetHeight() );
+		getOpenGl().Viewport( m_viewport.getPosition().x()
+			, m_viewport.getPosition().y()
+			, m_viewport.getWidth()
+			, m_viewport.getHeight() );
 	}
 }

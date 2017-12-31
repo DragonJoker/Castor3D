@@ -1,31 +1,12 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_SHADOW_MAP_PASS_DIRECTIONAL_H___
 #define ___C3D_SHADOW_MAP_PASS_DIRECTIONAL_H___
 
 #include "ShadowMapPass.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -43,18 +24,18 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
-		 *\param[in]	p_light		The light source.
-		 *\param[in]	p_shadowMap	The parent shadow map.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	scene		The scene.
+		 *\param[in]	shadowMap	The parent shadow map.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
-		 *\param[in]	p_light		La source lumineuse.
-		 *\param[in]	p_shadowMap	La shadow map parente.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	scene		La scène.
+		 *\param[in]	shadowMap	La shadow map parente.
 		 */
-		C3D_API ShadowMapPassDirectional( Engine & p_engine
-			, Light & p_light
-			, ShadowMap const & p_shadowMap );
+		C3D_API ShadowMapPassDirectional( Engine & engine
+			, Scene & scene
+			, ShadowMap const & shadowMap );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -63,41 +44,65 @@ namespace Castor3D
 		 */
 		C3D_API ~ShadowMapPassDirectional();
 		/**
+		 *\copydoc		castor3d::ShadowMapPass::update
+		 */
+		void update( Camera const & camera
+			, RenderQueueArray & queues
+			, Light & light
+			, uint32_t index )override;
+		/**
+		 *\copydoc		castor3d::ShadowMapPass::render
+		 */
+		void render( uint32_t index )override;
+		/**
 		 *\~english
 		 *\return		The camera.
 		 *\~french
 		 *\return		La caméra.
 		 */
-		inline CameraSPtr GetCamera()const
+		inline CameraSPtr getCamera()const
 		{
 			return m_camera;
 		}
 
 	private:
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoInitialise
+		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */
-		bool DoInitialise( Castor::Size const & p_size )override;
+		bool doInitialise( castor::Size const & size )override;
 		/**
-		 *\copydoc		Castor3D::ShadowMapPass::DoCleanup
+		 *\copydoc		castor3d::ShadowMapPass::doCleanup
 		 */
-		void DoCleanup()override;
+		void doCleanup()override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoUpdate
+		 *\copydoc		castor3d::RenderPass::doUpdate
 		 */
-		void DoUpdate( RenderQueueArray & p_queues )override;
+		void doUpdate( RenderQueueArray & queues )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoRender
+		 *\copydoc		castor3d::ShadowMapPass::doPreparePipeline
 		 */
-		void DoRender( uint32_t p_face )override;
+		void doPreparePipeline( ShaderProgram & p_program
+			, PipelineFlags const & p_flags )override;
+
+	public:
+		static castor::String const ShadowMapUbo;
+		static castor::String const FarPlane;
+		static uint32_t constexpr UboBindingPoint = 8u;
+		static uint32_t constexpr TextureSize = 2048;
 
 	private:
 		//!\~english	The camera created from the light.
 		//!\~french		La caméra créée à partir de la lumière.
 		CameraSPtr m_camera;
+		//!\~english	The shadow map configuration data UBO.
+		//!\~french		L'UBO de données de configuration de shadow map.
+		UniformBuffer m_shadowConfig;
+		//!\~english	The variable holding the camera's far plane.
+		//!\~french		La variable contenant la position du plan éloigné de la caméra.
+		Uniform1f & m_farPlane;
 		//!\~english	The view matrix.
 		//!\~french		La matrice vue.
-		Castor::Matrix4x4r m_view;
+		castor::Matrix4x4r m_view;
 	};
 }
 

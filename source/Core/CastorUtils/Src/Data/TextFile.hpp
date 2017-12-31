@@ -1,31 +1,12 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CASTOR_TEXT_FILE_H___
 #define ___CASTOR_TEXT_FILE_H___
 
 #include "File.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -68,7 +49,9 @@ namespace Castor
 		 *\param[in]	p_mode		Le mode d'ouverture, combinaison d'un ou plusieurs OpenMode
 		 *\param[in]	p_encoding	L'encodage pour un fichier en mode texte
 		 */
-		CU_API TextFile( Path const & p_fileName, FlagCombination< OpenMode > const & p_mode, EncodingMode p_encoding = EncodingMode::eASCII );
+		CU_API TextFile( Path const & p_fileName
+			, FlagCombination< OpenMode > const & p_mode
+			, EncodingMode p_encoding = EncodingMode::eASCII );
 		/**
 		 *\~english
 		 *\brief		Destructor, closes the file
@@ -90,7 +73,7 @@ namespace Castor
 		 *\param[in]	p_strSeparators	La liste des séparateurs de ligne
 		 *\return		Le nombre d'octets lus
 		 */
-		CU_API uint64_t ReadLine( String & p_toRead, uint64_t p_size, String p_strSeparators = cuT( "\r\n" ) );
+		CU_API uint64_t readLine( String & p_toRead, uint64_t p_size, String p_strSeparators = cuT( "\r\n" ) );
 		/**
 		 *\~english
 		 *\brief		Reads one word from the file (stops at first ' ' met)
@@ -101,7 +84,7 @@ namespace Castor
 		 *\param[out]	p_toRead	Reçoit le mot lu
 		 *\return		Le nombre d'octets lus
 		 */
-		CU_API uint64_t ReadWord( String & p_toRead );
+		CU_API uint64_t readWord( String & p_toRead );
 		/**
 		 *\~english
 		 *\brief		Reads one char from the file
@@ -112,7 +95,7 @@ namespace Castor
 		 *\param[out]	p_toRead	Reçoit le caractère lu
 		 *\return		Le nombre d'octets lus
 		 */
-		CU_API uint64_t ReadChar( xchar & p_toRead );
+		CU_API uint64_t readChar( xchar & p_toRead );
 		/**
 		 *\~english
 		 *\brief		Copies all this file's content into a string
@@ -123,7 +106,7 @@ namespace Castor
 		 *\param[out]	p_strOut	Reçoit le contenu
 		 *\return		Le nombre d'octets lus
 		 */
-		CU_API uint64_t CopyToString( String & p_strOut );
+		CU_API uint64_t copytoString( String & p_strOut );
 		/**
 		 *\~english
 		 *\brief		Writes a text into the file
@@ -134,7 +117,7 @@ namespace Castor
 		 *\param[in]	p_strText	Le texte
 		 *\return		Le nombre d'octets écrits
 		 */
-		CU_API uint64_t WriteText( String const & p_strText );
+		CU_API uint64_t writeText( String const & p_strText );
 		/**
 		 *\~english
 		 *\brief		Writes a formatted text into the file
@@ -149,11 +132,11 @@ namespace Castor
 		 *\param[in]	...			Paramètres POD (cf. printf)
 		 *\return		Le nombre d'octets écrits
 		 */
-		CU_API uint64_t Print( uint64_t p_uiMaxSize, xchar const * p_pFormat, ... );
+		CU_API uint64_t print( uint64_t p_uiMaxSize, xchar const * p_pFormat, ... );
 	};
 	/**
 	 *\~english
-	 *\brief		Open mode dependant write function
+	 *\brief		open mode dependant write function
 	 *\param[in]	p_file		The file
 	 *\param[in]	p_toWrite	The data to write in the file
 	 *\return		A reference to this file
@@ -166,7 +149,7 @@ namespace Castor
 	template< typename T > TextFile & operator<<( TextFile & p_file, T const & p_toWrite );
 	/**
 	 *\~english
-	 *\brief		Open mode dependant read function
+	 *\brief		open mode dependant read function
 	 *\param[in]	p_file		The file
 	 *\param[out]	p_toRead	The data to read from the file
 	 *\return		A reference to this file

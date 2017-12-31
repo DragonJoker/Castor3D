@@ -8,101 +8,101 @@
 #include "Mesh/Mesh.hpp"
 #include "Mesh/Skeleton/Skeleton.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-#ifdef GetObject
-#	undef GetObject
+#ifdef getObject
+#	undef getObject
 #endif
 
-namespace Castor3D
+namespace castor3d
 {
-	AnimatedObjectGroup::TextWriter::TextWriter( String const & p_tabs )
-		: Castor::TextWriter< AnimatedObjectGroup >{ p_tabs }
+	AnimatedObjectGroup::TextWriter::TextWriter( String const & tabs )
+		: castor::TextWriter< AnimatedObjectGroup >{ tabs }
 	{
 	}
 
-	bool AnimatedObjectGroup::TextWriter::operator()( AnimatedObjectGroup const & p_group, TextFile & p_file )
+	bool AnimatedObjectGroup::TextWriter::operator()( AnimatedObjectGroup const & group, TextFile & file )
 	{
-		Logger::LogInfo( m_tabs + cuT( "Writing AnimatedObjectGroup " ) + p_group.GetName() );
-		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "animated_object_group \"" ) + p_group.GetName() + cuT( "\"\n" ) ) > 0
-						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-		Castor::TextWriter< AnimatedObjectGroup >::CheckError( l_return, "AnimatedObjectGroup name" );
+		Logger::logInfo( m_tabs + cuT( "Writing AnimatedObjectGroup " ) + group.getName() );
+		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "animated_object_group \"" ) + group.getName() + cuT( "\"\n" ) ) > 0
+						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+		castor::TextWriter< AnimatedObjectGroup >::checkError( result, "AnimatedObjectGroup name" );
 
-		StrSet l_written;
+		StrSet written;
 
-		for ( auto l_it : p_group.GetObjects() )
+		for ( auto it : group.getObjects() )
 		{
-			auto l_name = l_it.first;
-			bool l_write{ true };
-			size_t l_skel = l_name.find( cuT( "_Skeleton" ) );
-			size_t l_mesh = l_name.find( cuT( "_Mesh" ) );
+			auto name = it.first;
+			bool write{ true };
+			size_t skel = name.find( cuT( "_Skeleton" ) );
+			size_t mesh = name.find( cuT( "_Mesh" ) );
 
 			// Only add objects, and not skeletons or meshes
-			if ( l_skel != String::npos )
+			if ( skel != String::npos )
 			{
-				l_name = l_name.substr( 0, l_skel );
-				l_write = p_group.GetObjects().find( l_name ) == p_group.GetObjects().end()
-						  && l_written.find( l_name ) == l_written.end();
+				name = name.substr( 0, skel );
+				write = group.getObjects().find( name ) == group.getObjects().end()
+						  && written.find( name ) == written.end();
 			}
-			else if ( l_mesh != String::npos )
+			else if ( mesh != String::npos )
 			{
-				l_name = l_name.substr( 0, l_mesh );
-				l_write = p_group.GetObjects().find( l_name ) == p_group.GetObjects().end()
-						  && l_written.find( l_name ) == l_written.end();
+				name = name.substr( 0, mesh );
+				write = group.getObjects().find( name ) == group.getObjects().end()
+						  && written.find( name ) == written.end();
 			}
 
-			if ( l_write )
+			if ( write )
 			{
-				l_return &= p_file.WriteText( m_tabs + cuT( "\tanimated_object \"" ) + l_name + cuT( "\"\n" ) ) > 0;
-				l_written.insert( l_name );
-				Castor::TextWriter< AnimatedObjectGroup >::CheckError( l_return, "AnimatedObjectGroup object name" );
-			}
-		}
-
-		if ( !p_group.GetAnimations().empty() )
-		{
-			l_return &= p_file.WriteText( cuT( "\n" ) ) > 0;
-
-			for ( auto l_it : p_group.GetAnimations() )
-			{
-				l_return &= p_file.WriteText( m_tabs + cuT( "\tanimation \"" ) + l_it.first + cuT( "\"\n" ) ) > 0
-							&& p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0
-							&& p_file.WriteText( m_tabs + cuT( "\t\tlooped " ) + String{ l_it.second.m_looped ? cuT( "true" ) : cuT( "false" ) } +cuT( "\n" ) ) > 0
-							&& p_file.WriteText( m_tabs + cuT( "\t\tscale " ) + string::to_string( l_it.second.m_scale ) + cuT( "\n" ) ) > 0
-							&& p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
-				Castor::TextWriter< AnimatedObjectGroup >::CheckError( l_return, "AnimatedObjectGroup animation" );
+				result &= file.writeText( m_tabs + cuT( "\tanimated_object \"" ) + name + cuT( "\"\n" ) ) > 0;
+				written.insert( name );
+				castor::TextWriter< AnimatedObjectGroup >::checkError( result, "AnimatedObjectGroup object name" );
 			}
 		}
 
-		if ( !p_group.GetAnimations().empty() )
+		if ( !group.getAnimations().empty() )
 		{
-			l_return &= p_file.WriteText( cuT( "\n" ) ) > 0;
+			result &= file.writeText( cuT( "\n" ) ) > 0;
 
-			for ( auto l_it : p_group.GetAnimations() )
+			for ( auto it : group.getAnimations() )
 			{
-				if ( l_it.second.m_state == AnimationState::ePlaying )
+				result &= file.writeText( m_tabs + cuT( "\tanimation \"" ) + it.first + cuT( "\"\n" ) ) > 0
+							&& file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0
+							&& file.writeText( m_tabs + cuT( "\t\tlooped " ) + String{ it.second.m_looped ? cuT( "true" ) : cuT( "false" ) } +cuT( "\n" ) ) > 0
+							&& file.writeText( m_tabs + cuT( "\t\tscale " ) + string::toString( it.second.m_scale ) + cuT( "\n" ) ) > 0
+							&& file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
+				castor::TextWriter< AnimatedObjectGroup >::checkError( result, "AnimatedObjectGroup animation" );
+			}
+		}
+
+		if ( !group.getAnimations().empty() )
+		{
+			result &= file.writeText( cuT( "\n" ) ) > 0;
+
+			for ( auto it : group.getAnimations() )
+			{
+				if ( it.second.m_state == AnimationState::ePlaying )
 				{
-					l_return &= p_file.WriteText( m_tabs + cuT( "\tstart_animation \"" ) + l_it.first + cuT( "\"\n" ) ) > 0;
-					Castor::TextWriter< AnimatedObjectGroup >::CheckError( l_return, "AnimatedObjectGroup started animation" );
+					result &= file.writeText( m_tabs + cuT( "\tstart_animation \"" ) + it.first + cuT( "\"\n" ) ) > 0;
+					castor::TextWriter< AnimatedObjectGroup >::checkError( result, "AnimatedObjectGroup started animation" );
 				}
 			}
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*************************************************************************************************
 
-	AnimatedObjectGroup::AnimatedObjectGroup( String const & p_name, Scene & p_scene )
-		: Named( p_name )
-		, OwnedBy< Scene >( p_scene )
+	AnimatedObjectGroup::AnimatedObjectGroup( String const & name, Scene & scene )
+		: Named( name )
+		, OwnedBy< Scene >( scene )
 	{
-		m_timer.Time();
+		m_timer.getElapsed();
 	}
 
 	AnimatedObjectGroup::~AnimatedObjectGroup()
@@ -111,205 +111,213 @@ namespace Castor3D
 		m_animations.clear();
 	}
 
-	AnimatedObjectSPtr AnimatedObjectGroup::AddObject( MovableObject & p_object, String const & p_name )
+	AnimatedObjectSPtr AnimatedObjectGroup::addObject( MovableObject & object
+		, String const & name )
 	{
 		return nullptr;
 	}
 
-	AnimatedObjectSPtr AnimatedObjectGroup::AddObject( Mesh & p_object, String const & p_name )
+	AnimatedObjectSPtr AnimatedObjectGroup::addObject( Mesh & mesh
+		, Geometry & geometry
+		, String const & name )
 	{
-		auto l_object = std::make_shared< AnimatedMesh >( p_name, p_object );
+		auto object = std::make_shared< AnimatedMesh >( name, mesh, geometry );
 
-		if ( !AddObject( l_object ) )
+		if ( !addObject( object ) )
 		{
-			l_object.reset();
+			object.reset();
 		}
 
-		return l_object;
+		return object;
 	}
 
-	AnimatedObjectSPtr AnimatedObjectGroup::AddObject( Skeleton & p_object, String const & p_name )
+	AnimatedObjectSPtr AnimatedObjectGroup::addObject( Skeleton & skeleton
+		, Mesh & mesh
+		, Geometry & geometry
+		, String const & name )
 	{
-		auto l_object = std::make_shared< AnimatedSkeleton >( p_name, p_object );
+		auto object = std::make_shared< AnimatedSkeleton >( name, skeleton, mesh, geometry );
 
-		if ( !AddObject( l_object ) )
+		if ( !addObject( object ) )
 		{
-			l_object.reset();
+			object.reset();
 		}
 
-		return l_object;
+		return object;
 	}
 
-	bool AnimatedObjectGroup::AddObject( AnimatedObjectSPtr p_object )
+	bool AnimatedObjectGroup::addObject( AnimatedObjectSPtr object )
 	{
-		bool l_return = p_object && m_objects.find( p_object->GetName() ) == m_objects.end();
+		bool result = object && m_objects.find( object->getName() ) == m_objects.end();
 
-		if ( l_return )
+		if ( result )
 		{
-			m_objects.insert( { p_object->GetName(), p_object } );
+			m_objects.insert( { object->getName(), object } );
 		}
 
-		for ( auto l_it : m_animations )
+		for ( auto it : m_animations )
 		{
-			p_object->AddAnimation( l_it.first );
-			auto & l_animation = p_object->GetAnimation( l_it.first );
-			l_animation.SetLooped( l_it.second.m_looped );
-			l_animation.SetScale( l_it.second.m_scale );
+			object->addAnimation( it.first );
+			auto & animation = object->getAnimation( it.first );
+			animation.setLooped( it.second.m_looped );
+			animation.setScale( it.second.m_scale );
 		}
 
-		return l_return;
+		return result;
 	}
 
-	void AnimatedObjectGroup::AddAnimation( String const & p_name )
+	void AnimatedObjectGroup::addAnimation( String const & name )
 	{
-		if ( m_animations.find( p_name ) == m_animations.end() )
+		if ( m_animations.find( name ) == m_animations.end() )
 		{
-			m_animations.insert( { p_name, { AnimationState::eStopped, false, 1.0f } } );
+			m_animations.insert( { name, { AnimationState::eStopped, false, 1.0f } } );
 
-			for ( auto l_it : m_objects )
+			for ( auto it : m_objects )
 			{
-				l_it.second->AddAnimation( p_name );
+				it.second->addAnimation( name );
 			}
 		}
 	}
 
-	void AnimatedObjectGroup::SetAnimationLooped( Castor::String const & p_name, bool p_looped )
+	void AnimatedObjectGroup::setAnimationLooped( castor::String const & name
+		, bool looped )
 	{
-		auto l_itAnim = m_animations.find( p_name );
+		auto itAnim = m_animations.find( name );
 
-		if ( l_itAnim != m_animations.end() )
+		if ( itAnim != m_animations.end() )
 		{
-			for ( auto l_it : m_objects )
+			for ( auto it : m_objects )
 			{
-				if ( l_it.second->HasAnimation( p_name ) )
+				if ( it.second->hasAnimation( name ) )
 				{
-					auto & l_animation = l_it.second->GetAnimation( p_name );
-					l_animation.SetLooped( p_looped );
+					auto & animation = it.second->getAnimation( name );
+					animation.setLooped( looped );
 				}
 			}
 
-			l_itAnim->second.m_looped = p_looped;
+			itAnim->second.m_looped = looped;
 		}
 	}
 
-	void AnimatedObjectGroup::SetAnimationScale( Castor::String const & p_name, float p_scale )
+	void AnimatedObjectGroup::setAnimationscale( castor::String const & name
+		, float scale )
 	{
-		auto l_itAnim = m_animations.find( p_name );
+		auto itAnim = m_animations.find( name );
 
-		if ( l_itAnim != m_animations.end() )
+		if ( itAnim != m_animations.end() )
 		{
-			for ( auto l_it : m_objects )
+			for ( auto it : m_objects )
 			{
-				if ( l_it.second->HasAnimation( p_name ) )
+				if ( it.second->hasAnimation( name ) )
 				{
-					auto & l_animation = l_it.second->GetAnimation( p_name );
-					l_animation.SetScale( p_scale );
+					auto & animation = it.second->getAnimation( name );
+					animation.setScale( scale );
 				}
 			}
 
-			l_itAnim->second.m_scale = p_scale;
+			itAnim->second.m_scale = scale;
 		}
 	}
 
-	void AnimatedObjectGroup::Update()
+	void AnimatedObjectGroup::update()
 	{
 #if defined( NDEBUG )
 
-		auto l_tslf = std::chrono::duration_cast< std::chrono::milliseconds >( m_timer.Time() );
+		auto tslf = std::chrono::duration_cast< Milliseconds >( m_timer.getElapsed() );
 
 #else
 
-		auto l_tslf = 25_ms;
+		auto tslf = 25_ms;
 
 #endif
 
-		for ( auto l_it : m_objects )
+		for ( auto it : m_objects )
 		{
-			l_it.second->Update( l_tslf );
+			it.second->update( tslf );
 		}
 	}
 
-	void AnimatedObjectGroup::StartAnimation( String const & p_name )
+	void AnimatedObjectGroup::startAnimation( String const & name )
 	{
-		auto l_itAnim = m_animations.find( p_name );
+		auto itAnim = m_animations.find( name );
 
-		if ( l_itAnim != m_animations.end() )
+		if ( itAnim != m_animations.end() )
 		{
-			for ( auto l_it : m_objects )
+			for ( auto it : m_objects )
 			{
-				l_it.second->StartAnimation( p_name );
+				it.second->startAnimation( name );
 			}
 
-			l_itAnim->second.m_state = AnimationState::ePlaying;
+			itAnim->second.m_state = AnimationState::ePlaying;
 		}
 	}
 
-	void AnimatedObjectGroup::StopAnimation( String const & p_name )
+	void AnimatedObjectGroup::stopAnimation( String const & name )
 	{
-		auto l_itAnim = m_animations.find( p_name );
+		auto itAnim = m_animations.find( name );
 
-		if ( l_itAnim != m_animations.end() )
+		if ( itAnim != m_animations.end() )
 		{
-			for ( auto l_it : m_objects )
+			for ( auto it : m_objects )
 			{
-				l_it.second->StopAnimation( p_name );
+				it.second->stopAnimation( name );
 			}
 
-			l_itAnim->second.m_state = AnimationState::eStopped;
+			itAnim->second.m_state = AnimationState::eStopped;
 		}
 	}
 
-	void AnimatedObjectGroup::PauseAnimation( String const & p_name )
+	void AnimatedObjectGroup::pauseAnimation( String const & name )
 	{
-		auto l_itAnim = m_animations.find( p_name );
+		auto itAnim = m_animations.find( name );
 
-		if ( l_itAnim != m_animations.end() )
+		if ( itAnim != m_animations.end() )
 		{
-			for ( auto l_it : m_objects )
+			for ( auto it : m_objects )
 			{
-				l_it.second->PauseAnimation( p_name );
+				it.second->pauseAnimation( name );
 			}
 
-			l_itAnim->second.m_state = AnimationState::ePaused;
+			itAnim->second.m_state = AnimationState::ePaused;
 		}
 	}
 
-	void AnimatedObjectGroup::StartAllAnimations()
+	void AnimatedObjectGroup::startAllAnimations()
 	{
-		for ( auto l_it : m_objects )
+		for ( auto it : m_objects )
 		{
-			l_it.second->StartAllAnimations();
+			it.second->startAllAnimations();
 		}
 
-		for ( auto l_it : m_animations )
+		for ( auto it : m_animations )
 		{
-			l_it.second.m_state = AnimationState::ePlaying;
+			it.second.m_state = AnimationState::ePlaying;
 		}
 	}
 
-	void AnimatedObjectGroup::StopAllAnimations()
+	void AnimatedObjectGroup::stopAllAnimations()
 	{
-		for ( auto l_it : m_objects )
+		for ( auto it : m_objects )
 		{
-			l_it.second->StopAllAnimations();
+			it.second->stopAllAnimations();
 		}
 
-		for ( auto l_it : m_animations )
+		for ( auto it : m_animations )
 		{
-			l_it.second.m_state = AnimationState::eStopped;
+			it.second.m_state = AnimationState::eStopped;
 		}
 	}
 
-	void AnimatedObjectGroup::PauseAllAnimations()
+	void AnimatedObjectGroup::pauseAllAnimations()
 	{
-		for ( auto l_it : m_objects )
+		for ( auto it : m_objects )
 		{
-			l_it.second->PauseAllAnimations();
+			it.second->pauseAllAnimations();
 		}
 
-		for ( auto l_it : m_animations )
+		for ( auto it : m_animations )
 		{
-			l_it.second.m_state = AnimationState::ePaused;
+			it.second.m_state = AnimationState::ePaused;
 		}
 	}
 }

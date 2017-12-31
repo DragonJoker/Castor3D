@@ -3,12 +3,12 @@
 #include "Mesh/Mesh.hpp"
 #include "Scene/Geometry.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-	AnimatedObject::AnimatedObject( String const & p_name )
-		: Named{ p_name }
+	AnimatedObject::AnimatedObject( String const & name )
+		: Named{ name }
 	{
 	}
 
@@ -16,92 +16,98 @@ namespace Castor3D
 	{
 	}
 
-	void AnimatedObject::AddAnimation( String const & p_name )
+	void AnimatedObject::addAnimation( String const & name )
 	{
-		DoAddAnimation( p_name );
+		doAddAnimation( name );
 	}
 
-	void AnimatedObject::StartAnimation( String const & p_name )
+	void AnimatedObject::startAnimation( String const & name )
 	{
-		auto l_it = m_animations.find( p_name );
+		auto it = m_animations.find( name );
 
-		if ( l_it != m_animations.end() )
+		if ( it != m_animations.end() )
 		{
-			auto & l_animation = *l_it->second;
+			auto & animation = *it->second;
 
-			if ( l_animation.GetState() != AnimationState::ePlaying
-					&& l_animation.GetState() != AnimationState::ePaused )
+			if ( animation.getState() != AnimationState::ePlaying )
 			{
-				l_animation.Play();
-				DoStartAnimation( l_animation );
+				if ( animation.getState() != AnimationState::ePaused )
+				{
+					animation.play();
+					doStartAnimation( animation );
+				}
+				else
+				{
+					animation.play();
+				}
 			}
 		}
 	}
 
-	void AnimatedObject::StopAnimation( String const & p_name )
+	void AnimatedObject::stopAnimation( String const & name )
 	{
-		auto l_it = m_animations.find( p_name );
+		auto it = m_animations.find( name );
 
-		if ( l_it != m_animations.end() )
+		if ( it != m_animations.end() )
 		{
-			auto & l_animation = *l_it->second;
+			auto & animation = *it->second;
 
-			if ( l_animation.GetState() != AnimationState::eStopped )
+			if ( animation.getState() != AnimationState::eStopped )
 			{
-				l_animation.Stop();
-				DoStopAnimation( l_animation );
+				animation.stop();
+				doStopAnimation( animation );
 			}
 		}
 	}
 
-	void AnimatedObject::PauseAnimation( String const & p_name )
+	void AnimatedObject::pauseAnimation( String const & name )
 	{
-		auto l_it = m_animations.find( p_name );
+		auto it = m_animations.find( name );
 
-		if ( l_it != m_animations.end() )
+		if ( it != m_animations.end() )
 		{
-			l_it->second->Pause();
+			it->second->pause();
 		}
 	}
 
-	void AnimatedObject::StartAllAnimations()
+	void AnimatedObject::startAllAnimations()
 	{
-		DoClearAnimations();
+		doClearAnimations();
 
-		for ( auto & l_it : m_animations )
+		for ( auto & it : m_animations )
 		{
-			l_it.second->Play();
-			DoStartAnimation( *l_it.second );
+			it.second->play();
+			doStartAnimation( *it.second );
 		}
 	}
 
-	void AnimatedObject::StopAllAnimations()
+	void AnimatedObject::stopAllAnimations()
 	{
-		for ( auto & l_it : m_animations )
+		for ( auto & it : m_animations )
 		{
-			l_it.second->Stop();
+			it.second->stop();
 		}
 
-		DoClearAnimations();
+		doClearAnimations();
 	}
 
-	void AnimatedObject::PauseAllAnimations()
+	void AnimatedObject::pauseAllAnimations()
 	{
-		for ( auto & l_it : m_animations )
+		for ( auto & it : m_animations )
 		{
-			l_it.second->Pause();
+			it.second->pause();
 		}
 	}
 
-	AnimationInstance & AnimatedObject::GetAnimation( Castor::String const & p_name )
+	AnimationInstance & AnimatedObject::getAnimation( castor::String const & name )
 	{
-		auto l_it = m_animations.find( p_name );
+		auto it = m_animations.find( name );
 
-		if ( l_it == m_animations.end() )
+		if ( it == m_animations.end() )
 		{
-			CASTOR_EXCEPTION( cuT( "No animation named " ) + p_name );
+			CASTOR_EXCEPTION( cuT( "No animation named " ) + name );
 		}
 
-		return *l_it->second;
+		return *it->second;
 	}
 }

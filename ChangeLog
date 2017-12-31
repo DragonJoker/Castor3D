@@ -1,3 +1,1775 @@
+2017-12-22  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Re-enabled depth pre-pass, that works, now.
+	* Reworked a bit the way debug symbols are loaded.
+	* Added a way to handle mipmaps in textures and texture attachments.
+	* Added some intrinsics to GlslWriter, and fixed few bugs.
+	* Fixed an object leak in BloomPostEffect
+	* Implemented Scalable Ambient Obscurance.
+	* Updated SsaoConfig, and using it in Ssao passes, to configure the effect.
+	* Added GlslPhongReflection for common reflection code in deferred and forward passes.
+	* Removed the multiplier to radius, the problem was in the test model.
+	* Added a rescale factor to the mesh, in SceneFileParser.
+	* Removed MaterialType array from ReflectionPass.
+
+2017-12-17  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Added CHMs for documentation.
+	* Added a TreeHolder class, to be able to expand or collapse all the tree nodes.
+	* Added PropertiesHolder as an attempt to get the properties grid to have the same background as others.
+	* Reworked export for skeletons, which are now in their own .cskl file.
+	* Fixed CastorViewer's camera management.
+	* Added new tone mapping operator : Uncharted 2.
+	* Fixed Skeleton animation bounding spheres.
+	* Fixed camera rotation using keyboard 'T' in CastorViewer
+	* Re-added view projection matrix in MatrixUbo.
+	* Now specular and gloss textures are modifiers to current specular and shininess/glossiness.
+	* Added possibility to pause an animation from scene file parser (for debugging purpose).
+	* Added nearest sampler to RenderColourToTexture.
+	* Added hdr_config section in scene file parser.
+	* Fixed frustum culling for bounding boxes.
+	* Removed useless functions from tone mappings.
+	* Using HdrConfigUbo, inside tone mappings.
+	* Enabled roll in NodeState for non camera nodes.
+	* Few modifications related to SSAO.
+
+2017-12-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Bounding box for morphed meshes are updated properly.
+	* Displaying submeshes' bounding boxes
+	* Improved the counts in debug overlays.
+	* Improved instanced rendering, by copying only visible nodes matrices.
+	* Added isSerialisable() function to Mesh, to prevent CubeBoxManager meshes from being written to scene file.
+	* Reworked a bit BoundingBox, to make it hold a dimension instead of min and max.
+	* Introduced AnimationKeyFrame, which holds all transformations/buffers for a single key frame of an all objects of an Animation.
+	* Few modifications to frustum.
+	* Tried a few things to force Skybox's viewport, but it's not compatible with env maps, this will need its own branch.
+
+2017-11-16  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed cube box display.
+	* Frustum culling is fixed.
+	* Fixed Picking for instantiated skinned meshes.
+
+2017-11-13  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Added SubmeshComponent base class and a handful of concrete components.
+	* Now components are fully integrated.Only remains a bug in lighting.
+	* Some speed improvements, by reducing shadow maps size, and bloom's textures size.
+	* Fixed non directional lights (their cube box was not created when not associated to a shadow map).
+	* Modified main debug panel overlays.
+	* Added IndexMapping class, to remove faces from Submesh.
+	* Fixed overlay rendering for rtot.
+	* Added LinesMapping index mapping class.
+	* Moved GeometryBuffers, fro Submesh and BillboardBase to RenderPipeline.
+	* CubeBoxManager now uses LinesMapping to generate its mesh.
+	* Updated importers.
+	* Removed built-in importers, except for OBJ and PLY
+
+2017-11-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Some changes to Appveyor build, to build samples (#196)
+
+2017-11-09  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Removed backlit computations, since transmittance won't rely on it.
+	* Added LightStreaks PostEffect.
+	* Split of Colour to RgbColour and RgbaColour.
+	* Added some booleans in Scene, to be able to disable unneeded parts of the rendering.
+	* Added signals to forward SSS, Pass, and Material changes to the scene.
+	* Billboards dimensions are now a castor::Point2f instead of a castor::Size.
+	* Using shader::Shadow::getLightSpacePosition from shader::SssTransmittance.
+	* Taking care of light visibility while filling LightBuffer.
+	* Fixed RenderPassTimer, added reset() function.
+	* DebugOverlays are now generated, and not anymore in Core.zip.
+
+2017-11-03  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Split travis build to prevent timeouts.
+
+2017-10-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Updated doxygen comments.
+	* Changed near plane to 0.5 for spot lights and VSM are then fixed.
+	* Removed some projects from Travis build.
+	* Updated license text
+	* Added sRGB colour space support.
+	* Using fma wherever it is possible.
+	* Moved far plane into LightCategory, and reflected this change in shaders.
+	* Removed CombinePass from DeferredRendering, to gain render time.
+	* Fixed 3x3 matrix inversion.
+	* Caches object creation message is now a debug message.
+	* Enabled stencil buffer for SMAA pass, to optimise render time for it.
+	* Fixed legacy reflections.
+	* Environment maps are now using RGAB32F pixel format.
+	* Depth buffer is now shared between all passes.
+	* Added transmission profile to SubsurfaceScattering in Pass.
+	* Parsed this profile from SceneFileParser.
+	* Using it in GlslSubsurfaceScattering shader (which should be renamed...)
+	* Updated license text.
+	* Taken care of codacy review comments.
+	* Fixed Parallax Occlusion Mapping, by taking the scene UBO from the opaque pass.
+	* DeferredRendering no more has its own SceneUbo.
+	* Disabled build of all importers in Travis.
+
+2017-10-07  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed hi poly models loading.
+	* Removed albedo from lighting computation.
+	* Added pass extended data's architecture.
+	* Added parsing of subsurface scattering configuration in scene files.
+	* Added ShaderBuffer class.
+	* PassBuffer now selects between TBO or SSBO, at runtime.
+	* Added PassFlag enum, and added it to RenderPass functions (and all derived)
+	* Fixed shadow mapping on Intel: samplers can't be parameters.
+	* Fixed emissive.
+	* material ID is now stored in the geometry buffer
+	* Added isEmpty function to CacheView.
+	* Removed ^ operator, added point::cross.
+	* Added a way to build the frustum from view and projection matrices.
+	* Now Equirectangular images processing takes care of HDR.
+	* glsl::Utils::calcWSPosition now takes  the depth as a parameter.
+	* Fixed a bug in specular roughness pipeline
+	* Added scene configuration in GUI elements.
+	* Implemented same face subsurface scattering
+	* Added farPlane to directional lights in GLSL
+	* Adding linear depth maps
+	* Added FilmGrain post-effect plugin.
+	* Added transmittance texture channel.
+	* Taking care of height maps, to modulate normals.
+	* Added parallax_occlusion option in Pass.
+	* Implemented SMAA, 1x and T2X (without reprojection) are functional.
+	* Fixed billboards and overlays rendering
+	* Improved GlslWriter, to handle boolean expressions, and binary expressions.
+
+2017-09-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Implemented VSM except for PointLights.
+
+2017-09-08  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed a driver crash issue due to the fact that I'd forgotten to transmit lights' far plane to forward pass
+	* Light pass result is split in two : diffuse and specular.
+
+2017-09-07  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed background colour for legacy scenes.
+	* Fixed overlays removal.
+	* Fixed a crash in debug symbols fetching that happened sometimes on Windows (due to an invalid pointer handle oO).
+	* Fixed ChangeTracked, and added GroupChangeTracked.
+	* Updated batch files to use Castor3DTestScenes
+	* Fixed shadows for point lights.
+
+2017-09-06  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixes for GCC
+	* Now taking care of light's volume to select the nearest light for shadow map generation.
+	* Fixed processing of alpha (blending or rejection)
+	* Grouped render pass timers by type.
+
+2017-08-31  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* ColourSkybox now has an update function.
+	* Added CubeBox and SphereBox properties.
+	* Increased number of SpotLight shadow maps to 20
+	* Changed the way meshes are written in the scene file.
+	* They are now in their own subsection under the scene section.
+	* Some crash fixes.
+	* Moved includes to GL/gl.h in new file GlGetFunction.
+	* It allows to remove remaining dependencies to this header from GlRenderSystem headers.
+	* Fixed properties in GuiCommon.
+	* Added CubeBox display in submesh properties.
+
+2017-08-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Made WorkerThread test more predictable.
+
+2017-08-26  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Added a skybox used to render the background colour in PBR.
+
+2017-08-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed README.md
+	* Trying to fix failure on Windows x86 builds.
+
+2017-08-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Moved GPUBuffer creation and storage initialization into RenderSystem, to be able to get it from a buffer pool.
+	* Implemented BuddyAllocator.
+	* Vertex buffers are now managed through a memory pool.
+	* I have on big GPU buffer, and the vertex buffers are allocated memory from this buffer, and given their offset.
+	* Removed test scenes from the repo.
+	* Using buffer pool for index buffers.
+	* Fixed Castor3DTest
+	* Added Castor3DTestScenes submodule
+	* Now IndexBuffers use the buddy allocator from the pool.
+	* Removed IndexBuffer from MeshLightPass
+	* Fixed submodule access.
+
+2017-08-22  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Disabled IBL filtering for reflection maps.
+	* Removed Policy<> struct.
+	* Removed create/destroy functions from FrameBuffer.
+	* Using alpha function in shadow maps generation.
+	* Moved UBO variable names to appropriate UBO classes.
+
+2017-08-17  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Now selecting an object in the scene displays its properties.
+	* Renamed GLSL namespace to glsl, merging  shadow maps.
+	* Fixed Signal, added unit tests for it.
+	* Reduced textures to their meaningful component, in Pass.cpp.
+	* Fixed QuaternionProperties.cpp
+	* Moved GLSL concepts only needed in Castor3D (related to lighting, materials, and shadows)
+	* Reordered Shader folder's file in subfolders.
+
+2017-08-10  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Refactored CastorUtils, GlslWriter and Castor3D to use camelCase instead of PascalCase for function names.
+
+2017-07-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed driver crash with Sponza and point light shadows.
+	* Moved Debug dump functions, to be able to display debug dumps from RenderTarget
+
+2017-07-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed Peter Panning, restoring my previous bias.
+	* Fixed SceneExportTest
+	* Updated the README
+	* Added GaussianBlur class, and using it to blur directional light shadow map.
+
+2017-07-26  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* SSBO layout std430 is useless, somehow, since I'm still forced to align arrays on 16 bytes.
+	* Fixed PreciseTimer.hpp
+
+2017-07-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Changing PassBuffer to a ShaderStorageBuffer.
+	* GpInfoUbo is now held by DeferredTechnique, and inner passes have a reference to it, so it is now updated only once.
+
+2017-07-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Added RenderPassTimer instances where it would be needed.
+	* Added a typedef on std::chrono::milliseconds and std::chrono::nanoseconds.
+	* Fixed forward rendering lights and shadows.
+	* Fixed shadows for forward rendering pass.
+	* Fixed ObjImporter 4 sided faces import.
+
+2017-07-23  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Updated program flags retrieved from the Pass.
+	* Implemented PCF shadows.
+	* Fixed frame saving.
+	* Fixed colours saturation when using a post effect.
+
+2017-07-22  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed lights and shadows for PBR workflows.
+
+2017-07-20  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Updated builtin importers.
+
+2017-07-19  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Updated Spheres test scene to match more closely the one using metallic workflow
+	* Fixed emissive, and shadow for spot and point lights.
+
+2017-07-18  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Removed l_ prefix.
+	* Renamed l_return to l_result
+	* Added configuration capacity to FxaaPostEffect.
+
+2017-07-17  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Implemented PBR Specular workflow, not satisfying yet.
+
+2017-07-14  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Updated importer plugins.
+	* Renamed ePbr to ePbrMetallicRoughness, and PbrPass to MetallicRoughnessPbrPass.
+	* Moved tests into folders.
+
+2017-07-13  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Updated TestRenderSystem.
+	* Fixed PickingPass.
+	* Updated CastorDvpTD materials.
+	* Fixed reflection and refraction, for both PBR and Legacy materials.
+	* Made GLSL::Vec classes more restrained on operator=
+	* Fixed seamless cube maps.
+	* Fixed Environment mapping for Legacy materials.
+	* Implementing refraction for PBR materials.
+	* Optimised PickingPass.
+	* It now downloads a small area of the texture, instead of downloading it completely.
+	* Fixed frustum culling.
+	* Added download capacity to FrameBufferAttachment classes.
+	* Added PbrPass viewer for GuiCommon.
+
+2017-07-12  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed HDR in skybox.
+	* It was only due to default sampler : it now using WrapMode::eRepeat.
+	* Fixed reflection mapping and HDR processing for skybox.
+	* Removed buggy barrier in Submesh
+	* Updated test suite.
+	* Fixed reflection mapping and HDR processing for skybox.
+	* Simplified a bit Submesh, added SubmeshUtils.
+	* Implemented IBL.
+	* Moved Equirectangular texture processing to Skybox.
+	* Fixed ComputeParticleSystem random buffer.
+
+2017-07-05  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* PBR lighting works.
+	* The scene holds the default material type, and it has been reflected in cscn files.
+	* Modified texture channels to reduce their numbers, and to make some of them usable for PBR.
+	* Modified RenderPass, to be able to generate a specific pixel shader for pbr or legacy pass.
+
+2017-07-03  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Instantiated skinned mesh now works.
+
+2017-07-01  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Updated CastorGui, to be able to build real GUIs.
+
+2017-06-30  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* GLSL::Ubo and GLSL::Ssbo now take their binding as a parameter, to simplify their binding point matching, between shader stages.
+	* Implemented GLSL::Shader to store data structures informations at shader write time.
+	* I now need to use it to bind UBOs and SSBOs at the right binding points.
+
+2017-06-29  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Adding support for instantiated skinning
+	* Fixed CPU core count on Linux.
+
+2017-06-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Simplified GpuBuffer, which is no more a template class, which has allowed to remove GlBufferBase
+
+2017-06-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Animations are now updated using a thread pool
+
+2017-06-19  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Integrated Dabou Master's animated meshes for towers.
+	* First attempt to dynamically add shadow producer lights.
+
+2017-06-12  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Alpha rejection works, it is now applied on the pass, instead of the texture unit.
+
+2017-06-09  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Some refactoring of TextureUnit.
+	* Weighted blend OIT works.
+	* Fixed Castor3DTest
+	* Fixed TestRenderSystem.
+	* Weighted blend works.
+	* Moved a bit some files in appropriate folders.
+
+2017-06-06  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Merged DeferredMsaaRenderTechnique into RenderTechnique.
+	* Removed RenderTechnique plugins.
+
+2017-06-05  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* SsaoConfig is now written into scene files.
+	* Added SsaoConfig structure, which allow configuration for enable status, effect radius, and bias.
+
+2017-06-03  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed ShaderEditor cleanup.
+	* SSAO is now working.
+	* Fixed CastorUtilsUniqueTest
+
+2017-06-02  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Added a way to registered variable names in GlslWriter.
+	* Fixed SSAO, it is faint, but it works.
+	* Moved NodeState to GuiCommon, to be able to use it in other projects.
+	* Modified Geometry::SetMaterial to be able to disable the event posting.
+	* Fixed animations loading from Assimp.
+	* For animation nodes that don't have a bone, I create a new bone to assign the node to it.
+
+2017-04-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Moved SSAO pass into FogPass which is renamed CombinePass.
+
+2017-04-18  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Compilation fixes
+	* Fixed the regressions in deferred msaa and in reflection/refraction
+
+2017-04-15  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Moved all LightPass related stuff in LightingPass.
+	* Both deferred rendering techniques now use this.
+	* Updated zip scenes
+
+2017-04-14  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Ambient lighting is repaired, and fog too.
+	* Pass buffer works correctly, with every test scene.
+
+2017-04-13  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Nearly working, materials are given to pass buffer
+	* It compiles, shaders compile, but the materials are not there yet...
+
+2017-04-12  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed a compile error in GuiCommon.
+	* Added classes for common UBOs (Matrices, ModelMatrix, Model, Scene, ...).
+	* Still modifying a lot of things.
+	* Implementing materials in texture buffers.
+	* I take it from shader writer side, in OpaquePass
+
+2017-04-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Repaired shadows.
+	* Reflection, refraction, and their combination is now rendered properly.
+	* Need to fix other scenes, now...
+
+2017-04-09  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Improved the camera movement in CastorViewer.
+	* Fixed a bug in environment map updates.
+	* Fixed a bug in submesh's reference counting of materials.
+
+2017-04-08  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Implemented combination of refraction and reflection.
+
+2017-04-07  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed the memory leak, due to a non virtual destructor on TextureSource...
+	* Fixed ShaderEditor.
+	* Fixed the crash, properly this time (it didn't crash anymore, but the fix was wrong)
+	* Fixed the crash in test cases.
+	* Environment mapping works with reflections.
+
+2017-04-06  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Implementing environment map pass for deferred rendering.
+	* Fixed the texturing bugs, it was due to the lights texture relying on the buffer for its dynamic texture (buffer that does not exist anymore)
+
+2017-04-05  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Reduced drastically the memory print of Castor3D, by avoiding creation of a pixel buffer for dynamic textures, it introduced a bug, some static textures are not initialised properly.
+	* Reflection mapping works with deferred rendering, but it's not satisfying...
+	* Reflection map faces are now generated properly.
+	* Reflection map is not generated properly, each face displays the same view.
+	* It is now sampled from the fragment shader.
+	* ReflectionMap is initialised, updated and rendered "successfully", but not used in the shader program yet.
+	* GUI events are now forwarded back to the user.
+	* GUI events are now forwarded back to the user, so they can be processed in user code.
+
+2017-04-03  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Reviewing Interop projects.
+
+2017-04-02  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed Castor3DTest.
+	* Fixing Castor3DTest.
+	* Updated importers.
+	* Fixed some bugs, with Skybox, TextureProjection and shadowing of objects with an opacity map.
+
+2017-04-01  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* World space position and view space position are reconstructed correctly.
+
+2017-03-31  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* World space position reconstruction from depth works with nearly everything, just need to fix the DirectionalLight shadows.
+	* World-space position reconstruction from depth works, along with directional lights
+
+2017-03-30  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Tried with view space position reconstruction from depth buffer, it's better but not good yet.
+
+2017-03-29  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Trying to convert from world space to view space in the fragment shader, not working yet.
+	* Trying another implementation of SSAO.
+	* Updated zip scenes.
+	* Fixed few bugs.
+	* Updated basic scene files.
+
+2017-03-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Removed material's ambient component.
+	* Moved RenderWindowCache back in Engine
+	* Debugging SsaoPass.2017-03-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* SSAO is implemented for deferred rendering techniques, it only needs debugging.
+
+2017-03-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Implemented Parallax Occlusion Mapping.
+	* Trying to implement parallax mapping.
+	* Fixed TestRenderSystem type string.
+	* Fixed writing of tone mappings, post effects and techniques, so they write proper parameters.
+	* Enabled TestRenderSystem if plug-ins are not enabled but tests are.
+
+2017-03-26  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Changed the texture used in test scene EquirectangularSkybox.zip
+	* Some bug fixes, on Linux.
+	* Removed extra functions from Importer plug-ins and Renderer plug-ins.
+	* It allowed me to move to C style function export for plug-ins.
+	* Now MeshGenerator::Generate takes a Parameters instance instead of random arrays.
+	* In scene files, the parameters are then made explicit.
+	* Terrain generation with diamond-squared algorithm is implemented.
+
+2017-03-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Added reflection mapping support in Scene/SceneFileParser and in Pass
+	* Modified Quaternion, made the from_xxx functions to be named constructors.
+	* Removed the render technique from RenderTechniquePass.
+	* ReflectionMap and ReflectionMapPass now compile.
+
+2017-03-23  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Added reflection map classes.
+	* Updated the copying of zlib.dll, which was broken, somehow.
+
+2017-03-22  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Shininess fix adjustment.
+	* Update doc main page.
+	* Fixed DeferredMsaaRenderTechnique, I actually really need this non MS depth buffer, and the blit after geometry pass.
+	* Modified the way NodeState is used, I now store a map of NodeStates, with scene node name as a key.
+	* It allows to reset a node to its original status.
+	* Fixed the specular bug I had for some time, it was due to p_shininess being 0, in the equation pow( l_specularFactor, p_shininess );.
+	* I've modified it this way pow( l_specularFactor, max( p_shininess, 0.001_f ) );.
+	* Added RenderInfo struct, which holds the render counts (vertex, faces, objects, visible, particles, ...).
+	* Fixed CastorViewer camera handling.
+	* Cleaned up includes in CastorUtils and Castor3D cpps.
+
+2017-03-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed equirectangular skybox.
+	* Fixed CastorDvpTD.
+	* Fixed Doxygen warnings.
+	* Fixed setup generation.
+
+2017-03-20  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Using GLSL::Function.
+	* Disabled AppVeyor x64 build, because for an unknown reason the test fail with an exception, while they pass correctly on my Windows x64 machine ...
+	* Removed the table's last line
+	* Fixed a typo
+	* Added AppVeyor status to README.md
+	* Fixed CastorGUI.
+	* It was due to half finished signal/connection integration...
+	* Fixed Windows x64 out of the box build.
+
+2017-03-19  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed the mess nano has done...
+	* Disabled Windows x64 build, and Castor3DTest on Linux.
+	* Fixed freetype lookup on Windows x64.
+	* Fixed a crash in LoopSubdivider in Release only.
+	* Fixed OverlayCache view, it now uses OverlayCache initialiser and cleaner.
+	* Fixing CastorUtilsTest
+	* Fixing VS2015 build
+	* Fixing appveyor.yml
+	* Removed Euler angles from Quaternion.
+	* Added draft appveyor.yml
+	* Fixed a crash on scene cleanup.
+	* Updated Importer plug-ins.
+	* Fixed Castor3DTest.
+	* Added a FrameListener to Scene, so its objects are contained, initialised and cleaned up from there.
+	* It allows a better Scene cleanup and switch, which doesn't need a RenderLoop cleanup.
+
+2017-03-18  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed binary export/import, the animation bug came from the endianness change on invalid template specialisation that was allowed by msvc
+
+2017-03-17  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Create ConstCoord typedefs, to use in Matrix, for constant column gettes
+	* Added support for Visual Studio 2017.
+	* Few modifications in Scene/Animation, to remove some shared_ptrs
+	* Merge pull request #149 from DragonJoker/staging/20170316-bugfix-001868-linux_shadow_maps
+	* Shadow maps work fine on Linux without any change to them
+	* Temporarily disabled testing (pass locally, though)
+
+2017-03-16  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed skybox rendering when using deferred rendering, and with a shadow producer light.
+	* Shadow maps work fine on Linux without any change to them, I certainly have fixed them somehow with my previous changes.
+	* Fixed TestUniformBufferBinding.cpp, to make it have a size, so uniform buffers are initialised.
+	* Deferred rendering is now a proper deferred rendering.
+	* Updated OpenGLES3RenderSystem, TestRenderSystem, and implemented some fixes for GCC/Linux
+	* Fixed the CMakeLists.txt
+	* Deferred rendering is now the default render technique.
+	* Background image is now rendered as a texture projected on a skybox, allowing it to be rendered at the same place as the skybox, and benefiting from the depth test against opaque objects.
+
+2017-03-15  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Some cleanup
+	* DeferredMsaaRenderTechnique works fully, using DeferredCommon.
+	* Created DeferredCommon library, to put common code for DeferredTechnique and DeferredMsaaTechnique.
+	* Deferred shadow map for point lights work fine using multipass.
+	* Forward rendering point light shadow maps works fine using multipass.
+	* Trying to move to multipass point light shadow maps.
+	* Multiple spot light shadows are fixed.
+	* It came from the glClear function that somehow needs the glDepthMask set to GL_TRUE when clearing depth buffer...
+	* Some name refactoring
+	* Debugging shadow maps.
+	* Single light shadow maps work properly
+
+2017-03-14  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Point and spot lights are now rendered properly.
+	* FrameBuffer::Clear doesn't parse the attachments anymore
+	* Spot and point lights are back.
+	* Updating DeferredRenderTechnique
+	* Now FrameBuffer::Bind doesn't set the draw buffers, the user must do it himself.
+	* Background image is now displayed, but masks opaque objects which are drawn before.
+	* Added shadow maps in deferred rendering.
+	* Added Clear function to FrameBufferAttachment classes.
+	* Added debug check of last given DepthStencilState against current OpenGL state, I may have a problem, here (already fixed some, though).
+
+2017-03-13  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Some attempts to fix the RToT
+	* Actually, multiple shadows don't work, and even worse, multiple light sources of the same type don't work, neither.
+
+2017-03-12  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Multiple shadows of same type work properly.
+	* Directional light shadow maps work with deferred rendering.
+	* Now the RenderTechniquePass holds the shadow maps.
+
+2017-03-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* The skybox for background colour is generated properly, with a 16x16 texture though.
+	* Deferred rendering is fully functional, except for the background colour.
+	* For the background colour, I'll probably have to set the skybox with a 1x1 texture containing the pixel with the right colour
+
+2017-03-10  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Now the light passes hold the programs array, and DeferredRenderTechnique holds one pass for each light type.
+	* Implementing proper deferred rendering technique, with one pass per light.
+	* Directional lighting is implemented, without shadows though.
+
+2017-03-9  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Templated GLSL::Vec2, GLSL::Vec3, GLSL::Vec4, GLSL::Mat2, GLSL::Mat3, and GLSL::Mat4.
+	* Added GLSL::Function class.
+
+2017-03-8  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Removed ProgramFlag::eShadow, since it was redundant with SceneFlag.
+	* Fixed shadow maps in deferred rendering.
+	* Added SceneFlag scoped enumeration, and replaced the uint8_t I were using by a SceneFlags reference.
+	* Added Shadow class, to handle shadow configuration.
+
+2017-03-7  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* GCC Fix #1 (well, more a MSVC bug)
+	* Multiple point light shadow maps work, using a sampler array instead of an array sampler.
+	* Implemented Update and Render in specific ShadowMaps.
+	* Updated TestRenderSystem
+	* Added classes to display cube texture arrays, to try to debug point lights shadow maps.
+	* Multiple spot light shadows are functional
+
+2017-03-6  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Now ShadowMap holds the attaches, to be able to give the right one to the ShadowMapPass
+	* Added deferred_shadow_all.cscn scene.
+	* The lights are now sorted by distance to the camera, in ShadowMap, to be able to enable shadow maps on the nearest lights.
+	* Renamed point::distancexxx to point::lengthxxx.
+	* Added proper point::distancexxx to compute distance between two points.
+
+2017-03-5  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Splitted ShadowMaptoXXX classes into ShadowMapXXX and ShadowMapPassXXX.
+	* ShadowMap holds the non light dependant data (such as texture and framebuffer).
+	* ShadowMapPass holds the light dependant data (such as camera and viewport).
+	* Added a scene to test shadow maps interactions (3 light sources, of different type, and shadow producers).
+	* It's highlighted a bug, that is now fixed.
+
+2017-03-4  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed travis.yml typo
+	* Point light shadow maps are eventually fixed!!
+	* Nearly good, the shadow map is generated properly with correct results.
+	* Fixed the render of cube texture faces to 2D textures.
+	* There are still problems in the shadow calculations though:
+	* - There is a vertical offset between shadow map and the computed shadow.
+	* - There is a problem with incorrect shadow computations, when the light is moved up or down, at the edges of the cube.
+	* These problems may be linked, or not, more investigation is needed.
+
+2017-03-3  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Disabled GlRenderSystemTest in Travis builds (it can't be run).
+	* Build on linux, in release
+	* Fixed platform specific DoShowBacktrace functions in release.
+	* Removed header
+	* Added header
+	* Added build status to README.md
+	* Removed useless statement.
+	* Equirectangular HDR files are mapped correctly to cube maps.
+	* Moved render to texture code to separate classes.
+
+2017-03-2  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* First draft of equirectangular HDR textures.
+	* Not too bad, I have no crash, and the cube map receives a render, but the faces are in wrong order.
+
+2017-02-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Added RangedValue and Range classes to CastorUtils.
+	* Fixed the way to handle overlay position, so the buffers are not regenerated for position changes.
+
+2017-02-16  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Using CASTOR_PLATFORM_* macros.
+	* Moved platform specific implementations to Platform folder
+
+2017-02-4  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed compilation on Windows, removed remaining _MSC_VER, _WIN32, _GNUG, ...
+
+2017-02-3  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* CastorUtils nearly builds on Android
+
+2017-02-2  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed the UDL parameters.
+
+2017-02-1  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed test cases, and the build of GuiCommon
+	* All times are expressed using std::chrono duration types.
+
+2017-01-31  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* It is fixed, and it reveals that GPU is the bottleneck (if it is really fixed)
+
+2017-01-29  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Added implementation of OpenGL ES 3 renderer.
+
+2016-12-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed Particle system
+	* Shadow maps with transparent objects are fixed.
+
+2016-12-19  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Shadows for alpha meshes.
+	* The textures have some problem.
+
+2016-12-15  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* The memory problems are solved on RAM, but I crash the driver...
+	* All is implemented, but some memory problems...
+
+2016-12-14  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Introduced UniformBufferBinding class, which is the link between a program and a UBO.
+	* Now RenderPass holds its UBOs, as do other classes that create their pipelines (Context, ToneMappings, PostEffects, ...).
+	* Now, I have to debug that.
+
+2016-12-13  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Program has been removed from UniformBuffer.
+	* Added a message in UniformBuffer when its initialisation fails.
+
+2016-12-12  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Uniform variables have to main classes: Uniform, and PushUniform.
+	* PushUniforms are uniforms that are given directly to the ShaderProgram, whereas UniformBuffer holds Uniform instances.
+	* No more MatrixUniform, OneUniform and PointUniform, the template parameter of TUniform being UniformType.
+	* Uniformisation of uniform variables implementations.
+	* Created PushUniform class, that has the shader program.
+	* Renamed FrameVariable to Uniform
+
+2016-12-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Implemented alpha rejection in shadow maps.
+	* Removed Peter Panning using normal offset of world space position instead of depth bias.
+	* The render loop now updates the queues, which are gathered from the render technique.
+
+2016-12-10  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Moved most render functions to RenderPass, only PickingPass has his ones.
+	* Fixed picking of transparent nodes.
+	* Fixed the instancing of transparent nodes.
+	* Now Logger can display messages without printing a newline.
+	* Log messages are not pointers anymore.
+	* Renamed DirectRenderTechnique to ForwardRenderTechnique.
+	* Renamed MsaaRenderTechnique to ForwardMsaaRenderTechnique.
+	* RenderQueue and RenderPass now process one type of nodes (opaque or transparent)
+	* RenderTechniquePass class has been created, and RenderTechnique now has two passes.
+
+2016-12-7  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* All bind methods now have void return type instead of bool.
+	* All dependant functions have been updated consequently, most of them now have a void return type too.
+	* ShaderProgram initialisation and binding has been modified to behave like the other classes of the engine.
+	* I has allowed me to highlight the declaration of frame variables that was not present in the shaders.
+	* Hence, I have updated the program and texture flags modification from the render passes.
+	* Splitted DoCompleteProgramFlags in two (opaque and transparent), to handle lights properly.
+	* The changes are done, now I must test them.
+	* Fixed pixel format test
+	* Removed TPL_PIXEL_FORMAT macro
+	* Removed extra qualifier in header.
+	* DeferredRenderTechnique and DeferredMsaaRenderTechnique now support shadows, and also objects that don't receive shadows.
+	* Added a way to check for the texture units completeness before a draw call, in GlDebug.
+	* It helped me fix the sampler unbind bug.
+	* But it didn't help fix the noisy message which is still there.
+	* Looks like it is related to a shader using shadow samplers with no textures bound to it, which is not the case...
+	* So I temporarily filtered the message out, but it needs investigation on its own.
+	* CastorTD now uses shadows too.
+
+2016-12-6  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Submesh's matrix buffers are now updated in a pre-render event, instead of queue-render
+	* Added "Trace" log level (lower than debug, it displays notifications from OpenGL Debug Output).
+	* Reworked GlDebug's debug callbacks, to make them more concise, and now each severity level matches a log level.
+	* Created common functions in render pass, to copy instantiated nodes matrices.
+	* DeferredMsaaRenderTechnique now uses shadows correctly too.
+	* Fixed the memory issue when a log level was given as command line parameter.
+	* Still the noisy message about shader/texture/sampler mismatch, since I don't know where it comes from, I'll probably need to store the state for currently bound OpenGL objects, in GlDebug...
+
+2016-12-6  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Now objects have the "shadow receiver" property.
+	* Now objects have the "shadow receiver" property.
+	* Modified render nodes so they use the newly created frame variable.
+	* Added support for non shadow receiver objects in GlslLighting.
+	* Now I'll need to rework deferred rendering outputs to make it work.
+	* Added new UBO: Model.
+	* Added RenderedObject class, to handle object visibility and behaviour with shadows
+
+2016-12-5  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Looks like the render is done, but some debug messages remain.
+	* Moved OpenGL debug checks to a new GlDebug class.
+
+2016-12-4  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Still some issues about non matching shader/sampler/texture.
+	* Updated the scenes
+	* Directional lights shadow mapping now works.
+
+2016-11-16  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* I lost my shadow map rendering :/
+	* I have something, but not quite good, needs work for task #1841
+
+2016-11-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Added base infrastructure.
+
+2016-12-4  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Texture transfers seem to work, even in PboTextureStorage.
+	* Still some issues in TransformFeedback tests.
+	* Fixing test cases.
+	* Removed useless using namespace Castor;
+	* RenderWindow now holds the picking pass.
+	* Created GpuObjectTracker class and moved this code from RenderSystem.
+	* Added Castor::CpuInformation to Castor3D::Engine
+	* Moved caches sources files to Cache folder.
+	* Moved prerequisites sources to Prerequisites folder
+
+2016-12-2  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed a problem with PixelFormat. Maybe will I have to take care of endianness.
+	* Implemented worker threads and thread pools.
+	* Fixed some memory leaks and memory problems detected with valgrind.
+	* The material type is now written in cscn files.
+	* All importer plug-ins are updated.
+	* LegacyPass has been created.
+	* Some issues with CastorDvpTD in Release only.
+
+2016-11-30  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Compute particle system is now functional.
+	* Particle systems are written to cscn files.
+	* Second attempt to write particle system to cscn files.
+	* First attempt to write the particle system to cscsn files.
+	* Particle system using compute shader is working.
+
+2016-11-29  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Created atomic counter buffers class.
+	* Created atomic counter buffers class.
+	* Added support for compute shaders.
+	* Added ShaderStorageBuffer class.
+	* Fixed test projects.
+	* Created FlagCombination class to handle flags.
+	* Modified CpuBuffer and GpuBuffer behavior.
+	* Added ShaderStorageBuffer class.
+
+2016-11-22  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Standard C++ compliance fix #1
+	* Finished CPU particle systems.
+	* CPU particle system is functional.
+	* Created FireworksParticle plug-in as a proof of concept for CPU particle systems.
+
+2016-11-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed the billboards sorting, fixed compatibility with particle system.
+	* Writing the billboards sorting, using directly the vertex buffer.
+	* Modified a bit the error model during the context creation.
+	* Added spherical billboards.
+	* Added a way to specify the billboard type in SceneFileParser.
+	* Fixed ParticleSystem.
+
+2016-11-19  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Billboards don't use geometry shaders anymore.
+
+2016-11-17  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Changing billboards infrastructure.
+	* First draft, and some quick and dirty stuff to test it, but not functional yet.
+
+2016-11-15  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Lights don't have PositionType anymore.
+	* Lights don't have PositionType anymore.
+	* Directional lights now use the scene node's orientation.
+
+2016-11-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Disabled the build of CastorViewer, CastorDvpTD ans Castor3DTest
+	* Added gtk2
+	* Fixed Xinerama dependency
+	* Typo again
+	* Fixed a typo
+	* Container based doesn't work, sticking to traditional, but enabled samples
+	* Same, with container base
+	* Trying use of gcc 5
+
+2016-11-10  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Skybox are fixed.
+	* Skybox are fixed.
+	* It was due to unsynchronised camera and skybox: The skybox is rendered before the scene is updated.
+	* I've also had to modify the mouse events to make them post post-render events.
+
+2016-11-9  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Bloom is fixed.
+	* The problem in the UBO was due to the stride of float arrays in it.
+	* This stride is 16 bytes (size of a vec4), hence my values were packed instead of being dispatched with this stride.
+	* I have added support for other UBO layouts (packed and shared).
+
+2016-11-8  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Modified the behavior of GlFrameVariableBuffer, to upload it only when needed.
+	* Removed string values from FrameVariable.
+	* Bloom is fixed, but some problems with UBO...
+	* Additionals enums updated.
+
+2016-11-4  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* All enumerators from Castor3D are updated.
+
+2016-11-3  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* All enumerators in CastorUtils are updated.
+	* All enumerators in GlRenderSystem are moved to scoped enumerators.
+	* Half the enumerators in GlRenderSystem are changed.
+	* All enumerators in CastorUtils are changed.
+
+2016-11-1  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed the test cases in Castor3DTest.
+	* It allowed me to re-enable BinaryExportTest.
+
+2016-10-31  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Added options for test projects
+
+2016-10-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Now outputing generated test projects in CMake results.
+	* Fixing Castor3DTest.
+	* GlRenderSystemTest works on Linux too.
+
+2016-10-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Particle system generalisation is done.
+	* User can now specify the vertex and geometry shaders to use, the UBOs he wants to use, and the particles description.
+	* Generalising ParticleSystem.
+	* It is nearly done, but still not functional, needs some more debugging.
+	* ParticleSystem is now working (I forgot the billboards dimensions, so it probably worked before).
+	* Now I need to generalise it.
+
+2016-10-26  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Render queue has been fixed.
+	* RenderQueue no longer holds maps, it holds the nodes, directly.
+	* All dependant classes have been updated to match this change.
+
+2016-10-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Removed v sync from all scenes.
+	* Using Float4 class for SSE2 in matrices.
+	* Fixed instantiation.
+
+2016-10-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Changed max texture matrices to 4.
+	* An AStyle pass.
+	* Modified a bit RenderQueue so it doesn't need the static dummy nodes list.
+	* Moved some enums to scoped enums in GlRenderSystem.
+	* GlTransformFeedbackTest::TwoWaysParticleSystem now works.
+	* Added CastorUtilsTest to CTest
+	* Compiled and tested with GCC on Linux.
+	* Added minizip to source tree.
+	* Libzip has been removed, and unit test pass on Windows.
+
+2016-10-23  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Even if transform feedback works, I have some problems with it, in ParticleSystem
+
+2016-10-22  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Added test suite for GlRenderSystem.
+	* It allowed me to test my transform feedback implementation, and it works.
+
+2016-10-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Adding the attributes to transform feedback buffer.
+
+2016-10-20  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Implementing transform feedback.
+
+2016-10-19  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Updated LwoImporter
+	* Updated TestRenderSystem
+	* Point light shadow maps are not functional yet...
+	* Enabled ObjImporter even if AssimpImporter is enabled.
+
+2016-10-18  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Point light shadow maps are now a cube map array.
+	* Fixed frame saving colours swap.
+	* Fixed the lights problems I had when I applied a bias to the reference depth in shadow mapping.
+	* It has allowed me to remove the fixed pipeline polygon offset that was applied instead of the bias in GLSL.
+	* Modified GlslWriter::GetLocale to make it more type safe (removed the implementation with Expr, and the assignment parameter must now be of the template return type).
+	* Removed LOCALE and LOCALE_ASSIGN macros, in GlslWriter.
+
+2016-10-17  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Something really wrong I think...
+	* Can't use samplerCubeArray for point lights (needs OpenGL 4.0, and layered rendering), so I'll keep the samplerCube for now.
+	* I have a ShadowMapPassPoint that doesn't work, but that doesn't produce any OpenGL error anymore.
+	* Spot light shadow mapping uses a sampler2DArrayShadow.
+	* Context can now render one layer of a texture array (depth or not).
+
+2016-10-16  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Modified textures storage management: the storage is now in the layout, and allocates on GPU all necessary memory to hold the data.
+	* It has allowed me to use ImmutableStorage for cube maps too.
+	* ShadowMapPass is now a base class, each light type implements its class.
+
+2016-10-14  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed non SSE2 support.
+	* Spot lights shadow mapping is implemented.
+	* Implemented diverse shadow types, and it can be specified through GLSL::LightingModel construction.
+	* The shadow acne is handled through glPolygonOffset.
+	* Fixed a bug in GLSL::Float.
+	* Shadow mapping works, now I need to resolve the shadow acne.
+	* Added shadow samplers, so soften the shadow edges.
+
+2016-10-13  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed the image binding.
+	* Added Viewport into LightCategory, so I can put the light VP matrix in the shader instead of just the view.
+
+2016-10-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Shadow map generation works, now I need to figure out what's wrong with my binding of its texture in the shader to make it work.
+	* SceneNodes' matrices are now updated when updating their parent Scene.
+	* Cleaned up Castor3DScene.xml, removed unused keywords.
+	* Added a possibility for objects to be ignored in shadow map.
+
+2016-10-10  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Modified the way to retrieve the current context, in RenderSystem.
+	* Spot lights are fixed (eventually).
+	* Two sided materials are now properly implemented (they are rendered two times, once with inverted normals).
+	* Added a way to move lights, in CastorViewer, by first selecting a geometry which is on attached to the same scene node.
+	* Fixed ambient lighting.
+
+2016-10-8  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Updated few plug-ins
+
+2016-10-7  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Introduced ShadowMap class and implemented shadow mapping (first draft).
+	* Lights now have their light space matrix.
+	* Moved rendering from RenderPass to RenderTechnique, since every render pass will implement its own.
+	* Added convenient functions to reduce shader code, for pre and post lighting and lighting computations.
+	* Added a way to retrieve the textures count from creation flags, in Pipeline.
+	* Moved the scene management from RenderPass to derived classes.
+	* Splitted Camera and Viewport Update function, added an Apply function so Update doesn't need an active Context any more.
+	* Added SIMD wrapper Float4.
+	* Fixed File and TextFile.
+	* Fixed a double lock problem in same thread in Logger.
+
+2016-10-3  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed an issue with bitfield for PipelineFlags.
+	* Fixed a parsing issue for fog parameters.
+	* Compiled with GCC.
+	* Added fog as a pipeline flag, so no more if in the GLSL code.
+
+2016-09-30  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Implemented three basic fogs.
+
+2016-09-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Now works, and keeps hardware instantiation.
+	* Added a stack trace, for frame events.
+	* Fixed a problem highlighted by deferred rendering, because of uninitialised variables.
+
+2016-09-6  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Removed redundant call to RederPanel::SetRenderWindow
+	* Avoid crashing on unsupported configurations.
+
+2016-09-5  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Added DataLights.zip
+	* Adding lights to CastorTD
+
+2016-08-31  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed few rebase issues.
+
+2016-08-30  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* First draft
+	* Added PickingPass class
+
+2016-09-20  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* ShaderProgram is now integrated to Pipeline.
+	* Recompiled every project, and fixed some GCC compliance issues.
+	* And again...
+	* Moved DoRenderNonInstanced to RenderTechnique.cpp.
+	* ShaderProgram is now integrated to Pipeline.
+
+2016-09-15  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Removed OpenCV from CMake files, and libswresample (it is not used).
+
+2016-09-10  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Looks like FXAA works, but it is very faint.
+
+2016-09-9  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Looks like it works, but it is very faint.
+
+2016-08-31  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Skybox renders properly in deferred lighting.
+	* Fixed a bug in applications image loading.
+	* Fixed LwoImporter compile error.
+	* Skybox renders properly in deferred lighting.
+	* It was due to a mistake: Skybox was rendered in back buffers...
+	* Also fixed an ambient lighting problem.
+	* Fixed ambient lighting in tests data.
+
+2016-08-30  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed transparent rendering.
+	* Fixed ambient lighting in DeferredRenderTechnique.
+	* Updated bindings.
+	* Difficulty more balanced.
+	* Added a new tower type.
+	* Added few things to HUD.
+	* Fixed a bug in abilities cost.
+	* Enemies are cached.
+	* Game can be restarted, after losing it.
+	* Game can be paused.
+	* It uses asynchronous render loop again.
+
+2016-08-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* [WE-JV6] CastorTD tower defense game
+	* Released CastorTD on Developpez.com, for WE-JV6
+
+2016-08-26  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* The background is rendered properly, but not skyboxes...
+	* Some unrelevant changes.
+
+2016-08-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Deferred rendering no has the same render as forward rendering.
+	* Transparent meshes are rendered using forward rendering.
+	* Now deferred render pipeline needs to work with a stencil buffer, or something to make background and skybox work.
+	* Opaque objects are rendered with deferred lighting, and transparent ones are rendered with forward rendering.
+	* Updated some enumerations.
+
+2016-08-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed the last bugs in picking, it works properly and nicely.
+	* In fact I don't need multipass for this, so I postpone, until needed.
+	* Picking now works properly,now I need to review multipass materials.
+
+2016-08-23  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Rays are fixed.
+	* Picking through rays have been fixed.
+
+2016-08-22  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed DeferredRenderTechnique to work as previously.
+	* Skeletal animations fixed, but a weird thing is that I had to transpose the rotation matrix...
+	* Updated KeyFrame to only hold the transformation matrix.
+	* Updated Binary file format to take care of this.
+	* Updated the tests.
+
+2016-08-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Pipeline now holds all states (rasteriser, depth, stencil, blend, multisample)
+	* Fixed camera on test scenes.
+	* Fixed blending.
+
+2016-08-20  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Cleaned up states (no more in renderers).
+	* All sub projects compile.
+	* All states are in Pipeline, except for DepthStencilState.
+	* Updated other projects
+	* Updated Viewport and Camera.
+	* Added multisample state.
+	* Removed states caches, and states Initialise/Cleanup.
+
+2016-08-19  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* pixel format.
+
+2016-08-5  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Render queue
+
+2016-08-4  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* It works, I now need to make sure there is a gain
+	* Few fixes (registered the scene, fixed the objects counting)
+	* First draft, it is implemented, but it needs debugging.
+
+2016-08-3  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Frustum culling is implemented
+	* Tried to fix the capture in CT_EQUAL macro.
+	* Removed unused DoResortAlpha function.
+	* Updated CMake submodule.
+	* Frustum culling works, but it now needs to be put in another place.
+	* For that I need to create a class that will effectively store the nodes to be rendered.
+	* This class would be "between" the scene and the render technique.
+	* Updated dependencies submodule.
+	* Fixed the look at.
+
+2016-08-2  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Adding a way to rotate 90° from RenderPanel.
+
+2016-08-1  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed matrix::look_at
+
+2016-07-31  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Added support for RGB hexadecimal colours in ParserParameter.inl
+
+2016-07-29  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* glm again, and an A-Style pass
+
+2016-07-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Trying to stick to glm again... :/
+
+2016-07-26  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Reworked cmake stuff to copy files and folders for selected configuration only.
+	* Reworking Camera to stop inverting its position.
+	* Modified ParserParameter for Colour, to parse #FFFFFF style colours.
+	* Checking my frustum culling implementation.
+	* Looks good, but some meshes disappear... Would it be because of the camera?
+
+2016-07-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Buffers and texture storage hierarchies have been reduced
+	* Updated TestRenderSystem
+	* Removed texture storages hierarchy.
+	* Removed GlIndexBuffer and GlVertexBuffer classes.
+	* Renamed it to README.md
+	* Updated README
+	* Render nodes are linearised as much as possible.
+
+2016-07-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed some setup inconsistencies.
+	* Instancing is fixed using linearized render nodes lists.
+	* And updated setup.
+	* Removed LGPL.txt since I'm using MIT License
+	* All Plugins and Bindings are using MIT License
+	* Samples, Tests and Tools are now using MIT License
+	* CastorUtils, GlslWriter and Castor3D are now using MIT license
+	* Started implementing Frustum culling.
+
+2016-07-23  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Removed conditions in instanced rendering.
+
+2016-07-22  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Plug-ins' interface is unified as much as possible.
+	* Importers fixed.
+	* Plug-ins' interface is unified as much as possible.
+	* Factories have been created for RenderSystem, Importer and Subdivider classes.
+	* CastorUtils sources into folders
+	* Test to use gcc 5.2 with Travis CI
+	* Fixed compilation with GCC and fixed COnfig folder.
+	* Trying to fix GCC compilation
+	* CastorUtils files have been moved into folders.
+	* Moving CastorUtils sources in folders.
+
+2016-07-20  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* First try to linearise render nodes maps.
+	* Reworked RenderTechnique and render nodes to avoid GCC crash on Travis.
+
+2016-07-19  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed the issue of post effects not displayed when skybox is displayed without any transparent mesh.
+	* Linear ToneMapping is now built whatever options are checked
+
+2016-07-7  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Merge pull request #94 from DragonJoker/20160704-feature-00XXXX-managers_removal
+	* Removed managers, they are replaced by caches.
+	* Compiled with GCC, ran on Linux
+	* Using generic lambdas to initialise caches.
+	* Forgot this file
+	* Need to link the signal from ObjectCache.
+	* And to debug again
+
+2016-07-6  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Moving to std::functions
+
+2016-07-5  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* It's working again.
+	* Now I need to check if I can reduce their code again.
+	* Cleaning up caches
+
+2016-07-4  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Except for the bindings, everything compiles, now, I need to debug...
+	* Replacing Managers with Caches and free functions.
+
+2016-07-3  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Grayscale seems to work, I have another problem, because when trying it with an opaque model, its not working.
+	* Introduced OpenGL immutable storage and fixed some bugs
+	* Added a PostEffectFactory to ease PostEffect plug-ins creation (using OnLoad and OnUnload functions).
+	* Fixed ambient lighting.
+	* Fixed BloomPostEffect.
+	* Fixed lower case opacity.png in test data files.
+	* Fixed fullscreen on Linux.
+	* Fixed window size on Linux.
+	* Renamed Haarm...ToneMapping plug-in.
+	* Fixed FFMPEG recorder for versions before 57.38
+
+2016-07-1  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Few irrelevant modifications
+	* Moved tone mappings into plug-ins.
+	* Moved tone mappings into plug-ins.
+
+2016-06-30  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Looks like the remaining problems are not to be resolved in this topic
+	* Updated submodule
+
+2016-06-29  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* No error, everything ok, but destination framebuffer remains unchanged.
+
+2016-06-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Added Gpu only storage
+
+2016-06-23  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Per-vertex animations are functional.
+	* Fixed ObjImporter on Linux, and added \r to characters to remove in string::trim.
+	* Cleaned up a bit GlslWriter, to remove stuff only visible from Castor3D.
+	* Modified GLSL::Ubo to store its variables in a temporary stream, to write this stream only if we have variables in the UBO.
+	* Created an Animation UBO, where the bones matrices and morphing time index have been moved.
+	* Updated ShaderManager to take care of this new UBO in GetAutomaticProgram.
+
+2016-06-22  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Cleaned up a bit SceneFileParser, to disable the animated object section, they are now directive only.
+	* Travis needs CMake 2.8...
+	* Fixed the skeleton animations problem.
+	* Looks like I'll have a bit more work, when I'll want to have meshes animated with both skeleton and morphing.
+	* Per-vertex animations work, but the mesh I'm using as a test as a face ordering flip, hence the interpolation follows that flip (making the face turn between two keyframes.
+	* I just need to figure out if I have to consider it as a problem on my side, or on modeler side.
+	* To be able to compute interpolation on GPU, I've had to be able to add a simple float variable to a shader.
+	* It implied a rework of single frame variables creation. I have modified it to be able to create any type of FrameVariable out of a FrameVariableBuffer.
+
+2016-06-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Added an array view class.
+	* Added an animation bertex buffer to submesh.
+	* Adding a program flag Morphing, that still needs to be processed in vertex shader and renter technique.
+
+2016-06-19  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Keyframes now use a precalculated transformation matrix.
+	* Added a directive to SceneFileParser, to be able to import meshes as morph targets.
+	* Added the skeleton of an OgreImporter plug-in.
+
+2016-06-17  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Removed some pointers.
+	* small updates in Image and ImageManager.
+	* Small change to avoid changing images when their resolution doesn't need to be changed.
+
+2016-06-16  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Modifying AssimpImporter.
+
+2016-06-15  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Supposedly implemented assimp import functionality for per-vertex animations, just need a mesh to test that.
+	* Better results with streams.
+	* A problem I have is that the downloaded texture is always empty...
+
+2016-06-14  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Implementing per-vertex animations.
+	* Need to implement importation from assimp and maybe FBX, and testing.
+
+2016-06-13  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Binary export is implemented for meshes/submeshes...
+	* Fixed TestRenderSystem.
+	* Fixed compilation with glx and without PCH
+	* -pedantic warnings fix.
+
+2016-06-10  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Binary export/import now works also with animated meshes.
+
+2016-06-9  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Keyframes are exported using doubles.
+	* Added a .editorconfig file, so ne more bothering with spaces or tab...
+	* Fixed few things discovered using -pedantic
+	* RenderTechniques are now named, so they are uniquely instantiated by their render target.
+	* Fixed a problem of current context in render windows cleanup.
+
+2016-06-8  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Moving some managers from Engine to Scene, but not ended yet...
+
+2016-06-6  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Removed Scenes from data, since they are in Castor3DTest/Data.
+	* Added explicit to constructors with one parameter.
+	* Compiled all importers.
+	* Now binary chunk data is written in big endian.
+	* Static meshes are correctly exported, even if they have a skeleton.
+	* Still some problems with animated meshes, though.
+	* To try debugging this, I started implementing scene export/import tests.
+
+2016-06-3  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Cleaning a bit Submesh.
+	* Finished AnimationInstance implementation
+
+2016-06-2  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Implementing AnimationInstance and objects...
+	* Added skeleton animated objects.
+
+2016-06-1  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Moved Animated... files into Scene folder, since they are Scene dependent, and are the instantiated animation objects stuff.
+
+2016-05-31  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Also splitted the AnimatedObject, created AnimatedSkeleton class.
+	* Updating animation.
+	* Moved Skeleton and Bone non animation related files to Mesh/Skeleton folder.
+	* Splitted Loader, TextLoader and BinaryLoader, added Writer, TextWriter and BinaryWriter.
+	* Moved BinaryParser<> and BinaryWriter<> out of their owning classes.
+	* Implemented checks for binary export of animated meshes.
+	* Tests pass, but exported animated meshes still don't render correctly...
+	* In SceneFileParser, fonts can now be in a scene too.
+	* Made Castor::Path constructors with one parameter explicit.
+
+2016-05-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Modified a bit CastorTest to be able to avoid passing tests and errors count to every test function.
+	* Castor3DTest can now load Castor3D and initialise it using TestRenderSystem.
+
+2016-05-26  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* TestRenderSystem works, all scenes "render", without any crash.
+	* Moved GlRenderSystem sources into subfolders.
+	* Creating TestRenderSystem plugin, and Castor3DTest application.
+	* Remove eSHADER_LANGUAGE and eRENDERER_TYPE enums.
+	* Now renderer type is a Castor::String.
+	* Created CastorTest library, to share Benchmark, UnitTest...
+
+2016-05-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Updated version numbers in CMakeLists.txt
+	* Animation export does not work yet.
+	* Exporting bones data in submeshes kills the render?
+	* Implementing Skeleton's export.
+	* Removed stVERTEX_GROUP, added stINTERLEAVED_VERTEX.
+	* Submesh now uses stINTERLEAVED_VERTEX, to add points, export and import.
+	* Extracted BinaryWriter class from BinaryParser (SRP).
+	* Reviewing how meshes are written.
+	* PostEffects, Techniques, and ToneMappings are written.
+
+2016-05-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Added CmshImporter to have the same behaviour as other imported meshes.
+	* Using scoped enumerators for all material, texture, and blend state enums.
+	* Moved SceneExporter from CastorViewer to GuiCommon.
+
+2016-05-23  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* First draft of immutable storages
+	* Modified TextLoader to have the current indentation.
+	* Updated datas to have the proper viewport type.
+	* Removed BinaryParser from classes that don't use it.
+	* Removed TextLoader from classes that don't use it.
+	* Reworked ChunkFiller and ChunkParser, they now use ChunkData type traits.
+	* Since .cmsh files will contain only one mesh, I've removed MeshManager::Save and MeshManager::Load.
+	* Also removed CbsnSceneExporter class.
+
+2016-05-22  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Skybox is working.
+
+2016-05-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Reworked the textures implementation.
+	* Fixed compilation without precompiled headers.
+	* Update COM and Python bindings.
+	* MSVC console is now UTF-8.
+	* Windows error messages are now converted to UTF-8.
+	* New texture system is functional.
+	* There is a bug with non HDR background texture, need to find where it comes from (incompatible format?)
+
+2016-05-20  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Nearly ended, just need to remove DynamicTexture and StaticTexture
+
+2016-05-19  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Started implementation of Texture(Layout|Storage|Image).
+	* Finished folders integration.
+	* Moved all Castor3D sources into folders.
+
+2016-05-13  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Began an implementation of cube maps, but made it the wrong way.
+	* I will need to split texture in two concepts: the texture, and its storage.
+	* It will allow the cube map to have one texture and 6 storages.
+
+2016-05-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Added GpuInformations class.
+	* Reworked a bit context creation.
+	* Fix for GpuInformations and GCC
+
+2016-05-10  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Added GpuInformations class.
+
+2016-04-19  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Submesh and Billboard don't perform a lookup at render time anymore
+
+2016-04-18  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Submesh and Billboard don't perform a lookup at render time anymore (gained 4-5ms in Parc.zip).
+	* Modified the way GeometryBuffers are initialised (added Initialise and Cleanup functions).
+	* They are now initialised as pre-render event.
+	* It allows the submeshes and billboards to retrieve a GeometryBuffers from a non compiled program (check is made at initialisation).
+	* Fixed a problem in RegexFormat< float > and RegexFormat< double >, it didn't parse exponent from floating points.
+	* Fixed a problem in RenderPanel, preventing mouse move events to be processed properly.
+
+2016-04-17  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* An A-Style pass.
+	* CastorViewer no longer depends on CastorGUI.
+	* Fixed compile error in CtrlControl.hpp, when Precompiled headers are disabled.
+	* CastorViewer no longer depends on CastorGUI.
+	* Moved User Input Events to Castor3D.
+	* TextOverlays vertical alignment is now correct.
+	* Added line spacing mode in SceneFileParser.
+	* Updated translations.
+	* TextOverlays vertical alignment is now correct.
+	* Fixed Font and Glyph.
+	* Added missing properties for TextOverlays, in GuiCommon.
+
+2016-04-16  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Pipeline is now stripped of Viewport related functions.
+	* Pipeline is now stripped of Viewport related functions.
+	* Created IViewportImpl and GlViewport classes.
+	* Moved Pipeline from RenderSystem to Context.
+	* Moved Pipeline from RenderSystem to Context.
+	* Remove IPipelineImpl.
+	* Now PostEffect derives from OwnedBy< RenderSystem >
+
+2016-04-8  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Added submodules
+	* Removed CMake folder
+	* Enforced OpenGL minimal version to 3.x
+
+2016-04-7  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Another fix for TestObjectPool.hpp
+	* Updated to be able to run object pool tests.
+	* Few fixes to objects pool.
+	* Updated travis.yml to try running test applications.
+	* Fixed setups, and added a start menu folder.
+
+2016-04-6  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed DeferredRenderTechnique.
+	* Removed the unused samples count parameter from FrameBuffer::Create
+	* The bug raised by rtot.cscn is fixed
+	* Some fixes on Linux.
+	* Fixed a bug in RasteriserState::Apply, that prevented the enabling of the culling.
+	* Still a problem on rtot.cscn.
+
+2016-04-5  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Reworked enumerations, to have a proper output in doxygen generated HTML.
+	* Fixed all doxygen warnings.
+
+2016-04-4  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Updating docs
+
+2016-03-30  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Context is cleaned up from redundant functions.
+	* Fixed a bug that prevented MSAA render technique to render alpha blended submeshes.
+	* Removed CullFace, SetAlphaFunc and GetMaxSize from Context.
+	* Billboards are fixed and functional.
+	* Added support for alpha blending, and alpha sorting, for billboards.
+	* Billboards are now fixed.
+
+2016-03-29  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Moved the billboards rendering code from Scene and BillboardList to RenderTechnique.
+	* It's nearly that, Y axis orientation is ok.
+	* Initial changes to try and make billboards work.
+	* They now appear on SceneObjectsList.
+
+2016-03-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Textures can be applied to text, independently of font's texture.
+	* Fixed GlX11Context.cpp
+	* Replaced the auto, by specified type.
+	* Textures can be applied to text, independently of font's texture.
+
+2016-03-26  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed OneFrameVariable::SetValues to use size_t instead of uint32_t
+	* Mesh, Material, Sampler, and RenderWindow resources are now managed through the scene.
+	* Removed SsaaTechnique, since it is a useless one.
+
+2016-03-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Updated data files, to use scene resources, when possible.
+
+2016-03-23  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Scene resource management is nearly ended.
+
+2016-03-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Few fixes post-rebase.
+	* Fixed OceanLighting.
+
+2016-03-19  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed a typo.
+	* Travis quickfix in Engine.cpp
+	* Updated GlslExpr.cpp to be able to compile it with gcc 4.9...
+	* Removed HdrLoader class, since I use FreeImage to load HDR images.
+	* HDR is implemented, created some tone mapping algorithms.
+
+2016-03-17  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Few updates in context to make the cleanup more correct. Still some work to do though.
+
+2016-03-16  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Added GpuQuery class into Castor3D.
+
+2016-03-14  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Added ManagerView class, to make the scene clean its resources, and being able not to clean Engine up when reloading the scene.
+	* Added manager views for Samplers, Materials, Meshes and RenderWindows in Scene.
+	* Still some problems with Contexts, but the most important stuff is done.
+	* HDR rendering is implemented.
+	* Created a first draft of HdrLoader, since FreeImage clamps floating point values to [0,1], still need some work though.
+
+2016-03-12  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* The HDR is not rendering yet, but all the code is here
+
+2016-03-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Each technique plugin has been cleaned up from C3D_HAS_GL_RENDERER preprocessor conditions.
+	* Shaders creation have been moved from GlRenderSystem to RenderSystem.
+	* Pixel shader creation common to Msaa, Ssaa, and Direct technique plugins have been moved to Castor3D::Technique.
+
+2016-03-10  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Extracted GlslWriter from GlRenderSystem, moved it in its own project, under Core.
+	* Castor3D depends on it.
+
+2016-02-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Added missing includes to OpenGl.inl.
+
+2016-02-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Removed texture type in Sampler::Bind.
+	* Inlined functions in OpenGl.hpp.
+
+2016-02-26  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed BloomPostEffect, was due to "vertex" in vertex shader program.
+	* Added an assertion when a VertexLayout element is not found into a BufferDeclaration.
+	* Removed Sampler from Texture, moved it into TextureUnit.
+
+2016-02-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed asynchronous render loop cleanup (RenderSystem had to be cleaned up inside the loop's thread).
+	* Replaced NULL by nullptr.
+	* CastorApplication doesn't need /f (-f) to load a scene file anymore, so a cscn or zip file can be dropped on the .exe to be loaded through CastorViewer (Windows only).
+	* Modified the Record and Print Screen functions, to make them work with asynchronous render loop.
+
+2016-02-23  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Removed OneTextureFrameVariable.
+	* Removed index from Texture, BindAt and BindFrom (replaced by Bind and Unbind).
+	* All test scenes render correctly.
+	* Uncovered a bug on BloomPostEffect.
+	* Almost finished, now need to go through all test scenes, to check regressions.
+
+2016-02-22  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Introduced RenderNode structure, which holds the program variables.
+	* Moved RenderNodes sorting from Scene to RenderTechnique.
+	* Now, BillboardList, Overlays and Scene use render nodes.
+	* The pass no longer holds the program variables, since they are in RenderNode.
+	* I have removed the shader program from the pass, but I don't know if I'll keep that like that.
+	* Some problems with overlays: When I use a texture, it is not used, and colour is lost. (???)
+
+2016-02-22  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed TextOverlays.
+	* Fixing TextOverlays bug
+
+2016-02-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Compiled and executed on 64 bits on Windows.
+	* Modified the master CMakeLists.txt file, to use dependencies folder as source for libraries, when present.
+
+2016-02-19  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Removed constexpr for ParserParameterHelpers::GetTypeName
+	* Fixed CompilerConfig.hpp
+
+2016-02-14  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Now using threaded Castor3D in CastorViewer.
+	* Modified Matrix and SquareMatrix constructors, made them explicit when needed.
+	* Updated DebugOverlays to have more precise timers.
+
+2016-02-13  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Modified the interpolation management in AnimationObjectBase, to be able to change it.
+	* Added some parsers for animations.
+
+2016-02-12  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Modified FileParser so it does not use variadic parameters anymore.
+	* Updated FileParser, to make its error reporting more consistent.
+	* Modified SceneFileParser_Parsers so it defaults to DirectRenderTechnique if the requested one does not exist.
+	* Reviewed ParserParameters.
+	* Added a new parser: start_animation, and an option to animation: looped.
+	* Fixed the parsing of unexpected additional parameters, so they are given to the parser function, as text.
+	* The animations are unlinked, it was related to the shader that switches from one geometry to another, causing the bones matrices to be given to the wrong shader.
+	* Updated translations.
+
+2016-02-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Debug overlays are no longer shown in Scene Tree.
+	* Castor won't crash anymore if TextOverlay doesn't have a font, it will just hide it, and report it in the log.
+
+2016-02-9  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* An AStyle pass, and fixed the submodule.
+	* An AStyle pass, and fixed the submodule.
+	* Removed the ShaderProgram from GeometryBuffers::Draw and GeometryBuffers::DrawInstanced.
+	* Removed some unused sections in SceneFileParser.
+	* Removed the ShaderProgram from GeometryBuffers::Draw and GeometryBuffers::DrawInstanced.
+	* Removed some unused sections in SceneFileParser.
+	* Reenabled eELEMENT_USAGE, as flags, so we can try and guess possible usages for attributes, from the name.
+	* The split of the bones data from the vertex buffer works correctly.
+	* Need to test the instantiation.
+	* Need to find a way to match ProgramInputLayout elements with BufferDeclaration ones. The name matching is done, but I need an additional way, since names may not match.
+	* Still need to fix the linked animated objects bug.
+	* It renders, nearly correctly (Bob the guard has some problems with its textures).
+	* I still need to do something, to remove the ProgramInputLayout::SetStride method, but I don't know how.
+	* Renamed ShaderProgramBase to ShaderProgram, and TextureBase to Texture.
+
+2016-02-3  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* In progress...
+
+2016-02-2  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Removed redundant calls in GeometryBuffers.
+	* Few fixes in the use of wxVariants.
+
+2016-02-1  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Nearly working, the two hellknights are somehow linked.
+	* I have to investigate.
+	* Animations are displayed in the tree, their properties are linked.
+	* Now I need to know why it is not rendered...
+	* First draft, animations need to be separated from objects or some work needs to be done in SceneObjectsList.
+
+2016-01-31  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Small fixes for configurations that don't have any video lib available.
+	* Fixed images indices in SceneObjectList.cpp.
+	* Implemented capture image and record video functionalities.
+
+2016-01-30  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Few corrections in README.
+	* Fixed the non animated scenes camera, in scene files.
+	* Small fix in SceneNode, to avoid an unwanted warning when reparenting a node.
+	* Fixed Python binding.
+	* Compiled with GCC, fixed all the projects, except for the Python bindings.
+	* Removed billboards, geometries, cameras, lights, scene nodes, and animated objects groups lists from Scene.
+	* Created a manager for each of those.
+	* Create intermediate classes ResourceManager and ObjectManager, owned respectively by Engine and Scene, in order to have a better distinction between Engine managers and Scene managers.
+	* Removed all virtual methods from managers, there is no polymorphism there so no need for them.
+	* Reworked constructors of managed classes to be able to create them through basic Create method in the managers.
+	* Also modified OwnedBy< Engine > and OwnedBy< RenderSystem > so their method to get the owner is named respectively GetEngine and GetRenderSystem.
+	* Added an OwnedBy< Scene > in the same way.
+
+2016-01-29  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed compilation
+	* Now Manager has a new template parameter which is the owner.
+	* Fixed ComCastor3D.
+	* Updated README and NEWS, for the coming version 0.8.0
+	* Fixed CastorGui use of utf8 iterators.
+	* Fixed utf8 iterator: added a const_iterator
+	* Implemented the glyphs delayed loading, for glyphs not initially loaded.
+
+2016-01-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* The text overlays are now cut correctly.
+	* Lines are sized before being written to buffer.
+	* Updated travis.yml, to use BUILDGRP variables.
+	* Reverted an unwanted change in Geometry
+	* Now PyCastor3D compiles iwth VC14.
+
+2016-01-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Added a new submodule: dependencies, which contains precompiled external libraries, except for wxWidgets (so far).
+	* Fixed a CMake bug due to a difference in latest FindZLib.cmake.
+	* Le renommage est fait.
+	* J'ai aussi corrigé File::DirectoryDelete.
+	* Removed extra GlRenderSystem:: in GlRenderSystem.hpp
+	* Updated AssimpImporter to be able to load multiple .md5anim files.
+	* Updated MovingNode so it now has a real name (taken from aiNode).
+	* Now in GLSL, we have bone_ids0, and bone_ids1 (ivec3), weights0 and weights1 (vec3), since we can now have 6 bones per vertex.
+	* Modified scene Anim.zip, to load another animated model, with different animations.
+	* Now, in anim-inst.cscn, the only animated objects are the two ones added to the animated object group.
+	* Updated Anim.zip
+
+2016-01-26  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Again, Travis...
+	* Updated Anim.zip, and trying to make Travis recognize aligned_alloc...
+	* Updated a animation system, added binary parsers for few things.
+	* Splitted Castor3DPrerequisites.hpp in multiple files, all included in Castor3DPrerequisites.hpp.
+	* Removed AnimationManager.
+	* Animation system is functional.
+	* Quaternion::slerp is fixed.
+	* Updated to remove Legacy non UBO matrix copy from vertex to fragment.
+	* Compiled on Linux.
+	* Integrating Th instance animations and movings...
+
+2016-01-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Animation works, camera is fixed thanks to feature 1770.
+	* Now I need to fix Interpolations, at bounds, and integrate Animated, to be able to instantiate animations.
+
+2016-01-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Still some problems with matrix multiplications ordering, but the animation is ok.
+	* Integrating old style Animation system.
+	* By comparing with the working one, I found that the only problem comes from introduction of Animable, and stuff about that.
+
+2016-01-23  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed a few things, refactored a lot.
+	* Now I need to understand what's happening in matrices, or keyframes, or anywhere it might bug.
+
+2016-01-19  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Updated README (removed D3D11 references).
+
+
+2016-18-01  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Removed RenderTarget and RenderWindow in renderers, since they did nothing interesting there.
+	* Dx11RenderSystem has been removed.
+	* All techniques and post effects are updated.
+	* Removed many of the hacks that were there because of Direct3D support.
+	* Fixed a bit the setups.
+
+2016-17-01  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed a bug for ignored sections in FileParser.
+	* Fixed, by bypassing RenderTextureToCurrentBuffer... Not satisfied yet.
+	* Modified to make Scene background rendered at technique dimensions.
+	* Moved attachments creation from RenderTarget to FrameBuffer.
+	* Some refactoring.
+	* Few fixes to avoid the crashes when using billboards.
+
+2016-16-01  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Changed #include <stdlib.h> to #include <cstdlib>.
+	* Using posix_memalign instead of aligned_alloc.
+
+2016-15-01  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Removed Scene::DoRemoveNodesAndUnattached.
+	* Removed GlslWriter::Layout implementation.
+
+2016-12-01  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Topology has been moved from Camera to GeometryBuffers.
+
+2016-11-01  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Removed SSAO PostEffect stub.
+
+2016-08-01  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Remove all Aligned calls.
+
+2015-12-10  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Splitted GlShaderSource in multiple files, in GLSL folder.
+	* Plane's position is now in its center.
+	* Fixes to compile with GCC.
+	* Fixed a problem in GlGeometryBuffers that prevented the Bind function to be called.
+	* Modified textures creation, flags are given at that time, and no more at initialisation.
+	* Improving shaders Light code generation.
+	* TBO cause the problem...
+	* c3d_sLightsCount is now an ivec4.
+
+2015-11-18  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Updated CMakeUtils.
+	* View matrix works correctly.
+	* Cleaned up comments.
+	* Fixed FPS counter.
+	* Added glQuery support in OpenGL, to query timers.
+	* Fixed includes order in Quaternion and TransformationMatrix.
+	* Updated Quaternion, to use snake case methods naming.
+	* Fix in Debug.cpp, in release builds.
+	* Fixed other projects use of Quaternion and Angle.
+
+2015-11-12  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed MSAA depth buffer, to have it in the same format as the RenderTarget's depth buffer.
+	* Added Travis CI builds.
+
+2015-11-06  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Some renamings.
+	* Few readability optimisations
+	* Updated sample scenes.
+	* Fixed uncovered bugs.
+
+2015-10-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Render to texture works, still some work to do in RenderToBuffer to make it work (I use BlitInto, but it is not a viable solution). The problem came from DepthStencilState, with depth test enabled while I don't have Z component for Context::BToBRender.
+	* Removed threaded plugins loading.
+	* Removed FrameBuffer::RenderToBuffer method.
+	* Renamed Context::BToBContext to Context::RenderTextureToCurrentBuffer.
+	* Added Context::RenderTextureToBackBuffer, to handle Y inversion with Direct3D.
+	* RenderTarget is no more resizable.
+	* Fixed an alpha problem in Context::RenderTextureToCurrentBuffer.
+	* Temporary fix for MsaaRenderTechnique, for DepthStencil buffers. I'll need to fix that properly using the method described here: http://www.gamedev.net/topic/602811-resolving-a-depthstencil-buffer/
+	* Now RTOT works with D3D11.
+
 2015-10-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
 	* Castor3D: Added BackBuffers classes, to hold the window's back buffers.
 	* Castor3D: Moved Context::Clear and Context::SetClearColour to FrameBuffer
@@ -566,76 +2338,61 @@
 	* CMake : Modified it to throw away bin_temp folder
 
 2014-03-26  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* CastorUitls : Removed AutoSingleton.hpp since it's no more used.
     * CMake : Corrected the /Zm flag replacement with MSVC
     * General : Few corrections to build with MSVC x64.
     * GlRenderSystem : Corrected the gloss map in GLSL computed programs.
 
 2014-03-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Renderers : Modified FrameVariableBuffer PassColour name to Pass
     * Samples : Created a Common folder to put wx resource files into.
     * Tools : Updated UnitTest integration, Enabled CTest.
     * Castor3D : Correcting Scene export in CSCN format, nearly functional.
 
 2014-03-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* ASSIMPImporter : Modified FindASSIMP.cmake to make it look for x64
     *   libraries when needed, under MSVC.
 
 2014-03-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Still updating CSCN scene saving
 
 2014-03-18  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Reviewing text file scene saving
 
 2014-03-12  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* General : Modified the file system
 
 2014-03-12  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* General : Modified the file system
     * General : Modified the scene file wiki docs
 
 2014-03-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* CastorUtils : Modified Prerequisites.hpp to be able to include it without
     *   any warning.
     * CastorUtilsTest : Modified to make it able to run unit test (it already
     *   was, but now CodeBase is renamed TestCase.)
 
 2014-03-10  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* CastorUtils : Added GetSystemError function.
 
 2014-03-07  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* General : Optimised a bit Quaternion and Cylinder.
 
 2014-03-06  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* GlRenderSystem : Added OpenGL 4.x shaders for Relief.
 
 2014-03-05  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* General : Modified FindAssimp.cmake
     * Castor3D : Modified Font.cpp to make it compliant with VS2012.
     * Castor3D : Modified Submesh normals generation.
 
 2014-02-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* General : Code cleanup + Beginning to export scenes in cscn file format
 
 2014-02-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Great change : Now all projects are managed using GIT.
 
 2014-02-20  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Added Animable class, base class for Mesh, MovableObject and
 	*   Skeleton. It holds the animation map and the functions related to it.
 	*   It also allows to ease the animations copy in AnimatedObject.
@@ -643,133 +2400,106 @@
 	*   animations.
 
 2014-02-14  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Reviewing animation system to finish that
 
 2014-02-05  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Taking care of render API support for non power of two 
 	*  textures.
 
 2014-01-30  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Overlays now functional.
 	* Castor3D : Need to make TextOverlays work (don't need a lot, I think).
 	* CastorUtils : Font file loading functional
 
 2014-01-17  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Repaired a matrix trouble when rendering overlays.
 
 2014-01-16  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* GlRenderSystem : Beginning to take care of EXT_direct_access_state
 	* Castor3D : Correcting overlay rendering and especially TextFont.
 
 2013-12-09  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Nearly fully functional skeletal animation system. Needs a
 	*   compliance test with instancing, and I have to see if I can optimize it
 	*   and how.
-	
-2013-11-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
 
+2013-11-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
 	* Casotr3D : Reviewing Overlay system
 
 2013-11-26  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* CastorUtils : Reviewed a bit the transformations computations
 	* Castor3D : Nearly functional animation system, still needs debugging to
 	*   understand why it doesn't work correctly.
 
 2013-11-07  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Nearly working billboards.
 
 2013-11-03  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Implemented mesh instanciation on hardware, needs little more
 	*   tests to make it fully usable.
 
 2013-10-29  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Repairing Deferred rendering, need to correct lights but it
 	*   re-renders (other than black).
 	* CastorViewer : Need to debug a crash when the application is closed.
 
 2013-10-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* General : Compiled it on Debian Wheezy through VMWare => Doesn't work
 	*   really but no more errors (sampler objects and shaders) in direct
 	*   rendering. Need to work MSAA, still.
 
 2013-10-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* General : Few corrections to compile on linux.
 
 2013-10-04  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Repaired alpha submeshes that were not displayed.
 
 2013-10-02  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* LoopDivider : Repaired.
 	* PNTrianglesDivider : Repaired.
 
 2013-07-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* CastorUtilsTest : Trying OpenCL.
 
 2013-07-15  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* General : Linux and wxWidgets 2.8 compatibility improved.
 
 2013-07-10  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* General : Nearly the end of the exporter and the cscn reader. Still UV
 	*   artifacts.
 
 2013-07-08  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* General : Finishing Exporter
 	* Castor3D : Improving cscn submesh reader.
 
 2013-07-05  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* General : Just need to export UV maps and exporter will be finished.
 
 2013-07-04  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* General : Began a Blender cscn exporter.
 
 2013-06-26  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Preparing to add bones informations for skeleton animations.
 	* GlRenderSystem : Removing static instance of OpenGl class, now
 	*   GlRenderSystem owns the instance.
 
 2013-06-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* General : Removed most of std::size_t from the projects, only left some
 	*   in CastorUtils.
 
 2013-06-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Dx11RenderSystem : Few corrections.
 	* CastorUtilsTest : Now optional.
 	* CastorUtils : Optimising Point and Matrix operations.
 
 2013-06-13  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* GlRenderSystem : Modified a bit GLSL default shader.
 	* GuiCommon : Corrected few bugs in images loading.
 
 2013-06-07  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Implementing Frustum View Culling
 
 2013-06-06  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* General : Cleaned up a bit FrameBuffer, GlFrameBuffer and Dx11FrameBuffer
 	* Castor3D : Now Render to buffer works !!
 	* Castor3D : Removed SetPolygonMode from Context.
@@ -781,13 +2511,11 @@
 	* Dx11RenderSystem : makes driver hang and crash !
 
 2013-06-05  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Removed Context::Enable and Context::Disable, removed
 	*   RenderState class.
 	* Dx11RenderSystem : Now need to make it work !
 
 2013-06-03  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Added DepthStencilState class to manage those buffers states
 	*   like Direct3D 11 (who does it well).
 	* Castor3D : Added blend state, implemented raster state.
@@ -795,18 +2523,15 @@
 	*   blending from the pass.
 
 2013-05-30  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Modified FrameBuffer binding in order to allow automatic or
 	*   manual definition of draw buffers.
 	* Castor3D : Created SSAA RenderTechnique, limited to 4 samples.
 
 2013-05-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Added interpolation mode for mip filter in Sampler.
 	* Castor3D : Added Automatic mipmaps generation in TextureUnit.
 
 2013-05-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* CastorUtils : Kind of finalized Pixel conversion system simplification in
 	*   order to be able to add or remove formats in an easier way.
 	* Castor3D : Removed auto mipmap generation, now if user wants it, he does
@@ -816,28 +2541,23 @@
 	*   ePIXEL_FORMAT_L8, ePIXEL_FORMAT_RGB16F32F and ePIXEL_FORMAT_RGB32F).
 
 2013-05-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* CastorViewer : Corrected rendering.
 	* OceanLighting : Debugging it to make work.
 
 2013-05-22  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Implemented Alpha to Coverage when MSAA is activated.
 
 2013-05-03  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : It was a bad idea to put BtoB objects (ShaderProgram,
 	*   GeometryBuffers, Viewport) in the RenderSystem, I moved it in the
 	*   Context so no moreproblems from it.
 
 2013-05-02  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Implementing FrameBuffer::RenderToBuffer function.
 	* Castor3D : Moved RenderWindow's ShaderProgram, Viewport and
 	*   GeometryBuffers into RenderSystem to make it available to FrameBuffer.
 
 2013-04-30  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* General : Removed dependencies from the SVN, as Dx9RenderSystem and 
 	*   Dx10RenderSystem.
 	* Castor3D : Merged GpuBuffer::Initialise and GpuBuffer::SetShaderProgram
@@ -850,7 +2570,6 @@
 	*   the currently loaded OpenGl context.
 
 2013-04-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Correcting lighting in auto-generated shaders, added Fresnel
 	*   factor.
 	* Castor3D : Corrected Sphere faces direction.
@@ -859,17 +2578,14 @@
 	* GlRenderSystem : Corrected GlLightRenderer::Disable (shader version)
 
 2013-04-26  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Correcting face directions (CCW).
 
 2013-04-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Implementing initialisation and cleanup of GPU side objects in
 	*   two events : InitialiseEvent and CleanupEvent.
 	* Castor3D : It works with Material, implementing it for SubmeshRenderer.
 
 2013-04-23  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* CastorUtils : Modified Image to make FreeImage load images by path and no
 	*   more by handle (caused trouble with some formats).
 	* Castor3D : Defined a default sampler and set it to texture unite that
@@ -878,7 +2594,6 @@
 	*   must investigate on the reasons.
 
 2013-04-22  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Reduced number of shaders by generating shaders only when
 	*   texture flags are new.
 	* Dx11RenderSystem : Advanced rendering to be nearly functional.
@@ -886,13 +2601,10 @@
 	*   invertedso I still have to investigate a bit to make it work.
 
 2013-04-18  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Introducing FrameVariableBuffer to manage frame variables with
 	*   OpenGl UBO or DirectX 11 Constants buffer. Great changes coming.
 
-
 2013-04-16  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Modified Submesh::AddPoints so it takes a stVERTEX_GROUP
 	*   structure as a parameter.
 	* ASSIMPImporter : Modified it to use Submesh::AddPoints in order for it to
@@ -901,14 +2613,12 @@
 	* CastorViewer : Added an "Export" button. OBJ export is implemented.
 
 2013-04-16  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Modified a bit FrameVariable in order to take care of 
 	*   eFRAME_VARIABLE_TYPE previously defined for SceneFileParser.
 	* GlRenderSystem : Corrected a bit GlX11Context.cpp.
 	* ObjImporter : Corrected.
 
 2013-04-14  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* General : Rehabilitated PLY importer due to a bug from ASSIMP when 
 	*   importing large meshes like dragon.ply.
 	* CastorUtils : Castor::Point now holds a static array as it's members
@@ -919,17 +2629,14 @@
 	*   meshes like FFXIII Lightning (hair)
 
 2013-04-12  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Splitted eBUFFER_MODE in eBUFFER_ACCESS_TYPE and eBUFFER_ACCESS_NATURE.
 
 2013-04-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Added depth format configuration in SceneFileParser.
 	* CastorUtils : Removed Stencil 4 and 8, a4l4, l4.
 	* Castor3D : Added depth write tweaks and cull modes.
 
 2013-04-09  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* CastorUtils : Removed Castor::Serialisable class.
 	* CastorUtils : Added 545RGB and DEPTH24S8 pixel formats.
 	* GlRenderSystem : Implemented OpenGL debug output so I have more verbose
@@ -937,20 +2644,17 @@
 	* Castor3D : Added few directives in SceneFileParser.
 
 2013-03-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Reviewed sizes a bit : Viewport holds the internal size,
 	*   RenderTarget and RenderWindow hold external size. Modified 
 	*   SceneFileParser, added <size> directive for viewport.
 
 2013-03-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* CastorUtils : Improved FileParser, now functions have parameters and not
 	*   only parameters types, and parameters parse themselves.
 	* Castor3D : Reviewed frame buffers : RenderTargets' can be resized but
 	*   not RenderTechniques' so supersampling should be possible
 
 2013-03-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Dx9RenderSystem : I found how to use Direct3D 9 debug device so using it
 	*   to debug Dx9RenderSystem.
 	* Castor3D : Introducing SamplerState class to group calls to 
@@ -959,18 +2663,15 @@
 	*   Dx10RenderSystem
 
 2013-03-15  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* DirectX : Added Dx10RenderSystem, I try to implement this one before
 	*   Dx11RenderSystem.
 
 2013-03-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* CastorUtils : Removed macro DECLARE_SHARED_PTR, now using 
 	*   DECLARE_SMART_PTR, so I replaced each XXxPtr by it's equivalent
 	*   XxxSPtr, done in CastorUtils, Castor3D and ASSIMPImporter.
 
 2013-02-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* CMake : Modified the CMakeLists to be able to use Visual Leaks Detector
 	*   with MSVC.
 	* CastorUtils : MemoryManager modified to take care of Visual Leaks 
@@ -978,7 +2679,6 @@
 	* ShaderProgramCg : Can now be compiled using only DirectX.
 
 2013-02-20  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Dx9Renderer : Correcting to frame buffers work with it.
 	* CastorUtils : Corrected warning for FileParser with MSVC.
 	* CastorUtils : Created two classes Size and Position instead of just
@@ -989,23 +2689,19 @@
 	*   DirectRenderTechnique and MsaaRenderTechnique.
 
 2013-02-19  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Added possibility to activate or deactivate deferred
 	*   rendering, this is also possible from cscn files.
 
 2013-02-18  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* GlRenderSystem : Geometry shader work in OpenGL, created a shader to show
 	*   wireframe models with Normals, Tangents and Bitangents.
 
 2013-02-15  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Removed all includes to ShaderObject.hpp except for
 	*   ShaderProgram, ShaderObject is no more used out of ShaderProgram.
 	* GuiCommon : Modifying wxShaderDialog to make it more sexy and usable.
 
 2013-02-12  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* CMake : Modified FindASSIMP.cmake to find x64 binaries
 	* Castor3D : Added comments for Material.
 	* General : Added compilation flag /Wp64 for MSVC in 32 bits in order to
@@ -1017,7 +2713,6 @@
 	*   are flat even if the mesh has it smooth.
 
 2013-02-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* General : Introducing 64 bits compilation support (replacing most 
 	*   std::size_t by uint32_t), modified CMakeLists.txt to be able to compile
 	*   in 64 bits (at least with VC11).
@@ -1025,7 +2720,6 @@
 	*   standard way.
 
 2013-02-07  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Modified Scene, added template functions to add, remove or get
 	*   an object whatever it's type may be (Light, Geometry, Camera, 
 	*   SceneNode).
@@ -1041,12 +2735,10 @@
 	* LwoImporter : Corrected logging.
 
 2013-02-04  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* CastorUtils : Modified FileParser to take care of parsers parameters.
 	* CastorViewer : Now loads plugins in a thread.
 
 2013-02-01  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* CMake : Added possibility to change binaries directory and also MSVC
 	*   temporary binaries directory, through PROJECTS_BINARIES_OUTPUT_PATH and
 	*   PROJECTS_BINTEMP_OUTPUT_PATH.
@@ -1055,22 +2747,18 @@
 	* CastorUtils : Modified Colour class, it doesn't extend Point4f anymore.
 
 2013-01-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* CastorUtils : Splitted File class in two classes : TextFile and
 	*   BinaryFile.
 	* CastorUtils : Modified Loader class to take a new template parameter :
 	*   the file class.
 
 2013-01-22  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Corrected GlRenderSystem to make it usable on configurations running with
 	*   OpenGL 2.1 and before.
 	* Replaced macros for cstrnlen, cstrftime, cstrncpy, cfopen, cfopen64,
 	*   cfseek and cftell by functions in namespace Castor.
-	
 
 2012-12-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Stereoscopic rendering just needs testing for now.
 	* Modified Importers so no more memory leaks are detected with Visual
 	*   Studio.
@@ -1084,17 +2772,14 @@
 	*   keywords).
 
 2012-12-17  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Implementing move assignment in CastorUtils classes.
 
 2012-12-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Compiled Dx9RenderSystem with latest modifications, but still buggy.
 	* Modified a bit FindASSIMP.cmake in order to find compiled libs on Windows
 	*   (selects x86 one)
 
 2012-12-10  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Added ASSIMP importer plugin to import actually unsupported file types,
 	*   modified ImporterPlugin::GetExtensions to be able to retrieve an array
 	*   of pairs <extension, file type>.
@@ -1104,21 +2789,17 @@
 	*   files).
 
 2012-11-30  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Added binormals to Vertex class, and so in vertex buffers.
 
 2012-11-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Reviewed includes in Castor3D.
 	* Removed GLEW from sources, now users must include theirs.
 
 2012-11-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Submeshes sorted by Material's alpha in order to render submeshes without
 	*   alpha before others.
 
 2012-11-22  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Moved RenderTechnique basic frame buffer, texture and depth buffer into
 	*   RenderTarget.
 	* Moved TargetRenderer::PostRender code into RenderWindow.
@@ -1126,32 +2807,27 @@
 	*   RenderTarget's frame buffer into the window.
 
 2012-11-19  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Created GeometryBuffers class which holds a Vertex buffer and an Index
 	* buffer, they are created by the RenderSystem.
 	* It allows the implementations to use API specific optimisations, like
 	* OpenGL Vertex Array Objects.
 
 2012-11-14  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Frame buffers implemented in Castor3D.
 	* GlRenderSystem and Dx9RenderSystem bindings Frame buffers are made.
 	* RenderTarget now uses RenderTechnique to make its rendering.
 	* Multisampled frame buffers working with OpenGL.
 
 2012-11-12  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Created TextureBase class, StaticTexture and DynamicTexture to help
 	* implementing render targets.
 	* Implemented RenderTarget in OpenGL.
 
 2012-11-09  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Removed all default glsl and hlsl files.
 	* Modified CMakeLists.txt in order to stop copying glsl and hlsl files
 
 2012-11-08  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Implemented OpenGL Frame Buffer Objects correctly.
 	* Changed RenderTarget : now it only holds frame buffer and all needed for
 	* that.
@@ -1160,13 +2836,11 @@
 	* RenderTarget as a private class member.
 
 2012-11-07  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Better support of Texture Buffer Objects (still experimental though)
 	* Reviewed Vertex Array Objects, they now hold their buffers so the choice
 	* of using it or not is wrapped into it
 
 2012-11-06  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Modified default sources in GlShaderProgram and Dx9ShaderProgram, they
 	* are now computed and no more external shader file is needed.
 	* Created files for GlUniformBuffer, GlPixelBufferObjet and GlVertexArrayObject.
@@ -1175,11 +2849,9 @@
 	* trying to do it at each frame
 
 2012-11-01  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Implemented multisampling, tested and working on GLX.
 
 2012-10-31  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Correcting HLSL shaders, done diff, diff-bump, diff-bump-spec,
 	* diff-bump-alph and diff-bump-alph-spec.
 	* When initialising Pass, the texture units are re-ordered so the ones with
@@ -1189,7 +2861,6 @@
 	* and not indices.
 
 2012-10-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Implemented intersection function in Line3D. 
 	* That class now has to named constructors : FromPointAndSlope and 
 	* FromPoints, to avoid confusion between them.
@@ -1201,93 +2872,74 @@
 	* blending).
 
 2012-10-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Replace "unsigned char" by "uint8_t".
 	* Allowed view of shaders source (not only files) in CastorViewer
 
 2012-10-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Renamed Buffer3D to HardwareBuffer
 	* Submesh now flushes its vertex and face arrays after GenerateBuffers.
 	* In OpenGL, HardwareBuffer is cleared after its data is passed to gpu.
 	* Corrected Direct3D render, now must implement shaders to render properly.
 
 2012-10-23  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Removed Point::link, Point::copy/clopy/clone functions.
 	* Modified BufferElementGroup so it can't hold anymore its buffer
 
 2012-10-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Modified Submesh::ComputeTangents to take care of each vertex normal
 	* PnTrianglesDivider, PlyImporter, Md2Importer, Md3Importer, ObjImporter
 	* checked, still Tangent space troubles...
 
 2012-10-19  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Repaired Cone, Plane, Cube, nearly repaired Cylinder
 
 2012-10-18  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Nearly corrected sphere, replaced unsigned short by uint16_t and unsigned
 	* int by uint32_t in all project
 
 2012-10-16  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Merged Submesh and SmoothingGroup classes
 
 2012-10-15  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Reduced images memory occupation
 
 2012-10-12  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Reduced memory size of vertex buffers
 
 2012-10-05  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Merged ImgToIco and ImgToXpm to ImgConverter, which now supports
 	* internationalisation.
 	* Added .bat files to generate .pot files
 
 2012-10-04  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Corrected MD2 and MD3 importers (texture coordinates and textures)
 
 2012-09-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Recompiling CastorShape. Integrated internationalisation
 
 2012-09-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Added channel for textures (colour, ambient, diffuse, specular, normal, 
 	* height).
 	* Lwo Importer loads polygons
 
 2012-09-13  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Implementing LWOImporter
 
 2012-09-12  Sylvain Doremus  <dragonjoker59@hotmail.com>	
-
 	* Corrected ObjImporter.
 	* Beginning LwoImporter
 
 2012-09-09  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Corrected LoopDivider.
 	* Added directive "primitive" for cameras in SceneFileParser
 
 2012-09-08  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* GlRenderSystem : Corrected GLSL shaders
 
 2012-09-06  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* General : Written install script to generate .deb files for each project
 
 2012-08-31  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Removed ApplyXXXMatrix from IPipelineImpl, now the Pipeline
 	*   applies matrices itself.
 	* Castor3D : Added HasParameter and SetParameter functions in ShaderObject,
@@ -1295,11 +2947,9 @@
 	* Dx9RenderSystem : Implemented Lights in texture for HLSL.
 
 2012-08-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* GlRenderSystem : Implemented Lights in texture for GLSL.
 
 2012-08-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* General : Added .rc file for each project. Now each shared library has a
 	*   version number under MS Windows.
 	* GuiCommon : Materials windows now use wxSizer classes to place and resize
@@ -1314,7 +2964,6 @@
 	*                                    - 3 for errors only
 
 2012-08-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* General : Removed *.aps files in resources from SVN.
 	* GuiCommon : Added GLSL.lang and HLSL.lang files in GuiCommon resources.
 	* Data : Moved *.glsl into GlRenderSystem resources.
@@ -1323,7 +2972,6 @@
 	* GuiCommon : Rehabilitated wxStcEditor, now it works !!
 
 2012-08-23  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* General : Added Destroy functions for each Create function in plugins, so
 	*   creation and deletion is made in DLL memory space (for Windows).
 	* CastorUtils : Modified DynamicLibrary::GetFunction, added a template
@@ -1332,39 +2980,33 @@
 	*   DynamicLibrary::GetFunction
 
 2012-08-02  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Modified Subdivision, now only in Subdivider, no more in
 	*   Geometry, Mesh or Submesh.
 	* Data : Changed models for testing
 
 2012-07-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Improved memory occupation, limited overhead of Vertex (152 to
 	*   24 bytes) and Face (140 to 16 bytes).
 	* ObjImporter : Corrected, materials and textures are now imported
 	*   correctly (taken care of UV parameters).
 
 2012-07-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* SMaxImporter : Corrected, with materials and textures
 	* Castor3D : Modified normals generation, now ComputeNormals take an
 	*   additional parameter that is the normal's type (flat or smooth)
 	* ObjImporter : Correcting materials and textures import.
 
 2012-07-20  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* AseImporter : Corrected, it now uses FileParser as it is a brace text
 	*   file format.
 
 2012-07-19  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* CastorUtils : Modified FileParser in order to be able to ignore complete
 	*   sections without commenting it (HLSL shader blocks in 
 	*   GlRenderSystem...)
 	* SMaxImporter : Correcting.
 
 2012-07-18  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Modified shaders, they now take care of the shader model, they
 	*   hold all defined files and sources for each model, the choice of the
 	*   source is  made at compile time, taking the source of the highest
@@ -1377,54 +3019,46 @@
 	* CastorViewer : Rotating no longer rotates camera but RootObjectNode.
 
 2012-07-17  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* Castor3D : Corrected lights and pipeline.
 	* Castor3D : Now the functions that need a shader take it in parameter.
 	* Dx9RenderSystem : Corrected.
-	
-2012-07-16  Sylvain Doremus  <dragonjoker59@hotmail.com>
 
+2012-07-16  Sylvain Doremus  <dragonjoker59@hotmail.com>
 	* GlRenderSystem : Finished corrections.
 	* GlRenderSystem : Beginning to implement FBOs.
-	
-2012-07-14  Sylvain Doremus  <dragonjoker59@hotmail.com>
 
+2012-07-14  Sylvain Doremus  <dragonjoker59@hotmail.com>
 	* GlRenderSystem : Corrected lights rendering, not tested with shaders yet.
 	* General : Removed CASTOR_TRACK calls. Still debugging shaders support.
 
 2012-07-13  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* CMake : Modified CMakeLists (put project creation function in 
 	*   Project.cmake).
 	* Dx9RenderSystem : Created class DirectX that calls D3D functions and
 	*   performs checks, so no more dirty "CheckDxError" in the renderer code.
 	* Castor3D : Still need to know why lights don't seem to be applied.
-	
+
 2012-07-12  Sylvain Doremus  <dragonjoker59@hotmail.com>
 	* Castor3D : Corrected a buffer's bug => it rerenders !!
-	
-2012-07-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
 
+2012-07-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
 	* GlRenderSystem : Modified a bit GlContext (MSW and X11) to initialise it
 	*   using 2.1 In debug mode
 	* Castor3D : Started to update documentation
 
 2012-07-10  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* CastorUtils : Ended documentation
 	* CastorUtils : Modified a bit Point, relocated functions that shouldn't be
 	*   in that class in a small helper class : point. It holds : normalise,
 	*   get_normalised, dot, all distance functions, cos_theta, negate.
 
 2012-07-09  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* General : Compiled on Linux with GCC 4.7.
 	* CastorUtils : Removed mostly all Boost dependencies (only left
 	*   boost::thread for compilers that do not support std::thread).
 	* CastorUtils : Comments ... Comments
 
 2012-07-06  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* CMake : Added MINGW GCC4.7 support in CMakeLists.txt
 	* General : Corrected few compile time errors with GCC
 	* Castor3D : Removed Engine threaded main loop
@@ -1434,11 +3068,9 @@
 	* CMake : Finished modifications
 
 2012-06-29  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* CastorUtils : Removed String, created StrUtils
 	* CastorUtils : Still documenting
 
 2012-05-13  Sylvain Doremus  <dragonjoker59@hotmail.com>
-
 	* General : Completed NEW, README, ChangeLog and AUTHORS.
 	* Removed std::move (it was a great mistake)

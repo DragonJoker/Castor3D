@@ -1,14 +1,14 @@
-#include "LanguageFileContext.hpp"
+﻿#include "LanguageFileContext.hpp"
 #include "StcContext.hpp"
 #include "StyleInfo.hpp"
 #include "LanguageInfo.hpp"
 
-using namespace Castor;
+using namespace castor;
 
 namespace GuiCommon
 {
-	LanguageFileContext::LanguageFileContext( TextFile * p_pFile )
-		:	FileParserContext( p_pFile )
+	LanguageFileContext::LanguageFileContext( Path const & path )
+		:	FileParserContext( path )
 	{
 		mapTypes[cuT( "default" )] = eSTC_TYPE_DEFAULT;
 		mapTypes[cuT( "word1" )] = eSTC_TYPE_WORD1;
@@ -113,7 +113,7 @@ namespace GuiCommon
 		mapLexers[cuT( "Flagship" )] =	eSTC_LEX_FLAGSHIP	;
 		mapLexers[cuT( "CSound" )] =	eSTC_LEX_CSOUND		;
 		mapLexers[cuT( "FreeBasic" )] =	eSTC_LEX_FREEBASIC	;
-		mapLexers[cuT( "InnoSetup" )] =	eSTC_LEX_INNOSETUP	;
+		mapLexers[cuT( "Innosetup" )] =	eSTC_LEX_INNOSETUP	;
 		mapLexers[cuT( "Opal" )] =	eSTC_LEX_OPAL		;
 		mapLexers[cuT( "Spice" )] =	eSTC_LEX_SPICE		;
 #if wxVERSION_NUMBER >= 2900

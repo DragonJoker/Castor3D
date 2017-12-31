@@ -1,224 +1,520 @@
-#if defined( CASTOR_COMPILER_MSVC )
-#	pragma warning( disable:4503 )
-#endif
-
 #include "RenderTechnique.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
+#include "FrameBuffer/ColourRenderBuffer.hpp"
+#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/TextureAttachment.hpp"
+#include "FrameBuffer/RenderBufferAttachment.hpp"
+#include "EnvironmentMap/EnvironmentMap.hpp"
+#include "Render/RenderPassTimer.hpp"
 #include "Render/RenderTarget.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Scene/Scene.hpp"
-#include "ShadowMap/ShadowMapPass.hpp"
+#include "Scene/Skybox.hpp"
+#include "Shader/PassBuffer/PassBuffer.hpp"
+#include "ShadowMap/ShadowMapDirectional.hpp"
+#include "ShadowMap/ShadowMapPoint.hpp"
+#include "ShadowMap/ShadowMapSpot.hpp"
+
 #include "Technique/RenderTechniquePass.hpp"
 #include "Texture/TextureLayout.hpp"
+#include "Technique/ForwardRenderTechniquePass.hpp"
+#include "Technique/Opaque/OpaquePass.hpp"
+#include "Technique/Transparent/TransparentPass.hpp"
 
 #include <GlslSource.hpp>
 
-using namespace Castor;
+#include "Shader/Shaders/GlslMaterial.hpp"
+#include "Shader/Shaders/GlslShadow.hpp"
 
-namespace Castor3D
+using namespace castor;
+
+#define DISPLAY_DEBUG_DEFERRED_BUFFERS 1
+#define DISPLAY_DEBUG_WEIGHTED_BLEND_BUFFERS 0
+#define DISPLAY_DEBUG_IBL_BUFFERS 0
+#define DISPLAY_DEBUG_SHADOW_MAPS 0
+#define DISPLAY_DEBUG_ENV_MAPS 0
+
+#define USE_WEIGHTED_BLEND 1
+#define DEBUG_FORWARD_RENDERING 0
+
+namespace castor3d
 {
 	//*************************************************************************************************
 
-	RenderTechnique::stFRAME_BUFFER::stFRAME_BUFFER( RenderTechnique & p_technique )
-		: m_technique{ p_technique }
+	namespace
 	{
-	}
-
-	bool RenderTechnique::stFRAME_BUFFER::Initialise( Size p_size )
-	{
-		m_colourTexture = m_technique.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead | AccessType::eWrite, PixelFormat::eRGBA16F32F, p_size );
-		m_colourTexture->GetImage().InitialiseSource();
-		p_size = m_colourTexture->GetDimensions();
-
-		bool l_return = m_colourTexture->Initialise();
-
-		if ( l_return )
+		void doPrepareShadowMaps( LightCache const & cache
+			, LightType type
+			, Camera const & camera
+			, RenderTechnique::ShadowMapArray & shadowMaps
+			, ShadowMapLightTypeArray & activeShadowMaps
+			, RenderQueueArray & queues )
 		{
-			m_frameBuffer = m_technique.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-			m_depthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32FS8 );
-			l_return = m_depthBuffer->Create();
-		}
+			auto lock = makeUniqueLock( cache );
+			std::map< double, LightSPtr > lights;
 
-		if ( l_return )
-		{
-			l_return = m_depthBuffer->Initialise( p_size );
-
-			if ( !l_return )
+			for ( auto & light : cache.getLights( type ) )
 			{
-				m_depthBuffer->Destroy();
+				light->setShadowMap( nullptr );
+
+				if ( light->isShadowProducer()
+					&& ( light->getLightType() == LightType::eDirectional
+						|| camera.isVisible( light->getBoundingBox()
+							, light->getParent()->getDerivedTransformationMatrix() ) ) )
+				{
+					lights.emplace( point::distanceSquared( camera.getParent()->getDerivedPosition()
+						, light->getParent()->getDerivedPosition() )
+						, light );
+				}
 			}
-		}
 
-		if ( l_return )
-		{
-			m_colourAttach = m_frameBuffer->CreateAttachment( m_colourTexture );
-			m_depthAttach = m_frameBuffer->CreateAttachment( m_depthBuffer );
-			l_return = m_frameBuffer->Create();
-		}
+			size_t count = std::min( shadowMaps.size(), lights.size() );
+			auto it = lights.begin();
 
-		if ( l_return )
-		{
-			l_return = m_frameBuffer->Initialise( p_size );
-
-			if ( l_return )
+			for ( auto i = 0u; i < count; ++i )
 			{
-				m_frameBuffer->Bind();
-				m_frameBuffer->Attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture->GetType() );
-				m_frameBuffer->Attach( AttachmentPoint::eDepthStencil, m_depthAttach );
-				m_frameBuffer->SetDrawBuffer( m_colourAttach );
-				l_return = m_frameBuffer->IsComplete();
-				m_frameBuffer->Unbind();
+				auto & shadowMap = *shadowMaps[i];
+				it->second->setShadowMap( &shadowMap );
+				activeShadowMaps[size_t( type )].emplace_back( std::ref( shadowMap ) );
+				shadowMap.update( camera
+					, queues
+					, *( it->second )
+					, i );
+				++it;
 			}
-			else
-			{
-				m_frameBuffer->Destroy();
-			}
-		}
-
-		return l_return;
-	}
-
-	void RenderTechnique::stFRAME_BUFFER::Cleanup()
-	{
-		if ( m_frameBuffer )
-		{
-			m_frameBuffer->Bind();
-			m_frameBuffer->DetachAll();
-			m_frameBuffer->Unbind();
-			m_frameBuffer->Cleanup();
-			m_colourTexture->Cleanup();
-			m_depthBuffer->Cleanup();
-
-			m_depthBuffer->Destroy();
-			m_frameBuffer->Destroy();
-
-			m_depthAttach.reset();
-			m_depthBuffer.reset();
-			m_colourAttach.reset();
-			m_colourTexture.reset();
-			m_frameBuffer.reset();
 		}
 	}
 
 	//*************************************************************************************************
 
-	RenderTechnique::RenderTechnique( String const & p_name
-		, RenderTarget & p_renderTarget
-		, RenderSystem & p_renderSystem
-		, std::unique_ptr< RenderTechniquePass > && p_opaquePass
-		, std::unique_ptr< RenderTechniquePass > && p_transparentPass
-		, Parameters const & CU_PARAM_UNUSED( p_params )
-		, bool p_multisampling )
+	RenderTechnique::RenderTechnique( String const & name
+		, RenderTarget & renderTarget
+		, RenderSystem & renderSystem
+		, Parameters const & parameters
+		, SsaoConfig const & config )
 
-		: OwnedBy< Engine >{ *p_renderSystem.GetEngine() }
-		, Named{ p_name }
-		, m_renderTarget{ p_renderTarget }
-		, m_renderSystem{ p_renderSystem }
-		, m_opaquePass{ std::move( p_opaquePass ) }
-		, m_transparentPass{ std::move( p_transparentPass ) }
+		: OwnedBy< Engine >{ *renderSystem.getEngine() }
+		, Named{ name }
+		, m_renderTarget{ renderTarget }
+		, m_renderSystem{ renderSystem }
+#if DEBUG_FORWARD_RENDERING
+		, m_opaquePass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "opaque_pass" )
+			, *renderTarget.getScene()
+			, renderTarget.getCamera().get()
+			, false
+			, nullptr
+			, config ) }
+#else
+		, m_opaquePass{ std::make_unique< OpaquePass >( *renderTarget.getScene()
+			, renderTarget.getCamera().get()
+			, config ) }
+#endif
+#if USE_WEIGHTED_BLEND
+		, m_transparentPass{ std::make_unique< TransparentPass >( *renderTarget.getScene()
+			, renderTarget.getCamera().get()
+			, config ) }
+#else
+		, m_transparentPass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "forward_transparent" )
+			, *renderTarget.getScene()
+			, renderTarget.getCamera().get()
+			, false
+			, false
+			, false
+			, nullptr
+			, config ) }
+#endif
 		, m_initialised{ false }
 		, m_frameBuffer{ *this }
+		, m_ssaoConfig{ config }
 	{
+		m_directionalShadowMaps.resize( 1u );
+		m_pointShadowMaps.resize( shader::PointShadowMapCount );
+		m_spotShadowMaps.resize( shader::SpotShadowMapCount );
+
+		for ( auto & shadowMap : m_directionalShadowMaps )
+		{
+			shadowMap = std::make_unique< ShadowMapDirectional >( *renderTarget.getEngine()
+				, *renderTarget.getScene() );
+		}
+
+		for ( auto & shadowMap : m_pointShadowMaps )
+		{
+			shadowMap = std::make_unique< ShadowMapPoint >( *renderTarget.getEngine()
+				, *renderTarget.getScene() );
+		}
+
+		for ( auto & shadowMap : m_spotShadowMaps )
+		{
+			shadowMap = std::make_unique< ShadowMapSpot >( *renderTarget.getEngine()
+				, *renderTarget.getScene() );
+		}
 	}
 
 	RenderTechnique::~RenderTechnique()
 	{
+		m_transparentPass.reset();
+		m_opaquePass.reset();
 	}
 
-	bool RenderTechnique::Initialise( uint32_t & p_index )
+	bool RenderTechnique::initialise( uint32_t & index )
 	{
 		if ( !m_initialised )
 		{
-			m_size = m_renderTarget.GetSize();
-			m_initialised = m_frameBuffer.Initialise( m_size );
+			m_size = m_renderTarget.getSize();
+			m_initialised = m_frameBuffer.initialise( m_size );
 
 			if ( m_initialised )
 			{
-				m_initialised = m_opaquePass->InitialiseShadowMaps();
+				doInitialiseShadowMaps();
+				m_opaquePass->initialise( m_size );
+				m_transparentPass->initialise( m_size );
 			}
 
 			if ( m_initialised )
 			{
-				m_initialised = m_transparentPass->InitialiseShadowMaps();
+				m_depthPrepass = std::make_unique< DepthPass >( cuT( "DepthPrepass" )
+					, *m_renderTarget.getScene()
+					, *m_renderTarget.getCamera()
+					, m_ssaoConfig
+					, m_frameBuffer.m_depthBuffer );
+				m_depthPrepass->initialise( m_size );
+
+#if !DEBUG_FORWARD_RENDERING
+				m_deferredRendering = std::make_unique< DeferredRendering >( *getEngine()
+					, static_cast< OpaquePass & >( *m_opaquePass )
+					, *m_frameBuffer.m_frameBuffer
+					, *m_frameBuffer.m_depthAttach
+					, m_renderTarget.getSize()
+					, *m_renderTarget.getScene()
+					, m_ssaoConfig );
+#endif
+#if USE_WEIGHTED_BLEND
+				m_weightedBlendRendering = std::make_unique< WeightedBlendRendering >( *getEngine()
+					, static_cast< TransparentPass & >( *m_transparentPass )
+					, *m_frameBuffer.m_frameBuffer
+					, *m_frameBuffer.m_depthAttach
+					, m_renderTarget.getSize()
+					, *m_renderTarget.getScene() );
+#endif
 			}
 
-			if ( m_initialised )
-			{
-				m_opaquePass->Initialise( m_size );
-				m_transparentPass->Initialise( m_size );
-			}
-
-			if ( m_initialised )
-			{
-				m_initialised = DoInitialise( p_index );
-			}
-
+			m_particleTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Particles" ), cuT( "Particles" ) );
+			m_postFxTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "HDR Post effects" ), cuT( "HDR Post effects" ) );
 			ENSURE( m_initialised );
 		}
 
 		return m_initialised;
 	}
 
-	void RenderTechnique::Cleanup()
+	void RenderTechnique::cleanup()
 	{
-		DoCleanup();
-		m_transparentPass->CleanupShadowMaps();
-		m_opaquePass->CleanupShadowMaps();
-		m_transparentPass->Cleanup();
-		m_opaquePass->Cleanup();
+		m_particleTimer.reset();
+		m_postFxTimer.reset();
+		m_weightedBlendRendering.reset();
+		m_deferredRendering.reset();
+		doCleanupShadowMaps();
+		m_depthPrepass->cleanup();
+		m_depthPrepass.reset();
+		m_transparentPass->cleanup();
+		m_opaquePass->cleanup();
 		m_initialised = false;
-		m_frameBuffer.Cleanup();
+		m_frameBuffer.cleanup();
 	}
 
-	void RenderTechnique::Update( RenderQueueArray & p_queues )
+	void RenderTechnique::update( RenderQueueArray & queues )
 	{
-		m_opaquePass->Update( p_queues );
-		m_transparentPass->Update( p_queues );
-		m_opaquePass->UpdateShadowMaps( p_queues );
-		m_transparentPass->UpdateShadowMaps( p_queues );
-	}
+		m_depthPrepass->update( queues );
+		m_opaquePass->update( queues );
+		m_transparentPass->update( queues );
+		doUpdateShadowMaps( queues );
+		auto & maps = m_renderTarget.getScene()->getEnvironmentMaps();
 
-	void RenderTechnique::Render( RenderInfo & p_info )
-	{
-		auto & l_scene = *m_renderTarget.GetScene();
-		l_scene.GetLightCache().UpdateLights();
-		m_renderSystem.PushScene( &l_scene );
-		bool l_shadows = l_scene.HasShadows();
-		
-		auto & l_camera = *m_renderTarget.GetCamera();
-		l_camera.Resize( m_size );
-		l_camera.Update();
-
-		DoRenderOpaque( p_info );
-
-		if ( l_scene.GetFog().GetType() == GLSL::FogType::eDisabled )
+		for ( auto & map : maps )
 		{
-			l_scene.RenderBackground( GetSize(), l_camera );
+			map.get().update( queues );
+		}
+	}
+
+	void RenderTechnique::render( Point2r const & jitter
+		, TextureUnit const & velocity
+		, RenderInfo & info )
+	{
+		auto & scene = *m_renderTarget.getScene();
+		auto & camera = *m_renderTarget.getCamera();
+		scene.getLightCache().updateLightsTexture( camera );
+		m_renderSystem.pushScene( &scene );
+		camera.resize( m_size );
+		camera.update();
+
+		// Update part
+		doRenderEnvironmentMaps();
+		doRenderShadowMaps();
+		doUpdateParticles( info );
+
+		// Render part
+		m_frameBuffer.m_frameBuffer->bind( FrameBufferTarget::eDraw );
+		m_frameBuffer.m_frameBuffer->setDrawBuffers();
+		m_frameBuffer.m_frameBuffer->clear( BufferComponent::eColour );
+		m_frameBuffer.m_frameBuffer->unbind();
+
+		m_depthPrepass->render( info
+			, m_activeShadowMaps
+			, jitter );
+
+		doRenderOpaque( jitter
+			, velocity
+			, info );
+
+		m_frameBuffer.m_frameBuffer->bind( FrameBufferTarget::eDraw );
+		m_frameBuffer.m_frameBuffer->setDrawBuffers();
+		scene.renderBackground( getSize(), camera );
+		m_frameBuffer.m_frameBuffer->unbind();
+
+		doRenderTransparent( jitter
+			, velocity
+			, info );
+		doApplyPostEffects();
+
+		m_renderSystem.popScene();
+	}
+
+	bool RenderTechnique::writeInto( castor::TextFile & file )
+	{
+		return true;
+	}
+
+	void RenderTechnique::debugDisplay( Size const & size )const
+	{
+		uint32_t index = 0u;
+
+#if DISPLAY_DEBUG_DEFERRED_BUFFERS && !DEBUG_FORWARD_RENDERING
+
+		m_deferredRendering->debugDisplay();
+
+#endif
+#if USE_WEIGHTED_BLEND && DISPLAY_DEBUG_WEIGHTED_BLEND_BUFFERS
+
+		m_weightedBlendRendering->debugDisplay();
+
+#endif
+#if DISPLAY_DEBUG_IBL_BUFFERS
+
+		m_frameBuffer.m_frameBuffer->bind();
+		scene.getSkybox().getIbl().debugDisplay( size );
+		m_frameBuffer.m_frameBuffer->unbind();
+
+#endif
+#if DISPLAY_DEBUG_ENV_MAPS
+
+		for ( auto & map : m_renderTarget.getScene()->getEnvironmentMaps() )
+		{
+			map.get().debugDisplay( size, index++ );
 		}
 
-		l_scene.GetParticleSystemCache().ForEach( [this, &p_info]( ParticleSystem & p_particleSystem )
+		index = 0u;
+
+#endif
+#if DISPLAY_DEBUG_SHADOW_MAPS
+
+		for ( auto & maps : m_activeShadowMaps )
 		{
-			p_particleSystem.Update();
-			p_info.m_particlesCount += p_particleSystem.GetParticlesCount();
+			for ( auto & map : maps )
+			{
+				map.get().debugDisplay( size, index++ );
+			}
+		}
+
+#endif
+	}
+
+	void RenderTechnique::doInitialiseShadowMaps()
+	{
+		for ( auto & shadowMap : m_directionalShadowMaps )
+		{
+			shadowMap->initialise();
+		}
+
+		for ( auto & shadowMap : m_pointShadowMaps )
+		{
+			shadowMap->initialise();
+		}
+
+		for ( auto & shadowMap : m_spotShadowMaps )
+		{
+			shadowMap->initialise();
+		}
+	}
+
+	void RenderTechnique::doCleanupShadowMaps()
+	{
+		for ( auto & shadowMap : m_directionalShadowMaps )
+		{
+			shadowMap->cleanup();
+		}
+
+		for ( auto & shadowMap : m_pointShadowMaps )
+		{
+			shadowMap->cleanup();
+		}
+
+		for ( auto & shadowMap : m_spotShadowMaps )
+		{
+			shadowMap->cleanup();
+		}
+	}
+
+	void RenderTechnique::doUpdateShadowMaps( RenderQueueArray & queues )
+	{
+		auto & scene = *m_renderTarget.getScene();
+		auto & camera = *m_renderTarget.getCamera();
+		auto & cache = scene.getLightCache();
+
+		for ( auto & array : m_activeShadowMaps )
+		{
+			array.clear();
+		}
+
+		doPrepareShadowMaps( cache
+			, LightType::eDirectional
+			, camera
+			, m_directionalShadowMaps
+			, m_activeShadowMaps
+			, queues );
+		doPrepareShadowMaps( cache
+			, LightType::ePoint
+			, camera
+			, m_pointShadowMaps
+			, m_activeShadowMaps
+			, queues );
+		doPrepareShadowMaps( cache
+			, LightType::eSpot
+			, camera
+			, m_spotShadowMaps
+			, m_activeShadowMaps
+			, queues );
+	}
+
+	void RenderTechnique::doRenderShadowMaps()
+	{
+		getEngine()->getMaterialCache().getPassBuffer().bind();
+
+		for ( auto & array : m_activeShadowMaps )
+		{
+			for ( auto & shadowMap : array )
+			{
+				shadowMap.get().render();
+			}
+		}
+	}
+
+	void RenderTechnique::doRenderEnvironmentMaps()
+	{
+		auto & scene = *m_renderTarget.getScene();
+		auto & maps = scene.getEnvironmentMaps();
+		getEngine()->getMaterialCache().getPassBuffer().bind();
+
+		for ( auto & map : maps )
+		{
+			map.get().render();
+		}
+	}
+
+	void RenderTechnique::doRenderOpaque( Point2r const & jitter
+		, TextureUnit const & velocity
+		, RenderInfo & info )
+	{
+		auto & scene = *m_renderTarget.getScene();
+
+		if ( scene.hasOpaqueObjects() )
+		{
+			auto & camera = *m_renderTarget.getCamera();
+			getEngine()->getMaterialCache().getPassBuffer().bind();
+
+#if DEBUG_FORWARD_RENDERING
+
+			getEngine()->setPerObjectLighting( true );
+			camera.apply();
+			m_frameBuffer.m_frameBuffer->bind( FrameBufferTarget::eDraw );
+			m_frameBuffer.m_frameBuffer->setDrawBuffers();
+			m_frameBuffer.m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
+			m_opaquePass->render( info
+				, m_activeShadowMaps );
+
+#else
+
+			m_deferredRendering->render( info
+				, scene
+				, camera
+				, m_activeShadowMaps
+				, jitter
+				, velocity );
+
+#endif
+		}
+	}
+
+	void RenderTechnique::doUpdateParticles( RenderInfo & info )
+	{
+		auto & scene = *m_renderTarget.getScene();
+
+		m_particleTimer->start();
+		scene.getParticleSystemCache().forEach( [this, &info]( ParticleSystem & particleSystem )
+		{
+			particleSystem.update();
+			info.m_particlesCount += particleSystem.getParticlesCount();
 		} );
-
-		DoRenderTransparent( p_info );
-
-		for ( auto l_effect : m_renderTarget.GetPostEffects() )
-		{
-			l_effect->Apply( *m_frameBuffer.m_frameBuffer );
-		}
-
-		m_renderSystem.PopScene();
+		m_particleTimer->stop();
 	}
 
-	bool RenderTechnique::WriteInto( Castor::TextFile & p_file )
+	void RenderTechnique::doRenderTransparent( Point2r const & jitter
+		, TextureUnit const & velocity
+		, RenderInfo & info )
 	{
-		return DoWriteInto( p_file );
+		auto & scene = *m_renderTarget.getScene();
+
+		if ( scene.hasTransparentObjects() )
+		{
+			auto & camera = *m_renderTarget.getCamera();
+			getEngine()->getMaterialCache().getPassBuffer().bind();
+
+#if USE_WEIGHTED_BLEND
+
+			m_weightedBlendRendering->render( info
+				, scene
+				, camera
+				, m_activeShadowMaps
+				, jitter
+				, velocity );
+
+#else
+
+			getEngine()->setPerObjectLighting( true );
+			m_transparentPass->renderShadowMaps();
+			camera.apply();
+			m_frameBuffer.m_frameBuffer->bind( FrameBufferTarget::eDraw );
+			m_frameBuffer.m_frameBuffer->setDrawBuffers();
+			m_transparentPass->render( info
+				, scene.hasShadows()
+				, m_activeShadowMaps );
+			m_frameBuffer.m_frameBuffer->unbind();
+
+#endif
+		}
+	}
+
+	void RenderTechnique::doApplyPostEffects()
+	{
+		m_postFxTimer->start();
+
+		for ( auto effect : m_renderTarget.getPostEffects() )
+		{
+			effect->apply( *m_frameBuffer.m_frameBuffer );
+		}
+
+		m_postFxTimer->stop();
 	}
 }

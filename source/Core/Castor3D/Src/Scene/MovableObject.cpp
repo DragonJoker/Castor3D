@@ -3,18 +3,18 @@
 #include "Animation/Animation.hpp"
 #include "Scene/Scene.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	MovableObject::TextWriter::TextWriter( String const & p_tabs )
-		: Castor::TextWriter< MovableObject >{ p_tabs }
+		: castor::TextWriter< MovableObject >{ p_tabs }
 	{
 	}
 
 	bool MovableObject::TextWriter::operator()( MovableObject const & p_object, TextFile & p_file )
 	{
-		return p_file.WriteText( m_tabs + cuT( "parent \"" ) + p_object.GetParent()->GetName() + cuT( "\"\n" ) ) > 0;
+		return p_file.writeText( m_tabs + cuT( "parent \"" ) + p_object.getParent()->getName() + cuT( "\"\n" ) ) > 0;
 	}
 
 	//*************************************************************************************************
@@ -29,29 +29,29 @@ namespace Castor3D
 
 	MovableObject::~MovableObject()
 	{
-		Detach();
-		Animable::CleanupAnimations();
+		detach();
+		Animable::cleanupAnimations();
 	}
 
-	void MovableObject::Detach()
+	void MovableObject::detach()
 	{
-		SceneNodeSPtr l_node = GetParent();
+		SceneNodeSPtr node = getParent();
 
-		if ( l_node )
+		if ( node )
 		{
 			m_notifyIndex.disconnect();
-			l_node->DetachObject( *this );
+			node->detachObject( *this );
 			m_sceneNode.reset();
 		}
 	}
 
-	void MovableObject::AttachTo( SceneNodeSPtr p_node )
+	void MovableObject::attachTo( SceneNodeSPtr p_node )
 	{
 		m_sceneNode = p_node;
 
 		if ( p_node )
 		{
-			m_strNodeName = p_node->GetName();
+			m_strNodeName = p_node->getName();
 		}
 		else
 		{

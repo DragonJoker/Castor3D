@@ -1,31 +1,12 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CU_UNIQUE_OBJECT_POOL_H___
 #define ___CU_UNIQUE_OBJECT_POOL_H___
 
 #include "ObjectPool.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -52,9 +33,9 @@ namespace Castor
 		 *\~french
 		 *\return		L'instance unique du pool d'objets.
 		 */
-		static inline MyObjectPool & Get()
+		static inline MyObjectPool & get()
 		{
-			return *DoGetInstance();
+			return *doGetInstance();
 		}
 		/**
 		 *\~english
@@ -64,11 +45,11 @@ namespace Castor
 		 *\brief		Crée l'instance unique du pool d'objets.
 		 *\param[in]	p_count	Le compte initial des objets du pool.
 		 */
-		static inline void Create( uint32_t p_count = 256u )
+		static inline void create( uint32_t p_count = 256u )
 		{
-			if ( !DoGetInstance() )
+			if ( !doGetInstance() )
 			{
-				DoGetInstance() = new MyObjectPool( p_count );
+				doGetInstance() = new MyObjectPool( p_count );
 			}
 		}
 		/**
@@ -77,17 +58,17 @@ namespace Castor
 		 *\~french
 		 *\brief		Détruit l'instance unique du pool d'objets.
 		 */
-		static inline void Destroy()
+		static inline void destroy()
 		{
-			if ( DoGetInstance() )
+			if ( doGetInstance() )
 			{
-				delete DoGetInstance();
-				DoGetInstance() = nullptr;
+				delete doGetInstance();
+				doGetInstance() = nullptr;
 			}
 		}
 
 	private:
-		static inline MyObjectPool *& DoGetInstance()
+		static inline MyObjectPool *& doGetInstance()
 		{
 			static MyObjectPool * s_instance = nullptr;
 			return s_instance;
@@ -118,9 +99,9 @@ namespace Castor
 		 *\~french
 		 *\return		L'instance unique du pool d'objets.
 		 */
-		static inline MyAlignedObjectPool & Get()
+		static inline MyAlignedObjectPool & get()
 		{
-			return *DoGetInstance();
+			return *doGetInstance();
 		}
 		/**
 		 *\~english
@@ -130,11 +111,11 @@ namespace Castor
 		 *\brief		Crée l'instance unique du pool d'objets.
 		 *\param[in]	p_count	Le compte initial des objets du pool.
 		 */
-		static inline void Create( uint32_t p_count = 256u )
+		static inline void create( uint32_t p_count = 256u )
 		{
-			if ( !DoGetInstance() )
+			if ( !doGetInstance() )
 			{
-				DoGetInstance() = new MyAlignedObjectPool( p_count );
+				doGetInstance() = new MyAlignedObjectPool( p_count );
 			}
 		}
 		/**
@@ -143,17 +124,17 @@ namespace Castor
 		 *\~french
 		 *\brief		Détruit l'instance unique du pool d'objets.
 		 */
-		static inline void Destroy()
+		static inline void destroy()
 		{
-			if ( DoGetInstance() )
+			if ( doGetInstance() )
 			{
-				delete DoGetInstance();
-				DoGetInstance() = nullptr;
+				delete doGetInstance();
+				doGetInstance() = nullptr;
 			}
 		}
 
 	private:
-		static inline MyAlignedObjectPool *& DoGetInstance()
+		static inline MyAlignedObjectPool *& doGetInstance()
 		{
 			static MyAlignedObjectPool * s_instance = nullptr;
 			return s_instance;

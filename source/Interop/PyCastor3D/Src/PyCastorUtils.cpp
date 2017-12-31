@@ -1,11 +1,11 @@
 #include "PyCastor3DPrerequisites.hpp"
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 Colour * CreateColourFromComponents( float p_r, float p_g, float p_b, float p_a )
 {
-	return new Colour( Colour::from_components( p_r, p_g, p_b, p_a ) );
+	return new Colour( Colour::fromComponents( p_r, p_g, p_b, p_a ) );
 }
 
 void ExportCastorUtils()
@@ -14,7 +14,7 @@ void ExportCastorUtils()
 	py::object l_module( py::handle<>( py::borrowed( PyImport_AddModule( "castor.utils" ) ) ) );
 	// Make "from castor import utils" work
 	py::scope().attr( "utils" ) = l_module;
-	// Set the current scope to the new sub-module
+	// set the current scope to the new sub-module
 	py::scope l_scope = l_module;
 
 	/**@group_name ePIXEL_FORMAT	*/
@@ -105,7 +105,7 @@ void ExportCastorUtils()
 	//@}
 	/**@group_name Vector3D	*/
 	//@{
-	py::def( "cross", cpy::VectorDotter() );
+	py::def( "cross", cpy::Vectordotter() );
 	py::def( "dot", cpy::VectorCrosser() );
 	py::class_< Point3r, std::shared_ptr< Point3r >, boost::noncopyable >( "Vector3D", py::init< real, real, real >() )
 	.add_property( "x", cpy::make_getter( &Point3r::operator[], 0u ), cpy::make_setter( &Point3r::operator[], 0u ), "The X coordinate" )
@@ -151,27 +151,27 @@ void ExportCastorUtils()
 	//@}
 	/**@group_name Quaternion	*/
 	//@{
-	void ( Quaternion::*quaternionFromAxisAngle )( Point3f const &, Angle const & ) = &Quaternion::from_axis_angle;
-	void ( Quaternion::*quaternionToAxisAngle )( Point3f &, Angle & )const = &Quaternion::to_axis_angle;
-	void ( Quaternion::*quaternionFromAxes )( Point3f const &, Point3f const &, Point3f const & ) = &Quaternion::from_axes;
-	void ( Quaternion::*quaternionToAxes )( Point3f &, Point3f &, Point3f & )const = &Quaternion::to_axes;
+	void ( Quaternion::*quaternionFromAxisAngle )( Point3f const &, Angle const & ) = &Quaternion::fromAxisAngle;
+	void ( Quaternion::*quaternionToAxisAngle )( Point3f &, Angle & )const = &Quaternion::toAxisAngle;
+	void ( Quaternion::*quaternionFromAxes )( Point3f const &, Point3f const &, Point3f const & ) = &Quaternion::fromAxes;
+	void ( Quaternion::*quaternionToAxes )( Point3f &, Point3f &, Point3f & )const = &Quaternion::toAxes;
 	Point3f & ( Quaternion::*quaternionTransform )( Point3f const &, Point3f & )const = &Quaternion::transform;
-	void ( Quaternion::*quaternionToMatrix )( Matrix4x4r & )const = &Quaternion::to_matrix;
-	void ( Quaternion::*quaternionFromMatrix )( Matrix4x4r const & ) = &Quaternion::from_matrix;
+	void ( Quaternion::*quaternionToMatrix )( Matrix4x4r & )const = &Quaternion::toMatrix;
+	void ( Quaternion::*quaternionFromMatrix )( Matrix4x4r const & ) = &Quaternion::fromMatrix;
 	Quaternion( Quaternion::*quaternionLerp )( Quaternion const & p_target, float p_factor )const = &Quaternion::lerp;
 	Quaternion( Quaternion::*quaternionMix )( Quaternion const & p_target, float p_factor )const = &Quaternion::mix;
 	Quaternion( Quaternion::*quaternionSlerp )( Quaternion const & p_target, float p_factor )const = &Quaternion::slerp;
 	py::class_< Quaternion >( "Quaternion", py::init< Point3r const &, Angle const & >() )
 	.add_property( "rotation_matrix", quaternionToMatrix, quaternionFromMatrix, "The quaternion's rotation matrix" )
 	.def( "transform", py::make_function( quaternionTransform, py::return_value_policy< py::reference_existing_object >() ) )
-	.def( "to_axis_angle", quaternionToAxisAngle )
-	.def( "from_axis_angle", quaternionFromAxisAngle )
-	.def( "to_axes", quaternionToAxes )
-	.def( "from_axes", quaternionFromAxes )
+	.def( "toAxisAngle", quaternionToAxisAngle )
+	.def( "fromAxisAngle", quaternionFromAxisAngle )
+	.def( "toAxes", quaternionToAxes )
+	.def( "fromAxes", quaternionFromAxes )
 	.def( "yaw", &Quaternion::get_yaw )
 	.def( "pitch", &Quaternion::get_pitch )
 	.def( "roll", &Quaternion::get_roll )
-	.def( "magnitude", &Quaternion::get_magnitude )
+	.def( "magnitude", &Quaternion::getMagnitude )
 	.def( "conjugate", &Quaternion::conjugate )
 	.def( "lerp", quaternionLerp )
 	.def( "slerp", quaternionMix )
@@ -231,18 +231,18 @@ void ExportCastorUtils()
 	/**@group_name Glyph	*/
 	//@{
 	py::class_< Glyph, boost::noncopyable >( "Glyph", py::no_init )
-	.add_property( "size", py::make_function( &Glyph::GetSize, py::return_value_policy< py::copy_const_reference >() ), "The glyph height" )
-	.add_property( "bearing", py::make_function( &Glyph::GetBearing, py::return_value_policy< py::copy_const_reference >() ), "The glyph position" )
-	.add_property( "advance", &Glyph::GetAdvance, "The offset after the glyph" )
+	.add_property( "size", py::make_function( &Glyph::getSize, py::return_value_policy< py::copy_const_reference >() ), "The glyph height" )
+	.add_property( "bearing", py::make_function( &Glyph::getBearing, py::return_value_policy< py::copy_const_reference >() ), "The glyph position" )
+	.add_property( "advance", &Glyph::getAdvance, "The offset after the glyph" )
 	;
 	//@}
 	/**@group_name Font	*/
 	//@{
 	typedef Font::GlyphArray::iterator( Font::*GlyphsItFunc )();
 	py::class_< Font, boost::noncopyable >( "Font", py::init< String const &, uint32_t, Path const & >() )
-	.add_property( "height", &Font::GetHeight, "The font height" )
-	.add_property( "max_height", &Font::GetMaxHeight, "The glyphs maximum height" )
-	.add_property( "max_width", &Font::GetMaxWidth, "The glyphs maximum width" )
+	.add_property( "height", &Font::getHeight, "The font height" )
+	.add_property( "max_height", &Font::getMaxHeight, "The glyphs maximum height" )
+	.add_property( "max_width", &Font::getMaxWidth, "The glyphs maximum width" )
 	.add_property( "glyphs", py::range< GlyphsItFunc, GlyphsItFunc >( &Font::begin, &Font::end ), "The glyphs" )
 	;
 	//@}
@@ -261,28 +261,28 @@ void ExportCastorUtils()
 	//@}
 	/**@group_name Image	*/
 	//@{
-	PxBufferBaseSPtr( Image::*ImageBufferGetter )()const = &Image::GetPixels;
+	PxBufferBaseSPtr( Image::*ImageBuffergetter )()const = &Image::getPixels;
 	py::class_< Image, boost::noncopyable >( "Image", py::no_init )
-	.add_property( "buffer", ImageBufferGetter, "The image pixels buffer" )
-	.def( "resample", &Image::Resample, py::return_value_policy< py::reference_existing_object >() )
+	.add_property( "buffer", ImageBuffergetter, "The image pixels buffer" )
+	.def( "resample", &Image::resample, py::return_value_policy< py::reference_existing_object >() )
 	.def( "fill", &Image::Fill, py::return_value_policy< py::reference_existing_object >() )
-	.def( "copy_image", &Image::CopyImage, py::return_value_policy< py::reference_existing_object >() )
-	.def( "sub_image", &Image::SubImage )
+	.def( "copy_image", &Image::copyImage, py::return_value_policy< py::reference_existing_object >() )
+	.def( "sub_image", &Image::subImage )
 	;
 	//@}
 	/**@group_name Logger	*/
 	//@{
 	void( *LoggerInitialiser )( ELogType ) = &Logger::Initialise;
 	void( *LoggerCleaner )() = &Logger::Cleanup;
-	void( *LoggerFileNameSetter )( String const &, ELogType ) = &Logger::SetFileName;
-	void( *DebugLogger )( String const & ) = &Logger::LogDebug;
-	void( *InfoLogger )( String const & ) = &Logger::LogInfo;
-	void( *WarningLogger )( String const & ) = &Logger::LogWarning;
-	void( *ErrorLogger )( String const & ) = &Logger::LogError;
+	void( *LoggerFileNamesetter )( String const &, ELogType ) = &Logger::setFileName;
+	void( *DebugLogger )( String const & ) = &Logger::logDebug;
+	void( *InfoLogger )( String const & ) = &Logger::logInfo;
+	void( *WarningLogger )( String const & ) = &Logger::logWarning;
+	void( *ErrorLogger )( String const & ) = &Logger::logError;
 	py::class_< Logger, boost::noncopyable >( "Logger", py::no_init )
 	.def( "initialise", LoggerInitialiser )
 	.def( "cleanup", LoggerCleaner )
-	.def( "set_file_name", LoggerFileNameSetter )
+	.def( "set_file_name", LoggerFileNamesetter )
 	.def( "log_debug", DebugLogger )
 	.def( "log_info", InfoLogger )
 	.def( "log_warning", WarningLogger )

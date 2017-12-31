@@ -4,39 +4,49 @@
 
 #include <Log/Logger.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace TestRender
 {
 	TestTexture::TestTexture(
 		TestRenderSystem & p_renderSystem,
 		TextureType p_type,
-		AccessTypes const & p_cpuAccess,
-		AccessTypes const & p_gpuAccess )
-		: TextureLayout{ p_renderSystem, p_type, p_cpuAccess, p_gpuAccess }
+		AccessTypes const & cpuAccess,
+		AccessTypes const & gpuAccess )
+		: TextureLayout{ p_renderSystem, p_type, cpuAccess, gpuAccess }
 	{
 	}
 
 	TestTexture::TestTexture(
 		TestRenderSystem & p_renderSystem,
 		TextureType p_type,
-		AccessTypes const & p_cpuAccess,
-		AccessTypes const & p_gpuAccess,
+		AccessTypes const & cpuAccess,
+		AccessTypes const & gpuAccess,
+		uint32_t mipmapCount )
+		: TextureLayout{ p_renderSystem, p_type, cpuAccess, gpuAccess, mipmapCount }
+	{
+	}
+
+	TestTexture::TestTexture(
+		TestRenderSystem & p_renderSystem,
+		TextureType p_type,
+		AccessTypes const & cpuAccess,
+		AccessTypes const & gpuAccess,
 		PixelFormat p_format,
 		Size const & p_size )
-		: TextureLayout{ p_renderSystem, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size }
+		: TextureLayout{ p_renderSystem, p_type, cpuAccess, gpuAccess, p_format, p_size }
 	{
 	}
 
 	TestTexture::TestTexture(
 		TestRenderSystem & p_renderSystem,
 		TextureType p_type,
-		AccessTypes const & p_cpuAccess,
-		AccessTypes const & p_gpuAccess,
+		AccessTypes const & cpuAccess,
+		AccessTypes const & gpuAccess,
 		PixelFormat p_format,
 		Point3ui const & p_size )
-		: TextureLayout{ p_renderSystem, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size }
+		: TextureLayout{ p_renderSystem, p_type, cpuAccess, gpuAccess, p_format, p_size }
 	{
 	}
 
@@ -44,24 +54,24 @@ namespace TestRender
 	{
 	}
 
-	void TestTexture::GenerateMipmaps()const
+	void TestTexture::generateMipmaps()const
 	{
 	}
 
-	bool TestTexture::DoInitialise()
+	bool TestTexture::doInitialise()
 	{
 		return true;
 	}
 
-	void TestTexture::DoCleanup()
+	void TestTexture::doCleanup()
 	{
 	}
 
-	void TestTexture::DoBind( uint32_t p_index )const
+	void TestTexture::doBind( uint32_t p_index )const
 	{
 	}
 
-	void TestTexture::DoUnbind( uint32_t p_index )const
+	void TestTexture::doUnbind( uint32_t p_index )const
 	{
 	}
 }

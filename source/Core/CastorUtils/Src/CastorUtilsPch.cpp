@@ -9,7 +9,7 @@
 #include "Math/SquareMatrix.hpp"
 #include "Math/Angle.hpp"
 
-namespace Castor
+namespace castor
 {
 	template<> const float AngleT< float >::Pi = float( 3.1415926535897932384626433832795028841968 );
 	template<> const float AngleT< float >::PiDiv2 = AngleT< float >::Pi / 2;
@@ -31,27 +31,27 @@ namespace Castor
 	template<> const double AngleT< double >::GradToRadian = AngleT< double >::Pi / 200;
 	template<> const double AngleT< double >::GradToDegree = 180.0 / 200.0;
 
-	dummy_dtor g_dummyDtor;
+	DummyDtor g_dummyDtor;
 
 	Point3r operator*( Matrix4x4r const & p_mtx, Point3r const & p_pt )
 	{
-		real const * l_mtx = p_mtx.const_ptr();
+		real const * mtx = p_mtx.constPtr();
 		return Point3r
 		{
-			l_mtx[0] * p_pt[0] + l_mtx[4] * p_pt[1] + l_mtx[ 8] * p_pt[2] + l_mtx[12],
-			l_mtx[1] * p_pt[0] + l_mtx[5] * p_pt[1] + l_mtx[ 9] * p_pt[2] + l_mtx[13],
-			l_mtx[2] * p_pt[0] + l_mtx[6] * p_pt[1] + l_mtx[10] * p_pt[2] + l_mtx[14]
+			mtx[0] * p_pt[0] + mtx[4] * p_pt[1] + mtx[ 8] * p_pt[2] + mtx[12],
+			mtx[1] * p_pt[0] + mtx[5] * p_pt[1] + mtx[ 9] * p_pt[2] + mtx[13],
+			mtx[2] * p_pt[0] + mtx[6] * p_pt[1] + mtx[10] * p_pt[2] + mtx[14]
 		};
 	}
 
 	Point3r operator*( Point3r const & p_pt, Matrix4x4r const & p_mtx )
 	{
-		real const * l_mtx = p_mtx.const_ptr();
+		real const * mtx = p_mtx.constPtr();
 		return Point3r
 		{
-			l_mtx[0] * p_pt[0] + l_mtx[1] * p_pt[1] + l_mtx[ 2] * p_pt[2] + l_mtx[ 3],
-			l_mtx[4] * p_pt[0] + l_mtx[5] * p_pt[1] + l_mtx[ 6] * p_pt[2] + l_mtx[ 7],
-			l_mtx[8] * p_pt[0] + l_mtx[9] * p_pt[1] + l_mtx[10] * p_pt[2] + l_mtx[11]
+			mtx[0] * p_pt[0] + mtx[1] * p_pt[1] + mtx[ 2] * p_pt[2] + mtx[ 3],
+			mtx[4] * p_pt[0] + mtx[5] * p_pt[1] + mtx[ 6] * p_pt[2] + mtx[ 7],
+			mtx[8] * p_pt[0] + mtx[9] * p_pt[1] + mtx[10] * p_pt[2] + mtx[11]
 		};
 	}
 
@@ -59,10 +59,10 @@ namespace Castor
 	{
 		return Point4r
 		{
-			point::dot( p_pt, p_mtx.get_row( 0 ) ),
-			point::dot( p_pt, p_mtx.get_row( 1 ) ),
-			point::dot( p_pt, p_mtx.get_row( 2 ) ),
-			point::dot( p_pt, p_mtx.get_row( 3 ) ),
+			point::dot( p_pt, p_mtx.getRow( 0 ) ),
+			point::dot( p_pt, p_mtx.getRow( 1 ) ),
+			point::dot( p_pt, p_mtx.getRow( 2 ) ),
+			point::dot( p_pt, p_mtx.getRow( 3 ) ),
 		};
 	}
 
@@ -70,14 +70,14 @@ namespace Castor
 	{
 		return Point4r
 		{
-			point::dot( p_pt, p_mtx.get_column( 0 ) ),
-			point::dot( p_pt, p_mtx.get_column( 1 ) ),
-			point::dot( p_pt, p_mtx.get_column( 2 ) ),
-			point::dot( p_pt, p_mtx.get_column( 3 ) ),
+			point::dot( p_pt, p_mtx.getColumn( 0 ) ),
+			point::dot( p_pt, p_mtx.getColumn( 1 ) ),
+			point::dot( p_pt, p_mtx.getColumn( 2 ) ),
+			point::dot( p_pt, p_mtx.getColumn( 3 ) ),
 		};
 	}
 
-	uint32_t GetNext2Pow( uint32_t p_value )
+	uint32_t getNext2Pow( uint32_t p_value )
 	{
 		static std::array< uint32_t, 32 > const TwoPows
 		{
@@ -115,14 +115,14 @@ namespace Castor
 			1u << 31
 		};
 
-		uint32_t l_result = 0;
+		uint32_t result = 0;
 
-		for ( uint32_t i = 0; i < TwoPows.size() && l_result < p_value; i++ )
+		for ( uint32_t i = 0; i < TwoPows.size() && result < p_value; i++ )
 		{
-			l_result = TwoPows[i];
+			result = TwoPows[i];
 		}
 
-		return l_result;
+		return result;
 	}
 }
 

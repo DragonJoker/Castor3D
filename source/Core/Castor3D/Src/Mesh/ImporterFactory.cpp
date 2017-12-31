@@ -2,14 +2,14 @@
 
 #include "CmshImporter.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	ImporterFactory::ImporterFactory()
 		: Factory< Importer, String, ImporterUPtr, std::function< ImporterUPtr( Engine & ) > >()
 	{
-		Register( CmshImporter::Type, CmshImporter::Create );
+		registerType( CmshImporter::Type, CmshImporter::create );
 	}
 
 	ImporterFactory::~ImporterFactory()

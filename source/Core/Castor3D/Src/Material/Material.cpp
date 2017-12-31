@@ -1,44 +1,49 @@
-#include "Material.hpp"
+﻿#include "Material.hpp"
 
 #include "LegacyPass.hpp"
+#include "MetallicRoughnessPbrPass.hpp"
+#include "SpecularGlossinessPbrPass.hpp"
 
 #include "Scene/SceneFileParser.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-	Material::TextWriter::TextWriter( String const & p_tabs )
-		: Castor::TextWriter< Material >{ p_tabs }
+	Material::TextWriter::TextWriter( String const & tabs )
+		: castor::TextWriter< Material >{ tabs }
 	{
 	}
 
-	bool Material::TextWriter::operator()( Material const & p_material, TextFile & p_file )
+	bool Material::TextWriter::operator()( Material const & material, TextFile & file )
 	{
-		static std::map< MaterialType, String > TypeName
-		{
-			{ MaterialType::eLegacy, cuT( "legacy" ) },
-		};
+		Logger::logInfo( m_tabs + cuT( "Writing Material " ) + material.getName() );
+		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "material \"" ) + material.getName() + cuT( "\"\n" ) ) > 0
+						&& file.writeText( m_tabs + cuT( "{" ) ) > 0;
+		castor::TextWriter< Material >::checkError( result, "Material name" );
 
-		Logger::LogInfo( m_tabs + cuT( "Writing Material " ) + p_material.GetName() );
-		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "material \"" ) + p_material.GetName() + cuT( "\"\n" ) ) > 0
-						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-		Castor::TextWriter< Material >::CheckError( l_return, "Material name" );
-
-		if ( l_return )
+		if ( result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\ttype " ) + TypeName[p_material.GetType()] + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Material >::CheckError( l_return, "Material type" );
-		}
-
-		if ( l_return )
-		{
-			switch ( p_material.GetType() )
+			switch ( material.getType() )
 			{
 			case MaterialType::eLegacy:
-				for ( auto l_pass : p_material )
+				for ( auto pass : material )
 				{
-					l_return &= LegacyPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< LegacyPass >( l_pass ), p_file );
+					result &= LegacyPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< LegacyPass >( pass ), file );
+				}
+				break;
+
+			case MaterialType::ePbrMetallicRoughness:
+				for ( auto pass : material )
+				{
+					result &= MetallicRoughnessPbrPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< MetallicRoughnessPbrPass >( pass ), file );
+				}
+				break;
+
+			case MaterialType::ePbrSpecularGlossiness:
+				for ( auto pass : material )
+				{
+					result &= SpecularGlossinessPbrPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< SpecularGlossinessPbrPass >( pass ), file );
 				}
 				break;
 
@@ -48,22 +53,24 @@ namespace Castor3D
 			}
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*********************************************************************************************
 
-	const Castor::String Material::DefaultMaterialName = cuT( "DefaultMaterial" );
+	const castor::String Material::DefaultMaterialName = cuT( "DefaultMaterial" );
 
-	Material::Material( String const & p_name, Engine & p_engine, MaterialType p_type )
-		: Resource< Material >( p_name )
-		, OwnedBy< Engine >( p_engine )
-		, m_type{ p_type }
+	Material::Material( String const & name
+		, Engine & engine
+		, MaterialType type )
+		: Resource< Material >( name )
+		, OwnedBy< Engine >( engine )
+		, m_type{ type }
 	{
 	}
 
@@ -71,32 +78,40 @@ namespace Castor3D
 	{
 	}
 
-	void Material::Initialise()
+	void Material::initialise()
 	{
-		Logger::LogDebug( cuT( "Initialising material [" ) + GetName() + cuT( "]" ) );
+		Logger::logDebug( cuT( "Initialising material [" ) + getName() + cuT( "]" ) );
 
-		for ( auto l_pass : m_passes )
+		for ( auto pass : m_passes )
 		{
-			l_pass->Initialise();
+			pass->initialise();
 		}
 	}
 
-	void Material::Cleanup()
+	void Material::cleanup()
 	{
-		for ( auto l_pass : m_passes )
+		for ( auto pass : m_passes )
 		{
-			l_pass->Cleanup();
+			pass->cleanup();
 		}
 	}
 
-	PassSPtr Material::CreatePass()
+	PassSPtr Material::createPass()
 	{
-		PassSPtr l_newPass;
+		PassSPtr newPass;
 
-		switch ( GetType() )
+		switch ( getType() )
 		{
 		case MaterialType::eLegacy:
-			l_newPass = std::make_shared< LegacyPass >( *this );
+			newPass = std::make_shared< LegacyPass >( *this );
+			break;
+
+		case MaterialType::ePbrMetallicRoughness:
+			newPass = std::make_shared< MetallicRoughnessPbrPass >( *this );
+			break;
+
+		case MaterialType::ePbrSpecularGlossiness:
+			newPass = std::make_shared< SpecularGlossinessPbrPass >( *this );
 			break;
 
 		default:
@@ -104,43 +119,73 @@ namespace Castor3D
 			break;
 		}
 
-		REQUIRE( l_newPass );
-		m_passes.push_back( l_newPass );
-		return l_newPass;
+		REQUIRE( newPass );
+		m_passListeners.emplace( newPass, newPass->onChanged.connect( std::bind( &Material::onPassChanged
+			, this
+			, std::placeholders::_1 ) ) );
+		m_passes.push_back( newPass );
+		onChanged( *this );
+		return newPass;
 	}
 
-	void Material::RemovePass( PassSPtr p_pass )
+	void Material::removePass( PassSPtr pass )
 	{
-		auto l_it = std::find( m_passes.begin(), m_passes.end(), p_pass );
+		auto it = std::find( m_passes.begin(), m_passes.end(), pass );
 
-		if ( l_it != m_passes.end() )
+		if ( it != m_passes.end() )
 		{
-			m_passes.erase( l_it );
+			m_passListeners.erase( *it );
+			m_passes.erase( it );
+			onChanged( *this );
 		}
 	}
 
-	PassSPtr Material::GetPass( uint32_t p_index )const
+	PassSPtr Material::getPass( uint32_t index )const
 	{
-		REQUIRE( p_index < m_passes.size() );
-		return m_passes[p_index];
+		REQUIRE( index < m_passes.size() );
+		return m_passes[index];
 	}
 
-	void Material::DestroyPass( uint32_t p_index )
+	void Material::destroyPass( uint32_t index )
 	{
-		REQUIRE( p_index < m_passes.size() );
-		m_passes.erase( m_passes.begin() + p_index );
+		REQUIRE( index < m_passes.size() );
+		m_passListeners.erase( *( m_passes.begin() + index ) );
+		m_passes.erase( m_passes.begin() + index );
+		onChanged( *this );
 	}
 
-	bool Material::HasAlphaBlending()const
+	bool Material::hasAlphaBlending()const
 	{
-		bool l_return = true;
-		uint32_t l_count = GetPassCount();
+		return m_passes.end() == std::find_if( m_passes.begin()
+			, m_passes.end()
+			, []( PassSPtr pass )
+			{
+				return !pass->hasAlphaBlending();
+			} );
+	}
 
-		for ( uint32_t i = 0; i < l_count && l_return; i++ )
-		{
-			l_return = m_passes[i]->HasAlphaBlending();
-		}
+	bool Material::hasEnvironmentMapping()const
+	{
+		return m_passes.end() != std::find_if( m_passes.begin()
+			, m_passes.end()
+			, []( PassSPtr pass )
+			{
+				return pass->hasEnvironmentMapping();
+			} );
+	}
 
-		return l_return;
+	bool Material::hasSubsurfaceScattering()const
+	{
+		return m_passes.end() != std::find_if( m_passes.begin()
+			, m_passes.end()
+			, []( PassSPtr pass )
+			{
+				return pass->hasSubsurfaceScattering();
+			} );
+	}
+
+	void Material::onPassChanged( Pass const & pass )
+	{
+		onChanged( *this );
 	}
 }

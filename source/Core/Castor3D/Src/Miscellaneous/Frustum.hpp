@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_FRUSTUM_H___
 #define ___C3D_FRUSTUM_H___
@@ -27,7 +8,7 @@ SOFTWARE.
 
 #include <Math/PlaneEquation.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -44,74 +25,112 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_viewport	The viewport.
+		 *\param[in]	viewport	The viewport.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_viewport	Le viewport.
+		 *\param[in]	viewport	Le viewport.
 		 */
-		C3D_API Frustum( Viewport & p_viewport );
+		C3D_API explicit Frustum( Viewport & viewport );
 		/**
 		 *\~english
 		 *\brief		Updates the frustum planes.
-		 *\param[in]	p_position	The view position.
-		 *\param[in]	p_x			The X vector.
-		 *\param[in]	p_y			The Y vector.
-		 *\param[in]	p_z			The Z vector.
+		 *\param[in]	projection	The projection matrix.
+		 *\param[in]	view		The view matrix.
 		 *\~french
 		 *\brief		Met à jour les plans du frustum.
-		 *\param[in]	p_position	La position de la vue.
-		 *\param[in]	p_x			Le vecteur X.
-		 *\param[in]	p_y			Le vecteur Y.
-		 *\param[in]	p_z			Le vecteur Z.
+		 *\param[in]	projection	La matrice de projection.
+		 *\param[in]	view		Le matrice de vue.
 		 */
-		C3D_API void Update( Castor::Point3r const & p_position, Castor::Point3r const & p_x, Castor::Point3r const & p_y, Castor::Point3r const & p_z );
+		C3D_API void update( castor::Matrix4x4r const & projection
+			, castor::Matrix4x4r const & view );
 		/**
 		 *\~english
-		 *\brief		Checks if given CubeBox is in the view frustum.
-		 *\param[in]	p_box				The CubeBox.
-		 *\param[in]	p_transformations	The CubeBox transformations matrix.
-		 *\return		\p false if the CubeBox is completely out of the view frustum.
+		 *\brief		Updates the frustum planes.
+		 *\param[in]	position	The view position.
+		 *\param[in]	right		The X vector.
+		 *\param[in]	up			The Y vector.
+		 *\param[in]	front		The Z vector.
+		 *\~french
+		 *\brief		Met à jour les plans du frustum.
+		 *\param[in]	position	La position de la vue.
+		 *\param[in]	right		Le vecteur X.
+		 *\param[in]	up			Le vecteur Y.
+		 *\param[in]	front		Le vecteur Z.
+		 */
+		C3D_API void update( castor::Point3r const & position
+			, castor::Point3r const & right
+			, castor::Point3r const & up
+			, castor::Point3r const & front );
+		/**
+		 *\~english
+		 *\brief		Updates the frustum planes.
+		 *\param[in]	eye		The view position.
+		 *\param[in]	target	The view target vector.
+		 *\param[in]	up		The direction of the up vector according to the orientation of the view.
+		 *\~french
+		 *\brief		Met à jour les plans du frustum.
+		 *\param[in]	eye		La position de la vue.
+		 *\param[in]	target	La position de la cible de la vue.
+		 *\param[in]	up		La direction du vecteur haut, selon l'orientation de la vue.
+		 */
+		C3D_API void update( castor::Point3r const & eye
+			, castor::Point3r const & target
+			, castor::Point3r const & up );
+		/**
+		 *\~english
+		 *\brief		Checks if given BoundingBox is in the view frustum.
+		 *\param[in]	box				The BoundingBox.
+		 *\param[in]	transformations	The BoundingBox transformations matrix.
+		 *\return		\p false if the BoundingBox is completely out of the view frustum.
 		 *\~french
 		 *\brief
-		 *\brief		Vérifie si la CubeBox donnée est dans le frustum de vue.
-		 *\param[in]	p_box				La CubeBox.
-		 *\param[in]	p_transformations	La matrice de transformations de la CubeBox.
-		 *\return		\p false si la CubeBox est complètement en dehors du frustum de vue.
+		 *\brief		Vérifie si la BoundingBox donnée est dans le frustum de vue.
+		 *\param[in]	box				La BoundingBox.
+		 *\param[in]	transformations	La matrice de transformations de la BoundingBox.
+		 *\return		\p false si la BoundingBox est complètement en dehors du frustum de vue.
 		 */
-		C3D_API bool IsVisible( Castor::CubeBox const & p_box, Castor::Matrix4x4r const & p_transformations )const;
+		C3D_API bool isVisible( castor::BoundingBox const & box
+			, castor::Matrix4x4r const & transformations )const;
 		/**
 		 *\~english
-		 *\brief		Checks if given SphereBox is in the view frustum.
-		 *\param[in]	p_box				The SphereBox.
-		 *\param[in]	p_transformations	The SphereBox transformations matrix.
-		 *\return		\p false if the SphereBox is completely out of the view frustum.
+		 *\brief		Checks if given BoundingSphere is in the view frustum.
+		 *\param[in]	sphere			The BoundingSphere.
+		 *\param[in]	transformations	The BoundingSphere transformations matrix.
+		 *\param[in]	scale			The scale for the BoundingSphere.
+		 *\return		\p false if the BoundingSphere is completely out of the view frustum.
 		 *\~french
 		 *\brief
 		 *\brief		Vérifie si la SphereBox donnée est dans le frustum de vue.
-		 *\param[in]	p_box				La SphereBox.
-		 *\param[in]	p_transformations	La SphereBox de transformations de la CubeBox.
-		 *\return		\p false si la SphereBox est complètement en dehors du frustum de vue.
+		 *\param[in]	sphere			La BoundingSphere.
+		 *\param[in]	transformations	La matrice de transformations de la BoundingSphere.
+		 *\param[in]	scale			L'échelle de la BoundingSphere.
+		 *\return		\p false si la BoundingSphere est complètement en dehors du frustum de vue.
 		 */
-		C3D_API bool IsVisible( Castor::SphereBox const & p_box, Castor::Matrix4x4r const & p_transformations )const;
+		C3D_API bool isVisible( castor::BoundingSphere const & sphere
+			, castor::Matrix4x4r const & transformations
+			, castor::Point3r const & scale )const;
 		/**
 		 *\~english
 		 *\brief		Checks if given point is in the view frustum.
-		 *\param[in]	p_point	The point.
+		 *\param[in]	point	The point.
 		 *\return		\p false if the point out of the view frustum.
 		 *\~french
 		 *\brief		Vérifie si le point donné est dans le frustum de vue.
-		 *\param[in]	p_point	Le point.
+		 *\param[in]	point	Le point.
 		 *\return		\p false si le point en dehors du frustum de vue.
 		 */
-		C3D_API bool IsVisible( Castor::Point3r const & p_point )const;
+		C3D_API bool isVisible( castor::Point3r const & point )const;
 
 	private:
 		//!\~english	The viewport.
 		//!\~french		Le viewport.
 		Viewport & m_viewport;
+		//!\~english	The view frustum's corners.
+		//!\~french		Les coins du frustum de vue.
+		std::array< castor::Point3r, size_t( FrustumCorner::eCount ) > m_corners;
 		//!\~english	The view frustum's planes.
 		//!\~french		Les plans du frustum de vue.
-		std::array< Castor::PlaneEquation< real >, size_t( FrustumPlane::eCount ) > m_planes;
+		std::array< castor::PlaneEquation, size_t( FrustumPlane::eCount ) > m_planes;
 	};
 }
 

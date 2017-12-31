@@ -9,199 +9,161 @@
 #include "Material/Material.hpp"
 #include "Mesh/Submesh.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-	Geometry::TextWriter::TextWriter( String const & p_tabs )
-		: Castor::TextWriter< Geometry >{ p_tabs }
+	Geometry::TextWriter::TextWriter( String const & tabs )
+		: castor::TextWriter< Geometry >{ tabs }
 	{
 	}
 
-	bool Geometry::TextWriter::operator()( Geometry const & p_geometry, TextFile & p_file )
+	bool Geometry::TextWriter::operator()( Geometry const & geometry, TextFile & file )
 	{
-		bool l_return{ true };
+		bool result{ true };
 
-		if ( p_geometry.GetMesh() )
+		if ( geometry.getMesh() )
 		{
-			Logger::LogInfo( m_tabs + cuT( "Writing Geometry " ) + p_geometry.GetName() );
-			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "object \"" ) + p_geometry.GetName() + cuT( "\"\n" ) ) > 0
-					   && p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-			Castor::TextWriter< Geometry >::CheckError( l_return, "Geometry name" );
+			Logger::logInfo( m_tabs + cuT( "Writing Geometry " ) + geometry.getName() );
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "object \"" ) + geometry.getName() + cuT( "\"\n" ) ) > 0
+					   && file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+			castor::TextWriter< Geometry >::checkError( result, "Geometry name" );
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( p_geometry, p_file );
+				result = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( geometry, file );
 			}
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = RenderedObject::TextWriter{ m_tabs + cuT( "\t" ) }( p_geometry, p_file );
+				result = RenderedObject::TextWriter{ m_tabs + cuT( "\t" ) }( geometry, file );
 			}
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "\tmesh \"" ) + p_geometry.GetMesh()->GetName() + cuT( "\"\n" ) ) > 0
-						   && p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0
-						   && p_file.WriteText( m_tabs + cuT( "\t\timport \"Meshes/" ) + p_geometry.GetMesh()->GetName() + cuT( ".cmsh\"\n" ) ) > 0
-						   && p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
-				Castor::TextWriter< Geometry >::CheckError( l_return, "Geometry mesh" );
+				result = file.writeText( m_tabs + cuT( "\tmesh \"" ) + geometry.getMesh()->getName() + cuT( "\"\n" ) ) > 0;
+				castor::TextWriter< Geometry >::checkError( result, "Geometry mesh" );
 			}
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "\tmaterials\n" ) ) > 0
-						   && p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0;
-				Castor::TextWriter< Geometry >::CheckError( l_return, "Geometry materials" );
-			}
+				result = file.writeText( m_tabs + cuT( "\tmaterials\n" ) ) > 0
+						   && file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0;
+				castor::TextWriter< Geometry >::checkError( result, "Geometry materials" );
 
-			if ( l_return )
-			{
-				uint16_t l_index{ 0u };
-
-				for ( auto l_submesh : *p_geometry.GetMesh() )
+				if ( result )
 				{
-					l_return = p_file.WriteText( m_tabs + cuT( "\t\tmaterial " ) + string::to_string( l_index++ ) + cuT( " \"" ) + p_geometry.GetMaterial( *l_submesh )->GetName() + cuT( "\"\n" ) ) > 0;
-					Castor::TextWriter< Geometry >::CheckError( l_return, "Geometry material" );
+					uint16_t index{ 0u };
+
+					for ( auto submesh : *geometry.getMesh() )
+					{
+						result &= file.writeText( m_tabs + cuT( "\t\tmaterial " ) + string::toString( index++ ) + cuT( " \"" ) + geometry.getMaterial( *submesh )->getName() + cuT( "\"\n" ) ) > 0;
+						castor::TextWriter< Geometry >::checkError( result, "Geometry material" );
+					}
+
+					if ( result )
+					{
+						result = file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
+					}
 				}
 			}
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
-			}
-
-			if ( l_return )
-			{
-				l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*************************************************************************************************
 
-	Geometry::Geometry( String const & p_name, Scene & p_scene, SceneNodeSPtr p_sn, MeshSPtr p_mesh )
-		: MovableObject{ p_name, p_scene, MovableType::eGeometry, p_sn }
-		, m_mesh{ p_mesh }
+	Geometry::Geometry( String const & name
+		, Scene & scene
+		, SceneNodeSPtr node
+		, MeshSPtr mesh )
+		: MovableObject{ name, scene, MovableType::eGeometry, node }
+		, m_mesh{ mesh }
 	{
-		if ( p_mesh )
-		{
-			m_strMeshName = p_mesh->GetName();
+		doUpdateMesh();
+	}
 
-			for ( auto l_submesh : *p_mesh )
+	void Geometry::prepare( uint32_t & faceCount
+		, uint32_t & vertexCount )
+	{
+		if ( !m_listCreated )
+		{
+			MeshSPtr mesh = getMesh();
+
+			if ( mesh )
 			{
-				m_submeshesMaterials[l_submesh.get()] = l_submesh->GetDefaultMaterial();
+				uint32_t nbFaces = mesh->getFaceCount();
+				uint32_t nbVertex = mesh->getVertexCount();
+				faceCount += nbFaces;
+				vertexCount += nbVertex;
+				mesh->computeContainers();
+				Logger::logInfo( StringStream()
+					<< cuT( "Geometry [" ) << getName() 
+					<< cuT( "] - NbVertex: " ) << nbVertex 
+					<< cuT( ", NbFaces: " ) << nbFaces );
+				m_listCreated = mesh->getSubmeshCount() > 0;
 			}
 		}
 	}
 
-	Geometry::~Geometry()
-	{
-		Cleanup();
-	}
-
-	void Geometry::Cleanup()
-	{
-	}
-
-	void Geometry::CreateBuffers( uint32_t & p_nbFaces, uint32_t & p_nbVertex )
-	{
-		if ( !m_listCreated )
-		{
-			Cleanup();
-			MeshSPtr l_mesh = GetMesh();
-
-			if ( l_mesh )
-			{
-				uint32_t l_nbFaces = l_mesh->GetFaceCount();
-				uint32_t l_nbVertex = l_mesh->GetVertexCount();
-				p_nbFaces += l_nbFaces;
-				p_nbVertex += l_nbVertex;
-				l_mesh->ComputeContainers();
-				Logger::LogInfo( StringStream() << cuT( "Geometry::CreateBuffers - NbVertex: " ) << l_nbVertex << cuT( ", NbFaces: " ) << l_nbFaces );
-				m_listCreated = l_mesh->GetSubmeshCount() > 0;
-			}
-		}
-	}
-
-	void Geometry::Render()
-	{
-		if ( !m_listCreated )
-		{
-			uint32_t l_nbFaces = 0, l_nbVertex = 0;
-			CreateBuffers( l_nbFaces, l_nbVertex );
-		}
-	}
-
-	void Geometry::SetMesh( MeshSPtr p_mesh )
+	void Geometry::setMesh( MeshSPtr mesh )
 	{
 		m_submeshesMaterials.clear();
-		m_mesh = p_mesh;
-
-		if ( p_mesh )
-		{
-			m_strMeshName = p_mesh->GetName();
-
-			for ( auto l_submesh : *p_mesh )
-			{
-				m_submeshesMaterials[l_submesh.get()] = l_submesh->GetDefaultMaterial();
-			}
-		}
-		else
-		{
-			m_strMeshName = cuEmptyString;
-		}
+		m_mesh = mesh;
+		doUpdateMesh();
+		doUpdateContainers();
 	}
 
-	void Geometry::SetMaterial( Submesh & p_submesh, MaterialSPtr p_material )
+	void Geometry::setMaterial( Submesh & submesh
+		, MaterialSPtr material
+		, bool updateSubmesh )
 	{
-		MeshSPtr l_mesh = GetMesh();
+		MeshSPtr mesh = getMesh();
 
-		if ( l_mesh )
+		if ( mesh )
 		{
-			auto l_it = std::find_if( l_mesh->begin(), l_mesh->end(), [&p_submesh]( SubmeshSPtr l_submesh )
-			{
-				return l_submesh.get() == &p_submesh;
-			} );
-
-			if ( l_it != l_mesh->end() )
-			{
-				auto l_pair = m_submeshesMaterials.insert( { &p_submesh, p_material } );
-
-				if ( !l_pair.second && l_pair.first->second.lock() != p_submesh.GetDefaultMaterial() )
+			auto it = std::find_if( mesh->begin()
+				, mesh->end()
+				, [&submesh]( SubmeshSPtr lookup )
 				{
-					p_submesh.UnRef( p_material );
-				}
+					return lookup.get() == &submesh;
+				} );
+			REQUIRE( it != mesh->end() );
 
-				l_pair.first->second = p_material;
-				auto l_count = p_submesh.Ref( p_material );
+			bool changed = false;
+			MaterialSPtr oldMaterial;
+			auto itSubMat = m_submeshesMaterials.find( &submesh );
 
-				if ( l_count >= 1 )
+			if ( itSubMat != m_submeshesMaterials.end() )
+			{
+				MaterialSPtr oldMaterial = itSubMat->second.lock();
+
+				if ( oldMaterial != material )
 				{
-					if ( !p_submesh.HasMatrixBuffer() && l_count == 1 )
-					{
-						// We need to update the render nodes afterwards (since the submesh's geometry buffers are now invalid).
-						GetScene()->SetChanged();
-						GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::eQueueRender, [this, &p_submesh]()
-						{
-							p_submesh.ResetGpuBuffers();
-						} ) );
-					}
-					else if ( p_submesh.HasMatrixBuffer() && l_count > 1 )
-					{
-						// We need to update the matrix buffers only.
-						GetScene()->GetListener().PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, &p_submesh]()
-						{
-							p_submesh.ResetMatrixBuffers();
-						} ) );
-					}
+					itSubMat->second = material;
+					changed = true;
 				}
 			}
-			else
+			else if ( material )
 			{
-				CASTOR_EXCEPTION( "Couldn't retrive the submesh in mesh's submeshes" );
+				m_submeshesMaterials.emplace( &submesh, material );
+				changed = true;
+			}
+
+			if ( changed )
+			{
+				submesh.setMaterial( oldMaterial, material, updateSubmesh );
+
+				if ( material->hasEnvironmentMapping() )
+				{
+					getScene()->createEnvironmentMap( *getParent() );
+				}
 			}
 		}
 		else
@@ -210,20 +172,113 @@ namespace Castor3D
 		}
 	}
 
-	MaterialSPtr Geometry::GetMaterial( Submesh const & p_submesh )const
+	MaterialSPtr Geometry::getMaterial( Submesh const & submesh )const
 	{
-		MaterialSPtr l_return;
-		auto l_it = m_submeshesMaterials.find( &p_submesh );
+		MaterialSPtr result;
+		auto it = m_submeshesMaterials.find( &submesh );
 
-		if ( l_it != m_submeshesMaterials.end() )
+		if ( it != m_submeshesMaterials.end() )
 		{
-			l_return = l_it->second.lock();
+			result = it->second.lock();
 		}
 		else
 		{
-			Logger::LogError( cuT( "Geometry::GetMaterial - Wrong submesh" ) );
+			Logger::logError( cuT( "Geometry::getMaterial - Wrong submesh" ) );
 		}
 
-		return l_return;
+		return result;
+	}
+
+	void Geometry::updateContainers( SubmeshBoundingBoxList const & boxes )
+	{
+		m_submeshesBoxes.clear();
+		m_submeshesSpheres.clear();
+
+		if ( !boxes.empty() )
+		{
+			m_submeshesBoxes.emplace( boxes[0].first, boxes[0].second );
+			m_submeshesSpheres.emplace( boxes[0].first, BoundingSphere{ boxes[0].second } );
+
+			for ( auto i = 1u; i < boxes.size(); ++i )
+			{
+				m_submeshesBoxes.emplace( boxes[i].first, boxes[i].second );
+				m_submeshesSpheres.emplace( boxes[i].first, BoundingSphere{ boxes[i].second } );
+			}
+
+			doUpdateContainers();
+		}
+	}
+
+	BoundingBox const & Geometry::getBoundingBox( Submesh const & submesh )const
+	{
+		static BoundingBox const dummy;
+		auto it = m_submeshesBoxes.find( &submesh );
+
+		if ( it != m_submeshesBoxes.end() )
+		{
+			return it->second;
+		}
+
+		return dummy;
+	}
+
+	BoundingSphere const & Geometry::getBoundingSphere( Submesh const & submesh )const
+	{
+		static BoundingSphere const dummy;
+		auto it = m_submeshesSpheres.find( &submesh );
+
+		if ( it != m_submeshesSpheres.end() )
+		{
+			return it->second;
+		}
+
+		return dummy;
+	}
+
+	void Geometry::setBoundingBox( Submesh const & submesh
+		, BoundingBox const & box )
+	{
+		m_submeshesBoxes[&submesh] = box;
+		m_submeshesSpheres[&submesh] = BoundingSphere{ box };
+		doUpdateContainers();
+	}
+
+	void Geometry::doUpdateMesh()
+	{
+		auto mesh = m_mesh.lock();
+
+		if ( mesh )
+		{
+			m_meshName = mesh->getName();
+
+			for ( auto submesh : *mesh )
+			{
+				m_submeshesMaterials[submesh.get()] = submesh->getDefaultMaterial();
+				m_submeshesBoxes.emplace( submesh.get(), submesh->getBoundingBox() );
+				m_submeshesSpheres.emplace( submesh.get(), submesh->getBoundingSphere() );
+			}
+		}
+		else
+		{
+			m_meshName = cuEmptyString;
+		}
+	}
+
+	void Geometry::doUpdateContainers()
+	{
+		if ( !m_submeshesBoxes.empty() )
+		{
+			auto it = m_submeshesBoxes.begin();
+			m_box = it->second;
+			++it;
+
+			while ( it != m_submeshesBoxes.end() )
+			{
+				m_box = m_box.getUnion( it->second );
+				++it;
+			}
+
+			m_sphere.load( m_box );
+		}
 	}
 }

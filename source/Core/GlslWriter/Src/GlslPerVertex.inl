@@ -1,11 +1,11 @@
-namespace GLSL
+namespace glsl
 {
 	gl_PerVertex::gl_PerVertex()
 		: Type( cuT( "gl_PerVertex " ) )
 	{
 	}
 
-	gl_PerVertex::gl_PerVertex( GlslWriter * p_writer, Castor::String const & p_name )
+	gl_PerVertex::gl_PerVertex( GlslWriter * p_writer, castor::String const & p_name )
 		: Type( cuT( "gl_PerVertex " ), p_writer, p_name )
 	{
 	}
@@ -14,7 +14,7 @@ namespace GLSL
 	{
 		if ( m_writer )
 		{
-			m_writer->WriteAssign( *this, p_rhs );
+			m_writer->writeAssign( *this, p_rhs );
 		}
 		else
 		{
@@ -28,8 +28,8 @@ namespace GLSL
 	template< typename T >
 	gl_PerVertex & gl_PerVertex::operator=( T const & p_rhs )
 	{
-		UpdateWriter( p_rhs );
-		m_writer->WriteAssign( *this, p_rhs );
+		updateWriter( p_rhs );
+		m_writer->writeAssign( *this, p_rhs );
 		return *this;
 	}
 

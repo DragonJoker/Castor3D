@@ -1,4 +1,4 @@
-#include "MainFrame.hpp"
+﻿#include "MainFrame.hpp"
 
 #include "RenderPanel.hpp"
 #include "CastorDvpTD.hpp"
@@ -10,8 +10,8 @@
 #include <Render/RenderLoop.hpp>
 #include <Render/RenderWindow.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace castortd
 {
@@ -25,14 +25,14 @@ namespace castortd
 			eID_RENDER_TIMER,
 		}	eID;
 
-		void DoUpdate( Game & p_game )
+		void doUpdate( Game & p_game )
 		{
-			if ( !wxGetApp().GetCastor()->IsCleaned() )
+			if ( !wxGetApp().getCastor()->isCleaned() )
 			{
-				p_game.Update();
-				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::ePostRender, [&p_game]()
+				p_game.update();
+				wxGetApp().getCastor()->postEvent( makeFunctorEvent( EventType::ePostRender, [&p_game]()
 				{
-					DoUpdate( p_game );
+					doUpdate( p_game );
 				} ) );
 			}
 		}
@@ -46,12 +46,12 @@ namespace castortd
 
 		try
 		{
-			wxGetApp().GetCastor()->Initialise( 120, CASTOR3D_THREADED );
-			DoLoadScene();
-			wxBoxSizer * l_sizer{ new wxBoxSizer{ wxHORIZONTAL } };
-			l_sizer->Add( m_panel.get(), wxSizerFlags( 1 ).Shaped().Centre() );
-			l_sizer->SetSizeHints( this );
-			SetSizer( l_sizer );
+			wxGetApp().getCastor()->initialise( 120, CASTOR3D_THREADED );
+			doLoadScene();
+			wxBoxSizer * sizer{ new wxBoxSizer{ wxHORIZONTAL } };
+			sizer->Add( m_panel.get(), wxSizerFlags( 1 ).Shaped().Centre() );
+			sizer->SetSizeHints( this );
+			SetSizer( sizer );
 		}
 		catch ( std::exception & p_exc )
 		{
@@ -63,64 +63,64 @@ namespace castortd
 	{
 	}
 
-	void MainFrame::DoLoadScene()
+	void MainFrame::doLoadScene()
 	{
-		auto & l_engine = *wxGetApp().GetCastor();
-		auto l_window = GuiCommon::LoadScene( l_engine
-			, File::GetExecutableDirectory().GetPath() / cuT( "share" ) / cuT( "CastorDvpTD" ) / cuT( "Data.zip" )
-			, l_engine.GetRenderLoop().GetWantedFps()
-			, l_engine.IsThreaded() );
+		auto & engine = *wxGetApp().getCastor();
+		auto window = GuiCommon::loadScene( engine
+			, File::getExecutableDirectory().getPath() / cuT( "share" ) / cuT( "CastorDvpTD" ) / cuT( "Data.zip" )
+			, engine.getRenderLoop().getWantedFps()
+			, engine.isThreaded() );
 
-		if ( l_window )
+		if ( window )
 		{
-			m_game = std::make_unique< Game >( *l_window->GetScene() );
+			m_game = std::make_unique< Game >( *window->getScene() );
 			m_panel = wxMakeWindowPtr< RenderPanel >( this, MainFrameSize, *m_game );
-			m_panel->SetRenderWindow( l_window );
+			m_panel->setRenderWindow( window );
 
-			if ( l_window->IsInitialised() )
+			if ( window->isInitialised() )
 			{
-				if ( l_window->IsFullscreen() )
+				if ( window->isFullscreen() )
 				{
 					ShowFullScreen( true, wxFULLSCREEN_ALL );
 				}
 
 				if ( !IsMaximized() )
 				{
-					SetClientSize( l_window->GetSize().width(), l_window->GetSize().height() );
+					SetClientSize( window->getSize().getWidth(), window->getSize().getHeight() );
 				}
 				else
 				{
 					Maximize( false );
-					SetClientSize( l_window->GetSize().width(), l_window->GetSize().height() );
+					SetClientSize( window->getSize().getWidth(), window->getSize().getHeight() );
 					Maximize();
 				}
 
-				Logger::LogInfo( cuT( "Scene file read" ) );
+				Logger::logInfo( cuT( "Scene file read" ) );
 			}
 			else
 			{
-				throw std::runtime_error{ "Impossible d'initialiser la fen�tre de rendu." };
+				throw std::runtime_error{ "Impossible d'initialiser la fenêtre de rendu." };
 			}
 
 #if wxCHECK_VERSION( 2, 9, 0 )
 
-			wxSize l_size = GetClientSize();
-			SetMinClientSize( l_size );
+			wxSize size = GetClientSize();
+			SetMinClientSize( size );
 
 #endif
 
 			if ( CASTOR3D_THREADED )
 			{
-				wxGetApp().GetCastor()->GetRenderLoop().StartRendering();
-				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::ePostRender, [this]()
+				wxGetApp().getCastor()->getRenderLoop().beginRendering();
+				wxGetApp().getCastor()->postEvent( makeFunctorEvent( EventType::ePostRender, [this]()
 				{
-					DoUpdate( *m_game );
+					doUpdate( *m_game );
 				} ) );
 			}
 			else
 			{
 				m_timer = new wxTimer( this, eID_RENDER_TIMER );
-				m_timer->Start( 1000 / wxGetApp().GetCastor()->GetRenderLoop().GetWantedFps(), true );
+				m_timer->Start( 1000 / wxGetApp().getCastor()->getRenderLoop().getWantedFps(), true );
 			}
 		}
 	}
@@ -134,7 +134,7 @@ namespace castortd
 
 	void MainFrame::OnPaint( wxPaintEvent & p_event )
 	{
-		wxPaintDC l_paintDC( this );
+		wxPaintDC paintDC( this );
 		p_event.Skip();
 	}
 
@@ -151,22 +151,22 @@ namespace castortd
 
 		if ( m_panel )
 		{
-			if ( wxGetApp().GetCastor()->IsThreaded() )
+			if ( wxGetApp().getCastor()->isThreaded() )
 			{
-				wxGetApp().GetCastor()->GetRenderLoop().Pause();
+				wxGetApp().getCastor()->getRenderLoop().pause();
 			}
 
-			m_panel->SetRenderWindow( nullptr );
+			m_panel->setRenderWindow( nullptr );
 
-			if ( wxGetApp().GetCastor()->IsThreaded() )
+			if ( wxGetApp().getCastor()->isThreaded() )
 			{
-				wxGetApp().GetCastor()->GetRenderLoop().Resume();
+				wxGetApp().getCastor()->getRenderLoop().resume();
 			}
 		}
 
-		if ( wxGetApp().GetCastor() )
+		if ( wxGetApp().getCastor() )
 		{
-			wxGetApp().GetCastor()->Cleanup();
+			wxGetApp().getCastor()->cleanup();
 		}
 
 		if ( m_panel )
@@ -186,17 +186,17 @@ namespace castortd
 
 	void MainFrame::OnRenderTimer( wxTimerEvent & p_event )
 	{
-		if ( wxGetApp().GetCastor() )
+		if ( wxGetApp().getCastor() )
 		{
-			auto & l_castor = *wxGetApp().GetCastor();
+			auto & castor = *wxGetApp().getCastor();
 
-			if ( !l_castor.IsCleaned() )
+			if ( !castor.isCleaned() )
 			{
-				if ( !l_castor.IsThreaded() )
+				if ( !castor.isThreaded() )
 				{
-					l_castor.GetRenderLoop().RenderSyncFrame();
-					m_game->Update();
-					m_timer->Start( 1000 / l_castor.GetRenderLoop().GetWantedFps(), true );
+					castor.getRenderLoop().renderSyncFrame();
+					m_game->update();
+					m_timer->Start( 1000 / castor.getRenderLoop().getWantedFps(), true );
 				}
 			}
 		}

@@ -1,17 +1,18 @@
-#include "Torus.hpp"
+﻿#include "Torus.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
+#include "Miscellaneous/Parameter.hpp"
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 Torus::Torus()
-	: MeshGenerator( MeshType::eTorus )
-	, m_rInternalRadius( 0 )
-	, m_rExternalRadius( 0 )
-	, m_uiInternalNbFaces( 0 )
-	, m_uiExternalNbFaces( 0 )
+	: MeshGenerator( cuT( "torus" ) )
+	, m_internalRadius( 0 )
+	, m_externalRadius( 0 )
+	, m_internalNbFaces( 0 )
+	, m_externalNbFaces( 0 )
 {
 }
 
@@ -19,98 +20,117 @@ Torus::~Torus()
 {
 }
 
-MeshGeneratorSPtr Torus::Create()
+MeshGeneratorSPtr Torus::create()
 {
 	return std::make_shared< Torus >();
 }
 
-void Torus::DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
+void Torus::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 {
-	m_rInternalRadius = std::abs( p_dimensions[0] );
-	m_rExternalRadius = std::abs( p_dimensions[1] );
-	m_uiInternalNbFaces = p_faces[0];
-	m_uiExternalNbFaces = p_faces[1];
-	p_mesh.Cleanup();
+	String param;
 
-	if ( m_uiInternalNbFaces >= 3 && m_uiExternalNbFaces >= 3 )
+	if ( p_parameters.get( cuT( "inner_size" ), param ) )
 	{
-		Submesh & l_submesh = *( p_mesh.CreateSubmesh() );
-		uint32_t l_uiCur = 0;
-		uint32_t l_uiPrv = 0;
-		uint32_t l_uiPCr = 0;
-		uint32_t l_uiPPr = 0;
-		real l_rAngleIn = 0.0;
-		real l_rAngleEx = 0.0;
-		uint32_t l_uiExtMax = m_uiExternalNbFaces;
-		uint32_t l_uiIntMax = m_uiInternalNbFaces;
-		Point3r l_ptPos;
-		Point3r l_ptNml;
-		Coords3r l_ptTangent0;
-		Coords3r l_ptTangent1;
+		m_internalRadius = string::toFloat( param );
+	}
+
+	if ( p_parameters.get( cuT( "outer_size" ), param ) )
+	{
+		m_externalRadius = string::toFloat( param );
+	}
+
+	if ( p_parameters.get( cuT( "inner_count" ), param ) )
+	{
+		m_internalNbFaces = string::toUInt( param );
+	}
+
+	if ( p_parameters.get( cuT( "outer_count" ), param ) )
+	{
+		m_externalNbFaces = string::toUInt( param );
+	}
+
+	p_mesh.cleanup();
+
+	if ( m_internalNbFaces >= 3 && m_externalNbFaces >= 3 )
+	{
+		Submesh & submesh = *( p_mesh.createSubmesh() );
+		uint32_t uiCur = 0;
+		uint32_t uiPrv = 0;
+		uint32_t uiPCr = 0;
+		uint32_t uiPPr = 0;
+		real rAngleIn = 0.0;
+		real rAngleEx = 0.0;
+		uint32_t uiExtMax = m_externalNbFaces;
+		uint32_t uiIntMax = m_internalNbFaces;
+		Point3r ptPos;
+		Point3r ptNml;
+		Coords3r ptTangent0;
+		Coords3r ptTangent1;
 
 		// Build the internal circle that will be rotated to build the torus
-		real l_step = real( Angle::PiMult2 ) / m_uiInternalNbFaces;
+		real step = real( Angle::PiMult2 ) / m_internalNbFaces;
 
-		for ( uint32_t j = 0; j <= l_uiIntMax; j++ )
+		for ( uint32_t j = 0; j <= uiIntMax; j++ )
 		{
-			BufferElementGroupSPtr l_vertex = l_submesh.AddPoint( m_rInternalRadius * cos( l_rAngleIn ) + m_rExternalRadius, m_rInternalRadius * sin( l_rAngleIn ), 0.0 );
-			Vertex::SetTexCoord( l_vertex, real( 0.0 ), real( j ) / m_uiInternalNbFaces );
-			Vertex::SetNormal( l_vertex, point::get_normalised( Point3r( real( cos( l_rAngleIn ) ), real( sin( l_rAngleIn ) ), real( 0.0 ) ) ) );
-			l_uiCur++;
-			l_rAngleIn += l_step;
+			BufferElementGroupSPtr vertex = submesh.addPoint( m_internalRadius * cos( rAngleIn ) + m_externalRadius, m_internalRadius * sin( rAngleIn ), 0.0 );
+			Vertex::setTexCoord( vertex, real( 0.0 ), real( j ) / m_internalNbFaces );
+			Vertex::setNormal( vertex, point::getNormalised( Point3r( real( cos( rAngleIn ) ), real( sin( rAngleIn ) ), real( 0.0 ) ) ) );
+			uiCur++;
+			rAngleIn += step;
 		}
 
 		// Build the torus
-		l_step = real( Angle::PiMult2 ) / m_uiExternalNbFaces;
+		step = real( Angle::PiMult2 ) / m_externalNbFaces;
+		auto indexMapping = std::make_shared< TriFaceMapping >( submesh );
 
-		for ( uint32_t i = 1; i <= l_uiExtMax; i++ )
+		for ( uint32_t i = 1; i <= uiExtMax; i++ )
 		{
-			l_uiPCr = l_uiCur;
-			l_uiPPr = l_uiPrv;
-			l_rAngleEx += l_step;
+			uiPCr = uiCur;
+			uiPPr = uiPrv;
+			rAngleEx += step;
 
-			for ( uint32_t j = 0; j <= l_uiIntMax; j++ )
+			for ( uint32_t j = 0; j <= uiIntMax; j++ )
 			{
-				BufferElementGroupSPtr l_vertex = l_submesh[j];
-				Vertex::GetPosition( l_vertex, l_ptPos );
-				Vertex::GetNormal( l_vertex, l_ptNml );
-				l_vertex = l_submesh.AddPoint( l_ptPos[0] * cos( l_rAngleEx ), l_ptPos[1], l_ptPos[0] * sin( l_rAngleEx ) );
-				Vertex::SetTexCoord( l_vertex, real( i ) / m_uiExternalNbFaces, real( j ) / m_uiInternalNbFaces );
-				Vertex::SetNormal( l_vertex, point::get_normalised( Point3r( real( l_ptNml[0] * cos( l_rAngleEx ) ), real( l_ptNml[1] ), real( l_ptNml[0] * sin( l_rAngleEx ) ) ) ) );
+				BufferElementGroupSPtr vertex = submesh[j];
+				Vertex::getPosition( vertex, ptPos );
+				Vertex::getNormal( vertex, ptNml );
+				vertex = submesh.addPoint( ptPos[0] * cos( rAngleEx ), ptPos[1], ptPos[0] * sin( rAngleEx ) );
+				Vertex::setTexCoord( vertex, real( i ) / m_externalNbFaces, real( j ) / m_internalNbFaces );
+				Vertex::setNormal( vertex, point::getNormalised( Point3r( real( ptNml[0] * cos( rAngleEx ) ), real( ptNml[1] ), real( ptNml[0] * sin( rAngleEx ) ) ) ) );
 			}
 
-			for ( uint32_t j = 0; j <= l_uiIntMax - 1; j++ )
+			for ( uint32_t j = 0; j <= uiIntMax - 1; j++ )
 			{
-				l_submesh.AddFace( l_uiCur + 1, l_uiPrv + 0, l_uiPrv + 1 );
-				l_submesh.AddFace( l_uiCur + 0, l_uiPrv + 0, l_uiCur + 1 );
-				l_uiPrv++;
-				l_uiCur++;
+				indexMapping->addFace( uiCur + 1, uiPrv + 0, uiPrv + 1 );
+				indexMapping->addFace( uiCur + 0, uiPrv + 0, uiCur + 1 );
+				uiPrv++;
+				uiCur++;
 			}
 
-			l_submesh.AddFace( l_uiPCr + 0, l_uiPrv + 0, l_uiPPr + 0 );
-			l_submesh.AddFace( l_uiCur + 0, l_uiPrv + 0, l_uiPCr + 0 );
-			l_uiPrv++;
-			l_uiCur++;
+			indexMapping->addFace( uiPCr + 0, uiPrv + 0, uiPPr + 0 );
+			indexMapping->addFace( uiCur + 0, uiPrv + 0, uiPCr + 0 );
+			uiPrv++;
+			uiCur++;
 		}
 
-		l_uiCur = 0;
-		l_uiPCr = l_uiCur;
-		l_uiPPr = l_uiPrv;
+		uiCur = 0;
+		uiPCr = uiCur;
+		uiPPr = uiPrv;
 
-		for ( uint32_t j = 0; j <= l_uiIntMax - 1; j++ )
+		for ( uint32_t j = 0; j <= uiIntMax - 1; j++ )
 		{
-			l_submesh.AddFace( l_uiCur + 1, l_uiPrv + 0, l_uiPrv + 1 );
-			l_submesh.AddFace( l_uiCur + 0, l_uiPrv + 0, l_uiCur + 1 );
-			l_uiPrv++;
-			l_uiCur++;
+			indexMapping->addFace( uiCur + 1, uiPrv + 0, uiPrv + 1 );
+			indexMapping->addFace( uiCur + 0, uiPrv + 0, uiCur + 1 );
+			uiPrv++;
+			uiCur++;
 		}
 
-		l_submesh.AddFace( l_uiPCr + 0, l_uiPrv + 0, l_uiPPr + 0 );
-		l_submesh.AddFace( l_uiCur + 0, l_uiPrv + 0, l_uiPCr + 0 );
-		l_uiPrv++;
-		l_uiCur++;
-		l_submesh.ComputeTangentsFromNormals();
+		indexMapping->addFace( uiPCr + 0, uiPrv + 0, uiPPr + 0 );
+		indexMapping->addFace( uiCur + 0, uiPrv + 0, uiPCr + 0 );
+
+		indexMapping->computeTangentsFromNormals();
+		submesh.setIndexMapping( indexMapping );
 	}
 
-	p_mesh.ComputeContainers();
+	p_mesh.computeContainers();
 }

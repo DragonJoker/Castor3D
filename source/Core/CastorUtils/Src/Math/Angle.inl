@@ -1,6 +1,6 @@
 #include <cmath>
 
-namespace Castor
+namespace castor
 {
 	template< typename Type >
 	AngleT< Type >::AngleT()noexcept
@@ -190,48 +190,48 @@ namespace Castor
 	template< typename Type >
 	AngleT< Type > operator+( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept
 	{
-		AngleT< Type > l_result( p_lhs );
-		l_result += p_rhs;
-		return l_result;
+		AngleT< Type > result( p_lhs );
+		result += p_rhs;
+		return result;
 	}
 
 	template< typename Type >
 	AngleT< Type > operator-( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept
 	{
-		AngleT< Type > l_result( p_lhs );
-		l_result -= p_rhs;
-		return l_result;
+		AngleT< Type > result( p_lhs );
+		result -= p_rhs;
+		return result;
 	}
 
 	template< typename Type >
 	AngleT< Type > operator*( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept
 	{
-		AngleT< Type > l_result( p_lhs );
-		l_result *= p_rhs;
-		return l_result;
+		AngleT< Type > result( p_lhs );
+		result *= p_rhs;
+		return result;
 	}
 
 	template< typename Type >
 	AngleT< Type > operator/( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept
 	{
-		AngleT< Type > l_result( p_lhs );
-		l_result /= p_rhs;
-		return l_result;
+		AngleT< Type > result( p_lhs );
+		result /= p_rhs;
+		return result;
 	}
 
 	template< typename Type >
 	AngleT< Type > operator*( AngleT< Type > const & p_lhs, double p_rhs )noexcept
 	{
-		AngleT< Type > l_result( p_lhs );
-		l_result *= p_rhs;
-		return l_result;
+		AngleT< Type > result( p_lhs );
+		result *= p_rhs;
+		return result;
 	}
 
 	template< typename Type >
 	AngleT< Type > operator/( AngleT< Type > const & p_lhs, double p_rhs )noexcept
 	{
-		AngleT< Type > l_result( p_lhs );
-		l_result /= p_rhs;
-		return l_result;
+		AngleT< Type > result( p_lhs );
+		result /= p_rhs;
+		return result;
 	}
 }

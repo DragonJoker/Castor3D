@@ -5,91 +5,206 @@
 #include "Material/Material.hpp"
 #include "Material/Pass.hpp"
 #include "Scene/SceneFileParser.hpp"
+#include "Shader/PassBuffer/LegacyPassBuffer.hpp"
+#include "Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp"
+#include "Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp"
 #include "Texture/Sampler.hpp"
 
-using namespace Castor;
+#include "Shader/Shaders/GlslMaterial.hpp"
 
-namespace Castor3D
+using namespace castor;
+
+namespace castor3d
 {
 	template<> const String CacheTraits< Material, String >::Name = cuT( "Material" );
 
-	void MaterialCache::Initialise()
+	void MaterialCache::initialise( MaterialType type )
 	{
-		auto l_lock = make_unique_lock( m_elements );
+		auto lock = makeUniqueLock( m_elements );
 
 		if ( !m_elements.has( Material::DefaultMaterialName ) )
 		{
-			m_defaultMaterial = m_produce( Material::DefaultMaterialName, MaterialType::eLegacy );
-			m_defaultMaterial->CreatePass();
-			m_defaultMaterial->GetPass( 0 )->SetTwoSided( true );
+			m_defaultMaterial = m_produce( Material::DefaultMaterialName, type );
+			m_defaultMaterial->createPass();
+			m_defaultMaterial->getPass( 0 )->setTwoSided( true );
 		}
 		else
 		{
 			m_defaultMaterial = m_elements.find( Material::DefaultMaterialName );
-			GetEngine()->PostEvent( MakeInitialiseEvent( *m_defaultMaterial ) );
+			getEngine()->postEvent( makeInitialiseEvent( *m_defaultMaterial ) );
+		}
+
+		switch ( type )
+		{
+		case MaterialType::eLegacy:
+			m_passBuffer = std::make_shared< LegacyPassBuffer >( *getEngine(), shader::MaxMaterialsCount );
+			break;
+
+		case MaterialType::ePbrMetallicRoughness:
+			m_passBuffer = std::make_shared< MetallicRoughnessPassBuffer >( *getEngine(), shader::MaxMaterialsCount );
+			break;
+
+		case MaterialType::ePbrSpecularGlossiness:
+			m_passBuffer = std::make_shared< SpecularGlossinessPassBuffer >( *getEngine(), shader::MaxMaterialsCount );
+			break;
 		}
 	}
 
-	void MaterialCache::Clear()
+	void MaterialCache::cleanup()
 	{
-		auto l_lock = make_unique_lock( m_elements );
+		m_passBuffer.reset();
+		auto lock = castor::makeUniqueLock( m_elements );
+
+		for ( auto it : m_elements )
+		{
+			m_clean( it.second );
+		}
+	}
+
+	void MaterialCache::update()
+	{
+		if ( m_passBuffer )
+		{
+			auto lock = makeUniqueLock( m_elements );
+
+			for ( auto & material : m_elements )
+			{
+				for ( auto & pass : *material.second )
+				{
+					if ( pass->getId() == 0 )
+					{
+						m_passBuffer->addPass( *pass );
+					}
+				}
+			}
+
+			m_passBuffer->update();
+		}
+	}
+
+	void MaterialCache::clear()
+	{
+		auto lock = makeUniqueLock( m_elements );
 		m_defaultMaterial.reset();
 		m_elements.clear();
 	}
 
-	void MaterialCache::GetNames( StringArray & l_names )
+	MaterialSPtr MaterialCache::add( Key const & name, MaterialSPtr element )
 	{
-		auto l_lock = make_unique_lock( m_elements );
-		l_names.clear();
-		auto l_it = m_elements.begin();
+		MaterialSPtr result{ element };
 
-		while ( l_it != m_elements.end() )
+		if ( element )
 		{
-			l_names.push_back( l_it->first );
-			l_it++;
-		}
-	}
+			auto lock = castor::makeUniqueLock( m_elements );
 
-	bool MaterialCache::Write( TextFile & p_file )const
-	{
-		auto l_lockA = make_unique_lock( m_elements );
-		{
-			auto l_lockB = make_unique_lock( GetEngine()->GetSamplerCache() );
-			GetEngine()->GetSamplerCache().lock();
-
-			for ( auto l_it : GetEngine()->GetSamplerCache() )
+			if ( m_elements.has( name ) )
 			{
-				Sampler::TextWriter( String{} )( *l_it.second, p_file );
-			}
-		}
-
-		bool l_return = true;
-		auto l_it = m_elements.begin();
-		bool l_first = true;
-
-		while ( l_return && l_it != m_elements.end() )
-		{
-			if ( l_first )
-			{
-				l_first = false;
+				castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
+				result = m_elements.find( name );
 			}
 			else
 			{
-				p_file.WriteText( cuT( "\n" ) );
+				m_elements.insert( name, element );
 			}
-
-			l_return = Material::TextWriter( String() )( * l_it->second, p_file );
-			++l_it;
+		}
+		else
+		{
+			castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_NULL_OBJECT << getObjectTypeName() << cuT( ": " ) );
 		}
 
-		return l_return;
+		for ( auto & pass : *result )
+		{
+			if ( pass->getId() == 0 )
+			{
+				m_passBuffer->addPass( *pass );
+			}
+		}
+
+		return result;
 	}
 
-	bool MaterialCache::Read( TextFile & p_file )
+	MaterialSPtr MaterialCache::add( Key const & name, MaterialType type )
 	{
-		auto l_lock = make_unique_lock( m_elements );
-		SceneFileParser l_parser( *GetEngine() );
-		l_parser.ParseFile( p_file );
+		MaterialSPtr result;
+		auto lock = castor::makeUniqueLock( m_elements );
+
+		if ( !m_elements.has( name ) )
+		{
+			result = m_produce( name, type );
+			m_initialise( result );
+			m_elements.insert( name, result );
+			castor::Logger::logDebug( castor::StringStream() << INFO_CACHE_CREATED_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
+		}
+		else
+		{
+			result = m_elements.find( name );
+			castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
+		}
+
+		for ( auto & pass : *result )
+		{
+			if ( pass->getId() == 0 )
+			{
+				m_passBuffer->addPass( *pass );
+			}
+		}
+
+		return result;
+	}
+
+	void MaterialCache::getNames( StringArray & names )
+	{
+		auto lock = makeUniqueLock( m_elements );
+		names.clear();
+		auto it = m_elements.begin();
+
+		while ( it != m_elements.end() )
+		{
+			names.push_back( it->first );
+			it++;
+		}
+	}
+
+	bool MaterialCache::write( TextFile & file )const
+	{
+		auto lockA = makeUniqueLock( m_elements );
+		{
+			auto lockB = makeUniqueLock( getEngine()->getSamplerCache() );
+			getEngine()->getSamplerCache().lock();
+
+			for ( auto it : getEngine()->getSamplerCache() )
+			{
+				Sampler::TextWriter( String{} )( *it.second, file );
+			}
+		}
+
+		bool result = true;
+		auto it = m_elements.begin();
+		bool first = true;
+
+		while ( result && it != m_elements.end() )
+		{
+			if ( first )
+			{
+				first = false;
+			}
+			else
+			{
+				file.writeText( cuT( "\n" ) );
+			}
+
+			result = Material::TextWriter( String() )( * it->second, file );
+			++it;
+		}
+
+		return result;
+	}
+
+	bool MaterialCache::read( Path const & path )
+	{
+		auto lock = makeUniqueLock( m_elements );
+		SceneFileParser parser( *getEngine() );
+		parser.parseFile( path );
 		return true;
 	}
 }

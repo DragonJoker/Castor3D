@@ -9,21 +9,21 @@
 
 #define CHECK_GL_STATES 0
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 #if CHECK_GL_STATES
 
-namespace Castor3D
+namespace castor3d
 {
 	OutputStream & operator<<( OutputStream & p_stream, DepthStencilState const & p_state )
 	{
-		static std::map< WritingMask, String > const l_depthMasks
+		static std::map< WritingMask, String > const depthMasks
 		{
 			{ WritingMask::eAll, "1" },
 			{ WritingMask::eZero, "0" },
 		};
-		static std::map< DepthFunc, String > const l_depthFuncs
+		static std::map< DepthFunc, String > const depthFuncs
 		{
 			{ DepthFunc::eNever, "Nv" },
 			{ DepthFunc::eLess, "Ls" },
@@ -34,7 +34,7 @@ namespace Castor3D
 			{ DepthFunc::eGEqual, "Ge" },
 			{ DepthFunc::eAlways, "Al" },
 		};
-		static std::map< StencilFunc, String > const l_stencilFuncs
+		static std::map< StencilFunc, String > const stencilFuncs
 		{
 			{ StencilFunc::eNever, "Nv" },
 			{ StencilFunc::eLess, "Ls" },
@@ -45,7 +45,7 @@ namespace Castor3D
 			{ StencilFunc::eGEqual, "Ge" },
 			{ StencilFunc::eAlways, "Al" },
 		};
-		static std::map< StencilOp, String > const l_stencilOps
+		static std::map< StencilOp, String > const stencilOps
 		{
 			{ StencilOp::eKeep, "Keep" },
 			{ StencilOp::eZero, "Zero" },
@@ -56,28 +56,28 @@ namespace Castor3D
 			{ StencilOp::eDecrWrap, "DecW" },
 			{ StencilOp::eInvert, "Invt" },
 		};
-		p_stream << cuT( "Depth - mask: " ) << l_depthMasks.at( p_state.GetDepthMask() )
-			<< cuT( ", test: " ) << ( p_state.GetDepthTest() ? "1" : "0" );
+		p_stream << cuT( "Depth - mask: " ) << depthMasks.at( p_state.getDepthMask() )
+			<< cuT( ", test: " ) << ( p_state.getDepthTest() ? "1" : "0" );
 
-		if ( p_state.GetDepthTest() )
+		if ( p_state.getDepthTest() )
 		{
-			p_stream << cuT( ", func: " ) << l_depthFuncs.at( p_state.GetDepthFunc() );
+			p_stream << cuT( ", func: " ) << depthFuncs.at( p_state.getDepthFunc() );
 		}
 
-		p_stream << cuT( ", Stencil - test: " ) << ( p_state.GetStencilTest() ? "1" : "0" );
+		p_stream << cuT( ", Stencil - test: " ) << ( p_state.getStencilTest() ? "1" : "0" );
 
-		if ( p_state.GetDepthTest() )
+		if ( p_state.getDepthTest() )
 		{
-			p_stream << cuT( ", Back - ref: " ) << p_state.GetStencilBackRef()
-				<< cuT( ", func: " ) << l_stencilFuncs.at( p_state.GetStencilBackFunc() )
-				<< cuT( ", fail op: " ) << l_stencilOps.at( p_state.GetStencilBackFailOp() )
-				<< cuT( ", depth fail op: " ) << l_stencilOps.at( p_state.GetStencilBackDepthFailOp() )
-				<< cuT( ", pass op: " ) << l_stencilOps.at( p_state.GetStencilBackPassOp() )
-				<< cuT( " - Front ref: " ) << p_state.GetStencilFrontRef()
-				<< cuT( ", func: " ) << l_stencilFuncs.at( p_state.GetStencilFrontFunc() )
-				<< cuT( ", fail op: " ) << l_stencilOps.at( p_state.GetStencilFrontFailOp() )
-				<< cuT( ", depth fail op: " ) << l_stencilOps.at( p_state.GetStencilFrontDepthFailOp() )
-				<< cuT( ", pass op: " ) << l_stencilOps.at( p_state.GetStencilFrontPassOp() );
+			p_stream << cuT( ", Back - ref: " ) << p_state.getStencilBackRef()
+				<< cuT( ", func: " ) << stencilFuncs.at( p_state.getStencilBackFunc() )
+				<< cuT( ", fail op: " ) << stencilOps.at( p_state.getStencilBackFailOp() )
+				<< cuT( ", depth fail op: " ) << stencilOps.at( p_state.getStencilBackDepthFailOp() )
+				<< cuT( ", pass op: " ) << stencilOps.at( p_state.getStencilBackPassOp() )
+				<< cuT( " - Front ref: " ) << p_state.getStencilFrontRef()
+				<< cuT( ", func: " ) << stencilFuncs.at( p_state.getStencilFrontFunc() )
+				<< cuT( ", fail op: " ) << stencilOps.at( p_state.getStencilFrontFailOp() )
+				<< cuT( ", depth fail op: " ) << stencilOps.at( p_state.getStencilFrontDepthFailOp() )
+				<< cuT( ", pass op: " ) << stencilOps.at( p_state.getStencilFrontPassOp() );
 		}
 
 		return p_stream;
@@ -92,7 +92,7 @@ namespace GlRender
 	{
 #if CHECK_GL_STATES
 
-		void DoLoad( DepthStencilState & p_state )
+		void doLoad( DepthStencilState & p_state )
 		{
 			static GLint const GL_INCR_WRAP = 0x8507;
 			static GLint const GL_DECR_WRAP = 0x8508;
@@ -101,7 +101,7 @@ namespace GlRender
 			static GLint const GL_STENCIL_BACK_FAIL = 0x8801;
 			static GLint const GL_STENCIL_BACK_PASS_DEPTH_FAIL = 0x8802;
 			static GLint const GL_STENCIL_BACK_PASS_DEPTH_PASS = 0x8803;
-			static std::map< GLint, DepthFunc > const l_depthFuncs
+			static std::map< GLint, DepthFunc > const depthFuncs
 			{
 				{ GL_NEVER, DepthFunc::eNever },
 				{ GL_LESS, DepthFunc::eLess },
@@ -112,7 +112,7 @@ namespace GlRender
 				{ GL_GEQUAL, DepthFunc::eGEqual },
 				{ GL_ALWAYS, DepthFunc::eAlways },
 			};
-			static std::map< GLint, StencilFunc > const l_stencilFuncs
+			static std::map< GLint, StencilFunc > const stencilFuncs
 			{
 				{ GL_NEVER, StencilFunc::eNever },
 				{ GL_LESS, StencilFunc::eLess },
@@ -123,7 +123,7 @@ namespace GlRender
 				{ GL_GEQUAL, StencilFunc::eGEqual },
 				{ GL_ALWAYS, StencilFunc::eAlways },
 			};
-			static std::map< GLint, StencilOp > const l_stencilOps
+			static std::map< GLint, StencilOp > const stencilOps
 			{
 				{ GL_KEEP, StencilOp::eKeep },
 				{ GL_ZERO, StencilOp::eZero },
@@ -134,87 +134,87 @@ namespace GlRender
 				{ GL_DECR_WRAP, StencilOp::eDecrWrap },
 				{ GL_INVERT, StencilOp::eInvert },
 			};
-			GLint l_value;
-			glGetIntegerv( GL_DEPTH_TEST, &l_value );
-			p_state.SetDepthTest( l_value != 0 );
-			glGetIntegerv( GL_DEPTH_WRITEMASK, &l_value );
-			p_state.SetDepthMask( l_value ? WritingMask::eAll : WritingMask::eZero );
-			glGetIntegerv( GL_DEPTH_FUNC, &l_value );
-			p_state.SetDepthFunc( l_depthFuncs.at( l_value ) );
-			glGetIntegerv( GL_STENCIL_TEST, &l_value );
-			p_state.SetStencilTest( l_value != 0 );
-			glGetIntegerv( GL_STENCIL_BACK_REF, &l_value );
-			p_state.SetStencilBackRef( l_value );
-			glGetIntegerv( GL_STENCIL_BACK_FUNC, &l_value );
-			p_state.SetStencilBackFunc( l_stencilFuncs.at( l_value ) );
-			glGetIntegerv( GL_STENCIL_BACK_FAIL, &l_value );
-			p_state.SetStencilBackFailOp( l_stencilOps.at( l_value ) );
-			glGetIntegerv( GL_STENCIL_BACK_PASS_DEPTH_FAIL, &l_value );
-			p_state.SetStencilBackDepthFailOp( l_stencilOps.at( l_value ) );
-			glGetIntegerv( GL_STENCIL_BACK_PASS_DEPTH_PASS, &l_value );
-			p_state.SetStencilBackPassOp( l_stencilOps.at( l_value ) );
-			glGetIntegerv( GL_STENCIL_REF, &l_value );
-			p_state.SetStencilFrontRef( l_value );
-			glGetIntegerv( GL_STENCIL_FUNC, &l_value );
-			p_state.SetStencilFrontFunc( l_stencilFuncs.at( l_value ) );
-			glGetIntegerv( GL_STENCIL_FAIL, &l_value );
-			p_state.SetStencilFrontFailOp( l_stencilOps.at( l_value ) );
-			glGetIntegerv( GL_STENCIL_PASS_DEPTH_FAIL, &l_value );
-			p_state.SetStencilFrontDepthFailOp( l_stencilOps.at( l_value ) );
-			glGetIntegerv( GL_STENCIL_PASS_DEPTH_PASS, &l_value );
-			p_state.SetStencilFrontPassOp( l_stencilOps.at( l_value ) );
+			GLint value;
+			glgetIntegerv( GL_DEPTH_TEST, &value );
+			p_state.setDepthTest( value != 0 );
+			glgetIntegerv( GL_DEPTH_WRITEMASK, &value );
+			p_state.setDepthMask( value ? WritingMask::eAll : WritingMask::eZero );
+			glgetIntegerv( GL_DEPTH_FUNC, &value );
+			p_state.setDepthFunc( depthFuncs.at( value ) );
+			glgetIntegerv( GL_STENCIL_TEST, &value );
+			p_state.setStencilTest( value != 0 );
+			glgetIntegerv( GL_STENCIL_BACK_REF, &value );
+			p_state.setStencilBackRef( value );
+			glgetIntegerv( GL_STENCIL_BACK_FUNC, &value );
+			p_state.setStencilBackFunc( stencilFuncs.at( value ) );
+			glgetIntegerv( GL_STENCIL_BACK_FAIL, &value );
+			p_state.setStencilBackFailOp( stencilOps.at( value ) );
+			glgetIntegerv( GL_STENCIL_BACK_PASS_DEPTH_FAIL, &value );
+			p_state.setStencilBackDepthFailOp( stencilOps.at( value ) );
+			glgetIntegerv( GL_STENCIL_BACK_PASS_DEPTH_PASS, &value );
+			p_state.setStencilBackPassOp( stencilOps.at( value ) );
+			glgetIntegerv( GL_STENCIL_REF, &value );
+			p_state.setStencilFrontRef( value );
+			glgetIntegerv( GL_STENCIL_FUNC, &value );
+			p_state.setStencilFrontFunc( stencilFuncs.at( value ) );
+			glgetIntegerv( GL_STENCIL_FAIL, &value );
+			p_state.setStencilFrontFailOp( stencilOps.at( value ) );
+			glgetIntegerv( GL_STENCIL_PASS_DEPTH_FAIL, &value );
+			p_state.setStencilFrontDepthFailOp( stencilOps.at( value ) );
+			glgetIntegerv( GL_STENCIL_PASS_DEPTH_PASS, &value );
+			p_state.setStencilFrontPassOp( stencilOps.at( value ) );
 		}
 
-		bool DoCompare( DepthStencilState const & p_gl
+		bool doCompare( DepthStencilState const & p_gl
 			, DepthStencilState const & p_save
 			, String const & p_stack )
 		{
-			bool l_result = p_gl.GetDepthTest() == p_save.GetDepthTest()
-				&& p_gl.GetDepthMask() == p_save.GetDepthMask()
-				&& ( !p_gl.GetDepthTest()
-					|| p_gl.GetDepthFunc() == p_save.GetDepthFunc() )
-				&& p_gl.GetStencilTest() == p_save.GetStencilTest()
-				&& ( !p_gl.GetStencilTest()
-					|| ( p_gl.GetStencilBackRef() == p_save.GetStencilBackRef()
-						&& p_gl.GetStencilBackFunc() == p_save.GetStencilBackFunc()
-						&& p_gl.GetStencilBackFailOp() == p_save.GetStencilBackFailOp()
-						&& p_gl.GetStencilBackDepthFailOp() == p_save.GetStencilBackDepthFailOp()
-						&& p_gl.GetStencilBackPassOp() == p_save.GetStencilBackPassOp()
-						&& p_gl.GetStencilFrontRef() == p_save.GetStencilFrontRef()
-						&& p_gl.GetStencilFrontFunc() == p_save.GetStencilFrontFunc()
-						&& p_gl.GetStencilFrontFailOp() == p_save.GetStencilFrontFailOp()
-						&& p_gl.GetStencilFrontDepthFailOp() == p_save.GetStencilFrontDepthFailOp()
-						&& p_gl.GetStencilFrontPassOp() == p_save.GetStencilFrontPassOp() ) );
+			bool result = p_gl.getDepthTest() == p_save.getDepthTest()
+				&& p_gl.getDepthMask() == p_save.getDepthMask()
+				&& ( !p_gl.getDepthTest()
+					|| p_gl.getDepthFunc() == p_save.getDepthFunc() )
+				&& p_gl.getStencilTest() == p_save.getStencilTest()
+				&& ( !p_gl.getStencilTest()
+					|| ( p_gl.getStencilBackRef() == p_save.getStencilBackRef()
+						&& p_gl.getStencilBackFunc() == p_save.getStencilBackFunc()
+						&& p_gl.getStencilBackFailOp() == p_save.getStencilBackFailOp()
+						&& p_gl.getStencilBackDepthFailOp() == p_save.getStencilBackDepthFailOp()
+						&& p_gl.getStencilBackPassOp() == p_save.getStencilBackPassOp()
+						&& p_gl.getStencilFrontRef() == p_save.getStencilFrontRef()
+						&& p_gl.getStencilFrontFunc() == p_save.getStencilFrontFunc()
+						&& p_gl.getStencilFrontFailOp() == p_save.getStencilFrontFailOp()
+						&& p_gl.getStencilFrontDepthFailOp() == p_save.getStencilFrontDepthFailOp()
+						&& p_gl.getStencilFrontPassOp() == p_save.getStencilFrontPassOp() ) );
 
-			if ( !l_result )
+			if ( !result )
 			{
-				Logger::LogDebug( StringStream{} << cuT( "DepthStencilState comparison failed" ) );
-				Logger::LogDebug( StringStream{} << cuT( "GL  :\n" ) << p_gl );
-				Logger::LogDebug( StringStream{} << cuT( "SAVE:\n" ) << p_save );
-				Logger::LogDebug( p_stack );
+				Logger::logDebug( StringStream{} << cuT( "DepthStencilState comparison failed" ) );
+				Logger::logDebug( StringStream{} << cuT( "GL  :\n" ) << p_gl );
+				Logger::logDebug( StringStream{} << cuT( "SAVE:\n" ) << p_save );
+				Logger::logDebug( p_stack );
 			}
 
-			return l_result;
+			return result;
 		}
 
 		struct StateCheck
 		{
 			StateCheck( DepthStencilState const & p_state )
 			{
-				DepthStencilState l_gl;
-				DoLoad( l_gl );
-				REQUIRE( DoCompare( l_gl, save, stack ) );
+				DepthStencilState gl;
+				doLoad( gl );
+				REQUIRE( doCompare( gl, save, stack ) );
 				save = p_state;
-				StringStream l_stream;
-				l_stream << Debug::Backtrace{};
-				stack = l_stream.str();
+				StringStream stream;
+				stream << Debug::Backtrace{};
+				stack = stream.str();
 			}
 
 			~StateCheck()
 			{
-				DepthStencilState l_gl;
-				DoLoad( l_gl );
-				REQUIRE( DoCompare( l_gl, save, stack ) );
+				DepthStencilState gl;
+				doLoad( gl );
+				REQUIRE( doCompare( gl, save, stack ) );
 			}
 
 			static DepthStencilState save;
@@ -225,29 +225,53 @@ namespace GlRender
 		String StateCheck::stack;
 
 #endif
+		
+		template< typename StateType >
+		uint64_t doEncode( StateType const & p_state );
 
-		void DoApply( BlendState const p_state, OpenGl const & p_gl )
+		template<>
+		uint64_t doEncode< DepthStencilState >( DepthStencilState const & p_state )
 		{
-			bool l_enabled{ false };
+			return ( uint64_t( p_state.getDepthTest() ? 1u : 0u ) << 63 )
+				| ( uint64_t( p_state.getDepthMask() == WritingMask::eMax ? 1u : 0u ) << 62 )
+				| ( uint64_t( p_state.getStencilTest() ? 1u : 0u ) << 61 )
+				| ( uint64_t( uint8_t( p_state.getStencilWriteMask() ) ) << 53 )
+				| ( uint64_t( uint8_t( p_state.getStencilReadMask() ) ) << 45 )
+				| ( uint64_t( uint8_t( p_state.getStencilBackFunc() ) ) << 42 )
+				| ( uint64_t( uint8_t( p_state.getStencilBackRef() ) ) << 34 )
+				| ( uint64_t( uint8_t( p_state.getStencilBackFailOp() ) ) << 31 )
+				| ( uint64_t( uint8_t( p_state.getStencilBackDepthFailOp() ) ) << 28 )
+				| ( uint64_t( uint8_t( p_state.getStencilBackPassOp() ) ) << 25 )
+				| ( uint64_t( uint8_t( p_state.getStencilFrontFunc() ) ) << 22 )
+				| ( uint64_t( uint8_t( p_state.getStencilFrontRef() ) ) << 14 )
+				| ( uint64_t( uint8_t( p_state.getStencilFrontFailOp() ) ) << 11 )
+				| ( uint64_t( uint8_t( p_state.getStencilFrontDepthFailOp() ) ) << 8 )
+				| ( uint64_t( uint8_t( p_state.getStencilFrontPassOp() ) ) << 5 );
+			
+		}
+		
+		void doApply( BlendState const p_state, OpenGl const & p_gl )
+		{
+			bool enabled{ false };
 
-			p_gl.ColorMask( p_gl.Get( p_state.GetColourMaskR() )
-							, p_gl.Get( p_state.GetColourMaskG() )
-							, p_gl.Get( p_state.GetColourMaskB() )
-							, p_gl.Get( p_state.GetColourMaskA() ) );
+			p_gl.ColorMask( p_gl.get( p_state.getColourMaskR() )
+							, p_gl.get( p_state.getColourMaskG() )
+							, p_gl.get( p_state.getColourMaskB() )
+							, p_gl.get( p_state.getColourMaskA() ) );
 
-			if ( p_state.IsIndependantBlendEnabled() )
+			if ( p_state.isIndependantBlendEnabled() )
 			{
 				for ( int i = 0; i < 8; i++ )
 				{
-					if ( p_state.IsBlendEnabled( i ) )
+					if ( p_state.isBlendEnabled( i ) )
 					{
-						l_enabled = true;
+						enabled = true;
 						p_gl.BlendFunc( i
-							, p_gl.Get( p_state.GetRgbSrcBlend( i ) )
-							, p_gl.Get( p_state.GetRgbDstBlend( i ) )
-							, p_gl.Get( p_state.GetAlphaSrcBlend( i ) )
-							, p_gl.Get( p_state.GetAlphaDstBlend( i ) ) );
-						p_gl.BlendEquation( i, p_gl.Get( p_state.GetRgbBlendOp( i ) ) );
+							, p_gl.get( p_state.getRgbSrcBlend( i ) )
+							, p_gl.get( p_state.getRgbDstBlend( i ) )
+							, p_gl.get( p_state.getAlphaSrcBlend( i ) )
+							, p_gl.get( p_state.getAlphaDstBlend( i ) ) );
+						p_gl.BlendEquation( i, p_gl.get( p_state.getRgbBlendOp( i ) ) );
 					}
 					else
 					{
@@ -258,14 +282,14 @@ namespace GlRender
 			}
 			else
 			{
-				if ( p_state.IsBlendEnabled( 0 ) )
+				if ( p_state.isBlendEnabled( 0 ) )
 				{
-					l_enabled = true;
-					p_gl.BlendFunc( p_gl.Get( p_state.GetRgbSrcBlend() )
-						, p_gl.Get( p_state.GetRgbDstBlend() )
-						, p_gl.Get( p_state.GetAlphaSrcBlend() )
-						, p_gl.Get( p_state.GetAlphaDstBlend() ) );
-					p_gl.BlendEquation( p_gl.Get( p_state.GetRgbBlendOp() ) );
+					enabled = true;
+					p_gl.BlendFunc( p_gl.get( p_state.getRgbSrcBlend() )
+						, p_gl.get( p_state.getRgbDstBlend() )
+						, p_gl.get( p_state.getAlphaSrcBlend() )
+						, p_gl.get( p_state.getAlphaDstBlend() ) );
+					p_gl.BlendEquation( p_gl.get( p_state.getRgbBlendOp() ) );
 				}
 				else
 				{
@@ -274,9 +298,9 @@ namespace GlRender
 				}
 			}
 
-			if ( l_enabled )
+			if ( enabled )
 			{
-				p_gl.BlendColor( p_state.GetBlendFactors() );
+				p_gl.BlendColor( p_state.getBlendFactors() );
 				p_gl.Enable( GlTweak::eBlend );
 			}
 			else
@@ -285,44 +309,50 @@ namespace GlRender
 			}
 		}
 
-		void DoApply( DepthStencilState const & p_state, OpenGl const & p_gl )
+		void doApply( DepthStencilState const & p_state, OpenGl const & p_gl )
 		{
 #if CHECK_GL_STATES
 
-			StateCheck l_check( p_state );
+			StateCheck check( p_state );
 
 #endif
+			static uint64_t save = 0ull;
+			uint64_t current = doEncode( p_state );
 
-			p_gl.DepthMask( p_gl.Get( p_state.GetDepthMask() ) );
+			if ( current != save )
+			{
+				save = current;
+				p_gl.DepthMask( p_gl.get( p_state.getDepthMask() ) );
 
-			if ( p_state.GetDepthTest() )
-			{
-				p_gl.Enable( GlTweak::eDepthTest );
-				p_gl.DepthFunc( p_gl.Get( p_state.GetDepthFunc() ) );
-			}
-			else
-			{
-				p_gl.Disable( GlTweak::eDepthTest );
-			}
+				if ( p_state.getDepthTest() )
+				{
+					p_gl.Enable( GlTweak::eDepthTest );
+					p_gl.DepthFunc( p_gl.get( p_state.getDepthFunc() ) );
+				}
+				else
+				{
+					p_gl.Disable( GlTweak::eDepthTest );
+				}
 
-			if ( p_state.GetStencilTest() )
-			{
-				p_gl.Enable( GlTweak::eStencilTest );
-				p_gl.StencilMaskSeparate( GlFace::eBoth, p_state.GetStencilWriteMask() );
-				p_gl.StencilFuncSeparate( GlFace::eBack, p_gl.Get( p_state.GetStencilBackFunc() ), p_state.GetStencilBackRef(), p_state.GetStencilReadMask() );
-				p_gl.StencilFuncSeparate( GlFace::eFront, p_gl.Get( p_state.GetStencilFrontFunc() ), p_state.GetStencilFrontRef(), p_state.GetStencilReadMask() );
-				p_gl.StencilOpSeparate( GlFace::eBack, p_gl.Get( p_state.GetStencilBackFailOp() ), p_gl.Get( p_state.GetStencilBackDepthFailOp() ), p_gl.Get( p_state.GetStencilBackPassOp() ) );
-				p_gl.StencilOpSeparate( GlFace::eFront, p_gl.Get( p_state.GetStencilFrontFailOp() ), p_gl.Get( p_state.GetStencilFrontDepthFailOp() ), p_gl.Get( p_state.GetStencilFrontPassOp() ) );
-			}
-			else
-			{
-				p_gl.Disable( GlTweak::eStencilTest );
+				if ( p_state.getStencilTest() )
+				{
+					p_gl.Enable( GlTweak::eStencilTest );
+					p_gl.StencilMaskSeparate( GlFace::eBoth, p_state.getStencilWriteMask() );
+					p_gl.StencilFuncSeparate( GlFace::eBack, p_gl.get( p_state.getStencilBackFunc() ), p_state.getStencilBackRef(), p_state.getStencilReadMask() );
+					p_gl.StencilFuncSeparate( GlFace::eFront, p_gl.get( p_state.getStencilFrontFunc() ), p_state.getStencilFrontRef(), p_state.getStencilReadMask() );
+					p_gl.StencilOpSeparate( GlFace::eBack, p_gl.get( p_state.getStencilBackFailOp() ), p_gl.get( p_state.getStencilBackDepthFailOp() ), p_gl.get( p_state.getStencilBackPassOp() ) );
+					p_gl.StencilOpSeparate( GlFace::eFront, p_gl.get( p_state.getStencilFrontFailOp() ), p_gl.get( p_state.getStencilFrontDepthFailOp() ), p_gl.get( p_state.getStencilFrontPassOp() ) );
+				}
+				else
+				{
+					p_gl.Disable( GlTweak::eStencilTest );
+				}
 			}
 		}
 
-		void DoApply( MultisampleState const & p_state, OpenGl const & p_gl )
+		void doApply( MultisampleState const & p_state, OpenGl const & p_gl )
 		{
-			if ( p_state.GetMultisample() )
+			if ( p_state.getMultisample() )
 			{
 				p_gl.Enable( GlTweak::eMultisample );
 			}
@@ -331,7 +361,7 @@ namespace GlRender
 				p_gl.Disable( GlTweak::eMultisample );
 			}
 
-			if ( p_state.IsAlphaToCoverageEnabled() )
+			if ( p_state.isAlphaToCoverageEnabled() )
 			{
 				p_gl.Enable( GlTweak::eAlphaToCoverage );
 			}
@@ -341,16 +371,16 @@ namespace GlRender
 			}
 		}
 
-		void DoApply( RasteriserState const & p_state, OpenGl const & p_gl )
+		void doApply( RasteriserState const & p_state, OpenGl const & p_gl )
 		{
-			p_gl.PolygonMode( GlFace::eBoth, p_gl.Get( p_state.GetFillMode() ) );
+			p_gl.PolygonMode( GlFace::eBoth, p_gl.get( p_state.getFillMode() ) );
 
-			if ( p_state.GetCulledFaces() != Culling::eNone )
+			if ( p_state.getCulledFaces() != Culling::eNone )
 			{
 				p_gl.Enable( GlTweak::eCullFace );
-				p_gl.CullFace( p_gl.Get( p_state.GetCulledFaces() ) );
+				p_gl.CullFace( p_gl.get( p_state.getCulledFaces() ) );
 
-				if ( p_state.GetFrontCCW() )
+				if ( p_state.getFrontCCW() )
 				{
 					p_gl.FrontFace( GlFrontFaceDirection::eCounterClockWise );
 				}
@@ -364,7 +394,7 @@ namespace GlRender
 				p_gl.Disable( GlTweak::eCullFace );
 			}
 
-			if ( p_state.GetAntialiasedLines() )
+			if ( p_state.getAntialiasedLines() )
 			{
 				p_gl.Enable( GlTweak::eLineSmooth );
 				p_gl.Hint( GlHint::eLineSmooth, GlHintValue::eNicest );
@@ -375,7 +405,7 @@ namespace GlRender
 				p_gl.Hint( GlHint::eLineSmooth, GlHintValue::eDontCare );
 			}
 
-			if ( p_state.GetScissor() )
+			if ( p_state.getScissor() )
 			{
 				p_gl.Enable( GlTweak::eScissorTest );
 			}
@@ -384,7 +414,7 @@ namespace GlRender
 				p_gl.Disable( GlTweak::eScissorTest );
 			}
 
-			if ( p_state.GetDepthClipping() )
+			if ( p_state.getDepthClipping() )
 			{
 				p_gl.Disable( GlTweak::eDepthClamp );
 			}
@@ -393,17 +423,17 @@ namespace GlRender
 				p_gl.Enable( GlTweak::eDepthClamp );
 			}
 
-			if ( p_state.GetDepthBiasFactor() != 0 || p_state.GetDepthBiasUnits() != 0 )
+			if ( p_state.getDepthBiasFactor() != 0 || p_state.getDepthBiasUnits() != 0 )
 			{
 				p_gl.Enable( GlTweak::eOffsetFill );
-				p_gl.PolygonOffset( p_state.GetDepthBiasFactor(), p_state.GetDepthBiasUnits() );
+				p_gl.PolygonOffset( p_state.getDepthBiasFactor(), p_state.getDepthBiasUnits() );
 			}
 			else
 			{
 				p_gl.Disable( GlTweak::eOffsetFill );
 			}
 
-			if ( p_state.GetDiscardPrimitives() )
+			if ( p_state.getDiscardPrimitives() )
 			{
 				p_gl.Enable( GlTweak::eRasterizerDiscard );
 			}
@@ -415,14 +445,14 @@ namespace GlRender
 	}
 
 	GlRenderPipeline::GlRenderPipeline( OpenGl & p_gl
-		, GlRenderSystem & p_renderSystem
+		, GlRenderSystem & renderSystem
 		, DepthStencilState && p_dsState
 		, RasteriserState && p_rsState
 		, BlendState && p_bdState
 		, MultisampleState && p_msState
 		, ShaderProgram & p_program
 		, PipelineFlags const & p_flags )
-		: RenderPipeline{ p_renderSystem, std::move( p_dsState ), std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ), p_program, p_flags }
+		: RenderPipeline{ renderSystem, std::move( p_dsState ), std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ), p_program, p_flags }
 		, Holder{ p_gl }
 	{
 	}
@@ -431,18 +461,17 @@ namespace GlRender
 	{
 	}
 
-	void GlRenderPipeline::Apply()const
+	void GlRenderPipeline::apply()const
 	{
-		DoApply( m_rsState, GetOpenGl() );
-		DoApply( m_dsState, GetOpenGl() );
-		DoApply( m_blState, GetOpenGl() );
-		DoApply( m_msState, GetOpenGl() );
-		m_program.Bind();
-		uint32_t l_count{ 0u };
+		doApply( m_rsState, getOpenGl() );
+		doApply( m_dsState, getOpenGl() );
+		doApply( m_blState, getOpenGl() );
+		doApply( m_msState, getOpenGl() );
+		m_program.bind();
 
-		for ( auto & l_binding : m_bindings )
+		for ( auto & binding : m_bindings )
 		{
-			l_binding.get().Bind( l_count++ );
+			binding.get().bind( binding.get().getOwner()->getBindingPoint() );
 		}
 	}
 }

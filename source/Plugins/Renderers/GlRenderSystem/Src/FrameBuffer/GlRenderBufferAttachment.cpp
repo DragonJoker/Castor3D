@@ -7,8 +7,8 @@
 
 #include <Graphics/PixelBufferBase.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GlRender
 {
@@ -24,34 +24,47 @@ namespace GlRender
 	{
 	}
 
-	void GlRenderBufferAttachment::DoAttach()
+	void GlRenderBufferAttachment::doDownload( castor::Position const & p_offset
+		, castor::PxBufferBase & p_buffer )const
 	{
-		m_glAttachmentPoint = GlAttachmentPoint( uint32_t( GetOpenGl().Get( GetAttachmentPoint() ) ) + GetAttachmentIndex() );
-		uint32_t l_uiGlName;
+		getOpenGl().ReadBuffer( GlBufferBinding( int( GlBufferBinding::eColor0 ) + getAttachmentIndex() ) );
+		auto format = getOpenGl().get( p_buffer.format() );
+		getOpenGl().ReadPixels( p_offset
+			, p_buffer.dimensions()
+			, format.Format
+			, format.Type
+			, p_buffer.ptr() );
+	}
 
-		switch ( GetRenderBuffer()->GetComponent() )
+	void GlRenderBufferAttachment::doAttach()
+	{
+		m_glAttachmentPoint = GlAttachmentPoint( uint32_t( getOpenGl().get( getAttachmentPoint() ) ) + getAttachmentIndex() );
+		uint32_t uiGlName;
+
+		switch ( getRenderBuffer()->getComponent() )
 		{
 		case BufferComponent::eColour:
-			l_uiGlName = std::static_pointer_cast< GlColourRenderBuffer >( GetRenderBuffer() )->GetGlName();
+			uiGlName = std::static_pointer_cast< GlColourRenderBuffer >( getRenderBuffer() )->getGlName();
 			break;
 
 		case BufferComponent::eDepth:
-			l_uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer >( GetRenderBuffer() )->GetGlName();
+			uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer >( getRenderBuffer() )->getGlName();
 			break;
 
 		case BufferComponent::eStencil:
-			l_uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer >( GetRenderBuffer() )->GetGlName();
+			uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer >( getRenderBuffer() )->getGlName();
 			break;
 
 		default:
-			l_uiGlName = uint32_t( GlInvalidIndex );
+			uiGlName = uint32_t( GlInvalidIndex );
 			break;
 		}
 
-		if ( l_uiGlName != GlInvalidIndex )
+		if ( uiGlName != GlInvalidIndex )
 		{
-			GetOpenGl().FramebufferRenderbuffer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, GlRenderBufferMode::eDefault, l_uiGlName );
-			m_glStatus = GlFramebufferStatus( GetOpenGl().CheckFramebufferStatus( GlFrameBufferMode::eDefault ) );
+			getOpenGl().FramebufferRenderbuffer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, GlRenderBufferMode::eDefault, uiGlName );
+			m_glStatus = GlFramebufferStatus( getOpenGl().CheckFramebufferStatus( GlFrameBufferMode::eDefault ) );
+			REQUIRE( m_glStatus == GlFramebufferStatus::eComplete );
 
 			if ( m_glStatus != GlFramebufferStatus::eUnsupported )
 			{
@@ -64,21 +77,45 @@ namespace GlRender
 		}
 	}
 
-	void GlRenderBufferAttachment::DoDetach()
+	void GlRenderBufferAttachment::doDetach()
 	{
-		if ( GetOpenGl().HasFbo() )
+		if ( getOpenGl().hasFbo() )
 		{
 			if ( m_glStatus != GlFramebufferStatus::eUnsupported )
 			{
-				GetOpenGl().FramebufferRenderbuffer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, GlRenderBufferMode::eDefault, 0 );
+				getOpenGl().FramebufferRenderbuffer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, GlRenderBufferMode::eDefault, 0 );
 			}
 
 			m_glAttachmentPoint = GlAttachmentPoint::eNone;
 		}
 	}
 
-	void GlRenderBufferAttachment::DoClear( BufferComponent p_component )const
+	void GlRenderBufferAttachment::doClear( RgbaColour const & p_colour )const
 	{
-		GetOpenGl().Clear( GetOpenGl().GetComponents( p_component ) );
+		getOpenGl().ClearBuffer( GlComponent::eColour
+			, getAttachmentIndex()
+			, p_colour.constPtr() );
+	}
+
+	void GlRenderBufferAttachment::doClear( float p_depth )const
+	{
+		getOpenGl().ClearBuffer( GlComponent::eDepth
+			, getAttachmentIndex()
+			, &p_depth );
+	}
+
+	void GlRenderBufferAttachment::doClear( int p_stencil )const
+	{
+		getOpenGl().ClearBuffer( GlComponent::eStencil
+			, getAttachmentIndex()
+			, &p_stencil );
+	}
+
+	void GlRenderBufferAttachment::doClear( float p_depth, int p_stencil )const
+	{
+		getOpenGl().ClearBuffer( GlComponent::eDepthStencil
+			, getAttachmentIndex()
+			, p_depth
+			, p_stencil );
 	}
 }

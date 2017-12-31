@@ -1,6 +1,6 @@
 #include "DynamicLibrary.hpp"
 
-namespace Castor
+namespace castor
 {
 	DynamicLibrary::DynamicLibrary()throw()
 		: m_pLibrary( nullptr )
@@ -14,7 +14,7 @@ namespace Castor
 	{
 		if ( p_lib.m_pLibrary )
 		{
-			Open( p_lib.m_pathLibrary );
+			open( p_lib.m_pathLibrary );
 		}
 	}
 
@@ -28,16 +28,16 @@ namespace Castor
 
 	DynamicLibrary::~DynamicLibrary()throw()
 	{
-		DoClose();
+		doClose();
 	}
 
 	DynamicLibrary & DynamicLibrary::operator =( DynamicLibrary const & p_lib )
 	{
-		DoClose();
+		doClose();
 
 		if ( p_lib.m_pLibrary )
 		{
-			Open( p_lib.m_pathLibrary );
+			open( p_lib.m_pathLibrary );
 		}
 
 		return *this;
@@ -56,13 +56,13 @@ namespace Castor
 		return *this;
 	}
 
-	bool DynamicLibrary::Open( xchar const * p_name )throw()
+	bool DynamicLibrary::open( xchar const * p_name )throw()
 	{
-		return Open( Path( p_name ) );
+		return open( Path( p_name ) );
 	}
 
-	bool DynamicLibrary::Open( String const & p_name )throw()
+	bool DynamicLibrary::open( String const & p_name )throw()
 	{
-		return Open( Path( p_name ) );
+		return open( Path( p_name ) );
 	}
 }

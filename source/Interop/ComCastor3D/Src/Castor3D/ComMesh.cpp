@@ -3,7 +3,7 @@
 
 namespace CastorCom
 {
-	static const Castor::String ERROR_UNINITIALISED = cuT( "The mesh must be initialised" );
+	static const castor::String ERROR_UNINITIALISED = cuT( "The mesh must be initialised" );
 
 	CMesh::CMesh()
 	{
@@ -25,19 +25,19 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CSubmesh * >( *pVal )->SetInternal( m_internal->GetSubmesh( val ) );
+					static_cast< CSubmesh * >( *pVal )->setInternal( m_internal->getSubmesh( val ) );
 				}
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IMesh,						// This is the GUID of component throwing error
+					 IID_IMesh,						// This is the GUID of PixelComponents throwing error
 					 cuT( "GetSubmesh" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
@@ -55,19 +55,19 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CSubmesh * >( *pVal )->SetInternal( m_internal->CreateSubmesh() );
+					static_cast< CSubmesh * >( *pVal )->setInternal( m_internal->createSubmesh() );
 				}
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IMesh,						// This is the GUID of component throwing error
+					 IID_IMesh,						// This is the GUID of PixelComponents throwing error
 					 cuT( "CreateSubmesh" ),		// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;
@@ -79,18 +79,18 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->DeleteSubmesh( static_cast< CSubmesh * >( val )->GetInternal() );
+			m_internal->deleteSubmesh( static_cast< CSubmesh * >( val )->getInternal() );
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError(
+			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
-					 IID_IMesh,						// This is the GUID of component throwing error
+					 IID_IMesh,						// This is the GUID of PixelComponents throwing error
 					 cuT( "DeleteSubmesh" ),		// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
-					 NULL );
+					 nullptr );
 		}
 
 		return hr;

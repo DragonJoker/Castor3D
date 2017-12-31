@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CASTOR_COLLECTION_H___
 #define ___CASTOR_COLLECTION_H___
@@ -29,7 +10,7 @@ SOFTWARE.
 #include "NonCopyable.hpp"
 #include "Exception/Assertion.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -44,14 +25,14 @@ namespace Castor
 	*/
 	template< typename TObj, typename TKey >
 	class Collection
-		: public Castor::NonCopyable
+		: public castor::NonCopyable
 	{
 	public:
 		DECLARE_SMART_PTR( TObj );
 		DECLARE_TPL_MAP( TKey, TObjSPtr, TObjPtr );
 		typedef typename TObjPtrMap::value_type value_type;
 		//!\~english Typedef over the key param type	\~french Typedef sur le type de la clef en paramètre de fonction
-		typedef typename call_traits< TKey >::const_param_type key_param_type;
+		typedef typename CallTraits< TKey >::const_param_type key_param_type;
 
 	private:
 		struct Search
@@ -155,7 +136,7 @@ namespace Castor
 		 *\brief		Gives the collected objects count
 		 *\return		The count
 		 *\~french
-		 *\brief		Donne le nombre d'objets de la collection
+		 *\brief		donne le nombre d'objets de la collection
 		 *\return		Le compte
 		 */
 		inline std::size_t size()const;
@@ -202,7 +183,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Initialise la dernière rechercher (clef vide, résultat invalide).
 		 */
-		void do_init_last()const;
+		void doInitLast()const;
 		/**
 		 *\~english
 		 *\brief		Updates the last search, performing the lookup in the map.
@@ -211,7 +192,7 @@ namespace Castor
 		 *\brief		Met à jour la dernière recherche, en effectuant la recherche dans la map.
 		 *\param[in]	p_key	La clef à tester.
 		 */
-		inline void do_update_last( key_param_type p_key )const;
+		inline void doUpdateLast( key_param_type p_key )const;
 
 	private:
 		TObjPtrMap m_objects;

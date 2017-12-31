@@ -2,9 +2,9 @@
 
 #include "ParticleSystem.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	CpuParticleSystem::CpuParticleSystem( ParticleSystem & p_parent )
 		: ParticleSystemImpl{ ParticleSystemImpl::Type::eCpu, p_parent }
@@ -15,25 +15,25 @@ namespace Castor3D
 	{
 	}
 
-	bool CpuParticleSystem::Initialise()
+	bool CpuParticleSystem::initialise()
 	{
-		m_particles.reserve( m_parent.GetMaxParticlesCount() );
-		auto & l_defaultValues = m_parent.GetDefaultValues();
+		m_particles.reserve( m_parent.getMaxParticlesCount() );
+		auto & defaultValues = m_parent.getDefaultValues();
 
-		for ( auto i = 0u; i < m_parent.GetMaxParticlesCount(); ++i )
+		for ( auto i = 0u; i < m_parent.getMaxParticlesCount(); ++i )
 		{
-			m_particles.emplace_back( m_inputs, l_defaultValues );
+			m_particles.emplace_back( m_inputs, defaultValues );
 		}
 
 		return true;
 	}
 
-	void CpuParticleSystem::Cleanup()
+	void CpuParticleSystem::cleanup()
 	{
 		m_particles.clear();
 	}
 
-	void CpuParticleSystem::AddParticleVariable( Castor::String const & p_name, ElementType p_type, Castor::String const & p_defaultValue )
+	void CpuParticleSystem::addParticleVariable( castor::String const & p_name, ElementType p_type, castor::String const & p_defaultValue )
 	{
 		m_inputs.push_back( BufferElementDeclaration{ p_name, 0u, p_type, m_inputs.stride() } );
 	}

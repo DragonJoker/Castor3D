@@ -2,14 +2,14 @@
 
 #include <Engine.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace Testing
 {
-	GlTestCase::GlTestCase( std::string const & p_name, Castor3D::Engine & p_engine )
+	GlTestCase::GlTestCase( std::string const & p_name, castor3d::Engine & engine )
 		: TestCase{ p_name }
-		, m_engine{ p_engine }
+		, m_engine{ engine }
 	{
 	}
 

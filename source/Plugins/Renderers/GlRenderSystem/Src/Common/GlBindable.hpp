@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___GL_BINDABLE_H___
 #define ___GL_BINDABLE_H___
@@ -100,34 +81,34 @@ namespace GlRender
 		@return
 			false if not created successfully
 		*/
-		inline bool Create( bool p_prebind = true )
+		inline bool create( bool p_prebind = true )
 		{
-			bool l_return = IsValid();
+			bool result = isValid();
 
-			if ( !l_return )
+			if ( !result )
 			{
-				l_return = ObjectType::DoCreate();
+				result = ObjectType::doCreate();
 
-				if ( l_return && p_prebind )
+				if ( result && p_prebind )
 				{
-					if ( l_return )
+					if ( result )
 					{
-						Bind();
-						Unbind();
+						bind();
+						unbind();
 					}
 
-					l_return = IsValid() && Validate();
+					result = isValid() && validate();
 
-					if ( !l_return )
+					if ( !result )
 					{
-						ObjectType::DoDestroy();
+						ObjectType::doDestroy();
 					}
 				}
 			}
 
-			if ( l_return )
+			if ( result )
 			{
-				glTrack( GetOpenGl(), GetGlTypeName(), this );
+				glTrack( getOpenGl(), getGlTypeName(), this );
 
 #if !defined( NDEBUG )
 
@@ -136,33 +117,33 @@ namespace GlRender
 #endif
 			}
 
-			return l_return;
+			return result;
 		}
 
 		/** Binds the object on GPU
 		@return
 			false if not bound successfully
 		*/
-		inline void Bind()const
+		inline void bind()const
 		{
-			REQUIRE( IsValid() );
-			m_binder( GetGlName() );
+			REQUIRE( isValid() );
+			m_binder( getGlName() );
 		}
 
 		/** Unbinds the object on GPU
 		*/
-		inline void Unbind()const
+		inline void unbind()const
 		{
 			m_unbinder( 0u );
 		}
 
 	public:
-		using ObjectType::Destroy;
-		using ObjectType::IsValid;
-		using ObjectType::GetGlName;
-		using ObjectType::Validate;
-		using ObjectType::GetGlTypeName;
-		using Holder::GetOpenGl;
+		using ObjectType::destroy;
+		using ObjectType::isValid;
+		using ObjectType::getGlName;
+		using ObjectType::validate;
+		using ObjectType::getGlTypeName;
+		using Holder::getOpenGl;
 
 	private:
 		//! The binding function

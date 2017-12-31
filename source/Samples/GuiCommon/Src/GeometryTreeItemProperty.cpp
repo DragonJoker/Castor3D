@@ -6,8 +6,8 @@
 #include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GuiCommon
 {
@@ -16,8 +16,8 @@ namespace GuiCommon
 		static wxString PROPERTY_CATEGORY_GEOMETRY = _( "Geometry: " );
 	}
 
-	GeometryTreeItemProperty::GeometryTreeItemProperty( bool p_editable, Castor3D::Geometry & p_geometry )
-		: TreeItemProperty( p_geometry.GetScene()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_GEOMETRY )
+	GeometryTreeItemProperty::GeometryTreeItemProperty( bool p_editable, castor3d::Geometry & p_geometry )
+		: TreeItemProperty( p_geometry.getScene()->getEngine(), p_editable, ePROPERTY_DATA_TYPE_GEOMETRY )
 		, m_geometry( p_geometry )
 	{
 		PROPERTY_CATEGORY_GEOMETRY = _( "Geometry: " );
@@ -29,16 +29,16 @@ namespace GuiCommon
 	{
 	}
 
-	void GeometryTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void GeometryTreeItemProperty::doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
-		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_GEOMETRY + wxString( m_geometry.GetName() ) ) );
+		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_GEOMETRY + wxString( m_geometry.getName() ) ) );
 	}
 
-	void GeometryTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
+	void GeometryTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
 	{
-		wxPGProperty * l_property = p_event.GetProperty();
+		wxPGProperty * property = p_event.GetProperty();
 
-		if ( l_property )
+		if ( property )
 		{
 		}
 	}

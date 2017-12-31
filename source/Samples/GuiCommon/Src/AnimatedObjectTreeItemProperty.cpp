@@ -5,8 +5,8 @@
 
 #include <wx/propgrid/advprops.h>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GuiCommon
 {
@@ -15,8 +15,8 @@ namespace GuiCommon
 		static wxString PROPERTY_CATEGORY_ANIMATED_OBJECT = _( "Animated Object: " );
 	}
 
-	AnimatedObjectTreeItemProperty::AnimatedObjectTreeItemProperty( Engine * p_engine, bool p_editable, AnimatedObjectSPtr p_object )
-		: TreeItemProperty( p_engine, p_editable, ePROPERTY_DATA_TYPE_ANIMATED_OBJECT )
+	AnimatedObjectTreeItemProperty::AnimatedObjectTreeItemProperty( Engine * engine, bool p_editable, AnimatedObjectSPtr p_object )
+		: TreeItemProperty( engine, p_editable, ePROPERTY_DATA_TYPE_ANIMATED_OBJECT )
 		, m_object( p_object )
 	{
 		PROPERTY_CATEGORY_ANIMATED_OBJECT = _( "Animated Object: " );
@@ -28,21 +28,21 @@ namespace GuiCommon
 	{
 	}
 
-	void AnimatedObjectTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void AnimatedObjectTreeItemProperty::doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
-		auto l_object = GetObject();
+		auto object = getObject();
 
-		if ( l_object )
+		if ( object )
 		{
 		}
 	}
 
-	void AnimatedObjectTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
+	void AnimatedObjectTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
 	{
-		auto l_object = GetObject();
-		wxPGProperty * l_property = p_event.GetProperty();
+		auto object = getObject();
+		wxPGProperty * property = p_event.GetProperty();
 
-		if ( l_property && l_object )
+		if ( property && object )
 		{
 		}
 	}

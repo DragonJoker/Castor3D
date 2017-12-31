@@ -15,7 +15,7 @@ namespace castortd
 		~MainFrame();
 
 	private:
-		void DoLoadScene();
+		void doLoadScene();
 
 		DECLARE_EVENT_TABLE()
 		void OnPaint( wxPaintEvent  & p_event );

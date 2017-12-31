@@ -1,31 +1,12 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_SKELETON_ANIMATION_INSTANCE_NODE___
 #define ___C3D_SKELETON_ANIMATION_INSTANCE_NODE___
 
 #include "SkeletonAnimationInstanceObject.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -44,17 +25,31 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
+		 *name Copy / Move.
+		 *\~french
+		 *name Copie / Déplacement.
+		 **/
+		/**@{*/
+		C3D_API SkeletonAnimationInstanceNode( SkeletonAnimationInstanceNode && rhs ) = default;
+		C3D_API SkeletonAnimationInstanceNode & operator=( SkeletonAnimationInstanceNode && rhs ) = default;
+		C3D_API SkeletonAnimationInstanceNode( SkeletonAnimationInstanceNode const & rhs ) = delete;
+		C3D_API SkeletonAnimationInstanceNode & operator=( SkeletonAnimationInstanceNode const & rhs ) = delete;
+		/**@}*/
+		/**
+		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_animationInstance	The parent skeleton animation instance.
-		 *\param[in]	p_animationObject	The animation object.
-		 *\param[out]	p_allObjects		Receives this object's children.
+		 *\param[in]	animationInstance	The parent skeleton animation instance.
+		 *\param[in]	animationObject		The animation object.
+		 *\param[out]	allObjects			Receives this object's children.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_animationInstance	L'instance d'animation de squelette parent.
-		 *\param[in]	p_animationObject	L'animation d'objet.
-		 *\param[out]	p_allObjects		Reçoit les enfants de cet objet.
+		 *\param[in]	animationInstance	L'instance d'animation de squelette parent.
+		 *\param[in]	animationObject		L'animation d'objet.
+		 *\param[out]	allObjects			Reçoit les enfants de cet objet.
 		 */
-		C3D_API SkeletonAnimationInstanceNode( SkeletonAnimationInstance & p_animationInstance, SkeletonAnimationNode & p_animationObject, SkeletonAnimationInstanceObjectPtrStrMap & p_allObjects );
+		C3D_API SkeletonAnimationInstanceNode( SkeletonAnimationInstance & animationInstance
+			, SkeletonAnimationNode & animationObject
+			, SkeletonAnimationInstanceObjectPtrArray & allObjects );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -62,40 +57,12 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		C3D_API ~SkeletonAnimationInstanceNode();
-		/**
-		 *\~english
-		 *\brief		Move constructor.
-		 *\~french
-		 *\brief		Constructeur par déplacement.
-		 */
-		C3D_API SkeletonAnimationInstanceNode( SkeletonAnimationInstanceNode && p_rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Move assignment operator.
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement.
-		 */
-		C3D_API SkeletonAnimationInstanceNode & operator=( SkeletonAnimationInstanceNode && p_rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Copy constructor.
-		 *\~french
-		 *\brief		Constructeur par copie.
-		 */
-		C3D_API SkeletonAnimationInstanceNode( SkeletonAnimationInstanceNode const & p_rhs ) = delete;
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator.
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie.
-		 */
-		C3D_API SkeletonAnimationInstanceNode & operator=( SkeletonAnimationInstanceNode const & p_rhs ) = delete;
 
 	private:
 		/**
-		 *\copydoc		Castor3D::SkeletonAnimatedObject::DoApply
+		 *\copydoc		castor3d::SkeletonAnimatedObject::doApply
 		 */
-		void DoApply()override;
+		void doApply()override;
 	};
 }
 

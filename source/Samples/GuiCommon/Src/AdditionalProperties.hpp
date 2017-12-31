@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___GUICOMMON_ADDITIONAL_PROPERTIES_H___
 #define ___GUICOMMON_ADDITIONAL_PROPERTIES_H___
@@ -88,7 +69,7 @@ SOFTWARE.
 	const char* classname##_VariantType = #classname; \
 	class classname##VariantData\
 		: public wxVariantData\
-		, public Castor::Aligned< alignment >\
+		, public castor::Aligned< alignment >\
 	{ \
 	public:\
 		classname##VariantData() {} \
@@ -158,8 +139,8 @@ SOFTWARE.
 
 namespace GuiCommon
 {
-	template< typename T > T GetValue( wxVariant const & p_variant );
-	template< typename T > wxVariant SetValue( T const & p_value );
+	template< typename T > T getValue( wxVariant const & p_variant );
+	template< typename T > wxVariant setValue( T const & p_value );
 
 	typedef bool ( wxEvtHandler::*ButtonEventMethod )( wxPGProperty * );
 
@@ -195,10 +176,10 @@ namespace GuiCommon
 	template< typename PropertyType >
 	PropertyType * CreateProperty( wxString const & p_name, wxVariant && p_value, wxString const & p_help )
 	{
-		auto l_return = new PropertyType( p_name );
-		l_return->SetValue( p_value );
-		l_return->SetHelpString( p_help );
-		return l_return;
+		auto result = new PropertyType( p_name );
+		result->SetValue( p_value );
+		result->SetHelpString( p_help );
+		return result;
 	}
 }
 

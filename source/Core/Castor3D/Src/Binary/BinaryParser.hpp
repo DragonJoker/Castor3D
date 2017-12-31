@@ -1,31 +1,14 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_BINARY_PARSER_H___
 #define ___C3D_BINARY_PARSER_H___
 
 #include "ChunkParser.hpp"
 
-namespace Castor3D
+#include "Miscellaneous/Version.hpp"
+
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -52,40 +35,40 @@ namespace Castor3D
 		 *\param[in]	p_file	Le fichier qui contient le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		inline bool Parse( TParsed & p_obj, Castor::BinaryFile & p_file )
+		inline bool parse( TParsed & p_obj, castor::BinaryFile & p_file )
 		{
-			BinaryChunk l_header;
-			bool l_return = l_header.Read( p_file );
+			BinaryChunk header;
+			bool result = header.read( p_file );
 
-			if ( l_header.GetChunkType() != ChunkType::eCmshFile )
+			if ( header.getChunkType() != ChunkType::eCmshFile )
 			{
-				Castor::Logger::LogError( cuT( "Not a valid CMSH file." ) );
-				l_return = false;
+				castor::Logger::logError( cuT( "Not a valid CMSH file." ) );
+				result = false;
 			}
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = DoParseHeader( l_header );
+				result = doParseHeader( header );
 			}
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = l_header.CheckAvailable( 1 );
+				result = header.checkAvailable( 1 );
 			}
 
-			BinaryChunk l_chunk;
+			BinaryChunk chunk;
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = l_header.GetSubChunk( l_chunk );
+				result = header.getSubChunk( chunk );
 			}
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = Parse( p_obj, l_chunk );
+				result = parse( p_obj, chunk );
 			}
 
-			return l_return;
+			return result;
 		}
 		/**
 		 *\~english
@@ -99,31 +82,119 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		inline bool Parse( TParsed & p_obj, BinaryChunk & p_chunk )
+		inline bool parse( TParsed & p_obj, BinaryChunk & p_chunk )
 		{
-			bool l_return = true;
+			bool result = true;
 
-			if ( p_chunk.GetChunkType() == ChunkTyper< TParsed >::Value )
+			if ( p_chunk.getChunkType() == ChunkTyper< TParsed >::Value )
 			{
 				m_chunk = &p_chunk;
 			}
 			else
 			{
-				Castor::Logger::LogError( cuT( "Not a valid chunk for parsed type." ) );
-				l_return = false;
+				castor::Logger::logError( cuT( "Not a valid chunk for parsed type." ) );
+				result = false;
 			}
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = DoParse( p_obj );
+				result = doParse_v1_1( p_obj );
 
-				if ( !l_return )
+				if ( result )
 				{
-					m_chunk->EndParse();
+					m_chunk->resetParse();
+					result = doParse_v1_2( p_obj );
+				}
+
+				if ( result )
+				{
+					m_chunk->resetParse();
+					result = doParse( p_obj );
+				}
+
+				if ( !result )
+				{
+					m_chunk->endParse();
 				}
 			}
 
-			return l_return;
+			return result;
+		}
+		/**
+		 *\~english
+		 *\brief		From chunk reader function
+		 *\param[out]	p_obj	The object to read
+		 *\param[in]	p_chunk	The chunk
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Fonction de lecture à partir d'un chunk
+		 *\param[out]	p_obj	L'objet à lire
+		 *\param[in]	p_chunk	Le chunk
+		 *\return		\p false si une erreur quelconque est arrivée
+		 */
+		inline bool parse_v1_1( TParsed & p_obj, BinaryChunk & p_chunk )
+		{
+			bool result = true;
+
+			if ( p_chunk.getChunkType() == ChunkTyper< TParsed >::Value )
+			{
+				m_chunk = &p_chunk;
+			}
+			else
+			{
+				castor::Logger::logError( cuT( "Not a valid chunk for parsed type." ) );
+				result = false;
+			}
+
+			if ( result )
+			{
+				result = doParse_v1_1( p_obj );
+
+				if ( !result )
+				{
+					m_chunk->endParse();
+				}
+			}
+
+			return result;
+		}
+		/**
+		 *\~english
+		 *\brief		From chunk reader function
+		 *\param[out]	p_obj	The object to read
+		 *\param[in]	p_chunk	The chunk
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Fonction de lecture à partir d'un chunk
+		 *\param[out]	p_obj	L'objet à lire
+		 *\param[in]	p_chunk	Le chunk
+		 *\return		\p false si une erreur quelconque est arrivée
+		 */
+		inline bool parse_v1_2( TParsed & p_obj, BinaryChunk & p_chunk )
+		{
+			bool result = true;
+
+			if ( p_chunk.getChunkType() == ChunkTyper< TParsed >::Value )
+			{
+				m_chunk = &p_chunk;
+			}
+			else
+			{
+				castor::Logger::logError( cuT( "Not a valid chunk for parsed type." ) );
+				result = false;
+			}
+
+			if ( result )
+			{
+				result = doParse_v1_2( p_obj );
+
+				if ( !result )
+				{
+					m_chunk->endParse();
+				}
+			}
+
+			return result;
 		}
 
 	protected:
@@ -137,43 +208,64 @@ namespace Castor3D
 		 *\param[in,out]	p_chunk	Le chunk.
 		 *\return			\p false si une erreur quelconque est arrivée.
 		 */
-		inline bool DoParseHeader( BinaryChunk & p_chunk )const
+		inline bool doParseHeader( BinaryChunk & p_chunk )const
 		{
-			BinaryChunk l_chunk;
-			bool l_return = p_chunk.GetSubChunk( l_chunk );
+			BinaryChunk chunk;
+			bool result = p_chunk.getSubChunk( chunk );
 
-			if ( l_chunk.GetChunkType() != ChunkType::eCmshHeader )
+			if ( chunk.getChunkType() != ChunkType::eCmshHeader )
 			{
-				Castor::Logger::LogError( cuT( "Missing header chunk." ) );
-				l_return = false;
+				castor::Logger::logError( cuT( "Missing header chunk." ) );
+				result = false;
 			}
 
-			Castor::String l_name;
-			uint32_t l_version{ 0 };
+			castor::String name;
+			uint32_t version{ 0 };
 
-			while ( l_return && l_chunk.CheckAvailable( 1 ) )
+			while ( result && chunk.checkAvailable( 1 ) )
 			{
-				BinaryChunk l_subchunk;
-				l_return = l_chunk.GetSubChunk( l_subchunk );
+				BinaryChunk subchunk;
+				result = chunk.getSubChunk( subchunk );
 
-				switch ( l_subchunk.GetChunkType() )
+				switch ( subchunk.getChunkType() )
 				{
 				case ChunkType::eName:
-					l_return = DoParseChunk( l_name, l_subchunk );
+					result = doParseChunk( name, subchunk );
 					break;
 
 				case ChunkType::eCmshVersion:
-					l_return = DoParseChunk( l_version, l_subchunk );
+					result = doParseChunk( version, subchunk );
+
+					if ( result )
+					{
+					  Version fileVersion{ int( CMSH_VERSION_MAJOR( version ) )
+							, int( CMSH_VERSION_MINOR( version ) )
+							, int( CMSH_VERSION_REVISION( version ) ) };
+						version = CMSH_VERSION;
+						Version latestVersion{ int( CMSH_VERSION_MAJOR( version ) )
+							, int( CMSH_VERSION_MINOR( version ) )
+							, int( CMSH_VERSION_REVISION( version ) ) };
+
+						if ( fileVersion < latestVersion )
+						{
+							castor::Logger::logWarning( castor::StringStream{} << cuT( "This file is using version " )
+								<< fileVersion
+								<< cuT( ", consider upgrading it to version " )
+								<< latestVersion
+								<< cuT( "." ) );
+						}
+					}
+
 					break;
 				}
 			}
 
-			if ( !l_return )
+			if ( !result )
 			{
-				p_chunk.EndParse();
+				p_chunk.endParse();
 			}
 
-			return l_return;
+			return result;
 		}
 		/**
 		 *\~english
@@ -190,9 +282,9 @@ namespace Castor3D
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T >
-		inline bool DoParseChunk( T * p_values, size_t p_count, BinaryChunk & p_chunk )const
+		inline bool doParseChunk( T * p_values, size_t p_count, BinaryChunk & p_chunk )const
 		{
-			return ChunkParser< T >::Parse( p_values, p_count, p_chunk );
+			return ChunkParser< T >::parse( p_values, p_count, p_chunk );
 		}
 		/**
 		 *\~english
@@ -207,9 +299,9 @@ namespace Castor3D
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T, size_t Count >
-		inline bool DoParseChunk( T( &p_values )[Count], BinaryChunk & p_chunk )const
+		inline bool doParseChunk( T( &p_values )[Count], BinaryChunk & p_chunk )const
 		{
-			return ChunkParser< T >::Parse( p_values, Count, p_chunk );
+			return ChunkParser< T >::parse( p_values, Count, p_chunk );
 		}
 		/**
 		 *\~english
@@ -224,9 +316,9 @@ namespace Castor3D
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T, size_t Count >
-		inline bool DoParseChunk( std::array< T, Count > & p_values, BinaryChunk & p_chunk )const
+		inline bool doParseChunk( std::array< T, Count > & p_values, BinaryChunk & p_chunk )const
 		{
-			return ChunkParser< T >::Parse( p_values.data(), Count, p_chunk );
+			return ChunkParser< T >::parse( p_values.data(), Count, p_chunk );
 		}
 		/**
 		 *\~english
@@ -241,9 +333,9 @@ namespace Castor3D
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T >
-		inline bool DoParseChunk( std::vector< T > & p_values, BinaryChunk & p_chunk )const
+		inline bool doParseChunk( std::vector< T > & p_values, BinaryChunk & p_chunk )const
 		{
-			return ChunkParser< T >::Parse( p_values.data(), p_values.size(), p_chunk );
+			return ChunkParser< T >::parse( p_values.data(), p_values.size(), p_chunk );
 		}
 		/**
 		 *\~english
@@ -258,9 +350,9 @@ namespace Castor3D
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T >
-		inline bool DoParseChunk( T & p_value, BinaryChunk & p_chunk )const
+		inline bool doParseChunk( T & p_value, BinaryChunk & p_chunk )const
 		{
-			return ChunkParser< T >::Parse( p_value, p_chunk );
+			return ChunkParser< T >::parse( p_value, p_chunk );
 		}
 		/**
 		 *\~english
@@ -272,17 +364,17 @@ namespace Castor3D
 		 *\param[out]	p_chunk	Reçoit le sous-chunk.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		inline bool DoGetSubChunk( BinaryChunk & p_chunk )
+		inline bool doGetSubChunk( BinaryChunk & p_chunk )
 		{
 			REQUIRE( m_chunk );
-			bool l_return = m_chunk->CheckAvailable( 1 );
+			bool result = m_chunk->checkAvailable( 1 );
 
-			if ( l_return )
+			if ( result )
 			{
-				l_return = m_chunk->GetSubChunk( p_chunk );
+				result = m_chunk->getSubChunk( p_chunk );
 			}
 
-			return l_return;
+			return result;
 		}
 
 	private:
@@ -298,7 +390,35 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		C3D_API virtual bool DoParse( TParsed & p_obj ) = 0;
+		C3D_API virtual bool doParse( TParsed & p_obj ) = 0;
+		/**
+		 *\~english
+		 *\brief		Chunk reader function from a chunk of version 1.1.
+		 *\param[out]	p_obj	The object to read
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Fonction de lecture à partir d'un chunk en version 1.1.
+		 *\param[out]	p_obj	L'objet à lire
+		 *\return		\p false si une erreur quelconque est arrivée
+		 */
+		C3D_API virtual bool doParse_v1_1( TParsed & p_obj )
+		{
+			return true;
+		}
+		/**
+		 *\~english
+		 *\brief		Chunk reader function from a chunk of version 1.1.
+		 *\param[out]	p_obj	The object to read
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Fonction de lecture à partir d'un chunk en version 1.1.
+		 *\param[out]	p_obj	L'objet à lire
+		 *\return		\p false si une erreur quelconque est arrivée
+		 */
+		C3D_API virtual bool doParse_v1_2( TParsed & p_obj )
+		{
+			return true;
+		}
 
 	protected:
 		//!\~english	The writer's chunk.

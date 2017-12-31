@@ -1,4 +1,4 @@
-#include "Config/PlatformConfig.hpp"
+﻿#include "Config/PlatformConfig.hpp"
 
 #if defined( CASTOR_PLATFORM_ANDROID )
 
@@ -8,84 +8,60 @@
 #pragma GCC diagnostic ignored "-Wpedantic"
 #include <EGL/egl.h>
 
-namespace Castor
+namespace castor
 {
 	namespace System
 	{
-		bool GetScreenSize( uint32_t p_screen, Castor::Size & p_size )
+		bool getScreenSize( uint32_t p_screen, castor::Size & p_size )
 		{
-			bool l_result = false;
-			auto l_display = eglGetDisplay( EGLNativeDisplayType( p_screen ) );
+			bool result = false;
+			auto display = eglgetDisplay( EGLNativeDisplayType( p_screen ) );
 
-			if ( !l_display )
+			if ( !display )
 			{
-				Logger::LogError( "Failed to open display." );
+				Logger::logError( "Failed to open display." );
 			}
 			else
 			{
-				auto l_surface = eglGetCurrentSurface( EGL_READ );
+				auto surface = eglgetCurrentSurface( EGL_READ );
 
-				if ( !l_surface )
+				if ( !surface )
 				{
-					Logger::LogError( "Failed to open display's surface." );
+					Logger::logError( "Failed to open display's surface." );
 				}
 				else
 				{
-					int l_width;
-					int l_height;
-					eglQuerySurface( l_display, l_surface, EGL_WIDTH, &l_width );
-					eglQuerySurface( l_display, l_surface, EGL_HEIGHT, &l_height );
-					p_size.set( l_width, l_height );
-					l_result = true;
+					int width;
+					int height;
+					eglQuerySurface( display, surface, EGL_WIDTH, &width );
+					eglQuerySurface( display, surface, EGL_HEIGHT, &height );
+					p_size.set( width, height );
+					result = true;
 				}
 			}
 
-			return l_result;
+			return result;
 		}
 
-		String GetLastErrorText()
+		String getLastErrorText()
 		{
-			String l_strReturn;
-			int l_error = errno;
-			char * l_szError = nullptr;
+			String strReturn;
+			int error = errno;
+			char * szError = nullptr;
 
-			if ( l_error != 0 && ( l_szError = strerror( l_error ) ) != nullptr )
+			if ( error != 0 && ( szError = strerror( error ) ) != nullptr )
 			{
-				l_strReturn = string::to_string( l_error ) + cuT( " (" ) + string::string_cast< xchar >( l_szError ) + cuT( ")" );
-				string::replace( l_strReturn, cuT( "\n" ), cuT( "" ) );
+				strReturn = string::toString( error ) + cuT( " (" ) + string::stringCast< xchar >( szError ) + cuT( ")" );
+				string::replace( strReturn, cuT( "\n" ), cuT( "" ) );
 			}
 
-			return l_strReturn;
-		}
-
-		uint8_t GetCPUCount()
-		{
-			struct ProcessFile
-			{
-				~ProcessFile()
-				{
-					pclose( m_file );
-				}
-				operator FILE * ()const
-				{
-					return m_file;
-				}
-				FILE * m_file;
-			};
-
-			char l_res[128];
-			{
-				ProcessFile l_file{ popen( "/bin/cat /proc/cpuinfo | grep -c '^processor'", "r" ) };
-				ENSURE( fread( l_res, 1, sizeof( l_res ) - 1, l_file ) < sizeof( l_res ) );
-			}
-
-			return l_res[0];
+			return strReturn;
 		}
 	}
 
-	void Localtime( std::tm * p_tm, time_t const * p_pTime )
+	void getLocaltime( std::tm * p_tm, time_t const * p_pTime )
 	{
-		p_tm = localtime( p_pTime );
+		*p_tm = *localtime( p_pTime );
 	}
 }
 

@@ -6,8 +6,8 @@
 #include <Render/RenderWindow.hpp>
 #include <Log/Logger.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace CastorViewer
 {
@@ -21,13 +21,13 @@ namespace CastorViewer
 	{
 	}
 
-	bool KeyboardEvent::Apply()
+	bool KeyboardEvent::apply()
 	{
-		RenderWindowSPtr l_pWindow = m_window.lock();
+		RenderWindowSPtr pWindow = m_window.lock();
 
-		if ( l_pWindow )
+		if ( pWindow )
 		{
-			l_pWindow->UpdateFullScreen( !l_pWindow->IsFullscreen() );
+			pWindow->updateFullScreen( !pWindow->isFullscreen() );
 		}
 
 		return true;

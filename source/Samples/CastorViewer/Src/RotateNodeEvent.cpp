@@ -3,8 +3,8 @@
 #include <Scene/SceneNode.hpp>
 #include <Math/Angle.hpp>
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace CastorViewer
 {
@@ -17,18 +17,18 @@ namespace CastorViewer
 	{
 	}
 
-	bool RotateNodeEvent::Apply()
+	bool RotateNodeEvent::apply()
 	{
-		SceneNodeSPtr l_node = m_node.lock();
+		SceneNodeSPtr node = m_node.lock();
 
-		if ( l_node && ( m_dx || m_dy || m_dz ) )
+		if ( node && ( m_dx || m_dy || m_dz ) )
 		{
-			Quaternion l_x{ Point3r{ 1.0, 0.0, 0.0 }, Angle::from_degrees( m_dx ) };
-			Quaternion l_y{ Point3r{ 0.0, 1.0, 0.0 }, Angle::from_degrees( m_dy ) };
-			Quaternion l_z{ Point3r{ 0.0, 0.0, 1.0 }, Angle::from_degrees( m_dz ) };
-			l_node->Rotate( l_x );
-			l_node->Rotate( l_y );
-			l_node->Rotate( l_z );
+			Quaternion x{ Quaternion::fromAxisAngle( Point3r{ 1.0, 0.0, 0.0 }, Angle::fromDegrees( m_dx ) ) };
+			Quaternion y{ Quaternion::fromAxisAngle( Point3r{ 0.0, 1.0, 0.0 }, Angle::fromDegrees( m_dy ) ) };
+			Quaternion z{ Quaternion::fromAxisAngle( Point3r{ 0.0, 0.0, 1.0 }, Angle::fromDegrees( m_dz ) ) };
+			node->rotate( x );
+			node->rotate( y );
+			node->rotate( z );
 		}
 
 		m_dx = 0;

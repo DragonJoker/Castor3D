@@ -29,7 +29,7 @@ HRESULT STDAPICALLTYPE DllGetClassObject( REFCLSID rclsid, REFIID riid, LPVOID *
 	return CastorCom::g_module.DllGetClassObject( rclsid, riid, ppv );
 }
 
-// DllRegisterServer - Adds entries to the system registry.
+// DllRegisterServer - adds entries to the system registry.
 HRESULT STDAPICALLTYPE DllRegisterServer()
 {
 	// registers object, typelib and all interfaces in typelib
@@ -44,7 +44,7 @@ HRESULT STDAPICALLTYPE DllUnregisterServer()
 	return hr;
 }
 
-// DllInstall - Adds/Removes entries to the system registry per user per machine.
+// DllInstall - adds/Removes entries to the system registry per user per machine.
 HRESULT STDAPICALLTYPE DllInstall( BOOL bInstall, LPCWSTR pszCmdLine )
 {
 	HRESULT hr = E_FAIL;

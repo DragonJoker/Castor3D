@@ -1,48 +1,24 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
-#ifndef ___C3D_RENDER_TECHNIQUE_H___
-#define ___C3D_RENDER_TECHNIQUE_H___
+#ifndef ___C3D_RenderTechnique_H___
+#define ___C3D_RenderTechnique_H___
 
 #include "HDR/ToneMapping.hpp"
+#include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Render/RenderInfo.hpp"
 #include "Texture/TextureUnit.hpp"
+#include "Technique/DepthPass.hpp"
+#include "Technique/RenderTechniqueFbo.hpp"
+#include "Technique/Opaque/DeferredRendering.hpp"
+#include "Technique/Transparent/WeightedBlendRendering.hpp"
+#include "ShadowMap/ShadowMap.hpp"
 
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
 #include <Graphics/Rectangle.hpp>
 
-#if !defined( NDEBUG )
-#	define DEBUG_BUFFERS 0
-#else
-#	define DEBUG_BUFFERS 0
-#endif
-
-#if defined( CASTOR_COMPILER_MSVC )
-#	pragma warning( push )
-#	pragma warning( disable:4503 )
-#endif
-
-namespace Castor3D
+namespace castor3d
 {
 	class RenderTechniquePass;
 	/*!
@@ -57,78 +33,33 @@ namespace Castor3D
 	\remarks	Une technique de rendu est la description d'une manière de rendre une cible de rendu
 	*/
 	class RenderTechnique
-		: public Castor::OwnedBy< Engine >
-		, public Castor::Named
+		: public castor::OwnedBy< Engine >
+		, public castor::Named
 	{
 		friend class RenderTechniquePass;
 
-	protected:
-		/*!
-		\author		Sylvain DOREMUS
-		\version	0.7.0.0
-		\date		19/12/2012
-		\~english
-		\brief		Internal struct holding a complete frame buffer.
-		\~french
-		\brief		Structure interne contenant un tampon d'image complet.
-		*/
-		struct stFRAME_BUFFER
-		{
-		public:
-			explicit stFRAME_BUFFER( RenderTechnique & p_technique );
-			bool Initialise( Castor::Size p_size );
-			void Cleanup();
-
-			//!\~english	The texture receiving the color render.
-			//!\~french		La texture recevant le rendu couleur.
-			TextureLayoutSPtr m_colourTexture;
-			//!\~english	The buffer receiving the depth render.
-			//!\~french		Le tampon recevant le rendu profondeur.
-			DepthStencilRenderBufferSPtr m_depthBuffer;
-			//!\~english	The frame buffer.
-			//!\~french		Le tampon d'image.
-			FrameBufferSPtr m_frameBuffer;
-			//!\~english	The attach between texture and main frame buffer.
-			//!\~french		L'attache entre la texture et le tampon principal.
-			TextureAttachmentSPtr m_colourAttach;
-			//!\~english	The attach between depth buffer and main frame buffer.
-			//!\~french		L'attache entre le tampon profondeur et le tampon principal.
-			RenderBufferAttachmentSPtr m_depthAttach;
-
-		private:
-			RenderTechnique & m_technique;
-		};
-
-	protected:
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_name				The technique name.
-		 *\param[in]	p_renderTarget		The render target for this technique.
-		 *\param[in]	p_renderSystem		The render system.
-		 *\param[in]	p_opaquePass		The opaque nodes pass.
-		 *\param[in]	p_transparentPass	The transparent nodes pass.
-		 *\param[in]	p_params			The technique parameters.
-		 *\param[in]	p_multisampling		The multisampling status
+		 *\param[in]	name			The technique name.
+		 *\param[in]	renderTarget	The render target for this technique.
+		 *\param[in]	renderSystem	The render system.
+		 *\param[in]	parameters		The technique parameters.
+		 *\param[in]	config			The SSAO configuration.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_name				Le nom de la technique.
-		 *\param[in]	p_renderTarget		La render target pour cette technique.
-		 *\param[in]	p_renderSystem		Le render system.
-		 *\param[in]	p_opaquePass		La passe pour les noeuds opaques.
-		 *\param[in]	p_transparentPass	La passe pour les noeuds transparents.
-		 *\param[in]	p_params			Les paramètres de la technique.
-		 *\param[in]	p_multisampling		Le statut de multiéchantillonnage.
+		 *\param[in]	name			Le nom de la technique.
+		 *\param[in]	renderTarget	La render target pour cette technique.
+		 *\param[in]	renderSystem	Le render system.
+		 *\param[in]	parameters		Les paramètres de la technique.
+		 *\param[in]	config			La configuration du SSAO.
 		 */
-		C3D_API RenderTechnique( Castor::String const & p_name
-			, RenderTarget & p_renderTarget
-			, RenderSystem & p_renderSystem
-			, std::unique_ptr< RenderTechniquePass > && p_opaquePass
-			, std::unique_ptr< RenderTechniquePass > && p_transparentPass
-			, Parameters const & p_params
-			, bool p_multisampling = false );
-
-	public:
+		C3D_API RenderTechnique( castor::String const & name
+			, RenderTarget & renderTarget
+			, RenderSystem & renderSystem
+			, Parameters const & parameters
+			, SsaoConfig const & config );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -139,57 +70,70 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
-		 *\param[in]	p_index		The base texture index.
+		 *\param[in]	index		The base texture index.
 		 *\return		\p true if ok.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
-		 *\param[in]	p_index		L'index de texture de base.
+		 *\param[in]	index		L'index de texture de base.
 		 *\return		\p true if ok.
 		 */
-		C3D_API bool Initialise( uint32_t & p_index );
+		C3D_API bool initialise( uint32_t & index );
 		/**
 		 *\~english
 		 *\brief		Cleanup function
 		 *\~french
 		 *\brief		Fonction de nettoyage
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Update function.
 		 *\remarks		Gather the render queues, for further update.
-		 *\param[out]	p_queues	Receives the render queues needed for the rendering of the frame.
+		 *\param[out]	queues	Receives the render queues needed for the rendering of the frame.
 		 *\~french
 		 *\brief		Fonction de mise à jour.
 		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
-		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
+		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API void Update( RenderQueueArray & p_queues );
+		C3D_API void update( RenderQueueArray & queues );
 		/**
 		 *\~english
 		 *\brief		Render function
-		 *\param[out]	p_info	Receives the render informations.
+		 *\param[in]	jitter		The jittering value.
+		 *\param[out]	velocity	Receives the velocity render.
+		 *\param[out]	info		Receives the render informations.
 		 *\~french
 		 *\brief		Fonction de rendu.
-		 *\param[out]	p_info	Reçoit les informations de rendu.
+		 *\param[out]	jitter		La valeur de jittering.
+		 *\param[out]	velocity	Reçoit le rendu des vélocités.
+		 *\param[out]	info		Reçoit les informations de rendu.
 		 */
-		C3D_API void Render( RenderInfo & p_info );
+		C3D_API void render( castor::Point2r const & jitter
+			, TextureUnit const & velocity
+			, RenderInfo & info );
 		/**
 		 *\~english
 		 *\brief		Writes the technique into a text file.
-		 *\param[in]	p_file	The file.
+		 *\param[in]	file	The file.
 		 *\~french
 		 *\brief		Ecrit la technique dans un fichier texte.
-		 *\param[in]	p_file	Le fichier.
+		 *\param[in]	file	Le fichier.
 		 */
-		C3D_API bool WriteInto( Castor::TextFile & p_file );
+		C3D_API bool writeInto( castor::TextFile & file );
+		/**
+		 *\~english
+		 *\brief		Displays debug dumps.
+		 *\~french
+		 *\brief		Affiche les dumps de debug.
+		 */
+		C3D_API void debugDisplay( castor::Size const & size )const;
 		/**
 		 *\~english
 		 *\return		The render area dimensions.
 		 *\~french
 		 *\return		Les dimensions de la zone de rendu.
 		 */
-		inline Castor::Size const & GetSize()const
+		inline castor::Size const & getSize()const
 		{
 			return m_size;
 		}
@@ -199,10 +143,21 @@ namespace Castor3D
 		 *\~french
 		 *\return		La texture de couleurs contenant le résultat du rendu.
 		 */
-		inline TextureLayout const & GetResult()const
+		inline TextureLayout const & getResult()const
 		{
 			REQUIRE( m_frameBuffer.m_colourTexture );
 			return *m_frameBuffer.m_colourTexture;
+		}
+		/**
+		 *\~english
+		 *\return		The depth texture holding the render's result.
+		 *\~french
+		 *\return		La texture de profondeurs contenant le résultat du rendu.
+		 */
+		inline TextureLayout const & getDepth()const
+		{
+			REQUIRE( m_frameBuffer.m_colourTexture );
+			return *m_frameBuffer.m_depthBuffer;
 		}
 		/**
 		 *\~english
@@ -210,7 +165,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La passe de rendu des noeuds opaques.
 		 */
-		inline RenderTechniquePass const & GetOpaquePass()const
+		inline RenderTechniquePass const & getOpaquePass()const
 		{
 			REQUIRE( m_opaquePass );
 			return *m_opaquePass;
@@ -221,60 +176,41 @@ namespace Castor3D
 		 *\~french
 		 *\return		La passe de rendu des noeuds transparents.
 		 */
-		inline RenderTechniquePass const & GetTransparentPass()const
+		inline RenderTechniquePass const & getTransparentPass()const
 		{
 			REQUIRE( m_transparentPass );
 			return *m_transparentPass;
 		}
+		/**
+		 *\~english
+		 *\return		\p true if the samples count is greater than 1.
+		 *\~french
+		 *\return		\p true si le nombre d'échantillons est plus grand que 1.
+		 */
+		inline bool isMultisampling()const
+		{
+			return false;
+		}
+
+	public:
+		using ShadowMapArray = std::vector< ShadowMapUPtr >;
 
 	private:
-		/**
-		 *\~english
-		 *\brief		Initialisation function
-		 *\param[in]	p_index	The base texture index
-		 *\return		\p true if ok
-		 *\~french
-		 *\brief		Fonction d'initialisation
-		 *\param[in]	p_index	L'index de texture de base
-		 *\return		\p true if ok
-		 */
-		C3D_API virtual bool DoInitialise( uint32_t & p_index ) = 0;
-		/**
-		 *\~english
-		 *\brief		Cleanup function
-		 *\~french
-		 *\brief		Fonction de nettoyage
-		 */
-		C3D_API virtual void DoCleanup() = 0;
-		/**
-		 *\~english
-		 *\brief		Renders opaque nodes.
-		 *\param[out]	p_info	Receives the render informations.
-		 *\~french
-		 *\brief		Dessine les noeuds opaques.
-		 *\param[out]	p_info	Reçoit les informations de rendu.
-		 */
-		C3D_API virtual void DoRenderOpaque( RenderInfo & p_info ) = 0;
-		/**
-		 *\~english
-		 *\brief		Renders transparent nodes.
-		 *\param[out]	p_info	Receives the render informations.
-		 *\~french
-		 *\brief		Dessine les noeuds transparents.
-		 *\param[out]	p_info	Reçoit les informations de rendu.
-		 */
-		C3D_API virtual void DoRenderTransparent( RenderInfo & p_info ) = 0;
-		/**
-		 *\~english
-		 *\brief		Writes the technique into a text file.
-		 *\param[in]	p_file	The file.
-		 *\~french
-		 *\brief		Ecrit la technique dans un fichier texte.
-		 *\param[in]	p_file	Le fichier.
-		 */
-		C3D_API virtual bool DoWriteInto( Castor::TextFile & p_file ) = 0;
+		void doInitialiseShadowMaps();
+		void doCleanupShadowMaps();
+		void doUpdateShadowMaps( RenderQueueArray & queues );
+		void doRenderShadowMaps();
+		void doRenderEnvironmentMaps();
+		void doRenderOpaque( castor::Point2r const & jitter
+			, TextureUnit const & velocity
+			, RenderInfo & info );
+		void doUpdateParticles( RenderInfo & info );
+		void doRenderTransparent( castor::Point2r const & jitter
+			, TextureUnit const & velocity
+			, RenderInfo & info );
+		void doApplyPostEffects();
 
-	protected:
+	private:
 		//!\~english	The technique intialisation status.
 		//!\~french		Le statut d'initialisation de la technique.
 		bool m_initialised;
@@ -286,21 +222,47 @@ namespace Castor3D
 		RenderSystem & m_renderSystem;
 		//!\~english	The render area dimension.
 		//!\~french		Les dimensions de l'aire de rendu.
-		Castor::Size m_size;
+		castor::Size m_size;
 		//!\~english	The HDR frame buffer.
 		//!\~french		Le tampon d'image HDR.
-		stFRAME_BUFFER m_frameBuffer;
+		RenderTechniqueFbo m_frameBuffer;
 		//!\~english	The pass used to render opaque nodes.
 		//!\~french		La passe utilisée pour dessiner les noeuds opaques.
 		std::unique_ptr< RenderTechniquePass > m_opaquePass;
 		//!\~english	The pass used to render transparent nodes.
 		//!\~french		La passe utilisée pour dessiner les noeuds transparents.
 		std::unique_ptr< RenderTechniquePass > m_transparentPass;
+		//!\~english	The SSAO configuration.
+		//!\~french		La configuration du SSAO.
+		SsaoConfig m_ssaoConfig;
+		//!\~english	The deferred rendering used for opaque meshes.
+		//!\~french		Le rendu différé utilisé pour les maillages opaques.
+		std::unique_ptr< DeferredRendering > m_deferredRendering;
+		//!\~english	The weighted blend rendering used for transparent meshes.
+		//!\~french		Le rendu weighted blend utilisé pour les maillages transparents.
+		std::unique_ptr< WeightedBlendRendering > m_weightedBlendRendering;
+		//!\~english	The particles timer.
+		//!\~french		Le timer de particules.
+		RenderPassTimerSPtr m_particleTimer;
+		//!\~english	The post effect timer.
+		//!\~french		Le timer d'effets post-rendu.
+		RenderPassTimerSPtr m_postFxTimer;
+		//!\~english	The directional lights shadow maps.
+		//!\~french		Les textures d'ombres pour les lumières directionnelles.
+		ShadowMapArray m_directionalShadowMaps;
+		//!\~english	The point lights shadow maps.
+		//!\~french		Les textures d'ombres pour les lumières omni-directionnelles.
+		ShadowMapArray m_pointShadowMaps;
+		//!\~english	The spot lights shadow maps.
+		//!\~french		Les textures d'ombres pour les lumières projecteurs.
+		ShadowMapArray m_spotShadowMaps;
+		//!\~english	The active shadow maps.
+		//!\~french		Les textures d'ombres actives.
+		ShadowMapLightTypeArray m_activeShadowMaps;
+		//!\~english	The depth prepass.
+		//!\~french		La prépasse de profondeur.
+		std::unique_ptr< DepthPass > m_depthPrepass;
 	};
 }
-
-#if defined( CASTOR_COMPILER_MSVC )
-#	pragma warning( pop )
-#endif
 
 #endif

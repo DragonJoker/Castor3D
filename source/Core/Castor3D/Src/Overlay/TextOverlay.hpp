@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_TEXT_OVERLAY_H___
 #define ___C3D_TEXT_OVERLAY_H___
@@ -26,7 +7,7 @@ SOFTWARE.
 #include "OverlayCategory.hpp"
 #include "FontTexture.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -51,7 +32,7 @@ namespace Castor3D
 		*/
 		struct Vertex
 		{
-			int32_t coords[2];
+			float coords[2];
 			float text[2];
 			float texture[2];
 		};
@@ -76,31 +57,31 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextWriter( Castor::String const & p_tabs, TextOverlay const * p_category = nullptr );
+			C3D_API TextWriter( castor::String const & tabs, TextOverlay const * category = nullptr );
 			/**
 			 *\~english
 			 *\brief		Saves an overlay into a text file
-			 *\param[in]	p_file		the file to save the overlay in
-			 *\param[in]	p_overlay	the overlay to save
+			 *\param[in]	file		the file to save the overlay in
+			 *\param[in]	overlay	the overlay to save
 			 *\return		\p true if everything is OK
 			 *\~french
 			 *\brief		Sauvegarde l'incrustation donnée dans un fichier texte
-			 *\param[in]	p_file		Le fichier où enregistrer l'incrustation
-			 *\param[in]	p_overlay	L'incrustation à enregistrer
+			 *\param[in]	file		Le fichier où enregistrer l'incrustation
+			 *\param[in]	overlay	L'incrustation à enregistrer
 			 *\return		\p true si tout s'est bien passé
 			 */
-			C3D_API bool operator()( TextOverlay const & p_overlay, Castor::TextFile & p_file );
+			C3D_API bool operator()( TextOverlay const & overlay, castor::TextFile & file );
 			/**
-			 *\copydoc		Castor3D::OverlayCategory::TextWriter::WriteInto
+			 *\copydoc		castor3d::OverlayCategory::TextWriter::writeInto
 			 */
-			C3D_API bool WriteInto( Castor::TextFile & p_file )override;
+			C3D_API bool writeInto( castor::TextFile & file )override;
 
 		private:
 			TextOverlay const * m_category;
 		};
 
 	public:
-		DECLARE_MAP( char32_t, Castor::Position, GlyphPosition );
+		DECLARE_MAP( char32_t, castor::Position, GlyphPosition );
 
 	public:
 		/**
@@ -116,7 +97,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~TextOverlay();
+		C3D_API ~TextOverlay();
 		/**
 		 *\~english
 		 *\brief		Creation function, used by the factory
@@ -125,23 +106,23 @@ namespace Castor3D
 		 *\brief		Fonction de création utilisée par la fabrique
 		 *\return		Un overlay
 		 */
-		C3D_API static OverlayCategorySPtr Create();
+		C3D_API static OverlayCategorySPtr create();
 		/**
-		 *\copydoc		Castor3D::OverlayCategory::CreateTextWriter
+		 *\copydoc		castor3d::OverlayCategory::createTextWriter
 		 */
-		C3D_API std::unique_ptr < OverlayCategory::TextWriter > CreateTextWriter( Castor::String const & p_tabs )override
+		C3D_API std::unique_ptr < OverlayCategory::TextWriter > createTextWriter( castor::String const & tabs )override
 		{
-			return std::make_unique< TextWriter >( p_tabs, this );
+			return std::make_unique< TextWriter >( tabs, this );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the text font
-		 *\param[in]	p_value	The new value
+		 *\brief		sets the text font
+		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit la police du texte
-		 *\param[in]	p_value	La nouvelle valeur
+		 *\param[in]	value	La nouvelle valeur
 		 */
-		C3D_API void SetFont( Castor::String const & p_value );
+		C3D_API void setFont( castor::String const & value );
 		/**
 		 *\~english
 		 *\brief		Retrieves the font name.
@@ -150,9 +131,9 @@ namespace Castor3D
 		 *\brief		Récupère le nom de la police.
 		 *\return		La valeur.
 		 */
-		C3D_API Castor::String const & GetFontName()const
+		C3D_API castor::String const & getFontName()const
 		{
-			return GetFontTexture()->GetFontName();
+			return getFontTexture()->getFontName();
 		}
 		/**
 		 *\~english
@@ -160,7 +141,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		\p true si cette incrustation a changé.
 		 */
-		C3D_API virtual bool IsChanged()const
+		C3D_API bool isChanged()const override
 		{
 			return m_textChanged;
 		}
@@ -170,7 +151,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La FontTexture.
 		 */
-		inline FontTextureSPtr GetFontTexture()const
+		inline FontTextureSPtr getFontTexture()const
 		{
 			return m_fontTexture.lock();
 		}
@@ -182,7 +163,7 @@ namespace Castor3D
 		 *\brief		Récupère le tampon de sommets du panneau
 		 *\return		Le tampon
 		 */
-		inline VertexArray const & GetTextVertex()const
+		inline VertexArray const & getTextVertex()const
 		{
 			return m_arrayVtx;
 		}
@@ -194,36 +175,36 @@ namespace Castor3D
 		 *\brief		Récupère le texte de l'incrustation
 		 *\return		La valeur
 		 */
-		inline Castor::String GetCaption()const
+		inline castor::String getCaption()const
 		{
 			return m_currentCaption;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the overlay text
-		 *\param[in]	p_value	The new value
+		 *\brief		sets the overlay text
+		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit le texte de l'incrustation
-		 *\param[in]	p_value	La nouvelle valeur
+		 *\param[in]	value	La nouvelle valeur
 		 */
-		inline void SetCaption( Castor::String const & p_value )
+		inline void setCaption( castor::String const & value )
 		{
-			m_currentCaption = p_value;
+			m_currentCaption = value;
 			m_textChanged = true;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the overlay text
-		 *\param[in]	p_value	The new value
+		 *\brief		sets the overlay text
+		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit le texte de l'incrustation
-		 *\param[in]	p_value	La nouvelle valeur
+		 *\param[in]	value	La nouvelle valeur
 		 */
-		inline void SetCaption( Castor::OutputStream const & p_value )
+		inline void setCaption( castor::OutputStream const & value )
 		{
-			Castor::StringStream l_ss;
-			l_ss << p_value.rdbuf();
-			SetCaption( l_ss.str() );
+			castor::StringStream ss;
+			ss << value.rdbuf();
+			setCaption( ss.str() );
 		}
 		/**
 		 *\~english
@@ -231,22 +212,22 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le mode de découpe du texte.
 		*/
-		inline TextWrappingMode GetTextWrappingMode()const
+		inline TextWrappingMode getTextWrappingMode()const
 		{
 			return m_wrappingMode;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets text wrapping mode
-		 *\param[in]	p_value	The new value
+		 *\brief		sets text wrapping mode
+		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit le mode de découpe du texte
-		 *\param[in]	p_value	La nouvelle valeur
+		 *\param[in]	value	La nouvelle valeur
 		 */
-		inline void SetTextWrappingMode( TextWrappingMode p_value )
+		inline void setTextWrappingMode( TextWrappingMode value )
 		{
-			m_textChanged |= m_wrappingMode != p_value;
-			m_wrappingMode = p_value;
+			m_textChanged |= m_wrappingMode != value;
+			m_wrappingMode = value;
 		}
 		/**
 		 *\~english
@@ -254,22 +235,22 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'alignement horizontal.
 		*/
-		inline HAlign GetHAlign()const
+		inline HAlign getHAlign()const
 		{
 			return m_hAlign;
 		}
 		/**
 		 *\~english
 		 *\brief		Defines the horizontal alignment
-		 *\param[in]	p_value	The new value
+		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit l'alignement horizontal
-		 *\param[in]	p_value	La nouvelle valeur
+		 *\param[in]	value	La nouvelle valeur
 		*/
-		inline void SetHAlign( HAlign p_value )
+		inline void setHAlign( HAlign value )
 		{
-			m_textChanged |= m_hAlign != p_value;
-			m_hAlign = p_value;
+			m_textChanged |= m_hAlign != value;
+			m_hAlign = value;
 		}
 		/**
 		 *\~english
@@ -277,22 +258,22 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'alignement vertical.
 		*/
-		inline VAlign GetVAlign()const
+		inline VAlign getVAlign()const
 		{
 			return m_vAlign;
 		}
 		/**
 		 *\~english
 		 *\brief		Defines the vertical alignment
-		 *\param[in]	p_value	The new value
+		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit l'alignement vertical
-		 *\param[in]	p_value	La nouvelle valeur
+		 *\param[in]	value	La nouvelle valeur
 		*/
-		inline void SetVAlign( VAlign p_value )
+		inline void setVAlign( VAlign value )
 		{
-			m_textChanged |= m_vAlign != p_value;
-			m_vAlign = p_value;
+			m_textChanged |= m_vAlign != value;
+			m_vAlign = value;
 		}
 		/**
 		 *\~english
@@ -300,22 +281,22 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le mode de mappage de texture du texte.
 		*/
-		inline TextTexturingMode GetTexturingMode()const
+		inline TextTexturingMode getTexturingMode()const
 		{
 			return m_texturingMode;
 		}
 		/**
 		 *\~english
 		 *\brief		Defines the text texture mapping mode.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le mode de mappage de texture du texte.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		*/
-		inline void SetTexturingMode( TextTexturingMode p_value )
+		inline void setTexturingMode( TextTexturingMode value )
 		{
-			m_textChanged |= m_texturingMode != p_value;
-			m_texturingMode = p_value;
+			m_textChanged |= m_texturingMode != value;
+			m_texturingMode = value;
 		}
 		/**
 		 *\~english
@@ -323,22 +304,22 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le mode d'espacement des lignes.
 		*/
-		inline TextLineSpacingMode GetLineSpacingMode()const
+		inline TextLineSpacingMode getLineSpacingMode()const
 		{
 			return m_lineSpacingMode;
 		}
 		/**
 		 *\~english
 		 *\brief		Defines the lines spacing mode.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le mode d'espacement des lignes.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		*/
-		inline void SetLineSpacingMode( TextLineSpacingMode p_value )
+		inline void setLineSpacingMode( TextLineSpacingMode value )
 		{
-			m_textChanged |= m_lineSpacingMode != p_value;
-			m_lineSpacingMode = p_value;
+			m_textChanged |= m_lineSpacingMode != value;
+			m_lineSpacingMode = value;
 		}
 
 	private:
@@ -352,16 +333,19 @@ namespace Castor3D
 		*/
 		struct DisplayableChar
 		{
-			//!\~english The character position, relative to its line.	\~french La position du caractère, relative à sa ligne.
-			Castor::Point2d m_position;
-			//!\~english The character dimensions.	\~french Les dimensions du caractère.
-			Castor::Point2d m_size;
-			//!\~english The character to display	\~french Le caractère à afficher.
-			Castor::Glyph const & m_glyph;
+			//!\~english	The character position, relative to its line.
+			//!\~french		La position du caractère, relative à sa ligne.
+			castor::Point2d m_position;
+			//!\~english	The character dimensions.
+			//!\~french		Les dimensions du caractère.
+			castor::Point2d m_size;
+			//!\~english	The character to display.
+			//!\~french		Le caractère à afficher.
+			castor::Glyph const & m_glyph;
 
-			DisplayableChar( Castor::Point2d const & p_position, Castor::Point2d const & p_size, Castor::Glyph const & p_glyph )
+			DisplayableChar( castor::Point2d const & p_position, castor::Point2d const & size, castor::Glyph const & p_glyph )
 				: m_position{ p_position }
-				, m_size{ p_size }
+				, m_size{ size }
 				, m_glyph{ p_glyph }
 			{
 			}
@@ -408,13 +392,17 @@ namespace Castor3D
 		*/
 		struct DisplayableLine
 		{
-			//!\~english The line position.	\~french La position de la ligne.
-			Castor::Point2d m_position;
-			//!\~english The line width.	\~french La largeur de la ligne.
+			//!\~english	The line position.
+			//!\~french		La position de la ligne.
+			castor::Point2d m_position;
+			//!\~english	The line width.
+			//!\~french		La largeur de la ligne.
 			double m_width;
-			//!\~english The line height.	\~french La hauteur de la ligne.
+			//!\~english	The line height.
+			//!\~french		La hauteur de la ligne.
 			double m_height;
-			//!\~english The displayable characters.	\~french Les caractères affichables.
+			//!\~english	The displayable characters.
+			//!\~french		Les caractères affichables.
 			std::vector< DisplayableChar > m_characters;
 		};
 		using DisplayableLineArray = std::vector< DisplayableLine >;
@@ -423,115 +411,134 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Draws the overlay
-		 *\param[in]	p_renderer	The renderer used to draw this overlay
+		 *\param[in]	renderer	The renderer used to draw this overlay
 		 *\~french
 		 *\brief		Dessine l'incrustation
-		 *\param[in]	p_renderer	Le renderer utilisé pour dessiner cette incrustation
+		 *\param[in]	renderer	Le renderer utilisé pour dessiner cette incrustation
 		 */
-		C3D_API virtual void DoRender( OverlayRendererSPtr p_renderer );
+		C3D_API void doRender( OverlayRendererSPtr renderer )override;
 		/**
 		 *\~english
 		 *\brief		Updates the overlay position, size...
 		 *\~french
 		 *\brief		Met à jour la position, taille...
 		 */
-		C3D_API virtual void DoUpdate();
+		C3D_API void doUpdate()override;
 		/**
 		 *\~english
 		 *\brief		Updates the vertex buffer.
-		 *\param[in]	p_size	The render target size.
+		 *\param[in]	size	The render target size.
 		 *\~french
 		 *\brief		Met à jour le tampon de sommets.
-		 *\param[in]	p_size	Les dimensions de la cible de rendu.
+		 *\param[in]	size	Les dimensions de la cible de rendu.
 		 */
-		C3D_API virtual void DoUpdateBuffer( Castor::Size const & p_size );
+		C3D_API void doUpdateBuffer( castor::Size const & size )override;
 		/**
 		 *\~english
 		 *\brief		Updates the vertex buffer.
-		 *\param[in]	p_size			The render target size.
-		 *\param[in]	p_generateUvs	The UV generator function.
+		 *\param[in]	size		The render target size.
+		 *\param[in]	generateUvs	The UV generator function.
 		 *\~french
 		 *\brief		Met à jour le tampon de sommets.
-		 *\param[in]	p_size			Les dimensions de la cible de rendu.
-		 *\param[in]	p_generateUvs	La fonction de génération d'UV.
+		 *\param[in]	size		Les dimensions de la cible de rendu.
+		 *\param[in]	generateUvs	La fonction de génération d'UV.
 		 */
-		C3D_API virtual void DoUpdateBuffer( Castor::Size const & p_size, std::function< void( Castor::Point2d const & p_size, Castor::Rectangle const & p_absolute, Castor::Point4r const & p_fontUV,
-																							   real & p_uvLeft, real & p_uvTop, real & p_uvRight, real & p_uvBottom ) > p_generateUvs );
+		C3D_API void doUpdateBuffer( castor::Size const & size
+			, std::function< void( castor::Point2d const & size
+				, castor::Rectangle const & absolute
+				, castor::Point4r const & fontUV
+				, real & uvLeft
+				, real & uvTop
+				, real & uvRight
+				, real & uvBottom ) > generateUvs );
 		/**
 		 *\~english
 		 *\brief		Computes the lines to display.
 		 *\remarks		Takes care of vertical alignment to retrieve the right vertical offset.
-		 *\param[in]	p_renderSize	The render size.
-		 *\param[in]	p_size			The overlay dimensions.
+		 *\param[in]	renderSize	The render size.
+		 *\param[in]	size		The overlay dimensions.
 		 *\return		The lines.
 		 *\~french
 		 *\brief		Calcule les lignes à afficher.
 		 *\remarks		Prend en compte l'alignement vertical, pour calculer le décalage vertical.
-		 *\param[in]	p_renderSize	Les dimensions de la zone de rendu.
-		 *\param[in]	p_size			The overlay dimensions.
+		 *\param[in]	renderSize	Les dimensions de la zone de rendu.
+		 *\param[in]	size		The overlay dimensions.
 		 *\return		Les lignes.
 		 */
-		C3D_API DisplayableLineArray DoPrepareText( Castor::Size const & p_renderSize, Castor::Point2d const & p_size );
+		C3D_API DisplayableLineArray doPrepareText( castor::Size const & renderSize
+			, castor::Point2d const & size );
 		/**
 		 *\~english
-		 *\brief		Adds a word to the vertex buffer.
-		 *\param[in]	p_renderSize	The render size.
-		 *\param[in]	p_word			The word to add.
-		 *\param[in]	p_wordWidth		The word width.
-		 *\param[in]	p_size			The overlay size.
-		 *\param[out]	p_left			The left position.
-		 *\param[out]	p_line			The line.
-		 *\param[out]	p_lines			The lines.
+		 *\brief		adds a word to the vertex buffer.
+		 *\param[in]	renderSize	The render size.
+		 *\param[in]	word		The word to add.
+		 *\param[in]	wordWidth	The word width.
+		 *\param[in]	size		The overlay size.
+		 *\param[out]	left		The left position.
+		 *\param[out]	line		The line.
+		 *\param[out]	lines		The lines.
 		 *\~french
 		 *\brief		Ajoute un mot au tampon de sommets.
-		 *\param[in]	p_renderSize	Les dimensions de la zone de rendu.
-		 *\param[in]	p_word			Le mot à ajouter.
-		 *\param[in]	p_wordWidth		La largeur du mot.
-		 *\param[in]	p_size			La taille de l'incrustation.
-		 *\param[out]	p_left			La position à gauche.
-		 *\param[out]	p_line			La ligne.
-		 *\param[out]	p_lines			Les lignes.
+		 *\param[in]	renderSize	Les dimensions de la zone de rendu.
+		 *\param[in]	word		Le mot à ajouter.
+		 *\param[in]	wordWidth	La largeur du mot.
+		 *\param[in]	size		La taille de l'incrustation.
+		 *\param[out]	left		La position à gauche.
+		 *\param[out]	line		La ligne.
+		 *\param[out]	lines		Les lignes.
 		 */
-		C3D_API void DoPrepareWord( Castor::Size const & p_renderSize, std::u32string const & p_word, double p_wordWidth, Castor::Point2d const & p_size, double & p_left, DisplayableLine & p_line, DisplayableLineArray & p_lines );
+		C3D_API void doPrepareWord( castor::Size const & renderSize
+			, std::u32string const & word
+			, double wordWidth
+			, castor::Point2d const & size
+			, double & left
+			, DisplayableLine & line
+			, DisplayableLineArray & lines );
 		/**
 		 *\~english
 		 *\brief		Fills the line, and jumps to the next one.
-		 *\param[in]	p_size	The overlay size.
-		 *\param[in]	p_line	The line.
-		 *\param[out]	p_left	The left position.
-		 *\param[out]	p_lines	The lines.
+		 *\param[in]	size	The overlay size.
+		 *\param[in]	line	The line.
+		 *\param[out]	left	The left position.
+		 *\param[out]	lines	The lines.
 		 *\~french
 		 *\brief		Finit la ligne et passe à la ligne suivante.
-		 *\param[in]	p_size	La taille de l'incrustation.
-		 *\param[in]	p_line	La ligne.
-		 *\param[out]	p_left	La position à gauche.
-		 *\param[out]	p_lines	Les lignes.
+		 *\param[in]	size	La taille de l'incrustation.
+		 *\param[in]	line	La ligne.
+		 *\param[out]	left	La position à gauche.
+		 *\param[out]	lines	Les lignes.
 		 */
-		C3D_API DisplayableLine DoFinishLine( Castor::Point2d const & p_size, DisplayableLine p_line, double & p_left, DisplayableLineArray & p_lines );
+		C3D_API DisplayableLine doFinishLine( castor::Point2d const & size
+			, DisplayableLine line
+			, double & left
+			, DisplayableLineArray & lines );
 		/**
 		 *\~english
 		 *\brief		Horizontally align a line.
-		 *\param[in]	p_width	The overlay width.
-		 *\param[in]	p_line	The line.
-		 *\param[out]	p_lines	The lines.
+		 *\param[in]	width	The overlay width.
+		 *\param[in]	line	The line.
+		 *\param[out]	lines	The lines.
 		 *\~french
 		 *\brief		Aligne horizontalement une ligne.
-		 *\param[in]	p_width	La largeur de l'incrustation.
-		 *\param[in]	p_line	La ligne.
-		 *\param[out]	p_lines	Les lignes.
+		 *\param[in]	width	La largeur de l'incrustation.
+		 *\param[in]	line	La ligne.
+		 *\param[out]	lines	Les lignes.
 		 */
-		C3D_API void DoAlignHorizontally( double p_width, DisplayableLine p_line, DisplayableLineArray & p_lines );
+		C3D_API void doAlignHorizontally( double width
+			, DisplayableLine line
+			, DisplayableLineArray & lines );
 		/**
 		 *\~english
 		 *\brief		Vertically align text.
-		 *\param[in]	p_height	The overlay height.
-		 *\param[out]	p_lines		The lines.
+		 *\param[in]	height	The overlay height.
+		 *\param[out]	lines		The lines.
 		 *\~french
 		 *\brief		Aligne verticalement un texte.
-		 *\param[in]	p_height	La hauteur de l'incrustation.
-		 *\param[out]	p_lines		Les lignes.
+		 *\param[in]	height	La hauteur de l'incrustation.
+		 *\param[out]	lines		Les lignes.
 		 */
-		C3D_API void DoAlignVertically( double p_height, DisplayableLineArray & p_lines );
+		C3D_API void doAlignVertically( double height
+			, DisplayableLineArray & lines );
 
 	protected:
 		//!\~english	The vertex buffer data.
@@ -539,10 +546,10 @@ namespace Castor3D
 		VertexArray m_arrayVtx;
 		//!\~english	The current overlay caption.
 		//!\~french		Le texte courant de l'incrustation.
-		Castor::String m_currentCaption;
+		castor::String m_currentCaption;
 		//!\~english	The previous overlay caption.
 		//!\~french		Le texte précédent de l'incrustation.
-		Castor::String m_previousCaption;
+		castor::String m_previousCaption;
 		//!\~english	The texture associated to the overlay font.
 		//!\~french		La texture associée à la police de l'incrustation.
 		FontTextureWPtr m_fontTexture;

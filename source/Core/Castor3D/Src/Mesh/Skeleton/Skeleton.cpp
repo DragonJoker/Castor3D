@@ -4,136 +4,158 @@
 
 #include "Animation/Skeleton/SkeletonAnimation.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	//*************************************************************************************************
 
-	bool BinaryWriter< Skeleton >::DoWrite( Skeleton const & p_obj )
+	bool BinaryWriter< Skeleton >::doWrite( Skeleton const & obj )
 	{
-		bool l_return = true;
+		bool result = true;
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = DoWriteChunk( p_obj.GetGlobalInverseTransform(), ChunkType::eSkeletonGlobalInverse, m_chunk );
+			result = doWriteChunk( obj.getGlobalInverseTransform(), ChunkType::eSkeletonGlobalInverse, m_chunk );
 		}
 
-		for ( auto l_bone : p_obj.m_bones )
+		for ( auto bone : obj.m_bones )
 		{
-			l_return &= BinaryWriter< Bone >{}.Write( *l_bone, m_chunk );
+			result &= BinaryWriter< Bone >{}.write( *bone, m_chunk );
 		}
 
-		for ( auto const & l_it : p_obj.m_animations )
+		for ( auto const & it : obj.m_animations )
 		{
-			l_return = BinaryWriter< Animation >{}.Write( *l_it.second, m_chunk );
+			result = BinaryWriter< Animation >{}.write( *it.second, m_chunk );
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*************************************************************************************************
 
-	bool BinaryParser< Skeleton >::DoParse( Skeleton & p_obj )
+	bool BinaryParser< Skeleton >::doParse( Skeleton & obj )
 	{
-		bool l_return = true;
-		BoneSPtr l_bone;
-		BinaryChunk l_chunk;
-		SkeletonAnimationUPtr l_animation;
+		bool result = true;
+		BoneSPtr bone;
+		BinaryChunk chunk;
+		SkeletonAnimationUPtr animation;
 
-		while ( l_return && DoGetSubChunk( l_chunk ) )
+		while ( result && doGetSubChunk( chunk ) )
 		{
-			switch ( l_chunk.GetChunkType() )
+			switch ( chunk.getChunkType() )
 			{
 			case ChunkType::eSkeletonGlobalInverse:
-				l_return = DoParseChunk( p_obj.m_globalInverse, l_chunk );
+				result = doParseChunk( obj.m_globalInverse, chunk );
 				break;
 
 			case ChunkType::eSkeletonBone:
-				l_bone = std::make_shared< Bone >( p_obj );
-				l_return = BinaryParser< Bone >{}.Parse( *l_bone, l_chunk );
+				bone = std::make_shared< Bone >( obj, Matrix4x4r{ 1.0_r } );
+				result = BinaryParser< Bone >{}.parse( *bone, chunk );
 
-				if ( l_return )
+				if ( result )
 				{
-					p_obj.m_bones.push_back( l_bone );
+					obj.m_bones.push_back( bone );
 				}
 
 				break;
 
 			case ChunkType::eAnimation:
-				l_animation = std::make_unique< SkeletonAnimation >( p_obj );
-				l_return = BinaryParser< Animation >{}.Parse( *l_animation, l_chunk );
+				animation = std::make_unique< SkeletonAnimation >( obj );
+				result = BinaryParser< Animation >{}.parse( *animation, chunk );
 
-				if ( l_return )
+				if ( result )
 				{
-					p_obj.m_animations.insert( { l_animation->GetName(), std::move( l_animation ) } );
+					obj.m_animations.insert( { animation->getName(), std::move( animation ) } );
 				}
 
 				break;
 			}
 		}
 
-		return l_return;
+		return result;
 	}
 
 	//*************************************************************************************************
 
-	Skeleton::Skeleton( Scene & p_scene )
-		: Animable{ p_scene }
+	Skeleton::Skeleton( Scene & scene )
+		: Animable{ scene }
 		, m_globalInverse{ 1 }
 	{
 	}
 
 	Skeleton::~Skeleton()
 	{
-		Animable::CleanupAnimations();
+		Animable::cleanupAnimations();
 	}
 
-	void Skeleton::AddBone( BoneSPtr p_bone )
+	BoneSPtr Skeleton::createBone( String const & name
+		, Matrix4x4r const & offset )
 	{
-		m_bones.push_back( p_bone );
+		auto bone = std::make_shared< Bone >( *this, offset );
+		bone->setName( name );
+		m_bones.push_back( bone );
+		return bone;
 	}
 
-	BoneSPtr Skeleton::FindBone( Castor::String const & p_name )const
+	BoneSPtr Skeleton::findBone( castor::String const & name )const
 	{
-		auto l_it = std::find_if( begin(), end(), [&p_name]( BoneSPtr p_bone )
+		auto it = std::find_if( begin(), end(), [&name]( BoneSPtr bone )
 		{
-			return p_bone->GetName() == p_name;
+			return bone->getName() == name;
 		} );
 
-		BoneSPtr l_bone;
+		BoneSPtr bone;
 
-		if ( l_it != end() )
+		if ( it != end() )
 		{
-			l_bone = *l_it;
+			bone = *it;
 		}
 
-		return l_bone;
+		return bone;
 	}
 
-	void Skeleton::SetBoneParent( BoneSPtr p_bone, BoneSPtr p_parent )
+	void Skeleton::setBoneParent( BoneSPtr bone, BoneSPtr parent )
 	{
-		if ( std::find( begin(), end(), p_bone ) == end() )
+		if ( std::find( begin(), end(), bone ) == end() )
 		{
-			CASTOR_EXCEPTION( "Skeleton::SetBoneParent - Child bone is not in the Skeleton's nodes" );
+			CASTOR_EXCEPTION( "Skeleton::setBoneParent - Child bone is not in the Skeleton's nodes" );
 		}
 
-		if ( std::find( begin(), end(), p_parent ) == end() )
+		if ( std::find( begin(), end(), parent ) == end() )
 		{
-			CASTOR_EXCEPTION( "Skeleton::SetBoneParent - Parent bone is not in the Skeleton's nodes" );
+			CASTOR_EXCEPTION( "Skeleton::setBoneParent - Parent bone is not in the Skeleton's nodes" );
 		}
 
-		p_parent->AddChild( p_bone );
-		p_bone->SetParent( p_parent );
+		parent->addChild( bone );
+		bone->setParent( parent );
 	}
 
-	SkeletonAnimation & Skeleton::CreateAnimation( Castor::String const & p_name )
+	SkeletonAnimation & Skeleton::createAnimation( castor::String const & name )
 	{
-		if ( !HasAnimation( p_name ) )
+		if ( !hasAnimation( name ) )
 		{
-			DoAddAnimation( std::make_shared< SkeletonAnimation >( *this, p_name ) );
+			doAddAnimation( std::make_shared< SkeletonAnimation >( *this, name ) );
 		}
 
-		return DoGetAnimation< SkeletonAnimation >( p_name );
+		return doGetAnimation< SkeletonAnimation >( name );
+	}
+
+	void Skeleton::computeContainers( Mesh & mesh )
+	{
+		auto it = m_boxes.find( &mesh );
+
+		if ( it == m_boxes.end() )
+		{
+			uint32_t index = 0u;
+			std::vector< BoundingBox > boxes;
+			boxes.reserve( m_bones.size() );
+
+			for ( auto & bone : m_bones )
+			{
+				boxes.emplace_back( bone->computeBoundingBox( mesh, index ) );
+				++index;
+			}
+		}
 	}
 }

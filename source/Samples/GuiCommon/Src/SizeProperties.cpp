@@ -3,7 +3,7 @@
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>
 
-using namespace Castor;
+using namespace castor;
 
 WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( Size )
 
@@ -14,9 +14,9 @@ namespace GuiCommon
 	SizeProperty::SizeProperty( wxString const & label, wxString const & name, Size const & value )
 		: wxPGProperty( label, name )
 	{
-		SetValueI( value );
-		AddPrivateChild( new wxIntProperty( _( "Width" ), wxPG_LABEL, value.width() ) );
-		AddPrivateChild( new wxIntProperty( _( "Height" ), wxPG_LABEL, value.height() ) );
+		setValueI( value );
+		AddPrivateChild( new wxIntProperty( _( "Width" ), wxPG_LABEL, value.getWidth() ) );
+		AddPrivateChild( new wxIntProperty( _( "Height" ), wxPG_LABEL, value.getHeight() ) );
 	}
 
 	SizeProperty::~SizeProperty()
@@ -28,8 +28,8 @@ namespace GuiCommon
 		if ( GetChildCount() )
 		{
 			const Size & size = SizeRefFromVariant( m_value );
-			Item( 0 )->SetValue( long( size.width() ) );
-			Item( 1 )->SetValue( long( size.height() ) );
+			Item( 0 )->SetValue( long( size.getWidth() ) );
+			Item( 1 )->SetValue( long( size.getHeight() ) );
 		}
 	}
 
@@ -41,11 +41,11 @@ namespace GuiCommon
 		switch ( childIndex )
 		{
 		case 0:
-			size.width() = val;
+			size.getWidth() = val;
 			break;
 
 		case 1:
-			size.height() = val;
+			size.getHeight() = val;
 			break;
 		}
 

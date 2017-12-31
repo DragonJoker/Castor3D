@@ -1,31 +1,14 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+﻿/*
+See LICENSE file in root folder
 */
 #ifndef ___CASTOR_LINE_3D_H___
 #define ___CASTOR_LINE_3D_H___
 
 #include "CastorUtils.hpp"
 
-namespace Castor
+#include <cmath>
+
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -47,9 +30,6 @@ namespace Castor
 	class Line3D
 	{
 	private:
-		typedef Castor::Policy< T > policy;
-
-	private:
 		/**
 		 *\~english
 		 *\brief		Constructor from 2 points
@@ -61,8 +41,8 @@ namespace Castor
 		 *\param[in]	p_ptB	La pente de la droite
 		 */
 		Line3D( Point< T, 3 > const & p_point, Point< T, 3 > const & p_ptSlope )
-			:	m_origin( p_point )
-			,	m_slope( p_ptSlope )
+			: m_origin( p_point )
+			, m_slope( p_ptSlope )
 		{
 		}
 
@@ -77,7 +57,7 @@ namespace Castor
 		 *\param[in]	p_point	Un point de la droite
 		 *\param[in]	p_ptSlope	La pente de la droite
 		 */
-		static Line3D< T > FromPointAndSlope( Point< T, 3 > const & p_point, Point< T, 3 > const & p_ptSlope )
+		static Line3D< T > fromPointAndSlope( Point< T, 3 > const & p_point, Point< T, 3 > const & p_ptSlope )
 		{
 			return Line3D< T >( p_point, p_ptSlope );
 		}
@@ -89,7 +69,7 @@ namespace Castor
 		 *\brief		Constructeur à partir de 2 points
 		 *\param[in]	p_ptA, p_ptB	Deux points de la droite
 		 */
-		static Line3D< T > FromPoints( Point< T, 3 > const & p_ptA, Point< T, 3 > const & p_ptB )
+		static Line3D< T > fromPoints( Point< T, 3 > const & p_ptA, Point< T, 3 > const & p_ptB )
 		{
 			return Line3D< T >( p_ptA, p_ptB - p_ptA );
 		}
@@ -118,8 +98,6 @@ namespace Castor
 			:	m_origin( std::move( p_line.m_origin ) )
 			,	m_slope( std::move( p_line.m_slope ) )
 		{
-			p_line.m_origin	= Point< T, 3 >();
-			p_line.m_slope	= Point< T, 3 >();
 		}
 		/**
 		 *\~english
@@ -131,10 +109,10 @@ namespace Castor
 		 *\param[in]	p_line	L'objet Line3D à copier
 		 *\return		Une référence sur cet objet Line3D
 		 */
-		Line3D & operator =( Line3D const & p_line )
+		Line3D & operator=( Line3D const & p_line )
 		{
-			m_origin	= p_line.m_origin;
-			m_slope		= p_line.m_slope;
+			m_origin = p_line.m_origin;
+			m_slope = p_line.m_slope;
 			return * this;
 		}
 		/**
@@ -147,12 +125,12 @@ namespace Castor
 		 *\param[in]	p_line	L'objet Line3D à déplacer
 		 *\return		Une référence sur cet objet Line3D
 		 */
-		Line3D & operator =( Line3D && p_line )
+		Line3D & operator=( Line3D && p_line )
 		{
 			if ( this != &p_line )
 			{
-				m_origin	= std::move( p_line.m_origin );
-				m_slope		= std::move( p_line.m_slope );
+				m_origin = std::move( p_line.m_origin );
+				m_slope = std::move( p_line.m_slope );
 				p_line.m_origin	= Point< T, 3 >();
 				p_line.m_slope	= Point< T, 3 >();
 			}
@@ -171,9 +149,9 @@ namespace Castor
 		 *\param[out]	p_point	Reçoit le point d'intersection
 		 *\return		\p true si une intersection existe
 		 */
-		bool Intersects( Line3D const & p_line, Point< T, 3 > & p_point )
+		bool intersects( Line3D const & p_line, Point< T, 3 > & p_point )
 		{
-			bool l_result;
+			bool result;
 			double a = m_origin[0];
 			double b = m_origin[1];
 			double c = m_origin[2];
@@ -189,7 +167,8 @@ namespace Castor
 			double t;
 			double tp;
 
-			if ( std::abs( qp ) > std::numeric_limits< double >::epsilon() && std::abs( p * qp - pp * q ) > std::numeric_limits< double >::epsilon() )
+			if ( std::abs( qp ) > std::numeric_limits< double >::epsilon()
+				&& std::abs( p * qp - pp * q ) > std::numeric_limits< double >::epsilon() )
 			{
 				t = qp * ( ap + ( pp * ( b - bp ) / qp ) - a ) / ( p * qp - pp * q );
 				tp = ( b + q * t - bp ) / qp;
@@ -199,15 +178,16 @@ namespace Castor
 					p_point[0] = T( m_slope[0] * t + m_origin[0] );
 					p_point[1] = T( m_slope[1] * t + m_origin[1] );
 					p_point[2] = T( m_slope[2] * t + m_origin[2] );
-					l_result = true;
+					result = true;
 				}
 				else
 				{
 					//invalid couple, no intersection
-					l_result = false;
+					result = false;
 				}
 			}
-			else if ( std::abs( rp ) > std::numeric_limits< double >::epsilon() && std::abs( p * rp - pp * r ) > std::numeric_limits< double >::epsilon() )
+			else if ( std::abs( rp ) > std::numeric_limits< double >::epsilon()
+				&& std::abs( p * rp - pp * r ) > std::numeric_limits< double >::epsilon() )
 			{
 				t = rp * ( ap + ( pp * ( c - cp ) / rp ) - a ) / ( p * rp - pp * r );
 				tp = ( c + r * t - cp ) / rp;
@@ -217,21 +197,21 @@ namespace Castor
 					p_point[0] = T( m_slope[0] * t + m_origin[0] );
 					p_point[1] = T( m_slope[1] * t + m_origin[1] );
 					p_point[2] = T( m_slope[2] * t + m_origin[2] );
-					l_result = true;
+					result = true;
 				}
 				else
 				{
 					//invalid couple, no intersection
-					l_result = false;
+					result = false;
 				}
 			}
 			else
 			{
 				// The 2 lines are parallel, no intersection
-				l_result = false;
+				result = false;
 			}
 
-			return l_result;
+			return result;
 		}
 		/**
 		 *\~english
@@ -243,11 +223,11 @@ namespace Castor
 		 *\param[in]	p_point	Le point à tester
 		 *\return		\p true si le point appartient à la ligne
 		 */
-		bool IsIn( Point< T, 3 > const & p_point )
+		bool isIn( Point< T, 3 > const & p_point )
 		{
-			return policy::is_null( ( p_point[0] - m_origin[0] ) / m_slope[0] )
-				   && policy::is_null( ( p_point[1] - m_origin[1] ) / m_slope[1] )
-				   && policy::is_null( ( p_point[2] - m_origin[2] ) / m_slope[2] );
+			return ( p_point[0] - m_origin[0] ) / m_slope[0] == T{}
+				   && ( p_point[1] - m_origin[1] ) / m_slope[1] == T{}
+				   && ( p_point[2] - m_origin[2] ) / m_slope[2] == T{};
 		}
 
 	public:

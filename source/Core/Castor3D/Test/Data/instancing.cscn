@@ -1,30 +1,28 @@
 debug_overlays true
+materials legacy
 
 scene "Scene"
 {
+	ambient_light 0.2 0.2 0.2
 	background_colour 0.5 0.5 0.5 1.0
-	ambient_light 0 0 0 1
 
 	material "Silver"
 	{
-		type legacy
 		pass
 		{
-			ambient 0.0745	0.0745	0.0745 1.0
 			diffuse 0.75164	0.75164	0.75164 1.0
 			emissive 0.0 0.0 0.0 1.0
 			specular 0.628281 0.628281 0.628281 1.0
 			shininess 51.2
+			two_sided true
 		}
 	}
 
 	material "Gold"
 	{
-		type legacy
 		pass
 		{
-			ambient 0.24725	0.1995	0.0745 1.0
-			diffuse 0.75164	0.60648	0.22648 1.0
+			diffuse 0.75164 0.60648 0.22648 1.0
 			emissive 0.0 0.0 0.0 1.0
 			specular 0.628281 0.555802 0.366065 1.0
 			shininess 51.2
@@ -41,7 +39,7 @@ scene "Scene"
 		parent "SunLightNode1"
 		type directional
 		colour 1.0 1.0 1.0
-		intensity 0.0 0.8 1.0
+		intensity 0.8 1.0
 	}
 
 	scene_node "FinalNode0"
@@ -52,7 +50,7 @@ scene "Scene"
 		parent "FinalNode0"
 		mesh "Mesh"
 		{
-			type torus 40 40 15.0 35.0
+			type "torus" -inner_count=40 -outer_count=40 -inner_size=15 -outer_size=35
 		}
 		material "Silver"
 	}
@@ -275,7 +273,7 @@ scene "Scene"
 		parent "FinalNode20"
 		mesh "Mesh"
 		{
-			type torus 40 40 25.0 50.0
+			type "torus" -inner_count=40 -outer_count=40 -inner_size=25 -outer_size=50
 		}
 		material "Silver"
 	}
@@ -506,18 +504,17 @@ scene "Scene"
 			far 20000.0
 		}
 	}
+}
 
-	window "Window"
+window "Window"
+{
+	render_target
 	{
-		render_target
-		{
-			format argb32
-			size screen_size
-			scene "Scene"
-			camera "MainCamera"
-			technique "forward"
-		}
-		fullscreen false
-		vsync false
+		format argb32
+		size screen_size
+		scene "Scene"
+		camera "MainCamera"
 	}
+	fullscreen false
+	vsync false
 }

@@ -15,6 +15,7 @@
 
 #include "GlAtomicCounterBufferTest.hpp"
 #include "ComputeShaderTest.hpp"
+#include "GlPassBufferTest.hpp"
 #include "GlTransformFeedbackTest.hpp"
 #include "GlTextureTest.hpp"
 
@@ -26,117 +27,118 @@
 
 #undef CreateWindow
 
-using namespace Castor;
+using namespace castor;
 
 namespace
 {
-	void DoLoadPlugins( Castor3D::Engine & p_engine )
+	void doloadPlugins( castor3d::Engine & engine )
 	{
-		PathArray l_arrayFiles;
-		File::ListDirectoryFiles( Castor3D::Engine::GetPluginsDirectory(), l_arrayFiles );
-		PathArray l_arrayKept;
+		PathArray arrayFiles;
+		File::listDirectoryFiles( castor3d::Engine::getPluginsDirectory(), arrayFiles );
+		PathArray arrayKept;
 
 		// Exclude debug plug-in in release builds, and release plug-ins in debug builds
-		for ( auto l_file : l_arrayFiles )
+		for ( auto file : arrayFiles )
 		{
 #if defined( NDEBUG )
 
-			if ( l_file.find( String( cuT( "d." ) ) + CASTOR_DLL_EXT ) == String::npos )
+			if ( file.find( String( cuT( "d." ) ) + CASTOR_DLL_EXT ) == String::npos )
 #else
 
-			if ( l_file.find( String( cuT( "d." ) ) + CASTOR_DLL_EXT ) != String::npos )
+			if ( file.find( String( cuT( "d." ) ) + CASTOR_DLL_EXT ) != String::npos )
 
 #endif
 			{
-				l_arrayKept.push_back( l_file );
+				arrayKept.push_back( file );
 			}
 		}
 
-		if ( !l_arrayKept.empty() )
+		if ( !arrayKept.empty() )
 		{
-			PathArray l_arrayFailed;
-			PathArray l_otherPlugins;
+			PathArray arrayFailed;
+			PathArray otherPlugins;
 
-			for ( auto l_file : l_arrayKept )
+			for ( auto file : arrayKept )
 			{
-				if ( l_file.GetExtension() == CASTOR_DLL_EXT )
+				if ( file.getExtension() == CASTOR_DLL_EXT )
 				{
 					// Since techniques depend on renderers, we load these first
-					if ( l_file.find( cuT( "RenderSystem" ) ) != String::npos )
+					if ( file.find( cuT( "RenderSystem" ) ) != String::npos )
 					{
-						if ( !p_engine.GetPluginCache().LoadPlugin( l_file ) )
+						if ( !engine.getPluginCache().loadPlugin( file ) )
 						{
-							l_arrayFailed.push_back( l_file );
+							arrayFailed.push_back( file );
 						}
 					}
 					else
 					{
-						l_otherPlugins.push_back( l_file );
+						otherPlugins.push_back( file );
 					}
 				}
 			}
 
 			// Then we load other plug-ins
-			for ( auto l_file : l_otherPlugins )
+			for ( auto file : otherPlugins )
 			{
-				if ( !p_engine.GetPluginCache().LoadPlugin( l_file ) )
+				if ( !engine.getPluginCache().loadPlugin( file ) )
 				{
-					l_arrayFailed.push_back( l_file );
+					arrayFailed.push_back( file );
 				}
 			}
 
-			if ( !l_arrayFailed.empty() )
+			if ( !arrayFailed.empty() )
 			{
-				Logger::LogWarning( cuT( "Some plug-ins couldn't be loaded :" ) );
+				Logger::logWarning( cuT( "Some plug-ins couldn't be loaded :" ) );
 
-				for ( auto l_file : l_arrayFailed )
+				for ( auto file : arrayFailed )
 				{
-					Logger::LogWarning( Path( l_file ).GetFileName() );
+					Logger::logWarning( Path( file ).getFileName() );
 				}
 
-				l_arrayFailed.clear();
+				arrayFailed.clear();
 			}
 		}
 
-		Logger::LogInfo( cuT( "Plugins loaded" ) );
+		Logger::logInfo( cuT( "Plugins loaded" ) );
 	}
 
-	std::unique_ptr< Castor3D::Engine > DoInitialiseCastor( Castor3D::IWindowHandleSPtr p_handle )
+	std::unique_ptr< castor3d::Engine > doInitialiseCastor( castor3d::IWindowHandleSPtr p_handle )
 	{
-		if ( !File::DirectoryExists( Castor3D::Engine::GetEngineDirectory() ) )
+		if ( !File::directoryExists( castor3d::Engine::getEngineDirectory() ) )
 		{
-			File::DirectoryCreate( Castor3D::Engine::GetEngineDirectory() );
+			File::directoryCreate( castor3d::Engine::getEngineDirectory() );
 		}
 
-		auto l_return = std::make_unique< Castor3D::Engine >();
-		DoLoadPlugins( *l_return );
+		auto result = std::make_unique< castor3d::Engine >();
+		doloadPlugins( *result );
 
-		auto l_renderers = l_return->GetPluginCache().GetPlugins( Castor3D::PluginType::eRenderer );
+		auto renderers = result->getPluginCache().getPlugins( castor3d::PluginType::eRenderer );
 
-		if ( l_renderers.empty() )
+		if ( renderers.empty() )
 		{
 			CASTOR_EXCEPTION( "No renderer plug-ins" );
 		}
 
-		if ( l_return->LoadRenderer( GlRender::GlRenderSystem::Name ) )
+		if ( result->loadRenderer( GlRender::GlRenderSystem::Type ) )
 		{
-			l_return->Initialise( 1, false );
-			auto l_context = l_return->GetRenderSystem()->CreateContext();
-			auto l_scene = l_return->GetSceneCache().Add( cuT( "Test" ) );
-			auto l_window = l_scene->GetRenderWindowCache().Add( cuT( "Window" ) );
-			auto l_target = l_return->GetRenderTargetCache().Add( Castor3D::TargetType::eWindow );
-			l_target->SetPixelFormat( PixelFormat::eA8R8G8B8 );
-			l_target->SetSize( Size{ 1024, 1024 } );
-			l_target->SetScene( l_scene );
-			l_window->SetRenderTarget( l_target );
-			l_window->Initialise( Size{ 1024, 1024 }, Castor3D::WindowHandle{ p_handle } );
+			result->initialise( 1, false );
+			auto context = result->getRenderSystem()->createContext();
+			auto scene = result->getSceneCache().add( cuT( "Test" ) );
+			auto window = result->getRenderWindowCache().add( cuT( "Window" ) );
+			auto target = result->getRenderTargetCache().add( castor3d::TargetType::eWindow );
+			result->setMaterialsType( castor3d::MaterialType::eLegacy );
+			target->setPixelFormat( PixelFormat::eA8R8G8B8 );
+			target->setSize( Size{ 1024, 1024 } );
+			target->setScene( scene );
+			window->setRenderTarget( target );
+			window->initialise( Size{ 1024, 1024 }, castor3d::WindowHandle{ p_handle } );
 		}
 		else
 		{
 			CASTOR_EXCEPTION( "Couldn't load renderer." );
 		}
 
-		return l_return;
+		return result;
 	}
 
 #if defined( _WIN32 )
@@ -172,16 +174,16 @@ namespace
 			::DestroyWindow( m_hWnd );
 		}
 
-		Castor3D::IWindowHandleSPtr CreateWindowHandle()
+		castor3d::IWindowHandleSPtr CreateWindowHandle()
 		{
-			Castor3D::IWindowHandleSPtr l_handle;
+			castor3d::IWindowHandleSPtr handle;
 
 			if ( m_hWnd )
 			{
-				l_handle = std::make_shared< Castor3D::IMswWindowHandle >( m_hWnd );
+				handle = std::make_shared< castor3d::IMswWindowHandle >( m_hWnd );
 			}
 
-			return l_handle;
+			return handle;
 		}
 
 	private:
@@ -219,7 +221,7 @@ namespace
 					CASTOR_EXCEPTION( "Couldn't open X Display" );
 				}
 
-				int l_attributes[] =
+				int attributes[] =
 				{
 					GLX_X_RENDERABLE, True,
 					GLX_X_VISUAL_TYPE, GLX_TRUE_COLOR,
@@ -232,80 +234,80 @@ namespace
 					0
 				};
 
-				int l_fbcount = 0;
-				GLXFBConfig * l_config = glXChooseFBConfig( m_display, DefaultScreen( m_display ), l_attributes, &l_fbcount );
-				int l_bestFbcIndex = -1;
-				int l_worstFbcIndex = -1;
-				int l_bestNumSamp = -1;
-				int l_worstNumSamp = 999;
-				Logger::LogDebug( StringStream() << cuT( "Configs count: " ) << l_fbcount );
+				int fbcount = 0;
+				GLXFBConfig * config = glXChooseFBConfig( m_display, DefaultScreen( m_display ), attributes, &fbcount );
+				int bestFbcIndex = -1;
+				int worstFbcIndex = -1;
+				int bestNumSamp = -1;
+				int worstNumSamp = 999;
+				Logger::logDebug( StringStream() << cuT( "Configs count: " ) << fbcount );
 
-				for ( int i = 0; i < l_fbcount; ++i )
+				for ( int i = 0; i < fbcount; ++i )
 				{
-					XVisualInfo * l_vi = glXGetVisualFromFBConfig( m_display, l_config[i] );
+					XVisualInfo * vi = glXGetVisualFromFBConfig( m_display, config[i] );
 
-					if ( l_vi )
+					if ( vi )
 					{
-						int l_sampleBuffers;
-						int l_samples;
-						glXGetFBConfigAttrib( m_display, l_config[i], GLX_SAMPLE_BUFFERS, &l_sampleBuffers );
-						glXGetFBConfigAttrib( m_display, l_config[i], GLX_SAMPLES, &l_samples );
+						int sampleBuffers;
+						int samples;
+						glXGetFBConfigAttrib( m_display, config[i], GLX_SAMPLE_BUFFERS, &sampleBuffers );
+						glXGetFBConfigAttrib( m_display, config[i], GLX_SAMPLES, &samples );
 
-						if ( l_bestFbcIndex < 0 || l_sampleBuffers && l_samples > l_bestNumSamp )
+						if ( bestFbcIndex < 0 || sampleBuffers && samples > bestNumSamp )
 						{
-							l_bestFbcIndex = i;
-							l_bestNumSamp = l_samples;
+							bestFbcIndex = i;
+							bestNumSamp = samples;
 						}
 
-						if ( l_worstFbcIndex < 0 || !l_sampleBuffers || l_samples < l_worstNumSamp )
+						if ( worstFbcIndex < 0 || !sampleBuffers || samples < worstNumSamp )
 						{
-							l_worstFbcIndex = i;
-							l_worstNumSamp = l_samples;
+							worstFbcIndex = i;
+							worstNumSamp = samples;
 						}
 					}
 
-					XFree( l_vi );
+					XFree( vi );
 				}
 
-				if ( l_bestFbcIndex == -1 )
+				if ( bestFbcIndex == -1 )
 				{
 					CASTOR_EXCEPTION( "Couldn't find appropriate GLXFBConfig" );
 				}
 
-				m_fbConfig = l_config[l_bestFbcIndex];
-				XVisualInfo * l_vi = glXGetVisualFromFBConfig( m_display, m_fbConfig );
+				m_fbConfig = config[bestFbcIndex];
+				XVisualInfo * vi = glXGetVisualFromFBConfig( m_display, m_fbConfig );
 
-				if ( !l_vi )
+				if ( !vi )
 				{
 					CASTOR_EXCEPTION( "Couldn't find get XVisualInfo" );
 				}
 
-				Window l_root = RootWindow( m_display, l_vi->screen );
-				m_map = XCreateColormap( m_display, l_root, l_vi->visual, AllocNone );
+				Window root = RootWindow( m_display, vi->screen );
+				m_map = XCreateColormap( m_display, root, vi->visual, AllocNone );
 
 				if ( !m_map )
 				{
 					CASTOR_EXCEPTION( "Couldn't create X Colormap" );
 				}
 
-				XSetWindowAttributes l_swa;
-				l_swa.colormap = m_map;
-				l_swa.background_pixmap = 0;
-				l_swa.border_pixel = 0;
-				l_swa.event_mask = StructureNotifyMask;
-				m_xWindow = XCreateWindow( m_display, l_root, 0, 0, 640, 480, 0, l_vi->depth, InputOutput, l_vi->visual, CWBorderPixel | CWColormap | CWEventMask, &l_swa );
+				XSetWindowAttributes swa;
+				swa.colormap = m_map;
+				swa.background_pixmap = 0;
+				swa.border_pixel = 0;
+				swa.event_mask = StructureNotifyMask;
+				m_xWindow = XCreateWindow( m_display, root, 0, 0, 640, 480, 0, vi->depth, InputOutput, vi->visual, CWBorderPixel | CWColormap | CWEventMask, &swa );
 
 				if ( !m_xWindow )
 				{
 					CASTOR_EXCEPTION( "Couldn't create X Window" );
 				}
 
-				XFree( l_vi );
+				XFree( vi );
 				XStoreName( m_display, m_xWindow, "GlRenderSystemTests" );
 				XMapWindow( m_display, m_xWindow );
   				XSync( m_display, False );
 			}
-			catch( Castor::Exception & p_exc )
+			catch( castor::Exception & p_exc )
 			{
 				if ( m_xWindow )
 				{
@@ -344,12 +346,12 @@ namespace
 			}
 		}
 
-		Castor3D::IWindowHandleSPtr CreateWindowHandle()
+		castor3d::IWindowHandleSPtr CreateWindowHandle()
 		{
 			REQUIRE( m_xWindow );
 			REQUIRE( m_display );
-			Castor3D::IWindowHandleSPtr l_handle= std::make_shared< Castor3D::IXWindowHandle >( (GLXDrawable)m_xWindow, m_display );
-			return l_handle;
+			castor3d::IWindowHandleSPtr handle= std::make_shared< castor3d::IXWindowHandle >( (GLXDrawable)m_xWindow, m_display );
+			return handle;
 		}
 
 	private:
@@ -366,58 +368,63 @@ namespace
 
 int main( int argc, char const * argv[] )
 {
-	int l_return = EXIT_SUCCESS;
-	int l_count = 1;
+	int result = EXIT_SUCCESS;
+	int count = 1;
 
 	if ( argc == 2 )
 	{
-		l_count = std::max< int >( 1, atoi( argv[2] ) );
+		count = std::max< int >( 1, atoi( argv[2] ) );
 	}
 
-	Castor::Logger::Initialise( Castor::LogType::eDebug );
-	Castor::Logger::SetFileName( Castor::File::GetExecutableDirectory() / cuT( "GlRenderSystemTests.log" ) );
+	castor::Logger::initialise( castor::LogType::eDebug );
+	castor::Logger::setFileName( castor::File::getExecutableDirectory() / cuT( "GlRenderSystemTests.log" ) );
 	{
 		try
 		{
-			RenderWindow l_window;
-			auto l_handle = l_window.CreateWindowHandle();
+			RenderWindow window;
+			auto handle = window.CreateWindowHandle();
 
-			if ( l_handle )
+			if ( handle )
 			{
-				auto l_engine = DoInitialiseCastor( l_handle );
+				auto engine = doInitialiseCastor( handle );
 
-				if ( l_engine )
+				if ( engine )
 				{
 					// Test cases.
-					Testing::Register( std::make_unique< Testing::GlTextureTest >( *l_engine ) );
-
-					if ( l_engine->GetRenderSystem()->GetGpuInformations().HasFeature( Castor3D::GpuFeature::eTransformFeedback ) )
+					if ( engine->getRenderSystem()->getGpuInformations().hasFeature( castor3d::GpuFeature::eShaderStorageBuffers ) )
 					{
-						//Testing::Register( std::make_unique< Testing::GlTransformFeedbackTest >( *l_engine ) );
+						Testing::registerType( std::make_unique< Testing::GlPassBufferTest >( *engine ) );
 					}
 
-					if ( l_engine->GetRenderSystem()->GetGpuInformations().HasFeature( Castor3D::GpuFeature::eAtomicCounterBuffers ) )
+					Testing::registerType( std::make_unique< Testing::GlTextureTest >( *engine ) );
+
+					if ( engine->getRenderSystem()->getGpuInformations().hasFeature( castor3d::GpuFeature::eTransformFeedback ) )
 					{
-						Testing::Register( std::make_unique< Testing::GlAtomicCounterBufferTest >( *l_engine ) );
+						//Testing::registerType( std::make_unique< Testing::GlTransformFeedbackTest >( *engine ) );
 					}
 
-					if ( l_engine->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel() >= Castor3D::ShaderModel::eModel5 )
+					if ( engine->getRenderSystem()->getGpuInformations().hasFeature( castor3d::GpuFeature::eAtomicCounterBuffers ) )
 					{
-						Testing::Register( std::make_unique< Testing::GlComputeShaderTest >( *l_engine ) );
+						Testing::registerType( std::make_unique< Testing::GlAtomicCounterBufferTest >( *engine ) );
+					}
+
+					if ( engine->getRenderSystem()->getGpuInformations().getMaxShaderModel() >= castor3d::ShaderModel::eModel5 )
+					{
+						Testing::registerType( std::make_unique< Testing::GlComputeShaderTest >( *engine ) );
 					}
 
 					// Tests loop.
-					BENCHLOOP( l_count, l_return );
+					BENCHLOOP( count, result );
 
-					l_engine->Cleanup();
+					engine->cleanup();
 				}
 			}
 		}
-		catch( Castor::Exception & p_exc )
+		catch( castor::Exception & p_exc )
 		{
-			Logger::LogError( p_exc.what() );
+			Logger::logError( p_exc.what() );
 		}
 	}
-	Castor::Logger::Cleanup();
-	return l_return;
+	castor::Logger::cleanup();
+	return result;
 }

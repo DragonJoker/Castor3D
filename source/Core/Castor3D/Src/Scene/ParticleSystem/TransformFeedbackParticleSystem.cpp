@@ -18,58 +18,60 @@
 
 #include <random>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	TransformFeedbackParticleSystem::TransformFeedbackParticleSystem( ParticleSystem & p_parent )
 		: ParticleSystemImpl{ ParticleSystemImpl::Type::eTransformFeedback, p_parent }
-		, m_randomTexture{ *p_parent.GetScene()->GetEngine() }
-		, m_ubo{ cuT( "ParticleSystem" ), *p_parent.GetScene()->GetEngine()->GetRenderSystem() }
+		, m_randomTexture{ *p_parent.getScene()->getEngine() }
+		, m_ubo{ cuT( "ParticleSystem" )
+			, *p_parent.getScene()->getEngine()->getRenderSystem()
+			, 1u }
 	{
-		m_deltaTime = m_ubo.CreateUniform< UniformType::eFloat >( cuT( "c3d_fDeltaTime" ) );
-		m_time = m_ubo.CreateUniform< UniformType::eFloat >( cuT( "c3d_fTotalTime" ) );
-		m_emitterPosition = m_ubo.CreateUniform< UniformType::eVec3f >( cuT( "c3d_v3EmitterPosition" ) );
+		m_deltaTime = m_ubo.createUniform< UniformType::eFloat >( cuT( "c3d_fDeltaTime" ) );
+		m_time = m_ubo.createUniform< UniformType::eFloat >( cuT( "c3d_fTotalTime" ) );
+		m_emitterPosition = m_ubo.createUniform< UniformType::eVec3f >( cuT( "c3d_v3EmitterPosition" ) );
 	}
 
 	TransformFeedbackParticleSystem::~TransformFeedbackParticleSystem()
 	{
 	}
 
-	bool TransformFeedbackParticleSystem::Initialise()
+	bool TransformFeedbackParticleSystem::initialise()
 	{
-		bool l_return = m_updateProgram != nullptr;
+		bool result = m_updateProgram != nullptr;
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = DoCreateRandomTexture();
+			result = doCreateRandomTexture();
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = m_updateProgram->Initialise();
+			result = m_updateProgram->initialise();
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			l_return = DoCreateUpdatePipeline();
+			result = doCreateUpdatePipeline();
 		}
 
-		return l_return;
+		return result;
 	}
 
-	void TransformFeedbackParticleSystem::Cleanup()
+	void TransformFeedbackParticleSystem::cleanup()
 	{
 		m_deltaTime.reset();
 		m_time.reset();
 		m_launcherLifetime.reset();
 		m_shellLifetime.reset();
 		m_secondaryShellLifetime.reset();
-		m_randomTexture.Cleanup();
+		m_randomTexture.cleanup();
 
 		if ( m_updatePipeline )
 		{
-			m_updatePipeline->Cleanup();
+			m_updatePipeline->cleanup();
 			m_updatePipeline.reset();
 		}
 
@@ -77,53 +79,53 @@ namespace Castor3D
 		{
 			if ( m_updateGeometryBuffers[i] )
 			{
-				m_updateGeometryBuffers[i]->Cleanup();
+				m_updateGeometryBuffers[i]->cleanup();
 				m_updateGeometryBuffers[i].reset();
 			}
 
 			if ( m_transformFeedbacks[i] )
 			{
-				m_transformFeedbacks[i]->Cleanup();
+				m_transformFeedbacks[i]->cleanup();
 				m_transformFeedbacks[i].reset();
 			}
 
 			if ( m_updateVertexBuffers[i] )
 			{
-				m_updateVertexBuffers[i]->Cleanup();
+				m_updateVertexBuffers[i]->cleanup();
 				m_updateVertexBuffers[i].reset();
 			}
 		}
 
-		m_ubo.Cleanup();
+		m_ubo.cleanup();
 
 		if ( m_updateProgram )
 		{
-			m_updateProgram->Cleanup();
+			m_updateProgram->cleanup();
 			m_updateProgram.reset();
 		}
 	}
 
-	uint32_t TransformFeedbackParticleSystem::Update( std::chrono::milliseconds const & p_time
-		, std::chrono::milliseconds const & p_totalTime )
+	uint32_t TransformFeedbackParticleSystem::update( Milliseconds const & p_time
+		, Milliseconds const & p_totalTime )
 	{
-		m_deltaTime->SetValue( float( p_time.count() ) );
-		m_time->SetValue( float( p_totalTime.count() ) );
-		m_emitterPosition->SetValue( m_parent.GetParent()->GetDerivedPosition() );
-		m_ubo.Update();
-		auto & l_gbuffers = *m_updateGeometryBuffers[m_vtx];
-		auto & l_transform = *m_transformFeedbacks[m_tfb];
+		m_deltaTime->setValue( float( p_time.count() ) );
+		m_time->setValue( float( p_totalTime.count() ) );
+		m_emitterPosition->setValue( m_parent.getParent()->getDerivedPosition() );
+		m_ubo.update();
+		auto & gbuffers = *m_updateGeometryBuffers[m_vtx];
+		auto & transform = *m_transformFeedbacks[m_tfb];
 
-		m_updatePipeline->Apply();
-		m_randomTexture.Bind();
-		l_transform.Bind();
+		m_updatePipeline->apply();
+		m_randomTexture.bind();
+		transform.bind();
 
-		l_gbuffers.Draw( std::max( 1u, m_transformFeedbacks[m_vtx]->GetWrittenPrimitives() ), 0 );
+		gbuffers.draw( std::max( 1u, m_transformFeedbacks[m_vtx]->getWrittenPrimitives() ), 0u );
 
-		l_transform.Unbind();
-		m_randomTexture.Unbind();
-		auto const l_written = std::max( 1u, l_transform.GetWrittenPrimitives() );
-		auto const l_count = uint32_t( m_computed.stride() * std::max( 1u, l_written ) );
-		m_parent.GetBillboards()->GetVertexBuffer().Copy( *m_updateVertexBuffers[m_tfb], l_count );
+		transform.unbind();
+		m_randomTexture.unbind();
+		auto const written = std::max( 1u, transform.getWrittenPrimitives() );
+		auto const count = uint32_t( m_computed.stride() * std::max( 1u, written ) );
+		m_parent.getBillboards()->getVertexBuffer().copy( *m_updateVertexBuffers[m_tfb], count );
 
 #if 0 && !defined( NDEBUG )
 
@@ -136,132 +138,132 @@ namespace Castor3D
 				float age;
 			};
 
-			m_updateVertexBuffers[m_tfb]->Bind();
-			auto l_buffer = reinterpret_cast< MyParticle * >( m_updateVertexBuffers[m_tfb]->Lock( 0, l_count, AccessType::eRead ) );
+			m_updateVertexBuffers[m_tfb]->bind();
+			auto buffer = reinterpret_cast< MyParticle * >( m_updateVertexBuffers[m_tfb]->lock( 0, count, AccessType::eRead ) );
 
-			if ( l_buffer )
+			if ( buffer )
 			{
-				MyParticle l_particles[10000];
-				std::memcpy( l_particles, l_buffer, l_count );
-				m_updateVertexBuffers[m_tfb]->Unlock();
+				MyParticle particles[10000];
+				std::memcpy( particles, buffer, count );
+				m_updateVertexBuffers[m_tfb]->unlock();
 			}
 
-			m_updateVertexBuffers[m_tfb]->Unbind();
+			m_updateVertexBuffers[m_tfb]->unbind();
 		}
 
 #endif
 
 		m_vtx = m_tfb;
 		m_tfb = 1 - m_tfb;
-		return l_written;
+		return written;
 	}
 
-	void TransformFeedbackParticleSystem::AddParticleVariable( Castor::String const & p_name, ElementType p_type, Castor::String const & p_defaultValue )
+	void TransformFeedbackParticleSystem::addParticleVariable( castor::String const & p_name, ElementType p_type, castor::String const & p_defaultValue )
 	{
 		m_computed.push_back( BufferElementDeclaration{ cuT( "out_" ) + p_name, 0u, p_type, m_computed.stride() } );
 		m_inputs.push_back( BufferElementDeclaration{ p_name, 0u, p_type, m_inputs.stride() } );
 	}
 
-	void TransformFeedbackParticleSystem::SetUpdateProgram( ShaderProgramSPtr p_program )
+	void TransformFeedbackParticleSystem::setUpdateProgram( ShaderProgramSPtr p_program )
 	{
 		m_updateProgram = p_program;
-		m_updateProgram->CreateUniform( UniformType::eSampler, cuT( "c3d_mapRandom" ), ShaderType::eGeometry );
+		m_updateProgram->createUniform< UniformType::eSampler >( cuT( "c3d_mapRandom" ), ShaderType::eGeometry )->setValue( MinTextureIndex );
 
-		m_updateProgram->SetTransformLayout( m_computed );
+		m_updateProgram->setTransformLayout( m_computed );
 	}
 
-	bool TransformFeedbackParticleSystem::DoCreateUpdatePipeline()
+	bool TransformFeedbackParticleSystem::doCreateUpdatePipeline()
 	{
-		auto & l_engine = *m_parent.GetScene()->GetEngine();
-		auto & l_renderSystem = *l_engine.GetRenderSystem();
+		auto & engine = *m_parent.getScene()->getEngine();
+		auto & renderSystem = *engine.getRenderSystem();
 
-		Particle l_particle{ m_computed, m_parent.GetDefaultValues() };
-		bool l_return{ true };
+		Particle particle{ m_computed, m_parent.getDefaultValues() };
+		bool result{ true };
 
-		for ( uint32_t i = 0; i < 2 && l_return; ++i )
+		for ( uint32_t i = 0; i < 2 && result; ++i )
 		{
-			m_updateVertexBuffers[i] = std::make_shared< VertexBuffer >( l_engine, m_inputs );
+			m_updateVertexBuffers[i] = std::make_shared< VertexBuffer >( engine, m_inputs );
 
-			if ( l_return )
+			if ( result )
 			{
-				m_updateVertexBuffers[i]->Resize( uint32_t( m_parent.GetMaxParticlesCount() ) * m_computed.stride() );
-				auto l_buffer = m_updateVertexBuffers[i]->data();
+				m_updateVertexBuffers[i]->resize( uint32_t( m_parent.getMaxParticlesCount() ) * m_computed.stride() );
+				auto buffer = m_updateVertexBuffers[i]->getData();
 
-				for ( uint32_t i = 0u; i < m_parent.GetMaxParticlesCount(); ++i )
+				for ( uint32_t i = 0u; i < m_parent.getMaxParticlesCount(); ++i )
 				{
-					std::memcpy( l_buffer, l_particle.GetData(), m_computed.stride() );
-					l_buffer += m_computed.stride();
+					std::memcpy( buffer, particle.getData(), m_computed.stride() );
+					buffer += m_computed.stride();
 				}
 
-				l_return = m_updateVertexBuffers[i]->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+				result = m_updateVertexBuffers[i]->initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 			}
 		}
 
-		for ( uint32_t i = 0; i < 2 && l_return; ++i )
+		for ( uint32_t i = 0; i < 2 && result; ++i )
 		{
-			m_transformFeedbacks[i] = l_renderSystem.CreateTransformFeedback( m_computed, Topology::ePoints, *m_updateProgram );
-			l_return = m_transformFeedbacks[i]->Initialise( { *m_updateVertexBuffers[i] } );
+			m_transformFeedbacks[i] = renderSystem.createTransformFeedback( m_computed, Topology::ePoints, *m_updateProgram );
+			result = m_transformFeedbacks[i]->initialise( { *m_updateVertexBuffers[i] } );
 
-			if ( l_return )
+			if ( result )
 			{
-				m_updateGeometryBuffers[i] = l_renderSystem.CreateGeometryBuffers( Topology::ePoints, *m_updateProgram );
-				l_return = m_updateGeometryBuffers[i]->Initialise( { *m_updateVertexBuffers[i] }, nullptr );
+				m_updateGeometryBuffers[i] = renderSystem.createGeometryBuffers( Topology::ePoints, *m_updateProgram );
+				result = m_updateGeometryBuffers[i]->initialise( { *m_updateVertexBuffers[i] }, nullptr );
 			}
 		}
 
-		if ( l_return )
+		if ( result )
 		{
-			RasteriserState l_rs;
-			l_rs.SetDiscardPrimitives( true );
-			DepthStencilState l_ds;
-			l_ds.SetDepthTest( true );
-			m_updatePipeline = l_renderSystem.CreateRenderPipeline( std::move( l_ds )
-				, std::move( l_rs )
+			RasteriserState rs;
+			rs.setDiscardPrimitives( true );
+			DepthStencilState ds;
+			ds.setDepthTest( true );
+			m_updatePipeline = renderSystem.createRenderPipeline( std::move( ds )
+				, std::move( rs )
 				, BlendState{}
 				, MultisampleState{}
 				, *m_updateProgram
 				, PipelineFlags{} );
-			m_updatePipeline->AddUniformBuffer( m_ubo );
+			m_updatePipeline->addUniformBuffer( m_ubo );
 		}
 
-		return l_return;
+		return result;
 	}
 
-	bool TransformFeedbackParticleSystem::DoCreateRandomTexture()
+	bool TransformFeedbackParticleSystem::doCreateRandomTexture()
 	{
-		auto & l_engine = *m_parent.GetScene()->GetEngine();
-		auto & l_renderSystem = *l_engine.GetRenderSystem();
+		auto & engine = *m_parent.getScene()->getEngine();
+		auto & renderSystem = *engine.getRenderSystem();
 
-		auto l_texture = l_renderSystem.CreateTexture( TextureType::eOneDimension, AccessType::eNone, AccessType::eRead, PixelFormat::eRGB32F, Size{ 1024, 1 } );
-		l_texture->GetImage().InitialiseSource();
-		auto & l_buffer = *std::static_pointer_cast< PxBuffer< PixelFormat::eRGB32F > >( l_texture->GetImage().GetBuffer() );
-		auto l_pixels = reinterpret_cast< float * >( l_buffer.ptr() );
+		auto texture = renderSystem.createTexture( TextureType::eOneDimension, AccessType::eNone, AccessType::eRead, PixelFormat::eRGB32F, Size{ 1024, 1 } );
+		texture->getImage().initialiseSource();
+		auto & buffer = *std::static_pointer_cast< PxBuffer< PixelFormat::eRGB32F > >( texture->getImage().getBuffer() );
+		auto pixels = reinterpret_cast< float * >( buffer.ptr() );
 
-		static std::random_device l_device;
-		std::uniform_real_distribution< float > l_distribution{ -1.0f, 1.0f };
+		static std::random_device device;
+		std::uniform_real_distribution< float > distribution{ -1.0f, 1.0f };
 
-		for ( uint32_t i{ 0u }; i < l_buffer.count(); ++i )
+		for ( uint32_t i{ 0u }; i < buffer.count(); ++i )
 		{
-			*l_pixels++ = l_distribution( l_device );
-			*l_pixels++ = l_distribution( l_device );
-			*l_pixels++ = l_distribution( l_device );
+			*pixels++ = distribution( device );
+			*pixels++ = distribution( device );
+			*pixels++ = distribution( device );
 		}
 
-		auto l_sampler = m_parent.GetScene()->GetEngine()->GetSamplerCache().Add( cuT( "TFParticleSystem" ) );
-		l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-		l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eRepeat );
-		bool l_return = l_sampler->Initialise();
+		auto sampler = m_parent.getScene()->getEngine()->getSamplerCache().add( cuT( "TFParticleSystem" ) );
+		sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+		sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+		sampler->setWrappingMode( TextureUVW::eU, WrapMode::eRepeat );
+		bool result = sampler->initialise();
 
-		if ( l_return )
+		if ( result )
 		{
-			m_randomTexture.SetTexture( l_texture );
-			m_randomTexture.SetSampler( l_sampler );
-			m_randomTexture.SetIndex( 0 );
-			l_return = m_randomTexture.Initialise();
-			l_texture->GenerateMipmaps();
+			m_randomTexture.setTexture( texture );
+			m_randomTexture.setSampler( sampler );
+			m_randomTexture.setIndex( MinTextureIndex );
+			result = m_randomTexture.initialise();
+			texture->generateMipmaps();
 		}
 
-		return l_return;
+		return result;
 	}
 }

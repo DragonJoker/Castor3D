@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_CHUNK_PARSER_H___
 #define ___C3D_CHUNK_PARSER_H___
@@ -26,7 +7,7 @@ SOFTWARE.
 #include "BinaryChunk.hpp"
 #include "ChunkData.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -54,16 +35,16 @@ namespace Castor3D
 		 *\param[in]	p_chunk		Le chunk contenant les valeurs
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Parse( uint8_t * p_values, size_t p_size, BinaryChunk & p_chunk )
+		static inline bool parse( uint8_t * p_values, size_t p_size, BinaryChunk & p_chunk )
 		{
-			bool l_return = p_chunk.CheckAvailable( uint32_t( p_size ) );
+			bool result = p_chunk.checkAvailable( uint32_t( p_size ) );
 
-			if ( l_return )
+			if ( result )
 			{
-				p_chunk.Get( p_values, uint32_t( p_size ) );
+				p_chunk.get( p_values, uint32_t( p_size ) );
 			}
 
-			return l_return;
+			return result;
 		}
 	};
 	/*!
@@ -94,18 +75,18 @@ namespace Castor3D
 		 *\param[in]	p_chunk		Le chunk contenant les valeurs
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Parse( T * p_values, size_t p_count, BinaryChunk & p_chunk )
+		static inline bool parse( T * p_values, size_t p_count, BinaryChunk & p_chunk )
 		{
-			bool l_return{ ChunkParserBase::Parse( reinterpret_cast< uint8_t * >( p_values )
+			bool result{ ChunkParserBase::parse( reinterpret_cast< uint8_t * >( p_values )
 				, p_count * sizeof( T )
 				, p_chunk ) };
 
 			for ( uint32_t i = 0; i < p_count; ++i )
 			{
-				PrepareChunkData( *p_values++ );
+				prepareChunkData( *p_values++ );
 			}
 
-			return l_return;
+			return result;
 		}
 		/**
 		 *\~english
@@ -119,13 +100,13 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk contenant la valeur
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Parse( T & p_value, BinaryChunk & p_chunk )
+		static inline bool parse( T & p_value, BinaryChunk & p_chunk )
 		{
-			bool l_return{ ChunkParserBase::Parse( GetBuffer( p_value )
-				, uint32_t( GetDataSize( p_value ) )
+			bool result{ ChunkParserBase::parse( getBuffer( p_value )
+				, uint32_t( getDataSize( p_value ) )
 				, p_chunk ) };
-			PrepareChunkData( p_value );
-			return l_return;
+			prepareChunkData( p_value );
+			return result;
 		}
 	};
 	/*!
@@ -133,12 +114,12 @@ namespace Castor3D
 	\version	0.7.0.0
 	\date 		08/04/2014
 	\~english
-	\brief		ChunkParser specialisation for Castor::String
+	\brief		ChunkParser specialisation for castor::String
 	\~french
-	\brief		Spécialisation de ChunkParser pour Castor::String
+	\brief		Spécialisation de ChunkParser pour castor::String
 	*/
 	template<>
-	class ChunkParser< Castor::String >
+	class ChunkParser< castor::String >
 		: public ChunkParserBase
 	{
 	public:
@@ -154,25 +135,25 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk contenant la valeur
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Parse( Castor::String & p_value, BinaryChunk & p_chunk )
+		static inline bool parse( castor::String & p_value, BinaryChunk & p_chunk )
 		{
-			bool l_return = p_chunk.CheckAvailable( 1 );
-			uint32_t l_size = p_chunk.GetRemaining();
+			bool result = p_chunk.checkAvailable( 1 );
+			uint32_t size = p_chunk.getRemaining();
 
-			if ( l_return )
+			if ( result )
 			{
-				std::vector< char > l_buffer( l_size + 1, 0 );
-				l_return = ChunkParserBase::Parse( reinterpret_cast< uint8_t * >( l_buffer.data() )
-					, l_size
+				std::vector< char > buffer( size + 1, 0 );
+				result = ChunkParserBase::parse( reinterpret_cast< uint8_t * >( buffer.data() )
+					, size
 					, p_chunk );
 
-				if ( l_return )
+				if ( result )
 				{
-					p_value = Castor::string::string_cast< xchar >( l_buffer.data() );
+					p_value = castor::string::stringCast< xchar >( buffer.data() );
 				}
 			}
 
-			return l_return;
+			return result;
 		}
 	};
 	/*!
@@ -180,12 +161,12 @@ namespace Castor3D
 	\version	0.7.0.0
 	\date 		08/04/2014
 	\~english
-	\brief		ChunkParser specialisation for Castor::Path
+	\brief		ChunkParser specialisation for castor::Path
 	\~french
-	\brief		Spécialisation de ChunkParser pour Castor::Path
+	\brief		Spécialisation de ChunkParser pour castor::Path
 	*/
 	template<>
-	class ChunkParser< Castor::Path >
+	class ChunkParser< castor::Path >
 		: public ChunkParserBase
 	{
 	public:
@@ -201,25 +182,25 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk contenant la valeur
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Parse( Castor::Path & p_value, BinaryChunk & p_chunk )
+		static inline bool parse( castor::Path & p_value, BinaryChunk & p_chunk )
 		{
-			bool l_return = p_chunk.CheckAvailable( 1 );
-			uint32_t l_size = p_chunk.GetRemaining();
+			bool result = p_chunk.checkAvailable( 1 );
+			uint32_t size = p_chunk.getRemaining();
 
-			if ( l_return )
+			if ( result )
 			{
-				std::vector< char > l_buffer( l_size + 1, 0 );
-				l_return = ChunkParserBase::Parse( reinterpret_cast< uint8_t * >( l_buffer.data() )
-					, l_size
+				std::vector< char > buffer( size + 1, 0 );
+				result = ChunkParserBase::parse( reinterpret_cast< uint8_t * >( buffer.data() )
+					, size
 					, p_chunk );
 
-				if ( l_return )
+				if ( result )
 				{
-					p_value = Castor::Path{ Castor::string::string_cast< xchar >( l_buffer.data() ) };
+					p_value = castor::Path{ castor::string::stringCast< xchar >( buffer.data() ) };
 				}
 			}
 
-			return l_return;
+			return result;
 		}
 	};
 }

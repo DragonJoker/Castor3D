@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CU_FIXED_SIZE_MARKED_MEMORY_DATA_H___
 #define ___CU_FIXED_SIZE_MARKED_MEMORY_DATA_H___
@@ -27,7 +8,7 @@ SOFTWARE.
 
 #include <cstddef>
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -60,21 +41,21 @@ namespace Castor
 		 *\brief		Initialise le pool avec le nombre d'objets donné.
 		 *\param[in]	p_count	Le compte des objets.
 		 */
-		void Initialise( size_t p_count )noexcept
+		void initialise( size_t p_count )noexcept
 		{
 			m_total = p_count;
 			m_buffer = new uint8_t[m_total + m_total * sizeof( Object )];
 			m_free = new uint8_t * [m_total];
 			m_freeIndex = m_free;
 			m_bufferEnd = m_buffer;
-			size_t l_size = sizeof( Object ) + 1;
+			size_t size = sizeof( Object ) + 1;
 
 			for ( size_t i = 0; i < m_total; ++i )
 			{
 				*m_freeIndex++ = m_bufferEnd;
 				// On marque le premier octet de la mémoire
 				*m_bufferEnd = NEVER_ALLOCATED;
-				m_bufferEnd += l_size;
+				m_bufferEnd += size;
 			}
 
 			m_freeEnd = m_freeIndex;
@@ -85,22 +66,22 @@ namespace Castor
 		 *\~french
 		 *\brief		Nettoie le pool, rapporte les fuites de mémoire.
 		 */
-		void Cleanup()noexcept
+		void cleanup()noexcept
 		{
 			if ( m_freeIndex != m_freeEnd )
 			{
-				ReportError< PoolErrorType::eCommonMemoryLeaksDetected >( Namer::Name, size_t( ( m_freeEnd - m_freeIndex ) * sizeof( Object ) ) );
-				uint8_t * l_buffer = m_buffer;
-				size_t l_size = sizeof( Object ) + 1;
+				reportError< PoolErrorType::eCommonMemoryLeaksDetected >( Namer::Name, size_t( ( m_freeEnd - m_freeIndex ) * sizeof( Object ) ) );
+				uint8_t * buffer = m_buffer;
+				size_t size = sizeof( Object ) + 1;
 
 				for ( size_t i = 0; i < m_total; ++i )
 				{
-					if ( *l_buffer == ALLOCATED )
+					if ( *buffer == ALLOCATED )
 					{
-						ReportError< PoolErrorType::eMarkedLeakAddress >( Namer::Name, ( void * )( l_buffer + 1 ) );
+						reportError< PoolErrorType::eMarkedLeakAddress >( Namer::Name, ( void * )( buffer + 1 ) );
 					}
 
-					l_buffer += l_size;
+					buffer += size;
 				}
 			}
 
@@ -114,30 +95,30 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Gives the address an available chunk.
-		 *\remarks		Set the marked byte to "Allocated" state.
+		 *\remarks		set the marked byte to "Allocated" state.
 		 *\return		nullptr if no memory available, the memory address if not.
 		 *\~french
-		 *\brief		Donne un chunk mémoire disponible.
+		 *\brief		donne un chunk mémoire disponible.
 		 *\remarks		Met l'octet de marquage dans l'état "Alloué".
 		 *\return		nullptr s'il n'y a plus de place disponible, l'adresse mémoire sinon.
 		 */
-		Object * Allocate()noexcept
+		Object * allocate()noexcept
 		{
 			if ( m_freeIndex == m_free )
 			{
-				ReportError< PoolErrorType::eCommonOutOfMemory >( Namer::Name );
+				reportError< PoolErrorType::eCommonOutOfMemory >( Namer::Name );
 				return nullptr;
 			}
 
-			uint8_t * l_space = *--m_freeIndex;
-			* l_space = ALLOCATED;
-			return reinterpret_cast< Object * >( ++l_space );
+			uint8_t * space = *--m_freeIndex;
+			* space = ALLOCATED;
+			return reinterpret_cast< Object * >( ++space );
 		}
 		/**
 		 *\~english
 		 *\brief		Frees the given memory.
 		 *\remarks		Checks if the given address comes from the pool, and if it has been allocated by the pool, via the marked byte.
-		 *\remarks		Set the marked byte to "Free" state.
+		 *\remarks		set the marked byte to "deallocate" state.
 		 *\param[in]	p_space	The memory to free.
 		 *\return		nullptr if no memory available, the memory address if not.
 		 *\~french
@@ -147,39 +128,39 @@ namespace Castor
 		 *\param[in]	p_space	La mémoire à libérer.
 		 *\return		true si la mémoire faisait partie du pool.
 		 */
-		bool Deallocate( void * p_space )noexcept
+		bool deallocate( void * p_space )noexcept
 		{
 			if ( p_space )
 			{
 				if ( m_freeIndex == m_freeEnd )
 				{
-					ReportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name, ( void * )p_space );
+					reportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name, ( void * )p_space );
 					return false;
 				}
 
 				if ( ptrdiff_t( p_space ) < ptrdiff_t( m_buffer ) || ptrdiff_t( p_space ) >= ptrdiff_t( m_bufferEnd ) )
 				{
-					ReportError< PoolErrorType::eCommonNotFromRange >( Namer::Name, ( void * )p_space );
+					reportError< PoolErrorType::eCommonNotFromRange >( Namer::Name, ( void * )p_space );
 					return false;
 				}
 
-				uint8_t * l_marked = reinterpret_cast< uint8_t * >( p_space );
-				--l_marked;
+				uint8_t * marked = reinterpret_cast< uint8_t * >( p_space );
+				--marked;
 
-				if ( *l_marked != ALLOCATED )
+				if ( *marked != ALLOCATED )
 				{
-					if ( *l_marked == FREED )
+					if ( *marked == FREED )
 					{
-						ReportError< PoolErrorType::eMarkedDoubleDelete >( Namer::Name, ( void * )p_space );
+						reportError< PoolErrorType::eMarkedDoubleDelete >( Namer::Name, ( void * )p_space );
 						return false;
 					}
 
-					ReportError< PoolErrorType::eMarkedNotFromPool >( Namer::Name, ( void * )p_space );
+					reportError< PoolErrorType::eMarkedNotFromPool >( Namer::Name, ( void * )p_space );
 					return false;
 				}
 
-				*l_marked = FREED;
-				*m_freeIndex++ = l_marked;
+				*marked = FREED;
+				*m_freeIndex++ = marked;
 				return true;
 			}
 			else

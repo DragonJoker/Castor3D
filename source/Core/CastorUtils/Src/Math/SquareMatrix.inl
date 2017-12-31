@@ -1,6 +1,6 @@
 ﻿#include "Simd.hpp"
 
-namespace Castor
+namespace castor
 {
 	namespace
 	{
@@ -9,110 +9,108 @@ namespace Castor
 		template< typename Type >
 		struct SqrMtxInverter< Type, 4 >
 		{
-			static inline Castor::SquareMatrix< Type, 4 > inverse( Castor::SquareMatrix< Type, 4 > const & p_mtx )
+			static inline void inverse( castor::SquareMatrix< Type, 4 > const & input
+				, castor::SquareMatrix< Type, 4 > & result )
 			{
-				Type l_tS00 = p_mtx[0][0];
-				Type l_tS01 = p_mtx[0][1];
-				Type l_tS02 = p_mtx[0][2];
-				Type l_tS03 = p_mtx[0][3];
-				Type l_tS10 = p_mtx[1][0];
-				Type l_tS11 = p_mtx[1][1];
-				Type l_tS12 = p_mtx[1][2];
-				Type l_tS13 = p_mtx[1][3];
-				Type l_tS20 = p_mtx[2][0];
-				Type l_tS21 = p_mtx[2][1];
-				Type l_tS22 = p_mtx[2][2];
-				Type l_tS23 = p_mtx[2][3];
-				Type l_tS30 = p_mtx[3][0];
-				Type l_tS31 = p_mtx[3][1];
-				Type l_tS32 = p_mtx[3][2];
-				Type l_tS33 = p_mtx[3][3];
-				Type l_tCoef00 = l_tS22 * l_tS33 - l_tS32 * l_tS23;
-				Type l_tCoef02 = l_tS12 * l_tS33 - l_tS32 * l_tS13;
-				Type l_tCoef03 = l_tS12 * l_tS23 - l_tS22 * l_tS13;
-				Type l_tCoef04 = l_tS21 * l_tS33 - l_tS31 * l_tS23;
-				Type l_tCoef06 = l_tS11 * l_tS33 - l_tS31 * l_tS13;
-				Type l_tCoef07 = l_tS11 * l_tS23 - l_tS21 * l_tS13;
-				Type l_tCoef08 = l_tS21 * l_tS32 - l_tS31 * l_tS22;
-				Type l_tCoef10 = l_tS11 * l_tS32 - l_tS31 * l_tS12;
-				Type l_tCoef11 = l_tS11 * l_tS22 - l_tS21 * l_tS12;
-				Type l_tCoef12 = l_tS20 * l_tS33 - l_tS30 * l_tS23;
-				Type l_tCoef14 = l_tS10 * l_tS33 - l_tS30 * l_tS13;
-				Type l_tCoef15 = l_tS10 * l_tS23 - l_tS20 * l_tS13;
-				Type l_tCoef16 = l_tS20 * l_tS32 - l_tS30 * l_tS22;
-				Type l_tCoef18 = l_tS10 * l_tS32 - l_tS30 * l_tS12;
-				Type l_tCoef19 = l_tS10 * l_tS22 - l_tS20 * l_tS12;
-				Type l_tCoef20 = l_tS20 * l_tS31 - l_tS30 * l_tS21;
-				Type l_tCoef22 = l_tS10 * l_tS31 - l_tS30 * l_tS11;
-				Type l_tCoef23 = l_tS10 * l_tS21 - l_tS20 * l_tS11;
-				Castor::SquareMatrix< Type, 4 > l_mtxInverse = Castor::SquareMatrix< Type, 4 >( Castor::NoInit() );
-				l_mtxInverse[0][0] = +1 * ( l_tS11 * l_tCoef00 - l_tS12 * l_tCoef04 + l_tS13 * l_tCoef08 );
-				l_mtxInverse[0][1] = -1 * ( l_tS01 * l_tCoef00 - l_tS02 * l_tCoef04 + l_tS03 * l_tCoef08 );
-				l_mtxInverse[0][2] = +1 * ( l_tS01 * l_tCoef02 - l_tS02 * l_tCoef06 + l_tS03 * l_tCoef10 );
-				l_mtxInverse[0][3] = -1 * ( l_tS01 * l_tCoef03 - l_tS02 * l_tCoef07 + l_tS03 * l_tCoef11 );
-				l_mtxInverse[1][0] = -1 * ( l_tS10 * l_tCoef00 - l_tS12 * l_tCoef12 + l_tS13 * l_tCoef16 );
-				l_mtxInverse[1][1] = +1 * ( l_tS00 * l_tCoef00 - l_tS02 * l_tCoef12 + l_tS03 * l_tCoef16 );
-				l_mtxInverse[1][2] = -1 * ( l_tS00 * l_tCoef02 - l_tS02 * l_tCoef14 + l_tS03 * l_tCoef18 );
-				l_mtxInverse[1][3] = +1 * ( l_tS00 * l_tCoef03 - l_tS02 * l_tCoef15 + l_tS03 * l_tCoef19 );
-				l_mtxInverse[2][0] = +1 * ( l_tS10 * l_tCoef04 - l_tS11 * l_tCoef12 + l_tS13 * l_tCoef20 );
-				l_mtxInverse[2][1] = -1 * ( l_tS00 * l_tCoef04 - l_tS01 * l_tCoef12 + l_tS03 * l_tCoef20 );
-				l_mtxInverse[2][2] = +1 * ( l_tS00 * l_tCoef06 - l_tS01 * l_tCoef14 + l_tS03 * l_tCoef22 );
-				l_mtxInverse[2][3] = -1 * ( l_tS00 * l_tCoef07 - l_tS01 * l_tCoef15 + l_tS03 * l_tCoef23 );
-				l_mtxInverse[3][0] = -1 * ( l_tS10 * l_tCoef08 - l_tS11 * l_tCoef16 + l_tS12 * l_tCoef20 );
-				l_mtxInverse[3][1] = +1 * ( l_tS00 * l_tCoef08 - l_tS01 * l_tCoef16 + l_tS02 * l_tCoef20 );
-				l_mtxInverse[3][2] = -1 * ( l_tS00 * l_tCoef10 - l_tS01 * l_tCoef18 + l_tS02 * l_tCoef22 );
-				l_mtxInverse[3][3] = +1 * ( l_tS00 * l_tCoef11 - l_tS01 * l_tCoef19 + l_tS02 * l_tCoef23 );
-				Castor::Point< Type, 4 > l_ptRow0( l_mtxInverse[0][0], l_mtxInverse[1][0], l_mtxInverse[2][0], l_mtxInverse[3][0] );
-				Type l_tDeterminant = Castor::point::dot( p_mtx[0], l_ptRow0 );
-				l_mtxInverse /= l_tDeterminant;
-				return l_mtxInverse;
+				auto tS0 = input[0];
+				Type tS00 = input[0][0];
+				Type tS01 = input[0][1];
+				Type tS02 = input[0][2];
+				Type tS03 = input[0][3];
+				Type tS10 = input[1][0];
+				Type tS11 = input[1][1];
+				Type tS12 = input[1][2];
+				Type tS13 = input[1][3];
+				Type tS20 = input[2][0];
+				Type tS21 = input[2][1];
+				Type tS22 = input[2][2];
+				Type tS23 = input[2][3];
+				Type tS30 = input[3][0];
+				Type tS31 = input[3][1];
+				Type tS32 = input[3][2];
+				Type tS33 = input[3][3];
+				Type tCoef00 = tS22 * tS33 - tS32 * tS23;
+				Type tCoef02 = tS12 * tS33 - tS32 * tS13;
+				Type tCoef03 = tS12 * tS23 - tS22 * tS13;
+				Type tCoef04 = tS21 * tS33 - tS31 * tS23;
+				Type tCoef06 = tS11 * tS33 - tS31 * tS13;
+				Type tCoef07 = tS11 * tS23 - tS21 * tS13;
+				Type tCoef08 = tS21 * tS32 - tS31 * tS22;
+				Type tCoef10 = tS11 * tS32 - tS31 * tS12;
+				Type tCoef11 = tS11 * tS22 - tS21 * tS12;
+				Type tCoef12 = tS20 * tS33 - tS30 * tS23;
+				Type tCoef14 = tS10 * tS33 - tS30 * tS13;
+				Type tCoef15 = tS10 * tS23 - tS20 * tS13;
+				Type tCoef16 = tS20 * tS32 - tS30 * tS22;
+				Type tCoef18 = tS10 * tS32 - tS30 * tS12;
+				Type tCoef19 = tS10 * tS22 - tS20 * tS12;
+				Type tCoef20 = tS20 * tS31 - tS30 * tS21;
+				Type tCoef22 = tS10 * tS31 - tS30 * tS11;
+				Type tCoef23 = tS10 * tS21 - tS20 * tS11;
+				result[0][0] = +1 * ( tS11 * tCoef00 - tS12 * tCoef04 + tS13 * tCoef08 );
+				result[0][1] = -1 * ( tS01 * tCoef00 - tS02 * tCoef04 + tS03 * tCoef08 );
+				result[0][2] = +1 * ( tS01 * tCoef02 - tS02 * tCoef06 + tS03 * tCoef10 );
+				result[0][3] = -1 * ( tS01 * tCoef03 - tS02 * tCoef07 + tS03 * tCoef11 );
+				result[1][0] = -1 * ( tS10 * tCoef00 - tS12 * tCoef12 + tS13 * tCoef16 );
+				result[1][1] = +1 * ( tS00 * tCoef00 - tS02 * tCoef12 + tS03 * tCoef16 );
+				result[1][2] = -1 * ( tS00 * tCoef02 - tS02 * tCoef14 + tS03 * tCoef18 );
+				result[1][3] = +1 * ( tS00 * tCoef03 - tS02 * tCoef15 + tS03 * tCoef19 );
+				result[2][0] = +1 * ( tS10 * tCoef04 - tS11 * tCoef12 + tS13 * tCoef20 );
+				result[2][1] = -1 * ( tS00 * tCoef04 - tS01 * tCoef12 + tS03 * tCoef20 );
+				result[2][2] = +1 * ( tS00 * tCoef06 - tS01 * tCoef14 + tS03 * tCoef22 );
+				result[2][3] = -1 * ( tS00 * tCoef07 - tS01 * tCoef15 + tS03 * tCoef23 );
+				result[3][0] = -1 * ( tS10 * tCoef08 - tS11 * tCoef16 + tS12 * tCoef20 );
+				result[3][1] = +1 * ( tS00 * tCoef08 - tS01 * tCoef16 + tS02 * tCoef20 );
+				result[3][2] = -1 * ( tS00 * tCoef10 - tS01 * tCoef18 + tS02 * tCoef22 );
+				result[3][3] = +1 * ( tS00 * tCoef11 - tS01 * tCoef19 + tS02 * tCoef23 );
+				castor::Point< Type, 4 > ptRow0( result[0][0], result[1][0], result[2][0], result[3][0] );
+				Type determinant = castor::point::dot( tS0, ptRow0 );
+				result /= determinant;
 			}
 		};
 
 		template< typename Type >
 		struct SqrMtxInverter< Type, 3 >
 		{
-			static inline Castor::SquareMatrix< Type, 3 > inverse( Castor::SquareMatrix< Type, 3 > const & p_mtx )
+			static inline void inverse( castor::SquareMatrix< Type, 3 > const & input
+				, castor::SquareMatrix< Type, 3 > & result )
 			{
-				Type l_tS00 = p_mtx[0][0];
-				Type l_tS01 = p_mtx[0][1];
-				Type l_tS02 = p_mtx[0][2];
-				Type l_tS10 = p_mtx[1][0];
-				Type l_tS11 = p_mtx[1][1];
-				Type l_tS12 = p_mtx[1][2];
-				Type l_tS20 = p_mtx[2][0];
-				Type l_tS21 = p_mtx[2][1];
-				Type l_tS22 = p_mtx[2][2];
-				Castor::SquareMatrix< Type, 3 > l_mtxInverse = Castor::SquareMatrix< Type, 3 >( Castor::NoInit() );
-				l_mtxInverse[0][0] = l_tS11 * l_tS22 - l_tS21 * l_tS12;
-				l_mtxInverse[0][1] = l_tS12 * l_tS20 - l_tS22 * l_tS10;
-				l_mtxInverse[0][2] = l_tS10 * l_tS21 - l_tS20 * l_tS11;
-				l_mtxInverse[1][0] = l_tS02 * l_tS21 - l_tS01 * l_tS22;
-				l_mtxInverse[1][1] = l_tS00 * l_tS22 - l_tS02 * l_tS20;
-				l_mtxInverse[1][2] = l_tS01 * l_tS20 - l_tS00 * l_tS21;
-				l_mtxInverse[2][0] = l_tS12 * l_tS01 - l_tS11 * l_tS02;
-				l_mtxInverse[2][1] = l_tS10 * l_tS02 - l_tS12 * l_tS00;
-				l_mtxInverse[2][2] = l_tS11 * l_tS00 - l_tS10 * l_tS01;
-				Type l_tDeterminant = l_tS00 * ( l_tS11 * l_tS22 - l_tS21 * l_tS12 )
-									  - l_tS10 * ( l_tS01 * l_tS22 - l_tS21 * l_tS02 )
-									  + l_tS20 * ( l_tS01 * l_tS12 - l_tS11 * l_tS02 );
-				l_mtxInverse /= l_tDeterminant;
-				return l_mtxInverse;
+				Type tS00 = input[0][0];
+				Type tS01 = input[0][1];
+				Type tS02 = input[0][2];
+				Type tS10 = input[1][0];
+				Type tS11 = input[1][1];
+				Type tS12 = input[1][2];
+				Type tS20 = input[2][0];
+				Type tS21 = input[2][1];
+				Type tS22 = input[2][2];
+				result[0][0] = tS11 * tS22 - tS21 * tS12;
+				result[0][1] = tS12 * tS20 - tS22 * tS10;
+				result[0][2] = tS10 * tS21 - tS20 * tS11;
+				result[1][0] = tS02 * tS21 - tS01 * tS22;
+				result[1][1] = tS00 * tS22 - tS02 * tS20;
+				result[1][2] = tS01 * tS20 - tS00 * tS21;
+				result[2][0] = tS12 * tS01 - tS11 * tS02;
+				result[2][1] = tS10 * tS02 - tS12 * tS00;
+				result[2][2] = tS11 * tS00 - tS10 * tS01;
+				Type determinant = tS00 * ( tS11 * tS22 - tS21 * tS12 )
+					- tS10 * ( tS01 * tS22 - tS21 * tS02 )
+					+ tS20 * ( tS01 * tS12 - tS11 * tS02 );
+				result /= determinant;
 			}
 		};
 
 		template< typename Type >
 		struct SqrMtxInverter< Type, 2 >
 		{
-			static inline Castor::SquareMatrix< Type, 2 > inverse( Castor::SquareMatrix< Type, 2 > const & p_mtx )
+			static inline void inverse( castor::SquareMatrix< Type, 2 > const & input
+				, castor::SquareMatrix< Type, 2 > & result )
 			{
-				Type l_tDeterminant = p_mtx[0][0] * p_mtx[1][1] - p_mtx[1][0] * p_mtx[0][1];
-				Castor::SquareMatrix< Type, 2 > l_mtxInverse = Castor::SquareMatrix< Type, 2 >( Castor::NoInit() );
-				l_mtxInverse[1][1] = + p_mtx[1][1] / l_tDeterminant;
-				l_mtxInverse[0][1] = - p_mtx[0][1] / l_tDeterminant;
-				l_mtxInverse[1][0] = - p_mtx[1][0] / l_tDeterminant;
-				l_mtxInverse[0][0] = + p_mtx[0][0] / l_tDeterminant;
-				return l_mtxInverse;
+				Type determinant = input[0][0] * input[1][1] - input[1][0] * input[0][1];
+				result[1][1] = +input[1][1] / determinant;
+				result[0][1] = -input[0][1] / determinant;
+				result[1][0] = -input[1][0] / determinant;
+				result[0][0] = +input[0][0] / determinant;
 			}
 		};
 		template< typename Type, uint32_t Count > struct SqrMtxOperators;
@@ -124,43 +122,43 @@ namespace Castor
 
 #if CASTOR_USE_SSE2
 
-			static inline void mul( Castor::SquareMatrix< float, 4 > & p_lhs, Castor::SquareMatrix< float, 4 > const & p_rhs )
+			static inline void mul( castor::SquareMatrix< float, 4 > & p_lhs, castor::SquareMatrix< float, 4 > const & p_rhs )
 			{
-				Matrix4x4f l_result = Matrix4x4f( NoInit() );
-				Float4 l_col0{ p_lhs[0].ptr() };		// l_col0 = p_lhs[0]
-				Float4 l_col1{ p_lhs[1].ptr() };		// l_col1 = p_lhs[1]
-				Float4 l_col2{ p_lhs[2].ptr() };		// l_col2 = p_lhs[2]
-				Float4 l_col3{ p_lhs[3].ptr() };		// l_col3 = p_lhs[3]
+				Matrix4x4f result = Matrix4x4f( NoInit() );
+				Float4 col0{ p_lhs[0].ptr() };		// col0 = p_lhs[0]
+				Float4 col1{ p_lhs[1].ptr() };		// col1 = p_lhs[1]
+				Float4 col2{ p_lhs[2].ptr() };		// col2 = p_lhs[2]
+				Float4 col3{ p_lhs[3].ptr() };		// col3 = p_lhs[3]
 
 				for ( int i = 0; i < 4; ++i )
 				{
-					Float4 l_colB{ p_rhs[i][0] };		// l_colB = { p_rhs[i][0], p_rhs[i][0], p_rhs[i][0], p_rhs[i][0] }
-					Float4 l_colR{ l_col0 * l_colB };	// l_colR = l_col0 * l_colB
-					l_colB = Float4( p_rhs[i][1] );		// l_colB = { p_rhs[i][1], p_rhs[i][1], p_rhs[i][1], p_rhs[i][1] }
-					l_colR += l_col1 * l_colB;			// l_colR += l_col1 * l_colB
-					l_colB = Float4( p_rhs[i][2] );		// l_colB = { p_rhs[i][2], p_rhs[i][2], p_rhs[i][2], p_rhs[i][2] }
-					l_colR += l_col2 * l_colB;			// l_colR += l_col2 * l_colB
-					l_colB = Float4( p_rhs[i][3] );		// l_colB = { p_rhs[i][3], p_rhs[i][3], p_rhs[i][3], p_rhs[i][3] }
-					l_colR += l_col3 * l_colB;			// l_colR += l_col3 * l_colB
-					l_colR.to_ptr( l_result[i].ptr() );
+					Float4 colB{ p_rhs[i][0] };		// colB = { p_rhs[i][0], p_rhs[i][0], p_rhs[i][0], p_rhs[i][0] }
+					Float4 colR{ col0 * colB };	// colR = col0 * colB
+					colB = Float4( p_rhs[i][1] );		// colB = { p_rhs[i][1], p_rhs[i][1], p_rhs[i][1], p_rhs[i][1] }
+					colR += col1 * colB;			// colR += col1 * colB
+					colB = Float4( p_rhs[i][2] );		// colB = { p_rhs[i][2], p_rhs[i][2], p_rhs[i][2], p_rhs[i][2] }
+					colR += col2 * colB;			// colR += col2 * colB
+					colB = Float4( p_rhs[i][3] );		// colB = { p_rhs[i][3], p_rhs[i][3], p_rhs[i][3], p_rhs[i][3] }
+					colR += col3 * colB;			// colR += col3 * colB
+					colR.toPtr( result[i].ptr() );
 				}
 
-				p_lhs = l_result;
+				p_lhs = result;
 			}
 
 #else
 
-			static inline void mul( Castor::SquareMatrix< float, 4 > & p_lhs, Castor::SquareMatrix< float, 4 > const & p_rhs )
+			static inline void mul( castor::SquareMatrix< float, 4 > & p_lhs, castor::SquareMatrix< float, 4 > const & p_rhs )
 			{
 				typedef typename Matrix4x4f::row_type row_type;
-				Point4f l_ptSrcA0( p_lhs[0][0], p_lhs[0][1], p_lhs[0][2], p_lhs[0][3] );
-				Point4f l_ptSrcA1( p_lhs[1][0], p_lhs[1][1], p_lhs[1][2], p_lhs[1][3] );
-				Point4f l_ptSrcA2( p_lhs[2][0], p_lhs[2][1], p_lhs[2][2], p_lhs[2][3] );
-				Point4f l_ptSrcA3( p_lhs[3][0], p_lhs[3][1], p_lhs[3][2], p_lhs[3][3] );
-				std::memcpy( p_lhs[0].ptr(), ( l_ptSrcA0 * p_rhs[0][0] + l_ptSrcA1 * p_rhs[0][1] + l_ptSrcA2 * p_rhs[0][2] + l_ptSrcA3 * p_rhs[0][3] ).const_ptr(), Size );
-				std::memcpy( p_lhs[1].ptr(), ( l_ptSrcA0 * p_rhs[1][0] + l_ptSrcA1 * p_rhs[1][1] + l_ptSrcA2 * p_rhs[1][2] + l_ptSrcA3 * p_rhs[1][3] ).const_ptr(), Size );
-				std::memcpy( p_lhs[2].ptr(), ( l_ptSrcA0 * p_rhs[2][0] + l_ptSrcA1 * p_rhs[2][1] + l_ptSrcA2 * p_rhs[2][2] + l_ptSrcA3 * p_rhs[2][3] ).const_ptr(), Size );
-				std::memcpy( p_lhs[3].ptr(), ( l_ptSrcA0 * p_rhs[3][0] + l_ptSrcA1 * p_rhs[3][1] + l_ptSrcA2 * p_rhs[3][2] + l_ptSrcA3 * p_rhs[3][3] ).const_ptr(), Size );
+				Point4f ptSrcA0( p_lhs[0][0], p_lhs[0][1], p_lhs[0][2], p_lhs[0][3] );
+				Point4f ptSrcA1( p_lhs[1][0], p_lhs[1][1], p_lhs[1][2], p_lhs[1][3] );
+				Point4f ptSrcA2( p_lhs[2][0], p_lhs[2][1], p_lhs[2][2], p_lhs[2][3] );
+				Point4f ptSrcA3( p_lhs[3][0], p_lhs[3][1], p_lhs[3][2], p_lhs[3][3] );
+				std::memcpy( p_lhs[0].ptr(), ( ptSrcA0 * p_rhs[0][0] + ptSrcA1 * p_rhs[0][1] + ptSrcA2 * p_rhs[0][2] + ptSrcA3 * p_rhs[0][3] ).constPtr(), Size );
+				std::memcpy( p_lhs[1].ptr(), ( ptSrcA0 * p_rhs[1][0] + ptSrcA1 * p_rhs[1][1] + ptSrcA2 * p_rhs[1][2] + ptSrcA3 * p_rhs[1][3] ).constPtr(), Size );
+				std::memcpy( p_lhs[2].ptr(), ( ptSrcA0 * p_rhs[2][0] + ptSrcA1 * p_rhs[2][1] + ptSrcA2 * p_rhs[2][2] + ptSrcA3 * p_rhs[2][3] ).constPtr(), Size );
+				std::memcpy( p_lhs[3].ptr(), ( ptSrcA0 * p_rhs[3][0] + ptSrcA1 * p_rhs[3][1] + ptSrcA2 * p_rhs[3][2] + ptSrcA3 * p_rhs[3][3] ).constPtr(), Size );
 			}
 
 #endif
@@ -171,17 +169,17 @@ namespace Castor
 		{
 			static const uint32_t Size = sizeof( Type ) * 4;
 
-			static inline void mul( Castor::SquareMatrix< Type, 4 > & p_mtxA, Castor::SquareMatrix< Type, 4 > const & p_mtxB )
+			static inline void mul( castor::SquareMatrix< Type, 4 > & p_mtxA, castor::SquareMatrix< Type, 4 > const & p_mtxB )
 			{
-				typedef typename Castor::SquareMatrix< Type, 4 >::row_type row_type;
-				Castor::Point< Type, 4 > l_ptSrcA0( p_mtxA[0][0], p_mtxA[0][1], p_mtxA[0][2], p_mtxA[0][3] );
-				Castor::Point< Type, 4 > l_ptSrcA1( p_mtxA[1][0], p_mtxA[1][1], p_mtxA[1][2], p_mtxA[1][3] );
-				Castor::Point< Type, 4 > l_ptSrcA2( p_mtxA[2][0], p_mtxA[2][1], p_mtxA[2][2], p_mtxA[2][3] );
-				Castor::Point< Type, 4 > l_ptSrcA3( p_mtxA[3][0], p_mtxA[3][1], p_mtxA[3][2], p_mtxA[3][3] );
-				std::memcpy( p_mtxA[0].ptr(), ( l_ptSrcA0 * p_mtxB[0][0] + l_ptSrcA1 * p_mtxB[0][1] + l_ptSrcA2 * p_mtxB[0][2] + l_ptSrcA3 * p_mtxB[0][3] ).const_ptr(), Size );
-				std::memcpy( p_mtxA[1].ptr(), ( l_ptSrcA0 * p_mtxB[1][0] + l_ptSrcA1 * p_mtxB[1][1] + l_ptSrcA2 * p_mtxB[1][2] + l_ptSrcA3 * p_mtxB[1][3] ).const_ptr(), Size );
-				std::memcpy( p_mtxA[2].ptr(), ( l_ptSrcA0 * p_mtxB[2][0] + l_ptSrcA1 * p_mtxB[2][1] + l_ptSrcA2 * p_mtxB[2][2] + l_ptSrcA3 * p_mtxB[2][3] ).const_ptr(), Size );
-				std::memcpy( p_mtxA[3].ptr(), ( l_ptSrcA0 * p_mtxB[3][0] + l_ptSrcA1 * p_mtxB[3][1] + l_ptSrcA2 * p_mtxB[3][2] + l_ptSrcA3 * p_mtxB[3][3] ).const_ptr(), Size );
+				typedef typename castor::SquareMatrix< Type, 4 >::row_type row_type;
+				castor::Point< Type, 4 > ptSrcA0( p_mtxA[0][0], p_mtxA[0][1], p_mtxA[0][2], p_mtxA[0][3] );
+				castor::Point< Type, 4 > ptSrcA1( p_mtxA[1][0], p_mtxA[1][1], p_mtxA[1][2], p_mtxA[1][3] );
+				castor::Point< Type, 4 > ptSrcA2( p_mtxA[2][0], p_mtxA[2][1], p_mtxA[2][2], p_mtxA[2][3] );
+				castor::Point< Type, 4 > ptSrcA3( p_mtxA[3][0], p_mtxA[3][1], p_mtxA[3][2], p_mtxA[3][3] );
+				std::memcpy( p_mtxA[0].ptr(), ( ptSrcA0 * p_mtxB[0][0] + ptSrcA1 * p_mtxB[0][1] + ptSrcA2 * p_mtxB[0][2] + ptSrcA3 * p_mtxB[0][3] ).constPtr(), Size );
+				std::memcpy( p_mtxA[1].ptr(), ( ptSrcA0 * p_mtxB[1][0] + ptSrcA1 * p_mtxB[1][1] + ptSrcA2 * p_mtxB[1][2] + ptSrcA3 * p_mtxB[1][3] ).constPtr(), Size );
+				std::memcpy( p_mtxA[2].ptr(), ( ptSrcA0 * p_mtxB[2][0] + ptSrcA1 * p_mtxB[2][1] + ptSrcA2 * p_mtxB[2][2] + ptSrcA3 * p_mtxB[2][3] ).constPtr(), Size );
+				std::memcpy( p_mtxA[3].ptr(), ( ptSrcA0 * p_mtxB[3][0] + ptSrcA1 * p_mtxB[3][1] + ptSrcA2 * p_mtxB[3][2] + ptSrcA3 * p_mtxB[3][3] ).constPtr(), Size );
 			}
 		};
 
@@ -190,15 +188,15 @@ namespace Castor
 		{
 			static const uint32_t Size = sizeof( Type ) * 3;
 
-			static inline void mul( Castor::SquareMatrix< Type, 3 > & p_mtxA, Castor::SquareMatrix< Type, 3 > const & p_mtxB )
+			static inline void mul( castor::SquareMatrix< Type, 3 > & p_mtxA, castor::SquareMatrix< Type, 3 > const & p_mtxB )
 			{
-				typedef typename Castor::SquareMatrix< Type, 3 >::row_type row_type;
-				Castor::Point< Type, 3 > l_ptSrcA0( p_mtxA[0][0], p_mtxA[0][1], p_mtxA[0][2] );
-				Castor::Point< Type, 3 > l_ptSrcA1( p_mtxA[1][0], p_mtxA[1][1], p_mtxA[1][2] );
-				Castor::Point< Type, 3 > l_ptSrcA2( p_mtxA[2][0], p_mtxA[2][1], p_mtxA[2][2] );
-				std::memcpy( p_mtxA[0].ptr(), ( l_ptSrcA0 * p_mtxB[0][0] + l_ptSrcA1 * p_mtxB[0][1] + l_ptSrcA2 * p_mtxB[0][2] ), Size );
-				std::memcpy( p_mtxA[1].ptr(), ( l_ptSrcA0 * p_mtxB[1][0] + l_ptSrcA1 * p_mtxB[1][1] + l_ptSrcA2 * p_mtxB[1][2] ), Size );
-				std::memcpy( p_mtxA[2].ptr(), ( l_ptSrcA0 * p_mtxB[2][0] + l_ptSrcA1 * p_mtxB[2][1] + l_ptSrcA2 * p_mtxB[2][2] ), Size );
+				typedef typename castor::SquareMatrix< Type, 3 >::row_type row_type;
+				castor::Point< Type, 3 > ptSrcA0( p_mtxA[0][0], p_mtxA[0][1], p_mtxA[0][2] );
+				castor::Point< Type, 3 > ptSrcA1( p_mtxA[1][0], p_mtxA[1][1], p_mtxA[1][2] );
+				castor::Point< Type, 3 > ptSrcA2( p_mtxA[2][0], p_mtxA[2][1], p_mtxA[2][2] );
+				std::memcpy( p_mtxA[0].ptr(), ( ptSrcA0 * p_mtxB[0][0] + ptSrcA1 * p_mtxB[0][1] + ptSrcA2 * p_mtxB[0][2] ), Size );
+				std::memcpy( p_mtxA[1].ptr(), ( ptSrcA0 * p_mtxB[1][0] + ptSrcA1 * p_mtxB[1][1] + ptSrcA2 * p_mtxB[1][2] ), Size );
+				std::memcpy( p_mtxA[2].ptr(), ( ptSrcA0 * p_mtxB[2][0] + ptSrcA1 * p_mtxB[2][1] + ptSrcA2 * p_mtxB[2][2] ), Size );
 			}
 		};
 
@@ -207,72 +205,72 @@ namespace Castor
 		{
 			static const uint32_t Size = sizeof( Type ) * 2;
 
-			static inline void mul( Castor::SquareMatrix< Type, 2 > const & p_mtxA, Castor::SquareMatrix< Type, 2 > const & p_mtxB )
+			static inline void mul( castor::SquareMatrix< Type, 2 > const & p_mtxA, castor::SquareMatrix< Type, 2 > const & p_mtxB )
 			{
-				typedef typename Castor::SquareMatrix< Type, 2 >::row_type row_type;
-				Castor::Point< Type, 2 > l_ptSrcA0( p_mtxA[0][0], p_mtxA[0][1] );
-				Castor::Point< Type, 2 > l_ptSrcA1( p_mtxA[1][0], p_mtxA[1][1] );
-				std::memcpy( p_mtxA[0].ptr(), ( l_ptSrcA0 * p_mtxB[0][0] + l_ptSrcA1 * p_mtxB[0][1] ), Size );
-				std::memcpy( p_mtxA[1].ptr(), ( l_ptSrcA0 * p_mtxB[1][0] + l_ptSrcA1 * p_mtxB[1][1] ), Size );
+				typedef typename castor::SquareMatrix< Type, 2 >::row_type row_type;
+				castor::Point< Type, 2 > ptSrcA0( p_mtxA[0][0], p_mtxA[0][1] );
+				castor::Point< Type, 2 > ptSrcA1( p_mtxA[1][0], p_mtxA[1][1] );
+				std::memcpy( p_mtxA[0].ptr(), ( ptSrcA0 * p_mtxB[0][0] + ptSrcA1 * p_mtxB[0][1] ), Size );
+				std::memcpy( p_mtxA[1].ptr(), ( ptSrcA0 * p_mtxB[1][0] + ptSrcA1 * p_mtxB[1][1] ), Size );
 			}
 		};
 
 		template< typename TypeA, typename TypeB, uint32_t Count >
 		struct MtxMultiplicator
 		{
-			static inline Castor::Point< TypeB, Count > mul( Castor::SquareMatrix< TypeA, 4 > const & p_matrix, Castor::Point< TypeB, Count > const & p_vertex )
+			static inline castor::Point< TypeB, Count > mul( castor::SquareMatrix< TypeA, 4 > const & p_matrix, castor::Point< TypeB, Count > const & p_vertex )
 			{
-				Castor::Point< TypeB, Count > l_result;
-				l_result[0]  = TypeB( p_matrix[0][0] * p_vertex[0] ) + TypeB( p_matrix[0][1] * p_vertex[1] ) + TypeB( p_matrix[0][2] * p_vertex[2] ) + TypeB( p_matrix[0][3] * p_vertex[3] );
-				l_result[1]  = TypeB( p_matrix[1][0] * p_vertex[0] ) + TypeB( p_matrix[1][1] * p_vertex[1] ) + TypeB( p_matrix[1][2] * p_vertex[2] ) + TypeB( p_matrix[1][3] * p_vertex[3] );
-				l_result[2]  = TypeB( p_matrix[2][0] * p_vertex[0] ) + TypeB( p_matrix[2][1] * p_vertex[1] ) + TypeB( p_matrix[2][2] * p_vertex[2] ) + TypeB( p_matrix[2][3] * p_vertex[3] );
-				l_result[3]  = TypeB( p_matrix[3][0] * p_vertex[0] ) + TypeB( p_matrix[3][1] * p_vertex[1] ) + TypeB( p_matrix[3][2] * p_vertex[2] ) + TypeB( p_matrix[3][3] * p_vertex[3] );
-				return l_result;
+				castor::Point< TypeB, Count > result;
+				result[0]  = TypeB( p_matrix[0][0] * p_vertex[0] ) + TypeB( p_matrix[0][1] * p_vertex[1] ) + TypeB( p_matrix[0][2] * p_vertex[2] ) + TypeB( p_matrix[0][3] * p_vertex[3] );
+				result[1]  = TypeB( p_matrix[1][0] * p_vertex[0] ) + TypeB( p_matrix[1][1] * p_vertex[1] ) + TypeB( p_matrix[1][2] * p_vertex[2] ) + TypeB( p_matrix[1][3] * p_vertex[3] );
+				result[2]  = TypeB( p_matrix[2][0] * p_vertex[0] ) + TypeB( p_matrix[2][1] * p_vertex[1] ) + TypeB( p_matrix[2][2] * p_vertex[2] ) + TypeB( p_matrix[2][3] * p_vertex[3] );
+				result[3]  = TypeB( p_matrix[3][0] * p_vertex[0] ) + TypeB( p_matrix[3][1] * p_vertex[1] ) + TypeB( p_matrix[3][2] * p_vertex[2] ) + TypeB( p_matrix[3][3] * p_vertex[3] );
+				return result;
 			}
 		};
 
 		template< typename TypeA, typename TypeB >
 		struct MtxMultiplicator< TypeA, TypeB, 0 >
 		{
-			static inline Castor::Point< TypeB, 0 > mul( Castor::SquareMatrix< TypeA, 4 > const & p_matrix, Castor::Point< TypeB, 0 > const & p_vertex )
+			static inline castor::Point< TypeB, 0 > mul( castor::SquareMatrix< TypeA, 4 > const & p_matrix, castor::Point< TypeB, 0 > const & p_vertex )
 			{
-				return Castor::Point< TypeB, 0 >();
+				return castor::Point< TypeB, 0 >();
 			}
 		};
 
 		template< typename TypeA, typename TypeB >
 		struct MtxMultiplicator< TypeA, TypeB, 1 >
 		{
-			static inline Castor::Point< TypeB, 1 > mul( Castor::SquareMatrix< TypeA, 4 > const & p_matrix, Castor::Point< TypeB, 1 > const & p_vertex )
+			static inline castor::Point< TypeB, 1 > mul( castor::SquareMatrix< TypeA, 4 > const & p_matrix, castor::Point< TypeB, 1 > const & p_vertex )
 			{
-				Castor::Point< TypeB, 1 > l_result;
-				l_result[0]  = TypeB( p_matrix[0][0] * p_vertex[0] );
-				return l_result;
+				castor::Point< TypeB, 1 > result;
+				result[0]  = TypeB( p_matrix[0][0] * p_vertex[0] );
+				return result;
 			}
 		};
 
 		template< typename TypeA, typename TypeB >
 		struct MtxMultiplicator< TypeA, TypeB, 2 >
 		{
-			static inline Castor::Point< TypeB, 2 > mul( Castor::SquareMatrix< TypeA, 4 > const & p_matrix, Castor::Point< TypeB, 2 > const & p_vertex )
+			static inline castor::Point< TypeB, 2 > mul( castor::SquareMatrix< TypeA, 4 > const & p_matrix, castor::Point< TypeB, 2 > const & p_vertex )
 			{
-				Castor::Point< TypeB, 2 > l_result;
-				l_result[0]  = TypeB( p_matrix[0][0] * p_vertex[0] ) + TypeB( p_matrix[0][1] * p_vertex[1] );
-				l_result[1]  = TypeB( p_matrix[1][0] * p_vertex[0] ) + TypeB( p_matrix[1][1] * p_vertex[1] );
-				return l_result;
+				castor::Point< TypeB, 2 > result;
+				result[0]  = TypeB( p_matrix[0][0] * p_vertex[0] ) + TypeB( p_matrix[0][1] * p_vertex[1] );
+				result[1]  = TypeB( p_matrix[1][0] * p_vertex[0] ) + TypeB( p_matrix[1][1] * p_vertex[1] );
+				return result;
 			}
 		};
 
 		template< typename TypeA, typename TypeB >
 		struct MtxMultiplicator< TypeA, TypeB, 3 >
 		{
-			static inline Castor::Point< TypeB, 3 > mul( Castor::SquareMatrix< TypeA, 4 > const & p_matrix, Castor::Point< TypeB, 3 > const & p_vertex )
+			static inline castor::Point< TypeB, 3 > mul( castor::SquareMatrix< TypeA, 4 > const & p_matrix, castor::Point< TypeB, 3 > const & p_vertex )
 			{
-				Castor::Point< TypeB, 3 > l_result;
-				l_result[0]  = TypeB( p_matrix[0][0] * p_vertex[0] ) + TypeB( p_matrix[0][1] * p_vertex[1] ) + TypeB( p_matrix[0][2] * p_vertex[2] );
-				l_result[1]  = TypeB( p_matrix[1][0] * p_vertex[0] ) + TypeB( p_matrix[1][1] * p_vertex[1] ) + TypeB( p_matrix[1][2] * p_vertex[2] );
-				l_result[2]  = TypeB( p_matrix[2][0] * p_vertex[0] ) + TypeB( p_matrix[2][1] * p_vertex[1] ) + TypeB( p_matrix[2][2] * p_vertex[2] );
-				return l_result;
+				castor::Point< TypeB, 3 > result;
+				result[0]  = TypeB( p_matrix[0][0] * p_vertex[0] ) + TypeB( p_matrix[0][1] * p_vertex[1] ) + TypeB( p_matrix[0][2] * p_vertex[2] );
+				result[1]  = TypeB( p_matrix[1][0] * p_vertex[0] ) + TypeB( p_matrix[1][1] * p_vertex[1] ) + TypeB( p_matrix[1][2] * p_vertex[2] );
+				result[2]  = TypeB( p_matrix[2][0] * p_vertex[0] ) + TypeB( p_matrix[2][1] * p_vertex[1] ) + TypeB( p_matrix[2][2] * p_vertex[2] );
+				return result;
 			}
 		};
 
@@ -281,30 +279,30 @@ namespace Castor
 		template< typename T >
 		struct CoFactorComputer< T, 1 >
 		{
-			static inline T get( Castor::SquareMatrix< T, 1 > const & CU_PARAM_UNUSED( p_matrix ), uint32_t CU_PARAM_UNUSED( p_column ), uint32_t CU_PARAM_UNUSED( p_row ) )
+			static inline T get( castor::SquareMatrix< T, 1 > const & CU_PARAM_UNUSED( p_matrix ), uint32_t CU_PARAM_UNUSED( p_column ), uint32_t CU_PARAM_UNUSED( p_row ) )
 			{
-				return Castor::Policy< T >::unit();
+				return T{ 1 };
 			}
 		};
 
 		template< typename T, uint32_t Count >
 		struct CoFactorComputer
 		{
-			static inline T get( Castor::SquareMatrix< T, Count > const & p_matrix, uint32_t p_column, uint32_t p_row )
+			static inline T get( castor::SquareMatrix< T, Count > const & p_matrix, uint32_t p_column, uint32_t p_row )
 			{
-				T l_tReturn = T();
-				Castor::SquareMatrix < T, Count - 1 > l_mtxTmp = p_matrix.get_minor( p_column, p_row );
+				T tReturn = T();
+				castor::SquareMatrix < T, Count - 1 > mtxTmp = p_matrix.getMinor( p_column, p_row );
 
 				if ( ( p_row + p_column ) % 2 == 0 )
 				{
-					l_tReturn = l_mtxTmp.get_determinant();
+					tReturn = mtxTmp.getDeterminant();
 				}
 				else
 				{
-					l_tReturn = -l_mtxTmp.get_determinant();
+					tReturn = -mtxTmp.getDeterminant();
 				}
 
-				return l_tReturn;
+				return tReturn;
 			}
 		};
 	}
@@ -341,19 +339,19 @@ namespace Castor
 	inline SquareMatrix< T, Count >::SquareMatrix( SquareMatrix< T, _Rows > const & p_matrix )
 		: my_matrix_type()
 	{
-		uint32_t l_count = std::min( Count, _Rows );
+		uint32_t constexpr count = std::min( Count, _Rows );
 
-		for ( uint32_t i = 0; i < l_count; i++ )
+		for ( uint32_t i = 0; i < count; i++ )
 		{
-			for ( uint32_t j = 0; j < l_count; j++ )
+			for ( uint32_t j = 0; j < count; j++ )
 			{
 				this->operator[]( i )[j] = p_matrix[i][j];
 			}
 		}
 
-		for ( int i = l_count; i < Count; i++ )
+		for ( int i = count; i < Count; i++ )
 		{
-			this->operator[]( i )[i] = Castor::Policy< T >::unit();
+			this->operator[]( i )[i] = T{ 1 };
 		}
 	}
 	template< typename T, uint32_t Count >
@@ -379,131 +377,117 @@ namespace Castor
 	{
 	}
 	template< typename T, uint32_t Count >
-	inline T SquareMatrix< T, Count >::get_determinant()const
+	inline T SquareMatrix< T, Count >::getDeterminant()const
 	{
-		T l_tReturn( Castor::Policy< T >::zero() );
+		T tReturn{};
 
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
-			l_tReturn += this->operator[]( 0 )[i] * get_cofactor( i, 0 );
+			tReturn += this->operator[]( 0 )[i] * getCofactor( i, 0 );
 		}
 
-		return l_tReturn;
+		return tReturn;
 	}
 	template< typename T, uint32_t Count >
-	inline bool SquareMatrix< T, Count >::is_orthogonal()const
+	inline bool SquareMatrix< T, Count >::isOrthogonal()const
 	{
-		bool l_result = false;
-		my_matrix_type l_mTmp( *this );
-		SquareMatrix< T, Count > l_mId1;
-		SquareMatrix< T, Count > l_mId2;
-		l_mTmp.transpose();
-		l_mId1.set_identity();
-		l_mId2.set_identity();
-		return ( l_mId1 == *this * l_mTmp ) && ( l_mId2 == l_mTmp * ( *this ) );
+		bool result = false;
+		my_matrix_type mTmp( *this );
+		SquareMatrix< T, Count > mId1;
+		SquareMatrix< T, Count > mId2;
+		mTmp.transpose();
+		mId1.setIdentity();
+		mId2.setIdentity();
+		return ( mId1 == *this * mTmp ) && ( mId2 == mTmp * ( *this ) );
 	}
 	template< typename T, uint32_t Count >
-	inline bool SquareMatrix< T, Count >::is_symmetrical()const
+	inline bool SquareMatrix< T, Count >::isSymmetrical()const
 	{
-		bool l_result = true;
+		bool result = true;
 
-		for ( uint32_t i = 0; i < Count && l_result; i++ )
+		for ( uint32_t i = 0; i < Count && result; i++ )
 		{
-			for ( uint32_t j = 0; j < Count && l_result; j++ )
+			for ( uint32_t j = 0; j < Count && result; j++ )
 			{
-				l_result = Castor::Policy< T >::equals( this->m_columns[i][j], this->m_columns[j][i] );
+				result = this->m_columns[i][j] == this->m_columns[j][i];
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 	template< typename T, uint32_t Count >
-	inline bool SquareMatrix< T, Count >::is_anti_symmetrical()const
+	inline bool SquareMatrix< T, Count >::isAntiSymmetrical()const
 	{
-		bool l_result = true;
+		bool result = true;
 
-		for ( uint32_t i = 0; i < Count && l_result; i++ )
+		for ( uint32_t i = 0; i < Count && result; i++ )
 		{
-			for ( uint32_t j = 0; j < Count && l_result; j++ )
+			for ( uint32_t j = 0; j < Count && result; j++ )
 			{
-				if ( !Castor::Policy< T >::is_null( this->m_columns[i][j] + this->m_columns[j][i] ) )
+				if ( this->m_columns[i][j] + this->m_columns[j][i] != T{} )
 				{
-					l_result = false;
+					result = false;
 				}
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 	template< typename T, uint32_t Count >
-	inline SquareMatrix< T, Count > SquareMatrix< T, Count >::get_inverse()const
+	inline SquareMatrix< T, Count > SquareMatrix< T, Count >::getInverse()const
 	{
-		return SqrMtxInverter< T, Count >::inverse( *this );
+		SquareMatrix< T, Count > result{ NoInit{} };
+		SqrMtxInverter< T, Count >::inverse( *this, result );
+		return result;
 	}
 	template< typename T, uint32_t Count >
-	inline SquareMatrix < T, Count - 1 > SquareMatrix< T, Count >::get_minor( uint32_t x, uint32_t y )const
+	inline SquareMatrix < T, Count - 1 > SquareMatrix< T, Count >::getMinor( uint32_t x, uint32_t y )const
 	{
-		SquareMatrix < T, Count - 1 > l_result;
-		l_result.set_identity();
-		uint32_t l_i = 0, l_j = 0;
+		SquareMatrix < T, Count - 1 > result;
+		result.setIdentity();
+		uint32_t idst = 0, jdst = 0;
 
-		for ( uint32_t i = 0; i < Count; i++ )
+		for ( uint32_t isrc = 0; isrc < Count; isrc++ )
 		{
-			if ( i != x )
+			if ( isrc != x )
 			{
-				l_j = 0;
+				jdst = 0;
 
-				for ( uint32_t j = 0; j < Count; j++ )
+				for ( uint32_t jsrc = 0; jsrc < Count; jsrc++ )
 				{
-					if ( j != y )
+					if ( jsrc != y )
 					{
-						l_result[l_i][l_j++] = this->m_columns[i][j];
+						result[idst][jdst++] = this->m_columns[isrc][jsrc];
 					}
 				}
 
-				l_i++;
+				idst++;
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 	template< typename T, uint32_t Count >
-	inline T SquareMatrix< T, Count >::get_cofactor( uint32_t p_column, uint32_t p_row )const
+	inline T SquareMatrix< T, Count >::getCofactor( uint32_t p_column, uint32_t p_row )const
 	{
 		return CoFactorComputer< T, Count >::get( *this, p_column, p_row );
 	}
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::invert()
 	{
-		T l_tDeterminant = get_determinant();
-
-		if ( !Castor::Policy< T >::is_null( l_tDeterminant ) )
-		{
-			SquareMatrix< T, Count > l_mTmp;
-
-			for ( uint32_t i = 0; i < Count; i++ )
-			{
-				for ( uint32_t j = 0; j < Count; j++ )
-				{
-					l_mTmp[i][j] = get_cofactor( i, j ) / l_tDeterminant;
-				}
-			}
-
-			std::memcpy( my_matrix_type::ptr(), l_mTmp.const_ptr(), my_matrix_type::size );
-		}
-
+		SqrMtxInverter< T, Count >::inverse( *this, *this );
 		return *this;
 	}
 	template< typename T, uint32_t Count >
-	inline SquareMatrix< T, Count > SquareMatrix< T, Count >::get_transposed()const
+	inline SquareMatrix< T, Count > SquareMatrix< T, Count >::getTransposed()const
 	{
-		SquareMatrix< T, Count > l_result( *this );
-		return l_result.transpose();
+		SquareMatrix< T, Count > result( *this );
+		return result.transpose();
 	}
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::transpose()
 	{
-		T const * l_buffer = my_matrix_type::const_ptr();
+		T const * buffer = my_matrix_type::constPtr();
 
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
@@ -620,17 +604,17 @@ namespace Castor
 	template< typename T, uint32_t Count >
 	inline bool operator==( SquareMatrix< T, Count > const & p_mtxA, SquareMatrix< T, Count > const & p_mtxB )
 	{
-		bool l_result = true;
+		bool result = true;
 
-		for ( uint32_t i = 0; i < Count && l_result; i++ )
+		for ( uint32_t i = 0; i < Count && result; i++ )
 		{
-			for ( uint32_t j = 0; j < Count && l_result; j++ )
+			for ( uint32_t j = 0; j < Count && result; j++ )
 			{
-				l_result = Castor::Policy< T >::equals( p_mtxA[i][j], p_mtxB[i][j] );
+				result = p_mtxA[i][j] == p_mtxB[i][j];
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 	template< typename T, uint32_t Count >
 	inline bool operator!=( SquareMatrix< T, Count > const & p_mtxA, SquareMatrix< T, Count > const & p_mtxB )
@@ -640,72 +624,72 @@ namespace Castor
 	template< typename T, uint32_t Count, typename U >
 	SquareMatrix< T, Count > operator+( SquareMatrix< T, Count > const & p_mtxA, SquareMatrix< U, Count > const & p_mtxB )
 	{
-		SquareMatrix< T, Count > l_result( p_mtxA );
-		l_result += p_mtxB;
-		return l_result;
+		SquareMatrix< T, Count > result( p_mtxA );
+		result += p_mtxB;
+		return result;
 	}
 	template< typename T, uint32_t Count, typename U >
 	SquareMatrix< T, Count > operator-( SquareMatrix< T, Count > const & p_mtxA, SquareMatrix< U, Count > const & p_mtxB )
 	{
-		SquareMatrix< T, Count > l_result( p_mtxA );
-		l_result -= p_mtxB;
-		return l_result;
+		SquareMatrix< T, Count > result( p_mtxA );
+		result -= p_mtxB;
+		return result;
 	}
 	template< typename T, uint32_t Count, typename U >
 	SquareMatrix< T, Count > operator*( SquareMatrix< T, Count > const & p_mtxA, SquareMatrix< U, Count > const & p_mtxB )
 	{
-		SquareMatrix< T, Count > l_result( p_mtxA );
-		l_result *= p_mtxB;
-		return l_result;
+		SquareMatrix< T, Count > result( p_mtxA );
+		result *= p_mtxB;
+		return result;
 	}
 	template< typename T, uint32_t Count, typename U >
 	SquareMatrix< T, Count > operator+( SquareMatrix< T, Count > const & p_matrix, U const * p_values )
 	{
-		SquareMatrix< T, Count > l_result( p_matrix );
-		l_result += p_values;
-		return l_result;
+		SquareMatrix< T, Count > result( p_matrix );
+		result += p_values;
+		return result;
 	}
 	template< typename T, uint32_t Count, typename U >
 	SquareMatrix< T, Count > operator-( SquareMatrix< T, Count > const & p_matrix, U const * p_values )
 	{
-		SquareMatrix< T, Count > l_result( p_matrix );
-		l_result -= p_values;
-		return l_result;
+		SquareMatrix< T, Count > result( p_matrix );
+		result -= p_values;
+		return result;
 	}
 	template< typename T, uint32_t Count, typename U >
 	SquareMatrix< T, Count > operator*( SquareMatrix< T, Count > const & p_matrix, U const * p_values )
 	{
-		SquareMatrix< T, Count > l_result( p_matrix );
-		l_result *= p_values;
-		return l_result;
+		SquareMatrix< T, Count > result( p_matrix );
+		result *= p_values;
+		return result;
 	}
 	template< typename T, uint32_t Count, typename U >
 	SquareMatrix< T, Count > operator+( SquareMatrix< T, Count > const & p_matrix, T const & p_value )
 	{
-		SquareMatrix< T, Count > l_result( p_matrix );
-		l_result += p_value;
-		return l_result;
+		SquareMatrix< T, Count > result( p_matrix );
+		result += p_value;
+		return result;
 	}
 	template< typename T, uint32_t Count, typename U >
 	SquareMatrix< T, Count > operator-( SquareMatrix< T, Count > const & p_matrix, T const & p_value )
 	{
-		SquareMatrix< T, Count > l_result( p_matrix );
-		l_result -= p_value;
-		return l_result;
+		SquareMatrix< T, Count > result( p_matrix );
+		result -= p_value;
+		return result;
 	}
 	template< typename T, uint32_t Count, typename U >
 	SquareMatrix< T, Count > operator*( SquareMatrix< T, Count > const & p_matrix, T const & p_value )
 	{
-		SquareMatrix< T, Count > l_result( p_matrix );
-		l_result *= p_value;
-		return l_result;
+		SquareMatrix< T, Count > result( p_matrix );
+		result *= p_value;
+		return result;
 	}
 	template< typename T, uint32_t Count, typename U >
 	SquareMatrix< T, Count > operator/( SquareMatrix< T, Count > const & p_matrix, T const & p_value )
 	{
-		SquareMatrix< T, Count > l_result( p_matrix );
-		l_result /= p_value;
-		return l_result;
+		SquareMatrix< T, Count > result( p_matrix );
+		result /= p_value;
+		return result;
 	}
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count > operator+( T p_value, SquareMatrix< T, Count > const & p_matrix )
@@ -725,25 +709,25 @@ namespace Castor
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count > operator-( SquareMatrix< T, Count > const & p_matrix )
 	{
-		SquareMatrix< T, Count > l_result;
+		SquareMatrix< T, Count > result;
 
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
 			for ( uint32_t j = 0; j < Count; j++ )
 			{
-				l_result[i][j] = -p_matrix[i][j];
+				result[i][j] = -p_matrix[i][j];
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 //*************************************************************************************************
 
 	template< typename CharT, typename T, uint32_t Count >
-	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & p_streamOut, Castor::SquareMatrix< T, Count > const & p_matrix )
+	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & p_streamOut, castor::SquareMatrix< T, Count > const & p_matrix )
 	{
-		auto l_precision = p_streamOut.precision( 10 );
+		auto precision = p_streamOut.precision( 10 );
 
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
@@ -756,12 +740,12 @@ namespace Castor
 			p_streamOut << std::endl;
 		}
 
-		p_streamOut.precision( l_precision );
+		p_streamOut.precision( precision );
 		return p_streamOut;
 	}
 
 	template< typename CharT, typename T, uint32_t Count >
-	inline std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & p_streamIn, Castor::SquareMatrix< T, Count > & p_matrix )
+	inline std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & p_streamIn, castor::SquareMatrix< T, Count > & p_matrix )
 	{
 		for ( uint32_t i = 0; i < Count; i++ )
 		{

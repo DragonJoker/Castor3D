@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CASTOR_FONT_H___
 #define ___CASTOR_FONT_H___
@@ -30,7 +11,7 @@ SOFTWARE.
 #include "Math/Point.hpp"
 #include "Glyph.hpp"
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -58,7 +39,7 @@ namespace Castor
 		\brief		Loader de Font à partir d'un texte
 		*/
 		class TextWriter
-			: public Castor::TextWriter< Font >
+			: public castor::TextWriter< Font >
 		{
 		public:
 			/**
@@ -67,7 +48,7 @@ namespace Castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			CU_API TextWriter( String const & p_tabs );
+			CU_API explicit TextWriter( String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a Font into a text file
@@ -92,7 +73,7 @@ namespace Castor
 		\remark		Utilise FreeType pour charger la police
 		*/
 		class BinaryLoader
-			: public Castor::BinaryLoader< Font >
+			: public castor::BinaryLoader< Font >
 		{
 		public:
 			/**
@@ -142,14 +123,14 @@ namespace Castor
 			 *\~french
 			 *\brief		Initialise le loader
 			 */
-			virtual void Initialise() = 0;
+			virtual void initialise() = 0;
 			/**
 			 *\~english
 			 *\brief		Cleans the loader up
 			 *\~french
 			 *\brief		Nettoie le loader
 			 */
-			virtual void Cleanup() = 0;
+			virtual void cleanup() = 0;
 			/**
 			 *\~english
 			 *\brief		Loads wanted glyph.
@@ -160,7 +141,7 @@ namespace Castor
 			 *\param[in]	p_char	Le caractère.
 			 *\return		Le glyphe.
 			 */
-			virtual Glyph LoadGlyph( char32_t p_char ) = 0;
+			virtual Glyph loadGlyph( char32_t p_char ) = 0;
 		};
 
 		DECLARE_VECTOR( Glyph, Glyph );
@@ -205,7 +186,7 @@ namespace Castor
 		 *\brief		Charge le glyphe voulu.
 		 *\param[in]	p_char	Le caractère.
 		 */
-		CU_API void LoadGlyph( char32_t p_char );
+		CU_API void loadGlyph( char32_t p_char );
 		/**
 		 *\~english
 		 *\brief		Tells if the font already has load ed the wanted glyph.
@@ -216,12 +197,14 @@ namespace Castor
 		 *\param[in]	p_char	Le caractère.
 		 *\return		false si elle n'est pas chargée.
 		 */
-		inline bool HasGlyphAt( char32_t p_char )const
+		inline bool hasGlyphAt( char32_t p_char )const
 		{
-			return m_loadedGlyphs.end() != std::find_if( m_loadedGlyphs.begin(), m_loadedGlyphs.end(), [p_char]( Glyph const & p_glyph )
-			{
-				return p_glyph.GetCharacter() == p_char;
-			} );
+			return m_loadedGlyphs.end() != std::find_if( m_loadedGlyphs.begin()
+				, m_loadedGlyphs.end()
+				, [p_char]( Glyph const & p_glyph )
+				{
+					return p_glyph.getCharacter() == p_char;
+				} );
 		}
 		/**
 		 *\~english
@@ -233,19 +216,21 @@ namespace Castor
 		 *\param[in]	p_char	Le caractère voulu
 		 *\return		Une référence constante sur la glyphe
 		 */
-		inline Glyph const & GetGlyphAt( char32_t p_char )const
+		inline Glyph const & getGlyphAt( char32_t p_char )const
 		{
-			auto l_it = std::find_if( m_loadedGlyphs.begin(), m_loadedGlyphs.end(), [p_char]( Glyph const & p_glyph )
-			{
-				return p_glyph.GetCharacter() == p_char;
-			} );
+			auto it = std::find_if( m_loadedGlyphs.begin()
+				, m_loadedGlyphs.end()
+				, [p_char]( Glyph const & p_glyph )
+				{
+					return p_glyph.getCharacter() == p_char;
+				} );
 
-			if ( l_it == m_loadedGlyphs.end() )
+			if ( it == m_loadedGlyphs.end() )
 			{
 				throw std::range_error( "Font subscript out of range" );
 			}
 
-			return *l_it;
+			return *it;
 		}
 		/**
 		 *\~english
@@ -257,19 +242,21 @@ namespace Castor
 		 *\param[in]	p_char	Le caractère voulu
 		 *\return		Une référence sur la glyphe
 		 */
-		inline Glyph & GetGlyphAt( char32_t p_char )
+		inline Glyph & getGlyphAt( char32_t p_char )
 		{
-			auto l_it = std::find_if( m_loadedGlyphs.begin(), m_loadedGlyphs.end(), [p_char]( Glyph const & p_glyph )
-			{
-				return p_glyph.GetCharacter() == p_char;
-			} );
+			auto it = std::find_if( m_loadedGlyphs.begin()
+				, m_loadedGlyphs.end()
+				, [p_char]( Glyph const & p_glyph )
+				{
+					return p_glyph.getCharacter() == p_char;
+				} );
 
-			if ( l_it == m_loadedGlyphs.end() )
+			if ( it == m_loadedGlyphs.end() )
 			{
 				throw std::range_error( "Font subscript out of range" );
 			}
 
-			return *l_it;
+			return *it;
 		}
 		/**
 		 *\~english
@@ -283,12 +270,14 @@ namespace Castor
 		 */
 		inline Glyph const & operator[]( char32_t p_char )const
 		{
-			ENSURE( HasGlyphAt( p_char ) );
+			ENSURE( hasGlyphAt( p_char ) );
 
-			return *std::find_if( m_loadedGlyphs.begin(), m_loadedGlyphs.end(), [p_char]( Glyph const & p_glyph )
-			{
-				return p_glyph.GetCharacter() == p_char;
-			} );
+			return *std::find_if( m_loadedGlyphs.begin()
+				, m_loadedGlyphs.end()
+				, [p_char]( Glyph const & p_glyph )
+				{
+					return p_glyph.getCharacter() == p_char;
+				} );
 		}
 		/**
 		 *\~english
@@ -302,12 +291,14 @@ namespace Castor
 		 */
 		inline Glyph & operator[]( char32_t p_char )
 		{
-			ENSURE( HasGlyphAt( p_char ) );
+			ENSURE( hasGlyphAt( p_char ) );
 
-			return *std::find_if( m_loadedGlyphs.begin(), m_loadedGlyphs.end(), [p_char]( Glyph const & p_glyph )
-			{
-				return p_glyph.GetCharacter() == p_char;
-			} );
+			return *std::find_if( m_loadedGlyphs.begin()
+				, m_loadedGlyphs.end()
+				, [p_char]( Glyph const & p_glyph )
+				{
+					return p_glyph.getCharacter() == p_char;
+				} );
 		}
 		/**
 		 *\~english
@@ -317,7 +308,7 @@ namespace Castor
 		 *\brief		Récupère la hauteur de la police
 		 *\return		La hauteur de la police
 		 */
-		inline uint32_t GetHeight()const
+		inline uint32_t getHeight()const
 		{
 			return m_height;
 		}
@@ -329,7 +320,7 @@ namespace Castor
 		 *\brief		Récupère la hauteur maximale des glyphes
 		 *\return		La hauteur maximale des glyphes
 		 */
-		inline uint32_t GetMaxHeight()const
+		inline uint32_t getMaxHeight()const
 		{
 			return m_maxHeight;
 		}
@@ -341,43 +332,43 @@ namespace Castor
 		 *\brief		Récupère la largeur maximale des glyphes
 		 *\return		La largeur maximale des glyphes
 		 */
-		inline uint32_t GetMaxWidth()const
+		inline uint32_t getMaxWidth()const
 		{
 			return m_maxWidth;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the max height of the glyphs
+		 *\brief		sets the max height of the glyphs
 		 *\param[in]	p_iHeight	The new height
 		 *\~french
 		 *\brief		Définit la hauteur maximale des glyphes
 		 *\param[in]	p_iHeight	La nouvelle hauteur
 		 */
-		inline void SetMaxHeight( uint32_t p_iHeight )
+		inline void setMaxHeight( uint32_t p_iHeight )
 		{
 			m_maxHeight = p_iHeight;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the max width of the glyphs
+		 *\brief		sets the max width of the glyphs
 		 *\param[in]	p_iWidth	The new width
 		 *\~french
 		 *\brief		Définit la largeur maximale des glyphes
 		 *\param[in]	p_iWidth	La nouvelle largeur
 		 */
-		inline void SetMaxWidth( uint32_t p_iWidth )
+		inline void setMaxWidth( uint32_t p_iWidth )
 		{
 			m_maxWidth = p_iWidth;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the glyph loader
+		 *\brief		sets the glyph loader
 		 *\param[in]	p_loader	The value
 		 *\~french
 		 *\brief		Définit le chargeur de glyphes
 		 *\param[in]	p_loader	La valeur
 		 */
-		inline void SetGlyphLoader( std::unique_ptr< SFontImpl > && p_loader )
+		inline void setGlyphLoader( std::unique_ptr< SFontImpl > && p_loader )
 		{
 			m_glyphLoader = std::move( p_loader );
 		}
@@ -389,7 +380,7 @@ namespace Castor
 		 *\brief		Dit si la police a un loader de glyphes
 		 *\return		Le statut
 		 */
-		inline bool HasGlyphLoader()
+		inline bool hasGlyphLoader()
 		{
 			return m_glyphLoader != nullptr;
 		}
@@ -401,7 +392,7 @@ namespace Castor
 		 *\brief		Définit le loader de glyphes
 		 *\return		Le loader
 		 */
-		inline SFontImpl & GetGlyphLoader()
+		inline SFontImpl & getGlyphLoader()
 		{
 			return *m_glyphLoader;
 		}
@@ -455,13 +446,13 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Sets The font face name
+		 *\brief		sets The font face name
 		 *\param[in]	p_name	The value
 		 *\~french
 		 *\brief		Définit le nom de la police
 		 *\param[in]	p_name	La valeur
 		 */
-		inline void SetFaceName( String const & p_name )
+		inline void setFaceName( String const & p_name )
 		{
 			m_faceName = p_name;
 		}
@@ -473,7 +464,7 @@ namespace Castor
 		 *\brief		Récupère le nom de la police
 		 *\return		La valeur
 		 */
-		inline String const & GetFaceName()const
+		inline String const & getFaceName()const
 		{
 			return m_faceName;
 		}
@@ -485,7 +476,7 @@ namespace Castor
 		 *\brief		Récupère le chemin du fichier de la police.
 		 *\return		La valeur.
 		 */
-		inline Path const & GetFilePath()const
+		inline Path const & getFilePath()const
 		{
 			return m_pathFile;
 		}
@@ -501,7 +492,7 @@ namespace Castor
 		 *\param[in]	p_char	Le caractère.
 		 *\return		Le glyphe.
 		 */
-		Glyph const & DoLoadGlyph( char32_t p_char );
+		Glyph const & doLoadGlyph( char32_t p_char );
 
 	private:
 		//!\~english The height of the font	\~french La hauteur de la police

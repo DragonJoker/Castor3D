@@ -5,12 +5,12 @@
 
 #include "Buffer/GlBuffer.hpp"
 
-using namespace Castor3D;
+using namespace castor3d;
 
 namespace GlRender
 {
-	GlTransformFeedback::GlTransformFeedback( OpenGl & p_gl, GlRenderSystem & p_renderSystem, BufferDeclaration const & p_computed, Topology p_topology, ShaderProgram & p_program )
-		: TransformFeedback{ p_renderSystem, p_computed, p_topology, p_program }
+	GlTransformFeedback::GlTransformFeedback( OpenGl & p_gl, GlRenderSystem & renderSystem, BufferDeclaration const & p_computed, Topology p_topology, ShaderProgram & p_program )
+		: TransformFeedback{ renderSystem, p_computed, p_topology, p_program }
 		, BindableType{ p_gl,
 						"GlTransformFeedback",
 						std::bind( &OpenGl::GenTransformFeedbacks, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
@@ -20,7 +20,7 @@ namespace GlRender
 						{
 							return p_gl.BindTransformFeedback( GlBufferTarget::eTransformFeedback, p_glName );
 						} }
-		, m_topology{ p_gl.Get( p_topology ) }
+		, m_topology{ p_gl.get( p_topology ) }
 	{
 	}
 
@@ -28,49 +28,49 @@ namespace GlRender
 	{
 	}
 
-	bool GlTransformFeedback::DoInitialise()
+	bool GlTransformFeedback::doInitialise()
 	{
-		bool l_return = BindableType::Create();
+		bool result = BindableType::create();
 
-		if ( l_return )
+		if ( result )
 		{
-			BindableType::Bind();
-			uint32_t l_index{ 0u };
+			BindableType::bind();
+			uint32_t index{ 0u };
 
-			for ( auto & l_buffer : m_buffers )
+			for ( auto & buffer : m_buffers )
 			{
-				auto & l_tb = static_cast< GlBuffer< uint8_t > const & >( l_buffer.get().GetGpuBuffer() );
-				GetOpenGl().BindBufferBase( GlBufferTarget::eTransformFeedbackBuffer, l_index++, l_tb.GetGlName() );
+				auto & tb = static_cast< GlBuffer const & >( buffer.get().getGpuBuffer() );
+				getOpenGl().BindBufferBase( GlBufferTarget::eTransformFeedbackBuffer, index++, tb.getGlName() );
 			}
 
-			BindableType::Unbind();
+			BindableType::unbind();
 		}
 
-		return l_return;
+		return result;
 	}
 
-	void GlTransformFeedback::DoCleanup()
+	void GlTransformFeedback::doCleanup()
 	{
-		BindableType::Destroy();
+		BindableType::destroy();
 	}
 
-	void GlTransformFeedback::DoBind()const
+	void GlTransformFeedback::doBind()const
 	{
-		BindableType::Bind();
+		BindableType::bind();
 	}
 
-	void GlTransformFeedback::DoUnbind()const
+	void GlTransformFeedback::doUnbind()const
 	{
-		BindableType::Unbind();
+		BindableType::unbind();
 	}
 
-	void GlTransformFeedback::DoBegin()const
+	void GlTransformFeedback::doBegin()const
 	{
-		GetOpenGl().BeginTransformFeedback( m_topology );
+		getOpenGl().BeginTransformFeedback( m_topology );
 	}
 
-	void GlTransformFeedback::DoEnd()const
+	void GlTransformFeedback::doEnd()const
 	{
-		GetOpenGl().EndTransformFeedback();
+		getOpenGl().EndTransformFeedback();
 	}
 }

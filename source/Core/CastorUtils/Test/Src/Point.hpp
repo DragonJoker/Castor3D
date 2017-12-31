@@ -1,25 +1,4 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
+/* See LICENSE file in root folder */
 #ifndef ___Testing_Point___
 #define ___Testing_Point___
 
@@ -160,7 +139,7 @@ namespace Testing
 		Coords< T, Count > & operator =( Point< T, Count > const & p_pt );
 		/**
 		 *\~english
-		 *\brief		Addition assignment operator
+		 *\brief		addition assignment operator
 		 *\param[in]	p_pt	The Coords object to add
 		 *\return		A reference to this Coords object
 		 *\~french
@@ -172,7 +151,7 @@ namespace Testing
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
-		 *\param[in]	p_pt	The Coords object to substract
+		 *\param[in]	p_pt	The Coords object to subtract
 		 *\return		A reference to this Coords object
 		 *\~french
 		 *\brief		Opàrateur d'affectation par soustraction
@@ -204,7 +183,7 @@ namespace Testing
 		template< typename U, uint32_t _Count > Coords< T, Count > & operator /=( Coords< U, _Count > const & p_pt );
 		/**
 		 *\~english
-		 *\brief		Addition assignment operator
+		 *\brief		addition assignment operator
 		 *\param[in]	p_pt	The Coords object to add
 		 *\return		A reference to this Coords object
 		 *\~french
@@ -216,7 +195,7 @@ namespace Testing
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
-		 *\param[in]	p_pt	The Coords object to substract
+		 *\param[in]	p_pt	The Coords object to subtract
 		 *\return		A reference to this Coords object
 		 *\~french
 		 *\brief		Opàrateur d'affectation par soustraction
@@ -248,7 +227,7 @@ namespace Testing
 		template< typename U, uint32_t _Count > Coords< T, Count > & operator /=( Point< U, _Count > const & p_pt );
 		/**
 		 *\~english
-		 *\brief		Addition assignment operator
+		 *\brief		addition assignment operator
 		 *\param[in]	p_coords	The values to add
 		 *\return		A reference to this Coords object
 		 *\~french
@@ -260,7 +239,7 @@ namespace Testing
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
-		 *\param[in]	p_coords	The values to substract
+		 *\param[in]	p_coords	The values to subtract
 		 *\return		A reference to this Coords object
 		 *\~french
 		 *\brief		Opàrateur d'affectation par soustraction
@@ -333,10 +312,10 @@ namespace Testing
 		/**
 		 *\~english
 		 *\brief		Retrieves the total size of the point
-		 *\return		count() * elem_size()
+		 *\return		count() * elemSize()
 		 *\~french
 		 *\brief		Ràcupàre la taille totale du point
-		 *\return		count() * elem_size()
+		 *\return		count() * elemSize()
 		 */
 		inline uint32_t size()const
 		{
@@ -350,7 +329,7 @@ namespace Testing
 		 *\brief			Ràcupàre les donnàes et les place dans un tableau
 		 *\param[in,out]	p_pResult	Reàoit les donnàes, doit àtre allouà par l'appelant
 		 */
-		void to_values( T * p_pResult )const;
+		void toValues( T * p_pResult )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the number of coordinates
@@ -371,7 +350,7 @@ namespace Testing
 		 *\brief		Ràcupàre la taille du type donnàes
 		 *\return		La taille du type de donnàes
 		 */
-		inline std::size_t elem_size()const
+		inline std::size_t elemSize()const
 		{
 			return sizeof( T );
 		}
@@ -445,7 +424,7 @@ namespace Testing
 		 *\brief		Ràcupàre un pointeur constant sur les donnàes
 		 *\return		Le pointeur
 		 */
-		inline T const * const_ptr()const
+		inline T const * constPtr()const
 		{
 			return m_coords;
 		}
@@ -522,7 +501,7 @@ namespace Testing
 	template< typename T, uint32_t Count, typename U, uint32_t _Count	> bool operator !=( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
 	/**
 	 *\~english
-	 *\brief		Addition operator
+	 *\brief		addition operator
 	 *\param[in]	p_ptA, p_ptB	The points to add
 	 *\return		The addition result
 	 *\~french
@@ -534,7 +513,7 @@ namespace Testing
 	/**
 	 *\~english
 	 *\brief		Substraction operator
-	 *\param[in]	p_ptA, p_ptB	The points to substract
+	 *\param[in]	p_ptA, p_ptB	The points to subtract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opàrateur de soustraction
@@ -577,7 +556,7 @@ namespace Testing
 	template< typename T, typename U > Point< T, 3 > operator ^( Coords< T, 3 > const & p_ptA, Coords< U, 3 > const & p_ptB );
 	/**
 	 *\~english
-	 *\brief		Addition operator
+	 *\brief		addition operator
 	 *\param[in]	p_pt		The point
 	 *\param[in]	p_coords	The values to add
 	 *\return		The addition result
@@ -592,7 +571,7 @@ namespace Testing
 	 *\~english
 	 *\brief		Substraction operator
 	 *\param[in]	p_pt		The point
-	 *\param[in]	p_coords	The values to substract
+	 *\param[in]	p_coords	The values to subtract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opàrateur de soustraction
@@ -815,7 +794,7 @@ namespace Testing
 		Point< T, Count > & operator =( Point< T, Count > && p_pt );
 		/**
 		 *\~english
-		 *\brief		Addition assignment operator
+		 *\brief		addition assignment operator
 		 *\param[in]	p_pt	The Point object to add
 		 *\return		A reference to this Point object
 		 *\~french
@@ -827,7 +806,7 @@ namespace Testing
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
-		 *\param[in]	p_pt	The Point object to substract
+		 *\param[in]	p_pt	The Point object to subtract
 		 *\return		A reference to this Point object
 		 *\~french
 		 *\brief		Opàrateur d'affectation par soustraction
@@ -859,7 +838,7 @@ namespace Testing
 		template< typename U, uint32_t _Count > Point< T, Count > & operator /=( Point< U, _Count > const & p_pt );
 		/**
 		 *\~english
-		 *\brief		Addition assignment operator
+		 *\brief		addition assignment operator
 		 *\param[in]	p_pt	The Point object to add
 		 *\return		A reference to this Point object
 		 *\~french
@@ -871,7 +850,7 @@ namespace Testing
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
-		 *\param[in]	p_pt	The Point object to substract
+		 *\param[in]	p_pt	The Point object to subtract
 		 *\return		A reference to this Point object
 		 *\~french
 		 *\brief		Opàrateur d'affectation par soustraction
@@ -903,7 +882,7 @@ namespace Testing
 		template< typename U, uint32_t _Count > Point< T, Count > & operator /=( Coords< U, _Count > const & p_pt );
 		/**
 		 *\~english
-		 *\brief		Addition assignment operator
+		 *\brief		addition assignment operator
 		 *\param[in]	p_coords	The values to add
 		 *\return		A reference to this Point object
 		 *\~french
@@ -915,7 +894,7 @@ namespace Testing
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
-		 *\param[in]	p_coords	The values to substract
+		 *\param[in]	p_coords	The values to subtract
 		 *\return		A reference to this Point object
 		 *\~french
 		 *\brief		Opàrateur d'affectation par soustraction
@@ -993,7 +972,7 @@ namespace Testing
 		 *\brief			Ràcupàre les donnàes et les place dans un tableau
 		 *\param[in,out]	p_pResult	Reàoit les donnàes, doit àtre allouà par l'appelant
 		 */
-		void to_values( T * p_pResult )const;
+		void toValues( T * p_pResult )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the number of coordinates
@@ -1014,17 +993,17 @@ namespace Testing
 		 *\brief		Ràcupàre la taille du type donnàes
 		 *\return		La taille du type de donnàes
 		 */
-		inline std::size_t elem_size()const
+		inline std::size_t elemSize()const
 		{
 			return sizeof( T );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the total size of the point
-		 *\return		count() * elem_size()
+		 *\return		count() * elemSize()
 		 *\~french
 		 *\brief		Ràcupàre la taille totale du point
-		 *\return		count() * elem_size()
+		 *\return		count() * elemSize()
 		 */
 		inline	std::size_t	size()const
 		{
@@ -1100,7 +1079,7 @@ namespace Testing
 		 *\brief		Ràcupàre un pointeur constant sur les donnàes
 		 *\return		Le pointeur
 		 */
-		inline T const * const_ptr()const
+		inline T const * constPtr()const
 		{
 			return &m_coords[0];
 		}
@@ -1177,7 +1156,7 @@ namespace Testing
 	template< typename T, uint32_t Count, typename U, uint32_t _Count	> bool operator !=( Point< T, Count > const & p_ptA, Point< U, _Count >	const & p_ptB );
 	/**
 	 *\~english
-	 *\brief		Addition operator
+	 *\brief		addition operator
 	 *\param[in]	p_ptA, p_ptB	The points to add
 	 *\return		The addition result
 	 *\~french
@@ -1189,7 +1168,7 @@ namespace Testing
 	/**
 	 *\~english
 	 *\brief		Substraction operator
-	 *\param[in]	p_ptA, p_ptB	The points to substract
+	 *\param[in]	p_ptA, p_ptB	The points to subtract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opàrateur de soustraction
@@ -1232,7 +1211,7 @@ namespace Testing
 	template< typename T, typename U > Point< T, 3 > operator ^( Point< T, 3 > const & p_ptA,  Point< U, 3 > const & p_ptB );
 	/**
 	 *\~english
-	 *\brief		Addition operator
+	 *\brief		addition operator
 	 *\param[in]	p_pt		The point
 	 *\param[in]	p_coords	The values to add
 	 *\return		The addition result
@@ -1247,7 +1226,7 @@ namespace Testing
 	 *\~english
 	 *\brief		Substraction operator
 	 *\param[in]	p_pt		The point
-	 *\param[in]	p_coords	The values to substract
+	 *\param[in]	p_coords	The values to subtract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opàrateur de soustraction
@@ -1332,7 +1311,7 @@ namespace Testing
 	template< typename T, uint32_t Count, typename U, uint32_t _Count > bool operator !=( Point< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
 	/**
 	 *\~english
-	 *\brief		Addition operator
+	 *\brief		addition operator
 	 *\param[in]	p_ptA, p_ptB	The points to add
 	 *\return		The addition result
 	 *\~french
@@ -1344,7 +1323,7 @@ namespace Testing
 	/**
 	 *\~english
 	 *\brief		Substraction operator
-	 *\param[in]	p_ptA, p_ptB	The points to substract
+	 *\param[in]	p_ptA, p_ptB	The points to subtract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opàrateur de soustraction
@@ -1409,7 +1388,7 @@ namespace Testing
 	template< typename T, uint32_t Count, typename U, uint32_t _Count > bool operator !=( Coords< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB );
 	/**
 	 *\~english
-	 *\brief		Addition operator
+	 *\brief		addition operator
 	 *\param[in]	p_ptA, p_ptB	The points to add
 	 *\return		The addition result
 	 *\~french
@@ -1421,7 +1400,7 @@ namespace Testing
 	/**
 	 *\~english
 	 *\brief		Substraction operator
-	 *\param[in]	p_ptA, p_ptB	The points to substract
+	 *\param[in]	p_ptA, p_ptB	The points to subtract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opàrateur de soustraction
@@ -1513,7 +1492,7 @@ namespace Testing
 		 *\brief		Retourne la forme normalisàe d'un point
 		 *\param[in]	p_point	Le point
 		 */
-		template< typename T, uint32_t Count > static Point< T, Count > get_normalised( Point< T, Count > const & p_point );
+		template< typename T, uint32_t Count > static Point< T, Count > getNormalised( Point< T, Count > const & p_point );
 		/**
 		 *\~english
 		 *\brief		Computes the scalar product of 2 points
@@ -1535,7 +1514,7 @@ namespace Testing
 		 *\param[in]	p_ptA, p_ptB	Les points
 		 *\return		Le cosinus
 		 */
-		template< typename T, uint32_t Count > static double cos_theta( Point< T, Count > const & p_ptA, Point< T, Count > const & p_ptB );
+		template< typename T, uint32_t Count > static double cosTheta( Point< T, Count > const & p_ptA, Point< T, Count > const & p_ptB );
 		/**
 		 *\~english
 		 *\brief		Computes the squared Euclidian distance of the point
@@ -1546,7 +1525,7 @@ namespace Testing
 		 *\param[in]	p_point	Le point
 		 *\return		Le carrà de la norme Euclidienne
 		 */
-		template< typename T, uint32_t Count > static double distance_squared( Point< T, Count > const & p_point );
+		template< typename T, uint32_t Count > static double distanceSquared( Point< T, Count > const & p_point );
 		/**
 		 *\~english
 		 *\brief		Computes the Euclidian distance of the point
@@ -1568,7 +1547,7 @@ namespace Testing
 		 *\param[in]	p_point	Le point
 		 *\return		La distance de Manhattan
 		 */
-		template< typename T, uint32_t Count > static double distance_manhattan( Point< T, Count > const & p_point );
+		template< typename T, uint32_t Count > static double distanceManhattan( Point< T, Count > const & p_point );
 		/**
 		 *\~english
 		 *\brief		Computes the Minkowski distance of the point
@@ -1581,7 +1560,7 @@ namespace Testing
 		 *\param[in]	p_dOrder	L'ordre Minkownski
 		 *\return		La distance de Minkowski
 		 */
-		template< typename T, uint32_t Count > static double distance_minkowski( Point< T, Count > const & p_point, double p_dOrder );
+		template< typename T, uint32_t Count > static double distanceMinkowski( Point< T, Count > const & p_point, double p_dOrder );
 		/**
 		 *\~english
 		 *\brief		Computes the Chebychev distance of the point
@@ -1592,7 +1571,7 @@ namespace Testing
 		 *\param[in]	p_point	Le point
 		 *\return		La distance de Chebychev
 		 */
-		template< typename T, uint32_t Count > static double distance_chebychev( Point< T, Count > const & p_point );
+		template< typename T, uint32_t Count > static double distanceChebychev( Point< T, Count > const & p_point );
 		/**
 		 *\~english
 		 *\brief		Computes the scalar product of 2 points
@@ -1614,7 +1593,7 @@ namespace Testing
 		 *\param[in]	p_ptA, p_ptB	Les points
 		 *\return		Le cosinus
 		 */
-		template< typename T, uint32_t Count > static double cos_theta( Coords< T, Count > const & p_ptA, Point< T, Count > const & p_ptB );
+		template< typename T, uint32_t Count > static double cosTheta( Coords< T, Count > const & p_ptA, Point< T, Count > const & p_ptB );
 		/**
 		 *\~english
 		 *\brief		Computes the scalar product of 2 points
@@ -1636,7 +1615,7 @@ namespace Testing
 		 *\param[in]	p_ptA, p_ptB	Les points
 		 *\return		Le cosinus
 		 */
-		template< typename T, uint32_t Count > static double cos_theta( Point< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB );
+		template< typename T, uint32_t Count > static double cosTheta( Point< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB );
 		/**
 		 *\~english
 		 *\brief		Negates every value of a point's data
@@ -1680,7 +1659,7 @@ namespace Testing
 		 *\param[in]	p_ptA, p_ptB	Les points
 		 *\return		Le cosinus
 		 */
-		template< typename T, uint32_t Count > static double cos_theta( Coords< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB );
+		template< typename T, uint32_t Count > static double cosTheta( Coords< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB );
 		/**
 		 *\~english
 		 *\brief		Computes the squared Euclidian distance of the point
@@ -1691,7 +1670,7 @@ namespace Testing
 		 *\param[in]	p_point	Le point
 		 *\return		Le carrà de la norme Euclidienne
 		 */
-		template< typename T, uint32_t Count > static double distance_squared( Coords< T, Count > const & p_point );
+		template< typename T, uint32_t Count > static double distanceSquared( Coords< T, Count > const & p_point );
 		/**
 		 *\~english
 		 *\brief		Computes the Euclidian distance of the point
@@ -1713,7 +1692,7 @@ namespace Testing
 		 *\param[in]	p_point	Le point
 		 *\return		La distance de Manhattan
 		 */
-		template< typename T, uint32_t Count > static double distance_manhattan( Coords< T, Count > const & p_point );
+		template< typename T, uint32_t Count > static double distanceManhattan( Coords< T, Count > const & p_point );
 		/**
 		 *\~english
 		 *\brief		Computes the Minkowski distance of the point
@@ -1726,7 +1705,7 @@ namespace Testing
 		 *\param[in]	p_dOrder	L'ordre Minkownski
 		 *\return		La distance de Minkowski
 		 */
-		template< typename T, uint32_t Count > static double distance_minkowski( Coords< T, Count > const & p_point, double p_dOrder );
+		template< typename T, uint32_t Count > static double distanceMinkowski( Coords< T, Count > const & p_point, double p_dOrder );
 		/**
 		 *\~english
 		 *\brief		Computes the Chebychev distance of the point
@@ -1737,7 +1716,7 @@ namespace Testing
 		 *\param[in]	p_point	Le point
 		 *\return		La distance de Chebychev
 		 */
-		template< typename T, uint32_t Count > static double distance_chebychev( Coords< T, Count > const & p_point );
+		template< typename T, uint32_t Count > static double distanceChebychev( Coords< T, Count > const & p_point );
 	};
 }
 

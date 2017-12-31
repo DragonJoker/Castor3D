@@ -1,29 +1,25 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___GLSL_WRITER_PREREQUISITES_H___
 #define ___GLSL_WRITER_PREREQUISITES_H___
 
 #include <CastorUtils.hpp>
+#include <Design/Factory.hpp>
+
+#ifdef max
+#	undef max
+#	undef min
+#	undef abs
+#endif
+
+#ifdef OUT
+#	undef OUT
+#endif
+
+#ifdef IN
+#	undef IN
+#endif
 
 #ifdef CASTOR_PLATFORM_WINDOWS
 #	ifdef GlslWriter_EXPORTS
@@ -35,75 +31,84 @@ SOFTWARE.
 #	define GlslWriter_API
 #endif
 
-namespace GLSL
-{
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date		31/05/2016
-	\~english
-	\brief		Shadow filter types enumeration.
-	\~french
-	\brief		Enum�ration des types de filtrage des ombres.
-	*/
-	enum class ShadowType
-	{
-		//!\~english	No shadows at all.
-		//!\~french		Pas d'ombres du tout.
-		eNone,
-		//!\~english	Poisson filtering.
-		//!\~french		Filtrage poisson.
-		eRaw,
-		//!\~english	Poisson filtering.
-		//!\~french		Filtrage poisson.
-		ePoisson,
-		//!\~english	Stratified poisson filtering.
-		//!\~french		Filtrage poisson stratifi�.
-		eStratifiedPoisson,
-		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date		31/05/2016
-	\~english
-	\brief		Fog types enumeration.
-	\~french
-	\brief		Enum�ration des types de brouillard.
-	*/
-	enum class FogType
-	{
-		//!\~english	No fog.
-		//!\~french		Pas de brouillard
-		eDisabled,
-		//!\~english	Fog intensity increases linearly with distance to camera.
-		//!\~french		L'intensit� du brouillard augmente lin�airement avec la distance � la cam�ra.
-		eLinear,
-		//!\~english	Fog intensity increases exponentially with distance to camera.
-		//!\~french		L'intensit� du brouillard augmente exponentiellement avec la distance � la cam�ra.
-		//!\~french		
-		eExponential,
-		//!\~english	Fog intensity increases even more with distance to camera.
-		//!\~french		L'intensit� du brouillard augmente encore plus avec la distance � la cam�ra.
-		eSquaredExponential,
-		CASTOR_SCOPED_ENUM_BOUNDS( eDisabled )
-	};
-	enum class UboLayout
-	{
-		eStd140,
-		ePacked,
-		eShared
-	};
+#define DECLARE_GLSL_PARAMETER( TypeName )\
+	using In##TypeName = glsl::InParam< TypeName >;\
+	using Out##TypeName = glsl::OutParam< TypeName >;\
+	using InOut##TypeName = glsl::InOutParam< TypeName >\
 
+namespace glsl
+{
+	struct IndentBlock;
 	struct GlslWriterConfig;
 	class GlslWriter;
+	class Shader;
 	class KeywordsBase;
 	template< int Version, class Enable = void >
 	class Keywords;
-	class LightingModel;
-	class PhongLightingModel;
-	class DeferredPhongLightingModel;
-	struct Light;
+
+	enum class TypeName
+	{
+		eBool,
+		eInt,
+		eUInt,
+		eFloat,
+		eVec2B,
+		eVec3B,
+		eVec4B,
+		eVec2I,
+		eVec3I,
+		eVec4I,
+		eVec2F,
+		eVec3F,
+		eVec4F,
+		eMat2x2B,
+		eMat3x3B,
+		eMat4x4B,
+		eMat2x2I,
+		eMat3x3I,
+		eMat4x4I,
+		eMat2x2F,
+		eMat3x3F,
+		eMat4x4F,
+		eSamplerBuffer,
+		eSampler1D,
+		eSampler2D,
+		eSampler3D,
+		eSamplerCube,
+		eSampler2DRect,
+		eSampler1DArray,
+		eSampler2DArray,
+		eSamplerCubeArray,
+		eSampler1DShadow,
+		eSampler2DShadow,
+		eSamplerCubeShadow,
+		eSampler2DRectShadow,
+		eSampler1DArrayShadow,
+		eSampler2DArrayShadow,
+		eSamplerCubeArrayShadow,
+		CASTOR_SCOPED_ENUM_BOUNDS( eBool )
+	};
+
+	enum class SamplerType
+	{
+		eBuffer,
+		e1D,
+		e2D,
+		e3D,
+		eCube,
+		e2DRect,
+		e1DArray,
+		e2DArray,
+		eCubeArray,
+		e1DShadow,
+		e2DShadow,
+		eCubeShadow,
+		e2DRectShadow,
+		e1DArrayShadow,
+		e2DArrayShadow,
+		eCubeArrayShadow,
+		CASTOR_SCOPED_ENUM_BOUNDS( eBuffer )
+	};
 
 	template< typename T >
 	struct Array;
@@ -127,27 +132,16 @@ namespace GLSL
 	struct Mat3T;
 	template< typename TypeT >
 	struct Mat4T;
+	template< SamplerType T >
+	struct SamplerT;
 
 	struct Expr;
 	struct Type;
 	struct Void;
 	struct Boolean;
 	struct Int;
+	struct UInt;
 	struct Float;
-	struct SamplerBuffer;
-	struct Sampler1D;
-	struct Sampler2D;
-	struct Sampler3D;
-	struct SamplerCube;
-	struct Sampler1DArray;
-	struct Sampler2DArray;
-	struct SamplerCubeArray;
-	struct Sampler1DShadow;
-	struct Sampler2DShadow;
-	struct SamplerCubeShadow;
-	struct Sampler1DArrayShadow;
-	struct Sampler2DArrayShadow;
-	struct SamplerCubeArrayShadow;
 
 	using Vec2 = Vec2T< Float >;
 	using Vec3 = Vec3T< Float >;
@@ -168,8 +162,107 @@ namespace GLSL
 	using BMat3 = Mat3T< Boolean >;
 	using BMat4 = Mat4T< Boolean >;
 
-	constexpr uint32_t SpotShadowMapCount = 10u;
-	constexpr uint32_t PointShadowMapCount = 6u;
+	using SamplerBuffer = SamplerT< SamplerType::eBuffer >;
+	using Sampler1D = SamplerT< SamplerType::e1D >;
+	using Sampler2D = SamplerT< SamplerType::e2D >;
+	using Sampler3D = SamplerT< SamplerType::e3D >;
+	using SamplerCube = SamplerT< SamplerType::eCube >;
+	using Sampler2DRect = SamplerT< SamplerType::e2DRect >;
+	using Sampler1DArray = SamplerT< SamplerType::e1DArray >;
+	using Sampler2DArray = SamplerT< SamplerType::e2DArray >;
+	using SamplerCubeArray = SamplerT< SamplerType::eCubeArray >;
+	using Sampler1DShadow = SamplerT< SamplerType::e1DShadow >;
+	using Sampler2DShadow = SamplerT< SamplerType::e2DShadow >;
+	using SamplerCubeShadow = SamplerT< SamplerType::eCubeShadow >;
+	using Sampler2DRectShadow = SamplerT< SamplerType::e2DRectShadow >;
+	using Sampler1DArrayShadow = SamplerT< SamplerType::e1DArrayShadow >;
+	using Sampler2DArrayShadow = SamplerT< SamplerType::e2DArrayShadow >;
+	using SamplerCubeArrayShadow = SamplerT< SamplerType::eCubeArrayShadow >;
+
+	DECLARE_GLSL_PARAMETER( Float );
+	DECLARE_GLSL_PARAMETER( Int );
+	DECLARE_GLSL_PARAMETER( UInt );
+	DECLARE_GLSL_PARAMETER( Boolean );
+	DECLARE_GLSL_PARAMETER( Vec2 );
+	DECLARE_GLSL_PARAMETER( Vec3 );
+	DECLARE_GLSL_PARAMETER( Vec4 );
+	DECLARE_GLSL_PARAMETER( IVec2 );
+	DECLARE_GLSL_PARAMETER( IVec3 );
+	DECLARE_GLSL_PARAMETER( IVec4 );
+	DECLARE_GLSL_PARAMETER( BVec2 );
+	DECLARE_GLSL_PARAMETER( BVec3 );
+	DECLARE_GLSL_PARAMETER( BVec4 );
+	DECLARE_GLSL_PARAMETER( Mat2 );
+	DECLARE_GLSL_PARAMETER( Mat3 );
+	DECLARE_GLSL_PARAMETER( Mat4 );
+	DECLARE_GLSL_PARAMETER( IMat2 );
+	DECLARE_GLSL_PARAMETER( IMat3 );
+	DECLARE_GLSL_PARAMETER( IMat4 );
+	DECLARE_GLSL_PARAMETER( BMat2 );
+	DECLARE_GLSL_PARAMETER( BMat3 );
+	DECLARE_GLSL_PARAMETER( BMat4 );
+	DECLARE_GLSL_PARAMETER( SamplerBuffer );
+	DECLARE_GLSL_PARAMETER( Sampler1D );
+	DECLARE_GLSL_PARAMETER( Sampler2D );
+	DECLARE_GLSL_PARAMETER( Sampler3D );
+	DECLARE_GLSL_PARAMETER( SamplerCube );
+	DECLARE_GLSL_PARAMETER( Sampler1DArray );
+	DECLARE_GLSL_PARAMETER( Sampler2DArray );
+	DECLARE_GLSL_PARAMETER( SamplerCubeArray );
+	DECLARE_GLSL_PARAMETER( Sampler1DShadow );
+	DECLARE_GLSL_PARAMETER( Sampler2DShadow );
+	DECLARE_GLSL_PARAMETER( SamplerCubeShadow );
+	DECLARE_GLSL_PARAMETER( Sampler1DArrayShadow );
+	DECLARE_GLSL_PARAMETER( Sampler2DArrayShadow );
+	DECLARE_GLSL_PARAMETER( SamplerCubeArrayShadow );
+
+	template< typename RetT, typename ... ParamsT >
+	struct Function;
+
+	template< typename T >
+	struct TypeTraits;
+	template< SamplerType ST >
+	struct SamplerTypeTraits;
+	template< typename T >
+	struct TypeOf
+	{
+		using Type = T;
+	};
+
+	struct Endl
+	{
+	};
+	struct Endi
+	{
+	};
+	struct Version
+	{
+	};
+	struct Attribute
+	{
+	};
+	struct In
+	{
+	};
+	struct Out
+	{
+	};
+	struct Layout
+	{
+		int m_index;
+	};
+	struct Uniform
+	{
+	};
+
+	static Endi endi;
+	static Endl endl;
+
+	GlslWriter_API void writeLine( GlslWriter & p_writer, castor::String const & p_line );
+	GlslWriter_API void registerName( GlslWriter & p_writer, castor::String const & p_name, TypeName p_type );
+	GlslWriter_API void checkNameExists( GlslWriter & p_writer, castor::String const & p_name, TypeName p_type );
 }
+
+#include "GlslWriterPrerequisites.inl"
 
 #endif

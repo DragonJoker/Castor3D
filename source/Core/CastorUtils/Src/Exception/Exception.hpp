@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CASTOR_EXCEPTION_H___
 #define ___CASTOR_EXCEPTION_H___
@@ -27,7 +8,7 @@ SOFTWARE.
 #include <sstream>
 #include <cstdint>
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -38,7 +19,7 @@ namespace Castor
 	\remark		Gives File, Function, Line in addition to usual description
 	\~french
 	\brief		Classe d'exceptions plus verbeuse que celles de std
-	\remark		Donne aussi le fichier, la fonction et la ligne en plus des informations usuelles
+	\remark		donne aussi le fichier, la fonction et la ligne en plus des informations usuelles
 	*/
 	class Exception
 		: public std::exception
@@ -58,7 +39,10 @@ namespace Castor
 		 *\param[in]	p_function		Le nom de la fonction
 		 *\param[in]	p_line			Le numéro de ligne
 		 */
-		Exception( std::string const & p_description, char const * p_file, char const * p_function, uint32_t p_line )
+		Exception( std::string const & p_description
+			, char const * p_file
+			, char const * p_function
+			, uint32_t p_line )
 			: m_line( p_line )
 			, m_description( p_description )
 			, m_filename( p_file ? p_file : "" )
@@ -94,7 +78,7 @@ namespace Castor
 		 *\brief		Récupère le nom du fichier
 		 *\return		Le nom du fichier
 		 */
-		inline std::string const & GetFilename()const throw()
+		inline std::string const & getFileName()const throw()
 		{
 			return m_filename;
 		}
@@ -106,7 +90,7 @@ namespace Castor
 		 *\brief		Récupère le nom de la fonction
 		 *\return		Le nom de la fonction
 		 */
-		inline std::string const & GetFunction()const throw()
+		inline std::string const & getFunction()const throw()
 		{
 			return m_functionName;
 		}
@@ -118,7 +102,7 @@ namespace Castor
 		 *\brief		Récupère le numéro de ligne
 		 *\return		Le numéro de ligne
 		 */
-		inline uint32_t GetLine()const throw()
+		inline uint32_t getLine()const throw()
 		{
 			return m_line;
 		}
@@ -130,7 +114,7 @@ namespace Castor
 		 *\brief		Récupère la description de l'exception
 		 *\return		La description de l'exception
 		 */
-		inline std::string const & GetDescription()const throw()
+		inline std::string const & getDescription()const throw()
 		{
 			return m_description;
 		}
@@ -142,50 +126,50 @@ namespace Castor
 		 *\brief		Récupère le texte complet de l'exception (description, ligne, fichier et fonction)
 		 *\return		La texte complet de l'exception
 		 */
-		inline std::string GetFullDescription()const throw()
+		inline std::string getFullDescription()const throw()
 		{
-			std::string l_strReturn;
-			std::string l_strSep;
+			std::string strReturn;
+			std::string strSep;
 
 			if ( !m_filename.empty() )
 			{
-				l_strReturn += m_filename + " ";
+				strReturn += m_filename + " ";
 			}
 			else
 			{
-				l_strReturn += "<Unknown file> ";
+				strReturn += "<Unknown file> ";
 			}
 
 			if ( !m_functionName.empty() )
 			{
-				l_strReturn += m_functionName + " ";
+				strReturn += m_functionName + " ";
 			}
 			else
 			{
-				l_strReturn += "<Unknown function> ";
+				strReturn += "<Unknown function> ";
 			}
 
 			if ( m_line )
 			{
-				std::stringstream l_stream;
-				l_stream << m_line;
-				l_strReturn += l_stream.str() + " : ";
+				std::stringstream stream;
+				stream << m_line;
+				strReturn += stream.str() + " : ";
 			}
 			else
 			{
-				l_strReturn += "<Unknown line> : ";
+				strReturn += "<Unknown line> : ";
 			}
 
 			if ( !m_description.empty() )
 			{
-				l_strReturn += m_description;
+				strReturn += m_description;
 			}
 			else
 			{
-				l_strReturn += "<Unknown exception> : ";
+				strReturn += "<Unknown exception> : ";
 			}
 
-			return l_strReturn;
+			return strReturn;
 		}
 
 	protected:
@@ -203,10 +187,10 @@ namespace Castor
 \author 	Sylvain DOREMUS
 \date 		03/01/2011
 \~english
-\brief		Macro to ease the use of Castor::Exception
+\brief		Macro to ease the use of castor::Exception
 \~french
-\brief		Macro définie pour faciliter l'utilisation de Castor::Exception
+\brief		Macro définie pour faciliter l'utilisation de castor::Exception
 */
-#define CASTOR_EXCEPTION( p_text ) throw Castor::Exception( (p_text), __FILE__, __FUNCTION__, __LINE__ )
+#define CASTOR_EXCEPTION( p_text ) throw castor::Exception( (p_text), __FILE__, __FUNCTION__, __LINE__ )
 
 #endif

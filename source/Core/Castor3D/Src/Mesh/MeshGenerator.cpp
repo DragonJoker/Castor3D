@@ -9,12 +9,12 @@
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Scene/Scene.hpp"
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-	MeshGenerator::MeshGenerator( MeshType p_eMeshType )
-		: m_eMeshType( p_eMeshType )
+	MeshGenerator::MeshGenerator( String const & p_meshType )
+		: m_meshType{ p_meshType }
 	{
 	}
 
@@ -22,30 +22,30 @@ namespace Castor3D
 	{
 	}
 
-	MeshGeneratorSPtr MeshGenerator::Create()
+	MeshGeneratorSPtr MeshGenerator::create()
 	{
-		return std::make_shared< MeshGenerator >( MeshType::eCustom );
+		return std::make_shared< MeshGenerator >( cuT( "custom" ) );
 	}
 
-	void MeshGenerator::Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
+	void MeshGenerator::generate( Mesh & p_mesh, Parameters const & p_parameters )
 	{
-		DoGenerate( p_mesh, p_faces, p_dimensions );
+		doGenerate( p_mesh, p_parameters );
 
-		for ( auto l_submesh : p_mesh )
+		for ( auto submesh : p_mesh )
 		{
-			p_mesh.GetScene()->GetListener().PostEvent( MakeInitialiseEvent( *l_submesh ) );
+			p_mesh.getScene()->getListener().postEvent( makeInitialiseEvent( *submesh ) );
 		}
 	}
 
-	void MeshGenerator::ComputeNormals( Mesh & p_mesh, bool p_reverted )
+	void MeshGenerator::computeNormals( Mesh & p_mesh, bool p_reverted )
 	{
-		for ( auto l_submesh : p_mesh )
+		for ( auto submesh : p_mesh )
 		{
-			l_submesh->ComputeNormals( p_reverted );
+			submesh->computeNormals( p_reverted );
 		}
 	}
 
-	void MeshGenerator::DoGenerate( Mesh & CU_PARAM_UNUSED( p_mesh ), UIntArray const & CU_PARAM_UNUSED( p_faces ), RealArray const & CU_PARAM_UNUSED( p_dimensions ) )
+	void MeshGenerator::doGenerate( Mesh & CU_PARAM_UNUSED( p_mesh ), Parameters const &  CU_PARAM_UNUSED( p_parameters ) )
 	{
 	}
 }

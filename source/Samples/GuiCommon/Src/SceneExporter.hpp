@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CV_SCENE_EXPORTER_H___
 #define ___CV_SCENE_EXPORTER_H___
@@ -51,7 +32,7 @@ namespace GuiCommon
 		 *\param[in]	p_scene		La scène à exporter.
 		 *\param[in]	p_fileName	Le nom du fichier exportà.
 		 */
-		virtual void ExportScene( Castor3D::Scene const & p_scene, Castor::Path const & p_fileName ) = 0;
+		virtual void ExportScene( castor3d::Scene const & p_scene, castor::Path const & p_fileName ) = 0;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -65,14 +46,14 @@ namespace GuiCommon
 	class ObjSceneExporter
 	{
 	public:
-		virtual void ExportScene( Castor3D::Scene const & p_scene, Castor::Path const & p_fileName );
+		virtual void ExportScene( castor3d::Scene const & p_scene, castor::Path const & p_fileName );
 
 	private:
-		void DoExportMaterials( Castor3D::Scene const & p_scene, Castor::Path const & p_path )const;
-		void DoExportMeshes( Castor3D::Scene const & p_scene, Castor::Path const & p_mtlpath, Castor::Path const & p_path )const;
-		Castor::String DoExportMaterial( Castor::Path const & p_pathMtlFolder, Castor3D::Material const & p_material )const;
-		Castor::String DoExportTexture( Castor::Path const & p_pathMtlFolder, Castor::String p_section, Castor3D::TextureUnitSPtr p_unit )const;
-		Castor::String DoExportMesh( Castor3D::Mesh const & p_mesh, uint32_t & p_offset, uint32_t & p_count )const;
+		void doExportMaterials( castor3d::Scene const & p_scene, castor::Path const & p_path )const;
+		void doExportMeshes( castor3d::Scene const & p_scene, castor::Path const & p_mtlpath, castor::Path const & p_path )const;
+		castor::String doExportMaterial( castor::Path const & p_pathMtlFolder, castor3d::Material const & p_material )const;
+		castor::String doExportTexture( castor::Path const & p_pathMtlFolder, castor::String p_section, castor3d::TextureUnitSPtr p_unit )const;
+		castor::String doExportMesh( castor3d::Mesh const & p_mesh, uint32_t & p_offset, uint32_t & p_count )const;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -86,7 +67,7 @@ namespace GuiCommon
 	class CscnSceneExporter
 	{
 	public:
-		virtual void ExportScene( Castor3D::Scene const & p_scene, Castor::Path const & p_fileName );
+		virtual void ExportScene( castor3d::Scene const & p_scene, castor::Path const & p_fileName );
 	};
 }
 

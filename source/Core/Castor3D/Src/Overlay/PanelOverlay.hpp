@@ -1,31 +1,12 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_PANEL_OVERLAY_H___
 #define ___C3D_PANEL_OVERLAY_H___
 
 #include "OverlayCategory.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -59,24 +40,24 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextWriter( Castor::String const & p_tabs, PanelOverlay const * p_category = nullptr );
+			C3D_API TextWriter( castor::String const & tabs, PanelOverlay const * category = nullptr );
 			/**
 			 *\~english
 			 *\brief		Saves an overlay into a text file
-			 *\param[in]	p_file		the file to save the overlay in
-			 *\param[in]	p_overlay	the overlay to save
+			 *\param[in]	file		the file to save the overlay in
+			 *\param[in]	overlay	the overlay to save
 			 *\return		\p true if everything is OK
 			 *\~french
 			 *\brief		Sauvegarde l'incrustation donnée dans un fichier texte
-			 *\param[in]	p_file		Le fichier où enregistrer l'incrustation
-			 *\param[in]	p_overlay	L'incrustation à enregistrer
+			 *\param[in]	file		Le fichier où enregistrer l'incrustation
+			 *\param[in]	overlay	L'incrustation à enregistrer
 			 *\return		\p true si tout s'est bien passé
 			 */
-			C3D_API bool operator()( PanelOverlay const & p_overlay, Castor::TextFile & p_file );
+			C3D_API bool operator()( PanelOverlay const & overlay, castor::TextFile & file );
 			/**
-			 *\copydoc		Castor3D::OverlayCategory::TextWriter::WriteInto
+			 *\copydoc		castor3d::OverlayCategory::TextWriter::writeInto
 			 */
-			C3D_API bool WriteInto( Castor::TextFile & p_file )override;
+			C3D_API bool writeInto( castor::TextFile & file )override;
 
 		private:
 			PanelOverlay const * m_category;
@@ -96,7 +77,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~PanelOverlay();
+		C3D_API ~PanelOverlay();
 		/**
 		 *\~english
 		 *\brief		Creation function, used by the factory
@@ -105,13 +86,13 @@ namespace Castor3D
 		 *\brief		Fonction de création utilisée par la fabrique
 		 *\return		Un overlay
 		 */
-		C3D_API static OverlayCategorySPtr Create();
+		C3D_API static OverlayCategorySPtr create();
 		/**
-		 *\copydoc		Castor3D::OverlayCategory::CreateTextWriter
+		 *\copydoc		castor3d::OverlayCategory::createTextWriter
 		 */
-		C3D_API std::unique_ptr < OverlayCategory::TextWriter > CreateTextWriter( Castor::String const & p_tabs )override
+		C3D_API std::unique_ptr < OverlayCategory::TextWriter > createTextWriter( castor::String const & tabs )override
 		{
-			return std::make_unique< TextWriter >( p_tabs, this );
+			return std::make_unique< TextWriter >( tabs, this );
 		}
 		/**
 		 *\~english
@@ -121,7 +102,7 @@ namespace Castor3D
 		 *\brief		Récupère le tampon de sommets du panneau
 		 *\return		Le tampon
 		 */
-		inline OverlayCategory::VertexArray const & GetPanelVertex()const
+		inline OverlayCategory::VertexArray const & getPanelVertex()const
 		{
 			return m_arrayVtx;
 		}
@@ -130,24 +111,25 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Draws the overlay
-		 *\param[in]	p_renderer	The renderer used to draw this overlay
+		 *\param[in]	renderer	The renderer used to draw this overlay
 		 *\~french
 		 *\brief		Dessine l'incrustation
-		 *\param[in]	p_renderer	Le renderer utilisé pour dessiner cette incrustation
+		 *\param[in]	renderer	Le renderer utilisé pour dessiner cette incrustation
 		 */
-		C3D_API virtual void DoRender( OverlayRendererSPtr p_renderer );
+		C3D_API void doRender( OverlayRendererSPtr renderer )override;
 		/**
 		 *\~english
 		 *\brief		Updates the vertex buffer.
-		 *\param[in]	p_size	The render target size.
+		 *\param[in]	size	The render target size.
 		 *\~french
 		 *\brief		Met à jour le tampon de sommets.
-		 *\param[in]	p_size	Les dimensions de la cible de rendu.
+		 *\param[in]	size	Les dimensions de la cible de rendu.
 		 */
-		C3D_API virtual void DoUpdateBuffer( Castor::Size const & p_size );
+		C3D_API void doUpdateBuffer( castor::Size const & size )override;
 
 	protected:
-		//!\~english The vertex buffer data	\~french Les données du tampon de sommets
+		//!\~english	The vertex buffer data.
+		//!\~french		Les données du tampon de sommets.
 		VertexArray m_arrayVtx;
 	};
 }

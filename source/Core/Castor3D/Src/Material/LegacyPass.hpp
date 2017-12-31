@@ -1,31 +1,12 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+﻿/*
+See LICENSE file in root folder
 */
 #ifndef ___C3D_LegacyPass_H___
 #define ___C3D_LegacyPass_H___
 
 #include "Material/Pass.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -52,7 +33,7 @@ namespace Castor3D
 		\brief Loader de Pass.
 		*/
 		class TextWriter
-			: public Castor::TextWriter< LegacyPass >
+			: public castor::TextWriter< LegacyPass >
 		{
 		public:
 			/**
@@ -61,18 +42,18 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur.
 			 */
-			C3D_API explicit TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a LegacyPass into a text file.
-			 *\param[in]		p_pass	The LegacyPass to write.
-			 *\param[in,out]	p_file	The file where to write the LegacyPass.
+			 *\param[in]		pass	The LegacyPass to write.
+			 *\param[in,out]	file	The file where to write the LegacyPass.
 			 *\~french
 			 *\brief			Ecrit une LegacyPass dans un fichier texte.
-			 *\param[in]		p_pass	La LegacyPass à écrire.
-			 *\param[in,out]	p_file	Le file où écrire la LegacyPass.
+			 *\param[in]		pass	La LegacyPass à écrire.
+			 *\param[in,out]	file	Le file où écrire la LegacyPass.
 			 */
-			C3D_API bool operator()( LegacyPass const & p_pass, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( LegacyPass const & pass, castor::TextFile & file )override;
 		};
 
 	public:
@@ -80,13 +61,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\remarks		Used by Material, don't use it.
-		 *\param[in]	p_parent	The parent material.
+		 *\param[in]	parent	The parent material.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\remarks		A ne pas utiliser autrement que via la classe Material.
-		 *\param[in]	p_parent	Le matériau parent.
+		 *\param[in]	parent	Le matériau parent.
 		 */
-		C3D_API LegacyPass( Material & p_parent );
+		C3D_API explicit LegacyPass( Material & parent );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -95,64 +76,72 @@ namespace Castor3D
 		 */
 		C3D_API ~LegacyPass();
 		/**
+		 *\copydoc		castor3d::Pass::accept
+		 */
+		C3D_API void accept( PassBuffer & buffer )const override;
+		/**
 		 *\~english
-		 *\brief		Sets the diffuse colour.
-		 *\param[in]	p_value	The new value.
+		 *\remarks	Passes are aligned on float[4], so the size of a pass
+		 *			is the number of float[4] needed to contain it.
+		 *\~french
+		 *\remarks	Les passes sont alignées sur 4 flottants, donc la taille d'une passe
+		 *			correspond aux nombres de float[4] qu'il faut pour la contenir.
+		 */
+		inline uint32_t getPassSize()const override
+		{
+			return 4u;
+		}
+		/**
+		 *\~english
+		 *\brief		sets the diffuse colour.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la couleur diffuse.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetDiffuse( Castor::Colour const & p_value)
+		inline void setDiffuse( castor::RgbColour const & value )
 		{
-			m_diffuse = p_value;
+			m_diffuse = value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the ambient colour.
-		 *\param[in]	p_value	The new value.
-		 *\~french
-		 *\brief		Définit la couleur ambiante.
-		 *\param[in]	p_value	La nouvelle valeur.
-		 */
-		inline void SetAmbient( Castor::Colour const & p_value)
-		{
-			m_ambient = p_value;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the specular colour.
-		 *\param[in]	p_value	The new value.
+		 *\brief		sets the specular colour.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la couleur spéculaire.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetSpecular( Castor::Colour const & p_value)
+		inline void setSpecular( castor::RgbColour const & value )
 		{
-			m_specular = p_value;
+			m_specular = value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the emissive colour.
-		 *\param[in]	p_value	The new value.
+		 *\brief		sets the ambient factor.
+		 *\param[in]	value	The new value.
 		 *\~french
-		 *\brief		Définit la couleur émissive.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\brief		Définit le facteur d'ambiante.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetEmissive( Castor::HdrColour const & p_value)
+		inline void setAmbient( float const & value )
 		{
-			m_emissive = p_value;
+			m_ambient = value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the shininess.
-		 *\param[in]	p_value	The new value.
+		 *\brief		sets the shininess.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit l'exposant.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void SetShininess( float p_value )
+		inline void setShininess( float value )
 		{
-			m_shininess = p_value;
+			m_shininess = value;
+			onChanged( *this );
 		}
 		/**
 		 *\~english
@@ -160,7 +149,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La valeur d'exposant.
 		 */
-		inline float GetShininess()const
+		inline float getShininess()const
 		{
 			return m_shininess;
 		}
@@ -170,19 +159,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		La couleur diffuse.
 		 */
-		inline Castor::Colour const & GetDiffuse()const
+		inline castor::RgbColour const & getDiffuse()const
 		{
 			return m_diffuse;
-		}
-		/**
-		 *\~english
-		 *\return		The ambient colour.
-		 *\~french
-		 *\return		La couleur ambiante.
-		 */
-		inline Castor::Colour const & GetAmbient()const
-		{
-			return m_ambient;
 		}
 		/**
 		 *\~english
@@ -190,19 +169,19 @@ namespace Castor3D
 		 *\~french
 		 *\return		La couleur spéculaire.
 		 */
-		inline Castor::Colour const & GetSpecular()const
+		inline castor::RgbColour const & getSpecular()const
 		{
 			return m_specular;
 		}
 		/**
 		 *\~english
-		 *\return		The emissive colour.
+		 *\return		The ambient factor.
 		 *\~french
-		 *\return		La couleur émissive.
+		 *\return		Le facteur d'ambiante.
 		 */
-		inline Castor::HdrColour const & GetEmissive()const
+		inline float getAmbient()const
 		{
-			return m_emissive;
+			return m_ambient;
 		}
 		/**
 		 *\~english
@@ -210,19 +189,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		La couleur diffuse.
 		 */
-		inline Castor::Colour & GetDiffuse()
+		inline castor::RgbColour & getDiffuse()
 		{
 			return m_diffuse;
-		}
-		/**
-		 *\~english
-		 *\return		The ambient colour.
-		 *\~french
-		 *\return		La couleur ambiante.
-		 */
-		inline Castor::Colour & GetAmbient()
-		{
-			return m_ambient;
 		}
 		/**
 		 *\~english
@@ -230,52 +199,35 @@ namespace Castor3D
 		 *\~french
 		 *\return		La couleur spéculaire.
 		 */
-		inline Castor::Colour & GetSpecular()
+		inline castor::RgbColour & getSpecular()
 		{
 			return m_specular;
-		}
-		/**
-		 *\~english
-		 *\return		The emissive colour.
-		 *\~french
-		 *\return		La couleur émissive.
-		 */
-		inline Castor::HdrColour & GetEmissive()
-		{
-			return m_emissive;
 		}
 
 	private:
 		/**
-		 *\copydoc		Castor3D::Pass::DoInitialise
+		 *\copydoc		castor3d::Pass::doInitialise
 		 */
-		void DoInitialise()override;
+		void doInitialise()override;
 		/**
-		 *\copydoc		Castor3D::Pass::DoCleanup
+		 *\copydoc		castor3d::Pass::doCleanup
 		 */
-		void DoCleanup()override;
+		void doCleanup()override;
 		/**
-		 *\copydoc		Castor3D::Pass::DoUpdateRenderNode
+		 *\copydoc		castor3d::Pass::doSetOpacity
 		 */
-		void DoUpdateRenderNode( PassRenderNodeUniforms & p_node )const override;
-		/**
-		 *\copydoc		Castor3D::Pass::DoSetOpacity
-		 */
-		void DoSetOpacity( float p_value )override;
+		void doSetOpacity( float value )override;
 
 	private:
 		//!\~english	Diffuse material colour.
 		//!\~french		La couleur diffuse
-		Castor::Colour m_diffuse;
-		//!\~english	Ambient material colour.
-		//!\~french		La couleur ambiante.
-		Castor::Colour m_ambient;
+		castor::RgbColour m_diffuse;
 		//!\~english	Specular material colour.
 		//!\~french		La couleur spéculaire.
-		Castor::Colour m_specular;
-		//!\~english	Emissive material colour.
-		//!\~french		La couleur émissive.
-		Castor::HdrColour m_emissive;
+		castor::RgbColour m_specular;
+		//!\~english	The ambient contribution factor.
+		//!\~french		Le facteur de contribution a l'ambiente.
+		float m_ambient{ 0.0f };
 		//!\~english	The shininess value.
 		//!\~french		La valeur d'exposant.
 		float m_shininess{ 50.0f };

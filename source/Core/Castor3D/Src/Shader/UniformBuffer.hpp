@@ -1,37 +1,19 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_UniformBuffer_H___
 #define ___C3D_UniformBuffer_H___
 
 #include "Castor3DPrerequisites.hpp"
 
-#include "Uniform.hpp"
 #include "Mesh/Buffer/GpuBuffer.hpp"
+#include "Shader/UniformBufferBinding.hpp"
+#include "Shader/Uniform/Uniform.hpp"
 
 #include <Design/OwnedBy.hpp>
 #include <Design/Named.hpp>
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -49,10 +31,10 @@ namespace Castor3D
 				<br />Utilise les GPU buffers si supportés (OpenGL Uniform Buffer Objects, Direct3D Constants buffers)
 	*/
 	class UniformBuffer
-		: public Castor::OwnedBy< RenderSystem >
-		, public Castor::Named
+		: public castor::OwnedBy< RenderSystem >
+		, public castor::Named
 	{
-		friend class Castor::TextWriter< Castor3D::UniformBuffer >;
+		friend class castor::TextWriter< castor3d::UniformBuffer >;
 
 	public:
 		/*!
@@ -65,7 +47,7 @@ namespace Castor3D
 		\brief		Loader de UniformBuffer.
 		*/
 		class TextWriter
-			: public Castor::TextWriter< UniformBuffer >
+			: public castor::TextWriter< UniformBuffer >
 		{
 		public:
 			/**
@@ -74,18 +56,18 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur.
 			 */
-			C3D_API TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a UniformBuffer into a text file.
-			 *\param[in]		p_object	The UniformBuffer.
-			 *\param[in,out]	p_file		The file.
+			 *\param[in]		object	The UniformBuffer.
+			 *\param[in,out]	file		The file.
 			 *\~french
 			 *\brief			Ecrit UniformBuffer dans un fichier texte.
-			 *\param[in]		p_object	Le UniformBuffer.
-			 *\param[in,out]	p_file		Le fichier.
+			 *\param[in]		object	Le UniformBuffer.
+			 *\param[in,out]	file		Le fichier.
 			 */
-			C3D_API bool operator()( UniformBuffer const & p_object, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( UniformBuffer const & object, castor::TextFile & file )override;
 		};
 
 	public:
@@ -96,14 +78,18 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_name			The buffer name.
-		 *\param[in]	p_renderSystem	The render system.
+		 *\param[in]	name			The buffer name.
+		 *\param[in]	renderSystem	The render system.
+		 *\param[in]	bindingPoint	The binding point.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_name			Le nom du tampon.
-		 *\param[in]	p_renderSystem	Le render system.
+		 *\param[in]	name			Le nom du tampon.
+		 *\param[in]	renderSystem	Le render system.
+		 *\param[in]	bindingPoint	Le point d'attache.
 		 */
-		C3D_API UniformBuffer( Castor::String const & p_name, RenderSystem & p_renderSystem );
+		C3D_API UniformBuffer( castor::String const & name
+			, RenderSystem & renderSystem
+			, uint32_t bindingPoint );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -117,179 +103,119 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Nettoie toutes les variables et le tampon GPU associé.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Updates the GPU storage.
 		 *\~french
 		 *\brief		Met à jour le stockage GPU.
 		 */
-		C3D_API void Update();
+		C3D_API void update()const;
+		/**
+		 *\~english
+		 *\brief		sets the buffer's binding point.
+		 *\param[in]	index	The binding point.
+		 *\~french
+		 *\brief		Définit le point d'attache du tampon.
+		 *\param[in]	index	Le point d'attache.
+		 */
+		C3D_API void bindTo( uint32_t index )const;
+		/**
+		 *\~english
+		 *\return		The buffer's binding point.
+		 *\~french
+		 *\return		Le point d'attache du tampon.
+		 */
+		C3D_API uint32_t getBindingPoint()const;
 		/**
 		 *\~english
 		 *\brief		Creates a binding of this unifor buffer to given program.
 		 *\remarks		If this is the first binding created, the GPU storage and variables will be initialised.
-		 *\param[in]	p_program	The program.
+		 *\param[in]	program	The program.
 		 *\return		The created binding.
 		 *\~french
 		 *\brief		Crée un binding entre ce tampon d'uniformes et le porgramme donné.
 		 *\remarks		Si c'est le premier binding créé, le stokage GPU et les variables seront initialisées.
-		 *\param[in]	p_program	Le programme.
+		 *\param[in]	program	Le programme.
 		 *\return		Le binding créé.
 		 */
-		C3D_API UniformBufferBinding & CreateBinding( ShaderProgram & p_program );
+		C3D_API UniformBufferBinding & createBinding( ShaderProgram & program );
 		/**
 		 *\~english
 		 *\brief		Retrieves the binding for given program.
-		 *\param[in]	p_program	The program.
+		 *\param[in]	program	The program.
 		 *\return		The retrieved binding.
 		 *\~french
 		 *\brief		Récupère le binding pour le programme donné.
-		 *\param[in]	p_program	Le programme.
+		 *\param[in]	program	Le programme.
 		 *\return		Le binding récupéré.
 		 */
-		C3D_API UniformBufferBinding & GetBinding( ShaderProgram & p_program )const;
+		C3D_API UniformBufferBinding & getBinding( ShaderProgram & program )const;
 		/**
 		 *\~english
 		 *\brief		Creates a variable of the wanted type.
-		 *\param[in]	p_type			The wanted type.
-		 *\param[in]	p_name			The variable name.
-		 *\param[in]	p_occurences	The array dimension.
+		 *\param[in]	type		The wanted type.
+		 *\param[in]	name		The variable name.
+		 *\param[in]	occurences	The array dimension.
 		 *\return		The created variable, nullptr if failed.
 		 *\~french
 		 *\brief		Crée une variable du type demandé.
-		 *\param[in]	p_type			Le type voulu.
-		 *\param[in]	p_name			Le nom de la variable.
-		 *\param[in]	p_occurences	Les dimensions du tableau.
+		 *\param[in]	type		Le type voulu.
+		 *\param[in]	name		Le nom de la variable.
+		 *\param[in]	occurences	Les dimensions du tableau.
 		 *\return		La variable créée, nullptr en cas d'échec.
 		 */
-		C3D_API UniformSPtr CreateUniform( UniformType p_type, Castor::String const & p_name, uint32_t p_occurences = 1 );
+		C3D_API UniformSPtr createUniform( UniformType type
+			, castor::String const & name
+			, uint32_t occurences = 1 );
 		/**
 		 *\~english
 		 *\brief		Creates a variable.
-		 *\param[in]	p_name			The variable name.
-		 *\param[in]	p_occurences	The array dimension.
+		 *\param[in]	name		The variable name.
+		 *\param[in]	occurences	The array dimension.
 		 *\return		The created variable, nullptr if failed.
 		 *\~french
 		 *\brief		Crée une variable.
-		 *\param[in]	p_name			Le nom de la variable.
-		 *\param[in]	p_occurences	Les dimensions du tableau.
+		 *\param[in]	name		Le nom de la variable.
+		 *\param[in]	occurences	Les dimensions du tableau.
 		 *\return		La variable créée, nullptr en cas d'échec.
 		 */
 		template< UniformType Type >
-		inline std::shared_ptr< typename uniform_type< Type >::type > CreateUniform( Castor::String const & p_name, int p_occurences = 1 )
+		inline std::shared_ptr< typename UniformTypeTraits< Type >::type > createUniform( castor::String const & name
+			, int occurences = 1 )
 		{
-			return std::static_pointer_cast< typename uniform_type< Type >::type >( CreateUniform( Type, p_name, p_occurences ) );
+			return std::static_pointer_cast< typename UniformTypeTraits< Type >::type >( createUniform( Type
+				, name
+				, occurences ) );
 		}
 		/**
 		 *\~english
 		 *\brief		Removes a variable from this buffer.
-		 *\param[in]	p_name	The variable name.
+		 *\param[in]	name	The variable name.
 		 *\~french
 		 *\brief		Supprime une variable de ce tampon.
-		 *\param[in]	p_name	Le nom de la variable.
+		 *\param[in]	name	Le nom de la variable.
 		 */
-		C3D_API void RemoveUniform( Castor::String const & p_name );
+		C3D_API void removeUniform( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Retrieves a variable by name.
-		 *\param[in]	p_name		The variable name.
+		 *\param[in]	name	The variable name.
 		 *\return		The retrieved variable, \p nullptr if not found.
 		 *\~french
 		 *\brief		Récupère une variable par son nom.
-		 *\param[in]	p_name		Le nom de la variable.
+		 *\param[in]	name	Le nom de la variable.
 		 *\return		La variable récupérée, nullptr si non trouvée.
 		 */
 		template< UniformType Type >
-		inline std::shared_ptr< TUniform< Type > > GetUniform( Castor::String const & p_name )const;
-		/**
-		 *\~english
-		 *\brief		Fills a UBO with matrix related variables.
-		 *\param[in]	p_ubo	The UBO to fill.
-		 *\~french
-		 *\brief		Remplit un UBO avec les variable relatives aux matrices.
-		 *\param[in]	p_ubo	L'UBO à remplir.
-		 */
-		C3D_API static void FillMatrixBuffer( UniformBuffer & p_ubo );
-		/**
-		 *\~english
-		 *\brief		Fills a UBO with model matrix related variables.
-		 *\param[in]	p_ubo	The UBO to fill.
-		 *\~french
-		 *\brief		Remplit un UBO avec les variable relatives aux matrices modèle.
-		 *\param[in]	p_ubo	L'UBO à remplir.
-		 */
-		C3D_API static void FillModelMatrixBuffer( UniformBuffer & p_ubo );
-		/**
-		 *\~english
-		 *\brief		Fills a UBO with scene related variables.
-		 *\param[in]	p_ubo	The UBO to fill.
-		 *\~french
-		 *\brief		Remplit un UBO avec les variable relatives à la scène.
-		 *\param[in]	p_ubo	L'UBO à remplir.
-		 */
-		C3D_API static void FillSceneBuffer( UniformBuffer & p_ubo );
-		/**
-		 *\~english
-		 *\brief		Fills a UBO with pass related variables.
-		 *\param[in]	p_ubo	The UBO to fill.
-		 *\~french
-		 *\brief		Remplit un UBO avec les variable relatives à la passe.
-		 *\param[in]	p_ubo	L'UBO à remplir.
-		 */
-		C3D_API static void FillPassBuffer( UniformBuffer & p_ubo );
-		/**
-		 *\~english
-		 *\brief		Fills a UBO with model related variables.
-		 *\param[in]	p_ubo	The UBO to fill.
-		 *\~french
-		 *\brief		Remplit un UBO avec les variable relatives au modèle.
-		 *\param[in]	p_ubo	L'UBO à remplir.
-		 */
-		C3D_API static void FillModelBuffer( UniformBuffer & p_ubo );
-		/**
-		 *\~english
-		 *\brief		Fills a UBO with skinning animation related variables.
-		 *\param[in]	p_ubo	The UBO to fill.
-		 *\~french
-		 *\brief		Remplit un UBO avec les variable relatives aux animations de skinning.
-		 *\param[in]	p_ubo	L'UBO à remplir.
-		 */
-		C3D_API static void FillSkinningBuffer( UniformBuffer & p_ubo );
-		/**
-		 *\~english
-		 *\brief		Fills a UBO with morphing animation related variables.
-		 *\param[in]	p_ubo	The UBO to fill.
-		 *\~french
-		 *\brief		Remplit un UBO avec les variable relatives aux animations de morphing.
-		 *\param[in]	p_ubo	L'UBO à remplir.
-		 */
-		C3D_API static void FillMorphingBuffer( UniformBuffer & p_ubo );
-		/**
-		 *\~english
-		 *\brief		Fills a UBO with billboard related variables.
-		 *\param[in]	p_ubo	The UBO to fill.
-		 *\~french
-		 *\brief		Remplit un UBO avec les variable relatives au billboard.
-		 *\param[in]	p_ubo	L'UBO à remplir.
-		 */
-		C3D_API static void FillBillboardBuffer( UniformBuffer & p_ubo );
-		/**
-		 *\~english
-		 *\brief		Fills a UBO with overlay related variables.
-		 *\param[in]	p_ubo	The UBO to fill.
-		 *\~french
-		 *\brief		Remplit un UBO avec les variable relatives aux incrustations.
-		 *\param[in]	p_ubo	L'UBO à remplir.
-		 */
-		C3D_API static void FillOverlayBuffer( UniformBuffer & p_ubo );
+		inline std::shared_ptr< TUniform< Type > > getUniform( castor::String const & name )const;
 		/**
 		 *\~english
 		 *\return		The GPU storage.
 		 *\~french
 		 *\return		Le stockage GPU.
 		 */
-		inline GpuBuffer< uint8_t > & GetStorage()const
+		inline GpuBuffer & getStorage()const
 		{
 			REQUIRE( m_storage );
 			return *m_storage;
@@ -339,27 +265,29 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Initialises all the variables and the GPU buffer associated.
-		 *\param[in]	p_binding	The binding from which the layout is retrieved.
+		 *\param[in]	binding	The binding from which the layout is retrieved.
 		 *\~french
 		 *\brief		Initialise toutes les variables et le tampon GPU associé.
-		 *\param[in]	p_binding	Le binding depuis lequel le layout est récupéré.
+		 *\param[in]	binding	Le binding depuis lequel le layout est récupéré.
 		 */
-		void DoInitialise( UniformBufferBinding const & p_binding );
+		void doInitialise( UniformBufferBinding const & binding );
 		/**
 		 *\~english
 		 *\brief		Creates a variable of the wanted type.
-		 *\param[in]	p_type			The wanted type.
-		 *\param[in]	p_name			The variable name.
-		 *\param[in]	p_occurences	The array dimension.
+		 *\param[in]	type		The wanted type.
+		 *\param[in]	name		The variable name.
+		 *\param[in]	occurences	The array dimension.
 		 *\return		The created variable, nullptr if failed.
 		 *\~french
 		 *\brief		Crée une variable du type demandé.
-		 *\param[in]	p_type			Le type voulu.
-		 *\param[in]	p_name			Le nom de la variable.
-		 *\param[in]	p_occurences	Les dimensions du tableau.
+		 *\param[in]	type		Le type voulu.
+		 *\param[in]	name		Le nom de la variable.
+		 *\param[in]	occurences	Les dimensions du tableau.
 		 *\return		La variable créée, nullptr en cas d'échec.
 		 */
-		UniformSPtr DoCreateVariable( UniformType p_type, Castor::String const & p_name, uint32_t p_occurences );
+		UniformSPtr doCreateVariable( UniformType type
+			, castor::String const & name
+			, uint32_t occurences );
 
 	protected:
 		//!\~english	The variables list.
@@ -370,13 +298,19 @@ namespace Castor3D
 		UniformMap m_mapVariables;
 		//!\~english	The data buffer.
 		//!\~french		Le tampon de données.
-		Castor::ByteArray m_buffer;
+		castor::ByteArray m_buffer;
 		//!\~english	The GPU buffer.
 		//!\~french		Le tampon GPU.
-		std::unique_ptr< GpuBuffer< uint8_t > > m_storage;
+		GpuBufferSPtr m_storage;
+		//!\~english	The offset in the GPU buffer.
+		//!\~french		Le décalage dans le tampon GPU.
+		uint32_t m_offset{ 0u };
 		//!\~english	The bindings per program.
 		//!\~french		Les bindings par programme.
 		UniformBufferBindingMap m_bindings;
+		//!\~english	The initial binding point.
+		//!\~french		Le point d'attache initial.
+		uint32_t m_bindingPoint{ 0u };
 	};
 }
 

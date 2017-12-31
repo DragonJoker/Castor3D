@@ -2,7 +2,7 @@ if ( MSVC AND ${CASTOR_BUILD_INTEROP_COM} )
 	project( CastorViewerSharp )
 
 	set( CVS_VERSION_MAJOR 0 )
-	set( CVS_VERSION_MINOR 7 )
+	set( CVS_VERSION_MINOR 10 )
 	set( CVS_VERSION_BUILD 0 )
 
 	configure_file(

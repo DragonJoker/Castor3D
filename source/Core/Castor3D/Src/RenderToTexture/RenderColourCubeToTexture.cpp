@@ -1,25 +1,26 @@
-#include "RenderColourCubeToTexture.hpp"
+﻿#include "RenderColourCubeToTexture.hpp"
 
 #include "Engine.hpp"
 
 #include "Mesh/Vertex.hpp"
 #include "Mesh/Buffer/Buffer.hpp"
 #include "Render/RenderPipeline.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
 	RenderColourCubeToTexture::RenderColourCubeToTexture( Context & p_context
-		, UniformBuffer & p_matrixUbo )
+		, MatrixUbo & p_matrixUbo )
 		: OwnedBy< Context >{ p_context }
 		, m_matrixUbo{ p_matrixUbo }
-		, m_viewport{ *p_context.GetRenderSystem()->GetEngine() }
+		, m_viewport{ *p_context.getRenderSystem()->getEngine() }
 		, m_bufferVertex
 		{
 			{
@@ -36,9 +37,9 @@ namespace Castor3D
 	{
 		uint32_t i = 0;
 
-		for ( auto & l_vertex : m_arrayVertex )
+		for ( auto & vertex : m_arrayVertex )
 		{
-			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_bufferVertex.data() )[i++ * m_declaration.stride()] );
+			vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_bufferVertex.data() )[i++ * m_declaration.stride()] );
 		}
 	}
 
@@ -46,203 +47,239 @@ namespace Castor3D
 	{
 	}
 
-	void RenderColourCubeToTexture::Initialise()
+	void RenderColourCubeToTexture::initialise()
 	{
-		m_viewport.Initialise();
-		auto & l_program = *DoCreateProgram();
-		auto & l_renderSystem = *GetOwner()->GetRenderSystem();
-		l_program.Initialise();
-		m_vertexBuffer = std::make_shared< VertexBuffer >( *l_renderSystem.GetEngine()
+		m_viewport.initialise();
+		auto & program = *doCreateProgram();
+		auto & renderSystem = *getOwner()->getRenderSystem();
+		program.initialise();
+		m_vertexBuffer = std::make_shared< VertexBuffer >( *renderSystem.getEngine()
 			, m_declaration );
-		m_vertexBuffer->Resize( uint32_t( m_arrayVertex.size()
+		m_vertexBuffer->resize( uint32_t( m_arrayVertex.size()
 			* m_declaration.stride() ) );
-		m_vertexBuffer->LinkCoords( m_arrayVertex.begin()
+		m_vertexBuffer->linkCoords( m_arrayVertex.begin()
 			, m_arrayVertex.end() );
-		m_vertexBuffer->Initialise( BufferAccessType::eStatic
+		m_vertexBuffer->initialise( BufferAccessType::eStatic
 			, BufferAccessNature::eDraw );
-		m_geometryBuffers = l_renderSystem.CreateGeometryBuffers( Topology::eTriangles
-			, l_program );
-		m_geometryBuffers->Initialise( { *m_vertexBuffer }
+		m_geometryBuffers = renderSystem.createGeometryBuffers( Topology::eTriangles
+			, program );
+		m_geometryBuffers->initialise( { *m_vertexBuffer }
 		, nullptr );
 
-		DepthStencilState l_dsState;
-		l_dsState.SetDepthTest( false );
-		m_pipeline = l_renderSystem.CreateRenderPipeline( std::move( l_dsState )
+		DepthStencilState dsState;
+		dsState.setDepthTest( false );
+		m_pipeline = renderSystem.createRenderPipeline( std::move( dsState )
 			, RasteriserState{}
 			, BlendState{}
 			, MultisampleState{}
-			, l_program
+			, program
 			, PipelineFlags{} );
-		m_pipeline->AddUniformBuffer( m_matrixUbo );
+		m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
 
-		m_sampler = GetOwner()->GetRenderSystem()->GetEngine()->GetSamplerCache().Add( cuT( "RenderColourCubeToTexture" ) );
-		m_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-		m_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-		m_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-		m_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-		m_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+		m_sampler = getOwner()->getRenderSystem()->getEngine()->getSamplerCache().add( cuT( "RenderColourCubeToTexture" ) );
+		m_sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+		m_sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+		m_sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+		m_sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+		m_sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
 	}
 
-	void RenderColourCubeToTexture::Cleanup()
+	void RenderColourCubeToTexture::cleanup()
 	{
 		m_sampler.reset();
-		m_pipeline->Cleanup();
+		m_pipeline->cleanup();
 		m_pipeline.reset();
-		m_vertexBuffer->Cleanup();
+		m_vertexBuffer->cleanup();
 		m_vertexBuffer.reset();
-		m_geometryBuffers->Cleanup();
+		m_geometryBuffers->cleanup();
 		m_geometryBuffers.reset();
-		m_viewport.Cleanup();
+		m_viewport.cleanup();
 	}
 
-	void RenderColourCubeToTexture::Render( Castor::Size const & p_size
-		, TextureLayout const & p_texture )
+	void RenderColourCubeToTexture::render( Position const & position
+		, Size const & size
+		, TextureLayout const & texture )
 	{
-		int l_w = p_size.width();
-		int l_h = p_size.height();
-		DoRender( Position{ l_w * 0, l_h * 1 }
-			, p_size
-			, p_texture
-			, Point3f{ -1, 0, 0 }
+		int w = size.getWidth();
+		int h = size.getHeight();
+		doRender( Position{ position.x() + w * 0, position.y() + h * 1 }
+			, size
+			, texture
+			, CubeMapFace::eNegativeX
 			, Point2f{ -1, 1 }
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );
-		DoRender( Position{ l_w * 1, l_h * 1 }
-			, p_size
-			, p_texture
-			, Point3f{ 0, -1, 0 }
+		doRender( Position{ position.x() + w * 1, position.y() + h * 1 }
+			, size
+			, texture
+			, CubeMapFace::eNegativeY
 			, Point2f{ 1, 1 }
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );
-		DoRender( Position{ l_w * 2, l_h * 1 }
-			, p_size
-			, p_texture
-			, Point3f{ 1, 0, 0 }
+		doRender( Position{ position.x() + w * 2, position.y() + h * 1 }
+			, size
+			, texture
+			, CubeMapFace::ePositiveX
 			, Point2f{ 1, 1 }
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );
-		DoRender( Position{ l_w * 3, l_h * 1 }
-			, p_size
-			, p_texture
-			, Point3f{ 0, 1, 0 }
+		doRender( Position{ position.x() + w * 3, position.y() + h * 1 }
+			, size
+			, texture
+			, CubeMapFace::ePositiveY
 			, Point2f{ 1, -1 }
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );
-		DoRender( Position{ l_w * 1, l_h * 0 }
-			, p_size
-			, p_texture
-			, Point3f{ 0, 0, -1 }
+		doRender( Position{ position.x() + w * 1, position.y() + h * 0 }
+			, size
+			, texture
+			, CubeMapFace::eNegativeZ
 			, Point2f{ 1, 1 }
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );
-		DoRender( Position{ l_w * 1, l_h * 2 }
-			, p_size
-			, p_texture
-			, Point3f{ 0, 0, 1 }
+		doRender( Position{ position.x() + w * 1, position.y() + h * 2 }
+			, size
+			, texture
+			, CubeMapFace::ePositiveZ
 			, Point2f{ 1, 1 }
 			, *m_pipeline
 			, m_matrixUbo
 			, *m_geometryBuffers );
 	}
 
-	void RenderColourCubeToTexture::DoRender( Position const & p_position
-		, Size const & p_size
-		, TextureLayout const & p_texture
-		, Point3f const & p_face
-		, Castor::Point2f const & p_uvMult
-		, RenderPipeline & p_pipeline
-		, UniformBuffer & p_matrixUbo
-		, GeometryBuffers const & p_geometryBuffers )
+	void RenderColourCubeToTexture::renderFace( castor::Size const & size
+		, TextureLayout const & texture
+		, CubeMapFace face )
 	{
-		REQUIRE( p_texture.GetType() == TextureType::eCube );
-		m_viewport.SetPosition( p_position );
-		m_viewport.Resize( p_size );
-		m_viewport.Update();
-		m_viewport.Apply();
-		p_pipeline.SetProjectionMatrix( m_viewport.GetProjection() );
+		doRender( Position{}
+			, size
+			, texture
+			, face
+			, Point2f{ 1, 1 }
+			, *m_pipeline
+			, m_matrixUbo
+			, *m_geometryBuffers );
+	}
+
+	void RenderColourCubeToTexture::renderFace( castor::Size const & size
+		, TextureLayout const & texture
+		, CubeMapFace face
+		, RenderPipeline & pipeline
+		, MatrixUbo & matrixUbo )
+	{
+		doRender( Position{}
+			, size
+			, texture
+			, face
+			, Point2f{ 1, 1 }
+			, pipeline
+			, matrixUbo
+			, *m_geometryBuffers );
+	}
+
+	void RenderColourCubeToTexture::doRender( Position const & position
+		, Size const & size
+		, TextureLayout const & texture
+		, CubeMapFace face
+		, castor::Point2f const & uvMult
+		, RenderPipeline & pipeline
+		, MatrixUbo & matrixUbo
+		, GeometryBuffers const & geometryBuffers )
+	{
+		static Point3f const Face[6u]
+		{
+			Point3f{ 1, 0, 0 },
+			Point3f{ -1, 0, 0 },
+			Point3f{ 0, 1, 0 },
+			Point3f{ 0, -1, 0 },
+			Point3f{ 0, 0, 1 },
+			Point3f{ 0, 0, -1 },
+		};
+		REQUIRE( texture.getType() == TextureType::eCube );
+		m_viewport.setPosition( position );
+		m_viewport.resize( size );
+		m_viewport.update();
+		m_viewport.apply();
 
 		REQUIRE( m_faceUniform );
-		m_faceUniform->SetValue( p_face );
+		m_faceUniform->setValue( Face[size_t( face )] );
 
-		p_pipeline.ApplyProjection( p_matrixUbo );
-		p_matrixUbo.Update();
-		p_pipeline.Apply();
+		matrixUbo.update( m_viewport.getProjection() );
+		pipeline.apply();
 
-		p_texture.Bind( 0u );
-		m_sampler->Bind( 0u );
-		p_geometryBuffers.Draw( uint32_t( m_arrayVertex.size() ), 0 );
-		m_sampler->Unbind( 0u );
-		p_texture.Unbind( 0u );
+		texture.bind( MinTextureIndex );
+		m_sampler->bind( MinTextureIndex );
+		geometryBuffers.draw( uint32_t( m_arrayVertex.size() ), 0u );
+		m_sampler->unbind( MinTextureIndex );
+		texture.unbind( MinTextureIndex );
 	}
 
-	ShaderProgramSPtr RenderColourCubeToTexture::DoCreateProgram()
+	ShaderProgramSPtr RenderColourCubeToTexture::doCreateProgram()
 	{
-		auto & l_renderSystem = *GetOwner()->GetRenderSystem();
-		String l_vtx;
+		auto & renderSystem = *getOwner()->getRenderSystem();
+		glsl::Shader vtx;
 		{
-			using namespace GLSL;
-			auto l_writer = l_renderSystem.CreateGlslWriter();
+			using namespace glsl;
+			auto writer = renderSystem.createGlslWriter();
 
-			UBO_MATRIX( l_writer );
+			UBO_MATRIX( writer );
 
 			// Shader inputs
-			auto position = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
-			auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture );
+			auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
+			auto texture = writer.declAttribute< Vec2 >( ShaderProgram::Texture );
 
 			// Shader outputs
-			auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ) );
-			auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
-			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = texture;
-				gl_Position = c3d_mtxProjection * vec4( position.x(), position.y(), 0.0, 1.0 );
+				gl_Position = c3d_projection * vec4( position.x(), position.y(), 0.0, 1.0 );
 			} );
-			l_vtx = l_writer.Finalise();
+			vtx = writer.finalise();
 		}
 
-		String l_pxl;
+		glsl::Shader pxl;
 		{
-			using namespace GLSL;
-			auto l_writer = l_renderSystem.CreateGlslWriter();
+			using namespace glsl;
+			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = l_writer.GetUniform< SamplerCube >( ShaderProgram::MapDiffuse );
-			auto c3d_v3Face = l_writer.GetUniform< Vec3 >( cuT( "c3d_v3Face" ) );
-			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto c3d_mapDiffuse = writer.declSampler< SamplerCube >( ShaderProgram::MapDiffuse, MinTextureIndex );
+			auto c3d_face = writer.declUniform< Vec3 >( cuT( "c3d_face" ) );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto plx_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 
-			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto l_mapCoord = l_writer.GetLocale( cuT( "l_mapCoord" ), vtx_texture * 2.0_f - 1.0_f );
-				auto l_uv = l_writer.GetLocale< Vec3 >( cuT( "l_uv" )
-					, l_writer.Ternary( c3d_v3Face.x() != 0.0_f
-						, vec3( c3d_v3Face.x(), l_mapCoord )
-						, l_writer.Ternary( c3d_v3Face.y() != 0.0_f
-							, vec3( l_mapCoord.x(), c3d_v3Face.y(), l_mapCoord.y() )
-							, vec3( l_mapCoord, c3d_v3Face.z() ) ) ) );
-				plx_v4FragColor = vec4( texture( c3d_mapDiffuse, l_uv ).xyz(), 1.0 );
+				auto mapCoord = writer.declLocale( cuT( "mapCoord" ), vtx_texture * 2.0_f - 1.0_f );
+				auto uv = writer.declLocale< Vec3 >( cuT( "uv" )
+					, writer.ternary( c3d_face.x() != 0.0_f
+						, vec3( c3d_face.x(), mapCoord )
+						, writer.ternary( c3d_face.y() != 0.0_f
+							, vec3( mapCoord.x(), c3d_face.y(), mapCoord.y() )
+							, vec3( mapCoord, c3d_face.z() ) ) ) );
+				pxl_fragColor = vec4( texture( c3d_mapDiffuse, uv ).xyz(), 1.0 );
 			} );
-			l_pxl = l_writer.Finalise();
+			pxl = writer.finalise();
 		}
 
-		auto l_model = l_renderSystem.GetGpuInformations().GetMaxShaderModel();
-		auto & l_cache = l_renderSystem.GetEngine()->GetShaderProgramCache();
-		auto l_program = l_cache.GetNewProgram( false );
-		l_program->CreateObject( ShaderType::eVertex );
-		l_program->CreateObject( ShaderType::ePixel );
-		l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
-		l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
-		l_program->CreateUniform< UniformType::eInt >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->SetValue( 0u );
-		m_faceUniform = l_program->CreateUniform< UniformType::eVec3f >( cuT( "c3d_v3Face" ), ShaderType::ePixel );
-		l_program->Initialise();
-		return l_program;
+		auto & cache = renderSystem.getEngine()->getShaderProgramCache();
+		auto program = cache.getNewProgram( false );
+		program->createObject( ShaderType::eVertex );
+		program->createObject( ShaderType::ePixel );
+		program->setSource( ShaderType::eVertex, vtx );
+		program->setSource( ShaderType::ePixel, pxl );
+		m_faceUniform = program->createUniform< UniformType::eVec3f >( cuT( "c3d_face" ), ShaderType::ePixel );
+		program->initialise();
+		return program;
 	}
 }

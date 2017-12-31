@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_RenderPipeline_H___
 #define ___C3D_RenderPipeline_H___
@@ -34,8 +15,9 @@ SOFTWARE.
 #include <Design/OwnedBy.hpp>
 
 #include <stack>
+#include <unordered_map>
 
-namespace Castor3D
+namespace castor3d
 {
 	static const uint32_t C3D_MAX_TEXTURE_MATRICES = 4;
 	/*!
@@ -50,40 +32,41 @@ namespace Castor3D
 	\remark		Définit les diverses matrices, applique les transformations supportées.
 	*/
 	class RenderPipeline
-		: public Castor::OwnedBy< RenderSystem >
+		: public castor::OwnedBy< RenderSystem >
 	{
 	private:
-		typedef std::stack< Castor::Matrix4x4r > MatrixStack;
-		typedef std::set< ShaderObjectSPtr > ShaderObjectSet;
+		using MatrixStack = std::stack< castor::Matrix4x4r >;
+		using ShaderObjectset = std::set< ShaderObjectSPtr >;
+		using BindingArray = std::vector< std::reference_wrapper< UniformBufferBinding > >;
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_renderSystem	The parent RenderSystem.
-		 *\param[in]	p_dsState		The depth stencil state.
-		 *\param[in]	p_rsState		The rateriser state.
-		 *\param[in]	p_blState		The blend state.
-		 *\param[in]	p_msState		The multisample state.
-		 *\param[in]	p_program		The shader program.
-		 *\param[in]	p_flags			The creation flags.
+		 *\param[in]	renderSystem	The parent RenderSystem.
+		 *\param[in]	dsState			The depth stencil state.
+		 *\param[in]	rsState			The rateriser state.
+		 *\param[in]	blState			The blend state.
+		 *\param[in]	msState			The multisample state.
+		 *\param[in]	program			The shader program.
+		 *\param[in]	flags			The creation flags.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_renderSystem	Le RenderSystem parent.
-		 *\param[in]	p_dsState		L'état de stencil et profondeur.
-		 *\param[in]	p_rsState		L'état de rastériseur.
-		 *\param[in]	p_blState		L'état de mélange.
-		 *\param[in]	p_msState		L'état de multi-échantillonnage.
-		 *\param[in]	p_program		Le programme shader.
-		 *\param[in]	p_flags			Les indicateurs de création.
+		 *\param[in]	renderSystem	Le RenderSystem parent.
+		 *\param[in]	dsState			L'état de stencil et profondeur.
+		 *\param[in]	rsState			L'état de rastériseur.
+		 *\param[in]	blState			L'état de mélange.
+		 *\param[in]	msState			L'état de multi-échantillonnage.
+		 *\param[in]	program			Le programme shader.
+		 *\param[in]	flags			Les indicateurs de création.
 		 */
-		C3D_API explicit RenderPipeline( RenderSystem & p_renderSystem
-			, DepthStencilState && p_dsState
-			, RasteriserState && p_rsState
-			, BlendState && p_blState
-			, MultisampleState && p_msState
-			, ShaderProgram & p_program
-			, PipelineFlags const & p_flags );
+		C3D_API explicit RenderPipeline( RenderSystem & renderSystem
+			, DepthStencilState && dsState
+			, RasteriserState && rsState
+			, BlendState && blState
+			, MultisampleState && msState
+			, ShaderProgram & program
+			, PipelineFlags const & flags );
 		/**
 		 *\~english
 		 *\brief		Denstructor.
@@ -97,214 +80,48 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Nettoie le pipeline.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Applies the pipeline.
 		 *\~french
 		 *\brief		Applique le pipeline.
 		 */
-		C3D_API virtual void Apply()const = 0;
+		C3D_API virtual void apply()const = 0;
 		/**
 		 *\~english
-		 *\brief		Adds a uniform buffer to the pipeline.
+		 *\brief		adds a uniform buffer to the pipeline.
 		 *\remarks		Creates the binding for this uniform buffer, using the pipeline's program.
 		 *\~french
 		 *\brief		Ajoute un tampon d'uniformes à ce pipeline.
 		 *\remarks		Crée le binding pour ce tampon, en utilisant le programme de ce pipeline.
 		 */
-		C3D_API void AddUniformBuffer( UniformBuffer & p_ubo );
+		C3D_API void addUniformBuffer( UniformBuffer & ubo );
 		/**
 		 *\~english
-		 *\brief		Projects the given screen point to 3D scene point.
-		 *\param[in]	p_screen	The screen coordinates.
-		 *\param[in]	p_viewport	The viewport.
-		 *\param[out]	p_result	Receives the scene coordinates.
-		 *\return		\p false if the current mode is not valid.
+		 *\brief		Retrieves a GeometryBuffers for given submesh.
+		 *\param[in]	submesh	The submesh.
 		 *\~french
-		 *\brief		Projette le point écran donné en point 3D.
-		 *\param[in]	p_screen	Les coordonnées écran.
-		 *\param[in]	p_viewport	Le viewport.
-		 *\param[out]	p_result	Reçoit coordonnées dans la scène.
-		 *\return		\p false si le mode courant est invalide.
+		 *\brief		Récupère un GeometryBuffers pour le sous-maillage donné.
+		 *\param[in]	submesh	Le sous-maillage.
 		 */
-		C3D_API bool Project( Castor::Point3r const & p_screen, Castor::Point4r const & p_viewport, Castor::Point3r & p_result );
+		C3D_API GeometryBuffersSPtr getGeometryBuffers( Submesh & submesh );
 		/**
 		 *\~english
-		 *\brief		Unprojects the given scene point to screen point.
-		 *\param[in]	p_scene		The scene coordinates.
-		 *\param[in]	p_viewport	The viewport.
-		 *\param[out]	p_result	Receives the screen coordinates.
-		 *\return		\p false if the current mode is not valid.
+		 *\brief		Retrieves a GeometryBuffers for given billboard.
+		 *\param[in]	billboard	The billboard.
 		 *\~french
-		 *\brief		Dé-projette le point dans la scène donné en point écran.
-		 *\param[in]	p_scene		Les coordonnées dans la scène.
-		 *\param[in]	p_viewport	Le viewport.
-		 *\param[out]	p_result	Reçoit les coordonnées écran.
-		 *\return		\p false si le mode courant est invalide.
+		 *\brief		Récupère un GeometryBuffers pour le billboard donné.
+		 *\param[in]	billboard	Le billboard.
 		 */
-		C3D_API bool UnProject( Castor::Point3i const & p_scene, Castor::Point4r const & p_viewport, Castor::Point3r & p_result );
-		/**
-		 *\~english
-		 *\brief		Puts the current projection matrix into the given frame variables buffer.
-		 *\param[in]	p_matrixBuffer	The matrix variables buffer.
-		 *\~french
-		 *\brief		Met la matrice de projection dans le buffer de variables donné.
-		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
-		 */
-		C3D_API void ApplyProjection( UniformBuffer const & p_matrixBuffer )const;
-		/**
-		 *\~english
-		 *\brief		Puts the current model matrix into the given frame variables buffer.
-		 *\param[in]	p_matrixBuffer	The matrix variables buffer.
-		 *\~french
-		 *\brief		Met la matrice de modèle dans le buffer de variables donné.
-		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
-		 */
-		C3D_API void ApplyModel( UniformBuffer const & p_matrixBuffer )const;
-		/**
-		 *\~english
-		 *\brief		Puts the current vieww matrix into the given frame variables buffer.
-		 *\param[in]	p_matrixBuffer	The matrix variables buffer.
-		 *\~french
-		 *\brief		Met la matrice de vue dans le buffer de variables donné.
-		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
-		 */
-		C3D_API void ApplyView( UniformBuffer const & p_matrixBuffer )const;
-		/**
-		 *\~english
-		 *\brief		Puts the current normals matrix into the given frame variables buffer.
-		 *\param[in]	p_matrixBuffer	The matrix variables buffer.
-		 *\~french
-		 *\brief		Met la matrice de normales dans le buffer de variables donné.
-		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
-		 */
-		C3D_API void ApplyNormal( UniformBuffer const & p_matrixBuffer );
-		/**
-		 *\~english
-		 *\brief		Puts the current texture 0 matrix into the given frame variables buffer.
-		 *\param[in]	p_index			The texture index.
-		 *\param[in]	p_matrixBuffer	The matrix variables buffer.
-		 *\~french
-		 *\brief		Met la matrice de texture 0 dans le buffer de variables donné.
-		 *\param[in]	p_index			L'indice de la texture.
-		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
-		 */
-		C3D_API void ApplyTexture( uint32_t p_index, UniformBuffer const & p_matrixBuffer )const;
-		/**
-		 *\~english
-		 *\brief		Puts all the matrices in the given frame variables buffer.
-		 *\param[in]	p_matrixBuffer	The matrix variables buffer.
-		 *\param[in]	p_matricesMask	A bitwise OR combination of MASK_MTXMODE, to select the matrices to apply.
-		 *\~french
-		 *\brief		Met toutes les matrices dans le buffer de variables donné.
-		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
-		 *\param[in]	p_matricesMask	Une combinaison en OU binaire de MASK_MTXMODE, pour filtrer les matrices à appliquer.
-		 */
-		C3D_API void ApplyMatrices( UniformBuffer const & p_matrixBuffer, uint64_t p_matricesMask );
-		/**
-		 *\~english
-		 *\brief		Sets the model matrix.
-		 *\param[in]	p_mtx	The new matrix.
-		 *\~french
-		 *\brief		Définit la matrice modèle.
-		 *\param[in]	p_mtx	La nouvelle matrice.
-		 */
-		inline void SetModelMatrix( Castor::Matrix4x4r const & p_mtx )
-		{
-			m_mtxModel = p_mtx;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the view matrix.
-		 *\param[in]	p_mtx	The new matrix.
-		 *\~french
-		 *\brief		Définit la matrice vue.
-		 *\param[in]	p_mtx	La nouvelle matrice.
-		 */
-		inline void SetViewMatrix( Castor::Matrix4x4r const & p_mtx )
-		{
-			m_mtxView = p_mtx;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the projection matrix.
-		 *\param[in]	p_mtx	The new matrix.
-		 *\~french
-		 *\brief		Définit la matrice projection.
-		 *\param[in]	p_mtx	La nouvelle matrice.
-		 */
-		inline void SetProjectionMatrix( Castor::Matrix4x4r const & p_mtx )
-		{
-			m_mtxProjection = p_mtx;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the projection matrix.
-		 *\param[in]	p_index	The texture index.
-		 *\param[in]	p_mtx	The new matrix.
-		 *\~french
-		 *\brief		Définit la matrice projection.
-		 *\param[in]	p_index	L'indice de la texture.
-		 *\param[in]	p_mtx	La nouvelle matrice.
-		 */
-		inline void SetTextureMatrix( uint32_t p_index, Castor::Matrix4x4r const & p_mtx )
-		{
-			REQUIRE( p_index < C3D_MAX_TEXTURE_MATRICES );
-			m_mtxTexture[p_index] = p_mtx;
-		}
-		/**
-		 *\~english
-		 *\return		The model matrix.
-		 *\~french
-		 *\return		La matrice de modèle.
-		 */
-		inline Castor::Matrix4x4r const & GetModelMatrix()const
-		{
-			return m_mtxModel;
-		}
-		/**
-		 *\~english
-		 *\return		The view matrix.
-		 *\~french
-		 *\return		La matrice de vue.
-		 */
-		inline Castor::Matrix4x4r const & GetViewMatrix()const
-		{
-			return m_mtxView;
-		}
-		/**
-		 *\~english
-		 *\return		The projection matrix.
-		 *\~french
-		 *\return		La matrice de projection.
-		 */
-		inline Castor::Matrix4x4r const & GetProjectionMatrix()const
-		{
-			return m_mtxProjection;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture matrix for given index.
-		 *\param[in]	p_index	The texture index.
-		 *\return		The matrix.
-		 *\~french
-		 *\brief		Récupère la matrice de texture pour l'indice donné.
-		 *\param[in]	p_index	L'indice de la texture.
-		 *\return		La matrice.
-		 */
-		inline Castor::Matrix4x4r const & GetTextureMatrix( uint32_t p_index )const
-		{
-			REQUIRE( p_index < C3D_MAX_TEXTURE_MATRICES );
-			return m_mtxTexture[p_index];
-		}
+		C3D_API GeometryBuffersSPtr getGeometryBuffers( BillboardBase & billboard );
 		/**
 		 *\~english
 		 *\return		The shader program.
 		 *\~french
 		 *\return		Le programme shader.
 		 */
-		inline ShaderProgram const & GetProgram()const
+		inline ShaderProgram const & getProgram()const
 		{
 			return m_program;
 		}
@@ -314,9 +131,19 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le programme shader.
 		 */
-		inline ShaderProgram & GetProgram()
+		inline ShaderProgram & getProgram()
 		{
 			return m_program;
+		}
+		/**
+		 *\~english
+		 *\return		The uniform buffer bindings.
+		 *\~french
+		 *\return		Les bindings des tampons de variables uniformes.
+		 */
+		inline BindingArray const & getBindings()const
+		{
+			return m_bindings;
 		}
 		/**
 		 *\~english
@@ -324,7 +151,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les indicateurs de création.
 		 */
-		inline PipelineFlags const & GetFlags()const
+		inline PipelineFlags const & getFlags()const
 		{
 			return m_flags;
 		}
@@ -334,7 +161,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le nombre de textures utilisées par le programme.
 		 */
-		inline uint32_t GetTexturesCount()
+		inline uint32_t getTexturesCount()
 		{
 			return m_textureCount;
 		}
@@ -344,7 +171,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La variable shader des maps d'ombres pour les lumières directionnelles.
 		 */
-		inline PushUniform1s & GetDirectionalShadowMapsVariable()
+		inline PushUniform1s & getDirectionalShadowMapsVariable()
 		{
 			REQUIRE( m_directionalShadowMaps );
 			return *m_directionalShadowMaps;
@@ -355,7 +182,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La variable shader des maps d'ombres pour les lumières spots.
 		 */
-		inline PushUniform1s & GetSpotShadowMapsVariable()
+		inline PushUniform1s & getSpotShadowMapsVariable()
 		{
 			REQUIRE( m_spotShadowMaps );
 			return *m_spotShadowMaps;
@@ -366,38 +193,66 @@ namespace Castor3D
 		 *\~french
 		 *\return		La variable shader des maps d'ombres pour les lumières ponctuelles.
 		 */
-		inline PushUniform1s & GetPointShadowMapsVariable()
+		inline PushUniform1s & getPointShadowMapsVariable()
 		{
 			REQUIRE( m_pointShadowMaps );
 			return *m_pointShadowMaps;
 		}
+		/**
+		 *\~english
+		 *\return		The reflection map frame variable.
+		 *\~french
+		 *\return		La variable shader de la reflection map.
+		 */
+		inline PushUniform1s & getEnvironmentMapVariable()
+		{
+			REQUIRE( m_environmentMap );
+			return *m_environmentMap;
+		}
+		/**
+		 *\~english
+		 *\return		The irradiance map frame variable.
+		 *\~french
+		 *\return		La variable shader de la texture d'irradiance.
+		 */
+		inline PushUniform1s & getIrradianceMapVariable()
+		{
+			REQUIRE( m_irradianceMap );
+			return *m_irradianceMap;
+		}
+		/**
+		 *\~english
+		 *\return		The irradiance map frame variable.
+		 *\~french
+		 *\return		La variable shader de la texture d'irradiance.
+		 */
+		inline PushUniform1s & getPrefilteredMapVariable()
+		{
+			REQUIRE( m_prefilteredMap );
+			return *m_prefilteredMap;
+		}
+		/**
+		 *\~english
+		 *\return		The BRDF map frame variable.
+		 *\~french
+		 *\return		La variable shader de la texture de BRDF.
+		 */
+		inline PushUniform1s & getBrdfMapVariable()
+		{
+			REQUIRE( m_brdfMap );
+			return *m_brdfMap;
+		}
 
 	private:
-		void DoApplyMatrix( Castor::Matrix4x4r const & p_matrix, Castor::String const & p_name, UniformBuffer const & p_matrixBuffer )const;
+		void doInitialiseGeometryBuffers( Submesh & submesh
+			, GeometryBuffersSPtr geometryBuffers );
+		void doInitialiseGeometryBuffers( BillboardBase & billboard
+			, GeometryBuffersSPtr geometryBuffers );
 
 	public:
-		C3D_API static const Castor::String MtxProjection;
-		C3D_API static const Castor::String MtxModel;
-		C3D_API static const Castor::String MtxView;
-		C3D_API static const Castor::String MtxNormal;
-		C3D_API static const Castor::String MtxTexture[C3D_MAX_TEXTURE_MATRICES];
+		C3D_API static const castor::String MtxTexture[C3D_MAX_TEXTURE_MATRICES];
 
 	protected:
-		//!\~english	The model matrix.
-		//!\~french		La matrice modèle.
-		Castor::Matrix4x4r m_mtxModel;
-		//!\~english	The view matrix.
-		//!\~french		La matrice vue.
-		Castor::Matrix4x4r m_mtxView;
-		//!\~english	The projection matrix.
-		//!\~french		La matrice projection.
-		Castor::Matrix4x4r m_mtxProjection;
-		//!\~english	The normals matrix.
-		//!\~french		La matrice des normales.
-		Castor::Matrix4x4r m_mtxNormal;
-		//!\~english	The texture matrices.
-		//!\~french		Les matrices de texture.
-		Castor::Matrix4x4r m_mtxTexture[C3D_MAX_TEXTURE_MATRICES];
 		//!\~english	The depth stencil state.
 		//!\~french		L'état de stencil et profondeur.
 		DepthStencilState m_dsState;
@@ -413,9 +268,6 @@ namespace Castor3D
 		//!\~english	The shader program.
 		//!\~french		Le programme shader.
 		ShaderProgram & m_program;
-		//!\~english	The scene frame variable buffer.
-		//!\~french		Le tampon de variables shader pour la scène.
-		UniformBufferSPtr m_sceneUbo;
 		//!\~english	The directional lights shadow maps frame variable.
 		//!\~french		La variable shader pour les maps d'ombres des lumières directionnelles.
 		PushUniform1sSPtr m_directionalShadowMaps;
@@ -425,6 +277,18 @@ namespace Castor3D
 		//!\~english	The point lights shadow maps frame variable.
 		//!\~french		La variable shader pour les maps d'ombres des lumières ponctuelles.
 		PushUniform1sSPtr m_pointShadowMaps;
+		//!\~english	The environment map frame variable.
+		//!\~french		La variable shader pour la texture d'environnement.
+		PushUniform1sSPtr m_environmentMap;
+		//!\~english	The irradiance map frame variable.
+		//!\~french		La variable shader pour la texture d'irradiance.
+		PushUniform1sSPtr m_irradianceMap;
+		//!\~english	The prefiltered environment map frame variable.
+		//!\~french		La variable shader pour la texture d'environnement préfiltrée.
+		PushUniform1sSPtr m_prefilteredMap;
+		//!\~english	The BRDF map frame variable.
+		//!\~french		La variable shader pour la texture de BRDF.
+		PushUniform1sSPtr m_brdfMap;
 		//!\~english	The creation flags.
 		//!\~french		Les indicateurs de création.
 		PipelineFlags m_flags;
@@ -433,7 +297,13 @@ namespace Castor3D
 		uint32_t m_textureCount{ 0u };
 		//!\~english	The uniform buffer bindings.
 		//!\~french		Les bindings de tampons d'uniformes.
-		std::vector< std::reference_wrapper< UniformBufferBinding > > m_bindings;
+		BindingArray m_bindings;
+		//!\~english	The GeometryBuffers used with this pipeline.
+		//!\~french		Les GeometryBuffers utilisés avec ce pipeline.
+		std::unordered_map< Submesh *, GeometryBuffersSPtr > m_meshGeometryBuffers;
+		//!\~english	The GeometryBuffers used with this pipeline.
+		//!\~french		Les GeometryBuffers utilisés avec ce pipeline.
+		std::unordered_map< BillboardBase *, GeometryBuffersSPtr > m_billboardGeometryBuffers;
 	};
 }
 

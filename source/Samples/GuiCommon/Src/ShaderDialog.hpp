@@ -1,24 +1,5 @@
-/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+﻿/*
+See LICENSE file in root folder
 */
 #ifndef ___GUICOMMON_SHADER_DIALOG_H___
 #define ___GUICOMMON_SHADER_DIALOG_H___
@@ -34,19 +15,24 @@ namespace GuiCommon
 		: public wxFrame
 	{
 	public:
-		ShaderDialog( Castor3D::Scene & p_scene, bool p_bCanEdit, wxWindow * p_parent, Castor3D::PassSPtr p_pass, wxPoint const & p_position = wxDefaultPosition, const wxSize p_size = wxSize( 800, 600 ) );
+		ShaderDialog( castor3d::Scene & p_scene
+			, bool p_bCanEdit
+			, wxWindow * p_parent
+			, castor3d::Pass & p_pass
+			, wxPoint const & p_position = wxDefaultPosition
+			, const wxSize p_size = wxSize( 800, 600 ) );
 		~ShaderDialog();
 
 	private:
-		void DoInitialiseShaderLanguage();
-		void DoInitialiseLayout();
-		void DoLoadPages();
-		void DoPopulateMenu();
-		void DoCleanup();
-		void DoLoadShader();
-		void DoOpenShaderFile();
-		void DoFolder( Castor3D::ShaderType p_type );
-		void DoSave( Castor3D::ShaderType p_type, bool p_createIfNone );
+		void doInitialiseShaderLanguage();
+		void doInitialiseLayout();
+		void doLoadPages();
+		void doPopulateMenu();
+		void doCleanup();
+		void doLoadShader();
+		void doOpenShaderFile();
+		void doFolder( castor3d::ShaderType p_type );
+		void doSave( castor3d::ShaderType p_type, bool p_createIfNone );
 
 		DECLARE_EVENT_TABLE()
 		void OnOpenFile( wxCommandEvent & p_event );
@@ -62,13 +48,13 @@ namespace GuiCommon
 		wxAuiManager m_auiManager;
 		wxAuiNotebook * m_pNotebookEditors;
 		std::unique_ptr< StcContext > m_pStcContext;
-		ShaderEditorPage * m_pEditorPages[size_t( Castor3D::ShaderType::eCount )];
-		Castor3D::ShaderProgramWPtr m_shaderProgram;
-		Castor3D::PassWPtr m_pPass;
+		ShaderEditorPage * m_pEditorPages[size_t( castor3d::ShaderType::eCount )];
+		castor3d::ShaderProgramWPtr m_shaderProgram;
+		castor3d::Pass & m_pass;
 		bool m_bCompiled;
 		bool m_bOwnShader;
 		bool m_bCanEdit;
-		Castor3D::Scene & m_scene;
+		castor3d::Scene & m_scene;
 	};
 }
 

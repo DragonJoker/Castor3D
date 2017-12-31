@@ -8,7 +8,7 @@ FT_BEGIN_HEADER
 #	include FT_GLYPH_H
 FT_END_HEADER
 
-namespace Castor
+namespace castor
 {
 	namespace ft
 	{
@@ -86,23 +86,23 @@ namespace Castor
 				{ 0x0B01, "Invalid post table" },
 			};
 
-			bool l_result = true;
+			bool result = true;
 
 			if ( p_error != 0 )
 			{
-				std::map< FT_Error, std::string >::const_iterator l_it = MapErrors.find( p_error );
-				std::string l_error = "ERROR : " + std::string( p_name ) + " failed - " + string::string_cast< char >( string::to_string( p_error ) );
+				std::map< FT_Error, std::string >::const_iterator it = MapErrors.find( p_error );
+				std::string error = "ERROR : " + std::string( p_name ) + " failed - " + string::stringCast< char >( string::toString( p_error ) );
 
-				if ( l_it != MapErrors.end() )
+				if ( it != MapErrors.end() )
 				{
-					l_error += " (" + l_it->second + ")";
+					error += " (" + it->second + ")";
 				}
 
-				LOADER_ERROR( l_error );
-				l_result = false;
+				LOADER_ERROR( error );
+				result = false;
 			}
 
-			return l_result;
+			return result;
 		}
 
 		struct SFreeTypeFontImpl
@@ -118,15 +118,15 @@ namespace Castor
 			{
 			}
 
-			void Initialise()override
+			void initialise()override
 			{
 				CHECK_FT_ERR( FT_Init_FreeType, &m_library );
-				CHECK_FT_ERR( FT_New_Face, m_library, string::string_cast< char >( m_path ).c_str(), 0, &m_face );
+				CHECK_FT_ERR( FT_New_Face, m_library, string::stringCast< char >( m_path ).c_str(), 0, &m_face );
 				CHECK_FT_ERR( FT_Select_Charmap, m_face, FT_ENCODING_UNICODE );
 				CHECK_FT_ERR( FT_Set_Pixel_Sizes, m_face, 0, m_height );
 			}
 
-			void Cleanup()override
+			void cleanup()override
 			{
 				CHECK_FT_ERR( FT_Done_Face, m_face );
 				CHECK_FT_ERR( FT_Done_FreeType, m_library );
@@ -134,54 +134,54 @@ namespace Castor
 				m_face = nullptr;
 			}
 
-			Glyph LoadGlyph( char32_t p_char )override
+			Glyph loadGlyph( char32_t p_c32 )override
 			{
-				FT_Glyph l_glyph{};
-				FT_ULong const l_char( p_char );
-				FT_UInt const l_index{ FT_Get_Char_Index( m_face, l_char ) };
-				CHECK_FT_ERR( FT_Load_Glyph, m_face, l_index, FT_LOAD_DEFAULT );
-				CHECK_FT_ERR( FT_Get_Glyph, m_face->glyph, &l_glyph );
-				CHECK_FT_ERR( FT_Glyph_To_Bitmap, &l_glyph, FT_RENDER_MODE_NORMAL, 0, 1 );
-				FT_BitmapGlyph const l_bmpGlyph = FT_BitmapGlyph( l_glyph );
-				FT_Bitmap const & l_bitmap = l_bmpGlyph->bitmap;
-				uint32_t const l_pitch( std::abs( l_bitmap.pitch ) );
-				Size const l_size{ l_pitch, uint32_t( l_bitmap.rows ) };
-				Position const l_bearing{ l_bmpGlyph->left, l_bmpGlyph->top };
-				ByteArray l_buffer( l_size.width() * l_size.height() );
-				uint32_t l_advance{ uint32_t( std::abs( l_glyph->advance.x ) / 65536.0 ) };
+				FT_Glyph glyph{};
+				FT_ULong const cl( p_c32 );
+				FT_UInt const index{ FT_Get_Char_Index( m_face, cl ) };
+				CHECK_FT_ERR( FT_Load_Glyph, m_face, index, FT_LOAD_DEFAULT );
+				CHECK_FT_ERR( FT_Get_Glyph, m_face->glyph, &glyph );
+				CHECK_FT_ERR( FT_Glyph_To_Bitmap, &glyph, FT_RENDER_MODE_NORMAL, 0, 1 );
+				FT_BitmapGlyph const bmpGlyph = FT_BitmapGlyph( glyph );
+				FT_Bitmap const & bitmap = bmpGlyph->bitmap;
+				uint32_t const pitch( std::abs( bitmap.pitch ) );
+				Size const size{ pitch, uint32_t( bitmap.rows ) };
+				Position const bearing{ bmpGlyph->left, bmpGlyph->top };
+				ByteArray buffer( size.getWidth() * size.getHeight() );
+				uint32_t advance{ uint32_t( std::abs( glyph->advance.x ) / 65536.0 ) };
 
-				if ( l_advance < l_size[0] )
+				if ( advance < size[0] )
 				{
-					l_advance = l_size[0] + l_bearing[0];
+					advance = size[0] + bearing[0];
 				}
 
-				if ( l_bitmap.pitch < 0 )
+				if ( bitmap.pitch < 0 )
 				{
-					uint8_t * l_dst = l_buffer.data();
-					uint8_t const * l_src = l_bitmap.buffer;
+					uint8_t * dst = buffer.data();
+					uint8_t const * src = bitmap.buffer;
 
-					for ( uint32_t i = 0; i < uint32_t( l_bitmap.rows ); i++ )
+					for ( uint32_t i = 0; i < uint32_t( bitmap.rows ); i++ )
 					{
-						memcpy( l_dst, l_src, l_bitmap.width );
-						l_src += l_pitch;
-						l_dst += l_pitch;
+						memcpy( dst, src, bitmap.width );
+						src += pitch;
+						dst += pitch;
 					}
 				}
 				else
 				{
-					uint8_t * l_dst = l_buffer.data() + l_buffer.size() - l_pitch;
-					uint8_t const * l_src = l_bitmap.buffer;
+					uint8_t * dst = buffer.data() + buffer.size() - pitch;
+					uint8_t const * src = bitmap.buffer;
 
-					for ( uint32_t i = 0; i < uint32_t( l_bitmap.rows ); i++ )
+					for ( uint32_t i = 0; i < uint32_t( bitmap.rows ); i++ )
 					{
-						memcpy( l_dst, l_src, l_bitmap.width );
-						l_src += l_pitch;
-						l_dst -= l_pitch;
+						memcpy( dst, src, bitmap.width );
+						src += pitch;
+						dst -= pitch;
 					}
 				}
 
-				FT_Done_Glyph( l_glyph );
-				return Glyph{ p_char, l_size, l_bearing, l_advance, l_buffer };
+				FT_Done_Glyph( glyph );
+				return Glyph{ p_c32, size, bearing, advance, buffer };
 			}
 
 		private:
@@ -195,37 +195,37 @@ namespace Castor
 	//************************************************************************************************
 
 	Font::TextWriter::TextWriter( String const & p_tabs )
-		: Castor::TextWriter< Font >{ p_tabs }
+		: castor::TextWriter< Font >{ p_tabs }
 	{
 	}
 
 
 	bool Font::TextWriter::operator()( Font const & p_object, TextFile & p_file )
 	{
-		Logger::LogInfo( m_tabs + cuT( "Writing Font " ) + p_object.GetName() );
-		bool l_result = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "font \"" ) + p_object.GetName() + cuT( "\"\n" ) ) > 0
-						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-		Castor::TextWriter< Font >::CheckError( l_result, "Font name" );
+		Logger::logInfo( m_tabs + cuT( "Writing Font " ) + p_object.getName() );
+		bool result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "font \"" ) + p_object.getName() + cuT( "\"\n" ) ) > 0
+						&& p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+		castor::TextWriter< Font >::checkError( result, "Font name" );
 
-		if ( l_result )
+		if ( result )
 		{
-			Path l_relative = CopyFile( p_object.GetFilePath(), p_file.GetFilePath(), Path{} );
-			l_result = p_file.WriteText( m_tabs + cuT( "\tfile \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
-			Castor::TextWriter< Font >::CheckError( l_result, "Font file" );
+			Path relative = copyFile( p_object.getFilePath(), p_file.getFilePath(), Path{} );
+			result = p_file.writeText( m_tabs + cuT( "\tfile \"" ) + relative + cuT( "\"\n" ) ) > 0;
+			castor::TextWriter< Font >::checkError( result, "Font file" );
 		}
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = p_file.WriteText( m_tabs + cuT( "\theight " ) + string::to_string( p_object.GetHeight() ) + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Font >::CheckError( l_result, "Font height" );
+			result = p_file.writeText( m_tabs + cuT( "\theight " ) + string::toString( p_object.getHeight() ) + cuT( "\n" ) ) > 0;
+			castor::TextWriter< Font >::checkError( result, "Font height" );
 		}
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = p_file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_result;
+		return result;
 	}
 
 	//************************************************************************************************
@@ -242,39 +242,39 @@ namespace Castor
 
 	bool Font::BinaryLoader::operator()( Font & p_font, Path const & p_pathFile )
 	{
-		bool l_result = false;
+		bool result = false;
 
 		if ( ! p_pathFile.empty() )
 		{
-			String l_strFontName = p_pathFile.GetFullFileName();
+			String strFontName = p_pathFile.getFullFileName();
 
 			try
 			{
-				if ( !p_font.HasGlyphLoader() )
+				if ( !p_font.hasGlyphLoader() )
 				{
-					p_font.SetGlyphLoader( std::make_unique< ft::SFreeTypeFontImpl >( p_pathFile, m_height ) );
+					p_font.setGlyphLoader( std::make_unique< ft::SFreeTypeFontImpl >( p_pathFile, m_height ) );
 				}
 
-				p_font.SetFaceName( p_pathFile.GetFileName() );
-				p_font.GetGlyphLoader().Initialise();
-				uint8_t const l_min = std::numeric_limits< uint8_t >::lowest();
-				uint8_t const l_max = std::numeric_limits< uint8_t >::max();
-				uint32_t l_maxHeight = 0;
-				uint32_t l_maxWidth = 0;
+				p_font.setFaceName( p_pathFile.getFileName() );
+				p_font.getGlyphLoader().initialise();
+				uint8_t const min = std::numeric_limits< uint8_t >::lowest();
+				uint8_t const max = std::numeric_limits< uint8_t >::max();
+				uint32_t maxHeight = 0;
+				uint32_t maxWidth = 0;
 
 				// We load the glyphs
-				for ( uint8_t c = l_min; c < l_max; c++ )
+				for ( uint8_t c = min; c < max; c++ )
 				{
-					char l_tmp[] { char( c ), 0, 0, 0 };
-					Glyph const & l_glyph = p_font.DoLoadGlyph( string::utf8::to_utf8( l_tmp ) );
-					l_maxHeight = std::max< int >( l_maxHeight, l_glyph.GetSize().height() );
-					l_maxWidth = std::max< int >( l_maxWidth, l_glyph.GetAdvance() );
+					char tmp[] { char( c ), 0, 0, 0 };
+					Glyph const & glyph = p_font.doLoadGlyph( string::utf8::toUtf8( tmp ) );
+					maxHeight = std::max< int >( maxHeight, glyph.getSize().getHeight() );
+					maxWidth = std::max< int >( maxWidth, glyph.getAdvance() );
 				}
 
-				p_font.GetGlyphLoader().Cleanup();
-				p_font.SetMaxHeight( l_maxHeight );
-				p_font.SetMaxWidth( l_maxWidth );
-				l_result = true;
+				p_font.getGlyphLoader().cleanup();
+				p_font.setMaxHeight( maxHeight );
+				p_font.setMaxWidth( maxWidth );
+				result = true;
 			}
 			catch ( std::runtime_error & p_exc )
 			{
@@ -282,7 +282,7 @@ namespace Castor
 			}
 		}
 
-		return l_result;
+		return result;
 	}
 
 	//*********************************************************************************************
@@ -312,30 +312,30 @@ namespace Castor
 	{
 	}
 
-	void Font::LoadGlyph( char32_t p_char )
+	void Font::loadGlyph( char32_t p_char )
 	{
-		m_glyphLoader->Initialise();
-		DoLoadGlyph( p_char );
-		m_glyphLoader->Cleanup();
+		m_glyphLoader->initialise();
+		doLoadGlyph( p_char );
+		m_glyphLoader->cleanup();
 	}
 
-	Glyph const & Font::DoLoadGlyph( char32_t p_char )
+	Glyph const & Font::doLoadGlyph( char32_t p_char )
 	{
-		auto l_it = std::find_if( m_loadedGlyphs.begin(), m_loadedGlyphs.end(), [p_char]( Glyph const & p_glyph )
+		auto it = std::find_if( m_loadedGlyphs.begin(), m_loadedGlyphs.end(), [p_char]( Glyph const & p_glyph )
 		{
-			return p_glyph.GetCharacter() == p_char;
+			return p_glyph.getCharacter() == p_char;
 		} );
 
-		if ( l_it == m_loadedGlyphs.end() )
+		if ( it == m_loadedGlyphs.end() )
 		{
-			m_loadedGlyphs.push_back( m_glyphLoader->LoadGlyph( p_char ) );
+			m_loadedGlyphs.push_back( m_glyphLoader->loadGlyph( p_char ) );
 
-			l_it = std::find_if( m_loadedGlyphs.begin(), m_loadedGlyphs.end(), [p_char]( Glyph const & p_glyph )
+			it = std::find_if( m_loadedGlyphs.begin(), m_loadedGlyphs.end(), [p_char]( Glyph const & p_glyph )
 			{
-				return p_glyph.GetCharacter() == p_char;
+				return p_glyph.getCharacter() == p_char;
 			} );
 		}
 
-		return *l_it;
+		return *it;
 	}
 }

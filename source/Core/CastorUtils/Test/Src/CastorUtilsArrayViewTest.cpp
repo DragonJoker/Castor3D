@@ -4,7 +4,7 @@
 
 #include <numeric>
 
-using namespace Castor;
+using namespace castor;
 
 namespace Testing
 {
@@ -17,72 +17,72 @@ namespace Testing
 	{
 	}
 
-	void CastorUtilsArrayViewTest::DoRegisterTests()
+	void CastorUtilsArrayViewTest::doRegisterTests()
 	{
-		DoRegisterTest( "BasicArrayViewTest", std::bind( &CastorUtilsArrayViewTest::BasicTest, this ) );
+		doRegisterTest( "BasicArrayViewTest", std::bind( &CastorUtilsArrayViewTest::BasicTest, this ) );
 	}
 
 	void CastorUtilsArrayViewTest::BasicTest()
 	{
 		{
-			size_t const l_size = 8;
-			int * l_tmp = new int[l_size];
-			ArrayView< int > l_view1{ l_tmp, l_size };
-			CT_CHECK( l_view1.size() == l_size );
-			CT_CHECK( !l_view1.empty() );
-			CT_CHECK( l_view1.begin() == l_tmp );
-			CT_CHECK( l_view1.cbegin() == l_view1.begin() );
-			CT_CHECK( l_view1.end() == l_tmp + l_size );
-			CT_CHECK( l_view1.cend() == l_view1.end() );
-			CT_CHECK( l_view1.end() == l_view1.begin() + l_view1.size() );
-			CT_CHECK( l_view1.end() == l_view1.begin() + l_view1.size() );
-			std::iota( l_view1.begin(), l_view1.end(), 0 );
-			size_t l_index{ 0u };
+			size_t const size = 8;
+			int * tmp = new int[size];
+			ArrayView< int > view1{ tmp, size };
+			CT_CHECK( view1.size() == size );
+			CT_CHECK( !view1.empty() );
+			CT_CHECK( view1.begin() == tmp );
+			CT_CHECK( view1.cbegin() == view1.begin() );
+			CT_CHECK( view1.end() == tmp + size );
+			CT_CHECK( view1.cend() == view1.end() );
+			CT_CHECK( view1.end() == view1.begin() + view1.size() );
+			CT_CHECK( view1.end() == view1.begin() + view1.size() );
+			std::iota( view1.begin(), view1.end(), 0 );
+			size_t index{ 0u };
 
-			for ( auto l_value : l_view1 )
+			for ( auto value : view1 )
 			{
-				CT_CHECK( l_value == l_tmp[l_index++] );
+				CT_CHECK( value == tmp[index++] );
 			}
 
-			CT_CHECK( *l_view1.rbegin() == l_tmp[--l_index] );
-			delete[] l_tmp;
+			CT_CHECK( *view1.rbegin() == tmp[--index] );
+			delete[] tmp;
 		}
 		{
-			static size_t const l_size = 8;
-			int l_tmp[l_size];
-			ArrayView< int > l_view1{ l_tmp };
-			CT_CHECK( l_view1.size() == l_size );
-			CT_CHECK( !l_view1.empty() );
-			CT_CHECK( l_view1.begin() == l_tmp );
-			CT_CHECK( l_view1.cbegin() == l_view1.begin() );
-			CT_CHECK( l_view1.end() == l_tmp + l_size );
-			CT_CHECK( l_view1.cend() == l_view1.end() );
-			CT_CHECK( l_view1.end() == l_view1.begin() + l_view1.size() );
-			CT_CHECK( l_view1.end() == l_view1.begin() + l_view1.size() );
-			std::iota( l_view1.begin(), l_view1.end(), 0 );
-			size_t l_index{ 0u };
+			static size_t const size = 8;
+			int tmp[size];
+			ArrayView< int > view1{ tmp };
+			CT_CHECK( view1.size() == size );
+			CT_CHECK( !view1.empty() );
+			CT_CHECK( view1.begin() == tmp );
+			CT_CHECK( view1.cbegin() == view1.begin() );
+			CT_CHECK( view1.end() == tmp + size );
+			CT_CHECK( view1.cend() == view1.end() );
+			CT_CHECK( view1.end() == view1.begin() + view1.size() );
+			CT_CHECK( view1.end() == view1.begin() + view1.size() );
+			std::iota( view1.begin(), view1.end(), 0 );
+			size_t index{ 0u };
 
-			for ( auto l_value : l_view1 )
+			for ( auto value : view1 )
 			{
-				CT_CHECK( l_value == l_tmp[l_index++] );
+				CT_CHECK( value == tmp[index++] );
 			}
 
-			CT_CHECK( *l_view1.rbegin() == l_tmp[--l_index] );
+			CT_CHECK( *view1.rbegin() == tmp[--index] );
 		}
 		{
-			size_t const l_size = 0;
-			int * l_tmp = new int[l_size + 1];
-			ArrayView< int > l_view1{ l_tmp, l_size };
-			CT_CHECK( l_view1.size() == l_size );
-			CT_CHECK( l_view1.empty() );
-			CT_CHECK( l_view1.begin() == l_tmp );
-			CT_CHECK( l_view1.cbegin() == l_view1.begin() );
-			CT_CHECK( l_view1.end() == l_tmp + l_size );
-			CT_CHECK( l_view1.cend() == l_view1.end() );
-			CT_CHECK( l_view1.end() == l_view1.begin() + l_view1.size() );
-			CT_CHECK( l_view1.end() == l_view1.begin() + l_view1.size() );
-			CT_CHECK( l_view1.end() == l_view1.begin() );
-			delete[] l_tmp;
+			size_t const size = 0;
+			int * tmp = new int[size + 1];
+			ArrayView< int > view1{ tmp, size };
+			CT_CHECK( view1.size() == size );
+			CT_CHECK( view1.empty() );
+			CT_CHECK( view1.begin() == tmp );
+			CT_CHECK( view1.cbegin() == view1.begin() );
+			CT_CHECK( view1.end() == tmp + size );
+			CT_CHECK( view1.cend() == view1.end() );
+			CT_CHECK( view1.end() == view1.begin() + view1.size() );
+			CT_CHECK( view1.end() == view1.begin() + view1.size() );
+			CT_CHECK( view1.end() == view1.begin() );
+			delete[] tmp;
 		}
 	}
 }

@@ -1,31 +1,12 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CASTOR_DEBUG_H___
 #define ___CASTOR_DEBUG_H___
 
 #include "CastorUtilsPrerequisites.hpp"
 
-namespace Castor
+namespace castor
 {
 	namespace Debug
 	{
@@ -40,6 +21,34 @@ namespace Castor
 			{
 			}
 		};
+		/**
+		 *\~english
+		 *\brief		Initialises debug data.
+		 *\~french
+		 *\brief		Initialise les données de débogage.
+		 */
+		CU_API void initialise();
+		/**
+		 *\~english
+		 *\brief		Loads debug data for given library.
+		 *\~french
+		 *\brief		Charge les données de débogage pour la bibliothèque donnée.
+		 */
+		CU_API void loadModule( DynamicLibrary const & library );
+		/**
+		 *\~english
+		 *\brief		Unloads debug data for given library.
+		 *\~french
+		 *\brief		Décharge les données de débogage pour la bibliothèque donnée.
+		 */
+		CU_API void unloadModule( DynamicLibrary const & library );
+		/**
+		 *\~english
+		 *\brief		Cleans up debug data.
+		 *\~french
+		 *\brief		Nettoie les données de débogage.
+		 */
+		CU_API void cleanup();
 		/**
 		 *\~english
 		 *\brief			Puts the backtrace into a stream
@@ -74,14 +83,20 @@ namespace Castor
 
 		protected:
 			Backtraced()
+				: m_callStack{ doGetCallStack() }
 			{
-				std::stringstream l_callStack;
-				l_callStack << Castor::Debug::Backtrace{};
-				m_callStack = l_callStack.str();
 			}
 
 			~Backtraced()
 			{
+			}
+
+		private:
+			static std::string doGetCallStack()
+			{
+				std::stringstream callStack;
+				callStack << castor::Debug::Backtrace{};
+				return callStack.str();
 			}
 
 		protected:

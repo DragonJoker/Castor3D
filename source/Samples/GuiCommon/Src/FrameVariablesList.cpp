@@ -3,12 +3,14 @@
 #include "ImagesLoader.hpp"
 #include "FrameVariableBufferTreeItemProperty.hpp"
 #include "FrameVariableTreeItemProperty.hpp"
-#include "PropertiesHolder.hpp"
+#include "PropertiesContainer.hpp"
 
 #include <Engine.hpp>
+#include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
-#include <Shader/Uniform.hpp>
+#include <Shader/Uniform/Uniform.hpp>
 #include <Shader/UniformBuffer.hpp>
+#include <Shader/UniformBufferBinding.hpp>
 #include <Shader/ShaderProgram.hpp>
 
 #include <wx/imaglist.h>
@@ -23,8 +25,8 @@
 #	define LoadImage wxBitmap::LoadImage
 #endif
 
-using namespace Castor3D;
-using namespace Castor;
+using namespace castor3d;
+using namespace castor;
 
 namespace GuiCommon
 {
@@ -36,40 +38,43 @@ namespace GuiCommon
 		eID_FRAME_VARIABLE_BUFFER_SEL,
 	}	eID;
 
-	FrameVariablesList::FrameVariablesList( PropertiesHolder * p_propertiesHolder, wxWindow * p_parent, wxPoint const & p_ptPos, wxSize const & p_size )
+	FrameVariablesList::FrameVariablesList( PropertiesContainer * p_propertiesHolder
+		, wxWindow * p_parent
+		, wxPoint const & p_ptPos
+		, wxSize const & p_size )
 		: wxTreeCtrl( p_parent, wxID_ANY, p_ptPos, p_size, wxTR_DEFAULT_STYLE | wxTR_HIDE_ROOT | wxNO_BORDER )
 		, m_propertiesHolder( p_propertiesHolder )
 	{
-		wxBusyCursor l_wait;
-		ImagesLoader::AddBitmap( eBMP_FRAME_VARIABLE, frame_variable_xpm );
-		ImagesLoader::AddBitmap( eBMP_FRAME_VARIABLE_SEL, frame_variable_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_FRAME_VARIABLE_BUFFER, frame_variable_buffer_xpm );
-		ImagesLoader::AddBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL, frame_variable_buffer_sel_xpm );
-		ImagesLoader::WaitAsyncLoads();
+		wxBusyCursor wait;
+		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE, frame_variable_xpm );
+		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_SEL, frame_variable_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_BUFFER, frame_variable_buffer_xpm );
+		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL, frame_variable_buffer_sel_xpm );
+		ImagesLoader::waitAsyncLoads();
 
-		wxImage * l_icons[] =
+		wxImage * icons[] =
 		{
-			ImagesLoader::GetBitmap( eBMP_FRAME_VARIABLE ),
-			ImagesLoader::GetBitmap( eBMP_FRAME_VARIABLE_SEL ),
-			ImagesLoader::GetBitmap( eBMP_FRAME_VARIABLE_BUFFER ),
-			ImagesLoader::GetBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL ),
+			ImagesLoader::getBitmap( eBMP_FRAME_VARIABLE ),
+			ImagesLoader::getBitmap( eBMP_FRAME_VARIABLE_SEL ),
+			ImagesLoader::getBitmap( eBMP_FRAME_VARIABLE_BUFFER ),
+			ImagesLoader::getBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL ),
 		};
 
-		wxImageList * l_imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
+		wxImageList * imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
 
-		for ( auto l_image : l_icons )
+		for ( auto image : icons )
 		{
-			int l_sizeOrig = l_image->GetWidth();
+			int sizeOrig = image->GetWidth();
 
-			if ( l_sizeOrig != GC_IMG_SIZE )
+			if ( sizeOrig != GC_IMG_SIZE )
 			{
-				l_image->Rescale( GC_IMG_SIZE, GC_IMG_SIZE, wxIMAGE_QUALITY_HIGHEST );
+				image->Rescale( GC_IMG_SIZE, GC_IMG_SIZE, wxIMAGE_QUALITY_HIGHEST );
 			}
 
-			l_imageList->Add( wxImage( *l_image ) );
+			imageList->Add( wxImage( *image ) );
 		}
 
-		AssignImageList( l_imageList );
+		AssignImageList( imageList );
 	}
 
 	FrameVariablesList::~FrameVariablesList()
@@ -77,16 +82,23 @@ namespace GuiCommon
 		UnloadVariables();
 	}
 
-	void FrameVariablesList::LoadVariables( ShaderType p_type, ShaderProgramSPtr p_program )
+	void FrameVariablesList::LoadVariables( ShaderType p_type
+		, ShaderProgramSPtr p_program
+		, RenderPipeline & p_pipeline )
 	{
 		m_program = p_program;
-		wxTreeItemId l_root = AddRoot( _( "Root" ) );
+		wxTreeItemId root = AddRoot( _( "Root" ) );
 
-		if ( p_program->GetObjectStatus( p_type ) != ShaderStatus::eDontExist )
+		for ( auto & binding : p_pipeline.getBindings() )
 		{
-			for ( auto l_variable : p_program->GetUniforms( p_type ) )
+			doAddBuffer( root, *binding.get().getOwner() );
+		}
+
+		if ( p_program->getObjectStatus( p_type ) != ShaderStatus::edontExist )
+		{
+			for ( auto variable : p_program->getUniforms( p_type ) )
 			{
-				DoAddVariable( l_root, l_variable, p_type );
+				doAddVariable( root, variable, p_type );
 			}
 		}
 	}
@@ -96,39 +108,60 @@ namespace GuiCommon
 		DeleteAllItems();
 	}
 
-	void FrameVariablesList::DoAddBuffer( wxTreeItemId p_id, UniformBufferSPtr p_buffer )
+	void FrameVariablesList::doAddBuffer( wxTreeItemId p_id
+		, UniformBuffer & p_buffer )
 	{
-		wxTreeItemId l_id = AppendItem( p_id, p_buffer->GetName(), eID_FRAME_VARIABLE_BUFFER, eID_FRAME_VARIABLE_BUFFER_SEL, new FrameVariableBufferTreeItemProperty( m_program.lock()->GetRenderSystem()->GetEngine(), m_propertiesHolder->IsEditable(), p_buffer ) );
-		uint32_t l_index = 0;
+		wxTreeItemId id = AppendItem( p_id, p_buffer.getName()
+			, eID_FRAME_VARIABLE_BUFFER
+			, eID_FRAME_VARIABLE_BUFFER_SEL
+			, new FrameVariableBufferTreeItemProperty( m_program.lock()->getRenderSystem()->getEngine()
+				, m_propertiesHolder->IsEditable()
+				, p_buffer ) );
 
-		for ( auto l_variable : *p_buffer )
+		for ( auto variable : p_buffer )
 		{
-			DoAddVariable( l_id, l_variable, p_buffer );
+			doAddVariable( id, variable, p_buffer );
 		}
 	}
 
-	void FrameVariablesList::DoAddVariable( wxTreeItemId p_id, UniformSPtr p_variable, UniformBufferSPtr p_buffer )
+	void FrameVariablesList::doAddVariable( wxTreeItemId p_id
+		, UniformSPtr p_variable
+		, UniformBuffer & p_buffer )
 	{
-		wxString l_displayName = p_variable->GetName();
+		wxString displayName = p_variable->getName();
 
-		if ( p_variable->GetOccCount() > 1 )
+		if ( p_variable->getOccCount() > 1 )
 		{
-			l_displayName << wxT( "[" ) << p_variable->GetOccCount() << wxT( "]" );
+			displayName << wxT( "[" ) << p_variable->getOccCount() << wxT( "]" );
 		}
 
-		AppendItem( p_id, l_displayName, eID_FRAME_VARIABLE, eID_FRAME_VARIABLE_SEL, new FrameVariableTreeItemProperty( m_propertiesHolder->IsEditable(), p_variable, p_buffer ) );
+		AppendItem( p_id
+			, displayName
+			, eID_FRAME_VARIABLE
+			, eID_FRAME_VARIABLE_SEL
+			, new FrameVariableTreeItemProperty( m_propertiesHolder->IsEditable()
+				, p_variable
+				, p_buffer ) );
 	}
 
-	void FrameVariablesList::DoAddVariable( wxTreeItemId p_id, PushUniformSPtr p_variable, ShaderType p_type )
+	void FrameVariablesList::doAddVariable( wxTreeItemId p_id
+		, PushUniformSPtr p_variable
+		, ShaderType p_type )
 	{
-		wxString l_displayName = p_variable->GetBaseUniform().GetName();
+		wxString displayName = p_variable->getBaseUniform().getName();
 
-		if ( p_variable->GetBaseUniform().GetOccCount() > 1 )
+		if ( p_variable->getBaseUniform().getOccCount() > 1 )
 		{
-			l_displayName << wxT( "[" ) << p_variable->GetBaseUniform().GetOccCount() << wxT( "]" );
+			displayName << wxT( "[" ) << p_variable->getBaseUniform().getOccCount() << wxT( "]" );
 		}
 
-		AppendItem( p_id, l_displayName, eID_FRAME_VARIABLE, eID_FRAME_VARIABLE_SEL, new FrameVariableTreeItemProperty( m_propertiesHolder->IsEditable(), p_variable, p_type ) );
+		AppendItem( p_id
+			, displayName
+			, eID_FRAME_VARIABLE
+			, eID_FRAME_VARIABLE_SEL
+			, new FrameVariableTreeItemProperty( m_propertiesHolder->IsEditable()
+				, p_variable
+				, p_type ) );
 	}
 
 	BEGIN_EVENT_TABLE( FrameVariablesList, wxTreeCtrl )
@@ -139,14 +172,14 @@ namespace GuiCommon
 
 	void FrameVariablesList::OnClose( wxCloseEvent & p_event )
 	{
-		DeleteAllItems();
+		UnloadVariables();
 		p_event.Skip();
 	}
 
 	void FrameVariablesList::OnSelectItem( wxTreeEvent & p_event )
 	{
-		TreeItemProperty * l_data = reinterpret_cast< TreeItemProperty * >( p_event.GetClientObject() );
-		m_propertiesHolder->SetPropertyData( l_data );
+		TreeItemProperty * data = reinterpret_cast< TreeItemProperty * >( p_event.GetClientObject() );
+		m_propertiesHolder->setPropertyData( data );
 		p_event.Skip();
 	}
 

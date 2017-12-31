@@ -12,295 +12,345 @@
 
 #include <Graphics/Font.hpp>
 
-using namespace Castor;
-using namespace Castor3D;
+using namespace castor;
+using namespace castor3d;
 
 namespace CastorGui
 {
-	ComboBoxCtrl::ComboBoxCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id )
-		: ComboBoxCtrl( p_engine, p_parent, p_id, StringArray(), -1, Position(), Size(), 0, true )
+	ComboBoxCtrl::ComboBoxCtrl( String const & p_name
+		, Engine & engine
+		, ControlRPtr p_parent
+		, uint32_t p_id )
+		: ComboBoxCtrl( p_name
+			, engine
+			, p_parent
+			, p_id
+			, StringArray()
+			, -1
+			, Position()
+			, Size()
+			, 0
+			, true )
 	{
 	}
 
-	ComboBoxCtrl::ComboBoxCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, StringArray const & p_values, int p_selected, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: Control( ControlType::eComboBox, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
+	ComboBoxCtrl::ComboBoxCtrl( String const & p_name
+		, Engine & engine
+		, ControlRPtr p_parent
+		, uint32_t p_id
+		, StringArray const & p_values
+		, int p_selected
+		, Position const & p_position
+		, Size const & p_size
+		, uint32_t p_style
+		, bool p_visible )
+		: Control( ControlType::eComboBox
+			, p_name
+			, engine
+			, p_parent
+			, p_id
+			, p_position
+			, p_size
+			, p_style
+			, p_visible )
 		, m_values( p_values )
 		, m_selected( p_selected )
 	{
-		m_expand = std::make_shared< ButtonCtrl >( p_engine, this, GetId() << 12, cuT( "+" ), Position( p_size.width() - p_size.height(), 0 ), Size( p_size.height(), p_size.height() ) );
-		m_expand->SetVisible( DoIsVisible() );
-		m_expandClickedConnection = m_expand->Connect( ButtonEvent::eClicked, std::bind( &ComboBoxCtrl::DoSwitchExpand, this ) );
+		m_expand = std::make_shared< ButtonCtrl >( p_name + cuT( "_Expand" )
+			, engine
+			, this
+			, getId() << 12
+			, cuT( "+" )
+			, Position( p_size.getWidth() - p_size.getHeight(), 0 )
+			, Size( p_size.getHeight(), p_size.getHeight() ) );
+		m_expand->setVisible( p_visible );
+		m_expandClickedConnection = m_expand->connect( ButtonEvent::eClicked, std::bind( &ComboBoxCtrl::doSwitchExpand, this ) );
 
-		m_choices = std::make_shared< ListBoxCtrl >( p_engine, this, ( GetId() << 12 ) + 1, m_values, m_selected, Position( 0, p_size.height() ), Size( p_size.width() - p_size.height(), -1 ), 0, false );
-		m_choicesSelectedConnection = m_choices->Connect( ListBoxEvent::eSelected, std::bind( &ComboBoxCtrl::OnSelected, this, std::placeholders::_1 ) );
+		m_choices = std::make_shared< ListBoxCtrl >( p_name + cuT( "_Choices" )
+			, engine
+			, this
+			, ( getId() << 12 ) + 1
+			, m_values
+			, m_selected
+			, Position( 0, p_size.getHeight() )
+			, Size( p_size.getWidth() - p_size.getHeight(), -1 )
+			, 0
+			, false );
+		m_choicesSelectedConnection = m_choices->connect( ListBoxEvent::eSelected, std::bind( &ComboBoxCtrl::onSelected, this, std::placeholders::_1 ) );
 
-		TextOverlaySPtr l_text = GetEngine()->GetOverlayCache().Add( cuT( "T_CtrlCombo_" ) + string::to_string( GetId() ), OverlayType::eText, nullptr, GetBackground()->GetOverlay().shared_from_this() )->GetTextOverlay();
-		l_text->SetPixelSize( Size( GetSize().width() - GetSize().height(), GetSize().height() ) );
-		l_text->SetVAlign( VAlign::eCenter );
-		m_text = l_text;
+		TextOverlaySPtr text = getEngine().getOverlayCache().add( cuT( "T_CtrlCombo_" ) + string::toString( getId() )
+			, OverlayType::eText
+			, nullptr
+			, getBackground()->getOverlay().shared_from_this() )->getTextOverlay();
+		text->setPixelSize( Size( getSize().getWidth() - getSize().getHeight(), getSize().getHeight() ) );
+		text->setVAlign( VAlign::eCenter );
+		m_text = text;
 	}
 
 	ComboBoxCtrl::~ComboBoxCtrl()
 	{
 	}
 
-	void ComboBoxCtrl::SetSelectedItemBackgroundMaterial( MaterialSPtr p_material )
+	void ComboBoxCtrl::setSelectedItemBackgroundMaterial( MaterialSPtr p_material )
 	{
-		m_choices->SetSelectedItemBackgroundMaterial( p_material );
+		m_choices->setSelectedItemBackgroundMaterial( p_material );
 	}
 
-	void ComboBoxCtrl::SetSelectedItemForegroundMaterial( MaterialSPtr p_material )
+	void ComboBoxCtrl::setSelectedItemForegroundMaterial( MaterialSPtr p_material )
 	{
-		m_choices->SetSelectedItemForegroundMaterial( p_material );
+		m_choices->setSelectedItemForegroundMaterial( p_material );
 	}
 
-	void ComboBoxCtrl::SetHighlightedItemBackgroundMaterial( MaterialSPtr p_material )
+	void ComboBoxCtrl::setHighlightedItemBackgroundMaterial( MaterialSPtr p_material )
 	{
-		m_choices->SetHighlightedItemBackgroundMaterial( p_material );
+		m_choices->setHighlightedItemBackgroundMaterial( p_material );
 	}
 
-	void ComboBoxCtrl::SetItemBackgroundMaterial( MaterialSPtr p_material )
+	void ComboBoxCtrl::setItemBackgroundMaterial( MaterialSPtr p_material )
 	{
-		m_choices->SetItemBackgroundMaterial( p_material );
+		m_choices->setItemBackgroundMaterial( p_material );
 	}
 
-	MaterialSPtr ComboBoxCtrl::GetSelectedItemBackgroundMaterial()const
+	MaterialSPtr ComboBoxCtrl::getSelectedItemBackgroundMaterial()const
 	{
-		return m_choices->GetSelectedItemBackgroundMaterial();
+		return m_choices->getSelectedItemBackgroundMaterial();
 	}
 
-	MaterialSPtr ComboBoxCtrl::GetSelectedItemForegroundMaterial()const
+	MaterialSPtr ComboBoxCtrl::getSelectedItemForegroundMaterial()const
 	{
-		return m_choices->GetSelectedItemForegroundMaterial();
+		return m_choices->getSelectedItemForegroundMaterial();
 	}
 
-	MaterialSPtr ComboBoxCtrl::GetHighlightedItemBackgroundMaterial()const
+	MaterialSPtr ComboBoxCtrl::getHighlightedItemBackgroundMaterial()const
 	{
-		return m_choices->GetHighlightedItemBackgroundMaterial();
+		return m_choices->getHighlightedItemBackgroundMaterial();
 	}
 
-	MaterialSPtr ComboBoxCtrl::GetItemBackgroundMaterial()const
+	MaterialSPtr ComboBoxCtrl::getItemBackgroundMaterial()const
 	{
-		return m_choices->GetItemBackgroundMaterial();
+		return m_choices->getItemBackgroundMaterial();
 	}
 
-	void ComboBoxCtrl::AppendItem( String  const & p_value )
+	void ComboBoxCtrl::appendItem( String  const & p_value )
 	{
-		m_choices->AppendItem( p_value );
+		m_choices->appendItem( p_value );
 	}
 
-	void ComboBoxCtrl::RemoveItem( int p_value )
+	void ComboBoxCtrl::removeItem( int p_value )
 	{
-		m_choices->RemoveItem( p_value );
+		m_choices->removeItem( p_value );
 	}
 
-	void ComboBoxCtrl::SetItemText( int p_index, String const & p_text )
+	void ComboBoxCtrl::setItemText( int p_index, String const & p_text )
 	{
-		return m_choices->SetItemText( p_index, p_text );
+		return m_choices->setItemText( p_index, p_text );
 	}
 
-	void ComboBoxCtrl::Clear()
+	void ComboBoxCtrl::clear()
 	{
-		return m_choices->Clear();
+		return m_choices->clear();
 	}
 
-	void ComboBoxCtrl::SetSelected( int p_value )
+	void ComboBoxCtrl::setSelected( int p_value )
 	{
-		return m_choices->SetSelected( p_value );
+		return m_choices->setSelected( p_value );
 	}
 
-	StringArray const & ComboBoxCtrl::GetItems()const
+	StringArray const & ComboBoxCtrl::getItems()const
 	{
-		return m_choices->GetItems();
+		return m_choices->getItems();
 	}
 
-	uint32_t ComboBoxCtrl::GetItemCount()const
+	uint32_t ComboBoxCtrl::getItemCount()const
 	{
-		return m_choices->GetItemCount();
+		return m_choices->getItemCount();
 	}
 
-	int ComboBoxCtrl::GetSelected()const
+	int ComboBoxCtrl::getSelected()const
 	{
-		return m_choices->GetSelected();
+		return m_choices->getSelected();
 	}
 
-	void ComboBoxCtrl::SetFont( Castor::String const & p_font )
+	void ComboBoxCtrl::setFont( castor::String const & p_font )
 	{
-		TextOverlaySPtr l_text = m_text.lock();
+		TextOverlaySPtr text = m_text.lock();
 
-		if ( l_text )
+		if ( text )
 		{
-			l_text->SetFont( p_font );
+			text->setFont( p_font );
 		}
 
-		m_choices->SetFont( p_font );
+		m_choices->setFont( p_font );
 	}
 
-	void ComboBoxCtrl::DoCreate()
+	void ComboBoxCtrl::doCreate()
 	{
-		SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
+		REQUIRE( getControlsManager() );
+		auto & manager = *getControlsManager();
+		setBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
 
-		m_expand->SetForegroundMaterial( GetForegroundMaterial() );
-		m_expand->SetPosition( Position( GetSize().width() - GetSize().height(), 0 ) );
-		m_expand->SetSize( Size( GetSize().height(), GetSize().height() ) );
+		m_expand->setForegroundMaterial( getForegroundMaterial() );
+		m_expand->setPosition( Position( getSize().getWidth() - getSize().getHeight(), 0 ) );
+		m_expand->setSize( Size( getSize().getHeight(), getSize().getHeight() ) );
 
-		m_choices->SetBackgroundMaterial( GetBackgroundMaterial() );
-		m_choices->SetForegroundMaterial( GetForegroundMaterial() );
-		m_choices->SetPosition( Position( 0, GetSize().height() ) );
-		m_choices->SetSize( Size( GetSize().width() - GetSize().height(), -1 ) );
+		m_choices->setBackgroundMaterial( getBackgroundMaterial() );
+		m_choices->setForegroundMaterial( getForegroundMaterial() );
+		m_choices->setPosition( Position( 0, getSize().getHeight() ) );
+		m_choices->setSize( Size( getSize().getWidth() - getSize().getHeight(), -1 ) );
 
-		EventHandler::Connect( KeyboardEventType::ePushed, [this]( KeyboardEvent const & p_event )
+		EventHandler::connect( KeyboardEventType::ePushed, [this]( KeyboardEvent const & p_event )
 		{
-			OnKeyDown( p_event );
+			onKeyDown( p_event );
 		} );
-		NonClientEventHandler::ConnectNC( KeyboardEventType::ePushed, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
+		NonClientEventHandler::connectNC( KeyboardEventType::ePushed, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
 		{
-			OnNcKeyDown( p_control, p_event );
+			onNcKeyDown( p_control, p_event );
 		} );
 
-		ControlsManagerSPtr l_cache = GetControlsManager();
-		TextOverlaySPtr l_text = m_text.lock();
-		l_text->SetMaterial( GetForegroundMaterial() );
-		l_text->SetPixelSize( Size( GetSize().width() - GetSize().height(), GetSize().height() ) );
+		TextOverlaySPtr text = m_text.lock();
+		text->setMaterial( getForegroundMaterial() );
+		text->setPixelSize( Size( getSize().getWidth() - getSize().getHeight(), getSize().getHeight() ) );
 
-		if ( !l_text->GetFontTexture() || !l_text->GetFontTexture()->GetFont() )
+		if ( !text->getFontTexture() || !text->getFontTexture()->getFont() )
 		{
-			l_text->SetFont( GetControlsManager()->GetDefaultFont()->GetName() );
+			text->setFont(manager.getDefaultFont()->getName() );
 		}
 
-		int l_sel = GetSelected();
+		int sel = getSelected();
 
-		if ( l_sel >= 0 && uint32_t( l_sel ) < GetItemCount() )
+		if ( sel >= 0 && uint32_t( sel ) < getItemCount() )
 		{
-			l_text->SetCaption( GetItems()[l_sel] );
+			text->setCaption( getItems()[sel] );
 		}
 
-		if ( l_cache )
-		{
-			l_cache->Create( m_expand );
-			l_cache->Create( m_choices );
-		}
+		manager.create( m_expand );
+		manager.create( m_choices );
+		manager.connectEvents( *this );
 	}
 
-	void ComboBoxCtrl::DoDestroy()
+	void ComboBoxCtrl::doDestroy()
 	{
+		REQUIRE( getControlsManager() );
+		auto & manager = *getControlsManager();
+		getControlsManager()->disconnectEvents( *this );
+
 		if ( m_expand )
 		{
-			m_expand->Destroy();
+			manager.destroy( m_expand );
 		}
 
 		if ( m_choices )
 		{
-			m_choices->Destroy();
+			manager.destroy( m_choices );
 		}
 	}
 
-	void ComboBoxCtrl::DoSetPosition( Position const & p_value )
+	void ComboBoxCtrl::doSetPosition( Position const & p_value )
 	{
-		TextOverlaySPtr l_text = m_text.lock();
+		TextOverlaySPtr text = m_text.lock();
 
-		if ( l_text )
+		if ( text )
 		{
-			//l_text->SetPixelPosition( p_value );
-			l_text.reset();
+			//l_text->setPixelPosition( p_value );
+			text.reset();
 		}
 
-		m_expand->SetPosition( Position( GetSize().width() - GetSize().height(), 0 ) );
-		m_choices->SetPosition( Position( 0, GetSize().height() ) );
+		m_expand->setPosition( Position( getSize().getWidth() - getSize().getHeight(), 0 ) );
+		m_choices->setPosition( Position( 0, getSize().getHeight() ) );
 	}
 
-	void ComboBoxCtrl::DoSetSize( Size const & p_value )
+	void ComboBoxCtrl::doSetSize( Size const & p_value )
 	{
-		TextOverlaySPtr l_text = m_text.lock();
+		TextOverlaySPtr text = m_text.lock();
 
-		if ( l_text )
+		if ( text )
 		{
-			l_text->SetPixelSize( p_value );
-			l_text.reset();
+			text->setPixelSize( p_value );
+			text.reset();
 		}
 
-		m_expand->SetSize( Size( p_value.height(), p_value.height() ) );
-		m_choices->SetSize( Size( p_value.width() - p_value.height(), -1 ) );
-		m_expand->SetPosition( Position( p_value.width() - p_value.height(), 0 ) );
-		m_choices->SetPosition( Position( 0, p_value.height() ) );
+		m_expand->setSize( Size( p_value.getHeight(), p_value.getHeight() ) );
+		m_choices->setSize( Size( p_value.getWidth() - p_value.getHeight(), -1 ) );
+		m_expand->setPosition( Position( p_value.getWidth() - p_value.getHeight(), 0 ) );
+		m_choices->setPosition( Position( 0, p_value.getHeight() ) );
 	}
 
-	void ComboBoxCtrl::DoSetBackgroundMaterial( MaterialSPtr p_material )
+	void ComboBoxCtrl::doSetBackgroundMaterial( MaterialSPtr p_material )
 	{
-		m_choices->SetBackgroundMaterial( GetBackgroundMaterial() );
+		m_choices->setBackgroundMaterial( getBackgroundMaterial() );
 	}
 
-	void ComboBoxCtrl::DoSetForegroundMaterial( MaterialSPtr p_material )
+	void ComboBoxCtrl::doSetForegroundMaterial( MaterialSPtr p_material )
 	{
-		m_expand->SetForegroundMaterial( GetForegroundMaterial() );
-		m_choices->SetForegroundMaterial( GetForegroundMaterial() );
-		TextOverlaySPtr l_text = m_text.lock();
+		m_expand->setForegroundMaterial( getForegroundMaterial() );
+		m_choices->setForegroundMaterial( getForegroundMaterial() );
+		TextOverlaySPtr text = m_text.lock();
 
-		if ( l_text )
+		if ( text )
 		{
-			l_text->SetMaterial( p_material );
-			l_text.reset();
+			text->setMaterial( p_material );
+			text.reset();
 		}
 	}
 
-	bool ComboBoxCtrl::DoCatchesMouseEvents()const
+	bool ComboBoxCtrl::doCatchesMouseEvents()const
 	{
 		return false;
 	}
 
-	void ComboBoxCtrl::OnKeyDown( KeyboardEvent const & p_event )
+	void ComboBoxCtrl::onKeyDown( KeyboardEvent const & p_event )
 	{
-		if ( GetSelected() != -1 )
+		if ( getSelected() != -1 )
 		{
-			bool l_changed = false;
-			int l_index = GetSelected();
+			bool changed = false;
+			int index = getSelected();
 
-			if ( p_event.GetKey() == KeyboardKey::eUp )
+			if ( p_event.getKey() == KeyboardKey::eUp )
 			{
-				l_index--;
-				l_changed = true;
+				index--;
+				changed = true;
 			}
-			else if ( p_event.GetKey() == KeyboardKey::eDown )
+			else if ( p_event.getKey() == KeyboardKey::edown )
 			{
-				l_index++;
-				l_changed = true;
+				index++;
+				changed = true;
 			}
 
-			if ( l_changed )
+			if ( changed )
 			{
-				l_index = std::max( 0, std::min( l_index, int( GetItemCount() - 1 ) ) );
-				SetSelected( l_index );
-				OnSelected( l_index );
+				index = std::max( 0, std::min( index, int( getItemCount() - 1 ) ) );
+				setSelected( index );
+				onSelected( index );
 			}
 		}
 	}
 
-	void ComboBoxCtrl::OnNcKeyDown( ControlSPtr p_control, KeyboardEvent const & p_event )
+	void ComboBoxCtrl::onNcKeyDown( ControlSPtr p_control, KeyboardEvent const & p_event )
 	{
-		OnKeyDown( p_event );
+		onKeyDown( p_event );
 	}
 
-	void ComboBoxCtrl::DoSetVisible( bool p_visible )
+	void ComboBoxCtrl::doSetVisible( bool p_visible )
 	{
-		m_expand->SetVisible( p_visible );
-		m_choices->Hide();
+		m_expand->setVisible( p_visible );
+		m_choices->hide();
 	}
 
-	void ComboBoxCtrl::DoSwitchExpand()
+	void ComboBoxCtrl::doSwitchExpand()
 	{
-		m_choices->SetVisible( !m_choices->IsVisible() );
+		m_choices->setVisible( !m_choices->isVisible() );
 	}
 
-	void ComboBoxCtrl::OnSelected( int p_selected )
+	void ComboBoxCtrl::onSelected( int p_selected )
 	{
 		if ( p_selected >= 0 )
 		{
-			DoSwitchExpand();
-			TextOverlaySPtr l_text = m_text.lock();
+			doSwitchExpand();
+			TextOverlaySPtr text = m_text.lock();
 
-			if ( l_text )
+			if ( text )
 			{
-				l_text->SetCaption( m_choices->GetItemText( p_selected ) );
+				text->setCaption( m_choices->getItemText( p_selected ) );
 			}
 		}
 

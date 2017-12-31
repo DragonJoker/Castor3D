@@ -16,11 +16,11 @@
 #include <direct.h>
 #include <Shlobj.h>
 #include <windows.h>
-#define GetCurrentDir _getcwd
-#undef CopyFile
-#undef DeleteFile
+#define getCurrentDir _getcwd
+#undef copyFile
+#undef deleteFile
 
-namespace Castor
+namespace castor
 {
 	namespace
 	{
@@ -28,199 +28,199 @@ namespace Castor
 		bool TraverseDirectory( Path const & p_folderPath, DirectoryFuncType p_directoryFunction, FileFuncType p_fileFunction )
 		{
 			REQUIRE( !p_folderPath.empty() );
-			bool l_result = false;
-			WIN32_FIND_DATA l_findData;
-			HANDLE l_handle = ::FindFirstFile( ( p_folderPath / cuT( "*.*" ) ).c_str(), &l_findData );
+			bool result = false;
+			WIN32_FIND_DATA findData;
+			HANDLE handle = ::FindFirstFile( ( p_folderPath / cuT( "*.*" ) ).c_str(), &findData );
 
-			if ( l_handle != INVALID_HANDLE_VALUE )
+			if ( handle != INVALID_HANDLE_VALUE )
 			{
-				l_result = true;
-				String l_name = l_findData.cFileName;
+				result = true;
+				String name = findData.cFileName;
 
-				if ( l_name != cuT( "." ) && l_name != cuT( ".." ) )
+				if ( name != cuT( "." ) && name != cuT( ".." ) )
 				{
-					if ( ( l_findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == FILE_ATTRIBUTE_DIRECTORY )
+					if ( ( findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == FILE_ATTRIBUTE_DIRECTORY )
 					{
-						l_result = p_directoryFunction( p_folderPath / l_name );
+						result = p_directoryFunction( p_folderPath / name );
 					}
 					else
 					{
-						p_fileFunction( p_folderPath / l_name );
+						p_fileFunction( p_folderPath / name );
 					}
 				}
 
-				while ( l_result && ::FindNextFile( l_handle, &l_findData ) == TRUE )
+				while ( result && ::FindNextFile( handle, &findData ) == TRUE )
 				{
-					if ( l_findData.cFileName != l_name )
+					if ( findData.cFileName != name )
 					{
-						l_name = l_findData.cFileName;
+						name = findData.cFileName;
 
-						if ( l_name != cuT( "." ) && l_name != cuT( ".." ) )
+						if ( name != cuT( "." ) && name != cuT( ".." ) )
 						{
-							if ( ( l_findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == FILE_ATTRIBUTE_DIRECTORY )
+							if ( ( findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == FILE_ATTRIBUTE_DIRECTORY )
 							{
-								l_result = p_directoryFunction( p_folderPath / l_name );
+								result = p_directoryFunction( p_folderPath / name );
 							}
 							else
 							{
-								p_fileFunction( p_folderPath / l_name );
+								p_fileFunction( p_folderPath / name );
 							}
 						}
 					}
 				}
 
-				::FindClose( l_handle );
+				::FindClose( handle );
 			}
 
-			return l_result;
+			return result;
 		}
 
 		bool DeleteEmptyDirectory( Path const & p_path )
 		{
 #if defined( CASTOR_COMPILER_MSVC )
 
-			bool l_result = _trmdir( p_path.c_str() ) == 0;
+			bool result = _trmdir( p_path.c_str() ) == 0;
 
 #else
 
-			bool l_result = rmdir( string::string_cast< char >( p_path ).c_str() ) == 0;
+			bool result = rmdir( string::stringCast< char >( p_path ).c_str() ) == 0;
 
 #endif
 
-			if ( !l_result )
+			if ( !result )
 			{
-				auto l_error = errno;
+				auto error = errno;
 
-				switch ( l_error )
+				switch ( error )
 				{
 				case ENOTEMPTY:
-					Logger::LogError( StringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], it is not empty." ) );
+					Logger::logError( StringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], it is not empty." ) );
 					break;
 
 				case ENOENT:
-					Logger::LogError( StringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], the path is invalid." ) );
+					Logger::logError( StringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], the path is invalid." ) );
 					break;
 
 				case EACCES:
-					Logger::LogError( StringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], a program has an open handle to this directory." ) );
+					Logger::logError( StringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], a program has an open handle to this directory." ) );
 					break;
 
 				default:
-					Logger::LogError( StringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], unknown error (" ) << l_error << cuT( ")." ) );
+					Logger::logError( StringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], unknown error (" ) << error << cuT( ")." ) );
 					break;
 				}
 			}
 
-			return l_result;
+			return result;
 		}
 
 	}
 
 #if defined( CASTOR_COMPILER_MSVC )
 
-	bool FOpen( FILE *& p_file, char const * p_path, char const * p_mode )
+	bool fileOpen( FILE *& p_file, char const * p_path, char const * p_mode )
 	{
-		errno_t l_err = fopen_s( &p_file, p_path, p_mode );
+		errno_t err = fopen_s( &p_file, p_path, p_mode );
 
-		if ( l_err && !p_file )
+		if ( err && !p_file )
 		{
-			Logger::LogError( StringStream() << cuT( "Couldn't open file [" ) << p_path << cuT( "], due to error: " ) << System::GetLastErrorText() );
+			Logger::logError( StringStream() << cuT( "Couldn't open file [" ) << p_path << cuT( "], due to error: " ) << System::getLastErrorText() );
 		}
 
-		return l_err == 0;
+		return err == 0;
 	}
 
-	bool FOpen64( FILE *& p_file, char const * p_path, char const * p_mode )
+	bool fileOpen64( FILE *& p_file, char const * p_path, char const * p_mode )
 	{
-		errno_t l_err = fopen_s( &p_file, p_path, p_mode );
+		errno_t err = fopen_s( &p_file, p_path, p_mode );
 
-		if ( l_err && !p_file )
+		if ( err && !p_file )
 		{
-			Logger::LogError( StringStream() << cuT( "Couldn't open file [" ) << p_path << cuT( "], due to error: " ) << System::GetLastErrorText() );
+			Logger::logError( StringStream() << cuT( "Couldn't open file [" ) << p_path << cuT( "], due to error: " ) << System::getLastErrorText() );
 		}
 
-		return l_err == 0;
+		return err == 0;
 	}
 
-	bool FSeek( FILE * p_file, int64_t p_offset, int p_iOrigin )
+	bool fileSeek( FILE * p_file, int64_t p_offset, int p_iOrigin )
 	{
 		return _fseeki64( p_file, p_offset, p_iOrigin ) == 0;
 	}
 
-	int64_t FTell( FILE * p_file )
+	int64_t fileTell( FILE * p_file )
 	{
 		return _ftelli64( p_file );
 	}
 
 #else
 
-	bool FOpen( FILE *& p_file, char const * p_path, char const * p_mode )
+	bool fileOpen( FILE *& p_file, char const * p_path, char const * p_mode )
 	{
 		p_file = fopen( p_path, p_mode );
 		return p_file != nullptr;
 	}
 
-	bool FOpen64( FILE *& p_file, char const * p_path, char const * p_mode )
+	bool fileOpen64( FILE *& p_file, char const * p_path, char const * p_mode )
 	{
 		p_file = fopen( p_path, p_mode );
 		return p_file != nullptr;
 	}
 
-	bool FSeek( FILE * p_file, int64_t p_offset, int p_iOrigin )
+	bool fileSeek( FILE * p_file, int64_t p_offset, int p_iOrigin )
 	{
 		return fseek( p_file, p_offset, p_iOrigin ) == 0;
 	}
 
-	int64_t FTell( FILE * p_file )
+	int64_t fileTell( FILE * p_file )
 	{
 		return ftell( p_file );
 	}
 
 #endif
 
-	Path File::GetExecutableDirectory()
+	Path File::getExecutableDirectory()
 	{
-		Path l_pathReturn;
-		xchar l_path[FILENAME_MAX];
-		DWORD l_result = GetModuleFileName( nullptr, l_path, _countof( l_path ) );
+		Path pathReturn;
+		xchar path[FILENAME_MAX];
+		DWORD result = ::GetModuleFileName( nullptr, path, _countof( path ) );
 
-		if ( l_result != 0 )
+		if ( result != 0 )
 		{
-			l_pathReturn = Path{ l_path };
+			pathReturn = Path{ path };
 		}
 
-		l_pathReturn = l_pathReturn.GetPath();
-		return l_pathReturn;
+		pathReturn = pathReturn.getPath();
+		return pathReturn;
 	}
 
-	Path File::GetUserDirectory()
+	Path File::getUserDirectory()
 	{
-		Path l_pathReturn;
-		xchar l_path[FILENAME_MAX];
-		HRESULT l_hr = SHGetFolderPath( nullptr, CSIDL_PROFILE, nullptr, 0, l_path );
+		Path pathReturn;
+		xchar path[FILENAME_MAX];
+		HRESULT hr = SHGetFolderPath( nullptr, CSIDL_PROFILE, nullptr, 0, path );
 
-		if ( SUCCEEDED( l_hr ) )
+		if ( SUCCEEDED( hr ) )
 		{
-			l_pathReturn = Path{ l_path };
+			pathReturn = Path{ path };
 		}
 
-		return l_pathReturn;
+		return pathReturn;
 	}
 
-	bool File::DirectoryExists( Path const & p_path )
+	bool File::directoryExists( Path const & p_path )
 	{
 		struct _stat status = { 0 };
-		_stat( string::string_cast< char >( p_path ).c_str(), &status );
+		_stat( string::stringCast< char >( p_path ).c_str(), &status );
 		return ( status.st_mode & S_IFDIR ) == S_IFDIR;
 	}
 
-	bool File::DirectoryCreate( Path const & p_path, FlagCombination< CreateMode > const & p_flags )
+	bool File::directoryCreate( Path const & p_path, FlagCombination< CreateMode > const & p_flags )
 	{
-		Path l_path = p_path.GetPath();
+		Path path = p_path.getPath();
 
-		if ( !l_path.empty() && !DirectoryExists( l_path ) )
+		if ( !path.empty() && !directoryExists( path ) )
 		{
-			DirectoryCreate( l_path, p_flags );
+			directoryCreate( path, p_flags );
 		}
 
 #if defined( CASTOR_COMPILER_MSVC )
@@ -229,16 +229,16 @@ namespace Castor
 
 #else
 
-		return mkdir( string::string_cast< char >( p_path ).c_str() ) == 0;
+		return mkdir( string::stringCast< char >( p_path ).c_str() ) == 0;
 
 #endif
 	}
 
-	bool File::ListDirectoryFiles( Path const & p_folderPath, PathArray & p_files, bool p_recursive )
+	bool File::listDirectoryFiles( Path const & p_folderPath, PathArray & p_files, bool p_recursive )
 	{
 		struct FileFunction
 		{
-			FileFunction( PathArray & p_files )
+			explicit FileFunction( PathArray & p_files )
 				: m_files( p_files )
 			{
 			}
@@ -253,7 +253,7 @@ namespace Castor
 		{
 			struct DirectoryFunction
 			{
-				DirectoryFunction( PathArray & p_files )
+				explicit DirectoryFunction( PathArray & p_files )
 					: m_files( p_files )
 				{
 				}
@@ -283,13 +283,13 @@ namespace Castor
 		}
 	}
 
-	bool File::DirectoryDelete( Path const & p_path )
+	bool File::directoryDelete( Path const & p_path )
 	{
 		struct FileFunction
 		{
 			void operator()( Path const & p_path )
 			{
-				File::DeleteFile( p_path );
+				File::deleteFile( p_path );
 			}
 		};
 
@@ -297,25 +297,25 @@ namespace Castor
 		{
 			bool operator()( Path const & p_path )
 			{
-				bool l_result = TraverseDirectory( p_path, DirectoryFunction(), FileFunction() );
+				bool result = TraverseDirectory( p_path, DirectoryFunction(), FileFunction() );
 
-				if ( l_result )
+				if ( result )
 				{
-					l_result = DeleteEmptyDirectory( p_path );
+					result = DeleteEmptyDirectory( p_path );
 				}
 
-				return l_result;
+				return result;
 			}
 		};
 
-		bool l_result = TraverseDirectory( p_path, DirectoryFunction(), FileFunction() );
+		bool result = TraverseDirectory( p_path, DirectoryFunction(), FileFunction() );
 
-		if ( l_result )
+		if ( result )
 		{
-			l_result = DeleteEmptyDirectory( p_path );
+			result = DeleteEmptyDirectory( p_path );
 		}
 
-		return l_result;
+		return result;
 	}
 }
 

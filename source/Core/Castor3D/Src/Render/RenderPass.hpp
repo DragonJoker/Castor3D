@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_RENDER_PASS_H___
 #define ___C3D_RENDER_PASS_H___
@@ -28,23 +9,31 @@ SOFTWARE.
 
 #include "Render/RenderInfo.hpp"
 #include "Render/RenderQueue.hpp"
-#include "Shader/UniformBuffer.hpp"
+#include "Shader/Ubos/BillboardUbo.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Shader/Ubos/ModelUbo.hpp"
+#include "Shader/Ubos/MorphingUbo.hpp"
+#include "Shader/Ubos/SceneUbo.hpp"
+#include "Shader/Ubos/SkinningUbo.hpp"
 
 #include <unordered_map>
 
-namespace Castor3D
+namespace castor3d
 {
-	inline bool operator<( PipelineFlags const & p_lhs, PipelineFlags const & p_rhs )
+	inline bool operator<( PipelineFlags const & lhs, PipelineFlags const & rhs )
 	{
-		return p_lhs.m_colourBlendMode < p_rhs.m_colourBlendMode
-			   || ( p_lhs.m_colourBlendMode == p_rhs.m_colourBlendMode
-					&& ( p_lhs.m_alphaBlendMode < p_rhs.m_alphaBlendMode
-						 || ( p_lhs.m_alphaBlendMode == p_rhs.m_alphaBlendMode
-							  && ( p_lhs.m_textureFlags < p_rhs.m_textureFlags
-								   || ( p_lhs.m_textureFlags == p_rhs.m_textureFlags
-										&& ( p_lhs.m_programFlags < p_rhs.m_programFlags
-											 || ( p_lhs.m_programFlags == p_rhs.m_programFlags
-												  && p_lhs.m_sceneFlags < p_rhs.m_sceneFlags ) ) ) ) ) ) );
+		return lhs.m_colourBlendMode < rhs.m_colourBlendMode
+			   || ( lhs.m_colourBlendMode == rhs.m_colourBlendMode
+					&& ( lhs.m_alphaBlendMode < rhs.m_alphaBlendMode
+						 || ( lhs.m_alphaBlendMode == rhs.m_alphaBlendMode
+							  && ( lhs.m_textureFlags < rhs.m_textureFlags
+								   || ( lhs.m_textureFlags == rhs.m_textureFlags
+										&& ( lhs.m_programFlags < rhs.m_programFlags
+											 || ( lhs.m_programFlags == rhs.m_programFlags
+												  && ( lhs.m_passFlags < rhs.m_passFlags
+													 || ( lhs.m_passFlags == rhs.m_passFlags
+														  && lhs.m_sceneFlags < rhs.m_sceneFlags ) ) ) ) ) ) ) ) );
 	}
 	/*!
 	\author		Sylvain DOREMUS
@@ -56,8 +45,8 @@ namespace Castor3D
 	\brief		Classe de base d'une passe de rendu.
 	*/
 	class RenderPass
-		: public Castor::OwnedBy< Engine >
-		, public Castor::Named
+		: public castor::OwnedBy< Engine >
+		, public castor::Named
 	{
 	public:
 		using DistanceSortedNodeMap = std::multimap< double, std::unique_ptr< DistanceRenderNodeBase > >;
@@ -65,22 +54,37 @@ namespace Castor3D
 	protected:
 		/**
 		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	p_name			The pass name.
-		 *\param[in]	p_engine		The engine.
-		 *\param[in]	p_opaque		Tells if this pass if for opaque nodes.
-		 *\param[in]	p_multisampling	The multisampling status.
+		 *\brief		Constructor for opaque nodes.
+		 *\param[in]	name	The pass name.
+		 *\param[in]	engine	The engine.
+		 *\param[in]	ignored	The geometries attached to this node will be ignored in the render.
 		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	p_name			Le nom de la passe.
-		 *\param[in]	p_engine		Le moteur.
-		 *\param[in]	p_opaque		Dit si cette passe de rendu est pour les noeuds opaques.
-		 *\param[in]	p_multisampling	Le statut de multiéchantillonnage.
+		 *\brief		Constructeur pour les noeuds opaques.
+		 *\param[in]	name	Le nom de la passe.
+		 *\param[in]	engine	Le moteur.
+		 *\param[in]	ignored	Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 */
-		C3D_API RenderPass( Castor::String const & p_name
-			, Engine & p_engine
-			, bool p_opaque
-			, bool p_multisampling = false );
+		C3D_API RenderPass( castor::String const & name
+			, Engine & engine
+			, SceneNode const * ignored );
+		/**
+		 *\~english
+		 *\brief		Constructor for transparent nodes.
+		 *\param[in]	name	The pass name.
+		 *\param[in]	engine	The engine.
+		 *\param[in]	oit		The order independant status.
+		 *\param[in]	ignored	The geometries attached to this node will be ignored in the render.
+		 *\~french
+		 *\brief		Constructeur pour les noeuds transparents.
+		 *\param[in]	name	Le nom de la passe.
+		 *\param[in]	engine	Le moteur.
+		 *\param[in]	oit		Le statut de rendu indépendant de l'ordre des objets.
+		 *\param[in]	ignored	Les géométries attachées à ce noeud seront ignorées lors du rendu.
+		 */
+		C3D_API RenderPass( castor::String const & name
+			, Engine & engine
+			, bool oit
+			, SceneNode const * ignored );
 
 	public:
 		/**
@@ -93,778 +97,1101 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Initialises the pass.
-		 *\param		p_size	The pass needed dimensions.
+		 *\param		size	The pass needed dimensions.
 		 *\return		\p true on ok.
 		 *\~french
 		 *\brief		Initialise la passe.
-		 *\param		p_size	Les dimensions voulues pour la passe.
+		 *\param		size	Les dimensions voulues pour la passe.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool Initialise( Castor::Size const & p_size );
+		C3D_API bool initialise( castor::Size const & size );
 		/**
 		 *\~english
 		 *\brief		Cleans up the pass.
 		 *\~french
 		 *\brief		Nettoie la passe.
 		 */
-		C3D_API void Cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Updates the render pass.
 		 *\remarks		Gather the render queues, for further update.
-		 *\param[out]	p_queues	Receives the render queues needed for the rendering of the frame.
+		 *\param[out]	queues	Receives the render queues needed for the rendering of the frame.
 		 *\~french
 		 *\brief		Met à jour la passe de rendu.
 		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
-		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
+		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API void Update( RenderQueueArray & p_queues );
+		C3D_API void update( RenderQueueArray & queues );
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags.
-		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
-		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
-		 *\param[in]	p_sceneFlags	Scene related flags.
-		 *\param[in]	p_invertNormals	Tells if the normals must be inverted, in the program.
+		 *\param[in]	passFlags		A combination of PassFlag.
+		 *\param[in]	textureFlags	A combination of TextureChannel.
+		 *\param[in]	programFlags	A combination of ProgramFlag.
+		 *\param[in]	sceneFlags		Scene related flags.
+		 *\param[in]	invertNormals	Tells if the normals must be inverted, in the program.
 		 *\~french
 		 *\brief		Récupère le source du vertex shader qui correspond aux indicateurs donnés.
-		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
-		 *\param[in]	p_programFlags	Combinaison de ProgramFlag.
-		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
-		 *\param[in]	p_invertNormals	Dit si les normales doivent être inversées, dans le programme.
+		 *\param[in]	passFlags		Une combinaison de PassFlag.
+		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
+		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API Castor::String GetVertexShaderSource( TextureChannels const & p_textureFlags
-			,ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags
-			, bool p_invertNormals )const;
+		C3D_API glsl::Shader getVertexShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, bool invertNormals )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
-		 *\param[in]	p_textureFlags	A combination of TextureChannel.
-		 *\param[in]	p_programFlags	A combination of ProgramFlag.
-		 *\param[in]	p_sceneFlags	Scene related flags.
+		 *\param[in]	passFlags		A combination of PassFlag.
+		 *\param[in]	textureFlags	A combination of TextureChannel.
+		 *\param[in]	programFlags	A combination of ProgramFlag.
+		 *\param[in]	sceneFlags		Scene related flags.
+		 *\param[in]	alphaFunc		The alpha test function.
 		 *\~french
 		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
-		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
-		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
-		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
+		 *\param[in]	passFlags		Une combinaison de PassFlag.
+		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
+		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 */
-		C3D_API Castor::String GetPixelShaderSource( TextureChannels const & p_textureFlags
-			,ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags )const;
+		C3D_API glsl::Shader getPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, ComparisonFunc alphaFunc )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the geometry shader source matching the given flags.
-		 *\param[in]	p_textureFlags	A combination of TextureChannel.
-		 *\param[in]	p_programFlags	A combination of ProgramFlag.
-		 *\param[in]	p_sceneFlags	Scene related flags.
+		 *\param[in]	passFlags		A combination of PassFlag.
+		 *\param[in]	textureFlags	A combination of TextureChannel.
+		 *\param[in]	programFlags	A combination of ProgramFlag.
+		 *\param[in]	sceneFlags		Scene related flags.
 		 *\~french
 		 *\brief		Récupère le source du geometry shader qui correspond aux indicateurs donnés.
-		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
-		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
-		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
+		 *\param[in]	passFlags		Une combinaison de PassFlag.
+		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API Castor::String GetGeometryShaderSource( TextureChannels const & p_textureFlags
-			,ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags )const;
+		C3D_API glsl::Shader getGeometryShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags )const;
 		/**
 		 *\~english
 		 *\brief		Prepares the pipeline matching the given flags.
-		 *\param[in]	p_colourBlendMode	The colour blend mode.
-		 *\param[in]	p_alphaBlendMode	The alpha blend mode.
-		 *\param[in]	p_textureFlags		A combination of TextureChannel.
-		 *\param[in]	p_programFlags		A combination of ProgramFlag.
-		 *\param[in]	p_sceneFlags		Scene related flags.
-		 *\param[in]	p_twoSided			Tells if the pass is two sided.
+		 *\param[in]	colourBlendMode	The colour blend mode.
+		 *\param[in]	alphaBlendMode	The alpha blend mode.
+		 *\param[in]	alphaFunc		The alpha test function.
+		 *\param[in]	passFlags		A combination of PassFlag.
+		 *\param[in]	textureFlags	A combination of TextureChannel.
+		 *\param[in]	programFlags	A combination of ProgramFlag.
+		 *\param[in]	sceneFlags		Scene related flags.
+		 *\param[in]	twoSided		Tells if the pass is two sided.
 		 *\~french
 		 *\brief		Prépare le pipeline qui correspond aux indicateurs donnés.
-		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
-		 *\param[in]	p_alphaBlendMode	Le mode de mélange alpha.
-		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
-		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
-		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
-		 *\param[in]	p_twoSided			Dit si la passe est sur les deux faces.
+		 *\param[in]	colourBlendMode	Le mode de mélange de couleurs.
+		 *\param[in]	alphaBlendMode	Le mode de mélange alpha.
+		 *\param[in]	alphaFunc		La fonction de test alpha.
+		 *\param[in]	passFlags		Une combinaison de PassFlag.
+		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
+		 *\param[in]	twoSided		Dit si la passe est sur les deux faces.
 		 */
-		C3D_API void PreparePipeline( BlendMode p_colourBlendMode
-			, BlendMode p_alphaBlendMode
-			, TextureChannels & p_textureFlags
-			, ProgramFlags & p_programFlags
-			, SceneFlags & p_sceneFlags
-			, bool p_twoSided );
+		C3D_API void preparePipeline( BlendMode colourBlendMode
+			, BlendMode alphaBlendMode
+			, ComparisonFunc alphaFunc
+			, PassFlags & passFlags
+			, TextureChannels & textureFlags
+			, ProgramFlags & programFlags
+			, SceneFlags & sceneFlags
+			, bool twoSided );
 		/**
 		 *\~english
 		 *\brief		Retrieves the pipeline matching the given flags, for front face culling.
-		 *\param[in]	p_colourBlendMode	The colour blend mode.
-		 *\param[in]	p_alphaBlendMode	The alpha blend mode.
-		 *\param[in]	p_textureFlags		A combination of TextureChannel.
-		 *\param[in]	p_programFlags		A combination of ProgramFlag.
-		 *\param[in]	p_sceneFlags		Scene related flags.
+		 *\param[in]	colourBlendMode	The colour blend mode.
+		 *\param[in]	alphaBlendMode	The alpha blend mode.
+		 *\param[in]	alphaFunc		The alpha test function.
+		 *\param[in]	passFlags		A combination of PassFlag.
+		 *\param[in]	textureFlags	A combination of TextureChannel.
+		 *\param[in]	programFlags	A combination of ProgramFlag.
+		 *\param[in]	sceneFlags		Scene related flags.
 		 *\return		The ready to use pipeline, \p nullptr if none is available for wanted configuration.
 		 *\~french
 		 *\brief		Récupère le pipeline qui correspond aux indicateurs donnés, pour les faces avant supprimées.
-		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
-		 *\param[in]	p_alphaBlendMode	Le mode de mélange alpha.
-		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
-		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
-		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
+		 *\param[in]	colourBlendMode	Le mode de mélange de couleurs.
+		 *\param[in]	alphaBlendMode	Le mode de mélange alpha.
+		 *\param[in]	alphaFunc		La fonction de test alpha.
+		 *\param[in]	passFlags		Une combinaison de PassFlag.
+		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\return		Le pipeline prêt à l'utilisation, \p nullptr si aucun pipeline n'est disponible pour la configuration voulue.
 		 */
-		C3D_API RenderPipeline * GetPipelineFront( BlendMode p_colourBlendMode
-			, BlendMode p_alphaBlendMode
-			, TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags );
+		C3D_API RenderPipeline * getPipelineFront( BlendMode colourBlendMode
+			, BlendMode alphaBlendMode
+			, ComparisonFunc alphaFunc
+			, PassFlags const & passFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pipeline matching the given flags, for back face culling.
-		 *\param[in]	p_colourBlendMode	The colour blend mode.
-		 *\param[in]	p_alphaBlendMode	The alpha blend mode.
-		 *\param[in]	p_textureFlags		A combination of TextureChannel.
-		 *\param[in]	p_programFlags		A combination of ProgramFlag.
-		 *\param[in]	p_sceneFlags		Scene related flags.
+		 *\param[in]	colourBlendMode	The colour blend mode.
+		 *\param[in]	alphaBlendMode	The alpha blend mode.
+		 *\param[in]	alphaFunc		The alpha test function.
+		 *\param[in]	passFlags		A combination of PassFlag.
+		 *\param[in]	textureFlags	A combination of TextureChannel.
+		 *\param[in]	programFlags	A combination of ProgramFlag.
+		 *\param[in]	sceneFlags		Scene related flags.
 		 *\return		The ready to use pipeline, \p nullptr if none is available for wanted configuration.
 		 *\~french
 		 *\brief		Récupère le pipeline qui correspond aux indicateurs donnés, pour les faces arrière supprimées.
-		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
-		 *\param[in]	p_alphaBlendMode	Le mode de mélange alpha.
-		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
-		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
-		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
+		 *\param[in]	colourBlendMode	Le mode de mélange de couleurs.
+		 *\param[in]	alphaBlendMode	Le mode de mélange alpha.
+		 *\param[in]	alphaFunc		La fonction de test alpha.
+		 *\param[in]	passFlags		Une combinaison de PassFlag.
+		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\return		Le pipeline prêt à l'utilisation, \p nullptr si aucun pipeline n'est disponible pour la configuration voulue.
 		 */
-		C3D_API RenderPipeline * GetPipelineBack( BlendMode p_colourBlendMode
-			, BlendMode p_alphaBlendMode
-			, TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags );
+		C3D_API RenderPipeline * getPipelineBack( BlendMode colourBlendMode
+			, BlendMode alphaBlendMode
+			, ComparisonFunc alphaFunc
+			, PassFlags const & passFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags )const;
 		/**
 		 *\~english
 		 *\brief		Creates an animated render node.
-		 *\param[in]	p_pass		The pass.
-		 *\param[in]	p_pipeline	The pipeline.
-		 *\param[in]	p_submesh	The submesh.
-		 *\param[in]	p_primitive	The geometry.
-		 *\param[in]	p_skeleton	The animated skeleton.
+		 *\param[in]	pass		The pass.
+		 *\param[in]	pipeline	The pipeline.
+		 *\param[in]	submesh		The submesh.
+		 *\param[in]	primitive	The geometry.
+		 *\param[in]	skeleton	The animated skeleton.
 		 *\return		The render node.
 		 *\~french
 		 *\brief		Crée un noeud de rendu animé.
-		 *\param[in]	p_pass		La passe.
-		 *\param[in]	p_pipeline	Le pipeline.
-		 *\param[in]	p_submesh	Le sous-maillage.
-		 *\param[in]	p_primitive	La géométrie.
-		 *\param[in]	p_skeleton	Le squelette animé.
+		 *\param[in]	pass		La passe.
+		 *\param[in]	pipeline	Le pipeline.
+		 *\param[in]	submesh		Le sous-maillage.
+		 *\param[in]	primitive	La géométrie.
+		 *\param[in]	skeleton	Le squelette animé.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API SkinningRenderNode CreateSkinningNode( Pass & p_pass
-			, RenderPipeline & p_pipeline
-			, Submesh & p_submesh
-			, Geometry & p_primitive
-			, AnimatedSkeleton & p_skeleton );
+		C3D_API SkinningRenderNode createSkinningNode( Pass & pass
+			, RenderPipeline & pipeline
+			, Submesh & submesh
+			, Geometry & primitive
+			, AnimatedSkeleton & skeleton );
 		/**
 		 *\~english
 		 *\brief		Creates an animated render node.
-		 *\param[in]	p_pass		The pass.
-		 *\param[in]	p_pipeline	The pipeline.
-		 *\param[in]	p_submesh	The submesh.
-		 *\param[in]	p_primitive	The geometry.
-		 *\param[in]	p_mesh		The animated mesh.
+		 *\param[in]	pass		The pass.
+		 *\param[in]	pipeline	The pipeline.
+		 *\param[in]	submesh		The submesh.
+		 *\param[in]	primitive	The geometry.
+		 *\param[in]	mesh		The animated mesh.
 		 *\return		The render node.
 		 *\~french
 		 *\brief		Crée un noeud de rendu animé.
-		 *\param[in]	p_pass		La passe.
-		 *\param[in]	p_pipeline	Le pipeline.
-		 *\param[in]	p_submesh	Le sous-maillage.
-		 *\param[in]	p_primitive	La géométrie.
-		 *\param[in]	p_mesh		Le maillage animé.
+		 *\param[in]	pass		La passe.
+		 *\param[in]	pipeline	Le pipeline.
+		 *\param[in]	submesh		Le sous-maillage.
+		 *\param[in]	primitive	La géométrie.
+		 *\param[in]	mesh		Le maillage animé.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API MorphingRenderNode CreateMorphingNode( Pass & p_pass
-			, RenderPipeline & p_pipeline
-			, Submesh & p_submesh
-			, Geometry & p_primitive
-			, AnimatedMesh & p_mesh );
+		C3D_API MorphingRenderNode createMorphingNode( Pass & pass
+			, RenderPipeline & pipeline
+			, Submesh & submesh
+			, Geometry & primitive
+			, AnimatedMesh & mesh );
 		/**
 		 *\~english
 		 *\brief		Creates a static render node.
-		 *\param[in]	p_pass		The pass.
-		 *\param[in]	p_pipeline	The pipeline.
-		 *\param[in]	p_submesh	The submesh.
-		 *\param[in]	p_primitive	The geometry.
+		 *\param[in]	pass		The pass.
+		 *\param[in]	pipeline	The pipeline.
+		 *\param[in]	submesh		The submesh.
+		 *\param[in]	primitive	The geometry.
 		 *\return		The render node.
 		 *\~french
 		 *\brief		Crée un noeud de rendu statique.
-		 *\param[in]	p_pass		La passe.
-		 *\param[in]	p_pipeline	Le pipeline.
-		 *\param[in]	p_submesh	Le sous-maillage.
-		 *\param[in]	p_primitive	La géométrie.
+		 *\param[in]	pass		La passe.
+		 *\param[in]	pipeline	Le pipeline.
+		 *\param[in]	submesh		Le sous-maillage.
+		 *\param[in]	primitive	La géométrie.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API StaticRenderNode CreateStaticNode( Pass & p_pass
-			, RenderPipeline & p_pipeline
-			, Submesh & p_submesh
-			, Geometry & p_primitive );
+		C3D_API StaticRenderNode createStaticNode( Pass & pass
+			, RenderPipeline & pipeline
+			, Submesh & submesh
+			, Geometry & primitive );
 		/**
 		 *\~english
 		 *\brief		Creates a static render node.
-		 *\param[in]	p_pass		The pass.
-		 *\param[in]	p_pipeline	The pipeline.
-		 *\param[in]	p_billboard	The billboard.
+		 *\param[in]	pass		The pass.
+		 *\param[in]	pipeline	The pipeline.
+		 *\param[in]	billboard	The billboard.
 		 *\return		The render node.
 		 *\~french
 		 *\brief		Crée un noeud de rendu statique.
-		 *\param[in]	p_pass		La passe.
-		 *\param[in]	p_pipeline	Le pipeline.
-		 *\param[in]	p_billboard	Le billboard.
+		 *\param[in]	pass		La passe.
+		 *\param[in]	pipeline	Le pipeline.
+		 *\param[in]	billboard	Le billboard.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API BillboardRenderNode CreateBillboardNode( Pass & p_pass
-			, RenderPipeline & p_pipeline
-			, BillboardBase & p_billboard );
+		C3D_API BillboardRenderNode createBillboardNode( Pass & pass
+			, RenderPipeline & pipeline
+			, BillboardBase & billboard );
 		/**
 		 *\~english
 		 *\brief		Updates the opaque pipeline.
-		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	pipeline	The render pipeline.
 		 *\~french
 		 *\brief		Met à jour lee pipeline opaque.
-		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	pipeline	Le pipeline de rendu.
 		 */
-		C3D_API void UpdatePipeline( RenderPipeline & p_pipeline )const;
+		C3D_API void updatePipeline( RenderPipeline & pipeline )const;
+		/**
+		 *\~english
+		 *\brief			Modifies the given flags to make them match the render pass requirements.
+		 *\param[in,out]	passFlags		A combination of PassFlag.
+		 *\param[in,out]	textureFlags	A combination of TextureChannel.
+		 *\param[in,out]	programFlags	A combination of ProgramFlag.
+		 *\param[in,out]	sceneFlags		A combination of SceneFlag.
+		 *\~french
+		 *\brief			Modifie les indicateurs donnés pour le faire correspondre au pré-requis de la passe de rendus.
+		 *\param[in,out]	passFlags		Une combinaison de PassFlag.
+		 *\param[in,out]	textureFlags	Une combinaison de TextureChannel.
+		 *\param[in,out]	programFlags	Une combinaison de ProgramFlag.
+		 *\param[in,out]	sceneFlags		Une combinaison de SceneFlag.
+		 */
+		C3D_API void updateFlags( PassFlags & passFlags
+			, TextureChannels & textureFlags
+			, ProgramFlags & programFlags
+			, SceneFlags & sceneFlags )const;
 		/**
 		 *\~english
 		 *\return		The multsampling status.
 		 *\~french
 		 *\return		Le statut d'échantillonnage.
 		 */
-		inline bool IsMultisampling()const
+		inline bool isOrderIndependent()const
 		{
-			return m_multisampling;
+			return m_oit;
+		}
+		/**
+		 *\~english
+		 *\return		The Scene UBO.
+		 *\~french
+		 *\return		L'UBO de la scène.
+		 */
+		inline SceneUbo & getSceneUbo()
+		{
+			return m_sceneUbo;
 		}
 
 	protected:
 		/**
 		 *\~english
 		 *\brief		Creates a render node.
-		 *\param[in]	p_pass		The pass.
-		 *\param[in]	p_pipeline	The pipeline.
+		 *\param[in]	pass		The pass.
+		 *\param[in]	pipeline	The pipeline.
 		 *\return		The render node.
 		 *\~french
 		 *\brief		Crée un noeud de rendu.
-		 *\param[in]	p_pass		La passe.
-		 *\param[in]	p_pipeline	Le pipeline.
+		 *\param[in]	pass		La passe.
+		 *\param[in]	pipeline	Le pipeline.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API PassRenderNode DoCreatePassRenderNode( Pass & p_pass
-			, RenderPipeline & p_pipeline );
+		C3D_API PassRenderNode doCreatePassRenderNode( Pass & pass
+			, RenderPipeline & pipeline );
 		/**
 		 *\~english
 		 *\brief		Creates a scene render node.
-		 *\param[in]	p_scene		The scene.
-		 *\param[in]	p_pipeline	The pipeline.
+		 *\param[in]	scene		The scene.
+		 *\param[in]	pipeline	The pipeline.
 		 *\return		The render node.
 		 *\~french
 		 *\brief		Crée un noeud de rendu de scène.
-		 *\param[in]	p_scene		La scène.
-		 *\param[in]	p_pipeline	Le pipeline.
+		 *\param[in]	scene		La scène.
+		 *\param[in]	pipeline	Le pipeline.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API SceneRenderNode DoCreateSceneRenderNode( Scene & p_scene
-			, RenderPipeline & p_pipeline );
+		C3D_API SceneRenderNode doCreateSceneRenderNode( Scene & scene
+			, RenderPipeline & pipeline );
 		/**
 		 *\~english
 		 *\brief		Retrieves the shader program matching the given flags.
-		 *\param[in]	p_textureFlags	A combination of TextureChannel.
-		 *\param[in]	p_programFlags	A combination of ProgramFlag.
-		 *\param[in]	p_sceneFlags	Scene related flags.
-		 *\param[in]	p_invertNormals	Tells if the normals must be inverted, in the program.
+		 *\param[in]	passFlags		A combination of PassFlag.
+		 *\param[in]	textureFlags	A combination of TextureChannel.
+		 *\param[in]	programFlags	A combination of ProgramFlag.
+		 *\param[in]	sceneFlags		Scene related flags.
+		 *\param[in]	alphaFunc		The alpha test function.
+		 *\param[in]	invertNormals	Tells if the normals must be inverted, in the program.
 		 *\~french
 		 *\brief		Récupère le programme shader correspondant aux flags donnés.
-		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
-		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
-		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
-		 *\param[in]	p_invertNormals	Dit si les normales doivent être inversées, dans le programme.
+		 *\param[in]	passFlags		Une combinaison de PassFlag.
+		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
+		 *\param[in]	alphaFunc		La fonction de test alpha.
+		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API ShaderProgramSPtr DoGetProgram( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags
-			, bool p_invertNormals )const;
+		C3D_API ShaderProgramSPtr doGetProgram( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, ComparisonFunc alphaFunc
+			, bool invertNormals )const;
 		/**
 		 *\~english
 		 *\brief		Copies the instanced nodes model matrices into given matrix buffer.
-		 *\param[in]	p_renderNodes	The instanced nodes.
-		 *\param[in]	p_matrixBuffer	The matrix buffer.
+		 *\param[in]	renderNodes		The instanced nodes.
+		 *\param[in]	matrixBuffer	The matrix buffer.
 		 *\~french
 		 *\brief		Copie les matrices de noeuds instanciés dans le tampon de matrices donné.
-		 *\param[in]	p_renderNodes	Les noeuds instanciés.
-		 *\param[in]	p_matrixBuffer	Le tampon de matrices.
+		 *\param[in]	renderNodes		Les noeuds instanciés.
+		 *\param[in]	matrixBuffer	Le tampon de matrices.
 		 */
-		C3D_API uint32_t DoCopyNodesMatrices( StaticRenderNodeArray const & p_renderNodes
-			, VertexBuffer & p_matrixBuffer );
+		C3D_API uint32_t doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
+			, VertexBuffer & matrixBuffer )const;
 		/**
 		 *\~english
 		 *\brief			Copies the instanced nodes model matrices into given matrix buffer.
 		 *\remarks			The nodes which are copied will be registered in the rendered nodes list.
-		 *\param[in]		p_renderNodes	The instanced nodes.
-		 *\param[in]		p_matrixBuffer	The matrix buffer.
-		 *\param[in, out]	p_info			Receives the render informations.
+		 *\param[in]		renderNodes		The instanced nodes.
+		 *\param[in]		matrixBuffer	The matrix buffer.
+		 *\param[in, out]	info			Receives the render informations.
 		 *\~french
 		 *\brief			Copie les matrices de noeuds instanciés dans le tampon de matrices donné.
 		 *\remarks			Les noeuds pour lesquels les matrices sont copiées seront enregistrés dans la liste des noeuds dessinés.
-		 *\param[in]		p_renderNodes	Les noeuds instanciés.
-		 *\param[in]		p_matrixBuffer	Le tampon de matrices.
-		 *\param[in,out]	p_info			Reçoit les informations de rendu.
+		 *\param[in]		renderNodes		Les noeuds instanciés.
+		 *\param[in]		matrixBuffer	Le tampon de matrices.
+		 *\param[in,out]	info			Reçoit les informations de rendu.
 		 */
-		C3D_API uint32_t DoCopyNodesMatrices( StaticRenderNodeArray const & p_renderNodes
-			, VertexBuffer & p_matrixBuffer
-			, RenderInfo & p_info );
+		C3D_API uint32_t doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
+			, VertexBuffer & matrixBuffer
+			, RenderInfo & info )const;
+		/**
+		 *\~english
+		 *\brief		Copies the instanced nodes model matrices into given matrix buffer.
+		 *\param[in]	renderNodes		The instanced nodes.
+		 *\param[in]	matrixBuffer	The matrix buffer.
+		 *\~french
+		 *\brief		Copie les matrices de noeuds instanciés dans le tampon de matrices donné.
+		 *\param[in]	renderNodes		Les noeuds instanciés.
+		 *\param[in]	matrixBuffer	Le tampon de matrices.
+		 */
+		C3D_API uint32_t doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
+			, VertexBuffer & matrixBuffer )const;
+		/**
+		 *\~english
+		 *\brief			Copies the instanced nodes model matrices into given matrix buffer.
+		 *\remarks			The nodes which are copied will be registered in the rendered nodes list.
+		 *\param[in]		renderNodes		The instanced nodes.
+		 *\param[in]		matrixBuffer	The matrix buffer.
+		 *\param[in, out]	info			Receives the render informations.
+		 *\~french
+		 *\brief			Copie les matrices de noeuds instanciés dans le tampon de matrices donné.
+		 *\remarks			Les noeuds pour lesquels les matrices sont copiées seront enregistrés dans la liste des noeuds dessinés.
+		 *\param[in]		renderNodes		Les noeuds instanciés.
+		 *\param[in]		matrixBuffer	Le tampon de matrices.
+		 *\param[in,out]	info			Reçoit les informations de rendu.
+		 */
+		C3D_API uint32_t doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
+			, VertexBuffer & matrixBuffer
+			, RenderInfo & info )const;
+		/**
+		 *\~english
+		 *\brief		Copies the instanced nodes model matrices into given matrix buffer.
+		 *\param[in]	renderNodes		The instanced nodes.
+		 *\param[in]	camera			The viewing camera.
+		 *\param[in]	matrixBuffer	The matrix buffer.
+		 *\~french
+		 *\brief		Copie les matrices de noeuds instanciés dans le tampon de matrices donné.
+		 *\param[in]	renderNodes		Les noeuds instanciés.
+		 *\param[in]	camera			La caméra regardant la scène.
+		 *\param[in]	matrixBuffer	Le tampon de matrices.
+		 */
+		C3D_API uint32_t doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
+			, Camera const & camera
+			, VertexBuffer & matrixBuffer )const;
+		/**
+		 *\~english
+		 *\brief			Copies the instanced nodes model matrices into given matrix buffer.
+		 *\remarks			The nodes which are copied will be registered in the rendered nodes list.
+		 *\param[in]		renderNodes		The instanced nodes.
+		 *\param[in]		camera			The viewing camera.
+		 *\param[in]		matrixBuffer	The matrix buffer.
+		 *\param[in, out]	info			Receives the render informations.
+		 *\~french
+		 *\brief			Copie les matrices de noeuds instanciés dans le tampon de matrices donné.
+		 *\remarks			Les noeuds pour lesquels les matrices sont copiées seront enregistrés dans la liste des noeuds dessinés.
+		 *\param[in]		renderNodes		Les noeuds instanciés.
+		 *\param[in]		camera			La caméra regardant la scène.
+		 *\param[in]		matrixBuffer	Le tampon de matrices.
+		 *\param[in,out]	info			Reçoit les informations de rendu.
+		 */
+		C3D_API uint32_t doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
+			, Camera const & camera
+			, VertexBuffer & matrixBuffer
+			, RenderInfo & info )const;
+		/**
+		 *\~english
+		 *\brief		Copies the instanced nodes model matrices into given matrix buffer.
+		 *\param[in]	renderNodes		The instanced nodes.
+		 *\param[in]	camera			The viewing camera.
+		 *\param[in]	matrixBuffer	The matrix buffer.
+		 *\~french
+		 *\brief		Copie les matrices de noeuds instanciés dans le tampon de matrices donné.
+		 *\param[in]	renderNodes		Les noeuds instanciés.
+		 *\param[in]	camera			La caméra regardant la scène.
+		 *\param[in]	matrixBuffer	Le tampon de matrices.
+		 */
+		C3D_API uint32_t doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
+			, Camera const & camera
+			, VertexBuffer & matrixBuffer )const;
+		/**
+		 *\~english
+		 *\brief			Copies the instanced nodes model matrices into given matrix buffer.
+		 *\remarks			The nodes which are copied will be registered in the rendered nodes list.
+		 *\param[in]		renderNodes		The instanced nodes.
+		 *\param[in]		camera			The viewing camera.
+		 *\param[in]		matrixBuffer	The matrix buffer.
+		 *\param[in, out]	info			Receives the render informations.
+		 *\~french
+		 *\brief			Copie les matrices de noeuds instanciés dans le tampon de matrices donné.
+		 *\remarks			Les noeuds pour lesquels les matrices sont copiées seront enregistrés dans la liste des noeuds dessinés.
+		 *\param[in]		renderNodes		Les noeuds instanciés.
+		 *\param[in]		camera			La caméra regardant la scène.
+		 *\param[in]		matrixBuffer	Le tampon de matrices.
+		 *\param[in,out]	info			Reçoit les informations de rendu.
+		 */
+		C3D_API uint32_t doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
+			, Camera const & camera
+			, VertexBuffer & matrixBuffer
+			, RenderInfo & info )const;
+		/**
+		 *\~english
+		 *\brief		Copies the instanced skinned nodes model matrices into given matrix buffer.
+		 *\param[in]	renderNodes	The instanced nodes.
+		 *\param[in]	bonesBuffer	The bones matrix buffer.
+		 *\~french
+		 *\brief		Copie les matrices de noeuds skinnés instanciés dans le tampon de matrices donné.
+		 *\param[in]	renderNodes	Les noeuds instanciés.
+		 *\param[in]	bonesBuffer	Le tampon de matrices des os.
+		 */
+		C3D_API uint32_t doCopyNodesBones( SkinningRenderNodeArray const & renderNodes
+			, ShaderStorageBuffer & bonesBuffer )const;
+		/**
+		 *\~english
+		 *\brief			Copies the instanced skinned nodes model matrices into given matrix buffer.
+		 *\remarks			The nodes which are copied will be registered in the rendered nodes list.
+		 *\param[in]		renderNodes	The instanced nodes.
+		 *\param[in]		bonesBuffer	The bones matrix buffer.
+		 *\param[in, out]	info		Receives the render informations.
+		 *\~french
+		 *\brief			Copie les matrices de noeuds skinnés instanciés dans le tampon de matrices donné.
+		 *\remarks			Les noeuds pour lesquels les matrices sont copiées seront enregistrés dans la liste des noeuds dessinés.
+		 *\param[in]		renderNodes	Les noeuds instanciés.
+		 *\param[in]		bonesBuffer	Le tampon de matrices des os.
+		 *\param[in,out]	info		Reçoit les informations de rendu.
+		 */
+		C3D_API uint32_t doCopyNodesBones( SkinningRenderNodeArray const & renderNodes
+			, ShaderStorageBuffer & bonesBuffer
+			, RenderInfo & info )const;
 		/**
 		 *\~english
 		 *\brief		Renders instanced submeshes.
-		 *\param[in]	p_nodes	The render nodes.
+		 *\param[in]	nodes	The render nodes.
 		 *\~french
 		 *\brief		Dessine des sous maillages instanciés.
-		 *\param[in]	p_nodes	Les noeuds de rendu.
+		 *\param[in]	nodes	Les noeuds de rendu.
 		 */
-		C3D_API void DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes );
+		C3D_API void doRender( SubmeshStaticRenderNodesByPipelineMap & nodes )const;
 		/**
 		 *\~english
 		 *\brief		Renders instanced submeshes.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\param[in]	nodes		The render nodes.
+		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des sous maillages instanciés.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]	nodes		Les noeuds de rendu.
+		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
-			, DepthMapArray & p_depthMaps );
+		C3D_API void doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
+			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
 		 *\~english
 		 *\brief		Renders instanced submeshes.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param		p_camera	The viewing camera.
+		 *\param[in]	nodes	The render nodes.
+		 *\param[in]	camera	The viewing camera.
 		 *\~french
 		 *\brief		Dessine des sous maillages instanciés.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param		p_camera	La caméra regardant la scène.
+		 *\param[in]	nodes	Les noeuds de rendu.
+		 *\param[in]	camera	La caméra regardant la scène.
 		 */
-		C3D_API void DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
-			, Camera const & p_camera );
+		C3D_API void doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
+			, Camera const & camera )const;
 		/**
 		 *\~english
 		 *\brief		Renders instanced submeshes.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param		p_camera	The viewing camera.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\param[in]	nodes		The render nodes.
+		 *\param[in]	camera		The viewing camera.
+		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des sous maillages instanciés.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param		p_camera	La caméra regardant la scène.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]	nodes		Les noeuds de rendu.
+		 *\param[in]	camera		La caméra regardant la scène.
+		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
-			, Camera const & p_camera
-			, DepthMapArray & p_depthMaps );
+		C3D_API void doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
+			, Camera const & camera
+			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
 		 *\~english
 		 *\brief			Renders instanced submeshes.
-		 *\param[in]		p_nodes		The render nodes.
-		 *\param			p_camera	The viewing camera.
-		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
-		 *\param[in, out]	p_info		Receives the render informations.
+		 *\param[in]		nodes		The render nodes.
+		 *\param[in]		camera		The viewing camera.
+		 *\param[in]		shadowMaps	The depth (shadows and other) maps.
+		 *\param[in, out]	info		Receives the render informations.
 		 *\~french
 		 *\brief			Dessine des sous maillages instanciés.
-		 *\param[in]		p_nodes		Les noeuds de rendu.
-		 *\param			p_camera	La caméra regardant la scène.
-		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
-		 *\param[in,out]	p_info		Reçoit les informations de rendu.
+		 *\param[in]		nodes		Les noeuds de rendu.
+		 *\param[in]		camera		La caméra regardant la scène.
+		 *\param[in]		shadowMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
-		C3D_API void DoRenderInstancedSubmeshes( SubmeshStaticRenderNodesByPipelineMap & p_nodes
-			, Camera const & p_camera
-			, DepthMapArray & p_depthMaps
-			, RenderInfo & p_info );
+		C3D_API void doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
+			, Camera const & camera
+			, ShadowMapLightTypeArray & shadowMaps
+			, RenderInfo & info )const;
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
-		 *\param[in]	p_nodes		The render nodes.
+		 *\param[in]	nodes		The render nodes.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param[in]	nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRenderStaticSubmeshes( StaticRenderNodesByPipelineMap & p_nodes );
+		C3D_API void doRender( StaticRenderNodesByPipelineMap & nodes )const;
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\param[in]	nodes		The render nodes.
+		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]	nodes		Les noeuds de rendu.
+		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRenderStaticSubmeshes( StaticRenderNodesByPipelineMap & p_nodes
-			, DepthMapArray & p_depthMaps );
+		C3D_API void doRender( StaticRenderNodesByPipelineMap & nodes
+			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param		p_camera	The viewing camera.
+		 *\param[in]	nodes	The render nodes.
+		 *\param[in]	camera	The viewing camera.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param		p_camera	La caméra regardant la scène.
+		 *\param[in]	nodes	Les noeuds de rendu.
+		 *\param[in]	camera	La caméra regardant la scène.
 		 */
-		C3D_API void DoRenderStaticSubmeshes( StaticRenderNodesByPipelineMap & p_nodes
-			, Camera const & p_camera );
+		C3D_API void doRender( StaticRenderNodesByPipelineMap & nodes
+			, Camera const & camera )const;
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param		p_camera	The viewing camera.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\param[in]	nodes		The render nodes.
+		 *\param[in]	camera		The viewing camera.
+		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param		p_camera	La caméra regardant la scène.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]	nodes		Les noeuds de rendu.
+		 *\param[in]	camera		La caméra regardant la scène.
+		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRenderStaticSubmeshes( StaticRenderNodesByPipelineMap & p_nodes
-			, Camera const & p_camera
-			, DepthMapArray & p_depthMaps );
+		C3D_API void doRender( StaticRenderNodesByPipelineMap & nodes
+			, Camera const & camera
+			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
 		 *\~english
 		 *\brief			Renders non instanced submeshes.
-		 *\param[in]		p_nodes		The render nodes.
-		 *\param			p_camera	The viewing camera.
-		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
-		 *\param[in, out]	p_info		Receives the render informations.
+		 *\param[in]		nodes		The render nodes.
+		 *\param[in]		camera		The viewing camera.
+		 *\param[in]		shadowMaps	The depth (shadows and other) maps.
+		 *\param[in, out]	info		Receives the render informations.
 		 *\~french
 		 *\brief			Dessine des sous maillages non instanciés.
-		 *\param[in]		p_nodes		Les noeuds de rendu.
-		 *\param			p_camera	La caméra regardant la scène.
-		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
-		 *\param[in,out]	p_info		Reçoit les informations de rendu.
+		 *\param[in]		nodes		Les noeuds de rendu.
+		 *\param[in]		camera		La caméra regardant la scène.
+		 *\param[in]		shadowMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
-		C3D_API void DoRenderStaticSubmeshes( StaticRenderNodesByPipelineMap & p_nodes
-			, Camera const & p_camera
-			, DepthMapArray & p_depthMaps
-			, RenderInfo & p_info );
+		C3D_API void doRender( StaticRenderNodesByPipelineMap & nodes
+			, Camera const & camera
+			, ShadowMapLightTypeArray & shadowMaps
+			, RenderInfo & info )const;
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
-		 *\param[in]	p_nodes		The render nodes.
+		 *\param[in]	nodes		The render nodes.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param[in]	nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRenderSkinningSubmeshes( SkinningRenderNodesByPipelineMap & p_nodes );
+		C3D_API void doRender( SkinningRenderNodesByPipelineMap & nodes )const;
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\param[in]	nodes		The render nodes.
+		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]	nodes		Les noeuds de rendu.
+		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRenderSkinningSubmeshes( SkinningRenderNodesByPipelineMap & p_nodes
-			, DepthMapArray & p_depthMaps );
+		C3D_API void doRender( SkinningRenderNodesByPipelineMap & nodes
+			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param		p_camera	The viewing camera.
+		 *\param[in]	nodes	The render nodes.
+		 *\param[in]	camera	The viewing camera.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param		p_camera	La caméra regardant la scène.
+		 *\param[in]	nodes	Les noeuds de rendu.
+		 *\param[in]	camera	La caméra regardant la scène.
 		 */
-		C3D_API void DoRenderSkinningSubmeshes( SkinningRenderNodesByPipelineMap & p_nodes
-			, Camera const & p_camera );
+		C3D_API void doRender( SkinningRenderNodesByPipelineMap & nodes
+			, Camera const & camera )const;
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param		p_camera	The viewing camera.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\param[in]	nodes		The render nodes.
+		 *\param[in]	camera		The viewing camera.
+		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param		p_camera	La caméra regardant la scène.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]	nodes		Les noeuds de rendu.
+		 *\param[in]	camera		La caméra regardant la scène.
+		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRenderSkinningSubmeshes( SkinningRenderNodesByPipelineMap & p_nodes
-			, Camera const & p_camera
-			, DepthMapArray & p_depthMaps );
+		C3D_API void doRender( SkinningRenderNodesByPipelineMap & nodes
+			, Camera const & camera
+			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
 		 *\~english
 		 *\brief			Renders non instanced submeshes.
-		 *\param[in]		p_nodes		The render nodes.
-		 *\param			p_camera	The viewing camera.
-		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
-		 *\param[in, out]	p_info		Receives the render informations.
+		 *\param[in]		nodes		The render nodes.
+		 *\param[in]		camera		The viewing camera.
+		 *\param[in]		shadowMaps	The depth (shadows and other) maps.
+		 *\param[in, out]	info		Receives the render informations.
 		 *\~french
 		 *\brief			Dessine des sous maillages non instanciés.
-		 *\param[in]		p_nodes		Les noeuds de rendu.
-		 *\param			p_camera	La caméra regardant la scène.
-		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
-		 *\param[in,out]	p_info		Reçoit les informations de rendu.
+		 *\param[in]		nodes		Les noeuds de rendu.
+		 *\param[in]		camera		La caméra regardant la scène.
+		 *\param[in]		shadowMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
-		C3D_API void DoRenderSkinningSubmeshes( SkinningRenderNodesByPipelineMap & p_nodes
-			, Camera const & p_camera
-			, DepthMapArray & p_depthMaps
-			, RenderInfo & p_info );
+		C3D_API void doRender( SkinningRenderNodesByPipelineMap & nodes
+			, Camera const & camera
+			, ShadowMapLightTypeArray & shadowMaps
+			, RenderInfo & info )const;
+		/**
+		 *\~english
+		 *\brief		Renders instanced submeshes.
+		 *\param[in]	nodes	The render nodes.
+		 *\~french
+		 *\brief		Dessine des sous maillages instanciés.
+		 *\param[in]	nodes	Les noeuds de rendu.
+		 */
+		C3D_API void doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes )const;
+		/**
+		 *\~english
+		 *\brief		Renders instanced submeshes.
+		 *\param[in]	nodes		The render nodes.
+		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des sous maillages instanciés.
+		 *\param[in]	nodes		Les noeuds de rendu.
+		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
+			, ShadowMapLightTypeArray & shadowMaps )const;
+		/**
+		 *\~english
+		 *\brief		Renders instanced submeshes.
+		 *\param[in]	nodes	The render nodes.
+		 *\param[in]	camera	The viewing camera.
+		 *\~french
+		 *\brief		Dessine des sous maillages instanciés.
+		 *\param[in]	nodes	Les noeuds de rendu.
+		 *\param[in]	camera	La caméra regardant la scène.
+		 */
+		C3D_API void doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
+			, Camera const & camera )const;
+		/**
+		 *\~english
+		 *\brief		Renders instanced submeshes.
+		 *\param[in]	nodes		The render nodes.
+		 *\param[in]	camera		The viewing camera.
+		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des sous maillages instanciés.
+		 *\param[in]	nodes		Les noeuds de rendu.
+		 *\param[in]	camera		La caméra regardant la scène.
+		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
+			, Camera const & camera
+			, ShadowMapLightTypeArray & shadowMaps )const;
+		/**
+		 *\~english
+		 *\brief			Renders instanced submeshes.
+		 *\param[in]		nodes		The render nodes.
+		 *\param[in]		camera		The viewing camera.
+		 *\param[in]		shadowMaps	The depth (shadows and other) maps.
+		 *\param[in, out]	info		Receives the render informations.
+		 *\~french
+		 *\brief			Dessine des sous maillages instanciés.
+		 *\param[in]		nodes		Les noeuds de rendu.
+		 *\param[in]		camera		La caméra regardant la scène.
+		 *\param[in]		shadowMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in,out]	info		Reçoit les informations de rendu.
+		 */
+		C3D_API void doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
+			, Camera const & camera
+			, ShadowMapLightTypeArray & shadowMaps
+			, RenderInfo & info )const;
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
-		 *\param[in]	p_nodes		The render nodes.
+		 *\param[in]	nodes		The render nodes.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param[in]	nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRenderMorphingSubmeshes( MorphingRenderNodesByPipelineMap & p_nodes );
+		C3D_API void doRender( MorphingRenderNodesByPipelineMap & nodes )const;
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\param[in]	nodes		The render nodes.
+		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]	nodes		Les noeuds de rendu.
+		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRenderMorphingSubmeshes( MorphingRenderNodesByPipelineMap & p_nodes
-			, DepthMapArray & p_depthMaps );
+		C3D_API void doRender( MorphingRenderNodesByPipelineMap & nodes
+			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param		p_camera	The viewing camera.
+		 *\param[in]	nodes	The render nodes.
+		 *\param[in]	camera	The viewing camera.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param		p_camera	La caméra regardant la scène.
+		 *\param[in]	nodes	Les noeuds de rendu.
+		 *\param[in]	camera	La caméra regardant la scène.
 		 */
-		C3D_API void DoRenderMorphingSubmeshes( MorphingRenderNodesByPipelineMap & p_nodes
-			, Camera const & p_camera );
+		C3D_API void doRender( MorphingRenderNodesByPipelineMap & nodes
+			, Camera const & camera )const;
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param		p_camera	The viewing camera.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\param[in]	nodes		The render nodes.
+		 *\param[in]	camera		The viewing camera.
+		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param		p_camera	La caméra regardant la scène.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]	nodes		Les noeuds de rendu.
+		 *\param[in]	camera		La caméra regardant la scène.
+		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRenderMorphingSubmeshes( MorphingRenderNodesByPipelineMap & p_nodes
-			, Camera const & p_camera
-			, DepthMapArray & p_depthMaps );
+		C3D_API void doRender( MorphingRenderNodesByPipelineMap & nodes
+			, Camera const & camera
+			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
 		 *\~english
 		 *\brief			Renders non instanced submeshes.
-		 *\param[in]		p_nodes		The render nodes.
-		 *\param			p_camera	The viewing camera.
-		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
-		 *\param[in, out]	p_info		Receives the render informations.
+		 *\param[in]		nodes		The render nodes.
+		 *\param[in]		camera		The viewing camera.
+		 *\param[in]		shadowMaps	The depth (shadows and other) maps.
+		 *\param[in, out]	info		Receives the render informations.
 		 *\~french
 		 *\brief			Dessine des sous maillages non instanciés.
-		 *\param[in]		p_nodes		Les noeuds de rendu.
-		 *\param			p_camera	La caméra regardant la scène.
-		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
-		 *\param[in,out]	p_info		Reçoit les informations de rendu.
+		 *\param[in]		nodes		Les noeuds de rendu.
+		 *\param[in]		camera		La caméra regardant la scène.
+		 *\param[in]		shadowMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
-		C3D_API void DoRenderMorphingSubmeshes( MorphingRenderNodesByPipelineMap & p_nodes
-			, Camera const & p_camera
-			, DepthMapArray & p_depthMaps
-			, RenderInfo & p_info );
+		C3D_API void doRender( MorphingRenderNodesByPipelineMap & nodes
+			, Camera const & camera
+			, ShadowMapLightTypeArray & shadowMaps
+			, RenderInfo & info )const;
 		/**
 		 *\~english
 		 *\brief		Renders billboards.
-		 *\param[in]	p_nodes		The render nodes.
+		 *\param[in]	nodes		The render nodes.
 		 *\~french
 		 *\brief		Dessine des billboards.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param[in]	nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes );
+		C3D_API void doRender( BillboardRenderNodesByPipelineMap & nodes )const;
 		/**
 		 *\~english
 		 *\brief		Renders billboards.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\param[in]	nodes		The render nodes.
+		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des billboards.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]	nodes		Les noeuds de rendu.
+		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
-			, DepthMapArray & p_depthMaps );
+		C3D_API void doRender( BillboardRenderNodesByPipelineMap & nodes
+			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
 		 *\~english
 		 *\brief		Renders billboards.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param		p_camera	The viewing camera.
+		 *\param[in]	nodes	The render nodes.
+		 *\param[in]	camera	The viewing camera.
 		 *\~french
 		 *\brief		Dessine des billboards.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param		p_camera	La caméra regardant la scène.
+		 *\param[in]	nodes	Les noeuds de rendu.
+		 *\param[in]	camera	La caméra regardant la scène.
 		 */
-		C3D_API void DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
-			, Camera const & p_camera );
+		C3D_API void doRender( BillboardRenderNodesByPipelineMap & nodes
+			, Camera const & camera )const;
 		/**
 		 *\~english
 		 *\brief		Renders billboards.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\param		p_camera	The viewing camera.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\param[in]	nodes		The render nodes.
+		 *\param[in]	camera		The viewing camera.
+		 *\param[in]	shadowMaps	The depth (shadows and other) maps.
 		 *\~french
 		 *\brief		Dessine des billboards.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\param		p_camera	La caméra regardant la scène.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in]	nodes		Les noeuds de rendu.
+		 *\param[in]	camera		La caméra regardant la scène.
+		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
-			, Camera const & p_camera
-			, DepthMapArray & p_depthMaps );
+		C3D_API void doRender( BillboardRenderNodesByPipelineMap & nodes
+			, Camera const & camera
+			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
 		 *\~english
 		 *\brief			Renders billboards.
-		 *\param[in]		p_nodes		The render nodes.
-		 *\param			p_camera	The viewing camera.
-		 *\param[in]		p_depthMaps	The depth (shadows and other) maps.
-		 *\param[in, out]	p_info		Receives the render informations.
+		 *\param[in]		nodes		The render nodes.
+		 *\param[in]		camera		The viewing camera.
+		 *\param[in]		shadowMaps	The depth (shadows and other) maps.
+		 *\param[in, out]	info		Receives the render informations.
 		 *\~french
 		 *\brief			Dessine des billboards.
-		 *\param[in]		p_nodes		Les noeuds de rendu.
-		 *\param			p_camera	La caméra regardant la scène.
-		 *\param[in]		p_depthMaps	Les textures de profondeur (ombres et autres).
-		 *\param[in,out]	p_info		Reçoit les informations de rendu.
+		 *\param[in]		nodes		Les noeuds de rendu.
+		 *\param[in]		camera		La caméra regardant la scène.
+		 *\param[in]		shadowMaps	Les textures de profondeur (ombres et autres).
+		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
-		C3D_API void DoRenderBillboards( BillboardRenderNodesByPipelineMap & p_nodes
-			, Camera const & p_camera
-			, DepthMapArray & p_depthMaps
-			, RenderInfo & p_info );
+		C3D_API void doRender( BillboardRenderNodesByPipelineMap & nodes
+			, Camera const & camera
+			, ShadowMapLightTypeArray & shadowMaps
+			, RenderInfo & info )const;
 
 	private:
 		/**
 		 *\~english
 		 *\brief		Initialises the pass.
-		 *\param		p_size	The pass needed dimensions.
+		 *\param		size	The pass needed dimensions.
 		 *\return		\p true on ok.
 		 *\~french
 		 *\brief		Initialise la passe.
-		 *\param		p_size	Les dimensions voulues pour la passe.
+		 *\param		size	Les dimensions voulues pour la passe.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool DoInitialise( Castor::Size const & p_size ) = 0;
+		C3D_API virtual bool doInitialise( castor::Size const & size ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans up the pass.
 		 *\~french
 		 *\brief		Nettoie la passe.
 		 */
-		C3D_API virtual void DoCleanup() = 0;
+		C3D_API virtual void doCleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the specific data.
 		 *\remarks		Gather the render queues, for further update.
-		 *\param[out]	p_queues	Receives the render queues needed for the rendering of the frame.
+		 *\param[out]	queues	Receives the render queues needed for the rendering of the frame.
 		 *\~french
 		 *\brief		Met les données spécifiques.
 		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
-		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
+		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API virtual void DoUpdate( RenderQueueArray & p_queues ) = 0;
-		/**
-		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags.
-		 *\param[in]	p_textureFlags	A combination of TextureChannel.
-		 *\param[in]	p_programFlags	A combination of ProgramFlag.
-		 *\param[in]	p_sceneFlags	Scene related flags.
-		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux indicateurs donnés.
-		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
-		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
-		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
-		 */
-		C3D_API virtual Castor::String DoGetPixelShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags )const = 0;
+		C3D_API virtual void doUpdate( RenderQueueArray & queues ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags.
-		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
-		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
-		 *\param[in]	p_sceneFlags	Scene related flags.
-		 *\param[in]	p_invertNormals	Tells if the normals must be inverted, in the program.
+		 *\param[in]	passFlags		A combination of PassFlag.
+		 *\param[in]	textureFlags	A combination of TextureChannel.
+		 *\param[in]	programFlags	A combination of ProgramFlag.
+		 *\param[in]	sceneFlags		Scene related flags.
+		 *\param[in]	invertNormals	Tells if the normals must be inverted, in the program.
 		 *\~french
 		 *\brief		Récupère le source du vertex shader qui correspond aux indicateurs donnés.
-		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
-		 *\param[in]	p_programFlags	Combinaison de ProgramFlag.
-		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
-		 *\param[in]	p_invertNormals	Dit si les normales doivent être inversées, dans le programme.
+		 *\param[in]	passFlags		Une combinaison de PassFlag.
+		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
+		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API virtual Castor::String DoGetVertexShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags
-			, bool p_invertNormals )const;
+		C3D_API virtual glsl::Shader doGetVertexShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, bool invertNormals )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the geometry shader source matching the given flags.
-		 *\param[in]	p_textureFlags	A combination of TextureChannel.
-		 *\param[in]	p_programFlags	A combination of ProgramFlag.
-		 *\param[in]	p_sceneFlags	Scene related flags.
+		 *\param[in]	passFlags		A combination of PassFlag.
+		 *\param[in]	textureFlags	A combination of TextureChannel.
+		 *\param[in]	programFlags	A combination of ProgramFlag.
+		 *\param[in]	sceneFlags		Scene related flags.
 		 *\~french
 		 *\brief		Récupère le source du geometry shader correspondant aux indicateurs donnés.
-		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
-		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
-		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
+		 *\param[in]	passFlags		Une combinaison de PassFlag.
+		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API virtual Castor::String DoGetGeometryShaderSource( TextureChannels const & p_textureFlags
-			, ProgramFlags const & p_programFlags
-			, SceneFlags const & p_sceneFlags )const = 0;
+		C3D_API virtual glsl::Shader doGetGeometryShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags )const = 0;
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source matching the given flags.
+		 *\param[in]	passFlags		A combination of PassFlag.
+		 *\param[in]	textureFlags	A combination of TextureChannel.
+		 *\param[in]	programFlags	A combination of ProgramFlag.
+		 *\param[in]	sceneFlags		Scene related flags.
+		 *\param[in]	alphaFunc		The alpha test function.
+		 *\~french
+		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
+		 *\param[in]	passFlags		Une combinaison de PassFlag.
+		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
+		 *\param[in]	alphaFunc		La fonction de test alpha.
+		 */
+		C3D_API virtual glsl::Shader doGetLegacyPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, ComparisonFunc alphaFunc )const = 0;
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source matching the given flags.
+		 *\param[in]	passFlags		A combination of PassFlag.
+		 *\param[in]	textureFlags	A combination of TextureChannel.
+		 *\param[in]	programFlags	A combination of ProgramFlag.
+		 *\param[in]	sceneFlags		Scene related flags.
+		 *\param[in]	alphaFunc		The alpha test function.
+		 *\~french
+		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
+		 *\param[in]	passFlags		Une combinaison de PassFlag.
+		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
+		 *\param[in]	alphaFunc		La fonction de test alpha.
+		 */
+		C3D_API virtual glsl::Shader doGetPbrMRPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, ComparisonFunc alphaFunc )const = 0;
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source matching the given flags.
+		 *\param[in]	passFlags		A combination of PassFlag.
+		 *\param[in]	textureFlags	A combination of TextureChannel.
+		 *\param[in]	programFlags	A combination of ProgramFlag.
+		 *\param[in]	sceneFlags		Scene related flags.
+		 *\param[in]	alphaFunc		The alpha test function.
+		 *\~french
+		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
+		 *\param[in]	passFlags		Une combinaison de PassFlag.
+		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
+		 *\param[in]	alphaFunc		La fonction de test alpha.
+		 */
+		C3D_API virtual glsl::Shader doGetPbrSGPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, ComparisonFunc alphaFunc )const = 0;
 		/**
 		 *\~english
 		 *\brief			Modifies the given flags to make them match the render pass requirements.
-		 *\param[in,out]	p_textureFlags	A combination of TextureChannel.
-		 *\param[in,out]	p_programFlags	A combination of ProgramFlag.
-		 *\param[in,out]	p_sceneFlags	A combination of SceneFlag.
+		 *\param[in,out]	passFlags		A combination of PassFlag.
+		 *\param[in,out]	textureFlags	A combination of TextureChannel.
+		 *\param[in,out]	programFlags	A combination of ProgramFlag.
+		 *\param[in,out]	sceneFlags		A combination of SceneFlag.
 		 *\~french
 		 *\brief			Modifie les indicateurs donnés pour le faire correspondre au pré-requis de la passe de rendus.
-		 *\param[in,out]	p_textureFlags	Une combinaison de TextureChannel.
-		 *\param[in,out]	p_programFlags	Une combinaison de ProgramFlag.
-		 *\param[in,out]	p_sceneFlags	Une combinaison de SceneFlag.
+		 *\param[in,out]	passFlags		Une combinaison de PassFlag.
+		 *\param[in,out]	textureFlags	Une combinaison de TextureChannel.
+		 *\param[in,out]	programFlags	Une combinaison de ProgramFlag.
+		 *\param[in,out]	sceneFlags		Une combinaison de SceneFlag.
 		 */
-		C3D_API virtual void DoUpdateFlags( TextureChannels & p_textureFlags
-			, ProgramFlags & p_programFlags
-			, SceneFlags & p_sceneFlags )const = 0;
+		C3D_API virtual void doUpdateFlags( PassFlags & passFlags
+			, TextureChannels & textureFlags
+			, ProgramFlags & programFlags
+			, SceneFlags & sceneFlags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the pipeline.
-		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	pipeline	The render pipeline.
 		 *\~french
-		 *\brief		Met à jour lee pipeline.
-		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\brief		Met à jour le pipeline.
+		 *\param[in]	pipeline	Le pipeline de rendu.
 		 */
-		C3D_API virtual void DoUpdatePipeline( RenderPipeline & p_pipeline  )const = 0;
+		C3D_API virtual void doUpdatePipeline( RenderPipeline & pipeline  )const = 0;
 		/**
 		 *\~english
-		 *\brief		Prepares the pipeline, culling front faces.
+		 *\brief			Prepares the pipeline, culling front faces.
+		 *\param[in,out]	program	The program, and updates it if needed.
+		 *\param[in]		flags	The pipeline flags.
 		 *\~french
-		 *\brief		Prépare le pipeline de rendu, en supprimant les faces avant.
+		 *\brief			Prépare le pipeline de rendu, en supprimant les faces avant.
+		 *\param[in,out]	program	Le programme, mis à jour si besoin est.
+		 *\param[in]		flags	Les indicateurs de pipeline.
 		 */
-		C3D_API virtual void DoPrepareFrontPipeline( ShaderProgram & p_program
-			, PipelineFlags const & p_flags ) = 0;
+		C3D_API virtual void doPrepareFrontPipeline( ShaderProgram & program
+			, PipelineFlags const & flags ) = 0;
 		/**
 		 *\~english
-		 *\brief		Prepares the pipeline, culling back faces.
+		 *\brief			Prepares the pipeline, culling back faces.
+		 *\param[in,out]	program	The program, and updates it if needed.
+		 *\param[in]		flags	The pipeline flags.
 		 *\~french
-		 *\brief		Prépare le pipeline de rendu, en supprimant les faces arrière.
+		 *\brief			Prépare le pipeline de rendu, en supprimant les faces arrière.
+		 *\param[in,out]	program	Le programme, mis à jour si besoin est.
+		 *\param[in]		flags	Les indicateurs de pipeline.
 		 */
-		C3D_API virtual void DoPrepareBackPipeline( ShaderProgram & p_program
-			, PipelineFlags const & p_flags ) = 0;
+		C3D_API virtual void doPrepareBackPipeline( ShaderProgram & program
+			, PipelineFlags const & flags ) = 0;
 
 	protected:
 		//!\~english	The render system.
@@ -885,42 +1212,33 @@ namespace Castor3D
 		//!\~english	The geometries buffers.
 		//!\~french		Les tampons de géométries.
 		std::set< GeometryBuffersSPtr > m_geometryBuffers;
-		//!\~english	Tells if the technique uses multisampling.
-		//!\~french		Dit si la technique utilise le multiéchantillonnage.
-		bool m_multisampling{ false };
+		//!\~english	Tells if the technique uses order independant rendering.
+		//!\~french		Dit si la technique utilise le rendu indépendant de l'ordre.
+		bool m_oit{ false };
 		//!\~english	The uniform buffer containing the scene data.
 		//!\~french		Le tampon d'uniformes contenant les données de scène.
-		UniformBuffer m_sceneUbo;
+		SceneUbo m_sceneUbo;
 		//!\~english	The uniform buffer containing matrices data.
 		//!\~french		Le tampon d'uniformes contenant les données de matrices.
-		UniformBuffer m_matrixUbo;
-		//!\~english	The uniform variable containing projection matrix.
-		//!\~french		La variable uniforme contenant la matrice projection.
-		Uniform4x4fSPtr m_projectionUniform{ nullptr };
-		//!\~english	The uniform variable containing view matrix.
-		//!\~french		La variable uniforme contenant la matrice vue.
-		Uniform4x4fSPtr m_viewUniform{ nullptr };
-		//!\~english	The uniform buffer containing matrices data.
-		//!\~french		Le tampon d'uniformes contenant les données de matrices.
-		UniformBuffer m_modelMatrixUbo;
-		//!\~english	The uniform buffer containing pass data.
-		//!\~french		Le tampon d'uniformes contenant les données de passe.
-		UniformBuffer m_passUbo;
-		//!\~english	The pass render node.
-		//!\~french		Le noeud de rendu de passe.
-		std::unique_ptr< PassRenderNodeUniforms > m_passNode;
+		MatrixUbo m_matrixUbo;
 		//!\~english	The uniform buffer containing model data.
 		//!\~french		Le tampon d'uniformes contenant les données du modèle.
-		UniformBuffer m_modelUbo;
+		ModelUbo m_modelUbo;
+		//!\~english	The uniform buffer containing matrices data.
+		//!\~french		Le tampon d'uniformes contenant les données de matrices.
+		ModelMatrixUbo m_modelMatrixUbo;
 		//!\~english	The uniform buffer containing billboard data.
 		//!\~french		Le tampon d'uniformes contenant les données de billboard.
-		UniformBuffer m_billboardUbo;
+		BillboardUbo m_billboardUbo;
 		//!\~english	The uniform buffer containing skinning animation data.
 		//!\~french		Le tampon d'uniformes contenant les données d'animation de skinning.
-		UniformBuffer m_skinningUbo;
+		SkinningUbo m_skinningUbo;
 		//!\~english	The uniform buffer containing morphing animation data.
 		//!\~french		Le tampon d'uniformes contenant les données d'animation de morphing.
-		UniformBuffer m_morphingUbo;
+		MorphingUbo m_morphingUbo;
+		//!\~english	The render pass timer.
+		//!\~french		Le timer de la passe de rendu.
+		RenderPassTimerSPtr m_timer;
 	};
 }
 

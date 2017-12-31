@@ -2,24 +2,18 @@
 
 #include <Miscellaneous/DynamicLibrary.hpp>
 
-using namespace Castor;
+using namespace castor;
 
-namespace Castor3D
+namespace castor3d
 {
-	ParticlePlugin::ParticlePlugin( DynamicLibrarySPtr p_library, Engine * p_engine )
-		: Plugin( PluginType::eParticle, p_library, *p_engine )
+	ParticlePlugin::ParticlePlugin( DynamicLibrarySPtr p_library, Engine * engine )
+		: Plugin( PluginType::eParticle, p_library, *engine )
 	{
-		if ( m_pfnOnLoad )
-		{
-			m_pfnOnLoad( GetEngine() );
-		}
+		load();
 	}
 
 	ParticlePlugin::~ParticlePlugin()
 	{
-		if ( m_pfnOnUnload )
-		{
-			m_pfnOnUnload( GetEngine() );
-		}
+		unload();
 	}
 }

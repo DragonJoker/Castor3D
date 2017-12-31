@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_VERSION_H___
 #define ___C3D_VERSION_H___
@@ -27,7 +8,7 @@ SOFTWARE.
 
 #include "RequiredVersion.hpp"
 
-namespace Castor3D
+namespace castor3d
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -69,7 +50,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le numéro majeur de version.
 		 */
-		inline uint16_t GetMajor()const
+		inline uint16_t getMajor()const
 		{
 			return m_major;
 		}
@@ -79,7 +60,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le numéro mineur de version.
 		 */
-		inline uint16_t GetMinor()const
+		inline uint16_t getMinor()const
 		{
 			return m_minor;
 		}
@@ -89,7 +70,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le numéro build de version.
 		 */
-		inline uint16_t GetBuild()const
+		inline uint16_t getBuild()const
 		{
 			return m_build;
 		}
@@ -115,7 +96,7 @@ namespace Castor3D
 	 *\param[in]	p_a, p_b	Les versions à comparer.
 	 *\return		false si un numéro de version est différent entre p_a et p_b.
 	 */
-	C3D_API bool operator==( Castor3D::Version const & p_a, Castor3D::Version const & p_b );
+	C3D_API bool operator==( castor3d::Version const & p_a, castor3d::Version const & p_b );
 	/**
 	 *\~english
 	 *\brief		Difference operator.
@@ -126,7 +107,7 @@ namespace Castor3D
 	 *\param[in]	p_a, p_b	Les versions à comparer.
 	 *\return		true si un numéro de version est différent entre p_a et p_b.
 	 */
-	C3D_API bool operator!=( Castor3D::Version const & p_a, Castor3D::Version const & p_b );
+	C3D_API bool operator!=( castor3d::Version const & p_a, castor3d::Version const & p_b );
 	/**
 	 *\~english
 	 *\brief		Less than operator.
@@ -137,7 +118,7 @@ namespace Castor3D
 	 *\param[in]	p_a, p_b	Les versions à comparer.
 	 *\return		true si p_a.major est inférieur à p_b.major ou s'ils sont égaux et p_a.minor est inférieur à p_b.minor ou si majors et minors sont égaux et p_a.build est inférieur à p_b.build.
 	 */
-	C3D_API bool operator<( Castor3D::Version const & p_a, Castor3D::Version const & p_b );
+	C3D_API bool operator<( castor3d::Version const & p_a, castor3d::Version const & p_b );
 	/**
 	 *\~english
 	 *\brief		Less than operator.
@@ -148,7 +129,7 @@ namespace Castor3D
 	 *\param[in]	p_a, p_b	Les versions à comparer.
 	 *\return		true si p_a.major est supérieur à p_b.major ou s'ils sont égaux et p_a.minor est supérieur à p_b.minor ou si majors et minors sont égaux et p_a.build est supérieur à p_b.build.
 	 */
-	C3D_API bool operator>( Castor3D::Version const & p_a, Castor3D::Version const & p_b );
+	C3D_API bool operator>( castor3d::Version const & p_a, castor3d::Version const & p_b );
 	/**
 	 *\~english
 	 *\brief		Less than operator.
@@ -159,7 +140,7 @@ namespace Castor3D
 	 *\param[in]	p_a, p_b	Les versions à comparer.
 	 *\return		false si p_a.major est supérieur à p_b.major ou s'ils sont égaux et p_a.minor est supérieur à p_b.minor ou si majors et minors sont égaux et p_a.build est supérieur à p_b.build.
 	 */
-	C3D_API bool operator<=( Castor3D::Version const & p_a, Castor3D::Version const & p_b );
+	C3D_API bool operator<=( castor3d::Version const & p_a, castor3d::Version const & p_b );
 	/**
 	 *\~english
 	 *\brief		Less than operator.
@@ -170,11 +151,11 @@ namespace Castor3D
 	 *\param[in]	p_a, p_b	Les versions à comparer.
 	 *\return		false si p_a.major est inférieur à p_b.major ou s'ils sont égaux et p_a.minor est inférieur à p_b.minor ou si majors et minors sont égaux et p_a.build est inférieur à p_b.build.
 	 */
-	C3D_API bool operator>=( Castor3D::Version const & p_a, Castor3D::Version const & p_b );
+	C3D_API bool operator>=( castor3d::Version const & p_a, castor3d::Version const & p_b );
 
-	C3D_API std::ostream & operator<<( std::ostream & p_stream, Castor3D::Version const & p_version );
-	C3D_API std::wostream & operator<<( std::wostream & p_stream, Castor3D::Version const & p_version );
-	C3D_API Castor::String & operator<<( Castor::String & p_stream, Castor3D::Version const & p_version );
+	C3D_API std::ostream & operator<<( std::ostream & p_stream, castor3d::Version const & p_version );
+	C3D_API std::wostream & operator<<( std::wostream & p_stream, castor3d::Version const & p_version );
+	C3D_API castor::String & operator<<( castor::String & p_stream, castor3d::Version const & p_version );
 }
 
 #endif

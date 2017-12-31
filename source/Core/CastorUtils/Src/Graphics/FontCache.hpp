@@ -1,24 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___CASTOR_FONT_CACHE_H___
 #define ___CASTOR_FONT_CACHE_H___
@@ -29,7 +10,7 @@ SOFTWARE.
 #	undef CreateFont
 #endif
 
-namespace Castor
+namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -46,7 +27,7 @@ namespace Castor
 		: private Collection< Font, String >
 	{
 	public:
-		DECLARE_MAP( Castor::String, Castor::Path, PathName );
+		DECLARE_MAP( castor::String, castor::Path, PathName );
 
 	public:
 		/**
@@ -79,7 +60,7 @@ namespace Castor
 		 *\param[in]	p_height	La précision de la police.
 		 *\return		La police créée (ou récupérée).
 		 */
-		CU_API FontSPtr Create( Castor::String const & p_name, uint32_t p_height, Castor::Path const & p_path );
+		CU_API FontSPtr create( castor::String const & p_name, uint32_t p_height, castor::Path const & p_path );
 		/**
 		 *\~english
 		 *\brief		Creates a font.
@@ -96,10 +77,10 @@ namespace Castor
 		 *\param[in]	p_height	La précision de la police.
 		 *\return		La police créée (ou récupérée).
 		 */
-		CU_API FontSPtr Add( Castor::String const & p_name, uint32_t p_height, Castor::Path const & p_path );
+		CU_API FontSPtr add( castor::String const & p_name, uint32_t p_height, castor::Path const & p_path );
 		/**
 		 *\~english
-		 *\brief		Adds an already created font.
+		 *\brief		adds an already created font.
 		 *\param[in]	p_name	The font name.
 		 *\param[in]	p_font	The font.
 		 *\return		The font.
@@ -110,7 +91,7 @@ namespace Castor
 		 *\param[in]	p_font	La police.
 		 *\return		La police.
 		 */
-		CU_API FontSPtr Add( Castor::String const & p_name, FontSPtr p_font );
+		CU_API FontSPtr add( castor::String const & p_name, FontSPtr p_font );
 		/**
 		 *\~english
 		 *\brief		Tells if a font exists.
@@ -121,7 +102,7 @@ namespace Castor
 		 *\param[in]	p_name	Le nom de la police.
 		 *\return		\p false si non trouvée.
 		 */
-		CU_API bool Has( Castor::String const & p_name );
+		CU_API bool has( castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Retrieves a font.
@@ -132,7 +113,7 @@ namespace Castor
 		 *\param[in]	p_name	Le nom de la police.
 		 *\return		La police, nullptr si non trouvée.
 		 */
-		CU_API FontSPtr Find( Castor::String const & p_name );
+		CU_API FontSPtr find( castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Retrieves a font.
@@ -143,14 +124,14 @@ namespace Castor
 		 *\param[in]	p_name	Le nom de la police.
 		 *\return		La police, nullptr si non trouvée.
 		 */
-		CU_API void Remove( Castor::String const & p_name );
+		CU_API void remove( castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Clears the collection and file paths.
 		 *\~french
 		 *\brief		Nettoie la collection et les chemins d'accès aux fichiers.
 		 */
-		CU_API void Clear();
+		CU_API void clear();
 
 	public:
 		using Collection< Font, String >::begin;

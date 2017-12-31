@@ -1,29 +1,10 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
-Copyright (c) 2016 dragonjoker59@hotmail.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+See LICENSE file in root folder
 */
 #ifndef ___C3D_PREREQUISITES_OVERLAY_H___
 #define ___C3D_PREREQUISITES_OVERLAY_H___
 
-namespace Castor3D
+namespace castor3d
 {
 	/**@name Overlay */
 	//@{
@@ -53,11 +34,14 @@ namespace Castor3D
 	*/
 	enum class TextWrappingMode
 	{
-		//!\~english The text is cut	\~french Le texte qui dépasse est découpé
+		//!\~english	The text is cut.
+		//!\~french		Le texte qui dépasse est découpé.
 		eNone,
-		//!\~english The text jumps to next line	\~french Le texte passe à la ligne suivante
+		//!\~english	The text jumps to next line.
+		//!\~french		Le texte passe à la ligne suivante.
 		eBreak,
-		//!\~english The text jumps to next line without cutting words	\~french Le texte passe à la ligne suivante, sans découper les mots
+		//!\~english	The text jumps to next line without cutting words.
+		//!\~french		Le texte passe à la ligne suivante, sans découper les mots.
 		eBreakWords,
 		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
 	};
@@ -71,9 +55,11 @@ namespace Castor3D
 	*/
 	enum class TextTexturingMode
 	{
-		//!\~english The texture is repeated on each character of the text.	\~french La texture est répétée sut chaque caractère du texte.
+		//!\~english	The texture is repeated on each character of the text.
+		//!\~french		La texture est répétée sut chaque caractère du texte.
 		eLetter,
-		//!\~english The texture is applied on the whole text.	\~french La texture est appliquée sur tout le texte.
+		//!\~english	The texture is applied on the whole text.
+		//!\~french		La texture est appliquée sur tout le texte.
 		eText,
 		CASTOR_SCOPED_ENUM_BOUNDS( eLetter )
 	};
@@ -87,11 +73,14 @@ namespace Castor3D
 	*/
 	enum class TextLineSpacingMode
 	{
-		//!\~english The height of each line is its own height.	\~french La hauteur d'une ligne est sa propre hauteur.
+		//!\~english	The height of each line is its own height.
+		//!\~french		La hauteur d'une ligne est sa propre hauteur.
 		eOwnHeight,
-		//!\~english The height of the lines is the maximum height between them.	\~french La hauteur des lignes est la plus grande hauteur parmi elles.
+		//!\~english	The height of the lines is the maximum height between them.
+		//!\~french		La hauteur des lignes est la plus grande hauteur parmi elles.
 		eMaxLineHeight,
-		//!\~english The height of the lines is the maximum height from the font's characters.	\~french La hauteur des lignes est la plus grande hauteur des caractères de la police.
+		//!\~english	The height of the lines is the maximum height from the font's characters.
+		//!\~french		La hauteur des lignes est la plus grande hauteur des caractères de la police.
 		eMaxFontHeight,
 		CASTOR_SCOPED_ENUM_BOUNDS( eOwnHeight )
 	};
@@ -106,11 +95,14 @@ namespace Castor3D
 	*/
 	enum class HAlign
 	{
-		//!\~english Aligned on the left.	\~french Aligné à gauche.
+		//!\~english	Aligned on the left.
+		//!\~french		Aligné à gauche.
 		eLeft,
-		//!\~english Centered horizontally.	\~french Centré, horizontalement.
+		//!\~english	Centered horizontally.
+		//!\~french		Centré, horizontalement.
 		eCenter,
-		//!\~english Aligned on the right.	\~french Aligné à droite.
+		//!\~english	Aligned on the right.
+		//!\~french		Aligné à droite.
 		eRight,
 		CASTOR_SCOPED_ENUM_BOUNDS( eLeft )
 	};
@@ -125,15 +117,17 @@ namespace Castor3D
 	*/
 	enum class VAlign
 	{
-		//!\~english Aligned on the top.	\~french Aligné en haut.
+		//!\~english	Aligned on the top.
+		//!\~french		Aligné en haut.
 		eTop,
-		//!\~english Centered vertically.	\~french Centré, verticalement.
+		//!\~english	Centered vertically.
+		//!\~french		Centré, verticalement.
 		eCenter,
-		//!\~english Aligned on the bottom.	\~french Aligné en bas.
+		//!\~english	Aligned on the bottom.
+		//!\~french		Aligné en bas.
 		eBottom,
 		CASTOR_SCOPED_ENUM_BOUNDS( eTop )
 	};
-
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		28/11/2014
@@ -144,11 +138,14 @@ namespace Castor3D
 	*/
 	enum class BorderPosition
 	{
-		//!\~english The border is outside the overlay	\~french La bordure est à l'intérieur de l'incrustation
+		//!\~english	The border is outside the overlay.
+		//!\~french		La bordure est à l'intérieur de l'incrustation.
 		eInternal,
-		//!\~english The border is middle outside and middle inside the overlay	\~french La bordure est à moitié à l'intérieur, à moitié à l'extérieur de l'incrustation
+		//!\~english	The border is middle outside and middle inside the overlay.
+		//!\~french		La bordure est à moitié à l'intérieur, à moitié à l'extérieur de l'incrustation.
 		eMiddle,
-		//!\~english The border is outside the overlay	\~french La bordure est à l'extérieur de l'incrustation
+		//!\~english	The border is outside the overlay.
+		//!\~french		La bordure est à l'extérieur de l'incrustation.
 		eExternal,
 		CASTOR_SCOPED_ENUM_BOUNDS( eInternal )
 	};
@@ -173,7 +170,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( TextOverlay );
 
 	DECLARE_VECTOR( OverlaySPtr, OverlayPtr );
-	DECLARE_MAP( Castor::String, OverlaySPtr, OverlayPtrStr );
+	DECLARE_MAP( castor::String, OverlaySPtr, OverlayPtrStr );
 
 	//@}
 }
