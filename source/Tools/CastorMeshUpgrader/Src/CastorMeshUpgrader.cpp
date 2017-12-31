@@ -313,7 +313,6 @@ int main( int argc, char * argv[] )
 #endif
 
 		castor::Logger::setFileName( castor::File::getExecutableDirectory() / cuT( "Tests.log" ) );
-		bool result = false;
 		castor3d::Engine engine;
 
 		if ( doInitialiseEngine( engine ) )
@@ -324,14 +323,20 @@ int main( int argc, char * argv[] )
 			if ( extension == cuT( "cmsh" ) )
 			{
 				castor3d::Mesh mesh{ name, scene };
-				result = doParseObject( path, mesh )
-					&& doWriteObject( path, mesh );
+
+				if ( doParseObject( path, mesh ) )
+				{
+					doWriteObject( path, mesh );
+				}
 			}
 			else if ( extension == cuT( "cskl" ) )
 			{
 				castor3d::Skeleton skeleton{ scene };
-				result = doParseObject( path, skeleton )
-					&& doWriteObject( path, skeleton );
+
+				if ( doParseObject( path, skeleton ) )
+				{
+					doWriteObject( path, skeleton );
+				}
 			}
 
 			engine.cleanup();
