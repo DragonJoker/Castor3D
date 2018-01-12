@@ -357,7 +357,14 @@ namespace Obj
 					++facesit;
 				}
 
-				std::cout << "    Group faces count: " << *facesit << std::endl;
+				if ( facesit == faces.end() )
+				{
+					std::cout << "    Group faces end" << std::endl;
+				}
+				else
+				{
+					std::cout << "    Group faces count: " << *facesit << std::endl;
+				}
 			}
 			else if ( ident == "usemtl" )
 			{
@@ -371,7 +378,11 @@ namespace Obj
 					vit = vertex.begin();
 					fit = index.begin();
 					vtxIndex = 0u;
-					++facesit;
+
+					if (facesit != faces.end ())
+					{
+						++facesit;
+					}
 				}
 
 				stream >> mtlname;
