@@ -1,10 +1,12 @@
 option( CASTOR_BUILDGRP_TOOL "Build Castoro3D tools." FALSE )
 option( CASTOR_BUILD_TOOL_IMG_CONVERTER "Build ImgConverter (needs wxWidgets library)" TRUE )
 option( CASTOR_BUILD_TOOL_MESH_UPGRADER "Build CastorMeshUpgrader" TRUE )
+option( CASTOR_BUILD_TOOL_MESH_CONVERTER "Build CastorMeshConverter" TRUE )
 
 function( ToolsInit )
 	set( ImgConv "no (Not wanted)" PARENT_SCOPE )
 	set( MshUpgd "no (Not wanted)" PARENT_SCOPE )
+	set( MshConv "no (Not wanted)" PARENT_SCOPE )
 endfunction( ToolsInit )
 
 function( ToolsBuild )
@@ -68,15 +70,25 @@ function( ToolsBuild )
 			endif()
 		endif()
 
-			if( ${CASTOR_BUILD_TOOL_MESH_UPGRADER} )
-				set( Build ${MshUpgd} )
-				add_subdirectory( Tools/CastorMeshUpgrader )
-				set( CPACK_PACKAGE_EXECUTABLES
-					${CPACK_PACKAGE_EXECUTABLES}
-					CastorMeshUpgrader "CastorMeshUpgrader"
-					PARENT_SCOPE )
-				set( MshUpgd ${Build} PARENT_SCOPE )
-			endif()
+		if( ${CASTOR_BUILD_TOOL_MESH_UPGRADER} )
+			set( Build ${MshUpgd} )
+			add_subdirectory( Tools/CastorMeshUpgrader )
+			set( CPACK_PACKAGE_EXECUTABLES
+				${CPACK_PACKAGE_EXECUTABLES}
+				CastorMeshUpgrader "CastorMeshUpgrader"
+				PARENT_SCOPE )
+			set( MshUpgd ${Build} PARENT_SCOPE )
+		endif()
+
+		if( ${CASTOR_BUILD_TOOL_MESH_CONVERTER} )
+			set( Build ${MshConv} )
+			add_subdirectory( Tools/CastorMeshConverter )
+			set( CPACK_PACKAGE_EXECUTABLES
+				${CPACK_PACKAGE_EXECUTABLES}
+				CastorMeshConverter "CastorMeshConverter"
+				PARENT_SCOPE )
+			set( MshConv ${Build} PARENT_SCOPE )
+		endif()
 
 		set( CastorMinLibraries
 			${CastorMinLibraries}
@@ -99,6 +111,9 @@ function( ToolsSummary msg )
 		if( ${CASTOR_BUILD_TOOL_MESH_UPGRADER} )
 			set( msg_tmp "${msg_tmp}\n    CastorMeshUpgrader   ${MshUpgd}" )
 		endif ()
+		if( ${CASTOR_BUILD_TOOL_MESH_CONVERTER} )
+			set( msg_tmp "${msg_tmp}\n    CastorMeshConverter  ${MshConv}" )
+		endif ()
 		set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 	endif ()
 endfunction( ToolsSummary )
@@ -117,6 +132,15 @@ function( ToolsSetup )
 		if( ${CASTOR_BUILD_TOOL_MESH_UPGRADER} )
 			cpack_add_component( CastorMeshUpgrader
 				DISPLAY_NAME "CastorMeshUpgrader application"
+				DESCRIPTION "A mesh upgrader, to convert Castor3D mesh to the latest version."
+				GROUP Tools
+				INSTALL_TYPES Full
+			)
+		endif()
+
+		if( ${CASTOR_BUILD_TOOL_MESH_CONVERTER} )
+			cpack_add_component( CastorMeshConverter
+				DISPLAY_NAME "CastorMeshConverter application"
 				DESCRIPTION "A mesh converter, to convert from any mesh format to Castor3D mesh."
 				GROUP Tools
 				INSTALL_TYPES Full

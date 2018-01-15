@@ -2,6 +2,7 @@
 #include <Plugin/RendererPlugin.hpp>
 #include <Scene/Scene.hpp>
 
+#include <Material/Material.hpp>
 #include <Mesh/Mesh.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Skeleton/Skeleton.hpp>
@@ -16,14 +17,11 @@ struct Options
 
 void printUsage()
 {
-	std::cout << "Castor Mesh Upgrader is a tool that allows you to upgrade your CMSH files to the latest CMSH version (works for CMSH and CSKL files)." << std::endl;
-	std::cout << "Note that if the .cmsh file contains a skeleton, it will be written in its own .cskl file." << std::endl;
+	std::cout << "Castor Mesh Converter is a tool that allows you to convert any mesh file to the CMSH files." << std::endl;
 	std::cout << "Usage:" << std::endl;
-	std::cout << "CastorMeshUpgrader FILE [-o NAME]" << std::endl;
-	std::cout << "  FILE must be a .cmsh or .cskl file." << std::endl;
+	std::cout << "CastorMeshConverter FILE [-o NAME]" << std::endl;
 	std::cout << "Options:" << std::endl;
 	std::cout << "  -o NAME     Allows you to specify the output file name." << std::endl;
-	std::cout << "              If you don't use this option, the original file will be overwritten." << std::endl;
 	std::cout << "              NAME can omit the extension." << std::endl << std::endl;
 }
 
@@ -112,13 +110,9 @@ bool doLoadRenderer( castor3d::Engine & engine )
 		{
 			if ( file.getExtension() == CASTOR_DLL_EXT )
 			{
-				// Since techniques depend on renderers, we load these first
-				if ( file.find( cuT( "RenderSystem" ) ) != castor::String::npos )
+				if ( !engine.getPluginCache().loadPlugin( file ) )
 				{
-					if ( !engine.getPluginCache().loadPlugin( file ) )
-					{
-						arrayFailed.push_back( file );
-					}
+					arrayFailed.push_back( file );
 				}
 			}
 		}
@@ -173,46 +167,22 @@ bool doInitialiseEngine( castor3d::Engine & engine )
 	return result;
 }
 
-void doInitialise( castor3d::Mesh & mesh )
+template< typename ObjType, typename ViewType >
+bool writeView( ViewType const & view
+	, castor::TextFile & file )
 {
-	for ( auto & submesh : mesh )
-	{
-		submesh->initialise();
-	}
-}
+	bool result = true;
 
-void doInitialise( castor3d::Skeleton & skeleton )
-{
-}
-
-template< typename T >
-bool doParseObject( castor::Path const & path
-	, T & object )
-{
-	bool result = false;
-
-	try
+	if ( !view.isEmpty() )
 	{
-		castor::BinaryFile file{ path, castor::File::OpenMode::eRead };
-		castor3d::BinaryParser< T > parser;
-		result = parser.parse( object, file );
-	}
-	catch ( castor::Exception & exc )
-	{
-		std::cerr << "Error encountered while parsing file : " << exc.what() << std::endl;
-	}
-	catch ( std::exception & exc )
-	{
-		std::cerr << "Error encountered while parsing file : " << exc.what() << std::endl;
-	}
-	catch ( ... )
-	{
-		std::cerr << "Error encountered while parsing file : Unknown exception" << std::endl;
-	}
-
-	if ( result )
-	{
-		doInitialise( object );
+		if ( result )
+		{
+			for ( auto const & name : view )
+			{
+				auto elem = view.find( name );
+				result &= typename ObjType::TextWriter{ castor::cuEmptyString }( *elem, file );
+			}
+		}
 	}
 
 	return result;
@@ -227,11 +197,45 @@ bool doPostWrite( castor::Path const & path
 {
 	auto skeleton = mesh.getSkeleton();
 	bool result = true;
+	auto name = path.getFileName();
+	auto folder = path.getPath();
 
 	if ( skeleton )
 	{
-		auto newPath = path.getPath() / ( path.getFileName() + cuT( ".cskl" ) );
+		auto newPath = folder / ( name + cuT( ".cskl" ) );
 		result = doWriteObject( newPath, *skeleton );
+	}
+
+	if ( result )
+	{
+		auto & scene = *mesh.getScene();
+		auto newPath = folder / ( name + cuT( "Materials.cscn" ) );
+		castor::TextFile file{ newPath, castor::File::OpenMode::eWrite };
+		result = writeView< castor3d::Material >( scene.getMaterialView()
+			, file );
+	}
+
+	if ( result )
+	{
+		auto & scene = *mesh.getScene();
+		auto newPath = folder / ( name + cuT( "Integration.cscn" ) );
+		castor::TextFile file{ newPath, castor::File::OpenMode::eWrite };
+		file.writeText( cuT( "object \"" ) + name + cuT( "\"\n" ) );
+		file.writeText( cuT( "{\n" ) );
+		file.writeText( cuT( "\tmesh \"" ) + name + cuT( "\"\n" ) );
+		file.writeText( cuT( "\tmaterials\n" ) );
+		file.writeText( cuT( "\t{\n" ) );
+		uint32_t index = 0u;
+
+		for ( auto & submesh : mesh )
+		{
+			file.writeText( cuT( "\t\tmaterial " ) + castor::string::toString( index++ ) + cuT( "\"" ) + submesh->getDefaultMaterial()->getName() + cuT( "\"\n" ) );
+		}
+
+		file.writeText( cuT( "\t}\n" ) );
+		file.writeText( cuT( "}\n" ) );
+		result = writeView< castor3d::Material >( scene.getMaterialView()
+			, file );
 	}
 
 	return result;
@@ -251,7 +255,7 @@ bool doWriteObject( castor::Path const & path
 
 	try
 	{
-		auto newPath = path.getPath() / ( path.getFileName() + cuT( "Upgraded." ) + path.getExtension() );
+		auto newPath = path.getPath() / ( path.getFileName() + cuT( ".cmsh" ) );
 		castor::BinaryFile file{ newPath, castor::File::OpenMode::eWrite };
 		castor3d::BinaryWriter< T > writer;
 		result = writer.write( object, file );
@@ -299,13 +303,6 @@ int main( int argc, char * argv[] )
 
 		auto extension = castor::string::lowerCase( path.getExtension() );
 
-		if ( extension != cuT( "cmsh" ) && extension != cuT( "cskl" ) )
-		{
-			std::cerr << "Wrong file type (expect .cmsh or .cskl extensions)." << std::endl << std::endl;
-			printUsage();
-			return EXIT_SUCCESS;
-		}
-
 #if defined( NDEBUG )
 		castor::Logger::initialise( castor::LogType::eInfo );
 #else
@@ -319,24 +316,34 @@ int main( int argc, char * argv[] )
 		{
 			castor3d::Scene scene{ cuT( "DummyScene" ), engine };
 			auto name = path.getFileName();
+			auto extension = castor::string::lowerCase( path.getExtension() );
+			castor3d::MeshSPtr mesh;
 
-			if ( extension == cuT( "cmsh" ) )
+			if ( !engine.getImporterFactory().isTypeRegistered( extension ) )
 			{
-				castor3d::Mesh mesh{ name, scene };
+				std::cerr << "Importer for [" << extension << "] files is not registered, make sure you've got the matching plug-in installed." << std::endl;
+			}
+			else
+			{
+				mesh = scene.getMeshCache().add( name );
+				auto importer = engine.getImporterFactory().create( extension, engine );
 
-				if ( doParseObject( path, mesh ) )
+				if ( !importer->importMesh( *mesh, path, castor3d::Parameters{}, true ) )
 				{
-					doWriteObject( path, mesh );
+					std::cerr << "Mesh Import failed" << std::endl;
+					scene.getMeshCache().remove( name );
+					mesh.reset();
 				}
 			}
-			else if ( extension == cuT( "cskl" ) )
-			{
-				castor3d::Skeleton skeleton{ scene };
 
-				if ( doParseObject( path, skeleton ) )
+			if ( mesh )
+			{
+				for ( auto & submesh : *mesh )
 				{
-					doWriteObject( path, skeleton );
+					submesh->initialise();
 				}
+
+				doWriteObject( path, *mesh );
 			}
 
 			engine.cleanup();
