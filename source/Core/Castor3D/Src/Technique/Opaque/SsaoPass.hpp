@@ -55,16 +55,13 @@ namespace castor3d
 		 *\brief		Renders the SSAO pass on currently bound framebuffer.
 		 *\param[in]	gpResult	The geometry pass result.
 		 *\param[in]	camera		The viewing camera.
-		 *\param[in]	info		Receives rendering info.
 		 *\~french
 		 *\brief		Dessine la passe SSAO sur le tampon d'image donné.
 		 *\param[in]	gpResult	Le résultat de la geometry pass.
 		 *\param[in]	camera		La caméra de rendu.
-		 *\param[in]	info		Reçoit les informations de rendu.
 		 */
 		void render( GeometryPassResult const & gpResult
-			, Camera const & camera
-			, RenderInfo & info );
+			, Camera const & camera );
 		/**
 		 *\~english
 		 *\return		The SSAO pass result.

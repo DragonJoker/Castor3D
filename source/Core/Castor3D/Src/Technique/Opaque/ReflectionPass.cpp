@@ -1017,16 +1017,14 @@ namespace castor3d
 		, TextureUnit const & lightSpecular
 		, Scene const & scene
 		, Camera const & camera
-		, FrameBuffer const & frameBuffer
-		, RenderInfo & info )
+		, FrameBuffer const & frameBuffer )
 	{
 		TextureUnit const * ssao = nullptr;
 
 		if ( m_ssaoEnabled )
 		{
 			m_ssao.render( gp
-				, camera
-				, info );
+				, camera );
 			ssao = &m_ssao.getResult();
 		}
 

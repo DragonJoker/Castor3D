@@ -203,8 +203,7 @@ namespace castor3d
 				, m_lightingPass->getSpecular()
 				, scene
 				, camera
-				, m_frameBuffer
-				, info );
+				, m_frameBuffer );
 		}
 		else
 		{
@@ -213,8 +212,7 @@ namespace castor3d
 				, m_lightingPass->getSpecular()
 				, scene
 				, camera
-				, m_frameBuffer
-				, info );
+				, m_frameBuffer );
 		}
 	}
 

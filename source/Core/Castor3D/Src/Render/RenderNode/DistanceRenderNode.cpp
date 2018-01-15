@@ -1,6 +1,7 @@
 #include "DistanceRenderNode.hpp"
 
 #include "Mesh/Mesh.hpp"
+#include "Mesh/Submesh.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/Geometry.hpp"
 
@@ -8,22 +9,22 @@ namespace castor3d
 {
 	namespace details
 	{
-		uint32_t getPrimitiveCount( Geometry & instance )
+		uint32_t getPrimitiveCount( Submesh const & submesh )
 		{
-			return instance.getMesh()->getFaceCount();
+			return submesh.getFaceCount();
 		}
 
-		uint32_t getPrimitiveCount( BillboardBase & instance )
+		uint32_t getPrimitiveCount( BillboardBase const & instance )
 		{
 			return instance.getCount() * 2u;
 		}
 
-		uint32_t getVertexCount( Geometry & instance )
+		uint32_t getVertexCount( Submesh const & submesh )
 		{
-			return instance.getMesh()->getVertexCount();
+			return submesh.getPointsCount();
 		}
 
-		uint32_t getVertexCount( BillboardBase & instance )
+		uint32_t getVertexCount( BillboardBase const & instance )
 		{
 			return instance.getCount();
 		}

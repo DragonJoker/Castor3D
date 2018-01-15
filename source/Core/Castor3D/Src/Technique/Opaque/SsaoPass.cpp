@@ -28,8 +28,7 @@ namespace castor3d
 	}
 
 	void SsaoPass::render( GeometryPassResult const & gpResult
-		, Camera const & camera
-		, RenderInfo & info )
+		, Camera const & camera )
 	{
 		m_ssaoConfigUbo.update( m_config, camera );
 		m_linearisePass.linearise( *gpResult[size_t( DsTexture::eDepth )]

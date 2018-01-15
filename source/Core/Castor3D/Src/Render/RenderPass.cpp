@@ -280,8 +280,8 @@ namespace castor3d
 						, envMap );
 
 					doRenderNode( renderNode );
-					info.m_visibleFaceCount += details::getPrimitiveCount( renderNode.m_instance );
-					info.m_visibleVertexCount += details::getVertexCount( renderNode.m_instance );
+					info.m_visibleFaceCount += details::getPrimitiveCount( renderNode.m_data );
+					info.m_visibleVertexCount += details::getVertexCount( renderNode.m_data );
 					++info.m_drawCalls;
 					++info.m_visibleObjectsCount;
 				}
