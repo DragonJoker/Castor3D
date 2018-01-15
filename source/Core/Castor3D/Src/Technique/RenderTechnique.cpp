@@ -176,13 +176,6 @@ namespace castor3d
 
 			if ( m_initialised )
 			{
-				m_depthPrepass = std::make_unique< DepthPass >( cuT( "DepthPrepass" )
-					, *m_renderTarget.getScene()
-					, *m_renderTarget.getCamera()
-					, m_ssaoConfig
-					, m_frameBuffer.m_depthBuffer );
-				m_depthPrepass->initialise( m_size );
-
 #if !DEBUG_FORWARD_RENDERING
 				m_deferredRendering = std::make_unique< DeferredRendering >( *getEngine()
 					, static_cast< OpaquePass & >( *m_opaquePass )
@@ -217,8 +210,6 @@ namespace castor3d
 		m_weightedBlendRendering.reset();
 		m_deferredRendering.reset();
 		doCleanupShadowMaps();
-		m_depthPrepass->cleanup();
-		m_depthPrepass.reset();
 		m_transparentPass->cleanup();
 		m_opaquePass->cleanup();
 		m_initialised = false;
@@ -227,7 +218,6 @@ namespace castor3d
 
 	void RenderTechnique::update( RenderQueueArray & queues )
 	{
-		m_depthPrepass->update( queues );
 		m_opaquePass->update( queues );
 		m_transparentPass->update( queues );
 		doUpdateShadowMaps( queues );
@@ -258,12 +248,8 @@ namespace castor3d
 		// Render part
 		m_frameBuffer.m_frameBuffer->bind( FrameBufferTarget::eDraw );
 		m_frameBuffer.m_frameBuffer->setDrawBuffers();
-		m_frameBuffer.m_frameBuffer->clear( BufferComponent::eColour );
+		m_frameBuffer.m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
 		m_frameBuffer.m_frameBuffer->unbind();
-
-		m_depthPrepass->render( info
-			, m_activeShadowMaps
-			, jitter );
 
 		doRenderOpaque( jitter
 			, velocity

@@ -846,8 +846,7 @@ namespace castor3d
 		{
 			DepthStencilState dsState;
 			dsState.setDepthTest( true );
-			dsState.setDepthMask( WritingMask::eZero );
-			dsState.setDepthFunc( DepthFunc::eEqual );
+			dsState.setDepthMask( WritingMask::eAll );
 			RasteriserState rsState;
 			rsState.setCulledFaces( Culling::eFront );
 			auto & pipeline = *m_frontPipelines.emplace( flags
@@ -894,8 +893,7 @@ namespace castor3d
 		{
 			DepthStencilState dsState;
 			dsState.setDepthTest( true );
-			dsState.setDepthMask( WritingMask::eZero );
-			dsState.setDepthFunc( DepthFunc::eEqual );
+			dsState.setDepthMask( WritingMask::eAll );
 			RasteriserState rsState;
 			rsState.setCulledFaces( Culling::eBack );
 			auto & pipeline = *m_backPipelines.emplace( flags

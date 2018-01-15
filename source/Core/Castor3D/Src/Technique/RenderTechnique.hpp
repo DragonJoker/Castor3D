@@ -259,9 +259,6 @@ namespace castor3d
 		//!\~english	The active shadow maps.
 		//!\~french		Les textures d'ombres actives.
 		ShadowMapLightTypeArray m_activeShadowMaps;
-		//!\~english	The depth prepass.
-		//!\~french		La prépasse de profondeur.
-		std::unique_ptr< DepthPass > m_depthPrepass;
 	};
 }
 
