@@ -385,6 +385,11 @@ namespace castor
 
 			if ( fiImage )
 			{
+#if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_BGR
+
+				SwapComponents( m_buffer->ptr(), m_buffer->format(), w, h );
+
+#endif
 				memcpy( FreeImage_GetBits( fiImage ), m_buffer->constPtr(), m_buffer->size() );
 				uint32_t width = p_size.getWidth();
 				uint32_t height = p_size.getHeight();

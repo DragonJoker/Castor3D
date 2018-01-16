@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_CPU_BUFFER_H___
@@ -407,10 +407,10 @@ namespace castor3d
 		uint32_t m_savedSize{ 0u };
 		//!<\~english	Buffer access type.
 		//!\~french		Type d'accès du tampon.
-		BufferAccessType m_accessType;
+		BufferAccessType m_accessType{ BufferAccessType( 0u ) };
 		//!<\~english	Buffer access nature.
 		//!\~french		Nature d'accès du tampon.
-		BufferAccessNature m_accessNature;
+		BufferAccessNature m_accessNature{ BufferAccessNature( 0u ) };
 	};
 }
 

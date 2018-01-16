@@ -64,7 +64,6 @@ namespace castor3d
 		 *\param[in]	scene			The rendered scene.
 		 *\param[in]	camera			The viewing camera.
 		 *\param[in]	frameBuffer		The target frame buffer.
-		 *\param[out]	info			The render informations.
 		 *\~french
 		 *\brief		Dessine le mapping de réflexion.
 		 *\param[in]	gp				Le résultat de la passe géométrique.
@@ -73,15 +72,13 @@ namespace castor3d
 		 *\param[in]	scene			La scène rendue.
 		 *\param[in]	camera			La caméra de rendu.
 		 *\param[in]	frameBuffer		Le tampon d'image cible.
-		 *\param[out]	info			Les informations de rendu.
 		 */
 		void render( GeometryPassResult & gp
 			, TextureUnit const & lightDiffuse
 			, TextureUnit const & lightSpecular
 			, Scene const & scene
 			, Camera const & camera
-			, FrameBuffer const & frameBuffer
-			, RenderInfo & info );
+			, FrameBuffer const & frameBuffer );
 		/**
 		 *\~english
 		 *\return		The SSAO texture.
