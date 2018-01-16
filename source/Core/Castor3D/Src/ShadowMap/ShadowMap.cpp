@@ -1,4 +1,4 @@
-﻿#include "ShadowMap.hpp"
+#include "ShadowMap.hpp"
 
 #include "Engine.hpp"
 
@@ -169,11 +169,11 @@ namespace castor3d
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 
-		UBO_MATRIX( writer );
-		UBO_MODEL_MATRIX( writer );
-		UBO_MODEL( writer );
-		SkinningUbo::declare( writer, programFlags );
-		UBO_MORPHING( writer, programFlags );
+		UBO_MATRIX( writer, 0u );
+		UBO_MODEL_MATRIX( writer, 0u );
+		UBO_MODEL( writer, 0u );
+		SkinningUbo::declare( writer, 0u, programFlags );
+		UBO_MORPHING( writer, 0u, programFlags );
 
 		// Outputs
 		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );

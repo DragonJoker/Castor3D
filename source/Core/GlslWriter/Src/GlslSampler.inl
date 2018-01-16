@@ -1,4 +1,4 @@
-﻿namespace glsl
+namespace glsl
 {
 	//*****************************************************************************************
 
@@ -21,6 +21,17 @@
 		, castor::String const & name )
 		: Type( TypeTraits< typename SamplerTypeTraits< ST >::Type >::Name + cuT( " " ), writer, name )
 		, m_binding{ bind }
+	{
+	}
+
+	template< SamplerType ST >
+	SamplerT< ST >::SamplerT( GlslWriter * writer
+		, uint32_t bind
+		, uint32_t set
+		, castor::String const & name )
+		: Type( TypeTraits< typename SamplerTypeTraits< ST >::Type >::Name + cuT( " " ), writer, name )
+		, m_binding{ bind }
+		, m_set{ set }
 	{
 	}
 

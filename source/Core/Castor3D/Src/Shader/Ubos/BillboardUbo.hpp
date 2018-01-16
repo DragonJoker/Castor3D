@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_BillboardUbo_H___
@@ -108,8 +108,12 @@ namespace castor3d
 	};
 }
 
-#define UBO_BILLBOARD( Writer )\
-	glsl::Ubo billboard{ writer, castor3d::BillboardUbo::BufferBillboard, castor3d::BillboardUbo::BindingPoint };\
+#define UBO_BILLBOARD( writer, set )\
+	glsl::Ubo billboard{ writer\
+		, castor3d::BillboardUbo::BufferBillboard\
+		, castor3d::BillboardUbo::BindingPoint\
+		, set\
+		, glsl::Ubo::Layout::ePushConstants };\
 	auto c3d_dimensions = billboard.declMember< Vec2 >( castor3d::BillboardUbo::Dimensions );\
 	auto c3d_windowSize = billboard.declMember< IVec2 >( castor3d::BillboardUbo::WindowSize );\
 	billboard.end()

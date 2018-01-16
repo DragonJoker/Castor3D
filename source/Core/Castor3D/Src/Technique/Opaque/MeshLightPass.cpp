@@ -142,9 +142,9 @@ namespace castor3d
 		GlslWriter writer = m_engine.getRenderSystem()->createGlslWriter();
 
 		// Shader inputs
-		UBO_MATRIX( writer );
-		UBO_MODEL_MATRIX( writer );
-		UBO_GPINFO( writer );
+		UBO_MATRIX( writer, 0u );
+		UBO_MODEL_MATRIX( writer, 0u );
+		UBO_GPINFO( writer, 0u );
 		auto vertex = writer.declAttribute< Vec3 >( ShaderProgram::Position );
 
 		// Shader outputs

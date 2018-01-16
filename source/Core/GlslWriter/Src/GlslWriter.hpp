@@ -23,6 +23,7 @@ namespace glsl
 		bool m_hasConstantsBuffers;
 		bool m_hasTextureBuffers;
 		bool m_hasShaderStorageBuffers;
+		bool m_isVulkan;
 	};
 
 	class GlslWriter
@@ -39,6 +40,7 @@ namespace glsl
 		GlslWriter_API void checkNameExists( castor::String const & name, TypeName type );
 		GlslWriter_API void inlineComment( castor::String const & comment );
 		GlslWriter_API void multilineComment( castor::String const & comment );
+		GlslWriter_API void enableExtension( castor::String const & name, uint32_t inCoreVersion );
 
 		inline uint32_t getShaderLanguageVersion()const
 		{
@@ -87,6 +89,7 @@ namespace glsl
 		inline void registerSampler( castor::String const & name
 			, TypeName type
 			, uint32_t binding
+			, uint32_t set
 			, uint32_t count
 			, bool enabled = true )
 		{
@@ -94,7 +97,7 @@ namespace glsl
 
 			if ( enabled )
 			{
-				m_shader.registerSampler( name, type, binding, count );
+				m_shader.registerSampler( name, type, binding, set, count );
 			}
 		}
 
@@ -275,9 +278,13 @@ namespace glsl
 		template< typename T > inline T declConstant( castor::String const & name, T const & rhs );
 		template< typename T > inline Optional< T > declConstant( castor::String const & name, T const & rhs, bool enabled );
 		template< typename T > inline T declSampler( castor::String const & name, uint32_t binding );
+		template< typename T > inline T declSampler( castor::String const & name, uint32_t binding, uint32_t set );
 		template< typename T > inline Optional< T > declSampler( castor::String const & name, uint32_t binding, bool enabled );
-		template< typename T > inline Array< T > declSampler( castor::String const & name, uint32_t binding, uint32_t dimension );
-		template< typename T > inline Optional< Array< T > > declSampler( castor::String const & name, uint32_t binding, uint32_t dimension, bool enabled );
+		template< typename T > inline Optional< T > declSampler( castor::String const & name, uint32_t binding, uint32_t set, bool enabled );
+		template< typename T > inline Array< T > declSamplerArray( castor::String const & name, uint32_t binding, uint32_t dimension );
+		template< typename T > inline Array< T > declSamplerArray( castor::String const & name, uint32_t binding, uint32_t set, uint32_t dimension );
+		template< typename T > inline Optional< Array< T > > declSamplerArray( castor::String const & name, uint32_t binding, uint32_t dimension, bool enabled );
+		template< typename T > inline Optional< Array< T > > declSamplerArray( castor::String const & name, uint32_t binding, uint32_t set, uint32_t dimension, bool enabled );
 		template< typename T > inline T declAttribute( castor::String const & name );
 		template< typename T > inline T declOutput( castor::String const & name );
 		template< typename T > inline T declInput( castor::String const & name );

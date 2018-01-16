@@ -118,8 +118,12 @@ namespace castor3d
 	};
 }
 
-#define UBO_MODEL( Writer )\
-	glsl::Ubo model{ writer, castor3d::ModelUbo::BufferModel, castor3d::ModelUbo::BindingPoint };\
+#define UBO_MODEL( writer, set )\
+	glsl::Ubo model{ writer\
+		, castor3d::ModelUbo::BufferModel\
+		, castor3d::ModelUbo::BindingPoint\
+		, set\
+		, glsl::Ubo::Layout::ePushConstants };\
 	auto c3d_shadowReceiver = model.declMember< glsl::Int >( castor3d::ModelUbo::ShadowReceiver );\
 	auto c3d_materialIndex = model.declMember< glsl::Int >( castor3d::ModelUbo::MaterialIndex );\
 	auto c3d_envMapIndex = model.declMember< glsl::Int >( castor3d::ModelUbo::EnvironmentIndex );\

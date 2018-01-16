@@ -29,13 +29,13 @@ namespace glsl
 		m_value << p_value;
 	}
 
-	Expr::Expr( GlslWriter * p_writer )
-		: m_writer( p_writer )
+	Expr::Expr( GlslWriter * writer )
+		: m_writer( writer )
 	{
 	}
 
-	Expr::Expr( GlslWriter * p_writer, String const & p_init )
-		: m_writer( p_writer )
+	Expr::Expr( GlslWriter * writer, String const & p_init )
+		: m_writer( writer )
 	{
 		m_value << p_init;
 	}

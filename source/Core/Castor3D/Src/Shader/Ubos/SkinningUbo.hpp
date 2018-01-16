@@ -61,13 +61,16 @@ namespace castor3d
 		 *\~english
 		 *\brief		Declares the GLSL variables needed to compute skinning in vertex shader.
 		 *\param[in]	writer	The GLSL writer.
+		 *\param[in]	set		The descriptor set index.
 		 *\param[in]	flags	The program flags.
 		 *\~french
 		 *\brief		Déclare les variables nécessaires au calcul du skinning dans le vertex shader.
 		 *\param[in]	writer	Le GLSL writer.
+		 *\param[in]	set		L'index du descriptor set.
 		 *\param[in]	flags	Les indicateurs du programme.
 		 */
 		C3D_API static void declare( glsl::GlslWriter & writer
+			, uint32_t set
 			, ProgramFlags const & flags );
 		/**
 		 *\~english

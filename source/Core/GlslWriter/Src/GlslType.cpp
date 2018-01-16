@@ -14,8 +14,8 @@ namespace glsl
 	{
 	}
 
-	Type::Type( String const & p_type, GlslWriter * p_writer, String const & p_name )
-		: Expr( p_writer )
+	Type::Type( String const & p_type, GlslWriter * writer, String const & p_name )
+		: Expr( writer )
 		, m_name( p_name )
 		, m_type( p_type )
 	{

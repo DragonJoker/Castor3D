@@ -216,7 +216,7 @@ namespace castor3d
 
 			// Inputs
 			auto position = writer.declAttribute< Vec3 >( ShaderProgram::Position );
-			UBO_MATRIX( writer );
+			UBO_MATRIX( writer, 0 );
 
 			// Outputs
 			auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );
@@ -241,7 +241,7 @@ namespace castor3d
 
 			// Inputs
 			auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
-			auto c3d_mapDiffuse = writer.declSampler< SamplerCube >( ShaderProgram::MapDiffuse, MinTextureIndex );
+			auto c3d_mapDiffuse = writer.declSampler< SamplerCube >( ShaderProgram::MapDiffuse, MinTextureIndex, 0u );
 			Ubo config{ writer, cuT( "Config" ), 0u };
 			auto c3d_roughness = config.declMember< Float >( cuT( "c3d_roughness" ) );
 			config.end();
@@ -358,7 +358,7 @@ namespace castor3d
 				auto prefilteredColor = writer.declLocale( cuT( "prefilteredColor" )
 					, vec3( 0.0_f ) );
 
-				FOR( writer, UInt, i, 0, "i < sampleCount", "++i" )
+				FOR( writer, UInt, i, 0u, "i < sampleCount", "++i" )
 				{
 					auto xi = writer.declLocale( cuT( "xi" )
 						, hammersley( i, sampleCount ) );

@@ -374,11 +374,11 @@ namespace castor3d
 				auto center = writer.declAttribute< Vec3 >( cuT( "center" ) );
 				auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 				auto gl_VertexID( writer.declBuiltin< Int >( cuT( "gl_VertexID" ) ) );
-				UBO_MATRIX( writer );
-				UBO_MODEL_MATRIX( writer );
-				UBO_SCENE( writer );
-				UBO_MODEL( writer );
-				UBO_BILLBOARD( writer );
+				UBO_MATRIX( writer, 0 );
+				UBO_SCENE( writer, 0 );
+				UBO_MODEL_MATRIX( writer, 0 );
+				UBO_MODEL( writer, 0 );
+				UBO_BILLBOARD( writer, 0 );
 
 				// Shader outputs
 				auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );

@@ -38,20 +38,20 @@ namespace glsl
 		m_value << p_value;
 	}
 
-	Int::Int( GlslWriter * p_writer, int p_value )
-		: Type( cuT( "int " ), p_writer, castor::String() )
+	Int::Int( GlslWriter * writer, int p_value )
+		: Type( cuT( "int " ), writer, castor::String() )
 	{
 		m_value << p_value;
 	}
 
-	Int::Int( GlslWriter * p_writer, float p_value )
-		: Type( cuT( "int " ), p_writer, castor::String() )
+	Int::Int( GlslWriter * writer, float p_value )
+		: Type( cuT( "int " ), writer, castor::String() )
 	{
 		m_value << p_value;
 	}
 
-	Int::Int( GlslWriter * p_writer, castor::String const & p_name )
-		: Type( cuT( "int " ), p_writer, p_name )
+	Int::Int( GlslWriter * writer, castor::String const & p_name )
+		: Type( cuT( "int " ), writer, p_name )
 	{
 	}
 
@@ -302,20 +302,20 @@ namespace glsl
 		m_value << static_cast< unsigned int >( p_value ) << "u";
 	}
 
-	UInt::UInt( GlslWriter * p_writer, unsigned int p_value )
-		: Type( cuT( "uint " ), p_writer, castor::String() )
+	UInt::UInt( GlslWriter * writer, unsigned int p_value )
+		: Type( cuT( "uint " ), writer, castor::String() )
 	{
 		m_value << p_value << "u";
 	}
 
-	UInt::UInt( GlslWriter * p_writer, float p_value )
-		: Type( cuT( "uint " ), p_writer, castor::String() )
+	UInt::UInt( GlslWriter * writer, float p_value )
+		: Type( cuT( "uint " ), writer, castor::String() )
 	{
 		m_value << static_cast< unsigned int >( p_value ) << "u";
 	}
 
-	UInt::UInt( GlslWriter * p_writer, castor::String const & p_name )
-		: Type( cuT( "uint " ), p_writer, p_name )
+	UInt::UInt( GlslWriter * writer, castor::String const & p_name )
+		: Type( cuT( "uint " ), writer, p_name )
 	{
 	}
 
@@ -586,14 +586,14 @@ namespace glsl
 		}
 	}
 
-	Float::Float( GlslWriter * p_writer, int p_value )
-		: Type( cuT( "float " ), p_writer, castor::String() )
+	Float::Float( GlslWriter * writer, int p_value )
+		: Type( cuT( "float " ), writer, castor::String() )
 	{
 		m_value << p_value << cuT( ".0" );
 	}
 
-	Float::Float( GlslWriter * p_writer, float p_value )
-		: Type( cuT( "float " ), p_writer, castor::String() )
+	Float::Float( GlslWriter * writer, float p_value )
+		: Type( cuT( "float " ), writer, castor::String() )
 	{
 		if ( abs( p_value - int( p_value ) ) <= std::numeric_limits< float >::epsilon() )
 		{
@@ -605,8 +605,8 @@ namespace glsl
 		}
 	}
 
-	Float::Float( GlslWriter * p_writer, double p_value )
-		: Type( cuT( "float " ), p_writer, castor::String() )
+	Float::Float( GlslWriter * writer, double p_value )
+		: Type( cuT( "float " ), writer, castor::String() )
 	{
 
 		if ( abs( p_value - int( p_value ) ) <= std::numeric_limits< double >::epsilon() )
@@ -619,8 +619,8 @@ namespace glsl
 		}
 	}
 
-	Float::Float( GlslWriter * p_writer, castor::String const & p_name )
-		: Type( cuT( "float " ), p_writer, p_name )
+	Float::Float( GlslWriter * writer, castor::String const & p_name )
+		: Type( cuT( "float " ), writer, p_name )
 	{
 	}
 

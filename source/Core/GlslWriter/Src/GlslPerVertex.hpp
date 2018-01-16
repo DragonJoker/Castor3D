@@ -12,7 +12,7 @@ namespace glsl
 		: public Type
 	{
 		inline gl_PerVertex();
-		inline gl_PerVertex( GlslWriter * p_writer, castor::String const & p_name = castor::String() );
+		inline gl_PerVertex( GlslWriter * writer, castor::String const & p_name = castor::String() );
 		inline gl_PerVertex & operator=( gl_PerVertex const & p_rhs );
 		template< typename T > inline gl_PerVertex & operator=( T const & p_rhs );
 		inline Vec4 gl_Position()const;

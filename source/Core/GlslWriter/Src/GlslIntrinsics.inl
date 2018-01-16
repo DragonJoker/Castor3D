@@ -11,10 +11,10 @@ namespace glsl
 			using T = TypeA;
 			using U = TypeB;
 
-			static Ret write( char const * const p_operator, T const & p_a, U const & p_b )
+			static Ret write( char const * const p_operator, T const & lhs, U const & rhs )
 			{
-				Ret result( p_a.m_writer );
-				result.m_value << castor::String( p_a ) << ' ' << p_operator << ' ' << toString( p_b );
+				Ret result( findWriter( lhs, rhs ) );
+				result.m_value << castor::String( lhs ) << ' ' << p_operator << ' ' << toString( rhs );
 				return result;
 			}
 		};
@@ -26,10 +26,10 @@ namespace glsl
 			using T = Optional< TypeA >;
 			using U = TypeB;
 
-			static Ret write( char const * const p_operator, T const & p_a, U const & p_b )
+			static Ret write( char const * const p_operator, T const & lhs, U const & rhs )
 			{
-				Ret result( p_a.m_writer, castor::String(), p_a.isEnabled() );
-				result.m_value << castor::String( p_a ) << ' ' << p_operator << ' ' << toString( p_b );
+				Ret result( findWriter( lhs, rhs ), castor::String(), lhs.isEnabled() );
+				result.m_value << castor::String( lhs ) << ' ' << p_operator << ' ' << toString( rhs );
 				return result;
 			}
 		};
@@ -41,10 +41,10 @@ namespace glsl
 			using T = TypeA;
 			using U = Optional< TypeB >;
 
-			static Ret write( char const * const p_operator, T const & p_a, U const & p_b )
+			static Ret write( char const * const p_operator, T const & lhs, U const & rhs )
 			{
-				Ret result( p_a.m_writer, castor::String(), p_b.isEnabled() );
-				result.m_value << castor::String( p_a ) << ' ' << p_operator << ' ' << toString( p_b );
+				Ret result( findWriter( lhs, rhs ), castor::String(), rhs.isEnabled() );
+				result.m_value << castor::String( lhs ) << ' ' << p_operator << ' ' << toString( rhs );
 				return result;
 			}
 		};
@@ -103,11 +103,11 @@ namespace glsl
 		struct Step;
 
 		template< typename V, typename U >
-		struct Step< V, U, typename std::enable_if< std::is_same< V, V >::value >::type >
+		struct Step< V, U, typename std::enable_if< std::is_same< U, V >::value >::type >
 		{
 			static V step( V const & edge, U const & x )
 			{
-				return writeFunctionCall< V >( edge.m_writer, cuT( "step" ), edge, x );
+				return writeFunctionCall< V >( findWriter( edge, x ), cuT( "step" ), edge, x );
 			}
 		};
 
@@ -116,136 +116,136 @@ namespace glsl
 		{
 			static V step( V const & edge, U const & x )
 			{
-				return writeFunctionCall< V >( edge.m_writer, cuT( "step" ), edge, x );
+				return writeFunctionCall< V >( findWriter( edge, x ), cuT( "step" ), edge, x );
 			}
 		};
 	}
 
 #	define GLSL_IMPLEMENT_OPERATOR( RetType, LhsType, RhsType, Operator, OperatorType )\
 	template< typename LhsType, typename RhsType, typename Enable >\
-	RetType operator Operator( LhsType const & p_lhs, RhsType const & p_rhs )\
+	RetType operator Operator( LhsType const & lhs, RhsType const & rhs )\
 	{\
-		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, lhs, rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
-	RetType operator Operator( LhsType const & p_lhs, InParam< RhsType > const & p_rhs )\
+	RetType operator Operator( LhsType const & lhs, InParam< RhsType > const & rhs )\
 	{\
-		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, lhs, rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
-	RetType operator Operator( LhsType const & p_lhs, InOutParam< RhsType > const & p_rhs )\
+	RetType operator Operator( LhsType const & lhs, InOutParam< RhsType > const & rhs )\
 	{\
-		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, lhs, rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
-	RetType operator Operator( LhsType const & p_lhs, OutParam< RhsType > const & p_rhs )\
+	RetType operator Operator( LhsType const & lhs, OutParam< RhsType > const & rhs )\
 	{\
-		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, lhs, rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
-	RetType operator Operator( LhsType const & p_lhs, Optional< RhsType > const & p_rhs )\
+	RetType operator Operator( LhsType const & lhs, Optional< RhsType > const & rhs )\
 	{\
-		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, lhs, rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
-	RetType operator Operator( InParam< LhsType > const & p_lhs, RhsType const & p_rhs )\
+	RetType operator Operator( InParam< LhsType > const & lhs, RhsType const & rhs )\
 	{\
-		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, lhs, rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
-	RetType operator Operator( InParam< LhsType > const & p_lhs, InParam< RhsType > const & p_rhs )\
+	RetType operator Operator( InParam< LhsType > const & lhs, InParam< RhsType > const & rhs )\
 	{\
-		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, lhs, rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
-	RetType operator Operator( InParam< LhsType > const & p_lhs, InOutParam< RhsType > const & p_rhs )\
+	RetType operator Operator( InParam< LhsType > const & lhs, InOutParam< RhsType > const & rhs )\
 	{\
-		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, lhs, rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
-	RetType operator Operator( InParam< LhsType > const & p_lhs, OutParam< RhsType > const & p_rhs )\
+	RetType operator Operator( InParam< LhsType > const & lhs, OutParam< RhsType > const & rhs )\
 	{\
-		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, lhs, rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
-	RetType operator Operator( InParam< LhsType > const & p_lhs, Optional< RhsType > const & p_rhs )\
+	RetType operator Operator( InParam< LhsType > const & lhs, Optional< RhsType > const & rhs )\
 	{\
-		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, lhs, rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
-	RetType operator Operator( InOutParam< LhsType > const & p_lhs, RhsType const & p_rhs )\
+	RetType operator Operator( InOutParam< LhsType > const & lhs, RhsType const & rhs )\
 	{\
-		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, lhs, rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
-	RetType operator Operator( InOutParam< LhsType > const & p_lhs, InParam< RhsType > const & p_rhs )\
+	RetType operator Operator( InOutParam< LhsType > const & lhs, InParam< RhsType > const & rhs )\
 	{\
-		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, lhs, rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
-	RetType operator Operator( InOutParam< LhsType > const & p_lhs, InOutParam< RhsType > const & p_rhs )\
+	RetType operator Operator( InOutParam< LhsType > const & lhs, InOutParam< RhsType > const & rhs )\
 	{\
-		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, lhs, rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
-	RetType operator Operator( InOutParam< LhsType > const & p_lhs, OutParam< RhsType > const & p_rhs )\
+	RetType operator Operator( InOutParam< LhsType > const & lhs, OutParam< RhsType > const & rhs )\
 	{\
-		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, lhs, rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
-	RetType operator Operator( InOutParam< LhsType > const & p_lhs, Optional< RhsType > const & p_rhs )\
+	RetType operator Operator( InOutParam< LhsType > const & lhs, Optional< RhsType > const & rhs )\
 	{\
-		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, lhs, rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
-	RetType operator Operator( OutParam< LhsType > const & p_lhs, RhsType const & p_rhs )\
+	RetType operator Operator( OutParam< LhsType > const & lhs, RhsType const & rhs )\
 	{\
-		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, lhs, rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
-	RetType operator Operator( OutParam< LhsType > const & p_lhs, InParam< RhsType > const & p_rhs )\
+	RetType operator Operator( OutParam< LhsType > const & lhs, InParam< RhsType > const & rhs )\
 	{\
-		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, lhs, rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
-	RetType operator Operator( OutParam< LhsType > const & p_lhs, InOutParam< RhsType > const & p_rhs )\
+	RetType operator Operator( OutParam< LhsType > const & lhs, InOutParam< RhsType > const & rhs )\
 	{\
-		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, lhs, rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
-	RetType operator Operator( OutParam< LhsType > const & p_lhs, OutParam< RhsType > const & p_rhs )\
+	RetType operator Operator( OutParam< LhsType > const & lhs, OutParam< RhsType > const & rhs )\
 	{\
-		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, lhs, rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
-	RetType operator Operator( OutParam< LhsType > const & p_lhs, Optional< RhsType > const & p_rhs )\
+	RetType operator Operator( OutParam< LhsType > const & lhs, Optional< RhsType > const & rhs )\
 	{\
-		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, lhs, rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
-	RetType operator Operator( Optional< LhsType > const & p_lhs, RhsType const & p_rhs )\
+	RetType operator Operator( Optional< LhsType > const & lhs, RhsType const & rhs )\
 	{\
-		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, lhs, rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
-	RetType operator Operator( Optional< LhsType > const & p_lhs, InParam< RhsType > const & p_rhs )\
+	RetType operator Operator( Optional< LhsType > const & lhs, InParam< RhsType > const & rhs )\
 	{\
-		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, lhs, rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
-	RetType operator Operator( Optional< LhsType > const & p_lhs, InOutParam< RhsType > const & p_rhs )\
+	RetType operator Operator( Optional< LhsType > const & lhs, InOutParam< RhsType > const & rhs )\
 	{\
-		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, lhs, rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
-	RetType operator Operator( Optional< LhsType > const & p_lhs, OutParam< RhsType > const & p_rhs )\
+	RetType operator Operator( Optional< LhsType > const & lhs, OutParam< RhsType > const & rhs )\
 	{\
-		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, lhs, rhs );\
 	}\
 	template< typename LhsType, typename RhsType, typename Enable >\
-	RetType operator Operator( Optional< LhsType > const & p_lhs, Optional< RhsType > const & p_rhs )\
+	RetType operator Operator( Optional< LhsType > const & lhs, Optional< RhsType > const & rhs )\
 	{\
-		return details::OperatorType< LhsType, RhsType >::write( #Operator, p_lhs, p_rhs );\
+		return details::OperatorType< LhsType, RhsType >::write( #Operator, lhs, rhs );\
 	}
 
 #	define GLSL_IMPLEMENT_ARITHMETIC_OPERATOR( LhsType, RhsType, Operator )\
@@ -269,57 +269,57 @@ namespace glsl
 	//***********************************************************************************************
 
 	template< typename ... Values >
-	inline Float dot( Type const & p_value, Values const & ... p_values )
+	inline Float dot( Type const & value, Values const & ... values )
 	{
-		return writeFunctionCall< Float, Type, Values... >( p_value.m_writer, cuT( "dot" ), p_value, p_values... );
+		return writeFunctionCall< Float, Type, Values... >( findWriter( value, values... ), cuT( "dot" ), value, values... );
 	}
 
 	template< typename ... Values >
-	inline Float inversesqrt( Type const & p_value, Values const & ... p_values )
+	inline Float inversesqrt( Type const & value, Values const & ... values )
 	{
-		return writeFunctionCall< Float, Type, Values... >( p_value.m_writer, cuT( "inversesqrt" ), p_value, p_values... );
+		return writeFunctionCall< Float, Type, Values... >( findWriter( value, values... ), cuT( "inversesqrt" ), value, values... );
 	}
 
 	template< typename Value, typename ... Values >
-	inline Value cross( Value const & p_value, Values const & ... p_values )
+	inline Value cross( Value const & value, Values const & ... values )
 	{
-		return writeFunctionCall< Value, Type, Values... >( p_value.m_writer, cuT( "cross" ), p_value, p_values... );
+		return writeFunctionCall< Value, Type, Values... >( findWriter( value, values... ), cuT( "cross" ), value, values... );
 	}
 
 	template< typename Value, typename ... Values >
-	inline Value clamp( Value const & p_value, Values const & ... p_values )
+	inline Value clamp( Value const & value, Values const & ... values )
 	{
-		return writeFunctionCall< Value, Type, Values... >( p_value.m_writer, cuT( "clamp" ), p_value, p_values... );
+		return writeFunctionCall< Value, Type, Values... >( findWriter( value, values... ), cuT( "clamp" ), value, values... );
 	}
 
 	template< typename Value, typename ... Values >
-	inline Value min( Value const & p_value, Values const & ... p_values )
+	inline Value min( Value const & value, Values const & ... values )
 	{
-		return writeFunctionCall< Value, Type, Values... >( p_value.m_writer, cuT( "min" ), p_value, p_values... );
+		return writeFunctionCall< Value, Type, Values... >( findWriter( value, values... ), cuT( "min" ), value, values... );
 	}
 
 	template< typename Value, typename ... Values >
-	inline Value max( Value const & p_value, Values const & ... p_values )
+	inline Value max( Value const & value, Values const & ... values )
 	{
-		return writeFunctionCall< Value, Type, Values... >( p_value.m_writer, cuT( "max" ), p_value, p_values... );
+		return writeFunctionCall< Value, Type, Values... >( findWriter( value, values... ), cuT( "max" ), value, values... );
 	}
 
 	template< typename Value, typename ... Values >
-	inline Value mix( Value const & p_value, Values const & ... p_values )
+	inline Value mix( Value const & value, Values const & ... values )
 	{
-		return writeFunctionCall< Value, Type, Values... >( p_value.m_writer, cuT( "mix" ), p_value, p_values... );
+		return writeFunctionCall< Value, Type, Values... >( findWriter( value, values... ), cuT( "mix" ), value, values... );
 	}
 
 	template< typename Value, typename ... Values >
-	inline Value reflect( Type const & p_value, Values const & ... p_values )
+	inline Value reflect( Type const & value, Values const & ... values )
 	{
-		return writeFunctionCall< Value, Type, Values... >( p_value.m_writer, cuT( "reflect" ), p_value, p_values... );
+		return writeFunctionCall< Value, Type, Values... >( findWriter( value, values... ), cuT( "reflect" ), value, values... );
 	}
 
 	template< typename Value >
 	inline Value sqrt( Value const & value )
 	{
-		return writeFunctionCall< Value, Value >( value.m_writer, cuT( "sqrt" ), value );
+		return writeFunctionCall< Value, Value >( findWriter( value ), cuT( "sqrt" ), value );
 	}
 
 	template< typename Value >
@@ -341,87 +341,87 @@ namespace glsl
 	}
 
 	template< typename Value >
-	Value normalize( Value const & p_value )
+	Value normalize( Value const & value )
 	{
-		return writeFunctionCall< Value >( p_value.m_writer, cuT( "normalize" ), p_value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "normalize" ), value );
 	}
 
 	template< typename Input, typename Output >
-	inline Output normalize( Swizzle< Input, Output > const & p_value )
+	inline Output normalize( Swizzle< Input, Output > const & value )
 	{
-		return writeFunctionCall< Output >( p_value.m_writer, cuT( "normalize" ), static_cast< Output const >( p_value ) );
+		return writeFunctionCall< Output >( findWriter( value ), cuT( "normalize" ), static_cast< Output const >( value ) );
 	}
 
 	template< typename Value >
-	inline Value transpose( Value const & p_value )
+	inline Value transpose( Value const & value )
 	{
-		return writeFunctionCall< Value >( p_value.m_writer, cuT( "transpose" ), p_value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "transpose" ), value );
 	}
 
 	template< typename Value >
-	inline Value inverse( Value const & p_value )
+	inline Value inverse( Value const & value )
 	{
-		return writeFunctionCall< Value >( p_value.m_writer, cuT( "inverse" ), p_value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "inverse" ), value );
 	}
 
 	template< typename Value >
-	inline Value abs( Value const & p_value )
+	inline Value abs( Value const & value )
 	{
-		return writeFunctionCall< Value >( p_value.m_writer, cuT( "abs" ), p_value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "abs" ), value );
 	}
 
 	template< typename Value >
-	inline Value isinf( Value const & p_value )
+	inline Value isinf( Value const & value )
 	{
-		return writeFunctionCall< Value >( p_value.m_writer, cuT( "isinf" ), p_value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "isinf" ), value );
 	}
 
 	template< typename ValueA, typename ValueB >
-	ValueB smoothstep( ValueA const & p_edge0, ValueA const & p_edge1, ValueB const & x )
+	ValueB smoothstep( ValueA const & edge0, ValueA const & edge1, ValueB const & x )
 	{
-		return writeFunctionCall< ValueB >( x.m_writer, cuT( "smoothstep" ), p_edge0, p_edge1,x );
+		return writeFunctionCall< ValueB >( findWriter( edge0, edge1, x ), cuT( "smoothstep" ), p_edge0, p_edge1,x );
 	}
 
 	template< typename Value >
-	inline Value dFdx( Value const & p_value )
+	inline Value dFdx( Value const & value )
 	{
-		return writeFunctionCall< Value >( p_value.m_writer, cuT( "dFdx" ), p_value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "dFdx" ), value );
 	}
 
 	template< typename Value >
-	inline Value dFdy( Value const & p_value )
+	inline Value dFdy( Value const & value )
 	{
-		return writeFunctionCall< Value >( p_value.m_writer, cuT( "dFdy" ), p_value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "dFdy" ), value );
 	}
 
 	template< typename Value >
-	inline Value dFdxCoarse( Value const & p_value )
+	inline Value dFdxCoarse( Value const & value )
 	{
-		return writeFunctionCall< Value >( p_value.m_writer, cuT( "dFdyCoarse" ), p_value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "dFdyCoarse" ), value );
 	}
 
 	template< typename Value >
-	inline Value dFdyCoarse( Value const & p_value )
+	inline Value dFdyCoarse( Value const & value )
 	{
-		return writeFunctionCall< Value >( p_value.m_writer, cuT( "dFdyCoarse" ), p_value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "dFdyCoarse" ), value );
 	}
 
 	template< typename Value >
-	inline Value dFdxFine( Value const & p_value )
+	inline Value dFdxFine( Value const & value )
 	{
-		return writeFunctionCall< Value >( p_value.m_writer, cuT( "dFdxFine" ), p_value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "dFdxFine" ), value );
 	}
 
 	template< typename Value >
-	inline Value dFdyFine( Value const & p_value )
+	inline Value dFdyFine( Value const & value )
 	{
-		return writeFunctionCall< Value >( p_value.m_writer, cuT( "dFdyFine" ), p_value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "dFdyFine" ), value );
 	}
 
 	template< typename Value >
-	inline Value sign( Value const & p_value )
+	inline Value sign( Value const & value )
 	{
-		return writeFunctionCall< Value >( p_value.m_writer, cuT( "sign" ), p_value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "sign" ), value );
 	}
 
 	template< typename Value >
@@ -433,31 +433,31 @@ namespace glsl
 	template< typename Value >
 	inline Value mod( Value const & x, Float const & y )
 	{
-		return writeFunctionCall< Value >( x.m_writer, cuT( "mod" ), x, y );
+		return writeFunctionCall< Value >( findWriter( x, y ), cuT( "mod" ), x, y );
 	}
 
 	template< typename Value >
 	inline Value fract( Value const & value )
 	{
-		return writeFunctionCall< Value >( value.m_writer, cuT( "fract" ), value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "fract" ), value );
 	}
 
 	template< typename Value >
 	inline Value floor( Value const & value )
 	{
-		return writeFunctionCall< Value >( value.m_writer, cuT( "floor" ), value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "floor" ), value );
 	}
 
 	template< typename Value >
 	inline Value trunc( Value const & value )
 	{
-		return writeFunctionCall< Value >( value.m_writer, cuT( "trunc" ), value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "trunc" ), value );
 	}
 
 	template< typename Value >
 	inline Value round( Value const & value )
 	{
-		return writeFunctionCall< Value >( value.m_writer, cuT( "round" ), value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "round" ), value );
 	}
 
 	template< typename ValueE, typename ValueX >
@@ -469,332 +469,663 @@ namespace glsl
 	template< typename Value >
 	inline Value step( Value const & edge, Float const & x )
 	{
-		return writeFunctionCall< Value >( edge.m_writer, cuT( "step" ), edge, x );
+		return writeFunctionCall< Value >( findWriter( edge, x ), cuT( "step" ), edge, x );
 	}
 
 	template< typename Value >
-	inline Value neg( Value const & p_value )
+	inline Value neg( Value const & value )
 	{
-		return writeFunctionCall< Value >( p_value.m_writer, cuT( "-" ), p_value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "-" ), value );
 	}
 
 	template< typename Input, typename Output >
-	inline Output neg( Swizzle< Input, Output > const & p_value )
+	inline Output neg( Swizzle< Input, Output > const & value )
 	{
-		return writeFunctionCall< Output >( p_value.m_input->m_writer, cuT( "-" ), static_cast< Output >( p_value ) );
+		return writeFunctionCall< Output >( findWriter( value ), cuT( "-" ), static_cast< Output >( value ) );
 	}
 
 	template< typename Value >
-	inline Value log( Value const & p_value )
+	inline Value log( Value const & value )
 	{
-		return writeFunctionCall< Value >( p_value.m_writer, cuT( "log" ), p_value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "log" ), value );
 	}
 
 	template< typename Value >
-	inline Value exp( Value const & p_value )
+	inline Value exp( Value const & value )
 	{
-		return writeFunctionCall< Value >( p_value.m_writer, cuT( "exp" ), p_value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "exp" ), value );
 	}
 
 	template< typename Value >
-	inline Value log2( Value const & p_value )
+	inline Value log2( Value const & value )
 	{
-		return writeFunctionCall< Value >( p_value.m_writer, cuT( "log2" ), p_value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "log2" ), value );
 	}
 
 	template< typename Value >
-	inline Value exp2( Value const & p_value )
+	inline Value exp2( Value const & value )
 	{
-		return writeFunctionCall< Value >( p_value.m_writer, cuT( "exp2" ), p_value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "exp2" ), value );
 	}
 
 	template< typename Value >
-	inline Value tan( Value const & p_value )
+	inline Value tan( Value const & value )
 	{
-		return writeFunctionCall< Value >( p_value.m_writer, cuT( "tan" ), p_value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "tan" ), value );
 	}
 
 	template< typename Value >
-	inline Value sin( Value const & p_value )
+	inline Value sin( Value const & value )
 	{
-		return writeFunctionCall< Value >( p_value.m_writer, cuT( "sin" ), p_value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "sin" ), value );
 	}
 
 	template< typename Value >
-	inline Value cos( Value const & p_value )
+	inline Value cos( Value const & value )
 	{
-		return writeFunctionCall< Value >( p_value.m_writer, cuT( "cos" ), p_value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "cos" ), value );
 	}
 
 	template< typename Value >
-	inline Value atan( Value const & p_value )
+	inline Value atan( Value const & value )
 	{
-		return writeFunctionCall< Value >( p_value.m_writer, cuT( "atan" ), p_value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "atan" ), value );
 	}
 
 	template< typename Value >
-	inline Value atan( Value const & p_y, Value const & p_x )
+	inline Value atan( Value const & y, Value const & x )
 	{
-		return writeFunctionCall< Value >( p_y.m_writer, cuT( "atan" ), p_y, p_x );
+		return writeFunctionCall< Value >( findWriter( y, x ), cuT( "atan" ), y, x );
 	}
 
 	template< typename Value >
-	inline Value asin( Value const & p_value )
+	inline Value asin( Value const & value )
 	{
-		return writeFunctionCall< Value >( p_value.m_writer, cuT( "asin" ), p_value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "asin" ), value );
 	}
 
 	template< typename Value >
-	inline Value acos( Value const & p_value )
+	inline Value acos( Value const & value )
 	{
-		return writeFunctionCall< Value >( p_value.m_writer, cuT( "acos" ), p_value );
+		return writeFunctionCall< Value >( findWriter( value ), cuT( "acos" ), value );
 	}
 
 	template< typename Value >
 	inline Value fma( Value const & a, Value const & b, Value const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( Optional< Value > const & a, Value const & b, Value const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( a.isEnabled()
+			&& writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( Value const & a, Optional< Value > const & b, Value const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( b.isEnabled()
+			&& writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( Value const & a, Value const & b, Optional< Value > const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( c.isEnabled()
+			&& writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( Optional< Value > const & a, Optional< Value > const & b, Value const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( a.isEnabled()
+			&& b.isEnabled()
+			&& writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( Optional< Value > const & a, Value const & b, Optional< Value > const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( a.isEnabled()
+			&& c.isEnabled()
+			&& writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( Value const & a, Optional< Value > const & b, Optional< Value > const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( b.isEnabled()
+			&& c.isEnabled()
+			&& writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( Optional< Value > const & a, Optional< Value > const & b, Optional< Value > const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( a.isEnabled()
+			&& b.isEnabled()
+			&& c.isEnabled()
+			&& writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( InParam< Value > const & a, Value const & b, Value const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( Value const & a, InParam< Value > const & b, Value const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( Value const & a, Value const & b, InParam< Value > const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( InParam< Value > const & a, InParam< Value > const & b, Value const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( InParam< Value > const & a, Value const & b, InParam< Value > const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( Value const & a, InParam< Value > const & b, InParam< Value > const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( InParam< Value > const & a, InParam< Value > const & b, InParam< Value > const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( OutParam< Value > const & a, Value const & b, Value const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( Value const & a, OutParam< Value > const & b, Value const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( Value const & a, Value const & b, OutParam< Value > const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( OutParam< Value > const & a, OutParam< Value > const & b, Value const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( OutParam< Value > const & a, Value const & b, OutParam< Value > const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( Value const & a, OutParam< Value > const & b, OutParam< Value > const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( OutParam< Value > const & a, OutParam< Value > const & b, OutParam< Value > const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( InOutParam< Value > const & a, Value const & b, Value const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( Value const & a, InOutParam< Value > const & b, Value const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( Value const & a, Value const & b, InOutParam< Value > const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( InOutParam< Value > const & a, InOutParam< Value > const & b, Value const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( InOutParam< Value > const & a, Value const & b, InOutParam< Value > const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( Value const & a, InOutParam< Value > const & b, InOutParam< Value > const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	template< typename Value >
 	inline Value fma( InOutParam< Value > const & a, InOutParam< Value > const & b, InOutParam< Value > const & c )
 	{
-		return writeFunctionCall< Value >( a.m_writer, cuT( "fma" ), a, b, c );
+		auto writer = findWriter( a, b, c );
+
+		if ( writer->getShaderLanguageVersion() < 400 )
+		{
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
+		}
+		else
+		{
+			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+		}
 	}
 
 	//***********************************************************************************************
 
 	template< typename ... Values >
-	inline Vec2 vec2( Type const & p_value, Values const & ... p_values )
+	inline Vec2 vec2( Type const & value, Values const & ... values )
 	{
-		return writeFunctionCall< Vec2, Type, Values... >( p_value.m_writer, cuT( "vec2" ), p_value, p_values... );
+		return writeFunctionCall< Vec2, Type, Values... >( findWriter( value, values... ), cuT( "vec2" ), value, values... );
 	}
 
 	template< typename ... Values >
-	inline Vec3 vec3( Type const & p_value, Values const & ... p_values )
+	inline Vec3 vec3( Type const & value, Values const & ... values )
 	{
-		return writeFunctionCall< Vec3, Type, Values... >( p_value.m_writer, cuT( "vec3" ), p_value, p_values... );
+		return writeFunctionCall< Vec3, Type, Values... >( findWriter( value, values... ), cuT( "vec3" ), value, values... );
 	}
 
 	template< typename ... Values >
-	inline Vec4 vec4( Type const & p_value, Values const & ... p_values )
+	inline Vec4 vec4( Type const & value, Values const & ... values )
 	{
-		return writeFunctionCall< Vec4, Type, Values... >( p_value.m_writer, cuT( "vec4" ), p_value, p_values... );
+		return writeFunctionCall< Vec4, Type, Values... >( findWriter( value, values... ), cuT( "vec4" ), value, values... );
 	}
 
 	template< typename ... Values >
-	inline IVec2 ivec2( Type const & p_value, Values const & ... p_values )
+	inline IVec2 ivec2( Type const & value, Values const & ... values )
 	{
-		return writeFunctionCall< IVec2, Type, Values... >( p_value.m_writer, cuT( "ivec2" ), p_value, p_values... );
+		return writeFunctionCall< IVec2, Type, Values... >( findWriter( value, values... ), cuT( "ivec2" ), value, values... );
 	}
 
 	template< typename ... Values >
-	inline IVec3 ivec3( Type const & p_value, Values const & ... p_values )
+	inline IVec3 ivec3( Type const & value, Values const & ... values )
 	{
-		return writeFunctionCall< IVec3, Type, Values... >( p_value.m_writer, cuT( "ivec3" ), p_value, p_values... );
+		return writeFunctionCall< IVec3, Type, Values... >( findWriter( value, values... ), cuT( "ivec3" ), value, values... );
 	}
 
 	template< typename ... Values >
-	inline IVec4 ivec4( Type const & p_value, Values const & ... p_values )
+	inline IVec4 ivec4( Type const & value, Values const & ... values )
 	{
-		return writeFunctionCall< IVec4, Type, Values... >( p_value.m_writer, cuT( "ivec4" ), p_value, p_values... );
+		return writeFunctionCall< IVec4, Type, Values... >( findWriter( value, values... ), cuT( "ivec4" ), value, values... );
 	}
 
 	template< typename ... Values >
-	inline BVec2 bvec2( Type const & p_value, Values const & ... p_values )
+	inline BVec2 bvec2( Type const & value, Values const & ... values )
 	{
-		return writeFunctionCall< BVec2, Type, Values... >( p_value.m_writer, cuT( "bvec2" ), p_value, p_values... );
+		return writeFunctionCall< BVec2, Type, Values... >( findWriter( value, values... ), cuT( "bvec2" ), value, values... );
 	}
 
 	template< typename ... Values >
-	inline BVec3 bvec3( Type const & p_value, Values const & ... p_values )
+	inline BVec3 bvec3( Type const & value, Values const & ... values )
 	{
-		return writeFunctionCall< BVec3, Type, Values... >( p_value.m_writer, cuT( "bvec3" ), p_value, p_values... );
+		return writeFunctionCall< BVec3, Type, Values... >( findWriter( value, values... ), cuT( "bvec3" ), value, values... );
 	}
 
 	template< typename ... Values >
-	inline BVec4 bvec4( Type const & p_value, Values const & ... p_values )
+	inline BVec4 bvec4( Type const & value, Values const & ... values )
 	{
-		return writeFunctionCall< BVec4, Type, Values... >( p_value.m_writer, cuT( "bvec4" ), p_value, p_values... );
+		return writeFunctionCall< BVec4, Type, Values... >( findWriter( value, values... ), cuT( "bvec4" ), value, values... );
 	}
 
 	template< typename ... Values >
-	inline Mat3 mat3( Type const & p_value, Values const & ... p_values )
+	inline Mat3 mat3( Type const & value, Values const & ... values )
 	{
-		return writeFunctionCall< Mat3, Type, Values... >( p_value.m_writer, cuT( "mat3" ), p_value, p_values... );
+		return writeFunctionCall< Mat3, Type, Values... >( findWriter( value, values... ), cuT( "mat3" ), value, values... );
 	}
 
 	template< typename ... Values >
-	inline Mat2 mat2( Type const & p_value, Values const & ... p_values )
+	inline Mat2 mat2( Type const & value, Values const & ... values )
 	{
-		return writeFunctionCall< Mat2, Type, Values... >( p_value.m_writer, cuT( "mat2" ), p_value, p_values... );
+		return writeFunctionCall< Mat2, Type, Values... >( findWriter( value, values... ), cuT( "mat2" ), value, values... );
 	}
 
 	template< typename ... Values >
-	inline Mat4 mat4( Type const & p_value, Values const & ... p_values )
+	inline Mat4 mat4( Type const & value, Values const & ... values )
 	{
-		return writeFunctionCall< Mat4, Type, Values... >( p_value.m_writer, cuT( "mat4" ), p_value, p_values... );
+		return writeFunctionCall< Mat4, Type, Values... >( findWriter( value, values... ), cuT( "mat4" ), value, values... );
 	}
 }

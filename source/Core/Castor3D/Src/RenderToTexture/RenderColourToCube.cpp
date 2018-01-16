@@ -185,7 +185,7 @@ namespace castor3d
 
 			// Inputs
 			auto position = writer.declAttribute< Vec3 >( ShaderProgram::Position );
-			UBO_MATRIX( writer );
+			UBO_MATRIX( writer, 0 );
 
 			// Outputs
 			auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );
@@ -206,9 +206,9 @@ namespace castor3d
 			GlslWriter writer{ renderSystem.createGlslWriter() };
 
 			// Inputs
-			UBO_HDR_CONFIG( writer );
+			UBO_HDR_CONFIG( writer, 0 );
 			auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex, 0u );
 
 			glsl::Utils utils{ writer };
 			utils.declareRemoveGamma();

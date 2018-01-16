@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___GLSL_Shader_H___
@@ -19,6 +19,7 @@ namespace glsl
 	{
 		TypeName m_type;
 		uint32_t m_binding;
+		uint32_t m_set;
 		uint32_t m_count;
 	};
 
@@ -46,9 +47,10 @@ namespace glsl
 		inline void registerSampler( castor::String const & name
 			, TypeName type
 			, uint32_t binding
+			, uint32_t set
 			, uint32_t count )
 		{
-			m_samplers.emplace( name, SamplerInfo{ type, binding, count } );
+			m_samplers.emplace( name, SamplerInfo{ type, binding, set, count } );
 		}
 
 		inline void registerUniform( castor::String const & name

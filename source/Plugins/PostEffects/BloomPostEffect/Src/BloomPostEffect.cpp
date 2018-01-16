@@ -43,7 +43,7 @@ namespace Bloom
 			using namespace glsl;
 			GlslWriter writer = renderSystem->createGlslWriter();
 
-			UBO_MATRIX( writer );
+			UBO_MATRIX( writer, 0u );
 
 			// Shader inputs
 			Vec2 position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
@@ -66,7 +66,7 @@ namespace Bloom
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
@@ -98,11 +98,11 @@ namespace Bloom
 
 			// Shader inputs
 			auto index = MinTextureIndex;
-			auto c3d_mapPass0 = writer.declSampler< Sampler2D >( BloomPostEffect::CombineMapPass0, index++ );
-			auto c3d_mapPass1 = writer.declSampler< Sampler2D >( BloomPostEffect::CombineMapPass1, index++ );
-			auto c3d_mapPass2 = writer.declSampler< Sampler2D >( BloomPostEffect::CombineMapPass2, index++ );
-			auto c3d_mapPass3 = writer.declSampler< Sampler2D >( BloomPostEffect::CombineMapPass3, index++ );
-			auto c3d_mapScene = writer.declSampler< Sampler2D >( BloomPostEffect::CombineMapScene, index++ );
+			auto c3d_mapPass0 = writer.declSampler< Sampler2D >( BloomPostEffect::CombineMapPass0, index++, 0u );
+			auto c3d_mapPass1 = writer.declSampler< Sampler2D >( BloomPostEffect::CombineMapPass1, index++, 0u );
+			auto c3d_mapPass2 = writer.declSampler< Sampler2D >( BloomPostEffect::CombineMapPass2, index++, 0u );
+			auto c3d_mapPass3 = writer.declSampler< Sampler2D >( BloomPostEffect::CombineMapPass3, index++, 0u );
+			auto c3d_mapScene = writer.declSampler< Sampler2D >( BloomPostEffect::CombineMapScene, index++, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs

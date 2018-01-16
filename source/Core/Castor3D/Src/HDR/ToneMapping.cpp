@@ -41,7 +41,7 @@ namespace castor3d
 			{
 				auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 
-				UBO_MATRIX( writer );
+				UBO_MATRIX( writer, 0 );
 
 				// Shader inputs
 				auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );

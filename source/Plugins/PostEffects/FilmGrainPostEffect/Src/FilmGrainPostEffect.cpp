@@ -1,4 +1,4 @@
-﻿#include "FilmGrainPostEffect.hpp"
+#include "FilmGrainPostEffect.hpp"
 
 #include "XpmLoader.hpp"
 
@@ -62,7 +62,7 @@ namespace film_grain
 			using namespace glsl;
 			GlslWriter writer = renderSystem->createGlslWriter();
 
-			UBO_MATRIX( writer );
+			UBO_MATRIX( writer, 0u );
 
 			// Shader inputs
 			Vec2 position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
@@ -92,8 +92,8 @@ namespace film_grain
 			auto c3d_time = filmGrain.declMember< Float >( Time );
 			filmGrain.end();
 
-			auto c3d_srcTex = writer.declSampler< Sampler2D >( SrcTex, MinTextureIndex + 0u );
-			auto c3d_noiseTex = writer.declSampler< Sampler3D >( NoiseTex, MinTextureIndex + 1u );
+			auto c3d_srcTex = writer.declSampler< Sampler2D >( SrcTex, MinTextureIndex + 0u, 0u );
+			auto c3d_noiseTex = writer.declSampler< Sampler3D >( NoiseTex, MinTextureIndex + 1u, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs

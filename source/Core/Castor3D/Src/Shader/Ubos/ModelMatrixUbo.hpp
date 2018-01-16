@@ -105,8 +105,12 @@ namespace castor3d
 	};
 }
 
-#define UBO_MODEL_MATRIX( Writer )\
-	glsl::Ubo modelMatrices{ writer, castor3d::ModelMatrixUbo::BufferModelMatrix, castor3d::ModelMatrixUbo::BindingPoint };\
+#define UBO_MODEL_MATRIX( writer, set )\
+	glsl::Ubo modelMatrices{ writer\
+		, castor3d::ModelMatrixUbo::BufferModelMatrix\
+		, castor3d::ModelMatrixUbo::BindingPoint\
+		, set\
+		, glsl::Ubo::Layout::ePushConstants };\
 	auto c3d_mtxModel = modelMatrices.declMember< glsl::Mat4 >( castor3d::ModelMatrixUbo::MtxModel );\
 	auto c3d_mtxNormal = modelMatrices.declMember< glsl::Mat4 >( castor3d::ModelMatrixUbo::MtxNormal );\
 	modelMatrices.end()

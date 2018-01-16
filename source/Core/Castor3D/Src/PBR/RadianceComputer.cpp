@@ -198,7 +198,7 @@ namespace castor3d
 
 			// Inputs
 			auto position = writer.declAttribute< Vec3 >( ShaderProgram::Position );
-			UBO_MATRIX( writer );
+			UBO_MATRIX( writer, 0 );
 
 			// Outputs
 			auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );
@@ -223,7 +223,7 @@ namespace castor3d
 
 			// Inputs
 			auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
-			auto c3d_mapDiffuse = writer.declSampler< SamplerCube >( ShaderProgram::MapDiffuse, MinTextureIndex );
+			auto c3d_mapDiffuse = writer.declSampler< SamplerCube >( ShaderProgram::MapDiffuse, MinTextureIndex, 0u );
 
 			// Outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_FragColor" ) );

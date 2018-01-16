@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___GLSL_SAMPLER_H___
@@ -18,11 +18,16 @@ namespace glsl
 		inline SamplerT( GlslWriter * writer
 			, uint32_t bind
 			, castor::String const & name );
+		inline SamplerT( GlslWriter * writer
+			, uint32_t bind
+			, uint32_t set
+			, castor::String const & name );
 		template< typename T > inline SamplerT & operator=( T const & rhs );
 		inline operator uint32_t();
 
 	private:
 		uint32_t m_binding{ 0u };
+		uint32_t m_set{ 0u };
 	};
 }
 

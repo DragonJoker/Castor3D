@@ -100,8 +100,11 @@ namespace castor3d
 	};
 }
 
-#define UBO_HDR_CONFIG( Writer )\
-	Ubo hdrConfig{ writer, castor3d::HdrConfigUbo::BufferHdrConfig, castor3d::HdrConfigUbo::BindingPoint };\
+#define UBO_HDR_CONFIG( writer, set )\
+	Ubo hdrConfig{ writer\
+		, castor3d::HdrConfigUbo::BufferHdrConfig\
+		, castor3d::HdrConfigUbo::BindingPoint\
+		, set };\
 	auto c3d_exposure = hdrConfig.declMember< Float >( castor3d::HdrConfigUbo::Exposure );\
 	auto c3d_gamma = hdrConfig.declMember< Float >( castor3d::HdrConfigUbo::Gamma );\
 	hdrConfig.end()

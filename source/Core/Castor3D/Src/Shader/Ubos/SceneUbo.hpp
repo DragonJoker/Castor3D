@@ -162,8 +162,11 @@ namespace castor3d
 	};
 }
 
-#define UBO_SCENE( Writer )\
-	glsl::Ubo scene{ writer, castor3d::SceneUbo::BufferScene, castor3d::SceneUbo::BindingPoint };\
+#define UBO_SCENE( writer, set )\
+	glsl::Ubo scene{ writer\
+		, castor3d::SceneUbo::BufferScene\
+		, castor3d::SceneUbo::BindingPoint\
+		, set };\
 	auto c3d_ambientLight = scene.declMember< glsl::Vec4 >( castor3d::SceneUbo::AmbientLight );\
 	auto c3d_backgroundColour = scene.declMember< glsl::Vec4 >( castor3d::SceneUbo::BackgroundColour );\
 	auto c3d_lightsCount = scene.declMember< glsl::IVec4 >( castor3d::SceneUbo::LightsCount );\

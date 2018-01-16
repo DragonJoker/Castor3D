@@ -204,7 +204,7 @@ namespace castor3d
 			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 
-			UBO_MATRIX( writer );
+			UBO_MATRIX( writer, 0 );
 
 			// Shader inputs
 			auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
@@ -226,9 +226,10 @@ namespace castor3d
 		{
 			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
+			writer.enableExtension( "GL_ARB_texture_cube_map_array", 400 );
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< SamplerCubeArray >( ShaderProgram::MapDiffuse, MinTextureIndex );
+			auto c3d_mapDiffuse = writer.declSampler< SamplerCubeArray >( ShaderProgram::MapDiffuse, MinTextureIndex, 0u );
 			auto c3d_face = writer.declUniform< Vec3 >( cuT( "c3d_face" ) );
 			auto c3d_v2UvMult = writer.declUniform< Vec2 >( cuT( "c3d_v2UvMult" ) );
 			auto c3d_iIndex = writer.declUniform< Int >( cuT( "c3d_iIndex" ) );

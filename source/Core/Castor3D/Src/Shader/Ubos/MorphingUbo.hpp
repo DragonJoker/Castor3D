@@ -93,9 +93,13 @@ namespace castor3d
 	};
 }
 
-#define UBO_MORPHING( Writer, Flags )\
-	glsl::Ubo morphing{ writer, castor3d::MorphingUbo::BufferMorphing, castor3d::MorphingUbo::BindingPoint };\
-	auto c3d_time = morphing.declMember< glsl::Float >( castor3d::MorphingUbo::Time, checkFlag( Flags, castor3d::ProgramFlag::eMorphing ) );\
+#define UBO_MORPHING( writer, set, flags )\
+	glsl::Ubo morphing{ writer\
+		, castor3d::MorphingUbo::BufferMorphing\
+		, castor3d::MorphingUbo::BindingPoint\
+		, set\
+		, glsl::Ubo::Layout::ePushConstants };\
+	auto c3d_time = morphing.declMember< glsl::Float >( castor3d::MorphingUbo::Time, checkFlag( flags, castor3d::ProgramFlag::eMorphing ) );\
 	morphing.end()
 
 #endif

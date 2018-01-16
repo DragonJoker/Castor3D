@@ -40,7 +40,7 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			UBO_MATRIX( writer );
+			UBO_MATRIX( writer, 0u );
 			auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
 			auto texture = writer.declAttribute< Vec2 >( ShaderProgram::Texture );
 
@@ -62,8 +62,8 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			UBO_MATRIX( writer );
-			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), MinTextureIndex );
+			UBO_MATRIX( writer, 0u );
+			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), MinTextureIndex, 0u );
 
 			auto c3d_clipInfo = writer.declUniform< Vec3 >( cuT( "c3d_clipInfo" ) );
 			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
@@ -88,9 +88,9 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			UBO_MATRIX( writer );
+			UBO_MATRIX( writer, 0u );
 			auto index = MinTextureIndex;
-			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), MinTextureIndex );
+			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), MinTextureIndex, 0u );
 
 			auto c3d_previousLevel = writer.declUniform< Int >( cuT( "c3d_previousLevel" ) );
 			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );

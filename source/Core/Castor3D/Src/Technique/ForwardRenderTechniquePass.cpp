@@ -106,12 +106,12 @@ namespace castor3d
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 
-		UBO_MATRIX( writer );
-		UBO_MODEL_MATRIX( writer );
-		SkinningUbo::declare( writer, programFlags );
-		UBO_MORPHING( writer, programFlags );
-		UBO_SCENE( writer );
-		UBO_MODEL( writer );
+		UBO_MATRIX( writer, 0u );
+		UBO_MODEL_MATRIX( writer, 0u );
+		SkinningUbo::declare( writer, 0u, programFlags );
+		UBO_MORPHING( writer, 0u, programFlags );
+		UBO_SCENE( writer, 0u );
+		UBO_MODEL( writer, 0u );
 
 		// Outputs
 		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );
@@ -235,9 +235,9 @@ namespace castor3d
 		GlslWriter writer = m_renderSystem.createGlslWriter();
 
 		// UBOs
-		UBO_MATRIX( writer );
-		UBO_SCENE( writer );
-		UBO_MODEL( writer );
+		UBO_MATRIX( writer, 0u );
+		UBO_SCENE( writer, 0u );
+		UBO_MODEL( writer, 0u );
 
 		// Fragment Intputs
 		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
@@ -258,46 +258,56 @@ namespace castor3d
 
 		if ( writer.hasTextureBuffers() )
 		{
-			auto c3d_sLights = writer.declSampler< SamplerBuffer >( ShaderProgram::Lights, 1u );
+			auto c3d_sLights = writer.declSampler< SamplerBuffer >( ShaderProgram::Lights, 1u, 0u );
 		}
 		else
 		{
-			auto c3d_sLights = writer.declSampler< Sampler1D >( ShaderProgram::Lights, 1u );
+			auto c3d_sLights = writer.declSampler< Sampler1D >( ShaderProgram::Lights, 1u, 0u );
 		}
 
 		auto index = MinTextureIndex;
 		auto c3d_mapDiffuse( writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse
 			, checkFlag( textureFlags, TextureChannel::eDiffuse ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eDiffuse ) ) );
 		auto c3d_mapSpecular( writer.declSampler< Sampler2D >( ShaderProgram::MapSpecular
 			, checkFlag( textureFlags, TextureChannel::eSpecular ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eSpecular ) ) );
 		auto c3d_mapGloss( writer.declSampler< Sampler2D >( ShaderProgram::MapGloss
 			, checkFlag( textureFlags, TextureChannel::eGloss ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eGloss ) ) );
 		auto c3d_mapNormal( writer.declSampler< Sampler2D >( ShaderProgram::MapNormal
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ) );
 		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( ShaderProgram::MapOpacity
 			, ( checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) );
 		auto c3d_mapHeight( writer.declSampler< Sampler2D >( ShaderProgram::MapHeight
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
 		auto c3d_mapAmbientOcclusion( writer.declSampler< Sampler2D >( ShaderProgram::MapAmbientOcclusion
 			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ) );
 		auto c3d_mapEmissive( writer.declSampler< Sampler2D >( ShaderProgram::MapEmissive
 			, checkFlag( textureFlags, TextureChannel::eEmissive ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eEmissive ) ) );
 		auto c3d_mapTransmittance( writer.declSampler< Sampler2D >( ShaderProgram::MapTransmittance
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ) );
 		auto c3d_mapEnvironment( writer.declSampler< SamplerCube >( ShaderProgram::MapEnvironment
 			, ( checkFlag( textureFlags, TextureChannel::eReflection )
 				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) ? index++ : 0u
-			, checkFlag( textureFlags, TextureChannel::eReflection )
-			|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) );
+			, 0u
+			, ( checkFlag( textureFlags, TextureChannel::eReflection )
+				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) ) );
 		auto c3d_heightScale( writer.declUniform< Float >( cuT( "c3d_heightScale" )
 			, checkFlag( textureFlags, TextureChannel::eHeight ), 0.1_f ) );
 
@@ -480,9 +490,9 @@ namespace castor3d
 		GlslWriter writer = m_renderSystem.createGlslWriter();
 
 		// UBOs
-		UBO_MATRIX( writer );
-		UBO_SCENE( writer );
-		UBO_MODEL( writer );
+		UBO_MATRIX( writer, 0u );
+		UBO_SCENE( writer, 0u );
+		UBO_MODEL( writer, 0u );
 
 		// Fragment Intputs
 		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
@@ -503,52 +513,65 @@ namespace castor3d
 
 		if ( writer.hasTextureBuffers() )
 		{
-			auto c3d_sLights = writer.declSampler< SamplerBuffer >( cuT( "c3d_sLights" ), 1u );
+			auto c3d_sLights = writer.declSampler< SamplerBuffer >( cuT( "c3d_sLights" ), 1u, 0u );
 		}
 		else
 		{
-			auto c3d_sLights = writer.declSampler< Sampler1D >( cuT( "c3d_sLights" ), 1u );
+			auto c3d_sLights = writer.declSampler< Sampler1D >( cuT( "c3d_sLights" ), 1u, 0u );
 		}
 
 		auto index = MinTextureIndex;
 		auto c3d_mapAlbedo( writer.declSampler< Sampler2D >( ShaderProgram::MapAlbedo
 			, checkFlag( textureFlags, TextureChannel::eAlbedo ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eAlbedo ) ) );
 		auto c3d_mapRoughness( writer.declSampler< Sampler2D >( ShaderProgram::MapRoughness
 			, checkFlag( textureFlags, TextureChannel::eRoughness ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eRoughness ) ) );
 		auto c3d_mapMetallic( writer.declSampler< Sampler2D >( ShaderProgram::MapMetallic
 			, checkFlag( textureFlags, TextureChannel::eMetallic ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eMetallic ) ) );
 		auto c3d_mapNormal( writer.declSampler< Sampler2D >( ShaderProgram::MapNormal
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ) );
 		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( ShaderProgram::MapOpacity
 			, ( checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) );
 		auto c3d_mapHeight( writer.declSampler< Sampler2D >( ShaderProgram::MapHeight
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
 		auto c3d_mapAmbientOcclusion( writer.declSampler< Sampler2D >( ShaderProgram::MapAmbientOcclusion
 			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ) );
 		auto c3d_mapEmissive( writer.declSampler< Sampler2D >( ShaderProgram::MapEmissive
 			, checkFlag( textureFlags, TextureChannel::eEmissive ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eEmissive ) ) );
 		auto c3d_mapTransmittance( writer.declSampler< Sampler2D >( ShaderProgram::MapTransmittance
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ) );
 		auto c3d_mapEnvironment( writer.declSampler< SamplerCube >( ShaderProgram::MapEnvironment
 			, ( checkFlag( textureFlags, TextureChannel::eReflection )
 				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) ? index++ : 0u
-			, checkFlag( textureFlags, TextureChannel::eReflection )
-				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) );
+			, 0u
+			, ( checkFlag( textureFlags, TextureChannel::eReflection )
+				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) ) );
 		auto c3d_mapIrradiance = writer.declSampler< SamplerCube >( ShaderProgram::MapIrradiance
-			, index++ );
+			, index++
+			, 0u );
 		auto c3d_mapPrefiltered = writer.declSampler< SamplerCube >( ShaderProgram::MapPrefiltered
-			, index++ );
+			, index++
+			, 0u );
 		auto c3d_mapBrdf = writer.declSampler< Sampler2D >( ShaderProgram::MapBrdf
-			, index++ );
+			, index++
+			, 0u );
 		auto c3d_heightScale( writer.declUniform< Float >( cuT( "c3d_heightScale" )
 			, checkFlag( textureFlags, TextureChannel::eHeight ), 0.1_f ) );
 
@@ -706,9 +729,9 @@ namespace castor3d
 		GlslWriter writer = m_renderSystem.createGlslWriter();
 
 		// UBOs
-		UBO_MATRIX( writer );
-		UBO_SCENE( writer );
-		UBO_MODEL( writer );
+		UBO_MATRIX( writer, 0u );
+		UBO_SCENE( writer, 0u );
+		UBO_MODEL( writer, 0u );
 
 		// Fragment Intputs
 		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
@@ -729,52 +752,65 @@ namespace castor3d
 
 		if ( writer.hasTextureBuffers() )
 		{
-			auto c3d_sLights = writer.declSampler< SamplerBuffer >( cuT( "c3d_sLights" ), 1u );
+			auto c3d_sLights = writer.declSampler< SamplerBuffer >( cuT( "c3d_sLights" ), 1u, 0u );
 		}
 		else
 		{
-			auto c3d_sLights = writer.declSampler< Sampler1D >( cuT( "c3d_sLights" ), 1u );
+			auto c3d_sLights = writer.declSampler< Sampler1D >( cuT( "c3d_sLights" ), 1u, 0u );
 		}
 
 		auto index = MinTextureIndex;
 		auto c3d_mapDiffuse( writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse
 			, checkFlag( textureFlags, TextureChannel::eDiffuse ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eDiffuse ) ) );
 		auto c3d_mapSpecular( writer.declSampler< Sampler2D >( ShaderProgram::MapSpecular
 			, checkFlag( textureFlags, TextureChannel::eSpecular ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eSpecular ) ) );
 		auto c3d_mapGlossiness( writer.declSampler< Sampler2D >( ShaderProgram::MapGloss
 			, checkFlag( textureFlags, TextureChannel::eGloss ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eGloss ) ) );
 		auto c3d_mapNormal( writer.declSampler< Sampler2D >( ShaderProgram::MapNormal
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ) );
 		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( ShaderProgram::MapOpacity
 			, ( checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) );
 		auto c3d_mapHeight( writer.declSampler< Sampler2D >( ShaderProgram::MapHeight
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
 		auto c3d_mapAmbientOcclusion( writer.declSampler< Sampler2D >( ShaderProgram::MapAmbientOcclusion
 			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ) );
 		auto c3d_mapEmissive( writer.declSampler< Sampler2D >( ShaderProgram::MapEmissive
 			, checkFlag( textureFlags, TextureChannel::eEmissive ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eEmissive ) ) );
 		auto c3d_mapTransmittance( writer.declSampler< Sampler2D >( ShaderProgram::MapTransmittance
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ? index++ : 0u
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ) );
 		auto c3d_mapEnvironment( writer.declSampler< SamplerCube >( ShaderProgram::MapEnvironment
 			, ( checkFlag( textureFlags, TextureChannel::eReflection )
 				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) ? index++ : 0u
-			, checkFlag( textureFlags, TextureChannel::eReflection )
-				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) );
+			, 0u
+			, ( checkFlag( textureFlags, TextureChannel::eReflection )
+				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) ) );
 		auto c3d_mapIrradiance = writer.declSampler< SamplerCube >( ShaderProgram::MapIrradiance
-			, index++ );
+			, index++
+			, 0u );
 		auto c3d_mapPrefiltered = writer.declSampler< SamplerCube >( ShaderProgram::MapPrefiltered
-			, index++ );
+			, index++
+			, 0u );
 		auto c3d_mapBrdf = writer.declSampler< Sampler2D >( ShaderProgram::MapBrdf
-			, index++ );
+			, index++
+			, 0u );
 		auto c3d_heightScale( writer.declUniform< Float >( cuT( "c3d_heightScale" )
 			, checkFlag( textureFlags, TextureChannel::eHeight ), 0.1_f ) );
 

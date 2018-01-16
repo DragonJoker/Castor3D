@@ -1,4 +1,4 @@
-﻿#include "DirectionalLightPass.hpp"
+#include "DirectionalLightPass.hpp"
 
 #include <Engine.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>
@@ -149,8 +149,8 @@ namespace castor3d
 		GlslWriter writer = m_engine.getRenderSystem()->createGlslWriter();
 
 		// Shader inputs
-		UBO_MATRIX( writer );
-		UBO_GPINFO( writer );
+		UBO_MATRIX( writer, 0u );
+		UBO_GPINFO( writer, 0u );
 		auto vertex = writer.declAttribute< Vec2 >( ShaderProgram::Position );
 
 		// Shader outputs

@@ -1334,12 +1334,12 @@ namespace castor3d
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 
-		UBO_MATRIX( writer );
-		UBO_MODEL_MATRIX( writer );
-		UBO_SCENE( writer );
-		UBO_MODEL( writer );
-		SkinningUbo::declare( writer, programFlags );
-		UBO_MORPHING( writer, programFlags );
+		UBO_MATRIX( writer, 0 );
+		UBO_MODEL_MATRIX( writer, 0 );
+		UBO_SCENE( writer, 0 );
+		UBO_MODEL( writer, 0 );
+		SkinningUbo::declare( writer, 0, programFlags );
+		UBO_MORPHING( writer, 0, programFlags );
 
 		// Outputs
 		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );

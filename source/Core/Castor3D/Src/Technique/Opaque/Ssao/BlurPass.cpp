@@ -37,7 +37,7 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			UBO_MATRIX( writer );
+			UBO_MATRIX( writer, 0u );
 			auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
 			auto texture = writer.declAttribute< Vec2 >( ShaderProgram::Texture );
 
@@ -60,10 +60,10 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 			auto index = MinTextureIndex;
 
-			auto c3d_mapInput = writer.declSampler< Sampler2D >( cuT( "c3d_mapInput" ), index++ );
+			auto c3d_mapInput = writer.declSampler< Sampler2D >( cuT( "c3d_mapInput" ), index++, 0u );
 
 			/** Same size as result buffer, do not offset by guard band when reading from it */
-			auto c3d_mapNormal = writer.declSampler< Sampler2D >( cuT( "c3d_mapNormal" ), index++, config.m_useNormalsBuffer );
+			auto c3d_mapNormal = writer.declSampler< Sampler2D >( cuT( "c3d_mapNormal" ), index++, 0u, config.m_useNormalsBuffer );
 			auto c3d_readMultiplyFirst = writer.declUniform( cuT( "c3d_readMultiplyFirst" ), config.m_useNormalsBuffer, vec4( 2.0_f ) );
 			auto c3d_readAddSecond = writer.declUniform( cuT( "c3d_readAddSecond" ), config.m_useNormalsBuffer, vec4( 1.0_f ) );
 

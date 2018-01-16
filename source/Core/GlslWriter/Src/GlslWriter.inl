@@ -164,8 +164,19 @@ namespace glsl
 		, uint32_t binding )
 	{
 		using Type = typename TypeOf< T >::Type;
-		registerSampler( name, TypeTraits< Type >::TypeEnum, binding, 1u );
-		*this << "layout( binding = " << binding << " ) uniform " << TypeTraits< Type >::Name << " " << name << ";" << endl;
+		registerSampler( name, TypeTraits< Type >::TypeEnum, binding, 0u, 1u );
+		*this << m_keywords->getTextureLayout( binding, 0u ) << cuT( "uniform " ) << TypeTraits< Type >::Name << " " << name << ";" << endl;
+		return T( this, binding, name );
+	}
+
+	template< typename T >
+	inline T GlslWriter::declSampler( castor::String const & name
+		, uint32_t binding
+		, uint32_t set )
+	{
+		using Type = typename TypeOf< T >::Type;
+		registerSampler( name, TypeTraits< Type >::TypeEnum, binding, set, 1u );
+		*this << m_keywords->getTextureLayout( binding, set ) << cuT( "uniform " ) << TypeTraits< Type >::Name << " " << name << ";" << endl;
 		return T( this, binding, name );
 	}
 
@@ -175,39 +186,86 @@ namespace glsl
 		, bool enabled )
 	{
 		using Type = typename TypeOf< T >::Type;
-		registerSampler( name, TypeTraits< Type >::TypeEnum, binding, 1u, enabled );
+		registerSampler( name, TypeTraits< Type >::TypeEnum, binding, 0u, 1u, enabled );
 
 		if ( enabled )
 		{
-			*this << "layout( binding = " << toString( binding ) << " ) uniform " << TypeTraits< Type >::Name << " " << name << ";" << endl;
+			*this << m_keywords->getTextureLayout( binding, 0u ) << cuT( "uniform " ) << TypeTraits< Type >::Name << " " << name << ";" << endl;
 		}
 
 		return Optional< T >( this, binding, name, enabled );
 	}
 
 	template< typename T >
-	inline Array< T > GlslWriter::declSampler( castor::String const & name
+	inline Optional< T > GlslWriter::declSampler( castor::String const & name
+		, uint32_t binding
+		, uint32_t set
+		, bool enabled )
+	{
+		using Type = typename TypeOf< T >::Type;
+		registerSampler( name, TypeTraits< Type >::TypeEnum, binding, set, 1u, enabled );
+
+		if ( enabled )
+		{
+			*this << m_keywords->getTextureLayout( binding, set ) << cuT( "uniform " ) << TypeTraits< Type >::Name << " " << name << ";" << endl;
+		}
+
+		return Optional< T >( this, binding, name, enabled );
+	}
+
+	template< typename T >
+	inline Array< T > GlslWriter::declSamplerArray( castor::String const & name
 		, uint32_t binding
 		, uint32_t dimension )
 	{
 		using Type = typename TypeOf< T >::Type;
-		registerSampler( name, TypeTraits< Type >::TypeEnum, binding, dimension );
-		*this << "layout( binding = " << binding << " ) uniform " << TypeTraits< Type >::Name << " " << name << "[" << dimension << "];" << endl;
+		registerSampler( name, TypeTraits< Type >::TypeEnum, binding, 0u, dimension );
+		*this << m_keywords->getTextureLayout( binding, 0u ) << cuT( "uniform " ) << TypeTraits< Type >::Name << " " << name << ";" << endl;
 		return Array< T >( this, binding, name, dimension );
 	}
 
 	template< typename T >
-	inline Optional< Array< T > > GlslWriter::declSampler( castor::String const & name
+	inline Array< T > GlslWriter::declSamplerArray( castor::String const & name
+		, uint32_t binding
+		, uint32_t set
+		, uint32_t dimension )
+	{
+		using Type = typename TypeOf< T >::Type;
+		registerSampler( name, TypeTraits< Type >::TypeEnum, binding, set, dimension );
+		*this << m_keywords->getTextureLayout( binding, set ) << cuT( "uniform " ) << TypeTraits< Type >::Name << " " << name << "[" << dimension << "];" << endl;
+		return Array< T >( this, binding, name, dimension );
+	}
+
+	template< typename T >
+	inline Optional< Array< T > > GlslWriter::declSamplerArray( castor::String const & name
 		, uint32_t binding
 		, uint32_t dimension
 		, bool enabled )
 	{
 		using Type = typename TypeOf< T >::Type;
-		registerSampler( name, TypeTraits< Type >::TypeEnum, binding, dimension, enabled );
+		registerSampler( name, TypeTraits< Type >::TypeEnum, binding, 0u, dimension, enabled );
 
 		if ( enabled )
 		{
-			*this << "layout( binding = " << binding << " ) uniform " << TypeTraits< Type >::Name << " " << name << "[" << dimension << "];" << endl;
+			*this << m_keywords->getTextureLayout( binding, 0u ) << cuT( "uniform " ) << TypeTraits< Type >::Name << " " << name << "[" << dimension << "];" << endl;
+		}
+
+		return Optional< Array< T > >( this, binding, name, dimension, enabled );
+	}
+
+	template< typename T >
+	inline Optional< Array< T > > GlslWriter::declSamplerArray( castor::String const & name
+		, uint32_t binding
+		, uint32_t set
+		, uint32_t dimension
+		, bool enabled )
+	{
+		using Type = typename TypeOf< T >::Type;
+		registerSampler( name, TypeTraits< Type >::TypeEnum, binding, set, dimension, enabled );
+
+		if ( enabled )
+		{
+			*this << m_keywords->getTextureLayout( binding, set ) << cuT( "uniform " ) << TypeTraits< Type >::Name << " " << name << "[" << dimension << "];" << endl;
 		}
 
 		return Optional< Array< T > >( this, binding, name, dimension, enabled );

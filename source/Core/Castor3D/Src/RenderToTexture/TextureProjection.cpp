@@ -112,8 +112,8 @@ namespace castor3d
 
 			// Inputs
 			auto position = writer.declAttribute< Vec3 >( ShaderProgram::Position );
-			UBO_MATRIX( writer );
-			UBO_MODEL_MATRIX( writer );
+			UBO_MATRIX( writer, 0 );
+			UBO_MODEL_MATRIX( writer, 0 );
 
 			// Outputs
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
@@ -132,7 +132,7 @@ namespace castor3d
 			GlslWriter writer{ renderSystem.createGlslWriter() };
 
 			// Inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex, 0u );
 			auto c3d_size = writer.declUniform< Vec2 >( cuT( "c3d_size" ) );
 			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
@@ -153,7 +153,6 @@ namespace castor3d
 		program->createObject( ShaderType::ePixel );
 		program->setSource( ShaderType::eVertex, vtx );
 		program->setSource( ShaderType::ePixel, pxl );
-		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
 		m_sizeUniform = program->createUniform< UniformType::eVec2f >( cuT( "c3d_size" ), ShaderType::ePixel );
 		program->initialise();
 		return *program;

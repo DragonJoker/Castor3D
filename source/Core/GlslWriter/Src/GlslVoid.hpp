@@ -12,7 +12,7 @@ namespace glsl
 		: public Type
 	{
 		inline Void();
-		inline Void( GlslWriter * p_writer );
+		inline Void( GlslWriter * writer );
 	};
 }
 

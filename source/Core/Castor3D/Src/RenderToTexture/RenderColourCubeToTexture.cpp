@@ -1,4 +1,4 @@
-﻿#include "RenderColourCubeToTexture.hpp"
+#include "RenderColourCubeToTexture.hpp"
 
 #include "Engine.hpp"
 
@@ -227,7 +227,7 @@ namespace castor3d
 			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 
-			UBO_MATRIX( writer );
+			UBO_MATRIX( writer, 0 );
 
 			// Shader inputs
 			auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
@@ -251,7 +251,7 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< SamplerCube >( ShaderProgram::MapDiffuse, MinTextureIndex );
+			auto c3d_mapDiffuse = writer.declSampler< SamplerCube >( ShaderProgram::MapDiffuse, MinTextureIndex, 0u );
 			auto c3d_face = writer.declUniform< Vec3 >( cuT( "c3d_face" ) );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 

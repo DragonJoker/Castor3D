@@ -14,8 +14,8 @@ namespace glsl
 		GlslWriter_API Expr( int p_value );
 		GlslWriter_API Expr( float p_value );
 		GlslWriter_API Expr( double p_value );
-		GlslWriter_API Expr( GlslWriter * p_writer );
-		GlslWriter_API Expr( GlslWriter * p_writer, castor::String const & p_init );
+		GlslWriter_API Expr( GlslWriter * writer );
+		GlslWriter_API Expr( GlslWriter * writer, castor::String const & p_init );
 		GlslWriter_API Expr( Expr const & p_rhs );
 		GlslWriter_API Expr( Expr && p_rhs );
 		GlslWriter_API virtual ~Expr();

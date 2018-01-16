@@ -16,6 +16,7 @@
 using namespace castor3d;
 using namespace castor;
 
+#define LIMIT_GL_VERSION 0
 #define DEF_USE_DIRECT_STATE_ACCESS 0
 
 namespace GlRender
@@ -496,6 +497,9 @@ namespace GlRender
 		StringStream stream( m_version );
 		stream >> version;
 		m_iVersion = int( version * 10 );
+#if LIMIT_GL_VERSION
+		m_iVersion = 33;
+#endif
 
 		if ( m_iVersion >= 33 )
 		{

@@ -43,7 +43,7 @@ namespace GrayScale
 			using namespace glsl;
 			GlslWriter writer = renderSystem->createGlslWriter();
 
-			UBO_MATRIX( writer );
+			UBO_MATRIX( writer, 0u );
 
 			// Shader inputs
 			Vec2 position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
@@ -66,7 +66,7 @@ namespace GrayScale
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs

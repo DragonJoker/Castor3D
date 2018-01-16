@@ -40,8 +40,8 @@ namespace fxaa
 	};
 }
 
-#define UBO_FXAA( p_writer )\
-	glsl::Ubo fxaa{ p_writer, FxaaUbo::Name, FxaaUbo::BindingPoint };\
+#define UBO_FXAA( writer, set )\
+	glsl::Ubo fxaa{ writer, FxaaUbo::Name, FxaaUbo::BindingPoint, set };\
 	auto c3d_subpixShift = fxaa.declMember< Float >( FxaaUbo::SubpixShift );\
 	auto c3d_spanMax = fxaa.declMember< Float >( FxaaUbo::SpanMax );\
 	auto c3d_reduceMul = fxaa.declMember< Float >( FxaaUbo::ReduceMul );\

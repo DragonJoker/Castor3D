@@ -117,8 +117,8 @@
 	}
 
 	template< typename ValueT >
-	Mat2T< ValueT >::Mat2T( GlslWriter * p_writer, castor::String const & p_name )
-		: Type( details::Mat2Traits< ValueT >::getName(), p_writer, p_name )
+	Mat2T< ValueT >::Mat2T( GlslWriter * writer, castor::String const & p_name )
+		: Type( details::Mat2Traits< ValueT >::getName(), writer, p_name )
 	{
 	}
 
@@ -171,8 +171,8 @@
 	}
 
 	template< typename ValueT >
-	Mat3T< ValueT >::Mat3T( GlslWriter * p_writer, castor::String const & p_name )
-		: Type( details::Mat3Traits< ValueT >::getName(), p_writer, p_name )
+	Mat3T< ValueT >::Mat3T( GlslWriter * writer, castor::String const & p_name )
+		: Type( details::Mat3Traits< ValueT >::getName(), writer, p_name )
 	{
 	}
 
@@ -225,8 +225,8 @@
 	}
 
 	template< typename ValueT >
-	Mat4T< ValueT >::Mat4T( GlslWriter * p_writer, castor::String const & p_name )
-		: Type( details::Mat4Traits< ValueT >::getName(), p_writer, p_name )
+	Mat4T< ValueT >::Mat4T( GlslWriter * writer, castor::String const & p_name )
+		: Type( details::Mat4Traits< ValueT >::getName(), writer, p_name )
 	{
 	}
 

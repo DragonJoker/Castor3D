@@ -146,33 +146,33 @@ namespace castor
 
 		void loadModule( DynamicLibrary const & library )
 		{
-			auto result = ::SymLoadModuleEx( doGetProcess()    // target process 
-				, nullptr                                      // handle to image - not used
-				, library.getPath().c_str()                    // name of image file
-				, nullptr                                      // name of module - not required
-				, 0                                            // base address - not required
-				, 0                                            // size of image - not required
-				, nullptr                                      // MODLOAD_DATA used for special cases 
-				, 0 );                                         // flags - not required
+			//auto result = ::SymLoadModuleEx( doGetProcess()    // target process 
+			//	, nullptr                                      // handle to image - not used
+			//	, library.getPath().c_str()                    // name of image file
+			//	, nullptr                                      // name of module - not required
+			//	, 0                                            // base address - not required
+			//	, 0                                            // size of image - not required
+			//	, nullptr                                      // MODLOAD_DATA used for special cases 
+			//	, 0 );                                         // flags - not required
 
-			if ( !result )
-			{
-				std::cerr << "SymLoadModuleEx failed: " << System::getLastErrorText() << std::endl;
-			}
-			else
-			{
-				doGetLibraryBaseAddress( library ) = result;
-			}
+			//if ( !result )
+			//{
+			//	std::cerr << "SymLoadModuleEx failed: " << System::getLastErrorText() << std::endl;
+			//}
+			//else
+			//{
+			//	doGetLibraryBaseAddress( library ) = result;
+			//}
 		}
 
 		void unloadModule( DynamicLibrary const & library )
 		{
-			auto address = doGetLibraryBaseAddress( library );
+			//auto address = doGetLibraryBaseAddress( library );
 
-			if ( address )
-			{
-				::SymUnloadModule64( doGetProcess(), address );
-			}
+			//if ( address )
+			//{
+			//	::SymUnloadModule64( doGetProcess(), address );
+			//}
 		}
 
 #else

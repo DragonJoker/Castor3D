@@ -86,7 +86,7 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			UBO_MATRIX( writer );
+			UBO_MATRIX( writer, 0u );
 			auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
 			auto texture = writer.declAttribute< Vec2 >( ShaderProgram::Texture );
 
@@ -110,9 +110,9 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			UBO_SCENE( writer );
-			UBO_GPINFO( writer );
-			Ubo config{ writer, SubsurfaceScatteringPass::Config, 2u };
+			UBO_SCENE( writer, 0u );
+			UBO_GPINFO( writer, 0u );
+			Ubo config{ writer, SubsurfaceScatteringPass::Config, 2u, 0u };
 			auto c3d_step = config.declMember< Vec2 >( SubsurfaceScatteringPass::Step );
 			auto c3d_correction = config.declMember< Float >( SubsurfaceScatteringPass::Correction );
 			auto c3d_pixelSize = config.declMember< Float >( SubsurfaceScatteringPass::PixelSize );
@@ -126,10 +126,10 @@ namespace castor3d
 				, 6u
 				, std::vector< Float >{ { -1.0, -0.6667, -0.3333, 0.3333, 0.6667, 1.0 } } );
 			auto index = MinTextureIndex;
-			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++ );
-			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++ );
-			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++ );
-			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), index++ );
+			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++, 0u );
+			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++, 0u );
+			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++, 0u );
+			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), index++, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			auto materials = shader::createMaterials( writer
@@ -221,12 +221,12 @@ namespace castor3d
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 			auto index = MinTextureIndex;
-			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++ );
-			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++ );
-			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), index++ );
-			auto c3d_mapBlur1 = writer.declSampler< Sampler2D >( cuT( "c3d_mapBlur1" ), index++ );
-			auto c3d_mapBlur2 = writer.declSampler< Sampler2D >( cuT( "c3d_mapBlur2" ), index++ );
-			auto c3d_mapBlur3 = writer.declSampler< Sampler2D >( cuT( "c3d_mapBlur3" ), index++ );
+			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++, 0u );
+			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++, 0u );
+			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), index++, 0u );
+			auto c3d_mapBlur1 = writer.declSampler< Sampler2D >( cuT( "c3d_mapBlur1" ), index++, 0u );
+			auto c3d_mapBlur2 = writer.declSampler< Sampler2D >( cuT( "c3d_mapBlur2" ), index++, 0u );
+			auto c3d_mapBlur3 = writer.declSampler< Sampler2D >( cuT( "c3d_mapBlur3" ), index++, 0u );
 			auto c3d_originalWeight = writer.declUniform< Vec4 >( cuT( "c3d_originalWeight" )
 				, vec4( 0.2406_f, 0.4475_f, 0.6159_f, 0.25_f ) );
 			auto c3d_blurWeights = writer.declUniform< Vec4 >( cuT( "c3d_blurWeights" )

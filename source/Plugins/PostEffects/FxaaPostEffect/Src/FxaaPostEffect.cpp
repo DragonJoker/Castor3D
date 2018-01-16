@@ -52,8 +52,8 @@ namespace fxaa
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			UBO_MATRIX( writer );
-			UBO_FXAA( writer );
+			UBO_MATRIX( writer, 0u );
+			UBO_FXAA( writer, 0u );
 			auto position = writer.declAttribute< Vec2 >( castor3d::ShaderProgram::Position );
 
 			// Shader outputs
@@ -80,11 +80,11 @@ namespace fxaa
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( castor3d::ShaderProgram::MapDiffuse, castor3d::MinTextureIndex );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( castor3d::ShaderProgram::MapDiffuse, castor3d::MinTextureIndex, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 			auto vtx_posPos = writer.declInput< Vec4 >( PosPos );
 
-			UBO_FXAA( writer );
+			UBO_FXAA( writer, 0u );
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );

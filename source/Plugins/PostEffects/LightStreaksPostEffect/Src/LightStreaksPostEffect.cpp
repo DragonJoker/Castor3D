@@ -1,4 +1,4 @@
-﻿#include "LightStreaksPostEffect.hpp"
+#include "LightStreaksPostEffect.hpp"
 
 #include <Engine.hpp>
 #include <Cache/SamplerCache.hpp>
@@ -40,7 +40,7 @@ namespace light_streaks
 			using namespace glsl;
 			GlslWriter writer = renderSystem->createGlslWriter();
 
-			UBO_MATRIX( writer );
+			UBO_MATRIX( writer, 0u );
 
 			// Shader inputs
 			Vec2 position = writer.declAttribute< Vec2 >( castor3d::ShaderProgram::Position );
@@ -63,7 +63,7 @@ namespace light_streaks
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( castor3d::ShaderProgram::MapDiffuse, castor3d::MinTextureIndex );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( castor3d::ShaderProgram::MapDiffuse, castor3d::MinTextureIndex, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
@@ -94,7 +94,7 @@ namespace light_streaks
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( castor3d::ShaderProgram::MapDiffuse, castor3d::MinTextureIndex );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( castor3d::ShaderProgram::MapDiffuse, castor3d::MinTextureIndex, 0u );
 			UBO_KAWASE( writer );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
@@ -134,11 +134,11 @@ namespace light_streaks
 
 			// Shader inputs
 			auto index = castor3d::MinTextureIndex;
-			auto c3d_mapScene = writer.declSampler< Sampler2D >( PostEffect::CombineMapScene, index++ );
-			auto c3d_mapKawase1 = writer.declSampler< Sampler2D >( PostEffect::CombineMapKawase1, index++ );
-			auto c3d_mapKawase2 = writer.declSampler< Sampler2D >( PostEffect::CombineMapKawase2, index++ );
-			auto c3d_mapKawase3 = writer.declSampler< Sampler2D >( PostEffect::CombineMapKawase3, index++ );
-			auto c3d_mapKawase4 = writer.declSampler< Sampler2D >( PostEffect::CombineMapKawase4, index++ );
+			auto c3d_mapScene = writer.declSampler< Sampler2D >( PostEffect::CombineMapScene, index++, 0u );
+			auto c3d_mapKawase1 = writer.declSampler< Sampler2D >( PostEffect::CombineMapKawase1, index++, 0u );
+			auto c3d_mapKawase2 = writer.declSampler< Sampler2D >( PostEffect::CombineMapKawase2, index++, 0u );
+			auto c3d_mapKawase3 = writer.declSampler< Sampler2D >( PostEffect::CombineMapKawase3, index++, 0u );
+			auto c3d_mapKawase4 = writer.declSampler< Sampler2D >( PostEffect::CombineMapKawase4, index++, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs

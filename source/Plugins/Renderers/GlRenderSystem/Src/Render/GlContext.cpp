@@ -77,9 +77,10 @@ namespace GlRender
 			getImpl().updateVSync( m_window->getVSync() );
 			engine->getRenderLoop().updateVSync( m_window->getVSync() );
 
-			if ( m_glRenderSystem->getOpenGlMajor() < 4 )
+			if ( m_glRenderSystem->getOpenGlMajor() < 3
+				|| ( m_glRenderSystem->getOpenGlMajor() == 3 && m_glRenderSystem->getOpenGlMinor() < 3 ) )
 			{
-				CASTOR_EXCEPTION( cuT( "The supported OpenGL version is insufficient to run Castor3D (OpenGL 4.2 is needed, at least)" ) );
+				CASTOR_EXCEPTION( cuT( "The supported OpenGL version is insufficient to run Castor3D (OpenGL 3.3 is needed, at least)" ) );
 			}
 
 			getImpl().setCurrent();

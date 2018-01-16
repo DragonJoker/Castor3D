@@ -206,11 +206,11 @@ namespace castor3d
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 
-		UBO_MATRIX( writer );
-		UBO_MODEL_MATRIX( writer );
-		UBO_MODEL( writer );
-		SkinningUbo::declare( writer, programFlags );
-		UBO_MORPHING( writer, programFlags );
+		UBO_MATRIX( writer, 0u );
+		UBO_MODEL_MATRIX( writer, 0u );
+		UBO_MODEL( writer, 0u );
+		SkinningUbo::declare( writer, 0u, programFlags );
+		UBO_MORPHING( writer, 0u, programFlags );
 
 		// Outputs
 		auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" ) );
@@ -346,6 +346,8 @@ namespace castor3d
 		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ) );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ) );
 		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( ShaderProgram::MapOpacity
+			, MinTextureIndex
+			, 0u
 			, checkFlag( textureFlags, TextureChannel::eOpacity ) ) );
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 

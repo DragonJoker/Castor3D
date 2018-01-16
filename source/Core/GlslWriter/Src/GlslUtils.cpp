@@ -8,8 +8,8 @@ namespace glsl
 {
 	uint32_t const Utils::MaxIblReflectionLod = 4;
 
-	Utils::Utils( GlslWriter & p_writer )
-		: m_writer{ p_writer }
+	Utils::Utils( GlslWriter & writer )
+		: m_writer{ writer }
 	{
 	}
 

@@ -59,8 +59,11 @@ namespace castor3d
 	};
 }
 
-#define UBO_GPINFO( p_writer )\
-	glsl::Ubo gpInfo{ p_writer, castor3d::GpInfoUbo::GPInfo, castor3d::GpInfoUbo::BindingPoint };\
+#define UBO_GPINFO( writer, set )\
+	glsl::Ubo gpInfo{ writer\
+		, castor3d::GpInfoUbo::GPInfo\
+		, castor3d::GpInfoUbo::BindingPoint\
+		, set };\
 	auto c3d_mtxInvViewProj = gpInfo.declMember< glsl::Mat4 >( castor3d::GpInfoUbo::InvViewProj );\
 	auto c3d_mtxInvView = gpInfo.declMember< glsl::Mat4 >( castor3d::GpInfoUbo::InvView );\
 	auto c3d_mtxInvProj = gpInfo.declMember< glsl::Mat4 >( castor3d::GpInfoUbo::InvProj );\

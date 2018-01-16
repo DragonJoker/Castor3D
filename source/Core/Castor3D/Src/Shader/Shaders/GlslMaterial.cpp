@@ -336,7 +336,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto c3d_materials = m_writer.declSampler< SamplerBuffer >( cuT( "c3d_materials" ), 0u );
+				auto c3d_materials = m_writer.declSampler< SamplerBuffer >( cuT( "c3d_materials" ), 0u, 0u );
 				m_getMaterial = m_writer.implementFunction< LegacyMaterial >( cuT( "getMaterial" )
 					, [this, &c3d_materials]( Int const & index )
 					{
@@ -404,7 +404,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto c3d_materials = m_writer.declSampler< SamplerBuffer >( cuT( "c3d_materials" ), 0u );
+				auto c3d_materials = m_writer.declSampler< SamplerBuffer >( cuT( "c3d_materials" ), 0u, 0u );
 				m_getMaterial = m_writer.implementFunction< MetallicRoughnessMaterial >( cuT( "getMaterial" )
 					, [this, &c3d_materials]( Int const & index )
 					{
@@ -466,7 +466,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto c3d_materials = m_writer.declSampler< SamplerBuffer >( cuT( "c3d_materials" ), 0u );
+				auto c3d_materials = m_writer.declSampler< SamplerBuffer >( cuT( "c3d_materials" ), 0u, 0u );
 				m_getMaterial = m_writer.implementFunction< SpecularGlossinessMaterial >( cuT( "getMaterial" )
 					, [this, &c3d_materials]( Int const & index )
 					{

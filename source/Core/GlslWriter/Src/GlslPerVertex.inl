@@ -5,8 +5,8 @@ namespace glsl
 	{
 	}
 
-	gl_PerVertex::gl_PerVertex( GlslWriter * p_writer, castor::String const & p_name )
-		: Type( cuT( "gl_PerVertex " ), p_writer, p_name )
+	gl_PerVertex::gl_PerVertex( GlslWriter * writer, castor::String const & p_name )
+		: Type( cuT( "gl_PerVertex " ), writer, p_name )
 	{
 	}
 

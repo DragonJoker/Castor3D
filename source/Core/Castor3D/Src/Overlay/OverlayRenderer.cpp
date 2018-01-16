@@ -609,8 +609,8 @@ namespace castor3d
 		{
 			auto writer = getRenderSystem()->createGlslWriter();
 
-			UBO_MATRIX( writer );
-			UBO_OVERLAY( writer );
+			UBO_MATRIX( writer, 0 );
+			UBO_OVERLAY( writer, 0 );
 
 			// Shader inputs
 			auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
@@ -667,7 +667,7 @@ namespace castor3d
 			}
 
 			materials->declare();
-			UBO_OVERLAY( writer );
+			UBO_OVERLAY( writer, 0u );
 
 			// Shader inputs
 			auto vtx_text = writer.declInput< Vec2 >( cuT( "vtx_text" )
@@ -676,12 +676,15 @@ namespace castor3d
 				, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
 			auto c3d_mapText = writer.declSampler< Sampler2D >( ShaderProgram::MapText
 				, LightBufferIndex + 0u
+				, 0u
 				, checkFlag( textureFlags, TextureChannel::eText ) );
 			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse
 				, LightBufferIndex + 1u
+				, 0u
 				, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
 			auto c3d_mapOpacity = writer.declSampler< Sampler2D >( ShaderProgram::MapOpacity
 				, LightBufferIndex + 2u
+				, 0u
 				, checkFlag( textureFlags, TextureChannel::eOpacity ) );
 
 			// Shader outputs

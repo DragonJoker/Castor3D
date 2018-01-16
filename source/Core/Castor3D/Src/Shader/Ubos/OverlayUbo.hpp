@@ -126,8 +126,12 @@ namespace castor3d
 	};
 }
 
-#define UBO_OVERLAY( Writer )\
-	glsl::Ubo overlay{ writer, castor3d::OverlayUbo::BufferOverlay, castor3d::OverlayUbo::BindingPoint };\
+#define UBO_OVERLAY( writer, set )\
+	glsl::Ubo overlay{ writer\
+		, castor3d::OverlayUbo::BufferOverlay\
+		, castor3d::OverlayUbo::BindingPoint\
+		, set\
+		, glsl::Ubo::Layout::ePushConstants };\
 	auto c3d_position = overlay.declMember< glsl::Vec2 >( castor3d::OverlayUbo::Position );\
 	auto c3d_renderSize = overlay.declMember< glsl::IVec2 >( castor3d::OverlayUbo::RenderSize );\
 	auto c3d_renderRatio = overlay.declMember< glsl::Vec2 >( castor3d::OverlayUbo::RenderRatio );\

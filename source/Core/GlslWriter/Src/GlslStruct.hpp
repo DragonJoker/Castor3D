@@ -11,9 +11,9 @@ namespace glsl
 	class Struct
 	{
 	public:
-		GlslWriter_API Struct( GlslWriter & p_writer
+		GlslWriter_API Struct( GlslWriter & writer
 			, castor::String const & p_name );
-		GlslWriter_API Struct( GlslWriter & p_writer
+		GlslWriter_API Struct( GlslWriter & writer
 			, castor::String const & p_name
 			, castor::String const & p_instName );
 		GlslWriter_API void end();

@@ -1,4 +1,4 @@
-﻿#include "GaussianBlur.hpp"
+#include "GaussianBlur.hpp"
 
 #include "Engine.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -41,7 +41,7 @@ namespace castor3d
 			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 
-			UBO_MATRIX( writer );
+			UBO_MATRIX( writer, 0 );
 
 			// Shader inputs
 			auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
@@ -71,7 +71,7 @@ namespace castor3d
 			auto c3d_coefficients = config.declMember< Float >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients );
 			auto c3d_textureSize = config.declMember< Vec2 >( GaussianBlur::TextureSize );
 			config.end();
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
@@ -84,7 +84,7 @@ namespace castor3d
 				auto offset = writer.declLocale( cuT( "offset" ), vec2( 0.0_f, 0 ) );
 				pxl_fragColor = texture( c3d_mapDiffuse, vtx_texture ) * c3d_coefficients[0];
 
-				FOR( writer, Int, i, 1, cuT( "i < c3d_coefficientsCount" ), cuT( "++i" ) )
+				FOR( writer, UInt, i, 1u, cuT( "i < c3d_coefficientsCount" ), cuT( "++i" ) )
 				{
 					offset += base;
 					pxl_fragColor += c3d_coefficients[i] * texture( c3d_mapDiffuse, vtx_texture - offset );
@@ -109,7 +109,7 @@ namespace castor3d
 			auto c3d_coefficients = config.declMember< Float >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients );
 			auto c3d_textureSize = config.declMember< Vec2 >( GaussianBlur::TextureSize );
 			config.end();
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
@@ -122,7 +122,7 @@ namespace castor3d
 				auto offset = writer.declLocale( cuT( "offset" ), vec2( 0.0_f, 0 ) );
 				pxl_fragColor = texture( c3d_mapDiffuse, vtx_texture ) * c3d_coefficients[0];
 
-				FOR( writer, Int, i, 1, cuT( "i < c3d_coefficientsCount" ), cuT( "++i" ) )
+				FOR( writer, UInt, i, 1u, cuT( "i < c3d_coefficientsCount" ), cuT( "++i" ) )
 				{
 					offset += base;
 					pxl_fragColor += c3d_coefficients[i] * texture( c3d_mapDiffuse, vtx_texture - offset );

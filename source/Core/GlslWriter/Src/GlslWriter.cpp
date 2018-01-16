@@ -6,10 +6,10 @@
 
 namespace glsl
 {
-	GlslWriter::GlslWriter( GlslWriterConfig const & p_config )
-		: m_keywords( glsl::KeywordsBase::get( p_config ) )
+	GlslWriter::GlslWriter( GlslWriterConfig const & config )
+		: m_keywords( glsl::KeywordsBase::get( config ) )
 		, m_uniform( cuT( "uniform " ) )
-		, m_config( p_config )
+		, m_config( config )
 	{
 		*this << glsl::Version() << endl;
 
@@ -73,6 +73,15 @@ namespace glsl
 	void GlslWriter::multilineComment( castor::String const & comment )
 	{
 		m_stream << cuT( "/*" ) << comment << "*/" << std::endl;
+	}
+
+	void GlslWriter::enableExtension( castor::String const & name, uint32_t inCoreVersion )
+	{
+		if ( getShaderLanguageVersion() < inCoreVersion
+			|| !inCoreVersion )
+		{
+			m_stream << "#extension " << name << ": enable" << std::endl;
+		}
 	}
 
 	Shader GlslWriter::finalise()

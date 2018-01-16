@@ -258,8 +258,8 @@ namespace castor3d
 
 			// Inputs
 			auto position = writer.declAttribute< Vec3 >( ShaderProgram::Position );
-			UBO_MATRIX( writer );
-			UBO_MODEL_MATRIX( writer );
+			UBO_MATRIX( writer, 0 );
+			UBO_MODEL_MATRIX( writer, 0 );
 
 			// Outputs
 			auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ) );
@@ -280,9 +280,9 @@ namespace castor3d
 			GlslWriter writer{ getEngine()->getRenderSystem()->createGlslWriter() };
 
 			// Inputs
-			UBO_HDR_CONFIG( writer );
+			UBO_HDR_CONFIG( writer, 0 );
 			auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ) );
-			auto skybox = writer.declSampler< SamplerCube >( cuT( "skybox" ), MinTextureIndex );
+			auto skybox = writer.declSampler< SamplerCube >( cuT( "skybox" ), MinTextureIndex, 0u );
 			glsl::Utils utils{ writer };
 
 			if ( !m_hdr )

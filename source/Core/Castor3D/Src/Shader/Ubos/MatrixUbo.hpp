@@ -134,8 +134,11 @@ namespace castor3d
 	};
 }
 
-#define UBO_MATRIX( Writer )\
-	glsl::Ubo matrices{ writer, castor3d::MatrixUbo::BufferMatrix, castor3d::MatrixUbo::BindingPoint };\
+#define UBO_MATRIX( writer, set )\
+	glsl::Ubo matrices{ writer\
+		, castor3d::MatrixUbo::BufferMatrix\
+		, castor3d::MatrixUbo::BindingPoint\
+		, set };\
 	auto c3d_projection = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::Projection );\
 	auto c3d_invProjection = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::InvProjection );\
 	auto c3d_curView = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::CurView );\

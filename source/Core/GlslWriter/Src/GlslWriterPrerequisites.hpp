@@ -43,7 +43,7 @@ namespace glsl
 	class GlslWriter;
 	class Shader;
 	class KeywordsBase;
-	template< int Version, class Enable = void >
+	template< int Version, bool IsVulkan, class Enable = void >
 	class Keywords;
 
 	enum class TypeName
@@ -258,9 +258,9 @@ namespace glsl
 	static Endi endi;
 	static Endl endl;
 
-	GlslWriter_API void writeLine( GlslWriter & p_writer, castor::String const & p_line );
-	GlslWriter_API void registerName( GlslWriter & p_writer, castor::String const & p_name, TypeName p_type );
-	GlslWriter_API void checkNameExists( GlslWriter & p_writer, castor::String const & p_name, TypeName p_type );
+	GlslWriter_API void writeLine( GlslWriter & writer, castor::String const & p_line );
+	GlslWriter_API void registerName( GlslWriter & writer, castor::String const & p_name, TypeName p_type );
+	GlslWriter_API void checkNameExists( GlslWriter & writer, castor::String const & p_name, TypeName p_type );
 }
 
 #include "GlslWriterPrerequisites.inl"

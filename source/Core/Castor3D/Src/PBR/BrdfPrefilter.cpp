@@ -150,7 +150,7 @@ namespace castor3d
 
 			// Inputs
 			auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
-			UBO_MATRIX( writer );
+			UBO_MATRIX( writer, 0 );
 
 			// Outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
@@ -296,7 +296,7 @@ namespace castor3d
 					auto sampleCount = writer.declLocale( cuT( "sampleCount" )
 						, 1024_ui );
 
-					FOR( writer, UInt, i, 0, "i < sampleCount", "++i" )
+					FOR( writer, UInt, i, 0u, "i < sampleCount", "++i" )
 					{
 						auto xi = writer.declLocale( cuT( "xi" )
 							, hammersley( i, sampleCount ) );
