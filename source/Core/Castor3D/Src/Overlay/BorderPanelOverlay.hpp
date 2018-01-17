@@ -100,7 +100,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the border material
+		 *\brief		Sets the border material
 		 *\param[in]	material	The new value
 		 *\~french
 		 *\brief		Définit le matériau des bords
@@ -236,7 +236,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the left border thickness
+		 *\brief		Sets the left border thickness
 		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord gauche
@@ -249,7 +249,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the top border thickness
+		 *\brief		Sets the top border thickness
 		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord haut
@@ -262,7 +262,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the right border thickness
+		 *\brief		Sets the right border thickness
 		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord droit
@@ -275,7 +275,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the bottom border thickness
+		 *\brief		Sets the bottom border thickness
 		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord bas
@@ -288,7 +288,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the borders thicknesses
+		 *\brief		Sets the borders thicknesses
 		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur des bords
@@ -374,7 +374,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the left border thickness
+		 *\brief		Sets the left border thickness
 		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord gauche
@@ -387,7 +387,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the top border thickness
+		 *\brief		Sets the top border thickness
 		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord haut
@@ -400,7 +400,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the right border thickness
+		 *\brief		Sets the right border thickness
 		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord droit
@@ -413,7 +413,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the bottom border thickness
+		 *\brief		Sets the bottom border thickness
 		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord bas
@@ -426,7 +426,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the borders thicknesses
+		 *\brief		Sets the borders thicknesses
 		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur des bords
@@ -451,7 +451,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the border position
+		 *\brief		Sets the border position
 		 *\param[in]	position	The new value
 		 *\~french
 		 *\brief		Définit la position de la bordure
@@ -475,7 +475,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the borders outer part UV
+		 *\brief		Sets the borders outer part UV
 		 *\param[in]	value	The new value (left, top, right and bottom)
 		 *\~french
 		 *\brief		Définit Les UV de la partie extérieure de la bordure
@@ -499,7 +499,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the borders inner part UV
+		 *\brief		Sets the borders inner part UV
 		 *\param[in]	value	The new value (left, top, right and bottom)
 		 *\~french
 		 *\brief		Définit Les UV de la partie intérieure de la bordure

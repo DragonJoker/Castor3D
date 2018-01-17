@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_VERTEX_BUFFER_H___
@@ -56,8 +56,8 @@ namespace castor3d
 		 *\param[in]	nature	Nature d'accès du tampon.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool initialise( BufferAccessType type
-			, BufferAccessNature nature );
+		C3D_API bool initialise( renderer::MemoryPropertyFlags flags
+			, std::vector< uint8_t > const & data );
 		/**
 		 *\~english
 		 *\brief		Clean up the GPU buffer.

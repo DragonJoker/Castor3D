@@ -13,25 +13,30 @@ namespace castor3d
 	{
 	}
 
-	bool VertexBuffer::initialise( BufferAccessType type
-		, BufferAccessNature nature )
+	bool VertexBuffer::initialise( renderer::MemoryPropertyFlags flags
+		, std::vector< uint8_t > const & data )
 	{
 		if ( !m_gpuBuffer )
 		{
-			auto buffer = getEngine()->getRenderSystem()->getBuffer( BufferType::eArray
-				, getSize()
-				, type
-				, nature );
+			auto buffer = getEngine()->getRenderSystem()->getBuffer( renderer::BufferTarget::eVertexBuffer
+				, uint32_t( data.size() )
+				, flags );
 			m_gpuBuffer = buffer.buffer;
 			m_offset = buffer.offset;
-			doInitialise( type, nature );
 		}
 
 		bool result = m_gpuBuffer != nullptr;
 
 		if ( result )
 		{
-			upload();
+			result = false;
+
+			if ( auto buffer = lock( 0u, uint32_t( data.size() ), renderer::MemoryMapFlag::eWrite ) )
+			{
+				std::memcpy( buffer, data.data(), data.size() );
+				unlock( uint32_t( data.size() ), true );
+				result = true;
+			}
 		}
 
 		return result;
@@ -41,9 +46,7 @@ namespace castor3d
 	{
 		if ( m_gpuBuffer )
 		{
-			getEngine()->getRenderSystem()->putBuffer( BufferType::eArray
-				, m_accessType
-				, m_accessNature
+			getEngine()->getRenderSystem()->putBuffer( renderer::BufferTarget::eVertexBuffer
 				, GpuBufferOffset{ m_gpuBuffer, m_offset } );
 			m_gpuBuffer.reset();
 		}

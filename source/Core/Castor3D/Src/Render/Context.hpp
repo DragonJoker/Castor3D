@@ -586,6 +586,17 @@ namespace castor3d
 		}
 		/**
 		 *\~english
+		 *\return		The render window.
+		 *\~french
+		 *\return		La fenêtre de rendu.
+		 */
+		inline renderer::Device const & getDevice()const
+		{
+			REQUIRE( m_device );
+			return *m_device;
+		}
+		/**
+		 *\~english
 		 *\return		\p true if initialised, false if not
 		 *\~french
 		 *\brief		Initialise le contexte
@@ -641,6 +652,9 @@ namespace castor3d
 		//!\~english	RenderWindow associated to this context.
 		//!\~french		RenderWindow associée à ce contexte.
 		RenderWindow * m_window;
+		//!\~english	The logical device.
+		//!\~french		Le périphérique logique.
+		renderer::DevicePtr m_device;
 		//!\~english	Tells if the context is initialised.
 		//!\~french		Dit si le contexte est initialisé.
 		bool m_initialised;

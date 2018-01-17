@@ -1,4 +1,4 @@
-﻿#include "MorphComponent.hpp"
+#include "MorphComponent.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
@@ -60,8 +60,7 @@ namespace castor3d
 			m_animBuffer.resize( size );
 		}
 
-		m_animBuffer.initialise( BufferAccessType::eDynamic
-			, BufferAccessNature::eDraw );
+		m_animBuffer.initialise( renderer::MemoryPropertyFlag::eHostVisible );
 	}
 
 	void MorphComponent::doUpload()

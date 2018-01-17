@@ -102,7 +102,7 @@ namespace castor3d
 		uint8_t * buffer = m_vertexBuffer->getData();
 		std::memcpy( buffer, data, sizeof( data ) );
 		m_viewport.setOrtho( 0, 1, 0, 1, 0, 1 );
-		m_vertexBuffer->initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
+		m_vertexBuffer->initialise( renderer::MemoryPropertyFlag::eHostVisible );
 		m_viewport.initialise();
 	}
 

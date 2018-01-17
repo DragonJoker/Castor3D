@@ -13,6 +13,8 @@ See LICENSE file in root folder
 #include <Design/OwnedBy.hpp>
 #include <Graphics/Size.hpp>
 
+#include <Device.hpp>
+
 namespace castor3d
 {
 	/*!
@@ -20,10 +22,10 @@ namespace castor3d
 	\version	0.1
 	\date		09/02/2010
 	\~english
-	\brief		Render window representation
+	\brief		Render window representation.
 	\remark		Manages a window where you can render a scene.
 	\~french
-	\brief		Implémentation d'une fenêtre de rendu
+	\brief		Implémentation d'une fenêtre de rendu.
 	\remark		Gère une fenêtre dans laquelle une scène peut être rendue
 	*/
 	class RenderWindow
@@ -35,9 +37,9 @@ namespace castor3d
 		\author		Sylvain DOREMUS
 		\date		14/02/2010
 		\~english
-		\brief		RenderTarget loader
+		\brief		RenderTarget loader.
 		\~english
-		\brief		Loader de RenderTarget
+		\brief		Loader de RenderTarget.
 		*/
 		class TextWriter
 			: public castor::TextWriter< RenderWindow >
@@ -49,30 +51,30 @@ namespace castor3d
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs );
 			/**
 			 *\~english
-			 *\brief		Writes a render window into a text file
-			 *\param[in]	p_window	the render window
-			 *\param[in]	p_file		the file
+			 *\brief		Writes a render window into a text file.
+			 *\param[in]	window	the render window.
+			 *\param[in]	file	the file.
 			 *\~french
-			 *\brief		Ecrit une fenêtre de rendu dans un fichier texte
-			 *\param[in]	p_window	La fenêtre de rendu
-			 *\param[in]	p_file		Le fichier
+			 *\brief		Ecrit une fenêtre de rendu dans un fichier texte.
+			 *\param[in]	window	La fenêtre de rendu.
+			 *\param[in]	file	Le fichier.
 			 */
-			C3D_API bool operator()( RenderWindow const & p_window, castor::TextFile & p_file )override;
+			C3D_API bool operator()( RenderWindow const & window, castor::TextFile & file )override;
 		};
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	engine	The engine
-		 *\param[in]	p_name		The window name
+		 *\param[in]	engine	The engine.
+		 *\param[in]	name	The window name.
 		 *\~french
 		 *\brief		Constructor
-		 *\param[in]	engine	Le moteur
-		 *\param[in]	p_name		Le nom de la fenêtre
+		 *\param[in]	engine	Le moteur.
+		 *\param[in]	name	Le nom de la fenêtre.
 		 */
 		C3D_API RenderWindow( castor::String const & p_name, Engine & engine );
 		/**
@@ -84,141 +86,131 @@ namespace castor3d
 		C3D_API ~RenderWindow();
 		/**
 		 *\~english
-		 *\brief		sets the handle, initialises the window.
-		 *\param[in]	p_size		The window size.
-		 *\param[in]	p_handle	The handle.
+		 *\brief		Sets the handle, initialises the window.
+		 *\param[in]	size	The window size.
+		 *\param[in]	handle	The handle.
 		 *\return		\p false if any problem occured
 		 *\~french
 		 *\brief		Définit l'identifiant de la fenêtre, initialise la fenêtre.
-		 *\param[in]	p_size		Les dimensions de la fenêtre.
-		 *\param[in]	p_handle	Le handle.
+		 *\param[in]	size	Les dimensions de la fenêtre.
+		 *\param[in]	handle	Le handle.
 		 *\return		\p false si un problème quelconque a été rencontré.
 		 */
-		C3D_API bool initialise( castor::Size const & p_size, WindowHandle const & p_handle );
+		C3D_API bool initialise( castor::Size const & size, renderer::WindowHandle && handle );
 		/**
 		 *\~english
-		 *\brief		Cleans up the instance
+		 *\brief		Cleans up the instance.
 		 *\~french
-		 *\brief		Nettoie l'instance
+		 *\brief		Nettoie l'instance.
 		 */
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		Renders one frame
-		 *\param[in]	p_bForce		Forces the rendering
+		 *\brief		Renders one frame.
+		 *\param[in]	force	Forces the rendering.
 		 *\~english
-		 *\brief		Renders one frame
-		 *\param[in]	p_bForce		Dit si on force le rendu
+		 *\brief		Renders one frame.
+		 *\param[in]	force	Dit si on force le rendu.
 		 */
-		C3D_API void render( bool p_bForce );
+		C3D_API void render( bool force );
 		/**
 		 *\~english
-		 *\brief		Resizes the window
-		 *\param[in]	x, y	The new size
+		 *\brief		Resizes the window.
+		 *\param[in]	x, y	The new size.
 		 *\~french
-		 *\brief		Redimensionne la fenêtre
-		 *\param[in]	x, y	Les nouvelles dimensions
+		 *\brief		Redimensionne la fenêtre.
+		 *\param[in]	x, y	Les nouvelles dimensions.
 		 */
 		C3D_API void resize( int x, int y );
 		/**
 		 *\~english
-		 *\brief		Resizes the window
-		 *\param[in]	p_size	The new size
+		 *\brief		Resizes the window.
+		 *\param[in]	size	The new size.
 		 *\~french
-		 *\brief		Redimensionne la fenêtre
-		 *\param[in]	p_size	Les nouvelles dimensions
+		 *\brief		Redimensionne la fenêtre.
+		 *\param[in]	size	Les nouvelles dimensions.
 		 */
-		C3D_API void resize( castor::Size const & p_size );
+		C3D_API void resize( castor::Size const & size );
 		/**
 		 *\~english
-		 *\brief		sets the camera
-		 *\param[in]	p_pCamera	The camera
+		 *\brief		Sets the camera.
+		 *\param[in]	camera	The camera.
 		 *\~french
-		 *\brief		Définit la caméra
-		 *\param[in]	p_pCamera	La caméra
+		 *\brief		Définit la caméra.
+		 *\param[in]	camera	La caméra.
 		 */
-		C3D_API void setCamera( CameraSPtr p_pCamera );
+		C3D_API void setCamera( CameraSPtr camera );
 		/**
 		 *\~english
-		 *\brief		Changes fullscreen status from contex
-		 *\param[in]	val	The new fullscreen status
+		 *\brief		Changes fullscreen status.
+		 *\param[in]	value	The new status.
 		 *\~french
-		 *\brief		Change le statut de plein écran à partir du contexte
-		 *\param[in]	val	Le nouveau statut de plein écran
+		 *\brief		Change le statut de plein écran.
+		 *\param[in]	value	Le nouveau statut.
 		 */
-		C3D_API void updateFullScreen( bool val );
+		C3D_API void updateFullScreen( bool value );
 		/**
 		 *\~english
-		 *\brief		Retrieves the Scene
-		 *\return		The Scene
+		 *\return		The scene.
 		 *\~french
-		 *\brief		Récupère la Scene
-		 *\return		La Scene
+		 *\return		La scène.
 		 */
 		C3D_API SceneSPtr getScene()const;
 		/**
 		 *\~english
-		 *\brief		Retrieves the Camera
-		 *\return		The Camera
+		 *\return		The camera.
 		 *\~french
-		 *\brief		Récupère la Camera
-		 *\return		La Camera
+		 *\return		La caméra.
 		 */
 		C3D_API CameraSPtr getCamera()const;
 		/**
 		 *\~english
-		 *\brief		Retrieves the ViewportType
-		 *\return		The ViewportType
+		 *\return		The ViewportType.
 		 *\~french
-		 *\brief		Récupère le ViewportType
-		 *\return		Le ViewportType
+		 *\return		Le ViewportType.
 		 */
 		C3D_API ViewportType getViewportType()const;
 		/**
 		 *\~english
-		 *\brief		sets the ViewportType
-		 *\param[in]	val	The new ViewportType
+		 *\brief		Sets the ViewportType.
+		 *\param[in]	value	The new value.
 		 *\~french
-		 *\brief		Définit le ViewportType
-		 *\param[in]	val	Le nouveau ViewportType
+		 *\brief		Définit le ViewportType.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		C3D_API void setViewportType( ViewportType val );
+		C3D_API void setViewportType( ViewportType value );
 		/**
 		 *\~english
-		 *\brief		sets the Scene
-		 *\param[in]	p_scene	The new Scene
+		 *\brief		Sets the Scene.
+		 *\param[in]	value	The new value.
 		 *\~french
-		 *\brief		Définit la Scene
-		 *\param[in]	p_scene	La nouvelle Scene
+		 *\brief		Définit la Scene.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		C3D_API void setScene( SceneSPtr p_scene );
+		C3D_API void setScene( SceneSPtr value );
 		/**
 		 *\~english
-		 *\brief		Retrieves the window dimensions
-		 *\return		The window dimensions
+		 *\return		The window dimensions.
 		 *\~french
-		 *\brief		Récupère les dimensions de la fenêtre
-		 *\return		Les dimensions de la fenêtre
+		 *\return		Les dimensions de la fenêtre.
 		 */
 		C3D_API castor::Size getSize()const;
 		/**
 		 *\~english
-		 *\brief		Retrieves the stereo status
-		 *\return		\p true if stereo is used
+		 *\return		\p true if stereo is used.
 		 *\~french
-		 *\brief		Récupère le statut d'utilisation stéréo
-		 *\return		\p true si le rendu stéréo est utilisé
+		 *\return		\p true si le rendu stéréo est utilisé.
 		 */
 		C3D_API bool isUsingStereo()const;
 		/**
 		 *\~english
-		 *\brief		Defines the stereo status
-		 *\param[in]	p_bStereo	\p true if stereo is to be used
+		 *\brief		Defines the stereo status.
+		 *\param[in]	stereo	\p true if stereo is to be used.
 		 *\~french
-		 *\brief		Définit le statut d'utilisation stéréo
-		 *\param[in]	p_bStereo	\p true si le rendu stéréo est à utiliser
+		 *\brief		Définit le statut d'utilisation stéréo.
+		 *\param[in]	stereo	\p true si le rendu stéréo est à utiliser.
 		 */
-		C3D_API void setStereo( bool p_bStereo );
+		C3D_API void setStereo( bool stereo );
 		/**
 		 *\~english
 		 *\brief		Retrieves the intra ocular distance
@@ -230,38 +222,34 @@ namespace castor3d
 		C3D_API real getIntraOcularDistance()const;
 		/**
 		 *\~english
-		 *\brief		Defines the intra ocular distance
-		 *\param[in]	p_rIao	The intra ocular distance
+		 *\brief		Defines the intra ocular distance.
+		 *\param[in]	intraOcularDistance	The intra ocular distance.
 		 *\~french
-		 *\brief		Définit la distance inter oculaire
-		 *\param[in]	p_rIao	La distance inter oculaire
+		 *\brief		Définit la distance inter oculaire.
+		 *\param[in]	intraOcularDistance	La distance inter oculaire.
 		 */
-		C3D_API void setIntraOcularDistance( real p_rIao );
+		C3D_API void setIntraOcularDistance( real intraOcularDistance );
 		/**
 		 *\~english
-		 *\brief		Retrieves the window pixel format
-		 *\return		The window pixel format
+		 *\return		The window pixel format.
 		 *\~french
-		 *\brief		Récupère le format des pixels de la fenêtre
-		 *\return		Le format des pixels de la fenêtre
+		 *\return		Le format des pixels de la fenêtre.
 		 */
 		C3D_API castor::PixelFormat getPixelFormat()const;
 		/**
 		 *\~english
-		 *\brief		sets the window pixel format
-		 *\param[in]	val	The new window pixel format
+		 *\brief		Sets the window pixel format.
+		 *\param[in]	value	The new window pixel format.
 		 *\~french
-		 *\brief		Définit le format des pixels de la fenêtre
-		 *\param[in]	val	Le nouveau format des pixels de la fenêtre
+		 *\brief		Définit le format des pixels de la fenêtre.
+		 *\param[in]	value	Le nouveau format des pixels de la fenêtre.
 		 */
-		C3D_API void setPixelFormat( castor::PixelFormat val );
+		C3D_API void setPixelFormat( castor::PixelFormat value );
 		/**
 		 *\~english
-		 *\brief		Retrieves the window index
-		 *\return		The window index
+		 *\return		The window index.
 		 *\~french
-		 *\brief		Récupère l'index de la fenêtre
-		 *\return		L'index de la fenêtre
+		 *\return		L'index de la fenêtre.
 		 */
 		inline uint32_t getIndex()const
 		{
@@ -269,23 +257,19 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the window handle
-		 *\return		The window handle
+		 *\return		The window handle.
 		 *\~french
-		 *\brief		Récupère le handle de la fenêtre
-		 *\return		Le handle de la fenêtre
+		 *\return		Le handle de la fenêtre.
 		 */
-		inline WindowHandle const & getHandle()const
+		inline renderer::WindowHandle const & getHandle()const
 		{
 			return m_handle;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the intialisation status
-		 *\return		The intialisation status
+		 *\return		The intialisation status.
 		 *\~french
-		 *\brief		Récupère le statut de l'initialisation
-		 *\return		Le statut de l'initialisation
+		 *\return		Le statut de l'initialisation.
 		 */
 		inline bool isInitialised()const
 		{
@@ -293,11 +277,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the FrameListener
-		 *\return		The FrameListener
+		 *\return		The FrameListener.
 		 *\~french
-		 *\brief		Récupère le FrameListener
-		 *\return		Le FrameListener
+		 *\return		Le FrameListener.
 		 */
 		inline FrameListenerSPtr getListener()const
 		{
@@ -305,11 +287,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the Context
-		 *\return		The Context
+		 *\return		The context.
 		 *\~french
-		 *\brief		Récupère la Context
-		 *\return		La Context
+		 *\return		Le contexte.
 		 */
 		inline ContextSPtr getContext()const
 		{
@@ -317,11 +297,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the render target
-		 *\return		The value
+		 *\return		The render target.
 		 *\~french
-		 *\brief		Récupère la cible du rendu
-		 *\return		La valeur
+		 *\return		La cible du rendu.
 		 */
 		inline RenderTargetSPtr getRenderTarget()const
 		{
@@ -329,55 +307,55 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the render target
-		 *\param[in]	p_pTarget	The new value
+		 *\brief		Sets the render target.
+		 *\param[in]	value	The new value.
 		 *\~french
-		 *\brief		Définit la cible du rendu
-		 *\param[in]	p_pTarget	La nouvelle valeur
+		 *\brief		Définit la cible du rendu.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setRenderTarget( RenderTargetSPtr p_pTarget )
+		inline void setRenderTarget( RenderTargetSPtr value )
 		{
-			m_renderTarget = p_pTarget;
+			m_renderTarget = value;
 		}
 		/**
 		 *\~english
-		 *\brief		sets the Context
-		 *\param[in]	p_context	The new Context
+		 *\brief		Sets the Context.
+		 *\param[in]	value	The new value
 		 *\~french
-		 *\brief		Définit le Context
-		 *\param[in]	p_context	Le nouveau Context
+		 *\brief		Définit le Context.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setContext( ContextSPtr p_context )
+		inline void setContext( ContextSPtr value )
 		{
-			m_context = p_context;
+			m_context = value;
 		}
 		/**
 		 *\~english
-		 *\brief		Tells the context is using vsync
+		 *\brief		Tells the context is using vsync.
 		 *\~french
-		 *\brief		Dit si le contexte utilise la vsync
+		 *\brief		Dit si le contexte utilise la vsync.
 		 */
 		inline bool getVSync()const
 		{
-			return m_bVSync;
+			return m_vSync;
 		}
 		/**
 		 *\~english
-		 *\brief		Defines the vsync usage
-		 *\param[in]	p_value	The usage
+		 *\brief		Defines the vsync usage.
+		 *\param[in]	value	The usage.
 		 *\~french
-		 *\brief		Définit l'utilisation de la vsync
-		 *\param[in]	p_value	L'utilisation
+		 *\brief		Définit l'utilisation de la vsync.
+		 *\param[in]	value	L'utilisation.
 		 */
-		inline void setVSync( bool p_value )
+		inline void setVSync( bool value )
 		{
-			m_bVSync = p_value;
+			m_vSync = value;
 		}
 		/**
 		 *\~english
-		 *\brief		Tells the rendering is fullscreen
+		 *\brief		Tells the rendering is fullscreen.
 		 *\~french
-		 *\brief		Dit si le rendu est en plein écran
+		 *\brief		Dit si le rendu est en plein écran.
 		 */
 		inline bool isFullscreen()const
 		{
@@ -385,15 +363,15 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Defines the fullscreen rendering status
-		 *\param[in]	p_value	The status
+		 *\brief		Defines the fullscreen rendering status.
+		 *\param[in]	value	The status.
 		 *\~french
-		 *\brief		Définit le statut du rendu plein écran
-		 *\param[in]	p_value	Le statut
+		 *\brief		Définit le statut du rendu plein écran.
+		 *\param[in]	value	Le statut.
 		 */
-		inline void setFullscreen( bool p_value )
+		inline void setFullscreen( bool value )
 		{
-			m_bFullscreen = p_value;
+			m_bFullscreen = value;
 		}
 		/**
 		 *\~english
@@ -450,7 +428,7 @@ namespace castor3d
 		uint32_t m_index;
 		//!\~english	The handle of the display window.
 		//!\~french		Handle de la fenêtre sustème.
-		WindowHandle m_handle;
+		renderer::WindowHandle m_handle;
 		//!\~english	The render target, which receives the main render.
 		//!\~french		La render target, recevant le rendu principal.
 		RenderTargetWPtr m_renderTarget;
@@ -465,7 +443,7 @@ namespace castor3d
 		ContextSPtr m_context;
 		//!\~english	Tells VSync is activated.
 		//!\~french		Dit si la VSync est activée.
-		bool m_bVSync{ false };
+		bool m_vSync{ false };
 		//!\~english	Tells fullscreen is activated.
 		//!\~french		Dit si le rendu est en plein écran.
 		bool m_bFullscreen{ false };

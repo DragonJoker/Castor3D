@@ -100,7 +100,7 @@ namespace castor3d
 		std::memcpy( m_vertexBuffer->getData()
 			, data.data()->constPtr()
 			, size );
-		m_vertexBuffer->initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
+		m_vertexBuffer->initialise( renderer::MemoryPropertyFlag::eHostVisible );
 
 		m_stencilPass.initialise( *m_vertexBuffer );
 

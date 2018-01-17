@@ -114,40 +114,31 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves a GPU buffer with the given size.
-		 *\param[in]	type			The buffer type.
-		 *\param[in]	size			The wanted buffer size.
-		 *\param[in]	accessType		Buffer access type.
-		 *\param[in]	accessNature	Buffer access nature.
+		 *\param[in]	target	The buffer type.
+		 *\param[in]	size	The wanted buffer size.
+		 *\param[in]	flags	The buffer memory flags.
 		 *\return		The created buffer, depending on current API.
 		 *\~french
 		 *\brief		Récupère un tampon GPU avec la taille donnée.
-		 *\param[in]	type			Le type de tampon.
-		 *\param[in]	size			La taille voulue pour le tampon.
-		 *\param[in]	accessType		Type d'accès du tampon.
-		 *\param[in]	accessNature	Nature d'accès du tampon.
-		 *\return		Le tampon créé, dépendant de l'API actuelle.
+		 *\param[in]	target	Le type de tampon.
+		 *\param[in]	size	La taille voulue pour le tampon.
+		 *\param[in]	flags	Les indicateurs de mémoire du tampon.
+		 *\return		Le tampon créé.
 		 */
-		C3D_API GpuBufferOffset getBuffer( BufferType type
+		C3D_API GpuBufferOffset getBuffer( renderer::BufferTarget target
 			, uint32_t size
-			, BufferAccessType accessType
-			, BufferAccessNature accessNature );
+			, renderer::MemoryPropertyFlags flags );
 		/**
 		 *\~english
 		 *\brief		Releases a GPU buffer.
-		 *\param[in]	type			The buffer type.
-		 *\param[in]	accessType		Buffer access type.
-		 *\param[in]	accessNature	Buffer access nature.
+		 *\param[in]	target			The buffer type.
 		 *\param[in]	bufferOffset	The buffer offset to release.
 		 *\~french
 		 *\brief		Libère un tampon GPU.
-		 *\param[in]	type			Le type de tampon.
-		 *\param[in]	accessType		Type d'accès du tampon.
-		 *\param[in]	accessNature	Nature d'accès du tampon.
+		 *\param[in]	target			Le type de tampon.
 		 *\param[in]	bufferOffset	Le tampon à libérer.
 		 */
-		C3D_API void putBuffer( BufferType type
-			, BufferAccessType accessType
-			, BufferAccessNature accessNature
+		C3D_API void putBuffer( renderer::BufferTarget target
 			, GpuBufferOffset const & bufferOffset );
 		/**
 		 *\~english
@@ -529,7 +520,7 @@ namespace castor3d
 		 *\param[in]	type	Le type de tampon.
 		 *\return		Le tampon créé, dépendant de l'API actuelle.
 		 */
-		C3D_API virtual GpuBufferSPtr doCreateBuffer( BufferType type ) = 0;
+		C3D_API virtual GpuBufferSPtr doCreateBuffer( renderer::BufferTarget target ) = 0;
 
 	protected:
 		//!\~english	Mutex used to make this class thread safe.

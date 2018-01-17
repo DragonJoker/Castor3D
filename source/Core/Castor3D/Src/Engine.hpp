@@ -62,7 +62,7 @@ namespace castor3d
 		C3D_API ~Engine();
 		/**
 		 *\~english
-		 *\brief		Initialisation function, sets the wanted frame rate
+		 *\brief		Initialisation function, Sets the wanted frame rate
 		 *\param[in]	p_wantedFPS		The wanted FPS count
 		 *\param[in]	p_threaded		If \p false, the render can't be threaded
 		 *\~french
@@ -258,7 +258,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the user input listener.
+		 *\brief		Sets the user input listener.
 		 *\param[in]	p_listener	The new value.
 		 *\~french
 		 *\brief		Définit le listener d'entrées utilisateur.
@@ -370,7 +370,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the need for per object lighting.
+		 *\brief		Sets the need for per object lighting.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit le besoin d'un éclairage par objet.
@@ -512,7 +512,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the materials type.
+		 *\brief		Sets the materials type.
 		 *\param[in]	p_type	The new value.
 		 *\~french
 		 *\brief		Définit le type des matériaux.

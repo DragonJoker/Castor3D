@@ -1,4 +1,4 @@
-﻿#include "BillboardList.hpp"
+#include "BillboardList.hpp"
 
 #include "Engine.hpp"
 
@@ -101,7 +101,7 @@ namespace castor3d
 				m_vertexBuffer->resize( uint32_t( count * stride ) );
 			}
 
-			m_initialised = m_vertexBuffer->initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+			m_initialised = m_vertexBuffer->initialise( renderer::MemoryPropertyFlag::eHostVisible );
 
 			if ( m_initialised )
 			{
@@ -125,7 +125,7 @@ namespace castor3d
 					buffer += stride;
 				}
 
-				m_initialised = m_quad->initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
+				m_initialised = m_quad->initialise( renderer::MemoryPropertyFlag::eHostVisible );
 			}
 		}
 

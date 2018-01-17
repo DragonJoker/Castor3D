@@ -132,7 +132,7 @@ namespace castor3d
 		C3D_API void render();
 		/**
 		 *\~english
-		 *\brief		sets the material
+		 *\brief		Sets the material
 		 *\param[in]	material	The new value
 		 *\~french
 		 *\brief		Définit le matériau
@@ -223,7 +223,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the overlay position
+		 *\brief		Sets the overlay position
 		 *\param[in]	position	The new value
 		 *\~french
 		 *\brief		Définit la position de l'incrustation
@@ -236,7 +236,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the overlay size
+		 *\brief		Sets the overlay size
 		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit la taille de l'incrustation
@@ -429,7 +429,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the overlay
+		 *\brief		Sets the overlay
 		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit l'incrustation
@@ -441,7 +441,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the visibility status
+		 *\brief		Sets the visibility status
 		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit le statut de visibilité
@@ -453,7 +453,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the overlay position
+		 *\brief		Sets the overlay position
 		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit la position de l'incrustation
@@ -466,7 +466,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the overlay size
+		 *\brief		Sets the overlay size
 		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit la taille de l'incrustation
@@ -479,7 +479,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the overlay order
+		 *\brief		Sets the overlay order
 		 *\param[in]	index	The new index
 		 *\param[in]	level	The new level
 		 *\~french
@@ -494,7 +494,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the overlay UV
+		 *\brief		Sets the overlay UV
 		 *\param[in]	value	The new value (left, top, right and bottom)
 		 *\~french
 		 *\brief		Définit Les UV de l'incrustation

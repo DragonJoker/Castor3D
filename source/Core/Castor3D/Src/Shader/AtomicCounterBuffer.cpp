@@ -1,4 +1,4 @@
-﻿#include "AtomicCounterBuffer.hpp"
+#include "AtomicCounterBuffer.hpp"
 
 #include "Mesh/Buffer/GpuBuffer.hpp"
 #include "Render/RenderSystem.hpp"
@@ -23,10 +23,9 @@ namespace castor3d
 	{
 		if ( !m_gpuBuffer )
 		{
-			auto buffer = getOwner()->getRenderSystem()->getBuffer( BufferType::eAtomicCounter
+			auto buffer = getOwner()->getRenderSystem()->getBuffer( renderer::BufferTarget::eStorageBuffer
 				, size
-				, BufferAccessType::eDynamic
-				, BufferAccessNature::eDraw );
+				, renderer::MemoryPropertyFlag::eHostVisible );
 			m_gpuBuffer = buffer.buffer;
 			m_offset = buffer.offset;
 		}
@@ -45,9 +44,8 @@ namespace castor3d
 	{
 		if ( m_gpuBuffer )
 		{
-			getOwner()->getRenderSystem()->putBuffer( BufferType::eAtomicCounter
-				, BufferAccessType::eDynamic
-				, BufferAccessNature::eDraw
+			getOwner()->getRenderSystem()->putBuffer( renderer::BufferTarget::eStorageBuffer
+				, renderer::MemoryPropertyFlag::eHostVisible
 				, GpuBufferOffset{ m_gpuBuffer, m_offset } );
 			m_gpuBuffer.reset();
 		}

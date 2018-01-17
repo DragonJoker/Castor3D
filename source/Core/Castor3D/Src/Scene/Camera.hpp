@@ -161,7 +161,7 @@ namespace castor3d
 		C3D_API ViewportType getViewportType()const;
 		/**
 		 *\~english
-		 *\brief		sets the viewport type
+		 *\brief		Sets the viewport type
 		 *\param[in]	value	The viewport type
 		 *\~french
 		 *\brief		Définit le type de viewport
@@ -281,7 +281,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the view matrix.
+		 *\brief		Sets the view matrix.
 		 *\param[in]	view	The new value.
 		 *\~french
 		 *\brief		Définit la matrice de vue.

@@ -59,8 +59,7 @@ namespace castor3d
 			* m_declaration.stride() ) );
 		m_vertexBuffer->linkCoords( m_arrayVertex.begin()
 			, m_arrayVertex.end() );
-		m_vertexBuffer->initialise( BufferAccessType::eStatic
-			, BufferAccessNature::eDraw );
+		m_vertexBuffer->initialise( renderer::MemoryPropertyFlag::eHostVisible );
 		m_geometryBuffers = renderSystem.createGeometryBuffers( Topology::eTriangles
 			, program );
 		m_geometryBuffers->initialise( { *m_vertexBuffer }

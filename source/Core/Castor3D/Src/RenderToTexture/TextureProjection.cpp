@@ -163,7 +163,7 @@ namespace castor3d
 		m_vertexBuffer = std::make_shared< VertexBuffer >( *getOwner()->getRenderSystem()->getEngine(), m_declaration );
 		m_vertexBuffer->resize( uint32_t( m_arrayVertex.size() * m_declaration.stride() ) );
 		m_vertexBuffer->linkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
-		return m_vertexBuffer->initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
+		return m_vertexBuffer->initialise( renderer::MemoryPropertyFlag::eHostVisible );
 	}
 
 	bool TextureProjection::doInitialisePipeline( ShaderProgram & p_program )

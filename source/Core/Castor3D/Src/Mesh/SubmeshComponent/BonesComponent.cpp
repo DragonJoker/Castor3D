@@ -1,4 +1,4 @@
-﻿#include "BonesComponent.hpp"
+#include "BonesComponent.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Skeleton/BonedVertex.hpp"
@@ -168,8 +168,7 @@ namespace castor3d
 			//m_bonesData.clear();
 		}
 
-		m_bonesBuffer.initialise( BufferAccessType::eDynamic
-			, BufferAccessNature::eDraw );
+		m_bonesBuffer.initialise( renderer::MemoryPropertyFlag::eHostVisible );
 	}
 
 	void BonesComponent::doUpload()

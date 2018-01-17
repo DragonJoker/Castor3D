@@ -259,13 +259,11 @@ namespace castor3d
 
 		if ( !m_initialised )
 		{
-			m_initialised = m_vertexBuffer.initialise( BufferAccessType::eDynamic
-				, BufferAccessNature::eDraw );
+			m_initialised = m_vertexBuffer.initialise( renderer::MemoryPropertyFlag::eHostVisible );
 
 			if ( m_initialised )
 			{
-				m_initialised = m_indexBuffer.initialise( BufferAccessType::eDynamic
-					, BufferAccessNature::eDraw );
+				m_initialised = m_indexBuffer.initialise( renderer::MemoryPropertyFlag::eHostVisible );
 			}
 
 			for ( auto & component : m_components )

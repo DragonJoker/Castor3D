@@ -74,7 +74,7 @@ namespace castor3d
 		virtual castor::String const & getName()const;
 		/**
 		 *\~english
-		 *\brief		sets the moving object.
+		 *\brief		Sets the moving object.
 		 *\param[in]	bone		The bone.
 		 *\~french
 		 *\brief		Définit l'objet mouvant.

@@ -37,7 +37,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the multisample activation status
+		 *\brief		Sets the multisample activation status
 		 *\param[in]	p_enable	The new value
 		 *\~french
 		 *\brief		Définit le statut d'activation du multisample
@@ -61,7 +61,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the alpha to coverage activation status
+		 *\brief		Sets the alpha to coverage activation status
 		 *\param[in]	p_enable	The new value
 		 *\~french
 		 *\brief		Définit le statut d'activation de l'alpha to coverage
@@ -85,7 +85,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the sample coverage mask
+		 *\brief		Sets the sample coverage mask
 		 *\param[in]	p_uiMask	The new value
 		 *\~french
 		 *\brief		Définit le masque de couverture de samples

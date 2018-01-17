@@ -195,7 +195,7 @@ namespace castor3d
 					buffer += m_computed.stride();
 				}
 
-				result = m_updateVertexBuffers[i]->initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+				result = m_updateVertexBuffers[i]->initialise( renderer::MemoryPropertyFlag::eHostVisible );
 			}
 		}
 

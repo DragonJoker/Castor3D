@@ -1,4 +1,4 @@
-﻿#include "BonesInstantiationComponent.hpp"
+#include "BonesInstantiationComponent.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Scene/Scene.hpp"
@@ -79,8 +79,7 @@ namespace castor3d
 				m_instancedBonesBuffer.reset();
 			}
 
-			m_instancedBonesBuffer->initialise( BufferAccessType::eDynamic
-				, BufferAccessNature::eDraw );
+			m_instancedBonesBuffer->initialise( renderer::MemoryPropertyFlag::eHostVisible );
 		}
 	}
 

@@ -108,7 +108,7 @@ namespace castor3d
 		C3D_API void update();
 		/**
 		 *\~english
-		 *\brief		sets the material
+		 *\brief		Sets the material
 		 *\param[in]	p_value	The new value
 		 *\~french
 		 *\brief		Definit le materiau
@@ -117,7 +117,7 @@ namespace castor3d
 		C3D_API void setMaterial( MaterialSPtr p_value );
 		/**
 		 *\~english
-		 *\brief		sets the particles dimensions.
+		 *\brief		Sets the particles dimensions.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Definit les dimensions des particules.
@@ -126,7 +126,7 @@ namespace castor3d
 		C3D_API void setDimensions( castor::Point2f const & p_value );
 		/**
 		 *\~english
-		 *\brief		sets the particles type name.
+		 *\brief		Sets the particles type name.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Definit le nom du type de particules.

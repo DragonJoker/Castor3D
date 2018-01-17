@@ -109,7 +109,7 @@ namespace castor3d
 		C3D_API void gatherBuffers( VertexBufferArray & buffers );
 		/**
 		 *\~english
-		 *\brief		sets the material
+		 *\brief		Sets the material
 		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Definit le materiau
@@ -131,7 +131,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the billboards dimensions
+		 *\brief		Sets the billboards dimensions
 		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Definit les dimensios des billboards
@@ -153,7 +153,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the offset of the center attribute in the vertex buffer.
+		 *\brief		Sets the offset of the center attribute in the vertex buffer.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Definit le décalage de l'attribut du centre dans le tampon de sommets.
@@ -165,7 +165,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the billboards count.
+		 *\brief		Sets the billboards count.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Definit le nombre de billboards.
@@ -269,7 +269,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\return		sets the billboard type.
+		 *\return		Sets the billboard type.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\return		Définit le type de billboard.
@@ -291,7 +291,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\return		sets the billboard dimensions type.
+		 *\return		Sets the billboard dimensions type.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\return		Définit le type des dimensions de billboard.
@@ -475,7 +475,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets a point in the list
+		 *\brief		Sets a point in the list
 		 *\param[in]	index		The point index
 		 *\param[in]	position	The point
 		 *\~french

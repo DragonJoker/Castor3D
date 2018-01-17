@@ -13,6 +13,15 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.10.0
+	\~english
+	\brief		Buddy allocator traits, for GPU buffers.
+	\~french
+	\brief		Traits de buddy allocator, pour les tampons GPU.
+	\remark
+	*/
 	struct GpuBufferBuddyAllocatorTraits
 	{
 		using PointerType = uint32_t;
@@ -83,9 +92,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\return		The null memory block.
+		 *\return		\p true if given pointer is null.
 		 *\~french
-		 *\return		Le block mémoire nul.
+		 *\return		\p true si le pointeur donné est nul.
 		 */
 		inline bool isNull( PointerType pointer )const
 		{
@@ -95,7 +104,11 @@ namespace castor3d
 	private:
 		size_t m_allocatedSize;
 	};
+	//!\~english	The allocator for GPU buffers.
+	//!\~french		L'allocateur pour les tampons GPU.
 	using GpuBufferAllocator = castor::BuddyAllocatorT< GpuBufferBuddyAllocatorTraits >;
+	//!\~english	A pointer to an allocator for GPU buffers.
+	//!\~french		Un pointeur sur un allocateur pour les tampons GPU.
 	using GpuBufferAllocatorUPtr = std::unique_ptr< GpuBufferAllocator >;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -118,51 +131,53 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
+		 *\param[in]	renderSystem	The RenderSystem.
+		 *\param[in]	target			The buffer target.
 		 *\~french
 		 *\brief		Constructeur.
+		 *\param[in]	renderSystem	Le RenderSystem.
+		 *\param[in]	target			La cible du tampon.
 		 */
-		C3D_API explicit GpuBuffer( RenderSystem & renderSystem );
+		C3D_API explicit GpuBuffer( RenderSystem & renderSystem
+			, renderer::BufferTarget target );
 		/**
 		 *\~english
-		 *\brief		Destructor.
+		 *\brief		Cleans up the GPU buffer storage.
+		 *\remarks		Used for buffer not in pools.
 		 *\~french
-		 *\brief		Destructeur.
+		 *\brief		Initialise le stockage GPU du tampon.
+		 *\remarks		Utilisé pour les tampons qui ne sont pas dans un pool.
 		 */
-		C3D_API virtual ~GpuBuffer();
-		/**
-		 *\~english
-		 *\brief		Creation function.
-		 *\return		\p true if OK.
-		 *\~french
-		 *\brief		Fonction de création.
-		 *\return		\p true si tout s'est bien passé.
-		 */
-		C3D_API virtual bool create() = 0;
-		/**
-		 *\~english
-		 *\brief		Destruction function.
-		 *\~french
-		 *\brief		Fonction de destruction.
-		 */
-		C3D_API virtual void destroy() = 0;
+		C3D_API void cleanupStorage();
 		/**
 		 *\~english
 		 *\brief		Initialises the GPU buffer storage.
+		 *\remarks		Used for buffer pools, through allocator.
 		 *\param[in]	numLevels		The allocator maximum tree size.
 		 *\param[in]	minBlockSize	The minimum size for a block.
-		 *\param[in]	type			Buffer access type.
-		 *\param[in]	nature			Buffer access nature.
+		 *\param[in]	flags			The buffer memory flags.
 		 *\~french
 		 *\brief		Initialise le stockage GPU du tampon.
+		 *\remarks		Utilisé pour les pools de tampons, au travers de l'allocateur.
 		 *\param[in]	numLevels		La taille maximale de l'arbre de l'allocateur.
 		 *\param[in]	minBlockSize	La taille minimale d'un bloc.
-		 *\param[in]	type			Type d'accès du tampon.
-		 *\param[in]	nature			Nature d'accès du tampon.
+		 *\param[in]	flags			Les indicateurs de mémoire du tampon.
 		 */
 		C3D_API void initialiseStorage( uint32_t numLevels
 			, uint32_t minBlockSize
-			, BufferAccessType type
-			, BufferAccessNature nature );
+			, renderer::MemoryPropertyFlags flags );
+		/**
+		 *\~english
+		 *\brief		Initialises the GPU buffer storage.
+		 *\param[in]	size	The buffer size.
+		 *\param[in]	flags	The buffer memory flags.
+		 *\~french
+		 *\brief		Initialise le stockage GPU du tampon.
+		 *\param[in]	size	La taille du tampon.
+		 *\param[in]	flags	Les indicateurs de mémoire du tampon.
+		 */
+		C3D_API void initialiseStorage( uint32_t size
+			, renderer::MemoryPropertyFlags flags );
 		/**
 		 *\~english
 		 *\param[in]	size	The requested memory size.
@@ -194,147 +209,61 @@ namespace castor3d
 		C3D_API void deallocate( uint32_t offset );
 		/**
 		 *\~english
-		 *\brief		sets the buffer's binding point.
-		 *\param[in]	index	The binding point.
-		 *\~french
-		 *\brief		Définit le point d'attache du tampon.
-		 *\param[in]	index	Le point d'attache.
-		 */
-		C3D_API virtual void setBindingPoint( uint32_t index )const = 0;
-		/**
-		 *\~english
-		 *\return		The buffer's binding point.
-		 *\~french
-		 *\return		Le point d'attache du tampon.
-		 */
-		C3D_API virtual uint32_t getBindingPoint()const = 0;
-		/**
-		 *\~english
 		 *\brief		Locks the buffer, id est maps it into memory so we can modify it.
 		 *\remarks		Maps from buffer[offset*sizeof( T )] to buffer[(offset+count-1)*sizeof( T )].
 		 *\param[in]	offset	The start offset in the buffer.
-		 *\param[in]	count	The mapped elements count.
+		 *\param[in]	size	The mapped memory size.
 		 *\param[in]	flags	The lock flags.
 		 *\return		The mapped buffer address.
 		 *\~french
 		 *\brief		Locke le tampon, càd le mappe en mémoire ram afin d'y autoriser des modifications.
 		 *\remarks		Mappe de tampon[offset*sizeof( T )] à tampon[(offset+count-1) * sizeof( T )].
 		 *\param[in]	offset	L'offset de départ.
-		 *\param[in]	count	Le nombre d'éléments à mapper.
+		 *\param[in]	size	La taille mémoire à mapper.
 		 *\param[in]	flags	Les flags de lock.
 		 *\return		L'adresse du tampon mappé.
 		 */
-		C3D_API virtual uint8_t * lock( uint32_t offset
-			, uint32_t count
-			, AccessTypes const & flags )const = 0;
+		C3D_API uint8_t * lock( uint32_t offset
+			, uint32_t size
+			, renderer::MemoryMapFlags const & flags )const;
 		/**
 		 *\~english
 		 *\brief		Unlocks the buffer, id est unmaps it from memory so no modification can be made after that.
 		 *\remarks		All modifications made in the mapped buffer are put into GPU memory.
+		 *\param[in]	size		The mapped elements count.
+		 *\param[in]	modified	Tells if the buffer has ben modified, and if the VRAM must be updated.
 		 *\~french
 		 *\brief		Un locke le tampon, càd l'unmappe de la mémoire ram afin de ne plus autoriser de modifications dessus.
 		 *\remarks		Toutes les modifications qui avaient été effectuées sur le tampon mappé sont rapatriées dans la mémoire GPU.
+		 *\param[in]	size		Le nombre d'éléments mappés.
+		 *\param[in]	modified	Dit si le tampon a été modifié, et donc si la VRAM doit être mise à jour.
 		 */
-		C3D_API virtual void unlock()const = 0;
+		C3D_API void unlock( uint32_t size, bool modified )const;
 		/**
 		 *\~english
-		 *\brief		Activation function, to tell the GPU it is active.
+		 *\return		The GPU storage.
 		 *\~french
-		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé.
+		 *\return		Le stockage GPU.
 		 */
-		C3D_API virtual void bind()const = 0;
-		/**
-		 *\~english
-		 *\brief		Activation function, to tell the GPU it is active.
-		 *\remarks		Used for instanciation.
-		 *\param[in]	instantiated	Tells if the buffer is instantiated.
-		 *\~french
-		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé.
-		 *\remarks		Utilisé pour l'instanciation.
-		 *\param[in]	instantiated	Dit si le tampon est instantié.
-		 */
-		C3D_API virtual void bind( bool instantiated )const
+		inline renderer::BufferBase const & getStorage()const
 		{
+			REQUIRE( m_storage );
+			return *m_storage;
 		}
-		/**
-		 *\~english
-		 *\brief		Deactivation function, to tell the GPU it is inactive.
-		 *\~french
-		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé.
-		 */
-		C3D_API virtual void unbind()const = 0;
-		/**
-		 *\~english
-		 *\brief		Copies data from given buffer to this one.
-		 *\param[in]	src			The source buffer.
-		 *\param[in]	srcOffset	The start offset in the source buffer.
-		 *\param[in]	dstOffset	The start offset in this buffer.
-		 *\param[in]	size		The number of elements to copy.
-		 *\~french
-		 *\brief		Copie les données du tampon donné dans celui-ci.
-		 *\param[in]	src			Le tampon source.
-		 *\param[in]	srcOffset	L'offset de départ dans le tampon source.
-		 *\param[in]	dstOffset	L'offset de départ dans ce tampon.
-		 *\param[in]	size		Le nombre d'éléments à copier.
-		 */
-		C3D_API virtual void copy( GpuBuffer const & src
-			, uint32_t srcOffset
-			, uint32_t dstOffset
-			, uint32_t size )const = 0;
-		/**
-		 *\~english
-		 *\brief		Transfers data to the GPU buffer from RAM.
-		 *\remarks		Transfers data from buffer[offset*sizeof( T )] to buffer[(offset+count-1)*sizeof( T )].
-		 *\param[in]	offset	The start offset.
-		 *\param[in]	count	Elements count.
-		 *\param[in]	buffer	The data.
-		 *\~french
-		 *\brief		Transfère des données au tampon GPU à partir de la RAM.
-		 *\remarks		Transfère les données de tampon[offset*sizeof( T )] à tampon[(offset+count-1) * sizeof( T )].
-		 *\param[in]	offset	L'offset de départ.
-		 *\param[in]	count	Nombre d'éléments.
-		 *\param[in]	buffer	Les données.
-		 */
-		C3D_API virtual void upload( uint32_t offset
-			, uint32_t count
-			, uint8_t const * buffer )const = 0;
-		/**
-		 *\~english
-		 *\brief		Transfers data from the GPU buffer to RAM.
-		 *\remarks		Transfers data from buffer[offset*sizeof( T )] to buffer[(offset+count-1)*sizeof( T )].
-		 *\param[in]	offset	The start offset.
-		 *\param[in]	count	Elements count.
-		 *\param[out]	buffer	The data.
-		 *\~french
-		 *\brief		Transfère des données du tampon GPU vers la RAM.
-		 *\remarks		Transfère les données de tampon[offset*sizeof( T )] à tampon[(offset+count-1) * sizeof( T )].
-		 *\param[in]	offset	L'offset de départ.
-		 *\param[in]	count	Nombre d'éléments.
-		 *\param[out]	buffer	Les données.
-		 */
-		C3D_API virtual void download( uint32_t offset
-			, uint32_t count
-			, uint8_t * buffer )const = 0;
 
 	private:
-		/**
-		 *\~english
-		 *\brief		Initialises the GPU buffer storage.
-		 *\param[in]	count	The buffer elements count.
-		 *\param[in]	type	Buffer access type.
-		 *\param[in]	nature	Buffer access nature.
-		 *\~french
-		 *\brief		Initialise le stockage GPU du tampon.
-		 *\param[in]	count	Le nombre d'éléments du tampon.
-		 *\param[in]	type	Type d'accès du tampon.
-		 *\param[in]	nature	Nature d'accès du tampon.
-		 */
-		C3D_API virtual void doInitialiseStorage( uint32_t size
-			, BufferAccessType type
-			, BufferAccessNature nature )const = 0;
-
-	private:
+		//!\~english	The allocation policy.
+		//!\~french		La politique d'allocation.
 		GpuBufferAllocatorUPtr m_allocator;
+		//!\~english	The GPU storage.
+		//!\~french		Le stockage GPU.
+		renderer::BufferBasePtr m_storage;
+		//!\~english	The buffer target.
+		//!\~french		La cible du tampon.
+		renderer::BufferTarget m_target;
+		//!\~english	The buffer memory flags.
+		//!\~french		Les indcateurs de mémoire du tampon.
+		renderer::MemoryPropertyFlags m_flags;
 	};
 }
 

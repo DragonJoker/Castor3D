@@ -22,7 +22,7 @@ namespace castor3d
 			{
 				ssbo = std::make_unique< ShaderStorageBuffer >( engine );
 				ssbo->resize( size );
-				ssbo->initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+				ssbo->initialise( renderer::MemoryPropertyFlag::eHostVisible );
 			}
 
 			return ssbo;

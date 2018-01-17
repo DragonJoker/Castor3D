@@ -60,8 +60,7 @@ namespace castor3d
 			vertexBuffer->resize( uint32_t( sizeof( data ) ) );
 			uint8_t * buffer = vertexBuffer->getData();
 			std::memcpy( buffer, data, sizeof( data ) );
-			vertexBuffer->initialise( BufferAccessType::eStatic
-				, BufferAccessNature::eDraw );
+			vertexBuffer->initialise( renderer::MemoryPropertyFlag::eHostVisible );
 			return vertexBuffer;
 		}
 

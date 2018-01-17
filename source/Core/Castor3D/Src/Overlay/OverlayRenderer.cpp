@@ -108,7 +108,7 @@ namespace castor3d
 				buffer += stride;
 			}
 
-			m_panelVertexBuffer->initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+			m_panelVertexBuffer->initialise( renderer::MemoryPropertyFlag::eHostVisible );
 
 			{
 				auto & pipeline = doGetPanelPipeline( 0u );
@@ -136,7 +136,7 @@ namespace castor3d
 				buffer += stride;
 			}
 
-			m_borderVertexBuffer->initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+			m_borderVertexBuffer->initialise( renderer::MemoryPropertyFlag::eHostVisible );
 
 			{
 				auto & pipeline = doGetPanelPipeline( 0 );
@@ -483,7 +483,7 @@ namespace castor3d
 	{
 		auto vertexBuffer = std::make_shared< VertexBuffer >( *getRenderSystem()->getEngine(), m_textDeclaration );
 		vertexBuffer->resize( C3D_MAX_CHARS_PER_BUFFER * m_textDeclaration.stride() );
-		vertexBuffer->initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+		vertexBuffer->initialise( renderer::MemoryPropertyFlag::eHostVisible );
 
 		OverlayGeometryBuffers geometryBuffers;
 		{

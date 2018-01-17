@@ -1,4 +1,4 @@
-﻿#include "InstantiationComponent.hpp"
+#include "InstantiationComponent.hpp"
 
 #include "Event/Frame/FrameListener.hpp"
 #include "Mesh/Submesh.hpp"
@@ -190,8 +190,7 @@ namespace castor3d
 
 			if ( m_matrixBuffer )
 			{
-				m_matrixBuffer->initialise( BufferAccessType::eDynamic
-					, BufferAccessNature::eDraw );
+				m_matrixBuffer->initialise( renderer::MemoryPropertyFlag::eHostVisible );
 			}
 		}
 	}

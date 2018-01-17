@@ -103,7 +103,7 @@ namespace castor3d
 	};
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -296,7 +296,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the chunk's data
+		 *\brief		Sets the chunk's data
 		 *\param[in]	p_begin	The data buffer's begin
 		 *\param[in]	p_end	The data buffer's end
 		 *\~french

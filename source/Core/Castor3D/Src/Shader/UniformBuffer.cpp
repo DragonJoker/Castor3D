@@ -1,4 +1,4 @@
-﻿#include "UniformBuffer.hpp"
+#include "UniformBuffer.hpp"
 
 #include "Render/RenderPipeline.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -166,9 +166,8 @@ namespace castor3d
 	{
 		if ( m_storage )
 		{
-			getRenderSystem()->putBuffer( BufferType::eUniform
-				, BufferAccessType::eDynamic
-				, BufferAccessNature::eDraw
+			getRenderSystem()->putBuffer( renderer::BufferTarget::eUniformBuffer
+				, renderer::MemoryPropertyFlag::eHostVisible
 				, GpuBufferOffset{ m_storage, m_offset } );
 			m_storage.reset();
 		}
@@ -269,10 +268,9 @@ namespace castor3d
 
 		if ( !m_storage )
 		{
-			auto buffer = getRenderSystem()->getBuffer( BufferType::eUniform
+			auto buffer = getRenderSystem()->getBuffer( renderer::BufferTarget::eUniformBuffer
 				, uint32_t( m_buffer.size() )
-				, BufferAccessType::eDynamic
-				, BufferAccessNature::eDraw );
+				, renderer::MemoryPropertyFlag::eHostVisible );
 			m_storage = buffer.buffer;
 			m_offset = buffer.offset;
 			m_storage->create();

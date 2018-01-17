@@ -113,7 +113,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the global inverse transform.
+		 *\brief		Sets the global inverse transform.
 		 *\param[in]	transform	The new value.
 		 *\~french
 		 *\brief		Définit la transformation globale inversée.

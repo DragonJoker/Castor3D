@@ -20,6 +20,7 @@ set( CastorBinsDependencies
 include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Src )
 include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
+include_directories( ${CMAKE_BINARY_DIR}/Core/Renderer/Src )
 include_directories( ${CMAKE_SOURCE_DIR}/Core/GlslWriter/Src )
 
 add_target(

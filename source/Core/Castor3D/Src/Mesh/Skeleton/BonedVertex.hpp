@@ -75,7 +75,7 @@ namespace castor3d
 		C3D_API VertexBoneData getBones()const;
 		/**
 		 *\~english
-		 *\brief		sets the group bones datas
+		 *\brief		Sets the group bones datas
 		 *\param[in]	p_data		The new value
 		 *\~french
 		 *\brief		Définit les données de bones du groupe
@@ -84,7 +84,7 @@ namespace castor3d
 		C3D_API void setBones( VertexBoneData * p_data );
 		/**
 		 *\~english
-		 *\brief		sets the group bones datas
+		 *\brief		Sets the group bones datas
 		 *\param[in]	p_data		The new value
 		 *\~french
 		 *\brief		Définit les données de bones du groupe
@@ -148,7 +148,7 @@ namespace castor3d
 		C3D_API static VertexBoneData & getBones( void * p_data );
 		/**
 		 *\~english
-		 *\brief		sets the group bones datas
+		 *\brief		Sets the group bones datas
 		 *\param[out]	p_group	The group
 		 *\param[in]	p_pData	The new value
 		 *\~french
@@ -159,7 +159,7 @@ namespace castor3d
 		C3D_API static void setBones( BufferElementGroupSPtr p_group, VertexBoneData * p_pData );
 		/**
 		 *\~english
-		 *\brief		sets the group bones datas
+		 *\brief		Sets the group bones datas
 		 *\param[out]	p_group	The group
 		 *\param[in]	p_data	The new value
 		 *\~french
@@ -170,7 +170,7 @@ namespace castor3d
 		C3D_API static void setBones( BufferElementGroupSPtr p_group, VertexBoneData const & p_data );
 		/**
 		 *\~english
-		 *\brief		sets the group bones datas
+		 *\brief		Sets the group bones datas
 		 *\param[out]	p_group	The group
 		 *\param[in]	p_data	The new value
 		 *\~french
@@ -181,7 +181,7 @@ namespace castor3d
 		C3D_API static void setBones( BufferElementGroup & p_group, VertexBoneData * p_data );
 		/**
 		 *\~english
-		 *\brief		sets the group bones datas
+		 *\brief		Sets the group bones datas
 		 *\param[out]	p_group	The group
 		 *\param[in]	p_data	The new value
 		 *\~french

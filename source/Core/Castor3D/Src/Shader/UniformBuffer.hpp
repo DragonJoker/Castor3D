@@ -113,7 +113,7 @@ namespace castor3d
 		C3D_API void update()const;
 		/**
 		 *\~english
-		 *\brief		sets the buffer's binding point.
+		 *\brief		Sets the buffer's binding point.
 		 *\param[in]	index	The binding point.
 		 *\~french
 		 *\brief		Définit le point d'attache du tampon.

@@ -2,19 +2,20 @@
 
 #include "Render/RenderSystem.hpp"
 
+#include <Buffer.hpp>
+#include <Device.hpp>
+
 using namespace castor;
 
 namespace castor3d
 {
 	namespace
 	{
-		uint32_t doMakeKey( BufferType type
-			, BufferAccessType accessType
-			, BufferAccessNature accessNature )
+		uint32_t doMakeKey( renderer::BufferTarget target
+			, renderer::MemoryPropertyFlags flags )
 		{
-			return ( uint32_t( type ) << 0u )
-				| ( uint32_t( accessType ) << 8u )
-				| ( uint32_t( accessNature ) << 8u );
+			return ( uint32_t( target ) << 0u )
+				| ( uint32_t( flags ) << 16u );
 		}
 	}
 
@@ -29,37 +30,27 @@ namespace castor3d
 
 	void GpuBufferPool::cleanup()
 	{
-		for ( auto & buffers : m_buffers )
-		{
-			for ( auto & buffer : buffers.second )
-			{
-				buffer->destroy();
-			}
-		}
-
 		m_buffers.clear();
 	}
 
-	GpuBufferOffset GpuBufferPool::getGpuBuffer( BufferType type
+	GpuBufferOffset GpuBufferPool::getGpuBuffer( renderer::BufferTarget target
 		, uint32_t size
-		, BufferAccessType accessType
-		, BufferAccessNature accessNature )
+		, renderer::MemoryPropertyFlags flags )
 	{
 		GpuBufferOffset result;
 
-		if ( type != BufferType::eArray
-			&& type != BufferType::eElementArray )
+		if ( target != renderer::BufferTarget::eIndexBuffer
+			&& target != renderer::BufferTarget::eVertexBuffer )
 		{
-			result.buffer = getRenderSystem()->doCreateBuffer( type );
-			result.buffer->create();
-			result.buffer->doInitialiseStorage( size
-				, accessType
-				, accessNature );
+			result.buffer = std::make_shared< GpuBuffer >( *getRenderSystem()
+				, target );
+			result.buffer->initialiseStorage( size
+				, flags );
 			result.offset = 0u;
 		}
 		else
 		{
-			auto key = doMakeKey( type, accessType, accessNature );
+			auto key = doMakeKey( target, flags );
 			auto it = m_buffers.find( key );
 
 			if ( it == m_buffers.end() )
@@ -72,8 +63,8 @@ namespace castor3d
 
 			if ( itB == it->second.end() )
 			{
-				buffer = getRenderSystem()->doCreateBuffer( type );
-				buffer->create();
+				result.buffer = std::make_shared< GpuBuffer >( *getRenderSystem()
+					, target );
 				uint32_t level = 20u;
 				uint64_t maxSize = ( 1u << level ) * 96;
 
@@ -88,8 +79,7 @@ namespace castor3d
 
 				buffer->initialiseStorage( level
 					, 96u
-					, accessType
-					, accessNature );
+					, flags );
 				it->second.push_back( buffer );
 			}
 			else
@@ -104,19 +94,17 @@ namespace castor3d
 		return result;
 	}
 
-	void GpuBufferPool::putGpuBuffer( BufferType type
-		, BufferAccessType accessType
-		, BufferAccessNature accessNature
+	void GpuBufferPool::putGpuBuffer( renderer::BufferTarget target
 		, GpuBufferOffset const & bufferOffset )
 	{
-		if ( type != BufferType::eArray
-			&& type != BufferType::eElementArray )
+		if ( target != renderer::BufferTarget::eIndexBuffer
+			&& target != renderer::BufferTarget::eVertexBuffer )
 		{
-			bufferOffset.buffer->destroy();
+			bufferOffset.buffer->cleanupStorage();
 		}
 		else
 		{
-			auto key = doMakeKey( type, accessType, accessNature );
+			auto key = doMakeKey( target, bufferOffset.buffer->m_flags );
 			auto it = m_buffers.find( key );
 			REQUIRE( it != m_buffers.end() );
 			auto itB = std::find_if( it->second.begin()

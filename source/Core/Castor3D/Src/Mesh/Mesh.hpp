@@ -190,7 +190,7 @@ namespace castor3d
 		C3D_API void computeNormals( bool p_reverted = false );
 		/**
 		 *\~english
-		 *\brief		sets the skeleton
+		 *\brief		Sets the skeleton
 		 *\param[in]	p_skeleton	The new value
 		 *\~french
 		 *\brief		Définit le squelette

@@ -536,7 +536,7 @@ namespace light_streaks
 				, m_declaration );
 			m_vertexBuffer->resize( uint32_t( m_vertices.size() * m_declaration.stride() ) );
 			m_vertexBuffer->linkCoords( m_vertices.begin(), m_vertices.end() );
-			m_vertexBuffer->initialise( castor3d::BufferAccessType::eStatic, castor3d::BufferAccessNature::eDraw );
+			m_vertexBuffer->initialise( renderer::MemoryPropertyFlag::eHostVisible );
 			m_geometryBuffers = getRenderSystem()->createGeometryBuffers( castor3d::Topology::eTriangles
 				, *program );
 			result = m_geometryBuffers->initialise( { *m_vertexBuffer }, nullptr );

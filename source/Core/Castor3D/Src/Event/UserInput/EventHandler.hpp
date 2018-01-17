@@ -180,7 +180,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\~brief		sets if the control can catch mouse events.
+		 *\~brief		Sets if the control can catch mouse events.
 		 *\param[in]	p_value		The new value.
 		 */
 		void setCatchesMouseEvents( bool p_value )

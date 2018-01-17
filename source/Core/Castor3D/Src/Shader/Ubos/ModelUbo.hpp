@@ -62,7 +62,7 @@ namespace castor3d
 			, uint32_t p_materialIndex )const;
 		/**
 		 *\~english
-		 *\brief		sets the environment map index value.
+		 *\brief		Sets the environment map index value.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit la valeur de l'indice de la texture d'environnement.

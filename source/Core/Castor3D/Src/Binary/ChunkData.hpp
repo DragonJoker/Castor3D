@@ -857,7 +857,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -869,7 +869,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -881,7 +881,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -893,7 +893,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -908,7 +908,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -923,7 +923,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -938,7 +938,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -953,7 +953,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -968,7 +968,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -983,7 +983,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -998,7 +998,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1013,7 +1013,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1028,7 +1028,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1047,7 +1047,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1066,7 +1066,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1085,7 +1085,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1104,7 +1104,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1123,7 +1123,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1142,7 +1142,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1157,7 +1157,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1175,7 +1175,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1193,7 +1193,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1223,7 +1223,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1240,7 +1240,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1257,7 +1257,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.

@@ -493,7 +493,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the visibility status
+		 *\brief		Sets the visibility status
 		 *\param[in]	val	The new value
 		 *\~french
 		 *\brief		Définit le statut de visibilité
@@ -505,7 +505,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the overlay order
+		 *\brief		Sets the overlay order
 		 *\param[in]	p_index	The new index
 		 *\param[in]	p_level	The new level
 		 *\~french
@@ -519,7 +519,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the material
+		 *\brief		Sets the material
 		 *\param[in]	p_material	The new value
 		 *\~french
 		 *\brief		Définit le matériau
@@ -531,7 +531,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the relative position of the overlay
+		 *\brief		Sets the relative position of the overlay
 		 *\param[in]	p_position	The new position
 		 *\~french
 		 *\brief		Définit la position relative de l'incrustation
@@ -543,7 +543,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the relative size of the overlay
+		 *\brief		Sets the relative size of the overlay
 		 *\param[in]	p_size	The new size
 		 *\~french
 		 *\brief		Définit les dimensions relatives de l'incrustation
@@ -555,7 +555,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the relative position of the overlay
+		 *\brief		Sets the relative position of the overlay
 		 *\param[in]	p_position	The new position
 		 *\~french
 		 *\brief		Définit la position relative de l'incrustation
@@ -567,7 +567,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the relative size of the overlay
+		 *\brief		Sets the relative size of the overlay
 		 *\param[in]	p_size	The new size
 		 *\~french
 		 *\brief		Définit les dimensions relatives de l'incrustation
@@ -579,7 +579,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the name of the overlay
+		 *\brief		Sets the name of the overlay
 		 *\param[in]	p_name	The new name
 		 *\~french
 		 *\brief		Définit le nom de l'incrustation

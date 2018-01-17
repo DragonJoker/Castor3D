@@ -124,7 +124,7 @@ namespace castor3d
 		C3D_API void detachObject( MovableObject & p_object );
 		/**
 		 *\~english
-		 *\brief		sets the parent node
+		 *\brief		Sets the parent node
 		 *\param[in]	p_parent	The new parent
 		 *\~french
 		 *\brief		Définit le noeud parent
@@ -237,7 +237,7 @@ namespace castor3d
 		C3D_API void scale( castor::Point3r const & p_s );
 		/**
 		 *\~english
-		 *\brief		sets the orientation
+		 *\brief		Sets the orientation
 		 *\param[in]	p_orientation	The new orientation
 		 *\~french
 		 *\brief		Définit l'orientation du noeud
@@ -246,7 +246,7 @@ namespace castor3d
 		C3D_API void setOrientation( castor::Quaternion const & p_orientation );
 		/**
 		 *\~english
-		 *\brief		sets the relative position from a Point3r
+		 *\brief		Sets the relative position from a Point3r
 		 *\param[in]	p_position	The new position
 		 *\~french
 		 *\brief		Définit la position relative du noeud
@@ -255,7 +255,7 @@ namespace castor3d
 		C3D_API void setPosition( castor::Point3r const & p_position );
 		/**
 		 *\~english
-		 *\brief		sets the relative scale from a Point3r
+		 *\brief		Sets the relative scale from a Point3r
 		 *\param[in]	p_scale	The new scale
 		 *\~french
 		 *\brief		Définit l'échelle relative du noeud
@@ -309,7 +309,7 @@ namespace castor3d
 		C3D_API castor::Matrix4x4r const & getDerivedTransformationMatrix()const;
 		/**
 		 *\~english
-		 *\brief		sets the node visibility status
+		 *\brief		Sets the node visibility status
 		 *\param[in]	p_visible	The new value
 		 *\~french
 		 *\brief		Définit le statut de visibilité du noeud
@@ -550,7 +550,7 @@ namespace castor3d
 		void doComputeMatrix();
 		/**
 		 *\~english
-		 *\brief		sets this node's children's absolute transformation matrix to be recalculated
+		 *\brief		Sets this node's children's absolute transformation matrix to be recalculated
 		 *\~french
 		 *\brief		Fait que la matrice de transfomation des enfants de ce noeud doit être recalculée
 		 */

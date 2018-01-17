@@ -34,7 +34,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the fill mode.
+		 *\brief		Sets the fill mode.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit le mode de remplissage.
@@ -56,7 +56,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the culled faces.
+		 *\brief		Sets the culled faces.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit les faces cachées.
@@ -78,7 +78,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the orientation of the faces considered front facing.
+		 *\brief		Sets the orientation of the faces considered front facing.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit le'orientation des faces considérées comme tournées vers l'avant.
@@ -100,7 +100,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the antialiased lines status.
+		 *\brief		Sets the antialiased lines status.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit le statut d'antialising des lignes.
@@ -122,7 +122,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the depth bias factor.
+		 *\brief		Sets the depth bias factor.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit le facteur de modificateur de profondeur.
@@ -144,7 +144,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the depth bias unit.
+		 *\brief		Sets the depth bias unit.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit l'unité du modificateur de profondeur.
@@ -166,7 +166,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the depth clipping status.
+		 *\brief		Sets the depth clipping status.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit le statut de depth clipping.
@@ -188,7 +188,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the scissor test activation status.
+		 *\brief		Sets the scissor test activation status.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit le statut d'activation du scissor test.
@@ -210,7 +210,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the primitive discard status.
+		 *\brief		Sets the primitive discard status.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit le statut de défausse des primitives.

@@ -31,6 +31,8 @@ See LICENSE file in root folder
 
 #include <GlslWriterPrerequisites.hpp>
 
+#include <RendererPrerequisites.hpp>
+
 namespace castor3d
 {
 	using castor::real;

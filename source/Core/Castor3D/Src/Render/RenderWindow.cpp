@@ -6,40 +6,43 @@
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/TextureLayout.hpp"
 
+#include <Device.hpp>
+#include <WindowHandle.hpp>
+
 using namespace castor;
 
 namespace castor3d
 {
-	RenderWindow::TextWriter::TextWriter( String const & p_tabs )
-		: castor::TextWriter< RenderWindow >{ p_tabs }
+	RenderWindow::TextWriter::TextWriter( String const & tabs )
+		: castor::TextWriter< RenderWindow >{ tabs }
 	{
 	}
 
-	bool RenderWindow::TextWriter::operator()( RenderWindow const & p_window, TextFile & p_file )
+	bool RenderWindow::TextWriter::operator()( RenderWindow const & window, TextFile & file )
 	{
-		Logger::logInfo( m_tabs + cuT( "Writing Window " ) + p_window.getName() );
-		bool result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "window \"" ) + p_window.getName() + cuT( "\"\n" ) ) > 0
-						&& p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+		Logger::logInfo( m_tabs + cuT( "Writing Window " ) + window.getName() );
+		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "window \"" ) + window.getName() + cuT( "\"\n" ) ) > 0
+						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 		castor::TextWriter< RenderWindow >::checkError( result, "RenderWindow name" );
 
 		if ( result )
 		{
-			result = p_file.print( 256, cuT( "%s\tvsync %s\n" ), m_tabs.c_str(), p_window.getVSync() ? cuT( "true" ) : cuT( "false" ) ) > 0;
+			result = file.print( 256, cuT( "%s\tvsync %s\n" ), m_tabs.c_str(), window.getVSync() ? cuT( "true" ) : cuT( "false" ) ) > 0;
 			castor::TextWriter< RenderWindow >::checkError( result, "RenderWindow vsync" );
 		}
 
 		if ( result )
 		{
-			result = p_file.print( 256, cuT( "%s\tfullscreen %s\n" ), m_tabs.c_str(), p_window.isFullscreen() ? cuT( "true" ) : cuT( "false" ) ) > 0;
+			result = file.print( 256, cuT( "%s\tfullscreen %s\n" ), m_tabs.c_str(), window.isFullscreen() ? cuT( "true" ) : cuT( "false" ) ) > 0;
 			castor::TextWriter< RenderWindow >::checkError( result, "RenderWindow fullscreen" );
 		}
 
-		if ( result && p_window.getRenderTarget() )
+		if ( result && window.getRenderTarget() )
 		{
-			result = RenderTarget::TextWriter( m_tabs + cuT( "\t" ) )( *p_window.getRenderTarget(), p_file );
+			result = RenderTarget::TextWriter( m_tabs + cuT( "\t" ) )( *window.getRenderTarget(), file );
 		}
 
-		p_file.writeText( m_tabs + cuT( "}\n" ) );
+		file.writeText( m_tabs + cuT( "}\n" ) );
 		return result;
 	}
 
@@ -47,13 +50,14 @@ namespace castor3d
 
 	uint32_t RenderWindow::s_nbRenderWindows = 0;
 
-	RenderWindow::RenderWindow( String const & p_name, Engine & engine )
+	RenderWindow::RenderWindow( String const & name, Engine & engine )
 		: OwnedBy< Engine >{ engine }
-		, Named{ p_name }
+		, Named{ name }
 		, m_index{ s_nbRenderWindows++ }
 		, m_wpListener{ engine.getFrameListenerCache().add( cuT( "RenderWindow_" ) + string::toString( m_index ) ) }
 		, m_backBuffers{ engine.getRenderSystem()->createBackBuffers() }
 		, m_pickingPass{ std::make_unique< PickingPass >( engine ) }
+		, m_handle{ nullptr }
 	{
 	}
 
@@ -71,10 +75,10 @@ namespace castor3d
 		m_pickingPass.reset();
 	}
 
-	bool RenderWindow::initialise( Size const & p_size, WindowHandle const & p_handle )
+	bool RenderWindow::initialise( Size const & size, renderer::WindowHandle && handle )
 	{
-		m_size = p_size;
-		m_handle = p_handle;
+		m_size = size;
+		m_handle = std::move( handle );
 
 		if ( m_handle )
 		{
@@ -198,9 +202,9 @@ namespace castor3d
 		resize( Size( x, y ) );
 	}
 
-	void RenderWindow::resize( Size const & p_size )
+	void RenderWindow::resize( Size const & size )
 	{
-		m_size = p_size;
+		m_size = size;
 
 		if ( m_initialised )
 		{

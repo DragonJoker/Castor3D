@@ -93,7 +93,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the albedo colour.
+		 *\brief		Sets the albedo colour.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la couleur d'albédo.
@@ -106,7 +106,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the glossiness.
+		 *\brief		Sets the glossiness.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la brillance.
@@ -119,7 +119,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the specular.
+		 *\brief		Sets the specular.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la spécularité.

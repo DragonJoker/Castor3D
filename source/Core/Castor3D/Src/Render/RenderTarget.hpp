@@ -150,7 +150,7 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		sets the target dimensions.
+		 *\brief		Sets the target dimensions.
 		 *\remarks		This method must be called before initialisation, otherwise it will have no effect.
 		 *\param[in]	size	The new dimensions.
 		 *\~english
@@ -177,7 +177,7 @@ namespace castor3d
 		C3D_API ViewportType getViewportType()const;
 		/**
 		 *\~english
-		 *\brief		sets the ViewportType.
+		 *\brief		Sets the ViewportType.
 		 *\param[in]	value	The new ViewportType.
 		 *\~french
 		 *\brief		Définit le ViewportType.
@@ -186,7 +186,7 @@ namespace castor3d
 		C3D_API void setViewportType( ViewportType value );
 		/**
 		 *\~english
-		 *\brief		sets the camera.
+		 *\brief		Sets the camera.
 		 *\remarks		Defines also LEye and REye cameras.
 		 *\param[in]	camera	The new camera.
 		 *\~french
@@ -197,7 +197,7 @@ namespace castor3d
 		C3D_API void setCamera( CameraSPtr camera );
 		/**
 		 *\~english
-		 *\brief		sets the tone mapping implementation type.
+		 *\brief		Sets the tone mapping implementation type.
 		 *\param[in]	name		The type.
 		 *\param[in]	parameters	The parameters.
 		 *\~french

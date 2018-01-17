@@ -80,7 +80,7 @@ namespace castor3d
 		C3D_API Particle & operator=( Particle && p_rhs );
 		/**
 		 *\~english
-		 *\brief		sets the particle variable's value at given index.
+		 *\brief		Sets the particle variable's value at given index.
 		 *\param[in]	p_index	The variable index.
 		 *\param[in]	p_value	The variable value.
 		 *\~french
@@ -92,7 +92,7 @@ namespace castor3d
 		inline void setValue( uint32_t p_index, typename ElementTyper< Type >::Type const & p_value );
 		/**
 		 *\~english
-		 *\brief		sets the particle variable's value at given index.
+		 *\brief		Sets the particle variable's value at given index.
 		 *\param[in]	p_index	The variable index.
 		 *\return		The variable value.
 		 *\~french

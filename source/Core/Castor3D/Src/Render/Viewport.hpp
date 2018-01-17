@@ -253,7 +253,7 @@ namespace castor3d
 			, real far );
 		/**
 		 *\~english
-		 *\brief		Builds a matrix that sets a non centered perspective projection from the given parameters.
+		 *\brief		Builds a matrix that Sets a non centered perspective projection from the given parameters.
 		 *\param[in]	left	Left clipping plane value.
 		 *\param[in]	right	Right clipping plane value.
 		 *\param[in]	bottom	Bottom clipping plane value.
@@ -277,7 +277,7 @@ namespace castor3d
 			, real far );
 		/**
 		 *\~english
-		 *\brief		Builds a matrix that sets an orthogonal projection.
+		 *\brief		Builds a matrix that Sets an orthogonal projection.
 		 *\param[in]	left	Left clipping plane value.
 		 *\param[in]	right	Right clipping plane value.
 		 *\param[in]	bottom	Bottom clipping plane value.
@@ -451,7 +451,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the viewport render position.
+		 *\brief		Sets the viewport render position.
 		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit la position de rendu du viewport.
@@ -463,7 +463,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the viewport render size
+		 *\brief		Sets the viewport render size
 		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit les dimensions de rendu du viewport
@@ -585,7 +585,7 @@ namespace castor3d
 	private:
 		/**
 		 *\~english
-		 *\brief		Builds a matrix that sets a centered perspective projection from the given parameters
+		 *\brief		Builds a matrix that Sets a centered perspective projection from the given parameters
 		 *\param[in]	fovy	Y Field of View
 		 *\param[in]	aspect	Width / Height ratio
 		 *\param[in]	near	Near clipping plane value
@@ -603,7 +603,7 @@ namespace castor3d
 			, real far );
 		/**
 		 *\~english
-		 *\brief		Builds a matrix that sets a non centered perspective projection from the given parameters
+		 *\brief		Builds a matrix that Sets a non centered perspective projection from the given parameters
 		 *\param[in]	left	Left clipping plane value
 		 *\param[in]	right	Right clipping plane value
 		 *\param[in]	bottom	Bottom clipping plane value
@@ -627,7 +627,7 @@ namespace castor3d
 			, real far );
 		/**
 		 *\~english
-		 *\brief		Builds a matrix that sets a non centered orthogonal projection from the given parameters
+		 *\brief		Builds a matrix that Sets a non centered orthogonal projection from the given parameters
 		 *\param[in]	left	Left clipping plane value
 		 *\param[in]	right	Right clipping plane value
 		 *\param[in]	bottom	Bottom clipping plane value

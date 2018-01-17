@@ -112,7 +112,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the animation node transformation.
+		 *\brief		Sets the animation node transformation.
 		 *\param[in]	transform	The new value.
 		 *\~french
 		 *\brief		Définit les animations du noeud de transformation.

@@ -93,7 +93,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the albedo colour.
+		 *\brief		Sets the albedo colour.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la couleur d'albédo.
@@ -106,7 +106,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the roughness.
+		 *\brief		Sets the roughness.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la rugosité.
@@ -119,7 +119,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the reflectance.
+		 *\brief		Sets the reflectance.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la réflectivité.

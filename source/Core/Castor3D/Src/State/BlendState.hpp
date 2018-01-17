@@ -35,7 +35,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the independant blending activation status.
+		 *\brief		Sets the independant blending activation status.
 		 *\param[in]	p_enable	The new value.
 		 *\~french
 		 *\brief		Définit le statut d'activation du blending indépendant.
@@ -57,7 +57,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the blend factors.
+		 *\brief		Sets the blend factors.
 		 *\param[in]	p_factors	The new value.
 		 *\~french
 		 *\brief		Définit les facteurs de blend.
@@ -83,7 +83,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the blending activation status.
+		 *\brief		Sets the blending activation status.
 		 *\param[in]	p_enable	The new value.
 		 *\param[in]	p_index		The value index.
 		 *\~french
@@ -111,7 +111,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the RGB source blending factor.
+		 *\brief		Sets the RGB source blending factor.
 		 *\param[in]	p_value	The new value.
 		 *\param[in]	p_index	The value index.
 		 *\~french
@@ -139,7 +139,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the RGB destination blending factor.
+		 *\brief		Sets the RGB destination blending factor.
 		 *\param[in]	p_value	The new value.
 		 *\param[in]	p_index	The value index.
 		 *\~french
@@ -167,7 +167,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the RGB blending operation.
+		 *\brief		Sets the RGB blending operation.
 		 *\param[in]	p_value	The new value.
 		 *\param[in]	p_index	The value index.
 		 *\~french
@@ -181,7 +181,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the RGB blending operation and operands.
+		 *\brief		Sets the RGB blending operation and operands.
 		 *\param[in]	p_op	The blend operation.
 		 *\param[in]	p_src	The blend source operand.
 		 *\param[in]	p_dst	The blend destination operand.
@@ -215,7 +215,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the alpha source blending factor.
+		 *\brief		Sets the alpha source blending factor.
 		 *\param[in]	p_value	The new value.
 		 *\param[in]	p_index	The value index.
 		 *\~french
@@ -243,7 +243,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the alpha destination blending factor.
+		 *\brief		Sets the alpha destination blending factor.
 		 *\param[in]	p_value	The new value.
 		 *\param[in]	p_index	The value index.
 		 *\~french
@@ -271,7 +271,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the alpha blending operation.
+		 *\brief		Sets the alpha blending operation.
 		 *\param[in]	p_value	The new value.
 		 *\param[in]	p_index	The value index.
 		 *\~french
@@ -285,7 +285,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the alpha blending operation and operands.
+		 *\brief		Sets the alpha blending operation and operands.
 		 *\param[in]	p_op	The blend operation.
 		 *\param[in]	p_src	The blend source operand.
 		 *\param[in]	p_dst	The blend destination operand.
@@ -305,7 +305,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the source blending factor for both RGB and alpha.
+		 *\brief		Sets the source blending factor for both RGB and alpha.
 		 *\param[in]	p_value	The new value.
 		 *\param[in]	p_index	The value index.
 		 *\~french
@@ -320,7 +320,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the destination blending factor for both RGB and alpha.
+		 *\brief		Sets the destination blending factor for both RGB and alpha.
 		 *\param[in]	p_value	The new value.
 		 *\param[in]	p_index	The value index.
 		 *\~french
@@ -335,7 +335,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the alpha and RGB blending operation.
+		 *\brief		Sets the alpha and RGB blending operation.
 		 *\param[in]	p_value	The new value.
 		 *\param[in]	p_index	The value index.
 		 *\~french
@@ -364,7 +364,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the render target write mask.
+		 *\brief		Sets the render target write mask.
 		 *\param[in]	p_value	The new value.
 		 *\param[in]	p_index	The value index.
 		 *\~french

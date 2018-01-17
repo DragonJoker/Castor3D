@@ -1,4 +1,4 @@
-﻿#include "ShaderStorageBuffer.hpp"
+#include "ShaderStorageBuffer.hpp"
 
 #include "Engine.hpp"
 #include "Render/RenderSystem.hpp"
@@ -16,15 +16,13 @@ namespace castor3d
 	{
 	}
 
-	bool ShaderStorageBuffer::initialise( BufferAccessType type
-		, BufferAccessNature nature )
+	bool ShaderStorageBuffer::initialise( renderer::MemoryPropertyFlags flags )
 	{
 		if ( !m_gpuBuffer )
 		{
 			auto buffer = getEngine()->getRenderSystem()->getBuffer( BufferType::eShaderStorage
 				, getSize()
-				, type
-				, nature );
+				, flags );
 			m_gpuBuffer = buffer.buffer;
 			m_offset = buffer.offset;
 			doInitialise( type, nature );

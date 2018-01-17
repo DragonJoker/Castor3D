@@ -7,6 +7,7 @@ function( CoreInit )
 	set( CUtlT "no (Not wanted)" PARENT_SCOPE )
 	set( GlslW "no (Not wanted)" PARENT_SCOPE )
 	set( C3D "no (Not wanted)" PARENT_SCOPE )
+	set( Rnd "no (Not wanted)" PARENT_SCOPE )
 	set( C3DT "no (Not wanted)" PARENT_SCOPE )
 	set( CT "no (Not wanted)" PARENT_SCOPE )
 endfunction( CoreInit )
@@ -35,6 +36,10 @@ function( CoreBuild )
 		set( Build ${GlslW} )
 		add_subdirectory( Core/GlslWriter )
 		set( GlslW ${Build} PARENT_SCOPE )
+
+		set( Build ${Rnd} )
+		add_subdirectory( Core/Renderer )
+		set( Rnd ${Build} PARENT_SCOPE )
 
 		set( Build ${C3D} )
 		add_subdirectory( Core/Castor3D )
@@ -74,6 +79,7 @@ function( CoreSummary msg msgtest )
 	set( msg_tmp "\nCore :" )
 	set( msg_tmp "${msg_tmp}\n    CastorUtils          ${Cutils}" )
 	set( msg_tmp "${msg_tmp}\n    GlslWriter           ${GlslW}" )
+	set( msg_tmp "${msg_tmp}\n    Renderer             ${Rnd}" )
 	set( msg_tmp "${msg_tmp}\n    Castor3D             ${C3D}" )
 	set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 
@@ -163,6 +169,33 @@ function( CoreSetup )
 			DESCRIPTION "Development files for GlslWriter."
 			GROUP Development
 			DEPENDS Castor3D CastorUtils_dev Castor3D Castor3D_dev
+			INSTALL_TYPES Developer Full
+		)
+
+		cpack_add_component( Renderer
+			DISPLAY_NAME "Renderer"
+			DESCRIPTION "Base renderer API."
+			REQUIRED
+			GROUP Core
+			INSTALL_TYPES Minimal Full
+		)
+		cpack_add_component( Renderer_dev
+			DISPLAY_NAME "Renderer SDK"
+			DESCRIPTION "Development files for Renderer."
+			GROUP Development
+			DEPENDS CastorUtils CastorUtils_dev
+			INSTALL_TYPES Developer Full
+		)
+		cpack_add_component( Renderer_French_Doc
+			DISPLAY_NAME "Renderer French help"
+			DESCRIPTION "Renderer French HTML documentation."
+			GROUP Documentation
+			INSTALL_TYPES Developer Full
+		)
+		cpack_add_component( Renderer_English_Doc
+			DISPLAY_NAME "Renderer English help"
+			DESCRIPTION "Renderer English HTML documentation."
+			GROUP Documentation
 			INSTALL_TYPES Developer Full
 		)
 

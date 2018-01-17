@@ -94,7 +94,7 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		sets the texture.
+		 *\brief		Sets the texture.
 		 *\param[in]	texture	The texture.
 		 *\~french
 		 *\brief		Definit la texture.
@@ -146,7 +146,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the texture channel.
+		 *\brief		Sets the texture channel.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le canal de la texture.
@@ -168,7 +168,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the unit index.
+		 *\brief		Sets the unit index.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit l'index de l'unité.
@@ -180,7 +180,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the target holding the texture.
+		 *\brief		Sets the target holding the texture.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la cible contenant la texture.
@@ -224,7 +224,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the auto mipmaps generation status.
+		 *\brief		Sets the auto mipmaps generation status.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le statut d'auto génération des mipmaps.

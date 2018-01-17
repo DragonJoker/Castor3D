@@ -106,23 +106,17 @@ namespace castor3d
 
 	GpuBufferOffset RenderSystem::getBuffer( BufferType type
 		, uint32_t size
-		, BufferAccessType accessType
-		, BufferAccessNature accessNature )
+		, renderer::MemoryPropertyFlags flags )
 	{
 		return m_gpuBufferPool.getGpuBuffer( type
 			, size
-			, accessType
-			, accessNature );
+			, flags );
 	}
 
 	void RenderSystem::putBuffer( BufferType type
-		, BufferAccessType accessType
-		, BufferAccessNature accessNature
 		, GpuBufferOffset const & bufferOffset )
 	{
 		m_gpuBufferPool.putGpuBuffer( type
-			, accessType
-			, accessNature
 			, bufferOffset );
 	}
 }

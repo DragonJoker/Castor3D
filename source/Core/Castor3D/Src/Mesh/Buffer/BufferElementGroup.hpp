@@ -96,7 +96,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group index
+		 *\brief		Sets the group index
 		 *\param[in]	p_index	The new value
 		 *\~french
 		 *\brief		Définit l'indice du groupe

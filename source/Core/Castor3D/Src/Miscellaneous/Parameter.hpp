@@ -190,7 +190,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets a parameter value
+		 *\brief		Sets a parameter value
 		 *\param[in]	p_name	The parameter name
 		 *\param[in]	p_value	The parameter value
 		 *\return		\p false if there is no parameter with the given name

@@ -46,7 +46,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the fog type.
+		 *\brief		Sets the fog type.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit le type de brouillard.

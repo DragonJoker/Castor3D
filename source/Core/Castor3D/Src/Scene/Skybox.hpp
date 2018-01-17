@@ -103,7 +103,7 @@ namespace castor3d
 		C3D_API void render( Camera const & camera );
 		/**
 		*\~english
-		*\return		sets the skybox's equirectangular texture.
+		*\return		Sets the skybox's equirectangular texture.
 		*\~french
 		*\return		Définit la texture équirectangulaire de la skybox.
 		*/
@@ -153,7 +153,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\return		sets the skybox's texture.
+		 *\return		Sets the skybox's texture.
 		 *\~french
 		 *\return		Définit la texture de la skybox.
 		 */
@@ -163,7 +163,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\return		sets the skybox's scene.
+		 *\return		Sets the skybox's scene.
 		 *\~french
 		 *\return		Définit la scène de la skybox.
 		 */

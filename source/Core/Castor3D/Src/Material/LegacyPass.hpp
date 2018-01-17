@@ -93,7 +93,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the diffuse colour.
+		 *\brief		Sets the diffuse colour.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la couleur diffuse.
@@ -106,7 +106,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the specular colour.
+		 *\brief		Sets the specular colour.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la couleur spéculaire.
@@ -119,7 +119,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the ambient factor.
+		 *\brief		Sets the ambient factor.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le facteur d'ambiante.
@@ -132,7 +132,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the shininess.
+		 *\brief		Sets the shininess.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit l'exposant.

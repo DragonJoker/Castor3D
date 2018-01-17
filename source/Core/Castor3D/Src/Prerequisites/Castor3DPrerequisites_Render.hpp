@@ -36,46 +36,6 @@ namespace castor3d
 	IMPLEMENT_FLAGS( AccessType )
 	/*!
 	\author 	Sylvain DOREMUS
-	\see		BufferAccessNature
-	\~english
-	\brief		Buffer access types enumeration
-	\remark		Made to be combined with BufferAccessNature
-	\~french
-	\brief		Enumération des types d'accès de tampon
-	\remark		Fait pour être combiné avec BufferAccessNature
-	*/
-	enum class BufferAccessType
-		: uint32_t
-	{
-		//! Modified once and used many times
-		eStatic = 1 << 0,
-		//! Modified many times and used many times
-		eDynamic = 1 << 1,
-		//! Modified oncce and used at most a few times
-		eStream = 1 << 2,
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\see		BufferAccessType
-	\~english
-	\brief		Buffer access natures enumeration
-	\remark		Made to be combined with BufferAccessType
-	\~french
-	\brief		Enumération des natures des accès de tampon
-	\remark		Fait pour être combiné avec BufferAccessType
-	*/
-	enum class BufferAccessNature
-		: uint32_t
-	{
-		//! Modified by CPU and used by GPU
-		eDraw = 1 << 4,
-		//! Modified by GPU and used by CPU
-		eRead = 1 << 5,
-		//! Modified by GPU and used by GPU
-		eCopy = 1 << 6,
-	};
-	/*!
-	\author 	Sylvain DOREMUS
 	\~english
 	\brief		Primitive draw types enumeration
 	\~french
@@ -245,9 +205,9 @@ namespace castor3d
 	{
 		//! Keeps the current value.
 		eKeep,
-		//! sets the stencil buffer value to 0.
+		//! Sets the stencil buffer value to 0.
 		eZero,
-		//! sets the stencil buffer value by the one given
+		//! Sets the stencil buffer value by the one given
 		eReplace,
 		//! Increments the current stencil buffer value. Clamps to the maximum representable unsigned value.
 		eIncrement,
@@ -432,34 +392,6 @@ namespace castor3d
 
 		return 0;
 	}
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date		12/12/2016
-	\~english
-	\brief		GPU buffers types enumeration.
-	\~french
-	\brief		Enumération des types de tampons.
-	*/
-	enum class BufferType
-		: uint32_t
-	{
-		//!\~english	Data array => Vertex buffers.
-		//!\~french		Tableau de données => Tampons de sommets.
-		eArray,
-		//!\~english	Element array => Index buffers.
-		//!\~french		Tableau d'éléments => Tampons d'indices.
-		eElementArray,
-		//!\~english	Uniform buffer.
-		//!\~french		Tampn de variables uniformes.
-		eUniform,
-		//!\~english	Atomic counters buffer.
-		//!\~french		Tampon de compteurs atomiques.
-		eAtomicCounter,
-		//!\~english	Shader storage buffer.
-		//!\~french		Tampon stockage pour shader.
-		eShaderStorage,
-	};
 	/**
 	 *\~english
 	 *\brief		gets the name of the given element type.

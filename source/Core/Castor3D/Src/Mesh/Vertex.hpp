@@ -66,7 +66,7 @@ namespace castor3d
 		C3D_API virtual ~Vertex();
 		/**
 		 *\~english
-		 *\brief		sets the vertex position
+		 *\brief		Sets the vertex position
 		 *\param[in]	val	The new value
 		 *\~french
 		 *\brief		Définit la position du sommet
@@ -78,7 +78,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex position
+		 *\brief		Sets the vertex position
 		 *\param[in]	val	The new value
 		 *\~french
 		 *\brief		Définit la position du sommet
@@ -90,7 +90,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex position
+		 *\brief		Sets the vertex position
 		 *\param[in]	x, y, z	The new value
 		 *\~french
 		 *\brief		Définit la position du sommet
@@ -102,7 +102,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex position
+		 *\brief		Sets the vertex position
 		 *\param[in]	p_coords	The new value
 		 *\~french
 		 *\brief		Définit la position du sommet
@@ -114,7 +114,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex normal
+		 *\brief		Sets the vertex normal
 		 *\param[in]	val	The value
 		 *\~french
 		 *\brief		Définit la normale du sommet
@@ -126,7 +126,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex normal
+		 *\brief		Sets the vertex normal
 		 *\param[in]	val	The value
 		 *\~french
 		 *\brief		Définit la normale du sommet
@@ -138,7 +138,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex normal
+		 *\brief		Sets the vertex normal
 		 *\param[in]	x, y, z	The values
 		 *\~french
 		 *\brief		Définit la normale du sommet
@@ -150,7 +150,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex normal
+		 *\brief		Sets the vertex normal
 		 *\param[in]	p_coords	The data buffer
 		 *\~french
 		 *\brief		Définit la normale du sommet
@@ -162,7 +162,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex tangent
+		 *\brief		Sets the vertex tangent
 		 *\param[in]	val	The value
 		 *\~french
 		 *\brief		Définit la tangente du sommet
@@ -174,7 +174,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex tangent
+		 *\brief		Sets the vertex tangent
 		 *\param[in]	val	The value
 		 *\~french
 		 *\brief		Définit la tangente du sommet
@@ -186,7 +186,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex tangent
+		 *\brief		Sets the vertex tangent
 		 *\param[in]	x, y, z	The values
 		 *\~french
 		 *\brief		Définit la tangente du sommet
@@ -198,7 +198,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex tangent
+		 *\brief		Sets the vertex tangent
 		 *\param[in]	p_coords	The data buffer
 		 *\~french
 		 *\brief		Définit la tangente du sommet
@@ -210,7 +210,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex bitangent
+		 *\brief		Sets the vertex bitangent
 		 *\param[in]	val	The value
 		 *\~french
 		 *\brief		Définit la bitangente du sommet
@@ -222,7 +222,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex bitangent
+		 *\brief		Sets the vertex bitangent
 		 *\param[in]	val	The value
 		 *\~french
 		 *\brief		Définit la bitangente du sommet
@@ -234,7 +234,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex bitangent
+		 *\brief		Sets the vertex bitangent
 		 *\param[in]	x, y, z	The values
 		 *\~french
 		 *\brief		Définit la bitangente du sommet
@@ -246,7 +246,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex bitangent
+		 *\brief		Sets the vertex bitangent
 		 *\param[in]	p_coords	The data buffer
 		 *\~french
 		 *\brief		Définit la bitangente du sommet
@@ -258,7 +258,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex texture coordinates
+		 *\brief		Sets the vertex texture coordinates
 		 *\param[in]	val	The value
 		 *\~french
 		 *\brief		Définit les coordonnées de texture du sommet
@@ -270,7 +270,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex texture coordinates
+		 *\brief		Sets the vertex texture coordinates
 		 *\param[in]	val	The value
 		 *\~french
 		 *\brief		Définit les coordonnées de texture du sommet
@@ -282,7 +282,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex texture coordinates
+		 *\brief		Sets the vertex texture coordinates
 		 *\param[in]	x, y, z	The values
 		 *\~french
 		 *\brief		Définit les coordonnées de texture du sommet
@@ -294,7 +294,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex texture coordinates
+		 *\brief		Sets the vertex texture coordinates
 		 *\param[in]	p_coords	The data buffer
 		 *\~french
 		 *\brief		Définit les coordonnées de texture du sommet
@@ -969,7 +969,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex position in a buffer
+		 *\brief		Sets the vertex position in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -983,7 +983,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex position in a buffer
+		 *\brief		Sets the vertex position in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -997,7 +997,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex position in a buffer
+		 *\brief		Sets the vertex position in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1008,7 +1008,7 @@ namespace castor3d
 		C3D_API static void setPosition( void * p_buffer, real const * p_coord );
 		/**
 		 *\~english
-		 *\brief		sets the vertex position in a buffer
+		 *\brief		Sets the vertex position in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	x,y,z		The new value
 		 *\~french
@@ -1019,7 +1019,7 @@ namespace castor3d
 		C3D_API static void setPosition( void * p_buffer, real x, real y, real z );
 		/**
 		 *\~english
-		 *\brief		sets the vertex normal in a buffer
+		 *\brief		Sets the vertex normal in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1033,7 +1033,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex normal in a buffer
+		 *\brief		Sets the vertex normal in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1047,7 +1047,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex normal in a buffer
+		 *\brief		Sets the vertex normal in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1058,7 +1058,7 @@ namespace castor3d
 		C3D_API static void setNormal( void * p_buffer, real const * p_coord );
 		/**
 		 *\~english
-		 *\brief		sets the vertex normal in a buffer
+		 *\brief		Sets the vertex normal in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	x,y,z		The new value
 		 *\~french
@@ -1069,7 +1069,7 @@ namespace castor3d
 		C3D_API static void setNormal( void * p_buffer, real x, real y, real z );
 		/**
 		 *\~english
-		 *\brief		sets the vertex tangent in a buffer
+		 *\brief		Sets the vertex tangent in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1083,7 +1083,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex tangent in a buffer
+		 *\brief		Sets the vertex tangent in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1097,7 +1097,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex tangent in a buffer
+		 *\brief		Sets the vertex tangent in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1108,7 +1108,7 @@ namespace castor3d
 		C3D_API static void setTangent( void * p_buffer, real const * p_coord );
 		/**
 		 *\~english
-		 *\brief		sets the vertex tangent in a buffer
+		 *\brief		Sets the vertex tangent in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	x,y,z		The new value
 		 *\~french
@@ -1119,7 +1119,7 @@ namespace castor3d
 		C3D_API static void setTangent( void * p_buffer, real x, real y, real z );
 		/**
 		 *\~english
-		 *\brief		sets the vertex bitangent in a buffer
+		 *\brief		Sets the vertex bitangent in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1133,7 +1133,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex bitangent in a buffer
+		 *\brief		Sets the vertex bitangent in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1147,7 +1147,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex bitangent in a buffer
+		 *\brief		Sets the vertex bitangent in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1158,7 +1158,7 @@ namespace castor3d
 		C3D_API static void setBitangent( void * p_buffer, real const * p_coord );
 		/**
 		 *\~english
-		 *\brief		sets the vertex bitangent in a buffer
+		 *\brief		Sets the vertex bitangent in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	x,y,z		The new value
 		 *\~french
@@ -1169,7 +1169,7 @@ namespace castor3d
 		C3D_API static void setBitangent( void * p_buffer, real x, real y, real z );
 		/**
 		 *\~english
-		 *\brief		sets the vertex texture coordinates in a buffer
+		 *\brief		Sets the vertex texture coordinates in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1183,7 +1183,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex texture coordinates in a buffer
+		 *\brief		Sets the vertex texture coordinates in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1197,7 +1197,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the vertex texture coordinates in a buffer
+		 *\brief		Sets the vertex texture coordinates in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1208,7 +1208,7 @@ namespace castor3d
 		C3D_API static void setTexCoord( void * p_buffer, real const * p_coord );
 		/**
 		 *\~english
-		 *\brief		sets the vertex texture coordinates in a buffer
+		 *\brief		Sets the vertex texture coordinates in a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	x,y,z		The new value
 		 *\~french
@@ -1379,7 +1379,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group position
+		 *\brief		Sets the group position
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1393,7 +1393,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group position
+		 *\brief		Sets the group position
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1407,7 +1407,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group position
+		 *\brief		Sets the group position
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1421,7 +1421,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group position
+		 *\brief		Sets the group position
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	x, y, z		The new value
 		 *\~french
@@ -1435,7 +1435,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group normal
+		 *\brief		Sets the group normal
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1449,7 +1449,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group normal
+		 *\brief		Sets the group normal
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1463,7 +1463,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group normal
+		 *\brief		Sets the group normal
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1477,7 +1477,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group normal
+		 *\brief		Sets the group normal
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	x, y, z		The new value
 		 *\~french
@@ -1491,7 +1491,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group tangent
+		 *\brief		Sets the group tangent
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1505,7 +1505,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group tangent
+		 *\brief		Sets the group tangent
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1519,7 +1519,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group tangent
+		 *\brief		Sets the group tangent
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1533,7 +1533,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group tangent
+		 *\brief		Sets the group tangent
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	x, y, z		The new value
 		 *\~french
@@ -1547,7 +1547,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group bitangent
+		 *\brief		Sets the group bitangent
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1561,7 +1561,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group bitangent
+		 *\brief		Sets the group bitangent
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1575,7 +1575,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group bitangent
+		 *\brief		Sets the group bitangent
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1589,7 +1589,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group bitangent
+		 *\brief		Sets the group bitangent
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	x, y, z		The new value
 		 *\~french
@@ -1603,7 +1603,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group texture coordinates
+		 *\brief		Sets the group texture coordinates
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1617,7 +1617,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group texture coordinates
+		 *\brief		Sets the group texture coordinates
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1631,7 +1631,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group texture coordinates
+		 *\brief		Sets the group texture coordinates
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	p_coord		The new value
 		 *\~french
@@ -1645,7 +1645,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group texture coordinates
+		 *\brief		Sets the group texture coordinates
 		 *\param[in]	p_pElement	The group
 		 *\param[in]	x, y, z		The new value
 		 *\~french
@@ -1899,7 +1899,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group position
+		 *\brief		Sets the group position
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -1913,7 +1913,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group position
+		 *\brief		Sets the group position
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -1927,7 +1927,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group position
+		 *\brief		Sets the group position
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -1941,7 +1941,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group position
+		 *\brief		Sets the group position
 		 *\param[out]	p_element	The group
 		 *\param[in]	x, y, z	The new value
 		 *\~french
@@ -1955,7 +1955,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group normal
+		 *\brief		Sets the group normal
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -1969,7 +1969,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group normal
+		 *\brief		Sets the group normal
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -1983,7 +1983,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group normal
+		 *\brief		Sets the group normal
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -1997,7 +1997,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group normal
+		 *\brief		Sets the group normal
 		 *\param[out]	p_element	The group
 		 *\param[in]	x, y, z	The new value
 		 *\~french
@@ -2011,7 +2011,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group tangent
+		 *\brief		Sets the group tangent
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -2025,7 +2025,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group tangent
+		 *\brief		Sets the group tangent
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -2039,7 +2039,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group tangent
+		 *\brief		Sets the group tangent
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -2053,7 +2053,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group tangent
+		 *\brief		Sets the group tangent
 		 *\param[out]	p_element	The group
 		 *\param[in]	x, y, z	The new value
 		 *\~french
@@ -2067,7 +2067,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group bitangent
+		 *\brief		Sets the group bitangent
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -2081,7 +2081,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group bitangent
+		 *\brief		Sets the group bitangent
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -2095,7 +2095,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group bitangent
+		 *\brief		Sets the group bitangent
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -2109,7 +2109,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group bitangent
+		 *\brief		Sets the group bitangent
 		 *\param[out]	p_element	The group
 		 *\param[in]	x, y, z	The new value
 		 *\~french
@@ -2123,7 +2123,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group texture coordinates
+		 *\brief		Sets the group texture coordinates
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -2137,7 +2137,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group texture coordinates
+		 *\brief		Sets the group texture coordinates
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -2151,7 +2151,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group texture coordinates
+		 *\brief		Sets the group texture coordinates
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_coord	The new value
 		 *\~french
@@ -2165,7 +2165,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the group texture coordinates
+		 *\brief		Sets the group texture coordinates
 		 *\param[out]	p_element	The group
 		 *\param[in]	x, y, z	The new value
 		 *\~french

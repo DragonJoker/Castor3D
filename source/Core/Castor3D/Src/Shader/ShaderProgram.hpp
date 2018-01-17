@@ -98,7 +98,7 @@ namespace castor3d
 		C3D_API ShaderObjectSPtr createObject( ShaderType p_type );
 		/**
 		 *\~english
-		 *\brief		sets all objects file.
+		 *\brief		Sets all objects file.
 		 *\param[in]	p_pathFile	The file name.
 		 *\~french
 		 *\brief		Définit le fichier utilisé par tous les objets.
@@ -138,7 +138,7 @@ namespace castor3d
 		C3D_API void resetToCompile();
 		/**
 		 *\~english
-		 *\brief		sets the input primitives type.
+		 *\brief		Sets the input primitives type.
 		 *\param[in]	p_target	The shader object concerned.
 		 *\param[in]	p_topology	The input primitives type.
 		 *\~french
@@ -149,7 +149,7 @@ namespace castor3d
 		C3D_API void setInputType( ShaderType p_target, Topology p_topology );
 		/**
 		 *\~english
-		 *\brief		sets the output primitives type.
+		 *\brief		Sets the output primitives type.
 		 *\param[in]	p_target	The shader object concerned.
 		 *\param[in]	p_topology	The output primitives type.
 		 *\~french
@@ -160,7 +160,7 @@ namespace castor3d
 		C3D_API void setOutputType( ShaderType p_target, Topology p_topology );
 		/**
 		 *\~english
-		 *\brief		sets the output vertex count.
+		 *\brief		Sets the output vertex count.
 		 *\param[in]	p_target	The shader object concerned.
 		 *\param[in]	p_count	The count.
 		 *\~french
@@ -171,7 +171,7 @@ namespace castor3d
 		C3D_API void setOutputVtxCount( ShaderType p_target, uint8_t p_count );
 		/**
 		 *\~english
-		 *\brief		sets the shader file.
+		 *\brief		Sets the shader file.
 		 *\param[in]	p_target	The shader object concerned.
 		 *\param[in]	p_pathFile	The file name.
 		 *\~french
@@ -204,7 +204,7 @@ namespace castor3d
 		C3D_API bool hasFile( ShaderType p_target )const;
 		/**
 		 *\~english
-		 *\brief		sets the shader source.
+		 *\brief		Sets the shader source.
 		 *\param[in]	p_target	The shader object concerned.
 		 *\param[in]	p_source	The source code.
 		 *\~french
@@ -215,7 +215,7 @@ namespace castor3d
 		C3D_API void setSource( ShaderType p_target, castor::String const & p_source );
 		/**
 		 *\~english
-		 *\brief		sets the shader source.
+		 *\brief		Sets the shader source.
 		 *\param[in]	p_target	The shader object concerned.
 		 *\param[in]	p_source	The source code.
 		 *\~french
@@ -413,7 +413,7 @@ namespace castor3d
 		C3D_API virtual ProgramInputLayout & getLayout() = 0;
 		/**
 		 *\~english
-		 *\brief		sets the transform feedback layout.
+		 *\brief		Sets the transform feedback layout.
 		 *\param[in]	p_declaration	The layout.
 		 *\~french
 		 *\brief		Définit le layout de transform feedback.

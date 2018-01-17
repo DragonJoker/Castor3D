@@ -50,7 +50,7 @@ namespace castor3d
 		C3D_API virtual castor::PxBufferBaseSPtr getBuffer()const = 0;
 		/**
 		 *\~english
-		 *\brief		sets the texture buffer.
+		 *\brief		Sets the texture buffer.
 		 *\param[in]	p_buffer	The texture buffer.
 		 *\~french
 		 *\brief		Définit le tampon de la texture.
@@ -238,7 +238,7 @@ namespace castor3d
 		C3D_API void resize( castor::Point3ui const & p_size );
 		/**
 		 *\~english
-		 *\brief		sets the texture buffer.
+		 *\brief		Sets the texture buffer.
 		 *\param[in]	p_buffer	The texture buffer.
 		 *\~french
 		 *\brief		Définit le tampon de la texture.

@@ -100,7 +100,7 @@ namespace castor3d
 		C3D_API void initialise( MaterialType type );
 		/**
 		 *\~english
-		 *\brief		sets all the elements to be cleaned up.
+		 *\brief		Sets all the elements to be cleaned up.
 		 *\~french
 		 *\brief		Met tous les éléments à nettoyer.
 		 */

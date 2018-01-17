@@ -116,7 +116,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the text font
+		 *\brief		Sets the text font
 		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit la police du texte
@@ -181,7 +181,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the overlay text
+		 *\brief		Sets the overlay text
 		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit le texte de l'incrustation
@@ -194,7 +194,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the overlay text
+		 *\brief		Sets the overlay text
 		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit le texte de l'incrustation
@@ -218,7 +218,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets text wrapping mode
+		 *\brief		Sets text wrapping mode
 		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit le mode de découpe du texte

@@ -1,4 +1,4 @@
-﻿#include "ComputeParticleSystem.hpp"
+#include "ComputeParticleSystem.hpp"
 
 #include "ParticleSystem.hpp"
 #include "Particle.hpp"
@@ -174,13 +174,13 @@ namespace castor3d
 		if ( result )
 		{
 			m_particlesStorages[m_in]->resize( size );
-			result = m_particlesStorages[m_in]->initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+			result = m_particlesStorages[m_in]->initialise( renderer::MemoryPropertyFlag::eHostVisible );
 		}
 
 		if ( result )
 		{
 			m_particlesStorages[m_out]->resize( size );
-			result = m_particlesStorages[m_out]->initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+			result = m_particlesStorages[m_out]->initialise( renderer::MemoryPropertyFlag::eHostVisible );
 		}
 
 		if ( result )
@@ -206,7 +206,7 @@ namespace castor3d
 	{
 		auto size = uint32_t( 1024u * 4u * sizeof( float ) );
 		m_randomStorage->resize( size );
-		bool result = m_randomStorage->initialise( BufferAccessType::eStatic, BufferAccessNature::eRead );
+		bool result = m_randomStorage->initialise( renderer::MemoryPropertyFlag::eHostVisible );
 
 		if ( result )
 		{
