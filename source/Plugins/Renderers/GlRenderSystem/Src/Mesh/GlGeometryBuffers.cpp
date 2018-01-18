@@ -186,67 +186,67 @@ namespace GlRender
 
 		switch ( element.m_dataType )
 		{
-		case ElementType::eFloat:
+		case renderer::AttributeFormat::eFloat:
 			attribute = std::make_shared< GlAttributeVec1r >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
-		case ElementType::eVec2:
+		case renderer::AttributeFormat::eVec2:
 			attribute = std::make_shared< GlAttributeVec2r >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
-		case ElementType::eVec3:
+		case renderer::AttributeFormat::eVec3:
 			attribute = std::make_shared< GlAttributeVec3r >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
-		case ElementType::eVec4:
+		case renderer::AttributeFormat::eVec4:
 			attribute = std::make_shared< GlAttributeVec4r >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
-		case ElementType::eColour:
+		case renderer::AttributeFormat::eColour:
 			attribute = std::make_shared< GlAttributeVec1ui >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
-		case ElementType::eInt:
+		case renderer::AttributeFormat::eInt:
 			attribute = std::make_shared< GlAttributeVec1i >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
-		case ElementType::eIVec2:
+		case renderer::AttributeFormat::eIVec2:
 			attribute = std::make_shared< GlAttributeVec2i >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
-		case ElementType::eIVec3:
+		case renderer::AttributeFormat::eIVec3:
 			attribute = std::make_shared< GlAttributeVec3i >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
-		case ElementType::eIVec4:
+		case renderer::AttributeFormat::eIVec4:
 			attribute = std::make_shared< GlAttributeVec4i >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
-		case ElementType::eUInt:
+		case renderer::AttributeFormat::eUInt:
 			attribute = std::make_shared< GlAttributeVec1ui >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
-		case ElementType::eUIVec2:
+		case renderer::AttributeFormat::eUIVec2:
 			attribute = std::make_shared< GlAttributeVec2ui >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
-		case ElementType::eUIVec3:
+		case renderer::AttributeFormat::eUIVec3:
 			attribute = std::make_shared< GlAttributeVec3ui >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
-		case ElementType::eUIVec4:
+		case renderer::AttributeFormat::eUIVec4:
 			attribute = std::make_shared< GlAttributeVec4ui >( getOpenGl(), m_program, stride, element.m_name, divisor );
 			break;
 
-		case ElementType::eMat2:
+		case renderer::AttributeFormat::eMat2:
 			attribute = std::make_shared< GlMatAttribute< real, 2, 2 > >( getOpenGl(), m_program, stride, element.m_name );
 			break;
 
-		case ElementType::eMat3:
+		case renderer::AttributeFormat::eMat3:
 			attribute = std::make_shared< GlMatAttribute< real, 3, 3 > >( getOpenGl(), m_program, stride, element.m_name );
 			break;
 
-		case ElementType::eMat4:
+		case renderer::AttributeFormat::eMat4:
 			attribute = std::make_shared< GlMatAttribute< real, 4, 4 > >( getOpenGl(), m_program, stride, element.m_name );
 			break;
 

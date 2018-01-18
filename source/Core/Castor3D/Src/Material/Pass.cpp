@@ -81,16 +81,16 @@ namespace castor3d
 
 	bool Pass::TextWriter::operator()( Pass const & pass, TextFile & file )
 	{
-		static std::map< ComparisonFunc, String > strAlphaFuncs
+		static std::map< renderer::CompareOp, String > strAlphaFuncs
 		{
-			{ ComparisonFunc::eAlways, cuT( "always" ) },
-			{ ComparisonFunc::eLess, cuT( "less" ) },
-			{ ComparisonFunc::eLEqual, cuT( "less_or_equal" ) },
-			{ ComparisonFunc::eEqual, cuT( "equal" ) },
-			{ ComparisonFunc::eNEqual, cuT( "not_equal" ) },
-			{ ComparisonFunc::eGEqual, cuT( "greater_or_equal" ) },
-			{ ComparisonFunc::eGreater, cuT( "greater" ) },
-			{ ComparisonFunc::eNever, cuT( "never" ) },
+			{ renderer::CompareOp::eAlways, cuT( "always" ) },
+			{ renderer::CompareOp::eLess, cuT( "less" ) },
+			{ renderer::CompareOp::eLEqual, cuT( "less_or_equal" ) },
+			{ renderer::CompareOp::eEqual, cuT( "equal" ) },
+			{ renderer::CompareOp::eNEqual, cuT( "not_equal" ) },
+			{ renderer::CompareOp::eGEqual, cuT( "greater_or_equal" ) },
+			{ renderer::CompareOp::eGreater, cuT( "greater" ) },
+			{ renderer::CompareOp::eNever, cuT( "never" ) },
 		};
 		static const String StrBlendModes[uint32_t( BlendMode::eCount )] =
 		{
@@ -130,7 +130,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			if ( pass.getAlphaFunc() != ComparisonFunc::eAlways )
+			if ( pass.getAlphaFunc() != renderer::CompareOp::eAlways )
 			{
 				result = file.writeText( m_tabs + cuT( "\talpha_func " )
 					+ strAlphaFuncs[pass.getAlphaFunc()] + cuT( " " )
@@ -268,7 +268,7 @@ namespace castor3d
 	bool Pass::hasAlphaBlending()const
 	{
 		return ( checkFlag( m_textureFlags, TextureChannel::eOpacity ) || m_opacity < 1.0f )
-			&& getAlphaFunc() == ComparisonFunc::eAlways;
+			&& getAlphaFunc() == renderer::CompareOp::eAlways;
 	}
 
 	void Pass::prepareTextures()
@@ -354,7 +354,7 @@ namespace castor3d
 
 		if ( m_opacity < 1.0f
 			&& m_alphaBlendMode == BlendMode::eNoBlend
-			&& m_alphaFunc == ComparisonFunc::eAlways )
+			&& m_alphaFunc == renderer::CompareOp::eAlways )
 		{
 			m_alphaBlendMode = BlendMode::eInterpolative;
 		}
@@ -373,7 +373,7 @@ namespace castor3d
 			result |= PassFlag::eAlphaBlending;
 		}
 
-		if ( getAlphaFunc() != ComparisonFunc::eAlways )
+		if ( getAlphaFunc() != renderer::CompareOp::eAlways )
 		{
 			result |= PassFlag::eAlphaTest;
 		}

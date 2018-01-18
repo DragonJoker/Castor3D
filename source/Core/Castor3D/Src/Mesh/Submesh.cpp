@@ -6,12 +6,14 @@
 
 #include "Event/Frame/FrameListener.hpp"
 #include "Event/Frame/FunctorEvent.hpp"
-#include "Mesh/Buffer/Buffer.hpp"
 #include "Mesh/SubmeshComponent/BonesComponent.hpp"
 #include "Mesh/SubmeshComponent/InstantiationComponent.hpp"
+#include "Render/Context.hpp"
+#include "Render/RenderSystem.hpp"
 #include "Scene/Scene.hpp"
-#include "Shader/ShaderProgram.hpp"
 #include "Vertex.hpp"
+
+#include <Device.hpp>
 
 using namespace castor;
 
@@ -57,31 +59,27 @@ namespace castor3d
 
 		if ( result )
 		{
-			VertexBuffer const & buffer = obj.getVertexBuffer();
-			size_t size = buffer.getSize();
-			uint32_t stride = buffer.getDeclaration().stride();
-			auto count = uint32_t( size / stride );
+			auto count = obj.getPointsCount();
 			result = doWriteChunk( count, ChunkType::eSubmeshVertexCount, m_chunk );
 
 			if ( result )
 			{
-				auto const * srcbuf = reinterpret_cast< InterleavedVertex const * >( buffer.getData() );
+				InterleavedVertex const * srcbuf = reinterpret_cast< InterleavedVertex const * >( obj.getPoints().data() );
 				std::vector< InterleavedVertexT< double > > dstbuf( count );
 				doCopyVertices( count, srcbuf, dstbuf.data() );
 				result = doWriteChunk( dstbuf, ChunkType::eSubmeshVertex, m_chunk );
 			}
 		}
 
-		if ( result )
+		if ( result && obj.hasComponent( TriFaceMapping::Name ) )
 		{
-			IndexBuffer const & buffer = obj.getIndexBuffer();
-			uint32_t count = buffer.getSize() / 3;
+			uint32_t count = obj.getFaceCount();
 			result = doWriteChunk( count, ChunkType::eSubmeshFaceCount, m_chunk );
 
 			if ( result )
 			{
-				auto const * srcbuf = reinterpret_cast< FaceIndices const * >( buffer.getData() );
-				result = doWriteChunk( srcbuf, buffer.getSize() / 3, ChunkType::eSubmeshFaces, m_chunk );
+				FaceIndices const * srcbuf = reinterpret_cast< FaceIndices const * >( obj.getComponent< TriFaceMapping >()->getFaces().data() );
+				result = doWriteChunk( srcbuf, count, ChunkType::eSubmeshFaces, m_chunk );
 			}
 		}
 
@@ -218,21 +216,6 @@ namespace castor3d
 		, m_defaultMaterial( scene.getEngine()->getMaterialCache().getDefaultMaterial() )
 		, m_id( id )
 		, m_parentMesh( mesh )
-		, m_vertexBuffer
-		{
-			*scene.getEngine(),
-			BufferDeclaration
-			{
-				{
-					BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec3, Vertex::getOffsetPos() ),
-					BufferElementDeclaration( ShaderProgram::Normal, uint32_t( ElementUsage::eNormal ), ElementType::eVec3, Vertex::getOffsetNml() ),
-					BufferElementDeclaration( ShaderProgram::Tangent, uint32_t( ElementUsage::eTangent ), ElementType::eVec3, Vertex::getOffsetTan() ),
-					BufferElementDeclaration( ShaderProgram::Bitangent, uint32_t( ElementUsage::eBitangent ), ElementType::eVec3, Vertex::getOffsetBin() ),
-					BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::eTexCoords ), ElementType::eVec3, Vertex::getOffsetTex() ),
-				}
-			}
-		}
-		, m_indexBuffer{ *scene.getEngine() }
 	{
 		addComponent( std::make_shared< InstantiationComponent >( *this ) );
 	}
@@ -247,6 +230,12 @@ namespace castor3d
 		if ( !m_generated )
 		{
 			doGenerateVertexBuffer();
+			auto context = getScene()->getEngine()->getRenderSystem()->getCurrentContext();
+			REQUIRE( context );
+			m_indexBuffer = renderer::makeBuffer< uint32_t >( context->getDevice()
+				, m_indexMapping->getCount() * m_indexMapping->getComponentsCount()
+				, renderer::BufferTarget::eIndexBuffer
+				, renderer::MemoryPropertyFlag::eHostVisible );
 
 			for ( auto & component : m_components )
 			{
@@ -259,13 +248,6 @@ namespace castor3d
 
 		if ( !m_initialised )
 		{
-			m_initialised = m_vertexBuffer.initialise( renderer::MemoryPropertyFlag::eHostVisible );
-
-			if ( m_initialised )
-			{
-				m_initialised = m_indexBuffer.initialise( renderer::MemoryPropertyFlag::eHostVisible );
-			}
-
 			for ( auto & component : m_components )
 			{
 				m_initialised &= component.second->initialise();
@@ -284,31 +266,46 @@ namespace castor3d
 			component.second->cleanup();
 		}
 
-		m_vertexBuffer.cleanup();
-
-		if ( !m_indexBuffer.isEmpty() )
-		{
-			m_indexBuffer.cleanup();
-		}
+		m_vertexBuffer.reset();
+		m_indexBuffer.reset();
 
 		m_points.clear();
-		m_pointsData.clear();
+	}
+
+	void Submesh::update()
+	{
+		if ( m_dirty )
+		{
+			uint32_t size = uint32_t( m_points.size() );
+
+			if ( auto buffer = m_vertexBuffer->lock( 0u
+				, size
+				, renderer::MemoryMapFlag::eWrite ) )
+			{
+				std::copy( m_points.begin(), m_points.end(), buffer );
+				m_vertexBuffer->unlock( size, true );
+			}
+
+			m_dirty = false;
+		}
+
+		for ( auto & component : m_components )
+		{
+			component.second->upload();
+		}
 	}
 
 	void Submesh::computeContainers()
 	{
-		if ( !m_pointsData.empty() )
+		if ( !m_points.empty() )
 		{
-			Point3r min;
-			Point3r max;
-			Point3r cur;
-			Vertex::getPosition( m_points[0], min );
-			Vertex::getPosition( m_points[0], max );
+			Point3r min = m_points[0].m_pos;
+			Point3r max = m_points[0].m_pos;
 			uint32_t nbVertex = getPointsCount();
 
 			for ( uint32_t i = 1; i < nbVertex; i++ )
 			{
-				Vertex::getPosition( m_points[i], cur );
+				Point3r cur = m_points[i].m_pos;
 				max[0] = std::max( cur[0], max[0] );
 				max[1] = std::max( cur[1], max[1] );
 				max[2] = std::max( cur[2], max[2] );
@@ -342,27 +339,24 @@ namespace castor3d
 
 			switch ( getTopology() )
 			{
-			case Topology::ePoints:
+			case renderer::PrimitiveTopology::ePointList:
 				break;
 
-			case Topology::eLines:
-				result = result / 2;
+			case renderer::PrimitiveTopology::eLineList:
+				result /= 2;
 				break;
 
-			case Topology::eLineLoop:
+			case renderer::PrimitiveTopology::eLineStrip:
+				result -= 1u;
 				break;
 
-			case Topology::eLineStrip:
-				result = result - 1u;
+			case renderer::PrimitiveTopology::eTriangleList:
+				result /= 3u;
 				break;
 
-			case Topology::eTriangles:
-				result = result / 3u;
-				break;
-
-			case Topology::eTriangleStrips:
-			case Topology::eTriangleFan:
-				result = result - 2u;
+			case renderer::PrimitiveTopology::eTriangleStrip:
+			case renderer::PrimitiveTopology::eTriangleFan:
+				result -= 2u;
 				break;
 			}
 		}
@@ -373,7 +367,7 @@ namespace castor3d
 	uint32_t Submesh::getPointsCount()const
 	{
 		return std::max< uint32_t >( uint32_t( m_points.size() )
-			, m_vertexBuffer.getSize() / m_vertexBuffer.getDeclaration().stride() );
+			, m_vertexBuffer->getCount() );
 	}
 
 	int Submesh::isInMyPoints( Point3r const & vertex
@@ -381,11 +375,10 @@ namespace castor3d
 	{
 		int result = -1;
 		int index = 0;
-		Point3r pos;
 
 		for ( auto it = m_points.begin(); it != m_points.end() && result == -1; ++it )
 		{
-			if ( point::lengthSquared( vertex - Vertex::getPosition( ( *it ), pos ) ) < precision )
+			if ( point::distanceSquared( vertex, it->m_pos ) < precision )
 			{
 				result = int( index );
 			}
@@ -396,24 +389,20 @@ namespace castor3d
 		return result;
 	}
 
-	BufferElementGroupSPtr Submesh::addPoint( real x, real y, real z )
+	InterleavedVertex Submesh::addPoint( real x, real y, real z )
 	{
-		BufferElementGroupSPtr result;
-		uint32_t stride = 3 * sizeof( real ) * 5;
-		m_pointsData.emplace_back( stride );
-		uint8_t * data = m_pointsData.back().data();
-		result = std::make_shared< BufferElementGroup >( data, uint32_t( m_points.size() ) );
-		Vertex::setPosition( result, x, y, z );
+		InterleavedVertex result;
+		result.m_pos = Point3f{ x, y, z };
 		m_points.push_back( result );
 		return result;
 	}
 
-	BufferElementGroupSPtr Submesh::addPoint( Point3r const & value )
+	InterleavedVertex Submesh::addPoint( Point3r const & value )
 	{
 		return addPoint( value[0], value[1], value[2] );
 	}
 
-	BufferElementGroupSPtr Submesh::addPoint( real * value )
+	InterleavedVertex Submesh::addPoint( real * value )
 	{
 		return addPoint( value[0], value[1], value[2] );
 	}
@@ -421,78 +410,7 @@ namespace castor3d
 	void Submesh::addPoints( InterleavedVertex const * const begin
 		, InterleavedVertex const * const end )
 	{
-		uint32_t stride = m_vertexBuffer.getDeclaration().stride();
-		m_pointsData.emplace_back( std::distance( begin, end ) * stride );
-		uint8_t * data = m_pointsData.back().data();
-
-		std::for_each( begin, end, [this, &data, &stride]( InterleavedVertex const & p_data )
-		{
-			auto vertex = std::make_shared< BufferElementGroup >( data, uint32_t( m_points.size() ) );
-			Vertex::setPosition( vertex, p_data.m_pos.data() );
-			Vertex::setNormal( vertex, p_data.m_nml.data() );
-			Vertex::setTangent( vertex, p_data.m_tan.data() );
-			Vertex::setBitangent( vertex, p_data.m_bin.data() );
-			Vertex::setTexCoord( vertex, p_data.m_tex.data() );
-			m_points.push_back( vertex );
-			data += stride;
-		} );
-	}
-
-	void Submesh::draw( GeometryBuffers const & geometryBuffers )
-	{
-		REQUIRE( m_initialised );
-
-		if ( m_dirty )
-		{
-			m_vertexBuffer.upload();
-			m_dirty = false;
-		}
-
-		for ( auto & component : m_components )
-		{
-			component.second->upload();
-		}
-
-		if ( !m_indexBuffer.isEmpty() )
-		{
-			geometryBuffers.draw( m_indexBuffer.getSize()
-				, m_indexBuffer.getOffset() );
-		}
-		else
-		{
-			geometryBuffers.draw( m_vertexBuffer.getSize() / m_vertexBuffer.getDeclaration().stride()
-				, 0u );
-		}
-	}
-
-	void Submesh::drawInstanced( GeometryBuffers const & geometryBuffers
-		, uint32_t count )
-	{
-		REQUIRE( m_initialised );
-
-		if ( m_dirty )
-		{
-			m_vertexBuffer.upload();
-			m_dirty = false;
-		}
-
-		for ( auto & component : m_components )
-		{
-			component.second->upload();
-		}
-
-		if ( !m_indexBuffer.isEmpty() )
-		{
-			geometryBuffers.drawInstanced( m_indexBuffer.getSize()
-				, m_indexBuffer.getOffset()
-				, count );
-		}
-		else
-		{
-			geometryBuffers.drawInstanced( m_vertexBuffer.getSize() / m_vertexBuffer.getDeclaration().stride()
-				, 0u
-				, count );
-		}
+		m_points.insert( m_points.end(), begin, end );
 	}
 
 	void Submesh::computeNormals( bool reverted )
@@ -538,9 +456,9 @@ namespace castor3d
 		}
 	}
 
-	void Submesh::gatherBuffers( VertexBufferArray & buffers )
+	void Submesh::gatherBuffers( renderer::VertexBufferCRefArray & buffers )
 	{
-		buffers.emplace_back( m_vertexBuffer );
+		buffers.emplace_back( *m_vertexBuffer );
 
 		for ( auto & component : m_components )
 		{
@@ -550,43 +468,31 @@ namespace castor3d
 
 	void Submesh::doGenerateVertexBuffer()
 	{
-		VertexBuffer & vertexBuffer = m_vertexBuffer;
-		uint32_t stride = m_vertexBuffer.getDeclaration().stride();
-		uint32_t size = uint32_t( m_points.size() ) * stride;
+		auto context = getScene()->getEngine()->getRenderSystem()->getCurrentContext();
+		REQUIRE( context );
+		uint32_t stride = sizeof( InterleavedVertex );
+		uint32_t size = uint32_t( m_points.size() );
 
 		if ( size )
 		{
-			if ( vertexBuffer.getSize() != size )
+			if ( !m_vertexBuffer
+				|| size != m_vertexBuffer->getCount() )
 			{
-				vertexBuffer.resize( size );
+				m_vertexBuffer = renderer::makeVertexBuffer< InterleavedVertex >( context->getDevice()
+					, size
+					, renderer::BufferTarget::eVertexBuffer
+					, renderer::MemoryPropertyFlag::eHostVisible );
 			}
 
-			auto buffer = vertexBuffer.getData();
-
-			for ( auto it : m_pointsData )
+			if ( auto buffer = m_vertexBuffer->lock( 0u
+				, size
+				, renderer::MemoryMapFlag::eWrite ) )
 			{
-				REQUIRE( buffer < vertexBuffer.getData() + vertexBuffer.getSize() );
-				REQUIRE( ( buffer < vertexBuffer.getData() + vertexBuffer.getSize()
-						&& buffer + it.size() <= vertexBuffer.getData() + vertexBuffer.getSize() )
-					|| ( buffer == vertexBuffer.getData() + vertexBuffer.getSize() ) );
-				std::memcpy( buffer, it.data(), it.size() );
-				buffer += it.size();
-			}
-
-			buffer = vertexBuffer.getData();
-
-			for ( auto point : m_points )
-			{
-				REQUIRE( buffer < vertexBuffer.getData() + vertexBuffer.getSize() );
-				REQUIRE( ( buffer < vertexBuffer.getData() + vertexBuffer.getSize()
-						&& buffer + stride <= vertexBuffer.getData() + vertexBuffer.getSize() )
-					|| ( buffer == vertexBuffer.getData() + vertexBuffer.getSize() ) );
-				point->linkCoords( buffer );
-				buffer += stride;
+				std::copy( m_points.begin(), m_points.end(), buffer );
+				m_vertexBuffer->unlock( size, true );
 			}
 
 			//m_points.clear();
-			//m_pointsData.clear();
 		}
 	}
 }

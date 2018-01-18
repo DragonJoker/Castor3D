@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___CASTOR_UTILS_PREREQUISITES_H___
 
 #include <array>
+#include <cassert>
 #include <chrono>
 #include <cstdint>
 #include <functional>

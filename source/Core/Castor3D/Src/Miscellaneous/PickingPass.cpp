@@ -332,7 +332,7 @@ namespace castor3d
 			{
 				if ( !renderNodes.empty() && component.hasMatrixBuffer() )
 				{
-					auto count = doCopyNodesMatrices( renderNodes, component.getMatrixBuffer() );
+					auto count = doCopyNodesMatrices( renderNodes, component.getData() );
 					submesh.drawInstanced( renderNodes[0].m_buffers, count );
 				}
 			} );
@@ -494,7 +494,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, ComparisonFunc alphaFunc )const
+		, renderer::CompareOp alphaFunc )const
 	{
 		return doGetPixelShaderSource( passFlags
 			, textureFlags
@@ -507,7 +507,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, ComparisonFunc alphaFunc )const
+		, renderer::CompareOp alphaFunc )const
 	{
 		return doGetPixelShaderSource( passFlags
 			, textureFlags
@@ -520,7 +520,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, ComparisonFunc alphaFunc )const
+		, renderer::CompareOp alphaFunc )const
 	{
 		return doGetPixelShaderSource( passFlags
 			, textureFlags
@@ -533,7 +533,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, ComparisonFunc alphaFunc )const
+		, renderer::CompareOp alphaFunc )const
 	{
 		using namespace glsl;
 		GlslWriter writer = m_renderSystem.createGlslWriter();
@@ -574,7 +574,7 @@ namespace castor3d
 					, alpha
 					, material->m_alphaRef() );
 			}
-			else if ( alphaFunc != ComparisonFunc::eAlways )
+			else if ( alphaFunc != renderer::CompareOp::eAlways )
 			{
 				shader::applyAlphaFunc( writer
 					, alphaFunc

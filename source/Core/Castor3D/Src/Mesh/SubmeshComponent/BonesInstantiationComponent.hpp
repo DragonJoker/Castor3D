@@ -46,7 +46,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
-		C3D_API void gather( VertexBufferArray & buffers )override;
+		C3D_API void gather( renderer::VertexBufferCRefArray & buffers )override;
 		/**
 		 *\~english
 		 *\return		The skeleton.
@@ -73,7 +73,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le ShaderStorageBuffer d'instanciation des os.
 		 */
-		inline ShaderStorageBuffer const & getInstancedBonesBuffer()const
+		inline renderer::Buffer< VertexBoneData > const & getInstancedBonesBuffer()const
 		{
 			return *m_instancedBonesBuffer;
 		}
@@ -83,7 +83,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le ShaderStorageBuffer d'instanciation des os.
 		 */
-		inline ShaderStorageBuffer & getInstancedBonesBuffer()
+		inline renderer::Buffer< VertexBoneData > & getInstancedBonesBuffer()
 		{
 			return *m_instancedBonesBuffer;
 		}
@@ -116,7 +116,7 @@ namespace castor3d
 		BonesComponent const & m_bones;
 		//!\~english	The bones buffer (instantiation).
 		//!\~french		Le tampon de bones (instanciation).
-		ShaderStorageBufferSPtr m_instancedBonesBuffer;
+		renderer::BufferPtr< VertexBoneData > m_instancedBonesBuffer;
 	};
 }
 

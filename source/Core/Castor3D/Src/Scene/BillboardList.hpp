@@ -106,7 +106,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Récupère les tampons qui doivent aller dans un VAO.
 		 */
-		C3D_API void gatherBuffers( VertexBufferArray & buffers );
+		C3D_API void gatherBuffers( renderer::VertexBufferCRefArray & buffers );
 		/**
 		 *\~english
 		 *\brief		Sets the material

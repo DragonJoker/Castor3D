@@ -4,7 +4,6 @@ See LICENSE file in root folder
 #ifndef ___C3D_SKYBOX_H___
 #define ___C3D_SKYBOX_H___
 
-#include "Mesh/Buffer/BufferDeclaration.hpp"
 #include "Render/Viewport.hpp"
 #include "Shader/Ubos/HdrConfigUbo.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
@@ -107,7 +106,7 @@ namespace castor3d
 		*\~french
 		*\return		Définit la texture équirectangulaire de la skybox.
 		*/
-		C3D_API void setEquiTexture( TextureLayoutSPtr texture
+		C3D_API void setEquiTexture( renderer::TexturePtr && texture
 			, castor::Size const & size );
 		/**
 		 *\~english
@@ -125,7 +124,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La texture de la skybox.
 		 */
-		inline TextureLayout & getTexture()
+		inline renderer::Texture & getTexture()
 		{
 			REQUIRE( m_texture );
 			return *m_texture;
@@ -136,9 +135,10 @@ namespace castor3d
 		 *\~french
 		 *\return		La texture de la skybox.
 		 */
-		inline TextureLayoutSPtr getTexture()const
+		inline renderer::Texture const & getTexture()const
 		{
-			return m_texture;
+			REQUIRE( m_texture );
+			return *m_texture;
 		}
 		/**
 		 *\~english
@@ -157,7 +157,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Définit la texture de la skybox.
 		 */
-		inline void setTexture( TextureLayoutSPtr texture )
+		inline void setTexture( renderer::TexturePtr && texture )
 		{
 			m_texture = texture;
 		}
@@ -173,11 +173,11 @@ namespace castor3d
 		}
 
 	protected:
-		virtual ShaderProgram & doInitialiseShader();
+		virtual renderer::ShaderProgram & doInitialiseShader();
 		bool doInitialiseTexture();
 		void doInitialiseEquiTexture();
 		bool doInitialiseVertexBuffer();
-		bool doInitialisePipeline( ShaderProgram & program );
+		bool doInitialisePipeline( renderer::ShaderProgram & program );
 
 	protected:
 		//!\~english	The skybox's scene.
@@ -185,10 +185,10 @@ namespace castor3d
 		SceneRPtr m_scene{ nullptr };
 		//!\~english	The pipeline used while rendering the skybox.
 		//!\~french		Le pipeline utilisé pour le rendu de la skybox.
-		RenderPipelineUPtr m_pipeline;
+		renderer::PipelinePtr m_pipeline;
 		//!\~english	The skybox equirectangular map texture.
 		//!\~french		La texture équirectangulaire de la skybox.
-		TextureLayoutSPtr m_equiTexture;
+		renderer::TexturePtr m_equiTexture;
 		//!\~english	The skybox equirectangular image path.
 		//!\~french		Le chemin de l'image équirectangulaire de la skybox.
 		castor::Path m_equiTexturePath;
@@ -197,7 +197,7 @@ namespace castor3d
 		castor::Size m_equiSize;
 		//!\~english	The skybox cube map texture.
 		//!\~french		La texture cube map de la skybox.
-		TextureLayoutSPtr m_texture;
+		renderer::TexturePtr m_texture;
 		//!\~english	The skybox cube map sampler.
 		//!\~french		L'échantillonneur de la cube map de la skybox.
 		SamplerWPtr m_sampler;
@@ -212,18 +212,13 @@ namespace castor3d
 		HdrConfigUbo m_configUbo;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
-		VertexBufferSPtr m_vertexBuffer{ nullptr };
+		renderer::VertexBufferPtr< TexturedCube > m_vertexBuffer{ nullptr };
 		//!\~english	The geomtry buffers.
 		//!\~french		Les tampons de géométrie.
-		GeometryBuffersSPtr m_geometryBuffers{ nullptr };
+		renderer::GeometryBuffersPtr m_geometryBuffers{ nullptr };
 		//!\~english	Vertex elements declaration.
 		//!\~french		Déclaration des éléments d'un sommet.
-		castor3d::BufferDeclaration m_declaration;
-		//!\~english	Vertex array (cube definition).
-		//!\~french		Tableau de vertex (définition du cube).
-		std::array< castor3d::BufferElementGroupSPtr, 36 > m_arrayVertex;
-		//! 6 * 6 * [3(vertex position)].
-		std::array< castor::real, 108 > m_bufferVertex;
+		renderer::VertexLayoutPtr m_declaration;
 		//!\~english	The model matrix.
 		//!\~french		La matrice modèle.
 		castor::Matrix4x4r m_mtxModel;

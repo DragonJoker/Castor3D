@@ -1,4 +1,4 @@
-﻿#include "Subdivider.hpp"
+#include "Subdivider.hpp"
 
 #include "Engine.hpp"
 #include "SubmeshComponent/Face.hpp"
@@ -14,10 +14,10 @@ using namespace castor;
 namespace castor3d
 {
 	Subdivider::Subdivider()
-		:	m_submesh( )
-		,	m_bGenerateBuffers( true )
-		,	m_pfnSubdivisionEnd( nullptr )
-		,	m_bThreaded( false )
+		: m_submesh( )
+		, m_bGenerateBuffers( true )
+		, m_pfnSubdivisionEnd( nullptr )
+		, m_bThreaded( false )
 	{
 	}
 
@@ -49,17 +49,17 @@ namespace castor3d
 		m_arrayFaces.clear();
 	}
 
-	BufferElementGroupSPtr Subdivider::addPoint( real x, real y, real z )
+	SubmeshVertex Subdivider::addPoint( real x, real y, real z )
 	{
 		return m_submesh->addPoint( x, y, z );
 	}
 
-	BufferElementGroupSPtr Subdivider::addPoint( Point3r const & p_v )
+	SubmeshVertex Subdivider::addPoint( Point3r const & p_v )
 	{
 		return addPoint( p_v[0], p_v[1], p_v[2] );
 	}
 
-	BufferElementGroupSPtr Subdivider::addPoint( real * p_v )
+	SubmeshVertex Subdivider::addPoint( real * p_v )
 	{
 		return addPoint( p_v[0], p_v[1], p_v[2] );
 	}
@@ -82,17 +82,17 @@ namespace castor3d
 		return m_submesh->getPointsCount();
 	}
 
-	BufferElementGroupSPtr Subdivider::getPoint( uint32_t i )const
+	SubmeshVertex Subdivider::getPoint( uint32_t i )const
 	{
 		return m_submesh->getPoint( i );
 	}
 
-	VertexPtrArray const & Subdivider::getPoints()const
+	SubmeshVertexArray const & Subdivider::getPoints()const
 	{
 		return m_submesh->getPoints();
 	}
 
-	castor3d::BufferElementGroupSPtr Subdivider::doTryAddPoint( Point3r const & p_point )
+	SubmeshVertex Subdivider::doTryAddPoint( Point3r const & p_point )
 	{
 		std::unique_lock< std::recursive_mutex > lock( m_mutex );
 		int index = -1;
@@ -177,7 +177,12 @@ namespace castor3d
 		return 0;
 	}
 
-	void Subdivider::doSetTextCoords( BufferElementGroup const & p_a, BufferElementGroup const & p_b, BufferElementGroup const & p_c, BufferElementGroup & p_d, BufferElementGroup & p_e, BufferElementGroup & p_f )
+	void Subdivider::doSetTextCoords( SubmeshVertex const & p_a
+		, SubmeshVertex const & p_b
+		, SubmeshVertex const & p_c
+		, SubmeshVertex & p_d
+		, SubmeshVertex & p_e
+		, SubmeshVertex & p_f )
 	{
 		Point3r aTex;
 		Point3r bTex;
@@ -194,7 +199,10 @@ namespace castor3d
 		addFace( p_d.getIndex(), p_e.getIndex(), p_f.getIndex() );
 	}
 
-	void Subdivider::doSetTextCoords( BufferElementGroup const & p_a, BufferElementGroup const & p_b, BufferElementGroup const & p_c, BufferElementGroup & p_p )
+	void Subdivider::doSetTextCoords( SubmeshVertex const & p_a
+		, SubmeshVertex const & p_b
+		, SubmeshVertex const & p_c
+		, SubmeshVertex & p_p )
 	{
 		Point3r aTex;
 		Point3r bTex;
@@ -209,7 +217,7 @@ namespace castor3d
 	}
 }
 
-String & operator << ( String & p_stream, castor3d::BufferElementGroup const & p_vertex )
+String & operator << ( String & p_stream, SubmeshVertex const & p_vertex )
 {
 	Point3r ptPos( reinterpret_cast< real const * >( p_vertex.constPtr() ) );
 	p_stream += cuT( "Vertex[" );

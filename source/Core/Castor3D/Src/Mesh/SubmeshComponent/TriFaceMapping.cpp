@@ -74,10 +74,10 @@ namespace castor3d
 	{
 		addFace( a, b, c );
 		addFace( a, c, d );
-		Vertex::setTexCoord( *getOwner()->getPoint( a ), minUV[0], minUV[1] );
-		Vertex::setTexCoord( *getOwner()->getPoint( b ), maxUV[0], minUV[1] );
-		Vertex::setTexCoord( *getOwner()->getPoint( c ), maxUV[0], maxUV[1] );
-		Vertex::setTexCoord( *getOwner()->getPoint( d ), minUV[0], maxUV[1] );
+		getOwner()->getPoint( a ).m_tex = Point3f{ minUV[0], minUV[1], 0.0f };
+		getOwner()->getPoint( b ).m_tex = Point3f{ maxUV[0], minUV[1], 0.0f };
+		getOwner()->getPoint( c ).m_tex = Point3f{ maxUV[0], maxUV[1], 0.0f };
+		getOwner()->getPoint( d ).m_tex = Point3f{ minUV[0], maxUV[1], 0.0f };
 	}
 
 	void TriFaceMapping::clearFaces()
@@ -130,7 +130,12 @@ namespace castor3d
 
 	uint32_t TriFaceMapping::getCount()const
 	{
-		return m_faceCount;
+		return uint32_t( m_faces.size() );
+	}
+
+	uint32_t TriFaceMapping::getComponentsCount()const
+	{
+		return 3u;
 	}
 
 	void TriFaceMapping::sortByDistance( Point3r const & cameraPosition )
@@ -142,35 +147,34 @@ namespace castor3d
 			if ( m_cameraPosition != cameraPosition )
 			{
 				if ( getOwner()->isInitialised()
-					&& !getOwner()->getVertexBuffer().isEmpty()
-					&& !getOwner()->getIndexBuffer().isEmpty() )
+					&& getOwner()->getVertexBuffer().getCount()
+					&& getOwner()->getIndexBuffer().getCount() )
 				{
-					IndexBuffer & indices = getOwner()->getIndexBuffer();
-					VertexBuffer & vertices = getOwner()->getVertexBuffer();
+					auto & indices = getOwner()->getIndexBuffer();
+					auto & vertices = getOwner()->getVertexBuffer();
 
-					vertices.bind();
-					indices.bind();
 					m_cameraPosition = cameraPosition;
-					uint32_t indexSize = indices.getSize();
-					uint32_t * index = indices.lock( 0, indexSize, AccessType::eRead | AccessType::eWrite );
+					uint32_t indexSize = indices.getCount();
 
-					if ( index )
+					if ( uint32_t * index = indices.lock( 0
+						, indexSize
+						, renderer::MemoryMapFlag::eRead | renderer::MemoryMapFlag::eWrite ) )
 					{
-						uint32_t stride = vertices.getDeclaration().stride();
-						uint8_t * vertex = vertices.getData();
 						FaceDistArray arraySorted;
 						arraySorted.reserve( indexSize / 3 );
 
-						if ( vertex )
+						if ( InterleavedVertex * vertex = vertices.lock( 0
+							, vertices.getCount()
+							, renderer::MemoryMapFlag::eRead ) )
 						{
 							for ( uint32_t * it = index + 0; it < index + indexSize; it += 3 )
 							{
 								double dDistance = 0.0;
-								Coords3r vtx1( reinterpret_cast< real * >( &vertex[it[0] * stride] ) );
+								auto & vtx1 = vertex[it[0]].m_pos;
 								dDistance += point::lengthSquared( vtx1 - cameraPosition );
-								Coords3r vtx2( reinterpret_cast< real * >( &vertex[it[1] * stride] ) );
+								auto & vtx2 = vertex[it[1]].m_pos;
 								dDistance += point::lengthSquared( vtx2 - cameraPosition );
-								Coords3r vtx3( reinterpret_cast< real * >( &vertex[it[2] * stride] ) );
+								auto & vtx3 = vertex[it[2]].m_pos;
 								dDistance += point::lengthSquared( vtx3 - cameraPosition );
 								arraySorted.push_back( FaceDistance{ { it[0], it[1], it[2] }, dDistance } );
 							}
@@ -183,13 +187,12 @@ namespace castor3d
 								*index++ = face.m_index[1];
 								*index++ = face.m_index[2];
 							}
+
+							indices.unlock( vertices.getCount(), false );
 						}
 
-						indices.unlock();
+						indices.unlock( vertices.getCount(), true );
 					}
-
-					indices.unbind();
-					vertices.unbind();
 				}
 			}
 		}
@@ -206,32 +209,38 @@ namespace castor3d
 
 	void TriFaceMapping::doFill()
 	{
+	}
+
+	void TriFaceMapping::doUpload()
+	{
 		auto count = uint32_t( m_faces.size() * 3 );
-		IndexBuffer & indexBuffer = getOwner()->getIndexBuffer();
 
 		if ( count )
 		{
-			m_faceCount = uint32_t( m_faces.size() );
+			auto & indexBuffer = getOwner()->getIndexBuffer();
 
-			if ( indexBuffer.getSize() != count )
+			if ( uint32_t * buffer = indexBuffer.lock( 0
+				, count
+				, renderer::MemoryMapFlag::eRead | renderer::MemoryMapFlag::eWrite ) )
 			{
-				indexBuffer.resize( count );
-			}
+				for ( auto const & face : m_faces )
+				{
+					*buffer = face[0];
+					++buffer;
+					*buffer = face[1];
+					++buffer;
+					*buffer = face[2];
+					++buffer;
+				}
 
-			uint32_t index = 0;
-
-			for ( auto const & face : m_faces )
-			{
-				indexBuffer[index++] = face[0];
-				indexBuffer[index++] = face[1];
-				indexBuffer[index++] = face[2];
+				indexBuffer.unlock( count, true );
 			}
 
 			m_faces.clear();
 		}
 		else
 		{
-			REQUIRE( m_faceCount * 3 == indexBuffer.getSize() );
+			REQUIRE( getCount() * 3u == indexBuffer.getSize() );
 		}
 	}
 }

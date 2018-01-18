@@ -470,7 +470,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La fonction d'alpha.
 		 */
-		inline castor3d::ComparisonFunc getAlphaFunc()const
+		inline castor3d::renderer::CompareOp getAlphaFunc()const
 		{
 			return m_alphaFunc;
 		}
@@ -482,7 +482,7 @@ namespace castor3d
 		 *\brief		Définit la fonction d'alpha.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setAlphaFunc( castor3d::ComparisonFunc value )
+		inline void setAlphaFunc( castor3d::renderer::CompareOp value )
 		{
 			m_alphaFunc = value;
 			onChanged( *this );
@@ -660,7 +660,7 @@ namespace castor3d
 		float m_alphaValue{ 0.0f };
 		//!\~english	The alpha function for alpha comparison.
 		//!\~french		La fonction d'alpha utilisée lors de la comparaison d'alpha.
-		ComparisonFunc m_alphaFunc{ ComparisonFunc::eAlways };
+		renderer::CompareOp m_alphaFunc{ renderer::CompareOp::eAlways };
 		//!\~english	Tells if the pass' textures are reduced.
 		//!\~french		Dit si les textures de la passe sont réduites.
 		bool m_texturesReduced{ false };

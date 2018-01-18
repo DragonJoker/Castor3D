@@ -4,9 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_TextureProjection_H___
 #define ___C3D_TextureProjection_H___
 
-#include "Mesh/Buffer/BufferDeclaration.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
 #include "Shader/Ubos/ModelMatrixUbo.hpp"
+
+#include <VertexLayout.hpp>
 
 #include <Design/OwnedBy.hpp>
 
@@ -65,13 +66,13 @@ namespace castor3d
 		 *\param[in]	p_texture	La texture 2D.
 		 *\param[in]	p_camera	La caméra.
 		 */
-		C3D_API void render( TextureLayout const & p_texture
+		C3D_API void render( renderer::Texture const & p_texture
 			, Camera const & p_camera );
 
 	private:
-		ShaderProgram & doInitialiseShader();
+		renderer::ShaderProgram & doInitialiseShader();
 		bool doInitialiseVertexBuffer();
-		bool doInitialisePipeline( ShaderProgram & p_program );
+		bool doInitialisePipeline( renderer::ShaderProgram & p_program );
 
 	private:
 		//!\~english	The shader matrices constants buffer.
@@ -83,23 +84,21 @@ namespace castor3d
 		//!\~english	The uniform variable containing render target size.
 		//!\~french		La variable uniforme contenant la taille de la cible du rendu.
 		PushUniform2fSPtr m_sizeUniform{ nullptr };
-		//!	6 (faces) * 6 (vertex) * 3 (vertex position)
-		std::array< castor::real, 6 * 6 * 3 > m_bufferVertex;
 		//!\~english	Buffer elements declaration.
 		//!\~french		Déclaration des éléments d'un vertex.
-		castor3d::BufferDeclaration m_declaration;
-		//!\~english	Vertex array (quad definition).
-		//!\~french		Tableau de vertex (définition du quad).
-		std::array< castor3d::BufferElementGroupSPtr, 36 > m_arrayVertex;
+		renderer::VertexLayoutPtr m_layout;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
-		VertexBufferSPtr m_vertexBuffer;
+		renderer::VertexBufferPtr< TexturedCube > m_vertexBuffer;
 		//!\~english	The GeometryBuffers used when rendering a texture to the current frame buffer.
 		//!\~french		Le GeometryBuffers utilisé lors du dessin d'une texture dans le tampon d'image courant.
-		GeometryBuffersSPtr m_geometryBuffers;
+		renderer::GeometryBuffersPtr m_geometryBuffers;
+		//!\~english	The shader program.
+		//!\~french		Le programme shader.
+		renderer::ShaderProgramPtr m_program;
 		//!\~english	The pipeline used to render a texture in the current draw-bound framebuffer.
 		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image actuellement activé en dessin.
-		RenderPipelineUPtr m_pipeline;
+		renderer::PipelinePtr m_pipeline;
 		//!\~english	The sampler for the texture.
 		//!\~french		Le sampler pour la texture.
 		SamplerSPtr m_sampler;

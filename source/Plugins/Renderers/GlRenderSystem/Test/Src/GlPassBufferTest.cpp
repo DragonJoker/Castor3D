@@ -244,7 +244,7 @@ namespace Testing
 				, declaration
 				{
 					{
-						BufferElementDeclaration{ ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec2 }
+						BufferElementDeclaration{ ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec2 }
 					}
 				}
 			{

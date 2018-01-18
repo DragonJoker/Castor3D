@@ -6,8 +6,6 @@ See LICENSE file in root folder
 
 #include "SubmeshComponent.hpp"
 
-#include "Mesh/Buffer/VertexBuffer.hpp"
-
 namespace castor3d
 {
 	/*!
@@ -41,16 +39,16 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
-		C3D_API void gather( VertexBufferArray & buffers )override;
+		C3D_API void gather( renderer::VertexBufferCRefArray & buffers )override;
 		/**
 		 *\~english
 		 *\return		The VertexBuffer.
 		 *\~french
 		 *\return		Le VertexBuffer.
 		 */
-		inline VertexBuffer const & getAnimationBuffer()const
+		inline renderer::VertexBuffer< InterleavedVertex > const & getAnimationBuffer()const
 		{
-			return m_animBuffer;
+			return *m_animBuffer;
 		}
 		/**
 		 *\~english
@@ -58,9 +56,19 @@ namespace castor3d
 		 *\~french
 		 *\return		Le VertexBuffer.
 		 */
-		inline VertexBuffer & getAnimationBuffer()
+		inline renderer::VertexBuffer< InterleavedVertex > & getAnimationBuffer()
 		{
-			return m_animBuffer;
+			return *m_animBuffer;
+		}
+		/**
+		 *\~english
+		 *\return		The animated vertex buffer data.
+		 *\~french
+		 *\return		Les données du tampon de sommets animés.
+		 */
+		inline InterleavedVertexArray & getData()
+		{
+			return m_data;
 		}
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
@@ -82,7 +90,10 @@ namespace castor3d
 	private:
 		//!\~english	The animated vertex buffer.
 		//!\~french		Le tampon de sommets animés.
-		VertexBuffer m_animBuffer;
+		renderer::VertexBufferPtr< InterleavedVertex > m_animBuffer;
+		//!\~english	The animated vertex buffer data.
+		//!\~french		Les données du tampon de sommets animés.
+		InterleavedVertexArray m_data;
 	};
 }
 

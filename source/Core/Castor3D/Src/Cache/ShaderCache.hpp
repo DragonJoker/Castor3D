@@ -60,7 +60,7 @@ namespace castor3d
 		 *\param[in]	initialise	Dit si on veut que le programme soit initialisé.
 		 *\return		Le programme créé.
 		 */
-		C3D_API ShaderProgramSPtr getNewProgram( bool initialise );
+		C3D_API renderer::ShaderProgram & getNewProgram( bool initialise );
 		/**
 		 *\~english
 		 *\brief		Looks for an automatically generated program corresponding to given flags.
@@ -84,31 +84,13 @@ namespace castor3d
 		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 *\return		Le programme trouvé ou créé.
 		 */
-		C3D_API ShaderProgramSPtr getAutomaticProgram( RenderPass const & renderPass
+		C3D_API renderer::ShaderProgram & getAutomaticProgram( RenderPass const & renderPass
 			, PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc
+			, renderer::CompareOp alphaFunc
 			, bool invertNormals );
-		/**
-		 *\~english
-		 *\brief		Creates the textures related frame variables.
-		 *\param[in]	program			The program to which the buffer is bound.
-		 *\param[in]	passFlags		Bitwise ORed PassFlag.
-		 *\param[in]	textureFlags	TextureChannel combination.
-		 *\param[in]	programFlags	Bitwise ORed ProgramFlag.
-		 *\~french
-		 *\brief		Crée les frame variables relatives aux textures.
-		 *\param[in]	program			Le programme auquel le buffer est lié.
-		 *\param[in]	passFlags		Une combinaison de PassFlag.
-		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
-		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
-		 */
-		C3D_API void createTextureVariables( ShaderProgram & program
-			, PassFlags const & passFlags
-			, TextureChannels const & textureFlags
-			, ProgramFlags const & programFlags )const;
 		/**
 		 *\~english
 		 *\brief		Locks the collection mutex
@@ -189,7 +171,7 @@ namespace castor3d
 		 *\param[in]	initialise	Dit si on veut que le programme soit initialisé.
 		 *\param[in]	program		Le programme à ajouter.
 		 */
-		C3D_API void doAddProgram( ShaderProgramSPtr program, bool initialise );
+		C3D_API renderer::ShaderProgram & doAddProgram( renderer::ShaderProgramPtr && program, bool initialise );
 		/**
 		 *\~english
 		 *\brief		Looks for an automatically generated program corresponding to given flags.
@@ -213,12 +195,12 @@ namespace castor3d
 		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 *\return		Le programme trouvé ou créé.
 		 */
-		C3D_API ShaderProgramSPtr doCreateAutomaticProgram( RenderPass const & renderPass
+		C3D_API renderer::ShaderProgramPtr doCreateAutomaticProgram( RenderPass const & renderPass
 			, PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc
+			, renderer::CompareOp alphaFunc
 			, bool invertNormals )const;
 		/**
 		 *\~english
@@ -242,12 +224,12 @@ namespace castor3d
 		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 *\return		Le programme trouvé.
 		 */
-		C3D_API void doAddAutomaticProgram( ShaderProgramSPtr program
+		C3D_API renderer::ShaderProgram &  doAddAutomaticProgram( renderer::ShaderProgramPtr && program
 			, PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc
+			, renderer::CompareOp alphaFunc
 			, bool invertNormals );
 		/**
 		 *\~english
@@ -269,12 +251,12 @@ namespace castor3d
 		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 *\return		Le programme créé.
 		 */
-		C3D_API ShaderProgramSPtr doCreateBillboardProgram( RenderPass const & renderPass
+		C3D_API renderer::ShaderProgramPtr doCreateBillboardProgram( RenderPass const & renderPass
 			, PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const;
+			, renderer::CompareOp alphaFunc )const;
 		/**
 		 *\~english
 		 *\brief		adds a billboards shader program corresponding to given flags.
@@ -293,32 +275,32 @@ namespace castor3d
 		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 *\return		Le programme trouvé.
 		 */
-		C3D_API void doAddBillboardProgram( ShaderProgramSPtr program
+		C3D_API renderer::ShaderProgram &  doAddBillboardProgram( renderer::ShaderProgramPtr && program
 			, PassFlags const & passFlags
 			,TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc );
+			, renderer::CompareOp alphaFunc );
 
 	private:
-		DECLARE_MAP( uint64_t, ShaderProgramWPtr, ShaderProgramWPtrUInt64 );
+		DECLARE_MAP( uint64_t, renderer::ShaderProgram *, ShaderProgramPtrUInt64 );
 		mutable std::recursive_mutex m_mutex;
 		//!\~english	The loaded shader programs.
 		//!\~french		Les programmes chargés.
 		ShaderProgramPtrArray m_arrayPrograms;
 		//!\~english	Automatically generated shader programs, sorted by texture flags.
 		//!\~french		Programmes auto-générés, triés par flags de texture.
-		ShaderProgramWPtrUInt64Map m_mapAutogenerated;
+		ShaderProgramPtrUInt64Map m_mapAutogenerated;
 		//!\~english	Billboards shader programs, sorted by texture flags.
 		//!\~french		Programmes shader pour billboards, triés par flags de texture.
-		ShaderProgramWPtrUInt64Map m_mapBillboards;
+		ShaderProgramPtrUInt64Map m_mapBillboards;
 	};
 	/**
 	 *\~english
-	 *\brief		Creates a ShaderProgram cache.
+	 *\brief		Creates a renderer::ShaderProgram cache.
 	 *\param[in]	engine	The engine.
 	 *\~french
-	 *\brief		Crée un cache de ShaderProgram.
+	 *\brief		Crée un cache de renderer::ShaderProgram.
 	 *\param[in]	engine	Le moteur.
 	 */
 	inline std::unique_ptr< ShaderProgramCache >

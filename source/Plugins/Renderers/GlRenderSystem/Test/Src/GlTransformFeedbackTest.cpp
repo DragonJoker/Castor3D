@@ -256,13 +256,13 @@ namespace Testing
 		BufferDeclaration outputs
 		{
 			{
-				BufferElementDeclaration( cuT( "outValue" ), 0, ElementType::eFloat, 0u )
+				BufferElementDeclaration( cuT( "outValue" ), 0, renderer::AttributeFormat::eFloat, 0u )
 			}
 		};
 		BufferDeclaration inputs
 		{
 			{
-				BufferElementDeclaration( cuT( "inValue" ), 0, ElementType::eFloat, 0u )
+				BufferElementDeclaration( cuT( "inValue" ), 0, renderer::AttributeFormat::eFloat, 0u )
 			}
 		};
 		float data[] = { 1, 2, 3, 4, 5 };
@@ -339,13 +339,13 @@ namespace Testing
 		BufferDeclaration outputs
 		{
 			{
-				BufferElementDeclaration( cuT( "outValue" ), 0, ElementType::eFloat, 0u )
+				BufferElementDeclaration( cuT( "outValue" ), 0, renderer::AttributeFormat::eFloat, 0u )
 			}
 		};
 		BufferDeclaration inputs
 		{
 			{
-				BufferElementDeclaration( cuT( "inValue" ), 0, ElementType::eFloat, 0u )
+				BufferElementDeclaration( cuT( "inValue" ), 0, renderer::AttributeFormat::eFloat, 0u )
 			}
 		};
 		float data[] = { 1, 2, 3, 4, 5 };
@@ -420,13 +420,13 @@ namespace Testing
 		BufferDeclaration outputs
 		{
 			{
-				BufferElementDeclaration( cuT( "outValue" ), 0, ElementType::eFloat, 0u )
+				BufferElementDeclaration( cuT( "outValue" ), 0, renderer::AttributeFormat::eFloat, 0u )
 			}
 		};
 		BufferDeclaration inputs
 		{
 			{
-				BufferElementDeclaration( cuT( "inValue" ), 0, ElementType::eFloat, 0u )
+				BufferElementDeclaration( cuT( "inValue" ), 0, renderer::AttributeFormat::eFloat, 0u )
 			}
 		};
 		float data[] = { 1, 2, 3, 4, 5 };
@@ -495,19 +495,19 @@ namespace Testing
 		BufferDeclaration outputs
 		{
 			{
-				BufferElementDeclaration( cuT( "Type1" ), 0u, ElementType::eFloat ),
-				BufferElementDeclaration( cuT( "Position1" ), 0u, ElementType::eVec3 ),
-				BufferElementDeclaration( cuT( "Velocity1" ), 0u, ElementType::eVec3 ),
-				BufferElementDeclaration( cuT( "Age1" ), 0u, ElementType::eFloat ),
+				BufferElementDeclaration( cuT( "Type1" ), 0u, renderer::AttributeFormat::eFloat ),
+				BufferElementDeclaration( cuT( "Position1" ), 0u, renderer::AttributeFormat::eVec3 ),
+				BufferElementDeclaration( cuT( "Velocity1" ), 0u, renderer::AttributeFormat::eVec3 ),
+				BufferElementDeclaration( cuT( "Age1" ), 0u, renderer::AttributeFormat::eFloat ),
 			}
 		};
 		BufferDeclaration inputs
 		{
 			{
-				BufferElementDeclaration( cuT( "Type" ), 0u, ElementType::eFloat ),
-				BufferElementDeclaration( cuT( "Position" ), uint32_t( ElementUsage::ePosition ), ElementType::eVec3 ),
-				BufferElementDeclaration( cuT( "Velocity" ), 0u, ElementType::eVec3 ),
-				BufferElementDeclaration( cuT( "Age" ), 0u, ElementType::eFloat ),
+				BufferElementDeclaration( cuT( "Type" ), 0u, renderer::AttributeFormat::eFloat ),
+				BufferElementDeclaration( cuT( "Position" ), uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec3 ),
+				BufferElementDeclaration( cuT( "Velocity" ), 0u, renderer::AttributeFormat::eVec3 ),
+				BufferElementDeclaration( cuT( "Age" ), 0u, renderer::AttributeFormat::eFloat ),
 			}
 		};
 		Particle particle
@@ -626,19 +626,19 @@ namespace Testing
 		BufferDeclaration outputs
 		{
 			{
-				BufferElementDeclaration( cuT( "Type1" ), 0u, ElementType::eFloat ),
-				BufferElementDeclaration( cuT( "Position1" ), 0u, ElementType::eVec3 ),
-				BufferElementDeclaration( cuT( "Velocity1" ), 0u, ElementType::eVec3 ),
-				BufferElementDeclaration( cuT( "Age1" ), 0u, ElementType::eFloat ),
+				BufferElementDeclaration( cuT( "Type1" ), 0u, renderer::AttributeFormat::eFloat ),
+				BufferElementDeclaration( cuT( "Position1" ), 0u, renderer::AttributeFormat::eVec3 ),
+				BufferElementDeclaration( cuT( "Velocity1" ), 0u, renderer::AttributeFormat::eVec3 ),
+				BufferElementDeclaration( cuT( "Age1" ), 0u, renderer::AttributeFormat::eFloat ),
 			}
 		};
 		BufferDeclaration inputs
 		{
 			{
-				BufferElementDeclaration( cuT( "Type" ), 0u, ElementType::eFloat ),
-				BufferElementDeclaration( cuT( "Position" ), uint32_t( ElementUsage::ePosition ), ElementType::eVec3 ),
-				BufferElementDeclaration( cuT( "Velocity" ), 0u, ElementType::eVec3 ),
-				BufferElementDeclaration( cuT( "Age" ), 0u, ElementType::eFloat ),
+				BufferElementDeclaration( cuT( "Type" ), 0u, renderer::AttributeFormat::eFloat ),
+				BufferElementDeclaration( cuT( "Position" ), uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec3 ),
+				BufferElementDeclaration( cuT( "Velocity" ), 0u, renderer::AttributeFormat::eVec3 ),
+				BufferElementDeclaration( cuT( "Age" ), 0u, renderer::AttributeFormat::eFloat ),
 			}
 		};
 		Particle particle;

@@ -3,7 +3,6 @@
 #include "Event/Frame/FrameListener.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Scene/Scene.hpp"
-#include "Shader/ShaderProgram.hpp"
 
 using namespace castor;
 
@@ -86,7 +85,7 @@ namespace castor3d
 		return count;
 	}
 
-	void InstantiationComponent::gather( VertexBufferArray & buffers )
+	void InstantiationComponent::gather( renderer::VertexBufferCRefArray & buffers )
 	{
 		if ( m_matrixBuffer )
 		{
@@ -115,11 +114,7 @@ namespace castor3d
 				getOwner()->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePreRender
 					, [this]()
 					{
-						if ( m_matrixBuffer )
-						{
-							m_matrixBuffer->cleanup();
-							m_matrixBuffer.reset();
-						}
+						m_matrixBuffer.reset();
 					} ) );
 			}
 			else
@@ -139,16 +134,17 @@ namespace castor3d
 
 		if ( getMaxRefCount() > 1 )
 		{
+			m_data.resize( getMaxRefCount() );
+
 			if ( !m_matrixBuffer )
 			{
-				m_matrixBuffer = std::make_unique< VertexBuffer >( *getOwner()->getScene()->getEngine()
-					, BufferDeclaration
-					{
-						{
-							BufferElementDeclaration{ ShaderProgram::Transform, uint32_t( ElementUsage::eTransform ), ElementType::eMat4, 0, 1 },
-							BufferElementDeclaration{ ShaderProgram::Material, uint32_t( ElementUsage::eMatIndex ), ElementType::eInt, 64, 1 },
-						}
-					} );
+				auto context = getOwner()->getScene()->getEngine()->getRenderSystem()->getCurrentContext();
+				REQUIRE( context );
+				m_matrixBuffer = renderer::makeVertexBuffer< InstantiationData >( context->getDevice()
+					, getMaxRefCount()
+					, 0u
+					, renderer::MemoryPropertyFlag::eHostVisible );
+				result = m_matrixBuffer != nullptr;
 			}
 		}
 		else
@@ -161,45 +157,30 @@ namespace castor3d
 
 	void InstantiationComponent::doCleanup()
 	{
-		if ( m_matrixBuffer )
-		{
-			m_matrixBuffer->cleanup();
-		}
+		m_matrixBuffer.reset();
 	}
 
 	void InstantiationComponent::doFill()
 	{
-		if ( m_matrixBuffer )
-		{
-			auto count = getMaxRefCount();
-
-			if ( count )
-			{
-				VertexBuffer & matrixBuffer = *m_matrixBuffer;
-				uint32_t size = count * matrixBuffer.getDeclaration().stride();
-
-				if ( matrixBuffer.getSize() != size )
-				{
-					matrixBuffer.resize( size );
-				}
-			}
-			else
-			{
-				m_matrixBuffer.reset();
-			}
-
-			if ( m_matrixBuffer )
-			{
-				m_matrixBuffer->initialise( renderer::MemoryPropertyFlag::eHostVisible );
-			}
-		}
 	}
 
 	void InstantiationComponent::doUpload()
 	{
 		if ( m_matrixBuffer )
 		{
-			m_matrixBuffer->upload();
+			auto count = getMaxRefCount();
+			auto itbones = m_data.begin();
+
+			if ( count )
+			{
+				if ( auto * buffer = m_matrixBuffer->lock( 0
+					, count
+					, renderer::MemoryMapFlag::eRead | renderer::MemoryMapFlag::eWrite ) )
+				{
+					std::copy( m_data.begin(), m_data.end(), buffer );
+					m_matrixBuffer->unlock( count, true );
+				}
+			}
 		}
 	}
 }

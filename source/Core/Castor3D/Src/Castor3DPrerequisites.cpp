@@ -35,89 +35,18 @@ using namespace glsl;
 
 namespace castor3d
 {
-	template<> String const TopologyNamer< Topology::ePoints >::Name = cuT( "points" );
-	template<> String const TopologyNamer< Topology::eLines >::Name = cuT( "lines" );
-	template<> String const TopologyNamer< Topology::eLineLoop >::Name = cuT( "line_loop" );
-	template<> String const TopologyNamer< Topology::eLineStrip >::Name = cuT( "line_strip" );
-	template<> String const TopologyNamer< Topology::eTriangles >::Name = cuT( "triangles" );
-	template<> String const TopologyNamer< Topology::eTriangleStrips >::Name = cuT( "triangle_strip" );
-	template<> String const TopologyNamer< Topology::eTriangleFan >::Name = cuT( "triangle_fan" );
+	template<> String const TopologyNamer< renderer::PrimitiveTopology::ePointList >::Name = cuT( "point_list" );
+	template<> String const TopologyNamer< renderer::PrimitiveTopology::eLineList >::Name = cuT( "line_list" );
+	template<> String const TopologyNamer< renderer::PrimitiveTopology::eLineListWithAdjacency >::Name = cuT( "line_list_adjacency" );
+	template<> String const TopologyNamer< renderer::PrimitiveTopology::eLineStrip >::Name = cuT( "line_strip" );
+	template<> String const TopologyNamer< renderer::PrimitiveTopology::eLineStripWithAdjacency >::Name = cuT( "line_strip_adjacency" );
+	template<> String const TopologyNamer< renderer::PrimitiveTopology::eTriangleList >::Name = cuT( "triangle_list" );
+	template<> String const TopologyNamer< renderer::PrimitiveTopology::eTriangleListWithAdjacency >::Name = cuT( "triangle_list_adjacency" );
+	template<> String const TopologyNamer< renderer::PrimitiveTopology::eTriangleStrip >::Name = cuT( "triangle_strip" );
+	template<> String const TopologyNamer< renderer::PrimitiveTopology::eTriangleStripWithAdjacency >::Name = cuT( "triangle_strip_adjacency" );
+	template<> String const TopologyNamer< renderer::PrimitiveTopology::eTriangleFan >::Name = cuT( "triangle_fan" );
+	template<> String const TopologyNamer< renderer::PrimitiveTopology::ePatchList >::Name = cuT( "patch_list" );
 
-	String getName( ElementType p_type )
-	{
-		switch ( p_type )
-		{
-		case ElementType::eFloat:
-			return cuT( "float" );
-			break;
-
-		case ElementType::eVec2:
-			return cuT( "vec2f" );
-			break;
-
-		case ElementType::eVec3:
-			return cuT( "vec3f" );
-			break;
-
-		case ElementType::eVec4:
-			return cuT( "vec4f" );
-			break;
-
-		case ElementType::eColour:
-			return cuT( "colour" );
-			break;
-
-		case ElementType::eInt:
-			return cuT( "int" );
-			break;
-
-		case ElementType::eIVec2:
-			return cuT( "vec2i" );
-			break;
-
-		case ElementType::eIVec3:
-			return cuT( "vec3i" );
-			break;
-
-		case ElementType::eIVec4:
-			return cuT( "vec4i" );
-			break;
-
-		case ElementType::eUInt:
-			return cuT( "uint" );
-			break;
-
-		case ElementType::eUIVec2:
-			return cuT( "vec2ui" );
-			break;
-
-		case ElementType::eUIVec3:
-			return cuT( "vec3ui" );
-			break;
-
-		case ElementType::eUIVec4:
-			return cuT( "vec4ui" );
-			break;
-
-		case ElementType::eMat2:
-			return cuT( "mat2" );
-			break;
-
-		case ElementType::eMat3:
-			return cuT( "mat3" );
-			break;
-
-		case ElementType::eMat4:
-			return cuT( "mat4" );
-			break;
-
-		default:
-			assert( false && "Unsupported vertex buffer attribute type." );
-			break;
-		}
-
-		return 0;
-	}
 
 	namespace shader
 	{
@@ -508,7 +437,7 @@ namespace castor3d
 		}
 
 		void applyAlphaFunc( glsl::GlslWriter & writer
-			, ComparisonFunc alphaFunc
+			, renderer::CompareOp alphaFunc
 			, glsl::Float const & alpha
 			, glsl::Float const & alphaRef )
 		{
@@ -516,7 +445,7 @@ namespace castor3d
 
 			switch ( alphaFunc )
 			{
-			case ComparisonFunc::eLess:
+			case renderer::CompareOp::eLess:
 				IF( writer, alpha >= alphaRef )
 				{
 					writer.discard();
@@ -524,7 +453,7 @@ namespace castor3d
 				FI;
 				break;
 
-			case ComparisonFunc::eLEqual:
+			case renderer::CompareOp::eLessEqual:
 				IF( writer, alpha > alphaRef )
 				{
 					writer.discard();
@@ -532,7 +461,7 @@ namespace castor3d
 				FI;
 				break;
 
-			case ComparisonFunc::eEqual:
+			case renderer::CompareOp::eEqual:
 				IF( writer, alpha != alphaRef )
 				{
 					writer.discard();
@@ -540,7 +469,7 @@ namespace castor3d
 				FI;
 				break;
 
-			case ComparisonFunc::eNEqual:
+			case renderer::CompareOp::eNotEqual:
 				IF( writer, alpha == alphaRef )
 				{
 					writer.discard();
@@ -548,7 +477,7 @@ namespace castor3d
 				FI;
 				break;
 
-			case ComparisonFunc::eGEqual:
+			case renderer::CompareOp::eGreaterEqual:
 				IF( writer, alpha < alphaRef )
 				{
 					writer.discard();
@@ -556,7 +485,7 @@ namespace castor3d
 				FI;
 				break;
 
-			case ComparisonFunc::eGreater:
+			case renderer::CompareOp::eGreater:
 				IF( writer, alpha <= alphaRef )
 				{
 					writer.discard();

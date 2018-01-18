@@ -149,7 +149,7 @@ namespace castor3d
 		return m_particlesCount;
 	}
 
-	void ComputeParticleSystem::addParticleVariable( castor::String const & p_name, ElementType p_type, castor::String const & p_defaultValue )
+	void ComputeParticleSystem::addParticleVariable( castor::String const & p_name, renderer::AttributeFormat p_type, castor::String const & p_defaultValue )
 	{
 		m_inputs.push_back( BufferElementDeclaration{ p_name, 0u, p_type, m_inputs.stride() } );
 	}

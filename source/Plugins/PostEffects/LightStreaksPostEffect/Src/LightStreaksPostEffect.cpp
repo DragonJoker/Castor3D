@@ -181,7 +181,7 @@ namespace light_streaks
 		{
 			castor3d::BufferElementDeclaration( castor3d::ShaderProgram::Position
 				, uint32_t( castor3d::ElementUsage::ePosition )
-				, castor3d::ElementType::eVec2 ),
+				, castor3d::renderer::AttributeFormat::eVec2 ),
 		} )
 		, m_hiPassSurfaces
 		{

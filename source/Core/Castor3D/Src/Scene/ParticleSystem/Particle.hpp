@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	template< ElementType Type >
+	template< renderer::AttributeFormat Type >
 	struct ElementTyper;
 	/*!
 	\author		Sylvain DOREMUS
@@ -88,7 +88,7 @@ namespace castor3d
 		 *\param[in]	p_index	L'index de la variable.
 		 *\param[in]	p_value	La valeur de la variable.
 		 */
-		template< ElementType Type >
+		template< renderer::AttributeFormat Type >
 		inline void setValue( uint32_t p_index, typename ElementTyper< Type >::Type const & p_value );
 		/**
 		 *\~english
@@ -100,7 +100,7 @@ namespace castor3d
 		 *\param[in]	p_index	L'index de la variable.
 		 *\return		La valeur de la variable.
 		 */
-		template< ElementType Type >
+		template< renderer::AttributeFormat Type >
 		inline typename ElementTyper< Type >::Type getValue( uint32_t p_index )const;
 		/**
 		 *\~english

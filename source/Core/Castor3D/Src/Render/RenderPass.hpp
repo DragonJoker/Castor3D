@@ -164,7 +164,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const;
+			, renderer::CompareOp alphaFunc )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the geometry shader source matching the given flags.
@@ -207,7 +207,7 @@ namespace castor3d
 		 */
 		C3D_API void preparePipeline( BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
-			, ComparisonFunc alphaFunc
+			, renderer::CompareOp alphaFunc
 			, PassFlags & passFlags
 			, TextureChannels & textureFlags
 			, ProgramFlags & programFlags
@@ -237,7 +237,7 @@ namespace castor3d
 		 */
 		C3D_API RenderPipeline * getPipelineFront( BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
-			, ComparisonFunc alphaFunc
+			, renderer::CompareOp alphaFunc
 			, PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
@@ -266,7 +266,7 @@ namespace castor3d
 		 */
 		C3D_API RenderPipeline * getPipelineBack( BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
-			, ComparisonFunc alphaFunc
+			, renderer::CompareOp alphaFunc
 			, PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
@@ -453,7 +453,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc
+			, renderer::CompareOp alphaFunc
 			, bool invertNormals )const;
 		/**
 		 *\~english
@@ -466,7 +466,7 @@ namespace castor3d
 		 *\param[in]	matrixBuffer	Le tampon de matrices.
 		 */
 		C3D_API uint32_t doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
-			, VertexBuffer & matrixBuffer )const;
+			, std::vector< InstantiationData > & matrixBuffer )const;
 		/**
 		 *\~english
 		 *\brief			Copies the instanced nodes model matrices into given matrix buffer.
@@ -482,7 +482,7 @@ namespace castor3d
 		 *\param[in,out]	info			Reçoit les informations de rendu.
 		 */
 		C3D_API uint32_t doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
-			, VertexBuffer & matrixBuffer
+			, std::vector< InstantiationData > & matrixBuffer
 			, RenderInfo & info )const;
 		/**
 		 *\~english
@@ -495,7 +495,7 @@ namespace castor3d
 		 *\param[in]	matrixBuffer	Le tampon de matrices.
 		 */
 		C3D_API uint32_t doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
-			, VertexBuffer & matrixBuffer )const;
+			, std::vector< InstantiationData > & matrixBuffer )const;
 		/**
 		 *\~english
 		 *\brief			Copies the instanced nodes model matrices into given matrix buffer.
@@ -511,7 +511,7 @@ namespace castor3d
 		 *\param[in,out]	info			Reçoit les informations de rendu.
 		 */
 		C3D_API uint32_t doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
-			, VertexBuffer & matrixBuffer
+			, std::vector< InstantiationData > & matrixBuffer
 			, RenderInfo & info )const;
 		/**
 		 *\~english
@@ -527,7 +527,7 @@ namespace castor3d
 		 */
 		C3D_API uint32_t doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
 			, Camera const & camera
-			, VertexBuffer & matrixBuffer )const;
+			, std::vector< InstantiationData > & matrixBuffer )const;
 		/**
 		 *\~english
 		 *\brief			Copies the instanced nodes model matrices into given matrix buffer.
@@ -546,7 +546,7 @@ namespace castor3d
 		 */
 		C3D_API uint32_t doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
 			, Camera const & camera
-			, VertexBuffer & matrixBuffer
+			, std::vector< InstantiationData > & matrixBuffer
 			, RenderInfo & info )const;
 		/**
 		 *\~english
@@ -562,7 +562,7 @@ namespace castor3d
 		 */
 		C3D_API uint32_t doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
 			, Camera const & camera
-			, VertexBuffer & matrixBuffer )const;
+			, std::vector< InstantiationData > & matrixBuffer )const;
 		/**
 		 *\~english
 		 *\brief			Copies the instanced nodes model matrices into given matrix buffer.
@@ -581,7 +581,7 @@ namespace castor3d
 		 */
 		C3D_API uint32_t doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
 			, Camera const & camera
-			, VertexBuffer & matrixBuffer
+			, std::vector< InstantiationData > & matrixBuffer
 			, RenderInfo & info )const;
 		/**
 		 *\~english
@@ -1098,7 +1098,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const = 0;
+			, renderer::CompareOp alphaFunc )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
@@ -1119,7 +1119,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const = 0;
+			, renderer::CompareOp alphaFunc )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
@@ -1140,7 +1140,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const = 0;
+			, renderer::CompareOp alphaFunc )const = 0;
 		/**
 		 *\~english
 		 *\brief			Modifies the given flags to make them match the render pass requirements.

@@ -771,7 +771,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			p_params[0]->get( uiMode );
-			parsingContext->pSampler->setComparisonFunc( ComparisonFunc( uiMode ) );
+			parsingContext->pSampler->setComparisonFunc( renderer::CompareOp( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -1429,7 +1429,7 @@ namespace castor3d
 				p_params[2]->get( value );
 			}
 
-			parsingContext->particleSystem->addParticleVariable( name, ElementType( type ), value );
+			parsingContext->particleSystem->addParticleVariable( name, renderer::AttributeFormat( type ), value );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eUBOVariable )
@@ -2925,7 +2925,7 @@ namespace castor3d
 			float fFloat;
 			p_params[0]->get( uiFunc );
 			p_params[1]->get( fFloat );
-			parsingContext->pass->setAlphaFunc( ComparisonFunc( uiFunc ) );
+			parsingContext->pass->setAlphaFunc( renderer::CompareOp( uiFunc ) );
 			parsingContext->pass->setAlphaValue( fFloat );
 		}
 	}

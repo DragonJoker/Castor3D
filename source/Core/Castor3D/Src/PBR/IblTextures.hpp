@@ -48,7 +48,7 @@ namespace castor3d
 		 *\brief		Met à jour les textures d'environnement.
 		 *\param[in]	source	La texture d'environnement source.
 		 */
-		C3D_API void update( TextureLayout const & source );
+		C3D_API void update( renderer::Texture const & source );
 		/**
 		 *\~english
 		 *\brief		Displays the maps.

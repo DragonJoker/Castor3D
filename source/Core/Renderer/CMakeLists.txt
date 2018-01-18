@@ -19,6 +19,8 @@ set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
 include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
+include_directories( ${CMAKE_SOURCE_DIR}/Core/GlslWriter/Src )
+include_directories( ${CMAKE_BINARY_DIR}/Core/GlslWriter/Src )
 include_directories( ${CMAKE_BINARY_DIR}/Core/Renderer/Src )
 
 set( RENDERLIB_WIN32 0 )
@@ -47,7 +49,7 @@ configure_file(
 add_target(
 	${PROJECT_NAME}
 	lib
-	"CastorUtils"
+	"CastorUtils;GlslWriter"
 	"${CastorMinLibraries}"
 	"RendererPch.hpp"
 	"RendererPch.cpp"

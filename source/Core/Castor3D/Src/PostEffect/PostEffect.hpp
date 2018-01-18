@@ -82,13 +82,10 @@ namespace castor3d
 
 			//!\~english	The surface framebuffer.
 			//!\~french		Le framebuffer de la surface.
-			castor3d::FrameBufferSPtr m_fbo;
+			renderer::FrameBufferPtr m_fbo;
 			//!\~english	The surface colour texture.
 			//!\~french		La texture couleur de la surface.
 			castor3d::TextureUnit m_colourTexture;
-			//!\~english	The attach between framebuffer and texture.
-			//!\~french		L'attache entre la texture et le framebuffer.
-			castor3d::TextureAttachmentSPtr m_colourAttach;
 			//!\~english	The surface dimensions.
 			//!\~french		Les dimensions de la surface.
 			castor::Size m_size;
@@ -158,7 +155,7 @@ namespace castor3d
 		 *\param[in,out]	framebuffer	Le tampon d'image.
 		 *\return			\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool apply( FrameBuffer & framebuffer ) = 0;
+		C3D_API virtual bool apply( renderer::FrameBuffer & framebuffer ) = 0;
 		/**
 		 *\~english
 		 *\return		\p true if the effect applies after tone mapping.

@@ -232,7 +232,7 @@ namespace castor3d
 		return m_dimensions;
 	}
 
-	void ParticleSystem::addParticleVariable( castor::String const & p_name, ElementType p_type, castor::String const & p_defaultValue )
+	void ParticleSystem::addParticleVariable( castor::String const & p_name, renderer::AttributeFormat p_type, castor::String const & p_defaultValue )
 	{
 		m_csImpl->addParticleVariable( p_name, p_type, p_defaultValue );
 		m_tfImpl->addParticleVariable( p_name, p_type, p_defaultValue );

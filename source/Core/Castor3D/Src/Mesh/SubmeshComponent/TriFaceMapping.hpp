@@ -155,6 +155,10 @@ namespace castor3d
 		 */
 		C3D_API uint32_t getCount()const override;
 		/**
+		 *\copydoc		castor3d::IndexMapping::getComponentsCount
+		 */
+		C3D_API uint32_t getComponentsCount()const override;
+		/**
 		 *\copydoc		castor3d::IndexMapping::sortByDistance
 		 */
 		C3D_API void sortByDistance( castor::Point3r const & cameraPosition )override;
@@ -239,6 +243,7 @@ namespace castor3d
 	private:
 		void doCleanup()override;
 		void doFill()override;
+		void doUpload()override;
 
 	public:
 		C3D_API static castor::String const Name;
@@ -247,9 +252,6 @@ namespace castor3d
 		//!\~english	The faces in the submesh.
 		//!\~french		Le tableau de faces.
 		FaceArray m_faces;
-		//!\~english	The face count.
-		//!\~french		Le nombre de faces.
-		uint32_t m_faceCount{ 0u };
 		//!\~english	Tells if normals exist or need to be computed.
 		//!\~french		Dit si les normales existent ou doivent être calculées.
 		bool m_hasNormals{ false };

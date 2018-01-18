@@ -136,7 +136,7 @@ namespace Fireworks
 			{
 				auto & particle = p_particles[i];
 
-				if ( particle.getValue< ElementType::eFloat >( 0u ) == 0.0f )
+				if ( particle.getValue< renderer::AttributeFormat::eFloat >( 0u ) == 0.0f )
 				{
 					particle = std::move( p_particles[p_firstUnused - 1] );
 					--p_firstUnused;
@@ -165,10 +165,10 @@ namespace Fireworks
 	void ParticleSystem::emitParticle( float p_type, castor::Point3f const & p_position, castor::Point3f const & p_velocity, float p_age )
 	{
 		Particle particle{ m_inputs };
-		particle.setValue< ElementType::eFloat >( 0u, p_type );
-		particle.setValue< ElementType::eVec3 >( 1u, p_position );
-		particle.setValue< ElementType::eVec3 >( 2u, p_velocity );
-		particle.setValue< ElementType::eFloat >( 3u, p_age );
+		particle.setValue< renderer::AttributeFormat::eFloat >( 0u, p_type );
+		particle.setValue< renderer::AttributeFormat::eVec3 >( 1u, p_position );
+		particle.setValue< renderer::AttributeFormat::eVec3 >( 2u, p_velocity );
+		particle.setValue< renderer::AttributeFormat::eFloat >( 3u, p_age );
 		m_particles[m_firstUnused++] = particle;
 	}
 

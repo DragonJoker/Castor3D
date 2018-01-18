@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_PREREQUISITES_MATERIAL_H___
@@ -35,6 +35,36 @@ namespace castor3d
 	};
 	/*!
 	\author 	Sylvain DOREMUS
+	\~english
+	\brief		Blending modes enumeration
+	\~french
+	\brief		Enumération des modes de mélange
+	*/
+	enum class BlendMode
+		: uint8_t
+	{
+		//!\~english Order dependent blending.
+		//!\~french Mélange dépendant de l'ordre.
+		eNoBlend,
+		//!\~english Order independent, add the components.
+		//!\~french Mélange indépendant de l'ordre, additionnant les composantes.
+		eAdditive,
+		//!\~english Order independent, multiply the components.
+		//!\~french Indépendant de l'ordre, multipliant les composantes.
+		eMultiplicative,
+		//!\~english Order dependent, interpolate the components.
+		//!\~french Indépendant de l'ordre, interpolant les composantes.
+		eInterpolative,
+		//!\~english Order independent, using A-buffer, not implemented yet.
+		//!\~french Indépendant de l'ordre, utilisant les A-Buffer (non implémenté).
+		eABuffer,
+		//!\~english Order independent, using depth peeling, not implemented yet.
+		//!\~french Indépendant de l'ordre, utilisant le pelage en profondeur (non implémenté).
+		eDepthPeeling,
+		CASTOR_SCOPED_ENUM_BOUNDS( eNoBlend )
+	};
+	/*!
+	\author 	Sylvain DOREMUS
 	\date 		13/09/2017
 	\version	0.10.0
 	\~english
@@ -66,352 +96,6 @@ namespace castor3d
 		eParallaxOcclusionMapping = 0x40,
 	};
 	IMPLEMENT_FLAGS( PassFlag )
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Alpha functions enumeration
-	\~french
-	\brief		Enumération des fonctions alpha
-	*/
-	enum class ComparisonFunc
-		: uint8_t
-	{
-		//!\~english Always take texture colour
-		//!\~french Prend toujours la couleur de la texture
-		eAlways = 0x0,
-		//!\~english Takes texture colour if alpha is less than given value
-		//!\~french Prend la couleur de la texture si l'alpha est inferieur a la valeur donnée
-		eLess = 0x1,
-		//!\~english Takes texture colour if alpha is less than or equal to given value
-		//!\~french Prend la couleur de la texture si l'alpha est inferieur ou egal a la valeur donnée
-		eLEqual = 0x2,
-		//!\~english Takes texture colour if alpha is equal to given value
-		//!\~french Prend la couleur de la texture si l'alpha est egal a la valeur donnée
-		eEqual = 0x3,
-		//!\~english Takes texture colour if alpha is different of given value
-		//!\~french Prend la couleur de la texture si l'alpha est different de la valeur donnée
-		eNEqual = 0x4,
-		//!\~english Takes texture colour if alpha is grater than or equal to given value
-		//!\~french Prend la couleur de la texture si l'alpha est superieur ou egal a la valeur donnée
-		eGEqual = 0x5,
-		//!\~english Takes texture colour if alpha is greater than given value
-		//!\~french Prend la couleur de la texture si l'alpha est superieur a la valeur donnée
-		eGreater = 0x6,
-		//!\~english Never take texture colour
-		//!\~french Ne prend jamais la couleur de la texture
-		eNever = 0x7,
-		CASTOR_SCOPED_ENUM_BOUNDS( eAlways )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Texture UVW enumeration
-	\~french
-	\brief		Enumération des UVW
-	*/
-	enum class TextureUVW
-		: uint8_t
-	{
-		eU,
-		eV,
-		eW,
-		CASTOR_SCOPED_ENUM_BOUNDS( eU )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Texture wrap modes enumeration
-	\~french
-	\brief		Enumération des modes de wrapping de texture
-	*/
-	enum class WrapMode
-		: uint8_t
-	{
-		eRepeat,
-		eMirroredRepeat,
-		eClampToBorder,
-		eClampToEdge,
-		CASTOR_SCOPED_ENUM_BOUNDS( eRepeat )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Texture interpolation filters enumeration
-	\~french
-	\brief		Enumération des filtres d'interpolation
-	*/
-	enum class InterpolationFilter
-		: uint8_t
-	{
-		eMin,
-		eMag,
-		eMip,
-		eCount
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Texture comparison modes enumeration.
-	\~french
-	\brief		Enumération des modes de comparaison de texture.
-	*/
-	enum class ComparisonMode
-		: uint8_t
-	{
-		eNone,
-		eRefToTexture,
-		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Texture filter interpolation modes enumeration
-	\~french
-	\brief		Enumération des modes d'interpolation
-	*/
-	enum class InterpolationMode
-		: uint8_t
-	{
-		eUndefined,
-		eNearest,
-		eLinear,
-		CASTOR_SCOPED_ENUM_BOUNDS( eUndefined )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Texture blending source indices enumeration
-	\~french
-	\brief		Enumération des indices de source de blending
-	*/
-	enum class BlendSrcIndex
-		: uint8_t
-	{
-		eIndex0,
-		eIndex1,
-		eIndex2,
-		CASTOR_SCOPED_ENUM_BOUNDS( eIndex0 )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Texture blending sources enumeration
-	\~french
-	\brief		Enumération des sources de blending
-	*/
-	enum class BlendSource
-		: uint8_t
-	{
-		eTexture,
-		eTexture0,
-		eTexture1,
-		eTexture2,
-		eTexture3,
-		eConstant,
-		eDiffuse,
-		ePrevious,
-		CASTOR_SCOPED_ENUM_BOUNDS( eTexture )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		RGB blending functions enumeration
-	\~french
-	\brief		Enumération de fonctions de mélange RGB
-	*/
-	enum class TextureBlendFunc
-		: uint8_t
-	{
-		//!\~english No blend
-		//!\~french Pas de mélange
-		eNoBlend,
-		//!\~english Arg0
-		//!\~french Arg0
-		eFirstArg,
-		//!\~english Arg0 + Arg1
-		//!\~french Arg0 + Arg1
-		eAdd,
-		//!\~english Arg0 + Arg1 - 0.5
-		//!\~french Arg0 + Arg1 - 0.5
-		eAddSigned,
-		//!\~english Arg0 x Arg1
-		//!\~french Arg0 x Arg1
-		eModulate,
-		//!\~english Arg0 × Arg2 + Arg1 × (1 - Arg2)
-		//!\~french Arg0 × Arg2 + Arg1 × (1 - Arg2)
-		eInterpolate,
-		//!\~english Arg0 - Arg1
-		//!\~french Arg0 - Arg1
-		eSubtract,
-		CASTOR_SCOPED_ENUM_BOUNDS( eNoBlend )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Blending operations enumeration
-	\~french
-	\brief		Enumération de opérations de mélange
-	*/
-	enum class BlendOperation
-		: uint8_t
-	{
-		//!\~english Src2 + Src1.
-		//!\~french Src2 + Src1.
-		eAdd,
-		//!\~english Src2 - Src1.
-		//!\~french Src2 - Src1.
-		eSubtract,
-		//!\~english Src1 - Src2.
-		//!\~french Src1 - Src2.
-		eRevSubtract,
-		//!\~english min( Src1, Src2 ).
-		//!\~french min( Src1, Src2 ).
-		eMin,
-		//!\~english max( Src1, Src2 ).
-		//!\~french max( Src1, Src2 ).
-		eMax,
-		eCount
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Blend operands enumeration
-	\~french
-	\brief		Enumération des opérandes de mélange
-	*/
-	enum class BlendOperand
-		: uint8_t
-	{
-		eZero,
-		eOne,
-		eSrcColour,
-		eInvSrcColour,
-		eDstColour,
-		eInvDstColour,
-		eSrcAlpha,
-		eInvSrcAlpha,
-		eDstAlpha,
-		eInvDstAlpha,
-		eConstant,
-		eInvConstant,
-		eSrcAlphaSaturate,
-		eSrc1Colour,
-		eInvSrc1Colour,
-		eSrc1Alpha,
-		eInvSrc1Alpha,
-		CASTOR_SCOPED_ENUM_BOUNDS( eZero )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Blending modes enumeration
-	\~french
-	\brief		Enumération des modes de mélange
-	*/
-	enum class BlendMode
-		: uint8_t
-	{
-		//!\~english Order dependent blending.
-		//!\~french Mélange dépendant de l'ordre.
-		eNoBlend,
-		//!\~english Order independent, add the components.
-		//!\~french Mélange indépendant de l'ordre, additionnant les composantes.
-		eAdditive,
-		//!\~english Order independent, multiply the components.
-		//!\~french Indépendant de l'ordre, multipliant les composantes.
-		eMultiplicative,
-		//!\~english Order dependent, interpolate the components.
-		//!\~french Indépendant de l'ordre, interpolant les composantes.
-		eInterpolative,
-		//!\~english Order independent, using A-buffer, not implemented yet.
-		//!\~french Indépendant de l'ordre, utilisant les A-Buffer (non implémenté).
-		eABuffer,
-		//!\~english Order independent, using depth peeling, not implemented yet.
-		//!\~french Indépendant de l'ordre, utilisant le pelage en profondeur (non implémenté).
-		eDepthPeeling,
-		CASTOR_SCOPED_ENUM_BOUNDS( eNoBlend )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Texture dimensions enumeration
-	\~french
-	\brief		Enumération des dimensions de texture
-	*/
-	enum class TextureType
-		: uint8_t
-	{
-		//!\~english 1 dimension texture buffer, used to store data.
-		//!\~french tampons de texture à 1 dimension, utilisé pour stocker des données.
-		eBuffer,
-		//!\~english 1 dimension textures => one coordinate => U mapping
-		//!\~french Textures à 1 dimension => une coordonnée => U mapping
-		eOneDimension,
-		//!\~english 1 dimension textures array => one coordinate => U mapping
-		//!\~french Tableau de textures à 1 dimension => une coordonnée => U mapping
-		eOneDimensionArray,
-		//!\~english 2 dimensions textures => two coordinates => UV mapping
-		//!\~french Textures à 2 dimensions => deux coordonnées => UV mapping
-		eTwoDimensions,
-		//!\~english 2 dimensions textures array => two coordinates => UV mapping
-		//!\~french Tableau de textures à 2 dimensions => deux coordonnées => UV mapping
-		eTwoDimensionsArray,
-		//!\~english 2 dimensions textures with multisample support => two coordinates => UV mapping
-		//!\~french Textures à 2 dimensions avec support du multisampling => deux coordonnées => UV mapping
-		eTwoDimensionsMS,
-		//!\~english 2 dimensions textures array with multisample support => two coordinates => UV mapping
-		//!\~french Tableau de textures à 2 dimensions => deux coordonnées => UV mapping
-		eTwoDimensionsMSArray,
-		//!\~english 3 dimensions textures => three coordinates => UVW mapping
-		//!\~french Textures à 3 dimensions => trois coordonnées => UVW mapping
-		eThreeDimensions,
-		//!\~english Cube texture.
-		//!\~french Textures cube.
-		eCube,
-		//!\~english Cube textures array.
-		//!\~french Tableaux de textures cube.
-		eCubeArray,
-		CASTOR_SCOPED_ENUM_BOUNDS( eBuffer )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Texture dimensions enumeration
-	\~french
-	\brief		Enumération des dimensions de texture
-	*/
-	enum class TextureStorageType
-		: uint8_t
-	{
-		//!\~english 1 dimension texture buffer, used to store data.
-		//!\~french tampons de texture à 1 dimension, utilisé pour stocker des données.
-		eBuffer,
-		//!\~english 1 dimension textures.
-		//!\~french Textures à 1 dimension.
-		eOneDimension,
-		//!\~english 1 dimension texture arrays.
-		//!\~french Tableaux de textures à 1 dimension.
-		eOneDimensionArray,
-		//!\~english 2 dimensions textures.
-		//!\~french Textures à 2 dimensions.
-		eTwoDimensions,
-		//!\~english 2 dimensions texture arrays.
-		//!\~french Tableaux de textures à 2 dimensions.
-		eTwoDimensionsArray,
-		//!\~english 2 dimensions textures with multisample support.
-		//!\~french Textures à 2 dimensions avec support du multisampling.
-		eTwoDimensionsMS,
-		//!\~english 3 dimensions textures.
-		//!\~french Textures à 3 dimensions.
-		eThreeDimensions,
-		//!\~english Cube map.
-		//!\~french Cube map.
-		eCubeMap,
-		//!\~english Cube map array.
-		//!\~french Tableau de cube maps.
-		eCubeMapArray,
-		CASTOR_SCOPED_ENUM_BOUNDS( eBuffer )
-	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -506,9 +190,6 @@ namespace castor3d
 	};
 	IMPLEMENT_FLAGS( TextureChannel )
 
-	class TextureImage;
-	class TextureLayout;
-	class TextureStorage;
 	class TextureUnit;
 	class Material;
 	class Pass;
@@ -518,9 +199,6 @@ namespace castor3d
 	class Sampler;
 	class SubsurfaceScattering;
 
-	DECLARE_SMART_PTR( TextureImage );
-	DECLARE_SMART_PTR( TextureLayout );
-	DECLARE_SMART_PTR( TextureStorage );
 	DECLARE_SMART_PTR( TextureUnit );
 	DECLARE_SMART_PTR( Material );
 	DECLARE_SMART_PTR( Pass );

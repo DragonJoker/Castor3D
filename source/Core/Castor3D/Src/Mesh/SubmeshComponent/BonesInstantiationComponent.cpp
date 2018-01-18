@@ -26,7 +26,7 @@ namespace castor3d
 		cleanup();
 	}
 
-	void BonesInstantiationComponent::gather( VertexBufferArray & buffers )
+	void BonesInstantiationComponent::gather( renderer::VertexBufferCRefArray & buffers )
 	{
 	}
 

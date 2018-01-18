@@ -89,7 +89,7 @@ namespace castor3d
 	{
 		auto declaration = BufferDeclaration(
 		{
-			BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec3 ),
+			BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec3 ),
 		} );
 
 		auto data = doGenerateVertices();

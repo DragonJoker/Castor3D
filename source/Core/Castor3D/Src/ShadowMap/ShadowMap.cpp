@@ -130,7 +130,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, ComparisonFunc alphaFunc )const
+		, renderer::CompareOp alphaFunc )const
 	{
 		return doGetPixelShaderSource( passFlags
 			, textureFlags
@@ -241,7 +241,7 @@ namespace castor3d
 
 	void ShadowMap::doDiscardAlpha( glsl::GlslWriter & writer
 		, TextureChannels const & textureFlags
-		, ComparisonFunc alphaFunc
+		, renderer::CompareOp alphaFunc
 		, glsl::Int const & materialIndex
 		, shader::Materials const & materials )const
 	{
@@ -263,7 +263,7 @@ namespace castor3d
 				, alpha
 				, alphaRef );
 		}
-		else if ( alphaFunc != ComparisonFunc::eAlways )
+		else if ( alphaFunc != renderer::CompareOp::eAlways )
 		{
 			auto material = materials.getBaseMaterial( materialIndex );
 			auto alpha = writer.declLocale( cuT( "alpha" )

@@ -78,43 +78,6 @@ namespace castor3d
 	};
 	/*!
 	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Shader object types enumeration
-	\~french
-	\brief		Enumération des types de shader object
-	*/
-	enum class ShaderType
-		: int8_t
-	{
-		eNone = -1,
-		eVertex,
-		eHull,
-		eDomain,
-		eGeometry,
-		ePixel,
-		eCompute,
-		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Shader object types masks
-	\~french
-	\brief		Masques pour les types de shader object
-	*/
-	enum class ShaderTypeFlag
-		: uint8_t
-	{
-		eVertex = uint8_t( 0x1 ) << int( ShaderType::eVertex ),
-		eHull = uint8_t( 0x1 ) << int( ShaderType::eHull ),
-		eDomain = uint8_t( 0x1 ) << int( ShaderType::eDomain ),
-		eGeometry = uint8_t( 0x1 ) << int( ShaderType::eGeometry ),
-		ePixel = uint8_t( 0x1 ) << int( ShaderType::ePixel ),
-		eCompute = uint8_t( 0x1 ) << int( ShaderType::eCompute ),
-	};
-	IMPLEMENT_FLAGS( ShaderTypeFlag )
-	/*!
-	\author 	Sylvain DOREMUS
 	\date 		20/11/13
 	\version	0.7.0.0
 	\~english
@@ -342,14 +305,8 @@ namespace castor3d
 		CASTOR_SCOPED_ENUM_BOUNDS( eBool )
 	};
 
-	class ShaderProgram;
-	class ShaderObject;
-	class ProgramInputLayout;
 	class Uniform;
 	class PushUniform;
-	class UniformBuffer;
-	class UniformBufferBinding;
-	class ShaderStorageBuffer;
 	class AtomicCounterBuffer;
 	class BillboardUbo;
 	class MatrixUbo;
@@ -684,31 +641,17 @@ namespace castor3d
 	DECLARE_SMART_PTR( PushUniform4x3r );
 	DECLARE_SMART_PTR( PushUniform4x4r );
 
-	DECLARE_SMART_PTR( UniformBuffer );
-	DECLARE_SMART_PTR( UniformBufferBinding );
 	DECLARE_SMART_PTR( Uniform );
 	DECLARE_SMART_PTR( PushUniform );
-	DECLARE_SMART_PTR( ShaderObject );
-	DECLARE_SMART_PTR( ShaderProgram );
-	DECLARE_SMART_PTR( ShaderStorageBuffer );
 	DECLARE_SMART_PTR( AtomicCounterBuffer );
 
-	DECLARE_VECTOR( ShaderProgramSPtr, ShaderProgramPtr );
-	DECLARE_VECTOR( ShaderObjectSPtr, ShaderObjectPtr );
+	DECLARE_VECTOR( renderer::ShaderProgramPtr, ShaderProgramPtr );
 	DECLARE_LIST( PushUniformSPtr, PushUniform );
 	DECLARE_LIST( UniformSPtr, Uniform );
-	DECLARE_LIST( UniformBufferSPtr, UniformBufferPtr );
-	DECLARE_LIST( ShaderStorageBufferSPtr, ShaderStorageBufferPtr );
 	DECLARE_LIST( AtomicCounterBufferSPtr, AtomicCounterBufferPtr );
 	DECLARE_MAP( castor::String, PushUniformWPtr, PushUniform );
 	DECLARE_MAP( castor::String, UniformWPtr, Uniform );
-	DECLARE_MAP( ShaderProgramRPtr, UniformBufferBindingUPtr, UniformBufferBinding );
-	DECLARE_MAP( castor::String, UniformBufferWPtr, UniformBufferPtrStr );
-	DECLARE_MAP( castor::String, ShaderStorageBufferWPtr, ShaderStorageBufferPtrStr );
 	DECLARE_MAP( castor::String, AtomicCounterBufferWPtr, AtomicCounterBufferPtrStr );
-	DECLARE_MAP( ShaderType, UniformBufferWPtr, UniformBufferPtrShader );
-	DECLARE_MAP( ShaderType, ShaderStorageBufferWPtr, ShaderStorageBufferPtrShader );
-	DECLARE_MAP( ShaderType, AtomicCounterBufferWPtr, AtomicCounterBufferPtrShader );
 
 	//@}
 
@@ -864,7 +807,7 @@ namespace castor3d
 		 *\param[in]	alphaRef	La valeur de référence pour la comparaison alpha.
 		 */
 		C3D_API void applyAlphaFunc( glsl::GlslWriter & writer
-			, ComparisonFunc alphaFunc
+			, renderer::CompareOp alphaFunc
 			, glsl::Float const & alpha
 			, glsl::Float const & alphaRef );
 

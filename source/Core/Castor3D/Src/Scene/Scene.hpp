@@ -331,9 +331,9 @@ namespace castor3d
 		 *\~french
 		 *\return		L'image de fond de la scène.
 		 */
-		inline TextureLayoutSPtr getBackgroundImage()const
+		inline renderer::Texture const & getBackgroundImage()const
 		{
-			return m_backgroundImage;
+			return *m_backgroundImage;
 		}
 		/**
 		 *\~english
@@ -621,7 +621,7 @@ namespace castor3d
 		castor::RgbColour m_backgroundColour;
 		//!\~english	The background image
 		//!\~french		L'image de fond
-		TextureLayoutSPtr m_backgroundImage;
+		renderer::TexturePtr m_backgroundImage;
 		//!\~english	The skybox
 		//!\~french		La skybox
 		SkyboxUPtr m_skybox;

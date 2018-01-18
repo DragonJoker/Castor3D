@@ -96,7 +96,7 @@ namespace castor3d
 		 *\brief		Met en place un barrière mémoire.
 		 *\param[in]	barriers	La barrière à attendre.
 		 */
-		C3D_API void memoryBarrier( MemoryBarriers const & barriers );
+		//C3D_API void memoryBarrier( MemoryBarriers const & barriers );
 		/**
 		 *\~english
 		 *\brief		Renders the given cube texture to the currently draw-bound frame buffer.
@@ -111,7 +111,7 @@ namespace castor3d
 		 */
 		C3D_API void renderTextureCube( castor::Position const & position
 			, castor::Size const & size
-			, TextureLayout const & texture );
+			, renderer::Texture const & texture );
 		/**
 		 *\~english
 		 *\brief		Renders the wanted layer of given cube texture array to the currently draw-bound frame buffer.
@@ -125,7 +125,7 @@ namespace castor3d
 		 *\param[in]	index	L'index de la couche.
 		 */
 		C3D_API void renderTextureCube( castor::Size const & size
-			, TextureLayout const & texture
+			, renderer::Texture const & texture
 			, uint32_t index );
 		/**
 		 *\~english
@@ -145,8 +145,8 @@ namespace castor3d
 		 */
 		C3D_API void renderTexture( castor::Position const & position
 			, castor::Size const & size
-			, TextureLayout const & texture
-			, RenderPipeline & pipeline
+			, renderer::Texture const & texture
+			, renderer::Pipeline & pipeline
 			, MatrixUbo & matrixUbo );
 		/**
 		 *\~english
@@ -162,7 +162,7 @@ namespace castor3d
 		 */
 		C3D_API void renderTexture( castor::Position const & position
 			, castor::Size const & size
-			, TextureLayout const & texture );
+			, renderer::Texture const & texture );
 		/**
 		 *\~english
 		 *\brief		Renders the given 2D texture to the currently draw-bound frame buffer.
@@ -177,7 +177,7 @@ namespace castor3d
 		 */
 		C3D_API void renderTextureNearest( castor::Position const & position
 			, castor::Size const & size
-			, TextureLayout const & texture );
+			, renderer::Texture const & texture );
 		/**
 		 *\~english
 		 *\brief		Renders the wanted layer of given 2D texture array to the currently draw-bound frame buffer.
@@ -194,7 +194,7 @@ namespace castor3d
 		 */
 		C3D_API void renderTexture( castor::Position const & position
 			, castor::Size const & size
-			, TextureLayout const & texture
+			, renderer::Texture const & texture
 			, uint32_t index );
 		/**
 		 *\~english
@@ -210,7 +210,7 @@ namespace castor3d
 		 */
 		C3D_API void renderDepthCube( castor::Position const & position
 			, castor::Size const & size
-			, TextureLayout const & texture );
+			, renderer::Texture const & texture );
 		/**
 		 *\~english
 		 *\brief		Renders the wanted layer of given depth cube texture array to the currently draw-bound frame buffer.
@@ -227,7 +227,7 @@ namespace castor3d
 		 */
 		C3D_API void renderDepthCube( castor::Position const & position
 			, castor::Size const & size
-			, TextureLayout const & texture
+			, renderer::Texture const & texture
 			, uint32_t index );
 		/**
 		 *\~english
@@ -243,7 +243,7 @@ namespace castor3d
 		 */
 		C3D_API void renderDepth( castor::Position const & position
 			, castor::Size const & size
-			, TextureLayout const & texture );
+			, renderer::Texture const & texture );
 		/**
 		 *\~english
 		 *\brief		Renders the wanted layer of given depth 2D texture array to the currently draw-bound frame buffer.
@@ -260,7 +260,7 @@ namespace castor3d
 		 */
 		C3D_API void renderDepth( castor::Position const & position
 			, castor::Size const & size
-			, TextureLayout const & texture
+			, renderer::Texture const & texture
 			, uint32_t index );
 		/**
 		 *\~english
@@ -276,7 +276,7 @@ namespace castor3d
 		 */
 		C3D_API void renderVariance( castor::Position const & position
 			, castor::Size const & size
-			, TextureLayout const & texture );
+			, renderer::Texture const & texture );
 		/**
 		 *\~english
 		 *\brief		Renders the given variance cube texture to the currently draw-bound frame buffer.
@@ -291,7 +291,7 @@ namespace castor3d
 		 */
 		C3D_API void renderVarianceCube( castor::Position const & position
 			, castor::Size const & size
-			, TextureLayout const & texture );
+			, renderer::Texture const & texture );
 		/**
 		 *\~english
 		 *\brief		Renders the given 2D texture.
@@ -307,8 +307,8 @@ namespace castor3d
 		 *\param[in]	matrixUbo	Le tampon d'uniformes recevant les matrices.
 		 */
 		inline void renderTexture( castor::Size const & size
-			, TextureLayout const & texture
-			, RenderPipeline & pipeline
+			, renderer::Texture const & texture
+			, renderer::Pipeline & pipeline
 			, MatrixUbo & matrixUbo )
 		{
 			static castor::Position const position;
@@ -329,7 +329,7 @@ namespace castor3d
 		 *\param[in]	texture		La texture.
 		 */
 		inline void renderTexture( castor::Size const & size
-			, TextureLayout const & texture )
+			, renderer::Texture const & texture )
 		{
 			static castor::Position const position;
 			renderTexture( position
@@ -347,7 +347,7 @@ namespace castor3d
 		 *\param[in]	texture		La texture.
 		 */
 		inline void renderTextureNearest( castor::Size const & size
-			, TextureLayout const & texture )
+			, renderer::Texture const & texture )
 		{
 			static castor::Position const position;
 			renderTextureNearest( position
@@ -367,7 +367,7 @@ namespace castor3d
 		 *\param[in]	index	L'index de la couche.
 		 */
 		inline void renderTexture( castor::Size const & size
-			, TextureLayout const & texture
+			, renderer::Texture const & texture
 			, uint32_t index )
 		{
 			static castor::Position const position;
@@ -387,7 +387,7 @@ namespace castor3d
 		 *\param[in]	texture	La texture.
 		 */
 		inline void renderTextureCube( castor::Size const & size
-			, TextureLayout const & texture )
+			, renderer::Texture const & texture )
 		{
 			static castor::Position const position;
 			renderTextureCube( position
@@ -405,7 +405,7 @@ namespace castor3d
 		 *\param[in]	texture	La texture.
 		 */
 		inline void renderDepth( castor::Size const & size
-			, TextureLayout const & texture )
+			, renderer::Texture const & texture )
 		{
 			static castor::Position const position;
 			renderDepth( position
@@ -425,7 +425,7 @@ namespace castor3d
 		 *\param[in]	index	L'index de la couche.
 		 */
 		inline void renderDepth( castor::Size const & size
-			, TextureLayout const & texture
+			, renderer::Texture const & texture
 			, uint32_t index )
 		{
 			static castor::Position const position;
@@ -445,7 +445,7 @@ namespace castor3d
 		 *\param[in]	texture	La texture.
 		 */
 		inline void renderDepthCube( castor::Size const & size
-			, TextureLayout const & texture )
+			, renderer::Texture const & texture )
 		{
 			static castor::Position const position;
 			renderDepth( position
@@ -465,7 +465,7 @@ namespace castor3d
 		 *\param[in]	index	L'index de la couche.
 		 */
 		inline void renderDepthCube( castor::Size const & size
-			, TextureLayout const & texture
+			, renderer::Texture const & texture
 			, uint32_t index )
 		{
 			static castor::Position const position;
@@ -493,17 +493,17 @@ namespace castor3d
 		 *\param[in]	hdrConfig	La configuration HDR.
 		 */
 		inline void renderEquiToCube( castor::Size const & size
-			, TextureLayout const & texture
-			, TextureLayoutSPtr cubeTexture
-			, FrameBufferSPtr fbo
-			, std::array< FrameBufferAttachmentSPtr, 6 > const & attachs
+			, renderer::Texture const & texture
+			, renderer::Texture * cubeTexture
+			, renderer::FrameBuffer const & fbo
+			//, std::array< FrameBufferAttachmentSPtr, 6 > const & attachs
 			, HdrConfig const & hdrConfig )
 		{
 			m_cube.render( size
 				, texture
 				, cubeTexture
 				, fbo
-				, attachs
+				//, attachs
 				, hdrConfig );
 		}
 		/**
@@ -523,9 +523,9 @@ namespace castor3d
 		 *\param[in]	matrixUbo	Le tampon d'uniformes recevant les matrices.
 		 */
 		inline void renderCubeFace( castor::Size const & size
-			, TextureLayoutSPtr texture
+			, renderer::Texture * texture
 			, CubeMapFace face
-			, RenderPipeline & pipeline
+			, renderer::Pipeline & pipeline
 			, MatrixUbo & matrixUbo )
 		{
 			m_colourCube.renderFace( size
@@ -547,7 +547,7 @@ namespace castor3d
 		 *\param[in]	face	L'index de la face.
 		 */
 		inline void renderCubeFace( castor::Size const & size
-			, TextureLayoutSPtr texture
+			, renderer::Texture * texture
 			, CubeMapFace face )
 		{
 			m_colourCube.renderFace( size
@@ -646,7 +646,7 @@ namespace castor3d
 		 *\brief		Met en place un barrière mémoire.
 		 *\param[in]	barriers	La barrière à attendre.
 		 */
-		C3D_API virtual void doMemoryBarrier( MemoryBarriers const & barriers ) = 0;
+		//C3D_API virtual void doMemoryBarrier( MemoryBarriers const & barriers ) = 0;
 
 	protected:
 		//!\~english	RenderWindow associated to this context.

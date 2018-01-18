@@ -12,6 +12,7 @@ See LICENSE file in root folder.
 #include "AttributeFormat.hpp"
 #include "BlendFactor.hpp"
 #include "BlendOp.hpp"
+#include "BorderColour.hpp"
 #include "BufferTarget.hpp"
 #include "ColourComponentFlag.hpp"
 #include "CommandBufferResetFlag.hpp"
@@ -46,6 +47,7 @@ See LICENSE file in root folder.
 #include "StencilOp.hpp"
 #include "SubpassContents.hpp"
 #include "TessellationStateFlag.hpp"
+#include "TextureType.hpp"
 #include "WrapMode.hpp"
 
 #include <Graphics/PixelFormat.hpp>

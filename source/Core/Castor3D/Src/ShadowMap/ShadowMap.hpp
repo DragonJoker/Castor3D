@@ -130,7 +130,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const;
+			, renderer::CompareOp alphaFunc )const;
 		/**
 		 *\~english
 		 *\return		The shadow map.
@@ -218,7 +218,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const = 0;
+			, renderer::CompareOp alphaFunc )const = 0;
 
 	protected:
 		/**
@@ -239,7 +239,7 @@ namespace castor3d
 		 */
 		void doDiscardAlpha( glsl::GlslWriter & writer
 			, TextureChannels const & textureFlags
-			, ComparisonFunc alphaFunc
+			, renderer::CompareOp alphaFunc
 			, glsl::Int const & material
 			, shader::Materials const & materials )const;
 

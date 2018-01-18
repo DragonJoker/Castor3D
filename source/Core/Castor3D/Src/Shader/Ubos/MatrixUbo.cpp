@@ -1,9 +1,6 @@
 #include "MatrixUbo.hpp"
 
 #include "Engine.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Shader/ShaderProgram.hpp"
-#include "Texture/TextureLayout.hpp"
 
 using namespace castor;
 
@@ -51,7 +48,6 @@ namespace castor3d
 		m_invProjection.setValue( projection.getInverse() );
 		m_curJitter.setValue( jitter );
 		m_ubo.update();
-		m_ubo.bindTo( MatrixUbo::BindingPoint );
 	}
 
 	void MatrixUbo::update( Matrix4x4r const & projection )const
@@ -59,6 +55,5 @@ namespace castor3d
 		m_projection.setValue( projection );
 		m_invProjection.setValue( projection.getInverse() );
 		m_ubo.update();
-		m_ubo.bindTo( MatrixUbo::BindingPoint );
 	}
 }

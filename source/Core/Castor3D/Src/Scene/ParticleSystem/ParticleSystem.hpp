@@ -159,7 +159,7 @@ namespace castor3d
 		 *\param[in]	p_type			Le type de la variable.
 		 *\param[in]	p_defaultValue	La valeur par défaut de la variable.
 		 */
-		C3D_API void addParticleVariable( castor::String const & p_name, ElementType p_type, castor::String const & p_defaultValue );
+		C3D_API void addParticleVariable( castor::String const & p_name, renderer::AttributeFormat p_type, castor::String const & p_defaultValue );
 		/**
 		 *\~english
 		 *\brief		Defines the program used to update the particles through transform feedback.

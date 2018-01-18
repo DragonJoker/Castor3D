@@ -6,8 +6,6 @@ See LICENSE file in root folder
 
 #include "Castor3DPrerequisites.hpp"
 
-#include "Mesh/Buffer/GpuBuffer.hpp"
-#include "Shader/UniformBufferBinding.hpp"
 #include "Shader/Uniform/Uniform.hpp"
 
 #include <Design/OwnedBy.hpp>
@@ -129,30 +127,6 @@ namespace castor3d
 		C3D_API uint32_t getBindingPoint()const;
 		/**
 		 *\~english
-		 *\brief		Creates a binding of this unifor buffer to given program.
-		 *\remarks		If this is the first binding created, the GPU storage and variables will be initialised.
-		 *\param[in]	program	The program.
-		 *\return		The created binding.
-		 *\~french
-		 *\brief		Crée un binding entre ce tampon d'uniformes et le porgramme donné.
-		 *\remarks		Si c'est le premier binding créé, le stokage GPU et les variables seront initialisées.
-		 *\param[in]	program	Le programme.
-		 *\return		Le binding créé.
-		 */
-		C3D_API UniformBufferBinding & createBinding( ShaderProgram & program );
-		/**
-		 *\~english
-		 *\brief		Retrieves the binding for given program.
-		 *\param[in]	program	The program.
-		 *\return		The retrieved binding.
-		 *\~french
-		 *\brief		Récupère le binding pour le programme donné.
-		 *\param[in]	program	Le programme.
-		 *\return		Le binding récupéré.
-		 */
-		C3D_API UniformBufferBinding & getBinding( ShaderProgram & program )const;
-		/**
-		 *\~english
 		 *\brief		Creates a variable of the wanted type.
 		 *\param[in]	type		The wanted type.
 		 *\param[in]	name		The variable name.
@@ -215,7 +189,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le stockage GPU.
 		 */
-		inline GpuBuffer & getStorage()const
+		inline renderer::UniformBufferBase & getStorage()const
 		{
 			REQUIRE( m_storage );
 			return *m_storage;
@@ -265,12 +239,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises all the variables and the GPU buffer associated.
-		 *\param[in]	binding	The binding from which the layout is retrieved.
 		 *\~french
 		 *\brief		Initialise toutes les variables et le tampon GPU associé.
-		 *\param[in]	binding	Le binding depuis lequel le layout est récupéré.
 		 */
-		void doInitialise( UniformBufferBinding const & binding );
+		void doInitialise();
 		/**
 		 *\~english
 		 *\brief		Creates a variable of the wanted type.
@@ -301,16 +273,10 @@ namespace castor3d
 		castor::ByteArray m_buffer;
 		//!\~english	The GPU buffer.
 		//!\~french		Le tampon GPU.
-		GpuBufferSPtr m_storage;
+		renderer::UniformBufferBasePtr m_storage;
 		//!\~english	The offset in the GPU buffer.
 		//!\~french		Le décalage dans le tampon GPU.
 		uint32_t m_offset{ 0u };
-		//!\~english	The bindings per program.
-		//!\~french		Les bindings par programme.
-		UniformBufferBindingMap m_bindings;
-		//!\~english	The initial binding point.
-		//!\~french		Le point d'attache initial.
-		uint32_t m_bindingPoint{ 0u };
 	};
 }
 

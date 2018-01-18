@@ -8,7 +8,6 @@ See LICENSE file in root folder
 #include "Binary/BinaryWriter.hpp"
 #include "Mesh/Skeleton/VertexBoneData.hpp"
 #include "Mesh/SubmeshComponent/SubmeshComponent.hpp"
-#include "Mesh/Buffer/VertexBuffer.hpp"
 
 namespace castor3d
 {
@@ -64,7 +63,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
-		C3D_API void gather( VertexBufferArray & buffers )override;
+		C3D_API void gather( renderer::VertexBufferCRefArray & buffers )override;
 		/**
 		 *\~english
 		 *\brief		adds bone datas.
@@ -98,7 +97,7 @@ namespace castor3d
 		 */
 		inline bool hasBoneData()const
 		{
-			return !m_bonesData.empty();
+			return !m_bones.empty();
 		}
 		/**
 		 *\~english
@@ -106,7 +105,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les données d'os.
 		 */
-		inline VertexPtrArray const & getBonesData()const
+		inline VertexBoneDataArray const & getBonesData()const
 		{
 			return m_bones;
 		}
@@ -116,9 +115,9 @@ namespace castor3d
 		 *\~french
 		 *\return		Le VertexBuffer des bones.
 		 */
-		inline VertexBuffer const & getBonesBuffer()const
+		inline renderer::VertexBuffer< VertexBoneData > const & getBonesBuffer()const
 		{
-			return m_bonesBuffer;
+			return *m_bonesBuffer;
 		}
 		/**
 		 *\~english
@@ -126,9 +125,9 @@ namespace castor3d
 		 *\~french
 		 *\return		Le VertexBuffer des bones.
 		 */
-		inline VertexBuffer & getBonesBuffer()
+		inline renderer::VertexBuffer< VertexBoneData > & getBonesBuffer()
 		{
-			return m_bonesBuffer;
+			return *m_bonesBuffer;
 		}
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
@@ -152,13 +151,13 @@ namespace castor3d
 	private:
 		//!\~english	The bone data buffer (animation).
 		//!\~french		Le tampon de données de bones (animation).
-		VertexBuffer m_bonesBuffer;
-		//!\~english	The bones data array.
-		//!\~french		Le tableau de données des bones.
-		BytePtrList m_bonesData;
+		renderer::VertexBufferPtr< VertexBoneData > m_bonesBuffer;
 		//!\~english	The bones pointer array.
 		//!\~french		Le tableau de bones.
-		VertexPtrArray m_bones;
+		VertexBoneDataArray m_bones;
+
+		friend class BinaryWriter< BonesComponent >;
+		friend class BinaryParser< BonesComponent >;
 	};
 	/*!
 	\author 	Sylvain DOREMUS

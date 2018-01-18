@@ -442,68 +442,68 @@ namespace GlRender
 		return m_bBindVboToGpuAddress;
 	}
 
-	castor3d::ElementType OpenGl::get( GlslAttributeType p_type )const
+	castor3d::renderer::AttributeFormat OpenGl::get( GlslAttributeType p_type )const
 	{
 		switch ( p_type )
 		{
 		case GlslAttributeType::eFloat:
-			return castor3d::ElementType::eFloat;
+			return castor3d::renderer::AttributeFormat::eFloat;
 			break;
 
 		case GlslAttributeType::eFloatVec2:
-			return castor3d::ElementType::eVec2;
+			return castor3d::renderer::AttributeFormat::eVec2;
 			break;
 
 		case GlslAttributeType::eFloatVec3:
-			return castor3d::ElementType::eVec3;
+			return castor3d::renderer::AttributeFormat::eVec3;
 			break;
 
 		case GlslAttributeType::eFloatVec4:
-			return castor3d::ElementType::eVec4;
+			return castor3d::renderer::AttributeFormat::eVec4;
 			break;
 
 		case GlslAttributeType::eInt:
-			return castor3d::ElementType::eInt;
+			return castor3d::renderer::AttributeFormat::eInt;
 			break;
 
 		case GlslAttributeType::eUnsignedInt:
-			return castor3d::ElementType::eInt;
+			return castor3d::renderer::AttributeFormat::eInt;
 			break;
 
 		case GlslAttributeType::eIntVec2:
-			return castor3d::ElementType::eIVec2;
+			return castor3d::renderer::AttributeFormat::eIVec2;
 			break;
 
 		case GlslAttributeType::eIntVec3:
-			return castor3d::ElementType::eIVec3;
+			return castor3d::renderer::AttributeFormat::eIVec3;
 			break;
 
 		case GlslAttributeType::eIntVec4:
-			return castor3d::ElementType::eIVec4;
+			return castor3d::renderer::AttributeFormat::eIVec4;
 			break;
 
 		case GlslAttributeType::eUnsignedIntVec2:
-			return castor3d::ElementType::eIVec2;
+			return castor3d::renderer::AttributeFormat::eIVec2;
 			break;
 
 		case GlslAttributeType::eUnsignedIntVec3:
-			return castor3d::ElementType::eIVec3;
+			return castor3d::renderer::AttributeFormat::eIVec3;
 			break;
 
 		case GlslAttributeType::eUnsignedIntVec4:
-			return castor3d::ElementType::eIVec4;
+			return castor3d::renderer::AttributeFormat::eIVec4;
 			break;
 
 		case GlslAttributeType::eFloatMat2:
-			return castor3d::ElementType::eMat2;
+			return castor3d::renderer::AttributeFormat::eMat2;
 			break;
 
 		case GlslAttributeType::eFloatMat3:
-			return castor3d::ElementType::eMat3;
+			return castor3d::renderer::AttributeFormat::eMat3;
 			break;
 
 		case GlslAttributeType::eFloatMat4:
-			return castor3d::ElementType::eMat4;
+			return castor3d::renderer::AttributeFormat::eMat4;
 			break;
 
 		default:
@@ -511,7 +511,7 @@ namespace GlRender
 			break;
 		}
 
-		return castor3d::ElementType::eCount;
+		return castor3d::renderer::AttributeFormat::eCount;
 	}
 
 	castor::String const & OpenGl::getGlslErrorString( int p_index )const
@@ -537,7 +537,7 @@ namespace GlRender
 		return TextureDimensions[uint32_t( p_index )];
 	}
 
-	inline GlComparator OpenGl::get( castor3d::ComparisonFunc p_eAlphaFunc )const
+	inline GlComparator OpenGl::get( castor3d::renderer::CompareOp p_eAlphaFunc )const
 	{
 		return AlphaFuncs[uint32_t( p_eAlphaFunc )];
 	}
@@ -1186,7 +1186,7 @@ namespace GlRender
 		EXEC_FUNCTION( BlendEquationi, p_uiBuffer, uint32_t( p_eOp ) );
 	}
 
-	void OpenGl::ComparisonFunc( GlComparator func, float ref )const
+	void OpenGl::renderer::CompareOp( GlComparator func, float ref )const
 	{
 		EXEC_FUNCTION( AlphaFunc, uint32_t( func ), ref );
 	}

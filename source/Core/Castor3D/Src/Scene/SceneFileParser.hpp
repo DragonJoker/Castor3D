@@ -120,7 +120,6 @@ namespace castor3d
 		int iFace1;
 		int iFace2;
 		LightType eLightType;
-		MeshType eMeshType;
 		Topology ePrimitiveType;
 		ViewportSPtr pViewport;
 		castor::String strName;

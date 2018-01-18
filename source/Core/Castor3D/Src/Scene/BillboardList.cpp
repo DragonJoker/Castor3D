@@ -78,8 +78,8 @@ namespace castor3d
 		, m_quad( std::make_unique< VertexBuffer >( *scene.getEngine(), BufferDeclaration
 		{
 			{
-				BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec3 ),
-				BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::eTexCoords ), ElementType::eVec2 ),
+				BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec3 ),
+				BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::eTexCoords ), renderer::AttributeFormat::eVec2 ),
 			}
 		} ) )
 	{
@@ -275,7 +275,7 @@ namespace castor3d
 		return result;
 	}
 
-	void BillboardBase::gatherBuffers( VertexBufferArray & buffers )
+	void BillboardBase::gatherBuffers( renderer::VertexBufferCRefArray & buffers )
 	{
 		buffers.emplace_back( *m_quad );
 		buffers.emplace_back( *m_vertexBuffer );
@@ -295,7 +295,7 @@ namespace castor3d
 			, std::make_shared< VertexBuffer >( *scene.getEngine()
 				, BufferDeclaration
 				{
-					{ BufferElementDeclaration( cuT( "center" ), uint32_t( 0u ), ElementType::eVec3, 0u, 1u ) }
+					{ BufferElementDeclaration( cuT( "center" ), uint32_t( 0u ), renderer::AttributeFormat::eVec3, 0u, 1u ) }
 				} ) }
 	{
 	}

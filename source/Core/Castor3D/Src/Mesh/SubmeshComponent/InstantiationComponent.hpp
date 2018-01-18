@@ -8,6 +8,11 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	struct InstantiationData
+	{
+		std::array< float, 16u > m_matrix;
+		int m_material;
+	};
 	/*!
 	\author		Sylvain DOREMUS
 	\date		09/11/2017
@@ -82,7 +87,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
-		C3D_API void gather( VertexBufferArray & buffers )override;
+		C3D_API void gather( renderer::VertexBufferCRefArray & buffers )override;
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::setMaterial
 		 */
@@ -105,7 +110,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le VertexBuffer d'instanciation.
 		 */
-		inline VertexBuffer const & getMatrixBuffer()const
+		inline renderer::VertexBuffer< InstantiationData > const & getMatrixBuffer()const
 		{
 			return *m_matrixBuffer;
 		}
@@ -115,9 +120,19 @@ namespace castor3d
 		 *\~french
 		 *\return		Le VertexBuffer d'instanciation.
 		 */
-		inline VertexBuffer & getMatrixBuffer()
+		inline renderer::VertexBuffer< InstantiationData > & getMatrixBuffer()
 		{
 			return *m_matrixBuffer;
+		}
+		/**
+		 *\~english
+		 *\return		The instantiation VertexBuffer.
+		 *\~french
+		 *\return		Le VertexBuffer d'instanciation.
+		 */
+		inline std::vector< InstantiationData > & getData()
+		{
+			return m_data;
 		}
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
@@ -144,7 +159,10 @@ namespace castor3d
 		std::map< MaterialSPtr, uint32_t > m_instanceCount;
 		//!\~english	The matrix buffer (instantiation).
 		//!\~french		Le tampon de matrices (instanciation).
-		VertexBufferUPtr m_matrixBuffer;
+		renderer::VertexBufferPtr< InstantiationData > m_matrixBuffer;
+		//!\~english	The matrix buffer (instantiation).
+		//!\~french		Le tampon de matrices (instanciation).
+		std::vector< InstantiationData > m_data;
 		//!\~english	The threshold at which instantiation is triggered.
 		//!\~french		Le seuil à partir duquel l'instanciation est utilisée.
 		uint32_t m_threshold;

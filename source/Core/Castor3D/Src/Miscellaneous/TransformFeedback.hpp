@@ -57,7 +57,7 @@ namespace castor3d
 		 *\param[in]	p_buffers	Les tampons de sommets.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool initialise( VertexBufferArray const & p_buffers );
+		C3D_API bool initialise( renderer::VertexBufferCRefArray const & p_buffers );
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
@@ -145,7 +145,7 @@ namespace castor3d
 		BufferDeclaration m_computed;
 		//!\~english	The attached buffers.
 		//!\~french		Les tampons attachés.
-		VertexBufferArray m_buffers;
+		renderer::VertexBufferCRefArray m_buffers;
 		//!\~english	The primitives written GPU query.
 		//!\~french		La requête GPU de primitives écrites.
 		GpuQueryUPtr m_query;

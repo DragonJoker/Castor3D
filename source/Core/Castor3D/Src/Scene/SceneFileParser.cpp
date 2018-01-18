@@ -31,7 +31,6 @@ SceneFileContext::SceneFileContext( Path const & path, SceneFileParser * parser 
 	, iFace1( -1 )
 	, iFace2( -1 )
 	, eLightType( LightType::eCount )
-	, eMeshType( MeshType::eCount )
 	, ePrimitiveType( Topology::eCount )
 	, pViewport( nullptr )
 	, strName()
@@ -56,7 +55,6 @@ void SceneFileContext::initialise()
 	iFace1 = -1;
 	iFace2 = -1;
 	eLightType = LightType::eCount;
-	eMeshType = MeshType::eCount;
 	ePrimitiveType = Topology::eCount;
 	uiUInt16 = 0;
 	uiUInt32 = 0;
@@ -112,14 +110,14 @@ SceneFileParser::SceneFileParser( Engine & engine )
 	m_mapTypes[cuT( "2d" )] = uint32_t( TextureType::eTwoDimensions );
 	m_mapTypes[cuT( "3d" )] = uint32_t( TextureType::eThreeDimensions );
 
-	m_mapComparisonFuncs[cuT( "always" )] = uint32_t( ComparisonFunc::eAlways );
-	m_mapComparisonFuncs[cuT( "less" )] = uint32_t( ComparisonFunc::eLess );
-	m_mapComparisonFuncs[cuT( "less_or_equal" )] = uint32_t( ComparisonFunc::eLEqual );
-	m_mapComparisonFuncs[cuT( "equal" )] = uint32_t( ComparisonFunc::eEqual );
-	m_mapComparisonFuncs[cuT( "not_equal" )] = uint32_t( ComparisonFunc::eNEqual );
-	m_mapComparisonFuncs[cuT( "greater_or_equal" )] = uint32_t( ComparisonFunc::eGEqual );
-	m_mapComparisonFuncs[cuT( "greater" )] = uint32_t( ComparisonFunc::eGreater );
-	m_mapComparisonFuncs[cuT( "never" )] = uint32_t( ComparisonFunc::eNever );
+	m_mapComparisonFuncs[cuT( "always" )] = uint32_t( renderer::CompareOp::eAlways );
+	m_mapComparisonFuncs[cuT( "less" )] = uint32_t( renderer::CompareOp::eLess );
+	m_mapComparisonFuncs[cuT( "less_or_equal" )] = uint32_t( renderer::CompareOp::eLEqual );
+	m_mapComparisonFuncs[cuT( "equal" )] = uint32_t( renderer::CompareOp::eEqual );
+	m_mapComparisonFuncs[cuT( "not_equal" )] = uint32_t( renderer::CompareOp::eNEqual );
+	m_mapComparisonFuncs[cuT( "greater_or_equal" )] = uint32_t( renderer::CompareOp::eGEqual );
+	m_mapComparisonFuncs[cuT( "greater" )] = uint32_t( renderer::CompareOp::eGreater );
+	m_mapComparisonFuncs[cuT( "never" )] = uint32_t( renderer::CompareOp::eNever );
 
 	m_mapTextureArguments[cuT( "texture" )] = uint32_t( BlendSource::eTexture );
 	m_mapTextureArguments[cuT( "texture0" )] = uint32_t( BlendSource::eTexture0 );
@@ -261,22 +259,22 @@ SceneFileParser::SceneFileParser( Engine & engine )
 	m_mapVariableTypes[cuT( "mat4x3d" )] = uint32_t( UniformType::eMat4x3d );
 	m_mapVariableTypes[cuT( "mat4x4d" )] = uint32_t( UniformType::eMat4x4d );
 
-	m_mapElementTypes[cuT( "int" )] = uint32_t( ElementType::eInt );
-	m_mapElementTypes[cuT( "uint" )] = uint32_t( ElementType::eUInt );
-	m_mapElementTypes[cuT( "float" )] = uint32_t( ElementType::eFloat );
-	m_mapElementTypes[cuT( "colour" )] = uint32_t( ElementType::eColour );
-	m_mapElementTypes[cuT( "vec2i" )] = uint32_t( ElementType::eIVec2 );
-	m_mapElementTypes[cuT( "vec3i" )] = uint32_t( ElementType::eIVec3 );
-	m_mapElementTypes[cuT( "vec4i" )] = uint32_t( ElementType::eIVec4 );
-	m_mapElementTypes[cuT( "vec2ui" )] = uint32_t( ElementType::eUIVec2 );
-	m_mapElementTypes[cuT( "vec3ui" )] = uint32_t( ElementType::eUIVec3 );
-	m_mapElementTypes[cuT( "vec4ui" )] = uint32_t( ElementType::eUIVec4 );
-	m_mapElementTypes[cuT( "vec2f" )] = uint32_t( ElementType::eVec2 );
-	m_mapElementTypes[cuT( "vec3f" )] = uint32_t( ElementType::eVec3 );
-	m_mapElementTypes[cuT( "vec4f" )] = uint32_t( ElementType::eVec4 );
-	m_mapElementTypes[cuT( "mat2f" )] = uint32_t( ElementType::eMat2 );
-	m_mapElementTypes[cuT( "mat3f" )] = uint32_t( ElementType::eMat3 );
-	m_mapElementTypes[cuT( "mat4f" )] = uint32_t( ElementType::eMat4 );
+	m_mapElementTypes[cuT( "int" )] = uint32_t( renderer::AttributeFormat::eInt );
+	m_mapElementTypes[cuT( "uint" )] = uint32_t( renderer::AttributeFormat::eUInt );
+	m_mapElementTypes[cuT( "float" )] = uint32_t( renderer::AttributeFormat::eFloat );
+	m_mapElementTypes[cuT( "colour" )] = uint32_t( renderer::AttributeFormat::eColour );
+	m_mapElementTypes[cuT( "vec2i" )] = uint32_t( renderer::AttributeFormat::eIVec2 );
+	m_mapElementTypes[cuT( "vec3i" )] = uint32_t( renderer::AttributeFormat::eIVec3 );
+	m_mapElementTypes[cuT( "vec4i" )] = uint32_t( renderer::AttributeFormat::eIVec4 );
+	m_mapElementTypes[cuT( "vec2ui" )] = uint32_t( renderer::AttributeFormat::eUIVec2 );
+	m_mapElementTypes[cuT( "vec3ui" )] = uint32_t( renderer::AttributeFormat::eUIVec3 );
+	m_mapElementTypes[cuT( "vec4ui" )] = uint32_t( renderer::AttributeFormat::eUIVec4 );
+	m_mapElementTypes[cuT( "vec2f" )] = uint32_t( renderer::AttributeFormat::eVec2 );
+	m_mapElementTypes[cuT( "vec3f" )] = uint32_t( renderer::AttributeFormat::eVec3 );
+	m_mapElementTypes[cuT( "vec4f" )] = uint32_t( renderer::AttributeFormat::eVec4 );
+	m_mapElementTypes[cuT( "mat2f" )] = uint32_t( renderer::AttributeFormat::eMat2 );
+	m_mapElementTypes[cuT( "mat3f" )] = uint32_t( renderer::AttributeFormat::eMat3 );
+	m_mapElementTypes[cuT( "mat4f" )] = uint32_t( renderer::AttributeFormat::eMat4 );
 
 	m_mapMovables[cuT( "camera" )] = uint32_t( MovableType::eCamera );
 	m_mapMovables[cuT( "light" )] = uint32_t( MovableType::eLight );

@@ -236,7 +236,13 @@ namespace renderer
 			, WrapMode wrapR
 			, Filter minFilter
 			, Filter magFilter
-			, MipmapMode mipFilter = MipmapMode::eNone )const = 0;
+			, MipmapMode mipFilter = MipmapMode::eNone
+			, float minLod = -1000.0f
+			, float maxLod = 1000.0f
+			, float lodBias = 0.0f
+			, BorderColour borderColour = BorderColour::eFloatOpaqueBlack
+			, float maxAnisotropy = 1.0f
+			, CompareOp compareOp = CompareOp::eAlways )const = 0;
 		/**
 		*\brief
 		*	Crée un tampon GPU.

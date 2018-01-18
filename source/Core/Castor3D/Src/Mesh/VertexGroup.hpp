@@ -19,26 +19,26 @@ namespace castor3d
 	{
 		//!\~english	The vertex coordinates.
 		//!\~french		La position du sommet.
-		std::array< T, 3 > m_pos;
+		castor::Point< T, 3 > m_pos;
 		//!\~english	The vertex normal.
 		//!\~french		La normale du sommet.
-		std::array< T, 3 > m_nml;
+		castor::Point< T, 3 > m_nml;
 		//!\~english	The vertex tangent.
 		//!\~french		La tangente du sommet.
-		std::array< T, 3 > m_tan;
+		castor::Point< T, 3 > m_tan;
 		//!\~english	The vertex bitangent.
 		//!\~french		La bitangente du sommet.
-		std::array< T, 3 > m_bin;
+		castor::Point< T, 3 > m_bin;
 		//!\~english	The vertex texture coordinates.
 		//!\~french		La coordonnées de texture du sommet.
-		std::array< T, 3 > m_tex;
+		castor::Point< T, 3 > m_tex;
 	};
 
 	template< typename T >
 	using InterleavedVertexTArray = std::vector< InterleavedVertexT< T > >;
 
-	using InterleavedVertex = InterleavedVertexT< real >;
-	using InterleavedVertexArray = InterleavedVertexTArray< real >;
+	using InterleavedVertex = InterleavedVertexT< float >;
+	using InterleavedVertexArray = InterleavedVertexTArray< float >;
 }
 
 #endif

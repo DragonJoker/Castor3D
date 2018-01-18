@@ -18,7 +18,7 @@ namespace castor3d
 	{
 	}
 
-	bool TransformFeedback::initialise( VertexBufferArray const & p_buffers )
+	bool TransformFeedback::initialise( renderer::VertexBufferCRefArray const & p_buffers )
 	{
 		m_buffers = p_buffers;
 		bool result = m_query->initialise();

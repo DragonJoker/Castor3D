@@ -127,12 +127,12 @@ namespace GlRender
 					if ( p_name.find( cuT( "gl_" ) ) != 0 )
 					{
 						int loc = getOpenGl().GetAttribLocation( program.getGlName(), p_name.data() );
-						ElementType elemType = getOpenGl().get( GlslAttributeType( p_value ) );
+						renderer::AttributeFormat elemType = getOpenGl().get( GlslAttributeType( p_value ) );
 						string::toLowerCase( p_name );
 
-						if ( elemType == ElementType::eVec4 && p_name == string::stringCast< char >( ShaderProgram::Position ) )
+						if ( elemType == renderer::AttributeFormat::eVec4 && p_name == string::stringCast< char >( ShaderProgram::Position ) )
 						{
-							elemType = ElementType::eVec3;
+							elemType = renderer::AttributeFormat::eVec3;
 						}
 
 						attributes.insert( { loc, BufferElementDeclaration{ p_name, 0, elemType } } );
@@ -154,13 +154,13 @@ namespace GlRender
 				getOpenGl().GetActiveAttrib( program.getGlName(), i, uint32_t( buffer.size() ), &actualLength, &arraySize, &type, buffer.data() );
 				std::string name( buffer.data(), actualLength );
 				Logger::logDebug( StringStream() << cuT( "   Attribute: " ) << string::stringCast< xchar >( name ) );
-				ElementType elemType = getOpenGl().get( GlslAttributeType( type ) );
+				renderer::AttributeFormat elemType = getOpenGl().get( GlslAttributeType( type ) );
 				int loc = getOpenGl().GetAttribLocation( program.getGlName(), buffer.data() );
 				string::toLowerCase( name );
 
-				if ( elemType == ElementType::eVec4 && name == string::stringCast< char >( ShaderProgram::Position ) )
+				if ( elemType == renderer::AttributeFormat::eVec4 && name == string::stringCast< char >( ShaderProgram::Position ) )
 				{
-					elemType = ElementType::eVec3;
+					elemType = renderer::AttributeFormat::eVec3;
 				}
 
 				attributes.insert( { loc, BufferElementDeclaration{ buffer.data(), 0, elemType } } );

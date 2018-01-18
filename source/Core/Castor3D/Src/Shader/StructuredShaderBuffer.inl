@@ -23,13 +23,13 @@ namespace castor3d
 	}
 
 	template< typename ElementTypeTraits >
-	uint32_t StructuredShaderBuffer< ElementTypeTraits >::add( ElementType & element )
+	uint32_t StructuredShaderBuffer< ElementTypeTraits >::add( renderer::AttributeFormat & element )
 	{
 		REQUIRE( m_elements.getId() == 0u );
 		REQUIRE( m_elements.size() < m_maxElemCount );
 		m_elements.emplace_back( &element );
 		m_elements.setId( m_elementID++ );
-		m_connections.emplace_back( element.onChanged.connect( [this]( ElementType const & element )
+		m_connections.emplace_back( element.onChanged.connect( [this]( renderer::AttributeFormat const & element )
 		{
 			m_dirty.emplace_back( &element );
 		} ) );
@@ -38,7 +38,7 @@ namespace castor3d
 	}
 
 	template< typename ElementTypeTraits >
-	void StructuredShaderBuffer< ElementTypeTraits >::remove( ElementType & element )
+	void StructuredShaderBuffer< ElementTypeTraits >::remove( renderer::AttributeFormat & element )
 	{
 		auto id = element.getId() - 1u;
 		REQUIRE( id < m_elements.size() );
@@ -61,11 +61,11 @@ namespace castor3d
 	{
 		if ( !m_dirty.empty() )
 		{
-			std::vector< ElementType const * > dirty;
+			std::vector< renderer::AttributeFormat const * > dirty;
 			std::swap( m_dirty, dirty );
 			auto end = std::unique( dirty.begin(), dirty.end() );
 
-			std::for_each( dirty.begin(), end, [this]( ElementType const * element )
+			std::for_each( dirty.begin(), end, [this]( renderer::AttributeFormat const * element )
 			{
 				element->accept( *this );
 			} );

@@ -1,4 +1,4 @@
-﻿#include "TextureUnit.hpp"
+#include "TextureUnit.hpp"
 
 #include "Engine.hpp"
 

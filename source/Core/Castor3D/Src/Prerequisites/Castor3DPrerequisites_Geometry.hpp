@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_PREREQUISITES_GEOMETRY_H___
@@ -8,51 +8,6 @@ namespace castor3d
 {
 	/**@name Geometry */
 	//@{
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Mesh type enumeration
-	\~french
-	\brief		Enumération des types de maillages
-	*/
-	enum class MeshType
-		: uint8_t
-	{
-		//!\~english Custom mesh type => User defined vertex, imported mesh...	\~french Type personnalisé => Défini par l'utilisateur, importé...
-		eCustom,
-		//!\~english Cone mesh type	\~french Cône
-		eCone,
-		//!\~english Cylinder mesh type	\~french Cylindre
-		eCylinder,
-		//!\~english Rectangular faces sphere mesh type	\~french Sphère à faces rectanglaires
-		eSphere,
-		//!\~english Cube mesh type	\~french Cube
-		eCube,
-		//!\~english Torus mesh type	\~french Torre
-		eTorus,
-		//!\~english Plane mesh type	\~french Plan
-		ePlane,
-		//!\~english Triangular faces sphere mesh type	\~french Sphère à faces triangulaires
-		eIcosahedron,
-		//!\~english Projection mesh type	\~french Projection
-		eProjection,
-		CASTOR_SCOPED_ENUM_BOUNDS( eCustom )
-	};
-
-	class Vertex;
-	class VertexLayout;
-	class BufferElementGroup;
-
-	DECLARE_SMART_PTR( Vertex );
-	DECLARE_SMART_PTR( BufferElementGroup );
-
-	template< typename T >
-	class Pattern;
-	using VertexPattern = Pattern< Vertex >;
-	using Point3rPattern = Pattern< castor::Point3r >;
-	using VertexPtrPattern = Pattern< VertexSPtr >;
-	using Point3rPtrPattern = Pattern< castor::Point3rSPtr >;
 
 	struct FaceGroup;
 	class Face;
@@ -80,13 +35,9 @@ namespace castor3d
 	class Subdivider;
 	class Bone;
 	class Skeleton;
-	class BonedVertex;
+	struct SubmeshVertex;
 	struct VertexBoneData;
 
-	DECLARE_SMART_PTR( VertexPattern );
-	DECLARE_SMART_PTR( Point3rPattern );
-	DECLARE_SMART_PTR( VertexPtrPattern );
-	DECLARE_SMART_PTR( Point3rPtrPattern );
 	DECLARE_SMART_PTR( Face );
 	DECLARE_SMART_PTR( Graph );
 	DECLARE_SMART_PTR( Mesh );
@@ -110,15 +61,10 @@ namespace castor3d
 	DECLARE_SMART_PTR( FaceGroup );
 	DECLARE_SMART_PTR( Bone );
 	DECLARE_SMART_PTR( Skeleton );
-	DECLARE_SMART_PTR( BonedVertex );
 
 	class MeshFactory;
 	DECLARE_SMART_PTR( MeshFactory );
 
-	//! Vertex array
-	DECLARE_VECTOR( Vertex, Vertex );
-	//! Vertex pointer array
-	DECLARE_VECTOR( BufferElementGroupSPtr, VertexPtr );
 	//! Face array
 	DECLARE_VECTOR( Face, Face );
 	//! Face pointer array
@@ -129,8 +75,8 @@ namespace castor3d
 	DECLARE_VECTOR( SubmeshSPtr, SubmeshPtr );
 	//! Geometry pointer array
 	DECLARE_VECTOR( GeometrySPtr, GeometryPtr );
-	//! Vertex pointer list
-	DECLARE_LIST( VertexSPtr, VertexPtr );
+	//! SubmeshVertex array.
+	DECLARE_VECTOR( SubmeshVertex, SubmeshVertex );
 	//! Mesh pointer array
 	DECLARE_MAP( castor::String, MeshSPtr, MeshPtrStr );
 	//! MovableObject pointer map, sorted by name
@@ -144,8 +90,6 @@ namespace castor3d
 	DECLARE_VECTOR( BoneSPtr, BonePtr );
 	//! Bone pointer map sorted by name
 	DECLARE_MAP( castor::String, BoneSPtr, BonePtrStr );
-	//! BonedVertex pointer array
-	DECLARE_VECTOR( BonedVertexSPtr, BonedVertexPtr );
 	DECLARE_MAP( castor::String, SubmeshComponentSPtr, SubmeshComponentStr );
 
 	//@}

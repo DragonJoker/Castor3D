@@ -115,13 +115,19 @@ namespace castor3d
 		setMaterial( nullptr, p_mat, false );
 	}
 
-	inline BufferElementGroupSPtr Submesh::operator[]( uint32_t p_index )const
+	inline InterleavedVertex const & Submesh::operator[]( uint32_t p_index )const
 	{
 		REQUIRE( p_index < m_points.size() );
 		return m_points[p_index];
 	}
 
-	inline BufferElementGroupSPtr Submesh::getPoint( uint32_t p_index )const
+	inline InterleavedVertex const & Submesh::getPoint( uint32_t p_index )const
+	{
+		REQUIRE( p_index < m_points.size() );
+		return m_points[p_index];
+	}
+
+	inline InterleavedVertex & Submesh::getPoint( uint32_t p_index )
 	{
 		REQUIRE( p_index < m_points.size() );
 		return m_points[p_index];
@@ -152,34 +158,34 @@ namespace castor3d
 		return m_sphere;
 	}
 
-	inline VertexPtrArray const & Submesh::getPoints()const
+	inline InterleavedVertexArray const & Submesh::getPoints()const
 	{
 		return m_points;
 	}
 
-	inline VertexPtrArray & Submesh::getPoints()
+	inline InterleavedVertexArray & Submesh::getPoints()
 	{
 		return m_points;
 	}
 
-	inline VertexBuffer const & Submesh::getVertexBuffer()const
+	inline renderer::VertexBuffer< InterleavedVertex > const & Submesh::getVertexBuffer()const
 	{
-		return m_vertexBuffer;
+		return *m_vertexBuffer;
 	}
 
-	inline VertexBuffer & Submesh::getVertexBuffer()
+	inline renderer::VertexBuffer< InterleavedVertex > & Submesh::getVertexBuffer()
 	{
-		return m_vertexBuffer;
+		return *m_vertexBuffer;
 	}
 
-	inline IndexBuffer const & Submesh::getIndexBuffer()const
+	inline renderer::Buffer< uint32_t > const & Submesh::getIndexBuffer()const
 	{
-		return m_indexBuffer;
+		return *m_indexBuffer;
 	}
 
-	inline IndexBuffer & Submesh::getIndexBuffer()
+	inline renderer::Buffer< uint32_t > & Submesh::getIndexBuffer()
 	{
-		return m_indexBuffer;
+		return *m_indexBuffer;
 	}
 
 	inline bool Submesh::isInitialised()const
@@ -284,14 +290,14 @@ namespace castor3d
 		return m_components;
 	}
 
-	inline Topology Submesh::getTopology()const
+	inline renderer::PrimitiveTopology Submesh::getTopology()const
 	{
 		return m_topology;
 	}
 
-	inline void Submesh::setTopology( Topology p_value )
+	inline void Submesh::setTopology( renderer::PrimitiveTopology value )
 	{
-		m_topology = p_value;
+		m_topology = value;
 	}
 
 	//*********************************************************************************************

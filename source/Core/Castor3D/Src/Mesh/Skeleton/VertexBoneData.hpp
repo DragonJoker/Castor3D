@@ -46,6 +46,7 @@ namespace castor3d
 		//!\~french		Les poids des bones.
 		std::array< real, C3D_MAX_BONES_PER_VERTEX > m_weights;
 	};
+	using VertexBoneDataArray = std::vector< VertexBoneData >;
 }
 
 #endif

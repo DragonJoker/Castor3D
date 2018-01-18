@@ -1,19 +1,18 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_SUBMESH_H___
-#define ___C3D_SUBMESH_H___
+#ifndef ___C3D_Submesh_H___
+#define ___C3D_Submesh_H___
 
 #include "Castor3DPrerequisites.hpp"
-#include "Mesh.hpp"
-#include "VertexGroup.hpp"
-#include "Mesh/Buffer/VertexBuffer.hpp"
-#include "Mesh/Buffer/IndexBuffer.hpp"
 
+#include "Mesh/Mesh.hpp"
+#include "Mesh/VertexGroup.hpp"
 #include "Mesh/Skeleton/VertexBoneData.hpp"
-#include "Mesh/Buffer/BufferDeclaration.hpp"
 
 #include <Design/OwnedBy.hpp>
+
+#include <VertexBuffer.hpp>
 
 namespace castor3d
 {
@@ -70,12 +69,19 @@ namespace castor3d
 		 */
 		C3D_API void initialise();
 		/**
-		 *\~english
-		 *\brief		Cleans the submesh
-		 *\~french
-		 *\brief		Nettoie le sous-maillage
-		 */
+		*\~english
+		*\brief		Cleans the submesh
+		*\~french
+		*\brief		Nettoie le sous-maillage
+		*/
 		C3D_API void cleanup();
+		/**
+		*\~english
+		*\brief		Updates the buffers.
+		*\~french
+		*\brief		Met à jour les tampons.
+		*/
+		C3D_API void update();
 		/**
 		 *\~english
 		 *\brief		Computes the containers (cube and sphere)
@@ -131,7 +137,7 @@ namespace castor3d
 		 *\param[in]	z	Coordonnée Y
 		 *\return		Le vertex créé
 		 */
-		C3D_API BufferElementGroupSPtr addPoint( real x, real y, real z );
+		C3D_API InterleavedVertex addPoint( real x, real y, real z );
 		/**
 		 *\~english
 		 *\brief		Adds a vertex to my list
@@ -142,7 +148,7 @@ namespace castor3d
 		 *\param[in]	value	Le point
 		 *\return		Le vertex créé
 		 */
-		C3D_API BufferElementGroupSPtr addPoint( castor::Point3r const & value );
+		C3D_API InterleavedVertex addPoint( castor::Point3r const & value );
 		/**
 		 *\~english
 		 *\brief		Creates and Adds a vertex to my list
@@ -153,7 +159,7 @@ namespace castor3d
 		 *\param[in]	value	Les coordonnées du point
 		 *\return		Le vertex créé
 		 */
-		C3D_API BufferElementGroupSPtr addPoint( real * value );
+		C3D_API InterleavedVertex addPoint( real * value );
 		/**
 		 *\~english
 		 *\brief		Adds a points list to my list.
@@ -166,26 +172,6 @@ namespace castor3d
 		 */
 		C3D_API void addPoints( InterleavedVertex const * const begin
 			, InterleavedVertex const * const end );
-		/**
-		 *\~english
-		 *\brief		Draws the submesh.
-		 *\param[in]	geometryBuffers	The geometry buffers used to draw this submesh.
-		 *\~french
-		 *\brief		Dessine le sous-maillage.
-		 *\param[in]	geometryBuffers	Les tampons de géométrie utilisés pour dessiner ce sous-maillage.
-		 */
-		C3D_API void draw( GeometryBuffers const & geometryBuffers );
-		/**
-		 *\~english
-		 *\brief		Draws the submesh.
-		 *\param[in]	geometryBuffers	The geometry buffers used to draw this submesh.
-		 *\param[in]	count			The instances count.
-		 *\~french
-		 *\brief		Dessine le sous-maillage.
-		 *\param[in]	geometryBuffers	Les tampons de géométrie utilisés pour dessiner ce sous-maillage.
-		 *\param[in]	count			Le nombre d'instances.
-		 */
-		C3D_API void drawInstanced( GeometryBuffers const & geometryBuffers, uint32_t count );
 		/**
 		 *\~english
 		 *\brief		Generates normals and tangents
@@ -232,7 +218,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Récupère les tampons qui doivent aller dans un VAO.
 		 */
-		C3D_API void gatherBuffers( VertexBufferArray & buffers );
+		C3D_API void gatherBuffers( renderer::VertexBufferCRefArray & buffers );
 		/**
 		 *\~english
 		 *\brief		Adds a points list to my list
@@ -278,7 +264,7 @@ namespace castor3d
 		 *\param[in]	index	L'index
 		 *\return		La valeur
 		 */
-		inline BufferElementGroupSPtr operator[]( uint32_t index )const;
+		inline InterleavedVertex const & operator[]( uint32_t index )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the point at given index
@@ -289,7 +275,18 @@ namespace castor3d
 		 *\param[in]	index	L'index
 		 *\return		La valeur
 		 */
-		inline BufferElementGroupSPtr getPoint( uint32_t index )const;
+		inline InterleavedVertex const & getPoint( uint32_t index )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the point at given index
+		 *\param[in]	index	The index
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le point à l'index donné
+		 *\param[in]	index	L'index
+		 *\return		La valeur
+		 */
+		inline InterleavedVertex & getPoint( uint32_t index );
 		/**
 		 *\~english
 		 *\return		The material.
@@ -331,42 +328,42 @@ namespace castor3d
 		 *\~french
 		 *\return		Le tableau de points.
 		 */
-		inline VertexPtrArray const & getPoints()const;
+		inline InterleavedVertexArray const & getPoints()const;
 		/**
 		 *\~english
 		 *\return		The points array.
 		 *\~french
 		 *\return		Le tableau de points.
 		 */
-		inline VertexPtrArray & getPoints();
+		inline InterleavedVertexArray & getPoints();
 		/**
 		 *\~english
 		 *\return		The VertexBuffer.
 		 *\~french
 		 *\return		Le VertexBuffer.
 		 */
-		inline VertexBuffer const & getVertexBuffer()const;
+		inline renderer::VertexBuffer< InterleavedVertex > const & getVertexBuffer()const;
 		/**
 		 *\~english
 		 *\return		The VertexBuffer.
 		 *\~french
 		 *\return		Le VertexBuffer.
 		 */
-		inline VertexBuffer & getVertexBuffer();
+		inline renderer::VertexBuffer< InterleavedVertex > & getVertexBuffer();
 		/**
 		 *\~english
 		 *\return		The IndexBuffer.
 		 *\~french
 		 *\return		L'IndexBuffer.
 		 */
-		inline IndexBuffer const & getIndexBuffer()const;
+		inline renderer::Buffer< uint32_t > const & getIndexBuffer()const;
 		/**
 		 *\~english
 		 *\return		The IndexBuffer.
 		 *\~french
 		 *\return		L'IndexBuffer.
 		 */
-		inline IndexBuffer & getIndexBuffer();
+		inline renderer::Buffer< uint32_t > & getIndexBuffer();
 		/**
 		 *\~english
 		 *\return		The initialisation status.
@@ -504,7 +501,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La topologie.
 		 */
-		inline Topology getTopology()const;
+		inline renderer::PrimitiveTopology getTopology()const;
 		/**
 		 *\~english
 		 *\brief		Sets the topology.
@@ -513,7 +510,7 @@ namespace castor3d
 		 *\brief		Définit la topologie.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setTopology( Topology value );
+		inline void setTopology( renderer::PrimitiveTopology value );
 
 	private:
 		void doGenerateVertexBuffer();
@@ -536,10 +533,10 @@ namespace castor3d
 		bool m_dirty{ true };
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
-		VertexBuffer m_vertexBuffer;
+		renderer::VertexBufferPtr< InterleavedVertex > m_vertexBuffer;
 		//!\~english	The index buffer.
 		//!\~french		Le tampon d'indices.
-		IndexBuffer m_indexBuffer;
+		renderer::BufferPtr< uint32_t > m_indexBuffer;
 		//!\~english	The Material assigned at creation.
 		//!\~french		Le Materiau affecté à la création.
 		MaterialWPtr m_defaultMaterial;
@@ -549,12 +546,9 @@ namespace castor3d
 		//!\~english	The spheric container.
 		//!\~french		Le conteneur sphère.
 		castor::BoundingSphere m_sphere;
-		//!\~english	The vertex data array.
-		//!\~french		Le tableau de données des sommets.
-		BytePtrList m_pointsData;
 		//!\~english	The vertex pointer array.
 		//!\~french		Le tableau de sommets.
-		VertexPtrArray m_points;
+		InterleavedVertexArray m_points;
 		//!\~english	The parent mesh.
 		//!\~french		Le maillage parent.
 		Mesh & m_parentMesh;
@@ -572,9 +566,8 @@ namespace castor3d
 		IndexMappingSPtr m_indexMapping;
 		//!\~english	The draw topology.
 		//!\\~french	La topologie de dessin.
-		Topology m_topology{ Topology::eTriangles };
+		renderer::PrimitiveTopology m_topology{ renderer::PrimitiveTopology::eTriangleList };
 
-		friend class GeometryBuffers;
 		friend class BinaryWriter< Submesh >;
 		friend class BinaryParser< Submesh >;
 	};

@@ -21,7 +21,7 @@ namespace castor3d
 	*/
 	struct GpuBufferOffset
 	{
-		GpuBufferSPtr buffer;
+		renderer::BufferBase * buffer;
 		uint32_t offset;
 	};
 	/*!
@@ -37,7 +37,7 @@ namespace castor3d
 		: public castor::OwnedBy< RenderSystem >
 	{
 	public:
-		using BufferArray = std::vector< GpuBufferSPtr >;
+		using BufferArray = std::vector< renderer::BufferBasePtr >;
 
 	public:
 		/**

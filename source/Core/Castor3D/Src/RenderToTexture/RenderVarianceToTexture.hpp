@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Render/Viewport.hpp"
 
-#include "Mesh/Buffer/BufferDeclaration.hpp"
+#include <VertexLayout.hpp>
 
 #include <Design/OwnedBy.hpp>
 
@@ -72,7 +72,7 @@ namespace castor3d
 		 */
 		C3D_API void render( castor::Position const & position
 			, castor::Size const & size
-			, TextureLayout const & texture );
+			, renderer::Texture const & texture );
 
 	private:
 		/**
@@ -95,10 +95,10 @@ namespace castor3d
 		 */
 		C3D_API void doRender( castor::Position const & position
 			, castor::Size const & size
-			, TextureLayout const & texture
-			, RenderPipeline & pipeline
+			, renderer::Texture const & texture
+			, renderer::Pipeline & pipeline
 			, MatrixUbo & matrixUbo
-			, GeometryBuffers const & geometryBuffers );
+			, renderer::GeometryBuffers const & geometryBuffers );
 		/**
 		 *\~english
 		 *\brief		Creates the render a 2D texture shader program.
@@ -107,7 +107,7 @@ namespace castor3d
 		 *\brief		Crée le programme shader de dessin de texture 2D.
 		 *\return		Le programme.
 		 */
-		ShaderProgramSPtr doCreateProgramDepth();
+		renderer::ShaderProgramPtr doCreateProgramDepth();
 		/**
 		 *\~english
 		 *\brief		Creates the render a 2D texture shader program.
@@ -116,7 +116,7 @@ namespace castor3d
 		 *\brief		Crée le programme shader de dessin de texture 2D.
 		 *\return		Le programme.
 		 */
-		ShaderProgramSPtr doCreateProgramVariance();
+		renderer::ShaderProgramPtr doCreateProgramVariance();
 		void doInitialiseDepth();
 		void doInitialiseVariance();
 
@@ -127,29 +127,30 @@ namespace castor3d
 		//!\~english	The Viewport used when rendering a texture into to a frame buffer.
 		//!\~french		Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
 		Viewport m_viewport;
-		//!	6 * [2(vertex position) + 2(texture coordinates)]
-		std::array< castor::real, 6 * ( 2 + 2 ) > m_bufferVertex;
 		//!\~english	Buffer elements declaration.
 		//!\~french		Déclaration des éléments d'un vertex.
-		castor3d::BufferDeclaration m_declaration;
-		//!\~english	Vertex array (quad definition).
-		//!\~french		Tableau de vertex (définition du quad).
-		std::array< castor3d::BufferElementGroupSPtr, 6 > m_arrayVertex;
+		renderer::VertexLayoutPtr m_layout;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
-		VertexBufferSPtr m_vertexBuffer;
+		renderer::VertexBufferPtr< TexturedQuad > m_vertexBuffer;
 		//!\~english	The GeometryBuffers used when rendering a texture to the current frame buffer.
 		//!\~french		Le GeometryBuffers utilisé lors du dessin d'une texture dans le tampon d'image courant.
-		GeometryBuffersSPtr m_geometryBuffersDepth;
+		renderer::GeometryBuffersPtr m_geometryBuffersDepth;
+		//!\~english	The shader program.
+		//!\~french		Le programme shader.
+		renderer::ShaderProgramPtr m_programDepth;
+		//!\~english	The pipeline used to render a texture in the current draw-bound framebuffer.
+		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image actuellement activé en dessin.
+		renderer::PipelinePtr m_pipelineDepth;
 		//!\~english	The GeometryBuffers used when rendering a texture to the current frame buffer.
 		//!\~french		Le GeometryBuffers utilisé lors du dessin d'une texture dans le tampon d'image courant.
-		GeometryBuffersSPtr m_geometryBuffersVariance;
+		renderer::GeometryBuffersPtr m_geometryBuffersVariance;
+		//!\~english	The shader program.
+		//!\~french		Le programme shader.
+		renderer::ShaderProgramPtr m_programVariance;
 		//!\~english	The pipeline used to render a texture in the current draw-bound framebuffer.
 		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image actuellement activé en dessin.
-		RenderPipelineUPtr m_pipelineDepth;
-		//!\~english	The pipeline used to render a texture in the current draw-bound framebuffer.
-		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image actuellement activé en dessin.
-		RenderPipelineUPtr m_pipelineVariance;
+		renderer::PipelinePtr m_pipelineVariance;
 		//!\~english	The sampler for the texture.
 		//!\~french		Le sampler pour la texture.
 		SamplerSPtr m_sampler;

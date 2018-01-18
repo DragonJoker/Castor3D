@@ -144,7 +144,7 @@ namespace Bloom
 		{
 			BufferElementDeclaration( ShaderProgram::Position
 				, uint32_t( ElementUsage::ePosition )
-				, ElementType::eVec2 ),
+				, renderer::AttributeFormat::eVec2 ),
 		} )
 		, m_hiPassSurfaces(
 		{

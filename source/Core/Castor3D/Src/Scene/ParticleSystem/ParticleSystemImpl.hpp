@@ -91,7 +91,7 @@ namespace castor3d
 		 *\param[in]	p_defaultValue	La valeur par défaut de la variable.
 		 */
 		C3D_API virtual void addParticleVariable( castor::String const & p_name
-			, ElementType p_type
+			, renderer::AttributeFormat p_type
 			, castor::String const & p_defaultValue ) = 0;
 		/**
 		 *\~english
