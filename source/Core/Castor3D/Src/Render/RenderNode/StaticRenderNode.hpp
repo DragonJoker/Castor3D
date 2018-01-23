@@ -23,7 +23,7 @@ namespace castor3d
 			, PassRenderNode && p_passNode
 			, ModelMatrixUbo & p_modelMatrixBuffer
 			, ModelUbo & p_modelBuffer
-			, GeometryBuffers & p_buffers
+			, renderer::GeometryBuffers & p_buffers
 			, SceneNode & p_sceneNode
 			, Submesh & p_data
 			, Geometry & p_instance );

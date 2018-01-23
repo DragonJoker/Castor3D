@@ -23,7 +23,7 @@ namespace castor3d
 	class StructuredShaderBuffer
 	{
 	public:
-		using renderer::AttributeFormat = typename ElementTypeTraits::renderer::AttributeFormat;
+		using ElementType = typename ElementTypeTraits::ElementType;
 		static uint32_t constexpr ElementSize = ElementTypeTraits::ElementSize;
 
 	public:
@@ -62,7 +62,7 @@ namespace castor3d
 		 *\remarks		Définit l'ID de l'élément.
 		 *\param[in]	element	L'élément.
 		 */
-		C3D_API uint32_t add( renderer::AttributeFormat & element );
+		C3D_API uint32_t add( ElementType & element );
 		/**
 		 *\~english
 		 *\brief		Removes an element from the buffer.
@@ -71,7 +71,7 @@ namespace castor3d
 		 *\brief		Supprime un élément du tampon.
 		 *\param[in]	element	L'élément.
 		 */
-		C3D_API void remove( renderer::AttributeFormat & element );
+		C3D_API void remove( ElementType & element );
 		/**
 		 *\~english
 		 *\brief		Updates the buffer.
@@ -110,7 +110,7 @@ namespace castor3d
 		uint32_t const m_maxElemCount;
 		//!\~english	The connections to change signal for current elements.
 		//!\~french		Les connexions aux signaux de changement des éléments actuels.
-		std::vector< typename renderer::AttributeFormat::OnChangedConnection > m_connections;
+		std::vector< typename ElementType::OnChangedConnection > m_connections;
 	};
 }
 

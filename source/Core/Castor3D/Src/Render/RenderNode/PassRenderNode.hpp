@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_PassRenderNode_H___
@@ -19,7 +19,7 @@ namespace castor3d
 	struct PassRenderNode
 	{
 		C3D_API PassRenderNode( Pass & p_pass
-			, ShaderProgram const & p_program );
+			, renderer::ShaderProgram const & p_program );
 
 		//!\~english	The pass.
 		//!\~french		La passe.

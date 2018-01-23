@@ -14,7 +14,7 @@
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
 #include "Texture/TextureLayout.hpp"
-#include "Texture/TextureImage.hpp"
+#include "Texture/TextureView.hpp"
 
 #include <Design/ArrayView.hpp>
 

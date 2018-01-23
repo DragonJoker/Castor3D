@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "ParticleSystemImpl.hpp"
 
-#include "Mesh/Buffer/BufferDeclaration.hpp"
+#include <Pipeline/VertexLayout.hpp>
 #include "Shader/UniformBuffer.hpp"
 #include "Texture/TextureUnit.hpp"
 

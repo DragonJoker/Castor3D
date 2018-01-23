@@ -1,7 +1,7 @@
 ﻿#include "ShadowMapPassDirectional.hpp"
 
 #include "Shader/ShaderProgram.hpp"
-#include "Texture/TextureImage.hpp"
+#include "Texture/TextureView.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/Light/DirectionalLight.hpp"
 

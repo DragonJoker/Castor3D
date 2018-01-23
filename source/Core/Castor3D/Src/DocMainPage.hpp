@@ -108,7 +108,7 @@
  *<li>Particle system has been implemented, giving to the user the implementation choice (CPU through class override, GPU through Transform Feedback or Compute shaders).</li>
  *<li>Fixed the lighting in GLSL, to make it behave properly without dirty hacks.</li>
  *<li>Compute shaders have been integrated to Castor3D, along with Shader Storage Buffers and Atomic Counter Buffers.</li>
- *<li>Textures implementation have been completely reviewed, we now have TextureLayout, which holds the TextureImage(s), and the TextureStorage per image.\n
+ *<li>Textures implementation have been completely reviewed, we now have TextureLayout, which holds the TextureView(s), and the TextureStorage per image.\n
  * It has allowed the creation of cube textures.</li>
  *<li>Textures transfer to RAM has been fixed.</li>
  *<li>Billboard rendering no more uses a geometry shader, it now relies on hardware instantiation of a quad, and the positions are given as side attributes.</li>
@@ -644,7 +644,7 @@
  *<li>Particle system has been implemented, giving to the user the implementation choice (CPU through class override, GPU through Transform Feedback or Compute shaders).</li>
  *<li>Fixed the lighting in GLSL, to make it behave properly without dirty hacks.</li>
  *<li>Compute shaders have been integrated to Castor3D, along with Shader Storage Buffers and Atomic Counter Buffers.</li>
- *<li>Textures implementation have been completely reviewed, we now have TextureLayout, which holds the TextureImage(s), and the TextureStorage per image.\n
+ *<li>Textures implementation have been completely reviewed, we now have TextureLayout, which holds the TextureView(s), and the TextureStorage per image.\n
  * It has allowed the creation of cube textures.</li>
  *<li>Textures transfer to RAM has been fixed.</li>
  *<li>Billboard rendering no more uses a geometry shader, it now relies on hardware instantiation of a quad, and the positions are given as side attributes.</li>

@@ -116,8 +116,8 @@ namespace castor3d
 		{
 			String name;
 			p_params[0]->get( name );
-			parsingContext->pScene = parsingContext->m_pParser->getEngine()->getSceneCache().add( name );
-			parsingContext->mapScenes.insert( std::make_pair( name, parsingContext->pScene ) );
+			parsingContext->scene = parsingContext->m_pParser->getEngine()->getSceneCache().add( name );
+			parsingContext->mapScenes.insert( std::make_pair( name, parsingContext->scene ) );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eScene )
@@ -149,7 +149,7 @@ namespace castor3d
 		else
 		{
 			p_params[0]->get( parsingContext->strName );
-			parsingContext->pMaterial = parsingContext->m_pParser->getEngine()->getMaterialCache().add( parsingContext->strName
+			parsingContext->material = parsingContext->m_pParser->getEngine()->getMaterialCache().add( parsingContext->strName
 				, MaterialType::eLegacy );
 		}
 	}
@@ -183,8 +183,8 @@ namespace castor3d
 		else
 		{
 			String name;
-			parsingContext->pOverlay = parsingContext->m_pParser->getEngine()->getOverlayCache().add( p_params[0]->get( name ), OverlayType::ePanel, nullptr, parsingContext->pOverlay );
-			parsingContext->pOverlay->setVisible( false );
+			parsingContext->overlay = parsingContext->m_pParser->getEngine()->getOverlayCache().add( p_params[0]->get( name ), OverlayType::ePanel, nullptr, parsingContext->overlay );
+			parsingContext->overlay->setVisible( false );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::ePanelOverlay )
@@ -200,8 +200,8 @@ namespace castor3d
 		else
 		{
 			String name;
-			parsingContext->pOverlay = parsingContext->m_pParser->getEngine()->getOverlayCache().add( p_params[0]->get( name ), OverlayType::eBorderPanel, nullptr, parsingContext->pOverlay );
-			parsingContext->pOverlay->setVisible( false );
+			parsingContext->overlay = parsingContext->m_pParser->getEngine()->getOverlayCache().add( p_params[0]->get( name ), OverlayType::eBorderPanel, nullptr, parsingContext->overlay );
+			parsingContext->overlay->setVisible( false );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eBorderPanelOverlay )
@@ -217,8 +217,8 @@ namespace castor3d
 		else
 		{
 			String name;
-			parsingContext->pOverlay = parsingContext->m_pParser->getEngine()->getOverlayCache().add( p_params[0]->get( name ), OverlayType::eText, nullptr, parsingContext->pOverlay );
-			parsingContext->pOverlay->setVisible( false );
+			parsingContext->overlay = parsingContext->m_pParser->getEngine()->getOverlayCache().add( p_params[0]->get( name ), OverlayType::eText, nullptr, parsingContext->overlay );
+			parsingContext->overlay->setVisible( false );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eTextOverlay )
@@ -234,7 +234,7 @@ namespace castor3d
 		else
 		{
 			String name;
-			parsingContext->pSampler = parsingContext->m_pParser->getEngine()->getSamplerCache().add( p_params[0]->get( name ) );
+			parsingContext->sampler = parsingContext->m_pParser->getEngine()->getSamplerCache().add( p_params[0]->get( name ) );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eSampler )
@@ -259,13 +259,13 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			if ( parsingContext->pWindow )
+			if ( parsingContext->window )
 			{
 				PARSING_ERROR( cuT( "Can't create more than one render window" ) );
 			}
@@ -273,7 +273,7 @@ namespace castor3d
 			{
 				String name;
 				p_params[0]->get( name );
-				parsingContext->pWindow = parsingContext->pScene->getEngine()->getRenderWindowCache().add( name );
+				parsingContext->window = parsingContext->scene->getEngine()->getRenderWindowCache().add( name );
 			}
 		}
 	}
@@ -283,9 +283,9 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pWindow )
+		if ( parsingContext->window )
 		{
-			parsingContext->pRenderTarget = parsingContext->m_pParser->getEngine()->getRenderTargetCache().add( TargetType::eWindow );
+			parsingContext->renderTarget = parsingContext->m_pParser->getEngine()->getRenderTargetCache().add( TargetType::eWindow );
 			parsingContext->iInt16 = 0;
 		}
 		else
@@ -299,7 +299,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pWindow )
+		if ( !parsingContext->window )
 		{
 			PARSING_ERROR( cuT( "No window initialised." ) );
 		}
@@ -307,7 +307,7 @@ namespace castor3d
 		{
 			bool bValue;
 			p_params[0]->get( bValue );
-			parsingContext->pWindow->setVSync( bValue );
+			parsingContext->window->setVSync( bValue );
 		}
 	}
 	END_ATTRIBUTE()
@@ -316,7 +316,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pWindow )
+		if ( !parsingContext->window )
 		{
 			PARSING_ERROR( cuT( "No window initialised." ) );
 		}
@@ -325,7 +325,7 @@ namespace castor3d
 
 			bool bValue;
 			p_params[0]->get( bValue );
-			parsingContext->pWindow->setFullscreen( bValue );
+			parsingContext->window->setFullscreen( bValue );
 		}
 	}
 	END_ATTRIBUTE()
@@ -335,7 +335,7 @@ namespace castor3d
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		String name;
 
-		if ( !parsingContext->pRenderTarget )
+		if ( !parsingContext->renderTarget )
 		{
 			PARSING_ERROR( cuT( "No target initialised." ) );
 		}
@@ -345,7 +345,7 @@ namespace castor3d
 
 			if ( it != parsingContext->mapScenes.end() )
 			{
-				parsingContext->pRenderTarget->setScene( it->second );
+				parsingContext->renderTarget->setScene( it->second );
 			}
 			else
 			{
@@ -360,15 +360,15 @@ namespace castor3d
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		String name;
 
-		if ( !parsingContext->pRenderTarget )
+		if ( !parsingContext->renderTarget )
 		{
 			PARSING_ERROR( cuT( "No target initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			if ( parsingContext->pRenderTarget->getScene() )
+			if ( parsingContext->renderTarget->getScene() )
 			{
-				parsingContext->pRenderTarget->setCamera( parsingContext->pRenderTarget->getScene()->getCameraCache().find( p_params[0]->get( name ) ) );
+				parsingContext->renderTarget->setCamera( parsingContext->renderTarget->getScene()->getCameraCache().find( p_params[0]->get( name ) ) );
 			}
 			else
 			{
@@ -382,14 +382,14 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pRenderTarget )
+		if ( !parsingContext->renderTarget )
 		{
 			PARSING_ERROR( cuT( "No target initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
 			Size size;
-			parsingContext->pRenderTarget->setSize( p_params[0]->get( size ) );
+			parsingContext->renderTarget->setSize( p_params[0]->get( size ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -398,7 +398,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pRenderTarget )
+		if ( !parsingContext->renderTarget )
 		{
 			PARSING_ERROR( cuT( "No target initialised." ) );
 		}
@@ -409,7 +409,7 @@ namespace castor3d
 
 			if ( ePF < PixelFormat::eD16 )
 			{
-				parsingContext->pRenderTarget->setPixelFormat( ePF );
+				parsingContext->renderTarget->setPixelFormat( ePF );
 			}
 			else
 			{
@@ -423,7 +423,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pRenderTarget )
+		if ( !parsingContext->renderTarget )
 		{
 			PARSING_ERROR( cuT( "No target initialised." ) );
 		}
@@ -434,8 +434,8 @@ namespace castor3d
 
 			if ( rIntraOcularDistance > 0 )
 			{
-				//l_parsingContext->pRenderTarget->setStereo( true );
-				//l_parsingContext->pRenderTarget->setIntraOcularDistance( rIntraOcularDistance );
+				//l_parsingContext->renderTarget->setStereo( true );
+				//l_parsingContext->renderTarget->setIntraOcularDistance( rIntraOcularDistance );
 			}
 		}
 	}
@@ -445,7 +445,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pRenderTarget )
+		if ( !parsingContext->renderTarget )
 		{
 			PARSING_ERROR( cuT( "No target initialised." ) );
 		}
@@ -469,8 +469,8 @@ namespace castor3d
 			}
 			else
 			{
-				PostEffectSPtr effect = engine->getRenderTargetCache().getPostEffectFactory().create( name, *parsingContext->pRenderTarget, *engine->getRenderSystem(), parameters );
-				parsingContext->pRenderTarget->addPostEffect( effect );
+				PostEffectSPtr effect = engine->getRenderTargetCache().getPostEffectFactory().create( name, *parsingContext->renderTarget, *engine->getRenderSystem(), parameters );
+				parsingContext->renderTarget->addPostEffect( effect );
 			}
 		}
 	}
@@ -480,7 +480,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pRenderTarget )
+		if ( !parsingContext->renderTarget )
 		{
 			PARSING_ERROR( cuT( "No target initialised." ) );
 		}
@@ -500,7 +500,7 @@ namespace castor3d
 				parameters.parse( p_params[1]->get( tmp ) );
 			}
 
-			parsingContext->pRenderTarget->setToneMappingType( name, parameters );
+			parsingContext->renderTarget->setToneMappingType( name, parameters );
 		}
 	}
 	END_ATTRIBUTE()
@@ -509,7 +509,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pRenderTarget )
+		if ( !parsingContext->renderTarget )
 		{
 			PARSING_ERROR( cuT( "No render target initialised." ) );
 		}
@@ -520,13 +520,13 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pRenderTarget->getTargetType() == TargetType::eTexture )
+		if ( parsingContext->renderTarget->getTargetType() == TargetType::eTexture )
 		{
-			parsingContext->pTextureUnit->setRenderTarget( parsingContext->pRenderTarget );
+			parsingContext->textureUnit->setRenderTarget( parsingContext->renderTarget );
 		}
 		else
 		{
-			parsingContext->pWindow->setRenderTarget( parsingContext->pRenderTarget );
+			parsingContext->window->setRenderTarget( parsingContext->renderTarget );
 		}
 	}
 	END_ATTRIBUTE_POP()
@@ -535,7 +535,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSampler )
+		if ( !parsingContext->sampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
@@ -543,7 +543,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			p_params[0]->get( uiMode );
-			parsingContext->pSampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode( uiMode ) );
+			parsingContext->sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -552,7 +552,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSampler )
+		if ( !parsingContext->sampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
@@ -560,7 +560,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			p_params[0]->get( uiMode );
-			parsingContext->pSampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode( uiMode ) );
+			parsingContext->sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -569,7 +569,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSampler )
+		if ( !parsingContext->sampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
@@ -577,7 +577,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			p_params[0]->get( uiMode );
-			parsingContext->pSampler->setInterpolationMode( InterpolationFilter::eMip, InterpolationMode( uiMode ) );
+			parsingContext->sampler->setInterpolationMode( InterpolationFilter::eMip, InterpolationMode( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -586,7 +586,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSampler )
+		if ( !parsingContext->sampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
@@ -597,7 +597,7 @@ namespace castor3d
 
 			if ( rValue >= -1000 && rValue <= 1000 )
 			{
-				parsingContext->pSampler->setMinLod( rValue );
+				parsingContext->sampler->setMinLod( rValue );
 			}
 			else
 			{
@@ -611,7 +611,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSampler )
+		if ( !parsingContext->sampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
@@ -622,7 +622,7 @@ namespace castor3d
 
 			if ( rValue >= -1000 && rValue <= 1000 )
 			{
-				parsingContext->pSampler->setMaxLod( rValue );
+				parsingContext->sampler->setMaxLod( rValue );
 			}
 			else
 			{
@@ -636,7 +636,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSampler )
+		if ( !parsingContext->sampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
@@ -647,7 +647,7 @@ namespace castor3d
 
 			if ( rValue >= -1000 && rValue <= 1000 )
 			{
-				parsingContext->pSampler->setLodBias( rValue );
+				parsingContext->sampler->setLodBias( rValue );
 			}
 			else
 			{
@@ -661,7 +661,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSampler )
+		if ( !parsingContext->sampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
@@ -669,7 +669,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			p_params[0]->get( uiMode );
-			parsingContext->pSampler->setWrappingMode( TextureUVW::eU, WrapMode( uiMode ) );
+			parsingContext->sampler->setWrappingMode( TextureUVW::eU, WrapMode( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -678,7 +678,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSampler )
+		if ( !parsingContext->sampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
@@ -686,7 +686,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			p_params[0]->get( uiMode );
-			parsingContext->pSampler->setWrappingMode( TextureUVW::eV, WrapMode( uiMode ) );
+			parsingContext->sampler->setWrappingMode( TextureUVW::eV, WrapMode( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -695,7 +695,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSampler )
+		if ( !parsingContext->sampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
@@ -703,7 +703,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			p_params[0]->get( uiMode );
-			parsingContext->pSampler->setWrappingMode( TextureUVW::eW, WrapMode( uiMode ) );
+			parsingContext->sampler->setWrappingMode( TextureUVW::eW, WrapMode( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -712,7 +712,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSampler )
+		if ( !parsingContext->sampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
@@ -720,7 +720,7 @@ namespace castor3d
 		{
 			RgbaColour colour;
 			p_params[0]->get( colour );
-			parsingContext->pSampler->setBorderColour( colour );
+			parsingContext->sampler->setBorderColour( colour );
 		}
 	}
 	END_ATTRIBUTE()
@@ -729,7 +729,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSampler )
+		if ( !parsingContext->sampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
@@ -737,7 +737,7 @@ namespace castor3d
 		{
 			real rValue = 1000;
 			p_params[0]->get( rValue );
-			parsingContext->pSampler->setMaxAnisotropy( rValue );
+			parsingContext->sampler->setMaxAnisotropy( rValue );
 		}
 	}
 	END_ATTRIBUTE()
@@ -746,7 +746,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSampler )
+		if ( !parsingContext->sampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
@@ -754,7 +754,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			p_params[0]->get( uiMode );
-			parsingContext->pSampler->setComparisonMode( ComparisonMode( uiMode ) );
+			parsingContext->sampler->setComparisonMode( ComparisonMode( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -763,7 +763,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSampler )
+		if ( !parsingContext->sampler )
 		{
 			PARSING_ERROR( cuT( "No sampler initialised." ) );
 		}
@@ -771,7 +771,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			p_params[0]->get( uiMode );
-			parsingContext->pSampler->setComparisonFunc( renderer::CompareOp( uiMode ) );
+			parsingContext->sampler->setComparisonFunc( renderer::CompareOp( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -780,7 +780,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -798,7 +798,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -806,7 +806,7 @@ namespace castor3d
 		{
 			RgbColour clrBackground;
 			p_params[0]->get( clrBackground );
-			parsingContext->pScene->setBackgroundColour( clrBackground );
+			parsingContext->scene->setBackgroundColour( clrBackground );
 		}
 	}
 	END_ATTRIBUTE()
@@ -815,14 +815,14 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
 			Path path;
-			parsingContext->pScene->setBackground( p_context->m_file.getPath(), p_params[0]->get( path ) );
+			parsingContext->scene->setBackground( p_context->m_file.getPath(), p_params[0]->get( path ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -831,7 +831,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -848,7 +848,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -859,7 +859,7 @@ namespace castor3d
 		else
 		{
 			p_params[0]->get( parsingContext->strName );
-			parsingContext->pMaterial = parsingContext->pScene->getMaterialView().add( parsingContext->strName, parsingContext->pScene->getMaterialsType() );
+			parsingContext->material = parsingContext->scene->getMaterialView().add( parsingContext->strName, parsingContext->scene->getMaterialsType() );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eMaterial )
@@ -868,14 +868,14 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
 			String name;
-			parsingContext->pSampler = parsingContext->pScene->getSamplerView().add( p_params[0]->get( name ) );
+			parsingContext->sampler = parsingContext->scene->getSamplerView().add( p_params[0]->get( name ) );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eSampler )
@@ -883,16 +883,16 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserSceneCamera )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->pViewport.reset();
-		parsingContext->pSceneNode.reset();
+		parsingContext->viewport.reset();
+		parsingContext->sceneNode.reset();
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			parsingContext->pSceneNode.reset();
+			parsingContext->sceneNode.reset();
 			p_params[0]->get( parsingContext->strName );
 		}
 	}
@@ -901,11 +901,11 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserSceneLight )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->pLight.reset();
+		parsingContext->light.reset();
 		parsingContext->strName.clear();
-		parsingContext->pSceneNode.reset();
+		parsingContext->sceneNode.reset();
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -919,17 +919,17 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserSceneCameraNode )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->pSceneNode.reset();
+		parsingContext->sceneNode.reset();
 		String name;
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
 			p_params[0]->get( name );
-			parsingContext->pSceneNode = parsingContext->pScene->getSceneNodeCache().add( name, parsingContext->pScene->getCameraRootNode() );
+			parsingContext->sceneNode = parsingContext->scene->getSceneNodeCache().add( name, parsingContext->scene->getCameraRootNode() );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eNode )
@@ -937,17 +937,17 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserSceneSceneNode )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->pSceneNode.reset();
+		parsingContext->sceneNode.reset();
 		String name;
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
 			p_params[0]->get( name );
-			parsingContext->pSceneNode = parsingContext->pScene->getSceneNodeCache().add( name, parsingContext->pScene->getObjectRootNode() );
+			parsingContext->sceneNode = parsingContext->scene->getSceneNodeCache().add( name, parsingContext->scene->getObjectRootNode() );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eNode )
@@ -955,17 +955,17 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserSceneObject )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->pGeometry.reset();
+		parsingContext->geometry.reset();
 		String name;
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
 			p_params[0]->get( name );
-			parsingContext->pGeometry = parsingContext->pScene->getGeometryCache().add( name, nullptr, nullptr );
+			parsingContext->geometry = parsingContext->scene->getGeometryCache().add( name, nullptr, nullptr );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eObject )
@@ -974,7 +974,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -982,7 +982,7 @@ namespace castor3d
 		{
 			RgbColour clColour;
 			p_params[0]->get( clColour );
-			parsingContext->pScene->setAmbientLight( clColour );
+			parsingContext->scene->setAmbientLight( clColour );
 		}
 	}
 	END_ATTRIBUTE()
@@ -1003,7 +1003,7 @@ namespace castor3d
 		else
 		{
 			auto importer = engine->getImporterFactory().create( extension, *engine );
-			parsingContext->pScene->importExternal( pathFile, *importer );
+			parsingContext->scene->importExternal( pathFile, *importer );
 		}
 	}
 	END_ATTRIBUTE()
@@ -1012,7 +1012,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -1020,7 +1020,7 @@ namespace castor3d
 		{
 			String name;
 			p_params[0]->get( name );
-			parsingContext->pBillboards = parsingContext->pScene->getBillboardListCache().add( name, SceneNodeSPtr{} );
+			parsingContext->billboards = parsingContext->scene->getBillboardListCache().add( name, SceneNodeSPtr{} );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eBillboard )
@@ -1029,7 +1029,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -1037,7 +1037,7 @@ namespace castor3d
 		{
 			String name;
 			p_params[0]->get( name );
-			parsingContext->pAnimGroup = parsingContext->pScene->getAnimatedObjectGroupCache().add( name );
+			parsingContext->pAnimGroup = parsingContext->scene->getAnimatedObjectGroupCache().add( name );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eAnimGroup )
@@ -1046,18 +1046,18 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
 			String name;
-			parsingContext->pOverlay = parsingContext->pScene->getOverlayView().add( p_params[0]->get( name )
+			parsingContext->overlay = parsingContext->scene->getOverlayView().add( p_params[0]->get( name )
 				, OverlayType::ePanel
-				, parsingContext->pScene
-				, parsingContext->pOverlay );
-			parsingContext->pOverlay->setVisible( false );
+				, parsingContext->scene
+				, parsingContext->overlay );
+			parsingContext->overlay->setVisible( false );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::ePanelOverlay )
@@ -1066,15 +1066,15 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
 			String name;
-			parsingContext->pOverlay = parsingContext->pScene->getOverlayView().add( p_params[0]->get( name ), OverlayType::eBorderPanel, parsingContext->pScene, parsingContext->pOverlay );
-			parsingContext->pOverlay->setVisible( false );
+			parsingContext->overlay = parsingContext->scene->getOverlayView().add( p_params[0]->get( name ), OverlayType::eBorderPanel, parsingContext->scene, parsingContext->overlay );
+			parsingContext->overlay->setVisible( false );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eBorderPanelOverlay )
@@ -1083,15 +1083,15 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
 			String name;
-			parsingContext->pOverlay = parsingContext->pScene->getOverlayView().add( p_params[0]->get( name ), OverlayType::eText, parsingContext->pScene, parsingContext->pOverlay );
-			parsingContext->pOverlay->setVisible( false );
+			parsingContext->overlay = parsingContext->scene->getOverlayView().add( p_params[0]->get( name ), OverlayType::eText, parsingContext->scene, parsingContext->overlay );
+			parsingContext->overlay->setVisible( false );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eTextOverlay )
@@ -1100,7 +1100,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -1115,7 +1115,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -1123,7 +1123,7 @@ namespace castor3d
 		{
 			uint32_t value;
 			p_params[0]->get( value );
-			parsingContext->pScene->getFog().setType( FogType( value ) );
+			parsingContext->scene->getFog().setType( FogType( value ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -1132,7 +1132,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -1140,7 +1140,7 @@ namespace castor3d
 		{
 			float value;
 			p_params[0]->get( value );
-			parsingContext->pScene->getFog().setDensity( value );
+			parsingContext->scene->getFog().setDensity( value );
 		}
 	}
 	END_ATTRIBUTE()
@@ -1149,7 +1149,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -1163,8 +1163,8 @@ namespace castor3d
 			p_params[0]->get( value );
 			parsingContext->strName = value;
 			parsingContext->uiUInt32 = 0;
-			parsingContext->pSceneNode.reset();
-			parsingContext->pMaterial.reset();
+			parsingContext->sceneNode.reset();
+			parsingContext->material.reset();
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eParticleSystem )
@@ -1173,7 +1173,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -1186,17 +1186,17 @@ namespace castor3d
 		parsingContext->bBool1 = false;
 		p_params[0]->get( parsingContext->strName2 );
 
-		if ( parsingContext->pScene )
+		if ( parsingContext->scene )
 		{
-			auto const & cache = parsingContext->pScene->getMeshCache();
+			auto const & cache = parsingContext->scene->getMeshCache();
 
 			if ( cache.has( parsingContext->strName2 ) )
 			{
-				parsingContext->pMesh = cache.find( parsingContext->strName2 );
+				parsingContext->mesh = cache.find( parsingContext->strName2 );
 			}
 			else
 			{
-				parsingContext->pMesh.reset();
+				parsingContext->mesh.reset();
 			}
 		}
 		else
@@ -1210,7 +1210,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -1223,13 +1223,13 @@ namespace castor3d
 			String value;
 			p_params[0]->get( value );
 
-			if ( !parsingContext->pScene->getSceneNodeCache().has( value ) )
+			if ( !parsingContext->scene->getSceneNodeCache().has( value ) )
 			{
 				PARSING_ERROR( cuT( "No scene node named " ) + value );
 			}
 			else
 			{
-				parsingContext->pSceneNode = parsingContext->pScene->getSceneNodeCache().find( value );
+				parsingContext->sceneNode = parsingContext->scene->getSceneNodeCache().find( value );
 			}
 		}
 	}
@@ -1239,7 +1239,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -1260,7 +1260,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -1276,7 +1276,7 @@ namespace castor3d
 
 			if ( cache.has( name ) )
 			{
-				parsingContext->pMaterial = cache.find( name );
+				parsingContext->material = cache.find( name );
 			}
 			else
 			{
@@ -1290,7 +1290,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -1309,7 +1309,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -1323,13 +1323,13 @@ namespace castor3d
 		}
 		else
 		{
-			if ( !parsingContext->pMaterial )
+			if ( !parsingContext->material )
 			{
-				parsingContext->pMaterial = parsingContext->m_pParser->getEngine()->getMaterialCache().getDefaultMaterial();
+				parsingContext->material = parsingContext->m_pParser->getEngine()->getMaterialCache().getDefaultMaterial();
 			}
 
-			parsingContext->particleSystem = parsingContext->pScene->getParticleSystemCache().add( parsingContext->strName, parsingContext->pSceneNode, parsingContext->uiUInt32 );
-			parsingContext->particleSystem->setMaterial( parsingContext->pMaterial );
+			parsingContext->particleSystem = parsingContext->scene->getParticleSystemCache().add( parsingContext->strName, parsingContext->sceneNode, parsingContext->uiUInt32 );
+			parsingContext->particleSystem->setMaterial( parsingContext->material );
 			parsingContext->particleSystem->setDimensions( parsingContext->point2f );
 		}
 	}
@@ -1338,17 +1338,17 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserParticleSystemTFShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->pShaderProgram.reset();
-		parsingContext->eShaderObject = ShaderType::eCount;
+		parsingContext->shaderProgram.reset();
+		parsingContext->shaderStage = ShaderType::eCount;
 		parsingContext->bBool1 = true;
 		
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else
 		{
-			parsingContext->pShaderProgram = parsingContext->m_pParser->getEngine()->getShaderProgramCache().getNewProgram( true );
+			parsingContext->shaderProgram = parsingContext->m_pParser->getEngine()->getShaderProgramCache().getNewProgram( true );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eShaderProgram )
@@ -1356,17 +1356,17 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserParticleSystemCSShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->pShaderProgram.reset();
-		parsingContext->eShaderObject = ShaderType::eCount;
+		parsingContext->shaderProgram.reset();
+		parsingContext->shaderStage = ShaderType::eCount;
 		parsingContext->bBool1 = false;
 		
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else
 		{
-			parsingContext->pShaderProgram = parsingContext->m_pParser->getEngine()->getShaderProgramCache().getNewProgram( true );
+			parsingContext->shaderProgram = parsingContext->m_pParser->getEngine()->getShaderProgramCache().getNewProgram( true );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eShaderProgram )
@@ -1374,7 +1374,7 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserParticleType )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->pUniform.reset();
+		parsingContext->uniform.reset();
 
 		if ( !parsingContext->particleSystem )
 		{
@@ -1405,7 +1405,7 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserParticleVariable )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->pUniform.reset();
+		parsingContext->uniform.reset();
 		p_params[0]->get( parsingContext->strName2 );
 
 		if ( !parsingContext->particleSystem )
@@ -1438,7 +1438,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -1446,21 +1446,21 @@ namespace castor3d
 		{
 			String name;
 			p_params[0]->get( name );
-			SceneNodeSPtr pParent = parsingContext->pScene->getSceneNodeCache().find( name );
+			SceneNodeSPtr pParent = parsingContext->scene->getSceneNodeCache().find( name );
 
 			if ( pParent )
 			{
-				parsingContext->pSceneNode = pParent;
+				parsingContext->sceneNode = pParent;
 			}
 			else
 			{
 				PARSING_ERROR( cuT( "Node " ) + name + cuT( " does not exist" ) );
 			}
 
-			if ( parsingContext->pLight )
+			if ( parsingContext->light )
 			{
-				parsingContext->pLight->detach();
-				parsingContext->pSceneNode->attachObject( *parsingContext->pLight );
+				parsingContext->light->detach();
+				parsingContext->sceneNode->attachObject( *parsingContext->light );
 			}
 		}
 	}
@@ -1470,7 +1470,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -1478,8 +1478,8 @@ namespace castor3d
 		{
 			uint32_t uiType;
 			p_params[0]->get( uiType );
-			parsingContext->eLightType = LightType( uiType );
-			parsingContext->pLight = parsingContext->pScene->getLightCache().add( parsingContext->strName, parsingContext->pSceneNode, parsingContext->eLightType );
+			parsingContext->lightType = LightType( uiType );
+			parsingContext->light = parsingContext->scene->getLightCache().add( parsingContext->strName, parsingContext->sceneNode, parsingContext->lightType );
 		}
 	}
 	END_ATTRIBUTE()
@@ -1488,7 +1488,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pLight )
+		if ( !parsingContext->light )
 		{
 			PARSING_ERROR( cuT( "No Light initialised. Have you set it's type?" ) );
 		}
@@ -1496,7 +1496,7 @@ namespace castor3d
 		{
 			Point3f value;
 			p_params[0]->get( value );
-			parsingContext->pLight->setColour( value.ptr() );
+			parsingContext->light->setColour( value.ptr() );
 		}
 	}
 	END_ATTRIBUTE()
@@ -1505,7 +1505,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pLight )
+		if ( !parsingContext->light )
 		{
 			PARSING_ERROR( cuT( "No Light initialised. Have you set it's type?" ) );
 		}
@@ -1513,7 +1513,7 @@ namespace castor3d
 		{
 			Point2f value;
 			p_params[0]->get( value );
-			parsingContext->pLight->setIntensity( value.ptr() );
+			parsingContext->light->setIntensity( value.ptr() );
 		}
 	}
 	END_ATTRIBUTE()
@@ -1522,7 +1522,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pLight )
+		if ( !parsingContext->light )
 		{
 			PARSING_ERROR( cuT( "No Light initialised. Have you set it's type?" ) );
 		}
@@ -1531,13 +1531,13 @@ namespace castor3d
 			Point3f value;
 			p_params[0]->get( value );
 
-			if ( parsingContext->eLightType == LightType::ePoint )
+			if ( parsingContext->lightType == LightType::ePoint )
 			{
-				parsingContext->pLight->getPointLight()->setAttenuation( value );
+				parsingContext->light->getPointLight()->setAttenuation( value );
 			}
-			else if ( parsingContext->eLightType == LightType::eSpot )
+			else if ( parsingContext->lightType == LightType::eSpot )
 			{
-				parsingContext->pLight->getSpotLight()->setAttenuation( value );
+				parsingContext->light->getSpotLight()->setAttenuation( value );
 			}
 			else
 			{
@@ -1551,7 +1551,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pLight )
+		if ( !parsingContext->light )
 		{
 			PARSING_ERROR( cuT( "No Light initialised. Have you set it's type?" ) );
 		}
@@ -1560,9 +1560,9 @@ namespace castor3d
 			float fFloat;
 			p_params[0]->get( fFloat );
 
-			if ( parsingContext->eLightType == LightType::eSpot )
+			if ( parsingContext->lightType == LightType::eSpot )
 			{
-				parsingContext->pLight->getSpotLight()->setCutOff( Angle::fromDegrees( fFloat ) );
+				parsingContext->light->getSpotLight()->setCutOff( Angle::fromDegrees( fFloat ) );
 			}
 			else
 			{
@@ -1576,7 +1576,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pLight )
+		if ( !parsingContext->light )
 		{
 			PARSING_ERROR( cuT( "No Light initialised. Have you set it's type?" ) );
 		}
@@ -1585,9 +1585,9 @@ namespace castor3d
 			float fFloat;
 			p_params[0]->get( fFloat );
 
-			if ( parsingContext->eLightType == LightType::eSpot )
+			if ( parsingContext->lightType == LightType::eSpot )
 			{
-				parsingContext->pLight->getSpotLight()->setExponent( fFloat );
+				parsingContext->light->getSpotLight()->setExponent( fFloat );
 			}
 			else
 			{
@@ -1601,7 +1601,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pLight )
+		if ( !parsingContext->light )
 		{
 			PARSING_ERROR( cuT( "No Light initialised. Have you set it's type?" ) );
 		}
@@ -1609,7 +1609,7 @@ namespace castor3d
 		{
 			bool value;
 			p_params[0]->get( value );
-			parsingContext->pLight->setShadowProducer( value );
+			parsingContext->light->setShadowProducer( value );
 		}
 	}
 	END_ATTRIBUTE()
@@ -1618,7 +1618,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSceneNode )
+		if ( !parsingContext->sceneNode )
 		{
 			PARSING_ERROR( cuT( "No Scene node initialised." ) );
 		}
@@ -1630,24 +1630,24 @@ namespace castor3d
 
 			if ( name == Scene::ObjectRootNode )
 			{
-				parent = parsingContext->pScene->getObjectRootNode();
+				parent = parsingContext->scene->getObjectRootNode();
 			}
 			else if ( name == Scene::CameraRootNode )
 			{
-				parent = parsingContext->pScene->getCameraRootNode();
+				parent = parsingContext->scene->getCameraRootNode();
 			}
 			else if ( name == Scene::RootNode )
 			{
-				parent = parsingContext->pScene->getRootNode();
+				parent = parsingContext->scene->getRootNode();
 			}
 			else
 			{
-				parent = parsingContext->pScene->getSceneNodeCache().find( name );
+				parent = parsingContext->scene->getSceneNodeCache().find( name );
 			}
 
 			if ( parent )
 			{
-				parsingContext->pSceneNode->attachTo( parent );
+				parsingContext->sceneNode->attachTo( parent );
 			}
 			else
 			{
@@ -1661,7 +1661,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSceneNode )
+		if ( !parsingContext->sceneNode )
 		{
 			PARSING_ERROR( cuT( "No Scene node initialised." ) );
 		}
@@ -1669,7 +1669,7 @@ namespace castor3d
 		{
 			Point3f value;
 			p_params[0]->get( value );
-			parsingContext->pSceneNode->setPosition( value );
+			parsingContext->sceneNode->setPosition( value );
 		}
 	}
 	END_ATTRIBUTE()
@@ -1678,7 +1678,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSceneNode )
+		if ( !parsingContext->sceneNode )
 		{
 			PARSING_ERROR( cuT( "No Scene node initialised." ) );
 		}
@@ -1688,7 +1688,7 @@ namespace castor3d
 			float angle;
 			p_params[0]->get( axis );
 			p_params[1]->get( angle );
-			parsingContext->pSceneNode->setOrientation( Quaternion::fromAxisAngle( axis, Angle::fromDegrees( angle ) ) );
+			parsingContext->sceneNode->setOrientation( Quaternion::fromAxisAngle( axis, Angle::fromDegrees( angle ) ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -1697,7 +1697,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSceneNode )
+		if ( !parsingContext->sceneNode )
 		{
 			PARSING_ERROR( cuT( "No Scene node initialised." ) );
 		}
@@ -1707,7 +1707,7 @@ namespace castor3d
 			p_params[0]->get( direction );
 			Point3r up{ 0, 1, 0 };
 			Point3r right{ point::cross( direction, up ) };
-			parsingContext->pSceneNode->setOrientation( Quaternion::fromAxes( right, up, direction ) );
+			parsingContext->sceneNode->setOrientation( Quaternion::fromAxes( right, up, direction ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -1716,7 +1716,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSceneNode )
+		if ( !parsingContext->sceneNode )
 		{
 			PARSING_ERROR( cuT( "No Scene node initialised." ) );
 		}
@@ -1724,7 +1724,7 @@ namespace castor3d
 		{
 			Point3r value;
 			p_params[0]->get( value );
-			parsingContext->pSceneNode->setScale( value );
+			parsingContext->sceneNode->setScale( value );
 		}
 	}
 	END_ATTRIBUTE()
@@ -1733,7 +1733,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pGeometry )
+		if ( !parsingContext->geometry )
 		{
 			PARSING_ERROR( cuT( "No Geometry initialised." ) );
 		}
@@ -1745,24 +1745,24 @@ namespace castor3d
 
 			if ( name == Scene::ObjectRootNode )
 			{
-				parent = parsingContext->pScene->getObjectRootNode();
+				parent = parsingContext->scene->getObjectRootNode();
 			}
 			else if ( name == Scene::CameraRootNode )
 			{
-				parent = parsingContext->pScene->getCameraRootNode();
+				parent = parsingContext->scene->getCameraRootNode();
 			}
 			else if ( name == Scene::RootNode )
 			{
-				parent = parsingContext->pScene->getRootNode();
+				parent = parsingContext->scene->getRootNode();
 			}
 			else
 			{
-				parent = parsingContext->pScene->getSceneNodeCache().find( name );
+				parent = parsingContext->scene->getSceneNodeCache().find( name );
 			}
 
 			if ( parent )
 			{
-				parent->attachObject( *parsingContext->pGeometry );
+				parent->attachObject( *parsingContext->geometry );
 			}
 			else
 			{
@@ -1780,13 +1780,13 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pGeometry )
+		if ( !parsingContext->geometry )
 		{
 			PARSING_ERROR( cuT( "No Geometry initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			if ( parsingContext->pGeometry->getMesh() )
+			if ( parsingContext->geometry->getMesh() )
 			{
 				auto & cache = parsingContext->m_pParser->getEngine()->getMaterialCache();
 				String name;
@@ -1794,10 +1794,10 @@ namespace castor3d
 
 				if ( cache.has( name ) )
 				{
-					for ( auto submesh : *parsingContext->pGeometry->getMesh() )
+					for ( auto submesh : *parsingContext->geometry->getMesh() )
 					{
 						MaterialSPtr material = cache.find( name );
-						parsingContext->pGeometry->setMaterial( *submesh, material );
+						parsingContext->geometry->setMaterial( *submesh, material );
 					}
 				}
 				else
@@ -1822,7 +1822,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pGeometry )
+		if ( !parsingContext->geometry )
 		{
 			PARSING_ERROR( cuT( "No Geometry initialised." ) );
 		}
@@ -1830,7 +1830,7 @@ namespace castor3d
 		{
 			bool value;
 			p_params[0]->get( value );
-			parsingContext->pGeometry->setShadowCaster( value );
+			parsingContext->geometry->setShadowCaster( value );
 		}
 	}
 	END_ATTRIBUTE()
@@ -1839,7 +1839,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pGeometry )
+		if ( !parsingContext->geometry )
 		{
 			PARSING_ERROR( cuT( "No Geometry initialised." ) );
 		}
@@ -1847,7 +1847,7 @@ namespace castor3d
 		{
 			bool value;
 			p_params[0]->get( value );
-			parsingContext->pGeometry->setShadowReceiver( value );
+			parsingContext->geometry->setShadowReceiver( value );
 		}
 	}
 	END_ATTRIBUTE()
@@ -1855,7 +1855,7 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserObjectEnd )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->pGeometry.reset();
+		parsingContext->geometry.reset();
 	}
 	END_ATTRIBUTE_POP()
 
@@ -1863,13 +1863,13 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pGeometry )
+		if ( !parsingContext->geometry )
 		{
 			PARSING_ERROR( cuT( "No Geometry initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			if ( parsingContext->pGeometry->getMesh() )
+			if ( parsingContext->geometry->getMesh() )
 			{
 				auto & cache = parsingContext->m_pParser->getEngine()->getMaterialCache();
 				String name;
@@ -1879,11 +1879,11 @@ namespace castor3d
 
 				if ( cache.has( name ) )
 				{
-					if ( parsingContext->pGeometry->getMesh()->getSubmeshCount() > index )
+					if ( parsingContext->geometry->getMesh()->getSubmeshCount() > index )
 					{
-						SubmeshSPtr submesh = parsingContext->pGeometry->getMesh()->getSubmesh( index );
+						SubmeshSPtr submesh = parsingContext->geometry->getMesh()->getSubmesh( index );
 						MaterialSPtr material = cache.find( name );
-						parsingContext->pGeometry->setMaterial( *submesh, material );
+						parsingContext->geometry->setMaterial( *submesh, material );
 					}
 					else
 					{
@@ -1914,7 +1914,7 @@ namespace castor3d
 		String type;
 		p_params[0]->get( type );
 
-		if ( !parsingContext->pMesh )
+		if ( !parsingContext->mesh )
 		{
 			Parameters parameters;
 			if ( p_params.size() > 1 )
@@ -1923,10 +1923,10 @@ namespace castor3d
 				parameters.parse( p_params[1]->get( tmp ) );
 			}
 
-			if ( parsingContext->pScene )
+			if ( parsingContext->scene )
 			{
-				parsingContext->pMesh = parsingContext->pScene->getMeshCache().add( parsingContext->strName2 );
-				parsingContext->pScene->getEngine()->getMeshFactory().create( type )->generate( *parsingContext->pMesh, parameters );
+				parsingContext->mesh = parsingContext->scene->getMeshCache().add( parsingContext->strName2 );
+				parsingContext->scene->getEngine()->getMeshFactory().create( type )->generate( *parsingContext->mesh, parameters );
 			}
 			else
 			{
@@ -1945,17 +1945,17 @@ namespace castor3d
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		parsingContext->bBool2 = false;
 		parsingContext->bBool1 = true;
-		parsingContext->iFace1 = -1;
-		parsingContext->iFace2 = -1;
-		parsingContext->pSubmesh.reset();
+		parsingContext->face1 = -1;
+		parsingContext->face2 = -1;
+		parsingContext->submesh.reset();
 
-		if ( !parsingContext->pMesh )
+		if ( !parsingContext->mesh )
 		{
 			PARSING_ERROR( cuT( "No Mesh initialised." ) );
 		}
 		else
 		{
-			parsingContext->pSubmesh = parsingContext->pMesh->createSubmesh();
+			parsingContext->submesh = parsingContext->mesh->createSubmesh();
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eSubmesh )
@@ -1964,7 +1964,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -2026,10 +2026,10 @@ namespace castor3d
 			}
 			else
 			{
-				parsingContext->pMesh = parsingContext->pScene->getMeshCache().add( parsingContext->strName2 );
+				parsingContext->mesh = parsingContext->scene->getMeshCache().add( parsingContext->strName2 );
 				auto importer = engine->getImporterFactory().create( extension, *engine );
 
-				if ( !importer->importMesh( *parsingContext->pMesh, pathFile, parameters, true ) )
+				if ( !importer->importMesh( *parsingContext->mesh, pathFile, parameters, true ) )
 				{
 					PARSING_ERROR( cuT( "Mesh Import failed" ) );
 				}
@@ -2042,7 +2042,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pMesh )
+		if ( !parsingContext->mesh )
 		{
 			PARSING_ERROR( cuT( "No mesh initialised." ) );
 		}
@@ -2091,27 +2091,27 @@ namespace castor3d
 			else
 			{
 				auto importer = engine->getImporterFactory().create( extension, *engine );
-				Mesh mesh{ cuT( "MorphImport" ), *parsingContext->pScene };
+				Mesh mesh{ cuT( "MorphImport" ), *parsingContext->scene };
 
 				if ( !importer->importMesh( mesh, pathFile, parameters, false ) )
 				{
 					PARSING_ERROR( cuT( "Mesh Import failed" ) );
 				}
-				else if ( mesh.getSubmeshCount() == parsingContext->pMesh->getSubmeshCount() )
+				else if ( mesh.getSubmeshCount() == parsingContext->mesh->getSubmeshCount() )
 				{
 					String animName{ "Morph" };
 
-					if ( !parsingContext->pMesh->hasAnimation( animName ) )
+					if ( !parsingContext->mesh->hasAnimation( animName ) )
 					{
-						auto & animation = parsingContext->pMesh->createAnimation( animName );
+						auto & animation = parsingContext->mesh->createAnimation( animName );
 
-						for ( auto submesh : *parsingContext->pMesh )
+						for ( auto submesh : *parsingContext->mesh )
 						{
 							animation.addChild( MeshAnimationSubmesh{ animation, *submesh } );
 						}
 					}
 
-					MeshAnimation & animation{ static_cast< MeshAnimation & >( parsingContext->pMesh->getAnimation( animName ) ) };
+					MeshAnimation & animation{ static_cast< MeshAnimation & >( parsingContext->mesh->getAnimation( animName ) ) };
 					uint32_t index = 0u;
 					MeshAnimationKeyFrameUPtr keyFrame = std::make_unique< MeshAnimationKeyFrame >( animation
 						, Milliseconds{ int64_t( timeIndex * 1000 ) } );
@@ -2146,7 +2146,7 @@ namespace castor3d
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		Engine * engine = parsingContext->m_pParser->getEngine();
 
-		if ( !parsingContext->pMesh )
+		if ( !parsingContext->mesh )
 		{
 			PARSING_ERROR( cuT( "No Mesh initialised." ) );
 		}
@@ -2164,10 +2164,10 @@ namespace castor3d
 			else
 			{
 				auto divider = engine->getSubdividerFactory().create( name );
-				parsingContext->pMesh->computeContainers();
-				Point3r ptCenter = parsingContext->pMesh->getBoundingBox().getCenter();
+				parsingContext->mesh->computeContainers();
+				Point3r ptCenter = parsingContext->mesh->getBoundingBox().getCenter();
 
-				for ( auto submesh : *parsingContext->pMesh )
+				for ( auto submesh : *parsingContext->mesh )
 				{
 					divider->subdivide( submesh, count, false );
 				}
@@ -2180,14 +2180,14 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pMesh )
+		if ( parsingContext->mesh )
 		{
-			if ( parsingContext->pGeometry )
+			if ( parsingContext->geometry )
 			{
-				parsingContext->pGeometry->setMesh( parsingContext->pMesh );
+				parsingContext->geometry->setMesh( parsingContext->mesh );
 			}
 
-			parsingContext->pMesh.reset();
+			parsingContext->mesh.reset();
 		}
 	}
 	END_ATTRIBUTE_POP()
@@ -2196,7 +2196,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSubmesh )
+		if ( !parsingContext->submesh )
 		{
 			PARSING_ERROR( cuT( "No Submesh initialised." ) );
 		}
@@ -2215,7 +2215,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSubmesh )
+		if ( !parsingContext->submesh )
 		{
 			PARSING_ERROR( cuT( "No Submesh initialised." ) );
 		}
@@ -2234,7 +2234,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSubmesh )
+		if ( !parsingContext->submesh )
 		{
 			PARSING_ERROR( cuT( "No Submesh initialised." ) );
 		}
@@ -2253,7 +2253,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSubmesh )
+		if ( !parsingContext->submesh )
 		{
 			PARSING_ERROR( cuT( "No Submesh initialised." ) );
 		}
@@ -2272,7 +2272,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSubmesh )
+		if ( !parsingContext->submesh )
 		{
 			PARSING_ERROR( cuT( "No Submesh initialised." ) );
 		}
@@ -2291,7 +2291,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSubmesh )
+		if ( !parsingContext->submesh )
 		{
 			PARSING_ERROR( cuT( "No Submesh initialised." ) );
 		}
@@ -2301,8 +2301,8 @@ namespace castor3d
 			p_params[0]->get( strParams );
 			Point3i pt3Indices;
 			StringArray arrayValues = string::split( strParams, cuT( " " ) );
-			parsingContext->iFace1 = -1;
-			parsingContext->iFace2 = -1;
+			parsingContext->face1 = -1;
+			parsingContext->face2 = -1;
 
 			if ( arrayValues.size() >= 4 )
 			{
@@ -2310,11 +2310,11 @@ namespace castor3d
 
 				if ( castor::parseValues( strParams, pt4Indices ) )
 				{
-					parsingContext->iFace1 = int( parsingContext->faces.size() );
+					parsingContext->face1 = int( parsingContext->faces.size() );
 					parsingContext->faces.push_back( pt4Indices[0] );
 					parsingContext->faces.push_back( pt4Indices[1] );
 					parsingContext->faces.push_back( pt4Indices[2] );
-					parsingContext->iFace2 = int( parsingContext->faces.size() );
+					parsingContext->face2 = int( parsingContext->faces.size() );
 					parsingContext->faces.push_back( pt4Indices[0] );
 					parsingContext->faces.push_back( pt4Indices[2] );
 					parsingContext->faces.push_back( pt4Indices[3] );
@@ -2322,7 +2322,7 @@ namespace castor3d
 			}
 			else if ( castor::parseValues( strParams, pt3Indices ) )
 			{
-				parsingContext->iFace1 = int( parsingContext->faces.size() );
+				parsingContext->face1 = int( parsingContext->faces.size() );
 				parsingContext->faces.push_back( pt3Indices[0] );
 				parsingContext->faces.push_back( pt3Indices[1] );
 				parsingContext->faces.push_back( pt3Indices[2] );
@@ -2335,7 +2335,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSubmesh )
+		if ( !parsingContext->submesh )
 		{
 			PARSING_ERROR( cuT( "No Submesh initialised." ) );
 		}
@@ -2343,7 +2343,7 @@ namespace castor3d
 		{
 			String strParams;
 			p_params[0]->get( strParams );
-			SubmeshSPtr submesh = parsingContext->pSubmesh;
+			SubmeshSPtr submesh = parsingContext->submesh;
 
 			if ( parsingContext->vertexTex.empty() )
 			{
@@ -2353,24 +2353,24 @@ namespace castor3d
 			Point3i pt3Indices;
 			StringArray arrayValues = string::split( strParams, cuT( " " ), 20 );
 
-			if ( arrayValues.size() >= 6 && parsingContext->iFace1 != -1 )
+			if ( arrayValues.size() >= 6 && parsingContext->face1 != -1 )
 			{
-				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->iFace1 + 0] * 3] = string::toReal( arrayValues[0] );
-				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->iFace1 + 0] * 3] = string::toReal( arrayValues[1] );
-				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->iFace1 + 1] * 3] = string::toReal( arrayValues[2] );
-				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->iFace1 + 1] * 3] = string::toReal( arrayValues[3] );
-				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->iFace1 + 2] * 3] = string::toReal( arrayValues[4] );
-				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->iFace1 + 2] * 3] = string::toReal( arrayValues[5] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toReal( arrayValues[0] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toReal( arrayValues[1] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toReal( arrayValues[2] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toReal( arrayValues[3] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toReal( arrayValues[4] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toReal( arrayValues[5] );
 			}
 
-			if ( arrayValues.size() >= 8 && parsingContext->iFace2 != -1 )
+			if ( arrayValues.size() >= 8 && parsingContext->face2 != -1 )
 			{
-				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->iFace2 + 0] * 3] = string::toReal( arrayValues[0] );
-				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->iFace2 + 0] * 3] = string::toReal( arrayValues[1] );
-				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->iFace2 + 1] * 3] = string::toReal( arrayValues[4] );
-				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->iFace2 + 1] * 3] = string::toReal( arrayValues[5] );
-				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::toReal( arrayValues[6] );
-				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::toReal( arrayValues[7] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toReal( arrayValues[0] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toReal( arrayValues[1] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face2 + 1] * 3] = string::toReal( arrayValues[4] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face2 + 1] * 3] = string::toReal( arrayValues[5] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[6] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[7] );
 			}
 		}
 	}
@@ -2380,7 +2380,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSubmesh )
+		if ( !parsingContext->submesh )
 		{
 			PARSING_ERROR( cuT( "No Submesh initialised." ) );
 		}
@@ -2388,7 +2388,7 @@ namespace castor3d
 		{
 			String strParams;
 			p_params[0]->get( strParams );
-			SubmeshSPtr submesh = parsingContext->pSubmesh;
+			SubmeshSPtr submesh = parsingContext->submesh;
 
 			if ( parsingContext->vertexTex.empty() )
 			{
@@ -2398,30 +2398,30 @@ namespace castor3d
 			Point3i pt3Indices;
 			StringArray arrayValues = string::split( strParams, cuT( " " ), 20 );
 
-			if ( arrayValues.size() >= 9 && parsingContext->iFace1 != -1 )
+			if ( arrayValues.size() >= 9 && parsingContext->face1 != -1 )
 			{
-				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->iFace1 + 0] * 3] = string::toReal( arrayValues[0] );
-				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->iFace1 + 0] * 3] = string::toReal( arrayValues[1] );
-				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->iFace1 + 0] * 3] = string::toReal( arrayValues[2] );
-				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->iFace1 + 1] * 3] = string::toReal( arrayValues[3] );
-				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->iFace1 + 1] * 3] = string::toReal( arrayValues[4] );
-				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->iFace1 + 1] * 3] = string::toReal( arrayValues[5] );
-				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->iFace1 + 2] * 3] = string::toReal( arrayValues[6] );
-				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->iFace1 + 2] * 3] = string::toReal( arrayValues[7] );
-				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->iFace1 + 2] * 3] = string::toReal( arrayValues[8] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toReal( arrayValues[0] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toReal( arrayValues[1] );
+				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toReal( arrayValues[2] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toReal( arrayValues[3] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toReal( arrayValues[4] );
+				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toReal( arrayValues[5] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toReal( arrayValues[6] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toReal( arrayValues[7] );
+				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toReal( arrayValues[8] );
 			}
 
-			if ( arrayValues.size() >= 12 && parsingContext->iFace2 != -1 )
+			if ( arrayValues.size() >= 12 && parsingContext->face2 != -1 )
 			{
-				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->iFace2 + 0] * 3] = string::toReal( arrayValues[0] );
-				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->iFace2 + 0] * 3] = string::toReal( arrayValues[1] );
-				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->iFace2 + 0] * 3] = string::toReal( arrayValues[2] );
-				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::toReal( arrayValues[6] );
-				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::toReal( arrayValues[7] );
-				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::toReal( arrayValues[8] );
-				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::toReal( arrayValues[ 9] );
-				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::toReal( arrayValues[10] );
-				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::toReal( arrayValues[11] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toReal( arrayValues[0] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toReal( arrayValues[1] );
+				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toReal( arrayValues[2] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[6] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[7] );
+				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[8] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[ 9] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[10] );
+				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[11] );
 			}
 		}
 	}
@@ -2431,7 +2431,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSubmesh )
+		if ( !parsingContext->submesh )
 		{
 			PARSING_ERROR( cuT( "No Submesh initialised." ) );
 		}
@@ -2439,7 +2439,7 @@ namespace castor3d
 		{
 			String strParams;
 			p_params[0]->get( strParams );
-			SubmeshSPtr submesh = parsingContext->pSubmesh;
+			SubmeshSPtr submesh = parsingContext->submesh;
 
 			if ( parsingContext->vertexNml.empty() )
 			{
@@ -2449,30 +2449,30 @@ namespace castor3d
 			Point3i pt3Indices;
 			StringArray arrayValues = string::split( strParams, cuT( " " ), 20 );
 
-			if ( arrayValues.size() >= 9 && parsingContext->iFace1 != -1 )
+			if ( arrayValues.size() >= 9 && parsingContext->face1 != -1 )
 			{
-				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->iFace1 + 0] * 3] = string::toReal( arrayValues[0] );
-				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->iFace1 + 0] * 3] = string::toReal( arrayValues[1] );
-				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->iFace1 + 0] * 3] = string::toReal( arrayValues[2] );
-				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->iFace1 + 1] * 3] = string::toReal( arrayValues[3] );
-				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->iFace1 + 1] * 3] = string::toReal( arrayValues[4] );
-				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->iFace1 + 1] * 3] = string::toReal( arrayValues[5] );
-				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->iFace1 + 2] * 3] = string::toReal( arrayValues[6] );
-				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->iFace1 + 2] * 3] = string::toReal( arrayValues[7] );
-				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->iFace1 + 2] * 3] = string::toReal( arrayValues[8] );
+				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toReal( arrayValues[0] );
+				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toReal( arrayValues[1] );
+				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toReal( arrayValues[2] );
+				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toReal( arrayValues[3] );
+				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toReal( arrayValues[4] );
+				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toReal( arrayValues[5] );
+				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toReal( arrayValues[6] );
+				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toReal( arrayValues[7] );
+				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toReal( arrayValues[8] );
 			}
 
-			if ( arrayValues.size() >= 12 && parsingContext->iFace2 != -1 )
+			if ( arrayValues.size() >= 12 && parsingContext->face2 != -1 )
 			{
-				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->iFace2 + 0] * 3] = string::toReal( arrayValues[ 0] );
-				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->iFace2 + 0] * 3] = string::toReal( arrayValues[ 1] );
-				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->iFace2 + 0] * 3] = string::toReal( arrayValues[ 2] );
-				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->iFace2 + 1] * 3] = string::toReal( arrayValues[ 6] );
-				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->iFace2 + 1] * 3] = string::toReal( arrayValues[ 7] );
-				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->iFace2 + 1] * 3] = string::toReal( arrayValues[ 8] );
-				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::toReal( arrayValues[ 9] );
-				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::toReal( arrayValues[10] );
-				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::toReal( arrayValues[11] );
+				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toReal( arrayValues[ 0] );
+				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toReal( arrayValues[ 1] );
+				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toReal( arrayValues[ 2] );
+				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->face2 + 1] * 3] = string::toReal( arrayValues[ 6] );
+				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->face2 + 1] * 3] = string::toReal( arrayValues[ 7] );
+				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->face2 + 1] * 3] = string::toReal( arrayValues[ 8] );
+				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[ 9] );
+				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[10] );
+				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[11] );
 			}
 		}
 	}
@@ -2482,7 +2482,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pSubmesh )
+		if ( !parsingContext->submesh )
 		{
 			PARSING_ERROR( cuT( "No Submesh initialised." ) );
 		}
@@ -2490,7 +2490,7 @@ namespace castor3d
 		{
 			String strParams;
 			p_params[0]->get( strParams );
-			SubmeshSPtr submesh = parsingContext->pSubmesh;
+			SubmeshSPtr submesh = parsingContext->submesh;
 
 			if ( parsingContext->vertexTan.empty() )
 			{
@@ -2500,30 +2500,30 @@ namespace castor3d
 			Point3i pt3Indices;
 			StringArray arrayValues = string::split( strParams, cuT( " " ), 20 );
 
-			if ( arrayValues.size() >= 9 && parsingContext->iFace1 != -1 )
+			if ( arrayValues.size() >= 9 && parsingContext->face1 != -1 )
 			{
-				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->iFace1 + 0] * 3] = string::toReal( arrayValues[0] );
-				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->iFace1 + 0] * 3] = string::toReal( arrayValues[1] );
-				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->iFace1 + 0] * 3] = string::toReal( arrayValues[2] );
-				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->iFace1 + 1] * 3] = string::toReal( arrayValues[3] );
-				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->iFace1 + 1] * 3] = string::toReal( arrayValues[4] );
-				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->iFace1 + 1] * 3] = string::toReal( arrayValues[5] );
-				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->iFace1 + 2] * 3] = string::toReal( arrayValues[6] );
-				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->iFace1 + 2] * 3] = string::toReal( arrayValues[7] );
-				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->iFace1 + 2] * 3] = string::toReal( arrayValues[8] );
+				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toReal( arrayValues[0] );
+				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toReal( arrayValues[1] );
+				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toReal( arrayValues[2] );
+				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toReal( arrayValues[3] );
+				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toReal( arrayValues[4] );
+				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toReal( arrayValues[5] );
+				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toReal( arrayValues[6] );
+				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toReal( arrayValues[7] );
+				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toReal( arrayValues[8] );
 			}
 
-			if ( arrayValues.size() >= 12 && parsingContext->iFace2 != -1 )
+			if ( arrayValues.size() >= 12 && parsingContext->face2 != -1 )
 			{
-				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->iFace2 + 0] * 3] = string::toReal( arrayValues[ 0] );
-				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->iFace2 + 0] * 3] = string::toReal( arrayValues[ 1] );
-				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->iFace2 + 0] * 3] = string::toReal( arrayValues[ 2] );
-				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->iFace2 + 1] * 3] = string::toReal( arrayValues[ 6] );
-				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->iFace2 + 1] * 3] = string::toReal( arrayValues[ 7] );
-				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->iFace2 + 1] * 3] = string::toReal( arrayValues[ 8] );
-				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::toReal( arrayValues[ 9] );
-				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::toReal( arrayValues[10] );
-				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->iFace2 + 2] * 3] = string::toReal( arrayValues[11] );
+				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toReal( arrayValues[ 0] );
+				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toReal( arrayValues[ 1] );
+				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toReal( arrayValues[ 2] );
+				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->face2 + 1] * 3] = string::toReal( arrayValues[ 6] );
+				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->face2 + 1] * 3] = string::toReal( arrayValues[ 7] );
+				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->face2 + 1] * 3] = string::toReal( arrayValues[ 8] );
+				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[ 9] );
+				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[10] );
+				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[11] );
 			}
 		}
 	}
@@ -2560,12 +2560,12 @@ namespace castor3d
 				index += 3;
 			}
 
-			parsingContext->pSubmesh->addPoints( vertices );
+			parsingContext->submesh->addPoints( vertices );
 
 			if ( !parsingContext->faces.empty() )
 			{
 				auto indices = reinterpret_cast< FaceIndices * >( &parsingContext->faces[0] );
-				auto mapping = std::make_shared< TriFaceMapping >( *parsingContext->pSubmesh );
+				auto mapping = std::make_shared< TriFaceMapping >( *parsingContext->submesh );
 				mapping->addFaceGroup( indices, indices + ( parsingContext->faces.size() / 3 ) );
 
 				if ( !parsingContext->vertexNml.empty() )
@@ -2584,7 +2584,7 @@ namespace castor3d
 					mapping->computeNormals();
 				}
 
-				parsingContext->pSubmesh->setIndexMapping( mapping );
+				parsingContext->submesh->setIndexMapping( mapping );
 			}
 
 			parsingContext->vertexPos.clear();
@@ -2592,7 +2592,7 @@ namespace castor3d
 			parsingContext->vertexTan.clear();
 			parsingContext->vertexTex.clear();
 			parsingContext->faces.clear();
-			parsingContext->pSubmesh->getParent().getScene()->getListener().postEvent( makeInitialiseEvent( *parsingContext->pSubmesh ) );
+			parsingContext->submesh->getParent().getScene()->getListener().postEvent( makeInitialiseEvent( *parsingContext->submesh ) );
 		}
 	}
 	END_ATTRIBUTE_POP()
@@ -2602,9 +2602,9 @@ namespace castor3d
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		parsingContext->strName.clear();
 
-		if ( parsingContext->pMaterial )
+		if ( parsingContext->material )
 		{
-			parsingContext->pass = parsingContext->pMaterial->createPass();
+			parsingContext->pass = parsingContext->material->createPass();
 
 			switch ( parsingContext->pass->getType() )
 			{
@@ -2847,11 +2847,11 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserPassTextureUnit )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->pTextureUnit.reset();
+		parsingContext->textureUnit.reset();
 
 		if ( parsingContext->pass )
 		{
-			parsingContext->pTextureUnit = std::make_shared< TextureUnit >( *parsingContext->m_pParser->getEngine() );
+			parsingContext->textureUnit = std::make_shared< TextureUnit >( *parsingContext->m_pParser->getEngine() );
 		}
 		else
 		{
@@ -2863,12 +2863,12 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserPassShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->pShaderProgram.reset();
-		parsingContext->eShaderObject = ShaderType::eCount;
+		parsingContext->shaderProgram.reset();
+		parsingContext->shaderStage = ShaderType::eCount;
 
 		if ( parsingContext->pass )
 		{
-			parsingContext->pShaderProgram = parsingContext->m_pParser->getEngine()->getShaderProgramCache().getNewProgram( true );
+			parsingContext->shaderProgram = parsingContext->m_pParser->getEngine()->getShaderProgramCache().getNewProgram( true );
 		}
 		else
 		{
@@ -3000,7 +3000,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pTextureUnit )
+		if ( !parsingContext->textureUnit )
 		{
 			PARSING_ERROR( cuT( "No TextureUnit initialised." ) );
 		}
@@ -3022,7 +3022,7 @@ namespace castor3d
 
 			if ( !relative.empty() )
 			{
-				parsingContext->pTextureUnit->setAutoMipmaps( true );
+				parsingContext->textureUnit->setAutoMipmaps( true );
 				auto texture = parsingContext->m_pParser->getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead );
 				texture->setSource( folder, relative );
 
@@ -3073,7 +3073,7 @@ namespace castor3d
 					texture->getImage().setBuffer( buffer );
 				}
 
-				parsingContext->pTextureUnit->setTexture( texture );
+				parsingContext->textureUnit->setTexture( texture );
 			}
 		}
 	}
@@ -3083,13 +3083,13 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pTextureUnit )
+		if ( !parsingContext->textureUnit )
 		{
 			PARSING_ERROR( cuT( "No TextureUnit initialised." ) );
 		}
 		else
 		{
-			parsingContext->pRenderTarget = parsingContext->m_pParser->getEngine()->getRenderTargetCache().add( TargetType::eTexture );
+			parsingContext->renderTarget = parsingContext->m_pParser->getEngine()->getRenderTargetCache().add( TargetType::eTexture );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eRenderTarget )
@@ -3098,7 +3098,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pTextureUnit )
+		if ( !parsingContext->textureUnit )
 		{
 			PARSING_ERROR( cuT( "No TextureUnit initialised." ) );
 		}
@@ -3106,7 +3106,7 @@ namespace castor3d
 		{
 			uint32_t uiChannel;
 			p_params[0]->get( uiChannel );
-			parsingContext->pTextureUnit->setChannel( TextureChannel( uiChannel ) );
+			parsingContext->textureUnit->setChannel( TextureChannel( uiChannel ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -3115,7 +3115,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pTextureUnit )
+		if ( !parsingContext->textureUnit )
 		{
 			PARSING_ERROR( cuT( "No TextureUnit initialised." ) );
 		}
@@ -3126,7 +3126,7 @@ namespace castor3d
 
 			if ( sampler )
 			{
-				parsingContext->pTextureUnit->setSampler( sampler );
+				parsingContext->textureUnit->setSampler( sampler );
 			}
 			else
 			{
@@ -3142,9 +3142,9 @@ namespace castor3d
 
 		if ( parsingContext->pass )
 		{
-			if ( parsingContext->pTextureUnit )
+			if ( parsingContext->textureUnit )
 			{
-				parsingContext->pass->addTextureUnit( parsingContext->pTextureUnit );
+				parsingContext->pass->addTextureUnit( parsingContext->textureUnit );
 			}
 			else
 			{
@@ -3162,103 +3162,103 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pShaderProgram )
+		if ( parsingContext->shaderProgram )
 		{
-			parsingContext->pShaderProgram->createObject( ShaderType::eVertex );
-			parsingContext->eShaderObject = ShaderType::eVertex;
+			parsingContext->shaderProgram->createObject( ShaderType::eVertex );
+			parsingContext->shaderStage = ShaderType::eVertex;
 		}
 		else
 		{
 			PARSING_ERROR( cuT( "Shader not initialised" ) );
 		}
 	}
-	END_ATTRIBUTE_PUSH( CSCNSection::eShaderObject )
+	END_ATTRIBUTE_PUSH( CSCNSection::shaderStage )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( parserPixelShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pShaderProgram )
+		if ( parsingContext->shaderProgram )
 		{
-			parsingContext->pShaderProgram->createObject( ShaderType::ePixel );
-			parsingContext->eShaderObject = ShaderType::ePixel;
+			parsingContext->shaderProgram->createObject( ShaderType::ePixel );
+			parsingContext->shaderStage = ShaderType::ePixel;
 		}
 		else
 		{
 			PARSING_ERROR( cuT( "Shader not initialised" ) );
 		}
 	}
-	END_ATTRIBUTE_PUSH( CSCNSection::eShaderObject )
+	END_ATTRIBUTE_PUSH( CSCNSection::shaderStage )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( parserGeometryShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pShaderProgram )
+		if ( parsingContext->shaderProgram )
 		{
-			parsingContext->pShaderProgram->createObject( ShaderType::eGeometry );
-			parsingContext->eShaderObject = ShaderType::eGeometry;
+			parsingContext->shaderProgram->createObject( ShaderType::eGeometry );
+			parsingContext->shaderStage = ShaderType::eGeometry;
 		}
 		else
 		{
 			PARSING_ERROR( cuT( "Shader not initialised" ) );
 		}
 	}
-	END_ATTRIBUTE_PUSH( CSCNSection::eShaderObject )
+	END_ATTRIBUTE_PUSH( CSCNSection::shaderStage )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( parserHullShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pShaderProgram )
+		if ( parsingContext->shaderProgram )
 		{
-			parsingContext->pShaderProgram->createObject( ShaderType::eHull );
-			parsingContext->eShaderObject = ShaderType::eHull;
+			parsingContext->shaderProgram->createObject( ShaderType::eHull );
+			parsingContext->shaderStage = ShaderType::eHull;
 		}
 		else
 		{
 			PARSING_ERROR( cuT( "Shader not initialised" ) );
 		}
 	}
-	END_ATTRIBUTE_PUSH( CSCNSection::eShaderObject )
+	END_ATTRIBUTE_PUSH( CSCNSection::shaderStage )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( parserdomainShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pShaderProgram )
+		if ( parsingContext->shaderProgram )
 		{
-			parsingContext->pShaderProgram->createObject( ShaderType::eDomain );
-			parsingContext->eShaderObject = ShaderType::eDomain;
+			parsingContext->shaderProgram->createObject( ShaderType::eDomain );
+			parsingContext->shaderStage = ShaderType::eDomain;
 		}
 		else
 		{
 			PARSING_ERROR( cuT( "Shader not initialised" ) );
 		}
 	}
-	END_ATTRIBUTE_PUSH( CSCNSection::eShaderObject )
+	END_ATTRIBUTE_PUSH( CSCNSection::shaderStage )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( parserComputeShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pShaderProgram )
+		if ( parsingContext->shaderProgram )
 		{
-			parsingContext->pShaderProgram->createObject( ShaderType::eCompute );
-			parsingContext->eShaderObject = ShaderType::eCompute;
+			parsingContext->shaderProgram->createObject( ShaderType::eCompute );
+			parsingContext->shaderStage = ShaderType::eCompute;
 		}
 		else
 		{
 			PARSING_ERROR( cuT( "Shader not initialised" ) );
 		}
 	}
-	END_ATTRIBUTE_PUSH( CSCNSection::eShaderObject )
+	END_ATTRIBUTE_PUSH( CSCNSection::shaderStage )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( parserConstantsBuffer )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pShaderProgram )
+		if ( !parsingContext->shaderProgram )
 		{
 			PARSING_ERROR( cuT( "No ShaderProgram initialised." ) );
 		}
@@ -3278,23 +3278,23 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pShaderProgram )
+		if ( parsingContext->shaderProgram )
 		{
 			if ( parsingContext->particleSystem )
 			{
 				if ( parsingContext->bBool1 )
 				{
-					parsingContext->particleSystem->setTFUpdateProgram( parsingContext->pShaderProgram );
+					parsingContext->particleSystem->setTFUpdateProgram( parsingContext->shaderProgram );
 				}
 				else
 				{
-					parsingContext->particleSystem->setCSUpdateProgram( parsingContext->pShaderProgram );
+					parsingContext->particleSystem->setCSUpdateProgram( parsingContext->shaderProgram );
 				}
 
 				parsingContext->bBool1 = false;
 			}
-			//l_parsingContext->pPass->setShader( parsingContext->pShaderProgram );
-			parsingContext->pShaderProgram.reset();
+			//l_parsingContext->pPass->setShader( parsingContext->shaderProgram );
+			parsingContext->shaderProgram.reset();
 		}
 	}
 	END_ATTRIBUTE_POP()
@@ -3303,19 +3303,19 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pShaderProgram )
+		if ( !parsingContext->shaderProgram )
 		{
 			PARSING_ERROR( cuT( "No ShaderProgram initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			if ( parsingContext->eShaderObject != ShaderType::eCount )
+			if ( parsingContext->shaderStage != ShaderType::eCount )
 			{
 				uint32_t uiModel;
 				Path path;
 				p_params[0]->get( uiModel );
 				p_params[1]->get( path );
-				parsingContext->pShaderProgram->setFile( parsingContext->eShaderObject, p_context->m_file.getPath() / path );
+				parsingContext->shaderProgram->setFile( parsingContext->shaderStage, p_context->m_file.getPath() / path );
 			}
 			else
 			{
@@ -3329,7 +3329,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pShaderProgram )
+		if ( !parsingContext->shaderProgram )
 		{
 			PARSING_ERROR( cuT( "No ShaderProgram initialised." ) );
 		}
@@ -3338,9 +3338,9 @@ namespace castor3d
 			String name;
 			p_params[0]->get( name );
 
-			if ( parsingContext->eShaderObject != ShaderType::eCount )
+			if ( parsingContext->shaderStage != ShaderType::eCount )
 			{
-				parsingContext->pSamplerUniform = parsingContext->pShaderProgram->createUniform< UniformType::eSampler >( name, parsingContext->eShaderObject );
+				parsingContext->samplerUniform = parsingContext->shaderProgram->createUniform< UniformType::eSampler >( name, parsingContext->shaderStage );
 			}
 			else
 			{
@@ -3365,8 +3365,8 @@ namespace castor3d
 
 			if ( value )
 			{
-				parsingContext->pUniformBuffer = std::make_unique< UniformBuffer >( parsingContext->strName
-					, *parsingContext->pShaderProgram->getRenderSystem()
+				parsingContext->uniformBuffer = std::make_unique< UniformBuffer >( parsingContext->strName
+					, *parsingContext->shaderProgram->getRenderSystem()
 					, 1u );
 			}
 			else
@@ -3381,7 +3381,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pShaderProgram )
+		if ( !parsingContext->shaderProgram )
 		{
 			PARSING_ERROR( cuT( "No ShaderProgram initialised." ) );
 		}
@@ -3390,11 +3390,11 @@ namespace castor3d
 			uint32_t uiType;
 			p_params[0]->get( uiType );
 
-			if ( parsingContext->eShaderObject != ShaderType::eCount )
+			if ( parsingContext->shaderStage != ShaderType::eCount )
 			{
-				if ( parsingContext->eShaderObject == ShaderType::eGeometry )
+				if ( parsingContext->shaderStage == ShaderType::eGeometry )
 				{
-					parsingContext->pShaderProgram->setInputType( parsingContext->eShaderObject, Topology( uiType ) );
+					parsingContext->shaderProgram->setInputType( parsingContext->shaderStage, Topology( uiType ) );
 				}
 				else
 				{
@@ -3413,7 +3413,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pShaderProgram )
+		if ( !parsingContext->shaderProgram )
 		{
 			PARSING_ERROR( cuT( "No ShaderProgram initialised." ) );
 		}
@@ -3422,11 +3422,11 @@ namespace castor3d
 			uint32_t uiType;
 			p_params[0]->get( uiType );
 
-			if ( parsingContext->eShaderObject != ShaderType::eCount )
+			if ( parsingContext->shaderStage != ShaderType::eCount )
 			{
-				if ( parsingContext->eShaderObject == ShaderType::eGeometry )
+				if ( parsingContext->shaderStage == ShaderType::eGeometry )
 				{
-					parsingContext->pShaderProgram->setOutputType( parsingContext->eShaderObject, Topology( uiType ) );
+					parsingContext->shaderProgram->setOutputType( parsingContext->shaderStage, Topology( uiType ) );
 				}
 				else
 				{
@@ -3445,13 +3445,13 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->eShaderObject != ShaderType::eCount )
+		if ( parsingContext->shaderStage != ShaderType::eCount )
 		{
-			if ( parsingContext->eShaderObject == ShaderType::eGeometry )
+			if ( parsingContext->shaderStage == ShaderType::eGeometry )
 			{
 				uint8_t count;
 				p_params[0]->get( count );
-				parsingContext->pShaderProgram->setOutputVtxCount( parsingContext->eShaderObject, count );
+				parsingContext->shaderProgram->setOutputVtxCount( parsingContext->shaderStage, count );
 			}
 			else
 			{
@@ -3468,10 +3468,10 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserShaderUboVariable )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->pUniform.reset();
+		parsingContext->uniform.reset();
 		p_params[0]->get( parsingContext->strName2 );
 
-		if ( !parsingContext->pUniformBuffer )
+		if ( !parsingContext->uniformBuffer )
 		{
 			PARSING_ERROR( cuT( "Shader constants buffer not initialised" ) );
 		}
@@ -3492,7 +3492,7 @@ namespace castor3d
 		uint32_t param;
 		p_params[0]->get( param );
 
-		if ( parsingContext->pUniformBuffer )
+		if ( parsingContext->uniformBuffer )
 		{
 			parsingContext->uiUInt32 = param;
 		}
@@ -3509,11 +3509,11 @@ namespace castor3d
 		uint32_t uiType;
 		p_params[0]->get( uiType );
 
-		if ( parsingContext->pUniformBuffer )
+		if ( parsingContext->uniformBuffer )
 		{
-			if ( !parsingContext->pUniform )
+			if ( !parsingContext->uniform )
 			{
-				parsingContext->pUniform = parsingContext->pUniformBuffer->createUniform( UniformType( uiType ), parsingContext->strName2, parsingContext->uiUInt32 );
+				parsingContext->uniform = parsingContext->uniformBuffer->createUniform( UniformType( uiType ), parsingContext->strName2, parsingContext->uiUInt32 );
 			}
 			else
 			{
@@ -3533,9 +3533,9 @@ namespace castor3d
 		String strParams;
 		p_params[0]->get( strParams );
 
-		if ( parsingContext->pUniform )
+		if ( parsingContext->uniform )
 		{
-			parsingContext->pUniform->setStrValue( strParams );
+			parsingContext->uniform->setStrValue( strParams );
 		}
 		else
 		{
@@ -3564,9 +3564,9 @@ namespace castor3d
 
 		if ( !parsingContext->strName.empty() && !parsingContext->path.empty() )
 		{
-			if ( parsingContext->pScene )
+			if ( parsingContext->scene )
 			{
-				parsingContext->pScene->getFontView().add( parsingContext->strName, parsingContext->iInt16, p_context->m_file.getPath() / parsingContext->path );
+				parsingContext->scene->getFontView().add( parsingContext->strName, parsingContext->iInt16, p_context->m_file.getPath() / parsingContext->path );
 			}
 			else
 			{
@@ -3580,11 +3580,11 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pOverlay )
+		if ( parsingContext->overlay )
 		{
 			Point2d ptPosition;
 			p_params[0]->get( ptPosition );
-			parsingContext->pOverlay->setPosition( ptPosition );
+			parsingContext->overlay->setPosition( ptPosition );
 		}
 		else
 		{
@@ -3597,11 +3597,11 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pOverlay )
+		if ( parsingContext->overlay )
 		{
 			Point2d ptSize;
 			p_params[0]->get( ptSize );
-			parsingContext->pOverlay->setSize( ptSize );
+			parsingContext->overlay->setSize( ptSize );
 		}
 		else
 		{
@@ -3614,11 +3614,11 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pOverlay )
+		if ( parsingContext->overlay )
 		{
 			Size size;
 			p_params[0]->get( size );
-			parsingContext->pOverlay->setPixelSize( size );
+			parsingContext->overlay->setPixelSize( size );
 		}
 		else
 		{
@@ -3631,11 +3631,11 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pOverlay )
+		if ( parsingContext->overlay )
 		{
 			Position position;
 			p_params[0]->get( position );
-			parsingContext->pOverlay->setPixelPosition( position );
+			parsingContext->overlay->setPixelPosition( position );
 		}
 		else
 		{
@@ -3648,12 +3648,12 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pOverlay )
+		if ( parsingContext->overlay )
 		{
 			String name;
 			p_params[0]->get( name );
 			auto & cache = parsingContext->m_pParser->getEngine()->getMaterialCache();
-			parsingContext->pOverlay->setMaterial( cache.find( name ) );
+			parsingContext->overlay->setMaterial( cache.find( name ) );
 		}
 		else
 		{
@@ -3666,8 +3666,8 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		String name;
-		parsingContext->pOverlay = parsingContext->m_pParser->getEngine()->getOverlayCache().add( p_params[0]->get( name ), OverlayType::ePanel, parsingContext->pOverlay->getScene(), parsingContext->pOverlay );
-		parsingContext->pOverlay->setVisible( false );
+		parsingContext->overlay = parsingContext->m_pParser->getEngine()->getOverlayCache().add( p_params[0]->get( name ), OverlayType::ePanel, parsingContext->overlay->getScene(), parsingContext->overlay );
+		parsingContext->overlay->setVisible( false );
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::ePanelOverlay )
 
@@ -3675,8 +3675,8 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		String name;
-		parsingContext->pOverlay = parsingContext->m_pParser->getEngine()->getOverlayCache().add( p_params[0]->get( name ), OverlayType::eBorderPanel, parsingContext->pOverlay->getScene(), parsingContext->pOverlay );
-		parsingContext->pOverlay->setVisible( false );
+		parsingContext->overlay = parsingContext->m_pParser->getEngine()->getOverlayCache().add( p_params[0]->get( name ), OverlayType::eBorderPanel, parsingContext->overlay->getScene(), parsingContext->overlay );
+		parsingContext->overlay->setVisible( false );
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eBorderPanelOverlay )
 
@@ -3684,8 +3684,8 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		String name;
-		parsingContext->pOverlay = parsingContext->m_pParser->getEngine()->getOverlayCache().add( p_params[0]->get( name ), OverlayType::eText, parsingContext->pOverlay->getScene(), parsingContext->pOverlay );
-		parsingContext->pOverlay->setVisible( false );
+		parsingContext->overlay = parsingContext->m_pParser->getEngine()->getOverlayCache().add( p_params[0]->get( name ), OverlayType::eText, parsingContext->overlay->getScene(), parsingContext->overlay );
+		parsingContext->overlay->setVisible( false );
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eTextOverlay )
 
@@ -3693,33 +3693,33 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pOverlay->getType() == OverlayType::eText )
+		if ( parsingContext->overlay->getType() == OverlayType::eText )
 		{
-			auto textOverlay = parsingContext->pOverlay->getTextOverlay();
+			auto textOverlay = parsingContext->overlay->getTextOverlay();
 
 			if ( textOverlay->getFontTexture() )
 			{
-				parsingContext->pOverlay->setVisible( true );
+				parsingContext->overlay->setVisible( true );
 			}
 			else
 			{
-				parsingContext->pOverlay->setVisible( false );
+				parsingContext->overlay->setVisible( false );
 				PARSING_ERROR( cuT( "TextOverlay's font has not been set, it will not be rendered" ) );
 			}
 		}
 		else
 		{
-			parsingContext->pOverlay->setVisible( true );
+			parsingContext->overlay->setVisible( true );
 		}
 
-		parsingContext->pOverlay = parsingContext->pOverlay->getParent();
+		parsingContext->overlay = parsingContext->overlay->getParent();
 	}
 	END_ATTRIBUTE_POP()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( parserPanelOverlayUvs )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr overlay = parsingContext->pOverlay;
+		OverlaySPtr overlay = parsingContext->overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::ePanel )
 		{
@@ -3737,7 +3737,7 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserBorderPanelOverlaySizes )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr overlay = parsingContext->pOverlay;
+		OverlaySPtr overlay = parsingContext->overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
@@ -3755,7 +3755,7 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserBorderPanelOverlayPixelSizes )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr overlay = parsingContext->pOverlay;
+		OverlaySPtr overlay = parsingContext->overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
@@ -3773,7 +3773,7 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserBorderPanelOverlayMaterial )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr overlay = parsingContext->pOverlay;
+		OverlaySPtr overlay = parsingContext->overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
@@ -3792,7 +3792,7 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserBorderPanelOverlayPosition )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr overlay = parsingContext->pOverlay;
+		OverlaySPtr overlay = parsingContext->overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
@@ -3810,7 +3810,7 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserBorderPanelOverlayCenterUvs )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr overlay = parsingContext->pOverlay;
+		OverlaySPtr overlay = parsingContext->overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
@@ -3828,7 +3828,7 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserBorderPanelOverlayOuterUvs )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr overlay = parsingContext->pOverlay;
+		OverlaySPtr overlay = parsingContext->overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
@@ -3846,7 +3846,7 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserBorderPanelOverlayInnerUvs )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr overlay = parsingContext->pOverlay;
+		OverlaySPtr overlay = parsingContext->overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
@@ -3864,7 +3864,7 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserTextOverlayFont )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr overlay = parsingContext->pOverlay;
+		OverlaySPtr overlay = parsingContext->overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eText )
 		{
@@ -3891,7 +3891,7 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserTextOverlayTextWrapping )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr overlay = parsingContext->pOverlay;
+		OverlaySPtr overlay = parsingContext->overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eText )
 		{
@@ -3910,7 +3910,7 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserTextOverlayVerticalAlign )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr overlay = parsingContext->pOverlay;
+		OverlaySPtr overlay = parsingContext->overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eText )
 		{
@@ -3929,7 +3929,7 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserTextOverlayHorizontalAlign )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr overlay = parsingContext->pOverlay;
+		OverlaySPtr overlay = parsingContext->overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eText )
 		{
@@ -3948,7 +3948,7 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserTextOverlayTexturingMode )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr overlay = parsingContext->pOverlay;
+		OverlaySPtr overlay = parsingContext->overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eText )
 		{
@@ -3967,7 +3967,7 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserTextOverlayLineSpacingMode )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr overlay = parsingContext->pOverlay;
+		OverlaySPtr overlay = parsingContext->overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eText )
 		{
@@ -3986,7 +3986,7 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserTextOverlayText )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		OverlaySPtr overlay = parsingContext->pOverlay;
+		OverlaySPtr overlay = parsingContext->overlay;
 		String strParams;
 		p_params[0]->get( strParams );
 
@@ -4006,20 +4006,20 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		String name;
-		SceneNodeSPtr pParent = parsingContext->pScene->getSceneNodeCache().find( p_params[0]->get( name ) );
+		SceneNodeSPtr pParent = parsingContext->scene->getSceneNodeCache().find( p_params[0]->get( name ) );
 
 		if ( pParent )
 		{
-			parsingContext->pSceneNode = pParent;
+			parsingContext->sceneNode = pParent;
 
-			while ( pParent->getParent() && pParent->getParent() != parsingContext->pScene->getObjectRootNode() && pParent->getParent() != parsingContext->pScene->getCameraRootNode() )
+			while ( pParent->getParent() && pParent->getParent() != parsingContext->scene->getObjectRootNode() && pParent->getParent() != parsingContext->scene->getCameraRootNode() )
 			{
 				pParent = pParent->getParent();
 			}
 
-			if ( !pParent->getParent() || pParent->getParent() == parsingContext->pScene->getObjectRootNode() )
+			if ( !pParent->getParent() || pParent->getParent() == parsingContext->scene->getObjectRootNode() )
 			{
-				pParent->attachTo( parsingContext->pScene->getCameraRootNode() );
+				pParent->attachTo( parsingContext->scene->getCameraRootNode() );
 			}
 		}
 		else
@@ -4032,8 +4032,8 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserCameraViewport )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->pViewport = std::make_shared< Viewport >( *parsingContext->m_pParser->getEngine() );
-		parsingContext->pViewport->setPerspective( Angle::fromDegrees( 0 ), 1, 0, 1 );
+		parsingContext->viewport = std::make_shared< Viewport >( *parsingContext->m_pParser->getEngine() );
+		parsingContext->viewport->setPerspective( Angle::fromDegrees( 0 ), 1, 0, 1 );
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eViewport )
 
@@ -4041,7 +4041,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		uint32_t uiType;
-		parsingContext->ePrimitiveType = Topology( p_params[0]->get( uiType ) );
+		parsingContext->primitiveType = Topology( p_params[0]->get( uiType ) );
 	}
 	END_ATTRIBUTE()
 
@@ -4049,10 +4049,10 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pSceneNode && parsingContext->pViewport )
+		if ( parsingContext->sceneNode && parsingContext->viewport )
 		{
-			parsingContext->pScene->getCameraCache().add( parsingContext->strName, parsingContext->pSceneNode, std::move( *parsingContext->pViewport ) );
-			parsingContext->pViewport.reset();
+			parsingContext->scene->getCameraCache().add( parsingContext->strName, parsingContext->sceneNode, std::move( *parsingContext->viewport ) );
+			parsingContext->viewport.reset();
 		}
 	}
 	END_ATTRIBUTE_POP()
@@ -4064,7 +4064,7 @@ namespace castor3d
 		if ( !p_params.empty() )
 		{
 			uint32_t uiType;
-			parsingContext->pViewport->updateType( ViewportType( p_params[0]->get( uiType ) ) );
+			parsingContext->viewport->updateType( ViewportType( p_params[0]->get( uiType ) ) );
 		}
 		else
 		{
@@ -4078,7 +4078,7 @@ namespace castor3d
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		real rValue;
 		p_params[0]->get( rValue );
-		parsingContext->pViewport->updateLeft( rValue );
+		parsingContext->viewport->updateLeft( rValue );
 	}
 	END_ATTRIBUTE()
 
@@ -4087,7 +4087,7 @@ namespace castor3d
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		real rValue;
 		p_params[0]->get( rValue );
-		parsingContext->pViewport->updateRight( rValue );
+		parsingContext->viewport->updateRight( rValue );
 	}
 	END_ATTRIBUTE()
 
@@ -4096,7 +4096,7 @@ namespace castor3d
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		real rValue;
 		p_params[0]->get( rValue );
-		parsingContext->pViewport->updateTop( rValue );
+		parsingContext->viewport->updateTop( rValue );
 	}
 	END_ATTRIBUTE()
 
@@ -4105,7 +4105,7 @@ namespace castor3d
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		real rValue;
 		p_params[0]->get( rValue );
-		parsingContext->pViewport->updateBottom( rValue );
+		parsingContext->viewport->updateBottom( rValue );
 	}
 	END_ATTRIBUTE()
 
@@ -4114,7 +4114,7 @@ namespace castor3d
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		real rValue;
 		p_params[0]->get( rValue );
-		parsingContext->pViewport->updateNear( rValue );
+		parsingContext->viewport->updateNear( rValue );
 	}
 	END_ATTRIBUTE()
 
@@ -4123,7 +4123,7 @@ namespace castor3d
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		real rValue;
 		p_params[0]->get( rValue );
-		parsingContext->pViewport->updateFar( rValue );
+		parsingContext->viewport->updateFar( rValue );
 	}
 	END_ATTRIBUTE()
 
@@ -4132,7 +4132,7 @@ namespace castor3d
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		Size size;
 		p_params[0]->get( size );
-		parsingContext->pViewport->resize( size );
+		parsingContext->viewport->resize( size );
 	}
 	END_ATTRIBUTE()
 
@@ -4141,7 +4141,7 @@ namespace castor3d
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		float fFovY;
 		p_params[0]->get( fFovY );
-		parsingContext->pViewport->updateFovY( Angle::fromDegrees( fFovY ) );
+		parsingContext->viewport->updateFovY( Angle::fromDegrees( fFovY ) );
 	}
 	END_ATTRIBUTE()
 
@@ -4150,7 +4150,7 @@ namespace castor3d
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		float fRatio;
 		p_params[0]->get( fRatio );
-		parsingContext->pViewport->updateRatio( fRatio );
+		parsingContext->viewport->updateRatio( fRatio );
 	}
 	END_ATTRIBUTE()
 
@@ -4158,15 +4158,15 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pBillboards )
+		if ( parsingContext->billboards )
 		{
 			String name;
 			p_params[0]->get( name );
-			SceneNodeSPtr pParent = parsingContext->pScene->getSceneNodeCache().find( name );
+			SceneNodeSPtr pParent = parsingContext->scene->getSceneNodeCache().find( name );
 
 			if ( pParent )
 			{
-				pParent->attachObject( *parsingContext->pBillboards );
+				pParent->attachObject( *parsingContext->billboards );
 			}
 			else
 			{
@@ -4184,7 +4184,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pBillboards )
+		if ( !parsingContext->billboards )
 		{
 			PARSING_ERROR( cuT( "Billboard not initialised" ) );
 		}
@@ -4197,7 +4197,7 @@ namespace castor3d
 			uint32_t value;
 			p_params[0]->get( value );
 
-			parsingContext->pBillboards->setBillboardType( BillboardType( value ) );
+			parsingContext->billboards->setBillboardType( BillboardType( value ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -4206,7 +4206,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pBillboards )
+		if ( !parsingContext->billboards )
 		{
 			PARSING_ERROR( cuT( "Billboard not initialised" ) );
 		}
@@ -4219,7 +4219,7 @@ namespace castor3d
 			uint32_t value;
 			p_params[0]->get( value );
 
-			parsingContext->pBillboards->setBillboardSize( BillboardSize( value ) );
+			parsingContext->billboards->setBillboardSize( BillboardSize( value ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -4233,7 +4233,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pBillboards )
+		if ( parsingContext->billboards )
 		{
 			auto & cache = parsingContext->m_pParser->getEngine()->getMaterialCache();
 			String name;
@@ -4241,7 +4241,7 @@ namespace castor3d
 
 			if ( cache.has( name ) )
 			{
-				parsingContext->pBillboards->setMaterial( cache.find( name ) );
+				parsingContext->billboards->setMaterial( cache.find( name ) );
 			}
 			else
 			{
@@ -4260,14 +4260,14 @@ namespace castor3d
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		Point2f dimensions;
 		p_params[0]->get( dimensions );
-		parsingContext->pBillboards->setDimensions( dimensions );
+		parsingContext->billboards->setDimensions( dimensions );
 	}
 	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( parserBillboardEnd )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->pBillboards = nullptr;
+		parsingContext->billboards = nullptr;
 	}
 	END_ATTRIBUTE_POP()
 
@@ -4276,7 +4276,7 @@ namespace castor3d
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		Point3r position;
 		p_params[0]->get( position );
-		parsingContext->pBillboards->addPoint( position );
+		parsingContext->billboards->addPoint( position );
 	}
 	END_ATTRIBUTE()
 
@@ -4288,7 +4288,7 @@ namespace castor3d
 
 		if ( parsingContext->pAnimGroup )
 		{
-			GeometrySPtr geometry = parsingContext->pScene->getGeometryCache().find( name );
+			GeometrySPtr geometry = parsingContext->scene->getGeometryCache().find( name );
 
 			if ( geometry )
 			{
@@ -4461,7 +4461,7 @@ namespace castor3d
 			{
 				Size size;
 				p_params[1]->get( size );
-				auto texture = parsingContext->pScene->getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
+				auto texture = parsingContext->scene->getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
 					, AccessType::eNone
 					, AccessType::eRead );
 				texture->getImage().initialiseSource( filePath, path );
@@ -4583,7 +4583,7 @@ namespace castor3d
 
 		if ( parsingContext->pSkybox )
 		{
-			parsingContext->pScene->setForeground( std::move( parsingContext->pSkybox ) );
+			parsingContext->scene->setForeground( std::move( parsingContext->pSkybox ) );
 			parsingContext->pSkybox.reset();
 		}
 		else
@@ -4597,7 +4597,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pRenderTarget )
+		if ( parsingContext->renderTarget )
 		{
 			if ( p_params.empty() )
 			{
@@ -4621,7 +4621,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pRenderTarget )
+		if ( parsingContext->renderTarget )
 		{
 			if ( p_params.empty() )
 			{
@@ -4645,7 +4645,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pRenderTarget )
+		if ( parsingContext->renderTarget )
 		{
 			if ( p_params.empty() )
 			{
@@ -4669,7 +4669,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pRenderTarget )
+		if ( parsingContext->renderTarget )
 		{
 			if ( p_params.empty() )
 			{
@@ -4693,7 +4693,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pRenderTarget )
+		if ( parsingContext->renderTarget )
 		{
 			if ( p_params.empty() )
 			{
@@ -4717,7 +4717,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pRenderTarget )
+		if ( parsingContext->renderTarget )
 		{
 			if ( p_params.empty() )
 			{
@@ -4741,7 +4741,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pRenderTarget )
+		if ( parsingContext->renderTarget )
 		{
 			if ( p_params.empty() )
 			{
@@ -4765,7 +4765,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pRenderTarget )
+		if ( parsingContext->renderTarget )
 		{
 			if ( p_params.empty() )
 			{
@@ -4789,7 +4789,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pRenderTarget )
+		if ( parsingContext->renderTarget )
 		{
 			if ( p_params.empty() )
 			{
@@ -4813,7 +4813,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pRenderTarget )
+		if ( parsingContext->renderTarget )
 		{
 			if ( p_params.empty() )
 			{
@@ -4837,7 +4837,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pRenderTarget )
+		if ( parsingContext->renderTarget )
 		{
 			if ( p_params.empty() )
 			{
@@ -4861,9 +4861,9 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pRenderTarget )
+		if ( parsingContext->renderTarget )
 		{
-			parsingContext->pRenderTarget->setSsaoConfig( parsingContext->ssaoConfig );
+			parsingContext->renderTarget->setSsaoConfig( parsingContext->ssaoConfig );
 		}
 		else
 		{
@@ -4965,7 +4965,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -4977,7 +4977,7 @@ namespace castor3d
 		{
 			float value;
 			p_params[0]->get( value );
-			parsingContext->pScene->setExposure( value );
+			parsingContext->scene->setExposure( value );
 		}
 	}
 	END_ATTRIBUTE()
@@ -4986,7 +4986,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->pScene )
+		if ( !parsingContext->scene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
@@ -4998,7 +4998,7 @@ namespace castor3d
 		{
 			float value;
 			p_params[0]->get( value );
-			parsingContext->pScene->setGamma( value );
+			parsingContext->scene->setGamma( value );
 		}
 	}
 	END_ATTRIBUTE()

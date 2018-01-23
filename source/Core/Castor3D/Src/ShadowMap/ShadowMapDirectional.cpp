@@ -16,7 +16,7 @@
 #include "Shader/UniformBuffer.hpp"
 #include "ShadowMap/ShadowMapPassDirectional.hpp"
 #include "Texture/Sampler.hpp"
-#include "Texture/TextureImage.hpp"
+#include "Texture/TextureView.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>

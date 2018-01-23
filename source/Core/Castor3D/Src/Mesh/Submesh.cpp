@@ -13,7 +13,7 @@
 #include "Scene/Scene.hpp"
 #include "Vertex.hpp"
 
-#include <Device.hpp>
+#include <Core/Device.hpp>
 
 using namespace castor;
 

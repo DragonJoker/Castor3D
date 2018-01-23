@@ -272,9 +272,9 @@ namespace castor3d
 		{
 			if ( m_initialised && scene->isInitialised() )
 			{
-				CameraSPtr pCamera = getCamera();
+				CameraSPtr camera = getCamera();
 
-				if ( pCamera )
+				if ( camera )
 				{
 					scene->getGeometryCache().fillInfo( info );
 					doRender( info, m_frameBuffer, getCamera() );

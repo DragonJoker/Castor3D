@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_Particle_H___
 #define ___C3D_Particle_H___
 
-#include "Mesh/Buffer/BufferDeclaration.hpp"
+#include <Pipeline/VertexLayout.hpp>
 
 namespace castor3d
 {

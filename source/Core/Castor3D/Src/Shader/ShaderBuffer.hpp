@@ -4,8 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_ShaderBuffer_H___
 #define ___C3D_ShaderBuffer_H___
 
-#include "Shader/ShaderStorageBuffer.hpp"
-#include "Texture/TextureUnit.hpp"
+#include "Castor3DPrerequisites.hpp"
 
 namespace castor3d
 {
@@ -51,31 +50,32 @@ namespace castor3d
 		C3D_API void update();
 		/**
 		 *\~english
-		 *\brief		Binds the buffer.
-		 *\param[in]	index	The binding point.
-		 *\~french
-		 *\brief		Active le tampon.
-		 *\param[in]	index	Le point d'activation.
-		 */
-		C3D_API void bind( uint32_t index )const;
-		/**
-		 *\~english
-		 *\return		The pointer the buffer.
+		 *\return		The pointer to the buffer.
 		 *\~french
 		 *\brief		Le pointeur sur le tampon.
 		 */
-		C3D_API uint8_t * ptr();
+		inline uint8_t * getPtr()
+		{
+			return m_data.data();
+		}
+		/**
+		 *\~english
+		 *\return		The buffer size.
+		 *\~french
+		 *\brief		La taille du tampon.
+		 */
+		inline uint32_t getSize()
+		{
+			return uint32_t( m_data.size() );
+		}
 
 	protected:
-		//!\~english	The SSBO.
-		//!\~french		Le SSBO.
-		ShaderStorageBufferUPtr m_ssbo;
-		//!\~english	The TBO.
-		//!\~french		Le TBO.
-		TextureUnit m_tbo;
-		//!\~english	The TBO's buffer.
-		//!\~french		Le tampon du TBO.
-		castor::PxBufferBaseSPtr m_buffer;
+		//!\~english	The SSBO, or TBO.
+		//!\~french		Le SSBO, ou TBO.
+		renderer::BufferBasePtr m_buffer;
+		//!\~english	The storage data.
+		//!\~french		Les données du stockage.
+		renderer::ByteArray m_data;
 	};
 }
 

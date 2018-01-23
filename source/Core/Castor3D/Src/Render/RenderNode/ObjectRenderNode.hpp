@@ -27,7 +27,7 @@ namespace castor3d
 			, PassRenderNode && p_passNode
 			, ModelMatrixUbo & p_modelMatrixBuffer
 			, ModelUbo & p_modelBuffer
-			, GeometryBuffers & p_buffers
+			, renderer::GeometryBuffers & p_buffers
 			, SceneNode & p_sceneNode
 			, DataType & p_data
 			, InstanceType & p_instance );
@@ -46,7 +46,7 @@ namespace castor3d
 		ModelUbo & m_modelUbo;
 		//!\~english	The geometry buffers.
 		//!\~french		Les tampons de la géométrie.
-		GeometryBuffers & m_buffers;
+		renderer::GeometryBuffers & m_buffers;
 		//!\~english	The parent scene node.
 		//!\~french		Le scene node parent.
 		SceneNode & m_sceneNode;

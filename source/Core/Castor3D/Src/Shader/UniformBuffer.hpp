@@ -8,6 +8,8 @@ See LICENSE file in root folder
 
 #include "Shader/Uniform/Uniform.hpp"
 
+#include <Buffer/UniformBuffer.hpp>
+
 #include <Design/OwnedBy.hpp>
 #include <Design/Named.hpp>
 

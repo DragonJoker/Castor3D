@@ -2,7 +2,7 @@
 
 #include "Mesh/Submesh.hpp"
 #include "Scene/Scene.hpp"
-#include "Shader/ShaderStorageBuffer.hpp"
+#include "Shader/ShaderBuffer.hpp"
 
 using namespace castor;
 
@@ -32,29 +32,12 @@ namespace castor3d
 
 	bool BonesInstantiationComponent::doInitialise()
 	{
-		bool result = true;
-
-		if ( m_instantiation.getMaxRefCount() > 1 )
-		{
-			if ( !m_instancedBonesBuffer )
-			{
-				m_instancedBonesBuffer = std::make_unique< ShaderStorageBuffer >( *getOwner()->getScene()->getEngine() );
-			}
-		}
-		else
-		{
-			m_instancedBonesBuffer.reset();
-		}
-
-		return result;
+		return true;
 	}
 
 	void BonesInstantiationComponent::doCleanup()
 	{
-		if ( m_instancedBonesBuffer )
-		{
-			m_instancedBonesBuffer->cleanup();
-		}
+		m_instancedBonesBuffer.reset();
 	}
 
 	void BonesInstantiationComponent::doFill()
@@ -62,24 +45,18 @@ namespace castor3d
 		if ( m_instancedBonesBuffer )
 		{
 			auto count = m_instantiation.getMaxRefCount();
+			auto stride = uint32_t( sizeof( float ) * 16u * 400u );
 
-			if ( count )
+			if ( count > 1
+				&& ( !m_instancedBonesBuffer || m_instancedBonesBuffer->getSize() < count * stride ) )
 			{
-				auto & bonesBuffer = *m_instancedBonesBuffer;
-				auto stride = uint32_t( sizeof( float ) * 16u * 400u );
-				uint32_t size = count * stride;
-
-				if ( bonesBuffer.getSize() != size )
-				{
-					bonesBuffer.resize( size );
-				}
+				m_instancedBonesBuffer = std::make_unique< ShaderBuffer >( *getOwner()->getScene()->getEngine()
+					, count * stride );
 			}
 			else
 			{
 				m_instancedBonesBuffer.reset();
 			}
-
-			m_instancedBonesBuffer->initialise( renderer::MemoryPropertyFlag::eHostVisible );
 		}
 	}
 
@@ -87,7 +64,7 @@ namespace castor3d
 	{
 		if ( m_instancedBonesBuffer )
 		{
-			m_instancedBonesBuffer->upload();
+			m_instancedBonesBuffer->update();
 		}
 	}
 }

@@ -44,12 +44,12 @@ namespace castor3d
 
 		BoundingBox doComputeBoundingBox( InterleavedVertexArray const & points )
 		{
-			Point3r min{ points[0].m_pos.data() };
-			Point3r max{ points[0].m_pos.data() };
+			Point3r min{ points[0].m_pos };
+			Point3r max{ points[0].m_pos };
 
 			for ( auto & vertex : points )
 			{
-				Point3r cur{ vertex.m_pos.data() };
+				Point3r cur{ vertex.m_pos };
 				max[0] = std::max( cur[0], max[0] );
 				max[1] = std::max( cur[1], max[1] );
 				max[2] = std::max( cur[2], max[2] );

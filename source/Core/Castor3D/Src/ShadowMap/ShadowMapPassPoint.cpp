@@ -5,7 +5,7 @@
 #include "Render/RenderPipeline.hpp"
 #include "Scene/Light/PointLight.hpp"
 #include "Shader/ShaderProgram.hpp"
-#include "Texture/TextureImage.hpp"
+#include "Texture/TextureView.hpp"
 
 #include <Graphics/Image.hpp>
 

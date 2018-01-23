@@ -12,7 +12,7 @@ See LICENSE file in root folder
 
 #include <Design/OwnedBy.hpp>
 
-#include <VertexBuffer.hpp>
+#include <Buffer/VertexBuffer.hpp>
 
 namespace castor3d
 {

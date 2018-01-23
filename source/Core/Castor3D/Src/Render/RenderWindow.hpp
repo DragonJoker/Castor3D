@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <Design/OwnedBy.hpp>
 #include <Graphics/Size.hpp>
 
-#include <Device.hpp>
+#include <Core/Device.hpp>
 
 namespace castor3d
 {

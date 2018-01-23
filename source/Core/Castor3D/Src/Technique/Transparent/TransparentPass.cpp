@@ -8,7 +8,7 @@
 #include <Scene/Skybox.hpp>
 #include <Shader/ShaderProgram.hpp>
 #include <Texture/Sampler.hpp>
-#include <Texture/TextureImage.hpp>
+#include <Texture/TextureView.hpp>
 #include <Texture/TextureLayout.hpp>
 
 #include <GlslSource.hpp>

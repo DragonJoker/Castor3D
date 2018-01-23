@@ -173,14 +173,14 @@ namespace GlRender
 		TextureDimensions[uint32_t( castor3d::TextureType::eCube )] = GlTexDim::eCube;
 		TextureDimensions[uint32_t( castor3d::TextureType::eCubeArray )] = GlTexDim::eCubeArray;
 
-		AlphaFuncs[uint32_t( castor3d::renderer::CompareOp::eAlways )] = GlComparator::eAlways;
-		AlphaFuncs[uint32_t( castor3d::renderer::CompareOp::eLess )] = GlComparator::eLess;
-		AlphaFuncs[uint32_t( castor3d::renderer::CompareOp::eLEqual )] = GlComparator::eLEqual;
-		AlphaFuncs[uint32_t( castor3d::renderer::CompareOp::eEqual )] = GlComparator::eEqual;
-		AlphaFuncs[uint32_t( castor3d::renderer::CompareOp::eNEqual )] = GlComparator::eNEqual;
-		AlphaFuncs[uint32_t( castor3d::renderer::CompareOp::eGEqual )] = GlComparator::eGEqual;
-		AlphaFuncs[uint32_t( castor3d::renderer::CompareOp::eGreater )] = GlComparator::eGreater;
-		AlphaFuncs[uint32_t( castor3d::renderer::CompareOp::eNever )] = GlComparator::eNever;
+		AlphaFuncs[uint32_t( renderer::CompareOp::eAlways )] = GlComparator::eAlways;
+		AlphaFuncs[uint32_t( renderer::CompareOp::eLess )] = GlComparator::eLess;
+		AlphaFuncs[uint32_t( renderer::CompareOp::eLEqual )] = GlComparator::eLEqual;
+		AlphaFuncs[uint32_t( renderer::CompareOp::eEqual )] = GlComparator::eEqual;
+		AlphaFuncs[uint32_t( renderer::CompareOp::eNEqual )] = GlComparator::eNEqual;
+		AlphaFuncs[uint32_t( renderer::CompareOp::eGEqual )] = GlComparator::eGEqual;
+		AlphaFuncs[uint32_t( renderer::CompareOp::eGreater )] = GlComparator::eGreater;
+		AlphaFuncs[uint32_t( renderer::CompareOp::eNever )] = GlComparator::eNever;
 
 		TextureWrapMode[uint32_t( castor3d::WrapMode::eRepeat )] = GlWrapMode::eRepeat;
 		TextureWrapMode[uint32_t( castor3d::WrapMode::eMirroredRepeat )] = GlWrapMode::eMirroredRepeat;

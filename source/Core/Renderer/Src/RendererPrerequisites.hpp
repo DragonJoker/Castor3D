@@ -7,52 +7,54 @@ See LICENSE file in root folder.
 #pragma once
 
 #include "RendererConfig.hpp"
+#include "UtilsMapping.hpp"
 
-#include "AccessFlag.hpp"
-#include "AttributeFormat.hpp"
-#include "BlendFactor.hpp"
-#include "BlendOp.hpp"
-#include "BorderColour.hpp"
-#include "BufferTarget.hpp"
-#include "ColourComponentFlag.hpp"
-#include "CommandBufferResetFlag.hpp"
-#include "CommandBufferUsageFlag.hpp"
-#include "CommandPoolCreateFlag.hpp"
-#include "CompareOp.hpp"
-#include "CullModeFlag.hpp"
-#include "DepthStencilStateFlag.hpp"
-#include "DescriptorType.hpp"
-#include "FenceCreateFlag.hpp"
-#include "Filter.hpp"
-#include "FrontFace.hpp"
-#include "ImageAspectFlag.hpp"
-#include "ImageLayout.hpp"
-#include "ImageTiling.hpp"
-#include "ImageUsageFlag.hpp"
-#include "IndexType.hpp"
-#include "LogicOp.hpp"
-#include "MemoryMapFlag.hpp"
-#include "MemoryPropertyFlag.hpp"
-#include "MipmapMode.hpp"
-#include "MultisampleStateFlag.hpp"
-#include "PipelineBindPoint.hpp"
-#include "PipelineStageFlag.hpp"
-#include "PolygonMode.hpp"
-#include "PrimitiveTopology.hpp"
-#include "QueryControlFlag.hpp"
-#include "QueryPipelineStatisticFlag.hpp"
-#include "RasterisationStateFlag.hpp"
-#include "SampleCountFlag.hpp"
-#include "ShaderStageFlag.hpp"
-#include "StencilOp.hpp"
-#include "SubpassContents.hpp"
-#include "TessellationStateFlag.hpp"
-#include "TextureType.hpp"
-#include "WrapMode.hpp"
-
-#include <Graphics/PixelFormat.hpp>
+#include "Enum/AccessFlag.hpp"
+#include "Enum/AttributeFormat.hpp"
+#include "Enum/BlendFactor.hpp"
+#include "Enum/BlendOp.hpp"
+#include "Enum/BorderColour.hpp"
+#include "Enum/BufferTarget.hpp"
+#include "Enum/ColourComponentFlag.hpp"
+#include "Enum/CommandBufferResetFlag.hpp"
+#include "Enum/CommandBufferUsageFlag.hpp"
+#include "Enum/CommandPoolCreateFlag.hpp"
+#include "Enum/CompareOp.hpp"
+#include "Enum/CullModeFlag.hpp"
+#include "Enum/DepthStencilStateFlag.hpp"
+#include "Enum/DescriptorType.hpp"
+#include "Enum/FenceCreateFlag.hpp"
+#include "Enum/Filter.hpp"
+#include "Enum/FrontFace.hpp"
+#include "Enum/ImageAspectFlag.hpp"
+#include "Enum/ImageLayout.hpp"
+#include "Enum/ImageTiling.hpp"
+#include "Enum/ImageUsageFlag.hpp"
+#include "Enum/IndexType.hpp"
+#include "Enum/LogicOp.hpp"
+#include "Enum/MemoryMapFlag.hpp"
+#include "Enum/MemoryPropertyFlag.hpp"
+#include "Enum/MipmapMode.hpp"
+#include "Enum/MultisampleStateFlag.hpp"
+#include "Enum/PipelineBindPoint.hpp"
+#include "Enum/PipelineStageFlag.hpp"
+#include "Enum/PolygonMode.hpp"
+#include "Enum/PrimitiveTopology.hpp"
+#include "Enum/QueryControlFlag.hpp"
+#include "Enum/QueryPipelineStatisticFlag.hpp"
+#include "Enum/QueryResultFlag.hpp"
+#include "Enum/QueryType.hpp"
+#include "Enum/RasterisationStateFlag.hpp"
+#include "Enum/SampleCountFlag.hpp"
+#include "Enum/ShaderStageFlag.hpp"
+#include "Enum/StencilOp.hpp"
+#include "Enum/SubpassContents.hpp"
+#include "Enum/TessellationStateFlag.hpp"
+#include "Enum/TextureType.hpp"
+#include "Enum/WrapMode.hpp"
 
 #include <cassert>
+#include <cstring>
 #include <ctime>
 #include <functional>
 #include <iomanip>
@@ -71,11 +73,18 @@ namespace renderer
 	class UniformBuffer;
 	template< typename T >
 	class VertexBuffer;
+	template< typename T >
+	class ShaderStorageBuffer;
+
+	struct BufferCopy;
+	struct BufferImageCopy;
+	struct ImageCopy;
 
 	class AttributeBase;
 	class BackBuffer;
 	class BufferBase;
 	class BufferMemoryBarrier;
+	class BufferView;
 	class ColourBlendState;
 	class ColourBlendStateAttachment;
 	class CommandBuffer;
@@ -96,6 +105,7 @@ namespace renderer
 	class MultisampleState;
 	class Pipeline;
 	class PipelineLayout;
+	class QueryPool;
 	class Queue;
 	class RasterisationState;
 	class RenderBuffer;
@@ -109,11 +119,13 @@ namespace renderer
 	class Semaphore;
 	class Scissor;
 	class ShaderProgram;
+	class ShaderStorageBufferBase;
 	class StagingBuffer;
 	class StencilOpState;
 	class SwapChain;
 	class TessellationState;
 	class Texture;
+	class TextureView;
 	class UniformBufferBase;
 	class VertexBufferBase;
 	class VertexLayout;
@@ -130,29 +142,11 @@ namespace renderer
 	*	Nanoseconds time to wait for a command buffer to be executed.
 	*/
 	static const uint32_t FenceTimeout = 100000000;
+
 	/**
 	*\name Typedefs généralistes.
 	*/
 	/**\{*/
-	using Vec2 = castor::Point2f;
-	using Vec3 = castor::Point3f;
-	using Vec4 = castor::Point4f;
-	using Mat4 = castor::Matrix4x4f;
-	using IVec2 = castor::Point2i;
-	using IVec3 = castor::Point3i;
-	using IVec4 = castor::Point4i;
-	using Quaternion = castor::Quaternion;
-	using RgbaColour = castor::RgbaColour;
-	using RgbColour = castor::RgbColour;
-	using PixelFormat = castor::PixelFormat;
-	using ByteArray = castor::ByteArray;
-	using UInt16Array = std::vector< uint16_t >;
-	using UInt32Array = std::vector< uint32_t >;
-	using UInt64Array = std::vector< uint64_t >;
-	using Vec3Array = castor::Point3fArray;
-	using Vec2Array = castor::Point2fArray;
-	using StringArray = castor::StringArray;
-
 	template< typename T >
 	using AttributePtr = std::unique_ptr< Attribute< T > >;
 	template< typename T >
@@ -161,9 +155,12 @@ namespace renderer
 	using UniformBufferPtr = std::unique_ptr< UniformBuffer< T > >;
 	template< typename T >
 	using VertexBufferPtr = std::unique_ptr< VertexBuffer< T > >;
+	template< typename T >
+	using ShaderStorageBufferPtr = std::unique_ptr< ShaderStorageBuffer< T > >;
 
 	using AttributeBasePtr = std::unique_ptr< AttributeBase >;
 	using BufferBasePtr = std::unique_ptr< BufferBase >;
+	using BufferViewPtr = std::unique_ptr< BufferView >;
 	using CommandBufferPtr = std::unique_ptr< CommandBuffer >;
 	using CommandPoolPtr = std::unique_ptr< CommandPool >;
 	using ConnectionPtr = std::unique_ptr< Connection >;
@@ -176,6 +173,7 @@ namespace renderer
 	using GeometryBuffersPtr = std::unique_ptr< GeometryBuffers >;
 	using IWindowHandlePtr = std::unique_ptr< IWindowHandle >;
 	using PipelineLayoutPtr = std::unique_ptr< PipelineLayout >;
+	using QueryPoolPtr = std::unique_ptr< QueryPool >;
 	using QueuePtr = std::unique_ptr< Queue >;
 	using RenderBufferPtr = std::unique_ptr< RenderBuffer >;
 	using RendererPtr = std::unique_ptr< Renderer >;
@@ -184,6 +182,7 @@ namespace renderer
 	using RenderSubpassPtr = std::unique_ptr< RenderSubpass >;
 	using SemaphorePtr = std::unique_ptr< Semaphore >;
 	using ShaderProgramPtr = std::unique_ptr< ShaderProgram >;
+	using ShaderStorageBufferBasePtr = std::unique_ptr< ShaderStorageBufferBase >;
 	using SwapChainPtr = std::unique_ptr< SwapChain >;
 	using VertexBufferBasePtr = std::unique_ptr< VertexBufferBase >;
 	using VertexLayoutPtr = std::unique_ptr< VertexLayout >;
@@ -195,6 +194,7 @@ namespace renderer
 	using SamplerPtr = std::shared_ptr< Sampler >;
 	using StagingBufferPtr = std::shared_ptr< StagingBuffer >;
 	using TexturePtr = std::shared_ptr< Texture >;
+	using TextureViewPtr = std::shared_ptr< TextureView >;
 
 	using FrameBufferPtrArray = std::vector< FrameBufferPtr >;
 	using CommandBufferPtrArray = std::vector< CommandBufferPtr >;
@@ -209,14 +209,14 @@ namespace renderer
 	using CommandBufferCRef = std::reference_wrapper< CommandBuffer const >;
 	using SemaphoreCRef = std::reference_wrapper< Semaphore const >;
 	using SwapChainCRef = std::reference_wrapper< SwapChain const >;
-	using TextureCRef = std::reference_wrapper< Texture const >;
+	using TextureViewCRef = std::reference_wrapper< TextureView const >;
 	using VertexLayoutCRef = std::reference_wrapper< VertexLayout const >;
 	using VertexBufferCRef = std::reference_wrapper< VertexBufferBase const >;
 
 	using CommandBufferCRefArray = std::vector< CommandBufferCRef >;
 	using SemaphoreCRefArray = std::vector< SemaphoreCRef >;
 	using SwapChainCRefArray = std::vector< SwapChainCRef >;
-	using TextureCRefArray = std::vector< TextureCRef >;
+	using TextureViewCRefArray = std::vector< TextureViewCRef >;
 	using VertexLayoutCRefArray = std::vector< VertexLayoutCRef >;
 	using VertexBufferCRefArray = std::vector< VertexBufferCRef >;
 	/**\}*/

@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_BILLBOARD_LIST_H___
@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "MovableObject.hpp"
 #include "RenderedObject.hpp"
 
-#include "Mesh/Buffer/BufferDeclaration.hpp"
+#include <Pipeline/VertexLayout.hpp>
 
 #include <Design/OwnedBy.hpp>
 
@@ -76,7 +76,7 @@ namespace castor3d
 		 *\brief		Dessine les billboards.
 		 *\param[in]	geometryBuffers	Les tampons de géométrie utilisés pour dessiner ces billboards.
 		 */
-		C3D_API void draw( GeometryBuffers const & geometryBuffers );
+		C3D_API void draw( renderer::GeometryBuffers const & geometryBuffers );
 		/**
 		 *\~english
 		 *\brief		Sorts the points from farthest to nearest from the camera.
@@ -201,7 +201,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le tampon de sommets.
 		 */
-		inline VertexBuffer const & getVertexBuffer()const
+		inline renderer::VertexBufferBase const & getVertexBuffer()const
 		{
 			return *m_vertexBuffer;
 		}
@@ -211,7 +211,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le tampon de sommets.
 		 */
-		inline VertexBuffer & getVertexBuffer()
+		inline renderer::VertexBufferBase & getVertexBuffer()
 		{
 			return *m_vertexBuffer;
 		}

@@ -3,7 +3,7 @@
 #include "Render/RenderSystem.hpp"
 
 #include <Buffer.hpp>
-#include <Device.hpp>
+#include <Core/Device.hpp>
 
 using namespace castor;
 

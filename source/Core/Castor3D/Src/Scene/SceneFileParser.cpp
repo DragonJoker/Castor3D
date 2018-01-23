@@ -13,26 +13,26 @@ using namespace castor;
 
 SceneFileContext::SceneFileContext( Path const & path, SceneFileParser * parser )
 	: FileParserContext( path )
-	, pWindow()
-	, pSceneNode()
-	, pGeometry()
-	, pMesh()
-	, pSubmesh()
-	, pLight()
-	, pCamera()
-	, pMaterial()
+	, window()
+	, sceneNode()
+	, geometry()
+	, mesh()
+	, submesh()
+	, light()
+	, camera()
+	, material()
 	, pass()
 	, legacyPass()
-	, pTextureUnit()
-	, pShaderProgram()
-	, eShaderObject( ShaderType::eCount )
-	, pUniform()
-	, pOverlay( nullptr )
-	, iFace1( -1 )
-	, iFace2( -1 )
-	, eLightType( LightType::eCount )
-	, ePrimitiveType( Topology::eCount )
-	, pViewport( nullptr )
+	, textureUnit()
+	, shaderProgram()
+	, shaderStage( ShaderType::eCount )
+	, uniform()
+	, overlay( nullptr )
+	, face1( -1 )
+	, face2( -1 )
+	, lightType( LightType::eCount )
+	, primitiveType( Topology::eCount )
+	, viewport( nullptr )
 	, strName()
 	, strName2()
 	, uiUInt16( 0 )
@@ -48,34 +48,34 @@ SceneFileContext::SceneFileContext( Path const & path, SceneFileParser * parser 
 
 void SceneFileContext::initialise()
 {
-	pScene.reset();
+	scene.reset();
 	pass.reset ();
 	legacyPass.reset();
-	pOverlay = nullptr;
-	iFace1 = -1;
-	iFace2 = -1;
-	eLightType = LightType::eCount;
-	ePrimitiveType = Topology::eCount;
+	overlay = nullptr;
+	face1 = -1;
+	face2 = -1;
+	lightType = LightType::eCount;
+	primitiveType = Topology::eCount;
 	uiUInt16 = 0;
 	uiUInt32 = 0;
 	uiUInt64 = 0;
 	bBool1 = false;
 	bBool2 = false;
 	m_pGeneralParentMaterial = nullptr;
-	pViewport = nullptr;
-	eShaderObject = ShaderType::eCount;
-	pWindow.reset();
-	pSceneNode.reset();
-	pGeometry.reset();
-	pMesh.reset();
-	pSubmesh.reset();
-	pLight.reset();
-	pCamera.reset();
-	pMaterial.reset();
-	pTextureUnit.reset();
-	pShaderProgram.reset();
-	pUniform.reset();
-	pSampler.reset();
+	viewport = nullptr;
+	shaderStage = ShaderType::eCount;
+	window.reset();
+	sceneNode.reset();
+	geometry.reset();
+	mesh.reset();
+	submesh.reset();
+	light.reset();
+	camera.reset();
+	material.reset();
+	textureUnit.reset();
+	shaderProgram.reset();
+	uniform.reset();
+	sampler.reset();
 	strName.clear();
 	strName2.clear();
 	mapScenes.clear();
@@ -565,11 +565,11 @@ void SceneFileParser::doInitialiseParser( Path const & path )
 	addParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "constants_buffer" ), parserConstantsBuffer, { makeParameter< ParameterType::eName >() } );
 	addParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "}" ), parserShaderEnd );
 
-	addParser( uint32_t( CSCNSection::eShaderObject ), cuT( "file" ), parserShaderProgramFile, { makeParameter< ParameterType::eCheckedText >( m_mapModels ), makeParameter< ParameterType::ePath >() } );
-	addParser( uint32_t( CSCNSection::eShaderObject ), cuT( "sampler" ), parserShaderProgramSampler, { makeParameter< ParameterType::eName >() } );
-	addParser( uint32_t( CSCNSection::eShaderObject ), cuT( "input_type" ), parserGeometryInputType, { makeParameter< ParameterType::eCheckedText >( m_mapPrimitiveTypes ) } );
-	addParser( uint32_t( CSCNSection::eShaderObject ), cuT( "output_type" ), parserGeometryOutputType, { makeParameter< ParameterType::eCheckedText >( m_mapPrimitiveOutputTypes ) } );
-	addParser( uint32_t( CSCNSection::eShaderObject ), cuT( "output_vtx_count" ), parserGeometryOutputVtxCount, { makeParameter< ParameterType::eUInt8 >() } );
+	addParser( uint32_t( CSCNSection::shaderStage ), cuT( "file" ), parserShaderProgramFile, { makeParameter< ParameterType::eCheckedText >( m_mapModels ), makeParameter< ParameterType::ePath >() } );
+	addParser( uint32_t( CSCNSection::shaderStage ), cuT( "sampler" ), parserShaderProgramSampler, { makeParameter< ParameterType::eName >() } );
+	addParser( uint32_t( CSCNSection::shaderStage ), cuT( "input_type" ), parserGeometryInputType, { makeParameter< ParameterType::eCheckedText >( m_mapPrimitiveTypes ) } );
+	addParser( uint32_t( CSCNSection::shaderStage ), cuT( "output_type" ), parserGeometryOutputType, { makeParameter< ParameterType::eCheckedText >( m_mapPrimitiveOutputTypes ) } );
+	addParser( uint32_t( CSCNSection::shaderStage ), cuT( "output_vtx_count" ), parserGeometryOutputVtxCount, { makeParameter< ParameterType::eUInt8 >() } );
 
 	addParser( uint32_t( CSCNSection::eShaderUBO ), cuT( "shaders" ), parserShaderUboShaders, { makeParameter< ParameterType::eBitwiseOred32BitsCheckedText >( m_mapShaderTypes ) } );
 	addParser( uint32_t( CSCNSection::eShaderUBO ), cuT( "variable" ), parserShaderUboVariable, { makeParameter< ParameterType::eName >() } );
@@ -718,7 +718,7 @@ void SceneFileParser::doCleanupParser()
 		m_mapScenes.insert( std::make_pair( it->first,  it->second ) );
 	}
 
-	m_renderWindow = context->pWindow;
+	m_renderWindow = context->window;
 }
 
 bool SceneFileParser::doDiscardParser( String const & line )
@@ -820,7 +820,7 @@ String SceneFileParser::doGetSectionName( uint32_t section )
 		result = cuT( "gl_shader_program" );
 		break;
 
-	case CSCNSection::eShaderObject:
+	case CSCNSection::shaderStage:
 		result = cuT( "shader_object" );
 		break;
 

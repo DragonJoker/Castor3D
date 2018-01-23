@@ -7,6 +7,8 @@ See LICENSE file in root folder
 #include "BonesComponent.hpp"
 #include "InstantiationComponent.hpp"
 
+#include "Shader/StructuredShaderBuffer.hpp"
+
 namespace castor3d
 {
 	/*!
@@ -73,7 +75,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le ShaderStorageBuffer d'instanciation des os.
 		 */
-		inline renderer::Buffer< VertexBoneData > const & getInstancedBonesBuffer()const
+		inline ShaderBuffer const & getInstancedBonesBuffer()const
 		{
 			return *m_instancedBonesBuffer;
 		}
@@ -83,7 +85,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le ShaderStorageBuffer d'instanciation des os.
 		 */
-		inline renderer::Buffer< VertexBoneData > & getInstancedBonesBuffer()
+		inline ShaderBuffer & getInstancedBonesBuffer()
 		{
 			return *m_instancedBonesBuffer;
 		}
@@ -116,7 +118,7 @@ namespace castor3d
 		BonesComponent const & m_bones;
 		//!\~english	The bones buffer (instantiation).
 		//!\~french		Le tampon de bones (instanciation).
-		renderer::BufferPtr< VertexBoneData > m_instancedBonesBuffer;
+		ShaderBufferUPtr m_instancedBonesBuffer;
 	};
 }
 

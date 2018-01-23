@@ -11,7 +11,7 @@
 #include "Mesh/Vertex.hpp"
 #include "Scene/Geometry.hpp"
 #include "Scene/Scene.hpp"
-#include "Texture/TextureImage.hpp"
+#include "Texture/TextureView.hpp"
 #include "Texture/TextureLayout.hpp"
 
 using namespace castor;

@@ -46,7 +46,7 @@ namespace castor3d
 		eTextureUnit = MAKE_SECTION_NAME( 'U', 'N', 'I', 'T' ),
 		eRenderTarget = MAKE_SECTION_NAME( 'R', 'T', 'G', 'R' ),
 		eShaderProgram = MAKE_SECTION_NAME( 'G', 'L', 'S', 'L' ),
-		eShaderObject = MAKE_SECTION_NAME( 'S', 'P', 'G', 'M' ),
+		shaderStage = MAKE_SECTION_NAME( 'S', 'P', 'G', 'M' ),
 		eShaderUBO = MAKE_SECTION_NAME( 'S', 'U', 'B', 'O' ),
 		eUBOVariable = MAKE_SECTION_NAME( 'S', 'U', 'B', 'V' ),
 		eBillboard = MAKE_SECTION_NAME( 'B', 'L', 'B', 'd' ),
@@ -94,34 +94,34 @@ namespace castor3d
 		C3D_API void initialise();
 
 	public:
-		SceneSPtr pScene;
-		RenderWindowSPtr pWindow;
-		SceneNodeSPtr pSceneNode;
-		GeometrySPtr pGeometry;
-		MeshSPtr pMesh;
-		SubmeshSPtr pSubmesh;
-		LightSPtr pLight;
-		CameraSPtr pCamera;
-		MaterialSPtr pMaterial;
-		SamplerSPtr pSampler;
-		RenderTargetSPtr pRenderTarget;
+		SceneSPtr scene;
+		RenderWindowSPtr window;
+		SceneNodeSPtr sceneNode;
+		GeometrySPtr geometry;
+		MeshSPtr mesh;
+		SubmeshSPtr submesh;
+		LightSPtr light;
+		CameraSPtr camera;
+		MaterialSPtr material;
+		SamplerSPtr sampler;
+		RenderTargetSPtr renderTarget;
 		LegacyPassSPtr legacyPass;
 		MetallicRoughnessPbrPassSPtr pbrMRPass;
 		SpecularGlossinessPbrPassSPtr pbrSGPass;
 		PassSPtr pass;
-		TextureUnitSPtr pTextureUnit;
-		ShaderProgramSPtr pShaderProgram;
-		ShaderType eShaderObject;
-		UniformBufferUPtr pUniformBuffer;
-		UniformSPtr pUniform;
-		PushUniform1sSPtr pSamplerUniform;
-		OverlaySPtr pOverlay;
-		BillboardListSPtr pBillboards;
-		int iFace1;
-		int iFace2;
-		LightType eLightType;
-		Topology ePrimitiveType;
-		ViewportSPtr pViewport;
+		TextureUnitSPtr textureUnit;
+		renderer::ShaderProgramPtr shaderProgram;
+		renderer::ShaderStageFlag shaderStage;
+		renderer::UniformBufferBasePtr uniformBuffer;
+		UniformSPtr uniform;
+		PushUniform1sSPtr samplerUniform;
+		OverlaySPtr overlay;
+		BillboardListSPtr billboards;
+		int face1;
+		int face2;
+		LightType lightType;
+		renderer::PrimitiveTopology primitiveType;
+		ViewportSPtr viewport;
 		castor::String strName;
 		castor::String strName2;
 		castor::Path path;

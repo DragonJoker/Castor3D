@@ -146,7 +146,7 @@ namespace castor3d
 		C3D_API void renderTexture( castor::Position const & position
 			, castor::Size const & size
 			, renderer::Texture const & texture
-			, renderer::Pipeline & pipeline
+			, RenderPipeline & pipeline
 			, MatrixUbo & matrixUbo );
 		/**
 		 *\~english
@@ -308,7 +308,7 @@ namespace castor3d
 		 */
 		inline void renderTexture( castor::Size const & size
 			, renderer::Texture const & texture
-			, renderer::Pipeline & pipeline
+			, RenderPipeline & pipeline
 			, MatrixUbo & matrixUbo )
 		{
 			static castor::Position const position;
@@ -525,7 +525,7 @@ namespace castor3d
 		inline void renderCubeFace( castor::Size const & size
 			, renderer::Texture * texture
 			, CubeMapFace face
-			, renderer::Pipeline & pipeline
+			, RenderPipeline & pipeline
 			, MatrixUbo & matrixUbo )
 		{
 			m_colourCube.renderFace( size

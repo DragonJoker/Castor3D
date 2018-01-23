@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_DeferredLightPass_H___
 #define ___C3D_DeferredLightPass_H___
 
-#include "Mesh/Buffer/BufferDeclaration.hpp"
+#include <Pipeline/VertexLayout.hpp>
 #include "Render/Viewport.hpp"
 #include "Shader/UniformBuffer.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"

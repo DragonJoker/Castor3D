@@ -111,6 +111,7 @@ namespace castor3d
 	class RenderLoopAsync;
 	class RenderLoopSync;
 	class RenderPass;
+	class RenderPipeline;
 	class RenderQueue;
 	class RenderSystem;
 	class RenderTarget;
@@ -146,6 +147,7 @@ namespace castor3d
 	DECLARE_SMART_PTR( RenderDepthLayerToTexture );
 	DECLARE_SMART_PTR( RenderDepthToCube );
 	DECLARE_SMART_PTR( RenderLoop );
+	DECLARE_SMART_PTR( RenderPipeline );
 	DECLARE_SMART_PTR( RenderSystem );
 	DECLARE_SMART_PTR( RenderTarget );
 	DECLARE_SMART_PTR( RenderTechnique );

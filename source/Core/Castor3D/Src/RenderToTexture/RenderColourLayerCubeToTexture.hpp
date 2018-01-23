@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Render/Viewport.hpp"
 
-#include <VertexLayout.hpp>
+#include <Pipeline/VertexLayout.hpp>
 
 #include <Design/OwnedBy.hpp>
 
@@ -104,7 +104,7 @@ namespace castor3d
 			, renderer::Texture const & p_texture
 			, castor::Point3f const & p_face
 			, castor::Point2f const & p_uvMult
-			, renderer::Pipeline & p_pipeline
+			, RenderPipeline & p_pipeline
 			, MatrixUbo & p_matrixUbo
 			, renderer::GeometryBuffers const & p_geometryBuffers
 			, uint32_t p_layer );
@@ -139,7 +139,7 @@ namespace castor3d
 		renderer::ShaderProgramPtr m_program;
 		//!\~english	The pipeline used to render a texture in the current draw-bound framebuffer.
 		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image actuellement activé en dessin.
-		renderer::PipelinePtr m_pipeline;
+		RenderPipelineUPtr m_pipeline;
 		//!\~english	The sampler for the texture.
 		//!\~french		Le sampler pour la texture.
 		SamplerSPtr m_sampler;

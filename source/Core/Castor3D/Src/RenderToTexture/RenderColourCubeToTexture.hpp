@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Render/Viewport.hpp"
 
-#include <VertexLayout.hpp>
+#include <Pipeline/VertexLayout.hpp>
 
 #include <Design/OwnedBy.hpp>
 
@@ -107,7 +107,7 @@ namespace castor3d
 		C3D_API void renderFace( castor::Size const & size
 			, renderer::Texture const & texture
 			, CubeMapFace face
-			, renderer::Pipeline & pipeline
+			, RenderPipeline & pipeline
 			, MatrixUbo & matrixUbo );
 
 	protected:
@@ -138,7 +138,7 @@ namespace castor3d
 			, renderer::Texture const & texture
 			, CubeMapFace face
 			, castor::Point2f const & uvMult
-			, renderer::Pipeline & pipeline
+			, RenderPipeline & pipeline
 			, MatrixUbo & matrixUbo
 			, renderer::GeometryBuffers const & geometryBuffers );
 		/**
@@ -172,7 +172,7 @@ namespace castor3d
 		renderer::ShaderProgramPtr m_program;
 		//!\~english	The pipeline used to render a texture in the current draw-bound framebuffer.
 		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image actuellement activé en dessin.
-		renderer::PipelinePtr m_pipeline;
+		RenderPipelineUPtr m_pipeline;
 		//!\~english	The sampler for the texture.
 		//!\~french		Le sampler pour la texture.
 		SamplerSPtr m_sampler;

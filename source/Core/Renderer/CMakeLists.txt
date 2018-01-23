@@ -59,6 +59,17 @@ add_target(
 	"${${PROJECT_NAME}_CONFIG_HEADER}"
 )
 
+parse_subdir_files( Buffer "Buffer" )
+parse_subdir_files( Command "Command" )
+parse_subdir_files( Core "Core" )
+parse_subdir_files( Descriptor "Descriptor" )
+parse_subdir_files( Enum "Enum" )
+parse_subdir_files( Image "Image" )
+parse_subdir_files( Pipeline "Pipeline" )
+parse_subdir_files( RenderPass "RenderPass" )
+parse_subdir_files( Shader "Shader" )
+parse_subdir_files( Sync "Sync" )
+
 install(
 	FILES ${CMAKE_CURRENT_BINARY_DIR}/Src/RendererConfig.hpp
 	DESTINATION include/${PROJECT_NAME}

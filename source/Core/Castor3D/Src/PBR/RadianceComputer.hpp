@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "Shader/Ubos/MatrixUbo.hpp"
 
-#include <VertexLayout.hpp>
+#include <Pipeline/VertexLayout.hpp>
 
 #include <Design/OwnedBy.hpp>
 
@@ -56,8 +56,8 @@ namespace castor3d
 		 *\param[in]	srcTexture	La texture cube source.
 		 *\param[in]	dstTexture	La texture cube destination.
 		 */
-		C3D_API void render( renderer::Texture const & srcTexture
-			, renderer::Texture const & dstTexture );
+		C3D_API void render( TextureLayout const & srcTexture
+			, TextureLayout const & dstTexture );
 
 	private:
 		/**
@@ -91,7 +91,7 @@ namespace castor3d
 		renderer::GeometryBuffersPtr m_geometryBuffers;
 		//!\~english	The pipeline used to render a texture in the framebuffer.
 		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image.
-		renderer::PipelinePtr m_pipeline;
+		RenderPipelineUPtr m_pipeline;
 		//!\~english	The frame buffer.
 		//!\~french		Le tampon d'image.
 		renderer::FrameBufferPtr m_frameBuffer;

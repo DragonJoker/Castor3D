@@ -6,7 +6,7 @@
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <Device.hpp>
+#include <Core/Device.hpp>
 #include <WindowHandle.hpp>
 
 using namespace castor;

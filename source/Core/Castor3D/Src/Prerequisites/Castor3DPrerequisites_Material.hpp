@@ -190,7 +190,9 @@ namespace castor3d
 	};
 	IMPLEMENT_FLAGS( TextureChannel )
 
+	class TextureLayout;
 	class TextureUnit;
+	class TextureView;
 	class Material;
 	class Pass;
 	class LegacyPass;
@@ -199,7 +201,9 @@ namespace castor3d
 	class Sampler;
 	class SubsurfaceScattering;
 
+	DECLARE_SMART_PTR( TextureLayout );
 	DECLARE_SMART_PTR( TextureUnit );
+	DECLARE_SMART_PTR( TextureView );
 	DECLARE_SMART_PTR( Material );
 	DECLARE_SMART_PTR( Pass );
 	DECLARE_SMART_PTR( LegacyPass );

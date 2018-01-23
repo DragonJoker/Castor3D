@@ -371,7 +371,7 @@ namespace GlRender
 		inline castor::String const & getGlslErrorString( int p_index )const;
 		inline GlTopology get( castor3d::Topology p_index )const;
 		inline GlTexDim get( castor3d::TextureType p_index )const;
-		inline GlComparator get( castor3d::renderer::CompareOp p_eAlphaFunc )const;
+		inline GlComparator get( renderer::CompareOp p_eAlphaFunc )const;
 		inline GlWrapMode get( castor3d::WrapMode p_eWrapMode )const;
 		inline GlInterpolationMode get( castor3d::InterpolationMode p_interpolation )const;
 		inline GlBlendSource get( castor3d::BlendSource p_eArgument )const;
@@ -905,7 +905,7 @@ namespace GlRender
 
 		inline GlAccessType getLockFlags( castor3d::AccessTypes const & p_flags )const;
 		inline castor::FlagCombination< GlBufferMappingBit > getBitfieldFlags( castor3d::AccessTypes const & p_flags )const;
-		inline castor3d::renderer::AttributeFormat get( GlslAttributeType p_type )const;
+		inline renderer::AttributeFormat get( GlslAttributeType p_type )const;
 
 #if C3D_TRACE_OBJECTS
 
@@ -948,7 +948,7 @@ namespace GlRender
 		std::array< castor::String, 8u > GlslErrors;
 		std::array< GlTopology, size_t( castor3d::Topology::eCount ) > PrimitiveTypes;
 		std::array< GlTexDim, size_t( castor3d::TextureType::eCount ) > TextureDimensions;
-		std::array< GlComparator, size_t( castor3d::renderer::CompareOp::eCount ) > AlphaFuncs;
+		std::array< GlComparator, size_t( renderer::CompareOp::eCount ) > AlphaFuncs;
 		std::array< GlWrapMode, size_t( castor3d::WrapMode::eCount ) > TextureWrapMode;
 		std::array< GlInterpolationMode, size_t( castor3d::InterpolationMode::eCount ) > TextureInterpolation;
 		std::array< GlBlendFactor, size_t( castor3d::BlendOperand::eCount ) > BlendFactors;

@@ -100,7 +100,7 @@ namespace castor3d
 		 *\brief		Definit la texture.
 		 *\param[in]	texture	La texture.
 		 */
-		C3D_API void setTexture( renderer::TexturePtr texture );
+		C3D_API void setTexture( TextureLayoutSPtr texture );
 		/**
 		 *\~english
 		 *\brief		Applies the texture unit.
@@ -128,10 +128,9 @@ namespace castor3d
 		 *\~french
 		 *\return		La texture.
 		 */
-		inline renderer::Texture const & getTexture()const
+		inline TextureLayoutSPtr getTexture()const
 		{
-			REQUIRE( m_texture );
-			return *m_texture;
+			return m_texture;
 		}
 		/**
 		 *\~english
@@ -270,7 +269,7 @@ namespace castor3d
 		castor::Matrix4x4r m_transformations;
 		//!\~english	The unit texture.
 		//!\~french		La texture de l'unité.
-		renderer::TexturePtr m_texture;
+		TextureLayoutSPtr m_texture;
 		//!\~english	The render target used to compute the texture, if this unit is a render target.
 		//!\~french		La render target utilisée pour générer la texture si cette unité est une render target.
 		RenderTargetWPtr m_renderTarget;

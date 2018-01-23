@@ -316,6 +316,8 @@ namespace castor3d
 	class SceneUbo;
 	class SkinningUbo;
 	class PassBuffer;
+	class ShaderBuffer;
+
 	template< UniformType Type >
 	class TUniform;
 	template< UniformType Type >
@@ -644,6 +646,7 @@ namespace castor3d
 	DECLARE_SMART_PTR( Uniform );
 	DECLARE_SMART_PTR( PushUniform );
 	DECLARE_SMART_PTR( AtomicCounterBuffer );
+	DECLARE_SMART_PTR( ShaderBuffer );
 
 	DECLARE_VECTOR( renderer::ShaderProgramPtr, ShaderProgramPtr );
 	DECLARE_LIST( PushUniformSPtr, PushUniform );

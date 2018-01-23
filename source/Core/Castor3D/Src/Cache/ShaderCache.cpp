@@ -10,7 +10,7 @@
 
 #include <GlslSource.hpp>
 
-#include <Device.hpp>
+#include <Core/Device.hpp>
 #include <ShaderProgram.hpp>
 
 using namespace castor;

@@ -13,7 +13,7 @@
 #include "Shader/Shaders/GlslMaterial.hpp"
 #include "ShadowMap/ShadowMapPassSpot.hpp"
 #include "Texture/Sampler.hpp"
-#include "Texture/TextureImage.hpp"
+#include "Texture/TextureView.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>

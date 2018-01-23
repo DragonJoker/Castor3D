@@ -5,7 +5,7 @@
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
 
-#include <Device.hpp>
+#include <Core/Device.hpp>
 
 using namespace castor;
 
@@ -143,6 +143,7 @@ namespace castor3d
 			, m_borderColour
 			, m_maxAnisotropy
 			, m_compareOp );
+		return true;
 	}
 
 	void Sampler::cleanup()

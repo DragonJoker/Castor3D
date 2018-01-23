@@ -93,10 +93,10 @@ namespace castor3d
 			TextureUnit m_colourTexture;
 			//!\~english	The frame buffer.
 			//!\~french		Le tampon d'image.
-			FrameBufferSPtr m_frameBuffer;
+			renderer::FrameBufferPtr m_frameBuffer;
 			//!\~english	The attach between the colour texture and main frame buffer.
 			//!\~french		L'attache entre la texture de couleurs et le tampon principal.
-			TextureAttachmentSPtr m_colourAttach;
+			// TextureAttachmentSPtr m_colourAttach;
 
 		private:
 			RenderTarget & m_renderTarget;
@@ -308,9 +308,9 @@ namespace castor3d
 		 *\~french
 		 *\return		Le tampon d'image.
 		 */
-		inline FrameBufferSPtr getFrameBuffer()const
+		inline renderer::FrameBuffer const & getFrameBuffer()const
 		{
-			return m_frameBuffer.m_frameBuffer;
+			return *m_frameBuffer.m_frameBuffer;
 		}
 		/**
 		 *\~english

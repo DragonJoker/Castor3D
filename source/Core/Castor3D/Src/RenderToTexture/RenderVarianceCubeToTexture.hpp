@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Render/Viewport.hpp"
 
-#include <VertexLayout.hpp>
+#include <Pipeline/VertexLayout.hpp>
 
 #include <Design/OwnedBy.hpp>
 
@@ -82,7 +82,7 @@ namespace castor3d
 			renderer::GeometryBuffersPtr m_geometryBuffers;
 			//!\~english	The pipeline used to render a texture in the current draw-bound framebuffer.
 			//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image actuellement activé en dessin.
-			renderer::PipelinePtr m_pipeline;
+			RenderPipelineUPtr m_pipeline;
 			//!\~english	The uniform variable holding the direction of the face to render.
 			//!\~french		La variable uniforme contenant la direction de la face à dessiner.
 			PushUniform3fSPtr m_faceUniform;
@@ -152,13 +152,13 @@ namespace castor3d
 		renderer::ShaderProgramPtr m_programDepth;
 		//!\~english	The pipeline used to render a texture in the current draw-bound framebuffer.
 		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image actuellement activé en dessin.
-		renderer::PipelinePtr m_pipelineDepth;
+		Pipeline m_pipelineDepth;
 		//!\~english	The shader program.
 		//!\~french		Le programme shader.
 		renderer::ShaderProgramPtr m_programVariance;
 		//!\~english	The pipeline used to render a texture in the current draw-bound framebuffer.
 		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image actuellement activé en dessin.
-		renderer::PipelinePtr m_pipelineVariance;
+		Pipeline m_pipelineVariance;
 		//!\~english	The sampler for the texture.
 		//!\~french		Le sampler pour la texture.
 		SamplerSPtr m_sampler;

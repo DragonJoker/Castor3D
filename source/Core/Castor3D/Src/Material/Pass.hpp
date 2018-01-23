@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_PASS_H___
@@ -470,7 +470,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La fonction d'alpha.
 		 */
-		inline castor3d::renderer::CompareOp getAlphaFunc()const
+		inline renderer::CompareOp getAlphaFunc()const
 		{
 			return m_alphaFunc;
 		}
@@ -482,7 +482,7 @@ namespace castor3d
 		 *\brief		Définit la fonction d'alpha.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setAlphaFunc( castor3d::renderer::CompareOp value )
+		inline void setAlphaFunc( renderer::CompareOp value )
 		{
 			m_alphaFunc = value;
 			onChanged( *this );

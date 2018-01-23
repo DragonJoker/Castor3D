@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Scene/MovableObject.hpp"
 
-#include "Mesh/Buffer/BufferDeclaration.hpp"
+#include <Pipeline/VertexLayout.hpp>
 
 #include <Miscellaneous/PreciseTimer.hpp>
 
