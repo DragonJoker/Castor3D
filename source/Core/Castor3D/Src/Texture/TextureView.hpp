@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_TextureView_H___
 #define ___C3D_TextureView_H___
 
-#include "TextureStorage.hpp"
+#include "Castor3DPrerequisites.hpp"
 
 #include <Graphics/PixelBufferBase.hpp>
 

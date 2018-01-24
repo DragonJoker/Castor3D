@@ -128,7 +128,7 @@ namespace castor3d
 		RenderPipelineUPtr m_pipeline;
 		//!\~english	The pipeline used to render the tone mapping.
 		//!\~french		Le pipeline utilisé pour le rendu du mappage de tons.
-		RenderColourToTextureUPtr m_colour;
+		RenderQuadUPtr m_colour;
 		//!\~english	The render pass timer.
 		//!\~french		Le timer de passe de rendu.
 		RenderPassTimerSPtr m_timer;

@@ -1,19 +1,20 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_RENDER_WINDOW_H___
-#define ___C3D_RENDER_WINDOW_H___
+#ifndef ___C3D_RenderWindow_H___
+#define ___C3D_RenderWindow_H___
 
-#include "Castor3DPrerequisites.hpp"
 #include "Event/Frame/FrameListener.hpp"
 #include "Miscellaneous/PickingPass.hpp"
-#include "Miscellaneous/WindowHandle.hpp"
+#include "RenderToTexture/RenderQuad.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
 
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
 #include <Graphics/Size.hpp>
 
 #include <Core/Device.hpp>
+#include <Core/SwapChain.hpp>
 
 namespace castor3d
 {
@@ -76,7 +77,8 @@ namespace castor3d
 		 *\param[in]	engine	Le moteur.
 		 *\param[in]	name	Le nom de la fenêtre.
 		 */
-		C3D_API RenderWindow( castor::String const & p_name, Engine & engine );
+		C3D_API RenderWindow( castor::String const & name
+			, Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -96,7 +98,8 @@ namespace castor3d
 		 *\param[in]	handle	Le handle.
 		 *\return		\p false si un problème quelconque a été rencontré.
 		 */
-		C3D_API bool initialise( castor::Size const & size, renderer::WindowHandle && handle );
+		C3D_API bool initialise( castor::Size const & size
+			, renderer::WindowHandle && handle );
 		/**
 		 *\~english
 		 *\brief		Cleans up the instance.
@@ -121,7 +124,7 @@ namespace castor3d
 		 *\brief		Redimensionne la fenêtre.
 		 *\param[in]	x, y	Les nouvelles dimensions.
 		 */
-		C3D_API void resize( int x, int y );
+		C3D_API void resize( uint32_t x, uint32_t y );
 		/**
 		 *\~english
 		 *\brief		Resizes the window.
@@ -148,7 +151,7 @@ namespace castor3d
 		 *\brief		Change le statut de plein écran.
 		 *\param[in]	value	Le nouveau statut.
 		 */
-		C3D_API void updateFullScreen( bool value );
+		C3D_API void enableFullScreen( bool value );
 		/**
 		 *\~english
 		 *\return		The scene.
@@ -257,16 +260,6 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\return		The window handle.
-		 *\~french
-		 *\return		Le handle de la fenêtre.
-		 */
-		inline renderer::WindowHandle const & getHandle()const
-		{
-			return m_handle;
-		}
-		/**
-		 *\~english
 		 *\return		The intialisation status.
 		 *\~french
 		 *\return		Le statut de l'initialisation.
@@ -283,7 +276,7 @@ namespace castor3d
 		 */
 		inline FrameListenerSPtr getListener()const
 		{
-			return m_wpListener.lock();
+			return m_listener.lock();
 		}
 		/**
 		 *\~english
@@ -291,9 +284,10 @@ namespace castor3d
 		 *\~french
 		 *\return		Le contexte.
 		 */
-		inline ContextSPtr getContext()const
+		inline renderer::Device const & getDevice()const
 		{
-			return m_context;
+			REQUIRE( m_device );
+			return *m_device;
 		}
 		/**
 		 *\~english
@@ -325,9 +319,9 @@ namespace castor3d
 		 *\brief		Définit le Context.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setContext( ContextSPtr value )
+		inline void setDevice( renderer::DevicePtr && value )
 		{
-			m_context = value;
+			m_device = std::move( value );
 		}
 		/**
 		 *\~english
@@ -337,7 +331,7 @@ namespace castor3d
 		 */
 		inline bool getVSync()const
 		{
-			return m_vSync;
+			return m_vsync;
 		}
 		/**
 		 *\~english
@@ -349,7 +343,7 @@ namespace castor3d
 		 */
 		inline void setVSync( bool value )
 		{
-			m_vSync = value;
+			m_vsync = value;
 		}
 		/**
 		 *\~english
@@ -359,7 +353,7 @@ namespace castor3d
 		 */
 		inline bool isFullscreen()const
 		{
-			return m_bFullscreen;
+			return m_fullscreen;
 		}
 		/**
 		 *\~english
@@ -371,17 +365,7 @@ namespace castor3d
 		 */
 		inline void setFullscreen( bool value )
 		{
-			m_bFullscreen = value;
-		}
-		/**
-		 *\~english
-		 *\return		The window's back buffers.
-		 *\~french
-		 *\return		Les tampons de rendu de la fenêtre.
-		 */
-		BackBuffersSPtr getBackBuffers()const
-		{
-			return m_backBuffers;
+			m_fullscreen = value;
 		}
 		/**
 		 *\~english
@@ -416,51 +400,31 @@ namespace castor3d
 		}
 
 	private:
-		void doRender( WindowBuffer p_eTargetBuffer, TextureUnit const & p_texture );
-		void doUpdateSize();
+		void doCreateProgram();
+		void doCreateSwapChainDependent();
+		bool doPrepareFrames();
+		void doResetSwapChain();
 
 	private:
-		//!\~english	Total number of render windows.
-		//!\~french		Nombre total de fenêtres de rendu.
 		static uint32_t s_nbRenderWindows;
-		//!\~english	This window's index.
-		//!\~french		Index de la fenêtre.
 		uint32_t m_index;
-		//!\~english	The handle of the display window.
-		//!\~french		Handle de la fenêtre sustème.
-		renderer::WindowHandle m_handle;
-		//!\~english	The render target, which receives the main render.
-		//!\~french		La render target, recevant le rendu principal.
+		MatrixUbo m_matrixUbo;
+		renderer::DevicePtr m_device;
+		renderer::SwapChainPtr m_swapChain;
+		renderer::RenderPassPtr m_renderPass;
+		std::vector< renderer::FrameBufferPtr > m_frameBuffers;
+		renderer::CommandBufferPtrArray m_commandBuffers;
+		renderer::SignalConnection< renderer::SwapChain::OnReset > m_swapChainReset;
+		renderer::ShaderProgram * m_program{ nullptr };
+		RenderQuadUPtr m_renderQuad;
 		RenderTargetWPtr m_renderTarget;
-		//!\~english	The events listener.
-		//!\~french		Gestionnaire d'évènements.
-		FrameListenerWPtr m_wpListener;
-		//!\~english	Tells if the window is initalised.
-		//!\~french		Dit si la fenêtre est initialisée.
+		FrameListenerWPtr m_listener;
 		bool m_initialised{ false };
-		//!\~english	The rendering context.
-		//!\~french		Le contexte de rendu.
-		ContextSPtr m_context;
-		//!\~english	Tells VSync is activated.
-		//!\~french		Dit si la VSync est activée.
-		bool m_vSync{ false };
-		//!\~english	Tells fullscreen is activated.
-		//!\~french		Dit si le rendu est en plein écran.
-		bool m_bFullscreen{ false };
-		//!\~english	The window's back buffers.
-		//!\~french		Les tampons de rendu de la fenêtre.
-		BackBuffersSPtr m_backBuffers;
-		//!\~english	The window size.
-		//!\~french		Les dimensions de la fenêtre.
+		bool m_vsync{ false };
+		bool m_fullscreen{ false };
 		castor::Size m_size;
-		//!\~english	Tells we need to save a frame.
-		//!\~french		Dit si l'on veut sauvegarder une immage.
 		bool m_toSave{ false };
-		//!\~english	The pixel buffer holding the saved image.
-		//!\~french		Le tampon de pixels contenant l'image sauvegardée.
 		castor::PxBufferBaseSPtr m_saveBuffer;
-		//!\~english	The picking pass.
-		//!\~french		La passe de picking.
 		PickingPassUPtr m_pickingPass;
 	};
 }

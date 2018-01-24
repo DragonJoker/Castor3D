@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_GaussianBlur_H___
@@ -75,7 +75,6 @@ namespace castor3d
 	private:
 		void doBlur( TextureLayoutSPtr source
 			, TextureLayoutSPtr destination
-			, TextureAttachmentSPtr attach
 			, RenderPipeline & pipeline );
 		bool doInitialiseBlurXProgram( Engine & engine );
 		bool doInitialiseBlurYProgram( Engine & engine );
@@ -90,10 +89,8 @@ namespace castor3d
 	private:
 		castor::Size m_size;
 		MatrixUbo m_matrixUbo;
-		AttachmentPoint m_point;
 		TextureUnit m_colour;
-		FrameBufferSPtr m_fbo;
-		TextureAttachmentSPtr m_colourAttach;
+		renderer::FrameBufferPtr m_fbo;
 
 		std::vector< float > m_kernel;
 		castor3d::UniformBuffer m_blurUbo;

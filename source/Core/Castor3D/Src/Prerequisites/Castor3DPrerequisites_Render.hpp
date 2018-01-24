@@ -11,14 +11,17 @@ namespace castor3d
 	/**@name Render */
 	//@{
 
+	struct TexturedVertex
+	{
+		castor::Point2f m_position;
+		castor::Point2f m_texture;
+	};
+
 	struct TexturedQuad
 	{
-		struct
-		{
-			castor::Point2f m_position;
-			castor::Point2f m_texture;
-		} m_vertex[4];
+		TexturedVertex m_vertex[4];
 	};
+
 	struct TexturedCube
 	{
 		struct
@@ -102,7 +105,7 @@ namespace castor3d
 	class RenderColourCubeToTexture;
 	class RenderColourLayerToTexture;
 	class RenderColourToCube;
-	class RenderColourToTexture;
+	class RenderQuad;
 	class RenderDepthCubeLayerToTexture;
 	class RenderDepthCubeToTexture;
 	class RenderDepthLayerToTexture;
@@ -141,7 +144,7 @@ namespace castor3d
 	DECLARE_SMART_PTR( RenderColourCubeToTexture );
 	DECLARE_SMART_PTR( RenderColourLayerToTexture );
 	DECLARE_SMART_PTR( RenderColourToCube );
-	DECLARE_SMART_PTR( RenderColourToTexture );
+	DECLARE_SMART_PTR( RenderQuad );
 	DECLARE_SMART_PTR( RenderDepthCubeLayerToTexture );
 	DECLARE_SMART_PTR( RenderDepthCubeToTexture );
 	DECLARE_SMART_PTR( RenderDepthLayerToTexture );

@@ -63,7 +63,7 @@ namespace castor3d
 	 *\param[in]	texture	La valeur.
 	 *\return		Le nom.
 	 */
-	AttachmentPoint getTextureAttachmentPoint( WbTexture texture );
+	renderer::ImageAspectFlags getTextureAttachmentPoint( WbTexture texture );
 	/**
 	 *\~english
 	 *\brief		Retrieve the attachment index for given texture enum value.
@@ -123,12 +123,12 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
 		 */
-		void doPrepareFrontPipeline( ShaderProgram & program
+		void doPrepareFrontPipeline( renderer::ShaderProgram & program
 			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
 		 */
-		void doPrepareBackPipeline( ShaderProgram & program
+		void doPrepareBackPipeline( renderer::ShaderProgram & program
 			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource

@@ -1,10 +1,10 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_ShadowMap_H___
 #define ___C3D_ShadowMap_H___
 
-#include "Mesh/Buffer/GeometryBuffers.hpp"
+#include <Buffer/GeometryBuffers.hpp>
 #include "Texture/TextureUnit.hpp"
 
 #include <Design/OwnedBy.hpp>
@@ -246,10 +246,10 @@ namespace castor3d
 	protected:
 		//!\~english	The frame buffer.
 		//!\~french		Le tampon d'image.
-		FrameBufferSPtr m_frameBuffer;
+		renderer::FrameBufferPtr m_frameBuffer;
 		//!\~english	The geometry buffer.
 		//!\~french		Les tampons de géométrie.
-		std::set< GeometryBuffersSPtr > m_geometryBuffers;
+		std::set< renderer::GeometryBuffersPtr > m_geometryBuffers;
 		//!\~english	The shadow mapping passes used during the render.
 		//!\~french		Les passes de shadow mapping utilisées pendant le rendu.
 		ShadowMapPassSPtr m_pass;

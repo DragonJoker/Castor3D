@@ -82,7 +82,7 @@ namespace castor3d
 		void doBlur( GeometryPassResult const & gp
 			, TextureUnit const & source
 			, TextureUnit const & destination
-			, TextureAttachmentSPtr attach
+			//, TextureAttachmentSPtr attach
 			, castor::Point2r const & direction )const;
 		void doCombine( GeometryPassResult const & gp
 			, TextureUnit const & source )const;
@@ -110,30 +110,27 @@ namespace castor3d
 		Uniform1fSPtr m_blurCorrection;
 		Uniform1fSPtr m_blurPixelSize;
 		TextureUnit m_intermediate;
-		TextureAttachmentSPtr m_intermediateAttach;
 		std::array< TextureUnit, 3u > m_blurResults;
-		std::array< TextureAttachmentSPtr, 3u > m_blurResultsAttaches;
 		TextureUnit m_result;
-		TextureAttachmentSPtr m_resultAttach;
-		FrameBufferSPtr m_fbo;
+		renderer::FrameBufferPtr m_fbo;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
-		VertexBufferSPtr m_vertexBuffer;
+		renderer::VertexBufferBasePtr m_vertexBuffer;
 		//!\~english	The shader program.
 		//!\~french		Le shader program.
-		ShaderProgramSPtr m_blurProgram;
+		renderer::ShaderProgramPtr m_blurProgram;
 		//!\~english	The geometry buffers.
 		//!\~french		Les tampons de géométrie.
-		GeometryBuffersSPtr m_blurGeometryBuffers;
+		renderer::GeometryBuffersPtr m_blurGeometryBuffers;
 		//!\~english	The blur pipeline.
 		//!\~french		Le pipeline de flou.
 		RenderPipelineUPtr m_blurPipeline;
 		//!\~english	The shader program.
 		//!\~french		Le shader program.
-		ShaderProgramSPtr m_combineProgram;
+		renderer::ShaderProgramPtr m_combineProgram;
 		//!\~english	The geometry buffers.
 		//!\~french		Les tampons de géométrie.
-		GeometryBuffersSPtr m_combineGeometryBuffers;
+		renderer::GeometryBuffersPtr m_combineGeometryBuffers;
 		//!\~english	The combine pipeline.
 		//!\~french		Le pipeline de combinaison.
 		RenderPipelineUPtr m_combinePipeline;

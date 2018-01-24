@@ -48,7 +48,7 @@ namespace castor3d
 			, castor::Size const & size
 			, Scene const & scene
 			, OpaquePass & opaque
-			, FrameBufferAttachment & depthAttach
+			//, FrameBufferAttachment & depthAttach
 			, SceneUbo & sceneUbo
 			, GpInfoUbo & gpInfoUbo );
 		/**
@@ -115,13 +115,7 @@ namespace castor3d
 		TextureUnit m_specular;
 		//!\~english	The target FBO.
 		//!\~french		Le FBO cible.
-		FrameBufferSPtr m_frameBuffer;
-		//!\~english	The attachment between diffuse result and the frame buffer.
-		//!\~french		L'attache entre le résultat diffus et le tampon d'images.
-		TextureAttachmentSPtr m_diffuseAttach;
-		//!\~english	The attachment between specular result and the frame buffer.
-		//!\~french		L'attache entre le résultat spéculaire et le tampon d'images.
-		TextureAttachmentSPtr m_specularAttach;
+		renderer::FrameBufferPtr m_frameBuffer;
 		//!\~english	The light passes.
 		//!\~french		Les passes de lumière.
 		LightPasses m_lightPass;

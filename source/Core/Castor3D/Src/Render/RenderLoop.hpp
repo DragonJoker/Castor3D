@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "Castor3DPrerequisites.hpp"
 #include "Render/RenderInfo.hpp"
 
+#include <Core/WindowHandle.hpp>
 #include <Multithreading/ThreadPool.hpp>
 
 #include <chrono>
@@ -30,15 +31,17 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine		The engine.
-		 *\param[in]	p_wantedFPS		The wanted FPS count.
-		 *\param[in]	p_isAsync		Tells if the render loop is asynchronous.
+		 *\param[in]	wantedFPS	The wanted FPS count.
+		 *\param[in]	isAsync		Tells if the render loop is asynchronous.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
-		 *\param[in]	p_wantedFPS		Le nombre voulu du FPS.
-		 *\param[in]	p_isAsync		Dit si la boucle de rendu est asynchrone.
+		 *\param[in]	wantedFPS	Le nombre voulu du FPS.
+		 *\param[in]	isAsync		Dit si la boucle de rendu est asynchrone.
 		 */
-		C3D_API RenderLoop( Engine & engine, uint32_t p_wantedFPS, bool p_isAsync );
+		C3D_API RenderLoop( Engine & engine
+			, uint32_t wantedFPS
+			, bool isAsync );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -57,33 +60,34 @@ namespace castor3d
 		 *\~english
 		 *\brief		Creates a render context.
 		 *\remarks		If the main context has not been created yet, the first created context will become the main context.
-						For asynchronous render loop, this means that the calling thread won't have associated context, preventing calls to renderSyncFrame
-		 *\param[in]	p_window	The render window used to initialise the render context, receives the context.
+						For asynchronous render loop, this means that the calling thread won't have associated context, preventing calls to renderSyncFrame.
+		 *\param[in]	window	The render window used to initialise the render context, receives the context.
 		 *\~french
 		 *\brief		Crée un contexte de rendu.
 		 *\remarks		Si le contexte principal n'a pas encore été créé, le premier contexte créé deviendra le contexte principal.
 						Pour la boucles de rendu asynchrone, cela signifie que le thread appelant cette fonction sera sans contexte associé, prévenant l'appel de renderSyncFrame.
-		 *\param[in]	p_window	La fenêtre de rendu utilisée pour initialiser le contexte de rendu, recevra le contexte.
+		 *\param[in]	window	La fenêtre de rendu utilisée pour initialiser le contexte de rendu, recevra le contexte.
 		 */
-		C3D_API void createContext( RenderWindow & p_window );
+		C3D_API void createDevice( renderer::WindowHandle && handle
+			, RenderWindow & window );
 		/**
 		 *\~english
 		 *\brief		Show or hide debug overlays.
-		 *\param[in]	p_show	The status.
+		 *\param[in]	show	The status.
 		 *\~french
 		 *\brief		Affiche ou cache les incrustations de débogage.
-		 *\param[in]	p_show	Le statut.
+		 *\param[in]	show	Le statut.
 		 */
-		C3D_API void showDebugOverlays( bool p_show );
+		C3D_API void showDebugOverlays( bool show );
 		/**
 		 *\~english
 		 *\brief		Updates the V-Sync status.
-		 *\param[in]	p_enable	The status.
+		 *\param[in]	enable	The status.
 		 *\~french
 		 *\brief		Met à jour le statut de synchronisation verticale.
-		 *\param[in]	p_enable	Le statut.
+		 *\param[in]	enable	Le statut.
 		 */
-		C3D_API virtual void updateVSync( bool p_enable );
+		C3D_API virtual void enableVSync( bool enable );
 		/**
 		 *\~english
 		 *\brief		Flushs all events of all frame listeners.
@@ -181,14 +185,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Asks for render context creation.
-		 *\param[in]	p_window	The render window used to initialise the render context, receives the context.
+		 *\param[in]	window	The render window used to initialise the render context, receives the context.
 		 *\return		The created context, or the existing one.
 		 *\~french
 		 *\brief		Demande la création du contexte de rendu.
-		 *\param[in]	p_window	La fenêtre de rendu utilisée pour initialiser le contexte de rendu, recevra le contexte.
+		 *\param[in]	window	La fenêtre de rendu utilisée pour initialiser le contexte de rendu, recevra le contexte.
 		 *\return		Le contexte créé, ou l'existant.
 		 */
-		C3D_API ContextSPtr doCreateContext( RenderWindow & p_window );
+		C3D_API renderer::Device const * doCreateDevice( renderer::WindowHandle && handle
+			, RenderWindow & window );
 		/**
 		 *\~english
 		 *\brief		Starts threaded render loop.
@@ -199,12 +204,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Asks for main render context creation.
-		 *\param[in]	p_window	The render window used to initialise the render context, receives the context.
+		 *\param[in]	window	The render window used to initialise the render context, receives the context.
 		 *\~french
 		 *\brief		Demande la création du contexte de rendu principal.
-		 *\param[in]	p_window	La fenêtre de rendu utilisée pour initialiser le contexte de rendu, recevra le contexte.
+		 *\param[in]	window	La fenêtre de rendu utilisée pour initialiser le contexte de rendu, recevra le contexte.
 		 */
-		C3D_API virtual ContextSPtr doCreateMainContext( RenderWindow & p_window ) = 0;
+		C3D_API virtual renderer::Device const * doCreateMainDevice( renderer::WindowHandle && handle
+			, RenderWindow & window ) = 0;
 
 	private:
 		void doProcessEvents( EventType p_eventType );
@@ -230,7 +236,5 @@ namespace castor3d
 		castor::ThreadPool m_queueUpdater;
 	};
 }
-
-#undef DECLARE_MANAGED_MEMBER
 
 #endif

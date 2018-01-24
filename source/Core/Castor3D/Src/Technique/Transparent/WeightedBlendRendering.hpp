@@ -41,8 +41,7 @@ namespace castor3d
 		 */
 		WeightedBlendRendering( Engine & engine
 			, TransparentPass & transparentPass
-			, FrameBuffer & frameBuffer
-			, TextureAttachment & depthAttach
+			, renderer::FrameBuffer & frameBuffer
 			, castor::Size const & size
 			, Scene const & scene );
 		/**
@@ -89,14 +88,13 @@ namespace castor3d
 		 *\~french
 		 *\return		Le tampon d'image intermédiaire.
 		 */
-		inline FrameBuffer & getFbo()
+		inline renderer::FrameBuffer & getFbo()
 		{
 			return *m_weightedBlendPassFrameBuffer;
 		}
 
 	private:
 		using WeightedBlendTextures = std::array< TextureUnitUPtr, size_t( WbTexture::eCount ) >;
-		using WeightedBlendAttachs = std::array< TextureAttachmentSPtr, size_t( WbTexture::eCount ) >;
 
 		//!\~english	The engine.
 		//!\~french		Le moteur.
@@ -106,7 +104,7 @@ namespace castor3d
 		TransparentPass & m_transparentPass;
 		//!\~english	The target framebuffer.
 		//!\~french		Le tampon d'image ciblé.
-		FrameBuffer & m_frameBuffer;
+		renderer::FrameBuffer & m_frameBuffer;
 		//!\~english	The render area dimension.
 		//!\~french		Les dimensions de l'aire de rendu.
 		castor::Size m_size;
@@ -118,10 +116,7 @@ namespace castor3d
 		WeightedBlendTextures m_weightedBlendPassResult;
 		//!\~english	The weighted blend frame buffer.
 		//!\~french		Le tampon d'image pour le weighted blend.
-		FrameBufferSPtr m_weightedBlendPassFrameBuffer;
-		//!\~english	The attachments between textures and weighted blend frame buffer.
-		//!\~french		Les attaches entre les textures et le tampon weighted blend.
-		WeightedBlendAttachs m_weightedBlendPassTexAttachs;
+		renderer::FrameBufferPtr m_weightedBlendPassFrameBuffer;
 	};
 }
 

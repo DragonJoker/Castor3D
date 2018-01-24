@@ -84,11 +84,10 @@ namespace castor3d
 		MatrixUbo & m_matrixUbo;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		TextureUnit m_result;
-		ShaderProgramSPtr m_program;
+		renderer::ShaderProgramPtr m_program;
 		PushUniform2i & m_axisUniform;
 		RenderPipelineUPtr m_pipeline;
-		FrameBufferSPtr m_fbo;
-		TextureAttachmentSPtr m_resultAttach;
+		renderer::FrameBufferPtr m_fbo;
 		RenderPassTimerSPtr m_timer;
 
 	};

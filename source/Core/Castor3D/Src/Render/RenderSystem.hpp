@@ -103,14 +103,14 @@ namespace castor3d
 		 *\brief		Définit le contexte de rendu actuellement actif
 		 *\param[in]	context	Le contexte
 		 */
-		C3D_API void setCurrentContext( Context * context );
+		C3D_API void setCurrentDevice( renderer::Device const * device );
 		/**
 		 *\~english
 		 *\return		The currently active render context.
 		 *\~french
 		 *\return		Le contexte de rendu actuellement actif.
 		 */
-		C3D_API Context * getCurrentContext();
+		C3D_API renderer::Device const * getCurrentDevice();
 		/**
 		 *\~english
 		 *\brief		Retrieves a GPU buffer with the given size.
@@ -149,6 +149,18 @@ namespace castor3d
 		C3D_API void cleanupPool();
 		/**
 		 *\~english
+		 *\brief		Creates a logical device bound to a physical GPU.
+		 *\param[in]	gpu	The GPU index.
+		 *\return		The created device.
+		 *\~french
+		 *\brief		Crée un périphérique logique lié à un GPU physique.
+		 *\param[in]	gpu	L'indice du GPU.
+		 *\return		Le périphérique logique créé.
+		 */
+		C3D_API renderer::DevicePtr createDevice( renderer::WindowHandle && handle
+			, uint32_t gpu = 0u );
+		/**
+		 *\~english
 		 *\return		The GPU informations.
 		 *\~french
 		 *\return		Les informations sur le GPU.
@@ -179,25 +191,36 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the main render context
-		 *\param[in]	context	The context
+		 *\brief		Sets the main device.
+		 *\param[in]	device	The device.
 		 *\~french
-		 *\brief		Définit le contexte de rendu principal
-		 *\param[in]	context	Le contexte
+		 *\brief		Définit le périphérique principal.
+		 *\param[in]	device	Le périphérique.
 		 */
-		inline void setMainContext( ContextSPtr context )
+		inline void setMainDevice( renderer::Device const & device )
 		{
-			m_mainContext = context;
+			m_mainDevice = &device;
 		}
 		/**
 		 *\~english
-		 *\return		The main render context.
+		 *\return		\p true if the main device has been created.
 		 *\~french
-		 *\return		Le contexte de rendu principal.
+		 *\return		\p true si le périphérique principal a été créé.
 		 */
-		inline ContextSPtr getMainContext()
+		inline bool hasMainDevice()
 		{
-			return m_mainContext;
+			return m_mainDevice != nullptr;
+		}
+		/**
+		 *\~english
+		 *\return		The main device.
+		 *\~french
+		 *\return		Le périphérique principal.
+		 */
+		inline renderer::Device const & getMainDevice()
+		{
+			REQUIRE( hasMainDevice() );
+			return *m_mainDevice;
 		}
 		/**
 		 *\~english
@@ -242,15 +265,6 @@ namespace castor3d
 		{
 			return m_gpuTime;
 		}
-		/**
-		 *\~english
-		 *\brief		Creates a rendering context
-		 *\return		The created context
-		 *\~french
-		 *\brief		Crée un contexte de rendu
-		 *\return		Le contexte créé
-		 */
-		C3D_API virtual ContextSPtr createContext() = 0;
 
 	protected:
 		/**
@@ -269,35 +283,16 @@ namespace castor3d
 		C3D_API virtual void doCleanup() = 0;
 
 	protected:
-		//!\~english	Mutex used to make this class thread safe.
-		//!\~french		Mutex pour rendre cette classe thread safe.
 		std::recursive_mutex m_mutex;
-		//!\~english	Tells whether or not it is initialised.
-		//!\~french		Dit si le render system est initialisé.
 		bool m_initialised;
-		//!\~english	The GPU informations.
-		//!\~french		Les informations sur le GPU.
 		GpuInformations m_gpuInformations;
-		//!\~english	The overlay renderer.
-		//!\~french		Le renderer d'overlays.
 		OverlayRendererSPtr m_overlayRenderer;
-		//!\~english	The main render context.
-		//!\~french		Le contexte de rendu principal.
-		ContextSPtr m_mainContext;
-		//!\~english	The currently active render context.
-		//!\~french		Le contexte de rendu actuellement actif.
-		std::map< std::thread::id, ContextRPtr > m_currentContexts;
-		//!\~english	Scene stack.
-		//!\~french		Pile des scènes.
+		renderer::RendererPtr m_renderer;
+		renderer::Device const * m_mainDevice{ nullptr };
+		std::map< std::thread::id, renderer::Device const * > m_currentDevices;
 		std::stack< SceneRPtr > m_stackScenes;
-		//!\~english	The current loaded renderer api type.
-		//!\~french		Le type de l'api de rendu actuellement chargée.
 		castor::String m_name;
-		//!\~english	The time spent on GPU for current frame.
-		//!\~french		Le temps passé sur le GPU pour l'image courante.
 		castor::Nanoseconds m_gpuTime;
-		//!\~english	The GPU buffer pool.
-		//!\~french		Le pool de tampons GPU.
 		GpuBufferPool m_gpuBufferPool;
 
 #if C3D_TRACE_OBJECTS

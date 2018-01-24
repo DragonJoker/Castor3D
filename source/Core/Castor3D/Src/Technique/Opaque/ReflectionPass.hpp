@@ -78,7 +78,7 @@ namespace castor3d
 			, TextureUnit const & lightSpecular
 			, Scene const & scene
 			, Camera const & camera
-			, FrameBuffer const & frameBuffer );
+			, renderer::FrameBuffer const & frameBuffer );
 		/**
 		 *\~english
 		 *\return		The SSAO texture.
@@ -120,7 +120,7 @@ namespace castor3d
 			 *\param[in]	matType		Le type de matériaux.
 			 */
 			ProgramPipeline( Engine & engine
-				, VertexBuffer & vbo
+				, renderer::VertexBufferBase & vbo
 				, MatrixUbo & matrixUbo
 				, SceneUbo & sceneUbo
 				, GpInfoUbo & gpInfoUbo
@@ -142,13 +142,13 @@ namespace castor3d
 			 *\brief		Applies the program.
 			 *\param[in]	vbo	Le tampon de sommets.
 			 */
-			void render( VertexBuffer const & vbo );
+			void render( renderer::VertexBufferBase const & vbo );
 			//!\~english	The shader program.
 			//!\~french		Le shader program.
-			ShaderProgramSPtr m_program;
+			renderer::ShaderProgramPtr m_program;
 			//!\~english	The geometry buffers.
 			//!\~french		Les tampons de géométrie.
-			GeometryBuffersSPtr m_geometryBuffers;
+			renderer::GeometryBuffersPtr m_geometryBuffers;
 			//!\~english	The render pipeline.
 			//!\~french		Le pipeline de rendu.
 			RenderPipelineUPtr m_pipeline;
@@ -164,7 +164,7 @@ namespace castor3d
 		Viewport m_viewport;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
-		VertexBufferSPtr m_vertexBuffer;
+		renderer::VertexBufferBasePtr m_vertexBuffer;
 		//!\~english	The matrices uniform buffer.
 		//!\~french		Le tampon d'uniformes contenant les matrices.
 		MatrixUbo m_matrixUbo;

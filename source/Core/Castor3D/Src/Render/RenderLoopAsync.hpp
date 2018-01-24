@@ -29,13 +29,14 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine		The engine.
-		 *\param[in]	p_wantedFPS		The wanted FPS count.
+		 *\param[in]	wantedFPS	The wanted FPS count.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
-		 *\param[in]	p_wantedFPS		Le nombre voulu du FPS.
+		 *\param[in]	wantedFPS	Le nombre voulu du FPS.
 		 */
-		C3D_API RenderLoopAsync( Engine & engine, uint32_t p_wantedFPS = 100 );
+		C3D_API RenderLoopAsync( Engine & engine
+			, uint32_t wantedFPS = 100 );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -97,14 +98,9 @@ namespace castor3d
 		 */
 		C3D_API bool isEnded()const;
 		/**
-		 *\~english
-		 *\brief		Updates the V-Sync status.
-		 *\param[in]	p_enable	The status.
-		 *\~french
-		 *\brief		Met à jour le statut de synchronisation verticale.
-		 *\param[in]	p_enable	Le statut.
+		 *\copydoc		castor3d::RenderLoop::enableVSync
 		 */
-		C3D_API void updateVSync( bool p_enable )override;
+		C3D_API void enableVSync( bool enable )override;
 		/**
 		 *\copydoc		castor3d::RenderLoop::beginRendering
 		 */
@@ -128,9 +124,10 @@ namespace castor3d
 
 	private:
 		/**
-		 *\copydoc		castor3d::RenderLoop::doCreateMainContext
+		 *\copydoc		castor3d::RenderLoop::doCreateMainDevice
 		 */
-		C3D_API ContextSPtr doCreateMainContext( RenderWindow & p_window )override;
+		C3D_API renderer::Device const * doCreateMainDevice( renderer::WindowHandle && handle
+			, RenderWindow & window )override;
 		/**
 		 *\~english
 		 *\brief		The threaded render loop.
@@ -140,31 +137,23 @@ namespace castor3d
 		 *\remarks		Le contexte principal est créé ici, car OpenGL demande à chaque thread d'avoir son contexte.
 		 */
 		C3D_API void doMainLoop();
-		C3D_API void doSetWindow( RenderWindow * p_window );
+		C3D_API void doSetHandle( renderer::WindowHandle && handle );
+		C3D_API renderer::WindowHandle & doGetHandle();
+		C3D_API void doSetWindow( RenderWindow * window );
 		C3D_API RenderWindow * doGetWindow()const;
 
 	private:
-		//!\~english The main loop, in case of threaded rendering	\~french La boucle principale, au cas où on fait du rendu threadé
 		std::unique_ptr< std::thread > m_mainLoopThread;
-		//!\~english Tells if render has ended, by any reason.	\~french Dit si le rendu est terminé, quelle qu'en soit la raison.
 		std::atomic_bool m_ended;
-		//!\~english Tells if render is running.	\~french Dit si le rendu est en cours.
 		std::atomic_bool m_rendering;
-		//!\~english Tells the frame render is ended.	\~french Dit si le rendu de la frame courante est terminé.
 		std::atomic_bool m_frameEnded;
-		//!\~english Tells if render is paused.	\~french Dit si le rendu est en pause.
 		std::atomic_bool m_paused;
-		//!\~english Tells if render context is to be created.	\~french Dit si le contexte de rendu est à créer.
 		std::atomic_bool m_createContext;
-		//!\~english Tells if render context is created.	\~french Dit si le contexte de rendu est créé.
 		std::atomic_bool m_created;
-		//!\~english Tells if the loop is interrupted.	\~french Dit si la boucle est interrompue.
 		std::atomic_bool m_interrupted;
-		//!\~english The mutex, to make the main loop thread-safe	\~french Le mutex utilisé pour que la boucle principale soit thread-safe
 		mutable std::mutex m_mutexWindow;
-		//!\~english The render window used to initalise the main rendering context	\~french La render window utilisée pour initialiser le contexte de rendu principal
 		RenderWindowRPtr m_window;
-		//!\~english The saved frame time, if V-Sync is disabled.	\~french Le temps par frame sauvegardé, si la synchronisation verticale est désactivée.
+		renderer::WindowHandle m_handle;
 		castor::Milliseconds m_savedTime{ 0 };
 	};
 }

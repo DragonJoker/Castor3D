@@ -243,12 +243,12 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
 		 */
-		void doPrepareFrontPipeline( ShaderProgram & p_program
+		void doPrepareFrontPipeline( renderer::ShaderProgram & p_program
 			, PipelineFlags const & p_flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
 		 */
-		void doPrepareBackPipeline( ShaderProgram & p_program
+		void doPrepareBackPipeline( renderer::ShaderProgram & p_program
 			, PipelineFlags const & p_flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdateFlags
@@ -262,44 +262,16 @@ namespace castor3d
 		using CameraQueueMap = std::map< Camera const *, RenderQueue >;
 
 	private:
-		//!\~english	The scenes, and cameras used to render them.
-		//!\~french		Les scènes, et les caméras utilisées pour les dessiner.
 		std::map< castor::String, GeometryWPtr > m_pickable;
-		//!\~english	The texture receiving the color render.
-		//!\~french		La texture recevant le rendu couleur.
 		TextureLayoutSPtr m_colourTexture;
-		//!\~english	The buffer receiving the depth render.
-		//!\~french		Le tampon recevant le rendu profondeur.
-		DepthStencilRenderBufferSPtr m_depthBuffer;
-		//!\~english	The frame buffer.
-		//!\~french		Le tampon d'image.
-		FrameBufferSPtr m_frameBuffer;
-		//!\~english	The attach between texture and main frame buffer.
-		//!\~french		L'attache entre la texture et le tampon principal.
-		TextureAttachmentSPtr m_colourAttach;
-		//!\~english	The attach between depth buffer and main frame buffer.
-		//!\~french		L'attache entre le tampon profondeur et le tampon principal.
-		RenderBufferAttachmentSPtr m_depthAttach;
-		//!\~english	The scenes, and cameras used to render them.
-		//!\~french		Les scènes, et les caméras utilisées pour les dessiner.
+		renderer::RenderBufferPtr m_depthBuffer;
+		renderer::FrameBufferPtr m_frameBuffer;
 		std::map< Scene const *, CameraQueueMap > m_scenes;
-		//!\~english	The picked geometry.
-		//!\~french		La géométrie sélectionnée.
 		GeometryWPtr m_geometry;
-		//!\~english	The picked geometry.
-		//!\~french		La géométrie sélectionnée.
 		BillboardBaseWPtr m_billboard;
-		//!\~english	The picked submesh.
-		//!\~french		Le sous-maillage sélectionné.
 		SubmeshWPtr m_submesh;
-		//!\~english	The picked face index.
-		//!\~french		L'indice de la face sélectionnée.
 		uint32_t m_face{ 0u };
-		//!\~english	The picking data UBO.
-		//!\~french		L'UBO de données de picking.
 		UniformBuffer m_pickingUbo;
-		//!\~english	Receives the picking area pixels.
-		//!\~french		Reçoit les pixels de la zone pickée.
 		castor::PxBufferBaseSPtr m_buffer;
 	};
 }

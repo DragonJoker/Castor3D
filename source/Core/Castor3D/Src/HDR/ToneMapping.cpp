@@ -3,7 +3,7 @@
 #include "Engine.hpp"
 
 #include "HDR/HdrConfig.hpp"
-#include "RenderToTexture/RenderColourToTexture.hpp"
+#include "RenderToTexture/RenderQuad.hpp"
 #include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -78,7 +78,7 @@ namespace castor3d
 			m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
 			m_pipeline->addUniformBuffer( m_configUbo.getUbo() );
 
-			m_colour = std::make_unique< RenderColourToTexture >( *getEngine()->getRenderSystem()->getMainContext(), m_matrixUbo );
+			m_colour = std::make_unique< RenderQuad >( *getEngine()->getRenderSystem()->getMainContext(), m_matrixUbo );
 			m_colour->initialise();
 
 			m_timer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Tone mapping" ), cuT( "Tone mapping" ) );

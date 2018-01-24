@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "RenderToTexture/RenderColourLayerCubeToTexture.hpp"
 #include "RenderToTexture/RenderColourLayerToTexture.hpp"
 #include "RenderToTexture/RenderColourToCube.hpp"
-#include "RenderToTexture/RenderColourToTexture.hpp"
+#include "RenderToTexture/RenderQuad.hpp"
 #include "RenderToTexture/RenderDepthCubeToTexture.hpp"
 #include "RenderToTexture/RenderDepthLayerCubeToTexture.hpp"
 #include "RenderToTexture/RenderDepthLayerToTexture.hpp"
@@ -663,7 +663,7 @@ namespace castor3d
 		MatrixUbo m_matrixUbo;
 		//!\~english	The pipeline used to render a texture in the current draw-bound framebuffer.
 		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image actuellement activé en dessin.
-		RenderColourToTexture m_colour;
+		RenderQuad m_colour;
 		//!\~english	The pipeline used to render a texture in the current draw-bound framebuffer.
 		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image actuellement activé en dessin.
 		RenderColourCubeToTexture m_colourCube;

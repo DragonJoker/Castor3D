@@ -45,6 +45,24 @@ namespace renderer
 		/**
 		*\~french
 		*\brief
+		*	Active le contexte du périphérique (pour OpenGL).
+		*\~english
+		*\brief
+		*	Enables the device's context (for OpenGL).
+		*/
+		virtual void enable()const = 0;
+		/**
+		*\~french
+		*\brief
+		*	Désctive le contexte du périphérique (pour OpenGL).
+		*\~english
+		*\brief
+		*	Disables the device's context (for OpenGL).
+		*/
+		virtual void disable()const = 0;
+		/**
+		*\~french
+		*\brief
 		*	Crée une passe de rendu.
 		*\param[in] formats
 		*	Les formats des attaches voulues pour la passe.

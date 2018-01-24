@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_ShadowMapSpot_H___
@@ -83,18 +83,9 @@ namespace castor3d
 			, renderer::CompareOp alphaFunc )const override;
 
 	private:
-		//!\~english	The attach between variance map and main frame buffer.
-		//!\~french		L'attache entre la texture de variance et le tampon principal.
-		TextureAttachmentSPtr m_varianceAttach;
-		//!\~english	The attach between linear depth buffer and main frame buffer.
-		//!\~french		L'attache entre le tampon de profondeur lineaire et le tampon principal.
-		TextureAttachmentSPtr m_linearAttach;
 		//!\~english	The depth buffer.
 		//!\~french		Le tampon de profondeur.
-		DepthStencilRenderBufferSPtr m_depthBuffer;
-		//!\~english	The attach between depth buffer and main frame buffer.
-		//!\~french		L'attache entre le tampon de profondeur et le tampon principal.
-		RenderBufferAttachmentSPtr m_depthAttach;
+		renderer::RenderBufferPtr m_depthBuffer;
 		//!\~english	The Gaussian blur pass.
 		//!\~french		La passe de flou Gaussien.
 		std::unique_ptr< GaussianBlur > m_blur;

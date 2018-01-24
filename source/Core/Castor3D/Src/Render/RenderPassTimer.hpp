@@ -118,7 +118,7 @@ namespace castor3d
 		castor::Nanoseconds m_gpuTime;
 		//!\~english	The GPU time elapsed queries.
 		//!\~french		Les requêtes GPU de temps écoulé.
-		std::array< GpuQueryUPtr, 2 > m_timerQuery;
+		std::array< uint32_t, 2 > m_timerQuery;
 		//!\~english	The active query index.
 		//!\~french		L'index de la requête active.
 		uint32_t m_queryIndex = 0;

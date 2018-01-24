@@ -83,12 +83,6 @@ namespace castor3d
 			, renderer::CompareOp alphaFunc )const override;
 
 	private:
-		//!\~english	The attach between variance map and main frame buffer.
-		//!\~french		L'attache entre la texture de variance et le tampon principal.
-		TextureAttachmentSPtr m_varianceAttach;
-		//!\~english	The attach between linear depth buffer and main frame buffer.
-		//!\~french		L'attache entre le tampon de profondeur linéaire et le tampon principal.
-		TextureAttachmentSPtr m_linearAttach;
 		//!\~english	The Gaussian blur pass.
 		//!\~french		La passe de flou Gaussien.
 		std::unique_ptr< GaussianBlur > m_blur;

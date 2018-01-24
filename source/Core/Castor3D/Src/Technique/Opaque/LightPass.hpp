@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_DeferredLightPass_H___
@@ -66,7 +66,7 @@ namespace castor3d
 	 *\param[in]	texture	La valeur.
 	 *\return		Le nom.
 	 */
-	AttachmentPoint getTextureAttachmentPoint( DsTexture texture );
+	renderer::ImageAspectFlags getTextureAttachmentPoint( DsTexture texture );
 	/**
 	 *\~english
 	 *\brief		Retrieve the attachment index for given texture enum value.
@@ -266,7 +266,7 @@ namespace castor3d
 			 *\param[in]	gpInfoUbo		L'UBO de la geometry pass.
 			 *\param[in]	modelMatrixUbo	L'UBO optionnel de matrices modèle.
 			 */
-			void initialise( VertexBuffer & vbo
+			void initialise( renderer::VertexBufferBase & vbo
 				, MatrixUbo & matrixUbo
 				, SceneUbo & sceneUbo
 				, UniformBuffer & gpInfoUbo
@@ -331,10 +331,10 @@ namespace castor3d
 		public:
 			//!\~english	The shader program used to render lights.
 			//!\~french		Le shader utilisé pour rendre les lumières.
-			ShaderProgramSPtr m_program;
+			renderer::ShaderProgramPtr m_program;
 			//!\~english	Geometry buffers holder.
 			//!\~french		Conteneur de buffers de géométries.
-			GeometryBuffersSPtr m_geometryBuffers;
+			renderer::GeometryBuffersPtr m_geometryBuffers;
 			//!\~english	The pipeline used by the light pass.
 			//!\~french		Le pipeline utilisé par la passe lumières.
 			RenderPipelineSPtr m_blendPipeline;
@@ -430,8 +430,7 @@ namespace castor3d
 		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
 		LightPass( Engine & engine
-			, FrameBuffer & frameBuffer
-			, FrameBufferAttachment & depthAttach
+			, renderer::FrameBuffer & frameBuffer
 			, GpInfoUbo & gpInfoUbo
 			, bool hasShadows );
 		/**
@@ -452,7 +451,7 @@ namespace castor3d
 		 */
 		void doInitialise( Scene const & scene
 			, LightType type
-			, VertexBuffer & vbo
+			, renderer::VertexBufferBase & vbo
 			, SceneUbo & sceneUbo
 			, ModelMatrixUbo * modelMatrixUbo );
 		/**
@@ -572,10 +571,7 @@ namespace castor3d
 		MatrixUbo m_matrixUbo;
 		//!\~english	The target FBO.
 		//!\~french		Le FBO cible.
-		FrameBuffer & m_frameBuffer;
-		//!\~english	The target RBO attach.
-		//!\~french		L'attache de RBO cible.
-		FrameBufferAttachment & m_depthAttach;
+		renderer::FrameBuffer & m_frameBuffer;
 		//!\~english	The light pass program.
 		//!\~french		Le programme de la passe de lumière.
 		ProgramPtr m_program;
@@ -584,7 +580,7 @@ namespace castor3d
 		GpInfoUbo & m_gpInfoUbo;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
-		VertexBufferSPtr m_vertexBuffer;
+		renderer::VertexBufferBasePtr m_vertexBuffer;
 		//!\~english	The index buffer offset.
 		//!\~french		Le décalage du tampon d'indices.
 		uint32_t m_offset{ 0u };

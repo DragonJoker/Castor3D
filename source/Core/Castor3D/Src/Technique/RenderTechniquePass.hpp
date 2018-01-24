@@ -168,12 +168,12 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
 		 */
-		C3D_API void doPrepareFrontPipeline( ShaderProgram & program
+		C3D_API void doPrepareFrontPipeline( renderer::ShaderProgram & program
 			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
 		 */
-		C3D_API void doPrepareBackPipeline( ShaderProgram & program
+		C3D_API void doPrepareBackPipeline( renderer::ShaderProgram & program
 			, PipelineFlags const & flags )override;
 
 	protected:

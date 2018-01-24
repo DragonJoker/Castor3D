@@ -32,13 +32,7 @@ namespace castor3d
 		TextureLayoutSPtr m_depthBuffer;
 		//!\~english	The frame buffer.
 		//!\~french		Le tampon d'image.
-		FrameBufferSPtr m_frameBuffer;
-		//!\~english	The attach between texture and main frame buffer.
-		//!\~french		L'attache entre la texture et le tampon principal.
-		TextureAttachmentSPtr m_colourAttach;
-		//!\~english	The attach between depth buffer and main frame buffer.
-		//!\~french		L'attache entre le tampon profondeur et le tampon principal.
-		TextureAttachmentSPtr m_depthAttach;
+		renderer::FrameBufferPtr m_frameBuffer;
 
 	private:
 		RenderTechnique & m_technique;

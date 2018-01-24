@@ -85,15 +85,15 @@ namespace castor3d
 		MatrixUbo & m_matrixUbo;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		castor::Size m_size;
-		ShaderProgramSPtr m_lineariseProgram;
+		renderer::ShaderProgramPtr m_lineariseProgram;
 		PushUniform3fSPtr m_clipInfo;
 		RenderPipelineUPtr m_linearisePipeline;
-		ShaderProgramSPtr m_minifyProgram;
+		renderer::ShaderProgramPtr m_minifyProgram;
 		PushUniform1iSPtr m_previousLevel;
 		RenderPipelineUPtr m_minifyPipeline;
 		TextureUnit m_result;
-		std::array< FrameBufferSPtr, MaxMipLevel + 1u > m_fbos;
-		std::array< TextureAttachmentSPtr, MaxMipLevel + 1u > m_resultAttaches;
+		std::array< renderer::FrameBufferPtr, MaxMipLevel + 1u > m_fbos;
+		//std::array< TextureAttachmentSPtr, MaxMipLevel + 1u > m_resultAttaches;
 		RenderPassTimerSPtr m_timer;
 
 	};

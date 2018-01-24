@@ -37,9 +37,8 @@ namespace castor3d
 		 *\param[in]	gpuAccess		Les accès requis pour le GPU (combinaison de AccessType).
 		 */
 		C3D_API TextureLayout( RenderSystem & renderSystem
-			, TextureType type
-			, AccessTypes const & cpuAccess
-			, AccessTypes const & gpuAccess );
+			, renderer::TextureType type
+			, renderer::MemoryPropertyFlags access );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -57,9 +56,8 @@ namespace castor3d
 		 *\param[in]	mipmapCount		Le nombre de mipmaps de la texture.
 		 */
 		C3D_API TextureLayout( RenderSystem & renderSystem
-			, TextureType type
-			, AccessTypes const & cpuAccess
-			, AccessTypes const & gpuAccess
+			, renderer::TextureType type
+			, renderer::MemoryPropertyFlags access
 			, uint32_t mipmapCount );
 		/**
 		 *\~english
@@ -80,9 +78,8 @@ namespace castor3d
 		 *\param[in]	size			Les dimensions de la texture.
 		 */
 		C3D_API TextureLayout( RenderSystem & renderSystem
-			, TextureType type
-			, AccessTypes const & cpuAccess
-			, AccessTypes const & gpuAccess
+			, renderer::TextureType type
+			, renderer::MemoryPropertyFlags access
 			, castor::PixelFormat format
 			, castor::Size const & size );
 		/**
@@ -104,9 +101,8 @@ namespace castor3d
 		 *\param[in]	size			Les dimensions de la texture.
 		 */
 		C3D_API TextureLayout( RenderSystem & renderSystem
-			, TextureType type
-			, AccessTypes const & cpuAccess
-			, AccessTypes const & gpuAccess
+			, renderer::TextureType type
+			, renderer::MemoryPropertyFlags access
 			, castor::PixelFormat format
 			, castor::Point3ui const & size );
 		/**
@@ -164,7 +160,7 @@ namespace castor3d
 		 *\param[in]	lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de AccessType.
 		 *\return		Le buffer de l'image.
 		 */
-		C3D_API uint8_t * lock( AccessTypes const & lock );
+		C3D_API uint8_t * lock( renderer::AccessFlags const & lock );
 		/**
 		 *\~english
 		 *\brief		Unlocks image buffer from GPU.
@@ -190,7 +186,7 @@ namespace castor3d
 		 *\param[in]	index	L'index de l'image.
 		 *\return		Le buffer de l'image.
 		 */
-		C3D_API uint8_t * lock( AccessTypes const & lock, uint32_t index );
+		C3D_API uint8_t * lock( renderer::AccessFlags const & lock, uint32_t index );
 		/**
 		 *\~english
 		 *\brief		Unlocks image buffer from GPU.
@@ -264,7 +260,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le type de texture.
 		 */
-		inline TextureType getType()const
+		inline renderer::TextureType getType()const
 		{
 			return m_type;
 		}
@@ -293,6 +289,17 @@ namespace castor3d
 		{
 			REQUIRE( index < m_images.size() && m_images[index] );
 			return *m_images[index];
+		}
+		/**
+		 *\~english
+		 *\return		The main texture view.
+		 *\~french
+		 *\return		La vue principale sur la texture.
+		 */
+		inline renderer::TextureView & getView()
+		{
+			REQUIRE( m_view );
+			return *m_view;
 		}
 		/**
 		 *\~english
@@ -354,7 +361,7 @@ namespace castor3d
 		 */
 		inline uint32_t getDepth()const
 		{
-			return m_type == TextureType::eThreeDimensions ? m_depth : 1;
+			return m_type == renderer::TextureType::e3D ? m_depth : 1;
 		}
 		/**
 		 *\~english
@@ -364,9 +371,9 @@ namespace castor3d
 		 */
 		inline uint32_t getLayersCount()const
 		{
-			return ( m_type == TextureType::eTwoDimensionsArray
-					|| m_type == TextureType::eOneDimensionArray
-					|| m_type == TextureType::eCubeArray )
+			return ( m_type == renderer::TextureType::e2DArray
+					|| m_type == renderer::TextureType::e1DArray
+					|| m_type == renderer::TextureType::eCubeArray )
 				? m_depth
 				: 1;
 		}
@@ -435,14 +442,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the GPU storage.
-		 *\param[in]	type	The storage type.
 		 *\return		\p true if OK.
 		 *\~french
 		 *\brief		Initialise le stockage GPU.
-		 *\param[in]	type	Le type de stockage.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		bool doCreateStorage( TextureStorageType type );
+		bool doCreateStorage();
 
 	private:
 		/**
@@ -482,19 +487,19 @@ namespace castor3d
 		bool m_initialised{ false };
 		//!\~english	Texture type.
 		//!\~french		Type de texture.
-		TextureType m_type;
+		renderer::TextureType m_type;
 		//!\~english	The texture GPU storage.
 		//!\~french		Le stockage GPU de la texture.
-		TextureStorageUPtr m_storage;
+		renderer::TexturePtr m_texture;
+		//!\~english	The default texture view.
+		//!\~french		La vue de texture par défaut.
+		renderer::TextureViewPtr m_view;
 		//!\~english	The texture images.
 		//!\~french		Les images de la texture.
-		std::vector< TextureImageUPtr > m_images;
-		//!\~english	The required CPU access (combination of AccessType).
-		//!\~french		Les accès requis pour le CPU (combinaison de AccessType).
-		AccessTypes m_cpuAccess;
-		//!\~english	The required GPU access (combination of AccessType).
-		//!\~french		Les accès requis pour le GPU (combinaison de AccessType).
-		AccessTypes m_gpuAccess;
+		std::vector< TextureViewUPtr > m_images;
+		//!\~english	The required memory properties.
+		//!\~french		Les propriétés mémoire requises.
+		renderer::MemoryPropertyFlags m_properties;
 		//!\~english	The teture dimensions.
 		//!\~french		Les dimensions de la texture.
 		castor::Size m_size;

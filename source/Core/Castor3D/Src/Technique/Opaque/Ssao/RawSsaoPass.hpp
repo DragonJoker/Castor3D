@@ -83,10 +83,9 @@ namespace castor3d
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		castor::Size m_size;
 		TextureUnit m_result;
-		ShaderProgramSPtr m_program;
+		renderer::ShaderProgramPtr m_program;
 		RenderPipelineUPtr m_pipeline;
-		FrameBufferSPtr m_fbo;
-		TextureAttachmentSPtr m_resultAttach;
+		renderer::FrameBufferPtr m_fbo;
 		RenderPassTimerSPtr m_timer;
 
 	};

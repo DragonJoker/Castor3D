@@ -45,7 +45,7 @@ namespace castor3d
 		 *\param[in]	fogType		Le type de brouillard.
 		 */
 		FinalCombineProgram( Engine & engine
-			, VertexBuffer & vbo
+			, renderer::VertexBufferBase & vbo
 			, MatrixUbo & matrixUbo
 			, SceneUbo & sceneUbo
 			, GpInfoUbo & gpInfoUbo
@@ -63,15 +63,15 @@ namespace castor3d
 		 *\~french
 		 *\brief		Applique le programme.
 		 */
-		void render( VertexBuffer const & vbo )const;
+		void render( renderer::VertexBufferBase const & vbo )const;
 
 	private:
 		//!\~english	The shader program.
 		//!\~french		Le shader program.
-		ShaderProgramSPtr m_program;
+		renderer::ShaderProgramPtr m_program;
 		//!\~english	The geometry buffers.
 		//!\~french		Les tampons de géométrie.
-		GeometryBuffersSPtr m_geometryBuffers;
+		renderer::GeometryBuffersPtr m_geometryBuffers;
 		//!\~english	The render pipeline.
 		//!\~french		Le pipeline de rendu.
 		RenderPipelineUPtr m_pipeline;
@@ -134,7 +134,7 @@ namespace castor3d
 		 *\param[in]	fogType		Le type de brouillard.
 		 */
 		void render( WeightedBlendPassResult const & wbResult
-			, FrameBuffer const & frameBuffer
+			, renderer::FrameBuffer const & frameBuffer
 			, Camera const & camera
 			, castor::Matrix4x4r const & invViewProj
 			, castor::Matrix4x4r const & invView
@@ -150,7 +150,7 @@ namespace castor3d
 		Viewport m_viewport;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
-		VertexBufferSPtr m_vertexBuffer;
+		renderer::VertexBufferBasePtr m_vertexBuffer;
 		//!\~english	The matrices uniform buffer.
 		//!\~french		Le tampon d'uniformes contenant les matrices.
 		MatrixUbo m_matrixUbo;

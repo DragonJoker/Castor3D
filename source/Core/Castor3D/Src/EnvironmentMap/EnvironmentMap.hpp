@@ -27,9 +27,7 @@ namespace castor3d
 	{
 	public:
 		using CubeMatrices = std::array< castor::Matrix4x4r, size_t( CubeMapFace::eCount ) >;
-		using CubeColourAttachment = std::array< TextureAttachmentSPtr, size_t( CubeMapFace::eCount ) >;
 		using CubeCameras = std::array< CameraSPtr, size_t( CubeMapFace::eCount ) >;
-		using CubeDepthAttachment = RenderBufferAttachmentSPtr;
 		using EnvironmentMapPasses = std::array< std::unique_ptr< EnvironmentMapPass >, size_t( CubeMapFace::eCount ) >;
 
 	public:
@@ -140,21 +138,15 @@ namespace castor3d
 		//!\~english	The target size.
 		//!\~french		Les dimensions de la cible.
 		static uint32_t m_count;
-		//!\~english	The attach between depth buffer and main frame buffer.
-		//!\~french		L'attache entre le tampon de profondeur et le tampon principal.
-		CubeDepthAttachment m_depthAttach;
 		//!\~english	The depth buffer.
 		//!\~french		Le tampon de profondeur.
-		DepthStencilRenderBufferSPtr m_depthBuffer;
-		//!\~english	The attach between colour buffer and main frame buffer.
-		//!\~french		L'attache entre le tampon de couleur et le tampon principal.
-		CubeColourAttachment m_colourAttachs;
+		renderer::RenderBufferPtr m_depthBuffer;
 		//!\~english	The reflection mapping texture.
 		//!\~french		La texture de reflcetion mapping.
 		TextureUnit m_environmentMap;
 		//!\~english	The frame buffer.
 		//!\~french		Le tampon d'image.
-		FrameBufferSPtr m_frameBuffer;
+		renderer::FrameBufferPtr m_frameBuffer;
 		//!\~english	The node.
 		//!\~french		Le noeud.
 		SceneNode const & m_node;

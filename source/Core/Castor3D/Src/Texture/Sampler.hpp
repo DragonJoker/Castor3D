@@ -163,6 +163,12 @@ namespace castor3d
 		{
 			return m_compareOp;
 		}
+
+		inline renderer::Sampler const & getSampler()const
+		{
+			REQUIRE( m_sampler );
+			return *m_sampler;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -182,52 +188,52 @@ namespace castor3d
 			m_wrapS = value;
 		}
 
-		inline renderer::WrapMode setWrapT( renderer::WrapMode value )
+		inline void setWrapT( renderer::WrapMode value )
 		{
 			m_wrapT = value;
 		}
 
-		inline renderer::WrapMode setWrapR( renderer::WrapMode value )
+		inline void setWrapR( renderer::WrapMode value )
 		{
 			m_wrapR = value;
 		}
 
-		inline renderer::Filter setMinFilter( renderer::Filter value )
+		inline void setMinFilter( renderer::Filter value )
 		{
 			m_minFilter = value;
 		}
 
-		inline renderer::Filter setMagFilter( renderer::Filter value )
+		inline void setMagFilter( renderer::Filter value )
 		{
 			m_magFilter = value;
 		}
 
-		inline renderer::MipmapMode setMipFilter( renderer::MipmapMode value )
+		inline void setMipFilter( renderer::MipmapMode value )
 		{
 			m_mipFilter = value;
 		}
 
-		inline float setMinLod( float value )
+		inline void setMinLod( float value )
 		{
 			m_minLod = value;
 		}
 
-		inline float setMaxLod( float value )
+		inline void setMaxLod( float value )
 		{
 			m_maxLod = value;
 		}
 
-		inline float setLodBias( float value )
+		inline void setLodBias( float value )
 		{
 			m_lodBias = value;
 		}
 
-		inline renderer::BorderColour setBorderColour( renderer::BorderColour value )
+		inline void setBorderColour( renderer::BorderColour value )
 		{
 			m_borderColour = value;
 		}
 
-		inline float setMaxAnisotropy( float value )
+		inline void setMaxAnisotropy( float value )
 		{
 			m_maxAnisotropy = value;
 		}

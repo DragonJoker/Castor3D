@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Render/Viewport.hpp"
 
+#include <Buffer/VertexBuffer.hpp>
 #include <Pipeline/VertexLayout.hpp>
 
 #include <Design/OwnedBy.hpp>

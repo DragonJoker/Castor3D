@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
 
+#include "Mesh\SubmeshComponent\InstantiationComponent.hpp"
 #include "Render/RenderInfo.hpp"
 #include "Render/RenderQueue.hpp"
 #include "Shader/Ubos/BillboardUbo.hpp"
@@ -449,7 +450,7 @@ namespace castor3d
 		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API ShaderProgramSPtr doGetProgram( PassFlags const & passFlags
+		C3D_API renderer::ShaderProgramPtr doGetProgram( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -594,7 +595,7 @@ namespace castor3d
 		 *\param[in]	bonesBuffer	Le tampon de matrices des os.
 		 */
 		C3D_API uint32_t doCopyNodesBones( SkinningRenderNodeArray const & renderNodes
-			, ShaderStorageBuffer & bonesBuffer )const;
+			, ShaderBuffer & bonesBuffer )const;
 		/**
 		 *\~english
 		 *\brief			Copies the instanced skinned nodes model matrices into given matrix buffer.
@@ -610,7 +611,7 @@ namespace castor3d
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
 		C3D_API uint32_t doCopyNodesBones( SkinningRenderNodeArray const & renderNodes
-			, ShaderStorageBuffer & bonesBuffer
+			, ShaderBuffer & bonesBuffer
 			, RenderInfo & info )const;
 		/**
 		 *\~english
@@ -1178,7 +1179,7 @@ namespace castor3d
 		 *\param[in,out]	program	Le programme, mis à jour si besoin est.
 		 *\param[in]		flags	Les indicateurs de pipeline.
 		 */
-		C3D_API virtual void doPrepareFrontPipeline( ShaderProgram & program
+		C3D_API virtual void doPrepareFrontPipeline( renderer::ShaderProgram & program
 			, PipelineFlags const & flags ) = 0;
 		/**
 		 *\~english
@@ -1190,7 +1191,7 @@ namespace castor3d
 		 *\param[in,out]	program	Le programme, mis à jour si besoin est.
 		 *\param[in]		flags	Les indicateurs de pipeline.
 		 */
-		C3D_API virtual void doPrepareBackPipeline( ShaderProgram & program
+		C3D_API virtual void doPrepareBackPipeline( renderer::ShaderProgram & program
 			, PipelineFlags const & flags ) = 0;
 
 	protected:
@@ -1211,7 +1212,7 @@ namespace castor3d
 		std::map< PipelineFlags, RenderPipelineUPtr > m_backPipelines;
 		//!\~english	The geometries buffers.
 		//!\~french		Les tampons de géométries.
-		std::set< GeometryBuffersSPtr > m_geometryBuffers;
+		std::set< renderer::GeometryBuffersPtr > m_geometryBuffers;
 		//!\~english	Tells if the technique uses order independant rendering.
 		//!\~french		Dit si la technique utilise le rendu indépendant de l'ordre.
 		bool m_oit{ false };

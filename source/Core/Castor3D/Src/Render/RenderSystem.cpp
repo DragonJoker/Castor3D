@@ -1,6 +1,6 @@
 #include "RenderSystem.hpp"
 
-#include "Render/Context.hpp"
+#include <Core/Renderer.hpp>
 
 #include <GlslSource.hpp>
 
@@ -19,7 +19,7 @@ namespace castor3d
 
 	RenderSystem::~RenderSystem()
 	{
-		m_mainContext.reset();
+		//m_mainDevice.reset();
 	}
 
 	void RenderSystem::initialise( GpuInformations && p_informations )
@@ -36,11 +36,10 @@ namespace castor3d
 
 	void RenderSystem::cleanup()
 	{
-		if ( m_mainContext )
-		{
-			m_mainContext->cleanup();
-			m_mainContext.reset();
-		}
+		//if ( m_mainDevice )
+		//{
+		//	delete m_mainDevice;
+		//}
 
 		doCleanup();
 
@@ -49,11 +48,6 @@ namespace castor3d
 		m_tracker.reportTracked();
 
 #endif
-	}
-
-	void RenderSystem::cleanupPool()
-	{
-		m_gpuBufferPool.cleanup();
 	}
 
 	void RenderSystem::pushScene( Scene * p_scene )
@@ -70,7 +64,7 @@ namespace castor3d
 	{
 		Scene * result = nullptr;
 
-		if ( m_stackScenes.size() )
+		if ( !m_stackScenes.empty() )
 		{
 			result = m_stackScenes.top();
 		}
@@ -86,17 +80,17 @@ namespace castor3d
 			, m_gpuInformations.hasShaderStorageBuffers() } };
 	}
 
-	void RenderSystem::setCurrentContext( Context * p_context )
+	void RenderSystem::setCurrentDevice( renderer::Device const * device )
 	{
-		m_currentContexts[std::this_thread::get_id()] = p_context;
+		m_currentDevices[std::this_thread::get_id()] = device;
 	}
 
-	Context * RenderSystem::getCurrentContext()
+	renderer::Device const * RenderSystem::getCurrentDevice()
 	{
-		Context * result{ nullptr };
-		auto it = m_currentContexts.find( std::this_thread::get_id() );
+		renderer::Device const * result{ nullptr };
+		auto it = m_currentDevices.find( std::this_thread::get_id() );
 
-		if ( it != m_currentContexts.end() )
+		if ( it != m_currentDevices.end() )
 		{
 			result = it->second;
 		}
@@ -104,7 +98,7 @@ namespace castor3d
 		return result;
 	}
 
-	GpuBufferOffset RenderSystem::getBuffer( BufferType type
+	GpuBufferOffset RenderSystem::getBuffer( renderer::BufferTarget type
 		, uint32_t size
 		, renderer::MemoryPropertyFlags flags )
 	{
@@ -113,10 +107,21 @@ namespace castor3d
 			, flags );
 	}
 
-	void RenderSystem::putBuffer( BufferType type
+	void RenderSystem::putBuffer( renderer::BufferTarget type
 		, GpuBufferOffset const & bufferOffset )
 	{
 		m_gpuBufferPool.putGpuBuffer( type
 			, bufferOffset );
+	}
+
+	void RenderSystem::cleanupPool()
+	{
+		m_gpuBufferPool.cleanup();
+	}
+	
+	renderer::DevicePtr RenderSystem::createDevice( renderer::WindowHandle && handle
+		, uint32_t gpu )
+	{
+		return m_renderer->createDevice( m_renderer->createConnection( gpu, std::move( handle ) ) );
 	}
 }

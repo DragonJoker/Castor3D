@@ -101,15 +101,6 @@ namespace castor3d
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, renderer::CompareOp alphaFunc )const override;
-
-	private:
-		using CubeAttachment = std::array< TextureAttachmentSPtr, size_t( CubeMapFace::eCount ) >;
-		//!\~english	The attach between depth buffer and main frame buffer.
-		//!\~french		L'attache entre le tampon de profondeur et le tampon principal.
-		CubeAttachment m_linearAttach;
-		//!\~english	The attach between colour buffer and main frame buffer.
-		//!\~french		L'attache entre le tampon de couleur et le tampon principal.
-		CubeAttachment m_colourAttach;
 	};
 }
 

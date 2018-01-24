@@ -44,8 +44,7 @@ namespace castor3d
 		 */
 		DeferredRendering( Engine & engine
 			, OpaquePass & opaquePass
-			, FrameBuffer & frameBuffer
-			, TextureAttachment & depthAttach
+			, renderer::FrameBuffer & frameBuffer
 			, castor::Size const & size
 			, Scene const & scene
 			, SsaoConfig const & config );
@@ -90,7 +89,6 @@ namespace castor3d
 
 	private:
 		using GeometryBufferTextures = std::array< TextureUnitUPtr, size_t( DsTexture::eCount ) >;
-		using GeometryBufferAttachs = std::array< TextureAttachmentSPtr, size_t( DsTexture::eCount ) >;
 
 		//!\~english	The engine.
 		//!\~french		Le moteur.
@@ -103,10 +101,7 @@ namespace castor3d
 		OpaquePass & m_opaquePass;
 		//!\~english	The target framebuffer.
 		//!\~french		Le tampon d'image ciblé.
-		FrameBuffer & m_frameBuffer;
-		//!\~english	The target framebuffer's depth attachment.
-		//!\~french		L'attache profondeur du tampon d'image ciblé.
-		TextureAttachment & m_depthAttach;
+		renderer::FrameBuffer & m_frameBuffer;
 		//!\~english	The render area dimension.
 		//!\~french		Les dimensions de l'aire de rendu.
 		castor::Size m_size;
@@ -127,10 +122,7 @@ namespace castor3d
 		GeometryBufferTextures m_geometryPassResult;
 		//!\~english	The deferred shading frame buffer.
 		//!\~french		Le tampon d'image pour le deferred shading.
-		FrameBufferSPtr m_geometryPassFrameBuffer;
-		//!\~english	The attachments between textures and deferred shading frame buffer.
-		//!\~french		Les attaches entre les textures et le tampon deferred shading.
-		GeometryBufferAttachs m_geometryPassTexAttachs;
+		renderer::FrameBufferPtr m_geometryPassFrameBuffer;
 	};
 }
 

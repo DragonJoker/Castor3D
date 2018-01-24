@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_OVERLAY_RENDERER_H___
@@ -151,8 +151,8 @@ namespace castor3d
 		*/
 		struct OverlayGeometryBuffers
 		{
-			GeometryBuffersSPtr m_noTexture;
-			GeometryBuffersSPtr m_textured;
+			renderer::GeometryBuffersPtr m_noTexture;
+			renderer::GeometryBuffersPtr m_textured;
 		};
 		/**
 		 *\~english
@@ -235,7 +235,7 @@ namespace castor3d
 		 *\param[in]	count			Le nombre de sommets.
 		 */
 		C3D_API void doDrawItem( Material & material
-			, VertexBuffer const & vertexBuffer
+			, renderer::VertexBufferBase const & vertexBuffer
 			, OverlayGeometryBuffers const & geometryBuffers
 			, uint32_t count );
 		/**
@@ -253,8 +253,8 @@ namespace castor3d
 		 *\param[in]	count			Le nombre de sommets.
 		 */
 		C3D_API void doDrawItem( Pass & pass
-			, VertexBuffer const & vertexBuffer
-			, GeometryBuffers const & geometryBuffers
+			, renderer::VertexBufferBase const & vertexBuffer
+			, renderer::GeometryBuffers const & geometryBuffers
 			, uint32_t count );
 		/**
 		 *\~english
@@ -275,8 +275,8 @@ namespace castor3d
 		 *\param[in]	count			Le nombre de sommets.
 		 */
 		C3D_API void doDrawItem( Pass & pass
-			, VertexBuffer const & vertexBuffer
-			, GeometryBuffers const & geometryBuffers
+			, renderer::VertexBufferBase const & vertexBuffer
+			, renderer::GeometryBuffers const & geometryBuffers
 			, TextureLayout const & texture
 			, Sampler const & sampler
 			, uint32_t count );
@@ -307,18 +307,18 @@ namespace castor3d
 		 *\param[in]	textureFlags	Combinaison de TextureChannel.
 		 *\return		Le programme créé.
 		 */
-		C3D_API ShaderProgramSPtr doCreateOverlayProgram( TextureChannels const & textureFlags );
+		C3D_API renderer::ShaderProgramPtr doCreateOverlayProgram( TextureChannels const & textureFlags );
 
 	protected:
 		//!\~english	Vertex buffers for panels.
 		//!\~french		Tampons de sommets pour les panneaux.
-		VertexBufferSPtr m_panelVertexBuffer;
+		renderer::VertexBufferBasePtr m_panelVertexBuffer;
 		//!\~english	Vertex buffers for borders.
 		//!\~french		Tampons de sommets pour les bordures.
-		VertexBufferSPtr m_borderVertexBuffer;
+		renderer::VertexBufferBasePtr m_borderVertexBuffer;
 		//!\~english	The Vertex buffers used to render texts.
 		//!\~french		Les tampons de sommets utilisés pour rendre les textes.
-		std::vector< VertexBufferSPtr > m_textsVertexBuffers;
+		std::vector< renderer::VertexBufferBasePtr > m_textsVertexBuffers;
 		//!\~english	Geometry buffers for panels.
 		//!\~french		Tampons de géometrie pour les panneaux.
 		OverlayGeometryBuffers m_panelGeometryBuffers;
@@ -330,10 +330,10 @@ namespace castor3d
 		std::vector< OverlayGeometryBuffers > m_textsGeometryBuffers;
 		//!\~english	The buffer elements declaration.
 		//!\~french		La déclaration des éléments du tampon.
-		BufferDeclaration m_declaration;
+		renderer::VertexLayoutPtr m_declaration;
 		//!\~english	The text overlay buffer elements declaration.
 		//!\~french		La déclaration des éléments du tampon, pour les textes.
-		BufferDeclaration m_textDeclaration;
+		renderer::VertexLayoutPtr m_textDeclaration;
 		//!\~english	The current render target size.
 		//!\~french		Les dimensions de la cible du rendu courant.
 		castor::Size m_size;

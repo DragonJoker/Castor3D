@@ -1,0 +1,95 @@
+/*
+See LICENSE file in root folder
+*/
+#ifndef ___C3D_RenderQuad_H___
+#define ___C3D_RenderQuad_H___
+
+#include "Castor3DPrerequisites.hpp"
+
+#include <Buffer/VertexBuffer.hpp>
+#include <Buffer/GeometryBuffers.hpp>
+#include <Descriptor/DescriptorSet.hpp>
+#include <Descriptor/DescriptorSetLayout.hpp>
+#include <Descriptor/DescriptorSetPool.hpp>
+#include <Pipeline/Pipeline.hpp>
+#include <Pipeline/PipelineLayout.hpp>
+#include <Pipeline/VertexLayout.hpp>
+#include <Pipeline/Viewport.hpp>
+
+namespace castor3d
+{
+	/**
+	*\~english
+	*\brief
+	*	Class used to render colour textures.
+	*\~french
+	*\brief
+	*	Classe utilisée pour rendre les textures couleur.
+	*/
+	class RenderQuad
+	{
+	public:
+		C3D_API ~RenderQuad() = default;
+		/**
+		*\~english
+		*\brief
+		*	Constructor.
+		*\param[in] context
+		*	The Context.
+		*\param[in] matrixUbo
+		*	The UBO containing matrix data.
+		*\param[in] program
+		*	The shader program.
+		*\param[in] invertU
+		*	Tells if the U coordinate of UV must be inverted, thus mirroring the reulting image.
+		*\~french
+		*\brief
+		*	Constructeur.
+		*\param[in] context
+		*	Le Context.
+		*\param[in] matrixUbo
+		*	L'UBO contenant les données de matrices.
+		*\param[in] program
+		*	Le programme shader.
+		*\param[in] invertU
+		*	Dit si la coordonnée U de l'UV doit être inversée, rendant ainsi un mirroir de l'image.
+		*/
+		C3D_API explicit RenderQuad( RenderSystem & renderSystem
+			, MatrixUbo & matrixUbo
+			, castor::Position const & position
+			, castor::Size const & size
+			, renderer::ShaderProgram const & program
+			, renderer::TextureView const & view
+			, renderer::RenderPass const & renderPass
+			, bool nearest
+			, bool invertU = false );
+		/**
+		*\~english
+		*\brief
+		*	Records the frame in the given command buffer.
+		*\param[in,out] commandBuffer
+		*	The command buffer into which rendering commands are registered.
+		*\~french
+		*\brief
+		*	Enregistre la frame dans le tampon de commandes donné.
+		*\param[in] commandBuffer
+		*	Le tampon de commandes dans lequel les commandes de rendu sont enregistrées.
+		*/
+		C3D_API void registerFrame( renderer::CommandBuffer & commandBuffer );
+
+	private:
+		MatrixUbo & m_matrixUbo;
+		TexturedQuad m_vertexData;
+		SamplerSPtr m_sampler;
+		renderer::VertexBufferPtr< TexturedQuad > m_vertexBuffer;
+		renderer::GeometryBuffersPtr m_geometryBuffers;
+		renderer::VertexLayoutPtr m_vertexLayout;
+		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
+		renderer::DescriptorSetPoolPtr m_descriptorPool;
+		renderer::DescriptorSetPtr m_descriptorSet;
+		renderer::PipelineLayoutPtr m_pipelineLayout;
+		renderer::PipelinePtr m_pipeline;
+	};
+}
+
+#endif

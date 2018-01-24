@@ -75,12 +75,12 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
 		 */
-		C3D_API void doPrepareFrontPipeline( ShaderProgram & program
+		C3D_API void doPrepareFrontPipeline( renderer::ShaderProgram & program
 			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
 		 */
-		C3D_API void doPrepareBackPipeline( ShaderProgram & program
+		C3D_API void doPrepareBackPipeline( renderer::ShaderProgram & program
 			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
@@ -133,10 +133,7 @@ namespace castor3d
 	private:
 		//!\~english	The frame buffer.
 		//!\~french		Le tampon d'image.
-		FrameBufferSPtr m_frameBuffer;
-		//!\~english	The attach between depth buffer and frame buffer.
-		//!\~french		L'attache entre le tampon profondeur et le tampon d'image.
-		TextureAttachmentSPtr m_depthAttach;
+		renderer::FrameBufferPtr m_frameBuffer;
 	};
 }
 
