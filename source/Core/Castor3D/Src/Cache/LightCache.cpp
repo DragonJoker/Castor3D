@@ -16,6 +16,9 @@
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureView.hpp"
 
+#include <Core/Device.hpp>
+#include <Image/Texture.hpp>
+
 #include <Design/ArrayView.hpp>
 
 using namespace castor;
@@ -99,7 +102,6 @@ namespace castor3d
 			, std::move( p_merge )
 			, std::move( p_attach )
 			, std::move( p_detach ) )
-		, m_lightsTexture{ *getEngine() }
 	{
 	}
 
@@ -109,24 +111,30 @@ namespace castor3d
 
 	void ObjectCache< Light, castor::String >::initialise()
 	{
-		auto texture = getEngine()->getRenderSystem()->createTexture( TextureType::eBuffer
-			, AccessType::eWrite
-			, AccessType::eRead
-			, PixelFormat::eRGBA32F
-			, Size( 1000, 1 ) );
-		texture->getImage().initialiseSource();
-		SamplerSPtr sampler = getEngine()->getLightsSampler();
-		m_lightsTexture.setAutoMipmaps( false );
-		m_lightsTexture.setSampler( sampler );
-		m_lightsTexture.setTexture( texture );
-		m_lightsTexture.setIndex( LightBufferIndex );
-		m_scene.getListener().postEvent( makeInitialiseEvent( m_lightsTexture ) );
-		m_lightsBuffer = texture->getImage().getBuffer();
+		m_lightsBuffer = PxBufferBase::create( { 1000u, 1u }, PixelFormat::eA8R8G8B8 );
+		m_scene.getListener().postEvent( makeFunctorEvent( EventType::ePreRender
+			, [this]()
+			{
+				auto & device = *getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
+				m_textureBuffer = renderer::makeBuffer< renderer::Vec4 >( device
+					, 1000u
+					, renderer::BufferTarget::eUniformTexelBuffer | renderer::BufferTarget::eTransferDst
+					, renderer::MemoryPropertyFlag::eHostVisible );
+				m_textureView = device.createBufferView( m_textureBuffer->getBuffer()
+					, m_lightsBuffer->format()
+					, 0u
+					, m_lightsBuffer->size() );
+			} ) );
 	}
 
 	void ObjectCache< Light, castor::String >::cleanup()
 	{
-		m_scene.getListener().postEvent( makeCleanupEvent( m_lightsTexture ) );
+		m_scene.getListener().postEvent( makeFunctorEvent( EventType::ePreRender
+			, [this]()
+			{
+				m_textureView.reset();
+				m_textureBuffer.reset();
+			} ) );
 		m_dirtyLights.clear();
 		m_connections.clear();
 		MyObjectCache::cleanup();
@@ -225,45 +233,31 @@ namespace castor3d
 
 	void ObjectCache< Light, castor::String >::updateLightsTexture( Camera const & camera )const
 	{
-		auto layout = m_lightsTexture.getTexture();
+		int index = 0;
 
-		if ( layout )
+		for ( auto lights : m_typeSortedLights )
 		{
-			auto const & image = layout->getImage();
-			int index = 0;
-
-			for ( auto lights : m_typeSortedLights )
+			for ( auto light : lights )
 			{
-				for ( auto light : lights )
+				if ( light->getLightType() == LightType::eDirectional
+					|| camera.isVisible( light->getBoundingBox()
+						, light->getParent()->getDerivedTransformationMatrix() ) )
 				{
-					if ( light->getLightType() == LightType::eDirectional
-						|| camera.isVisible( light->getBoundingBox()
-							, light->getParent()->getDerivedTransformationMatrix() ) )
-					{
-						light->bind( *m_lightsBuffer, index++ );
-					}
+					light->bind( *m_lightsBuffer, index++ );
 				}
 			}
-
-			auto locked = layout->lock( AccessType::eWrite );
-
-			if ( locked )
-			{
-				memcpy( locked, m_lightsBuffer->constPtr(), m_lightsBuffer->size() );
-			}
-
-			layout->unlock( true );
 		}
-	}
 
-	void ObjectCache< Light, castor::String >::bindLights()const
-	{
-		m_lightsTexture.bind();
-	}
+		auto locked = m_textureBuffer->getBuffer().lock( 0u
+			, m_textureBuffer->getBuffer().getSize()
+			, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateBuffer );
 
-	void ObjectCache< Light, castor::String >::unbindLights()const
-	{
-		m_lightsTexture.unbind();
+		if ( locked )
+		{
+			std::memcpy( locked, m_lightsBuffer->constPtr(), m_lightsBuffer->size() );
+		}
+
+		m_textureBuffer->getBuffer().unlock( m_textureBuffer->getBuffer().getSize(), true );
 	}
 
 	void ObjectCache< Light, castor::String >::onLightChanged( Light & light )

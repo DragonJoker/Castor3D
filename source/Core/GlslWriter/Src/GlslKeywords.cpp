@@ -155,7 +155,6 @@ namespace glsl
 		static std::map< Ubo::Layout, String > LayoutName
 		{
 			{ Ubo::Layout::eStd140, cuT( "std140" ) },
-			{ Ubo::Layout::ePushConstants, cuT( "std140" ) },
 			{ Ubo::Layout::eShared, cuT( "shared" ) },
 			{ Ubo::Layout::ePacked, cuT( "packed" ) },
 		};

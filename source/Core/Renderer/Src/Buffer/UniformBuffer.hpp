@@ -176,6 +176,31 @@ namespace renderer
 		UniformBufferBasePtr m_ubo;
 		std::vector< T > m_data;
 	};
+	/**
+	*\brief
+	*	Fonction d'aide à la création d'un Buffer.
+	*\param[in] device
+	*	Le périphérique logique.
+	*\param[in] count
+	*	La nombre d'éléments dans le tampon.
+	*\param[in] target
+	*	Les indicateurs d'utilisation du tampon.
+	*\param[in] flags
+	*	Les indicateurs de mémoire du tampon.
+	*\return
+	*	Le tampon créé.
+	*/
+	template< typename T >
+	inline UniformBufferPtr< T > makeUniformBuffer( Device const & device
+		, uint32_t count
+		, BufferTargets target
+		, MemoryPropertyFlags flags )
+	{
+		return std::make_unique< UniformBuffer< T > >( device
+			, count
+			, target
+			, flags );
+	}
 }
 
 #include "UniformBuffer.inl"

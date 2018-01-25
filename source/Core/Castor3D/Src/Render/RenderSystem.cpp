@@ -60,7 +60,7 @@ namespace castor3d
 		m_stackScenes.pop();
 	}
 
-	Scene * RenderSystem::getTopScene()
+	Scene * RenderSystem::getTopScene()const
 	{
 		Scene * result = nullptr;
 
@@ -85,7 +85,7 @@ namespace castor3d
 		m_currentDevices[std::this_thread::get_id()] = device;
 	}
 
-	renderer::Device const * RenderSystem::getCurrentDevice()
+	renderer::Device const * RenderSystem::getCurrentDevice()const
 	{
 		renderer::Device const * result{ nullptr };
 		auto it = m_currentDevices.find( std::this_thread::get_id() );

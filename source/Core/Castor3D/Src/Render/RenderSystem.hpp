@@ -87,7 +87,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La scène du haut de la pile, nullptr si la pile est vide.
 		 */
-		C3D_API Scene * getTopScene();
+		C3D_API Scene * getTopScene()const;
 		/**
 		 *\~english
 		 *\return		A pre-configured GlslWriter instance.
@@ -110,7 +110,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le contexte de rendu actuellement actif.
 		 */
-		C3D_API renderer::Device const * getCurrentDevice();
+		C3D_API renderer::Device const * getCurrentDevice()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a GPU buffer with the given size.

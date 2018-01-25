@@ -55,7 +55,6 @@ namespace castor3d
 		*	Dit si la coordonnée U de l'UV doit être inversée, rendant ainsi un mirroir de l'image.
 		*/
 		C3D_API explicit RenderQuad( RenderSystem & renderSystem
-			, MatrixUbo & matrixUbo
 			, castor::Position const & position
 			, castor::Size const & size
 			, renderer::ShaderProgram const & program
@@ -78,7 +77,6 @@ namespace castor3d
 		C3D_API void registerFrame( renderer::CommandBuffer & commandBuffer );
 
 	private:
-		MatrixUbo & m_matrixUbo;
 		TexturedQuad m_vertexData;
 		SamplerSPtr m_sampler;
 		renderer::VertexBufferPtr< TexturedQuad > m_vertexBuffer;

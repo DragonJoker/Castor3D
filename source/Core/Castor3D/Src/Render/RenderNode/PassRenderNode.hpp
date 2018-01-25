@@ -18,15 +18,11 @@ namespace castor3d
 	*/
 	struct PassRenderNode
 	{
-		C3D_API PassRenderNode( Pass & p_pass
-			, renderer::ShaderProgram const & p_program );
+		C3D_API PassRenderNode( Pass & pass );
 
 		//!\~english	The pass.
 		//!\~french		La passe.
 		Pass & m_pass;
-		//!\~english	The pass textures.
-		//!\~french		Les textures de la passe.
-		std::map< uint32_t, std::reference_wrapper< PushUniform1s > > m_textures;
 	};
 }
 

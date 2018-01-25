@@ -38,21 +38,21 @@ namespace castor3d
 		switch ( p_pass.getType() )
 		{
 		case MaterialType::eLegacy:
-			doGetTexture( p_pass, p_program, TextureChannel::eDiffuse, ShaderProgram::MapDiffuse, *this );
-			doGetTexture( p_pass, p_program, TextureChannel::eSpecular, ShaderProgram::MapSpecular, *this );
-			doGetTexture( p_pass, p_program, TextureChannel::eGloss, ShaderProgram::MapGloss, *this );
+			doGetTexture( p_pass, p_program, TextureChannel::eDiffuse, cuT( "c3d_mapDiffuse" ), *this );
+			doGetTexture( p_pass, p_program, TextureChannel::eSpecular, cuT( "c3d_mapSpecular" ), *this );
+			doGetTexture( p_pass, p_program, TextureChannel::eGloss, cuT( "c3d_mapGloss" ), *this );
 			break;
 
 		case MaterialType::ePbrMetallicRoughness:
-			doGetTexture( p_pass, p_program, TextureChannel::eAlbedo, ShaderProgram::MapAlbedo, *this );
-			doGetTexture( p_pass, p_program, TextureChannel::eMetallic, ShaderProgram::MapMetallic, *this );
-			doGetTexture( p_pass, p_program, TextureChannel::eRoughness, ShaderProgram::MapRoughness, *this );
+			doGetTexture( p_pass, p_program, TextureChannel::eAlbedo, cuT( "c3d_mapAlbedo" ), *this );
+			doGetTexture( p_pass, p_program, TextureChannel::eMetallic, cuT( "c3d_mapMetallic" ), *this );
+			doGetTexture( p_pass, p_program, TextureChannel::eRoughness, cuT( "c3d_mapRoughness" ), *this );
 			break;
 
 		case MaterialType::ePbrSpecularGlossiness:
-			doGetTexture( p_pass, p_program, TextureChannel::eAlbedo, ShaderProgram::MapDiffuse, *this );
-			doGetTexture( p_pass, p_program, TextureChannel::eSpecular, ShaderProgram::MapSpecular, *this );
-			doGetTexture( p_pass, p_program, TextureChannel::eGloss, ShaderProgram::MapGloss, *this );
+			doGetTexture( p_pass, p_program, TextureChannel::eAlbedo, cuT( "c3d_mapDiffuse" ), *this );
+			doGetTexture( p_pass, p_program, TextureChannel::eSpecular, cuT( "c3d_mapSpecular" ), *this );
+			doGetTexture( p_pass, p_program, TextureChannel::eGloss, cuT( "c3d_mapGloss" ), *this );
 			break;
 
 		default:
@@ -60,10 +60,10 @@ namespace castor3d
 		}
 
 		doGetTexture( p_pass, p_program, TextureChannel::eAmbientOcclusion, ShaderProgram::MapAmbientOcclusion, *this );
-		doGetTexture( p_pass, p_program, TextureChannel::eEmissive, ShaderProgram::MapEmissive, *this );
-		doGetTexture( p_pass, p_program, TextureChannel::eOpacity, ShaderProgram::MapOpacity, *this );
-		doGetTexture( p_pass, p_program, TextureChannel::eHeight, ShaderProgram::MapHeight, *this );
-		doGetTexture( p_pass, p_program, TextureChannel::eNormal, ShaderProgram::MapNormal, *this );
+		doGetTexture( p_pass, p_program, TextureChannel::eEmissive, cuT( "c3d_mapEmissive" ), *this );
+		doGetTexture( p_pass, p_program, TextureChannel::eOpacity, cuT( "c3d_mapOpacity" ), *this );
+		doGetTexture( p_pass, p_program, TextureChannel::eHeight, cuT( "c3d_mapHeight" ), *this );
+		doGetTexture( p_pass, p_program, TextureChannel::eNormal, cuT( "c3d_mapNormal" ), *this );
 		doGetTexture( p_pass, p_program, TextureChannel::eTransmittance, ShaderProgram::MapTransmittance, *this );
 	}
 }

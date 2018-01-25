@@ -41,7 +41,7 @@ namespace castor3d
 		, m_declaration
 		{
 			{
-				BufferElementDeclaration{ ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec2 }
+				BufferElementDeclaration{ cuT( "position" ), uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec2 }
 			}
 		}
 		, m_size{ size }
@@ -148,7 +148,7 @@ namespace castor3d
 			GlslWriter writer{ renderSystem.createGlslWriter() };
 
 			// Inputs
-			auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
+			auto position = writer.declAttribute< Vec2 >( cuT( "position" ) );
 			UBO_MATRIX( writer, 0 );
 
 			// Outputs

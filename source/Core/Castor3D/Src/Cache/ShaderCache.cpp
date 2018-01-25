@@ -245,8 +245,8 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			auto position = writer.declAttribute< Vec4 >( ShaderProgram::Position );
-			auto texture = writer.declAttribute< Vec2 >( ShaderProgram::Texture );
+			auto position = writer.declAttribute< Vec4 >( cuT( "position" ) );
+			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ) );
 			auto center = writer.declAttribute< Vec3 >( cuT( "center" ) );
 			auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 			auto gl_VertexID( writer.declBuiltin< Int >( cuT( "gl_VertexID" ) ) );

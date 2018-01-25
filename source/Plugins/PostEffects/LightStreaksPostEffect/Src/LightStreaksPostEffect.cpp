@@ -43,7 +43,7 @@ namespace light_streaks
 			UBO_MATRIX( writer, 0u );
 
 			// Shader inputs
-			Vec2 position = writer.declAttribute< Vec2 >( castor3d::ShaderProgram::Position );
+			Vec2 position = writer.declAttribute< Vec2 >( castor3d::cuT( "position" ) );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
@@ -63,7 +63,7 @@ namespace light_streaks
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( castor3d::ShaderProgram::MapDiffuse, castor3d::MinTextureIndex, 0u );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( castor3d::cuT( "c3d_mapDiffuse" ), castor3d::MinTextureIndex, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
@@ -94,7 +94,7 @@ namespace light_streaks
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( castor3d::ShaderProgram::MapDiffuse, castor3d::MinTextureIndex, 0u );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( castor3d::cuT( "c3d_mapDiffuse" ), castor3d::MinTextureIndex, 0u );
 			UBO_KAWASE( writer );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
@@ -179,7 +179,7 @@ namespace light_streaks
 		, m_kawaseUbo{ *renderSystem.getEngine() }
 		, m_declaration(
 		{
-			castor3d::BufferElementDeclaration( castor3d::ShaderProgram::Position
+			castor3d::BufferElementDeclaration( castor3d::cuT( "position" )
 				, uint32_t( castor3d::ElementUsage::ePosition )
 				, renderer::AttributeFormat::eVec2 ),
 		} )

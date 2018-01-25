@@ -103,20 +103,6 @@ namespace castor3d
 		C3D_API void setTexture( TextureLayoutSPtr texture );
 		/**
 		 *\~english
-		 *\brief		Applies the texture unit.
-		 *\~french
-		 *\brief		Applique la texture.
-		 */
-		C3D_API void bind()const;
-		/**
-		 *\~english
-		 *\brief		Removes the texture unit from the stack, in order not to interfere with other ones.
-		 *\~french
-		 *\brief		Désactive la texture.
-		 */
-		C3D_API void unbind()const;
-		/**
-		 *\~english
 		 *\return		The texture dimension.
 		 *\~french
 		 *\return		La dimension de la texture.

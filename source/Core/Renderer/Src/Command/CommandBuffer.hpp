@@ -439,6 +439,24 @@ namespace renderer
 			, QueryPool const & pool
 			, uint32_t query )const = 0;
 		/**
+		*\~french
+		*\brief
+		*	Met à jour les valeurs de push constants.
+		*\param[in] layout
+		*	Le layout de pipeline utilisé pour programmer la mise à jour des push constants.
+		*\param[in] stageFlags
+		*	Spécifie les niveaux de shaders qui vont utiliser les push constants dans l'intervalle mis à jour.
+		*\~english
+		*\brief
+		*	Updates the values of push constants.
+		*\param[in] layout
+		*	The pipeline layout used to program the push constants updates.
+		*\param[in] stageFlags
+		*	Specifies the shader stages that will use the push constants in the updated range.
+		*/
+		virtual void pushConstants( PipelineLayout const & layout
+			, PushConstantsBuffer const & pcb )const = 0;
+		/**
 		*\brief
 		*	Copie les données d'un tampon vers un autre tampon.
 		*\param[in] src

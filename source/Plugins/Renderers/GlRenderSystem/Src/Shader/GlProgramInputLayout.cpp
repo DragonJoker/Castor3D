@@ -130,7 +130,7 @@ namespace GlRender
 						renderer::AttributeFormat elemType = getOpenGl().get( GlslAttributeType( p_value ) );
 						string::toLowerCase( p_name );
 
-						if ( elemType == renderer::AttributeFormat::eVec4 && p_name == string::stringCast< char >( ShaderProgram::Position ) )
+						if ( elemType == renderer::AttributeFormat::eVec4 && p_name == string::stringCast< char >( cuT( "position" ) ) )
 						{
 							elemType = renderer::AttributeFormat::eVec3;
 						}
@@ -158,7 +158,7 @@ namespace GlRender
 				int loc = getOpenGl().GetAttribLocation( program.getGlName(), buffer.data() );
 				string::toLowerCase( name );
 
-				if ( elemType == renderer::AttributeFormat::eVec4 && name == string::stringCast< char >( ShaderProgram::Position ) )
+				if ( elemType == renderer::AttributeFormat::eVec4 && name == string::stringCast< char >( cuT( "position" ) ) )
 				{
 					elemType = renderer::AttributeFormat::eVec3;
 				}

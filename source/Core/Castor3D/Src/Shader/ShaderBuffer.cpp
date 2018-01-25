@@ -21,13 +21,13 @@ namespace castor3d
 
 			if ( engine.getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers ) )
 			{
-				result = engine.getRenderSystem()->getCurrentContext()->getDevice().createBuffer( size
+				result = engine.getRenderSystem()->getCurrentDevice()->createBuffer( size
 					, renderer::BufferTarget::eStorageBuffer
 					, renderer::MemoryPropertyFlag::eHostVisible );
 			}
 			else
 			{
-				result = engine.getRenderSystem()->getCurrentContext()->getDevice().createBuffer( size
+				result = engine.getRenderSystem()->getCurrentDevice()->createBuffer( size
 					, renderer::BufferTarget::eUniformTexelBuffer
 					, renderer::MemoryPropertyFlag::eHostVisible );
 			}
@@ -61,8 +61,15 @@ namespace castor3d
 		}
 	}
 
-	uint8_t * ShaderBuffer::ptr()
+	renderer::DescriptorSetLayoutBinding ShaderBuffer::createBinding( uint32_t index )const
 	{
-		return m_data.data();
+		if ( checkFlag( m_buffer->getTargets(), renderer::BufferTarget::eStorageBuffer ) )
+		{
+			return { index, renderer::DescriptorType::eStorageBuffer, renderer::ShaderStageFlag::eFragment };
+		}
+		else
+		{
+			return { index, renderer::DescriptorType::eUniformTexelBuffer, renderer::ShaderStageFlag::eFragment };
+		}
 	}
 }

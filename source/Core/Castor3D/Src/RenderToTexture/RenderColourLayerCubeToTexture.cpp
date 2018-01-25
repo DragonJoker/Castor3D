@@ -30,8 +30,8 @@ namespace castor3d
 		, m_declaration
 		{
 			{
-				BufferElementDeclaration{ ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec2 },
-				BufferElementDeclaration{ ShaderProgram::Texture, uint32_t( ElementUsage::eTexCoords ), renderer::AttributeFormat::eVec2 }
+				BufferElementDeclaration{ cuT( "position" ), uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec2 },
+				BufferElementDeclaration{ cuT( "texcoord" ), uint32_t( ElementUsage::eTexCoords ), renderer::AttributeFormat::eVec2 }
 			}
 		}
 	{
@@ -202,8 +202,8 @@ namespace castor3d
 			UBO_MATRIX( writer, 0 );
 
 			// Shader inputs
-			auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
-			auto texture = writer.declAttribute< Vec2 >( ShaderProgram::Texture );
+			auto position = writer.declAttribute< Vec2 >( cuT( "position" ) );
+			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ) );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
@@ -224,7 +224,7 @@ namespace castor3d
 			writer.enableExtension( "GL_ARB_texture_cube_map_array", 400 );
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< SamplerCubeArray >( ShaderProgram::MapDiffuse, MinTextureIndex, 0u );
+			auto c3d_mapDiffuse = writer.declSampler< SamplerCubeArray >( cuT( "c3d_mapDiffuse" ), MinTextureIndex, 0u );
 			auto c3d_face = writer.declUniform< Vec3 >( cuT( "c3d_face" ) );
 			auto c3d_iIndex = writer.declUniform< Int >( cuT( "c3d_iIndex" ) );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
@@ -252,7 +252,7 @@ namespace castor3d
 		program->createObject( ShaderType::ePixel );
 		program->setSource( ShaderType::eVertex, vtx );
 		program->setSource( ShaderType::ePixel, pxl );
-		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
+		program->createUniform< UniformType::eSampler >( cuT( "c3d_mapDiffuse" ), ShaderType::ePixel )->setValue( MinTextureIndex );
 		m_faceUniform = program->createUniform< UniformType::eVec3f >( cuT( "c3d_face" ), ShaderType::ePixel );
 		m_layerIndexUniform = program->createUniform< UniformType::eInt >( cuT( "c3d_iIndex" ), ShaderType::ePixel );
 		program->initialise();

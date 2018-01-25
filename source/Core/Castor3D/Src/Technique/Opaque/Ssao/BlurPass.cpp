@@ -38,8 +38,8 @@ namespace castor3d
 
 			// Shader inputs
 			UBO_MATRIX( writer, 0u );
-			auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
-			auto texture = writer.declAttribute< Vec2 >( ShaderProgram::Texture );
+			auto position = writer.declAttribute< Vec2 >( cuT( "position" ) );
+			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ) );
 
 			// Shader outputs
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );

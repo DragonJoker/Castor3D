@@ -15,21 +15,21 @@ namespace castor3d
 
 		if ( !points.empty() )
 		{
-			BufferElementGroupSPtr v1 = points[0];
-			BufferElementGroupSPtr v2 = points[1];
-			BufferElementGroupSPtr v3 = points[2];
+			auto & v1 = points[0];
+			auto & v2 = points[1];
+			auto & v3 = points[2];
 			triFace.addFace( 0, 1, 2 );
-			Vertex::setTexCoord( v1, 0.0, 0.0 );
-			Vertex::setTexCoord( v2, 0.0, 0.0 );
-			Vertex::setTexCoord( v3, 0.0, 0.0 );
+			v1.m_tex = Point3r{ 0.0, 0.0, 0.0 };
+			v2.m_tex = Point3r{ 0.0, 0.0, 0.0 };
+			v3.m_tex = Point3r{ 0.0, 0.0, 0.0 };
 
 			for ( uint32_t i = 2; i < uint32_t( points.size() - 1 ); i++ )
 			{
-				v2 = points[i];
-				v3 = points[i + 1];
+				auto & v2 = points[i];
+				auto & v3 = points[i + 1];
 				triFace.addFace( 0, i, i + 1 );
-				Vertex::setTexCoord( v2, 0.0, 0.0 );
-				Vertex::setTexCoord( v3, 0.0, 0.0 );
+				v2.m_tex = Point3r{ 0.0, 0.0, 0.0 };
+				v3.m_tex = Point3r{ 0.0, 0.0, 0.0 };
 			}
 		}
 	}
@@ -40,28 +40,13 @@ namespace castor3d
 	{
 		auto & points = submesh.getPoints();
 		auto & faces = triFace.getFaces();
-
-		Point3r vec2m1;
-		Point3r vec3m1;
-		Point3r tex2m1;
-		Point3r tex3m1;
-		Point3r pt1;
-		Point3r pt2;
-		Point3r pt3;
-		Point3r uv1;
-		Point3r uv2;
-		Point3r uv3;
-		BufferElementGroupSPtr pVtx1;
-		BufferElementGroupSPtr pVtx2;
-		BufferElementGroupSPtr pVtx3;
-		Point3r vFaceNormal;
-		Point3r vFaceTangent;
+		Point3r pt0;
 
 		// First we flush normals and tangents
 		for ( auto & pt : points )
 		{
-			Vertex::setNormal( pt, pt1 );
-			Vertex::setTangent( pt, pt1 );
+			pt.m_nml = pt0;
+			pt.m_tan = pt0;
 		}
 
 		Coords3r coord;
@@ -71,65 +56,50 @@ namespace castor3d
 		{
 			for ( auto const & face : faces )
 			{
-				pVtx1 = points[face[0]];
-				pVtx2 = points[face[1]];
-				pVtx3 = points[face[2]];
-				Vertex::getPosition( pVtx1, pt1 );
-				Vertex::getPosition( pVtx2, pt2 );
-				Vertex::getPosition( pVtx3, pt3 );
-				Vertex::getTexCoord( pVtx1, uv1 );
-				Vertex::getTexCoord( pVtx2, uv2 );
-				Vertex::getTexCoord( pVtx3, uv3 );
-				vec2m1 = pt2 - pt1;
-				vec3m1 = pt3 - pt1;
-				tex2m1 = uv2 - uv1;
-				tex3m1 = uv3 - uv1;
-				vFaceNormal = -point::cross( vec3m1, vec2m1 );
-				vFaceTangent = ( vec2m1 * tex3m1[1] ) - ( vec3m1 * tex2m1[1] );
-				Vertex::getNormal( pVtx1, coord ) += vFaceNormal;
-				Vertex::getNormal( pVtx2, coord ) += vFaceNormal;
-				Vertex::getNormal( pVtx3, coord ) += vFaceNormal;
-				Vertex::getTangent( pVtx1, coord ) += vFaceTangent;
-				Vertex::getTangent( pVtx2, coord ) += vFaceTangent;
-				Vertex::getTangent( pVtx3, coord ) += vFaceTangent;
+				auto & vtx1 = points[face[0]];
+				auto & vtx2 = points[face[1]];
+				auto & vtx3 = points[face[2]];
+				auto const vec2m1 = vtx2.m_pos - vtx1.m_pos;
+				auto const vec3m1 = vtx3.m_pos - vtx1.m_pos;
+				auto const tex2m1 = vtx2.m_tex - vtx1.m_tex;
+				auto const tex3m1 = vtx3.m_tex - vtx1.m_tex;
+				auto const faceNormal = -point::cross( vec3m1, vec2m1 );
+				auto const faceTangent = ( vec2m1 * tex3m1[1] ) - ( vec3m1 * tex2m1[1] );
+				vtx1.m_nml += faceNormal;
+				vtx2.m_nml += faceNormal;
+				vtx3.m_nml += faceNormal;
+				vtx1.m_tan += faceTangent;
+				vtx2.m_tan += faceTangent;
+				vtx3.m_tan += faceTangent;
 			}
 		}
 		else
 		{
 			for ( auto const & face : faces )
 			{
-				pVtx1 = points[face[0]];
-				pVtx2 = points[face[1]];
-				pVtx3 = points[face[2]];
-				Vertex::getPosition( pVtx1, pt1 );
-				Vertex::getPosition( pVtx2, pt2 );
-				Vertex::getPosition( pVtx3, pt3 );
-				Vertex::getTexCoord( pVtx1, uv1 );
-				Vertex::getTexCoord( pVtx2, uv2 );
-				Vertex::getTexCoord( pVtx3, uv3 );
-				vec2m1 = pt2 - pt1;
-				vec3m1 = pt3 - pt1;
-				tex2m1 = uv2 - uv1;
-				tex3m1 = uv3 - uv1;
-				vFaceNormal = point::cross( vec3m1, vec2m1 );
-				vFaceTangent = ( vec3m1 * tex2m1[1] ) - ( vec2m1 * tex3m1[1] );
-				Vertex::getNormal( pVtx1, coord ) += vFaceNormal;
-				Vertex::getNormal( pVtx2, coord ) += vFaceNormal;
-				Vertex::getNormal( pVtx3, coord ) += vFaceNormal;
-				Vertex::getTangent( pVtx1, coord ) += vFaceTangent;
-				Vertex::getTangent( pVtx2, coord ) += vFaceTangent;
-				Vertex::getTangent( pVtx3, coord ) += vFaceTangent;
+				auto & vtx1 = points[face[0]];
+				auto & vtx2 = points[face[1]];
+				auto & vtx3 = points[face[2]];
+				auto const vec2m1 = vtx2.m_pos - vtx1.m_pos;
+				auto const vec3m1 = vtx3.m_pos - vtx1.m_pos;
+				auto const tex2m1 = vtx2.m_tex - vtx1.m_tex;
+				auto const tex3m1 = vtx3.m_tex - vtx1.m_tex;
+				auto const faceNormal = -point::cross( vec3m1, vec2m1 );
+				auto const faceTangent = ( vec3m1 * tex2m1[1] ) - ( vec2m1 * tex3m1[1] );
+				vtx1.m_nml += faceNormal;
+				vtx2.m_nml += faceNormal;
+				vtx3.m_nml += faceNormal;
+				vtx1.m_tan += faceTangent;
+				vtx2.m_tan += faceTangent;
+				vtx3.m_tan += faceTangent;
 			}
 		}
 
 		// Eventually we normalize the normals and tangents
 		for ( auto vtx : points )
 		{
-			Coords3r value;
-			Vertex::getNormal( vtx, value );
-			point::normalise( value );
-			Vertex::getTangent( vtx, value );
-			point::normalise( value );
+			point::normalise( vtx.m_nml );
+			point::normalise( vtx.m_tan );
 		}
 	}
 
@@ -137,25 +107,15 @@ namespace castor3d
 		, Face const & face )
 	{
 		auto & points = submesh.getPoints();
-		BufferElementGroupSPtr pVtx1, pVtx2, pVtx3;
-		Point3r vec2m1;
-		Point3r vec3m1;
-		Point3r vFaceNormal;
-		Point3r pt1;
-		Point3r pt2;
-		Point3r pt3;
-		pVtx1 = points[face[0]];
-		pVtx2 = points[face[1]];
-		pVtx3 = points[face[2]];
-		Vertex::getPosition( pVtx1, pt1 );
-		Vertex::getPosition( pVtx2, pt2 );
-		Vertex::getPosition( pVtx3, pt3 );
-		vec2m1 = pt2 - pt1;
-		vec3m1 = pt3 - pt1;
-		vFaceNormal = point::getNormalised( point::cross( vec2m1, vec3m1 ) );
-		Vertex::setNormal( pVtx1, vFaceNormal );
-		Vertex::setNormal( pVtx2, vFaceNormal );
-		Vertex::setNormal( pVtx3, vFaceNormal );
+		auto & vtx1 = points[face[0]];
+		auto & vtx2 = points[face[1]];
+		auto & vtx3 = points[face[2]];
+		auto const vec2m1 = vtx2.m_pos - vtx1.m_pos;
+		auto const vec3m1 = vtx3.m_pos - vtx1.m_pos;
+		auto const faceNormal = point::getNormalised( -point::cross( vec3m1, vec2m1 ) );
+		vtx1.m_nml += faceNormal;
+		vtx2.m_nml += faceNormal;
+		vtx3.m_nml += faceNormal;
 		computeTangents( submesh, face );
 	}
 
@@ -163,35 +123,17 @@ namespace castor3d
 		, Face const & face )
 	{
 		auto & points = submesh.getPoints();
-		BufferElementGroupSPtr pVtx1, pVtx2, pVtx3;
-		Point3r vec2m1;
-		Point3r vec3m1;
-		Point3r vFaceTangent;
-		Point3r tex2m1;
-		Point3r tex3m1;
-		Point3r uv1;
-		Point3r uv2;
-		Point3r uv3;
-		Point3r pt1;
-		Point3r pt2;
-		Point3r pt3;
-		pVtx1 = points[face[0]];
-		pVtx2 = points[face[1]];
-		pVtx3 = points[face[2]];
-		Vertex::getPosition( pVtx1, pt1 );
-		Vertex::getPosition( pVtx2, pt2 );
-		Vertex::getPosition( pVtx3, pt3 );
-		Vertex::getTexCoord( pVtx1, uv1 );
-		Vertex::getTexCoord( pVtx2, uv2 );
-		Vertex::getTexCoord( pVtx3, uv3 );
-		vec2m1 = pt2 - pt1;
-		vec3m1 = pt3 - pt1;
-		tex2m1 = uv2 - uv1;
-		tex3m1 = uv3 - uv1;
-		vFaceTangent = point::getNormalised( ( vec2m1 * tex3m1[1] ) - ( vec3m1 * tex2m1[1] ) );
-		Vertex::setTangent( pVtx1, vFaceTangent );
-		Vertex::setTangent( pVtx2, vFaceTangent );
-		Vertex::setTangent( pVtx3, vFaceTangent );
+		auto & vtx1 = points[face[0]];
+		auto & vtx2 = points[face[1]];
+		auto & vtx3 = points[face[2]];
+		auto const vec2m1 = vtx2.m_pos - vtx1.m_pos;
+		auto const vec3m1 = vtx3.m_pos - vtx1.m_pos;
+		auto const tex2m1 = vtx2.m_tex - vtx1.m_tex;
+		auto const tex3m1 = vtx3.m_tex - vtx1.m_tex;
+		auto const faceTangent = point::getNormalised( ( vec2m1 * tex3m1[1] ) - ( vec3m1 * tex2m1[1] ) );
+		vtx1.m_tan += faceTangent;
+		vtx2.m_tan += faceTangent;
+		vtx3.m_tan += faceTangent;
 	}
 
 	void SubmeshUtils::computeTangentsFromNormals( Submesh & submesh
@@ -204,55 +146,42 @@ namespace castor3d
 		// Pour chaque vertex, on stocke la somme des tangentes qui peuvent lui être affectées
 		for ( auto const & face : faces )
 		{
-			BufferElementGroupSPtr	pVtx1 = points[face[0]];
-			BufferElementGroupSPtr	pVtx2 = points[face[1]];
-			BufferElementGroupSPtr	pVtx3 = points[face[2]];
-			Point3r pt1;
-			Point3r pt2;
-			Point3r pt3;
-			Point3r uv1;
-			Point3r uv2;
-			Point3r uv3;
-			Vertex::getPosition( pVtx1, pt1 );
-			Vertex::getPosition( pVtx2, pt2 );
-			Vertex::getPosition( pVtx3, pt3 );
-			Vertex::getTexCoord( pVtx1, uv1 );
-			Vertex::getTexCoord( pVtx2, uv2 );
-			Vertex::getTexCoord( pVtx3, uv3 );
-			Point3r vec2m1 = pt2 - pt1;
-			Point3r vec3m1 = pt3 - pt1;
-			Point3r vec3m2 = pt3 - pt2;
-			Point3r tex2m1 = uv2 - uv1;
-			Point3r tex3m1 = uv3 - uv1;
-			// Calculates the triangle's area.
-			real rDirCorrection = tex2m1[0] * tex3m1[1] - tex2m1[1] * tex3m1[0];
-			Point3r vFaceTangent;
+			auto & vtx1 = points[face[0]];
+			auto & vtx2 = points[face[1]];
+			auto & vtx3 = points[face[2]];
+			auto const vec2m1 = vtx2.m_pos - vtx1.m_pos;
+			auto const vec3m1 = vtx3.m_pos - vtx1.m_pos;
+			auto const tex2m1 = vtx2.m_tex - vtx1.m_tex;
+			auto const tex3m1 = vtx3.m_tex - vtx1.m_tex;
 
-			if ( rDirCorrection )
+			// Calculates the triangle's area.
+			real dirCorrection = tex2m1[0] * tex3m1[1] - tex2m1[1] * tex3m1[0];
+			Point3r faceTangent;
+
+			if ( dirCorrection )
 			{
-				rDirCorrection = 1 / rDirCorrection;
+				dirCorrection = 1 / dirCorrection;
 				// Calculates the face tangent to the current triangle.
-				vFaceTangent[0] = rDirCorrection * ( ( vec2m1[0] * tex3m1[1] ) + ( vec3m1[0] * -tex2m1[1] ) );
-				vFaceTangent[1] = rDirCorrection * ( ( vec2m1[1] * tex3m1[1] ) + ( vec3m1[1] * -tex2m1[1] ) );
-				vFaceTangent[2] = rDirCorrection * ( ( vec2m1[2] * tex3m1[1] ) + ( vec3m1[2] * -tex2m1[1] ) );
+				faceTangent[0] = dirCorrection * ( ( vec2m1[0] * tex3m1[1] ) + ( vec3m1[0] * -tex2m1[1] ) );
+				faceTangent[1] = dirCorrection * ( ( vec2m1[1] * tex3m1[1] ) + ( vec3m1[1] * -tex2m1[1] ) );
+				faceTangent[2] = dirCorrection * ( ( vec2m1[2] * tex3m1[1] ) + ( vec3m1[2] * -tex2m1[1] ) );
 			}
 
-			arrayTangents[face[0]] += vFaceTangent;
-			arrayTangents[face[1]] += vFaceTangent;
-			arrayTangents[face[2]] += vFaceTangent;
+			arrayTangents[face[0]] += faceTangent;
+			arrayTangents[face[1]] += faceTangent;
+			arrayTangents[face[2]] += faceTangent;
 		}
 
 		uint32_t i = 0;
-		//On effectue la moyennes des tangentes
+		// Average tangents
 		for ( auto & value : arrayTangents )
 		{
-			Point3r normal;
-			Vertex::getNormal( points[i], normal );
+			auto & point = points[i];
 			Point3r tangent = point::getNormalised( value );
-			tangent -= normal * point::dot( tangent, normal );
-			Point3r bitangent = point::cross( normal, tangent );
-			Vertex::setTangent( points[i], tangent );
-			Vertex::setBitangent( points[i], bitangent );
+			tangent -= point.m_nml * point::dot( tangent, point.m_nml );
+			Point3r bitangent = point::cross( point.m_nml, tangent );
+			point.m_tan = tangent;
+			point.m_bin = bitangent;
 			i++;
 		}
 	}
@@ -261,12 +190,7 @@ namespace castor3d
 	{
 		for ( auto & point : submesh.getPoints() )
 		{
-			Point3r normal;
-			Point3r bitangent;
-			Vertex::getNormal( point, normal );
-			Vertex::getBitangent( point, bitangent );
-			Point3r tangent = point::cross( normal, bitangent );
-			Vertex::setTangent( point, tangent );
+			point.m_tan = point::cross( point.m_nml, point.m_bin );
 		}
 	}
 
@@ -274,12 +198,7 @@ namespace castor3d
 	{
 		for ( auto & point : submesh.getPoints() )
 		{
-			Point3r normal;
-			Point3r tangent;
-			Vertex::getNormal( point, normal );
-			Vertex::getTangent( point, tangent );
-			Point3r bitangent = point::cross( tangent, normal );
-			Vertex::setBitangent( point, bitangent );
+			point.m_bin = point::cross( point.m_tan, point.m_nml );
 		}
 	}
 }

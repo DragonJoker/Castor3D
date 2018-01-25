@@ -35,19 +35,6 @@ using namespace glsl;
 
 namespace castor3d
 {
-	template<> String const TopologyNamer< renderer::PrimitiveTopology::ePointList >::Name = cuT( "point_list" );
-	template<> String const TopologyNamer< renderer::PrimitiveTopology::eLineList >::Name = cuT( "line_list" );
-	template<> String const TopologyNamer< renderer::PrimitiveTopology::eLineListWithAdjacency >::Name = cuT( "line_list_adjacency" );
-	template<> String const TopologyNamer< renderer::PrimitiveTopology::eLineStrip >::Name = cuT( "line_strip" );
-	template<> String const TopologyNamer< renderer::PrimitiveTopology::eLineStripWithAdjacency >::Name = cuT( "line_strip_adjacency" );
-	template<> String const TopologyNamer< renderer::PrimitiveTopology::eTriangleList >::Name = cuT( "triangle_list" );
-	template<> String const TopologyNamer< renderer::PrimitiveTopology::eTriangleListWithAdjacency >::Name = cuT( "triangle_list_adjacency" );
-	template<> String const TopologyNamer< renderer::PrimitiveTopology::eTriangleStrip >::Name = cuT( "triangle_strip" );
-	template<> String const TopologyNamer< renderer::PrimitiveTopology::eTriangleStripWithAdjacency >::Name = cuT( "triangle_strip_adjacency" );
-	template<> String const TopologyNamer< renderer::PrimitiveTopology::eTriangleFan >::Name = cuT( "triangle_fan" );
-	template<> String const TopologyNamer< renderer::PrimitiveTopology::ePatchList >::Name = cuT( "patch_list" );
-
-
 	namespace shader
 	{
 		namespace legacy
@@ -68,7 +55,7 @@ namespace castor3d
 					auto vtx_normal( writer.getBuiltin< Vec3 >( cuT( "vtx_normal" ) ) );
 					auto vtx_tangent( writer.getBuiltin< Vec3 >( cuT( "vtx_tangent" ) ) );
 					auto vtx_bitangent( writer.getBuiltin< Vec3 >( cuT( "vtx_bitangent" ) ) );
-					auto c3d_mapNormal( writer.getBuiltin< Sampler2D >( ShaderProgram::MapNormal ) );
+					auto c3d_mapNormal( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapNormal" ) ) );
 
 					auto v3MapNormal = writer.declLocale( cuT( "v3MapNormal" )
 						, texture( c3d_mapNormal, texCoord.xy() ).xyz() );
@@ -79,7 +66,7 @@ namespace castor3d
 					if ( checkFlag( textureFlags, TextureChannel::eHeight )
 						&& !checkFlag( passFlags, PassFlag::eParallaxOcclusionMapping ) )
 					{
-						auto c3d_mapHeight( writer.getBuiltin< Sampler2D >( ShaderProgram::MapHeight ) );
+						auto c3d_mapHeight( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapHeight" ) ) );
 						v3MapNormal = mix( vec3( 0.0_f, 0.0_f, 1.0_f )
 							, v3MapNormal
 							, texture( c3d_mapHeight, texCoord.xy() ).r() );
@@ -94,7 +81,7 @@ namespace castor3d
 
 				if ( checkFlag( textureFlags, TextureChannel::eGloss ) )
 				{
-					auto c3d_mapGloss( writer.getBuiltin< Sampler2D >( ShaderProgram::MapGloss ) );
+					auto c3d_mapGloss( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapGloss" ) ) );
 					shininess = texture( c3d_mapGloss, texCoord.xy() ).r() * 128.0_f;
 				}
 			}
@@ -113,7 +100,7 @@ namespace castor3d
 
 				if ( checkFlag( textureFlags, TextureChannel::eDiffuse ) )
 				{
-					auto c3d_mapDiffuse( writer.getBuiltin< Sampler2D >( ShaderProgram::MapDiffuse ) );
+					auto c3d_mapDiffuse( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapDiffuse" ) ) );
 					diffuse *= writeFunctionCall< Vec3 >( &writer, cuT( "removeGamma" )
 						, gamma
 						, texture( c3d_mapDiffuse, texCoord.xy() ).xyz() );
@@ -121,7 +108,7 @@ namespace castor3d
 
 				if ( checkFlag( textureFlags, TextureChannel::eSpecular ) )
 				{
-					auto c3d_mapSpecular( writer.getBuiltin< Sampler2D >( ShaderProgram::MapSpecular ) );
+					auto c3d_mapSpecular( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapSpecular" ) ) );
 					specular *= texture( c3d_mapSpecular, texCoord.xy() ).xyz();
 				}
 
@@ -129,7 +116,7 @@ namespace castor3d
 
 				if ( checkFlag( textureFlags, TextureChannel::eEmissive ) )
 				{
-					auto c3d_mapEmissive( writer.getBuiltin< Sampler2D >( ShaderProgram::MapEmissive ) );
+					auto c3d_mapEmissive( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapEmissive" ) ) );
 					emissive *= writeFunctionCall< Vec3 >( &writer, cuT( "removeGamma" )
 						, gamma
 						, texture( c3d_mapEmissive, texCoord.xy() ).xyz() );
@@ -199,7 +186,7 @@ namespace castor3d
 						auto vtx_normal( writer.getBuiltin< Vec3 >( cuT( "vtx_normal" ) ) );
 						auto vtx_tangent( writer.getBuiltin< Vec3 >( cuT( "vtx_tangent" ) ) );
 						auto vtx_bitangent( writer.getBuiltin< Vec3 >( cuT( "vtx_bitangent" ) ) );
-						auto c3d_mapNormal( writer.getBuiltin< Sampler2D >( ShaderProgram::MapNormal ) );
+						auto c3d_mapNormal( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapNormal" ) ) );
 
 						auto v3MapNormal = writer.declLocale( cuT( "v3MapNormal" )
 							, texture( c3d_mapNormal, texCoord.xy() ).xyz() );
@@ -210,7 +197,7 @@ namespace castor3d
 						if ( checkFlag( textureFlags, TextureChannel::eHeight )
 							&& !checkFlag( passFlags, PassFlag::eParallaxOcclusionMapping ) )
 						{
-							auto c3d_mapHeight( writer.getBuiltin< Sampler2D >( ShaderProgram::MapHeight ) );
+							auto c3d_mapHeight( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapHeight" ) ) );
 							v3MapNormal = mix( vec3( 0.0_f, 0.0_f, 1.0_f )
 								, v3MapNormal
 								, texture( c3d_mapHeight, texCoord.xy() ).r() );
@@ -225,13 +212,13 @@ namespace castor3d
 
 					if ( checkFlag( textureFlags, TextureChannel::eMetallic ) )
 					{
-						auto c3d_mapMetallic( writer.getBuiltin< Sampler2D >( ShaderProgram::MapMetallic ) );
+						auto c3d_mapMetallic( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapMetallic" ) ) );
 						p_metallic = texture( c3d_mapMetallic, texCoord.xy() ).r();
 					}
 
 					if ( checkFlag( textureFlags, TextureChannel::eRoughness ) )
 					{
-						auto c3d_mapRoughness( writer.getBuiltin< Sampler2D >( ShaderProgram::MapRoughness ) );
+						auto c3d_mapRoughness( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapRoughness" ) ) );
 						p_roughness = texture( c3d_mapRoughness, texCoord.xy() ).r();
 					}
 				}
@@ -249,7 +236,7 @@ namespace castor3d
 
 					if ( checkFlag( textureFlags, TextureChannel::eAlbedo ) )
 					{
-						auto c3d_mapAlbedo( writer.getBuiltin< Sampler2D >( ShaderProgram::MapAlbedo ) );
+						auto c3d_mapAlbedo( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapAlbedo" ) ) );
 						p_albedo *= writeFunctionCall< Vec3 >( &writer, cuT( "removeGamma" )
 							, p_gamma
 							, texture( c3d_mapAlbedo, texCoord.xy() ).xyz() );
@@ -259,7 +246,7 @@ namespace castor3d
 
 					if ( checkFlag( textureFlags, TextureChannel::eEmissive ) )
 					{
-						auto c3d_mapEmissive( writer.getBuiltin< Sampler2D >( ShaderProgram::MapEmissive ) );
+						auto c3d_mapEmissive( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapEmissive" ) ) );
 						p_emissive *= writeFunctionCall< Vec3 >( &writer, cuT( "removeGamma" )
 							, p_gamma
 							, texture( c3d_mapEmissive, texCoord.xy() ).xyz() );
@@ -326,7 +313,7 @@ namespace castor3d
 						auto vtx_normal( writer.getBuiltin< Vec3 >( cuT( "vtx_normal" ) ) );
 						auto vtx_tangent( writer.getBuiltin< Vec3 >( cuT( "vtx_tangent" ) ) );
 						auto vtx_bitangent( writer.getBuiltin< Vec3 >( cuT( "vtx_bitangent" ) ) );
-						auto c3d_mapNormal( writer.getBuiltin< Sampler2D >( ShaderProgram::MapNormal ) );
+						auto c3d_mapNormal( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapNormal" ) ) );
 
 						auto v3MapNormal = writer.declLocale( cuT( "v3MapNormal" )
 							, texture( c3d_mapNormal, texCoord.xy() ).xyz() );
@@ -337,7 +324,7 @@ namespace castor3d
 						if ( checkFlag( textureFlags, TextureChannel::eHeight )
 							&& !checkFlag( passFlags, PassFlag::eParallaxOcclusionMapping ) )
 						{
-							auto c3d_mapHeight( writer.getBuiltin< Sampler2D >( ShaderProgram::MapHeight ) );
+							auto c3d_mapHeight( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapHeight" ) ) );
 							v3MapNormal = mix( vec3( 0.0_f, 0.0_f, 1.0_f )
 								, v3MapNormal
 								, texture( c3d_mapHeight, texCoord.xy() ).r() );
@@ -352,13 +339,13 @@ namespace castor3d
 
 					if ( checkFlag( textureFlags, TextureChannel::eSpecular ) )
 					{
-						auto c3d_mapSpecular( writer.getBuiltin< Sampler2D >( ShaderProgram::MapSpecular ) );
+						auto c3d_mapSpecular( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapSpecular" ) ) );
 						p_specular *= texture( c3d_mapSpecular, texCoord.xy() ).rgb();
 					}
 
 					if ( checkFlag( textureFlags, TextureChannel::eGloss ) )
 					{
-						auto c3d_mapGloss( writer.getBuiltin< Sampler2D >( ShaderProgram::MapGloss ) );
+						auto c3d_mapGloss( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapGloss" ) ) );
 						p_glossiness *= texture( c3d_mapGloss, texCoord.xy() ).r();
 					}
 				}
@@ -376,7 +363,7 @@ namespace castor3d
 
 					if ( checkFlag( textureFlags, TextureChannel::eAlbedo ) )
 					{
-						auto c3d_mapDiffuse( writer.getBuiltin< Sampler2D >( ShaderProgram::MapDiffuse ) );
+						auto c3d_mapDiffuse( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapDiffuse" ) ) );
 						p_diffuse *= writeFunctionCall< Vec3 >( &writer, cuT( "removeGamma" )
 							, p_gamma
 							, texture( c3d_mapDiffuse, texCoord.xy() ).xyz() );
@@ -386,7 +373,7 @@ namespace castor3d
 
 					if ( checkFlag( textureFlags, TextureChannel::eEmissive ) )
 					{
-						auto c3d_mapEmissive( writer.getBuiltin< Sampler2D >( ShaderProgram::MapEmissive ) );
+						auto c3d_mapEmissive( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapEmissive" ) ) );
 						p_emissive *= writeFunctionCall< Vec3 >( &writer, cuT( "removeGamma" )
 							, p_gamma
 							, texture( c3d_mapEmissive, texCoord.xy() ).xyz() );
@@ -534,7 +521,7 @@ namespace castor3d
 				&& checkFlag( textureFlags, TextureChannel::eNormal ) )
 			{
 				using namespace glsl;
-				auto c3d_mapHeight( writer.getBuiltin< Sampler2D >( ShaderProgram::MapHeight ) );
+				auto c3d_mapHeight( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapHeight" ) ) );
 				auto c3d_heightScale( writer.getBuiltin< Float >( cuT( "c3d_heightScale" ) ) );
 
 				result = writer.implementFunction< Float >( cuT( "ParallaxSoftShadowMultiplier" )
@@ -630,7 +617,7 @@ namespace castor3d
 			if ( checkFlag( textureFlags, TextureChannel::eHeight )
 				&& checkFlag( textureFlags, TextureChannel::eNormal ) )
 			{
-				auto c3d_mapHeight( writer.getBuiltin< Sampler2D >( ShaderProgram::MapHeight ) );
+				auto c3d_mapHeight( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapHeight" ) ) );
 				auto c3d_heightScale( writer.getBuiltin< Float >( cuT( "c3d_heightScale" ) ) );
 
 				result = writer.implementFunction< Vec2 >( cuT( "ParallaxMapping" ),

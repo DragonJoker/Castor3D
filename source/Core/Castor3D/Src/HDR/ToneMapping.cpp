@@ -44,8 +44,8 @@ namespace castor3d
 				UBO_MATRIX( writer, 0 );
 
 				// Shader inputs
-				auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
-				auto texture = writer.declAttribute< Vec2 >( ShaderProgram::Texture );
+				auto position = writer.declAttribute< Vec2 >( cuT( "position" ) );
+				auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ) );
 
 				// Shader outputs
 				auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
@@ -65,7 +65,7 @@ namespace castor3d
 			auto pxl = doCreate();
 			program->setSource( ShaderType::eVertex, vtx );
 			program->setSource( ShaderType::ePixel, pxl );
-			program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
+			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapDiffuse" ), ShaderType::ePixel )->setValue( MinTextureIndex );
 			result = program->initialise();
 		}
 

@@ -186,8 +186,8 @@ namespace castor3d
 		using namespace glsl;
 		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 		// Inputs
-		auto position = writer.declAttribute< Vec4 >( ShaderProgram::Position );
-		auto texture = writer.declAttribute< Vec3 >( ShaderProgram::Texture );
+		auto position = writer.declAttribute< Vec4 >( cuT( "position" ) );
+		auto texture = writer.declAttribute< Vec3 >( cuT( "texcoord" ) );
 		auto bone_ids0 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds0
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
 		auto bone_ids1 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds1
@@ -345,7 +345,7 @@ namespace castor3d
 		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" ) );
 		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ) );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ) );
-		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( ShaderProgram::MapOpacity
+		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( cuT( "c3d_mapOpacity" )
 			, MinTextureIndex
 			, 0u
 			, checkFlag( textureFlags, TextureChannel::eOpacity ) ) );
@@ -364,7 +364,7 @@ namespace castor3d
 
 			if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 			{
-				auto c3d_mapOpacity = writer.getBuiltin< glsl::Sampler2D >( ShaderProgram::MapOpacity );
+				auto c3d_mapOpacity = writer.getBuiltin< glsl::Sampler2D >( cuT( "c3d_mapOpacity" ) );
 				auto vtx_texture = writer.getBuiltin< glsl::Vec3 >( cuT( "vtx_texture" ) );
 				alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
 				shader::applyAlphaFunc( writer

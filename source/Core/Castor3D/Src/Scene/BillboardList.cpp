@@ -78,8 +78,8 @@ namespace castor3d
 		, m_quad( std::make_unique< VertexBuffer >( *scene.getEngine(), BufferDeclaration
 		{
 			{
-				BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec3 ),
-				BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::eTexCoords ), renderer::AttributeFormat::eVec2 ),
+				BufferElementDeclaration( cuT( "position" ), uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec3 ),
+				BufferElementDeclaration( cuT( "texcoord" ), uint32_t( ElementUsage::eTexCoords ), renderer::AttributeFormat::eVec2 ),
 			}
 		} ) )
 	{

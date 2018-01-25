@@ -149,8 +149,8 @@ namespace castor3d
 		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 
 		// Vertex inputs
-		auto position = writer.declAttribute< Vec4 >( ShaderProgram::Position );
-		auto texture = writer.declAttribute< Vec3 >( ShaderProgram::Texture );
+		auto position = writer.declAttribute< Vec4 >( cuT( "position" ) );
+		auto texture = writer.declAttribute< Vec3 >( cuT( "texcoord" ) );
 		auto bone_ids0 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds0
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
 		auto bone_ids1 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds1
@@ -255,7 +255,7 @@ namespace castor3d
 			auto alphaRef = writer.declLocale( cuT( "alphaRef" )
 				, material->m_alphaRef() );
 
-			auto c3d_mapOpacity = writer.getBuiltin< glsl::Sampler2D >( ShaderProgram::MapOpacity );
+			auto c3d_mapOpacity = writer.getBuiltin< glsl::Sampler2D >( cuT( "c3d_mapOpacity" ) );
 			auto vtx_texture = writer.getBuiltin< glsl::Vec3 >( cuT( "vtx_texture" ) );
 			alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
 			shader::applyAlphaFunc( writer

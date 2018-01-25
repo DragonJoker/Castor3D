@@ -4,7 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_OverlayUbo_H___
 #define ___C3D_OverlayUbo_H___
 
-#include "Shader/UniformBuffer.hpp"
+#include "Castor3DPrerequisites.hpp"
+
+#include <Buffer/PushConstantsBuffer.hpp>
 
 namespace castor3d
 {
@@ -71,21 +73,16 @@ namespace castor3d
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	materialIndex	L'index du matériau de l'incrustation.
 		 */
-		C3D_API void update( int materialIndex )const;
+		C3D_API void update( int materialIndex );
 		/**
 		 *\~english
-		 *\name			getters.
+		 *\name			Getters.
 		 *\~french
-		 *\name			getters.
+		 *\name			Getters.
 		 */
-		inline UniformBuffer & getUbo()
+		inline renderer::PushConstantsBuffer const & getUbo()const
 		{
-			return m_ubo;
-		}
-
-		inline UniformBuffer const & getUbo()const
-		{
-			return m_ubo;
+			return m_pcb;
 		}
 		/**@}*/
 
@@ -93,7 +90,10 @@ namespace castor3d
 		static constexpr uint32_t BindingPoint = 2u;
 		//!\~english	Name of the overlay information frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les informations de l'incrustation.
-		C3D_API static castor::String const BufferOverlay;
+		C3D_API static castor::String const BufferOverlayName;
+		//!\~english	Name of the overlay information frame variable buffer.
+		//!\~french		Nom du frame variable buffer contenant les informations de l'incrustation.
+		C3D_API static castor::String const BufferOverlayInstance;
 		//!\~english	Name of the overlay position frame variable.
 		//!\~french		Nom de la frame variable contenant la position de l'incrustation.
 		C3D_API static castor::String const Position;
@@ -108,34 +108,23 @@ namespace castor3d
 		C3D_API static castor::String const MaterialIndex;
 
 	private:
-		//!\~english	The UBO.
-		//!\~french		L'UBO.
-		UniformBuffer m_ubo;
-		//!\~english	The uniform variable containing overlay position.
-		//!\~french		La variable uniforme contenant la position de l'incrustation.
-		Uniform2f & m_position;
-		//!\~english	The uniform variable containing overlay position.
-		//!\~french		La variable uniforme contenant la position de l'incrustation.
-		Uniform2i & m_size;
-		//!\~english	The uniform variable containing the render ratio.
-		//!\~french		La variable uniforme contenant le ratio de rendu.
-		Uniform2f & m_ratio;
-		//!\~english	The uniform variable containing overlay's material index.
-		//!\~french		La variable uniforme contenant l'indice du matériau de l'incrustation.
-		Uniform1i & m_material;
+		castor::Coords2f m_position;
+		castor::Coords2i m_renderSize;
+		castor::Coords2f m_renderRatio;
+		int32_t * m_materialIndex;
+		Engine & m_engine;
+		renderer::PushConstantsBuffer m_pcb;
 	};
 }
 
 #define UBO_OVERLAY( writer, set )\
-	glsl::Ubo overlay{ writer\
-		, castor3d::OverlayUbo::BufferOverlay\
-		, castor3d::OverlayUbo::BindingPoint\
-		, set\
-		, glsl::Ubo::Layout::ePushConstants };\
-	auto c3d_position = overlay.declMember< glsl::Vec2 >( castor3d::OverlayUbo::Position );\
-	auto c3d_renderSize = overlay.declMember< glsl::IVec2 >( castor3d::OverlayUbo::RenderSize );\
-	auto c3d_renderRatio = overlay.declMember< glsl::Vec2 >( castor3d::OverlayUbo::RenderRatio );\
-	auto c3d_materialIndex = overlay.declMember< glsl::Int >( castor3d::OverlayUbo::MaterialIndex );\
+	glsl::Pcb overlay{ writer\
+		, castor3d::OverlayUbo::BufferOverlayName\
+		, castor3d::OverlayUbo::BufferOverlayInstance };\
+	auto c3d_position = overlay.declMember< glsl::Vec2 >( castor3d::OverlayUbo::Position, 0u );\
+	auto c3d_renderSize = overlay.declMember< glsl::IVec2 >( castor3d::OverlayUbo::RenderSize, 1u );\
+	auto c3d_renderRatio = overlay.declMember< glsl::Vec2 >( castor3d::OverlayUbo::RenderRatio, 2u );\
+	auto c3d_materialIndex = overlay.declMember< glsl::Int >( castor3d::OverlayUbo::MaterialIndex, 3u );\
 	overlay.end()
 
 #endif

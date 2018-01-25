@@ -1303,11 +1303,11 @@ namespace castor3d
 		using namespace glsl;
 		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 		// Vertex inputs
-		auto position = writer.declAttribute< Vec4 >( ShaderProgram::Position );
+		auto position = writer.declAttribute< Vec4 >( cuT( "position" ) );
 		auto normal = writer.declAttribute< Vec3 >( ShaderProgram::Normal );
 		auto tangent = writer.declAttribute< Vec3 >( ShaderProgram::Tangent );
 		auto bitangent = writer.declAttribute< Vec3 >( ShaderProgram::Bitangent );
-		auto texture = writer.declAttribute< Vec3 >( ShaderProgram::Texture );
+		auto texture = writer.declAttribute< Vec3 >( cuT( "texcoord" ) );
 		auto bone_ids0 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds0
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
 		auto bone_ids1 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds1

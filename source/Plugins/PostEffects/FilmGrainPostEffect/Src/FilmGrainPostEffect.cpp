@@ -65,7 +65,7 @@ namespace film_grain
 			UBO_MATRIX( writer, 0u );
 
 			// Shader inputs
-			Vec2 position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
+			Vec2 position = writer.declAttribute< Vec2 >( cuT( "position" ) );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );

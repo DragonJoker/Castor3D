@@ -34,8 +34,8 @@ namespace castor3d
 		*/
 		struct Vertex
 		{
-			float coords[2];
-			float texture[2];
+			castor::Point2f coords;
+			castor::Point2f texture;
 		};
 		DECLARE_VECTOR( Vertex, Vertex );
 		/*!

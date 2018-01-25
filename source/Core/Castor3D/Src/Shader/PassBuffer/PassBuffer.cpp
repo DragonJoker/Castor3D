@@ -70,9 +70,9 @@ namespace castor3d
 		}
 	}
 
-	void PassBuffer::bind()const
+	renderer::DescriptorSetLayoutBinding PassBuffer::createBinding()const
 	{
-		m_buffer.bind( PassBufferIndex );
+		return m_buffer.createBinding( PassBufferIndex );
 	}
 
 	void PassBuffer::visit( LegacyPass const & pass )

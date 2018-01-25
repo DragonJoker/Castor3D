@@ -5,6 +5,7 @@
 #include "RenderToTexture/RenderQuad.hpp"
 #include "Texture/TextureLayout.hpp"
 
+#include <Buffer/StagingBuffer.hpp>
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassState.hpp>
 #include <RenderPass/RenderSubpass.hpp>
@@ -59,7 +60,6 @@ namespace castor3d
 		: OwnedBy< Engine >{ engine }
 		, Named{ name }
 		, m_index{ s_nbRenderWindows++ }
-		, m_matrixUbo{ engine }
 		, m_listener{ engine.getFrameListenerCache().add( cuT( "RenderWindow_" ) + string::toString( m_index ) ) }
 		, m_pickingPass{ std::make_unique< PickingPass >( engine ) }
 	{
@@ -124,8 +124,12 @@ namespace castor3d
 				doCreateSwapChainDependent();
 				doPrepareFrames();
 
+				m_transferCommandBuffer = m_device->getGraphicsCommandPool().createCommandBuffer();
 				target->initialise( 1 );
 				m_saveBuffer = PxBufferBase::create( target->getSize(), target->getPixelFormat() );
+				m_stagingBuffer = std::make_shared< renderer::StagingBuffer >( *m_device
+					, renderer::BufferTarget::eTransferDst
+					, m_saveBuffer->size() );
 				m_pickingPass->initialise( target->getSize() );
 				m_device->disable();
 				m_initialised = true;
@@ -187,15 +191,12 @@ namespace castor3d
 			{
 				if ( m_toSave )
 				{
+					ByteArray data;
+					m_stagingBuffer->downloadTextureData( *m_transferCommandBuffer
+						, m_saveBuffer->ptr()
+						, m_saveBuffer->size()
+						, target->getTexture().getTexture()->getView() );
 					auto texture = target->getTexture().getTexture();
-					auto buffer = texture->lock( renderer::AccessFlag::eHostRead );
-
-					if ( buffer )
-					{
-						std::memcpy( m_saveBuffer->ptr(), buffer, m_saveBuffer->size() );
-					}
-
-					texture->unlock( false );
 					m_toSave = false;
 				}
 
@@ -447,7 +448,6 @@ namespace castor3d
 	{
 		RenderTargetSPtr target = getRenderTarget();
 		m_renderQuad = std::make_unique< RenderQuad >( *getEngine()->getRenderSystem()
-			, m_matrixUbo
 			, castor::Position{}
 			, m_size
 			, *m_program

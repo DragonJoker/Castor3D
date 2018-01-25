@@ -2,6 +2,9 @@
 
 #include "Engine.hpp"
 
+#include <Image/Texture.hpp>
+#include <Image/TextureView.hpp>
+
 using namespace castor;
 
 namespace castor3d
@@ -10,66 +13,69 @@ namespace castor3d
 
 	namespace
 	{
-		size_t getImagesCount( TextureType type, uint32_t depth )
+		size_t getSubviewCount( renderer::TextureType type
+			, uint32_t layerCount )
 		{
-			size_t result = depth;
+			size_t result = layerCount;
 
-			if ( type == TextureType::eCube || type == TextureType::eCubeArray )
+			if ( type == renderer::TextureType::eCube
+				|| type == renderer::TextureType::eCubeArray )
 			{
 				result *= size_t( CubeMapFace::eCount );
+			}
+			else if ( type == renderer::TextureType::e3D )
+			{
+				result = 1u;
 			}
 
 			return result;
 		}
 
-		TextureStorageType getStorageType( TextureType type )
+		renderer::TextureType getSubviewType( renderer::TextureType type )
 		{
-			TextureStorageType result = TextureStorageType::eCount;
+			renderer::TextureType result = type;
 
-			switch ( type )
+			switch ( result )
 			{
-			case TextureType::eBuffer:
-				result = TextureStorageType::eBuffer;
-				break;
+			case renderer::TextureType::e1D:
+				return renderer::TextureType::e1D;
 
-			case TextureType::eOneDimension:
-				result = TextureStorageType::eOneDimension;
-				break;
+			case renderer::TextureType::e2D:
+				return renderer::TextureType::e2D;
 
-			case TextureType::eOneDimensionArray:
-				result = TextureStorageType::eOneDimensionArray;
-				break;
+			case renderer::TextureType::e3D:
+				return renderer::TextureType::e3D;
 
-			case TextureType::eTwoDimensions:
-				result = TextureStorageType::eTwoDimensions;
-				break;
+			case renderer::TextureType::eCube:
+				return renderer::TextureType::e2D;
 
-			case TextureType::eTwoDimensionsArray:
-				result = TextureStorageType::eTwoDimensionsArray;
-				break;
+			case renderer::TextureType::e1DArray:
+				return renderer::TextureType::e1D;
 
-			case TextureType::eTwoDimensionsMS:
-				result = TextureStorageType::eTwoDimensionsMS;
-				break;
+			case renderer::TextureType::e2DArray:
+				return renderer::TextureType::e2D;
 
-			case TextureType::eThreeDimensions:
-				result = TextureStorageType::eThreeDimensions;
-				break;
-
-			case TextureType::eCube:
-				result = TextureStorageType::eCubeMap;
-				break;
-
-			case TextureType::eCubeArray:
-				result = TextureStorageType::eCubeMapArray;
-				break;
+			case renderer::TextureType::eCubeArray:
+				return renderer::TextureType::e2D;
 
 			default:
-				FAILURE( "The given texture type doesn't have any associated storage type" );
-				CASTOR_EXCEPTION( cuT( "The given texture type doesn't have any associated storage type" ) );
-				break;
+				FAILURE( "Unsupported texture type." );
+				return renderer::TextureType::e2D;
 			}
+		}
 
+		std::vector< TextureViewUPtr > createSubviews( TextureLayout & layout
+			, renderer::TextureType type
+			, uint32_t layerCount )
+		{
+			std::vector< TextureViewUPtr > result{ getSubviewCount( type, 1 ) + 1u };
+			result[0] = std::make_unique< TextureView >( layout
+				, type
+				, 0u
+				, ~( 0u )
+				, 0u
+				, ~( 0u )
+				, 0u );
 			return result;
 		}
 	}
@@ -77,95 +83,133 @@ namespace castor3d
 	//************************************************************************************************
 
 	TextureLayout::TextureLayout( RenderSystem & renderSystem
-		, TextureType type
-		, AccessTypes const & cpuAccess
-		, AccessTypes const & gpuAccess )
+		, renderer::TextureType type
+		, renderer::ImageUsageFlags usage
+		, renderer::MemoryPropertyFlags memoryProperties )
 		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_type{ type }
-		, m_images{ getImagesCount( type, 1 ) }
-		, m_cpuAccess{ cpuAccess }
-		, m_gpuAccess{ gpuAccess }
+		, m_usage{ usage }
+		, m_properties{ memoryProperties }
+		, m_views{ createSubviews( *this, type, 1u ) }
+		, m_defaultView{ *m_views[0] }
 	{
-		uint32_t index = 0u;
+		auto viewType = getSubviewType( type );
 
-		for ( auto & image : m_images )
+		if ( viewType != type )
 		{
-			image = std::make_unique< TextureView >( *this, index++ );
+			for ( uint32_t i = 1u; i < m_views.size(); ++i )
+			{
+				m_views[i] = std::make_unique< TextureView >( *this
+					, viewType
+					, 0u
+					, ~( 0u )
+					, i
+					, 1u
+					, i );
+			}
 		}
 	}
 
 	TextureLayout::TextureLayout( RenderSystem & renderSystem
-		, TextureType type
-		, AccessTypes const & cpuAccess
-		, AccessTypes const & gpuAccess
+		, renderer::TextureType type
+		, renderer::ImageUsageFlags usage
+		, renderer::MemoryPropertyFlags memoryProperties
 		, uint32_t mipmapCount )
 		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_type{ type }
-		, m_images{ getImagesCount( type, 1 ) }
-		, m_cpuAccess{ cpuAccess }
-		, m_gpuAccess{ gpuAccess }
+		, m_usage{ usage }
+		, m_properties{ memoryProperties }
 		, m_mipmapCount{ mipmapCount }
+		, m_views{ createSubviews( *this, type, 1u ) }
+		, m_defaultView{ *m_views[0] }
 	{
-		uint32_t index = 0u;
+		auto viewType = getSubviewType( type );
 
-		for ( auto & image : m_images )
+		if ( viewType != type )
 		{
-			image = std::make_unique< TextureView >( *this, index++ );
+			for ( uint32_t i = 1u; i < m_views.size(); ++i )
+			{
+				m_views[i] = std::make_unique< TextureView >( *this
+					, viewType
+					, 0u
+					, ~( 0u )
+					, i
+					, 1u
+					, i );
+			}
 		}
 	}
 
 	TextureLayout::TextureLayout( RenderSystem & renderSystem
-		, TextureType type
-		, AccessTypes const & cpuAccess
-		, AccessTypes const & gpuAccess
+		, renderer::TextureType type
+		, renderer::ImageUsageFlags usage
+		, renderer::MemoryPropertyFlags memoryProperties
 		, PixelFormat format
 		, Size const & size )
 		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_type{ type }
-		, m_images{ getImagesCount( type, 1 ) }
-		, m_cpuAccess{ cpuAccess }
-		, m_gpuAccess{ gpuAccess }
-		, m_format{ format }
+		, m_usage{ usage }
+		, m_properties{ memoryProperties }
 		, m_size{ size }
+		, m_format{ format }
+		, m_views{ createSubviews( *this, type, 1u ) }
+		, m_defaultView{ *m_views[0] }
 	{
-		REQUIRE( m_type != TextureType::eThreeDimensions
-				 && m_type != TextureType::eOneDimensionArray
-				 && m_type != TextureType::eTwoDimensionsArray
-				 && m_type != TextureType::eTwoDimensionsMSArray
-				 && m_type != TextureType::eCubeArray );
-		uint32_t index = 0u;
+		REQUIRE( m_type != renderer::TextureType::e3D
+			&& m_type != renderer::TextureType::e1DArray
+			&& m_type != renderer::TextureType::e2DArray
+			&& m_type != renderer::TextureType::eCubeArray );
+		auto viewType = getSubviewType( type );
 
-		for ( auto & image : m_images )
+		if ( viewType != type )
 		{
-			image = std::make_unique< TextureView >( *this, index++ );
+			for ( uint32_t i = 1u; i < m_views.size(); ++i )
+			{
+				m_views[i] = std::make_unique< TextureView >( *this
+					, viewType
+					, 0u
+					, ~( 0u )
+					, i
+					, 1u
+					, i );
+			}
 		}
 	}
 
 	TextureLayout::TextureLayout( RenderSystem & renderSystem
-		, TextureType type
-		, AccessTypes const & cpuAccess
-		, AccessTypes const & gpuAccess
+		, renderer::TextureType type
+		, renderer::ImageUsageFlags usage
+		, renderer::MemoryPropertyFlags memoryProperties
 		, PixelFormat format
 		, Point3ui const & size )
 		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_type{ type }
-		, m_images{ getImagesCount( type, size[2] ) }
-		, m_cpuAccess{ cpuAccess }
-		, m_gpuAccess{ gpuAccess }
-		, m_format{ format }
+		, m_usage{ usage }
+		, m_properties{ memoryProperties }
 		, m_size{ size[0], size[1] }
+		, m_format{ format }
 		, m_depth{ size[2] }
+		, m_views{ createSubviews( *this, type, 1u ) }
+		, m_defaultView{ *m_views[0] }
 	{
-		REQUIRE( m_type == TextureType::eThreeDimensions
-				 || m_type == TextureType::eOneDimensionArray
-				 || m_type == TextureType::eTwoDimensionsArray
-				 || m_type == TextureType::eTwoDimensionsMSArray
-				 || m_type == TextureType::eCubeArray );
-		uint32_t index = 0u;
+		REQUIRE( m_type == renderer::TextureType::e3D
+			|| m_type == renderer::TextureType::e1DArray
+			|| m_type == renderer::TextureType::e2DArray
+			|| m_type == renderer::TextureType::eCubeArray );
+		auto viewType = getSubviewType( type );
 
-		for ( auto & image : m_images )
+		if ( viewType != type )
 		{
-			image = std::make_unique< TextureView >( *this, index++ );
+			for ( uint32_t i = 1u; i < m_views.size(); ++i )
+			{
+				m_views[i] = std::make_unique< TextureView >( *this
+					, viewType
+					, 0u
+					, ~( 0u )
+					, i
+					, 1u
+					, i );
+			}
 		}
 	}
 
@@ -177,16 +221,63 @@ namespace castor3d
 	{
 		if ( !m_initialised )
 		{
-			bool result = doInitialise();
+			m_texture = getRenderSystem()->getCurrentDevice()->createTexture();
 
-			if ( result )
+			switch ( m_type )
 			{
-				doBind( 0 );
-				result = doCreateStorage( getStorageType( m_type ) );
-				doUnbind( 0 );
+			case renderer::TextureType::e1D:
+				m_texture->setImage( m_format
+					, m_size.getWidth()
+					, m_usage );
+				break;
+
+			case renderer::TextureType::e2D:
+				m_texture->setImage( m_format
+					, Point2ui{ m_size.getWidth(), m_size.getHeight() }
+					, m_usage );
+				break;
+
+			case renderer::TextureType::e3D:
+				m_texture->setImage( m_format
+					, Point3ui{ m_size.getWidth(), m_size.getHeight(), m_depth }
+					, m_usage );
+				break;
+
+			case renderer::TextureType::eCube:
+				m_texture->setImage( m_format
+					, Point2ui{ m_size.getWidth(), m_size.getHeight() }
+					, 6u
+					, m_usage );
+				break;
+
+			case renderer::TextureType::e1DArray:
+				m_texture->setImage( m_format
+					, m_size.getWidth()
+					, m_depth
+					, m_usage );
+				break;
+
+			case renderer::TextureType::e2DArray:
+				m_texture->setImage( m_format
+					, Point2ui{ m_size.getWidth(), m_size.getHeight() }
+					, m_depth
+					, m_usage );
+				break;
+
+			case renderer::TextureType::eCubeArray:
+				m_texture->setImage( m_format
+					, Point2ui{ m_size.getWidth(), m_size.getHeight() }
+					, m_depth
+					, m_usage );
+				break;
 			}
 
-			m_initialised = result;
+			for ( auto & view : m_views )
+			{
+				view->initialise();
+			}
+
+			m_initialised = m_texture != nullptr;
 		}
 
 		return m_initialised;
@@ -196,94 +287,28 @@ namespace castor3d
 	{
 		if ( m_initialised )
 		{
-			m_storage.reset();
-			doCleanup();
+			for ( auto & view : m_views )
+			{
+				view->cleanup();
+			}
+
+			m_texture.reset();
 		}
 
 		m_initialised = false;
 	}
 
-	void TextureLayout::bind( uint32_t index )const
+	void TextureLayout::generateMipmaps()const
 	{
-		REQUIRE( m_initialised );
-		doBind( index );
-		REQUIRE( m_storage );
-		m_storage->bind( index );
-	}
-
-	void TextureLayout::unbind( uint32_t index )const
-	{
-		REQUIRE( m_initialised );
-		REQUIRE( m_storage );
-		m_storage->unbind( index );
-		doUnbind( index );
-	}
-
-	void TextureLayout::resize( Size const & size )
-	{
-		REQUIRE( m_type != TextureType::eThreeDimensions
-				 && m_type != TextureType::eOneDimensionArray
-				 && m_type != TextureType::eTwoDimensionsArray
-				 && m_type != TextureType::eTwoDimensionsMSArray
-				 && m_type != TextureType::eCubeArray );
-
-		doResetStorage();
-
-		for ( auto & image : m_images )
-		{
-			image->resize( size );
-		}
-	}
-
-	void TextureLayout::resize( Point3ui const & size )
-	{
-		REQUIRE( m_type == TextureType::eThreeDimensions
-				 || m_type == TextureType::eOneDimensionArray
-				 || m_type == TextureType::eTwoDimensionsArray
-				 || m_type == TextureType::eTwoDimensionsMSArray
-				 || m_type == TextureType::eCubeArray );
-
-		doResetStorage();
-
-		for ( auto & image : m_images )
-		{
-			image->resize( size );
-		}
-	}
-
-	uint8_t * TextureLayout::lock( AccessTypes const & lock )
-	{
-		doBind( 0u );
-		REQUIRE( m_storage );
-		return m_storage->lock( lock );
-	}
-
-	void TextureLayout::unlock( bool p_modified )
-	{
-		REQUIRE( m_storage );
-		m_storage->unlock( p_modified );
-		doUnbind( 0u );
-	}
-
-	uint8_t * TextureLayout::lock( AccessTypes const & lock
-		, uint32_t index )
-	{
-		REQUIRE( m_storage );
-		return m_storage->lock( lock, index );
-	}
-
-	void TextureLayout::unlock( bool modified
-		, uint32_t index )
-	{
-		REQUIRE( m_storage );
-		m_storage->unlock( modified, index );
+		REQUIRE( m_texture );
+		m_texture->generateMipmaps();
 	}
 
 	void TextureLayout::setSource( Path const & folder
 		, Path const & relative )
 	{
-		m_images[0]->initialiseSource( folder, relative );
-		auto buffer = m_images[0]->getBuffer();
+		m_views[0]->initialiseSource( folder, relative );
+		auto buffer = m_views[0]->getBuffer();
 
 		if ( m_size != buffer->dimensions()
 			 || m_format != buffer->format() )
@@ -295,7 +320,7 @@ namespace castor3d
 
 	void TextureLayout::setSource( PxBufferBaseSPtr buffer )
 	{
-		auto & image = m_images[0];
+		auto & image = m_views[0];
 
 		if ( !image->hasSource() )
 		{
@@ -326,46 +351,6 @@ namespace castor3d
 			m_size = size;
 			m_format = format;
 		}
-	}
-
-	bool TextureLayout::doResetStorage()
-	{
-		bool result = true;
-
-		if ( m_storage )
-		{
-			auto type = m_storage->getType();
-			m_storage.reset();
-			result = doCreateStorage( type );
-		}
-
-		return result;
-	}
-
-	bool TextureLayout::doCreateStorage( TextureStorageType type )
-	{
-		bool result = false;
-
-		if ( !m_storage )
-		{
-			try
-			{
-				m_storage = getRenderSystem()->createTextureStorage( type
-					, *this
-					, m_cpuAccess
-					, m_gpuAccess );
-				result = true;
-			}
-			catch ( std::exception & p_exc )
-			{
-				Logger::logError( StringStream()
-					<< cuT( "TextureView::Initialise - Error encountered while allocating storage: " )
-					<< string::stringCast< xchar >( p_exc.what() ) );
-			}
-		}
-
-		ENSURE( m_storage );
-		return result;
 	}
 
 	//************************************************************************************************

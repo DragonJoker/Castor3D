@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3DPrerequisites.hpp"
 
+#include <Image/ImageSubresourceRange.hpp>
+
 #include <Graphics/PixelBufferBase.hpp>
 
 namespace castor3d
@@ -51,12 +53,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		sets the texture buffer.
-		 *\param[in]	p_buffer	The texture buffer.
+		 *\param[in]	buffer	The texture buffer.
 		 *\~french
 		 *\brief		Définit le tampon de la texture.
-		 *\param[in]	p_buffer	Le tampon de la texture.
+		 *\param[in]	buffer	Le tampon de la texture.
 		 */
-		C3D_API virtual void setBuffer( castor::PxBufferBaseSPtr p_buffer ) = 0;
+		C3D_API virtual void setBuffer( castor::PxBufferBaseSPtr buffer ) = 0;
 		/**
 		 *\~english
 		 *\return		The static source status.
@@ -64,19 +66,6 @@ namespace castor3d
 		 *\return		Le statut de source statique.
 		 */
 		C3D_API virtual bool isStatic()const = 0;
-		/**
-		 *\~english
-		 *\brief		Resizes the source.
-		 *\param[in]	p_size	The new size.
-		 *\param[in]	p_depth	The new depth.
-		 *\return		\p true if the source has been resized.
-		 *\~french
-		 *\brief		Redimensionne la source.
-		 *\param[in]	p_size	La nouvelle taille.
-		 *\param[in]	p_depth	La nouvelle profondeur.
-		 *\return		\p true si la source a été redimensionnée.
-		 */
-		C3D_API virtual bool resize( castor::Size const & p_size, uint32_t p_depth ) = 0;
 
 		/**
 		 *\~english
@@ -110,16 +99,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Readjusts dimensions if the selected rendering API doesn't support NPOT textures.
-		 *\param[in,out]	p_size	The size.
-		 *\param[in,out]	p_depth	The depth.
+		 *\param[in,out]	size	The size.
+		 *\param[in,out]	depth	The depth.
 		 *\return			\p true if the dimensions have changed.
 		 *\~french
 		 *\brief			Réajuste les dimensions données si l'API de rendu sélectionnée ne supporte pas les textures NPOT.
-		 *\param[in,out]	p_size	La taille.
-		 *\param[in,out]	p_depth	La profondeur.
+		 *\param[in,out]	size	La taille.
+		 *\param[in,out]	depth	La profondeur.
 		 *\return			\p true si les dimensions ont changé.
 		 */
-		bool doAdjustDimensions( castor::Size & p_size, uint32_t & p_depth );
+		bool doAdjustDimensions( castor::Size & size, uint32_t & depth );
 
 	protected:
 		//!\~english	The engine.
@@ -165,52 +154,78 @@ namespace castor3d
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a TextureView into a text file
-			 *\param[in]	p_file	The file
-			 *\param[in]	p_obj	The TextureView
+			 *\param[in]	file	The file
+			 *\param[in]	obj		The TextureView
 			 *\~french
 			 *\brief		Ecrit une TextureView dans un fichier texte
-			 *\param[in]	p_file	Le fichier
-			 *\param[in]	p_obj	La TextureView
+			 *\param[in]	file	Le fichier
+			 *\param[in]	obj		La TextureView
 			 */
-			C3D_API bool operator()( TextureView const & p_obj, castor::TextFile & p_file )override;
+			C3D_API bool operator()( TextureView const & obj
+				, castor::TextFile & file )override;
 		};
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_layout	The parent layout.
-		 *\param[in]	p_index		The image index in its layout.
+		 *\param[in]	layout	The parent layout.
+		 *\param[in]	type	The view texture type.
+		 *\param[in]	index	The image index in its layout.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_layout	Le layout parent.
-		 *\param[in]	p_index		L'index de l'image dans son layout.
+		 *\param[in]	layout	Le layout parent.
+		 *\param[in]	type	Le type de texture de la vue.
+		 *\param[in]	index	L'index de l'image dans son layout.
 		 */
-		C3D_API TextureView( TextureLayout & p_layout, uint32_t p_index );
+		C3D_API TextureView( TextureLayout & layout
+			, renderer::TextureType type
+			, uint32_t baseMipLevel
+			, uint32_t levelCount
+			, uint32_t baseArrayLayer
+			, uint32_t layerCount
+			, uint32_t index );
+		/**
+		 *\~english
+		 *\brief		Initialises the view.
+		 *\return		\p true if OK.
+		 *\~french
+		 *\brief		Initialise la vue.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		C3D_API bool initialise();
+		/**
+		 *\~english
+		 *\brief		Cleans up the view.
+		 *\~french
+		 *\brief		Nettoie la vue.
+		 */
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Defines the texture buffer from an image file.
-		 *\param[in]	p_folder	The folder containing the image.
-		 *\param[in]	p_relative	The image file path, relative to p_folder.
+		 *\param[in]	folder		The folder containing the image.
+		 *\param[in]	relative	The image file path, relative to p_folder.
 		 *\~french
 		 *\brief		Définit le tampon de la texture depuis un fichier image.
-		 *\param[in]	p_folder	Le dossier contenant l'image.
-		 *\param[in]	p_relative	Le chemin d'accès à l'image, relatif à p_folder.
+		 *\param[in]	folder		Le dossier contenant l'image.
+		 *\param[in]	relative	Le chemin d'accès à l'image, relatif à p_folder.
 		 */
-		C3D_API void initialiseSource( castor::Path const & p_folder, castor::Path const & p_relative );
+		C3D_API void initialiseSource( castor::Path const & folder
+			, castor::Path const & relative );
 		/**
 		 *\~english
 		 *\brief		Initialises the texture buffer.
-		 *\param[in]	p_buffer	The buffer.
+		 *\param[in]	buffer	The buffer.
 		 *\~french
 		 *\brief		Initialise le tampon de la texture.
-		 *\param[in]	p_buffer	Le tampon.
+		 *\param[in]	buffer	Le tampon.
 		 */
-		C3D_API void initialiseSource( castor::PxBufferBaseSPtr p_buffer );
+		C3D_API void initialiseSource( castor::PxBufferBaseSPtr buffer );
 		/**
 		 *\~english
 		 *\brief		Initialises the texture buffer.
@@ -220,89 +235,63 @@ namespace castor3d
 		C3D_API void initialiseSource();
 		/**
 		 *\~english
-		 *\brief		Resizes the texture buffer
-		 *\param[in]	p_size	The new size
-		 *\~french
-		 *\brief		Redimensionne le buffer de la texture
-		 *\param[in]	p_size	La nouvelle taille
-		 */
-		C3D_API void resize( castor::Size const & p_size );
-		/**
-		 *\~english
-		 *\brief		Resizes the 3D texture buffer
-		 *\param[in]	p_size	The new size
-		 *\~french
-		 *\brief		Redimensionne le buffer de la texture 3D
-		 *\param[in]	p_size	La nouvelle taille
-		 */
-		C3D_API void resize( castor::Point3ui const & p_size );
-		/**
-		 *\~english
-		 *\brief		sets the texture buffer.
-		 *\param[in]	p_buffer	The texture buffer.
+		 *\brief		Sets the texture buffer.
+		 *\param[in]	buffer	The texture buffer.
 		 *\~french
 		 *\brief		Définit le tampon de la texture.
-		 *\param[in]	p_buffer	Le tampon de la texture.
+		 *\param[in]	buffer	Le tampon de la texture.
 		 */
-		C3D_API void setBuffer( castor::PxBufferBaseSPtr p_buffer );
+		C3D_API void setBuffer( castor::PxBufferBaseSPtr buffer );
 		/**
-		 *\~english
-		 *\return		\p true if the texture's source has already been defined.
-		 *\~french
-		 *\return		\p true si la source de la texture a déjà été définie.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		**/
+		/**@{*/
 		inline bool hasSource()const
 		{
 			return m_source != nullptr;
 		}
-		/**
-		 *\~english
-		 *\return		The texture buffer.
-		 *\~french
-		 *\return		Le tampon de la texture.
-		 */
+
 		inline castor::PxBufferBaseSPtr getBuffer()const
 		{
 			return m_source->getBuffer();
 		}
-		/**
-		 *\~english
-		 *\return		The static source status.
-		 *\~french
-		 *\return		Le statut de source statique.
-		 */
+
 		inline bool isStaticSource()const
 		{
 			return m_source->isStatic();
 		}
-		/**
-		 *\~english
-		 *\return		The static source status.
-		 *\~french
-		 *\return		Le statut de source statique.
-		 */
+
 		inline castor::String toString()const
 		{
 			return m_source->toString();
 		}
-		/**
-		 *\~english
-		 *\return		The image index in its layout.
-		 *\~french
-		 *\return		L'index de l'image dans son layout.
-		 */
+
 		inline uint32_t getIndex()const
 		{
 			return m_index;
 		}
 
-	protected:
-		//!\~english	The texture source.
-		//!\~french		La source de la texture.
-		std::unique_ptr< TextureSource > m_source;
-		//!\~english	The image index in its layout.
-		//!\~french		L'index de l'image dans son layout.
+		inline renderer::TextureView const & getView()const
+		{
+			REQUIRE( m_view );
+			return *m_view;
+		}
+		/**@}*/
+
+	private:
 		uint32_t m_index;
+		renderer::TextureType m_type;
+		uint32_t m_baseMipLevel;
+		uint32_t m_levelCount;
+		uint32_t m_baseArrayLayer;
+		uint32_t m_layerCount;
+		std::unique_ptr< TextureSource > m_source;
+		renderer::TextureViewPtr m_view;
 	};
 }
 

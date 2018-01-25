@@ -44,7 +44,7 @@ namespace castor3d
 			UBO_MATRIX( writer, 0 );
 
 			// Shader inputs
-			auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
+			auto position = writer.declAttribute< Vec2 >( cuT( "position" ) );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
@@ -71,7 +71,7 @@ namespace castor3d
 			auto c3d_coefficients = config.declMember< Float >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients );
 			auto c3d_textureSize = config.declMember< Vec2 >( GaussianBlur::TextureSize );
 			config.end();
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex, 0u );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), MinTextureIndex, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
@@ -109,7 +109,7 @@ namespace castor3d
 			auto c3d_coefficients = config.declMember< Float >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients );
 			auto c3d_textureSize = config.declMember< Vec2 >( GaussianBlur::TextureSize );
 			config.end();
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex, 0u );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), MinTextureIndex, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs

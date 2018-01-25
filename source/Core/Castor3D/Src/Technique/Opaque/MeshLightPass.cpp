@@ -89,7 +89,7 @@ namespace castor3d
 	{
 		auto declaration = BufferDeclaration(
 		{
-			BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec3 ),
+			BufferElementDeclaration( cuT( "position" ), uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec3 ),
 		} );
 
 		auto data = doGenerateVertices();
@@ -145,7 +145,7 @@ namespace castor3d
 		UBO_MATRIX( writer, 0u );
 		UBO_MODEL_MATRIX( writer, 0u );
 		UBO_GPINFO( writer, 0u );
-		auto vertex = writer.declAttribute< Vec3 >( ShaderProgram::Position );
+		auto vertex = writer.declAttribute< Vec3 >( cuT( "position" ) );
 
 		// Shader outputs
 		auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );

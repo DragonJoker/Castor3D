@@ -3,6 +3,9 @@
 #include "Engine.hpp"
 #include "TextureLayout.hpp"
 
+#include <Core/Device.hpp>
+#include <Image/Texture.hpp>
+
 #include <Graphics/Image.hpp>
 
 using namespace castor;
@@ -21,23 +24,17 @@ namespace castor3d
 			{
 			}
 
-			virtual bool isStatic()const
+			bool isStatic()const override
 			{
 				return true;
 			}
 
-			bool resize( Size const & size, uint32_t depth )
-			{
-				FAILURE( "Can't call Resize on a static texture source." );
-				return false;
-			}
-
-			inline PxBufferBaseSPtr getBuffer()const
+			inline PxBufferBaseSPtr getBuffer()const override
 			{
 				return m_buffer;
 			}
 
-			inline void setBuffer( PxBufferBaseSPtr buffer )
+			inline void setBuffer( PxBufferBaseSPtr buffer ) override
 			{
 				m_buffer = buffer;
 				m_format = buffer->format();
@@ -80,7 +77,7 @@ namespace castor3d
 				return 1u;
 			}
 
-			virtual String toString()const
+			String toString()const override
 			{
 				return String{};
 			}
@@ -140,12 +137,12 @@ namespace castor3d
 				return 1u;
 			}
 
-			virtual String toString()const
+			String toString()const override
 			{
 				return m_folder / m_relative;
 			}
 
-			inline void setBuffer( PxBufferBaseSPtr buffer )
+			inline void setBuffer( PxBufferBaseSPtr buffer ) override
 			{
 				m_buffer = buffer;
 				m_format = buffer->format();
@@ -190,7 +187,7 @@ namespace castor3d
 				return m_depth;
 			}
 
-			virtual String toString()const
+			String toString()const override
 			{
 				return String{};
 			}
@@ -214,26 +211,12 @@ namespace castor3d
 				m_size = dimensions;
 			}
 
-			virtual bool isStatic()const
+			bool isStatic()const override
 			{
 				return false;
 			}
 
-			bool resize( Size const & size, uint32_t p_depth )
-			{
-				Size adjusted{ size };
-				doAdjustDimensions( adjusted, p_depth );
-				bool result = m_size != size;
-
-				if ( result )
-				{
-					m_size = size;
-				}
-
-				return result;
-			}
-
-			inline PxBufferBaseSPtr getBuffer()const
+			inline PxBufferBaseSPtr getBuffer()const override
 			{
 				if ( !m_buffer || m_buffer->dimensions() != m_size )
 				{
@@ -243,7 +226,7 @@ namespace castor3d
 				return m_buffer;
 			}
 
-			inline void setBuffer( PxBufferBaseSPtr buffer )
+			inline void setBuffer( PxBufferBaseSPtr buffer ) override
 			{
 				m_size = buffer->dimensions();
 				m_format = buffer->format();
@@ -273,7 +256,7 @@ namespace castor3d
 				return 1u;
 			}
 
-			virtual String toString()const
+			String toString()const override
 			{
 				return string::toString( m_size.getWidth() )
 					+ cuT( "x" ) + string::toString( m_size.getHeight() );
@@ -300,7 +283,7 @@ namespace castor3d
 				return m_depth;
 			}
 
-			virtual String toString()const
+			String toString()const override
 			{
 				return string::toString( m_size.getWidth() )
 					+ cuT( "x" ) + string::toString( m_size.getHeight() )
@@ -345,10 +328,38 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	TextureView::TextureView( TextureLayout & layout, uint32_t index )
+	TextureView::TextureView( TextureLayout & layout
+		, renderer::TextureType type
+		, uint32_t baseMipLevel
+		, uint32_t levelCount
+		, uint32_t baseArrayLayer
+		, uint32_t layerCount
+		, uint32_t index )
 		: OwnedBy< TextureLayout >{ layout }
 		, m_index{ index }
+		, m_baseMipLevel{ baseMipLevel }
+		, m_levelCount{ levelCount }
+		, m_baseArrayLayer{ baseArrayLayer }
+		, m_layerCount{ layerCount }
+		, m_type{ type }
 	{
+	}
+
+	bool TextureView::initialise()
+	{
+		auto & device = *getOwner()->getRenderSystem()->getCurrentDevice();
+		m_view = getOwner()->getTexture().createView( m_type
+			, getOwner()->getPixelFormat()
+			, m_baseMipLevel
+			, m_levelCount
+			, m_baseArrayLayer
+			, m_layerCount );
+		return m_view != nullptr;
+	}
+
+	void TextureView::cleanup()
+	{
+		m_view.reset();
 	}
 
 	void TextureView::initialiseSource( Path const & folder
@@ -381,7 +392,7 @@ namespace castor3d
 
 	void TextureView::initialiseSource()
 	{
-		if ( getOwner()->getType() == TextureType::eThreeDimensions )
+		if ( getOwner()->getType() == renderer::TextureType::e3D )
 		{
 			m_source = std::make_unique< Dynamic3DTextureSource >( *getOwner()->getRenderSystem()->getEngine()
 				, Point3ui{ getOwner()->getWidth()
@@ -397,16 +408,6 @@ namespace castor3d
 		}
 
 		getOwner()->doUpdateFromFirstImage( m_source->getDimensions(), m_source->getPixelFormat() );
-	}
-
-	void TextureView::resize( Size const & size )
-	{
-		m_source->resize( size, 1u );
-	}
-
-	void TextureView::resize( Point3ui const & size )
-	{
-		m_source->resize( Size{ size[0], size[1] }, size[2] );
 	}
 
 	void TextureView::setBuffer( PxBufferBaseSPtr buffer )

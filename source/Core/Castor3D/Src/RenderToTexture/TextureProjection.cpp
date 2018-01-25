@@ -34,7 +34,7 @@ namespace castor3d
 		, m_declaration
 		{
 			{
-				BufferElementDeclaration{ ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec3 }
+				BufferElementDeclaration{ cuT( "position" ), uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec3 }
 			}
 		}
 	{
@@ -111,7 +111,7 @@ namespace castor3d
 			GlslWriter writer{ renderSystem.createGlslWriter() };
 
 			// Inputs
-			auto position = writer.declAttribute< Vec3 >( ShaderProgram::Position );
+			auto position = writer.declAttribute< Vec3 >( cuT( "position" ) );
 			UBO_MATRIX( writer, 0 );
 			UBO_MODEL_MATRIX( writer, 0 );
 
@@ -132,7 +132,7 @@ namespace castor3d
 			GlslWriter writer{ renderSystem.createGlslWriter() };
 
 			// Inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex, 0u );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), MinTextureIndex, 0u );
 			auto c3d_size = writer.declUniform< Vec2 >( cuT( "c3d_size" ) );
 			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 

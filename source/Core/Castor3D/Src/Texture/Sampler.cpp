@@ -129,9 +129,9 @@ namespace castor3d
 
 	bool Sampler::initialise()
 	{
-		auto context = getEngine()->getRenderSystem()->getCurrentContext();
-		REQUIRE( context );
-		m_sampler = context->getDevice().createSampler( m_wrapS
+		auto device = getEngine()->getRenderSystem()->getCurrentDevice();
+		REQUIRE( device );
+		m_sampler = device->createSampler( m_wrapS
 			, m_wrapT
 			, m_wrapR
 			, m_minFilter
@@ -148,8 +148,6 @@ namespace castor3d
 
 	void Sampler::cleanup()
 	{
-		auto context = getEngine()->getRenderSystem()->getCurrentContext();
-		REQUIRE( context );
 		m_sampler.reset();
 	}
 }

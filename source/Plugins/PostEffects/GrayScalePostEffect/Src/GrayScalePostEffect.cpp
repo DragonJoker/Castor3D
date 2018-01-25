@@ -46,7 +46,7 @@ namespace GrayScale
 			UBO_MATRIX( writer, 0u );
 
 			// Shader inputs
-			Vec2 position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
+			Vec2 position = writer.declAttribute< Vec2 >( cuT( "position" ) );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
@@ -66,7 +66,7 @@ namespace GrayScale
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex, 0u );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), MinTextureIndex, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
@@ -128,7 +128,7 @@ namespace GrayScale
 		ShaderProgramSPtr program = cache.getNewProgram( false );
 		program->createObject( ShaderType::eVertex );
 		program->createObject( ShaderType::ePixel );
-		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
+		program->createUniform< UniformType::eSampler >( cuT( "c3d_mapDiffuse" ), ShaderType::ePixel )->setValue( MinTextureIndex );
 		program->setSource( ShaderType::eVertex, vertex );
 		program->setSource( ShaderType::ePixel, fragment );
 		program->initialise();

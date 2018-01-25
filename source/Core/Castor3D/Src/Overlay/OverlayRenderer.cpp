@@ -7,11 +7,14 @@
 
 #include "Material/Material.hpp"
 #include "Material/Pass.hpp"
-#include "Mesh/Buffer/Buffer.hpp"
 #include "Render/RenderPipeline.hpp"
+#include "Shader/PassBuffer/PassBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
+
+#include <Buffer/Buffer.hpp>
+#include <Buffer/VertexBuffer.hpp>
 
 #include <Graphics/Font.hpp>
 
@@ -32,48 +35,45 @@ namespace castor3d
 	{
 		uint32_t doFillBuffers( OverlayCategory::VertexArray::const_iterator begin
 			, uint32_t count
-			, VertexBuffer & vbo )
+			, renderer::VertexBuffer< OverlayCategory::Vertex > & vbo )
 		{
 			OverlayCategory::Vertex const & vertex = *begin;
 			auto size = count * sizeof( OverlayCategory::Vertex );
 
-			vbo.bind();
-			vbo.upload( 0, uint32_t( size ), reinterpret_cast< uint8_t const * >( &vertex ) );
-			vbo.unbind();
+			if ( auto buffer = vbo.getBuffer().lock( 0u
+				, uint32_t( size )
+				, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateRange ) )
+			{
+				std::memcpy( buffer, reinterpret_cast< uint8_t const * >( &vertex ), size );
+				vbo.getBuffer().unlock( uint32_t( size ), true );
+			}
+
 			return count;
 		}
 
 		uint32_t doFillBuffers( TextOverlay::VertexArray::const_iterator begin
 			, uint32_t count
-			, VertexBuffer & vbo )
+			, renderer::VertexBuffer< TextOverlay::Vertex > & vbo )
 		{
 			TextOverlay::Vertex const & vertex = *begin;
 			auto size = count * sizeof( TextOverlay::Vertex );
 
-			vbo.bind();
-			vbo.upload( 0, uint32_t( size ), reinterpret_cast< uint8_t const * >( &vertex ) );
-			vbo.unbind();
+			if ( auto buffer = vbo.getBuffer().lock( 0u
+				, uint32_t( size )
+				, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateRange ) )
+			{
+				std::memcpy( buffer, reinterpret_cast< uint8_t const * >( &vertex ), size );
+				vbo.getBuffer().unlock( uint32_t( size ), true );
+			}
+
 			return count;
 		}
 	}
 
-	OverlayRenderer::OverlayRenderer( RenderSystem & renderSystem )
+	OverlayRenderer::OverlayRenderer( RenderSystem & renderSystem
+		, renderer::TextureView const & target )
 		: OwnedBy< RenderSystem >( renderSystem )
-		, m_declaration{
-			{
-				{
-					BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eIVec2 ),
-					BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::eTexCoords ), renderer::AttributeFormat::eVec2 )
-				}
-			} }
-		, m_textDeclaration{
-			{
-				{
-					BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eIVec2 ),
-					BufferElementDeclaration( ShaderProgram::Text, uint32_t( ElementUsage::eTexCoords ), renderer::AttributeFormat::eVec2, 0 ),
-					BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::eTexCoords ), renderer::AttributeFormat::eVec2, 1 )
-				}
-			} }
+		, m_target{ target }
 		, m_matrixUbo{ *renderSystem.getEngine() }
 		, m_overlayUbo{ *renderSystem.getEngine() }
 	{
@@ -81,72 +81,63 @@ namespace castor3d
 
 	OverlayRenderer::~OverlayRenderer()
 	{
-		for ( auto & vertex : m_borderVertex )
-		{
-			vertex.reset();
-		}
-
-		for ( auto & vertex : m_panelVertex )
-		{
-			vertex.reset();
-		}
 	}
 
 	void OverlayRenderer::initialise()
 	{
+		auto & device = *getRenderSystem()->getCurrentDevice();
+
+		if ( !m_commandBuffer )
+		{
+			m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+		}
+
+		if ( !m_declaration )
+		{
+			m_declaration = device.createVertexLayout( 0u, sizeof( OverlayCategory::Vertex ) );
+			m_declaration->createAttribute< Point2f >( 0u
+				, offsetof( OverlayCategory::Vertex, coords ) );
+			m_declaration->createAttribute< Point2f >( 1u
+				, offsetof( OverlayCategory::Vertex, texture ) );
+		}
+
+		if ( !m_textDeclaration )
+		{
+			m_textDeclaration = device.createVertexLayout( 0u, sizeof( TextOverlay::Vertex ) );
+			m_textDeclaration->createAttribute< Point2f >( 0u
+				, offsetof( TextOverlay::Vertex, coords ) );
+			m_textDeclaration->createAttribute< Point2f >( 1u
+				, offsetof( TextOverlay::Vertex, text ) );
+			m_textDeclaration->createAttribute< Point2f >( 2u
+				, offsetof( TextOverlay::Vertex, texture ) );
+		}
+
 		if ( !m_panelVertexBuffer )
 		{
 			// Panel Overlays buffers
-			m_panelVertexBuffer = std::make_shared< VertexBuffer >( *getRenderSystem()->getEngine(), m_declaration );
-			uint32_t stride = m_declaration.stride();
-			m_panelVertexBuffer->resize( uint32_t( m_panelVertex.size() * stride ) );
-			uint8_t * buffer = m_panelVertexBuffer->getData();
-
-			for ( auto & vertex : m_panelVertex )
-			{
-				vertex = std::make_shared< BufferElementGroup >( buffer );
-				buffer += stride;
-			}
-
-			m_panelVertexBuffer->initialise( renderer::MemoryPropertyFlag::eHostVisible );
-
-			{
-				auto & pipeline = doGetPanelPipeline( 0u );
-				m_panelGeometryBuffers.m_noTexture = getRenderSystem()->createGeometryBuffers( Topology::eTriangles, pipeline.getProgram() );
-				m_panelGeometryBuffers.m_noTexture->initialise( { *m_panelVertexBuffer }, nullptr );
-			}
-			{
-				auto & pipeline = doGetPanelPipeline( uint32_t( TextureChannel::eDiffuse ) );
-				m_panelGeometryBuffers.m_textured = getRenderSystem()->createGeometryBuffers( Topology::eTriangles, pipeline.getProgram() );
-				m_panelGeometryBuffers.m_textured->initialise( { *m_panelVertexBuffer }, nullptr );
-			}
+			m_panelVertexBuffer = renderer::makeVertexBuffer< OverlayCategory::Vertex >( device
+				, uint32_t( m_panelVertex.size() )
+				, renderer::BufferTarget::eTransferDst
+				, renderer::MemoryPropertyFlag::eHostVisible );
+			m_panelGeometryBuffers.m_noTexture = device.createGeometryBuffers( *m_panelVertexBuffer, 0u, *m_declaration );
+			m_panelGeometryBuffers.m_textured = device.createGeometryBuffers( *m_panelVertexBuffer, 0u, *m_declaration );
 		}
 
 		if ( !m_borderVertexBuffer )
 		{
 			// Border Overlays buffers
-			m_borderVertexBuffer = std::make_shared< VertexBuffer >( *getRenderSystem()->getEngine(), m_declaration );
-			uint32_t stride = m_declaration.stride();
-			m_borderVertexBuffer->resize( uint32_t( m_borderVertex.size() * stride ) );
-			uint8_t * buffer = m_borderVertexBuffer->getData();
-
-			for ( auto & vertex : m_borderVertex )
-			{
-				vertex = std::make_shared< BufferElementGroup >( buffer );
-				buffer += stride;
-			}
-
-			m_borderVertexBuffer->initialise( renderer::MemoryPropertyFlag::eHostVisible );
+			m_panelVertexBuffer = renderer::makeVertexBuffer< OverlayCategory::Vertex >( device
+				, uint32_t( m_panelVertex.size() )
+				, renderer::BufferTarget::eTransferDst
+				, renderer::MemoryPropertyFlag::eHostVisible );
 
 			{
 				auto & pipeline = doGetPanelPipeline( 0 );
-				m_borderGeometryBuffers.m_noTexture = getRenderSystem()->createGeometryBuffers( Topology::eTriangles, pipeline.getProgram() );
-				m_borderGeometryBuffers.m_noTexture->initialise( { *m_borderVertexBuffer }, nullptr );
+				m_borderGeometryBuffers.m_noTexture = device.createGeometryBuffers( *m_panelVertexBuffer, 0u, *m_declaration );
 			}
 			{
 				auto & pipeline = doGetPanelPipeline( uint32_t( TextureChannel::eDiffuse ) );
-				m_borderGeometryBuffers.m_textured = getRenderSystem()->createGeometryBuffers( Topology::eTriangles, pipeline.getProgram() );
-				m_borderGeometryBuffers.m_textured->initialise( { *m_borderVertexBuffer }, nullptr );
+				m_borderGeometryBuffers.m_textured = device.createGeometryBuffers( *m_panelVertexBuffer, 0u, *m_declaration );
 			}
 		}
 
@@ -156,61 +147,30 @@ namespace castor3d
 
 	void OverlayRenderer::cleanup()
 	{
-		for ( auto & vertex : m_borderVertex )
-		{
-			vertex.reset();
-		}
-
-		for ( auto & vertex : m_panelVertex )
-		{
-			vertex.reset();
-		}
-
-		for ( auto & pair : m_pipelines )
-		{
-			pair.second->cleanup();
-		}
-
 		m_overlayUbo.getUbo().cleanup();
 		m_matrixUbo.getUbo().cleanup();
-		m_pipelines.clear();
+		m_panelPipelines.clear();
+		m_textPipelines.clear();
 		m_mapPanelNodes.clear();
 		m_mapTextNodes.clear();
 
 		if ( m_panelVertexBuffer )
 		{
-			m_panelGeometryBuffers.m_noTexture->cleanup();
-			m_panelGeometryBuffers.m_textured->cleanup();
 			m_panelGeometryBuffers.m_noTexture.reset();
 			m_panelGeometryBuffers.m_textured.reset();
-			m_panelVertexBuffer->cleanup();
 			m_panelVertexBuffer.reset();
 		}
 
 		if ( m_borderVertexBuffer )
 		{
-			m_borderGeometryBuffers.m_noTexture->cleanup();
-			m_borderGeometryBuffers.m_textured->cleanup();
 			m_borderGeometryBuffers.m_noTexture.reset();
 			m_borderGeometryBuffers.m_textured.reset();
-			m_borderVertexBuffer->cleanup();
 			m_borderVertexBuffer.reset();
 		}
 
-		for ( auto & buffer : m_textsGeometryBuffers )
-		{
-			buffer.m_noTexture->cleanup();
-			buffer.m_textured->cleanup();
-		}
-
 		m_textsGeometryBuffers.clear();
-
-		for ( auto buffer : m_textsVertexBuffers )
-		{
-			buffer->cleanup();
-		}
-
 		m_textsVertexBuffers.clear();
+		m_commandBuffer.reset();
 	}
 
 	void OverlayRenderer::drawPanel( PanelOverlay & overlay )
@@ -222,7 +182,8 @@ namespace castor3d
 			m_overlayUbo.setPosition( overlay.getAbsolutePosition()
 				, m_size
 				, overlay.getRenderRatio( m_size ) );
-			doDrawItem( *material
+			doDrawItem( *m_commandBuffer
+				, *material
 				, *m_panelVertexBuffer
 				, m_panelGeometryBuffers
 				, doFillBuffers( overlay.getPanelVertex().begin()
@@ -241,7 +202,8 @@ namespace castor3d
 				m_overlayUbo.setPosition( overlay.getAbsolutePosition()
 					, m_size
 					, overlay.getRenderRatio( m_size ) );
-				doDrawItem( *material
+				doDrawItem( *m_commandBuffer
+					, *material
 					, *m_panelVertexBuffer
 					, m_panelGeometryBuffers
 					, doFillBuffers( overlay.getPanelVertex().begin()
@@ -257,7 +219,8 @@ namespace castor3d
 				m_overlayUbo.setPosition( overlay.getAbsolutePosition()
 					, m_size
 					, overlay.getRenderRatio( m_size ) );
-				doDrawItem( *material
+				doDrawItem( *m_commandBuffer
+					, *material
 					, *m_borderVertexBuffer
 					, m_borderGeometryBuffers
 					, doFillBuffers( overlay.getBorderVertex().begin()
@@ -280,22 +243,22 @@ namespace castor3d
 				TextOverlay::VertexArray arrayVtx = overlay.getTextVertex();
 				int32_t count = uint32_t( arrayVtx.size() );
 				uint32_t index = 0;
-				std::vector< OverlayGeometryBuffers > geometryBuffers;
-				std::vector< VertexBufferSPtr > vertexBuffers;
+				std::vector< std::reference_wrapper< OverlayGeometryBuffers > > geometryBuffers;
+				renderer::VertexBufferCRefArray vertexBuffers;
 				TextOverlay::VertexArray::const_iterator it = arrayVtx.begin();
 
 				while ( count > C3D_MAX_CHARS_PER_BUFFER )
 				{
-					geometryBuffers.push_back( doFillTextPart( count, it, index ) );
-					vertexBuffers.push_back( m_textsVertexBuffers[index] );
+					geometryBuffers.emplace_back( doFillTextPart( count, it, index ) );
+					vertexBuffers.emplace_back( *m_textsVertexBuffers[index] );
 					++index;
 					count -= C3D_MAX_CHARS_PER_BUFFER;
 				}
 
 				if ( count > 0 )
 				{
-					geometryBuffers.push_back( doFillTextPart( count, it, index ) );
-					vertexBuffers.push_back( m_textsVertexBuffers[index] );
+					geometryBuffers.emplace_back( doFillTextPart( count, it, index ) );
+					vertexBuffers.emplace_back( *m_textsVertexBuffers[index] );
 				}
 
 				auto texture = overlay.getFontTexture()->getTexture();
@@ -311,11 +274,12 @@ namespace castor3d
 
 					if ( checkFlag( pass->getTextureFlags(), TextureChannel::eDiffuse ) )
 					{
-						for ( auto geoBuffers : geometryBuffers )
+						for ( auto & geoBuffers : geometryBuffers )
 						{
-							doDrawItem( *pass
-								, *( *itV )
-								, *geoBuffers.m_textured
+							doDrawItem( *m_commandBuffer
+								, *pass
+								, itV->get()
+								, *geoBuffers.get().m_textured
 								, *texture
 								, *sampler
 								, std::min( count, C3D_MAX_CHARS_PER_BUFFER ) );
@@ -325,11 +289,12 @@ namespace castor3d
 					}
 					else
 					{
-						for ( auto geoBuffers : geometryBuffers )
+						for ( auto & geoBuffers : geometryBuffers )
 						{
-							doDrawItem( *pass
-								, *( *itV )
-								, *geoBuffers.m_noTexture
+							doDrawItem( *m_commandBuffer
+								, *pass
+								, itV->get()
+								, *geoBuffers.get().m_noTexture
 								, *texture
 								, *sampler
 								, std::min( count, C3D_MAX_CHARS_PER_BUFFER ) );
@@ -367,14 +332,10 @@ namespace castor3d
 		if ( it == m_mapPanelNodes.end() )
 		{
 			auto & pipeline = doGetPanelPipeline( pass.getTextureFlags() );
-			it = m_mapPanelNodes.insert( { &pass, OverlayRenderNode
-				{
-					pipeline,
-					{
-						pass,
-						pipeline.getProgram(),
-					},
-					m_overlayUbo,
+			it = m_mapPanelNodes.insert( { &pass
+				, OverlayRenderNode{ *pipeline.pipeline
+					, pass
+					, m_overlayUbo
 				}
 			} ).first;
 		}
@@ -389,14 +350,10 @@ namespace castor3d
 		if ( it == m_mapTextNodes.end() )
 		{
 			auto & pipeline = doGetTextPipeline( pass.getTextureFlags() );
-			it = m_mapTextNodes.insert( { &pass, OverlayRenderNode
-				{
-					pipeline,
-					{
-						pass,
-						pipeline.getProgram(),
-					},
-					m_overlayUbo,
+			it = m_mapTextNodes.insert( { &pass
+				, OverlayRenderNode{ *pipeline.pipeline
+					, pass
+					, m_overlayUbo
 				}
 			} ).first;
 		}
@@ -404,146 +361,148 @@ namespace castor3d
 		return it->second;
 	}
 
-	RenderPipeline & OverlayRenderer::doGetPanelPipeline( TextureChannels textureFlags )
+	OverlayRenderer::Pipeline & OverlayRenderer::doGetPanelPipeline( TextureChannels textureFlags )
 	{
-		// Remove unwanted flags
-		remFlag( textureFlags, TextureChannel::eNormal );
-		remFlag( textureFlags, TextureChannel::eSpecular );
-		remFlag( textureFlags, TextureChannel::eGloss );
-		remFlag( textureFlags, TextureChannel::eHeight );
-		remFlag( textureFlags, TextureChannel::eEmissive );
-
-		// get shader
-		return doGetPipeline( textureFlags );
+		return doGetPipeline( textureFlags, m_panelPipelines );
 	}
 
-	RenderPipeline & OverlayRenderer::doGetTextPipeline( TextureChannels textureFlags )
+	OverlayRenderer::Pipeline & OverlayRenderer::doGetTextPipeline( TextureChannels textureFlags )
 	{
-		// Remove unwanted flags
-		remFlag( textureFlags, TextureChannel::eNormal );
-		remFlag( textureFlags, TextureChannel::eSpecular );
-		remFlag( textureFlags, TextureChannel::eGloss );
-		remFlag( textureFlags, TextureChannel::eHeight );
-		remFlag( textureFlags, TextureChannel::eEmissive );
 		addFlag( textureFlags, TextureChannel::eText );
-
-		// get shader
-		return doGetPipeline( textureFlags );
+		return doGetPipeline( textureFlags, m_textPipelines );
 	}
 
-	RenderPipeline & OverlayRenderer::doGetPipeline( TextureChannels const & textureFlags )
+	OverlayRenderer::Pipeline & OverlayRenderer::doGetPipeline( TextureChannels textureFlags
+		, std::map< uint32_t, Pipeline > & pipelines )
 	{
-		auto it = m_pipelines.find( textureFlags );
+		// Remove unwanted flags
+		remFlag( textureFlags, TextureChannel::eNormal );
+		remFlag( textureFlags, TextureChannel::eSpecular );
+		remFlag( textureFlags, TextureChannel::eGloss );
+		remFlag( textureFlags, TextureChannel::eHeight );
+		remFlag( textureFlags, TextureChannel::eEmissive );
+		auto it = pipelines.find( textureFlags );
 
-		if ( it == m_pipelines.end() )
+		if ( it == pipelines.end() )
 		{
 			// Since it does not exist yet, create it and initialise it
+			auto & device = *getRenderSystem()->getCurrentDevice();
 			auto program = doCreateOverlayProgram( textureFlags );
+			program.link();
 
-			if ( program )
+			renderer::ColourBlendState blState{};
+			blState.addAttachment( renderer::ColourBlendStateAttachment{
+				true,
+				renderer::BlendFactor::eSrcAlpha,
+				renderer::BlendFactor::eInvSrcAlpha,
+				renderer::BlendOp::eAdd,
+				renderer::BlendFactor::eSrcAlpha,
+				renderer::BlendFactor::eInvSrcAlpha,
+				renderer::BlendOp::eAdd
+			} );
+			renderer::DescriptorSetLayoutBindingArray bindings;
+
+			if ( checkFlag( textureFlags, TextureChannel::eText ) )
 			{
-				program->initialise();
-				BlendState blState;
-				blState.setAlphaSrcBlend( BlendOperand::eSrcAlpha );
-				blState.setAlphaDstBlend( BlendOperand::eInvSrcAlpha );
-				blState.setRgbSrcBlend( BlendOperand::eSrcAlpha );
-				blState.setRgbDstBlend( BlendOperand::eInvSrcAlpha );
-				blState.enableBlend( true );
-
-				MultisampleState msState;
-				msState.enableAlphaToCoverage( false );
-
-				DepthStencilState dsState;
-				dsState.setDepthMask( WritingMask::eZero );
-				dsState.setDepthTest( false );
-
-				RasteriserState rsState;
-				rsState.setCulledFaces( Culling::eBack );
-
-				auto pipeline = getRenderSystem()->createRenderPipeline( std::move( dsState )
-					, std::move( rsState )
-					, std::move( blState )
-					, std::move( msState )
-					, *program
-					, PipelineFlags{} );
-				pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
-				pipeline->addUniformBuffer( m_overlayUbo.getUbo() );
-				it = m_pipelines.emplace( textureFlags, std::move( pipeline ) ).first;
+				bindings.emplace_back( 1u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
 			}
-			else
+
+			if ( checkFlag( textureFlags, TextureChannel::eDiffuse ) )
 			{
-				CASTOR_EXCEPTION( "Couldn't create an overlay shader program" );
+				bindings.emplace_back( 2u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
 			}
+
+			if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+			{
+				bindings.emplace_back( 3u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			}
+
+			// Pass buffer
+			bindings.emplace_back( getRenderSystem()->getEngine()->getMaterialCache().getPassBuffer().createBinding() );
+			// Matrix UBO
+			bindings.emplace_back( castor3d::MatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment );
+			// Overlay UBO
+			bindings.emplace_back( castor3d::OverlayUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment );
+
+			auto descriptorLayout = device.createDescriptorSetLayout( std::move( bindings ) );
+			auto descriptorPool = descriptorLayout->createPool( 1000u );
+			auto pipelineLayout = device.createPipelineLayout( *descriptorLayout );
+			auto pipeline = device.createPipeline( *pipelineLayout
+				, program
+				, { *m_declaration }
+				, *m_renderPass
+				, renderer::PrimitiveTopology::eTriangleStrip
+				, renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eBack }
+				, blState );
+			pipeline->depthStencilState( renderer::DepthStencilState{ 0u, false, false } );
+			pipeline->finish();
+			it = pipelines.emplace( textureFlags
+				, Pipeline{ std::move( descriptorLayout )
+					, std::move( descriptorPool )
+					, std::move( pipelineLayout )
+					, std::move( pipeline )
+				} ).first;
 		}
 
-		return *it->second;
+		return it->second;
 	}
 
 	OverlayRenderer::OverlayGeometryBuffers OverlayRenderer::doCreateTextGeometryBuffers()
 	{
-		auto vertexBuffer = std::make_shared< VertexBuffer >( *getRenderSystem()->getEngine(), m_textDeclaration );
-		vertexBuffer->resize( C3D_MAX_CHARS_PER_BUFFER * m_textDeclaration.stride() );
-		vertexBuffer->initialise( renderer::MemoryPropertyFlag::eHostVisible );
-
+		auto & device = *getRenderSystem()->getCurrentDevice();
+		auto vertexBuffer = renderer::makeVertexBuffer< TextOverlay::Vertex >( *getRenderSystem()->getCurrentDevice()
+			, C3D_MAX_CHARS_PER_BUFFER
+			, renderer::BufferTarget::eVertexBuffer | renderer::BufferTarget::eTransferDst
+			, renderer::MemoryPropertyFlag::eHostVisible );
 		OverlayGeometryBuffers geometryBuffers;
-		{
-			auto & pipeline = doGetTextPipeline( 0 );
-			geometryBuffers.m_noTexture = getRenderSystem()->createGeometryBuffers( Topology::eTriangles, pipeline.getProgram() );
-			geometryBuffers.m_noTexture->initialise( { *vertexBuffer }, nullptr );
-		}
-		{
-			auto & pipeline = doGetTextPipeline( uint32_t( TextureChannel::eDiffuse ) );
-			geometryBuffers.m_textured = getRenderSystem()->createGeometryBuffers( Topology::eTriangles, pipeline.getProgram() );
-			geometryBuffers.m_textured->initialise( { *vertexBuffer }, nullptr );
-		}
-
+		geometryBuffers.m_noTexture = device.createGeometryBuffers( *vertexBuffer, 0u, *m_textDeclaration );
+		geometryBuffers.m_textured = device.createGeometryBuffers( *vertexBuffer, 0u, *m_textDeclaration );
 		m_textsVertexBuffers.push_back( std::move( vertexBuffer ) );
 		m_textsGeometryBuffers.push_back( geometryBuffers );
 		return geometryBuffers;
 	}
 
-	void OverlayRenderer::doDrawItem( Pass & pass
-		, VertexBuffer const & vertexBuffer
-		, GeometryBuffers const & geometryBuffers
+	void OverlayRenderer::doDrawItem( renderer::CommandBuffer const & commandBuffer
+		, Pass & pass
+		, renderer::VertexBufferBase const & vertexBuffer
+		, renderer::GeometryBuffers const & geometryBuffers
 		, uint32_t count )
 	{
 		auto & node = doGetPanelNode( pass );
 		m_overlayUbo.update( pass.getId() );
-		node.m_pipeline.apply();
-		pass.bindTextures();
-		geometryBuffers.draw( count, 0u );
-		pass.unbindTextures();
+		commandBuffer.bindPipeline( *node.m_pipeline.pipeline );
+		commandBuffer.bindDescriptorSet( *node.m_descriptorSet
+			, *node.m_pipeline.pipelineLayout );
+		commandBuffer.bindGeometryBuffers( geometryBuffers );
+		commandBuffer.draw( count
+			, 1u
+			, 0u
+			, 0u );
 	}
 
-	void OverlayRenderer::doDrawItem( Pass & pass
-		, VertexBuffer const & vertexBuffer
-		, GeometryBuffers const & geometryBuffers
+	void OverlayRenderer::doDrawItem( renderer::CommandBuffer const & commandBuffer
+		, Pass & pass
+		, renderer::VertexBufferBase const & vertexBuffer
+		, renderer::GeometryBuffers const & geometryBuffers
 		, TextureLayout const & texture
 		, Sampler const & sampler
 		, uint32_t count )
 	{
 		auto & node = doGetTextNode( pass );
-
-		auto textureVariable = node.m_pipeline.getProgram().findUniform< UniformType::eSampler >( ShaderProgram::MapText, ShaderType::ePixel );
-
-		if ( textureVariable )
-		{
-			textureVariable->setValue( LightBufferIndex );
-		}
-
 		m_overlayUbo.update( pass.getId() );
-		node.m_pipeline.apply();
-		pass.bindTextures();
-		texture.bind( LightBufferIndex );
-		sampler.bind( LightBufferIndex );
-		geometryBuffers.draw( count, 0u );
-		sampler.unbind( LightBufferIndex );
-		texture.unbind( LightBufferIndex );
-		pass.unbindTextures();
+		commandBuffer.bindPipeline( *node.m_pipeline.pipeline );
+		commandBuffer.bindDescriptorSet( *node.m_descriptorSet
+			, *node.m_pipeline.pipelineLayout );
+		commandBuffer.bindGeometryBuffers( geometryBuffers );
+		commandBuffer.draw( count
+			, 1u
+			, 0u
+			, 0u );
 	}
 
-	void OverlayRenderer::doDrawItem( Material & material
-		, VertexBuffer const & vertexBuffer
+	void OverlayRenderer::doDrawItem( renderer::CommandBuffer const & commandBuffer
+		, Material & material
+		, renderer::VertexBufferBase const & vertexBuffer
 		, OverlayRenderer::OverlayGeometryBuffers const & geometryBuffers
 		, uint32_t count )
 	{
@@ -551,14 +510,16 @@ namespace castor3d
 		{
 			if ( checkFlag( pass->getTextureFlags(), TextureChannel::eDiffuse ) )
 			{
-				doDrawItem( *pass
+				doDrawItem( commandBuffer
+					, *pass
 					, vertexBuffer
 					, *geometryBuffers.m_textured
 					, count );
 			}
 			else
 			{
-				doDrawItem( *pass
+				doDrawItem( commandBuffer
+					, *pass
 					, vertexBuffer
 					, *geometryBuffers.m_noTexture
 					, count );
@@ -566,12 +527,10 @@ namespace castor3d
 		}
 	}
 
-	OverlayRenderer::OverlayGeometryBuffers OverlayRenderer::doFillTextPart( int32_t count
+	OverlayRenderer::OverlayGeometryBuffers & OverlayRenderer::doFillTextPart( int32_t count
 		, TextOverlay::VertexArray::const_iterator & it
 		, uint32_t index )
 	{
-		OverlayGeometryBuffers geometryBuffers;
-
 		if ( m_textsGeometryBuffers.size() <= index )
 		{
 			doCreateTextGeometryBuffers();
@@ -579,33 +538,28 @@ namespace castor3d
 
 		if ( m_textsGeometryBuffers.size() > index )
 		{
-			geometryBuffers = m_textsGeometryBuffers[index];
 			auto & vertexBuffer = m_textsVertexBuffers[index];
 			count = std::min( count, C3D_MAX_CHARS_PER_BUFFER );
 			doFillBuffers( it, count, *vertexBuffer );
 			it += count;
-		}
-		else
-		{
-			CASTOR_EXCEPTION( "Bad index for geometry buffers" );
+			return m_textsGeometryBuffers[index];
 		}
 
-		return geometryBuffers;
+		static OverlayGeometryBuffers dummy;
+		return dummy;
 	}
 
-	ShaderProgramSPtr OverlayRenderer::doCreateOverlayProgram( TextureChannels const & textureFlags )
+	renderer::ShaderProgram & OverlayRenderer::doCreateOverlayProgram( TextureChannels const & textureFlags )
 	{
 		using namespace glsl;
 		using namespace shader;
 
 		// Shader program
 		auto & cache = getRenderSystem()->getEngine()->getShaderProgramCache();
-		ShaderProgramSPtr program = cache.getNewProgram( false );
-		program->createObject( ShaderType::eVertex );
-		program->createObject( ShaderType::ePixel );
+		renderer::ShaderProgram & program = cache.getNewProgram( false );
 
 		// Vertex shader
-		glsl::Shader strVs;
+		glsl::Shader vtx;
 		{
 			auto writer = getRenderSystem()->createGlslWriter();
 
@@ -613,9 +567,9 @@ namespace castor3d
 			UBO_OVERLAY( writer, 0 );
 
 			// Shader inputs
-			auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
-			auto text = writer.declAttribute< Vec2 >( ShaderProgram::Text, checkFlag( textureFlags, TextureChannel::eText ) );
-			auto texture = writer.declAttribute< Vec2 >( ShaderProgram::Texture, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
+			auto position = writer.declAttribute< Vec2 >( cuT( "position" ) );
+			auto text = writer.declAttribute< Vec2 >( cuT( "text" ), checkFlag( textureFlags, TextureChannel::eText ) );
+			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ), checkFlag( textureFlags, TextureChannel::eDiffuse ) );
 
 			// Shader outputs
 			auto vtx_text = writer.declOutput< Vec2 >( cuT( "vtx_text" ), checkFlag( textureFlags, TextureChannel::eText ) );
@@ -641,11 +595,11 @@ namespace castor3d
 					, 1.0 );
 			} );
 
-			strVs = writer.finalise();
+			vtx = writer.finalise();
 		}
 
 		// Pixel shader
-		glsl::Shader strPs;
+		glsl::Shader pxl;
 		{
 			auto writer = getRenderSystem()->createGlslWriter();
 
@@ -674,15 +628,15 @@ namespace castor3d
 				, checkFlag( textureFlags, TextureChannel::eText ) );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" )
 				, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
-			auto c3d_mapText = writer.declSampler< Sampler2D >( ShaderProgram::MapText
+			auto c3d_mapText = writer.declSampler< Sampler2D >( cuT( "c3d_mapText" )
 				, LightBufferIndex + 0u
 				, 0u
 				, checkFlag( textureFlags, TextureChannel::eText ) );
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" )
 				, LightBufferIndex + 1u
 				, 0u
 				, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
-			auto c3d_mapOpacity = writer.declSampler< Sampler2D >( ShaderProgram::MapOpacity
+			auto c3d_mapOpacity = writer.declSampler< Sampler2D >( cuT( "c3d_mapOpacity" )
 				, LightBufferIndex + 2u
 				, 0u
 				, checkFlag( textureFlags, TextureChannel::eOpacity ) );
@@ -716,29 +670,12 @@ namespace castor3d
 				pxl_fragColor = vec4( diffuse.xyz(), alpha );
 			} );
 
-			strPs = writer.finalise();
+			pxl = writer.finalise();
 		}
 
-		if ( checkFlag( textureFlags, TextureChannel::eText ) )
-		{
-			program->createUniform< UniformType::eSampler >( ShaderProgram::MapText, ShaderType::ePixel )->setValue( LightBufferIndex );
-		}
-
-		auto index = MinTextureIndex;
-
-		if ( checkFlag( textureFlags, TextureChannel::eDiffuse ) )
-		{
-			program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( index++ );
-		}
-
-		if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
-		{
-			program->createUniform< UniformType::eSampler >( ShaderProgram::MapOpacity, ShaderType::ePixel )->setValue( index++ );
-		}
-
-		program->setSource( ShaderType::eVertex, strVs );
-		program->setSource( ShaderType::ePixel, strPs );
-		program->initialise();
+		program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
+		program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
+		program.link();
 		return program;
 	}
 }

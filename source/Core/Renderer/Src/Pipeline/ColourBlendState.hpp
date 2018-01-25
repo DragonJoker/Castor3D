@@ -1,4 +1,4 @@
-/*
+﻿/*
 This file belongs to Renderer.
 See LICENSE file in root folder.
 */
@@ -12,7 +12,7 @@ namespace renderer
 {
 	/**
 	*\brief
-	*	Etat de m�lange.
+	*	Etat de mélange.
 	*/
 	class ColourBlendState
 	{
@@ -22,19 +22,19 @@ namespace renderer
 			, Vec4 const & blendConstants = Vec4{ 0.0f, 0.0f, 0.0f, 0.0f } );
 		/**
 		*\return
-		*	Un ColourBlendState avec une attache couleur par d�faut.
+		*	Un ColourBlendState avec une attache couleur par défaut.
 		*/
 		static ColourBlendState const & createDefault();
 		/**
 		*\brief
-		*	Ajoute une attache � l'�tat.
+		*	Ajoute une attache à l'état.
 		*\param[in] attachment
 		*	L'attache.
 		*/
 		void addAttachment( ColourBlendStateAttachment const & attachment );
 		/**
 		*\return
-		*	Le statut d'activation de l'op�rateur logique.
+		*	Le statut d'activation de l'opérateur logique.
 		*/
 		inline bool isLogicOpEnabled()const
 		{
@@ -42,7 +42,7 @@ namespace renderer
 		}
 		/**
 		*\return
-		*	L'op�rateur logique.
+		*	L'opérateur logique.
 		*/
 		inline LogicOp getLogicOp()const
 		{
@@ -50,7 +50,7 @@ namespace renderer
 		}
 		/**
 		*\return
-		*	Les constantes de m�lange.
+		*	Les constantes de mélange.
 		*/
 		inline Vec4 const & getBlendConstants()const
 		{
@@ -58,7 +58,7 @@ namespace renderer
 		}
 		/**
 		*\return
-		*	Le d�but du tableau d'attaches.
+		*	Le début du tableau d'attaches.
 		*/
 		inline ColourBlendStateAttachmentArray::const_iterator begin()const
 		{

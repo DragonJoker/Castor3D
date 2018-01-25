@@ -53,8 +53,8 @@ namespace smaa
 			UBO_MATRIX( writer, 0u );
 			auto c3d_pixelSize = writer.declConstant( constants::PixelSize
 				, vec2( Float( pixelSize[0] ), pixelSize[1] ) );
-			auto position = writer.declAttribute< Vec4 >( castor3d::ShaderProgram::Position );
-			auto texture = writer.declAttribute< Vec2 >( castor3d::ShaderProgram::Texture );
+			auto position = writer.declAttribute< Vec4 >( castor3d::cuT( "position" ) );
+			auto texture = writer.declAttribute< Vec2 >( castor3d::cuT( "texcoord" ) );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
@@ -229,8 +229,8 @@ namespace smaa
 				, vec2( Float( pixelSize[0] ), pixelSize[1] ) );
 			auto c3d_maxSearchSteps = writer.declConstant( constants::MaxSearchSteps
 				, Int( maxSearchSteps ) );
-			auto position = writer.declAttribute< Vec4 >( castor3d::ShaderProgram::Position );
-			auto texture = writer.declAttribute< Vec2 >( castor3d::ShaderProgram::Texture );
+			auto position = writer.declAttribute< Vec4 >( castor3d::cuT( "position" ) );
+			auto texture = writer.declAttribute< Vec2 >( castor3d::cuT( "texcoord" ) );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
@@ -885,8 +885,8 @@ namespace smaa
 			UBO_MATRIX( writer, 0u );
 			auto c3d_pixelSize = writer.declConstant( constants::PixelSize
 				, vec2( Float( pixelSize[0] ), pixelSize[1] ) );
-			auto position = writer.declAttribute< Vec4 >( castor3d::ShaderProgram::Position );
-			auto texture = writer.declAttribute< Vec2 >( castor3d::ShaderProgram::Texture );
+			auto position = writer.declAttribute< Vec4 >( castor3d::cuT( "position" ) );
+			auto texture = writer.declAttribute< Vec2 >( castor3d::cuT( "texcoord" ) );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
@@ -1054,8 +1054,8 @@ namespace smaa
 
 			// Shader inputs
 			UBO_MATRIX( writer, 0u );
-			auto position = writer.declAttribute< Vec4 >( castor3d::ShaderProgram::Position );
-			auto texture = writer.declAttribute< Vec2 >( castor3d::ShaderProgram::Texture );
+			auto position = writer.declAttribute< Vec4 >( castor3d::cuT( "position" ) );
+			auto texture = writer.declAttribute< Vec2 >( castor3d::cuT( "texcoord" ) );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );

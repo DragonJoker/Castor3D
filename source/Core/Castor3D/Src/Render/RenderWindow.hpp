@@ -408,10 +408,11 @@ namespace castor3d
 	private:
 		static uint32_t s_nbRenderWindows;
 		uint32_t m_index;
-		MatrixUbo m_matrixUbo;
 		renderer::DevicePtr m_device;
 		renderer::SwapChainPtr m_swapChain;
 		renderer::RenderPassPtr m_renderPass;
+		renderer::StagingBufferPtr m_stagingBuffer;
+		renderer::CommandBufferPtr m_transferCommandBuffer;
 		std::vector< renderer::FrameBufferPtr > m_frameBuffers;
 		renderer::CommandBufferPtrArray m_commandBuffers;
 		renderer::SignalConnection< renderer::SwapChain::OnReset > m_swapChainReset;

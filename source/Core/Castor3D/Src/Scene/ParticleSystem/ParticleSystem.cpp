@@ -239,7 +239,7 @@ namespace castor3d
 		m_cpuImpl->addParticleVariable( p_name, p_type, p_defaultValue );
 
 		if ( p_name == cuT( "center" )
-			 || p_name == ShaderProgram::Position )
+			 || p_name == cuT( "position" ) )
 		{
 			m_billboardInputs.push_back( BufferElementDeclaration{ cuT( "center" ), 0u, p_type, m_billboardInputs.stride(), 1u } );
 			m_centerOffset = m_billboardInputs.stride();

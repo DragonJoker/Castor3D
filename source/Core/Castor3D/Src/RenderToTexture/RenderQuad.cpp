@@ -27,7 +27,6 @@ using namespace castor;
 namespace castor3d
 {
 	RenderQuad::RenderQuad( RenderSystem & renderSystem
-		, MatrixUbo & matrixUbo
 		, Position const & position
 		, Size const & size
 		, renderer::ShaderProgram const & program
@@ -35,14 +34,13 @@ namespace castor3d
 		, renderer::RenderPass const & renderPass
 		, bool nearest
 		, bool invertU )
-		: m_matrixUbo{ matrixUbo }
-		, m_vertexData
+		: m_vertexData
 		{
 			{
-				{ Point2f{ 0.0f, 0.0f }, Point2f{ ( invertU ? 1.0f : 0.0f ), 0.0f } },
-				{ Point2f{ 1.0f, 0.0f }, Point2f{ ( invertU ? 0.0f : 1.0f ), 0.0f } },
-				{ Point2f{ 1.0f, 1.0f }, Point2f{ ( invertU ? 0.0f : 1.0f ), 1.0f } },
-				{ Point2f{ 0.0f, 1.0f }, Point2f{ ( invertU ? 1.0f : 0.0f ), 1.0f } },
+				{ Point2f{ -1.0, -1.0 }, Point2f{ ( invertU ? 1.0 : 0.0 ), 0.0 } },
+				{ Point2f{ -1.0, +1.0 }, Point2f{ ( invertU ? 1.0 : 0.0 ), 1.0 } },
+				{ Point2f{ +1.0, -1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), 0.0 } },
+				{ Point2f{ +1.0, +1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), 1.0 } },
 			}
 		}
 	{
@@ -89,7 +87,7 @@ namespace castor3d
 		// Initialise the descriptor set.
 		std::vector< renderer::DescriptorSetLayoutBinding > bindings
 		{
-			{ 0u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment }
+			{ MinTextureIndex, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment }
 		};
 		m_descriptorLayout = device.createDescriptorSetLayout( std::move( bindings ) );
 		m_descriptorPool = m_descriptorLayout->createPool( 1u );
@@ -97,9 +95,6 @@ namespace castor3d
 		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 0u )
 			, view
 			, m_sampler->getSampler() );
-		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 1u )
-			, m_matrixUbo.getUbo().getStorage()
-			, 0u );
 		m_descriptorSet->update();
 
 		// Initialise the pipeline.

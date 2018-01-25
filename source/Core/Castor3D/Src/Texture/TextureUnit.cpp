@@ -136,7 +136,8 @@ namespace castor3d
 						else
 						{
 							result = file.writeText( m_tabs + cuT( "\timage \"" ) + path + cuT( "\" rgb\n" ) ) > 0;
-						}'es 
+						}
+
 						castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit image" );
 					}
 
@@ -198,9 +199,7 @@ namespace castor3d
 				&& sampler
 				&& sampler->getMipFilter() != renderer::MipmapMode::eNearest )
 			{
-				m_texture->bind( MinTextureIndex );
 				m_texture->generateMipmaps();
-				m_texture->unbind( MinTextureIndex );
 			}
 		}
 
@@ -219,44 +218,6 @@ namespace castor3d
 		if ( target )
 		{
 			target->cleanup();
-		}
-	}
-
-	void TextureUnit::bind()const
-	{
-		if ( m_texture && m_texture->isInitialised() )
-		{
-			m_texture->bind( m_index );
-
-			if ( m_changed
-				&& m_autoMipmaps
-				&& m_texture->getType() != TextureType::eBuffer )
-			{
-				m_texture->generateMipmaps();
-				m_changed = false;
-			}
-
-			auto sampler = getSampler();
-
-			if ( sampler )
-			{
-				sampler->bind( m_index );
-			}
-		}
-	}
-
-	void TextureUnit::unbind()const
-	{
-		auto sampler = getSampler();
-
-		if ( sampler )
-		{
-			sampler->unbind( m_index );
-		}
-
-		if ( m_texture && m_texture->isInitialised() )
-		{
-			m_texture->unbind( m_index );
 		}
 	}
 

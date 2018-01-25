@@ -79,6 +79,7 @@ namespace renderer
 	struct BufferCopy;
 	struct BufferImageCopy;
 	struct ImageCopy;
+	struct PushConstant;
 
 	class AttributeBase;
 	class BackBuffer;
@@ -105,6 +106,7 @@ namespace renderer
 	class MultisampleState;
 	class Pipeline;
 	class PipelineLayout;
+	class PushConstantsBuffer;
 	class QueryPool;
 	class Queue;
 	class RasterisationState;
@@ -189,6 +191,8 @@ namespace renderer
 	using UniformBufferBasePtr = std::unique_ptr< UniformBufferBase >;
 
 	using DescriptorSetLayoutBindingArray = std::vector< DescriptorSetLayoutBinding >;
+	using PushConstantArray = std::vector< PushConstant >;
+
 	using FrameBufferPtr = std::shared_ptr< FrameBuffer >;
 	using PipelinePtr = std::shared_ptr< Pipeline >;
 	using SamplerPtr = std::shared_ptr< Sampler >;

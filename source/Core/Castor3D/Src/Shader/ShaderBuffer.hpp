@@ -50,6 +50,15 @@ namespace castor3d
 		C3D_API void update();
 		/**
 		 *\~english
+		 *\brief		Creates the descriptor set layout binding at given point.
+		 *\param[in]	index	The binding point index.
+		 *\~french
+		 *\brief		Crée une attache de layout de set de descripteurs au point donné.
+		 *\param[in]	index	L'indice du point d'attache.
+		 */
+		C3D_API renderer::DescriptorSetLayoutBinding createBinding( uint32_t index = 0u )const;
+		/**
+		 *\~english
 		 *\return		The pointer to the buffer.
 		 *\~french
 		 *\brief		Le pointeur sur le tampon.

@@ -35,7 +35,7 @@ namespace castor3d
 			// Shader inputs
 			UBO_MATRIX( writer, 0u );
 			UBO_MODEL_MATRIX( writer, 0u );
-			auto vertex = writer.declAttribute< Vec3 >( ShaderProgram::Position );
+			auto vertex = writer.declAttribute< Vec3 >( cuT( "position" ) );
 
 			// Shader outputs
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
