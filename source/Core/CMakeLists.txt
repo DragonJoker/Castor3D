@@ -1,6 +1,7 @@
 option( CASTOR_BUILD_CASTOR3D "Build Castor3D" TRUE )
 option( CASTOR_BUILD_TEST_CASTORUTILS "Build CastorUtils test application" TRUE )
 option( CASTOR_BUILD_TEST_CASTOR3D "Build Castor3D test application" TRUE )
+option( CASTOR_BUILD_TEST_RENDERER "Build Renderer test applications" TRUE )
 
 function( CoreInit )
 	set( Cutils "no (Not wanted)" PARENT_SCOPE )
@@ -62,6 +63,12 @@ function( CoreBuild )
 			add_subdirectory( Core/Castor3D/Test )
 			set( C3DT ${Build} PARENT_SCOPE )
 		endif()
+
+		if ( ${CASTOR_BUILDGRP_RENDERER} AND ${CASTOR_BUILD_TEST_RENDERER} )
+			set( Build ${RdrT} )
+			add_subdirectory( Core/Renderer/Test )
+			set( RdrT ${Build} PARENT_SCOPE )
+		endif()
 	endif()
 
 	set( CastorMinLibraries
@@ -87,6 +94,7 @@ function( CoreSummary msg msgtest )
 		set( msgtest_tmp "${msgtest_tmp}\n    CastorTest           ${CT}" )
 		set( msgtest_tmp "${msgtest_tmp}\n    CastorUtilsTest      ${CUtlT}" )
 		set( msgtest_tmp "${msgtest_tmp}\n    Castor3DTest         ${C3DT}" )
+		set( msgtest_tmp "${msgtest_tmp}\n    RendererTest         ${RdrT}" )
 		set( msgtest "${msgtest}${msgtest_tmp}" PARENT_SCOPE )
 	endif()
 endfunction( CoreSummary )

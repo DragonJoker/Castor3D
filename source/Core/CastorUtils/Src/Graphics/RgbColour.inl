@@ -1,4 +1,4 @@
-﻿#include "Data/BinaryFile.hpp"
+#include "Data/BinaryFile.hpp"
 #include "Data/TextFile.hpp"
 #include "Math/Math.hpp"
 #include "Miscellaneous/StringUtils.hpp"
@@ -143,6 +143,21 @@ namespace castor
 		{
 			m_components[i].link( &m_values[i] );
 		}
+	}
+
+	template< typename ComponentType >
+	RgbColourT< ComponentType >::RgbColourT( float r, float g, float b )
+		: m_values()
+		, m_components()
+	{
+		for ( uint8_t i = 0; i < uint8_t( RgbComponent::eCount ); i++ )
+		{
+			m_components[i].link( &m_values[i] );
+		}
+
+		m_components[size_t( RgbComponent::eRed )] = r;
+		m_components[size_t( RgbComponent::eGreen )] = g;
+		m_components[size_t( RgbComponent::eBlue )] = b;
 	}
 
 	template< typename ComponentType >

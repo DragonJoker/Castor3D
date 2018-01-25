@@ -8,39 +8,37 @@
 
 namespace castor
 {
-	bool DynamicLibrary::open( Path const & p_name )throw()
+	void DynamicLibrary::doOpen()noexcept
 	{
-		if ( !m_pLibrary )
+		if ( !m_library )
 		{
-			std::string name( string::stringCast< char >( p_name ) );
+			std::string name( string::stringCast< char >( m_pathLibrary ) );
 
 			try
 			{
-				m_pLibrary = dlopen( name.c_str(), RTLD_LAZY );
-				m_pathLibrary = p_name;
+				m_library = dlopen( name.c_str(), RTLD_LAZY );
 			}
 			catch ( ... )
 			{
-				Logger::logError( std::string( "Can't load dynamic library at [" ) + name + std::string( "]" ) );
-				m_pLibrary = nullptr;
+				Logger::logError( std::string( "Can't load dynamic library at [" ) + m_pathLibrary + std::string( "]" ) );
+				m_library = nullptr;
+				m_pathLibrary.clear();
 			}
 		}
-
-		return m_pLibrary != nullptr;
 	}
 
-	void * DynamicLibrary::doGetFunction( String const & p_name )throw()
+	void * DynamicLibrary::doGetFunction( String const & name )noexcept
 	{
 		void * result = nullptr;
 
-		if ( m_pLibrary )
+		if ( m_library )
 		{
-			std::string name( string::stringCast< char >( p_name ) );
+			std::string stdname( string::stringCast< char >( name ) );
 
 			try
 			{
 				dlerror();
-				result = dlsym( m_pLibrary, name.c_str() );
+				result = dlsym( m_library, stdname.c_str() );
 				auto error = dlerror();
 
 				if ( error != NULL )
@@ -51,36 +49,36 @@ namespace castor
 			catch ( std::exception & exc )
 			{
 				result = nullptr;
-				Logger::logError( std::string( "Can't load function [" ) + name + std::string( "]: " ) + exc.what() );
+				Logger::logError( std::string( "Can't load function [" ) + stdname + std::string( "]: " ) + exc.what() );
 			}
 			catch ( ... )
 			{
 				result = nullptr;
-				Logger::logError( std::string( "Can't load function [" ) + name + std::string( "]: Unknown error." ) );
+				Logger::logError( std::string( "Can't load function [" ) + stdname + std::string( "]: Unknown error." ) );
 			}
 		}
 		else
 		{
-			Logger::logError( cuT( "Can't load function [" ) + p_name + cuT( "] because dynamic library is not loaded" ) );
+			Logger::logError( cuT( "Can't load function [" ) + name + cuT( "] because dynamic library is not loaded" ) );
 		}
 
 		return result;
 	}
 
-	void DynamicLibrary::doClose()throw()
+	void DynamicLibrary::doClose()noexcept
 	{
-		if ( m_pLibrary )
+		if ( m_library )
 		{
 			try
 			{
-				dlclose( m_pLibrary );
+				dlclose( m_library );
 			}
 			catch ( ... )
 			{
 				Logger::logError( std::string( "Can't unload dynamic library" ) );
 			}
 
-			m_pLibrary = nullptr;
+			m_library = nullptr;
 		}
 	}
 }

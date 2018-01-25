@@ -10,72 +10,70 @@
 
 namespace castor
 {
-	bool DynamicLibrary::open( Path const & p_name )throw()
+	void DynamicLibrary::doOpen()noexcept
 	{
-		if ( !m_pLibrary )
+		if ( !m_library )
 		{
-			std::string name( string::stringCast< char >( p_name ) );
-			//UINT uiOldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
+			std::string name( string::stringCast< char >( m_pathLibrary ) );
+			//UINT oldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
 
 			try
 			{
-				m_pLibrary = ::LoadLibraryA( name.c_str() );
+				m_library = ::LoadLibraryA( name.c_str() );
 
-				if ( !m_pLibrary )
+				if ( !m_library )
 				{
 					CASTOR_EXCEPTION( System::getLastErrorText() );
 				}
-
-				m_pathLibrary = p_name;
 			}
 			catch ( std::exception & p_exc )
 			{
-				String strError = cuT( "Can't load dynamic library at [" ) + p_name + cuT( "]: " );
+				String strError = cuT( "Can't load dynamic library at [" ) + m_pathLibrary + cuT( "]: " );
 				strError += p_exc.what();
 				Logger::logError( strError );
-				m_pLibrary = nullptr;
+				m_library = nullptr;
+				m_pathLibrary.clear();
 			}
 			catch ( ... )
 			{
-				String strError = cuT( "Can't load dynamic library at [" ) + p_name + cuT( "]: " );
+				String strError = cuT( "Can't load dynamic library at [" ) + m_pathLibrary + cuT( "]: " );
 				strError += System::getLastErrorText();
 				Logger::logError( strError );
-				m_pLibrary = nullptr;
+				m_library = nullptr;
+				m_pathLibrary.clear();
 			}
 
-			//::SetErrorMode( uiOldMode );
+			//::SetErrorMode( oldMode );
 		}
-
-		return m_pLibrary != nullptr;
 	}
 
-	void * DynamicLibrary::doGetFunction( String const & p_name )throw()
+	void * DynamicLibrary::doGetFunction( String const & name )noexcept
 	{
 		void * result = nullptr;
 
-		if ( m_pLibrary )
+		if ( m_library )
 		{
-			std::string name( string::stringCast< char >( p_name ) );
-			UINT uiOldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
-			result = reinterpret_cast< void * >( ::GetProcAddress( static_cast< HMODULE >( m_pLibrary ), name.c_str() ) );
-			::SetErrorMode( uiOldMode );
+			std::string stdname( string::stringCast< char >( name ) );
+			UINT oldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
+			result = reinterpret_cast< void * >( ::GetProcAddress( static_cast< HMODULE >( m_library ), stdname.c_str() ) );
+			::SetErrorMode( oldMode );
 		}
 		else
 		{
-			Logger::logError( cuT( "Can't load function [" ) + p_name + cuT( "] because dynamic library is not loaded" ) );
+			Logger::logError( cuT( "Can't load function [" ) + name + cuT( "] because dynamic library is not loaded" ) );
 		}
 
 		return result;
 	}
 
-	void DynamicLibrary::doClose()throw()
+	void DynamicLibrary::doClose()noexcept
 	{
-		if ( m_pLibrary )
+		if ( m_library )
 		{
-			UINT uiOldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
-			::FreeLibrary( static_cast< HMODULE >( m_pLibrary ) );
-			::SetErrorMode( uiOldMode );
-			m_pLibrary = nullptr;
+			UINT oldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
+			::FreeLibrary( static_cast< HMODULE >( m_library ) );
+			::SetErrorMode( oldMode );
+			m_library = nullptr;
 		}
 	}
 }

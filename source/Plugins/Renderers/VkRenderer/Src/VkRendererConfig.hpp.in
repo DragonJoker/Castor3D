@@ -1,0 +1,19 @@
+/*
+This file belongs to VkRenderer.
+See LICENSE file in root folder.
+*/
+#ifndef ___VkRenderer_Config_HPP___
+#define ___VkRenderer_Config_HPP___
+#pragma once
+
+//! Tells if RenderLib can use glslang and SPIRV to read GLSL shaders.
+#define VKRENDERER_GLSL_TO_SPV ${VKRENDERER_GLSL_TO_SPV}
+
+namespace vk_renderer
+{
+	static int constexpr VersionMajor = ${VkRenderer_VERSION_MAJOR};
+	static int constexpr VersionMinor = ${VkRenderer_VERSION_MINOR};
+	static int constexpr VersionBuild = ${VkRenderer_VERSION_BUILD};
+}
+
+#endif

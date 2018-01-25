@@ -76,7 +76,7 @@ install(
 	COMPONENT ${PROJECT_NAME}_dev
 )
 
-set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Core" )
+set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Renderer" )
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 target_add_doc( ${PROJECT_NAME} "French" "*.h *.hpp" )
 target_add_doc( ${PROJECT_NAME} "English" "*.h *.hpp" )

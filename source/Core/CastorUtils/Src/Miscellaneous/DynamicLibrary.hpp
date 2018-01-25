@@ -17,7 +17,7 @@ namespace castor
 	\brief		Platform independant library
 	\remark		Loads a library and gives access to it's functions in a platform independant way
 	\~french
-	\brief		bibliothèque dynamique (Dll, shared lib)
+	\brief		Bibliothèque dynamique (Dll, shared lib)
 	\remark		Charge une bibliothèque et permet l'accès a ses fonction de manière indépendante de l'OS
 	*/
 	class DynamicLibrary
@@ -25,142 +25,172 @@ namespace castor
 	public:
 		/**
 		 *\~english
-		 *\brief		Default constructor
+		 *\brief		Constructor, loads the library.
+		 *\param[in]	pathFile	The file path
 		 *\~french
-		 *\brief		Constructeur par défaut
+		 *\brief		Constructeur, charge la bibliothèque
+		 *\param[in]	pathFile	Le chemin du fichier
 		 */
-		CU_API DynamicLibrary()throw();
+		CU_API DynamicLibrary( Path const & pathFile )noexcept;
+		/**
+		 *\~english
+		 *\brief		Constructor, loads the library.
+		 *\param[in]	pathFile	The file path
+		 *\~french
+		 *\brief		Constructeur, charge la bibliothèque
+		 *\param[in]	pathFile	Le chemin du fichier
+		 */
+		CU_API DynamicLibrary( String const & pathFile )noexcept;
 		/**
 		 *\~english
 		 *\brief		Copy constructor
-		 *\param[in]	p_lib	The DynamicLibrary to copy
+		 *\param[in]	lib	The DynamicLibrary to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_lib	La DynamicLibrary à copier
+		 *\param[in]	lib	La DynamicLibrary à copier
 		 */
-		CU_API DynamicLibrary( DynamicLibrary const & p_lib )throw();
+		CU_API DynamicLibrary( DynamicLibrary const & lib )noexcept;
 		/**
 		 *\~english
 		 *\brief		Move constructor
-		 *\param[in]	p_lib	The DynamicLibrary to move
+		 *\param[in]	lib	The DynamicLibrary to move
 		 *\~french
 		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_lib	La DynamicLibrary à déplacer
+		 *\param[in]	lib	La DynamicLibrary à déplacer
 		 */
-		CU_API DynamicLibrary( DynamicLibrary && p_lib )throw();
+		CU_API DynamicLibrary( DynamicLibrary && lib )noexcept;
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		CU_API ~DynamicLibrary()throw();
+		CU_API ~DynamicLibrary()noexcept;
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
-		 *\param[in]	p_lib	The DynamicLibrary to copy
+		 *\param[in]	lib	The DynamicLibrary to copy
 		 *\return		A reference to this DynamicLibrary
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_lib	La DynamicLibrary à copier
+		 *\param[in]	lib	La DynamicLibrary à copier
 		 *\return		Une référence sur cette DynamicLibrary
 		 */
-		CU_API DynamicLibrary & operator =( DynamicLibrary const & p_lib );
+		CU_API DynamicLibrary & operator =( DynamicLibrary const & lib );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
-		 *\param[in]	p_lib	The DynamicLibrary to move
+		 *\param[in]	lib	The DynamicLibrary to move
 		 *\return		A reference to this DynamicLibrary
 		 *\~french
 		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_lib	La DynamicLibrary à déplacer
+		 *\param[in]	lib	La DynamicLibrary à déplacer
 		 *\return		Une référence sur cette DynamicLibrary
 		 */
-		CU_API DynamicLibrary & operator =( DynamicLibrary && p_lib );
-		/**
-		 *\~english
-		 *\brief		Opens a library from a path
-		 *\param[in]	p_szPath	The file path
-		 *\return		\p true if library was successfully loaded
-		 *\~french
-		 *\brief		Charge une bibliothèque à partir d'un chemin
-		 *\param[in]	p_szPath	Le chemin du fichier
-		 *\return		\p true si la librarie s'est chargée correctement
-		 */
-		CU_API bool open( xchar const * p_szPath )throw();
-		/**
-		 *\~english
-		 *\brief		Opens a library from a path
-		 *\param[in]	p_strPath	The file path
-		 *\return		\p true if library was successfully loaded
-		 *\~french
-		 *\brief		Charge une bibliothèque à partir d'un chemin
-		 *\param[in]	p_strPath	Le chemin du fichier
-		 *\return		\p true si la librarie s'est chargée correctement
-		 */
-		CU_API bool open( String const & p_strPath )throw();
-		/**
-		 *\~english
-		 *\brief		Opens a library from a path
-		 *\param[in]	p_pathFile	The file path
-		 *\return		\p true if library was successfully loaded
-		 *\~french
-		 *\brief		Charge une bibliothèque à partir d'un chemin
-		 *\param[in]	p_pathFile	Le chemin du fichier
-		 *\return		\p true si la librarie s'est chargée correctement
-		 */
-		CU_API bool open( Path const & p_pathFile )throw();
+		CU_API DynamicLibrary & operator =( DynamicLibrary && lib );
 		/**
 		 *\~english
 		 *\brief		Retrieves a function
-		 *\param[in]	p_pfnFunction	Receives the function
-		 *\param[in]	p_szName		The function name
+		 *\param[in]	function	Receives the function
+		 *\param[in]	name		The function name
 		 *\return		\p true if the function was correctly retrieved
 		 *\~french
 		 *\brief		Récupère une fonction
-		 *\param[in]	p_pfnFunction	Reçoit la fonction
-		 *\param[in]	p_szName		Le nom de la fonction
+		 *\param[in]	function	Reçoit la fonction
+		 *\param[in]	name		Le nom de la fonction
 		 *\return		\p true si la fonction a été correctement récupérée
 		 */
 		template< typename FuncType >
-		bool getFunction( FuncType & p_pfnFunction, char const * p_szName )throw()
+		bool getFunction( FuncType & function, char const * name )noexcept
 		{
-			return getFunction( p_pfnFunction, string::stringCast< xchar >( p_szName ) );
+			return getFunction( function, string::stringCast< xchar >( name ) );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a function
-		 *\param[in]	p_pfnFunction	Receives the function
-		 *\param[in]	p_wszName		The function name
+		 *\param[in]	function	Receives the function
+		 *\param[in]	name		The function name
 		 *\return		\p true if the function was correctly retrieved
 		 *\~french
 		 *\brief		Récupère une fonction
-		 *\param[in]	p_pfnFunction	Reçoit la fonction
-		 *\param[in]	p_wszName		Le nom de la fonction
+		 *\param[in]	function	Reçoit la fonction
+		 *\param[in]	name		Le nom de la fonction
 		 *\return		\p true si la fonction a été correctement récupérée
 		 */
 		template< typename FuncType >
-		bool getFunction( FuncType & p_pfnFunction, wchar_t const * p_wszName )throw()
+		bool getFunction( FuncType & function, wchar_t const * name )noexcept
 		{
-			return getFunction( p_pfnFunction, string::stringCast< xchar >( p_wszName ) );
+			return getFunction( function, string::stringCast< xchar >( name ) );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a function
-		 *\param[in]	p_pfnFunction	Receives the function
-		 *\param[in]	p_name		The function name
+		 *\param[in]	function	Receives the function
+		 *\param[in]	name		The function name
 		 *\return		\p true if the function was correctly retrieved
 		 *\~french
 		 *\brief		Récupère une fonction
-		 *\param[in]	p_pfnFunction	Reçoit la fonction
-		 *\param[in]	p_name		Le nom de la fonction
+		 *\param[in]	function	Reçoit la fonction
+		 *\param[in]	name		Le nom de la fonction
 		 *\return		\p true si la fonction a été correctement récupérée
 		 */
 		template< typename FuncType >
-		bool getFunction( FuncType & p_pfnFunction, String const & p_name )throw()
+		bool getFunction( FuncType & function, String const & name )noexcept
 		{
-			p_pfnFunction = reinterpret_cast< FuncType >( doGetFunction( p_name ) );
-			return p_pfnFunction != nullptr;
+			function = reinterpret_cast< FuncType >( doGetFunction( name ) );
+			return function != nullptr;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves a function
+		 *\param[in]	function	Receives the function
+		 *\param[in]	name		The function name
+		 *\return		\p true if the function was correctly retrieved
+		 *\~french
+		 *\brief		Récupère une fonction
+		 *\param[in]	function	Reçoit la fonction
+		 *\param[in]	name		Le nom de la fonction
+		 *\return		\p true si la fonction a été correctement récupérée
+		 */
+		template< typename FuncType >
+		bool getFunction( char const * name, FuncType & function )noexcept
+		{
+			return getFunction( function, string::stringCast< xchar >( name ) );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves a function
+		 *\param[in]	function	Receives the function
+		 *\param[in]	name		The function name
+		 *\return		\p true if the function was correctly retrieved
+		 *\~french
+		 *\brief		Récupère une fonction
+		 *\param[in]	function	Reçoit la fonction
+		 *\param[in]	name		Le nom de la fonction
+		 *\return		\p true si la fonction a été correctement récupérée
+		 */
+		template< typename FuncType >
+		bool getFunction( wchar_t const * name, FuncType & function )noexcept
+		{
+			return getFunction( function, string::stringCast< xchar >( name ) );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves a function
+		 *\param[in]	function	Receives the function
+		 *\param[in]	name		The function name
+		 *\return		\p true if the function was correctly retrieved
+		 *\~french
+		 *\brief		Récupère une fonction
+		 *\param[in]	function	Reçoit la fonction
+		 *\param[in]	name		Le nom de la fonction
+		 *\return		\p true si la fonction a été correctement récupérée
+		 */
+		template< typename FuncType >
+		bool getFunction( String const & name, FuncType & function )noexcept
+		{
+			function = reinterpret_cast< FuncType >( doGetFunction( name ) );
+			return function != nullptr;
 		}
 		/**
 		 *\~english
@@ -172,7 +202,7 @@ namespace castor
 		 */
 		inline bool isOpen()const
 		{
-			return m_pLibrary != nullptr;
+			return m_library != nullptr;
 		}
 		/**
 		 *\~english
@@ -188,11 +218,12 @@ namespace castor
 		}
 
 	private:
-		CU_API void doClose()throw();
-		CU_API void * doGetFunction( String const & p_name )throw();
+		CU_API void doOpen()noexcept;
+		CU_API void doClose()noexcept;
+		CU_API void * doGetFunction( String const & name )noexcept;
 
 	private:
-		void * m_pLibrary;
+		void * m_library;
 		Path m_pathLibrary;
 	};
 	/*!

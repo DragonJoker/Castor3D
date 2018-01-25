@@ -198,6 +198,10 @@ namespace castor3d
 					if ( device )
 					{
 						m_renderSystem.setMainDevice( *device );
+						device->enable();
+						GpuInformations info;
+						m_renderSystem.initialise( std::move( info ) );
+						device->disable();
 						m_created = true;
 					}
 					else

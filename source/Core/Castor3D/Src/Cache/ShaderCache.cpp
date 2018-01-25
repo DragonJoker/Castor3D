@@ -11,7 +11,7 @@
 #include <GlslSource.hpp>
 
 #include <Core/Device.hpp>
-#include <ShaderProgram.hpp>
+#include <Shader/ShaderProgram.hpp>
 
 using namespace castor;
 

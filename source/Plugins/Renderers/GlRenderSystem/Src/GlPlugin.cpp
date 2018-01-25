@@ -1,4 +1,4 @@
-﻿#include "Render/GlRenderSystem.hpp"
+#include "GlRenderSystem.hpp"
 
 #include <Engine.hpp>
 #include <Plugin/RendererPlugin.hpp>

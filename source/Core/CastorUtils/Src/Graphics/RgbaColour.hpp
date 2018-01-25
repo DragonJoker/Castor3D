@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___CU_RgbaColour_H___
@@ -225,6 +225,13 @@ namespace castor
 		 *\brief		Constructeur par défaut
 		 */
 		inline RgbaColourT();
+		/**
+		 *\~english
+		 *\brief		Specified Constructor
+		 *\~french
+		 *\brief		Constructeur spécifié.
+		 */
+		inline RgbaColourT( float r, float g, float b, float a );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -703,9 +710,9 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the asked PixelComponents value
-		 *\param[in]	component	The asked PixelComponents
-		 *\return		The PixelComponents value
+		 *\brief		Retrieves the asked component value
+		 *\param[in]	component	The asked component
+		 *\return		The components value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante demandée
 		 *\param[in]	component	La composante demandée
@@ -717,9 +724,9 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the asked PixelComponents value
-		 *\param[in]	component	The asked PixelComponents
-		 *\return		The PixelComponents value
+		 *\brief		Retrieves the asked component value
+		 *\param[in]	component	The asked component
+		 *\return		The components value
 		 *\~french
 		 *\brief		Récupère la valeur de la composante demandée
 		 *\param[in]	component	La composante demandée
@@ -728,6 +735,34 @@ namespace castor
 		inline ComponentType const & operator[]( RgbaComponent component )const
 		{
 			return m_arrayComponents[size_t( component )];
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the asked component value
+		 *\param[in]	component	The asked component
+		 *\return		The components value
+		 *\~french
+		 *\brief		Récupère la valeur de la composante demandée
+		 *\param[in]	component	La composante demandée
+		 *\return		La valeur de la composante
+		 */
+		inline ComponentType & operator[]( size_t component )
+		{
+			return m_arrayComponents[component];
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the asked component value
+		 *\param[in]	component	The asked component
+		 *\return		The components value
+		 *\~french
+		 *\brief		Récupère la valeur de la composante demandée
+		 *\param[in]	component	La composante demandée
+		 *\return		La valeur de la composante
+		 */
+		inline ComponentType const & operator[]( size_t component )const
+		{
+			return m_arrayComponents[component];
 		}
 		/**
 		 *\~english
