@@ -16,6 +16,7 @@ namespace gl_renderer
 		GL_COLOR_BUFFER_BIT = 0x00004000,
 	};
 	Utils_ImplementFlag( GlImageAspectFlag );
+	std::string getName( GlImageAspectFlags value );
 	/**
 	*\brief
 	*	Convertit un renderer::ImageAspectFlags en GlImageAspectFlags.

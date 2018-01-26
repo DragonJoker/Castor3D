@@ -31,16 +31,19 @@ namespace gl_renderer
 		, uint32_t size
 		, renderer::MemoryMapFlags flags )const
 	{
-		glLogCall( gl::BindBuffer, m_target, m_name );
-		auto result = glLogCall( gl::MapBufferRange, m_target, offset, size, GLbitfield( convert( flags ) ) );
+		m_copyTarget = checkFlag( flags, renderer::MemoryMapFlag::eWrite )
+			? GL_BUFFER_TARGET_COPY_WRITE
+			: GL_BUFFER_TARGET_COPY_READ;
+		glLogCall( gl::BindBuffer, m_copyTarget, m_name );
+		auto result = glLogCall( gl::MapBufferRange, m_copyTarget, offset, size, GLbitfield( convert( flags ) ) );
 		return reinterpret_cast< uint8_t * >( result );
 	}
 
 	void Buffer::unlock( uint32_t size
 		, bool modified )const
 	{
-		glLogCall( gl::UnmapBuffer, m_target );
-		glLogCall( gl::BindBuffer, m_target, 0u );
+		glLogCall( gl::UnmapBuffer, m_copyTarget );
+		glLogCall( gl::BindBuffer, m_copyTarget, 0u );
 	}
 
 	renderer::BufferMemoryBarrier Buffer::makeTransferDestination()const

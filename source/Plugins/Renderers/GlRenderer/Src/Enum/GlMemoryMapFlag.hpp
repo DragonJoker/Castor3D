@@ -20,7 +20,8 @@ namespace gl_renderer
 		GL_MEMORY_MAP_PERSISTENT_BIT = 0x00000040,
 		GL_MEMORY_MAP_COHERENT_BIT = 0x00000080,
 	};
-	Utils_ImplementFlag( GlMemoryMapFlag )
+	Utils_ImplementFlag( GlMemoryMapFlag );
+	std::string getName( GlMemoryMapFlags value );
 	/**
 	*\brief
 	*	Convertit un renderer::MemoryMapFlags en GlMemoryMapFlags.

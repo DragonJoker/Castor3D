@@ -15,6 +15,7 @@ See LICENSE file in root folder.
 #include "Enum/BlendOp.hpp"
 #include "Enum/BorderColour.hpp"
 #include "Enum/BufferTarget.hpp"
+#include "Enum/ClipDirection.hpp"
 #include "Enum/ColourComponentFlag.hpp"
 #include "Enum/CommandBufferResetFlag.hpp"
 #include "Enum/CommandBufferUsageFlag.hpp"

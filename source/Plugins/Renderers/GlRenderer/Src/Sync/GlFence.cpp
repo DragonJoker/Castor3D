@@ -15,11 +15,6 @@ namespace gl_renderer
 		GL_WAIT_RESULT_TIMEOUT_EXPIRED = 0x911B,
 	};
 
-	enum GlFenceWaitFlag
-	{
-		GL_WAIT_FLAG_SYNC_GPU_COMMANDS_COMPLETE = 0x9117,
-		GL_WAIT_FLAG_SYNC_FLUSH_COMMANDS_BIT = 0x00000001,
-	};
 	Fence::Fence( renderer::Device const & device
 		, renderer::FenceCreateFlags flags )
 		: renderer::Fence{ device, flags }

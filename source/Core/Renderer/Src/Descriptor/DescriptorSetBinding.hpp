@@ -252,10 +252,12 @@ namespace renderer
 		*/
 		UniformBufferBinding( DescriptorSetLayoutBinding const & layoutBinding
 			, UniformBufferBase const & uniformBuffer
-			, uint32_t offset )
+			, uint32_t offset
+			, uint32_t range )
 			: DescriptorSetBinding{ layoutBinding }
 			, m_uniformBuffer{ uniformBuffer }
 			, m_offset{ offset }
+			, m_range{ range }
 		{
 		}
 		/**
@@ -274,10 +276,19 @@ namespace renderer
 		{
 			return m_offset;
 		}
+		/**
+		*\return
+		*	La taille de l'intervalle.
+		*/
+		inline uint32_t getRange()const
+		{
+			return m_range;
+		}
 
 	private:
 		UniformBufferBase const & m_uniformBuffer;
 		uint32_t m_offset;
+		uint32_t m_range;
 	};
 	/**
 	*\brief
@@ -303,10 +314,12 @@ namespace renderer
 		*/
 		StorageBufferBinding( DescriptorSetLayoutBinding const & layoutBinding
 			, BufferBase const & storageBuffer
-			, uint32_t offset )
+			, uint32_t offset
+			, uint32_t range )
 			: DescriptorSetBinding{ layoutBinding }
 			, m_buffer{ storageBuffer }
 			, m_offset{ offset }
+			, m_range{ range }
 		{
 		}
 		/**
@@ -325,10 +338,19 @@ namespace renderer
 		{
 			return m_offset;
 		}
+		/**
+		*\return
+		*	La taille de l'intervalle.
+		*/
+		inline uint32_t getRange()const
+		{
+			return m_range;
+		}
 
 	private:
 		BufferBase const & m_buffer;
 		uint32_t m_offset;
+		uint32_t m_range;
 	};
 	/**
 	*\brief

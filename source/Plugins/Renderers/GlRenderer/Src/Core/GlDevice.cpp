@@ -296,7 +296,7 @@ namespace gl_renderer
 	renderer::Mat4 Device::perspective( renderer::Angle fovy
 		, float aspect
 		, float zNear
-		, float zFar )
+		, float zFar )const
 	{
 		float const tanHalfFovy = tan( float( fovy ) / float( 2 ) );
 
@@ -315,7 +315,7 @@ namespace gl_renderer
 		, float bottom
 		, float top
 		, float zNear
-		, float zFar )
+		, float zFar )const
 	{
 		renderer::Mat4 result{ 1 };
 		result[0][0] = float( 2 ) / ( right - left );

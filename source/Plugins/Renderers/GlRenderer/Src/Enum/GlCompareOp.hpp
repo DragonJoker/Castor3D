@@ -20,6 +20,7 @@ namespace gl_renderer
 		GL_COMPARE_OP_GEQUAL = 0x0206,
 		GL_COMPARE_OP_ALWAYS = 0x0207,
 	};
+	std::string getName( GlCompareOp value );
 	/**
 	*\brief
 	*	Convertit un renderer::CompareOp en GlCompareOp.

@@ -23,11 +23,6 @@ namespace gl_renderer
 		Renderer();
 		/**
 		*\brief
-		*	Destructeur.
-		*/
-		~Renderer();
-		/**
-		*\brief
 		*	Crée le périphérique logique.
 		*\param[in] connection
 		*	La connection avec la fenêtre.

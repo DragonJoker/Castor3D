@@ -274,6 +274,7 @@ namespace gl_renderer
 
 	void BindPipelineCommand::apply()const
 	{
+		glLogCommand( "BindPipelineCommand" );
 		doApply( m_pipeline.getColourBlendState() );
 		doApply( m_pipeline.getRasterisationState() );
 		doApply( m_pipeline.getDepthStencilState() );

@@ -6,7 +6,8 @@ See LICENSE file in root folder.
 
 namespace renderer
 {
-	Renderer::Renderer()
+	Renderer::Renderer( ClipDirection clipDirection )
+		: m_clipDirection{ clipDirection }
 	{
 	}
 }

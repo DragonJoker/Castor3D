@@ -126,6 +126,7 @@ namespace gl_renderer
 	private:
 		GLuint m_name{ GL_INVALID_INDEX };
 		GlBufferTarget m_target;
+		mutable GlBufferTarget m_copyTarget;
 	};
 }
 

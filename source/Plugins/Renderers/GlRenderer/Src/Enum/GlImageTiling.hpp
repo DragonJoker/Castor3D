@@ -13,6 +13,7 @@ namespace gl_renderer
 		GL_OPTIMAL_TILING_EXT = 0x9584,
 		GL_LINEAR_TILING_EXT = 0x9585,
 	};
+	std::string getName( GlImageTiling value );
 	/**
 	*\brief
 	*	Convertit un renderer::ImageTiling en GlImageTiling.

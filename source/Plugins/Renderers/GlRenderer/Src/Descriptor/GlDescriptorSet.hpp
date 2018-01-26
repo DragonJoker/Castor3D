@@ -58,13 +58,15 @@ namespace gl_renderer
 		*/
 		renderer::UniformBufferBinding const & createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
 			, renderer::UniformBufferBase const & uniformBuffer
-			, uint32_t offset )override;
+			, uint32_t offset
+			, uint32_t range )override;
 		/**
 		*\copydoc		renderer::DescriptorSet::createBinding
 		*/
 		renderer::StorageBufferBinding const & createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
 			, renderer::BufferBase const & storageBuffer
-			, uint32_t offset )override;
+			, uint32_t offset
+			, uint32_t range )override;
 		/**
 		*\copydoc		renderer::DescriptorSet::createBinding
 		*/

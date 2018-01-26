@@ -15,6 +15,7 @@ namespace gl_renderer
 		GL_POLYGON_MODE_LINE = 0x1B01,
 		GL_POLYGON_MODE_FILL = 0x1B02,
 	};
+	std::string getName( GlPolygonMode value );
 	/**
 	*\brief
 	*	Convertit un renderer::PolygonMode en GlPolygonMode.

@@ -17,6 +17,7 @@ namespace gl_renderer
 		GL_WRAP_MODE_CLAMP_TO_BORDER = 0x812D,
 		GL_WRAP_MODE_MIRROR_CLAMP_TO_EDGE = 0x8743,
 	};
+	std::string getName( GlWrapMode value );
 	/**
 	*\brief
 	*	Convertit un renderer::WrapMode en GlWrapMode.

@@ -21,6 +21,7 @@ namespace gl_renderer
 
 	void CopyBufferCommand::apply()const
 	{
+		glLogCommand( "CopyBufferCommand" );
 		glLogCall( gl::BindBuffer, GL_BUFFER_TARGET_COPY_READ, m_src.getBuffer() );
 		glLogCall( gl::BindBuffer, GL_BUFFER_TARGET_COPY_WRITE, m_dst.getBuffer() );
 		glLogCall( gl::CopyBufferSubData

@@ -16,6 +16,7 @@ namespace gl_renderer
 		GL_CULL_MODE_BACK = 0x0405,
 		GL_CULL_MODE_FRONT_AND_BACK = 0x0408,
 	};
+	std::string getName( GlCullMode value );
 	/**
 	*\brief
 	*	Convertit un renderer::CullModeFlags en GlCullMode.

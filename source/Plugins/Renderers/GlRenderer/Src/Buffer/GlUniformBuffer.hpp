@@ -47,10 +47,7 @@ namespace gl_renderer
 		*\return
 		*	L'offset réel.
 		*/
-		uint32_t getOffset( uint32_t count )const
-		{
-			return count * getSize();
-		}
+		uint32_t getOffset( uint32_t count )const override;
 
 	protected:
 		/**

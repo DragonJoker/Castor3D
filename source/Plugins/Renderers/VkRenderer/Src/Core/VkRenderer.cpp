@@ -99,7 +99,7 @@ namespace vk_renderer
 	}
 
 	Renderer::Renderer()
-		: renderer::Renderer{}
+		: renderer::Renderer{ renderer::ClipDirection::eTopDown }
 	{
 # if VKRENDERER_GLSL_TO_SPV
 

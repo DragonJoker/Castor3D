@@ -94,24 +94,27 @@ namespace vk_renderer
 
 	renderer::UniformBufferBinding const & DescriptorSet::createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
 		, renderer::UniformBufferBase const & uniformBuffer
-		, uint32_t offset )
+		, uint32_t offset
+		, uint32_t range )
 	{
-		offset = uniformBuffer.getOffset( offset );
 		m_bindings.emplace_back( std::make_unique< UniformBufferBinding >( layoutBinding
 			, *this
 			, static_cast< UniformBuffer const & >( uniformBuffer )
-			, offset ) );
+			, offset
+			, range ) );
 		return static_cast< UniformBufferBinding const & >( *m_bindings.back() );
 	}
 
 	renderer::StorageBufferBinding const & DescriptorSet::createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
 		, renderer::BufferBase const & storageBuffer
-		, uint32_t offset )
+		, uint32_t offset
+		, uint32_t range )
 	{
 		m_bindings.emplace_back( std::make_unique< StorageBufferBinding >( layoutBinding
 			, *this
 			, static_cast< Buffer const & >( storageBuffer )
-			, offset ) );
+			, offset
+			, range ) );
 		return static_cast< StorageBufferBinding const & >( *m_bindings.back() );
 	}
 

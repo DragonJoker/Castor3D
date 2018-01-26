@@ -2,6 +2,34 @@
 
 namespace gl_renderer
 {
+	std::string getName( GLFilter value )
+	{
+		switch ( value )
+		{
+		case gl_renderer::GL_FILTER_NEAREST:
+			return "GL_NEAREST";
+
+		case gl_renderer::GL_FILTER_LINEAR:
+			return "GL_LINEAR";
+
+		case gl_renderer::GL_FILTER_NEAREST_MIPMAP_NEAREST:
+			return "GL_NEAREST_MIPMAP_NEAREST";
+
+		case gl_renderer::GL_FILTER_LINEAR_MIPMAP_NEAREST:
+			return "GL_LINEAR_MIPMAP_NEAREST";
+
+		case gl_renderer::GL_FILTER_NEAREST_MIPMAP_LINEAR:
+			return "GL_NEAREST_MIPMAP_LINEAR";
+
+		case gl_renderer::GL_FILTER_LINEAR_MIPMAP_LINEAR:
+			return "GL_LINEAR_MIPMAP_LINEAR";
+
+		default:
+			assert( false && "Unsupported GLFilter" );
+			return "GLFilter_UNKNOWN";
+		}
+	}
+
 	GLFilter convert( renderer::Filter const & filter )
 	{
 		switch ( filter )

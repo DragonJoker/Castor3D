@@ -17,7 +17,7 @@ namespace renderer
 		*\brief
 		*	Constructeur, initialise l'instance de renderer.
 		*/
-		Renderer();
+		Renderer( ClipDirection clipDirection );
 
 	public:
 		/**
@@ -44,6 +44,21 @@ namespace renderer
 		*/
 		virtual ConnectionPtr createConnection( uint32_t deviceIndex
 			, WindowHandle && handle )const = 0;
+		/**
+		*\~english
+		*\return
+		*	The clip direction for the rendering API.
+		*\~french
+		*\return
+		*	La direction de clipping pour l'API de rendu.
+		*/
+		inline ClipDirection getClipDirection()const
+		{
+			return m_clipDirection;
+		}
+
+	private:
+		ClipDirection m_clipDirection;
 	};
 }
 

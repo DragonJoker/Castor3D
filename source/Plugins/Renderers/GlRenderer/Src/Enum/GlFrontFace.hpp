@@ -14,6 +14,7 @@ namespace gl_renderer
 		GL_FRONT_FACE_CW = 0x0900,
 		GL_FRONT_FACE_CCW = 0x0901,
 	};
+	std::string getName( GlFrontFace value );
 	/**
 	*\brief
 	*	Convertit un renderer::FrontFace en GlFrontFace.

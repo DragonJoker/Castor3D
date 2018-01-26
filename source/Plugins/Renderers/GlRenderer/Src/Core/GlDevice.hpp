@@ -184,7 +184,7 @@ namespace gl_renderer
 		renderer::Mat4 perspective( renderer::Angle fovy
 			, float aspect
 			, float zNear
-			, float zFar )override;
+			, float zFar )const override;
 		/**
 		*\copydoc	renderer::Device::ortho
 		*/
@@ -193,7 +193,7 @@ namespace gl_renderer
 			, float bottom
 			, float top
 			, float zNear
-			, float zFar )override;
+			, float zFar )const override;
 		/**
 		*\brief
 		*	Echange les tampons.

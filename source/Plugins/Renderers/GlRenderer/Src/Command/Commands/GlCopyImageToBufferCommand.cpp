@@ -26,6 +26,7 @@ namespace gl_renderer
 
 	void CopyImageToBufferCommand::apply()const
 	{
+		glLogCommand( "CopyImageToBufferCommand" );
 		glLogCall( gl::BindTexture, m_target, m_src.getImage() );
 		glLogCall( gl::BindBuffer, GL_BUFFER_TARGET_PIXEL_PACK, m_dst.getBuffer() );
 		glLogCall( gl::GetTexImage

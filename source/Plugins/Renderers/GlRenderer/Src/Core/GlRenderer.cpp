@@ -9,11 +9,7 @@
 namespace gl_renderer
 {
 	Renderer::Renderer()
-		: renderer::Renderer{}
-	{
-	}
-
-	Renderer::~Renderer()
+		: renderer::Renderer{ renderer::ClipDirection::eBottomUp }
 	{
 	}
 

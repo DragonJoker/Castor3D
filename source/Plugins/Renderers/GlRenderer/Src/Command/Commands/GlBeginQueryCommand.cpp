@@ -18,6 +18,7 @@ namespace gl_renderer
 
 	void BeginQueryCommand::apply()const
 	{
+		glLogCommand( "BeginQueryCommand" );
 		glLogCall( gl::BeginQuery, m_target, m_query );
 	}
 

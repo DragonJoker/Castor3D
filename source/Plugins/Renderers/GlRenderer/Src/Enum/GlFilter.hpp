@@ -18,6 +18,7 @@ namespace gl_renderer
 		GL_FILTER_NEAREST_MIPMAP_LINEAR = 0x2702,
 		GL_FILTER_LINEAR_MIPMAP_LINEAR = 0x2703,
 	};
+	std::string getName( GLFilter value );
 	/**
 	*\brief
 	*	Convertit un renderer::Filter en GLFilter.

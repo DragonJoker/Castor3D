@@ -151,6 +151,8 @@ namespace renderer
 		*	Le tampon.
 		*\param[in] offset
 		*	Le décalage de l'attache dans le tampon.
+		*\param[in] range
+		*	Le décompte des données pouvant être lues depuis l'attache dans le tampon.
 		*\return
 		*	L'attache créée.
 		*\~english
@@ -162,12 +164,15 @@ namespace renderer
 		*	The buffer.
 		*\param[in] offset
 		*	The attach's offset in the buffer.
+		*\param[in] range
+		*	The amount of data that can be read from the buffer.
 		*\return
 		*	The created binding.
 		*/
 		virtual UniformBufferBinding const & createBinding( DescriptorSetLayoutBinding const & layoutBinding
 			, UniformBufferBase const & uniformBuffer
-			, uint32_t offset ) = 0;
+			, uint32_t offset
+			, uint32_t range ) = 0;
 		/**
 		*\~french
 		*\brief
@@ -178,6 +183,8 @@ namespace renderer
 		*	Le tampon.
 		*\param[in] offset
 		*	Le décalage de l'attache dans le tampon.
+		*\param[in] range
+		*	Le décompte des données pouvant être lues depuis l'attache dans le tampon.
 		*\return
 		*	L'attache créée.
 		*\~english
@@ -189,12 +196,15 @@ namespace renderer
 		*	The buffer.
 		*\param[in] offset
 		*	The attach's offset in the buffer.
+		*\param[in] range
+		*	The amount of data that can be read from the buffer.
 		*\return
 		*	The created binding.
 		*/
 		virtual StorageBufferBinding const & createBinding( DescriptorSetLayoutBinding const & layoutBinding
 			, BufferBase const & storageBuffer
-			, uint32_t offset ) = 0;
+			, uint32_t offset
+			, uint32_t range ) = 0;
 		/**
 		*\~french
 		*\brief
@@ -245,11 +255,13 @@ namespace renderer
 		template< typename T >
 		inline UniformBufferBinding const & createBinding( DescriptorSetLayoutBinding const & layoutBinding
 			, UniformBuffer< T > const & uniformBuffer
-			, uint32_t offset )
+			, uint32_t offset
+			, uint32_t range )
 		{
 			return createBinding( layoutBinding
 				, uniformBuffer.getUbo()
-				, offset );
+				, offset * uniformBuffer.getOffset( 1u )
+				, range * sizeof( T ) );
 		}
 		/**
 		*\~french
@@ -276,11 +288,13 @@ namespace renderer
 		template< typename T >
 		inline StorageBufferBinding const & createBinding( DescriptorSetLayoutBinding const & layoutBinding
 			, Buffer< T > const & storageBuffer
-			, uint32_t offset )
+			, uint32_t offset
+			, uint32_t range )
 		{
 			return createBinding( layoutBinding
 				, storageBuffer.getBuffer()
-				, offset );
+				, offset
+				, range );
 		}
 		/**
 		*\~french

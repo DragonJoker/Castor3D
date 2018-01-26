@@ -19,6 +19,7 @@ namespace gl_renderer
 
 	void ClearCommand::apply()const
 	{
+		glLogCommand( "ClearCommand" );
 		glLogCall( gl::ClearTexImage
 			, m_image.getImage()
 			, 0

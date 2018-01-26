@@ -15,6 +15,7 @@ namespace gl_renderer
 		GL_ACCESS_TYPE_WRITE_ONLY = 0x88B9,
 		GL_ACCESS_TYPE_READ_WRITE = 0x88BA,
 	};
+	std::string getName( GlAccessType value );
 	/**
 	*\brief
 	*	Convertit un renderer::AccessFlags en VkAccessFlags.

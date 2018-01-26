@@ -22,12 +22,12 @@ namespace gl_renderer
 		void bind( renderer::CombinedTextureSamplerBinding const & binding )
 		{
 			glLogCall( gl::ActiveTexture, GL_TEXTURE0 + binding.getBinding().getBindingPoint() );
-			glLogCall( gl::BindSampler
-				, binding.getBinding().getBindingPoint()
-				, static_cast< Sampler const & >( binding.getSampler() ).getSampler() );
 			glLogCall( gl::BindTexture
 				, convert( binding.getView().getType() )
 				, static_cast< TextureView const & >( binding.getView() ).getImage() );
+			glLogCall( gl::BindSampler
+				, binding.getBinding().getBindingPoint()
+				, static_cast< Sampler const & >( binding.getSampler() ).getSampler() );
 		}
 
 		void bind( renderer::SamplerBinding const & binding )
@@ -62,18 +62,22 @@ namespace gl_renderer
 
 		void bind( renderer::UniformBufferBinding const & binding )
 		{
-			glLogCall( gl::BindBufferBase
+			glLogCall( gl::BindBufferRange
 				, GL_BUFFER_TARGET_UNIFORM
 				, binding.getBinding().getBindingPoint()
-				, static_cast< Buffer const & >( binding.getUniformBuffer().getBuffer() ).getBuffer() );
+				, static_cast< Buffer const & >( binding.getUniformBuffer().getBuffer() ).getBuffer()
+				, binding.getOffset()
+				, binding.getRange() );
 		}
 
 		void bind( renderer::StorageBufferBinding const & binding )
 		{
-			glLogCall( gl::BindBufferBase
+			glLogCall( gl::BindBufferRange
 				, GL_BUFFER_TARGET_SHADER_STORAGE
 				, binding.getBinding().getBindingPoint()
-				, static_cast< Buffer const & >( binding.getBuffer() ).getBuffer() );
+				, static_cast< Buffer const & >( binding.getBuffer() ).getBuffer()
+				, binding.getOffset()
+				, binding.getRange() );
 		}
 
 		void bind( renderer::TexelBufferBinding const & binding )
@@ -96,6 +100,7 @@ namespace gl_renderer
 
 	void BindDescriptorSetCommand::apply()const
 	{
+		glLogCommand( "BindDescriptorSetCommand" );
 		for ( auto & descriptor : m_descriptorSet.getCombinedTextureSamplers() )
 		{
 			bind( descriptor );

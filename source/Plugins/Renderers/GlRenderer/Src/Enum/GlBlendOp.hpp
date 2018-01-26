@@ -17,6 +17,7 @@ namespace gl_renderer
 		GL_BLEND_OP_SUBTRACT = 0x800A,
 		GL_BLEND_OP_REVERSE_SUBTRACT = 0x800B,
 	};
+	std::string getName( GlBlendOp value );
 	/**
 	*\brief
 	*	Convertit un renderer::BlendOp en GlBlendOp.

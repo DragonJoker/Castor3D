@@ -43,6 +43,15 @@ namespace renderer
 		*/
 		virtual ~Device() = default;
 		/**
+		*\~english
+		*\return
+		*	The clip direction for the rendering API.
+		*\~french
+		*\return
+		*	La direction de clipping pour l'API de rendu.
+		*/
+		ClipDirection getClipDirection()const;
+		/**
 		*\~french
 		*\brief
 		*	Active le contexte du périphérique (pour OpenGL).
@@ -419,7 +428,7 @@ namespace renderer
 		virtual Mat4 perspective( Angle fovy
 			, float aspect
 			, float zNear
-			, float zFar ) = 0;
+			, float zFar )const = 0;
 		/**
 		*\brief
 		*	Calcule une matrice de projection orthographique.
@@ -435,7 +444,7 @@ namespace renderer
 			, float bottom
 			, float top
 			, float zNear
-			, float zFar ) = 0;
+			, float zFar )const = 0;
 		/**
 		*\brief
 		*	Calcule une matrice de projection en perspective sans clipping
@@ -449,7 +458,7 @@ namespace renderer
 		*/
 		Mat4 infinitePerspective( Angle fovy
 			, float aspect
-			, float zNear );
+			, float zNear )const;
 		/**
 		*\~french
 		*\brief
@@ -503,6 +512,7 @@ namespace renderer
 		}
 
 	protected:
+		Renderer const & m_renderer;
 		QueuePtr m_presentQueue;
 		QueuePtr m_graphicsQueue;
 		CommandPoolPtr m_presentCommandPool;

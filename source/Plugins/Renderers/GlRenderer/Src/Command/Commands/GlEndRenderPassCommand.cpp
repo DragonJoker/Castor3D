@@ -14,6 +14,7 @@ namespace gl_renderer
 
 	void EndRenderPassCommand::apply()const
 	{
+		glLogCommand( "EndRenderPassCommand" );
 		glLogCall( gl::BindFramebuffer, GL_FRAMEBUFFER, 0u );
 	}
 

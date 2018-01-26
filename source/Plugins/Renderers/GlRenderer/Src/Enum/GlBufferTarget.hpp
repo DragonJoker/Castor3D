@@ -23,6 +23,7 @@ namespace gl_renderer
 		GL_BUFFER_TARGET_SHADER_STORAGE = 0x90D2,
 		GL_BUFFER_TARGET_DISPATCH_INDIRECT = 0x90EE,
 	};
+	std::string getName( GlBufferTarget value );
 
 	/**
 	*\brief

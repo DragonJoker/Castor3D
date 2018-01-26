@@ -15,6 +15,7 @@ namespace gl_renderer
 		GL_QUERY_TYPE_PRIMITIVES_GENERATED = 0x8C87,
 		GL_QUERY_TYPE_TIMESTAMP = 0x8E28,
 	};
+	std::string getName( GlQueryType value );
 	/**
 	*\brief
 	*	Convertit un renderer::QueryType en GlQueryType.

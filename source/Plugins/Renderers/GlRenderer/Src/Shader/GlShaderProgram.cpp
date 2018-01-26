@@ -12,14 +12,6 @@ namespace gl_renderer
 {
 	namespace
 	{
-		enum GlShaderInfo
-		{
-			GL_INFO_COMPILE_STATUS = 0x8B81,
-			GL_INFO_LINK_STATUS = 0x8B82,
-			GL_INFO_LOG_LENGTH = 0x8B84,
-			GL_INFO_ATTACHED_SHADERS = 0x8B85,
-		};
-
 		std::string doRetrieveCompilerLog( GLuint shaderName )
 		{
 			std::string log;

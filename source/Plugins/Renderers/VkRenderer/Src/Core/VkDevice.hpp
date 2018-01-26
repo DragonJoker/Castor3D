@@ -194,7 +194,7 @@ namespace vk_renderer
 		renderer::Mat4 perspective( renderer::Angle fovy
 			, float aspect
 			, float zNear
-			, float zFar )override;
+			, float zFar )const override;
 		/**
 		*\copydoc	renderer::Device::ortho
 		*/
@@ -203,7 +203,7 @@ namespace vk_renderer
 			, float bottom
 			, float top
 			, float zNear
-			, float zFar )override;
+			, float zFar )const override;
 		/**
 		*\~french
 		*\brief

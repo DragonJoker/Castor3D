@@ -142,14 +142,15 @@ namespace vk_renderer
 	UniformBufferBinding::UniformBufferBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
 		, DescriptorSet const & descriptorSet
 		, UniformBuffer const & uniformBuffer
-		, uint32_t offset )
-		: renderer::UniformBufferBinding{ layoutBinding, uniformBuffer, offset }
+		, uint32_t offset
+		, uint32_t range )
+		: renderer::UniformBufferBinding{ layoutBinding, uniformBuffer, offset, range }
 		, m_uniformBuffer{ static_cast< Buffer const & >( uniformBuffer.getBuffer() ) }
 		, m_info
 		{
 			m_uniformBuffer,                                // buffer
 			offset,                                         // offset
-			uniformBuffer.getSize()                         // range
+			range                                           // range
 		}
 	{
 		m_write =
@@ -172,14 +173,15 @@ namespace vk_renderer
 	StorageBufferBinding::StorageBufferBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
 		, DescriptorSet const & descriptorSet
 		, Buffer const & storageBuffer
-		, uint32_t offset )
-		: renderer::StorageBufferBinding{ layoutBinding, storageBuffer, offset }
+		, uint32_t offset
+		, uint32_t range )
+		: renderer::StorageBufferBinding{ layoutBinding, storageBuffer, offset, range }
 		, m_buffer{ storageBuffer }
 		, m_info
 		{
 			m_buffer,                                       // buffer
 			offset,                                         // offset
-			m_buffer.getSize()                              // range
+			range,                                          // range
 		}
 	{
 		m_write =

@@ -20,6 +20,7 @@ namespace gl_renderer
 		GL_LAYOUT_TRANSFER_SRC_EXT = 0x9592,
 		GL_LAYOUT_TRANSFER_DST_EXT = 0x9593,
 	};
+	std::string getName( GlImageLayout value );
 	/**
 	*\brief
 	*	Convertit un renderer::ImageLayout en VkImageLayout.

@@ -98,36 +98,9 @@ namespace gl_renderer
 		GL_DEBUG_CATEGORY_OTHER_AMD = 0x9150,
 	};
 
-	enum Tweak
-	{
-		GL_CULL_FACE = 0x0B44,
-		GL_DEPTH_TEST = 0x0B71,
-		GL_STENCIL_TEST = 0x0B90,
-		GL_BLEND = 0x0BE2,
-		GL_POLYGON_OFFSET_POINT = 0x2A01,
-		GL_POLYGON_OFFSET_LINE = 0x2A02,
-		GL_MULTISAMPLE = 0x809D,
-		GL_SAMPLE_ALPHA_TO_COVERAGE = 0x809E,
-		GL_SAMPLE_ALPHA_TO_ONE = 0x809F,
-		GL_POLYGON_OFFSET_FILL = 0x8037,
-		GL_DEPTH_CLAMP = 0x864F,
-		GL_RASTERIZER_DISCARD = 0x8C89,
-	};
-
 	enum PatchParameter
 	{
 		GL_PATCH_VERTICES = 0x8E72,
-	};
-
-	enum BaseType
-	{
-		GL_BYTE = 0x1400,
-		GL_UNSIGNED_BYTE = 0x1401,
-		GL_SHORT = 0x1402,
-		GL_UNSIGNED_SHORT = 0x1403,
-		GL_INT = 0x1404,
-		GL_UNSIGNED_INT = 0x1405,
-		GL_FLOAT = 0x1406,
 	};
 
 	enum ContextFlag
@@ -147,18 +120,6 @@ namespace gl_renderer
 		GL_RENDERER = 0x1F01,
 		GL_VERSION = 0x1F02,
 		GL_EXTENSIONS = 0x1F03,
-	};
-
-	enum ClipOrigin
-	{
-		GL_LOWER_LEFT = 0x8CA1,
-		GL_UPPER_LEFT = 0x8CA2,
-	};
-
-	enum ClipDepth
-	{
-		GL_NEGATIVE_ONE_TO_ONE = 0x935E,
-		GL_ZERO_TO_ONE = 0x935F,
 	};
 
 #if RENDERLIB_WIN32
@@ -183,6 +144,7 @@ namespace gl_renderer
 	using PFN_glBeginQuery = void ( GLAPIENTRY * )( GLenum target, GLuint id );
 	using PFN_glBindBuffer = void ( GLAPIENTRY * )( GLenum target, GLuint buffer );
 	using PFN_glBindBufferBase = void ( GLAPIENTRY * ) ( GLenum target, GLuint index, GLuint buffer );
+	using PFN_glBindBufferRange = void ( GLAPIENTRY * ) ( GLenum target, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size );
 	using PFN_glBindFramebuffer = void ( GLAPIENTRY * ) ( GLenum target, GLuint framebuffer );
 	using PFN_glBindImageTexture = void ( GLAPIENTRY * ) ( GLuint unit, GLuint texture, GLint level, GLboolean layered, GLint layer, GLenum access, GLenum format );
 	using PFN_glBindSampler = void ( GLAPIENTRY * )( GLuint unit, GLuint sampler );
@@ -242,6 +204,7 @@ namespace gl_renderer
 	using PFN_glGenTextures = void ( GLAPIENTRY * )( GLsizei n, GLuint * textures );
 	using PFN_glGenerateMipmap = void ( GLAPIENTRY * )( GLenum target );
 	using PFN_glGetError = GLenum( GLAPIENTRY * )( void );
+	using PFN_glGetIntegerv = void ( GLAPIENTRY * )( GLenum pname, GLint * data );
 	using PFN_glGetProgramInfoLog = void ( GLAPIENTRY * ) ( GLuint program, GLsizei bufSize, GLsizei* length, GLchar* infoLog );
 	using PFN_glGetProgramiv = void ( GLAPIENTRY * ) ( GLuint program, GLenum pname, GLint* param );
 	using PFN_glGetQueryObjectui64v = void ( GLAPIENTRY * )( GLuint id, GLenum pname, GLuint64 * params );

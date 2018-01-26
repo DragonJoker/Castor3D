@@ -17,6 +17,7 @@ namespace gl_renderer
 
 	void PushConstantsCommand::apply()const
 	{
+		glLogCommand( "PushConstantsCommand" );
 		auto buffer = m_data.data();
 
 		for ( auto & constant : m_pcb )

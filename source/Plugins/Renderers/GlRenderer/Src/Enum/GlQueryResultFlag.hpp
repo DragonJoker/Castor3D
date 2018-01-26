@@ -14,6 +14,7 @@ namespace gl_renderer
 		GL_QUERY_RESULT_NO_WAIT = 0x9194,
 	};
 	Utils_ImplementFlag( GlQueryResultFlag );
+	std::string getName( GlQueryResultFlags value );
 	/**
 	*\brief
 	*	Convertit un renderer::QueryResultFlags en GLuint.

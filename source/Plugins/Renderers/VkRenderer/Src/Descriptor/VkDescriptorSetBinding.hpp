@@ -109,7 +109,8 @@ namespace vk_renderer
 		UniformBufferBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
 			, DescriptorSet const & descriptorSet
 			, UniformBuffer const & uniformBuffer
-			, uint32_t offset );
+			, uint32_t offset
+			, uint32_t range );
 
 	private:
 		Buffer const & m_uniformBuffer;
@@ -127,7 +128,8 @@ namespace vk_renderer
 		StorageBufferBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
 			, DescriptorSet const & descriptorSet
 			, Buffer const & storageBuffer
-			, uint32_t offset );
+			, uint32_t offset
+			, uint32_t range );
 
 	private:
 		Buffer const & m_buffer;

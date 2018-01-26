@@ -21,6 +21,7 @@ namespace gl_renderer
 
 	void DrawCommand::apply()const
 	{
+		glLogCommand( "DrawCommand" );
 		if ( m_instCount > 1 )
 		{
 			glLogCall( gl::DrawArraysInstancedBaseInstance

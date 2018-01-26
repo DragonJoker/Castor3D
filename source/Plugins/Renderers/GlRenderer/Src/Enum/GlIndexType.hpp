@@ -14,6 +14,7 @@ namespace gl_renderer
 		GL_INDEX_TYPE_UINT16 = 0x1403,
 		GL_INDEX_TYPE_UINT32 = 0x1405,
 	};
+	std::string getName( GlIndexType value );
 	/**
 	*\brief
 	*	Convertit un renderer::IndexType en GlIndexType.

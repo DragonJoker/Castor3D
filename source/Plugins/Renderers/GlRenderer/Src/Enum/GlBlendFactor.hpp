@@ -31,6 +31,7 @@ namespace gl_renderer
 		GL_BLEND_FACTOR_ONE_MINUS_SRC1_COLOR = 0x88FA,
 		GL_BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA = 0x88FB,
 	};
+	std::string getName( GlBlendFactor value );
 	/**
 	*\brief
 	*	Convertit un renderer::BlendFactor en GlBlendFactor.

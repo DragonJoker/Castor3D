@@ -41,6 +41,7 @@ namespace gl_renderer
 
 	void CopyBufferToImageCommand::apply()const
 	{
+		glLogCommand( "CopyBufferToImageCommand" );
 		glLogCall( gl::BindTexture, m_target, m_dst.getImage() );
 		glLogCall( gl::BindBuffer, GL_BUFFER_TARGET_PIXEL_UNPACK, m_src.getBuffer() );
 

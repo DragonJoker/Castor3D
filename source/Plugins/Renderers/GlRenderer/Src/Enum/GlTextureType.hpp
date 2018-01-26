@@ -29,6 +29,7 @@ namespace gl_renderer
 		GL_TEXTURE_CUBE_MAP_POSITIVE_Z = 0x8519,
 		GL_TEXTURE_CUBE_MAP_NEGATIVE_Z = 0x851A,
 	};
+	std::string getName( GlTextureType value );
 	/**
 	*\brief
 	*	Convertit un renderer::WrapMode en GlTextureType.

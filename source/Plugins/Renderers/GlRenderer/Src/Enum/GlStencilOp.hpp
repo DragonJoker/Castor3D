@@ -19,6 +19,7 @@ namespace gl_renderer
 		GL_STENCIL_OP_INCR_WRAP = 0x8507,
 		GL_STENCIL_OP_DECR_WRAP = 0x8508,
 	};
+	std::string getName( GlStencilOp value );
 	/**
 	*\brief
 	*	Convertit un renderer::StencilOp en GlStencilOp.

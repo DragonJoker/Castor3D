@@ -25,6 +25,7 @@ namespace gl_renderer
 
 	void DrawIndexedCommand::apply()const
 	{
+		glLogCommand( "DrawIndexedCommand" );
 		if ( m_instCount > 1 )
 		{
 			glLogCall( gl::DrawElementsInstancedBaseInstance

@@ -27,6 +27,7 @@ namespace gl_renderer
 		GL_LOGIC_OP_NAND = 0x150E,
 		GL_LOGIC_OP_SET = 0x150F,
 	};
+	std::string getName( GlLogicOp value );
 	/**
 	*\brief
 	*	Convertit un renderer::LogicOp en GlLogicOp.

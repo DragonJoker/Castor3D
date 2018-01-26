@@ -2,6 +2,25 @@
 
 namespace gl_renderer
 {
+	std::string getName( GlAttributeFormatBaseType value )
+	{
+		switch ( value )
+		{
+		case gl_renderer::GL_ATTRIBUTE_FORMAT_BASE_TYPE_INT:
+			return "GL_INT";
+
+		case gl_renderer::GL_ATTRIBUTE_FORMAT_BASE_TYPE_UNSIGNED_INT:
+			return "GL_UNSIGNED_INT";
+
+		case gl_renderer::GL_ATTRIBUTE_FORMAT_BASE_TYPE_FLOAT:
+			return "GL_FLOAT";
+
+		default:
+			assert( false && "Unsupported GlAttributeFormatBaseType" );
+			return "GlAttributeFormatBaseType_UNKNOWN";
+		}
+	}
+
 	GlAttributeFormatBaseType getType( renderer::AttributeFormat format )
 	{
 		switch ( format )

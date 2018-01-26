@@ -14,6 +14,7 @@ namespace gl_renderer
 
 	void ResetQueryPoolCommand::apply()const
 	{
+		glLogCommand( "ResetQueryPoolCommand" );
 	}
 
 	CommandPtr ResetQueryPoolCommand::clone()const

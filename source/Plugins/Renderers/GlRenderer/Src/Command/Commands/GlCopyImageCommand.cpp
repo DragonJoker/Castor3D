@@ -28,6 +28,7 @@ namespace gl_renderer
 
 	void CopyImageCommand::apply()const
 	{
+		glLogCommand( "CopyImageCommand" );
 		glLogCall( gl::BindTexture, m_srcTarget, m_src.getImage() );
 		glLogCall( gl::BindTexture, m_dstTarget, m_dst.getImage() );
 		glLogCall( gl::CopyImageSubData

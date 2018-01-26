@@ -15,6 +15,7 @@ namespace gl_renderer
 		GL_ATTRIBUTE_FORMAT_BASE_TYPE_UNSIGNED_INT = 0x1405,
 		GL_ATTRIBUTE_FORMAT_BASE_TYPE_FLOAT = 0x1406,
 	};
+	std::string getName( GlAttributeFormatBaseType value );
 
 	/**
 	*\brief

@@ -51,21 +51,25 @@ namespace gl_renderer
 
 	renderer::UniformBufferBinding const & DescriptorSet::createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
 		, renderer::UniformBufferBase const & uniformBuffer
-		, uint32_t offset )
+		, uint32_t offset
+		, uint32_t range )
 	{
 		m_uniformBuffers.emplace_back( layoutBinding
 			, uniformBuffer
-			, offset );
+			, offset
+			, range );
 		return m_uniformBuffers.back();
 	}
 
 	renderer::StorageBufferBinding const & DescriptorSet::createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
 		, renderer::BufferBase const & storageBuffer
-		, uint32_t offset )
+		, uint32_t offset
+		, uint32_t range )
 	{
 		m_storageBuffers.emplace_back( layoutBinding
 			, storageBuffer
-			, offset );
+			, offset
+			, range );
 		return m_storageBuffers.back();
 	}
 

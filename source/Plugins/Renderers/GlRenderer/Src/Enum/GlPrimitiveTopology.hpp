@@ -24,6 +24,7 @@ namespace gl_renderer
 		GL_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_ADJACENCY = 0x000D,
 		GL_PRIMITIVE_TOPOLOGY_PATCH_LIST = 0x000E,
 	};
+	std::string getName( GlPrimitiveTopology value );
 	/**
 	*\brief
 	*	Convertit un renderer::PrimitiveTopology en GlPrimitiveTopolgy.

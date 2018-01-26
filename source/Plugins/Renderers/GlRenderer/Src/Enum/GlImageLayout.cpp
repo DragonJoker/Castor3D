@@ -2,6 +2,40 @@
 
 namespace gl_renderer
 {
+	std::string getName( GlImageLayout value )
+	{
+		switch ( value )
+		{
+		case gl_renderer::GL_LAYOUT_UNDEFINED_EXT:
+			return "GL_LAYOUT_UNDEFINED_EXT";
+
+		case gl_renderer::GL_LAYOUT_GENERAL_EXT:
+			return "GL_LAYOUT_GENERAL_EXT";
+
+		case gl_renderer::GL_LAYOUT_COLOR_ATTACHMENT_EXT:
+			return "GL_LAYOUT_COLOR_ATTACHMENT_EXT";
+
+		case gl_renderer::GL_LAYOUT_DEPTH_STENCIL_ATTACHMENT_EXT:
+			return "GL_LAYOUT_DEPTH_STENCIL_ATTACHMENT_EXT";
+
+		case gl_renderer::GL_LAYOUT_DEPTH_STENCIL_READ_ONLY_EXT:
+			return "GL_LAYOUT_DEPTH_STENCIL_READ_ONLY_EXT";
+
+		case gl_renderer::GL_LAYOUT_SHADER_READ_ONLY_EXT:
+			return "GL_LAYOUT_SHADER_READ_ONLY_EXT";
+
+		case gl_renderer::GL_LAYOUT_TRANSFER_SRC_EXT:
+			return "GL_LAYOUT_TRANSFER_SRC_EXT";
+
+		case gl_renderer::GL_LAYOUT_TRANSFER_DST_EXT:
+			return "GL_LAYOUT_TRANSFER_DST_EXT";
+
+		default:
+			assert( false && "Unsupported GlImageLayout" );
+			return "GlImageLayout_UNKNOWN";
+		}
+	}
+
 	GlImageLayout convert( renderer::ImageLayout const & layout )
 	{
 		switch ( layout )

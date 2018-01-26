@@ -11,12 +11,13 @@ namespace renderer
 {
 	Device::Device( Renderer const & renderer
 		, Connection const & connection )
+		: m_renderer{ renderer }
 	{
 	}
 
 	Mat4 Device::infinitePerspective( Angle fovy
 		, float aspect
-		, float zNear )
+		, float zNear )const
 	{
 		float const range = tan( float( fovy ) / float( 2 ) ) * zNear;
 		float const left = -range * aspect;
@@ -31,5 +32,10 @@ namespace renderer
 		result[2][3] = -float( 1 );
 		result[3][2] = -float( 2 ) * zNear;
 		return result;
+	}
+
+	ClipDirection Device::getClipDirection()const
+	{
+		return m_renderer.getClipDirection();
 	}
 }

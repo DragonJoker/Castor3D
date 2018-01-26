@@ -11,15 +11,6 @@ See LICENSE file in root folder.
 
 namespace gl_renderer
 {
-	enum GlClearTarget
-		: GLenum
-	{
-		GL_CLEAR_TARGET_COLOR = 0x1800,
-		GL_CLEAR_TARGET_DEPTH = 0x1801,
-		GL_CLEAR_TARGET_STENCIL = 0x1802,
-		GL_CLEAR_TARGET_DEPTH_STENCIL = 0x84F9,
-	};
-
 	BeginRenderPassCommand::BeginRenderPassCommand( renderer::RenderPass const & renderPass
 		, renderer::FrameBuffer const & frameBuffer
 		, renderer::ClearValueArray const & clearValues
@@ -32,6 +23,7 @@ namespace gl_renderer
 
 	void BeginRenderPassCommand::apply()const
 	{
+		glLogCommand( "BeginRenderPassCommand" );
 		glLogCall( gl::BindFramebuffer, GL_FRAMEBUFFER, m_frameBuffer.getFrameBuffer() );
 
 		if ( m_renderPass.getClear() )
