@@ -147,7 +147,7 @@ namespace castor3d
 
 	void OverlayRenderer::cleanup()
 	{
-		m_overlayUbo.getUbo().cleanup();
+		m_overlayUbo.getUbo();
 		m_matrixUbo.getUbo().cleanup();
 		m_panelPipelines.clear();
 		m_textPipelines.clear();
@@ -336,6 +336,7 @@ namespace castor3d
 				, OverlayRenderNode{ *pipeline.pipeline
 					, pass
 					, m_overlayUbo
+					, std::vector< renderer::DescriptorSetPtr >{}
 				}
 			} ).first;
 		}
@@ -354,6 +355,7 @@ namespace castor3d
 				, OverlayRenderNode{ *pipeline.pipeline
 					, pass
 					, m_overlayUbo
+					, std::vector< renderer::DescriptorSetPtr >{}
 				}
 			} ).first;
 		}

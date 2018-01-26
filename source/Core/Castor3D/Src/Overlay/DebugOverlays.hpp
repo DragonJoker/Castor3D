@@ -104,11 +104,13 @@ namespace castor3d
 		 *\~english
 		 *\brief		Registers a render pass timer.
 		 *\param[in]	timer	The timer to register.
+		 *\return		The query ID.
 		 *\~french
 		 *\brief		Enregistre un timer de passe de rendu.
 		 *\param[in]	timer	Le timer à enregistrer.
+		 *\return		L'ID de la requête.
 		 */
-		void registerTimer( RenderPassTimer & timer );
+		uint32_t registerTimer( RenderPassTimer & timer );
 		/**
 		 *\~english
 		 *\brief		Unregisters a render pass timer.
@@ -259,6 +261,8 @@ namespace castor3d
 		castor::Nanoseconds m_averageTime{ 0 };
 		std::locale m_timesLocale;
 		RenderInfo m_renderInfo;
+		renderer::QueryPoolPtr m_queries;
+		uint32_t m_queriesCount{ 0u };
 	};
 }
 

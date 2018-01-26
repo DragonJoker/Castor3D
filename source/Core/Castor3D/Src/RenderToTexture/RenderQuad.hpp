@@ -29,39 +29,44 @@ namespace castor3d
 	class RenderQuad
 	{
 	public:
-		C3D_API ~RenderQuad() = default;
+		C3D_API virtual ~RenderQuad() = default;
 		/**
 		*\~english
 		*\brief
 		*	Constructor.
-		*\param[in] context
-		*	The Context.
-		*\param[in] matrixUbo
-		*	The UBO containing matrix data.
-		*\param[in] program
-		*	The shader program.
+		*\param[in] renderSystem
+		*	The RenderSystem.
 		*\param[in] invertU
 		*	Tells if the U coordinate of UV must be inverted, thus mirroring the reulting image.
 		*\~french
 		*\brief
 		*	Constructeur.
-		*\param[in] context
-		*	Le Context.
-		*\param[in] matrixUbo
-		*	L'UBO contenant les données de matrices.
-		*\param[in] program
-		*	Le programme shader.
+		*\param[in] renderSystem
+		*	Le RenderSystem.
 		*\param[in] invertU
 		*	Dit si la coordonnée U de l'UV doit être inversée, rendant ainsi un mirroir de l'image.
 		*/
 		C3D_API explicit RenderQuad( RenderSystem & renderSystem
+			, bool nearest
+			, bool invertU = false );
+		/**
+		*\~english
+		*\brief
+		*	Creates the rendering pipeline.
+		*\param[in] program
+		*	The shader program.
+		*\~french
+		*\brief
+		*	Crée le pipeline de rendu.
+		*\param[in] program
+		*	Le programme shader.
+		*/
+		C3D_API void createPipeline( castor::Size const & size
 			, castor::Position const & position
-			, castor::Size const & size
 			, renderer::ShaderProgram const & program
 			, renderer::TextureView const & view
 			, renderer::RenderPass const & renderPass
-			, bool nearest
-			, bool invertU = false );
+			, std::vector< renderer::DescriptorSetLayoutBinding > bindings );
 		/**
 		*\~english
 		*\brief
@@ -77,6 +82,11 @@ namespace castor3d
 		C3D_API void registerFrame( renderer::CommandBuffer & commandBuffer );
 
 	private:
+		virtual void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
+			, renderer::DescriptorSet & descriptorSet );
+
+	private:
+		RenderSystem & m_renderSystem;
 		TexturedQuad m_vertexData;
 		SamplerSPtr m_sampler;
 		renderer::VertexBufferPtr< TexturedQuad > m_vertexBuffer;

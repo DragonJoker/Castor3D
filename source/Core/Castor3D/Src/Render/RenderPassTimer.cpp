@@ -18,7 +18,7 @@ namespace castor3d
 		, m_timerQuery
 		{
 			{
-				engine.getRenderSystem()->createQuery( QueryType::eTimeElapsed ),
+				engine.getRenderSystem()->createQuery( QueryType::eTime ),
 				engine.getRenderSystem()->createQuery( QueryType::eTimeElapsed )
 			}
 		}

@@ -99,11 +99,13 @@ namespace castor3d
 		 *\~english
 		 *\brief		Registers a render pass timer.
 		 *\param[in]	timer	The timer to register.
+		 *\return		The query ID.
 		 *\~french
 		 *\brief		Enregistre un timer de passe de rendu.
 		 *\param[in]	timer	Le timer à enregistrer.
+		 *\return		L'ID de la requête.
 		 */
-		C3D_API void registerTimer( RenderPassTimer & timer );
+		C3D_API uint32_t registerTimer( RenderPassTimer & timer );
 		/**
 		 *\~english
 		 *\brief		Unregisters a render pass timer.

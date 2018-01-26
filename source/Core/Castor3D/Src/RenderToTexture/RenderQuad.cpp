@@ -27,14 +27,10 @@ using namespace castor;
 namespace castor3d
 {
 	RenderQuad::RenderQuad( RenderSystem & renderSystem
-		, Position const & position
-		, Size const & size
-		, renderer::ShaderProgram const & program
-		, renderer::TextureView const & view
-		, renderer::RenderPass const & renderPass
 		, bool nearest
 		, bool invertU )
-		: m_vertexData
+		: m_renderSystem{ renderSystem }
+		, m_vertexData
 		{
 			{
 				{ Point2f{ -1.0, -1.0 }, Point2f{ ( invertU ? 1.0 : 0.0 ), 0.0 } },
@@ -44,12 +40,10 @@ namespace castor3d
 			}
 		}
 	{
-		auto & device = *renderSystem.getCurrentDevice();
-
 		// Initialise the sampler.
 		String const name = nearest
-			? String{ cuT( "RenderColourToTexture_Nearest" ) }
-			: String{ cuT( "RenderColourToTexture_Linear" ) };
+			? String{ cuT( "RenderQuad_Nearest" ) }
+			: String{ cuT( "RenderQuad_Linear" ) };
 		renderer::Filter const filter = nearest
 			? renderer::Filter::eNearest
 			: renderer::Filter::eLinear;
@@ -67,7 +61,16 @@ namespace castor3d
 			m_sampler->setWrapS( renderer::WrapMode::eClampToEdge );
 			m_sampler->setWrapT( renderer::WrapMode::eClampToEdge );
 		}
+	}
 
+	void RenderQuad::createPipeline( castor::Size const & size
+		, castor::Position const & position
+		, renderer::ShaderProgram const & program
+		, renderer::TextureView const & view
+		, renderer::RenderPass const & renderPass
+		, std::vector< renderer::DescriptorSetLayoutBinding > bindings )
+	{
+		auto & device = *m_renderSystem.getCurrentDevice();
 		// Initialise the vertex buffer.
 		m_vertexBuffer = renderer::makeVertexBuffer< TexturedQuad >( device
 			, 1u
@@ -83,16 +86,16 @@ namespace castor3d
 		m_geometryBuffers = device.createGeometryBuffers( *m_vertexBuffer
 			, 0u
 			, *m_vertexLayout );
-
 		// Initialise the descriptor set.
-		std::vector< renderer::DescriptorSetLayoutBinding > bindings
-		{
-			{ MinTextureIndex, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment }
-		};
+		auto textureBindingPoint = uint32_t( bindings.size() );
+		bindings.emplace_back( textureBindingPoint
+			, renderer::DescriptorType::eCombinedImageSampler
+			, renderer::ShaderStageFlag::eFragment );
 		m_descriptorLayout = device.createDescriptorSetLayout( std::move( bindings ) );
 		m_descriptorPool = m_descriptorLayout->createPool( 1u );
 		m_descriptorSet = m_descriptorPool->createDescriptorSet();
-		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 0u )
+		doFillDescriptorSet( *m_descriptorLayout, *m_descriptorSet );
+		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( textureBindingPoint )
 			, view
 			, m_sampler->getSampler() );
 		m_descriptorSet->update();
@@ -128,5 +131,10 @@ namespace castor3d
 		commandBuffer.bindGeometryBuffers( *m_geometryBuffers );
 		commandBuffer.bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
 		commandBuffer.draw( 4u, 1u, 0u, 0u );
+	}
+
+	void RenderQuad::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
+		, renderer::DescriptorSet & descriptorSet )
+	{
 	}
 }

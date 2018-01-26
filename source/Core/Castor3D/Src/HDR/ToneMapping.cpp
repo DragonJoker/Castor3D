@@ -8,6 +8,10 @@
 #include "Render/RenderPipeline.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/Ubos/HdrConfigUbo.hpp"
+#include "Texture/TextureLayout.hpp"
+
+#include <Descriptor/DescriptorSet.hpp>
+#include <Descriptor/DescriptorSetLayout.hpp>
 
 #include <GlslSource.hpp>
 
@@ -21,7 +25,7 @@ namespace castor3d
 		, Parameters const & parameters )
 		: OwnedBy< Engine >{ engine }
 		, Named{ name }
-		, m_matrixUbo{ engine }
+		, RenderQuad{ *engine.getRenderSystem(), true, false }
 		, m_configUbo{ engine }
 	{
 	}
@@ -30,82 +34,62 @@ namespace castor3d
 	{
 	}
 
-	bool ToneMapping::initialise()
+	bool ToneMapping::initialise( Size const & size
+		, TextureLayout const & source
+		, renderer::RenderPass const & renderPass )
 	{
-		auto program = getEngine()->getShaderProgramCache().getNewProgram( false );
-		bool result = program != nullptr;
+		auto & renderSystem = *getEngine()->getRenderSystem();
+		auto & program = getEngine()->getShaderProgramCache().getNewProgram( false );
 
-		if ( result )
+		glsl::Shader vtx;
 		{
-			glsl::Shader vtx;
+			auto writer = renderSystem.createGlslWriter();
+
+			UBO_MATRIX( writer, 0 );
+
+			// Shader inputs
+			auto position = writer.declAttribute< Vec2 >( cuT( "position" ) );
+			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ) );
+
+			// Shader outputs
+			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+
+			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto writer = getEngine()->getRenderSystem()->createGlslWriter();
+				vtx_texture = texture;
+				gl_Position = c3d_projection * vec4( position.x(), position.y(), 0.0, 1.0 );
+			} );
 
-				UBO_MATRIX( writer, 0 );
-
-				// Shader inputs
-				auto position = writer.declAttribute< Vec2 >( cuT( "position" ) );
-				auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ) );
-
-				// Shader outputs
-				auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
-				auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
-
-				writer.implementFunction< void >( cuT( "main" ), [&]()
-				{
-					vtx_texture = texture;
-					gl_Position = c3d_projection * vec4( position.x(), position.y(), 0.0, 1.0 );
-				} );
-
-				vtx = writer.finalise();
-			}
-
-			program->createObject( ShaderType::eVertex );
-			program->createObject( ShaderType::ePixel );
-			auto pxl = doCreate();
-			program->setSource( ShaderType::eVertex, vtx );
-			program->setSource( ShaderType::ePixel, pxl );
-			program->createUniform< UniformType::eSampler >( cuT( "c3d_mapDiffuse" ), ShaderType::ePixel )->setValue( MinTextureIndex );
-			result = program->initialise();
+			vtx = writer.finalise();
 		}
 
-		if ( result )
+		auto pxl = doCreate();
+		program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
+		program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
+		program.link();
+		renderer::DescriptorSetLayoutBindingArray bindings
 		{
-			DepthStencilState dsState;
-			dsState.setDepthTest( false );
-			dsState.setDepthMask( WritingMask::eZero );
-			m_pipeline = getEngine()->getRenderSystem()->createRenderPipeline( std::move( dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, *program, PipelineFlags{} );
-			m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
-			m_pipeline->addUniformBuffer( m_configUbo.getUbo() );
+			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
+		};
+		createPipeline( size
+			, Position{}
+			, program
+			, source.getView()
+			, renderPass
+			, bindings );
+		m_timer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Tone mapping" ), cuT( "Tone mapping" ) );
 
-			m_colour = std::make_unique< RenderQuad >( *getEngine()->getRenderSystem()->getMainContext(), m_matrixUbo );
-			m_colour->initialise();
-
-			m_timer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Tone mapping" ), cuT( "Tone mapping" ) );
-		}
-
-		return result;
+		registerFrame( *m_commandBuffer
+			, *m_timer );
+		return true;
 	}
 
 	void ToneMapping::cleanup()
 	{
 		m_timer.reset();
 		doDestroy();
-
-		if ( m_colour )
-		{
-			m_colour->cleanup();
-			m_colour.reset();
-		}
-
-		if ( m_pipeline )
-		{
-			m_pipeline->cleanup();
-			m_pipeline.reset();
-		}
-
 		m_configUbo.getUbo().cleanup();
-		m_matrixUbo.getUbo().cleanup();
 	}
 
 	void ToneMapping::update( HdrConfig const & config )
@@ -123,8 +107,15 @@ namespace castor3d
 		m_colour->render( position
 			, size
 			, texture
-			, m_matrixUbo
 			, *m_pipeline );
 		m_timer->stop();
+	}
+
+	void ToneMapping::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
+		, renderer::DescriptorSet & descriptorSet )
+	{
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
+			, m_configUbo.getUbo()
+			, 0u );
 	}
 }

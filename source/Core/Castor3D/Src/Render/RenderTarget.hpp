@@ -85,7 +85,9 @@ namespace castor3d
 		{
 		public:
 			explicit TargetFbo( RenderTarget & renderTarget );
-			bool initialise( uint32_t index, castor::Size const & size );
+			bool initialise( renderer::RenderPass & renderPass
+				, uint32_t index
+				, castor::Size const & size );
 			void cleanup();
 
 			//!\~english	The texture receiving the color render.
@@ -94,9 +96,6 @@ namespace castor3d
 			//!\~english	The frame buffer.
 			//!\~french		Le tampon d'image.
 			renderer::FrameBufferPtr m_frameBuffer;
-			//!\~english	The attach between the colour texture and main frame buffer.
-			//!\~french		L'attache entre la texture de couleurs et le tampon principal.
-			// TextureAttachmentSPtr m_colourAttach;
 
 		private:
 			RenderTarget & m_renderTarget;
@@ -217,195 +216,113 @@ namespace castor3d
 		 */
 		C3D_API void addPostEffect( PostEffectSPtr effect );
 		/**
-		 *\~english
-		 *\return		The intialisation status.
-		 *\~french
-		 *\return		Le statut de l'initialisation.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		**/
+		/**@{*/
 		inline bool isInitialised()const
 		{
 			return m_initialised;
 		}
-		/**
-		 *\~english
-		 *\return		The target's dimensions.
-		 *\~english
-		 *\return		Les dimensions de la cible.
-		 */
+
 		castor::Size const & getSize()const
 		{
 			return m_size;
 		}
-		/**
-		 *\~english
-		 *\return		The RenderTechnique.
-		 *\~french
-		 *\return		La RenderTechnique.
-		 */
+
 		inline RenderTechniqueSPtr getTechnique()const
 		{
 			return m_renderTechnique;
 		}
-		/**
-		 *\~english
-		 *\brief		Defines the RenderTechnique.
-		 *\param[in]	technique	The RenderTechnique.
-		 *\~french
-		 *\brief		Définit la RenderTechnique.
-		 *\param[in]	technique	La RenderTechnique.
-		 */
-		inline void setTechnique( RenderTechniqueSPtr technique )
-		{
-			m_renderTechnique = technique;
-		}
-		/**
-		 *\~english
-		 *\return		The Scene.
-		 *\~french
-		 *\return		La Scene.
-		 */
+
 		inline SceneSPtr getScene()const
 		{
 			return m_scene.lock();
 		}
-		/**
-		 *\~english
-		 *\return		The Camera.
-		 *\~french
-		 *\return		La Camera.
-		 */
+
 		inline CameraSPtr getCamera()const
 		{
 			return m_camera.lock();
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the Scene.
-		 *\param[in]	scene	The new Scene.
-		 *\~french
-		 *\brief		Définit la Scene.
-		 *\param[in]	scene	La nouvelle Scene.
-		 */
-		inline void setScene( SceneSPtr scene )
-		{
-			m_scene = scene;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the SSAO configuration.
-		 *\param[in]	config	The new value.
-		 *\~french
-		 *\brief		Définit la configuration du SSAO.
-		 *\param[in]	config	La nouvelle value.
-		 */
-		inline void setSsaoConfig( SsaoConfig const & config )
-		{
-			m_ssaoConfig = config;
-		}
-		/**
-		 *\~english
-		 *\return		The frame buffer.
-		 *\~french
-		 *\return		Le tampon d'image.
-		 */
+
 		inline renderer::FrameBuffer const & getFrameBuffer()const
 		{
 			return *m_frameBuffer.m_frameBuffer;
 		}
-		/**
-		 *\~english
-		 *\return		The RGB texture.
-		 *\~french
-		 *\return		La texture RGB.
-		 */
+
 		inline TextureUnit const & getTexture()const
 		{
 			return m_frameBuffer.m_colourTexture;
 		}
-		/**
-		 *\~english
-		 *\return		The velocity texture.
-		 *\~french
-		 *\return		La texture de vélocités.
-		 */
+
 		inline TextureUnit const & getVelocity()const
 		{
 			return m_velocityTexture;
 		}
-		/**
-		 *\~english
-		 *\return		The window pixel format.
-		 *\~french
-		 *\return		Le format des pixels de la fenêtre.
-		 */
+
 		inline castor::PixelFormat getPixelFormat()const
 		{
 			return m_pixelFormat;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the window pixel format
-		 *\param[in]	value	The new window pixel format
-		 *\~french
-		 *\brief		Définit le format des pixels de la fenêtre
-		 *\param[in]	value	Le nouveau format des pixels de la fenêtre
-		 */
-		inline void setPixelFormat( castor::PixelFormat value )
-		{
-			m_pixelFormat = value;
-		}
-		/**
-		 *\~english
-		 *\return		The target type.
-		 *\~french
-		 *\return		Le type de cible.
-		 */
+
 		inline TargetType getTargetType()const
 		{
 			return m_type;
 		}
-		/**
-		 *\~english
-		 *\return		The target index.
-		 *\~french
-		 *\return		L'indice de la cible.
-		 */
+
 		inline uint32_t getIndex()const
 		{
 			return m_index;
 		}
-		/**
-		 *\~english
-		 *\return		The post effects array.
-		 *\~french
-		 *\return		Le tableau d'effets de post rendu.
-		 */
+
 		inline PostEffectPtrArray const & getPostEffects()const
 		{
 			return m_postEffects;
 		}
-		/**
-		 *\~english
-		 *\return		The tone mapping implementation.
-		 *\~french
-		 *\return		L'implémentation de mappage de tons.
-		 */
+
 		inline ToneMappingSPtr getToneMapping()const
 		{
 			return m_toneMapping;
 		}
+		/**@}*/
 		/**
-		 *\~english
-		 *\brief		Sets the jittering value.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit la valeur de jittering.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
+		*\~english
+		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		**/
+		/**@{*/
+		inline void setTechnique( RenderTechniqueSPtr technique )
+		{
+			m_renderTechnique = technique;
+		}
+
+		inline void setScene( SceneSPtr scene )
+		{
+			m_scene = scene;
+		}
+
+		inline void setSsaoConfig( SsaoConfig const & config )
+		{
+			m_ssaoConfig = config;
+		}
+
+		inline void setPixelFormat( castor::PixelFormat value )
+		{
+			m_pixelFormat = value;
+		}
+
 		inline void setJitter( castor::Point2r const & value )
 		{
 			m_jitter = value;
 		}
+		/**@}*/
 
 	private:
 		C3D_API void doRender( RenderInfo & info
@@ -417,63 +334,28 @@ namespace castor3d
 		C3D_API static const castor::String DefaultSamplerName;
 
 	private:
-		//!\~english	The number of actually created render targets.
-		//!\~french		Le compte de render target actuellement créées.
 		static uint32_t sm_uiCount;
-		//!\~english	The render target type.
-		//!\~french		Type de RenderTarget.
 		TargetType m_type;
-		//!\~english	Tells if the target is initalised.
-		//!\~french		Dit si la cible est initialisée.
 		bool m_initialised;
-		//!\~english	The target size.
-		//!\~french		Les dimensions de la cible.
 		castor::Size m_size;
-		//!\~english	The technique used to render this target.
-		//!\~french		La technique utilisée pour rendre cette cible.
 		RenderTechniqueSPtr m_renderTechnique;
-		//!\~english	The scene rendered in this render target.
-		//!\~french		La scène rendue par cette RenderTarget.
 		SceneWPtr m_scene;
-		//!\~english	The camera used to render the scene.
-		//!\~french		La caméra utilisée pour rendre la scène.
 		CameraWPtr m_camera;
-		//!\~english	Frame buffer.
-		//!\~french		tampon d'image.
+		renderer::RenderPassPtr m_renderPass;
+		renderer::CommandBufferPtr m_commandBuffer;
 		TargetFbo m_frameBuffer;
-		//!\~english	The target display format.
-		//!\~french		Le format des pixels de la cible.
 		castor::PixelFormat m_pixelFormat;
-		//!\~english	This render target's index.
-		//!\~french		L'index de cette render target.
 		uint32_t m_index;
-		//!\~english	The render technique parameters.
-		//!\~french		Les paramètres de la technique de rendu.
 		Parameters m_techniqueParameters;
-		//!\~english	The post effects.
-		//!\~french		Les effets post rendu.
 		PostEffectPtrArray m_postEffects;
-		//!\~english	The tone mapping implementation.
-		//!\~french		L'implémentation de mappage de ton.
 		ToneMappingSPtr m_toneMapping;
-		//!\~english	The post effects applying after tone mapping.
-		//!\~french		Les effets post rendu s'appliquant après le mappage de tons.
 		PostEffectPtrArray m_postPostEffects;
-		//!\~english	The post effect timer.
-		//!\~french		Le timer d'effets post-rendu.
 		RenderPassTimerSPtr m_postPostFxTimer;
-		//!\~english	The overlay rendering timer.
-		//!\~french		Le timer de rendu des incrustations.
 		RenderPassTimerSPtr m_overlaysTimer;
-		//!\~english	The SSAO configuration.
-		//!\~french		La configuration du SSAO.
 		SsaoConfig m_ssaoConfig;
-		//!\~english	The jittering value.
-		//!\~french		La valeur de jittering.
 		castor::Point2r m_jitter;
-		//!\~english	The texture receiving the velocity render.
-		//!\~french		La texture recevant le rendu vélocité.
 		TextureUnit m_velocityTexture;
+		OverlayRendererSPtr m_overlayRenderer;
 	};
 }
 

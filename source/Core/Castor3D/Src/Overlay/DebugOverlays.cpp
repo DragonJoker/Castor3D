@@ -279,7 +279,7 @@ namespace castor3d
 		return m_renderInfo;
 	}
 
-	void DebugOverlays::registerTimer( RenderPassTimer & timer )
+	uint32_t DebugOverlays::registerTimer( RenderPassTimer & timer )
 	{
 		auto & cache = getEngine()->getOverlayCache();
 		auto fullName = getFullName( timer );
@@ -295,6 +295,7 @@ namespace castor3d
 		}
 
 		it->second.addTimer( std::ref( timer ) );
+		return m_queriesCount++;
 	}
 
 	void DebugOverlays::unregisterTimer( RenderPassTimer & timer )
@@ -438,6 +439,9 @@ namespace castor3d
 			, m_renderInfo.m_drawCalls );
 		m_debugPanel->updatePosition();
 		m_debugPanel->setVisible( m_visible );
+		m_queries = getEngine()->getRenderSystem()->getCurrentDevice()->createQueryPool( renderer::QueryType::eTimestamp
+			, m_queriesCount
+			, 0u );
 	}
 
 	//*********************************************************************************************

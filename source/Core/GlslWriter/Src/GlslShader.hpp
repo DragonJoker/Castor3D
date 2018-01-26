@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "GlslSsbo.hpp"
 #include "GlslUbo.hpp"
+#include "GlslPcb.hpp"
 
 namespace glsl
 {

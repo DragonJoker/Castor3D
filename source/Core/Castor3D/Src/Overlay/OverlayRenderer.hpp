@@ -143,7 +143,7 @@ namespace castor3d
 			Pipeline & m_pipeline;
 			Pass & m_pass;
 			OverlayUbo & m_overlayUbo;
-			renderer::DescriptorSetPtr m_descriptorSet;
+			std::vector< renderer::DescriptorSetPtr > m_descriptorSets;
 		};
 
 		struct OverlayGeometryBuffers

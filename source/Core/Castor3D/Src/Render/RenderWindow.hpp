@@ -419,6 +419,7 @@ namespace castor3d
 		renderer::ShaderProgram * m_program{ nullptr };
 		RenderQuadUPtr m_renderQuad;
 		RenderTargetWPtr m_renderTarget;
+		OverlayRendererSPtr m_overlayRenderer;
 		FrameListenerWPtr m_listener;
 		bool m_initialised{ false };
 		bool m_vsync{ false };

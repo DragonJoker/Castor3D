@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_TONE_MAPPING_H___
 
 #include "Render/RenderInfo.hpp"
+#include "RenderToTexture/RenderQuad.hpp"
 #include "Shader/UniformBuffer.hpp"
 #include "Shader/Ubos/HdrConfigUbo.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
@@ -26,6 +27,7 @@ namespace castor3d
 	class ToneMapping
 		: public castor::OwnedBy< Engine >
 		, public castor::Named
+		, private RenderQuad
 	{
 	public:
 		/**
@@ -56,7 +58,9 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise le shader de mappage de tons.
 		 */
-		C3D_API bool initialise();
+		C3D_API bool initialise( castor::Size const & size
+			, TextureLayout const & source
+			, renderer::RenderPass const & renderPass );
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
@@ -88,6 +92,21 @@ namespace castor3d
 		C3D_API void apply( castor::Size const & size
 			, TextureLayout const & texture
 			, RenderInfo & info );
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		**/
+		/**@{*/
+		inline renderer::CommandBuffer const & getCommands()const
+		{
+			REQUIRE( m_commandBuffer );
+			return *m_commandBuffer;
+		}
+		/**@}*/
 
 	private:
 		/**
@@ -116,22 +135,20 @@ namespace castor3d
 		 */
 		C3D_API virtual void doUpdate() = 0;
 
+	private:
+		void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
+			, renderer::DescriptorSet & descriptorSet )override;
+
 	protected:
-		//!\~english	The matrix data UBO.
-		//!\~french		L'UBO de données de matrices.
-		MatrixUbo m_matrixUbo;
 		//!\~english	The configuration data UBO.
 		//!\~french		L'UBO de données de configuration.
 		HdrConfigUbo m_configUbo;
-		//!\~english	The tone mapping shader program.
-		//!\~french		Le shader de mappage de ton.
-		RenderPipelineUPtr m_pipeline;
-		//!\~english	The pipeline used to render the tone mapping.
-		//!\~french		Le pipeline utilisé pour le rendu du mappage de tons.
-		RenderQuadUPtr m_colour;
 		//!\~english	The render pass timer.
 		//!\~french		Le timer de passe de rendu.
 		RenderPassTimerSPtr m_timer;
+		//!\~english	The command buffer holding the tone mapping commands.
+		//!\~french		Le tampon de commandes contenant les commandes de mappage de tons.
+		renderer::CommandBufferPtr m_commandBuffer;
 	};
 }
 

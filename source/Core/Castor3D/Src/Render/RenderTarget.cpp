@@ -3,9 +3,8 @@
 #include "Engine.hpp"
 
 #include "Event/Frame/FunctorEvent.hpp"
-#include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/TextureAttachment.hpp"
 #include "HDR/ToneMapping.hpp"
+#include "Overlay/OverlayRenderer.hpp"
 #include "Render/RenderPassTimer.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
@@ -13,6 +12,13 @@
 #include "Technique/RenderTechnique.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
+
+#include <Core/Device.hpp>
+#include <Image/Texture.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <RenderPass/RenderPassState.hpp>
+#include <RenderPass/RenderSubpass.hpp>
+#include <RenderPass/RenderSubpassState.hpp>
 
 #include <Graphics/Image.hpp>
 
@@ -105,42 +111,35 @@ namespace castor3d
 	{
 	}
 
-	bool RenderTarget::TargetFbo::initialise( uint32_t index, Size const & size )
+	bool RenderTarget::TargetFbo::initialise( renderer::RenderPass & renderPass
+		, uint32_t index
+		, Size const & size )
 	{
-		m_frameBuffer = m_renderTarget.getEngine()->getRenderSystem()->createFrameBuffer();
-		m_frameBuffer->initialise();
+		auto & renderSystem = *m_renderTarget.getEngine()->getRenderSystem();
+		auto & device = *renderSystem.getCurrentDevice();
 
 		SamplerSPtr sampler = m_renderTarget.getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + string::toString( m_renderTarget.m_index ) );
-		auto texture = m_renderTarget.getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
-			, AccessType::eRead
-			, AccessType::eRead | AccessType::eWrite
+		auto texture = std::make_shared< TextureLayout >( renderSystem
+			, renderer::TextureType::e2D
+			, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled
+			, renderer::MemoryPropertyFlag::eDeviceLocal
 			, m_renderTarget.getPixelFormat()
 			, size );
-		m_colourAttach = m_frameBuffer->createAttachment( texture );
 		m_colourTexture.setTexture( texture );
 		m_colourTexture.setSampler( sampler );
 		m_colourTexture.setIndex( index );
 		m_colourTexture.getTexture()->getImage().initialiseSource();
 		m_colourTexture.getTexture()->initialise();
 
-		m_frameBuffer->bind();
-		m_frameBuffer->attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture.getTexture()->getType() );
-		m_frameBuffer->setDrawBuffers();
-		bool result = m_frameBuffer->isComplete();
-		REQUIRE( result );
-		m_frameBuffer->unbind();
+		m_frameBuffer = renderPass.createFrameBuffer( renderer::UIVec2{ size }
+			, { m_colourTexture.getTexture()->getView() } );
 
-		return result;
+		return true;
 	}
 
 	void RenderTarget::TargetFbo::cleanup()
 	{
-		m_frameBuffer->bind();
-		m_frameBuffer->detachAll();
-		m_frameBuffer->unbind();
-		m_frameBuffer->cleanup();
 		m_colourTexture.cleanup();
-		m_colourAttach.reset();
 		m_frameBuffer.reset();
 	}
 
@@ -162,12 +161,12 @@ namespace castor3d
 	{
 		m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( cuT( "linear" ), *getEngine(), Parameters{} );
 		SamplerSPtr sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + string::toString( m_index ) );
-		sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-		sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+		sampler->setMinFilter( renderer::Filter::eLinear );
+		sampler->setMagFilter( renderer::Filter::eLinear );
 
 		sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + string::toString( m_index ) + cuT( "_Point" ) );
-		sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eNearest );
-		sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eNearest );
+		sampler->setMinFilter( renderer::Filter::eNearest );
+		sampler->setMagFilter( renderer::Filter::eNearest );
 	}
 
 	RenderTarget::~RenderTarget()
@@ -178,7 +177,25 @@ namespace castor3d
 	{
 		if ( !m_initialised )
 		{
-			m_frameBuffer.initialise( index, m_size );
+			auto & renderSystem = *getEngine()->getRenderSystem();
+			auto & device = *renderSystem.getCurrentDevice();
+
+			std::vector< renderer::PixelFormat > formats{ { getPixelFormat() } };
+			renderer::RenderSubpassPtrArray subpasses;
+			subpasses.emplace_back( device.createRenderSubpass( formats
+				, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
+				, renderer::AccessFlag::eColourAttachmentWrite } ) );
+			m_renderPass = device.createRenderPass( formats
+				, std::move( subpasses )
+				, renderer::RenderPassState{ renderer::PipelineStageFlag::eBottomOfPipe
+					, renderer::AccessFlag::eMemoryRead
+					, { renderer::ImageLayout::ePresentSrc } }
+				, renderer::RenderPassState{ renderer::PipelineStageFlag::eBottomOfPipe
+					, renderer::AccessFlag::eMemoryRead
+					, { renderer::ImageLayout::ePresentSrc } } );
+			m_frameBuffer.initialise( *m_renderPass
+				, index
+				, m_size );
 
 			if ( !m_renderTechnique )
 			{
@@ -202,9 +219,10 @@ namespace castor3d
 			m_size = m_frameBuffer.m_colourTexture.getTexture()->getDimensions();
 			m_renderTechnique->initialise( index );
 
-			auto velocityTexture = getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
-				, AccessType::eRead
-				, AccessType::eRead | AccessType::eWrite
+			auto velocityTexture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
+				, renderer::TextureType::e2D
+				, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled
+				, renderer::MemoryPropertyFlag::eDeviceLocal
 				, PixelFormat::eAL16F32F
 				, m_size );
 			m_velocityTexture.setTexture( velocityTexture );
@@ -220,7 +238,8 @@ namespace castor3d
 				effect->initialise();
 			}
 
-			m_initialised = m_toneMapping->initialise();
+			m_initialised = m_toneMapping->initialise( getSize()
+				, m_renderTechnique->getResult() );
 
 			for ( auto effect : m_postPostEffects )
 			{
@@ -348,19 +367,24 @@ namespace castor3d
 		fbo.m_frameBuffer->setClearColour( RgbaColour::fromRGBA( toRGBAFloat( scene->getBackgroundColour() ) ) );
 
 		// Render the scene through the RenderTechnique.
-		getEngine()->getMaterialCache().getPassBuffer().bind();
 		m_renderTechnique->render( m_jitter
 			, m_velocityTexture
 			, info );
 
 		// Then draw the render's result to the RenderTarget's frame buffer.
-		fbo.m_frameBuffer->bind( FrameBufferTarget::eDraw );
-		fbo.m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
-		m_toneMapping->update( scene->getHdrConfig() );
-		m_toneMapping->apply( getSize()
-			, m_renderTechnique->getResult()
-			, info );
-		fbo.m_frameBuffer->unbind();
+		if ( m_commandBuffer->begin() )
+		{
+			m_toneMapping->update( *m_commandBuffer
+				, scene->getHdrConfig() );
+			m_commandBuffer->beginRenderPass( *m_renderPass
+				, *fbo.m_frameBuffer
+				, { RgbaColour::fromRGBA( toRGBAFloat( scene->getBackgroundColour() ) ) }
+				, renderer::SubpassContents::eSecondaryCommandBuffers );
+			m_commandBuffer->executeCommands( { m_toneMapping->getCommands() } );
+			m_commandBuffer->endRenderPass();
+			m_commandBuffer->end();
+		}
+
 		m_postPostFxTimer->start();
 
 		for ( auto & effect : m_postPostEffects )
