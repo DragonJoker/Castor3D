@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_Particle_H___
 #define ___C3D_Particle_H___
 
+#include "ParticleDeclaration.hpp"
 #include <Pipeline/VertexLayout.hpp>
 
 namespace castor3d
@@ -25,83 +26,85 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_description	The particle's elements description.
-		 *\param[in]	p_defaultValues	The default values for the particle's elements.
+		 *\param[in]	description		The particle's elements description.
+		 *\param[in]	defaultValues	The default values for the particle's elements.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_description	La description des éléments de la particule.
-		 *\param[in]	p_defaultValues	Les valeurs par défaut des éléments de la particule.
+		 *\param[in]	description		La description des éléments de la particule.
+		 *\param[in]	defaultValues	Les valeurs par défaut des éléments de la particule.
 		 */
-		C3D_API Particle( BufferDeclaration const & p_description, castor::StrStrMap const & p_defaultValues );
+		C3D_API Particle( ParticleDeclaration const & description
+			, castor::StrStrMap const & defaultValues );
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_description	The particle's elements description.
+		 *\param[in]	description	The particle's elements description.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_description	La description des éléments de la particule.
+		 *\param[in]	description	La description des éléments de la particule.
 		 */
-		C3D_API explicit Particle( BufferDeclaration const & p_description );
+		C3D_API explicit Particle( ParticleDeclaration const & description );
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
-		 *\param[in]	p_rhs	The object to copy.
+		 *\param[in]	rhs	The object to copy.
 		 *\~french
 		 *\brief		Constructeur par copie.
-		 *\param[in]	p_rhs	L'objet à copier.
+		 *\param[in]	rhs	L'objet à copier.
 		 */
-		C3D_API Particle( Particle const & p_rhs );
+		C3D_API Particle( Particle const & rhs );
 		/**
 		 *\~english
 		 *\brief		Move constructor.
-		 *\param[in]	p_rhs	The object to move.
+		 *\param[in]	rhs	The object to move.
 		 *\~french
 		 *\brief		Constructeur par déplacement.
-		 *\param[in]	p_rhs	L'objet à déplacer.
+		 *\param[in]	rhs	L'objet à déplacer.
 		 */
-		C3D_API Particle( Particle && p_rhs );
+		C3D_API Particle( Particle && rhs );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator.
-		 *\param[in]	p_rhs	The object to copy.
+		 *\param[in]	rhs	The object to copy.
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie.
-		 *\param[in]	p_rhs	L'objet à copier.
+		 *\param[in]	rhs	L'objet à copier.
 		 */
-		C3D_API Particle & operator=( Particle const & p_rhs );
+		C3D_API Particle & operator=( Particle const & rhs );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator.
-		 *\param[in]	p_rhs	The object to move.
+		 *\param[in]	rhs	The object to move.
 		 *\~french
 		 *\brief		Opérateur d'affectation par déplacement.
-		 *\param[in]	p_rhs	L'objet à déplacer.
+		 *\param[in]	rhs	L'objet à déplacer.
 		 */
-		C3D_API Particle & operator=( Particle && p_rhs );
+		C3D_API Particle & operator=( Particle && rhs );
 		/**
 		 *\~english
 		 *\brief		Sets the particle variable's value at given index.
-		 *\param[in]	p_index	The variable index.
-		 *\param[in]	p_value	The variable value.
+		 *\param[in]	index	The variable index.
+		 *\param[in]	value	The variable value.
 		 *\~french
 		 *\brief		Définit la valeur de la variable de particule à l'index donné.
-		 *\param[in]	p_index	L'index de la variable.
-		 *\param[in]	p_value	La valeur de la variable.
+		 *\param[in]	index	L'index de la variable.
+		 *\param[in]	value	La valeur de la variable.
 		 */
 		template< renderer::AttributeFormat Type >
-		inline void setValue( uint32_t p_index, typename ElementTyper< Type >::Type const & p_value );
+		inline void setValue( uint32_t index
+			, typename ElementTyper< Type >::Type const & value );
 		/**
 		 *\~english
 		 *\brief		Sets the particle variable's value at given index.
-		 *\param[in]	p_index	The variable index.
+		 *\param[in]	index	The variable index.
 		 *\return		The variable value.
 		 *\~french
 		 *\brief		Définit la valeur de la variable de particule à l'index donné.
-		 *\param[in]	p_index	L'index de la variable.
+		 *\param[in]	index	L'index de la variable.
 		 *\return		La valeur de la variable.
 		 */
 		template< renderer::AttributeFormat Type >
-		inline typename ElementTyper< Type >::Type getValue( uint32_t p_index )const;
+		inline typename ElementTyper< Type >::Type getValue( uint32_t index )const;
 		/**
 		 *\~english
 		 *\return		The particle data.
@@ -126,7 +129,7 @@ namespace castor3d
 	private:
 		//!\~english	The particle's elemets description.
 		//!\~french		La description des éléments de la particule.
-		BufferDeclaration const & m_description;
+		ParticleDeclaration const & m_description;
 		//!\~english	The particle's data.
 		//!\~french		Les données de la particule.
 		std::vector< uint8_t > m_data;

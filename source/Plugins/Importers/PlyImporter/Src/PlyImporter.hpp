@@ -12,7 +12,6 @@ See LICENSE file in root folder
 #pragma warning( disable:4312 )
 
 #include <Mesh/Importer.hpp>
-#include <Mesh/Buffer/Buffer.hpp>
 
 #pragma warning( pop )
 

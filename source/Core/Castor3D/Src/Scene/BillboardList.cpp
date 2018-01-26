@@ -75,11 +75,11 @@ namespace castor3d
 		: m_vertexBuffer{ vertexBuffer }
 		, m_scene{ scene }
 		, m_node{ node }
-		, m_quad( std::make_unique< VertexBuffer >( *scene.getEngine(), BufferDeclaration
+		, m_quad( std::make_unique< VertexBuffer >( *scene.getEngine(), ParticleDeclaration
 		{
 			{
-				BufferElementDeclaration( cuT( "position" ), uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec3 ),
-				BufferElementDeclaration( cuT( "texcoord" ), uint32_t( ElementUsage::eTexCoords ), renderer::AttributeFormat::eVec2 ),
+				ParticleElementDeclaration( cuT( "position" ), uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec3 ),
+				ParticleElementDeclaration( cuT( "texcoord" ), uint32_t( ElementUsage::eTexCoords ), renderer::AttributeFormat::eVec2 ),
 			}
 		} ) )
 	{
@@ -293,9 +293,9 @@ namespace castor3d
 		, BillboardBase{ scene
 			, parent
 			, std::make_shared< VertexBuffer >( *scene.getEngine()
-				, BufferDeclaration
+				, ParticleDeclaration
 				{
-					{ BufferElementDeclaration( cuT( "center" ), uint32_t( 0u ), renderer::AttributeFormat::eVec3, 0u, 1u ) }
+					{ ParticleElementDeclaration( cuT( "center" ), uint32_t( 0u ), renderer::AttributeFormat::eVec3, 0u, 1u ) }
 				} ) }
 	{
 	}

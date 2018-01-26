@@ -41,7 +41,7 @@ namespace castor3d
 		, m_declaration
 		{
 			{
-				BufferElementDeclaration{ cuT( "position" ), uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec2 }
+				ParticleElementDeclaration{ cuT( "position" ), uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec2 }
 			}
 		}
 		, m_size{ size }

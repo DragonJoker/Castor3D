@@ -82,9 +82,9 @@ namespace castor3d
 		: LightPass{ engine, frameBuffer, depthAttach, gpInfoUbo, hasShadows }
 		, m_viewport{ engine }
 	{
-		auto declaration = BufferDeclaration(
+		auto declaration = ParticleDeclaration(
 		{
-			BufferElementDeclaration( cuT( "position" ), uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec2 ),
+			ParticleElementDeclaration( cuT( "position" ), uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec2 ),
 		} );
 
 		real data[] =

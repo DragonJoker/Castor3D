@@ -87,9 +87,9 @@ namespace castor3d
 	void MeshLightPass::initialise( Scene const & scene
 		, SceneUbo & sceneUbo )
 	{
-		auto declaration = BufferDeclaration(
+		auto declaration = ParticleDeclaration(
 		{
-			BufferElementDeclaration( cuT( "position" ), uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec3 ),
+			ParticleElementDeclaration( cuT( "position" ), uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec3 ),
 		} );
 
 		auto data = doGenerateVertices();

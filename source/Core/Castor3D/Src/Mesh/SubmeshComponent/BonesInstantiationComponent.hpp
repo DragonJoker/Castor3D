@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "BonesComponent.hpp"
 #include "InstantiationComponent.hpp"
 
-#include "Shader/StructuredShaderBuffer.hpp"
+#include "Shader/ShaderBuffer.hpp"
 
 namespace castor3d
 {

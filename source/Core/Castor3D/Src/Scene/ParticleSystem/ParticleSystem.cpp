@@ -1,4 +1,4 @@
-﻿#include "ParticleSystem.hpp"
+#include "ParticleSystem.hpp"
 
 #include "ComputeParticleSystem.hpp"
 #include "CpuParticleSystem.hpp"
@@ -7,93 +7,90 @@
 #include "Engine.hpp"
 
 #include "Material/Material.hpp"
-#include "Mesh/Buffer/BufferElementGroup.hpp"
-#include "Mesh/Buffer/VertexBuffer.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/Scene.hpp"
-#include "Shader/ShaderProgram.hpp"
 
 using namespace castor;
 
 namespace castor3d
 {
-	ParticleSystem::TextWriter::TextWriter( String const & p_tabs )
-		: MovableObject::TextWriter{ p_tabs }
+	ParticleSystem::TextWriter::TextWriter( String const & tabs )
+		: MovableObject::TextWriter{ tabs }
 	{
 	}
 
-	bool ParticleSystem::TextWriter::operator()( ParticleSystem const & p_obj, castor::TextFile & p_file )
+	bool ParticleSystem::TextWriter::operator()( ParticleSystem const & obj, castor::TextFile & file )
 	{
-		bool result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "particle_system \"" ) + p_obj.getName() + cuT( "\"\n" ) ) > 0
-						&& p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "particle_system \"" ) + obj.getName() + cuT( "\"\n" ) ) > 0
+						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 		MovableObject::TextWriter::checkError( result, "ParticleSystem name" );
 
 		if ( result )
 		{
-			result = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( p_obj, p_file );
+			result = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( obj, file );
 		}
 
 		if ( result )
 		{
-			result = p_file.print( 256, cuT( "%s\tparticles_count %d\n" ), m_tabs.c_str(), uint32_t( p_obj.getMaxParticlesCount() ) ) > 0;
+			result = file.print( 256, cuT( "%s\tparticles_count %d\n" ), m_tabs.c_str(), uint32_t( obj.getMaxParticlesCount() ) ) > 0;
 			MovableObject::TextWriter::checkError( result, "ParticleSystem particles count" );
 		}
 
 		if ( result )
 		{
-			result = p_file.print( 256, cuT( "%s\tdimensions %f %f\n" ), m_tabs.c_str(), p_obj.getDimensions()[0], p_obj.getDimensions()[1] ) > 0;
+			result = file.print( 256, cuT( "%s\tdimensions %f %f\n" ), m_tabs.c_str(), obj.getDimensions()[0], obj.getDimensions()[1] ) > 0;
 			MovableObject::TextWriter::checkError( result, "ParticleSystem dimensions" );
 		}
 
 		if ( result )
 		{
-			result = p_file.writeText( m_tabs + cuT( "\tmaterial \"" ) + p_obj.getMaterial()->getName() + cuT( "\"\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\tmaterial \"" ) + obj.getMaterial()->getName() + cuT( "\"\n" ) ) > 0;
 			MovableObject::TextWriter::checkError( result, "ParticleSystem material" );
 		}
 
 		if ( result )
 		{
-			result = p_file.writeText( m_tabs + cuT( "\tparticle\n" ) ) > 0
-					   && p_file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\tparticle\n" ) ) > 0
+					   && file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0;
 			MovableObject::TextWriter::checkError( result, "ParticleSystem particle" );
 
-			if ( result && !p_obj.getParticleType().empty() )
+			if ( result && !obj.getParticleType().empty() )
 			{
-				result = p_file.writeText( m_tabs + cuT( "\t\ttype \"" ) + p_obj.getParticleType() + cuT( "\"\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "\t\ttype \"" ) + obj.getParticleType() + cuT( "\"\n" ) ) > 0;
 				MovableObject::TextWriter::checkError( result, "ParticleSystem particle" );
 			}
 
-			auto values = p_obj.getDefaultValues();
+			auto values = obj.getDefaultValues();
 
-			for ( auto & var : p_obj.getParticleVariables() )
+			for ( auto & var : obj.getParticleVariables() )
 			{
 				if ( result )
 				{
-					result = p_file.writeText( m_tabs + cuT( "\t\tvariable \"" ) + var.m_name + cuT( "\" " ) + castor3d::getName( var.m_dataType ) + cuT( " " ) + values[cuT( "out_" ) + var.m_name] + cuT( "\n" ) ) > 0;
+					result = file.writeText( m_tabs + cuT( "\t\tvariable \"" ) + var.m_name + cuT( "\" " ) + renderer::getName( var.m_dataType ) + cuT( " " ) + values[cuT( "out_" ) + var.m_name] + cuT( "\n" ) ) > 0;
 					MovableObject::TextWriter::checkError( result, "ParticleSystem particle variable" );
 				}
 			}
 
 			if ( result )
 			{
-				result = p_file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
 				MovableObject::TextWriter::checkError( result, "ParticleSystem particle" );
 			}
 		}
 
-		if ( result && p_obj.m_tfImpl->hasUpdateProgram() )
+		if ( result && obj.m_tfImpl->hasUpdateProgram() )
 		{
-			result = ShaderProgram::TextWriter( m_tabs + cuT( "\t" ), cuT( "tf_shader_program" ) )( p_obj.m_tfImpl->getUpdateProgram(), p_file );
+			result = ShaderProgram::TextWriter( m_tabs + cuT( "\t" ), cuT( "tf_shader_program" ) )( obj.m_tfImpl->getUpdateProgram(), file );
 		}
 
-		if ( result && p_obj.m_csImpl->hasUpdateProgram() )
+		if ( result && obj.m_csImpl->hasUpdateProgram() )
 		{
-			result = ShaderProgram::TextWriter( m_tabs + cuT( "\t" ), cuT( "cs_shader_program" ) )( p_obj.m_csImpl->getUpdateProgram(), p_file );
+			result = ShaderProgram::TextWriter( m_tabs + cuT( "\t" ), cuT( "cs_shader_program" ) )( obj.m_csImpl->getUpdateProgram(), file );
 		}
 
 		if ( result )
 		{
-			result = p_file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return result;
@@ -241,15 +238,15 @@ namespace castor3d
 		if ( p_name == cuT( "center" )
 			 || p_name == cuT( "position" ) )
 		{
-			m_billboardInputs.push_back( BufferElementDeclaration{ cuT( "center" ), 0u, p_type, m_billboardInputs.stride(), 1u } );
+			m_billboardInputs.push_back( ParticleElementDeclaration{ cuT( "center" ), 0u, p_type, m_billboardInputs.stride(), 1u } );
 			m_centerOffset = m_billboardInputs.stride();
 		}
 		else
 		{
-			m_billboardInputs.push_back( BufferElementDeclaration{ p_name, 0u, p_type, m_billboardInputs.stride(), 1u } );
+			m_billboardInputs.push_back( ParticleElementDeclaration{ p_name, 0u, p_type, m_billboardInputs.stride(), 1u } );
 		}
 
-		m_inputs.push_back( BufferElementDeclaration{ p_name, 0u, p_type, m_billboardInputs.stride(), 1u } );
+		m_inputs.push_back( ParticleElementDeclaration{ p_name, 0u, p_type, m_billboardInputs.stride(), 1u } );
 		m_defaultValues[cuT ("out_") + p_name] = p_defaultValue;
 	}
 

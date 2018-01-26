@@ -125,7 +125,7 @@ namespace castor3d
 	class TextureProjection;
 	class ToneMapping;
 	struct BillboardRenderNode;
-	struct BufferElementDeclaration;
+	struct ParticleElementDeclaration;
 	struct DistanceRenderNodeBase;
 	struct MorphingRenderNode;
 	struct PassRenderNode;
@@ -134,7 +134,7 @@ namespace castor3d
 	struct SkinningRenderNode;
 	struct StaticRenderNode;
 
-	DECLARE_SMART_PTR( BufferElementDeclaration );
+	DECLARE_SMART_PTR( ParticleElementDeclaration );
 	DECLARE_SMART_PTR( Context );
 	DECLARE_SMART_PTR( EnvironmentMap );
 	DECLARE_SMART_PTR( EnvironmentMapPass );

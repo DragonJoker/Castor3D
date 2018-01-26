@@ -44,18 +44,18 @@ namespace castor3d
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a ParticleSystem into a text file
-			 *\param[in]	p_file	The file to save the object in
-			 *\param[in]	p_obj	The object to save
+			 *\param[in]	file	The file to save the object in
+			 *\param[in]	obj		The object to save
 			 *\~french
 			 *\brief		Ecrit un ParticleSystem dans un fichier texte
-			 *\param[in]	p_file	Le fichier
-			 *\param[in]	p_obj	L'objet
+			 *\param[in]	file	Le fichier
+			 *\param[in]	obj		L'objet
 			 */
-			C3D_API bool operator()( ParticleSystem const & p_obj, castor::TextFile & p_file );
+			C3D_API bool operator()( ParticleSystem const & obj, castor::TextFile & file );
 		};
 
 		friend class TextWriter;
@@ -64,18 +64,21 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_name		The name.
-		 *\param[in]	p_scene		The parent scene.
-		 *\param[in]	p_parent	The parent scene node.
-		 *\param[in]	p_count		The particles count.
+		 *\param[in]	name		The name.
+		 *\param[in]	scene		The parent scene.
+		 *\param[in]	parent	The parent scene node.
+		 *\param[in]	count		The particles count.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_name		Le nom.
-		 *\param[in]	p_scene		La scene parente.
-		 *\param[in]	p_parent	Le noeud de scène parent.
-		 *\param[in]	p_count		Le nombre de particules.
+		 *\param[in]	name		Le nom.
+		 *\param[in]	scene		La scene parente.
+		 *\param[in]	parent	Le noeud de scène parent.
+		 *\param[in]	count		Le nombre de particules.
 		 */
-		C3D_API ParticleSystem( castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent, size_t p_count );
+		C3D_API ParticleSystem( castor::String const & name
+			, Scene & scene
+			, SceneNodeSPtr parent
+			, size_t count );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -109,30 +112,30 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Sets the material
-		 *\param[in]	p_value	The new value
+		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Definit le materiau
-		 *\param[in]	p_value	La nouvelle valeur
+		 *\param[in]	value	La nouvelle valeur
 		 */
-		C3D_API void setMaterial( MaterialSPtr p_value );
+		C3D_API void setMaterial( MaterialSPtr value );
 		/**
 		 *\~english
 		 *\brief		Sets the particles dimensions.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Definit les dimensions des particules.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		C3D_API void setDimensions( castor::Point2f const & p_value );
+		C3D_API void setDimensions( castor::Point2f const & value );
 		/**
 		 *\~english
 		 *\brief		Sets the particles type name.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Definit le nom du type de particules.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		C3D_API void setParticleType( castor::String const & p_value );
+		C3D_API void setParticleType( castor::String const & value );
 		/**
 		 *\~english
 		 *\return		The material.
@@ -150,34 +153,36 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		adds a particle variable.
-		 *\param[in]	p_name			The variable name.
-		 *\param[in]	p_type			The variable type.
-		 *\param[in]	p_defaultValue	The variable default value.
+		 *\param[in]	name			The variable name.
+		 *\param[in]	type			The variable type.
+		 *\param[in]	defaultValue	The variable default value.
 		 *\~french
 		 *\brief		Ajoute une variable de particule.
-		 *\param[in]	p_name			Le nom de la variable.
-		 *\param[in]	p_type			Le type de la variable.
-		 *\param[in]	p_defaultValue	La valeur par défaut de la variable.
+		 *\param[in]	name			Le nom de la variable.
+		 *\param[in]	type			Le type de la variable.
+		 *\param[in]	defaultValue	La valeur par défaut de la variable.
 		 */
-		C3D_API void addParticleVariable( castor::String const & p_name, renderer::AttributeFormat p_type, castor::String const & p_defaultValue );
+		C3D_API void addParticleVariable( castor::String const & name
+			, renderer::AttributeFormat type
+			, castor::String const & defaultValue );
 		/**
 		 *\~english
 		 *\brief		Defines the program used to update the particles through transform feedback.
-		 *\param[in]	p_program	The program.
+		 *\param[in]	program	The program.
 		 *\~french
 		 *\brief		Définit le programme utilisé pour mettre à jour les particules via le transform feedback.
-		 *\param[in]	p_program	Le programme.
+		 *\param[in]	program	Le programme.
 		 */
-		C3D_API void setTFUpdateProgram( ShaderProgramSPtr p_program );
+		C3D_API void setTFUpdateProgram( renderer::ShaderProgram const & program );
 		/**
 		 *\~english
 		 *\brief		Defines the program used to update the particles through compute shader.
-		 *\param[in]	p_program	The program.
+		 *\param[in]	program	The program.
 		 *\~french
 		 *\brief		Définit le programme utilisé pour mettre à jour les particules via un compute shader.
-		 *\param[in]	p_program	Le programme.
+		 *\param[in]	program	Le programme.
 		 */
-		C3D_API void setCSUpdateProgram( ShaderProgramSPtr p_program );
+		C3D_API void setCSUpdateProgram( renderer::ShaderProgram const & program );
 		/**
 		 *\~english
 		 *\return		The particles written at last update.
@@ -234,7 +239,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les variables des particules.
 		 */
-		inline BufferDeclaration const & getParticleVariables()const
+		inline ParticleDeclaration const & getParticleVariables()const
 		{
 			return m_inputs;
 		}
@@ -248,10 +253,10 @@ namespace castor3d
 		castor::StrStrMap m_defaultValues;
 		//!\~english	The particle elements description.
 		//!\~french		La description des élément d'une particule.
-		BufferDeclaration m_inputs;
+		ParticleDeclaration m_inputs;
 		//!\~english	The billboard vertex buffer elements description.
 		//!\~french		La description des élément du tampon de sommets des billboards.
-		BufferDeclaration m_billboardInputs;
+		ParticleDeclaration m_billboardInputs;
 		//!\~english	The billboards containing the particles.
 		//!\~french		Les billboards contenant les particules.
 		BillboardBaseSPtr m_particlesBillboard;

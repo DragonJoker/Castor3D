@@ -112,10 +112,10 @@ namespace castor3d
 	private:
 		//!\~english	The computed elements description.
 		//!\~french		La description des éléments calculés.
-		BufferDeclaration m_computed;
+		ParticleDeclaration m_computed;
 		//!\~english	The vertex buffer elements description.
 		//!\~french		La description des éléments des tampons de sommets.
-		BufferDeclaration m_inputs;
+		ParticleDeclaration m_inputs;
 		//!\~english	The program used to update the transform buffer.
 		//!\~french		Le programme utilisé pour mettre à jour le tampon de transformation.
 		ShaderProgramSPtr m_updateProgram;

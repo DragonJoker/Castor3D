@@ -19,7 +19,6 @@
 #include <Mesh/SubmeshComponent/Face.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Vertex.hpp>
-#include <Mesh/Buffer/Buffer.hpp>
 #include <Miscellaneous/Version.hpp>
 #include <Plugin/Plugin.hpp>
 #include <Render/RenderSystem.hpp>
@@ -632,7 +631,7 @@ namespace Obj
 			{
 				arraySplitted = string::split( strLine, cuT( " " ), 1 );
 
-				if ( arraySplitted.size() >= 1 )
+				if ( !arraySplitted.empty() )
 				{
 					section = arraySplitted[0];
 

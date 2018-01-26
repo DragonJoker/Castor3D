@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "SmaaUbo.hpp"
 
-#include <Mesh/Buffer/BufferDeclaration.hpp>
+#include <Mesh/Buffer/ParticleDeclaration.hpp>
 #include <PostEffect/PostEffect.hpp>
 #include <Texture/TextureUnit.hpp>
 #include <Render/Viewport.hpp>

@@ -8,8 +8,8 @@
 #include <FrameBuffer/FrameBufferAttachment.hpp>
 #include <FrameBuffer/TextureAttachment.hpp>
 #include <Mesh/Vertex.hpp>
-#include <Mesh/Buffer/BufferDeclaration.hpp>
-#include <Mesh/Buffer/BufferElementDeclaration.hpp>
+#include <Mesh/Buffer/ParticleDeclaration.hpp>
+#include <Mesh/Buffer/ParticleElementDeclaration.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>
 #include <Miscellaneous/Parameter.hpp>
@@ -179,7 +179,7 @@ namespace light_streaks
 		, m_kawaseUbo{ *renderSystem.getEngine() }
 		, m_declaration(
 		{
-			castor3d::BufferElementDeclaration( castor3d::cuT( "position" )
+			castor3d::ParticleElementDeclaration( castor3d::cuT( "position" )
 				, uint32_t( castor3d::ElementUsage::ePosition )
 				, renderer::AttributeFormat::eVec2 ),
 		} )

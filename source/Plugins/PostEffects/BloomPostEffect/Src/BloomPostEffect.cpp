@@ -8,8 +8,8 @@
 #include <FrameBuffer/FrameBufferAttachment.hpp>
 #include <FrameBuffer/TextureAttachment.hpp>
 #include <Mesh/Vertex.hpp>
-#include <Mesh/Buffer/BufferDeclaration.hpp>
-#include <Mesh/Buffer/BufferElementDeclaration.hpp>
+#include <Mesh/Buffer/ParticleDeclaration.hpp>
+#include <Mesh/Buffer/ParticleElementDeclaration.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>
 #include <Miscellaneous/Parameter.hpp>
@@ -142,7 +142,7 @@ namespace Bloom
 		, m_matrixUbo{ *renderSystem.getEngine() }
 		, m_declaration(
 		{
-			BufferElementDeclaration( cuT( "position" )
+			ParticleElementDeclaration( cuT( "position" )
 				, uint32_t( ElementUsage::ePosition )
 				, renderer::AttributeFormat::eVec2 ),
 		} )

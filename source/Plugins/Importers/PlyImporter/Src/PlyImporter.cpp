@@ -1,4 +1,4 @@
-﻿#include "PlyImporter.hpp"
+#include "PlyImporter.hpp"
 
 #include <Engine.hpp>
 
@@ -68,9 +68,6 @@ namespace C3dPly
 		std::istringstream ssToken;
 		String::size_type stIndex;
 		int iNbProperties = 0;
-		VertexSPtr pVertex;
-		Coords3r ptNml;
-		Coords2r ptTex;
 		SubmeshSPtr submesh = p_mesh.createSubmesh();
 		MaterialSPtr pMaterial = p_mesh.getScene()->getMaterialView().find( materialName );
 

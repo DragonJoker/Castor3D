@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "KawaseUbo.hpp"
 
-#include <Mesh/Buffer/BufferDeclaration.hpp>
+#include <Mesh/Buffer/ParticleDeclaration.hpp>
 #include <Miscellaneous/GaussianBlur.hpp>
 #include <PostEffect/PostEffect.hpp>
 #include <Texture/TextureUnit.hpp>
@@ -79,7 +79,7 @@ namespace light_streaks
 		castor3d::MatrixUbo m_matrixUbo;
 		castor3d::RenderPipelineUPtr m_combinePipeline;
 
-		castor3d::BufferDeclaration m_declaration;
+		castor3d::ParticleDeclaration m_declaration;
 		std::array< castor3d::BufferElementGroupSPtr, 6 > m_vertices;
 		castor3d::VertexBufferSPtr m_vertexBuffer;
 		castor3d::GeometryBuffersSPtr m_geometryBuffers;

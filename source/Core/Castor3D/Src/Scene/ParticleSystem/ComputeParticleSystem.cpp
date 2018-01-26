@@ -151,7 +151,7 @@ namespace castor3d
 
 	void ComputeParticleSystem::addParticleVariable( castor::String const & p_name, renderer::AttributeFormat p_type, castor::String const & p_defaultValue )
 	{
-		m_inputs.push_back( BufferElementDeclaration{ p_name, 0u, p_type, m_inputs.stride() } );
+		m_inputs.push_back( ParticleElementDeclaration{ p_name, 0u, p_type, m_inputs.stride() } );
 	}
 
 	void ComputeParticleSystem::setUpdateProgram( ShaderProgramSPtr p_program )

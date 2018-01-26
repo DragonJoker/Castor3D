@@ -39,7 +39,7 @@ namespace castor3d
 		 *\param[in]	p_topology		Le type de primitives.
 		 *\param[in]	p_program		Le programm shader.
 		 */
-		C3D_API TransformFeedback( RenderSystem & renderSystem, BufferDeclaration const & p_computed, Topology p_topology, ShaderProgram & p_program );
+		C3D_API TransformFeedback( RenderSystem & renderSystem, ParticleDeclaration const & p_computed, Topology p_topology, ShaderProgram & p_program );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -142,7 +142,7 @@ namespace castor3d
 		ShaderProgram & m_program;
 		//!\~english	The computed elements description.
 		//!\~french		La description des éléments calculés.
-		BufferDeclaration m_computed;
+		ParticleDeclaration m_computed;
 		//!\~english	The attached buffers.
 		//!\~french		Les tampons attachés.
 		renderer::VertexBufferCRefArray m_buffers;

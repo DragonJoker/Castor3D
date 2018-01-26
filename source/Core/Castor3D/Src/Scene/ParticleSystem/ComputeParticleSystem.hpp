@@ -121,7 +121,7 @@ namespace castor3d
 	protected:
 		//!\~english	The particle's elements description.
 		//!\~french		La description des éléments d'une particule.
-		BufferDeclaration m_inputs;
+		ParticleDeclaration m_inputs;
 		//!\~english	The program used to update the transform buffer.
 		//!\~french		Le programme utilisé pour mettre à jour le tampon de transformation.
 		ShaderProgramSPtr m_updateProgram;

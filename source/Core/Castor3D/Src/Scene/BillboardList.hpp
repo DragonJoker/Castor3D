@@ -42,7 +42,7 @@ namespace castor3d
 		 */
 		C3D_API BillboardBase( Scene & scene
 			, SceneNodeSPtr node
-			, VertexBufferSPtr vertexBuffer );
+			, renderer::VertexBufferBase & vertexBuffer );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -203,7 +203,7 @@ namespace castor3d
 		 */
 		inline renderer::VertexBufferBase const & getVertexBuffer()const
 		{
-			return *m_vertexBuffer;
+			return m_vertexBuffer;
 		}
 		/**
 		 *\~english
@@ -213,7 +213,7 @@ namespace castor3d
 		 */
 		inline renderer::VertexBufferBase & getVertexBuffer()
 		{
-			return *m_vertexBuffer;
+			return m_vertexBuffer;
 		}
 		/**
 		 *\~english
@@ -320,10 +320,10 @@ namespace castor3d
 		castor::Point3r m_cameraPosition;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
-		VertexBufferSPtr m_vertexBuffer;
+		renderer::VertexBufferBase & m_vertexBuffer;
 		//!\~english	The vertex buffer containing the instanced quad.
 		//!\~french		Le tampon de sommets contenant le quad instancié.
-		VertexBufferSPtr m_quad;
+		renderer::VertexBufferBasePtr m_quad;
 		//!\~english	Tells the positions have changed and needs to be sent again to GPU.
 		//!\~french		Dit que les positions ont change et doivent etre renvoyees au GPU.
 		bool m_needUpdate{ true };

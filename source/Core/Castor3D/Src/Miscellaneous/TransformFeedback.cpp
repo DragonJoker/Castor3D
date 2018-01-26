@@ -6,7 +6,7 @@
 
 namespace castor3d
 {
-	TransformFeedback::TransformFeedback( RenderSystem & renderSystem, BufferDeclaration const & p_computed, Topology p_topology, ShaderProgram & p_program )
+	TransformFeedback::TransformFeedback( RenderSystem & renderSystem, ParticleDeclaration const & p_computed, Topology p_topology, ShaderProgram & p_program )
 		: castor::OwnedBy< RenderSystem >( renderSystem )
 		, m_program{ p_program }
 		, m_query{ renderSystem.createQuery( QueryType::eTransformFeedbackPrimitivesWritten ) }
