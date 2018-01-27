@@ -2,16 +2,23 @@
 
 #include "Engine.hpp"
 
-#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
-#include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/RenderBufferAttachment.hpp"
-#include "FrameBuffer/TextureAttachment.hpp"
-#include "Mesh/Vertex.hpp"
-#include "Mesh/Buffer/Buffer.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
+
+#include <Buffer/UniformBuffer.hpp>
+#include <Buffer/VertexBuffer.hpp>
+#include <Image/Texture.hpp>
+#include <Image/TextureView.hpp>
+#include <Pipeline/DepthStencilState.hpp>
+#include <Pipeline/Scissor.hpp>
+#include <Pipeline/VertexLayout.hpp>
+#include <Pipeline/Viewport.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <RenderPass/RenderPassState.hpp>
+#include <RenderPass/RenderSubpass.hpp>
+#include <RenderPass/RenderSubpassState.hpp>
+#include <RenderPass/TextureAttachment.hpp>
+#include <Shader/ShaderProgram.hpp>
 
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
@@ -20,89 +27,69 @@ using namespace castor;
 
 namespace castor3d
 {
-	RadianceComputer::RadianceComputer( Engine & engine
-		, castor::Size const & size )
-		: OwnedBy< Engine >{ engine }
-		, m_matrixUbo{ engine }
-		, m_viewport{ engine }
-		, m_bufferVertex
-		{
-			{
-				-1, +1, -1, /**/+1, -1, -1, /**/-1, -1, -1, /**/+1, -1, -1, /**/-1, +1, -1, /**/+1, +1, -1,
-				-1, -1, +1, /**/-1, +1, -1, /**/-1, -1, -1, /**/-1, +1, -1, /**/-1, -1, +1, /**/-1, +1, +1,
-				+1, -1, -1, /**/+1, +1, +1, /**/+1, -1, +1, /**/+1, +1, +1, /**/+1, -1, -1, /**/+1, +1, -1,
-				-1, -1, +1, /**/+1, +1, +1, /**/-1, +1, +1, /**/+1, +1, +1, /**/-1, -1, +1, /**/+1, -1, +1,
-				-1, +1, -1, /**/+1, +1, +1, /**/+1, +1, -1, /**/+1, +1, +1, /**/-1, +1, -1, /**/-1, +1, +1,
-				-1, -1, -1, /**/+1, -1, -1, /**/-1, -1, +1, /**/+1, -1, -1, /**/+1, -1, +1, /**/-1, -1, +1,
-			}
-		}
-		, m_declaration
-		{
-			{
-				ParticleElementDeclaration{ cuT( "position" ), uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec3 }
-			}
-		}
-		, m_size{ size }
+	namespace
 	{
-		uint32_t i = 0;
-
-		for ( auto & vertex : m_arrayVertex )
+		TextureUnit doCreateRadianceTexture( Engine & engine
+			, Size const & size )
 		{
-			vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_bufferVertex.data() )[i++ * m_declaration.stride()] );
+			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
+				, renderer::TextureType::eCube
+				, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled
+				, renderer::MemoryPropertyFlag::eDeviceLocal
+				, PixelFormat::eRGB32F
+				, Size{ 32u, 32u } );
+			SamplerSPtr sampler;
+			auto name = cuT( "IblTexturesRadiance" );
+
+			if ( engine.getSamplerCache().has( name ) )
+			{
+				sampler = engine.getSamplerCache().find( name );
+			}
+			else
+			{
+				sampler = engine.getSamplerCache().create( name );
+				sampler->setMinFilter( renderer::Filter::eLinear );
+				sampler->setMagFilter( renderer::Filter::eLinear );
+				sampler->setWrapS( renderer::WrapMode::eClampToEdge );
+				sampler->setWrapT( renderer::WrapMode::eClampToEdge );
+				sampler->setWrapR( renderer::WrapMode::eClampToEdge );
+				engine.getSamplerCache().add( name, sampler );
+			}
+
+			sampler->initialise();
+			TextureUnit result{ engine };
+			result.setTexture( texture );
+			result.setSampler( sampler );
+			result.initialise();
+			return result;
 		}
 
-		m_viewport.initialise();
-		m_viewport.setPerspective( 90.0_degrees, 1.0_r, 0.1_r, 10.0_r );
-		m_viewport.resize( m_size );
-		m_viewport.update();
-		auto & program = *doCreateProgram();
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		m_vertexBuffer = std::make_shared< VertexBuffer >( *getEngine()
-			, m_declaration );
-		m_vertexBuffer->resize( uint32_t( m_arrayVertex.size()
-			* m_declaration.stride() ) );
-		m_vertexBuffer->linkCoords( m_arrayVertex.begin(),
-			m_arrayVertex.end() );
-		m_vertexBuffer->initialise( renderer::MemoryPropertyFlag::eHostVisible );
-		m_geometryBuffers = renderSystem.createGeometryBuffers( Topology::eTriangles
-			, program );
-		m_geometryBuffers->initialise( { *m_vertexBuffer }
-		, nullptr );
+	}
 
-		DepthStencilState dsState;
-		dsState.setDepthFunc( DepthFunc::eLEqual );
-		dsState.setDepthTest( false );
-		dsState.setDepthMask( WritingMask::eAll );
-
-		RasteriserState rsState;
-		rsState.setCulledFaces( Culling::eFront );
-
-		m_pipeline = renderSystem.createRenderPipeline( std::move( dsState )
-			, std::move( rsState )
-			, BlendState{}
-			, MultisampleState{}
-			, program
-			, PipelineFlags{} );
-		m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
-
-		m_frameBuffer = renderSystem.createFrameBuffer();
-
-		m_depthBuffer = m_frameBuffer->createDepthStencilRenderBuffer( PixelFormat::eD24 );
-		m_depthBuffer->create();
-		m_depthBuffer->initialise( m_size );
-		m_depthAttach = m_frameBuffer->createAttachment( m_depthBuffer );
-
-		m_frameBuffer->initialise();
-		m_frameBuffer->bind();
-		m_frameBuffer->attach( AttachmentPoint::eDepth, m_depthAttach );
-		REQUIRE( m_frameBuffer->isComplete() );
-		m_frameBuffer->unbind();
-
-		if ( !getEngine()->getSamplerCache().has( cuT( "RadianceComputer" ) ) )
+	RadianceComputer::RadianceComputer( Engine & engine
+		, Size const & size
+		, renderer::Texture const & srcTexture )
+		: m_renderSystem{ *engine.getRenderSystem() }
+		, m_result{ doCreateRadianceTexture( engine, size ) }
+		, m_vertexData
 		{
-			m_sampler = getEngine()->getSamplerCache().add( cuT( "RadianceComputer" ) );
-			m_sampler->setMinFilter( InterpolationMode::eLinear );
-			m_sampler->setMagFilter( InterpolationMode::eLinear );
+			{
+				Point3f{ -1, +1, -1 }, Point3f{ +1, -1, -1 }, Point3f{ -1, -1, -1 }, Point3f{ +1, -1, -1 }, Point3f{ -1, +1, -1 }, Point3f{ +1, +1, -1 },
+				Point3f{ -1, -1, +1 }, Point3f{ -1, +1, -1 }, Point3f{ -1, -1, -1 }, Point3f{ -1, +1, -1 }, Point3f{ -1, -1, +1 }, Point3f{ -1, +1, +1 },
+				Point3f{ +1, -1, -1 }, Point3f{ +1, +1, +1 }, Point3f{ +1, -1, +1 }, Point3f{ +1, +1, +1 }, Point3f{ +1, -1, -1 }, Point3f{ +1, +1, -1 },
+				Point3f{ -1, -1, +1 }, Point3f{ +1, +1, +1 }, Point3f{ -1, +1, +1 }, Point3f{ +1, +1, +1 }, Point3f{ -1, -1, +1 }, Point3f{ +1, -1, +1 },
+				Point3f{ -1, +1, -1 }, Point3f{ +1, +1, +1 }, Point3f{ +1, +1, -1 }, Point3f{ +1, +1, +1 }, Point3f{ -1, +1, -1 }, Point3f{ -1, +1, +1 },
+				Point3f{ -1, -1, -1 }, Point3f{ +1, -1, -1 }, Point3f{ -1, -1, +1 }, Point3f{ +1, -1, -1 }, Point3f{ +1, -1, +1 }, Point3f{ -1, -1, +1 },
+			}
+		}
+	{
+		auto & dstTexture = m_result.getTexture()->getTexture();
+
+		if ( !engine.getSamplerCache().has( cuT( "RadianceComputer" ) ) )
+		{
+			m_sampler = engine.getSamplerCache().add( cuT( "RadianceComputer" ) );
+			m_sampler->setMinFilter( renderer::Filter::eLinear );
+			m_sampler->setMagFilter( renderer::Filter::eLinear );
 			m_sampler->setWrapS( renderer::WrapMode::eClampToEdge );
 			m_sampler->setWrapT( renderer::WrapMode::eClampToEdge );
 			m_sampler->setWrapR( renderer::WrapMode::eClampToEdge );
@@ -110,90 +97,165 @@ namespace castor3d
 		}
 		else
 		{
-			m_sampler = getEngine()->getSamplerCache().find( cuT( "RadianceComputer" ) );
+			m_sampler = engine.getSamplerCache().find( cuT( "RadianceComputer" ) );
 		}
-	}
+		
+		auto & device = *m_renderSystem.getCurrentDevice();
+		// Initialise the vertex buffer.
+		m_vertexBuffer = renderer::makeVertexBuffer< NonTexturedCube >( device
+			, 1u
+			, 0u
+			, renderer::MemoryPropertyFlag::eHostVisible );
 
-	RadianceComputer::~RadianceComputer()
-	{
-		m_sampler.reset();
-		m_frameBuffer->bind();
-		m_frameBuffer->detachAll();
-		m_frameBuffer->unbind();
-		m_frameBuffer->cleanup();
-		m_frameBuffer.reset();
-		m_depthAttach.reset();
-		m_depthBuffer->cleanup();
-		m_depthBuffer->destroy();
-		m_depthBuffer.reset();
-		m_pipeline->cleanup();
-		m_pipeline.reset();
-		m_vertexBuffer->cleanup();
-		m_vertexBuffer.reset();
-		m_geometryBuffers->cleanup();
-		m_geometryBuffers.reset();
-		m_viewport.cleanup();
-		m_matrixUbo.getUbo().cleanup();
+		// Initialise the vertex layout.
+		m_vertexLayout = device.createVertexLayout( 0u, sizeof( NonTexturedCube ) );
+		m_vertexLayout->createAttribute< Point2f >( 0u, offsetof( NonTexturedCube::Quad::Vertex, position ) );
 
-		for ( auto & vertex : m_arrayVertex )
-		{
-			vertex.reset();
-		}
-	}
+		// Initialise the geometry buffers.
+		m_geometryBuffers = device.createGeometryBuffers( *m_vertexBuffer
+			, 0u
+			, *m_vertexLayout );
 
-	void RadianceComputer::render( TextureLayout const & srcTexture
-		, TextureLayoutSPtr dstTexture )
-	{
-		static Matrix4x4r const views[] =
+		// Initialise the UBO.
+		m_configUbo = renderer::makeUniformBuffer< renderer::Mat4 >( device
+			, 6u
+			, renderer::BufferTarget::eTransferDst
+			, renderer::MemoryPropertyFlag::eHostVisible );
+		m_configUbo->getData( 0u ) = matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +1.0f, +0.0f, +0.0f }, Point3r{ 0.0f, -1.0f, +0.0f } );
+		m_configUbo->getData( 1u ) = matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ -1.0f, +0.0f, +0.0f }, Point3r{ 0.0f, -1.0f, +0.0f } );
+		m_configUbo->getData( 2u ) = matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, +1.0f, +0.0f }, Point3r{ 0.0f, +0.0f, +1.0f } );
+		m_configUbo->getData( 3u ) = matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, -1.0f, +0.0f }, Point3r{ 0.0f, +0.0f, -1.0f } );
+		m_configUbo->getData( 4u ) = matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, +0.0f, +1.0f }, Point3r{ 0.0f, -1.0f, +0.0f } );
+		m_configUbo->getData( 5u ) = matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, +0.0f, -1.0f }, Point3r{ 0.0f, -1.0f, +0.0f } );
+		auto offset = m_configUbo->getOffset( 6u );
+
+		if ( auto buffer = m_configUbo->getUbo().getBuffer().lock( 0u
+			, offset
+			, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateBuffer ) )
 		{
-			matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +1.0f, +0.0f, +0.0f }, Point3r{ 0.0f, -1.0f, +0.0f } ),
-			matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ -1.0f, +0.0f, +0.0f }, Point3r{ 0.0f, -1.0f, +0.0f } ),
-			matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, +1.0f, +0.0f }, Point3r{ 0.0f, +0.0f, +1.0f } ),
-			matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, -1.0f, +0.0f }, Point3r{ 0.0f, +0.0f, -1.0f } ),
-			matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, +0.0f, +1.0f }, Point3r{ 0.0f, -1.0f, +0.0f } ),
-			matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, +0.0f, -1.0f }, Point3r{ 0.0f, -1.0f, +0.0f } )
-		};
-		REQUIRE( dstTexture->getDimensions() == m_size );
-		std::array< FrameBufferAttachmentSPtr, 6 > attachs
-		{
+			for ( auto i = 0u; i < 6u; ++i )
 			{
-				m_frameBuffer->createAttachment( dstTexture, CubeMapFace::ePositiveX ),
-				m_frameBuffer->createAttachment( dstTexture, CubeMapFace::eNegativeX ),
-				m_frameBuffer->createAttachment( dstTexture, CubeMapFace::ePositiveY ),
-				m_frameBuffer->createAttachment( dstTexture, CubeMapFace::eNegativeY ),
-				m_frameBuffer->createAttachment( dstTexture, CubeMapFace::ePositiveZ ),
-				m_frameBuffer->createAttachment( dstTexture, CubeMapFace::eNegativeZ ),
+				std::memcpy( buffer, m_configUbo->getData( i ).constPtr(), sizeof( renderer::Mat4 ) );
+				buffer += offset;
 			}
-		};
 
-		m_viewport.apply();
-		m_frameBuffer->bind( FrameBufferTarget::eDraw );
-		srcTexture.bind( MinTextureIndex );
-		m_sampler->bind( MinTextureIndex );
-
-		for ( uint32_t i = 0u; i < 6u; ++i )
-		{
-			attachs[i]->attach( AttachmentPoint::eColour, 0u );
-			m_frameBuffer->setDrawBuffer( attachs[i] );
-			m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth );
-			REQUIRE( m_frameBuffer->isComplete() );
-			m_matrixUbo.update( views[i], m_viewport.getProjection() );
-			m_pipeline->apply();
-			m_geometryBuffers->draw( uint32_t( m_arrayVertex.size() ), 0u );
+			m_configUbo->getUbo().getBuffer().unlock( offset, true );
 		}
 
-		m_sampler->unbind( MinTextureIndex );
-		srcTexture.unbind( MinTextureIndex );
-		m_frameBuffer->unbind();
+		// Create the render passes.
+		std::vector< renderer::PixelFormat > formats{ { dstTexture.getFormat() } };
+		renderer::DescriptorSetLayoutBindingArray bindings;
+		bindings.emplace_back( 0u
+			, renderer::DescriptorType::eCombinedImageSampler
+			, renderer::ShaderStageFlag::eFragment );
+		bindings.emplace_back( 1u
+			, renderer::DescriptorType::eUniformBuffer
+			, renderer::ShaderStageFlag::eVertex );
+		m_descriptorLayout = device.createDescriptorSetLayout( std::move( bindings ) );
+		m_descriptorPool = m_descriptorLayout->createPool( 6u * ( glsl::Utils::MaxIblReflectionLod + 1 ) );
+		m_pipelineLayout = device.createPipelineLayout( *m_descriptorLayout );
+		auto & program = doCreateProgram();
+		
+		for ( auto face = 0u; face < 6u; ++face )
+		{
+			auto & facePass = m_renderPasses[face];
+
+			// Create the views.
+			facePass.srcView = srcTexture.createView( renderer::TextureType::e2D
+				, srcTexture.getFormat()
+				, 0u
+				, 1u
+				, face
+				, 1u );
+			facePass.dstView = dstTexture.createView( renderer::TextureType::e2D
+				, dstTexture.getFormat()
+				, 0u
+				, 1u
+				, face
+				, 1u );
+
+			// Initialise the descriptor set.
+			facePass.descriptorSet = m_descriptorPool->createDescriptorSet();
+			facePass.descriptorSet->createBinding( m_descriptorLayout->getBinding( 0u )
+				, *facePass.srcView
+				, m_sampler->getSampler() );
+			facePass.descriptorSet->createBinding( m_descriptorLayout->getBinding( 1u )
+				, *m_configUbo
+				, face
+				, 1u );
+			facePass.descriptorSet->update();
+
+			// Create the render pass.
+			renderer::RenderSubpassPtrArray subpasses;
+			subpasses.emplace_back( device.createRenderSubpass( formats
+				, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
+				, renderer::AccessFlag::eColourAttachmentWrite } ) );
+			facePass.renderPass = device.createRenderPass( formats
+				, std::move( subpasses )
+				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
+					, renderer::AccessFlag::eColourAttachmentWrite
+					, { renderer::ImageLayout::eColourAttachmentOptimal } }
+				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
+					, renderer::AccessFlag::eColourAttachmentWrite
+					, { renderer::ImageLayout::eColourAttachmentOptimal } }
+				, false );
+
+			// Initialise the frame buffer.
+			renderer::TextureAttachmentPtrArray attaches;
+			attaches.emplace_back( std::make_unique< renderer::TextureAttachment >( *facePass.dstView ) );
+			facePass.frameBuffer = facePass.renderPass->createFrameBuffer( renderer::UIVec2{ size }
+				, std::move( attaches ) );
+
+			// Initialise the pipeline.
+			facePass.pipeline = device.createPipeline( *m_pipelineLayout
+				, program
+				, { *m_vertexLayout }
+				, *facePass.renderPass
+				, renderer::PrimitiveTopology::eTriangleStrip );
+			facePass.pipeline->depthStencilState( renderer::DepthStencilState{ 0u, false, false } );
+			facePass.pipeline->viewport( {
+				size[0],
+				size[0],
+				0,
+				0,
+			} );
+			facePass.pipeline->scissor( {
+				0,
+				0,
+				size[0],
+				size[0],
+			} );
+			facePass.pipeline->finish();
+		}
+
+		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+
+		for ( auto face = 0u; face < 6u; ++face )
+		{
+			auto & facePass = m_renderPasses[face];
+			m_commandBuffer->beginRenderPass( *facePass.renderPass
+				, *facePass.frameBuffer
+				, { renderer::RgbaColour{ 0, 0, 0, 0 } }
+			, renderer::SubpassContents::eInline );
+			m_commandBuffer->bindPipeline( *facePass.pipeline );
+			m_commandBuffer->bindGeometryBuffers( *m_geometryBuffers );
+			m_commandBuffer->draw( 36u, 1u, 0u, 0u );
+			m_commandBuffer->endRenderPass();
+		}
 	}
 
-	ShaderProgramSPtr RadianceComputer::doCreateProgram()
+	void RadianceComputer::render()
 	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
+		auto & device = *m_renderSystem.getCurrentDevice();
+		device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
+	}
+
+	renderer::ShaderProgram & RadianceComputer::doCreateProgram()
+	{
 		glsl::Shader vtx;
 		{
 			using namespace glsl;
-			GlslWriter writer{ renderSystem.createGlslWriter() };
+			GlslWriter writer{ m_renderSystem.createGlslWriter() };
 
 			// Inputs
 			auto position = writer.declAttribute< Vec3 >( cuT( "position" ) );
@@ -218,7 +280,7 @@ namespace castor3d
 		glsl::Shader pxl;
 		{
 			using namespace glsl;
-			GlslWriter writer{ renderSystem.createGlslWriter() };
+			GlslWriter writer{ m_renderSystem.createGlslWriter() };
 
 			// Inputs
 			auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
@@ -275,14 +337,11 @@ namespace castor3d
 			pxl = writer.finalise();
 		}
 
-		auto & cache = getEngine()->getShaderProgramCache();
-		auto program = cache.getNewProgram( false );
-		program->createObject( renderer::ShaderStageFlag::eVertex );
-		program->createObject( renderer::ShaderStageFlag::eFragment );
-		program->setSource( renderer::ShaderStageFlag::eVertex, vtx );
-		program->setSource( renderer::ShaderStageFlag::eFragment, pxl );
-		program->createUniform< UniformType::eSampler >( cuT( "c3d_mapDiffuse" ), renderer::ShaderStageFlag::eFragment )->setValue( MinTextureIndex );
-		program->initialise();
+		auto & cache = m_renderSystem.getEngine()->getShaderProgramCache();
+		auto & program = cache.getNewProgram( false );
+		program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
+		program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
+		program.link();
 		return program;
 	}
 }
