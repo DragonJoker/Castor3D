@@ -4,13 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_BrdfPrefilter_H___
 #define ___C3D_BrdfPrefilter_H___
 
-#include "Render/Viewport.hpp"
-
-#include "Shader/Ubos/MatrixUbo.hpp"
-
-#include <Pipeline/VertexLayout.hpp>
-
-#include <Design/OwnedBy.hpp>
+#include "RenderToTexture/RenderQuad.hpp"
 
 namespace castor3d
 {
@@ -19,88 +13,56 @@ namespace castor3d
 	\date		02/03/2017
 	\version	0.9.0
 	\~english
-	\brief		Class used to render colour equirectangular textures to cube maps.
+	\brief		Computes the convoluted BRDF 2D texture.
 	\~french
-	\brief		Classe utilisée pour rendre les textures couleur équirectangulaires dans des cube maps.
+	\brief		Calcule la texture 2D contenant le BRDF convolu.
 	*/
 	class BrdfPrefilter
-		: public castor::OwnedBy< Engine >
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\param[in]	size	The render size.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	size		The render size.
+		 *\param[in]	dstTexture	The cube texture destination.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	size	La taille du rendu.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	size		La taille du rendu.
+		 *\param[in]	dstTexture	La texture cube destination.
 		 */
 		C3D_API explicit BrdfPrefilter( Engine & engine
-			, castor::Size const & size );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~BrdfPrefilter();
+			, castor::Size const & size
+			, renderer::TextureView const & dstTexture );
 		/**
 		 *\~english
 		 *\brief		Computes the convoluted BRDF.
-		 *\param[in]	dstTexture	The cube texture destination.
 		 *\~french
 		 *\brief		Calcule le BRDF circonvolu.
-		 *\param[in]	dstTexture	La texture cube destination.
 		 */
-		C3D_API void render( TextureLayout const & dstTexture );
+		C3D_API void render();
 
 	private:
 		/**
 		 *\~english
-		 *\brief		Creates the render a 2D texture shader program.
-		 *\return		The program.
+		 *\brief		Creates the render convolution shader program.
 		 *\~french
-		 *\brief		Crée le programme shader de dessin de texture 2D.
-		 *\return		Le programme.
+		 *\brief		Crée le programme shader de convolution.
 		 */
-		renderer::ShaderProgramPtr doCreateProgram();
+		renderer::ShaderProgram & doCreateProgram();
 
 	private:
-		//!\~english	The uniform buffer containing matrices data.
-		//!\~french		Le tampon d'uniformes contenant les données de matrices.
-		MatrixUbo m_matrixUbo;
-		//!\~english	The resulting dimensions.
-		//!\~french		Les dimensions du résultat.
-		castor::Size m_size;
-		//!\~english	The Viewport used when rendering a texture into to a frame buffer.
-		//!\~french		Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
-		Viewport m_viewport;
-		//!\~english	Buffer elements declaration.
-		//!\~french		Déclaration des éléments d'un vertex.
-		renderer::VertexLayoutPtr m_declaration;
-		//!\~english	The vertex buffer.
-		//!\~french		Le tampon de sommets.
-		renderer::VertexBufferPtr< TexturedQuad > m_vertexBuffer;
-		//!\~english	The GeometryBuffers used when rendering a texture to the frame buffer.
-		//!\~french		Le GeometryBuffers utilisé lors du dessin d'une texture dans le tampon d'image.
+		RenderSystem & m_renderSystem;
+		NonTexturedQuad m_vertexData;
+		renderer::VertexBufferPtr< NonTexturedQuad > m_vertexBuffer;
 		renderer::GeometryBuffersPtr m_geometryBuffers;
-		//!\~english	The pipeline used to render a texture in the framebuffer.
-		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image.
-		RenderPipelineUPtr m_pipeline;
-		//!\~english	The frame buffer.
-		//!\~french		Le tampon d'image.
+		renderer::VertexLayoutPtr m_vertexLayout;
+		renderer::RenderPassPtr m_renderPass;
 		renderer::FrameBufferPtr m_frameBuffer;
-		//!\~english	The depth buffer.
-		//!\~french		Le tampon de profondeur.
-		renderer::RenderBufferPtr m_depthBuffer;
-		//!\~english	The depth buffer attach.
-		//!\~french		L'attache du tampon de profondeur.
-		// RenderBufferAttachmentSPtr m_depthAttach;
-		//!\~english	The roughness variable.
-		//!\~french		La variable pour la roughness.
-		PushUniform1fSPtr m_roughnessUniform;
+		renderer::PipelineLayoutPtr m_pipelineLayout;
+		renderer::PipelinePtr m_pipeline;
+		renderer::CommandBufferPtr m_commandBuffer;
 	};
 }
 
