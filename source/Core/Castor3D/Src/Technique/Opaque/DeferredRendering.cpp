@@ -29,11 +29,11 @@ namespace castor3d
 			else
 			{
 				result = engine.getRenderSystem()->createSampler( name );
-				result->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eNearest );
-				result->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eNearest );
-				result->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-				result->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-				result->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+				result->setMinFilter( InterpolationMode::eNearest );
+				result->setMagFilter( InterpolationMode::eNearest );
+				result->setWrapS( renderer::WrapMode::eClampToEdge );
+				result->setWrapT( renderer::WrapMode::eClampToEdge );
+				result->setWrapR( renderer::WrapMode::eClampToEdge );
 				result->initialise();
 				cache.add( name, result );
 			}

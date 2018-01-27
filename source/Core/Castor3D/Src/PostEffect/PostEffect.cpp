@@ -2,11 +2,11 @@
 
 #include "Engine.hpp"
 
-#include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/TextureAttachment.hpp"
 #include "Render/RenderTarget.hpp"
-
 #include "Texture/TextureLayout.hpp"
+
+#include <RenderPass/FrameBuffer.hpp>
+#include <RenderPass/RenderPass.hpp>
 
 using namespace castor;
 namespace castor3d
@@ -19,6 +19,7 @@ namespace castor3d
 	}
 
 	bool PostEffect::PostEffectSurface::initialise( RenderTarget & renderTarget
+		, renderer::RenderPass const & renderPass
 		, Size const & size
 		, uint32_t index
 		, SamplerSPtr sampler
@@ -27,44 +28,27 @@ namespace castor3d
 		m_size = size;
 		m_colourTexture.setIndex( index );
 
-		m_fbo = renderTarget.getEngine()->getRenderSystem()->createFrameBuffer();
-		auto colourTexture = renderTarget.getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
-			, AccessType::eRead
-			, AccessType::eRead | AccessType::eWrite
+		auto colourTexture = std::make_shared< TextureLayout >( *renderTarget.getEngine()->getRenderSystem()
+			, renderer::TextureType::e2D
+			, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled
+			, renderer::MemoryPropertyFlag::eDeviceLocal
 			, format
 			, size );
 
-		m_colourTexture.setSampler( sampler );
 		colourTexture->getImage().initialiseSource();
-		m_colourAttach = m_fbo->createAttachment( colourTexture );
-
+		m_colourTexture.setSampler( sampler );
 		m_colourTexture.setTexture( colourTexture );
 		m_colourTexture.initialise();
-		m_fbo->initialise();
-		m_fbo->setClearColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueBlack ) );
 
-		m_fbo->bind();
-		m_fbo->attach( AttachmentPoint::eColour, 0, m_colourAttach, colourTexture->getType() );
-		m_fbo->setDrawBuffer( m_colourAttach );
-		bool result = m_fbo->isComplete();
-		REQUIRE( result );
-		m_fbo->unbind();
-
-		return result;
+		m_fbo = renderPass.createFrameBuffer( renderer::UIVec2{ size }
+			, { colourTexture->getView() } );
+		return true;
 	}
 
 	void PostEffect::PostEffectSurface::cleanup()
 	{
-		m_fbo->bind();
-		m_fbo->detachAll();
-		m_fbo->unbind();
-		m_fbo->cleanup();
-
-		m_colourTexture.cleanup();
-		m_fbo->cleanup();
-
 		m_fbo.reset();
-		m_colourAttach.reset();
+		m_colourTexture.cleanup();
 	}
 
 	//*********************************************************************************************

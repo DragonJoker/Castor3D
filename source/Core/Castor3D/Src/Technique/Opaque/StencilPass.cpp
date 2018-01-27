@@ -81,10 +81,10 @@ namespace castor3d
 		auto & renderSystem = *engine.getRenderSystem();
 
 		m_program = engine.getShaderProgramCache().getNewProgram( false );
-		m_program->createObject( ShaderType::eVertex );
-		m_program->createObject( ShaderType::ePixel );
-		m_program->setSource( ShaderType::eVertex, doGetVertexShader( engine ) );
-		m_program->setSource( ShaderType::ePixel, doGetPixelShader( engine ) );
+		m_program->createObject( renderer::ShaderStageFlag::eVertex );
+		m_program->createObject( renderer::ShaderStageFlag::eFragment );
+		m_program->setSource( renderer::ShaderStageFlag::eVertex, doGetVertexShader( engine ) );
+		m_program->setSource( renderer::ShaderStageFlag::eFragment, doGetPixelShader( engine ) );
 		m_program->initialise();
 
 		m_geometryBuffers = renderSystem.createGeometryBuffers( Topology::eTriangles, *m_program );

@@ -179,14 +179,14 @@ namespace castor3d
 			auto vtx = doGetVertexProgram( engine );
 			auto pxl = doGetPixelProgram( engine, fogType );
 			ShaderProgramSPtr program = engine.getShaderProgramCache().getNewProgram( false );
-			program->createObject( ShaderType::eVertex );
-			program->createObject( ShaderType::ePixel );
-			program->createUniform< UniformType::eSampler >( getTextureName( WbTexture::eDepth ), ShaderType::ePixel )->setValue( MinTextureIndex + 0u );
-			program->createUniform< UniformType::eSampler >( getTextureName( WbTexture::eAccumulation ), ShaderType::ePixel )->setValue( MinTextureIndex + 1u );
-			program->createUniform< UniformType::eSampler >( getTextureName( WbTexture::eRevealage ), ShaderType::ePixel )->setValue( MinTextureIndex + 2u );
+			program->createObject( renderer::ShaderStageFlag::eVertex );
+			program->createObject( renderer::ShaderStageFlag::eFragment );
+			program->createUniform< UniformType::eSampler >( getTextureName( WbTexture::eDepth ), renderer::ShaderStageFlag::eFragment )->setValue( MinTextureIndex + 0u );
+			program->createUniform< UniformType::eSampler >( getTextureName( WbTexture::eAccumulation ), renderer::ShaderStageFlag::eFragment )->setValue( MinTextureIndex + 1u );
+			program->createUniform< UniformType::eSampler >( getTextureName( WbTexture::eRevealage ), renderer::ShaderStageFlag::eFragment )->setValue( MinTextureIndex + 2u );
 
-			program->setSource( ShaderType::eVertex, vtx );
-			program->setSource( ShaderType::ePixel, pxl );
+			program->setSource( renderer::ShaderStageFlag::eVertex, vtx );
+			program->setSource( renderer::ShaderStageFlag::eFragment, pxl );
 			program->initialise();
 			return program;
 		}

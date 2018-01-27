@@ -239,7 +239,8 @@ namespace castor3d
 			}
 
 			m_initialised = m_toneMapping->initialise( getSize()
-				, m_renderTechnique->getResult() );
+				, m_renderTechnique->getResult()
+				, *m_renderPass );
 
 			for ( auto effect : m_postPostEffects )
 			{
@@ -364,7 +365,7 @@ namespace castor3d
 		, CameraSPtr camera )
 	{
 		SceneSPtr scene = getScene();
-		fbo.m_frameBuffer->setClearColour( RgbaColour::fromRGBA( toRGBAFloat( scene->getBackgroundColour() ) ) );
+		//fbo.m_frameBuffer->setClearColour( RgbaColour::fromRGBA( toRGBAFloat( scene->getBackgroundColour() ) ) );
 
 		// Render the scene through the RenderTechnique.
 		m_renderTechnique->render( m_jitter
@@ -372,10 +373,9 @@ namespace castor3d
 			, info );
 
 		// Then draw the render's result to the RenderTarget's frame buffer.
-		if ( m_commandBuffer->begin() )
+		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
 		{
-			m_toneMapping->update( *m_commandBuffer
-				, scene->getHdrConfig() );
+			m_toneMapping->update( scene->getHdrConfig() );
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *fbo.m_frameBuffer
 				, { RgbaColour::fromRGBA( toRGBAFloat( scene->getBackgroundColour() ) ) }
@@ -389,14 +389,12 @@ namespace castor3d
 
 		for ( auto & effect : m_postPostEffects )
 		{
-			effect->apply( *fbo.m_frameBuffer );
+			effect->apply();
 		}
 
 		m_postPostFxTimer->stop();
 
 		// We also render overlays.
-		fbo.m_frameBuffer->bind();
-		getEngine()->getMaterialCache().getPassBuffer().bind();
 		m_overlaysTimer->start();
 		getEngine()->getOverlayCache().render( *scene, m_size );
 		m_overlaysTimer->stop();
@@ -407,7 +405,5 @@ namespace castor3d
 		m_renderTechnique->debugDisplay( Size{ camera->getWidth(), camera->getHeight() } );
 
 #endif
-
-		fbo.m_frameBuffer->unbind();
 	}
 }

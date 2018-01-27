@@ -202,13 +202,13 @@ namespace GuiCommon
 	{
 		bool cont = true;
 
-		if ( cont && m_pEditorPages[size_t( ShaderType::eVertex )]->getShaderFile().empty() )
+		if ( cont && m_pEditorPages[size_t( renderer::ShaderStageFlag::eVertex )]->getShaderFile().empty() )
 		{
 			wxMessageBox( _( "Fill the vertex shader file name" ), _( "ERROR" ) );
 			cont = false;
 		}
 
-		if ( cont && m_pEditorPages[size_t( ShaderType::ePixel )]->getShaderFile().empty() )
+		if ( cont && m_pEditorPages[size_t( renderer::ShaderStageFlag::eFragment )]->getShaderFile().empty() )
 		{
 			wxMessageBox( _( "Fill the fragment file name" ), _( "ERROR" ) );
 			cont = false;
@@ -221,7 +221,7 @@ namespace GuiCommon
 				m_shaderProgram = m_scene.getEngine()->getShaderProgramCache().getNewProgram( false );
 			}
 
-			for ( uint8_t i = uint8_t( ShaderType::eVertex ); i < uint8_t( ShaderType::eCount ); i++ )
+			for ( uint8_t i = uint8_t( renderer::ShaderStageFlag::eVertex ); i < uint8_t( ShaderType::eCount ); i++ )
 			{
 				wxString file = m_pEditorPages[i]->getShaderFile();
 

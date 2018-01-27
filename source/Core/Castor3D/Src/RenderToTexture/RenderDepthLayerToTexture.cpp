@@ -80,11 +80,11 @@ namespace castor3d
 		m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
 
 		m_sampler = renderSystem.getEngine()->getSamplerCache().add( cuT( "RenderDepthLayerToTexture" ) );
-		m_sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-		m_sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-		m_sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-		m_sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-		m_sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+		m_sampler->setMinFilter( InterpolationMode::eLinear );
+		m_sampler->setMagFilter( InterpolationMode::eLinear );
+		m_sampler->setWrapS( renderer::WrapMode::eClampToEdge );
+		m_sampler->setWrapT( renderer::WrapMode::eClampToEdge );
+		m_sampler->setWrapR( renderer::WrapMode::eClampToEdge );
 	}
 
 	void RenderDepthLayerToTexture::cleanup()
@@ -208,12 +208,12 @@ namespace castor3d
 
 		auto & cache = renderSystem.getEngine()->getShaderProgramCache();
 		auto program = cache.getNewProgram( false );
-		program->createObject( ShaderType::eVertex );
-		program->createObject( ShaderType::ePixel );
-		program->setSource( ShaderType::eVertex, vtx );
-		program->setSource( ShaderType::ePixel, pxl );
-		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
-		m_layerIndexUniform = program->createUniform< UniformType::eInt >( cuT( "c3d_iIndex" ), ShaderType::ePixel );
+		program->createObject( renderer::ShaderStageFlag::eVertex );
+		program->createObject( renderer::ShaderStageFlag::eFragment );
+		program->setSource( renderer::ShaderStageFlag::eVertex, vtx );
+		program->setSource( renderer::ShaderStageFlag::eFragment, pxl );
+		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, renderer::ShaderStageFlag::eFragment )->setValue( MinTextureIndex );
+		m_layerIndexUniform = program->createUniform< UniformType::eInt >( cuT( "c3d_iIndex" ), renderer::ShaderStageFlag::eFragment );
 		program->initialise();
 		return program;
 	}

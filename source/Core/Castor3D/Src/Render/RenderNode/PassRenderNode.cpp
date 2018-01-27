@@ -21,7 +21,7 @@ namespace castor3d
 
 			if ( unit )
 			{
-				auto variable = p_program.findUniform< UniformType::eSampler >( p_name, ShaderType::ePixel );
+				auto variable = p_program.findUniform< UniformType::eSampler >( p_name, renderer::ShaderStageFlag::eFragment );
 
 				if ( variable )
 				{

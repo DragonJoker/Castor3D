@@ -115,11 +115,11 @@ namespace castor3d
 		else
 		{
 			auto sampler = getEngine()->getSamplerCache().add( skybox );
-			sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-			sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-			sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-			sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-			sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+			sampler->setMinFilter( InterpolationMode::eLinear );
+			sampler->setMagFilter( InterpolationMode::eLinear );
+			sampler->setWrapS( renderer::WrapMode::eClampToEdge );
+			sampler->setWrapT( renderer::WrapMode::eClampToEdge );
+			sampler->setWrapR( renderer::WrapMode::eClampToEdge );
 			m_sampler = sampler;
 		}
 
@@ -312,11 +312,11 @@ namespace castor3d
 			pxl = writer.finalise();
 		}
 
-		program->createObject( ShaderType::eVertex );
-		program->createObject( ShaderType::ePixel );
-		program->setSource( ShaderType::eVertex, vtx );
-		program->setSource( ShaderType::ePixel, pxl );
-		program->createUniform< UniformType::eSampler >( cuT( "skybox" ), ShaderType::ePixel )->setValue( MinTextureIndex );
+		program->createObject( renderer::ShaderStageFlag::eVertex );
+		program->createObject( renderer::ShaderStageFlag::eFragment );
+		program->setSource( renderer::ShaderStageFlag::eVertex, vtx );
+		program->setSource( renderer::ShaderStageFlag::eFragment, pxl );
+		program->createUniform< UniformType::eSampler >( cuT( "skybox" ), renderer::ShaderStageFlag::eFragment )->setValue( MinTextureIndex );
 		program->initialise();
 		return *program;
 	}

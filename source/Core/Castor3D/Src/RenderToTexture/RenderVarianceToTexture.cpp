@@ -67,11 +67,11 @@ namespace castor3d
 		doInitialiseVariance();
 
 		m_sampler = renderSystem.getEngine()->getSamplerCache().add( cuT( "RenderVarianceToTexture" ) );
-		m_sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-		m_sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-		m_sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-		m_sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-		m_sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+		m_sampler->setMinFilter( InterpolationMode::eLinear );
+		m_sampler->setMagFilter( InterpolationMode::eLinear );
+		m_sampler->setWrapS( renderer::WrapMode::eClampToEdge );
+		m_sampler->setWrapT( renderer::WrapMode::eClampToEdge );
+		m_sampler->setWrapR( renderer::WrapMode::eClampToEdge );
 	}
 
 	void RenderVarianceToTexture::cleanup()
@@ -180,10 +180,10 @@ namespace castor3d
 
 		auto & cache = renderSystem.getEngine()->getShaderProgramCache();
 		auto program = cache.getNewProgram( false );
-		program->createObject( ShaderType::eVertex );
-		program->createObject( ShaderType::ePixel );
-		program->setSource( ShaderType::eVertex, vtx );
-		program->setSource( ShaderType::ePixel, pxl );
+		program->createObject( renderer::ShaderStageFlag::eVertex );
+		program->createObject( renderer::ShaderStageFlag::eFragment );
+		program->setSource( renderer::ShaderStageFlag::eVertex, vtx );
+		program->setSource( renderer::ShaderStageFlag::eFragment, pxl );
 		program->initialise();
 		return program;
 	}
@@ -238,10 +238,10 @@ namespace castor3d
 
 		auto & cache = renderSystem.getEngine()->getShaderProgramCache();
 		auto program = cache.getNewProgram( false );
-		program->createObject( ShaderType::eVertex );
-		program->createObject( ShaderType::ePixel );
-		program->setSource( ShaderType::eVertex, vtx );
-		program->setSource( ShaderType::ePixel, pxl );
+		program->createObject( renderer::ShaderStageFlag::eVertex );
+		program->createObject( renderer::ShaderStageFlag::eFragment );
+		program->setSource( renderer::ShaderStageFlag::eVertex, vtx );
+		program->setSource( renderer::ShaderStageFlag::eFragment, pxl );
 		program->initialise();
 		return program;
 	}

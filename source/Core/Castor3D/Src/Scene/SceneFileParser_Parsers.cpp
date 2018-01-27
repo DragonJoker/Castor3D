@@ -543,7 +543,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			p_params[0]->get( uiMode );
-			parsingContext->sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode( uiMode ) );
+			parsingContext->sampler->setMinFilter( InterpolationMode( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -560,7 +560,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			p_params[0]->get( uiMode );
-			parsingContext->sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode( uiMode ) );
+			parsingContext->sampler->setMagFilter( InterpolationMode( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -577,7 +577,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			p_params[0]->get( uiMode );
-			parsingContext->sampler->setInterpolationMode( InterpolationFilter::eMip, InterpolationMode( uiMode ) );
+			parsingContext->sampler->setMipFilter( InterpolationMode( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -669,7 +669,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			p_params[0]->get( uiMode );
-			parsingContext->sampler->setWrappingMode( TextureUVW::eU, WrapMode( uiMode ) );
+			parsingContext->sampler->setWrapS( renderer::WrapMode( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -686,7 +686,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			p_params[0]->get( uiMode );
-			parsingContext->sampler->setWrappingMode( TextureUVW::eV, WrapMode( uiMode ) );
+			parsingContext->sampler->setWrapT( renderer::WrapMode( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -703,7 +703,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			p_params[0]->get( uiMode );
-			parsingContext->sampler->setWrappingMode( TextureUVW::eW, WrapMode( uiMode ) );
+			parsingContext->sampler->setWrapR( renderer::WrapMode( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -3164,8 +3164,8 @@ namespace castor3d
 
 		if ( parsingContext->shaderProgram )
 		{
-			parsingContext->shaderProgram->createObject( ShaderType::eVertex );
-			parsingContext->shaderStage = ShaderType::eVertex;
+			parsingContext->shaderProgram->createObject( renderer::ShaderStageFlag::eVertex );
+			parsingContext->shaderStage = renderer::ShaderStageFlag::eVertex;
 		}
 		else
 		{
@@ -3180,8 +3180,8 @@ namespace castor3d
 
 		if ( parsingContext->shaderProgram )
 		{
-			parsingContext->shaderProgram->createObject( ShaderType::ePixel );
-			parsingContext->shaderStage = ShaderType::ePixel;
+			parsingContext->shaderProgram->createObject( renderer::ShaderStageFlag::eFragment );
+			parsingContext->shaderStage = renderer::ShaderStageFlag::eFragment;
 		}
 		else
 		{

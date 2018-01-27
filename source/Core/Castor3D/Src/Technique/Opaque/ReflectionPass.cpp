@@ -884,10 +884,10 @@ namespace castor3d
 					? doCreatePbrMRPixelProgram( renderSystem, fogType, hasSsao )
 					: doCreatePbrSGPixelProgram( renderSystem, fogType, hasSsao );
 			auto result = engine.getShaderProgramCache().getNewProgram( false );
-			result->createObject( ShaderType::eVertex );
-			result->createObject( ShaderType::ePixel );
-			result->setSource( ShaderType::eVertex, vtx );
-			result->setSource( ShaderType::ePixel, pxl );
+			result->createObject( renderer::ShaderStageFlag::eVertex );
+			result->createObject( renderer::ShaderStageFlag::eFragment );
+			result->setSource( renderer::ShaderStageFlag::eVertex, vtx );
+			result->setSource( renderer::ShaderStageFlag::eFragment, pxl );
 			result->initialise();
 			return result;
 		}

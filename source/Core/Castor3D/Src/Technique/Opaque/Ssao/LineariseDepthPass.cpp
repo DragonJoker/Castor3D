@@ -119,10 +119,10 @@ namespace castor3d
 			auto vtx = doGetVertexProgram( engine );
 			auto pxl = doGetLinearisePixelProgram( engine );
 			ShaderProgramSPtr program = engine.getShaderProgramCache().getNewProgram( false );
-			program->createObject( ShaderType::eVertex );
-			program->createObject( ShaderType::ePixel );
-			program->setSource( ShaderType::eVertex, vtx );
-			program->setSource( ShaderType::ePixel, pxl );
+			program->createObject( renderer::ShaderStageFlag::eVertex );
+			program->createObject( renderer::ShaderStageFlag::eFragment );
+			program->setSource( renderer::ShaderStageFlag::eVertex, vtx );
+			program->setSource( renderer::ShaderStageFlag::eFragment, pxl );
 			program->initialise();
 			return program;
 		}
@@ -132,10 +132,10 @@ namespace castor3d
 			auto vtx = doGetVertexProgram( engine );
 			auto pxl = doGetMinifyPixelProgram( engine );
 			ShaderProgramSPtr program = engine.getShaderProgramCache().getNewProgram( false );
-			program->createObject( ShaderType::eVertex );
-			program->createObject( ShaderType::ePixel );
-			program->setSource( ShaderType::eVertex, vtx );
-			program->setSource( ShaderType::ePixel, pxl );
+			program->createObject( renderer::ShaderStageFlag::eVertex );
+			program->createObject( renderer::ShaderStageFlag::eFragment );
+			program->setSource( renderer::ShaderStageFlag::eVertex, vtx );
+			program->setSource( renderer::ShaderStageFlag::eFragment, pxl );
 			program->initialise();
 			return program;
 		}
@@ -169,9 +169,9 @@ namespace castor3d
 			else
 			{
 				sampler = engine.getSamplerCache().add( name );
-				sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eNearest );
-				sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eNearest );
-				sampler->setInterpolationMode( InterpolationFilter::eMip, InterpolationMode::eNearest );
+				sampler->setMinFilter( InterpolationMode::eNearest );
+				sampler->setMagFilter( InterpolationMode::eNearest );
+				sampler->setMipFilter( InterpolationMode::eNearest );
 				sampler->setWrappingMode( TextureUVW::eU, mode );
 				sampler->setWrappingMode( TextureUVW::eV, mode );
 			}
@@ -284,7 +284,7 @@ namespace castor3d
 	void LineariseDepthPass::doInitialiseLinearisePass()
 	{
 		m_lineariseProgram = doGetLineariseProgram( m_engine );
-		m_clipInfo = m_lineariseProgram->findUniform< UniformType::eVec3f >( cuT( "c3d_clipInfo" ), ShaderType::ePixel );
+		m_clipInfo = m_lineariseProgram->findUniform< UniformType::eVec3f >( cuT( "c3d_clipInfo" ), renderer::ShaderStageFlag::eFragment );
 		m_linearisePipeline = doCreatePipeline( m_engine, *m_lineariseProgram );
 		m_linearisePipeline->addUniformBuffer( m_matrixUbo.getUbo() );
 	}
@@ -292,7 +292,7 @@ namespace castor3d
 	void LineariseDepthPass::doInitialiseMinifyPass()
 	{
 		m_minifyProgram = doGetMinifyProgram( m_engine );
-		m_previousLevel = m_minifyProgram->findUniform< UniformType::eInt >( cuT( "c3d_previousLevel" ), ShaderType::ePixel );
+		m_previousLevel = m_minifyProgram->findUniform< UniformType::eInt >( cuT( "c3d_previousLevel" ), renderer::ShaderStageFlag::eFragment );
 		m_minifyPipeline = doCreatePipeline( m_engine, *m_minifyProgram );
 		m_minifyPipeline->addUniformBuffer( m_matrixUbo.getUbo() );
 	}

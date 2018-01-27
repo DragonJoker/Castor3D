@@ -85,8 +85,10 @@ namespace castor3d
 		virtual void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
 			, renderer::DescriptorSet & descriptorSet );
 
-	private:
+	protected:
 		RenderSystem & m_renderSystem;
+
+	private:
 		TexturedQuad m_vertexData;
 		SamplerSPtr m_sampler;
 		renderer::VertexBufferPtr< TexturedQuad > m_vertexBuffer;

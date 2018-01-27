@@ -21,10 +21,10 @@ namespace castor3d
 		uint32_t const count = uint32_t( std::ceil( std::distance( p_font->begin(), p_font->end() ) / 16.0 ) );
 
 		SamplerSPtr sampler = getEngine()->getSamplerCache().add( p_font->getName() );
-		sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-		sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-		sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-		sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+		sampler->setWrapS( renderer::WrapMode::eClampToEdge );
+		sampler->setWrapT( renderer::WrapMode::eClampToEdge );
+		sampler->setMinFilter( InterpolationMode::eLinear );
+		sampler->setMagFilter( InterpolationMode::eLinear );
 		m_sampler = sampler;
 		m_texture = getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions, AccessType::eWrite, AccessType::eRead, PixelFormat::eL8, Size{ maxWidth * 16, maxHeight * count } );
 		m_texture->getImage().initialiseSource();

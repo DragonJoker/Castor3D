@@ -41,11 +41,11 @@ namespace castor3d
 			else
 			{
 				sampler = engine.getSamplerCache().add( name );
-				sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-				sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-				sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
-				sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
-				sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
+				sampler->setMinFilter( InterpolationMode::eLinear );
+				sampler->setMagFilter( InterpolationMode::eLinear );
+				sampler->setWrapS( renderer::WrapMode::eClampToBorder );
+				sampler->setWrapT( renderer::WrapMode::eClampToBorder );
+				sampler->setWrapR( renderer::WrapMode::eClampToBorder );
 				sampler->setBorderColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueWhite ) );
 			}
 
@@ -79,11 +79,11 @@ namespace castor3d
 			else
 			{
 				sampler = engine.getSamplerCache().add( name );
-				sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-				sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-				sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-				sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-				sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+				sampler->setMinFilter( InterpolationMode::eLinear );
+				sampler->setMagFilter( InterpolationMode::eLinear );
+				sampler->setWrapS( renderer::WrapMode::eClampToEdge );
+				sampler->setWrapT( renderer::WrapMode::eClampToEdge );
+				sampler->setWrapR( renderer::WrapMode::eClampToEdge );
 			}
 
 			auto texture = engine.getRenderSystem()->createTexture( TextureType::eTwoDimensions

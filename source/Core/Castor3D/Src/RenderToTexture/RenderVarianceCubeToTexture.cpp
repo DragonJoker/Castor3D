@@ -60,11 +60,11 @@ namespace castor3d
 		m_vertexBuffer->initialise( renderer::MemoryPropertyFlag::eHostVisible );
 
 		m_sampler = getOwner()->getRenderSystem()->getEngine()->getSamplerCache().add( cuT( "RenderVarianceCubeToTexture" ) );
-		m_sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-		m_sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-		m_sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-		m_sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-		m_sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+		m_sampler->setMinFilter( InterpolationMode::eLinear );
+		m_sampler->setMagFilter( InterpolationMode::eLinear );
+		m_sampler->setWrapS( renderer::WrapMode::eClampToEdge );
+		m_sampler->setWrapT( renderer::WrapMode::eClampToEdge );
+		m_sampler->setWrapR( renderer::WrapMode::eClampToEdge );
 
 		doInitialiseDepth();
 		doInitialiseVariance();
@@ -238,10 +238,10 @@ namespace castor3d
 
 		auto & cache = renderSystem.getEngine()->getShaderProgramCache();
 		auto program = cache.getNewProgram( false );
-		program->createObject( ShaderType::eVertex );
-		program->createObject( ShaderType::ePixel );
-		program->setSource( ShaderType::eVertex, vtx );
-		program->setSource( ShaderType::ePixel, pxl );
+		program->createObject( renderer::ShaderStageFlag::eVertex );
+		program->createObject( renderer::ShaderStageFlag::eFragment );
+		program->setSource( renderer::ShaderStageFlag::eVertex, vtx );
+		program->setSource( renderer::ShaderStageFlag::eFragment, pxl );
 		return program;
 	}
 
@@ -303,10 +303,10 @@ namespace castor3d
 
 		auto & cache = renderSystem.getEngine()->getShaderProgramCache();
 		auto program = cache.getNewProgram( false );
-		program->createObject( ShaderType::eVertex );
-		program->createObject( ShaderType::ePixel );
-		program->setSource( ShaderType::eVertex, vtx );
-		program->setSource( ShaderType::ePixel, pxl );
+		program->createObject( renderer::ShaderStageFlag::eVertex );
+		program->createObject( renderer::ShaderStageFlag::eFragment );
+		program->setSource( renderer::ShaderStageFlag::eVertex, vtx );
+		program->setSource( renderer::ShaderStageFlag::eFragment, pxl );
 		return program;
 	}
 
@@ -314,7 +314,7 @@ namespace castor3d
 	{
 		auto & renderSystem = *getOwner()->getRenderSystem();
 		auto & program = *doCreateDepthProgram();
-		m_pipelineDepth.m_faceUniform = program.createUniform< UniformType::eVec3f >( cuT( "c3d_face" ), ShaderType::ePixel );
+		m_pipelineDepth.m_faceUniform = program.createUniform< UniformType::eVec3f >( cuT( "c3d_face" ), renderer::ShaderStageFlag::eFragment );
 		program.initialise();
 
 		m_pipelineDepth.m_geometryBuffers = renderSystem.createGeometryBuffers( Topology::eTriangles
@@ -338,7 +338,7 @@ namespace castor3d
 	{
 		auto & renderSystem = *getOwner()->getRenderSystem();
 		auto & program = *doCreateVarianceProgram();
-		m_pipelineVariance.m_faceUniform = program.createUniform< UniformType::eVec3f >( cuT( "c3d_face" ), ShaderType::ePixel );
+		m_pipelineVariance.m_faceUniform = program.createUniform< UniformType::eVec3f >( cuT( "c3d_face" ), renderer::ShaderStageFlag::eFragment );
 		program.initialise();
 
 		m_pipelineVariance.m_geometryBuffers = renderSystem.createGeometryBuffers( Topology::eTriangles

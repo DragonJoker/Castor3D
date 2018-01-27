@@ -71,7 +71,7 @@ namespace castor3d
 			C3D_API bool operator()( castor3d::RenderTarget const & target, castor::TextFile & file )override;
 		};
 
-	private:
+	public:
 		/*!
 		\author		Sylvain DOREMUS
 		\version	0.7.0.0

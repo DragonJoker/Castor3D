@@ -49,14 +49,14 @@ namespace castor3d
 			, SceneFlags const & sceneFlags )
 		{
 			if ( getShadowType( sceneFlags ) != ShadowType::eNone
-				&& !program.findUniform< UniformType::eSampler >( shader::Shadow::MapShadowSpot, ShaderType::ePixel ) )
+				&& !program.findUniform< UniformType::eSampler >( shader::Shadow::MapShadowSpot, renderer::ShaderStageFlag::eFragment ) )
 			{
 				program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowDirectional
-					, ShaderType::ePixel );
+					, renderer::ShaderStageFlag::eFragment );
 				program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowSpot
-					, ShaderType::ePixel, shader::SpotShadowMapCount );
+					, renderer::ShaderStageFlag::eFragment, shader::SpotShadowMapCount );
 				program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowPoint
-					, ShaderType::ePixel, shader::PointShadowMapCount );
+					, renderer::ShaderStageFlag::eFragment, shader::PointShadowMapCount );
 			}
 
 			if ( ( checkFlag( passFlags, PassFlag::ePbrMetallicRoughness )
@@ -64,11 +64,11 @@ namespace castor3d
 				&& checkFlag( programFlags, ProgramFlag::eLighting ) )
 			{
 				program.createUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance
-					, ShaderType::ePixel );
+					, renderer::ShaderStageFlag::eFragment );
 				program.createUniform< UniformType::eSampler >( ShaderProgram::MapPrefiltered
-					, ShaderType::ePixel );
+					, renderer::ShaderStageFlag::eFragment );
 				program.createUniform< UniformType::eSampler >( ShaderProgram::MapBrdf
-					, ShaderType::ePixel );
+					, renderer::ShaderStageFlag::eFragment );
 			}
 		}
 

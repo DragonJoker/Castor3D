@@ -58,20 +58,20 @@ namespace castor3d
 			textures >>= 1;
 		}
 
-		if ( m_program.hasObject( ShaderType::ePixel ) )
+		if ( m_program.hasObject( renderer::ShaderStageFlag::eFragment ) )
 		{
-			m_directionalShadowMaps = m_program.findUniform< UniformType::eSampler >( shader::Shadow::MapShadowDirectional, ShaderType::ePixel );
-			m_spotShadowMaps = m_program.findUniform< UniformType::eSampler >( shader::Shadow::MapShadowSpot, ShaderType::ePixel );
-			m_pointShadowMaps = m_program.findUniform< UniformType::eSampler >( shader::Shadow::MapShadowPoint, ShaderType::ePixel );
-			m_environmentMap = m_program.findUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel );
+			m_directionalShadowMaps = m_program.findUniform< UniformType::eSampler >( shader::Shadow::MapShadowDirectional, renderer::ShaderStageFlag::eFragment );
+			m_spotShadowMaps = m_program.findUniform< UniformType::eSampler >( shader::Shadow::MapShadowSpot, renderer::ShaderStageFlag::eFragment );
+			m_pointShadowMaps = m_program.findUniform< UniformType::eSampler >( shader::Shadow::MapShadowPoint, renderer::ShaderStageFlag::eFragment );
+			m_environmentMap = m_program.findUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, renderer::ShaderStageFlag::eFragment );
 
 			if ( ( checkFlag( m_flags.m_passFlags, PassFlag::ePbrMetallicRoughness )
 					|| checkFlag( m_flags.m_passFlags, PassFlag::ePbrSpecularGlossiness ) )
 				&& checkFlag( m_flags.m_programFlags, ProgramFlag::eLighting ) )
 			{
-				m_irradianceMap = m_program.findUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance, ShaderType::ePixel );
-				m_prefilteredMap = m_program.findUniform< UniformType::eSampler >( ShaderProgram::MapPrefiltered, ShaderType::ePixel );
-				m_brdfMap = m_program.findUniform< UniformType::eSampler >( ShaderProgram::MapBrdf, ShaderType::ePixel );
+				m_irradianceMap = m_program.findUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance, renderer::ShaderStageFlag::eFragment );
+				m_prefilteredMap = m_program.findUniform< UniformType::eSampler >( ShaderProgram::MapPrefiltered, renderer::ShaderStageFlag::eFragment );
+				m_brdfMap = m_program.findUniform< UniformType::eSampler >( ShaderProgram::MapBrdf, renderer::ShaderStageFlag::eFragment );
 			}
 		}
 	}

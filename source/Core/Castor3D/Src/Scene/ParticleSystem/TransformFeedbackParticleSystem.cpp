@@ -250,9 +250,9 @@ namespace castor3d
 		}
 
 		auto sampler = m_parent.getScene()->getEngine()->getSamplerCache().add( cuT( "TFParticleSystem" ) );
-		sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-		sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-		sampler->setWrappingMode( TextureUVW::eU, WrapMode::eRepeat );
+		sampler->setMinFilter( InterpolationMode::eLinear );
+		sampler->setMagFilter( InterpolationMode::eLinear );
+		sampler->setWrapS( renderer::WrapMode::eRepeat );
 		bool result = sampler->initialise();
 
 		if ( result )

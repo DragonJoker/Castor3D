@@ -340,10 +340,10 @@ namespace castor3d
 			auto vtx = doGetVertexProgram( engine );
 			auto pxl = doGetPixelProgram( engine, config );
 			ShaderProgramSPtr program = engine.getShaderProgramCache().getNewProgram( false );
-			program->createObject( ShaderType::eVertex );
-			program->createObject( ShaderType::ePixel );
-			program->setSource( ShaderType::eVertex, vtx );
-			program->setSource( ShaderType::ePixel, pxl );
+			program->createObject( renderer::ShaderStageFlag::eVertex );
+			program->createObject( renderer::ShaderStageFlag::eFragment );
+			program->setSource( renderer::ShaderStageFlag::eVertex, vtx );
+			program->setSource( renderer::ShaderStageFlag::eFragment, pxl );
 			program->initialise();
 			return program;
 		}
@@ -377,8 +377,8 @@ namespace castor3d
 			else
 			{
 				sampler = engine.getSamplerCache().add( name );
-				sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eNearest );
-				sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eNearest );
+				sampler->setMinFilter( InterpolationMode::eNearest );
+				sampler->setMagFilter( InterpolationMode::eNearest );
 				sampler->setWrappingMode( TextureUVW::eU, mode );
 				sampler->setWrappingMode( TextureUVW::eV, mode );
 			}
@@ -402,7 +402,7 @@ namespace castor3d
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_result{ engine }
 		, m_program{ doGetProgram( engine, config ) }
-		, m_axisUniform{ *m_program->findUniform< UniformType::eVec2i >( cuT( "c3d_axis" ), ShaderType::ePixel ) }
+		, m_axisUniform{ *m_program->findUniform< UniformType::eVec2i >( cuT( "c3d_axis" ), renderer::ShaderStageFlag::eFragment ) }
 		, m_pipeline{ doCreatePipeline( engine, *m_program ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "SSAO" ), cuT( "Blur" ) ) }
 	{

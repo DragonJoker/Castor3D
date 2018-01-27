@@ -345,10 +345,10 @@ namespace castor3d
 
 		auto & cache = getEngine()->getShaderProgramCache();
 		auto program = cache.getNewProgram( false );
-		program->createObject( ShaderType::eVertex );
-		program->createObject( ShaderType::ePixel );
-		program->setSource( ShaderType::eVertex, vtx );
-		program->setSource( ShaderType::ePixel, pxl );
+		program->createObject( renderer::ShaderStageFlag::eVertex );
+		program->createObject( renderer::ShaderStageFlag::eFragment );
+		program->setSource( renderer::ShaderStageFlag::eVertex, vtx );
+		program->setSource( renderer::ShaderStageFlag::eFragment, pxl );
 		program->initialise();
 		return program;
 	}

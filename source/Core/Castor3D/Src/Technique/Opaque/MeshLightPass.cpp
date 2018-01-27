@@ -25,8 +25,8 @@ namespace castor3d
 		, glsl::Shader const & vtx
 		, glsl::Shader const & pxl )
 		: LightPass::Program{ engine, vtx, pxl }
-		, m_lightPosition{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_position" ), ShaderType::ePixel ) }
-		, m_lightAttenuation{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_attenuation" ), ShaderType::ePixel ) }
+		, m_lightPosition{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_position" ), renderer::ShaderStageFlag::eFragment ) }
+		, m_lightAttenuation{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_attenuation" ), renderer::ShaderStageFlag::eFragment ) }
 	{
 	}
 

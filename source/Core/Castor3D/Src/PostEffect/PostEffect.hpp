@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_POST_EFFECT_H___
 #define ___C3D_POST_EFFECT_H___
 
+#include "Render/RenderTarget.hpp"
 #include "Texture/TextureUnit.hpp"
 
 #include <Design/Named.hpp>
@@ -68,6 +69,7 @@ namespace castor3d
 			 *\param[in]	format			Le format des pixels de la surface.
 			 */
 			C3D_API bool initialise( castor3d::RenderTarget & renderTarget
+				, renderer::RenderPass const & renderPass
 				, castor::Size const & size
 				, uint32_t index
 				, castor3d::SamplerSPtr sampler
@@ -148,14 +150,26 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Render function, applies the effect to the given framebuffer.
-		 *\param[in,out]	framebuffer	The framebuffer.
 		 *\return			\p true if ok.
 		 *\~french
 		 *\brief			Fonction de rendu, applique l'effet au tampon d'image donné.
-		 *\param[in,out]	framebuffer	Le tampon d'image.
 		 *\return			\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool apply( renderer::FrameBuffer & framebuffer ) = 0;
+		C3D_API virtual bool apply() = 0;
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		**/
+		/**@{*/
+		inline renderer::CommandBuffer const & getCommands()const
+		{
+			REQUIRE( m_commandBuffer );
+			return *m_commandBuffer;
+		}
 		/**
 		 *\~english
 		 *\return		\p true if the effect applies after tone mapping.
@@ -166,6 +180,7 @@ namespace castor3d
 		{
 			return m_postToneMapping;
 		}
+		/**@}*/
 
 	private:
 		/**
@@ -185,6 +200,9 @@ namespace castor3d
 		//!\~english	Tells if the effect applies after tone mapping.
 		//!\~french		Dit si l'effet s'applique après le mappage de tons.
 		bool m_postToneMapping{ false };
+		//!\~english	The command buffer holding the effect commands.
+		//!\~french		Le tampon de commandes contenant les commandes de l'effet.
+		renderer::CommandBufferPtr m_commandBuffer;
 	};
 }
 

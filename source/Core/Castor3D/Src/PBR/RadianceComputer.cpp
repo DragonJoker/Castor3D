@@ -101,11 +101,11 @@ namespace castor3d
 		if ( !getEngine()->getSamplerCache().has( cuT( "RadianceComputer" ) ) )
 		{
 			m_sampler = getEngine()->getSamplerCache().add( cuT( "RadianceComputer" ) );
-			m_sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-			m_sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-			m_sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-			m_sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-			m_sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+			m_sampler->setMinFilter( InterpolationMode::eLinear );
+			m_sampler->setMagFilter( InterpolationMode::eLinear );
+			m_sampler->setWrapS( renderer::WrapMode::eClampToEdge );
+			m_sampler->setWrapT( renderer::WrapMode::eClampToEdge );
+			m_sampler->setWrapR( renderer::WrapMode::eClampToEdge );
 			m_sampler->initialise();
 		}
 		else
@@ -277,11 +277,11 @@ namespace castor3d
 
 		auto & cache = getEngine()->getShaderProgramCache();
 		auto program = cache.getNewProgram( false );
-		program->createObject( ShaderType::eVertex );
-		program->createObject( ShaderType::ePixel );
-		program->setSource( ShaderType::eVertex, vtx );
-		program->setSource( ShaderType::ePixel, pxl );
-		program->createUniform< UniformType::eSampler >( cuT( "c3d_mapDiffuse" ), ShaderType::ePixel )->setValue( MinTextureIndex );
+		program->createObject( renderer::ShaderStageFlag::eVertex );
+		program->createObject( renderer::ShaderStageFlag::eFragment );
+		program->setSource( renderer::ShaderStageFlag::eVertex, vtx );
+		program->setSource( renderer::ShaderStageFlag::eFragment, pxl );
+		program->createUniform< UniformType::eSampler >( cuT( "c3d_mapDiffuse" ), renderer::ShaderStageFlag::eFragment )->setValue( MinTextureIndex );
 		program->initialise();
 		return program;
 	}

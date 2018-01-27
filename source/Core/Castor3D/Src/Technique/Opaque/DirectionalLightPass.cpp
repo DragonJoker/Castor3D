@@ -33,8 +33,8 @@ namespace castor3d
 		, glsl::Shader const & vtx
 		, glsl::Shader const & pxl )
 		: LightPass::Program{ engine, vtx, pxl }
-		, m_lightDirection{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_direction" ), ShaderType::ePixel ) }
-		, m_lightTransform{ m_program->createUniform< UniformType::eMat4x4f >( cuT( "light.m_transform" ), ShaderType::ePixel ) }
+		, m_lightDirection{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_direction" ), renderer::ShaderStageFlag::eFragment ) }
+		, m_lightTransform{ m_program->createUniform< UniformType::eMat4x4f >( cuT( "light.m_transform" ), renderer::ShaderStageFlag::eFragment ) }
 	{
 	}
 

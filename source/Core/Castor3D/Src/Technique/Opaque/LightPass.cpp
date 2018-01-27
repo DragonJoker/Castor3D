@@ -289,10 +289,10 @@ namespace castor3d
 			, glsl::Shader const & pxl )
 		{
 			auto program = engine.getShaderProgramCache().getNewProgram( false );
-			program->createObject( ShaderType::eVertex );
-			program->createObject( ShaderType::ePixel );
-			program->setSource( ShaderType::eVertex, vtx );
-			program->setSource( ShaderType::ePixel, pxl );
+			program->createObject( renderer::ShaderStageFlag::eVertex );
+			program->createObject( renderer::ShaderStageFlag::eFragment );
+			program->setSource( renderer::ShaderStageFlag::eVertex, vtx );
+			program->setSource( renderer::ShaderStageFlag::eFragment, pxl );
 			return program;
 		}
 	}
@@ -303,9 +303,9 @@ namespace castor3d
 		, glsl::Shader const & vtx
 		, glsl::Shader const & pxl )
 		: m_program{ ::doCreateProgram( engine, vtx, pxl ) }
-		, m_lightColour{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_lightBase.m_colour" ), ShaderType::ePixel ) }
-		, m_lightIntensity{ m_program->createUniform< UniformType::eVec2f >( cuT( "light.m_lightBase.m_intensity" ), ShaderType::ePixel ) }
-		, m_lightFarPlane{ m_program->createUniform< UniformType::eFloat >( cuT( "light.m_lightBase.m_farPlane" ), ShaderType::ePixel ) }
+		, m_lightColour{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_lightBase.m_colour" ), renderer::ShaderStageFlag::eFragment ) }
+		, m_lightIntensity{ m_program->createUniform< UniformType::eVec2f >( cuT( "light.m_lightBase.m_intensity" ), renderer::ShaderStageFlag::eFragment ) }
+		, m_lightFarPlane{ m_program->createUniform< UniformType::eFloat >( cuT( "light.m_lightBase.m_farPlane" ), renderer::ShaderStageFlag::eFragment ) }
 	{
 	}
 
