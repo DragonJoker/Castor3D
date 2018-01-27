@@ -28,11 +28,14 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	scene	The scene.
+		 *\param[in]	source	The source environment map.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	scene	La scène.
+		 *\param[in]	source	La texture d'environnement source.
 		 */
-		C3D_API explicit IblTextures( Scene & scene );
+		C3D_API explicit IblTextures( Scene & scene
+			, TextureLayout const & source );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -43,12 +46,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the environment maps.
-		 *\param[in]	source	The source environment map.
 		 *\~french
 		 *\brief		Met à jour les textures d'environnement.
-		 *\param[in]	source	La texture d'environnement source.
 		 */
-		C3D_API void update( renderer::Texture const & source );
+		C3D_API void update();
 		/**
 		 *\~english
 		 *\brief		Displays the maps.
@@ -66,7 +67,7 @@ namespace castor3d
 		 */
 		inline TextureUnit const & getIrradiance()const
 		{
-			return m_radianceTexture;
+			return m_radianceComputer.getResult();
 		}
 		/**
 		 *\~english
@@ -76,7 +77,7 @@ namespace castor3d
 		 */
 		inline TextureUnit const & getPrefilteredEnvironment()const
 		{
-			return m_prefilteredEnvironment;
+			return m_environmentPrefilter.getResult();
 		}
 		/**
 		 *\~english
@@ -90,12 +91,6 @@ namespace castor3d
 		}
 
 	private:
-		//!\~english	The radiance texture.
-		//!\~french		La texture de radiance.
-		TextureUnit m_radianceTexture;
-		//!\~english	The prefiltered environment texture.
-		//!\~french		La texture d'environnement préfiltrée.
-		TextureUnit m_prefilteredEnvironment;
 		//!\~english	The prefiltered BRDF texture.
 		//!\~french		La texture BRDF préfiltrée.
 		TextureUnit m_prefilteredBrdf;

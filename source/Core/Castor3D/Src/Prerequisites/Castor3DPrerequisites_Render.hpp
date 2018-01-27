@@ -11,26 +11,56 @@ namespace castor3d
 	/**@name Render */
 	//@{
 
-	struct TexturedVertex
+	struct NonTexturedQuad
 	{
-		castor::Point2f m_position;
-		castor::Point2f m_texture;
+		struct Vertex
+		{
+			castor::Point2f position;
+		};
+
+		Vertex vertex[4];
 	};
 
 	struct TexturedQuad
 	{
-		TexturedVertex m_vertex[4];
+		struct Vertex
+		{
+			castor::Point2f position;
+			castor::Point2f texture;
+		};
+
+		Vertex vertex[4];
+	};
+
+	struct NonTexturedCube
+	{
+		struct Quad
+		{
+			struct Vertex
+			{
+				castor::Point3f position;
+			};
+
+			Vertex vertex[6];
+		};
+
+		Quad faces[6];
 	};
 
 	struct TexturedCube
 	{
-		struct
+		struct Quad
 		{
-			struct
+			struct Vertex
 			{
-				castor::Point3f m_position;
-			} m_vertex[4];
-		} m_faces[6];
+				castor::Point3f position;
+				castor::Point2f texture;
+			};
+
+			Vertex vertex[6];
+		};
+
+		Quad faces[6];
 	};
 	/*!
 	\author 	Sylvain DOREMUS

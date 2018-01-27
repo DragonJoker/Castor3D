@@ -6,6 +6,21 @@
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
+#include <Buffer/UniformBuffer.hpp>
+#include <Buffer/VertexBuffer.hpp>
+#include <Image/Texture.hpp>
+#include <Image/TextureView.hpp>
+#include <Pipeline/DepthStencilState.hpp>
+#include <Pipeline/Scissor.hpp>
+#include <Pipeline/VertexLayout.hpp>
+#include <Pipeline/Viewport.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <RenderPass/RenderPassState.hpp>
+#include <RenderPass/RenderSubpass.hpp>
+#include <RenderPass/RenderSubpassState.hpp>
+#include <RenderPass/TextureAttachment.hpp>
+#include <Shader/ShaderProgram.hpp>
+
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
 
@@ -16,77 +31,13 @@ namespace castor3d
 {
 	namespace
 	{
-		TextureUnit doCreateRadianceTexture( Engine & engine )
-		{
-			auto texture = engine.getRenderSystem()->createTexture( TextureType::eCube
-				, AccessType::eNone
-				, AccessType::eRead | AccessType::eWrite
-				, PixelFormat::eRGB32F
-				, Size{ 32u, 32u } );
-			SamplerSPtr sampler;
-			auto name = cuT( "IblTexturesRadiance" );
-
-			if ( engine.getSamplerCache().has( name ) )
-			{
-				sampler = engine.getSamplerCache().find( name );
-			}
-			else
-			{
-				sampler = engine.getSamplerCache().create( name );
-				sampler->setMinFilter( InterpolationMode::eLinear );
-				sampler->setMagFilter( InterpolationMode::eLinear );
-				sampler->setWrapS( renderer::WrapMode::eClampToEdge );
-				sampler->setWrapT( renderer::WrapMode::eClampToEdge );
-				sampler->setWrapR( renderer::WrapMode::eClampToEdge );
-				engine.getSamplerCache().add( name, sampler );
-			}
-
-			TextureUnit result{ engine };
-			result.setTexture( texture );
-			result.setSampler( sampler );
-			result.setIndex( MinTextureIndex + 6u );
-			return result;
-		}
-
-		TextureUnit doCreatePrefilteredTexture( Engine & engine )
-		{
-			auto texture = engine.getRenderSystem()->createTexture( TextureType::eCube
-				, AccessType::eNone
-				, AccessType::eRead | AccessType::eWrite
-				, PixelFormat::eRGB32F
-				, Size{ 128u, 128u } );
-			SamplerSPtr sampler;
-			auto name = cuT( "IblTexturesPrefiltered" );
-
-			if ( engine.getSamplerCache().has( name ) )
-			{
-				sampler = engine.getSamplerCache().find( name );
-			}
-			else
-			{
-				sampler = engine.getSamplerCache().create( name );
-				sampler->setMinFilter( InterpolationMode::eLinear );
-				sampler->setMagFilter( InterpolationMode::eLinear );
-				sampler->setMipFilter( InterpolationMode::eLinear );
-				sampler->setWrapS( renderer::WrapMode::eClampToEdge );
-				sampler->setWrapT( renderer::WrapMode::eClampToEdge );
-				sampler->setWrapR( renderer::WrapMode::eClampToEdge );
-				engine.getSamplerCache().add( name, sampler );
-			}
-
-			TextureUnit result{ engine };
-			result.setTexture( texture );
-			result.setSampler( sampler );
-			result.setIndex( MinTextureIndex + 7u );
-			return result;
-		}
-
 		TextureUnit doCreatePrefilteredBrdf( Engine & engine )
 		{
-			auto texture = engine.getRenderSystem()->createTexture( TextureType::eTwoDimensions
-				, AccessType::eNone
-				, AccessType::eRead | AccessType::eWrite
-				, PixelFormat::eAL16F32F
+			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
+				, renderer::TextureType::e2D
+				, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled
+				, renderer::MemoryPropertyFlag::eDeviceLocal
+				, PixelFormat::eRGB32F
 				, Size{ 512u, 512u } );
 			SamplerSPtr sampler;
 			auto name = cuT( "IblTexturesBRDF" );
@@ -98,75 +49,47 @@ namespace castor3d
 			else
 			{
 				sampler = engine.getSamplerCache().create( name );
-				sampler->setMinFilter( InterpolationMode::eLinear );
-				sampler->setMagFilter( InterpolationMode::eLinear );
+				sampler->setMinFilter( renderer::Filter::eLinear );
+				sampler->setMagFilter( renderer::Filter::eLinear );
 				sampler->setWrapS( renderer::WrapMode::eClampToEdge );
 				sampler->setWrapT( renderer::WrapMode::eClampToEdge );
 				sampler->setWrapR( renderer::WrapMode::eClampToEdge );
 				engine.getSamplerCache().add( name, sampler );
 			}
 
+			sampler->initialise();
 			TextureUnit result{ engine };
 			result.setTexture( texture );
 			result.setSampler( sampler );
-			result.setIndex( MinTextureIndex + 8u );
+			result.initialise();
 			return result;
 		}
 	}
 
 	//************************************************************************************************
 
-	IblTextures::IblTextures( Scene & scene )
+	IblTextures::IblTextures( Scene & scene
+		, TextureLayout const & source )
 		: OwnedBy< Scene >{ scene }
-		, m_radianceTexture{ doCreateRadianceTexture( *scene.getEngine() ) }
-		, m_prefilteredEnvironment{ doCreatePrefilteredTexture( *scene.getEngine() ) }
 		, m_prefilteredBrdf{ doCreatePrefilteredBrdf( *scene.getEngine() ) }
-		, m_radianceComputer{ *scene.getEngine(), m_radianceTexture.getTexture()->getDimensions() }
-		, m_environmentPrefilter{ *scene.getEngine(), m_prefilteredEnvironment.getTexture()->getDimensions() }
+		, m_radianceComputer{ *scene.getEngine(), Size{ 512, 512 }, source.getTexture() }
+		, m_environmentPrefilter{ *scene.getEngine(), Size{ 128u, 128u }, source.getTexture() }
 	{
-		auto texture = m_radianceTexture.getTexture();
-		texture->getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource();
-		texture->getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource();
-		texture->getImage( uint32_t( CubeMapFace::ePositiveY ) ).initialiseSource();
-		texture->getImage( uint32_t( CubeMapFace::eNegativeY ) ).initialiseSource();
-		texture->getImage( uint32_t( CubeMapFace::ePositiveZ ) ).initialiseSource();
-		texture->getImage( uint32_t( CubeMapFace::eNegativeZ ) ).initialiseSource();
-		m_radianceTexture.initialise();
-		m_radianceTexture.getSampler()->initialise();
-
-		texture = m_prefilteredEnvironment.getTexture();
-		texture->getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource();
-		texture->getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource();
-		texture->getImage( uint32_t( CubeMapFace::ePositiveY ) ).initialiseSource();
-		texture->getImage( uint32_t( CubeMapFace::eNegativeY ) ).initialiseSource();
-		texture->getImage( uint32_t( CubeMapFace::ePositiveZ ) ).initialiseSource();
-		texture->getImage( uint32_t( CubeMapFace::eNegativeZ ) ).initialiseSource();
-		m_prefilteredEnvironment.initialise();
-		m_prefilteredEnvironment.getSampler()->initialise();
-		texture->bind( MinTextureIndex );
-		texture->generateMipmaps();
-		texture->unbind( MinTextureIndex );
-
-		texture = m_prefilteredBrdf.getTexture();
-		texture->getImage().initialiseSource();
-		m_prefilteredBrdf.initialise();
-		m_prefilteredBrdf.getSampler()->initialise();
-
-		BrdfPrefilter filter{ *scene.getEngine(), m_prefilteredBrdf.getTexture()->getDimensions() };
-		filter.render( m_prefilteredBrdf.getTexture() );
+		BrdfPrefilter filter{ *scene.getEngine()
+			, m_prefilteredBrdf.getTexture()->getDimensions()
+			, m_prefilteredBrdf.getTexture()->getView() };
+		filter.render();
 	}
 
 	IblTextures::~IblTextures()
 	{
-		m_radianceTexture.cleanup();
-		m_prefilteredEnvironment.cleanup();
 		m_prefilteredBrdf.cleanup();
 	}
 
-	void IblTextures::update( TextureLayout const & source )
+	void IblTextures::update()
 	{
-		m_radianceComputer.render( source, m_radianceTexture.getTexture() );
-		m_environmentPrefilter.render( source, m_prefilteredEnvironment.getTexture() );
+		m_radianceComputer.render();
+		m_environmentPrefilter.render();
 	}
 
 	void IblTextures::debugDisplay( Size const & renderSize )const
@@ -176,17 +99,17 @@ namespace castor3d
 		int left = 0u;
 		int top = renderSize.getHeight() - height;
 		auto size = Size( width, height );
-		auto & context = *getScene()->getEngine()->getRenderSystem()->getCurrentContext();
-		context.renderTexture( Position{ left, top }
-			, size
-			, *m_prefilteredBrdf.getTexture() );
-		left += 512;
-		context.renderTextureCube( Position{ left, top }
-			, Size( width / 4, height / 4u )
-			, *m_prefilteredEnvironment.getTexture() );
-		left += 512;
-		context.renderTextureCube( Position{ left, top }
-			, Size( width / 4, height / 4u )
-			, *m_radianceTexture.getTexture() );
+		//auto & context = *getScene()->getEngine()->getRenderSystem()->getCurrentContext();
+		//context.renderTexture( Position{ left, top }
+		//	, size
+		//	, *m_prefilteredBrdf.getTexture() );
+		//left += 512;
+		//context.renderTextureCube( Position{ left, top }
+		//	, Size( width / 4, height / 4u )
+		//	, *m_prefilteredEnvironment.getTexture() );
+		//left += 512;
+		//context.renderTextureCube( Position{ left, top }
+		//	, Size( width / 4, height / 4u )
+		//	, *m_radianceTexture.getTexture() );
 	}
 }
