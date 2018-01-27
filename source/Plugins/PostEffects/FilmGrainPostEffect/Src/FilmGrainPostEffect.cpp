@@ -13,36 +13,24 @@
 #include <Cache/SamplerCache.hpp>
 #include <Cache/ShaderCache.hpp>
 
-#include <FrameBuffer/BackBuffers.hpp>
-#include <FrameBuffer/FrameBufferAttachment.hpp>
-#include <FrameBuffer/TextureAttachment.hpp>
-#include <Mesh/Vertex.hpp>
-#include <Mesh/Buffer/ParticleDeclaration.hpp>
-#include <Mesh/Buffer/ParticleElementDeclaration.hpp>
-#include <Mesh/Buffer/GeometryBuffers.hpp>
-#include <Mesh/Buffer/VertexBuffer.hpp>
 #include <Miscellaneous/Parameter.hpp>
-#include <Render/Context.hpp>
-#include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
-#include <Render/RenderWindow.hpp>
-#include <Render/Viewport.hpp>
-#include <Shader/UniformBuffer.hpp>
-#include <Shader/ShaderProgram.hpp>
-#include <State/BlendState.hpp>
-#include <State/RasteriserState.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
-#include <numeric>
+#include <RenderPass/RenderPass.hpp>
+#include <RenderPass/RenderPassState.hpp>
+#include <RenderPass/RenderSubpass.hpp>
+#include <RenderPass/RenderSubpassState.hpp>
+#include <Shader/ShaderProgram.hpp>
 
 #include <GlslSource.hpp>
 
+#include <numeric>
 
 using namespace castor;
-using namespace castor3d;
 
 namespace film_grain
 {
@@ -55,14 +43,11 @@ namespace film_grain
 		static String const Time = cuT( "c3d_time" );
 		static String const SrcTex = cuT( "c3d_srcTex" );
 		static String const NoiseTex = cuT( "c3d_noiseTex" );
-		static constexpr uint32_t BindingPoint = 2u;
 
-		glsl::Shader getVertexProgram( RenderSystem * renderSystem )
+		glsl::Shader getVertexProgram( castor3d::RenderSystem * renderSystem )
 		{
 			using namespace glsl;
 			GlslWriter writer = renderSystem->createGlslWriter();
-
-			UBO_MATRIX( writer, 0u );
 
 			// Shader inputs
 			Vec2 position = writer.declAttribute< Vec2 >( cuT( "position" ) );
@@ -74,26 +59,26 @@ namespace film_grain
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = position;
-				gl_Position = c3d_projection * vec4( position.xy(), 0.0, 1.0 );
+				gl_Position = vec4( position.xy(), 0.0, 1.0 );
 			} );
 			return writer.finalise();
 		}
 
-		glsl::Shader getFragmentProgram( RenderSystem * renderSystem )
+		glsl::Shader getFragmentProgram( castor3d::RenderSystem * renderSystem )
 		{
 			using namespace glsl;
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			glsl::Ubo filmGrain{ writer, FilmGrainUbo, BindingPoint };
+			glsl::Ubo filmGrain{ writer, FilmGrainUbo, 0u };
 			auto c3d_pixelSize = filmGrain.declMember< Vec2 >( PixelSize );
 			auto c3d_noiseIntensity = filmGrain.declMember< Float >( NoiseIntensity );
 			auto c3d_exposure = filmGrain.declMember< Float >( Exposure );
 			auto c3d_time = filmGrain.declMember< Float >( Time );
 			filmGrain.end();
 
-			auto c3d_srcTex = writer.declSampler< Sampler2D >( SrcTex, MinTextureIndex + 0u, 0u );
-			auto c3d_noiseTex = writer.declSampler< Sampler3D >( NoiseTex, MinTextureIndex + 1u, 0u );
+			auto c3d_srcTex = writer.declSampler< Sampler2D >( SrcTex, 1u, 0u );
+			auto c3d_noiseTex = writer.declSampler< Sampler3D >( NoiseTex, 2u, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
@@ -158,170 +143,34 @@ namespace film_grain
 
 	//*********************************************************************************************
 
-	String PostEffect::Type = cuT( "film_grain" );
-	String PostEffect::Name = cuT( "FilmGrain PostEffect" );
-
-	PostEffect::PostEffect( RenderTarget & renderTarget
-		, RenderSystem & renderSystem
-		, Parameters const & params )
-		: castor3d::PostEffect{ PostEffect::Type
-			, renderTarget
-			, renderSystem
-			, params
-			, false }
-		, m_surface{ *renderSystem.getEngine() }
-		, m_matrixUbo{ *renderSystem.getEngine() }
+	RenderQuad::RenderQuad( castor3d::RenderSystem & renderSystem
+		, Size const & size )
+		: castor3d::RenderQuad{ renderSystem, false, false }
+		, m_size{ size }
 		, m_noise{ *renderSystem.getEngine() }
-		, m_configUbo{ FilmGrainUbo, renderSystem, BindingPoint }
-		, m_pixelSize{ *m_configUbo.createUniform< UniformType::eVec2f >( PixelSize ) }
-		, m_noiseIntensity{ *m_configUbo.createUniform< UniformType::eFloat >( NoiseIntensity ) }
-		, m_exposure{ *m_configUbo.createUniform< UniformType::eFloat >( Exposure ) }
-		, m_time{ *m_configUbo.createUniform< UniformType::eFloat >( Time ) }
 	{
-		String name = cuT( "FilmGrain2D" );
+		auto name = cuT( "FilmGrain_Noise" );
+		castor3d::SamplerSPtr sampler;
 
-		if ( !m_renderTarget.getEngine()->getSamplerCache().has( name ) )
+		if ( !m_renderSystem.getEngine()->getSamplerCache().has( name ) )
 		{
-			m_sampler2D = m_renderTarget.getEngine()->getSamplerCache().add( name );
-			m_sampler2D->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-			m_sampler2D->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-			m_sampler2D->setInterpolationMode( InterpolationFilter::eMip, InterpolationMode::eLinear );
-			m_sampler2D->setWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
-			m_sampler2D->setWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
-			m_sampler2D->setWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
+			sampler = m_renderSystem.getEngine()->getSamplerCache().add( name );
+			sampler->setMinFilter( renderer::Filter::eLinear );
+			sampler->setMagFilter( renderer::Filter::eLinear );
+			sampler->setMipFilter( renderer::MipmapMode::eLinear );
+			sampler->setWrapS( renderer::WrapMode::eRepeat );
+			sampler->setWrapT( renderer::WrapMode::eRepeat );
+			sampler->setWrapR( renderer::WrapMode::eRepeat );
 		}
 		else
 		{
-			m_sampler2D = m_renderTarget.getEngine()->getSamplerCache().find( name );
+			sampler = m_renderSystem.getEngine()->getSamplerCache().find( name );
 		}
 
-		name = cuT( "FilmGrain3D" );
-
-		if ( !m_renderTarget.getEngine()->getSamplerCache().has( name ) )
-		{
-			m_sampler3D = m_renderTarget.getEngine()->getSamplerCache().add( name );
-			m_sampler3D->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-			m_sampler3D->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-			m_sampler3D->setInterpolationMode( InterpolationFilter::eMip, InterpolationMode::eLinear );
-			m_sampler3D->setWrappingMode( TextureUVW::eU, WrapMode::eRepeat );
-			m_sampler3D->setWrappingMode( TextureUVW::eV, WrapMode::eRepeat );
-			m_sampler3D->setWrappingMode( TextureUVW::eW, WrapMode::eRepeat );
-		}
-		else
-		{
-			m_sampler3D = m_renderTarget.getEngine()->getSamplerCache().find( name );
-		}
-	}
-
-	PostEffect::~PostEffect()
-	{
-	}
-
-	PostEffectSPtr PostEffect::create( RenderTarget & renderTarget
-		, RenderSystem & renderSystem
-		, Parameters const & params )
-	{
-		return std::make_shared< PostEffect >( renderTarget
-			, renderSystem
-			, params );
-	}
-
-	bool PostEffect::initialise()
-	{
-		bool result = false;
-		auto & cache = getRenderSystem()->getEngine()->getShaderProgramCache();
-		Size size = m_renderTarget.getSize();
-
-		auto vertex = getVertexProgram( getRenderSystem() );
-		auto fragment = getFragmentProgram( getRenderSystem() );
-		ShaderProgramSPtr program = cache.getNewProgram( false );
-		program->createObject( ShaderType::eVertex );
-		program->createObject( ShaderType::ePixel );
-		m_mapSrc = program->createUniform< UniformType::eSampler >( SrcTex
-			, ShaderType::ePixel );
-		m_mapSrc->setValue( MinTextureIndex + 0 );
-		m_mapNoise = program->createUniform< UniformType::eSampler >( NoiseTex
-			, ShaderType::ePixel );
-		m_mapNoise->setValue( MinTextureIndex + 1 );
-		program->setSource( ShaderType::eVertex, vertex );
-		program->setSource( ShaderType::ePixel, fragment );
-		program->initialise();
-
-		DepthStencilState dsstate;
-		dsstate.setDepthTest( false );
-		dsstate.setDepthMask( WritingMask::eZero );
-		RasteriserState rsstate;
-		rsstate.setCulledFaces( Culling::eBack );
-		m_pipeline = getRenderSystem()->createRenderPipeline( std::move( dsstate )
-			, std::move( rsstate )
-			, BlendState{}
-			, MultisampleState{}
-			, *program
-			, PipelineFlags{} );
-		m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
-		m_pipeline->addUniformBuffer( m_configUbo );
-		result = m_surface.initialise( m_renderTarget
-			, size
-			, MinTextureIndex
-			, m_sampler2D );
-
-		m_pixelSize.setValue( Point2f{ size.getWidth(), size.getHeight() } );
-		m_noiseIntensity.setValue( 1.0f );
-		m_exposure.setValue( 1.0f );
-
-		doGenerateNoiseTexture();
-
-		return result;
-	}
-
-	void PostEffect::cleanup()
-	{
-		m_mapSrc.reset();
-		m_mapNoise.reset();
-		m_noise.cleanup();
-		m_surface.cleanup();
-		m_matrixUbo.getUbo().cleanup();
-		m_configUbo.cleanup();
-	}
-
-	bool PostEffect::apply( FrameBuffer & framebuffer )
-	{
-		m_time.setValue( float( m_timer.getElapsed().count() ) / 6.0f );
-		m_configUbo.update();
-		m_configUbo.bindTo( BindingPoint );
-		auto attach = framebuffer.getAttachment( AttachmentPoint::eColour, 0 );
-		REQUIRE( attach && attach->getAttachmentType() == AttachmentType::eTexture );
-
-		m_surface.m_fbo->bind( FrameBufferTarget::eDraw );
-		auto texture = std::static_pointer_cast< TextureAttachment >( attach )->getTexture();
-		m_surface.m_fbo->clear( BufferComponent::eColour );
-		m_noise.bind();
-		getRenderSystem()->getCurrentContext()->renderTexture( 
-			m_surface.m_size
-			, *texture
-			, *m_pipeline
-			, m_matrixUbo );
-		m_noise.unbind();
-		m_surface.m_fbo->unbind();
-
-		framebuffer.bind( FrameBufferTarget::eDraw );
-		getRenderSystem()->getCurrentContext()->renderTexture( texture->getDimensions()
-			, *m_surface.m_colourTexture.getTexture() );
-		framebuffer.unbind();
-
-		return true;
-	}
-
-	bool PostEffect::doWriteInto( TextFile & file )
-	{
-		return true;
-	}
-
-	void PostEffect::doGenerateNoiseTexture()
-	{
-		auto texture = getRenderSystem()->createTexture( TextureType::eThreeDimensions
-			, AccessType::eWrite
-			, AccessType::eRead
+		auto texture = std::make_shared< castor3d::TextureLayout >( m_renderSystem
+			, renderer::TextureType::e3D
+			, renderer::ImageUsageFlag::eSampled
+			, renderer::MemoryPropertyFlag::eDeviceLocal
 			, PixelFormat::eR8G8B8
 			, Point3ui{ 512u, 512u, 6u } );
 
@@ -336,14 +185,177 @@ namespace film_grain
 			loader.loadImage( NoiseLayer6_xpm, getCountOf( NoiseLayer6_xpm ) ),
 		};
 
-		for ( uint32_t i = 0u; i < 6u; ++i )
+		for ( uint32_t i = 1u; i <= 6u; ++i )
 		{
 			texture->getImage( i ).initialiseSource( buffers[i] );
 		}
 
 		m_noise.setTexture( texture );
-		m_noise.setSampler( m_sampler3D );
-		m_noise.setIndex( MinTextureIndex + 1u );
+		m_noise.setSampler( sampler );
 		m_noise.initialise();
+
+		m_configUbo = renderer::makeUniformBuffer< Configuration >( *m_renderSystem.getCurrentDevice()
+			, 1u
+			, renderer::BufferTarget::eTransferDst
+			, renderer::MemoryPropertyFlag::eHostVisible );
+		m_configUbo->getData( 0 ).m_pixelSize = Point2f{ m_size };
+		m_configUbo->getData( 0 ).m_noiseIntensity = 1.0f;
+		m_configUbo->getData( 0 ).m_exposure = 1.0f;
+	}
+
+	void RenderQuad::update( float time )
+	{
+		m_configUbo->getData( 0 ).m_time = time;
+
+		if ( auto buffer = m_configUbo->getUbo().getBuffer().lock( 0u
+			, sizeof( Configuration )
+			, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateRange ) )
+		{
+			std::memcpy( buffer, m_configUbo->getDatas().data(), sizeof( Configuration ) );
+			m_configUbo->getUbo().getBuffer().unlock( sizeof( Configuration ), true );
+		}
+	}
+
+	void RenderQuad::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
+		, renderer::DescriptorSet & descriptorSet )
+	{
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
+			, *m_configUbo
+			, 0u
+			, 1u );
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
+			, m_noise.getTexture()->getView()
+			, m_noise.getSampler()->getSampler() );
+	}
+
+	//*********************************************************************************************
+
+	String PostEffect::Type = cuT( "film_grain" );
+	String PostEffect::Name = cuT( "FilmGrain PostEffect" );
+
+	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
+		, castor3d::RenderSystem & renderSystem
+		, castor3d::Parameters const & params )
+		: castor3d::PostEffect{ PostEffect::Type
+			, renderTarget
+			, renderSystem
+			, params
+			, false }
+		, m_surface{ *renderSystem.getEngine() }
+	{
+		String name = cuT( "FilmGrain2D" );
+
+		if ( !m_renderTarget.getEngine()->getSamplerCache().has( name ) )
+		{
+			m_sampler = m_renderTarget.getEngine()->getSamplerCache().add( name );
+			m_sampler->setMinFilter( renderer::Filter::eLinear );
+			m_sampler->setMagFilter( renderer::Filter::eLinear );
+			m_sampler->setMipFilter( renderer::MipmapMode::eLinear );
+			m_sampler->setWrapS( renderer::WrapMode::eClampToBorder );
+			m_sampler->setWrapT( renderer::WrapMode::eClampToBorder );
+			m_sampler->setWrapR( renderer::WrapMode::eClampToBorder );
+		}
+		else
+		{
+			m_sampler = m_renderTarget.getEngine()->getSamplerCache().find( name );
+		}
+	}
+
+	PostEffect::~PostEffect()
+	{
+	}
+
+	castor3d::PostEffectSPtr PostEffect::create( castor3d::RenderTarget & renderTarget
+		, castor3d::RenderSystem & renderSystem
+		, castor3d::Parameters const & params )
+	{
+		return std::make_shared< PostEffect >( renderTarget
+			, renderSystem
+			, params );
+	}
+
+	bool PostEffect::initialise()
+	{
+		auto & cache = getRenderSystem()->getEngine()->getShaderProgramCache();
+		Size size = m_renderTarget.getSize();
+
+		auto vtx = getVertexProgram( getRenderSystem() );
+		auto pxl = getFragmentProgram( getRenderSystem() );
+		auto & program = cache.getNewProgram( false );
+
+		program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
+		program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
+		program.link();
+
+		auto & device = *getRenderSystem()->getCurrentDevice();
+		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+
+		std::vector< renderer::PixelFormat > formats{ { m_renderTarget.getPixelFormat() } };
+		renderer::RenderSubpassPtrArray subpasses;
+		subpasses.emplace_back( device.createRenderSubpass( formats
+			, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
+			, renderer::AccessFlag::eColourAttachmentWrite } ) );
+		m_renderPass = device.createRenderPass( formats
+			, std::move( subpasses )
+			, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
+				, renderer::AccessFlag::eColourAttachmentWrite
+				, { renderer::ImageLayout::eColourAttachmentOptimal } }
+			, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
+				, renderer::AccessFlag::eColourAttachmentWrite
+				, { renderer::ImageLayout::eColourAttachmentOptimal } }
+			, false );
+
+		renderer::DescriptorSetLayoutBindingArray bindings
+		{
+			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
+			{ 1u, renderer::DescriptorType::eSampledImage, renderer::ShaderStageFlag::eFragment },
+		};
+
+		m_quad = std::make_unique< RenderQuad >( *getRenderSystem(), size );
+		m_quad->createPipeline( size
+			, Position{}
+			, program
+			, m_renderTarget.getTexture().getTexture()->getView()
+			, *m_renderPass
+			, bindings );
+
+		auto result = m_surface.initialise( m_renderTarget
+			, *m_renderPass
+			, size
+			, 0u
+			, m_sampler );
+
+		if ( result
+			&& m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
+		{
+			m_commandBuffer->beginRenderPass( *m_renderPass
+				, *m_surface.m_fbo
+				, {}
+				, renderer::SubpassContents::eInline );
+			m_quad->registerFrame( *m_commandBuffer );
+			m_commandBuffer->endRenderPass();
+			m_commandBuffer->end();
+		}
+
+		return result;
+	}
+
+	void PostEffect::cleanup()
+	{
+		m_quad.reset();
+		m_commandBuffer.reset();
+		m_renderPass.reset();
+		m_surface.cleanup();
+	}
+
+	bool PostEffect::apply()
+	{
+		m_quad->update( float( m_timer.getElapsed().count() ) / 6.0f );
+		return getRenderSystem()->getCurrentDevice()->getGraphicsQueue().submit( *m_commandBuffer, nullptr );
+	}
+
+	bool PostEffect::doWriteInto( TextFile & file )
+	{
+		return true;
 	}
 }

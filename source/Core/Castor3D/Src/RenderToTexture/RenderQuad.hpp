@@ -70,16 +70,25 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
-		*	Records the frame in the given command buffer.
-		*\param[in,out] commandBuffer
-		*	The command buffer into which rendering commands are registered.
+		*	Prpares the commands to render the quad.
 		*\~french
 		*\brief
-		*	Enregistre la frame dans le tampon de commandes donné.
-		*\param[in] commandBuffer
-		*	Le tampon de commandes dans lequel les commandes de rendu sont enregistrées.
+		*	Prépare les commandes de dessin du quad.
 		*/
-		C3D_API void registerFrame( renderer::CommandBuffer & commandBuffer );
+		C3D_API void prepareFrame();
+		/**
+		*\~english
+		*\return
+		*	The command buffer to render the quad.
+		*\~french
+		*\return
+		*	Le tampon de commandes de dessin du quad.
+		*/
+		inline renderer::CommandBuffer const & getCommandBuffer()const
+		{
+			REQUIRE( m_commandBuffer );
+			return *m_commandBuffer;
+		}
 
 	private:
 		virtual void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
@@ -99,6 +108,7 @@ namespace castor3d
 		renderer::DescriptorSetPtr m_descriptorSet;
 		renderer::PipelineLayoutPtr m_pipelineLayout;
 		renderer::PipelinePtr m_pipeline;
+		renderer::CommandBufferPtr m_commandBuffer;
 	};
 }
 

@@ -125,12 +125,14 @@ namespace castor3d
 		m_pipeline->finish();
 	}
 
-	void RenderQuad::registerFrame( renderer::CommandBuffer & commandBuffer )
+	void RenderQuad::prepareFrame()
 	{
-		commandBuffer.bindPipeline( *m_pipeline );
-		commandBuffer.bindGeometryBuffers( *m_geometryBuffers );
-		commandBuffer.bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
-		commandBuffer.draw( 4u, 1u, 0u, 0u );
+		auto & device = *m_renderSystem.getCurrentDevice();
+		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer( false );
+		m_commandBuffer->bindPipeline( *m_pipeline );
+		m_commandBuffer->bindGeometryBuffers( *m_geometryBuffers );
+		m_commandBuffer->bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
+		m_commandBuffer->draw( 4u, 1u, 0u, 0u );
 	}
 
 	void RenderQuad::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout

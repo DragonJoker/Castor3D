@@ -1,11 +1,11 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_FilmGrainPostEffect___
 #define ___C3D_FilmGrainPostEffect___
 
-#include <Mesh/Buffer/ParticleDeclaration.hpp>
 #include <PostEffect/PostEffect.hpp>
+#include <RenderToTexture/RenderQuad.hpp>
 #include <Texture/TextureUnit.hpp>
 #include <Render/Viewport.hpp>
 #include <Shader/Ubos/MatrixUbo.hpp>
@@ -15,6 +15,31 @@ namespace film_grain
 {
 	static const uint32_t FILTER_COUNT = 4;
 	static const uint32_t KERNEL_SIZE = 3;
+
+	class RenderQuad
+		: public castor3d::RenderQuad
+	{
+	public:
+		explicit RenderQuad( castor3d::RenderSystem & renderSystem
+			, castor::Size const & size );
+		void update( float time );
+
+	private:
+		void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
+			, renderer::DescriptorSet & descriptorSet )override;
+
+	private:
+		struct Configuration
+		{
+			castor::Point2f m_pixelSize;
+			float m_noiseIntensity;
+			float m_exposure;
+			float m_time;
+		};
+		castor::Size m_size;
+		renderer::UniformBufferPtr< Configuration > m_configUbo;
+		castor3d::TextureUnit m_noise;
+	};
 
 	class PostEffect
 		: public castor3d::PostEffect
@@ -38,34 +63,24 @@ namespace film_grain
 		/**
 		 *\copydoc		castor3d::PostEffect::Apply
 		 */
-		bool apply( castor3d::FrameBuffer & framebuffer ) override;
+		bool apply() override;
 
 	private:
 		/**
 		 *\copydoc		castor3d::PostEffect::doWriteInto
 		 */
 		bool doWriteInto( castor::TextFile & file ) override;
-		void doGenerateNoiseTexture();
 
 	public:
 		static castor::String Type;
 		static castor::String Name;
 
 	private:
-		castor3d::PushUniform1sSPtr m_mapSrc;
-		castor3d::PushUniform1sSPtr m_mapNoise;
-		castor3d::SamplerSPtr m_sampler2D;
-		castor3d::SamplerSPtr m_sampler3D;
-		castor3d::RenderPipelineSPtr m_pipeline;
-		castor3d::MatrixUbo m_matrixUbo;
+		castor3d::SamplerSPtr m_sampler;
 		PostEffectSurface m_surface;
-		castor3d::TextureUnit m_noise;
-		castor3d::UniformBuffer m_configUbo;
-		castor3d::Uniform2f & m_pixelSize;
-		castor3d::Uniform1f & m_noiseIntensity;
-		castor3d::Uniform1f & m_exposure;
-		castor3d::Uniform1f & m_time;
 		castor::PreciseTimer m_timer;
+		renderer::RenderPassPtr m_renderPass;
+		std::unique_ptr< RenderQuad > m_quad;
 	};
 }
 
