@@ -261,23 +261,6 @@ namespace renderer
 		*/
 		virtual TexturePtr createTexture( ImageLayout initialLayout = ImageLayout::eUndefined )const = 0;
 		/**
-		*\~english
-		*\brief
-		*	Creates a render buffer.
-		*\param[in] format
-		*	The buffer's format.
-		*\param[in] size
-		*	The buffer's dimensions.
-		*\brief
-		*	Crée un tampon de rendu.
-		*\param[in] format
-		*	Le format du tampon.
-		*\param[in] size
-		*	Les dimensions du tampon.
-		*/
-		virtual RenderBufferPtr createRenderBuffer( PixelFormat format
-			, UIVec2 const & size ) = 0;
-		/**
 		*\~french
 		*\brief
 		*	Crée un échantillonneur.

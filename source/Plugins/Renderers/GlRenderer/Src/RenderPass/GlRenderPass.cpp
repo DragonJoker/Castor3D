@@ -31,10 +31,10 @@ namespace gl_renderer
 	}
 
 	renderer::FrameBufferPtr RenderPass::createFrameBuffer( renderer::UIVec2 const & dimensions
-		, renderer::TextureViewCRefArray const & textures )const
+		, renderer::TextureAttachmentPtrArray && textures )const
 	{
 		return std::make_shared< FrameBuffer >( *this
 			, dimensions
-			, textures );
+			, std::move( textures ) );
 	}
 }

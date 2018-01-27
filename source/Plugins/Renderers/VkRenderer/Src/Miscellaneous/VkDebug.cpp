@@ -39,6 +39,7 @@ namespace vk_renderer
 	template<> std::string const VkTypeNamer< VkFenceCreateInfo >::Name = "VkFenceCreateInfo";
 	template<> std::string const VkTypeNamer< VkFramebufferCreateInfo >::Name = "VkFramebufferCreateInfo";
 	template<> std::string const VkTypeNamer< VkGraphicsPipelineCreateInfo >::Name = "VkGraphicsPipelineCreateInfo";
+	template<> std::string const VkTypeNamer< VkImageBlit >::Name = "VkImageBlit";
 	template<> std::string const VkTypeNamer< VkImageCopy >::Name = "VkImageCopy";
 	template<> std::string const VkTypeNamer< VkImageCreateInfo >::Name = "VkImageCreateInfo";
 	template<> std::string const VkTypeNamer< VkImageMemoryBarrier >::Name = "VkImageMemoryBarrier";

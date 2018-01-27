@@ -407,6 +407,18 @@ namespace vk_renderer
 			return dump.str();
 		}
 
+		static inline std::string subDump( VkImageBlit const & value, std::string const & tabs )
+		{
+			std::stringstream dump;
+			dump << tabs << "{" << std::endl;
+			dump << tabs << "\t" << "dstOffset: " << std::endl << subDump( value.dstOffsets, tabs + "\t" ) << std::endl;
+			dump << tabs << "\t" << "dstSubresource: " << std::endl << subDump( value.dstSubresource, tabs + "\t" ) << std::endl;
+			dump << tabs << "\t" << "srcOffset: " << std::endl << subDump( value.srcOffsets, tabs + "\t" ) << std::endl;
+			dump << tabs << "\t" << "srcSubresource: " << std::endl << subDump( value.srcSubresource, tabs + "\t" ) << std::endl;
+			dump << tabs << "}" << std::endl;
+			return dump.str();
+		}
+
 		static inline std::string subDump( VkImageSubresourceLayers const & value, std::string const & tabs )
 		{
 			std::stringstream dump;

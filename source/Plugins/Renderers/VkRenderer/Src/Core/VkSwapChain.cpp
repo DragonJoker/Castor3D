@@ -3,6 +3,7 @@
 #include "Command/VkCommandBuffer.hpp"
 #include "Command/VkCommandPool.hpp"
 #include "Command/VkQueue.hpp"
+#include "Core/VkBackBuffer.hpp"
 #include "Core/VkDevice.hpp"
 #include "Core/VkPhysicalDevice.hpp"
 #include "Image/VkTexture.hpp"
@@ -11,7 +12,8 @@
 #include "RenderPass/VkRenderPass.hpp"
 #include "Sync/VkImageMemoryBarrier.hpp"
 #include "Sync/VkSemaphore.hpp"
-#include "VkBackBuffer.hpp"
+
+#include <RenderPass/TextureAttachment.hpp>
 
 namespace vk_renderer
 {
@@ -59,8 +61,10 @@ namespace vk_renderer
 
 		for ( size_t i = 0u; i < result.size(); ++i )
 		{
+			renderer::TextureAttachmentPtrArray attaches;
+			attaches.emplace_back( std::make_unique< renderer::TextureAttachment >( m_backBuffers[i]->getView() ) );
 			result[i] = static_cast< RenderPass const & >( renderPass ).createFrameBuffer( m_dimensions
-				, { m_backBuffers[i]->getView() } );
+				, std::move( attaches ) );
 		}
 
 		return result;

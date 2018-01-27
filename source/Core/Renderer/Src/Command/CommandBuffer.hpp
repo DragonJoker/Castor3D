@@ -8,6 +8,7 @@ See LICENSE file in root folder.
 
 #include "Miscellaneous/BufferCopy.hpp"
 #include "Miscellaneous/BufferImageCopy.hpp"
+#include "Miscellaneous/ImageBlit.hpp"
 #include "Miscellaneous/ImageCopy.hpp"
 #include "RenderPass/ClearValue.hpp"
 
@@ -351,6 +352,34 @@ namespace renderer
 		virtual void copyImage( ImageCopy const & copyInfo
 			, TextureView const & src
 			, TextureView const & dst )const = 0;
+		/**
+		*\~french
+		*\brief
+		*	Copie une image vers une autre.
+		*\param[in] src
+		*	L'image source.
+		*\param[in] dst
+		*	L'image destination.
+		*\param[in] blit
+		*	La configuration de la copie.
+		*\param[in] filter
+		*	Le filtre appliqué si la copie nécessite une mise à l'échelle.
+		*\~english
+		*\brief
+		*	Blits an image to another one.
+		*\param[in] src
+		*	The source image.
+		*\param[in] dst
+		*	The destination image.
+		*\param[in] blit
+		*	The blit configuration.
+		*\param[in] filter
+		*	The filter applied if the blit requires scaling.
+		*/
+		virtual void blitImage( ImageBlit const & blit
+			, TextureAttachment const & src
+			, TextureAttachment const & dst
+			, Filter filter )const = 0;
 		/**
 		*\~english
 		*\brief

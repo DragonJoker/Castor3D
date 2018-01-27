@@ -152,6 +152,13 @@ namespace gl_renderer
 			, renderer::TextureView const & src
 			, renderer::TextureView const & dst )const override;
 		/**
+		*\copydoc	renderer::CommandBuffer:blitImage
+		*/
+		void blitImage( renderer::ImageBlit const & blit
+			, renderer::TextureAttachment const & src
+			, renderer::TextureAttachment const & dst
+			, renderer::Filter filter )const override;
+		/**
 		*\copydoc	renderer::CommandBuffer:resetQueryPool
 		*/
 		void resetQueryPool( renderer::QueryPool const & pool

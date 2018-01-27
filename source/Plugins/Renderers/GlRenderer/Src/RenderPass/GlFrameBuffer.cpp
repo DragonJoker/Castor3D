@@ -129,28 +129,28 @@ namespace gl_renderer
 
 	FrameBuffer::FrameBuffer( renderer::RenderPass const & renderPass
 		, renderer::UIVec2 const & dimensions )
-		: renderer::FrameBuffer{ renderPass, dimensions, renderer::TextureViewCRefArray{} }
+		: renderer::FrameBuffer{ renderPass, dimensions, renderer::TextureAttachmentPtrArray{} }
 		, m_frameBuffer{ 0u }
 	{
 	}
 
 	FrameBuffer::FrameBuffer( renderer::RenderPass const & renderPass
 		, renderer::UIVec2 const & dimensions
-		, renderer::TextureViewCRefArray const & views )
-		: renderer::FrameBuffer{ renderPass, dimensions, views }
+		, renderer::TextureAttachmentPtrArray && views )
+		: renderer::FrameBuffer{ renderPass, dimensions, std::move( views ) }
 	{
 		glLogCall( gl::GenFramebuffers, 1, &m_frameBuffer );
 		glLogCall( gl::BindFramebuffer, GL_FRAMEBUFFER, m_frameBuffer );
 		renderer::UInt32Array colours;
 
-		for ( auto & view : views )
+		for ( auto & attach : m_attachments )
 		{
 			Attachment attachment
 			{
-				getAttachmentPoint( static_cast< TextureView const & >( view.get() ) ),
+				getAttachmentPoint( static_cast< TextureView const & >( attach->getView() ) ),
 				0u,
-				static_cast< TextureView const & >( view.get() ).getImage(),
-				getAttachmentType( static_cast< TextureView const & >( view.get() ) ),
+				static_cast< TextureView const & >( attach->getView() ).getImage(),
+				getAttachmentType( static_cast< TextureView const & >( attach->getView() ) ),
 			};
 
 			if ( attachment.point == GL_ATTACHMENT_POINT_DEPTH_STENCIL
@@ -171,7 +171,7 @@ namespace gl_renderer
 				, attachment.point
 				, GL_TEXTURE_2D
 				, attachment.object
-				, view.get().getSubResourceRange().getBaseMipLevel() );
+				, attach->getView().getSubResourceRange().getBaseMipLevel() );
 			doCheck( glLogCall( gl::CheckFramebufferStatus, GL_FRAMEBUFFER ) );
 		}
 

@@ -365,7 +365,7 @@ namespace renderer
 
 	template< typename T >
 	inline void StagingBuffer::downloadBufferData( CommandBuffer const & commandBuffer
-		, std::vector< T > const & data
+		, std::vector< T > & data
 		, Buffer< T > const & buffer )const
 	{
 		downloadBufferData( commandBuffer
@@ -377,7 +377,7 @@ namespace renderer
 
 	template< typename T >
 	inline void StagingBuffer::downloadBufferData( CommandBuffer const & commandBuffer
-		, ByteArray const & data
+		, ByteArray & data
 		, Buffer< T > const & buffer )const
 	{
 		downloadBufferData( commandBuffer
@@ -389,7 +389,7 @@ namespace renderer
 
 	template< typename T >
 	inline void StagingBuffer::downloadBufferData( CommandBuffer const & commandBuffer
-		, uint8_t const * const data
+		, uint8_t * data
 		, uint32_t size
 		, Buffer< T > const & buffer )const
 	{
@@ -402,7 +402,7 @@ namespace renderer
 
 	template< typename T >
 	inline void StagingBuffer::downloadBufferData( CommandBuffer const & commandBuffer
-		, std::vector< T > const & data
+		, std::vector< T > & data
 		, uint32_t offset
 		, Buffer< T > const & buffer )const
 	{
@@ -415,7 +415,7 @@ namespace renderer
 
 	template< typename T >
 	inline void StagingBuffer::downloadBufferData( CommandBuffer const & commandBuffer
-		, ByteArray const & data
+		, ByteArray & data
 		, uint32_t offset
 		, Buffer< T > const & buffer )const
 	{
@@ -428,7 +428,7 @@ namespace renderer
 
 	template< typename T >
 	void StagingBuffer::downloadBufferData( CommandBuffer const & commandBuffer
-		, uint8_t const * const data
+		, uint8_t * data
 		, uint32_t size
 		, uint32_t offset
 		, Buffer< T > const & buffer )const
@@ -443,7 +443,7 @@ namespace renderer
 
 	template< typename T >
 	inline void StagingBuffer::downloadVertexData( CommandBuffer const & commandBuffer
-		, std::vector< T > const & data
+		, std::vector< T > & data
 		, VertexBuffer< T > const & buffer
 		, PipelineStageFlags const & flags )const
 	{
@@ -457,7 +457,7 @@ namespace renderer
 
 	template< typename T >
 	inline void StagingBuffer::downloadVertexData( CommandBuffer const & commandBuffer
-		, ByteArray const & data
+		, ByteArray & data
 		, VertexBuffer< T > const & buffer
 		, PipelineStageFlags const & flags )const
 	{
@@ -471,7 +471,7 @@ namespace renderer
 
 	template< typename T >
 	inline void StagingBuffer::downloadVertexData( CommandBuffer const & commandBuffer
-		, uint8_t const * const data
+		, uint8_t * data
 		, uint32_t size
 		, VertexBuffer< T > const & buffer
 		, PipelineStageFlags const & flags )const
@@ -486,7 +486,7 @@ namespace renderer
 
 	template< typename T >
 	inline void StagingBuffer::downloadVertexData( CommandBuffer const & commandBuffer
-		, std::vector< T > const & data
+		, std::vector< T > & data
 		, uint32_t offset
 		, VertexBuffer< T > const & buffer
 		, PipelineStageFlags const & flags )const
@@ -501,7 +501,7 @@ namespace renderer
 
 	template< typename T >
 	inline void StagingBuffer::downloadVertexData( CommandBuffer const & commandBuffer
-		, ByteArray const & data
+		, ByteArray & data
 		, uint32_t offset
 		, VertexBuffer< T > const & buffer
 		, PipelineStageFlags const & flags )const
@@ -516,7 +516,7 @@ namespace renderer
 
 	template< typename T >
 	inline void StagingBuffer::downloadVertexData( CommandBuffer const & commandBuffer
-		, uint8_t const * const data
+		, uint8_t * data
 		, uint32_t size
 		, uint32_t offset
 		, VertexBuffer< T > const & buffer
@@ -533,7 +533,7 @@ namespace renderer
 
 	template< typename T >
 	inline void StagingBuffer::downloadUniformData( CommandBuffer const & commandBuffer
-		, ByteArray const & data
+		, ByteArray & data
 		, UniformBuffer< T > const & buffer
 		, PipelineStageFlags const & flags )const
 	{
@@ -547,7 +547,7 @@ namespace renderer
 
 	template< typename T >
 	inline void StagingBuffer::downloadUniformData( CommandBuffer const & commandBuffer
-		, uint8_t const * const data
+		, uint8_t * data
 		, uint32_t size
 		, UniformBuffer< T > const & buffer
 		, PipelineStageFlags const & flags )const
@@ -562,7 +562,7 @@ namespace renderer
 
 	template< typename T >
 	inline void StagingBuffer::downloadUniformData( CommandBuffer const & commandBuffer
-		, ByteArray const & data
+		, ByteArray & data
 		, uint32_t offset
 		, UniformBuffer< T > const & buffer
 		, PipelineStageFlags const & flags )const
@@ -577,7 +577,7 @@ namespace renderer
 
 	template< typename T >
 	inline void StagingBuffer::downloadUniformData( CommandBuffer const & commandBuffer
-		, std::vector< T > const & data
+		, std::vector< T > & data
 		, UniformBuffer< T > const & buffer
 		, PipelineStageFlags const & flags )const
 	{
@@ -593,7 +593,7 @@ namespace renderer
 
 	template< typename T >
 	inline void StagingBuffer::downloadUniformData( CommandBuffer const & commandBuffer
-		, T const * const data
+		, T * data
 		, uint32_t count
 		, UniformBuffer< T > const & buffer
 		, PipelineStageFlags const & flags )const
@@ -610,7 +610,7 @@ namespace renderer
 
 	template< typename T >
 	inline void StagingBuffer::downloadUniformData( CommandBuffer const & commandBuffer
-		, std::vector< T > const & data
+		, std::vector< T > & data
 		, uint32_t offset
 		, UniformBuffer< T > const & buffer
 		, PipelineStageFlags const & flags )const
@@ -627,7 +627,7 @@ namespace renderer
 
 	template< typename T >
 	inline void StagingBuffer::downloadUniformData( CommandBuffer const & commandBuffer
-		, T const * const data
+		, T * data
 		, uint32_t count
 		, uint32_t offset
 		, UniformBuffer< T > const & buffer
@@ -645,7 +645,7 @@ namespace renderer
 
 	template< typename T >
 	inline void StagingBuffer::downloadUniformData( CommandBuffer const & commandBuffer
-		, uint8_t const * const data
+		, uint8_t * data
 		, uint32_t size
 		, uint32_t offset
 		, UniformBuffer< T > const & buffer

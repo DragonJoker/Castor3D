@@ -80,6 +80,7 @@ namespace renderer
 	struct BufferCopy;
 	struct BufferImageCopy;
 	struct ImageCopy;
+	struct ImageBlit;
 	struct PushConstant;
 
 	class AttributeBase;
@@ -111,7 +112,6 @@ namespace renderer
 	class QueryPool;
 	class Queue;
 	class RasterisationState;
-	class RenderBuffer;
 	class Renderer;
 	class RenderingResources;
 	class RenderPass;
@@ -128,6 +128,7 @@ namespace renderer
 	class SwapChain;
 	class TessellationState;
 	class Texture;
+	class TextureAttachment;
 	class TextureView;
 	class UniformBufferBase;
 	class VertexBufferBase;
@@ -173,12 +174,12 @@ namespace renderer
 	using DescriptorSetPtr = std::unique_ptr< DescriptorSet >;
 	using DevicePtr = std::unique_ptr< Device >;
 	using FencePtr = std::unique_ptr< Fence >;
+	using TextureAttachmentPtr = std::unique_ptr< TextureAttachment >;
 	using GeometryBuffersPtr = std::unique_ptr< GeometryBuffers >;
 	using IWindowHandlePtr = std::unique_ptr< IWindowHandle >;
 	using PipelineLayoutPtr = std::unique_ptr< PipelineLayout >;
 	using QueryPoolPtr = std::unique_ptr< QueryPool >;
 	using QueuePtr = std::unique_ptr< Queue >;
-	using RenderBufferPtr = std::unique_ptr< RenderBuffer >;
 	using RendererPtr = std::unique_ptr< Renderer >;
 	using RenderingResourcesPtr = std::unique_ptr< RenderingResources >;
 	using RenderPassPtr = std::unique_ptr< RenderPass >;
@@ -202,6 +203,7 @@ namespace renderer
 	using TextureViewPtr = std::shared_ptr< TextureView >;
 
 	using FrameBufferPtrArray = std::vector< FrameBufferPtr >;
+	using TextureAttachmentPtrArray = std::vector< TextureAttachmentPtr >;
 	using CommandBufferPtrArray = std::vector< CommandBufferPtr >;
 	using RenderSubpassPtrArray = std::vector< RenderSubpassPtr >;
 
@@ -224,6 +226,7 @@ namespace renderer
 	using TextureViewCRefArray = std::vector< TextureViewCRef >;
 	using VertexLayoutCRefArray = std::vector< VertexLayoutCRef >;
 	using VertexBufferCRefArray = std::vector< VertexBufferCRef >;
+
 	/**\}*/
 	/**
 	*\name Typedefs d'attributs de sommets.

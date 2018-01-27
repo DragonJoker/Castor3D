@@ -178,6 +178,18 @@ namespace vk_renderer
 		{
 			return m_image;
 		}
+		/**
+		*\~french
+		*\return
+		*	La layout actuel de l'image.
+		*\~english
+		*\brief
+		*	The current image layout.
+		*/
+		inline renderer::ImageLayout getCurrentLayout()const
+		{
+			return m_currentLayout;
+		}
 
 	private:
 		/**

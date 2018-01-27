@@ -32,6 +32,7 @@ See LICENSE file in root folder.
 #include <Buffer/PushConstantsBuffer.hpp>
 #include <Buffer/StagingBuffer.hpp>
 #include <Buffer/VertexBuffer.hpp>
+#include <RenderPass/TextureAttachment.hpp>
 
 namespace vk_renderer
 {
@@ -397,6 +398,23 @@ namespace vk_renderer
 			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 			, 1
 			, &vkcopyInfo );
+	}
+
+	void CommandBuffer::blitImage( renderer::ImageBlit const & blit
+		, renderer::TextureAttachment const & src
+		, renderer::TextureAttachment const & dst
+		, renderer::Filter filter )const
+	{
+		auto vkblitInfo = convert( blit );
+		DEBUG_DUMP( vkblitInfo );
+		vk::CmdBlitImage( m_commandBuffer
+			, static_cast< Texture const & >( static_cast< renderer::TextureAttachment const & >( src ).getTexture() )
+			, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+			, static_cast< Texture const & >( static_cast< renderer::TextureAttachment const & >( dst ).getTexture() )
+			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+			, 1
+			, &vkblitInfo
+			, convert( filter ) );
 	}
 
 	void CommandBuffer::resetQueryPool( renderer::QueryPool const & pool

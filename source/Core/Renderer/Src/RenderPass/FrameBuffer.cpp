@@ -3,6 +3,7 @@ This file belongs to Renderer.
 See LICENSE file in root folder.
 */
 #include "RenderPass/FrameBuffer.hpp"
+#include "RenderPass/TextureAttachment.hpp"
 
 #include "Command/Queue.hpp"
 #include "Image/Texture.hpp"
@@ -10,13 +11,14 @@ See LICENSE file in root folder.
 
 namespace renderer
 {
-	FrameBuffer::FrameBuffer()
-	{
-	}
-
 	FrameBuffer::FrameBuffer( RenderPass const & renderPass
 		, UIVec2 const & dimensions
-		, TextureViewCRefArray const & textures )
+		, TextureAttachmentPtrArray && attachments )
+		: m_attachments{ std::move( attachments ) }
 	{
+		for ( auto & attachment : m_attachments )
+		{
+			attachment->m_frameBuffer = this;
+		}
 	}
 }

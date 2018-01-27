@@ -61,13 +61,13 @@ namespace renderer
 		*	n'est pas possible, une std::runtime_error est lancée.
 		*\param[in] dimensions
 		*	Les dimensions du tampon d'images.
-		*\param[in] textures
-		*	Les textures voulues pour le tampon d'images à créer.
+		*\param[in] attaches
+		*	Les attaches pour le tampon d'images à créer.
 		*\return
 		*	Le FrameBuffer créé.
 		*/
 		virtual FrameBufferPtr createFrameBuffer( UIVec2 const & dimensions
-			, TextureViewCRefArray const & textures )const = 0;
+			, TextureAttachmentPtrArray && attaches )const = 0;
 	};
 }
 

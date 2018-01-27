@@ -22,7 +22,6 @@ See LICENSE file in root folder.
 #include "Pipeline/GlPipeline.hpp"
 #include "Pipeline/GlPipelineLayout.hpp"
 #include "Pipeline/GlVertexLayout.hpp"
-#include "RenderPass/GlRenderBuffer.hpp"
 #include "RenderPass/GlRenderPass.hpp"
 #include "RenderPass/GlRenderSubpass.hpp"
 #include "Shader/GlShaderProgram.hpp"
@@ -170,12 +169,6 @@ namespace gl_renderer
 	renderer::TexturePtr Device::createTexture( renderer::ImageLayout initialLayout )const
 	{
 		return std::make_shared< Texture >( *this );
-	}
-
-	renderer::RenderBufferPtr Device::createRenderBuffer( renderer::PixelFormat format
-		, renderer::UIVec2 const & size )
-	{
-		return std::make_unique< RenderBuffer >( *this, format, size );
 	}
 
 	renderer::SamplerPtr Device::createSampler( renderer::WrapMode wrapS

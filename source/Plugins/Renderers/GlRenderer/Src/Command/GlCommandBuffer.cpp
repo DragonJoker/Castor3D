@@ -24,6 +24,7 @@ See LICENSE file in root folder.
 #include "Commands/GlBindDescriptorSetCommand.hpp"
 #include "Commands/GlBindGeometryBuffersCommand.hpp"
 #include "Commands/GlBindPipelineCommand.hpp"
+#include "Commands/GlBlitImageCommand.hpp"
 #include "Commands/GlCopyBufferCommand.hpp"
 #include "Commands/GlCopyBufferToImageCommand.hpp"
 #include "Commands/GlCopyImageCommand.hpp"
@@ -234,6 +235,17 @@ namespace gl_renderer
 		m_commands.emplace_back( std::make_unique< CopyImageCommand >( copyInfo
 			, src
 			, dst ) );
+	}
+
+	void CommandBuffer::blitImage( renderer::ImageBlit const & blitInfo
+		, renderer::TextureAttachment const & src
+		, renderer::TextureAttachment const & dst
+		, renderer::Filter filter )const
+	{
+		m_commands.emplace_back( std::make_unique< BlitImageCommand >( blitInfo
+			, src
+			, dst
+			, filter ) );
 	}
 
 	void CommandBuffer::resetQueryPool( renderer::QueryPool const & pool

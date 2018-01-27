@@ -57,7 +57,7 @@ namespace gl_renderer
 		*	Le FrameBuffer créé.
 		*/
 		renderer::FrameBufferPtr createFrameBuffer( renderer::UIVec2 const & dimensions
-			, renderer::TextureViewCRefArray const & textures )const override;
+			, renderer::TextureAttachmentPtrArray && textures )const override;
 		/**
 		*\return
 		*	Le statut de vidage.

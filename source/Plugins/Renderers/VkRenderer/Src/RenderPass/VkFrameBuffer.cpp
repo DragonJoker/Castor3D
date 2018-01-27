@@ -6,27 +6,29 @@ See LICENSE file in root folder.
 
 #include "Command/VkCommandBuffer.hpp"
 #include "Command/VkCommandPool.hpp"
-#include "Core/VkDevice.hpp"
-#include "Sync/VkFence.hpp"
-#include "Sync/VkImageMemoryBarrier.hpp"
-#include "Miscellaneous/VkMemoryStorage.hpp"
 #include "Command/VkQueue.hpp"
-#include "RenderPass/VkRenderPass.hpp"
+#include "Core/VkDevice.hpp"
 #include "Image/VkTexture.hpp"
 #include "Image/VkTextureView.hpp"
+#include "Miscellaneous/VkMemoryStorage.hpp"
+#include "RenderPass/VkRenderPass.hpp"
+#include "Sync/VkFence.hpp"
+#include "Sync/VkImageMemoryBarrier.hpp"
+
+#include <RenderPass/TextureAttachment.hpp>
 
 namespace vk_renderer
 {
 	namespace
 	{
-		TextureViewCRefArray convert( renderer::TextureViewCRefArray const & textures )
+		TextureViewCRefArray convert( renderer::TextureAttachmentPtrArray const & attachs )
 		{
 			TextureViewCRefArray result;
-			result.reserve( textures.size() );
+			result.reserve( attachs.size() );
 
-			for ( auto & texture : textures )
+			for ( auto & attach : attachs )
 			{
-				result.emplace_back( static_cast< TextureView const & >( texture.get() ) );
+				result.emplace_back( static_cast< TextureView const & >( static_cast< renderer::TextureAttachment const & >( *attach ).getView() ) );
 			}
 
 			return result;
@@ -36,13 +38,13 @@ namespace vk_renderer
 	FrameBuffer::FrameBuffer( Device const & device
 		, RenderPass const & renderPass
 		, renderer::UIVec2 const & dimensions
-		, renderer::TextureViewCRefArray const & textures )
-		: renderer::FrameBuffer{ renderPass, dimensions, textures }
+		, renderer::TextureAttachmentPtrArray && attachments )
+		: renderer::FrameBuffer{ renderPass, dimensions, std::move( attachments ) }
 		, m_device{ device }
-		, m_views{ convert( textures ) }
+		, m_views{ convert( m_attachments ) }
 		, m_dimensions{ dimensions }
 	{
-		auto attachments = makeVkArray< VkImageView >( m_views );
+		auto vkattachments = makeVkArray< VkImageView >( m_views );
 
 		VkFramebufferCreateInfo createInfo
 		{
@@ -50,8 +52,8 @@ namespace vk_renderer
 			nullptr,
 			0u,                                                 // flags
 			renderPass,                                         // renderPass
-			static_cast< uint32_t >( attachments.size() ),      // attachmentCount
-			attachments.data(),                                 // pAttachments
+			static_cast< uint32_t >( vkattachments.size() ),    // attachmentCount
+			vkattachments.data(),                               // pAttachments
 			uint32_t( dimensions[0] ),                          // width
 			uint32_t( dimensions[1] ),                          // height
 			1u                                                  // layers

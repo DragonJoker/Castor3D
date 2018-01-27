@@ -153,6 +153,7 @@ namespace gl_renderer
 	using PFN_glBlendColor = void ( GLAPIENTRY * ) ( GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha );
 	using PFN_glBlendEquationSeparatei = void ( GLAPIENTRY * ) ( GLuint buf, GLenum modeRGB, GLenum modeAlpha );
 	using PFN_glBlendFuncSeparatei = void ( GLAPIENTRY * ) ( GLuint buf, GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha );
+	using PFN_glBlitFramebuffer = void ( GLAPIENTRY * )( GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter );
 	using PFN_glBufferStorage = void ( GLAPIENTRY * )( GLenum target, GLsizeiptr size, const void * data, GLbitfield flags );
 	using PFN_glCheckFramebufferStatus = GLenum( GLAPIENTRY * ) ( GLenum target );
 	using PFN_glClearBufferfi = void ( GLAPIENTRY * ) ( GLenum buffer, GLint drawBuffer, GLfloat depth, GLint stencil );

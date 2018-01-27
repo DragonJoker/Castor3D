@@ -183,18 +183,18 @@ namespace vk_renderer
 	}
 
 	renderer::FrameBufferPtr RenderPass::createFrameBuffer( renderer::UIVec2 const & dimensions
-		, renderer::TextureViewCRefArray const & textures )const
+		, renderer::TextureAttachmentPtrArray && textures )const
 	{
 		// On vérifie la compatibilité des vues demandés pour le framebuffer à créer.
 		auto it = std::find_if( textures.begin()
 			, textures.end()
-			, [this]( std::reference_wrapper< renderer::TextureView const > const & view )
+			, [this]( renderer::TextureAttachmentPtr const & attach )
 		{
 			return m_formats.end() == std::find_if( m_formats.begin()
 				, m_formats.end()
-				, [&view]( auto format )
+				, [&attach]( auto format )
 			{
-				return format == view.get().getFormat();
+				return format == attach->getFormat();
 			} );
 		} );
 
@@ -207,7 +207,7 @@ namespace vk_renderer
 		return std::make_unique< FrameBuffer >( m_device
 			, *this
 			, dimensions
-			, textures );
+			, std::move( textures ) );
 	}
 
 	std::vector< VkClearValue > const & RenderPass::getClearValues (renderer::ClearValueArray const & clearValues)const

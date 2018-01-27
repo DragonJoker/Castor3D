@@ -83,6 +83,7 @@
 #include "Image/VkImageSubresourceRange.hpp"
 #include "Miscellaneous/VkBufferCopy.hpp"
 #include "Miscellaneous/VkBufferImageCopy.hpp"
+#include "Miscellaneous/VkImageBlit.hpp"
 #include "Miscellaneous/VkImageCopy.hpp"
 #include "Pipeline/VkColourBlendState.hpp"
 #include "Pipeline/VkColourBlendStateAttachment.hpp"

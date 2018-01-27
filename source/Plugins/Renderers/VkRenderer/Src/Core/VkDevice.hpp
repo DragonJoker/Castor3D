@@ -121,11 +121,6 @@ namespace vk_renderer
 		*/
 		renderer::TexturePtr createTexture( renderer::ImageLayout initialLayout )const override;
 		/**
-		*\copydoc	renderer::Device::createRenderBuffer
-		*/
-		renderer::RenderBufferPtr createRenderBuffer( renderer::PixelFormat format
-			, renderer::UIVec2 const & size )override;
-		/**
 		*\copydoc	renderer::Device::createSampler
 		*/
 		renderer::SamplerPtr createSampler( renderer::WrapMode wrapS
