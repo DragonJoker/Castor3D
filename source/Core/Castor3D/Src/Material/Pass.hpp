@@ -92,20 +92,6 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		Binds the pass' textures.
-		 *\~french
-		 *\brief		Active les textures de la passe.
-		 */
-		C3D_API void bindTextures();
-		/**
-		 *\~english
-		 *\brief		Unbinds the pass' textures.
-		 *\~french
-		 *\brief		Désactive les textures de la passe.
-		 */
-		C3D_API void unbindTextures();
-		/**
-		 *\~english
 		 *\brief		adds a texture unit.
 		 *\param[in]	p_unit	The texture unit.
 		 *\~french

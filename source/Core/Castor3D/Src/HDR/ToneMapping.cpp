@@ -80,7 +80,7 @@ namespace castor3d
 			, bindings );
 		m_timer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Tone mapping" ), cuT( "Tone mapping" ) );
 
-		registerFrame( *m_commandBuffer );
+		prepareFrame();
 		return true;
 	}
 

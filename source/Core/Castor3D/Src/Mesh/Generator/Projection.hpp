@@ -54,7 +54,7 @@ namespace castor3d
 		 *\param[in]	p_vAxis		L'axe de projection
 		 *\param[in]	p_bClosed	Dit si on doit fermer la projection
 		 */
-		C3D_API void setPoints( Point3rPatternSPtr p_pPattern, castor::Point3r const & p_vAxis, bool p_bClosed );
+		//C3D_API void setPoints( Point3rPatternSPtr p_pPattern, castor::Point3r const & p_vAxis, bool p_bClosed );
 
 	private:
 		/**
@@ -63,7 +63,7 @@ namespace castor3d
 		C3D_API virtual void doGenerate( Mesh & p_mesh, Parameters const & p_parameters );
 
 	private:
-		Point3rPatternSPtr m_pPattern;
+		//Point3rPatternSPtr m_pPattern;
 		castor::Point3r m_vAxis;
 		real m_fDepth;
 		bool m_bClosed;

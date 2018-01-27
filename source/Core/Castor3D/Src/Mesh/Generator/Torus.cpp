@@ -1,4 +1,4 @@
-﻿#include "Torus.hpp"
+#include "Torus.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
@@ -62,19 +62,15 @@ void Torus::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 		real rAngleEx = 0.0;
 		uint32_t uiExtMax = m_externalNbFaces;
 		uint32_t uiIntMax = m_internalNbFaces;
-		Point3r ptPos;
-		Point3r ptNml;
-		Coords3r ptTangent0;
-		Coords3r ptTangent1;
 
 		// Build the internal circle that will be rotated to build the torus
 		real step = real( Angle::PiMult2 ) / m_internalNbFaces;
 
 		for ( uint32_t j = 0; j <= uiIntMax; j++ )
 		{
-			BufferElementGroupSPtr vertex = submesh.addPoint( m_internalRadius * cos( rAngleIn ) + m_externalRadius, m_internalRadius * sin( rAngleIn ), 0.0 );
-			Vertex::setTexCoord( vertex, real( 0.0 ), real( j ) / m_internalNbFaces );
-			Vertex::setNormal( vertex, point::getNormalised( Point3r( real( cos( rAngleIn ) ), real( sin( rAngleIn ) ), real( 0.0 ) ) ) );
+			submesh.addPoint( InterleavedVertex::createPNT( Point3f{ m_internalRadius * cos( rAngleIn ) + m_externalRadius, m_internalRadius * sin( rAngleIn ), 0.0 }
+				, point::getNormalised( Point3r{ real( cos( rAngleIn ) ), real( sin( rAngleIn ) ), real( 0.0 ) } )
+				, Point2f{ real( 0.0 ), real( j ) / m_internalNbFaces } ) );
 			uiCur++;
 			rAngleIn += step;
 		}
@@ -91,12 +87,10 @@ void Torus::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 
 			for ( uint32_t j = 0; j <= uiIntMax; j++ )
 			{
-				BufferElementGroupSPtr vertex = submesh[j];
-				Vertex::getPosition( vertex, ptPos );
-				Vertex::getNormal( vertex, ptNml );
-				vertex = submesh.addPoint( ptPos[0] * cos( rAngleEx ), ptPos[1], ptPos[0] * sin( rAngleEx ) );
-				Vertex::setTexCoord( vertex, real( i ) / m_externalNbFaces, real( j ) / m_internalNbFaces );
-				Vertex::setNormal( vertex, point::getNormalised( Point3r( real( ptNml[0] * cos( rAngleEx ) ), real( ptNml[1] ), real( ptNml[0] * sin( rAngleEx ) ) ) ) );
+				auto & vertex = submesh[j];
+				vertex = submesh.addPoint( vertex.m_pos[0] * cos( rAngleEx ), vertex.m_pos[1], vertex.m_pos[0] * sin( rAngleEx ) );
+				vertex.m_tex = Point3r{ real( i ) / m_externalNbFaces, real( j ) / m_internalNbFaces };
+				vertex.m_nml = point::getNormalised( Point3r( real( vertex.m_nml[0] * cos( rAngleEx ) ), real( vertex.m_nml[1] ), real( vertex.m_nml[0] * sin( rAngleEx ) ) ) );
 			}
 
 			for ( uint32_t j = 0; j <= uiIntMax - 1; j++ )

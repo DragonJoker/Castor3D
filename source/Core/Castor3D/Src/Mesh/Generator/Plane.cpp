@@ -1,4 +1,4 @@
-﻿#include "Plane.hpp"
+#include "Plane.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
@@ -57,7 +57,6 @@ void Plane::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 	real gapH = m_depth / ( m_subDivisionsD + 1 );
 	Point3r ptCurrentUV;
 	Point3r ptPreviousUV;
-	BufferElementGroupSPtr vertex;
 	Point3r ptNormal( 0.0, 1.0, 0.0 );
 	Point3r ptTangent;
 	Point2r ptUv;
@@ -67,9 +66,9 @@ void Plane::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 	{
 		for ( uint32_t j = 0; j < nbVertexH; j++ )
 		{
-			vertex = submesh->addPoint( offsetW + ( i * gapW ), offsetH + ( j * gapH ), 0.0 );
-			Vertex::setTexCoord( vertex, ( i * gapW / m_width ), ( j * gapH / m_depth ) );
-			Vertex::setNormal( vertex, 0.0, 0.0, 1.0 );
+			submesh->addPoint( InterleavedVertex::createPNT( Point3f{ offsetW + ( i * gapW ), offsetH + ( j * gapH ), 0.0 }
+				, Point3f{ 0.0, 0.0, 1.0 }
+				, Point2f{ i * gapW / m_width, j * gapH / m_depth } ) );
 		}
 	}
 

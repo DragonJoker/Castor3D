@@ -1,4 +1,4 @@
-﻿#include "PluginCache.hpp"
+#include "PluginCache.hpp"
 
 #include "Engine.hpp"
 
@@ -172,13 +172,7 @@ namespace castor3d
 				CASTOR_EXCEPTION( string::stringCast< char >( cuT( "File [" ) + p_pathFile + cuT( "] does not exist" ) ) );
 			}
 
-			DynamicLibrarySPtr library = std::make_shared< DynamicLibrary >();
-
-			if ( !library->open( p_pathFile ) )
-			{
-				CASTOR_PLUGIN_EXCEPTION( string::stringCast< char >( cuT( "Error encountered while loading file [" ) + p_pathFile + cuT( "]" ) ), true );
-			}
-
+			DynamicLibrarySPtr library = std::make_shared< DynamicLibrary >( p_pathFile );
 			Plugin::PGetTypeFunction pfnGetType;
 
 			if ( !library->getFunction( pfnGetType, getTypeFunctionABIName ) )

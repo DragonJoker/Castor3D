@@ -1,4 +1,4 @@
-﻿#include "Sphere.hpp"
+#include "Sphere.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
@@ -72,10 +72,10 @@ void Sphere::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 				{
 					real rCos = cos( rAlphaI );
 					real rSin = sin( rAlphaI );
-					BufferElementGroupSPtr vertex = submesh.addPoint( ptT[0] * rCos, ptT[1], ptT[0] * rSin );
-					Vertex::setTexCoord( vertex, real( i ) / m_nbFaces, real( 1.0 + ptT[1] / m_radius ) / 2 );
-					Vertex::setNormal( vertex, point::getNormalised( Vertex::getPosition( vertex, ptPos ) ) );
-					//l_vertex->setTangent( point::getNormalised( Point3r( real( cos( dAlphaI + Angle::PiDiv2 ) ), real( 0.0 ), real( sin( dAlphaI + Angle::PiDiv2 ) ) ) ) );
+					auto pos = Point3f{ ptT[0] * rCos, ptT[1], ptT[0] * rSin };
+					submesh.addPoint( InterleavedVertex::createPNT( pos
+						, Point3f{ point::getNormalised( pos ) }
+						, Point2f{ real( i ) / m_nbFaces, real( 1.0 + ptT[1] / m_radius ) / 2 } ) );
 					iCur++;
 				}
 			}
@@ -87,10 +87,10 @@ void Sphere::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 			{
 				real rCos = cos( rAlphaI );
 				real rSin = sin( rAlphaI );
-				BufferElementGroupSPtr vertex = submesh.addPoint( ptB[0] * rCos, ptB[1], ptB[0] * rSin );
-				Vertex::setTexCoord( vertex, real( i ) / m_nbFaces, real( 1.0 + ptB[1] / m_radius ) / 2 );
-				Vertex::setNormal( vertex, point::getNormalised( Vertex::getPosition( vertex, ptPos ) ) );
-				// vertex->setTangent( point::getNormalised( Point3r( real( cos( dAlphaI + Angle::PiDiv2 ) ), real( 0.0 ), real( sin( dAlphaI + Angle::PiDiv2 ) ) ) ) );
+				auto pos = Point3f{ ptB[0] * rCos, ptB[1], ptB[0] * rSin };
+				submesh.addPoint( InterleavedVertex::createPNT( pos
+					, Point3f{ point::getNormalised( pos ) }
+					, Point2f{ real( i ) / m_nbFaces, real( 1.0 + ptB[1] / m_radius ) / 2 } ) );
 			}
 
 			// Reconstition des faces

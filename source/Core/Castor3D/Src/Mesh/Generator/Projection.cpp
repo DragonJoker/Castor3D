@@ -1,4 +1,4 @@
-﻿#include "Projection.hpp"
+#include "Projection.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
@@ -16,7 +16,7 @@ Projection::Projection()
 
 Projection::~Projection()
 {
-	m_pPattern.reset();
+	//m_pPattern.reset();
 }
 
 MeshGeneratorSPtr Projection::create()
@@ -24,14 +24,14 @@ MeshGeneratorSPtr Projection::create()
 	return std::make_shared< Projection >();
 }
 
-void Projection::setPoints( Point3rPatternSPtr p_pPattern, Point3r const & p_vAxis, bool p_bClosed )
-{
-	m_pPattern = p_pPattern;
-	m_bClosed = p_bClosed;
-	m_vAxis = p_vAxis;
-	point::normalise( m_vAxis );
-	m_vAxis = m_vAxis * m_fDepth;
-}
+//void Projection::setPoints( Point3rPatternSPtr p_pPattern, Point3r const & p_vAxis, bool p_bClosed )
+//{
+//	m_pPattern = p_pPattern;
+//	m_bClosed = p_bClosed;
+//	m_vAxis = p_vAxis;
+//	point::normalise( m_vAxis );
+//	m_vAxis = m_vAxis * m_fDepth;
+//}
 
 void Projection::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 {

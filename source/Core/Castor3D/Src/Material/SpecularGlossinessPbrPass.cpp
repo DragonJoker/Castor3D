@@ -1,22 +1,6 @@
-﻿#include "SpecularGlossinessPbrPass.hpp"
+#include "SpecularGlossinessPbrPass.hpp"
 
-#include "Engine.hpp"
-#include "Cache/CameraCache.hpp"
-#include "Cache/MaterialCache.hpp"
-#include "Cache/ShaderCache.hpp"
-
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderNode/RenderNode.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Scene/SceneNode.hpp"
-#include "Shader/UniformBuffer.hpp"
 #include "Shader/PassBuffer/PassBuffer.hpp"
-#include "Shader/ShaderProgram.hpp"
-#include "State/BlendState.hpp"
-#include "Texture/TextureLayout.hpp"
-#include "Texture/TextureUnit.hpp"
-
-#include <Log/Logger.hpp>
 
 using namespace castor;
 

@@ -1,4 +1,4 @@
-﻿#include "Pass.hpp"
+#include "Pass.hpp"
 
 #include "Engine.hpp"
 #include "Material/Material.hpp"
@@ -85,10 +85,10 @@ namespace castor3d
 		{
 			{ renderer::CompareOp::eAlways, cuT( "always" ) },
 			{ renderer::CompareOp::eLess, cuT( "less" ) },
-			{ renderer::CompareOp::eLEqual, cuT( "less_or_equal" ) },
+			{ renderer::CompareOp::eLessEqual, cuT( "less_or_equal" ) },
 			{ renderer::CompareOp::eEqual, cuT( "equal" ) },
-			{ renderer::CompareOp::eNEqual, cuT( "not_equal" ) },
-			{ renderer::CompareOp::eGEqual, cuT( "greater_or_equal" ) },
+			{ renderer::CompareOp::eNotEqual, cuT( "not_equal" ) },
+			{ renderer::CompareOp::eGreaterEqual, cuT( "greater_or_equal" ) },
 			{ renderer::CompareOp::eGreater, cuT( "greater" ) },
 			{ renderer::CompareOp::eNever, cuT( "never" ) },
 		};
@@ -197,22 +197,6 @@ namespace castor3d
 		for ( auto unit : m_textureUnits )
 		{
 			unit->cleanup();
-		}
-	}
-
-	void Pass::bindTextures()
-	{
-		for ( auto it : m_textureUnits )
-		{
-			it->bind();
-		}
-	}
-
-	void Pass::unbindTextures()
-	{
-		for ( auto it : m_textureUnits )
-		{
-			it->unbind();
 		}
 	}
 
@@ -472,7 +456,10 @@ namespace castor3d
 			{
 				PxBufferBaseSPtr reduced = opacityMap->getTexture()->getImage().getBuffer();
 				PF::reduceToAlpha( reduced );
-				auto texture = getOwner()->getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead );
+				auto texture = std::make_shared< TextureLayout >( *getOwner()->getEngine()->getRenderSystem()
+					, renderer::TextureType::e2D
+					, renderer::ImageUsageFlag::eSampled
+					, renderer::MemoryPropertyFlag::eHostVisible );
 				texture->setSource( reduced );
 				opacityMap->setTexture( texture );
 				opacityBuffer.reset();
@@ -480,7 +467,10 @@ namespace castor3d
 		}
 		else if ( opacityBuffer )
 		{
-			auto texture = getOwner()->getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead );
+			auto texture = std::make_shared< TextureLayout >( *getOwner()->getEngine()->getRenderSystem()
+				, renderer::TextureType::e2D
+				, renderer::ImageUsageFlag::eSampled
+				, renderer::MemoryPropertyFlag::eHostVisible );
 			texture->setSource( opacityBuffer );
 			opacityMap = std::make_shared< TextureUnit >( *getOwner()->getEngine() );
 			opacityMap->setAutoMipmaps( opacitySource->getAutoMipmaps() );

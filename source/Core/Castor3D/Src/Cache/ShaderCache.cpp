@@ -48,7 +48,11 @@ namespace castor3d
 	{
 		for ( auto & program : m_arrayPrograms )
 		{
-			getEngine()->postEvent( makeCleanupEvent( *program ) );
+			getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
+				, [&program]()
+				{
+					program.reset();
+				} ) );
 		}
 	}
 
@@ -61,7 +65,7 @@ namespace castor3d
 
 	renderer::ShaderProgram & ShaderProgramCache::getNewProgram( bool initialise )
 	{
-		auto result = getEngine()->getRenderSystem()->getMainContext()->getDevice().createShaderProgram();
+		auto result = getEngine()->getRenderSystem()->getMainDevice().createShaderProgram();
 		REQUIRE( result );
 		return doAddProgram( std::move( result ), initialise );
 	}
@@ -148,7 +152,7 @@ namespace castor3d
 
 		if ( initialise )
 		{
-			if ( getEngine()->getRenderSystem()->getCurrentContext() )
+			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
 			{
 				result.link();
 			}
@@ -173,20 +177,19 @@ namespace castor3d
 		, renderer::CompareOp alphaFunc
 		, bool invertNormals )const
 	{
-		auto result = getEngine()->getRenderSystem()->getMainContext()->getDevice().createShaderProgram();
-		REQUIRE( result );
+		auto result = getEngine()->getRenderSystem()->getMainDevice().createShaderProgram();
 		renderer::ShaderStageFlags matrixUboShaderMask = renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment;
 		result->createModule( renderPass.getVertexShaderSource( passFlags
 				, textureFlags
 				, programFlags
 				, sceneFlags
-				, invertNormals )
+				, invertNormals ).getSource()
 			, renderer::ShaderStageFlag::eVertex );
 		result->createModule( renderPass.getPixelShaderSource( passFlags
 				, textureFlags
 				, programFlags
 				, sceneFlags
-				, alphaFunc )
+				, alphaFunc ).getSource()
 			, renderer::ShaderStageFlag::eFragment );
 		auto geometry = renderPass.getGeometryShaderSource( passFlags
 			, textureFlags
@@ -196,7 +199,7 @@ namespace castor3d
 		if ( !geometry.getSource().empty() )
 		{
 			addFlag( matrixUboShaderMask, renderer::ShaderStageFlag::eGeometry );
-			result->createModule( geometry
+			result->createModule( geometry.getSource()
 				, renderer::ShaderStageFlag::eGeometry );
 		}
 
@@ -237,7 +240,7 @@ namespace castor3d
 	{
 		auto & engine = *getEngine();
 		auto & renderSystem = *engine.getRenderSystem();
-		auto result = getEngine()->getRenderSystem()->getMainContext()->getDevice().createShaderProgram();
+		auto result = getEngine()->getRenderSystem()->getMainDevice().createShaderProgram();
 		REQUIRE( result );
 		glsl::Shader vtxShader;
 		{
@@ -322,8 +325,8 @@ namespace castor3d
 			, sceneFlags
 			, alphaFunc );
 
-		result->createModule( vtxShader, renderer::ShaderStageFlag::eVertex );
-		result->createModule( pxlShader, renderer::ShaderStageFlag::eFragment );
+		result->createModule( vtxShader.getSource(), renderer::ShaderStageFlag::eVertex );
+		result->createModule( pxlShader.getSource(), renderer::ShaderStageFlag::eFragment );
 		return result;
 	}
 
