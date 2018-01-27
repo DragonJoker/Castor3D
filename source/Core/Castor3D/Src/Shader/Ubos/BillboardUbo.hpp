@@ -113,7 +113,7 @@ namespace castor3d
 		, castor3d::BillboardUbo::BufferBillboard\
 		, castor3d::BillboardUbo::BindingPoint\
 		, set\
-		, glsl::Ubo::Layout::ePushConstants };\
+		, glsl::Ubo::Layout::eStd140 };\
 	auto c3d_dimensions = billboard.declMember< Vec2 >( castor3d::BillboardUbo::Dimensions );\
 	auto c3d_windowSize = billboard.declMember< IVec2 >( castor3d::BillboardUbo::WindowSize );\
 	billboard.end()

@@ -7,7 +7,8 @@ using namespace castor;
 
 namespace castor3d
 {
-	ComputePipeline::ComputePipeline( RenderSystem & renderSystem, ShaderProgram & p_program )
+	ComputePipeline::ComputePipeline( RenderSystem & renderSystem
+		, renderer::ShaderProgram & p_program )
 		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_program{ p_program }
 	{
@@ -19,6 +20,6 @@ namespace castor3d
 
 	void ComputePipeline::cleanup()
 	{
-		m_program.cleanup();
+		m_program;
 	}
 }

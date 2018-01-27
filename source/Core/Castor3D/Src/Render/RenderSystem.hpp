@@ -113,6 +113,13 @@ namespace castor3d
 		C3D_API renderer::Device const * getCurrentDevice()const;
 		/**
 		 *\~english
+		 *\return		Tells if the current thread has a device.
+		 *\~french
+		 *\return		Dit si le thread actuel a un périphérique logique.
+		 */
+		C3D_API bool hasCurrentDevice()const;
+		/**
+		 *\~english
 		 *\brief		Retrieves a GPU buffer with the given size.
 		 *\param[in]	target	The buffer type.
 		 *\param[in]	size	The wanted buffer size.

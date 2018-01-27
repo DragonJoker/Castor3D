@@ -79,8 +79,8 @@ namespace castor3d
 
 		// Initialise the vertex layout.
 		m_vertexLayout = device.createVertexLayout( 0u, sizeof( TexturedQuad ) );
-		m_vertexLayout->createAttribute< Point2f >( 0u, offsetof( TexturedVertex, m_position ) );
-		m_vertexLayout->createAttribute< Point2f >( 0u, offsetof( TexturedVertex, m_texture ) );
+		m_vertexLayout->createAttribute< Point2f >( 0u, offsetof( TexturedQuad::Vertex, position ) );
+		m_vertexLayout->createAttribute< Point2f >( 0u, offsetof( TexturedQuad::Vertex, texture ) );
 
 		// Initialise the geometry buffers.
 		m_geometryBuffers = device.createGeometryBuffers( *m_vertexBuffer

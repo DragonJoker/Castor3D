@@ -6,11 +6,6 @@ See LICENSE file in root folder
 
 #include "Castor3DPrerequisites.hpp"
 
-#include "State/BlendState.hpp"
-#include "State/DepthStencilState.hpp"
-#include "State/MultisampleState.hpp"
-#include "State/RasteriserState.hpp"
-
 #include <Math/SquareMatrix.hpp>
 #include <Design/OwnedBy.hpp>
 
@@ -41,7 +36,8 @@ namespace castor3d
 		 *\param[in]	renderSystem	Le RenderSystem parent.
 		 *\param[in]	p_program		Le programme shader.
 		 */
-		C3D_API explicit ComputePipeline( RenderSystem & renderSystem, ShaderProgram & p_program );
+		C3D_API explicit ComputePipeline( RenderSystem & renderSystem
+			, renderer::ShaderProgram & p_program );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -77,7 +73,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le programme shader.
 		 */
-		inline ShaderProgram & getProgram()
+		inline renderer::ShaderProgram & getProgram()
 		{
 			return m_program;
 		}
@@ -85,7 +81,7 @@ namespace castor3d
 	protected:
 		//!\~english	The shader program.
 		//!\~french		Le programme shader.
-		ShaderProgram & m_program;
+		renderer::ShaderProgram & m_program;
 	};
 }
 

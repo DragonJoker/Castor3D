@@ -110,7 +110,7 @@ namespace castor3d
 		, castor3d::ModelMatrixUbo::BufferModelMatrix\
 		, castor3d::ModelMatrixUbo::BindingPoint\
 		, set\
-		, glsl::Ubo::Layout::ePushConstants };\
+		, glsl::Ubo::Layout::eStd140 };\
 	auto c3d_mtxModel = modelMatrices.declMember< glsl::Mat4 >( castor3d::ModelMatrixUbo::MtxModel );\
 	auto c3d_mtxNormal = modelMatrices.declMember< glsl::Mat4 >( castor3d::ModelMatrixUbo::MtxNormal );\
 	modelMatrices.end()

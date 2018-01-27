@@ -98,6 +98,11 @@ namespace castor3d
 		return result;
 	}
 
+	bool RenderSystem::hasCurrentDevice()const
+	{
+		return m_currentDevices.end() != m_currentDevices.find( std::this_thread::get_id() );
+	}
+
 	GpuBufferOffset RenderSystem::getBuffer( renderer::BufferTarget type
 		, uint32_t size
 		, renderer::MemoryPropertyFlags flags )
