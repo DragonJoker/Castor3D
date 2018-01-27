@@ -1224,11 +1224,11 @@ namespace smaa
 		if ( !m_renderTarget.getEngine()->getSamplerCache().has( name ) )
 		{
 			m_pointSampler = m_renderTarget.getEngine()->getSamplerCache().add( name );
-			m_pointSampler->setInterpolationMode( castor3d::InterpolationFilter::eMin, castor3d::InterpolationMode::eNearest );
-			m_pointSampler->setInterpolationMode( castor3d::InterpolationFilter::eMag, castor3d::InterpolationMode::eNearest );
-			m_pointSampler->setWrappingMode( castor3d::TextureUVW::eU, castor3d::WrapMode::eClampToBorder );
-			m_pointSampler->setWrappingMode( castor3d::TextureUVW::eV, castor3d::WrapMode::eClampToBorder );
-			m_pointSampler->setWrappingMode( castor3d::TextureUVW::eW, castor3d::WrapMode::eClampToBorder );
+			m_pointSampler->setMinFilter( renderer::Filter::eNearest );
+			m_pointSampler->setMagFilter( renderer::Filter::eNearest );
+			m_pointSampler->setWrapS( renderer::WrapMode::eClampToBorder );
+			m_pointSampler->setWrapT( renderer::WrapMode::eClampToBorder );
+			m_pointSampler->setWrapR( renderer::WrapMode::eClampToBorder );
 		}
 		else
 		{
@@ -1240,11 +1240,11 @@ namespace smaa
 		if ( !m_renderTarget.getEngine()->getSamplerCache().has( name ) )
 		{
 			m_linearSampler = m_renderTarget.getEngine()->getSamplerCache().add( name );
-			m_linearSampler->setInterpolationMode( castor3d::InterpolationFilter::eMin, castor3d::InterpolationMode::eLinear );
-			m_linearSampler->setInterpolationMode( castor3d::InterpolationFilter::eMag, castor3d::InterpolationMode::eLinear );
-			m_linearSampler->setWrappingMode( castor3d::TextureUVW::eU, castor3d::WrapMode::eClampToBorder );
-			m_linearSampler->setWrappingMode( castor3d::TextureUVW::eV, castor3d::WrapMode::eClampToBorder );
-			m_linearSampler->setWrappingMode( castor3d::TextureUVW::eW, castor3d::WrapMode::eClampToBorder );
+			m_linearSampler->setMinFilter( renderer::Filter::eLinear );
+			m_linearSampler->setMagFilter( renderer::Filter::eLinear );
+			m_linearSampler->setWrapS( renderer::WrapMode::eClampToBorder );
+			m_linearSampler->setWrapT( renderer::WrapMode::eClampToBorder );
+			m_linearSampler->setWrapR( renderer::WrapMode::eClampToBorder );
 		}
 		else
 		{
@@ -1430,10 +1430,10 @@ namespace smaa
 			, m_smaaPredicationScale
 			, m_smaaPredicationStrength );
 		auto program = cache.getNewProgram( false );
-		program->createObject( castor3d::ShaderType::eVertex );
-		program->createObject( castor3d::ShaderType::ePixel );
-		program->setSource( castor3d::ShaderType::eVertex, vertex );
-		program->setSource( castor3d::ShaderType::ePixel, fragment );
+		program->createObject( castor3d::renderer::ShaderStageFlag::eVertex );
+		program->createObject( castor3d::renderer::ShaderStageFlag::eFragment );
+		program->setSource( castor3d::renderer::ShaderStageFlag::eVertex, vertex );
+		program->setSource( castor3d::renderer::ShaderStageFlag::eFragment, fragment );
 		program->initialise();
 
 		castor3d::DepthStencilState dsstate;
@@ -1512,10 +1512,10 @@ namespace smaa
 			, m_smaaCornerRounding
 			, m_smaaMaxSearchStepsDiag );
 		auto program = cache.getNewProgram( false );
-		program->createObject( castor3d::ShaderType::eVertex );
-		program->createObject( castor3d::ShaderType::ePixel );
-		program->setSource( castor3d::ShaderType::eVertex, vertex );
-		program->setSource( castor3d::ShaderType::ePixel, fragment );
+		program->createObject( castor3d::renderer::ShaderStageFlag::eVertex );
+		program->createObject( castor3d::renderer::ShaderStageFlag::eFragment );
+		program->setSource( castor3d::renderer::ShaderStageFlag::eVertex, vertex );
+		program->setSource( castor3d::renderer::ShaderStageFlag::eFragment, fragment );
 		program->initialise();
 
 		castor3d::DepthStencilState dsstate;
@@ -1551,12 +1551,12 @@ namespace smaa
 			, pixelSize
 			, m_mode == Mode::eT2X && m_reprojection );
 		auto program = cache.getNewProgram( false );
-		program->createObject( castor3d::ShaderType::eVertex );
-		program->createObject( castor3d::ShaderType::ePixel );
-		program->setSource( castor3d::ShaderType::eVertex, vertex );
-		program->setSource( castor3d::ShaderType::ePixel, fragment );
+		program->createObject( castor3d::renderer::ShaderStageFlag::eVertex );
+		program->createObject( castor3d::renderer::ShaderStageFlag::eFragment );
+		program->setSource( castor3d::renderer::ShaderStageFlag::eVertex, vertex );
+		program->setSource( castor3d::renderer::ShaderStageFlag::eFragment, fragment );
 		m_subsampleIndicesUniform = program->createUniform< castor3d::UniformType::eVec4i >( constants::SubsampleIndices
-			, castor3d::ShaderType::ePixel );
+			, castor3d::renderer::ShaderStageFlag::eFragment );
 		program->initialise();
 
 		castor3d::DepthStencilState dsstate;
@@ -1596,10 +1596,10 @@ namespace smaa
 			, m_reprojectionWeightScale
 			, m_mode == Mode::eT2X && m_reprojection );
 		auto program = cache.getNewProgram( false );
-		program->createObject( castor3d::ShaderType::eVertex );
-		program->createObject( castor3d::ShaderType::ePixel );
-		program->setSource( castor3d::ShaderType::eVertex, vertex );
-		program->setSource( castor3d::ShaderType::ePixel, fragment );
+		program->createObject( castor3d::renderer::ShaderStageFlag::eVertex );
+		program->createObject( castor3d::renderer::ShaderStageFlag::eFragment );
+		program->setSource( castor3d::renderer::ShaderStageFlag::eVertex, vertex );
+		program->setSource( castor3d::renderer::ShaderStageFlag::eFragment, fragment );
 		program->initialise();
 
 		castor3d::DepthStencilState dsstate;

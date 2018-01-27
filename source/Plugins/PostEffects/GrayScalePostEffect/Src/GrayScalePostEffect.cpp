@@ -97,11 +97,11 @@ namespace GrayScale
 		if ( !m_renderTarget.getEngine()->getSamplerCache().has( name ) )
 		{
 			m_sampler = m_renderTarget.getEngine()->getSamplerCache().add( name );
-			m_sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eNearest );
-			m_sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eNearest );
-			m_sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToBorder );
-			m_sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToBorder );
-			m_sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToBorder );
+			m_sampler->setMinFilter( InterpolationMode::eNearest );
+			m_sampler->setMagFilter( InterpolationMode::eNearest );
+			m_sampler->setWrapS( renderer::WrapMode::eClampToBorder );
+			m_sampler->setWrapT( renderer::WrapMode::eClampToBorder );
+			m_sampler->setWrapR( renderer::WrapMode::eClampToBorder );
 		}
 		else
 		{
@@ -126,11 +126,11 @@ namespace GrayScale
 		auto vertex = getVertexProgram( getRenderSystem() );
 		auto fragment = getFragmentProgram( getRenderSystem() );
 		ShaderProgramSPtr program = cache.getNewProgram( false );
-		program->createObject( ShaderType::eVertex );
-		program->createObject( ShaderType::ePixel );
-		program->createUniform< UniformType::eSampler >( cuT( "c3d_mapDiffuse" ), ShaderType::ePixel )->setValue( MinTextureIndex );
-		program->setSource( ShaderType::eVertex, vertex );
-		program->setSource( ShaderType::ePixel, fragment );
+		program->createObject( renderer::ShaderStageFlag::eVertex );
+		program->createObject( renderer::ShaderStageFlag::eFragment );
+		program->createUniform< UniformType::eSampler >( cuT( "c3d_mapDiffuse" ), renderer::ShaderStageFlag::eFragment )->setValue( MinTextureIndex );
+		program->setSource( renderer::ShaderStageFlag::eVertex, vertex );
+		program->setSource( renderer::ShaderStageFlag::eFragment, fragment );
 		program->initialise();
 
 		DepthStencilState dsstate;

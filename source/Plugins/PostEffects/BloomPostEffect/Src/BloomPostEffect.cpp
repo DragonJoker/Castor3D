@@ -440,11 +440,11 @@ namespace Bloom
 		if ( !m_renderTarget.getEngine()->getSamplerCache().has( name ) )
 		{
 			sampler = m_renderTarget.getEngine()->getSamplerCache().add( name );
-			sampler->setInterpolationMode( InterpolationFilter::eMin, mode );
-			sampler->setInterpolationMode( InterpolationFilter::eMag, mode );
-			sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-			sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-			sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+			sampler->setMinFilter( mode );
+			sampler->setMagFilter( mode );
+			sampler->setWrapS( renderer::WrapMode::eClampToEdge );
+			sampler->setWrapT( renderer::WrapMode::eClampToEdge );
+			sampler->setWrapR( renderer::WrapMode::eClampToEdge );
 		}
 		else
 		{
@@ -461,12 +461,12 @@ namespace Bloom
 		auto const hipass = getHiPassProgram( getRenderSystem() );
 
 		ShaderProgramSPtr program = cache.getNewProgram( false );
-		program->createObject( ShaderType::eVertex );
-		program->createObject( ShaderType::ePixel );
+		program->createObject( renderer::ShaderStageFlag::eVertex );
+		program->createObject( renderer::ShaderStageFlag::eFragment );
 		program->createUniform < UniformType::eSampler >( cuT( "c3d_mapDiffuse" )
-			, ShaderType::ePixel )->setValue( MinTextureIndex );
-		program->setSource( ShaderType::eVertex, vertex );
-		program->setSource( ShaderType::ePixel, hipass );
+			, renderer::ShaderStageFlag::eFragment )->setValue( MinTextureIndex );
+		program->setSource( renderer::ShaderStageFlag::eVertex, vertex );
+		program->setSource( renderer::ShaderStageFlag::eFragment, hipass );
 		bool result = program->initialise();
 
 		if ( result )
@@ -493,21 +493,21 @@ namespace Bloom
 		auto const combine = getCombineProgram( getRenderSystem() );
 
 		ShaderProgramSPtr program = cache.getNewProgram( false );
-		program->createObject( ShaderType::eVertex );
-		program->createObject( ShaderType::ePixel );
+		program->createObject( renderer::ShaderStageFlag::eVertex );
+		program->createObject( renderer::ShaderStageFlag::eFragment );
 		program->createUniform< UniformType::eSampler >( BloomPostEffect::CombineMapPass0
-			, ShaderType::ePixel )->setValue( MinTextureIndex + 0 );
+			, renderer::ShaderStageFlag::eFragment )->setValue( MinTextureIndex + 0 );
 		program->createUniform< UniformType::eSampler >( BloomPostEffect::CombineMapPass1
-			, ShaderType::ePixel )->setValue( MinTextureIndex + 1 );
+			, renderer::ShaderStageFlag::eFragment )->setValue( MinTextureIndex + 1 );
 		program->createUniform< UniformType::eSampler >( BloomPostEffect::CombineMapPass2
-			, ShaderType::ePixel )->setValue( MinTextureIndex + 2 );
+			, renderer::ShaderStageFlag::eFragment )->setValue( MinTextureIndex + 2 );
 		program->createUniform< UniformType::eSampler >( BloomPostEffect::CombineMapPass3
-			, ShaderType::ePixel )->setValue( MinTextureIndex + 3 );
+			, renderer::ShaderStageFlag::eFragment )->setValue( MinTextureIndex + 3 );
 		program->createUniform< UniformType::eSampler >( BloomPostEffect::CombineMapScene
-			, ShaderType::ePixel )->setValue( MinTextureIndex + 4 );
+			, renderer::ShaderStageFlag::eFragment )->setValue( MinTextureIndex + 4 );
 
-		program->setSource( ShaderType::eVertex, vertex );
-		program->setSource( ShaderType::ePixel, combine );
+		program->setSource( renderer::ShaderStageFlag::eVertex, vertex );
+		program->setSource( renderer::ShaderStageFlag::eFragment, combine );
 		bool result = program->initialise();
 
 		if ( result )

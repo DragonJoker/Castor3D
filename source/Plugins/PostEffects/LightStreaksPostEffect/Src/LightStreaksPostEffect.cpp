@@ -444,9 +444,9 @@ namespace light_streaks
 			sampler = m_renderTarget.getEngine()->getSamplerCache().add( name );
 			sampler->setInterpolationMode( castor3d::InterpolationFilter::eMin, mode );
 			sampler->setInterpolationMode( castor3d::InterpolationFilter::eMag, mode );
-			sampler->setWrappingMode( castor3d::TextureUVW::eU, castor3d::WrapMode::eClampToEdge );
-			sampler->setWrappingMode( castor3d::TextureUVW::eV, castor3d::WrapMode::eClampToEdge );
-			sampler->setWrappingMode( castor3d::TextureUVW::eW, castor3d::WrapMode::eClampToEdge );
+			sampler->setWrapS( renderer::WrapMode::eClampToEdge );
+			sampler->setWrapT( renderer::WrapMode::eClampToEdge );
+			sampler->setWrapR( renderer::WrapMode::eClampToEdge );
 		}
 		else
 		{
@@ -463,10 +463,10 @@ namespace light_streaks
 		auto const hipass = getHiPassProgram( getRenderSystem() );
 
 		castor3d::ShaderProgramSPtr program = cache.getNewProgram( false );
-		program->createObject( castor3d::ShaderType::eVertex );
-		program->createObject( castor3d::ShaderType::ePixel );
-		program->setSource( castor3d::ShaderType::eVertex, vertex );
-		program->setSource( castor3d::ShaderType::ePixel, hipass );
+		program->createObject( castor3d::renderer::ShaderStageFlag::eVertex );
+		program->createObject( castor3d::renderer::ShaderStageFlag::eFragment );
+		program->setSource( castor3d::renderer::ShaderStageFlag::eVertex, vertex );
+		program->setSource( castor3d::renderer::ShaderStageFlag::eFragment, hipass );
 		bool result = program->initialise();
 
 		if ( result )
@@ -493,10 +493,10 @@ namespace light_streaks
 		auto const hipass = getKawaseProgram( getRenderSystem() );
 
 		castor3d::ShaderProgramSPtr program = cache.getNewProgram( false );
-		program->createObject( castor3d::ShaderType::eVertex );
-		program->createObject( castor3d::ShaderType::ePixel );
-		program->setSource( castor3d::ShaderType::eVertex, vertex );
-		program->setSource( castor3d::ShaderType::ePixel, hipass );
+		program->createObject( castor3d::renderer::ShaderStageFlag::eVertex );
+		program->createObject( castor3d::renderer::ShaderStageFlag::eFragment );
+		program->setSource( castor3d::renderer::ShaderStageFlag::eVertex, vertex );
+		program->setSource( castor3d::renderer::ShaderStageFlag::eFragment, hipass );
 		bool result = program->initialise();
 
 		if ( result )
@@ -524,10 +524,10 @@ namespace light_streaks
 		auto const combine = getCombineProgram( getRenderSystem() );
 
 		castor3d::ShaderProgramSPtr program = cache.getNewProgram( false );
-		program->createObject( castor3d::ShaderType::eVertex );
-		program->createObject( castor3d::ShaderType::ePixel );
-		program->setSource( castor3d::ShaderType::eVertex, vertex );
-		program->setSource( castor3d::ShaderType::ePixel, combine );
+		program->createObject( castor3d::renderer::ShaderStageFlag::eVertex );
+		program->createObject( castor3d::renderer::ShaderStageFlag::eFragment );
+		program->setSource( castor3d::renderer::ShaderStageFlag::eVertex, vertex );
+		program->setSource( castor3d::renderer::ShaderStageFlag::eFragment, combine );
 		bool result = program->initialise();
 
 		if ( result )
