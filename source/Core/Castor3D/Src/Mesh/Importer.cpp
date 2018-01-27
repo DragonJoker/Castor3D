@@ -84,9 +84,7 @@ namespace castor3d
 					{
 						for ( auto & vertex : submesh->getPoints() )
 						{
-							Coords3r position;
-							Vertex::getPosition( vertex, position );
-							position *= scale;
+							vertex.m_pos *= scale;
 						}
 					}
 				}
@@ -160,9 +158,10 @@ namespace castor3d
 			{
 				TextureUnitSPtr unit = std::make_shared< TextureUnit >( *pass.getOwner()->getEngine() );
 				unit->setAutoMipmaps( true );
-				auto texture = getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
-					, AccessType::eRead
-					, AccessType::eRead );
+				auto texture = std::make_shared < TextureLayout >( *getEngine()->getRenderSystem()
+					, renderer::TextureType::e2D
+					, renderer::ImageUsageFlag::eSampled
+					, renderer::MemoryPropertyFlag::eHostVisible );
 				texture->setSource( folder, relative );
 				unit->setTexture( texture );
 				unit->setChannel( channel );

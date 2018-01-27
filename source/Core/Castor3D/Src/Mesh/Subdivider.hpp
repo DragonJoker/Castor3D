@@ -145,14 +145,14 @@ namespace castor3d
 		 *\param[in]	i	L'indice du position
 		 *\return		La valeur
 		 */
-		C3D_API SubmeshVertex & getPoint( uint32_t i )const;
+		C3D_API SubmeshVertex getPoint( uint32_t i )const;
 		/**
 		 *\~english
 		 *\return		Retrieves the points array
 		 *\~french
 		 *\return		Récupère le tableau de points
 		 */
-		C3D_API SubmeshVertexArray const & getPoints()const;
+		C3D_API InterleavedVertexArray const & getPoints()const;
 		/**
 		 *\~english
 		 *\brief		Defines a function to execute when the threaded subdivision ends
@@ -277,6 +277,6 @@ namespace castor3d
 	};
 }
 
-castor::String & operator<<( castor::String & p_stream, castor3d::SubmeshVertex const & vertex );
+castor::String & operator<<( castor::String & stream, castor3d::SubmeshVertex const & vertex );
 
 #endif

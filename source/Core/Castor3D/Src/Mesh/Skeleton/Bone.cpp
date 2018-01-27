@@ -132,17 +132,15 @@ namespace castor3d
 				auto component = submesh->getComponent< BonesComponent >();
 				uint32_t i = 0u;
 
-				for ( auto & data : component->getBonesData() )
+				for ( auto & boneData : component->getBonesData() )
 				{
-					auto boneData = BonedVertex::getBones( data );
 					auto it = std::find( boneData.m_ids.begin()
 						, boneData.m_ids.end()
 						, boneIndex );
 
 					if ( it != boneData.m_ids.end() )
 					{
-						Coords3r position;
-						Vertex::getPosition( submesh->getPoint( i ), position );
+						auto position = submesh->getPoint( i ).m_pos;
 						min[0] = std::min( min[0], position[0] );
 						min[1] = std::min( min[1], position[1] );
 						min[2] = std::min( min[2], position[2] );

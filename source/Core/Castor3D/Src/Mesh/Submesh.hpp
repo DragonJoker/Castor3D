@@ -162,6 +162,15 @@ namespace castor3d
 		C3D_API InterleavedVertex addPoint( real * value );
 		/**
 		 *\~english
+		 *\brief		Adds a vertex to the list.
+		 *\param[in]	value	The vertex.
+		 *\~french
+		 *\brief		Ajoute un sommet à la liste.
+		 *\param[in]	value	Le sommet.
+		 */
+		C3D_API void addPoint( InterleavedVertex const & value );
+		/**
+		 *\~english
 		 *\brief		Adds a points list to my list.
 		 *\param[in]	begin	The vertices data begin.
 		 *\param[in]	end	The vertices data end.
@@ -265,6 +274,17 @@ namespace castor3d
 		 *\return		La valeur
 		 */
 		inline InterleavedVertex const & operator[]( uint32_t index )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the point at given index
+		 *\param[in]	index	The index
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le point à l'index donné
+		 *\param[in]	index	L'index
+		 *\return		La valeur
+		 */
+		inline InterleavedVertex & operator[]( uint32_t index );
 		/**
 		 *\~english
 		 *\brief		Retrieves the point at given index

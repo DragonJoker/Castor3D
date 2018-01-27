@@ -156,9 +156,9 @@ namespace castor3d
 					m_cameraPosition = cameraPosition;
 					uint32_t indexSize = indices.getCount();
 
-					if ( uint32_t * index = indices.lock( 0
-						, indexSize
-						, renderer::MemoryMapFlag::eRead | renderer::MemoryMapFlag::eWrite ) )
+					if ( uint32_t * index = reinterpret_cast< uint32_t * >( indices.getBuffer().lock( 0
+						, uint32_t( indexSize * sizeof( uint32_t ) )
+						, renderer::MemoryMapFlag::eRead | renderer::MemoryMapFlag::eWrite ) ) )
 					{
 						FaceDistArray arraySorted;
 						arraySorted.reserve( indexSize / 3 );
@@ -188,10 +188,10 @@ namespace castor3d
 								*index++ = face.m_index[2];
 							}
 
-							indices.unlock( vertices.getCount(), false );
+							indices.getBuffer().unlock( vertices.getCount(), false );
 						}
 
-						indices.unlock( vertices.getCount(), true );
+						indices.getBuffer().unlock( uint32_t( indexSize * sizeof( uint32_t ) ), true );
 					}
 				}
 			}
@@ -219,9 +219,9 @@ namespace castor3d
 		{
 			auto & indexBuffer = getOwner()->getIndexBuffer();
 
-			if ( uint32_t * buffer = indexBuffer.lock( 0
-				, count
-				, renderer::MemoryMapFlag::eRead | renderer::MemoryMapFlag::eWrite ) )
+			if ( uint32_t * buffer = reinterpret_cast< uint32_t * >( indexBuffer.getBuffer().lock( 0
+				, uint32_t( count * sizeof( uint32_t ) )
+				, renderer::MemoryMapFlag::eRead | renderer::MemoryMapFlag::eWrite ) ) )
 			{
 				for ( auto const & face : m_faces )
 				{
@@ -233,14 +233,10 @@ namespace castor3d
 					++buffer;
 				}
 
-				indexBuffer.unlock( count, true );
+				indexBuffer.getBuffer().unlock( uint32_t( count * sizeof( uint32_t ) ), true );
 			}
 
 			m_faces.clear();
-		}
-		else
-		{
-			REQUIRE( getCount() * 3u == indexBuffer.getSize() );
 		}
 	}
 }

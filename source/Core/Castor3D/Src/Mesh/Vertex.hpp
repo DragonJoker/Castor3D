@@ -21,11 +21,8 @@ namespace castor3d
 	*/
 	struct SubmeshVertex
 	{
-		castor::Point3f m_position;
-		castor::Point3f m_normal;
-		castor::Point3f m_tangent;
-		castor::Point3f m_bitangent;
-		castor::Point3f m_texture;
+		uint32_t m_index;
+		InterleavedVertex m_vertex;
 	};
 }
 

@@ -4,7 +4,7 @@
 #include "Mesh/Vertex.hpp"
 #include "Scene/Scene.hpp"
 
-#include <VertexBuffer.hpp>
+#include <Buffer/VertexBuffer.hpp>
 
 using namespace castor;
 
@@ -34,9 +34,8 @@ namespace castor3d
 
 		if ( !m_animBuffer || m_animBuffer->getCount() != count )
 		{
-			auto context = getOwner()->getScene()->getEngine()->getRenderSystem()->getCurrentContext();
-			REQUIRE( context );
-			m_animBuffer = renderer::makeVertexBuffer< InterleavedVertex >( context->getDevice()
+			auto & device = *getOwner()->getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
+			m_animBuffer = renderer::makeVertexBuffer< InterleavedVertex >( device
 				, count
 				, 0u
 				, renderer::MemoryPropertyFlag::eHostVisible );

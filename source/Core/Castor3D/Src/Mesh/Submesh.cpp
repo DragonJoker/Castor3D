@@ -230,9 +230,8 @@ namespace castor3d
 		if ( !m_generated )
 		{
 			doGenerateVertexBuffer();
-			auto context = getScene()->getEngine()->getRenderSystem()->getCurrentContext();
-			REQUIRE( context );
-			m_indexBuffer = renderer::makeBuffer< uint32_t >( context->getDevice()
+			auto & device = *getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
+			m_indexBuffer = renderer::makeBuffer< uint32_t >( device
 				, m_indexMapping->getCount() * m_indexMapping->getComponentsCount()
 				, renderer::BufferTarget::eIndexBuffer
 				, renderer::MemoryPropertyFlag::eHostVisible );
@@ -393,7 +392,7 @@ namespace castor3d
 	{
 		InterleavedVertex result;
 		result.m_pos = Point3f{ x, y, z };
-		m_points.push_back( result );
+		addPoint( result );
 		return result;
 	}
 
@@ -405,6 +404,11 @@ namespace castor3d
 	InterleavedVertex Submesh::addPoint( real * value )
 	{
 		return addPoint( value[0], value[1], value[2] );
+	}
+
+	void Submesh::addPoint( InterleavedVertex const & vertex )
+	{
+		m_points.push_back( vertex );
 	}
 
 	void Submesh::addPoints( InterleavedVertex const * const begin
@@ -468,8 +472,7 @@ namespace castor3d
 
 	void Submesh::doGenerateVertexBuffer()
 	{
-		auto context = getScene()->getEngine()->getRenderSystem()->getCurrentContext();
-		REQUIRE( context );
+		auto & device = *getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
 		uint32_t stride = sizeof( InterleavedVertex );
 		uint32_t size = uint32_t( m_points.size() );
 
@@ -478,7 +481,7 @@ namespace castor3d
 			if ( !m_vertexBuffer
 				|| size != m_vertexBuffer->getCount() )
 			{
-				m_vertexBuffer = renderer::makeVertexBuffer< InterleavedVertex >( context->getDevice()
+				m_vertexBuffer = renderer::makeVertexBuffer< InterleavedVertex >( device
 					, size
 					, renderer::BufferTarget::eVertexBuffer
 					, renderer::MemoryPropertyFlag::eHostVisible );

@@ -121,6 +121,12 @@ namespace castor3d
 		return m_points[p_index];
 	}
 
+	inline InterleavedVertex & Submesh::operator[]( uint32_t p_index )
+	{
+		REQUIRE( p_index < m_points.size() );
+		return m_points[p_index];
+	}
+
 	inline InterleavedVertex const & Submesh::getPoint( uint32_t p_index )const
 	{
 		REQUIRE( p_index < m_points.size() );

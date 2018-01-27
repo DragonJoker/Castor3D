@@ -138,9 +138,8 @@ namespace castor3d
 
 			if ( !m_matrixBuffer )
 			{
-				auto context = getOwner()->getScene()->getEngine()->getRenderSystem()->getCurrentContext();
-				REQUIRE( context );
-				m_matrixBuffer = renderer::makeVertexBuffer< InstantiationData >( context->getDevice()
+				auto & device = *getOwner()->getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
+				m_matrixBuffer = renderer::makeVertexBuffer< InstantiationData >( device
 					, getMaxRefCount()
 					, 0u
 					, renderer::MemoryPropertyFlag::eHostVisible );

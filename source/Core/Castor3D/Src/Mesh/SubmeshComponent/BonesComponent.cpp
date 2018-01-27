@@ -105,11 +105,11 @@ namespace castor3d
 
 	bool BonesComponent::doInitialise()
 	{
-		auto context = getOwner()->getScene()->getEngine()->getRenderSystem()->getCurrentContext();
+		auto & device = *getOwner()->getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
 
 		if ( !m_bonesBuffer || m_bonesBuffer->getCount() != m_bones.size() )
 		{
-			m_bonesBuffer = renderer::makeVertexBuffer< VertexBoneData >( context->getDevice()
+			m_bonesBuffer = renderer::makeVertexBuffer< VertexBoneData >( device
 				, uint32_t( m_bones.size() )
 				, 0u
 				, renderer::MemoryPropertyFlag::eHostVisible );
