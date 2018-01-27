@@ -6,14 +6,40 @@ See LICENSE file in root folder
 
 #include "FxaaUbo.hpp"
 
-#include <Mesh/Buffer/ParticleDeclaration.hpp>
 #include <PostEffect/PostEffect.hpp>
+#include <RenderToTexture/RenderQuad.hpp>
 #include <Texture/TextureUnit.hpp>
 #include <Render/Viewport.hpp>
 #include <Shader/Ubos/MatrixUbo.hpp>
 
 namespace fxaa
 {
+	class RenderQuad
+		: public castor3d::RenderQuad
+	{
+	public:
+		explicit RenderQuad( castor3d::RenderSystem & renderSystem
+			, castor::Size const & size );
+		void update( float subpixShift
+			, float spanMax
+			, float reduceMul );
+
+	private:
+		void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
+			, renderer::DescriptorSet & descriptorSet )override;
+
+	private:
+		struct Configuration
+		{
+			castor::Point2f m_renderSize;
+			float m_subpixShift;
+			float m_spanMax;
+			float m_reduceMul;
+		};
+		castor::Size m_size;
+		renderer::UniformBufferPtr< Configuration > m_configUbo;
+	};
+
 	class PostEffect
 		: public castor3d::PostEffect
 	{
@@ -32,22 +58,7 @@ namespace fxaa
 		/**
 		 *\copydoc		castor3d::PostEffect::Apply
 		 */
-		bool apply( castor3d::FrameBuffer & p_framebuffer ) override;
-
-		inline void setSubpixShift( float p_value )
-		{
-			m_subpixShift = p_value;
-		}
-
-		inline void setMaxSpan( float p_value )
-		{
-			m_spanMax = p_value;
-		}
-
-		inline void setReduceMul( float p_value )
-		{
-			m_reduceMul = p_value;
-		}
+		bool apply() override;
 
 	private:
 		/**
@@ -60,14 +71,14 @@ namespace fxaa
 		static castor::String Name;
 
 	private:
-		castor3d::SamplerSPtr m_sampler;
-		castor3d::RenderPipelineSPtr m_pipeline;
-		PostEffectSurface m_surface;
-		castor3d::MatrixUbo m_matrixUbo;
-		FxaaUbo m_fxaaUbo;
 		float m_subpixShift{ 1.0f / 4.0f };
 		float m_spanMax{ 8.0f };
 		float m_reduceMul{ 1.0f / 8.0f };
+		castor3d::SamplerSPtr m_sampler;
+		PostEffectSurface m_surface;
+		renderer::RenderPassPtr m_renderPass;
+		std::unique_ptr< RenderQuad > m_fxaaQuad;
+		std::unique_ptr< RenderQuad > m_resultQuad;
 	};
 }
 
