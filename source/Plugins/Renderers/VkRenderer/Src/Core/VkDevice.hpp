@@ -34,18 +34,6 @@ namespace vk_renderer
 		*/
 		~Device();
 		/**
-		*\copydoc	renderer::Device::enable
-		*/
-		void enable()const override
-		{
-		}
-		/**
-		*\copydoc	renderer::Device::disable
-		*/
-		void disable()const override
-		{
-		}
-		/**
 		*\copydoc	renderer::Device::createRenderPass
 		*/
 		renderer::RenderPassPtr createRenderPass( std::vector< renderer::PixelFormat > const & formats
@@ -344,6 +332,20 @@ namespace vk_renderer
 		inline operator VkDevice const &()const
 		{
 			return m_device;
+		}
+
+	private:
+		/**
+		*\copydoc	renderer::Device::enable
+		*/
+		void doEnable()const override
+		{
+		}
+		/**
+		*\copydoc	renderer::Device::disable
+		*/
+		void doDisable()const override
+		{
 		}
 
 	private:

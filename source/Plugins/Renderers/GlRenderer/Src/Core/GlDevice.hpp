@@ -29,14 +29,6 @@ namespace gl_renderer
 		Device( renderer::Renderer const & renderer
 			, renderer::ConnectionPtr && connection );
 		/**
-		*\copydoc	renderer::Device::enable
-		*/
-		void enable()const override;
-		/**
-		*\copydoc	renderer::Device::disable
-		*/
-		void disable()const override;
-		/**
 		*\copydoc		renderer::Device::createRenderPass
 		*/
 		renderer::RenderPassPtr createRenderPass( std::vector< renderer::PixelFormat > const & formats
@@ -214,6 +206,16 @@ namespace gl_renderer
 		{
 			return m_context->getGlslVersion();
 		}
+
+	private:
+		/**
+		*\copydoc	renderer::Device::enable
+		*/
+		void doEnable()const override;
+		/**
+		*\copydoc	renderer::Device::disable
+		*/
+		void doDisable()const override;
 
 	private:
 		ContextPtr m_context;

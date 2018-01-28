@@ -226,7 +226,6 @@ namespace renderer
 	using TextureViewCRefArray = std::vector< TextureViewCRef >;
 	using VertexLayoutCRefArray = std::vector< VertexLayoutCRef >;
 	using VertexBufferCRefArray = std::vector< VertexBufferCRef >;
-
 	/**\}*/
 	/**
 	*\name Typedefs d'attributs de sommets.
@@ -240,6 +239,19 @@ namespace renderer
 	using Vec2AttributePtr = AttributePtr< Vec2 >;
 	using Vec3AttributePtr = AttributePtr< Vec3 >;
 	using Vec4AttributePtr = AttributePtr< Vec4 >;
+	/**\}*/
+	/**
+	*\name Signaux.
+	*/
+	/**\{*/
+	using DeviceEnabledFunction = std::function< void( Device const & ) >;
+	using DeviceDisabledFunction = std::function< void( Device const & ) >;
+
+	using DeviceEnabledSignal = Signal< DeviceEnabledFunction >;
+	using DeviceDisabledSignal = Signal< DeviceDisabledFunction >;
+
+	using DeviceEnabledConnection = SignalConnection< DeviceEnabledSignal >;
+	using DeviceDisabledConnection = SignalConnection< DeviceDisabledSignal >;
 	/**\}*/
 }
 

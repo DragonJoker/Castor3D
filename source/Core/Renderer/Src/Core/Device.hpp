@@ -59,7 +59,7 @@ namespace renderer
 		*\brief
 		*	Enables the device's context (for OpenGL).
 		*/
-		virtual void enable()const = 0;
+		void enable()const;
 		/**
 		*\~french
 		*\brief
@@ -68,7 +68,7 @@ namespace renderer
 		*\brief
 		*	Disables the device's context (for OpenGL).
 		*/
-		virtual void disable()const = 0;
+		void disable()const;
 		/**
 		*\~french
 		*\brief
@@ -493,6 +493,30 @@ namespace renderer
 		{
 			return *m_graphicsCommandPool;
 		}
+
+	private:
+		/**
+		*\~french
+		*\brief
+		*	Active le contexte du périphérique (pour OpenGL).
+		*\~english
+		*\brief
+		*	Enables the device's context (for OpenGL).
+		*/
+		virtual void doEnable()const = 0;
+		/**
+		*\~french
+		*\brief
+		*	Désctive le contexte du périphérique (pour OpenGL).
+		*\~english
+		*\brief
+		*	Disables the device's context (for OpenGL).
+		*/
+		virtual void doDisable()const = 0;
+
+	public:
+		DeviceEnabledSignal onEnabled;
+		DeviceDisabledSignal onDisabled;
 
 	protected:
 		Renderer const & m_renderer;

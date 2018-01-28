@@ -15,6 +15,18 @@ namespace renderer
 	{
 	}
 
+	void Device::enable()const
+	{
+		doEnable();
+		onEnabled( *this );
+	}
+
+	void Device::disable()const
+	{
+		onDisabled( *this );
+		doDisable();
+	}
+
 	Mat4 Device::infinitePerspective( Angle fovy
 		, float aspect
 		, float zNear )const

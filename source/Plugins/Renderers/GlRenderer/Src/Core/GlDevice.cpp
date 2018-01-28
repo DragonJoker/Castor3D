@@ -42,16 +42,6 @@ namespace gl_renderer
 		m_graphicsCommandPool = std::make_unique< CommandPool >( *this, 0u );
 	}
 
-	void Device::enable()const
-	{
-		m_context->setCurrent();
-	}
-
-	void Device::disable()const
-	{
-		m_context->endCurrent();
-	}
-
 	renderer::RenderPassPtr Device::createRenderPass( std::vector< renderer::PixelFormat > const & formats
 		, renderer::RenderSubpassPtrArray const & subpasses
 		, renderer::RenderPassState const & initialState
@@ -324,5 +314,15 @@ namespace gl_renderer
 	void Device::swapBuffers()const
 	{
 		m_context->swapBuffers();
+	}
+
+	void Device::doEnable()const
+	{
+		m_context->setCurrent();
+	}
+
+	void Device::doDisable()const
+	{
+		m_context->endCurrent();
 	}
 }
