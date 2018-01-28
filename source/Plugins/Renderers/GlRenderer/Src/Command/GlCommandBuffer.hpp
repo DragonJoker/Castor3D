@@ -187,6 +187,12 @@ namespace gl_renderer
 		void pushConstants( renderer::PipelineLayout const & layout
 			, renderer::PushConstantsBuffer const & pcb )const override;
 		/**
+		*\copydoc	renderer::CommandBuffer:dispatch
+		*/
+		void dispatch( uint32_t groupCountX
+			, uint32_t groupCountY
+			, uint32_t groupCountZ )const override;
+		/**
 		*\return
 		*	Le tableau de commandes.
 		*/

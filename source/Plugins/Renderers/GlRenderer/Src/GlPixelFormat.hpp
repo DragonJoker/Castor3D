@@ -1,4 +1,4 @@
-﻿/*
+/*
 This file belongs to Renderer.
 See LICENSE file in root folder.
 */
@@ -50,6 +50,9 @@ namespace gl_renderer
 		GL_TYPE_UI565 = 0x8363,
 		GL_TYPE_UI24_8 = 0x84FA,
 	};
+	std::string getName( GlInternal value );
+	std::string getName( GlFormat value );
+	std::string getName( GlType value );
 	/**
 	*\brief
 	*	Convertit un renderer::PixelFormat en GlInternal.

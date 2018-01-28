@@ -4,8 +4,6 @@
 #include "Mesh/Mesh.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
-#include "Mesh/Buffer/IndexBuffer.hpp"
-#include "Mesh/Buffer/VertexBuffer.hpp"
 #include "Render/Viewport.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Geometry.hpp"
@@ -91,12 +89,13 @@ namespace castor3d
 
 	Intersection Ray::intersects( Face const & p_face, castor::Matrix4x4r const & p_transform, Submesh const & p_submesh, real & p_distance )const
 	{
-		Point3r pt1, pt2, pt3;
-		auto stride = p_submesh.getVertexBuffer().getDeclaration().stride();
-		return intersects( p_transform * Vertex::getPosition( &p_submesh.getVertexBuffer().getData()[p_face[0] * stride], pt1 )
-						   , p_transform * Vertex::getPosition( &p_submesh.getVertexBuffer().getData()[p_face[1] * stride], pt2 )
-						   , p_transform * Vertex::getPosition( &p_submesh.getVertexBuffer().getData()[p_face[2] * stride], pt3 )
-						   , p_distance );
+		//Point3r pt1, pt2, pt3;
+		//auto stride = p_submesh.getVertexBuffer().getDeclaration().stride();
+		//return intersects( p_transform * Vertex::getPosition( &p_submesh.getVertexBuffer().getData()[p_face[0] * stride], pt1 )
+		//	, p_transform * Vertex::getPosition( &p_submesh.getVertexBuffer().getData()[p_face[1] * stride], pt2 )
+		//	, p_transform * Vertex::getPosition( &p_submesh.getVertexBuffer().getData()[p_face[2] * stride], pt3 )
+		//	, p_distance );
+		return Intersection::eOut;
 	}
 
 	Intersection Ray::intersects( Point3r const & p_vertex, real & p_distance )const
@@ -288,9 +287,9 @@ namespace castor3d
 					{
 						Face face
 						{
-							submesh->getIndexBuffer().getData()[k * 3 + 0],
-							submesh->getIndexBuffer().getData()[k * 3 + 1],
-							submesh->getIndexBuffer().getData()[k * 3 + 2],
+							0,//submesh->getIndexBuffer().getData()[k * 3 + 0],
+							0,//submesh->getIndexBuffer().getData()[k * 3 + 1],
+							0,//submesh->getIndexBuffer().getData()[k * 3 + 2],
 						};
 						real curfaceDist = 0.0_r;
 

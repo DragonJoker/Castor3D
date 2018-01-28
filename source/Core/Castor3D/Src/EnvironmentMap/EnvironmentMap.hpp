@@ -140,7 +140,7 @@ namespace castor3d
 		static uint32_t m_count;
 		//!\~english	The depth buffer.
 		//!\~french		Le tampon de profondeur.
-		renderer::RenderBufferPtr m_depthBuffer;
+		renderer::TexturePtr m_depthBuffer;
 		//!\~english	The reflection mapping texture.
 		//!\~french		La texture de reflcetion mapping.
 		TextureUnit m_environmentMap;

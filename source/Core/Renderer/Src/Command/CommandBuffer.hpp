@@ -486,6 +486,21 @@ namespace renderer
 		virtual void pushConstants( PipelineLayout const & layout
 			, PushConstantsBuffer const & pcb )const = 0;
 		/**
+		*\~french
+		*\brief
+		*	Distribue des éléments de calcul.
+		*\param[in] groupCountX, groupCountY, groupCountZ
+		*	Le nombre de groupes de travail locaux à distribuer dans les dimensions Xy, Y, et Z.
+		*\~english
+		*\brief
+		*	Dispatch compute work items.
+		*\param[in] groupCountX, groupCountY, groupCountZ
+		*	The number of local workgroups to dispatch to the X, Y, and Z dimensions.
+		*/
+		virtual void dispatch( uint32_t groupCountX
+			, uint32_t groupCountY
+			, uint32_t groupCountZ )const = 0;
+		/**
 		*\brief
 		*	Copie les données d'un tampon vers un autre tampon.
 		*\param[in] src

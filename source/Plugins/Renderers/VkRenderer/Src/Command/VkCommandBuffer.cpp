@@ -465,4 +465,14 @@ namespace vk_renderer
 			, pcb.getSize()
 			, pcb.getData() );
 	}
+
+	void CommandBuffer::dispatch( uint32_t groupCountX
+		, uint32_t groupCountY
+		, uint32_t groupCountZ )const
+	{
+		vk::CmdDispatch( m_commandBuffer
+			, groupCountX
+			, groupCountY
+			, groupCountZ );
+	}
 }

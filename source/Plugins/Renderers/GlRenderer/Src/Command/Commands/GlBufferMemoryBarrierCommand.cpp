@@ -6,13 +6,17 @@ See LICENSE file in root folder.
 
 namespace gl_renderer
 {
-	BufferMemoryBarrierCommand::BufferMemoryBarrierCommand()
+	BufferMemoryBarrierCommand::BufferMemoryBarrierCommand( renderer::PipelineStageFlags after
+		, renderer::PipelineStageFlags before
+		, renderer::BufferMemoryBarrier const & transitionBarrier )
+		: m_flags{ convert( before ) }
 	{
 	}
 
 	void BufferMemoryBarrierCommand::apply()const
 	{
 		glLogCommand( "BufferMemoryBarrierCommand" );
+		glLogCall( gl::MemoryBarrier, m_flags );
 	}
 
 	CommandPtr BufferMemoryBarrierCommand::clone()const

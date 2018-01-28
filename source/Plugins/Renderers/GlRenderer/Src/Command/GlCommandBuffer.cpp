@@ -25,15 +25,18 @@ See LICENSE file in root folder.
 #include "Commands/GlBindGeometryBuffersCommand.hpp"
 #include "Commands/GlBindPipelineCommand.hpp"
 #include "Commands/GlBlitImageCommand.hpp"
+#include "Commands/GlBufferMemoryBarrierCommand.hpp"
 #include "Commands/GlCopyBufferCommand.hpp"
 #include "Commands/GlCopyBufferToImageCommand.hpp"
 #include "Commands/GlCopyImageCommand.hpp"
 #include "Commands/GlCopyImageToBufferCommand.hpp"
+#include "Commands/GlDispatchCommand.hpp"
 #include "Commands/GlDrawCommand.hpp"
 #include "Commands/GlDrawIndexedCommand.hpp"
 #include "Commands/GlClearCommand.hpp"
 #include "Commands/GlEndQueryCommand.hpp"
 #include "Commands/GlEndRenderPassCommand.hpp"
+#include "Commands/GlImageMemoryBarrierCommand.hpp"
 #include "Commands/GlPushConstantsCommand.hpp"
 #include "Commands/GlResetQueryPoolCommand.hpp"
 #include "Commands/GlScissorCommand.hpp"
@@ -141,18 +144,18 @@ namespace gl_renderer
 		, renderer::PipelineStageFlags before
 		, renderer::BufferMemoryBarrier const & transitionBarrier )const
 	{
-		//m_commandBuffer->memoryBarrier( convert( after )
-		//	, convert( before )
-		//	, convert( transitionBarrier ) );
+		m_commands.emplace_back( std::make_unique< BufferMemoryBarrierCommand >( after
+			, before
+			, transitionBarrier ) );
 	}
 
 	void CommandBuffer::memoryBarrier( renderer::PipelineStageFlags after
 		, renderer::PipelineStageFlags before
 		, renderer::ImageMemoryBarrier const & transitionBarrier )const
 	{
-		//m_commandBuffer->memoryBarrier( convert( after )
-		//	, convert( before )
-		//	, convert( transitionBarrier ) );
+		m_commands.emplace_back( std::make_unique< ImageMemoryBarrierCommand >( after
+			, before
+			, transitionBarrier ) );
 	}
 
 	void CommandBuffer::bindDescriptorSet( renderer::DescriptorSet const & descriptorSet
@@ -287,5 +290,14 @@ namespace gl_renderer
 	{
 		m_commands.emplace_back( std::make_unique< PushConstantsCommand >( layout
 			, pcb ) );
+	}
+
+	void CommandBuffer::dispatch( uint32_t groupCountX
+		, uint32_t groupCountY
+		, uint32_t groupCountZ )const
+	{
+		m_commands.emplace_back( std::make_unique< DispatchCommand >( groupCountX
+			, groupCountY 
+			, groupCountZ ) );
 	}
 }

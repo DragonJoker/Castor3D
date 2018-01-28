@@ -35,6 +35,7 @@
 #include "Enum/GlImageTiling.hpp"
 #include "Enum/GlIndexType.hpp"
 #include "Enum/GlLogicOp.hpp"
+#include "Enum/GlMemoryBarrierFlag.hpp"
 #include "Enum/GlMemoryMapFlag.hpp"
 #include "Enum/GlMemoryPropertyFlag.hpp"
 #include "Enum/GlMipmapMode.hpp"

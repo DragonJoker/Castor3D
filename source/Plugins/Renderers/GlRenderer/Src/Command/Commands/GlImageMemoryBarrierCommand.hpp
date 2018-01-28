@@ -20,9 +20,14 @@ namespace gl_renderer
 		*\brief
 		*	Constructeur.
 		*/
-		ImageMemoryBarrierCommand();
+		ImageMemoryBarrierCommand( renderer::PipelineStageFlags after
+			, renderer::PipelineStageFlags before
+			, renderer::ImageMemoryBarrier const & transitionBarrier );
 
 		void apply()const override;
 		CommandPtr clone()const override;
+
+	private:
+		GlMemoryBarrierFlags m_flags;
 	};
 }

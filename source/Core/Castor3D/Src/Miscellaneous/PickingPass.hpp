@@ -264,7 +264,7 @@ namespace castor3d
 	private:
 		std::map< castor::String, GeometryWPtr > m_pickable;
 		TextureLayoutSPtr m_colourTexture;
-		renderer::RenderBufferPtr m_depthBuffer;
+		renderer::TexturePtr m_depthBuffer;
 		renderer::FrameBufferPtr m_frameBuffer;
 		std::map< Scene const *, CameraQueueMap > m_scenes;
 		GeometryWPtr m_geometry;

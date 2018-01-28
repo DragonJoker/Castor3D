@@ -1,4 +1,4 @@
-/*
+﻿/*
 This file belongs to VkLib.
 See LICENSE file in root folder.
 */
@@ -11,6 +11,7 @@ See LICENSE file in root folder.
 #if RENDERLIB_WIN32
 #	define GLAPIENTRY __stdcall
 #	include <Windows.h>
+#	undef MemoryBarrier
 #else
 #	define GLAPIENTRY
 #endif
@@ -183,6 +184,7 @@ namespace gl_renderer
 	using PFN_glDepthMask = void ( GLAPIENTRY * )( GLboolean flag );
 	using PFN_glDepthRange = void ( GLAPIENTRY * )( GLclampd zNear, GLclampd zFar );
 	using PFN_glDisable = void ( GLAPIENTRY * )( GLenum cap );
+	using PFN_glDispatchCompute = void ( GLAPIENTRY * )( GLuint num_groups_x, GLuint num_groups_y, GLuint num_groups_z );
 	using PFN_glDrawArrays = void ( GLAPIENTRY * )( GLenum mode, GLint first, GLsizei count );
 	using PFN_glDrawArraysInstancedBaseInstance = void ( GLAPIENTRY * ) ( GLenum mode, GLint first, GLsizei count, GLsizei primcount, GLuint baseinstance );
 	using PFN_glDrawBuffers = void ( GLAPIENTRY * ) ( GLsizei n, const GLenum* bufs );
@@ -218,6 +220,7 @@ namespace gl_renderer
 	using PFN_glLinkProgram = void ( GLAPIENTRY * ) ( GLuint program );
 	using PFN_glLogicOp = void ( GLAPIENTRY * )( GLenum opcode );
 	using PFN_glMapBufferRange = void * ( GLAPIENTRY * )( GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access );
+	using PFN_glMemoryBarrier = void ( GLAPIENTRY * )( GLbitfield barriers );
 	using PFN_glPatchParameteri = void ( GLAPIENTRY * ) ( GLenum pname, GLint value );
 	using PFN_glPolygonMode = void ( GLAPIENTRY * )( GLenum face, GLenum mode );
 	using PFN_glPolygonOffsetClampEXT = void ( GLAPIENTRY * ) ( GLfloat factor, GLfloat units, GLfloat clamp );
