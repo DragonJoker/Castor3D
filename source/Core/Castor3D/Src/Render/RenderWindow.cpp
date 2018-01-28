@@ -145,36 +145,35 @@ namespace castor3d
 
 		if ( m_device )
 		{
-			auto device = getEngine()->getRenderSystem()->getCurrentDevice();
-
-			if ( device != m_device.get() )
+			if ( getEngine()->getRenderSystem()->hasCurrentDevice()
+				&& getEngine()->getRenderSystem()->getCurrentDevice() != m_device.get() )
 			{
+				auto device = getEngine()->getRenderSystem()->getCurrentDevice();
+				device->disable();
 				m_device->enable();
-			}
 
-			m_pickingPass->cleanup();
-			RenderTargetSPtr target = getRenderTarget();
+				m_pickingPass->cleanup();
+				RenderTargetSPtr target = getRenderTarget();
 
-			if ( target )
-			{
-				target->cleanup();
-			}
+				if ( target )
+				{
+					target->cleanup();
+				}
 
-			if ( device != m_device.get() )
-			{
 				m_device->disable();
 			}
-
-			if ( m_device.get() != getEngine()->getRenderSystem()->getCurrentDevice() )
+			else
 			{
-				//m_device->cleanup();
+				m_pickingPass->cleanup();
+				RenderTargetSPtr target = getRenderTarget();
+
+				if ( target )
+				{
+					target->cleanup();
+				}
 			}
 
-			if ( device && device != m_device.get() )
-			{
-				device->disable();
-			}
-
+			getEngine()->getRenderSystem()->unregisterDevice( *m_device );
 			m_device.reset();
 		}
 	}

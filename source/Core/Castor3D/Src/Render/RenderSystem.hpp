@@ -67,6 +67,24 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
+		 *\brief		Connects to the device onEnabled/onDisabled signals.
+		 *\param[in]	device	The device to register.
+		 *\~french
+		 *\brief		Se connecte aux signaux onEnablle/onDisable du périphérique.
+		 *\param[in]	device	Le périphérique à enregistrer.
+		 */
+		C3D_API void registerDevice( renderer::Device & device );
+		/**
+		 *\~english
+		 *\brief		Disconnects from the device onEnabled/onDisabled signals.
+		 *\param[in]	device	The device to unregister.
+		 *\~french
+		 *\brief		Se déconnecte du signaux onEnablle/onDisable du périphérique.
+		 *\param[in]	device	Le périphérique à désenregistrer.
+		 */
+		C3D_API void unregisterDevice( renderer::Device & device );
+		/**
+		 *\~english
 		 *\brief		Pushes a scene on the stack
 		 *\param[in]	scene	The scene
 		 *\~french
@@ -97,27 +115,25 @@ namespace castor3d
 		C3D_API glsl::GlslWriter createGlslWriter();
 		/**
 		 *\~english
-		 *\brief		Sets the currently active render context
-		 *\param[in]	context	The context
+		 *\return		The currently active device.
 		 *\~french
-		 *\brief		Définit le contexte de rendu actuellement actif
-		 *\param[in]	context	Le contexte
+		 *\return		Le périphérique actuellement actif.
 		 */
-		C3D_API void setCurrentDevice( renderer::Device const * device );
+		inline renderer::Device const * getCurrentDevice()const
+		{
+			REQUIRE( m_currentDevice );
+			return m_currentDevice;
+		}
 		/**
 		 *\~english
-		 *\return		The currently active render context.
+		 *\return		Tells if there is an active device.
 		 *\~french
-		 *\return		Le contexte de rendu actuellement actif.
+		 *\return		Dit s'il y a un périphérique actif.
 		 */
-		C3D_API renderer::Device const * getCurrentDevice()const;
-		/**
-		 *\~english
-		 *\return		Tells if the current thread has a device.
-		 *\~french
-		 *\return		Dit si le thread actuel a un périphérique logique.
-		 */
-		C3D_API bool hasCurrentDevice()const;
+		inline bool hasCurrentDevice()const
+		{
+			return m_currentDevice != nullptr;
+		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a GPU buffer with the given size.
@@ -296,11 +312,13 @@ namespace castor3d
 		OverlayRendererSPtr m_overlayRenderer;
 		renderer::RendererPtr m_renderer;
 		renderer::Device const * m_mainDevice{ nullptr };
-		std::map< std::thread::id, renderer::Device const * > m_currentDevices;
+		renderer::Device const * m_currentDevice{ nullptr };
 		std::stack< SceneRPtr > m_stackScenes;
 		castor::String m_name;
 		castor::Nanoseconds m_gpuTime;
 		GpuBufferPool m_gpuBufferPool;
+		std::map< renderer::Device *, renderer::DeviceEnabledConnection > m_deviceEnabledConnections;
+		std::map< renderer::Device *, renderer::DeviceDisabledConnection > m_deviceDisabledConnections;
 
 #if C3D_TRACE_OBJECTS
 

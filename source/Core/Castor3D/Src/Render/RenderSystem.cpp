@@ -50,6 +50,26 @@ namespace castor3d
 #endif
 	}
 
+	void RenderSystem::registerDevice( renderer::Device & device )
+	{
+		m_deviceEnabledConnections.emplace( &device
+			, device.onEnabled.connect( [this]( renderer::Device const & device )
+			{
+				m_currentDevice = &device;
+			} ) );
+		m_deviceDisabledConnections.emplace( &device
+			, device.onDisabled.connect( [this]( renderer::Device const & device )
+			{
+				m_currentDevice = nullptr;
+			} ) );
+	}
+
+	void RenderSystem::unregisterDevice( renderer::Device & device )
+	{
+		m_deviceEnabledConnections.erase( &device );
+		m_deviceDisabledConnections.erase( &device );
+	}
+
 	void RenderSystem::pushScene( Scene * p_scene )
 	{
 		m_stackScenes.push( p_scene );
@@ -80,29 +100,6 @@ namespace castor3d
 			, m_gpuInformations.hasShaderStorageBuffers() } };
 	}
 
-	void RenderSystem::setCurrentDevice( renderer::Device const * device )
-	{
-		m_currentDevices[std::this_thread::get_id()] = device;
-	}
-
-	renderer::Device const * RenderSystem::getCurrentDevice()const
-	{
-		renderer::Device const * result{ nullptr };
-		auto it = m_currentDevices.find( std::this_thread::get_id() );
-
-		if ( it != m_currentDevices.end() )
-		{
-			result = it->second;
-		}
-
-		return result;
-	}
-
-	bool RenderSystem::hasCurrentDevice()const
-	{
-		return m_currentDevices.end() != m_currentDevices.find( std::this_thread::get_id() );
-	}
-
 	GpuBufferOffset RenderSystem::getBuffer( renderer::BufferTarget type
 		, uint32_t size
 		, renderer::MemoryPropertyFlags flags )
@@ -127,6 +124,8 @@ namespace castor3d
 	renderer::DevicePtr RenderSystem::createDevice( renderer::WindowHandle && handle
 		, uint32_t gpu )
 	{
-		return m_renderer->createDevice( m_renderer->createConnection( gpu, std::move( handle ) ) );
+		renderer::DevicePtr result = m_renderer->createDevice( m_renderer->createConnection( gpu, std::move( handle ) ) );
+		registerDevice( *result );
+		return result;
 	}
 }
