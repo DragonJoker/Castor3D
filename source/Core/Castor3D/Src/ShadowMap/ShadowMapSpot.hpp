@@ -83,11 +83,10 @@ namespace castor3d
 			, renderer::CompareOp alphaFunc )const override;
 
 	private:
-		//!\~english	The depth buffer.
-		//!\~french		Le tampon de profondeur.
+		renderer::RenderPassPtr m_renderPass;
+		renderer::FrameBufferPtr m_frameBuffer;
 		renderer::TexturePtr m_depthBuffer;
-		//!\~english	The Gaussian blur pass.
-		//!\~french		La passe de flou Gaussien.
+		renderer::TextureViewPtr m_depthBufferView;
 		std::unique_ptr< GaussianBlur > m_blur;
 	};
 }

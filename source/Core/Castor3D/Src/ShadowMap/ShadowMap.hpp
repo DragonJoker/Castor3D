@@ -244,8 +244,7 @@ namespace castor3d
 			, shader::Materials const & materials )const;
 
 	protected:
-		renderer::RenderPassPtr m_renderPass;
-		renderer::FrameBufferPtr m_frameBuffer;
+		renderer::CommandBufferPtr m_commandBuffer;
 		std::set< renderer::GeometryBuffersPtr > m_geometryBuffers;
 		ShadowMapPassSPtr m_pass;
 		TextureUnit m_shadowMap;

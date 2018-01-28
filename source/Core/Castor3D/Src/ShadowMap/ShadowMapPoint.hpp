@@ -101,6 +101,16 @@ namespace castor3d
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, renderer::CompareOp alphaFunc )const override;
+
+	private:
+		struct FrameBuffer
+		{
+			renderer::RenderPassPtr renderPass;
+			renderer::FrameBufferPtr frameBuffer;
+			renderer::TextureViewPtr varianceView;
+			renderer::TextureViewPtr linearView;
+		};
+		std::array< FrameBuffer, 6u > m_frameBuffers;
 	};
 }
 

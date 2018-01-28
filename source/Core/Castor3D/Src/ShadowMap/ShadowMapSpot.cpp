@@ -12,6 +12,14 @@
 #include "Texture/TextureView.hpp"
 #include "Texture/TextureLayout.hpp"
 
+#include <Image/Texture.hpp>
+#include <Image/TextureView.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <RenderPass/RenderPassState.hpp>
+#include <RenderPass/RenderSubpass.hpp>
+#include <RenderPass/RenderSubpassState.hpp>
+#include <RenderPass/TextureAttachment.hpp>
+
 #include <GlslSource.hpp>
 
 #include <Graphics/Image.hpp>
@@ -125,49 +133,77 @@ namespace castor3d
 
 	void ShadowMapSpot::render()
 	{
-		m_pass->startTimer();
-		m_frameBuffer->bind( FrameBufferTarget::eDraw );
-		m_frameBuffer->clear( BufferComponent::eDepth | BufferComponent::eColour );
-		m_pass->render();
-		m_frameBuffer->unbind();
+		static renderer::RgbaColour const black = renderer::RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueBlack );
+		static renderer::DepthStencilClearValue const zero{ 1.0f, 0 };
+		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
 
-		m_blur->blur( m_shadowMap.getTexture() );
-		m_pass->stopTimer();
+		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
+		{
+			m_pass->startTimer( *m_commandBuffer );
+			m_commandBuffer->beginRenderPass( *m_renderPass
+				, *m_frameBuffer
+				, { zero, black, black }
+				, renderer::SubpassContents::eSecondaryCommandBuffers );
+			m_commandBuffer->executeCommands( { m_pass->getCommandBuffer() } );
+			m_commandBuffer->endRenderPass();
+			m_pass->stopTimer( *m_commandBuffer );
+			m_commandBuffer->end();
+
+			device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
+			m_blur->blur();
+		}
 	}
 
 	void ShadowMapSpot::debugDisplay( castor::Size const & size, uint32_t index )
 	{
-		Size displaySize{ 256u, 256u };
-		Position position{ int32_t( ( displaySize.getWidth() + 1 ) * index * 3u ), int32_t( displaySize.getHeight() * 2u ) };
-		getEngine()->getRenderSystem()->getCurrentContext()->renderVariance( position
-			, displaySize
-			, *m_shadowMap.getTexture() );
-		position.offset( 2 * ( displaySize.getWidth() + 1 ), 0 );
-		getEngine()->getRenderSystem()->getCurrentContext()->renderTexture( position
-			, displaySize
-			, *m_linearMap.getTexture() );
+		//Size displaySize{ 256u, 256u };
+		//Position position{ int32_t( ( displaySize.getWidth() + 1 ) * index * 3u ), int32_t( displaySize.getHeight() * 2u ) };
+		//getEngine()->getRenderSystem()->getCurrentDevice()->renderVariance( position
+		//	, displaySize
+		//	, *m_shadowMap.getTexture() );
+		//position.offset( 2 * ( displaySize.getWidth() + 1 ), 0 );
+		//getEngine()->getRenderSystem()->getCurrentDevice()->renderTexture( position
+		//	, displaySize
+		//	, *m_linearMap.getTexture() );
 	}
 
 	void ShadowMapSpot::doInitialise()
 	{
-		m_depthBuffer = m_frameBuffer->createDepthStencilRenderBuffer( PixelFormat::eD24 );
-		m_depthBuffer->create();
-		m_depthBuffer->initialise( Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize } );
+		renderer::UIVec2 size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize };
+		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		m_depthBuffer = device.createTexture();
+		m_depthBuffer->setImage( PixelFormat::eD24
+			, size
+			, renderer::ImageUsageFlag::eDepthStencilAttachment );
+		m_depthBufferView = m_depthBuffer->createView( renderer::TextureType::e2D
+			, PixelFormat::eD24
+			, 0u
+			, 1u
+			, 0u
+			, 1u );
+		std::vector< renderer::PixelFormat > formats{ { PixelFormat::eD24, PixelFormat::eAL32F, PixelFormat::eL32F } };
+		renderer::RenderSubpassPtrArray subpasses;
+		subpasses.emplace_back( device.createRenderSubpass( formats
+			, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
+			, renderer::AccessFlag::eColourAttachmentWrite } ) );
+		m_renderPass = device.createRenderPass( formats
+			, subpasses
+			, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
+				, renderer::AccessFlag::eColourAttachmentWrite
+				, { renderer::ImageLayout::eDepthStencilAttachmentOptimal, renderer::ImageLayout::eColourAttachmentOptimal, renderer::ImageLayout::eColourAttachmentOptimal } }
+			, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
+				, renderer::AccessFlag::eColourAttachmentWrite
+				, { renderer::ImageLayout::eDepthStencilAttachmentOptimal, renderer::ImageLayout::eColourAttachmentOptimal, renderer::ImageLayout::eColourAttachmentOptimal } } );
+		renderer::TextureAttachmentPtrArray attaches;
+		attaches.emplace_back( std::make_unique< renderer::TextureAttachment >( m_shadowMap.getTexture()->getView() ) );
+		attaches.emplace_back( std::make_unique< renderer::TextureAttachment >( m_linearMap.getTexture()->getView() ) );
+		attaches.emplace_back( std::make_unique< renderer::TextureAttachment >( *m_depthBufferView ) );
+		m_frameBuffer = m_renderPass->createFrameBuffer( size, std::move( attaches ) );
 
-		m_frameBuffer->setClearColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueBlack ) );
-		m_varianceAttach = m_frameBuffer->createAttachment( m_shadowMap.getTexture() );
-		m_linearAttach = m_frameBuffer->createAttachment( m_linearMap.getTexture() );
-		m_depthAttach = m_frameBuffer->createAttachment( m_depthBuffer );
-
-		m_frameBuffer->bind();
-		m_frameBuffer->attach( AttachmentPoint::eDepth, m_depthAttach );
-		m_frameBuffer->attach( AttachmentPoint::eColour, 0u, m_varianceAttach, m_shadowMap.getTexture()->getType() );
-		m_frameBuffer->attach( AttachmentPoint::eColour, 1u, m_linearAttach, m_linearMap.getTexture()->getType() );
-		ENSURE( m_frameBuffer->isComplete() );
-		m_frameBuffer->setDrawBuffers();
-		m_frameBuffer->unbind();
+		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 
 		m_blur = std::make_unique< GaussianBlur >( *getEngine()
+			, *m_shadowMap.getTexture()
 			, m_shadowMap.getTexture()->getDimensions()
 			, m_shadowMap.getTexture()->getPixelFormat()
 			, 5u );
@@ -175,6 +211,8 @@ namespace castor3d
 
 	void ShadowMapSpot::doCleanup()
 	{
+		m_frameBuffer.reset();
+		m_renderPass.reset();
 		m_blur.reset();
 		m_depthBuffer.reset();
 	}

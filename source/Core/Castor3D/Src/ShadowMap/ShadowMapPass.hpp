@@ -54,7 +54,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Démarre les timers.
 		 */
-		C3D_API void startTimer();
+		C3D_API void startTimer( renderer::CommandBuffer const & commandBuffer );
 		/**
 		 *\~english
 		 *\brief		Stops the timers.
@@ -62,7 +62,7 @@ namespace castor3d
 		 *\brief
 		 *\brief		Arrête les timers.
 		 */
-		C3D_API void stopTimer();
+		C3D_API void stopTimer( renderer::CommandBuffer const & commandBuffer );
 		/**
 		 *\~english
 		 *\brief		Updates the render pass.
@@ -128,7 +128,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Prépare le pipeline de rendu, en supprimant les faces arrière.
 		 */
-		virtual void doPreparePipeline( ShaderProgram & program
+		virtual void doPreparePipeline( renderer::ShaderProgram & program
 			, PipelineFlags const & flags );
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
@@ -137,12 +137,12 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
 		 */
-		void doPrepareFrontPipeline( ShaderProgram & program
+		void doPrepareFrontPipeline( renderer::ShaderProgram & program
 			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
 		 */
-		void doPrepareBackPipeline( ShaderProgram & program
+		void doPrepareBackPipeline( renderer::ShaderProgram & program
 			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
@@ -185,14 +185,8 @@ namespace castor3d
 			, renderer::CompareOp alphaFunc )const override;
 
 	protected:
-		//!\~english	The scene.
-		//!\~french		La scène.
 		Scene & m_scene;
-		//!\~english	The parent shadow map.
-		//!\~french		La shadow map parente.
 		ShadowMap const & m_shadowMap;
-		//!\~english	Tells if the pass is initialised.
-		//!\~french		Dit si la passe est initialisée.
 		bool m_initialised{ false };
 	};
 }

@@ -14,9 +14,9 @@ namespace castor3d
 	\version	0.9.0
 	\date		30/08/2016
 	\~english
-	\brief		Shadow mapping implementation for spot lights.
+	\brief		Shadow mapping implementation for directional lights.
 	\~french
-	\brief		Implémentation du mappage d'ombres pour les lumières spot.
+	\brief		Implémentation du mappage d'ombres pour les lumières directionnelles.
 	*/
 	class ShadowMapDirectional
 		: public ShadowMap
@@ -83,8 +83,8 @@ namespace castor3d
 			, renderer::CompareOp alphaFunc )const override;
 
 	private:
-		//!\~english	The Gaussian blur pass.
-		//!\~french		La passe de flou Gaussien.
+		renderer::RenderPassPtr m_renderPass;
+		renderer::FrameBufferPtr m_frameBuffer;
 		std::unique_ptr< GaussianBlur > m_blur;
 	};
 }

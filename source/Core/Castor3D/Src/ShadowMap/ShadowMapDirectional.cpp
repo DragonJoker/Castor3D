@@ -2,22 +2,25 @@
 
 #include "Engine.hpp"
 
-#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
-#include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/RenderBufferAttachment.hpp"
-#include "FrameBuffer/TextureAttachment.hpp"
 #include "Miscellaneous/GaussianBlur.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/Light/Light.hpp"
 #include "Scene/Light/DirectionalLight.hpp"
-#include "Shader/ShaderProgram.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
 #include "Shader/UniformBuffer.hpp"
 #include "ShadowMap/ShadowMapPassDirectional.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureView.hpp"
 #include "Texture/TextureLayout.hpp"
+
+#include <Image/Texture.hpp>
+#include <Image/TextureView.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <RenderPass/RenderPassState.hpp>
+#include <RenderPass/RenderSubpass.hpp>
+#include <RenderPass/RenderSubpassState.hpp>
+#include <RenderPass/TextureAttachment.hpp>
 
 #include <GlslSource.hpp>
 
@@ -31,7 +34,7 @@ namespace castor3d
 {
 	namespace
 	{
-		TextureUnit doInitialiseVariance( Engine & engine, Size const & p_size )
+		TextureUnit doInitialiseVariance( Engine & engine, Size const & size )
 		{
 			String const name = cuT( "ShadowMap_Directional_Variance" );
 			SamplerSPtr sampler;
@@ -48,14 +51,15 @@ namespace castor3d
 				sampler->setWrapS( renderer::WrapMode::eClampToBorder );
 				sampler->setWrapT( renderer::WrapMode::eClampToBorder );
 				sampler->setWrapR( renderer::WrapMode::eClampToBorder );
-				sampler->setBorderColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueWhite ) );
+				sampler->setBorderColour( renderer::BorderColour::eFloatOpaqueWhite );
 			}
 
-			auto texture = engine.getRenderSystem()->createTexture(
-				TextureType::eTwoDimensions,
-				AccessType::eNone,
-				AccessType::eRead | AccessType::eWrite,
-				PixelFormat::eAL32F, p_size );
+			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
+				, renderer::TextureType::e2D
+				, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled
+				, renderer::MemoryPropertyFlag::eDeviceLocal
+				, PixelFormat::eAL32F
+				, size );
 			TextureUnit unit{ engine };
 			unit.setTexture( texture );
 			unit.setSampler( sampler );
@@ -68,7 +72,7 @@ namespace castor3d
 			return unit;
 		}
 
-		TextureUnit doInitialiseDepth( Engine & engine, Size const & p_size )
+		TextureUnit doInitialiseDepth( Engine & engine, Size const & size )
 		{
 			String const name = cuT( "ShadowMap_Directional_Depth" );
 			SamplerSPtr sampler;
@@ -87,11 +91,12 @@ namespace castor3d
 				sampler->setWrapR( renderer::WrapMode::eClampToEdge );
 			}
 
-			auto texture = engine.getRenderSystem()->createTexture(
-				TextureType::eTwoDimensions,
-				AccessType::eNone,
-				AccessType::eRead | AccessType::eWrite,
-				PixelFormat::eD32F, p_size );
+			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
+				, renderer::TextureType::e2D
+				, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled
+				, renderer::MemoryPropertyFlag::eDeviceLocal
+				, PixelFormat::eD32F
+				, size );
 			TextureUnit unit{ engine };
 			unit.setTexture( texture );
 			unit.setSampler( sampler );
@@ -128,43 +133,66 @@ namespace castor3d
 
 	void ShadowMapDirectional::render()
 	{
-		m_pass->startTimer();
-		m_frameBuffer->bind( FrameBufferTarget::eDraw );
-		m_frameBuffer->clear( BufferComponent::eDepth | BufferComponent::eColour );
-		m_pass->render( 0u );
-		m_frameBuffer->unbind();
+		static renderer::RgbaColour const black = renderer::RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueBlack );
+		static renderer::DepthStencilClearValue const zero{ 1.0f, 0 };
+		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
 
-		m_blur->blur( m_shadowMap.getTexture() );
-		m_pass->stopTimer();
+		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
+		{
+			m_pass->startTimer( *m_commandBuffer );
+			m_commandBuffer->beginRenderPass( *m_renderPass
+				, *m_frameBuffer
+				, { zero, black }
+				, renderer::SubpassContents::eSecondaryCommandBuffers );
+			m_commandBuffer->executeCommands( { m_pass->getCommandBuffer() } );
+			m_commandBuffer->endRenderPass();
+			m_pass->stopTimer( *m_commandBuffer );
+			m_commandBuffer->end();
+
+			device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
+			m_blur->blur();
+		}
 	}
 
 	void ShadowMapDirectional::debugDisplay( castor::Size const & size, uint32_t index )
 	{
-		Size displaySize{ 256u, 256u };
-		Position position{ int32_t( displaySize.getWidth() * index * 3 ), int32_t( displaySize.getHeight() * 3u ) };
-		getEngine()->getRenderSystem()->getCurrentContext()->renderVariance( position
-			, displaySize
-			, *m_shadowMap.getTexture() );
-		position = Position{ int32_t( displaySize.getWidth() * ( 2 + index * 3 ) ), int32_t( displaySize.getHeight() * 3u ) };
-		getEngine()->getRenderSystem()->getCurrentContext()->renderDepth( position
-			, displaySize
-			, *m_linearMap.getTexture() );
+		//Size displaySize{ 256u, 256u };
+		//Position position{ int32_t( displaySize.getWidth() * index * 3 ), int32_t( displaySize.getHeight() * 3u ) };
+		//getEngine()->getRenderSystem()->getCurrentContext()->renderVariance( position
+		//	, displaySize
+		//	, *m_shadowMap.getTexture() );
+		//position = Position{ int32_t( displaySize.getWidth() * ( 2 + index * 3 ) ), int32_t( displaySize.getHeight() * 3u ) };
+		//getEngine()->getRenderSystem()->getCurrentContext()->renderDepth( position
+		//	, displaySize
+		//	, *m_linearMap.getTexture() );
 	}
 
 	void ShadowMapDirectional::doInitialise()
 	{
-		m_frameBuffer->setClearColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueBlack ) );
-		m_varianceAttach = m_frameBuffer->createAttachment( m_shadowMap.getTexture() );
-		m_linearAttach = m_frameBuffer->createAttachment( m_linearMap.getTexture() );
+		renderer::UIVec2 size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize };
+		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		std::vector< renderer::PixelFormat > formats{ { PixelFormat::eD24, PixelFormat::eAL32F, PixelFormat::eL32F } };
+		renderer::RenderSubpassPtrArray subpasses;
+		subpasses.emplace_back( device.createRenderSubpass( formats
+			, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
+			, renderer::AccessFlag::eColourAttachmentWrite } ) );
+		m_renderPass = device.createRenderPass( formats
+			, subpasses
+			, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
+				, renderer::AccessFlag::eColourAttachmentWrite
+				, { renderer::ImageLayout::eDepthStencilAttachmentOptimal, renderer::ImageLayout::eColourAttachmentOptimal, renderer::ImageLayout::eColourAttachmentOptimal } }
+			, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
+				, renderer::AccessFlag::eColourAttachmentWrite
+				, { renderer::ImageLayout::eDepthStencilAttachmentOptimal, renderer::ImageLayout::eColourAttachmentOptimal, renderer::ImageLayout::eColourAttachmentOptimal } } );
+		renderer::TextureAttachmentPtrArray attaches;
+		attaches.emplace_back( std::make_unique< renderer::TextureAttachment >( m_shadowMap.getTexture()->getView() ) );
+		attaches.emplace_back( std::make_unique< renderer::TextureAttachment >( m_linearMap.getTexture()->getView() ) );
+		m_frameBuffer = m_renderPass->createFrameBuffer( size, std::move( attaches ) );
 
-		m_frameBuffer->bind();
-		m_frameBuffer->attach( AttachmentPoint::eDepth, m_linearAttach, m_linearMap.getTexture()->getType() );
-		m_frameBuffer->attach( AttachmentPoint::eColour, 0u, m_varianceAttach, m_shadowMap.getTexture()->getType() );
-		ENSURE( m_frameBuffer->isComplete() );
-		m_frameBuffer->setDrawBuffers();
-		m_frameBuffer->unbind();
+		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 
 		m_blur = std::make_unique< GaussianBlur >( *getEngine()
+			, *m_shadowMap.getTexture()
 			, m_shadowMap.getTexture()->getDimensions()
 			, m_shadowMap.getTexture()->getPixelFormat()
 			, 5u );
@@ -172,9 +200,9 @@ namespace castor3d
 
 	void ShadowMapDirectional::doCleanup()
 	{
+		m_frameBuffer.reset();
+		m_renderPass.reset();
 		m_blur.reset();
-		m_linearAttach.reset();
-		m_varianceAttach.reset();
 	}
 
 	void ShadowMapDirectional::doUpdateFlags( PassFlags & passFlags

@@ -52,7 +52,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Démarre les timers.
 		 */
-		C3D_API void start();
+		C3D_API void start( renderer::CommandBuffer const & commandBuffer );
 		/**
 		 *\~english
 		 *\brief		Stops the timers.
@@ -60,7 +60,7 @@ namespace castor3d
 		 *\brief
 		 *\brief		Arrête les timers.
 		 */
-		C3D_API void stop();
+		C3D_API void stop( renderer::CommandBuffer const & commandBuffer );
 		/**
 		 *\~english
 		 *\brief		Reset the timer's times.

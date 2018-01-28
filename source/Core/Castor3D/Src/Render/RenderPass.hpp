@@ -402,6 +402,18 @@ namespace castor3d
 		{
 			return m_sceneUbo;
 		}
+		/**
+		 *\~english
+		 *\return		The command buffer.
+		 *\~english
+		 *\return		Le tampon de commandes.
+		 */
+		inline renderer::CommandBuffer const & getCommandBuffer( uint32_t index = 0u )const
+		{
+			REQUIRE( m_commandBuffers.size() > index );
+			REQUIRE( m_commandBuffers[index] );
+			return *m_commandBuffers[index];
+		}
 
 	protected:
 		/**
@@ -1195,51 +1207,22 @@ namespace castor3d
 			, PipelineFlags const & flags ) = 0;
 
 	protected:
-		//!\~english	The render system.
-		//!\~french		Le render system.
 		RenderSystem & m_renderSystem;
-		//!\~english	The render queue.
-		//!\~french		La file de rendu.
 		RenderQueue m_renderQueue;
-		//!\~english	Tells if this pass is used for opaque render nodes.
-		//!\~french		Dit si cette passe est utilisée pour les noeuds de rendu opaques.
 		bool m_opaque{ false };
-		//!\~english	The pipelines used to render nodes' back faces.
-		//!\~french		Les pipelines de rendu utilisés pour dessiner les faces arrière des noeuds.
 		std::map< PipelineFlags, RenderPipelineUPtr > m_frontPipelines;
-		//!\~english	The pipelines used to render nodes' front faces.
-		//!\~french		Les pipelines de rendu utilisés pour dessiner les faces avant noeuds.
 		std::map< PipelineFlags, RenderPipelineUPtr > m_backPipelines;
-		//!\~english	The geometries buffers.
-		//!\~french		Les tampons de géométries.
 		std::set< renderer::GeometryBuffersPtr > m_geometryBuffers;
-		//!\~english	Tells if the technique uses order independant rendering.
-		//!\~french		Dit si la technique utilise le rendu indépendant de l'ordre.
 		bool m_oit{ false };
-		//!\~english	The uniform buffer containing the scene data.
-		//!\~french		Le tampon d'uniformes contenant les données de scène.
 		SceneUbo m_sceneUbo;
-		//!\~english	The uniform buffer containing matrices data.
-		//!\~french		Le tampon d'uniformes contenant les données de matrices.
 		MatrixUbo m_matrixUbo;
-		//!\~english	The uniform buffer containing model data.
-		//!\~french		Le tampon d'uniformes contenant les données du modèle.
 		ModelUbo m_modelUbo;
-		//!\~english	The uniform buffer containing matrices data.
-		//!\~french		Le tampon d'uniformes contenant les données de matrices.
 		ModelMatrixUbo m_modelMatrixUbo;
-		//!\~english	The uniform buffer containing billboard data.
-		//!\~french		Le tampon d'uniformes contenant les données de billboard.
 		BillboardUbo m_billboardUbo;
-		//!\~english	The uniform buffer containing skinning animation data.
-		//!\~french		Le tampon d'uniformes contenant les données d'animation de skinning.
 		SkinningUbo m_skinningUbo;
-		//!\~english	The uniform buffer containing morphing animation data.
-		//!\~french		Le tampon d'uniformes contenant les données d'animation de morphing.
 		MorphingUbo m_morphingUbo;
-		//!\~english	The render pass timer.
-		//!\~french		Le timer de la passe de rendu.
 		RenderPassTimerSPtr m_timer;
+		std::vector< renderer::CommandBufferPtr > m_commandBuffers;
 	};
 }
 

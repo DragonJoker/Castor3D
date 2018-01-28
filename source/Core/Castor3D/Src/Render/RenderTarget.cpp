@@ -186,13 +186,13 @@ namespace castor3d
 				, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::AccessFlag::eColourAttachmentWrite } ) );
 			m_renderPass = device.createRenderPass( formats
-				, std::move( subpasses )
-				, renderer::RenderPassState{ renderer::PipelineStageFlag::eBottomOfPipe
-					, renderer::AccessFlag::eMemoryRead
-					, { renderer::ImageLayout::ePresentSrc } }
-				, renderer::RenderPassState{ renderer::PipelineStageFlag::eBottomOfPipe
-					, renderer::AccessFlag::eMemoryRead
-					, { renderer::ImageLayout::ePresentSrc } } );
+				, subpasses
+				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
+					, renderer::AccessFlag::eColourAttachmentWrite
+					, { renderer::ImageLayout::eColourAttachmentOptimal } }
+				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
+					, renderer::AccessFlag::eColourAttachmentWrite
+					, { renderer::ImageLayout::eColourAttachmentOptimal } } );
 			m_frameBuffer.initialise( *m_renderPass
 				, index
 				, m_size );

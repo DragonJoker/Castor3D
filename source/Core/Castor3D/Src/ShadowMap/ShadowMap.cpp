@@ -3,7 +3,6 @@
 #include "Engine.hpp"
 
 #include "Event/Frame/FunctorEvent.hpp"
-#include "FrameBuffer/FrameBuffer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/Light/Light.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -11,6 +10,13 @@
 #include "ShadowMap/ShadowMapPass.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
+
+#include <Image/Texture.hpp>
+#include <Image/TextureView.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <RenderPass/RenderPassState.hpp>
+#include <RenderPass/RenderSubpass.hpp>
+#include <RenderPass/RenderSubpassState.hpp>
 
 #include <GlslSource.hpp>
 #include "Shader/Shaders/GlslMaterial.hpp"
@@ -42,14 +48,8 @@ namespace castor3d
 		{
 			m_shadowMap.initialise();
 			m_linearMap.initialise();
-			m_frameBuffer = getEngine()->getRenderSystem()->createFrameBuffer();
-			result = m_frameBuffer->initialise();
 			auto size = m_shadowMap.getTexture()->getDimensions();
-
-			if ( result )
-			{
-				result = m_pass->initialise( size );
-			}
+			result = m_pass->initialise( size );
 
 			if ( result )
 			{
@@ -67,9 +67,6 @@ namespace castor3d
 		if ( m_frameBuffer )
 		{
 			doCleanup();
-			m_frameBuffer.reset();
-			m_renderPass.reset();
-
 			m_shadowMap.cleanup();
 			m_linearMap.cleanup();
 		}
