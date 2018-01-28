@@ -46,8 +46,8 @@ namespace castor3d
 		}
 
 		m_sampler = p_context.getRenderSystem()->getEngine()->getSamplerCache().add( cuT( "TextureProjection" ) );
-		m_sampler->setMinFilter( InterpolationMode::eLinear );
-		m_sampler->setMagFilter( InterpolationMode::eLinear );
+		m_sampler->setMinFilter( renderer::Filter::eLinear );
+		m_sampler->setMagFilter( renderer::Filter::eLinear );
 		m_sampler->setWrapS( renderer::WrapMode::eClampToEdge );
 		m_sampler->setWrapT( renderer::WrapMode::eClampToEdge );
 		m_sampler->setWrapR( renderer::WrapMode::eClampToEdge );

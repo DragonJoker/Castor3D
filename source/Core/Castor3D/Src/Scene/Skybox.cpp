@@ -115,8 +115,8 @@ namespace castor3d
 		else
 		{
 			auto sampler = getEngine()->getSamplerCache().add( skybox );
-			sampler->setMinFilter( InterpolationMode::eLinear );
-			sampler->setMagFilter( InterpolationMode::eLinear );
+			sampler->setMinFilter( renderer::Filter::eLinear );
+			sampler->setMagFilter( renderer::Filter::eLinear );
 			sampler->setWrapS( renderer::WrapMode::eClampToEdge );
 			sampler->setWrapT( renderer::WrapMode::eClampToEdge );
 			sampler->setWrapR( renderer::WrapMode::eClampToEdge );

@@ -98,7 +98,7 @@ namespace castor3d
 		, castor3d::MorphingUbo::BufferMorphing\
 		, castor3d::MorphingUbo::BindingPoint\
 		, set\
-		, glsl::Ubo::Layout::ePushConstants };\
+		, glsl::Ubo::Layout::eStd140 };\
 	auto c3d_time = morphing.declMember< glsl::Float >( castor3d::MorphingUbo::Time, checkFlag( flags, castor3d::ProgramFlag::eMorphing ) );\
 	morphing.end()
 

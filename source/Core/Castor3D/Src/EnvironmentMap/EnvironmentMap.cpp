@@ -40,15 +40,15 @@ namespace castor3d
 			{
 				sampler = engine.getSamplerCache().add( name );
 				sampler->setInterpolationMode( InterpolationFilter::eMin
-					, InterpolationMode::eLinear );
+					, renderer::Filter::eLinear );
 				sampler->setInterpolationMode( InterpolationFilter::eMag
-					, InterpolationMode::eLinear );
+					, renderer::Filter::eLinear );
 
 				if ( p_type == MaterialType::ePbrMetallicRoughness
 					|| p_type == MaterialType::ePbrSpecularGlossiness )
 				{
 					sampler->setInterpolationMode( InterpolationFilter::eMip
-						, InterpolationMode::eLinear );
+						, renderer::Filter::eLinear );
 				}
 
 				sampler->setWrappingMode( TextureUVW::eU

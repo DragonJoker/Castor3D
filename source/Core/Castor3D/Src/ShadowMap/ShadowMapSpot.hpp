@@ -85,7 +85,7 @@ namespace castor3d
 	private:
 		//!\~english	The depth buffer.
 		//!\~french		Le tampon de profondeur.
-		renderer::RenderBufferPtr m_depthBuffer;
+		renderer::TexturePtr m_depthBuffer;
 		//!\~english	The Gaussian blur pass.
 		//!\~french		La passe de flou Gaussien.
 		std::unique_ptr< GaussianBlur > m_blur;

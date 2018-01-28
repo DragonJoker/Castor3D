@@ -177,8 +177,8 @@ SceneFileParser::SceneFileParser( Engine & engine )
 	m_mapViewportModes[cuT( "perspective" )] = uint32_t( ViewportType::ePerspective );
 	m_mapViewportModes[cuT( "frustum" )] = uint32_t( ViewportType::eFrustum );
 
-	m_mapInterpolationModes[cuT( "nearest" )] = uint32_t( InterpolationMode::eNearest );
-	m_mapInterpolationModes[cuT( "linear" )] = uint32_t( InterpolationMode::eLinear );
+	m_mapInterpolationModes[cuT( "nearest" )] = uint32_t( renderer::Filter::eNearest );
+	m_mapInterpolationModes[cuT( "linear" )] = uint32_t( renderer::Filter::eLinear );
 
 	m_mapWrappingModes[cuT( "repeat" )] = uint32_t( WrapMode::eRepeat );
 	m_mapWrappingModes[cuT( "mirrored_repeat" )] = uint32_t( WrapMode::eMirroredRepeat );

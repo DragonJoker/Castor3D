@@ -97,8 +97,8 @@ namespace GrayScale
 		if ( !m_renderTarget.getEngine()->getSamplerCache().has( name ) )
 		{
 			m_sampler = m_renderTarget.getEngine()->getSamplerCache().add( name );
-			m_sampler->setMinFilter( InterpolationMode::eNearest );
-			m_sampler->setMagFilter( InterpolationMode::eNearest );
+			m_sampler->setMinFilter( renderer::Filter::eNearest );
+			m_sampler->setMagFilter( renderer::Filter::eNearest );
 			m_sampler->setWrapS( renderer::WrapMode::eClampToBorder );
 			m_sampler->setWrapT( renderer::WrapMode::eClampToBorder );
 			m_sampler->setWrapR( renderer::WrapMode::eClampToBorder );

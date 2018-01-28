@@ -80,8 +80,8 @@ namespace castor3d
 		m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
 
 		m_sampler = getOwner()->getRenderSystem()->getEngine()->getSamplerCache().add( cuT( "RenderColourLayerToTexture" ) );
-		m_sampler->setMinFilter( InterpolationMode::eLinear );
-		m_sampler->setMagFilter( InterpolationMode::eLinear );
+		m_sampler->setMinFilter( renderer::Filter::eLinear );
+		m_sampler->setMagFilter( renderer::Filter::eLinear );
 		m_sampler->setWrapS( renderer::WrapMode::eClampToEdge );
 		m_sampler->setWrapT( renderer::WrapMode::eClampToEdge );
 		m_sampler->setWrapR( renderer::WrapMode::eClampToEdge );

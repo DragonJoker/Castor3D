@@ -543,7 +543,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			p_params[0]->get( uiMode );
-			parsingContext->sampler->setMinFilter( InterpolationMode( uiMode ) );
+			parsingContext->sampler->setMinFilter( renderer::Filter( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -560,7 +560,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			p_params[0]->get( uiMode );
-			parsingContext->sampler->setMagFilter( InterpolationMode( uiMode ) );
+			parsingContext->sampler->setMagFilter( renderer::Filter( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -577,7 +577,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			p_params[0]->get( uiMode );
-			parsingContext->sampler->setMipFilter( InterpolationMode( uiMode ) );
+			parsingContext->sampler->setMipFilter( renderer::Filter( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()

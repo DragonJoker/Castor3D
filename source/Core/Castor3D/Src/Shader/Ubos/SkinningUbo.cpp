@@ -59,10 +59,10 @@ namespace castor3d
 		, ProgramFlags const & flags )
 	{
 		using namespace glsl;
-		auto bone_ids0 = writer.getBuiltin< IVec4 >( ShaderProgram::BoneIds0 );
-		auto bone_ids1 = writer.getBuiltin< IVec4 >( ShaderProgram::BoneIds1 );
-		auto weights0 = writer.getBuiltin< Vec4 >( ShaderProgram::Weights0 );
-		auto weights1 = writer.getBuiltin< Vec4 >( ShaderProgram::Weights1 );
+		auto bone_ids0 = writer.getBuiltin< IVec4 >( cuT( "bone_ids0" ) );
+		auto bone_ids1 = writer.getBuiltin< IVec4 >( cuT( "bone_ids1" ) );
+		auto weights0 = writer.getBuiltin< Vec4 >( cuT( "weights0" ) );
+		auto weights1 = writer.getBuiltin< Vec4 >( cuT( "weights1" ) );
 		auto c3d_mtxModel = writer.getBuiltin< glsl::Mat4 >( ModelMatrixUbo::MtxModel );
 		auto c3d_mtxBones = writer.getBuiltinArray< glsl::Mat4 >( SkinningUbo::Bones );
 		auto mtxBoneTransform = writer.declLocale< Mat4 >( cuT( "mtxBoneTransform" ) );

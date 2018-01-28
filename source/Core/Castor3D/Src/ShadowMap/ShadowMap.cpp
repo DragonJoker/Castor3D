@@ -66,25 +66,13 @@ namespace castor3d
 
 		if ( m_frameBuffer )
 		{
-			m_frameBuffer->bind();
-			m_frameBuffer->detachAll();
-			m_frameBuffer->unbind();
-
 			doCleanup();
-
-			m_frameBuffer->cleanup();
 			m_frameBuffer.reset();
+			m_renderPass.reset();
 
 			m_shadowMap.cleanup();
 			m_linearMap.cleanup();
 		}
-
-		for ( auto buffer : m_geometryBuffers )
-		{
-			buffer->cleanup();
-		}
-
-		m_geometryBuffers.clear();
 	}
 
 	void ShadowMap::updateFlags( PassFlags & passFlags
@@ -151,21 +139,21 @@ namespace castor3d
 		// Vertex inputs
 		auto position = writer.declAttribute< Vec4 >( cuT( "position" ) );
 		auto texture = writer.declAttribute< Vec3 >( cuT( "texcoord" ) );
-		auto bone_ids0 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds0
+		auto bone_ids0 = writer.declAttribute< IVec4 >( cuT( "bone_ids0" )
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds1
+		auto bone_ids1 = writer.declAttribute< IVec4 >( cuT( "bone_ids1" )
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = writer.declAttribute< Vec4 >( ShaderProgram::Weights0
+		auto weights0 = writer.declAttribute< Vec4 >( cuT( "weights0" )
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = writer.declAttribute< Vec4 >( ShaderProgram::Weights1
+		auto weights1 = writer.declAttribute< Vec4 >( cuT( "weights1" )
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto transform = writer.declAttribute< Mat4 >( ShaderProgram::Transform
+		auto transform = writer.declAttribute< Mat4 >( cuT( "transform" )
 			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-		auto material = writer.declAttribute< Int >( ShaderProgram::Material
+		auto material = writer.declAttribute< Int >( cuT( "material" )
 			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = writer.declAttribute< Vec4 >( ShaderProgram::Position2
+		auto position2 = writer.declAttribute< Vec4 >( cuT( "position2" )
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto texture2 = writer.declAttribute< Vec3 >( ShaderProgram::Texture2
+		auto texture2 = writer.declAttribute< Vec3 >( cuT( "texture2" )
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 

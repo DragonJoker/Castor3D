@@ -2,10 +2,6 @@
 
 #include "Engine.hpp"
 
-#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
-#include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/RenderBufferAttachment.hpp"
-#include "FrameBuffer/TextureAttachment.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/Light/Light.hpp"
 #include "Scene/Light/SpotLight.hpp"
@@ -41,17 +37,18 @@ namespace castor3d
 			else
 			{
 				sampler = engine.getSamplerCache().add( name );
-				sampler->setMinFilter( InterpolationMode::eLinear );
-				sampler->setMagFilter( InterpolationMode::eLinear );
+				sampler->setMinFilter( renderer::Filter::eLinear );
+				sampler->setMagFilter( renderer::Filter::eLinear );
 				sampler->setWrapS( renderer::WrapMode::eClampToBorder );
 				sampler->setWrapT( renderer::WrapMode::eClampToBorder );
 				sampler->setWrapR( renderer::WrapMode::eClampToBorder );
-				sampler->setBorderColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueWhite ) );
+				sampler->setBorderColour( renderer::BorderColour::eFloatOpaqueWhite );
 			}
 
-			auto texture = engine.getRenderSystem()->createTexture( TextureType::eTwoDimensions
-				, AccessType::eNone
-				, AccessType::eRead | AccessType::eWrite
+			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
+				, renderer::TextureType::e2D
+				, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled
+				, renderer::MemoryPropertyFlag::eDeviceLocal
 				, PixelFormat::eAL32F
 				, size );
 			TextureUnit unit{ engine };
@@ -79,16 +76,17 @@ namespace castor3d
 			else
 			{
 				sampler = engine.getSamplerCache().add( name );
-				sampler->setMinFilter( InterpolationMode::eLinear );
-				sampler->setMagFilter( InterpolationMode::eLinear );
+				sampler->setMinFilter( renderer::Filter::eLinear );
+				sampler->setMagFilter( renderer::Filter::eLinear );
 				sampler->setWrapS( renderer::WrapMode::eClampToEdge );
 				sampler->setWrapT( renderer::WrapMode::eClampToEdge );
 				sampler->setWrapR( renderer::WrapMode::eClampToEdge );
 			}
 
-			auto texture = engine.getRenderSystem()->createTexture( TextureType::eTwoDimensions
-				, AccessType::eNone
-				, AccessType::eRead | AccessType::eWrite
+			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
+				, renderer::TextureType::e2D
+				, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled
+				, renderer::MemoryPropertyFlag::eDeviceLocal
 				, PixelFormat::eL32F
 				, size );
 			TextureUnit unit{ engine };
@@ -178,11 +176,6 @@ namespace castor3d
 	void ShadowMapSpot::doCleanup()
 	{
 		m_blur.reset();
-		m_depthAttach.reset();
-		m_linearAttach.reset();
-		m_varianceAttach.reset();
-		m_depthBuffer->cleanup();
-		m_depthBuffer->destroy();
 		m_depthBuffer.reset();
 	}
 

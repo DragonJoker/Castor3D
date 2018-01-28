@@ -424,17 +424,17 @@ namespace light_streaks
 	castor3d::SamplerSPtr PostEffect::doCreateSampler( bool p_linear )
 	{
 		castor::String name = cuT( "FlareSampler_" );
-		castor3d::InterpolationMode mode;
+		renderer::Filter mode;
 
 		if ( p_linear )
 		{
 			name += cuT( "Linear" );
-			mode = castor3d::InterpolationMode::eLinear;
+			mode = renderer::Filter::eLinear;
 		}
 		else
 		{
 			name += cuT( "Nearest" );
-			mode = castor3d::InterpolationMode::eNearest;
+			mode = renderer::Filter::eNearest;
 		}
 
 		castor3d::SamplerSPtr sampler;

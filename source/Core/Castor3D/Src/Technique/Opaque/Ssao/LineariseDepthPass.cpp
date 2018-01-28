@@ -169,9 +169,9 @@ namespace castor3d
 			else
 			{
 				sampler = engine.getSamplerCache().add( name );
-				sampler->setMinFilter( InterpolationMode::eNearest );
-				sampler->setMagFilter( InterpolationMode::eNearest );
-				sampler->setMipFilter( InterpolationMode::eNearest );
+				sampler->setMinFilter( renderer::Filter::eNearest );
+				sampler->setMagFilter( renderer::Filter::eNearest );
+				sampler->setMipFilter( renderer::Filter::eNearest );
 				sampler->setWrappingMode( TextureUVW::eU, mode );
 				sampler->setWrappingMode( TextureUVW::eV, mode );
 			}

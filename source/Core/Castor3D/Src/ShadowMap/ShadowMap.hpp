@@ -244,20 +244,11 @@ namespace castor3d
 			, shader::Materials const & materials )const;
 
 	protected:
-		//!\~english	The frame buffer.
-		//!\~french		Le tampon d'image.
+		renderer::RenderPassPtr m_renderPass;
 		renderer::FrameBufferPtr m_frameBuffer;
-		//!\~english	The geometry buffer.
-		//!\~french		Les tampons de géométrie.
 		std::set< renderer::GeometryBuffersPtr > m_geometryBuffers;
-		//!\~english	The shadow mapping passes used during the render.
-		//!\~french		Les passes de shadow mapping utilisées pendant le rendu.
 		ShadowMapPassSPtr m_pass;
-		//!\~english	The shadow map texture.
-		//!\~french		La texture de mappage d'ombres.
 		TextureUnit m_shadowMap;
-		//!\~english	The linear depth texture.
-		//!\~french		La texture de profondeur linéaire.
 		TextureUnit m_linearMap;
 	};
 }

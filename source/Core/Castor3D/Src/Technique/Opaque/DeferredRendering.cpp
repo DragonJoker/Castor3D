@@ -29,8 +29,8 @@ namespace castor3d
 			else
 			{
 				result = engine.getRenderSystem()->createSampler( name );
-				result->setMinFilter( InterpolationMode::eNearest );
-				result->setMagFilter( InterpolationMode::eNearest );
+				result->setMinFilter( renderer::Filter::eNearest );
+				result->setMagFilter( renderer::Filter::eNearest );
 				result->setWrapS( renderer::WrapMode::eClampToEdge );
 				result->setWrapT( renderer::WrapMode::eClampToEdge );
 				result->setWrapR( renderer::WrapMode::eClampToEdge );

@@ -422,17 +422,17 @@ namespace Bloom
 	SamplerSPtr BloomPostEffect::doCreateSampler( bool p_linear )
 	{
 		String name = cuT( "BloomSampler_" );
-		InterpolationMode mode;
+		renderer::Filter mode;
 
 		if ( p_linear )
 		{
 			name += cuT( "Linear" );
-			mode = InterpolationMode::eLinear;
+			mode = renderer::Filter::eLinear;
 		}
 		else
 		{
 			name += cuT( "Nearest" );
-			mode = InterpolationMode::eNearest;
+			mode = renderer::Filter::eNearest;
 		}
 
 		SamplerSPtr sampler;

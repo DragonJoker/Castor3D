@@ -338,8 +338,8 @@ namespace castor3d
 			else
 			{
 				sampler = engine.getSamplerCache().add( name );
-				sampler->setMinFilter( InterpolationMode::eNearest );
-				sampler->setMagFilter( InterpolationMode::eNearest );
+				sampler->setMinFilter( renderer::Filter::eNearest );
+				sampler->setMagFilter( renderer::Filter::eNearest );
 				sampler->setWrapS( renderer::WrapMode::eClampToEdge );
 				sampler->setWrapT( renderer::WrapMode::eClampToEdge );
 			}

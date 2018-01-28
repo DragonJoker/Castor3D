@@ -67,8 +67,8 @@ namespace castor3d
 		doInitialiseVariance();
 
 		m_sampler = renderSystem.getEngine()->getSamplerCache().add( cuT( "RenderVarianceToTexture" ) );
-		m_sampler->setMinFilter( InterpolationMode::eLinear );
-		m_sampler->setMagFilter( InterpolationMode::eLinear );
+		m_sampler->setMinFilter( renderer::Filter::eLinear );
+		m_sampler->setMagFilter( renderer::Filter::eLinear );
 		m_sampler->setWrapS( renderer::WrapMode::eClampToEdge );
 		m_sampler->setWrapT( renderer::WrapMode::eClampToEdge );
 		m_sampler->setWrapR( renderer::WrapMode::eClampToEdge );

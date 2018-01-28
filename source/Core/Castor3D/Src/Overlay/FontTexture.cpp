@@ -23,8 +23,8 @@ namespace castor3d
 		SamplerSPtr sampler = getEngine()->getSamplerCache().add( p_font->getName() );
 		sampler->setWrapS( renderer::WrapMode::eClampToEdge );
 		sampler->setWrapT( renderer::WrapMode::eClampToEdge );
-		sampler->setMinFilter( InterpolationMode::eLinear );
-		sampler->setMagFilter( InterpolationMode::eLinear );
+		sampler->setMinFilter( renderer::Filter::eLinear );
+		sampler->setMagFilter( renderer::Filter::eLinear );
 		m_sampler = sampler;
 		m_texture = getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions, AccessType::eWrite, AccessType::eRead, PixelFormat::eL8, Size{ maxWidth * 16, maxHeight * count } );
 		m_texture->getImage().initialiseSource();
