@@ -22,6 +22,7 @@ namespace castor3d
 	struct GpuBufferOffset
 	{
 		renderer::BufferBase * buffer;
+		renderer::MemoryPropertyFlags flags;
 		uint32_t offset;
 	};
 	/*!
@@ -99,6 +100,7 @@ namespace castor3d
 
 	private:
 		std::map< uint32_t, BufferArray > m_buffers;
+		BufferArray m_nonSharedBuffers;
 	};
 }
 

@@ -11,6 +11,11 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	struct PickingUboData
+	{
+		uint32_t drawIndex;
+		uint32_t nodeIndex;
+	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
@@ -271,7 +276,7 @@ namespace castor3d
 		BillboardBaseWPtr m_billboard;
 		SubmeshWPtr m_submesh;
 		uint32_t m_face{ 0u };
-		UniformBuffer m_pickingUbo;
+		renderer::UniformBufferPtr< PickingUboData > m_pickingUbo;
 		castor::PxBufferBaseSPtr m_buffer;
 	};
 }

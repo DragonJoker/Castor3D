@@ -2,7 +2,7 @@
 
 #include "Material/Pass.hpp"
 #include "Shader/ShaderProgram.hpp"
-#include "Shader/UniformBuffer.hpp"
+#include "Castor3DPrerequisites.hpp"
 #include "Texture/TextureUnit.hpp"
 
 using namespace castor;

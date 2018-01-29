@@ -3,16 +3,19 @@
 #include "Engine.hpp"
 
 #include "EnvironmentMap/EnvironmentMapPass.hpp"
-#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
-#include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/RenderBufferAttachment.hpp"
-#include "FrameBuffer/TextureAttachment.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/SceneNode.hpp"
-#include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
+
+#include <Image/Texture.hpp>
+#include <Image/TextureView.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <RenderPass/RenderPassState.hpp>
+#include <RenderPass/RenderSubpass.hpp>
+#include <RenderPass/RenderSubpassState.hpp>
+#include <RenderPass/TextureAttachment.hpp>
 
 #include <GlslSource.hpp>
 
@@ -25,8 +28,8 @@ namespace castor3d
 		static Size const MapSize{ 1024, 1024 };
 
 		TextureUnit doInitialisePoint( Engine & engine
-			, Size const & p_size
-			, MaterialType p_type )
+			, Size const & size
+			, MaterialType type )
 		{
 			String const name = cuT( "EnvironmentMap" );
 
@@ -39,31 +42,26 @@ namespace castor3d
 			else
 			{
 				sampler = engine.getSamplerCache().add( name );
-				sampler->setInterpolationMode( InterpolationFilter::eMin
-					, renderer::Filter::eLinear );
-				sampler->setInterpolationMode( InterpolationFilter::eMag
-					, renderer::Filter::eLinear );
+				sampler->setMinFilter( renderer::Filter::eLinear );
+				sampler->setMagFilter( renderer::Filter::eLinear );
 
-				if ( p_type == MaterialType::ePbrMetallicRoughness
-					|| p_type == MaterialType::ePbrSpecularGlossiness )
+				if ( type == MaterialType::ePbrMetallicRoughness
+					|| type == MaterialType::ePbrSpecularGlossiness )
 				{
-					sampler->setInterpolationMode( InterpolationFilter::eMip
-						, renderer::Filter::eLinear );
+					sampler->setMipFilter( renderer::MipmapMode::eLinear );
 				}
 
-				sampler->setWrappingMode( TextureUVW::eU
-					, WrapMode::eClampToEdge );
-				sampler->setWrappingMode( TextureUVW::eV
-					, WrapMode::eClampToEdge );
-				sampler->setWrappingMode( TextureUVW::eW
-					, WrapMode::eClampToEdge );
+				sampler->setWrapS( renderer::WrapMode::eClampToEdge );
+				sampler->setWrapT( renderer::WrapMode::eClampToEdge );
+				sampler->setWrapR( renderer::WrapMode::eClampToEdge );
 			}
 
-			auto texture = engine.getRenderSystem()->createTexture( TextureType::eCube
-				, AccessType::eNone
-				, AccessType::eRead | AccessType::eWrite
+			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
+				, renderer::TextureType::e2D
+				, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled
+				, renderer::MemoryPropertyFlag::eDeviceLocal
 				, PixelFormat::eRGBA32F
-				, p_size );
+				, size );
 			TextureUnit unit{ engine };
 			unit.setTexture( texture );
 			unit.setSampler( sampler );
@@ -139,86 +137,94 @@ namespace castor3d
 
 	bool EnvironmentMap::initialise()
 	{
-		bool result = true;
+		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		m_depthBuffer = device.createTexture();
+		m_depthBuffer->setImage( PixelFormat::eD32F
+			, renderer::UIVec2{ MapSize }
+			, renderer::ImageUsageFlag::eDepthStencilAttachment );
+		m_depthBufferView = m_depthBuffer->createView( renderer::TextureType::e2D
+			, m_depthBuffer->getFormat()
+			, 0u
+			, 1u
+			, 0u
+			, 1u );
+		std::vector< renderer::PixelFormat > formats{ { m_depthBuffer->getFormat(), m_environmentMap.getTexture()->getPixelFormat() } };
+		renderer::RenderSubpassPtrArray subpasses;
+		subpasses.emplace_back( device.createRenderSubpass( formats
+			, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
+			, renderer::AccessFlag::eColourAttachmentWrite } ) );
+		auto & environment = m_environmentMap.getTexture()->getTexture();
+		uint32_t face = 0u;
 
-		if ( !m_frameBuffer )
+		for ( auto & frameBuffer : m_frameBuffers )
 		{
-			auto & scene = *m_node.getScene();
-			m_frameBuffer = getEngine()->getRenderSystem()->createFrameBuffer();
-			result = m_frameBuffer->initialise();
-
-			if ( result )
-			{
-				constexpr float PixelComponents = std::numeric_limits< float >::max();
-				m_frameBuffer->setClearColour( PixelComponents, PixelComponents, PixelComponents, PixelComponents );
-				auto texture = m_environmentMap.getTexture();
-				texture->initialise();
-
-				if ( scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness
-					|| scene.getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
-				{
-					texture->bind( 0 );
-					texture->generateMipmaps();
-					texture->unbind( 0 );
-				}
-
-				uint32_t i = 0;
-
-				for ( auto & attach : m_colourAttachs )
-				{
-					attach = m_frameBuffer->createAttachment( texture, CubeMapFace( i++ ) );
-					attach->setTarget( TextureType::eTwoDimensions );
-				}
-
-				m_depthBuffer = m_frameBuffer->createDepthStencilRenderBuffer( PixelFormat::eD32F );
-				m_depthBuffer->create();
-				m_depthBuffer->initialise( MapSize );
-
-				m_depthAttach = m_frameBuffer->createAttachment( m_depthBuffer );
-				m_frameBuffer->bind( FrameBufferTarget::eDraw );
-				m_frameBuffer->attach( AttachmentPoint::eDepth, m_depthAttach );
-				m_frameBuffer->unbind();
-			}
-
-			m_frameBuffer->bind();
-			m_frameBuffer->setDrawBuffers( FrameBuffer::AttachArray{} );
-			m_frameBuffer->unbind();
-
-			for ( auto & pass : m_passes )
-			{
-				pass->initialise( MapSize );
-			}
+			frameBuffer.view = environment.createView( renderer::TextureType::e2D
+				, environment.getFormat()
+				, 0u
+				, 1u
+				, face
+				, 1u );
+			frameBuffer.renderPass = device.createRenderPass( formats
+				, subpasses
+				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
+					, renderer::AccessFlag::eColourAttachmentWrite
+					, { renderer::ImageLayout::eDepthStencilAttachmentOptimal, renderer::ImageLayout::eColourAttachmentOptimal } }
+				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
+					, renderer::AccessFlag::eColourAttachmentWrite
+					, { renderer::ImageLayout::eDepthStencilAttachmentOptimal, renderer::ImageLayout::eColourAttachmentOptimal } } );
+			renderer::TextureAttachmentPtrArray attaches;
+			attaches.emplace_back( std::make_unique< renderer::TextureAttachment >( *m_depthBufferView ) );
+			attaches.emplace_back( std::make_unique< renderer::TextureAttachment >( *frameBuffer.view ) );
+			frameBuffer.frameBuffer = frameBuffer.renderPass->createFrameBuffer( renderer::UIVec2{ MapSize }
+				, std::move( attaches ) );
+			++face;
 		}
 
-		return result;
+		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+
+		for ( auto & pass : m_passes )
+		{
+			pass->initialise( MapSize );
+		}
+		
+		static float constexpr component = std::numeric_limits< float >::max();
+		static renderer::RgbaColour const white{ component, component, component, component };
+		face = 0u;
+
+		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
+		{
+			for ( auto & frameBuffer : m_frameBuffers )
+			{
+				m_commandBuffer->beginRenderPass( *frameBuffer.renderPass
+					, *frameBuffer.frameBuffer
+					, { white, white }
+					, renderer::SubpassContents::eSecondaryCommandBuffers );
+				m_commandBuffer->executeCommands( m_passes[face]->getCommandBuffers() );
+				m_commandBuffer->endRenderPass();
+				++face;
+			}
+
+			m_commandBuffer->end();
+		}
+		return true;
 	}
 
 	void EnvironmentMap::cleanup()
 	{
-		if ( m_frameBuffer )
+		for ( auto & frameBuffer : m_frameBuffers )
 		{
-			for ( auto & pass : m_passes )
-			{
-				pass->cleanup();
-			}
-
-			m_frameBuffer->bind();
-			m_frameBuffer->detachAll();
-			m_frameBuffer->unbind();
-			m_depthAttach.reset();
-
-			for ( auto & attach : m_colourAttachs )
-			{
-				attach.reset();
-			}
-
-			m_depthBuffer->cleanup();
-			m_depthBuffer->destroy();
-			m_depthBuffer.reset();
-			m_environmentMap.cleanup();
-			m_frameBuffer->cleanup();
-			m_frameBuffer.reset();
+			frameBuffer.frameBuffer.reset();
+			frameBuffer.renderPass.reset();
+			frameBuffer.view.reset();
 		}
+
+		for ( auto & pass : m_passes )
+		{
+			pass->cleanup();
+		}
+
+		m_depthBuffer.reset();
+		m_environmentMap.cleanup();
 	}
 	
 	void EnvironmentMap::update( RenderQueueArray & p_queues )
@@ -235,27 +241,14 @@ namespace castor3d
 
 		if ( m_render == 5u )
 		{
-			uint32_t face = 0u;
-
-			for ( auto & attach : m_colourAttachs )
-			{
-				m_frameBuffer->bind( FrameBufferTarget::eDraw );
-				attach->attach( AttachmentPoint::eColour, 0u );
-				m_frameBuffer->setDrawBuffer( attach );
-				m_frameBuffer->clear( BufferComponent::eDepth | BufferComponent::eColour );
-				m_passes[face]->render();
-				m_frameBuffer->unbind();
-				face++;
-			}
-
+			auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+			device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
 			auto & scene = *m_node.getScene();
 
 			if ( scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness
 				|| scene.getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
 			{
-				m_environmentMap.getTexture()->bind( 0 );
 				m_environmentMap.getTexture()->generateMipmaps();
-				m_environmentMap.getTexture()->unbind( 0 );
 			}
 
 			m_render = 0u;
@@ -264,10 +257,10 @@ namespace castor3d
 
 	void EnvironmentMap::debugDisplay( castor::Size const & size, uint32_t index )
 	{
-		Size displaySize{ 128u, 128u };
-		Position position{ int32_t( displaySize.getWidth() * 4 * index ), int32_t( displaySize.getHeight() * 4 ) };
-		getEngine()->getRenderSystem()->getCurrentContext()->renderTextureCube( position
-			, displaySize
-			, *m_environmentMap.getTexture() );
+		//Size displaySize{ 128u, 128u };
+		//Position position{ int32_t( displaySize.getWidth() * 4 * index ), int32_t( displaySize.getHeight() * 4 ) };
+		//getEngine()->getRenderSystem()->getCurrentContext()->renderTextureCube( position
+		//	, displaySize
+		//	, *m_environmentMap.getTexture() );
 	}
 }

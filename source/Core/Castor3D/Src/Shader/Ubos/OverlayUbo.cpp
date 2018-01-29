@@ -1,7 +1,9 @@
 #include "OverlayUbo.hpp"
 
 #include "Engine.hpp"
-#include "Render/RenderPipeline.hpp"
+#include "Render/RenderSystem.hpp"
+
+#include <Buffer/UniformBuffer.hpp>
 
 using namespace castor;
 
@@ -32,10 +34,6 @@ namespace castor3d
 		: m_engine{ engine }
 		, m_pcb{ renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment
 			, doGetVariables() }
-		, m_position{ reinterpret_cast< float * >( m_pcb.getData() + 0u ) }
-		, m_renderSize{ reinterpret_cast< int32_t * >( m_pcb.getData() + 8u ) }
-		, m_renderRatio{ reinterpret_cast< float * >( m_pcb.getData() + 16u ) }
-		, m_materialIndex{ reinterpret_cast< int32_t * >( m_pcb.getData() + 24u ) }
 	{
 	}
 
@@ -47,13 +45,13 @@ namespace castor3d
 		, castor::Size const & renderSize
 		, castor::Point2f const & renderRatio )
 	{
-		m_position = Point2f{ position };
-		m_renderSize = Point2i{ renderSize };
-		m_renderRatio = renderRatio;
+		m_pcb.getData()->position = Point2f{ position };
+		m_pcb.getData()->renderSize = Point2i{ renderSize };
+		m_pcb.getData()->renderRatio = renderRatio;
 	}
 
 	void OverlayUbo::update( int materialIndex )
 	{
-		*m_materialIndex = materialIndex - 1;
+		m_pcb.getData()->materialIndex = materialIndex - 1;
 	}
 }

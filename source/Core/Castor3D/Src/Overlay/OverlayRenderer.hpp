@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include "Render/RenderPassTimer.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
 #include "Shader/Ubos/OverlayUbo.hpp"
-#include "Shader/UniformBuffer.hpp"
+#include "Castor3DPrerequisites.hpp"
 #include "TextOverlay.hpp"
 
 #include <Design/OwnedBy.hpp>
@@ -143,7 +143,7 @@ namespace castor3d
 			Pipeline & m_pipeline;
 			Pass & m_pass;
 			OverlayUbo & m_overlayUbo;
-			std::vector< renderer::DescriptorSetPtr > m_descriptorSets;
+			renderer::DescriptorSetPtr m_descriptorSet;
 		};
 
 		struct OverlayGeometryBuffers
@@ -153,12 +153,12 @@ namespace castor3d
 		};
 
 		OverlayRenderNode & doGetPanelNode( Pass & pass );
-		OverlayRenderNode & doGetTextNode( Pass & pass );
-		Pipeline & doGetPanelPipeline( TextureChannels textureFlags );
-		Pipeline & doGetTextPipeline( TextureChannels textureFlags );
+		OverlayRenderNode & doGetTextNode( Pass & pass
+			, TextureLayout const & texture
+			, Sampler const & sampler );
 		Pipeline & doGetPipeline( TextureChannels textureFlags
 			, std::map< uint32_t, Pipeline > & pipelines );
-		OverlayGeometryBuffers doCreateTextGeometryBuffers();
+		OverlayGeometryBuffers & doCreateTextGeometryBuffers();
 		void doDrawItem( renderer::CommandBuffer const & commandBuffer
 			, Material & material
 			, renderer::VertexBufferBase const & vertexBuffer
@@ -180,6 +180,14 @@ namespace castor3d
 			, TextOverlay::VertexArray::const_iterator & it
 			, uint32_t index );
 		renderer::ShaderProgram & doCreateOverlayProgram( TextureChannels const & textureFlags );
+		renderer::DescriptorSetPtr doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
+			, TextureChannels textureFlags
+			, Pass const & pass );
+		renderer::DescriptorSetPtr doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
+			, TextureChannels textureFlags
+			, Pass const & pass
+			, TextureLayout const & texture
+			, Sampler const & sampler );
 
 	private:
 		renderer::TextureView const & m_target;
@@ -189,7 +197,7 @@ namespace castor3d
 		std::vector< renderer::VertexBufferPtr< TextOverlay::Vertex > > m_textsVertexBuffers;
 		OverlayGeometryBuffers m_panelGeometryBuffers;
 		OverlayGeometryBuffers m_borderGeometryBuffers;
-		std::vector< OverlayGeometryBuffers > m_textsGeometryBuffers;
+		std::list< OverlayGeometryBuffers > m_textsGeometryBuffers;
 		renderer::VertexLayoutPtr m_declaration;
 		renderer::VertexLayoutPtr m_textDeclaration;
 		castor::Size m_size;

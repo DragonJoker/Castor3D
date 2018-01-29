@@ -2,7 +2,9 @@
 
 #include "Engine.hpp"
 #include "HDR/HdrConfig.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Render/RenderSystem.hpp"
+
+#include <Buffer/UniformBuffer.hpp>
 
 using namespace castor;
 
@@ -13,11 +15,7 @@ namespace castor3d
 	String const HdrConfigUbo::Gamma = cuT( "c3d_gamma" );
 
 	HdrConfigUbo::HdrConfigUbo( Engine & engine )
-		: m_ubo{ HdrConfigUbo::BufferHdrConfig
-			, *engine.getRenderSystem()
-			, HdrConfigUbo::BindingPoint }
-		, m_exposure{ *m_ubo.createUniform< UniformType::eFloat >( HdrConfigUbo::Exposure ) }
-		, m_gamma{ *m_ubo.createUniform< UniformType::eFloat >( HdrConfigUbo::Gamma ) }
+		: m_engine{ engine }
 	{
 	}
 
@@ -25,11 +23,24 @@ namespace castor3d
 	{
 	}
 
-	void HdrConfigUbo::update( HdrConfig const & p_config )const
+	void HdrConfigUbo::initialise()
 	{
-		m_exposure.setValue( p_config.getExposure() );
-		m_gamma.setValue( p_config.getGamma() );
-		m_ubo.update();
-		m_ubo.bindTo( HdrConfigUbo::BindingPoint );
+		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
+		m_ubo = renderer::makeUniformBuffer< HdrConfig >( device
+			, 1u
+			, renderer::BufferTarget::eTransferDst
+			, renderer::MemoryPropertyFlag::eHostVisible );
+	}
+
+	void HdrConfigUbo::cleanup()
+	{
+		m_ubo.reset();
+	}
+
+	void HdrConfigUbo::update( HdrConfig const & config )const
+	{
+		m_ubo->getData( 0u ).setExposure( config.getExposure() );
+		m_ubo->getData( 0u ).setGamma( config.getGamma() );
+		m_ubo->upload();
 	}
 }

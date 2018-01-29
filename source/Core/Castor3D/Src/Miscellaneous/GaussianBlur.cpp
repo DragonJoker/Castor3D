@@ -10,6 +10,7 @@
 #include "Texture/TextureUnit.hpp"
 
 #include <Buffer/GeometryBuffers.hpp>
+#include <Buffer/UniformBuffer.hpp>
 #include <Buffer/VertexBuffer.hpp>
 #include <Descriptor/DescriptorSet.hpp>
 #include <Descriptor/DescriptorSetLayout.hpp>

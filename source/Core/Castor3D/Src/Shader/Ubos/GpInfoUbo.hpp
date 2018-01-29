@@ -4,25 +4,89 @@ See LICENSE file in root folder
 #ifndef ___C3D_GpInfoUbo_H___
 #define ___C3D_GpInfoUbo_H___
 
-#include "Shader/UniformBuffer.hpp"
+#include "Castor3DPrerequisites.hpp"
+
+#include <Buffer/UniformBuffer.hpp>
 
 namespace castor3d
 {
 	class GpInfoUbo
 	{
-	public:
-		explicit GpInfoUbo( Engine & engine );
-		~GpInfoUbo();
-		void update( castor::Size const & p_size
-			, Camera const & p_camera
-			, castor::Matrix4x4r const & p_invViewProj
-			, castor::Matrix4x4r const & p_invView
-			, castor::Matrix4x4r const & p_invProj );
-
-		inline UniformBuffer & getUbo()
+	private:
+		struct Configuration
 		{
-			return m_ubo;
+			renderer::Mat4 invViewProj;
+			renderer::Mat4 invView;
+			renderer::Mat4 invProj;
+			renderer::Mat4 gView;
+			renderer::Mat4 gProj;
+			renderer::Vec2 renderSize;
+		};
+
+	public:
+		/**
+		 *\~english
+		 *\name			Copy/Move construction/assignment operation.
+		 *\~french
+		 *\name			Constructeurs/Opérateurs d'affectation par copie/déplacement.
+		 */
+		/**@{*/
+		C3D_API GpInfoUbo( GpInfoUbo const & ) = delete;
+		C3D_API GpInfoUbo & operator=( GpInfoUbo const & ) = delete;
+		C3D_API GpInfoUbo( GpInfoUbo && ) = default;
+		C3D_API GpInfoUbo & operator=( GpInfoUbo && ) = default;
+		/**@}*/
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	engine	The engine.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	engine	Le moteur.
+		 */
+		explicit GpInfoUbo( Engine & engine );
+		/**
+		 *\~english
+		 *\brief		Destructor
+		 *\~french
+		 *\brief		Destructeur
+		 */
+		~GpInfoUbo();
+		/**
+		 *\~english
+		 *\brief		Initialises the UBO.
+		 *\~french
+		 *\brief		Initialise l'UBO.
+		 */
+		C3D_API void initialise();
+		/**
+		 *\~english
+		 *\brief		Cleanup function.
+		 *\~french
+		 *\brief		Fonction de nettoyage.
+		 */
+		C3D_API void cleanup();
+		void update( castor::Size const & renderSize
+			, Camera const & camera
+			, castor::Matrix4x4r const & invViewProj
+			, castor::Matrix4x4r const & invView
+			, castor::Matrix4x4r const & invProj );
+		/**
+		 *\~english
+		 *\name			getters.
+		 *\~french
+		 *\name			getters.
+		 */
+		inline renderer::UniformBuffer< Configuration > & getUbo()
+		{
+			return *m_ubo;
 		}
+
+		inline renderer::UniformBuffer< Configuration > const & getUbo()const
+		{
+			return *m_ubo;
+		}
+		/**@}*/
 
 	public:
 		static const castor::String GPInfo;
@@ -35,34 +99,15 @@ namespace castor3d
 		static constexpr uint32_t BindingPoint = 4u;
 
 	private:
-		//!\~english	The uniform buffer containing Geometry pass informations.
-		//!\~french		Le tampon d'uniformes contenant les informations de la geometry pass.
-		UniformBuffer m_ubo;
-		//!\~english	The uniform variable containing inverted projection-view matrix.
-		//!\~french		La variable uniforme contenant la matrice projection-vue inversée.
-		Uniform4x4fSPtr m_invViewProjUniform;
-		//!\~english	The uniform variable containing inverted view matrix.
-		//!\~french		La variable uniforme contenant la matrice vue inversée.
-		Uniform4x4fSPtr m_invViewUniform;
-		//!\~english	The uniform variable containing inverted projection matrix.
-		//!\~french		La variable uniforme contenant la matrice projection inversés.
-		Uniform4x4fSPtr m_invProjUniform;
-		//!\~english	The uniform variable containing view matrix.
-		//!\~french		La variable uniforme contenant la matrice vue.
-		Uniform4x4fSPtr m_gViewUniform;
-		//!\~english	The uniform variable containing projection matrix.
-		//!\~french		La variable uniforme contenant la matrice projection.
-		Uniform4x4fSPtr m_gProjUniform;
-		//!\~english	The shader variable containing the render area size.
-		//!\~french		La variable de shader contenant les dimensions de la zone de rendu.
-		Uniform2fSPtr m_renderSize;
+		Engine & m_engine;
+		renderer::UniformBufferPtr< Configuration > m_ubo;
 	};
 }
 
-#define UBO_GPINFO( writer, set )\
+#define UBO_GPINFO( writer, binding, set )\
 	glsl::Ubo gpInfo{ writer\
 		, castor3d::GpInfoUbo::GPInfo\
-		, castor3d::GpInfoUbo::BindingPoint\
+		, binding\
 		, set };\
 	auto c3d_mtxInvViewProj = gpInfo.declMember< glsl::Mat4 >( castor3d::GpInfoUbo::InvViewProj );\
 	auto c3d_mtxInvView = gpInfo.declMember< glsl::Mat4 >( castor3d::GpInfoUbo::InvView );\

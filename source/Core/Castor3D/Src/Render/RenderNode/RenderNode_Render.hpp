@@ -18,74 +18,17 @@
 #include "Shader/Ubos/ModelMatrixUbo.hpp"
 #include "Shader/Ubos/ModelUbo.hpp"
 #include "Shader/Ubos/SceneUbo.hpp"
-#include "Shader/Uniform/PushUniform.hpp"
-#include "Shader/ShaderProgram.hpp"
-#include "Shader/UniformBuffer.hpp"
 #include "ShadowMap/ShadowMap.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
 
+#include <Shader/ShaderProgram.hpp>
+
 using namespace castor;
 
 namespace castor3d
 {
-	inline uint32_t doFillShaderShadowMaps( RenderPipeline & pipeline
-		, ShadowMapLightTypeArray & shadowMaps
-		, uint32_t & index )
-	{
-		if ( getShadowType( pipeline.getFlags().m_sceneFlags ) != ShadowType::eNone )
-		{
-			for ( auto i = 0u; i < shadowMaps.size(); ++i )
-			{
-				auto lightType = LightType( i );
-				auto layer = 0u;
-
-				for ( auto shadowMap : shadowMaps[i] )
-				{
-					auto & unit = shadowMap.get().getTexture();
-					unit.getTexture()->bind( index );
-					unit.getSampler()->bind( index );
-
-					switch ( lightType )
-					{
-					case LightType::eDirectional:
-						pipeline.getDirectionalShadowMapsVariable().setValue( index++, layer++ );
-						break;
-
-					case LightType::eSpot:
-						pipeline.getSpotShadowMapsVariable().setValue( index++, layer++ );
-						break;
-
-					case LightType::ePoint:
-						pipeline.getPointShadowMapsVariable().setValue( index++, layer++ );
-						++layer;
-						break;
-					}
-				}
-			}
-		}
-
-		return index;
-	}
-
-	inline uint32_t doFillShaderPbrMaps( RenderPipeline & pipeline
-		, Scene & scene
-		, SceneNode & sceneNode
-		, uint32_t index )
-	{
-		scene.getIbl( sceneNode ).getIrradiance().getTexture()->bind( index );
-		scene.getIbl( sceneNode ).getIrradiance().getSampler()->bind( index );
-		pipeline.getIrradianceMapVariable().setValue( index++ );
-		scene.getIbl( sceneNode ).getPrefilteredEnvironment().getTexture()->bind( index );
-		scene.getIbl( sceneNode ).getPrefilteredEnvironment().getSampler()->bind( index );
-		pipeline.getPrefilteredMapVariable().setValue( index++ );
-		scene.getSkybox().getIbl().getPrefilteredBrdf().getTexture()->bind( index );
-		scene.getSkybox().getIbl().getPrefilteredBrdf().getSampler()->bind( index );
-		pipeline.getBrdfMapVariable().setValue( index++ );
-		return index;
-	}
-
 	inline void doBindPass( SceneNode & sceneNode
 		, PassRenderNode & node
 		, Scene & scene
@@ -94,24 +37,7 @@ namespace castor3d
 		, ModelUbo & model
 		, EnvironmentMap *& envMap )
 	{
-		node.m_pass.bindTextures();
-
 		uint32_t index = pipeline.getTexturesCount() + MinTextureIndex;
-
-		if ( checkFlag( pipeline.getFlags().m_programFlags, ProgramFlag::eLighting ) )
-		{
-			doFillShaderShadowMaps( pipeline, shadowMaps, index );
-		}
-
-		if ( ( checkFlag( pipeline.getFlags().m_passFlags, PassFlag::ePbrMetallicRoughness )
-				|| checkFlag( pipeline.getFlags().m_passFlags, PassFlag::ePbrSpecularGlossiness ) )
-			&& checkFlag( pipeline.getFlags().m_programFlags, ProgramFlag::eLighting ) )
-		{
-			index = doFillShaderPbrMaps( pipeline
-				, scene
-				, sceneNode
-				, index );
-		}
 
 		for ( auto pair : node.m_textures )
 		{

@@ -1,9 +1,9 @@
 #include "ModelMatrixUbo.hpp"
 
 #include "Engine.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Shader/ShaderProgram.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Render/RenderSystem.hpp"
+
+#include <Buffer/UniformBuffer.hpp>
 
 using namespace castor;
 
@@ -14,16 +14,26 @@ namespace castor3d
 	String const ModelMatrixUbo::MtxNormal = cuT( "c3d_mtxNormal" );
 
 	ModelMatrixUbo::ModelMatrixUbo( Engine & engine )
-		: m_ubo{ ModelMatrixUbo::BufferModelMatrix
-			, *engine.getRenderSystem()
-			, ModelMatrixUbo::BindingPoint }
-		, m_model{ *m_ubo.createUniform< UniformType::eMat4x4r >( ModelMatrixUbo::MtxModel ) }
-		, m_normal{ *m_ubo.createUniform< UniformType::eMat4x4r >( ModelMatrixUbo::MtxNormal ) }
+		: m_engine{ engine }
 	{
 	}
 
 	ModelMatrixUbo::~ModelMatrixUbo()
 	{
+	}
+
+	void ModelMatrixUbo::initialise()
+	{
+		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
+		m_ubo = renderer::makeUniformBuffer< Configuration >( device
+			, 1u
+			, renderer::BufferTarget::eTransferDst
+			, renderer::MemoryPropertyFlag::eHostVisible );
+	}
+
+	void ModelMatrixUbo::cleanup()
+	{
+		m_ubo.reset();
 	}
 
 	void ModelMatrixUbo::update( castor::Matrix4x4r const & model )const
@@ -37,9 +47,9 @@ namespace castor3d
 	void ModelMatrixUbo::update( castor::Matrix4x4r const & model
 		, castor::Matrix3x3r const & normal )const
 	{
-		m_normal.setValue( castor::Matrix4x4r{ normal } );
-		m_model.setValue( model );
-		m_ubo.update();
-		m_ubo.bindTo( ModelMatrixUbo::BindingPoint );
+		auto & configuration = m_ubo->getData( 0u );
+		configuration.normal = castor::Matrix4x4r{ normal };
+		configuration.model = model;
+		m_ubo->upload();
 	}
 }

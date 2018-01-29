@@ -1,7 +1,9 @@
-﻿#include "BillboardUbo.hpp"
+#include "BillboardUbo.hpp"
 
 #include "Engine.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Render/RenderSystem.hpp"
+
+#include <Buffer/UniformBuffer.hpp>
 
 using namespace castor;
 
@@ -12,11 +14,7 @@ namespace castor3d
 	String const BillboardUbo::WindowSize = cuT( "c3d_windowSize" );
 
 	BillboardUbo::BillboardUbo( Engine & engine )
-		: m_ubo{ BillboardUbo::BufferBillboard
-			, *engine.getRenderSystem()
-			, BillboardUbo::BindingPoint }
-		, m_dimensions{ *m_ubo.createUniform< UniformType::eVec2f >( BillboardUbo::Dimensions ) }
-		, m_windowSize{ *m_ubo.createUniform< UniformType::eVec2i >( BillboardUbo::WindowSize ) }
+		: m_engine{ engine }
 	{
 	}
 
@@ -24,15 +22,28 @@ namespace castor3d
 	{
 	}
 
+	void BillboardUbo::initialise()
+	{
+		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
+		m_ubo = renderer::makeUniformBuffer< Configuration >( device
+			, 1u
+			, renderer::BufferTarget::eTransferDst
+			, renderer::MemoryPropertyFlag::eHostVisible );
+	}
+
+	void BillboardUbo::cleanup()
+	{
+		m_ubo.reset();
+	}
+
 	void BillboardUbo::update( Point2f const & dimensions )const
 	{
-		m_dimensions.setValue( dimensions );
-		m_ubo.update();
-		m_ubo.bindTo( BillboardUbo::BindingPoint );
+		m_ubo->getData( 0u ).dimensions = dimensions;
+		m_ubo->upload();
 	}
 
 	void BillboardUbo::setWindowSize( Size const & window )const
 	{
-		m_windowSize.setValue( Point2i( window[0], window[1] ) );
+		m_ubo->getData( 0u ).windowSize = renderer::IVec2{ window[0], window[1] };
 	}
 }

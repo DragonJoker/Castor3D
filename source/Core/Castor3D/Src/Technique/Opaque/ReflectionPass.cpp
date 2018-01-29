@@ -16,7 +16,7 @@
 #include "Shader/Ubos/MatrixUbo.hpp"
 #include "Shader/Ubos/SceneUbo.hpp"
 #include "Shader/ShaderProgram.hpp"
-#include "Shader/UniformBuffer.hpp"
+#include "Castor3DPrerequisites.hpp"
 #include "Shader/Shaders/GlslFog.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
 #include "Shader/Shaders/GlslPhongReflection.hpp"

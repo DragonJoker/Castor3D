@@ -8,6 +8,7 @@
 #include <Buffer/VertexBuffer.hpp>
 #include <Image/Texture.hpp>
 #include <Image/TextureView.hpp>
+#include <Miscellaneous/PushConstantRange.hpp>
 #include <Pipeline/DepthStencilState.hpp>
 #include <Pipeline/Scissor.hpp>
 #include <Pipeline/VertexLayout.hpp>
@@ -78,13 +79,6 @@ namespace castor3d
 				Point3f{ -1, -1, +1 }, Point3f{ +1, +1, +1 }, Point3f{ -1, +1, +1 }, Point3f{ +1, +1, +1 }, Point3f{ -1, -1, +1 }, Point3f{ +1, -1, +1 },
 				Point3f{ -1, +1, -1 }, Point3f{ +1, +1, +1 }, Point3f{ +1, +1, -1 }, Point3f{ +1, +1, +1 }, Point3f{ -1, +1, -1 }, Point3f{ -1, +1, +1 },
 				Point3f{ -1, -1, -1 }, Point3f{ +1, -1, -1 }, Point3f{ -1, -1, +1 }, Point3f{ +1, -1, -1 }, Point3f{ +1, -1, +1 }, Point3f{ -1, -1, +1 },
-			}
-		}
-		, m_pushConstants
-		{
-			renderer::ShaderStageFlag::eFragment,
-			{
-				{ 0u, 0u, renderer::AttributeFormat::eFloat }, // Roughness
 			}
 		}
 	{
@@ -159,7 +153,8 @@ namespace castor3d
 			, renderer::ShaderStageFlag::eVertex );
 		m_descriptorLayout = device.createDescriptorSetLayout( std::move( bindings ) );
 		m_descriptorPool = m_descriptorLayout->createPool( 6u * ( glsl::Utils::MaxIblReflectionLod + 1 ) );
-		m_pipelineLayout = device.createPipelineLayout( *m_descriptorLayout );
+		renderer::PushConstantRange range{ renderer::ShaderStageFlag::eFragment, 0u, uint32_t( sizeof( float ) ) };
+		m_pipelineLayout = device.createPipelineLayout( { *m_descriptorLayout }, { range } );
 		auto & program = doCreateProgram( size );
 
 		for ( auto mipLevel = 0u; mipLevel < glsl::Utils::MaxIblReflectionLod + 1u; ++mipLevel )
@@ -170,6 +165,8 @@ namespace castor3d
 			for ( auto face = 0u; face < 6u; ++face )
 			{
 				auto & facePass = mipPasses[face];
+				facePass.pushConstants = std::make_unique< renderer::PushConstantsBuffer< float > >( renderer::ShaderStageFlag::eFragment
+					, renderer::PushConstantArray{ { 0u, 0u, renderer::AttributeFormat::eFloat } } );
 
 				// Create the views.
 				if ( mipLevel == 0u )
@@ -232,8 +229,7 @@ namespace castor3d
 					, std::move( attaches ) );
 
 				// Initialise the pipeline.
-				facePass.pipeline = device.createPipeline( *m_pipelineLayout
-					, program
+				facePass.pipeline = m_pipelineLayout->createPipeline( program
 					, { *m_vertexLayout }
 					, *facePass.renderPass
 					, renderer::PrimitiveTopology::eTriangleStrip );
@@ -252,11 +248,11 @@ namespace castor3d
 				Size mipSize{ uint32_t( size.getWidth() * std::pow( 0.5, mipLevel ) )
 					, uint32_t( size.getHeight() * std::pow( 0.5, mipLevel ) ) };
 				auto roughness = mipLevel / float( glsl::Utils::MaxIblReflectionLod );
-				std::memcpy( m_pushConstants.getData(), &roughness, sizeof( float ) );
 
 				for ( auto face = 0u; face < 6u; ++face )
 				{
 					auto & facePass = mipPasses[face];
+					*facePass.pushConstants->getData() = roughness;
 					m_commandBuffer->beginRenderPass( *facePass.renderPass
 						, *facePass.frameBuffer
 						, { renderer::RgbaColour{ 0, 0, 0, 0 } }
@@ -275,7 +271,7 @@ namespace castor3d
 						mipSize[0],
 					} );
 					m_commandBuffer->pushConstants( *m_pipelineLayout
-						, m_pushConstants );
+						, *facePass.pushConstants );
 					m_commandBuffer->bindGeometryBuffers( *m_geometryBuffers );
 					m_commandBuffer->draw( 36u, 1u, 0u, 0u );
 					m_commandBuffer->endRenderPass();
@@ -301,7 +297,7 @@ namespace castor3d
 
 			// Inputs
 			auto position = writer.declAttribute< Vec3 >( cuT( "position" ) );
-			UBO_MATRIX( writer, 0 );
+			UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
 
 			// Outputs
 			auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );

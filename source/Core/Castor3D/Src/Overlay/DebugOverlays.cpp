@@ -5,6 +5,8 @@
 #include "Overlay/TextOverlay.hpp"
 #include "Render/RenderPassTimer.hpp"
 
+#include <Miscellaneous/QueryPool.hpp>
+
 #include <iomanip>
 
 using namespace castor;

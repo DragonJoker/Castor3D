@@ -21,6 +21,15 @@ namespace castor3d
 	*/
 	class OverlayUbo
 	{
+	private:
+		struct Configuration
+		{
+			castor::Point2f position;
+			castor::Point2i renderSize;
+			castor::Point2f renderRatio;
+			int32_t materialIndex;
+		};
+
 	public:
 		/**
 		 *\~english
@@ -80,7 +89,7 @@ namespace castor3d
 		 *\~french
 		 *\name			Getters.
 		 */
-		inline renderer::PushConstantsBuffer const & getUbo()const
+		inline renderer::PushConstantsBuffer< Configuration > const & getUbo()const
 		{
 			return m_pcb;
 		}
@@ -108,12 +117,8 @@ namespace castor3d
 		C3D_API static castor::String const MaterialIndex;
 
 	private:
-		castor::Coords2f m_position;
-		castor::Coords2i m_renderSize;
-		castor::Coords2f m_renderRatio;
-		int32_t * m_materialIndex;
 		Engine & m_engine;
-		renderer::PushConstantsBuffer m_pcb;
+		renderer::PushConstantsBuffer< Configuration > m_pcb;
 	};
 }
 

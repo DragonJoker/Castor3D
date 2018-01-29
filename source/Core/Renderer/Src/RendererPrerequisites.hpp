@@ -81,6 +81,7 @@ namespace renderer
 
 	struct BufferCopy;
 	struct BufferImageCopy;
+	struct ClearValue;
 	struct ImageCopy;
 	struct ImageBlit;
 	struct PushConstant;
@@ -138,8 +139,7 @@ namespace renderer
 	class VertexBufferBase;
 	class VertexLayout;
 	class Viewport;
-
-	struct ClearValue;
+	class WindowHandle;
 
 	/**
 	*\~french
@@ -159,6 +159,8 @@ namespace renderer
 	using AttributePtr = std::unique_ptr< Attribute< T > >;
 	template< typename T >
 	using BufferPtr = std::unique_ptr< Buffer< T > >;
+	template< typename T >
+	using PushConstantsBufferPtr = std::unique_ptr< PushConstantsBuffer< T > >;
 	template< typename T >
 	using UniformBufferPtr = std::unique_ptr< UniformBuffer< T > >;
 	template< typename T >

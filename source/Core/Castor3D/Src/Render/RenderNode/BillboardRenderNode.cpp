@@ -4,7 +4,7 @@
 #include "Scene/SceneNode.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Shader/ShaderProgram.hpp"
-#include "Shader/UniformBuffer.hpp"
+#include "Castor3DPrerequisites.hpp"
 
 using namespace castor;
 

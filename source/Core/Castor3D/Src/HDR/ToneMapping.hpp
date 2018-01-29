@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Render/RenderInfo.hpp"
 #include "RenderToTexture/RenderQuad.hpp"
-#include "Shader/UniformBuffer.hpp"
+#include "Castor3DPrerequisites.hpp"
 #include "Shader/Ubos/HdrConfigUbo.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
 
@@ -77,36 +77,6 @@ namespace castor3d
 		 *\param[in]	config	La configuration HDR.
 		 */
 		C3D_API void update( HdrConfig const & config );
-		/**
-		 *\~english
-		 *\brief		Applies the tone mapping for given HDR texture.
-		 *\param[in]	size	The target dimensions.
-		 *\param[in]	texture	The HDR texture.
-		 *\param[in]	info	Receives the render information.
-		 *\~english
-		 *\brief		Applique le mappage de tons pour la texture HDR donnée.
-		 *\param[in]	size	Les dimensions de la cible.
-		 *\param[in]	texture	La texture HDR.
-		 *\param[in]	info	Reçoit les informations de rendu.
-		 */
-		C3D_API void apply( castor::Size const & size
-			, TextureLayout const & texture
-			, RenderInfo & info );
-		/**
-		*\~english
-		*name
-		*	Getters.
-		*\~french
-		*name
-		*	Accesseurs.
-		**/
-		/**@{*/
-		inline renderer::CommandBuffer const & getCommands()const
-		{
-			REQUIRE( m_commandBuffer );
-			return *m_commandBuffer;
-		}
-		/**@}*/
 
 	private:
 		/**
@@ -146,9 +116,6 @@ namespace castor3d
 		//!\~english	The render pass timer.
 		//!\~french		Le timer de passe de rendu.
 		RenderPassTimerSPtr m_timer;
-		//!\~english	The command buffer holding the tone mapping commands.
-		//!\~french		Le tampon de commandes contenant les commandes de mappage de tons.
-		renderer::CommandBufferPtr m_commandBuffer;
 	};
 }
 

@@ -4,7 +4,6 @@ See LICENSE file in root folder
 #ifndef ___C3D_GrayScalePostEffect___
 #define ___C3D_GrayScalePostEffect___
 
-#include <Mesh/Buffer/ParticleDeclaration.hpp>
 #include <PostEffect/PostEffect.hpp>
 #include <Texture/TextureUnit.hpp>
 #include <Render/Viewport.hpp>

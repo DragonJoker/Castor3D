@@ -6,7 +6,6 @@
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Material/Pass.hpp"
 #include "Render/RenderPass.hpp"
-#include "Render/Context.hpp"
 
 #include <GlslSource.hpp>
 
@@ -253,11 +252,11 @@ namespace castor3d
 			auto center = writer.declAttribute< Vec3 >( cuT( "center" ) );
 			auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 			auto gl_VertexID( writer.declBuiltin< Int >( cuT( "gl_VertexID" ) ) );
-			UBO_MATRIX( writer, 0 );
-			UBO_SCENE( writer, 0 );
-			UBO_MODEL_MATRIX( writer, 0 );
-			UBO_MODEL( writer, 0 );
-			UBO_BILLBOARD( writer, 0 );
+			UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
+			UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
+			UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
+			UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
+			UBO_BILLBOARD( writer, BillboardUbo::BindingPoint, 0 );
 
 			// Shader outputs
 			auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );

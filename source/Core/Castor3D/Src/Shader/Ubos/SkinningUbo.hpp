@@ -4,7 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_SkinningUbo_H___
 #define ___C3D_SkinningUbo_H___
 
-#include "Shader/UniformBuffer.hpp"
+#include "Castor3DPrerequisites.hpp"
+
+#include <Buffer/UniformBuffer.hpp>
 
 namespace castor3d
 {
@@ -19,6 +21,12 @@ namespace castor3d
 	*/
 	class SkinningUbo
 	{
+	private:
+		struct Configuration
+		{
+			renderer::Mat4 bonesMatrix[400];
+		};
+
 	public:
 		/**
 		 *\~english
@@ -48,6 +56,20 @@ namespace castor3d
 		 *\brief		Destructeur
 		 */
 		C3D_API ~SkinningUbo();
+		/**
+		 *\~english
+		 *\brief		Initialises the UBO.
+		 *\~french
+		 *\brief		Initialise l'UBO.
+		 */
+		C3D_API void initialise();
+		/**
+		 *\~english
+		 *\brief		Cleanup function.
+		 *\~french
+		 *\brief		Fonction de nettoyage.
+		 */
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -92,14 +114,14 @@ namespace castor3d
 		 *\~french
 		 *\name			getters.
 		 */
-		inline UniformBuffer & getUbo()
+		inline renderer::UniformBuffer< Configuration > & getUbo()
 		{
-			return m_ubo;
+			return *m_ubo;
 		}
 
-		inline UniformBuffer const & getUbo()const
+		inline renderer::UniformBuffer< Configuration > const & getUbo()const
 		{
-			return m_ubo;
+			return *m_ubo;
 		}
 		/**@}*/
 
@@ -113,12 +135,8 @@ namespace castor3d
 		C3D_API static castor::String const Bones;
 
 	private:
-		//!\~english	The UBO.
-		//!\~french		L'UBO.
-		UniformBuffer m_ubo;
-		//!\~english	The bones matrices uniform variable.
-		//!\~french		Le variable uniforme contenant les matrices des os.
-		Uniform4x4f & m_bonesMatrix;
+		Engine & m_engine;
+		renderer::UniformBufferPtr< Configuration > m_ubo;
 	};
 }
 

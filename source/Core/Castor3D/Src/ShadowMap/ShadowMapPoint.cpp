@@ -8,7 +8,7 @@
 #include "Scene/BillboardList.hpp"
 #include "Scene/Light/Light.hpp"
 #include "Scene/Light/PointLight.hpp"
-#include "Shader/UniformBuffer.hpp"
+#include "Castor3DPrerequisites.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
 #include "ShadowMap/ShadowMapPassPoint.hpp"
 #include "Texture/Sampler.hpp"
@@ -138,30 +138,8 @@ namespace castor3d
 
 	void ShadowMapPoint::render()
 	{
-		static float constexpr component = std::numeric_limits< float >::max();
-		static renderer::RgbaColour const white{ component, component, component, component };
 		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
-		uint32_t face = 0u;
-
-		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
-		{
-			m_pass->startTimer( *m_commandBuffer );
-
-			for ( auto & frameBuffer : m_frameBuffers )
-			{
-				m_commandBuffer->beginRenderPass( *frameBuffer.renderPass
-					, *frameBuffer.frameBuffer
-					, { white, white }
-					, renderer::SubpassContents::eSecondaryCommandBuffers );
-				m_commandBuffer->executeCommands( { m_pass->getCommandBuffer( face ) } );
-				m_commandBuffer->endRenderPass();
-				++face;
-			}
-
-			m_pass->stopTimer( *m_commandBuffer );
-			m_commandBuffer->end();
-			device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
-		}
+		device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
 	}
 
 	void ShadowMapPoint::debugDisplay( castor::Size const & size, uint32_t index )
@@ -220,10 +198,39 @@ namespace castor3d
 		}
 
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+		static float constexpr component = std::numeric_limits< float >::max();
+		static renderer::RgbaColour const white{ component, component, component, component };
+		face = 0u;
+
+		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
+		{
+			m_pass->startTimer( *m_commandBuffer );
+
+			for ( auto & frameBuffer : m_frameBuffers )
+			{
+				m_commandBuffer->beginRenderPass( *frameBuffer.renderPass
+					, *frameBuffer.frameBuffer
+					, { white, white }
+					, renderer::SubpassContents::eSecondaryCommandBuffers );
+				m_commandBuffer->executeCommands( { m_pass->getCommandBuffer( face ) } );
+				m_commandBuffer->endRenderPass();
+				++face;
+			}
+
+			m_pass->stopTimer( *m_commandBuffer );
+			m_commandBuffer->end();
+		}
 	}
 
 	void ShadowMapPoint::doCleanup()
 	{
+		for ( auto & frameBuffer : m_frameBuffers )
+		{
+			frameBuffer.frameBuffer.reset();
+			frameBuffer.renderPass.reset();
+			frameBuffer.varianceView.reset();
+			frameBuffer.linearView.reset();
+		}
 	}
 
 	void ShadowMapPoint::doUpdateFlags( PassFlags & passFlags

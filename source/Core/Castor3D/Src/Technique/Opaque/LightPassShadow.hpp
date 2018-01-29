@@ -13,7 +13,6 @@ See LICENSE file in root folder
 
 #include "Engine.hpp"
 #include "Scene/Light/Light.hpp"
-#include "Render/Context.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/Uniform/PushUniform.hpp"

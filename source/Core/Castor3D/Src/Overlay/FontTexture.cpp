@@ -26,7 +26,12 @@ namespace castor3d
 		sampler->setMinFilter( renderer::Filter::eLinear );
 		sampler->setMagFilter( renderer::Filter::eLinear );
 		m_sampler = sampler;
-		m_texture = getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions, AccessType::eWrite, AccessType::eRead, PixelFormat::eL8, Size{ maxWidth * 16, maxHeight * count } );
+		m_texture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
+			, renderer::TextureType::e2D
+			, renderer::ImageUsageFlag::eTransferDst | renderer::ImageUsageFlag::eSampled
+			, renderer::MemoryPropertyFlag::eHostVisible
+			, PixelFormat::eL8
+			, Size{ maxWidth * 16, maxHeight * count } );
 		m_texture->getImage().initialiseSource();
 	}
 
@@ -37,9 +42,7 @@ namespace castor3d
 	void FontTexture::initialise()
 	{
 		m_texture->initialise();
-		m_texture->bind( MinTextureIndex );
 		m_texture->generateMipmaps();
-		m_texture->unbind( MinTextureIndex );
 		onChanged( *this );
 	}
 

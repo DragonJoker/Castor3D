@@ -4,7 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_MorphingUbo_H___
 #define ___C3D_MorphingUbo_H___
 
-#include "Shader/UniformBuffer.hpp"
+#include "Castor3DPrerequisites.hpp"
+
+#include <Buffer/UniformBuffer.hpp>
 
 namespace castor3d
 {
@@ -19,6 +21,12 @@ namespace castor3d
 	*/
 	class MorphingUbo
 	{
+	private:
+		struct Configuration
+		{
+			float time;
+		};
+
 	public:
 		/**
 		 *\~english
@@ -50,6 +58,20 @@ namespace castor3d
 		C3D_API ~MorphingUbo();
 		/**
 		 *\~english
+		 *\brief		Initialises the UBO.
+		 *\~french
+		 *\brief		Initialise l'UBO.
+		 */
+		C3D_API void initialise();
+		/**
+		 *\~english
+		 *\brief		Cleanup function.
+		 *\~french
+		 *\brief		Fonction de nettoyage.
+		 */
+		C3D_API void cleanup();
+		/**
+		 *\~english
 		 *\brief		Updates the UBO from given values.
 		 *\param[in]	p_time	The current time index.
 		 *\~french
@@ -63,14 +85,15 @@ namespace castor3d
 		 *\~french
 		 *\name			getters.
 		 */
-		inline UniformBuffer & getUbo()
+		/**@{*/
+		inline renderer::UniformBuffer< Configuration > & getUbo()
 		{
-			return m_ubo;
+			return *m_ubo;
 		}
 
-		inline UniformBuffer const & getUbo()const
+		inline renderer::UniformBuffer< Configuration > const & getUbo()const
 		{
-			return m_ubo;
+			return *m_ubo;
 		}
 		/**@}*/
 
@@ -84,12 +107,8 @@ namespace castor3d
 		C3D_API static castor::String const Time;
 
 	private:
-		//!\~english	The UBO.
-		//!\~french		L'UBO.
-		UniformBuffer m_ubo;
-		//!\~english	The time uniform variable.
-		//!\~french		La variable uniforme contenant le temps.
-		Uniform1f & m_time;
+		Engine & m_engine;
+		renderer::UniformBufferPtr< Configuration > m_ubo;
 	};
 }
 

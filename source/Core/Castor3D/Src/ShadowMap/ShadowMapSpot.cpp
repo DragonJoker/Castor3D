@@ -133,25 +133,8 @@ namespace castor3d
 
 	void ShadowMapSpot::render()
 	{
-		static renderer::RgbaColour const black = renderer::RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueBlack );
-		static renderer::DepthStencilClearValue const zero{ 1.0f, 0 };
 		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
-
-		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
-		{
-			m_pass->startTimer( *m_commandBuffer );
-			m_commandBuffer->beginRenderPass( *m_renderPass
-				, *m_frameBuffer
-				, { zero, black, black }
-				, renderer::SubpassContents::eSecondaryCommandBuffers );
-			m_commandBuffer->executeCommands( { m_pass->getCommandBuffer() } );
-			m_commandBuffer->endRenderPass();
-			m_pass->stopTimer( *m_commandBuffer );
-			m_commandBuffer->end();
-
-			device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
-			m_blur->blur();
-		}
+		device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
 	}
 
 	void ShadowMapSpot::debugDisplay( castor::Size const & size, uint32_t index )
@@ -207,6 +190,24 @@ namespace castor3d
 			, m_shadowMap.getTexture()->getDimensions()
 			, m_shadowMap.getTexture()->getPixelFormat()
 			, 5u );
+		
+		static renderer::RgbaColour const black = renderer::RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueBlack );
+		static renderer::DepthStencilClearValue const zero{ 1.0f, 0 };
+
+		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
+		{
+			m_pass->startTimer( *m_commandBuffer );
+			m_commandBuffer->beginRenderPass( *m_renderPass
+				, *m_frameBuffer
+				, { zero, black, black }
+				, renderer::SubpassContents::eSecondaryCommandBuffers );
+			m_commandBuffer->executeCommands( { m_pass->getCommandBuffer() } );
+			m_commandBuffer->endRenderPass();
+			m_pass->stopTimer( *m_commandBuffer );
+			m_commandBuffer->end();
+
+			m_blur->blur();
+		}
 	}
 
 	void ShadowMapSpot::doCleanup()

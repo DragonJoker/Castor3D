@@ -42,10 +42,11 @@ namespace castor3d
 		if ( target != renderer::BufferTarget::eIndexBuffer
 			&& target != renderer::BufferTarget::eVertexBuffer )
 		{
-			result.buffer = std::make_shared< GpuBuffer >( *getRenderSystem()
-				, target );
-			result.buffer->initialiseStorage( size
-				, flags );
+			auto & device = *getRenderSystem()->getCurrentDevice();
+			m_nonSharedBuffers.emplace_back( device.createBuffer( size
+				, target | renderer::BufferTarget::eTransferDst
+				, renderer::MemoryPropertyFlag::eHostVisible ) );
+			result.buffer = m_nonSharedBuffers.back().get();
 			result.offset = 0u;
 		}
 		else
@@ -89,6 +90,7 @@ namespace castor3d
 
 			result.buffer = buffer;
 			result.offset = buffer->allocate( size );
+			result.flags = flags;
 		}
 
 		return result;
@@ -100,11 +102,15 @@ namespace castor3d
 		if ( target != renderer::BufferTarget::eIndexBuffer
 			&& target != renderer::BufferTarget::eVertexBuffer )
 		{
-			bufferOffset.buffer->cleanupStorage();
+			auto it = std::find( m_nonSharedBuffers.begin()
+				, m_nonSharedBuffers.end()
+				, bufferOffset.buffer );
+			REQUIRE( it != m_nonSharedBuffers.end() );
+			it->reset();
 		}
 		else
 		{
-			auto key = doMakeKey( target, bufferOffset.buffer->m_flags );
+			auto key = doMakeKey( target, bufferOffset.flags );
 			auto it = m_buffers.find( key );
 			REQUIRE( it != m_buffers.end() );
 			auto itB = std::find_if( it->second.begin()

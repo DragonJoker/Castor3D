@@ -102,8 +102,7 @@ namespace castor3d
 
 		// Initialise the pipeline.
 		m_pipelineLayout = device.createPipelineLayout( *m_descriptorLayout );
-		m_pipeline = device.createPipeline( *m_pipelineLayout
-			, program
+		m_pipeline = m_pipelineLayout->createPipeline( program
 			, { *m_vertexLayout }
 			, renderPass
 			, renderer::PrimitiveTopology::eTriangleStrip );

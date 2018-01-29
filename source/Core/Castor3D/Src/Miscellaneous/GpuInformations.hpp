@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_GPU_INFORMATIONS_H___
 #define ___C3D_GPU_INFORMATIONS_H___
 
-#include "Render/Context.hpp"
+#include "Castor3DPrerequisites.hpp"
 
 #include <Design/OwnedBy.hpp>
 

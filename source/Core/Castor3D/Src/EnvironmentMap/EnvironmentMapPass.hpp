@@ -85,19 +85,18 @@ namespace castor3d
 		 *\brief		Fonction de rendu.
 		 */
 		C3D_API void render();
+		/**
+		 *\~english
+		 *\return		The command buffers used to render the pass.
+		 *\~french
+		 *\brief		Les tampons de commands de rendu de la passe.
+		 */
+		C3D_API renderer::CommandBufferCRefArray getCommandBuffers()const;
 
 	private:
-		//!\~english	The camera node.
-		//!\~french		Le noeud de la camera.
 		SceneNodeSPtr m_node;
-		//!\~english	The camera.
-		//!\~french		La camera.
 		CameraSPtr m_camera;
-		//!\~english	The pass used to render opaque nodes.
-		//!\~french		La passe utilisée pour dessiner les noeuds opaques.
 		std::unique_ptr< RenderTechniquePass > m_opaquePass;
-		//!\~english	The pass used to render transparent nodes.
-		//!\~french		La passe utilisée pour dessiner les noeuds transparents.
 		std::unique_ptr< RenderTechniquePass > m_transparentPass;
 	};
 }

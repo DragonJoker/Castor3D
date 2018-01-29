@@ -4,7 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_BillboardUbo_H___
 #define ___C3D_BillboardUbo_H___
 
-#include "Shader/UniformBuffer.hpp"
+#include "Castor3DPrerequisites.hpp"
+
+#include <Buffer/UniformBuffer.hpp>
 
 namespace castor3d
 {
@@ -19,6 +21,13 @@ namespace castor3d
 	*/
 	class BillboardUbo
 	{
+	private:
+		struct Configuration
+		{
+			renderer::Vec2 dimensions;
+			renderer::IVec2 windowSize;
+		};
+
 	public:
 		/**
 		 *\~english
@@ -50,6 +59,20 @@ namespace castor3d
 		C3D_API ~BillboardUbo();
 		/**
 		 *\~english
+		 *\brief		Initialises the UBO.
+		 *\~french
+		 *\brief		Initialise l'UBO.
+		 */
+		C3D_API void initialise();
+		/**
+		 *\~english
+		 *\brief		Cleanup function.
+		 *\~french
+		 *\brief		Fonction de nettoyage.
+		 */
+		C3D_API void cleanup();
+		/**
+		 *\~english
 		 *\brief		Updates the UBO from given values.
 		 *\param[in]	dimensions	The billboard dimensions.
 		 *\~french
@@ -72,14 +95,14 @@ namespace castor3d
 		 *\~french
 		 *\name			getters.
 		 */
-		inline UniformBuffer & getUbo()
+		inline renderer::UniformBuffer< Configuration > & getUbo()
 		{
-			return m_ubo;
+			return *m_ubo;
 		}
 
-		inline UniformBuffer const & getUbo()const
+		inline renderer::UniformBuffer< Configuration > const & getUbo()const
 		{
-			return m_ubo;
+			return *m_ubo;
 		}
 		/**@}*/
 
@@ -96,22 +119,15 @@ namespace castor3d
 		C3D_API static castor::String const WindowSize;
 
 	private:
-		//!\~english	The UBO.
-		//!\~french		L'UBO.
-		UniformBuffer m_ubo;
-		//!\~english	The dimensions uniform variable.
-		//!\~french		La variable uniforme des dimensions.
-		Uniform2f & m_dimensions;
-		//!\~english	The window dimensions uniform variable.
-		//!\~french		La variable uniforme des dimensions de la fenêtre.
-		Uniform2i & m_windowSize;
+		Engine & m_engine;
+		renderer::UniformBufferPtr< Configuration > m_ubo;
 	};
 }
 
-#define UBO_BILLBOARD( writer, set )\
+#define UBO_BILLBOARD( writer, binding, set )\
 	glsl::Ubo billboard{ writer\
 		, castor3d::BillboardUbo::BufferBillboard\
-		, castor3d::BillboardUbo::BindingPoint\
+		, binding\
 		, set\
 		, glsl::Ubo::Layout::eStd140 };\
 	auto c3d_dimensions = billboard.declMember< Vec2 >( castor3d::BillboardUbo::Dimensions );\

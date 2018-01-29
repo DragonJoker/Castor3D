@@ -1,12 +1,12 @@
 #include "SceneUbo.hpp"
 
 #include "Engine.hpp"
+#include "Render/RenderSystem.hpp"
 #include "Render/Viewport.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
-#include "Shader/ShaderProgram.hpp"
-#include "Shader/UniformBufferBinding.hpp"
-#include "Texture/TextureLayout.hpp"
+
+#include <Buffer/UniformBuffer.hpp>
 
 using namespace castor;
 
@@ -23,17 +23,7 @@ namespace castor3d
 	String const SceneUbo::LightsCount = cuT( "c3d_lightsCount" );
 
 	SceneUbo::SceneUbo( Engine & engine )
-		: m_ubo{ SceneUbo::BufferScene
-			, *engine.getRenderSystem()
-			, SceneUbo::BindingPoint }
-		, m_ambientLight{ *m_ubo.createUniform< UniformType::eVec4f >( SceneUbo::AmbientLight ) }
-		, m_backgroundColour{ *m_ubo.createUniform< UniformType::eVec4f >( SceneUbo::BackgroundColour ) }
-		, m_lightsCount{ *m_ubo.createUniform< UniformType::eVec4i >( SceneUbo::LightsCount ) }
-		, m_cameraPos{ *m_ubo.createUniform< UniformType::eVec3f >( SceneUbo::CameraPos ) }
-		, m_cameraNearPlane{ *m_ubo.createUniform< UniformType::eFloat >( SceneUbo::CameraNearPlane ) }
-		, m_cameraFarPlane{ *m_ubo.createUniform< UniformType::eFloat >( SceneUbo::CameraFarPlane ) }
-		, m_fogType{ *m_ubo.createUniform< UniformType::eInt >( SceneUbo::FogType ) }
-		, m_fogDensity{ *m_ubo.createUniform< UniformType::eFloat >( SceneUbo::FogDensity ) }
+		: m_engine{ engine }
 	{
 	}
 
@@ -41,38 +31,55 @@ namespace castor3d
 	{
 	}
 
-	void SceneUbo::updateCameraPosition( Camera const & p_camera )const
+	void SceneUbo::initialise()
 	{
-		m_cameraPos.setValue( p_camera.getParent()->getDerivedPosition() );
-		m_ambientLight.setValue( toRGBAFloat( p_camera.getScene()->getAmbientLight() ) );
-		m_backgroundColour.setValue( toRGBAFloat( p_camera.getScene()->getBackgroundColour() ) );
-		m_ubo.update();
-		m_ubo.bindTo( SceneUbo::BindingPoint );
+		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
+		m_ubo = renderer::makeUniformBuffer< Configuration >( device
+			, 1u
+			, renderer::BufferTarget::eTransferDst
+			, renderer::MemoryPropertyFlag::eHostVisible );
 	}
 
-	void SceneUbo::update( Camera const & p_camera
-		, Fog const & p_fog )const
+	void SceneUbo::cleanup()
 	{
-		m_fogType.setValue( int( p_fog.getType() ) );
-		m_fogDensity.setValue( p_fog.getDensity() );
-		m_cameraNearPlane.setValue( p_camera.getViewport().getNear() );
-		m_cameraFarPlane.setValue( p_camera.getViewport().getFar() );
-		updateCameraPosition( p_camera );
+		m_ubo.reset();
 	}
 
-	void SceneUbo::update( Scene const & p_scene
-		, Camera const & p_camera
-		, bool p_lights )const
+	void SceneUbo::updateCameraPosition( Camera const & camera )const
 	{
-		if ( p_lights )
+		auto & configuration = m_ubo->getData( 0u );
+		configuration.cameraPos = camera.getParent()->getDerivedPosition();
+		configuration.ambientLight = toRGBAFloat( camera.getScene()->getAmbientLight() );
+		configuration.backgroundColour = toRGBAFloat( camera.getScene()->getBackgroundColour() );
+		m_ubo->upload();
+	}
+
+	void SceneUbo::update( Camera const & camera
+		, Fog const & fog )const
+	{
+		auto & configuration = m_ubo->getData( 0u );
+		configuration.fogType = int( fog.getType() );
+		configuration.fogDensity = fog.getDensity();
+		configuration.cameraNearPlane = camera.getViewport().getNear();
+		configuration.cameraFarPlane = camera.getViewport().getFar();
+		updateCameraPosition( camera );
+	}
+
+	void SceneUbo::update( Scene const & scene
+		, Camera const & camera
+		, bool lights )const
+	{
+		auto & configuration = m_ubo->getData( 0u );
+
+		if ( lights )
 		{
-			auto & cache = p_scene.getLightCache();
+			auto & cache = scene.getLightCache();
 			auto lock = makeUniqueLock( cache );
-			m_lightsCount.getValue( 0 )[size_t( LightType::eSpot )] = cache.getLightsCount( LightType::eSpot );
-			m_lightsCount.getValue( 0 )[size_t( LightType::ePoint )] = cache.getLightsCount( LightType::ePoint );
-			m_lightsCount.getValue( 0 )[size_t( LightType::eDirectional )] = cache.getLightsCount( LightType::eDirectional );
+			configuration.lightsCount[size_t( LightType::eSpot )] = cache.getLightsCount( LightType::eSpot );
+			configuration.lightsCount[size_t( LightType::ePoint )] = cache.getLightsCount( LightType::ePoint );
+			configuration.lightsCount[size_t( LightType::eDirectional )] = cache.getLightsCount( LightType::eDirectional );
 		}
 
-		update( p_camera, p_scene.getFog() );
+		update( camera, scene.getFog() );
 	}
 }

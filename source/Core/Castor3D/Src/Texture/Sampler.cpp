@@ -1,7 +1,6 @@
 #include "Sampler.hpp"
 
 #include "Engine.hpp"
-#include "Render/Context.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
 

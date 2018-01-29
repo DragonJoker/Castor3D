@@ -135,38 +135,24 @@ namespace castor3d
 		}
 
 	private:
-		//!\~english	The target size.
-		//!\~french		Les dimensions de la cible.
+		struct FrameBuffer
+		{
+			renderer::RenderPassPtr renderPass;
+			renderer::FrameBufferPtr frameBuffer;
+			renderer::TextureViewPtr view;
+		};
 		static uint32_t m_count;
-		//!\~english	The depth buffer.
-		//!\~french		Le tampon de profondeur.
-		renderer::TexturePtr m_depthBuffer;
-		//!\~english	The reflection mapping texture.
-		//!\~french		La texture de reflcetion mapping.
 		TextureUnit m_environmentMap;
-		//!\~english	The frame buffer.
-		//!\~french		Le tampon d'image.
-		renderer::FrameBufferPtr m_frameBuffer;
-		//!\~english	The node.
-		//!\~french		Le noeud.
+		renderer::TexturePtr m_depthBuffer;
+		renderer::TextureViewPtr m_depthBufferView;
+		std::array< FrameBuffer, 6u > m_frameBuffers;
+		renderer::CommandBufferPtr m_commandBuffer;
 		SceneNode const & m_node;
-		//!\~english	The connection to node changed signal.
-		//!\~french		La connexion au signal de changement du noeud.
 		OnSceneNodeChangedConnection m_onNodeChanged;
-		//!\~english	The view matrices for the render of each cube face.
-		//!\~french		Les matrices vue pour le dessin de chaque face du cube.
 		CubeMatrices m_matrices;
-		//!\~english	The target size.
-		//!\~french		Les dimensions de la cible.
 		castor::Size m_size;
-		//!\~english	The target size.
-		//!\~french		Les dimensions de la cible.
 		uint32_t m_index{ 0u };
-		//!\~english	The render pass for each cube face.
-		//!\~french		La passe de rendu pour chaque face du cube.
 		EnvironmentMapPasses m_passes;
-		//!\~english	The render call count (1 of 5 triggers an actual render).
-		//!\~french		Le nombre d'appels à la fonction de rendu (1 sur 5 effectue réellement un rendu).
 		uint32_t m_render = 0u;
 	};
 }

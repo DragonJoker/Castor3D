@@ -8,7 +8,6 @@
 #include "Event/Frame/FunctorEvent.hpp"
 #include "Mesh/SubmeshComponent/BonesComponent.hpp"
 #include "Mesh/SubmeshComponent/InstantiationComponent.hpp"
-#include "Render/Context.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/Scene.hpp"
 #include "Vertex.hpp"

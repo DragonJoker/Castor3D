@@ -323,7 +323,7 @@ namespace castor3d
 	void LightPass::Program::initialise( VertexBuffer & vbo
 		, MatrixUbo & matrixUbo
 		, SceneUbo & sceneUbo
-		, UniformBuffer & gpInfoUbo
+		, GpInfoUbo & gpInfoUbo
 		, ModelMatrixUbo * modelMatrixUbo )
 	{
 		m_program->initialise();
@@ -331,12 +331,12 @@ namespace castor3d
 		m_firstPipeline = doCreatePipeline( false );
 		m_firstPipeline->addUniformBuffer( matrixUbo.getUbo() );
 		m_firstPipeline->addUniformBuffer( sceneUbo.getUbo() );
-		m_firstPipeline->addUniformBuffer( gpInfoUbo );
+		m_firstPipeline->addUniformBuffer( gpInfoUbo.getUbo() );
 
 		m_blendPipeline = doCreatePipeline( true );
 		m_blendPipeline->addUniformBuffer( matrixUbo.getUbo() );
 		m_blendPipeline->addUniformBuffer( sceneUbo.getUbo() );
-		m_blendPipeline->addUniformBuffer( gpInfoUbo );
+		m_blendPipeline->addUniformBuffer( gpInfoUbo.getUbo() );
 
 		if ( modelMatrixUbo )
 		{

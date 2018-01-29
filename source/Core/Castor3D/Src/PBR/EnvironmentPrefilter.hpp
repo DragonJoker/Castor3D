@@ -75,6 +75,7 @@ namespace castor3d
 			renderer::RenderPassPtr renderPass;
 			renderer::FrameBufferPtr frameBuffer;
 			renderer::PipelinePtr pipeline;
+			renderer::PushConstantsBufferPtr< float > pushConstants;
 		};
 
 		using CubePasses = std::array< RenderPass, 6 >;
@@ -92,7 +93,6 @@ namespace castor3d
 		renderer::PipelineLayoutPtr m_pipelineLayout;
 		RenderPasses m_renderPasses;
 		renderer::CommandBufferPtr m_commandBuffer;
-		renderer::PushConstantsBuffer m_pushConstants;
 	};
 }
 

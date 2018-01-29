@@ -207,8 +207,7 @@ namespace castor3d
 				, std::move( attaches ) );
 
 			// Initialise the pipeline.
-			facePass.pipeline = device.createPipeline( *m_pipelineLayout
-				, program
+			facePass.pipeline = m_pipelineLayout->createPipeline( program
 				, { *m_vertexLayout }
 				, *facePass.renderPass
 				, renderer::PrimitiveTopology::eTriangleStrip );

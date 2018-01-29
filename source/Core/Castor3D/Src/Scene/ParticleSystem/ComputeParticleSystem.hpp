@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "ParticleSystemImpl.hpp"
 
 #include <Pipeline/VertexLayout.hpp>
-#include "Shader/UniformBuffer.hpp"
+#include "Castor3DPrerequisites.hpp"
 #include "Texture/TextureUnit.hpp"
 
 namespace castor3d

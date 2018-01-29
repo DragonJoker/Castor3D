@@ -15,7 +15,7 @@
 #include "Scene/Scene.hpp"
 #include "Scene/SceneNode.hpp"
 #include "Shader/ShaderStorageBuffer.hpp"
-#include "Shader/UniformBuffer.hpp"
+#include "Castor3DPrerequisites.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
 

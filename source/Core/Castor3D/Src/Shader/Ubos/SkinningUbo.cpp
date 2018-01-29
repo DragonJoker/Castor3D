@@ -16,10 +16,7 @@ namespace castor3d
 	String const SkinningUbo::Bones = cuT( "c3d_mtxBones" );
 
 	SkinningUbo::SkinningUbo( Engine & engine )
-		: m_ubo{ SkinningUbo::BufferSkinning
-			, *engine.getRenderSystem()
-			, SkinningUbo::BindingPoint }
-		, m_bonesMatrix{ *m_ubo.createUniform< UniformType::eMat4x4f >( SkinningUbo::Bones, 400u ) }
+		: m_engine{ engine }
 	{
 	}
 
@@ -27,11 +24,24 @@ namespace castor3d
 	{
 	}
 
+	void SkinningUbo::initialise()
+	{
+		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
+		m_ubo = renderer::makeUniformBuffer< Configuration >( device
+			, 1u
+			, renderer::BufferTarget::eTransferDst
+			, renderer::MemoryPropertyFlag::eHostVisible );
+	}
+
+	void SkinningUbo::cleanup()
+	{
+		m_ubo.reset();
+	}
+
 	void SkinningUbo::update( AnimatedSkeleton const & skeleton )const
 	{
-		skeleton.fillShader( m_bonesMatrix );
-		m_ubo.update();
-		m_ubo.bindTo( SkinningUbo::BindingPoint );
+		skeleton.fillShader( m_ubo->getData( 0u ).bonesMatrix );
+		m_ubo->upload();
 	}
 
 	void SkinningUbo::declare( glsl::GlslWriter & writer

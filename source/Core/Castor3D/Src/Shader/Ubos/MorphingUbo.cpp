@@ -1,8 +1,9 @@
-﻿#include "MorphingUbo.hpp"
+#include "MorphingUbo.hpp"
 
 #include "Engine.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Render/RenderSystem.hpp"
+
+#include <Buffer/UniformBuffer.hpp>
 
 using namespace castor;
 
@@ -12,10 +13,7 @@ namespace castor3d
 	String const MorphingUbo::Time = cuT( "c3d_time" );
 
 	MorphingUbo::MorphingUbo( Engine & engine )
-		: m_ubo{ MorphingUbo::BufferMorphing
-			, *engine.getRenderSystem()
-			, MorphingUbo::BindingPoint }
-		, m_time{ *m_ubo.createUniform< UniformType::eFloat >( MorphingUbo::Time ) }
+		: m_engine{ engine }
 	{
 	}
 
@@ -23,10 +21,24 @@ namespace castor3d
 	{
 	}
 
-	void MorphingUbo::update( float p_time )const
+	void MorphingUbo::initialise()
 	{
-		m_time.setValue( p_time );
-		m_ubo.update();
-		m_ubo.bindTo( MorphingUbo::BindingPoint );
+		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
+		m_ubo = renderer::makeUniformBuffer< Configuration >( device
+			, 1u
+			, renderer::BufferTarget::eTransferDst
+			, renderer::MemoryPropertyFlag::eHostVisible );
+	}
+
+	void MorphingUbo::cleanup()
+	{
+		m_ubo.reset();
+	}
+
+	void MorphingUbo::update( float time )const
+	{
+		auto & configuration = m_ubo->getData( 0u );
+		configuration.time = time;
+		m_ubo->upload();
 	}
 }

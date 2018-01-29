@@ -38,14 +38,13 @@ namespace castor3d
 		, TextureLayout const & source
 		, renderer::RenderPass const & renderPass )
 	{
+		m_configUbo.initialise();
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & program = getEngine()->getShaderProgramCache().getNewProgram( false );
 
 		glsl::Shader vtx;
 		{
 			auto writer = renderSystem.createGlslWriter();
-
-			UBO_MATRIX( writer, 0 );
 
 			// Shader inputs
 			auto position = writer.declAttribute< Vec2 >( cuT( "position" ) );
@@ -58,7 +57,7 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = texture;
-				gl_Position = c3d_projection * vec4( position.x(), position.y(), 0.0, 1.0 );
+				gl_Position = vec4( position.x(), position.y(), 0.0, 1.0 );
 			} );
 
 			vtx = writer.finalise();
@@ -88,7 +87,7 @@ namespace castor3d
 	{
 		m_timer.reset();
 		doDestroy();
-		m_configUbo.getUbo().cleanup();
+		m_configUbo.cleanup();
 	}
 
 	void ToneMapping::update( HdrConfig const & config )
@@ -97,24 +96,12 @@ namespace castor3d
 		doUpdate();
 	}
 
-	void ToneMapping::apply( Size const & size
-		, TextureLayout const & texture
-		, RenderInfo & info )
-	{
-		static Position const position;
-		m_timer->start();
-		m_colour->render( position
-			, size
-			, texture
-			, *m_pipeline );
-		m_timer->stop();
-	}
-
 	void ToneMapping::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
 		, renderer::DescriptorSet & descriptorSet )
 	{
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
 			, m_configUbo.getUbo()
-			, 0u );
+			, 0u
+			, 1u );
 	}
 }

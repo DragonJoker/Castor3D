@@ -40,8 +40,10 @@ namespace castor3d
 		m_colourTexture.setTexture( colourTexture );
 		m_colourTexture.initialise();
 
+		renderer::TextureAttachmentPtrArray attaches;
+		attaches.emplace_back( std::make_unique< renderer::TextureAttachment >( colourTexture->getView() ) );
 		m_fbo = renderPass.createFrameBuffer( renderer::UIVec2{ size }
-			, { colourTexture->getView() } );
+			, std::move( attaches ) );
 		return true;
 	}
 

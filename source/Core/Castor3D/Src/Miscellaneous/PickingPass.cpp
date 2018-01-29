@@ -1,19 +1,14 @@
 #include "PickingPass.hpp"
 
 #include "Cache/MaterialCache.hpp"
-#include "FrameBuffer/ColourRenderBuffer.hpp"
-#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
-#include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/RenderBufferAttachment.hpp"
-#include "FrameBuffer/TextureAttachment.hpp"
-#include "Shader/PassBuffer/PassBuffer.hpp"
-#include "Shader/Shaders/GlslMaterial.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Mesh/SubmeshComponent/InstantiationComponent.hpp"
-#include "Mesh/Buffer/GeometryBuffers.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderNode/RenderNode_Render.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Shader/PassBuffer/PassBuffer.hpp"
+#include "Shader/Shaders/GlslMaterial.hpp"
+
+#include <Shader/ShaderProgram.hpp>
 
 #include <GlslSource.hpp>
 
@@ -31,7 +26,7 @@ namespace castor3d
 
 		template< bool Opaque, typename MapType, typename FuncType >
 		inline void doTraverseNodes( RenderPass const & pass
-			, UniformBuffer & ubo
+			, renderer::UniformBuffer< PickingUboData > & ubo
 			, MapType & nodes
 			, PickingPass::NodeType type
 			, FuncType function )

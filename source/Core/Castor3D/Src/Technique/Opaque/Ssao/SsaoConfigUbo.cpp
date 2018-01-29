@@ -1,10 +1,12 @@
 #include "SsaoConfigUbo.hpp"
 
 #include "Engine.hpp"
-#include "Technique/Opaque/Ssao/SsaoConfig.hpp"
-#include "Render/RenderInfo.hpp"
+#include "Render/RenderSystem.hpp"
 #include "Render/Viewport.hpp"
 #include "Scene/Camera.hpp"
+#include "Technique/Opaque/Ssao/SsaoConfig.hpp"
+
+#include <Buffer/UniformBuffer.hpp>
 
 using namespace castor;
 
@@ -29,25 +31,7 @@ namespace castor3d
 	String const SsaoConfigUbo::InvViewMatrix = cuT( "c3d_worldToCamera" );
 
 	SsaoConfigUbo::SsaoConfigUbo( Engine & engine )
-		: m_ubo{ SsaoConfigUbo::BufferSsaoConfig
-			, *engine.getRenderSystem()
-			, SsaoConfigUbo::BindingPoint }
-		, m_numSamples{ *m_ubo.createUniform< UniformType::eInt >( SsaoConfigUbo::NumSamples ) }
-		, m_numSpiralTurns{ *m_ubo.createUniform< UniformType::eInt >( SsaoConfigUbo::NumSpiralTurns ) }
-		, m_projScale{ *m_ubo.createUniform< UniformType::eFloat >( SsaoConfigUbo::ProjScale ) }
-		, m_radius{ *m_ubo.createUniform< UniformType::eFloat >( SsaoConfigUbo::Radius ) }
-		, m_invRadius{ *m_ubo.createUniform< UniformType::eFloat >( SsaoConfigUbo::InvRadius ) }
-		, m_radius2{ *m_ubo.createUniform< UniformType::eFloat >( SsaoConfigUbo::Radius2 ) }
-		, m_invRadius2{ *m_ubo.createUniform< UniformType::eFloat >( SsaoConfigUbo::InvRadius2 ) }
-		, m_bias{ *m_ubo.createUniform< UniformType::eFloat >( SsaoConfigUbo::Bias ) }
-		, m_intensity{ *m_ubo.createUniform< UniformType::eFloat >( SsaoConfigUbo::Intensity ) }
-		, m_intensityDivR6{ *m_ubo.createUniform< UniformType::eFloat >( SsaoConfigUbo::IntensityDivR6 ) }
-		, m_farPlaneZ{ *m_ubo.createUniform< UniformType::eFloat >( SsaoConfigUbo::FarPlaneZ ) }
-		, m_edgeSharpness{ *m_ubo.createUniform< UniformType::eFloat >( SsaoConfigUbo::EdgeSharpness ) }
-		, m_blurStepSize{ *m_ubo.createUniform< UniformType::eInt >( SsaoConfigUbo::BlurStepSize ) }
-		, m_blurRadius{ *m_ubo.createUniform< UniformType::eInt >( SsaoConfigUbo::BlurRadius ) }
-		, m_projInfo{ *m_ubo.createUniform< UniformType::eVec4f >( SsaoConfigUbo::ProjInfo ) }
-		, m_invViewMatrix{ *m_ubo.createUniform< UniformType::eMat4x4f >( SsaoConfigUbo::InvViewMatrix ) }
+		: m_engine{ engine }
 	{
 	}
 
@@ -127,30 +111,30 @@ namespace castor3d
 		farZ = std::min( farZ, -1000.0f );
 		auto const proj = getProjectUnitMatrix( viewport );
 
-		m_numSamples.setValue( config.m_numSamples );
-		m_numSpiralTurns.setValue( numSpiralTurns );
-		m_projScale.setValue( projScale );
-		m_radius.setValue( radius );
-		m_invRadius.setValue( invRadius );
-		m_radius2.setValue( radius2 );
-		m_invRadius2.setValue( invRadius2 );
-		m_bias.setValue( config.m_bias );
-		m_intensity.setValue( config.m_intensity );
-		m_intensityDivR6.setValue( intersityDivR6 );
-		m_farPlaneZ.setValue( farZ );
-		m_edgeSharpness.setValue( config.m_edgeSharpness );
-		m_blurStepSize.setValue( config.m_blurStepSize );
-		m_blurRadius.setValue( config.m_blurRadius );
-		m_projInfo.setValue( Point4f
+		auto & configuration = m_ubo->getData( 0u );
+		configuration.numSamples = config.m_numSamples;
+		configuration.numSpiralTurns = numSpiralTurns;
+		configuration.projScale = projScale;
+		configuration.radius = radius;
+		configuration.invRadius = invRadius;
+		configuration.radius2 = radius2;
+		configuration.invRadius2 = invRadius2;
+		configuration.bias = config.m_bias;
+		configuration.intensity = config.m_intensity;
+		configuration.intensityDivR6 = intersityDivR6;
+		configuration.farPlaneZ = farZ;
+		configuration.edgeSharpness = config.m_edgeSharpness;
+		configuration.blurStepSize = config.m_blurStepSize;
+		configuration.blurRadius = config.m_blurRadius;
+		configuration.projInfo = Point4f
 		{
 			-2.0f / ( viewport.getWidth() * proj[0][0] ),
 			-2.0f / ( viewport.getHeight() * proj[1][1] ),
 			( 1.0f - proj[0][2] ) / proj[0][0],
 			( 1.0f - proj[1][2] ) / proj[1][1]
-		} );
-		m_invViewMatrix.setValue( camera.getView() );
+		};
+		configuration.invViewMatrix = camera.getView();
 
-		m_ubo.update();
-		m_ubo.bindTo( SsaoConfigUbo::BindingPoint );
+		m_ubo->upload();
 	}
 }

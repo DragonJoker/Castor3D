@@ -70,12 +70,12 @@ namespace castor3d
 		int32_t centerR = size.getWidth();
 		int32_t centerB = size.getHeight();
 
-		OverlayCategory::Vertex vertex0 = { { float( centerL ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, { real( m_uv[0] ), real( m_uv[3] ) } };
-		OverlayCategory::Vertex vertex1 = { { float( centerL ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, { real( m_uv[0] ), real( m_uv[1] ) } };
-		OverlayCategory::Vertex vertex2 = { { float( centerR ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, { real( m_uv[2] ), real( m_uv[1] ) } };
-		OverlayCategory::Vertex vertex3 = { { float( centerL ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, { real( m_uv[0] ), real( m_uv[3] ) } };
-		OverlayCategory::Vertex vertex4 = { { float( centerR ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, { real( m_uv[2] ), real( m_uv[1] ) } };
-		OverlayCategory::Vertex vertex5 = { { float( centerR ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, { real( m_uv[2] ), real( m_uv[3] ) } };
+		OverlayCategory::Vertex vertex0 = { Point2f{ float( centerL ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, Point2f{ real( m_uv[0] ), real( m_uv[3] ) } };
+		OverlayCategory::Vertex vertex1 = { Point2f{ float( centerL ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, Point2f{ real( m_uv[0] ), real( m_uv[1] ) } };
+		OverlayCategory::Vertex vertex2 = { Point2f{ float( centerR ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, Point2f{ real( m_uv[2] ), real( m_uv[1] ) } };
+		OverlayCategory::Vertex vertex3 = { Point2f{ float( centerL ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, Point2f{ real( m_uv[0] ), real( m_uv[3] ) } };
+		OverlayCategory::Vertex vertex4 = { Point2f{ float( centerR ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, Point2f{ real( m_uv[2] ), real( m_uv[1] ) } };
+		OverlayCategory::Vertex vertex5 = { Point2f{ float( centerR ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, Point2f{ real( m_uv[2] ), real( m_uv[3] ) } };
 
 		m_arrayVtx[0] = vertex0;
 		m_arrayVtx[1] = vertex1;

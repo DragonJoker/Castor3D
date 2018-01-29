@@ -63,13 +63,21 @@ namespace castor3d
 		C3D_API void update();
 		/**
 		 *\~english
-		 *\brief		Creates the descriptor set layout binding at given point.
-		 *\param[in]	index	The binding point index.
+		 *\brief		Creates the descriptor set layout binding.
 		 *\~french
-		 *\brief		Crée une attache de layout de set de descripteurs au point donné.
-		 *\param[in]	index	L'indice du point d'attache.
+		 *\brief		Crée une attache de layout de set de descripteurs.
 		 */
-		C3D_API renderer::DescriptorSetLayoutBinding createBinding()const;
+		C3D_API renderer::DescriptorSetLayoutBinding createLayoutBinding()const;
+		/**
+		 *\~english
+		 *\brief		Creates the descriptor set binding at given point.
+		 *\param[in]	binding	The descriptor set layout binding.
+		 *\~french
+		 *\brief		Crée une attache de set de descripteurs au point donné.
+		 *\param[in]	binding	L'attache de layout de set de descripteurs.
+		 */
+		C3D_API renderer::DescriptorSetBinding const & createBinding( renderer::DescriptorSet & descriptorSet
+			, renderer::DescriptorSetLayoutBinding const & binding )const;
 		/**
 		 *\~english
 		 *\brief		Puts the pass data into the buffer.

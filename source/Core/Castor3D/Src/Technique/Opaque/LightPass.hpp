@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include <Pipeline/VertexLayout.hpp>
 #include "Render/Viewport.hpp"
-#include "Shader/UniformBuffer.hpp"
+#include "Castor3DPrerequisites.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
 #include "Shader/Ubos/GpInfoUbo.hpp"
 
@@ -269,7 +269,7 @@ namespace castor3d
 			void initialise( renderer::VertexBufferBase & vbo
 				, MatrixUbo & matrixUbo
 				, SceneUbo & sceneUbo
-				, UniformBuffer & gpInfoUbo
+				, GpInfoUbo & gpInfoUbo
 				, ModelMatrixUbo * modelMatrixUbo );
 			/**
 			*\~english

@@ -35,7 +35,7 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedSkeleton::fillShader( Uniform4x4r & variable )const
+	void AnimatedSkeleton::fillShader( Matrix4x4r * variable )const
 	{
 		Skeleton & skeleton = m_skeleton;
 		uint32_t i{ 0u };
@@ -44,7 +44,7 @@ namespace castor3d
 		{
 			for ( auto bone : skeleton )
 			{
-				variable.setValue( skeleton.getGlobalInverseTransform(), i++ );
+				variable[i++] = skeleton.getGlobalInverseTransform();
 			}
 		}
 		else
@@ -63,7 +63,7 @@ namespace castor3d
 					}
 				}
 
-				variable.setValue( final, i++ );
+				variable[i++] = final;
 			}
 		}
 	}
