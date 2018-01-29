@@ -23,41 +23,6 @@ namespace gl_renderer
 		/**
 		*\brief
 		*	Constructeur.
-		*\param[in] vbo
-		*	Le VBO.
-		*\param[in] offset
-		*	L'offset du premier sommet.
-		*\param[in] layout
-		*	Le layout.
-		*/
-		GeometryBuffers( renderer::VertexBufferBase const & vbo
-			, uint64_t offset
-			, renderer::VertexLayout const & layout );
-		/**
-		*\brief
-		*	Constructeur.
-		*\param[in] vbo
-		*	Le VBO.
-		*\param[in] offset
-		*	L'offset du premier sommet dans le VBO.
-		*\param[in] layout
-		*	Le layout.
-		*\param[in] ibo
-		*	L'IBO.
-		*\param[in] offset
-		*	L'offset du premier sommet dans l'IBO.
-		*\param[in] type
-		*	Le type des indices.
-		*/
-		GeometryBuffers( renderer::VertexBufferBase const & vbo
-			, uint64_t vboOffset
-			, renderer::VertexLayout const & layout
-			, renderer::BufferBase const & ibo
-			, uint64_t iboOffset
-			, renderer::IndexType type );
-		/**
-		*\brief
-		*	Constructeur.
 		*\param[in] vbos
 		*	Les VBOs.
 		*\param[in] offsets

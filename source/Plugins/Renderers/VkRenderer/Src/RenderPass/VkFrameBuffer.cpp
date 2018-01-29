@@ -112,10 +112,10 @@ namespace vk_renderer
 		copyCmd.begin();
 		copyCmd.memoryBarrier( renderer::PipelineStageFlag::eTransfer
 			, renderer::PipelineStageFlag::eTransfer
-			, image.makeTransferDestination( view.getSubResourceRange() ) );
+			, view.makeTransferDestination() );
 		copyCmd.memoryBarrier( renderer::PipelineStageFlag::eTransfer
 			, renderer::PipelineStageFlag::eTransfer
-			, attachImage.makeTransferSource( attachView.getSubResourceRange() ) );
+			, attachView.makeTransferSource() );
 
 		renderer::ImageCopy imageCopyRegion{};
 		imageCopyRegion.srcSubresource.aspectMask = renderer::ImageAspectFlag::eColour;
@@ -134,8 +134,7 @@ namespace vk_renderer
 			, view );
 		copyCmd.memoryBarrier( renderer::PipelineStageFlag::eTransfer
 			, renderer::PipelineStageFlag::eTransfer
-			, image.makeGeneralLayout( view.getSubResourceRange()
-				, renderer::AccessFlag::eMemoryRead ) );
+			, view.makeGeneralLayout( renderer::AccessFlag::eMemoryRead ) );
 
 		copyCmd.end();
 

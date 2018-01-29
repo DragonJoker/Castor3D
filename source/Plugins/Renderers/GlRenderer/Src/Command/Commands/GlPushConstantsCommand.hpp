@@ -17,12 +17,12 @@ namespace gl_renderer
 	{
 	public:
 		PushConstantsCommand( renderer::PipelineLayout const & layout
-			, renderer::PushConstantsBuffer const & pcb );
+			, renderer::PushConstantsBufferBase const & pcb );
 		void apply()const override;
 		CommandPtr clone()const override;
 
 	private:
-		renderer::PushConstantsBuffer const & m_pcb;
+		renderer::PushConstantsBufferBase const & m_pcb;
 		renderer::ByteArray m_data;
 	};
 }

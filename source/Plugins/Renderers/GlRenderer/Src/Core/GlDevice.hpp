@@ -50,21 +50,6 @@ namespace gl_renderer
 		/**
 		*\copydoc		renderer::Device::createGeometryBuffers
 		*/
-		renderer::GeometryBuffersPtr createGeometryBuffers( renderer::VertexBufferBase const & vbo
-			, uint64_t vboOffset
-			, renderer::VertexLayout const & layout )const override;
-		/**
-		*\copydoc		renderer::Device::createGeometryBuffers
-		*/
-		renderer::GeometryBuffersPtr createGeometryBuffers( renderer::VertexBufferBase const & vbo
-			, uint64_t vboOffset
-			, renderer::VertexLayout const & layout
-			, renderer::BufferBase const & ibo
-			, uint64_t iboOffset
-			, renderer::IndexType type )const override;
-		/**
-		*\copydoc		renderer::Device::createGeometryBuffers
-		*/
 		renderer::GeometryBuffersPtr createGeometryBuffers( renderer::VertexBufferCRefArray const & vbos
 			, std::vector< uint64_t > vboOffsets
 			, renderer::VertexLayoutCRefArray const & layouts )const override;
@@ -80,21 +65,8 @@ namespace gl_renderer
 		/**
 		*\copydoc		renderer::Device::createPipelineLayout
 		*/
-		renderer::PipelineLayoutPtr createPipelineLayout()const override;
-		/**
-		*\copydoc		renderer::Device::createPipelineLayout
-		*/
-		renderer::PipelineLayoutPtr createPipelineLayout( renderer::DescriptorSetLayout const & layout )const override;
-		/**
-		*\copydoc		renderer::Device::createPipeline
-		*/
-		renderer::PipelinePtr createPipeline( renderer::PipelineLayout const & layout
-			, renderer::ShaderProgram const & program
-			, renderer::VertexLayoutCRefArray const & vertexLayouts
-			, renderer::RenderPass const & renderPass
-			, renderer::PrimitiveTopology topology
-			, renderer::RasterisationState const & rasterisationState
-			, renderer::ColourBlendState const & colourBlendState )const override;
+		renderer::PipelineLayoutPtr createPipelineLayout( renderer::DescriptorSetLayoutCRefArray const & setLayouts
+			, renderer::PushConstantRangeCRefArray const & pushConstantRanges )const override;
 		/**
 		*\copydoc		renderer::Device::createDescriptorSetLayout
 		*/

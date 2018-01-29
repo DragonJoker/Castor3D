@@ -60,8 +60,6 @@ namespace vk_renderer
 		, m_device{ rhs.m_device }
 		, m_image{ rhs.m_image }
 		, m_owner{ rhs.m_owner }
-		, m_currentLayout{ rhs.m_currentLayout }
-		, m_currentAccessMask{ rhs.m_currentAccessMask }
 	{
 		rhs.m_image = VK_NULL_HANDLE;
 	}
@@ -74,8 +72,6 @@ namespace vk_renderer
 		{
 			m_image = rhs.m_image;
 			m_owner = rhs.m_owner;
-			m_currentLayout = rhs.m_currentLayout;
-			m_currentAccessMask = rhs.m_currentAccessMask;
 			rhs.m_image = VK_NULL_HANDLE;
 		}
 
@@ -87,8 +83,6 @@ namespace vk_renderer
 		, m_device{ device }
 		, m_image{}
 		, m_owner{ true }
-		, m_currentLayout{ initialLayout }
-		, m_currentAccessMask{ 0 }
 	{
 	}
 
@@ -100,8 +94,6 @@ namespace vk_renderer
 		, m_device{ device }
 		, m_image{ image }
 		, m_owner{ false }
-		, m_currentLayout{ renderer::ImageLayout::ePresentSrc }
-		, m_currentAccessMask{ renderer::AccessFlag::eMemoryRead }
 	{
 		if ( renderer::isDepthFormat( format )
 			|| renderer::isDepthStencilFormat( format ) )
@@ -131,8 +123,6 @@ namespace vk_renderer
 		: renderer::Texture{ device }
 		, m_device{ device }
 		, m_owner{ true }
-		, m_currentLayout{ renderer::ImageLayout::eUndefined }
-		, m_currentAccessMask{ 0 }
 	{
 		if ( renderer::isDepthFormat( format )
 			|| renderer::isDepthStencilFormat( format ) )
@@ -224,98 +214,6 @@ namespace vk_renderer
 		//m_texture->unbind( 0 );
 	}
 
-	renderer::ImageMemoryBarrier Texture::makeGeneralLayout( renderer::ImageSubresourceRange const & range, renderer::AccessFlags accessFlags )const
-	{
-		return doMakeLayoutTransition( renderer::ImageLayout::eGeneral
-			, VK_QUEUE_FAMILY_IGNORED
-			, accessFlags
-			, range );
-	}
-
-	renderer::ImageMemoryBarrier Texture::makeTransferDestination( renderer::ImageSubresourceRange const & range )const
-	{
-		return doMakeLayoutTransition( renderer::ImageLayout::eTransferDstOptimal
-			, VK_QUEUE_FAMILY_IGNORED
-			, renderer::AccessFlag::eTransferWrite
-			, range );
-	}
-
-	renderer::ImageMemoryBarrier Texture::makeTransferSource( renderer::ImageSubresourceRange const & range )const
-	{
-		return doMakeLayoutTransition( renderer::ImageLayout::eTransferSrcOptimal
-			, VK_QUEUE_FAMILY_IGNORED
-			, renderer::AccessFlag::eTransferRead
-			, range );
-	}
-
-	renderer::ImageMemoryBarrier Texture::makeShaderInputResource( renderer::ImageSubresourceRange const & range )const
-	{
-		return doMakeLayoutTransition( renderer::ImageLayout::eShaderReadOnlyOptimal
-			, VK_QUEUE_FAMILY_IGNORED
-			, renderer::AccessFlag::eShaderRead
-			, range );
-	}
-
-	renderer::ImageMemoryBarrier Texture::makeDepthStencilReadOnly( renderer::ImageSubresourceRange const & range )const
-	{
-		return doMakeLayoutTransition( renderer::ImageLayout::eDepthStencilReadOnlyOptimal
-			, m_device.getGraphicsQueue().getFamilyIndex()
-			, renderer::AccessFlag::eShaderRead
-			, range );
-	}
-
-	renderer::ImageMemoryBarrier Texture::makeColourAttachment( renderer::ImageSubresourceRange const & range )const
-	{
-		return doMakeLayoutTransition( renderer::ImageLayout::eColourAttachmentOptimal
-			, m_device.getGraphicsQueue().getFamilyIndex()
-			, renderer::AccessFlag::eColourAttachmentWrite
-			, range );
-	}
-
-	renderer::ImageMemoryBarrier Texture::makeDepthStencilAttachment( renderer::ImageSubresourceRange const & range )const
-	{
-		return doMakeLayoutTransition( renderer::ImageLayout::eDepthStencilAttachmentOptimal
-			, m_device.getGraphicsQueue().getFamilyIndex()
-			, renderer::AccessFlag::eDepthStencilAttachmentWrite
-			, range );
-	}
-
-	renderer::ImageMemoryBarrier Texture::makePresentSource( renderer::ImageSubresourceRange const & range )const
-	{
-		return doMakeLayoutTransition( renderer::ImageLayout::ePresentSrc
-			, m_device.getPresentQueue().getFamilyIndex()
-			, renderer::AccessFlag::eMemoryRead
-			, range );
-	}
-
-	renderer::ImageMemoryBarrier Texture::doMakeLayoutTransition( renderer::ImageLayout layout
-		, uint32_t queueFamily
-		, renderer::AccessFlags dstAccessMask
-		, renderer::ImageSubresourceRange const & range )const
-	{
-		// On fait passer le layout de l'image à un autre layout, via une barrière.
-		renderer::ImageMemoryBarrier transitionBarrier
-		{
-			m_currentAccessMask,                     // srcAccessMask
-			dstAccessMask,                           // dstAccessMask
-			m_currentLayout,                         // oldLayout
-			layout,                                  // newLayout
-			queueFamily == VK_QUEUE_FAMILY_IGNORED   // srcQueueFamilyIndex
-				? VK_QUEUE_FAMILY_IGNORED
-				: m_currentQueueFamily,
-			queueFamily,                             // dstQueueFamilyIndex
-			*this,                                   // image
-			range                                    // subresourceRange
-		};
-		DEBUG_DUMP( convert( transitionBarrier ) );
-		m_currentAccessMask = dstAccessMask;
-		m_currentLayout = layout;
-		m_currentQueueFamily = queueFamily == VK_QUEUE_FAMILY_IGNORED
-			? m_currentQueueFamily
-			: queueFamily;
-		return transitionBarrier;
-	}
-
 	void Texture::doSetImage1D( renderer::ImageUsageFlags usageFlags
 		, renderer::ImageTiling tiling
 		, renderer::MemoryPropertyFlags memoryFlags )
@@ -341,7 +239,7 @@ namespace vk_renderer
 			VK_SHARING_MODE_EXCLUSIVE,                            // sharingMode
 			0,                                                    // queueFamilyIndexCount
 			nullptr,                                              // pQueueFamilyIndices
-			convert( m_currentLayout )                            // initialLayout
+			VK_IMAGE_LAYOUT_UNDEFINED                             // initialLayout
 		};
 		DEBUG_DUMP( createInfo );
 		auto res = vk::CreateImage( m_device
@@ -403,7 +301,7 @@ namespace vk_renderer
 			VK_SHARING_MODE_EXCLUSIVE,                            // sharingMode
 			0,                                                    // queueFamilyIndexCount
 			nullptr,                                              // pQueueFamilyIndices
-			convert( m_currentLayout )                            // initialLayout
+			VK_IMAGE_LAYOUT_UNDEFINED                             // initialLayout
 		};
 		DEBUG_DUMP( createInfo );
 		auto res = vk::CreateImage( m_device
@@ -455,7 +353,7 @@ namespace vk_renderer
 			VK_SHARING_MODE_EXCLUSIVE,                            // sharingMode
 			0,                                                    // queueFamilyIndexCount
 			nullptr,                                              // pQueueFamilyIndices
-			convert( m_currentLayout )                            // initialLayout
+			VK_IMAGE_LAYOUT_UNDEFINED                             // initialLayout
 		};
 		DEBUG_DUMP( createInfo );
 		auto res = vk::CreateImage( m_device

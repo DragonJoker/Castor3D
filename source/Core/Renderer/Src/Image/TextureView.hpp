@@ -84,6 +84,114 @@ namespace renderer
 		virtual ~TextureView() = default;
 		/**
 		*\~french
+		*\brief
+		*	Prépare une barrière mémoire de transition vers un layout général.
+		*\param[in] accessFlags
+		*	Les accès voulus, une fois que la transition est effectuée.
+		*\return
+		*	La barrière mémoire.
+		*\~english
+		*\brief
+		*	Prepares a memory barrier, for a general layout.
+		*\param[in] accessFlags
+		*	The wanted access flags, once the transition is done.
+		*\return
+		*	The memory barrier.
+		*/
+		virtual ImageMemoryBarrier makeGeneralLayout( AccessFlags accessFlags )const = 0;
+		/**
+		*\~french
+		*\brief
+		*	Prépare une barrière mémoire de transition vers un layout de destination de transfert.
+		*\return
+		*	La barrière mémoire.
+		*\~english
+		*\brief
+		*	Prepares a memory barrier, for a transfer destination layout.
+		*\return
+		*	The memory barrier.
+		*/
+		virtual ImageMemoryBarrier makeTransferDestination()const = 0;
+		/**
+		*\~french
+		*\brief
+		*	Prépare une barrière mémoire de transition vers un layout de source de transfert.
+		*\return
+		*	La barrière mémoire.
+		*\~english
+		*\brief
+		*	Prepares a memory barrier, for a transfer source layout.
+		*\return
+		*	The memory barrier.
+		*/
+		virtual ImageMemoryBarrier makeTransferSource()const = 0;
+		/**
+		*\~french
+		*\brief
+		*	Prépare une barrière mémoire de transition vers un layout de ressource d'entrée (lecture seule) d'un shader.
+		*\return
+		*	La barrière mémoire.
+		*\~english
+		*\brief
+		*	Prepares a memory barrier, for an input shader resource layout.
+		*\return
+		*	The memory barrier.
+		*/
+		virtual ImageMemoryBarrier makeShaderInputResource()const = 0;
+		/**
+		*\~french
+		*\brief
+		*	Prépare une barrière mémoire de transition vers un layout de ressource de lecture de profondeur et/ou stencil.
+		*\return
+		*	La barrière mémoire.
+		*\~english
+		*\brief
+		*	Prepares a memory barrier, for a depth ant/or stencil read only layout.
+		*\return
+		*	The memory barrier.
+		*/
+		virtual ImageMemoryBarrier makeDepthStencilReadOnly()const = 0;
+		/**
+		*\~french
+		*\brief
+		*	Prépare une barrière mémoire de transition vers un layout d'attache couleur.
+		*\return
+		*	La barrière mémoire.
+		*\~english
+		*\brief
+		*	Prepares a memory barrier, for a colour attachment layout.
+		*\return
+		*	The memory barrier.
+		*/
+		virtual ImageMemoryBarrier makeColourAttachment()const = 0;
+		/**
+		*\~french
+		*\brief
+		*	Prépare une barrière mémoire de transition vers un layout d'attache profondeur et/ou stencil.
+		*\return
+		*	La barrière mémoire.
+		*\~english
+		*\brief
+		*	Prepares a memory barrier, for a depth and/or stencil attachment layout.
+		*\return
+		*	The memory barrier.
+		*/
+		virtual ImageMemoryBarrier makeDepthStencilAttachment()const = 0;
+		/**
+		*\~french
+		*\brief
+		*	Prépare une barrière mémoire de transition vers un layout de source de presentation.
+		*\return
+		*	La barrière mémoire.
+		*\~english
+		*\brief
+		*	Prepares a memory barrier, for a presentation source layout.
+		*\return
+		*	The memory barrier.
+		*/
+		virtual ImageMemoryBarrier makePresentSource()const = 0;
+		/**
+		*\~french
 		*\return
 		*	Le type de texture.
 		*\~english

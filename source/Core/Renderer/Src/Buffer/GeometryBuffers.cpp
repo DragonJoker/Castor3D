@@ -6,24 +6,6 @@ See LICENSE file in root folder.
 
 namespace renderer
 {
-	GeometryBuffers::GeometryBuffers( VertexBufferBase const & vbo
-		, uint64_t offset
-		, VertexLayout const & layout )
-		: m_vbos{ 1, { vbo, offset, layout } }
-	{
-	}
-
-	GeometryBuffers::GeometryBuffers( VertexBufferBase const & vbo
-		, uint64_t vboOffset
-		, VertexLayout const & layout
-		, BufferBase const & ibo
-		, uint64_t iboOffset
-		, IndexType type )
-		: m_vbos{ 1, { vbo, vboOffset, layout } }
-		, m_ibo{ std::make_unique< IBO >( ibo, iboOffset, type ) }
-	{
-	}
-
 	GeometryBuffers::GeometryBuffers( VertexBufferCRefArray const & vbos
 		, std::vector< uint64_t > vboOffsets
 		, VertexLayoutCRefArray const & layouts )

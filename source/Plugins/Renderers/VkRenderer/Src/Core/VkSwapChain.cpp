@@ -90,7 +90,7 @@ namespace vk_renderer
 	{
 		commandBuffer.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
-			, m_backBuffers[index]->getTexture().makeColourAttachment( m_backBuffers[index]->getView().getSubResourceRange() ) );
+			, m_backBuffers[index]->getView().makeColourAttachment() );
 	}
 
 	void SwapChain::postRenderCommands( uint32_t index
@@ -98,7 +98,7 @@ namespace vk_renderer
 	{
 		commandBuffer.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 			, renderer::PipelineStageFlag::eBottomOfPipe
-			, m_backBuffers[index]->getTexture().makePresentSource( m_backBuffers[index]->getView().getSubResourceRange() ) );
+			, m_backBuffers[index]->getView().makePresentSource() );
 	}
 
 	renderer::RenderingResources * SwapChain::getResources()

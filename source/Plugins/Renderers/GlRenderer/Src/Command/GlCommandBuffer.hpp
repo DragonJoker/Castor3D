@@ -185,7 +185,7 @@ namespace gl_renderer
 		*\copydoc	renderer::CommandBuffer:pushConstants
 		*/
 		void pushConstants( renderer::PipelineLayout const & layout
-			, renderer::PushConstantsBuffer const & pcb )const override;
+			, renderer::PushConstantsBufferBase const & pcb )const override;
 		/**
 		*\copydoc	renderer::CommandBuffer:dispatch
 		*/

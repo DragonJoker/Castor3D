@@ -171,6 +171,41 @@ namespace renderer
 		{
 			return *m_ubo;
 		}
+		/**
+		*\~english
+		*\brief
+		*	Uploads the buffer data to VRAM
+		*\param[in] offset
+		*	The offset in elements from which buffer memory is mapped.
+		*\param[in] size
+		*	The size in elements of the buffer memory to map.
+		*\~french
+		*\brief
+		*	Met en VRAM les données du tampon.
+		*\param[in] offset
+		*	L'offset à partir duquel la mémoire du tampon est mappée.
+		*\param[in] size
+		*	La taille en octets de la mémoire à mapper.
+		*/
+		inline void upload( uint32_t offset = 0u
+			, uint32_t range = 1u )
+		{
+			assert( range + offset <= m_data.size() );
+			auto size = getOffset( 1u );
+
+			if ( auto buffer = m_ubo->getBuffer().lock( offset * size
+				, range * size
+				, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateRange ) )
+			{
+				for ( auto i = 0u; i < range; ++i )
+				{
+					std::memcpy( buffer, &m_data[offset + i], sizeof( T ) );
+					buffer += size;
+				}
+
+				m_ubo->getBuffer().unlock( size, true );
+			}
+		}
 
 	private:
 		UniformBufferBasePtr m_ubo;

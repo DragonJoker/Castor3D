@@ -84,6 +84,38 @@ namespace gl_renderer
 		*/
 		~TextureView();
 		/**
+		*\copydoc	renderer::TextureView::makeGeneralLayout
+		*/
+		renderer::ImageMemoryBarrier makeGeneralLayout( renderer::AccessFlags accessFlags )const override;
+		/**
+		*\copydoc	renderer::TextureView::makeTransferDestination
+		*/
+		renderer::ImageMemoryBarrier makeTransferDestination()const override;
+		/**
+		*\copydoc	renderer::TextureView::makeTransferSource
+		*/
+		renderer::ImageMemoryBarrier makeTransferSource()const override;
+		/**
+		*\copydoc	renderer::TextureView::makeShaderInputResource
+		*/
+		renderer::ImageMemoryBarrier makeShaderInputResource()const override;
+		/**
+		*\copydoc	renderer::TextureView::makeDepthStencilReadOnly
+		*/
+		renderer::ImageMemoryBarrier makeDepthStencilReadOnly()const override;
+		/**
+		*\copydoc	renderer::TextureView::makeColourAttachment
+		*/
+		renderer::ImageMemoryBarrier makeColourAttachment()const override;
+		/**
+		*\copydoc	renderer::TextureView::makeDepthStencilAttachment
+		*/
+		renderer::ImageMemoryBarrier makeDepthStencilAttachment()const override;
+		/**
+		*\copydoc	renderer::TextureView::makePresentSource
+		*/
+		renderer::ImageMemoryBarrier makePresentSource()const override;
+		/**
 		*\return
 		*	L'image OpenGL.
 		*/
@@ -92,6 +124,11 @@ namespace gl_renderer
 			assert( m_texture != GL_INVALID_INDEX );
 			return m_texture;
 		}
+
+	private:
+		renderer::ImageMemoryBarrier doMakeLayoutTransition( renderer::ImageLayout layout
+			, uint32_t queueFamily
+			, renderer::AccessFlags dstAccessMask )const;
 
 	private:
 		Device const & m_device;

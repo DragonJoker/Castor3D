@@ -134,39 +134,6 @@ namespace vk_renderer
 		*/
 		void generateMipmaps()const override;
 		/**
-		*\copydoc	renderer::Texture::makeGeneralLayout
-		*/
-		renderer::ImageMemoryBarrier makeGeneralLayout( renderer::ImageSubresourceRange const & range
-			, renderer::AccessFlags accessFlags )const override;
-		/**
-		*\copydoc	renderer::Texture::makeTransferDestination
-		*/
-		renderer::ImageMemoryBarrier makeTransferDestination( renderer::ImageSubresourceRange const & range )const override;
-		/**
-		*\copydoc	renderer::Texture::makeTransferSource
-		*/
-		renderer::ImageMemoryBarrier makeTransferSource( renderer::ImageSubresourceRange const & range )const override;
-		/**
-		*\copydoc	renderer::Texture::makeShaderInputResource
-		*/
-		renderer::ImageMemoryBarrier makeShaderInputResource( renderer::ImageSubresourceRange const & range )const override;
-		/**
-		*\copydoc	renderer::Texture::makeDepthStencilReadOnly
-		*/
-		renderer::ImageMemoryBarrier makeDepthStencilReadOnly( renderer::ImageSubresourceRange const & range )const override;
-		/**
-		*\copydoc	renderer::Texture::makeColourAttachment
-		*/
-		renderer::ImageMemoryBarrier makeColourAttachment( renderer::ImageSubresourceRange const & range )const override;
-		/**
-		*\copydoc	renderer::Texture::makeDepthStencilAttachment
-		*/
-		renderer::ImageMemoryBarrier makeDepthStencilAttachment( renderer::ImageSubresourceRange const & range )const override;
-		/**
-		*\copydoc	renderer::Texture::makePresentSource
-		*/
-		renderer::ImageMemoryBarrier makePresentSource( renderer::ImageSubresourceRange const & range )const override;
-		/**
 		*\~french
 		*\brief
 		*	Opérateur de conversion implicite vers VkImage.
@@ -178,48 +145,8 @@ namespace vk_renderer
 		{
 			return m_image;
 		}
-		/**
-		*\~french
-		*\return
-		*	La layout actuel de l'image.
-		*\~english
-		*\brief
-		*	The current image layout.
-		*/
-		inline renderer::ImageLayout getCurrentLayout()const
-		{
-			return m_currentLayout;
-		}
 
 	private:
-		/**
-		*\~french
-		*\brief
-		*	Prépare une barrière mémoire de transition de l'image vers un autre layout.
-		*\param[in] layout
-		*	Le layout vers lequel on fait la transition.
-		*\param[in] queueFamily
-		*	La file référençant l'image après la transition.
-		*\param[in] dstAccessMask
-		*	Les accès voulus, une fois que la transition est effectuée.
-		*\return
-		*	La barrière mémoire.
-		*\~english
-		*\brief
-		*	Prepares a layout transition memory barrier.
-		*\param[in] layout
-		*	The destination layout.
-		*\param[in] queueFamily
-		*	The queue referencing the image after the transition.
-		*\param[in] dstAccessMask
-		*	The wanted access after the transition is done.
-		*\return
-		*	The memory barrier.
-		*/
-		renderer::ImageMemoryBarrier doMakeLayoutTransition( renderer::ImageLayout layout
-			, uint32_t queueFamily
-			, renderer::AccessFlags dstAccessMask
-			, renderer::ImageSubresourceRange const & range )const;
 		/**
 		*\copydoc	renderer::Texture::doSetImage1D
 		*/
@@ -244,9 +171,6 @@ namespace vk_renderer
 		VkImage m_image{};
 		ImageStoragePtr m_storage;
 		bool m_owner{};
-		mutable renderer::AccessFlags m_currentAccessMask{};
-		mutable renderer::ImageLayout m_currentLayout{};
-		mutable uint32_t m_currentQueueFamily{ 0 };
 	};
 }
 

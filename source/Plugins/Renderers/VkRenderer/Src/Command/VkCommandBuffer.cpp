@@ -456,7 +456,7 @@ namespace vk_renderer
 	}
 
 	void CommandBuffer::pushConstants( renderer::PipelineLayout const & layout
-		, renderer::PushConstantsBuffer const & pcb )const
+		, renderer::PushConstantsBufferBase const & pcb )const
 	{
 		vk::CmdPushConstants( m_commandBuffer
 			, static_cast< PipelineLayout const & >( layout )

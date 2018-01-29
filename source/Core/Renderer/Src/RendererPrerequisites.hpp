@@ -73,6 +73,8 @@ namespace renderer
 	template< typename T >
 	class UniformBuffer;
 	template< typename T >
+	class PushConstantsBuffer;
+	template< typename T >
 	class VertexBuffer;
 	template< typename T >
 	class ShaderStorageBuffer;
@@ -82,6 +84,7 @@ namespace renderer
 	struct ImageCopy;
 	struct ImageBlit;
 	struct PushConstant;
+	struct PushConstantRange;
 
 	class AttributeBase;
 	class BackBuffer;
@@ -95,6 +98,7 @@ namespace renderer
 	class Connection;
 	class DepthStencilState;
 	class DescriptorSet;
+	class DescriptorSetBinding;
 	class DescriptorSetLayout;
 	class DescriptorSetLayoutBinding;
 	class DescriptorSetPool;
@@ -108,7 +112,7 @@ namespace renderer
 	class MultisampleState;
 	class Pipeline;
 	class PipelineLayout;
-	class PushConstantsBuffer;
+	class PushConstantsBufferBase;
 	class QueryPool;
 	class Queue;
 	class RasterisationState;
@@ -214,6 +218,8 @@ namespace renderer
 	using RenderSubpassArray = std::vector< RenderSubpass >;
 
 	using CommandBufferCRef = std::reference_wrapper< CommandBuffer const >;
+	using DescriptorSetLayoutCRef = std::reference_wrapper< DescriptorSetLayout const >;
+	using PushConstantRangeCRef = std::reference_wrapper< PushConstantRange const >;
 	using SemaphoreCRef = std::reference_wrapper< Semaphore const >;
 	using SwapChainCRef = std::reference_wrapper< SwapChain const >;
 	using TextureViewCRef = std::reference_wrapper< TextureView const >;
@@ -221,6 +227,8 @@ namespace renderer
 	using VertexBufferCRef = std::reference_wrapper< VertexBufferBase const >;
 
 	using CommandBufferCRefArray = std::vector< CommandBufferCRef >;
+	using DescriptorSetLayoutCRefArray = std::vector< DescriptorSetLayoutCRef >;
+	using PushConstantRangeCRefArray = std::vector< PushConstantRangeCRef >;
 	using SemaphoreCRefArray = std::vector< SemaphoreCRef >;
 	using SwapChainCRefArray = std::vector< SwapChainCRef >;
 	using TextureViewCRefArray = std::vector< TextureViewCRef >;

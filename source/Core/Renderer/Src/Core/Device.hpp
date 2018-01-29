@@ -130,57 +130,23 @@ namespace renderer
 		virtual VertexLayoutPtr createVertexLayout( uint32_t bindingSlot
 			, uint32_t stride )const = 0;
 		/**
+		*\~english
+		*\brief
+		*	Creates a pipeline layout.
+		*\param[in] setLayouts
+		*	The descriptor sets layouts.
+		*\param[in] pushConstantRanges
+		*	The push constants ranges.
 		*\~french
 		*\brief
 		*	Crée un layout de pipeline.
-		*\return
-		*	Le layout créé.
+		*\param[in] setLayouts
+		*	Les layouts des descripteurs du pipeline.
+		*\param[in] pushConstantRanges
+		*	Les intervalles de push constants.
 		*/
-		virtual PipelineLayoutPtr createPipelineLayout()const = 0;
-		/**
-		*\brief
-		*	Crée un layout de pipeline.
-		*\param[in] layout
-		*	Le layout des descripteurs utilisés par le pipeline.
-		*\return
-		*	Le layout créé.
-		*/
-		virtual PipelineLayoutPtr createPipelineLayout( DescriptorSetLayout const & layout )const = 0;
-		/**
-		*\~french
-		*\brief
-		*	Crée tampon de géométries.
-		*\param[in] layout
-		*	Le layout des descripteurs utilisés par le pipeline.
-		*\return
-		*	Le layout créé.
-		*/
-		virtual GeometryBuffersPtr createGeometryBuffers( VertexBufferBase const & vbo
-			, uint64_t vboOffset
-			, VertexLayout const & layout )const = 0;
-		/**
-		*\~french
-		*\brief
-		*	Crée tampon de géométries.
-		*\param[in] vbo
-		*	Le VBO.
-		*\param[in] vboOffset
-		*	L'offset du premier sommet dans le VBO.
-		*\param[in] layout
-		*	Le layout.
-		*\param[in] ibo
-		*	L'IBO.
-		*\param[in] iboOffset
-		*	L'offset du premier sommet dans l'IBO.
-		*\param[in] type
-		*	Le type des indices.
-		*/
-		virtual GeometryBuffersPtr createGeometryBuffers( VertexBufferBase const & vbo
-			, uint64_t vboOffset
-			, VertexLayout const & layout
-			, BufferBase const & ibo
-			, uint64_t iboOffset
-			, IndexType type )const = 0;
+		virtual PipelineLayoutPtr createPipelineLayout( DescriptorSetLayoutCRefArray const & setLayouts
+			, PushConstantRangeCRefArray const & pushConstantRanges )const = 0;
 		/**
 		*\~french
 		*\brief
@@ -218,30 +184,6 @@ namespace renderer
 			, BufferBase const & ibo
 			, uint64_t iboOffset
 			, IndexType type )const = 0;
-		/**
-		*\~french
-		*\brief
-		*	Crée un pipeline.
-		*\param[in] layout
-		*	Le layout du pipeline.
-		*\param[in] program
-		*	Le programme shader.
-		*\param[in] vertexBuffers
-		*	Les tampons de sommets utilisés.
-		*\param[in] renderPass
-		*	La passe de rendu.
-		*\param[in] topology
-		*	La topologie d'affichage des sommets affichés via ce pipeline.
-		*\return
-		*	Le pipeline créé.
-		*/
-		virtual PipelinePtr createPipeline( PipelineLayout const & layout
-			, ShaderProgram const & program
-			, VertexLayoutCRefArray const & vertexLayouts
-			, RenderPass const & renderPass
-			, PrimitiveTopology topology
-			, RasterisationState const & rasterisationState = RasterisationState{}
-			, ColourBlendState const & colourBlendState = ColourBlendState::createDefault() )const = 0;
 		/**
 		*\~french
 		*\brief
@@ -442,6 +384,88 @@ namespace renderer
 		Mat4 infinitePerspective( Angle fovy
 			, float aspect
 			, float zNear )const;
+		/**
+		*\~french
+		*\brief
+		*	Crée tampon de géométries.
+		*\param[in] layout
+		*	Le layout des descripteurs utilisés par le pipeline.
+		*\return
+		*	Le layout créé.
+		*/
+		GeometryBuffersPtr createGeometryBuffers( VertexBufferBase const & vbo
+			, uint64_t vboOffset
+			, VertexLayout const & layout )const;
+		/**
+		*\~french
+		*\brief
+		*	Crée tampon de géométries.
+		*\param[in] vbo
+		*	Le VBO.
+		*\param[in] vboOffset
+		*	L'offset du premier sommet dans le VBO.
+		*\param[in] layout
+		*	Le layout.
+		*\param[in] ibo
+		*	L'IBO.
+		*\param[in] iboOffset
+		*	L'offset du premier sommet dans l'IBO.
+		*\param[in] type
+		*	Le type des indices.
+		*/
+		GeometryBuffersPtr createGeometryBuffers( VertexBufferBase const & vbo
+			, uint64_t vboOffset
+			, VertexLayout const & layout
+			, BufferBase const & ibo
+			, uint64_t iboOffset
+			, IndexType type )const;
+		/**
+		*\~english
+		*\brief
+		*	Creates a pipeline layout.
+		*\return
+		*	The created layout.
+		*\~french
+		*\brief
+		*	Crée un layout de pipeline.
+		*\return
+		*	Le layout créé.
+		*/
+		PipelineLayoutPtr createPipelineLayout()const;
+		/**
+		*\~english
+		*\brief
+		*	Creates a pipeline layout.
+		*\param[in] layout
+		*	The descriptor set layout.
+		*\return
+		*	The created layout.
+		*\~french
+		*\brief
+		*	Crée un layout de pipeline.
+		*\param[in] layout
+		*	Le layout des descripteurs utilisés par le pipeline.
+		*\return
+		*	Le layout créé.
+		*/
+		PipelineLayoutPtr createPipelineLayout( DescriptorSetLayout const & layout )const;
+		/**
+		*\~english
+		*\brief
+		*	Creates a pipeline layout.
+		*\param[in] pushConstantRanges
+		*	The push constants ranges.
+		*\return
+		*	The created layout.
+		*\~french
+		*\brief
+		*	Crée un layout de pipeline.
+		*\param[in] pushConstantRanges
+		*	Les intervalles de push constants.
+		*\return
+		*	Le layout créé.
+		*/
+		PipelineLayoutPtr createPipelineLayout( PushConstantRangeCRefArray const & pushConstantRanges );
 		/**
 		*\~french
 		*\brief

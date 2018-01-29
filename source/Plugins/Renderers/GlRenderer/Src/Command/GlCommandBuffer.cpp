@@ -286,7 +286,7 @@ namespace gl_renderer
 	}
 
 	void CommandBuffer::pushConstants( renderer::PipelineLayout const & layout
-		, renderer::PushConstantsBuffer const & pcb )const
+		, renderer::PushConstantsBufferBase const & pcb )const
 	{
 		m_commands.emplace_back( std::make_unique< PushConstantsCommand >( layout
 			, pcb ) );

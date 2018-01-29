@@ -48,39 +48,6 @@ namespace gl_renderer
 		*/
 		void generateMipmaps()const override;
 		/**
-		*\copydoc	renderer::Texture::makeGeneralLayout
-		*/
-		renderer::ImageMemoryBarrier makeGeneralLayout( renderer::ImageSubresourceRange const & range
-			, renderer::AccessFlags accessFlags )const override;
-		/**
-		*\copydoc	renderer::Texture::makeTransferDestination
-		*/
-		renderer::ImageMemoryBarrier makeTransferDestination( renderer::ImageSubresourceRange const & range )const override;
-		/**
-		*\copydoc	renderer::Texture::makeTransferSource
-		*/
-		renderer::ImageMemoryBarrier makeTransferSource( renderer::ImageSubresourceRange const & range )const override;
-		/**
-		*\copydoc	renderer::Texture::makeShaderInputResource
-		*/
-		renderer::ImageMemoryBarrier makeShaderInputResource( renderer::ImageSubresourceRange const & range )const override;
-		/**
-		*\copydoc	renderer::Texture::makeDepthStencilReadOnly
-		*/
-		renderer::ImageMemoryBarrier makeDepthStencilReadOnly( renderer::ImageSubresourceRange const & range )const override;
-		/**
-		*\copydoc	renderer::Texture::makeColourAttachment
-		*/
-		renderer::ImageMemoryBarrier makeColourAttachment( renderer::ImageSubresourceRange const & range )const override;
-		/**
-		*\copydoc	renderer::Texture::makeDepthStencilAttachment
-		*/
-		renderer::ImageMemoryBarrier makeDepthStencilAttachment( renderer::ImageSubresourceRange const & range )const override;
-		/**
-		*\copydoc	renderer::Texture::makePresentSource
-		*/
-		renderer::ImageMemoryBarrier makePresentSource( renderer::ImageSubresourceRange const & range )const override;
-		/**
 		*\return
 		*	L'image OpenGL.
 		*/
@@ -91,10 +58,6 @@ namespace gl_renderer
 		}
 
 	private:
-		renderer::ImageMemoryBarrier doMakeLayoutTransition( renderer::ImageLayout layout
-			, uint32_t queueFamily
-			, renderer::AccessFlags dstAccessMask
-			, renderer::ImageSubresourceRange const & range )const;
 		/**
 		*\copydoc	renderer::Texture::doSetImage1D
 		*/

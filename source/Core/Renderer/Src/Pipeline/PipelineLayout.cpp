@@ -11,7 +11,8 @@ See LICENSE file in root folder.
 namespace renderer
 {
 	PipelineLayout::PipelineLayout( Device const & device
-		, DescriptorSetLayout const * layout )
+		, DescriptorSetLayoutCRefArray const & layouts
+		, PushConstantRangeCRefArray const & pushConstantRanges )
 	{
 	}
 }

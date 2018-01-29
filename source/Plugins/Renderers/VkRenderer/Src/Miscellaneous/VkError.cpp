@@ -209,6 +209,11 @@ namespace vk_renderer
 				assert( false );
 				break;
 
+			case VK_ERROR_INVALID_SHADER_NV:
+				doGetError() = "One or more shaders failed to compile or link.";
+				assert( false );
+				break;
+
 			default:
 				doGetError() = "Unknown error";
 				assert( false );

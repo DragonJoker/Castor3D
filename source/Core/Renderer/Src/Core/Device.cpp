@@ -4,8 +4,10 @@ See LICENSE file in root folder.
 */
 #include "Core/Device.hpp"
 
+#include "Buffer/GeometryBuffers.hpp"
 #include "Core/Renderer.hpp"
 #include "Core/SwapChain.hpp"
+#include "Pipeline/PipelineLayout.hpp"
 
 namespace renderer
 {
@@ -49,5 +51,47 @@ namespace renderer
 	ClipDirection Device::getClipDirection()const
 	{
 		return m_renderer.getClipDirection();
+	}
+
+	GeometryBuffersPtr Device::createGeometryBuffers( VertexBufferBase const & vbo
+		, uint64_t vboOffset
+		, VertexLayout const & layout )const
+	{
+		return createGeometryBuffers( VertexBufferCRefArray{ vbo }
+			, { vboOffset }
+			, VertexLayoutCRefArray{ layout } );
+	}
+
+	GeometryBuffersPtr Device::createGeometryBuffers( VertexBufferBase const & vbo
+		, uint64_t vboOffset
+		, VertexLayout const & layout
+		, BufferBase const & ibo
+		, uint64_t iboOffset
+		, IndexType type )const
+	{
+		return createGeometryBuffers( VertexBufferCRefArray{ vbo }
+			, { vboOffset }
+			, VertexLayoutCRefArray{ layout }
+			, ibo
+			, iboOffset
+			, type );
+	}
+
+	PipelineLayoutPtr Device::createPipelineLayout()const
+	{
+		return createPipelineLayout( DescriptorSetLayoutCRefArray{}
+		, PushConstantRangeCRefArray{} );
+	}
+
+	PipelineLayoutPtr Device::createPipelineLayout( DescriptorSetLayout const & layout )const
+	{
+		return createPipelineLayout( DescriptorSetLayoutCRefArray{ layout }
+		, PushConstantRangeCRefArray{} );
+	}
+
+	PipelineLayoutPtr Device::createPipelineLayout( PushConstantRangeCRefArray const & pushConstantRanges )
+	{
+		return createPipelineLayout( DescriptorSetLayoutCRefArray{}
+		, PushConstantRangeCRefArray{ pushConstantRanges } );
 	}
 }

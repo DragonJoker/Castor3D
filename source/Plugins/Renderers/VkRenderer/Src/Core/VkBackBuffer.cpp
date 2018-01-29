@@ -16,7 +16,16 @@ namespace vk_renderer
 		, Texture && texture )
 		: renderer::BackBuffer{ device, swapChain, imageIndex }
 		, m_image{ std::move( texture ) }
-		, m_view{ device, m_image, m_image.getType(), format, 0u, 1u, 0u, 1u }
+		, m_view{ device
+			, m_image
+			, m_image.getType()
+			, format
+			, 0u
+			, 1u
+			, 0u
+			, 1u
+			, renderer::ImageLayout::ePresentSrc
+			, renderer::AccessFlag::eMemoryRead }
 	{
 	}
 }

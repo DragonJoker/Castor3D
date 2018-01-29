@@ -29,14 +29,14 @@ namespace renderer
 		, uint32_t size
 		, TextureView const & view )const
 	{
-		assert( size < getBuffer().getSize() );
+		assert( size <= getBuffer().getSize() );
 		doCopyToStagingBuffer( data, size );
 
 		if ( commandBuffer.begin( CommandBufferUsageFlag::eOneTimeSubmit ) )
 		{
 			commandBuffer.memoryBarrier( PipelineStageFlag::eTopOfPipe
 				, PipelineStageFlag::eTransfer
-				, view.getTexture().makeTransferDestination( view.getSubResourceRange() ) );
+				, view.makeTransferDestination() );
 			commandBuffer.copyToImage( BufferImageCopy
 				{
 					0u,
@@ -54,7 +54,7 @@ namespace renderer
 				, view );
 			commandBuffer.memoryBarrier( PipelineStageFlag::eTransfer
 				, PipelineStageFlag::eFragmentShader
-				, view.getTexture().makeShaderInputResource( view.getSubResourceRange() ) );
+				, view.makeShaderInputResource() );
 			bool res = commandBuffer.end();
 
 			if ( !res )
@@ -101,13 +101,13 @@ namespace renderer
 		, uint32_t size
 		, TextureView const & view )const
 	{
-		assert( size < getBuffer().getSize() );
+		assert( size <= getBuffer().getSize() );
 
 		if ( commandBuffer.begin( CommandBufferUsageFlag::eOneTimeSubmit ) )
 		{
 			commandBuffer.memoryBarrier( PipelineStageFlag::eTopOfPipe
 				, PipelineStageFlag::eTransfer
-				, view.getTexture().makeTransferSource( view.getSubResourceRange() ) );
+				, view.makeTransferSource() );
 			commandBuffer.copyToBuffer( BufferImageCopy
 				{
 					0u,
@@ -125,7 +125,7 @@ namespace renderer
 				, getBuffer() );
 			commandBuffer.memoryBarrier( PipelineStageFlag::eTransfer
 				, PipelineStageFlag::eFragmentShader
-				, view.getTexture().makeShaderInputResource( view.getSubResourceRange() ) );
+				, view.makeShaderInputResource() );
 			bool res = commandBuffer.end();
 
 			if ( !res )
@@ -168,7 +168,7 @@ namespace renderer
 	void StagingBuffer::doCopyToStagingBuffer( uint8_t const * data
 		, uint32_t size )const
 	{
-		assert( size < getBuffer().getSize() );
+		assert( size <= getBuffer().getSize() );
 		auto buffer = static_cast< BufferBase const & >( getBuffer() ).lock( 0
 			, size
 			, MemoryMapFlag::eWrite | MemoryMapFlag::eInvalidateRange );
@@ -287,7 +287,7 @@ namespace renderer
 	void StagingBuffer::doCopyFromStagingBuffer( uint8_t * data
 		, uint32_t size )const
 	{
-		assert( size < getBuffer().getSize() );
+		assert( size <= getBuffer().getSize() );
 		auto buffer = static_cast< BufferBase const & >( getBuffer() ).lock( 0
 			, size
 			, MemoryMapFlag::eRead );

@@ -40,7 +40,7 @@ namespace renderer
 		}
 	}
 
-	PushConstantsBuffer::PushConstantsBuffer( ShaderStageFlags stageFlags
+	PushConstantsBufferBase::PushConstantsBufferBase( ShaderStageFlags stageFlags
 		, PushConstantArray const & variables )
 		: m_stageFlags{ stageFlags }
 		, m_variables{ variables }

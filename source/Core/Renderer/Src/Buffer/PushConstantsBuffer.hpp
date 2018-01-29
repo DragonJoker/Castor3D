@@ -60,15 +60,13 @@ namespace renderer
 	*\remarks
 	*	En OpenGL il sera traité comme un ensemble de variables uniformes, alors q'en Vulkan ce sera un bloc de push constants.
 	*/
-	class PushConstantsBuffer
+	class PushConstantsBufferBase
 	{
 	public:
 		/**
 		*\~french
 		*\brief
 		*	Constructeur.
-		*\param[in] device
-		*	Le périphérique logique.
 		*\param[in] stageFlags
 		*	Spécifie les niveaux de shaders qui vont utiliser les push constants dans l'intervalle mis à jour.
 		*\param[in] variables
@@ -76,14 +74,12 @@ namespace renderer
 		*\~english
 		*\brief
 		*	Constructor.
-		*\param[in] device
-		*	The logical device.
 		*\param[in] stageFlags
 		*	Specifies the shader stages that will use the push constants in the updated range.
 		*\param[in] variables
 		*	The constants contained in the buffer.
 		*/
-		PushConstantsBuffer( ShaderStageFlags stageFlags
+		PushConstantsBufferBase( ShaderStageFlags stageFlags
 			, PushConstantArray const & variables );
 		/**
 		*\~english
@@ -167,6 +163,127 @@ namespace renderer
 		PushConstantArray m_variables;
 		uint32_t m_offset;
 		renderer::ByteArray m_data;
+	};
+	/**
+	*\brief
+	*	Classe template wrappant un UniformBufferBase.
+	*/
+	template< typename T >
+	class PushConstantsBuffer
+	{
+	public:
+		/**
+		*\~french
+		*\brief
+		*	Constructeur.
+		*\param[in] stageFlags
+		*	Spécifie les niveaux de shaders qui vont utiliser les push constants dans l'intervalle mis à jour.
+		*\param[in] variables
+		*	Les variables contenues dans le tampon.
+		*\~english
+		*\brief
+		*	Constructor.
+		*\param[in] stageFlags
+		*	Specifies the shader stages that will use the push constants in the updated range.
+		*\param[in] variables
+		*	The constants contained in the buffer.
+		*/
+		PushConstantsBuffer( ShaderStageFlags stageFlags
+			, PushConstantArray const & variables )
+			: m_pcb{ stageFlags, variables }
+		{
+		}
+		/**
+		*\~english
+		*\return
+		*	The base offset.
+		*\~french
+		*\return
+		*	Le décalage de base.
+		*/
+		inline uint32_t getOffset()const
+		{
+			return m_pcb.getOffset();
+		}
+		/**
+		*\~english
+		*\return
+		*	The data size.
+		*\~french
+		*\return
+		*	La taille des données.
+		*/
+		inline uint32_t getSize()const
+		{
+			return m_pcb.getSize();
+		}
+		/**
+		*\~english
+		*\return
+		*	The shader stages that will use the push constants in the updated range.
+		*\~french
+		*\return
+		*	Les niveaux de shaders qui vont utiliser les push constants dans l'intervalle mis à jour.
+		*/
+		inline ShaderStageFlags getStageFlags()const
+		{
+			return m_pcb.getStageFlags();
+		}
+		/**
+		*\~english
+		*\brief
+		*	A pointer to the buffer data.
+		*\~french
+		*\brief
+		*	Un pointeur sur les données du tampon.
+		*/
+		inline T const * getData()const
+		{
+			return reinterpret_cast< T const * >( m_pcb.getData() );
+		}
+		/**
+		*\~english
+		*\brief
+		*	A pointer to the buffer data.
+		*\~french
+		*\brief
+		*	Un pointeur sur les données du tampon.
+		*/
+		inline T * getData()
+		{
+			return reinterpret_cast< T * >( m_pcb.getData() );
+		}
+		/**
+		*\return
+		*	Le début du tableau de constantes.
+		*/
+		inline PushConstantArray::const_iterator begin()const
+		{
+			return m_pcb.begin();
+		}
+		/**
+		*\return
+		*	La fin du tableau de constantes.
+		*/
+		inline PushConstantArray::const_iterator end()const
+		{
+			return m_pcb.end();
+		}
+		/**
+		*\~english
+		*\brief
+		*	A pointer to the buffer data.
+		*\~french
+		*\brief
+		*	Un pointeur sur les données du tampon.
+		*/
+		inline PushConstantsBufferBase const & getBuffer()const
+		{
+			return m_pcb;
+		}
+
+	private:
+		PushConstantsBufferBase m_pcb;
 	};
 }
 

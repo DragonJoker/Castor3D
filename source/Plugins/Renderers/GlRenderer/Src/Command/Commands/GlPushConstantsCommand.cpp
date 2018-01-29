@@ -9,7 +9,7 @@ See LICENSE file in root folder.
 namespace gl_renderer
 {
 	PushConstantsCommand::PushConstantsCommand( renderer::PipelineLayout const & layout
-		, renderer::PushConstantsBuffer const & pcb )
+		, renderer::PushConstantsBufferBase const & pcb )
 		: m_pcb{ pcb }
 		, m_data{ pcb.getData(), pcb.getData() + pcb.getSize() }
 	{

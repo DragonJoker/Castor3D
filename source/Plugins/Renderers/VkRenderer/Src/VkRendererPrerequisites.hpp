@@ -85,6 +85,7 @@
 #include "Miscellaneous/VkBufferImageCopy.hpp"
 #include "Miscellaneous/VkImageBlit.hpp"
 #include "Miscellaneous/VkImageCopy.hpp"
+#include "Miscellaneous/VkPushConstantRange.hpp"
 #include "Pipeline/VkColourBlendState.hpp"
 #include "Pipeline/VkColourBlendStateAttachment.hpp"
 #include "Pipeline/VkDepthStencilState.hpp"
@@ -377,6 +378,29 @@ namespace vk_renderer
 		for ( auto & value : values )
 		{
 			result.emplace_back( convert( value ) );
+		}
+
+		return result;
+	}
+	/**
+	*\brief
+	*	Convertit un tableau de RendererType en tableau de VkType.
+	*\remarks
+	*	Un prérequis à cette fonction est que la fonction VkType convert( RendererType ) existe.
+	*\param[in] values
+	*	Le tableau de RendererType.
+	*\return
+	*	Le tableau de VkType.
+	*/
+	template< typename VkType, typename LibType >
+	std::vector< VkType > convert( std::vector< std::reference_wrapper< LibType const > > const & values )
+	{
+		std::vector< VkType > result;
+		result.reserve( values.size() );
+
+		for ( auto & value : values )
+		{
+			result.emplace_back( convert( value.get() ) );
 		}
 
 		return result;

@@ -19,7 +19,6 @@ See LICENSE file in root folder.
 #include "Image/GlTexture.hpp"
 #include "Image/GlTextureView.hpp"
 #include "Miscellaneous/GlQueryPool.hpp"
-#include "Pipeline/GlPipeline.hpp"
 #include "Pipeline/GlPipelineLayout.hpp"
 #include "Pipeline/GlVertexLayout.hpp"
 #include "RenderPass/GlRenderPass.hpp"
@@ -73,30 +72,6 @@ namespace gl_renderer
 			, stride );
 	}
 
-	renderer::GeometryBuffersPtr Device::createGeometryBuffers( renderer::VertexBufferBase const & vbo
-		, uint64_t vboOffset
-		, renderer::VertexLayout const & layout )const
-	{
-		return std::make_unique< GeometryBuffers >( vbo
-			, vboOffset
-			, layout );
-	}
-
-	renderer::GeometryBuffersPtr Device::createGeometryBuffers( renderer::VertexBufferBase const & vbo
-		, uint64_t vboOffset
-		, renderer::VertexLayout const & layout
-		, renderer::BufferBase const & ibo
-		, uint64_t iboOffset
-		, renderer::IndexType type )const
-	{
-		return std::make_unique< GeometryBuffers >( vbo
-			, vboOffset
-			, layout
-			, ibo
-			, iboOffset
-			, type );
-	}
-
 	renderer::GeometryBuffersPtr Device::createGeometryBuffers( renderer::VertexBufferCRefArray const & vbos
 		, std::vector< uint64_t > vboOffsets
 		, renderer::VertexLayoutCRefArray const & layouts )const
@@ -121,34 +96,12 @@ namespace gl_renderer
 			, type );
 	}
 
-	renderer::PipelineLayoutPtr Device::createPipelineLayout()const
+	renderer::PipelineLayoutPtr Device::createPipelineLayout( renderer::DescriptorSetLayoutCRefArray const & setLayouts
+		, renderer::PushConstantRangeCRefArray const & pushConstantRanges )const
 	{
 		return std::make_unique< PipelineLayout >( *this
-			, nullptr );
-	}
-
-	renderer::PipelineLayoutPtr Device::createPipelineLayout( renderer::DescriptorSetLayout const & layout )const
-	{
-		return std::make_unique< PipelineLayout >( *this
-			, &layout );
-	}
-
-	renderer::PipelinePtr Device::createPipeline( renderer::PipelineLayout const & layout
-		, renderer::ShaderProgram const & program
-		, renderer::VertexLayoutCRefArray const & vertexLayouts
-		, renderer::RenderPass const & renderPass
-		, renderer::PrimitiveTopology topology
-		, renderer::RasterisationState const & rasterisationState
-		, renderer::ColourBlendState const & colourBlendState )const
-	{
-		return std::make_shared< Pipeline >( *this
-			, layout
-			, program
-			, vertexLayouts
-			, renderPass
-			, topology
-			, rasterisationState
-			, colourBlendState );
+			, setLayouts
+			, pushConstantRanges );
 	}
 
 	renderer::DescriptorSetLayoutPtr Device::createDescriptorSetLayout( renderer::DescriptorSetLayoutBindingArray && bindings )const
