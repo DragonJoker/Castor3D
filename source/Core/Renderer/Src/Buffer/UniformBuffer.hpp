@@ -12,6 +12,10 @@ See LICENSE file in root folder.
 namespace renderer
 {
 	/**
+	*\~french
+	*\brief
+	*	A uniform variables buffer.
+	*\~french
 	*\brief
 	*	Représente un tampon de variables uniformes.
 	*/
@@ -19,6 +23,19 @@ namespace renderer
 	{
 	protected:
 		/**
+		*\english
+		*	Constructor.
+		*\param[in] device
+		*	The logical device.
+		*\param[in] count
+		*	The number of instances of the data.
+		*\param[in] size
+		*	The size of an instance, in bytes.
+		*\param[in] target
+		*	The buffer usage flags.
+		*\param[in] flags
+		*	The memory property flags.
+		*\~french
 		*\brief
 		*	Constructeur.
 		*\param[in] device
@@ -49,15 +66,27 @@ namespace renderer
 		*/
 		virtual ~UniformBufferBase() = default;
 		/**
+		*\~english
 		*\brief
-		*	Récupère l'offset dans le buffer pour un nombre d'éléments donné.
-		*\param[in] count
-		*	Le nombre d'éléments.
+		*	Retrieves the aligned size for an element.
+		*\param[in] size
+		*	The size of an element.
 		*\return
-		*	L'offset réel.
+		*	The aligned size.
+		*\~french
+		*\brief
+		*	Récupère la taille alignée pour un élément.
+		*\param[in] size
+		*	La taille d'un élément.
+		*\return
+		*	La taille alignée.
 		*/
-		virtual uint32_t getOffset( uint32_t count )const = 0;
+		virtual uint32_t getAlignedSize( uint32_t size )const = 0;
 		/**
+		*\~english
+		*\return
+		*	The GPU buffer.
+		*\~french
 		*\return
 		*	Le tampon GPU.
 		*/
@@ -66,28 +95,17 @@ namespace renderer
 			return *m_buffer;
 		}
 		/**
+		*\~english
+		*\return
+		*	The size of one element in the buffer.
+		*\~french
 		*\return
 		*	La taille d'une instance des données du tampon.
 		*/
-		inline uint32_t getSize()const
+		inline uint32_t getElementSize()const
 		{
 			return m_size;
 		}
-
-	protected:
-		/**
-		*\brief
-		*	Crée le tampon GPU.
-		*\param[in] count
-		*	Le nombre d'instance des données.
-		*\param[in] target
-		*	Les indicateurs d'utilisation du tampon.
-		*\param[in] flags
-		*	Les indicateurs de mémoire du tampon.
-		*/
-		virtual void doCreateBuffer( uint32_t count
-			, BufferTargets target
-			, MemoryPropertyFlags flags ) = 0;
 
 	protected:
 		Device const & m_device;
@@ -96,6 +114,10 @@ namespace renderer
 		BufferBasePtr m_buffer;
 	};
 	/**
+	*\~french
+	*\brief
+	*	A template class wrapping a UniformBufferBase.
+	*\~french
 	*\brief
 	*	Classe template wrappant un UniformBufferBase.
 	*/
@@ -104,6 +126,17 @@ namespace renderer
 	{
 	public:
 		/**
+		*\english
+		*	Constructor.
+		*\param[in] device
+		*	The logical device.
+		*\param[in] count
+		*	The number of instances of the data.
+		*\param[in] target
+		*	The buffer usage flags.
+		*\param[in] flags
+		*	The memory property flags.
+		*\~french
 		*\brief
 		*	Constructeur.
 		*\param[in] device
@@ -120,6 +153,10 @@ namespace renderer
 			, BufferTargets target
 			, MemoryPropertyFlags flags );
 		/**
+		*\~english
+		*\return
+		*	The N-th instance of the data.
+		*\~french
 		*\return
 		*	La n-ème instance des données.
 		*/
@@ -128,6 +165,10 @@ namespace renderer
 			return m_data[index];
 		}
 		/**
+		*\~english
+		*\return
+		*	The N-th instance of the data.
+		*\~french
 		*\return
 		*	La n-ème instance des données.
 		*/
@@ -136,6 +177,10 @@ namespace renderer
 			return m_data[index];
 		}
 		/**
+		*\~english
+		*\return
+		*	The data.
+		*\~french
 		*\return
 		*	Les données.
 		*/
@@ -144,6 +189,10 @@ namespace renderer
 			return m_data;
 		}
 		/**
+		*\~english
+		*\return
+		*	The data.
+		*\~french
 		*\return
 		*	Les données.
 		*/
@@ -152,18 +201,26 @@ namespace renderer
 			return m_data;
 		}
 		/**
+		*\~english
 		*\brief
-		*	Récupère l'offset dans le buffer pour un nombre d'éléments donné.
-		*\param[in] count
-		*	Le nombre d'éléments.
+		*	Retrieves the aligned size for an element.
 		*\return
-		*	L'offset réel.
+		*	The aligned size.
+		*\~french
+		*\brief
+		*	Récupère la taille alignée pour un élément.
+		*\return
+		*	La taille alignée.
 		*/
-		inline uint32_t getOffset( uint32_t count )const
+		inline uint32_t getAlignedSize()const
 		{
-			return m_ubo->getOffset( count );
+			return m_ubo->getAlignedSize( uint32_t( sizeof( T ) ) );
 		}
 		/**
+		*\~english
+		*\return
+		*	The GPU buffer.
+		*\~french
 		*\return
 		*	Le tampon GPU.
 		*/
@@ -191,7 +248,7 @@ namespace renderer
 			, uint32_t range = 1u )
 		{
 			assert( range + offset <= m_data.size() );
-			auto size = getOffset( 1u );
+			auto size = getAlignedSize();
 
 			if ( auto buffer = m_ubo->getBuffer().lock( offset * size
 				, range * size
@@ -212,8 +269,22 @@ namespace renderer
 		std::vector< T > m_data;
 	};
 	/**
+	*\~french
 	*\brief
-	*	Fonction d'aide à la création d'un Buffer.
+	*	UniformBuffer creation helper function.
+	*\param[in] device
+	*	The logical device.
+	*\param[in] count
+	*	The number of instances of the data.
+	*\param[in] target
+	*	The buffer usage flags.
+	*\param[in] flags
+	*	The memory property flags.
+	*\return
+	*	The created buffer.
+	*\~french
+	*\brief
+	*	Fonction d'aide à la création d'un UniformBuffer.
 	*\param[in] device
 	*	Le périphérique logique.
 	*\param[in] count

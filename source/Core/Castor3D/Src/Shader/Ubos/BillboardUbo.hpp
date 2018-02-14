@@ -21,7 +21,7 @@ namespace castor3d
 	*/
 	class BillboardUbo
 	{
-	private:
+	public:
 		struct Configuration
 		{
 			renderer::Vec2 dimensions;

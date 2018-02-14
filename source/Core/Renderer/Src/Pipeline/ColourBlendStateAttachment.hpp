@@ -52,6 +52,18 @@ namespace renderer
 				| ColourComponentFlag::eB
 				| ColourComponentFlag::eA );
 		/**
+		*\~english
+		*\return
+		*	The hash for this state.
+		*\~french
+		*\return
+		*	Le hash de cet état.
+		*/
+		inline uint32_t getHash()const
+		{
+			return m_hash;
+		}
+		/**
 		*\return
 		*	Le statut d'activation du mélange.
 		*/
@@ -125,7 +137,19 @@ namespace renderer
 		BlendFactor m_dstAlphaBlendFactor;
 		BlendOp m_alphaBlendOp;
 		ColourComponentFlags m_colorWriteMask;
+		uint32_t m_hash;
+		friend bool operator==( ColourBlendStateAttachment const & lhs, ColourBlendStateAttachment const & rhs );
 	};
+
+	inline bool operator==( ColourBlendStateAttachment const & lhs, ColourBlendStateAttachment const & rhs )
+	{
+		return lhs.m_hash == rhs.m_hash;
+	}
+
+	inline bool operator!=( ColourBlendStateAttachment const & lhs, ColourBlendStateAttachment const & rhs )
+	{
+		return !( lhs == rhs );
+	}
 }
 
 #endif

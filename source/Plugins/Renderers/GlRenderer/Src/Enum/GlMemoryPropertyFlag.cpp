@@ -34,7 +34,6 @@ namespace gl_renderer
 		if ( checkFlag( value, gl_renderer::GlMemoryPropertyFlag::GL_MEMORY_PROPERTY_PERSISTENT_BIT ) )
 		{
 			result += sep + "GL_MAP_INVALIDATE_RANGE_BIT";
-			sep = " | ";
 		}
 
 		return result;

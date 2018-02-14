@@ -6,12 +6,12 @@
 
 #include <FrameBuffer/BackBuffers.hpp>
 #include <FrameBuffer/FrameBufferAttachment.hpp>
-#include <FrameBuffer/TextureAttachment.hpp>
+#include <FrameBuffer/FrameBufferAttachment.hpp>
 #include <Mesh/Vertex.hpp>
-#include <Mesh/Buffer/ParticleDeclaration.hpp>
-#include <Mesh/Buffer/ParticleElementDeclaration.hpp>
-#include <Mesh/Buffer/GeometryBuffers.hpp>
-#include <Mesh/Buffer/VertexBuffer.hpp>
+#include <Buffer/ParticleDeclaration.hpp>
+#include <Buffer/ParticleElementDeclaration.hpp>
+#include <Buffer/GeometryBuffers.hpp>
+#include <Buffer/VertexBuffer.hpp>
 #include <Miscellaneous/Parameter.hpp>
 #include <Render/Context.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -159,7 +159,7 @@ namespace GrayScale
 		if ( attach && attach->getAttachmentType() == AttachmentType::eTexture )
 		{
 			m_surface.m_fbo->bind( FrameBufferTarget::eDraw );
-			auto texture = std::static_pointer_cast< TextureAttachment >( attach )->getTexture();
+			auto texture = std::static_pointer_cast< FrameBufferAttachment >( attach )->getTexture();
 			m_surface.m_fbo->clear( BufferComponent::eColour );
 			getRenderSystem()->getCurrentContext()->renderTexture( 
 				m_surface.m_size

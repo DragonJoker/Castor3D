@@ -73,26 +73,38 @@ namespace renderer
 		*\~french
 		*\brief
 		*	Crée une passe de rendu.
-		*\param[in] formats
-		*	Les formats des attaches voulues pour la passe.
+		*\param[in] attaches
+		*	Les attaches voulues pour la passe.
 		*\param[in] subpasses
 		*	Les sous passes (au moins 1 nécéssaire).
 		*\param[in] initialState
 		*	L'état voulu en début de passe.
 		*\param[in] finalState
 		*	L'état voulu en fin de passe.
-		*\param[in] clear
-		*	Dit si l'on veut vider le contenu des images au chargement de la passe.
 		*\param[in] samplesCount
 		*	Le nombre d'échantillons (pour le multisampling).
 		*\return
 		*	La passe créée.
+		*\~english
+		*\brief
+		*	Creates a render pass.
+		*\param[in] attaches
+		*	The attachments pixels formats.
+		*\param[in] subpasses
+		*	The rendersubpasses (at least one is necessary).
+		*\param[in] initialState
+		*	The state wanted at the beginning of the pass.
+		*\param[in] finalState
+		*	The state attained at the end of the pass.
+		*\param[in] samplesCount
+		*	The samples count (for multisampling).
+		*\return
+		*	The created pass.
 		*/
-		virtual RenderPassPtr createRenderPass( std::vector< PixelFormat > const & formats
+		virtual RenderPassPtr createRenderPass( RenderPassAttachmentArray const & attaches
 			, RenderSubpassPtrArray const & subpasses
 			, RenderPassState const & initialState
 			, RenderPassState const & finalState
-			, bool clear = true
 			, SampleCountFlag samplesCount = SampleCountFlag::e1 )const = 0;
 		/**
 		*\~french
@@ -137,6 +149,8 @@ namespace renderer
 		*	The descriptor sets layouts.
 		*\param[in] pushConstantRanges
 		*	The push constants ranges.
+		*\return
+		*	The created layout.
 		*\~french
 		*\brief
 		*	Crée un layout de pipeline.
@@ -144,6 +158,8 @@ namespace renderer
 		*	Les layouts des descripteurs du pipeline.
 		*\param[in] pushConstantRanges
 		*	Les intervalles de push constants.
+		*\return
+		*	Le layout créé.
 		*/
 		virtual PipelineLayoutPtr createPipelineLayout( DescriptorSetLayoutCRefArray const & setLayouts
 			, PushConstantRangeCRefArray const & pushConstantRanges )const = 0;
@@ -453,6 +469,58 @@ namespace renderer
 		*\~english
 		*\brief
 		*	Creates a pipeline layout.
+		*\param[in] pushConstantRange
+		*	The push constants range.
+		*\return
+		*	The created layout.
+		*\~french
+		*\brief
+		*	Crée un layout de pipeline.
+		*\param[in] pushConstantRange
+		*	L'intervalle de push constants.
+		*\return
+		*	Le layout créé.
+		*/
+		PipelineLayoutPtr createPipelineLayout( PushConstantRange const & pushConstantRange )const;
+		/**
+		*\~english
+		*\brief
+		*	Creates a pipeline layout.
+		*\param[in] layout
+		*	The descriptor set layout.
+		*\param[in] pushConstantRange
+		*	The push constants range.
+		*\return
+		*	The created layout.
+		*\~french
+		*\brief
+		*	Crée un layout de pipeline.
+		*\param[in] layout
+		*	Le layout des descripteurs utilisés par le pipeline.
+		*\param[in] pushConstantRange
+		*	L'intervalle de push constants.
+		*\return
+		*	Le layout créé.
+		*/
+		PipelineLayoutPtr createPipelineLayout( DescriptorSetLayout const & layout
+			, PushConstantRange const & pushConstantRange )const;
+		/**
+		*\~english
+		*\brief
+		*	Creates a pipeline layout.
+		*\param[in] setLayouts
+		*	The descriptor sets layouts.
+		*\~french
+		*\brief
+		*	Crée un layout de pipeline.
+		*\param[in] setLayouts
+		*	Les layouts des descripteurs du pipeline.
+		*/
+		PipelineLayoutPtr createPipelineLayout( DescriptorSetLayoutCRefArray const & layouts )const;
+		/**
+		*\~english
+		*\brief
+		*	Creates a pipeline layout.
 		*\param[in] pushConstantRanges
 		*	The push constants ranges.
 		*\return
@@ -465,7 +533,7 @@ namespace renderer
 		*\return
 		*	Le layout créé.
 		*/
-		PipelineLayoutPtr createPipelineLayout( PushConstantRangeCRefArray const & pushConstantRanges );
+		PipelineLayoutPtr createPipelineLayout( PushConstantRangeCRefArray const & pushConstantRanges )const;
 		/**
 		*\~french
 		*\brief

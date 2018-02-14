@@ -48,10 +48,11 @@ See LICENSE file in root folder.
 
 namespace gl_renderer
 {
-	CommandBuffer::CommandBuffer( renderer::Device const & device
+	CommandBuffer::CommandBuffer( Device const & device
 		, renderer::CommandPool const & pool
 		, bool primary )
 		: renderer::CommandBuffer{ device, pool, primary }
+		, m_device{ device }
 	{
 	}
 
@@ -127,7 +128,7 @@ namespace gl_renderer
 		, renderer::PipelineBindPoint bindingPoint )const
 	{
 		m_currentPipeline = &pipeline;
-		m_commands.emplace_back( std::make_unique< BindPipelineCommand >( pipeline, bindingPoint ) );
+		m_commands.emplace_back( std::make_unique< BindPipelineCommand >( m_device, pipeline, bindingPoint ) );
 	}
 
 	void CommandBuffer::bindGeometryBuffers( renderer::GeometryBuffers const & geometryBuffers )const
@@ -169,12 +170,12 @@ namespace gl_renderer
 
 	void CommandBuffer::setViewport( renderer::Viewport const & viewport )const
 	{
-		m_commands.emplace_back( std::make_unique< ViewportCommand >( viewport ) );
+		m_commands.emplace_back( std::make_unique< ViewportCommand >( m_device, viewport ) );
 	}
 
 	void CommandBuffer::setScissor( renderer::Scissor const & scissor )const
 	{
-		m_commands.emplace_back( std::make_unique< ScissorCommand >( scissor ) );
+		m_commands.emplace_back( std::make_unique< ScissorCommand >( m_device, scissor ) );
 	}
 
 	void CommandBuffer::draw( uint32_t vtxCount
@@ -241,8 +242,8 @@ namespace gl_renderer
 	}
 
 	void CommandBuffer::blitImage( renderer::ImageBlit const & blitInfo
-		, renderer::TextureAttachment const & src
-		, renderer::TextureAttachment const & dst
+		, renderer::FrameBufferAttachment const & src
+		, renderer::FrameBufferAttachment const & dst
 		, renderer::Filter filter )const
 	{
 		m_commands.emplace_back( std::make_unique< BlitImageCommand >( blitInfo

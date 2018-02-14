@@ -49,7 +49,19 @@ namespace renderer
 	private:
 		IVec2 m_offset;
 		IVec2 m_size;
+		friend bool operator==( Viewport const & lhs, Viewport const & rhs );
 	};
+
+	inline bool operator==( Viewport const & lhs, Viewport const & rhs )
+	{
+		return lhs.m_offset == rhs.m_offset
+			&& lhs.m_size == rhs.m_size;
+	}
+
+	inline bool operator!=( Viewport const & lhs, Viewport const & rhs )
+	{
+		return !( lhs == rhs );
+	}
 }
 
 #endif

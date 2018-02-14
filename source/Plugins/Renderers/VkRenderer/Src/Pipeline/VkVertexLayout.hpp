@@ -16,10 +16,6 @@
 
 namespace vk_renderer
 {
-	/**
-	*\brief
-	*	Classe template wrappant un vk::VertexBuffer.
-	*/
 	class VertexLayout
 		: public renderer::VertexLayout
 	{

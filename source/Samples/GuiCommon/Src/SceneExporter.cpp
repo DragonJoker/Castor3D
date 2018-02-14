@@ -10,9 +10,9 @@
 #include <Mesh/Skeleton/Skeleton.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Vertex.hpp>
-#include <Mesh/Buffer/GeometryBuffers.hpp>
-#include <Mesh/Buffer/IndexBuffer.hpp>
-#include <Mesh/Buffer/VertexBuffer.hpp>
+#include <Buffer/GeometryBuffers.hpp>
+#include <Buffer/IndexBuffer.hpp>
+#include <Buffer/VertexBuffer.hpp>
 #include <Render/RenderWindow.hpp>
 #include <Scene/Scene.hpp>
 #include <Texture/Sampler.hpp>

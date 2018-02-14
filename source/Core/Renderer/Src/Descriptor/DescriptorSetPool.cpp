@@ -20,4 +20,10 @@ namespace renderer
 		assert( m_allocated + count <= m_maxSets );
 		m_allocated = std::min( m_allocated + count, m_maxSets );
 	}
+
+	void DescriptorSetPool::deallocate( uint32_t count )const
+	{
+		assert( m_allocated >= count );
+		m_allocated -= count;
+	}
 }

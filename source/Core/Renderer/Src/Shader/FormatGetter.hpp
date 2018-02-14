@@ -38,6 +38,12 @@ namespace renderer
 		};
 
 		template<>
+		struct FormatGetter< Mat4 >
+		{
+			static AttributeFormat constexpr value = AttributeFormat::eMat4f;
+		};
+
+		template<>
 		struct FormatGetter< int >
 		{
 			static AttributeFormat constexpr value = AttributeFormat::eInt;

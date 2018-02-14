@@ -4,7 +4,7 @@
 #include <Material/Material.hpp>
 #include <Event/Frame/FunctorEvent.hpp>
 #include <Mesh/Submesh.hpp>
-#include <Mesh/Buffer/GeometryBuffers.hpp>
+#include <Buffer/GeometryBuffers.hpp>
 #include <Scene/Geometry.hpp>
 #include <Scene/Scene.hpp>
 

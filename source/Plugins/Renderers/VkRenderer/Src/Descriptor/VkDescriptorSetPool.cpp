@@ -9,10 +9,12 @@ namespace vk_renderer
 {
 	DescriptorSetPool::DescriptorSetPool( Device const & device
 		, DescriptorSetLayout const & layout
-		, uint32_t maxSets )
+		, uint32_t maxSets
+		, bool automaticFree )
 		: renderer::DescriptorSetPool{ layout, maxSets }
 		, m_device{ device }
 		, m_layout{ layout }
+		, m_automaticFree{ automaticFree }
 	{
 		std::vector< VkDescriptorPoolSize > poolSizes;
 
@@ -21,7 +23,7 @@ namespace vk_renderer
 			poolSizes.push_back(
 			{
 				convert( binding.getDescriptorType() ),         // type
-				maxSets                                         // descriptorCount
+				maxSets * binding.getDescriptorsCount()         // descriptorCount
 			} );
 		}
 
@@ -29,13 +31,15 @@ namespace vk_renderer
 		{
 			VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,      // sType
 			nullptr,                                            // pNext
-			0,                                                  // flags
+			m_automaticFree                                     // flags
+				? 0u
+				: VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT,
 			maxSets,                                            // maxSets
 			uint32_t( poolSizes.size() ),                       // poolSizeCount
 			poolSizes.data()                                    // pPoolSizes
 		};
 		DEBUG_DUMP( createInfo );
-		auto res = vk::CreateDescriptorPool( m_device
+		auto res = m_device.vkCreateDescriptorPool( m_device
 			, &createInfo
 			, nullptr
 			, &m_pool );
@@ -48,12 +52,13 @@ namespace vk_renderer
 
 	DescriptorSetPool::~DescriptorSetPool()
 	{
-		vk::DestroyDescriptorPool( m_device, m_pool, nullptr );
+		m_device.vkDestroyDescriptorPool( m_device, m_pool, nullptr );
 	}
 
-	renderer::DescriptorSetPtr DescriptorSetPool::createDescriptorSet()const
+	renderer::DescriptorSetPtr DescriptorSetPool::createDescriptorSet( uint32_t bindingPoint )const
 	{
 		return std::make_unique< DescriptorSet >( m_device
-			, *this );
+			, *this
+			, bindingPoint );
 	}
 }

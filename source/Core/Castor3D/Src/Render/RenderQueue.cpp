@@ -8,7 +8,7 @@
 #include "Material/Pass.hpp"
 #include "Mesh/Mesh.hpp"
 #include "Mesh/Submesh.hpp"
-#include "Mesh/Buffer/GeometryBuffers.hpp"
+#include "Buffer/GeometryBuffers.hpp"
 #include "Mesh/Skeleton/Skeleton.hpp"
 #include "Render/RenderPass.hpp"
 #include "Render/RenderPipeline.hpp"

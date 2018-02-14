@@ -10,23 +10,23 @@ using namespace castor;
 
 namespace castor3d
 {
-	BillboardRenderNode::BillboardRenderNode( RenderPipeline & p_pipeline
-		, PassRenderNode && p_passNode
-		, ModelMatrixUbo & p_modelMatrixBuffer
-		, ModelUbo & p_modelBuffer
-		, GeometryBuffers & p_buffers
-		, SceneNode & p_sceneNode
-		, BillboardBase & p_data
-		, BillboardUbo & p_billboardUbo )
-		: BillboardListRenderNode{ p_pipeline
-			, std::move( p_passNode )
-			, p_modelMatrixBuffer
-			, p_modelBuffer
-			, p_buffers
-			, p_sceneNode
-			, p_data
-			, p_data }
-		, m_billboardUbo{ p_billboardUbo }
+	BillboardRenderNode::BillboardRenderNode( RenderPipeline & pipeline
+		, PassRenderNode && passNode
+		, UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixBuffer
+		, UniformBufferOffset< ModelUbo::Configuration > modelBuffer
+		, renderer::GeometryBuffers const & buffers
+		, SceneNode & sceneNode
+		, BillboardBase & data
+		, UniformBufferOffset< BillboardUbo::Configuration > billboardUbo )
+		: BillboardListRenderNode{ pipeline
+			, std::move( passNode )
+			, modelMatrixBuffer
+			, modelBuffer
+			, buffers
+			, sceneNode
+			, data
+			, data }
+		, m_billboardUbo{ billboardUbo }
 	{
 	}
 }

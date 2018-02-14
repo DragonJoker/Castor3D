@@ -20,7 +20,7 @@
 #include <RenderPass/RenderPassState.hpp>
 #include <RenderPass/RenderSubpass.hpp>
 #include <RenderPass/RenderSubpassState.hpp>
-#include <RenderPass/TextureAttachment.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
 #include <Shader/ShaderProgram.hpp>
 
 #include <GlslSource.hpp>
@@ -220,12 +220,19 @@ namespace castor3d
 		renderer::RenderPassPtr doCreateRenderPass( renderer::Device const & device
 			, renderer::PixelFormat format )
 		{
-			std::vector< renderer::PixelFormat > formats{ { format } };
+			std::vector< renderer::PixelFormat > formats
+			{
+				format
+			};
+			renderer::RenderPassAttachmentArray attaches
+			{
+				{ format, true }
+			};
 			renderer::RenderSubpassPtrArray subpasses;
 			subpasses.emplace_back( device.createRenderSubpass( formats
 				, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::AccessFlag::eColourAttachmentWrite } ) );
-			return device.createRenderPass( formats
+			return device.createRenderPass( attaches
 				, std::move( subpasses )
 				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 					, renderer::AccessFlag::eColourAttachmentWrite
@@ -239,8 +246,8 @@ namespace castor3d
 			, renderer::TextureView const & view
 			, Size const & size )
 		{
-			renderer::TextureAttachmentPtrArray attaches;
-			attaches.emplace_back( std::make_unique< renderer::TextureAttachment >( view ) );
+			renderer::FrameBufferAttachmentArray attaches;
+			attaches.emplace_back( *( renderPass.begin() ), view );
 			return renderPass.createFrameBuffer( renderer::UIVec2{ size }
 				, std::move( attaches ) );
 		}
@@ -356,7 +363,6 @@ namespace castor3d
 		auto & program = cache.getNewProgram( false );
 		program.createModule( vertex.getSource(), renderer::ShaderStageFlag::eVertex );
 		program.createModule( blurX.getSource(), renderer::ShaderStageFlag::eFragment );
-		program.link();
 
 		m_blurXPass = doCreateRenderPass( device, m_format );
 		m_blurXFbo = doCreateFbo( *m_blurXPass, m_intermediate.getTexture()->getView(), m_size );
@@ -385,7 +391,6 @@ namespace castor3d
 		auto & program = cache.getNewProgram( false );
 		program.createModule( vertex.getSource(), renderer::ShaderStageFlag::eVertex );
 		program.createModule( blurY.getSource(), renderer::ShaderStageFlag::eFragment );
-		program.link();
 
 		m_blurYPass = doCreateRenderPass( device, m_format );
 		m_blurYFbo = doCreateFbo( *m_blurYPass, m_intermediate.getTexture()->getView(), m_size );

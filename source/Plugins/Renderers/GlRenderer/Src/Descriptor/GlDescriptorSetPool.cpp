@@ -5,13 +5,14 @@
 namespace gl_renderer
 {
 	DescriptorSetPool::DescriptorSetPool( renderer::DescriptorSetLayout const & layout
-		, uint32_t maxSets )
+		, uint32_t maxSets
+		, bool automaticFree )
 		: renderer::DescriptorSetPool{ layout, maxSets }
 	{
 	}
 
-	renderer::DescriptorSetPtr DescriptorSetPool::createDescriptorSet()const
+	renderer::DescriptorSetPtr DescriptorSetPool::createDescriptorSet( uint32_t bindingPoint )const
 	{
-		return std::make_unique< DescriptorSet >( *this );
+		return std::make_unique< DescriptorSet >( *this, bindingPoint );
 	}
 }

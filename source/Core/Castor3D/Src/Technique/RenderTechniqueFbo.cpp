@@ -1,7 +1,7 @@
 #include "RenderTechniqueFbo.hpp"
 
 #include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/TextureAttachment.hpp"
+#include "FrameBuffer/FrameBufferAttachment.hpp"
 #include "Technique/RenderTechnique.hpp"
 #include "Texture/TextureLayout.hpp"
 

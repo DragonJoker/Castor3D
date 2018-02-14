@@ -1,4 +1,4 @@
-#include "Pipeline/VkPipeline.hpp"
+﻿#include "Pipeline/VkPipeline.hpp"
 
 #include "Core/VkDevice.hpp"
 #include "Core/VkRenderingResources.hpp"
@@ -56,7 +56,7 @@ namespace vk_renderer
 
 	renderer::Pipeline & Pipeline::finish()
 	{
-		// Les informations li�es aux shaders utilis�s.
+		// Les informations liées aux shaders utilisés.
 		std::vector< VkPipelineShaderStageCreateInfo > shaderStage;
 
 		for ( auto & module : m_shader )
@@ -73,7 +73,7 @@ namespace vk_renderer
 			} );
 		}
 
-		// Les informations des donn�es contenues dans les tampons de sommets.
+		// Les informations des données contenues dans les tampons de sommets.
 		std::vector< VkVertexInputBindingDescription > vertexBindingDescriptions;
 		std::vector< VkVertexInputAttributeDescription > vertexAttributeDescriptions;
 		vertexBindingDescriptions.reserve( m_vertexLayouts.size() );
@@ -125,7 +125,7 @@ namespace vk_renderer
 				: nullptr,
 		};
 
-		// Les �tats dynamiques, le cas �ch�ant
+		// Les états dynamiques, le cas échéant
 		std::vector< VkDynamicState > dynamicStates;
 
 		if ( !m_viewport )
@@ -147,7 +147,7 @@ namespace vk_renderer
 			dynamicStates.data()                                          // pDynamicStates
 		};
 
-		// Enfin, on cr�e le pipeline !!
+		// Enfin, on crée le pipeline !!
 		VkGraphicsPipelineCreateInfo pipeline
 		{
 			VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO,
@@ -178,7 +178,7 @@ namespace vk_renderer
 		};
 		DEBUG_DUMP( pipeline );
 		DEBUG_WRITE( "pipeline.log" );
-		auto res = vk::CreateGraphicsPipelines( m_device
+		auto res = m_device.vkCreateGraphicsPipelines( m_device
 			, VK_NULL_HANDLE
 			, 1
 			, &pipeline
@@ -195,7 +195,7 @@ namespace vk_renderer
 
 	Pipeline::~Pipeline()
 	{
-		vk::DestroyPipeline( m_device, m_pipeline, nullptr );
+		m_device.vkDestroyPipeline( m_device, m_pipeline, nullptr );
 	}
 
 	renderer::Pipeline & Pipeline::multisampleState( renderer::MultisampleState const & state )

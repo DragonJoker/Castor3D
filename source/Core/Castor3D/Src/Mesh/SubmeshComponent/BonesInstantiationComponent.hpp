@@ -48,7 +48,9 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
-		C3D_API void gather( renderer::VertexBufferCRefArray & buffers )override;
+		C3D_API void gather( renderer::VertexBufferCRefArray & buffers
+			, std::vector< uint64_t > offsets
+			, renderer::VertexLayoutCRefArray & layouts )override;
 		/**
 		 *\~english
 		 *\return		The skeleton.
@@ -110,14 +112,8 @@ namespace castor3d
 		C3D_API static castor::String const Name;
 
 	private:
-		//!\~english	The instantiation component.
-		//!\~french		Le composant d'instantiation.
 		InstantiationComponent const & m_instantiation;
-		//!\~english	The skinning component.
-		//!\~french		Le composant de skinning.
 		BonesComponent const & m_bones;
-		//!\~english	The bones buffer (instantiation).
-		//!\~french		Le tampon de bones (instanciation).
 		ShaderBufferUPtr m_instancedBonesBuffer;
 	};
 }

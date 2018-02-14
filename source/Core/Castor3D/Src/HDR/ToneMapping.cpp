@@ -66,7 +66,6 @@ namespace castor3d
 		auto pxl = doCreate();
 		program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
 		program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
-		program.link();
 		renderer::DescriptorSetLayoutBindingArray bindings
 		{
 			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },

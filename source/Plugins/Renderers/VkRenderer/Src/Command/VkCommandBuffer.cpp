@@ -32,7 +32,7 @@ See LICENSE file in root folder.
 #include <Buffer/PushConstantsBuffer.hpp>
 #include <Buffer/StagingBuffer.hpp>
 #include <Buffer/VertexBuffer.hpp>
-#include <RenderPass/TextureAttachment.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
 
 namespace vk_renderer
 {
@@ -68,7 +68,7 @@ namespace vk_renderer
 			1                                         // commandBufferCount
 		};
 		DEBUG_DUMP( cmdAllocInfo );
-		auto res = vk::AllocateCommandBuffers( m_device, &cmdAllocInfo, &m_commandBuffer );
+		auto res = m_device.vkAllocateCommandBuffers( m_device, &cmdAllocInfo, &m_commandBuffer );
 
 		if ( !checkError( res ) )
 		{
@@ -78,7 +78,7 @@ namespace vk_renderer
 
 	CommandBuffer::~CommandBuffer()
 	{
-		vk::FreeCommandBuffers( m_device, m_pool, 1, &m_commandBuffer );
+		m_device.vkFreeCommandBuffers( m_device, m_pool, 1, &m_commandBuffer );
 	}
 
 	bool CommandBuffer::begin( renderer::CommandBufferUsageFlags flags )const
@@ -91,7 +91,7 @@ namespace vk_renderer
 			nullptr                                      // pInheritanceInfo
 		};
 		DEBUG_DUMP( cmdBufInfo );
-		auto res = vk::BeginCommandBuffer( m_commandBuffer, &cmdBufInfo );
+		auto res = m_device.vkBeginCommandBuffer( m_commandBuffer, &cmdBufInfo );
 		m_currentPipeline = nullptr;
 		return checkError( res );
 	}
@@ -123,21 +123,21 @@ namespace vk_renderer
 			&m_inheritanceInfo                           // pInheritanceInfo
 		};
 		DEBUG_DUMP( cmdBufInfo );
-		auto res = vk::BeginCommandBuffer( m_commandBuffer, &cmdBufInfo );
+		auto res = m_device.vkBeginCommandBuffer( m_commandBuffer, &cmdBufInfo );
 		m_currentPipeline = nullptr;
 		return checkError( res );
 	}
 
 	bool CommandBuffer::end()const
 	{
-		auto res = vk::EndCommandBuffer( m_commandBuffer );
+		auto res = m_device.vkEndCommandBuffer( m_commandBuffer );
 		m_currentPipeline = nullptr;
 		return checkError( res );
 	}
 
 	bool CommandBuffer::reset( renderer::CommandBufferResetFlags flags )const
 	{
-		auto res = vk::ResetCommandBuffer( m_commandBuffer, convert( flags ) );
+		auto res = m_device.vkResetCommandBuffer( m_commandBuffer, convert( flags ) );
 		return checkError( res );
 	}
 
@@ -169,25 +169,25 @@ namespace vk_renderer
 			vkclearValues.data()                                // pClearValues
 		};
 		DEBUG_DUMP( beginInfo );
-		vk::CmdBeginRenderPass( m_commandBuffer
+		m_device.vkCmdBeginRenderPass( m_commandBuffer
 			, &beginInfo
 			, convert( contents ) );
 	}
 
 	void CommandBuffer::nextSubpass( renderer::SubpassContents contents )const
 	{
-		vk::CmdNextSubpass( m_commandBuffer, convert( contents ) );
+		m_device.vkCmdNextSubpass( m_commandBuffer, convert( contents ) );
 	}
 
 	void CommandBuffer::endRenderPass()const
 	{
-		vk::CmdEndRenderPass( m_commandBuffer );
+		m_device.vkCmdEndRenderPass( m_commandBuffer );
 	}
 
 	void CommandBuffer::executeCommands( renderer::CommandBufferCRefArray const & commands )const
 	{
 		auto vkCommands = makeVkArray< VkCommandBuffer >( convert( commands ) );
-		vk::CmdExecuteCommands( m_commandBuffer
+		m_device.vkCmdExecuteCommands( m_commandBuffer
 			, uint32_t( vkCommands.size() )
 			, vkCommands.data() );
 	}
@@ -197,7 +197,7 @@ namespace vk_renderer
 	{
 		auto vkcolour = convert( colour );
 		auto vksubresourceRange = convert( image.getSubResourceRange() );
-		vk::CmdClearColorImage( m_commandBuffer
+		m_device.vkCmdClearColorImage( m_commandBuffer
 			, static_cast< Texture const & >( image.getTexture() )
 			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 			, &vkcolour
@@ -208,7 +208,7 @@ namespace vk_renderer
 	void CommandBuffer::bindPipeline( renderer::Pipeline const & pipeline
 		, renderer::PipelineBindPoint bindingPoint )const
 	{
-		vk::CmdBindPipeline( m_commandBuffer
+		m_device.vkCmdBindPipeline( m_commandBuffer
 			, convert( bindingPoint )
 			, static_cast< Pipeline const & >( pipeline ) );
 		m_currentPipeline = &static_cast< Pipeline const & >( pipeline );
@@ -226,7 +226,7 @@ namespace vk_renderer
 			offsets.emplace_back( vbo.offset );
 		}
 
-		vk::CmdBindVertexBuffers( m_commandBuffer
+		m_device.vkCmdBindVertexBuffers( m_commandBuffer
 			, 0u
 			, uint32_t( buffers.size() )
 			, makeVkArray< VkBuffer >( buffers ).data()
@@ -235,7 +235,7 @@ namespace vk_renderer
 		if ( geometryBuffers.hasIbo() )
 		{
 			auto & ibo = geometryBuffers.getIbo();
-			vk::CmdBindIndexBuffer( m_commandBuffer
+			m_device.vkCmdBindIndexBuffer( m_commandBuffer
 				, static_cast< Buffer const & >( ibo.buffer )
 				, ibo.offset
 				, convert( ibo.type ) );
@@ -249,7 +249,7 @@ namespace vk_renderer
 		auto vkafter = convert( after );
 		auto vkbefore = convert( before );
 		auto vktb = convert( transitionBarrier );
-		vk::CmdPipelineBarrier( m_commandBuffer
+		m_device.vkCmdPipelineBarrier( m_commandBuffer
 			, vkbefore
 			, vkafter
 			, 0
@@ -268,7 +268,7 @@ namespace vk_renderer
 		auto vkafter = convert( after );
 		auto vkbefore = convert( before );
 		auto vktb = convert( transitionBarrier );
-		vk::CmdPipelineBarrier( m_commandBuffer
+		m_device.vkCmdPipelineBarrier( m_commandBuffer
 			, vkbefore
 			, vkafter
 			, 0
@@ -286,10 +286,10 @@ namespace vk_renderer
 	{
 		assert( m_currentPipeline && "No pipeline bound." );
 		VkDescriptorSet set{ static_cast< DescriptorSet const & >( descriptorSet ) };
-		vk::CmdBindDescriptorSets( m_commandBuffer
+		m_device.vkCmdBindDescriptorSets( m_commandBuffer
 			, convert( bindingPoint )
 			, static_cast< PipelineLayout const & >( layout )
-			, 0u
+			, descriptorSet.getBindingPoint()
 			, 1u
 			, &set
 			, 0u
@@ -300,7 +300,7 @@ namespace vk_renderer
 	{
 		assert( m_currentPipeline && "No pipeline bound." );
 		auto vkviewport = convert( viewport );
-		vk::CmdSetViewport( m_commandBuffer
+		m_device.vkCmdSetViewport( m_commandBuffer
 			, 0u
 			, 1u
 			, &vkviewport );
@@ -310,7 +310,7 @@ namespace vk_renderer
 	{
 		assert( m_currentPipeline && "No pipeline bound." );
 		auto vkscissor = convert( scissor );
-		vk::CmdSetScissor( m_commandBuffer
+		m_device.vkCmdSetScissor( m_commandBuffer
 			, 0u
 			, 1u
 			, &vkscissor );
@@ -322,7 +322,7 @@ namespace vk_renderer
 		, uint32_t firstInstance )const
 	{
 		assert( m_currentPipeline && "No pipeline bound." );
-		vk::CmdDraw( m_commandBuffer
+		m_device.vkCmdDraw( m_commandBuffer
 			, vtxCount
 			, instCount
 			, firstVertex
@@ -336,7 +336,7 @@ namespace vk_renderer
 		, uint32_t firstInstance )const
 	{
 		assert( m_currentPipeline && "No pipeline bound." );
-		vk::CmdDrawIndexed( m_commandBuffer
+		m_device.vkCmdDrawIndexed( m_commandBuffer
 			, indexCount
 			, instCount
 			, firstIndex
@@ -350,7 +350,7 @@ namespace vk_renderer
 	{
 		auto vkcopyInfo = convert( copyInfo );
 		DEBUG_DUMP( vkcopyInfo );
-		vk::CmdCopyBufferToImage( m_commandBuffer
+		m_device.vkCmdCopyBufferToImage( m_commandBuffer
 			, static_cast< Buffer const & >( src )
 			, static_cast< Texture const & >( dst.getTexture() )
 			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
@@ -364,7 +364,7 @@ namespace vk_renderer
 	{
 		auto vkcopyInfo = convert( copyInfo );
 		DEBUG_DUMP( vkcopyInfo );
-		vk::CmdCopyImageToBuffer( m_commandBuffer
+		m_device.vkCmdCopyImageToBuffer( m_commandBuffer
 			, static_cast< Texture const & >( src.getTexture() )
 			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 			, static_cast< Buffer const & >( dst )
@@ -378,7 +378,7 @@ namespace vk_renderer
 	{
 		auto vkcopyInfo = convert( copyInfo );
 		DEBUG_DUMP( vkcopyInfo );
-		vk::CmdCopyBuffer( m_commandBuffer
+		m_device.vkCmdCopyBuffer( m_commandBuffer
 			, static_cast< Buffer const & >( src )
 			, static_cast< Buffer const & >( dst )
 			, 1
@@ -391,7 +391,7 @@ namespace vk_renderer
 	{
 		auto vkcopyInfo = convert( copyInfo );
 		DEBUG_DUMP( vkcopyInfo );
-		vk::CmdCopyImage( m_commandBuffer
+		m_device.vkCmdCopyImage( m_commandBuffer
 			, static_cast< Texture const & >( src.getTexture() )
 			, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
 			, static_cast< Texture const & >( dst.getTexture() )
@@ -401,16 +401,16 @@ namespace vk_renderer
 	}
 
 	void CommandBuffer::blitImage( renderer::ImageBlit const & blit
-		, renderer::TextureAttachment const & src
-		, renderer::TextureAttachment const & dst
+		, renderer::FrameBufferAttachment const & src
+		, renderer::FrameBufferAttachment const & dst
 		, renderer::Filter filter )const
 	{
 		auto vkblitInfo = convert( blit );
 		DEBUG_DUMP( vkblitInfo );
-		vk::CmdBlitImage( m_commandBuffer
-			, static_cast< Texture const & >( static_cast< renderer::TextureAttachment const & >( src ).getTexture() )
+		m_device.vkCmdBlitImage( m_commandBuffer
+			, static_cast< Texture const & >( static_cast< renderer::FrameBufferAttachment const & >( src ).getTexture() )
 			, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-			, static_cast< Texture const & >( static_cast< renderer::TextureAttachment const & >( dst ).getTexture() )
+			, static_cast< Texture const & >( static_cast< renderer::FrameBufferAttachment const & >( dst ).getTexture() )
 			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 			, 1
 			, &vkblitInfo
@@ -421,7 +421,7 @@ namespace vk_renderer
 		, uint32_t firstQuery
 		, uint32_t queryCount )const
 	{
-		vk::CmdResetQueryPool( m_commandBuffer
+		m_device.vkCmdResetQueryPool( m_commandBuffer
 			, static_cast< QueryPool const & >( pool )
 			, firstQuery
 			, queryCount );
@@ -431,7 +431,7 @@ namespace vk_renderer
 		, uint32_t query
 		, renderer::QueryControlFlags flags )const
 	{
-		vk::CmdBeginQuery( m_commandBuffer
+		m_device.vkCmdBeginQuery( m_commandBuffer
 			, static_cast< QueryPool const & >( pool )
 			, query
 			, convert( flags ) );
@@ -440,7 +440,7 @@ namespace vk_renderer
 	void CommandBuffer::endQuery( renderer::QueryPool const & pool
 		, uint32_t query )const
 	{
-		vk::CmdEndQuery( m_commandBuffer
+		m_device.vkCmdEndQuery( m_commandBuffer
 			, static_cast< QueryPool const & >( pool )
 			, query );
 	}
@@ -449,7 +449,7 @@ namespace vk_renderer
 		, renderer::QueryPool const & pool
 		, uint32_t query )const
 	{
-		vk::CmdWriteTimestamp( m_commandBuffer
+		m_device.vkCmdWriteTimestamp( m_commandBuffer
 			, convert( pipelineStage )
 			, static_cast< QueryPool const & >( pool )
 			, query );
@@ -458,7 +458,7 @@ namespace vk_renderer
 	void CommandBuffer::pushConstants( renderer::PipelineLayout const & layout
 		, renderer::PushConstantsBufferBase const & pcb )const
 	{
-		vk::CmdPushConstants( m_commandBuffer
+		m_device.vkCmdPushConstants( m_commandBuffer
 			, static_cast< PipelineLayout const & >( layout )
 			, convert( pcb.getStageFlags() )
 			, pcb.getOffset()
@@ -470,7 +470,7 @@ namespace vk_renderer
 		, uint32_t groupCountY
 		, uint32_t groupCountZ )const
 	{
-		vk::CmdDispatch( m_commandBuffer
+		m_device.vkCmdDispatch( m_commandBuffer
 			, groupCountX
 			, groupCountY
 			, groupCountZ );

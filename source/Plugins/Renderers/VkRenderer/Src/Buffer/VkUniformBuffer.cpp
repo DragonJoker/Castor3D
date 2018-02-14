@@ -33,23 +33,14 @@ namespace vk_renderer
 			, target
 			, flags }
 	{
-		doCreateBuffer( count
-			, target
-			, flags );
-	}
-
-	uint32_t UniformBuffer::getOffset( uint32_t count )const
-	{
-		return count * doGetAlignedSize( count
-			, static_cast< Device const & >( m_device ).getPhysicalDevice().getProperties().limits.minUniformBufferOffsetAlignment );
-	}
-
-	void UniformBuffer::doCreateBuffer( uint32_t count
-		, renderer::BufferTargets target
-		, renderer::MemoryPropertyFlags flags )
-	{
-		m_buffer = m_device.createBuffer( count * getOffset( 1u )
+		m_buffer = m_device.createBuffer( count * getAlignedSize( getElementSize() )
 			, target | renderer::BufferTarget::eUniformBuffer
 			, flags );
+	}
+
+	uint32_t UniformBuffer::getAlignedSize( uint32_t size )const
+	{
+		return doGetAlignedSize( size
+			, static_cast< Device const & >( m_device ).getPhysicalDevice().getProperties().limits.minUniformBufferOffsetAlignment );
 	}
 }

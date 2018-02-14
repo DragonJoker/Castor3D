@@ -6,12 +6,12 @@
 
 #include <FrameBuffer/BackBuffers.hpp>
 #include <FrameBuffer/FrameBufferAttachment.hpp>
-#include <FrameBuffer/TextureAttachment.hpp>
+#include <FrameBuffer/FrameBufferAttachment.hpp>
 #include <Mesh/Vertex.hpp>
-#include <Mesh/Buffer/ParticleDeclaration.hpp>
-#include <Mesh/Buffer/ParticleElementDeclaration.hpp>
-#include <Mesh/Buffer/GeometryBuffers.hpp>
-#include <Mesh/Buffer/VertexBuffer.hpp>
+#include <Buffer/ParticleDeclaration.hpp>
+#include <Buffer/ParticleElementDeclaration.hpp>
+#include <Buffer/GeometryBuffers.hpp>
+#include <Buffer/VertexBuffer.hpp>
 #include <Miscellaneous/Parameter.hpp>
 #include <Render/Context.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -298,7 +298,7 @@ namespace Bloom
 
 		if ( attach && attach->getAttachmentType() == AttachmentType::eTexture )
 		{
-			auto const & texture = *std::static_pointer_cast< TextureAttachment >( attach )->getTexture();
+			auto const & texture = *std::static_pointer_cast< FrameBufferAttachment >( attach )->getTexture();
 
 			doHiPassFilter( texture );
 			doDownSample( texture );

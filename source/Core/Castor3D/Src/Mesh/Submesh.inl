@@ -184,6 +184,16 @@ namespace castor3d
 		return *m_vertexBuffer;
 	}
 
+	inline renderer::VertexLayout const & Submesh::getVertexLayout()const
+	{
+		return *m_vertexLayout;
+	}
+
+	inline renderer::GeometryBuffers const & Submesh::getGeometryBuffers()const
+	{
+		return *m_geometryBuffers;
+	}
+
 	inline renderer::Buffer< uint32_t > const & Submesh::getIndexBuffer()const
 	{
 		return *m_indexBuffer;

@@ -59,7 +59,7 @@ namespace vk_renderer
 		: m_device{ device }
 		, m_familyIndex{ familyIndex }
 	{
-		vk::GetDeviceQueue( m_device, familyIndex, 0, &m_queue );
+		m_device.vkGetDeviceQueue( m_device, familyIndex, 0, &m_queue );
 	}
 
 	bool Queue::submit( renderer::CommandBuffer const & commandBuffer
@@ -78,7 +78,7 @@ namespace vk_renderer
 			nullptr                                                                     // pSignalSemaphores
 		};
 		DEBUG_DUMP( submitInfo );
-		auto res = vk::QueueSubmit( m_queue
+		auto res = m_device.vkQueueSubmit( m_queue
 			, 1u
 			, &submitInfo
 			, fence ? static_cast< VkFence const & >( *static_cast< Fence const * >( fence ) ) : VK_NULL_HANDLE );
@@ -105,7 +105,7 @@ namespace vk_renderer
 			&static_cast< VkSemaphore const & >( static_cast< Semaphore const & >( semaphoreToSignal ) )   // pSignalSemaphores
 		};
 		DEBUG_DUMP( submitInfo );
-		auto res = vk::QueueSubmit( m_queue
+		auto res = m_device.vkQueueSubmit( m_queue
 			, 1u
 			, &submitInfo
 			, fence ? static_cast< VkFence const & >( *static_cast< Fence const * >( fence ) ) : VK_NULL_HANDLE );
@@ -138,7 +138,7 @@ namespace vk_renderer
 			}
 		};
 		DEBUG_DUMP( submitInfo );
-		auto res = vk::QueueSubmit( m_queue
+		auto res = m_device.vkQueueSubmit( m_queue
 			, static_cast< uint32_t >( submitInfo.size() )
 			, submitInfo.data()
 			, fence ? static_cast< VkFence const & >( *static_cast< Fence const * >( fence ) ) : VK_NULL_HANDLE );
@@ -173,12 +173,12 @@ namespace vk_renderer
 			nullptr                                                  // pResults
 		};
 		DEBUG_DUMP( presentInfo );
-		return vk::QueuePresentKHR( m_queue, &presentInfo );
+		return m_device.vkQueuePresentKHR( m_queue, &presentInfo );
 	}
 
 	bool Queue::waitIdle()const
 	{
-		auto res = vk::QueueWaitIdle( m_queue );
+		auto res = m_device.vkQueueWaitIdle( m_queue );
 		return checkError( res );
 	}
 }

@@ -80,18 +80,37 @@ namespace renderer
 	PipelineLayoutPtr Device::createPipelineLayout()const
 	{
 		return createPipelineLayout( DescriptorSetLayoutCRefArray{}
-		, PushConstantRangeCRefArray{} );
+			, PushConstantRangeCRefArray{} );
 	}
 
 	PipelineLayoutPtr Device::createPipelineLayout( DescriptorSetLayout const & layout )const
 	{
 		return createPipelineLayout( DescriptorSetLayoutCRefArray{ layout }
-		, PushConstantRangeCRefArray{} );
+			, PushConstantRangeCRefArray{} );
 	}
 
-	PipelineLayoutPtr Device::createPipelineLayout( PushConstantRangeCRefArray const & pushConstantRanges )
+	PipelineLayoutPtr Device::createPipelineLayout( PushConstantRange const & pushConstantRange )const
 	{
 		return createPipelineLayout( DescriptorSetLayoutCRefArray{}
-		, PushConstantRangeCRefArray{ pushConstantRanges } );
+			, PushConstantRangeCRefArray{ pushConstantRange } );
+	}
+
+	PipelineLayoutPtr Device::createPipelineLayout( DescriptorSetLayout const & layout
+		, PushConstantRange const & pushConstantRange )const
+	{
+		return createPipelineLayout( DescriptorSetLayoutCRefArray{ layout }
+			, PushConstantRangeCRefArray{ pushConstantRange } );
+	}
+
+	PipelineLayoutPtr Device::createPipelineLayout( DescriptorSetLayoutCRefArray const & layouts )const
+	{
+		return createPipelineLayout( layouts
+			, PushConstantRangeCRefArray{} );
+	}
+
+	PipelineLayoutPtr Device::createPipelineLayout( PushConstantRangeCRefArray const & pushConstantRanges )const
+	{
+		return createPipelineLayout( DescriptorSetLayoutCRefArray{}
+			, PushConstantRangeCRefArray{ pushConstantRanges } );
 	}
 }

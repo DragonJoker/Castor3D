@@ -94,7 +94,6 @@ namespace gl_renderer
 		if ( checkFlag( value, GlMemoryBarrierFlag::GL_MEMORY_BARRIER_QUERY_BUFFER ) )
 		{
 			result += sep + "GL_QUERY_BUFFER_BARRIER_BIT";
-			sep = " | ";
 		}
 
 		return result;

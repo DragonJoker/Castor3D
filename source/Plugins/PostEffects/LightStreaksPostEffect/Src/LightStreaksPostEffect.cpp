@@ -6,12 +6,12 @@
 
 #include <FrameBuffer/BackBuffers.hpp>
 #include <FrameBuffer/FrameBufferAttachment.hpp>
-#include <FrameBuffer/TextureAttachment.hpp>
+#include <FrameBuffer/FrameBufferAttachment.hpp>
 #include <Mesh/Vertex.hpp>
-#include <Mesh/Buffer/ParticleDeclaration.hpp>
-#include <Mesh/Buffer/ParticleElementDeclaration.hpp>
-#include <Mesh/Buffer/GeometryBuffers.hpp>
-#include <Mesh/Buffer/VertexBuffer.hpp>
+#include <Buffer/ParticleDeclaration.hpp>
+#include <Buffer/ParticleElementDeclaration.hpp>
+#include <Buffer/GeometryBuffers.hpp>
+#include <Buffer/VertexBuffer.hpp>
 #include <Miscellaneous/Parameter.hpp>
 #include <Render/Context.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -311,7 +311,7 @@ namespace light_streaks
 
 		if ( attach && attach->getAttachmentType() == castor3d::AttachmentType::eTexture )
 		{
-			auto const & texture = *std::static_pointer_cast< castor3d::TextureAttachment >( attach )->getTexture();
+			auto const & texture = *std::static_pointer_cast< castor3d::FrameBufferAttachment >( attach )->getTexture();
 
 			doHiPassFilter( texture );
 			doKawaseBlur( texture, framebuffer );

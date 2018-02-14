@@ -33,6 +33,18 @@ namespace renderer
 		*/
 		void addAttachment( ColourBlendStateAttachment const & attachment );
 		/**
+		*\~english
+		*\return
+		*	The hash for this state.
+		*\~french
+		*\return
+		*	Le hash de cet état.
+		*/
+		inline uint8_t getHash()const
+		{
+			return m_hash;
+		}
+		/**
 		*\return
 		*	Le statut d'activation de l'opérateur logique.
 		*/
@@ -74,11 +86,32 @@ namespace renderer
 		}
 
 	private:
-		bool const m_logicOpEnable;
-		LogicOp const m_logicOp;
-		Vec4 const m_blendConstants;
+		bool m_logicOpEnable;
+		LogicOp m_logicOp;
+		Vec4 m_blendConstants;
 		ColourBlendStateAttachmentArray m_attachs;
+		uint8_t m_hash;
+		friend bool operator==( ColourBlendState const & lhs, ColourBlendState const & rhs );
 	};
+
+	inline bool operator==( ColourBlendState const & lhs, ColourBlendState const & rhs )
+	{
+		auto result = lhs.m_hash == rhs.m_hash
+			&& lhs.m_blendConstants == rhs.m_blendConstants
+			&& lhs.m_attachs.size() == rhs.m_attachs.size();
+
+		for ( size_t i = 0; i < lhs.m_attachs.size() && result; ++i )
+		{
+			result = lhs.m_attachs[i] == rhs.m_attachs[i];
+		}
+
+		return result;
+	}
+
+	inline bool operator!=( ColourBlendState const & lhs, ColourBlendState const & rhs )
+	{
+		return !( lhs == rhs );
+	}
 }
 
 #endif

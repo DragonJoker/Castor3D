@@ -48,7 +48,7 @@ namespace gl_renderer
 		, renderer::ImageTiling tiling
 		, renderer::MemoryPropertyFlags memoryFlags )
 	{
-		if ( m_layerCount )
+		if ( m_layerCount > 1 )
 		{
 			m_target = GL_TEXTURE_1D_ARRAY;
 		}
@@ -59,11 +59,11 @@ namespace gl_renderer
 
 		glLogCall( gl::BindTexture, m_target, m_texture );
 
-		if ( m_layerCount )
+		if ( m_layerCount > 1 )
 		{
 			glLogCall( gl::TexStorage2D
 				, m_target
-				, 1
+				, GLsizei( m_mipmapLevels )
 				, gl_renderer::getInternal( m_format )
 				, m_size[0]
 				, m_layerCount );
@@ -72,7 +72,7 @@ namespace gl_renderer
 		{
 			glLogCall( gl::TexStorage1D
 				, m_target
-				, 1
+				, GLsizei( m_mipmapLevels )
 				, gl_renderer::getInternal( m_format )
 				, m_size[0] );
 		}
@@ -84,7 +84,7 @@ namespace gl_renderer
 		, renderer::ImageTiling tiling
 		, renderer::MemoryPropertyFlags memoryFlags )
 	{
-		if ( m_layerCount )
+		if ( m_layerCount > 1 )
 		{
 			if ( m_samples > renderer::SampleCountFlag::e1 )
 			{
@@ -106,7 +106,7 @@ namespace gl_renderer
 
 		glLogCall( gl::BindTexture, m_target, m_texture );
 
-		if ( m_layerCount )
+		if ( m_layerCount > 1 )
 		{
 			if ( m_samples > renderer::SampleCountFlag::e1 )
 			{
@@ -123,7 +123,7 @@ namespace gl_renderer
 			{
 				glLogCall( gl::TexStorage3D
 					, m_target
-					, 1
+					, GLsizei( m_mipmapLevels )
 					, gl_renderer::getInternal( m_format )
 					, m_size[0]
 					, m_size[1]
@@ -144,7 +144,7 @@ namespace gl_renderer
 		{
 			glLogCall( gl::TexStorage2D
 				, m_target
-				, 1
+				, GLsizei( m_mipmapLevels )
 				, gl_renderer::getInternal( m_format )
 				, m_size[0]
 				, m_size[1] );
@@ -161,7 +161,7 @@ namespace gl_renderer
 		glLogCall( gl::BindTexture, m_target, m_texture );
 		glLogCall( gl::TexStorage3D
 			, m_target
-			, 1
+			, GLsizei( m_mipmapLevels )
 			, gl_renderer::getInternal( m_format )
 			, m_size[0]
 			, m_size[1]

@@ -39,7 +39,9 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
-		C3D_API void gather( renderer::VertexBufferCRefArray & buffers )override;
+		C3D_API void gather( renderer::VertexBufferCRefArray & buffers
+			, std::vector< uint64_t > offsets
+			, renderer::VertexLayoutCRefArray & layouts )override;
 		/**
 		 *\~english
 		 *\return		The VertexBuffer.
@@ -86,13 +88,11 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const Name;
+		C3D_API static uint32_t constexpr BindingPoint = 1u;
 
 	private:
-		//!\~english	The animated vertex buffer.
-		//!\~french		Le tampon de sommets animés.
 		renderer::VertexBufferPtr< InterleavedVertex > m_animBuffer;
-		//!\~english	The animated vertex buffer data.
-		//!\~french		Les données du tampon de sommets animés.
+		renderer::VertexLayoutPtr m_animLayout;
 		InterleavedVertexArray m_data;
 	};
 }

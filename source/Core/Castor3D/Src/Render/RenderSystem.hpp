@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Miscellaneous/GpuInformations.hpp"
 #include "Miscellaneous/GpuObjectTracker.hpp"
-#include "Mesh/Buffer/GpuBufferPool.hpp"
+#include "Buffer/GpuBufferPool.hpp"
 
 #include <stack>
 

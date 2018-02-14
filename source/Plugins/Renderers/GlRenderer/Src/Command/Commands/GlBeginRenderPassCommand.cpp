@@ -19,6 +19,7 @@ namespace gl_renderer
 		, m_frameBuffer{ static_cast< FrameBuffer const & >( frameBuffer ) }
 		, m_clearValues{ clearValues }
 	{
+		assert( m_clearValues.size() == m_frameBuffer.getSize() );
 	}
 
 	void BeginRenderPassCommand::apply()const
@@ -26,12 +27,17 @@ namespace gl_renderer
 		glLogCommand( "BeginRenderPassCommand" );
 		glLogCall( gl::BindFramebuffer, GL_FRAMEBUFFER, m_frameBuffer.getFrameBuffer() );
 
-		if ( m_renderPass.getClear() )
-		{
-			GLint colourIndex = 0u;
-			GLint depthStencilIndex = 0u;
+		GLint colourIndex = 0u;
+		GLint depthStencilIndex = 0u;
+		auto it = m_frameBuffer.begin();
 
-			for ( auto & clearValue : m_clearValues )
+		for ( size_t i = 0; i < m_frameBuffer.getSize(); ++i )
+		{
+			auto & clearValue = m_clearValues[i];
+			auto & attach = *it;
+			++it;
+
+			if ( attach.getAttachment().clear )
 			{
 				if ( clearValue.isColour() )
 				{

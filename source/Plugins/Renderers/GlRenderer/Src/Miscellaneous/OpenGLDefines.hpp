@@ -44,7 +44,6 @@ namespace gl_renderer
 	typedef struct __GLsync *GLsync;
 
 	static GLuint constexpr GL_INVALID_INDEX = ~GLuint( 0u );
-	static GLuint constexpr GL_TEXTURE0 = 0x84C0;
 	static GLuint constexpr GL_NO_ERROR = 0;
 	static GLboolean constexpr GL_TRUE = 1;
 	static GLboolean constexpr GL_FALSE = 0;
@@ -207,6 +206,7 @@ namespace gl_renderer
 	using PFN_glGenTextures = void ( GLAPIENTRY * )( GLsizei n, GLuint * textures );
 	using PFN_glGenerateMipmap = void ( GLAPIENTRY * )( GLenum target );
 	using PFN_glGetError = GLenum( GLAPIENTRY * )( void );
+	using PFN_glGetFloatv = void ( GLAPIENTRY * )( GLenum pname, GLfloat * data );
 	using PFN_glGetIntegerv = void ( GLAPIENTRY * )( GLenum pname, GLint * data );
 	using PFN_glGetProgramInfoLog = void ( GLAPIENTRY * ) ( GLuint program, GLsizei bufSize, GLsizei* length, GLchar* infoLog );
 	using PFN_glGetProgramiv = void ( GLAPIENTRY * ) ( GLuint program, GLenum pname, GLint* param );

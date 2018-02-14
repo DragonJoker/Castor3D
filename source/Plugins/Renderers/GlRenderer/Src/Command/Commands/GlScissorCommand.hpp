@@ -24,12 +24,14 @@ namespace gl_renderer
 		*\param[in] scissor
 		*	Le scissor.
 		*/
-		ScissorCommand( renderer::Scissor const & scissor );
+		ScissorCommand( Device const & device
+			, renderer::Scissor const & scissor );
 
 		void apply()const override;
 		CommandPtr clone()const override;
 
 	private:
+		Device const & m_device;
 		renderer::Scissor m_scissor;
 	};
 }

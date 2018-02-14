@@ -7,6 +7,7 @@ See LICENSE file in root folder.
 #include "VkRendererPrerequisites.hpp"
 
 #include <RenderPass/RenderPass.hpp>
+#include <RenderPass/RenderPassAttachment.hpp>
 #include <RenderPass/RenderPassState.hpp>
 
 namespace vk_renderer
@@ -28,7 +29,7 @@ namespace vk_renderer
 		*\param[in] device
 		*	La connexion logique au GPU.
 		*\param[in] formats
-		*	Les formats des attaches voulues pour la passe.
+		*	Les attaches voulues pour la passe.
 		*\param[in] subpasses
 		*	Les sous passes (au moins 1 nécéssaire).
 		*\param[in] initialState
@@ -52,17 +53,14 @@ namespace vk_renderer
 		*	The state wanted at the beginning of the pass.
 		*\param[in] finalState
 		*	The state attained at the end of the pass.
-		*\param[in] clear
-		*	Tells if we want to clear the images at the beginning of the pass.
 		*\param[in] samplesCount
 		*	The samples count (for multisampling).
 		*/
 		RenderPass( Device const & device
-			, std::vector< renderer::PixelFormat > const & formats
+			, renderer::RenderPassAttachmentArray const & attaches
 			, renderer::RenderSubpassPtrArray const & subpasses
 			, renderer::RenderPassState const & initialState
 			, renderer::RenderPassState const & finalState
-			, bool clear
 			, renderer::SampleCountFlag samplesCount );
 		/**
 		*\~french
@@ -99,7 +97,7 @@ namespace vk_renderer
 		*	The created frame buffer.
 		*/
 		renderer::FrameBufferPtr createFrameBuffer( renderer::UIVec2 const & dimensions
-			, renderer::TextureAttachmentPtrArray && textures )const override;
+			, renderer::FrameBufferAttachmentArray && textures )const override;
 		std::vector< VkClearValue > const & getClearValues (renderer::ClearValueArray const & clearValues)const;
 		/**
 		*\~french
@@ -116,7 +114,6 @@ namespace vk_renderer
 
 	private:
 		Device const & m_device;
-		std::vector< renderer::PixelFormat > m_formats;
 		VkRenderPass m_renderPass{};
 		renderer::SampleCountFlag m_samplesCount{};
 		RenderSubpassCRefArray m_subpasses;

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This file belongs to Renderer.
 See LICENSE file in root folder.
 */
@@ -13,7 +13,7 @@ namespace renderer
 	/**
 	*\~french
 	*\brief
-	*	Etat de multi-�chantillonnage.
+	*	Etat de multi-échantillonnage.
 	*/
 	class MultisampleState
 	{
@@ -22,17 +22,17 @@ namespace renderer
 		*\brief
 		*	Constructeur.
 		*\param[in] flags
-		*	Les indicateurs de l'�tat.
+		*	Les indicateurs de l'état.
 		*\param[in] rasterisationSamples
-		*	Le nombre d'�chantillons par pixel, lors de la rast�risation.
+		*	Le nombre d'échantillons par pixel, lors de la rastérisation.
 		*\param[in] sampleShadingEnable
-		*	D�termine si l'ex�cution du shader de fragment s'ex�cute par fragment (\p false) ou par �chantillon (\p true).
+		*	Détermine si l'exécution du shader de fragment s'exécute par fragment (\p false) ou par échantillon (\p true).
 		*\param[in] minSampleShading
-		*	La fraction minimale de shader par �chantillon.
+		*	La fraction minimale de shader par échantillon.
 		*\param[in] alphaToCoverageEnable
-		*	Dit si une valeur de couverture temporaire est g�n�r�e, � partir de la composante alpha de la premi�re couleur sortie du fragment.
+		*	Dit si une valeur de couverture temporaire est générée, à partir de la composante alpha de la première couleur sortie du fragment.
 		*\param[in] alphaToOneEnable
-		*	Dit si la composante alpha de la premi�re couleur sortie du fragment est remplac�e par 1.
+		*	Dit si la composante alpha de la première couleur sortie du fragment est remplacée par 1.
 		*/
 		MultisampleState( MultisampleStateFlags flags = 0
 			, SampleCountFlag rasterisationSamples = SampleCountFlag::e1
@@ -46,17 +46,17 @@ namespace renderer
 		*\param[in] flags
 		*	Les indicateurs de l'�tat.
 		*\param[in] rasterisationSamples
-		*	Le nombre d'�chantillons par pixel, lors de la rast�risation.
+		*	Le nombre d'échantillons par pixel, lors de la rastérisation.
 		*\param[in] sampleShadingEnable
-		*	D�termine si l'ex�cution du shader de fragment s'ex�cute par fragment (\p false) ou par �chantillon (\p true).
+		*	Détermine si l'exécution du shader de fragment s'exécute par fragment (\p false) ou par échantillon (\p true).
 		*\param[in] minSampleShading
-		*	La fraction minimale de shader par �chantillon.
+		*	La fraction minimale de shader par échantillon.
 		*\param[in] sampleMask
-		*	Le masque de couverture, combin� via un ET binaire avec l'information de couverture g�n�r�e lors de la rast�risation.
+		*	Le masque de couverture, combiné via un ET binaire avec l'information de couverture générée lors de la rastérisation.
 		*\param[in] alphaToCoverageEnable
-		*	Dit si une valeur de couverture temporaire est g�n�r�e, � partir de la composante alpha de la premi�re couleur sortie du fragment.
+		*	Dit si une valeur de couverture temporaire est générée, à partir de la composante alpha de la première couleur sortie du fragment.
 		*\param[in] alphaToOneEnable
-		*	Dit si la composante alpha de la premi�re couleur sortie du fragment est remplac�e par 1.
+		*	Dit si la composante alpha de la première couleur sortie du fragment est remplacée par 1.
 		*/
 		MultisampleState( MultisampleStateFlags flags
 			, SampleCountFlag rasterisationSamples
@@ -66,8 +66,20 @@ namespace renderer
 			, bool alphaToCoverageEnable
 			, bool alphaToOneEnable );
 		/**
+		*\~english
 		*\return
-		*	Les indicateurs de l'�tat.
+		*	The hash for this state.
+		*\~french
+		*\return
+		*	Le hash de cet état.
+		*/
+		inline uint64_t getHash()const
+		{
+			return m_hash;
+		}
+		/**
+		*\return
+		*	Les indicateurs de l'état.
 		*/
 		inline MultisampleStateFlags getFlags()const
 		{
@@ -75,7 +87,7 @@ namespace renderer
 		}
 		/**
 		*\return
-		*	Le nombre d'�chantillons par pixel, lors de la rast�risation.
+		*	Le nombre d'échantillons par pixel, lors de la rast�risation.
 		*/
 		inline SampleCountFlag getRasterisationSamples()const
 		{
@@ -83,7 +95,7 @@ namespace renderer
 		}
 		/**
 		*\return
-		*	D�termine si l'ex�cution du shader de fragment s'ex�cute par fragment (\p false) ou par �chantillon (\p true).
+		*	D�termine si l'ex�cution du shader de fragment s'ex�cute par fragment (\p false) ou par échantillon (\p true).
 		*/
 		inline bool isSampleShadingEnabled()const
 		{
@@ -91,7 +103,7 @@ namespace renderer
 		}
 		/**
 		*\return
-		*	La fraction minimale de shader par �chantillon.
+		*	La fraction minimale de shader par échantillon.
 		*/
 		inline float getMinSampleShading()const
 		{
@@ -99,7 +111,7 @@ namespace renderer
 		}
 		/**
 		*\return
-		*	Le masque de couverture, combin� via un ET binaire avec l'information de couverture g�n�r�e lors de la rast�risation.
+		*	Le masque de couverture, combiné via un ET binaire avec l'information de couverture générée lors de la rast�risation.
 		*/
 		inline uint32_t const & getSampleMask()const
 		{
@@ -107,7 +119,7 @@ namespace renderer
 		}
 		/**
 		*\return
-		*	Dit si une valeur de couverture temporaire est g�n�r�e, � partir de la composante alpha de la premi�re couleur sortie du fragment.
+		*	Dit si une valeur de couverture temporaire est générée, � partir de la composante alpha de la première couleur sortie du fragment.
 		*/
 		inline bool isAlphaToCoverageEnabled()const
 		{
@@ -115,7 +127,7 @@ namespace renderer
 		}
 		/**
 		*\return
-		*	Dit si la composante alpha de la premi�re couleur sortie du fragment est remplac�e par 1.
+		*	Dit si la composante alpha de la première couleur sortie du fragment est remplac�e par 1.
 		*/
 		inline bool isAlphaToOneEnabled()const
 		{
@@ -130,7 +142,20 @@ namespace renderer
 		uint32_t m_sampleMask;
 		bool m_alphaToCoverageEnable;
 		bool m_alphaToOneEnable;
+		uint64_t m_hash;
+		friend bool operator==( MultisampleState const & lhs, MultisampleState const & rhs );
 	};
+
+	inline bool operator==( MultisampleState const & lhs, MultisampleState const & rhs )
+	{
+		return lhs.m_hash == rhs.m_hash
+			&& lhs.m_minSampleShading == rhs.m_minSampleShading;
+	}
+
+	inline bool operator!=( MultisampleState const & lhs, MultisampleState const & rhs )
+	{
+		return !( lhs == rhs );
+	}
 }
 
 #endif

@@ -44,6 +44,18 @@ namespace renderer
 			, uint32_t writeMask = 0xFFFFFFFFu
 			, uint32_t reference = 0u );
 		/**
+		*\~english
+		*\return
+		*	The hash for this state.
+		*\~french
+		*\return
+		*	Le hash de cet état.
+		*/
+		inline uint16_t getHash()const
+		{
+			return m_hash;
+		}
+		/**
 		*\return
 		*	L'opération lors d'un échec du test de stencil.
 		*/
@@ -108,7 +120,22 @@ namespace renderer
 		uint32_t m_compareMask;
 		uint32_t m_writeMask;
 		uint32_t m_reference;
+		uint16_t m_hash;
+		friend bool operator==( StencilOpState const & lhs, StencilOpState const & rhs );
 	};
+
+	inline bool operator==( StencilOpState const & lhs, StencilOpState const & rhs )
+	{
+		return lhs.m_hash == rhs.m_hash
+			&& lhs.m_compareMask == rhs.m_compareMask
+			&& lhs.m_writeMask == rhs.m_writeMask
+			&& lhs.m_reference == rhs.m_reference;
+	}
+
+	inline bool operator!=( StencilOpState const & lhs, StencilOpState const & rhs )
+	{
+		return !( lhs == rhs );
+	}
 }
 
 #endif

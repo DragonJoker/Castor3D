@@ -46,7 +46,8 @@ namespace renderer
 		m_format = format;
 		m_type = TextureType::e1D;
 		m_size = UIVec3{ size, 0u, 0u };
-		m_layerCount = 0u;
+		m_layerCount = 1u;
+		m_mipmapLevels = 1u;
 		m_samples = SampleCountFlag::e1;
 		doSetImage1D( usageFlags
 			, tiling
@@ -62,7 +63,8 @@ namespace renderer
 		m_format = format;
 		m_type = TextureType::e2D;
 		m_size = UIVec3{ size[0], size[1], 0u };
-		m_layerCount = 0;
+		m_layerCount = 1u;
+		m_mipmapLevels = 1u;
 		m_samples = samples;
 		doSetImage2D( usageFlags
 			, tiling
@@ -78,14 +80,15 @@ namespace renderer
 		m_format = format;
 		m_type = TextureType::e3D;
 		m_size = size;
-		m_layerCount = 0;
+		m_layerCount = 1u;
+		m_mipmapLevels = 1u;
 		m_samples = samples;
 		doSetImage3D( usageFlags
 			, tiling
 			, renderer::MemoryPropertyFlag::eDeviceLocal );
 	}
 
-	void Texture::setImage( PixelFormat format
+	void Texture::setImageArray( PixelFormat format
 		, uint32_t size
 		, uint32_t layerCount
 		, ImageUsageFlags usageFlags
@@ -95,13 +98,14 @@ namespace renderer
 		m_type = TextureType::e1DArray;
 		m_size = UIVec3{ size, 0u, 0u };
 		m_layerCount = layerCount;
+		m_mipmapLevels = 1u;
 		m_samples = SampleCountFlag::e1;
 		doSetImage1D( usageFlags
 			, tiling
 			, renderer::MemoryPropertyFlag::eDeviceLocal );
 	}
 
-	void Texture::setImage( PixelFormat format
+	void Texture::setImageArray( PixelFormat format
 		, UIVec2 const & size
 		, uint32_t layerCount
 		, ImageUsageFlags usageFlags
@@ -111,6 +115,96 @@ namespace renderer
 		m_type = TextureType::e2DArray;
 		m_size = UIVec3{ size[0], size[1], 0u };
 		m_layerCount = layerCount;
+		m_mipmapLevels = 1u;
+		m_samples = SampleCountFlag::e1;
+		doSetImage2D( usageFlags
+			, tiling
+			, renderer::MemoryPropertyFlag::eDeviceLocal );
+	}
+
+	void Texture::setImage( PixelFormat format
+		, uint32_t size
+		, uint32_t mipmapLevels
+		, ImageUsageFlags usageFlags
+		, ImageTiling tiling )
+	{
+		m_format = format;
+		m_type = TextureType::e1D;
+		m_size = UIVec3{ size, 0u, 0u };
+		m_layerCount = 1u;
+		m_mipmapLevels = mipmapLevels;
+		m_samples = SampleCountFlag::e1;
+		doSetImage1D( usageFlags
+			, tiling
+			, renderer::MemoryPropertyFlag::eDeviceLocal );
+	}
+
+	void Texture::setImage( PixelFormat format
+		, UIVec2 const & size
+		, uint32_t mipmapLevels
+		, ImageUsageFlags usageFlags
+		, ImageTiling tiling
+		, SampleCountFlag samples )
+	{
+		m_format = format;
+		m_type = TextureType::e2D;
+		m_size = UIVec3{ size[0], size[1], 0u };
+		m_layerCount = 1u;
+		m_mipmapLevels = mipmapLevels;
+		m_samples = samples;
+		doSetImage2D( usageFlags
+			, tiling
+			, renderer::MemoryPropertyFlag::eDeviceLocal );
+	}
+
+	void Texture::setImage( PixelFormat format
+		, UIVec3 const & size
+		, uint32_t mipmapLevels
+		, ImageUsageFlags usageFlags
+		, ImageTiling tiling
+		, SampleCountFlag samples )
+	{
+		m_format = format;
+		m_type = TextureType::e3D;
+		m_size = size;
+		m_layerCount = 1u;
+		m_mipmapLevels = mipmapLevels;
+		m_samples = samples;
+		doSetImage3D( usageFlags
+			, tiling
+			, renderer::MemoryPropertyFlag::eDeviceLocal );
+	}
+
+	void Texture::setImageArray( PixelFormat format
+		, uint32_t size
+		, uint32_t layerCount
+		, uint32_t mipmapLevels
+		, ImageUsageFlags usageFlags
+		, ImageTiling tiling )
+	{
+		m_format = format;
+		m_type = TextureType::e1DArray;
+		m_size = UIVec3{ size, 0u, 0u };
+		m_layerCount = layerCount;
+		m_mipmapLevels = mipmapLevels;
+		m_samples = SampleCountFlag::e1;
+		doSetImage1D( usageFlags
+			, tiling
+			, renderer::MemoryPropertyFlag::eDeviceLocal );
+	}
+
+	void Texture::setImageArray( PixelFormat format
+		, UIVec2 const & size
+		, uint32_t layerCount
+		, uint32_t mipmapLevels
+		, ImageUsageFlags usageFlags
+		, ImageTiling tiling )
+	{
+		m_format = format;
+		m_type = TextureType::e2DArray;
+		m_size = UIVec3{ size[0], size[1], 0u };
+		m_layerCount = layerCount;
+		m_mipmapLevels = mipmapLevels;
 		m_samples = SampleCountFlag::e1;
 		doSetImage2D( usageFlags
 			, tiling

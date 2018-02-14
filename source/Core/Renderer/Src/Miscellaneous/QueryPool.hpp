@@ -18,7 +18,7 @@ namespace renderer
 	*/
 	class QueryPool
 	{
-	public:
+	protected:
 		/**
 		*\~english
 		*\brief
@@ -47,6 +47,8 @@ namespace renderer
 			, QueryType type
 			, uint32_t count
 			, QueryPipelineStatisticFlags pipelineStatistics );
+
+	public:
 		/**
 		*\~english
 		*\brief

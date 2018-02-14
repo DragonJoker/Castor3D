@@ -40,7 +40,6 @@ namespace gl_renderer
 		if ( checkFlag( value, gl_renderer::GlShaderStageFlag::GL_SHADER_STAGE_COMPUTE ) )
 		{
 			result += sep + "GL_COMPUTE_SHADER";
-			sep = " | ";
 		}
 
 		return result;

@@ -24,7 +24,7 @@ namespace vk_renderer
 			range,                     // range
 		};
 		DEBUG_DUMP( createInfo );
-		auto res = vk::CreateBufferView( m_device
+		auto res = m_device.vkCreateBufferView( m_device
 			, &createInfo
 			, nullptr
 			, &m_view );
@@ -39,7 +39,7 @@ namespace vk_renderer
 	{
 		if ( m_view )
 		{
-			vk::DestroyBufferView( m_device
+			m_device.vkDestroyBufferView( m_device
 				, m_view
 				, nullptr );
 		}

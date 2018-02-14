@@ -21,7 +21,7 @@
 #include <RenderPass/RenderPassState.hpp>
 #include <RenderPass/RenderSubpass.hpp>
 #include <RenderPass/RenderSubpassState.hpp>
-#include <RenderPass/TextureAttachment.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
 #include <Shader/ShaderProgram.hpp>
 
 #include <GlslSource.hpp>
@@ -158,7 +158,18 @@ namespace castor3d
 	void ShadowMapPoint::doInitialise()
 	{
 		renderer::UIVec2 size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize };
-		std::vector< renderer::PixelFormat > formats{ { PixelFormat::eD24, PixelFormat::eAL32F, PixelFormat::eL32F } };
+		std::vector< renderer::PixelFormat > formats
+		{
+			PixelFormat::eD24,
+			PixelFormat::eAL32F,
+			PixelFormat::eL32F
+		};
+		renderer::RenderPassAttachmentArray rpAttaches
+		{
+			{ PixelFormat::eD24, true },
+			{ PixelFormat::eAL32F, true },
+			{ PixelFormat::eL32F, true }
+		};
 		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
 		renderer::RenderSubpassPtrArray subpasses;
 		subpasses.emplace_back( device.createRenderSubpass( formats
@@ -182,7 +193,7 @@ namespace castor3d
 				, 1u
 				, face
 				, 1u );
-			frameBuffer.renderPass = device.createRenderPass( formats
+			frameBuffer.renderPass = device.createRenderPass( rpAttaches
 				, subpasses
 				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 					, renderer::AccessFlag::eColourAttachmentWrite
@@ -190,9 +201,9 @@ namespace castor3d
 				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 					, renderer::AccessFlag::eColourAttachmentWrite
 					, { renderer::ImageLayout::eColourAttachmentOptimal, renderer::ImageLayout::eColourAttachmentOptimal } } );
-			renderer::TextureAttachmentPtrArray attaches;
-			attaches.emplace_back( std::make_unique< renderer::TextureAttachment >( *frameBuffer.varianceView ) );
-			attaches.emplace_back( std::make_unique< renderer::TextureAttachment >( *frameBuffer.linearView ) );
+			renderer::FrameBufferAttachmentArray attaches;
+			attaches.emplace_back( *( frameBuffer.renderPass->begin() + 0u ), frameBuffer.varianceView );
+			attaches.emplace_back( *( frameBuffer.renderPass->begin() + 1u ), frameBuffer.linearView );
 			frameBuffer.frameBuffer = frameBuffer.renderPass->createFrameBuffer( size, std::move( attaches ) );
 			++face;
 		}

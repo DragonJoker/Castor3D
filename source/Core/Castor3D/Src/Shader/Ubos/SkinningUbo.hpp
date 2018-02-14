@@ -21,7 +21,7 @@ namespace castor3d
 	*/
 	class SkinningUbo
 	{
-	private:
+	public:
 		struct Configuration
 		{
 			renderer::Mat4 bonesMatrix[400];

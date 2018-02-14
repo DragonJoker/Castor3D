@@ -10,11 +10,11 @@ namespace vk_renderer
 {
 	/**
 	*\brief
-	*	Convertit un renderer::Viewport en vk::Viewport.
+	*	Convertit un renderer::Scissor en VkRect2D
 	*\param[in] flags
-	*	Le renderer::Viewport.
+	*	Le renderer::Scissor.
 	*\return
-	*	Le vk::Viewport.
+	*	Le VkRect2D.
 	*/
 	VkRect2D convert( renderer::Scissor const & scissor );
 }

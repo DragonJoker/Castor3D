@@ -22,7 +22,6 @@ namespace gl_renderer
 		if ( checkFlag( value, GlImageAspectFlag::GL_STENCIL_BUFFER_BIT ) )
 		{
 			result += sep + "GL_STENCIL_BUFFER_BIT";
-			sep = " | ";
 		}
 
 		return result;

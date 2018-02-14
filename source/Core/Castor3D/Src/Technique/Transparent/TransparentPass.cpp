@@ -127,7 +127,7 @@ namespace castor3d
 		, Point2r const & jitter )
 	{
 		m_scene.getLightCache().bindLights();
-		doRender( info
+		doUpdate( info
 			, shadowMaps
 			, jitter );
 		m_scene.getLightCache().unbindLights();
@@ -199,9 +199,9 @@ namespace castor3d
 		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 		// Vertex inputs
 		auto position = writer.declAttribute< Vec4 >( cuT( "position" ) );
-		auto normal = writer.declAttribute< Vec3 >( ShaderProgram::Normal );
-		auto tangent = writer.declAttribute< Vec3 >( ShaderProgram::Tangent );
-		auto bitangent = writer.declAttribute< Vec3 >( ShaderProgram::Bitangent );
+		auto normal = writer.declAttribute< Vec3 >( cuT( "normal" ) );
+		auto tangent = writer.declAttribute< Vec3 >( cuT( "tangent" ) );
+		auto bitangent = writer.declAttribute< Vec3 >( cuT( "bitangent" ) );
 		auto texture = writer.declAttribute< Vec3 >( cuT( "texcoord" ) );
 		auto bone_ids0 = writer.declAttribute< IVec4 >( cuT( "bone_ids0" )
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
@@ -217,11 +217,11 @@ namespace castor3d
 			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
 		auto position2 = writer.declAttribute< Vec4 >( cuT( "position2" )
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto normal2 = writer.declAttribute< Vec3 >( ShaderProgram::Normal2
+		auto normal2 = writer.declAttribute< Vec3 >( cuT( "normal2" )
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto tangent2 = writer.declAttribute< Vec3 >( ShaderProgram::Tangent2
+		auto tangent2 = writer.declAttribute< Vec3 >( cuT( "tangent2" )
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto bitangent2 = writer.declAttribute< Vec3 >( ShaderProgram::Bitangent2
+		auto bitangent2 = writer.declAttribute< Vec3 >( cuT( "bitangent2" )
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto texture2 = writer.declAttribute< Vec3 >( cuT( "texture2" )
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );

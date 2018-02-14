@@ -85,11 +85,15 @@ namespace castor3d
 		return count;
 	}
 
-	void InstantiationComponent::gather( renderer::VertexBufferCRefArray & buffers )
+	void InstantiationComponent::gather( renderer::VertexBufferCRefArray & buffers
+		, std::vector< uint64_t > offsets
+		, renderer::VertexLayoutCRefArray & layouts )
 	{
 		if ( m_matrixBuffer )
 		{
 			buffers.emplace_back( *m_matrixBuffer );
+			offsets.emplace_back( 0u );
+			layouts.emplace_back( *m_matrixLayout );
 		}
 	}
 
@@ -143,12 +147,16 @@ namespace castor3d
 					, getMaxRefCount()
 					, 0u
 					, renderer::MemoryPropertyFlag::eHostVisible );
-				result = m_matrixBuffer != nullptr;
+				m_matrixLayout = device.createVertexLayout( BindingPoint, sizeof( InstantiationData ) );
+				m_matrixLayout->createAttribute< renderer::Mat4 >( 0u, offsetof( InstantiationData, m_matrix ) );
+				m_matrixLayout->createAttribute< int >( 1u, offsetof( InstantiationData, m_material ) );
+				result = m_matrixBuffer != nullptr
+					&& m_matrixLayout != nullptr;
 			}
 		}
 		else
 		{
-			m_matrixBuffer.reset();
+			doCleanup();
 		}
 
 		return result;
@@ -156,6 +164,7 @@ namespace castor3d
 
 	void InstantiationComponent::doCleanup()
 	{
+		m_matrixLayout.reset();
 		m_matrixBuffer.reset();
 	}
 

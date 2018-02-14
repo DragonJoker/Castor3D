@@ -14,12 +14,12 @@ See LICENSE file in root folder.
 namespace renderer
 {
 	RenderPass::RenderPass( Device const & device
-		, std::vector< PixelFormat > const & formats
+		, RenderPassAttachmentArray const & attaches
 		, RenderSubpassPtrArray const & subpasses
 		, RenderPassState const & initialState
 		, RenderPassState const & finalState
-		, bool clear
 		, SampleCountFlag samplesCount )
+		: m_attaches{ attaches }
 	{
 	}
 }

@@ -11,18 +11,35 @@ namespace gl_renderer
 	enum GlInternal
 		: GLenum
 	{
+		GL_INTERNAL_R8G8B8 = 0x8051,
+		GL_INTERNAL_R8G8B8A8 = 0x8058,
+		GL_INTERNAL_R4G4B4A4 = 0x8056,
+		GL_INTERNAL_R5G5B5A1 = 0x8057,
+		GL_INTERNAL_D16 = 0x81A5,
+		GL_INTERNAL_D24 = 0x81A6,
+		GL_INTERNAL_D32 = 0x81A7,
 		GL_INTERNAL_R8 = 0x8229,
 		GL_INTERNAL_R8G8 = 0x822B,
-		GL_INTERNAL_R8G8B8 = 0x8051,
-		GL_INTERNAL_R5G6B5 = 0x8D62,
-		GL_INTERNAL_R8G8B8A8 = 0x8058,
-		GL_INTERNAL_B8G8R8A8 = 0x93A1,
-		GL_INTERNAL_R5G5B5A1 = 0x8057,
-		GL_INTERNAL_R4G4B4A4 = 0x8056,
-		GL_INTERNAL_D16 = 0x81A5,
+		GL_INTERNAL_R16F = 0x822D,
+		GL_INTERNAL_R32F = 0x822E,
+		GL_INTERNAL_RG16F = 0x822F,
+		GL_INTERNAL_RG32F = 0x8230,
+		GL_INTERNAL_DXT1 = 0x83F1,
+		GL_INTERNAL_DXT3 = 0x83F2,
+		GL_INTERNAL_DXT5 = 0x83F3,
 		GL_INTERNAL_D24S8 = 0x88F0,
+		GL_INTERNAL_RGBA32F = 0x8814,
+		GL_INTERNAL_RGB32F = 0x8815,
+		GL_INTERNAL_RGBA16F = 0x881A,
+		GL_INTERNAL_RGB16F = 0x881B,
+		GL_INTERNAL_R8G8B8_SRGB = 0x8C41,
+		GL_INTERNAL_R8G8B8A8_SRGB = 0x8C43,
 		GL_INTERNAL_D32F = 0x8CAC,
+		GL_INTERNAL_D32FS8 = 0x8CAD,
+		GL_INTERNAL_S1 = 0x8D46,
 		GL_INTERNAL_S8 = 0x8D48,
+		GL_INTERNAL_R5G6B5 = 0x8D62,
+		GL_INTERNAL_B8G8R8A8 = 0x93A1,
 	};
 	enum GlFormat
 		: GLenum
@@ -43,12 +60,14 @@ namespace gl_renderer
 	{
 		GL_TYPE_UI8 = 0x1401,
 		GL_TYPE_UI16 = 0x1403,
+		GL_TYPE_UI32 = 0x1405,
 		GL_TYPE_F = 0x1406,
 		GL_TYPE_US4444 = 0x8033,
 		GL_TYPE_US5551 = 0x8034,
 		GL_TYPE_UI8888 = 0x8035,
 		GL_TYPE_UI565 = 0x8363,
 		GL_TYPE_UI24_8 = 0x84FA,
+		GL_TYPE_32F_UI24_8 = 0x8DAD
 	};
 	std::string getName( GlInternal value );
 	std::string getName( GlFormat value );
@@ -80,15 +99,6 @@ namespace gl_renderer
 	*	Le GlType.
 	*/
 	GlType getType( renderer::PixelFormat format )noexcept;
-	/**
-	*\brief
-	*	Récupère la taille en octets du renderer::PixelFormat donné.
-	*\param[in] format
-	*	Le renderer::PixelFormat.
-	*\return
-	*	La taille des données.
-	*/
-	uint32_t getSize( renderer::PixelFormat format )noexcept;
 	/**
 	*\brief
 	*	Convertit un GlInternal en renderer::PixelFormat.

@@ -33,21 +33,18 @@ namespace vk_renderer
 	}
 
 	RenderPass::RenderPass( Device const & device
-		, std::vector< renderer::PixelFormat > const & formats
+		, renderer::RenderPassAttachmentArray const & attaches
 		, renderer::RenderSubpassPtrArray const & subpasses
 		, renderer::RenderPassState const & initialState
 		, renderer::RenderPassState const & finalState
-		, bool clear
 		, renderer::SampleCountFlag samplesCount )
 		: renderer::RenderPass{ device
-			, formats
+			, attaches
 			, subpasses
 			, initialState
 			, finalState
-			, clear
 			, samplesCount }
 		, m_device{ device }
-		, m_formats{ formats }
 		, m_subpasses{ doConvert( subpasses ) }
 		, m_samplesCount{ samplesCount }
 		, m_initialState{ initialState }
@@ -55,25 +52,25 @@ namespace vk_renderer
 	{
 		// On crée les attaches pour les tampons de couleur et de profondeur.
 		std::vector< VkAttachmentDescription > attachments;
-		attachments.reserve( m_formats.size() );
+		attachments.reserve( getSize() );
 		uint32_t index{ 0 };
 
-		for ( auto const & format : m_formats )
+		for ( auto const & attach : *this )
 		{
-			if ( renderer::isDepthStencilFormat( format )
-				|| renderer::isDepthFormat( format )
-				|| renderer::isStencilFormat( format ) )
+			if ( renderer::isDepthStencilFormat( attach.pixelFormat )
+				|| renderer::isDepthFormat( attach.pixelFormat )
+				|| renderer::isStencilFormat( attach.pixelFormat ) )
 			{
 				attachments.push_back(
 				{
 					0u,                                             // flags
-					convert( format ),                              // format
+					convert( attach.pixelFormat ),                  // format
 					convert( m_samplesCount ),                      // samples
-					clear                                           // loadOp
+					attach.clear                                    // loadOp
 						? VK_ATTACHMENT_LOAD_OP_CLEAR
 						: VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_STORE,                   // storeOp
-					clear                                           // stencilLoadOp
+					attach.clear                                    // stencilLoadOp
 						? VK_ATTACHMENT_LOAD_OP_CLEAR
 						: VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_STORE,                   // stencilStoreOp
@@ -86,9 +83,9 @@ namespace vk_renderer
 				attachments.push_back(
 				{
 					0u,                                             // flags
-					convert( format ),                              // format
+					convert( attach.pixelFormat ),                  // format
 					convert( m_samplesCount ),                      // samples
-					clear                                           // loadOp
+					attach.clear                                    // loadOp
 						? VK_ATTACHMENT_LOAD_OP_CLEAR
 						: VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_STORE,                   // storeOp
@@ -169,7 +166,7 @@ namespace vk_renderer
 		};
 		DEBUG_DUMP( renderPassInfo );
 
-		auto res = vk::CreateRenderPass( m_device, &renderPassInfo, nullptr, &m_renderPass );
+		auto res = m_device.vkCreateRenderPass( m_device, &renderPassInfo, nullptr, &m_renderPass );
 
 		if ( !checkError( res ) )
 		{
@@ -179,35 +176,16 @@ namespace vk_renderer
 
 	RenderPass::~RenderPass()
 	{
-		vk::DestroyRenderPass( m_device, m_renderPass, nullptr );
+		m_device.vkDestroyRenderPass( m_device, m_renderPass, nullptr );
 	}
 
 	renderer::FrameBufferPtr RenderPass::createFrameBuffer( renderer::UIVec2 const & dimensions
-		, renderer::TextureAttachmentPtrArray && textures )const
+		, renderer::FrameBufferAttachmentArray && attaches )const
 	{
-		// On vérifie la compatibilité des vues demandés pour le framebuffer à créer.
-		auto it = std::find_if( textures.begin()
-			, textures.end()
-			, [this]( renderer::TextureAttachmentPtr const & attach )
-		{
-			return m_formats.end() == std::find_if( m_formats.begin()
-				, m_formats.end()
-				, [&attach]( auto format )
-			{
-				return format == attach->getFormat();
-			} );
-		} );
-
-		if ( it != textures.end() )
-		{
-			throw std::runtime_error{ "Incompatible views for framebuffer creation from this render pass." };
-		}
-
-		// On crée le framebuffer.
 		return std::make_unique< FrameBuffer >( m_device
 			, *this
 			, dimensions
-			, std::move( textures ) );
+			, std::move( attaches ) );
 	}
 
 	std::vector< VkClearValue > const & RenderPass::getClearValues (renderer::ClearValueArray const & clearValues)const

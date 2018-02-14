@@ -52,7 +52,6 @@ namespace gl_renderer
 		if ( checkFlag( value, gl_renderer::GlMemoryMapFlag::GL_MEMORY_MAP_UNSYNCHRONIZED_BIT ) )
 		{
 			result += sep + "GL_MAP_UNSYNCHRONIZED_BIT";
-			sep = " | ";
 		}
 
 		return result;

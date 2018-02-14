@@ -1,7 +1,7 @@
 #include "ShadowMapPass.hpp"
 
 #include "Mesh/Submesh.hpp"
-#include "Mesh/Buffer/GeometryBuffers.hpp"
+#include "Buffer/GeometryBuffers.hpp"
 #include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/BillboardList.hpp"
@@ -41,12 +41,12 @@ namespace castor3d
 	void ShadowMapPass::doRenderNodes( SceneRenderNodes & nodes
 		, Camera const & camera )
 	{
-		RenderPass::doRender( nodes.m_instantiatedStaticNodes.m_backCulled, camera );
-		RenderPass::doRender( nodes.m_staticNodes.m_backCulled, camera );
-		RenderPass::doRender( nodes.m_skinnedNodes.m_backCulled, camera );
-		RenderPass::doRender( nodes.m_instantiatedSkinnedNodes.m_backCulled, camera );
-		RenderPass::doRender( nodes.m_morphingNodes.m_backCulled, camera );
-		RenderPass::doRender( nodes.m_billboardNodes.m_backCulled, camera );
+		RenderPass::doUpdate( nodes.m_instantiatedStaticNodes.m_backCulled, camera );
+		RenderPass::doUpdate( nodes.m_staticNodes.m_backCulled, camera );
+		RenderPass::doUpdate( nodes.m_skinnedNodes.m_backCulled, camera );
+		RenderPass::doUpdate( nodes.m_instantiatedSkinnedNodes.m_backCulled, camera );
+		RenderPass::doUpdate( nodes.m_morphingNodes.m_backCulled, camera );
+		RenderPass::doUpdate( nodes.m_billboardNodes.m_backCulled, camera );
 	}
 
 	void ShadowMapPass::doUpdateFlags( PassFlags & passFlags

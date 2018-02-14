@@ -63,7 +63,9 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
-		C3D_API void gather( renderer::VertexBufferCRefArray & buffers )override;
+		C3D_API void gather( renderer::VertexBufferCRefArray & buffers
+			, std::vector< uint64_t > offsets
+			, renderer::VertexLayoutCRefArray & layouts )override;
 		/**
 		 *\~english
 		 *\brief		adds bone datas.
@@ -147,13 +149,11 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const Name;
+		C3D_API static uint32_t constexpr BindingPoint = 3u;
 
 	private:
-		//!\~english	The bone data buffer (animation).
-		//!\~french		Le tampon de données de bones (animation).
 		renderer::VertexBufferPtr< VertexBoneData > m_bonesBuffer;
-		//!\~english	The bones pointer array.
-		//!\~french		Le tableau de bones.
+		renderer::VertexLayoutPtr m_bonesLayout;
 		VertexBoneDataArray m_bones;
 
 		friend class BinaryWriter< BonesComponent >;

@@ -10,8 +10,9 @@ namespace gl_renderer
 	{
 	}
 
-	renderer::DescriptorSetPoolPtr DescriptorSetLayout::createPool( uint32_t maxSets )const
+	renderer::DescriptorSetPoolPtr DescriptorSetLayout::createPool( uint32_t maxSets
+		, bool automaticFree )const
 	{
-		return std::make_unique< DescriptorSetPool >( *this, maxSets );
+		return std::make_unique< DescriptorSetPool >( *this, maxSets, automaticFree );
 	}
 }

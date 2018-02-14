@@ -18,7 +18,15 @@ See LICENSE file in root folder.
 #elif RENDERLIB_XLIB
 #	include <GL/glx.h>
 #elif RENDERLIB_ANDROID
-#	include <EGL/egl.h>
+#	include <native_window.h>
+#elif RENDERLIB_XCB
+#	include <xcbint.h>
+#	include <xcb/xproto.h>
+#elif RENDERLIB_MIR
+#	include <mir_toolkit/mir_connection.h>
+#	include <mir_toolkit/mir_surface.h>
+#elif RENDERLIB_WAYLAND
+#	include <wayland-client-core.h>
 #else
 #	error "Yet unsupported OS"
 #endif
@@ -101,41 +109,144 @@ namespace renderer
 		Display * m_display;
 	};
 
-#elif RENDERLIB_ANDROID
+#elif RENDERLIB_XCB
 
-	class IEglWindowHandle
+	class IXcbWindowHandle
 		: public IWindowHandle
 	{
 	public:
-		IEglWindowHandle( EGLNativeWindowType window
-			, EGLDisplay display )
-			: m_window{ window }
-			, m_display{ display }
+		IXcbWindowHandle( xcb_connection_t * connection
+			, xcb_window_t window )
+			: m_connection{ connection }
+			, m_window{ window }
 		{
 		}
 
-		virtual ~IEglWindowHandle()
+		virtual ~IXcbWindowHandle()
 		{
 		}
 
 		virtual operator bool()
 		{
-			return m_window != 0 && m_display != 0;
+			return m_connection != nullptr && m_window != 0;
 		}
 
-		inline EGLNativeWindowType getWindow()const
+		inline xcb_connection_t * getConnection()const
+		{
+			return m_connection;
+		}
+
+		inline xcb_window_t getWindow()const
 		{
 			return m_window;
 		}
 
-		inline EGLDisplay getDisplay()const
+	private:
+		xcb_connection_t * m_connection;
+		xcb_window_t m_window;
+	};
+
+#elif RENDERLIB_ANDROID
+
+	class IAndroidWindowHandle
+		: public IWindowHandle
+	{
+	public:
+		IAndroidWindowHandle( ANativeWindow * window )
+			: m_window{ window }
+		{
+		}
+
+		virtual ~IAndroidWindowHandle()
+		{
+		}
+
+		virtual operator bool()
+		{
+			return m_window != nullptr;
+		}
+
+		inline ANativeWindow * getWindow()const
+		{
+			return m_window;
+		}
+
+	private:
+		ANativeWindow * m_window;
+	};
+
+#elif RENDERLIB_MIR
+
+	class IMirWindowHandle
+		: public IWindowHandle
+	{
+	public:
+		IMirWindowHandle( MirConnection * connection
+			, MirSurface * surface )
+			: m_connection{ connection }
+			, m_surface{ surface }
+		{
+		}
+
+		virtual ~IMirWindowHandle()
+		{
+		}
+
+		virtual operator bool()
+		{
+			return m_connection != nullptr && m_surface != nullptr;
+		}
+
+		inline MirConnection * getConnection()const
+		{
+			return m_connection;
+		}
+
+		inline MirSurface * getSurface()const
+		{
+			return m_surface;
+		}
+
+	private:
+		MirConnection * m_connection;
+		MirSurface * m_surface;
+	};
+
+#elif RENDERLIB_WAYLAND
+
+	class IWaylandWindowHandle
+		: public IWindowHandle
+	{
+	public:
+		IWaylandWindowHandle( wl_display * display
+			, wl_surface * surface )
+			: m_display{ display }
+			, m_surface{ surface }
+		{
+		}
+
+		virtual ~IWaylandWindowHandle()
+		{
+		}
+
+		virtual operator bool()
+		{
+			return m_display != nullptr && m_surface != nullptr;
+		}
+
+		inline wl_display * getDisplay()const
 		{
 			return m_display;
 		}
 
+		inline wl_surface * getSurface()const
+		{
+			return m_window;
+		}
+
 	private:
-		EGLNativeWindowType m_window;
-		EGLDisplay m_display;
+		wl_display * m_display;
+		wl_surface * m_surface;
 	};
 
 #endif

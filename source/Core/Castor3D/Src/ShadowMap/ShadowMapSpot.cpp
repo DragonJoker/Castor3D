@@ -18,7 +18,7 @@
 #include <RenderPass/RenderPassState.hpp>
 #include <RenderPass/RenderSubpass.hpp>
 #include <RenderPass/RenderSubpassState.hpp>
-#include <RenderPass/TextureAttachment.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
 
 #include <GlslSource.hpp>
 
@@ -164,12 +164,23 @@ namespace castor3d
 			, 1u
 			, 0u
 			, 1u );
-		std::vector< renderer::PixelFormat > formats{ { PixelFormat::eD24, PixelFormat::eAL32F, PixelFormat::eL32F } };
+		std::vector< renderer::PixelFormat > formats
+		{
+			PixelFormat::eD24,
+			PixelFormat::eAL32F,
+			PixelFormat::eL32F
+		};
+		renderer::RenderPassAttachmentArray rpAttaches
+		{
+			{ PixelFormat::eD24, true },
+			{ PixelFormat::eAL32F, true },
+			{ PixelFormat::eL32F, true }
+		};
 		renderer::RenderSubpassPtrArray subpasses;
 		subpasses.emplace_back( device.createRenderSubpass( formats
 			, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 			, renderer::AccessFlag::eColourAttachmentWrite } ) );
-		m_renderPass = device.createRenderPass( formats
+		m_renderPass = device.createRenderPass( rpAttaches
 			, subpasses
 			, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::AccessFlag::eColourAttachmentWrite
@@ -177,10 +188,10 @@ namespace castor3d
 			, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::AccessFlag::eColourAttachmentWrite
 				, { renderer::ImageLayout::eDepthStencilAttachmentOptimal, renderer::ImageLayout::eColourAttachmentOptimal, renderer::ImageLayout::eColourAttachmentOptimal } } );
-		renderer::TextureAttachmentPtrArray attaches;
-		attaches.emplace_back( std::make_unique< renderer::TextureAttachment >( m_shadowMap.getTexture()->getView() ) );
-		attaches.emplace_back( std::make_unique< renderer::TextureAttachment >( m_linearMap.getTexture()->getView() ) );
-		attaches.emplace_back( std::make_unique< renderer::TextureAttachment >( *m_depthBufferView ) );
+		renderer::FrameBufferAttachmentArray attaches;
+		attaches.emplace_back( *( m_renderPass->begin() + 0u ), m_shadowMap.getTexture()->getView() );
+		attaches.emplace_back( *( m_renderPass->begin() + 1u ), m_linearMap.getTexture()->getView() );
+		attaches.emplace_back( *( m_renderPass->begin() + 2u ), *m_depthBufferView );
 		m_frameBuffer = m_renderPass->createFrameBuffer( size, std::move( attaches ) );
 
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();

@@ -7,6 +7,13 @@ See LICENSE file in root folder
 #include "Core/GlContext.hpp"
 
 #include <Core/Device.hpp>
+#include <Pipeline/ColourBlendState.hpp>
+#include <Pipeline/DepthStencilState.hpp>
+#include <Pipeline/MultisampleState.hpp>
+#include <Pipeline/RasterisationState.hpp>
+#include <Pipeline/Scissor.hpp>
+#include <Pipeline/TessellationState.hpp>
+#include <Pipeline/Viewport.hpp>
 
 namespace gl_renderer
 {
@@ -31,11 +38,10 @@ namespace gl_renderer
 		/**
 		*\copydoc		renderer::Device::createRenderPass
 		*/
-		renderer::RenderPassPtr createRenderPass( std::vector< renderer::PixelFormat > const & formats
+		renderer::RenderPassPtr createRenderPass( renderer::RenderPassAttachmentArray const & attaches
 			, renderer::RenderSubpassPtrArray const & subpasses
 			, renderer::RenderPassState const & initialState
 			, renderer::RenderPassState const & finalState
-			, bool clear
 			, renderer::SampleCountFlag samplesCount )const override;
 		/**
 		*\copydoc		renderer::Device::createRenderSubpass
@@ -179,6 +185,46 @@ namespace gl_renderer
 			return m_context->getGlslVersion();
 		}
 
+		inline renderer::Scissor & getCurrentScissor()const
+		{
+			return m_scissor;
+		}
+
+		inline renderer::Viewport & getCurrentViewport()const
+		{
+			return m_viewport;
+		}
+
+		inline renderer::ColourBlendState & getCurrentBlendState()const
+		{
+			return m_cbState;
+		}
+
+		inline renderer::DepthStencilState & getCurrentDepthStencilState()const
+		{
+			return m_dsState;
+		}
+
+		inline renderer::MultisampleState & getCurrentMultisampleState()const
+		{
+			return m_msState;
+		}
+
+		inline renderer::RasterisationState & getCurrentRasterisationState()const
+		{
+			return m_rsState;
+		}
+
+		inline renderer::TessellationState & getCurrentTessellationState()const
+		{
+			return m_tsState;
+		}
+
+		inline GLuint & getCurrentProgram()const
+		{
+			return m_currentProgram;
+		}
+
 	private:
 		/**
 		*\copydoc	renderer::Device::enable
@@ -191,5 +237,13 @@ namespace gl_renderer
 
 	private:
 		ContextPtr m_context;
+		mutable renderer::Scissor m_scissor{ 0, 0, 0, 0 };
+		mutable renderer::Viewport m_viewport{ 0, 0, 0, 0 };
+		mutable renderer::ColourBlendState m_cbState;
+		mutable renderer::DepthStencilState m_dsState;
+		mutable renderer::MultisampleState m_msState;
+		mutable renderer::RasterisationState m_rsState;
+		mutable renderer::TessellationState m_tsState;
+		mutable GLuint m_currentProgram;
 	};
 }

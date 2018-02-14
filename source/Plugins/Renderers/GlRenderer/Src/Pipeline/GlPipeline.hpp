@@ -45,7 +45,7 @@ namespace gl_renderer
 		*\param[in] topology
 		*	La topologie d'affichage des sommets affichés via ce pipeline.
 		*/
-		Pipeline( renderer::Device const & device
+		Pipeline( Device const & device
 			, renderer::PipelineLayout const & layout
 			, renderer::ShaderProgram const & program
 			, renderer::VertexLayoutCRefArray const & vertexLayouts
@@ -179,14 +179,15 @@ namespace gl_renderer
 		*\return
 		*	Le ShaderProgram.
 		*/
-		inline renderer::ShaderProgram const & getProgram()const
+		inline ShaderProgram const & getProgram()const
 		{
 			return m_program;
 		}
 
 	private:
+		Device const & m_device;
 		renderer::PipelineLayout const & m_layout;
-		renderer::ShaderProgram const & m_program;
+		ShaderProgram const & m_program;
 		renderer::ColourBlendState m_cbState;
 		renderer::RasterisationState m_rsState;
 		renderer::DepthStencilState m_dsState;

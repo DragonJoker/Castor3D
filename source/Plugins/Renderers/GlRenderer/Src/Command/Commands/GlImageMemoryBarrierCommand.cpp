@@ -15,8 +15,8 @@ namespace gl_renderer
 
 	void ImageMemoryBarrierCommand::apply()const
 	{
-		glLogCommand( "ImageMemoryBarrierCommand" );
-		glLogCall( gl::MemoryBarrier, m_flags );
+		//glLogCommand( "ImageMemoryBarrierCommand" );
+		//glLogCall( gl::MemoryBarrier, m_flags );
 	}
 
 	CommandPtr ImageMemoryBarrierCommand::clone()const

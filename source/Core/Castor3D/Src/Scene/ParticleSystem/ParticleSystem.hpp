@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_ParticleSystem_H___
 
 #include "Scene/MovableObject.hpp"
+#include "Scene/ParticleSystem/ParticleDeclaration.hpp"
 
 #include <Pipeline/VertexLayout.hpp>
 
@@ -167,15 +168,6 @@ namespace castor3d
 			, castor::String const & defaultValue );
 		/**
 		 *\~english
-		 *\brief		Defines the program used to update the particles through transform feedback.
-		 *\param[in]	program	The program.
-		 *\~french
-		 *\brief		Définit le programme utilisé pour mettre à jour les particules via le transform feedback.
-		 *\param[in]	program	Le programme.
-		 */
-		C3D_API void setTFUpdateProgram( renderer::ShaderProgram const & program );
-		/**
-		 *\~english
 		 *\brief		Defines the program used to update the particles through compute shader.
 		 *\param[in]	program	The program.
 		 *\~french
@@ -287,9 +279,6 @@ namespace castor3d
 		//!\~english	The CPU implementation.
 		//!\~french		L'implémentation CPU.
 		CpuParticleSystemUPtr m_cpuImpl;
-		//!\~english	The implementation using transform feedback.
-		//!\~french		L'implémentation utilisant le transform feedback.
-		TransformFeedbackParticleSystemUPtr m_tfImpl;
 		//!\~english	The implementation using compute shader.
 		//!\~french		L'implémentation utilisant un compute shader.
 		ComputeParticleSystemUPtr m_csImpl;

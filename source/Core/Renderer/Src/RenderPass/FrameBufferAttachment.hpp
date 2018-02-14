@@ -2,8 +2,8 @@
 This file belongs to Renderer.
 See LICENSE file in root folder.
 */
-#ifndef ___Renderer_TextureAttachment_HPP___
-#define ___Renderer_TextureAttachment_HPP___
+#ifndef ___Renderer_FrameBufferAttachment_HPP___
+#define ___Renderer_FrameBufferAttachment_HPP___
 #pragma once
 
 #include "Image/TextureView.hpp"
@@ -18,7 +18,7 @@ namespace renderer
 	*\brief
 	*	Une attache entre une image et un tampon d'image.
 	*/
-	class TextureAttachment
+	class FrameBufferAttachment
 	{
 		friend class FrameBuffer;
 
@@ -27,15 +27,20 @@ namespace renderer
 		*\~english
 		*\brief
 		*	Constructor.
+		*\param[in] attach
+		*	The associated render pass attach.
 		*\param[in] view
 		*	The texture view.
 		*\~french
 		*\brief
 		*	Constructeur.
+		*\param[in] attach
+		*	L'attache de passe de rendu correspondante.
 		*\param[in] view
 		*	La vue sur la texture.
 		*/
-		TextureAttachment( TextureView const & view );
+		FrameBufferAttachment( RenderPassAttachment const & attach
+			, TextureView const & view );
 		/**
 		*\~english
 		*\brief
@@ -44,7 +49,7 @@ namespace renderer
 		*\brief
 		*	Destructeur.
 		*/
-		virtual ~TextureAttachment() = default;
+		virtual ~FrameBufferAttachment() = default;
 		/**
 		*\~english
 		*\return
@@ -93,10 +98,23 @@ namespace renderer
 		{
 			return *m_frameBuffer;
 		}
+		/**
+		*\~english
+		*\return
+		*	The associated render pass attach.
+		*\~french
+		*\return
+		*	L'attache de passe de rendu correspondante.
+		*/
+		inline RenderPassAttachment const & getAttachment()const
+		{
+			return m_attach;
+		}
 
 	private:
 		TextureView const & m_view;
 		FrameBuffer const * m_frameBuffer;
+		RenderPassAttachment const & m_attach;
 	};
 }
 

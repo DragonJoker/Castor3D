@@ -90,7 +90,9 @@ namespace castor3d
 		 *\~french
 		 *\brief		Récupère les tampons qui doivent aller dans un VAO.
 		 */
-		C3D_API virtual void gather( renderer::VertexBufferCRefArray & buffers ) = 0;
+		C3D_API virtual void gather( renderer::VertexBufferCRefArray & buffers
+			, std::vector< uint64_t > offsets
+			, renderer::VertexLayoutCRefArray & layouts ) = 0;
 		/**
 		 *\~english
 		 *\return		The shader program flags.

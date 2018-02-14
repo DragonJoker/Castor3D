@@ -10,11 +10,11 @@ namespace vk_renderer
 {
 	/**
 	*\brief
-	*	Convertit un renderer::Viewport en vk::Viewport.
+	*	Convertit un renderer::Viewport en VkViewport.
 	*\param[in] flags
 	*	Le renderer::Viewport.
 	*\return
-	*	Le vk::Viewport.
+	*	Le VkViewport.
 	*/
 	VkViewport convert( renderer::Viewport const & viewport );
 }

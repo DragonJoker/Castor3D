@@ -1,10 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_GpuBufferPool_HPP___
-#define ___C3D_GpuBufferPool_HPP___
+#ifndef ___C3D_UniformBufferPool_HPP___
+#define ___C3D_UniformBufferPool_HPP___
 
-#include "Castor3DPrerequisites.hpp"
+#include "UniformBuffer.hpp"
 
 #include <Design/OwnedBy.hpp>
 
@@ -19,26 +19,38 @@ namespace castor3d
 	\~french
 	\brief		Un GpuBuffer et un offset dans le GpuBuffer.
 	*/
-	struct GpuBufferOffset
+	template< typename T >
+	struct UniformBufferOffset
 	{
-		renderer::BufferBase * buffer;
+		UniformBuffer< T > * buffer;
 		renderer::MemoryPropertyFlags flags;
 		uint32_t offset;
+
+		T const & getData()const
+		{
+			return buffer->getBuffer().getData( offset );
+		}
+
+		T & getData()
+		{
+			return buffer->getBuffer().getData( offset );
+		}
 	};
 	/*!
 	\author		Sylvain DOREMUS
-	\version	0.10.0
-	\date		22/08/2017
+	\version	0.11.0
+	\date		08/02/2018
 	\~english
-	\brief		Buddy allocator implementation.
+	\brief		Uniform buffer pool implementation.
 	\~french
-	\brief		Implémentation d'un buddy allocator.
+	\brief		Implémentation d'un pool de tampon d'uniformes.
 	*/
-	class GpuBufferPool
+	template< typename T >
+	class UniformBufferPool
 		: public castor::OwnedBy< RenderSystem >
 	{
 	public:
-		using BufferArray = std::vector< renderer::BufferBasePtr >;
+		using BufferArray = std::vector< std::unique_ptr< UniformBuffer< T > > >;
 
 	public:
 		/**
@@ -49,14 +61,14 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	renderSystem	Le RenderSystem.
 		 */
-		explicit GpuBufferPool( RenderSystem & renderSystem );
+		explicit UniformBufferPool( RenderSystem & renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		~GpuBufferPool();
+		~UniformBufferPool();
 		/**
 		 *\~english
 		 *\brief		Cleans up all GPU buffers.
@@ -66,21 +78,15 @@ namespace castor3d
 		void cleanup();
 		/**
 		 *\~english
-		 *\brief		Retrieves a GPU buffer with the given size.
-		 *\param[in]	target	The buffer type.
-		 *\param[in]	size	The wanted buffer size.
+		 *\brief		Retrieves a uniform buffer.
 		 *\param[in]	flags	The buffer memory flags.
-		 *\return		The created buffer, depending on current API.
+		 *\return		The uniform buffer.
 		 *\~french
-		 *\brief		Récupère un tampon GPU avec la taille donnée.
-		 *\param[in]	target	Le type de tampon.
-		 *\param[in]	size	La taille voulue pour le tampon.
+		 *\brief		Récupère un tampon d'uniformes.
 		 *\param[in]	flags	Les indicateurs de mémoire du tampon.
-		 *\return		Le tampon créé.
+		 *\return		Le tampon d'uniformes.
 		 */
-		GpuBufferOffset getGpuBuffer( renderer::BufferTarget target
-			, uint32_t size
-			, renderer::MemoryPropertyFlags flags );
+		UniformBufferOffset< T > getBuffer( renderer::MemoryPropertyFlags flags );
 		/**
 		 *\~english
 		 *\brief		Releases a GPU buffer.
@@ -91,17 +97,16 @@ namespace castor3d
 		 *\param[in]	target			Le type de tampon.
 		 *\param[in]	bufferOffset	Le tampon à libérer.
 		 */
-		void putGpuBuffer( renderer::BufferTarget target
-			, GpuBufferOffset const & bufferOffset );
+		void putBuffer( UniformBufferOffset< T > const & bufferOffset );
 
 	private:
-		BufferArray::iterator doFindBuffer( uint32_t size
-			, BufferArray & array );
+		typename BufferArray::iterator doFindBuffer( BufferArray & array );
 
 	private:
 		std::map< uint32_t, BufferArray > m_buffers;
-		BufferArray m_nonSharedBuffers;
 	};
 }
+
+#include "UniformBufferPool.inl"
 
 #endif

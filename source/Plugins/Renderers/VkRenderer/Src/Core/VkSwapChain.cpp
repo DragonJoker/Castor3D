@@ -1,4 +1,4 @@
-#include "Core/VkSwapChain.hpp"
+﻿#include "Core/VkSwapChain.hpp"
 
 #include "Command/VkCommandBuffer.hpp"
 #include "Command/VkCommandPool.hpp"
@@ -6,6 +6,7 @@
 #include "Core/VkBackBuffer.hpp"
 #include "Core/VkDevice.hpp"
 #include "Core/VkPhysicalDevice.hpp"
+#include "Core/VkRenderer.hpp"
 #include "Image/VkTexture.hpp"
 #include "Miscellaneous/VkMemoryStorage.hpp"
 #include "RenderPass/VkFrameBuffer.hpp"
@@ -13,7 +14,7 @@
 #include "Sync/VkImageMemoryBarrier.hpp"
 #include "Sync/VkSemaphore.hpp"
 
-#include <RenderPass/TextureAttachment.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
 
 namespace vk_renderer
 {
@@ -45,7 +46,7 @@ namespace vk_renderer
 	SwapChain::~SwapChain()
 	{
 		m_backBuffers.clear();
-		vk::DestroySwapchainKHR( m_device, m_swapChain, nullptr );
+		m_device.vkDestroySwapchainKHR( m_device, m_swapChain, nullptr );
 	}
 
 	void SwapChain::reset( renderer::UIVec2 const & size )
@@ -61,8 +62,8 @@ namespace vk_renderer
 
 		for ( size_t i = 0u; i < result.size(); ++i )
 		{
-			renderer::TextureAttachmentPtrArray attaches;
-			attaches.emplace_back( std::make_unique< renderer::TextureAttachment >( m_backBuffers[i]->getView() ) );
+			renderer::FrameBufferAttachmentArray attaches;
+			attaches.emplace_back( *renderPass.begin(), m_backBuffers[i]->getView() );
 			result[i] = static_cast< RenderPass const & >( renderPass ).createFrameBuffer( m_dimensions
 				, std::move( attaches ) );
 		}
@@ -109,7 +110,7 @@ namespace vk_renderer
 		if ( resources.waitRecord( renderer::FenceTimeout ) )
 		{
 			uint32_t backBuffer{ 0u };
-			auto res = vk::AcquireNextImageKHR( m_device
+			auto res = m_device.vkAcquireNextImageKHR( m_device
 				, m_swapChain
 				, std::numeric_limits< uint64_t >::max()
 				, static_cast< Semaphore const & >( resources.getImageAvailableSemaphore() )
@@ -157,9 +158,9 @@ namespace vk_renderer
 
 	void SwapChain::doSelectFormat( VkPhysicalDevice gpu )
 	{
-		// On r�cup�re la liste de VkFormat support�s par la surface.
+		// On récupère la liste de VkFormat supportés par la surface.
 		uint32_t formatCount{ 0u };
-		auto res = vk::GetPhysicalDeviceSurfaceFormatsKHR( gpu
+		auto res = m_device.getRenderer().vkGetPhysicalDeviceSurfaceFormatsKHR( gpu
 			, m_surface
 			, &formatCount
 			, nullptr );
@@ -170,7 +171,7 @@ namespace vk_renderer
 		}
 
 		std::vector< VkSurfaceFormatKHR > surfFormats{ formatCount };
-		res = vk::GetPhysicalDeviceSurfaceFormatsKHR( gpu, m_surface
+		res = m_device.getRenderer().vkGetPhysicalDeviceSurfaceFormatsKHR( gpu, m_surface
 			, &formatCount
 			, surfFormats.data() );
 
@@ -179,9 +180,9 @@ namespace vk_renderer
 			throw std::runtime_error{ "Surface formats enumeration failed: " + getLastError() };
 		}
 
-		// Si la liste de formats ne contient qu'une entr�e VK_FORMAT_UNDEFINED,
-		// la surface n'a pas de format pr�f�r�. Sinon, au moins un format support�
-		// sera renvoy�.
+		// Si la liste de formats ne contient qu'une entrée VK_FORMAT_UNDEFINED,
+		// la surface n'a pas de format préféré. Sinon, au moins un format supporté
+		// sera renvoyé.
 		if ( formatCount == 1u && surfFormats[0].format == VK_FORMAT_UNDEFINED )
 		{
 			m_format = convert( VK_FORMAT_R8G8B8A8_UNORM );
@@ -197,9 +198,9 @@ namespace vk_renderer
 
 	VkPresentModeKHR SwapChain::doSelectPresentMode()
 	{
-		// On r�cup�re la liste de VkPresentModeKHR support�s par la surface.
+		// On récupère la liste de VkPresentModeKHR supportés par la surface.
 		uint32_t presentModeCount{};
-		auto res = vk::GetPhysicalDeviceSurfacePresentModesKHR( m_device.getPhysicalDevice()
+		auto res = m_device.getRenderer().vkGetPhysicalDeviceSurfacePresentModesKHR( m_device.getPhysicalDevice()
 			, m_surface
 			, &presentModeCount
 			, nullptr );
@@ -210,7 +211,7 @@ namespace vk_renderer
 		}
 
 		std::vector< VkPresentModeKHR > presentModes{ presentModeCount };
-		res = vk::GetPhysicalDeviceSurfacePresentModesKHR( m_device.getPhysicalDevice()
+		res = m_device.getRenderer().vkGetPhysicalDeviceSurfacePresentModesKHR( m_device.getPhysicalDevice()
 			, m_surface
 			, &presentModeCount
 			, presentModes.data() );
@@ -220,7 +221,7 @@ namespace vk_renderer
 			throw std::runtime_error{ "Surface present modes enumeration failed: " + getLastError() };
 		}
 
-		// Si le mode bo�te aux lettres est disponible, on utilise celui-l�, car c'est celui avec le
+		// Si le mode bo�te aux lettres est disponible, on utilise celui-là, car c'est celui avec le
 		// minimum de latence dans tearing.
 		// Sinon, on essaye le mode IMMEDIATE, qui est normalement disponible, et est le plus rapide
 		// (bien qu'il y ait du tearing). Sinon on utilise le mode FIFO qui est toujours disponible.
@@ -305,7 +306,7 @@ namespace vk_renderer
 			oldSwapChain,                                                             // oldSwapchain
 		};
 		DEBUG_DUMP( createInfo );
-		auto res = vk::CreateSwapchainKHR( m_device
+		auto res = m_device.vkCreateSwapchainKHR( m_device
 			, &createInfo
 			, nullptr
 			, &m_swapChain );
@@ -318,7 +319,7 @@ namespace vk_renderer
 		// On supprime la précédente swap chain au cas où il y en avait une.
 		if ( oldSwapChain != VK_NULL_HANDLE )
 		{
-			vk::DestroySwapchainKHR( m_device
+			m_device.vkDestroySwapchainKHR( m_device
 				, oldSwapChain
 				, nullptr );
 		}
@@ -328,7 +329,7 @@ namespace vk_renderer
 	{
 		// On récupère les images de la swapchain.
 		uint32_t imageCount{ 0u };
-		auto res = vk::GetSwapchainImagesKHR( m_device
+		auto res = m_device.vkGetSwapchainImagesKHR( m_device
 			, m_swapChain
 			, &imageCount
 			, nullptr );
@@ -339,7 +340,7 @@ namespace vk_renderer
 		}
 
 		std::vector< VkImage > swapChainImages( imageCount );
-		res = vk::GetSwapchainImagesKHR( m_device
+		res = m_device.vkGetSwapchainImagesKHR( m_device
 			, m_swapChain
 			, &imageCount
 			, &swapChainImages[0] );
@@ -407,7 +408,7 @@ namespace vk_renderer
 		m_device.waitIdle();
 		auto colour = m_clearColour;
 		m_backBuffers.clear();
-		vk::DestroySwapchainKHR( m_device, m_swapChain, nullptr );
+		m_device.vkDestroySwapchainKHR( m_device, m_swapChain, nullptr );
 		m_renderingResources.clear();
 		m_surfaceCapabilities = m_device.getSurfaceCapabilities();
 		// On choisit le format de la surface.

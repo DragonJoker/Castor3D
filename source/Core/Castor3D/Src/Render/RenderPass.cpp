@@ -4,8 +4,6 @@
 
 #include "Material/Pass.hpp"
 #include "Mesh/Submesh.hpp"
-#include "Mesh/Buffer/GeometryBuffers.hpp"
-#include "Mesh/Buffer/VertexBuffer.hpp"
 #include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderNode/RenderNode_Render.hpp"
@@ -14,10 +12,13 @@
 #include "Scene/Geometry.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/SceneNode.hpp"
-#include "Shader/ShaderStorageBuffer.hpp"
 #include "Castor3DPrerequisites.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
+
+#include <Buffer/Buffer.hpp>
+#include <Buffer/GeometryBuffers.hpp>
+#include <Buffer/VertexBuffer.hpp>
 
 #include <GlslSource.hpp>
 
@@ -36,23 +37,15 @@ namespace castor3d
 		{
 			for ( auto itPipelines : nodes )
 			{
-				itPipelines.first->apply();
-
 				for ( auto itPass : itPipelines.second )
 				{
 					for ( auto itSubmeshes : itPass.second )
 					{
-						doBindPassOpacityMap( itSubmeshes.second[0].m_passNode
-							, itSubmeshes.second[0].m_passNode.m_pass );
-
 						function( *itPipelines.first
 							, *itPass.first
 							, *itSubmeshes.first
 							, itSubmeshes.first->getInstantiation()
 							, itSubmeshes.second );
-
-						doUnbindPassOpacityMap( itSubmeshes.second[0].m_passNode
-							, itSubmeshes.second[0].m_passNode.m_pass );
 					}
 				}
 			}
@@ -67,21 +60,10 @@ namespace castor3d
 		{
 			for ( auto itPipelines : nodes )
 			{
-				itPipelines.first->apply();
-
 				for ( auto itPass : itPipelines.second )
 				{
 					for ( auto itSubmeshes : itPass.second )
 					{
-						EnvironmentMap * envMap = nullptr;
-						doBindPass( details::getParentNode( itSubmeshes.second[0].m_instance )
-							, itSubmeshes.second[0].m_passNode
-							, scene
-							, *itPipelines.first
-							, shadowMaps
-							, itSubmeshes.second[0].m_modelUbo
-							, envMap );
-
 						function( *itPipelines.first
 							, *itPass.first
 							, *itSubmeshes.first
@@ -101,23 +83,16 @@ namespace castor3d
 			for ( auto itPipelines : nodes )
 			{
 				pass.updatePipeline( *itPipelines.first );
-				itPipelines.first->apply();
 
 				for ( auto itPass : itPipelines.second )
 				{
 					for ( auto itSubmeshes : itPass.second )
 					{
-						doBindPassOpacityMap( itSubmeshes.second[0].m_passNode
-							, itSubmeshes.second[0].m_passNode.m_pass );
-
 						function( *itPipelines.first
 							, *itPass.first
 							, *itSubmeshes.first
 							, itSubmeshes.first->getInstantiation()
 							, itSubmeshes.second );
-
-						doUnbindPassOpacityMap( itSubmeshes.second[0].m_passNode
-							, itSubmeshes.second[0].m_passNode.m_pass );
 					}
 				}
 			}
@@ -134,21 +109,11 @@ namespace castor3d
 			for ( auto itPipelines : nodes )
 			{
 				pass.updatePipeline( *itPipelines.first );
-				itPipelines.first->apply();
 
 				for ( auto itPass : itPipelines.second )
 				{
 					for ( auto itSubmeshes : itPass.second )
 					{
-						EnvironmentMap * envMap = nullptr;
-						doBindPass( details::getParentNode( itSubmeshes.second[0].m_instance )
-							, itSubmeshes.second[0].m_passNode
-							, scene
-							, *itPipelines.first
-							, shadowMaps
-							, itSubmeshes.second[0].m_modelUbo
-							, envMap );
-
 						function( *itPipelines.first
 							, *itPass.first
 							, *itSubmeshes.first
@@ -165,17 +130,9 @@ namespace castor3d
 		{
 			for ( auto itPipelines : nodes )
 			{
-				itPipelines.first->apply();
-
 				for ( auto & renderNode : itPipelines.second )
 				{
-					doBindPassOpacityMap( renderNode.m_passNode
-						, renderNode.m_passNode.m_pass );
-
-					doRenderNodeNoPass( renderNode );
-
-					doUnbindPassOpacityMap( renderNode.m_passNode
-						, renderNode.m_passNode.m_pass );
+					doUpdateNodeModelMatrix( renderNode );
 				}
 			}
 		}
@@ -188,19 +145,9 @@ namespace castor3d
 		{
 			for ( auto itPipelines : nodes )
 			{
-				itPipelines.first->apply();
-
 				for ( auto & renderNode : itPipelines.second )
 				{
-					EnvironmentMap * envMap = nullptr;
-					doBindPass( details::getParentNode( renderNode.m_instance )
-						, renderNode.m_passNode
-						, scene
-						, *itPipelines.first
-						, shadowMaps
-						, renderNode.m_modelUbo
-						, envMap );
-					doRenderNode( renderNode );
+					doUpdateNode( renderNode );
 				}
 			}
 		}
@@ -213,17 +160,10 @@ namespace castor3d
 			for ( auto itPipelines : nodes )
 			{
 				pass.updatePipeline( *itPipelines.first );
-				itPipelines.first->apply();
 
 				for ( auto & renderNode : itPipelines.second )
 				{
-					doBindPassOpacityMap( renderNode.m_passNode
-						, renderNode.m_passNode.m_pass );
-
-					doRenderNodeNoPass( renderNode );
-
-					doUnbindPassOpacityMap( renderNode.m_passNode
-						, renderNode.m_passNode.m_pass );
+					doUpdateNodeModelMatrix( renderNode );
 				}
 			}
 		}
@@ -238,19 +178,10 @@ namespace castor3d
 			for ( auto itPipelines : nodes )
 			{
 				pass.updatePipeline( *itPipelines.first );
-				itPipelines.first->apply();
 
 				for ( auto & renderNode : itPipelines.second )
 				{
-					EnvironmentMap * envMap = nullptr;
-					doBindPass( details::getParentNode( renderNode.m_instance )
-						, renderNode.m_passNode
-						, scene
-						, *itPipelines.first
-						, shadowMaps
-						, renderNode.m_modelUbo
-						, envMap );
-					doRenderNode( renderNode );
+					doUpdateNode( renderNode );
 				}
 			}
 		}
@@ -266,20 +197,10 @@ namespace castor3d
 			for ( auto itPipelines : nodes )
 			{
 				pass.updatePipeline( *itPipelines.first );
-				itPipelines.first->apply();
 
 				for ( auto & renderNode : itPipelines.second )
 				{
-					EnvironmentMap * envMap = nullptr;
-					doBindPass( details::getParentNode( renderNode.m_instance )
-						, renderNode.m_passNode
-						, scene
-						, *itPipelines.first
-						, shadowMaps
-						, renderNode.m_modelUbo
-						, envMap );
-
-					doRenderNode( renderNode );
+					doUpdateNode( renderNode );
 					info.m_visibleFaceCount += details::getPrimitiveCount( renderNode.m_data );
 					info.m_visibleVertexCount += details::getVertexCount( renderNode.m_data );
 					++info.m_drawCalls;
@@ -293,7 +214,9 @@ namespace castor3d
 			, std::vector< InstantiationData > & matrixBuffer )
 		{
 			auto const mtxSize = sizeof( float ) * 16;
-			auto const count = std::min( matrixBuffer.size(), uint32_t( renderNodes.size() ) );
+			auto const stride = sizeof( InstantiationData );
+			auto const count = std::min( uint32_t( matrixBuffer.size() )
+				, uint32_t( renderNodes.size() ) );
 			auto buffer = matrixBuffer.data();
 			auto it = renderNodes.begin();
 			auto i = 0u;
@@ -308,7 +231,6 @@ namespace castor3d
 				++it;
 			}
 
-			matrixBuffer.upload( 0u, stride * count, matrixBuffer.getData() );
 			return count;
 		}
 
@@ -318,7 +240,9 @@ namespace castor3d
 			, std::vector< InstantiationData > & matrixBuffer )
 		{
 			auto const mtxSize = sizeof( float ) * 16;
-			auto const count = std::min( matrixBuffer.size(), uint32_t( renderNodes.size() ) );
+			auto const stride = sizeof( InstantiationData );
+			auto const count = std::min( uint32_t( matrixBuffer.size() )
+				, uint32_t( renderNodes.size() ) );
 			auto buffer = matrixBuffer.data();
 			auto it = renderNodes.begin();
 			auto i = 0u;
@@ -338,7 +262,6 @@ namespace castor3d
 				++it;
 			}
 
-			matrixBuffer.upload( 0u, stride * count, matrixBuffer.getData() );
 			return count;
 		}
 	}
@@ -355,12 +278,12 @@ namespace castor3d
 		, m_renderQueue{ *this, true, ignored }
 		, m_opaque{ true }
 		, m_matrixUbo{ engine }
-		, m_modelMatrixUbo{ engine }
 		, m_sceneUbo{ engine }
-		, m_modelUbo{ engine }
-		, m_billboardUbo{ engine }
-		, m_skinningUbo{ engine }
-		, m_morphingUbo{ engine }
+		, m_modelMatrixUboPool{ m_renderSystem }
+		, m_modelUboPool{ m_renderSystem }
+		, m_billboardUboPool{ m_renderSystem }
+		, m_skinningUboPool{ m_renderSystem }
+		, m_morphingUboPool{ m_renderSystem }
 	{
 	}
 
@@ -375,12 +298,12 @@ namespace castor3d
 		, m_renderQueue{ *this, false, ignored }
 		, m_opaque{ false }
 		, m_matrixUbo{ engine }
-		, m_modelMatrixUbo{ engine }
 		, m_sceneUbo{ engine }
-		, m_modelUbo{ engine }
-		, m_billboardUbo{ engine }
-		, m_skinningUbo{ engine }
-		, m_morphingUbo{ engine }
+		, m_modelMatrixUboPool{ m_renderSystem }
+		, m_modelUboPool{ m_renderSystem }
+		, m_billboardUboPool{ m_renderSystem }
+		, m_skinningUboPool{ m_renderSystem }
+		, m_morphingUboPool{ m_renderSystem }
 	{
 	}
 
@@ -396,21 +319,14 @@ namespace castor3d
 
 	void RenderPass::cleanup()
 	{
-		m_skinningUbo.getUbo().cleanup();
-		m_morphingUbo.getUbo().cleanup();
-		m_billboardUbo.getUbo().cleanup();
-		m_modelUbo.getUbo().cleanup();
-		m_modelMatrixUbo.getUbo().cleanup();
-		m_matrixUbo.getUbo().cleanup();
-		m_sceneUbo.getUbo().cleanup();
+		m_skinningUboPool.cleanup();
+		m_morphingUboPool.cleanup();
+		m_billboardUboPool.cleanup();
+		m_modelUboPool.cleanup();
+		m_modelMatrixUboPool.cleanup();
+		m_matrixUbo.cleanup();
+		m_sceneUbo.cleanup();
 		doCleanup();
-
-		for ( auto & buffers : m_geometryBuffers )
-		{
-			buffers->cleanup();
-		}
-
-		m_geometryBuffers.clear();
 		m_timer.reset();
 	}
 
@@ -502,7 +418,7 @@ namespace castor3d
 				alphaBlendMode = BlendMode::eNoBlend;
 			}
 
-			auto backProgram = doGetProgram( passFlags
+			auto & backProgram = doGetProgram( passFlags
 				, textureFlags
 				, programFlags
 				, sceneFlags
@@ -511,7 +427,7 @@ namespace castor3d
 
 			if ( !m_opaque )
 			{
-				auto frontProgram = doGetProgram( passFlags
+				auto & frontProgram = doGetProgram( passFlags
 					, textureFlags
 					, programFlags
 					, sceneFlags
@@ -523,8 +439,8 @@ namespace castor3d
 					, textureFlags
 					, programFlags
 					, sceneFlags };
-				doPrepareFrontPipeline( *frontProgram, flags );
-				doPrepareBackPipeline( *backProgram, flags );
+				doPrepareFrontPipeline( frontProgram, flags );
+				doPrepareBackPipeline( backProgram, flags );
 			}
 			else
 			{
@@ -537,16 +453,16 @@ namespace castor3d
 
 				if ( twoSided || checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
-					auto frontProgram = doGetProgram( passFlags
+					auto & frontProgram = doGetProgram( passFlags
 						, textureFlags
 						, programFlags
 						, sceneFlags
 						, alphaFunc
 						, true );
-					doPrepareFrontPipeline( *frontProgram, flags );
+					doPrepareFrontPipeline( frontProgram, flags );
 				}
 
-				doPrepareBackPipeline( *backProgram, flags );
+				doPrepareBackPipeline( backProgram, flags );
 			}
 		}
 	}
@@ -605,21 +521,20 @@ namespace castor3d
 		, Geometry & primitive
 		, AnimatedSkeleton & skeleton )
 	{
-		auto buffers = pipeline.getGeometryBuffers( submesh );
-		m_geometryBuffers.insert( buffers );
+		auto & buffers = submesh.getGeometryBuffers();
 
 		return SkinningRenderNode
 		{
 			pipeline,
 			doCreatePassRenderNode( pass, pipeline ),
-			m_modelMatrixUbo,
-			m_modelUbo,
-			*buffers,
+			m_modelMatrixUboPool.getBuffer( renderer::MemoryPropertyFlag::eDeviceLocal ),
+			m_modelUboPool.getBuffer( renderer::MemoryPropertyFlag::eDeviceLocal ),
+			buffers,
 			*primitive.getParent(),
 			submesh,
 			primitive,
 			skeleton,
-			m_skinningUbo
+			m_skinningUboPool.getBuffer( renderer::MemoryPropertyFlag::eDeviceLocal )
 		};
 	}
 
@@ -629,21 +544,20 @@ namespace castor3d
 		, Geometry & primitive
 		, AnimatedMesh & mesh )
 	{
-		auto buffers = pipeline.getGeometryBuffers( submesh );
-		m_geometryBuffers.insert( buffers );
+		auto & buffers = submesh.getGeometryBuffers();
 
 		return MorphingRenderNode
 		{
 			pipeline,
 			doCreatePassRenderNode( pass, pipeline ),
-			m_modelMatrixUbo,
-			m_modelUbo,
-			*buffers,
+			m_modelMatrixUboPool.getBuffer( renderer::MemoryPropertyFlag::eDeviceLocal ),
+			m_modelUboPool.getBuffer( renderer::MemoryPropertyFlag::eDeviceLocal ),
+			buffers,
 			*primitive.getParent(),
 			submesh,
 			primitive,
 			mesh,
-			m_morphingUbo
+			m_morphingUboPool.getBuffer( renderer::MemoryPropertyFlag::eDeviceLocal )
 		};
 	}
 
@@ -652,16 +566,15 @@ namespace castor3d
 		, Submesh & submesh
 		, Geometry & primitive )
 	{
-		auto buffers = pipeline.getGeometryBuffers( submesh );
-		m_geometryBuffers.insert( buffers );
+		auto & buffers = submesh.getGeometryBuffers();
 
 		return StaticRenderNode
 		{
 			pipeline,
 			doCreatePassRenderNode( pass, pipeline ),
-			m_modelMatrixUbo,
-			m_modelUbo,
-			*buffers,
+			m_modelMatrixUboPool.getBuffer( renderer::MemoryPropertyFlag::eDeviceLocal ),
+			m_modelUboPool.getBuffer( renderer::MemoryPropertyFlag::eDeviceLocal ),
+			buffers,
 			*primitive.getParent(),
 			submesh,
 			primitive,
@@ -672,19 +585,18 @@ namespace castor3d
 		, RenderPipeline & pipeline
 		, BillboardBase & billboard )
 	{
-		auto buffers = pipeline.getGeometryBuffers( billboard );
-		m_geometryBuffers.insert( buffers );
+		auto & buffers = billboard.getGeometryBuffers();
 
 		return BillboardRenderNode
 		{
 			pipeline,
 			doCreatePassRenderNode( pass, pipeline ),
-			m_modelMatrixUbo,
-			m_modelUbo,
-			*buffers,
+			m_modelMatrixUboPool.getBuffer( renderer::MemoryPropertyFlag::eDeviceLocal ),
+			m_modelUboPool.getBuffer( renderer::MemoryPropertyFlag::eDeviceLocal ),
+			buffers,
 			*billboard.getNode(),
 			billboard,
-			m_billboardUbo,
+			m_billboardUboPool.getBuffer( renderer::MemoryPropertyFlag::eDeviceLocal ),
 		};
 	}
 
@@ -710,7 +622,6 @@ namespace castor3d
 		return PassRenderNode
 		{
 			pass,
-			pipeline.getProgram(),
 		};
 	}
 
@@ -720,7 +631,7 @@ namespace castor3d
 		return SceneRenderNode{};
 	}
 
-	ShaderProgramSPtr RenderPass::doGetProgram( PassFlags const & passFlags
+	renderer::ShaderProgram & RenderPass::doGetProgram( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
@@ -813,13 +724,13 @@ namespace castor3d
 	}
 
 	uint32_t RenderPass::doCopyNodesBones( SkinningRenderNodeArray const & renderNodes
-		, ShaderStorageBuffer & bonesBuffer )const
+		, ShaderBuffer & bonesBuffer )const
 	{
 		uint32_t const mtxSize = sizeof( float ) * 16;
 		uint32_t const stride = mtxSize * 400u;
 		auto const count = std::min( bonesBuffer.getSize() / stride, uint32_t( renderNodes.size() ) );
 		REQUIRE( count <= renderNodes.size() );
-		auto buffer = bonesBuffer.getData();
+		auto buffer = bonesBuffer.getPtr();
 		auto it = renderNodes.begin();
 		auto i = 0u;
 
@@ -832,12 +743,12 @@ namespace castor3d
 			++it;
 		}
 
-		bonesBuffer.upload( 0u, stride * count, bonesBuffer.getData() );
+		bonesBuffer.update( 0u, stride * count );
 		return count;
 	}
 
 	uint32_t RenderPass::doCopyNodesBones( SkinningRenderNodeArray const & renderNodes
-		, ShaderStorageBuffer & bonesBuffer
+		, ShaderBuffer & bonesBuffer
 		, RenderInfo & info )const
 	{
 		auto count = doCopyNodesBones( renderNodes, bonesBuffer );
@@ -845,7 +756,7 @@ namespace castor3d
 		return count;
 	}
 
-	void RenderPass::doRender( SubmeshStaticRenderNodesByPipelineMap & nodes )const
+	void RenderPass::doUpdate( SubmeshStaticRenderNodesByPipelineMap & nodes )const
 	{
 		doTraverseNodes( *this
 			, nodes
@@ -859,12 +770,11 @@ namespace castor3d
 				{
 					uint32_t count = doCopyNodesMatrices( renderNodes
 						, instantiation.getData() );
-					submesh.drawInstanced( renderNodes[0].m_buffers, count );
 				}
 			} );
 	}
 
-	void RenderPass::doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( SubmeshStaticRenderNodesByPipelineMap & nodes
 		, ShadowMapLightTypeArray & shadowMaps )const
 	{
 		doTraverseNodes( *this
@@ -881,12 +791,11 @@ namespace castor3d
 				{
 					uint32_t count = doCopyNodesMatrices( renderNodes
 						, instantiation.getData() );
-					submesh.drawInstanced( renderNodes[0].m_buffers, count );
 				}
 			} );
 	}
 
-	void RenderPass::doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( SubmeshStaticRenderNodesByPipelineMap & nodes
 		, Camera const & camera )const
 	{
 		doTraverseNodes( *this
@@ -903,12 +812,11 @@ namespace castor3d
 					uint32_t count = doCopyNodesMatrices( renderNodes
 						, camera
 						, instantiation.getData() );
-					submesh.drawInstanced( renderNodes[0].m_buffers, count );
 				}
 			} );
 	}
 
-	void RenderPass::doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( SubmeshStaticRenderNodesByPipelineMap & nodes
 		, Camera const & camera
 		, ShadowMapLightTypeArray & shadowMaps )const
 	{
@@ -928,12 +836,11 @@ namespace castor3d
 					uint32_t count = doCopyNodesMatrices( renderNodes
 						, camera
 						, instantiation.getData() );
-					submesh.drawInstanced( renderNodes[0].m_buffers, count );
 				}
 			} );
 	}
 
-	void RenderPass::doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( SubmeshStaticRenderNodesByPipelineMap & nodes
 		, Camera const & camera
 		, ShadowMapLightTypeArray & shadowMaps
 		, RenderInfo & info )const
@@ -954,7 +861,6 @@ namespace castor3d
 					uint32_t count = doCopyNodesMatrices( renderNodes
 						, instantiation.getData()
 						, info );
-					submesh.drawInstanced( renderNodes[0].m_buffers, count );
 					info.m_visibleFaceCount += submesh.getFaceCount() * count;
 					info.m_visibleVertexCount += submesh.getPointsCount() * count;
 					++info.m_drawCalls;
@@ -962,13 +868,13 @@ namespace castor3d
 			} );
 	}
 
-	void RenderPass::doRender( StaticRenderNodesByPipelineMap & nodes )const
+	void RenderPass::doUpdate( StaticRenderNodesByPipelineMap & nodes )const
 	{
 		doRenderNonInstanced( *this
 			, nodes );
 	}
 
-	void RenderPass::doRender( StaticRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( StaticRenderNodesByPipelineMap & nodes
 		, ShadowMapLightTypeArray & shadowMaps )const
 	{
 		doRenderNonInstanced( *this
@@ -977,7 +883,7 @@ namespace castor3d
 			, shadowMaps );
 	}
 
-	void RenderPass::doRender( StaticRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( StaticRenderNodesByPipelineMap & nodes
 		, Camera const & camera )const
 	{
 		doRenderNonInstanced( *this
@@ -985,7 +891,7 @@ namespace castor3d
 			, nodes );
 	}
 
-	void RenderPass::doRender( StaticRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( StaticRenderNodesByPipelineMap & nodes
 		, Camera const & camera
 		, ShadowMapLightTypeArray & shadowMaps )const
 	{
@@ -996,7 +902,7 @@ namespace castor3d
 			, shadowMaps );
 	}
 
-	void RenderPass::doRender( StaticRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( StaticRenderNodesByPipelineMap & nodes
 		, Camera const & camera
 		, ShadowMapLightTypeArray & shadowMaps
 		, RenderInfo & info )const
@@ -1009,13 +915,13 @@ namespace castor3d
 			, info );
 	}
 
-	void RenderPass::doRender( SkinningRenderNodesByPipelineMap & nodes )const
+	void RenderPass::doUpdate( SkinningRenderNodesByPipelineMap & nodes )const
 	{
 		doRenderNonInstanced( *this
 			, nodes );
 	}
 
-	void RenderPass::doRender( SkinningRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( SkinningRenderNodesByPipelineMap & nodes
 		, ShadowMapLightTypeArray & shadowMaps )const
 	{
 		doRenderNonInstanced( *this
@@ -1024,7 +930,7 @@ namespace castor3d
 			, shadowMaps );
 	}
 
-	void RenderPass::doRender( SkinningRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( SkinningRenderNodesByPipelineMap & nodes
 		, Camera const & camera )const
 	{
 		doRenderNonInstanced( *this
@@ -1032,7 +938,7 @@ namespace castor3d
 			, nodes );
 	}
 
-	void RenderPass::doRender( SkinningRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( SkinningRenderNodesByPipelineMap & nodes
 		, Camera const & camera
 		, ShadowMapLightTypeArray & shadowMaps )const
 	{
@@ -1043,7 +949,7 @@ namespace castor3d
 			, shadowMaps );
 	}
 
-	void RenderPass::doRender( SkinningRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( SkinningRenderNodesByPipelineMap & nodes
 		, Camera const & camera
 		, ShadowMapLightTypeArray & shadowMaps
 		, RenderInfo & info )const
@@ -1056,7 +962,7 @@ namespace castor3d
 			, info );
 	}
 
-	void RenderPass::doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes )const
+	void RenderPass::doUpdate( SubmeshSkinningRenderNodesByPipelineMap & nodes )const
 	{
 		doTraverseNodes( *this
 			, nodes
@@ -1075,13 +981,11 @@ namespace castor3d
 					uint32_t count1 = doCopyNodesMatrices( renderNodes, instantiation.getData() );
 					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
 					REQUIRE( count1 == count2 );
-					instantiatedBones.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
-					submesh.drawInstanced( renderNodes[0].m_buffers, count1 );
 				}
 			} );
 	}
 
-	void RenderPass::doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( SubmeshSkinningRenderNodesByPipelineMap & nodes
 		, ShadowMapLightTypeArray & shadowMaps )const
 	{
 		doTraverseNodes( *this
@@ -1103,13 +1007,11 @@ namespace castor3d
 					uint32_t count1 = doCopyNodesMatrices( renderNodes, instantiation.getData() );
 					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
 					REQUIRE( count1 == count2 );
-					instantiatedBones.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
-					submesh.drawInstanced( renderNodes[0].m_buffers, count1 );
 				}
 			} );
 	}
 
-	void RenderPass::doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( SubmeshSkinningRenderNodesByPipelineMap & nodes
 		, Camera const & camera )const
 	{
 		doTraverseNodes( *this
@@ -1130,13 +1032,11 @@ namespace castor3d
 					uint32_t count1 = doCopyNodesMatrices( renderNodes, instantiation.getData() );
 					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
 					REQUIRE( count1 == count2 );
-					instantiatedBones.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
-					submesh.drawInstanced( renderNodes[0].m_buffers, count1 );
 				}
 			} );
 	}
 
-	void RenderPass::doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( SubmeshSkinningRenderNodesByPipelineMap & nodes
 		, Camera const & camera
 		, ShadowMapLightTypeArray & shadowMaps )const
 	{
@@ -1160,13 +1060,11 @@ namespace castor3d
 					uint32_t count1 = doCopyNodesMatrices( renderNodes, instantiation.getData() );
 					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
 					REQUIRE( count1 == count2 );
-					instantiatedBones.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
-					submesh.drawInstanced( renderNodes[0].m_buffers, count1 );
 				}
 			} );
 	}
 
-	void RenderPass::doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( SubmeshSkinningRenderNodesByPipelineMap & nodes
 		, Camera const & camera
 		, ShadowMapLightTypeArray & shadowMaps
 		, RenderInfo & info )const
@@ -1191,8 +1089,6 @@ namespace castor3d
 					uint32_t count1 = doCopyNodesMatrices( renderNodes, instantiation.getData(), info );
 					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer(), info );
 					REQUIRE( count1 == count2 );
-					instantiatedBones.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
-					submesh.drawInstanced( renderNodes[0].m_buffers, count1 );
 					info.m_visibleFaceCount += submesh.getFaceCount() * count1;
 					info.m_visibleVertexCount += submesh.getPointsCount() * count1;
 					++info.m_drawCalls;
@@ -1200,13 +1096,13 @@ namespace castor3d
 			} );
 	}
 
-	void RenderPass::doRender( MorphingRenderNodesByPipelineMap & nodes )const
+	void RenderPass::doUpdate( MorphingRenderNodesByPipelineMap & nodes )const
 	{
 		doRenderNonInstanced( *this
 			, nodes );
 	}
 
-	void RenderPass::doRender( MorphingRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( MorphingRenderNodesByPipelineMap & nodes
 		, ShadowMapLightTypeArray & shadowMaps )const
 	{
 		doRenderNonInstanced( *this
@@ -1215,7 +1111,7 @@ namespace castor3d
 			, shadowMaps );
 	}
 
-	void RenderPass::doRender( MorphingRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( MorphingRenderNodesByPipelineMap & nodes
 		, Camera const & camera )const
 	{
 		doRenderNonInstanced( *this
@@ -1223,7 +1119,7 @@ namespace castor3d
 			, nodes );
 	}
 
-	void RenderPass::doRender( MorphingRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( MorphingRenderNodesByPipelineMap & nodes
 		, Camera const & camera
 		, ShadowMapLightTypeArray & shadowMaps )const
 	{
@@ -1234,7 +1130,7 @@ namespace castor3d
 			, shadowMaps );
 	}
 
-	void RenderPass::doRender( MorphingRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( MorphingRenderNodesByPipelineMap & nodes
 		, Camera const & camera
 		, ShadowMapLightTypeArray & shadowMaps
 		, RenderInfo & info )const
@@ -1247,13 +1143,13 @@ namespace castor3d
 			, info );
 	}
 
-	void RenderPass::doRender( BillboardRenderNodesByPipelineMap & nodes )const
+	void RenderPass::doUpdate( BillboardRenderNodesByPipelineMap & nodes )const
 	{
 		doRenderNonInstanced( *this
 			, nodes );
 	}
 
-	void RenderPass::doRender( BillboardRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( BillboardRenderNodesByPipelineMap & nodes
 		, ShadowMapLightTypeArray & shadowMaps )const
 	{
 		doRenderNonInstanced( *this
@@ -1262,7 +1158,7 @@ namespace castor3d
 			, shadowMaps );
 	}
 
-	void RenderPass::doRender( BillboardRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( BillboardRenderNodesByPipelineMap & nodes
 		, Camera const & camera )const
 	{
 		doRenderNonInstanced( *this
@@ -1270,7 +1166,7 @@ namespace castor3d
 			, nodes );
 	}
 
-	void RenderPass::doRender( BillboardRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( BillboardRenderNodesByPipelineMap & nodes
 		, Camera const & camera
 		, ShadowMapLightTypeArray & shadowMaps )const
 	{
@@ -1281,7 +1177,7 @@ namespace castor3d
 			, shadowMaps );
 	}
 
-	void RenderPass::doRender( BillboardRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( BillboardRenderNodesByPipelineMap & nodes
 		, Camera const & camera
 		, ShadowMapLightTypeArray & shadowMaps
 		, RenderInfo & info )const
@@ -1304,9 +1200,9 @@ namespace castor3d
 		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 		// Vertex inputs
 		auto position = writer.declAttribute< Vec4 >( cuT( "position" ) );
-		auto normal = writer.declAttribute< Vec3 >( ShaderProgram::Normal );
-		auto tangent = writer.declAttribute< Vec3 >( ShaderProgram::Tangent );
-		auto bitangent = writer.declAttribute< Vec3 >( ShaderProgram::Bitangent );
+		auto normal = writer.declAttribute< Vec3 >( cuT( "normal" ) );
+		auto tangent = writer.declAttribute< Vec3 >( cuT( "tangent" ) );
+		auto bitangent = writer.declAttribute< Vec3 >( cuT( "bitangent" ) );
 		auto texture = writer.declAttribute< Vec3 >( cuT( "texcoord" ) );
 		auto bone_ids0 = writer.declAttribute< IVec4 >( cuT( "bone_ids0" )
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
@@ -1322,20 +1218,20 @@ namespace castor3d
 			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
 		auto position2 = writer.declAttribute< Vec4 >( cuT( "position2" )
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto normal2 = writer.declAttribute< Vec3 >( ShaderProgram::Normal2
+		auto normal2 = writer.declAttribute< Vec3 >( cuT( "normal2" )
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto tangent2 = writer.declAttribute< Vec3 >( ShaderProgram::Tangent2
+		auto tangent2 = writer.declAttribute< Vec3 >( cuT( "tangent2" )
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto bitangent2 = writer.declAttribute< Vec3 >( ShaderProgram::Bitangent2
+		auto bitangent2 = writer.declAttribute< Vec3 >( cuT( "bitangent2" )
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto texture2 = writer.declAttribute< Vec3 >( cuT( "texture2" )
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 
-		UBO_MATRIX( writer, 0 );
-		UBO_MODEL_MATRIX( writer, 0 );
-		UBO_SCENE( writer, 0 );
-		UBO_MODEL( writer, 0 );
+		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
+		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
+		UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
+		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
 		SkinningUbo::declare( writer, 0, programFlags );
 		UBO_MORPHING( writer, 0, programFlags );
 

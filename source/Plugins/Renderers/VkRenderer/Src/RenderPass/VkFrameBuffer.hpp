@@ -45,7 +45,7 @@ namespace vk_renderer
 		FrameBuffer( Device const & device
 			, RenderPass const & renderPass
 			, renderer::UIVec2 const & dimensions
-			, renderer::TextureAttachmentPtrArray && attachments );
+			, renderer::FrameBufferAttachmentArray && attachments );
 		/**
 		*\~french
 		*\brief

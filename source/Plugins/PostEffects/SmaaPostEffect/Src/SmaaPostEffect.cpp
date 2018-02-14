@@ -10,12 +10,12 @@
 #include <FrameBuffer/BackBuffers.hpp>
 #include <FrameBuffer/RenderBufferAttachment.hpp>
 #include <FrameBuffer/DepthStencilRenderBuffer.hpp>
-#include <FrameBuffer/TextureAttachment.hpp>
+#include <FrameBuffer/FrameBufferAttachment.hpp>
 #include <Mesh/Vertex.hpp>
-#include <Mesh/Buffer/ParticleDeclaration.hpp>
-#include <Mesh/Buffer/ParticleElementDeclaration.hpp>
-#include <Mesh/Buffer/GeometryBuffers.hpp>
-#include <Mesh/Buffer/VertexBuffer.hpp>
+#include <Buffer/ParticleDeclaration.hpp>
+#include <Buffer/ParticleElementDeclaration.hpp>
+#include <Buffer/GeometryBuffers.hpp>
+#include <Buffer/VertexBuffer.hpp>
 #include <Miscellaneous/Parameter.hpp>
 #include <Render/Context.hpp>
 #include <Render/RenderPipeline.hpp>
@@ -1313,7 +1313,7 @@ namespace smaa
 		auto curIndex = ( m_subsampleIndex + 1 ) % uint32_t( m_jitters.size() );
 		auto srgbAttach = framebuffer.getAttachment( castor3d::AttachmentPoint::eColour, 0 );
 		REQUIRE( srgbAttach && srgbAttach->getAttachmentType() == castor3d::AttachmentType::eTexture );
-		auto & srgbTexture = *std::static_pointer_cast< castor3d::TextureAttachment >( srgbAttach )->getTexture();
+		auto & srgbTexture = *std::static_pointer_cast< castor3d::FrameBufferAttachment >( srgbAttach )->getTexture();
 		auto & rgbTexture = m_renderTarget.getTechnique()->getResult();
 		castor3d::TextureLayoutSPtr result;
 

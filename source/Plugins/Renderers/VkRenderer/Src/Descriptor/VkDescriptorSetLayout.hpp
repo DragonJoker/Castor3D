@@ -63,7 +63,8 @@ namespace vk_renderer
 		*\return
 		*	The created pool.
 		*/
-		renderer::DescriptorSetPoolPtr createPool( uint32_t maxSets )const override;
+		renderer::DescriptorSetPoolPtr createPool( uint32_t maxSets
+			, bool automaticFree )const override;
 		/**
 		*\~french
 		*\brief

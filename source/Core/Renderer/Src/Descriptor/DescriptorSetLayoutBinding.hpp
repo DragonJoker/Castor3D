@@ -26,6 +26,8 @@ namespace renderer
 		*	Le type d'attache.
 		*\param[in] flags
 		*	Les indicateurs d'étape shader.
+		*\param[in] count
+		*	Le nombre de descripteurs (pour les tableaux).
 		*\~english
 		*\brief
 		*	Constructor.
@@ -35,10 +37,13 @@ namespace renderer
 		*	The binding type.
 		*\param[in] flags
 		*	The shader stage flags.
+		*\param[in] count
+		*	The descriptors count (for arrays).
 		*/ 
 		DescriptorSetLayoutBinding( uint32_t index
 			, DescriptorType type
-			, ShaderStageFlags flags );
+			, ShaderStageFlags flags
+			, uint32_t count = 1u );
 		/**
 		*\~english
 		*\return
@@ -75,11 +80,24 @@ namespace renderer
 		{
 			return m_flags;
 		}
+		/**
+		*\~english
+		*\return
+		*	The descriptors count.
+		*\~french
+		*\return
+		*	Le nombre de descripteurs.
+		*/
+		inline uint32_t getDescriptorsCount()const
+		{
+			return m_count;
+		}
 
 	private:
 		uint32_t m_index;
 		DescriptorType m_type;
 		ShaderStageFlags m_flags;
+		uint32_t m_count;
 	};
 }
 

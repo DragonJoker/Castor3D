@@ -28,6 +28,15 @@ namespace renderer
 		, m_depthBiasClamp{ depthBiasClamp }
 		, m_depthBiasSlopeFactor{ depthBiasSlopeFactor }
 		, m_lineWidth{ lineWidth }
+		, m_hash
+		{ uint16_t(
+			( uint16_t( m_depthClampEnable ) << 15 )
+			| ( uint16_t( m_rasteriserDiscardEnable ) << 14 )
+			| ( uint16_t( m_polygonMode ) << 11 )
+			| ( uint16_t( m_cullMode ) << 9 )
+			| ( uint16_t( m_frontFace ) << 7 )
+			| ( uint16_t( m_depthBiasEnable ) << 6 )
+		) }
 	{
 	}
 }

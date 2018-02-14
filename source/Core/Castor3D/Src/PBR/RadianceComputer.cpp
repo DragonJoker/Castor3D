@@ -1,15 +1,21 @@
 #include "RadianceComputer.hpp"
 
 #include "Engine.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
 
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <Buffer/UniformBuffer.hpp>
 #include <Buffer/VertexBuffer.hpp>
+#include <Descriptor/DescriptorSet.hpp>
+#include <Descriptor/DescriptorSetLayout.hpp>
+#include <Descriptor/DescriptorSetPool.hpp>
 #include <Image/Texture.hpp>
 #include <Image/TextureView.hpp>
 #include <Pipeline/DepthStencilState.hpp>
+#include <Pipeline/Pipeline.hpp>
+#include <Pipeline/PipelineLayout.hpp>
 #include <Pipeline/Scissor.hpp>
 #include <Pipeline/VertexLayout.hpp>
 #include <Pipeline/Viewport.hpp>
@@ -17,7 +23,7 @@
 #include <RenderPass/RenderPassState.hpp>
 #include <RenderPass/RenderSubpass.hpp>
 #include <RenderPass/RenderSubpassState.hpp>
-#include <RenderPass/TextureAttachment.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
 #include <Shader/ShaderProgram.hpp>
 
 #include <GlslSource.hpp>
@@ -127,23 +133,17 @@ namespace castor3d
 		m_configUbo->getData( 3u ) = matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, -1.0f, +0.0f }, Point3r{ 0.0f, +0.0f, -1.0f } );
 		m_configUbo->getData( 4u ) = matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, +0.0f, +1.0f }, Point3r{ 0.0f, -1.0f, +0.0f } );
 		m_configUbo->getData( 5u ) = matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, +0.0f, -1.0f }, Point3r{ 0.0f, -1.0f, +0.0f } );
-		auto offset = m_configUbo->getOffset( 6u );
-
-		if ( auto buffer = m_configUbo->getUbo().getBuffer().lock( 0u
-			, offset
-			, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateBuffer ) )
-		{
-			for ( auto i = 0u; i < 6u; ++i )
-			{
-				std::memcpy( buffer, m_configUbo->getData( i ).constPtr(), sizeof( renderer::Mat4 ) );
-				buffer += offset;
-			}
-
-			m_configUbo->getUbo().getBuffer().unlock( offset, true );
-		}
+		m_configUbo->upload();
 
 		// Create the render passes.
-		std::vector< renderer::PixelFormat > formats{ { dstTexture.getFormat() } };
+		std::vector< renderer::PixelFormat > formats
+		{
+			dstTexture.getFormat()
+		};
+		renderer::RenderPassAttachmentArray rpAttaches
+		{
+			{ dstTexture.getFormat(), false }
+		};
 		renderer::DescriptorSetLayoutBindingArray bindings;
 		bindings.emplace_back( 0u
 			, renderer::DescriptorType::eCombinedImageSampler
@@ -190,19 +190,18 @@ namespace castor3d
 			subpasses.emplace_back( device.createRenderSubpass( formats
 				, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::AccessFlag::eColourAttachmentWrite } ) );
-			facePass.renderPass = device.createRenderPass( formats
+			facePass.renderPass = device.createRenderPass( rpAttaches
 				, std::move( subpasses )
 				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 					, renderer::AccessFlag::eColourAttachmentWrite
 					, { renderer::ImageLayout::eColourAttachmentOptimal } }
 				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 					, renderer::AccessFlag::eColourAttachmentWrite
-					, { renderer::ImageLayout::eColourAttachmentOptimal } }
-				, false );
+					, { renderer::ImageLayout::eColourAttachmentOptimal } } );
 
 			// Initialise the frame buffer.
-			renderer::TextureAttachmentPtrArray attaches;
-			attaches.emplace_back( std::make_unique< renderer::TextureAttachment >( *facePass.dstView ) );
+			renderer::FrameBufferAttachmentArray attaches;
+			attaches.emplace_back( *( facePass.renderPass->begin() ), *facePass.dstView );
 			facePass.frameBuffer = facePass.renderPass->createFrameBuffer( renderer::UIVec2{ size }
 				, std::move( attaches ) );
 
@@ -258,7 +257,7 @@ namespace castor3d
 
 			// Inputs
 			auto position = writer.declAttribute< Vec3 >( cuT( "position" ) );
-			UBO_MATRIX( writer, 0 );
+			UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
 
 			// Outputs
 			auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );
@@ -340,7 +339,6 @@ namespace castor3d
 		auto & program = cache.getNewProgram( false );
 		program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
 		program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
-		program.link();
 		return program;
 	}
 }

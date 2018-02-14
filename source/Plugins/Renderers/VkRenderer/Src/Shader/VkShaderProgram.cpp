@@ -11,6 +11,8 @@ See LICENSE file in root folder.
 #	include <SPIRV/GlslangToSpv.h>
 #endif
 
+#include <regex>
+
 namespace vk_renderer
 {
 
@@ -166,6 +168,10 @@ namespace vk_renderer
 		std::string source = shader;
 
 		glslang::TShader glshader{ glstage };
+		std::regex regex{ R"(\#version \d*)" };
+		source = std::regex_replace( source.data()
+			, regex
+			, "$&\n#define VULKAN 100\n" );
 		char const * const str = source.c_str();
 		glshader.setStrings( &str, 1 );
 

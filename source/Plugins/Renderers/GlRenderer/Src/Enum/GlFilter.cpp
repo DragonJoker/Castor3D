@@ -2,7 +2,7 @@
 
 namespace gl_renderer
 {
-	std::string getName( GLFilter value )
+	std::string getName( GlFilter value )
 	{
 		switch ( value )
 		{
@@ -25,12 +25,12 @@ namespace gl_renderer
 			return "GL_LINEAR_MIPMAP_LINEAR";
 
 		default:
-			assert( false && "Unsupported GLFilter" );
+			assert( false && "Unsupported GlFilter" );
 			return "GLFilter_UNKNOWN";
 		}
 	}
 
-	GLFilter convert( renderer::Filter const & filter )
+	GlFilter convert( renderer::Filter const & filter )
 	{
 		switch ( filter )
 		{
@@ -46,7 +46,7 @@ namespace gl_renderer
 		}
 	}
 
-	GLFilter convert( renderer::Filter const & filter, renderer::MipmapMode mode )
+	GlFilter convert( renderer::Filter const & filter, renderer::MipmapMode mode )
 	{
 		switch ( filter )
 		{

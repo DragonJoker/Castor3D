@@ -20,13 +20,6 @@ See LICENSE file in root folder
 
 namespace GlRender
 {
-	enum class GlMin
-		: uint32_t
-	{
-		eProgramTexelOffset = 0x8904,
-		eMapBufferAlignment = 0x90BC,
-	};
-
 	enum class GlMax
 		: uint32_t
 	{
@@ -83,7 +76,6 @@ namespace GlRender
 		eSampleMaskWords = 0x8E59,
 		eSamples = 0x8D57,
 		eServerWaitTimeout = 0x9111,
-		eShaderStorageBufferBindings = 0x90DD,
 		eTessControlAtomicCounters = 0x92D3,
 		eTessEvaluationAtomicCounters = 0x92D4,
 		eTessControlShaderStorageBlocks = 0x90D8,

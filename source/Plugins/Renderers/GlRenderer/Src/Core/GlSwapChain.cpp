@@ -35,7 +35,7 @@ namespace gl_renderer
 	renderer::CommandBufferPtrArray SwapChain::createCommandBuffers()const
 	{
 		renderer::CommandBufferPtrArray result;
-		result.emplace_back( std::make_unique< CommandBuffer >( m_device
+		result.emplace_back( std::make_unique< CommandBuffer >( static_cast< Device const & >( m_device )
 			, m_device.getGraphicsCommandPool()
 			, true ) );
 		return result;

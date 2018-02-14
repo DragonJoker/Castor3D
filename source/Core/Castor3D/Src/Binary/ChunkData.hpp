@@ -1267,22 +1267,22 @@ namespace castor3d
 	{
 		if ( !castor::isBigEndian() )
 		{
-			castor::switchEndianness( p_value.m_ids[0] );
-			castor::switchEndianness( p_value.m_ids[1] );
-			castor::switchEndianness( p_value.m_ids[2] );
-			castor::switchEndianness( p_value.m_ids[3] );
-			castor::switchEndianness( p_value.m_ids[4] );
-			castor::switchEndianness( p_value.m_ids[5] );
-			castor::switchEndianness( p_value.m_ids[6] );
-			castor::switchEndianness( p_value.m_ids[7] );
-			castor::switchEndianness( p_value.m_weights[0] );
-			castor::switchEndianness( p_value.m_weights[1] );
-			castor::switchEndianness( p_value.m_weights[2] );
-			castor::switchEndianness( p_value.m_weights[3] );
-			castor::switchEndianness( p_value.m_weights[4] );
-			castor::switchEndianness( p_value.m_weights[5] );
-			castor::switchEndianness( p_value.m_weights[6] );
-			castor::switchEndianness( p_value.m_weights[7] );
+			castor::switchEndianness( p_value.m_ids.data[0] );
+			castor::switchEndianness( p_value.m_ids.data[1] );
+			castor::switchEndianness( p_value.m_ids.data[2] );
+			castor::switchEndianness( p_value.m_ids.data[3] );
+			castor::switchEndianness( p_value.m_ids.data[4] );
+			castor::switchEndianness( p_value.m_ids.data[5] );
+			castor::switchEndianness( p_value.m_ids.data[6] );
+			castor::switchEndianness( p_value.m_ids.data[7] );
+			castor::switchEndianness( p_value.m_weights.data[0] );
+			castor::switchEndianness( p_value.m_weights.data[1] );
+			castor::switchEndianness( p_value.m_weights.data[2] );
+			castor::switchEndianness( p_value.m_weights.data[3] );
+			castor::switchEndianness( p_value.m_weights.data[4] );
+			castor::switchEndianness( p_value.m_weights.data[5] );
+			castor::switchEndianness( p_value.m_weights.data[6] );
+			castor::switchEndianness( p_value.m_weights.data[7] );
 		}
 	}
 }

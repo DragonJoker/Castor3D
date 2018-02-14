@@ -41,7 +41,7 @@ namespace vk_renderer
 			convert( getSubResourceRange() )
 		};
 		DEBUG_DUMP( createInfo );
-		auto res = vk::CreateImageView( m_device
+		auto res = m_device.vkCreateImageView( m_device
 			, &createInfo
 			, nullptr
 			, &m_view );
@@ -56,7 +56,7 @@ namespace vk_renderer
 	{
 		if ( m_view )
 		{
-			vk::DestroyImageView( m_device
+			m_device.vkDestroyImageView( m_device
 				, m_view
 				, nullptr );
 		}

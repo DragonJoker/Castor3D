@@ -28,7 +28,7 @@ namespace gl_renderer
 		*\param[in] primary
 		*	Dit si le tampon est un tampon de commandes primaire (\p true) ou secondaire (\p false).
 		*/
-		CommandBuffer( renderer::Device const & device
+		CommandBuffer( Device const & device
 			, renderer::CommandPool const & pool
 			, bool primary );
 		/**
@@ -155,8 +155,8 @@ namespace gl_renderer
 		*\copydoc	renderer::CommandBuffer:blitImage
 		*/
 		void blitImage( renderer::ImageBlit const & blit
-			, renderer::TextureAttachment const & src
-			, renderer::TextureAttachment const & dst
+			, renderer::FrameBufferAttachment const & src
+			, renderer::FrameBufferAttachment const & dst
 			, renderer::Filter filter )const override;
 		/**
 		*\copydoc	renderer::CommandBuffer:resetQueryPool
@@ -202,6 +202,7 @@ namespace gl_renderer
 		}
 
 	private:
+		Device const & m_device;
 		mutable renderer::CommandBufferUsageFlags m_beginFlags{ 0u };
 		mutable CommandArray m_commands;
 		mutable renderer::Pipeline const * m_currentPipeline{ nullptr };

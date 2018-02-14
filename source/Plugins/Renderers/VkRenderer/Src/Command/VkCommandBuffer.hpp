@@ -175,8 +175,8 @@ namespace vk_renderer
 		*\copydoc	renderer::CommandBuffer:blitImage
 		*/
 		void blitImage( renderer::ImageBlit const & blit
-			, renderer::TextureAttachment const & src
-			, renderer::TextureAttachment const & dst
+			, renderer::FrameBufferAttachment const & src
+			, renderer::FrameBufferAttachment const & dst
 			, renderer::Filter filter )const override;
 		/**
 		*\copydoc	renderer::CommandBuffer:resetQueryPool

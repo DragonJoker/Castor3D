@@ -378,8 +378,8 @@ namespace renderer
 		*	The filter applied if the blit requires scaling.
 		*/
 		virtual void blitImage( ImageBlit const & blit
-			, TextureAttachment const & src
-			, TextureAttachment const & dst
+			, FrameBufferAttachment const & src
+			, FrameBufferAttachment const & dst
 			, Filter filter )const = 0;
 		/**
 		*\~english

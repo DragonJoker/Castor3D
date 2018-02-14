@@ -54,7 +54,7 @@ namespace vk_renderer
 			VK_FALSE                                              // unnormalizedCoordinates
 		};
 		DEBUG_DUMP( createInfo );
-		auto res = vk::CreateSampler( m_device, &createInfo, nullptr, &m_sampler );
+		auto res = m_device.vkCreateSampler( m_device, &createInfo, nullptr, &m_sampler );
 
 		if ( !checkError( res ) )
 		{
@@ -64,6 +64,6 @@ namespace vk_renderer
 
 	Sampler::~Sampler()
 	{
-		vk::DestroySampler( m_device, m_sampler, nullptr );
+		m_device.vkDestroySampler( m_device, m_sampler, nullptr );
 	}
 }

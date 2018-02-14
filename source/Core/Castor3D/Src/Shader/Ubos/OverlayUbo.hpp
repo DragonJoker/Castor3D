@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <Buffer/PushConstantsBuffer.hpp>
+#include <Buffer/UniformBuffer.hpp>
 
 namespace castor3d
 {
@@ -89,9 +89,9 @@ namespace castor3d
 		 *\~french
 		 *\name			Getters.
 		 */
-		inline renderer::PushConstantsBuffer< Configuration > const & getUbo()const
+		inline renderer::UniformBuffer< Configuration > const & getUbo()const
 		{
-			return m_pcb;
+			return *m_ubo;
 		}
 		/**@}*/
 
@@ -118,18 +118,16 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		renderer::PushConstantsBuffer< Configuration > m_pcb;
+		renderer::UniformBufferPtr< Configuration > m_ubo;
 	};
 }
 
-#define UBO_OVERLAY( writer, set )\
-	glsl::Pcb overlay{ writer\
-		, castor3d::OverlayUbo::BufferOverlayName\
-		, castor3d::OverlayUbo::BufferOverlayInstance };\
-	auto c3d_position = overlay.declMember< glsl::Vec2 >( castor3d::OverlayUbo::Position, 0u );\
-	auto c3d_renderSize = overlay.declMember< glsl::IVec2 >( castor3d::OverlayUbo::RenderSize, 1u );\
-	auto c3d_renderRatio = overlay.declMember< glsl::Vec2 >( castor3d::OverlayUbo::RenderRatio, 2u );\
-	auto c3d_materialIndex = overlay.declMember< glsl::Int >( castor3d::OverlayUbo::MaterialIndex, 3u );\
+#define UBO_OVERLAY( writer, binding, set )\
+	glsl::Ubo overlay{ writer, OverlayUbo::BufferOverlayName, binding, set };\
+	auto c3d_position = overlay.declMember< glsl::Vec2 >( castor3d::OverlayUbo::Position );\
+	auto c3d_renderSize = overlay.declMember< glsl::IVec2 >( castor3d::OverlayUbo::RenderSize );\
+	auto c3d_renderRatio = overlay.declMember< glsl::Vec2 >( castor3d::OverlayUbo::RenderRatio );\
+	auto c3d_materialIndex = overlay.declMember< glsl::Int >( castor3d::OverlayUbo::MaterialIndex );\
 	overlay.end()
 
 #endif

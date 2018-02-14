@@ -101,18 +101,9 @@ namespace gl_renderer
 		, renderer::ShaderStageFlag stage )
 	{
 		auto shaderName = glLogCall( gl::CreateShader, convert( stage ) );
-
-		std::vector< char > buffer( shader.size() + 1 );
-
-#if defined( _MSC_VER )
-		strncpy_s( buffer.data(), shader.size() + 1, shader.c_str(), shader.size() );
-#else
-		strncpy( buffer.data(), shader.c_str(), shader.size() );
-#endif
-
 		auto length = int( shader.size() );
-		auto data = buffer.data();
-		glLogCall( gl::ShaderSource, shaderName, 1, const_cast< const char ** >( &data ), &length );
+		auto data = shader.data();
+		glLogCall( gl::ShaderSource, shaderName, 1, &data, &length );
 		glLogCall( gl::CompileShader, shaderName );
 		int compiled = 0;
 		glLogCall( gl::GetShaderiv, shaderName, GL_INFO_COMPILE_STATUS, &compiled );
@@ -133,7 +124,7 @@ namespace gl_renderer
 		throw std::runtime_error{ "Shader compilation from SPIR-V is not supported." };
 	}
 
-	void ShaderProgram::link()
+	void ShaderProgram::link()const
 	{
 		int attached = 0;
 		glLogCall( gl::GetProgramiv, m_program, GL_INFO_ATTACHED_SHADERS, &attached );
@@ -141,7 +132,6 @@ namespace gl_renderer
 		int linked = 0;
 		glLogCall( gl::GetProgramiv, m_program, GL_INFO_LINK_STATUS, &linked );
 		auto linkerLog = doRetrieveLinkerLog( m_program );
-		bool result = false;
 
 		if ( linked
 			&& attached == int( m_shaders.size() )

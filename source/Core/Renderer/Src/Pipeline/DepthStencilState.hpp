@@ -52,6 +52,18 @@ namespace renderer
 			, float minDepthBounds = 0.0f
 			, float maxDepthBounds = 1.0f );
 		/**
+		*\~english
+		*\return
+		*	The hash for this state.
+		*\~french
+		*\return
+		*	Le hash de cet état.
+		*/
+		inline uint8_t getHash()const
+		{
+			return m_hash;
+		}
+		/**
 		*\return
 		*	Les indicateurs de l'état.
 		*/
@@ -143,7 +155,23 @@ namespace renderer
 		StencilOpState m_back;
 		float m_minDepthBounds;
 		float m_maxDepthBounds;
+		uint8_t m_hash;
+		friend bool operator==( DepthStencilState const & lhs, DepthStencilState const & rhs );
 	};
+
+	inline bool operator==( DepthStencilState const & lhs, DepthStencilState const & rhs )
+	{
+		return lhs.m_hash == rhs.m_hash
+			&& lhs.m_front == rhs.m_front
+			&& lhs.m_back == rhs.m_back
+			&& lhs.m_minDepthBounds == rhs.m_minDepthBounds
+			&& lhs.m_maxDepthBounds == rhs.m_maxDepthBounds;
+	}
+
+	inline bool operator!=( DepthStencilState const & lhs, DepthStencilState const & rhs )
+	{
+		return !( lhs == rhs );
+	}
 }
 
 #endif

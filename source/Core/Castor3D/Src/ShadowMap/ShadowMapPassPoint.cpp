@@ -1,7 +1,7 @@
 #include "ShadowMapPassPoint.hpp"
 
 #include "Mesh/Submesh.hpp"
-#include "Mesh/Buffer/VertexBuffer.hpp"
+#include "Buffer/VertexBuffer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/Light/PointLight.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -83,12 +83,12 @@ namespace castor3d
 
 	void ShadowMapPassPoint::doRenderNodes( SceneRenderNodes & p_nodes )
 	{
-		RenderPass::doRender( p_nodes.m_instantiatedStaticNodes.m_backCulled );
-		RenderPass::doRender( p_nodes.m_staticNodes.m_backCulled );
-		RenderPass::doRender( p_nodes.m_skinnedNodes.m_backCulled );
-		RenderPass::doRender( p_nodes.m_instantiatedSkinnedNodes.m_backCulled );
-		RenderPass::doRender( p_nodes.m_morphingNodes.m_backCulled );
-		RenderPass::doRender( p_nodes.m_billboardNodes.m_backCulled );
+		RenderPass::doUpdate( p_nodes.m_instantiatedStaticNodes.m_backCulled );
+		RenderPass::doUpdate( p_nodes.m_staticNodes.m_backCulled );
+		RenderPass::doUpdate( p_nodes.m_skinnedNodes.m_backCulled );
+		RenderPass::doUpdate( p_nodes.m_instantiatedSkinnedNodes.m_backCulled );
+		RenderPass::doUpdate( p_nodes.m_morphingNodes.m_backCulled );
+		RenderPass::doUpdate( p_nodes.m_billboardNodes.m_backCulled );
 	}
 
 	bool ShadowMapPassPoint::doInitialise( Size const & p_size )

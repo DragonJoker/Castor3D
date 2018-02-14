@@ -18,7 +18,7 @@ namespace gl_renderer
 
 	renderer::CommandBufferPtr CommandPool::createCommandBuffer( bool primary )const
 	{
-		return std::make_unique< CommandBuffer >( m_device
+		return std::make_unique< CommandBuffer >( static_cast< Device const & >( m_device )
 			, *this
 			, primary );
 	}

@@ -192,6 +192,12 @@ namespace renderer
 		assert( size <= getBuffer().getSize() );
 		if ( commandBuffer.begin( CommandBufferUsageFlag::eOneTimeSubmit ) )
 		{
+			commandBuffer.memoryBarrier( PipelineStageFlag::eTransfer
+				, PipelineStageFlag::eTransfer
+				, getBuffer().makeTransferSource() );
+			commandBuffer.memoryBarrier( PipelineStageFlag::eTransfer
+				, PipelineStageFlag::eTransfer
+				, buffer.makeTransferDestination() );
 			commandBuffer.copyBuffer( getBuffer()
 				, buffer
 				, size
@@ -224,6 +230,12 @@ namespace renderer
 		assert( size <= getBuffer().getSize() );
 		if ( commandBuffer.begin( CommandBufferUsageFlag::eOneTimeSubmit ) )
 		{
+			commandBuffer.memoryBarrier( PipelineStageFlag::eTransfer
+				, PipelineStageFlag::eTransfer
+				, getBuffer().makeTransferSource() );
+			commandBuffer.memoryBarrier( PipelineStageFlag::eTransfer
+				, PipelineStageFlag::eTransfer
+				, buffer.getBuffer().makeTransferDestination() );
 			commandBuffer.copyBuffer( getBuffer()
 				, buffer.getBuffer()
 				, size
@@ -258,6 +270,12 @@ namespace renderer
 	{
 		if ( commandBuffer.begin( CommandBufferUsageFlag::eOneTimeSubmit ) )
 		{
+			commandBuffer.memoryBarrier( PipelineStageFlag::eTransfer
+				, PipelineStageFlag::eTransfer
+				, getBuffer().makeTransferSource() );
+			commandBuffer.memoryBarrier( PipelineStageFlag::eTransfer
+				, PipelineStageFlag::eTransfer
+				, buffer.getBuffer().makeTransferDestination() );
 			commandBuffer.copyBuffer( getBuffer()
 				, buffer.getBuffer()
 				, size
@@ -314,6 +332,9 @@ namespace renderer
 			commandBuffer.memoryBarrier( PipelineStageFlag::eTransfer
 				, PipelineStageFlag::eTransfer
 				, buffer.makeTransferSource() );
+			commandBuffer.memoryBarrier( PipelineStageFlag::eTransfer
+				, PipelineStageFlag::eTransfer
+				, getBuffer().makeTransferDestination() );
 			commandBuffer.copyBuffer( buffer
 				, getBuffer()
 				, size
@@ -349,6 +370,9 @@ namespace renderer
 			commandBuffer.memoryBarrier( PipelineStageFlag::eTransfer
 				, PipelineStageFlag::eTransfer
 				, buffer.getBuffer().makeTransferSource() );
+			commandBuffer.memoryBarrier( PipelineStageFlag::eTransfer
+				, PipelineStageFlag::eTransfer
+				, getBuffer().makeTransferDestination() );
 			commandBuffer.copyBuffer( buffer.getBuffer()
 				, getBuffer()
 				, size
@@ -386,6 +410,9 @@ namespace renderer
 			commandBuffer.memoryBarrier( PipelineStageFlag::eTransfer
 				, PipelineStageFlag::eTransfer
 				, buffer.getBuffer().makeTransferSource() );
+			commandBuffer.memoryBarrier( PipelineStageFlag::eTransfer
+				, PipelineStageFlag::eTransfer
+				, getBuffer().makeTransferDestination() );
 			commandBuffer.copyBuffer( buffer.getBuffer()
 				, getBuffer()
 				, size

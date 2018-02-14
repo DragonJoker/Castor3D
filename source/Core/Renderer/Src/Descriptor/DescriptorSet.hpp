@@ -29,13 +29,17 @@ namespace renderer
 		*	Constructeur.
 		*\param[in] pool
 		*	Le pool parent.
+		*\param[in] bindingPoint
+		*	Le point d'attache du set.
 		*\~english
 		*\brief
 		*	Constructor.
 		*\param[in] pool
 		*	The parent pool.
+		*\param[in] bindingPoint
+		*	The binding point for the set.
 		*/
-		DescriptorSet( DescriptorSetPool const & pool );
+		DescriptorSet( DescriptorSetPool const & pool, uint32_t bindingPoint );
 
 	public:
 		/**
@@ -46,7 +50,19 @@ namespace renderer
 		*\brief
 		*	Destructor.
 		*/
-		virtual ~DescriptorSet() = default;
+		virtual ~DescriptorSet();
+		/**
+		*\~french
+		*\return
+		*	Le point d'attache du set.
+		*\~english
+		*\return
+		*	The binding point for the set.
+		*/
+		inline uint32_t getBindingPoint()const
+		{
+			return m_bindingPoint;
+		}
 		/**
 		*\~french
 		*\brief
@@ -57,6 +73,8 @@ namespace renderer
 		*	L'image.
 		*\param[in] sampler
 		*	L'échantillonneur.
+		*\param[in] index
+		*	L'indice dans le tableau.
 		*\return
 		*	L'attache créée.
 		*\~english
@@ -68,12 +86,15 @@ namespace renderer
 		*	The image.
 		*\param[in] sampler
 		*	The sampler.
+		*\param[in] index
+		*	The array index.
 		*\return
 		*	The created binding.
 		*/
 		virtual CombinedTextureSamplerBinding const & createBinding( DescriptorSetLayoutBinding const & layoutBinding
 			, TextureView const & view
-			, Sampler const & sampler ) = 0;
+			, Sampler const & sampler
+			, uint32_t index = 0u ) = 0;
 		/**
 		*\~french
 		*\brief
@@ -82,6 +103,8 @@ namespace renderer
 		*	L'attache de layout.
 		*\param[in] sampler
 		*	L'échantillonneur.
+		*\param[in] index
+		*	L'indice dans le tableau.
 		*\return
 		*	L'attache créée.
 		*\~english
@@ -91,11 +114,14 @@ namespace renderer
 		*	The layout binding.
 		*\param[in] sampler
 		*	The sampler.
+		*\param[in] index
+		*	The array index.
 		*\return
 		*	The created binding.
 		*/
 		virtual SamplerBinding const & createBinding( DescriptorSetLayoutBinding const & layoutBinding
-			, Sampler const & sampler ) = 0;
+			, Sampler const & sampler
+			, uint32_t index = 0u ) = 0;
 		/**
 		*\~french
 		*\brief
@@ -104,6 +130,8 @@ namespace renderer
 		*	L'attache de layout.
 		*\param[in] view
 		*	L'image.
+		*\param[in] index
+		*	L'indice dans le tableau.
 		*\return
 		*	L'attache créée.
 		*\~english
@@ -113,12 +141,15 @@ namespace renderer
 		*	The layout binding.
 		*\param[in] view
 		*	The image.
+		*\param[in] index
+		*	The array index.
 		*\return
 		*	The created binding.
 		*/
 		virtual SampledTextureBinding const & createBinding( DescriptorSetLayoutBinding const & layoutBinding
 			, TextureView const & view
-			, ImageLayout layout ) = 0;
+			, ImageLayout layout
+			, uint32_t index = 0u ) = 0;
 		/**
 		*\~french
 		*\brief
@@ -127,6 +158,8 @@ namespace renderer
 		*	L'attache de layout.
 		*\param[in] view
 		*	L'image.
+		*\param[in] index
+		*	L'indice dans le tableau.
 		*\return
 		*	L'attache créée.
 		*\~english
@@ -136,11 +169,14 @@ namespace renderer
 		*	The layout binding.
 		*\param[in] view
 		*	The image.
+		*\param[in] index
+		*	The array index.
 		*\return
 		*	The created binding.
 		*/
 		virtual StorageTextureBinding const & createBinding( DescriptorSetLayoutBinding const & layoutBinding
-			, TextureView const & view ) = 0;
+			, TextureView const & view
+			, uint32_t index = 0u ) = 0;
 		/**
 		*\~french
 		*\brief
@@ -153,6 +189,8 @@ namespace renderer
 		*	Le décalage de l'attache dans le tampon.
 		*\param[in] range
 		*	Le décompte des données pouvant être lues depuis l'attache dans le tampon.
+		*\param[in] index
+		*	L'indice dans le tableau.
 		*\return
 		*	L'attache créée.
 		*\~english
@@ -166,13 +204,16 @@ namespace renderer
 		*	The attach's offset in the buffer.
 		*\param[in] range
 		*	The amount of data that can be read from the buffer.
+		*\param[in] index
+		*	The array index.
 		*\return
 		*	The created binding.
 		*/
 		virtual UniformBufferBinding const & createBinding( DescriptorSetLayoutBinding const & layoutBinding
 			, UniformBufferBase const & uniformBuffer
 			, uint32_t offset
-			, uint32_t range ) = 0;
+			, uint32_t range
+			, uint32_t index = 0u ) = 0;
 		/**
 		*\~french
 		*\brief
@@ -185,6 +226,8 @@ namespace renderer
 		*	Le décalage de l'attache dans le tampon.
 		*\param[in] range
 		*	Le décompte des données pouvant être lues depuis l'attache dans le tampon.
+		*\param[in] index
+		*	L'indice dans le tableau.
 		*\return
 		*	L'attache créée.
 		*\~english
@@ -198,13 +241,16 @@ namespace renderer
 		*	The attach's offset in the buffer.
 		*\param[in] range
 		*	The amount of data that can be read from the buffer.
+		*\param[in] index
+		*	The array index.
 		*\return
 		*	The created binding.
 		*/
 		virtual StorageBufferBinding const & createBinding( DescriptorSetLayoutBinding const & layoutBinding
 			, BufferBase const & storageBuffer
 			, uint32_t offset
-			, uint32_t range ) = 0;
+			, uint32_t range
+			, uint32_t index = 0u ) = 0;
 		/**
 		*\~french
 		*\brief
@@ -213,6 +259,8 @@ namespace renderer
 		*	L'attache de layout.
 		*\param[in] buffer
 		*	Le tampon.
+		*\param[in] index
+		*	L'indice dans le tableau.
 		*\return
 		*	L'attache créée.
 		*\~english
@@ -224,12 +272,15 @@ namespace renderer
 		*	The buffer.
 		*\param[in] view
 		*	The view to the buffer.
+		*\param[in] index
+		*	The array index.
 		*\return
 		*	The created binding.
 		*/
 		virtual TexelBufferBinding const & createBinding( DescriptorSetLayoutBinding const & layoutBinding
 			, BufferBase const & buffer
-			, BufferView const & view ) = 0;
+			, BufferView const & view
+			, uint32_t index = 0u ) = 0;
 		/**
 		*\~french
 		*\brief
@@ -238,6 +289,8 @@ namespace renderer
 		*	L'attache de layout.
 		*\param[in] uniformBuffer
 		*	Le tampon.
+		*\param[in] index
+		*	L'indice dans le tableau.
 		*\return
 		*	L'attache créée.
 		*\~english
@@ -249,6 +302,8 @@ namespace renderer
 		*	The buffer.
 		*\param[in] offset
 		*	The attach's offset in the buffer.
+		*\param[in] index
+		*	The array index.
 		*\return
 		*	The created binding.
 		*/
@@ -256,12 +311,14 @@ namespace renderer
 		inline UniformBufferBinding const & createBinding( DescriptorSetLayoutBinding const & layoutBinding
 			, UniformBuffer< T > const & uniformBuffer
 			, uint32_t offset
-			, uint32_t range )
+			, uint32_t range
+			, uint32_t index = 0u )
 		{
 			return createBinding( layoutBinding
 				, uniformBuffer.getUbo()
-				, offset * uniformBuffer.getOffset( 1u )
-				, range * sizeof( T ) );
+				, offset * uniformBuffer.getAlignedSize()
+				, range * sizeof( T )
+				, index );
 		}
 		/**
 		*\~french
@@ -271,6 +328,8 @@ namespace renderer
 		*	L'attache de layout.
 		*\param[in] storageBuffer
 		*	Le tampon.
+		*\param[in] index
+		*	L'indice dans le tableau.
 		*\return
 		*	L'attache créée.
 		*\~english
@@ -282,6 +341,8 @@ namespace renderer
 		*	The buffer.
 		*\param[in] offset
 		*	The attach's offset in the buffer.
+		*\param[in] index
+		*	The array index.
 		*\return
 		*	The created binding.
 		*/
@@ -289,12 +350,14 @@ namespace renderer
 		inline StorageBufferBinding const & createBinding( DescriptorSetLayoutBinding const & layoutBinding
 			, Buffer< T > const & storageBuffer
 			, uint32_t offset
-			, uint32_t range )
+			, uint32_t range
+			, uint32_t index = 0u )
 		{
 			return createBinding( layoutBinding
 				, storageBuffer.getBuffer()
 				, offset
-				, range );
+				, range
+				, index );
 		}
 		/**
 		*\~french
@@ -306,6 +369,8 @@ namespace renderer
 		*	Le tampon.
 		*\param[in] view
 		*	La vue sur le tampon.
+		*\param[in] index
+		*	L'indice dans le tableau.
 		*\return
 		*	L'attache créée.
 		*\~english
@@ -317,17 +382,21 @@ namespace renderer
 		*	The buffer.
 		*\param[in] view
 		*	The view to the buffer.
+		*\param[in] index
+		*	The array index.
 		*\return
 		*	The created binding.
 		*/
 		template< typename T >
 		inline TexelBufferBinding const & createBinding( DescriptorSetLayoutBinding const & layoutBinding
 			, UniformBuffer< T > const & buffer
-			, BufferView const & view )
+			, BufferView const & view
+			, uint32_t index = 0u )
 		{
 			return createBinding( layoutBinding
 				, buffer.getUbo()
-				, view );
+				, view
+				, index );
 		}
 		/**
 		*\~french
@@ -339,6 +408,8 @@ namespace renderer
 		*	Le tampon.
 		*\param[in] view
 		*	La vue sur le tampon.
+		*\param[in] index
+		*	L'indice dans le tableau.
 		*\return
 		*	L'attache créée.
 		*\~english
@@ -350,17 +421,21 @@ namespace renderer
 		*	The buffer.
 		*\param[in] view
 		*	The view to the buffer.
+		*\param[in] index
+		*	The array index.
 		*\return
 		*	The created binding.
 		*/
 		template< typename T >
 		inline TexelBufferBinding const & createBinding( DescriptorSetLayoutBinding const & layoutBinding
 			, Buffer< T > const & buffer
-			, BufferView const & view )
+			, BufferView const & view
+			, uint32_t index = 0u )
 		{
 			return createBinding( layoutBinding
 				, buffer.getBuffer()
-				, view );
+				, view
+				, index );
 		}
 		/**
 		*\~french
@@ -371,6 +446,10 @@ namespace renderer
 		*	Updates all the bindings in the descriptor set.
 		*/
 		virtual void update()const = 0;
+
+	private:
+		DescriptorSetPool const & m_pool;
+		uint32_t m_bindingPoint;
 	};
 }
 

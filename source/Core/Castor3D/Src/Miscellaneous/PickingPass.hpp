@@ -163,32 +163,32 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doRender
 		 */
-		void doRender( Scene const & p_scene
+		void doUpdate( Scene const & p_scene
 			, SubmeshStaticRenderNodesByPipelineMap & p_nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doRender
 		 */
-		void doRender( Scene const & p_scene
+		void doUpdate( Scene const & p_scene
 			, StaticRenderNodesByPipelineMap & p_nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doRenderAnimatedSubmeshes
 		 */
-		void doRender( Scene const & p_scene
+		void doUpdate( Scene const & p_scene
 			, SkinningRenderNodesByPipelineMap & p_nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doRender
 		 */
-		void doRender( Scene const & p_scene
+		void doUpdate( Scene const & p_scene
 			, SubmeshSkinningRenderNodesByPipelineMap & p_nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doRenderAnimatedSubmeshes
 		 */
-		void doRender( Scene const & p_scene
+		void doUpdate( Scene const & p_scene
 			, MorphingRenderNodesByPipelineMap & p_nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doRender
 		 */
-		void doRender( Scene const & p_scene
+		void doUpdate( Scene const & p_scene
 			, BillboardRenderNodesByPipelineMap & p_nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doInitialise

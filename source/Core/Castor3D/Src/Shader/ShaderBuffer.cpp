@@ -4,8 +4,10 @@
 #include "Render/RenderSystem.hpp"
 
 #include <Buffer/Buffer.hpp>
+#include <Buffer/UniformBuffer.hpp>
 #include <Core/Device.hpp>
 #include <Descriptor/DescriptorSet.hpp>
+#include <Descriptor/DescriptorSetLayoutBinding.hpp>
 
 using namespace castor;
 
@@ -66,24 +68,31 @@ namespace castor3d
 
 	void ShaderBuffer::update()
 	{
+		update( 0u, uint32_t( m_data.size() ) );
+	}
+
+	void ShaderBuffer::update( uint32_t offset, uint32_t size )
+	{
+		REQUIRE( size + offset <= m_data.size() );
+
 		if ( m_ssbo )
 		{
-			if ( uint8_t * buffer = m_ssbo->lock( 0u
-				, uint32_t( m_data.size() )
+			if ( uint8_t * buffer = m_ssbo->lock( offset
+				, size
 				, renderer::MemoryMapFlag::eWrite ) )
 			{
-				std::memcpy( buffer, m_data.data(), m_data.size() );
-				m_ssbo->unlock( uint32_t( m_data.size() ), true );
+				std::memcpy( buffer, m_data.data(), size );
+				m_ssbo->unlock( size, true );
 			}
 		}
 		else
 		{
-			if ( uint8_t * buffer = m_tbo->getBuffer().lock( 0u
-				, uint32_t( m_data.size() )
+			if ( uint8_t * buffer = m_tbo->getBuffer().lock( offset
+				, size
 				, renderer::MemoryMapFlag::eWrite ) )
 			{
-				std::memcpy( buffer, m_data.data(), m_data.size() );
-				m_tbo->getBuffer().unlock( uint32_t( m_data.size() ), true );
+				std::memcpy( buffer, m_data.data(), size );
+				m_tbo->getBuffer().unlock( size, true );
 			}
 		}
 	}

@@ -21,7 +21,7 @@ namespace vk_renderer
 			vkbindings.data()                                     // pBindings
 		};
 		DEBUG_DUMP( createInfo );
-		auto res = vk::CreateDescriptorSetLayout( m_device
+		auto res = m_device.vkCreateDescriptorSetLayout( m_device
 			, &createInfo
 			, nullptr
 			, &m_layout );
@@ -34,15 +34,17 @@ namespace vk_renderer
 
 	DescriptorSetLayout::~DescriptorSetLayout()
 	{
-		vk::DestroyDescriptorSetLayout( m_device
+		m_device.vkDestroyDescriptorSetLayout( m_device
 			, m_layout
 			, nullptr );
 	}
 
-	renderer::DescriptorSetPoolPtr DescriptorSetLayout::createPool( uint32_t maxSets )const
+	renderer::DescriptorSetPoolPtr DescriptorSetLayout::createPool( uint32_t maxSets
+		, bool automaticFree )const
 	{
 		return std::make_unique< DescriptorSetPool >( m_device
 			, *this
-			, maxSets );
+			, maxSets
+			, automaticFree );
 	}
 }

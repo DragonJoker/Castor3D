@@ -26,7 +26,7 @@ namespace vk_renderer
 			*\param[in] p_value
 			*	La valeur par défaut de la variable
 			*/
-			ThreadUniqueValue( Type const & value = Type{} )
+			explicit ThreadUniqueValue( Type const & value = Type{} )
 				: m_initialValue{ value }
 			{
 			}

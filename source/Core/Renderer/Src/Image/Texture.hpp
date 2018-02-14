@@ -39,6 +39,8 @@ namespace renderer
 		};
 
 	protected:
+		Texture( Texture const & ) = delete;
+		Texture( Texture && rhs );
 		/**
 		*\~french
 		*\brief
@@ -54,9 +56,7 @@ namespace renderer
 		Texture( Device const & device );
 
 	public:
-		Texture( Texture const & ) = delete;
 		Texture & operator=( Texture const & ) = delete;
-		Texture( Texture && rhs );
 		Texture & operator=( Texture && rhs );
 		/**
 		*\~english
@@ -181,7 +181,7 @@ namespace renderer
 		*\param[in] tiling
 		*	The image tiling mode.
 		*/
-		void setImage( PixelFormat format
+		void setImageArray( PixelFormat format
 			, uint32_t size
 			, uint32_t layerCount
 			, ImageUsageFlags usageFlags = ImageUsageFlag::eTransferDst | ImageUsageFlag::eSampled
@@ -214,9 +214,166 @@ namespace renderer
 		*\param[in] tiling
 		*	The image tiling mode.
 		*/
-		void setImage( PixelFormat format
+		void setImageArray( PixelFormat format
 			, UIVec2 const & size
 			, uint32_t layerCount
+			, ImageUsageFlags usageFlags = ImageUsageFlag::eTransferDst | ImageUsageFlag::eSampled
+			, ImageTiling tiling = ImageTiling::eOptimal );
+		/**
+		*\~french
+		*\brief
+		*	Charge l'image de la texture.
+		*\param[in] format
+		*	Le format de l'image.
+		*\param[in] size
+		*	Les dimensions de l'image.
+		*\param[in] usageFlags
+		*	Les indicateurs d'utilisation de l'image.
+		*\param[in] tiling
+		*	Le mode de tiling de l'image.
+		*\~english
+		*\brief
+		*	Loads the texture image.
+		*\param[in] format
+		*	The pixel format.
+		*\param[in] size
+		*	The image dimensions.
+		*\param[in] usageFlags
+		*	The image usage flags.
+		*\param[in] tiling
+		*	The image tiling mode.
+		*/
+		void setImage( PixelFormat format
+			, uint32_t size
+			, uint32_t mipmapLevels
+			, ImageUsageFlags usageFlags = ImageUsageFlag::eTransferDst | ImageUsageFlag::eSampled
+			, ImageTiling tiling = ImageTiling::eOptimal );
+		/**
+		*\~french
+		*\brief
+		*	Charge l'image de la texture.
+		*\param[in] format
+		*	Le format de l'image.
+		*\param[in] size
+		*	Les dimensions de l'image.
+		*\param[in] usageFlags
+		*	Les indicateurs d'utilisation de l'image.
+		*\param[in] tiling
+		*	Le mode de tiling de l'image.
+		*\~english
+		*\brief
+		*	Loads the texture image.
+		*\param[in] format
+		*	The pixel format.
+		*\param[in] size
+		*	The image dimensions.
+		*\param[in] usageFlags
+		*	The image usage flags.
+		*\param[in] tiling
+		*	The image tiling mode.
+		*/
+		void setImage( PixelFormat format
+			, UIVec2 const & size
+			, uint32_t mipmapLevels
+			, ImageUsageFlags usageFlags = ImageUsageFlag::eTransferDst | ImageUsageFlag::eSampled
+			, ImageTiling tiling = ImageTiling::eOptimal
+			, SampleCountFlag samples = SampleCountFlag::e1 );
+		/**
+		*\~french
+		*\brief
+		*	Charge l'image de la texture.
+		*\param[in] format
+		*	Le format de l'image.
+		*\param[in] size
+		*	Les dimensions de l'image.
+		*\param[in] usageFlags
+		*	Les indicateurs d'utilisation de l'image.
+		*\param[in] tiling
+		*	Le mode de tiling de l'image.
+		*\~english
+		*\brief
+		*	Loads the texture image.
+		*\param[in] format
+		*	The pixel format.
+		*\param[in] size
+		*	The image dimensions.
+		*\param[in] usageFlags
+		*	The image usage flags.
+		*\param[in] tiling
+		*	The image tiling mode.
+		*/
+		void setImage( PixelFormat format
+			, UIVec3 const & size
+			, uint32_t mipmapLevels
+			, ImageUsageFlags usageFlags = ImageUsageFlag::eTransferDst | ImageUsageFlag::eSampled
+			, ImageTiling tiling = ImageTiling::eOptimal
+			, SampleCountFlag samples = SampleCountFlag::e1 );
+		/**
+		*\~french
+		*\brief
+		*	Charge l'image de la texture.
+		*\param[in] format
+		*	Le format de l'image.
+		*\param[in] size
+		*	Les dimensions de l'image.
+		*\param[in] layerCount
+		*	Le nombre de couches.
+		*\param[in] usageFlags
+		*	Les indicateurs d'utilisation de l'image.
+		*\param[in] tiling
+		*	Le mode de tiling de l'image.
+		*\~english
+		*\brief
+		*	Loads the texture image.
+		*\param[in] format
+		*	The pixel format.
+		*\param[in] size
+		*	The image dimensions.
+		*\param[in] layerCount
+		*	The number of layers.
+		*\param[in] usageFlags
+		*	The image usage flags.
+		*\param[in] tiling
+		*	The image tiling mode.
+		*/
+		void setImageArray( PixelFormat format
+			, uint32_t size
+			, uint32_t layerCount
+			, uint32_t mipmapLevels
+			, ImageUsageFlags usageFlags = ImageUsageFlag::eTransferDst | ImageUsageFlag::eSampled
+			, ImageTiling tiling = ImageTiling::eOptimal );
+		/**
+		*\~french
+		*\brief
+		*	Charge l'image de la texture.
+		*\param[in] format
+		*	Le format de l'image.
+		*\param[in] size
+		*	Les dimensions de l'image.
+		*\param[in] layerCount
+		*	Le nombre de couches.
+		*\param[in] usageFlags
+		*	Les indicateurs d'utilisation de l'image.
+		*\param[in] tiling
+		*	Le mode de tiling de l'image.
+		*\~english
+		*\brief
+		*	Loads the texture image.
+		*\param[in] format
+		*	The pixel format.
+		*\param[in] size
+		*	The image dimensions.
+		*\param[in] layerCount
+		*	The number of layers.
+		*\param[in] usageFlags
+		*	The image usage flags.
+		*\param[in] tiling
+		*	The image tiling mode.
+		*/
+		void setImageArray( PixelFormat format
+			, UIVec2 const & size
+			, uint32_t layerCount
+			, uint32_t mipmapLevels
 			, ImageUsageFlags usageFlags = ImageUsageFlag::eTransferDst | ImageUsageFlag::eSampled
 			, ImageTiling tiling = ImageTiling::eOptimal );
 		/**
@@ -277,6 +434,18 @@ namespace renderer
 		inline PixelFormat getFormat()const noexcept
 		{
 			return m_format;
+		}
+		/**
+		*\~french
+		*\return
+		*	Le nombre de niveaux de mipmaps.
+		*\~english
+		*\return
+		*	The mipmap levels count.
+		*/
+		inline uint32_t getMipmapLevels()const noexcept
+		{
+			return m_mipmapLevels;
 		}
 		/**
 		*\~french
@@ -376,9 +545,10 @@ namespace renderer
 
 	protected:
 		Device const & m_device;
-		TextureType m_type{ TextureType::eCount };
 		UIVec3 m_size;
-		uint32_t m_layerCount{ 0u };
+		TextureType m_type{ TextureType::eCount };
+		uint32_t m_layerCount{ 1u };
+		uint32_t m_mipmapLevels{ 1u };
 		PixelFormat m_format{ PixelFormat::eR8G8B8 };
 		SampleCountFlag m_samples{ SampleCountFlag::e1 };
 	};

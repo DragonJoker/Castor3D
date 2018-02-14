@@ -32,6 +32,8 @@ namespace vk_renderer
 		*	Le périphérique logique.
 		*\param[in] pool
 		*	Le pool parent.
+		*\param[in] bindingPoint
+		*	Le point d'attache du set.
 		*\~english
 		*\brief
 		*	Constructor.
@@ -39,9 +41,12 @@ namespace vk_renderer
 		*	The logical connection to the GPU.
 		*\param[in] pool
 		*	The parent pool.
+		*\param[in] bindingPoint
+		*	The binding point for the set.
 		*/
 		DescriptorSet( Device const & device
-			, DescriptorSetPool const & pool );
+			, DescriptorSetPool const & pool
+			, uint32_t bindingPoint );
 		/**
 		*\~french
 		*\brief
@@ -52,54 +57,56 @@ namespace vk_renderer
 		*/
 		~DescriptorSet();
 		/**
-		*\copydoc	renderer::createBinding
+		*\copydoc	renderer::DescriptorSet::createBinding
 		*/
 		renderer::CombinedTextureSamplerBinding const & createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
 			, renderer::TextureView const & view
-			, renderer::Sampler const & sampler )override;
+			, renderer::Sampler const & sampler
+			, uint32_t index )override;
 		/**
-		*\copydoc	renderer::createBinding
+		*\copydoc	renderer::DescriptorSet::createBinding
 		*/
 		renderer::SamplerBinding const & createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
-			, renderer::Sampler const & sampler )override;
+			, renderer::Sampler const & sampler
+			, uint32_t index )override;
 		/**
-		*\copydoc	renderer::createBinding
+		*\copydoc	renderer::DescriptorSet::createBinding
 		*/
 		renderer::SampledTextureBinding const & createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
 			, renderer::TextureView const & view
-			, renderer::ImageLayout layout )override;
+			, renderer::ImageLayout layout
+			, uint32_t index )override;
 		/**
-		*\copydoc	renderer::createBinding
+		*\copydoc	renderer::DescriptorSet::createBinding
 		*/
 		renderer::StorageTextureBinding const & createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
-			, renderer::TextureView const & view )override;
+			, renderer::TextureView const & view
+			, uint32_t index )override;
 		/**
-		*\copydoc	renderer::createBinding
+		*\copydoc	renderer::DescriptorSet::createBinding
 		*/
 		renderer::UniformBufferBinding const & createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
 			, renderer::UniformBufferBase const & uniformBuffer
 			, uint32_t offset
-			, uint32_t range )override;
+			, uint32_t range
+			, uint32_t index )override;
 		/**
-		*\copydoc	renderer::createBinding
+		*\copydoc	renderer::DescriptorSet::createBinding
 		*/
 		renderer::StorageBufferBinding const & createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
 			, renderer::BufferBase const & storageBuffer
 			, uint32_t offset
-			, uint32_t range )override;
+			, uint32_t range
+			, uint32_t index )override;
 		/**
-		*\copydoc	renderer::createBinding
+		*\copydoc	renderer::DescriptorSet::createBinding
 		*/
 		renderer::TexelBufferBinding const & createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
 			, renderer::BufferBase const & buffer
-			, renderer::BufferView const & view )override;
+			, renderer::BufferView const & view
+			, uint32_t index )override;
 		/**
-		*\~french
-		*\brief
-		*	Met à jour toutes les attaches du descripteur.
-		*\~english
-		*\brief
-		*	Updates all this descriptor's attaches.
+		*\copydoc	renderer::DescriptorSet::update
 		*/
 		void update()const override;
 		/**

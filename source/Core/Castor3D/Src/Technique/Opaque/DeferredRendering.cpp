@@ -1,7 +1,7 @@
 #include "DeferredRendering.hpp"
 
 #include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/TextureAttachment.hpp"
+#include "FrameBuffer/FrameBufferAttachment.hpp"
 #include "Render/RenderPassTimer.hpp"
 #include "Scene/Skybox.hpp"
 #include "Shader/PassBuffer/PassBuffer.hpp"
@@ -47,7 +47,7 @@ namespace castor3d
 	DeferredRendering::DeferredRendering( Engine & engine
 		, OpaquePass & opaquePass
 		, FrameBuffer & frameBuffer
-		, TextureAttachment & depthAttach
+		, FrameBufferAttachment & depthAttach
 		, Size const & size
 		, Scene const & scene
 		, SsaoConfig const & config )

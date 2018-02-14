@@ -25,10 +25,6 @@ namespace gl_renderer
 		{
 			std::cerr << "Could not initialise logical device:\n" << exc.what() << std::endl;
 		}
-		catch ( ... )
-		{
-			std::cerr << "Could not initialise logical device:\nUnknown error" << std::endl;
-		}
 
 		return result;
 	}

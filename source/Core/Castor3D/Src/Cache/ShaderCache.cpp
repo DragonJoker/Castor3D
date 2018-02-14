@@ -147,25 +147,7 @@ namespace castor3d
 		, bool initialise )
 	{
 		m_arrayPrograms.push_back( std::move( program ) );
-		auto & result = *m_arrayPrograms.back();
-
-		if ( initialise )
-		{
-			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
-			{
-				result.link();
-			}
-			else
-			{
-				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-					, [&result]()
-					{
-						result.link();
-					} ) );
-			}
-		}
-
-		return result;
+		return *m_arrayPrograms.back();
 	}
 
 	renderer::ShaderProgramPtr ShaderProgramCache::doCreateAutomaticProgram( RenderPass const & renderPass

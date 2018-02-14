@@ -49,6 +49,7 @@
 #include "Enum/GlShaderStageFlag.hpp"
 #include "Enum/GlStencilOp.hpp"
 #include "Enum/GlTextureType.hpp"
+#include "Enum/GlTextureUnit.hpp"
 #include "Enum/GlTweak.hpp"
 #include "Enum/GlWrapMode.hpp"
 

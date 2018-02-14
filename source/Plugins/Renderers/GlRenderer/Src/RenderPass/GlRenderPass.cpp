@@ -13,25 +13,22 @@ See LICENSE file in root folder.
 namespace gl_renderer
 {
 	RenderPass::RenderPass( renderer::Device const & device
-		, std::vector< renderer::PixelFormat > const & formats
+		, renderer::RenderPassAttachmentArray const & attaches
 		, renderer::RenderSubpassPtrArray const & subpasses
 		, renderer::RenderPassState const & initialState
 		, renderer::RenderPassState const & finalState
-		, bool clear
 		, renderer::SampleCountFlag samplesCount )
 		: renderer::RenderPass{ device
-			, formats
+			, attaches
 			, subpasses
 			, initialState
 			, finalState
-			, clear
 			, samplesCount }
-		, m_clear{ clear }
 	{
 	}
 
 	renderer::FrameBufferPtr RenderPass::createFrameBuffer( renderer::UIVec2 const & dimensions
-		, renderer::TextureAttachmentPtrArray && textures )const
+		, renderer::FrameBufferAttachmentArray && textures )const
 	{
 		return std::make_shared< FrameBuffer >( *this
 			, dimensions

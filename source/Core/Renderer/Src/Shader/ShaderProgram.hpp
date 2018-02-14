@@ -57,11 +57,6 @@ namespace renderer
 			, ShaderStageFlag stage ) = 0;
 		/**
 		*\brief
-		*	Lie les modules du programme.
-		*/
-		virtual void link() = 0;
-		/**
-		*\brief
 		*	Dit si le SPIR-V est supporté.
 		*/
 		virtual bool isSPIRVSupported() = 0;

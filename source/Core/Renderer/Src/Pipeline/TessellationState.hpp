@@ -40,7 +40,19 @@ namespace renderer
 	private:
 		TessellationStateFlags m_flags;
 		uint32_t m_patchControlPoints;
+		friend bool operator==( TessellationState const & lhs, TessellationState const & rhs );
 	};
+
+	inline bool operator==( TessellationState const & lhs, TessellationState const & rhs )
+	{
+		return lhs.m_flags == rhs.m_flags
+			&& lhs.m_patchControlPoints == rhs.m_patchControlPoints;
+	}
+
+	inline bool operator!=( TessellationState const & lhs, TessellationState const & rhs )
+	{
+		return !( lhs == rhs );
+	}
 }
 
 #endif

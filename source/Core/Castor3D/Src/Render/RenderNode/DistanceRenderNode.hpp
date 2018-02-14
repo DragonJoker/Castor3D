@@ -114,7 +114,7 @@ namespace castor3d
 		 */
 		inline void render()override
 		{
-			doRenderNode( m_node );
+			doUpdateNode( m_node );
 		}
 
 		//!\~english	The object node.

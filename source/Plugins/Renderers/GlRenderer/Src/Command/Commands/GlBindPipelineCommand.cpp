@@ -4,27 +4,38 @@ See LICENSE file in root folder.
 */
 #include "GlBindPipelineCommand.hpp"
 
+#include "Core/GlDevice.hpp"
 #include "Pipeline/GlPipeline.hpp"
 #include "Pipeline/GlPipelineLayout.hpp"
 #include "Shader/GlShaderProgram.hpp"
 
 namespace gl_renderer
 {
-	namespace
+	void apply( Device const & device
+		, renderer::ColourBlendState const & state )
 	{
-		void doApply( renderer::ColourBlendState const & state )
+		auto & save = device.getCurrentBlendState();
+		static bool hadBlend = false;
+
+		if ( state != save )
 		{
-			if ( state.isLogicOpEnabled() )
+			if ( state.isLogicOpEnabled()
+				&& !save.isLogicOpEnabled()
+				&& state.getLogicOp() != save.getLogicOp() )
 			{
 				glLogCall( gl::LogicOp, convert( state.getLogicOp() ) );
 			}
 
-			auto & blendConstants = state.getBlendConstants();
-			glLogCall( gl::BlendColor
-				, blendConstants[0]
-				, blendConstants[1]
-				, blendConstants[2]
-				, blendConstants[3] );
+			if ( state.getBlendConstants() != save.getBlendConstants() )
+			{
+				auto & blendConstants = state.getBlendConstants();
+				glLogCall( gl::BlendColor
+					, blendConstants[0]
+					, blendConstants[1]
+					, blendConstants[2]
+					, blendConstants[3] );
+			}
+
 			bool blend = false;
 			GLuint buf = 0u;
 
@@ -48,203 +59,299 @@ namespace gl_renderer
 				++buf;
 			}
 
-			if ( blend )
+			if ( hadBlend != blend )
 			{
-				glLogCall( gl::Enable, GL_BLEND );
+				if ( blend )
+				{
+					glLogCall( gl::Enable, GL_BLEND );
+				}
+				else
+				{
+					glLogCall( gl::Disable, GL_BLEND );
+				}
 			}
-			else
-			{
-				glLogCall( gl::Disable, GL_BLEND );
-			}
+
+			save = state;
+			hadBlend = blend;
 		}
+	}
 
-		void doApply( renderer::RasterisationState const & state )
+	void apply( Device const & device
+		, renderer::RasterisationState const & state )
+	{
+		auto & save = device.getCurrentRasterisationState();
+
+		if ( state != save )
 		{
-			if ( state.getCullMode() != renderer::CullModeFlag::eNone )
+			if ( state.getCullMode() != save.getCullMode()
+				|| state.getFrontFace() != save.getFrontFace() )
 			{
-				glLogCall( gl::Enable, GL_CULL_FACE );
-				glLogCall( gl::CullFace, convert( state.getCullMode() ) );
-				glLogCall( gl::FrontFace, convert( state.getFrontFace() ) );
-			}
-			else
-			{
-				glLogCall( gl::Disable, GL_CULL_FACE );
-			}
-
-			glLogCall( gl::PolygonMode
-				, GL_CULL_MODE_FRONT_AND_BACK
-				, convert( state.getPolygonMode() ) );
-
-			if ( state.isDepthBiasEnabled() )
-			{
-				switch ( state.getPolygonMode() )
+				if ( state.getCullMode() != renderer::CullModeFlag::eNone )
 				{
-				case renderer::PolygonMode::eFill:
-					glLogCall( gl::Enable, GL_POLYGON_OFFSET_FILL );
-					break;
+					if ( save.getCullMode() == renderer::CullModeFlag::eNone )
+					{
+						glLogCall( gl::Enable, GL_CULL_FACE );
+					}
 
-				case renderer::PolygonMode::eLine:
-					glLogCall( gl::Enable, GL_POLYGON_OFFSET_LINE );
-					break;
+					if ( state.getCullMode() != save.getCullMode() )
+					{
+						glLogCall( gl::CullFace, convert( state.getCullMode() ) );
+					}
 
-				case renderer::PolygonMode::ePoint:
-					glLogCall( gl::Enable, GL_POLYGON_OFFSET_POINT );
-					break;
+					if ( state.getFrontFace() != save.getFrontFace() )
+					{
+						glLogCall( gl::FrontFace, convert( state.getFrontFace() ) );
+					}
 				}
-
-				glLogCall( gl::PolygonOffsetClampEXT, state.getDepthBiasConstantFactor()
-					, state.getDepthBiasSlopeFactor()
-					, state.getDepthBiasClamp() );
-			}
-			else
-			{
-				switch ( state.getPolygonMode() )
+				else if ( save.getCullMode() != renderer::CullModeFlag::eNone )
 				{
-				case renderer::PolygonMode::eFill:
-					glLogCall( gl::Disable, GL_POLYGON_OFFSET_FILL );
-					break;
-
-				case renderer::PolygonMode::eLine:
-					glLogCall( gl::Disable, GL_POLYGON_OFFSET_LINE );
-					break;
-
-				case renderer::PolygonMode::ePoint:
-					glLogCall( gl::Disable, GL_POLYGON_OFFSET_POINT );
-					break;
+					glLogCall( gl::Disable, GL_CULL_FACE );
 				}
 			}
 
-			if ( state.isDepthClampEnabled() )
+			if ( state.getPolygonMode() != save.getPolygonMode() )
 			{
-				glLogCall( gl::Enable, GL_DEPTH_CLAMP );
-			}
-			else
-			{
-				glLogCall( gl::Disable, GL_DEPTH_CLAMP );
+				glLogCall( gl::PolygonMode
+					, GL_CULL_MODE_FRONT_AND_BACK
+					, convert( state.getPolygonMode() ) );
 			}
 
-			if ( state.isRasteriserDiscardEnabled() )
+			if ( state.isDepthBiasEnabled() != save.isDepthBiasEnabled()
+				|| state.getPolygonMode() != save.getPolygonMode() )
 			{
-				glLogCall( gl::Enable, GL_RASTERIZER_DISCARD );
+				if ( state.isDepthBiasEnabled() )
+				{
+					switch ( state.getPolygonMode() )
+					{
+					case renderer::PolygonMode::eFill:
+						glLogCall( gl::Enable, GL_POLYGON_OFFSET_FILL );
+						break;
+
+					case renderer::PolygonMode::eLine:
+						glLogCall( gl::Enable, GL_POLYGON_OFFSET_LINE );
+						break;
+
+					case renderer::PolygonMode::ePoint:
+						glLogCall( gl::Enable, GL_POLYGON_OFFSET_POINT );
+						break;
+					}
+
+					glLogCall( gl::PolygonOffsetClampEXT, state.getDepthBiasConstantFactor()
+						, state.getDepthBiasSlopeFactor()
+						, state.getDepthBiasClamp() );
+				}
+				else
+				{
+					switch ( state.getPolygonMode() )
+					{
+					case renderer::PolygonMode::eFill:
+						glLogCall( gl::Disable, GL_POLYGON_OFFSET_FILL );
+						break;
+
+					case renderer::PolygonMode::eLine:
+						glLogCall( gl::Disable, GL_POLYGON_OFFSET_LINE );
+						break;
+
+					case renderer::PolygonMode::ePoint:
+						glLogCall( gl::Disable, GL_POLYGON_OFFSET_POINT );
+						break;
+					}
+				}
 			}
-			else
+
+			if ( state.isDepthClampEnabled() != save.isDepthClampEnabled() )
 			{
-				glLogCall( gl::Disable, GL_RASTERIZER_DISCARD );
+				if ( state.isDepthClampEnabled() )
+				{
+					glLogCall( gl::Enable, GL_DEPTH_CLAMP );
+				}
+				else
+				{
+					glLogCall( gl::Disable, GL_DEPTH_CLAMP );
+				}
+			}
+
+			if ( state.isRasteriserDiscardEnabled() != save.isRasteriserDiscardEnabled() )
+			{
+				if ( state.isRasteriserDiscardEnabled() )
+				{
+					glLogCall( gl::Enable, GL_RASTERIZER_DISCARD );
+				}
+				else
+				{
+					glLogCall( gl::Disable, GL_RASTERIZER_DISCARD );
+				}
 			}
 
 			if ( state.getPolygonMode() == renderer::PolygonMode::eLine )
 			{
 				glLogCall( gl::LineWidth, state.getLineWidth() );
 			}
-		}
 
-		void doApply( renderer::MultisampleState const & state )
+			save = state;
+		}
+	}
+
+	void apply( Device const & device
+		, renderer::MultisampleState const & state )
+	{
+		auto & save = device.getCurrentMultisampleState();
+
+		if ( state != save )
 		{
 			if ( state.getRasterisationSamples() != renderer::SampleCountFlag::e1 )
 			{
 				glLogCall( gl::Enable, GL_MULTISAMPLE );
 
-				if ( state.isAlphaToCoverageEnabled() )
+				if ( state.isAlphaToCoverageEnabled() != save.isAlphaToCoverageEnabled() )
 				{
-					glLogCall( gl::Enable, GL_SAMPLE_ALPHA_TO_COVERAGE );
-				}
-				else
-				{
-					glLogCall( gl::Disable, GL_SAMPLE_ALPHA_TO_COVERAGE );
+					if ( state.isAlphaToCoverageEnabled() )
+					{
+						glLogCall( gl::Enable, GL_SAMPLE_ALPHA_TO_COVERAGE );
+					}
+					else
+					{
+						glLogCall( gl::Disable, GL_SAMPLE_ALPHA_TO_COVERAGE );
+					}
 				}
 
-				if ( state.isAlphaToOneEnabled() )
+				if ( state.isAlphaToOneEnabled() != save.isAlphaToOneEnabled() )
 				{
-					glLogCall( gl::Enable, GL_SAMPLE_ALPHA_TO_ONE );
-				}
-				else
-				{
-					glLogCall( gl::Disable, GL_SAMPLE_ALPHA_TO_ONE );
+					if ( state.isAlphaToOneEnabled() )
+					{
+						glLogCall( gl::Enable, GL_SAMPLE_ALPHA_TO_ONE );
+					}
+					else
+					{
+						glLogCall( gl::Disable, GL_SAMPLE_ALPHA_TO_ONE );
+					}
 				}
 			}
 			else
 			{
 				glLogCall( gl::Disable, GL_MULTISAMPLE );
 			}
-		}
 
-		void doApply( renderer::DepthStencilState const & state )
+			save = state;
+		}
+	}
+
+	void apply( Device const & device
+		, renderer::DepthStencilState const & state )
+	{
+		auto & save = device.getCurrentDepthStencilState();
+
+		if ( state != save )
 		{
-			if ( state.isDepthWriteEnabled() )
+			if ( state.isDepthWriteEnabled() != save.isDepthWriteEnabled() )
 			{
-				glLogCall( gl::DepthMask, GL_TRUE );
-			}
-			else
-			{
-				glLogCall( gl::DepthMask, GL_FALSE );
-			}
-
-			if ( state.isDepthTestEnabled() )
-			{
-				glLogCall( gl::Enable, GL_DEPTH_TEST );
-				glLogCall( gl::DepthFunc, convert( state.getDepthCompareOp() ) );
-			}
-			else
-			{
-				glLogCall( gl::Disable, GL_DEPTH_TEST );
+				if ( state.isDepthWriteEnabled() )
+				{
+					glLogCall( gl::DepthMask, GL_TRUE );
+				}
+				else
+				{
+					glLogCall( gl::DepthMask, GL_FALSE );
+				}
 			}
 
-			if ( state.isStencilTestEnabled() )
+			if ( state.isDepthTestEnabled() != save.isDepthTestEnabled() )
 			{
-				glLogCall( gl::Enable, GL_STENCIL_TEST );
-
-				glLogCall( gl::StencilMaskSeparate
-					, GL_CULL_MODE_BACK
-					, state.getBackStencilOp().getWriteMask() );
-				glLogCall( gl::StencilFuncSeparate
-					, GL_CULL_MODE_BACK
-					, convert( state.getBackStencilOp().getCompareOp() )
-					, state.getBackStencilOp().getReference()
-					, state.getBackStencilOp().getCompareMask() );
-				glLogCall( gl::StencilOpSeparate
-					, GL_CULL_MODE_BACK
-					, convert( state.getBackStencilOp().getFailOp() )
-					, convert( state.getBackStencilOp().getDepthFailOp() )
-					, convert( state.getBackStencilOp().getPassOp() ) );
-				glLogCall( gl::StencilMaskSeparate
-					, GL_CULL_MODE_FRONT
-					, state.getFrontStencilOp().getWriteMask() );
-				glLogCall( gl::StencilFuncSeparate
-					, GL_CULL_MODE_FRONT
-					, convert( state.getFrontStencilOp().getCompareOp() )
-					, state.getFrontStencilOp().getReference()
-					, state.getFrontStencilOp().getCompareMask() );
-				glLogCall( gl::StencilOpSeparate
-					, GL_CULL_MODE_FRONT
-					, convert( state.getFrontStencilOp().getFailOp() )
-					, convert( state.getFrontStencilOp().getDepthFailOp() )
-					, convert( state.getFrontStencilOp().getPassOp() ) );
-			}
-			else
-			{
-				glLogCall( gl::Disable, GL_STENCIL_TEST );
+				if ( state.isDepthTestEnabled() )
+				{
+					glLogCall( gl::Enable, GL_DEPTH_TEST );
+					glLogCall( gl::DepthFunc, convert( state.getDepthCompareOp() ) );
+				}
+				else
+				{
+					glLogCall( gl::Disable, GL_DEPTH_TEST );
+				}
 			}
 
-			if ( state.isDepthBoundsTestEnabled() )
+			if ( state.isStencilTestEnabled() != save.isStencilTestEnabled()
+				|| ( state.isStencilTestEnabled()
+					&& ( state.getBackStencilOp() != save.getBackStencilOp()
+						|| state.getFrontStencilOp() != save.getFrontStencilOp() ) ) )
 			{
-				glLogCall( gl::Enable, GL_DEPTH_CLAMP );
-				glLogCall( gl::DepthRange, state.getMinDepthBounds(), state.getMaxDepthBounds() );
+				if ( state.isStencilTestEnabled() )
+				{
+					glLogCall( gl::Enable, GL_STENCIL_TEST );
+
+					glLogCall( gl::StencilMaskSeparate
+						, GL_CULL_MODE_BACK
+						, state.getBackStencilOp().getWriteMask() );
+					glLogCall( gl::StencilFuncSeparate
+						, GL_CULL_MODE_BACK
+						, convert( state.getBackStencilOp().getCompareOp() )
+						, state.getBackStencilOp().getReference()
+						, state.getBackStencilOp().getCompareMask() );
+					glLogCall( gl::StencilOpSeparate
+						, GL_CULL_MODE_BACK
+						, convert( state.getBackStencilOp().getFailOp() )
+						, convert( state.getBackStencilOp().getDepthFailOp() )
+						, convert( state.getBackStencilOp().getPassOp() ) );
+					glLogCall( gl::StencilMaskSeparate
+						, GL_CULL_MODE_FRONT
+						, state.getFrontStencilOp().getWriteMask() );
+					glLogCall( gl::StencilFuncSeparate
+						, GL_CULL_MODE_FRONT
+						, convert( state.getFrontStencilOp().getCompareOp() )
+						, state.getFrontStencilOp().getReference()
+						, state.getFrontStencilOp().getCompareMask() );
+					glLogCall( gl::StencilOpSeparate
+						, GL_CULL_MODE_FRONT
+						, convert( state.getFrontStencilOp().getFailOp() )
+						, convert( state.getFrontStencilOp().getDepthFailOp() )
+						, convert( state.getFrontStencilOp().getPassOp() ) );
+				}
+				else
+				{
+					glLogCall( gl::Disable, GL_STENCIL_TEST );
+				}
 			}
-			else
+
+			if ( state.isDepthBoundsTestEnabled() != save.isDepthBoundsTestEnabled()
+				|| ( state.isDepthBoundsTestEnabled()
+					&& ( state.getMinDepthBounds() != save.getMinDepthBounds()
+						|| state.getMaxDepthBounds() != save.getMaxDepthBounds() ) ) )
 			{
-				glLogCall( gl::Disable, GL_DEPTH_CLAMP );
+				if ( state.isDepthBoundsTestEnabled() )
+				{
+					glLogCall( gl::Enable, GL_DEPTH_CLAMP );
+					glLogCall( gl::DepthRange, state.getMinDepthBounds(), state.getMaxDepthBounds() );
+				}
+				else
+				{
+					glLogCall( gl::Disable, GL_DEPTH_CLAMP );
+				}
 			}
+
+			save = state;
 		}
+	}
 
-		void doApply( renderer::TessellationState const & state )
+	void apply( Device const & device
+		, renderer::TessellationState const & state )
+	{
+		auto & save = device.getCurrentTessellationState();
+
+		if ( state != save )
 		{
 			if ( state.getControlPoints() )
 			{
 				glLogCall( gl::PatchParameteri, GL_PATCH_VERTICES, int( state.getControlPoints() ) );
 			}
-		}
 
-		void doApply( renderer::Viewport const & state )
+			save = state;
+		}
+	}
+
+	void apply( Device const & device
+		, renderer::Viewport const & state )
+	{
+		auto & save = device.getCurrentViewport();
+
+		if ( state != save )
 		{
 			glLogCall( gl::Viewport
 				, state.getOffset()[0]
@@ -252,8 +359,14 @@ namespace gl_renderer
 				, state.getSize()[0]
 				, state.getSize()[1] );
 		}
+	}
 
-		void doApply( renderer::Scissor const & state )
+	void apply( Device const & device
+		, renderer::Scissor const & state )
+	{
+		auto & save = device.getCurrentScissor();
+
+		if ( state != save )
 		{
 			glLogCall( gl::Scissor
 				, state.getOffset()[0]
@@ -263,9 +376,11 @@ namespace gl_renderer
 		}
 	}
 
-	BindPipelineCommand::BindPipelineCommand( renderer::Pipeline const & pipeline
+	BindPipelineCommand::BindPipelineCommand( Device const & device
+		, renderer::Pipeline const & pipeline
 		, renderer::PipelineBindPoint bindingPoint )
-		: m_pipeline{ static_cast< Pipeline const & > ( pipeline ) }
+		: m_device{ device }
+		, m_pipeline{ static_cast< Pipeline const & > ( pipeline ) }
 		, m_layout{ static_cast< PipelineLayout const & > ( m_pipeline.getLayout() ) }
 		, m_program{ static_cast< ShaderProgram const & > ( m_pipeline.getProgram() ) }
 		, m_bindingPoint{ bindingPoint }
@@ -275,23 +390,29 @@ namespace gl_renderer
 	void BindPipelineCommand::apply()const
 	{
 		glLogCommand( "BindPipelineCommand" );
-		doApply( m_pipeline.getColourBlendState() );
-		doApply( m_pipeline.getRasterisationState() );
-		doApply( m_pipeline.getDepthStencilState() );
-		doApply( m_pipeline.getMultisampleState() );
-		doApply( m_pipeline.getTessellationState() );
+		gl_renderer::apply( m_device, m_pipeline.getColourBlendState() );
+		gl_renderer::apply( m_device, m_pipeline.getRasterisationState() );
+		gl_renderer::apply( m_device, m_pipeline.getDepthStencilState() );
+		gl_renderer::apply( m_device, m_pipeline.getMultisampleState() );
+		gl_renderer::apply( m_device, m_pipeline.getTessellationState() );
 
 		if ( m_pipeline.hasViewport() )
 		{
-			doApply( m_pipeline.getViewport() );
+			gl_renderer::apply( m_device, m_pipeline.getViewport() );
 		}
 
 		if ( m_pipeline.hasScissor() )
 		{
-			doApply( m_pipeline.getScissor() );
+			gl_renderer::apply( m_device, m_pipeline.getScissor() );
 		}
 
-		glLogCall( gl::UseProgram, m_program.getProgram() );
+		auto & save = m_device.getCurrentProgram();
+
+		if ( m_program.getProgram() != save )
+		{
+			glLogCall( gl::UseProgram, m_program.getProgram() );
+			save = m_program.getProgram();
+		}
 	}
 
 	CommandPtr BindPipelineCommand::clone()const

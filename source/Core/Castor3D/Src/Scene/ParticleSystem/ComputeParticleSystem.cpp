@@ -1,19 +1,15 @@
 #include "ComputeParticleSystem.hpp"
 
-#include "ParticleSystem.hpp"
-#include "Particle.hpp"
-
 #include "Engine.hpp"
-
-#include "Mesh/Buffer/GeometryBuffers.hpp"
-#include "Miscellaneous/ComputePipeline.hpp"
+#include "Render/RenderSystem.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/Scene.hpp"
-#include "Shader/AtomicCounterBuffer.hpp"
-#include "Shader/UniformBufferBinding.hpp"
-#include "Shader/ShaderProgram.hpp"
-#include "Shader/ShaderStorageBuffer.hpp"
+#include "Scene/ParticleSystem/ParticleSystem.hpp"
+#include "Scene/ParticleSystem/Particle.hpp"
 #include "Texture/TextureLayout.hpp"
+
+#include <Buffer/GeometryBuffers.hpp>
+#include <Buffer/UniformBuffer.hpp>
 
 #include <Graphics/PixelBuffer.hpp>
 
@@ -25,15 +21,7 @@ namespace castor3d
 {
 	ComputeParticleSystem::ComputeParticleSystem( ParticleSystem & p_parent )
 		: ParticleSystemImpl{ ParticleSystemImpl::Type::eComputeShader, p_parent }
-		, m_ubo{ cuT( "ParticleSystem" )
-			, *p_parent.getScene()->getEngine()->getRenderSystem()
-			, 1u }
 	{
-		m_deltaTime = m_ubo.createUniform< UniformType::eFloat >( cuT( "c3d_fDeltaTime" ) );
-		m_time = m_ubo.createUniform< UniformType::eFloat >( cuT( "c3d_fTotalTime" ) );
-		m_maxParticleCount = m_ubo.createUniform< UniformType::eUInt >( cuT( "c3d_uiMaxParticlesCount" ) );
-		m_currentParticleCount = m_ubo.createUniform< UniformType::eUInt >( cuT( "c3d_uiCurrentParticlesCount" ) );
-		m_emitterPosition = m_ubo.createUniform< UniformType::eVec3f >( cuT( "c3d_v3EmitterPosition" ) );
 	}
 
 	ComputeParticleSystem::~ComputeParticleSystem()
@@ -43,6 +31,16 @@ namespace castor3d
 	bool ComputeParticleSystem::initialise()
 	{
 		bool result = m_updateProgram != nullptr;
+
+		if ( result )
+		{
+			auto & device = *getParent().getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
+			m_ubo = renderer::makeUniformBuffer< Configuration >( device
+				, 1u
+				, renderer::BufferTarget::eTransferDst
+				, renderer::MemoryPropertyFlag::eHostVisible );
+			m_ubo->getData( 0u ).maxParticleCount = uint32_t( m_parent.getMaxParticlesCount() );
+		}
 
 		if ( result )
 		{
@@ -56,18 +54,6 @@ namespace castor3d
 
 		if ( result )
 		{
-			m_maxParticleCount->setValue( uint32_t( m_parent.getMaxParticlesCount() ) );
-			result = m_updateProgram->initialise();
-		}
-
-		if ( result )
-		{
-			m_binding = &m_ubo.createBinding( *m_updateProgram );
-			result = m_binding != nullptr;
-		}
-
-		if ( result )
-		{
 			result = doInitialisePipeline();
 		}
 
@@ -76,59 +62,49 @@ namespace castor3d
 
 	void ComputeParticleSystem::cleanup()
 	{
-		m_deltaTime.reset();
-		m_time.reset();
-		m_maxParticleCount.reset();
-		m_currentParticleCount.reset();
-		m_launcherLifetime.reset();
-		m_shellLifetime.reset();
-		m_secondaryShellLifetime.reset();
-
 		if ( m_randomStorage )
 		{
-			m_randomStorage->cleanup();
+			m_randomStorage.reset();
 		}
 
 		for ( auto & storage : m_particlesStorages )
 		{
 			if ( storage )
 			{
-				storage->cleanup();
+				storage.reset();
 			}
 		}
 
 		if ( m_generatedCountBuffer )
 		{
-			m_generatedCountBuffer->cleanup();
+			m_generatedCountBuffer.reset();
 		}
 
-		m_ubo.cleanup();
-
-		if ( m_updateProgram )
-		{
-			m_updateProgram->cleanup();
-			m_updateProgram.reset();
-		}
+		m_ubo.reset();
+		m_updateProgram = nullptr;
 	}
 
-	uint32_t ComputeParticleSystem::update( Milliseconds const & p_time
-		, Milliseconds const & p_totalTime )
+	uint32_t ComputeParticleSystem::update( Milliseconds const & time
+		, Milliseconds const & totalTime )
 	{
-		m_deltaTime->setValue( float( p_time.count() ) );
-		m_time->setValue( float( p_totalTime.count() ) );
+		auto & data = m_ubo->getData( 0u );
+		data.deltaTime = float( time.count() );
+		data.time = float( totalTime.count() );
 		auto particlesCount = std::max( 1u, m_particlesCount );
-		m_currentParticleCount->setValue( particlesCount );
-		m_emitterPosition->setValue( m_parent.getParent()->getDerivedPosition() );
-		m_ubo.update();
-		m_binding->bind( 1u );
+		data.currentParticleCount = particlesCount;
+		data.emitterPosition = m_parent.getParent()->getDerivedPosition();
+		m_ubo->upload( 0u );
 
 		uint32_t counts[]{ 0u, 0u };
-		m_generatedCountBuffer->upload( 0u, 2u, counts );
 
-		m_randomStorage->bindTo( 1u );
-		m_particlesStorages[m_in]->bindTo( 2u );
-		m_particlesStorages[m_out]->bindTo( 3u );
-		m_binding->bind( 5u );
+		if ( auto buffer = m_generatedCountBuffer->lock( 0u
+			, 2u
+			, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateRange ) )
+		{
+			buffer[0] = counts[0];
+			buffer[1] = counts[1];
+			m_randomStorage->unlock( 2u, true );
+		}
 
 		m_computePipeline->run(
 			Point3ui{ std::max( 1u, uint32_t( std::ceil( float( particlesCount ) / m_worgGroupSize ) ) ), 1u, 1u },
@@ -149,85 +125,101 @@ namespace castor3d
 		return m_particlesCount;
 	}
 
-	void ComputeParticleSystem::addParticleVariable( castor::String const & p_name, renderer::AttributeFormat p_type, castor::String const & p_defaultValue )
+	void ComputeParticleSystem::addParticleVariable( castor::String const & name
+		, renderer::AttributeFormat type
+		, castor::String const & defaultValue )
 	{
-		m_inputs.push_back( ParticleElementDeclaration{ p_name, 0u, p_type, m_inputs.stride() } );
+		m_inputs.push_back( ParticleElementDeclaration{ name, 0u, type, m_inputs.stride() } );
 	}
 
-	void ComputeParticleSystem::setUpdateProgram( ShaderProgramSPtr p_program )
+	void ComputeParticleSystem::setUpdateProgram( renderer::ShaderProgram const & program )
 	{
-		m_updateProgram = p_program;
-
-		m_updateProgram->createAtomicCounterBuffer( cuT( "Counters" ), ShaderTypeFlag::eCompute );
-		m_generatedCountBuffer = m_updateProgram->findAtomicCounterBuffer( cuT( "Counters" ) );
-
-		m_randomStorage = std::make_shared< ShaderStorageBuffer >( *m_parent.getScene()->getEngine() );
-		m_particlesStorages[m_in] = std::make_shared< ShaderStorageBuffer >( *m_parent.getScene()->getEngine() );
-		m_particlesStorages[m_out] = std::make_shared< ShaderStorageBuffer >( *m_parent.getScene()->getEngine() );;
+		m_updateProgram = &program;
 	}
 
 	bool ComputeParticleSystem::doInitialiseParticleStorage()
 	{
 		auto size = uint32_t( m_parent.getMaxParticlesCount() * m_inputs.stride() );
-		bool result = m_generatedCountBuffer->initialise( uint32_t( sizeof( uint32_t ) * 2u ), 0u );
+		auto & device = *getParent().getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
+		m_generatedCountBuffer = renderer::makeBuffer< uint32_t >( device
+			, 2u
+			, renderer::BufferTarget::eStorageBuffer | renderer::BufferTarget::eTransferDst | renderer::BufferTarget::eTransferSrc
+			, renderer::MemoryPropertyFlag::eHostVisible );
 
-		if ( result )
+		m_particlesStorages[m_in] = renderer::makeBuffer< uint8_t >( device
+			, size
+			, renderer::BufferTarget::eStorageBuffer | renderer::BufferTarget::eTransferDst
+			, renderer::MemoryPropertyFlag::eHostVisible );
+
+		m_particlesStorages[m_in] = renderer::makeBuffer< uint8_t >( device
+			, size
+			, renderer::BufferTarget::eStorageBuffer | renderer::BufferTarget::eTransferDst
+			, renderer::MemoryPropertyFlag::eHostVisible );
+
+		Particle particle{ m_inputs, m_parent.getDefaultValues() };
+
+		if ( auto buffer = m_particlesStorages[m_in]->getBuffer().lock( 0u
+			, size
+			, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateRange ) )
 		{
-			m_particlesStorages[m_in]->resize( size );
-			result = m_particlesStorages[m_in]->initialise( renderer::MemoryPropertyFlag::eHostVisible );
-		}
-
-		if ( result )
-		{
-			m_particlesStorages[m_out]->resize( size );
-			result = m_particlesStorages[m_out]->initialise( renderer::MemoryPropertyFlag::eHostVisible );
-		}
-
-		if ( result )
-		{
-			std::vector< uint8_t > particles;
-			particles.resize( m_parent.getMaxParticlesCount() * m_inputs.stride() );
-			auto buffer = particles.data();
-			Particle particle{ m_inputs, m_parent.getDefaultValues() };
-
 			for ( uint32_t i = 0u; i < m_parent.getMaxParticlesCount(); ++i )
 			{
 				std::memcpy( buffer, particle.getData(), m_inputs.stride() );
 				buffer += m_inputs.stride();
 			}
 
-			m_particlesStorages[m_in]->upload( 0u, uint32_t( particles.size() ), particles.data() );
+			m_particlesStorages[m_in]->getBuffer().unlock( size, true );
 		}
 
-		return result;
+		return true;
 	}
 
 	bool ComputeParticleSystem::doCreateRandomStorage()
 	{
-		auto size = uint32_t( 1024u * 4u * sizeof( float ) );
-		m_randomStorage->resize( size );
-		bool result = m_randomStorage->initialise( renderer::MemoryPropertyFlag::eHostVisible );
+		auto & device = *getParent().getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
+		uint32_t size = 1024u;
+		m_randomStorage = renderer::makeBuffer< renderer::Vec4 >( device
+			, 1024
+			, renderer::BufferTarget::eStorageBuffer | renderer::BufferTarget::eTransferDst
+			, renderer::MemoryPropertyFlag::eHostVisible );
+		std::random_device device;
+		std::uniform_real_distribution< float > distribution{ -1.0f, 1.0f };
 
-		if ( result )
+		if ( auto buffer = m_randomStorage->getBuffer().lock( 0u
+			, size
+			, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateRange ) )
 		{
-			std::array< float, 1024u * 4u > buffer;
-			std::random_device device;
-			std::uniform_real_distribution< float > distribution{ -1.0f, 1.0f };
-
-			for ( auto & value : buffer )
+			for ( auto i = 0u; i < size; ++i )
 			{
-				value = distribution( device );
+				*buffer = distribution( device );
+				++buffer;
 			}
 
-			m_randomStorage->upload( 0u, size, reinterpret_cast< uint8_t * >( buffer.data() ) );
+			m_randomStorage->getBuffer().unlock( size, true );
 		}
 
-		return result;
+		return true;
 	}
 
 	bool ComputeParticleSystem::doInitialisePipeline()
 	{
-		m_computePipeline = m_parent.getScene()->getEngine()->getRenderSystem()->createComputePipeline( *m_updateProgram );
-		return m_computePipeline != nullptr;
+		auto & device = *getParent().getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
+		renderer::DescriptorSetLayoutBindingArray bindings
+		{
+			{ 0u, renderer::DescriptorType::eStorageBuffer, renderer::ShaderStageFlag::eCompute },
+			{ 1u, renderer::DescriptorType::eStorageBuffer, renderer::ShaderStageFlag::eCompute },
+			{ 2u, renderer::DescriptorType::eStorageBuffer, renderer::ShaderStageFlag::eCompute },
+			{ 3u, renderer::DescriptorType::eStorageBuffer, renderer::ShaderStageFlag::eCompute },
+			{ 4u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eCompute },
+		};
+		m_descriptorLayout = device.createDescriptorSetLayout( std::move( bindings ) );
+		m_descriptorPool = m_descriptorLayout->createPool( 1u );
+		m_descriptorSet = m_descriptorPool->createDescriptorSet( 0u );
+		m_pipelineLayout = device.createPipelineLayout( *m_descriptorLayout );
+		m_pipeline = m_pipelineLayout->createPipeline( *m_updateProgram
+			, renderer::VertexLayoutCRefArray{}
+			, *m_renderPass
+			, );
+		return true;
 	}
 }

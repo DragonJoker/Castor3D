@@ -15,7 +15,7 @@
 #include <RenderPass/RenderPassState.hpp>
 #include <RenderPass/RenderSubpass.hpp>
 #include <RenderPass/RenderSubpassState.hpp>
-#include <RenderPass/TextureAttachment.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
 
 #include <GlslSource.hpp>
 
@@ -148,7 +148,16 @@ namespace castor3d
 			, 1u
 			, 0u
 			, 1u );
-		std::vector< renderer::PixelFormat > formats{ { m_depthBuffer->getFormat(), m_environmentMap.getTexture()->getPixelFormat() } };
+		std::vector< renderer::PixelFormat > formats
+		{
+			m_depthBuffer->getFormat(),
+			m_environmentMap.getTexture()->getPixelFormat()
+		};
+		renderer::RenderPassAttachmentArray rpAttaches
+		{
+			{ m_depthBuffer->getFormat(), true },
+			{ m_environmentMap.getTexture()->getPixelFormat(), true }
+		};
 		renderer::RenderSubpassPtrArray subpasses;
 		subpasses.emplace_back( device.createRenderSubpass( formats
 			, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
@@ -164,7 +173,7 @@ namespace castor3d
 				, 1u
 				, face
 				, 1u );
-			frameBuffer.renderPass = device.createRenderPass( formats
+			frameBuffer.renderPass = device.createRenderPass( rpAttaches
 				, subpasses
 				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 					, renderer::AccessFlag::eColourAttachmentWrite
@@ -172,9 +181,9 @@ namespace castor3d
 				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 					, renderer::AccessFlag::eColourAttachmentWrite
 					, { renderer::ImageLayout::eDepthStencilAttachmentOptimal, renderer::ImageLayout::eColourAttachmentOptimal } } );
-			renderer::TextureAttachmentPtrArray attaches;
-			attaches.emplace_back( std::make_unique< renderer::TextureAttachment >( *m_depthBufferView ) );
-			attaches.emplace_back( std::make_unique< renderer::TextureAttachment >( *frameBuffer.view ) );
+			renderer::FrameBufferAttachmentArray attaches;
+			attaches.emplace_back( *( frameBuffer.renderPass->begin() + 0u ), *m_depthBufferView );
+			attaches.emplace_back( *( frameBuffer.renderPass->begin() + 1u ), *frameBuffer.view );
 			frameBuffer.frameBuffer = frameBuffer.renderPass->createFrameBuffer( renderer::UIVec2{ MapSize }
 				, std::move( attaches ) );
 			++face;

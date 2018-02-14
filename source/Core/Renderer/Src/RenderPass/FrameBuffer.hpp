@@ -1,4 +1,4 @@
-/*
+﻿/*
 This file belongs to Renderer.
 See LICENSE file in root folder.
 */
@@ -6,7 +6,7 @@ See LICENSE file in root folder.
 #define ___Renderer_FrameBuffer_HPP___
 #pragma once
 
-#include "TextureAttachment.hpp"
+#include "FrameBufferAttachment.hpp"
 
 namespace renderer
 {
@@ -14,7 +14,7 @@ namespace renderer
 	*\brief
 	*	Classe encapsulant le concept de Framebuffer.
 	*\remarks
-	*	Contient les tampon de profondeur et de couleur.
+	*	Contient les tampons de profondeur et de couleur.
 	*/
 	class FrameBuffer
 	{
@@ -37,7 +37,7 @@ namespace renderer
 		*/
 		FrameBuffer( RenderPass const & renderPass
 			, UIVec2 const & dimensions
-			, TextureAttachmentPtrArray && textures );
+			, FrameBufferAttachmentArray && textures );
 
 	public:
 		/**
@@ -56,7 +56,7 @@ namespace renderer
 		*	Pour utiliser cette fonction, il faut que le tampon soit activé.
 		*\param[in] xoffset, yoffset
 		*	Le décalage à partir duquel les données seront copiées, par rapport
-		*	au d�but du stockage de la texture, en VRAM.
+		*	au début du stockage de la texture, en VRAM.
 		*\param[in] width, height
 		*	Les dimensions des données à copier.
 		*\param[in] format
@@ -72,9 +72,45 @@ namespace renderer
 			, uint32_t height
 			, PixelFormat format
 			, uint8_t * data )const noexcept = 0;
+		/**
+		*\~english
+		*\return
+		*	The beginning of the attaches array.
+		*\~french
+		*\return
+		*	Le début du tableau des attaches.
+		*/
+		inline auto begin()const
+		{
+			return m_attachments.begin();
+		}
+		/**
+		*\~english
+		*\return
+		*	The end of the attaches array.
+		*\~french
+		*\return
+		*	La fin du tableau des attaches.
+		*/
+		inline auto end()const
+		{
+			return m_attachments.end();
+		}
+		/**
+		*\~english
+		*\return
+		*	The number of attaches.
+		*\~french
+		*\return
+		*	Le nombre d'attaches.
+		*/
+		inline size_t getSize()const
+		{
+			return m_attachments.size();
+		}
 
 	protected:
-		TextureAttachmentPtrArray m_attachments;
+		FrameBufferAttachmentArray m_attachments;
 	};
 }
 

@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_BloomPostEffect___
 #define ___C3D_BloomPostEffect___
 
-#include <Mesh/Buffer/ParticleDeclaration.hpp>
+#include <Buffer/ParticleDeclaration.hpp>
 #include <Miscellaneous/GaussianBlur.hpp>
 #include <PostEffect/PostEffect.hpp>
 #include <Texture/TextureUnit.hpp>

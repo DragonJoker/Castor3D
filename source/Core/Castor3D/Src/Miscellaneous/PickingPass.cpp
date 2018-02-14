@@ -85,7 +85,7 @@ namespace castor3d
 
 					if ( renderNode.m_data.isInitialised() )
 					{
-						doRenderNodeNoPass( renderNode );
+						doUpdateNodeModelMatrix( renderNode );
 					}
 				}
 
@@ -233,12 +233,12 @@ namespace castor3d
 	{
 		m_matrixUbo.update( camera.getView()
 			, camera.getViewport().getProjection() );
-		doRender( nodes.m_scene, nodes.m_instantiatedStaticNodes.m_backCulled );
-		doRender( nodes.m_scene, nodes.m_staticNodes.m_backCulled );
-		doRender( nodes.m_scene, nodes.m_skinnedNodes.m_backCulled );
-		doRender( nodes.m_scene, nodes.m_instantiatedSkinnedNodes.m_backCulled );
-		doRender( nodes.m_scene, nodes.m_morphingNodes.m_backCulled );
-		doRender( nodes.m_scene, nodes.m_billboardNodes.m_backCulled );
+		doUpdate( nodes.m_scene, nodes.m_instantiatedStaticNodes.m_backCulled );
+		doUpdate( nodes.m_scene, nodes.m_staticNodes.m_backCulled );
+		doUpdate( nodes.m_scene, nodes.m_skinnedNodes.m_backCulled );
+		doUpdate( nodes.m_scene, nodes.m_instantiatedSkinnedNodes.m_backCulled );
+		doUpdate( nodes.m_scene, nodes.m_morphingNodes.m_backCulled );
+		doUpdate( nodes.m_scene, nodes.m_billboardNodes.m_backCulled );
 	}
 
 	Point3f PickingPass::doFboPick( Position const & position
@@ -312,7 +312,7 @@ namespace castor3d
 		return result;
 	}
 
-	void PickingPass::doRender( Scene const & scene
+	void PickingPass::doUpdate( Scene const & scene
 		, SubmeshStaticRenderNodesByPipelineMap & nodes )
 	{
 		doTraverseNodes< true >( *this
@@ -333,7 +333,7 @@ namespace castor3d
 			} );
 	}
 
-	void PickingPass::doRender( Scene const & scene
+	void PickingPass::doUpdate( Scene const & scene
 		, StaticRenderNodesByPipelineMap & nodes )
 	{
 		doRenderNonInstanced< true >( *this
@@ -343,7 +343,7 @@ namespace castor3d
 			, nodes );
 	}
 
-	void PickingPass::doRender( Scene const & scene
+	void PickingPass::doUpdate( Scene const & scene
 		, SkinningRenderNodesByPipelineMap & nodes )
 	{
 		doRenderNonInstanced< true >( *this
@@ -353,7 +353,7 @@ namespace castor3d
 			, nodes );
 	}
 	
-	void PickingPass::doRender( Scene const & scene
+	void PickingPass::doUpdate( Scene const & scene
 		, SubmeshSkinningRenderNodesByPipelineMap & nodes )
 	{
 		doTraverseNodes< true >( *this
@@ -378,7 +378,7 @@ namespace castor3d
 			} );
 	}
 
-	void PickingPass::doRender( Scene const & scene
+	void PickingPass::doUpdate( Scene const & scene
 		, MorphingRenderNodesByPipelineMap & nodes )
 	{
 		doRenderNonInstanced< true >( *this
@@ -388,7 +388,7 @@ namespace castor3d
 			, nodes );
 	}
 
-	void PickingPass::doRender( Scene const & scene
+	void PickingPass::doUpdate( Scene const & scene
 		, BillboardRenderNodesByPipelineMap & nodes )
 	{
 		doRenderNonInstanced< true >( *this

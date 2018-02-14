@@ -3,6 +3,7 @@
 #include "Engine.hpp"
 
 #include <Buffer/VertexBuffer.hpp>
+#include <Command/CommandBuffer.hpp>
 #include <Image/TextureView.hpp>
 #include <Pipeline/DepthStencilState.hpp>
 #include <Pipeline/Scissor.hpp>
@@ -12,7 +13,7 @@
 #include <RenderPass/RenderPassState.hpp>
 #include <RenderPass/RenderSubpass.hpp>
 #include <RenderPass/RenderSubpassState.hpp>
-#include <RenderPass/TextureAttachment.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
 #include <Shader/ShaderProgram.hpp>
 
 #include <GlslSource.hpp>
@@ -53,24 +54,30 @@ namespace castor3d
 			, *m_vertexLayout );
 
 		// Create the render pass.
-		std::vector< renderer::PixelFormat > formats{ { dstTexture.getFormat() } };
+		std::vector< renderer::PixelFormat > formats
+		{
+			dstTexture.getFormat()
+		};
+		renderer::RenderPassAttachmentArray rpAttaches
+		{
+			{ dstTexture.getFormat(), false }
+		};
 		renderer::RenderSubpassPtrArray subpasses;
 		subpasses.emplace_back( device.createRenderSubpass( formats
 			, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 			, renderer::AccessFlag::eColourAttachmentWrite } ) );
-		m_renderPass = device.createRenderPass( formats
+		m_renderPass = device.createRenderPass( rpAttaches
 			, std::move( subpasses )
 			, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::AccessFlag::eColourAttachmentWrite
 				, { renderer::ImageLayout::eColourAttachmentOptimal } }
 			, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::AccessFlag::eColourAttachmentWrite
-				, { renderer::ImageLayout::eColourAttachmentOptimal } }
-			, false );
+				, { renderer::ImageLayout::eColourAttachmentOptimal } } );
 
 		// Initialise the frame buffer.
-		renderer::TextureAttachmentPtrArray attaches;
-		attaches.emplace_back( std::make_unique< renderer::TextureAttachment >( dstTexture ) );
+		renderer::FrameBufferAttachmentArray attaches;
+		attaches.emplace_back( *( m_renderPass->begin() ), dstTexture );
 		m_frameBuffer = m_renderPass->createFrameBuffer( renderer::UIVec2{ size }
 			, std::move( attaches ) );
 
@@ -129,7 +136,6 @@ namespace castor3d
 
 			// Inputs
 			auto position = writer.declAttribute< Vec2 >( cuT( "position" ) );
-			UBO_MATRIX( writer, 0 );
 
 			// Outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
@@ -138,7 +144,7 @@ namespace castor3d
 			std::function< void() > main = [&]()
 			{
 				vtx_texture = position;
-				gl_Position = c3d_projection * vec4( position.x(), position.y(), 0.0, 1.0 );
+				gl_Position = vec4( position.x(), position.y(), 0.0, 1.0 );
 			};
 
 			writer.implementFunction< void >( cuT( "main" ), main );
@@ -327,7 +333,6 @@ namespace castor3d
 		auto & program = cache.getNewProgram( false );
 		program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
 		program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
-		program.link();
 		return program;
 	}
 }

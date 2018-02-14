@@ -12,8 +12,10 @@ namespace gl_renderer
 {
 	class Context
 	{
-	public:
+	protected:
 		Context( renderer::ConnectionPtr && connection );
+
+	public:
 		virtual ~Context() = default;
 		/**
 		*\brief

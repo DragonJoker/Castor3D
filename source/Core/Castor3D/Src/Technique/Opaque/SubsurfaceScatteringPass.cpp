@@ -275,7 +275,6 @@ namespace castor3d
 			auto & program = cache.getNewProgram( false );
 			program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
 			program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
-			program.link();
 			return program;
 		}
 
@@ -288,7 +287,6 @@ namespace castor3d
 			auto & program = cache.getNewProgram( false );
 			program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
 			program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
-			program.link();
 			return program;
 		}
 
@@ -354,25 +352,25 @@ namespace castor3d
 	{
 		auto & device = *renderSystem.getCurrentDevice();
 		std::vector< PixelFormat > formats{ destination.getTexture()->getPixelFormat() };
+		renderer::RenderPassAttachmentArray rpAttaches{ { destination.getTexture()->getPixelFormat(), false } };
 
 		// Create the render pass.
 		renderer::RenderSubpassPtrArray subpasses;
 		subpasses.emplace_back( device.createRenderSubpass( formats
 			, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 			, renderer::AccessFlag::eColourAttachmentWrite } ) );
-		m_renderPass = device.createRenderPass( formats
+		m_renderPass = device.createRenderPass( rpAttaches
 			, std::move( subpasses )
 			, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::AccessFlag::eColourAttachmentWrite
 				, { renderer::ImageLayout::eColourAttachmentOptimal } }
 			, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::AccessFlag::eColourAttachmentWrite
-				, { renderer::ImageLayout::eColourAttachmentOptimal } }
-			, false );
+				, { renderer::ImageLayout::eColourAttachmentOptimal } } );
 
 		// Initialise the frame buffer.
-		renderer::TextureAttachmentPtrArray attaches;
-		attaches.emplace_back( std::make_unique< renderer::TextureAttachment >( destination.getTexture()->getView() ) );
+		renderer::FrameBufferAttachmentArray attaches;
+		attaches.emplace_back( *m_renderPass->begin(), destination.getTexture()->getView() );
 		m_frameBuffer = m_renderPass->createFrameBuffer( renderer::UIVec2{ size }
 			, std::move( attaches ) );
 
@@ -449,25 +447,25 @@ namespace castor3d
 	{
 		auto & device = *renderSystem.getCurrentDevice();
 		std::vector< PixelFormat > formats{ destination.getTexture()->getPixelFormat() };
+		renderer::RenderPassAttachmentArray rpAttaches{ { destination.getTexture()->getPixelFormat(), false } };
 
 		// Create the render pass.
 		renderer::RenderSubpassPtrArray subpasses;
 		subpasses.emplace_back( device.createRenderSubpass( formats
 			, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 			, renderer::AccessFlag::eColourAttachmentWrite } ) );
-		m_renderPass = device.createRenderPass( formats
+		m_renderPass = device.createRenderPass( rpAttaches
 			, std::move( subpasses )
 			, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::AccessFlag::eColourAttachmentWrite
 				, { renderer::ImageLayout::eColourAttachmentOptimal } }
 			, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::AccessFlag::eColourAttachmentWrite
-				, { renderer::ImageLayout::eColourAttachmentOptimal } }
-			, false );
+				, { renderer::ImageLayout::eColourAttachmentOptimal } } );
 
 		// Initialise the frame buffer.
-		renderer::TextureAttachmentPtrArray attaches;
-		attaches.emplace_back( std::make_unique< renderer::TextureAttachment >( destination.getTexture()->getView() ) );
+		renderer::FrameBufferAttachmentArray attaches;
+		attaches.emplace_back( *m_renderPass->begin(), destination.getTexture()->getView() );
 		m_frameBuffer = m_renderPass->createFrameBuffer( renderer::UIVec2{ size }
 			, std::move( attaches ) );
 

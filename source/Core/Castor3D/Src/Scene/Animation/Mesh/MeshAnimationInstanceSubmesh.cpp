@@ -4,7 +4,7 @@
 #include "MeshAnimationInstance.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Mesh/SubmeshComponent/MorphComponent.hpp"
-#include "Mesh/Buffer/VertexBuffer.hpp"
+#include "Buffer/VertexBuffer.hpp"
 #include "Scene/Geometry.hpp"
 #include "Scene/Animation/AnimatedMesh.hpp"
 #include "Shader/Uniform/Uniform.hpp"

@@ -8,7 +8,7 @@ See LICENSE file in root folder.
 
 namespace gl_renderer
 {
-	enum GLFilter
+	enum GlFilter
 		: GLenum
 	{
 		GL_FILTER_NEAREST = 0x2600,
@@ -18,25 +18,25 @@ namespace gl_renderer
 		GL_FILTER_NEAREST_MIPMAP_LINEAR = 0x2702,
 		GL_FILTER_LINEAR_MIPMAP_LINEAR = 0x2703,
 	};
-	std::string getName( GLFilter value );
+	std::string getName( GlFilter value );
 	/**
 	*\brief
-	*	Convertit un renderer::Filter en GLFilter.
+	*	Convertit un renderer::Filter en GlFilter.
 	*\param[in] filter
 	*	Le renderer::Filter.
 	*\return
-	*	Le GLFilter.
+	*	Le GlFilter.
 	*/
-	GLFilter convert( renderer::Filter const & filter );
+	GlFilter convert( renderer::Filter const & filter );
 	/**
 	*\brief
-	*	Convertit un renderer::Filter en GLFilter, en tenant compte d'un mode de mipmapping.
+	*	Convertit un renderer::Filter en GlFilter, en tenant compte d'un mode de mipmapping.
 	*\param[in] filter
 	*	Le renderer::Filter.
 	*\param[in] mode
 	*	Le mode de mipmapping.
 	*\return
-	*	Le GLFilter.
+	*	Le GlFilter.
 	*/
-	GLFilter convert( renderer::Filter const & filter, renderer::MipmapMode mode );
+	GlFilter convert( renderer::Filter const & filter, renderer::MipmapMode mode );
 }

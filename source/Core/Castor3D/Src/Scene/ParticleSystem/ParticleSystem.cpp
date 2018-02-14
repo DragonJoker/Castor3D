@@ -1,14 +1,15 @@
 #include "ParticleSystem.hpp"
 
-#include "ComputeParticleSystem.hpp"
-#include "CpuParticleSystem.hpp"
-#include "TransformFeedbackParticleSystem.hpp"
-
 #include "Engine.hpp"
-
 #include "Material/Material.hpp"
+#include "Render/RenderSystem.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/Scene.hpp"
+#include "Scene/ParticleSystem/ComputeParticleSystem.hpp"
+#include "Scene/ParticleSystem/CpuParticleSystem.hpp"
+
+#include <Core/Device.hpp>
+#include <Pipeline/VertexLayout.hpp>
 
 using namespace castor;
 
@@ -78,14 +79,9 @@ namespace castor3d
 			}
 		}
 
-		if ( result && obj.m_tfImpl->hasUpdateProgram() )
-		{
-			result = ShaderProgram::TextWriter( m_tabs + cuT( "\t" ), cuT( "tf_shader_program" ) )( obj.m_tfImpl->getUpdateProgram(), file );
-		}
-
 		if ( result && obj.m_csImpl->hasUpdateProgram() )
 		{
-			result = ShaderProgram::TextWriter( m_tabs + cuT( "\t" ), cuT( "cs_shader_program" ) )( obj.m_csImpl->getUpdateProgram(), file );
+			//result = ShaderProgram::TextWriter( m_tabs + cuT( "\t" ), cuT( "cs_shader_program" ) )( obj.m_csImpl->getUpdateProgram(), file );
 		}
 
 		if ( result )
@@ -98,10 +94,12 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	ParticleSystem::ParticleSystem( String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent, size_t p_count )
-		: MovableObject{ p_name, p_scene, MovableType::eParticleEmitter, p_parent }
-		, m_particlesCount{ p_count }
-		, m_tfImpl{ std::make_unique< TransformFeedbackParticleSystem >( *this ) }
+	ParticleSystem::ParticleSystem( String const & name
+		, Scene & scene
+		, SceneNodeSPtr parent
+		, size_t count )
+		: MovableObject{ name, scene, MovableType::eParticleEmitter, parent }
+		, m_particlesCount{ count }
 		, m_csImpl{ std::make_unique< ComputeParticleSystem >( *this ) }
 	{
 	}
@@ -112,11 +110,18 @@ namespace castor3d
 
 	bool ParticleSystem::initialise()
 	{
-		auto & engine = *getScene()->getEngine();
-		m_particlesBillboard = std::make_unique< BillboardBase >(
-			*getScene(),
-			getScene()->getObjectRootNode(),
-			std::make_shared< VertexBuffer >( engine, m_billboardInputs ) );
+		auto & device = *getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
+		auto vertexLayout = device.createVertexLayout( 0u, m_inputs.stride() );
+		uint32_t index{ 0u };
+
+		for ( auto & attribute : m_inputs )
+		{
+			vertexLayout->createAttribute( index++, attribute.m_dataType, attribute.m_offset );
+		}
+
+		m_particlesBillboard = std::make_unique< BillboardBase >( *getScene()
+			, getScene()->getObjectRootNode()
+			, std::move( vertexLayout ) );
 		m_particlesBillboard->setBillboardType( BillboardType::eSpherical );
 		m_particlesBillboard->setDimensions( m_dimensions );
 		m_particlesBillboard->setMaterial( m_material.lock() );
@@ -135,22 +140,12 @@ namespace castor3d
 		}
 		else
 		{
-			result = m_tfImpl->initialise();
+			result = m_cpuImpl->initialise();
 
 			if ( result )
 			{
-				Logger::logInfo( cuT( "Using Transform Feedback Particle System" ) );
-				m_impl = m_tfImpl.get();
-			}
-			else
-			{
-				result = m_cpuImpl->initialise();
-
-				if ( result )
-				{
-					Logger::logInfo( cuT( "Using CPU Particle System" ) );
-					m_impl = m_cpuImpl.get();
-				}
+				Logger::logInfo( cuT( "Using CPU Particle System" ) );
+				m_impl = m_cpuImpl.get();
 			}
 		}
 
@@ -163,7 +158,6 @@ namespace castor3d
 		m_particlesBillboard->cleanup();
 		m_particlesBillboard.reset();
 		m_csImpl->cleanup();
-		m_tfImpl->cleanup();
 		m_cpuImpl->cleanup();
 		m_impl = nullptr;
 	}
@@ -232,7 +226,6 @@ namespace castor3d
 	void ParticleSystem::addParticleVariable( castor::String const & p_name, renderer::AttributeFormat p_type, castor::String const & p_defaultValue )
 	{
 		m_csImpl->addParticleVariable( p_name, p_type, p_defaultValue );
-		m_tfImpl->addParticleVariable( p_name, p_type, p_defaultValue );
 		m_cpuImpl->addParticleVariable( p_name, p_type, p_defaultValue );
 
 		if ( p_name == cuT( "center" )
@@ -250,13 +243,8 @@ namespace castor3d
 		m_defaultValues[cuT ("out_") + p_name] = p_defaultValue;
 	}
 
-	void ParticleSystem::setTFUpdateProgram( ShaderProgramSPtr p_program )
+	void ParticleSystem::setCSUpdateProgram( renderer::ShaderProgram const & program )
 	{
-		m_tfImpl->setUpdateProgram( p_program );
-	}
-
-	void ParticleSystem::setCSUpdateProgram( ShaderProgramSPtr p_program )
-	{
-		m_csImpl->setUpdateProgram( p_program );
+		m_csImpl->setUpdateProgram( program );
 	}
 }

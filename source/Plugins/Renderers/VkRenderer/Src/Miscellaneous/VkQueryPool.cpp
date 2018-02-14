@@ -21,7 +21,7 @@ namespace vk_renderer
 			convert( pipelineStatistics )
 		};
 		DEBUG_DUMP( createInfo );
-		vk::CreateQueryPool( device
+		m_device.vkCreateQueryPool( device
 			, &createInfo
 			, nullptr
 			, &m_pool );
@@ -29,7 +29,7 @@ namespace vk_renderer
 
 	QueryPool::~QueryPool()
 	{
-		vk::DestroyQueryPool( m_device
+		m_device.vkDestroyQueryPool( m_device
 			, m_pool
 			, nullptr );
 	}
@@ -40,7 +40,7 @@ namespace vk_renderer
 		, renderer::QueryResultFlags flags
 		, renderer::UInt32Array & data )const
 	{
-		vk::GetQueryPoolResults( m_device
+		m_device.vkGetQueryPoolResults( m_device
 			, m_pool
 			, firstQuery
 			, queryCount
@@ -56,7 +56,7 @@ namespace vk_renderer
 		, renderer::QueryResultFlags flags
 		, renderer::UInt64Array & data )const
 	{
-		vk::GetQueryPoolResults( m_device
+		m_device.vkGetQueryPoolResults( m_device
 			, m_pool
 			, firstQuery
 			, queryCount

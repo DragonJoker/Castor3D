@@ -101,7 +101,6 @@
 
 #include "Miscellaneous/VkDebug.hpp"
 #include "Miscellaneous/VkError.hpp"
-#include "Miscellaneous/VulkanFunctions.hpp"
 
 #include <RendererPrerequisites.hpp>
 

@@ -38,7 +38,8 @@ namespace vk_renderer
 		CombinedTextureSamplerBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
 			, DescriptorSet const & descriptorSet
 			, TextureView const & texture
-			, Sampler const & sampler );
+			, Sampler const & sampler
+			, uint32_t index );
 
 	private:
 		TextureView const & m_view;
@@ -56,7 +57,8 @@ namespace vk_renderer
 	public:
 		SamplerBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
 			, DescriptorSet const & descriptorSet
-			, Sampler const & sampler );
+			, Sampler const & sampler
+			, uint32_t index );
 
 	private:
 		Sampler const & m_sampler;
@@ -74,7 +76,8 @@ namespace vk_renderer
 		SampledTextureBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
 			, DescriptorSet const & descriptorSet
 			, TextureView const & texture
-			, renderer::ImageLayout layout );
+			, renderer::ImageLayout layout
+			, uint32_t index );
 
 	private:
 		TextureView const & m_view;
@@ -91,7 +94,8 @@ namespace vk_renderer
 	public:
 		StorageTextureBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
 			, DescriptorSet const & descriptorSet
-			, TextureView const & texture );
+			, TextureView const & texture
+			, uint32_t index );
 
 	private:
 		TextureView const & m_view;
@@ -110,7 +114,8 @@ namespace vk_renderer
 			, DescriptorSet const & descriptorSet
 			, UniformBuffer const & uniformBuffer
 			, uint32_t offset
-			, uint32_t range );
+			, uint32_t range
+			, uint32_t index );
 
 	private:
 		Buffer const & m_uniformBuffer;
@@ -129,7 +134,8 @@ namespace vk_renderer
 			, DescriptorSet const & descriptorSet
 			, Buffer const & storageBuffer
 			, uint32_t offset
-			, uint32_t range );
+			, uint32_t range
+			, uint32_t index );
 
 	private:
 		Buffer const & m_buffer;
@@ -147,7 +153,8 @@ namespace vk_renderer
 		TexelBufferBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
 			, DescriptorSet const & descriptorSet
 			, Buffer const & storageBuffer
-			, BufferView const & view );
+			, BufferView const & view
+			, uint32_t index );
 
 	private:
 		Buffer const & m_buffer;

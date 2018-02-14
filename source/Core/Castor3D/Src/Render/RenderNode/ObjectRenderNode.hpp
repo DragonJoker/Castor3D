@@ -7,6 +7,10 @@ See LICENSE file in root folder
 #include "PassRenderNode.hpp"
 #include "SceneRenderNode.hpp"
 
+#include "Buffer/UniformBufferPool.hpp"
+#include "Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Shader/Ubos/ModelUbo.hpp"
+
 namespace castor3d
 {
 	/*!
@@ -23,14 +27,14 @@ namespace castor3d
 		using DataType = DataTypeT;
 		using InstanceType = InstanceTypeT;
 
-		C3D_API ObjectRenderNode( RenderPipeline & p_pipeline
-			, PassRenderNode && p_passNode
-			, ModelMatrixUbo & p_modelMatrixBuffer
-			, ModelUbo & p_modelBuffer
-			, renderer::GeometryBuffers & p_buffers
-			, SceneNode & p_sceneNode
-			, DataType & p_data
-			, InstanceType & p_instance );
+		C3D_API ObjectRenderNode( RenderPipeline & pipeline
+			, PassRenderNode && passNode
+			, UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixBuffer
+			, UniformBufferOffset< ModelUbo::Configuration > modelBuffer
+			, renderer::GeometryBuffers const & buffers
+			, SceneNode & sceneNode
+			, DataType & data
+			, InstanceType & instance );
 
 		//!\~english	The pipeline.
 		//!\~french		Le pipeline.
@@ -40,13 +44,13 @@ namespace castor3d
 		PassRenderNode m_passNode;
 		//!\~english	The model matrices UBO.
 		//!\~french		L'UBO de matrices modèle.
-		ModelMatrixUbo & m_modelMatrixUbo;
+		UniformBufferOffset < ModelMatrixUbo::Configuration > m_modelMatrixUbo;
 		//!\~english	The model UBO.
 		//!\~french		L'UBO de modèle.
-		ModelUbo & m_modelUbo;
+		UniformBufferOffset< ModelUbo::Configuration > m_modelUbo;
 		//!\~english	The geometry buffers.
 		//!\~french		Les tampons de la géométrie.
-		renderer::GeometryBuffers & m_buffers;
+		renderer::GeometryBuffers const & m_buffers;
 		//!\~english	The parent scene node.
 		//!\~french		Le scene node parent.
 		SceneNode & m_sceneNode;

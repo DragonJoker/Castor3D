@@ -24,12 +24,14 @@ namespace gl_renderer
 		*\param[in] viewport
 		*	Le viewport.
 		*/
-		ViewportCommand( renderer::Viewport const & viewport );
+		ViewportCommand( Device const & device
+			, renderer::Viewport const & viewport );
 
 		void apply()const override;
 		CommandPtr clone()const override;
 
 	private:
+		Device const & m_device;
 		renderer::Viewport m_viewport;
 	};
 }

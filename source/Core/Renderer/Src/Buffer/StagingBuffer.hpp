@@ -296,54 +296,6 @@ namespace renderer
 		*/
 		template< typename T >
 		inline void uploadUniformData( CommandBuffer const & commandBuffer
-			, ByteArray const & data
-			, UniformBuffer< T > const & buffer
-			, PipelineStageFlags const & flags )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données d'un tampon d'uniformes dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] size
-		*	La taille des données à copier.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
-		template< typename T >
-		inline void uploadUniformData( CommandBuffer const & commandBuffer
-			, uint8_t const * const data
-			, uint32_t size
-			, UniformBuffer< T > const & buffer
-			, PipelineStageFlags const & flags )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données d'un tampon d'uniformes dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] offset
-		*	L'offset dans le tampon.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
-		template< typename T >
-		inline void uploadUniformData( CommandBuffer const & commandBuffer
-			, ByteArray const & data
-			, uint32_t offset
-			, UniformBuffer< T > const & buffer
-			, PipelineStageFlags const & flags )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données d'un tampon d'uniformes dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
-		template< typename T >
-		inline void uploadUniformData( CommandBuffer const & commandBuffer
 			, std::vector< T > const & data
 			, UniformBuffer< T > const & buffer
 			, PipelineStageFlags const & flags )const;
@@ -398,26 +350,6 @@ namespace renderer
 		inline void uploadUniformData( CommandBuffer const & commandBuffer
 			, T const * const data
 			, uint32_t count
-			, uint32_t offset
-			, UniformBuffer< T > const & buffer
-			, PipelineStageFlags const & flags )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données d'un tampon d'uniformes dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] size
-		*	La taille des données à copier.
-		*\param[in] offset
-		*	L'offset dans le tampon.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
-		template< typename T >
-		inline void uploadUniformData( CommandBuffer const & commandBuffer
-			, uint8_t const * const data
-			, uint32_t size
 			, uint32_t offset
 			, UniformBuffer< T > const & buffer
 			, PipelineStageFlags const & flags )const;
@@ -686,54 +618,6 @@ namespace renderer
 		*/
 		template< typename T >
 		inline void downloadUniformData( CommandBuffer const & commandBuffer
-			, ByteArray & data
-			, UniformBuffer< T > const & buffer
-			, PipelineStageFlags const & flags )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données d'un tampon d'uniformes dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] size
-		*	La taille des données à copier.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
-		template< typename T >
-		inline void downloadUniformData( CommandBuffer const & commandBuffer
-			, uint8_t * data
-			, uint32_t size
-			, UniformBuffer< T > const & buffer
-			, PipelineStageFlags const & flags )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données d'un tampon d'uniformes dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] offset
-		*	L'offset dans le tampon.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
-		template< typename T >
-		inline void downloadUniformData( CommandBuffer const & commandBuffer
-			, ByteArray & data
-			, uint32_t offset
-			, UniformBuffer< T > const & buffer
-			, PipelineStageFlags const & flags )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données d'un tampon d'uniformes dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
-		template< typename T >
-		inline void downloadUniformData( CommandBuffer const & commandBuffer
 			, std::vector< T > & data
 			, UniformBuffer< T > const & buffer
 			, PipelineStageFlags const & flags )const;
@@ -788,26 +672,6 @@ namespace renderer
 		inline void downloadUniformData( CommandBuffer const & commandBuffer
 			, T * data
 			, uint32_t count
-			, uint32_t offset
-			, UniformBuffer< T > const & buffer
-			, PipelineStageFlags const & flags )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données d'un tampon d'uniformes dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] size
-		*	La taille des données à copier.
-		*\param[in] offset
-		*	L'offset dans le tampon.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
-		template< typename T >
-		inline void downloadUniformData( CommandBuffer const & commandBuffer
-			, uint8_t * data
-			, uint32_t size
 			, uint32_t offset
 			, UniformBuffer< T > const & buffer
 			, PipelineStageFlags const & flags )const;
@@ -830,7 +694,7 @@ namespace renderer
 		template< typename T >
 		inline void doCopyUniformDataToStagingBuffer( T const * const data
 			, uint32_t count
-			, uint32_t offset )const;
+			, uint32_t elemAlignedSize )const;
 		void doCopyToStagingBuffer( uint8_t const * const data
 			, uint32_t size )const;
 		void doCopyFromStagingBuffer( CommandBuffer const & commandBuffer
@@ -856,7 +720,7 @@ namespace renderer
 		template< typename T >
 		inline void doCopyUniformDataFromStagingBuffer( T * data
 			, uint32_t count
-			, uint32_t offset )const;
+			, uint32_t elemAlignedSize )const;
 		void doCopyFromStagingBuffer( uint8_t * data
 			, uint32_t size )const;
 		void doCopyToStagingBuffer( CommandBuffer const & commandBuffer

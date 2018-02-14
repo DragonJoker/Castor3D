@@ -26,19 +26,20 @@ namespace gl_renderer
 		*\brief
 		*	Constructeur.
 		*\param[in] device
-		*	Le périphérique logique.
+		*	Le pï¿½riphï¿½rique logique.
 		*/
 		DescriptorSetLayout( renderer::Device const & device
 			, renderer::DescriptorSetLayoutBindingArray && bindings );
 		/**
 		*\brief
-		*	Crée un pool pour les descripteurs qui utiliseront ce layout.
+		*	Crï¿½e un pool pour les descripteurs qui utiliseront ce layout.
 		*\param[in] maxSets
-		*	Le nombre maximum de sets que le pool peut créer.
+		*	Le nombre maximum de sets que le pool peut crï¿½er.
 		*\return
 		*	Le pool.
 		*/
-		renderer::DescriptorSetPoolPtr createPool( uint32_t maxSets )const override;
+		renderer::DescriptorSetPoolPtr createPool( uint32_t maxSets
+			, bool automaticFree )const override;
 	};
 }
 

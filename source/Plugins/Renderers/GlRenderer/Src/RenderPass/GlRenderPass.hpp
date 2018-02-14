@@ -31,17 +31,14 @@ namespace gl_renderer
 		*	L'état voulu en début de passe.
 		*\param[in] finalState
 		*	L'état voulu en fin de passe.
-		*\param[in] clear
-		*	Dit si l'on veut vider le contenu des images au chargement de la passe.
 		*\param[in] samplesCount
 		*	Le nombre d'échantillons (pour le multisampling).
 		*/
 		RenderPass( renderer::Device const & device
-			, std::vector< renderer::PixelFormat > const & formats
+			, renderer::RenderPassAttachmentArray const & attaches
 			, renderer::RenderSubpassPtrArray const & subpasses
 			, renderer::RenderPassState const & initialState
 			, renderer::RenderPassState const & finalState
-			, bool clear
 			, renderer::SampleCountFlag samplesCount );
 		/**
 		*\brief
@@ -57,17 +54,6 @@ namespace gl_renderer
 		*	Le FrameBuffer créé.
 		*/
 		renderer::FrameBufferPtr createFrameBuffer( renderer::UIVec2 const & dimensions
-			, renderer::TextureAttachmentPtrArray && textures )const override;
-		/**
-		*\return
-		*	Le statut de vidage.
-		*/
-		inline bool getClear()const
-		{
-			return m_clear;
-		}
-
-	private:
-		bool m_clear;
+			, renderer::FrameBufferAttachmentArray && textures )const override;
 	};
 }

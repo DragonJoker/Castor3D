@@ -50,6 +50,13 @@ namespace castor3d
 		C3D_API void update();
 		/**
 		 *\~english
+		 *\brief		Updates the buffer.
+		 *\~french
+		 *\brief		Met à jour le tampon.
+		 */
+		C3D_API void update( uint32_t offset, uint32_t size );
+		/**
+		 *\~english
 		 *\brief		Creates the descriptor set layout binding at given point.
 		 *\param[in]	index	The binding point index.
 		 *\~french

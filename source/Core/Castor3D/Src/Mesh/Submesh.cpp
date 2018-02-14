@@ -211,10 +211,10 @@ namespace castor3d
 	//*************************************************************************************************
 
 	Submesh::Submesh( Scene & scene, Mesh & mesh, uint32_t id )
-		: OwnedBy< Scene >( scene )
-		, m_defaultMaterial( scene.getEngine()->getMaterialCache().getDefaultMaterial() )
-		, m_id( id )
-		, m_parentMesh( mesh )
+		: OwnedBy< Scene >{ scene }
+		, m_parentMesh{ mesh }
+		, m_id{ id }
+		, m_defaultMaterial{ getScene()->getEngine()->getMaterialCache().getDefaultMaterial() }
 	{
 		addComponent( std::make_shared< InstantiationComponent >( *this ) );
 	}
@@ -241,6 +241,24 @@ namespace castor3d
 				component.second->fill();
 			}
 
+			m_vertexLayout = device.createVertexLayout( 0u, sizeof( InterleavedVertex ) );
+			m_vertexLayout->createAttribute< renderer::Vec3 >( 0u, offsetof( InterleavedVertex, m_pos ) );
+			m_vertexLayout->createAttribute< renderer::Vec3 >( 1u, offsetof( InterleavedVertex, m_nml ) );
+			m_vertexLayout->createAttribute< renderer::Vec3 >( 2u, offsetof( InterleavedVertex, m_tan ) );
+			m_vertexLayout->createAttribute< renderer::Vec3 >( 3u, offsetof( InterleavedVertex, m_bin ) );
+			m_vertexLayout->createAttribute< renderer::Vec3 >( 4u, offsetof( InterleavedVertex, m_tex ) );
+
+			renderer::VertexBufferCRefArray buffers;
+			std::vector< uint64_t > offsets;
+			renderer::VertexLayoutCRefArray layouts;
+			doGatherBuffers( buffers, offsets, layouts );
+
+			m_geometryBuffers = device.createGeometryBuffers( buffers
+				, offsets
+				, layouts
+				, m_indexBuffer->getBuffer()
+				, 0u
+				, renderer::IndexType::eUInt32 );
 			m_generated = true;
 		}
 
@@ -459,16 +477,6 @@ namespace castor3d
 		}
 	}
 
-	void Submesh::gatherBuffers( renderer::VertexBufferCRefArray & buffers )
-	{
-		buffers.emplace_back( *m_vertexBuffer );
-
-		for ( auto & component : m_components )
-		{
-			component.second->gather( buffers );
-		}
-	}
-
 	void Submesh::doGenerateVertexBuffer()
 	{
 		auto & device = *getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
@@ -495,6 +503,20 @@ namespace castor3d
 			}
 
 			//m_points.clear();
+		}
+	}
+
+	void Submesh::doGatherBuffers( renderer::VertexBufferCRefArray & buffers
+		, std::vector< uint64_t > & offsets
+		, renderer::VertexLayoutCRefArray & layouts )
+	{
+		buffers.emplace_back( *m_vertexBuffer );
+		offsets.emplace_back( 0u );
+		layouts.emplace_back( *m_vertexLayout );
+
+		for ( auto & component : m_components )
+		{
+			component.second->gather( buffers, offsets, layouts );
 		}
 	}
 }

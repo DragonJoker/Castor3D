@@ -1,5 +1,6 @@
 #include "Pipeline/GlPipeline.hpp"
 
+#include "Command/Commands/GlBindPipelineCommand.hpp"
 #include "Core/GlDevice.hpp"
 #include "Pipeline/GlPipelineLayout.hpp"
 #include "Core/GlRenderingResources.hpp"
@@ -9,7 +10,7 @@
 
 namespace gl_renderer
 {
-	Pipeline::Pipeline( renderer::Device const & device
+	Pipeline::Pipeline( Device const & device
 		, renderer::PipelineLayout const & layout
 		, renderer::ShaderProgram const & program
 		, renderer::VertexLayoutCRefArray const & vertexLayouts
@@ -25,8 +26,9 @@ namespace gl_renderer
 			, topology
 			, rasterisationState
 			, colourBlendState }
+		, m_device{ device }
 		, m_layout{ layout }
-		, m_program{ program }
+		, m_program{ static_cast< ShaderProgram const & >( program ) }
 		, m_cbState{ colourBlendState }
 		, m_rsState{ rasterisationState }
 		, m_dsState{ 0u, false, true, renderer::CompareOp::eLess,  }
@@ -35,6 +37,12 @@ namespace gl_renderer
 
 	renderer::Pipeline & Pipeline::finish()
 	{
+		apply( m_device, m_cbState );
+		apply( m_device, m_rsState );
+		apply( m_device, m_dsState );
+		apply( m_device, m_msState );
+		apply( m_device, m_tsState );
+		m_program.link();
 		return *this;
 	}
 

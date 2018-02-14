@@ -111,7 +111,7 @@ namespace castor3d
 		 *\param[out]	shadowMaps	Les textures d'ombres.
 		 *\param[out]	jitter		La valeur de jittering.
 		 */
-		C3D_API void doRender( RenderInfo & info
+		C3D_API void doUpdate( RenderInfo & info
 			, ShadowMapLightTypeArray & shadowMaps
 			, castor::Point2r const & jitter = castor::Point2r{} );
 

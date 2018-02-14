@@ -13,7 +13,13 @@
 #include "Texture/TextureLayout.hpp"
 
 #include <Buffer/Buffer.hpp>
+#include <Buffer/GeometryBuffers.hpp>
 #include <Buffer/VertexBuffer.hpp>
+#include <Descriptor/DescriptorSet.hpp>
+#include <Descriptor/DescriptorSetLayout.hpp>
+#include <Descriptor/DescriptorSetPool.hpp>
+#include <Pipeline/Pipeline.hpp>
+#include <Pipeline/PipelineLayout.hpp>
 #include <RenderPass/RenderPass.hpp>
 #include <Shader/ShaderProgram.hpp>
 
@@ -30,10 +36,16 @@ using namespace castor;
 
 namespace castor3d
 {
-	static const int32_t C3D_MAX_CHARS_PER_BUFFER = 6000;
+	static int32_t constexpr C3D_MAX_CHARS_PER_BUFFER = 6000;
 
 	namespace
 	{
+		static uint32_t constexpr MatrixUboBinding = 1u;
+		static uint32_t constexpr OverlayUboBinding = 2u;
+		static uint32_t constexpr TextMapBinding = 3u;
+		static uint32_t constexpr DiffuseMapBinding = 4u;
+		static uint32_t constexpr OpacityMapBinding = 5u;
+
 		uint32_t doFillBuffers( OverlayCategory::VertexArray::const_iterator begin
 			, uint32_t count
 			, renderer::VertexBuffer< OverlayCategory::Vertex > & vbo )
@@ -389,21 +401,28 @@ namespace castor3d
 		getRenderSystem()->getEngine()->getMaterialCache().getPassBuffer().createBinding( *result
 			, pipeline.descriptorLayout->getBinding( PassBufferIndex ) );
 		// Matrix UBO
-		result->createBinding( pipeline.descriptorLayout->getBinding( castor3d::MatrixUbo::BindingPoint )
+		result->createBinding( pipeline.descriptorLayout->getBinding( MatrixUboBinding )
 			, m_matrixUbo.getUbo()
+			, 0u
+			, 1u );
+		// Overlay UBO
+		result->createBinding( pipeline.descriptorLayout->getBinding( OverlayUboBinding )
+			, m_overlayUbo.getUbo()
 			, 0u
 			, 1u );
 
 		if ( checkFlag( textureFlags, TextureChannel::eDiffuse ) )
 		{
-			result->createBinding( pipeline.descriptorLayout->getBinding( 3u )
-				, pass.getTextureUnit( TextureChannel::eDiffuse )->getTexture()->getView() );
+			result->createBinding( pipeline.descriptorLayout->getBinding( DiffuseMapBinding )
+				, pass.getTextureUnit( TextureChannel::eDiffuse )->getTexture()->getView()
+				, pass.getTextureUnit( TextureChannel::eDiffuse )->getSampler()->getSampler() );
 		}
 
 		if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 		{
-			result->createBinding( pipeline.descriptorLayout->getBinding( 4u )
-				, pass.getTextureUnit( TextureChannel::eOpacity )->getTexture()->getView() );
+			result->createBinding( pipeline.descriptorLayout->getBinding( OpacityMapBinding )
+				, pass.getTextureUnit( TextureChannel::eOpacity )->getTexture()->getView()
+				, pass.getTextureUnit( TextureChannel::eOpacity )->getSampler()->getSampler() );
 		}
 
 		return result;
@@ -421,7 +440,7 @@ namespace castor3d
 
 		if ( checkFlag( textureFlags, TextureChannel::eText ) )
 		{
-			result->createBinding( pipeline.descriptorLayout->getBinding( 2u )
+			result->createBinding( pipeline.descriptorLayout->getBinding( TextMapBinding )
 				, texture.getView()
 				, sampler.getSampler() );
 		}
@@ -445,7 +464,6 @@ namespace castor3d
 			// Since it does not exist yet, create it and initialise it
 			auto & device = *getRenderSystem()->getCurrentDevice();
 			auto & program = doCreateOverlayProgram( textureFlags );
-			program.link();
 
 			renderer::ColourBlendState blState{};
 			blState.addAttachment( renderer::ColourBlendStateAttachment{
@@ -462,21 +480,33 @@ namespace castor3d
 			// Pass buffer
 			bindings.emplace_back( getRenderSystem()->getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding() );
 			// Matrix UBO
-			bindings.emplace_back( castor3d::MatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment );
+			bindings.emplace_back( MatrixUboBinding
+				, renderer::DescriptorType::eUniformBuffer
+				, renderer::ShaderStageFlag::eFragment );
+			// Matrix UBO
+			bindings.emplace_back( OverlayUboBinding
+				, renderer::DescriptorType::eUniformBuffer
+				, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
 
 			if ( checkFlag( textureFlags, TextureChannel::eText ) )
 			{
-				bindings.emplace_back( 2u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+				bindings.emplace_back( TextMapBinding
+					, renderer::DescriptorType::eCombinedImageSampler
+					, renderer::ShaderStageFlag::eFragment );
 			}
 
 			if ( checkFlag( textureFlags, TextureChannel::eDiffuse ) )
 			{
-				bindings.emplace_back( 3u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+				bindings.emplace_back( DiffuseMapBinding
+					, renderer::DescriptorType::eCombinedImageSampler
+					, renderer::ShaderStageFlag::eFragment );
 			}
 
 			if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 			{
-				bindings.emplace_back( 4u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+				bindings.emplace_back( OpacityMapBinding
+					, renderer::DescriptorType::eCombinedImageSampler
+					, renderer::ShaderStageFlag::eFragment );
 			}
 
 			auto descriptorLayout = device.createDescriptorSetLayout( std::move( bindings ) );
@@ -624,8 +654,8 @@ namespace castor3d
 		{
 			auto writer = getRenderSystem()->createGlslWriter();
 
-			UBO_MATRIX( writer, 0 );
-			UBO_OVERLAY( writer, 0 );
+			UBO_MATRIX( writer, MatrixUboBinding, 0u );
+			UBO_OVERLAY( writer, OverlayUboBinding, 0u );
 
 			// Shader inputs
 			auto position = writer.declAttribute< Vec2 >( cuT( "position" ) );
@@ -682,7 +712,7 @@ namespace castor3d
 			}
 
 			materials->declare();
-			UBO_OVERLAY( writer, 0u );
+			UBO_OVERLAY( writer, OverlayUboBinding, 0u );
 
 			// Shader inputs
 			auto vtx_text = writer.declInput< Vec2 >( cuT( "vtx_text" )
@@ -690,15 +720,15 @@ namespace castor3d
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" )
 				, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
 			auto c3d_mapText = writer.declSampler< Sampler2D >( cuT( "c3d_mapText" )
-				, LightBufferIndex + 0u
+				, TextMapBinding
 				, 0u
 				, checkFlag( textureFlags, TextureChannel::eText ) );
 			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" )
-				, LightBufferIndex + 1u
+				, DiffuseMapBinding
 				, 0u
 				, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
 			auto c3d_mapOpacity = writer.declSampler< Sampler2D >( cuT( "c3d_mapOpacity" )
-				, LightBufferIndex + 2u
+				, OpacityMapBinding
 				, 0u
 				, checkFlag( textureFlags, TextureChannel::eOpacity ) );
 
@@ -736,7 +766,6 @@ namespace castor3d
 
 		program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
 		program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
-		program.link();
 		return program;
 	}
 }

@@ -62,7 +62,7 @@ namespace vk_renderer
 			deducedTypeIndex                          // memoryTypeIndex
 		};
 		DEBUG_DUMP( allocateInfo );
-		auto res = vk::AllocateMemory( m_device, &allocateInfo, nullptr, &m_memory );
+		auto res = m_device.vkAllocateMemory( m_device, &allocateInfo, nullptr, &m_memory );
 
 		if ( !checkError( res ) )
 		{
@@ -73,7 +73,7 @@ namespace vk_renderer
 	template< typename VkType, bool Image >
 	inline MemoryStorage< VkType, Image >::~MemoryStorage()
 	{
-		vk::FreeMemory( m_device, m_memory, nullptr );
+		m_device.vkFreeMemory( m_device, m_memory, nullptr );
 	}
 
 	template< typename VkType, bool Image >
@@ -82,7 +82,7 @@ namespace vk_renderer
 		, VkMemoryMapFlags flags )const
 	{
 		uint8_t * pointer{ nullptr };
-		auto res = vk::MapMemory( m_device
+		auto res = m_device.vkMapMemory( m_device
 			, m_memory
 			, offset
 			, size
@@ -112,7 +112,7 @@ namespace vk_renderer
 				size                                              // size
 			};
 			DEBUG_DUMP( flushRange );
-			auto res = vk::FlushMappedMemoryRanges( m_device, 1, &flushRange );
+			auto res = m_device.vkFlushMappedMemoryRanges( m_device, 1, &flushRange );
 
 			if ( !checkError( res ) )
 			{
@@ -120,7 +120,7 @@ namespace vk_renderer
 			}
 		}
 
-		vk::UnmapMemory( m_device, m_memory );
+		m_device.vkUnmapMemory( m_device, m_memory );
 	}
 
 	//*********************************************************************************************

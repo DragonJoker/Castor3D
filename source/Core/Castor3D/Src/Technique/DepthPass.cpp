@@ -2,7 +2,7 @@
 
 #include <Engine.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>
-#include <FrameBuffer/TextureAttachment.hpp>
+#include <FrameBuffer/FrameBufferAttachment.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
@@ -60,7 +60,7 @@ namespace castor3d
 		m_camera->apply();
 		m_frameBuffer->bind();
 		m_frameBuffer->clear( BufferComponent::eDepth | BufferComponent::eStencil );
-		doRender( info
+		doUpdate( info
 			, shadowMaps
 			, jitter );
 		m_frameBuffer->unbind();

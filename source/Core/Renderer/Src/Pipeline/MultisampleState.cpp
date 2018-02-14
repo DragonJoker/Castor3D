@@ -36,6 +36,14 @@ namespace renderer
 		, m_sampleMask{ sampleMask }
 		, m_alphaToCoverageEnable{ alphaToCoverageEnable }
 		, m_alphaToOneEnable{ alphaToOneEnable }
+		, m_hash
+		{ uint64_t(
+			( uint64_t( m_sampleShadingEnable ) << 63 )
+			| ( uint64_t( m_sampleMask ) << 30 )
+			| ( uint64_t( m_alphaToCoverageEnable ) << 29 )
+			| ( uint64_t( m_alphaToOneEnable ) << 28 )
+			| ( uint64_t( m_rasterizationSamples ) << 21 )
+		) }
 	{
 	}
 }

@@ -2,10 +2,10 @@
 
 #include <Engine.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>
-#include <FrameBuffer/TextureAttachment.hpp>
-#include <Mesh/Buffer/BufferElementGroup.hpp>
-#include <Mesh/Buffer/GeometryBuffers.hpp>
-#include <Mesh/Buffer/VertexBuffer.hpp>
+#include <FrameBuffer/FrameBufferAttachment.hpp>
+#include <Buffer/BufferElementGroup.hpp>
+#include <Buffer/GeometryBuffers.hpp>
+#include <Buffer/VertexBuffer.hpp>
 #include <Technique/Opaque/Ssao/SsaoConfig.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>

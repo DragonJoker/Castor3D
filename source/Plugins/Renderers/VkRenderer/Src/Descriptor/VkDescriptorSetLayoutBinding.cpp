@@ -12,7 +12,7 @@ namespace vk_renderer
 		{
 			binding.getBindingPoint(),
 			convert( binding.getDescriptorType() ),
-			1u,
+			binding.getDescriptorsCount(),
 			convert( binding.getShaderStageFlags() ),
 		};
 	}

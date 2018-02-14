@@ -134,11 +134,11 @@ namespace castor3d
 
 				for ( auto & boneData : component->getBonesData() )
 				{
-					auto it = std::find( boneData.m_ids.begin()
-						, boneData.m_ids.end()
+					auto it = std::find( boneData.m_ids.data.begin()
+						, boneData.m_ids.data.end()
 						, boneIndex );
 
-					if ( it != boneData.m_ids.end() )
+					if ( it != boneData.m_ids.data.end() )
 					{
 						auto position = submesh->getPoint( i ).m_pos;
 						min[0] = std::min( min[0], position[0] );

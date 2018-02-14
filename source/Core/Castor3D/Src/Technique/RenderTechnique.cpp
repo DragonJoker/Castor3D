@@ -5,7 +5,7 @@
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/ColourRenderBuffer.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
-#include "FrameBuffer/TextureAttachment.hpp"
+#include "FrameBuffer/FrameBufferAttachment.hpp"
 #include "FrameBuffer/RenderBufferAttachment.hpp"
 #include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Render/RenderPassTimer.hpp"

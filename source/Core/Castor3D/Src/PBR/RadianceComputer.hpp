@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "Texture/TextureUnit.hpp"
 
+#include <Buffer/GeometryBuffers.hpp>
+
 #include <array>
 
 namespace castor3d

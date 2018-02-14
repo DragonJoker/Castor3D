@@ -21,7 +21,7 @@ namespace castor3d
 	*/
 	class ModelMatrixUbo
 	{
-	private:
+	public:
 		struct Configuration
 		{
 			renderer::Mat4 model;

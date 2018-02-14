@@ -47,13 +47,6 @@ namespace vk_renderer
 			, renderer::ShaderStageFlag stage )override;
 		/**
 		*\brief
-		*	Lie les modules du programme.
-		*/
-		inline void link()override
-		{
-		}
-		/**
-		*\brief
 		*	Dit si le SPIR-V est supporté.
 		*/
 		inline bool isSPIRVSupported()override

@@ -87,7 +87,9 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
-		C3D_API void gather( renderer::VertexBufferCRefArray & buffers )override;
+		C3D_API void gather( renderer::VertexBufferCRefArray & buffers
+			, std::vector< uint64_t > offsets
+			, renderer::VertexLayoutCRefArray & layouts )override;
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::setMaterial
 		 */
@@ -152,19 +154,13 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const Name;
+		C3D_API static uint32_t constexpr BindingPoint = 2u;
 
 	private:
-		//!\~english	The submesh instances count.
-		//!\~french		Le nombre d'instances du sous-maillage.
 		std::map< MaterialSPtr, uint32_t > m_instanceCount;
-		//!\~english	The matrix buffer (instantiation).
-		//!\~french		Le tampon de matrices (instanciation).
 		renderer::VertexBufferPtr< InstantiationData > m_matrixBuffer;
-		//!\~english	The matrix buffer (instantiation).
-		//!\~french		Le tampon de matrices (instanciation).
+		renderer::VertexLayoutPtr m_matrixLayout;
 		std::vector< InstantiationData > m_data;
-		//!\~english	The threshold at which instantiation is triggered.
-		//!\~french		Le seuil à partir duquel l'instanciation est utilisée.
 		uint32_t m_threshold;
 	};
 }

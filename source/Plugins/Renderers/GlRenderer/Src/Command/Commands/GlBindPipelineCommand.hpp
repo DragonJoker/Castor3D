@@ -8,9 +8,19 @@ See LICENSE file in root folder
 
 namespace gl_renderer
 {
+	void apply( Device const & device
+		, renderer::ColourBlendState const & state );
+	void apply( Device const & device
+		, renderer::RasterisationState const & state );
+	void apply( Device const & device
+		, renderer::MultisampleState const & state );
+	void apply( Device const & device
+		, renderer::DepthStencilState const & state );
+	void apply( Device const & device
+		, renderer::TessellationState const & state );
 	/**
 	*\brief
-	*	Commande d'activation d'un pipeline: shaders, tests, états, ...
+	*	Commande d'activation d'un pipeline: shaders, tests, ï¿½tats, ...
 	*/
 	class BindPipelineCommand
 		: public CommandBase
@@ -20,17 +30,19 @@ namespace gl_renderer
 		*\brief
 		*	Constructeur.
 		*\param[in] pipeline
-		*	Le pipeline à activer.
+		*	Le pipeline ï¿½ activer.
 		*\param[in] bindingPoint
 		*	Le point d'attache du pipeline.
 		*/
-		BindPipelineCommand( renderer::Pipeline const & pipeline
+		BindPipelineCommand( Device const & device
+			, renderer::Pipeline const & pipeline
 			, renderer::PipelineBindPoint bindingPoint );
 
 		void apply()const override;
 		CommandPtr clone()const override;
 
 	private:
+		Device const & m_device;
 		Pipeline const & m_pipeline;
 		PipelineLayout const & m_layout;
 		ShaderProgram const & m_program;

@@ -20,10 +20,9 @@ namespace vk_renderer
 	CombinedTextureSamplerBinding::CombinedTextureSamplerBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
 		, DescriptorSet const & descriptorSet
 		, TextureView const & view
-		, Sampler const & sampler )
-		: renderer::CombinedTextureSamplerBinding{ layoutBinding
-			, view
-			, sampler }
+		, Sampler const & sampler
+		, uint32_t index )
+		: renderer::CombinedTextureSamplerBinding{ layoutBinding, view, sampler, index }
 		, m_view{ view }
 		, m_sampler{ sampler }
 		, m_info
@@ -39,7 +38,7 @@ namespace vk_renderer
 			nullptr,                                        // pNext
 			descriptorSet,                                  // dstSet
 			layoutBinding.getBindingPoint(),                // dstBinding
-			0u,                                             // dstArrayElement
+			index,                                          // dstArrayElement
 			1u,                                             // descriptorCount
 			VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,      // descriptorType
 			&m_info,                                        // pImageInfo
@@ -52,9 +51,9 @@ namespace vk_renderer
 
 	SamplerBinding::SamplerBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
 		, DescriptorSet const & descriptorSet
-		, Sampler const & sampler )
-		: renderer::SamplerBinding{ layoutBinding
-			, sampler }
+		, Sampler const & sampler
+		, uint32_t index )
+		: renderer::SamplerBinding{ layoutBinding, sampler, index }
 		, m_sampler{ sampler }
 		, m_info
 		{
@@ -69,7 +68,7 @@ namespace vk_renderer
 			nullptr,                                        // pNext
 			descriptorSet,                                  // dstSet
 			layoutBinding.getBindingPoint(),                // dstBinding
-			0u,                                             // dstArrayElement
+			index,                                          // dstArrayElement
 			1u,                                             // descriptorCount
 			VK_DESCRIPTOR_TYPE_SAMPLER,                     // descriptorType
 			&m_info,                                        // pImageInfo
@@ -83,8 +82,9 @@ namespace vk_renderer
 	SampledTextureBinding::SampledTextureBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
 		, DescriptorSet const & descriptorSet
 		, TextureView const & view
-		, renderer::ImageLayout layout )
-		: renderer::SampledTextureBinding{ layoutBinding, view, layout }
+		, renderer::ImageLayout layout
+		, uint32_t index )
+		: renderer::SampledTextureBinding{ layoutBinding, view, layout, index }
 		, m_view{ view }
 		, m_info
 		{
@@ -99,7 +99,7 @@ namespace vk_renderer
 			nullptr,                                        // pNext
 			descriptorSet,                                  // dstSet
 			layoutBinding.getBindingPoint(),                // dstBinding
-			0u,                                             // dstArrayElement
+			index,                                          // dstArrayElement
 			1u,                                             // descriptorCount
 			VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,               // descriptorType
 			&m_info,                                        // pImageInfo
@@ -112,8 +112,9 @@ namespace vk_renderer
 
 	StorageTextureBinding::StorageTextureBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
 		, DescriptorSet const & descriptorSet
-		, TextureView const & view )
-		: renderer::StorageTextureBinding{ layoutBinding, view }
+		, TextureView const & view
+		, uint32_t index )
+		: renderer::StorageTextureBinding{ layoutBinding, view, index }
 		, m_view{ view }
 		, m_info
 		{
@@ -128,7 +129,7 @@ namespace vk_renderer
 			nullptr,                                        // pNext
 			descriptorSet,                                  // dstSet
 			layoutBinding.getBindingPoint(),                // dstBinding
-			0u,                                             // dstArrayElement
+			index,                                          // dstArrayElement
 			1u,                                             // descriptorCount
 			VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,               // descriptorType
 			&m_info,                                        // pImageInfo
@@ -143,8 +144,9 @@ namespace vk_renderer
 		, DescriptorSet const & descriptorSet
 		, UniformBuffer const & uniformBuffer
 		, uint32_t offset
-		, uint32_t range )
-		: renderer::UniformBufferBinding{ layoutBinding, uniformBuffer, offset, range }
+		, uint32_t range
+		, uint32_t index )
+		: renderer::UniformBufferBinding{ layoutBinding, uniformBuffer, offset, range, index }
 		, m_uniformBuffer{ static_cast< Buffer const & >( uniformBuffer.getBuffer() ) }
 		, m_info
 		{
@@ -159,7 +161,7 @@ namespace vk_renderer
 			nullptr,                                        // pNext
 			descriptorSet,                                  // dstSet
 			layoutBinding.getBindingPoint(),                // dstBinding
-			0u,                                             // dstArrayElement
+			index,                                          // dstArrayElement
 			1u,                                             // descriptorCount
 			VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,              // descriptorType
 			nullptr,                                        // pImageInfo
@@ -174,8 +176,9 @@ namespace vk_renderer
 		, DescriptorSet const & descriptorSet
 		, Buffer const & storageBuffer
 		, uint32_t offset
-		, uint32_t range )
-		: renderer::StorageBufferBinding{ layoutBinding, storageBuffer, offset, range }
+		, uint32_t range
+		, uint32_t index )
+		: renderer::StorageBufferBinding{ layoutBinding, storageBuffer, offset, range, index }
 		, m_buffer{ storageBuffer }
 		, m_info
 		{
@@ -190,7 +193,7 @@ namespace vk_renderer
 			nullptr,                                        // pNext
 			descriptorSet,                                  // dstSet
 			layoutBinding.getBindingPoint(),                // dstBinding
-			0u,                                             // dstArrayElement
+			index,                                          // dstArrayElement
 			1u,                                             // descriptorCount
 			VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,              // descriptorType
 			nullptr,                                        // pImageInfo
@@ -204,8 +207,9 @@ namespace vk_renderer
 	TexelBufferBinding::TexelBufferBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
 		, DescriptorSet const & descriptorSet
 		, Buffer const & buffer
-		, BufferView const & view )
-		: renderer::TexelBufferBinding{ layoutBinding, buffer, view }
+		, BufferView const & view
+		, uint32_t index )
+		: renderer::TexelBufferBinding{ layoutBinding, buffer, view, index }
 		, m_buffer{ buffer }
 		, m_view{ view }
 		, m_info
@@ -224,7 +228,7 @@ namespace vk_renderer
 			nullptr,                                        // pNext
 			descriptorSet,                                  // dstSet
 			layoutBinding.getBindingPoint(),                // dstBinding
-			0u,                                             // dstArrayElement
+			index,                                          // dstArrayElement
 			1u,                                             // descriptorCount
 			type,                                           // descriptorType
 			nullptr,                                        // pImageInfo

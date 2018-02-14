@@ -4,9 +4,9 @@
 
 #include "FrameBuffer/FrameBuffer.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
-#include "FrameBuffer/TextureAttachment.hpp"
-#include "Mesh/Buffer/BufferElementGroup.hpp"
-#include "Mesh/Buffer/GeometryBuffers.hpp"
+#include "FrameBuffer/FrameBufferAttachment.hpp"
+#include "Buffer/BufferElementGroup.hpp"
+#include "Buffer/GeometryBuffers.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"

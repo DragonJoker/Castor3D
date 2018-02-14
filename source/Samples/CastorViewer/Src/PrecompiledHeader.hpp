@@ -74,7 +74,7 @@ See LICENSE file in root folder
 #	include <Event/Frame/FrameListener.hpp>
 #	include <Material/Material.hpp>
 #	include <Material/Pass.hpp>
-#	include <Mesh/Buffer/Buffer.hpp>
+#	include <Buffer/Buffer.hpp>
 #	include <Mesh/SubmeshComponent/Face.hpp>
 #	include <Mesh/Mesh.hpp>
 #	include <Mesh/Submesh.hpp>

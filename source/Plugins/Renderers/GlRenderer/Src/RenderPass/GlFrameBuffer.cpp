@@ -129,14 +129,14 @@ namespace gl_renderer
 
 	FrameBuffer::FrameBuffer( renderer::RenderPass const & renderPass
 		, renderer::UIVec2 const & dimensions )
-		: renderer::FrameBuffer{ renderPass, dimensions, renderer::TextureAttachmentPtrArray{} }
+		: renderer::FrameBuffer{ renderPass, dimensions, renderer::FrameBufferAttachmentArray{} }
 		, m_frameBuffer{ 0u }
 	{
 	}
 
 	FrameBuffer::FrameBuffer( renderer::RenderPass const & renderPass
 		, renderer::UIVec2 const & dimensions
-		, renderer::TextureAttachmentPtrArray && views )
+		, renderer::FrameBufferAttachmentArray && views )
 		: renderer::FrameBuffer{ renderPass, dimensions, std::move( views ) }
 	{
 		glLogCall( gl::GenFramebuffers, 1, &m_frameBuffer );
@@ -147,10 +147,10 @@ namespace gl_renderer
 		{
 			Attachment attachment
 			{
-				getAttachmentPoint( static_cast< TextureView const & >( attach->getView() ) ),
+				getAttachmentPoint( static_cast< TextureView const & >( attach.getView() ) ),
 				0u,
-				static_cast< TextureView const & >( attach->getView() ).getImage(),
-				getAttachmentType( static_cast< TextureView const & >( attach->getView() ) ),
+				static_cast< TextureView const & >( attach.getView() ).getImage(),
+				getAttachmentType( static_cast< TextureView const & >( attach.getView() ) ),
 			};
 
 			if ( attachment.point == GL_ATTACHMENT_POINT_DEPTH_STENCIL
@@ -168,10 +168,10 @@ namespace gl_renderer
 
 			glLogCall( gl::FramebufferTexture2D
 				, GL_FRAMEBUFFER
-				, attachment.point
+				, GlAttachmentPoint( attachment.point + attachment.index )
 				, GL_TEXTURE_2D
 				, attachment.object
-				, attach->getView().getSubResourceRange().getBaseMipLevel() );
+				, attach.getView().getSubResourceRange().getBaseMipLevel() );
 			doCheck( glLogCall( gl::CheckFramebufferStatus, GL_FRAMEBUFFER ) );
 		}
 

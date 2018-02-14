@@ -21,7 +21,7 @@ namespace castor3d
 	*/
 	class MorphingUbo
 	{
-	private:
+	public:
 		struct Configuration
 		{
 			float time;

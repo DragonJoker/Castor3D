@@ -21,7 +21,7 @@ namespace castor3d
 	*/
 	class ModelUbo
 	{
-	private:
+	public:
 		struct Configuration
 		{
 			int32_t shadowReceiver;

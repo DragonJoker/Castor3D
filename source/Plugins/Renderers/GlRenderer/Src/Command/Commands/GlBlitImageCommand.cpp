@@ -9,7 +9,7 @@ See LICENSE file in root folder.
 #include "RenderPass/GlFrameBuffer.hpp"
 
 #include <Image/ImageSubresourceRange.hpp>
-#include <RenderPass/TextureAttachment.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
 
 namespace gl_renderer
 {
@@ -40,8 +40,8 @@ namespace gl_renderer
 	}
 
 	BlitImageCommand::BlitImageCommand( renderer::ImageBlit const & blitInfo
-		, renderer::TextureAttachment const & src
-		, renderer::TextureAttachment const & dst
+		, renderer::FrameBufferAttachment const & src
+		, renderer::FrameBufferAttachment const & dst
 		, renderer::Filter filter )
 		: m_blitInfo{ blitInfo }
 		, m_srcTexture{ static_cast< Texture const & >( src.getTexture() ) }

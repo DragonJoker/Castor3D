@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Texture/TextureUnit.hpp"
 
+#include <Buffer/GeometryBuffers.hpp>
 #include <Buffer/PushConstantsBuffer.hpp>
 
 #include <array>

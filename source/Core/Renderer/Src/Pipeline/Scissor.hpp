@@ -49,7 +49,19 @@ namespace renderer
 	private:
 		IVec2 m_offset;
 		IVec2 m_size;
+		friend bool operator==( Scissor const & lhs, Scissor const & rhs );
 	};
+
+	inline bool operator==( Scissor const & lhs, Scissor const & rhs )
+	{
+		return lhs.m_offset == rhs.m_offset
+			&& lhs.m_size == rhs.m_size;
+	}
+
+	inline bool operator!=( Scissor const & lhs, Scissor const & rhs )
+	{
+		return !( lhs == rhs );
+	}
 }
 
 #endif

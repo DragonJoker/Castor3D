@@ -54,7 +54,7 @@ namespace gl_renderer
 		*\brief
 		*	Lie les modules du programme.
 		*/
-		void link()override;
+		void link()const;
 		/**
 		*\brief
 		*	Dit si le SPIR-V est supporté.

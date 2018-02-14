@@ -14,13 +14,15 @@ namespace renderer
 	{
 	}
 
-	DescriptorSetLayoutBinding const & DescriptorSetLayout::getBinding( uint32_t index )const
+	DescriptorSetLayoutBinding const & DescriptorSetLayout::getBinding( uint32_t bindingPoint
+		, uint32_t index )const
 	{
 		auto it = std::find_if( m_bindings.begin()
 			, m_bindings.end()
-			, [index]( DescriptorSetLayoutBinding const & lookup )
+			, [bindingPoint, index]( DescriptorSetLayoutBinding const & lookup )
 		{
-			return lookup.getBindingPoint() == index;
+			return lookup.getBindingPoint() == bindingPoint
+				&& index < lookup.getDescriptorsCount();
 		} );
 
 		if ( it == m_bindings.end() )

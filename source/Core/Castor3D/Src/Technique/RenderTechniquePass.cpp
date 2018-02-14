@@ -190,7 +190,7 @@ namespace castor3d
 	{
 	}
 
-	void RenderTechniquePass::doRender( RenderInfo & info
+	void RenderTechniquePass::doUpdate( RenderInfo & info
 		, ShadowMapLightTypeArray & shadowMaps
 		, Point2r const & jitter )
 	{
@@ -221,19 +221,19 @@ namespace castor3d
 			m_matrixUbo.update( camera.getView()
 				, camera.getViewport().getProjection()
 				, jitterProjSpace );
-			RenderPass::doRender( nodes.m_instantiatedStaticNodes.m_frontCulled, camera, shadowMaps );
-			RenderPass::doRender( nodes.m_staticNodes.m_frontCulled, camera, shadowMaps );
-			RenderPass::doRender( nodes.m_skinnedNodes.m_frontCulled, camera, shadowMaps );
-			RenderPass::doRender( nodes.m_instantiatedSkinnedNodes.m_frontCulled, camera, shadowMaps );
-			RenderPass::doRender( nodes.m_morphingNodes.m_frontCulled, camera, shadowMaps );
-			RenderPass::doRender( nodes.m_billboardNodes.m_frontCulled, camera, shadowMaps );
+			RenderPass::doUpdate( nodes.m_instantiatedStaticNodes.m_frontCulled, camera, shadowMaps );
+			RenderPass::doUpdate( nodes.m_staticNodes.m_frontCulled, camera, shadowMaps );
+			RenderPass::doUpdate( nodes.m_skinnedNodes.m_frontCulled, camera, shadowMaps );
+			RenderPass::doUpdate( nodes.m_instantiatedSkinnedNodes.m_frontCulled, camera, shadowMaps );
+			RenderPass::doUpdate( nodes.m_morphingNodes.m_frontCulled, camera, shadowMaps );
+			RenderPass::doUpdate( nodes.m_billboardNodes.m_frontCulled, camera, shadowMaps );
 
-			RenderPass::doRender( nodes.m_instantiatedStaticNodes.m_backCulled, camera, shadowMaps, info );
-			RenderPass::doRender( nodes.m_staticNodes.m_backCulled, camera, shadowMaps, info );
-			RenderPass::doRender( nodes.m_skinnedNodes.m_backCulled, camera, shadowMaps, info );
-			RenderPass::doRender( nodes.m_instantiatedSkinnedNodes.m_backCulled, camera, shadowMaps );
-			RenderPass::doRender( nodes.m_morphingNodes.m_backCulled, camera, shadowMaps, info );
-			RenderPass::doRender( nodes.m_billboardNodes.m_backCulled, camera, shadowMaps, info );
+			RenderPass::doUpdate( nodes.m_instantiatedStaticNodes.m_backCulled, camera, shadowMaps, info );
+			RenderPass::doUpdate( nodes.m_staticNodes.m_backCulled, camera, shadowMaps, info );
+			RenderPass::doUpdate( nodes.m_skinnedNodes.m_backCulled, camera, shadowMaps, info );
+			RenderPass::doUpdate( nodes.m_instantiatedSkinnedNodes.m_backCulled, camera, shadowMaps );
+			RenderPass::doUpdate( nodes.m_morphingNodes.m_backCulled, camera, shadowMaps, info );
+			RenderPass::doUpdate( nodes.m_billboardNodes.m_backCulled, camera, shadowMaps, info );
 			m_timer->stop();
 		}
 	}

@@ -86,6 +86,7 @@ namespace renderer
 	struct ImageBlit;
 	struct PushConstant;
 	struct PushConstantRange;
+	struct RenderPassAttachment;
 
 	class AttributeBase;
 	class BackBuffer;
@@ -133,7 +134,7 @@ namespace renderer
 	class SwapChain;
 	class TessellationState;
 	class Texture;
-	class TextureAttachment;
+	class FrameBufferAttachment;
 	class TextureView;
 	class UniformBufferBase;
 	class VertexBufferBase;
@@ -180,7 +181,6 @@ namespace renderer
 	using DescriptorSetPtr = std::unique_ptr< DescriptorSet >;
 	using DevicePtr = std::unique_ptr< Device >;
 	using FencePtr = std::unique_ptr< Fence >;
-	using TextureAttachmentPtr = std::unique_ptr< TextureAttachment >;
 	using GeometryBuffersPtr = std::unique_ptr< GeometryBuffers >;
 	using IWindowHandlePtr = std::unique_ptr< IWindowHandle >;
 	using PipelineLayoutPtr = std::unique_ptr< PipelineLayout >;
@@ -198,8 +198,15 @@ namespace renderer
 	using VertexLayoutPtr = std::unique_ptr< VertexLayout >;
 	using UniformBufferBasePtr = std::unique_ptr< UniformBufferBase >;
 
+	using ClearValueArray = std::vector< ClearValue >;
+	using ColourBlendStateAttachmentArray = std::vector< ColourBlendStateAttachment >;
 	using DescriptorSetLayoutBindingArray = std::vector< DescriptorSetLayoutBinding >;
+	using FrameBufferAttachmentArray = std::vector< FrameBufferAttachment >;
+	using ImageLayoutArray = std::vector< ImageLayout >;
+	using PipelineStageFlagsArray = std::vector< PipelineStageFlags >;
 	using PushConstantArray = std::vector< PushConstant >;
+	using RenderSubpassArray = std::vector< RenderSubpass >;
+	using RenderPassAttachmentArray = std::vector< RenderPassAttachment >;
 
 	using FrameBufferPtr = std::shared_ptr< FrameBuffer >;
 	using PipelinePtr = std::shared_ptr< Pipeline >;
@@ -209,15 +216,8 @@ namespace renderer
 	using TextureViewPtr = std::shared_ptr< TextureView >;
 
 	using FrameBufferPtrArray = std::vector< FrameBufferPtr >;
-	using TextureAttachmentPtrArray = std::vector< TextureAttachmentPtr >;
 	using CommandBufferPtrArray = std::vector< CommandBufferPtr >;
 	using RenderSubpassPtrArray = std::vector< RenderSubpassPtr >;
-
-	using ClearValueArray = std::vector< ClearValue >;
-	using ColourBlendStateAttachmentArray = std::vector< ColourBlendStateAttachment >;
-	using ImageLayoutArray = std::vector< ImageLayout >;
-	using PipelineStageFlagsArray = std::vector< PipelineStageFlags >;
-	using RenderSubpassArray = std::vector< RenderSubpass >;
 
 	using CommandBufferCRef = std::reference_wrapper< CommandBuffer const >;
 	using DescriptorSetLayoutCRef = std::reference_wrapper< DescriptorSetLayout const >;

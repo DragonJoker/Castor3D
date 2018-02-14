@@ -285,7 +285,6 @@ namespace film_grain
 
 		program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
 		program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
-		program.link();
 
 		auto & device = *getRenderSystem()->getCurrentDevice();
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();

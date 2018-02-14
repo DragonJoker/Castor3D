@@ -2,7 +2,7 @@
 
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/TextureAttachment.hpp"
+#include "FrameBuffer/FrameBufferAttachment.hpp"
 #include "Render/RenderInfo.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Shader/PassBuffer/PassBuffer.hpp"
@@ -14,7 +14,7 @@ namespace castor3d
 	WeightedBlendRendering::WeightedBlendRendering( Engine & engine
 		, TransparentPass & transparentPass
 		, FrameBuffer & frameBuffer
-		, TextureAttachment & depthAttach
+		, FrameBufferAttachment & depthAttach
 		, castor::Size const & size
 		, Scene const & scene )
 		: m_engine{ engine }

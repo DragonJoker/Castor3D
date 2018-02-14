@@ -22,6 +22,11 @@ namespace renderer
 		: m_logicOpEnable{ logicOpEnable }
 		, m_logicOp{ logicOp }
 		, m_blendConstants{ blendConstants }
+		, m_hash
+		{ uint8_t(
+			( uint8_t( m_logicOpEnable ) << 7 )
+			| ( uint8_t( m_logicOp ) << 2 )
+		) }
 	{
 	}
 

@@ -326,7 +326,6 @@ namespace fxaa
 		auto & fxaaProgram = cache.getNewProgram( false );
 		fxaaProgram.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
 		fxaaProgram.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
-		fxaaProgram.link();
 		m_fxaaQuad = std::make_unique< RenderQuad >( *getRenderSystem(), size );
 		m_fxaaQuad->createPipeline( size
 			, Position{}
@@ -350,7 +349,6 @@ namespace fxaa
 			auto & resultProgram = cache.getNewProgram( false );
 			resultProgram.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
 			resultProgram.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
-			resultProgram.link();
 			m_resultQuad = std::make_unique< RenderQuad >( *getRenderSystem(), size );
 			m_resultQuad->createPipeline( size
 				, Position{}

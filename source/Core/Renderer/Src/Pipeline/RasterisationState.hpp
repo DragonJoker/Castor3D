@@ -55,6 +55,18 @@ namespace renderer
 			, float depthBiasSlopeFactor = 0.0f
 			, float lineWidth = 1.0f );
 		/**
+		*\~english
+		*\return
+		*	The hash for this state.
+		*\~french
+		*\return
+		*	Le hash de cet état.
+		*/
+		inline uint16_t getHash()const
+		{
+			return m_hash;
+		}
+		/**
 		*\return
 		*	Les indicateurs de l'état.
 		*/
@@ -151,11 +163,27 @@ namespace renderer
 		CullModeFlags m_cullMode;
 		FrontFace m_frontFace;
 		bool m_depthBiasEnable;
+		uint16_t m_hash;
 		float m_depthBiasConstantFactor;
 		float m_depthBiasClamp;
 		float m_depthBiasSlopeFactor;
 		float m_lineWidth;
+		friend bool operator==( RasterisationState const & lhs, RasterisationState const & rhs );
 	};
+
+	inline bool operator==( RasterisationState const & lhs, RasterisationState const & rhs )
+	{
+		return lhs.m_hash == rhs.m_hash
+			&& lhs.m_depthBiasConstantFactor == rhs.m_depthBiasConstantFactor
+			&& lhs.m_depthBiasClamp == rhs.m_depthBiasClamp
+			&& lhs.m_depthBiasSlopeFactor == rhs.m_depthBiasSlopeFactor
+			&& lhs.m_lineWidth == rhs.m_lineWidth;
+	}
+
+	inline bool operator!=( RasterisationState const & lhs, RasterisationState const & rhs )
+	{
+		return !( lhs == rhs );
+	}
 }
 
 #endif

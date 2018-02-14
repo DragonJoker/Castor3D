@@ -5,7 +5,9 @@
 #include "Render/RenderTarget.hpp"
 #include "Texture/TextureLayout.hpp"
 
+#include <Command/CommandBuffer.hpp>
 #include <RenderPass/FrameBuffer.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
 #include <RenderPass/RenderPass.hpp>
 
 using namespace castor;
@@ -40,8 +42,8 @@ namespace castor3d
 		m_colourTexture.setTexture( colourTexture );
 		m_colourTexture.initialise();
 
-		renderer::TextureAttachmentPtrArray attaches;
-		attaches.emplace_back( std::make_unique< renderer::TextureAttachment >( colourTexture->getView() ) );
+		renderer::FrameBufferAttachmentArray attaches;
+		attaches.emplace_back( *renderPass.begin(), colourTexture->getView() );
 		m_fbo = renderPass.createFrameBuffer( renderer::UIVec2{ size }
 			, std::move( attaches ) );
 		return true;

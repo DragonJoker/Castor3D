@@ -440,7 +440,6 @@ namespace castor3d
 		m_program = &cache.getNewProgram( false );
 		m_program->createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
 		m_program->createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
-		m_program->link();
 	}
 
 	void RenderWindow::doCreateSwapChainDependent()

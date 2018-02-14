@@ -42,11 +42,13 @@ namespace castor3d
 		if ( target != renderer::BufferTarget::eIndexBuffer
 			&& target != renderer::BufferTarget::eVertexBuffer )
 		{
-			auto & device = *getRenderSystem()->getCurrentDevice();
-			m_nonSharedBuffers.emplace_back( device.createBuffer( size
+			std::unique_ptr< GpuBuffer > buffer = std::make_unique< GpuBuffer >();
+			buffer->doInitialiseStorage( *getRenderSystem()->getCurrentDevice()
+				, size
 				, target | renderer::BufferTarget::eTransferDst
-				, renderer::MemoryPropertyFlag::eHostVisible ) );
-			result.buffer = m_nonSharedBuffers.back().get();
+				, renderer::MemoryPropertyFlag::eHostVisible );
+			m_nonSharedBuffers.emplace_back( std::move( buffer ) );
+			result.buffer = &m_nonSharedBuffers.back()->getBuffer().getBuffer();
 			result.offset = 0u;
 		}
 		else
@@ -60,12 +62,9 @@ namespace castor3d
 			}
 
 			auto itB = doFindBuffer( size, it->second );
-			GpuBufferSPtr buffer;
 
 			if ( itB == it->second.end() )
 			{
-				result.buffer = std::make_shared< GpuBuffer >( *getRenderSystem()
-					, target );
 				uint32_t level = 20u;
 				uint64_t maxSize = ( 1u << level ) * 96;
 
@@ -78,18 +77,22 @@ namespace castor3d
 				REQUIRE( maxSize < std::numeric_limits< uint32_t >::max() );
 				REQUIRE( maxSize >= size );
 
-				buffer->initialiseStorage( level
+				std::unique_ptr< GpuBuffer > buffer = std::make_unique< GpuBuffer >();
+				buffer->initialiseStorage( *getRenderSystem()->getCurrentDevice()
+					, level
 					, 96u
+					, target
 					, flags );
-				it->second.push_back( buffer );
+				it->second.emplace_back( std::move( buffer ) );
+				result.buffer = &buffer->getBuffer().getBuffer();
+				result.offset = buffer->allocate( size );
 			}
 			else
 			{
-				buffer = *itB;
+				result.buffer = &( *itB )->getBuffer().getBuffer();
+				result.offset = ( *itB )->allocate( size );
 			}
 
-			result.buffer = buffer;
-			result.offset = buffer->allocate( size );
 			result.flags = flags;
 		}
 
@@ -102,9 +105,12 @@ namespace castor3d
 		if ( target != renderer::BufferTarget::eIndexBuffer
 			&& target != renderer::BufferTarget::eVertexBuffer )
 		{
-			auto it = std::find( m_nonSharedBuffers.begin()
+			auto it = std::find_if( m_nonSharedBuffers.begin()
 				, m_nonSharedBuffers.end()
-				, bufferOffset.buffer );
+				, [&bufferOffset]( std::unique_ptr< GpuBuffer > const & lookup )
+				{
+					return &lookup->getBuffer().getBuffer() == bufferOffset.buffer;
+				} );
 			REQUIRE( it != m_nonSharedBuffers.end() );
 			it->reset();
 		}
@@ -115,13 +121,12 @@ namespace castor3d
 			REQUIRE( it != m_buffers.end() );
 			auto itB = std::find_if( it->second.begin()
 				, it->second.end()
-				, [&bufferOffset]( GpuBufferSPtr const & lookup )
+				, [&bufferOffset]( std::unique_ptr< GpuBuffer > const & lookup )
 				{
-					return lookup == bufferOffset.buffer;
+					return &lookup->getBuffer().getBuffer() == bufferOffset.buffer;
 				} );
 			REQUIRE( itB != it->second.end() );
-			auto buffer = *itB;
-			buffer->deallocate( bufferOffset.offset );
+			( *itB )->deallocate( bufferOffset.offset );
 		}
 	}
 
