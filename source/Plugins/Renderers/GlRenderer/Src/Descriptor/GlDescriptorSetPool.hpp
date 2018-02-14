@@ -4,8 +4,8 @@
 *\author
 *	Sylvain Doremus
 */
-#ifndef ___VkRenderer_DescriptorSetPool_HPP___
-#define ___VkRenderer_DescriptorSetPool_HPP___
+#ifndef ___GlRenderer_DescriptorSetPool_HPP___
+#define ___GlRenderer_DescriptorSetPool_HPP___
 #pragma once
 
 #include "GlRendererPrerequisites.hpp"

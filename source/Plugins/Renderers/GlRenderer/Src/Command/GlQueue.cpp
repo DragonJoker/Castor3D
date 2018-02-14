@@ -25,9 +25,10 @@ namespace gl_renderer
 			command->apply();
 		}
 
-		return fence
-			? fence->wait( ~( 0u ) ) == renderer::WaitResult::eSuccess
-			: true;
+		return true;
+		//return fence
+		//	? fence->wait( ~( 0u ) ) == renderer::WaitResult::eSuccess
+		//	: true;
 	}
 
 	bool Queue::submit( renderer::CommandBuffer const & commandBuffer
@@ -41,9 +42,10 @@ namespace gl_renderer
 			command->apply();
 		}
 
-		return fence
-			? fence->wait( ~( 0u ) ) == renderer::WaitResult::eSuccess
-			: true;
+		return true;
+		//return fence
+		//	? fence->wait( ~( 0u ) ) == renderer::WaitResult::eSuccess
+		//	: true;
 	}
 
 	bool Queue::submit( renderer::CommandBufferCRefArray const & commandBuffers
@@ -60,9 +62,10 @@ namespace gl_renderer
 			}
 		}
 
-		return fence
-			? fence->wait( ~( 0u ) ) == renderer::WaitResult::eSuccess
-			: true;
+		return true;
+		//return fence
+		//	? fence->wait( ~( 0u ) ) == renderer::WaitResult::eSuccess
+		//	: true;
 	}
 
 	bool Queue::present( renderer::SwapChainCRefArray const & swapChains

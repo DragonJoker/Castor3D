@@ -141,6 +141,14 @@ namespace gl_renderer
 			{
 				std::cout << "ShaderProgram::link - " << linkerLog << std::endl;
 			}
+
+			int validated = 0;
+			glLogCall( gl::GetProgramiv, m_program, GL_INFO_VALIDATE_STATUS, &validated );
+
+			if ( !validated )
+			{
+				std::cerr << "ShaderProgram::link - Not validated" << std::endl;
+			}
 		}
 		else
 		{

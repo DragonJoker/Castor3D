@@ -44,7 +44,7 @@ namespace vk_renderer
 			, m_pool
 			, firstQuery
 			, queryCount
-			, data.size()
+			, data.size() * sizeof( uint32_t )
 			, data.data()
 			, stride
 			, convert( flags ) );
@@ -60,7 +60,7 @@ namespace vk_renderer
 			, m_pool
 			, firstQuery
 			, queryCount
-			, data.size()
+			, data.size() * sizeof( uint64_t )
 			, data.data()
 			, stride
 			, convert( flags ) | VK_QUERY_RESULT_64_BIT );

@@ -57,10 +57,10 @@ namespace gl_renderer
 				, binding.getBinding().getBindingPoint() + binding.getIndex()
 				, static_cast< TextureView const & >( view ).getImage()
 				, range.getBaseMipLevel()
-				, range.getLayerCount() > 0
+				, range.getLayerCount()
 				, range.getBaseArrayLayer()
 				, GL_ACCESS_TYPE_READ_WRITE
-				, getFormat( view.getFormat() ) );
+				, getInternal( view.getFormat() ) );
 		}
 
 		void bind( renderer::UniformBufferBinding const & binding )

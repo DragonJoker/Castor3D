@@ -24,6 +24,7 @@ See LICENSE file in root folder.
 #include "RenderPass/GlRenderPass.hpp"
 #include "RenderPass/GlRenderSubpass.hpp"
 #include "Shader/GlShaderProgram.hpp"
+#include "Sync/GlFence.hpp"
 #include "Sync/GlSemaphore.hpp"
 
 #include <iostream>
@@ -268,9 +269,12 @@ namespace gl_renderer
 		: renderer::Device{ renderer, *connection }
 		, m_context{ Context::create( std::move( connection ) ) }
 	{
+		m_timestampPeriod = 1;
 		m_presentQueue = std::make_unique< Queue >();
+		m_computeQueue = std::make_unique< Queue >();
 		m_graphicsQueue = std::make_unique< Queue >();
 		m_presentCommandPool = std::make_unique< CommandPool >( *this, 0u );
+		m_computeCommandPool = std::make_unique< CommandPool >( *this, 0u );
 		m_graphicsCommandPool = std::make_unique< CommandPool >( *this, 0u );
 
 		enable();
@@ -305,10 +309,12 @@ namespace gl_renderer
 	}
 
 	renderer::VertexLayoutPtr Device::createVertexLayout( uint32_t bindingSlot
-		, uint32_t stride )const
+		, uint32_t stride
+		, renderer::VertexInputRate inputRate )const
 	{
 		return std::make_unique< VertexLayout >( bindingSlot
-			, stride );
+			, stride
+			, inputRate );
 	}
 
 	renderer::GeometryBuffersPtr Device::createGeometryBuffers( renderer::VertexBufferCRefArray const & vbos
@@ -438,6 +444,11 @@ namespace gl_renderer
 	renderer::SemaphorePtr Device::createSemaphore()const
 	{
 		return std::make_unique< Semaphore >( *this );
+	}
+
+	renderer::FencePtr Device::createFence( renderer::FenceCreateFlags flags )const
+	{
+		return std::make_unique< Fence >( *this, flags );
 	}
 
 	renderer::CommandPoolPtr Device::createCommandPool( uint32_t queueFamilyIndex

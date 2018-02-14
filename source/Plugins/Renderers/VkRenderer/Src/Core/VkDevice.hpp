@@ -50,7 +50,8 @@ namespace vk_renderer
 		*\copydoc	renderer::Device::createVertexLayout
 		*/
 		renderer::VertexLayoutPtr createVertexLayout( uint32_t bindingSlot
-			, uint32_t stride )const override;
+			, uint32_t stride
+			, renderer::VertexInputRate inputRate )const override;
 		/**
 		*\copydoc	renderer::Device::createGeometryBuffers
 		*/
@@ -122,6 +123,10 @@ namespace vk_renderer
 		*\copydoc	renderer::Device::createSemaphore
 		*/
 		renderer::SemaphorePtr createSemaphore()const override;
+		/**
+		*\copydoc	renderer::Device::createFence
+		*/
+		renderer::FencePtr createFence( renderer::FenceCreateFlags flags )const override;
 		/**
 		*\copydoc	renderer::Device::createCommandPool
 		*/

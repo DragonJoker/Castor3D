@@ -4,8 +4,8 @@
 *\author
 *	Sylvain Doremus
 */
-#ifndef ___VkRenderer_Sampler_HPP___
-#define ___VkRenderer_Sampler_HPP___
+#ifndef ___GlRenderer_Sampler_HPP___
+#define ___GlRenderer_Sampler_HPP___
 #pragma once
 
 #include "GlRendererPrerequisites.hpp"

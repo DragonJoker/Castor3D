@@ -78,6 +78,11 @@ namespace gl_renderer
 		void clear( renderer::TextureView const & image
 			, renderer::RgbaColour const & colour )const override;
 		/**
+		*\copydoc	renderer::CommandBuffer:clear
+		*/
+		void clear( renderer::TextureView const & image
+			, renderer::DepthStencilClearValue const & value )const override;
+		/**
 		*\copydoc	renderer::CommandBuffer:memoryBarrier
 		*/
 		void memoryBarrier( renderer::PipelineStageFlags after
@@ -95,13 +100,18 @@ namespace gl_renderer
 		void bindPipeline( renderer::Pipeline const & pipeline
 			, renderer::PipelineBindPoint bindingPoint )const override;
 		/**
+		*\copydoc	renderer::CommandBuffer:bindPipeline
+		*/
+		void bindPipeline( renderer::ComputePipeline const & pipeline
+			, renderer::PipelineBindPoint bindingPoint )const override;
+		/**
 		*\copydoc	renderer::CommandBuffer:bindGeometryBuffers
 		*/
 		void bindGeometryBuffers( renderer::GeometryBuffers const & geometryBuffers )const override;
 		/**
 		*\copydoc	renderer::CommandBuffer:bindDescriptorSet
 		*/
-		void bindDescriptorSet( renderer::DescriptorSet const & descriptorSet
+		void bindDescriptorSets( renderer::DescriptorSetCRefArray const & descriptorSets
 			, renderer::PipelineLayout const & layout
 			, renderer::PipelineBindPoint bindingPoint )const override;
 		/**
@@ -205,7 +215,8 @@ namespace gl_renderer
 		Device const & m_device;
 		mutable renderer::CommandBufferUsageFlags m_beginFlags{ 0u };
 		mutable CommandArray m_commands;
-		mutable renderer::Pipeline const * m_currentPipeline{ nullptr };
+		mutable Pipeline const * m_currentPipeline{ nullptr };
+		mutable ComputePipeline const * m_currentComputePipeline{ nullptr };
 		mutable renderer::IndexType m_indexType{ renderer::IndexType::eUInt32 };
 	};
 }

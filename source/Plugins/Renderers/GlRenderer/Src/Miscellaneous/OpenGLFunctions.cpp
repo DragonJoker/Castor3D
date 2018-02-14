@@ -1,5 +1,5 @@
 /*
-This file belongs to VkLib.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #include "GlRendererPrerequisites.hpp"

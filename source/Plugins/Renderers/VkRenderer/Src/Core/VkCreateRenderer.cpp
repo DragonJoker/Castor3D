@@ -3,8 +3,8 @@
 
 extern "C"
 {
-	VkRenderer_API renderer::Renderer * createRenderer()
+	VkRenderer_API renderer::Renderer * createRenderer( bool enableValidation )
 	{
-		return new vk_renderer::Renderer;
+		return new vk_renderer::Renderer{ enableValidation };
 	}
 }

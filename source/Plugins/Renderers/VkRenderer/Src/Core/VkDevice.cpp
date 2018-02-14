@@ -25,6 +25,7 @@ See LICENSE file in root folder.
 #include "RenderPass/VkRenderSubpass.hpp"
 #include "Shader/VkAttribute.hpp"
 #include "Shader/VkShaderProgram.hpp"
+#include "Sync/VkFence.hpp"
 #include "Sync/VkSemaphore.hpp"
 
 namespace vk_renderer
@@ -37,6 +38,7 @@ namespace vk_renderer
 		, m_gpu{ m_connection->getGpu() }
 		, m_version{ "Vulkan 1.0.0" }
 	{
+		m_timestampPeriod = m_gpu.getProperties().limits.timestampPeriod;
 		std::vector< VkDeviceQueueCreateInfo > queueCreateInfos;
 		std::vector< float > queuePriorities = { 1.0f };
 
@@ -58,6 +60,19 @@ namespace vk_renderer
 				nullptr,                                                // pNext
 				0,                                                      // flags
 				m_connection->getPresentQueueFamilyIndex(),              // queueFamilyIndex
+				static_cast< uint32_t >( queuePriorities.size() ),      // queueCount
+				queuePriorities.data()                                  // pQueuePriorities
+			} );
+		}
+
+		if ( m_connection->getComputeQueueFamilyIndex() != m_connection->getGraphicsQueueFamilyIndex() )
+		{
+			queueCreateInfos.push_back(
+			{
+				VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,             // sType
+				nullptr,                                                // pNext
+				0,                                                      // flags
+				m_connection->getComputeQueueFamilyIndex(),             // queueFamilyIndex
 				static_cast< uint32_t >( queuePriorities.size() ),      // queueCount
 				queuePriorities.data()                                  // pQueuePriorities
 			} );
@@ -95,15 +110,28 @@ namespace vk_renderer
 
 		if ( m_connection->getGraphicsQueueFamilyIndex() != m_connection->getPresentQueueFamilyIndex() )
 		{
-			m_graphicsQueue = std::make_unique< Queue >( *this, m_connection->getGraphicsQueueFamilyIndex() );
+			m_graphicsQueue = std::make_unique< Queue >( *this, m_connection->getPresentQueueFamilyIndex() );
 		}
 		else
 		{
-			m_graphicsQueue = std::make_unique< Queue >( *this, m_connection->getPresentQueueFamilyIndex() );
+			m_graphicsQueue = std::make_unique< Queue >( *this, m_connection->getGraphicsQueueFamilyIndex() );
 		}
 
 		m_graphicsCommandPool = std::make_unique< CommandPool >( *this
 			, m_graphicsQueue->getFamilyIndex()
+			, renderer::CommandPoolCreateFlag::eResetCommandBuffer | renderer::CommandPoolCreateFlag::eTransient );
+
+		if ( m_connection->getGraphicsQueueFamilyIndex() != m_connection->getComputeQueueFamilyIndex() )
+		{
+			m_computeQueue = std::make_unique< Queue >( *this, m_connection->getComputeQueueFamilyIndex() );
+		}
+		else
+		{
+			m_computeQueue = std::make_unique< Queue >( *this, m_connection->getGraphicsQueueFamilyIndex() );
+		}
+
+		m_computeCommandPool = std::make_unique< CommandPool >( *this
+			, m_computeQueue->getFamilyIndex()
 			, renderer::CommandPoolCreateFlag::eResetCommandBuffer | renderer::CommandPoolCreateFlag::eTransient );
 	}
 
@@ -113,6 +141,8 @@ namespace vk_renderer
 		m_graphicsQueue.reset();
 		m_presentCommandPool.reset();
 		m_presentQueue.reset();
+		m_computeCommandPool.reset();
+		m_computeQueue.reset();
 		vkDestroyDevice( m_device, nullptr );
 	}
 
@@ -139,10 +169,12 @@ namespace vk_renderer
 	}
 
 	renderer::VertexLayoutPtr Device::createVertexLayout( uint32_t bindingSlot
-		, uint32_t stride )const
+		, uint32_t stride
+		, renderer::VertexInputRate inputRate )const
 	{
 		return std::make_unique< VertexLayout >( bindingSlot
-			, stride );
+			, stride
+			, inputRate );
 	}
 
 	renderer::GeometryBuffersPtr Device::createGeometryBuffers( renderer::VertexBufferCRefArray const & vbos
@@ -272,6 +304,11 @@ namespace vk_renderer
 	renderer::SemaphorePtr Device::createSemaphore()const
 	{
 		return std::make_unique< Semaphore >( *this );
+	}
+
+	renderer::FencePtr Device::createFence( renderer::FenceCreateFlags flags )const
+	{
+		return std::make_unique< Fence >( *this, flags );
 	}
 
 	renderer::CommandPoolPtr Device::createCommandPool( uint32_t queueFamilyIndex

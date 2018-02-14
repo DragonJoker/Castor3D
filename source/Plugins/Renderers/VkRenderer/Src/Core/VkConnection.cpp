@@ -200,6 +200,7 @@ namespace vk_renderer
 		uint32_t i{ 0u };
 		m_graphicsQueueFamilyIndex = std::numeric_limits< uint32_t >::max();
 		m_presentQueueFamilyIndex = std::numeric_limits< uint32_t >::max();
+		m_computeQueueFamilyIndex = std::numeric_limits< uint32_t >::max();
 
 		for ( auto & present : supportsPresent )
 		{
@@ -208,21 +209,36 @@ namespace vk_renderer
 				, m_presentSurface
 				, &present );
 
-			if ( ( m_gpu.getQueueProperties()[i].queueCount > 0 ) &&
-				( m_gpu.getQueueProperties()[i].queueFlags & VK_QUEUE_GRAPHICS_BIT ) )
+			if ( m_gpu.getQueueProperties()[i].queueCount > 0 )
 			{
-				// Tout d'abord on choisit une file graphique
-				if ( m_graphicsQueueFamilyIndex == std::numeric_limits< uint32_t >::max() )
+				if ( m_gpu.getQueueProperties()[i].queueFlags & VK_QUEUE_GRAPHICS_BIT )
 				{
-					m_graphicsQueueFamilyIndex = i;
+					// Tout d'abord on choisit une file graphique
+					if ( m_graphicsQueueFamilyIndex == std::numeric_limits< uint32_t >::max() )
+					{
+						m_graphicsQueueFamilyIndex = i;
+					}
+
+					// Si elle supporte aussi les calculs, on l'utilisera aussi en tant que file de calcul.
+					if ( m_gpu.getQueueProperties()[i].queueFlags & VK_QUEUE_COMPUTE_BIT
+						&& m_computeQueueFamilyIndex == std::numeric_limits< uint32_t >::max() )
+					{
+						m_computeQueueFamilyIndex = i;
+					}
+
+					// Si une file supporte les graphismes et la présentation, on la préfère.
+					if ( present )
+					{
+						m_graphicsQueueFamilyIndex = i;
+						m_presentQueueFamilyIndex = i;
+						break;
+					}
 				}
 
-				// Si une file supporte les graphismes et la présentation, on la préfère.
-				if ( present )
+				if ( m_gpu.getQueueProperties()[i].queueFlags & VK_QUEUE_COMPUTE_BIT
+					&& m_computeQueueFamilyIndex == std::numeric_limits< uint32_t >::max() )
 				{
-					m_graphicsQueueFamilyIndex = i;
-					m_presentQueueFamilyIndex = i;
-					break;
+					m_computeQueueFamilyIndex = i;
 				}
 			}
 
@@ -244,7 +260,8 @@ namespace vk_renderer
 
 		// Si on n'en a pas trouvé, on génère une erreur.
 		if ( m_graphicsQueueFamilyIndex == std::numeric_limits< uint32_t >::max()
-			|| m_presentQueueFamilyIndex == std::numeric_limits< uint32_t >::max() )
+			|| m_presentQueueFamilyIndex == std::numeric_limits< uint32_t >::max()
+			|| m_computeQueueFamilyIndex == std::numeric_limits< uint32_t >::max() )
 		{
 			throw std::runtime_error{ "Could not find appropriate queue families" };
 		}

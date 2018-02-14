@@ -1,5 +1,5 @@
 /*
-This file belongs to VkLib.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 
@@ -71,6 +71,7 @@ GL_LIB_FUNCTION( CopyBufferSubData )
 GL_LIB_FUNCTION( CopyImageSubData )
 GL_LIB_FUNCTION( CreateProgram )
 GL_LIB_FUNCTION( CreateShader )
+GL_LIB_FUNCTION( CreateShaderProgramv )
 GL_LIB_FUNCTION( CreateVertexArrays )
 GL_LIB_FUNCTION( DeleteBuffers )
 GL_LIB_FUNCTION( DeleteFramebuffers )
@@ -85,6 +86,7 @@ GL_LIB_FUNCTION( DrawArrays )
 GL_LIB_FUNCTION( DrawArraysInstancedBaseInstance )
 GL_LIB_FUNCTION( DrawBuffers )
 GL_LIB_FUNCTION( DrawElementsBaseVertex )
+GL_LIB_FUNCTION( DrawElementsInstanced )
 GL_LIB_FUNCTION( DrawElementsInstancedBaseInstance )
 GL_LIB_FUNCTION( EnableVertexAttribArray )
 GL_LIB_FUNCTION( EndQuery )
@@ -99,7 +101,11 @@ GL_LIB_FUNCTION( GenQueries )
 GL_LIB_FUNCTION( GenSamplers )
 GL_LIB_FUNCTION( GenerateMipmap )
 GL_LIB_FUNCTION( GetProgramInfoLog )
+GL_LIB_FUNCTION( GetProgramInterfaceiv )
 GL_LIB_FUNCTION( GetProgramiv )
+GL_LIB_FUNCTION( GetProgramResourceiv )
+GL_LIB_FUNCTION( GetProgramResourceIndex )
+GL_LIB_FUNCTION( GetProgramResourceName )
 GL_LIB_FUNCTION( GetQueryObjectui64v )
 GL_LIB_FUNCTION( GetQueryObjectuiv )
 GL_LIB_FUNCTION( GetShaderInfoLog )
@@ -146,6 +152,7 @@ GL_LIB_FUNCTION( UniformMatrix3fv )
 GL_LIB_FUNCTION( UniformMatrix4fv )
 GL_LIB_FUNCTION( UnmapBuffer )
 GL_LIB_FUNCTION( UseProgram )
+GL_LIB_FUNCTION( VertexAttribDivisor )
 GL_LIB_FUNCTION( VertexAttribPointer )
 
 #undef GL_LIB_FUNCTION

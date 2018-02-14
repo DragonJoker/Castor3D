@@ -5,7 +5,7 @@ See LICENSE file in root folder.
 namespace renderer
 {
 	/**
-	*name
+	*\name
 	*	Upload.
 	**/
 	/**@{*/
@@ -267,7 +267,7 @@ namespace renderer
 	}
 	/**@}*/
 	/**
-	*name
+	*\name
 	*	Upload.
 	**/
 	/**@{*/
@@ -529,7 +529,7 @@ namespace renderer
 	}
 	/**@}*/
 	/**
-	*name
+	*\name
 	*	Upload.
 	**/
 	/**@{*/
@@ -552,7 +552,7 @@ namespace renderer
 	}
 	/**@}*/
 	/**
-	*name
+	*\name
 	*	Download.
 	**/
 	/**@{*/

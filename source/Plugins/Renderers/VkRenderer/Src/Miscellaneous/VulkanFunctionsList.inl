@@ -1,5 +1,5 @@
 /*
-This file belongs to VkLib.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #if defined( CreateSemaphore )
@@ -110,6 +110,7 @@ VK_LIB_DEVICE_FUNCTION( vkCmdBindPipeline )
 VK_LIB_DEVICE_FUNCTION( vkCmdBindVertexBuffers )
 VK_LIB_DEVICE_FUNCTION( vkCmdBlitImage )
 VK_LIB_DEVICE_FUNCTION( vkCmdClearColorImage )
+VK_LIB_DEVICE_FUNCTION( vkCmdClearDepthStencilImage )
 VK_LIB_DEVICE_FUNCTION( vkCmdCopyBuffer )
 VK_LIB_DEVICE_FUNCTION( vkCmdCopyBufferToImage )
 VK_LIB_DEVICE_FUNCTION( vkCmdCopyImage )
@@ -130,6 +131,7 @@ VK_LIB_DEVICE_FUNCTION( vkCmdWriteTimestamp )
 VK_LIB_DEVICE_FUNCTION( vkCreateBuffer )
 VK_LIB_DEVICE_FUNCTION( vkCreateBufferView )
 VK_LIB_DEVICE_FUNCTION( vkCreateCommandPool )
+VK_LIB_DEVICE_FUNCTION( vkCreateComputePipelines )
 VK_LIB_DEVICE_FUNCTION( vkCreateDescriptorPool )
 VK_LIB_DEVICE_FUNCTION( vkCreateDescriptorSetLayout )
 VK_LIB_DEVICE_FUNCTION( vkCreateFence )

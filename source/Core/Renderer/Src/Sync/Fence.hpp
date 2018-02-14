@@ -36,7 +36,7 @@ namespace renderer
 		*	Les indicateurs de création de la barrière.
 		*/ 
 		Fence( Device const & device
-			, FenceCreateFlags flags = 0 );
+			, FenceCreateFlags flags );
 
 	public:
 		/**

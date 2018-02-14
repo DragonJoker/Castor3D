@@ -343,9 +343,14 @@ namespace gl_renderer
 	executeFunction( Name, #Name, __VA_ARGS__ )
 #	define glLogCommand( Name )\
 	std::cout << "Command: " << Name << std::endl
-#else
+#elif defined( NDEBUG )
 #	define glLogCall( Name, ... )\
 	( Name( __VA_ARGS__ ) )
+#	define glLogCommand( Name )
+#	else
+#	define glLogCall( Name, ... )\
+	( Name( __VA_ARGS__ ) );\
+	glCheckError( #Name )
 #	define glLogCommand( Name )
 #endif
 }

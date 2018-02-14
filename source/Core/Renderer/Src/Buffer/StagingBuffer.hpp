@@ -33,7 +33,7 @@ namespace renderer
 			, BufferTargets target
 			, uint32_t size = 10000000u );
 		/**
-		*name
+		*\name
 		*	Upload.
 		**/
 		/**@{*/
@@ -355,7 +355,7 @@ namespace renderer
 			, PipelineStageFlags const & flags )const;
 		/**@}*/
 		/**
-		*name
+		*\name
 		*	Upload.
 		**/
 		/**@{*/
@@ -687,7 +687,7 @@ namespace renderer
 
 	private:
 		/**
-		*name
+		*\name
 		*	Upload.
 		**/
 		/**@{*/
@@ -713,7 +713,7 @@ namespace renderer
 			, PipelineStageFlags const & flags )const;
 		/**@{*/
 		/**
-		*name
+		*\name
 		*	Download.
 		**/
 		/**@{*/

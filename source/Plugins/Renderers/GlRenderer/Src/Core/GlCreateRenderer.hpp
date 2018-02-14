@@ -26,5 +26,5 @@ extern "C"
 	*\param[in] connection
 	*	La connection avec la fenêtre.
 	*/
-	GlRenderer_API renderer::Renderer * createRenderer();
+	GlRenderer_API renderer::Renderer * createRenderer( bool enableValidation );
 }

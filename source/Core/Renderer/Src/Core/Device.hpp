@@ -15,13 +15,29 @@ See LICENSE file in root folder.
 namespace renderer
 {
 	/**
+	*\~english
+	*\brief
+	*	The class containing the informations related to the logical device.
+	*\remarks
+	*	It creates most of the rendering API objects.
+	*\~french
 	*\brief
 	*	Classe contenant les informations liées au GPU logique.
+	*\remarks
+	*	Elle crée la plupart des objets de rendu.
 	*/
 	class Device
 	{
 	protected:
 		/**
+		*\~english
+		*\brief
+		*	Constructor.
+		*\param[in] renderer
+		*	The Renderer instance.
+		*\param[in] connection
+		*	The connection to the application.
+		*\~french
 		*\brief
 		*	Constructeur.
 		*\param[in] renderer
@@ -34,12 +50,12 @@ namespace renderer
 
 	public:
 		/**
-		*\~french
-		*\brief
-		*	Destructeur.
 		*\~english
 		*\brief
 		*	Destructor.
+		*\~french
+		*\brief
+		*	Destructeur.
 		*/
 		virtual ~Device() = default;
 		/**
@@ -52,12 +68,12 @@ namespace renderer
 		*/
 		ClipDirection getClipDirection()const;
 		/**
-		*\~french
-		*\brief
-		*	Active le contexte du périphérique (pour OpenGL).
 		*\~english
 		*\brief
 		*	Enables the device's context (for OpenGL).
+		*\~french
+		*\brief
+		*	Active le contexte du périphérique (pour OpenGL).
 		*/
 		void enable()const;
 		/**
@@ -124,7 +140,7 @@ namespace renderer
 		*\param[in] neededState
 		*	The state wanted for this subpass execution.
 		*\return
-		*	The created subpass
+		*	The created subpass.
 		*/
 		virtual RenderSubpassPtr createRenderSubpass( std::vector< PixelFormat > const & formats
 			, RenderSubpassState const & neededState )const = 0;
@@ -136,11 +152,25 @@ namespace renderer
 		*	Le point d'attache du tampon associé.
 		*\param[in] stride
 		*	La taille en octets séparant un élément du suivant, dans le tampon.
+		*\param[in] inputRate
+		*	La cadence d'entrée.
 		*\return
 		*	Le layout créé.
+		*\~english
+		*\brief
+		*	Creates a vertex layout.
+		*\param[in] bindingSlot
+		*	The binding point for associated buffer.
+		*\param[in] stride
+		*	The byte size from one element to the next one, in the buffer.
+		*\param[in] inputRate
+		*	The input rate (for instantiation).
+		*\return
+		*	The created layout.
 		*/
 		virtual VertexLayoutPtr createVertexLayout( uint32_t bindingSlot
-			, uint32_t stride )const = 0;
+			, uint32_t stride
+			, VertexInputRate inputRate = VertexInputRate::eVertex )const = 0;
 		/**
 		*\~english
 		*\brief
@@ -164,6 +194,15 @@ namespace renderer
 		virtual PipelineLayoutPtr createPipelineLayout( DescriptorSetLayoutCRefArray const & setLayouts
 			, PushConstantRangeCRefArray const & pushConstantRanges )const = 0;
 		/**
+		*\~english
+		*\brief
+		*	Creates a geometry buffers.
+		*\param[in] vbos
+		*	The VBOs.
+		*\param[in] vboOffsets
+		*	The offset for the first vertex of each VBO.
+		*\param[in] layouts
+		*	The vertex layouts, one for each VBO.
 		*\~french
 		*\brief
 		*	Crée tampon de géométries.
@@ -178,6 +217,21 @@ namespace renderer
 			, std::vector< uint64_t > vboOffsets
 			, VertexLayoutCRefArray const & layouts )const = 0;
 		/**
+		*\~english
+		*\brief
+		*	Creates a geometry buffers.
+		*\param[in] vbos
+		*	The VBOs.
+		*\param[in] vboOffsets
+		*	The offset for the first vertex of each VBO.
+		*\param[in] layouts
+		*	The vertex layouts, one for each VBO.
+		*\param[in] ibo
+		*	The IBO.
+		*\param[in] iboOffset
+		*	The offset of the first index in the IBO.
+		*\param[in] type
+		*	LThe index type.
 		*\~french
 		*\brief
 		*	Crée tampon de géométries.
@@ -190,7 +244,7 @@ namespace renderer
 		*\param[in] ibo
 		*	L'IBO.
 		*\param[in] iboOffset
-		*	L'offset du premier sommet dans l'IBO.
+		*	L'offset du premier indice dans l'IBO.
 		*\param[in] type
 		*	Le type des indices.
 		*/
@@ -201,6 +255,13 @@ namespace renderer
 			, uint64_t iboOffset
 			, IndexType type )const = 0;
 		/**
+		*\~english
+		*\brief
+		*	Creates a descriptor set layout.
+		*\param[in] bindings
+		*	The layout bindings.
+		*\return
+		*	The created layout.
 		*\~french
 		*\brief
 		*	Crée un layout de set de descripteurs.
@@ -211,6 +272,11 @@ namespace renderer
 		*/
 		virtual DescriptorSetLayoutPtr createDescriptorSetLayout( DescriptorSetLayoutBindingArray && bindings )const = 0;
 		/**
+		*\~english
+		*\brief
+		*	Creates a texture.
+		*\param[in] initialLayout
+		*	The image initial layout.
 		*\~french
 		*\brief
 		*	Crée une texture.
@@ -219,6 +285,15 @@ namespace renderer
 		*/
 		virtual TexturePtr createTexture( ImageLayout initialLayout = ImageLayout::eUndefined )const = 0;
 		/**
+		*\~english
+		*\brief
+		*	Creates a sampler.
+		*\param[in] wrapS, wrapT, wrapR
+		*	The texture wrap modes.
+		*\param[in] minFilter, magFilter
+		*	The minification and magnification filters.
+		*\param[in] mipFilter
+		*	The mipmap filter.
 		*\~french
 		*\brief
 		*	Crée un échantillonneur.
@@ -242,6 +317,15 @@ namespace renderer
 			, float maxAnisotropy = 1.0f
 			, CompareOp compareOp = CompareOp::eAlways )const = 0;
 		/**
+		*\~english
+		*\brief
+		*	Creates a GPU buffer.
+		*\param[in] size
+		*	The buffer size.
+		*\param[in] target
+		*	The buffer usage flags.
+		*\param[in] memoryFlags
+		*	The buffer memory flags.
 		*\~french
 		*\brief
 		*	Crée un tampon GPU.
@@ -249,7 +333,7 @@ namespace renderer
 		*	La taille du tampon.
 		*\param[in] target
 		*	Les indicateurs d'utilisation du tampon.
-		*\param[in] flags
+		*\param[in] memoryFlags
 		*	Les indicateurs de mémoire du tampon.
 		*/
 		virtual BufferBasePtr createBuffer( uint32_t size
@@ -284,6 +368,17 @@ namespace renderer
 			, uint32_t offset
 			, uint32_t range )const = 0;
 		/**
+		*\~english
+		*\brief
+		*	Creates a uniform buffer.
+		*\param[in] count
+		*	The buffer elements count.
+		*\param[in] size
+		*	The size of one element in the buffer.
+		*\param[in] target
+		*	The buffer usage flags.
+		*\param[in] flags
+		*	The buffer memory flags.
 		*\~french
 		*\brief
 		*	Crée un tampon d'uniformes.
@@ -301,6 +396,11 @@ namespace renderer
 			, BufferTargets target
 			, MemoryPropertyFlags memoryFlags )const = 0;
 		/**
+		*\~english
+		*\brief
+		*	Creates a swap chain.
+		*\param[in] size
+		*	The wanted dimensions.
 		*\~french
 		*\brief
 		*	Crée une swap chain.
@@ -309,30 +409,56 @@ namespace renderer
 		*/
 		virtual SwapChainPtr createSwapChain( UIVec2 const & size )const = 0;
 		/**
+		*\~english
+		*\brief
+		*	Creates a semaphore.
 		*\~french
 		*\brief
 		*	Crée un sémaphore.
 		*/
 		virtual SemaphorePtr createSemaphore()const = 0;
 		/**
+		*\~english
+		*\brief
+		*	Creates a fence.
+		*\param[in] flags
+		*	The fence creation flags.
+		*\~french
+		*\brief
+		*	Crée une barrière.
+		*\param[in] flags
+		*	Les indicateurs de création de la barrière.
+		*/
+		virtual FencePtr createFence( FenceCreateFlags flags = 0 )const = 0;
+		/**
+		*\~english
+		*\brief
+		*	Creates a command buffer pool.
+		*\param[in] queueFamilyIndex
+		*	The family index of the queue to which the pool belongs.
+		*\param[in] flags
+		*	The command pool creation flags.
 		*\~french
 		*\brief
 		*	Crée un pool de tampons de commandes.
 		*\param[in] queueFamilyIndex
 		*	L'index de la famille à laquelle appartient le pool.
 		*\param[in] flags
-		*	Combinaison binaire de CommandPoolCreateFlag.
+		*	Les indicateurs de création du pool.
 		*/
 		virtual CommandPoolPtr createCommandPool( uint32_t queueFamilyIndex
 			, CommandPoolCreateFlags const & flags = 0 )const = 0;
 		/**
+		*\~english
+		*\brief
+		*	Creates the shader program.
 		*\~french
 		*\brief
 		*	Crée un programme shader.
 		*/
 		virtual ShaderProgramPtr createShaderProgram()const = 0;
 		/**
-		*\~french
+		*\~english
 		*\brief
 		*	Creates a query pool.
 		*\param[in] type
@@ -355,6 +481,17 @@ namespace renderer
 			, uint32_t count
 			, QueryPipelineStatisticFlags pipelineStatistics )const = 0;
 		/**
+		*\english
+		*	Computes a perspective projection matrix.
+		*\param[in] fovy
+		*	The vertical aperture angle.
+		*\param[in] aspect
+		*	The width / height ratio.
+		*\param[in] zNear
+		*	The near plane position.
+		*\param[in] zFar
+		*	The far plane position.
+		*\~french
 		*\brief
 		*	Calcule une matrice de projection en perspective.
 		*\param[in] fovy
@@ -371,6 +508,16 @@ namespace renderer
 			, float zNear
 			, float zFar )const = 0;
 		/**
+		*\~english
+		*\brief
+		*	Computes an orthographic projection matrix.
+		*\param[in] left, right
+		*	The left and right planes position.
+		*\param[in] top, bottom
+		*	The top and bottom planes position.
+		*\param[in] zNear, zFar
+		*	The near and far planes position.
+		*\~french
 		*\brief
 		*	Calcule une matrice de projection orthographique.
 		*\param[in] left, right
@@ -387,6 +534,15 @@ namespace renderer
 			, float zNear
 			, float zFar )const = 0;
 		/**
+		*\english
+		*	Computes a perspective projection matrix with no far plane clipping.
+		*\param[in] fovy
+		*	The vertical aperture angle.
+		*\param[in] aspect
+		*	The width / height ratio.
+		*\param[in] zNear
+		*	The near plane position.
+		*\~french
 		*\brief
 		*	Calcule une matrice de projection en perspective sans clipping
 		*	d'arrière plan.
@@ -401,18 +557,44 @@ namespace renderer
 			, float aspect
 			, float zNear )const;
 		/**
+		*\~english
+		*\brief
+		*	Creates a geometry buffers.
+		*\param[in] vbo
+		*	The VBO.
+		*\param[in] vboOffset
+		*	The offset of the first vertex in the VBO.
+		*\param[in] layout
+		*	The vertex buffer layout.
 		*\~french
 		*\brief
 		*	Crée tampon de géométries.
+		*\param[in] vbo
+		*	Le VBO.
+		*\param[in] vboOffset
+		*	L'offset du premier sommet dans le VBO.
 		*\param[in] layout
-		*	Le layout des descripteurs utilisés par le pipeline.
-		*\return
-		*	Le layout créé.
+		*	Le layout.
 		*/
 		GeometryBuffersPtr createGeometryBuffers( VertexBufferBase const & vbo
 			, uint64_t vboOffset
 			, VertexLayout const & layout )const;
 		/**
+		*\~english
+		*\brief
+		*	Creates a geometry buffers.
+		*\param[in] vbo
+		*	The VBO.
+		*\param[in] vboOffset
+		*	The offset of the first vertex in the VBO.
+		*\param[in] layout
+		*	The vertex buffer layout.
+		*\param[in] ibo
+		*	The IBO.
+		*\param[in] iboOffset
+		*	The offset of the first index in the VBO.
+		*\param[in] type
+		*	The index type.
 		*\~french
 		*\brief
 		*	Crée tampon de géométries.
@@ -510,11 +692,15 @@ namespace renderer
 		*	Creates a pipeline layout.
 		*\param[in] setLayouts
 		*	The descriptor sets layouts.
+		*\return
+		*	The created layout.
 		*\~french
 		*\brief
 		*	Crée un layout de pipeline.
 		*\param[in] setLayouts
 		*	Les layouts des descripteurs du pipeline.
+		*\return
+		*	Le layout créé.
 		*/
 		PipelineLayoutPtr createPipelineLayout( DescriptorSetLayoutCRefArray const & layouts )const;
 		/**
@@ -535,12 +721,18 @@ namespace renderer
 		*/
 		PipelineLayoutPtr createPipelineLayout( PushConstantRangeCRefArray const & pushConstantRanges )const;
 		/**
+		*\~english
+		*\brief
+		*	Waits for the device to be idle.
 		*\~french
 		*\brief
 		*	Attend que le périphérique soit inactif.
 		*/
 		virtual void waitIdle()const = 0;
 		/**
+		*\~english
+		*\brief
+		*	The version number.
 		*\~french
 		*\brief
 		*	Le numéro de version.
@@ -550,6 +742,9 @@ namespace renderer
 			return m_version;
 		}
 		/**
+		*\~english
+		*\return
+		*	The presentation queue.
 		*\~french
 		*\return
 		*	La file de présentation.
@@ -559,6 +754,21 @@ namespace renderer
 			return *m_presentQueue;
 		}
 		/**
+		*\~english
+		*\return
+		*	The compute queue.
+		*\~french
+		*\return
+		*	La file de calcul.
+		*/
+		inline Queue const & getComputeQueue()const
+		{
+			return *m_computeQueue;
+		}
+		/**
+		*\~english
+		*\return
+		*	The graphics queue.
 		*\~french
 		*\return
 		*	La file de dessin.
@@ -568,6 +778,9 @@ namespace renderer
 			return *m_graphicsQueue;
 		}
 		/**
+		*\~english
+		*\return
+		*	The command buffer pool for the presentation queue.
 		*\~french
 		*\return
 		*	Le pool de tampons de commandes pour la file de présentation.
@@ -577,6 +790,21 @@ namespace renderer
 			return *m_presentCommandPool;
 		}
 		/**
+		*\~english
+		*\return
+		*	The command buffer pool for the compute queue.
+		*\~french
+		*\return
+		*	Le pool de tampons de commandes pour la file de calcul.
+		*/
+		inline CommandPool const & getComputeCommandPool()const
+		{
+			return *m_computeCommandPool;
+		}
+		/**
+		*\~english
+		*\return
+		*	The command buffer pool for the graphics queue.
 		*\~french
 		*\return
 		*	Le pool de tampons de commandes pour la file de dessin.
@@ -584,6 +812,30 @@ namespace renderer
 		inline CommandPool const & getGraphicsCommandPool()const
 		{
 			return *m_graphicsCommandPool;
+		}
+		/**
+		*\~english
+		*\return
+		*	The parent Renderer.
+		*\~french
+		*\return
+		*	Le Renderer parent.
+		*/
+		inline Renderer const & getRenderer()const
+		{
+			return m_renderer;
+		}
+		/**
+		*\~english
+		*\return
+		*	The number of nanoseconds it takes for timestamp value to be incremented by 1.
+		*\~french
+		*\return
+		*	Le nombre de nanosecondes qu'il faut pour que la valeur d'un timestamp soit incrémentée de 1.
+		*/
+		inline float getTimestampPeriod()const
+		{
+			return m_timestampPeriod;
 		}
 
 	private:
@@ -599,7 +851,7 @@ namespace renderer
 		/**
 		*\~french
 		*\brief
-		*	Désctive le contexte du périphérique (pour OpenGL).
+		*	Désactive le contexte du périphérique (pour OpenGL).
 		*\~english
 		*\brief
 		*	Disables the device's context (for OpenGL).
@@ -613,10 +865,13 @@ namespace renderer
 	protected:
 		Renderer const & m_renderer;
 		QueuePtr m_presentQueue;
+		QueuePtr m_computeQueue;
 		QueuePtr m_graphicsQueue;
 		CommandPoolPtr m_presentCommandPool;
+		CommandPoolPtr m_computeCommandPool;
 		CommandPoolPtr m_graphicsCommandPool;
 		std::string m_version;
+		float m_timestampPeriod;
 	};
 }
 

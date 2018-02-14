@@ -12,6 +12,7 @@ See LICENSE file in root folder.
 #include "Core/GlRenderingResources.hpp"
 #include "Descriptor/GlDescriptorSet.hpp"
 #include "Image/GlTexture.hpp"
+#include "Pipeline/GlComputePipeline.hpp"
 #include "Pipeline/GlPipeline.hpp"
 #include "Pipeline/GlPipelineLayout.hpp"
 #include "RenderPass/GlFrameBuffer.hpp"
@@ -21,11 +22,14 @@ See LICENSE file in root folder.
 
 #include "Commands/GlBeginQueryCommand.hpp"
 #include "Commands/GlBeginRenderPassCommand.hpp"
+#include "Commands/GlBindComputePipelineCommand.hpp"
 #include "Commands/GlBindDescriptorSetCommand.hpp"
 #include "Commands/GlBindGeometryBuffersCommand.hpp"
 #include "Commands/GlBindPipelineCommand.hpp"
 #include "Commands/GlBlitImageCommand.hpp"
 #include "Commands/GlBufferMemoryBarrierCommand.hpp"
+#include "Commands/GlClearColourCommand.hpp"
+#include "Commands/GlClearDepthStencilCommand.hpp"
 #include "Commands/GlCopyBufferCommand.hpp"
 #include "Commands/GlCopyBufferToImageCommand.hpp"
 #include "Commands/GlCopyImageCommand.hpp"
@@ -33,7 +37,6 @@ See LICENSE file in root folder.
 #include "Commands/GlDispatchCommand.hpp"
 #include "Commands/GlDrawCommand.hpp"
 #include "Commands/GlDrawIndexedCommand.hpp"
-#include "Commands/GlClearCommand.hpp"
 #include "Commands/GlEndQueryCommand.hpp"
 #include "Commands/GlEndRenderPassCommand.hpp"
 #include "Commands/GlImageMemoryBarrierCommand.hpp"
@@ -121,14 +124,27 @@ namespace gl_renderer
 	void CommandBuffer::clear( renderer::TextureView const & image
 		, renderer::RgbaColour const & colour )const
 	{
-		m_commands.emplace_back( std::make_unique< ClearCommand >( image, colour ) );
+		m_commands.emplace_back( std::make_unique< ClearColourCommand >( image, colour ) );
+	}
+
+	void CommandBuffer::clear( renderer::TextureView const & image
+		, renderer::DepthStencilClearValue const & value )const
+	{
+		m_commands.emplace_back( std::make_unique< ClearDepthStencilCommand >( image, value ) );
 	}
 
 	void CommandBuffer::bindPipeline( renderer::Pipeline const & pipeline
 		, renderer::PipelineBindPoint bindingPoint )const
 	{
-		m_currentPipeline = &pipeline;
+		m_currentPipeline = &static_cast< Pipeline const & >( pipeline );
 		m_commands.emplace_back( std::make_unique< BindPipelineCommand >( m_device, pipeline, bindingPoint ) );
+	}
+
+	void CommandBuffer::bindPipeline( renderer::ComputePipeline const & pipeline
+		, renderer::PipelineBindPoint bindingPoint )const
+	{
+		m_currentComputePipeline = &static_cast< ComputePipeline const & >( pipeline );
+		m_commands.emplace_back( std::make_unique< BindComputePipelineCommand >( m_device, pipeline, bindingPoint ) );
 	}
 
 	void CommandBuffer::bindGeometryBuffers( renderer::GeometryBuffers const & geometryBuffers )const
@@ -159,13 +175,16 @@ namespace gl_renderer
 			, transitionBarrier ) );
 	}
 
-	void CommandBuffer::bindDescriptorSet( renderer::DescriptorSet const & descriptorSet
+	void CommandBuffer::bindDescriptorSets( renderer::DescriptorSetCRefArray const & descriptorSets
 		, renderer::PipelineLayout const & layout
 		, renderer::PipelineBindPoint bindingPoint )const
 	{
-		m_commands.emplace_back( std::make_unique< BindDescriptorSetCommand >( descriptorSet
-			, layout
-			, bindingPoint ) );
+		for ( auto & descriptorSet : descriptorSets )
+		{
+			m_commands.emplace_back( std::make_unique< BindDescriptorSetCommand >( descriptorSet.get()
+				, layout
+				, bindingPoint ) );
+		}
 	}
 
 	void CommandBuffer::setViewport( renderer::Viewport const & viewport )const
@@ -187,7 +206,7 @@ namespace gl_renderer
 			, instCount
 			, firstVertex
 			, firstInstance
-			, m_currentPipeline->getPrimitiveType() ) );
+			, m_currentPipeline->getInputAssemblyState().getTopology() ) );
 	}
 
 	void CommandBuffer::drawIndexed( uint32_t indexCount
@@ -201,7 +220,7 @@ namespace gl_renderer
 			, firstIndex
 			, vertexOffset
 			, firstInstance
-			, m_currentPipeline->getPrimitiveType()
+			, m_currentPipeline->getInputAssemblyState().getTopology()
 			, m_indexType ) );
 	}
 

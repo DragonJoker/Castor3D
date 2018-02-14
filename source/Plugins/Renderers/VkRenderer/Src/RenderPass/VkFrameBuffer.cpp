@@ -109,7 +109,7 @@ namespace vk_renderer
 		CommandBuffer copyCmd{ m_device
 			, static_cast< CommandPool const & >( m_device.getGraphicsCommandPool() )
 			, true };
-		copyCmd.begin();
+		copyCmd.begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
 		copyCmd.memoryBarrier( renderer::PipelineStageFlag::eTransfer
 			, renderer::PipelineStageFlag::eTransfer
 			, view.makeTransferDestination() );

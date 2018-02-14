@@ -4,8 +4,8 @@
 *\author
 *	Sylvain Doremus
 */
-#ifndef ___VkRenderer_Texture_HPP___
-#define ___VkRenderer_Texture_HPP___
+#ifndef ___GlRenderer_Texture_HPP___
+#define ___GlRenderer_Texture_HPP___
 #pragma once
 
 #include "GlRendererPrerequisites.hpp"

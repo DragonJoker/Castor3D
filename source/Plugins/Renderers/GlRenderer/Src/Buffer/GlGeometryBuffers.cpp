@@ -4,7 +4,6 @@ See LICENSE file in root folder.
 */
 #include "Buffer/GlGeometryBuffers.hpp"
 
-#include "Shader/GlAttribute.hpp"
 #include "Buffer/GlBuffer.hpp"
 #include "Pipeline/GlVertexLayout.hpp"
 
@@ -55,16 +54,65 @@ namespace gl_renderer
 				, GL_BUFFER_TARGET_ARRAY
 				, static_cast< Buffer const & >( vbo.vbo.getBuffer() ).getBuffer() );
 
-			for ( auto & attribute : static_cast< VertexLayout const & >( vbo.layout ) )
+			if ( vbo.layout.getInputRate() == renderer::VertexInputRate::eVertex )
 			{
-				glLogCall( gl::EnableVertexAttribArray, attribute.getLocation() );
-				glLogCall( gl::VertexAttribPointer
-					, attribute.getLocation()
-					, getCount( attribute.getFormat() )
-					, getType( attribute.getFormat() )
-					, false
-					, vbo.layout.getStride()
-					, BufferOffset( vbo.offset + attribute.getOffset() ) );
+				for ( auto & attribute : static_cast< VertexLayout const & >( vbo.layout ) )
+				{
+					glLogCall( gl::EnableVertexAttribArray, attribute.getLocation() );
+					glLogCall( gl::VertexAttribPointer
+						, attribute.getLocation()
+						, getCount( attribute.getFormat() )
+						, getType( attribute.getFormat() )
+						, false
+						, vbo.layout.getStride()
+						, BufferOffset( vbo.offset + attribute.getOffset() ) );
+				}
+			}
+			else
+			{
+				for ( auto & attribute : static_cast< VertexLayout const & >( vbo.layout ) )
+				{
+					auto format = attribute.getFormat();
+					uint32_t offset = attribute.getOffset();
+					uint32_t location = attribute.getLocation();
+					uint32_t divisor = 1u;
+
+					if ( attribute.getFormat() == renderer::AttributeFormat::eMat4f )
+					{
+						format = renderer::AttributeFormat::eVec4f;
+
+						for ( auto i = 0u; i < 4u; ++i )
+						{
+							glLogCall( gl::EnableVertexAttribArray, location );
+							glLogCall( gl::VertexAttribPointer
+								, location
+								, getCount( format )
+								, getType( format )
+								, false
+								, vbo.layout.getStride()
+								, BufferOffset( vbo.offset + offset ) );
+							glLogCall( gl::VertexAttribDivisor
+								, location
+								, divisor );
+							++location;
+							offset += 16u;
+						}
+					}
+					else
+					{
+						glLogCall( gl::EnableVertexAttribArray, location );
+						glLogCall( gl::VertexAttribPointer
+							, location
+							, getCount( format )
+							, getType( format )
+							, false
+							, vbo.layout.getStride()
+							, BufferOffset( vbo.offset + offset ) );
+						glLogCall( gl::VertexAttribDivisor
+							, location
+							, divisor );
+					}
+				}
 			}
 		}
 

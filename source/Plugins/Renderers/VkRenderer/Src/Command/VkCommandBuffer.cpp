@@ -19,6 +19,7 @@ See LICENSE file in root folder.
 #include "Miscellaneous/VkBufferImageCopy.hpp"
 #include "Miscellaneous/VkImageCopy.hpp"
 #include "Miscellaneous/VkQueryPool.hpp"
+#include "Pipeline/VkComputePipeline.hpp"
 #include "Pipeline/VkPipeline.hpp"
 #include "Pipeline/VkPipelineLayout.hpp"
 #include "Pipeline/VkScissor.hpp"
@@ -45,6 +46,18 @@ namespace vk_renderer
 			for ( auto & command : commands )
 			{
 				result.emplace_back( static_cast< CommandBuffer const & >( command.get() ) );
+			}
+
+			return result;
+		}
+
+		DescriptorSetCRefArray convert( renderer::DescriptorSetCRefArray const & descriptors )
+		{
+			DescriptorSetCRefArray result;
+
+			for ( auto & descriptor : descriptors )
+			{
+				result.emplace_back( static_cast< DescriptorSet const & >( descriptor.get() ) );
 			}
 
 			return result;
@@ -93,6 +106,7 @@ namespace vk_renderer
 		DEBUG_DUMP( cmdBufInfo );
 		auto res = m_device.vkBeginCommandBuffer( m_commandBuffer, &cmdBufInfo );
 		m_currentPipeline = nullptr;
+		m_currentComputePipeline = nullptr;
 		return checkError( res );
 	}
 
@@ -125,6 +139,7 @@ namespace vk_renderer
 		DEBUG_DUMP( cmdBufInfo );
 		auto res = m_device.vkBeginCommandBuffer( m_commandBuffer, &cmdBufInfo );
 		m_currentPipeline = nullptr;
+		m_currentComputePipeline = nullptr;
 		return checkError( res );
 	}
 
@@ -132,6 +147,7 @@ namespace vk_renderer
 	{
 		auto res = m_device.vkEndCommandBuffer( m_commandBuffer );
 		m_currentPipeline = nullptr;
+		m_currentComputePipeline = nullptr;
 		return checkError( res );
 	}
 
@@ -205,6 +221,19 @@ namespace vk_renderer
 			, &vksubresourceRange );
 	}
 
+	void CommandBuffer::clear( renderer::TextureView const & image
+		, renderer::DepthStencilClearValue const & value )const
+	{
+		auto vkclear = convert( value );
+		auto vksubresourceRange = convert( image.getSubResourceRange() );
+		m_device.vkCmdClearDepthStencilImage( m_commandBuffer
+			, static_cast< Texture const & >( image.getTexture() )
+			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+			, &vkclear
+			, 1
+			, &vksubresourceRange );
+	}
+
 	void CommandBuffer::bindPipeline( renderer::Pipeline const & pipeline
 		, renderer::PipelineBindPoint bindingPoint )const
 	{
@@ -212,6 +241,15 @@ namespace vk_renderer
 			, convert( bindingPoint )
 			, static_cast< Pipeline const & >( pipeline ) );
 		m_currentPipeline = &static_cast< Pipeline const & >( pipeline );
+	}
+
+	void CommandBuffer::bindPipeline( renderer::ComputePipeline const & pipeline
+		, renderer::PipelineBindPoint bindingPoint )const
+	{
+		m_device.vkCmdBindPipeline( m_commandBuffer
+			, convert( bindingPoint )
+			, static_cast< ComputePipeline const & >( pipeline ) );
+		m_currentComputePipeline = &static_cast< ComputePipeline const & >( pipeline );
 	}
 
 	void CommandBuffer::bindGeometryBuffers( renderer::GeometryBuffers const & geometryBuffers )const
@@ -280,18 +318,18 @@ namespace vk_renderer
 			, &vktb );
 	}
 
-	void CommandBuffer::bindDescriptorSet( renderer::DescriptorSet const & descriptorSet
+	void CommandBuffer::bindDescriptorSets( renderer::DescriptorSetCRefArray const & descriptorSets
 		, renderer::PipelineLayout const & layout
 		, renderer::PipelineBindPoint bindingPoint )const
 	{
-		assert( m_currentPipeline && "No pipeline bound." );
-		VkDescriptorSet set{ static_cast< DescriptorSet const & >( descriptorSet ) };
+		assert( ( m_currentPipeline || m_currentComputePipeline ) && "No pipeline bound." );
+		auto vkDescriptors = makeVkArray< VkDescriptorSet >( convert( descriptorSets ) );
 		m_device.vkCmdBindDescriptorSets( m_commandBuffer
 			, convert( bindingPoint )
 			, static_cast< PipelineLayout const & >( layout )
-			, descriptorSet.getBindingPoint()
-			, 1u
-			, &set
+			, descriptorSets.begin()->get().getBindingPoint()
+			, uint32_t( descriptorSets.size() )
+			, vkDescriptors.data()
 			, 0u
 			, nullptr );
 	}
@@ -470,6 +508,7 @@ namespace vk_renderer
 		, uint32_t groupCountY
 		, uint32_t groupCountZ )const
 	{
+		assert( m_currentComputePipeline && "No compute pipeline bound." );
 		m_device.vkCmdDispatch( m_commandBuffer
 			, groupCountX
 			, groupCountY

@@ -16,20 +16,30 @@ See LICENSE file in root folder.
 namespace renderer
 {
 	/**
+	*\~french
 	*\brief
-	*	Tampon de commandes.
+	*	A command buffer.
+	*\~french
+	*\brief
+	*	Un tampon de commandes.
 	*/
 	class CommandBuffer
 	{
 	protected:
 		CommandBuffer( CommandBuffer const & ) = delete;
 		CommandBuffer & operator=( CommandBuffer const & ) = delete;
-		/**
-		*\brief
-		*	Constructeur par défaut.
-		*/
 		CommandBuffer() = default;
 		/**
+		*\~english
+		*\brief
+		*	Constructor.
+		*\param[in] device
+		*	The logical device.
+		*\param[in] pool
+		*	The parent command buffer pool.
+		*\param[in] primary
+		*	Tells if the command buffer is primary (\p true) or not (\p false).
+		*\~french
 		*\brief
 		*	Constructeur.
 		*\param[in] device
@@ -54,6 +64,14 @@ namespace renderer
 		*/
 		virtual ~CommandBuffer() = default;
 		/**
+		*\~english
+		*\brief
+		*	Starts recording the command buffer.
+		*\param[in] flags
+		*	The usage flags for the command buffer.
+		*\return
+		*	\p false on any problem.
+		*\~french
 		*\brief
 		*	Démarre l'enregistrement du tampon de commandes.
 		*\param[in] flags
@@ -63,6 +81,26 @@ namespace renderer
 		*/
 		virtual bool begin( CommandBufferUsageFlags flags = 0u )const = 0;
 		/**
+		*\~english
+		*\brief
+		*	Starts recording the command buffer as a secondary command buffer.
+		*\param[in] flags
+		*	The usage flags for the command buffer.
+		*\param[in] renderPass
+		*	The render pass with which the buffer is compatible, and int which it can execute.
+		*\param[in] subpass
+		*	The index of the subpass into which this buffer will be executed.
+		*\param[in] frameBuffer
+		*	The frame buffer into which the command buffer will render.
+		*\param[in] occlusionQueryEnable
+		*	Tells if the command buffer can be executed while an occlusion query is active on main command buffer.
+		*\param[in] queryFlags
+		*	The occlusion query flags that can be used by an active occlusion query on the main command buffer, when this buffer is executed.
+		*\param[in] pipelineStatistics
+		*	Tells which pipeline statistics can be counted by an active query on the main command buffer, when this buffer is executed.
+		*\return
+		*	\p false on any error.
+		*\~french
 		*\brief
 		*	Démarre l'enregistrement du tampon de commandes en tant que tampon secondaire.
 		*\param[in] flags
@@ -92,6 +130,12 @@ namespace renderer
 			, QueryControlFlags queryFlags = 0u
 			, QueryPipelineStatisticFlags pipelineStatistics = 0u )const = 0;
 		/**
+		*\~english
+		*\brief
+		*	Ends the command buffer recording.
+		*\return
+		*	\p false on any error.
+		*\~french
 		*\brief
 		*	Termine l'enregistrement du tampon de commandes.
 		*\return
@@ -99,6 +143,14 @@ namespace renderer
 		*/
 		virtual bool end()const = 0;
 		/**
+		*\~english
+		*\brief
+		*	Reset a command buffer to the initial state.
+		*\param[in] flags
+		*	The flags controlling the reset operation.
+		*\return
+		*	\p false on any error.
+		*\~french
 		*\brief
 		*	Réinitialise le tampon de commandes et le met dans un état où il peut à nouveau enregistrer des commandes.
 		*\param[in] flags
@@ -108,6 +160,18 @@ namespace renderer
 		*/
 		virtual bool reset( CommandBufferResetFlags flags = 0u )const = 0;
 		/**
+		*\~english
+		*\brief
+		*	Begins a new render pass.
+		*\param[in] renderPass
+		*	The render pass to begin.
+		*\param[in] frameBuffer
+		*	The framebuffer containing the attachments that are used with the render pass.
+		*\param[in] clearValues
+		*	The clear values for each attachment that needs to be cleared.
+		*\param[in] contents
+		*	Specifies how the commands in the first subpass will be provided.
+		*\~french
 		*\brief
 		*	Démarre une passe de rendu.
 		*\param[in] renderPass
@@ -124,6 +188,12 @@ namespace renderer
 			, ClearValueArray const & clearValues
 			, SubpassContents contents )const = 0;
 		/**
+		*\~english
+		*\brief
+		*	Transition to the next subpass of a render pass.
+		*\param[in] contents
+		*	Specifies how the commands in the next subpass will be provided.
+		*\~french
 		*\brief
 		*	Passe à la sous-passe suivante.
 		*\param[in] contents
@@ -131,20 +201,38 @@ namespace renderer
 		*/
 		virtual void nextSubpass( SubpassContents contents )const = 0;
 		/**
+		*\~english
 		*\brief
-		*	Termine une passe de rendu.
+		*	End the current render pass.
+		*\~french
+		*\brief
+		*	Termine la passe de rendu courante.
 		*/
 		virtual void endRenderPass()const = 0;
 		/**
+		*\~english
 		*\brief
-		*	Execute des tampons de commande secondaires.
+		*	Execute a secondary command buffer.
+		*\param[in] commands
+		*	The secondary command buffers, which are recorded to execute in the order they are listed in the array.
+		*\~french
+		*\brief
+		*	Execute des tampons de commande secondaires, qui sont enregistrés pour être exécutés dans l'ordre du tableau.
 		*\param[in] commands
 		*	Les tampons de commandes.
 		*/
 		virtual void executeCommands( CommandBufferCRefArray const & commands )const = 0;
 		/**
+		*\~english
 		*\brief
-		*	Vide l'image avec la couleur de vidage.
+		*	Clear a color image.
+		*\param[in] image
+		*	The image to clear.
+		*\param[in] colour
+		*	The clear colour.
+		*\~french
+		*\brief
+		*	Vide une image couleur.
 		*\param[in] image
 		*	L'image à vider.
 		*\param[in] colour
@@ -153,6 +241,34 @@ namespace renderer
 		virtual void clear( TextureView const & image
 			, RgbaColour const & colour )const = 0;
 		/**
+		*\~english
+		*\brief
+		*	Clear a depth and/or stencil image.
+		*\param[in] image
+		*	The image to clear.
+		*\param[in] value
+		*	The clear value.
+		*\~french
+		*\brief
+		*	Vide une image profondeur et/ou stencil.
+		*\param[in] image
+		*	L'image à vider.
+		*\param[in] value
+		*	La valeur de vidage.
+		*/
+		virtual void clear( renderer::TextureView const & image
+			, renderer::DepthStencilClearValue const & value )const = 0;
+		/**
+		*\~english
+		*\brief
+		*	Defines a memory dependency between commands that were submitted before it, and those submitted after it.
+		*\param[in] after
+		*	Specifies the pipeline stages that must be ended before the barrier.
+		*\param[in] before
+		*	Specifies the pipeline stages that can be started after the barrier.
+		*\param[in] transitionBarrier
+		*	Describes the transition.
+		*\~french
 		*\brief
 		*	Met en place une barrière de transition d'état de tampon.
 		*\param[in] after
@@ -166,6 +282,16 @@ namespace renderer
 			, PipelineStageFlags before
 			, BufferMemoryBarrier const & transitionBarrier )const = 0;
 		/**
+		*\~english
+		*\brief
+		*	Defines a memory dependency between commands that were submitted before it, and those submitted after it.
+		*\param[in] after
+		*	Specifies the pipeline stages that must be ended before the barrier.
+		*\param[in] before
+		*	Specifies the pipeline stages that can be started after the barrier.
+		*\param[in] transitionBarrier
+		*	Describes the transition.
+		*\~french
 		*\brief
 		*	Met en place une barrière de transition de layout d'image.
 		*\param[in] after
@@ -179,6 +305,14 @@ namespace renderer
 			, PipelineStageFlags before
 			, ImageMemoryBarrier const & transitionBarrier )const = 0;
 		/**
+		*\~english
+		*\brief
+		*	Binds a pipeline to the command buffer.
+		*\param[in] pipeline
+		*	The pipeline to be bound.
+		*\param[in] bindingPoint
+		*	Specifies whether to bind to the compute or graphics bind point.
+		*\~french
 		*\brief
 		*	Active un pipeline: shaders, tests, états, ...
 		*\param[in] pipeline
@@ -189,26 +323,68 @@ namespace renderer
 		virtual void bindPipeline( Pipeline const & pipeline
 			, PipelineBindPoint bindingPoint = PipelineBindPoint::eGraphics )const = 0;
 		/**
+		*\~english
 		*\brief
-		*	Active des tampons de géométrie.
+		*	Binds a compute pipeline to the command buffer.
+		*\param[in] pipeline
+		*	The pipeline to be bound.
+		*\param[in] bindingPoint
+		*	Specifies whether to bind to the compute or graphics bind point.
+		*\~french
+		*\brief
+		*	Active un pipeline de calcul.
+		*\param[in] pipeline
+		*	Le pipeline à activer.
+		*\param[in] bindingPoint
+		*	Le point d'attache du pipeline.
+		*/
+		virtual void bindPipeline( ComputePipeline const & pipeline
+			, PipelineBindPoint bindingPoint = PipelineBindPoint::eCompute )const = 0;
+		/**
+		*\~english
+		*\brief
+		*	Enables geometry buffers (VBO, EBO, ...).
+		*\param[in] geometryBuffers
+		*	Les tampons de géométrie.
+		*\~french
+		*\brief
+		*	Active des tampons de géométrie (VBO, IBO, ...).
 		*\param[in] geometryBuffers
 		*	Les tampons de géométrie.
 		*/
 		virtual void bindGeometryBuffers( GeometryBuffers const & geometryBuffers )const = 0;
 		/**
+		*\~english
 		*\brief
-		*	Active un descriptor set.
-		*\param[in] descriptorSet
-		*	Le descriptor set.
+		*	Binds descriptor sets to the command buffer.
+		*\param[in] descriptorSets
+		*	The descriptor sets.
+		*\param[in] layout
+		*	The pipeline layout used to program the binding.
+		*\param[in] bindingPoint
+		*	Indicates whether the descriptor wil be used by graphics or compute pipeline.
+		*\~french
+		*\brief
+		*	Active des descriptor sets.
+		*\param[in] descriptorSets
+		*	Les descriptor sets.
 		*\param[in] layout
 		*	Le layout de pipeline.
 		*\param[in] bindingPoint
 		*	Le point d'attache du set.
 		*/
-		virtual void bindDescriptorSet( DescriptorSet const & descriptorSet
+		virtual void bindDescriptorSets( DescriptorSetCRefArray const & descriptorSet
 			, PipelineLayout const & layout
 			, PipelineBindPoint bindingPoint = PipelineBindPoint::eGraphics )const = 0;
 		/**
+		*\~english
+		*\brief
+		*	Defines the currently bound pipeline viewport.
+		*\remarks
+		*	This action is possible only if the viewport is dynamic, in the pipeline.
+		*\param[in] viewport
+		*	The viewport.
+		*\~french
 		*\brief
 		*	Définit le viewport du pipeline.
 		*\remarks
@@ -218,15 +394,35 @@ namespace renderer
 		*/
 		virtual void setViewport( Viewport const & viewport )const = 0;
 		/**
+		*\~english
 		*\brief
-		*	Définit le ciseau du pipeline.
+		*	Defines the currently bound pipeline scissor.
 		*\remarks
-		*	Cette action n'est faisable que si le ciseau est configuré comme dynamique.
+		*	This action is possible only if the scissor is dynamic, in the pipeline.
 		*\param[in] scissor
-		*	Le ciseau.
+		*	The scissor.
+		*\~french
+		*\brief
+		*	Définit le scissor du pipeline.
+		*\remarks
+		*	Cette action n'est faisable que si le scissor est configuré comme dynamique.
+		*\param[in] scissor
+		*	Le scissor.
 		*/
 		virtual void setScissor( Scissor const & scissor )const = 0;
 		/**
+		*\~english
+		*\brief
+		*	Draws some vertices.
+		*\param[in] vtxCount
+		*	The vertex count.
+		*\param[in] instCount
+		*	The instances count.
+		*\param[in] firstVertex
+		*	The first vertex index.
+		*\param[in] firstInstance
+		*	The first instance index.
+		*\~french
 		*\brief
 		*	Dessine des sommets.
 		*\param[in] vtxCount
@@ -239,10 +435,24 @@ namespace renderer
 		*	Index de la première instance.
 		*/
 		virtual void draw( uint32_t vtxCount
-			, uint32_t instCount
-			, uint32_t firstVertex
-			, uint32_t firstInstance )const = 0;
+			, uint32_t instCount = 1u
+			, uint32_t firstVertex = 0u
+			, uint32_t firstInstance = 0u )const = 0;
 		/**
+		*\~english
+		*\brief
+		*	Draws some indexed vertices.
+		*\param[in] indexCount
+		*	The index count.
+		*\param[in] instCount
+		*	The instances count.
+		*\param[in] firstIndex
+		*	The first index index.
+		*\param[in] vertexOffset
+		*	The offset added to the vertex index, before indexing the vertex buffer.
+		*\param[in] firstInstance
+		*	The first instance index.
+		*\~french
 		*\brief
 		*	Dessine des sommets.
 		*\param[in] indexCount
@@ -257,10 +467,10 @@ namespace renderer
 		*	Index de la première instance.
 		*/
 		virtual void drawIndexed( uint32_t indexCount
-			, uint32_t instCount
-			, uint32_t firstIndex
-			, uint32_t vertexOffset
-			, uint32_t firstInstance )const = 0;
+			, uint32_t instCount = 1u
+			, uint32_t firstIndex = 0u
+			, uint32_t vertexOffset = 0u
+			, uint32_t firstInstance = 0u )const = 0;
 		/**
 		*\~french
 		*\brief
@@ -310,22 +520,22 @@ namespace renderer
 		/**
 		*\~french
 		*\brief
-		*	Copie les données d'une image vers une autre.
+		*	Copie les données d'un tampon vers un autre.
 		*\param[in] copyInfo
 		*	Les informations de la copie.
 		*\param[in] src
-		*	L'image source.
+		*	Le tampon source.
 		*\param[in] dst
-		*	L'image destination.
+		*	Le tampon destination.
 		*\~english
 		*\brief
-		*	Copies data from an image to another one.
+		*	Copies data from a buffer to another one.
 		*\param[in] copyInfo
 		*	The copy informations.
 		*\param[in] src
-		*	The source image.
+		*	The source buffer.
 		*\param[in] dst
-		*	The destination image.
+		*	The destination buffer.
 		*/
 		virtual void copyBuffer( BufferCopy const & copyInfo
 			, BufferBase const & src
@@ -502,6 +712,7 @@ namespace renderer
 			, uint32_t groupCountY
 			, uint32_t groupCountZ )const = 0;
 		/**
+		*\~french
 		*\brief
 		*	Copie les données d'un tampon vers un autre tampon.
 		*\param[in] src
@@ -510,11 +721,52 @@ namespace renderer
 		*	Le tampon destination.
 		*\param[in] size
 		*	La taille des données à copier.
+		*\param[in] offset
+		*	Le décalage dans le tampon source.
+		*\~english
+		*\brief
+		*	Copies data from a buffer to another one.
+		*\param[in] src
+		*	The source buffer.
+		*\param[in] dst
+		*	The destination buffer.
+		*\param[in] size
+		*	The byte size of the data to copy.
+		*\param[in] offset
+		*	The offset in the source buffer.
 		*/
 		void copyBuffer( BufferBase const & src
 			, BufferBase const & dst
 			, uint32_t size
 			, uint32_t offset = 0 )const;
+		/**
+		*\~english
+		*\brief
+		*	Binds a descriptor set to the command buffer.
+		*\param[in] descriptorSet
+		*	The descriptor set.
+		*\param[in] layout
+		*	The pipeline layout used to program the binding.
+		*\param[in] bindingPoint
+		*	Indicates whether the descriptor wil be used by graphics or compute pipeline.
+		*\~french
+		*\brief
+		*	Active un descriptor set.
+		*\param[in] descriptorSet
+		*	Le descriptor set.
+		*\param[in] layout
+		*	Le layout de pipeline.
+		*\param[in] bindingPoint
+		*	Le point d'attache du set.
+		*/
+		inline void bindDescriptorSet( DescriptorSet const & descriptorSet
+			, PipelineLayout const & layout
+			, PipelineBindPoint bindingPoint = PipelineBindPoint::eGraphics )const
+		{
+			bindDescriptorSets( { descriptorSet }
+				, layout
+				, bindingPoint );
+		}
 		/**
 		*\brief
 		*	Copie les données d'un tampon vers un autre tampon.
@@ -524,6 +776,19 @@ namespace renderer
 		*	Le tampon destination.
 		*\param[in] size
 		*	La taille des données à copier.
+		*\param[in] offset
+		*	Le décalage dans le tampon source.
+		*\~english
+		*\brief
+		*	Copies data from a buffer to another one.
+		*\param[in] src
+		*	The source buffer.
+		*\param[in] dst
+		*	The destination buffer.
+		*\param[in] size
+		*	The byte size of the data to copy.
+		*\param[in] offset
+		*	The offset in the source buffer.
 		*/
 		void copyBuffer( BufferBase const & src
 			, VertexBufferBase const & dst
@@ -538,6 +803,19 @@ namespace renderer
 		*	Le tampon destination.
 		*\param[in] size
 		*	La taille des données à copier.
+		*\param[in] offset
+		*	Le décalage dans le tampon source.
+		*\~english
+		*\brief
+		*	Copies data from a buffer to another one.
+		*\param[in] src
+		*	The source buffer.
+		*\param[in] dst
+		*	The destination buffer.
+		*\param[in] size
+		*	The byte size of the data to copy.
+		*\param[in] offset
+		*	The offset in the source buffer.
 		*/
 		void copyBuffer( VertexBufferBase const & src
 			, BufferBase const & dst
@@ -552,6 +830,19 @@ namespace renderer
 		*	Le tampon destination.
 		*\param[in] size
 		*	La taille des données à copier.
+		*\param[in] offset
+		*	Le décalage dans le tampon source.
+		*\~english
+		*\brief
+		*	Copies data from a buffer to another one.
+		*\param[in] src
+		*	The source buffer.
+		*\param[in] dst
+		*	The destination buffer.
+		*\param[in] size
+		*	The byte size of the data to copy.
+		*\param[in] offset
+		*	The offset in the source buffer.
 		*/
 		void copyBuffer( VertexBufferBase const & src
 			, VertexBufferBase const & dst
@@ -566,6 +857,19 @@ namespace renderer
 		*	Le tampon destination.
 		*\param[in] size
 		*	La taille des données à copier.
+		*\param[in] offset
+		*	Le décalage dans le tampon source.
+		*\~english
+		*\brief
+		*	Copies data from a buffer to another one.
+		*\param[in] src
+		*	The source buffer.
+		*\param[in] dst
+		*	The destination buffer.
+		*\param[in] size
+		*	The byte size of the data to copy.
+		*\param[in] offset
+		*	The offset in the source buffer.
 		*/
 		void copyBuffer( BufferBase const & src
 			, UniformBufferBase const & dst
@@ -580,6 +884,19 @@ namespace renderer
 		*	Le tampon destination.
 		*\param[in] size
 		*	La taille des données à copier.
+		*\param[in] offset
+		*	Le décalage dans le tampon source.
+		*\~english
+		*\brief
+		*	Copies data from a buffer to another one.
+		*\param[in] src
+		*	The source buffer.
+		*\param[in] dst
+		*	The destination buffer.
+		*\param[in] size
+		*	The byte size of the data to copy.
+		*\param[in] offset
+		*	The offset in the source buffer.
 		*/
 		void copyBuffer( UniformBufferBase const & src
 			, BufferBase const & dst
@@ -594,6 +911,19 @@ namespace renderer
 		*	Le tampon destination.
 		*\param[in] size
 		*	La taille des données à copier.
+		*\param[in] offset
+		*	Le décalage dans le tampon source.
+		*\~english
+		*\brief
+		*	Copies data from a buffer to another one.
+		*\param[in] src
+		*	The source buffer.
+		*\param[in] dst
+		*	The destination buffer.
+		*\param[in] size
+		*	The byte size of the data to copy.
+		*\param[in] offset
+		*	The offset in the source buffer.
 		*/
 		void copyBuffer( UniformBufferBase const & src
 			, UniformBufferBase const & dst

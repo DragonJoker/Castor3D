@@ -11,10 +11,9 @@ namespace renderer
 		, ShaderProgram const & program
 		, VertexLayoutCRefArray const & vertexLayouts
 		, RenderPass const & renderPass
-		, PrimitiveTopology topology
+		, InputAssemblyState const & inputAssemblyState
 		, RasterisationState const & rasterisationState
 		, ColourBlendState const & colourBlendState )
-		: m_topology{ topology }
 	{
 	}
 }

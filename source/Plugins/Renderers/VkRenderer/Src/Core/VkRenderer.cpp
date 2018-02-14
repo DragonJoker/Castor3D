@@ -104,8 +104,8 @@ namespace vk_renderer
 		}
 	}
 
-	Renderer::Renderer()
-		: renderer::Renderer{ renderer::ClipDirection::eTopDown }
+	Renderer::Renderer( bool enableValidation )
+		: renderer::Renderer{ renderer::ClipDirection::eTopDown, "vk", enableValidation }
 #if defined( _WIN32 )
 		, m_library{ "vulkan-1.dll" }
 #elif defined( __linux__ )

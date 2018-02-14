@@ -6,6 +6,9 @@ namespace gl_renderer
 	{
 		switch ( value )
 		{
+		case gl_renderer::GL_ATTRIBUTE_FORMAT_BASE_TYPE_UNSIGNED_BYTE:
+			return "GL_UNSIGNED_BYTE";
+
 		case gl_renderer::GL_ATTRIBUTE_FORMAT_BASE_TYPE_INT:
 			return "GL_INT";
 
@@ -32,7 +35,6 @@ namespace gl_renderer
 		case renderer::AttributeFormat::eMat2f:
 		case renderer::AttributeFormat::eMat3f:
 		case renderer::AttributeFormat::eMat4f:
-		case renderer::AttributeFormat::eColour:
 			return GL_ATTRIBUTE_FORMAT_BASE_TYPE_FLOAT;
 
 		case renderer::AttributeFormat::eInt:
@@ -46,6 +48,9 @@ namespace gl_renderer
 		case renderer::AttributeFormat::eVec3ui:
 		case renderer::AttributeFormat::eVec4ui:
 			return GL_ATTRIBUTE_FORMAT_BASE_TYPE_UNSIGNED_INT;
+
+		case renderer::AttributeFormat::eColour:
+			return GL_ATTRIBUTE_FORMAT_BASE_TYPE_UNSIGNED_BYTE;
 
 		default:
 			assert( false && "Unsupported attribute format." );
@@ -76,6 +81,7 @@ namespace gl_renderer
 		case renderer::AttributeFormat::eVec4i:
 		case renderer::AttributeFormat::eVec4ui:
 		case renderer::AttributeFormat::eMat2f:
+		case renderer::AttributeFormat::eColour:
 			return 4u;
 
 		case renderer::AttributeFormat::eMat3f:

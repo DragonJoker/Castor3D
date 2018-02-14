@@ -78,6 +78,23 @@ namespace renderer
 	*	The aspects.
 	*/
 	ImageAspectFlags getAspectMask( renderer::PixelFormat format );
+	/**
+	*\~english
+	*\brief
+	*	Gets the name of the given element.
+	*\param[in] value
+	*	The element.
+	*\return
+	*	The name.
+	*\~french
+	*\brief
+	*	Récupère le nom de l'élément donné.
+	*\param[in] value
+	*	L'élément.
+	*\return
+	*	Le nom.
+	*/
+	std::string getName( renderer::PixelFormat value );
 }
 
 #endif

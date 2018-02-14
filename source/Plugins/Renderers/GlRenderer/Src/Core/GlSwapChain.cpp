@@ -15,6 +15,7 @@ namespace gl_renderer
 		, renderer::UIVec2 const & size )
 		: renderer::SwapChain{ device, size }
 	{
+		m_format = renderer::PixelFormat::eR8G8B8A8;
 		m_renderingResources.emplace_back( std::make_unique< RenderingResources >( device ) );
 	}
 

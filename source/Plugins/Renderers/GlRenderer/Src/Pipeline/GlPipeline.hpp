@@ -4,8 +4,8 @@
 *\author
 *	Sylvain Doremus
 */
-#ifndef ___VkRenderer_Pipeline_HPP___
-#define ___VkRenderer_Pipeline_HPP___
+#ifndef ___GlRenderer_Pipeline_HPP___
+#define ___GlRenderer_Pipeline_HPP___
 #pragma once
 
 #include "GlRendererPrerequisites.hpp"
@@ -13,6 +13,7 @@
 #include <Pipeline/Pipeline.hpp>
 #include <Pipeline/ColourBlendState.hpp>
 #include <Pipeline/DepthStencilState.hpp>
+#include <Pipeline/InputAssemblyState.hpp>
 #include <Pipeline/MultisampleState.hpp>
 #include <Pipeline/RasterisationState.hpp>
 #include <Pipeline/Scissor.hpp>
@@ -30,67 +31,41 @@ namespace gl_renderer
 	{
 	public:
 		/**
-		*\brief
-		*	Constructeur.
-		*\param[in] device
-		*	Le LogicalDevice parent.
-		*\param[in] layout
-		*	Le layout du pipeline.
-		*\param[in] program
-		*	Le programme shader.
-		*\param[in] vertexBuffers
-		*	Les tampons de sommets utilisés.
-		*\param[in] renderPass
-		*	La passe de rendu.
-		*\param[in] topology
-		*	La topologie d'affichage des sommets affichés via ce pipeline.
+		*name
+		*	Construction / Destruction.
 		*/
+		/**@{*/
 		Pipeline( Device const & device
-			, renderer::PipelineLayout const & layout
+			, PipelineLayout const & layout
 			, renderer::ShaderProgram const & program
 			, renderer::VertexLayoutCRefArray const & vertexLayouts
 			, renderer::RenderPass const & renderPass
-			, renderer::PrimitiveTopology topology
+			, renderer::InputAssemblyState const & inputAssemblyState
 			, renderer::RasterisationState const & rasterisationState
 			, renderer::ColourBlendState const & colourBlendState );
+		/**@}*/
 		/**
-		*\brief
-		*	Crée le pipeline.
+		*\copydoc	renderer::Pipeline::finish
 		*/
 		renderer::Pipeline & finish()override;
 		/**
-		*\brief
-		*	Définit le MultisampleState.
-		*\param[in] state
-		*	La nouvelle valeur.
+		*\copydoc	renderer::Pipeline::finish
 		*/
 		renderer::Pipeline & multisampleState( renderer::MultisampleState const & state )override;
 		/**
-		*\brief
-		*	Définit le DepthStencilState.
-		*\param[in] state
-		*	La nouvelle valeur.
+		*\copydoc	renderer::Pipeline::finish
 		*/
 		renderer::Pipeline & depthStencilState( renderer::DepthStencilState const & state )override;
 		/**
-		*\brief
-		*	Définit le TessellationState.
-		*\param[in] state
-		*	La nouvelle valeur.
+		*\copydoc	renderer::Pipeline::finish
 		*/
 		renderer::Pipeline & tessellationState( renderer::TessellationState const & state )override;
 		/**
-		*\brief
-		*	Définit le Viewport.
-		*\param[in] viewport
-		*	La nouvelle valeur.
+		*\copydoc	renderer::Pipeline::finish
 		*/
 		renderer::Pipeline & viewport( renderer::Viewport const & viewport )override;
 		/**
-		*\brief
-		*	Définit le Scissor.
-		*\param[in] scissor
-		*	La nouvelle valeur.
+		*\copydoc	renderer::Pipeline::finish
 		*/
 		renderer::Pipeline & scissor( renderer::Scissor const & scissor )override;
 		/**
@@ -108,6 +83,14 @@ namespace gl_renderer
 		inline bool hasScissor()const
 		{
 			return m_scissor != nullptr;
+		}
+		/**
+		*\return
+		*	Le InputAssemblyState.
+		*/
+		inline renderer::InputAssemblyState const & getInputAssemblyState()const
+		{
+			return m_iaState;
 		}
 		/**
 		*\return
@@ -171,7 +154,7 @@ namespace gl_renderer
 		*\return
 		*	Le PipelineLayout.
 		*/
-		inline renderer::PipelineLayout const & getLayout()const
+		inline PipelineLayout const & getLayout()const
 		{
 			return m_layout;
 		}
@@ -186,8 +169,11 @@ namespace gl_renderer
 
 	private:
 		Device const & m_device;
-		renderer::PipelineLayout const & m_layout;
+		PipelineLayout const & m_layout;
 		ShaderProgram const & m_program;
+		renderer::VertexLayoutCRefArray m_vertexLayouts;
+		renderer::RenderPass const & m_renderPass;
+		renderer::InputAssemblyState m_iaState;
 		renderer::ColourBlendState m_cbState;
 		renderer::RasterisationState m_rsState;
 		renderer::DepthStencilState m_dsState;

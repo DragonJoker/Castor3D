@@ -172,10 +172,10 @@ namespace gl_renderer
 				, GL_TEXTURE_2D
 				, attachment.object
 				, attach.getView().getSubResourceRange().getBaseMipLevel() );
-			doCheck( glLogCall( gl::CheckFramebufferStatus, GL_FRAMEBUFFER ) );
+			doCheck( gl::CheckFramebufferStatus( GL_FRAMEBUFFER ) );
 		}
 
-		doCheck( glLogCall( gl::CheckFramebufferStatus, GL_FRAMEBUFFER ) );
+		doCheck( gl::CheckFramebufferStatus( GL_FRAMEBUFFER ) );
 		glLogCall( gl::DrawBuffers, GLsizei( colours.size() ), colours.data() );
 		glLogCall( gl::BindFramebuffer, GL_FRAMEBUFFER, 0 );
 	}

@@ -14,7 +14,8 @@ namespace renderer
 	FrameBuffer::FrameBuffer( RenderPass const & renderPass
 		, UIVec2 const & dimensions
 		, FrameBufferAttachmentArray && attachments )
-		: m_attachments{ std::move( attachments ) }
+		: m_dimensions{ dimensions }
+		, m_attachments{ std::move( attachments ) }
 	{
 		for ( auto & attachment : m_attachments )
 		{

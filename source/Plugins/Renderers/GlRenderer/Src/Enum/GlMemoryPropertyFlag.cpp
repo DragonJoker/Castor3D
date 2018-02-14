@@ -47,7 +47,7 @@ namespace gl_renderer
 		{
 			result = GL_MEMORY_PROPERTY_READ_BIT
 				| GL_MEMORY_PROPERTY_WRITE_BIT
-				| GL_MEMORY_PROPERTY_DYNAMIC_STORAGE_BIT;
+				/*| GL_MEMORY_PROPERTY_DYNAMIC_STORAGE_BIT*/;
 		}
 
 		if ( checkFlag( flags, renderer::MemoryPropertyFlag::eHostCoherent ) )

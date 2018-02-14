@@ -52,7 +52,8 @@ namespace gl_renderer
 		*\copydoc		renderer::Device::createVertexLayout
 		*/
 		renderer::VertexLayoutPtr createVertexLayout( uint32_t bindingSlot
-			, uint32_t stride )const override;
+			, uint32_t stride
+			, renderer::VertexInputRate inputRate )const override;
 		/**
 		*\copydoc		renderer::Device::createGeometryBuffers
 		*/
@@ -125,6 +126,10 @@ namespace gl_renderer
 		*/
 		renderer::SemaphorePtr createSemaphore()const override;
 		/**
+		*\copydoc	renderer::Device::createFence
+		*/
+		renderer::FencePtr createFence( renderer::FenceCreateFlags flags = 0 )const override;
+		/**
 		*\copydoc		renderer::Device::createCommandPool
 		*/
 		renderer::CommandPoolPtr createCommandPool( uint32_t queueFamilyIndex
@@ -170,7 +175,7 @@ namespace gl_renderer
 			return m_context->getVendor();
 		}
 
-		inline std::string const & getRenderer()const
+		inline std::string const & getRendererName()const
 		{
 			return m_context->getRenderer();
 		}

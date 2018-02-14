@@ -26,5 +26,5 @@ extern "C"
 	*\param[in] connection
 	*	La connection avec la fenêtre.
 	*/
-	VkRenderer_API renderer::Renderer * createRenderer();
+	VkRenderer_API renderer::Renderer * createRenderer( bool enableValidation );
 }

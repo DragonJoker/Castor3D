@@ -2,13 +2,13 @@
 This file belongs to GlRenderer.
 See LICENSE file in root folder.
 */
-#include "GlClearCommand.hpp"
+#include "GlClearColourCommand.hpp"
 
 #include "Image/GlTextureView.hpp"
 
 namespace gl_renderer
 {
-	ClearCommand::ClearCommand( renderer::TextureView const & image
+	ClearColourCommand::ClearColourCommand( renderer::TextureView const & image
 		, renderer::RgbaColour const & colour )
 		: m_image{ static_cast< TextureView const & >( image ) }
 		, m_colour{ colour }
@@ -17,9 +17,9 @@ namespace gl_renderer
 	{
 	}
 
-	void ClearCommand::apply()const
+	void ClearColourCommand::apply()const
 	{
-		glLogCommand( "ClearCommand" );
+		glLogCommand( "ClearColourCommand" );
 		glLogCall( gl::ClearTexImage
 			, m_image.getImage()
 			, 0
@@ -28,8 +28,8 @@ namespace gl_renderer
 			, m_colour.constPtr() );
 	}
 
-	CommandPtr ClearCommand::clone()const
+	CommandPtr ClearColourCommand::clone()const
 	{
-		return std::make_unique< ClearCommand >( *this );
+		return std::make_unique< ClearColourCommand >( *this );
 	}
 }

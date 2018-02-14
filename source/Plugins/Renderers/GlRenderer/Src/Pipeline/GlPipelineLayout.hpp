@@ -47,9 +47,13 @@ namespace gl_renderer
 		renderer::PipelinePtr createPipeline( renderer::ShaderProgram const & program
 			, renderer::VertexLayoutCRefArray const & vertexLayouts
 			, renderer::RenderPass const & renderPass
-			, renderer::PrimitiveTopology topology
+			, renderer::InputAssemblyState const & inputAssemblyState
 			, renderer::RasterisationState const & rasterisationState
 			, renderer::ColourBlendState const & colourBlendState )const override;
+		/**
+		*\copydoc	renderer::PipelineLayout::createPipeline
+		*/
+		renderer::ComputePipelinePtr createPipeline( renderer::ShaderProgram const & program )const override;
 
 	private:
 		Device const & m_device;

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This file belongs to Renderer.
 See LICENSE file in root folder
 */
@@ -12,7 +12,7 @@ namespace gl_renderer
 	*\brief
 	*	Commande de vidage d'une image.
 	*/
-	class ClearCommand
+	class ClearColourCommand
 		: public CommandBase
 	{
 	public:
@@ -20,11 +20,11 @@ namespace gl_renderer
 		*\brief
 		*	Constructeur.
 		*\param[in] image
-		*	L'image � vider.
+		*	L'image à vider.
 		*\param[in] colour
 		*	La couleur de vidage.
 		*/
-		ClearCommand( renderer::TextureView const & image
+		ClearColourCommand( renderer::TextureView const & image
 			, renderer::RgbaColour const & colour );
 
 		void apply()const override;

@@ -73,7 +73,7 @@ namespace renderer
 			return uint32_t( 4u * 4u * sizeof( float ) );
 
 		case AttributeFormat::eColour:
-			return uint32_t( sizeof( uint32_t ) );
+			return uint32_t( 4 * sizeof( uint8_t ) );
 
 		case AttributeFormat::eInt:
 			return uint32_t( 1u * sizeof( int32_t ) );

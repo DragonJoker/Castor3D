@@ -21,23 +21,14 @@ namespace gl_renderer
 
 	void DrawCommand::apply()const
 	{
+		assert( m_instCount >= 1 );
 		glLogCommand( "DrawCommand" );
-		if ( m_instCount > 1 )
-		{
-			glLogCall( gl::DrawArraysInstancedBaseInstance
-				, m_mode
-				, m_firstVertex
-				, m_vtxCount
-				, m_instCount
-				, m_firstInstance );
-		}
-		else
-		{
-			glLogCall( gl::DrawArrays
-				, m_mode
-				, m_firstVertex
-				, m_vtxCount );
-		}
+		glLogCall( gl::DrawArraysInstancedBaseInstance
+			, m_mode
+			, m_firstVertex
+			, m_vtxCount
+			, m_instCount
+			, m_firstInstance );
 	}
 
 	CommandPtr DrawCommand::clone()const

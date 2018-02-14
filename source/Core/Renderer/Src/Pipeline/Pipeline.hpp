@@ -31,15 +31,15 @@ namespace renderer
 		*	Les tampons de sommets utilisés.
 		*\param[in] renderPass
 		*	La passe de rendu.
-		*\param[in] topology
-		*	La topologie d'affichage des sommets affichés via ce pipeline.
+		*\param[in] inputAssemblyState
+		*	L'état d'assemblage des entrées.
 		*/
 		Pipeline( Device const & device
 			, PipelineLayout const & layout
 			, ShaderProgram const & program
 			, VertexLayoutCRefArray const & vertexLayouts
 			, RenderPass const & renderPass
-			, PrimitiveTopology topology
+			, InputAssemblyState const & inputAssemblyState
 			, RasterisationState const & rasterisationState = RasterisationState{}
 			, ColourBlendState const & colourBlendState = ColourBlendState::createDefault() );
 
@@ -93,17 +93,6 @@ namespace renderer
 		*	La nouvelle valeur.
 		*/
 		virtual Pipeline & scissor( Scissor const & scissor ) = 0;
-		/**
-		*\return
-		*	Le type de primitives dessinées via ce pipeline.
-		*/
-		inline PrimitiveTopology getPrimitiveType()const
-		{
-			return m_topology;
-		}
-
-	private:
-		PrimitiveTopology m_topology;
 	};
 }
 

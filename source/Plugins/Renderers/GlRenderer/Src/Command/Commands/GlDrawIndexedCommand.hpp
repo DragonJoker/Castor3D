@@ -50,5 +50,6 @@ namespace gl_renderer
 		uint32_t m_firstInstance;
 		GlPrimitiveTopology m_mode;
 		GlIndexType m_type;
+		uint32_t m_size;
 	};
 }

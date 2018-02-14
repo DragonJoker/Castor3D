@@ -4,11 +4,11 @@
 *\author
 *	Sylvain Doremus
 */
-#ifndef ___VkRenderer_VertexLayout_HPP___
-#define ___VkRenderer_VertexLayout_HPP___
+#ifndef ___GlRenderer_VertexLayout_HPP___
+#define ___GlRenderer_VertexLayout_HPP___
 #pragma once
 
-#include "Shader/GlAttribute.hpp"
+#include "GlRendererPrerequisites.hpp"
 
 #include <Pipeline/VertexLayout.hpp>
 
@@ -33,37 +33,8 @@ namespace gl_renderer
 		*	La taille en octets séparant un élément du suivant, dans le tampon.
 		*/
 		VertexLayout( uint32_t bindingSlot
-			, uint32_t stride );
-		/**
-		*\brief
-		*	Crée un attribut de sommet.
-		*\param[in] location
-		*	La position de l'attribut dans le shader.
-		*\param[in] offset
-		*	La position de l'attribut dans le tampon.
-		*/
-		renderer::AttributeBase createAttribute( uint32_t location
-			, renderer::AttributeFormat format
-			, uint32_t offset )override;
-		/**
-		*\return
-		*	Le début du tableau d'attributs.
-		*/
-		inline std::vector< AttributeBase >::const_iterator begin()const
-		{
-			return m_attributes.begin();
-		}
-		/**
-		*\return
-		*	La fin du tableau d'attributs.
-		*/
-		inline std::vector< AttributeBase >::const_iterator end()const
-		{
-			return m_attributes.end();
-		}
-
-	private:
-		std::vector< AttributeBase > m_attributes;
+			, uint32_t stride
+			, renderer::VertexInputRate inputRate );
 	};
 }
 

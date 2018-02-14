@@ -410,10 +410,10 @@ namespace renderer
 		*/
 		virtual TextureViewPtr createView( TextureType type
 			, PixelFormat format
-			, uint32_t baseMipLevel
-			, uint32_t levelCount
-			, uint32_t baseArrayLayer
-			, uint32_t layerCount )const = 0;
+			, uint32_t baseMipLevel = 0u
+			, uint32_t levelCount = 1u
+			, uint32_t baseArrayLayer = 0u
+			, uint32_t layerCount=  1u )const = 0;
 		/**
 		*\~french
 		*\brief

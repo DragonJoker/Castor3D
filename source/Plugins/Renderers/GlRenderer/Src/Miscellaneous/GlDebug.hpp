@@ -79,4 +79,6 @@ namespace gl_renderer
 		, int length
 		, const char * message
 		, void * userParam );
+
+	bool glCheckError( std::string const & text );
 }

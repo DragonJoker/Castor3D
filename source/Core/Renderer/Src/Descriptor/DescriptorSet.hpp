@@ -310,8 +310,8 @@ namespace renderer
 		template< typename T >
 		inline UniformBufferBinding const & createBinding( DescriptorSetLayoutBinding const & layoutBinding
 			, UniformBuffer< T > const & uniformBuffer
-			, uint32_t offset
-			, uint32_t range
+			, uint32_t offset = 0u
+			, uint32_t range = 1u
 			, uint32_t index = 0u )
 		{
 			return createBinding( layoutBinding

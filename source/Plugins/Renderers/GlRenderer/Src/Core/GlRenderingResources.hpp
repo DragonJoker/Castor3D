@@ -4,8 +4,8 @@
 *\author
 *	Sylvain Doremus
 */
-#ifndef ___VkRenderer_RenderingResources_HPP___
-#define ___VkRenderer_RenderingResources_HPP___
+#ifndef ___GlRenderer_RenderingResources_HPP___
+#define ___GlRenderer_RenderingResources_HPP___
 #pragma once
 
 #include "GlRendererPrerequisites.hpp"

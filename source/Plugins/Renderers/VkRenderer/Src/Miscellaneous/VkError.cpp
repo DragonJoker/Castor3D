@@ -1,5 +1,5 @@
 /*
-This file belongs to VkLib.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #include "VkRendererPrerequisites.hpp"
@@ -141,7 +141,6 @@ namespace vk_renderer
 
 			case VK_ERROR_DEVICE_LOST:
 				doGetError() = "The logical or physical device has been lost.";
-				//assert( false );
 				break;
 
 			case VK_ERROR_MEMORY_MAP_FAILED:

@@ -169,5 +169,53 @@ namespace gl_renderer
 		std::cout << stream.str() << std::endl;
 	}
 
+	bool glCheckError( std::string const & text )
+	{
+		bool result = true;
+		uint32_t errorCode = gl::GetError();
+
+		while ( errorCode )
+		{
+			static uint32_t constexpr InvalidEnum = 0x0500;
+			static uint32_t constexpr InvalidValue = 0x0501;
+			static uint32_t constexpr InvalidOperation = 0x0502;
+			static uint32_t constexpr StackOverflow = 0x0503;
+			static uint32_t constexpr StackUnderflow = 0x0504;
+			static uint32_t constexpr OutOfMemory = 0x0505;
+			static uint32_t constexpr InvalidFramebufferOperation = 0x0506;
+
+			static std::map< uint32_t, std::string > const Errors
+			{
+				{ InvalidEnum, "Invalid Enum" },
+				{ InvalidValue, "Invalid Value" },
+				{ InvalidOperation, "Invalid Operation" },
+				{ StackOverflow, "Stack Overflow" },
+				{ StackUnderflow, "Stack Underflow" },
+				{ OutOfMemory, "Out of memory" },
+				{ InvalidFramebufferOperation, "Invalid frame buffer operation" },
+			};
+
+			auto it = Errors.find( errorCode );
+			std::stringstream error;
+			error << "OpenGL Error, on function: " << text << std::endl;
+			error << "  ID: 0x" << std::hex << errorCode << std::endl;
+
+			if ( it == Errors.end() )
+			{
+				error << "  Message: Unknown error" << std::endl;
+			}
+			else
+			{
+				error << "  Message: " << it->second << std::endl;
+			}
+
+			std::cerr << error.str();
+			errorCode = gl::GetError();
+			result = false;
+		}
+
+		return result;
+	}
+
 	//*************************************************************************************************
 }

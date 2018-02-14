@@ -22,16 +22,32 @@ namespace gl_renderer
 	void CopyBufferCommand::apply()const
 	{
 		glLogCommand( "CopyBufferCommand" );
-		glLogCall( gl::BindBuffer, GL_BUFFER_TARGET_COPY_READ, m_src.getBuffer() );
-		glLogCall( gl::BindBuffer, GL_BUFFER_TARGET_COPY_WRITE, m_dst.getBuffer() );
-		glLogCall( gl::CopyBufferSubData
-			, GL_BUFFER_TARGET_COPY_READ
-			, GL_BUFFER_TARGET_COPY_WRITE
-			, m_copyInfo.srcOffset
-			, m_copyInfo.dstOffset
-			, m_copyInfo.size );
-		glLogCall( gl::BindBuffer, GL_BUFFER_TARGET_COPY_WRITE, 0u );
-		glLogCall( gl::BindBuffer, GL_BUFFER_TARGET_COPY_READ, 0u );
+		if ( m_src.getTarget() == m_dst.getTarget() )
+		{
+			glLogCall( gl::BindBuffer, GL_BUFFER_TARGET_COPY_READ, m_src.getBuffer() );
+			glLogCall( gl::BindBuffer, GL_BUFFER_TARGET_COPY_WRITE, m_dst.getBuffer() );
+			glLogCall( gl::CopyBufferSubData
+				, GL_BUFFER_TARGET_COPY_READ
+				, GL_BUFFER_TARGET_COPY_WRITE
+				, m_copyInfo.srcOffset
+				, m_copyInfo.dstOffset
+				, m_copyInfo.size );
+			glLogCall( gl::BindBuffer, GL_BUFFER_TARGET_COPY_WRITE, 0u );
+			glLogCall( gl::BindBuffer, GL_BUFFER_TARGET_COPY_READ, 0u );
+		}
+		else
+		{
+			glLogCall( gl::BindBuffer, m_src.getTarget(), m_src.getBuffer() );
+			glLogCall( gl::BindBuffer, m_dst.getTarget(), m_dst.getBuffer() );
+			glLogCall( gl::CopyBufferSubData
+				, m_src.getTarget()
+				, m_dst.getTarget()
+				, m_copyInfo.srcOffset
+				, m_copyInfo.dstOffset
+				, m_copyInfo.size );
+			glLogCall( gl::BindBuffer, m_dst.getTarget(), 0u );
+			glLogCall( gl::BindBuffer, m_src.getTarget(), 0u );
+		}
 	}
 
 	CommandPtr CopyBufferCommand::clone()const

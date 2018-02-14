@@ -6,6 +6,23 @@ See LICENSE file in root folder.
 
 namespace gl_renderer
 {
+	namespace
+	{
+		uint32_t getSize( renderer::IndexType type )
+		{
+			switch ( type )
+			{
+			case renderer::IndexType::eUInt16:
+				return 2u;
+			case renderer::IndexType::eUInt32:
+				return 4u;
+			default:
+				assert( false && "Unsupported index type" );
+				return 1u;
+			}
+		}
+	}
+
 	DrawIndexedCommand::DrawIndexedCommand( uint32_t indexCount
 		, uint32_t instCount
 		, uint32_t firstIndex
@@ -20,31 +37,20 @@ namespace gl_renderer
 		, m_firstInstance{ firstInstance }
 		, m_mode{ convert( mode ) }
 		, m_type{ convert( type ) }
+		, m_size{ getSize( type ) }
 	{
 	}
 
 	void DrawIndexedCommand::apply()const
 	{
 		glLogCommand( "DrawIndexedCommand" );
-		if ( m_instCount > 1 )
-		{
 			glLogCall( gl::DrawElementsInstancedBaseInstance
 				, m_mode
 				, m_indexCount
 				, m_type
-				, ( ( GLvoid * )m_firstIndex )
+				, ( ( GLvoid * )( m_firstIndex * m_size ) )
 				, m_instCount
 				, m_firstInstance );
-		}
-		else
-		{
-			glLogCall( gl::DrawElementsBaseVertex
-				, m_mode
-				, m_indexCount
-				, m_type
-				, ( ( GLvoid * )m_firstIndex )
-				, m_vertexOffset );
-		}
 	}
 
 	CommandPtr DrawIndexedCommand::clone()const

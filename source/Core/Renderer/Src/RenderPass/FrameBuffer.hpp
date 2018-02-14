@@ -108,8 +108,21 @@ namespace renderer
 		{
 			return m_attachments.size();
 		}
+		/**
+		*\~english
+		*\return
+		*	The framebuffer dimensions.
+		*\~french
+		*\return
+		*	Les dimensions du tampon d'image.
+		*/
+		inline renderer::UIVec2 const & getDimensions()const
+		{
+			return m_dimensions;
+		}
 
 	protected:
+		UIVec2 m_dimensions;
 		FrameBufferAttachmentArray m_attachments;
 	};
 }

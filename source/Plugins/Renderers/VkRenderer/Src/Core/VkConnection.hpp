@@ -72,6 +72,18 @@ namespace vk_renderer
 		/**
 		*\~french
 		*\return
+		*	L'index du type de file de calcul.
+		*\~english
+		*\return
+		*	The compute queue's family index.
+		*/
+		inline auto getComputeQueueFamilyIndex()const
+		{
+			return m_computeQueueFamilyIndex;
+		}
+		/**
+		*\~french
+		*\return
 		*	L'index du type de file de présentation.
 		*\~english
 		*\return
@@ -119,6 +131,7 @@ namespace vk_renderer
 		PhysicalDevice const & m_gpu;
 		VkSurfaceKHR m_presentSurface{ VK_NULL_HANDLE };
 		uint32_t m_graphicsQueueFamilyIndex{ std::numeric_limits< uint32_t >::max() };
+		uint32_t m_computeQueueFamilyIndex{ std::numeric_limits< uint32_t >::max() };
 		uint32_t m_presentQueueFamilyIndex{ std::numeric_limits< uint32_t >::max() };
 	};
 }

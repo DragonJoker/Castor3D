@@ -52,6 +52,7 @@ See LICENSE file in root folder.
 #include "Enum/SubpassContents.hpp"
 #include "Enum/TessellationStateFlag.hpp"
 #include "Enum/TextureType.hpp"
+#include "Enum/VertexInputRate.hpp"
 #include "Enum/WrapMode.hpp"
 
 #include <cassert>
@@ -66,8 +67,6 @@ See LICENSE file in root folder.
 
 namespace renderer
 {
-	template< typename T >
-	class Attribute;
 	template< typename T >
 	class Buffer;
 	template< typename T >
@@ -88,7 +87,7 @@ namespace renderer
 	struct PushConstantRange;
 	struct RenderPassAttachment;
 
-	class AttributeBase;
+	class Attribute;
 	class BackBuffer;
 	class BufferBase;
 	class BufferMemoryBarrier;
@@ -97,6 +96,7 @@ namespace renderer
 	class ColourBlendStateAttachment;
 	class CommandBuffer;
 	class CommandPool;
+	class ComputePipeline;
 	class Connection;
 	class DepthStencilState;
 	class DescriptorSet;
@@ -110,6 +110,7 @@ namespace renderer
 	class GeometryBuffers;
 	class ImageMemoryBarrier;
 	class ImageSubresourceRange;
+	class InputAssemblyState;
 	class IWindowHandle;
 	class MultisampleState;
 	class Pipeline;
@@ -157,8 +158,6 @@ namespace renderer
 	*/
 	/**\{*/
 	template< typename T >
-	using AttributePtr = std::unique_ptr< Attribute< T > >;
-	template< typename T >
 	using BufferPtr = std::unique_ptr< Buffer< T > >;
 	template< typename T >
 	using PushConstantsBufferPtr = std::unique_ptr< PushConstantsBuffer< T > >;
@@ -169,11 +168,12 @@ namespace renderer
 	template< typename T >
 	using ShaderStorageBufferPtr = std::unique_ptr< ShaderStorageBuffer< T > >;
 
-	using AttributeBasePtr = std::unique_ptr< AttributeBase >;
+	using AttributeBasePtr = std::unique_ptr< Attribute >;
 	using BufferBasePtr = std::unique_ptr< BufferBase >;
 	using BufferViewPtr = std::unique_ptr< BufferView >;
 	using CommandBufferPtr = std::unique_ptr< CommandBuffer >;
 	using CommandPoolPtr = std::unique_ptr< CommandPool >;
+	using ComputePipelinePtr = std::unique_ptr< ComputePipeline >;
 	using ConnectionPtr = std::unique_ptr< Connection >;
 	using DescriptorSetLayoutPtr = std::unique_ptr< DescriptorSetLayout >;
 	using DescriptorSetLayoutBindingPtr = std::unique_ptr< DescriptorSetLayoutBinding >;
@@ -183,6 +183,7 @@ namespace renderer
 	using FencePtr = std::unique_ptr< Fence >;
 	using GeometryBuffersPtr = std::unique_ptr< GeometryBuffers >;
 	using IWindowHandlePtr = std::unique_ptr< IWindowHandle >;
+	using PipelinePtr = std::unique_ptr< Pipeline >;
 	using PipelineLayoutPtr = std::unique_ptr< PipelineLayout >;
 	using QueryPoolPtr = std::unique_ptr< QueryPool >;
 	using QueuePtr = std::unique_ptr< Queue >;
@@ -198,6 +199,7 @@ namespace renderer
 	using VertexLayoutPtr = std::unique_ptr< VertexLayout >;
 	using UniformBufferBasePtr = std::unique_ptr< UniformBufferBase >;
 
+	using AttributeArray = std::vector< Attribute >;
 	using ClearValueArray = std::vector< ClearValue >;
 	using ColourBlendStateAttachmentArray = std::vector< ColourBlendStateAttachment >;
 	using DescriptorSetLayoutBindingArray = std::vector< DescriptorSetLayoutBinding >;
@@ -209,7 +211,6 @@ namespace renderer
 	using RenderPassAttachmentArray = std::vector< RenderPassAttachment >;
 
 	using FrameBufferPtr = std::shared_ptr< FrameBuffer >;
-	using PipelinePtr = std::shared_ptr< Pipeline >;
 	using SamplerPtr = std::shared_ptr< Sampler >;
 	using StagingBufferPtr = std::shared_ptr< StagingBuffer >;
 	using TexturePtr = std::shared_ptr< Texture >;
@@ -220,6 +221,7 @@ namespace renderer
 	using RenderSubpassPtrArray = std::vector< RenderSubpassPtr >;
 
 	using CommandBufferCRef = std::reference_wrapper< CommandBuffer const >;
+	using DescriptorSetCRef = std::reference_wrapper< DescriptorSet const >;
 	using DescriptorSetLayoutCRef = std::reference_wrapper< DescriptorSetLayout const >;
 	using PushConstantRangeCRef = std::reference_wrapper< PushConstantRange const >;
 	using SemaphoreCRef = std::reference_wrapper< Semaphore const >;
@@ -229,6 +231,7 @@ namespace renderer
 	using VertexBufferCRef = std::reference_wrapper< VertexBufferBase const >;
 
 	using CommandBufferCRefArray = std::vector< CommandBufferCRef >;
+	using DescriptorSetCRefArray = std::vector< DescriptorSetCRef >;
 	using DescriptorSetLayoutCRefArray = std::vector< DescriptorSetLayoutCRef >;
 	using PushConstantRangeCRefArray = std::vector< PushConstantRangeCRef >;
 	using SemaphoreCRefArray = std::vector< SemaphoreCRef >;
@@ -236,19 +239,6 @@ namespace renderer
 	using TextureViewCRefArray = std::vector< TextureViewCRef >;
 	using VertexLayoutCRefArray = std::vector< VertexLayoutCRef >;
 	using VertexBufferCRefArray = std::vector< VertexBufferCRef >;
-	/**\}*/
-	/**
-	*\name Typedefs d'attributs de sommets.
-	*/
-	/**\{*/
-	using FloatAttribute = Attribute< float >;
-	using Vec2Attribute = Attribute< Vec2 >;
-	using Vec3Attribute = Attribute< Vec3 >;
-	using Vec4Attribute = Attribute< Vec4 >;
-	using FloatAttributePtr = AttributePtr< float >;
-	using Vec2AttributePtr = AttributePtr< Vec2 >;
-	using Vec3AttributePtr = AttributePtr< Vec3 >;
-	using Vec4AttributePtr = AttributePtr< Vec4 >;
 	/**\}*/
 	/**
 	*\name Signaux.

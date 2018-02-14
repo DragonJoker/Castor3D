@@ -1,5 +1,5 @@
 /*
-This file belongs to VkLib.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #include "Descriptor/VkDescriptorSetBinding.hpp"
@@ -131,7 +131,7 @@ namespace vk_renderer
 			layoutBinding.getBindingPoint(),                // dstBinding
 			index,                                          // dstArrayElement
 			1u,                                             // descriptorCount
-			VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,               // descriptorType
+			VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,               // descriptorType
 			&m_info,                                        // pImageInfo
 			nullptr,                                        // pBufferInfo
 			nullptr                                         // pTexelBufferView

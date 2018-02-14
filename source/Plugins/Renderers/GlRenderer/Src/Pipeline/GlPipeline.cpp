@@ -2,20 +2,26 @@
 
 #include "Command/Commands/GlBindPipelineCommand.hpp"
 #include "Core/GlDevice.hpp"
-#include "Pipeline/GlPipelineLayout.hpp"
+#include "Core/GlRenderer.hpp"
 #include "Core/GlRenderingResources.hpp"
+#include "Miscellaneous/GlValidator.hpp"
+#include "Pipeline/GlPipelineLayout.hpp"
+#include "Pipeline/GlVertexLayout.hpp"
 #include "RenderPass/GlRenderPass.hpp"
 #include "Shader/GlShaderProgram.hpp"
-#include "Pipeline/GlVertexLayout.hpp"
+
+#if defined( interface )
+#	undef interface
+#endif
 
 namespace gl_renderer
 {
 	Pipeline::Pipeline( Device const & device
-		, renderer::PipelineLayout const & layout
+		, PipelineLayout const & layout
 		, renderer::ShaderProgram const & program
 		, renderer::VertexLayoutCRefArray const & vertexLayouts
 		, renderer::RenderPass const & renderPass
-		, renderer::PrimitiveTopology topology
+		, renderer::InputAssemblyState const & inputAssemblyState
 		, renderer::RasterisationState const & rasterisationState
 		, renderer::ColourBlendState const & colourBlendState )
 		: renderer::Pipeline{ device
@@ -23,12 +29,15 @@ namespace gl_renderer
 			, program
 			, vertexLayouts
 			, renderPass
-			, topology
+			, inputAssemblyState
 			, rasterisationState
 			, colourBlendState }
 		, m_device{ device }
 		, m_layout{ layout }
 		, m_program{ static_cast< ShaderProgram const & >( program ) }
+		, m_vertexLayouts{ vertexLayouts }
+		, m_renderPass{ renderPass }
+		, m_iaState{ inputAssemblyState }
 		, m_cbState{ colourBlendState }
 		, m_rsState{ rasterisationState }
 		, m_dsState{ 0u, false, true, renderer::CompareOp::eLess,  }
@@ -43,6 +52,15 @@ namespace gl_renderer
 		apply( m_device, m_msState );
 		apply( m_device, m_tsState );
 		m_program.link();
+
+		if ( m_device.getRenderer().isValidationEnabled() )
+		{
+			validatePipeline( m_layout
+				, m_program
+				, m_vertexLayouts
+				, m_renderPass );
+		}
+
 		return *this;
 	}
 

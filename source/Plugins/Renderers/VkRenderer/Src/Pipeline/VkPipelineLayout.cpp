@@ -2,6 +2,7 @@
 
 #include "Descriptor/VkDescriptorSetLayout.hpp"
 #include "Core/VkDevice.hpp"
+#include "Pipeline/VkComputePipeline.hpp"
 #include "Pipeline/VkPipeline.hpp"
 
 namespace vk_renderer
@@ -57,27 +58,34 @@ namespace vk_renderer
 		}
 	}
 
-	renderer::PipelinePtr PipelineLayout::createPipeline( renderer::ShaderProgram const & program
-		, renderer::VertexLayoutCRefArray const & vertexLayouts
-		, renderer::RenderPass const & renderPass
-		, renderer::PrimitiveTopology topology
-		, renderer::RasterisationState const & rasterisationState
-		, renderer::ColourBlendState const & colourBlendState )const
-	{
-		return std::make_shared< Pipeline >( m_device
-			, *this
-			, program
-			, vertexLayouts
-			, renderPass
-			, topology
-			, rasterisationState
-			, colourBlendState );
-	}
-
 	PipelineLayout::~PipelineLayout()
 	{
 		m_device.vkDestroyPipelineLayout( m_device
 			, m_layout
 			, nullptr );
+	}
+
+	renderer::PipelinePtr PipelineLayout::createPipeline( renderer::ShaderProgram const & program
+		, renderer::VertexLayoutCRefArray const & vertexLayouts
+		, renderer::RenderPass const & renderPass
+		, renderer::InputAssemblyState const & inputAssemblyState
+		, renderer::RasterisationState const & rasterisationState
+		, renderer::ColourBlendState const & colourBlendState )const
+	{
+		return std::make_unique< Pipeline >( m_device
+			, *this
+			, program
+			, vertexLayouts
+			, renderPass
+			, inputAssemblyState
+			, rasterisationState
+			, colourBlendState );
+	}
+
+	renderer::ComputePipelinePtr PipelineLayout::createPipeline( renderer::ShaderProgram const & program )const
+	{
+		return std::make_unique< ComputePipeline >( m_device
+			, *this
+			, program );
 	}
 }

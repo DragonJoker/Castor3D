@@ -23,76 +23,42 @@ namespace vk_renderer
 	{
 	public:
 		/**
-		*\brief
-		*	Constructeur.
-		*\param[in] device
-		*	Le LogicalDevice parent.
-		*\param[in] layout
-		*	Le layout du pipeline.
-		*\param[in] program
-		*	Le programme shader.
-		*\param[in] vertexBuffers
-		*	Les tampons de sommets utilisés.
-		*\param[in] renderPass
-		*	La passe de rendu.
-		*\param[in] topology
-		*	La topologie d'affichage des sommets affichés via ce pipeline.
+		*name
+		*	Construction / Destruction.
 		*/
+		/**@{*/
 		Pipeline( Device const & device
 			, renderer::PipelineLayout const & layout
 			, renderer::ShaderProgram const & program
 			, renderer::VertexLayoutCRefArray const & vertexLayouts
 			, renderer::RenderPass const & renderPass
-			, renderer::PrimitiveTopology topology
+			, renderer::InputAssemblyState const & inputAssemblyState
 			, renderer::RasterisationState const & rasterisationState
 			, renderer::ColourBlendState const & colourBlendState );
-		/**
-		*\~french
-		*\brief
-		*	Destructeur.
-		*\~english
-		*\brief
-		*	Destructor.
-		*/
 		~Pipeline();
+		/**@}*/
 		/**
-		*\brief
-		*	Crée le pipeline.
+		*\copydoc	renderer::Pipeline::finish
 		*/
 		renderer::Pipeline & finish()override;
 		/**
-		*\brief
-		*	Définit le MultisampleState.
-		*\param[in] state
-		*	La nouvelle valeur.
+		*\copydoc	renderer::Pipeline::multisampleState
 		*/
 		renderer::Pipeline & multisampleState( renderer::MultisampleState const & state )override;
 		/**
-		*\brief
-		*	Définit le DepthStencilState.
-		*\param[in] state
-		*	La nouvelle valeur.
+		*\copydoc	renderer::Pipeline::depthStencilState
 		*/
 		renderer::Pipeline & depthStencilState( renderer::DepthStencilState const & state )override;
 		/**
-		*\brief
-		*	Définit le TessellationState.
-		*\param[in] state
-		*	La nouvelle valeur.
+		*\copydoc	renderer::Pipeline::tessellationState
 		*/
 		renderer::Pipeline & tessellationState( renderer::TessellationState const & state )override;
 		/**
-		*\brief
-		*	Définit le Viewport.
-		*\param[in] viewport
-		*	La nouvelle valeur.
+		*\copydoc	renderer::Pipeline::viewport
 		*/
 		renderer::Pipeline & viewport( renderer::Viewport const & viewport )override;
 		/**
-		*\brief
-		*	Définit le Scissor.
-		*\param[in] scissor
-		*	La nouvelle valeur.
+		*\copydoc	renderer::Pipeline::scissor
 		*/
 		renderer::Pipeline & scissor( renderer::Scissor const & scissor )override;
 		/**
@@ -103,7 +69,7 @@ namespace vk_renderer
 		*\brief
 		*	VkPipeline implicit cast operator.
 		*/
-		inline operator VkPipeline const &( )const
+		inline operator VkPipeline const &()const
 		{
 			return m_pipeline;
 		}
@@ -114,7 +80,7 @@ namespace vk_renderer
 		ShaderProgram const & m_shader;
 		VertexLayoutCRefArray m_vertexLayouts;
 		RenderPass const & m_renderPass;
-		VkPrimitiveTopology m_topology;
+		VkPipelineInputAssemblyStateCreateInfo m_inputAssemblyState;
 		VkPipelineRasterizationStateCreateInfo m_rasterisationState;
 		std::vector< VkPipelineColorBlendAttachmentState > m_colourBlendStateAttachments;
 		VkPipelineColorBlendStateCreateInfo m_colourBlendState;

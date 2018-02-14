@@ -1,4 +1,4 @@
-/*
+Ôªø/*
 This file belongs to Renderer.
 See LICENSE file in root folder.
 */
@@ -59,7 +59,7 @@ namespace renderer
 		/**
 		*\~english
 		*\brief
-		*	Creates a pipeline using this layout.
+		*	Creates a graphics pipeline using this layout.
 		*\param[in] program
 		*	The shader program.
 		*\param[in] vertexBuffers
@@ -76,30 +76,45 @@ namespace renderer
 		*	The created pipeline.
 		*\~french
 		*\brief
-		*	CrÈe un pipeline.
-		*\param[in] layout
-		*	Le layout du pipeline.
+		*	Cr√©e un pipeline graphique utilisant ce layout.
 		*\param[in] program
 		*	Le programme shader.
 		*\param[in] vertexBuffers
-		*	Les tampons de sommets utilisÈs.
+		*	Les tampons de sommets utilis√©s.
 		*\param[in] renderPass
 		*	La passe de rendu.
 		*\param[in] topology
-		*	La topologie d'affichage des sommets affichÈs via ce pipeline.
+		*	La topologie d'affichage des sommets affich√©s via ce pipeline.
 		*\param[in] rasterisationState
-		*	L'Ètat de rastÈrisation.
+		*	L'√©tat de rast√©risation.
 		*\param[in] colourBlendState
-		*	L'Ètat de mÈlange de couleurs.
+		*	L'√©tat de m√©lange de couleurs.
 		*\return
-		*	Le pipeline crÈÈ.
+		*	Le pipeline cr√©√©.
 		*/
 		virtual PipelinePtr createPipeline( ShaderProgram const & program
 			, VertexLayoutCRefArray const & vertexLayouts
 			, RenderPass const & renderPass
-			, PrimitiveTopology topology
+			, InputAssemblyState const & inputAssemblyState
 			, RasterisationState const & rasterisationState = RasterisationState{}
 			, ColourBlendState const & colourBlendState = ColourBlendState::createDefault() )const = 0;
+		/**
+		*\~english
+		*\brief
+		*	Creates a compute pipeline using this layout.
+		*\param[in] program
+		*	The shader program.
+		*\return
+		*	The created pipeline.
+		*\~french
+		*\brief
+		*	Cr√©e un pipeline de calcul utilisant ce layout.
+		*\param[in] program
+		*	Le programme shader.
+		*\return
+		*	Le pipeline cr√©√©.
+		*/
+		virtual ComputePipelinePtr createPipeline( ShaderProgram const & program )const = 0;
 	};
 }
 

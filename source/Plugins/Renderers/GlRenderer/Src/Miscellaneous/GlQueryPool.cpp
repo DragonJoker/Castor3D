@@ -26,16 +26,23 @@ namespace gl_renderer
 		, renderer::QueryResultFlags flags
 		, renderer::UInt32Array & data )const
 	{
-		assert( firstQuery + queryCount < m_names.size() );
+		assert( firstQuery + queryCount <= m_names.size() );
 		assert( queryCount == data.size() );
+		renderer::UInt64Array data64;
+		data64.resize( data.size() );
 		auto begin = m_names.begin() + firstQuery;
 		auto end = begin + queryCount;
-		auto * buffer = data.data();
+		auto * buffer = data64.data();
 
 		for ( auto it = begin; it != end; ++it )
 		{
-			glLogCall( gl::GetQueryObjectuiv, *it, convert( flags ), buffer );
+			glLogCall( gl::GetQueryObjectui64v, *it, convert( flags ), buffer );
 			++buffer;
+		}
+
+		for ( uint32_t i = 0; i < data64.size(); ++i )
+		{
+			data[i] = uint32_t( data64[i] );
 		}
 	}
 

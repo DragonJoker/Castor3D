@@ -77,6 +77,7 @@
 #include "Enum/VkSubpassContents.hpp"
 #include "Enum/VkTessellationStateFlag.hpp"
 #include "Enum/VkTextureType.hpp"
+#include "Enum/VkVertexInputRate.hpp"
 #include "Enum/VkWrapMode.hpp"
 #include "Descriptor/VkDescriptorSetLayoutBinding.hpp"
 #include "Image/VkImageSubresourceLayers.hpp"
@@ -89,6 +90,7 @@
 #include "Pipeline/VkColourBlendState.hpp"
 #include "Pipeline/VkColourBlendStateAttachment.hpp"
 #include "Pipeline/VkDepthStencilState.hpp"
+#include "Pipeline/VkInputAssemblyState.hpp"
 #include "Pipeline/VkMultisampleState.hpp"
 #include "Pipeline/VkRasterisationState.hpp"
 #include "Pipeline/VkStencilOpState.hpp"
@@ -127,6 +129,7 @@ namespace vk_renderer
 	class BufferView;
 	class CommandBuffer;
 	class CommandPool;
+	class ComputePipeline;
 	class Connection;
 	class DescriptorSet;
 	class DescriptorSetBinding;
@@ -169,6 +172,7 @@ namespace vk_renderer
 	using RenderSubpassPtrArray = std::vector< RenderSubpassPtr >;
 
 	using CommandBufferCRef = std::reference_wrapper< CommandBuffer const >;
+	using DescriptorSetCRef = std::reference_wrapper< DescriptorSet const >;
 	using DescriptorSetLayoutCRef = std::reference_wrapper< DescriptorSetLayout const >;
 	using RenderSubpassCRef = std::reference_wrapper< RenderSubpass const >;
 	using SemaphoreCRef = std::reference_wrapper< Semaphore const >;
@@ -179,6 +183,7 @@ namespace vk_renderer
 	using VertexBufferCRef = std::reference_wrapper< VertexBufferBase const >;
 
 	using CommandBufferCRefArray = std::vector< CommandBufferCRef >;
+	using DescriptorSetCRefArray = std::vector< DescriptorSetCRef >;
 	using DescriptorSetLayoutCRefArray = std::vector< DescriptorSetLayoutCRef >;
 	using RenderSubpassCRefArray = std::vector< RenderSubpassCRef >;
 	using SemaphoreCRefArray = std::vector< SemaphoreCRef >;

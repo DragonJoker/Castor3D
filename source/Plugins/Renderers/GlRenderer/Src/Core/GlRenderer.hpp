@@ -20,7 +20,7 @@ namespace gl_renderer
 		*\brief
 		*	Constructeur, initialise l'instance de Vulkan.
 		*/
-		Renderer();
+		Renderer( bool enableValidation );
 		/**
 		*\brief
 		*	Crée le périphérique logique.
