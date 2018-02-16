@@ -806,7 +806,7 @@ namespace glsl
 
 	GlslWriter & GlslWriter::operator<<( Layout const & p_rhs )
 	{
-		m_stream << m_keywords->getLayout( p_rhs.m_index );
+		m_stream << m_keywords->getLayout( p_rhs.m_location );
 		return *this;
 	}
 

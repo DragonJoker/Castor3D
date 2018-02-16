@@ -249,7 +249,7 @@ namespace glsl
 	};
 	struct Layout
 	{
-		int m_index;
+		int m_location;
 	};
 	struct Uniform
 	{

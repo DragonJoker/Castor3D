@@ -219,9 +219,9 @@ namespace glsl
 
 		if ( !m_textureLayout.empty() )
 		{
-			REQUIRE( !m_textureBinding .empty() );
+			REQUIRE( !m_textureBinding.empty() );
 			result = m_textureLayout;
-			result = cuT( "( " ) + m_textureBinding + cuT( " = " ) + string::toString( index );
+			result += cuT( "( " ) + m_textureBinding + cuT( " = " ) + string::toString( index );
 
 			if ( !m_textureSet.empty() )
 			{
@@ -229,6 +229,42 @@ namespace glsl
 			}
 
 			result += cuT( " ) " );
+		}
+
+		return result;
+	}
+
+	String KeywordsBase::getUniformLayout( uint32_t location )const
+	{
+		String result;
+
+		if ( !m_uniformLayout.empty() )
+		{
+			result = m_uniformLayout + cuT( "( location = " ) + string::toString( location ) + cuT( " ) " );
+		}
+
+		return result;
+	}
+
+	String KeywordsBase::getInputLayout( uint32_t location )const
+	{
+		String result;
+
+		if ( !m_inputLayout.empty() )
+		{
+			result = m_inputLayout + cuT( "( location = " ) + string::toString( location ) + cuT( " ) " );
+		}
+
+		return result;
+	}
+
+	String KeywordsBase::getOutputLayout( uint32_t location )const
+	{
+		String result;
+
+		if ( !m_outputLayout.empty() )
+		{
+			result = m_outputLayout + cuT( "( location = " ) + string::toString( location ) + cuT( " ) " );
 		}
 
 		return result;

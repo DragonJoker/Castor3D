@@ -16,6 +16,9 @@ namespace glsl
 		GlslWriter_API virtual castor::String getUboLayout( Ubo::Layout layout, uint32_t index, uint32_t set )const;
 		GlslWriter_API castor::String getSsboLayout( Ssbo::Layout layout, uint32_t index, uint32_t set )const;
 		GlslWriter_API castor::String getTextureLayout( uint32_t index, uint32_t set )const;
+		GlslWriter_API castor::String getUniformLayout( uint32_t location )const;
+		GlslWriter_API castor::String getInputLayout( uint32_t location )const;
+		GlslWriter_API castor::String getOutputLayout( uint32_t location )const;
 
 		inline castor::String const & getVersion()const;
 		inline castor::String const & getIn()const;
@@ -93,6 +96,9 @@ namespace glsl
 		castor::String m_textureSet;
 		castor::String m_textureBinding;
 		castor::String m_textureLayout;
+		castor::String m_uniformLayout;
+		castor::String m_inputLayout;
+		castor::String m_outputLayout;
 		castor::String m_version;
 		castor::String m_attribute;
 		castor::String m_in;

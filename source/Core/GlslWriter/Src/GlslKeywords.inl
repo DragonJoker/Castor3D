@@ -594,7 +594,15 @@ namespace glsl
 		Keywords()
 		{
 			m_uboLayout = cuT( "layout" );
+			m_uboSet = cuT( "set" );
+			m_uboBinding = cuT( "binding" );
 			m_ssboLayout = cuT( "layout" );
+			m_ssboBinding = cuT( "binding" );
+			m_textureLayout = cuT( "layout" );
+			m_textureBinding = cuT( "binding" );
+			m_uniformLayout = cuT( "layout" );
+			m_inputLayout = cuT( "layout" );
+			m_outputLayout = cuT( "layout" );
 			m_version = cuT( "#version " ) + castor::string::toString( Version );
 			m_attribute = cuT( "in" );
 			m_in = cuT( "in" );
@@ -682,9 +690,15 @@ namespace glsl
 		Keywords()
 		{
 			m_uboLayout = cuT( "layout" );
+			m_uboSet = cuT( "set" );
 			m_uboBinding = cuT( "binding" );
 			m_ssboLayout = cuT( "layout" );
 			m_ssboBinding = cuT( "binding" );
+			m_textureLayout = cuT( "layout" );
+			m_textureBinding = cuT( "binding" );
+			m_uniformLayout = cuT( "layout" );
+			m_inputLayout = cuT( "layout" );
+			m_outputLayout = cuT( "layout" );
 			m_version = cuT( "#version " ) + castor::string::toString( Version );
 			m_attribute = cuT( "in" );
 			m_in = cuT( "in" );
@@ -780,7 +794,10 @@ namespace glsl
 			m_textureLayout = cuT( "layout" );
 			m_textureSet = cuT( "set" );
 			m_textureBinding = cuT( "binding" );
-			m_version = cuT( "#version " ) + castor::string::toString( Version ) + cuT( "\n#extension GL_KHR_vulkan_glsl : enable" );
+			m_uniformLayout = cuT( "layout" );
+			m_inputLayout = cuT( "layout" );
+			m_outputLayout = cuT( "layout" );
+			m_version = cuT( "#version " ) + castor::string::toString( Version ) + cuT( "\n#extension GL_KHR_vulkan_glsl : enable\n" );
 			m_attribute = cuT( "in" );
 			m_in = cuT( "in" );
 			m_out = cuT( "out" );
