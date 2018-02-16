@@ -18,6 +18,7 @@
 #include <Descriptor/DescriptorSet.hpp>
 #include <Descriptor/DescriptorSetLayout.hpp>
 #include <Descriptor/DescriptorSetPool.hpp>
+#include <Pipeline/InputAssemblyState.hpp>
 #include <Pipeline/Pipeline.hpp>
 #include <Pipeline/PipelineLayout.hpp>
 #include <RenderPass/RenderPass.hpp>
@@ -515,7 +516,7 @@ namespace castor3d
 			auto pipeline = pipelineLayout->createPipeline( program
 				, { *m_declaration }
 				, *m_renderPass
-				, renderer::PrimitiveTopology::eTriangleStrip
+				, { renderer::PrimitiveTopology::eTriangleStrip }
 				, renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eBack }
 				, blState );
 			pipeline->depthStencilState( renderer::DepthStencilState{ 0u, false, false } );
@@ -658,13 +659,13 @@ namespace castor3d
 			UBO_OVERLAY( writer, OverlayUboBinding, 0u );
 
 			// Shader inputs
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ) );
-			auto text = writer.declAttribute< Vec2 >( cuT( "text" ), checkFlag( textureFlags, TextureChannel::eText ) );
-			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ), checkFlag( textureFlags, TextureChannel::eDiffuse ) );
+			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
+			auto text = writer.declAttribute< Vec2 >( cuT( "text" ), 1u, checkFlag( textureFlags, TextureChannel::eText ) );
+			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 2u, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
 
 			// Shader outputs
-			auto vtx_text = writer.declOutput< Vec2 >( cuT( "vtx_text" ), checkFlag( textureFlags, TextureChannel::eText ) );
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), checkFlag( textureFlags, TextureChannel::eDiffuse ) );
+			auto vtx_text = writer.declOutput< Vec2 >( cuT( "vtx_text" ), 0u, checkFlag( textureFlags, TextureChannel::eText ) );
+			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 1u, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
@@ -716,8 +717,10 @@ namespace castor3d
 
 			// Shader inputs
 			auto vtx_text = writer.declInput< Vec2 >( cuT( "vtx_text" )
+				, 0u
 				, checkFlag( textureFlags, TextureChannel::eText ) );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" )
+				, 1u
 				, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
 			auto c3d_mapText = writer.declSampler< Sampler2D >( cuT( "c3d_mapText" )
 				, TextMapBinding

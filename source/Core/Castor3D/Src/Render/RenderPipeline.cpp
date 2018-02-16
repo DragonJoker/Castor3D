@@ -9,6 +9,7 @@
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/Shaders/GlslShadow.hpp"
 
+#include <Pipeline/InputAssemblyState.hpp>
 #include <Pipeline/Pipeline.hpp>
 #include <Pipeline/PipelineLayout.hpp>
 
@@ -53,7 +54,7 @@ namespace castor3d
 		m_pipeline = m_pipelineLayout->createPipeline( m_program
 			, m_vertexLayouts
 			, renderPass
-			, topology
+			, { topology }
 			, m_rsState
 			, m_blState );
 		m_pipeline->depthStencilState( m_dsState );

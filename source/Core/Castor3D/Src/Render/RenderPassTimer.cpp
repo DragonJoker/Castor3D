@@ -4,6 +4,9 @@
 #include "Render/RenderLoop.hpp"
 #include "Render/RenderSystem.hpp"
 
+#include <Core/Device.hpp>
+#include <Miscellaneous/QueryPool.hpp>
+
 using namespace castor;
 
 namespace castor3d
@@ -14,20 +17,10 @@ namespace castor3d
 		: Named{ name }
 		, m_engine{ engine }
 		, m_category{ category }
-		//, m_timerQuery
-		//{
-		//	{
-		//		engine.getRenderSystem()->createQuery( QueryType::eTime ),
-		//		engine.getRenderSystem()->createQuery( QueryType::eTimeElapsed )
-		//	}
-		//}
+		, m_timerQuery{ engine.getRenderSystem()->getCurrentDevice()->createQueryPool( renderer::QueryType::eTimestamp, 2u, 0u ) }
 		, m_cpuTime{ 0_ns }
 		, m_gpuTime{ 0_ns }
 	{
-		//m_timerQuery[0]->initialise();
-		//m_timerQuery[1]->initialise();
-		//m_timerQuery[1 - m_queryIndex]->begin();
-		//m_timerQuery[1 - m_queryIndex]->end();
 		engine.getRenderLoop().registerTimer( *this );
 	}
 
@@ -38,27 +31,24 @@ namespace castor3d
 			m_engine.getRenderLoop().unregisterTimer( *this );
 		}
 
-		//m_timerQuery[0]->cleanup();
-		//m_timerQuery[1]->cleanup();
-		//m_timerQuery[0].reset();
-		//m_timerQuery[1].reset();
+		m_timerQuery.reset();
 	}
 
-	void RenderPassTimer::start( renderer::CommandBuffer const & commandBuffer )
+	void RenderPassTimer::start()
 	{
 		m_cpuTimer.getElapsed();
-		//commandBuffer.writeTimestamp( renderer::PipelineStageFlag::eAllCommands, m_pool, m_queryIndex );
-		//m_timerQuery[m_queryIndex]->begin();
 	}
 
-	void RenderPassTimer::stop( renderer::CommandBuffer const & commandBuffer )
+	void RenderPassTimer::stop()
 	{
 		m_cpuTime = m_cpuTimer.getElapsed();
-		//m_timerQuery[m_queryIndex]->end();
-		//m_queryIndex = 1 - m_queryIndex;
-		//uint64_t time = 0;
-		//m_timerQuery[m_queryIndex]->getInfos( QueryInfo::eResult, time );
-		//m_gpuTime = Nanoseconds( time );
+		renderer::UInt32Array values{ 0u, 0u };
+		m_timerQuery->getResults( 0u
+			, 2u
+			, 0u
+			, renderer::QueryResultFlag::eWait
+			, values );
+		m_gpuTime = Nanoseconds{ uint64_t( ( values[1] - values[0] ) / float( m_engine.getRenderSystem()->getCurrentDevice()->getTimestampPeriod() ) ) };
 	}
 
 	void RenderPassTimer::reset()

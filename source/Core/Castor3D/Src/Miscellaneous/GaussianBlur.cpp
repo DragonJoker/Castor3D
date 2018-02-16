@@ -45,10 +45,10 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ) );
+			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			writer.implementFunction< void >( cuT( "main" )
@@ -73,10 +73,10 @@ namespace castor3d
 			auto c3d_coefficients = config.declMember< Vec4 >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients / 4u );
 			config.end();
 			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0u );
 			auto gl_FragDepth = writer.declBuiltin< Float >( cuT( "gl_FragDepth" ) );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
@@ -111,7 +111,7 @@ namespace castor3d
 			auto c3d_coefficients = config.declMember< Vec4 >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients / 4u );
 			config.end();
 			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );

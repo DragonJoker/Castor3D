@@ -136,11 +136,6 @@ namespace castor3d
 		}
 	}
 
-	void Camera::apply()const
-	{
-		m_viewport.apply();
-	}
-
 	void Camera::resize( uint32_t width, uint32_t height )
 	{
 		resize( Size( width, height ) );

@@ -1199,32 +1199,48 @@ namespace castor3d
 		using namespace glsl;
 		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 		// Vertex inputs
-		auto position = writer.declAttribute< Vec4 >( cuT( "position" ) );
-		auto normal = writer.declAttribute< Vec3 >( cuT( "normal" ) );
-		auto tangent = writer.declAttribute< Vec3 >( cuT( "tangent" ) );
-		auto bitangent = writer.declAttribute< Vec3 >( cuT( "bitangent" ) );
-		auto texture = writer.declAttribute< Vec3 >( cuT( "texcoord" ) );
+		auto position = writer.declAttribute< Vec4 >( cuT( "position" )
+			, RenderPass::VertexInputs::PositionLocation );
+		auto normal = writer.declAttribute< Vec3 >( cuT( "normal" )
+			, RenderPass::VertexInputs::NormalLocation );
+		auto tangent = writer.declAttribute< Vec3 >( cuT( "tangent" )
+			, RenderPass::VertexInputs::TangentLocation );
+		auto bitangent = writer.declAttribute< Vec3 >( cuT( "bitangent" )
+			, RenderPass::VertexInputs::BitangentLocation );
+		auto texture = writer.declAttribute< Vec3 >( cuT( "texcoord" )
+			, RenderPass::VertexInputs::TextureLocation );
 		auto bone_ids0 = writer.declAttribute< IVec4 >( cuT( "bone_ids0" )
+			, RenderPass::VertexInputs::BoneIds0Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
 		auto bone_ids1 = writer.declAttribute< IVec4 >( cuT( "bone_ids1" )
+			, RenderPass::VertexInputs::BoneIds1Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
 		auto weights0 = writer.declAttribute< Vec4 >( cuT( "weights0" )
+			, RenderPass::VertexInputs::Weights0Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
 		auto weights1 = writer.declAttribute< Vec4 >( cuT( "weights1" )
+			, RenderPass::VertexInputs::Weights1Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
 		auto transform = writer.declAttribute< Mat4 >( cuT( "transform" )
+			, RenderPass::VertexInputs::TransformLocation
 			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
 		auto material = writer.declAttribute< Int >( cuT( "material" )
+			, RenderPass::VertexInputs::MaterialLocation
 			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
 		auto position2 = writer.declAttribute< Vec4 >( cuT( "position2" )
+			, RenderPass::VertexInputs::Position2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto normal2 = writer.declAttribute< Vec3 >( cuT( "normal2" )
+			, RenderPass::VertexInputs::Normal2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto tangent2 = writer.declAttribute< Vec3 >( cuT( "tangent2" )
+			, RenderPass::VertexInputs::Tangent2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto bitangent2 = writer.declAttribute< Vec3 >( cuT( "bitangent2" )
+			, RenderPass::VertexInputs::Bitangent2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto texture2 = writer.declAttribute< Vec3 >( cuT( "texture2" )
+			, RenderPass::VertexInputs::Texture2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 
@@ -1236,15 +1252,24 @@ namespace castor3d
 		UBO_MORPHING( writer, 0, programFlags );
 
 		// Outputs
-		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );
-		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
-		auto vtx_tangentSpaceViewPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
-		auto vtx_normal = writer.declOutput< Vec3 >( cuT( "vtx_normal" ) );
-		auto vtx_tangent = writer.declOutput< Vec3 >( cuT( "vtx_tangent" ) );
-		auto vtx_bitangent = writer.declOutput< Vec3 >( cuT( "vtx_bitangent" ) );
-		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ) );
-		auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" ) );
-		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" ) );
+		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" )
+			, RenderPass::VertexOutputs::WorldPositionLocation );
+		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" )
+			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
+		auto vtx_tangentSpaceViewPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" )
+			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
+		auto vtx_normal = writer.declOutput< Vec3 >( cuT( "vtx_normal" )
+			, RenderPass::VertexOutputs::NormalLocation );
+		auto vtx_tangent = writer.declOutput< Vec3 >( cuT( "vtx_tangent" )
+			, RenderPass::VertexOutputs::TangentLocation );
+		auto vtx_bitangent = writer.declOutput< Vec3 >( cuT( "vtx_bitangent" )
+			, RenderPass::VertexOutputs::BitangentLocation );
+		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" )
+			, RenderPass::VertexOutputs::TextureLocation );
+		auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" )
+			, RenderPass::VertexOutputs::InstanceLocation );
+		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
+			, RenderPass::VertexOutputs::MaterialLocation );
 		auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 		std::function< void() > main = [&]()

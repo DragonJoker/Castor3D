@@ -10,42 +10,30 @@
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
+#include <Buffer/GeometryBuffers.hpp>
+#include <Buffer/VertexBuffer.hpp>
+#include <Descriptor/DescriptorSet.hpp>
+#include <Descriptor/DescriptorSetLayout.hpp>
+#include <Descriptor/DescriptorSetLayoutBinding.hpp>
+#include <Descriptor/DescriptorSetPool.hpp>
+
 #include <GlslSource.hpp>
 
 using namespace castor;
 
 namespace castor3d
 {
-	TextureProjection::TextureProjection( Context & p_context )
-		: OwnedBy< Context >{ p_context }
-		, m_matrixUbo{ *p_context.getRenderSystem()->getEngine() }
-		, m_modelMatrixUbo{ *p_context.getRenderSystem()->getEngine() }
-		, m_bufferVertex
-		{
-			{
-				-1, +1, -1,/**/+1, -1, -1,/**/-1, -1, -1,/**/+1, -1, -1,/**/-1, +1, -1,/**/+1, +1, -1,/**/
-				-1, -1, +1,/**/-1, +1, -1,/**/-1, -1, -1,/**/-1, +1, -1,/**/-1, -1, +1,/**/-1, +1, +1,/**/
-				+1, -1, -1,/**/+1, +1, +1,/**/+1, -1, +1,/**/+1, +1, +1,/**/+1, -1, -1,/**/+1, +1, -1,/**/
-				-1, -1, +1,/**/+1, +1, +1,/**/-1, +1, +1,/**/+1, +1, +1,/**/-1, -1, +1,/**/+1, -1, +1,/**/
-				-1, +1, -1,/**/+1, +1, +1,/**/+1, +1, -1,/**/+1, +1, +1,/**/-1, +1, -1,/**/-1, +1, +1,/**/
-				-1, -1, -1,/**/+1, -1, -1,/**/-1, -1, +1,/**/+1, -1, -1,/**/+1, -1, +1,/**/-1, -1, +1,/**/
-			}
-		}
-		, m_declaration
-		{
-			{
-				ParticleElementDeclaration{ cuT( "position" ), uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec3 }
-			}
-		}
+	namespace
 	{
-		uint32_t i = 0;
-
-		for ( auto & vertex : m_arrayVertex )
-		{
-			vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_bufferVertex.data() )[i++ * m_declaration.stride()] );
-		}
-
-		m_sampler = p_context.getRenderSystem()->getEngine()->getSamplerCache().add( cuT( "TextureProjection" ) );
+	}
+	TextureProjection::TextureProjection( Engine & engine )
+		: OwnedBy< Engine >{ engine }
+		, m_matrixUbo{ engine }
+		, m_modelMatrixUbo{ engine }
+		, m_sizePushConstant{ renderer::ShaderStageFlag::eFragment, { { 0u, 0u, renderer::AttributeFormat::eVec2f } } }
+		, m_pushConstantRange{ renderer::ShaderStageFlag::eFragment, m_sizePushConstant.getOffset(), m_sizePushConstant.getSize() }
+	{
+		m_sampler = engine.getSamplerCache().add( cuT( "TextureProjection" ) );
 		m_sampler->setMinFilter( renderer::Filter::eLinear );
 		m_sampler->setMagFilter( renderer::Filter::eLinear );
 		m_sampler->setWrapS( renderer::WrapMode::eClampToEdge );
@@ -55,65 +43,98 @@ namespace castor3d
 
 	TextureProjection::~TextureProjection()
 	{
-		for ( auto & vertex : m_arrayVertex )
-		{
-			vertex.reset();
-		}
 	}
 
-	void TextureProjection::initialise()
+	void TextureProjection::initialise( TextureLayout const & texture
+		, renderer::RenderPass const & renderPass )
 	{
 		m_sampler->initialise();
 		auto & program = doInitialiseShader();
 		doInitialiseVertexBuffer();
-		doInitialisePipeline( program );
+		doInitialisePipeline( program, texture, renderPass );
 	}
 
 	void TextureProjection::cleanup()
 	{
-		m_matrixUbo.getUbo().cleanup();
-		m_modelMatrixUbo.getUbo().cleanup();
-		m_sampler.reset();
 		m_pipeline->cleanup();
 		m_pipeline.reset();
-		m_vertexBuffer->cleanup();
-		m_vertexBuffer.reset();
-		m_geometryBuffers->cleanup();
+		m_matrixUbo.cleanup();
+		m_modelMatrixUbo.cleanup();
+		m_sampler.reset();
 		m_geometryBuffers.reset();
+		m_vertexBuffer.reset();
+		m_vertexLayout.reset();
+		m_descriptorSet.reset();
+		m_descriptorPool.reset();
+		m_descriptorLayout.reset();
 	}
 
-	void TextureProjection::render( TextureLayout const & p_texture
-		, Camera const & p_camera )
+	void TextureProjection::doPrepareFrame()
+	{
+		auto & renderSystem = *getEngine()->getRenderSystem();
+		auto & device = *renderSystem.getCurrentDevice();
+
+		if ( !m_commandBuffer )
+		{
+			m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer( false );
+		}
+		else
+		{
+			m_commandBuffer->reset();
+		}
+
+		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eRenderPassContinue ) )
+		{
+			m_commandBuffer->bindPipeline( m_pipeline->getPipeline() );
+			m_commandBuffer->setViewport( { m_size.getWidth()
+				, m_size.getHeight()
+				, 0
+				, 0 } );
+			m_commandBuffer->setScissor( { 0
+				, 0
+				, m_size.getWidth()
+				, m_size.getHeight() } );
+			m_commandBuffer->bindDescriptorSet( *m_descriptorSet
+				, m_pipeline->getPipelineLayout() );
+			m_commandBuffer->pushConstants( m_pipeline->getPipelineLayout()
+				, m_sizePushConstant );
+			m_commandBuffer->bindGeometryBuffers( *m_geometryBuffers );
+			m_commandBuffer->draw( 36u );
+			m_commandBuffer->end();
+		}
+	}
+
+	void TextureProjection::update( Camera const & camera )
 	{
 		static Matrix3x3r const Identity{ 1.0f };
-		auto node = p_camera.getParent();
+		auto const & viewport = camera.getViewport();
+		auto node = camera.getParent();
 		matrix::setTranslate( m_mtxModel, node->getDerivedPosition() );
-		m_matrixUbo.update( p_camera.getView()
-			, p_camera.getViewport().getProjection() );
+		m_matrixUbo.update( camera.getView()
+			, viewport.getProjection() );
 		m_modelMatrixUbo.update( m_mtxModel, Identity );
-		m_sizeUniform->setValue( Point2f{ p_camera.getViewport().getWidth()
-			, p_camera.getViewport().getHeight() } );
-		p_camera.apply();
-		m_pipeline->apply();
-		p_texture.bind( MinTextureIndex );
-		m_sampler->bind( MinTextureIndex );
-		m_geometryBuffers->draw( uint32_t( m_arrayVertex.size() ), 0u );
-		m_sampler->unbind( MinTextureIndex );
-		p_texture.unbind( MinTextureIndex );
+		*m_sizePushConstant.getData() = Point2f{ viewport.getWidth()
+			, viewport.getHeight() };
+
+		if ( m_size != viewport.getSize() )
+		{
+			m_size = viewport.getSize();
+			doPrepareFrame();
+		}
 	}
 
-	ShaderProgram & TextureProjection::doInitialiseShader()
+	renderer::ShaderProgram & TextureProjection::doInitialiseShader()
 	{
-		auto & renderSystem = *getOwner()->getRenderSystem();
+		auto & renderSystem = *getEngine()->getRenderSystem();
 		glsl::Shader vtx;
 		{
 			using namespace glsl;
 			GlslWriter writer{ renderSystem.createGlslWriter() };
 
 			// Inputs
-			auto position = writer.declAttribute< Vec3 >( cuT( "position" ) );
-			UBO_MATRIX( writer, 0 );
-			UBO_MODEL_MATRIX( writer, 0 );
+			auto position = writer.declAttribute< Vec3 >( cuT( "position" ), 0u );
+			UBO_MATRIX( writer, 0, 0 );
+			UBO_MODEL_MATRIX( writer, 1, 0 );
 
 			// Outputs
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
@@ -132,12 +153,12 @@ namespace castor3d
 			GlslWriter writer{ renderSystem.createGlslWriter() };
 
 			// Inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), MinTextureIndex, 0u );
-			auto c3d_size = writer.declUniform< Vec2 >( cuT( "c3d_size" ) );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 2u, 0u );
+			auto c3d_size = writer.declUniform< Vec2 >( cuT( "c3d_size" ), 0u );
 			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 			// Outputs
-			auto pxl_FragColor = writer.declOutput< Vec4 >( cuT( "pxl_FragColor" ) );
+			auto pxl_FragColor = writer.declFragData< Vec4 >( cuT( "pxl_FragColor" ), 0u );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
@@ -147,45 +168,106 @@ namespace castor3d
 			pxl = writer.finalise();
 		}
 
-		auto & cache = renderSystem.getEngine()->getShaderProgramCache();
-		auto program = cache.getNewProgram( false );
-		program->createObject( renderer::ShaderStageFlag::eVertex );
-		program->createObject( renderer::ShaderStageFlag::eFragment );
-		program->setSource( renderer::ShaderStageFlag::eVertex, vtx );
-		program->setSource( renderer::ShaderStageFlag::eFragment, pxl );
-		m_sizeUniform = program->createUniform< UniformType::eVec2f >( cuT( "c3d_size" ), renderer::ShaderStageFlag::eFragment );
-		program->initialise();
-		return *program;
+		auto & cache = getEngine()->getShaderProgramCache();
+		auto & program = cache.getNewProgram( false );
+		program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
+		program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
+		return program;
 	}
 
 	bool TextureProjection::doInitialiseVertexBuffer()
 	{
-		m_vertexBuffer = std::make_shared< VertexBuffer >( *getOwner()->getRenderSystem()->getEngine(), m_declaration );
-		m_vertexBuffer->resize( uint32_t( m_arrayVertex.size() * m_declaration.stride() ) );
-		m_vertexBuffer->linkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
-		return m_vertexBuffer->initialise( renderer::MemoryPropertyFlag::eHostVisible );
+		auto & renderSystem = *getEngine()->getRenderSystem();
+		auto & device = *renderSystem.getCurrentDevice();
+		m_vertexLayout = renderer::makeLayout< NonTexturedCube >( device, 0u );
+		m_vertexLayout->createAttribute< decltype( NonTexturedCube::Quad::Vertex::position ) >( 0u
+			, offsetof( NonTexturedCube::Quad::Vertex, position ) );
+		m_vertexBuffer = renderer::makeVertexBuffer< NonTexturedCube >( device
+			, 1u
+			, renderer::BufferTarget::eTransferDst
+			, renderer::MemoryPropertyFlag::eHostVisible );
+
+		if ( auto buffer = m_vertexBuffer->lock( 0u
+			, 1u
+			, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateRange ) )
+		{
+			*buffer = NonTexturedCube
+			{
+				{
+					{ Point3f{ -1.0, +1.0, -1.0 }, Point3f{ +1.0, -1.0, -1.0 }, Point3f{ -1.0, -1.0, -1.0 }, Point3f{ +1.0, -1.0, -1.0 }, Point3f{ -1.0, +1.0, -1.0 }, Point3f{ +1.0, +1.0, -1.0 } },
+					{ Point3f{ -1.0, -1.0, +1.0 }, Point3f{ -1.0, +1.0, -1.0 }, Point3f{ -1.0, -1.0, -1.0 }, Point3f{ -1.0, +1.0, -1.0 }, Point3f{ -1.0, -1.0, +1.0 }, Point3f{ -1.0, +1.0, +1.0 } },
+					{ Point3f{ +1.0, -1.0, -1.0 }, Point3f{ +1.0, +1.0, +1.0 }, Point3f{ +1.0, -1.0, +1.0 }, Point3f{ +1.0, +1.0, +1.0 }, Point3f{ +1.0, -1.0, -1.0 }, Point3f{ +1.0, +1.0, -1.0 } },
+					{ Point3f{ -1.0, -1.0, +1.0 }, Point3f{ +1.0, +1.0, +1.0 }, Point3f{ -1.0, +1.0, +1.0 }, Point3f{ +1.0, +1.0, +1.0 }, Point3f{ -1.0, -1.0, +1.0 }, Point3f{ +1.0, -1.0, +1.0 } },
+					{ Point3f{ -1.0, +1.0, -1.0 }, Point3f{ +1.0, +1.0, +1.0 }, Point3f{ +1.0, +1.0, -1.0 }, Point3f{ +1.0, +1.0, +1.0 }, Point3f{ -1.0, +1.0, -1.0 }, Point3f{ -1.0, +1.0, +1.0 } },
+					{ Point3f{ -1.0, -1.0, -1.0 }, Point3f{ +1.0, -1.0, -1.0 }, Point3f{ -1.0, -1.0, +1.0 }, Point3f{ +1.0, -1.0, -1.0 }, Point3f{ +1.0, -1.0, +1.0 }, Point3f{ -1.0, -1.0, +1.0 } },
+				}
+			};
+			m_vertexBuffer->unlock( 1u, true );
+		}
+
+		m_geometryBuffers = device.createGeometryBuffers( *m_vertexBuffer
+			, 0u
+			, *m_vertexLayout );
+		return true;
 	}
 
-	bool TextureProjection::doInitialisePipeline( ShaderProgram & p_program )
+	bool TextureProjection::doInitialisePipeline( renderer::ShaderProgram & program
+		, TextureLayout const & texture
+		, renderer::RenderPass const & renderPass )
 	{
-		DepthStencilState dsState;
-		dsState.setDepthTest( true );
-		dsState.setDepthMask( WritingMask::eZero );
-		dsState.setDepthFunc( DepthFunc::eLEqual );
+		renderer::DepthStencilState dsState
+		{
+			0u,
+			true,
+			false,
+			renderer::CompareOp::eLessEqual
+		};
 
-		RasteriserState rsState;
-		rsState.setCulledFaces( Culling::eFront );
+		renderer::RasterisationState rsState
+		{
+			0u,
+			false,
+			false,
+			renderer::PolygonMode::eFill,
+			renderer::CullModeFlag::eFront
+		};
 
-		m_pipeline = getOwner()->getRenderSystem()->createRenderPipeline( std::move( dsState )
+		auto blState = renderer::ColourBlendState::createDefault();
+		auto & renderSystem = *getEngine()->getRenderSystem();
+		auto & device = *renderSystem.getCurrentDevice();
+		m_pipeline = std::make_unique< RenderPipeline >( renderSystem
+			, std::move( dsState )
 			, std::move( rsState )
-			, BlendState{}
-			, MultisampleState{}
-			, p_program
+			, std::move( blState )
+			, renderer::MultisampleState{}
+			, program
 			, PipelineFlags{} );
-		m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
-		m_pipeline->addUniformBuffer( m_modelMatrixUbo.getUbo() );
-		m_geometryBuffers = getOwner()->getRenderSystem()->createGeometryBuffers( Topology::eTriangles
-			, m_pipeline->getProgram() );
-		return m_geometryBuffers->initialise( { *m_vertexBuffer }, nullptr );
+
+		renderer::DescriptorSetLayoutBindingArray bindings
+		{
+			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex },
+			{ 1u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex },
+			{ 2u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
+		};
+		m_descriptorLayout = device.createDescriptorSetLayout( std::move( bindings ) );
+		m_descriptorPool = m_descriptorLayout->createPool( 1u );
+		m_descriptorSet = m_descriptorPool->createDescriptorSet( 0u );
+		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 0u )
+			, m_matrixUbo.getUbo()
+			, 0u
+			, 1u );
+		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 1u )
+			, m_modelMatrixUbo.getUbo()
+			, 0u
+			, 1u );
+		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 2u )
+			, texture.getView()
+			, m_sampler->getSampler() );
+
+		m_pipeline->setVertexLayouts( { *m_vertexLayout } );
+		m_pipeline->setDescriptorSetLayouts( { *m_descriptorLayout } );
+		m_pipeline->setPushConstantRanges( { m_pushConstantRange } );
+		m_pipeline->initialise( renderPass, renderer::PrimitiveTopology::eTriangleList );
+		return true;
 	}
 }

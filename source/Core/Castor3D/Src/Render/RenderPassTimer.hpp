@@ -52,7 +52,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Démarre les timers.
 		 */
-		C3D_API void start( renderer::CommandBuffer const & commandBuffer );
+		C3D_API void start();
 		/**
 		 *\~english
 		 *\brief		Stops the timers.
@@ -60,7 +60,7 @@ namespace castor3d
 		 *\brief
 		 *\brief		Arrête les timers.
 		 */
-		C3D_API void stop( renderer::CommandBuffer const & commandBuffer );
+		C3D_API void stop();
 		/**
 		 *\~english
 		 *\brief		Reset the timer's times.
@@ -99,6 +99,17 @@ namespace castor3d
 		{
 			return m_category;
 		}
+		/**
+		 *\~english
+		 *\return		The query pool.
+		 *\~french
+		 *\return		Le pool de requêtes.
+		 */
+		inline renderer::QueryPool const & getQuery()const
+		{
+			REQUIRE( m_timerQuery );
+			return *m_timerQuery;
+		}
 
 	private:
 		//!\~english	The engine.
@@ -118,10 +129,7 @@ namespace castor3d
 		castor::Nanoseconds m_gpuTime;
 		//!\~english	The GPU time elapsed queries.
 		//!\~french		Les requêtes GPU de temps écoulé.
-		std::array< uint32_t, 2 > m_timerQuery;
-		//!\~english	The active query index.
-		//!\~french		L'index de la requête active.
-		uint32_t m_queryIndex = 0;
+		renderer::QueryPoolPtr m_timerQuery;
 	};
 }
 

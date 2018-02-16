@@ -6,6 +6,7 @@
 
 #include <Buffer/GeometryBuffers.hpp>
 #include <Buffer/VertexBuffer.hpp>
+#include <Command/CommandBuffer.hpp>
 #include <Core/Device.hpp>
 #include <Descriptor/DescriptorSet.hpp>
 #include <Descriptor/DescriptorSetBinding.hpp>
@@ -13,6 +14,7 @@
 #include <Descriptor/DescriptorSetLayoutBinding.hpp>
 #include <Descriptor/DescriptorSetPool.hpp>
 #include <Pipeline/DepthStencilState.hpp>
+#include <Pipeline/InputAssemblyState.hpp>
 #include <Pipeline/Pipeline.hpp>
 #include <Pipeline/PipelineLayout.hpp>
 #include <Pipeline/RasterisationState.hpp>
@@ -105,7 +107,7 @@ namespace castor3d
 		m_pipeline = m_pipelineLayout->createPipeline( program
 			, { *m_vertexLayout }
 			, renderPass
-			, renderer::PrimitiveTopology::eTriangleStrip );
+			, { renderer::PrimitiveTopology::eTriangleStrip } );
 		m_pipeline->depthStencilState( renderer::DepthStencilState{ 0u, false, false } );
 		m_pipeline->viewport( renderer::Viewport
 		{
@@ -128,10 +130,15 @@ namespace castor3d
 	{
 		auto & device = *m_renderSystem.getCurrentDevice();
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer( false );
-		m_commandBuffer->bindPipeline( *m_pipeline );
-		m_commandBuffer->bindGeometryBuffers( *m_geometryBuffers );
-		m_commandBuffer->bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
-		m_commandBuffer->draw( 4u, 1u, 0u, 0u );
+		registerFrame( *m_commandBuffer );
+	}
+
+	void RenderQuad::registerFrame( renderer::CommandBuffer & commandBuffer )
+	{
+		commandBuffer.bindPipeline( *m_pipeline );
+		commandBuffer.bindGeometryBuffers( *m_geometryBuffers );
+		commandBuffer.bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
+		commandBuffer.draw( 4u, 1u, 0u, 0u );
 	}
 
 	void RenderQuad::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout

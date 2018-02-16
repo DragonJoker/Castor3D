@@ -41,16 +41,22 @@ namespace castor3d
 		 */
 		WeightedBlendRendering( Engine & engine
 			, TransparentPass & transparentPass
-			, renderer::FrameBuffer & frameBuffer
+			, renderer::TextureView & depthView
+			, renderer::TextureView & colourView
 			, castor::Size const & size
 			, Scene const & scene );
 		/**
 		 *\~english
-		 *\brief		Destroys deferred rendering related stuff.
+		 *\brief		Renders opaque nodes.
+		 *\param[out]	scene		The rendered scene.
+		 *\param[out]	camera		The viewer camera.
 		 *\~french
-		 *\brief		Détruit les données liées au deferred rendering.
+		 *\brief		Dessine les noeuds opaques.
+		 *\param[out]	scene		La scène rendue.
+		 *\param[out]	camera		La caméra par laquelle la scène est rendue.
 		 */
-		~WeightedBlendRendering();
+		void update( Scene const & scene
+			, Camera const & camera );
 		/**
 		 *\~english
 		 *\brief		Renders opaque nodes.
@@ -90,33 +96,22 @@ namespace castor3d
 		 */
 		inline renderer::FrameBuffer & getFbo()
 		{
-			return *m_weightedBlendPassFrameBuffer;
+			return *m_frameBuffer;
 		}
 
 	private:
-		using WeightedBlendTextures = std::array< TextureUnitUPtr, size_t( WbTexture::eCount ) >;
-
-		//!\~english	The engine.
-		//!\~french		Le moteur.
 		Engine & m_engine;
-		//!\~english	The pass used to render transparent nodes.
-		//!\~french		La passe utilisée pour dessiner les noeuds transparents.
 		TransparentPass & m_transparentPass;
-		//!\~english	The target framebuffer.
-		//!\~french		Le tampon d'image ciblé.
-		renderer::FrameBuffer & m_frameBuffer;
-		//!\~english	The render area dimension.
-		//!\~french		Les dimensions de l'aire de rendu.
 		castor::Size m_size;
-		//!\~english	The opaque and transparent passes combination pass.
-		//!\~french		La passe de combinaison des passes opaque et transparente.
-		std::unique_ptr< FinalCombinePass > m_finalCombinePass;
-		//!\~english	The various textures for weighted blend.
-		//!\~french		Les diverses textures pour le weighted blend.
+		renderer::TexturePtr m_accumulation;
+		renderer::TextureViewPtr m_accumulationView;
+		renderer::TexturePtr m_revealage;
+		renderer::TextureViewPtr m_revealageView;
 		WeightedBlendTextures m_weightedBlendPassResult;
-		//!\~english	The weighted blend frame buffer.
-		//!\~french		Le tampon d'image pour le weighted blend.
-		renderer::FrameBufferPtr m_weightedBlendPassFrameBuffer;
+		renderer::RenderPassPtr m_renderPass;
+		renderer::FrameBufferPtr m_frameBuffer;
+		FinalCombinePass m_finalCombinePass;
+		renderer::CommandBufferPtr m_commandBuffer;
 	};
 }
 

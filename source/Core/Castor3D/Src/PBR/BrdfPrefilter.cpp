@@ -6,6 +6,7 @@
 #include <Command/CommandBuffer.hpp>
 #include <Image/TextureView.hpp>
 #include <Pipeline/DepthStencilState.hpp>
+#include <Pipeline/InputAssemblyState.hpp>
 #include <Pipeline/Scissor.hpp>
 #include <Pipeline/VertexLayout.hpp>
 #include <Pipeline/Viewport.hpp>
@@ -86,7 +87,7 @@ namespace castor3d
 		m_pipeline = m_pipelineLayout->createPipeline( doCreateProgram()
 			, { *m_vertexLayout }
 			, *m_renderPass
-			, renderer::PrimitiveTopology::eTriangleStrip );
+			, { renderer::PrimitiveTopology::eTriangleStrip } );
 		m_pipeline->depthStencilState( renderer::DepthStencilState{ 0u, false, false } );
 		m_pipeline->viewport( renderer::Viewport
 		{
@@ -135,10 +136,10 @@ namespace castor3d
 			GlslWriter writer{ m_renderSystem.createGlslWriter() };
 
 			// Inputs
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ) );
+			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
 
 			// Outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			std::function< void() > main = [&]()
@@ -157,10 +158,10 @@ namespace castor3d
 			GlslWriter writer{ m_renderSystem.createGlslWriter() };
 
 			// Inputs
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			// Outputs
-			auto pxl_fragColor = writer.declOutput< Vec2 >( cuT( "pxl_FragColor" ) );
+			auto pxl_fragColor = writer.declFragData< Vec2 >( cuT( "pxl_FragColor" ), 0u );
 
 			auto radicalInverse = writer.implementFunction< Float >( cuT( "RadicalInverse_VdC" )
 				, [&]( UInt const & p_bits )

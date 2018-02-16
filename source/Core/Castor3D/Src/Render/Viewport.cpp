@@ -1,4 +1,4 @@
-﻿#include "Viewport.hpp"
+#include "Viewport.hpp"
 
 #include "Engine.hpp"
 
@@ -54,22 +54,9 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	IViewportImpl::IViewportImpl( RenderSystem & renderSystem, Viewport & p_viewport )
-		: OwnedBy< RenderSystem >{ renderSystem }
-		, m_viewport{ p_viewport }
-	{
-	}
-
-	IViewportImpl::~IViewportImpl()
-	{
-	}
-
-	//*************************************************************************************************
-
 	const std::array< String, size_t( ViewportType::eCount ) > Viewport::string_type = { cuT( "ortho" ), cuT( "perspective" ), cuT( "frustum" ) };
 
-	Viewport::Viewport( Engine & engine
-		, ViewportType type
+	Viewport::Viewport( ViewportType type
 		, castor::Angle const & fovY
 		, real aspect
 		, real left
@@ -78,8 +65,7 @@ namespace castor3d
 		, real top
 		, real near
 		, real far )
-		: OwnedBy< Engine >{ engine }
-		, m_type{ type }
+		: m_type{ type }
 		, m_size{}
 		, m_modified{ true }
 		, m_fovY{ m_modified, fovY }
@@ -90,6 +76,8 @@ namespace castor3d
 		, m_top{ m_modified, top }
 		, m_near{ m_modified, near }
 		, m_far{ m_modified, far }
+		, m_viewport{ 1u, 1u, 0, 0 }
+		, m_scissor{ 0, 0, 1u, 1u }
 	{
 		if ( m_type != ViewportType::eOrtho && !m_near )
 		{
@@ -97,58 +85,13 @@ namespace castor3d
 		}
 	}
 
-	Viewport::Viewport( Engine & engine )
-		: Viewport{ engine, ViewportType::eOrtho, Angle{}, 1, 0, 1, 0, 1, 0, 1 }
+	Viewport::Viewport()
+		: Viewport{ ViewportType::eOrtho, Angle{}, 1, 0, 1, 0, 1, 0, 1 }
 	{
 	}
 
 	Viewport::~Viewport()
 	{
-	}
-
-	Viewport::Viewport( Viewport const & rhs )
-		: OwnedBy< Engine >{ *rhs.getEngine() }
-		, m_modified{ rhs.m_modified }
-		, m_fovY{ m_modified, rhs.m_fovY }
-		, m_ratio{ m_modified, rhs.m_ratio }
-		, m_left{ m_modified, rhs.m_left }
-		, m_right{ m_modified, rhs.m_right }
-		, m_bottom{ m_modified, rhs.m_bottom }
-		, m_top{ m_modified, rhs.m_top }
-		, m_near{ m_modified, rhs.m_near }
-		, m_far{ m_modified, rhs.m_far }
-		, m_projection{ rhs.m_projection }
-		, m_type{ rhs.m_type }
-		, m_size{ rhs.m_size }
-	{
-	}
-
-	Viewport & Viewport::operator=( Viewport const & rhs )
-	{
-		m_modified = rhs.m_modified;
-		m_fovY = rhs.m_fovY.value();
-		m_ratio = rhs.m_ratio.value();
-		m_left = rhs.m_left.value();
-		m_right = rhs.m_right.value();
-		m_bottom = rhs.m_bottom.value();
-		m_top = rhs.m_top.value();
-		m_near = rhs.m_near.value();
-		m_far = rhs.m_far.value();
-		m_type = rhs.m_type;
-		m_size = rhs.m_size;
-		m_projection = rhs.m_projection;
-		return *this;
-	}
-
-	bool Viewport::initialise()
-	{
-		m_impl = getEngine()->getRenderSystem()->createViewport( *this );
-		return m_impl != nullptr;
-	}
-
-	void Viewport::cleanup()
-	{
-		m_impl.reset();
 	}
 
 	bool Viewport::update()
@@ -193,11 +136,6 @@ namespace castor3d
 		}
 
 		return result;
-	}
-
-	void Viewport::apply()const
-	{
-		m_impl->apply();
 	}
 
 	void Viewport::setPerspective( Angle const & fovY
@@ -253,6 +191,13 @@ namespace castor3d
 		m_near = near;
 		m_far = far;
 		m_modified = true;
+	}
+
+	void Viewport::resize( const castor::Size & value )
+	{
+		m_size = value;
+		m_viewport = renderer::Viewport{ m_size[0], m_size[1], 0, 0 };
+		m_scissor = renderer::Scissor{ 0, 0, m_size[0], m_size[1] };
 	}
 
 	void Viewport::doComputePerspective( Angle const & fovy

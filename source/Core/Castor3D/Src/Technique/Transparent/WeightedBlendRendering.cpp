@@ -1,105 +1,139 @@
 #include "WeightedBlendRendering.hpp"
 
-#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
-#include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/FrameBufferAttachment.hpp"
 #include "Render/RenderInfo.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Shader/PassBuffer/PassBuffer.hpp"
+
+#include <Image/Texture.hpp>
+#include <Image/TextureView.hpp>
+#include <RenderPass/FrameBuffer.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <RenderPass/RenderPassState.hpp>
+#include <RenderPass/RenderSubpass.hpp>
+#include <RenderPass/RenderSubpassState.hpp>
 
 using namespace castor;
 
 namespace castor3d
 {
+	namespace
+	{
+		renderer::RenderPassPtr doCreateRenderPass( Engine & engine
+			, renderer::TextureView & depthView
+			, renderer::TextureView & colourView )
+		{
+			auto & renderSystem = *engine.getRenderSystem();
+			auto & device = *renderSystem.getCurrentDevice();
+			std::vector< renderer::PixelFormat > formats
+			{
+				depthView.getFormat(),
+				getTextureFormat( WbTexture::eAccumulation ),
+				getTextureFormat( WbTexture::eRevealage ),
+				colourView.getFormat()
+			};
+			renderer::RenderPassAttachmentArray attaches
+			{
+				renderer::RenderPassAttachment::createDepthStencilAttachment( depthView.getFormat(), false ),
+				renderer::RenderPassAttachment::createColourAttachment( 0u, getTextureFormat( WbTexture::eAccumulation ), true ),
+				renderer::RenderPassAttachment::createColourAttachment( 1u, getTextureFormat( WbTexture::eRevealage ), true ),
+				renderer::RenderPassAttachment::createColourAttachment( 2u, colourView.getFormat(), false ),
+			};
+			renderer::ImageLayoutArray const initialLayouts
+			{
+				renderer::ImageLayout::eDepthStencilAttachmentOptimal,
+				renderer::ImageLayout::eShaderReadOnlyOptimal,
+				renderer::ImageLayout::eShaderReadOnlyOptimal,
+				renderer::ImageLayout::eColourAttachmentOptimal,
+			};
+			renderer::ImageLayoutArray const finalLayouts
+			{
+				renderer::ImageLayout::eDepthStencilAttachmentOptimal,
+				renderer::ImageLayout::eShaderReadOnlyOptimal,
+				renderer::ImageLayout::eShaderReadOnlyOptimal,
+				renderer::ImageLayout::eColourAttachmentOptimal,
+			};
+			renderer::RenderSubpassPtrArray subpasses;
+			subpasses.emplace_back( device.createRenderSubpass( { attaches[0], attaches[1], attaches[2] }
+				, { renderer::PipelineStageFlag::eColourAttachmentOutput, renderer::AccessFlag::eColourAttachmentWrite } ) );
+			subpasses.emplace_back( device.createRenderSubpass( { attaches[3] }
+				, { renderer::PipelineStageFlag::eColourAttachmentOutput, renderer::AccessFlag::eColourAttachmentWrite } ) );
+			return device.createRenderPass( attaches
+				, std::move( subpasses )
+				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
+					, renderer::AccessFlag::eColourAttachmentWrite
+					, initialLayouts }
+				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
+					, renderer::AccessFlag::eColourAttachmentWrite
+					, finalLayouts } );
+		}
+
+		renderer::TexturePtr doCreateTexture( Engine & engine
+			, Size const & size
+			, WbTexture texture )
+		{
+			auto & renderSystem = *engine.getRenderSystem();
+			auto & device = *renderSystem.getCurrentDevice();
+			auto result = device.createTexture();
+			result->setImage( getTextureFormat( texture )
+				, renderer::UIVec2{ size.getWidth(), size.getHeight() }
+			, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled );
+			return result;
+		}
+
+		renderer::FrameBufferPtr doCreateFrameBuffer( renderer::RenderPass const & renderPass
+			, Size const & size
+			, WeightedBlendTextures const & wbResult
+			, renderer::TextureView const & colourView )
+		{
+			renderer::FrameBufferAttachmentArray attaches
+			{
+				{ *( renderPass.begin() + 0u ), wbResult[0] },
+				{ *( renderPass.begin() + 1u ), wbResult[1] },
+				{ *( renderPass.begin() + 2u ), wbResult[2] },
+				{ *( renderPass.begin() + 3u ), colourView },
+			};
+			return renderPass.createFrameBuffer( renderer::UIVec2{ size.getWidth(), size.getHeight() }
+				, std::move( attaches ) );
+		}
+	}
+
 	WeightedBlendRendering::WeightedBlendRendering( Engine & engine
 		, TransparentPass & transparentPass
-		, FrameBuffer & frameBuffer
-		, FrameBufferAttachment & depthAttach
+		, renderer::TextureView & depthView
+		, renderer::TextureView & colourView
 		, castor::Size const & size
 		, Scene const & scene )
 		: m_engine{ engine }
 		, m_transparentPass{ transparentPass }
-		, m_frameBuffer{ frameBuffer }
 		, m_size{ size }
+		, m_accumulation{ doCreateTexture( engine, m_size, WbTexture::eAccumulation ) }
+		, m_accumulationView{ m_accumulation->createView( renderer::TextureType::e2D, m_accumulation->getFormat() ) }
+		, m_revealage{ doCreateTexture( engine, m_size, WbTexture::eRevealage ) }
+		, m_revealageView{ m_revealage->createView( renderer::TextureType::e2D, m_accumulation->getFormat() ) }
+		, m_renderPass{ doCreateRenderPass( engine, depthView, colourView ) }
+		, m_weightedBlendPassResult{ { depthView, *m_accumulationView, *m_revealageView } }
+		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_size, m_weightedBlendPassResult, colourView ) }
+		, m_finalCombinePass{ engine, m_size, m_transparentPass.getSceneUbo(), m_weightedBlendPassResult, *m_renderPass }
+		, m_commandBuffer{ engine.getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer() }
 	{
-		auto & renderSystem = *engine.getRenderSystem();
-		m_weightedBlendPassFrameBuffer = renderSystem.createFrameBuffer();
-		m_weightedBlendPassFrameBuffer->setClearColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueBlack ) );
-		bool result = m_weightedBlendPassFrameBuffer->initialise();
-
-		if ( result )
-		{
-			m_weightedBlendPassResult[0] = std::make_unique< TextureUnit >( m_engine );
-			m_weightedBlendPassResult[0]->setIndex( MinTextureIndex );
-			m_weightedBlendPassResult[0]->setTexture( depthAttach.getTexture() );
-			m_weightedBlendPassResult[0]->setSampler( m_engine.getLightsSampler() );
-			m_weightedBlendPassResult[0]->initialise();
-			m_weightedBlendPassTexAttachs[0] = m_weightedBlendPassFrameBuffer->createAttachment( depthAttach.getTexture() );
-
-			for ( uint32_t i = uint32_t( WbTexture::eAccumulation ); i < uint32_t( WbTexture::eCount ); i++ )
-			{
-				auto texture = renderSystem.createTexture( TextureType::eTwoDimensions
-					, AccessType::eNone
-					, AccessType::eRead | AccessType::eWrite
-					, getTextureFormat( WbTexture( i ) )
-					, m_size );
-				texture->getImage().initialiseSource();
-
-				m_weightedBlendPassResult[i] = std::make_unique< TextureUnit >( m_engine );
-				m_weightedBlendPassResult[i]->setIndex( MinTextureIndex + i );
-				m_weightedBlendPassResult[i]->setTexture( texture );
-				m_weightedBlendPassResult[i]->setSampler( m_engine.getLightsSampler() );
-				m_weightedBlendPassResult[i]->initialise();
-
-				m_weightedBlendPassTexAttachs[i] = m_weightedBlendPassFrameBuffer->createAttachment( texture );
-			}
-
-			m_weightedBlendPassFrameBuffer->bind();
-
-			for ( int i = 0; i < size_t( WbTexture::eCount ) && result; i++ )
-			{
-				m_weightedBlendPassFrameBuffer->attach( getTextureAttachmentPoint( WbTexture( i ) )
-					, getTextureAttachmentIndex( WbTexture( i ) )
-					, m_weightedBlendPassTexAttachs[i]
-					, m_weightedBlendPassResult[i]->getType() );
-			}
-
-			ENSURE( m_weightedBlendPassFrameBuffer->isComplete() );
-			m_weightedBlendPassFrameBuffer->setDrawBuffers();
-			m_weightedBlendPassFrameBuffer->unbind();
-		}
-
-		if ( result )
-		{
-			m_finalCombinePass = std::make_unique< FinalCombinePass >( *renderSystem.getEngine()
-				, m_size
-				, m_transparentPass.getSceneUbo() );
-		}
-
-		ENSURE( result );
 	}
 
-	WeightedBlendRendering::~WeightedBlendRendering()
+	void WeightedBlendRendering::update( Scene const & scene
+		, Camera const & camera )
 	{
-		m_weightedBlendPassFrameBuffer->bind();
-		m_weightedBlendPassFrameBuffer->detachAll();
-		m_weightedBlendPassFrameBuffer->unbind();
-		m_weightedBlendPassFrameBuffer->cleanup();
+		static RgbaColour accumClear = RgbaColour::fromPredefined( PredefinedRgbaColour::eTransparentBlack );
+		static RgbaColour revealClear = RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueWhite );
 
-		for ( auto & attach : m_weightedBlendPassTexAttachs )
-		{
-			attach.reset();
-		}
+		m_transparentPass.getSceneUbo().update( camera, scene.getFog() );
+		auto invView = camera.getView().getInverse().getTransposed();
+		auto invProj = camera.getViewport().getProjection().getInverse();
+		auto invViewProj = ( camera.getViewport().getProjection() * camera.getView() ).getInverse();
 
-		m_weightedBlendPassResult[0].reset();
-
-		for ( uint32_t i = uint32_t( WbTexture::eAccumulation ); i < uint32_t( WbTexture::eCount ); i++ )
-		{
-			m_weightedBlendPassResult[i]->cleanup();
-			m_weightedBlendPassResult[i].reset();
-		}
-
-		m_weightedBlendPassFrameBuffer.reset();
+		m_finalCombinePass.update( camera
+			, invViewProj
+			, invView
+			, invProj );
 	}
 
 	void WeightedBlendRendering::render( RenderInfo & info
@@ -111,45 +145,37 @@ namespace castor3d
 	{
 		static RgbaColour accumClear = RgbaColour::fromPredefined( PredefinedRgbaColour::eTransparentBlack );
 		static RgbaColour revealClear = RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueWhite );
-
-		m_transparentPass.getSceneUbo().update( camera, scene.getFog() );
-		auto invView = camera.getView().getInverse().getTransposed();
-		auto invProj = camera.getViewport().getProjection().getInverse();
-		auto invViewProj = ( camera.getViewport().getProjection() * camera.getView() ).getInverse();
-
 		m_engine.setPerObjectLighting( true );
-		camera.apply();
 
 		// Accumulate blend.
-		m_weightedBlendPassFrameBuffer->bind( FrameBufferTarget::eDraw );
-		m_weightedBlendPassTexAttachs[size_t( WbTexture::eAccumulation )]->clear( accumClear );
-		m_weightedBlendPassTexAttachs[size_t( WbTexture::eRevealage )]->clear( revealClear );
-		m_transparentPass.render( info
-			, shadowMaps
-			, jitter );
-		m_weightedBlendPassFrameBuffer->unbind();
-
-		m_finalCombinePass->render( m_weightedBlendPassResult
-			, m_frameBuffer
-			, camera
-			, invViewProj
-			, invView
-			, invProj
-			, scene.getFog().getType() );
+		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
+		{
+			m_commandBuffer->beginRenderPass( *m_renderPass
+				, *m_frameBuffer
+				, { { accumClear }, { revealClear } }
+				, renderer::SubpassContents::eSecondaryCommandBuffers );
+			m_transparentPass.render( info
+				, shadowMaps
+				, jitter );
+			m_commandBuffer->nextSubpass( renderer::SubpassContents::eSecondaryCommandBuffers );
+			m_commandBuffer->executeCommands( { m_finalCombinePass.getCommandBuffer( scene.getFog().getType() ) } );
+			m_commandBuffer->endRenderPass();
+			m_commandBuffer->end();
+		}
 	}
 
 	void WeightedBlendRendering::debugDisplay()
 	{
-		auto count = 2;
-		int width = int( m_size.getWidth() ) / 6;
-		int height = int( m_size.getHeight() ) / 6;
-		int left = int( m_size.getWidth() ) - width;
-		int top = int( m_size.getHeight() ) - height;
-		auto size = Size( width, height );
-		auto & context = *m_engine.getRenderSystem()->getCurrentContext();
-		auto index = 0;
-		context.renderDepth( Position{ left, top - height * index++ }, size, *m_weightedBlendPassResult[size_t( WbTexture::eDepth )]->getTexture() );
-		context.renderTexture( Position{ left, top - height * index++ }, size, *m_weightedBlendPassResult[size_t( WbTexture::eRevealage )]->getTexture() );
-		context.renderTexture( Position{ left, top - height * index++ }, size, *m_weightedBlendPassResult[size_t( WbTexture::eAccumulation )]->getTexture() );
+		//auto count = 2;
+		//int width = int( m_size.getWidth() ) / 6;
+		//int height = int( m_size.getHeight() ) / 6;
+		//int left = int( m_size.getWidth() ) - width;
+		//int top = int( m_size.getHeight() ) - height;
+		//auto size = Size( width, height );
+		//auto & context = *m_engine.getRenderSystem()->getCurrentContext();
+		//auto index = 0;
+		//context.renderDepth( Position{ left, top - height * index++ }, size, *m_weightedBlendPassResult[size_t( WbTexture::eDepth )]->getTexture() );
+		//context.renderTexture( Position{ left, top - height * index++ }, size, *m_weightedBlendPassResult[size_t( WbTexture::eRevealage )]->getTexture() );
+		//context.renderTexture( Position{ left, top - height * index++ }, size, *m_weightedBlendPassResult[size_t( WbTexture::eAccumulation )]->getTexture() );
 	}
 }

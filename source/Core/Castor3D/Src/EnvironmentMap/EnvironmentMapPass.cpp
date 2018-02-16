@@ -13,7 +13,7 @@ namespace castor3d
 	{
 		CameraSPtr doCreateCamera( SceneNode & node )
 		{
-			Viewport viewport{ *node.getScene()->getEngine() };
+			Viewport viewport;
 			return std::make_shared< Camera >( cuT( "EnvironmentMap_" ) + node.getName()
 				, *node.getScene()
 				, node.shared_from_this()
@@ -57,7 +57,6 @@ namespace castor3d
 			, near
 			, far );
 		m_camera->resize( size );
-		m_camera->getViewport().initialise();
 		m_opaquePass->initialise( size );
 		m_transparentPass->initialise( size );
 		return true;
@@ -67,7 +66,6 @@ namespace castor3d
 	{
 		m_opaquePass->cleanup();
 		m_transparentPass->cleanup();
-		m_camera->getViewport().cleanup();
 	}
 
 	void EnvironmentMapPass::update( SceneNode const & node, RenderQueueArray & queues )

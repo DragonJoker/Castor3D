@@ -78,6 +78,15 @@ namespace castor3d
 		C3D_API void prepareFrame();
 		/**
 		*\~english
+		*\brief
+		*	Prpares the commands to render the quad, inside given command buffer.
+		*\~french
+		*\brief
+		*	Prépare les commandes de dessin du quad, dans le tampon de commandes donné.
+		*/
+		C3D_API void registerFrame( renderer::CommandBuffer & commandBuffer );
+		/**
+		*\~english
 		*\return
 		*	The command buffer to render the quad.
 		*\~french

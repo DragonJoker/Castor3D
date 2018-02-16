@@ -30,7 +30,7 @@ namespace castor3d
 	};
 	//!\~english	The weighted blend pass result.
 	//!\~french		Le résultat de la passe de weighted blend.
-	using WeightedBlendPassResult = std::array< TextureUnitUPtr, size_t( WbTexture::eCount ) >;
+	using WeightedBlendTextures = std::array< renderer::TextureViewCRef, size_t( WbTexture::eCount ) >;
 	/**
 	 *\~english
 	 *\brief		Retrieve the name for given texture enum value.
@@ -168,6 +168,9 @@ namespace castor3d
 		void doUpdatePipeline( RenderPipeline & pipeline )const override;
 		void doCompletePipeline( PipelineFlags const & flags
 			, RenderPipeline & pipeline );
+
+	private:
+		renderer::RenderPassPtr m_renderPass;
 	};
 }
 

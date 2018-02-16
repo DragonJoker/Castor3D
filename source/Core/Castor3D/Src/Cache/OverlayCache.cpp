@@ -83,10 +83,9 @@ namespace castor3d
 		   , std::bind( OverlayCleaner{ *this }, std::placeholders::_1 )
 		   , std::move( p_merge ) )
 		, m_overlayCountPerLevel{ 1000, 0 }
-		, m_viewport{ *getEngine() }
+		, m_viewport{}
 	{
 		m_viewport.setOrtho( 0, 1, 1, 0, 0, 1000 );
-		getEngine()->postEvent( makeInitialiseEvent( m_viewport ) );
 	}
 
 	Cache< Overlay, castor::String >::~Cache()
@@ -102,7 +101,6 @@ namespace castor3d
 
 	void Cache< Overlay, castor::String >::cleanup()
 	{
-		m_viewport.cleanup();
 		auto lock = makeUniqueLock( *this );
 
 		for ( auto it : m_fontTextures )

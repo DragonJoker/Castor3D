@@ -358,7 +358,7 @@ namespace castor3d
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ? index++ : 0u
 			, 0u
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
-		auto c3d_mapAmbientOcclusion( writer.declSampler< Sampler2D >( ShaderProgram::MapAmbientOcclusion
+		auto c3d_mapAmbientOcclusion( writer.declSampler< Sampler2D >( cuT( "c3d_mapAmbientOcclusion" )
 			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ? index++ : 0u
 			, 0u
 			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ) );
@@ -366,7 +366,7 @@ namespace castor3d
 			, checkFlag( textureFlags, TextureChannel::eEmissive ) ? index++ : 0u
 			, 0u
 			, checkFlag( textureFlags, TextureChannel::eEmissive ) ) );
-		auto c3d_mapTransmittance( writer.declSampler< Sampler2D >( ShaderProgram::MapTransmittance
+		auto c3d_mapTransmittance( writer.declSampler< Sampler2D >( cuT( "c3d_mapTransmittance" )
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ? index++ : 0u
 			, 0u
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ) );
@@ -540,7 +540,7 @@ namespace castor3d
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ? index++ : 0u
 			, 0u
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
-		auto c3d_mapAmbientOcclusion( writer.declSampler< Sampler2D >( ShaderProgram::MapAmbientOcclusion
+		auto c3d_mapAmbientOcclusion( writer.declSampler< Sampler2D >( cuT( "c3d_mapAmbientOcclusion" )
 			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ? index++ : 0u
 			, 0u
 			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ) );
@@ -548,7 +548,7 @@ namespace castor3d
 			, checkFlag( textureFlags, TextureChannel::eEmissive ) ? index++ : 0u
 			, 0u
 			, checkFlag( textureFlags, TextureChannel::eEmissive ) ) );
-		auto c3d_mapTransmittance( writer.declSampler< Sampler2D >( ShaderProgram::MapTransmittance
+		auto c3d_mapTransmittance( writer.declSampler< Sampler2D >( cuT( "c3d_mapTransmittance" )
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ? index++ : 0u
 			, 0u
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ) );
@@ -727,7 +727,7 @@ namespace castor3d
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ? index++ : 0u
 			, 0u
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
-		auto c3d_mapAmbientOcclusion( writer.declSampler< Sampler2D >( ShaderProgram::MapAmbientOcclusion
+		auto c3d_mapAmbientOcclusion( writer.declSampler< Sampler2D >( cuT( "c3d_mapAmbientOcclusion" )
 			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ? index++ : 0u
 			, 0u
 			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ) );
@@ -735,7 +735,7 @@ namespace castor3d
 			, checkFlag( textureFlags, TextureChannel::eEmissive ) ? index++ : 0u
 			, 0u
 			, checkFlag( textureFlags, TextureChannel::eEmissive ) ) );
-		auto c3d_mapTransmittance( writer.declSampler< Sampler2D >( ShaderProgram::MapTransmittance
+		auto c3d_mapTransmittance( writer.declSampler< Sampler2D >( cuT( "c3d_mapTransmittance" )
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ? index++ : 0u
 			, 0u
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ) );

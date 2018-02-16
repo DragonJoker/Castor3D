@@ -127,13 +127,6 @@ namespace castor3d
 		C3D_API void update();
 		/**
 		 *\~english
-		 *\brief		Applies the viewport.
-		 *\~french
-		 *\brief		Applique le viewport.
-		 */
-		C3D_API void apply()const;
-		/**
-		 *\~english
 		 *\brief		Resizes the viewport
 		 *\param[in]	width, height	Display window size
 		 *\~french

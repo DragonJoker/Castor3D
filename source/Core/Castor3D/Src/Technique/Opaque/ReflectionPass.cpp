@@ -119,7 +119,7 @@ namespace castor3d
 			auto c3d_mapSsao = writer.declSampler< Sampler2D >( cuT( "c3d_mapSsao" ), hasSsao ? index++ : 0u, 0u, hasSsao );
 			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), index++, 0u );
 			auto c3d_mapLightSpecular = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightSpecular" ), index++, 0u );
-			auto c3d_mapEnvironment = writer.declSamplerArray< SamplerCube >( ShaderProgram::MapEnvironment, index++, 0u, c_environmentCount );
+			auto c3d_mapEnvironment = writer.declSamplerArray< SamplerCube >( cuT( "c3d_mapEnvironment" ), index++, 0u, c_environmentCount );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			shader::LegacyMaterials materials{ writer };
@@ -270,10 +270,10 @@ namespace castor3d
 			auto c3d_mapSsao = writer.declSampler< Sampler2D >( cuT( "c3d_mapSsao" ), hasSsao ? index++ : 0u, 0u, hasSsao );
 			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), index++, 0u );
 			auto c3d_mapLightSpecular = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightSpecular" ), index++, 0u );
-			auto c3d_mapBrdf = writer.declSampler< Sampler2D >( ShaderProgram::MapBrdf, index++, 0u );
-			auto c3d_mapIrradiance = writer.declSampler< SamplerCube >( ShaderProgram::MapIrradiance, index++, 0u );
-			auto c3d_mapPrefiltered = writer.declSampler< SamplerCube >( ShaderProgram::MapPrefiltered, index++, 0u );
-			auto c3d_mapEnvironment = writer.declSamplerArray< SamplerCube >( ShaderProgram::MapEnvironment, index++, 0u, c_environmentCount );
+			auto c3d_mapBrdf = writer.declSampler< Sampler2D >( cuT( "c3d_mapBrdf" ), index++, 0u );
+			auto c3d_mapIrradiance = writer.declSampler< SamplerCube >( cuT( "c3d_mapIrradiance" ), index++, 0u );
+			auto c3d_mapPrefiltered = writer.declSampler< SamplerCube >( cuT( "c3d_mapPrefiltered" ), index++, 0u );
+			auto c3d_mapEnvironment = writer.declSamplerArray< SamplerCube >( cuT( "c3d_mapEnvironment" ), index++, 0u, c_environmentCount );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			shader::PbrMRMaterials materials{ writer };
@@ -574,10 +574,10 @@ namespace castor3d
 			auto c3d_mapSsao = writer.declSampler< Sampler2D >( cuT( "c3d_mapSsao" ), hasSsao ? index++ : 0u, 0u, hasSsao );
 			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), index++, 0u );
 			auto c3d_mapLightSpecular = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightSpecular" ), index++, 0u );
-			auto c3d_mapBrdf = writer.declSampler< Sampler2D >( ShaderProgram::MapBrdf, index++, 0u );
-			auto c3d_mapIrradiance = writer.declSampler< SamplerCube >( ShaderProgram::MapIrradiance, index++, 0u );
-			auto c3d_mapPrefiltered = writer.declSampler< SamplerCube >( ShaderProgram::MapPrefiltered, index++, 0u );
-			auto c3d_mapEnvironment = writer.declSamplerArray< SamplerCube >( ShaderProgram::MapEnvironment, index++, 0u, c_environmentCount );
+			auto c3d_mapBrdf = writer.declSampler< Sampler2D >( cuT( "c3d_mapBrdf" ), index++, 0u );
+			auto c3d_mapIrradiance = writer.declSampler< SamplerCube >( cuT( "c3d_mapIrradiance" ), index++, 0u );
+			auto c3d_mapPrefiltered = writer.declSampler< SamplerCube >( cuT( "c3d_mapPrefiltered" ), index++, 0u );
+			auto c3d_mapEnvironment = writer.declSamplerArray< SamplerCube >( cuT( "c3d_mapEnvironment" ), index++, 0u, c_environmentCount );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			shader::PbrSGMaterials materials{ writer };

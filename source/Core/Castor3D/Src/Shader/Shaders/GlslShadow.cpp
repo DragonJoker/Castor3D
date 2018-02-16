@@ -237,7 +237,7 @@ namespace castor3d
 					, Vec3 const & normal
 					, Int const & index )
 				{
-					auto c3d_mapShadowSpot = m_writer.getBuiltin< Sampler2D >( Shadow::MapShadowSpot, SpotShadowMapCount );
+					auto c3d_mapShadowSpot = m_writer.getBuiltinArray< Sampler2D >( Shadow::MapShadowSpot, SpotShadowMapCount );
 					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
 						, m_getLightSpacePosition( lightMatrix, worldSpacePosition ) );
 					auto moments = m_writer.declLocale( cuT( "moments" )
@@ -270,7 +270,7 @@ namespace castor3d
 				, Float const & farPlane
 				, Int const & index )
 				{
-					auto c3d_mapShadowPoint = m_writer.getBuiltin< SamplerCube >( MapShadowPoint, PointShadowMapCount );
+					auto c3d_mapShadowPoint = m_writer.getBuiltinArray< SamplerCube >( MapShadowPoint, PointShadowMapCount );
 					auto vertexToLight = m_writer.declLocale( cuT( "vertexToLight" )
 						, worldSpacePosition - lightPosition );
 					auto depth = m_writer.declLocale( cuT( "depth" )

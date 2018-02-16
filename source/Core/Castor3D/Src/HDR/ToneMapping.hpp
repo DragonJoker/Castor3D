@@ -78,6 +78,8 @@ namespace castor3d
 		 */
 		C3D_API void update( HdrConfig const & config );
 
+		using RenderQuad::getCommandBuffer;
+
 	private:
 		/**
 		 *\~english

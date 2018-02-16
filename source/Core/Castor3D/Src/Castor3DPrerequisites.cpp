@@ -143,17 +143,17 @@ namespace castor3d
 				{
 				case LightType::eDirectional:
 					result->declareDirectionalModel( index );
-					writer.declUniform< DirectionalLight >( cuT( "light" ) );
+					writer.declUniform< DirectionalLight >( cuT( "light" ), index++ );
 					break;
 
 				case LightType::ePoint:
 					result->declarePointModel( index );
-					writer.declUniform< PointLight >( cuT( "light" ) );
+					writer.declUniform< PointLight >( cuT( "light" ), index++ );
 					break;
 
 				case LightType::eSpot:
 					result->declareSpotModel( index );
-					writer.declUniform< SpotLight >( cuT( "light" ) );
+					writer.declUniform< SpotLight >( cuT( "light" ), index++ );
 					break;
 
 				default:
@@ -273,17 +273,17 @@ namespace castor3d
 					{
 					case LightType::eDirectional:
 						result->declareDirectionalModel( index );
-						writer.declUniform< DirectionalLight >( cuT( "light" ) );
+						writer.declUniform< DirectionalLight >( cuT( "light" ), index++ );
 						break;
 
 					case LightType::ePoint:
 						result->declarePointModel( index );
-						writer.declUniform< PointLight >( cuT( "light" ) );
+						writer.declUniform< PointLight >( cuT( "light" ), index++ );
 						break;
 
 					case LightType::eSpot:
 						result->declareSpotModel( index );
-						writer.declUniform< SpotLight >( cuT( "light" ) );
+						writer.declUniform< SpotLight >( cuT( "light" ), index++ );
 						break;
 
 					default:
@@ -400,17 +400,17 @@ namespace castor3d
 					{
 					case LightType::eDirectional:
 						result->declareDirectionalModel( index );
-						writer.declUniform< DirectionalLight >( cuT( "light" ) );
+						writer.declUniform< DirectionalLight >( cuT( "light" ), index++ );
 						break;
 
 					case LightType::ePoint:
 						result->declarePointModel( index );
-						writer.declUniform< PointLight >( cuT( "light" ) );
+						writer.declUniform< PointLight >( cuT( "light" ), index++ );
 						break;
 
 					case LightType::eSpot:
 						result->declareSpotModel( index );
-						writer.declUniform< SpotLight >( cuT( "light" ) );
+						writer.declUniform< SpotLight >( cuT( "light" ), index++ );
 						break;
 
 					default:

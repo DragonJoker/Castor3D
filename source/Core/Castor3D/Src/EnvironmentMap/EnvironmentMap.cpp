@@ -155,11 +155,11 @@ namespace castor3d
 		};
 		renderer::RenderPassAttachmentArray rpAttaches
 		{
-			{ m_depthBuffer->getFormat(), true },
-			{ m_environmentMap.getTexture()->getPixelFormat(), true }
+			renderer::RenderPassAttachment::createDepthStencilAttachment( m_depthBuffer->getFormat(), true ),
+			renderer::RenderPassAttachment::createColourAttachment( 0u, m_environmentMap.getTexture()->getPixelFormat(), true )
 		};
 		renderer::RenderSubpassPtrArray subpasses;
-		subpasses.emplace_back( device.createRenderSubpass( formats
+		subpasses.emplace_back( device.createRenderSubpass( rpAttaches
 			, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 			, renderer::AccessFlag::eColourAttachmentWrite } ) );
 		auto & environment = m_environmentMap.getTexture()->getTexture();
@@ -174,7 +174,7 @@ namespace castor3d
 				, face
 				, 1u );
 			frameBuffer.renderPass = device.createRenderPass( rpAttaches
-				, subpasses
+				, std::move( subpasses )
 				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 					, renderer::AccessFlag::eColourAttachmentWrite
 					, { renderer::ImageLayout::eDepthStencilAttachmentOptimal, renderer::ImageLayout::eColourAttachmentOptimal } }

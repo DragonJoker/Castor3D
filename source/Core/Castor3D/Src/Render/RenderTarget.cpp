@@ -15,6 +15,7 @@
 
 #include <Core/Device.hpp>
 #include <Image/Texture.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassState.hpp>
 #include <RenderPass/RenderSubpass.hpp>
@@ -131,8 +132,10 @@ namespace castor3d
 		m_colourTexture.getTexture()->getImage().initialiseSource();
 		m_colourTexture.getTexture()->initialise();
 
+		renderer::FrameBufferAttachmentArray attaches;
+		attaches.emplace_back( *renderPass.begin(), m_colourTexture.getTexture()->getView() );
 		m_frameBuffer = renderPass.createFrameBuffer( renderer::UIVec2{ size }
-			, { m_colourTexture.getTexture()->getView() } );
+			, {  } );
 
 		return true;
 	}
@@ -185,7 +188,7 @@ namespace castor3d
 			subpasses.emplace_back( device.createRenderSubpass( formats
 				, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::AccessFlag::eColourAttachmentWrite } ) );
-			m_renderPass = device.createRenderPass( formats
+			m_renderPass = device.createRenderPass( { { getPixelFormat(), true } }
 				, subpasses
 				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 					, renderer::AccessFlag::eColourAttachmentWrite
@@ -380,7 +383,7 @@ namespace castor3d
 				, *fbo.m_frameBuffer
 				, { RgbaColour::fromRGBA( toRGBAFloat( scene->getBackgroundColour() ) ) }
 				, renderer::SubpassContents::eSecondaryCommandBuffers );
-			m_commandBuffer->executeCommands( { m_toneMapping->getCommands() } );
+			m_commandBuffer->executeCommands( { m_toneMapping->getCommandBuffer() } );
 			m_commandBuffer->endRenderPass();
 			m_commandBuffer->end();
 		}

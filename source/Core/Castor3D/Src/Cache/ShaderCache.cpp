@@ -229,9 +229,9 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			auto position = writer.declAttribute< Vec4 >( cuT( "position" ) );
-			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ) );
-			auto center = writer.declAttribute< Vec3 >( cuT( "center" ) );
+			auto position = writer.declAttribute< Vec4 >( cuT( "position" ), 0u );
+			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
+			auto center = writer.declAttribute< Vec3 >( cuT( "center" ), 2u );
 			auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 			auto gl_VertexID( writer.declBuiltin< Int >( cuT( "gl_VertexID" ) ) );
 			UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
@@ -241,15 +241,16 @@ namespace castor3d
 			UBO_BILLBOARD( writer, BillboardUbo::BindingPoint, 0 );
 
 			// Shader outputs
-			auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );
-			auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" ) );
-			auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" ) );
-			auto vtx_normal = writer.declOutput< Vec3 >( cuT( "vtx_normal" ) );
-			auto vtx_tangent = writer.declOutput< Vec3 >( cuT( "vtx_tangent" ) );
-			auto vtx_bitangent = writer.declOutput< Vec3 >( cuT( "vtx_bitangent" ) );
-			auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ) );
-			auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" ) );
-			auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" ) );
+			uint32_t location{ 0u };
+			auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ), location++ );
+			auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" ), location++ );
+			auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" ), location++ );
+			auto vtx_normal = writer.declOutput< Vec3 >( cuT( "vtx_normal" ), location++ );
+			auto vtx_tangent = writer.declOutput< Vec3 >( cuT( "vtx_tangent" ), location++ );
+			auto vtx_bitangent = writer.declOutput< Vec3 >( cuT( "vtx_bitangent" ), location++ );
+			auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ), location++ );
+			auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" ), location++ );
+			auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" ), location++ );
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()

@@ -47,11 +47,11 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ) );
-			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ) );
+			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
+			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()

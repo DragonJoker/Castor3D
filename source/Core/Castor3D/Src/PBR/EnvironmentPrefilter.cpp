@@ -14,6 +14,7 @@
 #include <Image/TextureView.hpp>
 #include <Miscellaneous/PushConstantRange.hpp>
 #include <Pipeline/DepthStencilState.hpp>
+#include <Pipeline/InputAssemblyState.hpp>
 #include <Pipeline/Pipeline.hpp>
 #include <Pipeline/PipelineLayout.hpp>
 #include <Pipeline/Scissor.hpp>
@@ -231,7 +232,7 @@ namespace castor3d
 				facePass.pipeline = m_pipelineLayout->createPipeline( program
 					, { *m_vertexLayout }
 					, *facePass.renderPass
-					, renderer::PrimitiveTopology::eTriangleStrip );
+					, { renderer::PrimitiveTopology::eTriangleStrip } );
 				facePass.pipeline->depthStencilState( renderer::DepthStencilState{ 0u, false, false } );
 				facePass.pipeline->finish();
 			}
@@ -295,11 +296,11 @@ namespace castor3d
 			GlslWriter writer{ m_renderSystem.createGlslWriter() };
 
 			// Inputs
-			auto position = writer.declAttribute< Vec3 >( cuT( "position" ) );
+			auto position = writer.declAttribute< Vec3 >( cuT( "position" ), 0u );
 			UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
 
 			// Outputs
-			auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );
+			auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ), 0u );
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			std::function< void() > main = [&]()
@@ -320,14 +321,14 @@ namespace castor3d
 			GlslWriter writer{ m_renderSystem.createGlslWriter() };
 
 			// Inputs
-			auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
+			auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ), 0u );
 			auto c3d_mapDiffuse = writer.declSampler< SamplerCube >( cuT( "c3d_mapDiffuse" ), MinTextureIndex, 0u );
 			Ubo config{ writer, cuT( "Config" ), 0u };
 			auto c3d_roughness = config.declMember< Float >( cuT( "c3d_roughness" ) );
 			config.end();
 
 			// Outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_FragColor" ) );
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_FragColor" ), 0u );
 
 			auto distributionGGX = writer.implementFunction< Float >( cuT( "DistributionGGX" )
 				, [&]( Vec3 const & p_N

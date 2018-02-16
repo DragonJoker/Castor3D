@@ -36,11 +36,13 @@ namespace castor3d
 
 	public:
 		/**
-		 *\~english
-		 *\name			Copy/Move construction/assignment operation.
-		 *\~french
-		 *\name			Constructeurs/Opérateurs d'affectation par copie/déplacement.
-		 */
+		*\~english
+		*\name
+		*	Copy/Move construction/assignment operation.
+		*\~french
+		*\name
+		*	Constructeurs/Opérateurs d'affectation par copie/déplacement.
+		*/
 		/**@{*/
 		C3D_API MatrixUbo( MatrixUbo const & ) = delete;
 		C3D_API MatrixUbo & operator=( MatrixUbo const & ) = delete;

@@ -1207,6 +1207,42 @@ namespace castor3d
 		C3D_API virtual void doPrepareBackPipeline( renderer::ShaderProgram & program
 			, PipelineFlags const & flags ) = 0;
 
+	public:
+		struct VertexInputs
+		{
+			static uint32_t constexpr PositionLocation = 0u;
+			static uint32_t constexpr NormalLocation = 1u;
+			static uint32_t constexpr TangentLocation = 2u;
+			static uint32_t constexpr BitangentLocation = 3u;
+			static uint32_t constexpr TextureLocation = 4u;
+			static uint32_t constexpr BoneIds0Location = 5u;
+			static uint32_t constexpr BoneIds1Location = 6u;
+			static uint32_t constexpr Weights0Location = 7u;
+			static uint32_t constexpr Weights1Location = 8u;
+			static uint32_t constexpr TransformLocation = 9u;
+			static uint32_t constexpr MaterialLocation = 10u;
+			static uint32_t constexpr Position2Location = 11u;
+			static uint32_t constexpr Normal2Location = 12u;
+			static uint32_t constexpr Tangent2Location = 13u;
+			static uint32_t constexpr Bitangent2Location = 14u;
+			static uint32_t constexpr Texture2Location = 15u;
+		};
+		struct VertexOutputs
+		{
+			static uint32_t constexpr WorldPositionLocation = 0u;
+			static uint32_t constexpr ViewPositionLocation = 1u;
+			static uint32_t constexpr CurPositionLocation = 2u;
+			static uint32_t constexpr PrvPositionLocation = 3u;
+			static uint32_t constexpr TangentSpaceFragPositionLocation = 4u;
+			static uint32_t constexpr TangentSpaceViewPositionLocation = 5u;
+			static uint32_t constexpr NormalLocation = 6u;
+			static uint32_t constexpr TangentLocation = 7u;
+			static uint32_t constexpr BitangentLocation = 8u;
+			static uint32_t constexpr TextureLocation = 9u;
+			static uint32_t constexpr InstanceLocation = 10u;
+			static uint32_t constexpr MaterialLocation = 11u;
+		};
+
 	protected:
 		RenderSystem & m_renderSystem;
 		RenderQueue m_renderQueue;

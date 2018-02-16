@@ -63,11 +63,11 @@ namespace castor3d
 					|| checkFlag( passFlags, PassFlag::ePbrSpecularGlossiness ) )
 				&& checkFlag( programFlags, ProgramFlag::eLighting ) )
 			{
-				program.createUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance
+				program.createUniform< UniformType::eSampler >( cuT( "c3d_mapIrradiance" )
 					, renderer::ShaderStageFlag::eFragment );
-				program.createUniform< UniformType::eSampler >( ShaderProgram::MapPrefiltered
+				program.createUniform< UniformType::eSampler >( cuT( "c3d_mapPrefiltered" )
 					, renderer::ShaderStageFlag::eFragment );
-				program.createUniform< UniformType::eSampler >( ShaderProgram::MapBrdf
+				program.createUniform< UniformType::eSampler >( cuT( "c3d_mapBrdf" )
 					, renderer::ShaderStageFlag::eFragment );
 			}
 		}

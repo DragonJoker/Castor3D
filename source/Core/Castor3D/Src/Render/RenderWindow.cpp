@@ -112,7 +112,7 @@ namespace castor3d
 				subpasses.emplace_back( m_device->createRenderSubpass( formats
 					, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
 					, renderer::AccessFlag::eColourAttachmentWrite } ) );
-				m_renderPass = m_device->createRenderPass( formats
+				m_renderPass = m_device->createRenderPass( { { m_swapChain->getFormat(), true } }
 					, std::move( subpasses )
 					, renderer::RenderPassState{ renderer::PipelineStageFlag::eBottomOfPipe
 						, renderer::AccessFlag::eMemoryRead

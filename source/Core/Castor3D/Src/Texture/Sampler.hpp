@@ -245,18 +245,18 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		renderer::WrapMode m_wrapS;
-		renderer::WrapMode m_wrapT;
-		renderer::WrapMode m_wrapR;
-		renderer::Filter m_minFilter;
-		renderer::Filter m_magFilter;
-		renderer::MipmapMode m_mipFilter;
-		float m_minLod;
-		float m_maxLod;
-		float m_lodBias;
-		renderer::BorderColour m_borderColour;
-		float m_maxAnisotropy;
-		renderer::CompareOp m_compareOp;
+		renderer::WrapMode m_wrapS{ renderer::WrapMode::eClampToEdge };
+		renderer::WrapMode m_wrapT{ renderer::WrapMode::eClampToEdge };
+		renderer::WrapMode m_wrapR{ renderer::WrapMode::eClampToEdge };
+		renderer::Filter m_minFilter{ renderer::Filter::eNearest };
+		renderer::Filter m_magFilter{ renderer::Filter::eNearest };
+		renderer::MipmapMode m_mipFilter{ renderer::MipmapMode::eNone };
+		float m_minLod{ -1000.0f };
+		float m_maxLod{ 1000.0f };
+		float m_lodBias{ 0.0f };
+		renderer::BorderColour m_borderColour{ renderer::BorderColour::eFloatOpaqueBlack };
+		float m_maxAnisotropy{ 1.0f };
+		renderer::CompareOp m_compareOp{ renderer::CompareOp::eAlways };
 		renderer::SamplerPtr m_sampler;
 	};
 }

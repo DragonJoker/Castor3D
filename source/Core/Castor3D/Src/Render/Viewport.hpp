@@ -7,6 +7,9 @@ See LICENSE file in root folder
 #include "Castor3DPrerequisites.hpp"
 #include "Design/GroupChangeTracked.hpp"
 
+#include <Pipeline/Scissor.hpp>
+#include <Pipeline/Viewport.hpp>
+
 #include <Math/Angle.hpp>
 #include <Math/PlaneEquation.hpp>
 #include <Design/OwnedBy.hpp>
@@ -15,49 +18,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date		16/04/2016
-	\~english
-	\brief		Render API specific viewport implementation.
-	\~french
-	\brief		Implémentation de viewport spécifique à l'API de rendu.
-	*/
-	class IViewportImpl
-		: public castor::OwnedBy< RenderSystem >
-	{
-	public:
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	renderSystem	The RenderSystem.
-		 *\param[in]	p_viewport		The parent viewport.
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	renderSystem	Le RenderSystem.
-		 *\param[in]	p_viewport		Le viewport parent.
-		 */
-		C3D_API IViewportImpl( RenderSystem & renderSystem, Viewport & p_viewport );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API virtual ~IViewportImpl();
-		/**
-		 *\~english
-		 *\brief		Applies the viewport.
-		 *\~french
-		 *\brief		Applique le viewport.
-		 */
-		C3D_API virtual void apply()const = 0;
-
-	protected:
-		//!\~english The parent viewport.	\~french Le viewport parent.
-		Viewport & m_viewport;
-	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.1
@@ -70,7 +30,6 @@ namespace castor3d
 	\remark		donne le type de projection FOV, ...
 	*/
 	class Viewport
-		: public castor::OwnedBy< Engine >
 	{
 	public:
 		C3D_API static const std::array< castor::String, size_t( ViewportType::eCount ) > string_type;
@@ -112,7 +71,6 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The core engine.
 		 *\param[in]	type	Projection type.
 		 *\param[in]	fovy	Y Field of View.
 		 *\param[in]	aspect	Width / Height ratio.
@@ -124,7 +82,6 @@ namespace castor3d
 		 *\param[in]	far		Far clipping plane value.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
 		 *\param[in]	type	Type de projection.
 		 *\param[in]	fovy	Angle de vision Y.
 		 *\param[in]	aspect	Ratio Largeur / Hauteur.
@@ -135,8 +92,7 @@ namespace castor3d
 		 *\param[in]	near	Position du plan proche.
 		 *\param[in]	far		Position du plan éloigné.
 		 */
-		C3D_API Viewport( Engine & engine
-			, ViewportType type
+		C3D_API Viewport( ViewportType type
 			, castor::Angle const & fovy
 			, real aspect
 			, real left
@@ -155,43 +111,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API explicit Viewport( Engine & engine );
-		/**
-		 *\~english
-		 *\brief		Copy constructor.
-		 *\param[in]	rhs	The object to copy.
-		 *\~french
-		 *\brief		Constructeur par copie.
-		 *\param[in]	rhs	L'objet à copier.
-		 */
-		C3D_API Viewport( Viewport const & rhs );
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator.
-		 *\param[in]	rhs	The object to copy.
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie.
-		 *\param[in]	rhs	L'objet à copier.
-		 */
-		C3D_API Viewport & operator=( Viewport const & rhs );
-		/**
-		 *\~english
-		 *\brief		Move constructor.
-		 *\param[in]	rhs	The object to move.
-		 *\~french
-		 *\brief		Constructeur par déplacement.
-		 *\param[in]	rhs	L'objet à déplacer.
-		 */
-		C3D_API Viewport( Viewport && rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Move assignment operator.
-		 *\param[in]	rhs	The object to move.
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement.
-		 *\param[in]	rhs	L'objet à déplacer.
-		 */
-		C3D_API Viewport & operator=( Viewport && rhs ) = default;
+		C3D_API explicit Viewport();
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -199,22 +119,6 @@ namespace castor3d
 		 *\brief		Destructeur
 		 */
 		C3D_API ~Viewport();
-		/**
-		 *\~english
-		 *\brief		Creates the render API specific implementation.
-		 *\return		\p true if everything's ok.
-		 *\~french
-		 *\brief		Crée l'implémentation spécifique à l'API de rendu.
-		 *\return		\p true si tout s'est bien passé.
-		 */
-		C3D_API bool initialise();
-		/**
-		 *\~english
-		 *\brief		Destroys the render API specific implementation.
-		 *\~french
-		 *\brief		Détruit l'implémentation spécifique à l'API de rendu.
-		 */
-		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Renders the viewport specifics
@@ -226,13 +130,6 @@ namespace castor3d
 		 *\return		\p true si le frustum de vue a été modifié
 		 */
 		C3D_API bool update();
-		/**
-		 *\~english
-		 *\brief		Applies the viewport.
-		 *\~french
-		 *\brief		Applique le viewport.
-		 */
-		C3D_API void apply()const;
 		/**
 		 *\~english
 		 *\brief		Builds a centered perspective viewport.
@@ -299,6 +196,15 @@ namespace castor3d
 			, real top
 			, real near
 			, real far );
+		/**
+		 *\~english
+		 *\brief		Sets the viewport render size
+		 *\param[in]	value	The new value
+		 *\~french
+		 *\brief		Définit les dimensions de rendu du viewport
+		 *\param[in]	value	La nouvelle valeur
+		 */
+		C3D_API void resize( const castor::Size & value );
 		/**
 		 *\~english
 		 *\return		The viewport render size
@@ -450,6 +356,26 @@ namespace castor3d
 			return m_projection;
 		}
 		/**
+		*\~english
+		*\return		The internal viewport.
+		*\~french
+		*\return		Le viewport interne.
+		*/
+		inline renderer::Viewport const & getViewport()const
+		{
+			return m_viewport;
+		}
+		/**
+		*\~english
+		*\return		The internal scissor.
+		*\~french
+		*\return		Le scissor interne.
+		*/
+		inline renderer::Scissor const & getScissor()const
+		{
+			return m_scissor;
+		}
+		/**
 		 *\~english
 		 *\brief		Sets the viewport render position.
 		 *\param[in]	value	The new value
@@ -460,18 +386,6 @@ namespace castor3d
 		inline void setPosition( const castor::Position & value )
 		{
 			m_position = value;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the viewport render size
-		 *\param[in]	value	The new value
-		 *\~french
-		 *\brief		Définit les dimensions de rendu du viewport
-		 *\param[in]	value	La nouvelle valeur
-		 */
-		inline void resize( const castor::Size & value )
-		{
-			m_size = value;
 		}
 		/**
 		 *\~english
@@ -707,7 +621,10 @@ namespace castor3d
 		castor::Matrix4x4r m_projection;
 		//!\~english	The render API specific implementation.
 		//!\~french		L'implémentation spécifique à l'API de rendu.
-		IViewportImplUPtr m_impl;
+		renderer::Viewport m_viewport;
+		//!\~english	The render API specific implementation.
+		//!\~french		L'implémentation spécifique à l'API de rendu.
+		renderer::Scissor m_scissor;
 	};
 }
 
