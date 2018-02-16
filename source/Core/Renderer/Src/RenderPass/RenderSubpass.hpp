@@ -27,8 +27,8 @@ namespace renderer
 		*	Constructeur.
 		*\param[in] device
 		*	La connexion logique au GPU.
-		*\param[in] formats
-		*	Les formats des attaches voulues pour la passe.
+		*\param[in] attaches
+		*	Les attaches de la sous-passe.
 		*\param[in] neededState
 		*	L'état voulu pour l'exécution de cette sous passe.
 		*\~english
@@ -36,13 +36,13 @@ namespace renderer
 		*	Constructor.
 		*\param[in] device
 		*	The logical connection to the GPU.
-		*\param[in] formats
-		*	The attachments pixels formats.
+		*\param[in] attaches
+		*	The attachments of the subpass.
 		*\param[in] neededState
 		*	The state wanted for this subpass execution.
 		*/
 		RenderSubpass( Device const & device
-			, std::vector< PixelFormat > const & formats
+			, RenderPassAttachmentArray const & attaches
 			, RenderSubpassState const & neededState );
 
 	public:

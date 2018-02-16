@@ -118,7 +118,7 @@ namespace renderer
 		*	The created pass.
 		*/
 		virtual RenderPassPtr createRenderPass( RenderPassAttachmentArray const & attaches
-			, RenderSubpassPtrArray const & subpasses
+			, RenderSubpassPtrArray && subpasses
 			, RenderPassState const & initialState
 			, RenderPassState const & finalState
 			, SampleCountFlag samplesCount = SampleCountFlag::e1 )const = 0;
@@ -126,8 +126,8 @@ namespace renderer
 		*\~french
 		*\brief
 		*	Crée une sous-passe de rendu.
-		*\param[in] formats
-		*	Les formats des attaches voulues pour la passe.
+		*\param[in] attaches
+		*	Les attaches de la sous-passe.
 		*\param[in] neededState
 		*	L'état voulu pour l'exécution de cette sous passe.
 		*\return
@@ -135,14 +135,14 @@ namespace renderer
 		*\~english
 		*\brief
 		*	Creates a render subpass.
-		*\param[in] formats
-		*	The attachments pixels formats.
+		*\param[in] attaches
+		*	The subpass attachments.
 		*\param[in] neededState
 		*	The state wanted for this subpass execution.
 		*\return
 		*	The created subpass.
 		*/
-		virtual RenderSubpassPtr createRenderSubpass( std::vector< PixelFormat > const & formats
+		virtual RenderSubpassPtr createRenderSubpass( RenderPassAttachmentArray const & attaches
 			, RenderSubpassState const & neededState )const = 0;
 		/**
 		*\~french

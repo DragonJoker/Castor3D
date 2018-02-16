@@ -34,18 +34,18 @@ namespace vk_renderer
 
 	RenderPass::RenderPass( Device const & device
 		, renderer::RenderPassAttachmentArray const & attaches
-		, renderer::RenderSubpassPtrArray const & subpasses
+		, renderer::RenderSubpassPtrArray && subpasses
 		, renderer::RenderPassState const & initialState
 		, renderer::RenderPassState const & finalState
 		, renderer::SampleCountFlag samplesCount )
 		: renderer::RenderPass{ device
 			, attaches
-			, subpasses
+			, std::move( subpasses )
 			, initialState
 			, finalState
 			, samplesCount }
 		, m_device{ device }
-		, m_subpasses{ doConvert( subpasses ) }
+		, m_subpasses{ doConvert( renderer::RenderPass::getSubpasses() ) }
 		, m_samplesCount{ samplesCount }
 		, m_initialState{ initialState }
 		, m_finalState{ finalState }
@@ -57,20 +57,18 @@ namespace vk_renderer
 
 		for ( auto const & attach : *this )
 		{
-			if ( renderer::isDepthStencilFormat( attach.pixelFormat )
-				|| renderer::isDepthFormat( attach.pixelFormat )
-				|| renderer::isStencilFormat( attach.pixelFormat ) )
+			if ( renderer::isDepthOrStencilFormat( attach.getFormat() ) )
 			{
 				attachments.push_back(
 				{
 					0u,                                             // flags
-					convert( attach.pixelFormat ),                  // format
+					convert( attach.getFormat() ),                  // format
 					convert( m_samplesCount ),                      // samples
-					attach.clear                                    // loadOp
+					attach.getClear()                               // loadOp
 						? VK_ATTACHMENT_LOAD_OP_CLEAR
 						: VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_STORE,                   // storeOp
-					attach.clear                                    // stencilLoadOp
+					attach.getClear()                               // stencilLoadOp
 						? VK_ATTACHMENT_LOAD_OP_CLEAR
 						: VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_STORE,                   // stencilStoreOp
@@ -83,9 +81,9 @@ namespace vk_renderer
 				attachments.push_back(
 				{
 					0u,                                             // flags
-					convert( attach.pixelFormat ),                  // format
+					convert( attach.getFormat() ),                  // format
 					convert( m_samplesCount ),                      // samples
-					attach.clear                                    // loadOp
+					attach.getClear()                               // loadOp
 						? VK_ATTACHMENT_LOAD_OP_CLEAR
 						: VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_STORE,                   // storeOp

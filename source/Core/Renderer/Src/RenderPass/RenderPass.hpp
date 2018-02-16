@@ -55,7 +55,7 @@ namespace renderer
 		*/
 		RenderPass( Device const & device
 			, RenderPassAttachmentArray const & attaches
-			, RenderSubpassPtrArray const & subpasses
+			, RenderSubpassPtrArray && subpasses
 			, RenderPassState const & initialState
 			, RenderPassState const & finalState
 			, SampleCountFlag samplesCount = SampleCountFlag::e1 );
@@ -134,9 +134,34 @@ namespace renderer
 		{
 			return m_attaches.size();
 		}
+		/**
+		*\~english
+		*\return
+		*	The attaches.
+		*\~french
+		*\return
+		*	Les attaches.
+		*/
+		inline RenderPassAttachmentArray const & getAttaches()const
+		{
+			return m_attaches;
+		}
+		/**
+		*\~english
+		*\return
+		*	The subpasses.
+		*\~french
+		*\return
+		*	Les sous-passes.
+		*/
+		inline RenderSubpassPtrArray const & getSubpasses()const
+		{
+			return m_subpasses;
+		}
 
 	private:
-		renderer::RenderPassAttachmentArray m_attaches;
+		RenderPassAttachmentArray m_attaches;
+		RenderSubpassPtrArray m_subpasses;
 	};
 }
 

@@ -218,5 +218,8 @@ namespace gl_renderer
 		mutable Pipeline const * m_currentPipeline{ nullptr };
 		mutable ComputePipeline const * m_currentComputePipeline{ nullptr };
 		mutable renderer::IndexType m_indexType{ renderer::IndexType::eUInt32 };
+		mutable uint32_t m_currentSubpass;
+		mutable renderer::RenderPass const * m_currentRenderPass;
+		mutable renderer::FrameBuffer const * m_currentFrameBuffer;
 	};
 }

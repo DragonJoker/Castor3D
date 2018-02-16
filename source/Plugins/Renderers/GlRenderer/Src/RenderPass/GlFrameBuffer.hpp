@@ -74,6 +74,19 @@ namespace gl_renderer
 			, renderer::PixelFormat format
 			, uint8_t * data )const noexcept;
 		/**
+		*\~english
+		*\brief
+		*	Sets the draw buffers.
+		*\param[in] attaches
+		*	The attaches.
+		*\~french
+		*\brief
+		*	Définit les tampons d'écriture.
+		*\param[in] attaches
+		*	Les attaches.
+		*/
+		void setDrawBuffers( renderer::RenderPassAttachmentArray const & attaches )const;
+		/**
 		*\return
 		*	Le Framebuffer OpenGL.
 		*/
@@ -111,7 +124,6 @@ namespace gl_renderer
 		struct Attachment
 		{
 			GlAttachmentPoint point;
-			GLuint index;
 			GLuint object;
 			GlAttachmentType type;
 		};

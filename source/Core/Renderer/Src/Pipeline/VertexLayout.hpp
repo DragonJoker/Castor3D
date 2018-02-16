@@ -228,6 +228,10 @@ namespace renderer
 			, uint32_t( sizeof( T ) )
 			, inputRate );
 	}
+	//!\~english	Helper macro to create a vertex layout attribute from a struct member.
+	//!\~french		Macro d'aide à la création d'un attribut de sommet à partir du membre d'une structure.
+#define createVertexAttribute( Layout, Struct, Member, Location )\
+	( Layout )->createAttribute< decltype( Struct::Member ) >( Location, offsetof( Struct, Member ) )
 }
 
 #endif

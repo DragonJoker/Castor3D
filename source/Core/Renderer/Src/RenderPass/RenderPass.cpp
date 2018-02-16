@@ -15,11 +15,12 @@ namespace renderer
 {
 	RenderPass::RenderPass( Device const & device
 		, RenderPassAttachmentArray const & attaches
-		, RenderSubpassPtrArray const & subpasses
+		, RenderSubpassPtrArray && subpasses
 		, RenderPassState const & initialState
 		, RenderPassState const & finalState
 		, SampleCountFlag samplesCount )
 		: m_attaches{ attaches }
+		, m_subpasses{ std::move( subpasses ) }
 	{
 	}
 }

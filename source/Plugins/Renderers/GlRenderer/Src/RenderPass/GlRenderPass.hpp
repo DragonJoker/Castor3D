@@ -4,7 +4,7 @@ See LICENSE file in root folder.
 */
 #pragma once
 
-#include "GlRendererPrerequisites.hpp"
+#include "GlRenderSubPass.hpp"
 
 #include <RenderPass/RenderPass.hpp>
 
@@ -36,7 +36,7 @@ namespace gl_renderer
 		*/
 		RenderPass( renderer::Device const & device
 			, renderer::RenderPassAttachmentArray const & attaches
-			, renderer::RenderSubpassPtrArray const & subpasses
+			, renderer::RenderSubpassPtrArray && subpasses
 			, renderer::RenderPassState const & initialState
 			, renderer::RenderPassState const & finalState
 			, renderer::SampleCountFlag samplesCount );
@@ -55,5 +55,13 @@ namespace gl_renderer
 		*/
 		renderer::FrameBufferPtr createFrameBuffer( renderer::UIVec2 const & dimensions
 			, renderer::FrameBufferAttachmentArray && textures )const override;
+
+		inline RenderSubpassCRefArray const & getSubpasses()const
+		{
+			return m_subpasses;
+		}
+
+	private:
+		RenderSubpassCRefArray m_subpasses;
 	};
 }

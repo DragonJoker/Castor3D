@@ -72,12 +72,17 @@ namespace gl_renderer
 	class PipelineLayout;
 	class QueryPool;
 	class RenderPass;
+	class RenderSubpass;
 	class ShaderProgram;
 	class Texture;
 	class TextureView;
 
 	using ContextPtr = std::unique_ptr< Context >;
 	using CommandPtr = std::unique_ptr< CommandBase >;
+
+	using RenderSubpassCRef = std::reference_wrapper< RenderSubpass const >;
+
+	using RenderSubpassCRefArray = std::vector< RenderSubpassCRef >;
 
 	using CommandArray = std::vector< CommandPtr >;
 }

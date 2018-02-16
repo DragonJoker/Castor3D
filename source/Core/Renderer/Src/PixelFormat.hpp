@@ -64,6 +64,28 @@ namespace renderer
 	/**
 	*\~french
 	*\brief
+	*	Dit si le renderer::PixelFormat donné est un format utilisable pour les tampons de profondeur et/ou stencil.
+	*\param[in] format
+	*	Le renderer::PixelFormat à tester.
+	*\return
+	*	\p true s'il l'est...
+	*\~english
+	*\brief
+	*	Tells if the given renderer::PixelFormat is usable in depth and/or stencil buffers.
+	*\param[in] format
+	*	The renderer::PixelFormat.
+	*\return
+	*	\p true if it is usable in depth and/or stencil buffers.
+	*/
+	inline bool isDepthOrStencilFormat( renderer::PixelFormat format )
+	{
+		return isDepthStencilFormat( format )
+			|| isStencilFormat( format )
+			|| isDepthFormat( format );
+	}
+	/**
+	*\~french
+	*\brief
 	*	Récupère le masque d'aspects correspondant au renderer::PixelFormat donné.
 	*\param[in] format
 	*	Le renderer::PixelFormat.

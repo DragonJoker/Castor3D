@@ -147,24 +147,24 @@ namespace vk_renderer
 	}
 
 	renderer::RenderPassPtr Device::createRenderPass( renderer::RenderPassAttachmentArray const & attaches
-		, renderer::RenderSubpassPtrArray const & subpasses
+		, renderer::RenderSubpassPtrArray && subpasses
 		, renderer::RenderPassState const & initialState
 		, renderer::RenderPassState const & finalState
 		, renderer::SampleCountFlag samplesCount )const
 	{
 		return std::make_unique< RenderPass >( *this
 			, attaches
-			, subpasses
+			, std::move( subpasses )
 			, initialState
 			, finalState
 			, samplesCount );
 	}
 
-	renderer::RenderSubpassPtr Device::createRenderSubpass( std::vector< renderer::PixelFormat > const & formats
+	renderer::RenderSubpassPtr Device::createRenderSubpass( renderer::RenderPassAttachmentArray const & attaches
 		, renderer::RenderSubpassState const & neededState )const
 	{
 		return std::make_unique< RenderSubpass >( *this
-			, formats
+			, attaches
 			, neededState );
 	}
 

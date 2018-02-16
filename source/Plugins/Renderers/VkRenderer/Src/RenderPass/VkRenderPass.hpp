@@ -58,7 +58,7 @@ namespace vk_renderer
 		*/
 		RenderPass( Device const & device
 			, renderer::RenderPassAttachmentArray const & attaches
-			, renderer::RenderSubpassPtrArray const & subpasses
+			, renderer::RenderSubpassPtrArray && subpasses
 			, renderer::RenderPassState const & initialState
 			, renderer::RenderPassState const & finalState
 			, renderer::SampleCountFlag samplesCount );

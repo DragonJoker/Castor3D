@@ -40,6 +40,7 @@ See LICENSE file in root folder.
 #include "Commands/GlEndQueryCommand.hpp"
 #include "Commands/GlEndRenderPassCommand.hpp"
 #include "Commands/GlImageMemoryBarrierCommand.hpp"
+#include "Commands/GlNextSubpassCommand.hpp"
 #include "Commands/GlPushConstantsCommand.hpp"
 #include "Commands/GlResetQueryPoolCommand.hpp"
 #include "Commands/GlScissorCommand.hpp"
@@ -95,14 +96,21 @@ namespace gl_renderer
 		, renderer::ClearValueArray const & clearValues
 		, renderer::SubpassContents contents )const
 	{
+		m_currentRenderPass = &renderPass;
+		m_currentFrameBuffer = &frameBuffer;
+		m_currentSubpass = 0u;
 		m_commands.emplace_back( std::make_unique< BeginRenderPassCommand >( renderPass
 			, frameBuffer
 			, clearValues
-			, contents ) );
+			, contents
+			, m_currentSubpass++ ) );
 	}
 
 	void CommandBuffer::nextSubpass( renderer::SubpassContents contents )const
 	{
+		m_commands.emplace_back( std::make_unique< NextSubpassCommand >( *m_currentRenderPass
+			, *m_currentFrameBuffer
+			, m_currentSubpass++ ) );
 	}
 
 	void CommandBuffer::endRenderPass()const

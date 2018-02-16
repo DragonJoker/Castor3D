@@ -6,6 +6,7 @@ See LICENSE file in root folder.
 
 #include "GlRendererPrerequisites.hpp"
 
+#include <RenderPass/RenderPassAttachment.hpp>
 #include <RenderPass/RenderSubpass.hpp>
 
 namespace gl_renderer
@@ -43,7 +44,15 @@ namespace gl_renderer
 		*	The state wanted for this subpass execution.
 		*/
 		RenderSubpass( renderer::Device const & device
-			, std::vector< renderer::PixelFormat > const & formats
+			, renderer::RenderPassAttachmentArray const & attaches
 			, renderer::RenderSubpassState const & neededState );
+
+		inline renderer::RenderPassAttachmentArray const & getAttaches()const
+		{
+			return m_attaches;
+		}
+
+	private:
+		renderer::RenderPassAttachmentArray m_attaches;
 	};
 }

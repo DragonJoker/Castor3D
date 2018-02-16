@@ -98,8 +98,7 @@ namespace vk_renderer
 		, m_image{ image }
 		, m_owner{ false }
 	{
-		if ( renderer::isDepthFormat( format )
-			|| renderer::isDepthStencilFormat( format ) )
+		if ( renderer::isDepthOrStencilFormat( format ) )
 		{
 			m_format = findSupportedFormat( m_device
 				, { format }
@@ -128,8 +127,7 @@ namespace vk_renderer
 		, m_device{ device }
 		, m_owner{ true }
 	{
-		if ( renderer::isDepthFormat( format )
-			|| renderer::isDepthStencilFormat( format ) )
+		if ( renderer::isDepthOrStencilFormat( format ) )
 		{
 			m_format = findSupportedFormat( m_device
 				, { format }
@@ -323,8 +321,7 @@ namespace vk_renderer
 		, renderer::ImageTiling tiling
 		, renderer::MemoryPropertyFlags memoryFlags )
 	{
-		if ( ( renderer::isDepthFormat( m_format )
-			|| renderer::isDepthStencilFormat( m_format ) )
+		if ( renderer::isDepthOrStencilFormat( m_format )
 			&& checkFlag( usageFlags, renderer::ImageUsageFlag::eDepthStencilAttachment ) )
 		{
 			m_format = findSupportedFormat( m_device

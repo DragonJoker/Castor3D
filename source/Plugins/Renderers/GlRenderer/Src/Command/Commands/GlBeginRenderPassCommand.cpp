@@ -6,6 +6,7 @@ See LICENSE file in root folder.
 
 #include "RenderPass/GlFrameBuffer.hpp"
 #include "RenderPass/GlRenderPass.hpp"
+#include "RenderPass/GlRenderSubpass.hpp"
 
 #include <RenderPass/ClearValue.hpp>
 
@@ -32,15 +33,15 @@ namespace gl_renderer
 				auto & depthStencil = clearValue.depthStencil();
 				auto stencil = GLint( depthStencil.stencil );
 
-				if ( renderer::isDepthStencilFormat( attach.pixelFormat ) )
+				if ( renderer::isDepthStencilFormat( attach.getFormat() ) )
 				{
 					glLogCall( gl::ClearBufferfi, GL_CLEAR_TARGET_DEPTH_STENCIL, 0u, depthStencil.depth, stencil );
 				}
-				else if ( renderer::isDepthFormat( attach.pixelFormat ) )
+				else if ( renderer::isDepthFormat( attach.getFormat() ) )
 				{
 					glLogCall( gl::ClearBufferfv, GL_CLEAR_TARGET_DEPTH, 0u, &depthStencil.depth );
 				}
-				else if ( renderer::isStencilFormat( attach.pixelFormat ) )
+				else if ( renderer::isStencilFormat( attach.getFormat() ) )
 				{
 					glLogCall( gl::ClearBufferiv, GL_CLEAR_TARGET_STENCIL, 0u, &stencil );
 				}
@@ -53,8 +54,10 @@ namespace gl_renderer
 	BeginRenderPassCommand::BeginRenderPassCommand( renderer::RenderPass const & renderPass
 		, renderer::FrameBuffer const & frameBuffer
 		, renderer::ClearValueArray const & clearValues
-		, renderer::SubpassContents contents )
+		, renderer::SubpassContents contents
+		, uint32_t index )
 		: m_renderPass{ static_cast< RenderPass const & >( renderPass ) }
+		, m_subpass{ static_cast< RenderSubpass const & >( *renderPass.getSubpasses()[index] ) }
 		, m_frameBuffer{ static_cast< FrameBuffer const & >( frameBuffer ) }
 		, m_clearValues{ clearValues }
 	{
@@ -72,6 +75,7 @@ namespace gl_renderer
 
 		if ( m_frameBuffer.getFrameBuffer() )
 		{
+			m_frameBuffer.setDrawBuffers( m_renderPass.getAttaches() );
 			auto it = m_frameBuffer.begin();
 
 			for ( size_t i = 0; i < m_frameBuffer.getSize(); ++i )
@@ -80,7 +84,7 @@ namespace gl_renderer
 				auto & attach = *it;
 				++it;
 
-				if ( attach.getAttachment().clear )
+				if ( attach.getAttachment().getClear() )
 				{
 					doClear( attach.getAttachment()
 						, clearValue
@@ -88,6 +92,8 @@ namespace gl_renderer
 						, depthStencilIndex );
 				}
 			}
+
+			m_frameBuffer.setDrawBuffers( m_subpass.getAttaches() );
 		}
 		else if ( !m_clearValues.empty() )
 		{
@@ -98,7 +104,7 @@ namespace gl_renderer
 				auto & clearValue = m_clearValues[i];
 				auto & attach = *it;
 
-				if ( attach.clear )
+				if ( attach.getClear() )
 				{
 					doClear( attach
 						, clearValue

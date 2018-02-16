@@ -29,9 +29,9 @@ namespace gl_renderer
 			GL_FRAMEBUFFER_STATUS_INCOMPLETE_LAYER_TARGETS = 0x8DA8,
 		};
 
-		GlAttachmentPoint getAttachmentPoint( TextureView const & texture )
+		GlAttachmentPoint getAttachmentPoint( renderer::PixelFormat format )
 		{
-			switch ( texture.getFormat() )
+			switch ( format )
 			{
 			case renderer::PixelFormat::eD16:
 			case renderer::PixelFormat::eD32F:
@@ -48,9 +48,14 @@ namespace gl_renderer
 			}
 		}
 
-		GlAttachmentType getAttachmentType( TextureView const & texture )
+		GlAttachmentPoint getAttachmentPoint( TextureView const & texture )
 		{
-			switch ( texture.getFormat() )
+			return getAttachmentPoint( texture.getFormat() );
+		}
+
+		GlAttachmentType getAttachmentType( renderer::PixelFormat format )
+		{
+			switch ( format )
 			{
 			case renderer::PixelFormat::eD16:
 			case renderer::PixelFormat::eD32F:
@@ -65,6 +70,11 @@ namespace gl_renderer
 			default:
 				return GL_ATTACHMENT_TYPE_COLOR;
 			}
+		}
+
+		GlAttachmentType getAttachmentType( TextureView const & texture )
+		{
+			return getAttachmentType( texture.getFormat() );
 		}
 
 		void doCheck( GLenum status )
@@ -141,14 +151,13 @@ namespace gl_renderer
 	{
 		glLogCall( gl::GenFramebuffers, 1, &m_frameBuffer );
 		glLogCall( gl::BindFramebuffer, GL_FRAMEBUFFER, m_frameBuffer );
-		renderer::UInt32Array colours;
 
 		for ( auto & attach : m_attachments )
 		{
+			auto index = attach.getAttachment().getIndex();
 			Attachment attachment
 			{
 				getAttachmentPoint( static_cast< TextureView const & >( attach.getView() ) ),
-				0u,
 				static_cast< TextureView const & >( attach.getView() ).getImage(),
 				getAttachmentType( static_cast< TextureView const & >( attach.getView() ) ),
 			};
@@ -157,18 +166,17 @@ namespace gl_renderer
 				|| attachment.point == GL_ATTACHMENT_POINT_DEPTH
 				|| attachment.point == GL_ATTACHMENT_POINT_STENCIL )
 			{
+				index = 0u;
 				m_depthStencilAttaches.push_back( attachment );
 			}
 			else
 			{
-				attachment.index = GLuint( m_colourAttaches.size() );
 				m_colourAttaches.push_back( attachment );
-				colours.push_back( attachment.point + attachment.index );
 			}
 
 			glLogCall( gl::FramebufferTexture2D
 				, GL_FRAMEBUFFER
-				, GlAttachmentPoint( attachment.point + attachment.index )
+				, GlAttachmentPoint( attachment.point + index )
 				, GL_TEXTURE_2D
 				, attachment.object
 				, attach.getView().getSubResourceRange().getBaseMipLevel() );
@@ -176,7 +184,6 @@ namespace gl_renderer
 		}
 
 		doCheck( gl::CheckFramebufferStatus( GL_FRAMEBUFFER ) );
-		glLogCall( gl::DrawBuffers, GLsizei( colours.size() ), colours.data() );
 		glLogCall( gl::BindFramebuffer, GL_FRAMEBUFFER, 0 );
 	}
 
@@ -208,5 +215,20 @@ namespace gl_renderer
 			, getType( format )
 			, data );
 		glLogCall( gl::BindFramebuffer, GL_FRAMEBUFFER, 0u );
+	}
+
+	void FrameBuffer::setDrawBuffers( renderer::RenderPassAttachmentArray const & attaches )const
+	{
+		renderer::UInt32Array colours;
+
+		for ( auto & attach : attaches )
+		{
+			if ( !renderer::isDepthOrStencilFormat( attach.getFormat() ) )
+			{
+				colours.push_back( getAttachmentPoint( attach.getFormat() ) + attach.getIndex() );
+			}
+		}
+
+		glLogCall( gl::DrawBuffers, GLsizei( colours.size() ), colours.data() );
 	}
 }

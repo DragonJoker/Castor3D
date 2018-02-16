@@ -12,7 +12,7 @@ namespace gl_renderer
 	*\brief
 	*	Démarre une passe de rendu en bindant son framebuffer, et en le vidant au besoin.
 	*/
-	class BeginRenderPassCommand
+	class NextSubpassCommand
 		: public CommandBase
 	{
 	public:
@@ -28,10 +28,8 @@ namespace gl_renderer
 		*\param[in] contents
 		*	Indique la manière dont les commandes de la première sous-passe sont fournies.
 		*/
-		BeginRenderPassCommand( renderer::RenderPass const & renderPass
+		NextSubpassCommand( renderer::RenderPass const & renderPass
 			, renderer::FrameBuffer const & frameBuffer
-			, renderer::ClearValueArray const & clearValues
-			, renderer::SubpassContents contents
 			, uint32_t index );
 
 		void apply()const override;
@@ -41,6 +39,5 @@ namespace gl_renderer
 		RenderPass const & m_renderPass;
 		RenderSubpass const & m_subpass;
 		FrameBuffer const & m_frameBuffer;
-		renderer::ClearValueArray m_clearValues;
 	};
 }

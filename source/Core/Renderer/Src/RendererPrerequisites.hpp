@@ -85,7 +85,6 @@ namespace renderer
 	struct ImageBlit;
 	struct PushConstant;
 	struct PushConstantRange;
-	struct RenderPassAttachment;
 
 	class Attribute;
 	class BackBuffer;
@@ -122,6 +121,7 @@ namespace renderer
 	class Renderer;
 	class RenderingResources;
 	class RenderPass;
+	class RenderPassAttachment;
 	class RenderPassState;
 	class RenderSubpass;
 	class RenderSubpassState;
