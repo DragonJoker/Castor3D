@@ -12,6 +12,33 @@ using namespace castor;
 
 namespace castor3d
 {
+	namespace
+	{
+		Matrix4x4d getProjectUnitMatrix( Viewport const & viewport )
+		{
+			// Uses double precision because the division operations may otherwise 
+			// significantly hurt prevision.
+			double const screenWidth( viewport.getWidth() );
+			double const screenHeight( viewport.getHeight() );
+
+			double r, l, t, b, n, f, x, y;
+
+			y = -viewport.getNear() * ( viewport.getFovY() / 2 ).tan();
+			x = y * ( screenWidth / screenHeight );
+
+			n = -viewport.getNear();
+			f = -viewport.getFar();
+
+			// Scale the pixel offset relative to the (non-square!) pixels in the unit frustum
+			r = x;
+			l = -x;
+			t = y;
+			b = -y;
+
+			return matrix::frustum( l, r, b, t, n, f );
+		}
+	}
+
 	String const SsaoConfigUbo::BufferSsaoConfig = cuT( "SsaoConfig" );
 	String const SsaoConfigUbo::NumSamples = cuT( "c3d_numSamples" );
 	String const SsaoConfigUbo::NumSpiralTurns = cuT( "c3d_numSpiralTurns" );
@@ -39,28 +66,18 @@ namespace castor3d
 	{
 	}
 
-	Matrix4x4d getProjectUnitMatrix( Viewport const & viewport )
+	void SsaoConfigUbo::initialise()
 	{
-		// Uses double precision because the division operations may otherwise 
-		// significantly hurt prevision.
-		double const screenWidth( viewport.getWidth() );
-		double const screenHeight( viewport.getHeight() );
+		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
+		m_ubo = renderer::makeUniformBuffer< Configuration >( device
+			, 1u
+			, renderer::BufferTarget::eTransferDst
+			, renderer::MemoryPropertyFlag::eHostVisible );
+	}
 
-		double r, l, t, b, n, f, x, y;
-
-		y = -viewport.getNear() * ( viewport.getFovY() / 2 ).tan();
-		x = y * ( screenWidth / screenHeight );
-
-		n = -viewport.getNear();
-		f = -viewport.getFar();
-
-		// Scale the pixel offset relative to the (non-square!) pixels in the unit frustum
-		r = x;
-		l = -x;
-		t = y;
-		b = -y;
-
-		return matrix::frustum( l, r, b, t, n, f );
+	void SsaoConfigUbo::cleanup()
+	{
+		m_ubo.reset();
 	}
 
 	void SsaoConfigUbo::update( SsaoConfig const & config

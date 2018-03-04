@@ -94,7 +94,7 @@ namespace GuiCommon
 			doAddBuffer( root, *binding.get().getOwner() );
 		}
 
-		if ( p_program->getObjectStatus( p_type ) != ShaderStatus::edontExist )
+		if ( p_program->getObjectStatus( p_type ) != ShaderStatus::eDontExist )
 		{
 			for ( auto variable : p_program->getUniforms( p_type ) )
 			{

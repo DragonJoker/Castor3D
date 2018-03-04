@@ -103,6 +103,20 @@ namespace castor3d
 		C3D_API ~SsaoConfigUbo();
 		/**
 		 *\~english
+		 *\brief		Initialises the UBO.
+		 *\~french
+		 *\brief		Initialise l'UBO.
+		 */
+		C3D_API void initialise();
+		/**
+		 *\~english
+		 *\brief		Cleanup function.
+		 *\~french
+		 *\brief		Fonction de nettoyage.
+		 */
+		C3D_API void cleanup();
+		/**
+		 *\~english
 		 *\brief		Updates the UBO content.
 		 *\param[in]	config	The SSAO configuration.
 		 *\param[in]	camera	The viewing camera.
@@ -156,8 +170,8 @@ namespace castor3d
 	};
 }
 
-#define UBO_SSAO_CONFIG( Writer )\
-	glsl::Ubo ssaoConfig{ Writer, castor3d::SsaoConfigUbo::BufferSsaoConfig, castor3d::SsaoConfigUbo::BindingPoint };\
+#define UBO_SSAO_CONFIG( Writer, Binding, Set )\
+	glsl::Ubo ssaoConfig{ Writer, castor3d::SsaoConfigUbo::BufferSsaoConfig, Binding, Set };\
 	auto c3d_numSamples = ssaoConfig.declMember< glsl::Int >( castor3d::SsaoConfigUbo::NumSamples );\
 	auto c3d_numSpiralTurns = ssaoConfig.declMember< glsl::Int >( castor3d::SsaoConfigUbo::NumSpiralTurns );\
 	auto c3d_projScale = ssaoConfig.declMember< glsl::Float >( castor3d::SsaoConfigUbo::ProjScale );\

@@ -1,21 +1,40 @@
 #include "LineariseDepthPass.hpp"
 
 #include "Engine.hpp"
-#include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/FrameBufferAttachment.hpp"
 #include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
-#include "State/BlendState.hpp"
-#include "State/DepthStencilState.hpp"
-#include "State/MultisampleState.hpp"
-#include "State/RasteriserState.hpp"
 #include "Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
+
+#include <Buffer/GeometryBuffers.hpp>
+#include <Buffer/VertexBuffer.hpp>
+#include <Command/CommandBuffer.hpp>
+#include <Command/Queue.hpp>
+#include <Core/Device.hpp>
+#include <Descriptor/DescriptorSet.hpp>
+#include <Descriptor/DescriptorSetBinding.hpp>
+#include <Descriptor/DescriptorSetLayout.hpp>
+#include <Descriptor/DescriptorSetLayoutBinding.hpp>
+#include <Descriptor/DescriptorSetPool.hpp>
+#include <Image/Texture.hpp>
+#include <Image/TextureView.hpp>
+#include <Pipeline/ColourBlendState.hpp>
+#include <Pipeline/DepthStencilState.hpp>
+#include <Pipeline/MultisampleState.hpp>
+#include <Pipeline/RasterisationState.hpp>
+#include <Pipeline/VertexLayout.hpp>
+#include <RenderPass/FrameBuffer.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <RenderPass/RenderPassAttachment.hpp>
+#include <RenderPass/RenderPassState.hpp>
+#include <RenderPass/RenderSubpass.hpp>
+#include <RenderPass/RenderSubpassState.hpp>
 
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
@@ -26,7 +45,6 @@
 #include <random>
 
 using namespace castor;
-using namespace castor3d;
 
 namespace castor3d
 {
@@ -39,9 +57,7 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			UBO_MATRIX( writer, 0u );
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ) );
-			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ) );
+			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
 
 			// Shader outputs
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
@@ -49,7 +65,7 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					gl_Position = c3d_projection * vec4( position, 0.0, 1.0 );
+					gl_Position = vec4( position, 0.0, 1.0 );
 				} );
 			return writer.finalise();
 		}
@@ -61,14 +77,12 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			UBO_MATRIX( writer, 0u );
-			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), MinTextureIndex, 0u );
-
-			auto c3d_clipInfo = writer.declUniform< Vec3 >( cuT( "c3d_clipInfo" ) );
+			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), 0u, 0u );
+			auto c3d_clipInfo = writer.declUniform< Vec3 >( cuT( "c3d_clipInfo" ), 1u );
 			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Float >( cuT( "pxl_fragColor" ) );
+			auto pxl_fragColor = writer.declOutput< Float >( cuT( "pxl_fragColor" ), 0u );
 
 			writer.implementFunction< Void >( cuT( "main" )
 				, [&]()
@@ -87,15 +101,12 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			UBO_MATRIX( writer, 0u );
-			auto index = MinTextureIndex;
-			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), MinTextureIndex, 0u );
-
-			auto c3d_previousLevel = writer.declUniform< Int >( cuT( "c3d_previousLevel" ) );
+			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), 0u, 0u );
+			auto c3d_previousLevel = writer.declUniform< Int >( cuT( "c3d_previousLevel" ), 1u );
 			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Float >( cuT( "pxl_fragColor" ) );
+			auto pxl_fragColor = writer.declOutput< Float >( cuT( "pxl_fragColor" ), 0u );
 
 			writer.implementFunction< Void >( cuT( "main" )
 				, [&]()
@@ -113,51 +124,56 @@ namespace castor3d
 			return writer.finalise();
 		}
 
-		ShaderProgramSPtr doGetLineariseProgram( Engine & engine )
+		renderer::ShaderProgram & doGetLineariseProgram( Engine & engine )
 		{
 			auto vtx = doGetVertexProgram( engine );
 			auto pxl = doGetLinearisePixelProgram( engine );
-			ShaderProgramSPtr program = engine.getShaderProgramCache().getNewProgram( false );
-			program->createObject( renderer::ShaderStageFlag::eVertex );
-			program->createObject( renderer::ShaderStageFlag::eFragment );
-			program->setSource( renderer::ShaderStageFlag::eVertex, vtx );
-			program->setSource( renderer::ShaderStageFlag::eFragment, pxl );
-			program->initialise();
+			auto & program = engine.getShaderProgramCache().getNewProgram( false );
+			program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
+			program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
 			return program;
 		}
 
-		ShaderProgramSPtr doGetMinifyProgram( Engine & engine )
+		renderer::ShaderProgram & doGetMinifyProgram( Engine & engine )
 		{
 			auto vtx = doGetVertexProgram( engine );
 			auto pxl = doGetMinifyPixelProgram( engine );
-			ShaderProgramSPtr program = engine.getShaderProgramCache().getNewProgram( false );
-			program->createObject( renderer::ShaderStageFlag::eVertex );
-			program->createObject( renderer::ShaderStageFlag::eFragment );
-			program->setSource( renderer::ShaderStageFlag::eVertex, vtx );
-			program->setSource( renderer::ShaderStageFlag::eFragment, pxl );
-			program->initialise();
+			auto & program = engine.getShaderProgramCache().getNewProgram( false );
+			program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
+			program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
 			return program;
 		}
 
 		RenderPipelineUPtr doCreatePipeline( Engine & engine
-			, ShaderProgram & program )
+			, renderer::ShaderProgram & program )
 		{
-			DepthStencilState dsstate;
-			dsstate.setDepthTest( false );
-			dsstate.setDepthMask( WritingMask::eZero );
-			RasteriserState rsstate;
-			rsstate.setCulledFaces( Culling::eNone );
-			return engine.getRenderSystem()->createRenderPipeline( std::move( dsstate )
+			renderer::DepthStencilState dsstate
+			{
+				0u,
+				false,
+				false
+			};
+			renderer::RasterisationState rsstate
+			{
+				0u,
+				false,
+				false,
+				renderer::PolygonMode::eFill,
+				renderer::CullModeFlag::eNone
+			};
+			auto bdstate = renderer::ColourBlendState::createDefault();
+			return std::make_unique< RenderPipeline >( *engine.getRenderSystem()
+				, std::move( dsstate )
 				, std::move( rsstate )
-				, BlendState{}
-				, MultisampleState{}
+				, std::move( bdstate )
+				, renderer::MultisampleState{}
 				, program
 				, PipelineFlags{} );
 		}
 
 		SamplerSPtr doCreateSampler( Engine & engine
 			, String const & name
-			, WrapMode mode )
+			, renderer::WrapMode mode )
 		{
 			SamplerSPtr sampler;
 
@@ -170,12 +186,113 @@ namespace castor3d
 				sampler = engine.getSamplerCache().add( name );
 				sampler->setMinFilter( renderer::Filter::eNearest );
 				sampler->setMagFilter( renderer::Filter::eNearest );
-				sampler->setMipFilter( renderer::Filter::eNearest );
-				sampler->setWrappingMode( TextureUVW::eU, mode );
-				sampler->setWrappingMode( TextureUVW::eV, mode );
+				sampler->setWrapS( mode );
+				sampler->setWrapT( mode );
 			}
 
 			return sampler;
+		}
+
+		TextureUnit doCreateTexture( Engine & engine, Size const & size )
+		{
+			auto & renderSystem = *engine.getRenderSystem();
+			auto sampler = doCreateSampler( engine, cuT( "LinearisePass_Result" ), renderer::WrapMode::eClampToEdge );
+			auto ssaoResult = std::make_shared< TextureLayout >( renderSystem
+				, renderer::TextureType::e2D
+				, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled
+				, renderer::MemoryPropertyFlag::eDeviceLocal
+				, PixelFormat::eL32F
+				, size
+				, LineariseDepthPass::MaxMipLevel + 1u );
+			TextureUnit result{ engine };
+			result.setTexture( ssaoResult );
+			result.setSampler( sampler );
+			result.initialise();
+			return result;
+		}
+
+		renderer::RenderPassPtr doCreateRenderPass( Engine & engine )
+		{
+			auto & renderSystem = *engine.getRenderSystem();
+			auto & device = *renderSystem.getCurrentDevice();
+			std::vector< renderer::PixelFormat > formats
+			{
+				PixelFormat::eL32F
+			};
+			renderer::RenderPassAttachmentArray attaches
+			{
+				renderer::RenderPassAttachment::createColourAttachment( 0u, PixelFormat::eL32F, true ),
+			};
+			renderer::ImageLayoutArray const initialLayouts
+			{
+				renderer::ImageLayout::eColourAttachmentOptimal,
+			};
+			renderer::ImageLayoutArray const finalLayouts
+			{
+				renderer::ImageLayout::eColourAttachmentOptimal,
+			};
+			renderer::RenderSubpassPtrArray subpasses;
+			subpasses.emplace_back( device.createRenderSubpass( attaches
+				, { renderer::PipelineStageFlag::eColourAttachmentOutput, renderer::AccessFlag::eColourAttachmentWrite } ) );
+			return device.createRenderPass( attaches
+				, std::move( subpasses )
+				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
+					, renderer::AccessFlag::eColourAttachmentWrite
+					, initialLayouts }
+				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
+					, renderer::AccessFlag::eColourAttachmentWrite
+					, finalLayouts } );
+		}
+
+		renderer::FrameBufferPtr doCreateFrameBuffer( renderer::RenderPass const & renderPass
+			, TextureUnit const & texture )
+		{
+			renderer::FrameBufferAttachmentArray attaches;
+			attaches.emplace_back( *( renderPass.begin() ), texture.getTexture()->getView() );
+			auto size = texture.getTexture()->getDimensions();
+			return renderPass.createFrameBuffer( renderer::UIVec2{ size.getWidth(), size.getHeight() }
+				, std::move( attaches ) );
+		}
+
+		renderer::VertexBufferPtr< NonTexturedQuad > doCreateVertexBuffer( Engine & engine )
+		{
+			auto & renderSystem = *engine.getRenderSystem();
+			auto & device = *renderSystem.getCurrentDevice();
+			auto result = renderer::makeVertexBuffer< NonTexturedQuad >( device
+				, 1u
+				, 0u
+				, renderer::MemoryPropertyFlag::eHostVisible );
+
+			if ( auto buffer = result->lock( 0u
+				, 1u
+				, renderer::MemoryMapFlag::eInvalidateRange | renderer::MemoryMapFlag::eWrite ) )
+			{
+				*buffer = NonTexturedQuad
+				{
+					{
+						{ Point2f{ -1.0, -1.0 } },
+						{ Point2f{ -1.0, +1.0 } },
+						{ Point2f{ +1.0, -1.0 } },
+						{ Point2f{ +1.0, +1.0 } },
+					}
+				};
+				result->unlock( 1u, true );
+			}
+
+			return result;
+		}
+
+		renderer::VertexLayoutPtr doCreateVertexLayout( Engine & engine )
+		{
+			auto & renderSystem = *engine.getRenderSystem();
+			auto & device = *renderSystem.getCurrentDevice();
+			auto result = renderer::makeLayout< NonTexturedQuad >( device
+				, 0u );
+			createVertexAttribute( result
+				, NonTexturedQuad::Vertex
+				, position
+				, 0u );
+			return result;
 		}
 	}
 
@@ -183,66 +300,32 @@ namespace castor3d
 
 	LineariseDepthPass::LineariseDepthPass( Engine & engine
 		, Size const & size
-		, MatrixUbo & matrixUbo
-		, SsaoConfigUbo & ssaoConfigUbo )
-		: m_engine{ engine }
-		, m_size{ size }
-		, m_matrixUbo{ matrixUbo }
-		, m_ssaoConfigUbo{ ssaoConfigUbo }
-		, m_result{ engine }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "SSAO" ), cuT( "Linearise depth" ) ) }
-	{
-		auto & renderSystem = *m_engine.getRenderSystem();
-		auto sampler = doCreateSampler( m_engine, cuT( "LinearisePass_Result" ), WrapMode::eClampToEdge );
-		auto ssaoResult = renderSystem.createTexture( TextureType::eTwoDimensions
-			, AccessType::eNone
-			, AccessType::eRead | AccessType::eWrite
-			, MaxMipLevel + 1u );
-		ssaoResult->setSource( PxBufferBase::create( m_size
-			, PixelFormat::eL32F ) );
-		m_result.setTexture( ssaoResult );
-		m_result.setSampler( sampler );
-		m_result.setIndex( MinTextureIndex );
-		m_result.initialise();
-
-		for ( uint32_t index = 0u; index <= MaxMipLevel; ++index )
-		{
-			auto & fbo = m_fbos[index];
-			fbo = renderSystem.createFrameBuffer();
-			fbo->initialise();
-
-			auto & resultAttach = m_resultAttaches[index];
-			resultAttach = fbo->createAttachment( ssaoResult, index );
-			fbo->bind();
-			fbo->attach( AttachmentPoint::eColour, 0u, resultAttach, ssaoResult->getType() );
-			fbo->setDrawBuffer( resultAttach );
-			ENSURE( fbo->isComplete() );
-			fbo->unbind();
-		}
-
-		doInitialiseLinearisePass();
-		doInitialiseMinifyPass();
-	}
-
-	LineariseDepthPass::~LineariseDepthPass()
-	{
-		doCleanupMinifyPass();
-		doCleanupLinearisePass();
-
-		for ( uint32_t index = 0u; index <= MaxMipLevel; ++index )
-		{
-			m_fbos[index]->cleanup();
-			m_fbos[index].reset();
-			m_resultAttaches[index].reset();
-		}
-
-		m_result.cleanup();
-	}
-
-	void LineariseDepthPass::linearise( TextureUnit const & depthBuffer
+		, SsaoConfigUbo & ssaoConfigUbo
+		, TextureUnit const & depthBuffer
 		, Viewport const & viewport )
+		: m_engine{ engine }
+		, m_ssaoConfigUbo{ ssaoConfigUbo }
+		, m_depthBuffer{ depthBuffer }
+		, m_size{ size }
+		, m_result{ doCreateTexture( m_engine, m_size ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "SSAO" ), cuT( "Linearise depth" ) ) }
+		, m_renderPass{ doCreateRenderPass( m_engine ) }
+		, m_vertexBuffer{ doCreateVertexBuffer( m_engine ) }
+		, m_vertexLayout{ doCreateVertexLayout( m_engine ) }
+		, m_geometryBuffers{ m_engine.getRenderSystem()->getCurrentDevice()->createGeometryBuffers( *m_vertexBuffer
+			, 0u
+			, *m_vertexLayout ) }
+		, m_sampler{ m_engine.getRenderSystem()->getCurrentDevice()->createSampler( renderer::WrapMode::eClampToEdge
+			, renderer::WrapMode::eClampToEdge
+			, renderer::WrapMode::eClampToEdge
+			, renderer::Filter::eNearest
+			, renderer::Filter::eNearest ) }
+		, m_commandBuffer{ m_engine.getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer() }
+		, m_clipInfo{ renderer::ShaderStageFlag::eFragment, { { 1u, 0u, renderer::AttributeFormat::eVec3f } } }
+		, m_linearisePushConstants{ renderer::ShaderStageFlag::eFragment, 0u, renderer::getSize( renderer::AttributeFormat::eVec3f ) }
+		, m_lineariseProgram{ doGetLineariseProgram( m_engine ) }
+		, m_minifyProgram{ doGetMinifyProgram( m_engine ) }
 	{
-		m_timer->start();
 		auto z_f = viewport.getFar();
 		auto z_n = viewport.getNear();
 		auto clipInfo = std::isinf( z_f )
@@ -251,64 +334,171 @@ namespace castor3d
 		// result = clipInfo[0] / ( clipInfo[1] * depth + clipInfo[2] );
 		// depth = 0 => result = z_n
 		// depth = 1 => result = z_f
-		m_clipInfo->setValue( clipInfo );
+		*m_clipInfo.getData() = clipInfo;
 
-		m_fbos[0]->bind( FrameBufferTarget::eDraw );
-		m_fbos[0]->clear( BufferComponent::eColour );
-		depthBuffer.getTexture()->bind( MinTextureIndex );
-		depthBuffer.getSampler()->bind( MinTextureIndex );
-		m_linearisePipeline->apply();
-		m_engine.getRenderSystem()->getCurrentContext()->renderTexture( m_size
-			, *depthBuffer.getTexture()
-			, *m_linearisePipeline
-			, m_matrixUbo );
-		m_fbos[0]->unbind();
+		doInitialiseLinearisePass();
+		doInitialiseMinifyPass();
+		doPrepareFrame();
+	}
 
-		for ( auto index = 1u; index <= MaxMipLevel; ++index )
-		{
-			m_previousLevel->setValue( index - 1 );
-			m_fbos[index]->bind( FrameBufferTarget::eDraw );
-			m_fbos[index]->clear( BufferComponent::eColour );
-			m_minifyPipeline->apply();
-			m_engine.getRenderSystem()->getCurrentContext()->renderTexture( m_size
-				, *m_result.getTexture()
-				, *m_minifyPipeline
-				, m_matrixUbo );
-			m_fbos[index]->unbind();
-		}
+	LineariseDepthPass::~LineariseDepthPass()
+	{
+		doCleanupMinifyPass();
+		doCleanupLinearisePass();
+		m_renderPass.reset();
+		m_timer.reset();
+		m_result.cleanup();
+	}
 
+	void LineariseDepthPass::linearise()
+	{
+		m_timer->start();
+		auto & renderSystem = *m_engine.getRenderSystem();
+		auto & device = *renderSystem.getCurrentDevice();
+		device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
 		m_timer->stop();
 	}
 
 	void LineariseDepthPass::doInitialiseLinearisePass()
 	{
-		m_lineariseProgram = doGetLineariseProgram( m_engine );
-		m_clipInfo = m_lineariseProgram->findUniform< UniformType::eVec3f >( cuT( "c3d_clipInfo" ), renderer::ShaderStageFlag::eFragment );
-		m_linearisePipeline = doCreatePipeline( m_engine, *m_lineariseProgram );
-		m_linearisePipeline->addUniformBuffer( m_matrixUbo.getUbo() );
+		auto size = m_result.getTexture()->getDimensions();
+		renderer::FrameBufferAttachmentArray attaches;
+		attaches.emplace_back( *( m_renderPass->begin() ), m_result.getTexture()->getView() );
+		m_lineariseFrameBuffer = m_renderPass->createFrameBuffer( renderer::UIVec2{ size[0], size[1] }
+			, std::move( attaches ) );
+		auto & renderSystem = *m_engine.getRenderSystem();
+		auto & device = *renderSystem.getCurrentDevice();
+		renderer::DescriptorSetLayoutBindingArray bindings
+		{
+			{ 0u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment }
+		};
+		m_lineariseDescriptorLayout = device.createDescriptorSetLayout( std::move( bindings ) );
+		m_lineariseDescriptorPool = m_lineariseDescriptorLayout->createPool( 1u );
+		m_lineariseDescriptor = m_lineariseDescriptorPool->createDescriptorSet();
+		m_lineariseDescriptor->createBinding( m_lineariseDescriptorLayout->getBinding( 0u )
+			, m_result.getTexture()->getView()
+			, *m_sampler );
+		m_linearisePipeline = doCreatePipeline( m_engine, m_lineariseProgram );
+		m_linearisePipeline->setDescriptorSetLayouts( { *m_lineariseDescriptorLayout } );
+		m_linearisePipeline->setPushConstantRanges( { m_linearisePushConstants } );
+		m_linearisePipeline->setVertexLayouts( { *m_vertexLayout } );
+		m_linearisePipeline->setViewport( { size[0], size[1], 0, 0 } );
+		m_linearisePipeline->setScissor( { 0, 0, size[0], size[1] } );
+		m_linearisePipeline->initialise( *m_renderPass, renderer::PrimitiveTopology::eTriangleStrip );
 	}
 
 	void LineariseDepthPass::doInitialiseMinifyPass()
 	{
-		m_minifyProgram = doGetMinifyProgram( m_engine );
-		m_previousLevel = m_minifyProgram->findUniform< UniformType::eInt >( cuT( "c3d_previousLevel" ), renderer::ShaderStageFlag::eFragment );
-		m_minifyPipeline = doCreatePipeline( m_engine, *m_minifyProgram );
-		m_minifyPipeline->addUniformBuffer( m_matrixUbo.getUbo() );
+		auto & renderSystem = *m_engine.getRenderSystem();
+		auto & device = *renderSystem.getCurrentDevice();
+		auto size = m_result.getTexture()->getDimensions();
+		renderer::DescriptorSetLayoutBindingArray bindings
+		{
+			{ 0u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment }
+		};
+		m_minifyDescriptorLayout = device.createDescriptorSetLayout( std::move( bindings ) );
+		m_minifyDescriptorPool = m_minifyDescriptorLayout->createPool( MaxMipLevel );
+		uint32_t index = 1u;
+
+		for ( auto & pipeline : m_minifyPipelines )
+		{
+			pipeline.view = m_result.getTexture()->getTexture().createView( renderer::TextureType::e2D
+				, m_result.getTexture()->getPixelFormat()
+				, index );
+			pipeline.descriptor = m_minifyDescriptorPool->createDescriptorSet();
+			pipeline.descriptor->createBinding( m_minifyDescriptorLayout->getBinding( 0u )
+				, *pipeline.view
+				, *m_sampler );
+			renderer::FrameBufferAttachmentArray attaches;
+			attaches.emplace_back( *( m_renderPass->begin() ), m_result.getTexture()->getView() );
+			pipeline.frameBuffer = m_renderPass->createFrameBuffer( renderer::UIVec2{ size[0], size[1] }
+				, std::move( attaches ) );
+			pipeline.previousLevel = std::make_unique< renderer::PushConstantsBuffer< int > >( renderer::ShaderStageFlag::eFragment
+				, renderer::PushConstantArray{ { 1u, 0u, renderer::AttributeFormat::eInt } } );
+			pipeline.pushConstants = { renderer::ShaderStageFlag::eFragment, 0u, renderer::getSize( renderer::AttributeFormat::eInt ) };
+			pipeline.pipeline = doCreatePipeline( m_engine, m_minifyProgram );
+			pipeline.pipeline->setDescriptorSetLayouts( { *m_minifyDescriptorLayout } );
+			pipeline.pipeline->setPushConstantRanges( { pipeline.pushConstants } );
+			pipeline.pipeline->setVertexLayouts( { *m_vertexLayout } );
+			pipeline.pipeline->setViewport( { size[0], size[1], 0, 0 } );
+			pipeline.pipeline->setScissor( { 0, 0, size[0], size[1] } );
+			pipeline.pipeline->initialise( *m_renderPass, renderer::PrimitiveTopology::eTriangleStrip );
+			++index;
+		}
 	}
 
 	void LineariseDepthPass::doCleanupLinearisePass()
 	{
 		m_linearisePipeline->cleanup();
 		m_linearisePipeline.reset();
-		m_clipInfo.reset();
-		m_lineariseProgram.reset();
+		m_lineariseDescriptor.reset();
+		m_lineariseDescriptorPool.reset();
+		m_lineariseDescriptorLayout.reset();
+		m_lineariseFrameBuffer.reset();
 	}
 
 	void LineariseDepthPass::doCleanupMinifyPass()
 	{
-		m_minifyPipeline->cleanup();
-		m_minifyPipeline.reset();
-		m_previousLevel.reset();
-		m_minifyProgram.reset();
+		for ( auto & pipeline : m_minifyPipelines )
+		{
+			pipeline.pipeline->cleanup();
+			pipeline.pipeline.reset();
+			pipeline.previousLevel.reset();
+			pipeline.frameBuffer.reset();
+			pipeline.descriptor.reset();
+			pipeline.view.reset();
+		}
+
+		m_minifyDescriptorPool.reset();
+		m_minifyDescriptorLayout.reset();
+	}
+
+	void LineariseDepthPass::doPrepareFrame()
+	{
+		static RgbaColour const colour{ 0.0, 0.0, 0.0, 0.0 };
+
+		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
+		{
+			m_commandBuffer->resetQueryPool( m_timer->getQuery(), 0u, 2u );
+			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+				, m_timer->getQuery()
+				, 0u );
+
+			// Linearisation pass.
+			m_commandBuffer->beginRenderPass( *m_renderPass
+				, *m_lineariseFrameBuffer
+				, { colour }
+				, renderer::SubpassContents::eInline );
+			m_commandBuffer->bindPipeline( m_linearisePipeline->getPipeline() );
+			m_commandBuffer->bindDescriptorSet( *m_lineariseDescriptor
+				, m_linearisePipeline->getPipelineLayout() );
+			m_commandBuffer->pushConstants( m_linearisePipeline->getPipelineLayout()
+				, m_clipInfo );
+			m_commandBuffer->bindGeometryBuffers( *m_geometryBuffers );
+			m_commandBuffer->draw( 4u );
+			m_commandBuffer->endRenderPass();
+
+			// Minification passes.
+			for ( auto & pipeline : m_minifyPipelines )
+			{
+				m_commandBuffer->beginRenderPass( *m_renderPass
+					, *pipeline.frameBuffer
+					, { colour }
+					, renderer::SubpassContents::eInline );
+				m_commandBuffer->bindPipeline( pipeline.pipeline->getPipeline() );
+				m_commandBuffer->bindDescriptorSet( *pipeline.descriptor
+					, pipeline.pipeline->getPipelineLayout() );
+				m_commandBuffer->pushConstants( pipeline.pipeline->getPipelineLayout()
+					, *pipeline.previousLevel );
+				m_commandBuffer->bindGeometryBuffers( *m_geometryBuffers );
+				m_commandBuffer->draw( 4u );
+				m_commandBuffer->endRenderPass();
+			}
+
+			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
+				, m_timer->getQuery()
+				, 1u );
+			m_commandBuffer->end();
+		}
 	}
 }

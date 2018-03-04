@@ -24,7 +24,7 @@ namespace castor3d
 		, renderer::RasterisationState && rsState
 		, renderer::ColourBlendState && blState
 		, renderer::MultisampleState && msState
-		, renderer::ShaderProgram & program
+		, renderer::ShaderProgram const & program
 		, PipelineFlags const & flags )
 		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_dsState{ std::move( dsState ) }
@@ -59,6 +59,17 @@ namespace castor3d
 			, m_blState );
 		m_pipeline->depthStencilState( m_dsState );
 		m_pipeline->multisampleState( m_msState );
+
+		if ( m_viewport )
+		{
+			m_pipeline->viewport( *m_viewport );
+		}
+
+		if ( m_scissor )
+		{
+			m_pipeline->scissor( *m_scissor );
+		}
+
 		m_pipeline->finish();
 	}
 }

@@ -68,11 +68,11 @@ namespace castor3d
 			, renderer::TextureType type
 			, uint32_t layerCount )
 		{
-			std::vector< TextureViewUPtr > result{ getSubviewCount( type, 1 ) + 1u };
+			std::vector< TextureViewUPtr > result{ getSubviewCount( type, 1u ) + 1u };
 			result[0] = std::make_unique< TextureView >( layout
 				, type
 				, 0u
-				, ~( 0u )
+				, layout.getMipmapCount()
 				, 0u
 				, ~( 0u )
 				, 0u );
@@ -189,6 +189,44 @@ namespace castor3d
 		, m_size{ size[0], size[1] }
 		, m_format{ format }
 		, m_depth{ size[2] }
+		, m_views{ createSubviews( *this, type, 1u ) }
+		, m_defaultView{ *m_views[0] }
+	{
+		REQUIRE( m_type == renderer::TextureType::e3D
+			|| m_type == renderer::TextureType::e1DArray
+			|| m_type == renderer::TextureType::e2DArray
+			|| m_type == renderer::TextureType::eCubeArray );
+		auto viewType = getSubviewType( type );
+
+		if ( viewType != type )
+		{
+			for ( uint32_t i = 1u; i < m_views.size(); ++i )
+			{
+				m_views[i] = std::make_unique< TextureView >( *this
+					, viewType
+					, 0u
+					, ~( 0u )
+					, i
+					, 1u
+					, i );
+			}
+		}
+	}
+
+	TextureLayout::TextureLayout( RenderSystem & renderSystem
+		, renderer::TextureType type
+		, renderer::ImageUsageFlags usage
+		, renderer::MemoryPropertyFlags memoryProperties
+		, castor::PixelFormat format
+		, castor::Size const & size
+		, uint32_t mipmapCount )
+		: OwnedBy< RenderSystem >{ renderSystem }
+		, m_type{ type }
+		, m_usage{ usage }
+		, m_properties{ memoryProperties }
+		, m_size{ size[0], size[1] }
+		, m_format{ format }
+		, m_mipmapCount{ mipmapCount }
 		, m_views{ createSubviews( *this, type, 1u ) }
 		, m_defaultView{ *m_views[0] }
 	{

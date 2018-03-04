@@ -1,6 +1,7 @@
 #include "RenderQuad.hpp"
 
 #include "Engine.hpp"
+#include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Texture/Sampler.hpp"
 
@@ -15,6 +16,7 @@
 #include <Descriptor/DescriptorSetPool.hpp>
 #include <Pipeline/DepthStencilState.hpp>
 #include <Pipeline/InputAssemblyState.hpp>
+#include <Pipeline/MultisampleState.hpp>
 #include <Pipeline/Pipeline.hpp>
 #include <Pipeline/PipelineLayout.hpp>
 #include <Pipeline/RasterisationState.hpp>
@@ -28,6 +30,36 @@ using namespace castor;
 
 namespace castor3d
 {
+	namespace
+	{
+		SamplerSPtr doCreateSampler( RenderSystem & renderSystem, bool nearest )
+		{
+			String const name = nearest
+				? String{ cuT( "RenderQuad_Nearest" ) }
+			: String{ cuT( "RenderQuad_Linear" ) };
+			renderer::Filter const filter = nearest
+				? renderer::Filter::eNearest
+				: renderer::Filter::eLinear;
+			auto & cache = renderSystem.getEngine()->getSamplerCache();
+			SamplerSPtr sampler;
+
+			if ( cache.has( name ) )
+			{
+				sampler = cache.find( name );
+			}
+			else
+			{
+				sampler = cache.add( name );
+				sampler->setMinFilter( filter );
+				sampler->setMagFilter( filter );
+				sampler->setWrapS( renderer::WrapMode::eClampToEdge );
+				sampler->setWrapT( renderer::WrapMode::eClampToEdge );
+			}
+
+			return sampler;
+		}
+	}
+
 	RenderQuad::RenderQuad( RenderSystem & renderSystem
 		, bool nearest
 		, bool invertU )
@@ -41,27 +73,15 @@ namespace castor3d
 				{ Point2f{ +1.0, +1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), 1.0 } },
 			}
 		}
+		, m_sampler{ doCreateSampler( m_renderSystem, nearest ) }
 	{
-		// Initialise the sampler.
-		String const name = nearest
-			? String{ cuT( "RenderQuad_Nearest" ) }
-			: String{ cuT( "RenderQuad_Linear" ) };
-		renderer::Filter const filter = nearest
-			? renderer::Filter::eNearest
-			: renderer::Filter::eLinear;
-		auto & cache = renderSystem.getEngine()->getSamplerCache();
+	}
 
-		if ( cache.has( name ) )
+	RenderQuad::~RenderQuad()
+	{
+		if ( m_pipeline )
 		{
-			m_sampler = cache.find( name );
-		}
-		else
-		{
-			m_sampler = cache.add( name );
-			m_sampler->setMinFilter( filter );
-			m_sampler->setMagFilter( filter );
-			m_sampler->setWrapS( renderer::WrapMode::eClampToEdge );
-			m_sampler->setWrapT( renderer::WrapMode::eClampToEdge );
+			m_pipeline->cleanup();
 		}
 	}
 
@@ -70,7 +90,8 @@ namespace castor3d
 		, renderer::ShaderProgram const & program
 		, renderer::TextureView const & view
 		, renderer::RenderPass const & renderPass
-		, std::vector< renderer::DescriptorSetLayoutBinding > bindings )
+		, renderer::DescriptorSetLayoutBindingArray bindings
+		, renderer::PushConstantRangeCRefArray const & pushRanges )
 	{
 		auto & device = *m_renderSystem.getCurrentDevice();
 		// Initialise the vertex buffer.
@@ -79,10 +100,18 @@ namespace castor3d
 			, 0u
 			, renderer::MemoryPropertyFlag::eHostVisible );
 
+		if ( auto buffer = m_vertexBuffer->lock( 0u
+			, 1u
+			, renderer::MemoryMapFlag::eInvalidateRange | renderer::MemoryMapFlag::eWrite ) )
+		{
+			*buffer = m_vertexData;
+			m_vertexBuffer->unlock( 1u, true );
+		}
+
 		// Initialise the vertex layout.
 		m_vertexLayout = device.createVertexLayout( 0u, sizeof( TexturedQuad ) );
-		m_vertexLayout->createAttribute< Point2f >( 0u, offsetof( TexturedQuad::Vertex, position ) );
-		m_vertexLayout->createAttribute< Point2f >( 0u, offsetof( TexturedQuad::Vertex, texture ) );
+		createVertexAttribute( m_vertexLayout, TexturedQuad::Vertex, position, 0u );
+		createVertexAttribute( m_vertexLayout, TexturedQuad::Vertex, texture, 1u );
 
 		// Initialise the geometry buffers.
 		m_geometryBuffers = device.createGeometryBuffers( *m_vertexBuffer
@@ -103,27 +132,32 @@ namespace castor3d
 		m_descriptorSet->update();
 
 		// Initialise the pipeline.
-		m_pipelineLayout = device.createPipelineLayout( *m_descriptorLayout );
-		m_pipeline = m_pipelineLayout->createPipeline( program
-			, { *m_vertexLayout }
-			, renderPass
-			, { renderer::PrimitiveTopology::eTriangleStrip } );
-		m_pipeline->depthStencilState( renderer::DepthStencilState{ 0u, false, false } );
-		m_pipeline->viewport( renderer::Viewport
+		auto bdState = renderer::ColourBlendState::createDefault();
+		m_pipeline = std::make_unique< RenderPipeline >( m_renderSystem
+			, renderer::DepthStencilState{ 0u, false, false }
+			, renderer::RasterisationState{}
+			, std::move( bdState )
+			, renderer::MultisampleState{}
+			, program
+			, PipelineFlags{} );
+		m_pipeline->setPushConstantRanges( pushRanges );
+		m_pipeline->setDescriptorSetLayouts( { *m_descriptorLayout } );
+		m_pipeline->setVertexLayouts( { *m_vertexLayout } );
+		m_pipeline->setViewport( renderer::Viewport
 		{
 			size.getWidth(),
 			size.getHeight(),
 			position.x(),
 			position.y(),
 		} );
-		m_pipeline->scissor( renderer::Scissor
+		m_pipeline->setScissor( renderer::Scissor
 		{
 			position.x(),
 			position.y(),
 			size.getWidth(),
 			size.getHeight(),
 		} );
-		m_pipeline->finish();
+		m_pipeline->initialise( renderPass, renderer::PrimitiveTopology::eTriangleStrip );
 	}
 
 	void RenderQuad::prepareFrame()
@@ -135,14 +169,19 @@ namespace castor3d
 
 	void RenderQuad::registerFrame( renderer::CommandBuffer & commandBuffer )
 	{
-		commandBuffer.bindPipeline( *m_pipeline );
+		commandBuffer.bindPipeline( m_pipeline->getPipeline() );
 		commandBuffer.bindGeometryBuffers( *m_geometryBuffers );
-		commandBuffer.bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
-		commandBuffer.draw( 4u, 1u, 0u, 0u );
+		commandBuffer.bindDescriptorSet( *m_descriptorSet, m_pipeline->getPipelineLayout() );
+		doRegisterFrame( commandBuffer );
+		commandBuffer.draw( 4u );
 	}
 
 	void RenderQuad::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
 		, renderer::DescriptorSet & descriptorSet )
+	{
+	}
+
+	void RenderQuad::doRegisterFrame( renderer::CommandBuffer & commandBuffer )
 	{
 	}
 }

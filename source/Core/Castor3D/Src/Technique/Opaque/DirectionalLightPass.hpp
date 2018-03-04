@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_DeferredDirectionalLightPass_H___
@@ -68,12 +68,17 @@ namespace castor3d
 			void doBind( Light const & light )override;
 
 		private:
-			//!\~english	The variable containing the light direction.
-			//!\~french		La variable contenant la direction de la lumière.
-			PushUniform3fSPtr m_lightDirection;
-			//!\~english	The variable containing the light space transformation matrix.
-			//!\~french		La variable contenant la matrice de transformation de la lumière.
-			PushUniform4x4fSPtr m_lightTransform;
+			struct Config
+			{
+				LightPass::Program::Config base;
+				//!\~english	The variable containing the light direction.
+				//!\~french		La variable contenant la direction de la lumière.
+				renderer::Vec3 direction;
+				//!\~english	The variable containing the light space transformation matrix.
+				//!\~french		La variable contenant la matrice de transformation de la lumière.
+				renderer::Mat4 transform;
+			};
+			renderer::UniformBufferPtr< Config > m_ubo;
 		};
 
 	public:
@@ -94,8 +99,8 @@ namespace castor3d
 		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
 		DirectionalLightPass( Engine & engine
-			, FrameBuffer & frameBuffer
-			, FrameBufferAttachment & depthAttach
+			, renderer::FrameBuffer & frameBuffer
+			, renderer::TextureView & depthView
 			, GpInfoUbo & gpInfoUbo
 			, bool hasShadows );
 		/**
@@ -152,8 +157,6 @@ namespace castor3d
 			, glsl::Shader const & pxl )const override;
 
 	private:
-		//!\~english	The viewport used when rendering is done.
-		//!\~french		Le viewport utilisé pour rendre la cible sur sa cible (fenêtre ou texture).
 		Viewport m_viewport;
 	};
 }

@@ -64,18 +64,29 @@ namespace castor3d
 			void doBind( Light const & light )override;
 
 		private:
-			//!\~english	The variable containing the light direction.
-			//!\~french		La variable contenant la direction de la lumière.
-			PushUniform3fSPtr m_lightDirection;
-			//!\~english	The variable containing the light exponent.
-			//!\~french		La variable contenant l'exposant de la lumière.
-			PushUniform1fSPtr m_lightExponent;
-			//!\~english	The variable containing the light cut off.
-			//!\~french		La variable contenant l'angle du cône de la lumière.
-			PushUniform1fSPtr m_lightCutOff;
-			//!\~english	The variable containing the light space transformation matrix.
-			//!\~french		La variable contenant la matrice de transformation de la lumière.
-			PushUniform4x4fSPtr m_lightTransform;
+			struct Config
+			{
+				LightPass::Program::Config m_base;
+				//!\~english	The variable containing the light position.
+				//!\~french		La variable contenant la position de la lumière.
+				renderer::Vec3 position;
+				//!\~english	The variable containing the light attenuation.
+				//!\~french		La variable contenant l'atténuation de la lumière.
+				renderer::Vec3 attenuation;
+				//!\~english	The variable containing the light direction.
+				//!\~french		La variable contenant la direction de la lumière.
+				renderer::Vec3 direction;
+				//!\~english	The variable containing the light exponent.
+				//!\~french		La variable contenant l'exposant de la lumière.
+				float exponent;
+				//!\~english	The variable containing the light cut off.
+				//!\~french		La variable contenant l'angle du cône de la lumière.
+				float cutOff;
+				//!\~english	The variable containing the light space transformation matrix.
+				//!\~french		La variable contenant la matrice de transformation de la lumière.
+				renderer::Mat4 transform;
+			};
+			renderer::UniformBufferPtr< Config > m_ubo;
 		};
 
 	public:

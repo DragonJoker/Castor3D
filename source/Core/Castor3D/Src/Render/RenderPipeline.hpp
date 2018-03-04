@@ -10,6 +10,8 @@ See LICENSE file in root folder
 #include <Pipeline/DepthStencilState.hpp>
 #include <Pipeline/MultisampleState.hpp>
 #include <Pipeline/RasterisationState.hpp>
+#include <Pipeline/Scissor.hpp>
+#include <Pipeline/Viewport.hpp>
 
 #include <Design/OwnedBy.hpp>
 
@@ -71,7 +73,7 @@ namespace castor3d
 			, renderer::RasterisationState && rsState
 			, renderer::ColourBlendState && blState
 			, renderer::MultisampleState && msState
-			, renderer::ShaderProgram & program
+			, renderer::ShaderProgram const & program
 			, PipelineFlags const & flags );
 		/**
 		*\~english
@@ -139,6 +141,18 @@ namespace castor3d
 			REQUIRE( !m_pipeline );
 			m_pushConstantRanges = pushConstantRanges;
 		}
+
+		inline void setViewport( renderer::Viewport const & viewport )
+		{
+			REQUIRE( !m_pipeline );
+			m_viewport = std::make_unique< renderer::Viewport >( viewport );
+		}
+
+		inline void setScissor( renderer::Scissor const & scissor )
+		{
+			REQUIRE( !m_pipeline );
+			m_scissor = std::make_unique< renderer::Scissor >( scissor );
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -172,11 +186,13 @@ namespace castor3d
 		renderer::RasterisationState m_rsState;
 		renderer::ColourBlendState m_blState;
 		renderer::MultisampleState m_msState;
-		renderer::ShaderProgram & m_program;
+		renderer::ShaderProgram const & m_program;
 		PipelineFlags m_flags;
 		renderer::VertexLayoutCRefArray m_vertexLayouts;
 		renderer::DescriptorSetLayoutCRefArray m_descriptorLayouts;
 		renderer::PushConstantRangeCRefArray m_pushConstantRanges;
+		std::unique_ptr< renderer::Viewport > m_viewport;
+		std::unique_ptr< renderer::Scissor > m_scissor;
 		renderer::PipelineLayoutPtr m_pipelineLayout;
 		renderer::PipelinePtr m_pipeline;
 	};

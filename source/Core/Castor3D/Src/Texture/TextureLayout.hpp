@@ -94,6 +94,33 @@ namespace castor3d
 		 *\param[in]	gpuAccess		The required GPU access (combination of AccessType).
 		 *\param[in]	format			The texture format.
 		 *\param[in]	size			The texture dimensions.
+		 *\param[in]	mipmapCount		The mipmap count for the texture.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	type			Le type de texture.
+		 *\param[in]	renderSystem	Le render system.
+		 *\param[in]	cpuAccess		Les accès requis pour le CPU (combinaison de AccessType).
+		 *\param[in]	gpuAccess		Les accès requis pour le GPU (combinaison de AccessType).
+		 *\param[in]	format			Le format de la texture.
+		 *\param[in]	size			Les dimensions de la texture.
+		 *\param[in]	mipmapCount		Le nombre de mipmaps de la texture.
+		 */
+		C3D_API TextureLayout( RenderSystem & renderSystem
+			, renderer::TextureType type
+			, renderer::ImageUsageFlags usage
+			, renderer::MemoryPropertyFlags memoryProperties
+			, castor::PixelFormat format
+			, castor::Size const & size
+			, uint32_t mipmapCount );
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	type			The texture type.
+		 *\param[in]	renderSystem	The render system.
+		 *\param[in]	cpuAccess		The required CPU access (combination of AccessType).
+		 *\param[in]	gpuAccess		The required GPU access (combination of AccessType).
+		 *\param[in]	format			The texture format.
+		 *\param[in]	size			The texture dimensions.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	type			Le type de texture.

@@ -29,24 +29,29 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine			The engine.
-		 *\param[in]	size			The render area dimensions.
-		 *\param[in]	config			The SSAO configuration.
-		 *\param[in]	matrixUbo		The matrices UBO.
-		 *\param[in]	ssaoConfigUbo	The SSAO configuration UBO.
+		 *\param[in]	engine					The engine.
+		 *\param[in]	size					The render area dimensions.
+		 *\param[in]	config					The SSAO configuration.
+		 *\param[in]	matrixUbo				The matrices UBO.
+		 *\param[in]	ssaoConfigUbo			The SSAO configuration UBO.
+		 *\param[in]	linearisedDepthBuffer	The linearised depth buffer.
+		 *\param[in]	normals					The normals buffer.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine			Le moteur.
-		 *\param[in]	size			Les dimensions de la zone de rendu.
-		 *\param[in]	config			La configuration du SSAO.
-		 *\param[in]	matrixUbo		L'UBO des matrices.
-		 *\param[in]	ssaoConfigUbo	L'UBO de configuration du SSAO.
+		 *\param[in]	engine					Le moteur.
+		 *\param[in]	size					Les dimensions de la zone de rendu.
+		 *\param[in]	config					La configuration du SSAO.
+		 *\param[in]	matrixUbo				L'UBO des matrices.
+		 *\param[in]	ssaoConfigUbo			L'UBO de configuration du SSAO.
+		 *\param[in]	linearisedDepthBuffer	Le tampon de profondeur linéarisé.
+		 *\param[in]	normals					Le tampon de normales.
 		 */
 		RawSsaoPass( Engine & engine
 			, castor::Size const & size
 			, SsaoConfig const & config
-			, MatrixUbo & matrixUbo
-			, SsaoConfigUbo & ssaoConfigUbo );
+			, SsaoConfigUbo & ssaoConfigUbo
+			, TextureUnit const & linearisedDepthBuffer
+			, TextureUnit const & normals );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -57,15 +62,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders the SSAO pass on currently bound framebuffer.
-		 *\param[in]	linearisedDepthBuffer	The linearised depth buffer.
-		 *\param[in]	normals					The normals buffer.
 		 *\~french
 		 *\brief		Dessine la passe SSAO sur le tampon d'image actif.
-		 *\param[in]	linearisedDepthBuffer	Le tampon de profondeur linéarisé.
-		 *\param[in]	normals					Le tampon de normales.
 		 */
-		void compute( TextureUnit const & linearisedDepthBuffer
-			, TextureUnit const & normals );
+		void compute();
 		/**
 		 *\~english
 		 *\return		The SSAO pass result.
@@ -79,13 +79,23 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		MatrixUbo & m_matrixUbo;
 		SsaoConfigUbo & m_ssaoConfigUbo;
+		TextureUnit const & m_linearisedDepthBuffer;
+		TextureUnit const & m_normals;
 		castor::Size m_size;
 		TextureUnit m_result;
-		renderer::ShaderProgramPtr m_program;
+		renderer::ShaderProgram & m_program;
+		renderer::SamplerPtr m_sampler;
+		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
+		renderer::DescriptorSetPoolPtr m_descriptorPool;
+		renderer::DescriptorSetPtr m_descriptor;
 		RenderPipelineUPtr m_pipeline;
-		renderer::FrameBufferPtr m_fbo;
+		renderer::RenderPassPtr m_renderPass;
+		renderer::FrameBufferPtr m_frameBuffer;
+		renderer::VertexBufferPtr< NonTexturedQuad > m_vertexBuffer;
+		renderer::VertexLayoutPtr m_vertexLayout;
+		renderer::GeometryBuffersPtr m_geometryBuffers;
+		renderer::CommandBufferPtr m_commandBuffer;
 		RenderPassTimerSPtr m_timer;
 
 	};

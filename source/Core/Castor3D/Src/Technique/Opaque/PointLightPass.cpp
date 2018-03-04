@@ -47,8 +47,13 @@ namespace castor3d
 	void PointLightPass::Program::doBind( Light const & light )
 	{
 		auto & pointLight = *light.getPointLight();
-		m_lightAttenuation->setValue( pointLight.getAttenuation() );
-		m_lightPosition->setValue( light.getParent()->getDerivedPosition() );
+		auto & data = m_ubo->getData( 0u );
+		data.colour = light.getColour();
+		data.intensity = light.getIntensity();
+		data.farPlane = light.getFarPlane();
+		data.attenuation = pointLight.getAttenuation();
+		data.position = light.getParent()->getDerivedPosition();
+		m_ubo->upload();
 	}
 
 	//*********************************************************************************************

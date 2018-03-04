@@ -58,17 +58,6 @@ namespace castor3d
 	castor::PixelFormat getTextureFormat( DsTexture texture );
 	/**
 	 *\~english
-	 *\brief		Retrieve the attachment point for given texture enum value.
-	 *\param[in]	texture	The value.
-	 *\return		The name.
-	 *\~french
-	 *\brief		Récupère le point d'attache pour la valeur d'énumeration de texture.
-	 *\param[in]	texture	La valeur.
-	 *\return		Le nom.
-	 */
-	renderer::ImageAspectFlags getTextureAttachmentPoint( DsTexture texture );
-	/**
-	 *\~english
 	 *\brief		Retrieve the attachment index for given texture enum value.
 	 *\param[in]	texture	The value.
 	 *\return		The name.
@@ -267,6 +256,7 @@ namespace castor3d
 			 *\param[in]	modelMatrixUbo	L'UBO optionnel de matrices modèle.
 			 */
 			void initialise( renderer::VertexBufferBase & vbo
+				, renderer::VertexLayout const & vertexLayout
 				, MatrixUbo & matrixUbo
 				, SceneUbo & sceneUbo
 				, GpInfoUbo & gpInfoUbo
@@ -329,27 +319,24 @@ namespace castor3d
 			virtual void doBind( Light const & light ) = 0;
 
 		public:
-			//!\~english	The shader program used to render lights.
-			//!\~french		Le shader utilisé pour rendre les lumières.
-			renderer::ShaderProgramPtr m_program;
-			//!\~english	Geometry buffers holder.
-			//!\~french		Conteneur de buffers de géométries.
+			struct Config
+			{
+				//!\~english	The variable containing the light colour.
+				//!\~french		La variable contenant la couleur de la lumière.
+				renderer::Vec3 colour;
+				//!\~english	The variable containing the light intensities.
+				//!\~french		La variable contenant les intensités de la lumière.
+				renderer::Vec2 intensity;
+				//!\~english	The variable containing the light far plane position.
+				//!\~french		La variable contenant la position du plan lointain de la lumière.
+				float farPlane;
+			};
+			Engine & m_engine;
+			renderer::UniformBufferBase const * m_baseUbo{ nullptr };
+			renderer::ShaderProgram & m_program;
 			renderer::GeometryBuffersPtr m_geometryBuffers;
-			//!\~english	The pipeline used by the light pass.
-			//!\~french		Le pipeline utilisé par la passe lumières.
 			RenderPipelineSPtr m_blendPipeline;
-			//!\~english	The pipeline used by the light pass.
-			//!\~french		Le pipeline utilisé par la passe lumières.
 			RenderPipelineSPtr m_firstPipeline;
-			//!\~english	The variable containing the light colour.
-			//!\~french		La variable contenant la couleur de la lumière.
-			PushUniform3fSPtr m_lightColour;
-			//!\~english	The variable containing the light intensities.
-			//!\~french		La variable contenant les intensités de la lumière.
-			PushUniform2fSPtr m_lightIntensity;
-			//!\~english	The variable containing the light far plane position.
-			//!\~french		La variable contenant la position du plan lointain de la lumière.
-			PushUniform1fSPtr m_lightFarPlane;
 		};
 		using ProgramPtr = std::unique_ptr< Program >;
 
@@ -431,6 +418,7 @@ namespace castor3d
 		 */
 		LightPass( Engine & engine
 			, renderer::FrameBuffer & frameBuffer
+			, renderer::TextureView & depthView
 			, GpInfoUbo & gpInfoUbo
 			, bool hasShadows );
 		/**
@@ -452,6 +440,7 @@ namespace castor3d
 		void doInitialise( Scene const & scene
 			, LightType type
 			, renderer::VertexBufferBase & vbo
+			, renderer::VertexLayout const & vertexLayout
 			, SceneUbo & sceneUbo
 			, ModelMatrixUbo * modelMatrixUbo );
 		/**
@@ -560,29 +549,15 @@ namespace castor3d
 			, glsl::Shader const & pxl )const = 0;
 
 	protected:
-		//!\~english	The engine.
-		//!\~french		Le moteur.
 		Engine & m_engine;
-		//!\~english	Tells if shadows are enabled.
-		//!\~french		Dit si les ombres sont activées.
 		bool m_shadows;
-		//!\~english	The uniform buffer containing matrices data.
-		//!\~french		Le tampon d'uniformes contenant les données de matrices.
 		MatrixUbo m_matrixUbo;
-		//!\~english	The target FBO.
-		//!\~french		Le FBO cible.
 		renderer::FrameBuffer & m_frameBuffer;
-		//!\~english	The light pass program.
-		//!\~french		Le programme de la passe de lumière.
+		renderer::TextureView & m_depthView;
 		ProgramPtr m_program;
-		//!\~english	The geometry pass informations.
-		//!\~french		Les informations de la passe de géométrie.
+		renderer::VertexBufferPtr< float > m_vertexBuffer;
+		renderer::VertexLayoutPtr m_vertexLayout;
 		GpInfoUbo & m_gpInfoUbo;
-		//!\~english	The vertex buffer.
-		//!\~french		Le tampon de sommets.
-		renderer::VertexBufferBasePtr m_vertexBuffer;
-		//!\~english	The index buffer offset.
-		//!\~french		Le décalage du tampon d'indices.
 		uint32_t m_offset{ 0u };
 	};
 }

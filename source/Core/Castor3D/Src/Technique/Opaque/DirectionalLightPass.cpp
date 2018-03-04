@@ -1,13 +1,15 @@
 #include "DirectionalLightPass.hpp"
 
-#include <Engine.hpp>
-#include <Buffer/VertexBuffer.hpp>
-#include <Render/RenderPipeline.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Scene/Camera.hpp>
-#include <Scene/Scene.hpp>
-#include <Scene/Light/DirectionalLight.hpp>
-#include <Shader/ShaderProgram.hpp>
+#include "Engine.hpp"
+#include "Buffer/VertexBuffer.hpp"
+#include "Render/RenderPipeline.hpp"
+#include "Render/RenderSystem.hpp"
+#include "Scene/Camera.hpp"
+#include "Scene/Scene.hpp"
+#include "Scene/Light/DirectionalLight.hpp"
+#include "Shader/ShaderProgram.hpp"
+
+#include <Buffer/UniformBuffer.hpp>
 
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
@@ -33,8 +35,6 @@ namespace castor3d
 		, glsl::Shader const & vtx
 		, glsl::Shader const & pxl )
 		: LightPass::Program{ engine, vtx, pxl }
-		, m_lightDirection{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_direction" ), renderer::ShaderStageFlag::eFragment ) }
-		, m_lightTransform{ m_program->createUniform< UniformType::eMat4x4f >( cuT( "light.m_transform" ), renderer::ShaderStageFlag::eFragment ) }
 	{
 	}
 
@@ -44,50 +44,80 @@ namespace castor3d
 
 	RenderPipelineUPtr DirectionalLightPass::Program::doCreatePipeline( bool blend )
 	{
-		DepthStencilState dsstate;
-		dsstate.setDepthTest( false );
-		dsstate.setDepthMask( WritingMask::eZero );
-		BlendState blstate;
+		if ( !m_ubo )
+		{
+			m_ubo = renderer::makeUniformBuffer< Config >( *m_engine.getRenderSystem()->getCurrentDevice()
+				, 1u
+				, renderer::BufferTarget::eTransferDst
+				, renderer::MemoryPropertyFlag::eHostVisible );
+			m_baseUbo = &m_ubo->getUbo();
+		}
+
+		renderer::DepthStencilState dsstate
+		{
+			0u,
+			false,
+			false
+		};
+		renderer::ColourBlendState blstate;
 
 		if ( blend )
 		{
-			blstate.enableBlend( true );
-			blstate.setBlendOp( BlendOperation::eAdd );
-			blstate.setSrcBlend( BlendOperand::eOne );
-			blstate.setDstBlend( BlendOperand::eOne );
+			blstate.addAttachment( renderer::ColourBlendStateAttachment
+			{
+				true,
+				renderer::BlendFactor::eOne,
+				renderer::BlendFactor::eOne,
+				renderer::BlendOp::eAdd,
+				renderer::BlendFactor::eOne,
+				renderer::BlendFactor::eOne,
+				renderer::BlendOp::eAdd,
+			} );
 		}
 
-		return m_program->getRenderSystem()->createRenderPipeline( std::move( dsstate )
-			, RasteriserState{}
+		return std::make_unique< RenderPipeline >( m_engine.getRenderSystem()
+			, std::move( dsstate )
+			, renderer::RasterisationState{}
 			, std::move( blstate )
-			, MultisampleState{}
-			, *m_program
+			, renderer::MultisampleState{}
+			, m_program
 			, PipelineFlags{} );
 	}
 
 	void DirectionalLightPass::Program::doBind( Light const & light )
 	{
 		auto & directionalLight = *light.getDirectionalLight();
-		m_lightDirection->setValue( directionalLight.getDirection() );
-		m_lightTransform->setValue( directionalLight.getLightSpaceTransform() );
+		auto & data = m_ubo->getData( 0u );
+		data.base.colour = light.getColour();
+		data.base.intensity = light.getIntensity();
+		data.base.farPlane = light.getFarPlane();
+		data.direction = directionalLight.getDirection();
+		data.transform = directionalLight.getLightSpaceTransform();
+		m_ubo->upload();
 	}
 
 	//*********************************************************************************************
 
 	DirectionalLightPass::DirectionalLightPass( Engine & engine
-		, FrameBuffer & frameBuffer
-		, FrameBufferAttachment & depthAttach
+		, renderer::FrameBuffer & frameBuffer
+		, renderer::TextureView & depthView
 		, GpInfoUbo & gpInfoUbo
 		, bool hasShadows )
-		: LightPass{ engine, frameBuffer, depthAttach, gpInfoUbo, hasShadows }
-		, m_viewport{ engine }
+		: LightPass{ engine, frameBuffer, depthView, gpInfoUbo, hasShadows }
 	{
-		auto declaration = ParticleDeclaration(
-		{
-			ParticleElementDeclaration( cuT( "position" ), uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec2 ),
-		} );
+		m_viewport.setOrtho( 0, 1, 0, 1, 0, 1 );
+	}
 
-		real data[] =
+	DirectionalLightPass::~DirectionalLightPass()
+	{
+		m_vertexBuffer.reset();
+		m_matrixUbo.cleanup();
+	}
+
+	void DirectionalLightPass::initialise( Scene const & scene
+		, SceneUbo & sceneUbo )
+	{
+		float data[] =
 		{
 			0, 0,
 			1, 1,
@@ -97,29 +127,27 @@ namespace castor3d
 			1, 1,
 		};
 
-		m_vertexBuffer = std::make_shared< VertexBuffer >( m_engine, declaration );
-		m_vertexBuffer->resize( sizeof( data ) );
-		uint8_t * buffer = m_vertexBuffer->getData();
-		std::memcpy( buffer, data, sizeof( data ) );
-		m_viewport.setOrtho( 0, 1, 0, 1, 0, 1 );
-		m_vertexBuffer->initialise( renderer::MemoryPropertyFlag::eHostVisible );
-		m_viewport.initialise();
-	}
+		auto & renderSystem = *m_engine.getRenderSystem();
+		auto & device = *renderSystem.getCurrentDevice();
+		m_vertexBuffer = renderer::makeVertexBuffer< float >( device
+			, 12u
+			, renderer::BufferTarget::eTransferDst
+			, renderer::MemoryPropertyFlag::eHostVisible );
 
-	DirectionalLightPass::~DirectionalLightPass()
-	{
-		m_vertexBuffer->cleanup();
-		m_vertexBuffer.reset();
-		m_viewport.cleanup();
-		m_matrixUbo.getUbo().cleanup();
-	}
+		if ( auto buffer = m_vertexBuffer->lock( 0u
+			, 12u
+			, renderer::MemoryMapFlag::eInvalidateRange | renderer::MemoryMapFlag::eWrite ) )
+		{
+			std::memcpy( buffer, data, sizeof( data ) );
+			m_vertexBuffer->unlock( 12u, true );
+		}
 
-	void DirectionalLightPass::initialise( Scene const & scene
-		, SceneUbo & sceneUbo )
-	{
+		m_vertexLayout = renderer::makeLayout< float >( device, 0u );
+		m_vertexLayout->createAttribute< renderer::Vec2 >( 0u, 0u );
 		doInitialise( scene
 			, LightType::eDirectional
 			, *m_vertexBuffer
+			, *m_vertexLayout
 			, sceneUbo
 			, nullptr );
 		m_viewport.update();
@@ -149,9 +177,9 @@ namespace castor3d
 		GlslWriter writer = m_engine.getRenderSystem()->createGlslWriter();
 
 		// Shader inputs
-		UBO_MATRIX( writer, 0u );
-		UBO_GPINFO( writer, 0u );
-		auto vertex = writer.declAttribute< Vec2 >( cuT( "position" ) );
+		UBO_MATRIX( writer, 0u, 0u );
+		UBO_GPINFO( writer, 1u, 0u );
+		auto vertex = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
 
 		// Shader outputs
 		auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );

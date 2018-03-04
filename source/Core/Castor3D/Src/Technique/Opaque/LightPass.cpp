@@ -2,8 +2,6 @@
 
 #include <Engine.hpp>
 #include <Buffer/GeometryBuffers.hpp>
-#include <FrameBuffer/FrameBuffer.hpp>
-#include <FrameBuffer/RenderBufferAttachment.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/Viewport.hpp>
 #include <Scene/Camera.hpp>
@@ -11,13 +9,16 @@
 #include <Shader/Ubos/ModelMatrixUbo.hpp>
 #include <Shader/Ubos/SceneUbo.hpp>
 #include <Shader/ShaderProgram.hpp>
-#include <State/BlendState.hpp>
-#include <State/DepthStencilState.hpp>
-#include <State/MultisampleState.hpp>
-#include <State/RasteriserState.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
+
+#include <Pipeline/ColourBlendState.hpp>
+#include <Pipeline/DepthStencilState.hpp>
+#include <Pipeline/MultisampleState.hpp>
+#include <Pipeline/RasterisationState.hpp>
+#include <RenderPass/FrameBuffer.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
 
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
@@ -68,23 +69,6 @@ namespace castor3d
 				PixelFormat::eRGBA16F32F,
 				PixelFormat::eRGBA16F32F,
 				PixelFormat::eRGBA16F32F,
-			}
-		};
-
-		return Values[size_t( texture )];
-	}
-
-	AttachmentPoint getTextureAttachmentPoint( DsTexture texture )
-	{
-		static std::array< AttachmentPoint, size_t( DsTexture::eCount ) > Values
-		{
-			{
-				AttachmentPoint::eDepthStencil,
-				AttachmentPoint::eColour,
-				AttachmentPoint::eColour,
-				AttachmentPoint::eColour,
-				AttachmentPoint::eColour,
-				AttachmentPoint::eColour,
 			}
 		};
 
@@ -284,15 +268,13 @@ namespace castor3d
 
 	namespace
 	{
-		ShaderProgramSPtr doCreateProgram( Engine & engine
+		renderer::ShaderProgram & doCreateProgram( Engine & engine
 			, glsl::Shader const & vtx
 			, glsl::Shader const & pxl )
 		{
 			auto program = engine.getShaderProgramCache().getNewProgram( false );
-			program->createObject( renderer::ShaderStageFlag::eVertex );
-			program->createObject( renderer::ShaderStageFlag::eFragment );
-			program->setSource( renderer::ShaderStageFlag::eVertex, vtx );
-			program->setSource( renderer::ShaderStageFlag::eFragment, pxl );
+			program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
+			program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
 			return program;
 		}
 	}
@@ -302,10 +284,8 @@ namespace castor3d
 	LightPass::Program::Program( Engine & engine
 		, glsl::Shader const & vtx
 		, glsl::Shader const & pxl )
-		: m_program{ ::doCreateProgram( engine, vtx, pxl ) }
-		, m_lightColour{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_lightBase.m_colour" ), renderer::ShaderStageFlag::eFragment ) }
-		, m_lightIntensity{ m_program->createUniform< UniformType::eVec2f >( cuT( "light.m_lightBase.m_intensity" ), renderer::ShaderStageFlag::eFragment ) }
-		, m_lightFarPlane{ m_program->createUniform< UniformType::eFloat >( cuT( "light.m_lightBase.m_farPlane" ), renderer::ShaderStageFlag::eFragment ) }
+		: m_engine{ engine }
+		, m_program{ ::doCreateProgram( engine, vtx, pxl ) }
 	{
 	}
 
@@ -316,19 +296,22 @@ namespace castor3d
 		m_firstPipeline.reset();
 		m_blendPipeline.reset();
 		m_geometryBuffers.reset();
-		m_lightColour = nullptr;
-		m_program.reset();
 	}
 
-	void LightPass::Program::initialise( VertexBuffer & vbo
+	void LightPass::Program::initialise( renderer::VertexBufferBase & vbo
+		, renderer::VertexLayout const & vertexLayout
 		, MatrixUbo & matrixUbo
 		, SceneUbo & sceneUbo
 		, GpInfoUbo & gpInfoUbo
 		, ModelMatrixUbo * modelMatrixUbo )
 	{
-		m_program->initialise();
-
+		auto & renderSystem = *m_engine.getRenderSystem();
+		auto & device = *renderSystem.getCurrentDevice();
+		m_geometryBuffers = device.createGeometryBuffers( vbo
+			, 0u
+			, vertexLayout );
 		m_firstPipeline = doCreatePipeline( false );
+
 		m_firstPipeline->addUniformBuffer( matrixUbo.getUbo() );
 		m_firstPipeline->addUniformBuffer( sceneUbo.getUbo() );
 		m_firstPipeline->addUniformBuffer( gpInfoUbo.getUbo() );
@@ -343,23 +326,15 @@ namespace castor3d
 			m_firstPipeline->addUniformBuffer( modelMatrixUbo->getUbo() );
 			m_blendPipeline->addUniformBuffer( modelMatrixUbo->getUbo() );
 		}
-
-		m_geometryBuffers = m_program->getRenderSystem()->createGeometryBuffers( Topology::eTriangles, *m_program );
-		m_geometryBuffers->initialise( { vbo }, nullptr );
 	}
 
 	void LightPass::Program::cleanup()
 	{
-		m_geometryBuffers->cleanup();
 		m_geometryBuffers.reset();
-		m_program->cleanup();
 	}
 
 	void LightPass::Program::bind( Light const & light )
 	{
-		m_lightColour->setValue( light.getColour() );
-		m_lightIntensity->setValue( light.getIntensity() );
-		m_lightFarPlane->setValue( light.getFarPlane() );
 		doBind( light );
 	}
 
@@ -368,7 +343,6 @@ namespace castor3d
 		, bool first
 		, uint32_t offset )const
 	{
-
 		if ( first )
 		{
 			m_firstPipeline->apply();
@@ -384,15 +358,15 @@ namespace castor3d
 	//************************************************************************************************
 
 	LightPass::LightPass( Engine & engine
-		, FrameBuffer & frameBuffer
-		, FrameBufferAttachment & depthAttach
+		, renderer::FrameBuffer & frameBuffer
+		, renderer::TextureView & depthView
 		, GpInfoUbo & gpInfoUbo
 		, bool hasShadows )
 		: m_engine{ engine }
 		, m_shadows{ hasShadows }
 		, m_matrixUbo{ engine }
 		, m_frameBuffer{ frameBuffer }
-		, m_depthAttach{ depthAttach }
+		, m_depthView{ depthView }
 		, m_gpInfoUbo{ gpInfoUbo }
 	{
 	}
@@ -417,7 +391,8 @@ namespace castor3d
 
 	void LightPass::doInitialise( Scene const & scene
 		, LightType type
-		, VertexBuffer & vbo
+		, renderer::VertexBufferBase & vbo
+		, renderer::VertexLayout const & vertexLayout
 		, SceneUbo & sceneUbo
 		, ModelMatrixUbo * modelMatrixUbo )
 	{
@@ -440,9 +415,10 @@ namespace castor3d
 		}
 
 		m_program->initialise( vbo
+			, vertexLayout
 			, m_matrixUbo
 			, sceneUbo
-			, m_gpInfoUbo.getUbo()
+			, m_gpInfoUbo
 			, modelMatrixUbo );
 	}
 
@@ -450,7 +426,7 @@ namespace castor3d
 	{
 		m_program->cleanup();
 		m_program.reset();
-		m_matrixUbo.getUbo().cleanup();
+		m_matrixUbo.cleanup();
 	}
 
 	void LightPass::doRender( castor::Size const & size

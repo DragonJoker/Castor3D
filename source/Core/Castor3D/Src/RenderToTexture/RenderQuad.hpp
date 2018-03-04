@@ -29,7 +29,7 @@ namespace castor3d
 	class RenderQuad
 	{
 	public:
-		C3D_API virtual ~RenderQuad() = default;
+		C3D_API virtual ~RenderQuad();
 		/**
 		*\~english
 		*\brief
@@ -66,7 +66,8 @@ namespace castor3d
 			, renderer::ShaderProgram const & program
 			, renderer::TextureView const & view
 			, renderer::RenderPass const & renderPass
-			, std::vector< renderer::DescriptorSetLayoutBinding > bindings );
+			, renderer::DescriptorSetLayoutBindingArray bindings
+			, renderer::PushConstantRangeCRefArray const & pushRanges );
 		/**
 		*\~english
 		*\brief
@@ -102,21 +103,21 @@ namespace castor3d
 	private:
 		virtual void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
 			, renderer::DescriptorSet & descriptorSet );
+		virtual void doRegisterFrame( renderer::CommandBuffer & commandBuffer );
 
 	protected:
 		RenderSystem & m_renderSystem;
+		SamplerSPtr m_sampler;
+		RenderPipelineUPtr m_pipeline;
 
 	private:
 		TexturedQuad m_vertexData;
-		SamplerSPtr m_sampler;
 		renderer::VertexBufferPtr< TexturedQuad > m_vertexBuffer;
 		renderer::GeometryBuffersPtr m_geometryBuffers;
 		renderer::VertexLayoutPtr m_vertexLayout;
 		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
 		renderer::DescriptorSetPoolPtr m_descriptorPool;
 		renderer::DescriptorSetPtr m_descriptorSet;
-		renderer::PipelineLayoutPtr m_pipelineLayout;
-		renderer::PipelinePtr m_pipeline;
 		renderer::CommandBufferPtr m_commandBuffer;
 	};
 }

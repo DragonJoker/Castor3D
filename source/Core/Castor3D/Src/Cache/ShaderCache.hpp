@@ -19,6 +19,8 @@ namespace castor3d
 	class ShaderProgramCache
 		: public castor::OwnedBy< Engine >
 	{
+		using ShaderProgramPtrArray = std::vector< renderer::ShaderProgramPtr >;
+
 	public:
 		/**
 		 *\~english

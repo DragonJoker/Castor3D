@@ -54,12 +54,17 @@ namespace castor3d
 	void SpotLightPass::Program::doBind( Light const & light )
 	{
 		auto & spotLight = *light.getSpotLight();
-		m_lightAttenuation->setValue( spotLight.getAttenuation() );
-		m_lightPosition->setValue( light.getParent()->getDerivedPosition() );
-		m_lightExponent->setValue( spotLight.getExponent() );
-		m_lightCutOff->setValue( spotLight.getCutOff().cos() );
-		m_lightDirection->setValue( spotLight.getDirection() );
-		m_lightTransform->setValue( spotLight.getLightSpaceTransform() );
+		auto & data = m_ubo->getData( 0u );
+		data.colour = light.getColour();
+		data.intensity = light.getIntensity();
+		data.farPlane = light.getFarPlane();
+		data.attenuation = spotLight.getAttenuation();
+		data.position = light.getParent()->getDerivedPosition();
+		data.exponent = spotLight.getExponent();
+		data.cutOff = spotLight.getCutOff().cos();
+		data.direction = spotLight.getDirection();
+		data.transform = spotLight.getLightSpaceTransform();
+		m_ubo->upload();
 	}
 
 	//*********************************************************************************************

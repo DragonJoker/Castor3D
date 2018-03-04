@@ -233,7 +233,7 @@ namespace GuiCommon
 		wxArrayString arrayChoices;
 		arrayChoices.push_back( wxCOMBO_NEW );
 
-		if ( program->getObjectStatus( m_shaderType ) != ShaderStatus::edontExist )
+		if ( program->getObjectStatus( m_shaderType ) != ShaderStatus::eDontExist )
 		{
 			// Load the shader source file/text
 			m_shaderSource = program->getSource( m_shaderType );
