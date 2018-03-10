@@ -20,8 +20,10 @@
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
+#include <Buffer/UniformBuffer.hpp>
+#include <Image/Texture.hpp>
 #include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassState.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/RenderSubpass.hpp>
 #include <RenderPass/RenderSubpassState.hpp>
 #include <Shader/ShaderProgram.hpp>
@@ -50,10 +52,10 @@ namespace film_grain
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			Vec2 position = writer.declAttribute< Vec2 >( cuT( "position" ) );
+			Vec2 position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
@@ -79,7 +81,7 @@ namespace film_grain
 
 			auto c3d_srcTex = writer.declSampler< Sampler2D >( SrcTex, 1u, 0u );
 			auto c3d_noiseTex = writer.declSampler< Sampler3D >( NoiseTex, 2u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			// Shader outputs
 			auto plx_fragColor = writer.declFragData< Vec4 >( cuT( "plx_fragColor" ), 0 );
@@ -144,35 +146,45 @@ namespace film_grain
 	//*********************************************************************************************
 
 	RenderQuad::RenderQuad( castor3d::RenderSystem & renderSystem
-		, Size const & size )
+		, renderer::Extent2D const & size )
 		: castor3d::RenderQuad{ renderSystem, false, false }
 		, m_size{ size }
-		, m_noise{ *renderSystem.getEngine() }
 	{
 		auto name = cuT( "FilmGrain_Noise" );
 		castor3d::SamplerSPtr sampler;
 
 		if ( !m_renderSystem.getEngine()->getSamplerCache().has( name ) )
 		{
-			sampler = m_renderSystem.getEngine()->getSamplerCache().add( name );
-			sampler->setMinFilter( renderer::Filter::eLinear );
-			sampler->setMagFilter( renderer::Filter::eLinear );
-			sampler->setMipFilter( renderer::MipmapMode::eLinear );
-			sampler->setWrapS( renderer::WrapMode::eRepeat );
-			sampler->setWrapT( renderer::WrapMode::eRepeat );
-			sampler->setWrapR( renderer::WrapMode::eRepeat );
+			m_sampler = m_renderSystem.getEngine()->getSamplerCache().add( name );
+			m_sampler->setMinFilter( renderer::Filter::eLinear );
+			m_sampler->setMagFilter( renderer::Filter::eLinear );
+			m_sampler->setMipFilter( renderer::MipmapMode::eLinear );
+			m_sampler->setWrapS( renderer::WrapMode::eRepeat );
+			m_sampler->setWrapT( renderer::WrapMode::eRepeat );
+			m_sampler->setWrapR( renderer::WrapMode::eRepeat );
 		}
 		else
 		{
-			sampler = m_renderSystem.getEngine()->getSamplerCache().find( name );
+			m_sampler = m_renderSystem.getEngine()->getSamplerCache().find( name );
 		}
 
-		auto texture = std::make_shared< castor3d::TextureLayout >( m_renderSystem
-			, renderer::TextureType::e3D
-			, renderer::ImageUsageFlag::eSampled
-			, renderer::MemoryPropertyFlag::eDeviceLocal
-			, PixelFormat::eR8G8B8
-			, Point3ui{ 512u, 512u, 6u } );
+		auto & device = *m_renderSystem.getCurrentDevice();
+
+		renderer::ImageCreateInfo image{};
+		image.flags = renderer::ImageCreateFlag::eCubeCompatible;
+		image.arrayLayers = 1u;
+		image.extent.width = 512u;
+		image.extent.height = 512u;
+		image.extent.depth = 6u;
+		image.format = renderer::Format::eR8G8B8_UNORM;
+		image.imageType = renderer::TextureType::e3D;
+		image.initialLayout = renderer::ImageLayout::eUndefined;
+		image.mipLevels = FILTER_COUNT;
+		image.samples = renderer::SampleCountFlag::e1;
+		image.sharingMode = renderer::SharingMode::eExclusive;
+		image.tiling = renderer::ImageTiling::eOptimal;
+		image.usage = renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst;
+		m_noise = device.createTexture( image, renderer::MemoryPropertyFlag::eDeviceLocal );
 
 		XpmLoader loader;
 		std::array< PxBufferBaseSPtr, 6u > buffers
@@ -185,35 +197,73 @@ namespace film_grain
 			loader.loadImage( NoiseLayer6_xpm, getCountOf( NoiseLayer6_xpm ) ),
 		};
 
-		for ( uint32_t i = 1u; i <= 6u; ++i )
+		uint32_t maxSize = 0u;
+		renderer::BufferImageCopyArray copyRegions( 6u );
+
+		for ( size_t i = 0u; i < buffers.size(); ++i )
 		{
-			texture->getImage( i ).initialiseSource( buffers[i] );
+			copyRegions[i].imageExtent.width = buffers[i]->dimensions()[0];
+			copyRegions[i].imageExtent.height = buffers[i]->dimensions()[1];
+			copyRegions[i].imageExtent.depth = 1u;
+			copyRegions[i].imageOffset.x = 0;
+			copyRegions[i].imageOffset.y = 0;
+			copyRegions[i].imageOffset.z = uint32_t( i );
+			copyRegions[i].imageSubresource.aspectMask = renderer::getAspectMask( image.format );
+			copyRegions[i].imageSubresource.baseArrayLayer = 0u;
+			copyRegions[i].imageSubresource.layerCount = 1u;
+			copyRegions[i].imageSubresource.mipLevel = 0u;
+			copyRegions[i].levelSize = buffers[i]->size();
+			maxSize = std::max( maxSize, copyRegions[i].levelSize );
 		}
 
-		m_noise.setTexture( texture );
-		m_noise.setSampler( sampler );
-		m_noise.initialise();
+		renderer::BufferBasePtr stagingBuffer = device.createBuffer( maxSize, renderer::BufferTarget::eTransferSrc );
+		renderer::CommandBufferPtr cmdCopy = device.getGraphicsCommandPool().createCommandBuffer( true );
+
+		for ( size_t i = 0u; i < copyRegions.size(); ++i )
+		{
+			if ( auto * data = stagingBuffer->lock( 0u, copyRegions[i].levelSize, renderer::MemoryMapFlag::eWrite ) )
+			{
+				std::memcpy( data, buffers[i]->constPtr(), buffers[i]->size() );
+				stagingBuffer->flush( 0u, copyRegions[i].levelSize );
+				stagingBuffer->unlock();
+
+				if ( cmdCopy->begin() )
+				{
+					cmdCopy->copyToImage( copyRegions[i]
+						, *stagingBuffer
+						, *m_noise );
+					cmdCopy->end();
+				}
+			}
+		}
+
+		renderer::ImageViewCreateInfo imageView{};
+		imageView.components.r = renderer::ComponentSwizzle::eIdentity;
+		imageView.components.g = renderer::ComponentSwizzle::eIdentity;
+		imageView.components.b = renderer::ComponentSwizzle::eIdentity;
+		imageView.components.a = renderer::ComponentSwizzle::eIdentity;
+		imageView.format = image.format;
+		imageView.viewType = renderer::TextureViewType::e3D;
+		imageView.subresourceRange.aspectMask = renderer::getAspectMask( imageView.format );
+		imageView.subresourceRange.baseMipLevel = 0u;
+		imageView.subresourceRange.levelCount = 1u;
+		imageView.subresourceRange.baseArrayLayer = 0u;
+		imageView.subresourceRange.layerCount = 1u;
+		m_noiseView = m_noise->createView( imageView );
 
 		m_configUbo = renderer::makeUniformBuffer< Configuration >( *m_renderSystem.getCurrentDevice()
 			, 1u
 			, renderer::BufferTarget::eTransferDst
 			, renderer::MemoryPropertyFlag::eHostVisible );
-		m_configUbo->getData( 0 ).m_pixelSize = Point2f{ m_size };
+		m_configUbo->getData( 0 ).m_pixelSize = Point2f{ m_size.width, m_size.height };
 		m_configUbo->getData( 0 ).m_noiseIntensity = 1.0f;
 		m_configUbo->getData( 0 ).m_exposure = 1.0f;
 	}
 
 	void RenderQuad::update( float time )
 	{
-		m_configUbo->getData( 0 ).m_time = time;
-
-		if ( auto buffer = m_configUbo->getUbo().getBuffer().lock( 0u
-			, sizeof( Configuration )
-			, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateRange ) )
-		{
-			std::memcpy( buffer, m_configUbo->getDatas().data(), sizeof( Configuration ) );
-			m_configUbo->getUbo().getBuffer().unlock( sizeof( Configuration ), true );
-		}
+		m_configUbo->getData().m_time = time;
+		m_configUbo->upload();
 	}
 
 	void RenderQuad::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
@@ -224,8 +274,8 @@ namespace film_grain
 			, 0u
 			, 1u );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
-			, m_noise.getTexture()->getView()
-			, m_noise.getSampler()->getSampler() );
+			, *m_noiseView
+			, m_sampler->getSampler() );
 	}
 
 	//*********************************************************************************************
@@ -276,33 +326,58 @@ namespace film_grain
 
 	bool PostEffect::initialise()
 	{
-		auto & cache = getRenderSystem()->getEngine()->getShaderProgramCache();
-		Size size = m_renderTarget.getSize();
+		auto & device = *getRenderSystem()->getCurrentDevice();
+		renderer::Extent2D size{ m_renderTarget.getSize()[0], m_renderTarget.getSize()[1] };
 
 		auto vtx = getVertexProgram( getRenderSystem() );
 		auto pxl = getFragmentProgram( getRenderSystem() );
-		auto & program = cache.getNewProgram( false );
 
-		program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
-		program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
+		renderer::ShaderStageStateArray stages;
+		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
+		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
+		stages[0].module->loadShader( vtx.getSource() );
+		stages[1].module->loadShader( pxl.getSource() );
 
-		auto & device = *getRenderSystem()->getCurrentDevice();
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 
-		std::vector< renderer::PixelFormat > formats{ { m_renderTarget.getPixelFormat() } };
-		renderer::RenderSubpassPtrArray subpasses;
-		subpasses.emplace_back( device.createRenderSubpass( formats
-			, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-			, renderer::AccessFlag::eColourAttachmentWrite } ) );
-		m_renderPass = device.createRenderPass( formats
-			, std::move( subpasses )
-			, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-				, renderer::AccessFlag::eColourAttachmentWrite
-				, { renderer::ImageLayout::eColourAttachmentOptimal } }
-			, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-				, renderer::AccessFlag::eColourAttachmentWrite
-				, { renderer::ImageLayout::eColourAttachmentOptimal } }
-			, false );
+		// Create the render pass.
+		renderer::RenderPassCreateInfo renderPass;
+		renderPass.flags = 0u;
+
+		renderPass.attachments.resize( 1u );
+		renderPass.attachments[0].index = 0u;
+		renderPass.attachments[0].format = m_renderTarget.getPixelFormat();
+		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+
+		renderPass.subpasses.resize( 1u );
+		renderPass.subpasses[0].flags = 0u;
+		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
+		renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
+
+		renderPass.dependencies.resize( 2u );
+		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].dstSubpass = 0u;
+		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		renderPass.dependencies[1].srcSubpass = 0u;
+		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		m_renderPass = device.createRenderPass( renderPass );
 
 		renderer::DescriptorSetLayoutBindingArray bindings
 		{
@@ -313,14 +388,15 @@ namespace film_grain
 		m_quad = std::make_unique< RenderQuad >( *getRenderSystem(), size );
 		m_quad->createPipeline( size
 			, Position{}
-			, program
+			, stages
 			, m_renderTarget.getTexture().getTexture()->getView()
 			, *m_renderPass
-			, bindings );
+			, bindings
+			, {} );
 
 		auto result = m_surface.initialise( m_renderTarget
 			, *m_renderPass
-			, size
+			, m_renderTarget.getSize()
 			, 0u
 			, m_sampler );
 
@@ -345,12 +421,6 @@ namespace film_grain
 		m_commandBuffer.reset();
 		m_renderPass.reset();
 		m_surface.cleanup();
-	}
-
-	bool PostEffect::apply()
-	{
-		m_quad->update( float( m_timer.getElapsed().count() ) / 6.0f );
-		return getRenderSystem()->getCurrentDevice()->getGraphicsQueue().submit( *m_commandBuffer, nullptr );
 	}
 
 	bool PostEffect::doWriteInto( TextFile & file )

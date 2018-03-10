@@ -7,8 +7,6 @@ See LICENSE file in root folder
 #include <PostEffect/PostEffect.hpp>
 #include <RenderToTexture/RenderQuad.hpp>
 #include <Texture/TextureUnit.hpp>
-#include <Render/Viewport.hpp>
-#include <Shader/Ubos/MatrixUbo.hpp>
 #include <Miscellaneous/PreciseTimer.hpp>
 
 namespace film_grain
@@ -21,7 +19,7 @@ namespace film_grain
 	{
 	public:
 		explicit RenderQuad( castor3d::RenderSystem & renderSystem
-			, castor::Size const & size );
+			, renderer::Extent2D const & size );
 		void update( float time );
 
 	private:
@@ -36,9 +34,11 @@ namespace film_grain
 			float m_exposure;
 			float m_time;
 		};
-		castor::Size m_size;
+		renderer::Extent2D m_size;
 		renderer::UniformBufferPtr< Configuration > m_configUbo;
-		castor3d::TextureUnit m_noise;
+		castor3d::SamplerSPtr m_sampler;
+		renderer::TexturePtr m_noise;
+		renderer::TextureViewPtr m_noiseView;
 	};
 
 	class PostEffect
@@ -60,10 +60,6 @@ namespace film_grain
 		 *\copydoc		castor3d::PostEffect::Cleanup
 		 */
 		void cleanup() override;
-		/**
-		 *\copydoc		castor3d::PostEffect::Apply
-		 */
-		bool apply() override;
 
 	private:
 		/**
