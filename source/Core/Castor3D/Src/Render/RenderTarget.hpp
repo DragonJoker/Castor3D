@@ -10,6 +10,8 @@ See LICENSE file in root folder
 #include "Render/RenderInfo.hpp"
 #include "Texture/TextureUnit.hpp"
 
+#include <RenderPass/FrameBuffer.hpp>
+
 #include <Design/OwnedBy.hpp>
 #include <Graphics/Size.hpp>
 #include <Design/OwnedBy.hpp>
@@ -264,7 +266,7 @@ namespace castor3d
 			return m_velocityTexture;
 		}
 
-		inline castor::PixelFormat getPixelFormat()const
+		inline renderer::Format getPixelFormat()const
 		{
 			return m_pixelFormat;
 		}
@@ -313,7 +315,7 @@ namespace castor3d
 			m_ssaoConfig = config;
 		}
 
-		inline void setPixelFormat( castor::PixelFormat value )
+		inline void setPixelFormat( renderer::Format value )
 		{
 			m_pixelFormat = value;
 		}
@@ -344,7 +346,7 @@ namespace castor3d
 		renderer::RenderPassPtr m_renderPass;
 		renderer::CommandBufferPtr m_commandBuffer;
 		TargetFbo m_frameBuffer;
-		castor::PixelFormat m_pixelFormat;
+		renderer::Format m_pixelFormat;
 		uint32_t m_index;
 		Parameters m_techniqueParameters;
 		PostEffectPtrArray m_postEffects;
@@ -356,6 +358,8 @@ namespace castor3d
 		castor::Point2r m_jitter;
 		TextureUnit m_velocityTexture;
 		OverlayRendererSPtr m_overlayRenderer;
+		renderer::SemaphorePtr m_signalReady;
+		renderer::SemaphorePtr m_signalFinished;
 	};
 }
 

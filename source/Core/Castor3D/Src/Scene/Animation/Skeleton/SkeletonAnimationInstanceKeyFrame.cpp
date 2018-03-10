@@ -38,32 +38,41 @@ namespace castor3d
 				auto component = submesh.getComponent< BonesComponent >();
 				uint32_t index = 0u;
 
-				for ( auto & data : component->getBonesData() )
+				for ( auto & boneData : component->getBonesData() )
 				{
-					auto boneData = BonedVertex::getBones( data );
 					Matrix4x4r transform{ 1.0_r };
 
-					if ( boneData.m_weights[0] > 0 )
+					if ( boneData.m_weights.weight0[0] > 0 )
 					{
-						auto bone = *( skeleton.begin() + boneData.m_ids[0] );
+						auto bone = *( skeleton.begin() + boneData.m_ids.id0[0] );
 						auto it = keyFrame.find( *bone );
 						REQUIRE( it != keyFrame.end() );
-						transform = Matrix4x4r{ it->second * bone->getOffsetMatrix() * boneData.m_weights[0] };
+						transform = Matrix4x4r{ it->second * bone->getOffsetMatrix() * boneData.m_weights.weight0[0] };
 					}
 
-					for ( uint32_t i = 1; i < boneData.m_ids.size(); ++i )
+					for ( uint32_t i = 1; i < boneData.m_ids.id0.size(); ++i )
 					{
-						if ( boneData.m_weights[i] > 0 )
+						if ( boneData.m_weights.weight0[i] > 0 )
 						{
-							auto bone = *( skeleton.begin() + boneData.m_ids[i] );
+							auto bone = *( skeleton.begin() + boneData.m_ids.id0[i] );
 							auto it = keyFrame.find( *bone );
 							REQUIRE( it != keyFrame.end() );
-							transform += Matrix4x4r{ it->second * bone->getOffsetMatrix() * boneData.m_weights[i] };
+							transform += Matrix4x4r{ it->second * bone->getOffsetMatrix() * boneData.m_weights.weight0[i] };
 						}
 					}
 
-					Coords3r cposition;
-					Vertex::getPosition( submesh.getPoint( index ), cposition );
+					for ( uint32_t i = 1; i < boneData.m_ids.id1.size(); ++i )
+					{
+						if ( boneData.m_weights.weight1[i] > 0 )
+						{
+							auto bone = *( skeleton.begin() + boneData.m_ids.id1[i] );
+							auto it = keyFrame.find( *bone );
+							REQUIRE( it != keyFrame.end() );
+							transform += Matrix4x4r{ it->second * bone->getOffsetMatrix() * boneData.m_weights.weight1[i] };
+						}
+					}
+
+					auto & cposition = submesh.getPoint( index ).m_pos;
 					Point4r position{ cposition[0], cposition[1], cposition[2], 1.0_r };
 					position = transform * position;
 					min[0] = std::min( min[0], position[0] );

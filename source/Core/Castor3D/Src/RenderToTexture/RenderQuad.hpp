@@ -7,7 +7,6 @@ See LICENSE file in root folder
 #include "Castor3DPrerequisites.hpp"
 
 #include <Buffer/VertexBuffer.hpp>
-#include <Buffer/GeometryBuffers.hpp>
 #include <Descriptor/DescriptorSet.hpp>
 #include <Descriptor/DescriptorSetLayout.hpp>
 #include <Descriptor/DescriptorSetPool.hpp>
@@ -61,9 +60,9 @@ namespace castor3d
 		*\param[in] program
 		*	Le programme shader.
 		*/
-		C3D_API void createPipeline( castor::Size const & size
+		C3D_API void createPipeline( renderer::Extent2D const & size
 			, castor::Position const & position
-			, renderer::ShaderProgram const & program
+			, renderer::ShaderStageStateArray const & program
 			, renderer::TextureView const & view
 			, renderer::RenderPass const & renderPass
 			, renderer::DescriptorSetLayoutBindingArray bindings
@@ -113,7 +112,6 @@ namespace castor3d
 	private:
 		TexturedQuad m_vertexData;
 		renderer::VertexBufferPtr< TexturedQuad > m_vertexBuffer;
-		renderer::GeometryBuffersPtr m_geometryBuffers;
 		renderer::VertexLayoutPtr m_vertexLayout;
 		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
 		renderer::DescriptorSetPoolPtr m_descriptorPool;

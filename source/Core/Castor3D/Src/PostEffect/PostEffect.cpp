@@ -25,17 +25,29 @@ namespace castor3d
 		, Size const & size
 		, uint32_t index
 		, SamplerSPtr sampler
-		, PixelFormat format )
+		, renderer::Format format
+		, uint32_t mipLevels )
 	{
 		m_size = size;
 		m_colourTexture.setIndex( index );
 
+		renderer::ImageCreateInfo image{};
+		image.flags = renderer::ImageCreateFlag::eCubeCompatible;
+		image.arrayLayers = 1u;
+		image.extent.width = size[0];
+		image.extent.height = size[1];
+		image.extent.depth = 1u;
+		image.format = format;
+		image.imageType = renderer::TextureType::e2D;
+		image.initialLayout = renderer::ImageLayout::eUndefined;
+		image.mipLevels = mipLevels;
+		image.samples = renderer::SampleCountFlag::e1;
+		image.sharingMode = renderer::SharingMode::eExclusive;
+		image.tiling = renderer::ImageTiling::eOptimal;
+		image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
 		auto colourTexture = std::make_shared< TextureLayout >( *renderTarget.getEngine()->getRenderSystem()
-			, renderer::TextureType::e2D
-			, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled
-			, renderer::MemoryPropertyFlag::eDeviceLocal
-			, format
-			, size );
+			, image
+			, renderer::MemoryPropertyFlag::eDeviceLocal );
 
 		colourTexture->getImage().initialiseSource();
 		m_colourTexture.setSampler( sampler );
@@ -43,8 +55,8 @@ namespace castor3d
 		m_colourTexture.initialise();
 
 		renderer::FrameBufferAttachmentArray attaches;
-		attaches.emplace_back( *renderPass.begin(), colourTexture->getView() );
-		m_fbo = renderPass.createFrameBuffer( renderer::UIVec2{ size }
+		attaches.emplace_back( *renderPass.getAttachments().begin(), colourTexture->getView() );
+		m_fbo = renderPass.createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
 			, std::move( attaches ) );
 		return true;
 	}

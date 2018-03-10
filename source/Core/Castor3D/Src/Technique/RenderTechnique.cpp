@@ -166,6 +166,7 @@ namespace castor3d
 		{
 			m_size = m_renderTarget.getSize();
 			m_initialised = m_frameBuffer.initialise( m_size );
+			m_signalFinished = getEngine()->getRenderSystem()->getCurrentDevice()->createSemaphore();
 
 			if ( m_initialised )
 			{

@@ -73,7 +73,8 @@ namespace castor3d
 				, castor::Size const & size
 				, uint32_t index
 				, castor3d::SamplerSPtr sampler
-				, castor::PixelFormat format = castor::PixelFormat::eRGBA32F );
+				, renderer::Format format = renderer::Format::eR32G32B32A32_SFLOAT
+				, uint32_t mipLevels = 1u );
 			/**
 			 *\~english
 			 *\brief		Cleans up the surface.
@@ -148,15 +149,6 @@ namespace castor3d
 		 */
 		C3D_API virtual void cleanup() = 0;
 		/**
-		 *\~english
-		 *\brief			Render function, applies the effect to the given framebuffer.
-		 *\return			\p true if ok.
-		 *\~french
-		 *\brief			Fonction de rendu, applique l'effet au tampon d'image donné.
-		 *\return			\p true si tout s'est bien passé.
-		 */
-		C3D_API virtual bool apply() = 0;
-		/**
 		*\~english
 		*name
 		*	Getters.
@@ -170,12 +162,13 @@ namespace castor3d
 			REQUIRE( m_commandBuffer );
 			return *m_commandBuffer;
 		}
-		/**
-		 *\~english
-		 *\return		\p true if the effect applies after tone mapping.
-		 *\~french
-		 *\brief		\p true si l'effet s'applique après le mappage de tons.
-		 */
+
+		inline renderer::Semaphore const & getSemaphore()const
+		{
+			REQUIRE( m_signalFinished );
+			return *m_signalFinished;
+		}
+
 		inline bool isAfterToneMapping()const
 		{
 			return m_postToneMapping;
@@ -194,15 +187,10 @@ namespace castor3d
 		C3D_API virtual bool doWriteInto( castor::TextFile & file ) = 0;
 
 	protected:
-		//!\~english	The render target to which this effect is attached.
-		//!\~french		La cible de rendu à laquelle est attachée cet effet.
 		RenderTarget & m_renderTarget;
-		//!\~english	Tells if the effect applies after tone mapping.
-		//!\~french		Dit si l'effet s'applique après le mappage de tons.
 		bool m_postToneMapping{ false };
-		//!\~english	The command buffer holding the effect commands.
-		//!\~french		Le tampon de commandes contenant les commandes de l'effet.
 		renderer::CommandBufferPtr m_commandBuffer;
+		renderer::SemaphorePtr m_signalFinished;
 	};
 }
 

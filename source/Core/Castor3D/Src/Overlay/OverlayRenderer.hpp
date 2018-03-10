@@ -109,25 +109,36 @@ namespace castor3d
 		 */
 		C3D_API void endRender();
 		/**
-		 *\~english
-		 *\return		The current render target size.
-		 *\~french
-		 *\return		Les dimensions de la cible du rendu courant.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		**/
+		/**@{*/
+		inline renderer::CommandBuffer const & getCommands()const
+		{
+			REQUIRE( m_commandBuffer );
+			return *m_commandBuffer;
+		}
+
+		inline renderer::Semaphore const & getSemaphore()const
+		{
+			REQUIRE( m_signalFinished );
+			return *m_signalFinished;
+		}
+
 		castor::Size const & getSize()const
 		{
 			return m_size;
 		}
-		/**
-		 *\~english
-		 *\return		\p true if the render size has changed.
-		 *\~french
-		 *\return		\p true si la taille de rendu a changé.
-		 */
+
 		bool isSizeChanged()const
 		{
 			return m_sizeChanged;
 		}
+		/**@}*/
 
 	private:
 		struct Pipeline
@@ -148,8 +159,8 @@ namespace castor3d
 
 		struct OverlayGeometryBuffers
 		{
-			renderer::GeometryBuffersPtr m_noTexture;
-			renderer::GeometryBuffersPtr m_textured;
+			GeometryBuffers m_noTexture;
+			GeometryBuffers m_textured;
 		};
 
 		OverlayRenderNode & doGetPanelNode( Pass & pass );
@@ -167,19 +178,17 @@ namespace castor3d
 		void doDrawItem( renderer::CommandBuffer const & commandBuffer
 			, Pass & pass
 			, renderer::VertexBufferBase const & vertexBuffer
-			, renderer::GeometryBuffers const & geometryBuffers
 			, uint32_t count );
 		void doDrawItem( renderer::CommandBuffer const & commandBuffer
 			, Pass & pass
 			, renderer::VertexBufferBase const & vertexBuffer
-			, renderer::GeometryBuffers const & geometryBuffers
 			, TextureLayout const & texture
 			, Sampler const & sampler
 			, uint32_t count );
 		OverlayGeometryBuffers & doFillTextPart( int32_t count
 			, TextOverlay::VertexArray::const_iterator & it
 			, uint32_t index );
-		renderer::ShaderProgram & doCreateOverlayProgram( TextureChannels const & textureFlags );
+		renderer::ShaderStageStateArray doCreateOverlayProgram( TextureChannels const & textureFlags );
 		renderer::DescriptorSetPtr doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
 			, TextureChannels textureFlags
 			, Pass const & pass );
@@ -192,6 +201,7 @@ namespace castor3d
 	private:
 		renderer::TextureView const & m_target;
 		renderer::CommandBufferPtr m_commandBuffer;
+		renderer::SemaphorePtr m_signalFinished;
 		renderer::VertexBufferPtr< OverlayCategory::Vertex > m_panelVertexBuffer;
 		renderer::VertexBufferPtr< OverlayCategory::Vertex > m_borderVertexBuffer;
 		std::vector< renderer::VertexBufferPtr< TextOverlay::Vertex > > m_textsVertexBuffers;
@@ -206,7 +216,6 @@ namespace castor3d
 		renderer::RenderPassPtr m_renderPass;
 		std::map< uint32_t, Pipeline > m_panelPipelines;
 		std::map< uint32_t, Pipeline > m_textPipelines;
-		Uniform1iSPtr m_mapText;
 		int m_previousBorderZIndex{ 0 };
 		int m_previousPanelZIndex{ 0 };
 		int m_previousTextZIndex{ 0 };

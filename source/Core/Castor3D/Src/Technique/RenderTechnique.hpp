@@ -110,6 +110,7 @@ namespace castor3d
 		 */
 		C3D_API void render( castor::Point2r const & jitter
 			, TextureUnit const & velocity
+			, renderer::Semaphore const & waitSemaphore
 			, RenderInfo & info );
 		/**
 		 *\~english
@@ -183,6 +184,17 @@ namespace castor3d
 		}
 		/**
 		 *\~english
+		 *\return		The transparent nodes render pass.
+		 *\~french
+		 *\return		La passe de rendu des noeuds transparents.
+		 */
+		inline renderer::Semaphore const & getSemaphore()const
+		{
+			REQUIRE( m_signalFinished );
+			return *m_signalFinished;
+		}
+		/**
+		 *\~english
 		 *\return		\p true if the samples count is greater than 1.
 		 *\~french
 		 *\return		\p true si le nombre d'échantillons est plus grand que 1.
@@ -211,54 +223,23 @@ namespace castor3d
 		void doApplyPostEffects();
 
 	private:
-		//!\~english	The technique intialisation status.
-		//!\~french		Le statut d'initialisation de la technique.
 		bool m_initialised;
-		//!\~english	The parent render target.
-		//!\~french		La render target parente.
 		RenderTarget & m_renderTarget;
-		//!\~english	The render system.
-		//!\~french		Le render system.
 		RenderSystem & m_renderSystem;
-		//!\~english	The render area dimension.
-		//!\~french		Les dimensions de l'aire de rendu.
 		castor::Size m_size;
-		//!\~english	The HDR frame buffer.
-		//!\~french		Le tampon d'image HDR.
 		RenderTechniqueFbo m_frameBuffer;
-		//!\~english	The pass used to render opaque nodes.
-		//!\~french		La passe utilisée pour dessiner les noeuds opaques.
 		std::unique_ptr< RenderTechniquePass > m_opaquePass;
-		//!\~english	The pass used to render transparent nodes.
-		//!\~french		La passe utilisée pour dessiner les noeuds transparents.
 		std::unique_ptr< RenderTechniquePass > m_transparentPass;
-		//!\~english	The SSAO configuration.
-		//!\~french		La configuration du SSAO.
 		SsaoConfig m_ssaoConfig;
-		//!\~english	The deferred rendering used for opaque meshes.
-		//!\~french		Le rendu différé utilisé pour les maillages opaques.
 		std::unique_ptr< DeferredRendering > m_deferredRendering;
-		//!\~english	The weighted blend rendering used for transparent meshes.
-		//!\~french		Le rendu weighted blend utilisé pour les maillages transparents.
 		std::unique_ptr< WeightedBlendRendering > m_weightedBlendRendering;
-		//!\~english	The particles timer.
-		//!\~french		Le timer de particules.
 		RenderPassTimerSPtr m_particleTimer;
-		//!\~english	The post effect timer.
-		//!\~french		Le timer d'effets post-rendu.
 		RenderPassTimerSPtr m_postFxTimer;
-		//!\~english	The directional lights shadow maps.
-		//!\~french		Les textures d'ombres pour les lumières directionnelles.
 		ShadowMapArray m_directionalShadowMaps;
-		//!\~english	The point lights shadow maps.
-		//!\~french		Les textures d'ombres pour les lumières omni-directionnelles.
 		ShadowMapArray m_pointShadowMaps;
-		//!\~english	The spot lights shadow maps.
-		//!\~french		Les textures d'ombres pour les lumières projecteurs.
 		ShadowMapArray m_spotShadowMaps;
-		//!\~english	The active shadow maps.
-		//!\~french		Les textures d'ombres actives.
 		ShadowMapLightTypeArray m_activeShadowMaps;
+		renderer::SemaphorePtr m_signalFinished;
 	};
 }
 

@@ -5,15 +5,14 @@
 #include "Render/RenderSystem.hpp"
 #include "Texture/Sampler.hpp"
 
-#include <Buffer/GeometryBuffers.hpp>
 #include <Buffer/VertexBuffer.hpp>
 #include <Command/CommandBuffer.hpp>
 #include <Core/Device.hpp>
 #include <Descriptor/DescriptorSet.hpp>
-#include <Descriptor/DescriptorSetBinding.hpp>
 #include <Descriptor/DescriptorSetLayout.hpp>
 #include <Descriptor/DescriptorSetLayoutBinding.hpp>
 #include <Descriptor/DescriptorSetPool.hpp>
+#include <Descriptor/WriteDescriptorSet.hpp>
 #include <Pipeline/DepthStencilState.hpp>
 #include <Pipeline/InputAssemblyState.hpp>
 #include <Pipeline/MultisampleState.hpp>
@@ -85,9 +84,9 @@ namespace castor3d
 		}
 	}
 
-	void RenderQuad::createPipeline( castor::Size const & size
+	void RenderQuad::createPipeline( renderer::Extent2D const & size
 		, castor::Position const & position
-		, renderer::ShaderProgram const & program
+		, renderer::ShaderStageStateArray const & program
 		, renderer::TextureView const & view
 		, renderer::RenderPass const & renderPass
 		, renderer::DescriptorSetLayoutBindingArray bindings
@@ -100,23 +99,17 @@ namespace castor3d
 			, 0u
 			, renderer::MemoryPropertyFlag::eHostVisible );
 
-		if ( auto buffer = m_vertexBuffer->lock( 0u
-			, 1u
-			, renderer::MemoryMapFlag::eInvalidateRange | renderer::MemoryMapFlag::eWrite ) )
+		if ( auto buffer = m_vertexBuffer->lock( 0u, 1u, renderer::MemoryMapFlag::eWrite ) )
 		{
 			*buffer = m_vertexData;
-			m_vertexBuffer->unlock( 1u, true );
+			m_vertexBuffer->unlock();
 		}
 
 		// Initialise the vertex layout.
-		m_vertexLayout = device.createVertexLayout( 0u, sizeof( TexturedQuad ) );
-		createVertexAttribute( m_vertexLayout, TexturedQuad::Vertex, position, 0u );
-		createVertexAttribute( m_vertexLayout, TexturedQuad::Vertex, texture, 1u );
+		m_vertexLayout = renderer::makeLayout< TexturedQuad >( 0u );
+		m_vertexLayout->createAttribute( 0u, renderer::Format::eR32G32_SFLOAT, offsetof( TexturedQuad::Vertex, position ) );
+		m_vertexLayout->createAttribute( 0u, renderer::Format::eR32G32_SFLOAT, offsetof( TexturedQuad::Vertex, texture ) );
 
-		// Initialise the geometry buffers.
-		m_geometryBuffers = device.createGeometryBuffers( *m_vertexBuffer
-			, 0u
-			, *m_vertexLayout );
 		// Initialise the descriptor set.
 		auto textureBindingPoint = uint32_t( bindings.size() );
 		bindings.emplace_back( textureBindingPoint
@@ -145,8 +138,8 @@ namespace castor3d
 		m_pipeline->setVertexLayouts( { *m_vertexLayout } );
 		m_pipeline->setViewport( renderer::Viewport
 		{
-			size.getWidth(),
-			size.getHeight(),
+			size.width,
+			size.height,
 			position.x(),
 			position.y(),
 		} );
@@ -154,8 +147,8 @@ namespace castor3d
 		{
 			position.x(),
 			position.y(),
-			size.getWidth(),
-			size.getHeight(),
+			size.width,
+			size.height,
 		} );
 		m_pipeline->initialise( renderPass, renderer::PrimitiveTopology::eTriangleStrip );
 	}
@@ -170,7 +163,7 @@ namespace castor3d
 	void RenderQuad::registerFrame( renderer::CommandBuffer & commandBuffer )
 	{
 		commandBuffer.bindPipeline( m_pipeline->getPipeline() );
-		commandBuffer.bindGeometryBuffers( *m_geometryBuffers );
+		commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 		commandBuffer.bindDescriptorSet( *m_descriptorSet, m_pipeline->getPipelineLayout() );
 		doRegisterFrame( commandBuffer );
 		commandBuffer.draw( 4u );

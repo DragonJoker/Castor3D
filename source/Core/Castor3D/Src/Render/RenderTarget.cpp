@@ -15,11 +15,12 @@
 
 #include <Core/Device.hpp>
 #include <Image/Texture.hpp>
+#include <RenderPass/FrameBuffer.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
 #include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassState.hpp>
-#include <RenderPass/RenderSubpass.hpp>
-#include <RenderPass/RenderSubpassState.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
+#include <RenderPass/SubpassDependency.hpp>
+#include <RenderPass/SubpassDescription.hpp>
 
 #include <Graphics/Image.hpp>
 
@@ -64,7 +65,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = file.writeText( m_tabs + cuT( "\tformat " ) + castor::PF::getFormatName( target.getPixelFormat() ) + cuT( "\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\tformat " ) + renderer::getName( target.getPixelFormat() ) + cuT( "\n" ) ) > 0;
 			castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget format" );
 		}
 
@@ -120,12 +121,23 @@ namespace castor3d
 		auto & device = *renderSystem.getCurrentDevice();
 
 		SamplerSPtr sampler = m_renderTarget.getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + string::toString( m_renderTarget.m_index ) );
+		renderer::ImageCreateInfo createInfo{};
+		createInfo.flags = 0u;
+		createInfo.arrayLayers = 1u;
+		createInfo.extent.width = size.getWidth();
+		createInfo.extent.height = size.getHeight();
+		createInfo.extent.depth = 1u;
+		createInfo.format = m_renderTarget.getPixelFormat();
+		createInfo.imageType = renderer::TextureType::e2D;
+		createInfo.initialLayout = renderer::ImageLayout::eUndefined;
+		createInfo.mipLevels = 1u;
+		createInfo.samples = renderer::SampleCountFlag::e1;
+		createInfo.sharingMode = renderer::SharingMode::eExclusive;
+		createInfo.tiling = renderer::ImageTiling::eOptimal;
+		createInfo.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
 		auto texture = std::make_shared< TextureLayout >( renderSystem
-			, renderer::TextureType::e2D
-			, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled
-			, renderer::MemoryPropertyFlag::eDeviceLocal
-			, m_renderTarget.getPixelFormat()
-			, size );
+			, createInfo
+			, renderer::MemoryPropertyFlag::eDeviceLocal );
 		m_colourTexture.setTexture( texture );
 		m_colourTexture.setSampler( sampler );
 		m_colourTexture.setIndex( index );
@@ -133,8 +145,8 @@ namespace castor3d
 		m_colourTexture.getTexture()->initialise();
 
 		renderer::FrameBufferAttachmentArray attaches;
-		attaches.emplace_back( *renderPass.begin(), m_colourTexture.getTexture()->getView() );
-		m_frameBuffer = renderPass.createFrameBuffer( renderer::UIVec2{ size }
+		attaches.emplace_back( *renderPass.getAttachments().begin(), m_colourTexture.getTexture()->getView() );
+		m_frameBuffer = renderPass.createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
 			, {  } );
 
 		return true;
@@ -183,19 +195,46 @@ namespace castor3d
 			auto & renderSystem = *getEngine()->getRenderSystem();
 			auto & device = *renderSystem.getCurrentDevice();
 
-			std::vector< renderer::PixelFormat > formats{ { getPixelFormat() } };
-			renderer::RenderSubpassPtrArray subpasses;
-			subpasses.emplace_back( device.createRenderSubpass( formats
-				, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-				, renderer::AccessFlag::eColourAttachmentWrite } ) );
-			m_renderPass = device.createRenderPass( { { getPixelFormat(), true } }
-				, subpasses
-				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-					, renderer::AccessFlag::eColourAttachmentWrite
-					, { renderer::ImageLayout::eColourAttachmentOptimal } }
-				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-					, renderer::AccessFlag::eColourAttachmentWrite
-					, { renderer::ImageLayout::eColourAttachmentOptimal } } );
+			renderer::RenderPassCreateInfo createInfo{};
+			createInfo.flags = 0u;
+
+			createInfo.attachments.resize( 1u );
+			createInfo.attachments[0].index = 0u;
+			createInfo.attachments[0].format = getPixelFormat();
+			createInfo.attachments[0].samples = renderer::SampleCountFlag::e1;
+			createInfo.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+			createInfo.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+			createInfo.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+			createInfo.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+			createInfo.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+			createInfo.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+
+			renderer::AttachmentReference colourReference;
+			colourReference.attachment = 0u;
+			colourReference.layout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+			createInfo.subpasses.resize( 1u );
+			createInfo.subpasses[0].flags = 0u;
+			createInfo.subpasses[0].colorAttachments = { colourReference };
+
+			createInfo.dependencies.resize( 2u );
+			createInfo.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+			createInfo.dependencies[0].dstSubpass = 0u;
+			createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+			createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
+			createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+			createInfo.dependencies[1].srcSubpass = 0u;
+			createInfo.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+			createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+			createInfo.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eMemoryRead;
+			createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+			m_renderPass = device.createRenderPass( createInfo );
 			m_frameBuffer.initialise( *m_renderPass
 				, index
 				, m_size );
@@ -219,15 +258,27 @@ namespace castor3d
 				}
 			}
 
-			m_size = m_frameBuffer.m_colourTexture.getTexture()->getDimensions();
+			m_size.set( m_frameBuffer.m_colourTexture.getTexture()->getDimensions().width
+				, m_frameBuffer.m_colourTexture.getTexture()->getDimensions().height );
 			m_renderTechnique->initialise( index );
 
+			renderer::ImageCreateInfo image{};
+			image.flags = 0u;
+			image.arrayLayers = 1u;
+			image.extent.width = m_size.getWidth();
+			image.extent.height = m_size.getHeight();
+			image.extent.depth = 1u;
+			image.format = renderer::Format::eR16_SFLOAT;
+			image.imageType = renderer::TextureType::e2D;
+			image.initialLayout = renderer::ImageLayout::eUndefined;
+			image.mipLevels = 1u;
+			image.samples = renderer::SampleCountFlag::e1;
+			image.sharingMode = renderer::SharingMode::eExclusive;
+			image.tiling = renderer::ImageTiling::eOptimal;
+			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
 			auto velocityTexture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
-				, renderer::TextureType::e2D
-				, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled
-				, renderer::MemoryPropertyFlag::eDeviceLocal
-				, PixelFormat::eAL16F32F
-				, m_size );
+				, image
+				, renderer::MemoryPropertyFlag::eDeviceLocal );
 			m_velocityTexture.setTexture( velocityTexture );
 			m_velocityTexture.setSampler( getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + string::toString( m_index ) + cuT( "_Point" ) ) );
 			m_velocityTexture.getTexture()->getImage().initialiseSource();
@@ -249,6 +300,10 @@ namespace castor3d
 			{
 				effect->initialise();
 			}
+
+			m_overlayRenderer = std::make_shared< OverlayRenderer >( *getEngine()->getRenderSystem()
+				, m_frameBuffer.m_colourTexture.getTexture()->getView() );
+			m_overlayRenderer->initialise();
 		}
 	}
 
@@ -257,6 +312,8 @@ namespace castor3d
 		if ( m_initialised )
 		{
 			m_initialised = false;
+			m_overlayRenderer->cleanup();
+			m_overlayRenderer.reset();
 
 			for ( auto effect : m_postPostEffects )
 			{
@@ -367,13 +424,16 @@ namespace castor3d
 		, RenderTarget::TargetFbo & fbo
 		, CameraSPtr camera )
 	{
+		auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
+		auto const * semaphoreToWait = m_signalReady.get();
 		SceneSPtr scene = getScene();
-		//fbo.m_frameBuffer->setClearColour( RgbaColour::fromRGBA( toRGBAFloat( scene->getBackgroundColour() ) ) );
 
 		// Render the scene through the RenderTechnique.
 		m_renderTechnique->render( m_jitter
 			, m_velocityTexture
+			, *semaphoreToWait
 			, info );
+		semaphoreToWait = &m_renderTechnique->getSemaphore();
 
 		// Then draw the render's result to the RenderTarget's frame buffer.
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
@@ -388,23 +448,55 @@ namespace castor3d
 			m_commandBuffer->end();
 		}
 
+		queue.submit( *m_commandBuffer
+			, *semaphoreToWait
+			, renderer::PipelineStageFlag::eAllCommands
+			, m_toneMapping->getSemaphore()
+			, nullptr );
+		semaphoreToWait = &m_toneMapping->getSemaphore();
+
+		// Apply the post effects.
 		m_postPostFxTimer->start();
 
 		for ( auto & effect : m_postPostEffects )
 		{
-			effect->apply();
+			queue.submit( effect->getCommands()
+				, *semaphoreToWait
+				, renderer::PipelineStageFlag::eAllCommands
+				, effect->getSemaphore()
+				, nullptr );
+			semaphoreToWait = &effect->getSemaphore();
 		}
 
 		m_postPostFxTimer->stop();
 
-		// We also render overlays.
+		// And now render overlays.
 		m_overlaysTimer->start();
-		getEngine()->getOverlayCache().render( *scene, m_size );
+		{
+			auto lock = makeUniqueLock( getEngine()->getOverlayCache() );
+			m_overlayRenderer->beginRender( camera->getViewport() );
+
+			for ( auto category : getEngine()->getOverlayCache() )
+			{
+				SceneSPtr scene = category->getOverlay().getScene();
+
+				if ( category->getOverlay().isVisible() && ( !scene || scene->getName() == scene->getName() ) )
+				{
+					category->render( *m_overlayRenderer );
+				}
+			}
+
+			m_overlayRenderer->endRender();
+			queue.submit( m_overlayRenderer->getCommands()
+				, *semaphoreToWait
+				, renderer::PipelineStageFlag::eAllCommands
+				, *m_signalFinished
+				, nullptr );
+		}
 		m_overlaysTimer->stop();
 
 #if DISPLAY_DEBUG
 
-		camera->apply();
 		m_renderTechnique->debugDisplay( Size{ camera->getWidth(), camera->getHeight() } );
 
 #endif

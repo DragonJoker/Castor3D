@@ -1,15 +1,9 @@
 #include "HejlBurgessDawsonToneMapping.hpp"
 
 #include <Engine.hpp>
-#include <Cache/ShaderCache.hpp>
-#include <Shader/Ubos/HdrConfigUbo.hpp>
-
 #include <Miscellaneous/Parameter.hpp>
-#include <Render/Context.hpp>
 #include <Render/RenderSystem.hpp>
-#include <Shader/UniformBuffer.hpp>
-#include <Shader/ShaderProgram.hpp>
-#include <Texture/TextureLayout.hpp>
+#include <Shader/Ubos/HdrConfigUbo.hpp>
 
 #include <GlslSource.hpp>
 
@@ -46,7 +40,7 @@ namespace HejlBurgessDawson
 			// Shader inputs
 			UBO_HDR_CONFIG( writer, 0u );
 			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			// Shader outputs
 			auto pxl_rgb = writer.declFragData< Vec4 >( cuT( "pxl_rgb" ), 0 );
