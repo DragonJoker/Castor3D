@@ -1,11 +1,12 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder
 */
 #pragma once
 
 #include "GlCommandBase.hpp"
 
+#include <Image/TextureView.hpp>
 #include <Miscellaneous/BufferImageCopy.hpp>
 
 namespace gl_renderer
@@ -28,19 +29,26 @@ namespace gl_renderer
 		*\param[in] dst
 		*	Le tampon destination.
 		*/
-		CopyImageToBufferCommand( renderer::BufferImageCopy const & copyInfo
-			, renderer::TextureView const & src
+		CopyImageToBufferCommand( renderer::BufferImageCopyArray const & copyInfo
+			, renderer::Texture const & src
 			, renderer::BufferBase const & dst );
+		CopyImageToBufferCommand( CopyImageToBufferCommand const & rhs );
 
 		void apply()const override;
 		CommandPtr clone()const override;
 
 	private:
-		renderer::BufferImageCopy m_copyInfo;
-		TextureView const & m_src;
+		void applyOne( renderer::BufferImageCopy const & copyInfo
+			, renderer::TextureView const & view )const;
+
+	private:
+		Texture const & m_src;
 		Buffer const & m_dst;
+		renderer::BufferImageCopyArray m_copyInfo;
+		GlInternal m_internal;
 		GlFormat m_format;
 		GlType m_type;
 		GlTextureType m_target;
+		std::vector< renderer::TextureViewPtr > m_views;
 	};
 }

@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #include "Core/Connection.hpp"
@@ -12,6 +12,7 @@ namespace renderer
 		, uint32_t deviceIndex
 		, WindowHandle && handle )
 		: m_handle{ std::move( handle ) }
+		, m_gpu{ renderer.getPhysicalDevice( deviceIndex ) }
 	{
 	}
 }

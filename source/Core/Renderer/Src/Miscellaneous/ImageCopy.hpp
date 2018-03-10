@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___Renderer_ImageCopy_HPP___
@@ -7,6 +7,8 @@ See LICENSE file in root folder.
 #pragma once
 
 #include "Image/ImageSubresourceLayers.hpp"
+#include "Miscellaneous/Extent3D.hpp"
+#include "Miscellaneous/Offset3D.hpp"
 
 namespace renderer
 {
@@ -16,7 +18,7 @@ namespace renderer
 	*	Specifies an image copy operation.
 	*\~french
 	*\brief
-	*	Définit une opération de copie d'image.
+	*	DÃ©finit une opÃ©ration de copie d'image.
 	*/
 	struct ImageCopy
 	{
@@ -26,7 +28,7 @@ namespace renderer
 		*	Specifies the specific image subresources of the image used for the source image data.
 		*\~french
 		*\brief
-		*	Spécifie les sous-ressources d'image spécifiques à l'image utilisée en tant que source.
+		*	SpÃ©cifie les sous-ressources d'image spÃ©cifiques Ã  l'image utilisÃ©e en tant que source.
 		*/
 		ImageSubresourceLayers srcSubresource;
 		/**
@@ -35,16 +37,16 @@ namespace renderer
 		*	Select the initial x, y, and z offsets in texels of the sub-regions of the source image data.
 		*\~french
 		*\brief
-		*	Selectionne les décalages \p x, \p y et \p z des sous-régions de l'image source.
+		*	Selectionne les dÃ©calages \p x, \p y et \p z des sous-rÃ©gions de l'image source.
 		*/
-		IVec3 srcOffset;
+		Offset3D srcOffset;
 		/**
 		*\~english
 		*\brief
 		*	Specifies the specific image subresources of the image used for the destination image data.
 		*\~french
 		*\brief
-		*	Spécifie les sous-ressources d'image spécifiques à l'image utilisée en tant que detination.
+		*	SpÃ©cifie les sous-ressources d'image spÃ©cifiques Ã  l'image utilisÃ©e en tant que detination.
 		*/
 		ImageSubresourceLayers dstSubresource;
 		/**
@@ -53,18 +55,18 @@ namespace renderer
 		*	Select the initial x, y, and z offsets in texels of the sub-regions of the destination image data.
 		*\~french
 		*\brief
-		*	Selectionne les décalages \p x, \p y et \p z des sous-régions de l'image destination.
+		*	Selectionne les dÃ©calages \p x, \p y et \p z des sous-rÃ©gions de l'image destination.
 		*/
-		IVec3 dstOffset;
+		Offset3D dstOffset;
 		/**
 		*\~english
 		*\brief
 		*	The size in texels of the source image to copy in \p width, \p height and \p depth.
 		*\~french
 		*\brief
-		*	Les dimensions en texels de l'image source à copier, en \p largeur, \p hauteur, et \p profondeur.
+		*	Les dimensions en texels de l'image source Ã  copier, en \p largeur, \p hauteur, et \p profondeur.
 		*/
-		UIVec3 extent;
+		Extent3D extent;
 	};
 }
 

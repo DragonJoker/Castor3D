@@ -17,7 +17,8 @@ namespace gl_renderer
 		: public Context
 	{
 	public:
-		X11Context( renderer::ConnectionPtr && connection );
+		X11Context( PhysicalDevice const & gpu
+			, renderer::ConnectionPtr && connection );
 		~X11Context();
 
 		void setCurrent()const override;

@@ -103,12 +103,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Draws the overlay
-		 *\param[in]	p_size	The render target size
+		 *\param[in]	size	The render target size
 		 *\~french
 		 *\brief		Dessine l'incrustation
-		 *\param[in]	p_size	Les dimensions de la cible du rendu
+		 *\param[in]	size	Les dimensions de la cible du rendu
 		 */
-		C3D_API virtual void render( castor::Size const & p_size );
+		C3D_API virtual void render( castor::Size const & size
+			, OverlayRenderer & renderer );
 		/**
 		 *\~english
 		 *\brief		adds a child to the overlay

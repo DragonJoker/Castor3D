@@ -51,9 +51,21 @@ namespace castor3d
 		return m_buffer->getBuffer().lock( offset, size, flags );
 	}
 
-	void GpuBuffer::unlock( uint32_t size )const
+	void GpuBuffer::flush( uint32_t offset
+		, uint32_t size )const
 	{
-		m_buffer->getBuffer().unlock( size, true );
+		return m_buffer->getBuffer().flush( offset, size );
+	}
+
+	void GpuBuffer::invalidate( uint32_t offset
+		, uint32_t size )const
+	{
+		return m_buffer->getBuffer().invalidate( offset, size );
+	}
+
+	void GpuBuffer::unlock()const
+	{
+		m_buffer->getBuffer().unlock();
 	}
 
 	void GpuBuffer::copy( renderer::CommandBuffer const & commandBuffer

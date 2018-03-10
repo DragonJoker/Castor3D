@@ -1,4 +1,4 @@
-﻿#include "Core/VkSwapChain.hpp"
+#include "Core/VkSwapChain.hpp"
 
 #include "Command/VkCommandBuffer.hpp"
 #include "Command/VkCommandPool.hpp"
@@ -8,7 +8,6 @@
 #include "Core/VkPhysicalDevice.hpp"
 #include "Core/VkRenderer.hpp"
 #include "Image/VkTexture.hpp"
-#include "Miscellaneous/VkMemoryStorage.hpp"
 #include "RenderPass/VkFrameBuffer.hpp"
 #include "RenderPass/VkRenderPass.hpp"
 #include "Sync/VkImageMemoryBarrier.hpp"
@@ -19,7 +18,7 @@
 namespace vk_renderer
 {
 	SwapChain::SwapChain( Device const & device
-		, renderer::UIVec2 const & size )
+		, renderer::Extent2D const & size )
 		: renderer::SwapChain{ device, size }
 		, m_device{ device }
 		, m_surface{ device.getPresentSurface() }
@@ -27,7 +26,7 @@ namespace vk_renderer
 		m_surfaceCapabilities = m_device.getSurfaceCapabilities();
 
 		// On choisit le format de la surface.
-		doSelectFormat( m_device.getPhysicalDevice() );
+		doSelectFormat( static_cast< PhysicalDevice const & >( m_device.getPhysicalDevice() ) );
 
 		// On crée la swap chain.
 		doCreateSwapChain();
@@ -49,10 +48,54 @@ namespace vk_renderer
 		m_device.vkDestroySwapchainKHR( m_device, m_swapChain, nullptr );
 	}
 
-	void SwapChain::reset( renderer::UIVec2 const & size )
+	void SwapChain::reset( renderer::Extent2D const & size )
 	{
 		m_dimensions = size;
 		doResetSwapChain();
+	}
+
+	void SwapChain::createDepthStencil( renderer::Format format )
+	{
+		m_depthStencil = m_device.createTexture(
+			{
+				0u,
+				renderer::TextureType::e2D,
+				format,
+				renderer::Extent3D{ getDimensions().width, getDimensions().height, 1u },
+				1u,
+				1u,
+				renderer::SampleCountFlag::e1,
+				renderer::ImageTiling::eOptimal,
+				renderer::ImageUsageFlag::eDepthStencilAttachment,
+				renderer::SharingMode::eExclusive,
+				{},
+				renderer::ImageLayout::eUndefined,
+			} );
+		m_depthStencil->bindMemory( m_device.allocateMemory( m_depthStencil->getMemoryRequirements()
+			, renderer::MemoryPropertyFlag::eDeviceLocal ) );
+		m_depthStencilView = m_depthStencil->createView( renderer::TextureViewType::e2D
+			, format );
+	}
+
+	renderer::FrameBufferAttachmentArray SwapChain::doPrepareAttaches( uint32_t backBuffer
+		, renderer::AttachmentDescriptionArray const & attaches )const
+	{
+		renderer::FrameBufferAttachmentArray result;
+
+		for ( auto & attach : attaches )
+		{
+			if ( !renderer::isDepthOrStencilFormat( attach.format ) )
+			{
+				result.emplace_back( attach, m_backBuffers[backBuffer]->getView() );
+			}
+			else
+			{
+				assert( m_depthStencilView );
+				result.emplace_back( attach, *m_depthStencilView );
+			}
+		}
+
+		return result;
 	}
 
 	renderer::FrameBufferPtrArray SwapChain::createFrameBuffers( renderer::RenderPass const & renderPass )const
@@ -62,8 +105,7 @@ namespace vk_renderer
 
 		for ( size_t i = 0u; i < result.size(); ++i )
 		{
-			renderer::FrameBufferAttachmentArray attaches;
-			attaches.emplace_back( *renderPass.begin(), m_backBuffers[i]->getView() );
+			auto attaches = doPrepareAttaches( uint32_t( i ), renderPass.getAttachments() );
 			result[i] = static_cast< RenderPass const & >( renderPass ).createFrameBuffer( m_dimensions
 				, std::move( attaches ) );
 		}
@@ -84,22 +126,6 @@ namespace vk_renderer
 		}
 
 		return result;
-	}
-
-	void SwapChain::preRenderCommands( uint32_t index
-		, renderer::CommandBuffer const & commandBuffer )const
-	{
-		commandBuffer.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-			, renderer::PipelineStageFlag::eColourAttachmentOutput
-			, m_backBuffers[index]->getView().makeColourAttachment() );
-	}
-
-	void SwapChain::postRenderCommands( uint32_t index
-		, renderer::CommandBuffer const & commandBuffer )const
-	{
-		commandBuffer.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-			, renderer::PipelineStageFlag::eBottomOfPipe
-			, m_backBuffers[index]->getView().makePresentSource() );
 	}
 
 	renderer::RenderingResources * SwapChain::getResources()
@@ -200,7 +226,7 @@ namespace vk_renderer
 	{
 		// On récupère la liste de VkPresentModeKHR supportés par la surface.
 		uint32_t presentModeCount{};
-		auto res = m_device.getRenderer().vkGetPhysicalDeviceSurfacePresentModesKHR( m_device.getPhysicalDevice()
+		auto res = m_device.getRenderer().vkGetPhysicalDeviceSurfacePresentModesKHR( static_cast< PhysicalDevice const & >( m_device.getPhysicalDevice() )
 			, m_surface
 			, &presentModeCount
 			, nullptr );
@@ -211,7 +237,7 @@ namespace vk_renderer
 		}
 
 		std::vector< VkPresentModeKHR > presentModes{ presentModeCount };
-		res = m_device.getRenderer().vkGetPhysicalDeviceSurfacePresentModesKHR( m_device.getPhysicalDevice()
+		res = m_device.getRenderer().vkGetPhysicalDeviceSurfacePresentModesKHR( static_cast< PhysicalDevice const & >( m_device.getPhysicalDevice() )
 			, m_surface
 			, &presentModeCount
 			, presentModes.data() );
@@ -254,8 +280,7 @@ namespace vk_renderer
 		{
 			// Si les dimensions de la surface sont indéfinies, elles sont initialisées
 			// aux dimensions des images requises.
-			swapChainExtent.width = m_dimensions[0];
-			swapChainExtent.height = m_dimensions[1];
+			swapChainExtent = convert( m_dimensions );
 		}
 		else
 		{
@@ -356,15 +381,16 @@ namespace vk_renderer
 
 		for ( auto image : swapChainImages )
 		{
-			m_backBuffers.emplace_back( std::make_unique< BackBuffer >( m_device
-				, *this
-				, index++
+			auto texture = std::make_unique< Texture >( m_device
 				, m_format
 				, m_dimensions
-				, Texture{ m_device
-					, m_format
-					, m_dimensions
-					, image } ) );
+				, image );
+			auto & ref = *texture;
+			m_backBuffers.emplace_back( std::make_unique< BackBuffer >( m_device
+				, std::move( texture )
+				, index++
+				, m_format
+				, ref ) );
 		}
 	}
 
@@ -412,7 +438,7 @@ namespace vk_renderer
 		m_renderingResources.clear();
 		m_surfaceCapabilities = m_device.getSurfaceCapabilities();
 		// On choisit le format de la surface.
-		doSelectFormat( m_device.getPhysicalDevice() );
+		doSelectFormat( static_cast< PhysicalDevice const & >( m_device.getPhysicalDevice() ) );
 		// On crée la swap chain.
 		doCreateSwapChain();
 		// Puis les tampons d'images.

@@ -109,13 +109,13 @@ namespace castor3d
 	{
 	}
 
-	void ShadowMapPass::doPrepareFrontPipeline( ShaderProgram & program
+	void ShadowMapPass::doPrepareFrontPipeline( renderer::ShaderStageStateArray & program
 		, PipelineFlags const & flags )
 	{
 		doPreparePipeline( program, flags );
 	}
 
-	void ShadowMapPass::doPrepareBackPipeline( ShaderProgram & program
+	void ShadowMapPass::doPrepareBackPipeline( renderer::ShaderStageStateArray & program
 		, PipelineFlags const & flags )
 	{
 		doPreparePipeline( program, flags );

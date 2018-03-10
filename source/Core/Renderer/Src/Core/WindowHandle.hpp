@@ -1,5 +1,5 @@
-/*
-This file belongs to Renderer.
+﻿/*
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___Renderer_WindowHandle_HPP___
@@ -10,6 +10,10 @@ See LICENSE file in root folder.
 namespace renderer
 {
 	/**
+	*\~english
+	*\brief
+	*	A window handle, platform dependant.
+	*\~french
 	*\brief
 	*	Implémentation d'un handle de fenêtre, dépendant de l'OS.
 	*/
@@ -17,21 +21,33 @@ namespace renderer
 	{
 	protected:
 		/**
+		*\~english
 		*\brief
-		*	Constructeur
+		*	Constructor.
+		*\~french
+		*\brief
+		*	Constructeur.
 		*/
 		IWindowHandle() = default;
 
 	public:
 		/**
+		*\~english
+		*\brief
+		*	Boolean convertion operator.
+		*\~french
 		*\brief
 		*	Opérateur de conversion en booléen.
 		*/
 		virtual operator bool() = 0;
 	};
 	/**
+	*\~english
 	*\brief
-	*	Implémentation d'un handle de fenêtre, indépendant de l'OS.
+	*	A window handle, platform independant.
+	*\~french
+	*\brief
+	*	Implémentation d'un handle de fenêtre, indépendant de la plateforme.
 	*/
 	class WindowHandle
 	{
@@ -41,27 +57,43 @@ namespace renderer
 		WindowHandle( WindowHandle && rhs ) = default;
 		WindowHandle & operator=( WindowHandle && rhs ) = default;
 		/**
+		*\~english
 		*\brief
-		*	Constructeur
+		*	Constructor.
+		*\param[in] handle
+		*	The allocated handle.
+		*\~french
+		*\brief
+		*	Constructeur.
 		*\param[in] handle
 		*	Le handle alloué.
 		*/
 		explicit WindowHandle( IWindowHandlePtr handle );
 		/**
+		*\~english
 		*\brief
-		*	Destructeur
+		*	Destructor.
+		*\~french
+		*\brief
+		*	Destructeur.
 		*/
 		~WindowHandle() = default;
 		/**
+		*\~english
 		*\brief
-		*	opérateur de conversion en bool.
+		*	Boolean convertion operator.
+		*\~french
+		*\brief
+		*	Opérateur de conversion en booléen.
 		*/
 		operator bool();
 		/**
-		*\brief
-		*	Récupère le handle de la fenêtre, casté dans le format voulu (HWND, GLXDrawable, ...).
+		*\~english
 		*\return
-		*	Le handle de la fenêtre.
+		*	The window handle, cast in wanted format (IMswWindowHandle, IXWindowHandle, ...).
+		*\~french
+		*\return
+		*	Le handle de la fenêtre, casté dans le format voulu (IMswWindowHandle, IXWindowHandle, ...).
 		*/
 		template< class T >
 		inline T const & getInternal()const

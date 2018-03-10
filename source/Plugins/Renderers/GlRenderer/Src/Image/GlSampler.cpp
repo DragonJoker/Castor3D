@@ -5,52 +5,34 @@
 namespace gl_renderer
 {
 	Sampler::Sampler( renderer::Device const & device
-		, renderer::WrapMode wrapS
-		, renderer::WrapMode wrapT
-		, renderer::WrapMode wrapR
-		, renderer::Filter minFilter
-		, renderer::Filter magFilter
-		, renderer::MipmapMode mipFilter
-		, float minLod
-		, float maxLod
-		, float lodBias
-		, renderer::BorderColour borderColour
-		, float maxAnisotropy
-		, renderer::CompareOp compareOp )
-		: renderer::Sampler{ device
-			, wrapS
-			, wrapT
-			, wrapR
-			, minFilter
-			, magFilter
-			, mipFilter
-			, minLod
-			, maxLod
-			, lodBias
-			, borderColour
-			, maxAnisotropy
-			, compareOp }
+		, renderer::SamplerCreateInfo const & createInfo )
+		: renderer::Sampler{ device, createInfo }
 	{
 		glLogCall( gl::GenSamplers, 1, &m_sampler );
 		glLogCall( gl::BindSampler, 0u, m_sampler );
-		glLogCall( gl::SamplerParameteri, m_sampler, GL_SAMPLER_PARAMETER_MIN_FILTER, convert( minFilter, mipFilter ) );
-		glLogCall( gl::SamplerParameteri, m_sampler, GL_SAMPLER_PARAMETER_MAG_FILTER, convert( magFilter ) );
-		glLogCall( gl::SamplerParameteri, m_sampler, GL_SAMPLER_PARAMETER_WRAP_S, convert( wrapS ) );
-		glLogCall( gl::SamplerParameteri, m_sampler, GL_SAMPLER_PARAMETER_WRAP_T, convert( wrapT ) );
-		glLogCall( gl::SamplerParameteri, m_sampler, GL_SAMPLER_PARAMETER_WRAP_R, convert( wrapR ) );
-		glLogCall( gl::SamplerParameterf, m_sampler, GL_SAMPLER_PARAMETER_MIN_LOD, minLod );
-		glLogCall( gl::SamplerParameterf, m_sampler, GL_SAMPLER_PARAMETER_MAX_LOD, maxLod );
+		glLogCall( gl::SamplerParameteri, m_sampler, GL_SAMPLER_PARAMETER_MIN_FILTER, convert( createInfo.minFilter, createInfo.mipmapMode ) );
+		glLogCall( gl::SamplerParameteri, m_sampler, GL_SAMPLER_PARAMETER_MAG_FILTER, convert( createInfo.magFilter ) );
+		glLogCall( gl::SamplerParameteri, m_sampler, GL_SAMPLER_PARAMETER_WRAP_S, convert( createInfo.addressModeU ) );
+		glLogCall( gl::SamplerParameteri, m_sampler, GL_SAMPLER_PARAMETER_WRAP_T, convert( createInfo.addressModeV ) );
+		glLogCall( gl::SamplerParameteri, m_sampler, GL_SAMPLER_PARAMETER_WRAP_R, convert( createInfo.addressModeW ) );
+		glLogCall( gl::SamplerParameterf, m_sampler, GL_SAMPLER_PARAMETER_MIN_LOD, createInfo.minLod );
+		glLogCall( gl::SamplerParameterf, m_sampler, GL_SAMPLER_PARAMETER_MAX_LOD, createInfo.maxLod );
 
-		if ( compareOp != renderer::CompareOp::eAlways )
+		if ( device.getFeatures().samplerAnisotropy && createInfo.anisotropyEnable )
+		{
+			glLogCall( gl::SamplerParameterf, m_sampler, GL_SAMPLER_PARAMETER_MAX_ANISOTROPY, createInfo.maxAnisotropy );
+		}
+
+		if ( createInfo.compareEnable )
 		{
 			glLogCall( gl::SamplerParameteri, m_sampler, GL_SAMPLER_PARAMETER_COMPARE_MODE, GL_SAMPLER_PARAMETER_COMPARE_REF_TO_TEXTURE );
-			glLogCall( gl::SamplerParameteri, m_sampler, GL_SAMPLER_PARAMETER_COMPARE_FUNC, convert( compareOp ) );
+			glLogCall( gl::SamplerParameteri, m_sampler, GL_SAMPLER_PARAMETER_COMPARE_FUNC, convert( createInfo.compareOp ) );
 		}
 
 		float fvalues[4] = { 0.0f };
 		int ivalues[4] = { 0 };
 
-		switch ( borderColour )
+		switch ( createInfo.borderColor )
 		{
 		case renderer::BorderColour::eFloatTransparentBlack:
 			glLogCall( gl::SamplerParameterfv, m_sampler, GL_SAMPLER_PARAMETER_BORDER_COLOR, fvalues );

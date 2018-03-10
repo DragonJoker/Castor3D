@@ -11,7 +11,7 @@
 #include <Pipeline/VertexLayout.hpp>
 #include <Pipeline/Viewport.hpp>
 #include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassState.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/RenderSubpass.hpp>
 #include <RenderPass/RenderSubpassState.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
@@ -46,64 +46,73 @@ namespace castor3d
 			, renderer::MemoryPropertyFlag::eHostVisible );
 
 		// Initialise the vertex layout.
-		m_vertexLayout = device.createVertexLayout( 0u, sizeof( NonTexturedQuad ) );
-		m_vertexLayout->createAttribute< Point2f >( 0u, offsetof( NonTexturedQuad::Vertex, position ) );
-
-		// Initialise the geometry buffers.
-		m_geometryBuffers = device.createGeometryBuffers( *m_vertexBuffer
-			, 0u
-			, *m_vertexLayout );
+		m_vertexLayout = renderer::makeLayout< NonTexturedQuad >( 0u );
+		m_vertexLayout->createAttribute( 0u, renderer::Format::eR32G32_SFLOAT, offsetof( NonTexturedQuad::Vertex, position ) );
 
 		// Create the render pass.
-		std::vector< renderer::PixelFormat > formats
-		{
-			dstTexture.getFormat()
-		};
-		renderer::RenderPassAttachmentArray rpAttaches
-		{
-			{ dstTexture.getFormat(), false }
-		};
-		renderer::RenderSubpassPtrArray subpasses;
-		subpasses.emplace_back( device.createRenderSubpass( formats
-			, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-			, renderer::AccessFlag::eColourAttachmentWrite } ) );
-		m_renderPass = device.createRenderPass( rpAttaches
-			, std::move( subpasses )
-			, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-				, renderer::AccessFlag::eColourAttachmentWrite
-				, { renderer::ImageLayout::eColourAttachmentOptimal } }
-			, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-				, renderer::AccessFlag::eColourAttachmentWrite
-				, { renderer::ImageLayout::eColourAttachmentOptimal } } );
+		renderer::RenderPassCreateInfo createInfo{};
+		createInfo.flags = 0u;
+
+		createInfo.attachments.resize( 1u );
+		createInfo.attachments[0].index = 0u;
+		createInfo.attachments[0].format = dstTexture.getFormat();
+		createInfo.attachments[0].samples = renderer::SampleCountFlag::e1;
+		createInfo.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+		createInfo.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+		createInfo.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		createInfo.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		createInfo.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+		createInfo.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+		renderer::AttachmentReference colourReference;
+		colourReference.attachment = 0u;
+		colourReference.layout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+		createInfo.subpasses.resize( 1u );
+		createInfo.subpasses[0].flags = 0u;
+		createInfo.subpasses[0].colorAttachments = { colourReference };
+
+		createInfo.dependencies.resize( 2u );
+		createInfo.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		createInfo.dependencies[0].dstSubpass = 0u;
+		createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+		createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
+		createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		createInfo.dependencies[1].srcSubpass = 0u;
+		createInfo.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+		createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+		createInfo.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eMemoryRead;
+		createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		m_renderPass = device.createRenderPass( createInfo );
 
 		// Initialise the frame buffer.
 		renderer::FrameBufferAttachmentArray attaches;
-		attaches.emplace_back( *( m_renderPass->begin() ), dstTexture );
-		m_frameBuffer = m_renderPass->createFrameBuffer( renderer::UIVec2{ size }
+		attaches.emplace_back( *( m_renderPass->getAttachments().begin() ), dstTexture );
+		m_frameBuffer = m_renderPass->createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
 			, std::move( attaches ) );
 
 		// Initialise the pipeline.
 		m_pipelineLayout = device.createPipelineLayout();
-		m_pipeline = m_pipelineLayout->createPipeline( doCreateProgram()
-			, { *m_vertexLayout }
-			, *m_renderPass
-			, { renderer::PrimitiveTopology::eTriangleStrip } );
-		m_pipeline->depthStencilState( renderer::DepthStencilState{ 0u, false, false } );
-		m_pipeline->viewport( renderer::Viewport
-		{
-			size.getWidth(),
-			size.getHeight(),
-			0,
-			0,
+		m_pipeline = m_pipelineLayout->createPipeline( renderer::GraphicsPipelineCreateInfo{
+			doCreateProgram(),
+			*m_renderPass,
+			renderer::VertexInputState::create( *m_vertexLayout ),
+			renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleStrip },
+			renderer::RasterisationState{},
+			renderer::MultisampleState{},
+			renderer::ColourBlendState::createDefault(),
+			{},
+			renderer::DepthStencilState{ 0u, false, false },
+			std::nullopt,
+			renderer::Viewport{ size.getWidth(), size.getHeight(), 0, 0, },
+			renderer::Scissor{ 0, 0, size.getWidth(), size.getHeight() },
 		} );
-		m_pipeline->scissor( renderer::Scissor
-		{
-			0,
-			0,
-			size.getWidth(),
-			size.getHeight(),
-		} );
-		m_pipeline->finish();
 
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 	}
@@ -119,7 +128,7 @@ namespace castor3d
 				, { renderer::RgbaColour{ 0, 0, 0, 0 } }
 				, renderer::SubpassContents::eInline );
 			m_commandBuffer->bindPipeline( *m_pipeline );
-			m_commandBuffer->bindGeometryBuffers( *m_geometryBuffers );
+			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 			m_commandBuffer->draw( 4u, 1u, 0u, 0u );
 			m_commandBuffer->endRenderPass();
 			m_commandBuffer->end();
@@ -128,7 +137,7 @@ namespace castor3d
 		device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
 	}
 
-	renderer::ShaderProgram & BrdfPrefilter::doCreateProgram()
+	renderer::ShaderStageStateArray BrdfPrefilter::doCreateProgram()
 	{
 		glsl::Shader vtx;
 		{
@@ -331,9 +340,11 @@ namespace castor3d
 		}
 
 		auto & cache = m_renderSystem.getEngine()->getShaderProgramCache();
-		auto & program = cache.getNewProgram( false );
-		program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
-		program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
+		auto program = cache.getNewProgram( false );
+		program.push_back( { m_renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
+		program.push_back( { m_renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
+		program[0].module->loadShader( vtx.getSource() );
+		program[1].module->loadShader( pxl.getSource() );
 		return program;
 	}
 }

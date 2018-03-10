@@ -76,7 +76,7 @@ namespace castor3d
 			auto & device = *renderSystem.getCurrentDevice();
 			auto result = device.createTexture();
 			result->setImage( getTextureFormat( texture )
-				, renderer::UIVec2{ size.getWidth(), size.getHeight() }
+				, renderer::Extent3D{ size.getWidth(), size.getHeight(), 1u }
 			, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled );
 			return result;
 		}
@@ -93,7 +93,7 @@ namespace castor3d
 				{ *( renderPass.begin() + 2u ), wbResult[2] },
 				{ *( renderPass.begin() + 3u ), colourView },
 			};
-			return renderPass.createFrameBuffer( renderer::UIVec2{ size.getWidth(), size.getHeight() }
+			return renderPass.createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
 				, std::move( attaches ) );
 		}
 	}

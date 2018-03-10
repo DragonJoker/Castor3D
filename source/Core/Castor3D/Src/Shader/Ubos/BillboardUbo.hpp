@@ -24,8 +24,8 @@ namespace castor3d
 	public:
 		struct Configuration
 		{
-			renderer::Vec2 dimensions;
-			renderer::IVec2 windowSize;
+			castor::Point2f dimensions;
+			castor::Point2i windowSize;
 		};
 
 	public:

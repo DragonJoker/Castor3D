@@ -15,7 +15,7 @@
 #include <Pipeline/VertexLayout.hpp>
 #include <Pipeline/Viewport.hpp>
 #include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassState.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/RenderSubpass.hpp>
 #include <RenderPass/RenderSubpassState.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
@@ -33,12 +33,23 @@ namespace castor3d
 	{
 		TextureUnit doCreatePrefilteredBrdf( Engine & engine )
 		{
+			renderer::ImageCreateInfo image{};
+			image.flags = 0u;
+			image.arrayLayers = 1u;
+			image.extent.width = 512u;
+			image.extent.height = 512u;
+			image.extent.depth = 1u;
+			image.format = renderer::Format::eR32G32B32_SFLOAT;
+			image.imageType = renderer::TextureType::e2D;
+			image.initialLayout = renderer::ImageLayout::eUndefined;
+			image.mipLevels = 1u;
+			image.samples = renderer::SampleCountFlag::e1;
+			image.sharingMode = renderer::SharingMode::eExclusive;
+			image.tiling = renderer::ImageTiling::eOptimal;
+			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
 			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
-				, renderer::TextureType::e2D
-				, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled
-				, renderer::MemoryPropertyFlag::eDeviceLocal
-				, PixelFormat::eRGB32F
-				, Size{ 512u, 512u } );
+				, image
+				, renderer::MemoryPropertyFlag::eDeviceLocal );
 			SamplerSPtr sampler;
 			auto name = cuT( "IblTexturesBRDF" );
 
@@ -76,7 +87,7 @@ namespace castor3d
 		, m_environmentPrefilter{ *scene.getEngine(), Size{ 128u, 128u }, source.getTexture() }
 	{
 		BrdfPrefilter filter{ *scene.getEngine()
-			, m_prefilteredBrdf.getTexture()->getDimensions()
+			, { m_prefilteredBrdf.getTexture()->getDimensions().width, m_prefilteredBrdf.getTexture()->getDimensions().height }
 			, m_prefilteredBrdf.getTexture()->getView() };
 		filter.render();
 	}

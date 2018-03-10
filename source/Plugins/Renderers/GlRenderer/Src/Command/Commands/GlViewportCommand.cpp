@@ -23,10 +23,13 @@ namespace gl_renderer
 		{
 			glLogCommand( "ViewportCommand" );
 			glLogCall( gl::Viewport
-				, m_viewport.getOffset()[0]
-				, m_viewport.getOffset()[1]
-				, m_viewport.getSize()[0]
-				, m_viewport.getSize()[1] );
+				, m_viewport.getOffset().x
+				, m_viewport.getOffset().y
+				, m_viewport.getSize().width
+				, m_viewport.getSize().height );
+			glLogCall( gl::DepthRange
+				, m_viewport.getDepthBounds()[0]
+				, m_viewport.getDepthBounds()[1] );
 			save = m_viewport;
 		}
 	}

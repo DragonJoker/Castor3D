@@ -93,7 +93,7 @@ namespace castor3d
 	void BorderPanelOverlay::doUpdateSize()
 	{
 		OverlayCategory::doUpdateSize();
-		OverlayRendererSPtr renderer = getOverlay().getEngine()->getOverlayCache().getRenderer();
+		OverlayRendererSPtr renderer;// = getOverlay().getEngine()->getOverlayCache().getRenderer();
 
 		if ( renderer )
 		{
@@ -175,9 +175,9 @@ namespace castor3d
 		return size;
 	}
 
-	void BorderPanelOverlay::doRender( OverlayRendererSPtr p_renderer )
+	void BorderPanelOverlay::doRender( OverlayRenderer & renderer )
 	{
-		p_renderer->drawBorderPanel( *this );
+		renderer.drawBorderPanel( *this );
 	}
 
 	void BorderPanelOverlay::doUpdateBuffer( Size const & p_size )

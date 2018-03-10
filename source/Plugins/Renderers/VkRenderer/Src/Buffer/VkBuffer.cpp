@@ -1,18 +1,19 @@
 #include "Buffer/VkBuffer.hpp"
 
 #include "Core/VkDevice.hpp"
+#include "Miscellaneous/VkDeviceMemory.hpp"
 #include "Sync/VkBufferMemoryBarrier.hpp"
+
+#include <Miscellaneous/MemoryRequirements.hpp>
 
 namespace vk_renderer
 {
 	Buffer::Buffer( Device const & device
 		, uint32_t size
-		, renderer::BufferTargets target
-		, renderer::MemoryPropertyFlags memoryFlags )
+		, renderer::BufferTargets target )
 		: renderer::BufferBase{ device
 			, size
-			, target
-			, memoryFlags }
+			, target }
 		, m_device{ device }
 	{
 		VkBufferCreateInfo bufferCreate
@@ -36,19 +37,6 @@ namespace vk_renderer
 		{
 			throw std::runtime_error{ "Buffer creation failed: " + getLastError() };
 		}
-
-		m_storage = std::make_unique< BufferStorage >( m_device
-			, m_buffer
-			, convert( memoryFlags ) );
-		res = m_device.vkBindBufferMemory( m_device
-			, m_buffer
-			, *m_storage
-			, 0 );
-
-		if ( !checkError( res ) )
-		{
-			throw std::runtime_error{ "Buffer memory binding failed: " + getLastError() };
-		}
 	}
 
 	Buffer::~Buffer()
@@ -56,20 +44,9 @@ namespace vk_renderer
 		m_device.vkDestroyBuffer( m_device, m_buffer, nullptr );
 	}
 
-	uint8_t * Buffer::lock( uint32_t offset
-		, uint32_t size
-		, renderer::MemoryMapFlags flags )const
+	renderer::MemoryRequirements Buffer::getMemoryRequirements()const
 	{
-		return m_storage->lock( offset
-			, size
-			, convert( flags ) );
-	}
-
-	void Buffer::unlock( uint32_t size
-		, bool modified )const
-	{
-		m_storage->unlock( size
-			, modified );
+		return m_device.getBufferMemoryRequirements( m_buffer );
 	}
 
 	renderer::BufferMemoryBarrier Buffer::makeTransferDestination()const
@@ -107,5 +84,18 @@ namespace vk_renderer
 		DEBUG_DUMP( convert( memoryBarrier ) );
 		m_currentAccessMask = convert( dstAccess );
 		return memoryBarrier;
+	}
+
+	void Buffer::doBindMemory()
+	{
+		auto res = m_device.vkBindBufferMemory( m_device
+			, m_buffer
+			, static_cast< DeviceMemory const & >( *m_storage )
+			, 0 );
+
+		if ( !checkError( res ) )
+		{
+			throw std::runtime_error{ "Buffer memory binding failed: " + getLastError() };
+		}
 	}
 }

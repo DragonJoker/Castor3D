@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #include "VkRendererPrerequisites.hpp"
@@ -12,8 +12,8 @@ namespace vk_renderer
 		{
 			VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO,
 			nullptr,
-			convert( state.getFlags() ),
-			state.getControlPoints()
+			convert( state.flags ),
+			state.patchControlPoints
 		};
 	}
 }

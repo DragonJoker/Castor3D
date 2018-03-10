@@ -40,56 +40,9 @@ namespace gl_renderer
 		*\param[in] bindingPoint
 		*	The binding point for the set.
 		*/
-		DescriptorSet( renderer::DescriptorSetPool const & pool, uint32_t bindingPoint );
-		/**
-		*\copydoc		renderer::DescriptorSet::createBinding
-		*/
-		renderer::CombinedTextureSamplerBinding const & createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
-			, renderer::TextureView const & view
-			, renderer::Sampler const & sampler
-			, uint32_t index )override;
-		/**
-		*\copydoc		renderer::DescriptorSet::createBinding
-		*/
-		renderer::SamplerBinding const & createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
-			, renderer::Sampler const & sampler
-			, uint32_t index )override;
-		/**
-		*\copydoc		renderer::DescriptorSet::createBinding
-		*/
-		renderer::SampledTextureBinding const & createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
-			, renderer::TextureView const & view
-			, renderer::ImageLayout layout
-			, uint32_t index )override;
-		/**
-		*\copydoc		renderer::DescriptorSet::createBinding
-		*/
-		renderer::StorageTextureBinding const & createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
-			, renderer::TextureView const & view
-			, uint32_t index )override;
-		/**
-		*\copydoc		renderer::DescriptorSet::createBinding
-		*/
-		renderer::UniformBufferBinding const & createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
-			, renderer::UniformBufferBase const & uniformBuffer
-			, uint32_t offset
-			, uint32_t range
-			, uint32_t index )override;
-		/**
-		*\copydoc		renderer::DescriptorSet::createBinding
-		*/
-		renderer::StorageBufferBinding const & createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
-			, renderer::BufferBase const & storageBuffer
-			, uint32_t offset
-			, uint32_t range
-			, uint32_t index )override;
-		/**
-		*\copydoc		renderer::DescriptorSet::createBinding
-		*/
-		renderer::TexelBufferBinding const & createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
-			, renderer::BufferBase const & buffer
-			, renderer::BufferView const & view
-			, uint32_t index )override;
+		DescriptorSet( renderer::DescriptorPool const & pool
+			, renderer::DescriptorSetLayout const & layout
+			, uint32_t bindingPoint );
 		/**
 		*\copydoc		renderer::DescriptorSet::update
 		*/
@@ -98,7 +51,7 @@ namespace gl_renderer
 		*\brief
 		*	Le tableau d'attaches de type sampler + texture.
 		*/
-		inline std::vector< renderer::CombinedTextureSamplerBinding > const & getCombinedTextureSamplers()const
+		inline renderer::WriteDescriptorSetArray const & getCombinedTextureSamplers()const
 		{
 			return m_combinedTextureSamplers;
 		}
@@ -106,7 +59,7 @@ namespace gl_renderer
 		*\brief
 		*	Le tableau d'attaches de type sampler.
 		*/
-		inline std::vector< renderer::SamplerBinding > const & getSamplers()const
+		inline renderer::WriteDescriptorSetArray const & getSamplers()const
 		{
 			return m_samplers;
 		}
@@ -114,7 +67,7 @@ namespace gl_renderer
 		*\brief
 		*	Le tableau d'attaches de type texture échantillonnée.
 		*/
-		inline std::vector< renderer::SampledTextureBinding > const & getSampledTextures()const
+		inline renderer::WriteDescriptorSetArray const & getSampledTextures()const
 		{
 			return m_sampledTextures;
 		}
@@ -122,7 +75,7 @@ namespace gl_renderer
 		*\brief
 		*	Le tableau d'attaches de type texture de stockage.
 		*/
-		inline std::vector< renderer::StorageTextureBinding > const & getStorageTextures()const
+		inline renderer::WriteDescriptorSetArray const & getStorageTextures()const
 		{
 			return m_storageTextures;
 		}
@@ -130,7 +83,7 @@ namespace gl_renderer
 		*\brief
 		*	Le tableau d'attaches de type tampon uniforme.
 		*/
-		inline std::vector< renderer::UniformBufferBinding > const & getUniformBuffers()const
+		inline renderer::WriteDescriptorSetArray const & getUniformBuffers()const
 		{
 			return m_uniformBuffers;
 		}
@@ -138,7 +91,7 @@ namespace gl_renderer
 		*\brief
 		*	Le tableau d'attaches de type tampon de stockage.
 		*/
-		inline std::vector< renderer::StorageBufferBinding > const & getStorageBuffers()const
+		inline renderer::WriteDescriptorSetArray const & getStorageBuffers()const
 		{
 			return m_storageBuffers;
 		}
@@ -146,19 +99,30 @@ namespace gl_renderer
 		*\brief
 		*	Le tableau d'attaches de type tampon uniforme de texels.
 		*/
-		inline std::vector< renderer::TexelBufferBinding > const & getTexelBuffers()const
+		inline renderer::WriteDescriptorSetArray const & getTexelBuffers()const
 		{
 			return m_texelBuffers;
 		}
+		/**
+		*\brief
+		*	Le tableau d'attaches de type tampon dynamique.
+		*/
+		inline renderer::WriteDescriptorSetArray const & getDynamicBuffers()const
+		{
+			return m_dynamicBuffers;
+		}
 
 	private:
-		std::vector< renderer::CombinedTextureSamplerBinding > m_combinedTextureSamplers;
-		std::vector< renderer::SamplerBinding > m_samplers;
-		std::vector< renderer::SampledTextureBinding > m_sampledTextures;
-		std::vector< renderer::StorageTextureBinding > m_storageTextures;
-		std::vector< renderer::UniformBufferBinding > m_uniformBuffers;
-		std::vector< renderer::StorageBufferBinding > m_storageBuffers;
-		std::vector< renderer::TexelBufferBinding > m_texelBuffers;
+		mutable renderer::WriteDescriptorSetArray m_combinedTextureSamplers;
+		mutable renderer::WriteDescriptorSetArray m_samplers;
+		mutable renderer::WriteDescriptorSetArray m_sampledTextures;
+		mutable renderer::WriteDescriptorSetArray m_storageTextures;
+		mutable renderer::WriteDescriptorSetArray m_uniformBuffers;
+		mutable renderer::WriteDescriptorSetArray m_storageBuffers;
+		mutable renderer::WriteDescriptorSetArray m_texelBuffers;
+		mutable renderer::WriteDescriptorSetArray m_dynamicUniformBuffers;
+		mutable renderer::WriteDescriptorSetArray m_dynamicStorageBuffers;
+		mutable renderer::WriteDescriptorSetArray m_dynamicBuffers;
 	};
 }
 

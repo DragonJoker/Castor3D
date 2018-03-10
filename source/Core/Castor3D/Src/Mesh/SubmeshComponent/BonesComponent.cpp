@@ -98,11 +98,11 @@ namespace castor3d
 		return getOwner()->getParent().getSkeleton();
 	}
 
-	void BonesComponent::gather( renderer::VertexBufferCRefArray & buffers
-		, std::vector< uint64_t > offsets
+	void BonesComponent::gather( renderer::BufferCRefArray & buffers
+		, std::vector< uint64_t > & offsets
 		, renderer::VertexLayoutCRefArray & layouts )
 	{
-		buffers.emplace_back( *m_bonesBuffer );
+		buffers.emplace_back( m_bonesBuffer->getBuffer() );
 		offsets.emplace_back( 0u );
 		layouts.emplace_back( *m_bonesLayout );
 	}
@@ -117,11 +117,11 @@ namespace castor3d
 				, uint32_t( m_bones.size() )
 				, 0u
 				, renderer::MemoryPropertyFlag::eHostVisible );
-			m_bonesLayout = device.createVertexLayout( BindingPoint, sizeof( VertexBoneData ) );
-			m_bonesLayout->createAttribute< renderer::UIVec4 >( 0u, offsetof( VertexBoneData::Ids, id0 ) );
-			m_bonesLayout->createAttribute< renderer::UIVec4 >( 1u, offsetof( VertexBoneData::Ids, id1 ) );
-			m_bonesLayout->createAttribute< renderer::Vec4 >( 2u, offsetof( VertexBoneData::Weights, weight0 ) );
-			m_bonesLayout->createAttribute< renderer::Vec4 >( 3u, offsetof( VertexBoneData::Weights, weight1 ) );
+			m_bonesLayout = renderer::makeLayout< VertexBoneData >( BindingPoint );
+			m_bonesLayout->createAttribute( 0u, renderer::Format::eR32G32B32A32_UINT, offsetof( VertexBoneData::Ids, id0 ) );
+			m_bonesLayout->createAttribute( 1u, renderer::Format::eR32G32B32A32_UINT, offsetof( VertexBoneData::Ids, id1 ) );
+			m_bonesLayout->createAttribute( 2u, renderer::Format::eR32G32B32A32_SFLOAT, offsetof( VertexBoneData::Weights, weight0 ) );
+			m_bonesLayout->createAttribute( 3u, renderer::Format::eR32G32B32A32_SFLOAT, offsetof( VertexBoneData::Weights, weight1 ) );
 		}
 
 		return m_bonesBuffer != nullptr;
@@ -149,7 +149,8 @@ namespace castor3d
 				, renderer::MemoryMapFlag::eRead | renderer::MemoryMapFlag::eWrite ) )
 			{
 				std::copy( m_bones.begin(), m_bones.end(), buffer );
-				m_bonesBuffer->unlock( count, true );
+				m_bonesBuffer->flush( 0u, count );
+				m_bonesBuffer->unlock();
 			}
 
 			//m_bones.clear();

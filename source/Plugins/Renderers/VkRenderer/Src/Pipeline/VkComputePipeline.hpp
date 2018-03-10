@@ -30,17 +30,11 @@ namespace vk_renderer
 		*\param[in] layout
 		*	Le layout du pipeline.
 		*\param[in] program
-		*	Le programme shader.
-		*\param[in] vertexBuffers
-		*	Les tampons de sommets utilisés.
-		*\param[in] renderPass
-		*	La passe de rendu.
-		*\param[in] topology
-		*	La topologie d'affichage des sommets affichés via ce pipeline.
+		*	Les informations de creation du pipeline.
 		*/
 		ComputePipeline( Device const & device
 			, renderer::PipelineLayout const & layout
-			, renderer::ShaderProgram const & program );
+			, renderer::ComputePipelineCreateInfo && createInfo );
 		/**
 		*\~french
 		*\brief
@@ -66,7 +60,9 @@ namespace vk_renderer
 	private:
 		Device const & m_device;
 		PipelineLayout const & m_layout;
-		ShaderProgram const & m_shader;
+		std::vector< VkSpecializationMapEntry > m_specialisationEntries;
+		VkSpecializationInfo m_specialisationInfos;
+		VkPipelineShaderStageCreateInfo m_shaderStage;
 		VkPipeline m_pipeline{ VK_NULL_HANDLE };
 	};
 }

@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___Renderer_Buffer_HPP___
@@ -7,6 +7,7 @@ See LICENSE file in root folder.
 #pragma once
 
 #include "Core/Device.hpp"
+#include "Miscellaneous/DeviceMemory.hpp"
 
 namespace renderer
 {
@@ -31,8 +32,6 @@ namespace renderer
 		*	The buffer size.
 		*\param[in] target
 		*	The buffer usage flags.
-		*\param[in] flags
-		*	The buffer memory flags.
 		*\~french
 		*\brief
 		*	Constructeur.
@@ -42,13 +41,10 @@ namespace renderer
 		*	La taille du tampon.
 		*\param[in] target
 		*	Les indicateurs d'utilisation du tampon.
-		*\param[in] flags
-		*	Les indicateurs de mémoire du tampon.
 		*/
 		BufferBase( Device const & device
 			, uint32_t size
-			, BufferTargets target
-			, MemoryPropertyFlags flags );
+			, BufferTargets target );
 
 	public:
 		/**
@@ -60,6 +56,19 @@ namespace renderer
 		*	Destructeur.
 		*/
 		virtual ~BufferBase() = default;
+		/**
+		*\~english
+		*\brief
+		*	Binds this buffer to given device memory object.
+		*\param[in] memory
+		*	The memory object.
+		*\~french
+		*\brief
+		*	Lie ce tampon à l'objet mémoire donné.
+		*\param[in] memory
+		*	L'object mémoire de périphérique.
+		*/
+		void bindMemory( DeviceMemoryPtr memory );
 		/**
 		*\~english
 		*\brief
@@ -84,27 +93,63 @@ namespace renderer
 		*\return
 		*	\p nullptr si le mapping a échoué.
 		*/
-		virtual uint8_t * lock( uint32_t offset
+		uint8_t * lock( uint32_t offset
 			, uint32_t size
-			, MemoryMapFlags flags )const = 0;
+			, MemoryMapFlags flags )const;
+		/**
+		*\~english
+		*\brief
+		*	Invalidates the buffer content.
+		*\param[in] offset
+		*	The mapped memory starting offset.
+		*\param[in] size
+		*	The range size.
+		*\~french
+		*\brief
+		*	Invalide le contenu du tampon.
+		*\param[in] offset
+		*	L'offset de la mémoire mappée.
+		*\param[in] size
+		*	La taille en octets de la mémoire mappée.
+		*/
+		void invalidate( uint32_t offset
+			, uint32_t size )const;
+		/**
+		*\~english
+		*\brief
+		*	Updates the VRAM.
+		*\param[in] offset
+		*	The mapped memory starting offset.
+		*\param[in] size
+		*	The range size.
+		*\~french
+		*\brief
+		*	Met à jour la VRAM.
+		*\param[in] offset
+		*	L'offset de la mémoire mappée.
+		*\param[in] size
+		*	La taille en octets de la mémoire mappée.
+		*/
+		void flush( uint32_t offset
+			, uint32_t size )const;
 		/**
 		*\~english
 		*\brief
 		*	Unmaps the buffer's memory from RAM.
-		*\param[in] size
-		*	The range size.
-		*\param[in] modified
-		*	Tells if the memory has changed, and VRAM must be updated.
 		*\~french
 		*\brief
 		*	Unmappe la mémoire du tampon de la RAM.
-		*\param[in] size
-		*	La taille en octets de la mémoire mappée.
-		*\param[in] modified
-		*	Dit si le tampon a été modifié, et donc si la VRAM doit être mise à jour.
 		*/
-		virtual void unlock( uint32_t size
-			, bool modified )const = 0;
+		void unlock()const;
+		/**
+		*\~english
+		*\return
+		*	The memory requirements for this buffer.
+		*\~french
+		*\return
+		*	Les exigences mémoire pour ce tampon.
+		*/
+		virtual MemoryRequirements getMemoryRequirements()const = 0;
 		/**
 		*\~english
 		*\brief
@@ -199,10 +244,14 @@ namespace renderer
 			return m_target;
 		}
 
+	private:
+		virtual void doBindMemory() = 0;
+
 	protected:
 		Device const & m_device;
 		uint32_t m_size;
 		BufferTargets m_target;
+		DeviceMemoryPtr m_storage;
 	};
 	/**
 	*\~english
@@ -303,23 +352,58 @@ namespace renderer
 		/**
 		*\~english
 		*\brief
-		*	Unmaps the buffer's memory from RAM.
+		*	Updates the VRAM.
+		*\param[in] offset
+		*	The mapped memory starting offset.
 		*\param[in] size
 		*	The range size.
-		*\param[in] modified
-		*	Tells if the memory has changed, and VRAM must be updated.
+		*\~french
+		*\brief
+		*	Met à jour la VRAM.
+		*\param[in] offset
+		*	L'offset de la mémoire mappée.
+		*\param[in] size
+		*	La taille en octets de la mémoire mappée.
+		*/
+		inline void flush( uint32_t offset
+			, uint32_t size )const
+		{
+			m_buffer->flush( uint32_t( offset * sizeof( T ) )
+				, uint32_t( size * sizeof( T ) ) );
+		}
+		/**
+		*\~english
+		*\brief
+		*	Invalidates the buffer content.
+		*\param[in] offset
+		*	The mapped memory starting offset.
+		*\param[in] size
+		*	The range size.
+		*\~french
+		*\brief
+		*	Invalide le contenu du tampon.
+		*\param[in] offset
+		*	L'offset de la mémoire mappée.
+		*\param[in] size
+		*	La taille en octets de la mémoire mappée.
+		*/
+		inline void invalidate( uint32_t offset
+			, uint32_t size )const
+		{
+			m_buffer->invalidate( uint32_t( offset * sizeof( T ) )
+				, uint32_t( size * sizeof( T ) ) );
+		}
+		/**
+		*\~english
+		*\brief
+		*	Unmaps the buffer's memory from RAM.
 		*\~french
 		*\brief
 		*	Unmappe la mémoire du tampon de la RAM.
-		*\param[in] size
-		*	La taille en octets de la mémoire mappée.
-		*\param[in] modified
-		*	Dit si le tampon a été modifié, et donc si la VRAM doit être mise à jour.
 		*/
-		inline void unlock( uint32_t size
-			, bool modified )const
+		virtual void unlock()const
 		{
-			m_buffer->unlock( size * sizeof( T ), modified );
+			m_buffer->unlock();
 		}
 
 	private:
@@ -331,8 +415,8 @@ namespace renderer
 	*	Helper function tor create a Buffer< T >.
 	*\param[in] device
 	*	The logical device.
-	*\param[in] size
-	*	The buffer size.
+	*\param[in] count
+	*	The buffer elements count.
 	*\param[in] target
 	*	The buffer usage flags.
 	*\param[in] flags

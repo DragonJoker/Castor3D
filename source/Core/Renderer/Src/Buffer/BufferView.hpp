@@ -1,5 +1,5 @@
-/*
-This file belongs to Renderer.
+﻿/*
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___Renderer_BufferView_HPP___
@@ -51,7 +51,7 @@ namespace renderer
 		*/
 		BufferView( Device const & device
 			, BufferBase const & buffer
-			, PixelFormat format
+			, Format format
 			, uint32_t offset
 			, uint32_t range );
 
@@ -73,7 +73,7 @@ namespace renderer
 		*\return
 		*	The view's pixels format.
 		*/
-		inline PixelFormat getFormat()const
+		inline Format getFormat()const
 		{
 			return m_format;
 		}
@@ -117,7 +117,7 @@ namespace renderer
 	private:
 		Device const & m_device;
 		BufferBase const & m_buffer;
-		PixelFormat m_format;
+		Format m_format;
 		uint32_t m_offset;
 		uint32_t m_range;
 	};

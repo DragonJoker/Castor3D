@@ -158,9 +158,18 @@ namespace castor3d
 			{
 				TextureUnitSPtr unit = std::make_shared< TextureUnit >( *pass.getOwner()->getEngine() );
 				unit->setAutoMipmaps( true );
+				renderer::ImageCreateInfo createInfo{};
+				createInfo.flags = 0u;
+				createInfo.arrayLayers = 1u;
+				createInfo.imageType = renderer::TextureType::e2D;
+				createInfo.initialLayout = renderer::ImageLayout::eUndefined;
+				createInfo.mipLevels = 1u;
+				createInfo.samples = renderer::SampleCountFlag::e1;
+				createInfo.sharingMode = renderer::SharingMode::eExclusive;
+				createInfo.tiling = renderer::ImageTiling::eOptimal;
+				createInfo.usage = renderer::ImageUsageFlag::eSampled;
 				auto texture = std::make_shared < TextureLayout >( *getEngine()->getRenderSystem()
-					, renderer::TextureType::e2D
-					, renderer::ImageUsageFlag::eSampled
+					, createInfo
 					, renderer::MemoryPropertyFlag::eHostVisible );
 				texture->setSource( folder, relative );
 				unit->setTexture( texture );

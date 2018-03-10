@@ -60,9 +60,9 @@ namespace castor3d
 		}
 
 	private:
-		renderer::ShaderProgram & doInitialiseShader();
+		renderer::ShaderStageStateArray doInitialiseShader();
 		bool doInitialiseVertexBuffer();
-		bool doInitialisePipeline( renderer::ShaderProgram & program
+		bool doInitialisePipeline( renderer::ShaderStageStateArray & program
 			, TextureLayout const & texture
 			, renderer::RenderPass const & renderPass );
 		void doPrepareFrame();
@@ -71,14 +71,13 @@ namespace castor3d
 		MatrixUbo m_matrixUbo;
 		ModelMatrixUbo m_modelMatrixUbo;
 		castor::Size m_size;
-		renderer::PushConstantsBuffer< renderer::Vec2 > m_sizePushConstant;
+		renderer::PushConstantsBuffer< castor::Point2f > m_sizePushConstant;
 		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
 		renderer::DescriptorSetPoolPtr m_descriptorPool;
 		renderer::DescriptorSetPtr m_descriptorSet;
 		renderer::VertexLayoutPtr m_vertexLayout;
 		renderer::PushConstantRange m_pushConstantRange;
 		renderer::VertexBufferPtr< NonTexturedCube > m_vertexBuffer;
-		renderer::GeometryBuffersPtr m_geometryBuffers;
 		RenderPipelineUPtr m_pipeline;
 		SamplerSPtr m_sampler;
 		renderer::CommandBufferPtr m_commandBuffer;

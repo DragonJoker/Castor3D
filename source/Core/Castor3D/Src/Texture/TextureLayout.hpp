@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "TextureView.hpp"
 
+#include <Image/ImageCreateInfo.hpp>
+
 namespace castor3d
 {
 	/*!
@@ -25,117 +27,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	type			The texture type.
-		 *\param[in]	renderSystem	The render system.
-		 *\param[in]	cpuAccess		The required CPU access (combination of AccessType).
-		 *\param[in]	gpuAccess		The required GPU access (combination of AccessType).
+		 *\param[in]	renderSystem		The render system.
+		 *\param[in]	info				The image informations.
+		 *\param[in]	memoryProperties	The required memory properties.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	type			Le type de texture.
-		 *\param[in]	renderSystem	Le render system.
-		 *\param[in]	cpuAccess		Les accès requis pour le CPU (combinaison de AccessType).
-		 *\param[in]	gpuAccess		Les accès requis pour le GPU (combinaison de AccessType).
+		 *\param[in]	renderSystem		Le render system.
+		 *\param[in]	info				Les informations de l'image.
+		 *\param[in]	memoryProperties	Les propriétés requise pour la mémoire.
 		 */
 		C3D_API TextureLayout( RenderSystem & renderSystem
-			, renderer::TextureType type
-			, renderer::ImageUsageFlags usage
+			, renderer::ImageCreateInfo info
 			, renderer::MemoryPropertyFlags memoryProperties );
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	type			The texture type.
-		 *\param[in]	renderSystem	The render system.
-		 *\param[in]	cpuAccess		The required CPU access (combination of AccessType).
-		 *\param[in]	gpuAccess		The required GPU access (combination of AccessType).
-		 *\param[in]	mipmapCount		The mipmap count for the texture.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	type			Le type de texture.
-		 *\param[in]	renderSystem	Le render system.
-		 *\param[in]	cpuAccess		Les accès requis pour le CPU (combinaison de AccessType).
-		 *\param[in]	gpuAccess		Les accès requis pour le GPU (combinaison de AccessType).
-		 *\param[in]	mipmapCount		Le nombre de mipmaps de la texture.
-		 */
-		C3D_API TextureLayout( RenderSystem & renderSystem
-			, renderer::TextureType type
-			, renderer::ImageUsageFlags usage
-			, renderer::MemoryPropertyFlags memoryProperties
-			, uint32_t mipmapCount );
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	type			The texture type.
-		 *\param[in]	renderSystem	The render system.
-		 *\param[in]	cpuAccess		The required CPU access (combination of AccessType).
-		 *\param[in]	gpuAccess		The required GPU access (combination of AccessType).
-		 *\param[in]	format			The texture format.
-		 *\param[in]	size			The texture dimensions.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	type			Le type de texture.
-		 *\param[in]	renderSystem	Le render system.
-		 *\param[in]	cpuAccess		Les accès requis pour le CPU (combinaison de AccessType).
-		 *\param[in]	gpuAccess		Les accès requis pour le GPU (combinaison de AccessType).
-		 *\param[in]	format			Le format de la texture.
-		 *\param[in]	size			Les dimensions de la texture.
-		 */
-		C3D_API TextureLayout( RenderSystem & renderSystem
-			, renderer::TextureType type
-			, renderer::ImageUsageFlags usage
-			, renderer::MemoryPropertyFlags memoryProperties
-			, castor::PixelFormat format
-			, castor::Size const & size );
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	type			The texture type.
-		 *\param[in]	renderSystem	The render system.
-		 *\param[in]	cpuAccess		The required CPU access (combination of AccessType).
-		 *\param[in]	gpuAccess		The required GPU access (combination of AccessType).
-		 *\param[in]	format			The texture format.
-		 *\param[in]	size			The texture dimensions.
-		 *\param[in]	mipmapCount		The mipmap count for the texture.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	type			Le type de texture.
-		 *\param[in]	renderSystem	Le render system.
-		 *\param[in]	cpuAccess		Les accès requis pour le CPU (combinaison de AccessType).
-		 *\param[in]	gpuAccess		Les accès requis pour le GPU (combinaison de AccessType).
-		 *\param[in]	format			Le format de la texture.
-		 *\param[in]	size			Les dimensions de la texture.
-		 *\param[in]	mipmapCount		Le nombre de mipmaps de la texture.
-		 */
-		C3D_API TextureLayout( RenderSystem & renderSystem
-			, renderer::TextureType type
-			, renderer::ImageUsageFlags usage
-			, renderer::MemoryPropertyFlags memoryProperties
-			, castor::PixelFormat format
-			, castor::Size const & size
-			, uint32_t mipmapCount );
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	type			The texture type.
-		 *\param[in]	renderSystem	The render system.
-		 *\param[in]	cpuAccess		The required CPU access (combination of AccessType).
-		 *\param[in]	gpuAccess		The required GPU access (combination of AccessType).
-		 *\param[in]	format			The texture format.
-		 *\param[in]	size			The texture dimensions.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	type			Le type de texture.
-		 *\param[in]	renderSystem	Le render system.
-		 *\param[in]	cpuAccess		Les accès requis pour le CPU (combinaison de AccessType).
-		 *\param[in]	gpuAccess		Les accès requis pour le GPU (combinaison de AccessType).
-		 *\param[in]	format			Le format de la texture.
-		 *\param[in]	size			Les dimensions de la texture.
-		 */
-		C3D_API TextureLayout( RenderSystem & renderSystem
-			, renderer::TextureType type
-			, renderer::ImageUsageFlags usage
-			, renderer::MemoryPropertyFlags memoryProperties
-			, castor::PixelFormat format
-			, castor::Point3ui const & size );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -203,7 +106,7 @@ namespace castor3d
 
 		inline renderer::TextureType getType()const
 		{
-			return m_type;
+			return m_info.imageType;
 		}
 
 		inline TextureView const & getImage( size_t index = 0u )const
@@ -231,41 +134,37 @@ namespace castor3d
 
 		inline uint32_t getWidth()const
 		{
-			return m_size.getWidth();
+			return m_info.extent.width;
 		}
 
 		inline uint32_t getHeight()const
 		{
-			return m_size.getHeight();
-		}
-
-		inline uint32_t getMipmapCount()const
-		{
-			return m_mipmapCount;
-		}
-
-		inline castor::Size const & getDimensions()const
-		{
-			return m_size;
-		}
-
-		inline castor::PixelFormat getPixelFormat()const
-		{
-			return m_format;
+			return m_info.extent.height;
 		}
 
 		inline uint32_t getDepth()const
 		{
-			return m_type == renderer::TextureType::e3D ? m_depth : 1;
+			return m_info.extent.depth;
+		}
+
+		inline uint32_t getMipmapCount()const
+		{
+			return m_info.mipLevels;
+		}
+
+		inline renderer::Extent3D const & getDimensions()const
+		{
+			return m_info.extent;
+		}
+
+		inline renderer::Format getPixelFormat()const
+		{
+			return m_info.format;
 		}
 
 		inline uint32_t getLayersCount()const
 		{
-			return ( m_type == renderer::TextureType::e2DArray
-					|| m_type == renderer::TextureType::e1DArray
-					|| m_type == renderer::TextureType::eCubeArray )
-				? m_depth
-				: 1;
+			return m_info.arrayLayers;
 		}
 
 		inline auto begin()
@@ -290,17 +189,12 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doUpdateFromFirstImage( castor::Size const & size, castor::PixelFormat format );
+		void doUpdateFromFirstImage( castor::Size const & size, renderer::Format format );
 
 	private:
 		bool m_initialised{ false };
-		renderer::TextureType m_type;
-		renderer::ImageUsageFlags m_usage;
+		renderer::ImageCreateInfo m_info;
 		renderer::MemoryPropertyFlags m_properties;
-		castor::Size m_size;
-		castor::PixelFormat m_format;
-		uint32_t m_depth{ 1 };
-		uint32_t m_mipmapCount{ ~( 0u ) };
 		std::vector< TextureViewUPtr > m_views;
 		TextureView & m_defaultView;
 		renderer::TexturePtr m_texture;

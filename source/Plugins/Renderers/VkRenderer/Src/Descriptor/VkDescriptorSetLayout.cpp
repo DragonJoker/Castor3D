@@ -1,7 +1,6 @@
 #include "Descriptor/VkDescriptorSetLayout.hpp"
 
 #include "Descriptor/VkDescriptorSetLayoutBinding.hpp"
-#include "Descriptor/VkDescriptorSetPool.hpp"
 #include "Core/VkDevice.hpp"
 
 namespace vk_renderer
@@ -37,14 +36,5 @@ namespace vk_renderer
 		m_device.vkDestroyDescriptorSetLayout( m_device
 			, m_layout
 			, nullptr );
-	}
-
-	renderer::DescriptorSetPoolPtr DescriptorSetLayout::createPool( uint32_t maxSets
-		, bool automaticFree )const
-	{
-		return std::make_unique< DescriptorSetPool >( m_device
-			, *this
-			, maxSets
-			, automaticFree );
 	}
 }

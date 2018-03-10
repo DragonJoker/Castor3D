@@ -119,7 +119,7 @@ namespace castor3d
 		 *\~english
 		 *\return		Les dimensions de la texture d'environnement.
 		 */
-		inline castor::Size getSize()const
+		inline renderer::Extent3D getSize()const
 		{
 			return m_environmentMap.getTexture()->getDimensions();
 		}

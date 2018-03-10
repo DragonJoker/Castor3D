@@ -1,12 +1,12 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___Renderer_DescriptorSetPool_HPP___
 #define ___Renderer_DescriptorSetPool_HPP___
 #pragma once
 
-#include "RendererPrerequisites.hpp"
+#include "Descriptor/DescriptorPool.hpp"
 
 #include <vector>
 
@@ -18,9 +18,7 @@ namespace renderer
 	*/
 	class DescriptorSetPool
 	{
-		friend class DescriptorSet;
-
-	protected:
+	public:
 		/**
 		*\~english
 		*\brief
@@ -37,9 +35,10 @@ namespace renderer
 		*\param[in] maxSets
 		*	Le nombre maximum de sets que le pool peut créer.
 		*/
-		DescriptorSetPool( DescriptorSetLayout const & layout, uint32_t maxSets );
-
-	public:
+		DescriptorSetPool( Device const & device
+			, DescriptorSetLayout const & layout
+			, uint32_t maxSets
+			, bool automaticFree );
 		/**
 		*\~english
 		*\brief
@@ -65,7 +64,7 @@ namespace renderer
 		*\return
 		*	Le descriptor set créé.
 		*/
-		virtual DescriptorSetPtr createDescriptorSet( uint32_t bindingPoint = 0u )const = 0;
+		DescriptorSetPtr createDescriptorSet( uint32_t bindingPoint = 0u )const;
 		/**
 		*\~english
 		*\return
@@ -80,37 +79,9 @@ namespace renderer
 		}
 
 	private:
-		/**
-		*\~english
-		*\brief
-		*	Allocates a descriptor set.
-		*\param[in] count
-		*	The number of sets.
-		*\~french
-		*\brief
-		*	Alloue des descripteurs.
-		*\param[in] count
-		*	Le nombre de descripteurs.
-		*/
-		void allocate( uint32_t count )const;
-		/**
-		*\~english
-		*\brief
-		*	Allocates a descriptor set.
-		*\param[in] count
-		*	The number of sets.
-		*\~french
-		*\brief
-		*	Alloue des descripteurs.
-		*\param[in] count
-		*	Le nombre de descripteurs.
-		*/
-		void deallocate( uint32_t count )const;
-
-	private:
 		DescriptorSetLayout const & m_layout;
 		uint32_t m_maxSets;
-		mutable uint32_t m_allocated{ 0u };
+		DescriptorPoolPtr m_pool;
 	};
 }
 

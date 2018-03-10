@@ -1,39 +1,42 @@
-﻿#include "Pipeline/VkComputePipeline.hpp"
+#include "Pipeline/VkComputePipeline.hpp"
 
 #include "Core/VkDevice.hpp"
 #include "Pipeline/VkPipelineLayout.hpp"
-#include "Shader/VkShaderProgram.hpp"
+#include "Pipeline/VkSpecialisationInfo.hpp"
+#include "Pipeline/VkSpecialisationMapEntry.hpp"
+#include "Shader/VkShaderModule.hpp"
 
 namespace vk_renderer
 {
 	ComputePipeline::ComputePipeline( Device const & device
 		, renderer::PipelineLayout const & layout
-		, renderer::ShaderProgram const & program )
+		, renderer::ComputePipelineCreateInfo && createInfo )
 		: renderer::ComputePipeline{ device
 			, layout
-			, program }
+			, std::move( createInfo ) }
 		, m_device{ device }
 		, m_layout{ static_cast< PipelineLayout const & >( layout ) }
-		, m_shader{ static_cast< ShaderProgram const & >( program ) }
 	{
-		auto & module = *m_shader.begin();
-		VkPipelineShaderStageCreateInfo shaderStage
+		auto & module = static_cast< ShaderModule const & >( *m_createInfo.stage.module );
+
+		if ( m_createInfo.stage.specialisationInfo )
 		{
-			VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
-			nullptr,
-			0,                                                        // flags
-			module.getStage(),                                        // stage
-			VkShaderModule( module ),                                 // module
-			"main",                                                   // pName
-			nullptr,                                                  // pSpecializationInfo
-		};
+			auto & info = *m_createInfo.stage.specialisationInfo;
+			m_specialisationEntries = convert< VkSpecializationMapEntry >( info.begin(), info.end() );
+			m_specialisationInfos = convert( info, m_specialisationEntries );
+			m_shaderStage = convert( m_createInfo.stage, &m_specialisationInfos );
+		}
+		else
+		{
+			m_shaderStage = convert( m_createInfo.stage );
+		}
 
 		VkComputePipelineCreateInfo pipeline
 		{
 			VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO,
 			nullptr,
 			0,                                                            // flags
-			shaderStage,                                                  // stage
+			m_shaderStage,                                                // stage
 			m_layout,                                                     // layout
 			VK_NULL_HANDLE,                                               // basePipelineHandle
 			-1                                                            // basePipelineIndex

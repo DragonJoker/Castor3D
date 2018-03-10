@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #include "VkRendererPrerequisites.hpp"
@@ -10,13 +10,13 @@ namespace vk_renderer
 	{
 		return VkStencilOpState
 		{
-			convert( state.getFailOp() ),
-			convert( state.getPassOp() ),
-			convert( state.getDepthFailOp() ),
-			convert( state.getCompareOp() ),
-			state.getCompareMask(),
-			state.getWriteMask(),
-			state.getReference(),
+			convert( state.failOp ),
+			convert( state.passOp ),
+			convert( state.depthFailOp ),
+			convert( state.compareOp ),
+			state.compareMask,
+			state.writeMask,
+			state.reference,
 		};
 	}
 }

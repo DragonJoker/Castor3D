@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___Renderer_ClearValue_HPP___
@@ -25,6 +25,7 @@ namespace renderer
 	*/
 	struct ClearValue
 	{
+		ClearValue();
 		ClearValue( RgbaColour const & colour );
 		ClearValue( DepthStencilClearValue const & depthStencil );
 

@@ -55,9 +55,9 @@ namespace castor3d
 		return std::make_shared< PanelOverlay >();
 	}
 
-	void PanelOverlay::doRender( OverlayRendererSPtr p_renderer )
+	void PanelOverlay::doRender( OverlayRenderer & renderer )
 	{
-		p_renderer->drawPanel( *this );
+		renderer.drawPanel( *this );
 	}
 
 	void PanelOverlay::doUpdateBuffer( Size const & p_size )

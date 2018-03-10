@@ -137,12 +137,12 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
 		 */
-		void doPrepareFrontPipeline( renderer::ShaderProgram & program
+		void doPrepareFrontPipeline( renderer::ShaderStageStateArray & program
 			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
 		 */
-		void doPrepareBackPipeline( renderer::ShaderProgram & program
+		void doPrepareBackPipeline( renderer::ShaderStageStateArray & program
 			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource

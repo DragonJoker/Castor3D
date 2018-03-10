@@ -238,7 +238,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le format des pixels de la fenêtre.
 		 */
-		C3D_API castor::PixelFormat getPixelFormat()const;
+		C3D_API renderer::Format getPixelFormat()const;
 		/**
 		 *\~english
 		 *\brief		Sets the window pixel format.
@@ -247,7 +247,7 @@ namespace castor3d
 		 *\brief		Définit le format des pixels de la fenêtre.
 		 *\param[in]	value	Le nouveau format des pixels de la fenêtre.
 		 */
-		C3D_API void setPixelFormat( castor::PixelFormat value );
+		C3D_API void setPixelFormat( renderer::Format value );
 		/**
 		 *\~english
 		 *\return		The window index.

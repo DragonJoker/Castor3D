@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder
 */
 #pragma once
@@ -20,7 +20,7 @@ namespace gl_renderer
 		*\brief
 		*	Constructeur.
 		*/
-		BindGeometryBuffersCommand( renderer::GeometryBuffers const & vao );
+		BindGeometryBuffersCommand( GeometryBuffers const & vao );
 
 		void apply()const override;
 		CommandPtr clone()const override;

@@ -320,7 +320,7 @@ namespace castor3d
 		inline renderer::VertexBuffer< InterleavedVertex > const & getVertexBuffer()const;
 		inline renderer::VertexBuffer< InterleavedVertex > & getVertexBuffer();
 		inline renderer::VertexLayout const & getVertexLayout()const;
-		inline renderer::GeometryBuffers const & getGeometryBuffers()const;
+		inline GeometryBuffers const & getGeometryBuffers()const;
 		inline renderer::Buffer< uint32_t > const & getIndexBuffer()const;
 		inline renderer::Buffer< uint32_t > & getIndexBuffer();
 		inline bool isInitialised()const;
@@ -340,7 +340,7 @@ namespace castor3d
 
 	private:
 		void doGenerateVertexBuffer();
-		void doGatherBuffers( renderer::VertexBufferCRefArray & buffers
+		void doGatherBuffers( renderer::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
 			, renderer::VertexLayoutCRefArray & layouts );
 
@@ -363,7 +363,7 @@ namespace castor3d
 		renderer::VertexBufferPtr< InterleavedVertex > m_vertexBuffer;
 		renderer::VertexLayoutPtr m_vertexLayout;
 		renderer::BufferPtr< uint32_t > m_indexBuffer;
-		renderer::GeometryBuffersPtr m_geometryBuffers;
+		GeometryBuffers m_geometryBuffers;
 
 		friend class BinaryWriter< Submesh >;
 		friend class BinaryParser< Submesh >;

@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #include "Core/VkConnection.hpp"
@@ -16,7 +16,7 @@ namespace vk_renderer
 		, renderer::WindowHandle && handle )
 		: renderer::Connection{ renderer, deviceIndex, std::move( handle ) }
 		, m_renderer{ renderer }
-		, m_gpu{ renderer.getPhysicalDevice( deviceIndex ) }
+		, m_gpu{ static_cast< PhysicalDevice const & >( renderer.getPhysicalDevice( deviceIndex ) ) }
 	{
 		doCreatePresentSurface();
 		doRetrievePresentationInfos();
@@ -211,7 +211,7 @@ namespace vk_renderer
 
 			if ( m_gpu.getQueueProperties()[i].queueCount > 0 )
 			{
-				if ( m_gpu.getQueueProperties()[i].queueFlags & VK_QUEUE_GRAPHICS_BIT )
+				if ( m_gpu.getQueueProperties()[i].queueFlags & renderer::QueueFlag::eGraphics )
 				{
 					// Tout d'abord on choisit une file graphique
 					if ( m_graphicsQueueFamilyIndex == std::numeric_limits< uint32_t >::max() )
@@ -220,7 +220,7 @@ namespace vk_renderer
 					}
 
 					// Si elle supporte aussi les calculs, on l'utilisera aussi en tant que file de calcul.
-					if ( m_gpu.getQueueProperties()[i].queueFlags & VK_QUEUE_COMPUTE_BIT
+					if ( m_gpu.getQueueProperties()[i].queueFlags & renderer::QueueFlag::eCompute
 						&& m_computeQueueFamilyIndex == std::numeric_limits< uint32_t >::max() )
 					{
 						m_computeQueueFamilyIndex = i;
@@ -235,7 +235,7 @@ namespace vk_renderer
 					}
 				}
 
-				if ( m_gpu.getQueueProperties()[i].queueFlags & VK_QUEUE_COMPUTE_BIT
+				if ( m_gpu.getQueueProperties()[i].queueFlags & renderer::QueueFlag::eCompute
 					&& m_computeQueueFamilyIndex == std::numeric_limits< uint32_t >::max() )
 				{
 					m_computeQueueFamilyIndex = i;

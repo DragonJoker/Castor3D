@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___Renderer_ImageBlit_HPP___
@@ -7,6 +7,8 @@ See LICENSE file in root folder.
 #pragma once
 
 #include "Image/ImageSubresourceLayers.hpp"
+#include "Miscellaneous/Extent3D.hpp"
+#include "Miscellaneous/Offset3D.hpp"
 
 namespace renderer
 {
@@ -16,7 +18,7 @@ namespace renderer
 	*	Specifies an image blit operation.
 	*\~french
 	*\brief
-	*	DÈfinit une opÈration de copie rapide d'image.
+	*	D√©finit une op√©ration de copie rapide d'image.
 	*/
 	struct ImageBlit
 	{
@@ -26,7 +28,7 @@ namespace renderer
 		*	Specifies the specific image subresources of the image used for the source image data.
 		*\~french
 		*\brief
-		*	SpÈcifie les sous-ressources d'image spÈcifiques ‡ l'image utilisÈe en tant que source.
+		*	Sp√©cifie les sous-ressources d'image sp√©cifiques √† l'image utilis√©e en tant que source.
 		*/
 		ImageSubresourceLayers srcSubresource;
 		/**
@@ -35,16 +37,25 @@ namespace renderer
 		*	Select the initial x, y, and z offsets in texels of the sub-regions of the source image data.
 		*\~french
 		*\brief
-		*	Selectionne les dÈcalages \p x, \p y et \p z des sous-rÈgions de l'image source.
+		*	Selectionne les d√©calages \p x, \p y et \p z des sous-r√©gions de l'image source.
 		*/
-		IVec3 srcOffset;
+		Offset3D srcOffset;
+		/**
+		*\~english
+		*\brief
+		*	Select the initial x, y, and z extents in texels of the sub-regions of the source image data.
+		*\~french
+		*\brief
+		*	Selectionne les √©tendues \p x, \p y et \p z des sous-r√©gions de l'image source.
+		*/
+		Extent3D srcExtent;
 		/**
 		*\~english
 		*\brief
 		*	Specifies the specific image subresources of the image used for the destination image data.
 		*\~french
 		*\brief
-		*	SpÈcifie les sous-ressources d'image spÈcifiques ‡ l'image utilisÈe en tant que detination.
+		*	Sp√©cifie les sous-ressources d'image sp√©cifiques √† l'image utilis√©e en tant que detination.
 		*/
 		ImageSubresourceLayers dstSubresource;
 		/**
@@ -53,9 +64,18 @@ namespace renderer
 		*	Select the initial x, y, and z offsets in texels of the sub-regions of the destination image data.
 		*\~french
 		*\brief
-		*	Selectionne les dÈcalages \p x, \p y et \p z des sous-rÈgions de l'image destination.
+		*	Selectionne les d√©calages \p x, \p y et \p z des sous-r√©gions de l'image destination.
 		*/
-		IVec3 dstOffset;
+		Offset3D dstOffset;
+		/**
+		*\~english
+		*\brief
+		*	Select the initial x, y, and z extents in texels of the sub-regions of the destination image data.
+		*\~french
+		*\brief
+		*	Selectionne les √©tendues \p x, \p y et \p z des sous-r√©gions de l'image destination.
+		*/
+		Extent3D dstExtent;
 	};
 }
 

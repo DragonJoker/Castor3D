@@ -8,7 +8,7 @@ See LICENSE file in root folder.
 
 namespace gl_renderer
 {
-	BindGeometryBuffersCommand::BindGeometryBuffersCommand( renderer::GeometryBuffers const & vao )
+	BindGeometryBuffersCommand::BindGeometryBuffersCommand( GeometryBuffers const & vao )
 		: m_vao{ static_cast< GeometryBuffers const & >( vao ) }
 	{
 	}

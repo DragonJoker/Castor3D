@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder
 */
 #pragma once
@@ -36,37 +36,7 @@ namespace vk_renderer
 		/**
 		*\copydoc	renderer::Device::createRenderPass
 		*/
-		renderer::RenderPassPtr createRenderPass( renderer::RenderPassAttachmentArray const & attaches
-			, renderer::RenderSubpassPtrArray && subpasses
-			, renderer::RenderPassState const & initialState
-			, renderer::RenderPassState const & finalState
-			, renderer::SampleCountFlag samplesCount )const override;
-		/**
-		*\copydoc	renderer::Device::createRenderSubpass
-		*/
-		renderer::RenderSubpassPtr createRenderSubpass( renderer::RenderPassAttachmentArray const & attaches
-			, renderer::RenderSubpassState const & neededState )const override;
-		/**
-		*\copydoc	renderer::Device::createVertexLayout
-		*/
-		renderer::VertexLayoutPtr createVertexLayout( uint32_t bindingSlot
-			, uint32_t stride
-			, renderer::VertexInputRate inputRate )const override;
-		/**
-		*\copydoc	renderer::Device::createGeometryBuffers
-		*/
-		renderer::GeometryBuffersPtr createGeometryBuffers( renderer::VertexBufferCRefArray const & vbos
-			, std::vector< uint64_t > vboOffsets
-			, renderer::VertexLayoutCRefArray const & layouts )const override;
-		/**
-		*\copydoc	renderer::Device::createGeometryBuffers
-		*/
-		renderer::GeometryBuffersPtr createGeometryBuffers( renderer::VertexBufferCRefArray const & vbos
-			, std::vector< uint64_t > vboOffsets
-			, renderer::VertexLayoutCRefArray const & layouts
-			, renderer::BufferBase const & ibo
-			, uint64_t iboOffset
-			, renderer::IndexType type )const override;
+		renderer::RenderPassPtr createRenderPass( renderer::RenderPassCreateInfo createInfo )const override;
 		/**
 		*\copydoc	renderer::Device::createPipelineLayout
 		*/
@@ -77,35 +47,40 @@ namespace vk_renderer
 		*/
 		renderer::DescriptorSetLayoutPtr createDescriptorSetLayout( renderer::DescriptorSetLayoutBindingArray && bindings )const override;
 		/**
+		*\copydoc	renderer::Device::createDescriptorPool
+		*/
+		renderer::DescriptorPoolPtr createDescriptorPool( renderer::DescriptorPoolCreateFlags flags
+			, uint32_t maxSets
+			, renderer::DescriptorPoolSizeArray poolSizes )const override;
+		/**
+		*\copydoc	renderer::Device::allocateMemory
+		*/
+		renderer::DeviceMemoryPtr allocateMemory( renderer::MemoryRequirements const & requirements
+			, renderer::MemoryPropertyFlags flags )const override;
+		/**
 		*\copydoc	renderer::Device::createTexture
 		*/
-		renderer::TexturePtr createTexture( renderer::ImageLayout initialLayout )const override;
+		renderer::TexturePtr createTexture( renderer::ImageCreateInfo const & createInfo )const override;
+		/**
+		*\copydoc	renderer::Device::getImageSubresourceLayout
+		*/
+		void getImageSubresourceLayout( renderer::Texture const & image
+			, renderer::ImageSubresource const & subresource
+			, renderer::SubresourceLayout & layout )const override;
 		/**
 		*\copydoc	renderer::Device::createSampler
 		*/
-		renderer::SamplerPtr createSampler( renderer::WrapMode wrapS
-			, renderer::WrapMode wrapT
-			, renderer::WrapMode wrapR
-			, renderer::Filter minFilter
-			, renderer::Filter magFilter
-			, renderer::MipmapMode mipFilter
-			, float minLod
-			, float maxLod
-			, float lodBias
-			, renderer::BorderColour borderColour
-			, float maxAnisotropy
-			, renderer::CompareOp compareOp )const override;
+		renderer::SamplerPtr createSampler( renderer::SamplerCreateInfo const & createInfo )const override;
 		/**
 		*\copydoc	renderer::Device::createBuffer
 		*/
 		renderer::BufferBasePtr createBuffer( uint32_t size
-			, renderer::BufferTargets target
-			, renderer::MemoryPropertyFlags memoryFlags )const override;
+			, renderer::BufferTargets target )const override;
 		/**
 		*\copydoc	renderer::Device::createBufferView
 		*/
 		renderer::BufferViewPtr createBufferView( renderer::BufferBase const & buffer
-			, renderer::PixelFormat format
+			, renderer::Format format
 			, uint32_t offset
 			, uint32_t range )const override;
 		/**
@@ -118,7 +93,7 @@ namespace vk_renderer
 		/**
 		*\copydoc	renderer::Device::createSwapChain
 		*/
-		renderer::SwapChainPtr createSwapChain( renderer::UIVec2 const & size )const override;
+		renderer::SwapChainPtr createSwapChain( renderer::Extent2D const & size )const override;
 		/**
 		*\copydoc	renderer::Device::createSemaphore
 		*/
@@ -135,7 +110,7 @@ namespace vk_renderer
 		/**
 		*\copydoc	renderer::Device::createShaderProgram
 		*/
-		virtual renderer::ShaderProgramPtr createShaderProgram()const override;
+		virtual renderer::ShaderModulePtr createShaderModule( renderer::ShaderStageFlag stage )const override;
 		/**
 		*\copydoc	renderer::Device::createQueryPool
 		*/
@@ -147,6 +122,15 @@ namespace vk_renderer
 		*	Attend que le périphérique soit inactif.
 		*/
 		void waitIdle()const override;
+		/**
+		*\copydoc	renderer::Device::frustum
+		*/
+		renderer::Mat4 frustum( float left
+			, float right
+			, float bottom
+			, float top
+			, float zNear
+			, float zFar )const override;
 		/**
 		*\copydoc	renderer::Device::perspective
 		*/
@@ -179,7 +163,7 @@ namespace vk_renderer
 		*return
 		*	The memory requirements.
 		*/
-		VkMemoryRequirements getBufferMemoryRequirements( VkBuffer buffer )const;
+		renderer::MemoryRequirements getBufferMemoryRequirements( VkBuffer buffer )const;
 		/**
 		*\~french
 		*\brief
@@ -196,75 +180,7 @@ namespace vk_renderer
 		*return
 		*	The memory requirements.
 		*/
-		VkMemoryRequirements getImageMemoryRequirements( VkImage image )const;
-		/**
-		*\brief
-		*	Le numéro de version.
-		*/
-		inline std::string const & getVersion()const
-		{
-			return m_version;
-		}
-		/**
-		*\~french
-		*\return
-		*	Le pool de commandes de présentation.
-		*\~english
-		*\return
-		*	The presentation command pool.
-		*/
-		inline auto const & getPresentCommandPool()const
-		{
-			return *m_presentCommandPool;
-		}
-		/**
-		*\~french
-		*\return
-		*	Le pool de commandes de dessin.
-		*\~english
-		*\return
-		*	The graphics command pool.
-		*/
-		inline auto const & getGraphicsCommandPool()const
-		{
-			return *m_graphicsCommandPool;
-		}
-		/**
-		*\~french
-		*\return
-		*	La file de présentation.
-		*\~english
-		*\return
-		*	The presentation queue.
-		*/
-		inline auto const & getPresentQueue()const
-		{
-			return *m_presentQueue;
-		}
-		/**
-		*\~french
-		*\return
-		*	La file de dessin.
-		*\~english
-		*\return
-		*	The graphics queue.
-		*/
-		inline auto const & getGraphicsQueue()const
-		{
-			return *m_graphicsQueue;
-		}
-		/**
-		*\~french
-		*\return
-		*	Le GPU physique.
-		*\~english
-		*\return
-		*	The physical device.
-		*/
-		inline PhysicalDevice const & getPhysicalDevice()const
-		{
-			return m_gpu;
-		}
+		renderer::MemoryRequirements getImageMemoryRequirements( VkImage image )const;
 		/**
 		*\~french
 		*\return
@@ -340,10 +256,9 @@ namespace vk_renderer
 		}
 
 	private:
-		std::string m_version;
 		Renderer const & m_renderer;
-		ConnectionPtr m_connection;
 		PhysicalDevice const & m_gpu;
+		ConnectionPtr m_connection;
 		VkDevice m_device{ VK_NULL_HANDLE };
 	};
 }

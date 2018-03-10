@@ -9,6 +9,9 @@ namespace gl_renderer
 		case gl_renderer::GL_INFO_COMPILE_STATUS:
 			return "GL_COMPILE_STATUS";
 
+		case gl_renderer::GL_INFO_VALIDATE_STATUS:
+			return "GL_VALIDATE_STATUS";
+
 		case gl_renderer::GL_INFO_LINK_STATUS:
 			return "GL_LINK_STATUS";
 

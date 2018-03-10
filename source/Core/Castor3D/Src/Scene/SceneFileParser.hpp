@@ -110,11 +110,9 @@ namespace castor3d
 		SpecularGlossinessPbrPassSPtr pbrSGPass;
 		PassSPtr pass;
 		TextureUnitSPtr textureUnit;
-		renderer::ShaderProgramPtr shaderProgram;
+		renderer::ShaderStageStateArray shaderProgram;
 		renderer::ShaderStageFlag shaderStage;
 		renderer::UniformBufferBasePtr uniformBuffer;
-		UniformSPtr uniform;
-		PushUniform1sSPtr samplerUniform;
 		OverlaySPtr overlay;
 		BillboardListSPtr billboards;
 		int face1;

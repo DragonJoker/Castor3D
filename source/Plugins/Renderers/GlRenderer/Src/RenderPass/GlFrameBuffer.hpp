@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder
 */
 #pragma once
@@ -30,7 +30,7 @@ namespace gl_renderer
 		*	Les dimensions du tampon d'images.
 		*/
 		FrameBuffer( renderer::RenderPass const & renderPass
-			, renderer::UIVec2 const & dimensions );
+			, renderer::Extent2D const & dimensions );
 		/**
 		*\brief
 		*	Crée un FrameBuffer compatible avec la passe de rendu donnée.
@@ -43,36 +43,13 @@ namespace gl_renderer
 		*	Les textures voulues pour le tampon d'images à créer.
 		*/
 		FrameBuffer( renderer::RenderPass const & renderPass
-			, renderer::UIVec2 const & dimensions
+			, renderer::Extent2D const & dimensions
 			, renderer::FrameBufferAttachmentArray && textures );
 		/**
 		*\brief
 		*	Destructeur
 		*/
 		~FrameBuffer();
-		/**
-		*\brief
-		*	Copie des données dans la RAM.
-		*\remarks
-		*	Pour utiliser cette fonction, il faut que le tampon soit activé.
-		*\param[in] xoffset, yoffset
-		*	Le décalage à partir duquel les données seront copiées, par rapport
-		*	au d�but du stockage de la texture, en VRAM.
-		*\param[in] width, height
-		*	Les dimensions des données à copier.
-		*\param[in] format
-		*	Le format voulu pour les données.
-		*\param[out] data
-		*	Reçoit les données copiées.
-		*/
-		void download( renderer::Queue const & queue
-			, uint32_t index
-			, uint32_t xoffset
-			, uint32_t yoffset
-			, uint32_t width
-			, uint32_t height
-			, renderer::PixelFormat format
-			, uint8_t * data )const noexcept;
 		/**
 		*\~english
 		*\brief
@@ -85,7 +62,20 @@ namespace gl_renderer
 		*\param[in] attaches
 		*	Les attaches.
 		*/
-		void setDrawBuffers( renderer::RenderPassAttachmentArray const & attaches )const;
+		void setDrawBuffers( renderer::AttachmentDescriptionArray const & attaches )const;
+		/**
+		*\~english
+		*\brief
+		*	Sets the draw buffers.
+		*\param[in] attaches
+		*	The attaches.
+		*\~french
+		*\brief
+		*	Définit les tampons d'écriture.
+		*\param[in] attaches
+		*	Les attaches.
+		*/
+		void setDrawBuffers( renderer::AttachmentReferenceArray const & attaches )const;
 		/**
 		*\return
 		*	Le Framebuffer OpenGL.

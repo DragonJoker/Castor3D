@@ -52,7 +52,7 @@ namespace gl_renderer
 		, renderer::QueryResultFlags flags
 		, renderer::UInt64Array & data )const
 	{
-		assert( firstQuery + queryCount < m_names.size() );
+		assert( firstQuery + queryCount <= m_names.size() );
 		assert( queryCount == data.size() );
 		auto begin = m_names.begin() + firstQuery;
 		auto end = begin + queryCount;

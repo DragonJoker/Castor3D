@@ -524,14 +524,9 @@ namespace castor3d
 
 	protected:
 		/**
-		 *\~english
-		 *\brief		Draws the overlay
-		 *\param[in]	renderer	The renderer used to draw this overlay
-		 *\~french
-		 *\brief		Dessine l'incrustation
-		 *\param[in]	renderer	Le renderer utilisé pour dessiner cette incrustation
+		 *\copydoc	castor3d::OverlayCategory::doRender
 		 */
-		C3D_API void doRender( OverlayRendererSPtr renderer )override;
+		C3D_API void doRender( OverlayRenderer & renderer )override;
 		/**
 		 *\~english
 		 *\brief		Updates the vertex buffer.

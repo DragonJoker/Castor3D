@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___Renderer_Device_HPP___
@@ -9,6 +9,9 @@ See LICENSE file in root folder.
 #include "Command/CommandPool.hpp"
 #include "Command/Queue.hpp"
 #include "Core/Connection.hpp"
+#include "Core/PhysicalDevice.hpp"
+#include "Image/ImageCreateInfo.hpp"
+#include "Image/SamplerCreateInfo.hpp"
 #include "Pipeline/ColourBlendState.hpp"
 #include "Pipeline/RasterisationState.hpp"
 
@@ -46,6 +49,7 @@ namespace renderer
 		*	La connection à l'application.
 		*/
 		Device( Renderer const & renderer
+			, PhysicalDevice const & gpu
 			, Connection const & connection );
 
 	public:
@@ -89,88 +93,19 @@ namespace renderer
 		*\~french
 		*\brief
 		*	Crée une passe de rendu.
-		*\param[in] attaches
-		*	Les attaches voulues pour la passe.
-		*\param[in] subpasses
-		*	Les sous passes (au moins 1 nécéssaire).
-		*\param[in] initialState
-		*	L'état voulu en début de passe.
-		*\param[in] finalState
-		*	L'état voulu en fin de passe.
-		*\param[in] samplesCount
-		*	Le nombre d'échantillons (pour le multisampling).
+		*\param[in] createInfo
+		*	Les informations de création.
 		*\return
 		*	La passe créée.
 		*\~english
 		*\brief
 		*	Creates a render pass.
-		*\param[in] attaches
-		*	The attachments pixels formats.
-		*\param[in] subpasses
-		*	The rendersubpasses (at least one is necessary).
-		*\param[in] initialState
-		*	The state wanted at the beginning of the pass.
-		*\param[in] finalState
-		*	The state attained at the end of the pass.
-		*\param[in] samplesCount
-		*	The samples count (for multisampling).
+		*\param[in] createInfo
+		*	The creation informations.
 		*\return
 		*	The created pass.
 		*/
-		virtual RenderPassPtr createRenderPass( RenderPassAttachmentArray const & attaches
-			, RenderSubpassPtrArray && subpasses
-			, RenderPassState const & initialState
-			, RenderPassState const & finalState
-			, SampleCountFlag samplesCount = SampleCountFlag::e1 )const = 0;
-		/**
-		*\~french
-		*\brief
-		*	Crée une sous-passe de rendu.
-		*\param[in] attaches
-		*	Les attaches de la sous-passe.
-		*\param[in] neededState
-		*	L'état voulu pour l'exécution de cette sous passe.
-		*\return
-		*	La sous-passe créée.
-		*\~english
-		*\brief
-		*	Creates a render subpass.
-		*\param[in] attaches
-		*	The subpass attachments.
-		*\param[in] neededState
-		*	The state wanted for this subpass execution.
-		*\return
-		*	The created subpass.
-		*/
-		virtual RenderSubpassPtr createRenderSubpass( RenderPassAttachmentArray const & attaches
-			, RenderSubpassState const & neededState )const = 0;
-		/**
-		*\~french
-		*\brief
-		*	Crée un layout de sommets.
-		*\param[in] bindingSlot
-		*	Le point d'attache du tampon associé.
-		*\param[in] stride
-		*	La taille en octets séparant un élément du suivant, dans le tampon.
-		*\param[in] inputRate
-		*	La cadence d'entrée.
-		*\return
-		*	Le layout créé.
-		*\~english
-		*\brief
-		*	Creates a vertex layout.
-		*\param[in] bindingSlot
-		*	The binding point for associated buffer.
-		*\param[in] stride
-		*	The byte size from one element to the next one, in the buffer.
-		*\param[in] inputRate
-		*	The input rate (for instantiation).
-		*\return
-		*	The created layout.
-		*/
-		virtual VertexLayoutPtr createVertexLayout( uint32_t bindingSlot
-			, uint32_t stride
-			, VertexInputRate inputRate = VertexInputRate::eVertex )const = 0;
+		virtual RenderPassPtr createRenderPass( RenderPassCreateInfo createInfo )const = 0;
 		/**
 		*\~english
 		*\brief
@@ -196,67 +131,6 @@ namespace renderer
 		/**
 		*\~english
 		*\brief
-		*	Creates a geometry buffers.
-		*\param[in] vbos
-		*	The VBOs.
-		*\param[in] vboOffsets
-		*	The offset for the first vertex of each VBO.
-		*\param[in] layouts
-		*	The vertex layouts, one for each VBO.
-		*\~french
-		*\brief
-		*	Crée tampon de géométries.
-		*\param[in] vbos
-		*	Les VBOs.
-		*\param[in] vboOffsets
-		*	L'offset du premier sommet pour chaque VBO.
-		*\param[in] layouts
-		*	Les layouts, un par vbo de \p vbos.
-		*/
-		virtual GeometryBuffersPtr createGeometryBuffers( VertexBufferCRefArray const & vbos
-			, std::vector< uint64_t > vboOffsets
-			, VertexLayoutCRefArray const & layouts )const = 0;
-		/**
-		*\~english
-		*\brief
-		*	Creates a geometry buffers.
-		*\param[in] vbos
-		*	The VBOs.
-		*\param[in] vboOffsets
-		*	The offset for the first vertex of each VBO.
-		*\param[in] layouts
-		*	The vertex layouts, one for each VBO.
-		*\param[in] ibo
-		*	The IBO.
-		*\param[in] iboOffset
-		*	The offset of the first index in the IBO.
-		*\param[in] type
-		*	LThe index type.
-		*\~french
-		*\brief
-		*	Crée tampon de géométries.
-		*\param[in] vbos
-		*	Les VBOs.
-		*\param[in] vboOffsets
-		*	L'offset du premier sommet pour chaque VBO.
-		*\param[in] layouts
-		*	Les layouts, un par vbo de \p vbos.
-		*\param[in] ibo
-		*	L'IBO.
-		*\param[in] iboOffset
-		*	L'offset du premier indice dans l'IBO.
-		*\param[in] type
-		*	Le type des indices.
-		*/
-		virtual GeometryBuffersPtr createGeometryBuffers( VertexBufferCRefArray const & vbos
-			, std::vector< uint64_t > vboOffsets
-			, VertexLayoutCRefArray const & layouts
-			, BufferBase const & ibo
-			, uint64_t iboOffset
-			, IndexType type )const = 0;
-		/**
-		*\~english
-		*\brief
 		*	Creates a descriptor set layout.
 		*\param[in] bindings
 		*	The layout bindings.
@@ -274,48 +148,101 @@ namespace renderer
 		/**
 		*\~english
 		*\brief
+		*	Creates a descriptor pool.
+		*\param[in] flags
+		*	Bitmask specifying certain supported operations on a descriptor pool.
+		*\param[in] maxSets
+		*	The maximum number of descriptor sets that can be allocated from the pool.
+		*\param[in] poolSizes
+		*	The array of DescriptorPoolSize describing the type and count of descriptors to be allocated in the pool.
+		*\return
+		*	The created pool.
+		*\~french
+		*\brief
+		*	Crée un pool de descripteurs.
+		*\param[in] flags
+		*	Masque de bits définissant les opérations supportées sur un pool de descripteurs.
+		*\param[in] maxSets
+		*	Le nombre maximum d'ensembles de descripteurs pouvant être alloués par le pool.
+		*\param[in] poolSizes
+		*	Le tableau de DescriptorPoolSize décrivant les types et nombre de descripteurs à allouer dans le pool.
+		*\return
+		*	Le pool créé.
+		*/
+		virtual DescriptorPoolPtr createDescriptorPool( DescriptorPoolCreateFlags flags
+			, uint32_t maxSets
+			, DescriptorPoolSizeArray poolSizes )const = 0;
+		/**
+		*\~english
+		*\brief
+		*	Allocates memory on the device.
+		*\param[in] requirements
+		*	The memory allocation requirements.
+		*\param[in] flags
+		*	The memory type.
+		*\return
+		*	The DeviceMemory object holding the allocated memory.
+		*\~french
+		*\brief
+		*	Alloue de la mémoire sur le périphérique.
+		*\param[in] requirements
+		*	Les exigences d'allocation mémoire.
+		*\param[in] flags
+		*	Le type de mémoire.
+		*\return
+		*	L'objet DeviceMemory contenant la mémoire allouée.
+		*/
+		virtual DeviceMemoryPtr allocateMemory( MemoryRequirements const & requirements
+			, MemoryPropertyFlags flags )const = 0;
+		/**
+		*\~english
+		*\brief
 		*	Creates a texture.
-		*\param[in] initialLayout
-		*	The image initial layout.
+		*\param[in] createInfo
+		*	The creation informations.
 		*\~french
 		*\brief
 		*	Crée une texture.
-		*\param[in] initialLayout
-		*	Le layout initial pour l'image.
+		*\param[in] createInfo
+		*	Les informations de création.
 		*/
-		virtual TexturePtr createTexture( ImageLayout initialLayout = ImageLayout::eUndefined )const = 0;
+		virtual TexturePtr createTexture( ImageCreateInfo const & createInfo )const = 0;
+		/**
+		*\~english
+		*\brief
+		*	Creates a texture.
+		*\param[in] image
+		*	The image whose layout is being queried.
+		*\param[out] subresource
+		*	Receives the image subresource.
+		*\param[out] layout
+		*	Receives the subresource layout.
+		*\~french
+		*\brief
+		*	Crée une texture.
+		*\param[in] image
+		*	L'image pour laquelle le layout est demandé.
+		*\param[out] subresource
+		*	Reçoit la sous-ressource de l'image.
+		*\param[out] layout
+		*	Reçoit le layout de la sous-ressource.
+		*/
+		virtual void getImageSubresourceLayout( Texture const & image
+			, ImageSubresource const & subresource
+			, SubresourceLayout & layout )const = 0;
 		/**
 		*\~english
 		*\brief
 		*	Creates a sampler.
-		*\param[in] wrapS, wrapT, wrapR
-		*	The texture wrap modes.
-		*\param[in] minFilter, magFilter
-		*	The minification and magnification filters.
-		*\param[in] mipFilter
-		*	The mipmap filter.
+		*\param[in] createInfo
+		*	The creation informations.
 		*\~french
 		*\brief
 		*	Crée un échantillonneur.
-		*\param[in] wrapS, wrapT, wrapR
-		*	Les modes de wrap de texture.
-		*\param[in] minFilter, magFilter
-		*	Les filtres de minification et magnification.
-		*\param[in] mipFilter
-		*	Le filtre de mipmap.
+		*\param[in] createInfo
+		*	Les informations de création.
 		*/
-		virtual SamplerPtr createSampler( WrapMode wrapS
-			, WrapMode wrapT
-			, WrapMode wrapR
-			, Filter minFilter
-			, Filter magFilter
-			, MipmapMode mipFilter = MipmapMode::eNone
-			, float minLod = -1000.0f
-			, float maxLod = 1000.0f
-			, float lodBias = 0.0f
-			, BorderColour borderColour = BorderColour::eFloatOpaqueBlack
-			, float maxAnisotropy = 1.0f
-			, CompareOp compareOp = CompareOp::eAlways )const = 0;
+		virtual SamplerPtr createSampler( SamplerCreateInfo const & createInfo )const = 0;
 		/**
 		*\~english
 		*\brief
@@ -324,8 +251,6 @@ namespace renderer
 		*	The buffer size.
 		*\param[in] target
 		*	The buffer usage flags.
-		*\param[in] memoryFlags
-		*	The buffer memory flags.
 		*\~french
 		*\brief
 		*	Crée un tampon GPU.
@@ -333,12 +258,9 @@ namespace renderer
 		*	La taille du tampon.
 		*\param[in] target
 		*	Les indicateurs d'utilisation du tampon.
-		*\param[in] memoryFlags
-		*	Les indicateurs de mémoire du tampon.
 		*/
 		virtual BufferBasePtr createBuffer( uint32_t size
-			, BufferTargets target
-			, MemoryPropertyFlags memoryFlags )const = 0;
+			, BufferTargets target )const = 0;
 		/**
 		*\~french
 		*\brief
@@ -364,7 +286,7 @@ namespace renderer
 		*	The number of elements from the buffer.
 		*/
 		virtual BufferViewPtr createBufferView( BufferBase const & buffer
-			, PixelFormat format
+			, Format format
 			, uint32_t offset
 			, uint32_t range )const = 0;
 		/**
@@ -377,7 +299,7 @@ namespace renderer
 		*	The size of one element in the buffer.
 		*\param[in] target
 		*	The buffer usage flags.
-		*\param[in] flags
+		*\param[in] memoryFlags
 		*	The buffer memory flags.
 		*\~french
 		*\brief
@@ -388,7 +310,7 @@ namespace renderer
 		*	La taille d'un élément.
 		*\param[in] target
 		*	Les indicateurs d'utilisation du tampon.
-		*\param[in] flags
+		*\param[in] memoryFlags
 		*	Les indicateurs de mémoire du tampon.
 		*/
 		virtual UniformBufferBasePtr createUniformBuffer( uint32_t count
@@ -407,7 +329,7 @@ namespace renderer
 		*\param[in] size
 		*	Les dimensions souhaitées.
 		*/
-		virtual SwapChainPtr createSwapChain( UIVec2 const & size )const = 0;
+		virtual SwapChainPtr createSwapChain( Extent2D const & size )const = 0;
 		/**
 		*\~english
 		*\brief
@@ -451,12 +373,16 @@ namespace renderer
 		/**
 		*\~english
 		*\brief
-		*	Creates the shader program.
+		*	Creates a shader module.
+		*\param[in] stage
+		*	The module's shader stage.
 		*\~french
 		*\brief
-		*	Crée un programme shader.
+		*	Crée un module shader.
+		*\param[in] stage
+		*	Le niveau de shader utilisé pour le module.
 		*/
-		virtual ShaderProgramPtr createShaderProgram()const = 0;
+		virtual ShaderModulePtr createShaderModule( ShaderStageFlag stage )const = 0;
 		/**
 		*\~english
 		*\brief
@@ -481,7 +407,33 @@ namespace renderer
 			, uint32_t count
 			, QueryPipelineStatisticFlags pipelineStatistics )const = 0;
 		/**
-		*\english
+		*\~english
+		*\brief
+		*	Computes an frustum projection matrix.
+		*\param[in] left, right
+		*	The left and right planes position.
+		*\param[in] top, bottom
+		*	The top and bottom planes position.
+		*\param[in] zNear, zFar
+		*	The near and far planes position.
+		*\~french
+		*\brief
+		*	Calcule une matrice de projection frustum.
+		*\param[in] left, right
+		*	La position des plans gauche et droite.
+		*\param[in] top, bottom
+		*	La position des plans haut et bas.
+		*\param[in] zNear, zFar
+		*	La position des premier et arrière plans.
+		*/
+		virtual Mat4 frustum( float left
+			, float right
+			, float bottom
+			, float top
+			, float zNear
+			, float zFar )const = 0;
+		/**
+		*\~english
 		*	Computes a perspective projection matrix.
 		*\param[in] fovy
 		*	The vertical aperture angle.
@@ -500,7 +452,7 @@ namespace renderer
 		*	Le ratio largeur / hauteur.
 		*\param[in] zNear
 		*	La position du premier plan (pour le clipping).
-		*\param[in] zNear
+		*\param[in] zFar
 		*	La position de l'arrière plan (pour le clipping).
 		*/
 		virtual Mat4 perspective( Angle fovy
@@ -534,7 +486,7 @@ namespace renderer
 			, float zNear
 			, float zFar )const = 0;
 		/**
-		*\english
+		*\~english
 		*	Computes a perspective projection matrix with no far plane clipping.
 		*\param[in] fovy
 		*	The vertical aperture angle.
@@ -559,64 +511,72 @@ namespace renderer
 		/**
 		*\~english
 		*\brief
-		*	Creates a geometry buffers.
-		*\param[in] vbo
-		*	The VBO.
-		*\param[in] vboOffset
-		*	The offset of the first vertex in the VBO.
-		*\param[in] layout
-		*	The vertex buffer layout.
+		*	Creates a GPU buffer.
+		*\param[in] size
+		*	The buffer size.
+		*\param[in] target
+		*	The buffer usage flags.
+		*\param[in] memoryFlags
+		*	The buffer memory flags.
 		*\~french
 		*\brief
-		*	Crée tampon de géométries.
-		*\param[in] vbo
-		*	Le VBO.
-		*\param[in] vboOffset
-		*	L'offset du premier sommet dans le VBO.
-		*\param[in] layout
-		*	Le layout.
+		*	Crée un tampon GPU.
+		*\param[in] size
+		*	La taille du tampon.
+		*\param[in] target
+		*	Les indicateurs d'utilisation du tampon.
+		*\param[in] memoryFlags
+		*	Les indicateurs de mémoire du tampon.
 		*/
-		GeometryBuffersPtr createGeometryBuffers( VertexBufferBase const & vbo
-			, uint64_t vboOffset
-			, VertexLayout const & layout )const;
+		BufferBasePtr createBuffer( uint32_t size
+			, BufferTargets target
+			, MemoryPropertyFlags flags )const;
 		/**
 		*\~english
 		*\brief
-		*	Creates a geometry buffers.
-		*\param[in] vbo
-		*	The VBO.
-		*\param[in] vboOffset
-		*	The offset of the first vertex in the VBO.
-		*\param[in] layout
-		*	The vertex buffer layout.
-		*\param[in] ibo
-		*	The IBO.
-		*\param[in] iboOffset
-		*	The offset of the first index in the VBO.
-		*\param[in] type
-		*	The index type.
+		*	Creates a texture.
+		*\param[in] createInfo
+		*	The creation informations.
 		*\~french
 		*\brief
-		*	Crée tampon de géométries.
-		*\param[in] vbo
-		*	Le VBO.
-		*\param[in] vboOffset
-		*	L'offset du premier sommet dans le VBO.
-		*\param[in] layout
-		*	Le layout.
-		*\param[in] ibo
-		*	L'IBO.
-		*\param[in] iboOffset
-		*	L'offset du premier sommet dans l'IBO.
-		*\param[in] type
-		*	Le type des indices.
+		*	Crée une texture.
+		*\param[in] createInfo
+		*	Les informations de création.
 		*/
-		GeometryBuffersPtr createGeometryBuffers( VertexBufferBase const & vbo
-			, uint64_t vboOffset
-			, VertexLayout const & layout
-			, BufferBase const & ibo
-			, uint64_t iboOffset
-			, IndexType type )const;
+		TexturePtr createTexture( ImageCreateInfo const & createInfo
+			, MemoryPropertyFlags flags )const;
+		/**
+		*\~french
+		*\brief
+		*	Crée une passe de rendu.
+		*\param[in] attaches
+		*	Les attaches voulues pour la passe.
+		*\param[in] subpasses
+		*	Les sous passes (au moins 1 nécessaire).
+		*\param[in] initialState
+		*	L'état voulu en début de passe.
+		*\param[in] finalState
+		*	L'état atteint en fin de passe.
+		*\return
+		*	La passe créée.
+		*\~english
+		*\brief
+		*	Creates a render pass.
+		*\param[in] attaches
+		*	The attachments pixels formats.
+		*\param[in] subpasses
+		*	The rendersubpasses (at least one is necessary).
+		*\param[in] initialState
+		*	The state wanted at the beginning of the pass.
+		*\param[in] finalState
+		*	The state attained at the end of the pass.
+		*\return
+		*	The created pass.
+		*/
+		RenderPassPtr createRenderPass( AttachmentDescriptionArray const & attaches
+			, RenderSubpassPtrArray && subpasses
+			, RenderSubpassState const & initialState
+			, RenderSubpassState const & finalState )const;
 		/**
 		*\~english
 		*\brief
@@ -690,14 +650,14 @@ namespace renderer
 		*\~english
 		*\brief
 		*	Creates a pipeline layout.
-		*\param[in] setLayouts
+		*\param[in] layouts
 		*	The descriptor sets layouts.
 		*\return
 		*	The created layout.
 		*\~french
 		*\brief
 		*	Crée un layout de pipeline.
-		*\param[in] setLayouts
+		*\param[in] layouts
 		*	Les layouts des descripteurs du pipeline.
 		*\return
 		*	Le layout créé.
@@ -723,6 +683,62 @@ namespace renderer
 		/**
 		*\~english
 		*\brief
+		*	Creates a sampler.
+		*\param[in] wrapS, wrapT, wrapR
+		*	The texture wrap modes.
+		*\param[in] minFilter, magFilter
+		*	The minification and magnification filters.
+		*\param[in] mipFilter
+		*	The mipmap filter.
+		*\param[in] minLod
+		*	Minimal LOD Level.
+		*\param[in] maxLod
+		*	Maximal LOD Level.
+		*\param[in] lodBias
+		*	The texture LOD offset.
+		*\param[in] borderColour
+		*	Texture border colour.
+		*\param[in] maxAnisotropy
+		*	Maximal anisotropic filtering value.
+		*\param[in] compareOp
+		*	The comparison operator, for depth maps.
+		*\~french
+		*\brief
+		*	Crée un échantillonneur.
+		*\param[in] wrapS, wrapT, wrapR
+		*	Les modes de wrap de texture.
+		*\param[in] minFilter, magFilter
+		*	Les filtres de minification et magnification.
+		*\param[in] mipFilter
+		*	Le filtre de mipmap.
+		*\param[in] minLod
+		*	Niveau de LOD minimal.
+		*\param[in] maxLod
+		*	Niveau de LOD maximal.
+		*\param[in] lodBias
+		*	Le décalage de LOD de la texture.
+		*\param[in] borderColour
+		*	Couleur des bords de la texture.
+		*\param[in] maxAnisotropy
+		*	Valeur maximale pour le filtrage anisotropique.
+		*\param[in] compareOp
+		*	L'opérateur de comparaison, pour les textures de profondeur.
+		*/
+		SamplerPtr createSampler( WrapMode wrapS
+			, WrapMode wrapT
+			, WrapMode wrapR
+			, Filter minFilter
+			, Filter magFilter
+			, MipmapMode mipFilter = MipmapMode::eNone
+			, float minLod = -1000.0f
+			, float maxLod = 1000.0f
+			, float lodBias = 0.0f
+			, BorderColour borderColour = BorderColour::eFloatOpaqueBlack
+			, float maxAnisotropy = 1.0f
+			, CompareOp compareOp = CompareOp::eAlways )const;
+		/**
+		*\~english
+		*\brief
 		*	Waits for the device to be idle.
 		*\~french
 		*\brief
@@ -731,100 +747,73 @@ namespace renderer
 		virtual void waitIdle()const = 0;
 		/**
 		*\~english
-		*\brief
-		*	The version number.
+		*name
+		*	Getters.
 		*\~french
-		*\brief
-		*	Le numéro de version.
+		*name
+		*	Accesseurs.
 		*/
-		inline std::string const & getVersion()const
+		/**@{*/
+		inline std::vector< QueueFamilyProperties > const & getQueueProperties()const
 		{
-			return m_version;
+			return m_gpu.getQueueProperties();
 		}
-		/**
-		*\~english
-		*\return
-		*	The presentation queue.
-		*\~french
-		*\return
-		*	La file de présentation.
-		*/
+
+		inline PhysicalDeviceProperties const & getProperties()const
+		{
+			return m_gpu.getProperties();
+		}
+
+		inline PhysicalDeviceMemoryProperties const & getMemoryProperties()const
+		{
+			return m_gpu.getMemoryProperties();
+		}
+
+		inline PhysicalDeviceFeatures const & getFeatures()const
+		{
+			return m_gpu.getFeatures();
+		}
+
 		inline Queue const & getPresentQueue()const
 		{
 			return *m_presentQueue;
 		}
-		/**
-		*\~english
-		*\return
-		*	The compute queue.
-		*\~french
-		*\return
-		*	La file de calcul.
-		*/
+
 		inline Queue const & getComputeQueue()const
 		{
 			return *m_computeQueue;
 		}
-		/**
-		*\~english
-		*\return
-		*	The graphics queue.
-		*\~french
-		*\return
-		*	La file de dessin.
-		*/
+
 		inline Queue const & getGraphicsQueue()const
 		{
 			return *m_graphicsQueue;
 		}
-		/**
-		*\~english
-		*\return
-		*	The command buffer pool for the presentation queue.
-		*\~french
-		*\return
-		*	Le pool de tampons de commandes pour la file de présentation.
-		*/
+
 		inline CommandPool const & getPresentCommandPool()const
 		{
 			return *m_presentCommandPool;
 		}
-		/**
-		*\~english
-		*\return
-		*	The command buffer pool for the compute queue.
-		*\~french
-		*\return
-		*	Le pool de tampons de commandes pour la file de calcul.
-		*/
+
 		inline CommandPool const & getComputeCommandPool()const
 		{
 			return *m_computeCommandPool;
 		}
-		/**
-		*\~english
-		*\return
-		*	The command buffer pool for the graphics queue.
-		*\~french
-		*\return
-		*	Le pool de tampons de commandes pour la file de dessin.
-		*/
+
 		inline CommandPool const & getGraphicsCommandPool()const
 		{
 			return *m_graphicsCommandPool;
 		}
-		/**
-		*\~english
-		*\return
-		*	The parent Renderer.
-		*\~french
-		*\return
-		*	Le Renderer parent.
-		*/
+
 		inline Renderer const & getRenderer()const
 		{
 			return m_renderer;
 		}
+
+		inline PhysicalDevice const & getPhysicalDevice()const
+		{
+			return m_gpu;
+		}
+		/**@}*/
 		/**
 		*\~english
 		*\return
@@ -864,13 +853,13 @@ namespace renderer
 
 	protected:
 		Renderer const & m_renderer;
+		PhysicalDevice const & m_gpu;
 		QueuePtr m_presentQueue;
 		QueuePtr m_computeQueue;
 		QueuePtr m_graphicsQueue;
 		CommandPoolPtr m_presentCommandPool;
 		CommandPoolPtr m_computeCommandPool;
 		CommandPoolPtr m_graphicsCommandPool;
-		std::string m_version;
 		float m_timestampPeriod;
 	};
 }

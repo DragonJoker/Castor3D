@@ -599,7 +599,7 @@ namespace castor3d
 		 *\param[in]	channel	Le canal de texture.
 		 *\param[in]	format	Le format de pixels voulu.
 		 */
-		void doReduceTexture( TextureChannel channel, castor::PixelFormat format );
+		void doReduceTexture( TextureChannel channel, renderer::Format format );
 
 	private:
 		void onSssChanged( SubsurfaceScattering const & sss );

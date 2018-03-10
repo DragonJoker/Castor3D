@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #include "Command/CommandBuffer.hpp"
@@ -16,6 +16,33 @@ namespace renderer
 		, CommandPool const & pool
 		, bool primary )
 	{
+	}
+
+	void CommandBuffer::bindVertexBuffer( uint32_t binding
+		, BufferBase const & buffer
+		, uint64_t offset )const
+	{
+		bindVertexBuffers( binding
+			, BufferCRefArray{ buffer }
+			, UInt64Array{ offset } );
+	}
+
+	void CommandBuffer::copyToImage( BufferImageCopy const & copyInfo
+		, BufferBase const & src
+		, Texture const & dst )const
+	{
+		copyToImage( BufferImageCopyArray{ 1u, copyInfo }
+			, src
+			, dst );
+	}
+
+	void CommandBuffer::copyToBuffer( BufferImageCopy const & copyInfo
+		, Texture const & src
+		, BufferBase const & dst )const
+	{
+		copyToBuffer( BufferImageCopyArray{ 1u, copyInfo }
+			, src
+			, dst );
 	}
 
 	void CommandBuffer::copyBuffer( BufferBase const & src
@@ -125,33 +152,31 @@ namespace renderer
 			{
 				{                                                   // srcSubresource
 					getAspectMask( src.getFormat() ),
-					srcRange.getBaseMipLevel(),
-					srcRange.getBaseArrayLayer(),
-					srcRange.getLayerCount()
+					srcRange.baseMipLevel,
+					srcRange.baseArrayLayer,
+					srcRange.layerCount
 				},
-				IVec3{                                              // srcOffset
+				Offset3D{                                              // srcOffset
 					0,                                                  // x
 					0,                                                  // y
 					0                                                   // z
 				},
 				{                                                   // dstSubresource
 					getAspectMask( dst.getFormat() ),
-					dstRange.getBaseMipLevel(),
-					dstRange.getBaseArrayLayer(),
-					dstRange.getLayerCount()
+					dstRange.baseMipLevel,
+					dstRange.baseArrayLayer,
+					dstRange.layerCount
 				},
-				IVec3{                                              // dstOffset
+				Offset3D{                                              // dstOffset
 					0,                                                  // x
 					0,                                                  // y
 					0                                                   // z
 				},
-				UIVec3{                                             // extent
-					uint32_t( dst.getTexture().getDimensions()[0] ),
-					uint32_t( dst.getTexture().getDimensions()[1] ),
-					uint32_t( dst.getTexture().getDimensions()[2] ),
-				}
+				dst.getTexture().getDimensions()                    // extent
 			}
-			, src
-			, dst );
+			, src.getTexture()
+			, ImageLayout::eTransferSrcOptimal
+			, dst.getTexture()
+			, ImageLayout::eTransferDstOptimal );
 	}
 }

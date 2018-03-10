@@ -3,8 +3,8 @@
 
 extern "C"
 {
-	GlRenderer_API renderer::Renderer * createRenderer( bool enableValidation )
+	GlRenderer_API renderer::Renderer * createRenderer( renderer::Renderer::Configuration const & configuration )
 	{
-		return new gl_renderer::Renderer{ enableValidation };
+		return new gl_renderer::Renderer{ configuration };
 	}
 }

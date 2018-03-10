@@ -1,4 +1,4 @@
-#include "QueryPool.hpp"
+﻿#include "QueryPool.hpp"
 
 namespace renderer
 {

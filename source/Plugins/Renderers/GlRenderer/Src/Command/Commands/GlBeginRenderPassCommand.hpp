@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder
 */
 #pragma once
@@ -32,14 +32,14 @@ namespace gl_renderer
 			, renderer::FrameBuffer const & frameBuffer
 			, renderer::ClearValueArray const & clearValues
 			, renderer::SubpassContents contents
-			, uint32_t index );
+			, renderer::SubpassDescription const & subpass );
 
 		void apply()const override;
 		CommandPtr clone()const override;
 
 	private:
 		RenderPass const & m_renderPass;
-		RenderSubpass const & m_subpass;
+		renderer::SubpassDescription const & m_subpass;
 		FrameBuffer const & m_frameBuffer;
 		renderer::ClearValueArray m_clearValues;
 	};

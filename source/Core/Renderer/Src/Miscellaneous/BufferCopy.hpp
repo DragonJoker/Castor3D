@@ -1,5 +1,5 @@
-/*
-This file belongs to Renderer.
+ï»¿/*
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___Renderer_BufferCopy_HPP___
@@ -16,7 +16,7 @@ namespace renderer
 	*	Specifies a buffer copy operation.
 	*\~french
 	*\brief
-	*	Définit une opération de copie de tampon.
+	*	DÃ©finit une opÃ©ration de copie de tampon.
 	*/
 	struct BufferCopy
 	{
@@ -26,7 +26,7 @@ namespace renderer
 		*	The starting offset in bytes from the start of \p srcBuffer.
 		*\~french
 		*\brief
-		*	Le décalage de départ en octets, depuis le début de \p srcBuffer.
+		*	Le dÃ©calage de dÃ©part en octets, depuis le dÃ©but de \p srcBuffer.
 		*/
 		uint32_t srcOffset;
 		/**
@@ -35,7 +35,7 @@ namespace renderer
 		*	The starting offset in bytes from the start of \p dstBuffer.
 		*\~french
 		*\brief
-		*	Le décalage de départ en octets, depuis le début de \p dstBuffer.
+		*	Le dÃ©calage de dÃ©part en octets, depuis le dÃ©but de \p dstBuffer.
 		*/
 		uint32_t dstOffset;
 		/**
@@ -44,7 +44,7 @@ namespace renderer
 		*	The number of bytes to copy.
 		*\~french
 		*\brief
-		*	Le nombre d'octets à copier.
+		*	Le nombre d'octets Ã  copier.
 		*/
 		uint32_t size;
 	};

@@ -116,12 +116,12 @@ namespace castor3d
 			, [this]()
 			{
 				auto & device = *getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
-				m_textureBuffer = renderer::makeBuffer< renderer::Vec4 >( device
+				m_textureBuffer = renderer::makeBuffer< castor::Point4f >( device
 					, 1000u
 					, renderer::BufferTarget::eUniformTexelBuffer | renderer::BufferTarget::eTransferDst
 					, renderer::MemoryPropertyFlag::eHostVisible );
 				m_textureView = device.createBufferView( m_textureBuffer->getBuffer()
-					, m_lightsBuffer->format()
+					, convert( m_lightsBuffer->format() )
 					, 0u
 					, m_lightsBuffer->size() );
 			} ) );
@@ -257,7 +257,8 @@ namespace castor3d
 			std::memcpy( locked, m_lightsBuffer->constPtr(), m_lightsBuffer->size() );
 		}
 
-		m_textureBuffer->getBuffer().unlock( m_textureBuffer->getBuffer().getSize(), true );
+		m_textureBuffer->getBuffer().flush( 0u, m_textureBuffer->getBuffer().getSize() );
+		m_textureBuffer->getBuffer().unlock();
 	}
 
 	void ObjectCache< Light, castor::String >::onLightChanged( Light & light )

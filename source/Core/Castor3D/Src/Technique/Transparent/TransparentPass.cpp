@@ -118,7 +118,7 @@ namespace castor3d
 			, jitter );
 	}
 
-	void TransparentPass::doPrepareFrontPipeline( renderer::ShaderProgram & program
+	void TransparentPass::doPrepareFrontPipeline( renderer::ShaderStageStateArray & program
 		, PipelineFlags const & flags )
 	{
 		auto it = m_frontPipelines.find( flags );
@@ -157,7 +157,7 @@ namespace castor3d
 		}
 	}
 
-	void TransparentPass::doPrepareBackPipeline( renderer::ShaderProgram & program
+	void TransparentPass::doPrepareBackPipeline( renderer::ShaderStageStateArray & program
 		, PipelineFlags const & flags )
 	{
 		auto it = m_backPipelines.find( flags );

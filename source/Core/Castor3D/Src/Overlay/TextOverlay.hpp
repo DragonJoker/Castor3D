@@ -409,28 +409,15 @@ namespace castor3d
 		using TextureCoordinates = std::array< float, 2 >;
 		DECLARE_VECTOR( TextureCoordinates, TextureCoords );
 		/**
-		 *\~english
-		 *\brief		Draws the overlay
-		 *\param[in]	renderer	The renderer used to draw this overlay
-		 *\~french
-		 *\brief		Dessine l'incrustation
-		 *\param[in]	renderer	Le renderer utilisé pour dessiner cette incrustation
+		 *\copydoc	castor3d::OverlayCategory::doRender
 		 */
-		C3D_API void doRender( OverlayRendererSPtr renderer )override;
+		C3D_API void doRender( OverlayRenderer & renderer )override;
 		/**
-		 *\~english
-		 *\brief		Updates the overlay position, size...
-		 *\~french
-		 *\brief		Met à jour la position, taille...
+		 *\copydoc	castor3d::OverlayCategory::doUpdate
 		 */
 		C3D_API void doUpdate()override;
 		/**
-		 *\~english
-		 *\brief		Updates the vertex buffer.
-		 *\param[in]	size	The render target size.
-		 *\~french
-		 *\brief		Met à jour le tampon de sommets.
-		 *\param[in]	size	Les dimensions de la cible de rendu.
+		 *\copydoc	castor3d::OverlayCategory::doUpdateBuffer
 		 */
 		C3D_API void doUpdateBuffer( castor::Size const & size )override;
 		/**

@@ -55,7 +55,7 @@ namespace castor3d
 	 *\param[in]	texture	La valeur.
 	 *\return		Le nom.
 	 */
-	castor::PixelFormat getTextureFormat( DsTexture texture );
+	renderer::Format getTextureFormat( DsTexture texture );
 	/**
 	 *\~english
 	 *\brief		Retrieve the attachment index for given texture enum value.
@@ -323,10 +323,10 @@ namespace castor3d
 			{
 				//!\~english	The variable containing the light colour.
 				//!\~french		La variable contenant la couleur de la lumière.
-				renderer::Vec3 colour;
+				castor::Point3f colour;
 				//!\~english	The variable containing the light intensities.
 				//!\~french		La variable contenant les intensités de la lumière.
-				renderer::Vec2 intensity;
+				castor::Point2f intensity;
 				//!\~english	The variable containing the light far plane position.
 				//!\~french		La variable contenant la position du plan lointain de la lumière.
 				float farPlane;
@@ -334,7 +334,6 @@ namespace castor3d
 			Engine & m_engine;
 			renderer::UniformBufferBase const * m_baseUbo{ nullptr };
 			renderer::ShaderProgram & m_program;
-			renderer::GeometryBuffersPtr m_geometryBuffers;
 			RenderPipelineSPtr m_blendPipeline;
 			RenderPipelineSPtr m_firstPipeline;
 		};

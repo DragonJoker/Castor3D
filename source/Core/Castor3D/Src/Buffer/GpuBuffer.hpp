@@ -108,15 +108,49 @@ namespace castor3d
 			, renderer::MemoryMapFlags const & flags )const;
 		/**
 		 *\~english
+		 *\brief		Locks the buffer, id est maps it into memory so we can modify it.
+		 *\remarks		Maps from m_buffer[offset] to m_buffer[offset + count - 1].
+		 *\param[in]	offset	The start offset in the buffer.
+		 *\param[in]	size	The mapped memory size.
+		 *\param[in]	flags	The lock flags.
+		 *\return		The mapped buffer address.
+		 *\~french
+		 *\brief		Locke le tampon, càd le mappe en mémoire ram afin d'y autoriser des modifications.
+		 *\remarks		Mappe de m_buffer[offset] à m_buffer[offset + count - 1].
+		 *\param[in]	offset	L'offset de départ.
+		 *\param[in]	size	La taille de la mémoire à mapper.
+		 *\param[in]	flags	Les flags de lock.
+		 *\return		L'adresse du tampon mappé.
+		 */
+		C3D_API void flush( uint32_t offset
+			, uint32_t size )const;
+		/**
+		 *\~english
+		 *\brief		Locks the buffer, id est maps it into memory so we can modify it.
+		 *\remarks		Maps from m_buffer[offset] to m_buffer[offset + count - 1].
+		 *\param[in]	offset	The start offset in the buffer.
+		 *\param[in]	size	The mapped memory size.
+		 *\param[in]	flags	The lock flags.
+		 *\return		The mapped buffer address.
+		 *\~french
+		 *\brief		Locke le tampon, càd le mappe en mémoire ram afin d'y autoriser des modifications.
+		 *\remarks		Mappe de m_buffer[offset] à m_buffer[offset + count - 1].
+		 *\param[in]	offset	L'offset de départ.
+		 *\param[in]	size	La taille de la mémoire à mapper.
+		 *\param[in]	flags	Les flags de lock.
+		 *\return		L'adresse du tampon mappé.
+		 */
+		C3D_API void invalidate( uint32_t offset
+			, uint32_t size )const;
+		/**
+		 *\~english
 		 *\brief		Unlocks the buffer, id est unmaps it from memory so no modification can be made after that.
 		 *\remarks		All modifications made in the mapped buffer are put into GPU memory.
-		 *\param[in]	size	The mapped memory size.
 		 *\~french
 		 *\brief		Un locke le tampon, càd l'unmappe de la mémoire ram afin de ne plus autoriser de modifications dessus.
 		 *\remarks		Toutes les modifications qui avaient été effectuées sur le tampon mappé sont rapatriées dans la mémoire GPU.
-		 *\param[in]	size	La taille de la mémoire mappée.
 		 */
-		C3D_API void unlock( uint32_t size )const;
+		C3D_API void unlock()const;
 		/**
 		 *\~english
 		 *\brief		Copies data from given buffer to this one.

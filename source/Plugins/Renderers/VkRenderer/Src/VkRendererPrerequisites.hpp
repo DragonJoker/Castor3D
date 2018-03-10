@@ -32,11 +32,11 @@
 #	undef abs
 #endif
 
-#include "VkPixelFormat.hpp"
 #include "RenderPass/VkClearValue.hpp"
 
 #include "Enum/VkAccessFlag.hpp"
-#include "Enum/VkAttributeFormat.hpp"
+#include "Enum/VkAttachmentLoadOp.hpp"
+#include "Enum/VkAttachmentStoreOp.hpp"
 #include "Enum/VkBlendFactor.hpp"
 #include "Enum/VkBlendOp.hpp"
 #include "Enum/VkBorderColour.hpp"
@@ -45,23 +45,32 @@
 #include "Enum/VkCommandBufferResetFlag.hpp"
 #include "Enum/VkCommandBufferUsageFlag.hpp"
 #include "Enum/VkCommandPoolCreateFlag.hpp"
+#include "Enum/VkComponentSwizzle.hpp"
 #include "Enum/VkCompareOp.hpp"
 #include "Enum/VkCullModeFlag.hpp"
+#include "Enum/VkDependencyFlag.hpp"
 #include "Enum/VkDepthStencilStateFlag.hpp"
+#include "Enum/VkDescriptorPoolCreateFlag.hpp"
 #include "Enum/VkDescriptorType.hpp"
+#include "Enum/VkDynamicState.hpp"
+#include "Enum/VkFormat.hpp"
+#include "Enum/VkFormatFeatureFlag.hpp"
 #include "Enum/VkFenceCreateFlag.hpp"
 #include "Enum/VkFilter.hpp"
 #include "Enum/VkFrontFace.hpp"
 #include "Enum/VkImageAspectFlag.hpp"
+#include "Enum/VkImageCreateFlag.hpp"
 #include "Enum/VkImageLayout.hpp"
 #include "Enum/VkImageTiling.hpp"
 #include "Enum/VkImageUsageFlag.hpp"
 #include "Enum/VkIndexType.hpp"
 #include "Enum/VkLogicOp.hpp"
+#include "Enum/VkMemoryHeapFlag.hpp"
 #include "Enum/VkMemoryMapFlag.hpp"
 #include "Enum/VkMemoryPropertyFlag.hpp"
 #include "Enum/VkMipmapMode.hpp"
 #include "Enum/VkMultisampleStateFlag.hpp"
+#include "Enum/VkPhysicalDeviceType.hpp"
 #include "Enum/VkPipelineBindPoint.hpp"
 #include "Enum/VkPipelineStageFlag.hpp"
 #include "Enum/VkPolygonMode.hpp"
@@ -70,22 +79,39 @@
 #include "Enum/VkQueryPipelineStatisticFlag.hpp"
 #include "Enum/VkQueryType.hpp"
 #include "Enum/VkQueryResultFlag.hpp"
+#include "Enum/VkQueueFlag.hpp"
 #include "Enum/VkRasterisationStateFlag.hpp"
+#include "Enum/VkRenderPassCreateFlag.hpp"
 #include "Enum/VkSampleCountFlag.hpp"
 #include "Enum/VkShaderStageFlag.hpp"
+#include "Enum/VkSharingMode.hpp"
 #include "Enum/VkStencilOp.hpp"
 #include "Enum/VkSubpassContents.hpp"
+#include "Enum/VkSubpassDescriptionFlag.hpp"
 #include "Enum/VkTessellationStateFlag.hpp"
 #include "Enum/VkTextureType.hpp"
+#include "Enum/VkTextureViewType.hpp"
 #include "Enum/VkVertexInputRate.hpp"
 #include "Enum/VkWrapMode.hpp"
+#include "Command/VkCommandBufferInheritanceInfo.hpp"
+#include "Descriptor/VkDescriptorBufferInfo.hpp"
+#include "Descriptor/VkDescriptorImageInfo.hpp"
 #include "Descriptor/VkDescriptorSetLayoutBinding.hpp"
+#include "Descriptor/VkWriteDescriptorSet.hpp"
+#include "Image/VkComponentMapping.hpp"
+#include "Image/VkImageSubresource.hpp"
 #include "Image/VkImageSubresourceLayers.hpp"
 #include "Image/VkImageSubresourceRange.hpp"
+#include "Image/VkSubresourceLayout.hpp"
 #include "Miscellaneous/VkBufferCopy.hpp"
 #include "Miscellaneous/VkBufferImageCopy.hpp"
+#include "Miscellaneous/VkExtent2D.hpp"
+#include "Miscellaneous/VkExtent3D.hpp"
 #include "Miscellaneous/VkImageBlit.hpp"
 #include "Miscellaneous/VkImageCopy.hpp"
+#include "Miscellaneous/VkMemoryRequirements.hpp"
+#include "Miscellaneous/VkOffset2D.hpp"
+#include "Miscellaneous/VkOffset3D.hpp"
 #include "Miscellaneous/VkPushConstantRange.hpp"
 #include "Pipeline/VkColourBlendState.hpp"
 #include "Pipeline/VkColourBlendStateAttachment.hpp"
@@ -93,11 +119,24 @@
 #include "Pipeline/VkInputAssemblyState.hpp"
 #include "Pipeline/VkMultisampleState.hpp"
 #include "Pipeline/VkRasterisationState.hpp"
+#include "Pipeline/VkScissor.hpp"
+#include "Pipeline/VkShaderStageState.hpp"
+#include "Pipeline/VkSpecialisationInfo.hpp"
+#include "Pipeline/VkSpecialisationMapEntry.hpp"
 #include "Pipeline/VkStencilOpState.hpp"
 #include "Pipeline/VkTessellationState.hpp"
+#include "Pipeline/VkVertexInputAttributeDescription.hpp"
+#include "Pipeline/VkVertexInputBindingDescription.hpp"
+#include "Pipeline/VkVertexInputState.hpp"
 #include "Pipeline/VkViewport.hpp"
-#include "Pipeline/VkScissor.hpp"
+#include "RenderPass/VkAttachmentDescription.hpp"
+#include "RenderPass/VkAttachmentReference.hpp"
+#include "RenderPass/VkClearAttachment.hpp"
+#include "RenderPass/VkClearRect.hpp"
 #include "RenderPass/VkClearValue.hpp"
+#include "RenderPass/VkRenderPassCreateInfo.hpp"
+#include "RenderPass/VkSubpassDependency.hpp"
+#include "RenderPass/VkSubpassDescription.hpp"
 #include "Sync/VkBufferMemoryBarrier.hpp"
 #include "Sync/VkImageMemoryBarrier.hpp"
 
@@ -131,11 +170,10 @@ namespace vk_renderer
 	class CommandPool;
 	class ComputePipeline;
 	class Connection;
+	class DescriptorPool;
 	class DescriptorSet;
-	class DescriptorSetBinding;
 	class DescriptorSetLayout;
 	class DescriptorSetLayoutBinding;
-	class DescriptorSetPool;
 	class Device;
 	class Pipeline;
 	class PipelineLayout;
@@ -161,7 +199,6 @@ namespace vk_renderer
 	using BufferStoragePtr = std::unique_ptr< BufferStorage >;
 	using ConnectionPtr = std::unique_ptr< Connection >;
 	using CommandPoolPtr = std::unique_ptr< CommandPool >;
-	using DescriptorSetBindingPtr = std::unique_ptr< DescriptorSetBinding >;
 	using ImageStoragePtr = std::unique_ptr< ImageStorage >;
 	using PhysicalDevicePtr = std::unique_ptr< PhysicalDevice >;
 	using QueuePtr = std::unique_ptr< Queue >;
@@ -350,7 +387,7 @@ namespace vk_renderer
 	*\return
 	*	The Vulkan handles array.
 	*/
-	template< typename VkType, typename LibType >
+	template< typename VkType, typename LibType, typename ... Params >
 	inline std::vector< VkType > makeVkArray( std::vector< std::reference_wrapper< LibType const > > const & input )
 	{
 		std::vector< VkType > result;

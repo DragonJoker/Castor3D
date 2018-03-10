@@ -16,7 +16,8 @@ namespace gl_renderer
 		: public Context
 	{
 	public:
-		MswContext( renderer::ConnectionPtr && connection );
+		MswContext( PhysicalDevice const & gpu
+			, renderer::ConnectionPtr && connection );
 		~MswContext();
 
 		void setCurrent()const override;
@@ -35,7 +36,7 @@ namespace gl_renderer
 
 	private:
 		HGLRC doCreateDummyContext();
-		bool doSelectPixelFormat();
+		bool doSelectFormat();
 		bool doCreateGl3Context();
 
 	private:

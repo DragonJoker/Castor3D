@@ -24,14 +24,14 @@ namespace castor3d
 		, renderer::RasterisationState && rsState
 		, renderer::ColourBlendState && blState
 		, renderer::MultisampleState && msState
-		, renderer::ShaderProgram const & program
+		, renderer::ShaderStageStateArray program
 		, PipelineFlags const & flags )
 		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_dsState{ std::move( dsState ) }
 		, m_rsState{ std::move( rsState ) }
 		, m_blState{ std::move( blState ) }
 		, m_msState{ std::move( msState ) }
-		, m_program{ program }
+		, m_program{ std::move( program ) }
 		, m_flags( flags )
 	{
 	}
@@ -49,27 +49,38 @@ namespace castor3d
 	void RenderPipeline::initialise( renderer::RenderPass const & renderPass
 		, renderer::PrimitiveTopology topology )
 	{
-		m_pipelineLayout = getRenderSystem()->getCurrentDevice()->createPipelineLayout( m_descriptorLayouts
-			, m_pushConstantRanges );
-		m_pipeline = m_pipelineLayout->createPipeline( m_program
-			, m_vertexLayouts
-			, renderPass
-			, { topology }
-			, m_rsState
-			, m_blState );
-		m_pipeline->depthStencilState( m_dsState );
-		m_pipeline->multisampleState( m_msState );
+		renderer::GraphicsPipelineCreateInfo createInfo
+		{
+			m_program,
+			renderPass,
+			renderer::VertexInputState::create( m_vertexLayouts ),
+			renderer::InputAssemblyState{ topology },
+			m_rsState,
+			m_msState,
+			m_blState,
+		};
+		createInfo.depthStencilState = m_dsState;
 
 		if ( m_viewport )
 		{
-			m_pipeline->viewport( *m_viewport );
+			createInfo.viewport = *m_viewport;
+		}
+		else
+		{
+			createInfo.dynamicStates.push_back( renderer::DynamicState::eViewport );
 		}
 
 		if ( m_scissor )
 		{
-			m_pipeline->scissor( *m_scissor );
+			createInfo.scissor = *m_scissor;
+		}
+		else
+		{
+			createInfo.dynamicStates.push_back( renderer::DynamicState::eScissor );
 		}
 
-		m_pipeline->finish();
+		m_pipelineLayout = getRenderSystem()->getCurrentDevice()->createPipelineLayout( m_descriptorLayouts
+			, m_pushConstantRanges );
+		m_pipeline = m_pipelineLayout->createPipeline( createInfo );
 	}
 }

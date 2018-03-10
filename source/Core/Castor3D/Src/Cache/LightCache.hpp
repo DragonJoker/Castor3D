@@ -182,7 +182,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le tampon de la texture.
 		 */
-		C3D_API renderer::Buffer< renderer::Vec4 > const & getBuffer()const
+		C3D_API renderer::Buffer< castor::Point4f > const & getBuffer()const
 		{
 			return *m_textureBuffer;
 		}
@@ -230,7 +230,7 @@ namespace castor3d
 
 	private:
 		LightsMap m_typeSortedLights;
-		renderer::BufferPtr< renderer::Vec4 > m_textureBuffer;
+		renderer::BufferPtr< castor::Point4f > m_textureBuffer;
 		renderer::BufferViewPtr m_textureView;
 		castor::PxBufferBaseSPtr m_lightsBuffer;
 		LightsRefArray m_dirtyLights;

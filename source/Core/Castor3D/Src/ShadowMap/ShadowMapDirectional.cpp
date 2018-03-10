@@ -152,7 +152,7 @@ namespace castor3d
 
 	void ShadowMapDirectional::doInitialise()
 	{
-		renderer::UIVec2 size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize };
+		renderer::Extent2D size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize };
 		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
 		std::vector< renderer::PixelFormat > formats
 		{

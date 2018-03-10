@@ -463,7 +463,7 @@ namespace castor3d
 		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API renderer::ShaderProgram & doGetProgram( PassFlags const & passFlags
+		C3D_API renderer::ShaderStageStateArray doGetProgram( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -1192,7 +1192,7 @@ namespace castor3d
 		 *\param[in,out]	program	Le programme, mis à jour si besoin est.
 		 *\param[in]		flags	Les indicateurs de pipeline.
 		 */
-		C3D_API virtual void doPrepareFrontPipeline( renderer::ShaderProgram & program
+		C3D_API virtual void doPrepareFrontPipeline( renderer::ShaderStageStateArray & program
 			, PipelineFlags const & flags ) = 0;
 		/**
 		 *\~english
@@ -1204,7 +1204,7 @@ namespace castor3d
 		 *\param[in,out]	program	Le programme, mis à jour si besoin est.
 		 *\param[in]		flags	Les indicateurs de pipeline.
 		 */
-		C3D_API virtual void doPrepareBackPipeline( renderer::ShaderProgram & program
+		C3D_API virtual void doPrepareBackPipeline( renderer::ShaderStageStateArray & program
 			, PipelineFlags const & flags ) = 0;
 
 	public:

@@ -1,4 +1,4 @@
-﻿#include "Core/VkRenderer.hpp"
+#include "Core/VkRenderer.hpp"
 
 #include "Core/VkConnection.hpp"
 #include "Core/VkDevice.hpp"
@@ -104,8 +104,8 @@ namespace vk_renderer
 		}
 	}
 
-	Renderer::Renderer( bool enableValidation )
-		: renderer::Renderer{ renderer::ClipDirection::eTopDown, "vk", enableValidation }
+	Renderer::Renderer( Configuration const & configuration )
+		: renderer::Renderer{ renderer::ClipDirection::eTopDown, "vk", configuration }
 #if defined( _WIN32 )
 		, m_library{ "vulkan-1.dll" }
 #elif defined( __linux__ )
@@ -184,16 +184,6 @@ namespace vk_renderer
 		return std::make_unique< Connection >( *this
 			, deviceIndex
 			, std::move( handle ) );
-	}
-
-	PhysicalDevice & Renderer::getPhysicalDevice( uint32_t gpuIndex )const
-	{
-		if ( gpuIndex >= m_gpus.size() )
-		{
-			throw std::logic_error( "Invalid GPU index" );
-		}
-
-		return *m_gpus[gpuIndex];
 	}
 
 	void Renderer::completeLayerNames( std::vector< char const * > & names )const
@@ -307,9 +297,9 @@ namespace vk_renderer
 		{
 			VK_STRUCTURE_TYPE_APPLICATION_INFO,
 			nullptr,
-			ShortName.c_str(),                                              // pApplicationName
+			m_configuration.appName.c_str(),                                // pApplicationName
 			VK_MAKE_VERSION( VersionMajor, VersionMinor, VersionBuild ),    // applicationVersion
-			ShortName.c_str(),                                              // pEngineName
+			m_configuration.engineName.c_str(),                             // pEngineName
 			VK_MAKE_VERSION( VersionMajor, VersionMinor, VersionBuild ),    // engineVersion
 			VulkanVersion                                                   // apiVersion
 		};
@@ -374,8 +364,8 @@ namespace vk_renderer
 
 	void Renderer::doEnumerateDevices()
 	{
-		uint32_t gpuCount{ 0 };
 		// On récupère les GPU physiques.
+		uint32_t gpuCount{ 0u };
 		auto res = vkEnumeratePhysicalDevices( m_instance
 			, &gpuCount
 			, nullptr );

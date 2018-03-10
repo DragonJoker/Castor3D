@@ -52,7 +52,7 @@ namespace castor3d
 	 *\param[in]	texture	La valeur.
 	 *\return		Le nom.
 	 */
-	castor::PixelFormat getTextureFormat( WbTexture texture );
+	renderer::Format getTextureFormat( WbTexture texture );
 	/**
 	 *\~english
 	 *\brief		Retrieve the attachment point for given texture enum value.
@@ -123,12 +123,12 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
 		 */
-		void doPrepareFrontPipeline( renderer::ShaderProgram & program
+		void doPrepareFrontPipeline( renderer::ShaderStageStateArray & program
 			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
 		 */
-		void doPrepareBackPipeline( renderer::ShaderProgram & program
+		void doPrepareBackPipeline( renderer::ShaderStageStateArray & program
 			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource

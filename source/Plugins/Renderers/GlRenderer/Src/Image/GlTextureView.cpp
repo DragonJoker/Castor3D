@@ -6,28 +6,107 @@
 
 namespace gl_renderer
 {
+	namespace
+	{
+		GlTextureViewType convert( renderer::TextureViewType viewType
+			, renderer::SampleCountFlag samples )
+		{
+			GlTextureViewType result = gl_renderer::convert( viewType );
+
+			if ( samples > renderer::SampleCountFlag::e1 )
+			{
+				switch ( result )
+				{
+				case GL_TEXTURE_VIEW_2D:
+					result = GL_TEXTURE_VIEW_2D_MULTISAMPLE;
+					break;
+				case GL_TEXTURE_VIEW_2D_ARRAY:
+					result = GL_TEXTURE_VIEW_2D_MULTISAMPLE_ARRAY;
+					break;
+				default:
+					assert( "Unsupported TextureViewType for a multisampled texture." );
+					break;
+				}
+			}
+
+			return result;
+		}
+	}
+
+	TextureView::TextureView( Device const & device
+		, Texture const & image )
+		: renderer::TextureView{ device
+		, image
+		, {
+			renderer::TextureViewType::e2D,
+			image.getFormat(),
+			renderer::ComponentMapping{},
+			{
+				renderer::ImageAspectFlag::eColour,
+				0u,
+				1u,
+				0u,
+				1u
+			}
+		} }
+		, m_device{ device }
+	{
+	}
+
 	TextureView::TextureView( Device const & device
 		, Texture const & texture
-		, renderer::TextureType type
-		, renderer::PixelFormat format
-		, uint32_t baseMipLevel
-		, uint32_t levelCount
-		, uint32_t baseArrayLayer
-		, uint32_t layerCount )
-		: renderer::TextureView{ device, texture, type, format, baseMipLevel, levelCount, baseArrayLayer, layerCount }
+		, renderer::ImageViewCreateInfo const & createInfo )
+		: renderer::TextureView{ device
+			, texture
+			, createInfo }
 		, m_device{ device }
-		, m_target{ convert( type ) }
+		, m_target{ convert( m_createInfo.viewType, texture.getSamplesCount() ) }
 	{
 		glLogCall( gl::GenTextures, 1, &m_texture );
 		glLogCall( gl::TextureView
 			, m_texture
 			, m_target
 			, texture.getImage()
-			, getInternal( format )
-			, baseMipLevel
-			, levelCount
-			, baseArrayLayer
-			, layerCount );
+			, getInternal( m_createInfo.format )
+			, m_createInfo.subresourceRange.baseMipLevel
+			, m_createInfo.subresourceRange.levelCount
+			, m_createInfo.subresourceRange.baseArrayLayer
+			, m_createInfo.subresourceRange.layerCount );
+		glLogCall( gl::BindTexture, m_target, m_texture );
+
+		if ( m_createInfo.components.r != renderer::ComponentSwizzle::eIdentity )
+		{
+			glLogCall( gl::TexParameteri, m_target, GL_SWIZZLE_R, convert( m_createInfo.components.r ) );
+		}
+
+		if ( m_createInfo.components.g != renderer::ComponentSwizzle::eIdentity )
+		{
+			glLogCall( gl::TexParameteri, m_target, GL_SWIZZLE_G, convert( m_createInfo.components.g ) );
+		}
+
+		if ( m_createInfo.components.b != renderer::ComponentSwizzle::eIdentity )
+		{
+			glLogCall( gl::TexParameteri, m_target, GL_SWIZZLE_B, convert( m_createInfo.components.b ) );
+		}
+
+		if ( m_createInfo.components.a != renderer::ComponentSwizzle::eIdentity )
+		{
+			glLogCall( gl::TexParameteri, m_target, GL_SWIZZLE_A, convert( m_createInfo.components.a ) );
+		}
+
+		int minLevel = 0;
+		gl::GetTexParameteriv( m_target, GL_TEXTURE_VIEW_MIN_LEVEL, &minLevel );
+		assert( minLevel == m_createInfo.subresourceRange.baseMipLevel );
+		int numLevels = 0;
+		gl::GetTexParameteriv( m_target, GL_TEXTURE_VIEW_NUM_LEVELS, &numLevels );
+		assert( numLevels == m_createInfo.subresourceRange.levelCount );
+		int minLayer = 0;
+		gl::GetTexParameteriv( m_target, GL_TEXTURE_VIEW_MIN_LAYER, &minLayer );
+		assert( minLayer == m_createInfo.subresourceRange.baseArrayLayer );
+		int numLayers = 0;
+		gl::GetTexParameteriv( m_target, GL_TEXTURE_VIEW_NUM_LAYERS, &numLayers );
+		assert( numLayers == m_createInfo.subresourceRange.layerCount );
+		glLogCall( gl::BindTexture, m_target, 0u );
 	}
 
 	TextureView::~TextureView()
@@ -35,76 +114,30 @@ namespace gl_renderer
 		glLogCall( gl::DeleteTextures, 1, &m_texture );
 	}
 
-	renderer::ImageMemoryBarrier TextureView::makeGeneralLayout( renderer::AccessFlags accessFlags )const
+	GLuint TextureView::getImage()const noexcept
 	{
-		return doMakeLayoutTransition( renderer::ImageLayout::eGeneral
-			, ~( 0u )
-			, accessFlags );
+		assert( m_texture != GL_INVALID_INDEX );
+		return m_texture;
 	}
 
-	renderer::ImageMemoryBarrier TextureView::makeTransferDestination()const
+	renderer::ImageMemoryBarrier TextureView::doMakeLayoutTransition( renderer::ImageLayout srcLayout
+		, renderer::ImageLayout dstLayout
+		, renderer::AccessFlags srcAccessFlags
+		, renderer::AccessFlags dstAccessMask
+		, uint32_t srcQueueFamily
+		, uint32_t dstQueueFamily )const
 	{
-		return doMakeLayoutTransition( renderer::ImageLayout::eTransferDstOptimal
-			, ~( 0u )
-			, renderer::AccessFlag::eTransferWrite );
-	}
-
-	renderer::ImageMemoryBarrier TextureView::makeTransferSource()const
-	{
-		return doMakeLayoutTransition( renderer::ImageLayout::eTransferSrcOptimal
-			, ~( 0u )
-			, renderer::AccessFlag::eShaderRead );
-	}
-
-	renderer::ImageMemoryBarrier TextureView::makeShaderInputResource()const
-	{
-		return doMakeLayoutTransition( renderer::ImageLayout::eShaderReadOnlyOptimal
-			, ~( 0u )
-			, renderer::AccessFlag::eTransferRead );
-	}
-
-	renderer::ImageMemoryBarrier TextureView::makeDepthStencilReadOnly()const
-	{
-		return doMakeLayoutTransition( renderer::ImageLayout::eDepthStencilReadOnlyOptimal
-			, ~( 0u )
-			, renderer::AccessFlag::eShaderRead );
-	}
-
-	renderer::ImageMemoryBarrier TextureView::makeColourAttachment()const
-	{
-		return doMakeLayoutTransition( renderer::ImageLayout::eColourAttachmentOptimal
-			, ~( 0u )
-			, renderer::AccessFlag::eColourAttachmentWrite );
-	}
-
-	renderer::ImageMemoryBarrier TextureView::makeDepthStencilAttachment()const
-	{
-		return doMakeLayoutTransition( renderer::ImageLayout::eDepthStencilAttachmentOptimal
-			, ~( 0u )
-			, renderer::AccessFlag::eColourAttachmentWrite );
-	}
-
-	renderer::ImageMemoryBarrier TextureView::makePresentSource()const
-	{
-		return doMakeLayoutTransition( renderer::ImageLayout::ePresentSrc
-			, ~( 0u )
-			, renderer::AccessFlag::eMemoryRead );
-	}
-
-	renderer::ImageMemoryBarrier TextureView::doMakeLayoutTransition( renderer::ImageLayout layout
-		, uint32_t queueFamily
-		, renderer::AccessFlags dstAccessMask )const
-	{
-		return renderer::ImageMemoryBarrier
+		renderer::ImageMemoryBarrier transitionBarrier
 		{
-			0u,                                      // srcAccessMask
-			dstAccessMask,                           // dstAccessMask
-			renderer::ImageLayout::eUndefined,       // oldLayout
-			layout,                                  // newLayout
-			~( 0u ),                                 // srcQueueFamilyIndex
-			queueFamily,                             // dstQueueFamilyIndex
-			getTexture(),                            // image
-			getSubResourceRange()                    // subresourceRange
+			srcAccessFlags,
+			dstAccessMask,
+			srcLayout,
+			dstLayout,
+			srcQueueFamily,
+			dstQueueFamily,
+			getTexture(),
+			getSubResourceRange()
 		};
+		return transitionBarrier;
 	}
 }

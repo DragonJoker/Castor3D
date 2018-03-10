@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___Renderer_RenderSubpassState_HPP___
@@ -11,42 +11,33 @@ See LICENSE file in root folder.
 namespace renderer
 {
 	/**
+	*\~english
 	*\brief
-	*	Description d'un état d'une passe de rendu.
+	*	Specifies the wanted state at the beginning of a subpass.
+	*\~french
+	*\brief
+	*	Description d'un état voulu au début d'une sous-passe de rendu.
 	*/
-	class RenderSubpassState
+	struct RenderSubpassState
 	{
-	public:
 		/**
+		*\~english
 		*\brief
-		*	Constructeur.
-		*\param[in] pipelineStage
-		*	Les indicateurs d'état du pipeline.
-		*\param[in] access
-		*	Les indicateurs d'accès.
-		*/
-		RenderSubpassState( PipelineStageFlags pipelineStage
-			, AccessFlags access );
-		/**
-		*\return
+		*	The pipeline stage flags.
+		*\~french
+		*\brief
 		*	Les indicateurs d'état du pipeline.
 		*/
-		inline PipelineStageFlags const & getPipelineStage()const
-		{
-			return m_pipelineStage;
-		}
+		PipelineStageFlags pipelineStage;
 		/**
-		*\return
+		*\~english
+		*\brief
+		*	The access flags.
+		*\~french
+		*\brief
 		*	Les indicateurs d'accès.
 		*/
-		inline AccessFlags const & getAccess()const
-		{
-			return m_access;
-		}
-
-	private:
-		PipelineStageFlags m_pipelineStage;
-		AccessFlags m_access;
+		AccessFlags access;
 	};
 }
 

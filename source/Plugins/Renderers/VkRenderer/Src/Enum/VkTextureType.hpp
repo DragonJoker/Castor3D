@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___VkRenderer_TextureType_HPP___
@@ -18,7 +18,7 @@ namespace vk_renderer
 	*\return
 	*	Le VkImageViewType.
 	*/
-	VkImageViewType convert( renderer::TextureType const & value )noexcept;
+	VkImageType convert( renderer::TextureType const & value )noexcept;
 }
 
 #endif

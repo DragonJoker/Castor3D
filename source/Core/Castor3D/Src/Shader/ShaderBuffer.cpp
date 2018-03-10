@@ -82,7 +82,8 @@ namespace castor3d
 				, renderer::MemoryMapFlag::eWrite ) )
 			{
 				std::memcpy( buffer, m_data.data(), size );
-				m_ssbo->unlock( size, true );
+				m_ssbo->flush( 0u, size );
+				m_ssbo->unlock();
 			}
 		}
 		else
@@ -92,7 +93,8 @@ namespace castor3d
 				, renderer::MemoryMapFlag::eWrite ) )
 			{
 				std::memcpy( buffer, m_data.data(), size );
-				m_tbo->getBuffer().unlock( size, true );
+				m_tbo->getBuffer().flush( 0u, size );
+				m_tbo->getBuffer().unlock();
 			}
 		}
 	}
@@ -109,7 +111,7 @@ namespace castor3d
 		}
 	}
 
-	renderer::DescriptorSetBinding const & ShaderBuffer::createBinding( renderer::DescriptorSet & descriptorSet
+	renderer::WriteDescriptorSet ShaderBuffer::createBinding( renderer::DescriptorSet & descriptorSet
 		, renderer::DescriptorSetLayoutBinding const & binding )const
 	{
 		if ( m_ssbo )

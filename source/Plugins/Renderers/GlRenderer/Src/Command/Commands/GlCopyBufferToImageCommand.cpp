@@ -10,90 +10,188 @@ See LICENSE file in root folder.
 
 #include <Image/ImageSubresourceRange.hpp>
 
+#define BufferOffset( n ) ( ( uint8_t * )nullptr + ( n ) )
+
 namespace gl_renderer
 {
-	namespace
-	{
-		GlTextureType convert( renderer::TextureType type
-			, uint32_t layer )
-		{
-			if ( type == renderer::TextureType::eCube )
-			{
-				return GlTextureType( GL_TEXTURE_CUBE_MAP_POSITIVE_X + layer );
-			}
-
-			return gl_renderer::convert( type );
-		}
-	}
-
-	CopyBufferToImageCommand::CopyBufferToImageCommand( renderer::BufferImageCopy const & copyInfo
+	CopyBufferToImageCommand::CopyBufferToImageCommand( renderer::BufferImageCopyArray const & copyInfo
 		, renderer::BufferBase const & src
-		, renderer::TextureView const & dst )
+		, renderer::Texture const & dst )
 		: m_copyInfo{ copyInfo }
 		, m_src{ static_cast< Buffer const & >( src ) }
-		, m_dst{ static_cast< TextureView const & >( dst ) }
-		, m_format{ getFormat( m_dst.getFormat() ) }
-		, m_type{ getType( m_dst.getFormat() ) }
-		, m_target{ convert( m_dst.getType() ) }
-		, m_copyTarget{ convert( m_dst.getType(), m_copyInfo.imageSubresource.baseArrayLayer ) }
+		, m_dst{ static_cast< Texture const & >( dst ) }
+		, m_internal{ getInternal( m_dst.getFormat() ) }
+		, m_format{ getFormat( m_internal ) }
+		, m_type{ getType( m_internal ) }
+		, m_copyTarget{ convert( m_dst.getType(), m_dst.getLayerCount() ) }
 	{
 	}
 
 	void CopyBufferToImageCommand::apply()const
 	{
 		glLogCommand( "CopyBufferToImageCommand" );
-		glLogCall( gl::BindTexture, m_target, m_dst.getImage() );
-		glLogCall( gl::BindBuffer, GL_BUFFER_TARGET_PIXEL_UNPACK, m_src.getBuffer() );
 
-		switch ( m_target )
+		for (const auto & copyInfo : m_copyInfo)
 		{
-		case GL_TEXTURE_1D:
-			glLogCall( gl::TexSubImage1D
-				, m_copyTarget
-				, m_copyInfo.imageSubresource.mipLevel
-				, m_copyInfo.imageOffset[0]
-				, m_copyInfo.imageExtent[0]
-				, m_format
-				, m_type
-				, nullptr );
-			break;
-
-		case GL_TEXTURE_2D:
-		case GL_TEXTURE_CUBE_MAP:
-			glLogCall( gl::TexSubImage2D
-				, m_copyTarget
-				, m_copyInfo.imageSubresource.mipLevel
-				, m_copyInfo.imageOffset[0]
-				, m_copyInfo.imageOffset[1]
-				, m_copyInfo.imageExtent[0]
-				, m_copyInfo.imageExtent[1]
-				, m_format
-				, m_type
-				, nullptr );
-			break;
-
-		case GL_TEXTURE_3D:
-			glLogCall( gl::TexSubImage3D
-				, m_copyTarget
-				, m_copyInfo.imageSubresource.mipLevel
-				, m_copyInfo.imageOffset[0]
-				, m_copyInfo.imageOffset[1]
-				, m_copyInfo.imageOffset[2]
-				, m_copyInfo.imageExtent[0]
-				, m_copyInfo.imageExtent[1]
-				, m_copyInfo.imageExtent[2]
-				, m_format
-				, m_type
-				, nullptr );
-			break;
+			applyOne( copyInfo );
 		}
-
-		glLogCall( gl::BindBuffer, GL_BUFFER_TARGET_PIXEL_UNPACK, 0u );
-		glLogCall( gl::BindTexture, m_target, 0u );
 	}
 
 	CommandPtr CopyBufferToImageCommand::clone()const
 	{
 		return std::make_unique< CopyBufferToImageCommand >( *this );
+	}
+
+	void CopyBufferToImageCommand::applyOne( renderer::BufferImageCopy const & copyInfo )const
+	{
+		glLogCall( gl::BindTexture, m_copyTarget, m_dst.getImage() );
+		glLogCall( gl::BindBuffer, GL_BUFFER_TARGET_PIXEL_UNPACK, m_src.getBuffer() );
+
+		if ( renderer::isCompressedFormat( m_dst.getFormat() ) )
+		{
+			switch ( m_copyTarget )
+			{
+			case GL_TEXTURE_1D:
+				glLogCall( gl::CompressedTexSubImage1D
+					, m_copyTarget
+					, copyInfo.imageSubresource.mipLevel
+					, copyInfo.imageOffset.x
+					, copyInfo.imageExtent.width
+					, m_internal
+					, copyInfo.levelSize
+					, BufferOffset( copyInfo.bufferOffset ) );
+				break;
+
+			case GL_TEXTURE_2D:
+				glLogCall( gl::CompressedTexSubImage2D
+					, m_copyTarget
+					, copyInfo.imageSubresource.mipLevel
+					, copyInfo.imageOffset.x
+					, copyInfo.imageOffset.y
+					, copyInfo.imageExtent.width
+					, copyInfo.imageExtent.height
+					, m_internal
+					, copyInfo.levelSize
+					, BufferOffset( copyInfo.bufferOffset ) );
+				break;
+
+			case GL_TEXTURE_3D:
+				glLogCall( gl::CompressedTexSubImage3D
+					, m_copyTarget
+					, copyInfo.imageSubresource.mipLevel
+					, copyInfo.imageOffset.x
+					, copyInfo.imageOffset.y
+					, copyInfo.imageOffset.z
+					, copyInfo.imageExtent.width
+					, copyInfo.imageExtent.height
+					, copyInfo.imageExtent.depth
+					, m_internal
+					, copyInfo.levelSize
+					, BufferOffset( copyInfo.bufferOffset ) );
+
+			case GL_TEXTURE_1D_ARRAY:
+				glLogCall( gl::CompressedTexSubImage2D
+					, m_copyTarget
+					, copyInfo.imageSubresource.mipLevel
+					, copyInfo.imageOffset.x
+					, copyInfo.imageSubresource.baseArrayLayer
+					, copyInfo.imageExtent.width
+					, copyInfo.imageSubresource.layerCount
+					, m_internal
+					, copyInfo.levelSize
+					, BufferOffset( copyInfo.bufferOffset ) );
+				break;
+
+			case GL_TEXTURE_2D_ARRAY:
+				glLogCall( gl::CompressedTexSubImage3D
+					, m_copyTarget
+					, copyInfo.imageSubresource.mipLevel
+					, copyInfo.imageOffset.x
+					, copyInfo.imageOffset.y
+					, copyInfo.imageSubresource.baseArrayLayer
+					, copyInfo.imageExtent.width
+					, copyInfo.imageExtent.height
+					, copyInfo.imageSubresource.layerCount
+					, m_internal
+					, copyInfo.levelSize
+					, BufferOffset( copyInfo.bufferOffset ) );
+				break;
+			}
+		}
+		else
+		{
+			switch ( m_copyTarget )
+			{
+			case GL_TEXTURE_1D:
+				glLogCall( gl::TexSubImage1D
+					, m_copyTarget
+					, copyInfo.imageSubresource.mipLevel
+					, copyInfo.imageOffset.x
+					, copyInfo.imageExtent.width
+					, m_format
+					, m_type
+					, BufferOffset( copyInfo.bufferOffset ) );
+				break;
+
+			case GL_TEXTURE_2D:
+				glLogCall( gl::TexSubImage2D
+					, m_copyTarget
+					, copyInfo.imageSubresource.mipLevel
+					, copyInfo.imageOffset.x
+					, copyInfo.imageOffset.y
+					, copyInfo.imageExtent.width
+					, copyInfo.imageExtent.height
+					, m_format
+					, m_type
+					, BufferOffset( copyInfo.bufferOffset ) );
+				break;
+
+			case GL_TEXTURE_3D:
+				glLogCall( gl::TexSubImage3D
+					, m_copyTarget
+					, copyInfo.imageSubresource.mipLevel
+					, copyInfo.imageOffset.x
+					, copyInfo.imageOffset.y
+					, copyInfo.imageOffset.z
+					, copyInfo.imageExtent.width
+					, copyInfo.imageExtent.height
+					, copyInfo.imageExtent.depth
+					, m_format
+					, m_type
+					, BufferOffset( copyInfo.bufferOffset ) );
+				break;
+
+			case GL_TEXTURE_1D_ARRAY:
+				glLogCall( gl::TexSubImage2D
+					, m_copyTarget
+					, copyInfo.imageSubresource.mipLevel
+					, copyInfo.imageOffset.x
+					, copyInfo.imageSubresource.baseArrayLayer
+					, copyInfo.imageExtent.width
+					, copyInfo.imageSubresource.layerCount
+					, m_format
+					, m_type
+					, BufferOffset( copyInfo.bufferOffset ) );
+				break;
+
+			case GL_TEXTURE_2D_ARRAY:
+				glLogCall( gl::TexSubImage3D
+					, m_copyTarget
+					, copyInfo.imageSubresource.mipLevel
+					, copyInfo.imageOffset.x
+					, copyInfo.imageOffset.y
+					, copyInfo.imageSubresource.baseArrayLayer
+					, copyInfo.imageExtent.width
+					, copyInfo.imageExtent.height
+					, copyInfo.imageSubresource.layerCount
+					, m_format
+					, m_type
+					, BufferOffset( copyInfo.bufferOffset ) );
+				break;
+			}
+		}
+
+		glLogCall( gl::BindBuffer, GL_BUFFER_TARGET_PIXEL_UNPACK, 0u );
+		glLogCall( gl::BindTexture, m_copyTarget, 0u );
 	}
 }

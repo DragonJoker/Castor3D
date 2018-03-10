@@ -20,7 +20,7 @@ namespace castor3d
 			renderer::Mat4 invProj;
 			renderer::Mat4 gView;
 			renderer::Mat4 gProj;
-			renderer::Vec2 renderSize;
+			castor::Point2f renderSize;
 		};
 
 	public:

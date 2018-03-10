@@ -21,10 +21,16 @@
 extern "C"
 {
 	/**
+	*\~french
 	*\brief
 	*	Crée un renderer OpenGL.
-	*\param[in] connection
-	*	La connection avec la fenêtre.
+	*\param[in] configuration
+	*	La configuration de création.
+	*\~english
+	*\brief
+	*	Creates an OpenGL renderer.
+	*\param[in] configuration
+	*	The creation options.
 	*/
-	GlRenderer_API renderer::Renderer * createRenderer( bool enableValidation );
+	GlRenderer_API renderer::Renderer * createRenderer( renderer::Renderer::Configuration const & configuration );
 }

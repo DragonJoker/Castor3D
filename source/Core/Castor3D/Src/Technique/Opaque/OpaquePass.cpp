@@ -864,7 +864,7 @@ namespace castor3d
 	{
 	}
 
-	void OpaquePass::doPrepareFrontPipeline( ShaderProgram & program
+	void OpaquePass::doPrepareFrontPipeline( renderer::ShaderStageStateArray & program
 		, PipelineFlags const & flags )
 	{
 		auto it = m_frontPipelines.find( flags );
@@ -911,7 +911,7 @@ namespace castor3d
 		}
 	}
 
-	void OpaquePass::doPrepareBackPipeline( ShaderProgram & program
+	void OpaquePass::doPrepareBackPipeline( renderer::ShaderStageStateArray & program
 		, PipelineFlags const & flags )
 	{
 		auto it = m_backPipelines.find( flags );

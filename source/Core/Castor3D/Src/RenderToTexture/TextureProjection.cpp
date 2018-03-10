@@ -6,16 +6,16 @@
 #include "Buffer/Buffer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/Camera.hpp"
-#include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <Buffer/GeometryBuffers.hpp>
 #include <Buffer/VertexBuffer.hpp>
 #include <Descriptor/DescriptorSet.hpp>
 #include <Descriptor/DescriptorSetLayout.hpp>
 #include <Descriptor/DescriptorSetLayoutBinding.hpp>
 #include <Descriptor/DescriptorSetPool.hpp>
+#include <Pipeline/ShaderStageState.hpp>
+#include <Shader/ShaderModule.hpp>
 
 #include <GlslSource.hpp>
 
@@ -30,7 +30,7 @@ namespace castor3d
 		: OwnedBy< Engine >{ engine }
 		, m_matrixUbo{ engine }
 		, m_modelMatrixUbo{ engine }
-		, m_sizePushConstant{ renderer::ShaderStageFlag::eFragment, { { 0u, 0u, renderer::AttributeFormat::eVec2f } } }
+		, m_sizePushConstant{ renderer::ShaderStageFlag::eFragment, { { 0u, 0u, renderer::ConstantFormat::eVec2f } } }
 		, m_pushConstantRange{ renderer::ShaderStageFlag::eFragment, m_sizePushConstant.getOffset(), m_sizePushConstant.getSize() }
 	{
 		m_sampler = engine.getSamplerCache().add( cuT( "TextureProjection" ) );
@@ -61,7 +61,6 @@ namespace castor3d
 		m_matrixUbo.cleanup();
 		m_modelMatrixUbo.cleanup();
 		m_sampler.reset();
-		m_geometryBuffers.reset();
 		m_vertexBuffer.reset();
 		m_vertexLayout.reset();
 		m_descriptorSet.reset();
@@ -98,7 +97,7 @@ namespace castor3d
 				, m_pipeline->getPipelineLayout() );
 			m_commandBuffer->pushConstants( m_pipeline->getPipelineLayout()
 				, m_sizePushConstant );
-			m_commandBuffer->bindGeometryBuffers( *m_geometryBuffers );
+			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 			m_commandBuffer->draw( 36u );
 			m_commandBuffer->end();
 		}
@@ -123,7 +122,7 @@ namespace castor3d
 		}
 	}
 
-	renderer::ShaderProgram & TextureProjection::doInitialiseShader()
+	renderer::ShaderStageStateArray TextureProjection::doInitialiseShader()
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		glsl::Shader vtx;
@@ -169,9 +168,11 @@ namespace castor3d
 		}
 
 		auto & cache = getEngine()->getShaderProgramCache();
-		auto & program = cache.getNewProgram( false );
-		program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
-		program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
+		auto program = cache.getNewProgram( false );
+		program.push_back( { renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
+		program.push_back( { renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
+		program[0].module->loadShader( vtx.getSource() );
+		program[1].module->loadShader( pxl.getSource() );
 		return program;
 	}
 
@@ -179,8 +180,9 @@ namespace castor3d
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
-		m_vertexLayout = renderer::makeLayout< NonTexturedCube >( device, 0u );
-		m_vertexLayout->createAttribute< decltype( NonTexturedCube::Quad::Vertex::position ) >( 0u
+		m_vertexLayout = renderer::makeLayout< NonTexturedCube >( 0u );
+		m_vertexLayout->createAttribute( 0u
+			, renderer::Format::eR32G32B32_SFLOAT
 			, offsetof( NonTexturedCube::Quad::Vertex, position ) );
 		m_vertexBuffer = renderer::makeVertexBuffer< NonTexturedCube >( device
 			, 1u
@@ -202,16 +204,14 @@ namespace castor3d
 					{ Point3f{ -1.0, -1.0, -1.0 }, Point3f{ +1.0, -1.0, -1.0 }, Point3f{ -1.0, -1.0, +1.0 }, Point3f{ +1.0, -1.0, -1.0 }, Point3f{ +1.0, -1.0, +1.0 }, Point3f{ -1.0, -1.0, +1.0 } },
 				}
 			};
-			m_vertexBuffer->unlock( 1u, true );
+			m_vertexBuffer->flush( 0u, 1u );
+			m_vertexBuffer->unlock();
 		}
 
-		m_geometryBuffers = device.createGeometryBuffers( *m_vertexBuffer
-			, 0u
-			, *m_vertexLayout );
 		return true;
 	}
 
-	bool TextureProjection::doInitialisePipeline( renderer::ShaderProgram & program
+	bool TextureProjection::doInitialisePipeline( renderer::ShaderStageStateArray & program
 		, TextureLayout const & texture
 		, renderer::RenderPass const & renderPass )
 	{

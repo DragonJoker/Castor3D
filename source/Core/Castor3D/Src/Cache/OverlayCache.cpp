@@ -109,26 +109,6 @@ namespace castor3d
 		}
 	}
 
-	void Cache< Overlay, castor::String >::updateRenderer()
-	{
-		if ( getEngine()->isCleaned() )
-		{
-			if ( m_pRenderer )
-			{
-				m_pRenderer->cleanup();
-				m_pRenderer.reset();
-			}
-		}
-		else
-		{
-			if ( !m_pRenderer )
-			{
-				m_pRenderer = std::make_shared< OverlayRenderer >( *getEngine()->getRenderSystem() );
-				m_pRenderer->initialise();
-			}
-		}
-	}
-
 	void Cache< Overlay, castor::String >::update()
 	{
 		auto lock = makeUniqueLock( *this );
@@ -136,32 +116,6 @@ namespace castor3d
 		for ( auto category : m_overlays )
 		{
 			category->update();
-		}
-	}
-
-	void Cache< Overlay, castor::String >::render( Scene const & p_scene, castor::Size const & p_size )
-	{
-		auto lock = makeUniqueLock( *this );
-
-		if ( m_pRenderer )
-		{
-			m_viewport.resize( p_size );
-			m_viewport.updateRight( real( p_size.getWidth() ) );
-			m_viewport.updateBottom( real( p_size.getHeight() ) );
-			m_viewport.update();
-			m_pRenderer->beginRender( m_viewport );
-
-			for ( auto category : m_overlays )
-			{
-				SceneSPtr scene = category->getOverlay().getScene();
-
-				if ( category->getOverlay().isVisible() && ( !scene || scene->getName() == p_scene.getName() ) )
-				{
-					category->render();
-				}
-			}
-
-			m_pRenderer->endRender();
 		}
 	}
 

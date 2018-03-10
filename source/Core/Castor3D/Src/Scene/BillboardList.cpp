@@ -9,7 +9,6 @@
 #include "Scene/Scene.hpp"
 #include "Shader/ShaderProgram.hpp"
 
-#include <Buffer/GeometryBuffers.hpp>
 #include <Buffer/VertexBuffer.hpp>
 #include <Pipeline/VertexLayout.hpp>
 
@@ -94,10 +93,10 @@ namespace castor3d
 			m_count = count;
 			Quad vertices
 			{
-				Vertex{ renderer::Vec3{ -0.5f, +0.5f, 1.0f }, renderer::Vec2{ 0.0f, 1.0f } },
-				Vertex{ renderer::Vec3{ -0.5f, -0.5f, 1.0f }, renderer::Vec2{ 0.0f, 0.0f } },
-				Vertex{ renderer::Vec3{ +0.5f, -0.5f, 1.0f }, renderer::Vec2{ 1.0f, 0.0f } },
-				Vertex{ renderer::Vec3{ +0.5f, +0.5f, 1.0f }, renderer::Vec2{ 1.0f, 1.0f } },
+				Vertex{ castor::Point3f{ -0.5f, +0.5f, 1.0f }, castor::Point2f{ 0.0f, 1.0f } },
+				Vertex{ castor::Point3f{ -0.5f, -0.5f, 1.0f }, castor::Point2f{ 0.0f, 0.0f } },
+				Vertex{ castor::Point3f{ +0.5f, -0.5f, 1.0f }, castor::Point2f{ 1.0f, 0.0f } },
+				Vertex{ castor::Point3f{ +0.5f, +0.5f, 1.0f }, castor::Point2f{ 1.0f, 1.0f } },
 			};
 			auto & device = *m_scene.getEngine()->getRenderSystem()->getCurrentDevice();
 			m_quadBuffer = renderer::makeVertexBuffer< Quad >( device
@@ -110,21 +109,22 @@ namespace castor3d
 				, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateRange ) )
 			{
 				std::memcpy( buffer, vertices.data(), sizeof( Quad ) );
-				m_quadBuffer->unlock( 1u, true );
+				m_quadBuffer->flush( 0u, 1u );
+				m_quadBuffer->unlock();
 			}
 
-			m_quadLayout = device.createVertexLayout( 0u, sizeof( Vertex ) );
-			m_quadLayout->createAttribute< renderer::Vec3 >( 0u, offsetof( Vertex, position ) );
-			m_quadLayout->createAttribute< renderer::Vec2 >( 1u, offsetof( Vertex, texcoord ) );
+			m_quadLayout = renderer::makeLayout< Vertex >( 0u, renderer::VertexInputRate::eVertex );
+			m_quadLayout->createAttribute( 0u, renderer::Format::eR32G32B32_SFLOAT, offsetof( Vertex, position ) );
+			m_quadLayout->createAttribute( 1u, renderer::Format::eR32G32_SFLOAT, offsetof( Vertex, texcoord ) );
 
-			renderer::VertexBufferCRefArray buffers;
+			renderer::BufferCRefArray buffers;
 			std::vector< uint64_t > offsets;
 			renderer::VertexLayoutCRefArray layouts;
 			doGatherBuffers( buffers, offsets, layouts );
 
-			m_geometryBuffers = device.createGeometryBuffers( buffers
-				, offsets
-				, layouts );
+			m_geometryBuffers.vbo = buffers;
+			m_geometryBuffers.vboOffsets = offsets;
+			m_geometryBuffers.layouts = layouts;
 			m_initialised = true;
 		}
 
@@ -262,14 +262,14 @@ namespace castor3d
 		return result;
 	}
 
-	void BillboardBase::doGatherBuffers( renderer::VertexBufferCRefArray & buffers
+	void BillboardBase::doGatherBuffers( renderer::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, renderer::VertexLayoutCRefArray & layouts )
 	{
-		buffers.emplace_back( *m_vertexBuffer );
+		buffers.emplace_back( m_vertexBuffer->getBuffer() );
 		offsets.emplace_back( 0u );
 		layouts.emplace_back( *m_vertexLayout );
-		buffers.emplace_back( *m_quadBuffer );
+		buffers.emplace_back( m_quadBuffer->getBuffer() );
 		offsets.emplace_back( 0u );
 		layouts.emplace_back( *m_quadLayout );
 	}
@@ -278,8 +278,8 @@ namespace castor3d
 
 	renderer::VertexLayoutPtr doCreateLayout( renderer::Device const & device )
 	{
-		renderer::VertexLayoutPtr result = device.createVertexLayout( 0u, sizeof( renderer::Vec3 ) );
-		result->createAttribute< renderer::Vec3 >( 0u, 0u );
+		renderer::VertexLayoutPtr result = device.createVertexLayout( 0u, sizeof( castor::Point3f ) );
+		result->createAttribute< castor::Point3f >( 0u, 0u );
 		return result;
 	}
 
@@ -315,7 +315,7 @@ namespace castor3d
 
 			uint32_t stride = m_vertexLayout->getStride();
 			auto & device = *m_scene.getEngine()->getRenderSystem()->getCurrentDevice();
-			m_vertexBuffer = renderer::makeVertexBuffer< renderer::Vec3 >( device
+			m_vertexBuffer = renderer::makeVertexBuffer< castor::Point3f >( device
 				, uint32_t( m_arrayPositions.size() )
 				, renderer::BufferTarget::eTransferDst
 				, renderer::MemoryPropertyFlag::eHostVisible );

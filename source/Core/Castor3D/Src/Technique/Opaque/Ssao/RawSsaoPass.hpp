@@ -94,7 +94,6 @@ namespace castor3d
 		renderer::FrameBufferPtr m_frameBuffer;
 		renderer::VertexBufferPtr< NonTexturedQuad > m_vertexBuffer;
 		renderer::VertexLayoutPtr m_vertexLayout;
-		renderer::GeometryBuffersPtr m_geometryBuffers;
 		renderer::CommandBufferPtr m_commandBuffer;
 		RenderPassTimerSPtr m_timer;
 

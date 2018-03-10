@@ -3,38 +3,6 @@
 
 namespace castor
 {
-#if defined( _X64 ) && CASTOR_USE_SSE2
-
-	namespace detail
-	{
-		const __m128i BufferConverter< PixelFormat::eYUY2, PixelFormat::eR8G8B8 >::umask	= _mm_set1_epi32( 0x0000FF00 );
-		const __m128i BufferConverter< PixelFormat::eYUY2, PixelFormat::eR8G8B8 >::vmask	= _mm_set1_epi32( 0xFF000000 );
-		const __m128i BufferConverter< PixelFormat::eYUY2, PixelFormat::eR8G8B8 >::ymask	= _mm_set1_epi32( 0x00FF00FF );
-		const __m128i BufferConverter< PixelFormat::eYUY2, PixelFormat::eR8G8B8 >::uvsub	= _mm_set1_epi32( 0x00800080 );
-		const __m128i BufferConverter< PixelFormat::eYUY2, PixelFormat::eR8G8B8 >::ysub	= _mm_set1_epi32( 0x00100010 );
-		const __m128i BufferConverter< PixelFormat::eYUY2, PixelFormat::eR8G8B8 >::facy	= _mm_set1_epi32( 0x00400040 );// 1 * 64
-		const __m128i BufferConverter< PixelFormat::eYUY2, PixelFormat::eR8G8B8 >::facrv	= _mm_set1_epi32( 0x00710071 );// 1.772 * 64
-		const __m128i BufferConverter< PixelFormat::eYUY2, PixelFormat::eR8G8B8 >::facgu	= _mm_set1_epi32( 0x002D002D );// 0.714 * 64
-		const __m128i BufferConverter< PixelFormat::eYUY2, PixelFormat::eR8G8B8 >::facgv	= _mm_set1_epi32( 0x00160016 );// 0.344 * 64
-		const __m128i BufferConverter< PixelFormat::eYUY2, PixelFormat::eR8G8B8 >::facbu	= _mm_set1_epi32( 0x00590059 );// 1.402 * 64
-		const __m128i BufferConverter< PixelFormat::eYUY2, PixelFormat::eR8G8B8 >::zero	= _mm_set1_epi32( 0x00000000 );
-
-		const __m128i BufferConverter< PixelFormat::eYUY2, PixelFormat::eA8R8G8B8 >::amask	= _mm_set1_epi32( 0x000000FF );
-		const __m128i BufferConverter< PixelFormat::eYUY2, PixelFormat::eA8R8G8B8 >::umask	= _mm_set1_epi32( 0x0000FF00 );
-		const __m128i BufferConverter< PixelFormat::eYUY2, PixelFormat::eA8R8G8B8 >::vmask	= _mm_set1_epi32( 0xFF000000 );
-		const __m128i BufferConverter< PixelFormat::eYUY2, PixelFormat::eA8R8G8B8 >::ymask	= _mm_set1_epi32( 0x00FF00FF );
-		const __m128i BufferConverter< PixelFormat::eYUY2, PixelFormat::eA8R8G8B8 >::uvsub	= _mm_set1_epi32( 0x00800080 );
-		const __m128i BufferConverter< PixelFormat::eYUY2, PixelFormat::eA8R8G8B8 >::ysub	= _mm_set1_epi32( 0x00100010 );
-		const __m128i BufferConverter< PixelFormat::eYUY2, PixelFormat::eA8R8G8B8 >::facy	= _mm_set1_epi32( 0x00400040 );// 1 * 64
-		const __m128i BufferConverter< PixelFormat::eYUY2, PixelFormat::eA8R8G8B8 >::facrv	= _mm_set1_epi32( 0x00710071 );// 1.772 * 64
-		const __m128i BufferConverter< PixelFormat::eYUY2, PixelFormat::eA8R8G8B8 >::facgu	= _mm_set1_epi32( 0x002D002D );// 0.714 * 64
-		const __m128i BufferConverter< PixelFormat::eYUY2, PixelFormat::eA8R8G8B8 >::facgv	= _mm_set1_epi32( 0x00160016 );// 0.344 * 64
-		const __m128i BufferConverter< PixelFormat::eYUY2, PixelFormat::eA8R8G8B8 >::facbu	= _mm_set1_epi32( 0x00590059 );// 1.402 * 64
-		const __m128i BufferConverter< PixelFormat::eYUY2, PixelFormat::eA8R8G8B8 >::zero	= _mm_set1_epi32( 0x00000000 );
-	}
-
-#endif
-
 	namespace PF
 	{
 		PixelFormat getPFWithoutAlpha( PixelFormat p_format )
@@ -47,8 +15,8 @@ namespace castor
 				result = PixelDefinitions< PixelFormat::eA8L8 >::NoAlphaPF;
 				break;
 
-			case PixelFormat::eAL16F32F:
-				result = PixelDefinitions< PixelFormat::eAL16F32F >::NoAlphaPF;
+			case PixelFormat::eAL16F:
+				result = PixelDefinitions< PixelFormat::eAL16F >::NoAlphaPF;
 				break;
 
 			case PixelFormat::eAL32F:
@@ -57,10 +25,6 @@ namespace castor
 
 			case PixelFormat::eA1R5G5B5:
 				result = PixelDefinitions< PixelFormat::eA1R5G5B5 >::NoAlphaPF;
-				break;
-
-			case PixelFormat::eA4R4G4B4:
-				result = PixelDefinitions< PixelFormat::eA4R4G4B4 >::NoAlphaPF;
 				break;
 
 			case PixelFormat::eA8R8G8B8:
@@ -77,10 +41,6 @@ namespace castor
 
 			case PixelFormat::eA8B8G8R8_SRGB:
 				result = PixelDefinitions< PixelFormat::eA8B8G8R8 >::NoAlphaPF;
-				break;
-
-			case PixelFormat::eRGBA16F32F:
-				result = PixelDefinitions< PixelFormat::eRGBA16F32F >::NoAlphaPF;
 				break;
 
 			case PixelFormat::eRGBA32F:
@@ -113,8 +73,8 @@ namespace castor
 				result = PixelDefinitions< PixelFormat::eL8 >::Alpha;
 				break;
 
-			case PixelFormat::eL16F32F:
-				result = PixelDefinitions< PixelFormat::eL16F32F	>::Alpha;
+			case PixelFormat::eL16F:
+				result = PixelDefinitions< PixelFormat::eL16F >::Alpha;
 				break;
 
 			case PixelFormat::eL32F:
@@ -125,20 +85,12 @@ namespace castor
 				result = PixelDefinitions< PixelFormat::eA8L8 >::Alpha;
 				break;
 
-			case PixelFormat::eAL16F32F:
-				result = PixelDefinitions< PixelFormat::eAL16F32F >::Alpha;
-				break;
-
 			case PixelFormat::eAL32F:
 				result = PixelDefinitions< PixelFormat::eAL32F >::Alpha;
 				break;
 
 			case PixelFormat::eA1R5G5B5:
 				result = PixelDefinitions< PixelFormat::eA1R5G5B5 >::Alpha;
-				break;
-
-			case PixelFormat::eA4R4G4B4:
-				result = PixelDefinitions< PixelFormat::eA4R4G4B4 >::Alpha;
 				break;
 
 			case PixelFormat::eR5G6B5:
@@ -185,14 +137,6 @@ namespace castor
 				result = PixelDefinitions< PixelFormat::eRGBA16F >::Alpha;
 				break;
 
-			case PixelFormat::eRGB16F32F:
-				result = PixelDefinitions< PixelFormat::eRGB16F32F >::Alpha;
-				break;
-
-			case PixelFormat::eRGBA16F32F:
-				result = PixelDefinitions< PixelFormat::eRGBA16F32F >::Alpha;
-				break;
-
 			case PixelFormat::eRGB32F:
 				result = PixelDefinitions< PixelFormat::eRGB32F >::Alpha;
 				break;
@@ -213,16 +157,8 @@ namespace castor
 				result = PixelDefinitions< PixelFormat::eDXTC5 >::Alpha;
 				break;
 
-			case PixelFormat::eYUY2:
-				result = PixelDefinitions< PixelFormat::eYUY2 >::Alpha;
-				break;
-
 			case PixelFormat::eD16:
 				result = PixelDefinitions< PixelFormat::eD16 >::Alpha;
-				break;
-
-			case PixelFormat::eD24:
-				result = PixelDefinitions< PixelFormat::eD24 >::Alpha;
 				break;
 
 			case PixelFormat::eD24S8:
@@ -239,10 +175,6 @@ namespace castor
 
 			case PixelFormat::eD32FS8:
 				result = PixelDefinitions< PixelFormat::eD32FS8 >::Alpha;
-				break;
-
-			case PixelFormat::eS1:
-				result = PixelDefinitions< PixelFormat::eS1 >::Alpha;
 				break;
 
 			case PixelFormat::eS8:
@@ -267,8 +199,8 @@ namespace castor
 				result = PixelDefinitions< PixelFormat::eL8 >::Compressed;
 				break;
 
-			case PixelFormat::eL16F32F:
-				result = PixelDefinitions< PixelFormat::eL16F32F >::Compressed;
+			case PixelFormat::eL16F:
+				result = PixelDefinitions< PixelFormat::eL16F >::Compressed;
 				break;
 
 			case PixelFormat::eL32F:
@@ -279,20 +211,12 @@ namespace castor
 				result = PixelDefinitions< PixelFormat::eA8L8 >::Compressed;
 				break;
 
-			case PixelFormat::eAL16F32F:
-				result = PixelDefinitions< PixelFormat::eAL16F32F >::Compressed;
-				break;
-
 			case PixelFormat::eAL32F:
 				result = PixelDefinitions< PixelFormat::eAL32F >::Compressed;
 				break;
 
 			case PixelFormat::eA1R5G5B5:
 				result = PixelDefinitions< PixelFormat::eA1R5G5B5 >::Compressed;
-				break;
-
-			case PixelFormat::eA4R4G4B4:
-				result = PixelDefinitions< PixelFormat::eA4R4G4B4 >::Compressed;
 				break;
 
 			case PixelFormat::eR5G6B5:
@@ -339,14 +263,6 @@ namespace castor
 				result = PixelDefinitions< PixelFormat::eRGBA16F >::Compressed;
 				break;
 
-			case PixelFormat::eRGB16F32F:
-				result = PixelDefinitions< PixelFormat::eRGB16F32F >::Compressed;
-				break;
-
-			case PixelFormat::eRGBA16F32F:
-				result = PixelDefinitions< PixelFormat::eRGBA16F32F >::Compressed;
-				break;
-
 			case PixelFormat::eRGB32F:
 				result = PixelDefinitions< PixelFormat::eRGB32F >::Compressed;
 				break;
@@ -367,16 +283,8 @@ namespace castor
 				result = PixelDefinitions< PixelFormat::eDXTC5 >::Compressed;
 				break;
 
-			case PixelFormat::eYUY2:
-				result = PixelDefinitions< PixelFormat::eYUY2 >::Compressed;
-				break;
-
 			case PixelFormat::eD16:
 				result = PixelDefinitions< PixelFormat::eD16 >::Compressed;
-				break;
-
-			case PixelFormat::eD24:
-				result = PixelDefinitions< PixelFormat::eD24 >::Compressed;
 				break;
 
 			case PixelFormat::eD24S8:
@@ -393,10 +301,6 @@ namespace castor
 
 			case PixelFormat::eD32FS8:
 				result = PixelDefinitions< PixelFormat::eD32FS8 >::Compressed;
-				break;
-
-			case PixelFormat::eS1:
-				result = PixelDefinitions< PixelFormat::eS1 >::Compressed;
 				break;
 
 			case PixelFormat::eS8:
@@ -466,8 +370,8 @@ namespace castor
 				result = PixelDefinitions< PixelFormat::eL8 >::Size;
 				break;
 
-			case PixelFormat::eL16F32F:
-				result = PixelDefinitions<	PixelFormat::eL16F32F >::Size;
+			case PixelFormat::eL16F:
+				result = PixelDefinitions< PixelFormat::eL16F >::Size;
 				break;
 
 			case PixelFormat::eL32F:
@@ -478,20 +382,12 @@ namespace castor
 				result = PixelDefinitions< PixelFormat::eA8L8 >::Size;
 				break;
 
-			case PixelFormat::eAL16F32F:
-				result = PixelDefinitions<	PixelFormat::eAL16F32F >::Size;
-				break;
-
 			case PixelFormat::eAL32F:
 				result = PixelDefinitions< PixelFormat::eAL32F >::Size;
 				break;
 
 			case PixelFormat::eA1R5G5B5:
 				result = PixelDefinitions< PixelFormat::eA1R5G5B5 >::Size;
-				break;
-
-			case PixelFormat::eA4R4G4B4:
-				result = PixelDefinitions< PixelFormat::eA4R4G4B4 >::Size;
 				break;
 
 			case PixelFormat::eR5G6B5:
@@ -538,14 +434,6 @@ namespace castor
 				result = PixelDefinitions<	PixelFormat::eRGBA16F >::Size;
 				break;
 
-			case PixelFormat::eRGB16F32F:
-				result = PixelDefinitions<	PixelFormat::eRGB16F32F >::Size;
-				break;
-
-			case PixelFormat::eRGBA16F32F:
-				result = PixelDefinitions<	PixelFormat::eRGBA16F32F >::Size;
-				break;
-
 			case PixelFormat::eRGB32F:
 				result = PixelDefinitions< PixelFormat::eRGB32F >::Size;
 				break;
@@ -566,16 +454,8 @@ namespace castor
 				result = PixelDefinitions<	PixelFormat::eDXTC5 >::Size;
 				break;
 
-			case PixelFormat::eYUY2:
-				result = PixelDefinitions<	PixelFormat::eYUY2 >::Size;
-				break;
-
 			case PixelFormat::eD16:
 				result = PixelDefinitions< PixelFormat::eD16 >::Size;
-				break;
-
-			case PixelFormat::eD24:
-				result = PixelDefinitions< PixelFormat::eD24 >::Size;
 				break;
 
 			case PixelFormat::eD24S8:
@@ -592,10 +472,6 @@ namespace castor
 
 			case PixelFormat::eD32FS8:
 				result = PixelDefinitions< PixelFormat::eD32FS8 >::Size;
-				break;
-
-			case PixelFormat::eS1:
-				result = PixelDefinitions<	PixelFormat::eS1 >::Size;
 				break;
 
 			case PixelFormat::eS8:
@@ -620,20 +496,16 @@ namespace castor
 				result = PixelDefinitions< PixelFormat::eL8 >::Count;
 				break;
 
-			case PixelFormat::eL16F32F:
-				result = PixelDefinitions<	PixelFormat::eL16F32F >::Count;
-				break;
-
 			case PixelFormat::eL32F:
 				result = PixelDefinitions< PixelFormat::eL32F >::Count;
 				break;
 
-			case PixelFormat::eA8L8:
-				result = PixelDefinitions< PixelFormat::eA8L8 >::Count;
+			case PixelFormat::eL16F:
+				result = PixelDefinitions< PixelFormat::eL16F >::Count;
 				break;
 
-			case PixelFormat::eAL16F32F:
-				result = PixelDefinitions<	PixelFormat::eAL16F32F >::Count;
+			case PixelFormat::eA8L8:
+				result = PixelDefinitions< PixelFormat::eA8L8 >::Count;
 				break;
 
 			case PixelFormat::eAL32F:
@@ -642,10 +514,6 @@ namespace castor
 
 			case PixelFormat::eA1R5G5B5:
 				result = PixelDefinitions< PixelFormat::eA1R5G5B5 >::Count;
-				break;
-
-			case PixelFormat::eA4R4G4B4:
-				result = PixelDefinitions< PixelFormat::eA4R4G4B4 >::Count;
 				break;
 
 			case PixelFormat::eR5G6B5:
@@ -692,14 +560,6 @@ namespace castor
 				result = PixelDefinitions<	PixelFormat::eRGBA16F >::Count;
 				break;
 
-			case PixelFormat::eRGB16F32F:
-				result = PixelDefinitions<	PixelFormat::eRGB16F32F >::Count;
-				break;
-
-			case PixelFormat::eRGBA16F32F:
-				result = PixelDefinitions<	PixelFormat::eRGBA16F32F >::Count;
-				break;
-
 			case PixelFormat::eRGB32F:
 				result = PixelDefinitions< PixelFormat::eRGB32F >::Count;
 				break;
@@ -720,16 +580,8 @@ namespace castor
 				result = PixelDefinitions<	PixelFormat::eDXTC5 >::Count;
 				break;
 
-			case PixelFormat::eYUY2:
-				result = PixelDefinitions<	PixelFormat::eYUY2 >::Count;
-				break;
-
 			case PixelFormat::eD16:
 				result = PixelDefinitions< PixelFormat::eD16 >::Count;
-				break;
-
-			case PixelFormat::eD24:
-				result = PixelDefinitions< PixelFormat::eD24 >::Count;
 				break;
 
 			case PixelFormat::eD24S8:
@@ -746,10 +598,6 @@ namespace castor
 
 			case PixelFormat::eD32FS8:
 				result = PixelDefinitions< PixelFormat::eD32FS8 >::Count;
-				break;
-
-			case PixelFormat::eS1:
-				result = PixelDefinitions<	PixelFormat::eS1 >::Count;
 				break;
 
 			case PixelFormat::eS8:
@@ -772,8 +620,8 @@ namespace castor
 				PixelDefinitions< PixelFormat::eL8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case PixelFormat::eL16F32F:
-				PixelDefinitions< PixelFormat::eL16F32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::eL16F:
+				PixelDefinitions< PixelFormat::eL16F >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
 			case PixelFormat::eL32F:
@@ -784,20 +632,12 @@ namespace castor
 				PixelDefinitions< PixelFormat::eA8L8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case PixelFormat::eAL16F32F:
-				PixelDefinitions< PixelFormat::eAL16F32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
-				break;
-
 			case PixelFormat::eAL32F:
 				PixelDefinitions< PixelFormat::eAL32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
 			case PixelFormat::eA1R5G5B5:
 				PixelDefinitions< PixelFormat::eA1R5G5B5 >::convert( p_pSrc, p_pDest, p_eDestFmt );
-				break;
-
-			case PixelFormat::eA4R4G4B4:
-				PixelDefinitions< PixelFormat::eA4R4G4B4 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
 			case PixelFormat::eR5G6B5:
@@ -844,14 +684,6 @@ namespace castor
 				PixelDefinitions< PixelFormat::eRGBA16F >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case PixelFormat::eRGB16F32F:
-				PixelDefinitions< PixelFormat::eRGB16F32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
-				break;
-
-			case PixelFormat::eRGBA16F32F:
-				PixelDefinitions< PixelFormat::eRGBA16F32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
-				break;
-
 			case PixelFormat::eRGB32F:
 				PixelDefinitions< PixelFormat::eRGB32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
@@ -872,16 +704,8 @@ namespace castor
 				PixelDefinitions< PixelFormat::eDXTC5 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case PixelFormat::eYUY2:
-				PixelDefinitions< PixelFormat::eYUY2 >::convert( p_pSrc, p_pDest, p_eDestFmt );
-				break;
-
 			case PixelFormat::eD16:
 				PixelDefinitions< PixelFormat::eD16 >::convert( p_pSrc, p_pDest, p_eDestFmt );
-				break;
-
-			case PixelFormat::eD24:
-				PixelDefinitions< PixelFormat::eD24 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
 			case PixelFormat::eD24S8:
@@ -898,10 +722,6 @@ namespace castor
 
 			case PixelFormat::eD32FS8:
 				PixelDefinitions< PixelFormat::eD32FS8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
-				break;
-
-			case PixelFormat::eS1:
-				PixelDefinitions< PixelFormat::eS1 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
 			case PixelFormat::eS8:
@@ -922,8 +742,8 @@ namespace castor
 				PixelDefinitions< PixelFormat::eL8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case PixelFormat::eL16F32F:
-				PixelDefinitions< PixelFormat::eL16F32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::eL16F:
+				PixelDefinitions< PixelFormat::eL16F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eL32F:
@@ -934,20 +754,12 @@ namespace castor
 				PixelDefinitions< PixelFormat::eA8L8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case PixelFormat::eAL16F32F:
-				PixelDefinitions< PixelFormat::eAL16F32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
-				break;
-
 			case PixelFormat::eAL32F:
 				PixelDefinitions< PixelFormat::eAL32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eA1R5G5B5:
 				PixelDefinitions< PixelFormat::eA1R5G5B5 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
-				break;
-
-			case PixelFormat::eA4R4G4B4:
-				PixelDefinitions< PixelFormat::eA4R4G4B4 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eR5G6B5:
@@ -994,14 +806,6 @@ namespace castor
 				PixelDefinitions< PixelFormat::eRGBA16F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case PixelFormat::eRGB16F32F:
-				PixelDefinitions< PixelFormat::eRGB16F32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
-				break;
-
-			case PixelFormat::eRGBA16F32F:
-				PixelDefinitions< PixelFormat::eRGBA16F32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
-				break;
-
 			case PixelFormat::eRGB32F:
 				PixelDefinitions< PixelFormat::eRGB32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
@@ -1022,16 +826,8 @@ namespace castor
 				PixelDefinitions< PixelFormat::eDXTC5 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case PixelFormat::eYUY2:
-				PixelDefinitions< PixelFormat::eYUY2 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
-				break;
-
 			case PixelFormat::eD16:
 				PixelDefinitions< PixelFormat::eD16 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
-				break;
-
-			case PixelFormat::eD24:
-				PixelDefinitions< PixelFormat::eD24 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eD24S8:
@@ -1048,10 +844,6 @@ namespace castor
 
 			case PixelFormat::eD32FS8:
 				PixelDefinitions< PixelFormat::eD32FS8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
-				break;
-
-			case PixelFormat::eS1:
-				PixelDefinitions< PixelFormat::eS1 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case PixelFormat::eS8:
@@ -1076,8 +868,8 @@ namespace castor
 					result = ( p_strFormat == PixelDefinitions< PixelFormat::eL8 >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
 
-				case PixelFormat::eL16F32F:
-					result = ( p_strFormat == PixelDefinitions< PixelFormat::eL16F32F >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
+				case PixelFormat::eL16F:
+					result = ( p_strFormat == PixelDefinitions< PixelFormat::eL16F >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
 
 				case PixelFormat::eL32F:
@@ -1088,20 +880,12 @@ namespace castor
 					result = ( p_strFormat == PixelDefinitions< PixelFormat::eA8L8 >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
 
-				case PixelFormat::eAL16F32F:
-					result = ( p_strFormat == PixelDefinitions< PixelFormat::eAL16F32F >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
-					break;
-
 				case PixelFormat::eAL32F:
 					result = ( p_strFormat == PixelDefinitions< PixelFormat::eAL32F >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
 
 				case PixelFormat::eA1R5G5B5:
 					result = ( p_strFormat == PixelDefinitions< PixelFormat::eA1R5G5B5 >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
-					break;
-
-				case PixelFormat::eA4R4G4B4:
-					result = ( p_strFormat == PixelDefinitions< PixelFormat::eA4R4G4B4 >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
 
 				case PixelFormat::eR5G6B5:
@@ -1148,14 +932,6 @@ namespace castor
 					result = ( p_strFormat == PixelDefinitions< PixelFormat::eRGBA16F >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
 
-				case PixelFormat::eRGB16F32F:
-					result = ( p_strFormat == PixelDefinitions< PixelFormat::eRGB16F32F >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
-					break;
-
-				case PixelFormat::eRGBA16F32F:
-					result = ( p_strFormat == PixelDefinitions< PixelFormat::eRGBA16F32F >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
-					break;
-
 				case PixelFormat::eRGB32F:
 					result = ( p_strFormat == PixelDefinitions< PixelFormat::eRGB32F >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
@@ -1176,16 +952,8 @@ namespace castor
 					result = ( p_strFormat == PixelDefinitions< PixelFormat::eDXTC5 >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
 
-				case PixelFormat::eYUY2:
-					result = ( p_strFormat == PixelDefinitions< PixelFormat::eYUY2 >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
-					break;
-
 				case PixelFormat::eD16:
 					result = ( p_strFormat == PixelDefinitions< PixelFormat::eD16 >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
-					break;
-
-				case PixelFormat::eD24:
-					result = ( p_strFormat == PixelDefinitions< PixelFormat::eD24 >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
 
 				case PixelFormat::eD24S8:
@@ -1202,10 +970,6 @@ namespace castor
 
 				case PixelFormat::eD32FS8:
 					result = ( p_strFormat == PixelDefinitions< PixelFormat::eD32FS8 >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
-					break;
-
-				case PixelFormat::eS1:
-					result = ( p_strFormat == PixelDefinitions< PixelFormat::eS1 >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
 
 				case PixelFormat::eS8:
@@ -1231,8 +995,8 @@ namespace castor
 				result = PixelDefinitions< PixelFormat::eL8 >::toStr();
 				break;
 
-			case PixelFormat::eL16F32F:
-				result = PixelDefinitions< PixelFormat::eL16F32F >::toStr();
+			case PixelFormat::eL16F:
+				result = PixelDefinitions< PixelFormat::eL32F >::toStr();
 				break;
 
 			case PixelFormat::eL32F:
@@ -1243,20 +1007,12 @@ namespace castor
 				result = PixelDefinitions< PixelFormat::eA8L8 >::toStr();
 				break;
 
-			case PixelFormat::eAL16F32F:
-				result = PixelDefinitions< PixelFormat::eAL16F32F >::toStr();
-				break;
-
 			case PixelFormat::eAL32F:
 				result = PixelDefinitions< PixelFormat::eAL32F >::toStr();
 				break;
 
 			case PixelFormat::eA1R5G5B5:
 				result = PixelDefinitions< PixelFormat::eA1R5G5B5 >::toStr();
-				break;
-
-			case PixelFormat::eA4R4G4B4:
-				result = PixelDefinitions< PixelFormat::eA4R4G4B4 >::toStr();
 				break;
 
 			case PixelFormat::eR5G6B5:
@@ -1303,14 +1059,6 @@ namespace castor
 				result = PixelDefinitions< PixelFormat::eRGBA16F >::toStr();
 				break;
 
-			case PixelFormat::eRGB16F32F:
-				result = PixelDefinitions< PixelFormat::eRGB16F32F >::toStr();
-				break;
-
-			case PixelFormat::eRGBA16F32F:
-				result = PixelDefinitions< PixelFormat::eRGBA16F32F >::toStr();
-				break;
-
 			case PixelFormat::eRGB32F:
 				result = PixelDefinitions< PixelFormat::eRGB32F >::toStr();
 				break;
@@ -1331,16 +1079,8 @@ namespace castor
 				result = PixelDefinitions< PixelFormat::eDXTC5 >::toStr();
 				break;
 
-			case PixelFormat::eYUY2:
-				result = PixelDefinitions< PixelFormat::eYUY2 >::toStr();
-				break;
-
 			case PixelFormat::eD16:
 				result = PixelDefinitions< PixelFormat::eD16 >::toStr();
-				break;
-
-			case PixelFormat::eD24:
-				result = PixelDefinitions< PixelFormat::eD24 >::toStr();
 				break;
 
 			case PixelFormat::eD24S8:
@@ -1357,10 +1097,6 @@ namespace castor
 
 			case PixelFormat::eD32FS8:
 				result = PixelDefinitions< PixelFormat::eD32FS8 >::toStr();
-				break;
-
-			case PixelFormat::eS1:
-				result = PixelDefinitions< PixelFormat::eS1 >::toStr();
 				break;
 
 			case PixelFormat::eS8:

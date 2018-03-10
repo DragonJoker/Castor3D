@@ -1,5 +1,5 @@
-/*
-This file belongs to Renderer.
+﻿/*
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #include "Shader/Attribute.hpp"
@@ -7,7 +7,7 @@ See LICENSE file in root folder.
 namespace renderer
 {
 	Attribute::Attribute( VertexLayout const & layout
-		, AttributeFormat format
+		, Format format
 		, uint32_t location
 		, uint32_t offset )
 		: m_layout{ layout }

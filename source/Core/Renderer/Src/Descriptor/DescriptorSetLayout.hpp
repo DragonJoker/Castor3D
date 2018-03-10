@@ -1,5 +1,5 @@
-﻿/*
-This file belongs to Renderer.
+/*
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___Renderer_DescriptorSetLayout_HPP___
@@ -100,10 +100,11 @@ namespace renderer
 		*\return
 		*	Le pool créé.
 		*/
-		virtual DescriptorSetPoolPtr createPool( uint32_t maxSets
-			, bool automaticFree = true )const = 0;
+		DescriptorSetPoolPtr createPool( uint32_t maxSets
+			, bool automaticFree = true )const;
 
 	protected:
+		Device const & m_device;
 		DescriptorSetLayoutBindingArray m_bindings;
 	};
 }

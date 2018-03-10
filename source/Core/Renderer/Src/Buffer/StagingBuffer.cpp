@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #include "Buffer/StagingBuffer.hpp"
@@ -23,8 +23,8 @@ namespace renderer
 
 	void StagingBuffer::uploadTextureData( CommandBuffer const & commandBuffer
 		, ImageSubresourceLayers const & subresourceLayers
-		, IVec3 const & offset
-		, UIVec3 const & extent
+		, Offset3D const & offset
+		, Extent3D const & extent
 		, uint8_t const * const data
 		, uint32_t size
 		, TextureView const & view )const
@@ -36,7 +36,8 @@ namespace renderer
 		{
 			commandBuffer.memoryBarrier( PipelineStageFlag::eTopOfPipe
 				, PipelineStageFlag::eTransfer
-				, view.makeTransferDestination() );
+				, view.makeTransferDestination( ImageLayout::eUndefined
+					, 0u ) );
 			commandBuffer.copyToImage( BufferImageCopy
 				{
 					0u,
@@ -44,17 +45,18 @@ namespace renderer
 					0u,
 					subresourceLayers,
 					offset,
-					UIVec3{
-						std::max( 1u, extent[0] ),
-						std::max( 1u, extent[1] ),
-						std::max( 1u, extent[2] )
+					Extent3D{
+						std::max( 1u, extent.width ),
+						std::max( 1u, extent.height ),
+						std::max( 1u, extent.depth )
 					}
 				}
 				, getBuffer()
-				, view );
+				, view.getTexture() );
 			commandBuffer.memoryBarrier( PipelineStageFlag::eTransfer
 				, PipelineStageFlag::eFragmentShader
-				, view.makeShaderInputResource() );
+				, view.makeShaderInputResource( ImageLayout::eTransferDstOptimal
+					, renderer::AccessFlag::eTransferWrite ) );
 			bool res = commandBuffer.end();
 
 			if ( !res )
@@ -62,8 +64,10 @@ namespace renderer
 				throw std::runtime_error{ "Texture data copy failed." };
 			}
 
+			auto fence = m_device.createFence();
 			res = m_device.getGraphicsQueue().submit( commandBuffer
-				, nullptr );
+				, fence.get() );
+			fence->wait( FenceTimeout );
 
 			if ( !res )
 			{
@@ -82,11 +86,11 @@ namespace renderer
 		uploadTextureData( commandBuffer
 			, {
 				getAspectMask( view.getFormat() ),
-				view.getSubResourceRange().getBaseMipLevel(),
-				view.getSubResourceRange().getBaseArrayLayer(),
-				view.getSubResourceRange().getLayerCount()
+				view.getSubResourceRange().baseMipLevel,
+				view.getSubResourceRange().baseArrayLayer,
+				view.getSubResourceRange().layerCount
 			}
-			, IVec3{ 0, 0, 0 }
+			, Offset3D{ 0, 0, 0 }
 			, view.getTexture().getDimensions()
 			, data
 			, size
@@ -95,8 +99,8 @@ namespace renderer
 
 	void StagingBuffer::downloadTextureData( CommandBuffer const & commandBuffer
 		, ImageSubresourceLayers const & subresourceLayers
-		, IVec3 const & offset
-		, UIVec3 const & extent
+		, Offset3D const & offset
+		, Extent3D const & extent
 		, uint8_t * data
 		, uint32_t size
 		, TextureView const & view )const
@@ -107,7 +111,8 @@ namespace renderer
 		{
 			commandBuffer.memoryBarrier( PipelineStageFlag::eTopOfPipe
 				, PipelineStageFlag::eTransfer
-				, view.makeTransferSource() );
+				, view.makeTransferSource( ImageLayout::eUndefined
+					, 0u ) );
 			commandBuffer.copyToBuffer( BufferImageCopy
 				{
 					0u,
@@ -115,17 +120,18 @@ namespace renderer
 					0u,
 					subresourceLayers,
 					offset,
-					UIVec3{
-						std::max( 1u, extent[0] ),
-						std::max( 1u, extent[1] ),
-						std::max( 1u, extent[2] )
+					Extent3D{
+						std::max( 1u, extent.width ),
+						std::max( 1u, extent.height ),
+						std::max( 1u, extent.depth )
 					}
 				}
-				, view
+				, view.getTexture()
 				, getBuffer() );
 			commandBuffer.memoryBarrier( PipelineStageFlag::eTransfer
 				, PipelineStageFlag::eFragmentShader
-				, view.makeShaderInputResource() );
+				, view.makeShaderInputResource( ImageLayout::eTransferSrcOptimal
+					, renderer::AccessFlag::eTransferRead ) );
 			bool res = commandBuffer.end();
 
 			if ( !res )
@@ -133,8 +139,10 @@ namespace renderer
 				throw std::runtime_error{ "Texture data copy failed." };
 			}
 
+			auto fence = m_device.createFence();
 			res = m_device.getGraphicsQueue().submit( commandBuffer
-				, nullptr );
+				, fence.get() );
+			fence->wait( FenceTimeout );
 
 			if ( !res )
 			{
@@ -154,11 +162,11 @@ namespace renderer
 		downloadTextureData( commandBuffer
 			, {
 				getAspectMask( view.getFormat() ),
-				view.getSubResourceRange().getBaseMipLevel(),
-				view.getSubResourceRange().getBaseArrayLayer(),
-				view.getSubResourceRange().getLayerCount()
+				view.getSubResourceRange().baseMipLevel,
+				view.getSubResourceRange().baseArrayLayer,
+				view.getSubResourceRange().layerCount
 			}
-			, IVec3{ 0, 0, 0 }
+			, Offset3D{ 0, 0, 0 }
 			, view.getTexture().getDimensions()
 			, data
 			, size
@@ -169,7 +177,7 @@ namespace renderer
 		, uint32_t size )const
 	{
 		assert( size <= getBuffer().getSize() );
-		auto buffer = static_cast< BufferBase const & >( getBuffer() ).lock( 0
+		auto buffer = static_cast< BufferBase const & >( getBuffer() ).lock( 0u
 			, size
 			, MemoryMapFlag::eWrite | MemoryMapFlag::eInvalidateRange );
 
@@ -181,7 +189,8 @@ namespace renderer
 		std::memcpy( buffer
 			, data
 			, size );
-		static_cast< BufferBase const & >( getBuffer() ).unlock( size, true );
+		getBuffer().flush( 0u, size );
+		getBuffer().unlock();
 	}
 
 	void StagingBuffer::doCopyFromStagingBuffer( CommandBuffer const & commandBuffer
@@ -209,8 +218,10 @@ namespace renderer
 				throw std::runtime_error{ "Buffer data copy failed." };
 			}
 
+			auto fence = m_device.createFence();
 			res = m_device.getGraphicsQueue().submit( commandBuffer
-				, nullptr );
+				, fence.get() );
+			fence->wait( FenceTimeout );
 
 			if ( !res )
 			{
@@ -250,8 +261,10 @@ namespace renderer
 				throw std::runtime_error{ "Buffer data copy failed." };
 			}
 
+			auto fence = m_device.createFence();
 			res = m_device.getGraphicsQueue().submit( commandBuffer
-				, nullptr );
+				, fence.get() );
+			fence->wait( FenceTimeout );
 
 			if ( !res )
 			{
@@ -290,8 +303,10 @@ namespace renderer
 				throw std::runtime_error{ "Buffer data copy failed." };
 			}
 
+			auto fence = m_device.createFence();
 			res = m_device.getGraphicsQueue().submit( commandBuffer
-				, nullptr );
+				, fence.get() );
+			fence->wait( FenceTimeout );
 
 			if ( !res )
 			{
@@ -306,7 +321,7 @@ namespace renderer
 		, uint32_t size )const
 	{
 		assert( size <= getBuffer().getSize() );
-		auto buffer = static_cast< BufferBase const & >( getBuffer() ).lock( 0
+		auto buffer = static_cast< BufferBase const & >( getBuffer() ).lock( 0u
 			, size
 			, MemoryMapFlag::eRead );
 
@@ -318,7 +333,8 @@ namespace renderer
 		std::memcpy( data
 			, buffer
 			, size );
-		static_cast< BufferBase const & >( getBuffer() ).unlock( size, true );
+		getBuffer().flush( 0u, size );
+		getBuffer().unlock();
 	}
 
 	void StagingBuffer::doCopyToStagingBuffer( CommandBuffer const & commandBuffer
@@ -346,8 +362,10 @@ namespace renderer
 				throw std::runtime_error{ "Buffer data copy failed." };
 			}
 
+			auto fence = m_device.createFence();
 			res = m_device.getGraphicsQueue().submit( commandBuffer
-				, nullptr );
+				, fence.get() );
+			fence->wait( FenceTimeout );
 
 			if ( !res )
 			{
@@ -387,8 +405,10 @@ namespace renderer
 				throw std::runtime_error{ "Buffer data copy failed." };
 			}
 
+			auto fence = m_device.createFence();
 			res = m_device.getGraphicsQueue().submit( commandBuffer
-				, nullptr );
+				, fence.get() );
+			fence->wait( FenceTimeout );
 
 			if ( !res )
 			{
@@ -427,8 +447,10 @@ namespace renderer
 				throw std::runtime_error{ "Buffer data copy failed." };
 			}
 
+			auto fence = m_device.createFence();
 			res = m_device.getGraphicsQueue().submit( commandBuffer
-				, nullptr );
+				, fence.get() );
+			fence->wait( FenceTimeout );
 
 			if ( !res )
 			{

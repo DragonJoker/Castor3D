@@ -1,13 +1,13 @@
-﻿/*
-This file belongs to Renderer.
+/*
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___Renderer_PipelineLayout_HPP___
 #define ___Renderer_PipelineLayout_HPP___
 #pragma once
 
-#include "ColourBlendState.hpp"
-#include "RasterisationState.hpp"
+#include "Pipeline.hpp"
+#include "ComputePipeline.hpp"
 
 namespace renderer
 {
@@ -60,16 +60,50 @@ namespace renderer
 		*\~english
 		*\brief
 		*	Creates a graphics pipeline using this layout.
-		*\param[in] program
-		*	The shader program.
-		*\param[in] vertexBuffers
-		*	The vertex buffers used.
+		*\param[in] createInfo
+		*	The creation informations.
+		*\return
+		*	The created pipeline.
+		*\~french
+		*\brief
+		*	Crée un pipeline graphique utilisant ce layout.
+		*\param[in] createInfo
+		*	Les informations de création.
+		*\return
+		*	Le pipeline créé.
+		*/
+		virtual PipelinePtr createPipeline( GraphicsPipelineCreateInfo createInfo )const = 0;
+		/**
+		*\~english
+		*\brief
+		*	Creates a compute pipeline using this layout.
+		*\param[in] createInfo
+		*	The creation informations.
+		*\return
+		*	The created pipeline.
+		*\~french
+		*\brief
+		*	Crée un pipeline de calcul utilisant ce layout.
+		*\param[in] createInfo
+		*	Les informations de création.
+		*\return
+		*	Le pipeline créé.
+		*/
+		virtual ComputePipelinePtr createPipeline( ComputePipelineCreateInfo createInfo )const = 0;
+		/**
+		*\~english
+		*\brief
+		*	Creates a graphics pipeline using this layout.
+		*\param[in] stages
+		*	The shader stages.
+		*\param[in] vertexLayouts
+		*	The vertex layout used by the pipeline.
 		*\param[in] renderPass
 		*	The render pass.
-		*\param[in] topology
-		*	The rendering topology.
+		*\param[in] inputAssemblyState
+		*	The input assembly state.
 		*\param[in] rasterisationState
-		*	The rasterisation state.
+		*	The rasterisation state state.
 		*\param[in] colourBlendState
 		*	The colour blend state.
 		*\return
@@ -77,44 +111,62 @@ namespace renderer
 		*\~french
 		*\brief
 		*	Crée un pipeline graphique utilisant ce layout.
-		*\param[in] program
-		*	Le programme shader.
-		*\param[in] vertexBuffers
-		*	Les tampons de sommets utilisés.
+		*\param[in] stages
+		*	Les niveaux de shader.
+		*\param[in] vertexLayouts
+		*	Le layout de sommets utilisé par le pipeline.
 		*\param[in] renderPass
 		*	La passe de rendu.
-		*\param[in] topology
-		*	La topologie d'affichage des sommets affichés via ce pipeline.
+		*\param[in] inputAssemblyState
+		*	L'état d'assemblage des entrées.
 		*\param[in] rasterisationState
 		*	L'état de rastérisation.
 		*\param[in] colourBlendState
-		*	L'état de mélange de couleurs.
+		*	L'état de mélange des couleurs.
 		*\return
 		*	Le pipeline créé.
 		*/
-		virtual PipelinePtr createPipeline( ShaderProgram const & program
+		inline PipelinePtr createPipeline( std::vector< ShaderStageState > && stages
 			, VertexLayoutCRefArray const & vertexLayouts
 			, RenderPass const & renderPass
 			, InputAssemblyState const & inputAssemblyState
 			, RasterisationState const & rasterisationState = RasterisationState{}
-			, ColourBlendState const & colourBlendState = ColourBlendState::createDefault() )const = 0;
+			, ColourBlendState const & colourBlendState = ColourBlendState::createDefault() )const
+		{
+			return createPipeline( GraphicsPipelineCreateInfo
+			{
+				std::move( stages ),
+				renderPass,
+				VertexInputState::create( vertexLayouts ),
+				inputAssemblyState,
+				rasterisationState,
+				MultisampleState{},
+				colourBlendState,
+			} );
+		}
 		/**
 		*\~english
 		*\brief
 		*	Creates a compute pipeline using this layout.
-		*\param[in] program
-		*	The shader program.
+		*\param[in] stages
+		*	The shader stages.
 		*\return
 		*	The created pipeline.
 		*\~french
 		*\brief
 		*	Crée un pipeline de calcul utilisant ce layout.
-		*\param[in] program
-		*	Le programme shader.
+		*\param[in] stages
+		*	Les niveaux de shader.
 		*\return
 		*	Le pipeline créé.
 		*/
-		virtual ComputePipelinePtr createPipeline( ShaderProgram const & program )const = 0;
+		inline ComputePipelinePtr createPipeline( ShaderStageState && stage )const
+		{
+			return createPipeline( ComputePipelineCreateInfo
+			{
+				std::move( stage )
+			} );
+		}
 	};
 }
 

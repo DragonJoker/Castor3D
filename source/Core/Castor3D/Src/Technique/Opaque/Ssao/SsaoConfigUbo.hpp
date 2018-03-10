@@ -68,7 +68,7 @@ namespace castor3d
 			//
 			//	where P is the projection matrix that maps camera space points
 			//	to [-1, 1] x [-1, 1].  That is, SsaoConfigUbo::getProjectUnitMatrix().
-			renderer::Vec4 projInfo;
+			castor::Point4f projInfo;
 			renderer::Mat4 invViewMatrix;
 		};
 

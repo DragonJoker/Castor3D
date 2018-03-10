@@ -22,11 +22,11 @@ namespace castor3d
 		cleanup();
 	}
 
-	void MorphComponent::gather( renderer::VertexBufferCRefArray & buffers
-		, std::vector< uint64_t > offsets
+	void MorphComponent::gather( renderer::BufferCRefArray & buffers
+		, std::vector< uint64_t > & offsets
 		, renderer::VertexLayoutCRefArray & layouts )
 	{
-		buffers.emplace_back( *m_animBuffer );
+		buffers.emplace_back( m_animBuffer->getBuffer() );
 		offsets.emplace_back( 0u );
 		layouts.emplace_back( *m_animLayout );
 	}
@@ -43,12 +43,12 @@ namespace castor3d
 				, count
 				, 0u
 				, renderer::MemoryPropertyFlag::eHostVisible );
-			m_animLayout = device.createVertexLayout( BindingPoint, sizeof( InterleavedVertex ) );
-			m_animLayout->createAttribute< renderer::Vec3 >( 0u, offsetof( InterleavedVertex, m_pos ) );
-			m_animLayout->createAttribute< renderer::Vec3 >( 1u, offsetof( InterleavedVertex, m_nml ) );
-			m_animLayout->createAttribute< renderer::Vec3 >( 2u, offsetof( InterleavedVertex, m_tan ) );
-			m_animLayout->createAttribute< renderer::Vec3 >( 3u, offsetof( InterleavedVertex, m_bin ) );
-			m_animLayout->createAttribute< renderer::Vec3 >( 4u, offsetof( InterleavedVertex, m_tex ) );
+			m_animLayout = renderer::makeLayout< InstantiationData >( BindingPoint, renderer::VertexInputRate::eVertex );
+			m_animLayout->createAttribute( 0u, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, m_pos ) );
+			m_animLayout->createAttribute( 1u, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, m_nml ) );
+			m_animLayout->createAttribute( 2u, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, m_tan ) );
+			m_animLayout->createAttribute( 3u, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, m_bin ) );
+			m_animLayout->createAttribute( 4u, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, m_tex ) );
 		}
 
 		return m_animBuffer != nullptr;
@@ -76,7 +76,8 @@ namespace castor3d
 				, renderer::MemoryMapFlag::eRead | renderer::MemoryMapFlag::eWrite ) )
 			{
 				std::copy( m_data.begin(), m_data.end(), buffer );
-				m_animBuffer->unlock( count, true );
+				m_animBuffer->flush( 0u, count );
+				m_animBuffer->unlock();
 			}
 		}
 	}

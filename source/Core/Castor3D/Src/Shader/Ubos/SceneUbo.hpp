@@ -24,10 +24,10 @@ namespace castor3d
 	private:
 		struct Configuration
 		{
-			renderer::Vec4 ambientLight;
-			renderer::Vec4 backgroundColour;
-			renderer::IVec4 lightsCount;
-			renderer::Vec3 cameraPos;
+			castor::Point4f ambientLight;
+			castor::Point4f backgroundColour;
+			castor::Point4i lightsCount;
+			castor::Point3f cameraPos;
 			float cameraNearPlane;
 			float cameraFarPlane;
 			int32_t fogType;

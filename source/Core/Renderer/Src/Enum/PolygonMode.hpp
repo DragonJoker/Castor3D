@@ -1,5 +1,5 @@
-/*
-This file belongs to Renderer.
+ï»¿/*
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___Renderer_PolygonMode_HPP___
@@ -29,9 +29,9 @@ namespace renderer
 	*	The name.
 	*\~french
 	*\brief
-	*	Récupère le nom du type d'élément donné.
+	*	RÃ©cupÃ¨re le nom du type d'Ã©lÃ©ment donnÃ©.
 	*\param[in] value
-	*	Le type d'élément.
+	*	Le type d'Ã©lÃ©ment.
 	*\return
 	*	Le nom.
 	*/

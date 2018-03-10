@@ -212,9 +212,9 @@ namespace castor3d
 		}
 	}
 
-	void TextOverlay::doRender( OverlayRendererSPtr p_renderer )
+	void TextOverlay::doRender( OverlayRenderer & renderer )
 	{
-		p_renderer->drawText( *this );
+		renderer.drawText( *this );
 	}
 
 	void TextOverlay::doUpdateBuffer( Size const & p_size
@@ -243,7 +243,7 @@ namespace castor3d
 					m_arrayVtx.reserve( m_previousCaption.size() * 6 );
 
 					DisplayableLineArray lines = doPrepareText( p_size, size );
-					Size const & texDim = fontTexture->getTexture()->getDimensions();
+					Size const & texDim = { fontTexture->getTexture()->getDimensions().width, fontTexture->getTexture()->getDimensions().height };
 
 					for ( auto const & line : lines )
 					{

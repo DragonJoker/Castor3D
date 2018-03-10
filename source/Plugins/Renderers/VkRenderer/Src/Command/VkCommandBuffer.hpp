@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder
 */
 #pragma once
@@ -59,12 +59,7 @@ namespace vk_renderer
 		*\copydoc	renderer::CommandBuffer:begin
 		*/
 		bool begin( renderer::CommandBufferUsageFlags flags
-			, renderer::RenderPass const & renderPass
-			, uint32_t subpass
-			, renderer::FrameBuffer const & frameBuffer
-			, bool occlusionQueryEnable
-			, renderer::QueryControlFlags queryFlags
-			, renderer::QueryPipelineStatisticFlags pipelineStatistics )const override;
+			, renderer::CommandBufferInheritanceInfo const & inheritanceInfo )const override;
 		/**
 		*\copydoc	renderer::CommandBuffer:end
 		*/
@@ -103,6 +98,11 @@ namespace vk_renderer
 		void clear( renderer::TextureView const & image
 			, renderer::DepthStencilClearValue const & colour )const override;
 		/**
+		*\copydoc	renderer::clearAttachments:clear
+		*/
+		void clearAttachments( renderer::ClearAttachmentArray const & clearAttachments
+			, renderer::ClearRectArray const & clearRects )override;
+		/**
 		*\copydoc	renderer::CommandBuffer:memoryBarrier
 		*/
 		void memoryBarrier( renderer::PipelineStageFlags after
@@ -125,14 +125,23 @@ namespace vk_renderer
 		void bindPipeline( renderer::ComputePipeline const & pipeline
 			, renderer::PipelineBindPoint bindingPoint )const override;
 		/**
-		*\copydoc	renderer::CommandBuffer:bindGeometryBuffers
+		*\copydoc	renderer::CommandBuffer:bindVertexBuffers
 		*/
-		void bindGeometryBuffers( renderer::GeometryBuffers const & geometryBuffers )const override;
+		void bindVertexBuffers( uint32_t firstBinding
+			, renderer::BufferCRefArray const & buffers
+			, renderer::UInt64Array offsets )const override;
+		/**
+		*\copydoc	renderer::CommandBuffer:bindIndexBuffer
+		*/
+		void bindIndexBuffer( renderer::BufferBase const & buffer
+			, uint64_t offset
+			, renderer::IndexType indexType )const override;
 		/**
 		*\copydoc	renderer::CommandBuffer:bindDescriptorSet
 		*/
 		void bindDescriptorSets( renderer::DescriptorSetCRefArray const & descriptorSets
 			, renderer::PipelineLayout const & layout
+			, renderer::UInt32Array const & dynamicOffsets
 			, renderer::PipelineBindPoint bindingPoint )const override;
 		/**
 		*\copydoc	renderer::CommandBuffer:setViewport
@@ -158,16 +167,30 @@ namespace vk_renderer
 			, uint32_t vertexOffset
 			, uint32_t firstInstance )const override;
 		/**
-		*\copydoc	renderer::CommandBuffer:copyToImage
+		*\copydoc	renderer::CommandBuffer:drawIndirect
 		*/
-		void copyToImage( renderer::BufferImageCopy const & copyInfo
-			, renderer::BufferBase const & src
-			, renderer::TextureView const & dst )const override;
+		void drawIndirect( renderer::BufferBase const & buffer
+			, uint32_t offset
+			, uint32_t drawCount
+			, uint32_t stride )const override;
 		/**
-		*\copydoc	renderer::CommandBuffer:copyToBuffer
+		*\copydoc	renderer::CommandBuffer:drawIndexedIndirect
 		*/
-		void copyToBuffer( renderer::BufferImageCopy const & copyInfo
-			, renderer::TextureView const & src
+		void drawIndexedIndirect( renderer::BufferBase const & buffer
+			, uint32_t offset
+			, uint32_t drawCount
+			, uint32_t stride )const override;
+		/**
+		*\copydoc	renderer::CommandBuffer::copyToImage
+		*/
+		void copyToImage( renderer::BufferImageCopyArray const & copyInfo
+			, renderer::BufferBase const & src
+			, renderer::Texture const & dst )const override;
+		/**
+		*\copydoc	renderer::CommandBuffer::copyToBuffer
+		*/
+		void copyToBuffer( renderer::BufferImageCopyArray const & copyInfo
+			, renderer::Texture const & src
 			, renderer::BufferBase const & dst )const override;
 		/**
 		*\copydoc	renderer::CommandBuffer:copyBuffer
@@ -179,14 +202,18 @@ namespace vk_renderer
 		*\copydoc	renderer::CommandBuffer:copyImage
 		*/
 		void copyImage( renderer::ImageCopy const & copyInfo
-			, renderer::TextureView const & src
-			, renderer::TextureView const & dst )const override;
+			, renderer::Texture const & src
+			, renderer::ImageLayout srcLayout
+			, renderer::Texture const & dst
+			, renderer::ImageLayout dstLayout )const override;
 		/**
 		*\copydoc	renderer::CommandBuffer:blitImage
 		*/
-		void blitImage( renderer::ImageBlit const & blit
-			, renderer::FrameBufferAttachment const & src
-			, renderer::FrameBufferAttachment const & dst
+		void blitImage( renderer::Texture const & srcImage
+			, renderer::ImageLayout srcLayout
+			, renderer::Texture const & dstImage
+			, renderer::ImageLayout dstLayout
+			, std::vector< renderer::ImageBlit > const & regions
 			, renderer::Filter filter )const override;
 		/**
 		*\copydoc	renderer::CommandBuffer:resetQueryPool
@@ -222,6 +249,21 @@ namespace vk_renderer
 		void dispatch( uint32_t groupCountX
 			, uint32_t groupCountY
 			, uint32_t groupCountZ )const override;
+		/**
+		*\copydoc	renderer::CommandBuffer:dispatchIndirect
+		*/
+		void dispatchIndirect( renderer::BufferBase const & buffer
+			, uint32_t offset )const override;
+		/**
+		*\copydoc	renderer::CommandBuffer::setLineWidth
+		*/
+		void setLineWidth( float width )const override;
+		/**
+		*\copydoc	renderer::CommandBuffer::setDepthBias
+		*/
+		void setDepthBias( float constantFactor
+			, float clamp
+			, float slopeFactor )const override;
 		/**
 		*\~french
 		*\return

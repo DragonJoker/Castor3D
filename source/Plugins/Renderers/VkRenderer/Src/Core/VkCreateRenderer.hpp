@@ -21,10 +21,16 @@
 extern "C"
 {
 	/**
+	*\~french
 	*\brief
 	*	Crée un renderer Vulkan.
-	*\param[in] connection
-	*	La connection avec la fenêtre.
+	*\param[in] configuration
+	*	La configuration de création.
+	*\~english
+	*\brief
+	*	Creates an Vulkan renderer.
+	*\param[in] configuration
+	*	The creation options.
 	*/
-	VkRenderer_API renderer::Renderer * createRenderer( bool enableValidation );
+	VkRenderer_API renderer::Renderer * createRenderer( renderer::Renderer::Configuration const & configuration );
 }

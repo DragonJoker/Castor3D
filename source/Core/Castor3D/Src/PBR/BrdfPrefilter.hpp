@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "RenderToTexture/RenderQuad.hpp"
 
+#include <RenderPass/FrameBuffer.hpp>
+
 namespace castor3d
 {
 	/*!
@@ -50,13 +52,12 @@ namespace castor3d
 		 *\~french
 		 *\brief		Crée le programme shader de convolution.
 		 */
-		renderer::ShaderProgram & doCreateProgram();
+		renderer::ShaderStageStateArray doCreateProgram();
 
 	private:
 		RenderSystem & m_renderSystem;
 		NonTexturedQuad m_vertexData;
 		renderer::VertexBufferPtr< NonTexturedQuad > m_vertexBuffer;
-		renderer::GeometryBuffersPtr m_geometryBuffers;
 		renderer::VertexLayoutPtr m_vertexLayout;
 		renderer::RenderPassPtr m_renderPass;
 		renderer::FrameBufferPtr m_frameBuffer;

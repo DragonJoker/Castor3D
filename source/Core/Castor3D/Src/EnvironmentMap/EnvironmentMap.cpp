@@ -12,10 +12,11 @@
 #include <Image/Texture.hpp>
 #include <Image/TextureView.hpp>
 #include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassState.hpp>
-#include <RenderPass/RenderSubpass.hpp>
-#include <RenderPass/RenderSubpassState.hpp>
+#include <RenderPass/FrameBuffer.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
+#include <RenderPass/SubpassDependency.hpp>
+#include <RenderPass/SubpassDescription.hpp>
 
 #include <GlslSource.hpp>
 
@@ -56,12 +57,23 @@ namespace castor3d
 				sampler->setWrapR( renderer::WrapMode::eClampToEdge );
 			}
 
+			renderer::ImageCreateInfo colour{};
+			colour.flags = 0u;
+			colour.arrayLayers = 1u;
+			colour.extent.width = size[0];
+			colour.extent.height = size[1];
+			colour.extent.depth = 1u;
+			colour.format = renderer::Format::eR32G32B32A32_SFLOAT;
+			colour.imageType = renderer::TextureType::e2D;
+			colour.initialLayout = renderer::ImageLayout::eUndefined;
+			colour.mipLevels = 1u;
+			colour.samples = renderer::SampleCountFlag::e1;
+			colour.sharingMode = renderer::SharingMode::eExclusive;
+			colour.tiling = renderer::ImageTiling::eOptimal;
+			colour.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
 			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
-				, renderer::TextureType::e2D
-				, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled
-				, renderer::MemoryPropertyFlag::eDeviceLocal
-				, PixelFormat::eRGBA32F
-				, size );
+				, colour
+				, renderer::MemoryPropertyFlag::eDeviceLocal );
 			TextureUnit unit{ engine };
 			unit.setTexture( texture );
 			unit.setSampler( sampler );
@@ -138,53 +150,101 @@ namespace castor3d
 	bool EnvironmentMap::initialise()
 	{
 		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
-		m_depthBuffer = device.createTexture();
-		m_depthBuffer->setImage( PixelFormat::eD32F
-			, renderer::UIVec2{ MapSize }
-			, renderer::ImageUsageFlag::eDepthStencilAttachment );
-		m_depthBufferView = m_depthBuffer->createView( renderer::TextureType::e2D
-			, m_depthBuffer->getFormat()
-			, 0u
-			, 1u
-			, 0u
-			, 1u );
-		std::vector< renderer::PixelFormat > formats
-		{
-			m_depthBuffer->getFormat(),
-			m_environmentMap.getTexture()->getPixelFormat()
-		};
-		renderer::RenderPassAttachmentArray rpAttaches
-		{
-			renderer::RenderPassAttachment::createDepthStencilAttachment( m_depthBuffer->getFormat(), true ),
-			renderer::RenderPassAttachment::createColourAttachment( 0u, m_environmentMap.getTexture()->getPixelFormat(), true )
-		};
-		renderer::RenderSubpassPtrArray subpasses;
-		subpasses.emplace_back( device.createRenderSubpass( rpAttaches
-			, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-			, renderer::AccessFlag::eColourAttachmentWrite } ) );
+		renderer::ImageCreateInfo depthStencil{};
+		depthStencil.flags = 0u;
+		depthStencil.arrayLayers = 1u;
+		depthStencil.extent.width = MapSize[0];
+		depthStencil.extent.height = MapSize[1];
+		depthStencil.extent.depth = 1u;
+		depthStencil.format = renderer::Format::eD32_SFLOAT;
+		depthStencil.imageType = renderer::TextureType::e2D;
+		depthStencil.initialLayout = renderer::ImageLayout::eUndefined;
+		depthStencil.mipLevels = 1u;
+		depthStencil.samples = renderer::SampleCountFlag::e1;
+		depthStencil.sharingMode = renderer::SharingMode::eExclusive;
+		depthStencil.tiling = renderer::ImageTiling::eOptimal;
+		depthStencil.usage = renderer::ImageUsageFlag::eDepthStencilAttachment;
+		m_depthBuffer = device.createTexture( depthStencil, renderer::MemoryPropertyFlag::eDeviceLocal );
+		m_depthBufferView = m_depthBuffer->createView( renderer::TextureViewType::e2D
+			, m_depthBuffer->getFormat() );
+
+		renderer::RenderPassCreateInfo createInfo{};
+		createInfo.flags = 0u;
+
+		createInfo.attachments.resize( 2u );
+		createInfo.attachments[0].index = 0u;
+		createInfo.attachments[0].format = m_environmentMap.getTexture()->getPixelFormat();
+		createInfo.attachments[0].samples = renderer::SampleCountFlag::e1;
+		createInfo.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+		createInfo.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+		createInfo.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		createInfo.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		createInfo.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+		createInfo.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+
+		createInfo.attachments[1].index = 1u;
+		createInfo.attachments[1].format = m_depthBuffer->getFormat();
+		createInfo.attachments[1].samples = renderer::SampleCountFlag::e1;
+		createInfo.attachments[1].loadOp = renderer::AttachmentLoadOp::eClear;
+		createInfo.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
+		createInfo.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		createInfo.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		createInfo.attachments[1].initialLayout = renderer::ImageLayout::eUndefined;
+		createInfo.attachments[1].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+
+		renderer::AttachmentReference colourReference;
+		colourReference.attachment = 0u;
+		colourReference.layout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+		renderer::AttachmentReference depthStencilReference;
+		depthStencilReference.attachment = 1u;
+		depthStencilReference.layout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+
+		createInfo.subpasses.resize( 1u );
+		createInfo.subpasses[0].flags = 0u;
+		createInfo.subpasses[0].colorAttachments = { colourReference };
+		createInfo.subpasses[0].depthStencilAttachment = depthStencilReference;
+
+		createInfo.dependencies.resize( 2u );
+		createInfo.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		createInfo.dependencies[0].dstSubpass = 0u;
+		createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+		createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
+		createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		createInfo.dependencies[1].srcSubpass = 0u;
+		createInfo.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+		createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+		createInfo.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eMemoryRead;
+		createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
 		auto & environment = m_environmentMap.getTexture()->getTexture();
+		renderer::ImageViewCreateInfo view;
+		view.components.r = renderer::ComponentSwizzle::eIdentity;
+		view.components.g = renderer::ComponentSwizzle::eIdentity;
+		view.components.b = renderer::ComponentSwizzle::eIdentity;
+		view.components.a = renderer::ComponentSwizzle::eIdentity;
+		view.format = environment.getFormat();
+		view.viewType = renderer::TextureViewType::e2D;
+		view.subresourceRange.aspectMask = renderer::getAspectMask( environment.getFormat() );
+		view.subresourceRange.baseMipLevel = 0u;
+		view.subresourceRange.levelCount = 1u;
+		view.subresourceRange.layerCount = 1u;
 		uint32_t face = 0u;
 
 		for ( auto & frameBuffer : m_frameBuffers )
 		{
-			frameBuffer.view = environment.createView( renderer::TextureType::e2D
-				, environment.getFormat()
-				, 0u
-				, 1u
-				, face
-				, 1u );
-			frameBuffer.renderPass = device.createRenderPass( rpAttaches
-				, std::move( subpasses )
-				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-					, renderer::AccessFlag::eColourAttachmentWrite
-					, { renderer::ImageLayout::eDepthStencilAttachmentOptimal, renderer::ImageLayout::eColourAttachmentOptimal } }
-				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-					, renderer::AccessFlag::eColourAttachmentWrite
-					, { renderer::ImageLayout::eDepthStencilAttachmentOptimal, renderer::ImageLayout::eColourAttachmentOptimal } } );
+			view.subresourceRange.baseArrayLayer = face;
+			frameBuffer.view = environment.createView( view );
+			frameBuffer.renderPass = device.createRenderPass( createInfo );
 			renderer::FrameBufferAttachmentArray attaches;
-			attaches.emplace_back( *( frameBuffer.renderPass->begin() + 0u ), *m_depthBufferView );
-			attaches.emplace_back( *( frameBuffer.renderPass->begin() + 1u ), *frameBuffer.view );
-			frameBuffer.frameBuffer = frameBuffer.renderPass->createFrameBuffer( renderer::UIVec2{ MapSize }
+			attaches.emplace_back( *( frameBuffer.renderPass->getAttachments().begin() + 0u ), *m_depthBufferView );
+			attaches.emplace_back( *( frameBuffer.renderPass->getAttachments().begin() + 1u ), *frameBuffer.view );
+			frameBuffer.frameBuffer = frameBuffer.renderPass->createFrameBuffer( renderer::Extent2D{ MapSize[0], MapSize[1] }
 				, std::move( attaches ) );
 			++face;
 		}

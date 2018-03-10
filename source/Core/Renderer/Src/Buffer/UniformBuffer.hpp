@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___Renderer_UniformBuffer_HPP___
@@ -23,7 +23,7 @@ namespace renderer
 	{
 	protected:
 		/**
-		*\english
+		*\~english
 		*	Constructor.
 		*\param[in] device
 		*	The logical device.
@@ -126,7 +126,7 @@ namespace renderer
 	{
 	public:
 		/**
-		*\english
+		*\~english
 		*	Constructor.
 		*\param[in] device
 		*	The logical device.
@@ -234,15 +234,15 @@ namespace renderer
 		*	Uploads the buffer data to VRAM
 		*\param[in] offset
 		*	The offset in elements from which buffer memory is mapped.
-		*\param[in] size
-		*	The size in elements of the buffer memory to map.
+		*\param[in] range
+		*	The number of elements to map.
 		*\~french
 		*\brief
 		*	Met en VRAM les données du tampon.
 		*\param[in] offset
 		*	L'offset à partir duquel la mémoire du tampon est mappée.
-		*\param[in] size
-		*	La taille en octets de la mémoire à mapper.
+		*\param[in] range
+		*	Le nombre d'éléments à mapper.
 		*/
 		inline void upload( uint32_t offset = 0u
 			, uint32_t range = 1u )
@@ -260,7 +260,8 @@ namespace renderer
 					buffer += size;
 				}
 
-				m_ubo->getBuffer().unlock( size, true );
+				m_ubo->getBuffer().flush( offset * size, range * size );
+				m_ubo->getBuffer().unlock();
 			}
 		}
 

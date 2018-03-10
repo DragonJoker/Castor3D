@@ -15,27 +15,17 @@ namespace gl_renderer
 	{
 	}
 
-	renderer::PipelinePtr PipelineLayout::createPipeline( renderer::ShaderProgram const & program
-		, renderer::VertexLayoutCRefArray const & vertexLayouts
-		, renderer::RenderPass const & renderPass
-		, renderer::InputAssemblyState const & inputAssemblyState
-		, renderer::RasterisationState const & rasterisationState
-		, renderer::ColourBlendState const & colourBlendState )const
+	renderer::PipelinePtr PipelineLayout::createPipeline( renderer::GraphicsPipelineCreateInfo createInfo )const
 	{
 		return std::make_unique< Pipeline >( m_device
 			, *this
-			, program
-			, vertexLayouts
-			, renderPass
-			, inputAssemblyState
-			, rasterisationState
-			, colourBlendState );
+			, std::move( createInfo ) );
 	}
 
-	renderer::ComputePipelinePtr PipelineLayout::createPipeline( renderer::ShaderProgram const & program )const
+	renderer::ComputePipelinePtr PipelineLayout::createPipeline( renderer::ComputePipelineCreateInfo createInfo )const
 	{
 		return std::make_unique< ComputePipeline >( m_device
 			, *this
-			, program );
+			, std::move( createInfo ) );
 	}
 }

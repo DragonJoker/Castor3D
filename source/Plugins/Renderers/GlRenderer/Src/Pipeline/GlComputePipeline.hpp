@@ -8,8 +8,9 @@
 #define ___GlRenderer_ComputePipeline_HPP___
 #pragma once
 
-#include "GlRendererPrerequisites.hpp"
+#include "Shader/GlShaderProgram.hpp"
 
+#include <Buffer/PushConstantsBuffer.hpp>
 #include <Pipeline/ComputePipeline.hpp>
 
 namespace gl_renderer
@@ -34,7 +35,7 @@ namespace gl_renderer
 		*/
 		ComputePipeline( Device const & device
 			, renderer::PipelineLayout const & layout
-			, renderer::ShaderProgram const & program );
+			, renderer::ComputePipelineCreateInfo && createInfo );
 		/**
 		*\return
 		*	Le PipelineLayout.
@@ -47,15 +48,24 @@ namespace gl_renderer
 		*\return
 		*	Le ShaderProgram.
 		*/
-		inline ShaderProgram const & getProgram()const
+		inline GLuint getProgram()const
 		{
-			return m_program;
+			return m_program.getProgram();
+		}
+		/**
+		*\return
+		*	Le tampon de push constants correspondant aux constantes de spécialisation.
+		*/
+		inline std::vector< renderer::PushConstantsBufferBase > const & getConstantsPcbs()const
+		{
+			return m_constantsPcbs;
 		}
 
 	private:
 		Device const & m_device;
 		renderer::PipelineLayout const & m_layout;
-		ShaderProgram const & m_program;
+		ShaderProgram m_program;
+		std::vector< renderer::PushConstantsBufferBase > m_constantsPcbs;
 	};
 }
 

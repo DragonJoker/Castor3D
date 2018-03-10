@@ -11,6 +11,8 @@ See LICENSE file in root folder
 #include "PBR/IblTextures.hpp"
 #include "Texture/TextureUnit.hpp"
 
+#include <Image/Texture.hpp>
+
 namespace castor3d
 {
 	/*!
@@ -159,7 +161,7 @@ namespace castor3d
 		 */
 		inline void setTexture( renderer::TexturePtr && texture )
 		{
-			m_texture = texture;
+			m_texture = std::move( texture );
 		}
 		/**
 		 *\~english
@@ -215,7 +217,7 @@ namespace castor3d
 		renderer::VertexBufferPtr< TexturedCube > m_vertexBuffer{ nullptr };
 		//!\~english	The geomtry buffers.
 		//!\~french		Les tampons de géométrie.
-		renderer::GeometryBuffersPtr m_geometryBuffers{ nullptr };
+		GeometryBuffers m_geometryBuffers;
 		//!\~english	Vertex elements declaration.
 		//!\~french		Déclaration des éléments d'un sommet.
 		renderer::VertexLayoutPtr m_declaration;

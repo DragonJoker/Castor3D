@@ -131,10 +131,12 @@ namespace castor3d
 								*index++ = line.m_index[2];
 							}
 
-							vertices.unlock( vertices.getCount(), false );
+							vertices.flush( 0u, vertices.getCount() );
+							vertices.unlock();
 						}
 
-						indices.getBuffer().unlock( uint32_t( indexSize * sizeof( uint32_t ) ), true );
+						indices.getBuffer().flush( 0u, uint32_t( indexSize * sizeof( uint32_t ) ) );
+						indices.getBuffer().unlock();
 					}
 				}
 			}
@@ -174,7 +176,8 @@ namespace castor3d
 					++buffer;
 				}
 
-				indexBuffer.getBuffer().unlock( uint32_t( count * sizeof( uint32_t ) ), true );
+				indexBuffer.getBuffer().flush( 0u, uint32_t( count * sizeof( uint32_t ) ) );
+				indexBuffer.getBuffer().unlock();
 			}
 
 			m_lines.clear();

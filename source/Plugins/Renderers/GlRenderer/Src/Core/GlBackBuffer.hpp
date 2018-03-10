@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder
 */
 #pragma once
@@ -29,7 +29,8 @@ namespace gl_renderer
 		*	L'index de l'image, parmi les images de la swap chain.
 		*/
 		BackBuffer( renderer::Device const & device
-			, renderer::SwapChain const & swapchain
+			, renderer::TexturePtr && image
+			, renderer::TextureViewPtr && view
 			, uint32_t imageIndex );
 	};
 }

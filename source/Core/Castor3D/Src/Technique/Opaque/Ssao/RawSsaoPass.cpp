@@ -611,7 +611,7 @@ namespace castor3d
 			renderer::FrameBufferAttachmentArray attaches;
 			attaches.emplace_back( *( renderPass.begin() ), texture.getTexture()->getView() );
 			auto size = texture.getTexture()->getDimensions();
-			return renderPass.createFrameBuffer( renderer::UIVec2{ size.getWidth(), size.getHeight() }
+			return renderPass.createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
 				, std::move( attaches ) );
 		}
 

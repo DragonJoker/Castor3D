@@ -241,24 +241,23 @@ namespace castor3d
 				component.second->fill();
 			}
 
-			m_vertexLayout = device.createVertexLayout( 0u, sizeof( InterleavedVertex ) );
-			m_vertexLayout->createAttribute< renderer::Vec3 >( 0u, offsetof( InterleavedVertex, m_pos ) );
-			m_vertexLayout->createAttribute< renderer::Vec3 >( 1u, offsetof( InterleavedVertex, m_nml ) );
-			m_vertexLayout->createAttribute< renderer::Vec3 >( 2u, offsetof( InterleavedVertex, m_tan ) );
-			m_vertexLayout->createAttribute< renderer::Vec3 >( 3u, offsetof( InterleavedVertex, m_bin ) );
-			m_vertexLayout->createAttribute< renderer::Vec3 >( 4u, offsetof( InterleavedVertex, m_tex ) );
+			m_vertexLayout = renderer::makeLayout< InstantiationData >( 0u, renderer::VertexInputRate::eVertex );
+			m_vertexLayout->createAttribute( 0u, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, m_pos ) );
+			m_vertexLayout->createAttribute( 1u, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, m_nml ) );
+			m_vertexLayout->createAttribute( 2u, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, m_tan ) );
+			m_vertexLayout->createAttribute( 3u, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, m_bin ) );
+			m_vertexLayout->createAttribute( 4u, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, m_tex ) );
 
-			renderer::VertexBufferCRefArray buffers;
-			std::vector< uint64_t > offsets;
+			renderer::BufferCRefArray buffers;
+			renderer::UInt64Array offsets;
 			renderer::VertexLayoutCRefArray layouts;
 			doGatherBuffers( buffers, offsets, layouts );
 
-			m_geometryBuffers = device.createGeometryBuffers( buffers
-				, offsets
-				, layouts
-				, m_indexBuffer->getBuffer()
-				, 0u
-				, renderer::IndexType::eUInt32 );
+			m_geometryBuffers.vbo = buffers;
+			m_geometryBuffers.vboOffsets = offsets;
+			m_geometryBuffers.layouts = layouts;
+			m_geometryBuffers.ibo = &m_indexBuffer->getBuffer();
+			m_geometryBuffers.iboOffset = 0u;
 			m_generated = true;
 		}
 
@@ -299,7 +298,8 @@ namespace castor3d
 				, renderer::MemoryMapFlag::eWrite ) )
 			{
 				std::copy( m_points.begin(), m_points.end(), buffer );
-				m_vertexBuffer->unlock( size, true );
+				m_vertexBuffer->flush( 0u, size );
+				m_vertexBuffer->unlock();
 			}
 
 			m_dirty = false;
@@ -499,18 +499,19 @@ namespace castor3d
 				, renderer::MemoryMapFlag::eWrite ) )
 			{
 				std::copy( m_points.begin(), m_points.end(), buffer );
-				m_vertexBuffer->unlock( size, true );
+				m_vertexBuffer->flush( 0u, size );
+				m_vertexBuffer->unlock();
 			}
 
 			//m_points.clear();
 		}
 	}
 
-	void Submesh::doGatherBuffers( renderer::VertexBufferCRefArray & buffers
+	void Submesh::doGatherBuffers( renderer::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, renderer::VertexLayoutCRefArray & layouts )
 	{
-		buffers.emplace_back( *m_vertexBuffer );
+		buffers.emplace_back( m_vertexBuffer->getBuffer() );
 		offsets.emplace_back( 0u );
 		layouts.emplace_back( *m_vertexLayout );
 

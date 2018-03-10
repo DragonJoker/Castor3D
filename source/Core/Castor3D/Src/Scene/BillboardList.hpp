@@ -130,9 +130,9 @@ namespace castor3d
 			return *m_vertexBuffer;
 		}
 
-		inline renderer::GeometryBuffers & getGeometryBuffers()
+		inline GeometryBuffers & getGeometryBuffers()
 		{
-			return *m_geometryBuffers;
+			return m_geometryBuffers;
 		}
 
 		inline Scene const & getParentScene()const
@@ -206,15 +206,15 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doGatherBuffers( renderer::VertexBufferCRefArray & buffers
+		void doGatherBuffers( renderer::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
 			, renderer::VertexLayoutCRefArray & layouts );
 
 	public:
 		struct Vertex
 		{
-			renderer::Vec3 position;
-			renderer::Vec2 texcoord;
+			castor::Point3f position;
+			castor::Point2f texcoord;
 		};
 		using Quad = std::array< Vertex, 4u >;
 
@@ -228,7 +228,7 @@ namespace castor3d
 		renderer::VertexLayoutPtr m_vertexLayout;
 		renderer::VertexBufferPtr< Quad > m_quadBuffer;
 		renderer::VertexLayoutPtr m_quadLayout;
-		renderer::GeometryBuffersPtr m_geometryBuffers;
+		GeometryBuffers m_geometryBuffers;
 		bool m_needUpdate{ true };
 		bool m_initialised{ false };
 		uint32_t m_count{ 0u };

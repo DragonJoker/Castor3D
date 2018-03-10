@@ -1,5 +1,5 @@
-﻿/*
-This file belongs to Renderer.
+/*
+This file belongs to RendererLib.
 See LICENSE file in root folder
 */
 #pragma once
@@ -33,6 +33,7 @@ namespace gl_renderer
 	private:
 		TextureView const & m_image;
 		renderer::RgbaColour m_colour;
+		GlInternal m_internal;
 		GlFormat m_format;
 		GlType m_type;
 	};

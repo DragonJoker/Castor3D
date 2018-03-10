@@ -35,6 +35,142 @@ using namespace glsl;
 
 namespace castor3d
 {
+	renderer::Format convert( castor::PixelFormat format )
+	{
+		switch ( format )
+		{
+		case castor::PixelFormat::eL8:
+			return renderer::Format::eR8_UNORM;
+		case castor::PixelFormat::eL16F:
+			return renderer::Format::eR16_SFLOAT;
+		case castor::PixelFormat::eL32F:
+			return renderer::Format::eR32_SFLOAT;
+		case castor::PixelFormat::eA8L8:
+			return renderer::Format::eR8G8_UNORM;
+		case castor::PixelFormat::eAL16F:
+			return renderer::Format::eR16G16_SFLOAT;
+		case castor::PixelFormat::eAL32F:
+			return renderer::Format::eR32G32_SFLOAT;
+		case castor::PixelFormat::eA1R5G5B5:
+			return renderer::Format::eA1R5G5B5_UNORM_PACK16;
+		case castor::PixelFormat::eR5G6B5:
+			return renderer::Format::eR5G5B5A1_UNORM_PACK16;
+		case castor::PixelFormat::eR8G8B8:
+			return renderer::Format::eR8G8B8_UNORM;
+		case castor::PixelFormat::eB8G8R8:
+			return renderer::Format::eB8G8R8_UNORM;
+		case castor::PixelFormat::eR8G8B8_SRGB:
+			return renderer::Format::eR8G8B8_SRGB;
+		case castor::PixelFormat::eB8G8R8_SRGB:
+			return renderer::Format::eB8G8R8_SRGB;
+		case castor::PixelFormat::eA8R8G8B8:
+			return renderer::Format::eR8G8B8A8_UNORM;
+		case castor::PixelFormat::eA8B8G8R8:
+			return renderer::Format::eA8B8G8R8_UNORM_PACK32;
+		case castor::PixelFormat::eA8R8G8B8_SRGB:
+			return renderer::Format::eR8G8B8A8_SRGB;
+		case castor::PixelFormat::eA8B8G8R8_SRGB:
+			return renderer::Format::eA8B8G8R8_SRGB_PACK32;
+		case castor::PixelFormat::eRGB16F:
+			return renderer::Format::eR16G16B16_SFLOAT;
+		case castor::PixelFormat::eRGBA16F:
+			return renderer::Format::eR16G16B16A16_SFLOAT;
+		case castor::PixelFormat::eRGB32F:
+			return renderer::Format::eR32G32B32_SFLOAT;
+		case castor::PixelFormat::eRGBA32F:
+			return renderer::Format::eR32G32B32A32_SFLOAT;
+		case castor::PixelFormat::eDXTC1:
+			return renderer::Format::eBC1_RGB_UNORM_BLOCK;
+		case castor::PixelFormat::eDXTC3:
+			return renderer::Format::eBC2_UNORM_BLOCK;
+		case castor::PixelFormat::eDXTC5:
+			return renderer::Format::eBC3_UNORM_BLOCK;
+		case castor::PixelFormat::eD16:
+			return renderer::Format::eD16_UNORM;
+		case castor::PixelFormat::eD24S8:
+			return renderer::Format::eD24_UNORM_S8_UINT;
+		case castor::PixelFormat::eD32:
+			return renderer::Format::eX8_D24_UNORM_PACK32;
+		case castor::PixelFormat::eD32F:
+			return renderer::Format::eD32_SFLOAT;
+		case castor::PixelFormat::eD32FS8:
+			return renderer::Format::eD32_SFLOAT_S8_UINT;
+		case castor::PixelFormat::eS8:
+			return renderer::Format::eS8_UINT;
+		default:
+			assert( false && "Unsupported castor::PixelFormat" );
+			return renderer::Format::eR8G8B8A8_UNORM;
+		}
+	}
+
+	castor::PixelFormat convert( renderer::Format format )
+	{
+		switch ( format )
+		{
+		case renderer::Format::eR8_UNORM:
+			return castor::PixelFormat::eL8;
+		case renderer::Format::eR16_SFLOAT:
+			return castor::PixelFormat::eL16F;
+		case renderer::Format::eR32_SFLOAT:
+			return castor::PixelFormat::eL32F;
+		case renderer::Format::eR8G8_UNORM:
+			return castor::PixelFormat::eA8L8;
+		case renderer::Format::eR16G16_SFLOAT:
+			return castor::PixelFormat::eAL16F;
+		case renderer::Format::eR32G32_SFLOAT:
+			return castor::PixelFormat::eAL32F;
+		case renderer::Format::eA1R5G5B5_UNORM_PACK16:
+			return castor::PixelFormat::eA1R5G5B5;
+		case renderer::Format::eR5G5B5A1_UNORM_PACK16:
+			return castor::PixelFormat::eR5G6B5;
+		case renderer::Format::eR8G8B8_UNORM:
+			return castor::PixelFormat::eR8G8B8;
+		case renderer::Format::eB8G8R8_UNORM:
+			return castor::PixelFormat::eB8G8R8;
+		case renderer::Format::eR8G8B8_SRGB:
+			return castor::PixelFormat::eR8G8B8_SRGB;
+		case renderer::Format::eB8G8R8_SRGB:
+			return castor::PixelFormat::eB8G8R8_SRGB;
+		case renderer::Format::eR8G8B8A8_UNORM:
+			return castor::PixelFormat::eA8R8G8B8;
+		case renderer::Format::eA8B8G8R8_UNORM_PACK32:
+			return castor::PixelFormat::eA8B8G8R8;
+		case renderer::Format::eR8G8B8A8_SRGB:
+			return castor::PixelFormat::eA8R8G8B8_SRGB;
+		case renderer::Format::eA8B8G8R8_SRGB_PACK32:
+			return castor::PixelFormat::eA8B8G8R8_SRGB;
+		case renderer::Format::eR16G16B16_SFLOAT:
+			return castor::PixelFormat::eRGB16F;
+		case renderer::Format::eR16G16B16A16_SFLOAT:
+			return castor::PixelFormat::eRGBA16F;
+		case renderer::Format::eR32G32B32_SFLOAT:
+			return castor::PixelFormat::eRGB32F;
+		case renderer::Format::eR32G32B32A32_SFLOAT:
+			return castor::PixelFormat::eRGBA32F;
+		case renderer::Format::eBC1_RGB_UNORM_BLOCK:
+			return castor::PixelFormat::eDXTC1;
+		case renderer::Format::eBC2_UNORM_BLOCK:
+			return castor::PixelFormat::eDXTC3;
+		case renderer::Format::eBC3_UNORM_BLOCK:
+			return castor::PixelFormat::eDXTC5;
+		case renderer::Format::eD16_UNORM:
+			return castor::PixelFormat::eD16;
+		case renderer::Format::eD24_UNORM_S8_UINT:
+			return castor::PixelFormat::eD24S8;
+		case renderer::Format::eX8_D24_UNORM_PACK32:
+			return castor::PixelFormat::eD32;
+		case renderer::Format::eD32_SFLOAT:
+			return castor::PixelFormat::eD32F;
+		case renderer::Format::eD32_SFLOAT_S8_UINT:
+			return castor::PixelFormat::eD32FS8;
+		case renderer::Format::eS8_UINT:
+			return castor::PixelFormat::eS8;
+		default:
+			assert( false && "Unsupported renderer::Format" );
+			return castor::PixelFormat::eA8R8G8B8;
+		}
+	}
+
 	namespace shader
 	{
 		namespace legacy

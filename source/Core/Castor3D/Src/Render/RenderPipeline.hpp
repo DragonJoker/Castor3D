@@ -73,7 +73,7 @@ namespace castor3d
 			, renderer::RasterisationState && rsState
 			, renderer::ColourBlendState && blState
 			, renderer::MultisampleState && msState
-			, renderer::ShaderProgram const & program
+			, renderer::ShaderStageStateArray program
 			, PipelineFlags const & flags );
 		/**
 		*\~english
@@ -186,7 +186,7 @@ namespace castor3d
 		renderer::RasterisationState m_rsState;
 		renderer::ColourBlendState m_blState;
 		renderer::MultisampleState m_msState;
-		renderer::ShaderProgram const & m_program;
+		renderer::ShaderStageStateArray m_program;
 		PipelineFlags m_flags;
 		renderer::VertexLayoutCRefArray m_vertexLayouts;
 		renderer::DescriptorSetLayoutCRefArray m_descriptorLayouts;

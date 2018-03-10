@@ -26,12 +26,23 @@ namespace castor3d
 		sampler->setMinFilter( renderer::Filter::eLinear );
 		sampler->setMagFilter( renderer::Filter::eLinear );
 		m_sampler = sampler;
+		renderer::ImageCreateInfo image{};
+		image.flags = 0u;
+		image.arrayLayers = 1u;
+		image.extent.width = maxWidth * 16;
+		image.extent.height = maxHeight * count;
+		image.extent.depth = 1u;
+		image.format = renderer::Format::eR8_UNORM;
+		image.imageType = renderer::TextureType::e2D;
+		image.initialLayout = renderer::ImageLayout::eUndefined;
+		image.mipLevels = 1u;
+		image.samples = renderer::SampleCountFlag::e1;
+		image.sharingMode = renderer::SharingMode::eExclusive;
+		image.tiling = renderer::ImageTiling::eOptimal;
+		image.usage = renderer::ImageUsageFlag::eTransferDst | renderer::ImageUsageFlag::eSampled;
 		m_texture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
-			, renderer::TextureType::e2D
-			, renderer::ImageUsageFlag::eTransferDst | renderer::ImageUsageFlag::eSampled
-			, renderer::MemoryPropertyFlag::eHostVisible
-			, PixelFormat::eL8
-			, Size{ maxWidth * 16, maxHeight * count } );
+			, image
+			, renderer::MemoryPropertyFlag::eHostVisible );
 		m_texture->getImage().initialiseSource();
 	}
 

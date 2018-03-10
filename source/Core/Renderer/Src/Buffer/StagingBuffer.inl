@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 namespace renderer
@@ -11,8 +11,8 @@ namespace renderer
 	/**@{*/
 	inline void StagingBuffer::uploadTextureData( CommandBuffer const & commandBuffer
 		, ImageSubresourceLayers const & subresourceLayers
-		, IVec3 const & offset
-		, UIVec3 const & extent
+		, Offset3D const & offset
+		, Extent3D const & extent
 		, ByteArray const & data
 		, TextureView const & texture )const
 	{
@@ -273,8 +273,8 @@ namespace renderer
 	/**@{*/
 	inline void StagingBuffer::downloadTextureData( CommandBuffer const & commandBuffer
 		, ImageSubresourceLayers const & subresourceLayers
-		, IVec3 const & offset
-		, UIVec3 const & extent
+		, Offset3D const & offset
+		, Extent3D const & extent
 		, ByteArray & data
 		, TextureView const & texture )const
 	{

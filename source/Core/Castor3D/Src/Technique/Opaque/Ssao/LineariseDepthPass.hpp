@@ -91,7 +91,6 @@ namespace castor3d
 		renderer::RenderPassPtr m_renderPass;
 		renderer::VertexBufferPtr< NonTexturedQuad > m_vertexBuffer;
 		renderer::VertexLayoutPtr m_vertexLayout;
-		renderer::GeometryBuffersPtr m_geometryBuffers;
 		renderer::SamplerPtr m_sampler;
 		renderer::CommandBufferPtr m_commandBuffer;
 		/**
@@ -105,7 +104,7 @@ namespace castor3d
 		renderer::DescriptorSetPoolPtr m_lineariseDescriptorPool;
 		renderer::DescriptorSetPtr m_lineariseDescriptor;
 		RenderPipelineUPtr m_linearisePipeline;
-		renderer::PushConstantsBuffer< renderer::Vec3 > m_clipInfo;
+		renderer::PushConstantsBuffer< castor::Point3f > m_clipInfo;
 		renderer::PushConstantRange m_linearisePushConstants;
 		/**@}*/
 		/**

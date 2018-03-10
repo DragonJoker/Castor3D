@@ -403,7 +403,7 @@ namespace castor3d
 		m_colourTexture = getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
 			, AccessType::eRead
 			, AccessType::eRead | AccessType::eWrite
-			, PixelFormat::eRGB32F
+			, renderer::Format::eR32G32B32_SFLOAT
 			, size );
 		m_buffer = PxBufferBase::create( Size{ PickingWidth, PickingWidth }
 			, m_colourTexture->getPixelFormat() );
@@ -415,7 +415,7 @@ namespace castor3d
 		{
 			m_frameBuffer = getEngine()->getRenderSystem()->createFrameBuffer();
 			m_frameBuffer->setClearColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueBlack ) );
-			m_depthBuffer = m_frameBuffer->createDepthStencilRenderBuffer( PixelFormat::eD32F );
+			m_depthBuffer = m_frameBuffer->createDepthStencilRenderBuffer( renderer::Format::eD32_SFLOAT );
 			result = m_depthBuffer->create();
 		}
 
@@ -599,12 +599,12 @@ namespace castor3d
 	{
 	}
 
-	void PickingPass::doPrepareFrontPipeline( ShaderProgram & program
+	void PickingPass::doPrepareFrontPipeline( renderer::ShaderStageStateArray & program
 		, PipelineFlags const & flags )
 	{
 	}
 
-	void PickingPass::doPrepareBackPipeline( ShaderProgram & program
+	void PickingPass::doPrepareBackPipeline( renderer::ShaderStageStateArray & program
 		, PipelineFlags const & flags )
 	{
 		if ( m_backPipelines.find( flags ) == m_backPipelines.end() )

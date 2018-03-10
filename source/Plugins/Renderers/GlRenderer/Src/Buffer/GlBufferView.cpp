@@ -7,7 +7,7 @@ namespace gl_renderer
 {
 	BufferView::BufferView( renderer::Device const & device
 		, Buffer const & buffer
-		, renderer::PixelFormat format
+		, renderer::Format format
 		, uint32_t offset
 		, uint32_t range )
 		: renderer::BufferView{ device, buffer, format, offset, range }

@@ -20,7 +20,7 @@ namespace vk_renderer
 		*\brief
 		*	Constructeur, initialise l'instance de Vulkan.
 		*/
-		Renderer( bool enableValidation );
+		Renderer( Configuration const & configuration );
 		/**
 		*\brief
 		*	Destructeur.
@@ -43,19 +43,6 @@ namespace vk_renderer
 		*/
 		renderer::ConnectionPtr createConnection( uint32_t deviceIndex
 			, renderer::WindowHandle && handle )const override;
-		/**
-		*\~french
-		*\brief
-		*	Récupère le GPU à l'index donné.
-		*\param[in] gpuIndex
-		*	L'index du GPU physique.
-		*\~english
-		*\brief
-		*	Retrieves the GPU at given index.
-		*\param[in] gpuIndex
-		*	The physical GPU index.
-		*/
-		PhysicalDevice & getPhysicalDevice( uint32_t gpuIndex )const;
 		/**
 		*\~french
 		*\brief
@@ -146,6 +133,5 @@ namespace vk_renderer
 		std::vector< LayerProperties > m_instanceLayersProperties;
 		std::vector< char const * > m_instanceExtensionNames;
 		std::vector< char const * > m_instanceLayerNames;
-		std::vector< PhysicalDevicePtr > m_gpus;
 	};
 }

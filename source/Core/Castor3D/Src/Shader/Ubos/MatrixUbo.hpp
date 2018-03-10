@@ -30,8 +30,8 @@ namespace castor3d
 			renderer::Mat4 prvView;
 			renderer::Mat4 curViewProj;
 			renderer::Mat4 prvViewProj;
-			renderer::Vec2 curJitter;
-			renderer::Vec2 prvJitter;
+			castor::Point2f curJitter;
+			castor::Point2f prvJitter;
 		};
 
 	public:

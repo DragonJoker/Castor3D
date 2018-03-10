@@ -287,7 +287,7 @@ namespace castor3d
 		m_sceneUbo.update( m_scene, *m_camera );
 	}
 
-	void RenderTechniquePass::doPrepareFrontPipeline( ShaderProgram & program
+	void RenderTechniquePass::doPrepareFrontPipeline( renderer::ShaderStageStateArray & program
 		, PipelineFlags const & flags )
 	{
 		auto it = m_frontPipelines.find( flags );
@@ -344,7 +344,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderTechniquePass::doPrepareBackPipeline( ShaderProgram & program
+	void RenderTechniquePass::doPrepareBackPipeline( renderer::ShaderStageStateArray & program
 		, PipelineFlags const & flags )
 	{
 		auto it = m_backPipelines.find( flags );

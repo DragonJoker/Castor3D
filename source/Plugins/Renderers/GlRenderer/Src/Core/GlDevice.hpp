@@ -1,14 +1,17 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder
 */
 #pragma once
 
 #include "Core/GlContext.hpp"
+#include "Core/GlPhysicalDevice.hpp"
 
+#include <Buffer/VertexBuffer.hpp>
 #include <Core/Device.hpp>
 #include <Pipeline/ColourBlendState.hpp>
 #include <Pipeline/DepthStencilState.hpp>
+#include <Pipeline/InputAssemblyState.hpp>
 #include <Pipeline/MultisampleState.hpp>
 #include <Pipeline/RasterisationState.hpp>
 #include <Pipeline/Scissor.hpp>
@@ -34,41 +37,13 @@ namespace gl_renderer
 		*	La connection à l'application.
 		*/
 		Device( renderer::Renderer const & renderer
+			, PhysicalDevice const & gpu
 			, renderer::ConnectionPtr && connection );
+		~Device();
 		/**
 		*\copydoc		renderer::Device::createRenderPass
 		*/
-		renderer::RenderPassPtr createRenderPass( renderer::RenderPassAttachmentArray const & attaches
-			, renderer::RenderSubpassPtrArray && subpasses
-			, renderer::RenderPassState const & initialState
-			, renderer::RenderPassState const & finalState
-			, renderer::SampleCountFlag samplesCount )const override;
-		/**
-		*\copydoc		renderer::Device::createRenderSubpass
-		*/
-		renderer::RenderSubpassPtr createRenderSubpass( renderer::RenderPassAttachmentArray const & attaches
-			, renderer::RenderSubpassState const & neededState )const override;
-		/**
-		*\copydoc		renderer::Device::createVertexLayout
-		*/
-		renderer::VertexLayoutPtr createVertexLayout( uint32_t bindingSlot
-			, uint32_t stride
-			, renderer::VertexInputRate inputRate )const override;
-		/**
-		*\copydoc		renderer::Device::createGeometryBuffers
-		*/
-		renderer::GeometryBuffersPtr createGeometryBuffers( renderer::VertexBufferCRefArray const & vbos
-			, std::vector< uint64_t > vboOffsets
-			, renderer::VertexLayoutCRefArray const & layouts )const override;
-		/**
-		*\copydoc		renderer::Device::createGeometryBuffers
-		*/
-		renderer::GeometryBuffersPtr createGeometryBuffers( renderer::VertexBufferCRefArray const & vbos
-			, std::vector< uint64_t > vboOffsets
-			, renderer::VertexLayoutCRefArray const & layouts
-			, renderer::BufferBase const & ibo
-			, uint64_t iboOffset
-			, renderer::IndexType type )const override;
+		renderer::RenderPassPtr createRenderPass( renderer::RenderPassCreateInfo createInfo )const override;
 		/**
 		*\copydoc		renderer::Device::createPipelineLayout
 		*/
@@ -79,35 +54,40 @@ namespace gl_renderer
 		*/
 		renderer::DescriptorSetLayoutPtr createDescriptorSetLayout( renderer::DescriptorSetLayoutBindingArray && bindings )const override;
 		/**
+		*\copydoc	renderer::Device::createDescriptorPool
+		*/
+		renderer::DescriptorPoolPtr createDescriptorPool( renderer::DescriptorPoolCreateFlags flags
+			, uint32_t maxSets
+			, renderer::DescriptorPoolSizeArray poolSizes )const override;
+		/**
+		*\copydoc	renderer::Device::allocateMemory
+		*/
+		renderer::DeviceMemoryPtr allocateMemory( renderer::MemoryRequirements const & requirements
+			, renderer::MemoryPropertyFlags flags )const override;
+		/**
 		*\copydoc		renderer::Device::createTexture
 		*/
-		renderer::TexturePtr createTexture( renderer::ImageLayout initialLayout )const override;
+		renderer::TexturePtr createTexture( renderer::ImageCreateInfo const & createInfo )const override;
+		/**
+		*\copydoc	renderer::Device::getImageSubresourceLayout
+		*/
+		void getImageSubresourceLayout( renderer::Texture const & image
+			, renderer::ImageSubresource const & subresource
+			, renderer::SubresourceLayout & layout )const override;
 		/**
 		*\copydoc		renderer::Device::createSampler
 		*/
-		renderer::SamplerPtr createSampler( renderer::WrapMode wrapS
-			, renderer::WrapMode wrapT
-			, renderer::WrapMode wrapR
-			, renderer::Filter minFilter
-			, renderer::Filter magFilter
-			, renderer::MipmapMode mipFilter
-			, float minLod
-			, float maxLod
-			, float lodBias
-			, renderer::BorderColour borderColour
-			, float maxAnisotropy
-			, renderer::CompareOp compareOp )const override;
+		renderer::SamplerPtr createSampler( renderer::SamplerCreateInfo const & createInfo )const override;
 		/**
 		*\copydoc		renderer::Device::createBuffer
 		*/
 		renderer::BufferBasePtr createBuffer( uint32_t size
-			, renderer::BufferTargets target
-			, renderer::MemoryPropertyFlags memoryFlags )const override;
+			, renderer::BufferTargets targets )const override;
 		/**
 		*\copydoc		renderer::Device::createBufferView
 		*/
 		renderer::BufferViewPtr createBufferView( renderer::BufferBase const & buffer
-			, renderer::PixelFormat format
+			, renderer::Format format
 			, uint32_t offset
 			, uint32_t range )const override;
 		/**
@@ -120,7 +100,7 @@ namespace gl_renderer
 		/**
 		*\copydoc		renderer::Device::createSwapChain
 		*/
-		renderer::SwapChainPtr createSwapChain( renderer::UIVec2 const & size )const override;
+		renderer::SwapChainPtr createSwapChain( renderer::Extent2D const & size )const override;
 		/**
 		*\copydoc		renderer::Device::createSemaphore
 		*/
@@ -137,7 +117,7 @@ namespace gl_renderer
 		/**
 		*\copydoc		renderer::Device::createShaderProgram
 		*/
-		virtual renderer::ShaderProgramPtr createShaderProgram()const override;
+		virtual renderer::ShaderModulePtr createShaderModule( renderer::ShaderStageFlag stage )const override;
 		/**
 		*\copydoc	renderer::Device::createQueryPool
 		*/
@@ -148,6 +128,15 @@ namespace gl_renderer
 		*\copydoc	renderer::Device::createQueryPool
 		*/
 		void waitIdle()const override;
+		/**
+		*\copydoc	renderer::Device::frustum
+		*/
+		renderer::Mat4 frustum( float left
+			, float right
+			, float bottom
+			, float top
+			, float zNear
+			, float zFar )const override;
 		/**
 		*\copydoc	renderer::Device::perspective
 		*/
@@ -170,24 +159,9 @@ namespace gl_renderer
 		*/
 		void swapBuffers()const;
 
-		inline std::string const & getVendor()const
-		{
-			return m_context->getVendor();
-		}
-
-		inline std::string const & getRendererName()const
-		{
-			return m_context->getRenderer();
-		}
-
-		inline std::string const & getVersionString()const
-		{
-			return m_context->getVersion();
-		}
-
 		inline uint32_t getGlslVersion()const
 		{
-			return m_context->getGlslVersion();
+			return static_cast< PhysicalDevice const & >( m_gpu ).getGlslVersion();
 		}
 
 		inline renderer::Scissor & getCurrentScissor()const
@@ -225,9 +199,34 @@ namespace gl_renderer
 			return m_tsState;
 		}
 
+		inline renderer::InputAssemblyState & getCurrentInputAssemblyState()const
+		{
+			return m_iaState;
+		}
+
 		inline GLuint & getCurrentProgram()const
 		{
 			return m_currentProgram;
+		}
+
+		inline GeometryBuffers & getEmptyIndexedVao()const
+		{
+			return *m_dummyIndexed.geometryBuffers;
+		}
+
+		inline renderer::BufferBase const & getEmptyIndexedVaoIdx()const
+		{
+			return m_dummyIndexed.indexBuffer->getBuffer();
+		}
+
+		inline GLuint getBlitSrcFbo()const
+		{
+			return m_blitFbos[0];
+		}
+
+		inline GLuint getBlitDstFbo()const
+		{
+			return m_blitFbos[1];
 		}
 
 	private:
@@ -242,6 +241,13 @@ namespace gl_renderer
 
 	private:
 		ContextPtr m_context;
+		// Mimic the behavior in Vulkan, when no IBO nor VBO is bound.
+		mutable struct
+		{
+			renderer::BufferPtr< uint32_t > indexBuffer;
+			renderer::VertexBufferPtr< renderer::Vec3 > vertexBuffer;
+			GeometryBuffersPtr geometryBuffers;
+		} m_dummyIndexed;
 		mutable renderer::Scissor m_scissor{ 0, 0, 0, 0 };
 		mutable renderer::Viewport m_viewport{ 0, 0, 0, 0 };
 		mutable renderer::ColourBlendState m_cbState;
@@ -249,6 +255,8 @@ namespace gl_renderer
 		mutable renderer::MultisampleState m_msState;
 		mutable renderer::RasterisationState m_rsState;
 		mutable renderer::TessellationState m_tsState;
+		mutable renderer::InputAssemblyState m_iaState;
 		mutable GLuint m_currentProgram;
+		GLuint m_blitFbos[2];
 	};
 }

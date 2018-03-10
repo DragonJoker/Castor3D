@@ -41,7 +41,6 @@ namespace castor3d
 			{
 				p_listener.fireEvents( EventType::ePreRender );
 			} );
-			getEngine()->getOverlayCache().updateRenderer();
 			getEngine()->getFrameListenerCache().forEach( []( FrameListener & p_listener )
 			{
 				p_listener.fireEvents( EventType::eQueueRender );
@@ -164,7 +163,6 @@ namespace castor3d
 				} );
 			doProcessEvents( EventType::ePreRender );
 			getEngine()->getMaterialCache().update();
-			getEngine()->getOverlayCache().updateRenderer();
 			getEngine()->getRenderTargetCache().render( info );
 			doProcessEvents( EventType::eQueueRender );
 		}

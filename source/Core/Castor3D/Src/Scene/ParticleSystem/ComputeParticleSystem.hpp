@@ -126,7 +126,7 @@ namespace castor3d
 			float time;
 			uint32_t maxParticleCount;
 			uint32_t currentParticleCount;
-			renderer::Vec3 emitterPosition;
+			castor::Point3f emitterPosition;
 		};
 
 	protected:
@@ -134,7 +134,7 @@ namespace castor3d
 		renderer::ShaderProgram const * m_updateProgram{ nullptr };
 		renderer::UniformBufferPtr< Configuration > m_ubo;
 		std::array< renderer::BufferPtr< uint8_t >, 2 > m_particlesStorages;
-		renderer::BufferPtr< renderer::Vec4 > m_randomStorage;
+		renderer::BufferPtr< castor::Point4f > m_randomStorage;
 		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
 		renderer::DescriptorSetPoolPtr m_descriptorPool;
 		renderer::DescriptorSetPtr m_descriptorSet;

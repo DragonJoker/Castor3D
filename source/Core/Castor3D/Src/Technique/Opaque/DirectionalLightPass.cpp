@@ -143,7 +143,7 @@ namespace castor3d
 		}
 
 		m_vertexLayout = renderer::makeLayout< float >( device, 0u );
-		m_vertexLayout->createAttribute< renderer::Vec2 >( 0u, 0u );
+		m_vertexLayout->createAttribute< castor::Point2f >( 0u, 0u );
 		doInitialise( scene
 			, LightType::eDirectional
 			, *m_vertexBuffer

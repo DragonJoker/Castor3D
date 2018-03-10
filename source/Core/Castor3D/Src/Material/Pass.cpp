@@ -280,16 +280,16 @@ namespace castor3d
 
 			doReduceTexture( TextureChannel::eSpecular
 				, getType() == MaterialType::ePbrMetallicRoughness
-					? PixelFormat::eL8
-					: PixelFormat::eR8G8B8 );
+					? renderer::Format::eR8_UNORM
+					: renderer::Format::eR8G8B8_UNORM );
 			doReduceTexture( TextureChannel::eGloss
-				, PixelFormat::eL8 );
+				, renderer::Format::eR8_UNORM );
 			doReduceTexture( TextureChannel::eHeight
-				, PixelFormat::eL8 );
+				, renderer::Format::eR8_UNORM );
 			doReduceTexture( TextureChannel::eAmbientOcclusion
-				, PixelFormat::eL8 );
+				, renderer::Format::eR8_UNORM );
 			doReduceTexture( TextureChannel::eTransmittance
-				, PixelFormat::eL8 );
+				, renderer::Format::eR8_UNORM );
 
 			auto unit = getTextureUnit( TextureChannel::eDiffuse );
 
@@ -302,16 +302,14 @@ namespace castor3d
 				else if ( unit->getTexture() )
 				{
 					auto format = unit->getTexture()->getPixelFormat();
-					m_needsGammaCorrection = format != PixelFormat::eL16F32F
-						&& format != PixelFormat::eL32F
-						&& format != PixelFormat::eAL16F32F
-						&& format != PixelFormat::eAL32F
-						&& format != PixelFormat::eRGB16F
-						&& format != PixelFormat::eRGB16F32F
-						&& format != PixelFormat::eRGB32F
-						&& format != PixelFormat::eRGBA16F
-						&& format != PixelFormat::eRGBA16F32F
-						&& format != PixelFormat::eRGBA32F;
+					m_needsGammaCorrection = format != renderer::Format::eR16_SFLOAT
+						&& format != renderer::Format::eR32_SFLOAT
+						&& format != renderer::Format::eR16G16_SFLOAT
+						&& format != renderer::Format::eR32G32_SFLOAT
+						&& format != renderer::Format::eR16G16B16_SFLOAT
+						&& format != renderer::Format::eR32G32B32_SFLOAT
+						&& format != renderer::Format::eR16G16B16A16_SFLOAT
+						&& format != renderer::Format::eR32G32B32A32_SFLOAT;
 				}
 			}
 
@@ -451,14 +449,28 @@ namespace castor3d
 			&& opacityMap->getTexture()->getImage().getBuffer() )
 		{
 			if ( opacityMap->getTexture()->getImage().getBuffer()->format() != PixelFormat::eL8
-				&& opacityMap->getTexture()->getImage().getBuffer()->format() != PixelFormat::eL16F32F
+				&& opacityMap->getTexture()->getImage().getBuffer()->format() != PixelFormat::eL16F
 				&& opacityMap->getTexture()->getImage().getBuffer()->format() != PixelFormat::eL32F )
 			{
 				PxBufferBaseSPtr reduced = opacityMap->getTexture()->getImage().getBuffer();
 				PF::reduceToAlpha( reduced );
+				auto size = reduced->dimensions();
+				renderer::ImageCreateInfo createInfo{};
+				createInfo.flags = 0u;
+				createInfo.arrayLayers = 1u;
+				createInfo.extent.width = size.getWidth();
+				createInfo.extent.height = size.getHeight();
+				createInfo.extent.depth = 1u;
+				createInfo.format = convert( reduced->format() );
+				createInfo.imageType = renderer::TextureType::e2D;
+				createInfo.initialLayout = renderer::ImageLayout::eUndefined;
+				createInfo.mipLevels = 1u;
+				createInfo.samples = renderer::SampleCountFlag::e1;
+				createInfo.sharingMode = renderer::SharingMode::eExclusive;
+				createInfo.tiling = renderer::ImageTiling::eOptimal;
+				createInfo.usage = renderer::ImageUsageFlag::eSampled;
 				auto texture = std::make_shared< TextureLayout >( *getOwner()->getEngine()->getRenderSystem()
-					, renderer::TextureType::e2D
-					, renderer::ImageUsageFlag::eSampled
+					, createInfo
 					, renderer::MemoryPropertyFlag::eHostVisible );
 				texture->setSource( reduced );
 				opacityMap->setTexture( texture );
@@ -467,9 +479,23 @@ namespace castor3d
 		}
 		else if ( opacityBuffer )
 		{
+			auto size = opacityBuffer->dimensions();
+			renderer::ImageCreateInfo createInfo{};
+			createInfo.flags = 0u;
+			createInfo.arrayLayers = 1u;
+			createInfo.extent.width = size.getWidth();
+			createInfo.extent.height = size.getHeight();
+			createInfo.extent.depth = 1u;
+			createInfo.format = convert( opacityBuffer->format() );
+			createInfo.imageType = renderer::TextureType::e2D;
+			createInfo.initialLayout = renderer::ImageLayout::eUndefined;
+			createInfo.mipLevels = 1u;
+			createInfo.samples = renderer::SampleCountFlag::e1;
+			createInfo.sharingMode = renderer::SharingMode::eExclusive;
+			createInfo.tiling = renderer::ImageTiling::eOptimal;
+			createInfo.usage = renderer::ImageUsageFlag::eSampled;
 			auto texture = std::make_shared< TextureLayout >( *getOwner()->getEngine()->getRenderSystem()
-				, renderer::TextureType::e2D
-				, renderer::ImageUsageFlag::eSampled
+				, createInfo
 				, renderer::MemoryPropertyFlag::eHostVisible );
 			texture->setSource( opacityBuffer );
 			opacityMap = std::make_shared< TextureUnit >( *getOwner()->getEngine() );
@@ -516,7 +542,7 @@ namespace castor3d
 		}
 	}
 
-	void Pass::doReduceTexture( TextureChannel channel, PixelFormat format )
+	void Pass::doReduceTexture( TextureChannel channel, renderer::Format format )
 	{
 		auto unit = getTextureUnit( channel );
 
@@ -528,9 +554,9 @@ namespace castor3d
 			{
 				auto buffer = texture->getImage().getBuffer();
 
-				if ( buffer->format() != format )
+				if ( buffer->format() != convert( format ) )
 				{
-					buffer = PxBufferBase::create( buffer->dimensions(), format, buffer->constPtr(), buffer->format() );
+					buffer = PxBufferBase::create( buffer->dimensions(), convert( format ), buffer->constPtr(), buffer->format() );
 				}
 			}
 		}

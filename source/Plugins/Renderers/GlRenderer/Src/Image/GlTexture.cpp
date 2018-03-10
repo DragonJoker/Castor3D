@@ -2,39 +2,143 @@
 
 #include "Command/GlCommandBuffer.hpp"
 #include "Core/GlDevice.hpp"
-#include "Sync/GlImageMemoryBarrier.hpp"
-#include "Core/GlRenderingResources.hpp"
 #include "Image/GlTextureView.hpp"
+#include "Miscellaneous/GlDeviceMemory.hpp"
+#include "Sync/GlImageMemoryBarrier.hpp"
+
+#ifdef max
+#	undef max
+#	undef min
+#endif
 
 namespace gl_renderer
 {
-	Texture::Texture( Device const & device )
-		: renderer::Texture{ device }
+	namespace
+	{
+		GlTextureType convert( renderer::TextureType type
+			, uint32_t layerCount
+			, renderer::SampleCountFlag samples )
+		{
+			GlTextureType result;
+
+			switch ( type )
+			{
+			case renderer::TextureType::e1D:
+				if ( layerCount > 1 )
+				{
+					result = GL_TEXTURE_1D_ARRAY;
+				}
+				else
+				{
+					result = GL_TEXTURE_1D;
+				}
+				break;
+			case renderer::TextureType::e2D:
+				if ( layerCount > 1 )
+				{
+					if ( samples > renderer::SampleCountFlag::e1 )
+					{
+						result = GL_TEXTURE_2D_MULTISAMPLE_ARRAY;
+					}
+					else
+					{
+						result = GL_TEXTURE_2D_ARRAY;
+					}
+				}
+				else
+				{
+					if ( samples != renderer::SampleCountFlag::e1 )
+					{
+						result = GL_TEXTURE_2D_MULTISAMPLE;
+					}
+					else
+					{
+						result = GL_TEXTURE_2D;
+					}
+				}
+				break;
+			case renderer::TextureType::e3D:
+				result = GL_TEXTURE_3D;
+				break;
+			default:
+				assert( false );
+				result = GL_TEXTURE_2D;
+				break;
+			}
+
+			return result;
+		}
+	}
+
+	Texture::Texture( Device const & device
+		, renderer::Format format
+		, renderer::Extent2D const & dimensions )
+		: renderer::Texture{ device
+			, renderer::TextureType::e2D
+			, format
+			, { dimensions.width, dimensions.height, 1u }
+			, 1u
+			, 1u }
 		, m_device{ device }
+		, m_createInfo{ 
+			0u,
+			renderer::TextureType::e2D,
+			format,
+			{ dimensions.width, dimensions.height, 1u },
+			1u,
+			1u,
+			renderer::SampleCountFlag::e1,
+			renderer::ImageTiling::eOptimal,
+			0u
+		}
+	{
+	}
+
+	Texture::Texture( Device const & device
+		, renderer::ImageCreateInfo const & createInfo )
+		: renderer::Texture{ device
+			, createInfo.imageType
+			, createInfo.format
+			, createInfo.extent
+			, createInfo.mipLevels
+			, createInfo.arrayLayers }
+		, m_device{ device }
+		, m_target{ convert( createInfo.imageType, createInfo.arrayLayers, createInfo.samples ) }
+		, m_createInfo{ createInfo }
 	{
 		glLogCall( gl::GenTextures, 1, &m_texture );
 	}
 
 	Texture::~Texture()
 	{
+		m_storage.reset();
 		glLogCall( gl::DeleteTextures, 1, &m_texture );
 	}
 
-	renderer::TextureViewPtr Texture::createView( renderer::TextureType type
-		, renderer::PixelFormat format
-		, uint32_t baseMipLevel
-		, uint32_t levelCount
-		, uint32_t baseArrayLayer
-		, uint32_t layerCount )const
+	renderer::MemoryRequirements Texture::getMemoryRequirements()const
 	{
-		return std::make_shared< TextureView >( m_device
+		renderer::MemoryRequirements result{};
+
+		if ( !renderer::isCompressedFormat( getFormat() ) )
+		{
+			result.size = getDimensions().width
+				* getDimensions().height
+				* getDimensions().depth
+				* getLayerCount()
+				* renderer::getSize( getFormat() );
+		}
+
+		result.type = renderer::ResourceType::eImage;
+		result.alignment = 1u;
+		result.memoryTypeBits = 0xFFFFFFFF;
+		return result;
+	}
+
+	renderer::TextureViewPtr Texture::createView( renderer::ImageViewCreateInfo const & createInfo )const
+	{
+		return std::make_unique< TextureView >( m_device
 			, *this
-			, type
-			, format
-			, baseMipLevel
-			, levelCount
-			, baseArrayLayer
-			, layerCount );
+			, createInfo );
 	}
 
 	void Texture::generateMipmaps()const
@@ -44,128 +148,8 @@ namespace gl_renderer
 		glLogCall( gl::BindTexture, m_target, 0 );
 	}
 
-	void Texture::doSetImage1D( renderer::ImageUsageFlags usageFlags
-		, renderer::ImageTiling tiling
-		, renderer::MemoryPropertyFlags memoryFlags )
+	void Texture::doBindMemory()
 	{
-		if ( m_layerCount > 1 )
-		{
-			m_target = GL_TEXTURE_1D_ARRAY;
-		}
-		else
-		{
-			m_target = GL_TEXTURE_1D;
-		}
-
-		glLogCall( gl::BindTexture, m_target, m_texture );
-
-		if ( m_layerCount > 1 )
-		{
-			glLogCall( gl::TexStorage2D
-				, m_target
-				, GLsizei( m_mipmapLevels )
-				, gl_renderer::getInternal( m_format )
-				, m_size[0]
-				, m_layerCount );
-		}
-		else
-		{
-			glLogCall( gl::TexStorage1D
-				, m_target
-				, GLsizei( m_mipmapLevels )
-				, gl_renderer::getInternal( m_format )
-				, m_size[0] );
-		}
-
-		glLogCall( gl::BindTexture, m_target, 0 );
-	}
-
-	void Texture::doSetImage2D( renderer::ImageUsageFlags usageFlags
-		, renderer::ImageTiling tiling
-		, renderer::MemoryPropertyFlags memoryFlags )
-	{
-		if ( m_layerCount > 1 )
-		{
-			if ( m_samples > renderer::SampleCountFlag::e1 )
-			{
-				m_target = GL_TEXTURE_2D_MULTISAMPLE_ARRAY;
-			}
-			else
-			{
-				m_target = GL_TEXTURE_2D_ARRAY;
-			}
-		}
-		else if ( m_samples != renderer::SampleCountFlag::e1 )
-		{
-			m_target = GL_TEXTURE_2D_MULTISAMPLE;
-		}
-		else
-		{
-			m_target = GL_TEXTURE_2D;
-		}
-
-		glLogCall( gl::BindTexture, m_target, m_texture );
-
-		if ( m_layerCount > 1 )
-		{
-			if ( m_samples > renderer::SampleCountFlag::e1 )
-			{
-				glLogCall( gl::TexStorage3DMultisample
-					, m_target
-					, GLsizei( m_samples )
-					, gl_renderer::getInternal( m_format )
-					, m_size[0]
-					, m_size[1]
-					, m_layerCount
-					, GL_TRUE );
-			}
-			else
-			{
-				glLogCall( gl::TexStorage3D
-					, m_target
-					, GLsizei( m_mipmapLevels )
-					, gl_renderer::getInternal( m_format )
-					, m_size[0]
-					, m_size[1]
-					, m_layerCount );
-			}
-		}
-		else if ( m_samples != renderer::SampleCountFlag::e1 )
-		{
-			glLogCall( gl::TexStorage2DMultisample
-				, m_target
-				, GLsizei( m_samples )
-				, gl_renderer::getInternal( m_format )
-				, m_size[0]
-				, m_size[1]
-				, GL_TRUE );
-		}
-		else
-		{
-			glLogCall( gl::TexStorage2D
-				, m_target
-				, GLsizei( m_mipmapLevels )
-				, gl_renderer::getInternal( m_format )
-				, m_size[0]
-				, m_size[1] );
-		}
-
-		glLogCall( gl::BindTexture, m_target, 0 );
-	}
-
-	void Texture::doSetImage3D( renderer::ImageUsageFlags usageFlags
-		, renderer::ImageTiling tiling
-		, renderer::MemoryPropertyFlags memoryFlags )
-	{
-		m_target = GL_TEXTURE_3D;
-		glLogCall( gl::BindTexture, m_target, m_texture );
-		glLogCall( gl::TexStorage3D
-			, m_target
-			, GLsizei( m_mipmapLevels )
-			, gl_renderer::getInternal( m_format )
-			, m_size[0]
-			, m_size[1]
-			, m_size[2] );
-		glLogCall( gl::BindTexture, m_target, 0 );
+		static_cast< DeviceMemory & >( *m_storage ).bindToImage( *this, m_target, m_createInfo );
 	}
 }

@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #include "VkRendererPrerequisites.hpp"
@@ -10,10 +10,10 @@ namespace vk_renderer
 	{
 		return VkRect2D
 		{
-			scissor.getOffset()[0],
-			scissor.getOffset()[1],
-			uint32_t( scissor.getSize()[0] ),
-			uint32_t( scissor.getSize()[1] )
+			scissor.getOffset().x,
+			scissor.getOffset().y,
+			scissor.getSize().width,
+			scissor.getSize().height
 		};
 	}
 }

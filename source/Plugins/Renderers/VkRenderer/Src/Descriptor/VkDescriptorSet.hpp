@@ -45,7 +45,8 @@ namespace vk_renderer
 		*	The binding point for the set.
 		*/
 		DescriptorSet( Device const & device
-			, DescriptorSetPool const & pool
+			, DescriptorPool const & pool
+			, DescriptorSetLayout const & layout
 			, uint32_t bindingPoint );
 		/**
 		*\~french
@@ -56,55 +57,6 @@ namespace vk_renderer
 		*	Destructor.
 		*/
 		~DescriptorSet();
-		/**
-		*\copydoc	renderer::DescriptorSet::createBinding
-		*/
-		renderer::CombinedTextureSamplerBinding const & createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
-			, renderer::TextureView const & view
-			, renderer::Sampler const & sampler
-			, uint32_t index )override;
-		/**
-		*\copydoc	renderer::DescriptorSet::createBinding
-		*/
-		renderer::SamplerBinding const & createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
-			, renderer::Sampler const & sampler
-			, uint32_t index )override;
-		/**
-		*\copydoc	renderer::DescriptorSet::createBinding
-		*/
-		renderer::SampledTextureBinding const & createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
-			, renderer::TextureView const & view
-			, renderer::ImageLayout layout
-			, uint32_t index )override;
-		/**
-		*\copydoc	renderer::DescriptorSet::createBinding
-		*/
-		renderer::StorageTextureBinding const & createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
-			, renderer::TextureView const & view
-			, uint32_t index )override;
-		/**
-		*\copydoc	renderer::DescriptorSet::createBinding
-		*/
-		renderer::UniformBufferBinding const & createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
-			, renderer::UniformBufferBase const & uniformBuffer
-			, uint32_t offset
-			, uint32_t range
-			, uint32_t index )override;
-		/**
-		*\copydoc	renderer::DescriptorSet::createBinding
-		*/
-		renderer::StorageBufferBinding const & createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
-			, renderer::BufferBase const & storageBuffer
-			, uint32_t offset
-			, uint32_t range
-			, uint32_t index )override;
-		/**
-		*\copydoc	renderer::DescriptorSet::createBinding
-		*/
-		renderer::TexelBufferBinding const & createBinding( renderer::DescriptorSetLayoutBinding const & layoutBinding
-			, renderer::BufferBase const & buffer
-			, renderer::BufferView const & view
-			, uint32_t index )override;
 		/**
 		*\copydoc	renderer::DescriptorSet::update
 		*/
@@ -124,10 +76,9 @@ namespace vk_renderer
 
 	private:
 		Device const & m_device;
-		DescriptorSetPool const & m_pool;
+		DescriptorPool const & m_pool;
 		DescriptorSetLayout const & m_layout;
 		VkDescriptorSet m_descriptorSet{};
-		std::vector< DescriptorSetBindingPtr > m_bindings;
 	};
 }
 

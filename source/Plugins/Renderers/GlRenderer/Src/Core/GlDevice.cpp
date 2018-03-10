@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #include "Core/GlDevice.hpp"
@@ -12,20 +12,25 @@ See LICENSE file in root folder.
 #include "Command/GlQueue.hpp"
 #include "Core/GlConnection.hpp"
 #include "Core/GlContext.hpp"
+#include "Core/GlDummyIndexBuffer.hpp"
 #include "Core/GlRenderer.hpp"
 #include "Core/GlSwapChain.hpp"
+#include "Descriptor/GlDescriptorPool.hpp"
 #include "Descriptor/GlDescriptorSetLayout.hpp"
 #include "Image/GlSampler.hpp"
 #include "Image/GlTexture.hpp"
 #include "Image/GlTextureView.hpp"
+#include "Miscellaneous/GlDeviceMemory.hpp"
 #include "Miscellaneous/GlQueryPool.hpp"
 #include "Pipeline/GlPipelineLayout.hpp"
-#include "Pipeline/GlVertexLayout.hpp"
 #include "RenderPass/GlRenderPass.hpp"
-#include "RenderPass/GlRenderSubpass.hpp"
-#include "Shader/GlShaderProgram.hpp"
+#include "Shader/GlShaderModule.hpp"
 #include "Sync/GlFence.hpp"
 #include "Sync/GlSemaphore.hpp"
+
+#include <Image/ImageSubresource.hpp>
+#include <Image/SubresourceLayout.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
 
 #include <iostream>
 
@@ -35,12 +40,12 @@ namespace gl_renderer
 	{
 		void doApply( renderer::ColourBlendState const & state )
 		{
-			if ( state.isLogicOpEnabled() )
+			if ( state.logicOpEnable )
 			{
-				glLogCall( gl::LogicOp, convert( state.getLogicOp() ) );
+				glLogCall( gl::LogicOp, convert( state.logicOp ) );
 			}
 
-			auto & blendConstants = state.getBlendConstants();
+			auto & blendConstants = state.blendConstants;
 			glLogCall( gl::BlendColor
 				, blendConstants[0]
 				, blendConstants[1]
@@ -50,21 +55,21 @@ namespace gl_renderer
 			bool blend = false;
 			GLuint buf = 0u;
 
-			for ( auto & blendState : state )
+			for ( auto & blendState : state.attachs )
 			{
-				if ( blendState.isBlendEnabled() )
+				if ( blendState.blendEnable )
 				{
 					blend = true;
 					glLogCall( gl::BlendEquationSeparatei
 						, buf
-						, convert( blendState.getColourBlendOp() )
-						, convert( blendState.getAlphaBlendOp() ) );
+						, convert( blendState.colorBlendOp )
+						, convert( blendState.alphaBlendOp ) );
 					glLogCall( gl::BlendFuncSeparatei
 						, buf
-						, convert( blendState.getSrcColourBlendFactor() )
-						, convert( blendState.getDstColourBlendFactor() )
-						, convert( blendState.getSrcAlphaBlendFactor() )
-						, convert( blendState.getDstAlphaBlendFactor() ) );
+						, convert( blendState.srcColorBlendFactor )
+						, convert( blendState.dstColorBlendFactor )
+						, convert( blendState.srcAlphaBlendFactor )
+						, convert( blendState.dstAlphaBlendFactor ) );
 				}
 
 				++buf;
@@ -82,11 +87,11 @@ namespace gl_renderer
 
 		void doApply( renderer::RasterisationState const & state )
 		{
-			if ( state.getCullMode() != renderer::CullModeFlag::eNone )
+			if ( state.cullMode != renderer::CullModeFlag::eNone )
 			{
 				glLogCall( gl::Enable, GL_CULL_FACE );
-				glLogCall( gl::CullFace, convert( state.getCullMode() ) );
-				glLogCall( gl::FrontFace, convert( state.getFrontFace() ) );
+				glLogCall( gl::CullFace, convert( state.cullMode ) );
+				glLogCall( gl::FrontFace, convert( state.frontFace ) );
 			}
 			else
 			{
@@ -95,11 +100,11 @@ namespace gl_renderer
 
 			glLogCall( gl::PolygonMode
 				, GL_CULL_MODE_FRONT_AND_BACK
-				, convert( state.getPolygonMode() ) );
+				, convert( state.polygonMode ) );
 
-			if ( state.isDepthBiasEnabled() )
+			if ( state.depthBiasEnable )
 			{
-				switch ( state.getPolygonMode() )
+				switch ( state.polygonMode )
 				{
 				case renderer::PolygonMode::eFill:
 					glLogCall( gl::Enable, GL_POLYGON_OFFSET_FILL );
@@ -114,13 +119,13 @@ namespace gl_renderer
 					break;
 				}
 
-				glLogCall( gl::PolygonOffsetClampEXT, state.getDepthBiasConstantFactor()
-					, state.getDepthBiasSlopeFactor()
-					, state.getDepthBiasClamp() );
+				glLogCall( gl::PolygonOffsetClampEXT, state.depthBiasConstantFactor
+					, state.depthBiasSlopeFactor
+					, state.depthBiasClamp );
 			}
 			else
 			{
-				switch ( state.getPolygonMode() )
+				switch ( state.polygonMode )
 				{
 				case renderer::PolygonMode::eFill:
 					glLogCall( gl::Disable, GL_POLYGON_OFFSET_FILL );
@@ -136,7 +141,7 @@ namespace gl_renderer
 				}
 			}
 
-			if ( state.isDepthClampEnabled() )
+			if ( state.depthClampEnable )
 			{
 				glLogCall( gl::Enable, GL_DEPTH_CLAMP );
 			}
@@ -145,7 +150,7 @@ namespace gl_renderer
 				glLogCall( gl::Disable, GL_DEPTH_CLAMP );
 			}
 
-			if ( state.isRasteriserDiscardEnabled() )
+			if ( state.rasteriserDiscardEnable )
 			{
 				glLogCall( gl::Enable, GL_RASTERIZER_DISCARD );
 			}
@@ -154,16 +159,16 @@ namespace gl_renderer
 				glLogCall( gl::Disable, GL_RASTERIZER_DISCARD );
 			}
 
-			glLogCall( gl::LineWidth, state.getLineWidth() );
+			glLogCall( gl::LineWidth, state.lineWidth );
 		}
 
 		void doApply( renderer::MultisampleState const & state )
 		{
-			if ( state.getRasterisationSamples() != renderer::SampleCountFlag::e1 )
+			if ( state.rasterisationSamples != renderer::SampleCountFlag::e1 )
 			{
 				glLogCall( gl::Enable, GL_MULTISAMPLE );
 
-				if ( state.isAlphaToCoverageEnabled() )
+				if ( state.alphaToCoverageEnable )
 				{
 					glLogCall( gl::Enable, GL_SAMPLE_ALPHA_TO_COVERAGE );
 				}
@@ -172,7 +177,7 @@ namespace gl_renderer
 					glLogCall( gl::Disable, GL_SAMPLE_ALPHA_TO_COVERAGE );
 				}
 
-				if ( state.isAlphaToOneEnabled() )
+				if ( state.alphaToOneEnable )
 				{
 					glLogCall( gl::Enable, GL_SAMPLE_ALPHA_TO_ONE );
 				}
@@ -189,7 +194,7 @@ namespace gl_renderer
 
 		void doApply( renderer::DepthStencilState const & state )
 		{
-			if ( state.isDepthWriteEnabled() )
+			if ( state.depthWriteEnable )
 			{
 				glLogCall( gl::DepthMask, GL_TRUE );
 			}
@@ -198,56 +203,56 @@ namespace gl_renderer
 				glLogCall( gl::DepthMask, GL_FALSE );
 			}
 
-			if ( state.isDepthTestEnabled() )
+			if ( state.depthTestEnable )
 			{
 				glLogCall( gl::Enable, GL_DEPTH_TEST );
-				glLogCall( gl::DepthFunc, convert( state.getDepthCompareOp() ) );
+				glLogCall( gl::DepthFunc, convert( state.depthCompareOp ) );
 			}
 			else
 			{
 				glLogCall( gl::Disable, GL_DEPTH_TEST );
 			}
 
-			if ( state.isStencilTestEnabled() )
+			if ( state.stencilTestEnable )
 			{
 				glLogCall( gl::Enable, GL_STENCIL_TEST );
 
 				glLogCall( gl::StencilMaskSeparate
 					, GL_CULL_MODE_BACK
-					, state.getBackStencilOp().getWriteMask() );
+					, state.back.writeMask );
 				glLogCall( gl::StencilFuncSeparate
 					, GL_CULL_MODE_BACK
-					, convert( state.getBackStencilOp().getCompareOp() )
-					, state.getBackStencilOp().getReference()
-					, state.getBackStencilOp().getCompareMask() );
+					, convert( state.back.compareOp )
+					, state.back.reference
+					, state.back.compareMask );
 				glLogCall( gl::StencilOpSeparate
 					, GL_CULL_MODE_BACK
-					, convert( state.getBackStencilOp().getFailOp() )
-					, convert( state.getBackStencilOp().getDepthFailOp() )
-					, convert( state.getBackStencilOp().getPassOp() ) );
+					, convert( state.back.failOp )
+					, convert( state.back.depthFailOp )
+					, convert( state.back.passOp ) );
 				glLogCall( gl::StencilMaskSeparate
 					, GL_CULL_MODE_FRONT
-					, state.getFrontStencilOp().getWriteMask() );
+					, state.front.writeMask );
 				glLogCall( gl::StencilFuncSeparate
 					, GL_CULL_MODE_FRONT
-					, convert( state.getFrontStencilOp().getCompareOp() )
-					, state.getFrontStencilOp().getReference()
-					, state.getFrontStencilOp().getCompareMask() );
+					, convert( state.front.compareOp )
+					, state.front.reference
+					, state.front.compareMask );
 				glLogCall( gl::StencilOpSeparate
 					, GL_CULL_MODE_FRONT
-					, convert( state.getFrontStencilOp().getFailOp() )
-					, convert( state.getFrontStencilOp().getDepthFailOp() )
-					, convert( state.getFrontStencilOp().getPassOp() ) );
+					, convert( state.front.failOp )
+					, convert( state.front.depthFailOp )
+					, convert( state.front.passOp ) );
 			}
 			else
 			{
 				glLogCall( gl::Disable, GL_STENCIL_TEST );
 			}
 
-			if ( state.isDepthBoundsTestEnabled() )
+			if ( state.depthBoundsTestEnable )
 			{
 				glLogCall( gl::Enable, GL_DEPTH_CLAMP );
-				glLogCall( gl::DepthRange, state.getMinDepthBounds(), state.getMaxDepthBounds() );
+				glLogCall( gl::DepthRange, state.minDepthBounds, state.maxDepthBounds );
 			}
 			else
 			{
@@ -257,18 +262,46 @@ namespace gl_renderer
 
 		void doApply( renderer::TessellationState const & state )
 		{
-			if ( state.getControlPoints() )
+			if ( state.patchControlPoints )
 			{
-				glLogCall( gl::PatchParameteri, GL_PATCH_VERTICES, int( state.getControlPoints() ) );
+				glLogCall( gl::PatchParameteri, GL_PATCH_VERTICES, int( state.patchControlPoints ) );
+			}
+		}
+
+		void doApply( renderer::InputAssemblyState const & state )
+		{
+			if ( state.topology == renderer::PrimitiveTopology::ePointList )
+			{
+				glLogCall( gl::Enable, GL_PROGRAM_POINT_SIZE );
+			}
+			else
+			{
+				glLogCall( gl::Disable, GL_PROGRAM_POINT_SIZE );
+			}
+
+			if ( state.primitiveRestartEnable )
+			{
+				glLogCall( gl::Enable, GL_PRIMITIVE_RESTART );
+			}
+			else
+			{
+				glLogCall( gl::Disable, GL_PRIMITIVE_RESTART );
 			}
 		}
 	}
 
 	Device::Device( renderer::Renderer const & renderer
+		, PhysicalDevice const & gpu
 		, renderer::ConnectionPtr && connection )
-		: renderer::Device{ renderer, *connection }
-		, m_context{ Context::create( std::move( connection ) ) }
+		: renderer::Device{ renderer, gpu, *connection }
+		, m_context{ Context::create( gpu, std::move( connection ) ) }
+		, m_rsState{}
 	{
+		enable();
+		glLogCall( gl::ClipControl, GL_UPPER_LEFT, GL_ZERO_TO_ONE );
+		initialiseDebugFunctions();
+		disable();
+
 		m_timestampPeriod = 1;
 		m_presentQueue = std::make_unique< Queue >();
 		m_computeQueue = std::make_unique< Queue >();
@@ -283,62 +316,43 @@ namespace gl_renderer
 		doApply( m_msState );
 		doApply( m_rsState );
 		doApply( m_tsState );
+		doApply( m_iaState );
+		m_dummyIndexed.indexBuffer = renderer::makeBuffer< uint32_t >( *this
+			, sizeof( dummyIndex ) / sizeof( dummyIndex[0] )
+			, renderer::BufferTarget::eIndexBuffer
+			, renderer::MemoryPropertyFlag::eHostVisible | renderer::MemoryPropertyFlag::eHostCoherent );
+
+		if ( auto * buffer = m_dummyIndexed.indexBuffer->lock( 0u
+			, sizeof( dummyIndex ) / sizeof( dummyIndex[0] )
+			, renderer::MemoryMapFlag::eWrite ) )
+		{
+			std::memcpy( buffer, dummyIndex, sizeof( dummyIndex ) );
+			m_dummyIndexed.indexBuffer->unlock();
+		}
+
+		auto & indexBuffer = static_cast< Buffer const & >( m_dummyIndexed.indexBuffer->getBuffer() );
+		m_dummyIndexed.geometryBuffers = std::make_unique< GeometryBuffers >( VboBindings{}
+			, BufferObjectBinding{ indexBuffer.getBuffer(), 0u, &indexBuffer }
+			, renderer::VertexInputState{}
+			, renderer::IndexType::eUInt32 );
+		m_dummyIndexed.geometryBuffers->initialise();
+
+		gl::GenFramebuffers( 2, m_blitFbos );
 		disable();
 	}
 
-	renderer::RenderPassPtr Device::createRenderPass( renderer::RenderPassAttachmentArray const & attaches
-		, renderer::RenderSubpassPtrArray && subpasses
-		, renderer::RenderPassState const & initialState
-		, renderer::RenderPassState const & finalState
-		, renderer::SampleCountFlag samplesCount )const
+	Device::~Device()
 	{
-		return std::make_unique< RenderPass >( *this
-			, attaches
-			, std::move( subpasses )
-			, initialState
-			, finalState
-			, samplesCount );
+		enable();
+		gl::DeleteFramebuffers( 2, m_blitFbos );
+		m_dummyIndexed.geometryBuffers.reset();
+		m_dummyIndexed.indexBuffer.reset();
+		disable();
 	}
 
-	renderer::RenderSubpassPtr Device::createRenderSubpass( renderer::RenderPassAttachmentArray const & attaches
-		, renderer::RenderSubpassState const & neededState )const
+	renderer::RenderPassPtr Device::createRenderPass( renderer::RenderPassCreateInfo createInfo )const
 	{
-		return std::make_unique< RenderSubpass >( *this
-			, attaches
-			, neededState );
-	}
-
-	renderer::VertexLayoutPtr Device::createVertexLayout( uint32_t bindingSlot
-		, uint32_t stride
-		, renderer::VertexInputRate inputRate )const
-	{
-		return std::make_unique< VertexLayout >( bindingSlot
-			, stride
-			, inputRate );
-	}
-
-	renderer::GeometryBuffersPtr Device::createGeometryBuffers( renderer::VertexBufferCRefArray const & vbos
-		, std::vector< uint64_t > vboOffsets
-		, renderer::VertexLayoutCRefArray const & layouts )const
-	{
-		return std::make_unique< GeometryBuffers >( vbos
-			, vboOffsets
-			, layouts );
-	}
-
-	renderer::GeometryBuffersPtr Device::createGeometryBuffers( renderer::VertexBufferCRefArray const & vbos
-		, std::vector< uint64_t > vboOffsets
-		, renderer::VertexLayoutCRefArray const & layouts
-		, renderer::BufferBase const & ibo
-		, uint64_t iboOffset
-		, renderer::IndexType type )const
-	{
-		return std::make_unique< GeometryBuffers >( vbos
-			, vboOffsets
-			, layouts
-			, ibo
-			, iboOffset
-			, type );
+		return std::make_unique< RenderPass >( *this, std::move( createInfo ) );
 	}
 
 	renderer::PipelineLayoutPtr Device::createPipelineLayout( renderer::DescriptorSetLayoutCRefArray const & setLayouts
@@ -354,51 +368,78 @@ namespace gl_renderer
 		return std::make_unique< DescriptorSetLayout >( *this, std::move( bindings ) );
 	}
 
-	renderer::TexturePtr Device::createTexture( renderer::ImageLayout initialLayout )const
+	renderer::DescriptorPoolPtr Device::createDescriptorPool( renderer::DescriptorPoolCreateFlags flags
+		, uint32_t maxSets
+		, renderer::DescriptorPoolSizeArray poolSizes )const
 	{
-		return std::make_shared< Texture >( *this );
+		return std::make_unique< DescriptorPool >( *this, flags, maxSets, poolSizes );
 	}
 
-	renderer::SamplerPtr Device::createSampler( renderer::WrapMode wrapS
-		, renderer::WrapMode wrapT
-		, renderer::WrapMode wrapR
-		, renderer::Filter minFilter
-		, renderer::Filter magFilter
-		, renderer::MipmapMode mipFilter
-		, float minLod
-		, float maxLod
-		, float lodBias
-		, renderer::BorderColour borderColour
-		, float maxAnisotropy
-		, renderer::CompareOp compareOp )const
+	renderer::DeviceMemoryPtr Device::allocateMemory( renderer::MemoryRequirements const & requirements
+		, renderer::MemoryPropertyFlags flags )const
 	{
-		return std::make_unique< Sampler >( *this
-			, wrapS
-			, wrapT
-			, wrapR
-			, minFilter
-			, magFilter
-			, mipFilter
-			, minLod
-			, maxLod
-			, lodBias
-			, borderColour
-			, maxAnisotropy
-			, compareOp );
+		return std::make_unique< DeviceMemory >( *this
+			, requirements
+			, flags );
+	}
+
+	renderer::TexturePtr Device::createTexture( renderer::ImageCreateInfo const & createInfo )const
+	{
+		return std::make_unique< Texture >( *this, createInfo );
+	}
+
+	void Device::getImageSubresourceLayout( renderer::Texture const & image
+		, renderer::ImageSubresource const & subresource
+		, renderer::SubresourceLayout & layout )const
+	{
+		auto & gltex = static_cast< Texture const & >( image );
+		auto target = convert( gltex.getType(), gltex.getLayerCount() );
+		glLogCall( gl::BindTexture
+			, target
+			, gltex.getImage() );
+		int w = 0;
+		int h = 0;
+		int d = 0;
+		int red = 0;
+		int green = 0;
+		int blue = 0;
+		int alpha = 0;
+		int depth = 0;
+		int stencil = 0;
+		gl::GetTexLevelParameteriv( target, subresource.mipLevel, GL_TEXTURE_WIDTH, &w );
+		gl::GetTexLevelParameteriv( target, subresource.mipLevel, GL_TEXTURE_HEIGHT, &h );
+		gl::GetTexLevelParameteriv( target, subresource.mipLevel, GL_TEXTURE_DEPTH, &d );
+		gl::GetTexLevelParameteriv( target, subresource.mipLevel, GL_TEXTURE_RED_SIZE, &red );
+		gl::GetTexLevelParameteriv( target, subresource.mipLevel, GL_TEXTURE_GREEN_SIZE, &green );
+		gl::GetTexLevelParameteriv( target, subresource.mipLevel, GL_TEXTURE_BLUE_SIZE, &blue );
+		gl::GetTexLevelParameteriv( target, subresource.mipLevel, GL_TEXTURE_ALPHA_SIZE, &alpha );
+		gl::GetTexLevelParameteriv( target, subresource.mipLevel, GL_TEXTURE_DEPTH_SIZE, &depth );
+		gl::GetTexLevelParameteriv( target, subresource.mipLevel, GL_TEXTURE_STENCIL_SIZE, &stencil );
+		layout.rowPitch = 0u;
+		layout.arrayPitch = 0u;
+		layout.depthPitch = 0u;
+		layout.size = std::max( w, 1 )  * std::max( d, 1 ) * std::max( h, 1 ) * ( red + green + blue + alpha + depth + stencil );
+		layout.offset = 0;
+		glLogCall( gl::BindTexture
+			, target
+			, 0 );
+	}
+
+	renderer::SamplerPtr Device::createSampler( renderer::SamplerCreateInfo const & createInfo )const
+	{
+		return std::make_unique< Sampler >( *this, createInfo );
 	}
 
 	renderer::BufferBasePtr Device::createBuffer( uint32_t size
-		, renderer::BufferTargets target
-		, renderer::MemoryPropertyFlags memoryFlags )const
+		, renderer::BufferTargets target )const
 	{
 		return std::make_unique< Buffer >( *this
 			, size
-			, target
-			, memoryFlags );
+			, target );
 	}
 
 	renderer::BufferViewPtr Device::createBufferView( renderer::BufferBase const & buffer
-		, renderer::PixelFormat format
+		, renderer::Format format
 		, uint32_t offset
 		, uint32_t range )const
 	{
@@ -421,7 +462,7 @@ namespace gl_renderer
 			, memoryFlags );
 	}
 
-	renderer::SwapChainPtr Device::createSwapChain( renderer::UIVec2 const & size )const
+	renderer::SwapChainPtr Device::createSwapChain( renderer::Extent2D const & size )const
 	{
 		renderer::SwapChainPtr result;
 
@@ -459,9 +500,9 @@ namespace gl_renderer
 			, flags );
 	}
 
-	renderer::ShaderProgramPtr Device::createShaderProgram()const
+	renderer::ShaderModulePtr Device::createShaderModule( renderer::ShaderStageFlag stage )const
 	{
-		return std::make_unique< ShaderProgram >( *this );
+		return std::make_shared< ShaderModule >( *this, stage );
 	}
 
 	renderer::QueryPoolPtr Device::createQueryPool( renderer::QueryType type
@@ -477,6 +518,25 @@ namespace gl_renderer
 	void Device::waitIdle()const
 	{
 		glLogCall( gl::Finish );
+	}
+
+	renderer::Mat4 Device::frustum( float left
+		, float right
+		, float bottom
+		, float top
+		, float zNear
+		, float zFar )const
+	{
+		renderer::Mat4 result( float( 0 ) );
+		result[0][0] = ( float( 2 ) * zNear ) / ( right - left );
+		result[1][1] = ( float( 2 ) * zNear ) / ( top - bottom );
+		result[2][0] = ( right + left ) / ( right - left );
+		result[2][1] = ( top + bottom ) / ( top - bottom );
+		result[2][3] = float( -1 );
+		result[2][2] = zFar / ( zNear - zFar );
+		result[3][2] = -( zFar * zNear ) / ( zFar - zNear );
+
+		return result;
 	}
 
 	renderer::Mat4 Device::perspective( renderer::Angle fovy

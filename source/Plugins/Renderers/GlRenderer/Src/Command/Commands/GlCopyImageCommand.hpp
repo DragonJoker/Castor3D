@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder
 */
 #pragma once
@@ -29,19 +29,21 @@ namespace gl_renderer
 		*	L'image destination.
 		*/
 		CopyImageCommand( renderer::ImageCopy const & copyInfo
-			, renderer::TextureView const & src
-			, renderer::TextureView const & dst );
+			, renderer::Texture const & src
+			, renderer::Texture const & dst );
 
 		void apply()const override;
 		CommandPtr clone()const override;
 
 	private:
-		TextureView const & m_src;
-		TextureView const & m_dst;
+		Texture const & m_src;
+		Texture const & m_dst;
 		renderer::ImageCopy m_copyInfo;
+		GlInternal m_srcInternal;
 		GlFormat m_srcFormat;
 		GlType m_srcType;
 		GlTextureType m_srcTarget;
+		GlInternal m_dstInternal;
 		GlFormat m_dstFormat;
 		GlType m_dstType;
 		GlTextureType m_dstTarget;

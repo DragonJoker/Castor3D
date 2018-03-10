@@ -5,56 +5,33 @@
 namespace vk_renderer
 {
 	Sampler::Sampler( Device const & device
-		, renderer::WrapMode wrapS
-		, renderer::WrapMode wrapT
-		, renderer::WrapMode wrapR
-		, renderer::Filter minFilter
-		, renderer::Filter magFilter
-		, renderer::MipmapMode mipFilter
-		, float minLod
-		, float maxLod
-		, float lodBias
-		, renderer::BorderColour borderColour
-		, float maxAnisotropy
-		, renderer::CompareOp compareOp )
-		: renderer::Sampler{ device
-			, wrapS
-			, wrapT
-			, wrapR
-			, minFilter
-			, magFilter
-			, mipFilter
-			, minLod
-			, maxLod
-			, lodBias
-			, borderColour
-			, maxAnisotropy
-			, compareOp }
+		, renderer::SamplerCreateInfo const & createInfo )
+		: renderer::Sampler{ device, createInfo }
 		, m_device{ device }
 	{
-		VkSamplerCreateInfo createInfo
+		VkSamplerCreateInfo vkcreateInfo
 		{
 			VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,                // sType
 			nullptr,                                              // pNext
 			0,                                                    // flags
-			convert( minFilter ),                                 // magFilter
-			convert( magFilter ),                                 // minFilter
-			convert( mipFilter ),                                 // mipmapMode
-			convert( wrapS ),                                     // addressModeU
-			convert( wrapT ),                                     // addressModeV
-			convert( wrapR ),                                     // addressModeW
-			lodBias,                                              // mipLodBias
-			maxAnisotropy != 1.0f,                                // anisotropyEnable
-			maxAnisotropy,                                        // maxAnisotropy
-			compareOp != renderer::CompareOp::eAlways,            // compareEnable
-			convert( compareOp ),                                 // compareOp
-			minLod,                                               // minLod
-			maxLod,                                               // maxLod
-			convert( borderColour ),                              // borderColor
-			VK_FALSE                                              // unnormalizedCoordinates
+			convert( createInfo.minFilter ),                      // magFilter
+			convert( createInfo.magFilter ),                      // minFilter
+			convert( createInfo.mipmapMode ),                     // mipmapMode
+			convert( createInfo.addressModeU ),                   // addressModeU
+			convert( createInfo.addressModeV ),                   // addressModeV
+			convert( createInfo.addressModeW ),                   // addressModeW
+			createInfo.mipLodBias,                                // mipLodBias
+			createInfo.anisotropyEnable,                          // anisotropyEnable
+			createInfo.maxAnisotropy,                             // maxAnisotropy
+			createInfo.compareEnable,                             // compareEnable
+			convert( createInfo.compareOp ),                      // compareOp
+			createInfo.minLod,                                    // minLod
+			createInfo.maxLod,                                    // maxLod
+			convert( createInfo.borderColor ),                    // borderColor
+			createInfo.unnormalizedCoordinates                    // unnormalizedCoordinates
 		};
-		DEBUG_DUMP( createInfo );
-		auto res = m_device.vkCreateSampler( m_device, &createInfo, nullptr, &m_sampler );
+		DEBUG_DUMP( vkcreateInfo );
+		auto res = m_device.vkCreateSampler( m_device, &vkcreateInfo, nullptr, &m_sampler );
 
 		if ( !checkError( res ) )
 		{

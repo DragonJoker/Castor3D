@@ -85,13 +85,13 @@ namespace castor3d
 		return count;
 	}
 
-	void InstantiationComponent::gather( renderer::VertexBufferCRefArray & buffers
-		, std::vector< uint64_t > offsets
+	void InstantiationComponent::gather( renderer::BufferCRefArray & buffers
+		, std::vector< uint64_t > & offsets
 		, renderer::VertexLayoutCRefArray & layouts )
 	{
 		if ( m_matrixBuffer )
 		{
-			buffers.emplace_back( *m_matrixBuffer );
+			buffers.emplace_back( m_matrixBuffer->getBuffer() );
 			offsets.emplace_back( 0u );
 			layouts.emplace_back( *m_matrixLayout );
 		}
@@ -147,9 +147,12 @@ namespace castor3d
 					, getMaxRefCount()
 					, 0u
 					, renderer::MemoryPropertyFlag::eHostVisible );
-				m_matrixLayout = device.createVertexLayout( BindingPoint, sizeof( InstantiationData ) );
-				m_matrixLayout->createAttribute< renderer::Mat4 >( 0u, offsetof( InstantiationData, m_matrix ) );
-				m_matrixLayout->createAttribute< int >( 1u, offsetof( InstantiationData, m_material ) );
+				m_matrixLayout = renderer::makeLayout< InstantiationData >( BindingPoint, renderer::VertexInputRate::eInstance );
+				m_matrixLayout->createAttribute( 0u, renderer::Format::eR32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 0u * sizeof( Point4f ) );
+				m_matrixLayout->createAttribute( 1u, renderer::Format::eR32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 1u * sizeof( Point4f ) );
+				m_matrixLayout->createAttribute( 2u, renderer::Format::eR32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 2u * sizeof( Point4f ) );
+				m_matrixLayout->createAttribute( 3u, renderer::Format::eR32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 3u * sizeof( Point4f ) );
+				m_matrixLayout->createAttribute( 4u, renderer::Format::eR32_UINT, offsetof( InstantiationData, m_material ) );
 				result = m_matrixBuffer != nullptr
 					&& m_matrixLayout != nullptr;
 			}
@@ -186,7 +189,8 @@ namespace castor3d
 					, renderer::MemoryMapFlag::eRead | renderer::MemoryMapFlag::eWrite ) )
 				{
 					std::copy( m_data.begin(), m_data.end(), buffer );
-					m_matrixBuffer->unlock( count, true );
+					m_matrixBuffer->flush( 0u, count );
+					m_matrixBuffer->unlock();
 				}
 			}
 		}

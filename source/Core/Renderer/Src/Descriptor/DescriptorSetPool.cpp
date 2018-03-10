@@ -1,29 +1,46 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #include "Descriptor/DescriptorSetPool.hpp"
 
+#include "Core/Device.hpp"
+#include "Descriptor/DescriptorPool.hpp"
 #include "Descriptor/DescriptorSet.hpp"
 #include "Descriptor/DescriptorSetLayout.hpp"
 
 namespace renderer
 {
-	DescriptorSetPool::DescriptorSetPool( DescriptorSetLayout const & layout, uint32_t maxSets )
+	namespace
+	{
+		DescriptorPoolSizeArray convert( DescriptorSetLayoutBindingArray const & bindings
+			, uint32_t maxSets )
+		{
+			DescriptorPoolSizeArray result;
+
+			for ( auto & binding : bindings )
+			{
+				result.push_back( { binding.getDescriptorType(), binding.getDescriptorsCount() * maxSets } );
+			}
+
+			return result;
+		}
+	}
+
+	DescriptorSetPool::DescriptorSetPool( Device const & device
+		, DescriptorSetLayout const & layout
+		, uint32_t maxSets
+		, bool automaticFree )
 		: m_layout{ layout }
 		, m_maxSets{ maxSets }
+		, m_pool{ device.createDescriptorPool( automaticFree ? renderer::DescriptorPoolCreateFlag::eFreeDescriptorSet : renderer::DescriptorPoolCreateFlag( 0u )
+			, maxSets
+			, convert( layout.getBindings(), maxSets ) ) }
 	{
 	}
 
-	void DescriptorSetPool::allocate( uint32_t count )const
+	DescriptorSetPtr DescriptorSetPool::createDescriptorSet( uint32_t bindingPoint )const
 	{
-		assert( m_allocated + count <= m_maxSets );
-		m_allocated = std::min( m_allocated + count, m_maxSets );
-	}
-
-	void DescriptorSetPool::deallocate( uint32_t count )const
-	{
-		assert( m_allocated >= count );
-		m_allocated -= count;
+		return m_pool->createDescriptorSet( m_layout, bindingPoint );
 	}
 }

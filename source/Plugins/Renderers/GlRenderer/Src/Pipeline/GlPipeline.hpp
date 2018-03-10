@@ -8,8 +8,10 @@
 #define ___GlRenderer_Pipeline_HPP___
 #pragma once
 
-#include "GlRendererPrerequisites.hpp"
+#include "Buffer/GlGeometryBuffers.hpp"
+#include "Shader/GlShaderProgram.hpp"
 
+#include <Buffer/PushConstantsBuffer.hpp>
 #include <Pipeline/Pipeline.hpp>
 #include <Pipeline/ColourBlendState.hpp>
 #include <Pipeline/DepthStencilState.hpp>
@@ -17,8 +19,12 @@
 #include <Pipeline/MultisampleState.hpp>
 #include <Pipeline/RasterisationState.hpp>
 #include <Pipeline/Scissor.hpp>
+#include <Pipeline/ShaderStageState.hpp>
 #include <Pipeline/TessellationState.hpp>
 #include <Pipeline/Viewport.hpp>
+
+#include <algorithm>
+#include <unordered_map>
 
 namespace gl_renderer
 {
@@ -37,44 +43,21 @@ namespace gl_renderer
 		/**@{*/
 		Pipeline( Device const & device
 			, PipelineLayout const & layout
-			, renderer::ShaderProgram const & program
-			, renderer::VertexLayoutCRefArray const & vertexLayouts
-			, renderer::RenderPass const & renderPass
-			, renderer::InputAssemblyState const & inputAssemblyState
-			, renderer::RasterisationState const & rasterisationState
-			, renderer::ColourBlendState const & colourBlendState );
+			, renderer::GraphicsPipelineCreateInfo && createInfo );
+		GeometryBuffers * findGeometryBuffers( VboBindings const & vbos
+			, IboBinding const & ibo )const;
+		GeometryBuffersRef createGeometryBuffers( VboBindings vbos
+			, IboBinding const & ibo
+			, renderer::IndexType type )const;
+		~Pipeline();
 		/**@}*/
-		/**
-		*\copydoc	renderer::Pipeline::finish
-		*/
-		renderer::Pipeline & finish()override;
-		/**
-		*\copydoc	renderer::Pipeline::finish
-		*/
-		renderer::Pipeline & multisampleState( renderer::MultisampleState const & state )override;
-		/**
-		*\copydoc	renderer::Pipeline::finish
-		*/
-		renderer::Pipeline & depthStencilState( renderer::DepthStencilState const & state )override;
-		/**
-		*\copydoc	renderer::Pipeline::finish
-		*/
-		renderer::Pipeline & tessellationState( renderer::TessellationState const & state )override;
-		/**
-		*\copydoc	renderer::Pipeline::finish
-		*/
-		renderer::Pipeline & viewport( renderer::Viewport const & viewport )override;
-		/**
-		*\copydoc	renderer::Pipeline::finish
-		*/
-		renderer::Pipeline & scissor( renderer::Scissor const & scissor )override;
 		/**
 		*\return
 		*	\p true si le Viewport est défini.
 		*/
 		inline bool hasViewport()const
 		{
-			return m_viewport != nullptr;
+			return (bool)m_viewport;
 		}
 		/**
 		*\return
@@ -82,7 +65,15 @@ namespace gl_renderer
 		*/
 		inline bool hasScissor()const
 		{
-			return m_scissor != nullptr;
+			return (bool)m_scissor;
+		}
+		/**
+		*\return
+		*	Le ShaderStageState.
+		*/
+		inline std::vector< renderer::ShaderStageState > const & getShaderStageState()const
+		{
+			return m_ssState;
 		}
 		/**
 		*\return
@@ -134,6 +125,14 @@ namespace gl_renderer
 		}
 		/**
 		*\return
+		*	Le VertexInputState.
+		*/
+		inline renderer::VertexInputState const & getVertexInputState()const
+		{
+			return m_vertexInputState;
+		}
+		/**
+		*\return
 		*	Le Viewport.
 		*/
 		inline renderer::Viewport const & getViewport()const
@@ -162,16 +161,51 @@ namespace gl_renderer
 		*\return
 		*	Le ShaderProgram.
 		*/
-		inline ShaderProgram const & getProgram()const
+		inline GLuint getProgram()const
 		{
-			return m_program;
+			return m_program.getProgram();
+		}
+		/**
+		*\return
+		*	Dit si le pipeline a des sommets.
+		*/
+		inline bool hasVertexLayout()const
+		{
+			return !m_vertexInputState.vertexBindingDescriptions.empty()
+				&& !m_vertexInputState.vertexAttributeDescriptions.empty();
+		}
+		/**
+		*\return
+		*	Le hash du VertexInputState.
+		*/
+		inline size_t getVertexInputStateHash()const
+		{
+			return m_vertexInputStateHash;
+		}
+		/**
+		*\return
+		*	Le tampon de push constants correspondant aux constantes de spécialisation.
+		*/
+		inline std::vector< renderer::PushConstantsBufferBase > const & getConstantsPcbs()const
+		{
+			return m_constantsPcbs;
+		}
+		/**
+		*\return
+		*	\p true si l'état dynamique est dans la liste d'états dynamiques.
+		*/
+		inline bool hasDynamicState( renderer::DynamicState state )const
+		{
+			return m_createInfo.dynamicStates.end() != std::find( m_createInfo.dynamicStates.begin()
+				, m_createInfo.dynamicStates.end()
+				, state );
 		}
 
 	private:
 		Device const & m_device;
 		PipelineLayout const & m_layout;
-		ShaderProgram const & m_program;
-		renderer::VertexLayoutCRefArray m_vertexLayouts;
+		std::vector< renderer::ShaderStageState > m_ssState;
+		renderer::VertexInputState m_vertexInputState;
 		renderer::RenderPass const & m_renderPass;
 		renderer::InputAssemblyState m_iaState;
 		renderer::ColourBlendState m_cbState;
@@ -179,8 +213,13 @@ namespace gl_renderer
 		renderer::DepthStencilState m_dsState;
 		renderer::MultisampleState m_msState;
 		renderer::TessellationState m_tsState;
-		std::unique_ptr< renderer::Viewport > m_viewport;
-		std::unique_ptr< renderer::Scissor > m_scissor;
+		std::optional< renderer::Viewport > m_viewport;
+		std::optional< renderer::Scissor > m_scissor;
+		std::vector< renderer::PushConstantsBufferBase > m_constantsPcbs;
+		ShaderProgram m_program;
+		mutable std::vector< std::pair< size_t, GeometryBuffersPtr > > m_geometryBuffers;
+		mutable std::unordered_map< GLuint, BufferDestroyConnection > m_connections;
+		size_t m_vertexInputStateHash;
 	};
 }
 

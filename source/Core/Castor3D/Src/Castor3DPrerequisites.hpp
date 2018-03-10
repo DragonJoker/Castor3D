@@ -288,25 +288,32 @@ namespace castor3d
 	using ParticleFactory = castor::Factory< CpuParticleSystem, castor::String, CpuParticleSystemUPtr, std::function< CpuParticleSystemUPtr( ParticleSystem & ) > >;
 
 	/*!
-	\author 	Sylvain DOREMUS
-	\date 		04/02/2016
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to specialise a cache behaviour.
-	*\remarks	Must hold:
-				<ul>
-				<li>Name: The element type name.</li>
-				<li>Producer: The element creation function prototype.</li>
-				<li>Merger: The prototype of the function use to merge a cache element into another cache.</li>
-				</ul>
-	\~french
-	\brief		Structure permettant de spécialiser le comportement d'un cache.
-	*\remarks	doit contenir:
-				<ul>
-				<li>Name: Le nom du type d'élément.</li>
-				<li>Producer: Le prototype de la fonction de création d'un élément.</li>
-				<li>Merger: Le prototype de la fonction pour fusionner un élément d'un cache dans un autre cache.</li>
-				</ul>
+	*\author
+	*	Sylvain DOREMUS
+	*\date
+	*	04/02/2016
+	*\version
+	*	0.8.0
+	*\~english
+	*\brief
+	*	Helper structure to specialise a cache behaviour.
+	*\remarks
+	*	Must hold:
+	*	<ul>
+	*	<li>Name: The element type name.</li>
+	*	<li>Producer: The element creation function prototype.</li>
+	*	<li>Merger: The prototype of the function use to merge a cache element into another cache.</li>
+	*	</ul>
+	*\~french
+	*\brief
+	*	Structure permettant de spécialiser le comportement d'un cache.
+	*\remarks
+	*	Doit contenir:
+	*	<ul>
+	*	<li>Name: Le nom du type d'élément.</li>
+	*	<li>Producer: Le prototype de la fonction de création d'un élément.</li>
+	*	<li>Merger: Le prototype de la fonction pour fusionner un élément d'un cache dans un autre cache.</li>
+	*	</ul>
 	*/
 	template< typename ElementType, typename KeyType >
 	struct CacheTraits;
@@ -349,25 +356,32 @@ namespace castor3d
 	DECLARE_SMART_PTR( RenderWindowCache );
 
 	/*!
-	\author 	Sylvain DOREMUS
-	\date 		04/02/2016
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to specialise a cache behaviour.
-	*\remarks	Must hold:
-				<ul>
-				<li>Name: The element type name.</li>
-				<li>Producer: The element creation function prototype.</li>
-				<li>Merger: The prototype of the function use to merge a cache element into another cache.</li>
-				</ul>
-	\~french
-	\brief		Structure permettant de spécialiser le comportement d'un cache.
-	*\remarks	doit contenir:
-				<ul>
-				<li>Name: Le nom du type d'élément.</li>
-				<li>Producer: Le prototype de la fonction de création d'un élément.</li>
-				<li>Merger: Le prototype de la fonction pour fusionner un élément d'un cache dans un autre cache.</li>
-				</ul>
+	*\author
+	*	Sylvain DOREMUS
+	*\date
+	*	04/02/2016
+	*\version
+	*	0.8.0
+	*\~english
+	*\brief
+	*	Helper structure to specialise a cache behaviour.
+	*\remarks
+	*	Must hold:
+	*	<ul>
+	*	<li>Name: The element type name.</li>
+	*	<li>Producer: The element creation function prototype.</li>
+	*	<li>Merger: The prototype of the function use to merge a cache element into another cache.</li>
+	*	</ul>
+	*\~french
+	*\brief
+	*	Structure permettant de spécialiser le comportement d'un cache.
+	*\remarks
+	*	Doit contenir:
+	*	<ul>
+	*	<li>Name: Le nom du type d'élément.</li>
+	*	<li>Producer: Le prototype de la fonction de création d'un élément.</li>
+	*	<li>Merger: Le prototype de la fonction pour fusionner un élément d'un cache dans un autre cache.</li>
+	*	</ul>
 	*/
 	template< typename ElementType, typename KeyType >
 	struct ObjectCacheTraits;

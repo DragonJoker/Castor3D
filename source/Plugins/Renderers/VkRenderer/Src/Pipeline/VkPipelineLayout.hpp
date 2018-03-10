@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder
 */
 #pragma once
@@ -49,16 +49,11 @@ namespace vk_renderer
 		/**
 		*\copydoc	renderer::PipelineLayout::createPipeline
 		*/
-		renderer::PipelinePtr createPipeline( renderer::ShaderProgram const & program
-			, renderer::VertexLayoutCRefArray const & vertexLayouts
-			, renderer::RenderPass const & renderPass
-			, renderer::InputAssemblyState const & inputAssemblyState
-			, renderer::RasterisationState const & rasterisationState
-			, renderer::ColourBlendState const & colourBlendState )const override;
+		renderer::PipelinePtr createPipeline( renderer::GraphicsPipelineCreateInfo createInfo )const override;
 		/**
 		*\copydoc	renderer::PipelineLayout::createPipeline
 		*/
-		renderer::ComputePipelinePtr createPipeline( renderer::ShaderProgram const & program )const override;
+		renderer::ComputePipelinePtr createPipeline( renderer::ComputePipelineCreateInfo createInfo )const override;
 		/**
 		*\~french
 		*\brief

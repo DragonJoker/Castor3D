@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___Renderer_BackBuffer_HPP___
@@ -7,6 +7,7 @@ See LICENSE file in root folder.
 #pragma once
 
 #include "Image/Texture.hpp"
+#include "Image/TextureView.hpp"
 
 namespace renderer
 {
@@ -28,7 +29,8 @@ namespace renderer
 		*	L'index de l'image, parmi les images de la swap chain.
 		*/
 		BackBuffer( Device const & device
-			, SwapChain const & swapchain
+			, TexturePtr && image
+			, TextureViewPtr && view
 			, uint32_t imageIndex );
 
 	public:
@@ -41,6 +43,47 @@ namespace renderer
 		*	Destructeur.
 		*/
 		virtual ~BackBuffer() = default;
+		/**
+		*\~french
+		*\return
+		*	L'index de l'image dans la swap chain.
+		*\~english
+		*\return
+		*	The image index, inside the swap chain.
+		*/
+		inline uint32_t getImageIndex()const
+		{
+			return m_imageIndex;
+		}
+		/**
+		*\~french
+		*\return
+		*	L'image du back buffer.
+		*\~english
+		*\return
+		*	The back buffer image.
+		*/
+		inline Texture const & getTexture()const
+		{
+			return *m_image;
+		}
+		/**
+		*\~french
+		*\return
+		*	La vue sur l'image.
+		*\~english
+		*\return
+		*	The image view.
+		*/
+		inline TextureView const & getView()const
+		{
+			return *m_view;
+		}
+
+	private:
+		TexturePtr m_image;
+		TextureViewPtr m_view;
+		uint32_t m_imageIndex{ 0u };
 	};
 }
 

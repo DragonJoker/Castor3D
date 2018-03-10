@@ -6,11 +6,11 @@ namespace vk_renderer
 	{
 		return VkImageSubresourceRange
 		{
-			convert( range.getAspectMask() ),
-			range.getBaseMipLevel(),
-			range.getLevelCount(),
-			range.getBaseArrayLayer(),
-			range.getLayerCount()
+			convert( range.aspectMask ),
+			range.baseMipLevel,
+			range.levelCount,
+			range.baseArrayLayer,
+			range.layerCount
 		};
 	}
 

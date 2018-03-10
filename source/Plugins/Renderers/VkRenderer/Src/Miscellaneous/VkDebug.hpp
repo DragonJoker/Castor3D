@@ -1414,7 +1414,15 @@ namespace vk_renderer
 	};
 }
 
-#if !defined( NDEBUG )
+#if !defined( ENABLE_DEBUG_DUMP )
+#	if !defined( NDEBUG )
+#		define ENABLE_DEBUG_DUMP 0
+#	else
+#		define ENABLE_DEBUG_DUMP 0
+#	endif
+#endif
+
+#if ENABLE_DEBUG_DUMP
 
 //!@~french		Dump une/des variable(s) Vulkan
 //!@~english	Dumps Vulkan variable(s)

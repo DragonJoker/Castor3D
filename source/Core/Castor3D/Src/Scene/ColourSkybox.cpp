@@ -6,7 +6,6 @@
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBufferAttachment.hpp"
 #include "Buffer/BufferElementGroup.hpp"
-#include "Buffer/GeometryBuffers.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"

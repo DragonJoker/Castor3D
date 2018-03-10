@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #include "VkRendererPrerequisites.hpp"
@@ -10,12 +10,12 @@ namespace vk_renderer
 	{
 		return VkViewport
 		{
-			float( viewport.getOffset()[0] ),
-			float( viewport.getOffset()[1] ),
-			float( viewport.getSize()[0] ),
-			float( viewport.getSize()[1] ),
-			0.0f,                 // minDepth
-			1.0f                  // maxDepth
+			float( viewport.getOffset().x ),
+			float( viewport.getOffset().y ),
+			float( viewport.getSize().width ),
+			float( viewport.getSize().height ),
+			viewport.getDepthBounds()[0],
+			viewport.getDepthBounds()[1]
 		};
 	}
 }

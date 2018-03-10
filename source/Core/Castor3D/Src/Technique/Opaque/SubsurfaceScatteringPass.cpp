@@ -371,7 +371,7 @@ namespace castor3d
 		// Initialise the frame buffer.
 		renderer::FrameBufferAttachmentArray attaches;
 		attaches.emplace_back( *m_renderPass->begin(), destination.getTexture()->getView() );
-		m_frameBuffer = m_renderPass->createFrameBuffer( renderer::UIVec2{ size }
+		m_frameBuffer = m_renderPass->createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
 			, std::move( attaches ) );
 
 		renderer::DescriptorSetLayoutBindingArray bindings
@@ -466,7 +466,7 @@ namespace castor3d
 		// Initialise the frame buffer.
 		renderer::FrameBufferAttachmentArray attaches;
 		attaches.emplace_back( *m_renderPass->begin(), destination.getTexture()->getView() );
-		m_frameBuffer = m_renderPass->createFrameBuffer( renderer::UIVec2{ size }
+		m_frameBuffer = m_renderPass->createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
 			, std::move( attaches ) );
 
 		renderer::DescriptorSetLayoutBindingArray bindings
@@ -564,7 +564,7 @@ namespace castor3d
 	{
 		auto & configuration = m_blurUbo->getData( 0u );
 		configuration.blurCorrection = 1.0f;
-		configuration.blurPixelSize = renderer::Vec2{ 1.0f / m_size.getWidth(), 1.0f / m_size.getHeight() };
+		configuration.blurPixelSize = castor::Point2f{ 1.0f / m_size.getWidth(), 1.0f / m_size.getHeight() };
 		m_blurUbo->upload( 0u );
 	}
 

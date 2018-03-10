@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___Renderer_PushConstantsBuffer_HPP___
@@ -44,16 +44,25 @@ namespace renderer
 		*	The variable format, the size of the variable is deduced from that.
 		*\~french
 		*\brief
-		*	Le nom de la variable, la taille de la variable est déduite de là.
+		*	Le format de la variable, la taille de la variable est déduite de là.
 		*/
-		AttributeFormat format;
+		ConstantFormat format;
+		/**
+		*\~english
+		*\brief
+		*	The dimensions of the array, if the constant is an array.
+		*\~french
+		*\brief
+		*	Les dimensions du tableau, si la constante est un tableau.
+		*/
+		uint32_t arraySize{ 1u };
 	};
 	/**
 	*\~english
 	*\brief
 	*	Wraps the push constants concept.
 	*\remarks
-	*	With OpenGL it will become a set of uniform variables, while in Vulkan it will become a push constants bloc.
+	*	With OpenGL it will become a set of uniform variables, while in Vulkan it will become a push constants block.
 	*\~french
 	*\brief
 	*	Wrappe le concept de push constants.
@@ -142,6 +151,10 @@ namespace renderer
 			return m_data.data();
 		}
 		/**
+		*\~english
+		*\return
+		*	The beginning of the constants array.
+		*\~french
 		*\return
 		*	Le début du tableau de constantes.
 		*/
@@ -150,6 +163,10 @@ namespace renderer
 			return m_variables.begin();
 		}
 		/**
+		*\~english
+		*\return
+		*	The end of the constants array.
+		*\~french
 		*\return
 		*	La fin du tableau de constantes.
 		*/
@@ -165,21 +182,18 @@ namespace renderer
 		renderer::ByteArray m_data;
 	};
 	/**
+	*\~english
 	*\brief
-	*	Classe template wrappant un UniformBufferBase.
+	*	Template class wrapping a PushConstantsBufferBase.
+	*\~french
+	*\brief
+	*	Classe template wrappant un PushConstantsBufferBase.
 	*/
 	template< typename T >
 	class PushConstantsBuffer
 	{
 	public:
 		/**
-		*\~french
-		*\brief
-		*	Constructeur.
-		*\param[in] stageFlags
-		*	Spécifie les niveaux de shaders qui vont utiliser les push constants dans l'intervalle mis à jour.
-		*\param[in] variables
-		*	Les variables contenues dans le tampon.
 		*\~english
 		*\brief
 		*	Constructor.
@@ -187,6 +201,13 @@ namespace renderer
 		*	Specifies the shader stages that will use the push constants in the updated range.
 		*\param[in] variables
 		*	The constants contained in the buffer.
+		*\~french
+		*\brief
+		*	Constructeur.
+		*\param[in] stageFlags
+		*	Spécifie les niveaux de shaders qui vont utiliser les push constants dans l'intervalle mis à jour.
+		*\param[in] variables
+		*	Les variables contenues dans le tampon.
 		*/
 		PushConstantsBuffer( ShaderStageFlags stageFlags
 			, PushConstantArray const & variables )
@@ -254,6 +275,10 @@ namespace renderer
 			return reinterpret_cast< T * >( m_pcb.getData() );
 		}
 		/**
+		*\~english
+		*\return
+		*	The beginning of the constants array.
+		*\~french
 		*\return
 		*	Le début du tableau de constantes.
 		*/
@@ -262,6 +287,10 @@ namespace renderer
 			return m_pcb.begin();
 		}
 		/**
+		*\~english
+		*\return
+		*	The end of the constants array.
+		*\~french
 		*\return
 		*	La fin du tableau de constantes.
 		*/

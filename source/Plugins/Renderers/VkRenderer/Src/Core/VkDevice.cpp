@@ -1,42 +1,42 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #include "Core/VkDevice.hpp"
 
 #include "Buffer/VkBuffer.hpp"
 #include "Buffer/VkBufferView.hpp"
-#include "Buffer/VkGeometryBuffers.hpp"
 #include "Buffer/VkUniformBuffer.hpp"
 #include "Command/VkCommandPool.hpp"
 #include "Command/VkQueue.hpp"
 #include "Core/VkConnection.hpp"
+#include "Core/VkPhysicalDevice.hpp"
 #include "Core/VkRenderer.hpp"
 #include "Core/VkSwapChain.hpp"
-#include "Descriptor/VkDescriptorSetBinding.hpp"
+#include "Descriptor/VkDescriptorPool.hpp"
 #include "Descriptor/VkDescriptorSetLayout.hpp"
 #include "Image/VkSampler.hpp"
 #include "Image/VkTexture.hpp"
 #include "Image/VkTextureView.hpp"
+#include "Miscellaneous/VkDeviceMemory.hpp"
 #include "Miscellaneous/VkQueryPool.hpp"
 #include "Pipeline/VkPipelineLayout.hpp"
-#include "Pipeline/VkVertexLayout.hpp"
 #include "RenderPass/VkRenderPass.hpp"
-#include "RenderPass/VkRenderSubpass.hpp"
 #include "Shader/VkAttribute.hpp"
-#include "Shader/VkShaderProgram.hpp"
+#include "Shader/VkShaderModule.hpp"
 #include "Sync/VkFence.hpp"
 #include "Sync/VkSemaphore.hpp"
+
+#include <Miscellaneous/MemoryRequirements.hpp>
 
 namespace vk_renderer
 {
 	Device::Device( Renderer const & renderer
 		, renderer::ConnectionPtr && connection )
-		: renderer::Device{ renderer, *connection }
+		: renderer::Device{ renderer, connection->getGpu(), *connection }
 		, m_renderer{ renderer }
 		, m_connection{ static_cast< Connection * >( connection.release() ) }
-		, m_gpu{ m_connection->getGpu() }
-		, m_version{ "Vulkan 1.0.0" }
+		, m_gpu{ static_cast< PhysicalDevice const & >( renderer::Device::getPhysicalDevice() ) }
 	{
 		m_timestampPeriod = m_gpu.getProperties().limits.timestampPeriod;
 		std::vector< VkDeviceQueueCreateInfo > queueCreateInfos;
@@ -47,7 +47,7 @@ namespace vk_renderer
 			VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,                 // sType
 			nullptr,                                                    // pNext
 			0,                                                          // flags
-			m_connection->getGraphicsQueueFamilyIndex(),                 // queueFamilyIndex
+			m_connection->getGraphicsQueueFamilyIndex(),                // queueFamilyIndex
 			static_cast< uint32_t >( queuePriorities.size() ),          // queueCount
 			queuePriorities.data()                                      // pQueuePriorities
 		} );
@@ -59,7 +59,7 @@ namespace vk_renderer
 				VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,             // sType
 				nullptr,                                                // pNext
 				0,                                                      // flags
-				m_connection->getPresentQueueFamilyIndex(),              // queueFamilyIndex
+				m_connection->getPresentQueueFamilyIndex(),             // queueFamilyIndex
 				static_cast< uint32_t >( queuePriorities.size() ),      // queueCount
 				queuePriorities.data()                                  // pQueuePriorities
 			} );
@@ -146,59 +146,9 @@ namespace vk_renderer
 		vkDestroyDevice( m_device, nullptr );
 	}
 
-	renderer::RenderPassPtr Device::createRenderPass( renderer::RenderPassAttachmentArray const & attaches
-		, renderer::RenderSubpassPtrArray && subpasses
-		, renderer::RenderPassState const & initialState
-		, renderer::RenderPassState const & finalState
-		, renderer::SampleCountFlag samplesCount )const
+	renderer::RenderPassPtr Device::createRenderPass( renderer::RenderPassCreateInfo createInfo )const
 	{
-		return std::make_unique< RenderPass >( *this
-			, attaches
-			, std::move( subpasses )
-			, initialState
-			, finalState
-			, samplesCount );
-	}
-
-	renderer::RenderSubpassPtr Device::createRenderSubpass( renderer::RenderPassAttachmentArray const & attaches
-		, renderer::RenderSubpassState const & neededState )const
-	{
-		return std::make_unique< RenderSubpass >( *this
-			, attaches
-			, neededState );
-	}
-
-	renderer::VertexLayoutPtr Device::createVertexLayout( uint32_t bindingSlot
-		, uint32_t stride
-		, renderer::VertexInputRate inputRate )const
-	{
-		return std::make_unique< VertexLayout >( bindingSlot
-			, stride
-			, inputRate );
-	}
-
-	renderer::GeometryBuffersPtr Device::createGeometryBuffers( renderer::VertexBufferCRefArray const & vbos
-		, std::vector< uint64_t > vboOffsets
-		, renderer::VertexLayoutCRefArray const & layouts )const
-	{
-		return std::make_unique< GeometryBuffers >( vbos
-			, vboOffsets
-			, layouts );
-	}
-
-	renderer::GeometryBuffersPtr Device::createGeometryBuffers( renderer::VertexBufferCRefArray const & vbos
-		, std::vector< uint64_t > vboOffsets
-		, renderer::VertexLayoutCRefArray const & layouts
-		, renderer::BufferBase const & ibo
-		, uint64_t iboOffset
-		, renderer::IndexType type )const
-	{
-		return std::make_unique< GeometryBuffers >( vbos
-			, vboOffsets
-			, layouts
-			, ibo
-			, iboOffset
-			, type );
+		return std::make_unique< RenderPass >( *this, std::move( createInfo ) );
 	}
 
 	renderer::PipelineLayoutPtr Device::createPipelineLayout( renderer::DescriptorSetLayoutCRefArray const & setLayouts
@@ -214,51 +164,54 @@ namespace vk_renderer
 		return std::make_unique< DescriptorSetLayout >( *this, std::move( bindings ) );
 	}
 
-	renderer::TexturePtr Device::createTexture( renderer::ImageLayout initialLayout )const
+	renderer::DescriptorPoolPtr Device::createDescriptorPool( renderer::DescriptorPoolCreateFlags flags
+		, uint32_t maxSets
+		, renderer::DescriptorPoolSizeArray poolSizes )const
 	{
-		return std::make_shared< Texture >( *this, initialLayout );
+		return std::make_unique< DescriptorPool >( *this, flags, maxSets, poolSizes );
 	}
 
-	renderer::SamplerPtr Device::createSampler( renderer::WrapMode wrapS
-		, renderer::WrapMode wrapT
-		, renderer::WrapMode wrapR
-		, renderer::Filter minFilter
-		, renderer::Filter magFilter
-		, renderer::MipmapMode mipFilter
-		, float minLod
-		, float maxLod
-		, float lodBias
-		, renderer::BorderColour borderColour
-		, float maxAnisotropy
-		, renderer::CompareOp compareOp )const
+	renderer::DeviceMemoryPtr Device::allocateMemory( renderer::MemoryRequirements const & requirements
+		, renderer::MemoryPropertyFlags flags )const
 	{
-		return std::make_unique< Sampler >( *this
-			, wrapS
-			, wrapT
-			, wrapR
-			, minFilter
-			, magFilter
-			, mipFilter
-			, minLod
-			, maxLod
-			, lodBias
-			, borderColour
-			, maxAnisotropy
-			, compareOp );
+		return std::make_unique< DeviceMemory >( *this
+			, requirements
+			, flags );
+	}
+
+	renderer::TexturePtr Device::createTexture( renderer::ImageCreateInfo const & createInfo )const
+	{
+		return std::make_unique< Texture >( *this, createInfo );
+	}
+
+	void Device::getImageSubresourceLayout( renderer::Texture const & image
+		, renderer::ImageSubresource const & subresource
+		, renderer::SubresourceLayout & layout )const
+	{
+		VkImageSubresource vksubresource = convert( subresource );
+		VkSubresourceLayout vklayout;
+		vkGetImageSubresourceLayout( m_device
+			, static_cast< Texture const & >( image )
+			, &vksubresource
+			, &vklayout );
+		layout = convert( vklayout );
+	}
+
+	renderer::SamplerPtr Device::createSampler( renderer::SamplerCreateInfo const & createInfo )const
+	{
+		return std::make_unique< Sampler >( *this, createInfo );
 	}
 
 	renderer::BufferBasePtr Device::createBuffer( uint32_t size
-		, renderer::BufferTargets target
-		, renderer::MemoryPropertyFlags memoryFlags )const
+		, renderer::BufferTargets target )const
 	{
 		return std::make_unique< Buffer >( *this
 			, size
-			, target
-			, memoryFlags );
+			, target );
 	}
 
 	renderer::BufferViewPtr Device::createBufferView( renderer::BufferBase const & buffer
-		, renderer::PixelFormat format
+		, renderer::Format format
 		, uint32_t offset
 		, uint32_t range )const
 	{
@@ -281,7 +234,7 @@ namespace vk_renderer
 			, memoryFlags );
 	}
 
-	renderer::SwapChainPtr Device::createSwapChain( renderer::UIVec2 const & size )const
+	renderer::SwapChainPtr Device::createSwapChain( renderer::Extent2D const & size )const
 	{
 		renderer::SwapChainPtr result;
 
@@ -319,9 +272,9 @@ namespace vk_renderer
 			, flags );
 	}
 
-	renderer::ShaderProgramPtr Device::createShaderProgram()const
+	renderer::ShaderModulePtr Device::createShaderModule( renderer::ShaderStageFlag stage )const
 	{
-		return std::make_unique< ShaderProgram >( *this );
+		return std::make_shared< ShaderModule >( *this, stage );
 	}
 
 	renderer::QueryPoolPtr Device::createQueryPool( renderer::QueryType type
@@ -337,6 +290,25 @@ namespace vk_renderer
 	void Device::waitIdle()const
 	{
 		vkDeviceWaitIdle( m_device );
+	}
+
+	renderer::Mat4 Device::frustum( float left
+		, float right
+		, float bottom
+		, float top
+		, float zNear
+		, float zFar )const
+	{
+		renderer::Mat4 result( float( 0 ) );
+		result[0][0] = ( float( 2 ) * zNear ) / ( right - left );
+		result[1][1] = ( float( 2 ) * zNear ) / ( top - bottom );
+		result[2][0] = ( right + left ) / ( right - left );
+		result[2][1] = ( top + bottom ) / ( top - bottom );
+		result[2][3] = float( -1 );
+		result[2][2] = zFar / ( zNear - zFar );
+		result[3][2] = -( zFar * zNear ) / ( zFar - zNear );
+
+		return result;
 	}
 
 	renderer::Mat4 Device::perspective( renderer::Angle fovy
@@ -374,21 +346,25 @@ namespace vk_renderer
 		return result;
 	}
 
-	VkMemoryRequirements Device::getBufferMemoryRequirements( VkBuffer buffer )const
+	renderer::MemoryRequirements Device::getBufferMemoryRequirements( VkBuffer buffer )const
 	{
 		VkMemoryRequirements requirements;
 		vkGetBufferMemoryRequirements( m_device
 			, buffer
 			, &requirements );
-		return requirements;
+		renderer::MemoryRequirements result = convert( requirements );
+		result.type = renderer::ResourceType::eBuffer;
+		return result;
 	}
 
-	VkMemoryRequirements Device::getImageMemoryRequirements( VkImage image )const
+	renderer::MemoryRequirements Device::getImageMemoryRequirements( VkImage image )const
 	{
 		VkMemoryRequirements requirements;
 		vkGetImageMemoryRequirements( m_device
 			, image
 			, &requirements );
-		return requirements;
+		renderer::MemoryRequirements result = convert( requirements );
+		result.type = renderer::ResourceType::eImage;
+		return result;
 	}
 }

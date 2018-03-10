@@ -129,7 +129,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dessine l'incrustation
 		 */
-		C3D_API void render();
+		C3D_API void render( OverlayRenderer & renderer );
 		/**
 		 *\~english
 		 *\brief		Sets the material
@@ -547,7 +547,7 @@ namespace castor3d
 		 *\brief		Dessine l'incrustation
 		 *\param[in]	renderer	Le renderer utilisé pour dessiner cette incrustation
 		 */
-		virtual void doRender( OverlayRendererSPtr renderer ) = 0;
+		virtual void doRender( OverlayRenderer & renderer ) = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the overlay position, size...

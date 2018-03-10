@@ -29,38 +29,8 @@ namespace vk_renderer
 		/**@{*/
 		Pipeline( Device const & device
 			, renderer::PipelineLayout const & layout
-			, renderer::ShaderProgram const & program
-			, renderer::VertexLayoutCRefArray const & vertexLayouts
-			, renderer::RenderPass const & renderPass
-			, renderer::InputAssemblyState const & inputAssemblyState
-			, renderer::RasterisationState const & rasterisationState
-			, renderer::ColourBlendState const & colourBlendState );
+			, renderer::GraphicsPipelineCreateInfo && createInfo );
 		~Pipeline();
-		/**@}*/
-		/**
-		*\copydoc	renderer::Pipeline::finish
-		*/
-		renderer::Pipeline & finish()override;
-		/**
-		*\copydoc	renderer::Pipeline::multisampleState
-		*/
-		renderer::Pipeline & multisampleState( renderer::MultisampleState const & state )override;
-		/**
-		*\copydoc	renderer::Pipeline::depthStencilState
-		*/
-		renderer::Pipeline & depthStencilState( renderer::DepthStencilState const & state )override;
-		/**
-		*\copydoc	renderer::Pipeline::tessellationState
-		*/
-		renderer::Pipeline & tessellationState( renderer::TessellationState const & state )override;
-		/**
-		*\copydoc	renderer::Pipeline::viewport
-		*/
-		renderer::Pipeline & viewport( renderer::Viewport const & viewport )override;
-		/**
-		*\copydoc	renderer::Pipeline::scissor
-		*/
-		renderer::Pipeline & scissor( renderer::Scissor const & scissor )override;
 		/**
 		*\~french
 		*\brief
@@ -77,18 +47,23 @@ namespace vk_renderer
 	private:
 		Device const & m_device;
 		PipelineLayout const & m_layout;
-		ShaderProgram const & m_shader;
-		VertexLayoutCRefArray m_vertexLayouts;
+		std::vector< VkVertexInputAttributeDescription > m_vertexAttributes;
+		std::vector< VkVertexInputBindingDescription > m_vertexBindings;
+		VkPipelineVertexInputStateCreateInfo m_vertexInputState;
 		RenderPass const & m_renderPass;
 		VkPipelineInputAssemblyStateCreateInfo m_inputAssemblyState;
 		VkPipelineRasterizationStateCreateInfo m_rasterisationState;
 		std::vector< VkPipelineColorBlendAttachmentState > m_colourBlendStateAttachments;
 		VkPipelineColorBlendStateCreateInfo m_colourBlendState;
-		std::unique_ptr< VkViewport > m_viewport;
-		std::unique_ptr< VkRect2D > m_scissor;
-		std::unique_ptr< VkPipelineMultisampleStateCreateInfo > m_multisampleState;
-		std::unique_ptr< VkPipelineDepthStencilStateCreateInfo > m_depthStencilState;
-		std::unique_ptr< VkPipelineTessellationStateCreateInfo > m_tessellationState;
+		VkPipelineMultisampleStateCreateInfo m_multisampleState;
+		std::optional< VkViewport > m_viewport;
+		std::optional< VkRect2D > m_scissor;
+		std::optional< VkPipelineDepthStencilStateCreateInfo > m_depthStencilState;
+		std::optional< VkPipelineTessellationStateCreateInfo > m_tessellationState;
+		std::vector< std::vector< VkSpecializationMapEntry > > m_specialisationEntries;
+		std::map< VkShaderStageFlagBits, VkSpecializationInfo > m_specialisationInfos;
+		std::vector< VkPipelineShaderStageCreateInfo > m_shaderStages;
+		std::vector< VkDynamicState > m_dynamicStates;
 		VkPipeline m_pipeline{ VK_NULL_HANDLE };
 	};
 }

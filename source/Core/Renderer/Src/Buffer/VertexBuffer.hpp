@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___Renderer_VertexBuffer_HPP___
@@ -18,7 +18,7 @@ namespace renderer
 	*/
 	class VertexBufferBase
 	{
-	protected:
+	public:
 		/**
 		*\brief
 		*	Constructeur.
@@ -35,8 +35,6 @@ namespace renderer
 			, uint32_t size
 			, BufferTargets target
 			, MemoryPropertyFlags flags );
-
-	public:
 		/**
 		*\return
 		*	La taille du tampon.
@@ -121,18 +119,60 @@ namespace renderer
 				, flags ) );
 		}
 		/**
+		*\~english
 		*\brief
-		*	Unmappe la mémoire du tampon de la RAM.
+		*	Updates the VRAM.
+		*\param[in] offset
+		*	The mapped memory starting offset.
+		*\param[in] size
+		*	The range size.
+		*\~french
+		*\brief
+		*	Met à jour la VRAM.
+		*\param[in] offset
+		*	L'offset de la mémoire mappée.
 		*\param[in] size
 		*	La taille en octets de la mémoire mappée.
-		*\param[in] modified
-		*	Dit si le tampon a été modifié, et donc si la VRAM doit être mise à jour.
 		*/
-		inline void unlock( uint32_t size
-			, bool modified )const
+		inline void flush( uint32_t offset
+			, uint32_t size )const
 		{
-			m_buffer->unlock( uint32_t( size * sizeof( T ) )
-				, modified );
+			m_buffer->flush( uint32_t( offset * sizeof( T ) )
+				, uint32_t( size * sizeof( T ) ) );
+		}
+		/**
+		*\~english
+		*\brief
+		*	Invalidates the buffer content.
+		*\param[in] offset
+		*	The mapped memory starting offset.
+		*\param[in] size
+		*	The range size.
+		*\~french
+		*\brief
+		*	Invalide le contenu du tampon.
+		*\param[in] offset
+		*	L'offset de la mémoire mappée.
+		*\param[in] size
+		*	La taille en octets de la mémoire mappée.
+		*/
+		inline void invalidate( uint32_t offset
+			, uint32_t size )const
+		{
+			m_buffer->invalidate( uint32_t( offset * sizeof( T ) )
+				, uint32_t( size * sizeof( T ) ) );
+		}
+		/**
+		*\~english
+		*\brief
+		*	Unmaps the buffer's memory from RAM.
+		*\~french
+		*\brief
+		*	Unmappe la mémoire du tampon de la RAM.
+		*/
+		virtual void unlock()const
+		{
+			m_buffer->unlock();
 		}
 	};
 	/**

@@ -1,17 +1,15 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #include "Command/VkCommandBuffer.hpp"
 
 #include "Buffer/VkBuffer.hpp"
-#include "Buffer/VkGeometryBuffers.hpp"
 #include "Buffer/VkUniformBuffer.hpp"
 #include "Command/VkCommandPool.hpp"
 #include "Core/VkDevice.hpp"
 #include "Core/VkRenderingResources.hpp"
 #include "Descriptor/VkDescriptorSet.hpp"
-#include "Descriptor/VkDescriptorSetBinding.hpp"
 #include "Image/VkImageSubresourceRange.hpp"
 #include "Image/VkTexture.hpp"
 #include "Image/VkTextureView.hpp"
@@ -58,6 +56,18 @@ namespace vk_renderer
 			for ( auto & descriptor : descriptors )
 			{
 				result.emplace_back( static_cast< DescriptorSet const & >( descriptor.get() ) );
+			}
+
+			return result;
+		}
+
+		std::vector< VkBufferImageCopy > convert( renderer::BufferImageCopyArray const & copies )
+		{
+			std::vector< VkBufferImageCopy > result;
+
+			for ( auto & copy : copies )
+			{
+				result.emplace_back( vk_renderer::convert( copy ) );
 			}
 
 			return result;
@@ -111,24 +121,9 @@ namespace vk_renderer
 	}
 
 	bool CommandBuffer::begin( renderer::CommandBufferUsageFlags flags
-		, renderer::RenderPass const & renderPass
-		, uint32_t subpass
-		, renderer::FrameBuffer const & frameBuffer
-		, bool occlusionQueryEnable
-		, renderer::QueryControlFlags queryFlags
-		, renderer::QueryPipelineStatisticFlags pipelineStatistics )const
+		, renderer::CommandBufferInheritanceInfo const & inheritanceInfo )const
 	{
-		m_inheritanceInfo = VkCommandBufferInheritanceInfo
-		{
-			VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO,  // sType;
-			nullptr,                                            // pNext;
-			static_cast< RenderPass const & >( renderPass ),    // renderPass;
-			subpass,                                            // subpass;
-			static_cast< FrameBuffer const & >( frameBuffer ),  // framebuffer;
-			occlusionQueryEnable,                               // occlusionQueryEnable;
-			convert( queryFlags ),                              // queryFlags;
-			convert( pipelineStatistics )                       // pipelineStatistics;
-		};
+		m_inheritanceInfo = convert( inheritanceInfo );
 		VkCommandBufferBeginInfo cmdBufInfo
 		{
 			VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
@@ -176,10 +171,7 @@ namespace vk_renderer
 					0,                                                // x
 					0                                                 // y
 				},
-				{                                                 // extent
-					uint32_t( vkfbo.getDimensions()[0] ),             // width
-					uint32_t( vkfbo.getDimensions()[1] ),             // height
-				}
+				convert( vkfbo.getDimensions() ),               // extent
 			},
 			uint32_t( vkclearValues.size() ),                   // clearValueCount
 			vkclearValues.data()                                // pClearValues
@@ -234,6 +226,18 @@ namespace vk_renderer
 			, &vksubresourceRange );
 	}
 
+	void CommandBuffer::clearAttachments( renderer::ClearAttachmentArray const & clearAttachments
+		, renderer::ClearRectArray const & clearRects )
+	{
+		auto vkAttaches = convert< VkClearAttachment >( clearAttachments );
+		auto vkRects = convert< VkClearRect >( clearRects );
+		m_device.vkCmdClearAttachments( m_commandBuffer
+			, uint32_t( vkAttaches.size() )
+			, vkAttaches.data()
+			, uint32_t( vkRects.size() )
+			, vkRects.data() );
+	}
+
 	void CommandBuffer::bindPipeline( renderer::Pipeline const & pipeline
 		, renderer::PipelineBindPoint bindingPoint )const
 	{
@@ -252,32 +256,32 @@ namespace vk_renderer
 		m_currentComputePipeline = &static_cast< ComputePipeline const & >( pipeline );
 	}
 
-	void CommandBuffer::bindGeometryBuffers( renderer::GeometryBuffers const & geometryBuffers )const
+	void CommandBuffer::bindVertexBuffers( uint32_t firstBinding
+		, renderer::BufferCRefArray const & buffers
+		, renderer::UInt64Array offsets )const
 	{
-		assert( m_currentPipeline && "No pipeline bound." );
-		std::vector< std::reference_wrapper< Buffer const > > buffers;
-		std::vector< uint64_t > offsets;
+		std::vector< std::reference_wrapper< Buffer const > > vkbuffers;
 
-		for ( auto & vbo : geometryBuffers.getVbos() )
+		for ( auto & buffer : buffers )
 		{
-			buffers.emplace_back( static_cast< Buffer const & >( vbo.vbo.getBuffer() ) );
-			offsets.emplace_back( vbo.offset );
+			vkbuffers.emplace_back( static_cast< Buffer const & >( buffer.get() ) );
 		}
 
 		m_device.vkCmdBindVertexBuffers( m_commandBuffer
-			, 0u
-			, uint32_t( buffers.size() )
-			, makeVkArray< VkBuffer >( buffers ).data()
+			, firstBinding
+			, uint32_t( vkbuffers.size() )
+			, makeVkArray< VkBuffer >( vkbuffers ).data()
 			, offsets.data() );
+	}
 
-		if ( geometryBuffers.hasIbo() )
-		{
-			auto & ibo = geometryBuffers.getIbo();
-			m_device.vkCmdBindIndexBuffer( m_commandBuffer
-				, static_cast< Buffer const & >( ibo.buffer )
-				, ibo.offset
-				, convert( ibo.type ) );
-		}
+	void CommandBuffer::bindIndexBuffer( renderer::BufferBase const & buffer
+		, uint64_t offset
+		, renderer::IndexType indexType )const
+	{
+		m_device.vkCmdBindIndexBuffer( m_commandBuffer
+			, static_cast< Buffer const & >( buffer )
+			, offset
+			, convert( indexType ) );
 	}
 
 	void CommandBuffer::memoryBarrier( renderer::PipelineStageFlags after
@@ -320,9 +324,9 @@ namespace vk_renderer
 
 	void CommandBuffer::bindDescriptorSets( renderer::DescriptorSetCRefArray const & descriptorSets
 		, renderer::PipelineLayout const & layout
+		, renderer::UInt32Array const & dynamicOffsets
 		, renderer::PipelineBindPoint bindingPoint )const
 	{
-		assert( ( m_currentPipeline || m_currentComputePipeline ) && "No pipeline bound." );
 		auto vkDescriptors = makeVkArray< VkDescriptorSet >( convert( descriptorSets ) );
 		m_device.vkCmdBindDescriptorSets( m_commandBuffer
 			, convert( bindingPoint )
@@ -330,13 +334,12 @@ namespace vk_renderer
 			, descriptorSets.begin()->get().getBindingPoint()
 			, uint32_t( descriptorSets.size() )
 			, vkDescriptors.data()
-			, 0u
-			, nullptr );
+			, uint32_t( dynamicOffsets.size() )
+			, dynamicOffsets.data() );
 	}
 
 	void CommandBuffer::setViewport( renderer::Viewport const & viewport )const
 	{
-		assert( m_currentPipeline && "No pipeline bound." );
 		auto vkviewport = convert( viewport );
 		m_device.vkCmdSetViewport( m_commandBuffer
 			, 0u
@@ -346,7 +349,6 @@ namespace vk_renderer
 
 	void CommandBuffer::setScissor( renderer::Scissor const & scissor )const
 	{
-		assert( m_currentPipeline && "No pipeline bound." );
 		auto vkscissor = convert( scissor );
 		m_device.vkCmdSetScissor( m_commandBuffer
 			, 0u
@@ -382,32 +384,58 @@ namespace vk_renderer
 			, firstInstance );
 	}
 
-	void CommandBuffer::copyToImage( renderer::BufferImageCopy const & copyInfo
+	void CommandBuffer::drawIndirect( renderer::BufferBase const & buffer
+		, uint32_t offset
+		, uint32_t drawCount
+		, uint32_t stride )const
+	{
+		assert( m_currentPipeline && "No pipeline bound." );
+		m_device.vkCmdDrawIndirect( m_commandBuffer
+			, static_cast< Buffer const & >( buffer )
+			, offset
+			, drawCount
+			, stride );
+	}
+
+	void CommandBuffer::drawIndexedIndirect( renderer::BufferBase const & buffer
+		, uint32_t offset
+		, uint32_t drawCount
+		, uint32_t stride )const
+	{
+		assert( m_currentPipeline && "No pipeline bound." );
+		m_device.vkCmdDrawIndexedIndirect( m_commandBuffer
+			, static_cast< Buffer const & >( buffer )
+			, offset
+			, drawCount
+			, stride );
+	}
+
+	void CommandBuffer::copyToImage( renderer::BufferImageCopyArray const & copyInfo
 		, renderer::BufferBase const & src
-		, renderer::TextureView const & dst )const
+		, renderer::Texture const & dst )const
 	{
 		auto vkcopyInfo = convert( copyInfo );
 		DEBUG_DUMP( vkcopyInfo );
 		m_device.vkCmdCopyBufferToImage( m_commandBuffer
 			, static_cast< Buffer const & >( src )
-			, static_cast< Texture const & >( dst.getTexture() )
+			, static_cast< Texture const & >( dst )
 			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-			, 1
-			, &vkcopyInfo );
+			, uint32_t( vkcopyInfo.size() )
+			, vkcopyInfo.data() );
 	}
 
-	void CommandBuffer::copyToBuffer( renderer::BufferImageCopy const & copyInfo
-		, renderer::TextureView const & src
+	void CommandBuffer::copyToBuffer( renderer::BufferImageCopyArray const & copyInfo
+		, renderer::Texture const & src
 		, renderer::BufferBase const & dst )const
 	{
 		auto vkcopyInfo = convert( copyInfo );
 		DEBUG_DUMP( vkcopyInfo );
 		m_device.vkCmdCopyImageToBuffer( m_commandBuffer
-			, static_cast< Texture const & >( src.getTexture() )
+			, static_cast< Texture const & >( src )
 			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 			, static_cast< Buffer const & >( dst )
-			, 1
-			, &vkcopyInfo );
+			, uint32_t( vkcopyInfo.size() )
+			, vkcopyInfo.data() );
 	}
 
 	void CommandBuffer::copyBuffer( renderer::BufferCopy const & copyInfo
@@ -424,34 +452,38 @@ namespace vk_renderer
 	}
 
 	void CommandBuffer::copyImage( renderer::ImageCopy const & copyInfo
-		, renderer::TextureView const & src
-		, renderer::TextureView const & dst )const
+		, renderer::Texture const & src
+		, renderer::ImageLayout srcLayout
+		, renderer::Texture const & dst
+		, renderer::ImageLayout dstLayout )const
 	{
 		auto vkcopyInfo = convert( copyInfo );
 		DEBUG_DUMP( vkcopyInfo );
 		m_device.vkCmdCopyImage( m_commandBuffer
-			, static_cast< Texture const & >( src.getTexture() )
-			, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-			, static_cast< Texture const & >( dst.getTexture() )
-			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+			, static_cast< Texture const & >( src )
+			, convert( srcLayout )
+			, static_cast< Texture const & >( dst )
+			, convert( dstLayout )
 			, 1
 			, &vkcopyInfo );
 	}
 
-	void CommandBuffer::blitImage( renderer::ImageBlit const & blit
-		, renderer::FrameBufferAttachment const & src
-		, renderer::FrameBufferAttachment const & dst
+	void CommandBuffer::blitImage( renderer::Texture const & srcImage
+		, renderer::ImageLayout srcLayout
+		, renderer::Texture const & dstImage
+		, renderer::ImageLayout dstLayout
+		, std::vector< renderer::ImageBlit > const & regions
 		, renderer::Filter filter )const
 	{
-		auto vkblitInfo = convert( blit );
-		DEBUG_DUMP( vkblitInfo );
+		auto vkregions = convert< VkImageBlit >( regions );
+		DEBUG_DUMP( vkregions );
 		m_device.vkCmdBlitImage( m_commandBuffer
-			, static_cast< Texture const & >( static_cast< renderer::FrameBufferAttachment const & >( src ).getTexture() )
-			, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-			, static_cast< Texture const & >( static_cast< renderer::FrameBufferAttachment const & >( dst ).getTexture() )
-			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-			, 1
-			, &vkblitInfo
+			, static_cast< Texture const & >( srcImage )
+			, convert( srcLayout )
+			, static_cast< Texture const & >( dstImage )
+			, convert( dstLayout )
+			, uint32_t( vkregions.size() )
+			, vkregions.data()
 			, convert( filter ) );
 	}
 
@@ -513,5 +545,29 @@ namespace vk_renderer
 			, groupCountX
 			, groupCountY
 			, groupCountZ );
+	}
+
+	void CommandBuffer::dispatchIndirect( renderer::BufferBase const & buffer
+		, uint32_t offset )const
+	{
+		assert( m_currentComputePipeline && "No pipeline bound." );
+		m_device.vkCmdDispatchIndirect( m_commandBuffer
+			, static_cast< Buffer const & >( buffer )
+			, offset );
+	}
+
+	void CommandBuffer::setLineWidth( float width )const
+	{
+		m_device.vkCmdSetLineWidth( m_commandBuffer, width );
+	}
+
+	void CommandBuffer::setDepthBias( float constantFactor
+		, float clamp
+		, float slopeFactor )const
+	{
+		m_device.vkCmdSetDepthBias( m_commandBuffer
+			, constantFactor
+			, clamp
+			, slopeFactor );
 	}
 }

@@ -190,12 +190,10 @@ namespace vk_renderer
 
 			case VK_SUBOPTIMAL_KHR:
 				doGetError() = "An image became available, and the swapchain no longer matches the surface properties exactly, but can still be used to present to the surface successfully.";
-				assert( false );
 				break;
 
 			case VK_ERROR_OUT_OF_DATE_KHR:
 				doGetError() = "A surface has changed in such a way that it is no longer compatible with the swapchain, and further presentation requests using the swapchain will fail.";
-				assert( false );
 				break;
 
 			case VK_ERROR_INCOMPATIBLE_DISPLAY_KHR:

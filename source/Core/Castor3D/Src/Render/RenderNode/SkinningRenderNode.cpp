@@ -15,7 +15,7 @@ namespace castor3d
 		, PassRenderNode && passNode
 		, UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixBuffer
 		, UniformBufferOffset< ModelUbo::Configuration > modelBuffer
-		, renderer::GeometryBuffers const & buffers
+		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
 		, Submesh & data
 		, Geometry & instance

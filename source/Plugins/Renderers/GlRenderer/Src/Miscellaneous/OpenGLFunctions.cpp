@@ -10,6 +10,7 @@ namespace gl_renderer
 	{
 #define GL_LIB_BASE_FUNCTION( fun ) PFN_gl##fun fun;
 #define GL_LIB_FUNCTION( fun ) PFN_gl##fun fun;
+#define GL_LIB_FUNCTION_OPT( fun ) PFN_gl##fun fun;
 #include "OpenGLFunctionsList.inl"
 	}
 
@@ -18,6 +19,7 @@ namespace gl_renderer
 	{
 #define WGL_LIB_BASE_FUNCTION( fun ) PFN_wgl##fun fun;
 #define WGL_LIB_FUNCTION( fun ) PFN_wgl##fun fun;
+#define WGL_LIB_FUNCTION_OPT( fun ) PFN_wgl##fun fun;
 #include "OpenGLFunctionsList.inl"
 	}
 #elif RENDERLIB_XLIB

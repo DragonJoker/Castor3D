@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #include "Command/GlQueue.hpp"
@@ -17,37 +17,6 @@ namespace gl_renderer
 	{
 	}
 
-	bool Queue::submit( renderer::CommandBuffer const & commandBuffer
-		, renderer::Fence const * fence )const
-	{
-		for ( auto & command : static_cast< CommandBuffer const & >( commandBuffer ).getCommands() )
-		{
-			command->apply();
-		}
-
-		return true;
-		//return fence
-		//	? fence->wait( ~( 0u ) ) == renderer::WaitResult::eSuccess
-		//	: true;
-	}
-
-	bool Queue::submit( renderer::CommandBuffer const & commandBuffer
-		, renderer::Semaphore const & semaphoreToWait
-		, renderer::PipelineStageFlags const & semaphoreStage
-		, renderer::Semaphore const & semaphoreToSignal
-		, renderer::Fence const * fence )const
-	{
-		for ( auto & command : static_cast< CommandBuffer const & >( commandBuffer ).getCommands() )
-		{
-			command->apply();
-		}
-
-		return true;
-		//return fence
-		//	? fence->wait( ~( 0u ) ) == renderer::WaitResult::eSuccess
-		//	: true;
-	}
-
 	bool Queue::submit( renderer::CommandBufferCRefArray const & commandBuffers
 		, renderer::SemaphoreCRefArray const & semaphoresToWait
 		, renderer::PipelineStageFlagsArray const & semaphoresStage
@@ -56,6 +25,8 @@ namespace gl_renderer
 	{
 		for ( auto & commandBuffer : commandBuffers )
 		{
+			static_cast< CommandBuffer const & >( commandBuffer.get() ).initialiseGeometryBuffers();
+
 			for ( auto & command : static_cast< CommandBuffer const & >( commandBuffer.get() ).getCommands() )
 			{
 				command->apply();

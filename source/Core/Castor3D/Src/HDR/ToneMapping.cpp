@@ -40,7 +40,9 @@ namespace castor3d
 	{
 		m_configUbo.initialise();
 		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & program = getEngine()->getShaderProgramCache().getNewProgram( false );
+		auto program = getEngine()->getShaderProgramCache().getNewProgram( false );
+
+		m_signalFinished = renderSystem.getCurrentDevice()->createSemaphore();
 
 		glsl::Shader vtx;
 		{
@@ -64,8 +66,10 @@ namespace castor3d
 		}
 
 		auto pxl = doCreate();
-		program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
-		program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
+		program.push_back( { renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
+		program.push_back( { renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
+		program[0].module->loadShader( vtx.getSource() );
+		program[1].module->loadShader( pxl.getSource() );
 		renderer::DescriptorSetLayoutBindingArray bindings
 		{
 			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
@@ -75,7 +79,8 @@ namespace castor3d
 			, program
 			, source.getView()
 			, renderPass
-			, bindings );
+			, bindings
+			, {} );
 		m_timer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Tone mapping" ), cuT( "Tone mapping" ) );
 
 		prepareFrame();

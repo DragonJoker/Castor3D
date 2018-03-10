@@ -152,7 +152,7 @@ namespace castor3d
 
 	void ShadowMapSpot::doInitialise()
 	{
-		renderer::UIVec2 size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize };
+		renderer::Extent2D size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize };
 		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
 		m_depthBuffer = device.createTexture();
 		m_depthBuffer->setImage( PixelFormat::eD24

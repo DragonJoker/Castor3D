@@ -1,4 +1,4 @@
-﻿#include "OverlayCategory.hpp"
+#include "OverlayCategory.hpp"
 
 #include "Engine.hpp"
 
@@ -77,7 +77,7 @@ namespace castor3d
 	{
 		if ( getOverlay().isVisible() )
 		{
-			OverlayRendererSPtr renderer = getOverlay().getEngine()->getOverlayCache().getRenderer();
+			OverlayRendererSPtr renderer;// = getOverlay().getEngine()->getOverlayCache().getRenderer();
 
 			if ( renderer )
 			{
@@ -103,9 +103,9 @@ namespace castor3d
 		}
 	}
 
-	void OverlayCategory::render()
+	void OverlayCategory::render( OverlayRenderer & renderer )
 	{
-		doRender( getOverlay().getEngine()->getOverlayCache().getRenderer() );
+		doRender( renderer );
 	}
 
 	void OverlayCategory::setMaterial( MaterialSPtr p_material )
@@ -215,7 +215,7 @@ namespace castor3d
 	Point2d OverlayCategory::doGetTotalSize()const
 	{
 		OverlaySPtr parent = getOverlay().getParent();
-		Size renderSize = getOverlay().getEngine()->getOverlayCache().getRenderer()->getSize();
+		Size renderSize;// = getOverlay().getEngine()->getOverlayCache().getRenderer()->getSize();
 		Point2d totalSize( renderSize.getWidth(), renderSize.getHeight() );
 
 		if ( parent )
@@ -230,13 +230,13 @@ namespace castor3d
 
 	void OverlayCategory::doUpdatePosition()
 	{
-		OverlayRendererSPtr renderer = getOverlay().getEngine()->getOverlayCache().getRenderer();
+		OverlayRendererSPtr renderer;// = getOverlay().getEngine()->getOverlayCache().getRenderer();
 
 		if ( renderer )
 		{
 			if ( isPositionChanged() || renderer->isSizeChanged() )
 			{
-				Size renderSize = getOverlay().getEngine()->getOverlayCache().getRenderer()->getSize();
+				Size renderSize;// = getOverlay().getEngine()->getOverlayCache().getRenderer()->getSize();
 				Point2d totalSize = doGetTotalSize();
 				bool changed = m_positionChanged;
 				Position pos = getPixelPosition();
@@ -266,13 +266,13 @@ namespace castor3d
 
 	void OverlayCategory::doUpdateSize()
 	{
-		OverlayRendererSPtr renderer = getOverlay().getEngine()->getOverlayCache().getRenderer();
+		OverlayRendererSPtr renderer;// = getOverlay().getEngine()->getOverlayCache().getRenderer();
 
 		if ( renderer )
 		{
 			if ( isSizeChanged() || renderer->isSizeChanged() )
 			{
-				Size renderSize = getOverlay().getEngine()->getOverlayCache().getRenderer()->getSize();
+				Size renderSize;// = getOverlay().getEngine()->getOverlayCache().getRenderer()->getSize();
 				Point2d totalSize = doGetTotalSize();
 				bool changed = m_sizeChanged;
 				Size size = getPixelSize();

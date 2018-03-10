@@ -250,7 +250,7 @@ namespace castor3d
 			renderer::FrameBufferAttachmentArray attaches;
 			attaches.emplace_back( *( renderPass.begin() ), texture.getTexture()->getView() );
 			auto size = texture.getTexture()->getDimensions();
-			return renderPass.createFrameBuffer( renderer::UIVec2{ size.getWidth(), size.getHeight() }
+			return renderPass.createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
 				, std::move( attaches ) );
 		}
 
@@ -364,7 +364,7 @@ namespace castor3d
 		auto size = m_result.getTexture()->getDimensions();
 		renderer::FrameBufferAttachmentArray attaches;
 		attaches.emplace_back( *( m_renderPass->begin() ), m_result.getTexture()->getView() );
-		m_lineariseFrameBuffer = m_renderPass->createFrameBuffer( renderer::UIVec2{ size[0], size[1] }
+		m_lineariseFrameBuffer = m_renderPass->createFrameBuffer( renderer::Extent2D{ size.width, size.heigt }
 			, std::move( attaches ) );
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
@@ -411,7 +411,7 @@ namespace castor3d
 				, *m_sampler );
 			renderer::FrameBufferAttachmentArray attaches;
 			attaches.emplace_back( *( m_renderPass->begin() ), m_result.getTexture()->getView() );
-			pipeline.frameBuffer = m_renderPass->createFrameBuffer( renderer::UIVec2{ size[0], size[1] }
+			pipeline.frameBuffer = m_renderPass->createFrameBuffer( castor::Extent2D{ size.width, size.height }
 				, std::move( attaches ) );
 			pipeline.previousLevel = std::make_unique< renderer::PushConstantsBuffer< int > >( renderer::ShaderStageFlag::eFragment
 				, renderer::PushConstantArray{ { 1u, 0u, renderer::AttributeFormat::eInt } } );

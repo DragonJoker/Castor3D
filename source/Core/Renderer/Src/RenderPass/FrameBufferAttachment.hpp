@@ -1,5 +1,5 @@
-/*
-This file belongs to Renderer.
+﻿/*
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___Renderer_FrameBufferAttachment_HPP___
@@ -39,7 +39,7 @@ namespace renderer
 		*\param[in] view
 		*	La vue sur la texture.
 		*/
-		FrameBufferAttachment( RenderPassAttachment const & attach
+		FrameBufferAttachment( AttachmentDescription const & attach
 			, TextureView const & view );
 		/**
 		*\~english
@@ -58,7 +58,7 @@ namespace renderer
 		*\return
 		*	Le format des pixels de l'attache.
 		*/
-		inline renderer::PixelFormat getFormat()const
+		inline renderer::Format getFormat()const
 		{
 			return m_view.getFormat();
 		}
@@ -106,7 +106,7 @@ namespace renderer
 		*\return
 		*	L'attache de passe de rendu correspondante.
 		*/
-		inline RenderPassAttachment const & getAttachment()const
+		inline AttachmentDescription const & getAttachment()const
 		{
 			return m_attach;
 		}
@@ -114,7 +114,7 @@ namespace renderer
 	private:
 		TextureView const & m_view;
 		FrameBuffer const * m_frameBuffer;
-		RenderPassAttachment const & m_attach;
+		AttachmentDescription const & m_attach;
 	};
 }
 

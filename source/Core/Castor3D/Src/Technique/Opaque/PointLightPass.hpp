@@ -69,10 +69,10 @@ namespace castor3d
 				LightPass::Program::Config m_base;
 				//!\~english	The variable containing the light position.
 				//!\~french		La variable contenant la position de la lumière.
-				renderer::Vec3 position;
+				castor::Point3f position;
 				//!\~english	The variable containing the light attenuation.
 				//!\~french		La variable contenant l'atténuation de la lumière.
-				renderer::Vec3 attenuation;
+				castor::Point3f attenuation;
 			};
 		};
 

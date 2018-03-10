@@ -31,7 +31,7 @@ namespace castor3d
 			, PassRenderNode && passNode
 			, UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixBuffer
 			, UniformBufferOffset< ModelUbo::Configuration > modelBuffer
-			, renderer::GeometryBuffers const & buffers
+			, GeometryBuffers const & buffers
 			, SceneNode & sceneNode
 			, DataType & data
 			, InstanceType & instance );
@@ -50,7 +50,7 @@ namespace castor3d
 		UniformBufferOffset< ModelUbo::Configuration > m_modelUbo;
 		//!\~english	The geometry buffers.
 		//!\~french		Les tampons de la géométrie.
-		renderer::GeometryBuffers const & m_buffers;
+		GeometryBuffers const & m_buffers;
 		//!\~english	The parent scene node.
 		//!\~french		Le scene node parent.
 		SceneNode & m_sceneNode;

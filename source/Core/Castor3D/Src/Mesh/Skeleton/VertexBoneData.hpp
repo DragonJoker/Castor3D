@@ -44,8 +44,8 @@ namespace castor3d
 		{
 			struct
 			{
-				renderer::UIVec4 id0;
-				renderer::UIVec4 id1;
+				castor::Point4ui id0;
+				castor::Point4ui id1;
 			};
 			std::array< uint32_t, C3D_MAX_BONES_PER_VERTEX > data;
 			Ids()
@@ -85,8 +85,8 @@ namespace castor3d
 		{
 			struct
 			{
-				renderer::UIVec4 weight0;
-				renderer::UIVec4 weight1;
+				castor::Point4f weight0;
+				castor::Point4f weight1;
 			};
 			std::array< float, C3D_MAX_BONES_PER_VERTEX > data;
 			Weights()

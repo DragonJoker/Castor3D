@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #include "PushConstantsBuffer.hpp"
@@ -33,7 +33,7 @@ namespace renderer
 					throw std::runtime_error{ "Inconsistency detected between given and computed offsets" };
 				}
 
-				offset = constant.offset + getSize( constant.format );
+				offset = constant.offset + getSize( constant.format ) * constant.arraySize;
 			}
 
 			return offset - baseOffset;

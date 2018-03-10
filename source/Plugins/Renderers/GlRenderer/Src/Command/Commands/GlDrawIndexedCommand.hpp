@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder
 */
 #pragma once
@@ -15,7 +15,6 @@ namespace gl_renderer
 	class DrawIndexedCommand
 		: public CommandBase
 	{
-	public:
 	public:
 		/**
 		*\brief

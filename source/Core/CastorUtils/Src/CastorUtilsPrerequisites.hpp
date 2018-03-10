@@ -79,7 +79,7 @@ namespace castor
 		eL8,
 		//!\~english	Half floats luminosity on VRAM, floats luminosity on RAM.
 		//!\~french		Luminosité en half float en VRAM, et en float en RAM.
-		eL16F32F,
+		eL16F,
 		//!\~english	32 bits loats luminosity.
 		//!\~french		Luminosité en float 32 bits.
 		eL32F,
@@ -88,16 +88,13 @@ namespace castor
 		eA8L8,
 		//!\~english	Half floats alpha and luminosity on VRAM, floats alpha and luminosity on RAM.
 		//!\~french		Luminosité et alpha en half float en VRAM, et en float en RAM.
-		eAL16F32F,
+		eAL16F,
 		//!\~english	32 bits floats alpha and luminosity.
 		//!\~french		Luminosité et alpha en float 32 bits.
 		eAL32F,
 		//!\~english	16 bits 5551 ARGB.
 		//!\~french		16 bits 5551 ARGB.
 		eA1R5G5B5,
-		//!\~english	16 bits 4444 ARGB.
-		//!\~french		16 bits 4444 ARGB.
-		eA4R4G4B4,
 		//!\~english	16 bits 565 RGB.
 		//!\~french		16 bits 565 RGB.
 		eR5G6B5,
@@ -131,12 +128,6 @@ namespace castor
 		//!\~english	Half float ARGB.
 		//!\~french		Half float ARGB.
 		eRGBA16F,
-		//!\~english	Half float RGB on VRAM, Float RGB on RAM.
-		//!\~french		RGB en half float en VRAM, et en float en RAM.
-		eRGB16F32F,
-		//!\~english	Half float ARGB on VRAM, Float ARGB on RAM.
-		//!\~french		ARGB en half float en VRAM, et en float en RAM.
-		eRGBA16F32F,
 		//!\~english	32 bits float RGB.
 		//!\~french		RGB en flottants 32 bits.
 		eRGB32F,
@@ -152,15 +143,9 @@ namespace castor
 		//!\~english	DXT5 16 bits compressed format.
 		//!\~french		Format compressé DXT5 16 bits.
 		eDXTC5,
-		//!\~english	YUY2 16 bits compressed format.
-		//!\~french		Format compressé YUY2 16 bits.
-		eYUY2,
 		//!\~english	Depth 16 bits.
 		//!\~french		Profondeur 16 bits.
 		eD16,
-		//!\~english	Depth 24 bits.
-		//!\~french		Profondeur 24 bits.
-		eD24,
 		//!\~english	Depth 24 bits, Stencil 8 bits.
 		//!\~french		Profondeur 24 bits, Stencil 8 bits.
 		eD24S8,
@@ -173,9 +158,6 @@ namespace castor
 		//!\~english	Depth 32 bits floating point, Stencil 8 bits.
 		//!\~french		Profondeur en float 32 bits, Stencil 8 bits.
 		eD32FS8,
-		//!\~english	Stencil 1 bit.
-		//!\~french		Stencil 1 bit.
-		eS1,
 		//!\~english	Stencil 8 bits.
 		//!\~french		Stencil 8 bits.
 		eS8,

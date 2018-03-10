@@ -44,13 +44,14 @@ namespace gl_renderer
 	void DrawIndexedCommand::apply()const
 	{
 		glLogCommand( "DrawIndexedCommand" );
-			glLogCall( gl::DrawElementsInstancedBaseInstance
-				, m_mode
-				, m_indexCount
-				, m_type
-				, ( ( GLvoid * )( m_firstIndex * m_size ) )
-				, m_instCount
-				, m_firstInstance );
+		glLogCall( gl::DrawElementsInstancedBaseVertexBaseInstance
+			, m_mode
+			, m_indexCount
+			, m_type
+			, ( ( GLvoid * )( m_firstIndex * m_size ) )
+			, m_instCount
+			, m_vertexOffset
+			, m_firstInstance );
 	}
 
 	CommandPtr DrawIndexedCommand::clone()const

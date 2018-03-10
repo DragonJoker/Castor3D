@@ -7,10 +7,10 @@ namespace vk_renderer
 		return VkImageCopy
 		{
 			convert( value.srcSubresource ),
-			{ value.srcOffset[0], value.srcOffset[1], value.srcOffset[2] },
+			convert( value.srcOffset ),
 			convert( value.dstSubresource ),
-			{ value.dstOffset[0], value.dstOffset[1], value.dstOffset[2] },
-			{ value.extent[0], value.extent[1], value.extent[2] },
+			convert( value.dstOffset ),
+			convert( value.extent ),
 		};
 	}
 }

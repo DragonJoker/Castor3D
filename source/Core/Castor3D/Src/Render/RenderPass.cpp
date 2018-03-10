@@ -17,7 +17,6 @@
 #include "Shader/Shaders/GlslMaterial.hpp"
 
 #include <Buffer/Buffer.hpp>
-#include <Buffer/GeometryBuffers.hpp>
 #include <Buffer/VertexBuffer.hpp>
 
 #include <GlslSource.hpp>
@@ -631,7 +630,7 @@ namespace castor3d
 		return SceneRenderNode{};
 	}
 
-	renderer::ShaderProgram & RenderPass::doGetProgram( PassFlags const & passFlags
+	renderer::ShaderStageStateArray RenderPass::doGetProgram( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags

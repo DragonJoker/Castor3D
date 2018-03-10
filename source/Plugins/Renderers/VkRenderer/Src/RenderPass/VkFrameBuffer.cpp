@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #include "RenderPass/VkFrameBuffer.hpp"
@@ -10,7 +10,6 @@ See LICENSE file in root folder.
 #include "Core/VkDevice.hpp"
 #include "Image/VkTexture.hpp"
 #include "Image/VkTextureView.hpp"
-#include "Miscellaneous/VkMemoryStorage.hpp"
 #include "RenderPass/VkRenderPass.hpp"
 #include "Sync/VkFence.hpp"
 #include "Sync/VkImageMemoryBarrier.hpp"
@@ -37,7 +36,7 @@ namespace vk_renderer
 
 	FrameBuffer::FrameBuffer( Device const & device
 		, RenderPass const & renderPass
-		, renderer::UIVec2 const & dimensions
+		, renderer::Extent2D const & dimensions
 		, renderer::FrameBufferAttachmentArray && attachments )
 		: renderer::FrameBuffer{ renderPass, dimensions, std::move( attachments ) }
 		, m_device{ device }
@@ -54,8 +53,8 @@ namespace vk_renderer
 			renderPass,                                         // renderPass
 			static_cast< uint32_t >( vkattachments.size() ),    // attachmentCount
 			vkattachments.data(),                               // pAttachments
-			uint32_t( dimensions[0] ),                          // width
-			uint32_t( dimensions[1] ),                          // height
+			dimensions.width,                                   // width
+			dimensions.height,                                  // height
 			1u                                                  // layers
 		};
 		DEBUG_DUMP( createInfo );
@@ -75,82 +74,6 @@ namespace vk_renderer
 		if ( m_framebuffer )
 		{
 			m_device.vkDestroyFramebuffer( m_device, m_framebuffer, nullptr );
-		}
-	}
-
-	void FrameBuffer::download( renderer::Queue const & queue
-		, uint32_t index
-		, uint32_t xoffset
-		, uint32_t yoffset
-		, uint32_t width
-		, uint32_t height
-		, renderer::PixelFormat format
-		, uint8_t * data )const noexcept
-	{
-		auto & attachView = m_views[index].get();
-		auto & attachImage = attachView.getTexture();
-		// Create the linear tiled destination image to copy to and to read the memory from
-		Texture image{ m_device
-			, format
-			, renderer::UIVec2{ width, height }
-			, renderer::ImageUsageFlag::eTransferDst
-			, renderer::ImageTiling::eLinear
-			, renderer::MemoryPropertyFlag::eHostVisible | renderer::MemoryPropertyFlag::eHostCoherent };
-		TextureView view{ m_device
-			, image
-			, image.getType()
-			, image.getFormat()
-			, 0u
-			, 1u
-			, 0u
-			, 1u };
-
-		// Do the actual blit from the swapchain image to our host visible destination image
-		CommandBuffer copyCmd{ m_device
-			, static_cast< CommandPool const & >( m_device.getGraphicsCommandPool() )
-			, true };
-		copyCmd.begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
-		copyCmd.memoryBarrier( renderer::PipelineStageFlag::eTransfer
-			, renderer::PipelineStageFlag::eTransfer
-			, view.makeTransferDestination() );
-		copyCmd.memoryBarrier( renderer::PipelineStageFlag::eTransfer
-			, renderer::PipelineStageFlag::eTransfer
-			, attachView.makeTransferSource() );
-
-		renderer::ImageCopy imageCopyRegion{};
-		imageCopyRegion.srcSubresource.aspectMask = renderer::ImageAspectFlag::eColour;
-		imageCopyRegion.srcSubresource.layerCount = 1;
-		imageCopyRegion.dstSubresource.aspectMask = renderer::ImageAspectFlag::eColour;
-		imageCopyRegion.dstSubresource.layerCount = 1;
-		imageCopyRegion.extent[0] = width;
-		imageCopyRegion.extent[1] = height;
-		imageCopyRegion.extent[2] = 1;
-		imageCopyRegion.srcOffset[0] = xoffset;
-		imageCopyRegion.srcOffset[1] = yoffset;
-		imageCopyRegion.srcOffset[2] = 0u;
-
-		copyCmd.copyImage( imageCopyRegion
-			, attachView
-			, view );
-		copyCmd.memoryBarrier( renderer::PipelineStageFlag::eTransfer
-			, renderer::PipelineStageFlag::eTransfer
-			, view.makeGeneralLayout( renderer::AccessFlag::eMemoryRead ) );
-
-		copyCmd.end();
-
-		{
-			Fence fence{ m_device };
-			queue.submit( copyCmd, &fence );
-		}
-
-		auto mapped = image.lock( 0u
-			, uint32_t( VK_WHOLE_SIZE )
-			, 0u );
-
-		if ( mapped.data )
-		{
-			std::memcpy( data, mapped.data, size_t( mapped.size ) );
-			image.unlock( uint32_t( VK_WHOLE_SIZE ), false );
 		}
 	}
 }

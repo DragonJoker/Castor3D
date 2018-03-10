@@ -1,122 +1,81 @@
-﻿#include "Pipeline/VkPipeline.hpp"
+#include "Pipeline/VkPipeline.hpp"
 
 #include "Core/VkDevice.hpp"
 #include "Core/VkRenderingResources.hpp"
 #include "Pipeline/VkPipelineLayout.hpp"
-#include "Pipeline/VkVertexLayout.hpp"
+#include "Pipeline/VkSpecialisationInfo.hpp"
+#include "Pipeline/VkSpecialisationMapEntry.hpp"
+#include "Pipeline/VkVertexInputAttributeDescription.hpp"
+#include "Pipeline/VkVertexInputBindingDescription.hpp"
+#include "Pipeline/VkVertexInputState.hpp"
 #include "RenderPass/VkRenderPass.hpp"
 #include "Shader/VkAttribute.hpp"
-#include "Shader/VkShaderProgram.hpp"
+#include "Shader/VkShaderModule.hpp"
 
 namespace vk_renderer
 {
-	namespace
-	{
-		VertexLayoutCRefArray convert( renderer::VertexLayoutCRefArray const & layouts )
-		{
-			VertexLayoutCRefArray result;
-			result.reserve( layouts.size() );
-
-			for ( auto & layout : layouts )
-			{
-				result.emplace_back( static_cast< VertexLayout const & >( layout.get() ) );
-			}
-
-			return result;
-		}
-	}
-
 	Pipeline::Pipeline( Device const & device
 		, renderer::PipelineLayout const & layout
-		, renderer::ShaderProgram const & program
-		, renderer::VertexLayoutCRefArray const & vertexLayouts
-		, renderer::RenderPass const & renderPass
-		, renderer::InputAssemblyState const & inputAssemblyState
-		, renderer::RasterisationState const & rasterisationState
-		, renderer::ColourBlendState const & colourBlendState )
+		, renderer::GraphicsPipelineCreateInfo && createInfo )
 		: renderer::Pipeline{ device
 			, layout
-			, program
-			, vertexLayouts
-			, renderPass
-			, inputAssemblyState
-			, rasterisationState
-			, colourBlendState }
+			, std::move( createInfo ) }
 		, m_device{ device }
 		, m_layout{ static_cast< PipelineLayout const & >( layout ) }
-		, m_shader{ static_cast< ShaderProgram const & >( program ) }
-		, m_vertexLayouts{ convert( vertexLayouts ) }
-		, m_renderPass{ static_cast< RenderPass const & >( renderPass ) }
-		, m_inputAssemblyState{ convert( inputAssemblyState ) }
-		, m_rasterisationState{ convert( rasterisationState ) }
-		, m_colourBlendStateAttachments{ convert< VkPipelineColorBlendAttachmentState >( colourBlendState.begin(), colourBlendState.end() ) }
-		, m_colourBlendState{ convert( colourBlendState, m_colourBlendStateAttachments ) }
+		, m_vertexAttributes{ convert< VkVertexInputAttributeDescription >( m_createInfo.vertexInputState.vertexAttributeDescriptions ) }
+		, m_vertexBindings{ convert< VkVertexInputBindingDescription >( m_createInfo.vertexInputState.vertexBindingDescriptions ) }
+		, m_vertexInputState{ convert( m_createInfo.vertexInputState, m_vertexAttributes, m_vertexBindings ) }
+		, m_renderPass{ static_cast< RenderPass const & >( m_createInfo.renderPass.get() ) }
+		, m_inputAssemblyState{ convert( m_createInfo.inputAssemblyState ) }
+		, m_rasterisationState{ convert( m_createInfo.rasterisationState ) }
+		, m_colourBlendStateAttachments{ convert< VkPipelineColorBlendAttachmentState >( m_createInfo.colourBlendState.attachs.begin(), m_createInfo.colourBlendState.attachs.end() ) }
+		, m_colourBlendState{ convert( m_createInfo.colourBlendState, m_colourBlendStateAttachments ) }
+		, m_multisampleState{ convert( m_createInfo.multisampleState ) }
+		, m_dynamicStates{ convert< VkDynamicState >( m_createInfo.dynamicStates ) }
 	{
-	}
+		if ( m_createInfo.depthStencilState )
+		{
+			m_depthStencilState = convert( m_createInfo.depthStencilState.value() );
+		}
 
-	renderer::Pipeline & Pipeline::finish()
-	{
+		if ( m_createInfo.scissor )
+		{
+			m_scissor = convert( m_createInfo.scissor.value() );
+		}
+
+		if ( m_createInfo.viewport )
+		{
+			m_viewport = convert( m_createInfo.viewport.value() );
+		}
+
+		if ( m_createInfo.tessellationState )
+		{
+			m_tessellationState = convert( m_createInfo.tessellationState.value() );
+		}
+
 		// Les informations liées aux shaders utilisés.
-		std::vector< VkPipelineShaderStageCreateInfo > shaderStage;
+		uint32_t index = 0;
+		std::vector< VkPipelineShaderStageCreateInfo > shaderStages;
+		m_specialisationEntries.resize( m_createInfo.stages.size() );
 
-		for ( auto & module : m_shader )
+		for ( auto & state : m_createInfo.stages )
 		{
-			shaderStage.emplace_back( VkPipelineShaderStageCreateInfo
+			auto & module = static_cast< ShaderModule const & >( *state.module );
+
+			if ( state.specialisationInfo )
 			{
-				VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
-				nullptr,
-				0,                                                        // flags
-				module.getStage(),                                        // stage
-				VkShaderModule( module ),                                 // module
-				"main",                                                   // pName
-				nullptr,                                                  // pSpecializationInfo
-			} );
-		}
-
-		// Les informations des données contenues dans les tampons de sommets.
-		std::vector< VkVertexInputBindingDescription > vertexBindingDescriptions;
-		std::vector< VkVertexInputAttributeDescription > vertexAttributeDescriptions;
-		vertexBindingDescriptions.reserve( m_vertexLayouts.size() );
-
-		for ( auto const & vb : m_vertexLayouts )
-		{
-			vertexBindingDescriptions.push_back( vb.get().getDescription() );
-
-			for ( auto const & attribute : vb.get() )
-			{
-				if ( attribute.getFormat() == renderer::AttributeFormat::eMat4f )
-				{
-					uint32_t offset = attribute.getOffset();
-					uint32_t location = attribute.getLocation();
-
-					for ( auto i = 0u; i < 4u; ++i )
-					{
-						auto attrib = renderer::Attribute{ vb.get()
-							, renderer::AttributeFormat::eVec4f
-							, location
-							, offset };
-						vertexAttributeDescriptions.emplace_back( convert( attrib ) );
-						++location;
-						offset += 16u;
-					}
-				}
-				else
-				{
-					vertexAttributeDescriptions.emplace_back( convert( attribute ) );
-				}
+				auto & info = *state.specialisationInfo;
+				m_specialisationEntries[index] = convert< VkSpecializationMapEntry >( info.begin(), info.end() );
+				m_specialisationInfos[module.getStage()] = convert( info, m_specialisationEntries[index] );
+				shaderStages.push_back( convert( state, &m_specialisationInfos[module.getStage()] ) );
 			}
-		}
+			else
+			{
+				shaderStages.push_back( convert( state ) );
+			}
 
-		VkPipelineVertexInputStateCreateInfo vertexInputState
-		{
-			VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
-			nullptr,
-			0,                                                            // flags
-			static_cast< uint32_t >( vertexBindingDescriptions.size() ),  // vertexBindingDescriptionCount
-			vertexBindingDescriptions.data(),                             // pVertexBindingDescriptions
-			static_cast< uint32_t >( vertexAttributeDescriptions.size() ),// vertexAttributeDescriptionCount
-			vertexAttributeDescriptions.data()                            // pVertexAttributeDescriptions
-		};
+			++index;
+		}
 
 		// Le viewport.
 		VkPipelineViewportStateCreateInfo viewportState
@@ -126,25 +85,23 @@ namespace vk_renderer
 			0,                                                                      // flags
 			1u,                                                                     // viewportCount
 			m_viewport                                                              // pViewports
-				? m_viewport.get()
+				? &m_viewport.value()
 				: nullptr,
 			1u,                                                                     // scissorCount
 			m_scissor                                                               // pScissors
-				? m_scissor.get()
+				? &m_scissor.value()
 				: nullptr,
 		};
 
 		// Les états dynamiques, le cas échéant
-		std::vector< VkDynamicState > dynamicStates;
-
 		if ( !m_viewport )
 		{
-			dynamicStates.push_back( VK_DYNAMIC_STATE_VIEWPORT );
+			assert( m_dynamicStates.end() != std::find( m_dynamicStates.begin(), m_dynamicStates.end(), VK_DYNAMIC_STATE_VIEWPORT ) );
 		}
 
 		if ( !m_scissor )
 		{
-			dynamicStates.push_back( VK_DYNAMIC_STATE_SCISSOR );
+			assert( m_dynamicStates.end() != std::find( m_dynamicStates.begin(), m_dynamicStates.end(), VK_DYNAMIC_STATE_SCISSOR ) );
 		}
 
 		VkPipelineDynamicStateCreateInfo dynamicState
@@ -152,8 +109,8 @@ namespace vk_renderer
 			VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO,         // sType
 			nullptr,                                                      // pNext
 			0,                                                            // flags
-			static_cast< uint32_t >( dynamicStates.size() ),              // dynamicStateCount
-			dynamicStates.data()                                          // pDynamicStates
+			static_cast< uint32_t >( m_dynamicStates.size() ),            // dynamicStateCount
+			m_dynamicStates.data()                                        // pDynamicStates
 		};
 
 		// Enfin, on crée le pipeline !!
@@ -162,23 +119,21 @@ namespace vk_renderer
 			VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO,
 			nullptr,
 			0,                                                            // flags
-			static_cast< uint32_t >( shaderStage.size() ),                // stageCount
-			shaderStage.data(),                                           // pStages
-			&vertexInputState,                                            // pVertexInputState;
+			static_cast< uint32_t >( shaderStages.size() ),               // stageCount
+			shaderStages.data(),                                          // pStages
+			&m_vertexInputState,                                          // pVertexInputState;
 			&m_inputAssemblyState,                                        // pInputAssemblyState
 			m_tessellationState                                           // pTessellationState
-				? m_tessellationState.get()
+				? &m_tessellationState.value()
 				: nullptr,
 			&viewportState,                                               // pViewportState
 			&m_rasterisationState,                                        // pRasterizationState
-			m_multisampleState                                            // pMultisampleState
-				? m_multisampleState.get()
-				: nullptr,
+			&m_multisampleState,                                          // pMultisampleState
 			m_depthStencilState                                           // pDepthStencilState
-				? m_depthStencilState.get()
+				? &m_depthStencilState.value()
 				: nullptr,
 			&m_colourBlendState,                                          // pColorBlendState
-			dynamicStates.empty() ? nullptr : &dynamicState,              // pDynamicState
+			m_dynamicStates.empty() ? nullptr : &dynamicState,            // pDynamicState
 			m_layout,                                                     // layout
 			m_renderPass,                                                 // renderPass
 			0,                                                            // subpass
@@ -198,42 +153,10 @@ namespace vk_renderer
 		{
 			throw std::runtime_error{ "Pipeline creation failed: " + getLastError() };
 		}
-
-		return *this;
 	}
 
 	Pipeline::~Pipeline()
 	{
 		m_device.vkDestroyPipeline( m_device, m_pipeline, nullptr );
-	}
-
-	renderer::Pipeline & Pipeline::multisampleState( renderer::MultisampleState const & state )
-	{
-		m_multisampleState = std::make_unique< VkPipelineMultisampleStateCreateInfo >( convert( state ) );
-		return *this;
-	}
-
-	renderer::Pipeline & Pipeline::depthStencilState( renderer::DepthStencilState const & state )
-	{
-		m_depthStencilState = std::make_unique< VkPipelineDepthStencilStateCreateInfo >( convert( state ) );
-		return *this;
-	}
-
-	renderer::Pipeline & Pipeline::tessellationState( renderer::TessellationState const & state )
-	{
-		m_tessellationState = std::make_unique< VkPipelineTessellationStateCreateInfo >( convert( state ) );
-		return *this;
-	}
-
-	renderer::Pipeline & Pipeline::viewport( renderer::Viewport const & viewport )
-	{
-		m_viewport = std::make_unique< VkViewport >( convert( viewport ) );
-		return *this;
-	}
-
-	renderer::Pipeline & Pipeline::scissor( renderer::Scissor const & scissor )
-	{
-		m_scissor = std::make_unique< VkRect2D >( convert( scissor ) );
-		return *this;
 	}
 }

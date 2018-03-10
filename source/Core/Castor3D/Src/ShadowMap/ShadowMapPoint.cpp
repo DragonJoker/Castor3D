@@ -157,7 +157,7 @@ namespace castor3d
 
 	void ShadowMapPoint::doInitialise()
 	{
-		renderer::UIVec2 size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize };
+		renderer::Extent2D size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize };
 		std::vector< renderer::PixelFormat > formats
 		{
 			PixelFormat::eD24,

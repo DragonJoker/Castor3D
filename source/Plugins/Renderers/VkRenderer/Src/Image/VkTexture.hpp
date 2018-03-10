@@ -42,12 +42,9 @@ namespace vk_renderer
 		/**
 		*\brief
 		*	Constructeur.
-		*\param[in] device
-		*	Le périphérique logique.
-		*\param[in] initialLayout
-		*	Le layout initial de l'image.
 		*/
-		Texture( Device const & device, renderer::ImageLayout initialLayout );
+		Texture( Device const & device
+			, renderer::ImageCreateInfo const & createInfo );
 		/**
 		*\brief
 		*	Constructeur.
@@ -55,8 +52,8 @@ namespace vk_renderer
 		*	Le périphérique logique.
 		*/
 		Texture( Device const & device
-			, renderer::PixelFormat format
-			, renderer::UIVec2 const & dimensions
+			, renderer::Format format
+			, renderer::Extent2D const & dimensions
 			, VkImage image );
 		/**
 		*\brief
@@ -65,8 +62,8 @@ namespace vk_renderer
 		*	Le périphérique logique.
 		*/
 		Texture( Device const & device
-			, renderer::PixelFormat format
-			, renderer::UIVec2 const & dimensions
+			, renderer::Format format
+			, renderer::Extent2D const & dimensions
 			, renderer::ImageUsageFlags usageFlags
 			, renderer::ImageTiling tiling
 			, renderer::MemoryPropertyFlags memoryFlags );
@@ -76,59 +73,13 @@ namespace vk_renderer
 		*/
 		~Texture();
 		/**
-		*\~french
-		*\brief
-		*	Mappe la mémoire du tampon en RAM.
-		*\param[in] offset
-		*	L'offset à partir duquel la mémoire du tampon est mappée.
-		*\param[in] size
-		*	La taille en octets de la mémoire à mapper.
-		*\param[in] flags
-		*	Indicateurs de configuration du mapping.
-		*\return
-		*	\p nullptr si le mapping a échoué.
-		*\~english
-		*\brief
-		*	Maps the buffer's memory in RAM.
-		*\param[in] offset
-		*	The memory mapping starting offset.
-		*\param[in] size
-		*	The memory mappping size.
-		*\param[in] flags
-		*	The memory mapping flags.
-		*\return
-		*	\p nullptr if the mapping failed.
+		*\copydoc	renderer::Texture::createView
 		*/
-		renderer::Texture::Mapped lock( uint32_t offset
-			, uint32_t size
-			, VkMemoryMapFlags flags )const;
-		/**
-		*\~french
-		*\brief
-		*	Unmappe la mémoire du tampon de la RAM.
-		*\param[in] size
-		*	La taille en octets de la mémoire mappée.
-		*\param[in] modified
-		*	Dit si le tampon a été modifié, et donc si la VRAM doit être mise à jour.
-		*\~english
-		*\brief
-		*	Unmaps the buffer's memory from the RAM.
-		*\param[in] size
-		*	The mapped memory size.
-		*\param[in] modified
-		*	Tells it the buffer has been modified, and whether the VRAM must be updated or not.
-		*/
-		void unlock( uint32_t size
-			, bool modified )const;
+		renderer::MemoryRequirements getMemoryRequirements()const override;
 		/**
 		*\copydoc	renderer::Texture::createView
 		*/
-		renderer::TextureViewPtr createView( renderer::TextureType type
-			, renderer::PixelFormat format
-			, uint32_t baseMipLevel
-			, uint32_t levelCount
-			, uint32_t baseArrayLayer
-			, uint32_t layerCount )const override;
+		renderer::TextureViewPtr createView( renderer::ImageViewCreateInfo const & createInfo )const override;
 		/**
 		*\copydoc	renderer::Texture::generateMipmaps
 		*/
@@ -147,29 +98,11 @@ namespace vk_renderer
 		}
 
 	private:
-		/**
-		*\copydoc	renderer::Texture::doSetImage1D
-		*/
-		void doSetImage1D( renderer::ImageUsageFlags usageFlags
-			, renderer::ImageTiling tiling
-			, renderer::MemoryPropertyFlags memoryFlags )override;
-		/**
-		*\copydoc	renderer::Texture::doSetImage2D
-		*/
-		void doSetImage2D( renderer::ImageUsageFlags usageFlags
-			, renderer::ImageTiling tiling
-			, renderer::MemoryPropertyFlags memoryFlags )override;
-		/**
-		*\copydoc	renderer::Texture::doSetImage3D
-		*/
-		void doSetImage3D( renderer::ImageUsageFlags usageFlags
-			, renderer::ImageTiling tiling
-			, renderer::MemoryPropertyFlags memoryFlags )override;
+		void doBindMemory()override;
 
 	private:
 		Device const & m_device;
 		VkImage m_image{};
-		ImageStoragePtr m_storage;
 		bool m_owner{};
 	};
 }

@@ -5,6 +5,9 @@ See LICENSE file in root folder.
 #include "Shader/GlShaderProgram.hpp"
 
 #include "Core/GlDevice.hpp"
+#include "Shader/GlShaderModule.hpp"
+
+#include <Pipeline/ShaderStageState.hpp>
 
 #include <iostream>
 
@@ -12,6 +15,28 @@ namespace gl_renderer
 {
 	namespace
 	{
+		std::string doRetrieveLinkerLog( GLuint programName )
+		{
+			std::string log;
+			int infologLength = 0;
+			int charsWritten = 0;
+			glLogCall( gl::GetProgramiv, programName, GL_INFO_LOG_LENGTH, &infologLength );
+
+			if ( infologLength > 0 )
+			{
+				std::vector< char > infoLog( infologLength + 1 );
+				glLogCall( gl::GetProgramInfoLog, programName, infologLength, &charsWritten, infoLog.data() );
+				log = infoLog.data();
+			}
+
+			if ( !log.empty() )
+			{
+				log = log.substr( 0, log.size() - 1 );
+			}
+
+			return log;
+		}
+
 		std::string doRetrieveCompilerLog( GLuint shaderName )
 		{
 			std::string log;
@@ -58,33 +83,78 @@ namespace gl_renderer
 			return compiled;
 		}
 
-		std::string doRetrieveLinkerLog( GLuint programName )
+		void doInitialiseState( renderer::ShaderStageState const & stage )
 		{
-			std::string log;
-			int infologLength = 0;
-			int charsWritten = 0;
-			glLogCall( gl::GetProgramiv, programName, GL_INFO_LOG_LENGTH, &infologLength );
+			auto & module = static_cast< ShaderModule const & >( *stage.module );
+			auto shader = module.getShader();
 
-			if ( infologLength > 0 )
+			if ( module.isSpirV() )
 			{
-				std::vector< char > infoLog( infologLength + 1 );
-				glLogCall( gl::GetProgramInfoLog, programName, infologLength, &charsWritten, infoLog.data() );
-				log = infoLog.data();
-			}
+				if ( stage.specialisationInfo )
+				{
+					auto & specialisationInfo = *stage.specialisationInfo;
+					auto count = GLuint( std::distance( specialisationInfo.begin(), specialisationInfo.end() ) );
+					std::vector< GLuint > indices;
+					indices.reserve( count );
+					std::vector< GLuint > values;
+					values.reserve( count );
+					auto src = reinterpret_cast< GLuint const * >( specialisationInfo.getData() );
+					auto dst = values.data();
 
-			if ( !log.empty() )
-			{
-				log = log.substr( 0, log.size() - 1 );
-			}
+					for ( auto & constant : specialisationInfo )
+					{
+						indices.push_back( constant.constantID );
+						values.push_back( *src );
+						++src;
+					}
 
-			return log;
+					glLogCall( gl::SpecializeShader
+						, shader
+						, stage.entryPoint.c_str()
+						, count
+						, indices.data()
+						, values.data() );
+				}
+				else
+				{
+					glLogCall( gl::SpecializeShader
+						, shader
+						, stage.entryPoint.c_str()
+						, 0u
+						, nullptr
+						, nullptr );
+				}
+
+				int compiled = 0;
+				glLogCall( gl::GetShaderiv, shader, GL_INFO_COMPILE_STATUS, &compiled );
+
+				if ( !doCheckCompileErrors( compiled != 0, shader ) )
+				{
+					throw std::runtime_error{ "Shader compilation failed." };
+				}
+			}
 		}
 	}
 
-	ShaderProgram::ShaderProgram( renderer::Device const & device )
-		: renderer::ShaderProgram{ device }
-		, m_program{ gl::CreateProgram() }
+	ShaderProgram::ShaderProgram( std::vector< renderer::ShaderStageState > const & stages )
+		: m_program{ gl::CreateProgram() }
 	{
+		for ( auto & stage : stages )
+		{
+			auto & module = static_cast< ShaderModule const & >( *stage.module );
+			m_shaders.push_back( module.getShader() );
+			doInitialiseState( stage );
+			glLogCall( gl::AttachShader, m_program, m_shaders.back() );
+		}
+	}
+
+	ShaderProgram::ShaderProgram( renderer::ShaderStageState const & stage )
+		: m_program{ gl::CreateProgram() }
+	{
+		auto & module = static_cast< ShaderModule const & >( *stage.module );
+		m_shaders.push_back( module.getShader() );
+		doInitialiseState( stage );
+		glLogCall( gl::AttachShader, m_program, m_shaders.back() );
 	}
 
 	ShaderProgram::~ShaderProgram()
@@ -95,33 +165,6 @@ namespace gl_renderer
 		}
 
 		glLogCall( gl::DeleteProgram, m_program );
-	}
-
-	void ShaderProgram::createModule( std::string const & shader
-		, renderer::ShaderStageFlag stage )
-	{
-		auto shaderName = glLogCall( gl::CreateShader, convert( stage ) );
-		auto length = int( shader.size() );
-		auto data = shader.data();
-		glLogCall( gl::ShaderSource, shaderName, 1, &data, &length );
-		glLogCall( gl::CompileShader, shaderName );
-		int compiled = 0;
-		glLogCall( gl::GetShaderiv, shaderName, GL_INFO_COMPILE_STATUS, &compiled );
-
-		if ( !doCheckCompileErrors( compiled != 0, shaderName ) )
-		{
-			glLogCall( gl::DeleteShader, shaderName );
-			throw std::runtime_error{ "Shader compilation failed." };
-		}
-
-		m_shaders.push_back( shaderName );
-		glLogCall( gl::AttachShader, m_program, shaderName );
-	}
-
-	void ShaderProgram::createModule( renderer::ByteArray const & fileData
-		, renderer::ShaderStageFlag stage )
-	{
-		throw std::runtime_error{ "Shader compilation from SPIR-V is not supported." };
 	}
 
 	void ShaderProgram::link()const

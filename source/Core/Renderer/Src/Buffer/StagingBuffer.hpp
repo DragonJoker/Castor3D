@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___Renderer_StagingBuffer_HPP___
@@ -13,19 +13,33 @@ See LICENSE file in root folder.
 namespace renderer
 {
 	/**
+	*\~english
+	*\brief
+	*	Class grouping the functions to transfer data from/to VRAM.
 	*\~french
 	*\brief
-	*	Classe regroupant les ressources de rendu nécessaires au dessin d'une image.
+	*	Classe regroupant les fonctions nécessaires au transfert de données depuis/vers la VRAM.
 	*/
 	class StagingBuffer
 	{
 	public:
 		/**
+		*\~english
+		*\brief
+		*	Constructor.
+		*\param[in] device
+		*	The logical device.
+		*\param[in] target
+		*	The buffer targets.
+		*\param[in] size
+		*	The buffer size.
 		*\~french
 		*\brief
 		*	Constructeur.
 		*\param[in] device
 		*	Le LogicalDevice parent.
+		*\param[in] target
+		*	Les cibles du tampon.
 		*\param[in] size
 		*	La taille du tampon.
 		*/
@@ -38,246 +52,99 @@ namespace renderer
 		**/
 		/**@{*/
 		/**
-		*\~french
-		*\brief
-		*	Copie les données d'une image dans une texture, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[out] texture
-		*	La texture de destination.
-		*/
+		*\name
+		*	Texture.
+		**/
+		/**@{*/
 		void uploadTextureData( CommandBuffer const & commandBuffer
 			, ImageSubresourceLayers const & subresourceLayers
-			, IVec3 const & offset
-			, UIVec3 const & extent
+			, Offset3D const & offset
+			, Extent3D const & extent
 			, uint8_t const * const data
 			, uint32_t size
 			, TextureView const & texture )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données d'une image dans une texture, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[out] texture
-		*	La texture de destination.
-		*/
 		inline void uploadTextureData( CommandBuffer const & commandBuffer
 			, ImageSubresourceLayers const & subresourceLayers
-			, IVec3 const & offset
-			, UIVec3 const & extent
+			, Offset3D const & offset
+			, Extent3D const & extent
 			, ByteArray const & data
 			, TextureView const & texture )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données d'une image dans une texture, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[out] texture
-		*	La texture de destination.
-		*/
 		void uploadTextureData( CommandBuffer const & commandBuffer
 			, uint8_t const * const data
 			, uint32_t size
 			, TextureView const & texture )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données d'une image dans une texture, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[out] texture
-		*	La texture de destination.
-		*/
 		inline void uploadTextureData( CommandBuffer const & commandBuffer
 			, ByteArray const & data
 			, TextureView const & texture )const;
+		/**@}*/
 		/**
-		*\~french
-		*\brief
-		*	Copie les données de sommets dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
+		*\name
+		*	Buffer.
+		**/
+		/**@{*/
 		template< typename T >
 		inline void uploadBufferData( CommandBuffer const & commandBuffer
 			, std::vector< T > const & data
 			, Buffer< T > const & buffer )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données de sommets dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		inline void uploadBufferData( CommandBuffer const & commandBuffer
 			, ByteArray const & data
 			, Buffer< T > const & buffer )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données de sommets dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] size
-		*	La taille des données à copier.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		inline void uploadBufferData( CommandBuffer const & commandBuffer
 			, uint8_t const * const data
 			, uint32_t size
 			, Buffer< T > const & buffer )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données de sommets dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] offset
-		*	L'offset dans le tampon.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		inline void uploadBufferData( CommandBuffer const & commandBuffer
 			, std::vector< T > const & data
 			, uint32_t offset
 			, Buffer< T > const & buffer )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données de sommets dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] offset
-		*	L'offset dans le tampon.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		inline void uploadBufferData( CommandBuffer const & commandBuffer
 			, ByteArray const & data
 			, uint32_t offset
 			, Buffer< T > const & buffer )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données de sommets dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] size
-		*	La taille des données à copier.
-		*\param[in] offset
-		*	L'offset dans le tampon.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		void uploadBufferData( CommandBuffer const & commandBuffer
 			, uint8_t const * const data
 			, uint32_t size
 			, uint32_t offset
 			, Buffer< T > const & buffer )const;
+		/**@}*/
 		/**
-		*\~french
-		*\brief
-		*	Copie les données de sommets dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
+		*\name
+		*	Vertex buffer.
+		**/
+		/**@{*/
 		template< typename T >
 		inline void uploadVertexData( CommandBuffer const & commandBuffer
 			, std::vector< T > const & data
 			, VertexBuffer< T > const & buffer
 			, PipelineStageFlags const & flags )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données de sommets dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		inline void uploadVertexData( CommandBuffer const & commandBuffer
 			, ByteArray const & data
 			, VertexBuffer< T > const & buffer
 			, PipelineStageFlags const & flags )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données de sommets dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] size
-		*	La taille des données à copier.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		inline void uploadVertexData( CommandBuffer const & commandBuffer
 			, uint8_t const * const data
 			, uint32_t size
 			, VertexBuffer< T > const & buffer
 			, PipelineStageFlags const & flags )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données de sommets dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] offset
-		*	L'offset dans le tampon.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		inline void uploadVertexData( CommandBuffer const & commandBuffer
 			, std::vector< T > const & data
 			, uint32_t offset
 			, VertexBuffer< T > const & buffer
 			, PipelineStageFlags const & flags )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données de sommets dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] offset
-		*	L'offset dans le tampon.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		inline void uploadVertexData( CommandBuffer const & commandBuffer
 			, ByteArray const & data
 			, uint32_t offset
 			, VertexBuffer< T > const & buffer
 			, PipelineStageFlags const & flags )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données de sommets dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] size
-		*	La taille des données à copier.
-		*\param[in] offset
-		*	L'offset dans le tampon.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		inline void uploadVertexData( CommandBuffer const & commandBuffer
 			, uint8_t const * const data
@@ -285,67 +152,29 @@ namespace renderer
 			, uint32_t offset
 			, VertexBuffer< T > const & buffer
 			, PipelineStageFlags const & flags )const;
+		/**@}*/
 		/**
-		*\~french
-		*\brief
-		*	Copie les données d'un tampon d'uniformes dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
+		*\name
+		*	Uniform buffer.
+		**/
+		/**@{*/
 		template< typename T >
 		inline void uploadUniformData( CommandBuffer const & commandBuffer
 			, std::vector< T > const & data
 			, UniformBuffer< T > const & buffer
 			, PipelineStageFlags const & flags )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données d'un tampon d'uniformes dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] count
-		*	Le nombre d'éléments à copier.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		inline void uploadUniformData( CommandBuffer const & commandBuffer
 			, T const * const data
 			, uint32_t count
 			, UniformBuffer< T > const & buffer
 			, PipelineStageFlags const & flags )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données d'un tampon d'uniformes dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] offset
-		*	L'offset dans le tampon.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		inline void uploadUniformData( CommandBuffer const & commandBuffer
 			, std::vector< T > const & data
 			, uint32_t offset
 			, UniformBuffer< T > const & buffer
 			, PipelineStageFlags const & flags )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données d'un tampon d'uniformes dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] count
-		*	Le nombre d'éléments à copier.
-		*\param[in] offset
-		*	L'offset dans le tampon.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		inline void uploadUniformData( CommandBuffer const & commandBuffer
 			, T const * const data
@@ -356,250 +185,103 @@ namespace renderer
 		/**@}*/
 		/**
 		*\name
-		*	Upload.
+		*	Download.
 		**/
 		/**@{*/
 		/**
-		*\~french
-		*\brief
-		*	Copie les données d'une image dans une texture, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[out] texture
-		*	La texture de destination.
-		*/
+		*\name
+		*	Texture.
+		**/
+		/**@{*/
 		void downloadTextureData( CommandBuffer const & commandBuffer
 			, ImageSubresourceLayers const & subresourceLayers
-			, IVec3 const & offset
-			, UIVec3 const & extent
+			, Offset3D const & offset
+			, Extent3D const & extent
 			, uint8_t * data
 			, uint32_t size
 			, TextureView const & texture )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données d'une image dans une texture, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[out] texture
-		*	La texture de destination.
-		*/
 		inline void downloadTextureData( CommandBuffer const & commandBuffer
 			, ImageSubresourceLayers const & subresourceLayers
-			, IVec3 const & offset
-			, UIVec3 const & extent
+			, Offset3D const & offset
+			, Extent3D const & extent
 			, ByteArray & data
 			, TextureView const & texture )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données d'une image dans une texture, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[out] texture
-		*	La texture de destination.
-		*/
 		void downloadTextureData( CommandBuffer const & commandBuffer
 			, uint8_t * data
 			, uint32_t size
 			, TextureView const & texture )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données d'une image dans une texture, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[out] texture
-		*	La texture de destination.
-		*/
 		inline void downloadTextureData( CommandBuffer const & commandBuffer
 			, ByteArray & data
 			, TextureView const & texture )const;
+		/**@}*/
 		/**
-		*\~french
-		*\brief
-		*	Copie les données de sommets dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
+		*\name
+		*	Buffer.
+		**/
+		/**@{*/
 		template< typename T >
 		inline void downloadBufferData( CommandBuffer const & commandBuffer
 			, std::vector< T > & data
 			, Buffer< T > const & buffer )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données de sommets dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		inline void downloadBufferData( CommandBuffer const & commandBuffer
 			, ByteArray & data
 			, Buffer< T > const & buffer )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données de sommets dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] size
-		*	La taille des données à copier.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		inline void downloadBufferData( CommandBuffer const & commandBuffer
 			, uint8_t * data
 			, uint32_t size
 			, Buffer< T > const & buffer )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données de sommets dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] offset
-		*	L'offset dans le tampon.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		inline void downloadBufferData( CommandBuffer const & commandBuffer
 			, std::vector< T > & data
 			, uint32_t offset
 			, Buffer< T > const & buffer )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données de sommets dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] offset
-		*	L'offset dans le tampon.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		inline void downloadBufferData( CommandBuffer const & commandBuffer
 			, ByteArray & data
 			, uint32_t offset
 			, Buffer< T > const & buffer )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données de sommets dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] size
-		*	La taille des données à copier.
-		*\param[in] offset
-		*	L'offset dans le tampon.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		void downloadBufferData( CommandBuffer const & commandBuffer
 			, uint8_t * data
 			, uint32_t size
 			, uint32_t offset
 			, Buffer< T > const & buffer )const;
+		/**@}*/
 		/**
-		*\~french
-		*\brief
-		*	Copie les données de sommets dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
+		*\name
+		*	Vertex buffer.
+		**/
+		/**@{*/
 		template< typename T >
 		inline void downloadVertexData( CommandBuffer const & commandBuffer
 			, std::vector< T > & data
 			, VertexBuffer< T > const & buffer
 			, PipelineStageFlags const & flags )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données de sommets dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		inline void downloadVertexData( CommandBuffer const & commandBuffer
 			, ByteArray & data
 			, VertexBuffer< T > const & buffer
 			, PipelineStageFlags const & flags )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données de sommets dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] size
-		*	La taille des données à copier.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		inline void downloadVertexData( CommandBuffer const & commandBuffer
 			, uint8_t * data
 			, uint32_t size
 			, VertexBuffer< T > const & buffer
 			, PipelineStageFlags const & flags )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données de sommets dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] offset
-		*	L'offset dans le tampon.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		inline void downloadVertexData( CommandBuffer const & commandBuffer
 			, std::vector< T > & data
 			, uint32_t offset
 			, VertexBuffer< T > const & buffer
 			, PipelineStageFlags const & flags )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données de sommets dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] offset
-		*	L'offset dans le tampon.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		inline void downloadVertexData( CommandBuffer const & commandBuffer
 			, ByteArray & data
 			, uint32_t offset
 			, VertexBuffer< T > const & buffer
 			, PipelineStageFlags const & flags )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données de sommets dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] size
-		*	La taille des données à copier.
-		*\param[in] offset
-		*	L'offset dans le tampon.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		inline void downloadVertexData( CommandBuffer const & commandBuffer
 			, uint8_t * data
@@ -607,67 +289,29 @@ namespace renderer
 			, uint32_t offset
 			, VertexBuffer< T > const & buffer
 			, PipelineStageFlags const & flags )const;
+		/**@}*/
 		/**
-		*\~french
-		*\brief
-		*	Copie les données d'un tampon d'uniformes dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
+		*\name
+		*	Uniform buffer.
+		**/
+		/**@{*/
 		template< typename T >
 		inline void downloadUniformData( CommandBuffer const & commandBuffer
 			, std::vector< T > & data
 			, UniformBuffer< T > const & buffer
 			, PipelineStageFlags const & flags )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données d'un tampon d'uniformes dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] count
-		*	Le nombre d'éléments à copier.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		inline void downloadUniformData( CommandBuffer const & commandBuffer
 			, T * data
 			, uint32_t count
 			, UniformBuffer< T > const & buffer
 			, PipelineStageFlags const & flags )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données d'un tampon d'uniformes dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] offset
-		*	L'offset dans le tampon.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		inline void downloadUniformData( CommandBuffer const & commandBuffer
 			, std::vector< T > & data
 			, uint32_t offset
 			, UniformBuffer< T > const & buffer
 			, PipelineStageFlags const & flags )const;
-		/**
-		*\~french
-		*\brief
-		*	Copie les données d'un tampon d'uniformes dans un tampon, en passant par le tampon de transfert.
-		*\param[in] data
-		*	Les données à copier.
-		*\param[in] count
-		*	Le nombre d'éléments à copier.
-		*\param[in] offset
-		*	L'offset dans le tampon.
-		*\param[out] buffer
-		*	Le tampon de destination.
-		*/
 		template< typename T >
 		inline void downloadUniformData( CommandBuffer const & commandBuffer
 			, T * data
@@ -675,6 +319,7 @@ namespace renderer
 			, uint32_t offset
 			, UniformBuffer< T > const & buffer
 			, PipelineStageFlags const & flags )const;
+		/**@}*/
 		/**@}*/
 		/**
 		*\return

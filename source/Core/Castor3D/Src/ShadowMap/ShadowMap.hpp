@@ -4,7 +4,6 @@ See LICENSE file in root folder
 #ifndef ___C3D_ShadowMap_H___
 #define ___C3D_ShadowMap_H___
 
-#include <Buffer/GeometryBuffers.hpp>
 #include "Texture/TextureUnit.hpp"
 
 #include <Design/OwnedBy.hpp>
@@ -245,7 +244,7 @@ namespace castor3d
 
 	protected:
 		renderer::CommandBufferPtr m_commandBuffer;
-		std::set< renderer::GeometryBuffersPtr > m_geometryBuffers;
+		std::set< std::reference_wrapper< GeometryBuffers > > m_geometryBuffers;
 		ShadowMapPassSPtr m_pass;
 		TextureUnit m_shadowMap;
 		TextureUnit m_linearMap;

@@ -44,6 +44,6 @@ namespace castor3d
 
 	void BillboardUbo::setWindowSize( Size const & window )const
 	{
-		m_ubo->getData( 0u ).windowSize = renderer::IVec2{ window[0], window[1] };
+		m_ubo->getData( 0u ).windowSize = castor::Point2i{ window[0], window[1] };
 	}
 }

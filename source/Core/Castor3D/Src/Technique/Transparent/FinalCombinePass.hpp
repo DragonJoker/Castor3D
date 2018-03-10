@@ -35,7 +35,7 @@ namespace castor3d
 			, castor::Size const & size
 			, renderer::DescriptorSet const & uboDescriptorSet
 			, renderer::DescriptorSet const & texDescriptorSet
-			, renderer::GeometryBuffers const & geometryBuffers );
+			, GeometryBuffers const & geometryBuffers );
 		inline renderer::CommandBuffer const & getCommandBuffer()const
 		{
 			REQUIRE( m_commandBuffer );
@@ -118,7 +118,6 @@ namespace castor3d
 		SamplerSPtr m_sampler;
 		renderer::VertexBufferPtr< TexturedQuad > m_vertexBuffer;
 		renderer::VertexLayoutPtr m_vertexLayout;
-		renderer::GeometryBuffersPtr m_geometryBuffers;
 		renderer::DescriptorSetLayoutPtr m_uboDescriptorLayout;
 		renderer::DescriptorSetPoolPtr m_uboDescriptorPool;
 		renderer::DescriptorSetPtr m_uboDescriptorSet;

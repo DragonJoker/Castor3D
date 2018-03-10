@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #include "VkRendererPrerequisites.hpp"
@@ -12,16 +12,16 @@ namespace vk_renderer
 		{
 			VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO,
 			nullptr,
-			convert( state.getFlags() ),
-			state.isDepthTestEnabled(),
-			state.isDepthWriteEnabled(),
-			convert( state.getDepthCompareOp() ),
-			state.isDepthBoundsTestEnabled(),
-			state.isStencilTestEnabled(),
-			convert( state.getFrontStencilOp() ),
-			convert( state.getBackStencilOp() ),
-			state.getMinDepthBounds(),
-			state.getMaxDepthBounds()
+			convert( state.flags ),
+			state.depthTestEnable,
+			state.depthWriteEnable,
+			convert( state.depthCompareOp ),
+			state.depthBoundsTestEnable,
+			state.stencilTestEnable,
+			convert( state.front ),
+			convert( state.back ),
+			state.minDepthBounds,
+			state.maxDepthBounds
 		};
 	}
 }

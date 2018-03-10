@@ -248,12 +248,12 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
 		 */
-		void doPrepareFrontPipeline( renderer::ShaderProgram & p_program
+		void doPrepareFrontPipeline( renderer::ShaderStageStateArray & p_program
 			, PipelineFlags const & p_flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
 		 */
-		void doPrepareBackPipeline( renderer::ShaderProgram & p_program
+		void doPrepareBackPipeline( renderer::ShaderStageStateArray & p_program
 			, PipelineFlags const & p_flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdateFlags

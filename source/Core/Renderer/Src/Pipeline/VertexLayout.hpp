@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___Renderer_VertexLayout_HPP___
@@ -8,7 +8,6 @@ See LICENSE file in root folder.
 
 #include "Core/Device.hpp"
 #include "Shader/Attribute.hpp"
-#include "Shader/FormatGetter.hpp"
 
 #include <vector>
 
@@ -24,7 +23,7 @@ namespace renderer
 	*/
 	class VertexLayout
 	{
-	protected:
+	public:
 		/**
 		*\~english
 		*\brief
@@ -48,8 +47,6 @@ namespace renderer
 		VertexLayout( uint32_t bindingSlot
 			, uint32_t stride
 			, VertexInputRate inputRate );
-
-	public:
 		/**
 		*\~english
 		*\brief
@@ -58,7 +55,7 @@ namespace renderer
 		*\brief
 		*	Destructeur.
 		*/
-		virtual ~VertexLayout() = default;
+		~VertexLayout() = default;
 		/**
 		*\~english
 		*\brief
@@ -80,32 +77,8 @@ namespace renderer
 		*	La position de l'attribut, dans le tampon.
 		*/
 		Attribute createAttribute( uint32_t location
-			, AttributeFormat format
+			, Format format
 			, uint32_t offset );
-		/**
-		*\~english
-		*\brief
-		*	Creates a vertex attribute.
-		*\param[in] location
-		*	The attribute location in the shader.
-		*\param[in] offset
-		*	The attribute location in the buffer.
-		*\~french
-		*\brief
-		*	Crée un attribut de sommet.
-		*\param[in] location
-		*	La position de l'attribut dans le shader.
-		*\param[in] offset
-		*	La position de l'attribut dans le tampon.
-		*/
-		template< typename T >
-		inline Attribute createAttribute( uint32_t location
-			, uint32_t offset )
-		{
-			return createAttribute( location
-				, details::FormatGetter< T >::value
-				, offset );
-		}
 		/**
 		*\~french
 		*\return
@@ -203,8 +176,6 @@ namespace renderer
 	*\~english
 	*\brief
 	*	Creates a vertex layout.
-	*\param[in] device
-	*	The logical device, that will effectively create the vertex layout.
 	*\param[in] bindingSlot
 	*	The binding slot of the associated buffer.
 	*\param[in] inputRate
@@ -212,26 +183,19 @@ namespace renderer
 	*\~french
 	*\brief
 	*	Crée un layout de sommet.
-	*\param[in] device
-	*	Le périphérique logique, qui va effectivement créer le layout de sommet.
 	*\param[in] bindingSlot
 	*	Le point d'attache du tampon associé.
 	*\param[in] inputRate
 	*	La cadence d'entrée.
 	*/
 	template< typename T >
-	VertexLayoutPtr makeLayout( Device const & device
-		, uint32_t bindingSlot
+	VertexLayoutPtr makeLayout( uint32_t bindingSlot
 		, VertexInputRate inputRate = VertexInputRate::eVertex )
 	{
-		return device.createVertexLayout( bindingSlot
+		return std::make_unique< VertexLayout >( bindingSlot
 			, uint32_t( sizeof( T ) )
 			, inputRate );
 	}
-	//!\~english	Helper macro to create a vertex layout attribute from a struct member.
-	//!\~french		Macro d'aide à la création d'un attribut de sommet à partir du membre d'une structure.
-#define createVertexAttribute( Layout, Struct, Member, Location )\
-	( Layout )->createAttribute< decltype( Struct::Member ) >( Location, offsetof( Struct, Member ) )
 }
 
 #endif

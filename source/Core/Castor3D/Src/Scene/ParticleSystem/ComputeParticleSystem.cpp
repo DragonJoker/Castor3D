@@ -8,7 +8,6 @@
 #include "Scene/ParticleSystem/Particle.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <Buffer/GeometryBuffers.hpp>
 #include <Buffer/UniformBuffer.hpp>
 
 #include <Graphics/PixelBuffer.hpp>
@@ -178,7 +177,7 @@ namespace castor3d
 	{
 		auto & device = *getParent().getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
 		uint32_t size = 1024u;
-		m_randomStorage = renderer::makeBuffer< renderer::Vec4 >( device
+		m_randomStorage = renderer::makeBuffer< castor::Point4f >( device
 			, 1024
 			, renderer::BufferTarget::eStorageBuffer | renderer::BufferTarget::eTransferDst
 			, renderer::MemoryPropertyFlag::eHostVisible );

@@ -87,8 +87,8 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
-		C3D_API void gather( renderer::VertexBufferCRefArray & buffers
-			, std::vector< uint64_t > offsets
+		C3D_API void gather( renderer::BufferCRefArray & buffers
+			, std::vector< uint64_t > & offsets
 			, renderer::VertexLayoutCRefArray & layouts )override;
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::setMaterial

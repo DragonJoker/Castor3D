@@ -90,18 +90,6 @@ namespace castor3d
 			return result;
 		}
 
-		renderer::GeometryBuffersPtr doCreateVao( Engine & engine
-			, renderer::VertexLayout const & layout
-			, renderer::VertexBuffer< TexturedQuad > & vbo )
-		{
-			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = *renderSystem.getCurrentDevice();
-			auto result = device.createGeometryBuffers( vbo
-				, 0u
-				, layout );
-			return result;
-		}
-
 		renderer::DescriptorSetLayoutPtr doCreateUboDescriptorLayout( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
@@ -340,7 +328,7 @@ namespace castor3d
 		, Size const & size
 		, renderer::DescriptorSet const & uboDescriptorSet
 		, renderer::DescriptorSet const & texDescriptorSet
-		, renderer::GeometryBuffers const & geometryBuffers )
+		, GeometryBuffers const & geometryBuffers )
 	{
 		m_pipeline->initialise( renderPass, renderer::PrimitiveTopology::eTriangleStrip );
 

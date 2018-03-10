@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___Renderer_CommandBuffer_HPP___
@@ -16,7 +16,7 @@ See LICENSE file in root folder.
 namespace renderer
 {
 	/**
-	*\~french
+	*\~english
 	*\brief
 	*	A command buffer.
 	*\~french
@@ -86,18 +86,8 @@ namespace renderer
 		*	Starts recording the command buffer as a secondary command buffer.
 		*\param[in] flags
 		*	The usage flags for the command buffer.
-		*\param[in] renderPass
-		*	The render pass with which the buffer is compatible, and int which it can execute.
-		*\param[in] subpass
-		*	The index of the subpass into which this buffer will be executed.
-		*\param[in] frameBuffer
-		*	The frame buffer into which the command buffer will render.
-		*\param[in] occlusionQueryEnable
-		*	Tells if the command buffer can be executed while an occlusion query is active on main command buffer.
-		*\param[in] queryFlags
-		*	The occlusion query flags that can be used by an active occlusion query on the main command buffer, when this buffer is executed.
-		*\param[in] pipelineStatistics
-		*	Tells which pipeline statistics can be counted by an active query on the main command buffer, when this buffer is executed.
+		*\param[in] inheritanceInfo
+		*	The inheritance informations.
 		*\return
 		*	\p false on any error.
 		*\~french
@@ -105,30 +95,13 @@ namespace renderer
 		*	Démarre l'enregistrement du tampon de commandes en tant que tampon secondaire.
 		*\param[in] flags
 		*	Les indicateurs de type de charge qui sera affectée au tampon.
-		*\param[in] renderPass
-		*	La passe de rendu avec laquelle le tampon sera compatible, et dans laquelle il peut s'exécuter.
-		*\param[in] subpass
-		*	L'indice de la sous-passe au sein de laquelle le tampon de commandes sera exécuté.
-		*\param[in] frameBuffer
-		*	Le tampon d'images dans lequel le tampon de commandes va effectuer son rendu.
-		*\param[in] occlusionQueryEnable
-		*	Indique si le tampon de commandes peut être exécuté alors qu'une requête d'occlusion est active sur le tampon principal.
-		*\param[in] queryFlags
-		*	Les indicateurs de requête d'occlusion pouvant être utilisées par une requête d'occlusion active sur le tampon principal,
-		*	lorsque ce tampon est exécuté.
-		*\param[in] pipelineStatistics
-		*	Indique quelles statistique de pipeline peuvent être comptées par une requête active sur le tampon principal,
-		*	lorsque ce tampon est exécuté.
+		*\param[in] inheritanceInfo
+		*	Les informations d'héritage.
 		*\return
 		*	\p false en cas d'erreur.
 		*/
 		virtual bool begin( CommandBufferUsageFlags flags
-			, RenderPass const & renderPass
-			, uint32_t subpass
-			, FrameBuffer const & frameBuffer
-			, bool occlusionQueryEnable = false
-			, QueryControlFlags queryFlags = 0u
-			, QueryPipelineStatisticFlags pipelineStatistics = 0u )const = 0;
+			, CommandBufferInheritanceInfo const & inheritanceInfo )const = 0;
 		/**
 		*\~english
 		*\brief
@@ -261,6 +234,24 @@ namespace renderer
 		/**
 		*\~english
 		*\brief
+		*	Clear regions within currently bound framebuffer attachments.
+		*\param[in] clearAttachments
+		*	The attachments to clear and the clear values to use.
+		*\param[in] clearRects
+		*	The regions within each selected attachment to clear.
+		*\~french
+		*\brief
+		*	Vide une région des attaches du tampon d'images actuellement attaché.
+		*\param[in] clearAttachments
+		*	Les attaches à vider et les valeurs de nettoyage à utiliser.
+		*\param[in] clearRects
+		*	Les régions à nettoyer pour chaque attache sélectionnée.
+		*/
+		virtual void clearAttachments( ClearAttachmentArray const & clearAttachments
+			, ClearRectArray const & clearRects ) = 0;
+		/**
+		*\~english
+		*\brief
 		*	Defines a memory dependency between commands that were submitted before it, and those submitted after it.
 		*\param[in] after
 		*	Specifies the pipeline stages that must be ended before the barrier.
@@ -343,21 +334,54 @@ namespace renderer
 		/**
 		*\~english
 		*\brief
-		*	Enables geometry buffers (VBO, EBO, ...).
-		*\param[in] geometryBuffers
-		*	Les tampons de géométrie.
+		*	Binds vertex buffers to the command buffer.
+		*\param[in] firstBinding
+		*	The index of the first vertex input binding whose state is updated by the command.
+		*\param[in] buffers
+		*	The array of buffer handles.
+		*\param[in] offsets
+		*	The array of buffer offsets.
 		*\~french
 		*\brief
-		*	Active des tampons de géométrie (VBO, IBO, ...).
-		*\param[in] geometryBuffers
-		*	Les tampons de géométrie.
+		*	Active des tampons de sommets sur le tampon de commandes.
+		*\param[in] firstBinding
+		*	L'indice de la première attache d'entrée de sommets dont l'état est mis à jour par la commande.
+		*\param[in] buffers
+		*	Un tableau de tampons de sommets.
+		*\param[in] offsets
+		*	Un tableau d'offsets dans les tampons.
 		*/
-		virtual void bindGeometryBuffers( GeometryBuffers const & geometryBuffers )const = 0;
+		virtual void bindVertexBuffers( uint32_t firstBinding
+			, BufferCRefArray const & buffers
+			, UInt64Array offsets )const = 0;
+		/**
+		*\~english
+		*\brief
+		*	Binds an index buffer to the command buffer.
+		*\param[in] buffer
+		*	The buffer being bound.
+		*\param[in] offset
+		*	The starting offset in bytes within buffer used in index buffer address calculations.
+		*\param[in] type
+		*	Tells whether the indices are treated as 16 bits or 32 bits.
+		*\~french
+		*\brief
+		*	Active un tampon d'indices sur le tampon de commandes.
+		*\param[in] buffer
+		*	Le tampon à activer.
+		*\param[in] offset
+		*	L'offset de départ en octets dans le tampon, utilisé pour le calcul des indices.
+		*\param[in] type
+		*	Dit si les indices sont traités en 16 bits ou 32 bits.
+		*/
+		virtual void bindIndexBuffer( BufferBase const & buffer
+			, uint64_t offset
+			, IndexType indexType )const = 0;
 		/**
 		*\~english
 		*\brief
 		*	Binds descriptor sets to the command buffer.
-		*\param[in] descriptorSets
+		*\param[in] descriptorSet
 		*	The descriptor sets.
 		*\param[in] layout
 		*	The pipeline layout used to program the binding.
@@ -366,15 +390,18 @@ namespace renderer
 		*\~french
 		*\brief
 		*	Active des descriptor sets.
-		*\param[in] descriptorSets
+		*\param[in] descriptorSet
 		*	Les descriptor sets.
 		*\param[in] layout
 		*	Le layout de pipeline.
 		*\param[in] bindingPoint
 		*	Le point d'attache du set.
+		*\param[in] dynamicOffsets
+		*	Les offsets des .
 		*/
 		virtual void bindDescriptorSets( DescriptorSetCRefArray const & descriptorSet
 			, PipelineLayout const & layout
+			, renderer::UInt32Array const & dynamicOffsets
 			, PipelineBindPoint bindingPoint = PipelineBindPoint::eGraphics )const = 0;
 		/**
 		*\~english
@@ -472,28 +499,61 @@ namespace renderer
 			, uint32_t vertexOffset = 0u
 			, uint32_t firstInstance = 0u )const = 0;
 		/**
-		*\~french
-		*\brief
-		*	Copie les données d'un tampon vers une image.
-		*\param[in] copyInfo
-		*	Les informations de la copie.
-		*\param[in] src
-		*	Le tampon source.
-		*\param[in] dst
-		*	L'image destination.
 		*\~english
 		*\brief
-		*	Copies data from a buffer to an image.
-		*\param[in] copyInfo
-		*	The copy informations.
-		*\param[in] src
-		*	The source buffer.
-		*\param[in] dst
-		*	The destination image.
+		*	Perform an indirect draw.
+		*\param[in] buffer
+		*	The buffer containing draw parameters.
+		*\param[in] offset
+		*	The byte offset into \p buffer where parameters begin.
+		*\param[in] drawCount
+		*	The number of draws to execute, and can be zero.
+		*\param[in] stride
+		*	The byte stride between successive sets of draw parameters.
+		*\~french
+		*\brief
+		*	Effectue un dessin indirect.
+		*\param[in] buffer
+		*	Le tampon contenant les paramètres de dessin.
+		*\param[in] offset
+		*	L'offset en octets dans \p buffer, où les paramètres commencent.
+		*\param[in] drawCount
+		*	Le nombre de dessins à effectuer, peut être zéro.
+		*\param[in] stride
+		*	Le stride en octets entre deux ensembles successifs de paramètres de dessin.
 		*/
-		virtual void copyToImage( BufferImageCopy const & copyInfo
-			, BufferBase const & src
-			, TextureView const & dst )const = 0;
+		virtual void drawIndirect( BufferBase const & buffer
+			, uint32_t offset
+			, uint32_t drawCount
+			, uint32_t stride )const = 0;
+		/**
+		*\~english
+		*\brief
+		*	Perform an indexed indirect draw.
+		*\param[in] buffer
+		*	The buffer containing draw parameters.
+		*\param[in] offset
+		*	The byte offset into \p buffer where parameters begin.
+		*\param[in] drawCount
+		*	The number of draws to execute, and can be zero.
+		*\param[in] stride
+		*	The byte stride between successive sets of draw parameters.
+		*\~french
+		*\brief
+		*	Effectue un dessin indirect indexé.
+		*\param[in] buffer
+		*	Le tampon contenant les paramètres de dessin.
+		*\param[in] offset
+		*	L'offset en octets dans \p buffer, où les paramètres commencent.
+		*\param[in] drawCount
+		*	Le nombre de dessins à effectuer, peut être zéro.
+		*\param[in] stride
+		*	Le stride en octets entre deux ensembles successifs de paramètres de dessin.
+		*/
+		virtual void drawIndexedIndirect( BufferBase const & buffer
+			, uint32_t offset
+			, uint32_t drawCount
+			, uint32_t stride )const = 0;
 		/**
 		*\~french
 		*\brief
@@ -514,8 +574,31 @@ namespace renderer
 		*\param[in] dst
 		*	The destination image.
 		*/
-		virtual void copyToBuffer( BufferImageCopy const & copyInfo
-			, TextureView const & src
+		virtual void copyToImage( BufferImageCopyArray const & copyInfo
+			, BufferBase const & src
+			, Texture const & dst )const = 0;
+		/**
+		*\~french
+		*\brief
+		*	Copie les données d'un tampon vers une image.
+		*\param[in] copyInfo
+		*	Les informations de la copie.
+		*\param[in] src
+		*	Le tampon source.
+		*\param[in] dst
+		*	L'image destination.
+		*\~english
+		*\brief
+		*	Copies data from a buffer to an image.
+		*\param[in] copyInfo
+		*	The copy informations.
+		*\param[in] src
+		*	The source buffer.
+		*\param[in] dst
+		*	The destination image.
+		*/
+		virtual void copyToBuffer( BufferImageCopyArray const & copyInfo
+			, Texture const & src
 			, BufferBase const & dst )const = 0;
 		/**
 		*\~french
@@ -561,35 +644,47 @@ namespace renderer
 		*	The destination image.
 		*/
 		virtual void copyImage( ImageCopy const & copyInfo
-			, TextureView const & src
-			, TextureView const & dst )const = 0;
+			, Texture const & src
+			, ImageLayout srcLayout
+			, Texture const & dst
+			, ImageLayout dstLayout )const = 0;
 		/**
 		*\~french
 		*\brief
-		*	Copie une image vers une autre.
-		*\param[in] src
+		*	Copie des régions d'une image vers une autre.
+		*\param[in] regions
+		*	Les régions à blitter.
+		*\param[in] srcImage
 		*	L'image source.
-		*\param[in] dst
+		*\param[in] srcLayout
+		*	Le layout de l'image source.
+		*\param[in] dstImage
 		*	L'image destination.
-		*\param[in] blit
-		*	La configuration de la copie.
+		*\param[in] dstLayout
+		*	Le layout de l'image destination.
 		*\param[in] filter
 		*	Le filtre appliqué si la copie nécessite une mise à l'échelle.
 		*\~english
 		*\brief
-		*	Blits an image to another one.
-		*\param[in] src
+		*	Copy regions of an image to another one.
+		*\param[in] regions
+		*	The regions to blit.
+		*\param[in] srcImage
 		*	The source image.
-		*\param[in] dst
+		*\param[in] srcLayout
+		*	The source image layout.
+		*\param[in] dstImage
 		*	The destination image.
-		*\param[in] blit
-		*	The blit configuration.
+		*\param[in] dstLayout
+		*	The source image layout.
 		*\param[in] filter
 		*	The filter applied if the blit requires scaling.
 		*/
-		virtual void blitImage( ImageBlit const & blit
-			, FrameBufferAttachment const & src
-			, FrameBufferAttachment const & dst
+		virtual void blitImage( Texture const & srcImage
+			, ImageLayout srcLayout
+			, Texture const & dstImage
+			, ImageLayout dstLayout
+			, std::vector< ImageBlit > const & regions
 			, Filter filter )const = 0;
 		/**
 		*\~english
@@ -684,15 +779,15 @@ namespace renderer
 		*	Met à jour les valeurs de push constants.
 		*\param[in] layout
 		*	Le layout de pipeline utilisé pour programmer la mise à jour des push constants.
-		*\param[in] stageFlags
-		*	Spécifie les niveaux de shaders qui vont utiliser les push constants dans l'intervalle mis à jour.
+		*\param[in] pcb
+		*	Le tampon de push constants.
 		*\~english
 		*\brief
 		*	Updates the values of push constants.
 		*\param[in] layout
 		*	The pipeline layout used to program the push constants updates.
-		*\param[in] stageFlags
-		*	Specifies the shader stages that will use the push constants in the updated range.
+		*\param[in] pcb
+		*	The push constants buffer.
 		*/
 		virtual void pushConstants( PipelineLayout const & layout
 			, PushConstantsBufferBase const & pcb )const = 0;
@@ -701,7 +796,7 @@ namespace renderer
 		*\brief
 		*	Distribue des éléments de calcul.
 		*\param[in] groupCountX, groupCountY, groupCountZ
-		*	Le nombre de groupes de travail locaux à distribuer dans les dimensions Xy, Y, et Z.
+		*	Le nombre de groupes de travail locaux à distribuer dans les dimensions X, Y, et Z.
 		*\~english
 		*\brief
 		*	Dispatch compute work items.
@@ -711,6 +806,129 @@ namespace renderer
 		virtual void dispatch( uint32_t groupCountX
 			, uint32_t groupCountY
 			, uint32_t groupCountZ )const = 0;
+		/**
+		*\~english
+		*\brief
+		*	Dispatch compute work items using indirect parameters.
+		*\param[in] buffer
+		*	The buffer containing dispatch parameters.
+		*\param[in] offset
+		*	The byte offset into \p buffer where parameters begin.
+		*\~french
+		*\brief
+		*	Distribue des éléments de calcul en utilisant des paramètres indirects.
+		*\param[in] buffer
+		*	Le tampon contenant les paramètres de distribution.
+		*\param[in] offset
+		*	L'offset en octets dans \p buffer, où les paramètres commencent.
+		*/
+		virtual void dispatchIndirect( BufferBase const & buffer
+			, uint32_t offset )const = 0;
+		/**
+		*\~french
+		*\brief
+		*	Définit la largeur des lignes, si celle-ci est un état dynamique du pipeline.
+		*\param[in] width
+		*	La largeur voulue.
+		*\~english
+		*\brief
+		*	Specifies the lines width, if this is a dynamic state in the pipeline.
+		*\param[in] width
+		*	The wanted width.
+		*/
+		virtual void setLineWidth( float width )const = 0;
+		/**
+		*\~french
+		*\brief
+		*	Définit la largeur des lignes, si celle-ci est un état dynamique du pipeline.
+		*\param[in] constantFactor
+		*	Le facteur contrôlant la valeur constante de profondeur ajoutée à chaque fragment.
+		*\param[in] clamp
+		*	Le décalage maximum (ou minimum) de profondeur d'un fragment.
+		*\param[in] slopeFactor
+		*	Le facteur appliqué à la pente d'un fragment lors du calcul de décalage de profondeur.
+		*\~english
+		*\brief
+		*	Specifies the lines width, if this is a dynamic state in the pipeline.
+		*\param[in] constantFactor
+		*	The scalar factor controlling the constant depth value added to each fragment.
+		*\param[in] clamp
+		*	The maximum (or minimum) depth bias of a fragment.
+		*\param[in] slopeFactor
+		*	The scalar factor applied to a fragment’s slope in depth bias calculations.
+		*/
+		virtual void setDepthBias( float constantFactor
+			, float clamp
+			, float slopeFactor )const = 0;
+		/**
+		*\~english
+		*\brief
+		*	Binds a vertex buffer to the command buffer.
+		*\param[in] binding
+		*	The index of the vertex input binding whose state is updated by the command.
+		*\param[in] buffers
+		*	The array of buffer handles.
+		*\param[in] offsets
+		*	The array of buffer offsets.
+		*\~french
+		*\brief
+		*	Active un tampon de sommets sur le tampon de commandes.
+		*\param[in] firstBinding
+		*	L'indice de l'attache d'entrée de sommets dont l'état est mis à jour par la commande.
+		*\param[in] buffers
+		*	Le tampon de sommets.
+		*\param[in] offsets
+		*	L'offsets dans le tampon.
+		*/
+		void bindVertexBuffer( uint32_t binding
+			, BufferBase const & buffer
+			, uint64_t offset )const;
+		/**
+		*\~french
+		*\brief
+		*	Copie les données d'un tampon vers une image.
+		*\param[in] copyInfo
+		*	Les informations de la copie.
+		*\param[in] src
+		*	Le tampon source.
+		*\param[in] dst
+		*	L'image destination.
+		*\~english
+		*\brief
+		*	Copies data from a buffer to an image.
+		*\param[in] copyInfo
+		*	The copy informations.
+		*\param[in] src
+		*	The source buffer.
+		*\param[in] dst
+		*	The destination image.
+		*/
+		void copyToImage( BufferImageCopy const & copyInfo
+			, BufferBase const & src
+			, Texture const & dst )const;
+		/**
+		*\~french
+		*\brief
+		*	Copie les données d'un tampon vers une image.
+		*\param[in] copyInfo
+		*	Les informations de la copie.
+		*\param[in] src
+		*	Le tampon source.
+		*\param[in] dst
+		*	L'image destination.
+		*\~english
+		*\brief
+		*	Copies data from a buffer to an image.
+		*\param[in] copyInfo
+		*	The copy informations.
+		*\param[in] src
+		*	The source buffer.
+		*\param[in] dst
+		*	The destination image.
+		*/
+		void copyToBuffer( BufferImageCopy const & copyInfo
+			, Texture const & src
+			, BufferBase const & dst )const;
 		/**
 		*\~french
 		*\brief
@@ -761,10 +979,70 @@ namespace renderer
 		*/
 		inline void bindDescriptorSet( DescriptorSet const & descriptorSet
 			, PipelineLayout const & layout
+			, renderer::UInt32Array const & dynamicOffsets
 			, PipelineBindPoint bindingPoint = PipelineBindPoint::eGraphics )const
 		{
-			bindDescriptorSets( { descriptorSet }
+			bindDescriptorSets( DescriptorSetCRefArray{ descriptorSet }
 				, layout
+				, dynamicOffsets
+				, bindingPoint );
+		}
+		/**
+		*\~english
+		*\brief
+		*	Binds a descriptor set to the command buffer.
+		*\param[in] descriptorSet
+		*	The descriptor set.
+		*\param[in] layout
+		*	The pipeline layout used to program the binding.
+		*\param[in] bindingPoint
+		*	Indicates whether the descriptor wil be used by graphics or compute pipeline.
+		*\~french
+		*\brief
+		*	Active un descriptor set.
+		*\param[in] descriptorSet
+		*	Le descriptor set.
+		*\param[in] layout
+		*	Le layout de pipeline.
+		*\param[in] bindingPoint
+		*	Le point d'attache du set.
+		*/
+		inline void bindDescriptorSet( DescriptorSet const & descriptorSet
+			, PipelineLayout const & layout
+			, PipelineBindPoint bindingPoint = PipelineBindPoint::eGraphics )const
+		{
+			bindDescriptorSets( DescriptorSetCRefArray{ descriptorSet }
+				, layout
+				, UInt32Array{}
+				, bindingPoint );
+		}
+		/**
+		*\~english
+		*\brief
+		*	Binds descriptor sets to the command buffer.
+		*\param[in] descriptorSet
+		*	The descriptor sets.
+		*\param[in] layout
+		*	The pipeline layout used to program the binding.
+		*\param[in] bindingPoint
+		*	Indicates whether the descriptor wil be used by graphics or compute pipeline.
+		*\~french
+		*\brief
+		*	Active des descriptor sets.
+		*\param[in] descriptorSet
+		*	Les descriptor sets.
+		*\param[in] layout
+		*	Le layout de pipeline.
+		*\param[in] bindingPoint
+		*	Le point d'attache du set.
+		*/
+		inline void bindDescriptorSets( DescriptorSetCRefArray const & descriptorSet
+			, PipelineLayout const & layout
+			, PipelineBindPoint bindingPoint = PipelineBindPoint::eGraphics )const
+		{
+			bindDescriptorSets( descriptorSet
+				, layout
+				, UInt32Array{}
 				, bindingPoint );
 		}
 		/**
@@ -953,15 +1231,15 @@ namespace renderer
 		*	Met à jour les valeurs de push constants.
 		*\param[in] layout
 		*	Le layout de pipeline utilisé pour programmer la mise à jour des push constants.
-		*\param[in] stageFlags
-		*	Spécifie les niveaux de shaders qui vont utiliser les push constants dans l'intervalle mis à jour.
+		*\param[in] pcb
+		*	Le tampon de push constants.
 		*\~english
 		*\brief
 		*	Updates the values of push constants.
 		*\param[in] layout
 		*	The pipeline layout used to program the push constants updates.
-		*\param[in] stageFlags
-		*	Specifies the shader stages that will use the push constants in the updated range.
+		*\param[in] pcb
+		*	The push constants buffer.
 		*/
 		template< typename T >
 		inline void pushConstants( PipelineLayout const & layout

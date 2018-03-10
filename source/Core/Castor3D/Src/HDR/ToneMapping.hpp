@@ -79,6 +79,21 @@ namespace castor3d
 		C3D_API void update( HdrConfig const & config );
 
 		using RenderQuad::getCommandBuffer;
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		**/
+		/**@{*/
+		inline renderer::Semaphore const & getSemaphore()const
+		{
+			REQUIRE( m_signalFinished );
+			return *m_signalFinished;
+		}
+		/**@}*/
 
 	private:
 		/**
@@ -112,12 +127,9 @@ namespace castor3d
 			, renderer::DescriptorSet & descriptorSet )override;
 
 	protected:
-		//!\~english	The configuration data UBO.
-		//!\~french		L'UBO de données de configuration.
 		HdrConfigUbo m_configUbo;
-		//!\~english	The render pass timer.
-		//!\~french		Le timer de passe de rendu.
 		RenderPassTimerSPtr m_timer;
+		renderer::SemaphorePtr m_signalFinished;
 	};
 }
 

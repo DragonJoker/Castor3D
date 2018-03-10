@@ -62,6 +62,14 @@ namespace castor3d
 
 		Quad faces[6];
 	};
+	struct GeometryBuffers
+	{
+		renderer::BufferCRefArray vbo;
+		renderer::UInt64Array vboOffsets;
+		renderer::VertexLayoutCRefArray layouts;
+		renderer::BufferBase const * ibo{ nullptr };
+		uint64_t iboOffset;
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.6.1.0

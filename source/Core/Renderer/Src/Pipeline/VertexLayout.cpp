@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #include "Pipeline/VertexLayout.hpp"
@@ -18,7 +18,7 @@ namespace renderer
 	}
 
 	Attribute VertexLayout::createAttribute( uint32_t location
-		, AttributeFormat format
+		, Format format
 		, uint32_t offset )
 	{
 		m_attributes.emplace_back( *this

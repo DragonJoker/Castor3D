@@ -1,5 +1,5 @@
-﻿/*
-This file belongs to Renderer.
+/*
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___Renderer_FrameBuffer_HPP___
@@ -7,36 +7,44 @@ See LICENSE file in root folder.
 #pragma once
 
 #include "FrameBufferAttachment.hpp"
+#include "Miscellaneous/Extent2D.hpp"
 
 namespace renderer
 {
 	/**
+	*\~english
+	*\brief
+	*	Class wrapping the concept of a Framebuffer.
+	*\~french
 	*\brief
 	*	Classe encapsulant le concept de Framebuffer.
-	*\remarks
-	*	Contient les tampons de profondeur et de couleur.
 	*/
 	class FrameBuffer
 	{
 	protected:
-		/**
-		*\brief
-		*	Crée un FrameBuffer.
-		*/
 		FrameBuffer();
 		/**
+		*\~english
+		*\brief
+		*	Creates a framebuffer compatible with the given render pass.
+		*\param[in] renderPass
+		*	The render pass, containing the attachments.
+		*\param[in] dimensions
+		*	The frame buffer dimensions.
+		*\param[in] textures
+		*	The attachments wanted for the framebuffer.
+		*\~french
 		*\brief
 		*	Crée un FrameBuffer compatible avec la passe de rendu donnée.
-		*\remarks
-		*	Si la compatibilité entre les textures voulues et les formats de la passe de rendu
-		*	n'est pas possible, une std::runtime_error est lancée.
+		*\param[in] renderPass
+		*	La passe de rendu, contenant les attaches.
 		*\param[in] dimensions
 		*	Les dimensions du tampon d'images.
 		*\param[in] textures
 		*	Les textures voulues pour le tampon d'images à créer.
 		*/
 		FrameBuffer( RenderPass const & renderPass
-			, UIVec2 const & dimensions
+			, Extent2D const & dimensions
 			, FrameBufferAttachmentArray && textures );
 
 	public:
@@ -49,29 +57,6 @@ namespace renderer
 		*	Destructeur.
 		*/
 		virtual ~FrameBuffer() = default;
-		/**
-		*\brief
-		*	Copie des données dans la RAM.
-		*\remarks
-		*	Pour utiliser cette fonction, il faut que le tampon soit activé.
-		*\param[in] xoffset, yoffset
-		*	Le décalage à partir duquel les données seront copiées, par rapport
-		*	au début du stockage de la texture, en VRAM.
-		*\param[in] width, height
-		*	Les dimensions des données à copier.
-		*\param[in] format
-		*	Le format voulu pour les données.
-		*\param[out] data
-		*	Reçoit les données copiées.
-		*/
-		virtual void download( Queue const & queue
-			, uint32_t index
-			, uint32_t xoffset
-			, uint32_t yoffset
-			, uint32_t width
-			, uint32_t height
-			, PixelFormat format
-			, uint8_t * data )const noexcept = 0;
 		/**
 		*\~english
 		*\return
@@ -116,13 +101,13 @@ namespace renderer
 		*\return
 		*	Les dimensions du tampon d'image.
 		*/
-		inline renderer::UIVec2 const & getDimensions()const
+		inline Extent2D const & getDimensions()const
 		{
 			return m_dimensions;
 		}
 
 	protected:
-		UIVec2 m_dimensions;
+		Extent2D m_dimensions;
 		FrameBufferAttachmentArray m_attachments;
 	};
 }

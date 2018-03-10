@@ -21,61 +21,32 @@ namespace gl_renderer
 		*\brief
 		*	Constructeur.
 		*/
-		SwapChain( renderer::Device const & device
-			, renderer::UIVec2 const & size );
+		SwapChain( Device const & device
+			, renderer::Extent2D const & size );
 		/**
-		*\brief
-		*	R�initialise la swap chain.
+		*\copydoc	renderer::SwapChain::reset
 		*/
-		void reset( renderer::UIVec2 const & size )override;
+		void reset( renderer::Extent2D const & size )override;
 		/**
-		*\brief
-		*	Cr�e les tampons d'image des back buffers, compatibles avec la passe de rendu donn�e.
-		*\param[in] renderPass
-		*	La passe de rendu.
-		*\return
-		*	Les tampons d'images.
+		*\copydoc	renderer::SwapChain::createFrameBuffers
 		*/
 		renderer::FrameBufferPtrArray createFrameBuffers( renderer::RenderPass const & renderPass )const override;
 		/**
-		*\brief
-		*	Cr�e les tampons d'image des back buffers, compatibles avec la passe de rendu donn�e.
-		*\param[in] renderPass
-		*	La passe de rendu.
-		*\return
-		*	Les tampons d'images.
+		*\copydoc	renderer::SwapChain::createCommandBuffers
 		*/
 		renderer::CommandBufferPtrArray createCommandBuffers()const override;
 		/**
-		*\brief
-		*	Enregistre des commandes de pr�-rendu.
-		*\param[in] index
-		*	L'indice de l'image.
-		*\param[in] commandBuffer
-		*	Le tampon de commandes recevant les commandes.
-		*/
-		void preRenderCommands( uint32_t index
-			, renderer::CommandBuffer const & commandBuffer )const override;
-		/**
-		*\brief
-		*	Enregistre des commandes de post-rendu.
-		*\param[in] index
-		*	L'indice de l'image.
-		*\param[in] commandBuffer
-		*	Le tampon de commandes recevant les commandes.
-		*/
-		void postRenderCommands( uint32_t index
-			, renderer::CommandBuffer const & commandBuffer )const override;;
-		/**
-		*\return
-		*	R�cup�re les ressources de rendu actives.
+		*\copydoc	renderer::SwapChain::getResources
 		*/
 		renderer::RenderingResources * getResources()override;
 		/**
-		*\return
-		*	Pr�sente les ressources de rendu.
+		*\copydoc	renderer::SwapChain::present
 		*/
 		void present( renderer::RenderingResources & resources )override;
+		/**
+		*\copydoc	renderer::SwapChain::createDepthStencil
+		*/
+		void createDepthStencil( renderer::Format format )override;
 		/**
 		*\brief
 		*	D�finit la couleur de vidage de la swapchain.
@@ -100,7 +71,7 @@ namespace gl_renderer
 		*\return
 		*	Les dimensions de la swap chain.
 		*/
-		inline renderer::UIVec2 getDimensions()const override
+		inline renderer::Extent2D getDimensions()const override
 		{
 			return m_dimensions;
 		}
@@ -108,16 +79,20 @@ namespace gl_renderer
 		*\return
 		*	Les format des pixels de la swap chain.
 		*/
-		inline renderer::PixelFormat getFormat()const override
+		inline renderer::Format getFormat()const override
 		{
 			return m_format;
 		}
 
 	private:
 		void doResetSwapChain();
+		void doCreateBackBuffers();
+		renderer::FrameBufferAttachmentArray doPrepareAttaches( uint32_t backBuffer
+			, renderer::AttachmentDescriptionArray const & attaches )const;
 
 	private:
+		Device const & m_device;
 		renderer::RgbaColour m_clearColour;
-		renderer::PixelFormat m_format;
+		renderer::Format m_format;
 	};
 }

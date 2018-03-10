@@ -146,9 +146,6 @@ namespace castor3d
 			//!\~english	The shader program.
 			//!\~french		Le shader program.
 			renderer::ShaderProgramPtr m_program;
-			//!\~english	The geometry buffers.
-			//!\~french		Les tampons de géométrie.
-			renderer::GeometryBuffersPtr m_geometryBuffers;
 			//!\~english	The render pipeline.
 			//!\~french		Le pipeline de rendu.
 			RenderPipelineUPtr m_pipeline;

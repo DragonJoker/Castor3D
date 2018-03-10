@@ -12,20 +12,29 @@ namespace gl_renderer
 		, renderer::RgbaColour const & colour )
 		: m_image{ static_cast< TextureView const & >( image ) }
 		, m_colour{ colour }
-		, m_format{ getFormat( m_image.getFormat() ) }
-		, m_type{ getType( m_image.getFormat() ) }
+		, m_internal{ getInternal( m_image.getFormat() ) }
+		, m_format{ getFormat( m_internal ) }
+		, m_type{ getType( m_internal ) }
 	{
 	}
 
 	void ClearColourCommand::apply()const
 	{
 		glLogCommand( "ClearColourCommand" );
-		glLogCall( gl::ClearTexImage
-			, m_image.getImage()
-			, 0
-			, m_format
-			, m_type
-			, m_colour.constPtr() );
+
+		if ( gl::ClearTexImage )
+		{
+			glLogCall( gl::ClearTexImage
+				, m_image.getImage()
+				, 0
+				, m_format
+				, m_type
+				, m_colour.constPtr() );
+		}
+		else
+		{
+			std::cerr << "Unsupported command : ClearColourCommand" << std::endl;
+		}
 	}
 
 	CommandPtr ClearColourCommand::clone()const

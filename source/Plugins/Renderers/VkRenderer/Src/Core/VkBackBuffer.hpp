@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder
 */
 #pragma once
@@ -30,51 +30,9 @@ namespace vk_renderer
 		*	L'index de l'image, parmi les images de la swap chain.
 		*/
 		BackBuffer( Device const & device
-			, renderer::SwapChain const & swapchain
+			, renderer::TexturePtr && image
 			, uint32_t imageIndex
-			, renderer::PixelFormat format
-			, renderer::UIVec2 const & dimensions
-			, Texture && texture );
-		/**
-		*\~french
-		*\return
-		*	L'index de l'image dans la swap chain.
-		*\~english
-		*\return
-		*	The image index, inside the swap chain.
-		*/
-		inline uint32_t getImageIndex()const
-		{
-			return m_imageIndex;
-		}
-		/**
-		*\~french
-		*\return
-		*	L'image du back buffer.
-		*\~english
-		*\return
-		*	The back buffer image.
-		*/
-		inline Texture const & getTexture()const
-		{
-			return m_image;
-		}
-		/**
-		*\~french
-		*\return
-		*	La vue sur l'image.
-		*\~english
-		*\return
-		*	The image view.
-		*/
-		inline TextureView const & getView()const
-		{
-			return m_view;
-		}
-
-	private:
-		Texture m_image;
-		TextureView m_view;
-		uint32_t m_imageIndex{ 0u };
+			, renderer::Format format
+			, Texture const & imageRef );
 	};
 }

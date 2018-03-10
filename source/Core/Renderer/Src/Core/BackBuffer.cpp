@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #include "Core/BackBuffer.hpp"
@@ -10,8 +10,12 @@ See LICENSE file in root folder.
 namespace renderer
 {
 	BackBuffer::BackBuffer( Device const & device
-		, SwapChain const & swapChain
+		, TexturePtr && image
+		, TextureViewPtr && view
 		, uint32_t imageIndex )
+		: m_image{ std::move( image ) }
+		, m_view{ std::move( view ) }
+		, m_imageIndex{ imageIndex }
 	{
 	}
 }

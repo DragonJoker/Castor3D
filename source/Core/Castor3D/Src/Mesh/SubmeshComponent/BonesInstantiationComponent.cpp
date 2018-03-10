@@ -26,8 +26,8 @@ namespace castor3d
 		cleanup();
 	}
 
-	void BonesInstantiationComponent::gather( renderer::VertexBufferCRefArray & buffers
-		, std::vector< uint64_t > offsets
+	void BonesInstantiationComponent::gather( renderer::BufferCRefArray & buffers
+		, std::vector< uint64_t > & offsets
 		, renderer::VertexLayoutCRefArray & layouts )
 	{
 	}

@@ -6,7 +6,10 @@ See LICENSE file in root folder
 
 #include "Castor3DPrerequisites.hpp"
 
+#include <Image/ImageViewCreateInfo.hpp>
 #include <Image/ImageSubresourceRange.hpp>
+#include <Image/TextureView.hpp>
+#include <Miscellaneous/Extent3D.hpp>
 
 #include <Graphics/PixelBufferBase.hpp>
 
@@ -80,7 +83,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les dimensions de la source.
 		 */
-		inline castor::Size getDimensions()const
+		inline renderer::Extent3D getDimensions()const
 		{
 			return m_size;
 		}
@@ -90,7 +93,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le format des pixels de la source.
 		 */
-		inline castor::PixelFormat getPixelFormat()const
+		inline renderer::Format getPixelFormat()const
 		{
 			return m_format;
 		}
@@ -108,7 +111,7 @@ namespace castor3d
 		 *\param[in,out]	depth	La profondeur.
 		 *\return			\p true si les dimensions ont changé.
 		 */
-		bool doAdjustDimensions( castor::Size & size, uint32_t & depth );
+		bool doAdjustDimensions( renderer::Extent3D & size );
 
 	protected:
 		//!\~english	The engine.
@@ -116,10 +119,10 @@ namespace castor3d
 		Engine & m_engine;
 		//!\~english	The source's pixel format.
 		//!\~french		Le format des pixels de la source.
-		castor::PixelFormat m_format;
+		renderer::Format m_format;
 		//!\~english	The source's dimensions.
 		//!\~french		Les dimensions de la source.
-		castor::Size m_size;
+		renderer::Extent3D m_size;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -183,11 +186,7 @@ namespace castor3d
 		 *\param[in]	index	L'index de l'image dans son layout.
 		 */
 		C3D_API TextureView( TextureLayout & layout
-			, renderer::TextureType type
-			, uint32_t baseMipLevel
-			, uint32_t levelCount
-			, uint32_t baseArrayLayer
-			, uint32_t layerCount
+			, renderer::ImageViewCreateInfo info
 			, uint32_t index );
 		/**
 		 *\~english
@@ -285,11 +284,7 @@ namespace castor3d
 
 	private:
 		uint32_t m_index;
-		renderer::TextureType m_type;
-		uint32_t m_baseMipLevel;
-		uint32_t m_levelCount;
-		uint32_t m_baseArrayLayer;
-		uint32_t m_layerCount;
+		renderer::ImageViewCreateInfo m_info;
 		std::unique_ptr< TextureSource > m_source;
 		renderer::TextureViewPtr m_view;
 	};

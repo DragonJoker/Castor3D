@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___Renderer_Attribute_HPP___
@@ -11,6 +11,9 @@ See LICENSE file in root folder.
 namespace renderer
 {
 	/**
+	*\~english
+	*\brief
+	*	Class wrapping the concept of a vertex attribute.
 	*\~french
 	*\brief
 	*	Classe encapsulant le concept d'attribut de sommet.
@@ -43,7 +46,7 @@ namespace renderer
 		*	La position de l'attribut dans le tampon.
 		*/
 		Attribute( VertexLayout const & layout
-			, AttributeFormat format
+			, Format format
 			, uint32_t location
 			, uint32_t offset );
 		/**
@@ -56,19 +59,19 @@ namespace renderer
 		*/
 		virtual ~Attribute() = default;
 		/**
-		*\~french
+		*\~english
 		*\return
-		*	Le format de l'attribut dans le tampon.
+		*	The format of the attribute in the buffer.
 		*\~french
 		*\return
 		*	Le format de l'attribut dans le tampon.
 		*/
-		inline AttributeFormat getFormat()const
+		inline Format getFormat()const
 		{
 			return m_format;
 		}
 		/**
-		*\~french
+		*\~english
 		*\return
 		*	The attribute location in the shader.
 		*\~french
@@ -80,7 +83,7 @@ namespace renderer
 			return m_location;
 		}
 		/**
-		*\~french
+		*\~english
 		*\return
 		*	The attribute location in the buffer.
 		*\~french
@@ -92,7 +95,7 @@ namespace renderer
 			return m_offset;
 		}
 		/**
-		*\~french
+		*\~english
 		*\return
 		*	The parent vertex layout.
 		*\~french
@@ -106,7 +109,7 @@ namespace renderer
 
 	private:
 		VertexLayout const & m_layout;
-		AttributeFormat m_format;
+		Format m_format;
 		uint32_t m_location;
 		uint32_t m_offset;
 	};

@@ -1,6 +1,8 @@
 #include "Core/GlX11Context.hpp"
 
 #if RENDERLIB_XLIB
+#include "Core/GlPhysicalDevice.hpp"
+
 #include "Miscellaneous/GlDebug.hpp"
 
 #include <Core/PlatformWindowHandle.hpp>
@@ -40,8 +42,9 @@ namespace gl_renderer
 		}
 	}
 
-	X11Context::X11Context( renderer::ConnectionPtr && connection )
-		: Context{ std::move( connection ) }
+	X11Context::X11Context( PhysicalDevice const & gpu
+		, renderer::ConnectionPtr && connection )
+		: Context{ gpu, std::move( connection ) }
 		, m_display( m_connection->getHandle().getInternal< renderer::IXWindowHandle >().getDisplay() )
 		, m_glxVersion( 10 )
 		, m_glxContext( nullptr )
@@ -98,48 +101,10 @@ namespace gl_renderer
 
 			setCurrent();
 			m_opengl = std::make_unique< OpenGLLibrary >();
-			m_vendor = ( char const * )glGetString( GL_VENDOR );
-			m_renderer = ( char const * )glGetString( GL_RENDERER );
-			m_version = ( char const * )glGetString( GL_VERSION );
 			loadDebugFunctions();
 			endCurrent();
 
-			double fversion{ 0u };
-			std::stringstream stream( m_version );
-			stream >> fversion;
-			auto version = int( fversion * 10 );
-			m_major = version / 10;
-			m_minor = version % 10;
-
-			if ( version >= 33 )
-			{
-				m_glslVersion = version * 10;
-			}
-			else if ( version >= 32 )
-			{
-				m_glslVersion = 150;
-			}
-			else if ( version >= 31 )
-			{
-				m_glslVersion = 140;
-			}
-			else if ( version >= 30 )
-			{
-				m_glslVersion = 130;
-			}
-			else if ( version >= 21 )
-			{
-				m_glslVersion = 120;
-			}
-			else if ( version >= 20 )
-			{
-				m_glslVersion = 110;
-			}
-			else
-			{
-				m_glslVersion = 100;
-			}
-			if ( m_major < 4 )
+			if ( m_gpu.getMajor() < 4 )
 			{
 				glXDestroyContext( m_display, m_glxContext );
 				throw std::runtime_error{ "The supported OpenGL version is insufficient." };
@@ -151,11 +116,7 @@ namespace gl_renderer
 				throw std::runtime_error{ "The supported OpenGL version is insufficient." };
 			}
 
-			setCurrent();
-			glLogCall( gl::ClipControl, GL_UPPER_LEFT, GL_ZERO_TO_ONE );
-			initialiseDebugFunctions();
 			XFree( visualInfo );
-			endCurrent();
 		}
 	}
 
@@ -251,8 +212,8 @@ namespace gl_renderer
 		bool result = false;
 		std::vector< int > attribList
 		{
-			GLX_CONTEXT_MAJOR_VERSION_ARB, m_major,
-			GLX_CONTEXT_MINOR_VERSION_ARB, m_minor,
+			GLX_CONTEXT_MAJOR_VERSION_ARB, m_gpu.getMajor(),
+			GLX_CONTEXT_MINOR_VERSION_ARB, m_gpu.getMinor(),
 			GLX_CONTEXT_FLAGS_ARB, GL_CONTEXT_CREATION_DEFAULT_FLAGS,
 			GLX_CONTEXT_PROFILE_MASK_ARB, GL_CONTEXT_CREATION_DEFAULT_MASK,
 			0
@@ -270,11 +231,11 @@ namespace gl_renderer
 
 			if ( result )
 			{
-				std::cout << "GlContext::create - " << m_major << "." << m_minor << " OpenGL context created." << std::endl;
+				std::cout << "GlContext::create - " << m_gpu.getMajor() << "." << m_gpu.getMinor() << " OpenGL context created." << std::endl;
 			}
 			else
 			{
-				std::cerr << "GlContext::create - Failed to create a " << m_major << "." << m_minor << " OpenGL context." << std::endl;
+				std::cerr << "GlContext::create - Failed to create a " << m_gpu.getMajor() << "." << m_gpu.getMinor() << " OpenGL context." << std::endl;
 			}
 		}
 		else

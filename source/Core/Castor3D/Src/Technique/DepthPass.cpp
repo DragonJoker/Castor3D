@@ -85,7 +85,7 @@ namespace castor3d
 	{
 	}
 
-	void DepthPass::doPrepareFrontPipeline( ShaderProgram & program
+	void DepthPass::doPrepareFrontPipeline( renderer::ShaderStageStateArray & program
 		, PipelineFlags const & flags )
 	{
 		auto it = m_frontPipelines.find( flags );
@@ -131,7 +131,7 @@ namespace castor3d
 		}
 	}
 
-	void DepthPass::doPrepareBackPipeline( ShaderProgram & program
+	void DepthPass::doPrepareBackPipeline( renderer::ShaderStageStateArray & program
 		, PipelineFlags const & flags )
 	{
 		auto it = m_backPipelines.find( flags );

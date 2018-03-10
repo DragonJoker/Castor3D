@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder
 */
 #pragma once
@@ -9,6 +9,12 @@ namespace gl_renderer
 	enum GlAttachmentPoint
 		: GLenum
 	{
+		GL_ATTACHMENT_POINT_FRONT = 0x0404,
+		GL_ATTACHMENT_POINT_FRONT_LEFT = 0x0400,
+		GL_ATTACHMENT_POINT_FRONT_RIGHT = 0x0401,
+		GL_ATTACHMENT_POINT_BACK = 0x0405,
+		GL_ATTACHMENT_POINT_BACK_LEFT = 0x0402,
+		GL_ATTACHMENT_POINT_BACK_RIGHT = 0x0403,
 		GL_ATTACHMENT_POINT_DEPTH_STENCIL = 0x821A,
 		GL_ATTACHMENT_POINT_COLOR0 = 0x8CE0,
 		GL_ATTACHMENT_POINT_COLOR1 = 0x8CE1,

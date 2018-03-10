@@ -23,10 +23,10 @@ namespace gl_renderer
 		{
 			glLogCommand( "ScissorCommand" );
 			glLogCall( gl::Scissor
-				, m_scissor.getOffset()[0]
-				, m_scissor.getOffset()[1]
-				, m_scissor.getSize()[0]
-				, m_scissor.getSize()[1] );
+				, m_scissor.getOffset().x
+				, m_scissor.getOffset().y
+				, m_scissor.getSize().width
+				, m_scissor.getSize().height );
 			save = m_scissor;
 		}
 	}

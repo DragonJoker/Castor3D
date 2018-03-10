@@ -1,12 +1,13 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___Renderer_Scissor_HPP___
 #define ___Renderer_Scissor_HPP___
 #pragma once
 
-#include "RendererPrerequisites.hpp"
+#include "Miscellaneous/Extent2D.hpp"
+#include "Miscellaneous/Offset2D.hpp"
 
 namespace renderer
 {
@@ -33,7 +34,7 @@ namespace renderer
 		*\return
 		*	L'offset du ciseau.
 		*/
-		inline IVec2 const & getOffset()const
+		inline Offset2D const & getOffset()const
 		{
 			return m_offset;
 		}
@@ -41,21 +42,23 @@ namespace renderer
 		*\return
 		*	Les dimensions du ciseau.
 		*/
-		inline IVec2 const & getSize()const
+		inline Extent2D const & getSize()const
 		{
 			return m_size;
 		}
 
 	private:
-		IVec2 m_offset;
-		IVec2 m_size;
+		Offset2D m_offset;
+		Extent2D m_size;
 		friend bool operator==( Scissor const & lhs, Scissor const & rhs );
 	};
 
 	inline bool operator==( Scissor const & lhs, Scissor const & rhs )
 	{
-		return lhs.m_offset == rhs.m_offset
-			&& lhs.m_size == rhs.m_size;
+		return lhs.m_offset.x == rhs.m_offset.x
+			&& lhs.m_offset.y == rhs.m_offset.y
+			&& lhs.m_size.width == rhs.m_size.width
+			&& lhs.m_size.height == rhs.m_size.height;
 	}
 
 	inline bool operator!=( Scissor const & lhs, Scissor const & rhs )

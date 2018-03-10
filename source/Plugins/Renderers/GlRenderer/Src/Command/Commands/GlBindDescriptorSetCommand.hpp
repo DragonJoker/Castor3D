@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder
 */
 #pragma once
@@ -28,6 +28,7 @@ namespace gl_renderer
 		*/
 		BindDescriptorSetCommand( renderer::DescriptorSet const & descriptorSet
 			, renderer::PipelineLayout const & layout
+			, renderer::UInt32Array const & dynamicOffsets
 			, renderer::PipelineBindPoint bindingPoint );
 
 		void apply()const override;
@@ -37,5 +38,6 @@ namespace gl_renderer
 		DescriptorSet const & m_descriptorSet;
 		PipelineLayout const & m_layout;
 		renderer::PipelineBindPoint m_bindingPoint;
+		renderer::UInt32Array m_dynamicOffsets;
 	};
 }

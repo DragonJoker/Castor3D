@@ -174,7 +174,7 @@ namespace gl_renderer
 		bool result = true;
 		uint32_t errorCode = gl::GetError();
 
-		while ( errorCode )
+		if ( errorCode )
 		{
 			static uint32_t constexpr InvalidEnum = 0x0500;
 			static uint32_t constexpr InvalidValue = 0x0501;

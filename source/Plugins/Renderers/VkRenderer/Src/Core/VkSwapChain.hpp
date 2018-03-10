@@ -34,7 +34,7 @@ namespace vk_renderer
 		*	The render surface dimensions.
 		*/
 		SwapChain( Device const & device
-			, renderer::UIVec2 const & size );
+			, renderer::Extent2D const & size );
 		/**
 		*\~french
 		*\brief
@@ -45,102 +45,29 @@ namespace vk_renderer
 		*/
 		~SwapChain();
 		/**
-		*\~french
-		*\brief
-		*	R�initialise la swap chain.
-		*\~english
-		*\brief
-		*	Resets the swap chain.
+		*\copydoc	renderer::SwapChain::reset
 		*/
-		void reset( renderer::UIVec2 const & size )override;
+		void reset( renderer::Extent2D const & size )override;
 		/**
-		*\~french
-		*\brief
-		*	Cr�e les tampons d'image des back buffers, compatibles avec la passe de rendu donn�e.
-		*\param[in] renderPass
-		*	La passe de rendu.
-		*\return
-		*	Les tampons d'images.
-		*\~english
-		*\brief
-		*	Creates the back buffers' frame buffers, compatible with given render pass.
-		*\param[in] renderPass
-		*	The render pass.
-		*\return
-		*	The frame buffers.
+		*\copydoc	renderer::SwapChain::createFrameBuffers
 		*/
 		renderer::FrameBufferPtrArray createFrameBuffers( renderer::RenderPass const & renderPass )const override;
 		/**
-		*\~french
-		*\brief
-		*	Cr�e les tampons de commandes des back buffers.
-		*\return
-		*	Les tampons de commandes.
-		*\~english
-		*\brief
-		*	Creates the back buffers' command buffers.
-		*\return
-		*	The command buffers.
+		*\copydoc	renderer::SwapChain::createCommandBuffers
 		*/
 		renderer::CommandBufferPtrArray createCommandBuffers()const override;
 		/**
-		*\~french
-		*\brief
-		*	Enregistre des commandes de pr�-rendu.
-		*\param[in] index
-		*	L'indice de l'image.
-		*\param[in] commandBuffer
-		*	Le tampon de commandes recevant les commandes.
-		*\~english
-		*\brief
-		*	Registers pre-render commands.
-		*\param[in] index
-		*	The index of the backbuffer.
-		*\param[in] commandBuffer
-		*	The command buffer receiving the commands.
-		*/
-		void preRenderCommands( uint32_t index
-			, renderer::CommandBuffer const & commandBuffer )const override;
-		/**
-		*\~french
-		*\brief
-		*	Enregistre des commandes de post-rendu.
-		*\param[in] index
-		*	L'indice de l'image.
-		*\param[in] commandBuffer
-		*	Le tampon de commandes recevant les commandes.
-		*\~english
-		*\brief
-		*	Registers post-render commands.
-		*\param[in] index
-		*	The index of the backbuffer.
-		*\param[in] commandBuffer
-		*	The command buffer receiving the commands.
-		*/
-		void postRenderCommands( uint32_t index
-			, renderer::CommandBuffer const & commandBuffer )const override;;
-		/**
-		*\~french
-		*\return
-		*	R�cup�re les ressources de rendu actives.
-		*\~english
-		*\return
-		*	The active rendering resources.
+		*\copydoc	renderer::SwapChain::getResources
 		*/
 		renderer::RenderingResources * getResources()override;
 		/**
-		*\~french
-		*\brief
-		*	Rend l'image utilis�e � la swap chain, pour la dessiner.
-		*\param[in] resources
-		*	Les ressources de rendu.
-		*\~english
-		*\brief
-		*	Gives back the backbuffer to the swap chain, to present it.
-		*\param[in] resources
-		*	The rendering resources.
+		*\copydoc	renderer::SwapChain::present
 		*/
 		void present( renderer::RenderingResources & resources )override;
+		/**
+		*\copydoc	renderer::SwapChain::createDepthStencil
+		*/
+		void createDepthStencil( renderer::Format format )override;
 		/**
 		*\~french
 		*\return
@@ -189,7 +116,7 @@ namespace vk_renderer
 		*\return
 		*	The swap chain dimensions.
 		*/
-		inline renderer::UIVec2 getDimensions()const override
+		inline renderer::Extent2D getDimensions()const override
 		{
 			return m_dimensions;
 		}
@@ -201,7 +128,7 @@ namespace vk_renderer
 		*\return
 		*	The swap chain's images pixels format.
 		*/
-		inline renderer::PixelFormat getFormat()const override
+		inline renderer::Format getFormat()const override
 		{
 			return m_format;
 		}
@@ -228,16 +155,17 @@ namespace vk_renderer
 			, bool acquisition
 			, char const * const action );
 		void doResetSwapChain();
+		renderer::FrameBufferAttachmentArray doPrepareAttaches( uint32_t backBuffer
+			, renderer::AttachmentDescriptionArray const & attaches )const;
 
 	protected:
 		Device const & m_device;
-		renderer::PixelFormat m_format{};
+		renderer::Format m_format{};
 		VkColorSpaceKHR m_colorSpace;
 		VkSwapchainKHR m_swapChain{};
 		VkSurfaceKHR m_surface{};
 		VkSurfaceCapabilitiesKHR m_surfaceCapabilities{};
 		uint32_t m_currentBuffer{};
-		BackBufferPtrArray m_backBuffers;
 		VkClearColorValue m_clearColour{};
 	};
 }

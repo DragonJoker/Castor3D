@@ -7,7 +7,6 @@ See LICENSE file in root folder.
 #include "Core/GlDevice.hpp"
 #include "Pipeline/GlComputePipeline.hpp"
 #include "Pipeline/GlPipelineLayout.hpp"
-#include "Shader/GlShaderProgram.hpp"
 
 namespace gl_renderer
 {
@@ -17,7 +16,7 @@ namespace gl_renderer
 		: m_device{ device }
 		, m_pipeline{ static_cast< ComputePipeline const & > ( pipeline ) }
 		, m_layout{ static_cast< PipelineLayout const & > ( m_pipeline.getLayout() ) }
-		, m_program{ static_cast< ShaderProgram const & > ( m_pipeline.getProgram() ) }
+		, m_program{ m_pipeline.getProgram() }
 		, m_bindingPoint{ bindingPoint }
 	{
 	}
@@ -27,10 +26,10 @@ namespace gl_renderer
 		glLogCommand( "BindComputePipelineCommand" );
 		auto & save = m_device.getCurrentProgram();
 
-		if ( m_program.getProgram() != save )
+		if ( m_program != save )
 		{
-			glLogCall( gl::UseProgram, m_program.getProgram() );
-			save = m_program.getProgram();
+			glLogCall( gl::UseProgram, m_program );
+			save = m_program;
 		}
 	}
 

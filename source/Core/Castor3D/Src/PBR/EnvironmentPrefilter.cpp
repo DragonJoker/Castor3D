@@ -21,7 +21,7 @@
 #include <Pipeline/VertexLayout.hpp>
 #include <Pipeline/Viewport.hpp>
 #include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassState.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/RenderSubpass.hpp>
 #include <RenderPass/RenderSubpassState.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
@@ -39,12 +39,23 @@ namespace castor3d
 		TextureUnit doCreatePrefilteredTexture( Engine & engine
 			, Size const & size )
 		{
+			renderer::ImageCreateInfo image{};
+			image.flags = renderer::ImageCreateFlag::eCubeCompatible;
+			image.arrayLayers = 6u;
+			image.extent.width = size[0];
+			image.extent.height = size[1];
+			image.extent.depth = 1u;
+			image.format = renderer::Format::eR32G32B32_SFLOAT;
+			image.imageType = renderer::TextureType::e2D;
+			image.initialLayout = renderer::ImageLayout::eUndefined;
+			image.mipLevels = 1u;
+			image.samples = renderer::SampleCountFlag::e1;
+			image.sharingMode = renderer::SharingMode::eExclusive;
+			image.tiling = renderer::ImageTiling::eOptimal;
+			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
 			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
-				, renderer::TextureType::eCube
-				, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled
-				, renderer::MemoryPropertyFlag::eDeviceLocal
-				, PixelFormat::eRGB32F
-				, size );
+				, image
+				, renderer::MemoryPropertyFlag::eDeviceLocal );
 			SamplerSPtr sampler;
 			auto name = cuT( "IblTexturesPrefiltered" );
 
@@ -115,13 +126,8 @@ namespace castor3d
 			, renderer::MemoryPropertyFlag::eHostVisible );
 
 		// Initialise the vertex layout.
-		m_vertexLayout = device.createVertexLayout( 0u, sizeof( NonTexturedCube ) );
-		m_vertexLayout->createAttribute< Point2f >( 0u, offsetof( NonTexturedCube::Quad::Vertex, position ) );
-
-		// Initialise the geometry buffers.
-		m_geometryBuffers = device.createGeometryBuffers( *m_vertexBuffer
-			, 0u
-			, *m_vertexLayout );
+		m_vertexLayout = renderer::makeLayout< NonTexturedCube >( 0u );
+		m_vertexLayout->createAttribute( 0u, renderer::Format::eR32G32B32_SFLOAT, offsetof( NonTexturedCube::Quad::Vertex, position ) );
 
 		// Initialise the UBO.
 		m_configUbo = renderer::makeUniformBuffer< renderer::Mat4 >( device
@@ -136,15 +142,7 @@ namespace castor3d
 		m_configUbo->getData( 5u ) = matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, +0.0f, -1.0f }, Point3r{ 0.0f, -1.0f, +0.0f } );
 		m_configUbo->upload();
 
-		// Create the render passes.
-		std::vector< renderer::PixelFormat > formats
-		{
-			dstTexture.getFormat()
-		};
-		renderer::RenderPassAttachmentArray rpAttaches
-		{
-			{ dstTexture.getFormat(), false }
-		};
+		// Prepare descriptor and pipeline layouts.
 		renderer::DescriptorSetLayoutBindingArray bindings;
 		bindings.emplace_back( 0u
 			, renderer::DescriptorType::eCombinedImageSampler
@@ -156,7 +154,48 @@ namespace castor3d
 		m_descriptorPool = m_descriptorLayout->createPool( 6u * ( glsl::Utils::MaxIblReflectionLod + 1 ) );
 		renderer::PushConstantRange range{ renderer::ShaderStageFlag::eFragment, 0u, uint32_t( sizeof( float ) ) };
 		m_pipelineLayout = device.createPipelineLayout( { *m_descriptorLayout }, { range } );
-		auto & program = doCreateProgram( size );
+
+		// Create the render passes.
+		renderer::RenderPassCreateInfo createInfo{};
+		createInfo.flags = 0u;
+
+		createInfo.attachments.resize( 1u );
+		createInfo.attachments[0].index = 0u;
+		createInfo.attachments[0].format = dstTexture.getFormat();
+		createInfo.attachments[0].samples = renderer::SampleCountFlag::e1;
+		createInfo.attachments[0].loadOp = renderer::AttachmentLoadOp::eDontCare;
+		createInfo.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+		createInfo.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		createInfo.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		createInfo.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+		createInfo.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+		renderer::AttachmentReference colourReference;
+		colourReference.attachment = 0u;
+		colourReference.layout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+		createInfo.subpasses.resize( 1u );
+		createInfo.subpasses[0].flags = 0u;
+		createInfo.subpasses[0].colorAttachments = { colourReference };
+
+		createInfo.dependencies.resize( 2u );
+		createInfo.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		createInfo.dependencies[0].dstSubpass = 0u;
+		createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+		createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
+		createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		createInfo.dependencies[1].srcSubpass = 0u;
+		createInfo.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+		createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+		createInfo.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eMemoryRead;
+		createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		auto program = doCreateProgram( size );
 
 		for ( auto mipLevel = 0u; mipLevel < glsl::Utils::MaxIblReflectionLod + 1u; ++mipLevel )
 		{
@@ -167,12 +206,12 @@ namespace castor3d
 			{
 				auto & facePass = mipPasses[face];
 				facePass.pushConstants = std::make_unique< renderer::PushConstantsBuffer< float > >( renderer::ShaderStageFlag::eFragment
-					, renderer::PushConstantArray{ { 0u, 0u, renderer::AttributeFormat::eFloat } } );
+					, renderer::PushConstantArray{ { 0u, 0u, renderer::ConstantFormat::eFloat } } );
 
 				// Create the views.
 				if ( mipLevel == 0u )
 				{
-					facePass.srcView = srcTexture.createView( renderer::TextureType::e2D
+					facePass.srcView = srcTexture.createView( renderer::TextureViewType::e2D
 						, srcTexture.getFormat()
 						, mipLevel
 						, 1u
@@ -182,7 +221,7 @@ namespace castor3d
 				else
 				{
 					// After first mip level, the source view is the previous mip level of destination.
-					facePass.srcView = dstTexture.createView( renderer::TextureType::e2D
+					facePass.srcView = dstTexture.createView( renderer::TextureViewType::e2D
 						, dstTexture.getFormat()
 						, mipLevel - 1
 						, 1u
@@ -190,7 +229,7 @@ namespace castor3d
 						, 1u );
 				}
 
-				facePass.dstView = dstTexture.createView( renderer::TextureType::e2D
+				facePass.dstView = dstTexture.createView( renderer::TextureViewType::e2D
 					, dstTexture.getFormat()
 					, mipLevel
 					, 1u
@@ -209,32 +248,26 @@ namespace castor3d
 				facePass.descriptorSet->update();
 
 				// Create the render pass.
-				renderer::RenderSubpassPtrArray subpasses;
-				subpasses.emplace_back( device.createRenderSubpass( formats
-					, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-					, renderer::AccessFlag::eColourAttachmentWrite } ) );
-				facePass.renderPass = device.createRenderPass( rpAttaches
-					, std::move( subpasses )
-					, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-						, renderer::AccessFlag::eColourAttachmentWrite
-						, { renderer::ImageLayout::eColourAttachmentOptimal } }
-					, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-						, renderer::AccessFlag::eColourAttachmentWrite
-						, { renderer::ImageLayout::eColourAttachmentOptimal } } );
+				facePass.renderPass = device.createRenderPass( createInfo );
 
 				// Initialise the frame buffer.
 				renderer::FrameBufferAttachmentArray attaches;
-				attaches.emplace_back( *( facePass.renderPass->begin() ), *facePass.dstView );
-				facePass.frameBuffer = facePass.renderPass->createFrameBuffer( renderer::UIVec2{ size }
+				attaches.emplace_back( *( facePass.renderPass->getAttachments().begin() ), *facePass.dstView );
+				facePass.frameBuffer = facePass.renderPass->createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
 					, std::move( attaches ) );
 
 				// Initialise the pipeline.
-				facePass.pipeline = m_pipelineLayout->createPipeline( program
-					, { *m_vertexLayout }
-					, *facePass.renderPass
-					, { renderer::PrimitiveTopology::eTriangleStrip } );
-				facePass.pipeline->depthStencilState( renderer::DepthStencilState{ 0u, false, false } );
-				facePass.pipeline->finish();
+				facePass.pipeline = m_pipelineLayout->createPipeline( {
+					program,
+					*facePass.renderPass,
+					renderer::VertexInputState::create( *m_vertexLayout ),
+					renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleStrip },
+					renderer::RasterisationState{},
+					renderer::MultisampleState{},
+					renderer::ColourBlendState::createDefault(),
+					{ renderer::DynamicState::eViewport, renderer::DynamicState::eScissor },
+					renderer::DepthStencilState{ 0u, false, false },
+				} );
 			}
 		}
 
@@ -272,7 +305,7 @@ namespace castor3d
 					} );
 					m_commandBuffer->pushConstants( *m_pipelineLayout
 						, *facePass.pushConstants );
-					m_commandBuffer->bindGeometryBuffers( *m_geometryBuffers );
+					m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 					m_commandBuffer->draw( 36u, 1u, 0u, 0u );
 					m_commandBuffer->endRenderPass();
 				}
@@ -288,7 +321,7 @@ namespace castor3d
 		device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
 	}
 
-	renderer::ShaderProgram & EnvironmentPrefilter::doCreateProgram( Size const & size )
+	renderer::ShaderStageStateArray EnvironmentPrefilter::doCreateProgram( Size const & size )
 	{
 		glsl::Shader vtx;
 		{
@@ -486,9 +519,11 @@ namespace castor3d
 		}
 
 		auto & cache = m_renderSystem.getEngine()->getShaderProgramCache();
-		auto & program = cache.getNewProgram( false );
-		program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
-		program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
+		auto program = cache.getNewProgram( false );
+		program.push_back( { m_renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
+		program.push_back( { m_renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
+		program[0].module->loadShader( vtx.getSource() );
+		program[1].module->loadShader( pxl.getSource() );
 		return program;
 	}
 }

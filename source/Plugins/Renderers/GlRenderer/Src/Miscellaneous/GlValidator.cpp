@@ -4,8 +4,11 @@
 #include "Pipeline/GlPipelineLayout.hpp"
 #include "Core/GlRenderingResources.hpp"
 #include "RenderPass/GlRenderPass.hpp"
-#include "Shader/GlShaderProgram.hpp"
-#include "Pipeline/GlVertexLayout.hpp"
+
+#include <Pipeline/VertexInputAttributeDescription.hpp>
+#include <Pipeline/VertexInputState.hpp>
+
+#include <algorithm>
 
 #if defined( interface )
 #	undef interface
@@ -255,7 +258,7 @@ namespace gl_renderer
 			}
 		}
 
-		bool areCompatible( renderer::PixelFormat lhs, renderer::PixelFormat rhs )
+		bool areCompatible( renderer::Format lhs, renderer::Format rhs )
 		{
 			if ( lhs == rhs )
 			{
@@ -264,49 +267,51 @@ namespace gl_renderer
 
 			switch ( lhs )
 			{
-			case renderer::PixelFormat::eR32F:
-			case renderer::PixelFormat::eR8:
-				return rhs == renderer::PixelFormat::eR32F
-					|| rhs == renderer::PixelFormat::eR8;
-			case renderer::PixelFormat::eRG32F:
-			case renderer::PixelFormat::eR8G8:
-				return rhs == renderer::PixelFormat::eRG32F
-					|| rhs == renderer::PixelFormat::eR8G8;
-			case renderer::PixelFormat::eRGB32F:
-			case renderer::PixelFormat::eR8G8B8:
-				return rhs == renderer::PixelFormat::eRGB32F
-					|| rhs == renderer::PixelFormat::eR8G8B8;
-			case renderer::PixelFormat::eRGBA32F:
-			case renderer::PixelFormat::eR8G8B8A8:
-			case renderer::PixelFormat::eB8G8R8A8:
-				return rhs == renderer::PixelFormat::eRGBA32F
-					|| rhs == renderer::PixelFormat::eR8G8B8A8
-					|| rhs == renderer::PixelFormat::eB8G8R8A8;
+			case renderer::Format::eR32_SFLOAT:
+			case renderer::Format::eR8_UNORM:
+				return rhs == renderer::Format::eR32_SFLOAT
+					|| rhs == renderer::Format::eR8_UNORM;
+			case renderer::Format::eR32G32_SFLOAT:
+			case renderer::Format::eR8G8_UNORM:
+				return rhs == renderer::Format::eR32G32_SFLOAT
+					|| rhs == renderer::Format::eR8G8_UNORM;
+			case renderer::Format::eR32G32B32_SFLOAT:
+			case renderer::Format::eR8G8B8_UNORM:
+				return rhs == renderer::Format::eR32G32B32_SFLOAT
+					|| rhs == renderer::Format::eR8G8B8_UNORM;
+			case renderer::Format::eR16G16B16A16_SFLOAT:
+			case renderer::Format::eR32G32B32A32_SFLOAT:
+			case renderer::Format::eR8G8B8A8_UNORM:
+			case renderer::Format::eB8G8R8A8_UNORM:
+				return rhs == renderer::Format::eR16G16B16A16_SFLOAT
+					|| rhs == renderer::Format::eR32G32B32A32_SFLOAT
+					|| rhs == renderer::Format::eR8G8B8A8_UNORM
+					|| rhs == renderer::Format::eB8G8R8A8_UNORM;
 			default:
 				assert( false );
 				return false;
 			}
 		}
 
-		renderer::PixelFormat convertPixelFormat( GlslAttributeType type )
+		renderer::Format convertFormat( GlslAttributeType type )
 		{
 			switch ( type )
 			{
 			case GLSL_ATTRIBUTE_FLOAT:
-				return renderer::PixelFormat::eR32F;
+				return renderer::Format::eR32_SFLOAT;
 			case GLSL_ATTRIBUTE_FLOAT_VEC2:
-				return renderer::PixelFormat::eRG32F;
+				return renderer::Format::eR32G32_SFLOAT;
 			case GLSL_ATTRIBUTE_FLOAT_VEC3:
-				return renderer::PixelFormat::eRGB32F;
+				return renderer::Format::eR32G32B32_SFLOAT;
 			case GLSL_ATTRIBUTE_FLOAT_VEC4:
-				return renderer::PixelFormat::eRGBA32F;
+				return renderer::Format::eR32G32B32A32_SFLOAT;
 			default:
 				assert( false );
-				return renderer::PixelFormat::eRGBA32F;
+				return renderer::Format::eR32G32B32A32_SFLOAT;
 			}
 		}
 
-		bool areCompatible( renderer::AttributeFormat lhs, renderer::AttributeFormat rhs )
+		bool areCompatibleInputs( renderer::Format lhs, renderer::Format rhs )
 		{
 			if ( lhs == rhs )
 			{
@@ -315,75 +320,100 @@ namespace gl_renderer
 
 			switch ( lhs )
 			{
-			case renderer::AttributeFormat::eVec4f:
-			case renderer::AttributeFormat::eVec4i:
-			case renderer::AttributeFormat::eVec4ui:
-			case renderer::AttributeFormat::eColour:
-				return rhs == renderer::AttributeFormat::eVec4f
-					|| rhs == renderer::AttributeFormat::eVec4i
-					|| rhs == renderer::AttributeFormat::eVec4ui
-					|| rhs == renderer::AttributeFormat::eColour;
-			case renderer::AttributeFormat::eVec3f:
-			case renderer::AttributeFormat::eVec3i:
-			case renderer::AttributeFormat::eVec3ui:
-				return rhs == renderer::AttributeFormat::eVec3f
-					|| rhs == renderer::AttributeFormat::eVec3i
-					|| rhs == renderer::AttributeFormat::eVec3ui;
-			case renderer::AttributeFormat::eVec2f:
-			case renderer::AttributeFormat::eVec2i:
-			case renderer::AttributeFormat::eVec2ui:
-				return rhs == renderer::AttributeFormat::eVec3f
-					|| rhs == renderer::AttributeFormat::eVec3i
-					|| rhs == renderer::AttributeFormat::eVec3ui;
-			case renderer::AttributeFormat::eInt:
-			case renderer::AttributeFormat::eUInt:
-			case renderer::AttributeFormat::eFloat:
-				return rhs == renderer::AttributeFormat::eInt
-					|| rhs == renderer::AttributeFormat::eUInt
-					|| rhs == renderer::AttributeFormat::eFloat;
+			case renderer::Format::eR32G32B32A32_SFLOAT:
+				return rhs == renderer::Format::eR32G32B32_SFLOAT
+					|| rhs == renderer::Format::eR32G32B32A32_SFLOAT
+					|| rhs == renderer::Format::eR32G32B32A32_SINT
+					|| rhs == renderer::Format::eR32G32B32A32_UINT
+					|| rhs == renderer::Format::eR8G8B8A8_UNORM;
+			case renderer::Format::eR32G32B32A32_SINT:
+				return rhs == renderer::Format::eR32G32B32_SINT
+					|| rhs == renderer::Format::eR32G32B32A32_SFLOAT
+					|| rhs == renderer::Format::eR32G32B32A32_SINT
+					|| rhs == renderer::Format::eR32G32B32A32_UINT
+					|| rhs == renderer::Format::eR8G8B8A8_UNORM;
+			case renderer::Format::eR32G32B32A32_UINT:
+				return rhs == renderer::Format::eR32G32B32_UINT
+					|| rhs == renderer::Format::eR32G32B32A32_SFLOAT
+					|| rhs == renderer::Format::eR32G32B32A32_SINT
+					|| rhs == renderer::Format::eR32G32B32A32_UINT
+					|| rhs == renderer::Format::eR8G8B8A8_UNORM;
+			case renderer::Format::eR8G8B8A8_UNORM:
+				return rhs == renderer::Format::eR32G32B32_SFLOAT
+					|| rhs == renderer::Format::eR32G32B32A32_SFLOAT
+					|| rhs == renderer::Format::eR32G32B32A32_SINT
+					|| rhs == renderer::Format::eR32G32B32A32_UINT
+					|| rhs == renderer::Format::eR8G8B8A8_UNORM;
+			case renderer::Format::eR32G32B32_SFLOAT:
+				return rhs == renderer::Format::eR32G32B32A32_SFLOAT
+					|| rhs == renderer::Format::eR32G32B32_SFLOAT
+					|| rhs == renderer::Format::eR32G32B32_SINT
+					|| rhs == renderer::Format::eR32G32B32_UINT;
+			case renderer::Format::eR32G32B32_SINT:
+				return rhs == renderer::Format::eR32G32B32A32_SINT
+					|| rhs == renderer::Format::eR32G32B32_SFLOAT
+					|| rhs == renderer::Format::eR32G32B32_SINT
+					|| rhs == renderer::Format::eR32G32B32_UINT;
+			case renderer::Format::eR32G32B32_UINT:
+				return rhs == renderer::Format::eR32G32B32A32_UINT
+					|| rhs == renderer::Format::eR32G32B32_SFLOAT
+					|| rhs == renderer::Format::eR32G32B32_SINT
+					|| rhs == renderer::Format::eR32G32B32_UINT;
+			case renderer::Format::eR32G32_SFLOAT:
+			case renderer::Format::eR32G32_SINT:
+			case renderer::Format::eR32G32_UINT:
+				return rhs == renderer::Format::eR32G32_SFLOAT
+					|| rhs == renderer::Format::eR32G32_SINT
+					|| rhs == renderer::Format::eR32G32_UINT;
+			case renderer::Format::eR32_SINT:
+			case renderer::Format::eR32_UINT:
+			case renderer::Format::eR32_SFLOAT:
+				return rhs == renderer::Format::eR32_SINT
+					|| rhs == renderer::Format::eR32_UINT
+					|| rhs == renderer::Format::eR32_SFLOAT;
 			default:
 				assert( false );
 				return false;
 			}
 		}
 
-		renderer::AttributeFormat convertAttribute( GlslAttributeType type )
+		renderer::Format convertAttribute( GlslAttributeType type )
 		{
 			switch ( type )
 			{
 			case GLSL_ATTRIBUTE_INT:
-				return renderer::AttributeFormat::eInt;
+				return renderer::Format::eR32_SINT;
 			case GLSL_ATTRIBUTE_UNSIGNED_INT:
-				return renderer::AttributeFormat::eUInt;
+				return renderer::Format::eR32_UINT;
 			case GLSL_ATTRIBUTE_FLOAT:
-				return renderer::AttributeFormat::eFloat;
+				return renderer::Format::eR32_SFLOAT;
 			case GLSL_ATTRIBUTE_FLOAT_VEC2:
-				return renderer::AttributeFormat::eVec2f;
+				return renderer::Format::eR32G32_SFLOAT;
 			case GLSL_ATTRIBUTE_FLOAT_VEC3:
-				return renderer::AttributeFormat::eVec3f;
+				return renderer::Format::eR32G32B32_SFLOAT;
 			case GLSL_ATTRIBUTE_FLOAT_VEC4:
-				return renderer::AttributeFormat::eVec4f;
+				return renderer::Format::eR32G32B32A32_SFLOAT;
 			case GLSL_ATTRIBUTE_INT_VEC2:
-				return renderer::AttributeFormat::eVec2i;
+				return renderer::Format::eR32G32_SINT;
 			case GLSL_ATTRIBUTE_INT_VEC3:
-				return renderer::AttributeFormat::eVec3i;
+				return renderer::Format::eR32G32B32_SINT;
 			case GLSL_ATTRIBUTE_INT_VEC4:
-				return renderer::AttributeFormat::eVec4i;
-			case GLSL_ATTRIBUTE_FLOAT_MAT2:
-				return renderer::AttributeFormat::eMat2f;
-			case GLSL_ATTRIBUTE_FLOAT_MAT3:
-				return renderer::AttributeFormat::eMat3f;
-			case GLSL_ATTRIBUTE_FLOAT_MAT4:
-				return renderer::AttributeFormat::eMat4f;
+				return renderer::Format::eR32G32B32A32_SINT;
+			//case GLSL_ATTRIBUTE_FLOAT_MAT2:
+			//	return renderer::Format::eMat2f;
+			//case GLSL_ATTRIBUTE_FLOAT_MAT3:
+			//	return renderer::Format::eMat3f;
+			//case GLSL_ATTRIBUTE_FLOAT_MAT4:
+			//	return renderer::Format::eMat4f;
 			case GLSL_ATTRIBUTE_UNSIGNED_INT_VEC2:
-				return renderer::AttributeFormat::eVec2ui;
+				return renderer::Format::eR32G32_UINT;
 			case GLSL_ATTRIBUTE_UNSIGNED_INT_VEC3:
-				return renderer::AttributeFormat::eVec3ui;
+				return renderer::Format::eR32G32B32_UINT;
 			case GLSL_ATTRIBUTE_UNSIGNED_INT_VEC4:
-				return renderer::AttributeFormat::eVec4ui;
+				return renderer::Format::eR32G32B32A32_UINT;
 			default:
 				assert( false );
-				return renderer::AttributeFormat::eFloat;
+				return renderer::Format::eR32_SFLOAT;
 			}
 		}
 
@@ -494,49 +524,76 @@ namespace gl_renderer
 		}
 
 		void doValidateInputs( GLuint program
-			, renderer::VertexLayoutCRefArray const & vertexLayouts )
+			, renderer::VertexInputState const & vertexInputState )
 		{
 			struct AttrSpec
 			{
-				renderer::AttributeFormat format;
+				renderer::Format format;
 				uint32_t location;
 			};
 			std::vector< AttrSpec > attributes;
 
-			for ( auto & vertexLayout : vertexLayouts )
+			for ( auto & attribute : vertexInputState.vertexAttributeDescriptions )
 			{
-				for ( auto & attribute : vertexLayout.get() )
-				{
-					attributes.push_back( { attribute.getFormat(), attribute.getLocation() } );
-				}
+				attributes.push_back( { attribute.format, attribute.location } );
 			}
+
+			auto findAttribute = [&attributes]( std::string const & name
+				, GlslAttributeType glslType
+				, uint32_t location )
+			{
+				auto it = std::find_if( attributes.begin()
+					, attributes.end()
+					, [&glslType, &location]( AttrSpec const & lookup )
+				{
+					return areCompatibleInputs( lookup.format, convertAttribute( glslType ) )
+						&& lookup.location == location;
+				} );
+
+				if ( it != attributes.end() )
+				{
+					attributes.erase( it );
+				}
+				else if ( name.find( "gl_" ) != 0u )
+				{
+					std::stringstream stream;
+					stream << ValidationError
+						<< "Attribute [" << name
+						<< "], of type: " << getName( glslType )
+						<< ", at location: " << location
+						<< " is used in the shader program, but is not listed in the vertex layouts" << std::endl;
+					throw std::logic_error{ stream.str() };
+				}
+			};
 
 			getProgramInterfaceInfos( program
 				, GLSL_INTERFACE_PROGRAM_INPUT
-				, { GLSL_PROPERTY_TYPE, GLSL_PROPERTY_ARRAY_SIZE, GLSL_PROPERTY_LOCATION, GLSL_PROPERTY_LOCATION_COMPONENT }
-				, [&attributes]( std::string name, std::vector< GLint > const & values )
+				, { GLSL_PROPERTY_TYPE, GLSL_PROPERTY_ARRAY_SIZE, GLSL_PROPERTY_LOCATION/*, GLSL_PROPERTY_LOCATION_COMPONENT*/ }
+				, [&attributes, &findAttribute]( std::string const & name, std::vector< GLint > const & values )
 				{
-					auto it = std::find_if( attributes.begin()
-						, attributes.end()
-						, [&values]( AttrSpec const & lookup )
-						{
-							return areCompatible( lookup.format, convertAttribute( GlslAttributeType( values[0] ) ) )
-								&& lookup.location == values[2];
-						} );
+					auto glslType = GlslAttributeType( values[0] );
+					auto location = uint32_t( values[2] );
 
-					if ( it != attributes.end() )
+					switch ( glslType )
 					{
-						attributes.erase( it );
-					}
-					else if ( name.find( "gl_" ) != 0u )
-					{
-						std::stringstream stream;
-						stream << ValidationError
-							<< "Attribute [" << name
-							<< "], of type: " << getName( GlslAttributeType( values[0] ) )
-							<< ", at location: " << values[2]
-							<< " is used in the shader program, but is not listed in the vertex layouts" << std::endl;
-						throw std::logic_error{ stream.str() };
+					case GLSL_ATTRIBUTE_FLOAT_MAT2:
+						findAttribute( name, GLSL_ATTRIBUTE_FLOAT_VEC2, location + 0u );
+						findAttribute( name, GLSL_ATTRIBUTE_FLOAT_VEC2, location + 1u );
+						break;
+					case GLSL_ATTRIBUTE_FLOAT_MAT3:
+						findAttribute( name, GLSL_ATTRIBUTE_FLOAT_VEC3, location + 0u );
+						findAttribute( name, GLSL_ATTRIBUTE_FLOAT_VEC3, location + 1u );
+						findAttribute( name, GLSL_ATTRIBUTE_FLOAT_VEC3, location + 2u );
+						break;
+					case GLSL_ATTRIBUTE_FLOAT_MAT4:
+						findAttribute( name, GLSL_ATTRIBUTE_FLOAT_VEC4, location + 0u );
+						findAttribute( name, GLSL_ATTRIBUTE_FLOAT_VEC4, location + 1u );
+						findAttribute( name, GLSL_ATTRIBUTE_FLOAT_VEC4, location + 2u );
+						findAttribute( name, GLSL_ATTRIBUTE_FLOAT_VEC4, location + 3u );
+						break;
+					default:
+						findAttribute( name, glslType, location );
+						break;
 					}
 				} );
 
@@ -552,11 +609,11 @@ namespace gl_renderer
 		void doValidateOutputs( GLuint program
 			, renderer::RenderPass const & renderPass )
 		{
-			renderer::RenderPassAttachmentArray attaches;
+			renderer::AttachmentDescriptionArray attaches;
 
-			for ( auto & attach : renderPass )
+			for ( auto & attach : renderPass.getAttachments() )
 			{
-				if ( !renderer::isDepthOrStencilFormat( attach.getFormat() ) )
+				if ( !renderer::isDepthOrStencilFormat( attach.format ) )
 				{
 					attaches.push_back( attach );
 				}
@@ -564,14 +621,14 @@ namespace gl_renderer
 
 			getProgramInterfaceInfos( program
 				, GLSL_INTERFACE_PROGRAM_OUTPUT
-				, { GLSL_PROPERTY_TYPE, GLSL_PROPERTY_ARRAY_SIZE, GLSL_PROPERTY_LOCATION, GLSL_PROPERTY_LOCATION_COMPONENT }
+				, { GLSL_PROPERTY_TYPE, GLSL_PROPERTY_ARRAY_SIZE, GLSL_PROPERTY_LOCATION/*, GLSL_PROPERTY_LOCATION_COMPONENT*/ }
 				, [&attaches]( std::string name, std::vector< GLint > const & values )
 				{
 					auto it = std::find_if( attaches.begin()
 						, attaches.end()
-						, [&values]( renderer::RenderPassAttachment const & lookup )
+						, [&values]( renderer::AttachmentDescription const & lookup )
 						{
-							return areCompatible( lookup.getFormat(), convertPixelFormat( GlslAttributeType( values[0] ) ) );
+							return areCompatible( lookup.format, convertFormat( GlslAttributeType( values[0] ) ) );
 						} );
 
 					if ( it != attaches.end() )
@@ -580,20 +637,18 @@ namespace gl_renderer
 					}
 					else
 					{
-						std::stringstream stream;
-						stream << ValidationError
+						std::cerr << ValidationError
 							<< "Attachment [" << name
 							<< "], of type: " << getName( GlslAttributeType( values[0] ) )
 							<< ", at location: " << values[2]
 							<< " is used in the shader program, but is not listed in the render pass attachments" << std::endl;
-						throw std::logic_error{ stream.str() };
 					}
 				} );
 
 			for ( auto & attach : attaches )
 			{
 				std::cerr << ValidationWarning
-					<< "Render pass has an attahment of type " << renderer::getName( attach.getFormat() )
+					<< "Render pass has an attahment of type " << renderer::getName( attach.format )
 					<< ", which is not used by the program" << std::endl;
 			}
 		}
@@ -664,14 +719,14 @@ namespace gl_renderer
 	}
 
 	void validatePipeline( PipelineLayout const & layout
-		, ShaderProgram const & m_program
-		, renderer::VertexLayoutCRefArray const & vertexLayouts
+		, GLuint program
+		, renderer::VertexInputState const & vertexInputState
 		, renderer::RenderPass const & renderPass )
 	{
-		doValidateInputs( m_program.getProgram(), vertexLayouts );
-		doValidateOutputs( m_program.getProgram(), renderPass );
-		//doValidateUbos( m_program.getProgram() );
-		//doValidateSsbos( m_program.getProgram() );
-		//doValidateUniforms( m_program.getProgram() );
+		doValidateInputs( program, vertexInputState );
+		doValidateOutputs( program, renderPass );
+		//doValidateUbos( program );
+		//doValidateSsbos( program );
+		//doValidateUniforms( program );
 	}
 }

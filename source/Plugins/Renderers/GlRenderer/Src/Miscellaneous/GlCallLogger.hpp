@@ -1,5 +1,5 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder
 */
 #pragma once
@@ -79,11 +79,6 @@ namespace gl_renderer
 		return getName( value );
 	}
 
-	inline std::string toString( GlAttributeFormatBaseType value )
-	{
-		return getName( value );
-	}
-
 	inline std::string toString( GlBaseType value )
 	{
 		return getName( value );
@@ -120,6 +115,11 @@ namespace gl_renderer
 	}
 
 	inline std::string toString( GlCompareOp value )
+	{
+		return getName( value );
+	}
+
+	inline std::string toString( GlComponentSwizzle value )
 	{
 		return getName( value );
 	}
@@ -235,6 +235,21 @@ namespace gl_renderer
 	}
 
 	inline std::string toString( GlStencilOp value )
+	{
+		return getName( value );
+	}
+
+	inline std::string toString( GlSwizzle value )
+	{
+		return getName( value );
+	}
+
+	inline std::string toString( GlTexLevelParameter value )
+	{
+		return getName( value );
+	}
+
+	inline std::string toString( GlTexParameter value )
 	{
 		return getName( value );
 	}

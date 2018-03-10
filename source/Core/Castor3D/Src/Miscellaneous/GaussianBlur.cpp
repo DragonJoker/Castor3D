@@ -9,7 +9,6 @@
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
 
-#include <Buffer/GeometryBuffers.hpp>
 #include <Buffer/UniformBuffer.hpp>
 #include <Buffer/VertexBuffer.hpp>
 #include <Descriptor/DescriptorSet.hpp>
@@ -17,7 +16,7 @@
 #include <Descriptor/DescriptorSetPool.hpp>
 #include <RenderPass/FrameBuffer.hpp>
 #include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassState.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/RenderSubpass.hpp>
 #include <RenderPass/RenderSubpassState.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
@@ -196,18 +195,29 @@ namespace castor3d
 		}
 
 		TextureUnit doCreateTexture( Engine & engine
-			, Size const & size
-			, PixelFormat format
+			, renderer::Extent2D const & size
+			, renderer::Format format
 			, String const & name )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
+			renderer::ImageCreateInfo image{};
+			image.flags = 0u;
+			image.arrayLayers = 1u;
+			image.extent.width = size.width;
+			image.extent.height = size.height;
+			image.extent.depth = 1u;
+			image.format = format;
+			image.imageType = renderer::TextureType::e2D;
+			image.initialLayout = renderer::ImageLayout::eUndefined;
+			image.mipLevels = 1u;
+			image.samples = renderer::SampleCountFlag::e1;
+			image.sharingMode = renderer::SharingMode::eExclusive;
+			image.tiling = renderer::ImageTiling::eOptimal;
+			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
 			auto sampler = doCreateSampler( engine, name );
 			auto texture = std::make_shared< TextureLayout >( renderSystem
-				, renderer::TextureType::e2D
-				, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled
-				, renderer::MemoryPropertyFlag::eHostVisible
-				, format
-				, size );
+				, image
+				, renderer::MemoryPropertyFlag::eHostVisible );
 			texture->getImage().initialiseSource();
 			TextureUnit unit{ engine };
 			unit.setTexture( texture );
@@ -218,38 +228,57 @@ namespace castor3d
 		}
 
 		renderer::RenderPassPtr doCreateRenderPass( renderer::Device const & device
-			, renderer::PixelFormat format )
+			, renderer::Format format )
 		{
-			std::vector< renderer::PixelFormat > formats
-			{
-				format
-			};
-			renderer::RenderPassAttachmentArray attaches
-			{
-				{ format, true }
-			};
-			renderer::RenderSubpassPtrArray subpasses;
-			subpasses.emplace_back( device.createRenderSubpass( formats
-				, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-				, renderer::AccessFlag::eColourAttachmentWrite } ) );
-			return device.createRenderPass( attaches
-				, std::move( subpasses )
-				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-					, renderer::AccessFlag::eColourAttachmentWrite
-					, { renderer::ImageLayout::eColourAttachmentOptimal, renderer::ImageLayout::eColourAttachmentOptimal } }
-				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-					, renderer::AccessFlag::eColourAttachmentWrite
-					, { renderer::ImageLayout::eColourAttachmentOptimal, renderer::ImageLayout::eColourAttachmentOptimal } } );
+			renderer::RenderPassCreateInfo createInfo{};
+			createInfo.flags = 0u;
+
+			createInfo.attachments.resize( 1u );
+			createInfo.attachments[0].index = 0u;
+			createInfo.attachments[0].format = format;
+			createInfo.attachments[0].samples = renderer::SampleCountFlag::e1;
+			createInfo.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+			createInfo.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+			createInfo.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+			createInfo.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+			createInfo.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+			createInfo.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+
+			renderer::AttachmentReference colourReference;
+			colourReference.attachment = 0u;
+			colourReference.layout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+			createInfo.subpasses.resize( 1u );
+			createInfo.subpasses[0].flags = 0u;
+			createInfo.subpasses[0].colorAttachments = { colourReference };
+
+			createInfo.dependencies.resize( 2u );
+			createInfo.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+			createInfo.dependencies[0].dstSubpass = 0u;
+			createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+			createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
+			createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+			createInfo.dependencies[1].srcSubpass = 0u;
+			createInfo.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+			createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+			createInfo.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eMemoryRead;
+			createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+			return device.createRenderPass( createInfo );
 		}
 
 		renderer::FrameBufferPtr doCreateFbo( renderer::RenderPass const & renderPass
 			, renderer::TextureView const & view
-			, Size const & size )
+			, renderer::Extent2D const & size )
 		{
 			renderer::FrameBufferAttachmentArray attaches;
-			attaches.emplace_back( *( renderPass.begin() ), view );
-			return renderPass.createFrameBuffer( renderer::UIVec2{ size }
-				, std::move( attaches ) );
+			attaches.emplace_back( *( renderPass.getAttachments().begin() ), view );
+			return renderPass.createFrameBuffer( size, std::move( attaches ) );
 		}
 	}
 
@@ -259,8 +288,8 @@ namespace castor3d
 		, renderer::TextureView const & src
 		, renderer::TextureView const & dst
 		, renderer::UniformBuffer< Configuration > const & blurUbo
-		, renderer::PixelFormat format
-		, castor::Size const & size )
+		, renderer::Format format
+		, renderer::Extent2D const & size )
 		: castor3d::RenderQuad{ renderSystem, false, false }
 		, m_srcView{ src }
 		, m_dstView{ dst }
@@ -285,9 +314,9 @@ namespace castor3d
 	String const GaussianBlur::TextureSize = cuT( "c3d_textureSize" );
 
 	GaussianBlur::GaussianBlur( Engine & engine
-		, TextureLayout const & texture
-		, Size const & textureSize
-		, PixelFormat format
+		, renderer::TextureView const & texture
+		, renderer::Extent2D const & textureSize
+		, renderer::Format format
 		, uint32_t kernelSize )
 		: OwnedBy< Engine >{ engine }
 		, m_source{ texture }
@@ -301,7 +330,7 @@ namespace castor3d
 		, m_blurXQuad
 		{
 			*engine.getRenderSystem(),
-			texture.getView(),
+			texture,
 			m_intermediate.getTexture()->getView(),
 			*m_blurUbo,
 			format,
@@ -311,7 +340,7 @@ namespace castor3d
 		{
 			*engine.getRenderSystem(),
 			m_intermediate.getTexture()->getView(),
-			texture.getView(),
+			texture,
 			*m_blurUbo,
 			format,
 			textureSize
@@ -328,7 +357,7 @@ namespace castor3d
 		doInitialiseBlurXProgram( engine );
 		doInitialiseBlurYProgram( engine );
 
-		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
+		if ( m_commandBuffer->begin() )
 		{
 			m_commandBuffer->beginRenderPass( *m_blurXPass
 				, *m_blurXFbo
@@ -360,9 +389,11 @@ namespace castor3d
 		auto const vertex = getVertexProgram( engine );
 		auto const blurX = getBlurXProgram( engine );
 
-		auto & program = cache.getNewProgram( false );
-		program.createModule( vertex.getSource(), renderer::ShaderStageFlag::eVertex );
-		program.createModule( blurX.getSource(), renderer::ShaderStageFlag::eFragment );
+		auto program = cache.getNewProgram( false );
+		program.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
+		program.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
+		program[0].module->loadShader( vertex.getSource() );
+		program[1].module->loadShader( blurX.getSource() );
 
 		m_blurXPass = doCreateRenderPass( device, m_format );
 		m_blurXFbo = doCreateFbo( *m_blurXPass, m_intermediate.getTexture()->getView(), m_size );
@@ -373,9 +404,10 @@ namespace castor3d
 		m_blurXQuad.createPipeline( m_size
 			, Position{}
 			, program
-			, m_source.getView()
+			, m_source
 			, *m_blurXPass
-			, bindings );
+			, bindings
+			, {} );
 		m_blurXQuad.prepareFrame();
 		return true;
 	}
@@ -388,9 +420,11 @@ namespace castor3d
 		auto const vertex = getVertexProgram( engine );
 		auto const blurY = getBlurYProgram( engine );
 
-		auto & program = cache.getNewProgram( false );
-		program.createModule( vertex.getSource(), renderer::ShaderStageFlag::eVertex );
-		program.createModule( blurY.getSource(), renderer::ShaderStageFlag::eFragment );
+		auto program = cache.getNewProgram( false );
+		program.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
+		program.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
+		program[0].module->loadShader( vertex.getSource() );
+		program[1].module->loadShader( blurY.getSource() );
 
 		m_blurYPass = doCreateRenderPass( device, m_format );
 		m_blurYFbo = doCreateFbo( *m_blurYPass, m_intermediate.getTexture()->getView(), m_size );
@@ -401,9 +435,10 @@ namespace castor3d
 		m_blurYQuad.createPipeline( m_size
 			, Position{}
 			, program
-			, m_source.getView()
+			, m_source
 			, *m_blurYPass
-			, bindings );
+			, bindings
+			, {} );
 		m_blurYQuad.prepareFrame();
 		return true;
 	}

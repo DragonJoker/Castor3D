@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Texture/TextureUnit.hpp"
 
-#include <Buffer/GeometryBuffers.hpp>
+#include <RenderPass/FrameBuffer.hpp>
 
 #include <array>
 
@@ -64,7 +64,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Crée le programme shader de calcul de la radiance.
 		 */
-		renderer::ShaderProgram & doCreateProgram();
+		renderer::ShaderStageStateArray doCreateProgram();
 
 	private:
 		struct RenderPass
@@ -83,7 +83,6 @@ namespace castor3d
 		NonTexturedCube m_vertexData;
 		SamplerSPtr m_sampler;
 		renderer::VertexBufferPtr< NonTexturedCube > m_vertexBuffer;
-		renderer::GeometryBuffersPtr m_geometryBuffers;
 		renderer::VertexLayoutPtr m_vertexLayout;
 		renderer::UniformBufferPtr< renderer::Mat4 > m_configUbo;
 		renderer::DescriptorSetLayoutPtr m_descriptorLayout;

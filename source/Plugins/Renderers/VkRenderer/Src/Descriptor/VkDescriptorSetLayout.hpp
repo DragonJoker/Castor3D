@@ -50,24 +50,6 @@ namespace vk_renderer
 		/**
 		*\~french
 		*\brief
-		*	Cr&e un pool pour les descripteurs qui utiliseront ce layout.
-		*\param[in] maxSets
-		*	Le nombre maximum de sets que le pool peut cr&er.
-		*\return
-		*	Le pool créé.
-		*\~english
-		*\brief
-		*	Creates a descriptor pool.
-		*\param[in] maxSets
-		*	The maximum sets count the pool can create.
-		*\return
-		*	The created pool.
-		*/
-		renderer::DescriptorSetPoolPtr createPool( uint32_t maxSets
-			, bool automaticFree )const override;
-		/**
-		*\~french
-		*\brief
 		*	Conversion implicite vers VkDescriptorSetLayout.
 		*\~english
 		*\brief

@@ -56,7 +56,7 @@ namespace gl_renderer
 		*/
 		BufferView( renderer::Device const & device
 			, Buffer const & buffer
-			, renderer::PixelFormat format
+			, renderer::Format format
 			, uint32_t offset
 			, uint32_t range );
 		/**

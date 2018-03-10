@@ -7,6 +7,9 @@ See LICENSE file in root folder
 #include "RenderToTexture/RenderQuad.hpp"
 #include "Texture/TextureUnit.hpp"
 
+#include <Buffer/UniformBuffer.hpp>
+#include <RenderPass/FrameBuffer.hpp>
+
 #include <Design/OwnedBy.hpp>
 
 namespace castor3d
@@ -41,9 +44,9 @@ namespace castor3d
 		 *\param[in]	kernelSize	Le nombre de coefficients du kernel.
 		 */
 		C3D_API GaussianBlur( Engine & engine
-			, TextureLayout const & texture
-			, castor::Size const & textureSize
-			, castor::PixelFormat format
+			, renderer::TextureView const & texture
+			, renderer::Extent2D const & textureSize
+			, renderer::Format format
 			, uint32_t kernelSize );
 		/**
 		 *\~english
@@ -52,6 +55,49 @@ namespace castor3d
 		 *\brief		Applique le flou sur la texture.
 		 */
 		C3D_API void blur();
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		**/
+		/**@{*/
+		inline renderer::RenderPass const & getBlurXPass()const
+		{
+			REQUIRE( m_blurXPass );
+			return *m_blurXPass;
+		}
+
+		inline renderer::RenderPass const & getBlurYPass()const
+		{
+			REQUIRE( m_blurYPass );
+			return *m_blurYPass;
+		}
+
+		inline renderer::FrameBuffer const & getBlurXFrameBuffer()const
+		{
+			REQUIRE( m_blurXFbo );
+			return *m_blurXFbo;
+		}
+
+		inline renderer::FrameBuffer const & getBlurYFrameBuffer()const
+		{
+			REQUIRE( m_blurYFbo );
+			return *m_blurYFbo;
+		}
+
+		inline renderer::CommandBuffer const & getBlurXCommandBuffer()const
+		{
+			return m_blurXQuad.getCommandBuffer();
+		}
+
+		inline renderer::CommandBuffer const & getBlurYCommandBuffer()const
+		{
+			return m_blurYQuad.getCommandBuffer();
+		}
+		/**@}*/
 
 	private:
 		bool doInitialiseBlurXProgram( Engine & engine );
@@ -67,9 +113,9 @@ namespace castor3d
 	private:
 		struct Configuration
 		{
-			renderer::Vec2 textureSize;
+			castor::Point2f textureSize;
 			uint32_t blurCoeffsCount;
-			std::array< renderer::Vec4, 15 > blurCoeffs; // We then allow for 60 coeffs max.
+			std::array< castor::Point4f, 15 > blurCoeffs; // We then allow for 60 coeffs max.
 		};
 
 		class RenderQuad
@@ -80,8 +126,8 @@ namespace castor3d
 				, renderer::TextureView const & src
 				, renderer::TextureView const & dst
 				, renderer::UniformBuffer< Configuration > const & blurUbo
-				, renderer::PixelFormat format
-				, castor::Size const & size );
+				, renderer::Format format
+				, renderer::Extent2D const & size );
 
 		private:
 			virtual void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
@@ -92,9 +138,9 @@ namespace castor3d
 			renderer::UniformBuffer< Configuration > const & m_blurUbo;
 		};
 
-		TextureLayout const & m_source;
-		castor::Size m_size;
-		renderer::PixelFormat m_format;
+		renderer::TextureView const & m_source;
+		renderer::Extent2D m_size;
+		renderer::Format m_format;
 		TextureUnit m_intermediate;
 
 		std::vector< float > m_kernel;

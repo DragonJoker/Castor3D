@@ -1,12 +1,12 @@
 /*
-This file belongs to Renderer.
+This file belongs to RendererLib.
 See LICENSE file in root folder.
 */
 #ifndef ___Renderer_Sampler_HPP___
 #define ___Renderer_Sampler_HPP___
 #pragma once
 
-#include "RendererPrerequisites.hpp"
+#include "SamplerCreateInfo.hpp"
 
 namespace renderer
 {
@@ -23,57 +23,18 @@ namespace renderer
 		*	Constructeur.
 		*\param[in] device
 		*	Le périphérique logique.
-		*\param[in] wrapS, wrapT, wrapR
-		*	Les modes de wrap de texture.
-		*\param[in] minFilter, magFilter
-		*	Les filtres de minification et magnification.
-		*\param[in] mipFilter
-		*	Le filtre de mipmap.
-		*\param[in] minLod
-		*	Niveau de LOD minimal.
-		*\param[in] maxLod
-		*	Niveau de LOD maximal.
-		*\param[in] lodBias
-		*	Le décalage de LOD de la texture.
-		*\param[in] borderColour
-		*	Couleur des bords de la texture.
-		*\param[in] maxAnisotropy
-		*	Valeur maximale pour le filtrage anisotropique.
+		*\param[in] createInfo
+		*	Les informations de création.
 		*\~english
 		*\brief
 		*	Constructor.
 		*\param[in] device
 		*	The logical connection to the GPU.
-		*\param[in] minFilter, magFilter
-		*\param[in] wrapS, wrapT, wrapR
-		*	The  S, T and R address mode.
-		*	The minification and magnification filter.
-		*\param[in] mipFilter
-		*	The mipmapping mode.
-		*\param[in] minLod
-		*	Minimal LOD Level.
-		*\param[in] maxLod
-		*	Maximal LOD Level.
-		*\param[in] lodBias
-		*	The texture LOD offset.
-		*\param[in] borderColour
-		*	Texture border colour.
-		*\param[in] maxAnisotropy
-		*	Maximal anisotropic filtering value.
+		*\param[in] createInfo
+		*	The creation informations.
 		*/
 		Sampler( Device const & device
-			, WrapMode wrapS
-			, WrapMode wrapT
-			, WrapMode wrapR
-			, Filter minFilter
-			, Filter magFilter
-			, MipmapMode mipFilter = MipmapMode::eNearest
-			, float minLod = -1000.0f
-			, float maxLod = 1000.0f
-			, float lodBias = 0.0f
-			, BorderColour borderColour = BorderColour::eFloatOpaqueBlack
-			, float maxAnisotropy = 1.0f
-			, CompareOp compareOp = CompareOp::eAlways );
+			, SamplerCreateInfo const & createInfo );
 
 	public:
 		/**
@@ -95,7 +56,7 @@ namespace renderer
 		*/
 		inline WrapMode getWrapS()const
 		{
-			return m_wrapS;
+			return m_info.addressModeU;
 		}
 		/**
 		*\~english
@@ -107,7 +68,7 @@ namespace renderer
 		*/
 		inline WrapMode getWrapT()const
 		{
-			return m_wrapT;
+			return m_info.addressModeV;
 		}
 		/**
 		*\~english
@@ -119,7 +80,7 @@ namespace renderer
 		*/
 		inline WrapMode getWrapR()const
 		{
-			return m_wrapR;
+			return m_info.addressModeW;
 		}
 		/**
 		*\~english
@@ -131,7 +92,7 @@ namespace renderer
 		*/
 		inline Filter getMinFilter()const
 		{
-			return m_minFilter;
+			return m_info.minFilter;
 		}
 		/**
 		*\~english
@@ -143,7 +104,7 @@ namespace renderer
 		*/
 		inline Filter getMagFilter()const
 		{
-			return m_magFilter;
+			return m_info.magFilter;
 		}
 		/**
 		*\~english
@@ -155,7 +116,7 @@ namespace renderer
 		*/
 		inline MipmapMode getMipFilter()const
 		{
-			return m_mipFilter;
+			return m_info.mipmapMode;
 		}
 		/**
 		*\~english
@@ -167,7 +128,7 @@ namespace renderer
 		*/
 		inline float getMinLod()const
 		{
-			return m_minLod;
+			return m_info.minLod;
 		}
 		/**
 		*\~english
@@ -179,7 +140,7 @@ namespace renderer
 		*/
 		inline float getMaxLod()const
 		{
-			return m_maxLod;
+			return m_info.maxLod;
 		}
 		/**
 		*\~english
@@ -191,7 +152,7 @@ namespace renderer
 		*/
 		inline float getLodBias()const
 		{
-			return m_lodBias;
+			return m_info.mipLodBias;
 		}
 		/**
 		*\~english
@@ -204,7 +165,7 @@ namespace renderer
 		*/
 		inline BorderColour getBorderColour()const
 		{
-			return m_borderColour;
+			return m_info.borderColor;
 		}
 		/**
 		*\~english
@@ -216,7 +177,7 @@ namespace renderer
 		*/
 		inline float getMaxAnisotropy()const
 		{
-			return m_maxAnisotropy;
+			return m_info.maxAnisotropy;
 		}
 		/**
 		*\~english
@@ -229,22 +190,11 @@ namespace renderer
 		*/
 		inline CompareOp getCompareOp()const
 		{
-			return m_compareOp;
+			return m_info.compareOp;
 		}
 
 	private:
-		WrapMode m_wrapS;
-		WrapMode m_wrapT;
-		WrapMode m_wrapR;
-		Filter m_minFilter;
-		Filter m_magFilter;
-		MipmapMode m_mipFilter;
-		float m_minLod;
-		float m_maxLod;
-		float m_lodBias;
-		BorderColour m_borderColour;
-		float m_maxAnisotropy;
-		CompareOp m_compareOp;
+		SamplerCreateInfo m_info;
 	};
 }
 

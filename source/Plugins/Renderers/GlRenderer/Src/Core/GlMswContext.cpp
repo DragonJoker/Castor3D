@@ -1,6 +1,8 @@
+#include "Core/GlMswContext.hpp"
+
 #if defined( _WIN32 )
 
-#include "Core/GlMswContext.hpp"
+#include "Core/GlPhysicalDevice.hpp"
 #include "Miscellaneous/GlDebug.hpp"
 
 #include <Core/PlatformWindowHandle.hpp>
@@ -24,60 +26,24 @@ namespace gl_renderer
 #endif
 	}
 
-	MswContext::MswContext( renderer::ConnectionPtr && connection )
-		: Context{ std::move( connection ) }
+	MswContext::MswContext( PhysicalDevice const & gpu
+		, renderer::ConnectionPtr && connection )
+		: Context{ gpu, std::move( connection ) }
 		, m_hDC( nullptr )
 		, m_hContext( nullptr )
 		, m_hWnd( m_connection->getHandle().getInternal< renderer::IMswWindowHandle >().getHwnd() )
 	{
 		m_hDC = ::GetDC( m_hWnd );
 
-		if ( doSelectPixelFormat() )
+		if ( doSelectFormat() )
 		{
 			m_hContext = wglCreateContext( m_hDC );
 			setCurrent();
 			m_opengl = std::make_unique< OpenGLLibrary >();
-			m_vendor = ( char const * )gl::GetString( GL_VENDOR );
-			m_renderer = ( char const * )gl::GetString( GL_RENDERER );
-			m_version = ( char const * )gl::GetString( GL_VERSION );
 			loadDebugFunctions();
 			endCurrent();
 
 			double fversion{ 0u };
-			std::stringstream stream( m_version );
-			stream >> fversion;
-			auto version = int( fversion * 10 );
-			m_major = version / 10;
-			m_minor = version % 10;
-
-			if ( version >= 33 )
-			{
-				m_glslVersion = version * 10;
-			}
-			else if ( version >= 32 )
-			{
-				m_glslVersion = 150;
-			}
-			else if ( version >= 31 )
-			{
-				m_glslVersion = 140;
-			}
-			else if ( version >= 30 )
-			{
-				m_glslVersion = 130;
-			}
-			else if ( version >= 21 )
-			{
-				m_glslVersion = 120;
-			}
-			else if ( version >= 20 )
-			{
-				m_glslVersion = 110;
-			}
-			else
-			{
-				m_glslVersion = 100;
-			}
 
 			if ( !doCreateGl3Context() )
 			{
@@ -86,8 +52,6 @@ namespace gl_renderer
 			}
 
 			setCurrent();
-			glLogCall( gl::ClipControl, GL_UPPER_LEFT, GL_ZERO_TO_ONE );
-			initialiseDebugFunctions();
 			wgl::SwapIntervalEXT( 0 );
 			endCurrent();
 		}
@@ -127,7 +91,7 @@ namespace gl_renderer
 	{
 		HGLRC result = nullptr;
 
-		if ( doSelectPixelFormat() )
+		if ( doSelectFormat() )
 		{
 			result = wglCreateContext( m_hDC );
 		}
@@ -135,7 +99,7 @@ namespace gl_renderer
 		return result;
 	}
 
-	bool MswContext::doSelectPixelFormat()
+	bool MswContext::doSelectFormat()
 	{
 		bool result = false;
 		PIXELFORMATDESCRIPTOR pfd = { 0 };
@@ -148,7 +112,8 @@ namespace gl_renderer
 		pfd.cRedBits = 8;
 		pfd.cGreenBits = 8;
 		pfd.cBlueBits = 8;
-		pfd.cDepthBits = 0;
+		pfd.cDepthBits = 24;
+		pfd.cStencilBits = 8;
 
 		int pixelFormats = ::ChoosePixelFormat( m_hDC, &pfd );
 
@@ -171,8 +136,8 @@ namespace gl_renderer
 			HGLRC hContext = m_hContext;
 			std::vector< int > attribList
 			{
-				WGL_CONTEXT_MAJOR_VERSION_ARB, m_major,
-				WGL_CONTEXT_MINOR_VERSION_ARB, m_minor,
+				WGL_CONTEXT_MAJOR_VERSION_ARB, m_gpu.getMajor(),
+				WGL_CONTEXT_MINOR_VERSION_ARB, m_gpu.getMinor(),
 				WGL_CONTEXT_FLAGS_ARB, GL_CONTEXT_CREATION_DEFAULT_FLAGS,
 				WGL_CONTEXT_PROFILE_MASK_ARB, GL_CONTEXT_CREATION_DEFAULT_MASK,
 				0
@@ -190,7 +155,7 @@ namespace gl_renderer
 			if ( !result )
 			{
 				std::stringstream error;
-				error << "Failed to create a " << m_major << "." << m_minor << " OpenGL context (0x" << std::hex << gl::GetError() << ").";
+				error << "Failed to create a " << m_gpu.getMajor() << "." << m_gpu.getMinor() << " OpenGL context (0x" << std::hex << gl::GetError() << ").";
 				throw std::runtime_error{ error.str() };
 			}
 		}

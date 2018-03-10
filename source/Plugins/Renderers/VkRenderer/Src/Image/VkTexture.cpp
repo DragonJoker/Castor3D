@@ -3,10 +3,11 @@
 #include "Command/VkCommandBuffer.hpp"
 #include "Command/VkQueue.hpp"
 #include "Core/VkDevice.hpp"
+#include "Core/VkPhysicalDevice.hpp"
 #include "Core/VkRenderer.hpp"
 #include "Sync/VkImageMemoryBarrier.hpp"
 #include "Image/VkImageSubresourceRange.hpp"
-#include "Miscellaneous/VkMemoryStorage.hpp"
+#include "Miscellaneous/VkDeviceMemory.hpp"
 #include "Command/VkQueue.hpp"
 #include "Image/VkTextureView.hpp"
 
@@ -30,13 +31,13 @@ namespace vk_renderer
 			};
 		}
 
-		renderer::PixelFormat findSupportedFormat( Device const & device
-			, const std::vector< renderer::PixelFormat > & candidates
+		renderer::Format doFindSupportedFormat( Device const & device
+			, const std::vector< renderer::Format > & candidates
 			, VkImageTiling tiling
 			, VkFormatFeatureFlags features
 			, PhysicalDevice const & physicalDevice )
 		{
-			for ( renderer::PixelFormat format : candidates )
+			for ( renderer::Format format : candidates )
 			{
 				VkFormatProperties props;
 				device.getRenderer().vkGetPhysicalDeviceFormatProperties( physicalDevice
@@ -55,6 +56,27 @@ namespace vk_renderer
 			}
 
 			throw std::runtime_error( "failed to find supported format!" );
+		}
+
+		renderer::Format doSelectFormat( Device const & device
+			, renderer::Format format )
+		{
+			renderer::Format result;
+
+			if ( renderer::isDepthOrStencilFormat( format ) )
+			{
+				result = doFindSupportedFormat( device
+					, { format }
+					, VK_IMAGE_TILING_OPTIMAL
+					, VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
+					, static_cast< PhysicalDevice const & >( device.getPhysicalDevice() ) );
+			}
+			else
+			{
+				result = format;
+			}
+
+			return result;
 		}
 	}
 
@@ -81,73 +103,88 @@ namespace vk_renderer
 		return *this;
 	}
 
-	Texture::Texture( Device const & device, renderer::ImageLayout initialLayout )
-		: renderer::Texture{ device }
+	Texture::Texture( Device const & device
+		, renderer::ImageCreateInfo const & createInfo )
+		: renderer::Texture{ device
+			, createInfo.imageType
+			, createInfo.format
+			, createInfo.extent
+			, createInfo.mipLevels
+			, createInfo.arrayLayers }
 		, m_device{ device }
 		, m_image{}
 		, m_owner{ true }
 	{
+		VkImageCreateInfo vkcreateInfo
+		{
+			VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
+			nullptr,
+			convert( createInfo.flags ),                        // flags
+			convert( createInfo.imageType ),                    // imageType
+			convert( createInfo.format ),                       // format
+			convert( createInfo.extent ),                       // extent
+			createInfo.mipLevels,                               // mipLevels
+			createInfo.arrayLayers,                             // arrayLayers
+			convert( createInfo.samples ),                      // samples
+			convert( createInfo.tiling ),                       // tiling
+			convert( createInfo.usage ),                        // usage
+			convert( createInfo.sharingMode ),                  // sharingMode
+			uint32_t( createInfo.queueFamilyIndices.size() ),   // queueFamilyIndexCount
+			createInfo.queueFamilyIndices.empty()               // pQueueFamilyIndices
+				? nullptr
+				: createInfo.queueFamilyIndices.data(),
+			convert( createInfo.initialLayout )                 // initialLayout
+		};
+		DEBUG_DUMP( vkcreateInfo );
+		auto res = m_device.vkCreateImage( m_device
+			, &vkcreateInfo
+			, nullptr
+			, &m_image );
+
+		if ( !checkError( res ) )
+		{
+			throw std::runtime_error{ "Image creation failed: " + getLastError() };
+		}
 	}
 
 	Texture::Texture( Device const & device
-		, renderer::PixelFormat format
-		, renderer::UIVec2 const & dimensions
+		, renderer::Format format
+		, renderer::Extent2D const & dimensions
 		, VkImage image )
-		: renderer::Texture{ device }
+		: renderer::Texture{ device
+			, renderer::TextureType::e2D
+			, doSelectFormat( device, format )
+			, renderer::Extent3D{ dimensions.width, dimensions.height, 1u }
+			, 1u 
+			, 1u }
 		, m_device{ device }
 		, m_image{ image }
 		, m_owner{ false }
 	{
-		if ( renderer::isDepthOrStencilFormat( format ) )
-		{
-			m_format = findSupportedFormat( m_device
-				, { format }
-				, VK_IMAGE_TILING_OPTIMAL
-				, VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
-				, m_device.getPhysicalDevice() );
-		}
-		else
-		{
-			m_format = format;
-		}
-
-		m_type = renderer::TextureType::e2D;
-		m_size = renderer::UIVec3{ dimensions[0], dimensions[1], 0u };
-		m_layerCount = 0u;
-		m_samples = renderer::SampleCountFlag::e1;
 	}
 
 	Texture::Texture( Device const & device
-		, renderer::PixelFormat format
-		, renderer::UIVec2 const & dimensions
+		, renderer::Format format
+		, renderer::Extent2D const & dimensions
 		, renderer::ImageUsageFlags usageFlags
 		, renderer::ImageTiling tiling
 		, renderer::MemoryPropertyFlags memoryFlags )
-		: renderer::Texture{ device }
-		, m_device{ device }
-		, m_owner{ true }
+		: Texture{ device
+			, {
+				0u,
+				renderer::TextureType::e2D,
+				doSelectFormat( device, format ),
+				renderer::Extent3D{ dimensions.width, dimensions.height, 1u },
+				1u,
+				1u,
+				renderer::SampleCountFlag::e1,
+				tiling,
+				usageFlags,
+				renderer::SharingMode::eExclusive,
+				{},
+				renderer::ImageLayout::eUndefined
+			} }
 	{
-		if ( renderer::isDepthOrStencilFormat( format ) )
-		{
-			m_format = findSupportedFormat( m_device
-				, { format }
-				, VK_IMAGE_TILING_OPTIMAL
-				, VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
-				, m_device.getPhysicalDevice() );
-		}
-		else
-		{
-			m_format = format;
-		}
-
-		m_format = format;
-		m_type = renderer::TextureType::e2D;
-		m_size = renderer::UIVec3{ dimensions[0], dimensions[1], 0u };
-		m_layerCount = 0u;
-		m_samples = renderer::SampleCountFlag::e1;
-		doSetImage2D( usageFlags
-			, tiling
-			, memoryFlags );
 	}
 
 	Texture::~Texture()
@@ -160,89 +197,77 @@ namespace vk_renderer
 		}
 	}
 
-	renderer::Texture::Mapped Texture::lock( uint32_t offset
-		, uint32_t size
-		, VkMemoryMapFlags flags )const
+	renderer::MemoryRequirements Texture::getMemoryRequirements()const
 	{
-		renderer::Texture::Mapped mapped{};
-		VkImageSubresource subResource{};
-		subResource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-		VkSubresourceLayout subResourceLayout;
-		m_device.vkGetImageSubresourceLayout( m_device, m_image, &subResource, &subResourceLayout );
-
-		mapped.data = m_storage->lock( offset
-			, size
-			, flags );
-
-		if ( mapped.data )
-		{
-			mapped.arrayPitch = subResourceLayout.arrayPitch;
-			mapped.depthPitch = subResourceLayout.depthPitch;
-			mapped.rowPitch = subResourceLayout.rowPitch;
-			mapped.size = subResourceLayout.size;
-			mapped.data += subResourceLayout.offset;
-		}
-
-		return mapped;
+		return m_device.getImageMemoryRequirements( m_image );
 	}
 
-	void Texture::unlock( uint32_t size
-		, bool modified )const
+	renderer::TextureViewPtr Texture::createView( renderer::ImageViewCreateInfo const & createInfo )const
 	{
-		m_storage->unlock( size
-			, modified );
-	}
-
-	renderer::TextureViewPtr Texture::createView( renderer::TextureType type
-		, renderer::PixelFormat format
-		, uint32_t baseMipLevel
-		, uint32_t levelCount
-		, uint32_t baseArrayLayer
-		, uint32_t layerCount )const
-	{
-		return std::make_shared< TextureView >( m_device
+		return std::make_unique< TextureView >( m_device
 			, *this
-			, type
-			, format
-			, baseMipLevel
-			, levelCount
-			, baseArrayLayer
-			, layerCount );
+			, createInfo );
 	}
 
 	void Texture::generateMipmaps()const
 	{
-		auto const width = int32_t( getDimensions()[0] );
-		auto const height = int32_t( getDimensions()[1] );
+		auto const width = int32_t( getDimensions().width );
+		auto const height = int32_t( getDimensions().height );
 		auto commandBuffer = m_device.getGraphicsCommandPool().createCommandBuffer();
 		auto & vkCommandBuffer = static_cast< CommandBuffer const & >( *commandBuffer );
 
 		if ( commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
 		{
-			TextureView srcView{ m_device, *this, getType(), getFormat(), 0, 1u, 0u, 1u };
+			TextureView srcView{ m_device
+				, *this
+				, {
+					renderer::TextureViewType( getType() ),
+					getFormat(),
+					renderer::ComponentMapping{},
+					{
+						renderer::getAspectMask( getFormat() ),
+						0,
+						1u,
+						0u,
+						1u
+					}
+				} };
 			vkCommandBuffer.memoryBarrier( convert( renderer::PipelineStageFlag::eFragmentShader )
 				, convert( renderer::PipelineStageFlag::eTopOfPipe )
-				, srcView.makeTransferSource() );
+				, srcView.makeTransferSource( renderer::ImageLayout::eUndefined, 0u ) );
 
-			for ( uint32_t i = 1; i < m_mipmapLevels; ++i )
+			for ( uint32_t i = 1u; i < getMipmapLevels(); ++i )
 			{
-				TextureView dstView{ m_device, *this, getType(), getFormat(), i, 1u, 0u, 1u };
+				TextureView dstView{ m_device
+					, *this
+					, {
+						renderer::TextureViewType( getType() ),
+						getFormat(),
+						renderer::ComponentMapping{},
+						{
+							renderer::getAspectMask( getFormat() ),
+							0,
+							1u,
+							0u,
+							1u
+						}
+					} };
 				vkCommandBuffer.memoryBarrier( convert( renderer::PipelineStageFlag::eFragmentShader )
 					, convert( renderer::PipelineStageFlag::eTopOfPipe )
-					, dstView.makeTransferDestination() );
+					, dstView.makeTransferDestination( renderer::ImageLayout::eUndefined, 0u ) );
 
 				int32_t const mipWidth = width >> i;
 				int32_t const mipHeight = height >> i;
 
 				VkImageBlit imageBlit = {};
-				imageBlit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+				imageBlit.srcSubresource.aspectMask = convert( getAspectMask( getFormat() ) );
 				imageBlit.srcSubresource.baseArrayLayer = 0;
 				imageBlit.srcSubresource.layerCount = 1;
 				imageBlit.srcSubresource.mipLevel = 0;
 				imageBlit.srcOffsets[0] = { 0, 0, 0 };
 				imageBlit.srcOffsets[1] = { width, height, 1 };
 
-				imageBlit.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+				imageBlit.dstSubresource.aspectMask = convert( getAspectMask( getFormat() ) );
 				imageBlit.dstSubresource.baseArrayLayer = 0;
 				imageBlit.dstSubresource.layerCount = 1;
 				imageBlit.dstSubresource.mipLevel = i;
@@ -265,164 +290,11 @@ namespace vk_renderer
 		}
 	}
 
-	void Texture::doSetImage1D( renderer::ImageUsageFlags usageFlags
-		, renderer::ImageTiling tiling
-		, renderer::MemoryPropertyFlags memoryFlags )
+	void Texture::doBindMemory()
 	{
-		assert( m_owner );
-		VkImageCreateInfo createInfo
-		{
-			VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
-			nullptr,
-			0,                                                    // flags
-			VK_IMAGE_TYPE_1D,                                     // imageType
-			convert( m_format ),                                  // format
-			{                                                     // extent
-				uint32_t( m_size[0] ),                                // width
-				1u,                                                   // height
-				1u                                                    // depth
-			},
-			m_mipmapLevels,                                       // mipLevels
-			m_layerCount ? m_layerCount : 1u,                     // arrayLayers
-			convert( m_samples ),                                 // samples
-			convert( tiling ),                                    // tiling
-			convert( usageFlags ),                                // usage
-			VK_SHARING_MODE_EXCLUSIVE,                            // sharingMode
-			0,                                                    // queueFamilyIndexCount
-			nullptr,                                              // pQueueFamilyIndices
-			VK_IMAGE_LAYOUT_UNDEFINED                             // initialLayout
-		};
-		DEBUG_DUMP( createInfo );
-		auto res = m_device.vkCreateImage( m_device
-			, &createInfo
-			, nullptr
-			, &m_image );
-
-		if ( !checkError( res ) )
-		{
-			throw std::runtime_error{ "Image creation failed: " + getLastError() };
-		}
-
-		m_storage = std::make_unique< ImageStorage >( m_device
+		auto res = m_device.vkBindImageMemory( m_device
 			, m_image
-			, convert( memoryFlags ) );
-		res = m_device.vkBindImageMemory( m_device
-			, m_image
-			, *m_storage
-			, 0 );
-
-		if ( !checkError( res ) )
-		{
-			throw std::runtime_error{ "Image storage binding failed: " + getLastError() };
-		}
-	}
-
-	void Texture::doSetImage2D( renderer::ImageUsageFlags usageFlags
-		, renderer::ImageTiling tiling
-		, renderer::MemoryPropertyFlags memoryFlags )
-	{
-		if ( renderer::isDepthOrStencilFormat( m_format )
-			&& checkFlag( usageFlags, renderer::ImageUsageFlag::eDepthStencilAttachment ) )
-		{
-			m_format = findSupportedFormat( m_device
-				, { m_format }
-				, convert( tiling )
-				, VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
-				, m_device.getPhysicalDevice() );
-		}
-
-		assert( m_owner );
-		VkImageCreateInfo createInfo
-		{
-			VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
-			nullptr,
-			0,                                                    // flags
-			VK_IMAGE_TYPE_2D,                                     // imageType
-			convert( m_format ),                                  // format
-			{                                                     // extent
-				uint32_t( m_size[0] ),                                // width
-				uint32_t( m_size[1] ),                                // height
-				1                                                     // depth
-			},
-			m_mipmapLevels,                                       // mipLevels
-			m_layerCount ? m_layerCount : 1u,                     // arrayLayers
-			convert( m_samples ),                                 // samples
-			convert( tiling ),                                    // tiling
-			convert( usageFlags ),                                // usage
-			VK_SHARING_MODE_EXCLUSIVE,                            // sharingMode
-			0,                                                    // queueFamilyIndexCount
-			nullptr,                                              // pQueueFamilyIndices
-			VK_IMAGE_LAYOUT_UNDEFINED                             // initialLayout
-		};
-		DEBUG_DUMP( createInfo );
-		auto res = m_device.vkCreateImage( m_device
-			, &createInfo
-			, nullptr
-			, &m_image );
-
-		if ( !checkError( res ) )
-		{
-			throw std::runtime_error{ "Image creation failed: " + getLastError() };
-		}
-
-		m_storage = std::make_unique< ImageStorage >( m_device
-			, m_image
-			, convert( memoryFlags ) );
-		res = m_device.vkBindImageMemory( m_device
-			, m_image
-			, *m_storage
-			, 0 );
-
-		if ( !checkError( res ) )
-		{
-			throw std::runtime_error{ "Image storage binding failed: " + getLastError() };
-		}
-	}
-
-	void Texture::doSetImage3D( renderer::ImageUsageFlags usageFlags
-		, renderer::ImageTiling tiling
-		, renderer::MemoryPropertyFlags memoryFlags )
-	{
-		assert( m_owner );
-		VkImageCreateInfo createInfo
-		{
-			VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
-			nullptr,
-			0,                                                    // flags
-			VK_IMAGE_TYPE_3D,                                     // imageType
-			convert( m_format ),                                  // format
-			{                                                     // extent
-				uint32_t( m_size[0] ),                                // width
-				uint32_t( m_size[1] ),                                // height
-				uint32_t( m_size[2] ),                                // depth
-			},
-			m_mipmapLevels,                                       // mipLevels
-			1u,                                                   // arrayLayers
-			convert( m_samples ),                                 // samples
-			convert( tiling ),                                    // tiling
-			convert( usageFlags ),                                // usage
-			VK_SHARING_MODE_EXCLUSIVE,                            // sharingMode
-			0,                                                    // queueFamilyIndexCount
-			nullptr,                                              // pQueueFamilyIndices
-			VK_IMAGE_LAYOUT_UNDEFINED                             // initialLayout
-		};
-		DEBUG_DUMP( createInfo );
-		auto res = m_device.vkCreateImage( m_device
-			, &createInfo
-			, nullptr
-			, &m_image );
-
-		if ( !checkError( res ) )
-		{
-			throw std::runtime_error{ "Image creation failed: " + getLastError() };
-		}
-
-		m_storage = std::make_unique< ImageStorage >( m_device
-			, m_image
-			, convert( memoryFlags ) );
-		res = m_device.vkBindImageMemory( m_device
-			, m_image
-			, *m_storage
+			, static_cast< DeviceMemory const & >( *m_storage )
 			, 0 );
 
 		if ( !checkError( res ) )

@@ -1,25 +1,29 @@
 #include "Core/GlSwapChain.hpp"
 
 #include "Command/GlCommandBuffer.hpp"
+#include "Core/GlBackBuffer.hpp"
 #include "Core/GlDevice.hpp"
 #include "RenderPass/GlFrameBuffer.hpp"
 #include "RenderPass/GlRenderPass.hpp"
 #include "Sync/GlSemaphore.hpp"
 #include "Image/GlTexture.hpp"
+#include "Image/GlTextureView.hpp"
 
 #include <iostream>
 
 namespace gl_renderer
 {
-	SwapChain::SwapChain( renderer::Device const & device
-		, renderer::UIVec2 const & size )
+	SwapChain::SwapChain( Device const & device
+		, renderer::Extent2D const & size )
 		: renderer::SwapChain{ device, size }
+		, m_device{ device }
 	{
-		m_format = renderer::PixelFormat::eR8G8B8A8;
+		m_format = renderer::Format::eR8G8B8A8_UNORM;
 		m_renderingResources.emplace_back( std::make_unique< RenderingResources >( device ) );
+		doCreateBackBuffers();
 	}
 
-	void SwapChain::reset( renderer::UIVec2 const & size )
+	void SwapChain::reset( renderer::Extent2D const & size )
 	{
 		m_dimensions = size;
 		doResetSwapChain();
@@ -27,10 +31,9 @@ namespace gl_renderer
 
 	renderer::FrameBufferPtrArray SwapChain::createFrameBuffers( renderer::RenderPass const & renderPass )const
 	{
-		return renderer::FrameBufferPtrArray
-		{
-			std::make_shared< FrameBuffer >( renderPass, m_dimensions )
-		};
+		renderer::FrameBufferPtrArray result;
+		result.emplace_back( std::make_unique< FrameBuffer >( renderPass, m_dimensions ) );
+		return result;
 	}
 
 	renderer::CommandBufferPtrArray SwapChain::createCommandBuffers()const
@@ -40,16 +43,6 @@ namespace gl_renderer
 			, m_device.getGraphicsCommandPool()
 			, true ) );
 		return result;
-	}
-
-	void SwapChain::preRenderCommands( uint32_t index
-		, renderer::CommandBuffer const & commandBuffer )const
-	{
-	}
-
-	void SwapChain::postRenderCommands( uint32_t index
-		, renderer::CommandBuffer const & commandBuffer )const
-	{
 	}
 
 	renderer::RenderingResources * SwapChain::getResources()
@@ -73,9 +66,34 @@ namespace gl_renderer
 		resources.setBackBuffer( ~0u );
 	}
 
+	void SwapChain::createDepthStencil( renderer::Format format )
+	{
+		auto texture = std::make_unique< Texture >( m_device
+			, format
+			, m_dimensions );
+		m_depthStencilView = std::make_unique< TextureView >( m_device
+			, *texture );
+		m_depthStencil = std::move( texture );
+	}
+
 	void SwapChain::doResetSwapChain()
 	{
 		m_device.waitIdle();
+		doCreateBackBuffers();
 		onReset();
+	}
+
+	void SwapChain::doCreateBackBuffers()
+	{
+		m_backBuffers.clear();
+		auto texture = std::make_unique< Texture >( m_device
+			, m_format
+			, m_dimensions );
+		auto view = std::make_unique< TextureView >( m_device
+			, *texture );
+		m_backBuffers.emplace_back( std::make_unique< BackBuffer >( m_device
+			, std::move( texture )
+			, std::move( view )
+			, 0u ) );
 	}
 }

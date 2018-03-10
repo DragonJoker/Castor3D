@@ -103,7 +103,7 @@ namespace castor3d
 
 		struct Configuration
 		{
-			renderer::Vec2 blurPixelSize;
+			castor::Point2f blurPixelSize;
 			float blurCorrection;
 		};
 
