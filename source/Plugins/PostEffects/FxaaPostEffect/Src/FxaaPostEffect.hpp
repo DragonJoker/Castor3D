@@ -31,10 +31,10 @@ namespace fxaa
 	private:
 		struct Configuration
 		{
-			castor::Point2f m_renderSize;
-			float m_subpixShift;
-			float m_spanMax;
-			float m_reduceMul;
+			castor::Point2f renderSize;
+			float subpixShift;
+			float spanMax;
+			float reduceMul;
 		};
 		castor::Size m_size;
 		renderer::UniformBufferPtr< Configuration > m_configUbo;
@@ -55,10 +55,6 @@ namespace fxaa
 		 *\copydoc		castor3d::PostEffect::Cleanup
 		 */
 		void cleanup() override;
-		/**
-		 *\copydoc		castor3d::PostEffect::Apply
-		 */
-		bool apply() override;
 
 	private:
 		/**
@@ -78,7 +74,6 @@ namespace fxaa
 		PostEffectSurface m_surface;
 		renderer::RenderPassPtr m_renderPass;
 		std::unique_ptr< RenderQuad > m_fxaaQuad;
-		std::unique_ptr< RenderQuad > m_resultQuad;
 	};
 }
 

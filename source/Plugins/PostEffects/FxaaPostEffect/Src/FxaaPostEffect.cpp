@@ -14,7 +14,7 @@
 #include <Image/Texture.hpp>
 #include <Image/TextureView.hpp>
 #include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassState.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/RenderSubpass.hpp>
 #include <RenderPass/RenderSubpassState.hpp>
 #include <Shader/ShaderProgram.hpp>
@@ -45,11 +45,11 @@ namespace fxaa
 
 			// Shader inputs
 			UBO_FXAA( writer, 0u );
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ) );
+			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
-			auto vtx_posPos = writer.declOutput< Vec4 >( PosPos );
+			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto vtx_posPos = writer.declOutput< Vec4 >( PosPos, 1u );
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			writer.implementFunction< void >( cuT( "main" )
@@ -73,8 +73,8 @@ namespace fxaa
 			// Shader inputs
 			UBO_FXAA( writer, 0u );
 			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
-			auto vtx_posPos = writer.declInput< Vec4 >( PosPos );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto vtx_posPos = writer.declInput< Vec4 >( PosPos, 1u );
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
@@ -145,50 +145,6 @@ namespace fxaa
 
 			return writer.finalise();
 		}
-		
-		glsl::Shader getResultVertexProgram( castor3d::RenderSystem * renderSystem )
-		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
-
-			// Shader inputs
-			UBO_FXAA( writer, 0u );
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ) );
-
-			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
-			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
-
-			writer.implementFunction< void >( cuT( "main" )
-				, [&]()
-				{
-					vtx_texture = position;
-					gl_Position = vec4( position.xy(), 0.0, 1.0 );
-				} );
-			return writer.finalise();
-		}
-
-		glsl::Shader getResultFragmentProgram( castor3d::RenderSystem * renderSystem )
-		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
-
-			// Shader inputs
-			UBO_FXAA( writer, 0u );
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
-
-			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
-
-			writer.implementFunction< void >( cuT( "main" )
-				, [&]()
-				{
-					pxl_fragColor = texture( c3d_mapDiffuse, vtx_texture );
-				} );
-
-			return writer.finalise();
-		}
 	}
 
 	//*********************************************************************************************
@@ -202,24 +158,18 @@ namespace fxaa
 			, 1u
 			, renderer::BufferTarget::eTransferDst
 			, renderer::MemoryPropertyFlag::eHostVisible );
-		m_configUbo->getData( 0 ).m_renderSize = Point2f{ size };
+		m_configUbo->getData( 0 ).renderSize = Point2f{ size };
 	}
 
 	void RenderQuad::update( float subpixShift
 		, float spanMax
 		, float reduceMul )
 	{
-		m_configUbo->getData( 0 ).m_subpixShift = subpixShift;
-		m_configUbo->getData( 0 ).m_spanMax = spanMax;
-		m_configUbo->getData( 0 ).m_reduceMul = reduceMul;
-
-		if ( auto buffer = m_configUbo->getUbo().getBuffer().lock( 0u
-			, sizeof( Configuration )
-			, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateRange ) )
-		{
-			std::memcpy( buffer, m_configUbo->getDatas().data(), sizeof( Configuration ) );
-			m_configUbo->getUbo().getBuffer().unlock( sizeof( Configuration ), true );
-		}
+		auto & data = m_configUbo->getData();
+		data.subpixShift = subpixShift;
+		data.spanMax = spanMax;
+		data.reduceMul = reduceMul;
+		m_configUbo->upload();
 	}
 
 	void RenderQuad::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
@@ -292,71 +242,80 @@ namespace fxaa
 
 	bool PostEffect::initialise()
 	{
-		auto & cache = getRenderSystem()->getEngine()->getShaderProgramCache();
-		Size size = m_renderTarget.getSize();
-
 		auto & device = *getRenderSystem()->getCurrentDevice();
+		renderer::Extent2D size{ m_renderTarget.getSize()[0], m_renderTarget.getSize()[1] };
 
-		// Prepare the render pass.
-		std::vector< renderer::PixelFormat > formats{ { m_renderTarget.getPixelFormat(), m_renderTarget.getPixelFormat() } };
-		renderer::RenderSubpassPtrArray subpasses;
-		subpasses.emplace_back( device.createRenderSubpass( formats
-			, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-			, renderer::AccessFlag::eColourAttachmentWrite } ) );
-		subpasses.emplace_back( device.createRenderSubpass( formats
-			, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-			, renderer::AccessFlag::eColourAttachmentWrite } ) );
-		m_renderPass = device.createRenderPass( formats
-			, std::move( subpasses )
-			, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-				, renderer::AccessFlag::eColourAttachmentWrite
-				, { renderer::ImageLayout::eColourAttachmentOptimal, renderer::ImageLayout::eColourAttachmentOptimal } }
-			, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-				, renderer::AccessFlag::eColourAttachmentWrite
-				, { renderer::ImageLayout::eColourAttachmentOptimal, renderer::ImageLayout::eColourAttachmentOptimal } }
-			, false );
+		// Create the render pass.
+		renderer::RenderPassCreateInfo renderPass;
+		renderPass.flags = 0u;
+
+		renderPass.attachments.resize( 1u );
+		renderPass.attachments[0].index = 0u;
+		renderPass.attachments[0].format = m_renderTarget.getPixelFormat();
+		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+
+		renderPass.subpasses.resize( 1u );
+		renderPass.subpasses[0].flags = 0u;
+		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
+		renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
+
+		renderPass.dependencies.resize( 2u );
+		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].dstSubpass = 0u;
+		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		renderPass.dependencies[1].srcSubpass = 0u;
+		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		m_renderPass = device.createRenderPass( renderPass );
 
 		// Create the FXAA quad renderer.
 		renderer::DescriptorSetLayoutBindingArray bindings
 		{
-			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
+			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment },
 		};
 		auto vtx = getFxaaVertexProgram( getRenderSystem() );
 		auto pxl = getFxaaFragmentProgram( getRenderSystem() );
-		auto & fxaaProgram = cache.getNewProgram( false );
-		fxaaProgram.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
-		fxaaProgram.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
+
+		renderer::ShaderStageStateArray stages;
+		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
+		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
+		stages[0].module->loadShader( vtx.getSource() );
+		stages[1].module->loadShader( pxl.getSource() );
+
 		m_fxaaQuad = std::make_unique< RenderQuad >( *getRenderSystem(), size );
 		m_fxaaQuad->createPipeline( size
 			, Position{}
-			, fxaaProgram
+			, stages
 			, m_renderTarget.getTexture().getTexture()->getView()
 			, *m_renderPass
-			, bindings );
+			, bindings
+			, {} );
 
 		// Initialise the surface.
 		auto result = m_surface.initialise( m_renderTarget
 			, *m_renderPass
-			, size
+			, m_renderTarget.getSize()
 			, 0u
 			, m_sampler );
 
 		if ( result )
 		{
-			// Create the result quad renderer.
-			auto vtx = getResultVertexProgram( getRenderSystem() );
-			auto pxl = getResultFragmentProgram( getRenderSystem() );
-			auto & resultProgram = cache.getNewProgram( false );
-			resultProgram.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
-			resultProgram.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
-			m_resultQuad = std::make_unique< RenderQuad >( *getRenderSystem(), size );
-			m_resultQuad->createPipeline( size
-				, Position{}
-				, resultProgram
-				, m_surface.m_colourTexture.getTexture()->getView()
-				, *m_renderPass
-				, bindings );
-
 			// Initialise the command buffer.
 			m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 
@@ -368,12 +327,10 @@ namespace fxaa
 				auto & surfaceView = m_surface.m_colourTexture.getTexture()->getView();
 
 				// Put images in the right state for rendering.
-				m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTopOfPipe
+				m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 					, renderer::PipelineStageFlag::eFragmentShader
-					, targetImage.makeShaderInputResource( targetView.getSubResourceRange() ) );
-				m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTopOfPipe
-					, renderer::PipelineStageFlag::eColourAttachmentOutput
-					, surfaceImage.makeShaderInputResource( surfaceView.getSubResourceRange() ) );
+					, targetView.makeShaderInputResource( renderer::ImageLayout::eColourAttachmentOptimal
+						, renderer::AccessFlag::eColourAttachmentWrite ) );
 
 				// Render the effect.
 				m_commandBuffer->beginRenderPass( *m_renderPass
@@ -381,20 +338,31 @@ namespace fxaa
 					, {}
 					, renderer::SubpassContents::eInline );
 				m_fxaaQuad->registerFrame( *m_commandBuffer );
-
-				// Put images in the right state for blitting.
-				m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-					, renderer::PipelineStageFlag::eFragmentShader
-					, surfaceImage.makeShaderInputResource( surfaceView.getSubResourceRange() ) );
-				m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
-					, renderer::PipelineStageFlag::eColourAttachmentOutput
-					, targetImage.makeColourAttachment( targetView.getSubResourceRange() ) );
+				m_commandBuffer->endRenderPass();
 
 				// Blit the result to the render target image.
-				m_commandBuffer->nextSubpass( renderer::SubpassContents::eInline );
-				m_resultQuad->registerFrame( *m_commandBuffer );
+				renderer::ImageCopy imageCopy;
+				imageCopy.dstOffset = { 0, 0, 0 };
+				imageCopy.srcOffset = { 0, 0, 0 };
+				imageCopy.extent = surfaceImage.getDimensions();
+				imageCopy.dstSubresource.aspectMask = renderer::getAspectMask( surfaceImage.getFormat() );
+				imageCopy.dstSubresource.baseArrayLayer = 0u;
+				imageCopy.dstSubresource.layerCount = 1u;
+				imageCopy.dstSubresource.mipLevel = 0u;
+				imageCopy.srcSubresource.aspectMask = renderer::getAspectMask( surfaceImage.getFormat() );
+				imageCopy.srcSubresource.baseArrayLayer = 0u;
+				imageCopy.srcSubresource.layerCount = 1u;
+				imageCopy.srcSubresource.mipLevel = 0u;
+				m_commandBuffer->copyImage( imageCopy
+					, surfaceImage
+					, renderer::ImageLayout::eColourAttachmentOptimal
+					, targetImage
+					, renderer::ImageLayout::eShaderReadOnlyOptimal );
+				m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
+					, renderer::PipelineStageFlag::eColourAttachmentOutput
+					, targetView.makeColourAttachment( renderer::ImageLayout::eTransferDstOptimal
+						, renderer::AccessFlag::eTransferWrite ) );
 
-				m_commandBuffer->endRenderPass();
 				m_commandBuffer->end();
 			}
 		}
@@ -409,11 +377,6 @@ namespace fxaa
 		m_commandBuffer.reset();
 		m_renderPass.reset();
 		m_surface.cleanup();
-	}
-
-	bool PostEffect::apply()
-	{
-		return getRenderSystem()->getCurrentDevice()->getGraphicsQueue().submit( *m_commandBuffer, nullptr );
 	}
 
 	bool PostEffect::doWriteInto( TextFile & p_file )

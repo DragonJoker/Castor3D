@@ -4,23 +4,32 @@ See LICENSE file in root folder
 #ifndef ___C3DFXAA_FxaaUbo_H___
 #define ___C3DFXAA_FxaaUbo_H___
 
-#include "Shader/UniformBuffer.hpp"
+#include <Castor3DPrerequisites.hpp>
+#include <Buffer/UniformBuffer.hpp>
 
 namespace fxaa
 {
 	class FxaaUbo
 	{
+	private:
+		struct Configuration
+		{
+			float subpixShift;
+			float spanMax;
+			float reduceMul;
+			castor::Point2f renderSize;
+		};
+
 	public:
 		explicit FxaaUbo( castor3d::Engine & engine );
-		~FxaaUbo();
-		void update( castor::Size const & p_size
-			, float p_shift
-			, float p_span
-			, float p_reduce );
+		void update( castor::Size const & size
+			, float shift
+			, float span
+			, float reduce );
 
-		inline castor3d::UniformBuffer & getUbo()
+		inline renderer::UniformBuffer< Configuration > & getUbo()
 		{
-			return m_ubo;
+			return *m_ubo;
 		}
 
 	public:
@@ -32,11 +41,7 @@ namespace fxaa
 		static constexpr uint32_t BindingPoint = 2u;
 
 	private:
-		castor3d::UniformBuffer m_ubo;
-		castor3d::Uniform1fSPtr m_subpixShift;
-		castor3d::Uniform1fSPtr m_spanMax;
-		castor3d::Uniform1fSPtr m_reduceMul;
-		castor3d::Uniform2fSPtr m_renderSize;
+		renderer::UniformBufferPtr< Configuration > m_ubo;
 	};
 }
 

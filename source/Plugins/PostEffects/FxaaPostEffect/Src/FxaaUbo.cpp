@@ -14,32 +14,24 @@ namespace fxaa
 	const String FxaaUbo::RenderSize = cuT( "c3d_renderSize" );
 
 	FxaaUbo::FxaaUbo( Engine & engine )
-		: m_ubo{ FxaaUbo::Name
-			, *engine.getRenderSystem()
-			, FxaaUbo::BindingPoint }
-		, m_subpixShift{ m_ubo.createUniform< UniformType::eFloat >( FxaaUbo::SubpixShift ) }
-		, m_spanMax{ m_ubo.createUniform< UniformType::eFloat >( FxaaUbo::SpanMax ) }
-		, m_reduceMul{ m_ubo.createUniform< UniformType::eFloat >( FxaaUbo::ReduceMul ) }
-		, m_renderSize{ m_ubo.createUniform< UniformType::eVec2f >( FxaaUbo::RenderSize ) }
+		: m_ubo{ renderer::makeUniformBuffer< Configuration >( *engine.getRenderSystem()->getCurrentDevice()
+			, 1u
+			, 0u
+			, renderer::MemoryPropertyFlag::eHostVisible | renderer::MemoryPropertyFlag::eHostCoherent ) }
 	{
 	}
 
-	FxaaUbo::~FxaaUbo()
+	void FxaaUbo::update( Size const & size
+		, float shift
+		, float span
+		, float reduce )
 	{
-		m_ubo.cleanup();
-	}
-
-	void FxaaUbo::update( Size const & p_size
-		, float p_shift
-		, float p_span
-		, float p_reduce )
-	{
-		m_subpixShift->setValue( p_shift );
-		m_spanMax->setValue( p_span );
-		m_reduceMul->setValue( p_reduce );
-		m_renderSize->setValue( Point2f( p_size.getWidth(), p_size.getHeight() ) );
-		m_ubo.update();
-		m_ubo.bindTo( FxaaUbo::BindingPoint );
+		auto & data = m_ubo->getData();
+		data.subpixShift = shift;
+		data.spanMax = span;
+		data.reduceMul = reduce;
+		data.renderSize = Point2f{ size.getWidth(), size.getHeight() };
+		m_ubo->upload();
 	}
 
 	//************************************************************************************************
