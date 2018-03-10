@@ -307,10 +307,17 @@ namespace Bloom
 
 		if ( result )
 		{
+			// Put image in the right state for rendering.
+			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+				, renderer::PipelineStageFlag::eFragmentShader
+				, m_renderTarget.getTexture().getTexture()->getView().makeShaderInputResource( renderer::ImageLayout::eColourAttachmentOptimal
+					, renderer::AccessFlag::eColourAttachmentWrite ) );
+
 			// Hi-passes
 			for ( uint32_t i = 0u; i < FILTER_COUNT; ++i )
 			{
 				auto & surface = m_pipelines.hiPass.surfaces[i];
+
 				m_commandBuffer->beginRenderPass( *m_renderPass
 					, *surface.frameBuffer
 					, clearValues

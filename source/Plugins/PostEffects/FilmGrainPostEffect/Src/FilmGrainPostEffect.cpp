@@ -403,12 +403,41 @@ namespace film_grain
 		if ( result
 			&& m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
 		{
+			// Put image in the right state for rendering.
+			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+				, renderer::PipelineStageFlag::eFragmentShader
+				, m_renderTarget.getTexture().getTexture()->getView().makeShaderInputResource( renderer::ImageLayout::eColourAttachmentOptimal
+					, renderer::AccessFlag::eColourAttachmentWrite ) );
+
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *m_surface.m_fbo
 				, {}
 				, renderer::SubpassContents::eInline );
 			m_quad->registerFrame( *m_commandBuffer );
 			m_commandBuffer->endRenderPass();
+
+			// Blit the result to the render target image.
+			renderer::ImageCopy imageCopy;
+			imageCopy.dstOffset = { 0, 0, 0 };
+			imageCopy.srcOffset = { 0, 0, 0 };
+			imageCopy.extent = m_renderTarget.getTexture().getTexture()->getDimensions();
+			imageCopy.dstSubresource.aspectMask = renderer::getAspectMask( m_renderTarget.getTexture().getTexture()->getView().getFormat() );
+			imageCopy.dstSubresource.baseArrayLayer = 0u;
+			imageCopy.dstSubresource.layerCount = 1u;
+			imageCopy.dstSubresource.mipLevel = 0u;
+			imageCopy.srcSubresource.aspectMask = renderer::getAspectMask( m_surface.m_colourTexture.getTexture()->getTexture().getFormat() );
+			imageCopy.srcSubresource.baseArrayLayer = 0u;
+			imageCopy.srcSubresource.layerCount = 1u;
+			imageCopy.srcSubresource.mipLevel = 0u;
+			m_commandBuffer->copyImage( imageCopy
+				, m_surface.m_colourTexture.getTexture()->getTexture()
+				, renderer::ImageLayout::eColourAttachmentOptimal
+				, m_renderTarget.getTexture().getTexture()->getTexture()
+				, renderer::ImageLayout::eShaderReadOnlyOptimal );
+			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
+				, renderer::PipelineStageFlag::eColourAttachmentOutput
+				, m_renderTarget.getTexture().getTexture()->getView().makeColourAttachment( renderer::ImageLayout::eTransferDstOptimal
+					, renderer::AccessFlag::eTransferWrite ) );
 			m_commandBuffer->end();
 		}
 
