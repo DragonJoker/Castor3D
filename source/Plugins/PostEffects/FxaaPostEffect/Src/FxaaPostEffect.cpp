@@ -372,7 +372,6 @@ namespace fxaa
 
 	void PostEffect::cleanup()
 	{
-		m_resultQuad.reset();
 		m_fxaaQuad.reset();
 		m_commandBuffer.reset();
 		m_renderPass.reset();

@@ -56,15 +56,6 @@ namespace castor3d
 		, m_frustum{ m_viewport }
 		, m_invertX{ invertX }
 	{
-		if ( scene.getEngine()->getRenderSystem()->getCurrentContext() )
-		{
-			m_viewport.initialise();
-		}
-		else
-		{
-			scene.getListener().postEvent( makeInitialiseEvent( m_viewport ) );
-		}
-
 		if ( node )
 		{
 			m_notifyIndex = node->onChanged.connect( std::bind( &Camera::onNodeChanged, this, std::placeholders::_1 ) );
@@ -79,7 +70,7 @@ namespace castor3d
 		: Camera{ name
 			, scene
 			, node
-			, Viewport{ *scene.getEngine() }
+			, Viewport{}
 			, invertX }
 	{
 	}

@@ -95,12 +95,13 @@ find_package( Doxygen )
 #--------------------------------------------------------------------------------------------------
 #	Adding include dirs to include search path
 #--------------------------------------------------------------------------------------------------
+set( RENDERERLIB_DIR external/RendererLib/source/Renderer )
 include_directories( Core/CastorUtils/Src )
-include_directories( Core/Renderer/Src )
+include_directories( ${RENDERERLIB_DIR}/Renderer/Src )
 include_directories( Core/GlslWriter/Src )
 include_directories( Core/Castor3D/Src )
 include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Core/CastorUtils/Src )
-include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Core/Renderer/Src )
+include_directories( ${CMAKE_CURRENT_BINARY_DIR}/${RENDERERLIB_DIR}/Renderer/Src )
 include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Core/Castor3D/Src )
 
 if( Boost_FOUND )
@@ -181,6 +182,7 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			enable_testing()
 		endif ()
 
+		add_subdirectory( ${RENDERERLIB_DIR} )
 		add_subdirectory( Core )
 		if ( ${CASTOR_BUILD_CASTOR3D} )
 			add_subdirectory( Plugins )

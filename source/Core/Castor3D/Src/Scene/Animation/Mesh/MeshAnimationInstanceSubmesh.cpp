@@ -7,7 +7,6 @@
 #include "Buffer/VertexBuffer.hpp"
 #include "Scene/Geometry.hpp"
 #include "Scene/Animation/AnimatedMesh.hpp"
-#include "Shader/Uniform/Uniform.hpp"
 
 using namespace castor;
 

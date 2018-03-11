@@ -14,8 +14,8 @@ set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
 include_directories( ${CMAKE_SOURCE_DIR}/Core/GlslWriter/Src )
 include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D/Src )
-include_directories( ${CMAKE_SOURCE_DIR}/Plugins/Renderers/GlRenderer/Src )
-include_directories( ${CMAKE_SOURCE_DIR}/Plugins/Renderers/GlRenderSystem/Src )
+include_directories( ${CMAKE_SOURCE_DIR}/${RENDERERLIB_DIR}/GlRenderer/Src )
+include_directories( ${CMAKE_SOURCE_DIR}/${RENDERERLIB_DIR}/GlRenderSystem/Src )
 include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
 
 add_target(

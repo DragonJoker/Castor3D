@@ -2,10 +2,6 @@
 
 #include "Engine.hpp"
 
-#include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
-#include "FrameBuffer/FrameBufferAttachment.hpp"
-#include "Buffer/BufferElementGroup.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
@@ -13,6 +9,9 @@
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
+
+#include <RenderPass/FrameBuffer.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
 
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
@@ -35,7 +34,8 @@ namespace castor3d
 	bool ColourSkybox::initialise()
 	{
 		REQUIRE( m_scene );
-		Size size{ 16, 16 };
+		static uint32_t constexpr Dim = 16u;
+		Size size{ Dim, Dim };
 		constexpr PixelFormat format{ PixelFormat::eRGB32F };
 		Pixel< format > pixel{ true };
 		auto pxData = pixel.ptr();
@@ -54,9 +54,26 @@ namespace castor3d
 			data += 3 * sizeof( float );
 		}
 
-		m_texture = getEngine()->getRenderSystem()->createTexture( TextureType::eCube
-			, AccessType::eWrite
-			, AccessType::eRead );
+		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		renderer::ImageCreateInfo image{};
+		image.flags = renderer::ImageCreateFlag::eCubeCompatible;
+		image.arrayLayers = 6u;
+		image.extent.width = Dim;
+		image.extent.height = Dim;
+		image.extent.depth = 1u;
+		image.format = renderer::Format::eR8G8B8_UNORM;
+		image.imageType = renderer::TextureType::e3D;
+		image.initialLayout = renderer::ImageLayout::eUndefined;
+		image.mipLevels = 1u;
+		image.samples = renderer::SampleCountFlag::e1;
+		image.sharingMode = renderer::SharingMode::eExclusive;
+		image.tiling = renderer::ImageTiling::eOptimal;
+		image.usage = renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst;
+		m_texture = device.createTexture( image, renderer::MemoryPropertyFlag::eDeviceLocal );
+
+		m_texture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
+			, image
+			, renderer::MemoryPropertyFlag::eHostVisible );
 		m_texture->getImage( 0u ).initialiseSource( buffer );
 		m_texture->getImage( 1u ).initialiseSource( buffer );
 		m_texture->getImage( 2u ).initialiseSource( buffer );

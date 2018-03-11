@@ -136,7 +136,11 @@ namespace castor3d
 		if ( m_initialised )
 		{
 			m_initialised = false;
-			m_geometryBuffers.reset();
+			m_geometryBuffers.vbo.clear();
+			m_geometryBuffers.vboOffsets.clear();
+			m_geometryBuffers.layouts.clear();
+			m_geometryBuffers.ibo = nullptr;
+			m_geometryBuffers.iboOffset = 0u;
 			m_quadLayout.reset();
 			m_quadBuffer.reset();
 		}
@@ -240,7 +244,8 @@ namespace castor3d
 					Logger::logError( std::stringstream() << "Submesh::SortFaces - Error: " << p_exc.what());
 				}
 
-				m_vertexBuffer->getBuffer().unlock( m_count * stride, true );
+				m_vertexBuffer->getBuffer().flush( 0u, m_count * stride );
+				m_vertexBuffer->getBuffer().unlock();
 			}
 		}
 	}
@@ -278,8 +283,8 @@ namespace castor3d
 
 	renderer::VertexLayoutPtr doCreateLayout( renderer::Device const & device )
 	{
-		renderer::VertexLayoutPtr result = device.createVertexLayout( 0u, sizeof( castor::Point3f ) );
-		result->createAttribute< castor::Point3f >( 0u, 0u );
+		renderer::VertexLayoutPtr result = renderer::makeLayout< castor::Point3f >( 0u );
+		result->createAttribute( 0u, renderer::Format::eR32G32B32_SFLOAT, 0u );
 		return result;
 	}
 

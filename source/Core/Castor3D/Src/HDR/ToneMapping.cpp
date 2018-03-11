@@ -74,7 +74,7 @@ namespace castor3d
 		{
 			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
 		};
-		createPipeline( size
+		createPipeline( { size[0], size[1] }
 			, Position{}
 			, program
 			, source.getView()

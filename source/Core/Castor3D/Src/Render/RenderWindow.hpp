@@ -416,7 +416,7 @@ namespace castor3d
 		std::vector< renderer::FrameBufferPtr > m_frameBuffers;
 		renderer::CommandBufferPtrArray m_commandBuffers;
 		renderer::SignalConnection< renderer::SwapChain::OnReset > m_swapChainReset;
-		renderer::ShaderProgram * m_program{ nullptr };
+		renderer::ShaderStageStateArray m_program;
 		RenderQuadUPtr m_renderQuad;
 		RenderTargetWPtr m_renderTarget;
 		OverlayRendererSPtr m_overlayRenderer;

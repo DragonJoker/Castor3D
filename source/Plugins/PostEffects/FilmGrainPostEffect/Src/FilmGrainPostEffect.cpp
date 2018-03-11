@@ -171,7 +171,7 @@ namespace film_grain
 		auto & device = *m_renderSystem.getCurrentDevice();
 
 		renderer::ImageCreateInfo image{};
-		image.flags = renderer::ImageCreateFlag::eCubeCompatible;
+		image.flags = 0u;
 		image.arrayLayers = 1u;
 		image.extent.width = 512u;
 		image.extent.height = 512u;

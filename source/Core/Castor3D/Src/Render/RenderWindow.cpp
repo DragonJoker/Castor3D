@@ -7,7 +7,7 @@
 
 #include <Buffer/StagingBuffer.hpp>
 #include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassState.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/RenderSubpass.hpp>
 #include <RenderPass/RenderSubpassState.hpp>
 #include <Shader/ShaderProgram.hpp>
@@ -92,7 +92,7 @@ namespace castor3d
 			if ( m_initialised )
 			{
 				m_device->enable();
-				m_swapChain = m_device->createSwapChain( Point2ui{ size.getWidth(), size.getHeight() } );
+				m_swapChain = m_device->createSwapChain( { size.getWidth(), size.getHeight() } );
 				SceneSPtr scene = getScene();
 				m_swapChain->setClearColour( RgbaColour::fromRGBA( toRGBAFloat( scene->getBackgroundColour() ) ) );
 				m_swapChainReset = m_swapChain->onReset.connect( [this]()
@@ -107,27 +107,52 @@ namespace castor3d
 					CASTOR_EXCEPTION( "No render target for render window." );
 				}
 
-				std::vector< renderer::PixelFormat > formats{ { m_swapChain->getFormat() } };
-				renderer::RenderSubpassPtrArray subpasses;
-				subpasses.emplace_back( m_device->createRenderSubpass( formats
-					, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-					, renderer::AccessFlag::eColourAttachmentWrite } ) );
-				m_renderPass = m_device->createRenderPass( { { m_swapChain->getFormat(), true } }
-					, std::move( subpasses )
-					, renderer::RenderPassState{ renderer::PipelineStageFlag::eBottomOfPipe
-						, renderer::AccessFlag::eMemoryRead
-						, { renderer::ImageLayout::ePresentSrc } }
-					, renderer::RenderPassState{ renderer::PipelineStageFlag::eBottomOfPipe
-						, renderer::AccessFlag::eMemoryRead
-						, { renderer::ImageLayout::ePresentSrc } } );
+				// Create the render pass.
+				renderer::RenderPassCreateInfo renderPass;
+				renderPass.flags = 0u;
+
+				renderPass.attachments.resize( 1u );
+				renderPass.attachments[0].index = 0u;
+				renderPass.attachments[0].format = m_swapChain->getFormat();
+				renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+				renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eDontCare;
+				renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+				renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+				renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+				renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+				renderPass.attachments[0].finalLayout = renderer::ImageLayout::ePresentSrc;
+
+				renderPass.subpasses.resize( 1u );
+				renderPass.subpasses[0].flags = 0u;
+				renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
+				renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
+
+				renderPass.dependencies.resize( 2u );
+				renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+				renderPass.dependencies[0].dstSubpass = 0u;
+				renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+				renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+				renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
+				renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+				renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+				renderPass.dependencies[1].srcSubpass = 0u;
+				renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+				renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+				renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+				renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+				renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eMemoryRead;
+				renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+				m_renderPass = m_device->createRenderPass( renderPass );
 
 				doCreateSwapChainDependent();
 				doPrepareFrames();
 
 				m_transferCommandBuffer = m_device->getGraphicsCommandPool().createCommandBuffer();
 				target->initialise( 1 );
-				m_saveBuffer = PxBufferBase::create( target->getSize(), target->getPixelFormat() );
-				m_stagingBuffer = std::make_shared< renderer::StagingBuffer >( *m_device
+				m_saveBuffer = PxBufferBase::create( target->getSize(), convert( target->getPixelFormat() ) );
+				m_stagingBuffer = std::make_unique< renderer::StagingBuffer >( *m_device
 					, renderer::BufferTarget::eTransferDst
 					, m_saveBuffer->size() );
 				m_pickingPass->initialise( target->getSize() );
@@ -238,7 +263,7 @@ namespace castor3d
 			getListener()->postEvent( makeFunctorEvent( EventType::ePreRender, [this]()
 			{
 				m_device->waitIdle();
-				m_swapChain->reset( Point2ui{ m_size.getWidth(), m_size.getHeight() } );
+				m_swapChain->reset( { m_size.getWidth(), m_size.getHeight() } );
 			} ) );
 		}
 	}
@@ -307,9 +332,9 @@ namespace castor3d
 		}
 	}
 
-	PixelFormat RenderWindow::getPixelFormat()const
+	renderer::Format RenderWindow::getPixelFormat()const
 	{
-		PixelFormat result = PixelFormat( -1 );
+		renderer::Format result = renderer::Format::eUndefined;
 		RenderTargetSPtr target = getRenderTarget();
 
 		if ( target )
@@ -320,7 +345,7 @@ namespace castor3d
 		return result;
 	}
 
-	void RenderWindow::setPixelFormat( PixelFormat value )
+	void RenderWindow::setPixelFormat( renderer::Format value )
 	{
 		RenderTargetSPtr target = getRenderTarget();
 
@@ -399,20 +424,18 @@ namespace castor3d
 			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 
-			UBO_MATRIX( writer, 0 );
-
 			// Shader inputs
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ) );
-			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ) );
+			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
+			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = texture;
-				gl_Position = c3d_projection * vec4( position.x(), position.y(), 0.0, 1.0 );
+				gl_Position = vec4( position.x(), position.y(), 0.0, 1.0 );
 			} );
 			vtx = writer.finalise();
 		}
@@ -424,7 +447,7 @@ namespace castor3d
 
 			// Shader inputs
 			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), MinTextureIndex, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
@@ -436,10 +459,10 @@ namespace castor3d
 			pxl = writer.finalise();
 		}
 
-		auto & cache = renderSystem.getEngine()->getShaderProgramCache();
-		m_program = &cache.getNewProgram( false );
-		m_program->createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
-		m_program->createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
+		m_program.push_back( { m_device->createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
+		m_program.push_back( { m_device->createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
+		m_program[0].module->loadShader( vtx.getSource() );
+		m_program[1].module->loadShader( pxl.getSource() );
 	}
 
 	void RenderWindow::doCreateSwapChainDependent()
@@ -447,8 +470,8 @@ namespace castor3d
 		RenderTargetSPtr target = getRenderTarget();
 		m_renderQuad = std::make_unique< RenderQuad >( *getEngine()->getRenderSystem()
 			, castor::Position{}
-			, m_size
-			, *m_program
+			, renderer::Extent2D{ m_size[0], m_size[1] }
+			, m_program
 			, target->getTexture().getTexture()->getView()
 			, *m_renderPass
 			, false
@@ -468,14 +491,12 @@ namespace castor3d
 
 			if ( commandBuffer.begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
 			{
-				m_swapChain->preRenderCommands( i, commandBuffer );
 				commandBuffer.beginRenderPass( *m_renderPass
 					, frameBuffer
 					, { m_swapChain->getClearColour() }
 					, renderer::SubpassContents::eInline );
 				m_renderQuad->registerFrame( commandBuffer );
 				commandBuffer.endRenderPass();
-				m_swapChain->postRenderCommands( i, commandBuffer );
 
 				result = commandBuffer.end();
 

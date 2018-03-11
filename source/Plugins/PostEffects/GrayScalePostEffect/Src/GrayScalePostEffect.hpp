@@ -29,10 +29,6 @@ namespace GrayScale
 		 *\copydoc		castor3d::PostEffect::Cleanup
 		 */
 		void cleanup() override;
-		/**
-		 *\copydoc		castor3d::PostEffect::Apply
-		 */
-		bool apply( castor3d::FrameBuffer & p_framebuffer ) override;
 
 	private:
 		/**
@@ -47,7 +43,6 @@ namespace GrayScale
 	private:
 		castor3d::SamplerSPtr m_sampler;
 		castor3d::RenderPipelineSPtr m_pipeline;
-		castor3d::MatrixUbo m_matrixUbo;
 		PostEffectSurface m_surface;
 	};
 }

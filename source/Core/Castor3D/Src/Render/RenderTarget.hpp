@@ -11,6 +11,7 @@ See LICENSE file in root folder
 #include "Texture/TextureUnit.hpp"
 
 #include <RenderPass/FrameBuffer.hpp>
+#include <Sync/Semaphore.hpp>
 
 #include <Design/OwnedBy.hpp>
 #include <Graphics/Size.hpp>
