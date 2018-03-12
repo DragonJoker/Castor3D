@@ -21,8 +21,32 @@ using namespace glsl;
 
 namespace castor3d
 {
+	namespace
+	{
+		renderer::BufferImageCopyArray doInitialiseCopies()
+		{
+			renderer::BufferImageCopyArray result( 6u );
+			renderer::BufferImageCopy copyRegion{};
+			copyRegion.imageExtent.width = 16u;
+			copyRegion.imageExtent.height = 16u;
+			copyRegion.imageExtent.depth = 16u;
+			copyRegion.imageSubresource.aspectMask = renderer::ImageAspectFlag::eColour;
+			copyRegion.imageSubresource.layerCount = 1u;
+			copyRegion.imageSubresource.mipLevel = 0u;
+
+			for ( uint32_t i = 0; i < 6u; ++i )
+			{
+				copyRegion.imageSubresource.baseArrayLayer = i;
+				result[i] = copyRegion;
+			}
+
+			return result;
+		}
+	}
+
 	ColourSkybox::ColourSkybox( Engine & engine )
 		: Skybox{ engine }
+		, m_copyRegions{ doInitialiseCopies() }
 	{
 		m_hdr = true;
 	}
@@ -36,25 +60,13 @@ namespace castor3d
 		REQUIRE( m_scene );
 		static uint32_t constexpr Dim = 16u;
 		Size size{ Dim, Dim };
-		constexpr PixelFormat format{ PixelFormat::eRGB32F };
-		Pixel< format > pixel{ true };
-		auto pxData = pixel.ptr();
-		std::memcpy( pxData, &m_colour->red().value(), sizeof( float ) );
-		pxData += sizeof( float );
-		std::memcpy( pxData, &m_colour->green().value(), sizeof( float ) );
-		pxData += sizeof( float );
-		std::memcpy( pxData, &m_colour->blue().value(), sizeof( float ) );
-
-		auto buffer = PxBufferBase::create( size, format );
-		auto data = buffer->ptr();
-
-		for ( uint32_t i = 0u; i < 256; ++i )
-		{
-			std::memcpy( data, pixel.constPtr(), 3 * sizeof( float ) );
-			data += 3 * sizeof( float );
-		}
-
 		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		m_stagingBuffer = renderer::makeBuffer< Point3f >( device
+			, 256u
+			, renderer::BufferTarget::eTransferSrc
+			, renderer::MemoryPropertyFlag::eHostVisible | renderer::MemoryPropertyFlag::eHostCoherent );
+		doUpdateColour();
+
 		renderer::ImageCreateInfo image{};
 		image.flags = renderer::ImageCreateFlag::eCubeCompatible;
 		image.arrayLayers = 6u;
@@ -69,44 +81,35 @@ namespace castor3d
 		image.sharingMode = renderer::SharingMode::eExclusive;
 		image.tiling = renderer::ImageTiling::eOptimal;
 		image.usage = renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst;
-		m_texture = device.createTexture( image, renderer::MemoryPropertyFlag::eDeviceLocal );
-
 		m_texture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
 			, image
 			, renderer::MemoryPropertyFlag::eHostVisible );
-		m_texture->getImage( 0u ).initialiseSource( buffer );
-		m_texture->getImage( 1u ).initialiseSource( buffer );
-		m_texture->getImage( 2u ).initialiseSource( buffer );
-		m_texture->getImage( 3u ).initialiseSource( buffer );
-		m_texture->getImage( 4u ).initialiseSource( buffer );
-		m_texture->getImage( 5u ).initialiseSource( buffer );
+
+		m_texture->getImage( 0u ).initialiseSource();
+		m_texture->getImage( 1u ).initialiseSource();
+		m_texture->getImage( 2u ).initialiseSource();
+		m_texture->getImage( 3u ).initialiseSource();
+		m_texture->getImage( 4u ).initialiseSource();
+		m_texture->getImage( 5u ).initialiseSource();
 		m_colour.reset();
+
+		m_cmdCopy = device.getGraphicsCommandPool().createCommandBuffer( true );
+		m_cmdCopy->begin();
+		m_cmdCopy->copyToImage( m_copyRegions
+			, m_stagingBuffer->getBuffer()
+			, m_texture->getTexture() );
 
 		return Skybox::initialise();
 	}
 
 	void ColourSkybox::update()
 	{
-		if ( m_colour.isDirty()
-			&& m_ibl )
+		if ( m_colour.isDirty() && m_ibl )
 		{
-			constexpr PixelFormat format{ PixelFormat::eRGB32F };
-			Pixel< format > pixel{ true };
-			auto pxData = pixel.ptr();
-			std::memcpy( pxData, &m_colour->red().value(), sizeof( float ) );
-			pxData += sizeof( float );
-			std::memcpy( pxData, &m_colour->green().value(), sizeof( float ) );
-			pxData += sizeof( float );
-			std::memcpy( pxData, &m_colour->blue().value(), sizeof( float ) );
-			m_texture->bind( MinTextureIndex );
-			doUpdateTextureImage( 0u, pixel );
-			doUpdateTextureImage( 1u, pixel );
-			doUpdateTextureImage( 2u, pixel );
-			doUpdateTextureImage( 3u, pixel );
-			doUpdateTextureImage( 4u, pixel );
-			doUpdateTextureImage( 5u, pixel );
-			m_texture->unbind( MinTextureIndex );
-			m_ibl->update( *m_texture );
+			doUpdateColour();
+			auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+			device.getGraphicsQueue().submit( *m_cmdCopy, nullptr );
+			device.getGraphicsQueue().waitIdle();
 			m_colour.reset();
 		}
 	}
@@ -116,20 +119,20 @@ namespace castor3d
 		m_colour = HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
 	}
 
-	void ColourSkybox::doUpdateTextureImage( uint32_t index
-		, Pixel< PixelFormat::eRGB32F > const & pixel )
+	void ColourSkybox::doUpdateColour()
 	{
-		auto buffer = m_texture->lock( AccessType::eWrite, index );
-
-		if ( buffer )
+		if ( auto * buffer = m_stagingBuffer->lock( 0u, 256u, renderer::MemoryMapFlag::eWrite ) )
 		{
-			for ( uint32_t i = 0u; i < 256; ++i )
+			Point3f colour{ m_colour->red().value(), m_colour->green().value(), m_colour->blue().value() };
+
+			for ( auto i = 0u; i < 256; ++i )
 			{
-				std::memcpy( buffer, pixel.constPtr(), 3 * sizeof( float ) );
-				buffer += 3 * sizeof( float );
+				*buffer = colour;
+				++buffer;
 			}
 
-			m_texture->unlock( true, index );
+			m_stagingBuffer->flush( 0u, 256u );
+			m_stagingBuffer->unlock();
 		}
 	}
 }

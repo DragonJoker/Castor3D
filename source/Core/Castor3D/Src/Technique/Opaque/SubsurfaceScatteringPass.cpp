@@ -22,9 +22,7 @@
 #include <Pipeline/VertexLayout.hpp>
 #include <RenderPass/FrameBuffer.hpp>
 #include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassState.hpp>
-#include <RenderPass/RenderSubpass.hpp>
-#include <RenderPass/RenderSubpassState.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
 
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
@@ -45,11 +43,11 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ) );
-			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ) );
+			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
+			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			writer.implementFunction< void >( cuT( "main" )
@@ -96,7 +94,7 @@ namespace castor3d
 				, 6u
 				, std::vector< Float >{ { -1.0, -0.6667, -0.3333, 0.3333, 0.6667, 1.0 } } );
 
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			glsl::Utils utils{ writer };
 			utils.declareCalcVSPosition();
@@ -196,31 +194,21 @@ namespace castor3d
 						? PassFlag::ePbrSpecularGlossiness
 						: PassFlag( 0u ) ) ) );
 			materials->declare();
-			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), 1u, 0u );
-			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), 2u, 0u );
-			auto c3d_mapBlur1 = writer.declSampler< Sampler2D >( cuT( "c3d_mapBlur1" ), 3u, 0u );
-			auto c3d_mapBlur2 = writer.declSampler< Sampler2D >( cuT( "c3d_mapBlur2" ), 4u, 0u );
-			auto c3d_mapBlur3 = writer.declSampler< Sampler2D >( cuT( "c3d_mapBlur3" ), 5u, 0u );
-			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), 6u, 0u );
 
-			auto c3d_originalWeight = writer.declUniform< Vec4 >( cuT( "c3d_originalWeight" )
-				, vec4( 0.2406_f, 0.4475_f, 0.6159_f, 0.25_f ) );
-			auto c3d_blurWeights = writer.declUniform< Vec4 >( cuT( "c3d_blurWeights" )
-				, 3u
-				, {
-					vec4( 0.1158_f, 0.3661_f, 0.3439_f, 0.25_f ),
-					vec4( 0.1836_f, 0.1864_f, 0.0_f, 0.25_f ),
-					vec4( 0.46_f, 0.0_f, 0.0402_f, 0.25_f )
-				} );
-			auto c3d_blurVariances = writer.declUniform< Float >( cuT( "c3d_blurVariances" )
-				, 3u
-				, {
-					0.0516_f,
-					0.2719_f,
-					2.0062_f
-				} );
+			Ubo weigthsUbo{ writer, cuT( "WeightsUBO" ), 1u, 0u };
+			auto c3d_originalWeight = weigthsUbo.declMember< Vec4 >( cuT( "c3d_originalWeight" ) );
+			auto c3d_blurWeights = weigthsUbo.declMember< Vec4 >( cuT( "c3d_blurWeights" ), 3u );
+			auto c3d_blurVariances = weigthsUbo.declMember< Float >( cuT( "c3d_blurVariances" ), 3u );
+			weigthsUbo.end();
 
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), 2u, 0u );
+			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), 3u, 0u );
+			auto c3d_mapBlur1 = writer.declSampler< Sampler2D >( cuT( "c3d_mapBlur1" ), 4u, 0u );
+			auto c3d_mapBlur2 = writer.declSampler< Sampler2D >( cuT( "c3d_mapBlur2" ), 5u, 0u );
+			auto c3d_mapBlur3 = writer.declSampler< Sampler2D >( cuT( "c3d_mapBlur3" ), 6u, 0u );
+			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), 7u, 0u );
+
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
@@ -265,28 +253,36 @@ namespace castor3d
 			return writer.finalise();
 		}
 
-		renderer::ShaderProgram & doCreateBlurProgram( Engine & engine
+		renderer::ShaderStageStateArray doCreateBlurProgram( Engine & engine
 			, bool isVertic )
 		{
-			auto & cache = engine.getShaderProgramCache();
+			auto & device = *engine.getRenderSystem()->getCurrentDevice();
 			auto const vtx = doGetVertexProgram( engine );
 			auto const pxl = doGetBlurProgram( engine, isVertic );
 
-			auto & program = cache.getNewProgram( false );
-			program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
-			program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
+			renderer::ShaderStageStateArray program
+			{
+				{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
+				{ device.createShaderModule( renderer::ShaderStageFlag::eFragment ) },
+			};
+			program[0].module->loadShader( vtx.getSource() );
+			program[1].module->loadShader( pxl.getSource() );
 			return program;
 		}
 
-		renderer::ShaderProgram & doCreateCombineProgram( Engine & engine )
+		renderer::ShaderStageStateArray doCreateCombineProgram( Engine & engine )
 		{
-			auto & cache = engine.getShaderProgramCache();
+			auto & device = *engine.getRenderSystem()->getCurrentDevice();
 			auto const vtx = doGetVertexProgram( engine );
 			auto const pxl = doGetCombineProgram( engine );
 
-			auto & program = cache.getNewProgram( false );
-			program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
-			program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
+			renderer::ShaderStageStateArray program
+			{
+				{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
+				{ device.createShaderModule( renderer::ShaderStageFlag::eFragment ) },
+			};
+			program[0].module->loadShader( vtx.getSource() );
+			program[1].module->loadShader( pxl.getSource() );
 			return program;
 		}
 
@@ -338,7 +334,7 @@ namespace castor3d
 		, castor::Size const & size
 		, GpInfoUbo & gpInfoUbo
 		, SceneUbo & sceneUbo
-		, renderer::UniformBuffer< Configuration > const & blurUbo
+		, renderer::UniformBuffer< BlurConfiguration > const & blurUbo
 		, GeometryPassResult const & gp
 		, TextureUnit const & source
 		, TextureUnit const & destination
@@ -351,27 +347,51 @@ namespace castor3d
 		, m_blurUbo{ blurUbo }
 	{
 		auto & device = *renderSystem.getCurrentDevice();
-		std::vector< PixelFormat > formats{ destination.getTexture()->getPixelFormat() };
-		renderer::RenderPassAttachmentArray rpAttaches{ { destination.getTexture()->getPixelFormat(), false } };
 
 		// Create the render pass.
-		renderer::RenderSubpassPtrArray subpasses;
-		subpasses.emplace_back( device.createRenderSubpass( formats
-			, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-			, renderer::AccessFlag::eColourAttachmentWrite } ) );
-		m_renderPass = device.createRenderPass( rpAttaches
-			, std::move( subpasses )
-			, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-				, renderer::AccessFlag::eColourAttachmentWrite
-				, { renderer::ImageLayout::eColourAttachmentOptimal } }
-			, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-				, renderer::AccessFlag::eColourAttachmentWrite
-				, { renderer::ImageLayout::eColourAttachmentOptimal } } );
+		renderer::RenderPassCreateInfo renderPass;
+		renderPass.flags = 0u;
+
+		renderPass.attachments.resize( 1u );
+		renderPass.attachments[0].index = 0u;
+		renderPass.attachments[0].format = destination.getTexture()->getPixelFormat();
+		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+
+		renderPass.subpasses.resize( 1u );
+		renderPass.subpasses[0].flags = 0u;
+		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
+		renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
+
+		renderPass.dependencies.resize( 2u );
+		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].dstSubpass = 0u;
+		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eAllCommands;
+		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
+		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		renderPass.dependencies[1].srcSubpass = 0u;
+		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		m_renderPass = device.createRenderPass( renderPass );
 
 		// Initialise the frame buffer.
+		renderer::Extent2D extent{ size.getWidth(), size.getHeight() };
 		renderer::FrameBufferAttachmentArray attaches;
-		attaches.emplace_back( *m_renderPass->begin(), destination.getTexture()->getView() );
-		m_frameBuffer = m_renderPass->createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
+		attaches.emplace_back( *m_renderPass->getAttachments().begin(), destination.getTexture()->getDefaultView() );
+		m_frameBuffer = m_renderPass->createFrameBuffer( extent
 			, std::move( attaches ) );
 
 		renderer::DescriptorSetLayoutBindingArray bindings
@@ -385,19 +405,20 @@ namespace castor3d
 			{ 6u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment }, // MaterialIndex map
 		};
 
-		createPipeline( size
+		createPipeline( extent
 			, Position{}
 			, doCreateBlurProgram( *renderSystem.getEngine(), isVertic )
-			, source.getTexture()->getView()
+			, source.getTexture()->getDefaultView()
 			, *m_renderPass
-			, bindings );
+			, bindings
+			, {} );
 	}
 
 	void SubsurfaceScatteringPass::Blur::prepareFrame( renderer::CommandBuffer const & commandBuffer )const
 	{
 		commandBuffer.beginRenderPass( *m_renderPass
 			, *m_frameBuffer
-			, { renderer::RgbaColour{ 0, 0, 0, 1 } }
+			, { renderer::ClearColorValue{ 0, 0, 0, 1 } }
 			, renderer::SubpassContents::eSecondaryCommandBuffers );
 		commandBuffer.executeCommands( { getCommandBuffer() } );
 		commandBuffer.endRenderPass();
@@ -421,13 +442,13 @@ namespace castor3d
 			, 0u
 			, 1u );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 4u )
-			, m_geometryBufferResult[size_t( DsTexture::eDepth )]->getTexture()->getView()
+			, m_geometryBufferResult[size_t( DsTexture::eDepth )]->getTexture()->getDefaultView()
 			, m_geometryBufferResult[size_t( DsTexture::eDepth )]->getSampler()->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 5u )
-			, m_geometryBufferResult[size_t( DsTexture::eData4 )]->getTexture()->getView()
+			, m_geometryBufferResult[size_t( DsTexture::eData4 )]->getTexture()->getDefaultView()
 			, m_geometryBufferResult[size_t( DsTexture::eData4 )]->getSampler()->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 6u )
-			, m_geometryBufferResult[size_t( DsTexture::eData5 )]->getTexture()->getView()
+			, m_geometryBufferResult[size_t( DsTexture::eData5 )]->getTexture()->getDefaultView()
 			, m_geometryBufferResult[size_t( DsTexture::eData5 )]->getSampler()->getSampler() );
 	}
 
@@ -435,63 +456,91 @@ namespace castor3d
 
 	SubsurfaceScatteringPass::Combine::Combine( RenderSystem & renderSystem
 		, Size const & size
+		, renderer::UniformBuffer< BlurWeights > const & blurUbo
 		, GeometryPassResult const & gp
 		, TextureUnit const & source
 		, std::array< TextureUnit, 3u > const & blurResults
 		, TextureUnit const & destination )
 		: RenderQuad{ renderSystem, false, false }
 		, m_renderSystem{ renderSystem }
+		, m_blurUbo{ blurUbo }
 		, m_geometryBufferResult{ gp }
 		, m_source{ source }
 		, m_blurResults{ blurResults }
 	{
 		auto & device = *renderSystem.getCurrentDevice();
-		std::vector< PixelFormat > formats{ destination.getTexture()->getPixelFormat() };
-		renderer::RenderPassAttachmentArray rpAttaches{ { destination.getTexture()->getPixelFormat(), false } };
 
 		// Create the render pass.
-		renderer::RenderSubpassPtrArray subpasses;
-		subpasses.emplace_back( device.createRenderSubpass( formats
-			, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-			, renderer::AccessFlag::eColourAttachmentWrite } ) );
-		m_renderPass = device.createRenderPass( rpAttaches
-			, std::move( subpasses )
-			, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-				, renderer::AccessFlag::eColourAttachmentWrite
-				, { renderer::ImageLayout::eColourAttachmentOptimal } }
-			, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-				, renderer::AccessFlag::eColourAttachmentWrite
-				, { renderer::ImageLayout::eColourAttachmentOptimal } } );
+		renderer::RenderPassCreateInfo renderPass;
+		renderPass.flags = 0u;
+
+		renderPass.attachments.resize( 1u );
+		renderPass.attachments[0].index = 0u;
+		renderPass.attachments[0].format = destination.getTexture()->getPixelFormat();
+		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+
+		renderPass.subpasses.resize( 1u );
+		renderPass.subpasses[0].flags = 0u;
+		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
+		renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
+
+		renderPass.dependencies.resize( 2u );
+		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].dstSubpass = 0u;
+		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eAllCommands;
+		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
+		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		renderPass.dependencies[1].srcSubpass = 0u;
+		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		m_renderPass = device.createRenderPass( renderPass );
 
 		// Initialise the frame buffer.
+		renderer::Extent2D extent{ size.getWidth(), size.getHeight() };
 		renderer::FrameBufferAttachmentArray attaches;
-		attaches.emplace_back( *m_renderPass->begin(), destination.getTexture()->getView() );
-		m_frameBuffer = m_renderPass->createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
+		attaches.emplace_back( *m_renderPass->getAttachments().begin(), destination.getTexture()->getDefaultView() );
+		m_frameBuffer = m_renderPass->createFrameBuffer( extent
 			, std::move( attaches ) );
 
 		renderer::DescriptorSetLayoutBindingArray bindings
 		{
 			renderSystem.getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding(),
-			{ 1u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment }, // Translucency map
-			{ 2u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment }, // MaterialIndex map
-			{ 3u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment }, // Blur result 0
-			{ 4u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment }, // Blur result 1
-			{ 5u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment }, // Blur result 2
+			{ 1u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },			// Blur weights
+			{ 2u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// Translucency map
+			{ 3u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// MaterialIndex map
+			{ 4u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// Blur result 0
+			{ 5u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// Blur result 1
+			{ 6u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// Blur result 2
 		};
 
-		createPipeline( size
+		createPipeline( extent
 			, Position{}
 			, doCreateCombineProgram( *renderSystem.getEngine() )
-			, source.getTexture()->getView()
+			, source.getTexture()->getDefaultView()
 			, *m_renderPass
-			, bindings );
+			, bindings
+			, {} );
 	}
 
 	void SubsurfaceScatteringPass::Combine::prepareFrame( renderer::CommandBuffer const & commandBuffer )const
 	{
 		commandBuffer.beginRenderPass( *m_renderPass
 			, *m_frameBuffer
-			, { renderer::RgbaColour{ 0, 0, 0, 1 } }
+			, { renderer::ClearColorValue{ 0, 0, 0, 1 } }
 		, renderer::SubpassContents::eSecondaryCommandBuffers );
 		commandBuffer.executeCommands( { getCommandBuffer() } );
 		commandBuffer.endRenderPass();
@@ -503,19 +552,21 @@ namespace castor3d
 		m_renderSystem.getEngine()->getMaterialCache().getPassBuffer().createBinding( descriptorSet
 			, descriptorSetLayout.getBinding( PassBufferIndex ) );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
-			, m_geometryBufferResult[size_t( DsTexture::eData4 )]->getTexture()->getView()
-			, m_geometryBufferResult[size_t( DsTexture::eData4 )]->getSampler()->getSampler() );
+			, m_blurUbo );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 2u )
-			, m_geometryBufferResult[size_t( DsTexture::eData5 )]->getTexture()->getView()
-			, m_geometryBufferResult[size_t( DsTexture::eData5 )]->getSampler()->getSampler() );
+			, m_geometryBufferResult[size_t( DsTexture::eData4 )]->getTexture()->getDefaultView()
+			, m_geometryBufferResult[size_t( DsTexture::eData4 )]->getSampler()->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 3u )
-			, m_blurResults[0].getTexture()->getView()
-			, m_blurResults[0].getSampler()->getSampler() );
+			, m_geometryBufferResult[size_t( DsTexture::eData5 )]->getTexture()->getDefaultView()
+			, m_geometryBufferResult[size_t( DsTexture::eData5 )]->getSampler()->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 4u )
-			, m_blurResults[1].getTexture()->getView()
-			, m_blurResults[1].getSampler()->getSampler() );
+			, m_blurResults[0].getTexture()->getDefaultView()
+			, m_blurResults[0].getSampler()->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 5u )
-			, m_blurResults[2].getTexture()->getView()
+			, m_blurResults[1].getTexture()->getDefaultView()
+			, m_blurResults[1].getSampler()->getSampler() );
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( 6u )
+			, m_blurResults[2].getTexture()->getDefaultView()
 			, m_blurResults[2].getSampler()->getSampler() );
 	}
 
@@ -534,7 +585,11 @@ namespace castor3d
 		, TextureUnit const & lightDiffuse )
 		: OwnedBy< Engine >{ engine }
 		, m_size{ textureSize }
-		, m_blurUbo{ renderer::makeUniformBuffer< Configuration >( *engine.getRenderSystem()->getCurrentDevice()
+		, m_blurConfigUbo{ renderer::makeUniformBuffer< BlurConfiguration >( *engine.getRenderSystem()->getCurrentDevice()
+			, 1u
+			, renderer::BufferTarget::eTransferDst
+			, renderer::MemoryPropertyFlag::eHostVisible ) }
+		, m_blurWeightsUbo{ renderer::makeUniformBuffer< BlurWeights >( *engine.getRenderSystem()->getCurrentDevice()
 			, 1u
 			, renderer::BufferTarget::eTransferDst
 			, renderer::MemoryPropertyFlag::eHostVisible ) }
@@ -550,22 +605,30 @@ namespace castor3d
 		, m_result{ doCreateTexture( engine, textureSize ) }
 		, m_blurX
 		{
-			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurUbo, gp, lightDiffuse, m_intermediate, false },
-			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurUbo, gp, m_blurResults[0], m_intermediate, false },
-			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurUbo, gp, m_blurResults[1], m_intermediate, false },
+			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, lightDiffuse, m_intermediate, false },
+			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, m_blurResults[0], m_intermediate, false },
+			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, m_blurResults[1], m_intermediate, false },
 		}
 		, m_blurY
 		{
-			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurUbo, gp, m_intermediate, m_blurResults[0], true },
-			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurUbo, gp, m_intermediate, m_blurResults[1], true },
-			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurUbo, gp, m_intermediate, m_blurResults[2], true },
+			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, m_intermediate, m_blurResults[0], true },
+			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, m_intermediate, m_blurResults[1], true },
+			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, m_intermediate, m_blurResults[2], true },
 		}
-		, m_combine{ *engine.getRenderSystem(), textureSize, gp, lightDiffuse, m_blurResults, m_result }
+		, m_combine{ *engine.getRenderSystem(), textureSize, *m_blurWeightsUbo, gp, lightDiffuse, m_blurResults, m_result }
 	{
-		auto & configuration = m_blurUbo->getData( 0u );
+		auto & configuration = m_blurConfigUbo->getData( 0u );
 		configuration.blurCorrection = 1.0f;
 		configuration.blurPixelSize = castor::Point2f{ 1.0f / m_size.getWidth(), 1.0f / m_size.getHeight() };
-		m_blurUbo->upload( 0u );
+		m_blurConfigUbo->upload();
+
+		auto & weights = m_blurWeightsUbo->getData();
+		weights.originalWeight = Point4f{ 0.2406f, 0.4475f, 0.6159f, 0.25f };
+		weights.blurWeights[0] = Point4f{ 0.1158, 0.3661, 0.3439, 0.25 };
+		weights.blurWeights[1] = Point4f{ 0.1836, 0.1864, 0.0, 0.25 };
+		weights.blurWeights[2] = Point4f{ 0.46, 0.0, 0.0402, 0.25 };
+		weights.blurVariance = Point3f{ 0.0516, 0.2719, 2.0062 };
+		m_blurWeightsUbo->upload();
 	}
 
 	SubsurfaceScatteringPass::~SubsurfaceScatteringPass()

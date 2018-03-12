@@ -41,7 +41,7 @@ namespace castor3d
 		*	Initialisation / Cleanup.
 		*/
 		/**@{*/
-		C3D_API void initialise( TextureLayout const & texture
+		C3D_API void initialise( renderer::TextureView const & texture
 			, renderer::RenderPass const & renderPass );
 		C3D_API void cleanup();
 		/**@}*/
@@ -63,7 +63,7 @@ namespace castor3d
 		renderer::ShaderStageStateArray doInitialiseShader();
 		bool doInitialiseVertexBuffer();
 		bool doInitialisePipeline( renderer::ShaderStageStateArray & program
-			, TextureLayout const & texture
+			, renderer::TextureView const & texture
 			, renderer::RenderPass const & renderPass );
 		void doPrepareFrame();
 

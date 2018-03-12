@@ -300,7 +300,7 @@ namespace Bloom
 		// Fill command buffer.
 		renderer::ClearValueArray clearValues
 		{
-			renderer::RgbaColour{}
+			renderer::ClearColorValue{}
 		};
 
 		bool result = m_commandBuffer->begin();
@@ -310,7 +310,7 @@ namespace Bloom
 			// Put image in the right state for rendering.
 			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
-				, m_renderTarget.getTexture().getTexture()->getView().makeShaderInputResource( renderer::ImageLayout::eColourAttachmentOptimal
+				, m_renderTarget.getTexture().getTexture()->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eColourAttachmentOptimal
 					, renderer::AccessFlag::eColourAttachmentWrite ) );
 
 			// Hi-passes
@@ -496,7 +496,7 @@ namespace Bloom
 			renderer::DepthStencilState{ false, false }
 		};
 		m_pipelines.hiPass.pipeline = m_pipelines.hiPass.layout.pipelineLayout->createPipeline( pipeline );
-		auto * srcView = &m_renderTarget.getTexture().getTexture()->getView();
+		auto * srcView = &m_renderTarget.getTexture().getTexture()->getDefaultView();
 
 		// Create descriptors
 		for ( auto & surface : m_pipelines.hiPass.surfaces )
@@ -559,7 +559,7 @@ namespace Bloom
 			, m_linearSampler->getSampler()
 			, renderer::ImageLayout::eShaderReadOnlyOptimal );
 		surface.descriptorSet->createBinding( m_pipelines.combine.layout.descriptorLayout->getBinding( 1u )
-			, m_renderTarget.getTexture().getTexture()->getView()
+			, m_renderTarget.getTexture().getTexture()->getDefaultView()
 			, m_linearSampler->getSampler()
 			, renderer::ImageLayout::eShaderReadOnlyOptimal );
 		surface.descriptorSet->update();

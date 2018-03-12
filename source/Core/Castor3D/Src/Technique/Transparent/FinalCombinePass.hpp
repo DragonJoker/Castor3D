@@ -35,7 +35,7 @@ namespace castor3d
 			, castor::Size const & size
 			, renderer::DescriptorSet const & uboDescriptorSet
 			, renderer::DescriptorSet const & texDescriptorSet
-			, GeometryBuffers const & geometryBuffers );
+			, renderer::BufferBase const & vbo );
 		inline renderer::CommandBuffer const & getCommandBuffer()const
 		{
 			REQUIRE( m_commandBuffer );

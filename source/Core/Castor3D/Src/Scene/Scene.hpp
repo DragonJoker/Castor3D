@@ -327,12 +327,23 @@ namespace castor3d
 		}
 		/**
 		 *\~english
+		 *\return		\p false if the background image doesn't exist.
+		 *\~french
+		 *\return		\p false si l'image de fond n'existe pas.
+		 */
+		inline bool hasBackgroundImage()const
+		{
+			return m_backgroundImage != nullptr;
+		}
+		/**
+		 *\~english
 		 *\return		The scene background image.
 		 *\~french
 		 *\return		L'image de fond de la scène.
 		 */
-		inline renderer::Texture const & getBackgroundImage()const
+		inline TextureLayout const & getBackgroundImage()const
 		{
+			REQUIRE( m_backgroundImage );
 			return *m_backgroundImage;
 		}
 		/**
@@ -621,7 +632,7 @@ namespace castor3d
 		castor::RgbColour m_backgroundColour;
 		//!\~english	The background image
 		//!\~french		L'image de fond
-		renderer::TexturePtr m_backgroundImage;
+		TextureLayoutSPtr m_backgroundImage;
 		//!\~english	The skybox
 		//!\~french		La skybox
 		SkyboxUPtr m_skybox;

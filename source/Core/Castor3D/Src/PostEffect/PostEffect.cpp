@@ -55,7 +55,7 @@ namespace castor3d
 		m_colourTexture.initialise();
 
 		renderer::FrameBufferAttachmentArray attaches;
-		attaches.emplace_back( *renderPass.getAttachments().begin(), colourTexture->getView() );
+		attaches.emplace_back( *renderPass.getAttachments().begin(), colourTexture->getDefaultView() );
 		m_fbo = renderPass.createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
 			, std::move( attaches ) );
 		return true;

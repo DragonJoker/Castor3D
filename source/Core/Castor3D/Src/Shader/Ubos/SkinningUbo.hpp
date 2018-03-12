@@ -24,7 +24,7 @@ namespace castor3d
 	public:
 		struct Configuration
 		{
-			renderer::Mat4 bonesMatrix[400];
+			castor::Matrix4x4f bonesMatrix[400];
 		};
 
 	public:

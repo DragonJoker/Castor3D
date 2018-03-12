@@ -179,8 +179,8 @@ namespace castor3d
 				, renderer::AccessFlag::eColourAttachmentWrite
 				, { renderer::ImageLayout::eDepthStencilAttachmentOptimal, renderer::ImageLayout::eColourAttachmentOptimal, renderer::ImageLayout::eColourAttachmentOptimal } } );
 		renderer::FrameBufferAttachmentArray attaches;
-		attaches.emplace_back( *( m_renderPass->begin() + 0u ), m_shadowMap.getTexture()->getView() );
-		attaches.emplace_back( *( m_renderPass->begin() + 1u ), m_linearMap.getTexture()->getView() );
+		attaches.emplace_back( *( m_renderPass->begin() + 0u ), m_shadowMap.getTexture()->getDefaultView() );
+		attaches.emplace_back( *( m_renderPass->begin() + 1u ), m_linearMap.getTexture()->getDefaultView() );
 		m_frameBuffer = m_renderPass->createFrameBuffer( size, std::move( attaches ) );
 
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
@@ -191,7 +191,7 @@ namespace castor3d
 			, m_shadowMap.getTexture()->getPixelFormat()
 			, 5u );
 		
-		static renderer::RgbaColour const black = renderer::RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueBlack );
+		static renderer::ClearColorValue const black{ 0.0f, 0.0f, 0.0f, 1.0f };
 		static renderer::DepthStencilClearValue const zero{ 1.0f, 0 };
 
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )

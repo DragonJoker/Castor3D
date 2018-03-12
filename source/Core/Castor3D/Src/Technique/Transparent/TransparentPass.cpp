@@ -36,7 +36,7 @@ namespace castor3d
 		renderer::ColourBlendState doCreateBlendState()
 		{
 			renderer::ColourBlendState bdState;
-			bdState.addAttachment( renderer::ColourBlendStateAttachment
+			bdState.attachs.push_back( renderer::ColourBlendStateAttachment
 			{
 				true,
 				renderer::BlendFactor::eOne,
@@ -46,7 +46,7 @@ namespace castor3d
 				renderer::BlendFactor::eOne,
 				renderer::BlendOp::eAdd,
 			} );
-			bdState.addAttachment( renderer::ColourBlendStateAttachment
+			bdState.attachs.push_back( renderer::ColourBlendStateAttachment
 			{
 				true,
 				renderer::BlendFactor::eZero,
@@ -82,8 +82,8 @@ namespace castor3d
 		{
 			{
 				PixelFormat::eD24S8,
-				PixelFormat::eRGBA16F32F,
-				PixelFormat::eL16F32F,
+				PixelFormat::eRGBA16F,
+				PixelFormat::eL16F,
 			}
 		};
 

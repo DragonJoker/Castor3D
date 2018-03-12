@@ -106,62 +106,62 @@ namespace castor3d
 		/**@{*/
 		inline renderer::WrapMode getWrapS()const
 		{
-			return m_wrapS;
+			return m_info.addressModeU;
 		}
 
 		inline renderer::WrapMode getWrapT()const
 		{
-			return m_wrapT;
+			return m_info.addressModeV;
 		}
 
 		inline renderer::WrapMode getWrapR()const
 		{
-			return m_wrapR;
+			return m_info.addressModeW;
 		}
 
 		inline renderer::Filter getMinFilter()const
 		{
-			return m_minFilter;
+			return m_info.minFilter;
 		}
 
 		inline renderer::Filter getMagFilter()const
 		{
-			return m_magFilter;
+			return m_info.magFilter;
 		}
 
 		inline renderer::MipmapMode getMipFilter()const
 		{
-			return m_mipFilter;
+			return m_info.mipmapMode;
 		}
 
 		inline float getMinLod()const
 		{
-			return m_minLod;
+			return m_info.minLod;
 		}
 
 		inline float getMaxLod()const
 		{
-			return m_maxLod;
+			return m_info.maxLod;
 		}
 
 		inline float getLodBias()const
 		{
-			return m_lodBias;
+			return m_info.mipLodBias;
 		}
 
 		inline renderer::BorderColour getBorderColour()const
 		{
-			return m_borderColour;
+			return m_info.borderColor;
 		}
 
 		inline float getMaxAnisotropy()const
 		{
-			return m_maxAnisotropy;
+			return m_info.maxAnisotropy;
 		}
 
 		inline renderer::CompareOp getCompareOp()const
 		{
-			return m_compareOp;
+			return m_info.compareOp;
 		}
 
 		inline renderer::Sampler const & getSampler()const
@@ -185,78 +185,89 @@ namespace castor3d
 		/**@{*/
 		inline void setWrapS( renderer::WrapMode value )
 		{
-			m_wrapS = value;
+			m_info.addressModeU = value;
 		}
 
 		inline void setWrapT( renderer::WrapMode value )
 		{
-			m_wrapT = value;
+			m_info.addressModeV = value;
 		}
 
 		inline void setWrapR( renderer::WrapMode value )
 		{
-			m_wrapR = value;
+			m_info.addressModeW = value;
 		}
 
 		inline void setMinFilter( renderer::Filter value )
 		{
-			m_minFilter = value;
+			m_info.minFilter = value;
 		}
 
 		inline void setMagFilter( renderer::Filter value )
 		{
-			m_magFilter = value;
+			m_info.magFilter = value;
 		}
 
 		inline void setMipFilter( renderer::MipmapMode value )
 		{
-			m_mipFilter = value;
+			m_info.mipmapMode = value;
 		}
 
 		inline void setMinLod( float value )
 		{
-			m_minLod = value;
+			m_info.minLod = value;
 		}
 
 		inline void setMaxLod( float value )
 		{
-			m_maxLod = value;
+			m_info.maxLod = value;
 		}
 
 		inline void setLodBias( float value )
 		{
-			m_lodBias = value;
+			m_info.mipLodBias = value;
 		}
 
 		inline void setBorderColour( renderer::BorderColour value )
 		{
-			m_borderColour = value;
+			m_info.borderColor = value;
 		}
 
 		inline void setMaxAnisotropy( float value )
 		{
-			m_maxAnisotropy = value;
+			m_info.maxAnisotropy = value;
 		}
 
 		inline void setCompareOp( renderer::CompareOp value )
 		{
-			m_compareOp = value;
+			m_info.compareOp = value;
+		}
+
+		inline void enableCompare( bool value )
+		{
+			m_info.compareEnable = value;
 		}
 		/**@}*/
 
 	private:
-		renderer::WrapMode m_wrapS{ renderer::WrapMode::eClampToEdge };
-		renderer::WrapMode m_wrapT{ renderer::WrapMode::eClampToEdge };
-		renderer::WrapMode m_wrapR{ renderer::WrapMode::eClampToEdge };
-		renderer::Filter m_minFilter{ renderer::Filter::eNearest };
-		renderer::Filter m_magFilter{ renderer::Filter::eNearest };
-		renderer::MipmapMode m_mipFilter{ renderer::MipmapMode::eNone };
-		float m_minLod{ -1000.0f };
-		float m_maxLod{ 1000.0f };
-		float m_lodBias{ 0.0f };
-		renderer::BorderColour m_borderColour{ renderer::BorderColour::eFloatOpaqueBlack };
-		float m_maxAnisotropy{ 1.0f };
-		renderer::CompareOp m_compareOp{ renderer::CompareOp::eAlways };
+		renderer::SamplerCreateInfo m_info
+		{
+			renderer::Filter::eNearest,
+			renderer::Filter::eNearest,
+			renderer::MipmapMode::eNone,
+			renderer::WrapMode::eClampToEdge,
+			renderer::WrapMode::eClampToEdge,
+			renderer::WrapMode::eClampToEdge,
+			0.0f,
+			false,
+			1.0f,
+			false,
+			renderer::CompareOp::eNever,
+			0.0f,
+			1.0f,
+			renderer::BorderColour::eFloatOpaqueBlack,
+			false
+		};
 		renderer::SamplerPtr m_sampler;
 	};
 }

@@ -105,6 +105,16 @@ namespace castor3d
 		 *\param[in]	pass	La passe.
 		 */
 		C3D_API virtual void visit( SpecularGlossinessPbrPass const & pass );
+		/**
+		 *\~english
+		 *\return		The pointer to the buffer.
+		 *\~french
+		 *\brief		Le pointeur sur le tampon.
+		 */
+		inline uint8_t * getPtr()
+		{
+			return m_buffer.getPtr();
+		}
 
 	public:
 		/*!

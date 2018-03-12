@@ -1,10 +1,13 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___CU_TEXTURE_UNIT_H___
-#define ___CU_TEXTURE_UNIT_H___
+#ifndef ___C3D_TextureUnit_H___
+#define ___C3D_TextureUnit_H___
+#pragma once
 
 #include "Castor3DPrerequisites.hpp"
+
+#include <Descriptor/WriteDescriptorSet.hpp>
 
 #include <Design/OwnedBy.hpp>
 
@@ -240,33 +243,27 @@ namespace castor3d
 		{
 			return m_renderTarget.lock();
 		}
+		/**
+		 *\~english
+		 *\return		The descriptor used for the texture.
+		 *\~french
+		 *\return		Le descripteur utilisé pour la texture.
+		 */
+		inline renderer::WriteDescriptorSet getDescriptor()const
+		{
+			return m_descriptor;
+		}
 
 	private:
 		friend class TextureRenderer;
-		//!\~english	The unit index inside it's pass.
-		//!\~french		L'index de l'unité dans sa passe.
 		uint32_t m_index;
-		//!\see TextureChannel
-		//\~english		The unit channel inside it's pass.
-		//!\~french		Le canal de l'unité dans sa passe.
 		TextureChannel m_channel;
-		//!\~english	The unit transformations.
-		//!\~french		Les transformations de l'unité.
 		castor::Matrix4x4r m_transformations;
-		//!\~english	The unit texture.
-		//!\~french		La texture de l'unité.
 		TextureLayoutSPtr m_texture;
-		//!\~english	The render target used to compute the texture, if this unit is a render target.
-		//!\~french		La render target utilisée pour générer la texture si cette unité est une render target.
 		RenderTargetWPtr m_renderTarget;
-		//!\~english	The sampler state assigned to this unit.
-		//!\~french		Le sampler state affecté à cette unité.
 		SamplerWPtr m_sampler;
-		//!\~english	Tells mipmaps must be regenerated after each texture data change.
-		//!\~french		Dit que les mipmaps doivent être regénérés après chaque changement des données de la texture.
 		bool m_autoMipmaps;
-		//!\~english	Tells the texture data has changed.
-		//!\~french		Dit que les données de la texture ont changé.
+		renderer::WriteDescriptorSet m_descriptor;
 		mutable bool m_changed;
 	};
 	/**

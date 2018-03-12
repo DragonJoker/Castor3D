@@ -232,6 +232,7 @@ namespace castor3d
 
 	void RenderTechnique::render( Point2r const & jitter
 		, TextureUnit const & velocity
+		, renderer::Semaphore const & waitSemaphore
 		, RenderInfo & info )
 	{
 		auto & scene = *m_renderTarget.getScene();

@@ -45,7 +45,7 @@ namespace castor3d
 	{
 	}
 
-	void TextureProjection::initialise( TextureLayout const & texture
+	void TextureProjection::initialise( renderer::TextureView const & texture
 		, renderer::RenderPass const & renderPass )
 	{
 		m_sampler->initialise();
@@ -82,21 +82,16 @@ namespace castor3d
 			m_commandBuffer->reset();
 		}
 
+		*m_sizePushConstant.getData() = Point2f{ m_size.getWidth()
+			, m_size.getHeight() };
+
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eRenderPassContinue ) )
 		{
 			m_commandBuffer->bindPipeline( m_pipeline->getPipeline() );
-			m_commandBuffer->setViewport( { m_size.getWidth()
-				, m_size.getHeight()
-				, 0
-				, 0 } );
-			m_commandBuffer->setScissor( { 0
-				, 0
-				, m_size.getWidth()
-				, m_size.getHeight() } );
-			m_commandBuffer->bindDescriptorSet( *m_descriptorSet
-				, m_pipeline->getPipelineLayout() );
-			m_commandBuffer->pushConstants( m_pipeline->getPipelineLayout()
-				, m_sizePushConstant );
+			m_commandBuffer->setViewport( { m_size.getWidth(), m_size.getHeight(), 0, 0 } );
+			m_commandBuffer->setScissor( { 0, 0, m_size.getWidth(), m_size.getHeight() } );
+			m_commandBuffer->bindDescriptorSet( *m_descriptorSet, m_pipeline->getPipelineLayout() );
+			m_commandBuffer->pushConstants( m_pipeline->getPipelineLayout(), m_sizePushConstant );
 			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 			m_commandBuffer->draw( 36u );
 			m_commandBuffer->end();
@@ -112,8 +107,6 @@ namespace castor3d
 		m_matrixUbo.update( camera.getView()
 			, viewport.getProjection() );
 		m_modelMatrixUbo.update( m_mtxModel, Identity );
-		*m_sizePushConstant.getData() = Point2f{ viewport.getWidth()
-			, viewport.getHeight() };
 
 		if ( m_size != viewport.getSize() )
 		{
@@ -212,7 +205,7 @@ namespace castor3d
 	}
 
 	bool TextureProjection::doInitialisePipeline( renderer::ShaderStageStateArray & program
-		, TextureLayout const & texture
+		, renderer::TextureView const & texture
 		, renderer::RenderPass const & renderPass )
 	{
 		renderer::DepthStencilState dsState
@@ -261,7 +254,7 @@ namespace castor3d
 			, 0u
 			, 1u );
 		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 2u )
-			, texture.getView()
+			, texture
 			, m_sampler->getSampler() );
 
 		m_pipeline->setVertexLayouts( { *m_vertexLayout } );

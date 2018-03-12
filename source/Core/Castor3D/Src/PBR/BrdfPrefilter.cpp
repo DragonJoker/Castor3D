@@ -125,7 +125,7 @@ namespace castor3d
 		{
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *m_frameBuffer
-				, { renderer::RgbaColour{ 0, 0, 0, 0 } }
+				, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
 				, renderer::SubpassContents::eInline );
 			m_commandBuffer->bindPipeline( *m_pipeline );
 			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );

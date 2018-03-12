@@ -101,10 +101,17 @@ namespace castor3d
 		static castor::String const Correction;
 		static castor::String const PixelSize;
 
-		struct Configuration
+		struct BlurConfiguration
 		{
 			castor::Point2f blurPixelSize;
 			float blurCorrection;
+		};
+
+		struct BlurWeights
+		{
+			castor::Point4f originalWeight;
+			castor::Point4f blurWeights[3u];
+			castor::Point3f blurVariance;
 		};
 
 	private:
@@ -116,7 +123,7 @@ namespace castor3d
 				, castor::Size const & size
 				, GpInfoUbo & gpInfoUbo
 				, SceneUbo & sceneUbo
-				, renderer::UniformBuffer< Configuration > const & blurUbo
+				, renderer::UniformBuffer< BlurConfiguration > const & blurUbo
 				, GeometryPassResult const & gp
 				, TextureUnit const & source
 				, TextureUnit const & destination
@@ -132,7 +139,7 @@ namespace castor3d
 			GeometryPassResult const & m_geometryBufferResult;
 			GpInfoUbo & m_gpInfoUbo;
 			SceneUbo & m_sceneUbo;
-			renderer::UniformBuffer< Configuration > const & m_blurUbo;
+			renderer::UniformBuffer< BlurConfiguration > const & m_blurUbo;
 			renderer::RenderPassPtr m_renderPass;
 			renderer::FrameBufferPtr m_frameBuffer;
 		};
@@ -143,6 +150,7 @@ namespace castor3d
 		public:
 			explicit Combine( RenderSystem & renderSystem
 				, castor::Size const & size
+				, renderer::UniformBuffer< BlurWeights > const & blurUbo
 				, GeometryPassResult const & gp
 				, TextureUnit const & source
 				, std::array< TextureUnit, 3u > const & blurResults
@@ -155,6 +163,7 @@ namespace castor3d
 
 		private:
 			RenderSystem & m_renderSystem;
+			renderer::UniformBuffer< BlurWeights > const & m_blurUbo;
 			GeometryPassResult const & m_geometryBufferResult;
 			TextureUnit const & m_source;
 			std::array< TextureUnit, 3u > const & m_blurResults;
@@ -164,7 +173,8 @@ namespace castor3d
 
 	private:
 		castor::Size m_size;
-		renderer::UniformBufferPtr< Configuration > m_blurUbo;
+		renderer::UniformBufferPtr< BlurConfiguration > m_blurConfigUbo;
+		renderer::UniformBufferPtr< BlurWeights > m_blurWeightsUbo;
 		TextureUnit m_intermediate;
 		std::array< TextureUnit, 3u > m_blurResults;
 		TextureUnit m_result;

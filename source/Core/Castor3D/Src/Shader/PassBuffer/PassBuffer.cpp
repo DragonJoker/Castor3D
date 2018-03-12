@@ -5,6 +5,8 @@
 #include "Render/RenderSystem.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
 
+#include <Descriptor/DescriptorSetLayoutBinding.hpp>
+
 #include <Design/ArrayView.hpp>
 
 using namespace castor;

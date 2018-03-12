@@ -210,7 +210,7 @@ namespace castor3d
 
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 		static float constexpr component = std::numeric_limits< float >::max();
-		static renderer::RgbaColour const white{ component, component, component, component };
+		static renderer::ClearColorValue const white{ component, component, component, component };
 		face = 0u;
 
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )

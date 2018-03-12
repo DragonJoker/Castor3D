@@ -9,7 +9,6 @@
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
-#include <Buffer/GeometryBuffers.hpp>
 #include <Buffer/VertexBuffer.hpp>
 #include <Pipeline/ColourBlendState.hpp>
 #include <Pipeline/DepthStencilState.hpp>
@@ -56,9 +55,9 @@ namespace castor3d
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			auto & device = *renderSystem.getCurrentDevice();
-			renderer::VertexLayoutPtr result = renderer::makeLayout< TexturedQuad >( device, 0u );
-			createVertexAttribute( result, TexturedQuad::Vertex, position, 0u );
-			createVertexAttribute( result, TexturedQuad::Vertex, texture, 1u );
+			renderer::VertexLayoutPtr result = renderer::makeLayout< TexturedQuad >( 0u );
+			result->createAttribute( 0u, renderer::Format::eR32G32_SFLOAT, offsetof( TexturedQuad::Vertex, position ) );
+			result->createAttribute( 1u, renderer::Format::eR32G32_SFLOAT, offsetof( TexturedQuad::Vertex, texture ) );
 			return result;
 		}
 
@@ -84,7 +83,8 @@ namespace castor3d
 						{ Point2f{ +1.0, +1.0 }, Point2f{ 1.0, 1.0 } }
 					}
 				};
-				result->unlock( 1u, true );
+				result->flush( 0u, 1u );
+				result->unlock();
 			}
 
 			return result;
@@ -248,19 +248,24 @@ namespace castor3d
 			return writer.finalise();
 		}
 		
-		renderer::ShaderProgram & doCreateProgram( Engine & engine
+		renderer::ShaderStageStateArray doCreateProgram( Engine & engine
 			, FogType fogType )
 		{
+			auto & device = *engine.getRenderSystem()->getCurrentDevice();
 			auto vtx = doGetVertexProgram( engine );
 			auto pxl = doGetPixelProgram( engine, fogType );
-			auto & program = engine.getShaderProgramCache().getNewProgram( false );
-			program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
-			program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
+			renderer::ShaderStageStateArray program
+			{
+				{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
+				{ device.createShaderModule( renderer::ShaderStageFlag::eFragment ) },
+			};
+			program[0].module->loadShader( vtx.getSource() );
+			program[1].module->loadShader( pxl.getSource() );
 			return program;
 		}
 
 		RenderPipelineUPtr doCreateRenderPipeline( Engine & engine
-			, renderer::ShaderProgram & program
+			, renderer::ShaderStageStateArray const & program
 			, renderer::DescriptorSetLayout const & uboLayout
 			, renderer::DescriptorSetLayout const & texLayout
 			, renderer::VertexLayout const & vtxLayout )
@@ -280,7 +285,7 @@ namespace castor3d
 				renderer::CullModeFlag::eNone
 			};
 			renderer::ColourBlendState bdState;
-			bdState.addAttachment( {
+			bdState.attachs.push_back( {
 				true,
 				renderer::BlendFactor::eSrcAlpha,
 				renderer::BlendFactor::eInvSrcAlpha,
@@ -328,7 +333,7 @@ namespace castor3d
 		, Size const & size
 		, renderer::DescriptorSet const & uboDescriptorSet
 		, renderer::DescriptorSet const & texDescriptorSet
-		, GeometryBuffers const & geometryBuffers )
+		, renderer::BufferBase const & vbo )
 	{
 		m_pipeline->initialise( renderPass, renderer::PrimitiveTopology::eTriangleStrip );
 
@@ -337,7 +342,7 @@ namespace castor3d
 			m_commandBuffer->bindPipeline( m_pipeline->getPipeline() );
 			m_commandBuffer->bindDescriptorSets( { uboDescriptorSet, texDescriptorSet }
 				, m_pipeline->getPipelineLayout() );
-			m_commandBuffer->bindGeometryBuffers( geometryBuffers );
+			m_commandBuffer->bindVertexBuffer( 0u, vbo, 0u );
 			m_commandBuffer->setViewport( { size.getWidth(), size.getHeight(), 0, 0 } );
 			m_commandBuffer->setScissor( { 0, 0, size.getWidth(), size.getHeight() } );
 			m_commandBuffer->draw( 4u );
@@ -358,7 +363,6 @@ namespace castor3d
 		, m_sampler{ doCreateSampler( engine ) }
 		, m_vertexBuffer{ doCreateVbo( engine ) }
 		, m_vertexLayout{ doCreateVertexLayout( engine ) }
-		, m_geometryBuffers{ doCreateVao( engine, *m_vertexLayout, *m_vertexBuffer ) }
 		, m_uboDescriptorLayout{ doCreateUboDescriptorLayout( engine ) }
 		, m_uboDescriptorPool{ m_uboDescriptorLayout->createPool( uint32_t( FogType::eCount ) ) }
 		, m_uboDescriptorSet{ doCreateUboDescriptorSet( *m_uboDescriptorPool, m_sceneUbo, m_gpInfo ) }
@@ -379,7 +383,7 @@ namespace castor3d
 				, m_size
 				, *m_uboDescriptorSet
 				, *m_texDescriptorSet
-				, *m_geometryBuffers );
+				, *m_vertexBuffer );
 		}
 	}
 

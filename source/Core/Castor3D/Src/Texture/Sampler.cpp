@@ -130,18 +130,7 @@ namespace castor3d
 	{
 		auto device = getEngine()->getRenderSystem()->getCurrentDevice();
 		REQUIRE( device );
-		m_sampler = device->createSampler( m_wrapS
-			, m_wrapT
-			, m_wrapR
-			, m_minFilter
-			, m_magFilter
-			, m_mipFilter
-			, m_minLod
-			, m_maxLod
-			, m_lodBias
-			, m_borderColour
-			, m_maxAnisotropy
-			, m_compareOp );
+		m_sampler = device->createSampler( m_info );
 		return true;
 	}
 

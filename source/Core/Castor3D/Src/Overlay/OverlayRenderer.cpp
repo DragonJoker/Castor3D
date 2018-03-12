@@ -434,14 +434,14 @@ namespace castor3d
 		if ( checkFlag( textureFlags, TextureChannel::eDiffuse ) )
 		{
 			result->createBinding( pipeline.descriptorLayout->getBinding( DiffuseMapBinding )
-				, pass.getTextureUnit( TextureChannel::eDiffuse )->getTexture()->getView()
+				, pass.getTextureUnit( TextureChannel::eDiffuse )->getTexture()->getDefaultView()
 				, pass.getTextureUnit( TextureChannel::eDiffuse )->getSampler()->getSampler() );
 		}
 
 		if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 		{
 			result->createBinding( pipeline.descriptorLayout->getBinding( OpacityMapBinding )
-				, pass.getTextureUnit( TextureChannel::eOpacity )->getTexture()->getView()
+				, pass.getTextureUnit( TextureChannel::eOpacity )->getTexture()->getDefaultView()
 				, pass.getTextureUnit( TextureChannel::eOpacity )->getSampler()->getSampler() );
 		}
 
@@ -461,7 +461,7 @@ namespace castor3d
 		if ( checkFlag( textureFlags, TextureChannel::eText ) )
 		{
 			result->createBinding( pipeline.descriptorLayout->getBinding( TextMapBinding )
-				, texture.getView()
+				, texture.getDefaultView()
 				, sampler.getSampler() );
 		}
 

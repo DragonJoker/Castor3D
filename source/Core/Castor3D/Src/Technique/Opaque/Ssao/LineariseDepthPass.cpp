@@ -248,7 +248,7 @@ namespace castor3d
 			, TextureUnit const & texture )
 		{
 			renderer::FrameBufferAttachmentArray attaches;
-			attaches.emplace_back( *( renderPass.begin() ), texture.getTexture()->getView() );
+			attaches.emplace_back( *( renderPass.begin() ), texture.getTexture()->getDefaultView() );
 			auto size = texture.getTexture()->getDimensions();
 			return renderPass.createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
 				, std::move( attaches ) );
@@ -321,8 +321,8 @@ namespace castor3d
 			, renderer::Filter::eNearest
 			, renderer::Filter::eNearest ) }
 		, m_commandBuffer{ m_engine.getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer() }
-		, m_clipInfo{ renderer::ShaderStageFlag::eFragment, { { 1u, 0u, renderer::AttributeFormat::eVec3f } } }
-		, m_linearisePushConstants{ renderer::ShaderStageFlag::eFragment, 0u, renderer::getSize( renderer::AttributeFormat::eVec3f ) }
+		, m_clipInfo{ renderer::ShaderStageFlag::eFragment, { { 1u, 0u, renderer::Format::eR32G32B32_SFLOAT } } }
+		, m_linearisePushConstants{ renderer::ShaderStageFlag::eFragment, 0u, renderer::getSize( renderer::Format::eR32G32B32_SFLOAT ) }
 		, m_lineariseProgram{ doGetLineariseProgram( m_engine ) }
 		, m_minifyProgram{ doGetMinifyProgram( m_engine ) }
 	{
@@ -363,7 +363,7 @@ namespace castor3d
 	{
 		auto size = m_result.getTexture()->getDimensions();
 		renderer::FrameBufferAttachmentArray attaches;
-		attaches.emplace_back( *( m_renderPass->begin() ), m_result.getTexture()->getView() );
+		attaches.emplace_back( *( m_renderPass->begin() ), m_result.getTexture()->getDefaultView() );
 		m_lineariseFrameBuffer = m_renderPass->createFrameBuffer( renderer::Extent2D{ size.width, size.heigt }
 			, std::move( attaches ) );
 		auto & renderSystem = *m_engine.getRenderSystem();
@@ -376,7 +376,7 @@ namespace castor3d
 		m_lineariseDescriptorPool = m_lineariseDescriptorLayout->createPool( 1u );
 		m_lineariseDescriptor = m_lineariseDescriptorPool->createDescriptorSet();
 		m_lineariseDescriptor->createBinding( m_lineariseDescriptorLayout->getBinding( 0u )
-			, m_result.getTexture()->getView()
+			, m_result.getTexture()->getDefaultView()
 			, *m_sampler );
 		m_linearisePipeline = doCreatePipeline( m_engine, m_lineariseProgram );
 		m_linearisePipeline->setDescriptorSetLayouts( { *m_lineariseDescriptorLayout } );
@@ -410,12 +410,12 @@ namespace castor3d
 				, *pipeline.view
 				, *m_sampler );
 			renderer::FrameBufferAttachmentArray attaches;
-			attaches.emplace_back( *( m_renderPass->begin() ), m_result.getTexture()->getView() );
+			attaches.emplace_back( *( m_renderPass->begin() ), m_result.getTexture()->getDefaultView() );
 			pipeline.frameBuffer = m_renderPass->createFrameBuffer( castor::Extent2D{ size.width, size.height }
 				, std::move( attaches ) );
 			pipeline.previousLevel = std::make_unique< renderer::PushConstantsBuffer< int > >( renderer::ShaderStageFlag::eFragment
-				, renderer::PushConstantArray{ { 1u, 0u, renderer::AttributeFormat::eInt } } );
-			pipeline.pushConstants = { renderer::ShaderStageFlag::eFragment, 0u, renderer::getSize( renderer::AttributeFormat::eInt ) };
+				, renderer::PushConstantArray{ { 1u, 0u, renderer::Format::eR32_SINT } } );
+			pipeline.pushConstants = { renderer::ShaderStageFlag::eFragment, 0u, renderer::getSize( renderer::Format::eR32_SINT ) };
 			pipeline.pipeline = doCreatePipeline( m_engine, m_minifyProgram );
 			pipeline.pipeline->setDescriptorSetLayouts( { *m_minifyDescriptorLayout } );
 			pipeline.pipeline->setPushConstantRanges( { pipeline.pushConstants } );

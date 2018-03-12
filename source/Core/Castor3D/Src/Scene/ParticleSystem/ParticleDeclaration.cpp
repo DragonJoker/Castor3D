@@ -18,7 +18,7 @@ namespace castor3d
 			{
 				m_elements.push_back( elements[i] );
 				m_elements[i].m_offset = m_stride;
-				m_stride += renderer::getSize( m_elements[i].m_dataType );
+				m_stride += getSize( m_elements[i].m_dataType );
 			}
 		}
 	}

@@ -109,25 +109,37 @@ namespace castor3d
 			return m_info.imageType;
 		}
 
-		inline TextureView const & getImage( size_t index = 0u )const
-		{
-			REQUIRE( index < m_views.size() && m_views[index] );
-			return *m_views[index];
-		}
-
-		inline TextureView & getImage( size_t index = 0u )
-		{
-			REQUIRE( index < m_views.size() && m_views[index] );
-			return *m_views[index];
-		}
-
 		inline renderer::Texture const & getTexture()const
 		{
 			REQUIRE( m_texture );
 			return *m_texture;
 		}
 
-		inline renderer::TextureView const & getView()const
+		inline TextureView const & getImage( size_t index = 0u )const
+		{
+			REQUIRE( index < m_views.size() - 1u && m_views[index + 1u] );
+			return *m_views[index + 1u];
+		}
+
+		inline TextureView & getImage( size_t index = 0u )
+		{
+			REQUIRE( index < m_views.size() - 1u && m_views[index + 1u] );
+			return *m_views[index + 1u];
+		}
+
+		inline TextureView const & getDefaultImage()const
+		{
+			REQUIRE( !m_views.empty() );
+			return *m_views[0];
+		}
+
+		inline TextureView & getDefaultImage()
+		{
+			REQUIRE( !m_views.empty() );
+			return *m_views[0];
+		}
+
+		inline renderer::TextureView const & getDefaultView()const
 		{
 			return m_defaultView.getView();
 		}

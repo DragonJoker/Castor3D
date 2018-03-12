@@ -18,8 +18,8 @@ using namespace castor;
 
 namespace castor3d
 {
-	ComputeParticleSystem::ComputeParticleSystem( ParticleSystem & p_parent )
-		: ParticleSystemImpl{ ParticleSystemImpl::Type::eComputeShader, p_parent }
+	ComputeParticleSystem::ComputeParticleSystem( ParticleSystem & parent )
+		: ParticleSystemImpl{ ParticleSystemImpl::Type::eComputeShader, parent }
 	{
 	}
 
@@ -29,7 +29,7 @@ namespace castor3d
 
 	bool ComputeParticleSystem::initialise()
 	{
-		bool result = m_updateProgram != nullptr;
+		bool result = m_updateProgram.module != nullptr;
 
 		if ( result )
 		{
@@ -80,7 +80,7 @@ namespace castor3d
 		}
 
 		m_ubo.reset();
-		m_updateProgram = nullptr;
+		m_updateProgram.module.reset();
 	}
 
 	uint32_t ComputeParticleSystem::update( Milliseconds const & time
@@ -102,38 +102,39 @@ namespace castor3d
 		{
 			buffer[0] = counts[0];
 			buffer[1] = counts[1];
-			m_randomStorage->unlock( 2u, true );
+			m_randomStorage->flush( 0u, 2u );
+			m_randomStorage->unlock();
 		}
 
-		m_computePipeline->run(
-			Point3ui{ std::max( 1u, uint32_t( std::ceil( float( particlesCount ) / m_worgGroupSize ) ) ), 1u, 1u },
-			Point3ui{ std::min( m_worgGroupSize, particlesCount ), 1u, 1u },
-			MemoryBarrier::eAtomicCounterBuffer | MemoryBarrier::eShaderStorageBuffer | MemoryBarrier::eVertexBuffer
-		);
+		//m_computePipeline->run(
+		//	Point3ui{ std::max( 1u, uint32_t( std::ceil( float( particlesCount ) / m_worgGroupSize ) ) ), 1u, 1u },
+		//	Point3ui{ std::min( m_worgGroupSize, particlesCount ), 1u, 1u },
+		//	MemoryBarrier::eAtomicCounterBuffer | MemoryBarrier::eShaderStorageBuffer | MemoryBarrier::eVertexBuffer
+		//);
 
-		m_generatedCountBuffer->download( 0u, 1u, &particlesCount );
-		m_particlesCount = std::min( particlesCount, uint32_t( m_parent.getMaxParticlesCount() ) );
+		//m_generatedCountBuffer->download( 0u, 1u, &particlesCount );
+		//m_particlesCount = std::min( particlesCount, uint32_t( m_parent.getMaxParticlesCount() ) );
 
-		if ( m_particlesCount )
-		{
-			m_parent.getBillboards()->getVertexBuffer().copy( *m_particlesStorages[m_out]
-				, m_particlesCount * m_inputs.stride());
-		}
+		//if ( m_particlesCount )
+		//{
+		//	m_parent.getBillboards()->getVertexBuffer().copy( *m_particlesStorages[m_out]
+		//		, m_particlesCount * m_inputs.stride());
+		//}
 
 		std::swap( m_in, m_out );
 		return m_particlesCount;
 	}
 
 	void ComputeParticleSystem::addParticleVariable( castor::String const & name
-		, renderer::AttributeFormat type
+		, ParticleFormat type
 		, castor::String const & defaultValue )
 	{
 		m_inputs.push_back( ParticleElementDeclaration{ name, 0u, type, m_inputs.stride() } );
 	}
 
-	void ComputeParticleSystem::setUpdateProgram( renderer::ShaderProgram const & program )
+	void ComputeParticleSystem::setUpdateProgram( renderer::ShaderStageState const & program )
 	{
-		m_updateProgram = &program;
+		m_updateProgram = program;
 	}
 
 	bool ComputeParticleSystem::doInitialiseParticleStorage()
@@ -167,7 +168,8 @@ namespace castor3d
 				buffer += m_inputs.stride();
 			}
 
-			m_particlesStorages[m_in]->getBuffer().unlock( size, true );
+			m_particlesStorages[m_in]->getBuffer().flush( 0u, size );
+			m_particlesStorages[m_in]->getBuffer().unlock();
 		}
 
 		return true;
@@ -181,20 +183,24 @@ namespace castor3d
 			, 1024
 			, renderer::BufferTarget::eStorageBuffer | renderer::BufferTarget::eTransferDst
 			, renderer::MemoryPropertyFlag::eHostVisible );
-		std::random_device device;
+		std::random_device rddevice;
 		std::uniform_real_distribution< float > distribution{ -1.0f, 1.0f };
 
-		if ( auto buffer = m_randomStorage->getBuffer().lock( 0u
+		if ( auto buffer = m_randomStorage->lock( 0u
 			, size
 			, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateRange ) )
 		{
 			for ( auto i = 0u; i < size; ++i )
 			{
-				*buffer = distribution( device );
+				( *buffer )[0] = distribution( rddevice );
+				( *buffer )[1] = distribution( rddevice );
+				( *buffer )[2] = distribution( rddevice );
+				( *buffer )[3] = distribution( rddevice );
 				++buffer;
 			}
 
-			m_randomStorage->getBuffer().unlock( size, true );
+			m_randomStorage->getBuffer().flush( 0u, size );
+			m_randomStorage->getBuffer().unlock();
 		}
 
 		return true;
@@ -215,10 +221,10 @@ namespace castor3d
 		m_descriptorPool = m_descriptorLayout->createPool( 1u );
 		m_descriptorSet = m_descriptorPool->createDescriptorSet( 0u );
 		m_pipelineLayout = device.createPipelineLayout( *m_descriptorLayout );
-		m_pipeline = m_pipelineLayout->createPipeline( *m_updateProgram
-			, renderer::VertexLayoutCRefArray{}
-			, *m_renderPass
-			, );
+		m_pipeline = m_pipelineLayout->createPipeline( renderer::ComputePipelineCreateInfo
+		{
+			m_updateProgram,
+		} );
 		return true;
 	}
 }

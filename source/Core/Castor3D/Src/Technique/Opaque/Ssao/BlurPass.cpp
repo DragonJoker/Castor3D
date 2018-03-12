@@ -429,7 +429,7 @@ namespace castor3d
 			, TextureUnit const & texture )
 		{
 			renderer::FrameBufferAttachmentArray attaches;
-			attaches.emplace_back( *( renderPass.begin() ), texture.getTexture()->getView() );
+			attaches.emplace_back( *( renderPass.begin() ), texture.getTexture()->getDefaultView() );
 			auto size = texture.getTexture()->getDimensions();
 			return renderPass.createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
 				, std::move( attaches ) );
@@ -453,8 +453,8 @@ namespace castor3d
 		, m_program{ doGetProgram( m_engine, config ) }
 		, m_size{ size }
 		, m_result{ doCreateTexture( m_engine, m_size ) }
-		, m_axisUniform{ renderer::ShaderStageFlag::eFragment, { { 3u, 0u, renderer::AttributeFormat::eVec2i } } }
-		, m_pushConstantRange{ renderer::ShaderStageFlag::eFragment, 0u, renderer::getSize( renderer::AttributeFormat::eVec2i ) }
+		, m_axisUniform{ renderer::ShaderStageFlag::eFragment, { { 3u, 0u, renderer::Format::eR32G32_SINT } } }
+		, m_pushConstantRange{ renderer::ShaderStageFlag::eFragment, 0u, renderer::getSize( renderer::Format::eR32G32_SINT ) }
 		, m_renderPass{ doCreateRenderPass( m_engine ) }
 		, m_fbo{ doCreateFrameBuffer( *m_renderPass, m_result ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "SSAO" ), cuT( "Blur" ) ) }
@@ -468,7 +468,7 @@ namespace castor3d
 		createPipeline( size
 			, Position{}
 			, m_program
-			, input.getTexture()->getView()
+			, input.getTexture()->getDefaultView()
 			, *m_renderPass
 			, bindings
 			, { m_pushConstantRange } );
@@ -514,7 +514,7 @@ namespace castor3d
 			, 0u
 			, 1u );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
-			, m_normals.getTexture()->getView()
+			, m_normals.getTexture()->getDefaultView()
 			, m_sampler->getSampler() );
 	}
 

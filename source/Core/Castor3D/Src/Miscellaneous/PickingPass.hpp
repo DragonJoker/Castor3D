@@ -4,10 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_PICKING_PASS_H___
 #define ___C3D_PICKING_PASS_H___
 
-#include <Pipeline/VertexLayout.hpp>
 #include "Render/RenderPass.hpp"
 #include "Render/Viewport.hpp"
 #include "Scene/Geometry.hpp"
+
+#include <Image/Texture.hpp>
+#include <Pipeline/VertexLayout.hpp>
 
 namespace castor3d
 {
@@ -268,8 +270,11 @@ namespace castor3d
 
 	private:
 		std::map< castor::String, GeometryWPtr > m_pickable;
-		TextureLayoutSPtr m_colourTexture;
-		renderer::TexturePtr m_depthBuffer;
+		renderer::TexturePtr m_colourTexture;
+		renderer::TexturePtr m_depthTexture;
+		renderer::TextureViewPtr m_colourView;
+		renderer::TextureViewPtr m_depthView;
+		renderer::RenderPassPtr m_renderPass;
 		renderer::FrameBufferPtr m_frameBuffer;
 		std::map< Scene const *, CameraQueueMap > m_scenes;
 		GeometryWPtr m_geometry;

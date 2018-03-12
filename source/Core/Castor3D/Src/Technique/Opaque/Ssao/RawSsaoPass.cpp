@@ -609,7 +609,7 @@ namespace castor3d
 			, TextureUnit const & texture )
 		{
 			renderer::FrameBufferAttachmentArray attaches;
-			attaches.emplace_back( *( renderPass.begin() ), texture.getTexture()->getView() );
+			attaches.emplace_back( *( renderPass.begin() ), texture.getTexture()->getDefaultView() );
 			auto size = texture.getTexture()->getDimensions();
 			return renderPass.createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
 				, std::move( attaches ) );
@@ -682,10 +682,10 @@ namespace castor3d
 				, 0u
 				, 1u );
 			result->createBinding( layout.getBinding( 1u )
-				, linearisedDepthBuffer.getTexture()->getView()
+				, linearisedDepthBuffer.getTexture()->getDefaultView()
 				, sampler );
 			result->createBinding( layout.getBinding( 2u )
-				, normals.getTexture()->getView()
+				, normals.getTexture()->getDefaultView()
 				, sampler );
 			return result;
 		}

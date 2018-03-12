@@ -52,28 +52,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	namespace
-	{
-		InterleavedVertexArray convert( VertexPtrArray const & p_points )
-		{
-			InterleavedVertexArray result;
-			result.reserve( p_points.size() );
-
-			for ( auto point : p_points )
-			{
-				InterleavedVertex vertex;
-				Vertex::getPosition( *point, vertex.m_pos );
-				Vertex::getNormal( *point, vertex.m_nml );
-				Vertex::getTangent( *point, vertex.m_tan );
-				Vertex::getBitangent( *point, vertex.m_bin );
-				Vertex::getTexCoord( *point, vertex.m_tex );
-				result.push_back( vertex );
-			}
-
-			return result;
-		}
-	}
-
 	IMPLEMENT_ATTRIBUTE_PARSER( parserRootMtlFile )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -409,7 +387,7 @@ namespace castor3d
 
 			if ( ePF < PixelFormat::eD16 )
 			{
-				parsingContext->renderTarget->setPixelFormat( ePF );
+				parsingContext->renderTarget->setPixelFormat( convert( ePF ) );
 			}
 			else
 			{
@@ -577,7 +555,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			p_params[0]->get( uiMode );
-			parsingContext->sampler->setMipFilter( renderer::Filter( uiMode ) );
+			parsingContext->sampler->setMipFilter( renderer::MipmapMode( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -718,9 +696,9 @@ namespace castor3d
 		}
 		else if ( !p_params.empty() )
 		{
-			RgbaColour colour;
+			uint32_t colour;
 			p_params[0]->get( colour );
-			parsingContext->sampler->setBorderColour( colour );
+			parsingContext->sampler->setBorderColour( renderer::BorderColour( colour ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -752,9 +730,9 @@ namespace castor3d
 		}
 		else if ( !p_params.empty() )
 		{
-			uint32_t uiMode;
-			p_params[0]->get( uiMode );
-			parsingContext->sampler->setComparisonMode( ComparisonMode( uiMode ) );
+			uint32_t mode;
+			p_params[0]->get( mode );
+			parsingContext->sampler->enableCompare( bool( mode ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -771,7 +749,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			p_params[0]->get( uiMode );
-			parsingContext->sampler->setComparisonFunc( renderer::CompareOp( uiMode ) );
+			parsingContext->sampler->setCompareOp( renderer::CompareOp( uiMode ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -1319,7 +1297,7 @@ namespace castor3d
 		}
 		else if ( parsingContext->point2f[0] == 0 || parsingContext->point2f[1] == 0 )
 		{
-			PARSING_ERROR( cuT( "one PixelComponents of the particles dimensions is 0." ) );
+			PARSING_ERROR( cuT( "one component of the particles dimensions is 0." ) );
 		}
 		else
 		{
@@ -1338,8 +1316,8 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserParticleSystemTFShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->shaderProgram.reset();
-		parsingContext->shaderStage = ShaderType::eCount;
+		parsingContext->shaderProgram.clear();
+		parsingContext->shaderStage = renderer::ShaderStageFlag( 0u );
 		parsingContext->bBool1 = true;
 		
 		if ( !parsingContext->scene )
@@ -1356,8 +1334,8 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserParticleSystemCSShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->shaderProgram.reset();
-		parsingContext->shaderStage = ShaderType::eCount;
+		parsingContext->shaderProgram.clear();
+		parsingContext->shaderStage = renderer::ShaderStageFlag( 0u );
 		parsingContext->bBool1 = false;
 		
 		if ( !parsingContext->scene )
@@ -1374,7 +1352,6 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserParticleType )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->uniform.reset();
 
 		if ( !parsingContext->particleSystem )
 		{
@@ -1405,7 +1382,6 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserParticleVariable )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->uniform.reset();
 		p_params[0]->get( parsingContext->strName2 );
 
 		if ( !parsingContext->particleSystem )
@@ -1429,7 +1405,7 @@ namespace castor3d
 				p_params[2]->get( value );
 			}
 
-			parsingContext->particleSystem->addParticleVariable( name, renderer::AttributeFormat( type ), value );
+			parsingContext->particleSystem->addParticleVariable( name, ParticleFormat( type ), value );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eUBOVariable )
@@ -2124,7 +2100,7 @@ namespace castor3d
 
 						if ( submesh->getPointsCount() == submeshAnim.getSubmesh().getPointsCount() )
 						{
-							keyFrame->addSubmeshBuffer( *submesh, convert( submesh->getPoints() ) );
+							keyFrame->addSubmeshBuffer( *submesh, submesh->getPoints() );
 						}
 
 						++index;
@@ -2540,21 +2516,21 @@ namespace castor3d
 
 			for ( auto & vertex : vertices )
 			{
-				std::memcpy( vertex.m_pos.data(), &parsingContext->vertexPos[index], sizeof( vertex.m_pos ) );
+				std::memcpy( vertex.m_pos.ptr(), &parsingContext->vertexPos[index], sizeof( vertex.m_pos ) );
 
 				if ( !parsingContext->vertexNml.empty() )
 				{
-					std::memcpy( vertex.m_nml.data(), &parsingContext->vertexNml[index], sizeof( vertex.m_nml ) );
+					std::memcpy( vertex.m_nml.ptr(), &parsingContext->vertexNml[index], sizeof( vertex.m_nml ) );
 				}
 
 				if ( !parsingContext->vertexTan.empty() )
 				{
-					std::memcpy( vertex.m_tan.data(), &parsingContext->vertexTan[index], sizeof( vertex.m_tan ) );
+					std::memcpy( vertex.m_tan.ptr(), &parsingContext->vertexTan[index], sizeof( vertex.m_tan ) );
 				}
 
 				if ( !parsingContext->vertexTex.empty() )
 				{
-					std::memcpy( vertex.m_tex.data(), &parsingContext->vertexTex[index], sizeof( vertex.m_tex ) );
+					std::memcpy( vertex.m_tex.ptr(), &parsingContext->vertexTex[index], sizeof( vertex.m_tex ) );
 				}
 
 				index += 3;
@@ -2863,8 +2839,8 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserPassShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->shaderProgram.reset();
-		parsingContext->shaderStage = ShaderType::eCount;
+		parsingContext->shaderProgram.clear();
+		parsingContext->shaderStage = renderer::ShaderStageFlag( 0u );
 
 		if ( parsingContext->pass )
 		{
@@ -3023,7 +2999,19 @@ namespace castor3d
 			if ( !relative.empty() )
 			{
 				parsingContext->textureUnit->setAutoMipmaps( true );
-				auto texture = parsingContext->m_pParser->getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead );
+				renderer::ImageCreateInfo image{};
+				image.arrayLayers = 1u;
+				image.extent.depth = 1u;
+				image.imageType = renderer::TextureType::e2D;
+				image.initialLayout = renderer::ImageLayout::eUndefined;
+				image.mipLevels = 1u;
+				image.samples = renderer::SampleCountFlag::e1;
+				image.sharingMode = renderer::SharingMode::eExclusive;
+				image.tiling = renderer::ImageTiling::eOptimal;
+				image.usage = renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst;
+				auto texture = std::make_shared< TextureLayout >( *parsingContext->m_pParser->getEngine()->getRenderSystem()
+					, image
+					, renderer::MemoryPropertyFlag::eHostVisible );
 				texture->setSource( folder, relative );
 
 				if ( p_params.size() >= 2 )
@@ -3051,10 +3039,8 @@ namespace castor3d
 							|| buffer->format() == PixelFormat::eA8B8G8R8_SRGB )
 							? PixelFormat::eL8
 							: ( buffer->format() == PixelFormat::eRGB16F
-								|| buffer->format() == PixelFormat::eRGBA16F
-								|| buffer->format() == PixelFormat::eRGB16F32F
-								|| buffer->format() == PixelFormat::eRGBA16F32F )
-								? PixelFormat::eL16F32F
+								|| buffer->format() == PixelFormat::eRGBA16F )
+								? PixelFormat::eL16F
 								: ( buffer->format() == PixelFormat::eRGB32F
 									|| buffer->format() == PixelFormat::eRGBA32F )
 									? PixelFormat::eL32F
@@ -3162,14 +3148,21 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->shaderProgram )
+		auto it = std::find_if( parsingContext->shaderProgram.begin()
+			, parsingContext->shaderProgram.end()
+			, []( renderer::ShaderStageState const & lookup )
+			{
+				return lookup.module->getStage() == renderer::ShaderStageFlag::eVertex;
+			} );
+
+		if ( it == parsingContext->shaderProgram.end() )
 		{
-			parsingContext->shaderProgram->createObject( renderer::ShaderStageFlag::eVertex );
+			parsingContext->shaderProgram.push_back( { parsingContext->m_pParser->getEngine()->getRenderSystem()->getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
 			parsingContext->shaderStage = renderer::ShaderStageFlag::eVertex;
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Shader not initialised" ) );
+			PARSING_ERROR( cuT( "Vertex shader is already initialised" ) );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::shaderStage )
@@ -3178,9 +3171,16 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->shaderProgram )
+		auto it = std::find_if( parsingContext->shaderProgram.begin()
+			, parsingContext->shaderProgram.end()
+			, []( renderer::ShaderStageState const & lookup )
+			{
+				return lookup.module->getStage() == renderer::ShaderStageFlag::eFragment;
+			} );
+
+		if ( it == parsingContext->shaderProgram.end() )
 		{
-			parsingContext->shaderProgram->createObject( renderer::ShaderStageFlag::eFragment );
+			parsingContext->shaderProgram.push_back( { parsingContext->m_pParser->getEngine()->getRenderSystem()->getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
 			parsingContext->shaderStage = renderer::ShaderStageFlag::eFragment;
 		}
 		else
@@ -3194,10 +3194,17 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->shaderProgram )
+		auto it = std::find_if( parsingContext->shaderProgram.begin()
+			, parsingContext->shaderProgram.end()
+			, []( renderer::ShaderStageState const & lookup )
+			{
+				return lookup.module->getStage() == renderer::ShaderStageFlag::eGeometry;
+			} );
+
+		if ( it == parsingContext->shaderProgram.end() )
 		{
-			parsingContext->shaderProgram->createObject( ShaderType::eGeometry );
-			parsingContext->shaderStage = ShaderType::eGeometry;
+			parsingContext->shaderProgram.push_back( { parsingContext->m_pParser->getEngine()->getRenderSystem()->getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eGeometry ) } );
+			parsingContext->shaderStage = renderer::ShaderStageFlag::eGeometry;
 		}
 		else
 		{
@@ -3210,10 +3217,17 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->shaderProgram )
+		auto it = std::find_if( parsingContext->shaderProgram.begin()
+			, parsingContext->shaderProgram.end()
+			, []( renderer::ShaderStageState const & lookup )
+			{
+				return lookup.module->getStage() == renderer::ShaderStageFlag::eTessellationControl;
+			} );
+
+		if ( it == parsingContext->shaderProgram.end() )
 		{
-			parsingContext->shaderProgram->createObject( ShaderType::eHull );
-			parsingContext->shaderStage = ShaderType::eHull;
+			parsingContext->shaderProgram.push_back( { parsingContext->m_pParser->getEngine()->getRenderSystem()->getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eTessellationControl ) } );
+			parsingContext->shaderStage = renderer::ShaderStageFlag::eTessellationControl;
 		}
 		else
 		{
@@ -3226,10 +3240,17 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->shaderProgram )
+		auto it = std::find_if( parsingContext->shaderProgram.begin()
+			, parsingContext->shaderProgram.end()
+			, []( renderer::ShaderStageState const & lookup )
+			{
+				return lookup.module->getStage() == renderer::ShaderStageFlag::eTessellationEvaluation;
+			} );
+
+		if ( it == parsingContext->shaderProgram.end() )
 		{
-			parsingContext->shaderProgram->createObject( ShaderType::eDomain );
-			parsingContext->shaderStage = ShaderType::eDomain;
+			parsingContext->shaderProgram.push_back( { parsingContext->m_pParser->getEngine()->getRenderSystem()->getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eTessellationEvaluation ) } );
+			parsingContext->shaderStage = renderer::ShaderStageFlag::eTessellationEvaluation;
 		}
 		else
 		{
@@ -3242,10 +3263,17 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->shaderProgram )
+		auto it = std::find_if( parsingContext->shaderProgram.begin()
+			, parsingContext->shaderProgram.end()
+			, []( renderer::ShaderStageState const & lookup )
+			{
+				return lookup.module->getStage() == renderer::ShaderStageFlag::eCompute;
+			} );
+
+		if ( it == parsingContext->shaderProgram.end() )
 		{
-			parsingContext->shaderProgram->createObject( ShaderType::eCompute );
-			parsingContext->shaderStage = ShaderType::eCompute;
+			parsingContext->shaderProgram.push_back( { parsingContext->m_pParser->getEngine()->getRenderSystem()->getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eCompute ) } );
+			parsingContext->shaderStage = renderer::ShaderStageFlag::eCompute;
 		}
 		else
 		{
@@ -3258,7 +3286,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->shaderProgram )
+		if ( parsingContext->shaderProgram.empty() )
 		{
 			PARSING_ERROR( cuT( "No ShaderProgram initialised." ) );
 		}
@@ -3278,23 +3306,19 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->shaderProgram )
+		if ( parsingContext->shaderProgram.empty() )
+		{
+			PARSING_ERROR( cuT( "No ShaderProgram initialised." ) );
+		}
+		else
 		{
 			if ( parsingContext->particleSystem )
 			{
-				if ( parsingContext->bBool1 )
-				{
-					parsingContext->particleSystem->setTFUpdateProgram( parsingContext->shaderProgram );
-				}
-				else
-				{
-					parsingContext->particleSystem->setCSUpdateProgram( parsingContext->shaderProgram );
-				}
-
+				parsingContext->particleSystem->setCSUpdateProgram( parsingContext->shaderProgram[0] );
 				parsingContext->bBool1 = false;
 			}
-			//l_parsingContext->pPass->setShader( parsingContext->shaderProgram );
-			parsingContext->shaderProgram.reset();
+
+			parsingContext->shaderProgram.clear();
 		}
 	}
 	END_ATTRIBUTE_POP()
@@ -3303,53 +3327,24 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->shaderProgram )
+		if ( parsingContext->shaderProgram.empty() )
 		{
 			PARSING_ERROR( cuT( "No ShaderProgram initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			if ( parsingContext->shaderStage != ShaderType::eCount )
+			if ( parsingContext->shaderStage != renderer::ShaderStageFlag( 0u ) )
 			{
 				uint32_t uiModel;
 				Path path;
 				p_params[0]->get( uiModel );
 				p_params[1]->get( path );
-				parsingContext->shaderProgram->setFile( parsingContext->shaderStage, p_context->m_file.getPath() / path );
+				parsingContext->shaderProgram.back().module->loadShader( p_context->m_file.getPath() / path );
 			}
 			else
 			{
 				PARSING_ERROR( cuT( "Shader not initialised" ) );
 			}
-		}
-	}
-	END_ATTRIBUTE()
-
-	IMPLEMENT_ATTRIBUTE_PARSER( parserShaderProgramSampler )
-	{
-		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-		if ( !parsingContext->shaderProgram )
-		{
-			PARSING_ERROR( cuT( "No ShaderProgram initialised." ) );
-		}
-		else if ( !p_params.empty() )
-		{
-			String name;
-			p_params[0]->get( name );
-
-			if ( parsingContext->shaderStage != ShaderType::eCount )
-			{
-				parsingContext->samplerUniform = parsingContext->shaderProgram->createUniform< UniformType::eSampler >( name, parsingContext->shaderStage );
-			}
-			else
-			{
-				PARSING_ERROR( cuT( "Shader program not initialised" ) );
-			}
-		}
-		else
-		{
-			PARSING_ERROR( cuT( "Shader not initialised" ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -3365,9 +3360,9 @@ namespace castor3d
 
 			if ( value )
 			{
-				parsingContext->uniformBuffer = std::make_unique< UniformBuffer >( parsingContext->strName
-					, *parsingContext->shaderProgram->getRenderSystem()
-					, 1u );
+				//parsingContext->uniformBuffer = std::make_unique< UniformBuffer >( parsingContext->strName
+				//	, *parsingContext->shaderProgram->getRenderSystem()
+				//	, 1u );
 			}
 			else
 			{
@@ -3377,98 +3372,9 @@ namespace castor3d
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserGeometryInputType )
-	{
-		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-		if ( !parsingContext->shaderProgram )
-		{
-			PARSING_ERROR( cuT( "No ShaderProgram initialised." ) );
-		}
-		else if ( !p_params.empty() )
-		{
-			uint32_t uiType;
-			p_params[0]->get( uiType );
-
-			if ( parsingContext->shaderStage != ShaderType::eCount )
-			{
-				if ( parsingContext->shaderStage == ShaderType::eGeometry )
-				{
-					parsingContext->shaderProgram->setInputType( parsingContext->shaderStage, Topology( uiType ) );
-				}
-				else
-				{
-					PARSING_ERROR( cuT( "Only valid for geometry shader" ) );
-				}
-			}
-			else
-			{
-				PARSING_ERROR( cuT( "Shader not initialised" ) );
-			}
-		}
-	}
-	END_ATTRIBUTE()
-
-	IMPLEMENT_ATTRIBUTE_PARSER( parserGeometryOutputType )
-	{
-		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-		if ( !parsingContext->shaderProgram )
-		{
-			PARSING_ERROR( cuT( "No ShaderProgram initialised." ) );
-		}
-		else if ( !p_params.empty() )
-		{
-			uint32_t uiType;
-			p_params[0]->get( uiType );
-
-			if ( parsingContext->shaderStage != ShaderType::eCount )
-			{
-				if ( parsingContext->shaderStage == ShaderType::eGeometry )
-				{
-					parsingContext->shaderProgram->setOutputType( parsingContext->shaderStage, Topology( uiType ) );
-				}
-				else
-				{
-					PARSING_ERROR( cuT( "Only valid for geometry shader" ) );
-				}
-			}
-			else
-			{
-				PARSING_ERROR( cuT( "Shader not initialised" ) );
-			}
-		}
-	}
-	END_ATTRIBUTE()
-
-	IMPLEMENT_ATTRIBUTE_PARSER( parserGeometryOutputVtxCount )
-	{
-		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-		if ( parsingContext->shaderStage != ShaderType::eCount )
-		{
-			if ( parsingContext->shaderStage == ShaderType::eGeometry )
-			{
-				uint8_t count;
-				p_params[0]->get( count );
-				parsingContext->shaderProgram->setOutputVtxCount( parsingContext->shaderStage, count );
-			}
-			else
-			{
-				PARSING_ERROR( cuT( "Only valid for geometry shader" ) );
-			}
-		}
-		else
-		{
-			PARSING_ERROR( cuT( "Shader not initialised" ) );
-		}
-	}
-	END_ATTRIBUTE()
-
 	IMPLEMENT_ATTRIBUTE_PARSER( parserShaderUboVariable )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->uniform.reset();
 		p_params[0]->get( parsingContext->strName2 );
 
 		if ( !parsingContext->uniformBuffer )
@@ -3511,14 +3417,14 @@ namespace castor3d
 
 		if ( parsingContext->uniformBuffer )
 		{
-			if ( !parsingContext->uniform )
-			{
-				parsingContext->uniform = parsingContext->uniformBuffer->createUniform( UniformType( uiType ), parsingContext->strName2, parsingContext->uiUInt32 );
-			}
-			else
-			{
-				PARSING_ERROR( cuT( "Variable type already set" ) );
-			}
+			//if ( !parsingContext->uniform )
+			//{
+			//	parsingContext->uniform = parsingContext->uniformBuffer->createUniform( UniformType( uiType ), parsingContext->strName2, parsingContext->uiUInt32 );
+			//}
+			//else
+			//{
+			//	PARSING_ERROR( cuT( "Variable type already set" ) );
+			//}
 		}
 		else
 		{
@@ -3533,14 +3439,14 @@ namespace castor3d
 		String strParams;
 		p_params[0]->get( strParams );
 
-		if ( parsingContext->uniform )
-		{
-			parsingContext->uniform->setStrValue( strParams );
-		}
-		else
-		{
-			PARSING_ERROR( cuT( "Variable not initialised" ) );
-		}
+		//if ( parsingContext->uniform )
+		//{
+		//	parsingContext->uniform->setStrValue( strParams );
+		//}
+		//else
+		//{
+		//	PARSING_ERROR( cuT( "Variable not initialised" ) );
+		//}
 	}
 	END_ATTRIBUTE()
 
@@ -4041,7 +3947,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		uint32_t uiType;
-		parsingContext->primitiveType = Topology( p_params[0]->get( uiType ) );
+		parsingContext->primitiveType = renderer::PrimitiveTopology( p_params[0]->get( uiType ) );
 	}
 	END_ATTRIBUTE()
 
@@ -4461,10 +4367,22 @@ namespace castor3d
 			{
 				Size size;
 				p_params[1]->get( size );
-				auto texture = parsingContext->scene->getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
-					, AccessType::eNone
-					, AccessType::eRead );
-				texture->getImage().initialiseSource( filePath, path );
+				renderer::ImageCreateInfo image{};
+				image.arrayLayers = 1u;
+				image.extent.width = size.getWidth();
+				image.extent.height = size.getHeight();
+				image.extent.depth = 1u;
+				image.imageType = renderer::TextureType::e2D;
+				image.initialLayout = renderer::ImageLayout::eUndefined;
+				image.mipLevels = 1u;
+				image.samples = renderer::SampleCountFlag::e1;
+				image.sharingMode = renderer::SharingMode::eExclusive;
+				image.tiling = renderer::ImageTiling::eOptimal;
+				image.usage = renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst;
+				auto texture = std::make_shared< TextureLayout >( *parsingContext->scene->getEngine()->getRenderSystem()
+					, image
+					, renderer::MemoryPropertyFlag::eHostVisible );
+				texture->getDefaultImage().initialiseSource( filePath, path );
 				parsingContext->pSkybox->setEquiTexture( texture
 					, size );
 			}

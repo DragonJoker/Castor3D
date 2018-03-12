@@ -147,7 +147,7 @@ namespace castor3d
 		inline void push_back( ParticleElementDeclaration const & element )
 		{
 			m_elements.push_back( element );
-			m_stride += renderer::getSize( m_elements.back().m_dataType );
+			m_stride += getSize( m_elements.back().m_dataType );
 		}
 		/**
 		 *\~english
@@ -161,7 +161,41 @@ namespace castor3d
 		inline void emplace_back( Params const & ... params )
 		{
 			m_elements.emplace_back( std::forward< Params >( params )... );
-			m_stride += renderer::getSize( m_elements.back().m_dataType );
+			m_stride += getSize( m_elements.back().m_dataType );
+		}
+
+	private:
+		uint32_t getSize( ParticleFormat format )
+		{
+			switch ( format )
+			{
+			case castor3d::ParticleFormat::eInt:
+			case castor3d::ParticleFormat::eUInt:
+			case castor3d::ParticleFormat::eFloat:
+				return 4u;
+
+			case castor3d::ParticleFormat::eVec2i:
+			case castor3d::ParticleFormat::eVec2ui:
+			case castor3d::ParticleFormat::eVec2f:
+				return 8u;
+
+			case castor3d::ParticleFormat::eVec3i:
+			case castor3d::ParticleFormat::eVec3ui:
+			case castor3d::ParticleFormat::eVec3f:
+				return 12u;
+
+			case castor3d::ParticleFormat::eVec4i:
+			case castor3d::ParticleFormat::eVec4ui:
+			case castor3d::ParticleFormat::eVec4f:
+			case castor3d::ParticleFormat::eMat2f:
+				return 16u;
+
+			case castor3d::ParticleFormat::eMat3f:
+				return 36u;
+
+			case castor3d::ParticleFormat::eMat4f:
+				return 64u;
+			}
 		}
 
 	private:

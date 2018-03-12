@@ -32,10 +32,13 @@ namespace castor3d
 				{
 					if ( checkFlag( info.flags, renderer::ImageCreateFlag::eCubeCompatible ) )
 					{
+						REQUIRE( ( info.arrayLayers % 6 ) == 0 );
 						return renderer::TextureViewType::eCube;
 					}
+
 					return renderer::TextureViewType::e2DArray;
 				}
+
 				return renderer::TextureViewType::e2D;
 
 			case renderer::TextureType::e3D:

@@ -8,6 +8,10 @@
 #include "Shader/PassBuffer/PassBuffer.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
 
+#include <RenderPass/FrameBuffer.hpp>
+#include <RenderPass/FrameBufferAttachmentArray.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
 #include <Shader/ShaderProgram.hpp>
 
 #include <GlslSource.hpp>
@@ -37,17 +41,16 @@ namespace castor3d
 			{
 				pass.updatePipeline( *itPipelines.first );
 				itPipelines.first->apply();
-				auto drawIndex = ubo.getUniform< UniformType::eUInt >( DrawIndex );
-				auto nodeIndex = ubo.getUniform< UniformType::eUInt >( NodeIndex );
-				drawIndex->setValue( uint8_t( type ) + ( ( count & 0x00FFFFFF ) << 8 ) );
+				auto & data = ubo.getData();
+				data.drawIndex = uint8_t( type ) + ( ( count & 0x00FFFFFF ) << 8 );
 				uint32_t index{ 0u };
 
 				for ( auto itPass : itPipelines.second )
 				{
 					for ( auto itSubmeshes : itPass.second )
 					{
-						nodeIndex->setValue( index++ );
-						ubo.update();
+						data.nodeIndex = index++;
+						ubo->upload();
 						function( *itPipelines.first
 							, *itPass.first
 							, *itSubmeshes.first
@@ -62,7 +65,7 @@ namespace castor3d
 
 		template< bool Opaque, typename MapType >
 		inline void doRenderNonInstanced( RenderPass const & pass
-			, UniformBuffer & ubo
+			, renderer::UniformBuffer< PickingUboData > & ubo
 			, Scene const & scene
 			, PickingPass::NodeType type
 			, MapType & nodes )
@@ -73,15 +76,14 @@ namespace castor3d
 			{
 				pass.updatePipeline( *itPipelines.first );
 				itPipelines.first->apply();
-				auto drawIndex = ubo.getUniform< UniformType::eUInt >( DrawIndex );
-				auto nodeIndex = ubo.getUniform< UniformType::eUInt >( NodeIndex );
-				drawIndex->setValue( uint8_t( type ) + ( ( count & 0x00FFFFFF ) << 8 ) );
+				auto & data = ubo.getData();
+				data.drawIndex = uint8_t( type ) + ( ( count & 0x00FFFFFF ) << 8 );
 				uint32_t index{ 0u };
 
 				for ( auto & renderNode : itPipelines.second )
 				{
-					nodeIndex->setValue( index++ );
-					ubo.update();
+					data.nodeIndex = index++;
+					ubo->upload();
 
 					if ( renderNode.m_data.isInitialised() )
 					{
@@ -177,18 +179,52 @@ namespace castor3d
 			}
 		}
 
+		renderer::TexturePtr createTexture( renderer::Device const & device
+			, Size const & size
+			, renderer::Format format
+			, renderer::ImageUsageFlags usage
+			, renderer::MemoryPropertyFlag memory )
+		{
+			renderer::ImageCreateInfo image{};
+			image.arrayLayers = 1u;
+			image.extent.width = size.getWidth();
+			image.extent.height = size.getHeight();
+			image.extent.depth = 1u;
+			image.flags = 0u;
+			image.format = format;
+			image.imageType = renderer::TextureType::e2D;
+			image.initialLayout = renderer::ImageLayout::eUndefined;
+			image.samples = renderer::SampleCountFlag::e1;
+			image.sharingMode = renderer::SharingMode::eExclusive;
+			image.tiling = renderer::ImageTiling::eOptimal;
+			image.usage = usage;
+			return device.createTexture( image, memory );
+		}
+
+		renderer::TextureViewPtr createView( renderer::Texture const & texture )
+		{
+			renderer::ImageViewCreateInfo view;
+			view.format = texture.getFormat();
+			view.viewType = renderer::TextureViewType::e2D;
+			view.components.r = renderer::ComponentSwizzle::eIdentity;
+			view.components.g = renderer::ComponentSwizzle::eIdentity;
+			view.components.b = renderer::ComponentSwizzle::eIdentity;
+			view.components.a = renderer::ComponentSwizzle::eIdentity;
+			view.subresourceRange.aspectMask = renderer::getAspectMask( view.format );
+			view.subresourceRange.baseArrayLayer = 0u;
+			view.subresourceRange.layerCount = 1u;
+			view.subresourceRange.baseMipLevel = 0u;
+			view.subresourceRange.levelCount = 1u;
+			return texture.createView( view );
+		}
+
 		static uint32_t constexpr PickingWidth = 50u;
 		static int constexpr PickingOffset = int( PickingWidth / 2 );
 	}
 
 	PickingPass::PickingPass( Engine & engine )
 		: RenderPass{ cuT( "Picking" ), engine, nullptr }
-		, m_pickingUbo{ Picking
-			, *engine.getRenderSystem()
-			, 7u }
 	{
-		m_pickingUbo.createUniform( UniformType::eUInt, DrawIndex );
-		m_pickingUbo.createUniform( UniformType::eUInt, NodeIndex );
 	}
 
 	PickingPass::~PickingPass()
@@ -316,7 +352,7 @@ namespace castor3d
 		, SubmeshStaticRenderNodesByPipelineMap & nodes )
 	{
 		doTraverseNodes< true >( *this
-			, m_pickingUbo
+			, *m_pickingUbo
 			, nodes
 			, NodeType::eInstantiatedStatic
 			, [&scene, this]( RenderPipeline & pipeline
@@ -337,7 +373,7 @@ namespace castor3d
 		, StaticRenderNodesByPipelineMap & nodes )
 	{
 		doRenderNonInstanced< true >( *this
-			, m_pickingUbo
+			, *m_pickingUbo
 			, scene
 			, NodeType::eStatic
 			, nodes );
@@ -347,7 +383,7 @@ namespace castor3d
 		, SkinningRenderNodesByPipelineMap & nodes )
 	{
 		doRenderNonInstanced< true >( *this
-			, m_pickingUbo
+			, *m_pickingUbo
 			, scene
 			, NodeType::eSkinning
 			, nodes );
@@ -357,7 +393,7 @@ namespace castor3d
 		, SubmeshSkinningRenderNodesByPipelineMap & nodes )
 	{
 		doTraverseNodes< true >( *this
-			, m_pickingUbo
+			, *m_pickingUbo
 			, nodes
 			, NodeType::eInstantiatedSkinning
 			, [&scene, this]( RenderPipeline & pipeline
@@ -382,7 +418,7 @@ namespace castor3d
 		, MorphingRenderNodesByPipelineMap & nodes )
 	{
 		doRenderNonInstanced< true >( *this
-			, m_pickingUbo
+			, *m_pickingUbo
 			, scene
 			, NodeType::eMorphing
 			, nodes );
@@ -392,7 +428,7 @@ namespace castor3d
 		, BillboardRenderNodesByPipelineMap & nodes )
 	{
 		doRenderNonInstanced< true >( *this
-			, m_pickingUbo
+			, *m_pickingUbo
 			, scene
 			, NodeType::eBillboard
 			, nodes );
@@ -400,76 +436,102 @@ namespace castor3d
 
 	bool PickingPass::doInitialise( Size const & size )
 	{
-		m_colourTexture = getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
-			, AccessType::eRead
-			, AccessType::eRead | AccessType::eWrite
-			, renderer::Format::eR32G32B32_SFLOAT
-			, size );
+		auto & renderSystem = *getEngine()->getRenderSystem();
+		auto & device = *renderSystem.getCurrentDevice();
+		m_pickingUbo = renderer::makeUniformBuffer< PickingUboData >( device
+			, 1u
+			, 0u
+			, renderer::MemoryPropertyFlag::eHostVisible );
+
+		m_colourTexture = createTexture( device
+			, size
+			, renderer::Format::eR32G32B32A32_SFLOAT
+			, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eTransferSrc
+			, renderer::MemoryPropertyFlag::eHostVisible );
+		m_colourView = createView( *m_colourTexture );
+
+		m_depthTexture = createTexture( device
+			, size
+			, renderer::Format::eD32_SFLOAT
+			, renderer::ImageUsageFlag::eDepthStencilAttachment
+			, renderer::MemoryPropertyFlag::eDeviceLocal );
+		m_depthView = createView( *m_colourTexture );
+
 		m_buffer = PxBufferBase::create( Size{ PickingWidth, PickingWidth }
-			, m_colourTexture->getPixelFormat() );
-		m_colourTexture->getImage().initialiseSource();
-		auto realSize = m_colourTexture->getDimensions();
-		bool result = m_colourTexture->initialise();
+			, convert( m_colourTexture->getFormat() ) );
 
-		if ( result )
-		{
-			m_frameBuffer = getEngine()->getRenderSystem()->createFrameBuffer();
-			m_frameBuffer->setClearColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueBlack ) );
-			m_depthBuffer = m_frameBuffer->createDepthStencilRenderBuffer( renderer::Format::eD32_SFLOAT );
-			result = m_depthBuffer->create();
-		}
+		// Create the render pass.
+		renderer::RenderPassCreateInfo renderPass;
+		renderPass.flags = 0u;
 
-		if ( result )
-		{
-			result = m_depthBuffer->initialise( realSize );
+		renderPass.attachments.resize( 2u );
+		renderPass.attachments[0].index = 0u;
+		renderPass.attachments[0].format = m_colourTexture->getFormat();
+		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eTransferDstOptimal;
 
-			if ( !result )
-			{
-				m_depthBuffer->destroy();
-			}
-		}
+		renderPass.attachments[1].index = 1u;
+		renderPass.attachments[1].format = m_depthTexture->getFormat();
+		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[1].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[1].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
 
-		if ( result )
-		{
-			m_colourAttach = m_frameBuffer->createAttachment( m_colourTexture );
-			m_depthAttach = m_frameBuffer->createAttachment( m_depthBuffer );
-			result = m_frameBuffer->initialise();
-		}
+		renderPass.subpasses.resize( 1u );
+		renderPass.subpasses[0].flags = 0u;
+		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
+		renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
+		renderPass.subpasses[0].colorAttachments.push_back( { 1u, renderer::ImageLayout::eDepthStencilAttachmentOptimal } );
 
-		if ( result )
-		{
-			m_frameBuffer->bind();
-			m_frameBuffer->attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture->getType() );
-			m_frameBuffer->attach( AttachmentPoint::eDepth, m_depthAttach );
-			m_frameBuffer->setDrawBuffer( m_colourAttach );
-			result = m_frameBuffer->isComplete();
-			m_frameBuffer->unbind();
-		}
+		renderPass.dependencies.resize( 2u );
+		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].dstSubpass = 0u;
+		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eTopOfPipe;
+		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
+		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
-		return result;
+		renderPass.dependencies[1].srcSubpass = 0u;
+		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		m_renderPass = device.createRenderPass( renderPass );
+
+		renderer::FrameBufferAttachmentArray attachments;
+		attachments.emplace_back( *( m_renderPass->getAttachments().begin() + 0u ), *m_colourView );
+		attachments.emplace_back( *( m_renderPass->getAttachments().begin() + 1u ), *m_depthView );
+		m_frameBuffer = m_renderPass->createFrameBuffer( { size.getWidth(), size.getHeight() }
+			, std::move( attachments ) );
+
+		return true;
 	}
 
 	void PickingPass::doCleanup()
 	{
 		m_buffer.reset();
-		m_pickingUbo.cleanup();
+		m_pickingUbo.reset();
 
 		if ( m_frameBuffer )
 		{
-			m_frameBuffer->bind();
-			m_frameBuffer->detachAll();
-			m_frameBuffer->unbind();
-			m_frameBuffer->cleanup();
-			m_colourTexture->cleanup();
-			m_depthBuffer->cleanup();
-
-			m_depthBuffer->destroy();
-
-			m_depthAttach.reset();
-			m_depthBuffer.reset();
-			m_colourAttach.reset();
-			m_colourTexture.reset();
 			m_frameBuffer.reset();
+			m_renderPass.reset();
+			m_colourView.reset();
+			m_colourTexture.reset();
+			m_depthView.reset();
+			m_depthTexture.reset();
 		}
 	}
 
@@ -544,9 +606,9 @@ namespace castor3d
 
 		// Fragment Intputs
 		auto gl_PrimitiveID( writer.declBuiltin< UInt >( cuT( "gl_PrimitiveID" ) ) );
-		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ) );
-		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ) );
-		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" ) );
+		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ), 0u );
+		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ), 1u );
+		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" ), 2u );
 		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( cuT( "c3d_mapOpacity" )
 			, MinTextureIndex
 			, 0u

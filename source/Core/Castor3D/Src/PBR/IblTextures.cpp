@@ -80,15 +80,15 @@ namespace castor3d
 	//************************************************************************************************
 
 	IblTextures::IblTextures( Scene & scene
-		, TextureLayout const & source )
+		, renderer::Texture const & source )
 		: OwnedBy< Scene >{ scene }
 		, m_prefilteredBrdf{ doCreatePrefilteredBrdf( *scene.getEngine() ) }
-		, m_radianceComputer{ *scene.getEngine(), Size{ 512, 512 }, source.getTexture() }
-		, m_environmentPrefilter{ *scene.getEngine(), Size{ 128u, 128u }, source.getTexture() }
+		, m_radianceComputer{ *scene.getEngine(), Size{ 512, 512 }, source }
+		, m_environmentPrefilter{ *scene.getEngine(), Size{ 128u, 128u }, source }
 	{
 		BrdfPrefilter filter{ *scene.getEngine()
 			, { m_prefilteredBrdf.getTexture()->getDimensions().width, m_prefilteredBrdf.getTexture()->getDimensions().height }
-			, m_prefilteredBrdf.getTexture()->getView() };
+			, m_prefilteredBrdf.getTexture()->getDefaultView() };
 		filter.render();
 	}
 

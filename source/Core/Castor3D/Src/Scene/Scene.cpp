@@ -173,10 +173,10 @@ namespace castor3d
 			castor::TextWriter< Scene >::checkError( result, "Scene background colour" );
 		}
 
-		if ( result && scene.getBackgroundImage() )
+		if ( result && scene.hasBackgroundImage() )
 		{
 			Logger::logInfo( cuT( "Scene::write - Background image" ) );
-			Path relative = Scene::TextWriter::copyFile( Path{ scene.getBackgroundImage()->getImage().toString() }, file.getFilePath(), Path{ cuT( "Textures" ) } );
+			Path relative = Scene::TextWriter::copyFile( Path{ scene.getBackgroundImage().getImage().toString() }, file.getFilePath(), Path{ cuT( "Textures" ) } );
 			result = file.writeText( m_tabs + cuT( "\tbackground_image \"" ) + relative + cuT( "\"\n" ) ) > 0;
 			castor::TextWriter< Scene >::checkError( result, "Scene background image" );
 		}
@@ -801,8 +801,8 @@ namespace castor3d
 			, [this]()
 			{
 				m_backgroundColourSkybox.initialise();
-				m_colour = std::make_unique< TextureProjection >( *getEngine()->getRenderSystem()->getCurrentContext() );
-				m_colour->initialise();
+				m_colour = std::make_unique< TextureProjection >( *getEngine() );
+				m_colour->initialise( m_backgroundColourSkybox.getView() );
 			} ) );
 
 		m_initialised = true;
@@ -917,15 +917,25 @@ namespace castor3d
 
 		try
 		{
-			auto texture = getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead );
+			renderer::ImageCreateInfo image{};
+			image.arrayLayers = 1u;
+			image.flags = 0u;
+			image.imageType = renderer::TextureType::e2D;
+			image.initialLayout = renderer::ImageLayout::eUndefined;
+			image.mipLevels = 1u;
+			image.samples = renderer::SampleCountFlag::e1;
+			image.sharingMode = renderer::SharingMode::eExclusive;
+			image.tiling = renderer::ImageTiling::eOptimal;
+			image.usage = renderer::ImageUsageFlag::eSampled;
+			auto texture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
+				, image
+				, renderer::MemoryPropertyFlag::eHostVisible );
 			texture->setSource( folder, relative );
 			m_backgroundImage = texture;
 			getListener().postEvent( makeFunctorEvent( EventType::ePreRender, [this]()
 			{
 				m_backgroundImage->initialise();
-				m_backgroundImage->bind( 0 );
 				m_backgroundImage->generateMipmaps();
-				m_backgroundImage->unbind( 0 );
 			} ) );
 			result = true;
 		}

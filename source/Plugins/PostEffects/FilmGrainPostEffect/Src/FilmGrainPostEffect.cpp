@@ -389,7 +389,7 @@ namespace film_grain
 		m_quad->createPipeline( size
 			, Position{}
 			, stages
-			, m_renderTarget.getTexture().getTexture()->getView()
+			, m_renderTarget.getTexture().getTexture()->getDefaultView()
 			, *m_renderPass
 			, bindings
 			, {} );
@@ -406,7 +406,7 @@ namespace film_grain
 			// Put image in the right state for rendering.
 			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
-				, m_renderTarget.getTexture().getTexture()->getView().makeShaderInputResource( renderer::ImageLayout::eColourAttachmentOptimal
+				, m_renderTarget.getTexture().getTexture()->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eColourAttachmentOptimal
 					, renderer::AccessFlag::eColourAttachmentWrite ) );
 
 			m_commandBuffer->beginRenderPass( *m_renderPass
@@ -421,7 +421,7 @@ namespace film_grain
 			imageCopy.dstOffset = { 0, 0, 0 };
 			imageCopy.srcOffset = { 0, 0, 0 };
 			imageCopy.extent = m_renderTarget.getTexture().getTexture()->getDimensions();
-			imageCopy.dstSubresource.aspectMask = renderer::getAspectMask( m_renderTarget.getTexture().getTexture()->getView().getFormat() );
+			imageCopy.dstSubresource.aspectMask = renderer::getAspectMask( m_renderTarget.getTexture().getTexture()->getDefaultView().getFormat() );
 			imageCopy.dstSubresource.baseArrayLayer = 0u;
 			imageCopy.dstSubresource.layerCount = 1u;
 			imageCopy.dstSubresource.mipLevel = 0u;
@@ -436,7 +436,7 @@ namespace film_grain
 				, renderer::ImageLayout::eShaderReadOnlyOptimal );
 			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
 				, renderer::PipelineStageFlag::eColourAttachmentOutput
-				, m_renderTarget.getTexture().getTexture()->getView().makeColourAttachment( renderer::ImageLayout::eTransferDstOptimal
+				, m_renderTarget.getTexture().getTexture()->getDefaultView().makeColourAttachment( renderer::ImageLayout::eTransferDstOptimal
 					, renderer::AccessFlag::eTransferWrite ) );
 			m_commandBuffer->end();
 		}

@@ -40,7 +40,7 @@ namespace castor3d
 		 */
 		inline ParticleElementDeclaration( castor::String const & name
 			, castor::FlagCombination< ElementUsage > const & usages
-			, renderer::Format type
+			, ParticleFormat type
 			, uint32_t offset = 0u
 			, uint32_t divisor = 0u )
 			: m_dataType( type )
@@ -59,7 +59,7 @@ namespace castor3d
 		castor::FlagCombination< ElementUsage > m_usages;
 		//!\~english	Element type.
 		//!\~french		Type de l'élément.
-		renderer::Format m_dataType{ renderer::Format::eR32G32B32A32_SFLOAT };
+		ParticleFormat m_dataType{ ParticleFormat::eVec4f };
 		//!\~english	Offset in buffer.
 		//!\~french		Offset dans le tampon.
 		uint32_t m_offset{ 0u };

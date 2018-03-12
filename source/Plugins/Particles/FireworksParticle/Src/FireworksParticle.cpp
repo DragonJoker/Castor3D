@@ -137,7 +137,7 @@ namespace Fireworks
 			{
 				auto & particle = particles[i];
 
-				if ( particle.getValue< renderer::AttributeFormat::eFloat >( 0u ) == 0.0f )
+				if ( particle.getValue< renderer::Format::eR32_SFLOAT >( 0u ) == 0.0f )
 				{
 					particle = std::move( particles[firstUnused - 1] );
 					--firstUnused;
@@ -169,10 +169,10 @@ namespace Fireworks
 		, float age )
 	{
 		Particle particle{ m_inputs };
-		particle.setValue< renderer::AttributeFormat::eFloat >( 0u, type );
-		particle.setValue< renderer::AttributeFormat::eVec3f >( 1u, position );
-		particle.setValue< renderer::AttributeFormat::eVec3f >( 2u, velocity );
-		particle.setValue< renderer::AttributeFormat::eFloat >( 3u, age );
+		particle.setValue< renderer::Format::eR32_SFLOAT >( 0u, type );
+		particle.setValue< renderer::Format::eR32G32B32_SFLOAT >( 1u, position );
+		particle.setValue< renderer::Format::eR32G32B32_SFLOAT >( 2u, velocity );
+		particle.setValue< renderer::Format::eR32_SFLOAT >( 3u, age );
 		m_particles[m_firstUnused++] = particle;
 	}
 

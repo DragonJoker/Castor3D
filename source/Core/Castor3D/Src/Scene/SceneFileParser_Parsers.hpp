@@ -188,10 +188,6 @@ namespace castor3d
 
 	// Shader Program Parsers
 	DECLARE_ATTRIBUTE_PARSER( parserShaderProgramFile )
-	DECLARE_ATTRIBUTE_PARSER( parserShaderProgramSampler )
-	DECLARE_ATTRIBUTE_PARSER( parserGeometryInputType )
-	DECLARE_ATTRIBUTE_PARSER( parserGeometryOutputType )
-	DECLARE_ATTRIBUTE_PARSER( parserGeometryOutputVtxCount )
 
 	// Shader Program UBO Parsers
 	DECLARE_ATTRIBUTE_PARSER( parserShaderUboShaders )

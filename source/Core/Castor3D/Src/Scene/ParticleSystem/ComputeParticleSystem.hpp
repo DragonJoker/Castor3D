@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Scene/ParticleSystem/ParticleDeclaration.hpp"
 #include "Texture/TextureUnit.hpp"
 
+#include <Pipeline/ShaderStageState.hpp>
 #include <Pipeline/VertexLayout.hpp>
 
 namespace castor3d
@@ -29,12 +30,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_parent	The parent particle system.
+		 *\param[in]	parent	The parent particle system.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_parent	Le système de particules parent.
+		 *\param[in]	parent	Le système de particules parent.
 		 */
-		C3D_API explicit ComputeParticleSystem( ParticleSystem & p_parent );
+		C3D_API explicit ComputeParticleSystem( ParticleSystem & parent );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -53,21 +54,21 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ParticleSystemImpl::update
 		 */
-		C3D_API uint32_t update( castor::Milliseconds const & p_time
-			, castor::Milliseconds const & p_total )override;
+		C3D_API uint32_t update( castor::Milliseconds const & time
+			, castor::Milliseconds const & total )override;
 		/**
 		 *\copydoc		castor3d::ParticleSystemImpl::addParticleVariable
 		 */
-		C3D_API void addParticleVariable( castor::String const & p_name, renderer::AttributeFormat p_type, castor::String const & p_defaultValue )override;
+		C3D_API void addParticleVariable( castor::String const & name, ParticleFormat type, castor::String const & defaultValue )override;
 		/**
 		 *\~english
 		 *\brief		Defines the program used to update the particles.
-		 *\param[in]	p_program	The program.
+		 *\param[in]	program	The program.
 		 *\~french
 		 *\brief		Définit le programme utilisé pour mettre à jour les particules.
-		 *\param[in]	p_program	Le programme.
+		 *\param[in]	program	Le programme.
 		 */
-		C3D_API void setUpdateProgram( renderer::ShaderProgram const & program );
+		C3D_API void setUpdateProgram( renderer::ShaderStageState const & program );
 		/**
 		 *\~english
 		 *\return		\p false if the update program has not been set.
@@ -76,18 +77,7 @@ namespace castor3d
 		 */
 		inline bool hasUpdateProgram()const
 		{
-			return m_updateProgram != nullptr;
-		}
-		/**
-		 *\~english
-		 *\return		\p false if the update program has not been set.
-		 *\~french
-		 *\return		\p false si le programme de mise à jour n'a pas été défini.
-		 */
-		inline renderer::ShaderProgram const & getUpdateProgram()const
-		{
-			REQUIRE( m_updateProgram );
-			return *m_updateProgram;
+			return m_updateProgram.module != nullptr;
 		}
 
 	private:
@@ -131,7 +121,7 @@ namespace castor3d
 
 	protected:
 		ParticleDeclaration m_inputs;
-		renderer::ShaderProgram const * m_updateProgram{ nullptr };
+		renderer::ShaderStageState m_updateProgram;
 		renderer::UniformBufferPtr< Configuration > m_ubo;
 		std::array< renderer::BufferPtr< uint8_t >, 2 > m_particlesStorages;
 		renderer::BufferPtr< castor::Point4f > m_randomStorage;
@@ -139,6 +129,7 @@ namespace castor3d
 		renderer::DescriptorSetPoolPtr m_descriptorPool;
 		renderer::DescriptorSetPtr m_descriptorSet;
 		renderer::PipelineLayoutPtr m_pipelineLayout;
+		renderer::ComputePipelinePtr m_pipeline;
 		uint32_t m_particlesCount{ 0u };
 		uint32_t m_worgGroupSize{ 128u };
 		renderer::BufferPtr< uint32_t > m_generatedCountBuffer;

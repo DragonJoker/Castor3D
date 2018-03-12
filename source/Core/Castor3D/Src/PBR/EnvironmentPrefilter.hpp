@@ -87,7 +87,7 @@ namespace castor3d
 		SamplerSPtr m_sampler;
 		renderer::VertexBufferPtr< NonTexturedCube > m_vertexBuffer;
 		renderer::VertexLayoutPtr m_vertexLayout;
-		renderer::UniformBufferPtr< renderer::Mat4 > m_configUbo;
+		renderer::UniformBufferPtr< castor::Matrix4x4f > m_configUbo;
 		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
 		renderer::DescriptorSetPoolPtr m_descriptorPool;
 		renderer::PipelineLayoutPtr m_pipelineLayout;

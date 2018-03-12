@@ -94,17 +94,17 @@ namespace castor3d
 	 *\param[in]	p_flags	Les indicateurs de scène.
 	 *\return		Le type de filtrage d'ombres.
 	 */
-	C3D_API ShadowType getShadowType( SceneFlags const & p_flags );
-	/**
-	 *\~english
-	 *\brief		Gives the fog type matching the given flags.
-	 *\param[in]	p_flags	The scene flags.
-	 *\return		The fog type.
-	 *\~french
-	 *\brief		Récupère le type de brouillard correspondant aux indicateurs donnés.
-	 *\param[in]	p_flags	Les indicateurs de scène.
-	 *\return		Le type de brouillard.
-	 */
+		C3D_API ShadowType getShadowType( SceneFlags const & p_flags );
+		/**
+		 *\~english
+		 *\brief		Gives the fog type matching the given flags.
+		 *\param[in]	p_flags	The scene flags.
+		 *\return		The fog type.
+		 *\~french
+		 *\brief		Récupère le type de brouillard correspondant aux indicateurs donnés.
+		 *\param[in]	p_flags	Les indicateurs de scène.
+		 *\return		Le type de brouillard.
+		 */
 	C3D_API FogType getFogType( SceneFlags const & p_flags );
 	/*!
 	\author 	Sylvain DOREMUS
@@ -143,6 +143,25 @@ namespace castor3d
 		//!\~french		Les dimensions des billboards ne changent pas.
 		eFixed,
 		CASTOR_SCOPED_ENUM_BOUNDS( eDynamic )
+	};
+
+	enum class ParticleFormat
+	{
+		eInt,
+		eVec2i,
+		eVec3i,
+		eVec4i,
+		eUInt,
+		eVec2ui,
+		eVec3ui,
+		eVec4ui,
+		eFloat,
+		eVec2f,
+		eVec3f,
+		eVec4f,
+		eMat2f,
+		eMat3f,
+		eMat4f,
 	};
 
 	class Scene;

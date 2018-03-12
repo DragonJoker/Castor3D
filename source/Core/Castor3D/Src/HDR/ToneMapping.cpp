@@ -77,7 +77,7 @@ namespace castor3d
 		createPipeline( { size[0], size[1] }
 			, Position{}
 			, program
-			, source.getView()
+			, source.getDefaultView()
 			, renderPass
 			, bindings
 			, {} );

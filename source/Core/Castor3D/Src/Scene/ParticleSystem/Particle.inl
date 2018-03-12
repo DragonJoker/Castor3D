@@ -15,7 +15,7 @@ namespace castor3d
 	}
 
 	template<>
-	struct ElementTyper< renderer::AttributeFormat::eFloat >
+	struct ElementTyper< ParticleFormat::eFloat >
 	{
 		using Type = float;
 
@@ -38,7 +38,7 @@ namespace castor3d
 	};
 
 	template<>
-	struct ElementTyper< renderer::AttributeFormat::eVec2f >
+	struct ElementTyper< ParticleFormat::eVec2f >
 	{
 		using Type = castor::Point2f;
 
@@ -61,7 +61,7 @@ namespace castor3d
 	};
 
 	template<>
-	struct ElementTyper< renderer::AttributeFormat::eVec3f >
+	struct ElementTyper< ParticleFormat::eVec3f >
 	{
 		using Type = castor::Point3f;
 
@@ -84,7 +84,7 @@ namespace castor3d
 	};
 
 	template<>
-	struct ElementTyper< renderer::AttributeFormat::eVec4f >
+	struct ElementTyper< ParticleFormat::eVec4f >
 	{
 		using Type = castor::Point4f;
 
@@ -107,29 +107,7 @@ namespace castor3d
 	};
 
 	template<>
-	struct ElementTyper< renderer::AttributeFormat::eColour >
-	{
-		using Type = uint32_t;
-
-		static inline Type parse( castor::String const & value )
-		{
-			Type result{};
-			return result;
-		}
-
-		static inline uint32_t const * getPointer( Type const & value )
-		{
-			return &value;
-		}
-
-		static inline uint32_t * getPointer( Type & value )
-		{
-			return &value;
-		}
-	};
-
-	template<>
-	struct ElementTyper< renderer::AttributeFormat::eInt >
+	struct ElementTyper< ParticleFormat::eInt >
 	{
 		using Type = int;
 
@@ -152,7 +130,7 @@ namespace castor3d
 	};
 
 	template<>
-	struct ElementTyper< renderer::AttributeFormat::eVec2i >
+	struct ElementTyper< ParticleFormat::eVec2i >
 	{
 		using Type = castor::Point2i;
 
@@ -175,7 +153,7 @@ namespace castor3d
 	};
 
 	template<>
-	struct ElementTyper< renderer::AttributeFormat::eVec3i >
+	struct ElementTyper< ParticleFormat::eVec3i >
 	{
 		using Type = castor::Point3i;
 
@@ -198,7 +176,7 @@ namespace castor3d
 	};
 
 	template<>
-	struct ElementTyper< renderer::AttributeFormat::eVec4i >
+	struct ElementTyper< ParticleFormat::eVec4i >
 	{
 		using Type = castor::Point4i;
 
@@ -221,7 +199,7 @@ namespace castor3d
 	};
 
 	template<>
-	struct ElementTyper< renderer::AttributeFormat::eUInt >
+	struct ElementTyper< ParticleFormat::eUInt >
 	{
 		using Type = uint32_t;
 
@@ -244,7 +222,7 @@ namespace castor3d
 	};
 
 	template<>
-	struct ElementTyper< renderer::AttributeFormat::eVec2ui >
+	struct ElementTyper< ParticleFormat::eVec2ui >
 	{
 		using Type = castor::Point2ui;
 
@@ -267,7 +245,7 @@ namespace castor3d
 	};
 
 	template<>
-	struct ElementTyper< renderer::AttributeFormat::eVec3ui >
+	struct ElementTyper< ParticleFormat::eVec3ui >
 	{
 		using Type = castor::Point3ui;
 
@@ -290,7 +268,7 @@ namespace castor3d
 	};
 
 	template<>
-	struct ElementTyper< renderer::AttributeFormat::eVec4ui >
+	struct ElementTyper< ParticleFormat::eVec4ui >
 	{
 		using Type = castor::Point4ui;
 
@@ -312,203 +290,106 @@ namespace castor3d
 		}
 	};
 
-	template<>
-	struct ElementTyper< renderer::AttributeFormat::eMat2f >
-	{
-		using Type = castor::Matrix2x2f;
-
-		static inline Type parse( castor::String const & value )
-		{
-			Type result;
-			ParseArray< float, 4 >( value, result.ptr() );
-			return result;
-		}
-
-		static inline float const * getPointer( Type const & value )
-		{
-			return value.constPtr();
-		}
-
-		static inline float * getPointer( Type & value )
-		{
-			return value.ptr();
-		}
-	};
-
-	template<>
-	struct ElementTyper< renderer::AttributeFormat::eMat3f >
-	{
-		using Type = castor::Matrix3x3f;
-
-		static inline Type parse( castor::String const & value )
-		{
-			Type result;
-			ParseArray< float, 9 >( value, result.ptr() );
-			return result;
-		}
-
-		static inline float const * getPointer( Type const & value )
-		{
-			return value.constPtr();
-		}
-
-		static inline float * getPointer( Type & value )
-		{
-			return value.ptr();
-		}
-	};
-
-	template<>
-	struct ElementTyper< renderer::AttributeFormat::eMat4f >
-	{
-		using Type = castor::Matrix4x4f;
-
-		static inline Type parse( castor::String const & value )
-		{
-			Type result;
-			ParseArray< float, 16 >( value, result.ptr() );
-			return result;
-		}
-
-		static inline float const * getPointer( Type const & value )
-		{
-			return value.constPtr();
-		}
-
-		static inline float * getPointer( Type & value )
-		{
-			return value.ptr();
-		}
-	};
-
-	template< renderer::AttributeFormat Type >
+	template< ParticleFormat Type >
 	inline typename ElementTyper< Type >::Type parseValue( castor::String const & value )
 	{
 		return ElementTyper< Type >::parse( value );
 	}
 
 	inline void parseValue( castor::String const & textValue
-		, renderer::AttributeFormat type
+		, ParticleFormat type
 		, Particle & particle
 		, uint32_t index )
 	{
 		switch ( type )
 		{
-		case renderer::AttributeFormat::eFloat:
+		case ParticleFormat::eFloat:
 			{
-				auto value = parseValue< renderer::AttributeFormat::eFloat >( textValue );
-				particle.setValue< renderer::AttributeFormat::eFloat >( index, value );
+				auto value = parseValue< ParticleFormat::eFloat >( textValue );
+				particle.setValue< ParticleFormat::eFloat >( index, value );
 			}
 			break;
 
-		case renderer::AttributeFormat::eVec2f:
+		case ParticleFormat::eVec2f:
 			{
-				auto value = parseValue< renderer::AttributeFormat::eVec2f >( textValue );
-				particle.setValue< renderer::AttributeFormat::eVec2f >( index, value );
+				auto value = parseValue< ParticleFormat::eVec2f >( textValue );
+				particle.setValue< ParticleFormat::eVec2f >( index, value );
 			}
 			break;
 
-		case renderer::AttributeFormat::eVec3f:
+		case ParticleFormat::eVec3f:
 			{
-				auto value = parseValue< renderer::AttributeFormat::eVec3f >( textValue );
-				particle.setValue< renderer::AttributeFormat::eVec3f >( index, value );
+				auto value = parseValue< ParticleFormat::eVec3f >( textValue );
+				particle.setValue< ParticleFormat::eVec3f >( index, value );
 			}
 			break;
 
-		case renderer::AttributeFormat::eVec4f:
+		case ParticleFormat::eVec4f:
 			{
-				auto value = parseValue< renderer::AttributeFormat::eVec4f >( textValue );
-				particle.setValue< renderer::AttributeFormat::eVec4f >( index, value );
+				auto value = parseValue< ParticleFormat::eVec4f >( textValue );
+				particle.setValue< ParticleFormat::eVec4f >( index, value );
 			}
 			break;
 
-		case renderer::AttributeFormat::eColour:
+		case ParticleFormat::eInt:
 			{
-				auto value = parseValue< renderer::AttributeFormat::eColour >( textValue );
-				particle.setValue< renderer::AttributeFormat::eColour >( index, value );
+				auto value = parseValue< ParticleFormat::eInt >( textValue );
+				particle.setValue< ParticleFormat::eInt >( index, value );
 			}
 			break;
 
-		case renderer::AttributeFormat::eInt:
+		case ParticleFormat::eVec2i:
 			{
-				auto value = parseValue< renderer::AttributeFormat::eInt >( textValue );
-				particle.setValue< renderer::AttributeFormat::eInt >( index, value );
+				auto value = parseValue< ParticleFormat::eVec2i >( textValue );
+				particle.setValue< ParticleFormat::eVec2i >( index, value );
 			}
 			break;
 
-		case renderer::AttributeFormat::eVec2i:
+		case ParticleFormat::eVec3i:
 			{
-				auto value = parseValue< renderer::AttributeFormat::eVec2i >( textValue );
-				particle.setValue< renderer::AttributeFormat::eVec2i >( index, value );
+				auto value = parseValue< ParticleFormat::eVec3i >( textValue );
+				particle.setValue< ParticleFormat::eVec3i >( index, value );
 			}
 			break;
 
-		case renderer::AttributeFormat::eVec3i:
+		case ParticleFormat::eVec4i:
 			{
-				auto value = parseValue< renderer::AttributeFormat::eVec3i >( textValue );
-				particle.setValue< renderer::AttributeFormat::eVec3i >( index, value );
+				auto value = parseValue< ParticleFormat::eVec4i >( textValue );
+				particle.setValue< ParticleFormat::eVec4i >( index, value );
 			}
 			break;
 
-		case renderer::AttributeFormat::eVec4i:
+		case ParticleFormat::eUInt:
 			{
-				auto value = parseValue< renderer::AttributeFormat::eVec4i >( textValue );
-				particle.setValue< renderer::AttributeFormat::eVec4i >( index, value );
+				auto value = parseValue< ParticleFormat::eUInt >( textValue );
+				particle.setValue< ParticleFormat::eUInt >( index, value );
 			}
 			break;
 
-		case renderer::AttributeFormat::eUInt:
+		case ParticleFormat::eVec2ui:
 			{
-				auto value = parseValue< renderer::AttributeFormat::eUInt >( textValue );
-				particle.setValue< renderer::AttributeFormat::eUInt >( index, value );
+				auto value = parseValue< ParticleFormat::eVec2ui >( textValue );
+				particle.setValue< ParticleFormat::eVec2ui >( index, value );
 			}
 			break;
 
-		case renderer::AttributeFormat::eVec2ui:
+		case ParticleFormat::eVec3ui:
 			{
-				auto value = parseValue< renderer::AttributeFormat::eVec2ui >( textValue );
-				particle.setValue< renderer::AttributeFormat::eVec2ui >( index, value );
+				auto value = parseValue< ParticleFormat::eVec3ui >( textValue );
+				particle.setValue< ParticleFormat::eVec3ui >( index, value );
 			}
 			break;
 
-		case renderer::AttributeFormat::eVec3ui:
+		case ParticleFormat::eVec4ui:
 			{
-				auto value = parseValue< renderer::AttributeFormat::eVec3ui >( textValue );
-				particle.setValue< renderer::AttributeFormat::eVec3ui >( index, value );
-			}
-			break;
-
-		case renderer::AttributeFormat::eVec4ui:
-			{
-				auto value = parseValue< renderer::AttributeFormat::eVec4ui >( textValue );
-				particle.setValue< renderer::AttributeFormat::eVec4ui >( index, value );
-			}
-			break;
-
-		case renderer::AttributeFormat::eMat2f:
-		{
-			auto value = parseValue< renderer::AttributeFormat::eMat2f >( textValue );
-			particle.setValue< renderer::AttributeFormat::eMat2f > (index, value);
-		}
-		break;
-
-		case renderer::AttributeFormat::eMat3f:
-		{
-			auto value = parseValue< renderer::AttributeFormat::eMat3f >( textValue );
-			particle.setValue< renderer::AttributeFormat::eMat3f > (index, value);
-		}
-		break;
-
-		case renderer::AttributeFormat::eMat4f:
-			{
-				auto value = parseValue< renderer::AttributeFormat::eMat4f >( textValue );
-				particle.setValue< renderer::AttributeFormat::eMat4f >( index, value );
+				auto value = parseValue< ParticleFormat::eVec4ui >( textValue );
+				particle.setValue< ParticleFormat::eVec4ui >( index, value );
 			}
 			break;
 		}
 	}
 
-	template< renderer::AttributeFormat Type >
+	template< ParticleFormat Type >
 	inline void Particle::setValue( uint32_t index, typename ElementTyper< Type >::Type const & value )
 	{
 		REQUIRE( index < m_description.size() );
@@ -517,7 +398,7 @@ namespace castor3d
 		std::memcpy( &m_data[it->m_offset], ElementTyper< Type >::getPointer( value ), sizeof( value ) );
 	}
 
-	template< renderer::AttributeFormat Type >
+	template< ParticleFormat Type >
 	inline typename ElementTyper< Type >::Type Particle::getValue( uint32_t index )const
 	{
 		REQUIRE( index < m_description.size() );

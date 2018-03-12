@@ -15,6 +15,81 @@ using namespace castor;
 
 namespace castor3d
 {
+	namespace
+	{
+		String getFormatName( ParticleFormat format )
+		{
+			switch ( format )
+			{
+			case castor3d::ParticleFormat::eInt:
+				return cuT( "int" );
+			case castor3d::ParticleFormat::eVec2i:
+				return cuT( "vec2i" );
+			case castor3d::ParticleFormat::eVec3i:
+				return cuT( "vec3i" );
+			case castor3d::ParticleFormat::eVec4i:
+				return cuT( "vec4i" );
+			case castor3d::ParticleFormat::eUInt:
+				return cuT( "uint" );
+			case castor3d::ParticleFormat::eVec2ui:
+				return cuT( "vec2ui" );
+			case castor3d::ParticleFormat::eVec3ui:
+				return cuT( "vec3ui" );
+			case castor3d::ParticleFormat::eVec4ui:
+				return cuT( "vec4ui" );
+			case castor3d::ParticleFormat::eFloat:
+				return cuT( "float" );
+			case castor3d::ParticleFormat::eVec2f:
+				return cuT( "vec2f" );
+			case castor3d::ParticleFormat::eVec3f:
+				return cuT( "vec3f" );
+			case castor3d::ParticleFormat::eVec4f:
+				return cuT( "vec4f" );
+			case castor3d::ParticleFormat::eMat2f:
+				return cuT( "mat2x2f" );
+			case castor3d::ParticleFormat::eMat3f:
+				return cuT( "mat3x3f" );
+			case castor3d::ParticleFormat::eMat4f:
+				return cuT( "mat4x4f" );
+			default:
+				break;
+			}
+		}
+
+		renderer::Format convert( ParticleFormat format )
+		{
+			switch ( format )
+			{
+			case castor3d::ParticleFormat::eInt:
+				return renderer::Format::eR32_SINT;
+			case castor3d::ParticleFormat::eVec2i:
+				return renderer::Format::eR32G32_SINT;
+			case castor3d::ParticleFormat::eVec3i:
+				return renderer::Format::eR32G32B32_SINT;
+			case castor3d::ParticleFormat::eVec4i:
+				return renderer::Format::eR32G32B32A32_SINT;
+			case castor3d::ParticleFormat::eUInt:
+				return renderer::Format::eR32_UINT;
+			case castor3d::ParticleFormat::eVec2ui:
+				return renderer::Format::eR32G32_UINT;
+			case castor3d::ParticleFormat::eVec3ui:
+				return renderer::Format::eR32G32B32_UINT;
+			case castor3d::ParticleFormat::eVec4ui:
+				return renderer::Format::eR32G32B32A32_UINT;
+			case castor3d::ParticleFormat::eFloat:
+				return renderer::Format::eR32_SFLOAT;
+			case castor3d::ParticleFormat::eVec2f:
+				return renderer::Format::eR32G32_SFLOAT;
+			case castor3d::ParticleFormat::eVec3f:
+				return renderer::Format::eR32G32B32_SFLOAT;
+			case castor3d::ParticleFormat::eVec4f:
+				return renderer::Format::eR32G32B32A32_SFLOAT;
+			default:
+				break;
+			}
+		}
+	}
+
 	ParticleSystem::TextWriter::TextWriter( String const & tabs )
 		: MovableObject::TextWriter{ tabs }
 	{
@@ -67,7 +142,7 @@ namespace castor3d
 			{
 				if ( result )
 				{
-					result = file.writeText( m_tabs + cuT( "\t\tvariable \"" ) + var.m_name + cuT( "\" " ) + renderer::getName( var.m_dataType ) + cuT( " " ) + values[cuT( "out_" ) + var.m_name] + cuT( "\n" ) ) > 0;
+					result = file.writeText( m_tabs + cuT( "\t\tvariable \"" ) + var.m_name + cuT( "\" " ) + getFormatName( var.m_dataType ) + cuT( " " ) + values[cuT( "out_" ) + var.m_name] + cuT( "\n" ) ) > 0;
 					MovableObject::TextWriter::checkError( result, "ParticleSystem particle variable" );
 				}
 			}
@@ -111,12 +186,33 @@ namespace castor3d
 	bool ParticleSystem::initialise()
 	{
 		auto & device = *getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
-		auto vertexLayout = device.createVertexLayout( 0u, m_inputs.stride() );
+		auto vertexLayout = std::make_unique< renderer::VertexLayout >( 0u, m_inputs.stride(), renderer::VertexInputRate::eInstance );
 		uint32_t index{ 0u };
 
 		for ( auto & attribute : m_inputs )
 		{
-			vertexLayout->createAttribute( index++, attribute.m_dataType, attribute.m_offset );
+			if ( attribute.m_dataType == ParticleFormat::eMat2f )
+			{
+				vertexLayout->createAttribute( index++, renderer::Format::eR32G32_SFLOAT, attribute.m_offset );
+				vertexLayout->createAttribute( index++, renderer::Format::eR32G32_SFLOAT, attribute.m_offset + 8u );
+			}
+			else if ( attribute.m_dataType == ParticleFormat::eMat3f )
+			{
+				vertexLayout->createAttribute( index++, renderer::Format::eR32G32B32_SFLOAT, attribute.m_offset );
+				vertexLayout->createAttribute( index++, renderer::Format::eR32G32B32_SFLOAT, attribute.m_offset + 12u );
+				vertexLayout->createAttribute( index++, renderer::Format::eR32G32B32_SFLOAT, attribute.m_offset + 24u );
+			}
+			else if ( attribute.m_dataType == ParticleFormat::eMat4f )
+			{
+				vertexLayout->createAttribute( index++, renderer::Format::eR32G32B32A32_SFLOAT, attribute.m_offset );
+				vertexLayout->createAttribute( index++, renderer::Format::eR32G32B32A32_SFLOAT, attribute.m_offset + 16u );
+				vertexLayout->createAttribute( index++, renderer::Format::eR32G32B32A32_SFLOAT, attribute.m_offset + 32u );
+				vertexLayout->createAttribute( index++, renderer::Format::eR32G32B32A32_SFLOAT, attribute.m_offset + 48u );
+			}
+			else
+			{
+				vertexLayout->createAttribute( index++, convert( attribute.m_dataType ), attribute.m_offset );
+			}
 		}
 
 		m_particlesBillboard = std::make_unique< BillboardBase >( *getScene()
@@ -178,38 +274,38 @@ namespace castor3d
 		m_firstUpdate = false;
 	}
 
-	void ParticleSystem::setMaterial( MaterialSPtr p_material )
+	void ParticleSystem::setMaterial( MaterialSPtr material )
 	{
-		m_material = p_material;
+		m_material = material;
 
 		if ( m_particlesBillboard )
 		{
-			m_particlesBillboard->setMaterial( p_material );
+			m_particlesBillboard->setMaterial( material );
 		}
 	}
 
-	void ParticleSystem::setDimensions( Point2f const & p_dimensions )
+	void ParticleSystem::setDimensions( Point2f const & dimensions )
 	{
-		m_dimensions = p_dimensions;
+		m_dimensions = dimensions;
 
 		if ( m_particlesBillboard )
 		{
-			m_particlesBillboard->setDimensions( p_dimensions );
+			m_particlesBillboard->setDimensions( dimensions );
 		}
 	}
 
-	void ParticleSystem::setParticleType( castor::String const & p_value )
+	void ParticleSystem::setParticleType( castor::String const & value )
 	{
 		auto & factory = getScene()->getEngine()->getParticleFactory();
-		m_particleType = p_value;
+		m_particleType = value;
 
-		if ( factory.isTypeRegistered( p_value ) )
+		if ( factory.isTypeRegistered( value ) )
 		{
-			m_cpuImpl = factory.create( p_value, *this );
+			m_cpuImpl = factory.create( value, *this );
 		}
 		else
 		{
-			CASTOR_EXCEPTION( cuT( "Particle type [" ) + p_value + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
+			CASTOR_EXCEPTION( cuT( "Particle type [" ) + value + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
 		}
 	}
 
@@ -223,27 +319,29 @@ namespace castor3d
 		return m_dimensions;
 	}
 
-	void ParticleSystem::addParticleVariable( castor::String const & p_name, renderer::AttributeFormat p_type, castor::String const & p_defaultValue )
+	void ParticleSystem::addParticleVariable( String const & name
+		, ParticleFormat type
+		, String const & defaultValue )
 	{
-		m_csImpl->addParticleVariable( p_name, p_type, p_defaultValue );
-		m_cpuImpl->addParticleVariable( p_name, p_type, p_defaultValue );
+		m_csImpl->addParticleVariable( name, type, defaultValue );
+		m_cpuImpl->addParticleVariable( name, type, defaultValue );
 
-		if ( p_name == cuT( "center" )
-			 || p_name == cuT( "position" ) )
+		if ( name == cuT( "center" )
+			 || name == cuT( "position" ) )
 		{
-			m_billboardInputs.push_back( ParticleElementDeclaration{ cuT( "center" ), 0u, p_type, m_billboardInputs.stride(), 1u } );
+			m_billboardInputs.push_back( ParticleElementDeclaration{ cuT( "center" ), 0u, type, m_billboardInputs.stride(), 1u } );
 			m_centerOffset = m_billboardInputs.stride();
 		}
 		else
 		{
-			m_billboardInputs.push_back( ParticleElementDeclaration{ p_name, 0u, p_type, m_billboardInputs.stride(), 1u } );
+			m_billboardInputs.push_back( ParticleElementDeclaration{ name, 0u, type, m_billboardInputs.stride(), 1u } );
 		}
 
-		m_inputs.push_back( ParticleElementDeclaration{ p_name, 0u, p_type, m_billboardInputs.stride(), 1u } );
-		m_defaultValues[cuT ("out_") + p_name] = p_defaultValue;
+		m_inputs.push_back( ParticleElementDeclaration{ name, 0u, type, m_billboardInputs.stride(), 1u } );
+		m_defaultValues[cuT ("out_") + name] = defaultValue;
 	}
 
-	void ParticleSystem::setCSUpdateProgram( renderer::ShaderProgram const & program )
+	void ParticleSystem::setCSUpdateProgram( renderer::ShaderStageState const & program )
 	{
 		m_csImpl->setUpdateProgram( program );
 	}

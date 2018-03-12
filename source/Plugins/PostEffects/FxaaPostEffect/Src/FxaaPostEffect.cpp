@@ -302,7 +302,7 @@ namespace fxaa
 		m_fxaaQuad->createPipeline( size
 			, Position{}
 			, stages
-			, m_renderTarget.getTexture().getTexture()->getView()
+			, m_renderTarget.getTexture().getTexture()->getDefaultView()
 			, *m_renderPass
 			, bindings
 			, {} );
@@ -322,9 +322,9 @@ namespace fxaa
 			if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
 			{
 				auto & targetImage = m_renderTarget.getTexture().getTexture()->getTexture();
-				auto & targetView = m_renderTarget.getTexture().getTexture()->getView();
+				auto & targetView = m_renderTarget.getTexture().getTexture()->getDefaultView();
 				auto & surfaceImage = m_surface.m_colourTexture.getTexture()->getTexture();
-				auto & surfaceView = m_surface.m_colourTexture.getTexture()->getView();
+				auto & surfaceView = m_surface.m_colourTexture.getTexture()->getDefaultView();
 
 				// Put images in the right state for rendering.
 				m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput

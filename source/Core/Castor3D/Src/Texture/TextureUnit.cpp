@@ -194,6 +194,7 @@ namespace castor3d
 		{
 			result = m_texture->initialise();
 			auto sampler = getSampler();
+			REQUIRE( sampler );
 
 			if ( result
 				&& sampler
@@ -201,6 +202,20 @@ namespace castor3d
 			{
 				m_texture->generateMipmaps();
 			}
+
+			m_descriptor = renderer::WriteDescriptorSet
+			{
+				0u,
+				0u,
+				1u,
+				renderer::DescriptorType::eCombinedImageSampler,
+				renderer::DescriptorImageInfo
+				{
+					std::ref( sampler->getSampler() ),
+					std::ref( m_texture->getDefaultView() ),
+					renderer::ImageLayout::eShaderReadOnlyOptimal,
+				}
+			};
 		}
 
 		return result;

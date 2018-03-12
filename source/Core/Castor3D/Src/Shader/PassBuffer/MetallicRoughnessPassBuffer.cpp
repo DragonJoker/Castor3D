@@ -10,8 +10,8 @@ namespace castor3d
 	MetallicRoughnessPassBuffer::MetallicRoughnessPassBuffer( Engine & engine
 		, uint32_t count )
 		: PassBuffer{ engine, count, DataSize }
-		, m_data{ makeArrayView( reinterpret_cast< MetallicRoughnessPassBuffer::PassData * >( m_buffer.ptr() )
-			, reinterpret_cast< MetallicRoughnessPassBuffer::PassData * >( m_buffer.ptr() ) + count ) }
+		, m_data{ makeArrayView( reinterpret_cast< MetallicRoughnessPassBuffer::PassData * >( m_buffer.getPtr() )
+			, reinterpret_cast< MetallicRoughnessPassBuffer::PassData * >( m_buffer.getPtr() ) + count ) }
 	{
 	}
 

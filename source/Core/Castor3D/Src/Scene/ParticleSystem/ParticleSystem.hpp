@@ -164,7 +164,7 @@ namespace castor3d
 		 *\param[in]	defaultValue	La valeur par défaut de la variable.
 		 */
 		C3D_API void addParticleVariable( castor::String const & name
-			, renderer::Format type
+			, ParticleFormat type
 			, castor::String const & defaultValue );
 		/**
 		 *\~english
@@ -174,7 +174,7 @@ namespace castor3d
 		 *\brief		Définit le programme utilisé pour mettre à jour les particules via un compute shader.
 		 *\param[in]	program	Le programme.
 		 */
-		C3D_API void setCSUpdateProgram( renderer::ShaderProgram const & program );
+		C3D_API void setCSUpdateProgram( renderer::ShaderStageState const & program );
 		/**
 		 *\~english
 		 *\return		The particles written at last update.

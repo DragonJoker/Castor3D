@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Scene/Skybox.hpp"
 
+#include <Buffer/Buffer.hpp>
 #include <Design/ChangeTracked.hpp>
 
 namespace castor3d
@@ -89,13 +90,13 @@ namespace castor3d
 		using Skybox::setTexture;
 
 	private:
-		void doUpdateTextureImage( uint32_t index
-			, castor::Pixel< castor::PixelFormat::eRGB32F > const & pixel );
+		void doUpdateColour();
 
 	private:
-		//!\~english	The skybox colour.
-		//!\~french		La couleur de la skybox.
 		castor::ChangeTracked< castor::HdrRgbColour > m_colour;
+		renderer::BufferPtr< castor::Point3f > m_stagingBuffer;
+		renderer::BufferImageCopyArray m_copyRegions;
+		renderer::CommandBufferPtr m_cmdCopy;
 	};
 }
 

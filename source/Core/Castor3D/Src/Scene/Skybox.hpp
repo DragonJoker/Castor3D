@@ -9,9 +9,8 @@ See LICENSE file in root folder
 #include "Shader/Ubos/MatrixUbo.hpp"
 #include "Shader/Ubos/ModelMatrixUbo.hpp"
 #include "PBR/IblTextures.hpp"
+#include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
-
-#include <Image/Texture.hpp>
 
 namespace castor3d
 {
@@ -108,7 +107,7 @@ namespace castor3d
 		*\~french
 		*\return		Définit la texture équirectangulaire de la skybox.
 		*/
-		C3D_API void setEquiTexture( renderer::TexturePtr && texture
+		C3D_API void setEquiTexture( TextureLayoutSPtr texture
 			, castor::Size const & size );
 		/**
 		 *\~english
@@ -121,15 +120,37 @@ namespace castor3d
 			return m_equiTexturePath;
 		}
 		/**
-		 *\~english
-		 *\return		The skybox's texture.
-		 *\~french
-		 *\return		La texture de la skybox.
-		 */
-		inline renderer::Texture & getTexture()
+		*\~english
+		*\return		The skybox's texture.
+		*\~french
+		*\return		La texture de la skybox.
+		*/
+		inline TextureLayout const & getTexture()const
 		{
 			REQUIRE( m_texture );
 			return *m_texture;
+		}
+		/**
+		*\~english
+		*\return		The skybox's texture.
+		*\~french
+		*\return		La texture de la skybox.
+		*/
+		inline TextureLayout & getTexture()
+		{
+			REQUIRE( m_texture );
+			return *m_texture;
+		}
+		/**
+		 *\~english
+		 *\return		The skybox's texture image.
+		 *\~french
+		 *\return		L'image de la texture de la skybox.
+		 */
+		inline renderer::Texture const & getImage()const
+		{
+			REQUIRE( m_texture );
+			return m_texture->getTexture();
 		}
 		/**
 		 *\~english
@@ -137,10 +158,10 @@ namespace castor3d
 		 *\~french
 		 *\return		La texture de la skybox.
 		 */
-		inline renderer::Texture const & getTexture()const
+		inline renderer::TextureView const & getView()const
 		{
 			REQUIRE( m_texture );
-			return *m_texture;
+			return m_texture->getDefaultView();
 		}
 		/**
 		 *\~english
@@ -159,7 +180,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Définit la texture de la skybox.
 		 */
-		inline void setTexture( renderer::TexturePtr && texture )
+		inline void setTexture( TextureLayoutSPtr texture )
 		{
 			m_texture = std::move( texture );
 		}
@@ -175,64 +196,39 @@ namespace castor3d
 		}
 
 	protected:
-		virtual renderer::ShaderProgram & doInitialiseShader();
+		virtual renderer::ShaderStageStateArray doInitialiseShader();
 		bool doInitialiseTexture();
 		void doInitialiseEquiTexture();
 		bool doInitialiseVertexBuffer();
-		bool doInitialisePipeline( renderer::ShaderProgram & program );
+		bool doInitialisePipeline( renderer::ShaderStageStateArray & program );
+		bool doPrepareFrame();
 
 	protected:
-		//!\~english	The skybox's scene.
-		//!\~french		La scène de la skybox.
 		SceneRPtr m_scene{ nullptr };
-		//!\~english	The pipeline used while rendering the skybox.
-		//!\~french		Le pipeline utilisé pour le rendu de la skybox.
+		renderer::RenderPassPtr m_renderPass;
+		renderer::FrameBufferPtr m_frameBuffer;
+		renderer::DescriptorSetLayoutPtr m_descriptorSetLayout;
+		renderer::DescriptorSetPoolPtr m_descriptorSetPool;
+		renderer::DescriptorSetPtr m_descriptorSet;
+		renderer::PipelineLayoutPtr m_pipelineLayout;
 		renderer::PipelinePtr m_pipeline;
-		//!\~english	The skybox equirectangular map texture.
-		//!\~french		La texture équirectangulaire de la skybox.
-		renderer::TexturePtr m_equiTexture;
-		//!\~english	The skybox equirectangular image path.
-		//!\~french		Le chemin de l'image équirectangulaire de la skybox.
+		renderer::CommandBufferPtr m_commandBuffer;
+		TextureLayoutSPtr m_equiTexture;
 		castor::Path m_equiTexturePath;
-		//!\~english	The skybox equirectangular map texture wanted face size.
-		//!\~french		La taille voulue pour les faces de la texture équirectangulaire de la skybox.
 		castor::Size m_equiSize;
-		//!\~english	The skybox cube map texture.
-		//!\~french		La texture cube map de la skybox.
-		renderer::TexturePtr m_texture;
-		//!\~english	The skybox cube map sampler.
-		//!\~french		L'échantillonneur de la cube map de la skybox.
+		TextureLayoutSPtr m_texture;
 		SamplerWPtr m_sampler;
-		//!\~english	The shader matrices constants buffer.
-		//!\~french		Le tampon de constantes de shader contenant les matrices.
 		MatrixUbo m_matrixUbo;
-		//!\~english	The uniform buffer containing matrices data.
-		//!\~french		Le tampon d'uniformes contenant les données de matrices.
 		ModelMatrixUbo m_modelMatrixUbo;
-		//!\~english	The HDR configuration.
-		//!\~french		La configuration HDR.
 		HdrConfigUbo m_configUbo;
-		//!\~english	The vertex buffer.
-		//!\~french		Le tampon de sommets.
-		renderer::VertexBufferPtr< TexturedCube > m_vertexBuffer{ nullptr };
-		//!\~english	The geomtry buffers.
-		//!\~french		Les tampons de géométrie.
-		GeometryBuffers m_geometryBuffers;
-		//!\~english	Vertex elements declaration.
-		//!\~french		Déclaration des éléments d'un sommet.
+		renderer::VertexBufferPtr< NonTexturedCube > m_vertexBuffer{ nullptr };
+		std::vector< NonTexturedCube > m_bufferVertex;
 		renderer::VertexLayoutPtr m_declaration;
-		//!\~english	The model matrix.
-		//!\~french		La matrice modèle.
 		castor::Matrix4x4r m_mtxModel;
-		//!\~english	The IBL textures.
-		//!\~french		Les textures l'IBL.
 		std::unique_ptr< IblTextures > m_ibl;
-		//!\~english	Tells if the skybox's texture is HDR.
-		//!\~french		Dit si la texture de la skybox est HDR.
 		bool m_hdr{ false };
-		//!\~english	The skybox's viewport.
-		//!\~french		Le viewport de la skybox.
 		Viewport m_viewport;
+		castor::Size m_size;
 	};
 }
 

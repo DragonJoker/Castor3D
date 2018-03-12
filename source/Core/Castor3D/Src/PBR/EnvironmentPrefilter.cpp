@@ -130,7 +130,7 @@ namespace castor3d
 		m_vertexLayout->createAttribute( 0u, renderer::Format::eR32G32B32_SFLOAT, offsetof( NonTexturedCube::Quad::Vertex, position ) );
 
 		// Initialise the UBO.
-		m_configUbo = renderer::makeUniformBuffer< renderer::Mat4 >( device
+		m_configUbo = renderer::makeUniformBuffer< castor::Matrix4x4f >( device
 			, 6u
 			, renderer::BufferTarget::eTransferDst
 			, renderer::MemoryPropertyFlag::eHostVisible );
@@ -288,7 +288,7 @@ namespace castor3d
 					*facePass.pushConstants->getData() = roughness;
 					m_commandBuffer->beginRenderPass( *facePass.renderPass
 						, *facePass.frameBuffer
-						, { renderer::RgbaColour{ 0, 0, 0, 0 } }
+						, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
 						, renderer::SubpassContents::eInline );
 					m_commandBuffer->bindPipeline( *facePass.pipeline );
 					m_commandBuffer->setViewport( {

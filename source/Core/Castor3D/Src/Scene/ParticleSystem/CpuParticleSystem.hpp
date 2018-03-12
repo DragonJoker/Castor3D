@@ -52,7 +52,7 @@ namespace castor3d
 		 *\copydoc		castor3d::ParticleSystemImpl::addParticleVariable
 		 */
 		C3D_API void addParticleVariable( castor::String const & name
-			, renderer::AttributeFormat type
+			, ParticleFormat type
 			, castor::String const & defaultValue )override;
 
 	private:

@@ -76,7 +76,7 @@ namespace castor3d
 				castor::Point3f direction;
 				//!\~english	The variable containing the light space transformation matrix.
 				//!\~french		La variable contenant la matrice de transformation de la lumière.
-				renderer::Mat4 transform;
+				castor::Matrix4x4f transform;
 			};
 			renderer::UniformBufferPtr< Config > m_ubo;
 		};

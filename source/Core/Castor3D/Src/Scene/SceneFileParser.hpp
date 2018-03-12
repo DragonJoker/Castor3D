@@ -259,6 +259,7 @@ namespace castor3d
 		UIntStrMap m_mapViewportModes;
 		UIntStrMap m_mapInterpolationModes;
 		UIntStrMap m_mapWrappingModes;
+		UIntStrMap m_mapBorderColours;
 		UIntStrMap m_mapShaderTypes;
 		UIntStrMap m_mapVariableTypes;
 		UIntStrMap m_mapElementTypes;

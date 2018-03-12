@@ -171,6 +171,34 @@ namespace castor3d
 		}
 	}
 
+	renderer::Mat4 convert( castor::Matrix4x4f const & value )
+	{
+		renderer::Mat4 result{ renderer::noInit };
+		std::memcpy( &result[0][0], value.constPtr(), 16 * sizeof( float ) );
+		return result;
+	}
+
+	castor::Matrix4x4f convert( renderer::Mat4 const & value )
+	{
+		castor::Matrix4x4f result;
+		std::memcpy( result.ptr(), &value[0][0], 16 * sizeof( float ) );
+		return result;
+	}
+
+	renderer::ClearColorValue convert( castor::RgbaColour const & value )
+	{
+		renderer::ClearColorValue result;
+		std::memcpy( result.float32.data(), value.constPtr(), 4 * sizeof( float ) );
+		return result;
+	}
+
+	castor::RgbaColour convert( renderer::ClearColorValue const & value )
+	{
+		castor::RgbaColour result;
+		std::memcpy( result.ptr(), value.float32.data(), 4 * sizeof( float ) );
+		return result;
+	}
+
 	namespace shader
 	{
 		namespace legacy

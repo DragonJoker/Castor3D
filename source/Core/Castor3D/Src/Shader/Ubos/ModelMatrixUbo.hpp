@@ -24,8 +24,8 @@ namespace castor3d
 	public:
 		struct Configuration
 		{
-			renderer::Mat4 model;
-			renderer::Mat4 normal;
+			castor::Matrix4x4f model;
+			castor::Matrix4x4f normal;
 		};
 
 	public:

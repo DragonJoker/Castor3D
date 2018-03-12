@@ -35,7 +35,7 @@ namespace castor3d
 		 *\param[in]	source	La texture d'environnement source.
 		 */
 		C3D_API explicit IblTextures( Scene & scene
-			, TextureLayout const & source );
+			, renderer::Texture const & source );
 		/**
 		 *\~english
 		 *\brief		Destructor.

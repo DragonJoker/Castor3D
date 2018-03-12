@@ -63,7 +63,7 @@ namespace castor3d
 
 		if ( blend )
 		{
-			blstate.addAttachment( renderer::ColourBlendStateAttachment
+			blstate.attachs.push_back( renderer::ColourBlendStateAttachment
 			{
 				true,
 				renderer::BlendFactor::eOne,

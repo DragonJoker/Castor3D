@@ -84,7 +84,7 @@ namespace castor3d
 				float cutOff;
 				//!\~english	The variable containing the light space transformation matrix.
 				//!\~french		La variable contenant la matrice de transformation de la lumière.
-				renderer::Mat4 transform;
+				castor::Matrix4x4f transform;
 			};
 			renderer::UniformBufferPtr< Config > m_ubo;
 		};

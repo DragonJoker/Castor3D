@@ -15,11 +15,11 @@ namespace castor3d
 	private:
 		struct Configuration
 		{
-			renderer::Mat4 invViewProj;
-			renderer::Mat4 invView;
-			renderer::Mat4 invProj;
-			renderer::Mat4 gView;
-			renderer::Mat4 gProj;
+			castor::Matrix4x4f invViewProj;
+			castor::Matrix4x4f invView;
+			castor::Matrix4x4f invProj;
+			castor::Matrix4x4f gView;
+			castor::Matrix4x4f gProj;
 			castor::Point2f renderSize;
 		};
 

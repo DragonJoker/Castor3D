@@ -145,7 +145,7 @@ namespace castor3d
 		m_colourTexture.getTexture()->initialise();
 
 		renderer::FrameBufferAttachmentArray attaches;
-		attaches.emplace_back( *renderPass.getAttachments().begin(), m_colourTexture.getTexture()->getView() );
+		attaches.emplace_back( *renderPass.getAttachments().begin(), m_colourTexture.getTexture()->getDefaultView() );
 		m_frameBuffer = renderPass.createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
 			, {  } );
 
@@ -302,7 +302,7 @@ namespace castor3d
 			}
 
 			m_overlayRenderer = std::make_shared< OverlayRenderer >( *getEngine()->getRenderSystem()
-				, m_frameBuffer.m_colourTexture.getTexture()->getView() );
+				, m_frameBuffer.m_colourTexture.getTexture()->getDefaultView() );
 			m_overlayRenderer->initialise();
 		}
 	}
@@ -441,7 +441,7 @@ namespace castor3d
 			m_toneMapping->update( scene->getHdrConfig() );
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *fbo.m_frameBuffer
-				, { RgbaColour::fromRGBA( toRGBAFloat( scene->getBackgroundColour() ) ) }
+				, { convert( RgbaColour::fromRGBA( toRGBAFloat( scene->getBackgroundColour() ) ) ) }
 				, renderer::SubpassContents::eSecondaryCommandBuffers );
 			m_commandBuffer->executeCommands( { m_toneMapping->getCommandBuffer() } );
 			m_commandBuffer->endRenderPass();

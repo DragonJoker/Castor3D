@@ -94,7 +94,7 @@ namespace castor3d
 				m_device->enable();
 				m_swapChain = m_device->createSwapChain( { size.getWidth(), size.getHeight() } );
 				SceneSPtr scene = getScene();
-				m_swapChain->setClearColour( RgbaColour::fromRGBA( toRGBAFloat( scene->getBackgroundColour() ) ) );
+				m_swapChain->setClearColour( convert( RgbaColour::fromRGBA( toRGBAFloat( scene->getBackgroundColour() ) ) ) );
 				m_swapChainReset = m_swapChain->onReset.connect( [this]()
 				{
 					doResetSwapChain();
@@ -219,7 +219,7 @@ namespace castor3d
 					m_stagingBuffer->downloadTextureData( *m_transferCommandBuffer
 						, m_saveBuffer->ptr()
 						, m_saveBuffer->size()
-						, target->getTexture().getTexture()->getView() );
+						, target->getTexture().getTexture()->getDefaultView() );
 					auto texture = target->getTexture().getTexture();
 					m_toSave = false;
 				}
@@ -469,13 +469,15 @@ namespace castor3d
 	{
 		RenderTargetSPtr target = getRenderTarget();
 		m_renderQuad = std::make_unique< RenderQuad >( *getEngine()->getRenderSystem()
-			, castor::Position{}
-			, renderer::Extent2D{ m_size[0], m_size[1] }
-			, m_program
-			, target->getTexture().getTexture()->getView()
-			, *m_renderPass
 			, false
 			, false );
+		m_renderQuad->createPipeline( renderer::Extent2D{ m_size[0], m_size[1] }
+			, castor::Position{}
+			, m_program
+			, target->getTexture().getTexture()->getDefaultView()
+			, *m_renderPass
+			, {}
+			, {} );
 	}
 
 	bool RenderWindow::doPrepareFrames()

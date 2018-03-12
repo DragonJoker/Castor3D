@@ -331,7 +331,7 @@ namespace castor3d
 		{
 			*engine.getRenderSystem(),
 			texture,
-			m_intermediate.getTexture()->getView(),
+			m_intermediate.getTexture()->getDefaultView(),
 			*m_blurUbo,
 			format,
 			textureSize
@@ -339,7 +339,7 @@ namespace castor3d
 		, m_blurYQuad
 		{
 			*engine.getRenderSystem(),
-			m_intermediate.getTexture()->getView(),
+			m_intermediate.getTexture()->getDefaultView(),
 			texture,
 			*m_blurUbo,
 			format,
@@ -361,13 +361,13 @@ namespace castor3d
 		{
 			m_commandBuffer->beginRenderPass( *m_blurXPass
 				, *m_blurXFbo
-				, { renderer::RgbaColour{ 0, 0, 0, 0 } }
+				, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
 			, renderer::SubpassContents::eSecondaryCommandBuffers );
 			m_commandBuffer->executeCommands( { m_blurXQuad.getCommandBuffer() } );
 			m_commandBuffer->endRenderPass();
 			m_commandBuffer->beginRenderPass( *m_blurYPass
 				, *m_blurYFbo
-				, { renderer::RgbaColour{ 0, 0, 0, 0 } }
+				, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
 			, renderer::SubpassContents::eSecondaryCommandBuffers );
 			m_commandBuffer->executeCommands( { m_blurYQuad.getCommandBuffer() } );
 			m_commandBuffer->endRenderPass();
@@ -396,7 +396,7 @@ namespace castor3d
 		program[1].module->loadShader( blurX.getSource() );
 
 		m_blurXPass = doCreateRenderPass( device, m_format );
-		m_blurXFbo = doCreateFbo( *m_blurXPass, m_intermediate.getTexture()->getView(), m_size );
+		m_blurXFbo = doCreateFbo( *m_blurXPass, m_intermediate.getTexture()->getDefaultView(), m_size );
 		renderer::DescriptorSetLayoutBindingArray bindings
 		{
 			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment }
@@ -427,7 +427,7 @@ namespace castor3d
 		program[1].module->loadShader( blurY.getSource() );
 
 		m_blurYPass = doCreateRenderPass( device, m_format );
-		m_blurYFbo = doCreateFbo( *m_blurYPass, m_intermediate.getTexture()->getView(), m_size );
+		m_blurYFbo = doCreateFbo( *m_blurYPass, m_intermediate.getTexture()->getDefaultView(), m_size );
 		renderer::DescriptorSetLayoutBindingArray bindings
 		{
 			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment }
