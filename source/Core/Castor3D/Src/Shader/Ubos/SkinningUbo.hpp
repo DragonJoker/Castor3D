@@ -92,7 +92,20 @@ namespace castor3d
 		 *\param[in]	flags	Les indicateurs du programme.
 		 */
 		C3D_API static void declare( glsl::GlslWriter & writer
+			, uint32_t binding
 			, uint32_t set
+			, ProgramFlags const & flags );
+		/**
+		 *\~english
+		 *\brief		Creates the descriptor set layout binding for the skinning UBO/SSBO.
+		 *\param[in]	binding	The descriptor binding index.
+		 *\param[in]	flags	The program flags.
+		 *\~french
+		 *\brief		Crée l'attache de layout de descripteur pour l'UBO/SSBO de skinning.
+		 *\param[in]	binding	L'index d'attache du descripteur.
+		 *\param[in]	flags	Les indicateurs du programme.
+		 */
+		C3D_API static renderer::DescriptorSetLayoutBinding createLayoutBinding( uint32_t binding
 			, ProgramFlags const & flags );
 		/**
 		 *\~english
@@ -126,7 +139,7 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		static constexpr uint32_t BindingPoint = 5u;
+		static constexpr uint32_t BindingPoint = 6u;
 		//!\~english	Name of the skinning animation frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les données d'animation de skinning.
 		C3D_API static castor::String const BufferSkinning;

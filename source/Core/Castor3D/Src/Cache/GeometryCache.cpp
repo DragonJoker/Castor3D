@@ -18,12 +18,12 @@ namespace castor3d
 	{
 		struct GeometryInitialiser
 		{
-			GeometryInitialiser( uint32_t & p_faceCount
-				, uint32_t & p_vertexCount
-				, FrameListener & p_listener )
-				: m_faceCount{ p_faceCount }
-				, m_vertexCount{ p_vertexCount }
-				, m_listener{ p_listener }
+			GeometryInitialiser( uint32_t & faceCount
+				, uint32_t & vertexCount
+				, FrameListener & listener )
+				: m_faceCount{ faceCount }
+				, m_vertexCount{ vertexCount }
+				, m_listener{ listener }
 			{
 			}
 
@@ -43,27 +43,27 @@ namespace castor3d
 	}
 
 	ObjectCache< Geometry, castor::String >::ObjectCache( Engine & engine
-		, Scene & p_scene
-		, SceneNodeSPtr p_rootNode
-		, SceneNodeSPtr p_rootCameraNode
-		, SceneNodeSPtr p_rootObjectNode
-		, Producer && p_produce
-		, Initialiser && p_initialise
-		, Cleaner && p_clean
-		, Merger && p_merge
-		, Attacher && p_attach
-		, Detacher && p_detach )
+		, Scene & scene
+		, SceneNodeSPtr rootNode
+		, SceneNodeSPtr rootCameraNode
+		, SceneNodeSPtr rootObjectNode
+		, Producer && produce
+		, Initialiser && initialise
+		, Cleaner && clean
+		, Merger && merge
+		, Attacher && attach
+		, Detacher && detach )
 		: MyObjectCache( engine
-			, p_scene
-			, p_rootNode
-			, p_rootCameraNode
-			, p_rootCameraNode
-			, std::move( p_produce )
-			, std::bind( GeometryInitialiser{ m_faceCount, m_vertexCount, p_scene.getListener() }, std::placeholders::_1 )
-			, std::move( p_clean )
-			, std::move( p_merge )
-			, std::move( p_attach )
-			, std::move( p_detach ) )
+			, scene
+			, rootNode
+			, rootCameraNode
+			, rootCameraNode
+			, std::move( produce )
+			, std::bind( GeometryInitialiser{ m_faceCount, m_vertexCount, scene.getListener() }, std::placeholders::_1 )
+			, std::move( clean )
+			, std::move( merge )
+			, std::move( attach )
+			, std::move( detach ) )
 	{
 	}
 

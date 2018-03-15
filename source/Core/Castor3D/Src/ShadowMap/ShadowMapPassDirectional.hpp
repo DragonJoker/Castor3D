@@ -75,33 +75,42 @@ namespace castor3d
 		 */
 		void doCleanup()override;
 		/**
+		 *\copydoc		castor3d::RenderPass::doFillDescriptor
+		 */
+		void doFillDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, BillboardListRenderNode & node )override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillDescriptor
+		 */
+		void doFillDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, SubmeshRenderNode & node )override;
+		/**
 		 *\copydoc		castor3d::RenderPass::doUpdate
 		 */
 		void doUpdate( RenderQueueArray & queues )override;
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::doPreparePipeline
 		 */
-		void doPreparePipeline( renderer::ShaderProgram & p_program
-			, PipelineFlags const & p_flags )override;
+		void doPreparePipeline( renderer::ShaderStageStateArray & program
+			, PipelineFlags const & flags )override;
 
 	public:
 		static castor::String const ShadowMapUbo;
 		static castor::String const FarPlane;
-		static uint32_t constexpr UboBindingPoint = 8u;
+		static uint32_t constexpr UboBindingPoint = 10u;
 		static uint32_t constexpr TextureSize = 2048;
 
+		struct Configuration
+		{
+			float farPlane;
+		};
+
 	private:
-		//!\~english	The camera created from the light.
-		//!\~french		La caméra créée à partir de la lumière.
 		CameraSPtr m_camera;
-		//!\~english	The shadow map configuration data UBO.
-		//!\~french		L'UBO de données de configuration de shadow map.
-		UniformBuffer m_shadowConfig;
-		//!\~english	The variable holding the camera's far plane.
-		//!\~french		La variable contenant la position du plan éloigné de la caméra.
-		Uniform1f & m_farPlane;
-		//!\~english	The view matrix.
-		//!\~french		La matrice vue.
+		renderer::UniformBufferPtr< Configuration > m_shadowConfig;
+		float m_farPlane;
 		castor::Matrix4x4r m_view;
 	};
 }

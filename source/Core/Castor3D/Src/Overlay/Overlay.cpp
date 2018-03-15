@@ -12,34 +12,34 @@ namespace castor3d
 {
 	//*************************************************************************************************
 
-	Overlay::TextWriter::TextWriter( String const & p_tabs )
-		: castor::TextWriter< Overlay >{ p_tabs }
+	Overlay::TextWriter::TextWriter( String const & tabs )
+		: castor::TextWriter< Overlay >{ tabs }
 	{
 	}
 
-	bool Overlay::TextWriter::operator()( Overlay const & p_overlay, TextFile & p_file )
+	bool Overlay::TextWriter::operator()( Overlay const & overlay, TextFile & file )
 	{
-		return p_overlay.m_category->createTextWriter( m_tabs )->writeInto( p_file );
+		return overlay.m_category->createTextWriter( m_tabs )->writeInto( file );
 	}
 
 	//*************************************************************************************************
 
-	Overlay::Overlay( Engine & engine, OverlayType p_type )
+	Overlay::Overlay( Engine & engine, OverlayType type )
 		: OwnedBy< Engine >( engine )
 		, m_parent()
 		, m_scene()
 		, m_renderSystem( engine.getRenderSystem() )
-		, m_category( engine.getOverlayCache().getFactory().create( p_type ) )
+		, m_category( engine.getOverlayCache().getFactory().create( type ) )
 	{
 		m_category->setOverlay( this );
 	}
 
-	Overlay::Overlay( Engine & engine, OverlayType p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
+	Overlay::Overlay( Engine & engine, OverlayType type, SceneSPtr scene, OverlaySPtr parent )
 		: OwnedBy< Engine >( engine )
-		, m_parent( p_parent )
-		, m_scene( p_scene )
+		, m_parent( parent )
+		, m_scene( scene )
 		, m_renderSystem( engine.getRenderSystem() )
-		, m_category( engine.getOverlayCache().getFactory().create( p_type ) )
+		, m_category( engine.getOverlayCache().getFactory().create( type ) )
 	{
 		m_category->setOverlay( this );
 	}
@@ -62,7 +62,7 @@ namespace castor3d
 		}
 	}
 
-	void Overlay::addChild( OverlaySPtr p_overlay )
+	void Overlay::addChild( OverlaySPtr overlay )
 	{
 		int index = 1;
 
@@ -71,23 +71,23 @@ namespace castor3d
 			index = ( *( m_overlays.end() - 1 ) )->getIndex() + 1;
 		}
 
-		p_overlay->setOrder( index, getLevel() + 1 );
-		m_overlays.push_back( p_overlay );
+		overlay->setOrder( index, getLevel() + 1 );
+		m_overlays.push_back( overlay );
 	}
 
-	uint32_t Overlay::getChildrenCount( int p_level )const
+	uint32_t Overlay::getChildrenCount( int level )const
 	{
 		uint32_t result{ 0 };
 
-		if ( p_level == getLevel() + 1 )
+		if ( level == getLevel() + 1 )
 		{
 			result = int( m_overlays.size() );
 		}
-		else if ( p_level > getLevel() )
+		else if ( level > getLevel() )
 		{
 			for ( auto overlay : m_overlays )
 			{
-				result += overlay->getChildrenCount( p_level );
+				result += overlay->getChildrenCount( level );
 			}
 		}
 

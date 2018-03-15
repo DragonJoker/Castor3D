@@ -268,7 +268,7 @@ namespace castor3d
 			image.extent.width = m_size.getWidth();
 			image.extent.height = m_size.getHeight();
 			image.extent.depth = 1u;
-			image.format = renderer::Format::eR16_SFLOAT;
+			image.format = renderer::Format::eR16G16B16A16_SFLOAT;
 			image.imageType = renderer::TextureType::e2D;
 			image.initialLayout = renderer::ImageLayout::eUndefined;
 			image.mipLevels = 1u;
@@ -430,7 +430,6 @@ namespace castor3d
 
 		// Render the scene through the RenderTechnique.
 		m_renderTechnique->render( m_jitter
-			, m_velocityTexture
 			, *semaphoreToWait
 			, info );
 		semaphoreToWait = &m_renderTechnique->getSemaphore();

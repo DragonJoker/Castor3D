@@ -7,35 +7,35 @@ using namespace castor;
 
 namespace castor3d
 {
-	PanelOverlay::TextWriter::TextWriter( String const & p_tabs, PanelOverlay const * p_category )
-		: OverlayCategory::TextWriter{ p_tabs }
-		, m_category{ p_category }
+	PanelOverlay::TextWriter::TextWriter( String const & tabs, PanelOverlay const * category )
+		: OverlayCategory::TextWriter{ tabs }
+		, m_category{ category }
 	{
 	}
 
-	bool PanelOverlay::TextWriter::operator()( PanelOverlay const & p_overlay, TextFile & p_file )
+	bool PanelOverlay::TextWriter::operator()( PanelOverlay const & overlay, TextFile & file )
 	{
-		Logger::logInfo( m_tabs + cuT( "Writing PanelOverlay " ) + p_overlay.getOverlayName() );
-		bool result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "panel_overlay \"" ) + p_overlay.getOverlay().getName() + cuT( "\"\n" ) ) > 0
-						&& p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+		Logger::logInfo( m_tabs + cuT( "Writing PanelOverlay " ) + overlay.getOverlayName() );
+		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "panel_overlay \"" ) + overlay.getOverlay().getName() + cuT( "\"\n" ) ) > 0
+						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 		OverlayCategory::TextWriter::checkError( result, "PanelOverlay name" );
 
 		if ( result )
 		{
-			result = OverlayCategory::TextWriter{ m_tabs }( p_overlay, p_file );
+			result = OverlayCategory::TextWriter{ m_tabs }( overlay, file );
 		}
 
 		if ( result )
 		{
-			result = p_file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return result;
 	}
 
-	bool PanelOverlay::TextWriter::writeInto( castor::TextFile & p_file )
+	bool PanelOverlay::TextWriter::writeInto( castor::TextFile & file )
 	{
-		return ( *this )( *m_category, p_file );
+		return ( *this )( *m_category, file );
 	}
 
 	//*************************************************************************************************
@@ -60,22 +60,21 @@ namespace castor3d
 		renderer.drawPanel( *this );
 	}
 
-	void PanelOverlay::doUpdateBuffer( Size const & p_size )
+	void PanelOverlay::doUpdateBuffer( Size const & size )
 	{
-		Position pos = getAbsolutePosition( p_size );
-		Size size = getAbsoluteSize( p_size );
+		Size absoluteSize = getAbsoluteSize( size );
 
 		int32_t centerL = 0;
 		int32_t centerT = 0;
-		int32_t centerR = size.getWidth();
-		int32_t centerB = size.getHeight();
+		int32_t centerR = absoluteSize.getWidth();
+		int32_t centerB = absoluteSize.getHeight();
 
-		OverlayCategory::Vertex vertex0 = { Point2f{ float( centerL ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, Point2f{ real( m_uv[0] ), real( m_uv[3] ) } };
-		OverlayCategory::Vertex vertex1 = { Point2f{ float( centerL ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, Point2f{ real( m_uv[0] ), real( m_uv[1] ) } };
-		OverlayCategory::Vertex vertex2 = { Point2f{ float( centerR ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, Point2f{ real( m_uv[2] ), real( m_uv[1] ) } };
-		OverlayCategory::Vertex vertex3 = { Point2f{ float( centerL ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, Point2f{ real( m_uv[0] ), real( m_uv[3] ) } };
-		OverlayCategory::Vertex vertex4 = { Point2f{ float( centerR ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, Point2f{ real( m_uv[2] ), real( m_uv[1] ) } };
-		OverlayCategory::Vertex vertex5 = { Point2f{ float( centerR ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, Point2f{ real( m_uv[2] ), real( m_uv[3] ) } };
+		OverlayCategory::Vertex vertex0 = { Point2f{ float( centerL ) / size.getWidth(), float( centerT ) / size.getHeight() }, Point2f{ real( m_uv[0] ), real( m_uv[3] ) } };
+		OverlayCategory::Vertex vertex1 = { Point2f{ float( centerL ) / size.getWidth(), float( centerB ) / size.getHeight() }, Point2f{ real( m_uv[0] ), real( m_uv[1] ) } };
+		OverlayCategory::Vertex vertex2 = { Point2f{ float( centerR ) / size.getWidth(), float( centerB ) / size.getHeight() }, Point2f{ real( m_uv[2] ), real( m_uv[1] ) } };
+		OverlayCategory::Vertex vertex3 = { Point2f{ float( centerL ) / size.getWidth(), float( centerT ) / size.getHeight() }, Point2f{ real( m_uv[0] ), real( m_uv[3] ) } };
+		OverlayCategory::Vertex vertex4 = { Point2f{ float( centerR ) / size.getWidth(), float( centerB ) / size.getHeight() }, Point2f{ real( m_uv[2] ), real( m_uv[1] ) } };
+		OverlayCategory::Vertex vertex5 = { Point2f{ float( centerR ) / size.getWidth(), float( centerT ) / size.getHeight() }, Point2f{ real( m_uv[2] ), real( m_uv[3] ) } };
 
 		m_arrayVtx[0] = vertex0;
 		m_arrayVtx[1] = vertex1;

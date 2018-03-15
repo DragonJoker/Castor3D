@@ -42,7 +42,7 @@ namespace castor3d
 		return *this;
 	}
 
-	void VertexBoneData::addBoneData( uint32_t p_boneId, real p_weight )
+	void VertexBoneData::addBoneData( uint32_t boneId, real weight )
 	{
 		bool done = false;
 
@@ -50,8 +50,8 @@ namespace castor3d
 		{
 			if ( m_weights.data[i] == 0.0_r )
 			{
-				m_ids.data[i] = p_boneId;
-				m_weights.data[i] = p_weight;
+				m_ids.data[i] = boneId;
+				m_weights.data[i] = weight;
 				done = true;
 			}
 		}

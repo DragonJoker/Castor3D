@@ -105,11 +105,13 @@ namespace castor3d
 	private:
 		struct FrameBuffer
 		{
-			renderer::RenderPassPtr renderPass;
 			renderer::FrameBufferPtr frameBuffer;
 			renderer::TextureViewPtr varianceView;
-			renderer::TextureViewPtr linearView;
+			renderer::TextureView const * linearView;
 		};
+		renderer::TexturePtr m_depthTexture;
+		renderer::TextureViewPtr m_depthView;
+		renderer::RenderPassPtr m_renderPass;
 		std::array< FrameBuffer, 6u > m_frameBuffers;
 	};
 }

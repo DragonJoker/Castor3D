@@ -6,8 +6,8 @@ using namespace castor;
 
 namespace castor3d
 {
-	ImporterPlugin::ImporterPlugin( DynamicLibrarySPtr p_library, Engine * engine )
-		: Plugin( PluginType::eImporter, p_library, *engine )
+	ImporterPlugin::ImporterPlugin( DynamicLibrarySPtr library, Engine * engine )
+		: Plugin( PluginType::eImporter, library, *engine )
 	{
 		load();
 	}
@@ -22,8 +22,8 @@ namespace castor3d
 		return m_extensions;
 	}
 
-	void ImporterPlugin::addExtension( Extension const & p_extension )
+	void ImporterPlugin::addExtension( Extension const & extension )
 	{
-		m_extensions.push_back( p_extension );
+		m_extensions.push_back( extension );
 	}
 }

@@ -8,6 +8,8 @@ See LICENSE file in root folder
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
 
+#include <Command/CommandBuffer.hpp>
+
 #include <Design/OwnedBy.hpp>
 
 #if defined( CASTOR_COMPILER_MSVC )
@@ -31,10 +33,10 @@ namespace castor3d
 	{
 		//!\~english	The geometries, sorted by shader program.
 		//!\~french		Les géométries, triées par programme shader.
-		MapType m_frontCulled;
+		MapType frontCulled;
 		//!\~english	The geometries, sorted by shader program.
 		//!\~french		Les géométries, triées par programme shader.
-		MapType m_backCulled;
+		MapType backCulled;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -47,17 +49,6 @@ namespace castor3d
 	*/
 	struct SceneRenderNodes
 	{
-		SceneRenderNodes & operator=( SceneRenderNodes const & rhs )
-		{
-			m_staticNodes = rhs.m_staticNodes;
-			m_instantiatedStaticNodes = rhs.m_instantiatedStaticNodes;
-			m_skinnedNodes = rhs.m_skinnedNodes;
-			m_instantiatedSkinnedNodes = rhs.m_instantiatedSkinnedNodes;
-			m_morphingNodes = rhs.m_morphingNodes;
-			m_billboardNodes = rhs.m_billboardNodes;
-			return *this;
-		}
-
 		using StaticNodesMap = RenderNodesT< StaticRenderNode, StaticRenderNodesByPipelineMap >;
 		using SkinnedNodesMap = RenderNodesT< SkinningRenderNode, SkinningRenderNodesByPipelineMap >;
 		using InstantiatedStaticNodesMap = RenderNodesT< StaticRenderNode, SubmeshStaticRenderNodesByPipelineMap >;
@@ -67,40 +58,28 @@ namespace castor3d
 
 		//!\~english	The scene.
 		//!\~french		La scène.
-		Scene const & m_scene;
+		Scene const & scene;
 		//!\~english	The static render nodes, sorted by shader program.
 		//!\~french		Les noeuds de rendu statiques, triés par programme shader.
-		StaticNodesMap m_staticNodes;
+		StaticNodesMap staticNodes;
 		//!\~english	The animated render nodes, sorted by shader program.
 		//!\~french		Les noeuds de rendu animés, triés par programme shader.
-		SkinnedNodesMap m_skinnedNodes;
+		SkinnedNodesMap skinnedNodes;
 		//!\~english	The instanced render nodes, sorted by shader program.
 		//!\~french		Les noeuds de rendu instanciés, triés par programme shader.
-		InstantiatedStaticNodesMap m_instantiatedStaticNodes;
+		InstantiatedStaticNodesMap instancedStaticNodes;
 		//!\~english	The animated render nodes, sorted by shader program.
 		//!\~french		Les noeuds de rendu animés, triés par programme shader.
-		InstantiatedSkinnedNodesMap m_instantiatedSkinnedNodes;
+		InstantiatedSkinnedNodesMap instancedSkinnedNodes;
 		//!\~english	The animated render nodes, sorted by shader program.
 		//!\~french		Les noeuds de rendu animés, triés par programme shader.
-		MorphingNodesMap m_morphingNodes;
+		MorphingNodesMap morphingNodes;
 		//!\~english	The billboards render nodes, sorted by shader program.
 		//!\~french		Les noeuds de rendu de billboards, triés par programme shader.
-		BillboardNodesMap m_billboardNodes;
+		BillboardNodesMap billboardNodes;
 
-		SceneRenderNodes( Scene const & scene
-			, StaticNodesMap const & staticGeometries = StaticNodesMap()
-			, SkinnedNodesMap const & skinnedGeometries = SkinnedNodesMap()
-			, InstantiatedStaticNodesMap const & instantiatedStaticGeometries = InstantiatedStaticNodesMap()
-			, InstantiatedSkinnedNodesMap const & instantiatedSkinnedGeometries = InstantiatedSkinnedNodesMap()
-			, MorphingNodesMap const & morphingGeometries = MorphingNodesMap()
-			, BillboardNodesMap const & billboards = BillboardNodesMap() )
-			: m_scene{ scene }
-			, m_staticNodes( staticGeometries )
-			, m_skinnedNodes( skinnedGeometries )
-			, m_instantiatedStaticNodes( instantiatedStaticGeometries )
-			, m_instantiatedSkinnedNodes( instantiatedSkinnedGeometries )
-			, m_morphingNodes( morphingGeometries )
-			, m_billboardNodes( billboards )
+		SceneRenderNodes( Scene const & scene )
+			: scene{ scene }
 		{
 		}
 	};
@@ -169,77 +148,27 @@ namespace castor3d
 		 *\brief		Récupère les noeuds d'une scène, du point de vue d'une caméra.
 		 *\return		Les noeuds de rendu
 		 */
-		C3D_API SceneRenderNodes & getRenderNodes()const;
+		C3D_API renderer::CommandBuffer const & getCommandBuffer()const
+		{
+			return *m_commandBuffer;
+		}
 
 	private:
-		/**
-		 *\~english
-		 *\brief		Prepares given nodes for render.
-		 *\param[in]	camera		The camera.
-		 *\param[in]	p_inputNodes	The scene nodes.
-		 *\param[out]	p_outputNodes	Receives the renderable nodes.
-		 *\~french
-		 *\brief		Prépare les noeuds donnés pour le rendu.
-		 *\param[in]	camera		La caméra.
-		 *\param[in]	p_inputNodes	Les noeuds de la scène.
-		 *\param[out]	p_outputNodes	Reçoit les noeuds à dessiner.
-		 */
-		void doPrepareRenderNodes();
-		/**
-		 *\~english
-		 *\brief			Sorts scene render nodes.
-		 *\param[in,out]	p_nodes	The nodes.
-		 *\~french
-		 *\brief			Trie les noeuds de rendu de scène.
-		 *\param[in,out]	p_nodes	Les noeuds.
-		 */
+		void doPrepareAllNodesCommandBuffer();
+		void doPrepareCulledNodesCommandBuffer();
 		void doSortRenderNodes();
-		/**
-		 *\~english
-		 *\brief		Notification that the scene has changed.
-		 *\param[in]	scene	The changed scene.
-		 *\~french
-		 *\brief		Notification que la scène a changé.
-		 *\param[in]	scene	La scène changée.
-		 */
 		void onSceneChanged( Scene const & scene );
-		/**
-		 *\~english
-		 *\brief		Notification that the camera has changed.
-		 *\param[in]	camera	The changed camera.
-		 *\~french
-		 *\brief		Notification que la caméra a changé.
-		 *\param[in]	camera	La caméra changée.
-		 */
 		void onCameraChanged( Camera const & camera );
 
-	protected:
-		//!\~english	Tells if this queue is for opaque nodes.
-		//!\~french		Dit si cette file est pour les noeuds opaques.
+	private:
 		bool m_opaque;
-		//!\~english	The geometries attached to this node will be ignored in the render.
-		//!\~french		Les géométries attachées à ce noeud seront ignorées lors du rendu.
-		SceneNode const * m_ignored{ nullptr };
-		//!\~english	The render nodes.
-		//!\~french		Les noeuds de rendu.
+		SceneNode const * m_ignoredNode{ nullptr };
 		std::unique_ptr< SceneRenderNodes > m_renderNodes;
-		//!\~english	The prepared render nodes.
-		//!\~french		Les noeuds de rendu préparés.
-		std::unique_ptr< SceneRenderNodes > m_preparedRenderNodes;
-		//!\~english	Tells if the camera has changed.
-		//!\~french		Dit si la caméra a changé.
+		renderer::CommandBufferPtr m_commandBuffer;
 		bool m_changed{ true };
-		//!\~english	Tells if the scene has changed.
-		//!\~french		Dit si la scène a changé.
 		bool m_isSceneChanged{ true };
-		//!\~english	The connection to the scene change notification.
-		//!\~french		Les conenction à la notification de scène changée.
 		OnSceneChangedConnection m_sceneChanged;
-		//!\~english	The connection to the camera change notification.
-		//!\~french		Les conenction à la notification de caméra changée.
 		OnCameraChangedConnection m_cameraChanged;
-		//!\~english	The optional camera.
-		//!\~french		La camera optionnelle.
 		Camera * m_camera{ nullptr };
 	};
 }

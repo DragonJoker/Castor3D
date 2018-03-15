@@ -88,10 +88,10 @@ namespace castor3d
 		{
 			renderer::FrameBufferAttachmentArray attaches
 			{
-				{ *( renderPass.begin() + 0u ), wbResult[0] },
-				{ *( renderPass.begin() + 1u ), wbResult[1] },
-				{ *( renderPass.begin() + 2u ), wbResult[2] },
-				{ *( renderPass.begin() + 3u ), colourView },
+				{ *( renderPass.getAttachments().begin() + 0u ), wbResult[0] },
+				{ *( renderPass.getAttachments().begin() + 1u ), wbResult[1] },
+				{ *( renderPass.getAttachments().begin() + 2u ), wbResult[2] },
+				{ *( renderPass.getAttachments().begin() + 3u ), colourView },
 			};
 			return renderPass.createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
 				, std::move( attaches ) );
@@ -108,9 +108,9 @@ namespace castor3d
 		, m_transparentPass{ transparentPass }
 		, m_size{ size }
 		, m_accumulation{ doCreateTexture( engine, m_size, WbTexture::eAccumulation ) }
-		, m_accumulationView{ m_accumulation->createView( renderer::TextureType::e2D, m_accumulation->getFormat() ) }
+		, m_accumulationView{ m_accumulation->createView( renderer::TextureViewType::e2D, m_accumulation->getFormat() ) }
 		, m_revealage{ doCreateTexture( engine, m_size, WbTexture::eRevealage ) }
-		, m_revealageView{ m_revealage->createView( renderer::TextureType::e2D, m_accumulation->getFormat() ) }
+		, m_revealageView{ m_revealage->createView( renderer::TextureViewType::e2D, m_accumulation->getFormat() ) }
 		, m_renderPass{ doCreateRenderPass( engine, depthView, colourView ) }
 		, m_weightedBlendPassResult{ { depthView, *m_accumulationView, *m_revealageView } }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_size, m_weightedBlendPassResult, colourView ) }
@@ -122,9 +122,6 @@ namespace castor3d
 	void WeightedBlendRendering::update( Scene const & scene
 		, Camera const & camera )
 	{
-		static RgbaColour accumClear = RgbaColour::fromPredefined( PredefinedRgbaColour::eTransparentBlack );
-		static RgbaColour revealClear = RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueWhite );
-
 		m_transparentPass.getSceneUbo().update( camera, scene.getFog() );
 		auto invView = camera.getView().getInverse().getTransposed();
 		auto invProj = camera.getViewport().getProjection().getInverse();
@@ -143,8 +140,8 @@ namespace castor3d
 		, Point2r const & jitter
 		, TextureUnit const & velocity )
 	{
-		static RgbaColour accumClear = RgbaColour::fromPredefined( PredefinedRgbaColour::eTransparentBlack );
-		static RgbaColour revealClear = RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueWhite );
+		static renderer::ClearColorValue accumClear{ 0.0, 0.0, 0.0, 0.0 };
+		static renderer::ClearColorValue revealClear{ 1.0, 1.0, 1.0, 1.0 };
 		m_engine.setPerObjectLighting( true );
 
 		// Accumulate blend.

@@ -8,7 +8,14 @@ See LICENSE file in root folder
 #include "Shader/Ubos/ModelMatrixUbo.hpp"
 
 #include <Buffer/PushConstantsBuffer.hpp>
+#include <Buffer/VertexBuffer.hpp>
+#include <Command/CommandBuffer.hpp>
+#include <Descriptor/DescriptorSet.hpp>
+#include <Descriptor/DescriptorSetLayout.hpp>
+#include <Descriptor/DescriptorSetPool.hpp>
 #include <Miscellaneous/PushConstantRange.hpp>
+#include <Pipeline/Pipeline.hpp>
+#include <Pipeline/PipelineLayout.hpp>
 #include <Pipeline/VertexLayout.hpp>
 
 #include <Design/OwnedBy.hpp>
@@ -75,10 +82,9 @@ namespace castor3d
 		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
 		renderer::DescriptorSetPoolPtr m_descriptorPool;
 		renderer::DescriptorSetPtr m_descriptorSet;
-		renderer::VertexLayoutPtr m_vertexLayout;
-		renderer::PushConstantRange m_pushConstantRange;
 		renderer::VertexBufferPtr< NonTexturedCube > m_vertexBuffer;
-		RenderPipelineUPtr m_pipeline;
+		renderer::PipelineLayoutPtr m_pipelineLayout;
+		renderer::PipelinePtr m_pipeline;
 		SamplerSPtr m_sampler;
 		renderer::CommandBufferPtr m_commandBuffer;
 		castor::Matrix4x4r m_mtxModel;

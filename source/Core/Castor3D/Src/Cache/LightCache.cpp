@@ -32,21 +32,21 @@ namespace castor3d
 		class LightInitialiser
 		{
 		public:
-			explicit LightInitialiser( LightsMap & p_typeSortedLights )
-				: m_typeSortedLights{ p_typeSortedLights }
+			explicit LightInitialiser( LightsMap & typeSortedLights )
+				: m_typeSortedLights{ typeSortedLights }
 			{
 			}
 
-			inline void operator()( LightSPtr p_element )
+			inline void operator()( LightSPtr element )
 			{
-				auto index = size_t( p_element->getLightType() );
+				auto index = size_t( element->getLightType() );
 				auto it = std::find( m_typeSortedLights[index].begin()
 					, m_typeSortedLights[index].end()
-					, p_element );
+					, element );
 
 				if ( it == m_typeSortedLights[index].end() )
 				{
-					m_typeSortedLights[index].push_back( p_element );
+					m_typeSortedLights[index].push_back( element );
 				}
 			}
 
@@ -57,17 +57,17 @@ namespace castor3d
 		class LightCleaner
 		{
 		public:
-			explicit LightCleaner( LightsMap & p_typeSortedLights )
-				: m_typeSortedLights{ p_typeSortedLights }
+			explicit LightCleaner( LightsMap & typeSortedLights )
+				: m_typeSortedLights{ typeSortedLights }
 			{
 			}
 
-			inline void operator()( LightSPtr p_element )
+			inline void operator()( LightSPtr element )
 			{
-				auto index = size_t( p_element->getLightType() );
+				auto index = size_t( element->getLightType() );
 				auto it = std::find( m_typeSortedLights[index].begin()
 					, m_typeSortedLights[index].end()
-					, p_element );
+					, element );
 
 				if ( it != m_typeSortedLights[index].end() )
 				{
@@ -81,27 +81,27 @@ namespace castor3d
 	}
 
 	ObjectCache< Light, castor::String >::ObjectCache( Engine & engine
-		, Scene & p_scene
-		, SceneNodeSPtr p_rootNode
-		, SceneNodeSPtr p_rootCameraNode
-		, SceneNodeSPtr p_rootObjectNode
-		, Producer && p_produce
-		, Initialiser && p_initialise
-		, Cleaner && p_clean
-		, Merger && p_merge
-		, Attacher && p_attach
-		, Detacher && p_detach )
+		, Scene & scene
+		, SceneNodeSPtr rootNode
+		, SceneNodeSPtr rootCameraNode
+		, SceneNodeSPtr rootObjectNode
+		, Producer && produce
+		, Initialiser && initialise
+		, Cleaner && clean
+		, Merger && merge
+		, Attacher && attach
+		, Detacher && detach )
 		: MyObjectCache( engine
-			, p_scene
-			, p_rootNode
-			, p_rootCameraNode
-			, p_rootObjectNode
-			, std::move( p_produce )
+			, scene
+			, rootNode
+			, rootCameraNode
+			, rootObjectNode
+			, std::move( produce )
 			, std::bind( LightInitialiser{ m_typeSortedLights }, std::placeholders::_1 )
 			, std::bind( LightCleaner{ m_typeSortedLights }, std::placeholders::_1 )
-			, std::move( p_merge )
-			, std::move( p_attach )
-			, std::move( p_detach ) )
+			, std::move( merge )
+			, std::move( attach )
+			, std::move( detach ) )
 	{
 	}
 
@@ -140,18 +140,18 @@ namespace castor3d
 		MyObjectCache::cleanup();
 	}
 
-	ObjectCache< Light, castor::String >::ElementPtr ObjectCache< Light, castor::String >::add( Key const & p_name, ElementPtr p_element )
+	ObjectCache< Light, castor::String >::ElementPtr ObjectCache< Light, castor::String >::add( Key const & name, ElementPtr element )
 	{
-		ElementPtr result{ p_element };
+		ElementPtr result{ element };
 
-		if ( p_element )
+		if ( element )
 		{
 			auto lock = castor::makeUniqueLock( m_elements );
 
-			if ( m_elements.has( p_name ) )
+			if ( m_elements.has( name ) )
 			{
-				castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << p_name );
-				result = m_elements.find( p_name );
+				castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
+				result = m_elements.find( name );
 				m_dirtyLights.emplace_back( result.get() );
 				m_connections.emplace( result.get()
 					, result->onChanged.connect( std::bind( &ObjectCache< Light, String >::onLightChanged
@@ -160,7 +160,7 @@ namespace castor3d
 			}
 			else
 			{
-				m_elements.insert( p_name, p_element );
+				m_elements.insert( name, element );
 				onChanged();
 			}
 		}
@@ -172,18 +172,18 @@ namespace castor3d
 		return result;
 	}
 
-	ObjectCache< Light, castor::String >::ElementPtr ObjectCache< Light, String >::add( Key const & p_name, SceneNodeSPtr p_parent, LightType p_type )
+	ObjectCache< Light, castor::String >::ElementPtr ObjectCache< Light, String >::add( Key const & name, SceneNodeSPtr parent, LightType type )
 	{
 		auto lock = castor::makeUniqueLock( m_elements );
 		ElementPtr result;
 
-		if ( !m_elements.has( p_name ) )
+		if ( !m_elements.has( name ) )
 		{
-			result = m_produce( p_name, p_parent, p_type );
+			result = m_produce( name, parent, type );
 			m_initialise( result );
-			m_elements.insert( p_name, result );
-			m_attach( result, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
-			castor::Logger::logDebug( castor::StringStream() << INFO_CACHE_CREATED_OBJECT << getObjectTypeName() << cuT( ": " ) << p_name );
+			m_elements.insert( name, result );
+			m_attach( result, parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
+			castor::Logger::logDebug( castor::StringStream() << INFO_CACHE_CREATED_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
 			m_dirtyLights.emplace_back( result.get() );
 			m_connections.emplace( result.get()
 				, result->onChanged.connect( std::bind( &ObjectCache< Light, String >::onLightChanged
@@ -193,23 +193,23 @@ namespace castor3d
 		}
 		else
 		{
-			result = m_elements.find( p_name );
-			castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << p_name );
+			result = m_elements.find( name );
+			castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
 		}
 
 		return result;
 	}
 
-	void ObjectCache< Light, castor::String >::remove( Key const & p_name )
+	void ObjectCache< Light, castor::String >::remove( Key const & name )
 	{
 		auto lock = castor::makeUniqueLock( m_elements );
 
-		if ( m_elements.has( p_name ) )
+		if ( m_elements.has( name ) )
 		{
-			auto element = m_elements.find( p_name );
+			auto element = m_elements.find( name );
 			m_detach( element );
 			m_connections.erase( element.get() );
-			m_elements.erase( p_name );
+			m_elements.erase( name );
 			onChanged();
 		}
 	}

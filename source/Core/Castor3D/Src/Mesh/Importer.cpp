@@ -84,7 +84,7 @@ namespace castor3d
 					{
 						for ( auto & vertex : submesh->getPoints() )
 						{
-							vertex.m_pos *= scale;
+							vertex.pos *= scale;
 						}
 					}
 				}
@@ -133,10 +133,10 @@ namespace castor3d
 			File::listDirectoryFiles( m_filePath, files, true );
 			auto it = std::find_if( files.begin()
 				, files.end()
-				, [&fileName]( Path const & p_file )
+				, [&fileName]( Path const & file )
 				{
-					return p_file.getFileName( true ) == fileName
-						   || p_file.getFileName( true ).find( fileName ) == 0;
+					return file.getFileName( true ) == fileName
+						   || file.getFileName( true ).find( fileName ) == 0;
 				} );
 
 			folder = m_filePath;
@@ -176,10 +176,10 @@ namespace castor3d
 				unit->setChannel( channel );
 				pass.addTextureUnit( unit );
 			}
-			catch ( std::exception & p_exc )
+			catch ( std::exception & exc )
 			{
 				unit.reset();
-				Logger::logWarning( StringStream() << cuT( "Error encountered while loading texture file " ) << path << cuT( ":\n" ) << p_exc.what() );
+				Logger::logWarning( StringStream() << cuT( "Error encountered while loading texture file " ) << path << cuT( ":\n" ) << exc.what() );
 			}
 			catch ( ... )
 			{

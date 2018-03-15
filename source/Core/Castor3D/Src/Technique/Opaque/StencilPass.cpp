@@ -1,18 +1,20 @@
 #include "StencilPass.hpp"
 
-#include <Engine.hpp>
-#include <Buffer/GeometryBuffers.hpp>
+#include "Engine.hpp"
+#include "Render/RenderSystem.hpp"
+#include "Scene/Scene.hpp"
+#include "Scene/Camera.hpp"
+#include "Scene/Light/PointLight.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Shader/Ubos/ModelMatrixUbo.hpp"
+
 #include <Buffer/VertexBuffer.hpp>
-#include <FrameBuffer/FrameBuffer.hpp>
-#include <FrameBuffer/RenderBufferAttachment.hpp>
-#include <Render/RenderPipeline.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Scene/Scene.hpp>
-#include <Scene/Camera.hpp>
-#include <Scene/Light/PointLight.hpp>
-#include <Shader/Ubos/MatrixUbo.hpp>
-#include <Shader/Ubos/ModelMatrixUbo.hpp>
-#include <Shader/ShaderProgram.hpp>
+#include <Image/Texture.hpp>
+#include <Image/TextureView.hpp>
+#include <RenderPass/FrameBuffer.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
 
 #include <GlslSource.hpp>
 #include "Shader/Shaders/GlslLight.hpp"
@@ -27,15 +29,41 @@ namespace castor3d
 
 	namespace
 	{
-		glsl::Shader doGetVertexShader( Engine const & engine )
+		renderer::RenderPassPtr doCreateRenderPass( Engine const & engine
+			, renderer::TextureView const & depthView )
+		{
+			auto & device = *engine.getRenderSystem()->getCurrentDevice();
+
+			renderer::RenderPassCreateInfo renderPass;
+			renderPass.flags = 0u;
+
+			renderPass.attachments.resize( 1u );
+			renderPass.attachments[0].index = 0u;
+			renderPass.attachments[0].format = depthView.getFormat();
+			renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
+			renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+			renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eClear;
+			renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eStore;
+			renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+			renderPass.attachments[0].initialLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+			renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+
+			renderPass.subpasses.resize( 1u );
+			renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
+			renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
+
+			return device.createRenderPass( renderPass );
+		}
+
+		glsl::Shader doGetVertexShader( RenderSystem & renderSystem )
 		{
 			using namespace glsl;
-			GlslWriter writer = engine.getRenderSystem()->createGlslWriter();
+			GlslWriter writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			UBO_MATRIX( writer, 0u );
-			UBO_MODEL_MATRIX( writer, 0u );
-			auto vertex = writer.declAttribute< Vec3 >( cuT( "position" ) );
+			UBO_MATRIX( writer, 0u, 0u );
+			UBO_MODEL_MATRIX( writer, 1u, 0u );
+			auto vertex = writer.declAttribute< Vec3 >( cuT( "position" ), 0u );
 
 			// Shader outputs
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
@@ -47,87 +75,133 @@ namespace castor3d
 
 			return writer.finalise();
 		}
-
-		glsl::Shader doGetPixelShader( Engine const & engine )
-		{
-			using namespace glsl;
-			GlslWriter writer = engine.getRenderSystem()->createGlslWriter();
-
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-			} );
-
-			return writer.finalise();
-		}
 	}
 
 	//*********************************************************************************************
 
-	StencilPass::StencilPass( FrameBuffer & frameBuffer
-		, FrameBufferAttachment & depthAttach
+	StencilPass::StencilPass( Engine const & engine
+		, renderer::TextureView const & depthView
 		, MatrixUbo & matrixUbo
 		, ModelMatrixUbo & modelMatrixUbo )
-		: m_frameBuffer{ frameBuffer }
-		, m_depthAttach{ depthAttach }
+		: m_engine{ engine }
+		, m_depthView{ depthView }
 		, m_matrixUbo{ matrixUbo }
 		, m_modelMatrixUbo{ modelMatrixUbo }
 	{
 	}
 
-	void StencilPass::initialise( castor3d::VertexBuffer & vbo )
+	void StencilPass::initialise( renderer::VertexLayout const & vertexLayout
+		, renderer::VertexBufferBase & vbo )
 	{
 		m_vbo = &vbo;
-		auto & engine = *vbo.getEngine();
-		auto & renderSystem = *engine.getRenderSystem();
+		auto & renderSystem = *m_engine.getRenderSystem();
+		auto & device = *renderSystem.getCurrentDevice();
+		renderer::Extent2D size{ m_depthView.getTexture().getDimensions().width, m_depthView.getTexture().getDimensions().height };
 
-		m_program = engine.getShaderProgramCache().getNewProgram( false );
-		m_program->createObject( renderer::ShaderStageFlag::eVertex );
-		m_program->createObject( renderer::ShaderStageFlag::eFragment );
-		m_program->setSource( renderer::ShaderStageFlag::eVertex, doGetVertexShader( engine ) );
-		m_program->setSource( renderer::ShaderStageFlag::eFragment, doGetPixelShader( engine ) );
-		m_program->initialise();
+		renderer::DescriptorSetLayoutBindingArray setLayoutBindings
+		{
+			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex },
+			{ 1u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex },
+		};
+		m_descriptorLayout = device.createDescriptorSetLayout( std::move( setLayoutBindings ) );
+		m_pipelineLayout = device.createPipelineLayout( *m_descriptorLayout );
 
-		m_geometryBuffers = renderSystem.createGeometryBuffers( Topology::eTriangles, *m_program );
-		m_geometryBuffers->initialise( { vbo }, nullptr );
+		m_descriptorPool = m_descriptorLayout->createPool( 1u );
+		m_descriptorSet = m_descriptorPool->createDescriptorSet();
+		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 0u )
+			, m_matrixUbo.getUbo() );
+		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 1u )
+			, m_modelMatrixUbo.getUbo() );
+		m_descriptorSet->update();
 
-		DepthStencilState dsstate;
-		dsstate.setDepthTest( true );
-		dsstate.setDepthMask( WritingMask::eZero );
-		dsstate.setStencilTest( true );
-		dsstate.setStencilReadMask( 0 );
-		dsstate.setStencilRef( 0 );
-		dsstate.setStencilFunc( StencilFunc::eAlways );
-		dsstate.setStencilBackOps( StencilOp::eKeep, StencilOp::eIncrWrap, StencilOp::eKeep );
-		dsstate.setStencilFrontOps( StencilOp::eKeep, StencilOp::eDecrWrap, StencilOp::eKeep );
-		RasteriserState rsstate;
-		rsstate.setCulledFaces( Culling::eNone );
-		m_pipeline = renderSystem.createRenderPipeline( std::move( dsstate )
-			, std::move( rsstate )
-			, BlendState{}
-			, MultisampleState{}
-			, *m_program
-			, PipelineFlags{} );
-		m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
-		m_pipeline->addUniformBuffer( m_modelMatrixUbo.getUbo() );
+		m_renderPass = doCreateRenderPass( m_engine, m_depthView );
+		renderer::FrameBufferAttachmentArray attaches
+		{
+			{ *m_renderPass->getAttachments().begin(), m_depthView }
+		};
+		m_frameBuffer = m_renderPass->createFrameBuffer( size, std::move( attaches ) );
+
+		renderer::ShaderStageStateArray program
+		{
+			{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
+		};
+		program[0].module->loadShader( doGetVertexShader( renderSystem ).getSource() );
+
+		renderer::RasterisationState rsstate;
+		rsstate.cullMode = renderer::CullModeFlag::eNone;
+
+		renderer::DepthStencilState dsstate;
+		dsstate.depthTestEnable = true;
+		dsstate.depthTestEnable = false;
+		dsstate.stencilTestEnable = true;
+		dsstate.back.compareMask = 0u;
+		dsstate.back.reference = 0u;
+		dsstate.back.compareOp = renderer::CompareOp::eAlways;
+		dsstate.back.failOp = renderer::StencilOp::eKeep;
+		dsstate.back.depthFailOp = renderer::StencilOp::eIncrementAndWrap;
+		dsstate.back.passOp = renderer::StencilOp::eKeep;
+		dsstate.front.compareMask = 0u;
+		dsstate.front.reference = 0u;
+		dsstate.front.compareOp = renderer::CompareOp::eAlways;
+		dsstate.front.failOp = renderer::StencilOp::eKeep;
+		dsstate.front.depthFailOp = renderer::StencilOp::eDecrementAndWrap;
+		dsstate.front.passOp = renderer::StencilOp::eKeep;
+
+		m_pipeline = m_pipelineLayout->createPipeline(
+		{
+			program,
+			*m_renderPass,
+			renderer::VertexInputState::create( vertexLayout ),
+			renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleList },
+			rsstate,
+			renderer::MultisampleState{},
+			renderer::ColourBlendState::createDefault(),
+			{},
+			dsstate,
+			std::nullopt,
+			renderer::Viewport{ size.width, size.height, 0, 0 },
+			renderer::Scissor{ 0, 0, size.width, size.height },
+		} );
+
+		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
+		m_finished = device.createSemaphore();
+
+		if ( m_commandBuffer->begin() )
+		{
+			m_commandBuffer->beginRenderPass( *m_renderPass
+				, *m_frameBuffer
+				, { renderer::DepthStencilClearValue{ 1.0, 0 } }
+				, renderer::SubpassContents::eInline );
+			m_commandBuffer->bindPipeline( *m_pipeline );
+			m_commandBuffer->bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
+			m_commandBuffer->bindVertexBuffer( 0u, vbo.getBuffer(), 0u );
+			m_commandBuffer->draw( vbo.getSize() / vertexLayout.getStride() );
+			m_commandBuffer->endRenderPass();
+			m_commandBuffer->end();
+		}
 	}
 
 	void StencilPass::cleanup()
 	{
-		m_geometryBuffers->cleanup();
-		m_geometryBuffers.reset();
-		m_pipeline->cleanup();
+		m_finished.reset();
+		m_commandBuffer.reset();
 		m_pipeline.reset();
-		m_program.reset();
+		m_pipelineLayout.reset();
+		m_frameBuffer.reset();
+		m_renderPass.reset();
+		m_descriptorSet.reset();
+		m_descriptorPool.reset();
+		m_descriptorLayout.reset();
 	}
 
-	void StencilPass::render( uint32_t count )
+	void StencilPass::render( renderer::Semaphore const & toWait )
 	{
-		m_frameBuffer.bind( FrameBufferTarget::eDraw );
-		m_frameBuffer.setDrawBuffers( FrameBuffer::AttachArray{} );
-		m_depthAttach.clear( 0 );
-		m_pipeline->apply();
-		m_geometryBuffers->draw( count, 0u );
-		m_frameBuffer.unbind();
+		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
+		device.getGraphicsQueue().submit( *m_commandBuffer
+			, toWait
+			, renderer::PipelineStageFlag::eAllCommands
+			, *m_finished
+			, nullptr );
 	}
 
 	//*********************************************************************************************

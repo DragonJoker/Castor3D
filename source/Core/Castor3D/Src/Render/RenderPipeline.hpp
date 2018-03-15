@@ -6,11 +6,14 @@ See LICENSE file in root folder
 
 #include "Castor3DPrerequisites.hpp"
 
+#include <Descriptor/DescriptorSetLayout.hpp>
+#include <Descriptor/DescriptorSetPool.hpp>
 #include <Pipeline/ColourBlendState.hpp>
 #include <Pipeline/DepthStencilState.hpp>
 #include <Pipeline/MultisampleState.hpp>
 #include <Pipeline/RasterisationState.hpp>
 #include <Pipeline/Scissor.hpp>
+#include <Pipeline/VertexLayout.hpp>
 #include <Pipeline/Viewport.hpp>
 
 #include <Design/OwnedBy.hpp>
@@ -87,15 +90,6 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
-		*	Cleans up the pipeline.
-		*\~french
-		*\brief
-		*	Nettoie le pipeline.
-		*/
-		C3D_API void cleanup();
-		/**
-		*\~english
-		*\brief
 		*	Initialises the pipeline.
 		*\param[in] renderPass
 		*	The render pass to which this pipeline is bound.
@@ -113,6 +107,28 @@ namespace castor3d
 			, renderer::PrimitiveTopology topology );
 		/**
 		*\~english
+		*\brief
+		*	Cleans up the pipeline.
+		*\~french
+		*\brief
+		*	Nettoie le pipeline.
+		*/
+		C3D_API void cleanup();
+		/**
+		*\~english
+		*\brief
+		*	Creates the descriptor pools for \p maxSetsPerLayout descriptor sets per descriptor set layout.
+		*\param[in] maxSetsPerLayout
+		*	The number of descriptor sets to be allocatable by the pools, per layout.
+		*\~french
+		*\brief
+		*	Crée les pools de descripteurs pour \p maxSetsPerLayout ensembles de descripteurs par layout d'ensemble de descripteurs.
+		*\param[in] maxSetsPerLayout
+		*	Le nombre d'ensembles de descripteurs allouables par les pools, par layout.
+		*/
+		C3D_API void createDescriptorPools( renderer::UInt32Array maxSetsPerLayout );
+		/**
+		*\~english
 		*name
 		*	Mutators.
 		*\remarks
@@ -124,16 +140,16 @@ namespace castor3d
 		*	Ils doivent être appelés avant l'appel à initialise().
 		**/
 		/**@{*/
-		inline void setVertexLayouts( renderer::VertexLayoutCRefArray const & layouts )
+		inline void setVertexLayouts( std::vector< renderer::VertexLayout > layouts )
 		{
 			REQUIRE( !m_pipeline );
-			m_vertexLayouts = layouts;
+			m_vertexLayouts = std::move( layouts );
 		}
 
-		inline void setDescriptorSetLayouts( renderer::DescriptorSetLayoutCRefArray const & layouts )
+		inline void setDescriptorSetLayouts( std::vector< renderer::DescriptorSetLayoutPtr > && layouts )
 		{
 			REQUIRE( !m_pipeline );
-			m_descriptorLayouts = layouts;
+			m_descriptorLayouts = std::move( layouts );
 		}
 
 		inline void setPushConstantRanges( renderer::PushConstantRangeCRefArray const & pushConstantRanges )
@@ -179,6 +195,18 @@ namespace castor3d
 			REQUIRE( m_pipelineLayout );
 			return *m_pipelineLayout;
 		}
+
+		inline renderer::DescriptorSetLayout const & getDescriptorSetLayout( uint32_t index )const
+		{
+			REQUIRE( index < m_descriptorLayouts.size() );
+			return *m_descriptorLayouts[index];
+		}
+
+		inline renderer::DescriptorSetPool const & getDescriptorPool( uint32_t index )const
+		{
+			REQUIRE( index < m_descriptorPools.size() );
+			return *m_descriptorPools[index];
+		}
 		/**@}*/
 
 	private:
@@ -188,8 +216,9 @@ namespace castor3d
 		renderer::MultisampleState m_msState;
 		renderer::ShaderStageStateArray m_program;
 		PipelineFlags m_flags;
-		renderer::VertexLayoutCRefArray m_vertexLayouts;
-		renderer::DescriptorSetLayoutCRefArray m_descriptorLayouts;
+		std::vector< renderer::VertexLayout > m_vertexLayouts;
+		std::vector< renderer::DescriptorSetLayoutPtr > m_descriptorLayouts;
+		std::vector< renderer::DescriptorSetPoolPtr > m_descriptorPools;
 		renderer::PushConstantRangeCRefArray m_pushConstantRanges;
 		std::unique_ptr< renderer::Viewport > m_viewport;
 		std::unique_ptr< renderer::Scissor > m_scissor;

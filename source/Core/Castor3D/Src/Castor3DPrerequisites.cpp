@@ -307,17 +307,14 @@ namespace castor3d
 				{
 				case LightType::eDirectional:
 					result->declareDirectionalModel( index );
-					writer.declUniform< DirectionalLight >( cuT( "light" ), index++ );
 					break;
 
 				case LightType::ePoint:
 					result->declarePointModel( index );
-					writer.declUniform< PointLight >( cuT( "light" ), index++ );
 					break;
 
 				case LightType::eSpot:
 					result->declareSpotModel( index );
-					writer.declUniform< SpotLight >( cuT( "light" ), index++ );
 					break;
 
 				default:
@@ -334,9 +331,9 @@ namespace castor3d
 			namespace mr
 			{
 				void computePreLightingMapContributions( glsl::GlslWriter & writer
-					, glsl::Vec3 & p_normal
-					, glsl::Float & p_metallic
-					, glsl::Float & p_roughness
+					, glsl::Vec3 & normal
+					, glsl::Float & metallic
+					, glsl::Float & roughness
 					, TextureChannels const & textureFlags
 					, ProgramFlags const & programFlags
 					, SceneFlags const & sceneFlags
@@ -370,27 +367,27 @@ namespace castor3d
 						auto tbn = writer.declLocale( cuT( "tbn" )
 							, mat3( normalize( vtx_tangent )
 								, normalize( vtx_bitangent )
-								, p_normal ) );
-						p_normal = normalize( tbn * v3MapNormal );
+								, normal ) );
+						normal = normalize( tbn * v3MapNormal );
 					}
 
 					if ( checkFlag( textureFlags, TextureChannel::eMetallic ) )
 					{
 						auto c3d_mapMetallic( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapMetallic" ) ) );
-						p_metallic = texture( c3d_mapMetallic, texCoord.xy() ).r();
+						metallic = texture( c3d_mapMetallic, texCoord.xy() ).r();
 					}
 
 					if ( checkFlag( textureFlags, TextureChannel::eRoughness ) )
 					{
 						auto c3d_mapRoughness( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapRoughness" ) ) );
-						p_roughness = texture( c3d_mapRoughness, texCoord.xy() ).r();
+						roughness = texture( c3d_mapRoughness, texCoord.xy() ).r();
 					}
 				}
 
 				void computePostLightingMapContributions( glsl::GlslWriter & writer
-					, glsl::Vec3 & p_albedo
-					, glsl::Vec3 & p_emissive
-					, glsl::Float const & p_gamma
+					, glsl::Vec3 & albedo
+					, glsl::Vec3 & emissive
+					, glsl::Float const & gamma
 					, TextureChannels const & textureFlags
 					, ProgramFlags const & programFlags
 					, SceneFlags const & sceneFlags )
@@ -401,18 +398,18 @@ namespace castor3d
 					if ( checkFlag( textureFlags, TextureChannel::eAlbedo ) )
 					{
 						auto c3d_mapAlbedo( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapAlbedo" ) ) );
-						p_albedo *= writeFunctionCall< Vec3 >( &writer, cuT( "removeGamma" )
-							, p_gamma
+						albedo *= writeFunctionCall< Vec3 >( &writer, cuT( "removeGamma" )
+							, gamma
 							, texture( c3d_mapAlbedo, texCoord.xy() ).xyz() );
 					}
 
-					p_emissive *= p_albedo;
+					emissive *= albedo;
 
 					if ( checkFlag( textureFlags, TextureChannel::eEmissive ) )
 					{
 						auto c3d_mapEmissive( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapEmissive" ) ) );
-						p_emissive *= writeFunctionCall< Vec3 >( &writer, cuT( "removeGamma" )
-							, p_gamma
+						emissive *= writeFunctionCall< Vec3 >( &writer, cuT( "removeGamma" )
+							, gamma
 							, texture( c3d_mapEmissive, texCoord.xy() ).xyz() );
 					}
 				}
@@ -461,9 +458,9 @@ namespace castor3d
 			namespace sg
 			{
 				void computePreLightingMapContributions( glsl::GlslWriter & writer
-					, glsl::Vec3 & p_normal
-					, glsl::Vec3 & p_specular
-					, glsl::Float & p_glossiness
+					, glsl::Vec3 & normal
+					, glsl::Vec3 & specular
+					, glsl::Float & glossiness
 					, TextureChannels const & textureFlags
 					, ProgramFlags const & programFlags
 					, SceneFlags const & sceneFlags
@@ -497,27 +494,27 @@ namespace castor3d
 						auto tbn = writer.declLocale( cuT( "tbn" )
 							, mat3( normalize( vtx_tangent )
 								, normalize( vtx_bitangent )
-								, p_normal ) );
-						p_normal = normalize( tbn * v3MapNormal );
+								, normal ) );
+						normal = normalize( tbn * v3MapNormal );
 					}
 
 					if ( checkFlag( textureFlags, TextureChannel::eSpecular ) )
 					{
 						auto c3d_mapSpecular( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapSpecular" ) ) );
-						p_specular *= texture( c3d_mapSpecular, texCoord.xy() ).rgb();
+						specular *= texture( c3d_mapSpecular, texCoord.xy() ).rgb();
 					}
 
 					if ( checkFlag( textureFlags, TextureChannel::eGloss ) )
 					{
 						auto c3d_mapGloss( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapGloss" ) ) );
-						p_glossiness *= texture( c3d_mapGloss, texCoord.xy() ).r();
+						glossiness *= texture( c3d_mapGloss, texCoord.xy() ).r();
 					}
 				}
 
 				void computePostLightingMapContributions( glsl::GlslWriter & writer
-					, glsl::Vec3 & p_diffuse
-					, glsl::Vec3 & p_emissive
-					, glsl::Float const & p_gamma
+					, glsl::Vec3 & diffuse
+					, glsl::Vec3 & emissive
+					, glsl::Float const & gamma
 					, TextureChannels const & textureFlags
 					, ProgramFlags const & programFlags
 					, SceneFlags const & sceneFlags )
@@ -528,18 +525,18 @@ namespace castor3d
 					if ( checkFlag( textureFlags, TextureChannel::eAlbedo ) )
 					{
 						auto c3d_mapDiffuse( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapDiffuse" ) ) );
-						p_diffuse *= writeFunctionCall< Vec3 >( &writer, cuT( "removeGamma" )
-							, p_gamma
+						diffuse *= writeFunctionCall< Vec3 >( &writer, cuT( "removeGamma" )
+							, gamma
 							, texture( c3d_mapDiffuse, texCoord.xy() ).xyz() );
 					}
 
-					p_emissive *= p_diffuse;
+					emissive *= diffuse;
 
 					if ( checkFlag( textureFlags, TextureChannel::eEmissive ) )
 					{
 						auto c3d_mapEmissive( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapEmissive" ) ) );
-						p_emissive *= writeFunctionCall< Vec3 >( &writer, cuT( "removeGamma" )
-							, p_gamma
+						emissive *= writeFunctionCall< Vec3 >( &writer, cuT( "removeGamma" )
+							, gamma
 							, texture( c3d_mapEmissive, texCoord.xy() ).xyz() );
 					}
 				}
@@ -689,9 +686,9 @@ namespace castor3d
 				auto c3d_heightScale( writer.getBuiltin< Float >( cuT( "c3d_heightScale" ) ) );
 
 				result = writer.implementFunction< Float >( cuT( "ParallaxSoftShadowMultiplier" )
-					, [&]( Vec3 const & p_lightDir
-					, Vec2 const p_initialTexCoord
-					, Float p_initialHeight )
+					, [&]( Vec3 const & lightDir
+					, Vec2 const initialTexCoord
+					, Float initialHeight )
 					{
 						auto shadowMultiplier = writer.declLocale( cuT( "shadowMultiplier" )
 							, 1.0_f );
@@ -701,7 +698,7 @@ namespace castor3d
 							, 20.0_f );
 
 						// calculate lighting only for surface oriented to the light source
-						IF( writer, dot( vec3( 0.0_f, 0, 1 ), p_lightDir ) > 0.0_f )
+						IF( writer, dot( vec3( 0.0_f, 0, 1 ), lightDir ) > 0.0_f )
 						{
 							// calculate initial parameters
 							auto numSamplesUnderSurface = writer.declLocale( cuT( "numSamplesUnderSurface" )
@@ -710,17 +707,17 @@ namespace castor3d
 							auto numLayers = writer.declLocale( cuT( "numLayers" )
 								, mix( maxLayers
 									, minLayers
-									, glsl::abs( dot( vec3( 0.0_f, 0.0, 1.0 ), p_lightDir ) ) ) );
+									, glsl::abs( dot( vec3( 0.0_f, 0.0, 1.0 ), lightDir ) ) ) );
 							auto layerHeight = writer.declLocale( cuT( "layerHeight" )
-								, p_initialHeight / numLayers );
+								, initialHeight / numLayers );
 							auto texStep = writer.declLocale( cuT( "deltaTexCoords" )
-								, writer.paren( p_lightDir.xy() * c3d_heightScale ) / p_lightDir.z() / numLayers );
+								, writer.paren( lightDir.xy() * c3d_heightScale ) / lightDir.z() / numLayers );
 
 							// current parameters
 							auto currentLayerHeight = writer.declLocale( cuT( "currentLayerHeight" )
-								, p_initialHeight - layerHeight );
+								, initialHeight - layerHeight );
 							auto currentTextureCoords = writer.declLocale( cuT( "currentTextureCoords" )
-								, p_initialTexCoord + texStep );
+								, initialTexCoord + texStep );
 							auto heightFromTexture = writer.declLocale( cuT( "heightFromTexture" )
 								, texture( c3d_mapHeight, currentTextureCoords ).r() );
 							auto stepIndex = writer.declLocale( cuT( "stepIndex" )
@@ -763,9 +760,9 @@ namespace castor3d
 						FI;
 
 						writer.returnStmt( shadowMultiplier );
-					}, InVec3{ &writer, cuT( "p_lightDir" ) }
-					, InVec2{ &writer, cuT( "p_initialTexCoord" ) }
-					, InFloat{ &writer, cuT( "p_initialHeight" ) } );
+					}, InVec3{ &writer, cuT( "lightDir" ) }
+					, InVec2{ &writer, cuT( "initialTexCoord" ) }
+					, InFloat{ &writer, cuT( "initialHeight" ) } );
 			}
 
 			return result;
@@ -785,7 +782,7 @@ namespace castor3d
 				auto c3d_heightScale( writer.getBuiltin< Float >( cuT( "c3d_heightScale" ) ) );
 
 				result = writer.implementFunction< Vec2 >( cuT( "ParallaxMapping" ),
-					[&]( Vec2 const & p_texCoords, Vec3 const & p_viewDir )
+					[&]( Vec2 const & texCoords, Vec3 const & viewDir )
 					{
 						// number of depth layers
 						auto minLayers = writer.declLocale( cuT( "minLayers" )
@@ -795,7 +792,7 @@ namespace castor3d
 						auto numLayers = writer.declLocale( cuT( "numLayers" )
 							, mix( maxLayers
 								, minLayers
-								, glsl::abs( dot( vec3( 0.0_f, 0.0, 1.0 ), p_viewDir ) ) ) );
+								, glsl::abs( dot( vec3( 0.0_f, 0.0, 1.0 ), viewDir ) ) ) );
 						// calculate the size of each layer
 						auto layerDepth = writer.declLocale( cuT( "layerDepth" )
 							, Float( 1.0f / numLayers ) );
@@ -804,12 +801,12 @@ namespace castor3d
 							, 0.0_f );
 						// the amount to shift the texture coordinates per layer (from vector P)
 						auto p = writer.declLocale( cuT( "p" )
-							, p_viewDir.xy() * c3d_heightScale );
+							, viewDir.xy() * c3d_heightScale );
 						auto deltaTexCoords = writer.declLocale( cuT( "deltaTexCoords" )
 							, p / numLayers );
 
 						auto currentTexCoords = writer.declLocale( cuT( "currentTexCoords" )
-							, p_texCoords );
+							, texCoords );
 						auto currentDepthMapValue = writer.declLocale( cuT( "currentDepthMapValue" )
 							, texture( c3d_mapHeight, currentTexCoords ).r() );
 
@@ -843,8 +840,8 @@ namespace castor3d
 								, currentTexCoords * writer.paren( vec2( 1.0_f ) - weight ) ) );
 
 						writer.returnStmt( finalTexCoords );
-					}, InVec2{ &writer, cuT( "p_texCoords" ) }
-					, InVec3{ &writer, cuT( "p_viewDir" ) } );
+					}, InVec2{ &writer, cuT( "texCoords" ) }
+					, InVec3{ &writer, cuT( "viewDir" ) } );
 			}
 
 			return result;

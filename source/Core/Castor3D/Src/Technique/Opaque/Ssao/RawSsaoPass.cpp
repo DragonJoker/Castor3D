@@ -82,7 +82,7 @@ namespace castor3d
 			auto & renderSystem = *engine.getRenderSystem();
 			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
-			auto index = MinTextureIndex;
+			auto index = MinBufferIndex;
 
 			// If using depth mip levels, the log of the maximum pixel offset before we need to switch to a lower
 			// miplevel to maintain reasonable spatial locality in the cache

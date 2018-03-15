@@ -31,7 +31,6 @@ namespace castor3d
 		, m_matrixUbo{ engine }
 		, m_modelMatrixUbo{ engine }
 		, m_sizePushConstant{ renderer::ShaderStageFlag::eFragment, { { 0u, 0u, renderer::ConstantFormat::eVec2f } } }
-		, m_pushConstantRange{ renderer::ShaderStageFlag::eFragment, m_sizePushConstant.getOffset(), m_sizePushConstant.getSize() }
 	{
 		m_sampler = engine.getSamplerCache().add( cuT( "TextureProjection" ) );
 		m_sampler->setMinFilter( renderer::Filter::eLinear );
@@ -56,13 +55,12 @@ namespace castor3d
 
 	void TextureProjection::cleanup()
 	{
-		m_pipeline->cleanup();
 		m_pipeline.reset();
+		m_pipelineLayout.reset();
 		m_matrixUbo.cleanup();
 		m_modelMatrixUbo.cleanup();
 		m_sampler.reset();
 		m_vertexBuffer.reset();
-		m_vertexLayout.reset();
 		m_descriptorSet.reset();
 		m_descriptorPool.reset();
 		m_descriptorLayout.reset();
@@ -87,11 +85,11 @@ namespace castor3d
 
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eRenderPassContinue ) )
 		{
-			m_commandBuffer->bindPipeline( m_pipeline->getPipeline() );
+			m_commandBuffer->bindPipeline( *m_pipeline );
 			m_commandBuffer->setViewport( { m_size.getWidth(), m_size.getHeight(), 0, 0 } );
 			m_commandBuffer->setScissor( { 0, 0, m_size.getWidth(), m_size.getHeight() } );
-			m_commandBuffer->bindDescriptorSet( *m_descriptorSet, m_pipeline->getPipelineLayout() );
-			m_commandBuffer->pushConstants( m_pipeline->getPipelineLayout(), m_sizePushConstant );
+			m_commandBuffer->bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
+			m_commandBuffer->pushConstants( *m_pipelineLayout, m_sizePushConstant );
 			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 			m_commandBuffer->draw( 36u );
 			m_commandBuffer->end();
@@ -173,10 +171,6 @@ namespace castor3d
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
-		m_vertexLayout = renderer::makeLayout< NonTexturedCube >( 0u );
-		m_vertexLayout->createAttribute( 0u
-			, renderer::Format::eR32G32B32_SFLOAT
-			, offsetof( NonTexturedCube::Quad::Vertex, position ) );
 		m_vertexBuffer = renderer::makeVertexBuffer< NonTexturedCube >( device
 			, 1u
 			, renderer::BufferTarget::eTransferDst
@@ -225,16 +219,14 @@ namespace castor3d
 			renderer::CullModeFlag::eFront
 		};
 
+		auto vertexLayout = renderer::makeLayout< NonTexturedCube >( 0u );
+		vertexLayout->createAttribute( 0u
+			, renderer::Format::eR32G32B32_SFLOAT
+			, offsetof( NonTexturedCube::Quad::Vertex, position ) );
+
 		auto blState = renderer::ColourBlendState::createDefault();
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
-		m_pipeline = std::make_unique< RenderPipeline >( renderSystem
-			, std::move( dsState )
-			, std::move( rsState )
-			, std::move( blState )
-			, renderer::MultisampleState{}
-			, program
-			, PipelineFlags{} );
 
 		renderer::DescriptorSetLayoutBindingArray bindings
 		{
@@ -243,7 +235,22 @@ namespace castor3d
 			{ 2u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
 		};
 		m_descriptorLayout = device.createDescriptorSetLayout( std::move( bindings ) );
-		m_descriptorPool = m_descriptorLayout->createPool( 1u );
+		renderer::PushConstantRange pushRange{ renderer::ShaderStageFlag::eFragment, m_sizePushConstant.getOffset(), m_sizePushConstant.getSize() };
+		m_pipelineLayout = device.createPipelineLayout( *m_descriptorLayout, pushRange );
+
+		m_pipeline = m_pipelineLayout->createPipeline(
+		{
+			program,
+			renderPass,
+			renderer::VertexInputState::create( *vertexLayout ),
+			renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleList },
+			rsState,
+			renderer::MultisampleState{},
+			blState,
+			{ renderer::DynamicState::eViewport, renderer::DynamicState::eScissor },
+			std::move( dsState )
+		} );
+
 		m_descriptorSet = m_descriptorPool->createDescriptorSet( 0u );
 		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 0u )
 			, m_matrixUbo.getUbo()
@@ -257,10 +264,6 @@ namespace castor3d
 			, texture
 			, m_sampler->getSampler() );
 
-		m_pipeline->setVertexLayouts( { *m_vertexLayout } );
-		m_pipeline->setDescriptorSetLayouts( { *m_descriptorLayout } );
-		m_pipeline->setPushConstantRanges( { m_pushConstantRange } );
-		m_pipeline->initialise( renderPass, renderer::PrimitiveTopology::eTriangleList );
 		return true;
 	}
 }

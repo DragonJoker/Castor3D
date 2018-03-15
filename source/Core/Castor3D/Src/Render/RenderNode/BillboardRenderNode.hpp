@@ -31,7 +31,7 @@ namespace castor3d
 
 		//!\~english	The billboard UBO.
 		//!\~french		L'UBO de billboard.
-		UniformBufferOffset< BillboardUbo::Configuration > & m_billboardUbo;
+		UniformBufferOffset< BillboardUbo::Configuration > & billboardUbo;
 	};
 }
 

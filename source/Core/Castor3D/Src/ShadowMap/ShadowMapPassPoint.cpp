@@ -15,18 +15,18 @@ namespace castor3d
 {
 	namespace
 	{
-		void doUpdateShadowMatrices( Point3r const & p_position
-			, std::array< Matrix4x4r, size_t( CubeMapFace::eCount ) > & p_matrices )
+		void doUpdateShadowMatrices( Point3r const & position
+			, std::array< Matrix4x4r, size_t( CubeMapFace::eCount ) > & matrices )
 		{
-			p_matrices =
+			matrices =
 			{
 				{
-					matrix::lookAt( p_position, p_position + Point3r{ +1, +0, +0 }, Point3r{ +0, -1, +0 } ),// Positive X
-					matrix::lookAt( p_position, p_position + Point3r{ -1, +0, +0 }, Point3r{ +0, -1, +0 } ),// Negative X
-					matrix::lookAt( p_position, p_position + Point3r{ +0, +1, +0 }, Point3r{ +0, +0, +1 } ),// Positive Y
-					matrix::lookAt( p_position, p_position + Point3r{ +0, -1, +0 }, Point3r{ +0, +0, -1 } ),// Negative Y
-					matrix::lookAt( p_position, p_position + Point3r{ +0, +0, +1 }, Point3r{ +0, -1, +0 } ),// Positive Z
-					matrix::lookAt( p_position, p_position + Point3r{ +0, +0, -1 }, Point3r{ +0, -1, +0 } ),// Negative Z
+					matrix::lookAt( position, position + Point3r{ +1, +0, +0 }, Point3r{ +0, -1, +0 } ),// Positive X
+					matrix::lookAt( position, position + Point3r{ -1, +0, +0 }, Point3r{ +0, -1, +0 } ),// Negative X
+					matrix::lookAt( position, position + Point3r{ +0, +1, +0 }, Point3r{ +0, +0, +1 } ),// Positive Y
+					matrix::lookAt( position, position + Point3r{ +0, -1, +0 }, Point3r{ +0, +0, -1 } ),// Negative Y
+					matrix::lookAt( position, position + Point3r{ +0, +0, +1 }, Point3r{ +0, -1, +0 } ),// Positive Z
+					matrix::lookAt( position, position + Point3r{ +0, +0, -1 }, Point3r{ +0, -1, +0 } ),// Negative Z
 				}
 			};
 		}
@@ -40,12 +40,6 @@ namespace castor3d
 		, Scene & scene
 		, ShadowMap const & shadowMap )
 		: ShadowMapPass{ engine, scene, shadowMap }
-		, m_shadowConfig{ ShadowMapUbo
-			, *engine.getRenderSystem()
-			, 8u }
-		, m_viewport{ engine }
-		, m_worldLightPosition{ *m_shadowConfig.createUniform< UniformType::eVec3f >( WorldLightPosition ) }
-		, m_farPlane{ *m_shadowConfig.createUniform< UniformType::eFloat >( FarPlane ) }
 	{
 		m_renderQueue.initialise( scene );
 	}
@@ -64,8 +58,9 @@ namespace castor3d
 			, m_viewport
 			, index );
 		doUpdateShadowMatrices( position, m_matrices );
-		m_worldLightPosition.setValue( position );
-		m_farPlane.setValue( m_viewport.getFar() );
+		auto & config = m_shadowConfig->getData();
+		config.worldLightPosition = position;
+		config.farPlane = m_viewport.getFar();
 		doUpdate( queues );
 	}
 
@@ -73,92 +68,102 @@ namespace castor3d
 	{
 		if ( m_initialised )
 		{
-			m_shadowConfig.update();
-			m_shadowConfig.bindTo( UboBindingPoint );
-			m_viewport.apply();
+			m_shadowConfig->upload();
 			m_matrixUbo.update( m_matrices[index], m_projection );
-			doRenderNodes( m_renderQueue.getRenderNodes() );
+			doUpdateNodes( m_renderQueue.getRenderNodes() );
 		}
 	}
 
-	void ShadowMapPassPoint::doRenderNodes( SceneRenderNodes & p_nodes )
+	void ShadowMapPassPoint::doUpdateNodes( SceneRenderNodes & nodes )
 	{
-		RenderPass::doUpdate( p_nodes.m_instantiatedStaticNodes.m_backCulled );
-		RenderPass::doUpdate( p_nodes.m_staticNodes.m_backCulled );
-		RenderPass::doUpdate( p_nodes.m_skinnedNodes.m_backCulled );
-		RenderPass::doUpdate( p_nodes.m_instantiatedSkinnedNodes.m_backCulled );
-		RenderPass::doUpdate( p_nodes.m_morphingNodes.m_backCulled );
-		RenderPass::doUpdate( p_nodes.m_billboardNodes.m_backCulled );
+		RenderPass::doUpdate( nodes.instancedStaticNodes.backCulled );
+		RenderPass::doUpdate( nodes.staticNodes.backCulled );
+		RenderPass::doUpdate( nodes.skinnedNodes.backCulled );
+		RenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled );
+		RenderPass::doUpdate( nodes.morphingNodes.backCulled );
+		RenderPass::doUpdate( nodes.billboardNodes.backCulled );
 	}
 
-	bool ShadowMapPassPoint::doInitialise( Size const & p_size )
+	bool ShadowMapPassPoint::doInitialise( Size const & size )
 	{
-		real const aspect = real( p_size.getWidth() ) / p_size.getHeight();
+		real const aspect = real( size.getWidth() ) / size.getHeight();
 		real const near = 1.0_r;
 		real const far = 2000.0_r;
 		matrix::perspective( m_projection, 90.0_degrees, aspect, near, far );
 
-		m_viewport.resize( p_size );
-		m_viewport.initialise();
+		m_shadowConfig = renderer::makeUniformBuffer< Configuration >( *getEngine()->getRenderSystem()->getCurrentDevice()
+			, 1u
+			, 0u
+			, renderer::MemoryPropertyFlag::eHostVisible | renderer::MemoryPropertyFlag::eHostCoherent );
+
+		m_viewport.resize( size );
 		return true;
 	}
 
 	void ShadowMapPassPoint::doCleanup()
 	{
-		m_viewport.cleanup();
-		m_matrixUbo.getUbo().cleanup();
-		m_shadowConfig.cleanup();
+		m_matrixUbo.cleanup();
+		m_shadowConfig.reset();
 		m_onNodeChanged.disconnect();
 	}
 
-	void ShadowMapPassPoint::doUpdate( RenderQueueArray & p_queues )
+	void ShadowMapPassPoint::doFillDescriptor( renderer::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, BillboardListRenderNode & node )
 	{
-		p_queues.emplace_back( m_renderQueue );
+		node.descriptorSet->createBinding( layout.getBinding( ShadowMapPassPoint::UboBindingPoint )
+			, *m_shadowConfig );
 	}
 
-	void ShadowMapPassPoint::doPreparePipeline( ShaderProgram & program
+	void ShadowMapPassPoint::doFillDescriptor( renderer::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, SubmeshRenderNode & node )
+	{
+		node.descriptorSet->createBinding( layout.getBinding( ShadowMapPassPoint::UboBindingPoint )
+			, *m_shadowConfig );
+	}
+
+	void ShadowMapPassPoint::doUpdate( RenderQueueArray & queues )
+	{
+		queues.emplace_back( m_renderQueue );
+	}
+
+	void ShadowMapPassPoint::doPreparePipeline( renderer::ShaderStageStateArray & program
 		, PipelineFlags const & flags )
 	{
 		if ( m_backPipelines.find( flags ) == m_backPipelines.end() )
 		{
-			RasteriserState rsState;
-			rsState.setCulledFaces( Culling::eNone );
-			DepthStencilState dsState;
-			dsState.setDepthTest( true );
+			renderer::RasterisationState rsState;
+			rsState.cullMode = renderer::CullModeFlag::eNone;
+			renderer::DepthStencilState dsState;
 			auto & pipeline = *m_backPipelines.emplace( flags
-				, getEngine()->getRenderSystem()->createRenderPipeline( std::move( dsState )
+				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
+					, std::move( dsState )
 					, std::move( rsState )
-					, BlendState{}
-					, MultisampleState{}
+					, renderer::ColourBlendState::createDefault()
+					, renderer::MultisampleState{}
 					, program
 					, flags ) ).first->second;
 
-			getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-				, [this, &pipeline, flags]()
-				{
-					pipeline.addUniformBuffer( m_matrixUbo.getUbo() );
-					pipeline.addUniformBuffer( m_modelUbo.getUbo() );
-					pipeline.addUniformBuffer( m_modelMatrixUbo.getUbo() );
-					pipeline.addUniformBuffer( m_shadowConfig );
+			auto initialise = [this, &pipeline, flags]()
+			{
+				auto uboBindings = doCreateUboBindings( flags );
+				uboBindings.emplace_back( ShadowMapPassPoint::UboBindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment );
+				auto layout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
+				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
+				layouts.emplace_back( std::move( layout ) );
+				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
+				m_initialised = true;
+			};
 
-					if ( checkFlag( flags.m_programFlags, ProgramFlag::eBillboards ) )
-					{
-						pipeline.addUniformBuffer( m_billboardUbo.getUbo() );
-					}
-
-					if ( checkFlag( flags.m_programFlags, ProgramFlag::eSkinning )
-						&& !checkFlag( flags.m_programFlags, ProgramFlag::eInstantiation ) )
-					{
-						pipeline.addUniformBuffer( m_skinningUbo.getUbo() );
-					}
-
-					if ( checkFlag( flags.m_programFlags, ProgramFlag::eMorphing ) )
-					{
-						pipeline.addUniformBuffer( m_morphingUbo.getUbo() );
-					}
-
-					m_initialised = true;
-				} ) );
+			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
+			{
+				initialise();
+			}
+			else
+			{
+				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, initialise ) );
+			}
 		}
 	}
 }

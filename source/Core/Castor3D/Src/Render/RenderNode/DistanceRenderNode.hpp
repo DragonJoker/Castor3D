@@ -77,8 +77,8 @@ namespace castor3d
 	struct DistanceRenderNode
 		: public DistanceRenderNodeBase
 	{
-		explicit DistanceRenderNode( NodeType & p_node )
-			: m_node{ p_node }
+		explicit DistanceRenderNode( NodeType & node )
+			: node{ node }
 		{
 		}
 		/**
@@ -86,41 +86,47 @@ namespace castor3d
 		 */
 		inline RenderPipeline & getPipeline()override
 		{
-			return m_node.m_pipeline;
+			return node.m_pipeline;
 		}
 		/**
 		 *\copydoc		DistanceRenderNodeBase::getPassNode
 		 */
 		inline PassRenderNode & getPassNode()override
 		{
-			return m_node.m_passNode;
+			return node.m_passNode;
 		}
 		/**
 		 *\copydoc		DistanceRenderNodeBase::getSceneNode
 		 */
 		inline SceneNode & getSceneNode()override
 		{
-			return details::getParentNode( m_node.m_instance );
+			return details::getParentNode( node.m_instance );
 		}
 		/**
 		 *\copydoc		DistanceRenderNodeBase::getModelUbo
 		 */
 		inline ModelUbo & getModelUbo()override
 		{
-			return m_node.m_modelUbo;
+			return node.m_modelUbo;
 		}
 		/**
 		 *\copydoc		DistanceRenderNodeBase::render
 		 */
 		inline void render()override
 		{
-			doUpdateNode( m_node );
+			doUpdateNode( node );
 		}
 
 		//!\~english	The object node.
 		//!\~french		Les noeud de l'objet.
-		NodeType & m_node;
+		NodeType & node;
 	};
+
+	template< typename NodeType >
+	std::unique_ptr< DistanceRenderNodeBase > makeDistanceNode( NodeType & node )
+	{
+		return std::make_unique< DistanceRenderNode< NodeType > >( node );
+	}
 }
 
 #endif

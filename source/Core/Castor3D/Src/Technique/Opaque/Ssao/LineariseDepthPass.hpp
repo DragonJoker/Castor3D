@@ -98,14 +98,14 @@ namespace castor3d
 		*	Linearisation.
 		*/
 		/**@{*/
-		renderer::ShaderProgram & m_lineariseProgram;
+		renderer::ShaderStageStateArray m_lineariseProgram;
 		renderer::FrameBufferPtr m_lineariseFrameBuffer;
 		renderer::DescriptorSetLayoutPtr m_lineariseDescriptorLayout;
 		renderer::DescriptorSetPoolPtr m_lineariseDescriptorPool;
 		renderer::DescriptorSetPtr m_lineariseDescriptor;
-		RenderPipelineUPtr m_linearisePipeline;
+		renderer::PipelineLayoutPtr m_linearisePipelineLayout;
+		renderer::PipelinePtr m_linearisePipeline;
 		renderer::PushConstantsBuffer< castor::Point3f > m_clipInfo;
-		renderer::PushConstantRange m_linearisePushConstants;
 		/**@}*/
 		/**
 		*name
@@ -119,11 +119,12 @@ namespace castor3d
 			renderer::FrameBufferPtr frameBuffer;
 			renderer::PushConstantsBufferPtr< int > previousLevel;
 			renderer::PushConstantRange pushConstants;
-			RenderPipelineUPtr pipeline;
+			renderer::PipelinePtr pipeline;
 		};
 
-		renderer::ShaderProgram & m_minifyProgram;
+		renderer::ShaderStageStateArray m_minifyProgram;
 		renderer::DescriptorSetLayoutPtr m_minifyDescriptorLayout;
+		renderer::PipelineLayoutPtr m_minifyPipelineLayout;
 		renderer::DescriptorSetPoolPtr m_minifyDescriptorPool;
 		std::array< MinifyPipeline, MaxMipLevel > m_minifyPipelines;
 		/**@}*/

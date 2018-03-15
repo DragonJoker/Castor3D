@@ -6,6 +6,8 @@
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/Ubos/ModelMatrixUbo.hpp"
 
+#include <Descriptor/DescriptorSetLayoutBinding.hpp>
+
 #include <GlslSource.hpp>
 
 using namespace castor;
@@ -45,6 +47,7 @@ namespace castor3d
 	}
 
 	void SkinningUbo::declare( glsl::GlslWriter & writer
+		, uint32_t binding
 		, uint32_t set
 		, ProgramFlags const & flags )
 	{
@@ -52,17 +55,30 @@ namespace castor3d
 		{
 			if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
 			{
-				glsl::Ssbo skinning{ writer, SkinningUbo::BufferSkinning, SkinningUbo::BindingPoint, set };
+				glsl::Ssbo skinning{ writer, SkinningUbo::BufferSkinning, binding, set };
 				auto c3d_mtxBones = skinning.declMemberArray< glsl::Mat4 >( SkinningUbo::Bones, checkFlag( flags, ProgramFlag::eSkinning ) );
 				skinning.end();
 			}
 			else
 			{
-				glsl::Ubo skinning{ writer, SkinningUbo::BufferSkinning, SkinningUbo::BindingPoint, set };
+				glsl::Ubo skinning{ writer, SkinningUbo::BufferSkinning, binding, set };
 				auto c3d_mtxBones = skinning.declMember< glsl::Mat4 >( SkinningUbo::Bones, 400, checkFlag( flags, ProgramFlag::eSkinning ) );
 				skinning.end();
 			}
 		}
+	}
+
+	renderer::DescriptorSetLayoutBinding SkinningUbo::createLayoutBinding( uint32_t binding
+		, ProgramFlags const & flags )
+	{
+		REQUIRE( checkFlag( flags, ProgramFlag::eSkinning ) );
+
+		if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
+		{
+			return renderer::DescriptorSetLayoutBinding{ binding, renderer::DescriptorType::eStorageBuffer, renderer::ShaderStageFlag::eVertex };
+		}
+
+		return renderer::DescriptorSetLayoutBinding{ binding, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex };
 	}
 
 	glsl::Mat4 SkinningUbo::computeTransform( glsl::GlslWriter & writer

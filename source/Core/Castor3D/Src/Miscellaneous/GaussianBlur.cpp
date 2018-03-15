@@ -165,10 +165,10 @@ namespace castor3d
 			std::transform( std::begin( result )
 				, std::end( result )
 				, std::begin( result )
-				, [&sum]( float & p_value )
-			{
-				return p_value /= sum;
-			} );
+				, [&sum]( float & value )
+				{
+					return value /= sum;
+				} );
 
 			return result;
 		}
@@ -222,7 +222,7 @@ namespace castor3d
 			TextureUnit unit{ engine };
 			unit.setTexture( texture );
 			unit.setSampler( sampler );
-			unit.setIndex( MinTextureIndex );
+			unit.setIndex( MinBufferIndex );
 			unit.initialise();
 			return unit;
 		}

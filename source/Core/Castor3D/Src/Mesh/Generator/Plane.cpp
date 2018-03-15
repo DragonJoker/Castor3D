@@ -25,26 +25,26 @@ MeshGeneratorSPtr Plane::create()
 	return std::make_shared< Plane >();
 }
 
-void Plane::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
+void Plane::doGenerate( Mesh & mesh, Parameters const & parameters )
 {
 	String param;
 
-	if ( p_parameters.get( cuT( "width_subdiv" ), param ) )
+	if ( parameters.get( cuT( "width_subdiv" ), param ) )
 	{
 		m_subDivisionsW = string::toUInt( param );
 	}
 
-	if ( p_parameters.get( cuT( "depth_subdiv" ), param ) )
+	if ( parameters.get( cuT( "depth_subdiv" ), param ) )
 	{
 		m_subDivisionsD = string::toUInt( param );
 	}
 
-	if ( p_parameters.get( cuT( "width" ), param ) )
+	if ( parameters.get( cuT( "width" ), param ) )
 	{
 		m_width = string::toFloat( param );
 	}
 
-	if ( p_parameters.get( cuT( "depth" ), param ) )
+	if ( parameters.get( cuT( "depth" ), param ) )
 	{
 		m_depth = string::toFloat( param );
 	}
@@ -60,7 +60,7 @@ void Plane::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 	Point3r ptNormal( 0.0, 1.0, 0.0 );
 	Point3r ptTangent;
 	Point2r ptUv;
-	SubmeshSPtr submesh = p_mesh.createSubmesh();
+	SubmeshSPtr submesh = mesh.createSubmesh();
 
 	for ( uint32_t i = 0; i < nbVertexW; i++ )
 	{
@@ -85,5 +85,5 @@ void Plane::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 
 	indexMapping->computeTangentsFromNormals();
 	submesh->setIndexMapping( indexMapping );
-	p_mesh.computeContainers();
+	mesh.computeContainers();
 }

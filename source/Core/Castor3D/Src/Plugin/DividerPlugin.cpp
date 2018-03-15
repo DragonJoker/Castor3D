@@ -6,8 +6,8 @@ using namespace castor;
 
 namespace castor3d
 {
-	DividerPlugin::DividerPlugin( DynamicLibrarySPtr p_library, Engine * engine )
-		: Plugin( PluginType::eDivider, p_library, *engine )
+	DividerPlugin::DividerPlugin( DynamicLibrarySPtr library, Engine * engine )
+		: Plugin( PluginType::eDivider, library, *engine )
 	{
 		load();
 	}

@@ -68,9 +68,9 @@ namespace castor3d
 	{
 	}
 
-	void MetallicRoughnessPbrPass::accept( PassBuffer & p_buffer )const
+	void MetallicRoughnessPbrPass::accept( PassBuffer & buffer )const
 	{
-		p_buffer.visit( *this );
+		buffer.visit( *this );
 	}
 
 	void MetallicRoughnessPbrPass::doInitialise()

@@ -44,7 +44,8 @@ namespace castor3d
 		 */
 		DeferredRendering( Engine & engine
 			, OpaquePass & opaquePass
-			, renderer::FrameBuffer & frameBuffer
+			, TextureLayoutSPtr depthTexture
+			, TextureLayoutSPtr velocityTexture
 			, castor::Size const & size
 			, Scene const & scene
 			, SsaoConfig const & config );
@@ -78,7 +79,7 @@ namespace castor3d
 			, Camera const & camera
 			, ShadowMapLightTypeArray & shadowMaps
 			, castor::Point2r const & jitter
-			, TextureUnit const & velocity );
+			, renderer::Semaphore const & toWait );
 		/**
 		 *\~english
 		 *\brief		Displays debug data on screen.
@@ -90,39 +91,15 @@ namespace castor3d
 	private:
 		using GeometryBufferTextures = std::array< TextureUnitUPtr, size_t( DsTexture::eCount ) >;
 
-		//!\~english	The engine.
-		//!\~french		Le moteur.
 		Engine & m_engine;
-		//!\~english	The SSAO configuration.
-		//!\~french		La configuration du SSAO.
 		SsaoConfig const & m_ssaoConfig;
-		//!\~english	The pass used to render opaque nodes.
-		//!\~french		La passe utilisée pour dessiner les noeuds opaques.
 		OpaquePass & m_opaquePass;
-		//!\~english	The target framebuffer.
-		//!\~french		Le tampon d'image ciblé.
-		renderer::FrameBuffer & m_frameBuffer;
-		//!\~english	The render area dimension.
-		//!\~french		Les dimensions de l'aire de rendu.
 		castor::Size m_size;
-		//!\~english	The geometry pass informations.
-		//!\~french		Les informations de la passe de géométrie.
 		GpInfoUbo m_gpInfoUbo;
-		//!\~english	The fog pass.
-		//!\~french		La passe de brouillard.
 		std::unique_ptr< LightingPass > m_lightingPass;
-		//!\~english	The reflection pass.
-		//!\~french		La passe de réflexion.
 		std::unique_ptr< ReflectionPass > m_reflection;
-		//!\~english	The reflection pass.
-		//!\~french		La passe de réflexion.
 		std::unique_ptr< SubsurfaceScatteringPass > m_subsurfaceScattering;
-		//!\~english	The various textures for deferred shading.
-		//!\~french		Les diverses textures pour le deferred shading.
 		GeometryBufferTextures m_geometryPassResult;
-		//!\~english	The deferred shading frame buffer.
-		//!\~french		Le tampon d'image pour le deferred shading.
-		renderer::FrameBufferPtr m_geometryPassFrameBuffer;
 	};
 }
 

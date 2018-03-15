@@ -19,16 +19,18 @@ See LICENSE file in root folder
 #include "Shader/Ubos/SceneUbo.hpp"
 #include "Shader/Ubos/SkinningUbo.hpp"
 
+#include <Command/CommandBuffer.hpp>
+
 #include <unordered_map>
 
 namespace castor3d
 {
 	inline bool operator<( PipelineFlags const & lhs, PipelineFlags const & rhs )
 	{
-		return lhs.m_colourBlendMode < rhs.m_colourBlendMode
-			   || ( lhs.m_colourBlendMode == rhs.m_colourBlendMode
-					&& ( lhs.m_alphaBlendMode < rhs.m_alphaBlendMode
-						 || ( lhs.m_alphaBlendMode == rhs.m_alphaBlendMode
+		return lhs.colourBlendMode < rhs.colourBlendMode
+			   || ( lhs.colourBlendMode == rhs.colourBlendMode
+					&& ( lhs.alphaBlendMode < rhs.alphaBlendMode
+						 || ( lhs.alphaBlendMode == rhs.alphaBlendMode
 							  && ( lhs.m_textureFlags < rhs.m_textureFlags
 								   || ( lhs.m_textureFlags == rhs.m_textureFlags
 										&& ( lhs.m_programFlags < rhs.m_programFlags
@@ -365,6 +367,78 @@ namespace castor3d
 		 *\param[in]	pipeline	Le pipeline de rendu.
 		 */
 		C3D_API void updatePipeline( RenderPipeline & pipeline )const;
+		/**
+		 *\~english
+		 *\brief		Initialises the descriptor set of a billboard node.
+		 *\param[in]	descriptorPool	The pool.
+		 *\param[in]	node			The node.
+		 *\~french
+		 *\brief		Initialise l'ensemble de descripteurs pour un noeud de billboard.
+		 *\param[in]	descriptorPool	Le pool.
+		 *\param[in]	node			Le noeud.
+		 */
+		C3D_API void initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
+			, BillboardRenderNode & node );
+		/**
+		 *\~english
+		 *\brief		Initialises the descriptor set of a morphing node.
+		 *\param[in]	descriptorPool	The pool.
+		 *\param[in]	node			The node.
+		 *\~french
+		 *\brief		Initialise l'ensemble de descripteurs pour un noeud de morphing.
+		 *\param[in]	descriptorPool	Le pool.
+		 *\param[in]	node			Le noeud.
+		 */
+		C3D_API void initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
+			, MorphingRenderNode & node );
+		/**
+		 *\~english
+		 *\brief		Initialises the descriptor set of a skinning node.
+		 *\param[in]	descriptorPool	The pool.
+		 *\param[in]	node			The node.
+		 *\~french
+		 *\brief		Initialise l'ensemble de descripteurs pour un noeud de skinning.
+		 *\param[in]	descriptorPool	Le pool.
+		 *\param[in]	node			Les noeud.
+		 */
+		C3D_API void initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
+			, SkinningRenderNode & node );
+		/**
+		 *\~english
+		 *\brief		Initialises the descriptor set of a static node.
+		 *\param[in]	descriptorPool	The pool.
+		 *\param[in]	node			The node.
+		 *\~french
+		 *\brief		Initialise l'ensemble de descripteurs pour un noeud statique.
+		 *\param[in]	descriptorPool	Le pool.
+		 *\param[in]	node			Le noeud.
+		 */
+		C3D_API void initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
+			, StaticRenderNode & node );
+		/**
+		 *\~english
+		 *\brief		Initialises the descriptor set of skining nodes.
+		 *\param[in]	descriptorPool	The pool.
+		 *\param[in]	nodes			The nodes.
+		 *\~french
+		 *\brief		Initialise l'ensemble de descripteurs pour des noeuds de skining.
+		 *\param[in]	descriptorPool	Le pool.
+		 *\param[in]	nodes			Les noeuds.
+		 */
+		C3D_API void initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
+			, SubmeshSkinninRenderNodesByPassMap & nodes );
+		/**
+		 *\~english
+		 *\brief		Initialises the descriptor set of static nodes.
+		 *\param[in]	descriptorPool	The pool.
+		 *\param[in]	nodes			The nodes.
+		 *\~french
+		 *\brief		Initialise l'ensemble de descripteurs pour des noeuds statiques.
+		 *\param[in]	descriptorPool	Le pool.
+		 *\param[in]	nodes			Les noeuds.
+		 */
+		C3D_API void initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
+			, SubmeshStaticRenderNodesByPassMap & nodes );
 		/**
 		 *\~english
 		 *\brief			Modifies the given flags to make them match the render pass requirements.
@@ -1022,6 +1096,15 @@ namespace castor3d
 			, Camera const & camera
 			, ShadowMapLightTypeArray & shadowMaps
 			, RenderInfo & info )const;
+		/**
+		 *\~english
+		 *\brief		Creates the common UBO descriptor layout bindings.
+		 *\param[in]	flags	The pipeline flags.
+		 *\~french
+		 *\brief		Crée les attaches de layout de descripteurs communs pour les IBO.
+		 *\param[in]	flags	Les indicateurs de pipeline.
+		 */
+		C3D_API virtual renderer::DescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const;
 
 	private:
 		/**
@@ -1042,6 +1125,32 @@ namespace castor3d
 		 *\brief		Nettoie la passe.
 		 */
 		C3D_API virtual void doCleanup() = 0;
+		/**
+		 *\~english
+		 *\brief		Initialises the descriptor set of a billboard node.
+		 *\param[in]	layout	The descriptors layout.
+		 *\param[in]	node	The node.
+		 *\~french
+		 *\brief		Initialise l'ensemble de descripteurs pour un noeud de billboard.
+		 *\param[in]	layout	Le layout des descripteurs.
+		 *\param[in]	node	Le noeud.
+		 */
+		C3D_API virtual void doFillDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, BillboardListRenderNode & node ) = 0;
+		/**
+		 *\~english
+		 *\brief		Initialises the descriptor set of a morphing node.
+		 *\param[in]	layout	The descriptors layout.
+		 *\param[in]	node	The node.
+		 *\~french
+		 *\brief		Initialise l'ensemble de descripteurs pour un noeud de morphing.
+		 *\param[in]	layout	Le layout des descripteurs.
+		 *\param[in]	node	Le noeud.
+		 */
+		C3D_API virtual void doFillDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, SubmeshRenderNode & node ) = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the specific data.

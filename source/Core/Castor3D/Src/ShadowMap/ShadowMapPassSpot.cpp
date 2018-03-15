@@ -14,10 +14,6 @@ namespace castor3d
 		, Scene & scene
 		, ShadowMap const & shadowMap )
 		: ShadowMapPass{ engine, scene, shadowMap }
-		, m_shadowConfig{ ShadowMapUbo
-			, *engine.getRenderSystem()
-			, UboBindingPoint }
-		, m_farPlane{ *m_shadowConfig.createUniform< UniformType::eFloat >( FarPlane ) }
 	{
 	}
 
@@ -35,7 +31,8 @@ namespace castor3d
 			, index );
 		m_camera->attachTo( light.getParent() );
 		m_camera->update();
-		m_farPlane.setValue( light.getSpotLight()->getFarPlane() );
+		auto & data = m_shadowConfig->getData();
+		data.farPlane = light.getSpotLight()->getFarPlane();
 		queues.emplace_back( m_renderQueue );
 	}
 
@@ -43,23 +40,26 @@ namespace castor3d
 	{
 		if ( m_camera && m_initialised )
 		{
-			m_shadowConfig.update();
-			m_shadowConfig.bindTo( UboBindingPoint );
-			m_camera->apply();
+			m_shadowConfig->upload();
 			m_matrixUbo.update( m_camera->getView()
 				, m_camera->getViewport().getProjection() );
-			doRenderNodes( m_renderQueue.getRenderNodes(), *m_camera );
+			doUpdateNodes( m_renderQueue.getRenderNodes(), *m_camera );
 		}
 	}
 
 	bool ShadowMapPassSpot::doInitialise( Size const & size )
 	{
-		Viewport viewport{ *getEngine() };
+		Viewport viewport;
 		m_camera = std::make_shared< Camera >( cuT( "ShadowMapSpot" )
 			, m_scene
 			, m_scene.getCameraRootNode()
 			, std::move( viewport ) );
 		m_camera->resize( size );
+
+		m_shadowConfig = renderer::makeUniformBuffer< Configuration >( *getEngine()->getRenderSystem()->getCurrentDevice()
+			, 1u
+			, 0u
+			, renderer::MemoryPropertyFlag::eHostVisible | renderer::MemoryPropertyFlag::eHostCoherent );
 
 		m_renderQueue.initialise( m_scene, *m_camera );
 		return true;
@@ -67,9 +67,25 @@ namespace castor3d
 
 	void ShadowMapPassSpot::doCleanup()
 	{
-		m_shadowConfig.cleanup();
+		m_shadowConfig.reset();
 		m_camera->detach();
 		m_camera.reset();
+	}
+
+	void ShadowMapPassSpot::doFillDescriptor( renderer::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, BillboardListRenderNode & node )
+	{
+		node.descriptorSet->createBinding( layout.getBinding( ShadowMapPassSpot::UboBindingPoint )
+			, *m_shadowConfig );
+	}
+
+	void ShadowMapPassSpot::doFillDescriptor( renderer::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, SubmeshRenderNode & node )
+	{
+		node.descriptorSet->createBinding( layout.getBinding( ShadowMapPassSpot::UboBindingPoint )
+			, *m_shadowConfig );
 	}
 
 	void ShadowMapPassSpot::doUpdate( RenderQueueArray & queues )
@@ -77,49 +93,42 @@ namespace castor3d
 		queues.emplace_back( m_renderQueue );
 	}
 
-	void ShadowMapPassSpot::doPreparePipeline( ShaderProgram & program
+	void ShadowMapPassSpot::doPreparePipeline( renderer::ShaderStageStateArray & program
 		, PipelineFlags const & flags )
 	{
 		if ( m_backPipelines.find( flags ) == m_backPipelines.end() )
 		{
-			RasteriserState rsState;
-			rsState.setCulledFaces( Culling::eNone );
-			DepthStencilState dsState;
-			dsState.setDepthTest( true );
+			renderer::RasterisationState rsState;
+			rsState.cullMode = renderer::CullModeFlag::eNone;
+			renderer::DepthStencilState dsState;
 			auto & pipeline = *m_backPipelines.emplace( flags
-				, getEngine()->getRenderSystem()->createRenderPipeline( std::move( dsState )
+				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
+					, std::move( dsState )
 					, std::move( rsState )
-					, BlendState{}
-					, MultisampleState{}
+					, renderer::ColourBlendState::createDefault()
+					, renderer::MultisampleState{}
 					, program
 					, flags ) ).first->second;
 
-			getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-				, [this, &pipeline, flags]()
+			auto initialise = [this, &pipeline, flags]()
 			{
-				pipeline.addUniformBuffer( m_matrixUbo.getUbo() );
-				pipeline.addUniformBuffer( m_modelUbo.getUbo() );
-				pipeline.addUniformBuffer( m_modelMatrixUbo.getUbo() );
-				pipeline.addUniformBuffer( m_shadowConfig );
-
-				if ( checkFlag( flags.m_programFlags, ProgramFlag::eBillboards ) )
-				{
-					pipeline.addUniformBuffer( m_billboardUbo.getUbo() );
-				}
-
-				if ( checkFlag( flags.m_programFlags, ProgramFlag::eSkinning )
-					&& !checkFlag( flags.m_programFlags, ProgramFlag::eInstantiation ) )
-				{
-					pipeline.addUniformBuffer( m_skinningUbo.getUbo() );
-				}
-
-				if ( checkFlag( flags.m_programFlags, ProgramFlag::eMorphing ) )
-				{
-					pipeline.addUniformBuffer( m_morphingUbo.getUbo() );
-				}
-
+				auto uboBindings = doCreateUboBindings( flags );
+				uboBindings.emplace_back( ShadowMapPassSpot::UboBindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment );
+				auto layout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
+				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
+				layouts.emplace_back( std::move( layout ) );
+				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
 				m_initialised = true;
-			} ) );
+			};
+
+			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
+			{
+				initialise();
+			}
+			else
+			{
+				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, initialise ) );
+			}
 		}
 	}
 }

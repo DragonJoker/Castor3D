@@ -111,19 +111,19 @@ namespace castor3d
 		}
 	}
 
-	renderer::WriteDescriptorSet ShaderBuffer::createBinding( renderer::DescriptorSet & descriptorSet
+	void ShaderBuffer::createBinding( renderer::DescriptorSet & descriptorSet
 		, renderer::DescriptorSetLayoutBinding const & binding )const
 	{
 		if ( m_ssbo )
 		{
-			return descriptorSet.createBinding( binding
+			descriptorSet.createBinding( binding
 				, *m_ssbo
 				, 0u
 				, uint32_t( m_data.size() ) );
 		}
 		else
 		{
-			return descriptorSet.createBinding( binding
+			descriptorSet.createBinding( binding
 				, *m_tbo
 				, 0u
 				, uint32_t( m_data.size() ) );

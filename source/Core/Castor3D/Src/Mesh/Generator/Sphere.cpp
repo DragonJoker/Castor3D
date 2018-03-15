@@ -24,23 +24,23 @@ MeshGeneratorSPtr Sphere::create()
 	return std::make_shared< Sphere >();
 }
 
-void Sphere::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
+void Sphere::doGenerate( Mesh & mesh, Parameters const & parameters )
 {
 	String param;
 
-	if ( p_parameters.get( cuT( "subdiv" ), param ) )
+	if ( parameters.get( cuT( "subdiv" ), param ) )
 	{
 		m_nbFaces = string::toUInt( param );
 	}
 
-	if ( p_parameters.get( cuT( "radius" ), param ) )
+	if ( parameters.get( cuT( "radius" ), param ) )
 	{
 		m_radius = string::toFloat( param );
 	}
 
 	if ( m_nbFaces >= 3 )
 	{
-		Submesh & submesh = *p_mesh.createSubmesh();
+		Submesh & submesh = *mesh.createSubmesh();
 		real rAngle = real( Angle::PiMult2 ) / m_nbFaces;
 		std::vector< Point2r > arc( m_nbFaces + 1 );
 		real rAlpha = 0;
@@ -110,5 +110,5 @@ void Sphere::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 		submesh.setIndexMapping( indexMapping );
 	}
 
-	p_mesh.computeContainers();
+	mesh.computeContainers();
 }

@@ -17,12 +17,6 @@ namespace castor3d
 {
 	namespace
 	{
-		template< typename NodeType >
-		std::unique_ptr< DistanceRenderNodeBase > MakeDistanceNode( NodeType & node )
-		{
-			return std::make_unique< DistanceRenderNode< NodeType > >( node );
-		}
-
 		template< typename MapType >
 		void doSortAlpha( MapType & input
 			, Camera const & camera
@@ -32,124 +26,14 @@ namespace castor3d
 			{
 				for ( auto & renderNode : itPipelines.second )
 				{
-					Matrix4x4r mtxMeshGlobal = renderNode.m_sceneNode.getDerivedTransformationMatrix().getInverse().transpose();
-					Point3r position = camera.getParent()->getDerivedPosition();
-					Point3r ptCameraLocal = position * mtxMeshGlobal;
-					renderNode.m_data.sortByDistance( ptCameraLocal );
-					ptCameraLocal -= renderNode.m_sceneNode.getPosition();
-					output.emplace( point::lengthSquared( ptCameraLocal ), MakeDistanceNode( renderNode ) );
+					Matrix4x4r worldMeshMatrix = renderNode.sceneNode.getDerivedTransformationMatrix().getInverse().transpose();
+					Point3r worldCameraPosition = camera.getParent()->getDerivedPosition();
+					Point3r meshCameraPosition = worldCameraPosition * worldMeshMatrix;
+					renderNode.data.sortByDistance( meshCameraPosition );
+					meshCameraPosition -= renderNode.sceneNode.getPosition();
+					output.emplace( point::lengthSquared( meshCameraPosition ), makeDistanceNode( renderNode ) );
 				}
 			}
-		}
-
-		inline void doUpdateProgram( ShaderProgram & program
-			, PassFlags const & passFlags
-			, TextureChannels const & textureFlags
-			, ProgramFlags const & programFlags
-			, SceneFlags const & sceneFlags )
-		{
-			if ( getShadowType( sceneFlags ) != ShadowType::eNone
-				&& !program.findUniform< UniformType::eSampler >( shader::Shadow::MapShadowSpot, renderer::ShaderStageFlag::eFragment ) )
-			{
-				program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowDirectional
-					, renderer::ShaderStageFlag::eFragment );
-				program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowSpot
-					, renderer::ShaderStageFlag::eFragment, shader::SpotShadowMapCount );
-				program.createUniform< UniformType::eSampler >( shader::Shadow::MapShadowPoint
-					, renderer::ShaderStageFlag::eFragment, shader::PointShadowMapCount );
-			}
-
-			if ( ( checkFlag( passFlags, PassFlag::ePbrMetallicRoughness )
-					|| checkFlag( passFlags, PassFlag::ePbrSpecularGlossiness ) )
-				&& checkFlag( programFlags, ProgramFlag::eLighting ) )
-			{
-				program.createUniform< UniformType::eSampler >( cuT( "c3d_mapIrradiance" )
-					, renderer::ShaderStageFlag::eFragment );
-				program.createUniform< UniformType::eSampler >( cuT( "c3d_mapPrefiltered" )
-					, renderer::ShaderStageFlag::eFragment );
-				program.createUniform< UniformType::eSampler >( cuT( "c3d_mapBrdf" )
-					, renderer::ShaderStageFlag::eFragment );
-			}
-		}
-
-		inline BlendState doCreateBlendState( BlendMode colourBlendMode
-			, BlendMode alphaBlendMode )
-		{
-			BlendState state;
-			bool blend = false;
-
-			switch ( colourBlendMode )
-			{
-			case BlendMode::eNoBlend:
-				state.setRgbSrcBlend( BlendOperand::eOne );
-				state.setRgbDstBlend( BlendOperand::eZero );
-				break;
-
-			case BlendMode::eAdditive:
-				blend = true;
-				state.setRgbSrcBlend( BlendOperand::eOne );
-				state.setRgbDstBlend( BlendOperand::eOne );
-				break;
-
-			case BlendMode::eMultiplicative:
-				blend = true;
-				state.setRgbSrcBlend( BlendOperand::eZero );
-				state.setRgbDstBlend( BlendOperand::eInvSrcColour );
-				break;
-
-			case BlendMode::eInterpolative:
-				blend = true;
-				state.setRgbSrcBlend( BlendOperand::eSrcColour );
-				state.setRgbDstBlend( BlendOperand::eInvSrcColour );
-				break;
-
-			default:
-				blend = true;
-				state.setRgbSrcBlend( BlendOperand::eSrcColour );
-				state.setRgbDstBlend( BlendOperand::eInvSrcColour );
-				break;
-			}
-
-			switch ( alphaBlendMode )
-			{
-			case BlendMode::eNoBlend:
-				state.setAlphaSrcBlend( BlendOperand::eOne );
-				state.setAlphaDstBlend( BlendOperand::eZero );
-				break;
-
-			case BlendMode::eAdditive:
-				blend = true;
-				state.setAlphaSrcBlend( BlendOperand::eOne );
-				state.setAlphaDstBlend( BlendOperand::eOne );
-				break;
-
-			case BlendMode::eMultiplicative:
-				blend = true;
-				state.setAlphaSrcBlend( BlendOperand::eZero );
-				state.setAlphaDstBlend( BlendOperand::eInvSrcAlpha );
-				state.setRgbSrcBlend( BlendOperand::eZero );
-				state.setRgbDstBlend( BlendOperand::eInvSrcAlpha );
-				break;
-
-			case BlendMode::eInterpolative:
-				blend = true;
-				state.setAlphaSrcBlend( BlendOperand::eSrcAlpha );
-				state.setAlphaDstBlend( BlendOperand::eInvSrcAlpha );
-				state.setRgbSrcBlend( BlendOperand::eSrcAlpha );
-				state.setRgbDstBlend( BlendOperand::eInvSrcAlpha );
-				break;
-
-			default:
-				blend = true;
-				state.setAlphaSrcBlend( BlendOperand::eSrcAlpha );
-				state.setAlphaDstBlend( BlendOperand::eInvSrcAlpha );
-				state.setRgbSrcBlend( BlendOperand::eSrcAlpha );
-				state.setRgbDstBlend( BlendOperand::eInvSrcAlpha );
-				break;
-			}
-
-			state.enableBlend( blend );
-			return state;
 		}
 	}
 
@@ -190,56 +74,136 @@ namespace castor3d
 	{
 	}
 
+	renderer::ColourBlendState RenderTechniquePass::createBlendState( BlendMode colourBlendMode
+		, BlendMode alphaBlendMode )
+	{
+		renderer::ColourBlendStateAttachment attach;
+
+		switch ( colourBlendMode )
+		{
+		case BlendMode::eNoBlend:
+			attach.srcColorBlendFactor = renderer::BlendFactor::eOne;
+			attach.dstColorBlendFactor = renderer::BlendFactor::eZero;
+			break;
+
+		case BlendMode::eAdditive:
+			attach.blendEnable = true;
+			attach.srcColorBlendFactor = renderer::BlendFactor::eOne;
+			attach.dstColorBlendFactor = renderer::BlendFactor::eOne;
+			break;
+
+		case BlendMode::eMultiplicative:
+			attach.blendEnable = true;
+			attach.srcColorBlendFactor = renderer::BlendFactor::eZero;
+			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcColour;
+			break;
+
+		case BlendMode::eInterpolative:
+			attach.blendEnable = true;
+			attach.srcColorBlendFactor = renderer::BlendFactor::eSrcColour;
+			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcColour;
+			break;
+
+		default:
+			attach.blendEnable = true;
+			attach.srcColorBlendFactor = renderer::BlendFactor::eSrcColour;
+			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcColour;
+			break;
+		}
+
+		switch ( alphaBlendMode )
+		{
+		case BlendMode::eNoBlend:
+			attach.srcAlphaBlendFactor = renderer::BlendFactor::eOne;
+			attach.dstAlphaBlendFactor = renderer::BlendFactor::eZero;
+			break;
+
+		case BlendMode::eAdditive:
+			attach.blendEnable = true;
+			attach.srcAlphaBlendFactor = renderer::BlendFactor::eOne;
+			attach.dstAlphaBlendFactor = renderer::BlendFactor::eOne;
+			break;
+
+		case BlendMode::eMultiplicative:
+			attach.blendEnable = true;
+			attach.srcAlphaBlendFactor = renderer::BlendFactor::eZero;
+			attach.dstAlphaBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
+			attach.srcColorBlendFactor = renderer::BlendFactor::eZero;
+			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
+			break;
+
+		case BlendMode::eInterpolative:
+			attach.blendEnable = true;
+			attach.srcAlphaBlendFactor = renderer::BlendFactor::eSrcAlpha;
+			attach.dstAlphaBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
+			attach.srcColorBlendFactor = renderer::BlendFactor::eSrcAlpha;
+			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
+			break;
+
+		default:
+			attach.blendEnable = true;
+			attach.srcAlphaBlendFactor = renderer::BlendFactor::eSrcAlpha;
+			attach.dstAlphaBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
+			attach.srcColorBlendFactor = renderer::BlendFactor::eSrcAlpha;
+			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
+			break;
+		}
+
+		renderer::ColourBlendState state;
+		state.attachs.push_back( attach );
+		return state;
+	}
+
 	void RenderTechniquePass::doUpdate( RenderInfo & info
 		, ShadowMapLightTypeArray & shadowMaps
 		, Point2r const & jitter )
 	{
-		doRenderNodes( m_renderQueue.getRenderNodes()
+		doUpdateNodes( m_renderQueue.getRenderNodes()
 			, *m_camera
 			, shadowMaps
 			, jitter
 			, info );
 	}
 
-	void RenderTechniquePass::doRenderNodes( SceneRenderNodes & nodes
+	void RenderTechniquePass::doUpdateNodes( SceneRenderNodes & nodes
 		, Camera const & camera
 		, ShadowMapLightTypeArray & shadowMaps
 		, Point2r const & jitter
 		, RenderInfo & info )const
 	{
-		if ( !nodes.m_staticNodes.m_backCulled.empty()
-			|| !nodes.m_instantiatedStaticNodes.m_backCulled.empty()
-			|| !nodes.m_skinnedNodes.m_backCulled.empty()
-			|| !nodes.m_instantiatedSkinnedNodes.m_backCulled.empty()
-			|| !nodes.m_morphingNodes.m_backCulled.empty()
-			|| !nodes.m_billboardNodes.m_backCulled.empty() )
+		if ( !nodes.staticNodes.backCulled.empty()
+			|| !nodes.instancedStaticNodes.backCulled.empty()
+			|| !nodes.skinnedNodes.backCulled.empty()
+			|| !nodes.instancedSkinnedNodes.backCulled.empty()
+			|| !nodes.morphingNodes.backCulled.empty()
+			|| !nodes.billboardNodes.backCulled.empty() )
 		{
-			m_timer->start();
 			auto jitterProjSpace = jitter * 2.0_r;
 			jitterProjSpace[0] /= camera.getWidth();
 			jitterProjSpace[1] /= camera.getHeight();
 			m_matrixUbo.update( camera.getView()
 				, camera.getViewport().getProjection()
 				, jitterProjSpace );
-			RenderPass::doUpdate( nodes.m_instantiatedStaticNodes.m_frontCulled, camera, shadowMaps );
-			RenderPass::doUpdate( nodes.m_staticNodes.m_frontCulled, camera, shadowMaps );
-			RenderPass::doUpdate( nodes.m_skinnedNodes.m_frontCulled, camera, shadowMaps );
-			RenderPass::doUpdate( nodes.m_instantiatedSkinnedNodes.m_frontCulled, camera, shadowMaps );
-			RenderPass::doUpdate( nodes.m_morphingNodes.m_frontCulled, camera, shadowMaps );
-			RenderPass::doUpdate( nodes.m_billboardNodes.m_frontCulled, camera, shadowMaps );
+			RenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled, camera, shadowMaps );
+			RenderPass::doUpdate( nodes.staticNodes.frontCulled, camera, shadowMaps );
+			RenderPass::doUpdate( nodes.skinnedNodes.frontCulled, camera, shadowMaps );
+			RenderPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled, camera, shadowMaps );
+			RenderPass::doUpdate( nodes.morphingNodes.frontCulled, camera, shadowMaps );
+			RenderPass::doUpdate( nodes.billboardNodes.frontCulled, camera, shadowMaps );
 
-			RenderPass::doUpdate( nodes.m_instantiatedStaticNodes.m_backCulled, camera, shadowMaps, info );
-			RenderPass::doUpdate( nodes.m_staticNodes.m_backCulled, camera, shadowMaps, info );
-			RenderPass::doUpdate( nodes.m_skinnedNodes.m_backCulled, camera, shadowMaps, info );
-			RenderPass::doUpdate( nodes.m_instantiatedSkinnedNodes.m_backCulled, camera, shadowMaps );
-			RenderPass::doUpdate( nodes.m_morphingNodes.m_backCulled, camera, shadowMaps, info );
-			RenderPass::doUpdate( nodes.m_billboardNodes.m_backCulled, camera, shadowMaps, info );
-			m_timer->stop();
+			RenderPass::doUpdate( nodes.instancedStaticNodes.backCulled, camera, shadowMaps, info );
+			RenderPass::doUpdate( nodes.staticNodes.backCulled, camera, shadowMaps, info );
+			RenderPass::doUpdate( nodes.skinnedNodes.backCulled, camera, shadowMaps, info );
+			RenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, camera, shadowMaps );
+			RenderPass::doUpdate( nodes.morphingNodes.backCulled, camera, shadowMaps, info );
+			RenderPass::doUpdate( nodes.billboardNodes.backCulled, camera, shadowMaps, info );
 		}
 	}
 
 	bool RenderTechniquePass::doInitialise( Size const & CU_PARAM_UNUSED( size ) )
 	{
+		m_finished = getEngine()->getRenderSystem()->getCurrentDevice()->createSemaphore();
+
 		if ( m_camera )
 		{
 			m_renderQueue.initialise( m_scene, *m_camera );
@@ -294,53 +258,36 @@ namespace castor3d
 
 		if ( it == m_frontPipelines.end() )
 		{
-			doUpdateProgram( program
-				, flags.m_passFlags
-				, flags.m_textureFlags
-				, flags.m_programFlags
-				, flags.m_sceneFlags );
-			DepthStencilState dsState;
-			dsState.setDepthTest( true );
-
-			if ( !m_opaque )
-			{
-				dsState.setDepthMask( WritingMask::eZero );
-			}
-
-			RasteriserState rsState;
-			rsState.setCulledFaces( Culling::eFront );
+			renderer::DepthStencilState dsState;
+			dsState.depthWriteEnable = !m_opaque;
+			renderer::RasterisationState rsState;
+			rsState.cullMode = renderer::CullModeFlag::eFront;
 			auto & pipeline = *m_frontPipelines.emplace( flags
-				, getEngine()->getRenderSystem()->createRenderPipeline( std::move( dsState )
+				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
+					, std::move( dsState )
 					, std::move( rsState )
-					, doCreateBlendState( flags.m_colourBlendMode, flags.m_alphaBlendMode )
-					, MultisampleState{}
+					, createBlendState( flags.colourBlendMode, flags.alphaBlendMode )
+					, renderer::MultisampleState{}
 					, program
 					, flags ) ).first->second;
 
-			getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-				, [this, &pipeline, flags]()
-				{
-					pipeline.addUniformBuffer( m_matrixUbo.getUbo() );
-					pipeline.addUniformBuffer( m_modelMatrixUbo.getUbo() );
-					pipeline.addUniformBuffer( m_sceneUbo.getUbo() );
-					pipeline.addUniformBuffer( m_modelUbo.getUbo() );
+			auto initialise = [this, &pipeline, flags]()
+			{
+				auto uboBindings = doCreateUboBindings( flags );
+				auto layout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
+				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
+				layouts.emplace_back( std::move( layout ) );
+				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
+			};
 
-					if ( checkFlag( flags.m_programFlags, ProgramFlag::eBillboards ) )
-					{
-						pipeline.addUniformBuffer( m_billboardUbo.getUbo() );
-					}
-
-					if ( checkFlag( flags.m_programFlags, ProgramFlag::eSkinning )
-						&& !checkFlag( flags.m_programFlags, ProgramFlag::eInstantiation ) )
-					{
-						pipeline.addUniformBuffer( m_skinningUbo.getUbo() );
-					}
-
-					if ( checkFlag( flags.m_programFlags, ProgramFlag::eMorphing ) )
-					{
-						pipeline.addUniformBuffer( m_morphingUbo.getUbo() );
-					}
-				} ) );
+			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
+			{
+				initialise();
+			}
+			else
+			{
+				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, initialise ) );
+			}
 		}
 	}
 
@@ -351,53 +298,35 @@ namespace castor3d
 
 		if ( it == m_backPipelines.end() )
 		{
-			doUpdateProgram( program
-				, flags.m_passFlags
-				, flags.m_textureFlags
-				, flags.m_programFlags
-				, flags.m_sceneFlags );
-			DepthStencilState dsState;
-			dsState.setDepthTest( true );
-
-			if ( !m_opaque )
-			{
-				dsState.setDepthMask( WritingMask::eZero );
-			}
-
-			RasteriserState rsState;
-			rsState.setCulledFaces( Culling::eBack );
+			renderer::DepthStencilState dsState;
+			dsState.depthWriteEnable = !m_opaque;
+			renderer::RasterisationState rsState;
 			auto & pipeline = *m_backPipelines.emplace( flags
-				, getEngine()->getRenderSystem()->createRenderPipeline( std::move( dsState )
-				, std::move( rsState )
-				, doCreateBlendState( flags.m_colourBlendMode, flags.m_alphaBlendMode )
-					, MultisampleState{}
-				, program
-				, flags ) ).first->second;
+				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
+					, std::move( dsState )
+					, std::move( rsState )
+					, createBlendState( flags.colourBlendMode, flags.alphaBlendMode )
+					, renderer::MultisampleState{}
+					, program
+					, flags ) ).first->second;
 
-			getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-				, [this, &pipeline, flags]()
-				{
-					pipeline.addUniformBuffer( m_matrixUbo.getUbo() );
-					pipeline.addUniformBuffer( m_modelMatrixUbo.getUbo() );
-					pipeline.addUniformBuffer( m_sceneUbo.getUbo() );
-					pipeline.addUniformBuffer( m_modelUbo.getUbo() );
+			auto initialise = [this, &pipeline, flags]()
+			{
+				auto uboBindings = doCreateUboBindings( flags );
+				auto layout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
+				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
+				layouts.emplace_back( std::move( layout ) );
+				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
+			};
 
-					if ( checkFlag( flags.m_programFlags, ProgramFlag::eBillboards ) )
-					{
-						pipeline.addUniformBuffer( m_billboardUbo.getUbo() );
-					}
-
-					if ( checkFlag( flags.m_programFlags, ProgramFlag::eSkinning )
-						&& !checkFlag( flags.m_programFlags, ProgramFlag::eInstantiation ) )
-					{
-						pipeline.addUniformBuffer( m_skinningUbo.getUbo() );
-					}
-
-					if ( checkFlag( flags.m_programFlags, ProgramFlag::eMorphing ) )
-					{
-						pipeline.addUniformBuffer( m_morphingUbo.getUbo() );
-					}
-				} ) );
+			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
+			{
+				initialise();
+			}
+			else
+			{
+				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, initialise ) );
+			}
 		}
 	}
 }

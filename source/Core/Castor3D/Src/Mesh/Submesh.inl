@@ -93,15 +93,15 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	inline void Submesh::addPoints( std::vector< InterleavedVertex > const & p_vertices )
+	inline void Submesh::addPoints( std::vector< InterleavedVertex > const & vertices )
 	{
-		addPoints( p_vertices.data(), p_vertices.data() + p_vertices.size() );
+		addPoints( vertices.data(), vertices.data() + vertices.size() );
 	}
 
 	template< size_t Count >
-	inline void Submesh::addPoints( std::array< InterleavedVertex, Count > const & p_vertices )
+	inline void Submesh::addPoints( std::array< InterleavedVertex, Count > const & vertices )
 	{
-		addPoints( p_vertices.data(), p_vertices.data() + p_vertices.size() );
+		addPoints( vertices.data(), vertices.data() + vertices.size() );
 	}
 
 	inline SkeletonSPtr Submesh::getSkeleton()const
@@ -109,34 +109,34 @@ namespace castor3d
 		return getParent().getSkeleton();
 	}
 
-	inline void Submesh::setDefaultMaterial( MaterialSPtr p_mat )
+	inline void Submesh::setDefaultMaterial( MaterialSPtr mat )
 	{
-		m_defaultMaterial = p_mat;
-		setMaterial( nullptr, p_mat, false );
+		m_defaultMaterial = mat;
+		setMaterial( nullptr, mat, false );
 	}
 
-	inline InterleavedVertex const & Submesh::operator[]( uint32_t p_index )const
+	inline InterleavedVertex const & Submesh::operator[]( uint32_t index )const
 	{
-		REQUIRE( p_index < m_points.size() );
-		return m_points[p_index];
+		REQUIRE( index < m_points.size() );
+		return m_points[index];
 	}
 
-	inline InterleavedVertex & Submesh::operator[]( uint32_t p_index )
+	inline InterleavedVertex & Submesh::operator[]( uint32_t index )
 	{
-		REQUIRE( p_index < m_points.size() );
-		return m_points[p_index];
+		REQUIRE( index < m_points.size() );
+		return m_points[index];
 	}
 
-	inline InterleavedVertex const & Submesh::getPoint( uint32_t p_index )const
+	inline InterleavedVertex const & Submesh::getPoint( uint32_t index )const
 	{
-		REQUIRE( p_index < m_points.size() );
-		return m_points[p_index];
+		REQUIRE( index < m_points.size() );
+		return m_points[index];
 	}
 
-	inline InterleavedVertex & Submesh::getPoint( uint32_t p_index )
+	inline InterleavedVertex & Submesh::getPoint( uint32_t index )
 	{
-		REQUIRE( p_index < m_points.size() );
-		return m_points[p_index];
+		REQUIRE( index < m_points.size() );
+		return m_points[index];
 	}
 
 	inline MaterialSPtr Submesh::getDefaultMaterial()const

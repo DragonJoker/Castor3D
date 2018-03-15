@@ -114,6 +114,7 @@ namespace castor3d
 
 			doDeclareLight();
 			doDeclareDirectionalLight();
+			doDeclareDirectionalLightUbo();
 			doDeclareModel();
 			doDeclareComputeDirectionalLight();
 		}
@@ -127,6 +128,7 @@ namespace castor3d
 
 			doDeclareLight();
 			doDeclarePointLight();
+			doDeclarePointLightUbo();
 			doDeclareModel();
 			doDeclareComputeOnePointLight();
 		}
@@ -140,6 +142,7 @@ namespace castor3d
 
 			doDeclareLight();
 			doDeclareSpotLight();
+			doDeclareSpotLightUbo();
 			doDeclareModel();
 			doDeclareComputeOneSpotLight();
 		}
@@ -199,6 +202,27 @@ namespace castor3d
 			lightDecl.declMember< Float >( cuT( "m_cutOff" ) );
 			lightDecl.declMember< Mat4 >( cuT( "m_transform" ) );
 			lightDecl.end();
+		}
+
+		void LightingModel::doDeclareDirectionalLightUbo()
+		{
+			Ubo lightUbo{ m_writer, cuT( "LightUbo" ), UboBindingPoint, 0u };
+			lightUbo.declMember< DirectionalLight >( cuT( "light" ) );
+			lightUbo.end();
+		}
+
+		void LightingModel::doDeclarePointLightUbo()
+		{
+			Ubo lightUbo{ m_writer, cuT( "LightUbo" ), UboBindingPoint, 0u };
+			lightUbo.declMember< PointLight >( cuT( "light" ) );
+			lightUbo.end();
+		}
+
+		void LightingModel::doDeclareSpotLightUbo()
+		{
+			Ubo lightUbo{ m_writer, cuT( "LightUbo" ), UboBindingPoint, 0u };
+			lightUbo.declMember< SpotLight >( cuT( "light" ) );
+			lightUbo.end();
 		}
 
 		void LightingModel::doDeclareGetBaseLight()

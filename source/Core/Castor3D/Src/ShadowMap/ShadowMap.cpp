@@ -3,10 +3,17 @@
 #include "Engine.hpp"
 
 #include "Event/Frame/FunctorEvent.hpp"
+#include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/Light/Light.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Shader/Ubos/ModelUbo.hpp"
+#include "Shader/Ubos/MorphingUbo.hpp"
+#include "Shader/Ubos/SceneUbo.hpp"
+#include "Shader/Ubos/SkinningUbo.hpp"
 #include "ShadowMap/ShadowMapPass.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
@@ -14,9 +21,7 @@
 #include <Image/Texture.hpp>
 #include <Image/TextureView.hpp>
 #include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassState.hpp>
-#include <RenderPass/RenderSubpass.hpp>
-#include <RenderPass/RenderSubpassState.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
 
 #include <GlslSource.hpp>
 #include "Shader/Shaders/GlslMaterial.hpp"
@@ -44,16 +49,17 @@ namespace castor3d
 	{
 		bool result = true;
 
-		if ( !m_frameBuffer )
+		if ( !m_initialised )
 		{
 			m_shadowMap.initialise();
 			m_linearMap.initialise();
 			auto size = m_shadowMap.getTexture()->getDimensions();
-			result = m_pass->initialise( size );
+			result = m_pass->initialise( { size.width, size.height } );
 
 			if ( result )
 			{
 				doInitialise();
+				m_initialised = true;
 			}
 		}
 
@@ -64,8 +70,9 @@ namespace castor3d
 	{
 		m_pass->cleanup();
 
-		if ( m_frameBuffer )
+		if ( m_initialised )
 		{
+			m_initialised = false;
 			doCleanup();
 			m_shadowMap.cleanup();
 			m_linearMap.cleanup();
@@ -134,8 +141,8 @@ namespace castor3d
 		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 
 		// Vertex inputs
-		auto position = writer.declAttribute< Vec4 >( cuT( "position" ) );
-		auto texture = writer.declAttribute< Vec3 >( cuT( "texcoord" ) );
+		auto position = writer.declAttribute< Vec4 >( cuT( "position" ), Submesh::Position );
+		auto texture = writer.declAttribute< Vec3 >( cuT( "texcoord" ), Submesh::Texture );
 		auto bone_ids0 = writer.declAttribute< IVec4 >( cuT( "bone_ids0" )
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
 		auto bone_ids1 = writer.declAttribute< IVec4 >( cuT( "bone_ids1" )
@@ -154,18 +161,18 @@ namespace castor3d
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 
-		UBO_MATRIX( writer, 0u );
-		UBO_MODEL_MATRIX( writer, 0u );
-		UBO_MODEL( writer, 0u );
-		SkinningUbo::declare( writer, 0u, programFlags );
-		UBO_MORPHING( writer, 0u, programFlags );
+		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
+		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
+		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
+		SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, programFlags );
+		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, programFlags );
 
 		// Outputs
-		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );
-		auto vtx_viewPosition = writer.declOutput< Vec3 >( cuT( "vtx_viewPosition" ) );
-		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ) );
-		auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" ) );
-		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" ) );
+		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ), 0u );
+		auto vtx_viewPosition = writer.declOutput< Vec3 >( cuT( "vtx_viewPosition" ), 1u );
+		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ), 2u );
+		auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" ), 3u );
+		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" ), 4u );
 		auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 		std::function< void() > main = [&]()

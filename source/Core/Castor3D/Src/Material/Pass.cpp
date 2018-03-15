@@ -232,7 +232,7 @@ namespace castor3d
 		Logger::logInfo( StringStream() << cuT( "Destroying TextureUnit " ) << index );
 		auto it = m_textureUnits.begin();
 		m_textureUnits.erase( it + index );
-		uint32_t i = MinTextureIndex;
+		uint32_t i = MinBufferIndex;
 
 		for ( it = m_textureUnits.begin(); it != m_textureUnits.end(); ++it )
 		{
@@ -267,7 +267,7 @@ namespace castor3d
 			TextureUnitSPtr opacitySource;
 			PxBufferBaseSPtr opacityImage;
 
-			uint32_t index = MinTextureIndex;
+			uint32_t index = MinBufferIndex;
 			doPrepareTexture( TextureChannel::eDiffuse, index );
 			doPrepareTexture( TextureChannel::eSpecular, index );
 			doPrepareTexture( TextureChannel::eGloss, index );

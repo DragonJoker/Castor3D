@@ -26,11 +26,11 @@ namespace castor3d
 
 		void SssTransmittance::declare( LightType type )
 		{
-			if ( m_shadowMap )
-			{
-				auto c3d_transmittanceProfile = m_writer.declUniform< Vec4 >( SssTransmittance::TransmittanceProfile, 10u );
-				auto c3d_profileFactorsCount = m_writer.declUniform< Int >( SssTransmittance::ProfileFactorsCount );
-			}
+			//if ( m_shadowMap )
+			//{
+			//	auto c3d_transmittanceProfile = m_writer.declUniform< Vec4 >( SssTransmittance::TransmittanceProfile, 10u );
+			//	auto c3d_profileFactorsCount = m_writer.declUniform< Int >( SssTransmittance::ProfileFactorsCount );
+			//}
 
 			doDeclareComputeTransmittance();
 		}

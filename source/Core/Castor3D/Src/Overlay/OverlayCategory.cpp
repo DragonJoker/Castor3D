@@ -12,46 +12,46 @@ using namespace castor;
 
 namespace castor3d
 {
-	OverlayCategory::TextWriter::TextWriter( String const & p_tabs )
-		: castor::TextWriter< OverlayCategory >{ p_tabs }
+	OverlayCategory::TextWriter::TextWriter( String const & tabs )
+		: castor::TextWriter< OverlayCategory >{ tabs }
 	{
 	}
 
-	bool OverlayCategory::TextWriter::operator()( OverlayCategory const & p_overlay, TextFile & p_file )
+	bool OverlayCategory::TextWriter::operator()( OverlayCategory const & overlay, TextFile & file )
 	{
-		bool result = p_file.writeText( m_tabs + cuT( "\tposition " ) ) > 0
-						&& Point2d::TextWriter{ String{} }( p_overlay.getPosition(), p_file )
-						&& p_file.writeText( cuT( "\n" ) ) > 0;
+		bool result = file.writeText( m_tabs + cuT( "\tposition " ) ) > 0
+						&& Point2d::TextWriter{ String{} }( overlay.getPosition(), file )
+						&& file.writeText( cuT( "\n" ) ) > 0;
 		castor::TextWriter< OverlayCategory >::checkError( result, "OverlayCategory position" );
 
 		if ( result )
 		{
-			result = p_file.writeText( m_tabs + cuT( "\tsize " ) ) > 0
-					   && Point2d::TextWriter{ String{} }( p_overlay.getSize(), p_file )
-					   && p_file.writeText( cuT( "\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\tsize " ) ) > 0
+					   && Point2d::TextWriter{ String{} }( overlay.getSize(), file )
+					   && file.writeText( cuT( "\n" ) ) > 0;
 			castor::TextWriter< OverlayCategory >::checkError( result, "OverlayCategory size" );
 		}
 
-		if ( result && p_overlay.getMaterial() )
+		if ( result && overlay.getMaterial() )
 		{
-			result = p_file.writeText( m_tabs + cuT( "\tmaterial \"" ) + p_overlay.getMaterial()->getName() + cuT( "\"\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\tmaterial \"" ) + overlay.getMaterial()->getName() + cuT( "\"\n" ) ) > 0;
 			castor::TextWriter< OverlayCategory >::checkError( result, "OverlayCategory material" );
 		}
 
-		for ( auto overlay : p_overlay.getOverlay() )
+		for ( auto overlay : overlay.getOverlay() )
 		{
 			switch ( overlay->getType() )
 			{
 			case OverlayType::ePanel:
-				result &= PanelOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *overlay->getPanelOverlay(), p_file );
+				result &= PanelOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *overlay->getPanelOverlay(), file );
 				break;
 
 			case OverlayType::eBorderPanel:
-				result &= BorderPanelOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *overlay->getBorderPanelOverlay(), p_file );
+				result &= BorderPanelOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *overlay->getBorderPanelOverlay(), file );
 				break;
 
 			case OverlayType::eText:
-				result &= TextOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *overlay->getTextOverlay(), p_file );
+				result &= TextOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *overlay->getTextOverlay(), file );
 				break;
 
 			default:
@@ -64,8 +64,8 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	OverlayCategory::OverlayCategory( OverlayType p_type )
-		: m_type( p_type )
+	OverlayCategory::OverlayCategory( OverlayType type )
+		: m_type( type )
 	{
 	}
 
@@ -108,13 +108,13 @@ namespace castor3d
 		doRender( renderer );
 	}
 
-	void OverlayCategory::setMaterial( MaterialSPtr p_material )
+	void OverlayCategory::setMaterial( MaterialSPtr material )
 	{
-		m_pMaterial = p_material;
+		m_pMaterial = material;
 
-		if ( p_material )
+		if ( material )
 		{
-			m_strMatName = p_material->getName();
+			m_strMatName = material->getName();
 		}
 		else
 		{
@@ -127,19 +127,19 @@ namespace castor3d
 		return m_pOverlay->getName();
 	}
 
-	Position OverlayCategory::getAbsolutePosition( castor::Size const & p_size )const
+	Position OverlayCategory::getAbsolutePosition( castor::Size const & size )const
 	{
 		// TODO: Bug here
 		Point2d position = getAbsolutePosition();
-		return Position{ int32_t( p_size.getWidth() * position[0] )
-			, int32_t( p_size.getHeight() * position[1] ) };
+		return Position{ int32_t( size.getWidth() * position[0] )
+			, int32_t( size.getHeight() * position[1] ) };
 	}
 
-	Size OverlayCategory::getAbsoluteSize( castor::Size const & p_size )const
+	Size OverlayCategory::getAbsoluteSize( castor::Size const & size )const
 	{
-		Point2d size = getAbsoluteSize();
-		return Size{ uint32_t( p_size.getWidth() * size[0] )
-			, uint32_t( p_size.getHeight() * size[1] ) };
+		Point2d absoluteSize = getAbsoluteSize();
+		return Size{ uint32_t( size.getWidth() * absoluteSize[0] )
+			, uint32_t( size.getHeight() * absoluteSize[1] ) };
 	}
 
 	Point2f OverlayCategory::getRenderRatio( Size const & size )const

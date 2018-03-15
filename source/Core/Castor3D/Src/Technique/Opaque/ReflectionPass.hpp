@@ -97,28 +97,6 @@ namespace castor3d
 			ProgramPipeline( ProgramPipeline && ) = default;
 			ProgramPipeline & operator=( ProgramPipeline const & ) = delete;
 			ProgramPipeline & operator=( ProgramPipeline && ) = default;
-			/**
-			 *\~english
-			 *\brief		Constructor.
-			 *\param[in]	engine		The engine.
-			 *\param[in]	vbo			The vertex buffer.
-			 *\param[in]	matrixUbo	The matrix UBO.
-			 *\param[in]	sceneUbo	The scene UBO.
-			 *\param[in]	gpInfoUbo	The geometry pass UBO.
-			 *\param[in]	hasSsao		The SSAO enabled status.
-			 *\param[in]	fogType		The fog type.
-			 *\param[in]	matType		The materials type.
-			 *\~french
-			 *\brief		Constructeur.
-			 *\param[in]	engine		Le moteur.
-			 *\param[in]	vbo			Le tampon de sommets.
-			 *\param[in]	matrixUbo	L'UBO des matrices.
-			 *\param[in]	sceneUbo	L'UBO de la scène.
-			 *\param[in]	gpInfoUbo	L'UBO de la passe géométrique.
-			 *\param[in]	hasSsao		Le statut d'activation du SSAO.
-			 *\param[in]	fogType		Le type de brouillard.
-			 *\param[in]	matType		Le type de matériaux.
-			 */
 			ProgramPipeline( Engine & engine
 				, renderer::VertexBufferBase & vbo
 				, MatrixUbo & matrixUbo
@@ -127,58 +105,26 @@ namespace castor3d
 				, bool hasSsao
 				, FogType fogType
 				, MaterialType matType );
-			/**
-			 *\~english
-			 *\brief		Destructor.
-			 *\~french
-			 *\brief		Destructeur.
-			 */
 			~ProgramPipeline();
-			/**
-			 *\~english
-			 *\brief		Applique le programme.
-			 *\param[in]	vbo	The vertex buffer.
-			 *\~french
-			 *\brief		Applies the program.
-			 *\param[in]	vbo	Le tampon de sommets.
-			 */
+
 			void render( renderer::VertexBufferBase const & vbo );
-			//!\~english	The shader program.
-			//!\~french		Le shader program.
-			renderer::ShaderProgramPtr m_program;
-			//!\~english	The render pipeline.
-			//!\~french		Le pipeline de rendu.
-			RenderPipelineUPtr m_pipeline;
+			renderer::ShaderStageStateArray m_program;
+			renderer::PipelinePtr m_pipeline;
 		};
-		//!\~english	An array of CombineProgram, one per fog type.
-		//!\~french		Un tableau de CombineProgram, un par type de brouillard.
 		using ReflectionPrograms = std::array< ProgramPipeline, size_t( FogType::eCount ) >;
-		//!\~english	The render size.
-		//!\~french		La taille du rendu.
 		castor::Size m_size;
-		//!\~english	The render viewport.
-		//!\~french		La viewport du rendu.
 		Viewport m_viewport;
-		//!\~english	The vertex buffer.
-		//!\~french		Le tampon de sommets.
 		renderer::VertexBufferBasePtr m_vertexBuffer;
-		//!\~english	The matrices uniform buffer.
-		//!\~french		Le tampon d'uniformes contenant les matrices.
 		MatrixUbo m_matrixUbo;
-		//!\~english	The geometry pass informations.
-		//!\~french		Les informations de la passe de géométrie.
 		GpInfoUbo & m_gpInfoUbo;
-		//!\~english	The shader program.
-		//!\~french		Le shader program.
+		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
+		renderer::DescriptorSetPoolPtr m_descriptorPool;
+		renderer::DescriptorSetPtr m_uboDescriptorSet;
+		renderer::DescriptorSetPtr m_texDescriptorSet;
+		renderer::PipelineLayoutPtr m_pipelineLayout;
 		ReflectionPrograms m_programs;
-		//!\~english	The render pass timer.
-		//!\~french		Le timer de la passe de rendu.
 		RenderPassTimerSPtr m_timer;
-		//!\~english	Tells if SSAO is to be used in lighting pass.
-		//!\~french		Dit si le SSAO doit être utilisé dans la light pass.
 		bool m_ssaoEnabled{ false };
-		//!\~english	The SSAO pass.
-		//!\~french		La passe SSAO.
 		SsaoPass m_ssao;
 	};
 }

@@ -7,6 +7,8 @@ See LICENSE file in root folder
 #include "ShadowMapPass.hpp"
 #include "Render/Viewport.hpp"
 
+#include <Buffer/UniformBuffer.hpp>
+
 namespace castor3d
 {
 	/*!
@@ -57,55 +59,57 @@ namespace castor3d
 		void render( uint32_t index )override;
 
 	protected:
-		void doRenderNodes( SceneRenderNodes & p_nodes );
+		void doUpdateNodes( SceneRenderNodes & nodes );
 
 	private:
 		/**
 		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */
-		bool doInitialise( castor::Size const & p_size )override;
+		bool doInitialise( castor::Size const & size )override;
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::doCleanup
 		 */
 		void doCleanup()override;
 		/**
+		 *\copydoc		castor3d::RenderPass::doFillDescriptor
+		 */
+		void doFillDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, BillboardListRenderNode & node )override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillDescriptor
+		 */
+		void doFillDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, SubmeshRenderNode & node )override;
+		/**
 		 *\copydoc		castor3d::RenderPass::doUpdate
 		 */
-		void doUpdate( RenderQueueArray & p_queues )override;
+		void doUpdate( RenderQueueArray & queues )override;
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::doPreparePipeline
 		 */
-		void doPreparePipeline( renderer::ShaderProgram & p_program
-			, PipelineFlags const & p_flags )override;
+		void doPreparePipeline( renderer::ShaderStageStateArray & program
+			, PipelineFlags const & flags )override;
 
 	public:
 		static castor::String const ShadowMapUbo;
 		static castor::String const WorldLightPosition;
 		static castor::String const FarPlane;
 		static uint32_t constexpr TextureSize = 1024;
-		static uint32_t constexpr UboBindingPoint = 8u;
+		static uint32_t constexpr UboBindingPoint = 10u;
+
+		struct Configuration
+		{
+			castor::Point3f worldLightPosition;
+			float farPlane;
+		};
 
 	private:
-		//!\~english	The connection to light's node changed signal.
-		//!\~french		La connexion au signal de changement du noeud de la source lumineuse.
 		OnSceneNodeChangedConnection m_onNodeChanged;
-		//!\~english	The projection matrix.
-		//!\~french		La matrice de projection.
 		castor::Matrix4x4r m_projection;
-		//!\~english	The shadow map configuration data UBO.
-		//!\~french		L'UBO de données de configuration de shadow map.
-		UniformBuffer m_shadowConfig;
-		//!\~english	The variable holding the world light position.
-		//!\~french		La variable contenant la position monde de la lumière.
-		Uniform3f & m_worldLightPosition;
-		//!\~english	The variable holding the camera's far plane.
-		//!\~french		La variable contenant la position du plan éloigné de la caméra.
-		Uniform1f & m_farPlane;
-		//!\~english	The Viewport used when rendering a texture into to a frame buffer.
-		//!\~french		Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
+		renderer::UniformBufferPtr< Configuration > m_shadowConfig;
 		Viewport m_viewport;
-		//!\~english	The view matrices for the render of each cube face.
-		//!\~french		Les matrices vue pour le dessin de chaque face du cube.
 		std::array< castor::Matrix4x4r, size_t( CubeMapFace::eCount ) > m_matrices;
 	};
 }

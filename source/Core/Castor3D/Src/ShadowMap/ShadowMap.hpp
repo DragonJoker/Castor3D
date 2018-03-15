@@ -248,6 +248,7 @@ namespace castor3d
 		ShadowMapPassSPtr m_pass;
 		TextureUnit m_shadowMap;
 		TextureUnit m_linearMap;
+		bool m_initialised{ false };
 	};
 }
 

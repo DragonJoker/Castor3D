@@ -173,10 +173,10 @@ namespace castor3d
 			auto pxl_fragColor = writer.declFragData< Vec2 >( cuT( "pxl_FragColor" ), 0u );
 
 			auto radicalInverse = writer.implementFunction< Float >( cuT( "RadicalInverse_VdC" )
-				, [&]( UInt const & p_bits )
+				, [&]( UInt const & inBits )
 				{
 					auto bits = writer.declLocale( cuT( "bits" )
-						, p_bits );
+						, inBits );
 					bits = writer.paren( bits << 16u ) | writer.paren( bits >> 16u );
 					bits = writer.paren( writer.paren( bits & 0x55555555_ui ) << 1u ) | writer.paren( writer.paren( bits & 0xAAAAAAAA_ui ) >> 1u );
 					bits = writer.paren( writer.paren( bits & 0x33333333_ui ) << 2u ) | writer.paren( writer.paren( bits & 0xCCCCCCCC_ui ) >> 2u );
@@ -184,31 +184,31 @@ namespace castor3d
 					bits = writer.paren( writer.paren( bits & 0x00FF00FF_ui ) << 8u ) | writer.paren( writer.paren( bits & 0xFF00FF00_ui ) >> 8u );
 					writer.returnStmt( writer.cast< Float >( bits ) * 2.3283064365386963e-10 ); // / 0x100000000
 				}
-				, InUInt{ &writer, cuT( "p_bits" ) } );
+				, InUInt{ &writer, cuT( "inBits" ) } );
 
 			auto hammersley = writer.implementFunction< Vec2 >( cuT( "Hammersley" )
-				, [&]( UInt const & p_i
-					, UInt const & p_n )
+				, [&]( UInt const & i
+					, UInt const & n )
 				{
-					writer.returnStmt( vec2( writer.cast< Float >( p_i ) / writer.cast< Float >( p_n ), radicalInverse( p_i ) ) );
+					writer.returnStmt( vec2( writer.cast< Float >( i ) / writer.cast< Float >( n ), radicalInverse( i ) ) );
 				}
-				, InUInt{ &writer, cuT( "p_i" ) }
-				, InUInt{ &writer, cuT( "p_n" ) } );
+				, InUInt{ &writer, cuT( "i" ) }
+				, InUInt{ &writer, cuT( "n" ) } );
 
 			auto importanceSample = writer.implementFunction< Vec3 >( cuT( "ImportanceSampleGGX" )
-				, [&]( Vec2 const & p_xi
-					, Vec3 const & p_n
-					, Float const & p_roughness )
+				, [&]( Vec2 const & xi
+					, Vec3 const & n
+					, Float const & roughness )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
 					auto constexpr PI = 3.1415926535897932384626433832795028841968;
 					auto a = writer.declLocale( cuT( "a" )
-						, p_roughness * p_roughness );
+						, roughness * roughness );
 
 					auto phi = writer.declLocale( cuT( "phi" )
-						, 2.0_f * PI * p_xi.x() );
+						, 2.0_f * PI * xi.x() );
 					auto cosTheta = writer.declLocale( cuT( "cosTheta" )
-						, sqrt( writer.paren( 1.0 - p_xi.y() ) / writer.paren( 1.0 + writer.paren( a * a - 1.0 ) * p_xi.y() ) ) );
+						, sqrt( writer.paren( 1.0 - xi.y() ) / writer.paren( 1.0 + writer.paren( a * a - 1.0 ) * xi.y() ) ) );
 					auto sinTheta = writer.declLocale( cuT( "sinTheta" )
 						, sqrt( 1.0 - cosTheta * cosTheta ) );
 
@@ -220,66 +220,66 @@ namespace castor3d
 
 					// from tangent-space vector to world-space sample vector
 					auto up = writer.declLocale( cuT( "up" )
-						, writer.ternary( glsl::abs( p_n.z() ) < 0.999, vec3( 0.0_f, 0.0, 1.0 ), vec3( 1.0_f, 0.0, 0.0 ) ) );
+						, writer.ternary( glsl::abs( n.z() ) < 0.999, vec3( 0.0_f, 0.0, 1.0 ), vec3( 1.0_f, 0.0, 0.0 ) ) );
 					auto tangent = writer.declLocale( cuT( "tangent" )
-						, normalize( cross( up, p_n ) ) );
+						, normalize( cross( up, n ) ) );
 					auto bitangent = writer.declLocale( cuT( "bitangent" )
-						, cross( p_n, tangent ) );
+						, cross( n, tangent ) );
 
 					auto sampleVec = writer.declLocale( cuT( "sampleVec" )
-						, tangent * H.x() + bitangent * H.y() + p_n * H.z() );
+						, tangent * H.x() + bitangent * H.y() + n * H.z() );
 					writer.returnStmt( normalize( sampleVec ) );
 				}
-				, InVec2{ &writer, cuT( "p_xi" ) }
-				, InVec3{ &writer, cuT( "p_n" ) }
-				, InFloat{ &writer, cuT( "p_roughness" ) } );
+				, InVec2{ &writer, cuT( "xi" ) }
+				, InVec3{ &writer, cuT( "n" ) }
+				, InFloat{ &writer, cuT( "roughness" ) } );
 
 			auto geometrySchlickGGX = writer.implementFunction< Float >( cuT( "GeometrySchlickGGX" )
-				, [&]( Float const & p_product
-					, Float const & p_roughness )
+				, [&]( Float const & product
+					, Float const & roughness )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
 					auto r = writer.declLocale( cuT( "r" )
-						, p_roughness );
+						, roughness );
 					auto k = writer.declLocale( cuT( "k" )
 						, writer.paren( r * r ) / 2.0_f );
 
 					auto nominator = writer.declLocale( cuT( "num" )
-						, p_product );
+						, product );
 					auto denominator = writer.declLocale( cuT( "denom" )
-						, p_product * writer.paren( 1.0_f - k ) + k );
+						, product * writer.paren( 1.0_f - k ) + k );
 
 					writer.returnStmt( nominator / denominator );
 				}
-				, InFloat( &writer, cuT( "p_product" ) )
-				, InFloat( &writer, cuT( "p_roughness" ) ) );
+				, InFloat( &writer, cuT( "product" ) )
+				, InFloat( &writer, cuT( "roughness" ) ) );
 
 			auto geometrySmith = writer.implementFunction< Float >( cuT( "GeometrySmith" )
-				, [&]( Float const & p_NdotV
-					, Float const & p_NdotL
-					, Float const & p_roughness )
+				, [&]( Float const & NdotV
+					, Float const & NdotL
+					, Float const & roughness )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
 					auto ggx2 = writer.declLocale( cuT( "ggx2" )
-						, geometrySchlickGGX( p_NdotV, p_roughness ) );
+						, geometrySchlickGGX( NdotV, roughness ) );
 					auto ggx1 = writer.declLocale( cuT( "ggx1" )
-						, geometrySchlickGGX( p_NdotL, p_roughness ) );
+						, geometrySchlickGGX( NdotL, roughness ) );
 
 					writer.returnStmt( ggx1 * ggx2 );
 				}
-				, InFloat( &writer, cuT( "p_NdotV" ) )
-				, InFloat( &writer, cuT( "p_NdotL" ) )
-				, InFloat( &writer, cuT( "p_roughness" ) ) );
+				, InFloat( &writer, cuT( "NdotV" ) )
+				, InFloat( &writer, cuT( "NdotL" ) )
+				, InFloat( &writer, cuT( "roughness" ) ) );
 
 			auto integrateBRDF = writer.implementFunction< Vec2 >( cuT( "IntegrateBRDF" )
-				, [&]( Float const & p_NdotV
-					, Float const & p_roughness )
+				, [&]( Float const & NdotV
+					, Float const & roughness )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
 					auto V = writer.declLocale< Vec3 >( cuT( "V" ) );
-					V.x() = sqrt( 1.0 - p_NdotV * p_NdotV );
+					V.x() = sqrt( 1.0 - NdotV * NdotV );
 					V.y() = 0.0_f;
-					V.z() = p_NdotV;
+					V.z() = NdotV;
 					auto N = writer.declLocale( cuT( "N" )
 						, vec3( 0.0_f, 0.0, 1.0 ) );
 
@@ -296,7 +296,7 @@ namespace castor3d
 						auto xi = writer.declLocale( cuT( "xi" )
 							, hammersley( i, sampleCount ) );
 						auto H = writer.declLocale( cuT( "H" )
-							, importanceSample( xi, N, p_roughness ) );
+							, importanceSample( xi, N, roughness ) );
 						auto L = writer.declLocale( cuT( "L" )
 							, normalize( vec3( 2.0_f ) * dot( V, H ) * H - V ) );
 
@@ -310,9 +310,9 @@ namespace castor3d
 						IF( writer, "NdotL > 0.0" )
 						{
 							auto G = writer.declLocale( cuT( "G" )
-								, geometrySmith( p_NdotV, max( dot( N, L ), 0.0 ), p_roughness ) );
+								, geometrySmith( NdotV, max( dot( N, L ), 0.0 ), roughness ) );
 							auto G_Vis = writer.declLocale( cuT( "G_Vis" )
-								, writer.paren( G * VdotH ) / writer.paren( NdotH * p_NdotV ) );
+								, writer.paren( G * VdotH ) / writer.paren( NdotH * NdotV ) );
 							auto Fc = writer.declLocale( cuT( "Fc" )
 								, pow( 1.0 - VdotH, 5.0_f ) );
 
@@ -327,8 +327,8 @@ namespace castor3d
 					B /= writer.cast< Float >( sampleCount );
 					writer.returnStmt( vec2( A, B ) );
 				}
-				, InFloat( &writer, cuT( "p_NdotV" ) )
-				, InFloat( &writer, cuT( "p_roughness" ) ) );
+				, InFloat( &writer, cuT( "NdotV" ) )
+				, InFloat( &writer, cuT( "roughness" ) ) );
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()

@@ -66,7 +66,7 @@ namespace GrayScale
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), MinTextureIndex, 0u );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), MinBufferIndex, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
@@ -128,7 +128,7 @@ namespace GrayScale
 		ShaderProgramSPtr program = cache.getNewProgram( false );
 		program->createObject( renderer::ShaderStageFlag::eVertex );
 		program->createObject( renderer::ShaderStageFlag::eFragment );
-		program->createUniform< UniformType::eSampler >( cuT( "c3d_mapDiffuse" ), renderer::ShaderStageFlag::eFragment )->setValue( MinTextureIndex );
+		program->createUniform< UniformType::eSampler >( cuT( "c3d_mapDiffuse" ), renderer::ShaderStageFlag::eFragment )->setValue( MinBufferIndex );
 		program->setSource( renderer::ShaderStageFlag::eVertex, vertex );
 		program->setSource( renderer::ShaderStageFlag::eFragment, fragment );
 		program->initialise();
@@ -143,7 +143,7 @@ namespace GrayScale
 
 		return m_surface.initialise( m_renderTarget
 			, size
-			, MinTextureIndex
+			, MinBufferIndex
 			, m_sampler );
 	}
 

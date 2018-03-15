@@ -115,9 +115,9 @@ namespace castor3d
 							for ( uint32_t * it = index + 0; it < index + indexSize; it += 2 )
 							{
 								double dDistance = 0.0;
-								auto & vtx1 = vertex[it[0]].m_pos;
+								auto & vtx1 = vertex[it[0]].pos;
 								dDistance += point::lengthSquared( vtx1 - cameraPosition );
-								auto & vtx2 = vertex[it[1]].m_pos;
+								auto & vtx2 = vertex[it[1]].pos;
 								dDistance += point::lengthSquared( vtx2 - cameraPosition );
 								arraySorted.push_back( LineDistance{ { it[0], it[1] }, dDistance } );
 							}
@@ -141,9 +141,9 @@ namespace castor3d
 				}
 			}
 		}
-		catch ( Exception const & p_exc )
+		catch ( Exception const & exc )
 		{
-			Logger::logError( std::stringstream() << "Submesh::SortLines - Error: " << p_exc.what() );
+			Logger::logError( std::stringstream() << "Submesh::SortLines - Error: " << exc.what() );
 		}
 	}
 

@@ -429,7 +429,7 @@ namespace castor3d
 			auto c3d_sLights = writer.declSampler< Sampler1D >( cuT( "c3d_mapLights" ), 1u, 0u );
 		}
 
-		auto index = MinTextureIndex;
+		auto index = MinBufferIndex;
 		auto c3d_mapDiffuse( writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" )
 			, checkFlag( textureFlags, TextureChannel::eDiffuse ) ? index++ : 0u
 			, 0u
@@ -658,8 +658,14 @@ namespace castor3d
 			//auto weight = writer.declLocale( cuT( "weight" )
 			//	, clamp( a * a * a * 1e8 * b * b * b, 1e-2, 3e2 ) );
 
+			auto curPosition = writer.declLocale( cuT( "curPosition" )
+				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
+			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
+				, vtx_prvPosition.xy() / vtx_prvPosition.z() );
+
 			pxl_accumulation = vec4( colour * alpha, alpha ) * weight;
 			pxl_revealage = alpha;
+			pxl_velocity.xy() = curPosition - prvPosition;
 		} );
 
 		return writer.finalise();
@@ -717,7 +723,7 @@ namespace castor3d
 			auto c3d_sLights = writer.declSampler< Sampler1D >( cuT( "c3d_mapLights" ), 1u, 0u );
 		}
 
-		auto index = MinTextureIndex;
+		auto index = MinBufferIndex;
 		auto c3d_mapAlbedo( writer.declSampler< Sampler2D >( cuT( "c3d_mapAlbedo" )
 			, checkFlag( textureFlags, TextureChannel::eAlbedo ) ? index++ : 0u
 			, 0u
@@ -795,6 +801,7 @@ namespace castor3d
 		// Fragment Outputs
 		auto pxl_accumulation( writer.declFragData< Vec4 >( getTextureName( WbTexture::eAccumulation ), 0 ) );
 		auto pxl_revealage( writer.declFragData< Float >( getTextureName( WbTexture::eRevealage ), 1 ) );
+		auto pxl_velocity( writer.declFragData< Vec4 >( cuT( "pxl_velocity" ), 2 ) );
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -924,8 +931,14 @@ namespace castor3d
 			//auto weight = writer.declLocale( cuT( "weight" )
 			//	, clamp( a * a * a * 1e8 * b * b * b, 1e-2, 3e2 ) );
 
-			pxl_accumulation = vec4( colour.xyz() * alpha, alpha ) * weight;
+			auto curPosition = writer.declLocale( cuT( "curPosition" )
+				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
+			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
+				, vtx_prvPosition.xy() / vtx_prvPosition.z() );
+
+			pxl_accumulation = vec4( colour * alpha, alpha ) * weight;
 			pxl_revealage = alpha;
+			pxl_velocity.xy() = curPosition - prvPosition;
 		} );
 
 		return writer.finalise();
@@ -983,7 +996,7 @@ namespace castor3d
 			auto c3d_sLights = writer.declSampler< Sampler1D >( cuT( "c3d_mapLights" ), 1u, 0u );
 		}
 
-		auto index = MinTextureIndex;
+		auto index = MinBufferIndex;
 		auto c3d_mapDiffuse( writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" )
 			, checkFlag( textureFlags, TextureChannel::eDiffuse ) ? index++ : 0u
 			, 0u
@@ -1060,6 +1073,7 @@ namespace castor3d
 		// Fragment Outputs
 		auto pxl_accumulation( writer.declFragData< Vec4 >( getTextureName( WbTexture::eAccumulation ), 0 ) );
 		auto pxl_revealage( writer.declFragData< Float >( getTextureName( WbTexture::eRevealage ), 1 ) );
+		auto pxl_velocity( writer.declFragData< Vec4 >( cuT( "pxl_velocity" ), 2 ) );
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -1187,8 +1201,14 @@ namespace castor3d
 			//auto weight = writer.declLocale( cuT( "weight" )
 			//	, clamp( a * a * a * 1e8 * b * b * b, 1e-2, 3e2 ) );
 
-			pxl_accumulation = vec4( colour.xyz() * alpha, alpha ) * weight;
+			auto curPosition = writer.declLocale( cuT( "curPosition" )
+				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
+			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
+				, vtx_prvPosition.xy() / vtx_prvPosition.z() );
+
+			pxl_accumulation = vec4( colour * alpha, alpha ) * weight;
 			pxl_revealage = alpha;
+			pxl_velocity.xy() = curPosition - prvPosition;
 		} );
 
 		return writer.finalise();

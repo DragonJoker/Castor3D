@@ -4,75 +4,79 @@
 
 namespace castor3d
 {
-	bool GpuObjectTracker::track( void * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name )
+	bool GpuObjectTracker::track( void * object, std::string const & type, std::string const & file, int line, std::string & name )
 	{
-		auto it = std::find_if( m_allocated.begin(), m_allocated.end(), [p_object]( ObjectDeclaration const & object )
-		{
-			return p_object == object.m_object;
-		} );
+		auto it = std::find_if( m_allocated.begin()
+			, m_allocated.end()
+			, [object]( ObjectDeclaration const & lookup )
+			{
+				return object == lookup.m_object;
+			} );
 
 		bool result = it == m_allocated.end();
 
-		std::stringstream ptr;
-		ptr.width( 16 );
-		ptr.fill( '0' );
-		ptr << std::hex << std::right << uint64_t( p_object );
-		std::stringstream type;
-		type.width( 20 );
-		type << std::left << p_type;
+		std::stringstream ptrStream;
+		ptrStream.width( 16 );
+		ptrStream.fill( '0' );
+		ptrStream << std::hex << std::right << uint64_t( object );
+		std::stringstream typeStream;
+		typeStream.width( 20 );
+		typeStream << std::left << type;
 
 		if ( result )
 		{
 			std::stringstream stream;
 			stream << castor::Debug::Backtrace();
-			m_allocated.push_back( { ++m_id, p_type, p_object, p_file, p_line, stream.str() } );
-			std::stringstream name;
-			name << "(" << m_id << ") " << type.str() << " [0x" << ptr.str() << "]";
-			castor::Logger::logDebug( name );
-			p_name = name.str();
+			m_allocated.push_back( { ++m_id, type, object, file, line, stream.str() } );
+			std::stringstream nameStream;
+			nameStream << "(" << m_id << ") " << typeStream.str() << " [0x" << ptrStream.str() << "]";
+			castor::Logger::logDebug( nameStream );
+			name = nameStream.str();
 		}
 		else
 		{
-			std::stringstream name;
-			name << "(" << it->m_id << ") " << type.str() << " [0x" << ptr.str() << "]";
-			castor::Logger::logDebug( std::stringstream() << "Rereferencing object: " << name.str() );
+			std::stringstream nameStream;
+			nameStream << "(" << it->m_id << ") " << typeStream.str() << " [0x" << ptrStream.str() << "]";
+			castor::Logger::logDebug( std::stringstream() << "Rereferencing object: " << nameStream.str() );
 		}
 
 		return result;
 	}
 
-	bool GpuObjectTracker::track( castor::Named * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name )
+	bool GpuObjectTracker::track( castor::Named * object, std::string const & type, std::string const & file, int line, std::string & name )
 	{
-		return track( reinterpret_cast< void * >( p_object ), p_type + ": " + castor::string::stringCast< char >( p_object->getName() ), p_file, p_line, p_name );
+		return track( reinterpret_cast< void * >( object ), type + ": " + castor::string::stringCast< char >( object->getName() ), file, line, name );
 	}
 
-	bool GpuObjectTracker::untrack( void * p_object, ObjectDeclaration & p_declaration )
+	bool GpuObjectTracker::untrack( void * object, ObjectDeclaration & declaration )
 	{
-		auto it = std::find_if( m_allocated.begin(), m_allocated.end(), [&p_object]( ObjectDeclaration p_decl )
-		{
-			return p_object == p_decl.m_object;
-		} );
+		auto it = std::find_if( m_allocated.begin()
+			, m_allocated.end()
+			, [&object]( ObjectDeclaration lookup )
+			{
+				return object == lookup.m_object;
+			} );
 
 		bool result = false;
 		char szName[1024] = { 0 };
-		std::stringstream ptr;
-		ptr.width( 16 );
-		ptr.fill( '0' );
-		ptr << std::hex << std::right << uint64_t( p_object );
+		std::stringstream ptrStream;
+		ptrStream.width( 16 );
+		ptrStream.fill( '0' );
+		ptrStream << std::hex << std::right << uint64_t( object );
 
 		if ( it != m_allocated.end() )
 		{
-			std::stringstream type;
-			type.width( 20 );
-			type << std::left << it->m_name;
-			p_declaration = *it;
+			std::stringstream typeStream;
+			typeStream.width( 20 );
+			typeStream << std::left << it->m_name;
+			declaration = *it;
 			result = true;
-			castor::Logger::logWarning( std::stringstream() << "Released " << type.str() << " [0x" << ptr.str() << "]" );
+			castor::Logger::logWarning( std::stringstream() << "Released " << typeStream.str() << " [0x" << ptrStream.str() << "]" );
 			m_allocated.erase( it );
 		}
 		else
 		{
-			castor::Logger::logWarning( std::stringstream() << "Untracked [0x" << ptr.str() << cuT( "]" ) );
+			castor::Logger::logWarning( std::stringstream() << "Untracked [0x" << ptrStream.str() << cuT( "]" ) );
 		}
 
 		return result;

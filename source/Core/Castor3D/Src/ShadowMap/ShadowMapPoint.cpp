@@ -18,9 +18,7 @@
 #include <Image/Texture.hpp>
 #include <Image/TextureView.hpp>
 #include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassState.hpp>
-#include <RenderPass/RenderSubpass.hpp>
-#include <RenderPass/RenderSubpassState.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
 #include <Shader/ShaderProgram.hpp>
 
@@ -57,12 +55,21 @@ namespace castor3d
 				sampler->setBorderColour( renderer::BorderColour::eFloatOpaqueWhite );
 			}
 
+			renderer::ImageCreateInfo image{};
+			image.flags = renderer::ImageCreateFlag::eCubeCompatible;
+			image.arrayLayers = 6u;
+			image.extent.width = size.getWidth();
+			image.extent.height = size.getHeight();
+			image.extent.depth = 1u;
+			image.imageType = renderer::TextureType::e2D;
+			image.mipLevels = 1u;
+			image.samples = renderer::SampleCountFlag::e1;
+			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+			image.format = renderer::Format::eR32G32_SFLOAT;
+
 			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
-				, renderer::TextureType::eCube
-				, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled
-				, renderer::MemoryPropertyFlag::eDeviceLocal
-				, PixelFormat::eAL32F
-				, size );
+				, image
+				, renderer::MemoryPropertyFlag::eDeviceLocal );
 			TextureUnit unit{ engine };
 			unit.setTexture( texture );
 			unit.setSampler( sampler );
@@ -75,7 +82,7 @@ namespace castor3d
 			return unit;
 		}
 
-		TextureUnit doInitialisePointDepth( Engine & engine
+		TextureUnit doInitialisePointLinearDepth( Engine & engine
 			, Size const & size )
 		{
 			String const name = cuT( "ShadowMap_Point_Depth" );
@@ -96,12 +103,20 @@ namespace castor3d
 				sampler->setBorderColour( renderer::BorderColour::eFloatOpaqueWhite );
 			}
 
+			renderer::ImageCreateInfo image{};
+			image.arrayLayers = 1u;
+			image.extent.width = size.getWidth();
+			image.extent.height = size.getHeight();
+			image.extent.depth = 1u;
+			image.imageType = renderer::TextureType::e2D;
+			image.mipLevels = 1u;
+			image.samples = renderer::SampleCountFlag::e1;
+			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+			image.format = renderer::Format::eR32_SFLOAT;
+
 			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
-				, renderer::TextureType::eCube
-				, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled
-				, renderer::MemoryPropertyFlag::eDeviceLocal
-				, PixelFormat::eL32F
-				, size );
+				, image
+				, renderer::MemoryPropertyFlag::eDeviceLocal );
 			TextureUnit unit{ engine };
 			unit.setTexture( texture );
 			unit.setSampler( sampler );
@@ -119,7 +134,7 @@ namespace castor3d
 		, Scene & scene )
 		: ShadowMap{ engine
 			, doInitialisePointShadow( engine, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } )
-			, doInitialisePointDepth( engine, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } )
+			, doInitialisePointLinearDepth( engine, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } )
 			, std::make_shared< ShadowMapPassPoint >( engine, scene, *this ) }
 	{
 	}
@@ -158,59 +173,116 @@ namespace castor3d
 	void ShadowMapPoint::doInitialise()
 	{
 		renderer::Extent2D size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize };
-		std::vector< renderer::PixelFormat > formats
-		{
-			PixelFormat::eD24,
-			PixelFormat::eAL32F,
-			PixelFormat::eL32F
-		};
-		renderer::RenderPassAttachmentArray rpAttaches
-		{
-			{ PixelFormat::eD24, true },
-			{ PixelFormat::eAL32F, true },
-			{ PixelFormat::eL32F, true }
-		};
 		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
-		renderer::RenderSubpassPtrArray subpasses;
-		subpasses.emplace_back( device.createRenderSubpass( formats
-			, renderer::RenderSubpassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-			, renderer::AccessFlag::eColourAttachmentWrite } ) );
+
+		renderer::ImageCreateInfo depth{};
+		depth.arrayLayers = 1u;
+		depth.extent.width = size.width;
+		depth.extent.height = size.height;
+		depth.extent.depth = 1u;
+		depth.imageType = renderer::TextureType::e2D;
+		depth.mipLevels = 1u;
+		depth.samples = renderer::SampleCountFlag::e1;
+		depth.usage = renderer::ImageUsageFlag::eDepthStencilAttachment;
+		depth.format = renderer::Format::eD24_UNORM_S8_UINT;
+		m_depthTexture = device.createTexture( depth, renderer::MemoryPropertyFlag::eDeviceLocal );
+
+		renderer::ImageViewCreateInfo depthView;
+		depthView.format = depth.format;
+		depthView.viewType = renderer::TextureViewType::e2D;
+		depthView.subresourceRange.aspectMask = renderer::ImageAspectFlag::eDepth;
+		depthView.subresourceRange.baseArrayLayer = 0u;
+		depthView.subresourceRange.layerCount = 1u;
+		depthView.subresourceRange.baseMipLevel = 0u;
+		depthView.subresourceRange.levelCount = 1u;
+		m_depthView = m_depthTexture->createView( depthView );
+
+		// Create the render pass.
+		renderer::RenderPassCreateInfo renderPass;
+		renderPass.flags = 0u;
+
+		renderPass.attachments.resize( 3u );
+		renderPass.attachments[0].index = 0u;
+		renderPass.attachments[0].format = renderer::Format::eD24_UNORM_S8_UINT;
+		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+
+		renderPass.attachments[1].index = 1u;
+		renderPass.attachments[1].format = renderer::Format::eR32_SFLOAT;
+		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[1].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[1].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+		renderPass.attachments[2].index = 2u;
+		renderPass.attachments[2].format = renderer::Format::eR32G32_SFLOAT;
+		renderPass.attachments[2].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[2].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[2].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[2].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[2].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[2].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[2].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+		renderPass.subpasses.resize( 1u );
+		renderPass.subpasses[0].flags = 0u;
+		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
+		renderPass.subpasses[0].colorAttachments.push_back( { 1u, renderer::ImageLayout::eColourAttachmentOptimal } );
+		renderPass.subpasses[0].colorAttachments.push_back( { 2u, renderer::ImageLayout::eColourAttachmentOptimal } );
+		renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
+
+		renderPass.dependencies.resize( 2u );
+		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].dstSubpass = 0u;
+		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		renderPass.dependencies[1].srcSubpass = 0u;
+		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		m_renderPass = device.createRenderPass( renderPass );
+
 		auto & variance = m_shadowMap.getTexture()->getTexture();
 		auto & linear = m_linearMap.getTexture()->getTexture();
 		uint32_t face = 0u;
 
 		for ( auto & frameBuffer : m_frameBuffers )
 		{
-			frameBuffer.varianceView = variance.createView( renderer::TextureType::e2D
+			frameBuffer.varianceView = variance.createView( renderer::TextureViewType::e2D
 				, variance.getFormat()
 				, 0u
 				, 1u
 				, face
 				, 1u );
-			frameBuffer.linearView = linear.createView( renderer::TextureType::e2D
-				, linear.getFormat()
-				, 0u
-				, 1u
-				, face
-				, 1u );
-			frameBuffer.renderPass = device.createRenderPass( rpAttaches
-				, subpasses
-				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-					, renderer::AccessFlag::eColourAttachmentWrite
-					, { renderer::ImageLayout::eColourAttachmentOptimal, renderer::ImageLayout::eColourAttachmentOptimal } }
-				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-					, renderer::AccessFlag::eColourAttachmentWrite
-					, { renderer::ImageLayout::eColourAttachmentOptimal, renderer::ImageLayout::eColourAttachmentOptimal } } );
+			frameBuffer.linearView = &m_linearMap.getTexture()->getDefaultView();
 			renderer::FrameBufferAttachmentArray attaches;
-			attaches.emplace_back( *( frameBuffer.renderPass->begin() + 0u ), frameBuffer.varianceView );
-			attaches.emplace_back( *( frameBuffer.renderPass->begin() + 1u ), frameBuffer.linearView );
-			frameBuffer.frameBuffer = frameBuffer.renderPass->createFrameBuffer( size, std::move( attaches ) );
+			attaches.emplace_back( *( m_renderPass->getAttachments().begin() + 0u ), *m_depthView );
+			attaches.emplace_back( *( m_renderPass->getAttachments().begin() + 1u ), *frameBuffer.linearView );
+			attaches.emplace_back( *( m_renderPass->getAttachments().begin() + 2u ), *frameBuffer.varianceView );
+			frameBuffer.frameBuffer = m_renderPass->createFrameBuffer( size, std::move( attaches ) );
 			++face;
 		}
 
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 		static float constexpr component = std::numeric_limits< float >::max();
 		static renderer::ClearColorValue const white{ component, component, component, component };
+		static renderer::DepthStencilClearValue const zero{ 1.0f, 0 };
 		face = 0u;
 
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
@@ -219,9 +291,9 @@ namespace castor3d
 
 			for ( auto & frameBuffer : m_frameBuffers )
 			{
-				m_commandBuffer->beginRenderPass( *frameBuffer.renderPass
+				m_commandBuffer->beginRenderPass( *m_renderPass
 					, *frameBuffer.frameBuffer
-					, { white, white }
+					, { zero, white, white }
 					, renderer::SubpassContents::eSecondaryCommandBuffers );
 				m_commandBuffer->executeCommands( { m_pass->getCommandBuffer( face ) } );
 				m_commandBuffer->endRenderPass();
@@ -238,10 +310,11 @@ namespace castor3d
 		for ( auto & frameBuffer : m_frameBuffers )
 		{
 			frameBuffer.frameBuffer.reset();
-			frameBuffer.renderPass.reset();
 			frameBuffer.varianceView.reset();
-			frameBuffer.linearView.reset();
+			frameBuffer.linearView = nullptr;
 		}
+
+		m_renderPass.reset();
 	}
 
 	void ShadowMapPoint::doUpdateFlags( PassFlags & passFlags
@@ -267,20 +340,20 @@ namespace castor3d
 		auto c3d_farPlane( shadowMap.declMember< Float >( ShadowMapPassPoint::FarPlane ) );
 		shadowMap.end();
 
-		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
-		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ) );
-		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ) );
+		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ), RenderPass::VertexOutputs::WorldPositionLocation );
+		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ), RenderPass::VertexOutputs::TextureLocation );
+		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ), RenderPass::VertexOutputs::MaterialLocation );
 		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( cuT( "c3d_mapOpacity" )
-			, MinTextureIndex
 			, 0u
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eOpacity ) ) );
 
 		auto materials = shader::createMaterials( writer, passFlags );
 		materials->declare();
 
 		// Fragment Outputs
-		auto pxl_depth = writer.declFragData< Vec2 >( cuT( "pxl_depth" ), 0u );
-		auto pxl_linear = writer.declFragData< Float >( cuT( "pxl_linear" ), 1u );
+		auto pxl_linear = writer.declFragData< Float >( cuT( "pxl_linear" ), 0u );
+		auto pxl_variance = writer.declFragData< Vec2 >( cuT( "pxl_variance" ), 1u );
 
 		auto main = [&]()
 		{
@@ -293,14 +366,14 @@ namespace castor3d
 			auto depth = writer.declLocale( cuT( "depth" )
 				, length( vtx_worldPosition - c3d_wordLightPosition ) );
 			pxl_linear = depth / c3d_farPlane;
-			pxl_depth.x() = pxl_linear;
-			pxl_depth.y() = pxl_linear * pxl_linear;
+			pxl_variance.x() = pxl_linear;
+			pxl_variance.y() = pxl_linear * pxl_linear;
 
 			auto dx = writer.declLocale( cuT( "dx" )
 				, dFdx( pxl_linear ) );
 			auto dy = writer.declLocale( cuT( "dy" )
 				, dFdy( pxl_linear ) );
-			pxl_depth.y() += 0.25_f * writer.paren( dx * dx + dy * dy );
+			pxl_variance.y() += 0.25_f * writer.paren( dx * dx + dy * dy );
 		};
 
 		writer.implementFunction< void >( cuT( "main" ), main );

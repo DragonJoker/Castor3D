@@ -13,37 +13,37 @@ namespace castor3d
 	static const String GetOnLoadFunctionABIName = cuT( "OnLoad" );
 	static const String GetOnUnloadFunctionABIName = cuT( "OnUnload" );
 
-	Plugin::Plugin( PluginType p_type, DynamicLibrarySPtr p_library, Engine & engine )
+	Plugin::Plugin( PluginType type, DynamicLibrarySPtr library, Engine & engine )
 		: OwnedBy< Engine >( engine )
 		, m_pfnGetRequiredVersion( 0 )
 		, m_pfnGetName( 0 )
-		, m_type( p_type )
-		, m_library( p_library )
+		, m_type( type )
+		, m_library( library )
 	{
-		if ( !p_library->getFunction( m_pfnGetName, GetNameFunctionABIName ) )
+		if ( !library->getFunction( m_pfnGetName, GetNameFunctionABIName ) )
 		{
-			String strError = cuT( "Error encountered while loading dll [" ) + p_library->getPath().getFileName() + cuT( "] plug-in getName function : " );
+			String strError = cuT( "Error encountered while loading dll [" ) + library->getPath().getFileName() + cuT( "] plug-in getName function : " );
 			strError += System::getLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::stringCast< char >( strError ), true );
 		}
 
-		if ( !p_library->getFunction( m_pfnGetRequiredVersion, GetRequiredVersionFunctionABIName ) )
+		if ( !library->getFunction( m_pfnGetRequiredVersion, GetRequiredVersionFunctionABIName ) )
 		{
-			String strError = cuT( "Error encountered while loading dll [" ) + p_library->getPath().getFileName() + cuT( "] plug-in getRequiredVersion function : " );
+			String strError = cuT( "Error encountered while loading dll [" ) + library->getPath().getFileName() + cuT( "] plug-in getRequiredVersion function : " );
 			strError += System::getLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::stringCast< char >( strError ), true );
 		}
 
-		if ( !p_library->getFunction( m_pfnOnLoad, GetOnLoadFunctionABIName ) )
+		if ( !library->getFunction( m_pfnOnLoad, GetOnLoadFunctionABIName ) )
 		{
-			String strError = cuT( "Error encountered while loading dll [" ) + p_library->getPath().getFileName() + cuT( "] plug-in OnLoad function : " );
+			String strError = cuT( "Error encountered while loading dll [" ) + library->getPath().getFileName() + cuT( "] plug-in OnLoad function : " );
 			strError += System::getLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::stringCast< char >( strError ), true );
 		}
 
-		if ( !p_library->getFunction( m_pfnOnUnload, GetOnUnloadFunctionABIName ) )
+		if ( !library->getFunction( m_pfnOnUnload, GetOnUnloadFunctionABIName ) )
 		{
-			String strError = cuT( "Error encountered while loading dll [" ) + p_library->getPath().getFileName() + cuT( "] plug-in OnUnload function : " );
+			String strError = cuT( "Error encountered while loading dll [" ) + library->getPath().getFileName() + cuT( "] plug-in OnUnload function : " );
 			strError += System::getLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::stringCast< char >( strError ), true );
 		}
@@ -54,11 +54,11 @@ namespace castor3d
 	{
 	}
 
-	void Plugin::getRequiredVersion( Version & p_version )const
+	void Plugin::getRequiredVersion( Version & version )const
 	{
 		if ( m_pfnGetRequiredVersion )
 		{
-			m_pfnGetRequiredVersion( &p_version );
+			m_pfnGetRequiredVersion( &version );
 		}
 	}
 

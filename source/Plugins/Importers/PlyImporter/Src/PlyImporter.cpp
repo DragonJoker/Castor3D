@@ -172,9 +172,9 @@ namespace C3dPly
 					{
 						std::getline( isFile, strLine );
 						ssToken.str( strLine );
-						ssToken >> vertex.m_pos[0] >> vertex.m_pos[1] >> vertex.m_pos[2];
-						ssToken >> vertex.m_nml[0] >> vertex.m_nml[1] >> vertex.m_nml[2];
-						ssToken >> vertex.m_tex[0] >> vertex.m_tex[1];
+						ssToken >> vertex.pos[0] >> vertex.pos[1] >> vertex.pos[2];
+						ssToken >> vertex.nml[0] >> vertex.nml[1] >> vertex.nml[2];
+						ssToken >> vertex.tex[0] >> vertex.tex[1];
 						ssToken.clear( std::istringstream::goodbit );
 					}
 				}
@@ -185,8 +185,8 @@ namespace C3dPly
 					{
 						std::getline( isFile, strLine );
 						ssToken.str( strLine );
-						ssToken >> vertex.m_pos[0] >> vertex.m_pos[1] >> vertex.m_pos[2];
-						ssToken >> vertex.m_nml[0] >> vertex.m_nml[1] >> vertex.m_nml[2];
+						ssToken >> vertex.pos[0] >> vertex.pos[1] >> vertex.pos[2];
+						ssToken >> vertex.nml[0] >> vertex.nml[1] >> vertex.nml[2];
 						ssToken.clear( std::istringstream::goodbit );
 					}
 				}
@@ -197,7 +197,7 @@ namespace C3dPly
 					{
 						std::getline( isFile, strLine );
 						ssToken.str( strLine );
-						ssToken >> vertex.m_pos[0] >> vertex.m_pos[1] >> vertex.m_pos[2];
+						ssToken >> vertex.pos[0] >> vertex.pos[1] >> vertex.pos[2];
 						ssToken.clear( std::istringstream::goodbit );
 					}
 				}

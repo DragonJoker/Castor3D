@@ -23,33 +23,33 @@ namespace castor3d
 			for ( auto & inVtx : in )
 			{
 				auto & outVtx = *it;
-				outVtx.m_pos[0] = U( inVtx.m_pos[0] );
-				outVtx.m_pos[1] = U( inVtx.m_pos[1] );
-				outVtx.m_pos[2] = U( inVtx.m_pos[2] );
-				outVtx.m_bin[0] = U( inVtx.m_bin[0] );
-				outVtx.m_bin[1] = U( inVtx.m_bin[1] );
-				outVtx.m_bin[2] = U( inVtx.m_bin[2] );
-				outVtx.m_nml[0] = U( inVtx.m_nml[0] );
-				outVtx.m_nml[1] = U( inVtx.m_nml[1] );
-				outVtx.m_nml[2] = U( inVtx.m_nml[2] );
-				outVtx.m_tan[0] = U( inVtx.m_tan[0] );
-				outVtx.m_tan[1] = U( inVtx.m_tan[1] );
-				outVtx.m_tan[2] = U( inVtx.m_tan[2] );
-				outVtx.m_tex[0] = U( inVtx.m_tex[0] );
-				outVtx.m_tex[1] = U( inVtx.m_tex[1] );
-				outVtx.m_tex[2] = U( inVtx.m_tex[2] );
+				outVtx.pos[0] = U( inVtx.pos[0] );
+				outVtx.pos[1] = U( inVtx.pos[1] );
+				outVtx.pos[2] = U( inVtx.pos[2] );
+				outVtx.bin[0] = U( inVtx.bin[0] );
+				outVtx.bin[1] = U( inVtx.bin[1] );
+				outVtx.bin[2] = U( inVtx.bin[2] );
+				outVtx.nml[0] = U( inVtx.nml[0] );
+				outVtx.nml[1] = U( inVtx.nml[1] );
+				outVtx.nml[2] = U( inVtx.nml[2] );
+				outVtx.tan[0] = U( inVtx.tan[0] );
+				outVtx.tan[1] = U( inVtx.tan[1] );
+				outVtx.tan[2] = U( inVtx.tan[2] );
+				outVtx.tex[0] = U( inVtx.tex[0] );
+				outVtx.tex[1] = U( inVtx.tex[1] );
+				outVtx.tex[2] = U( inVtx.tex[2] );
 				++it;
 			}
 		}
 
 		BoundingBox doComputeBoundingBox( InterleavedVertexArray const & points )
 		{
-			Point3r min{ points[0].m_pos };
-			Point3r max{ points[0].m_pos };
+			Point3r min{ points[0].pos };
+			Point3r max{ points[0].pos };
 
 			for ( auto & vertex : points )
 			{
-				Point3r cur{ vertex.m_pos };
+				Point3r cur{ vertex.pos };
 				max[0] = std::max( cur[0], max[0] );
 				max[1] = std::max( cur[1], max[1] );
 				max[2] = std::max( cur[2], max[2] );

@@ -83,6 +83,8 @@ namespace castor3d
 			, renderer::CompareOp alphaFunc )const override;
 
 	private:
+		renderer::TexturePtr m_depthTexture;
+		renderer::TextureViewPtr m_depthView;
 		renderer::RenderPassPtr m_renderPass;
 		renderer::FrameBufferPtr m_frameBuffer;
 		std::unique_ptr< GaussianBlur > m_blur;

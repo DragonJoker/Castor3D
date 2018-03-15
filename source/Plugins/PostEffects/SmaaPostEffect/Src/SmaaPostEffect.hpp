@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SmaaPostEffect_H___
@@ -117,7 +117,6 @@ namespace smaa
 		castor3d::RenderPipelineSPtr m_reprojectPipeline;
 
 		// Common.
-		castor3d::MatrixUbo m_matrixUbo;
 		float m_smaaThreshold{ 0.1f };
 		int m_smaaMaxSearchSteps{ 16 };
 		int m_smaaMaxSearchStepsDiag{ 8 };

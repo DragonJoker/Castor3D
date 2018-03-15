@@ -86,18 +86,18 @@ namespace castor3d
 			return unit;
 		}
 
-		EnvironmentMap::EnvironmentMapPasses doCreatePasses( EnvironmentMap & p_map
-			, SceneNode & p_node )
+		EnvironmentMap::EnvironmentMapPasses doCreatePasses( EnvironmentMap & map
+			, SceneNode & node )
 		{
 			static Point3r const position;
 			std::array< SceneNodeSPtr, size_t( CubeMapFace::eCount ) > nodes
 			{
-				std::make_shared< SceneNode >( cuT( "EnvironmentMap_PosX" ), *p_node.getScene() ),
-				std::make_shared< SceneNode >( cuT( "EnvironmentMap_NegX" ), *p_node.getScene() ),
-				std::make_shared< SceneNode >( cuT( "EnvironmentMap_PosY" ), *p_node.getScene() ),
-				std::make_shared< SceneNode >( cuT( "EnvironmentMap_NegY" ), *p_node.getScene() ),
-				std::make_shared< SceneNode >( cuT( "EnvironmentMap_PosZ" ), *p_node.getScene() ),
-				std::make_shared< SceneNode >( cuT( "EnvironmentMap_NegZ" ), *p_node.getScene() ),
+				std::make_shared< SceneNode >( cuT( "EnvironmentMap_PosX" ), *node.getScene() ),
+				std::make_shared< SceneNode >( cuT( "EnvironmentMap_NegX" ), *node.getScene() ),
+				std::make_shared< SceneNode >( cuT( "EnvironmentMap_PosY" ), *node.getScene() ),
+				std::make_shared< SceneNode >( cuT( "EnvironmentMap_NegY" ), *node.getScene() ),
+				std::make_shared< SceneNode >( cuT( "EnvironmentMap_PosZ" ), *node.getScene() ),
+				std::make_shared< SceneNode >( cuT( "EnvironmentMap_NegZ" ), *node.getScene() ),
 			};
 			std::array< Quaternion, size_t( CubeMapFace::eCount ) > orients
 			{
@@ -120,12 +120,12 @@ namespace castor3d
 			return EnvironmentMap::EnvironmentMapPasses
 			{
 				{
-					std::make_unique< EnvironmentMapPass >( p_map, nodes[0], p_node ),
-					std::make_unique< EnvironmentMapPass >( p_map, nodes[1], p_node ),
-					std::make_unique< EnvironmentMapPass >( p_map, nodes[2], p_node ),
-					std::make_unique< EnvironmentMapPass >( p_map, nodes[3], p_node ),
-					std::make_unique< EnvironmentMapPass >( p_map, nodes[4], p_node ),
-					std::make_unique< EnvironmentMapPass >( p_map, nodes[5], p_node ),
+					std::make_unique< EnvironmentMapPass >( map, nodes[0], node ),
+					std::make_unique< EnvironmentMapPass >( map, nodes[1], node ),
+					std::make_unique< EnvironmentMapPass >( map, nodes[2], node ),
+					std::make_unique< EnvironmentMapPass >( map, nodes[3], node ),
+					std::make_unique< EnvironmentMapPass >( map, nodes[4], node ),
+					std::make_unique< EnvironmentMapPass >( map, nodes[5], node ),
 				}
 			};
 		}
@@ -134,12 +134,12 @@ namespace castor3d
 	uint32_t EnvironmentMap::m_count = 0u;
 
 	EnvironmentMap::EnvironmentMap( Engine & engine
-		, SceneNode  & p_node )
+		, SceneNode  & node )
 		: OwnedBy< Engine >{ engine }
-		, m_environmentMap{ doInitialisePoint( engine, MapSize, p_node.getScene()->getMaterialsType() ) }
-		, m_node{ p_node }
+		, m_environmentMap{ doInitialisePoint( engine, MapSize, node.getScene()->getMaterialsType() ) }
+		, m_node{ node }
 		, m_index{ ++m_count }
-		, m_passes( doCreatePasses( *this, p_node ) )
+		, m_passes( doCreatePasses( *this, node ) )
 	{
 	}
 
@@ -296,11 +296,11 @@ namespace castor3d
 		m_environmentMap.cleanup();
 	}
 	
-	void EnvironmentMap::update( RenderQueueArray & p_queues )
+	void EnvironmentMap::update( RenderQueueArray & queues )
 	{
 		for ( auto & pass : m_passes )
 		{
-			pass->update( m_node, p_queues );
+			pass->update( m_node, queues );
 		}
 	}
 

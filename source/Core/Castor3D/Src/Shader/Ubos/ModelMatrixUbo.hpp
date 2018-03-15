@@ -110,7 +110,7 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		static constexpr uint32_t BindingPoint = 2u;
+		static constexpr uint32_t BindingPoint = 4u;
 		C3D_API static castor::String const BufferModelMatrix;
 		C3D_API static castor::String const MtxModel;
 		C3D_API static castor::String const MtxNormal;

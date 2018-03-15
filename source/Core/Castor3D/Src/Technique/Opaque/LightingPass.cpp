@@ -6,23 +6,22 @@
 #include "PointLightPass.hpp"
 #include "SpotLightPass.hpp"
 
-#include <Engine.hpp>
-#include <Buffer/GeometryBuffers.hpp>
+#include "Engine.hpp"
+#include "Render/RenderPassTimer.hpp"
+#include "Render/RenderPipeline.hpp"
+#include "Render/RenderSystem.hpp"
+#include "Scene/Scene.hpp"
+#include "Scene/Camera.hpp"
+#include "Scene/Light/PointLight.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Technique/RenderTechniquePass.hpp"
+#include "Texture/TextureLayout.hpp"
+#include "Texture/TextureUnit.hpp"
+
 #include <Buffer/VertexBuffer.hpp>
-#include <FrameBuffer/FrameBuffer.hpp>
-#include <FrameBuffer/RenderBufferAttachment.hpp>
-#include <Render/RenderPassTimer.hpp>
-#include <Render/RenderPipeline.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Scene/Scene.hpp>
-#include <Scene/Camera.hpp>
-#include <Scene/Light/PointLight.hpp>
-#include <Shader/Ubos/MatrixUbo.hpp>
-#include <Shader/Ubos/ModelMatrixUbo.hpp>
-#include <Shader/ShaderProgram.hpp>
-#include <Technique/RenderTechniquePass.hpp>
-#include <Texture/TextureLayout.hpp>
-#include <Texture/TextureUnit.hpp>
+#include <RenderPass/FrameBuffer.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
 
 #include <GlslSource.hpp>
 
@@ -37,18 +36,25 @@ namespace castor3d
 	namespace
 	{
 		TextureUnit doCreateTexture( Engine & engine
-			, Size const & size
-			, uint32_t index )
+			, Size const & size )
 		{
-			auto texture = engine.getRenderSystem()->createTexture( TextureType::eTwoDimensions
-				, AccessType::eNone
-				, AccessType::eRead | AccessType::eWrite
-				, PixelFormat::eRGB16F32F
-				, size );
+			renderer::ImageCreateInfo image{};
+			image.arrayLayers = 1u;
+			image.extent.width = size.getWidth();
+			image.extent.height = size.getHeight();
+			image.extent.depth = 1u;
+			image.imageType = renderer::TextureType::e2D;
+			image.mipLevels = 1u;
+			image.samples = renderer::SampleCountFlag::e1;
+			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+			image.format = renderer::Format::eR16G16B16_SFLOAT;
+
+			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
+				, image
+				, renderer::MemoryPropertyFlag::eDeviceLocal );
 			texture->getImage().initialiseSource();
 
 			TextureUnit result{ engine };
-			result.setIndex( index );
 			result.setTexture( texture );
 			result.setSampler( engine.getLightsSampler() );
 			result.initialise();
@@ -59,88 +65,63 @@ namespace castor3d
 	LightingPass::LightingPass( Engine & engine
 		, Size const & size
 		, Scene const & scene
+		, GeometryPassResult const & gpResult
 		, OpaquePass & opaque
-		, FrameBufferAttachment & depthAttach
+		, renderer::TextureView const & depthView
 		, SceneUbo & sceneUbo
 		, GpInfoUbo & gpInfoUbo )
 		: m_size{ size }
-		, m_diffuse{ doCreateTexture( engine, size, MinTextureIndex + 0u ) }
-		, m_specular{ doCreateTexture( engine, size, MinTextureIndex + 1u ) }
-		, m_frameBuffer{ engine.getRenderSystem()->createFrameBuffer() }
+		, m_diffuse{ doCreateTexture( engine, size ) }
+		, m_specular{ doCreateTexture( engine, size ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Lighting" ), cuT( "Lighting" ) ) }
 	{
-		m_frameBuffer->setClearColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eTransparentBlack ) );
-		bool result = m_frameBuffer->initialise();
+		m_lightPass[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPass >( engine
+			, depthView
+			, m_diffuse.getTexture()->getDefaultView()
+			, m_specular.getTexture()->getDefaultView()
+			, gpInfoUbo
+			, false );
+		m_lightPass[size_t( LightType::ePoint )] = std::make_unique< PointLightPass >( engine
+			, depthView
+			, m_diffuse.getTexture()->getDefaultView()
+			, m_specular.getTexture()->getDefaultView()
+			, gpInfoUbo
+			, false );
+		m_lightPass[size_t( LightType::eSpot )] = std::make_unique< SpotLightPass >( engine
+			, depthView
+			, m_diffuse.getTexture()->getDefaultView()
+			, m_specular.getTexture()->getDefaultView()
+			, gpInfoUbo
+			, false );
+		m_lightPassShadow[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPassShadow >( engine
+			, depthView
+			, m_diffuse.getTexture()->getDefaultView()
+			, m_specular.getTexture()->getDefaultView()
+			, gpInfoUbo );
+		m_lightPassShadow[size_t( LightType::ePoint )] = std::make_unique< PointLightPassShadow >( engine
+			, depthView
+			, m_diffuse.getTexture()->getDefaultView()
+			, m_specular.getTexture()->getDefaultView()
+			, gpInfoUbo );
+		m_lightPassShadow[size_t( LightType::eSpot )] = std::make_unique< SpotLightPassShadow >( engine
+			, depthView
+			, m_diffuse.getTexture()->getDefaultView()
+			, m_specular.getTexture()->getDefaultView()
+			, gpInfoUbo );
 
-		if ( result )
+		for ( auto & lightPass : m_lightPass )
 		{
-			m_diffuseAttach = m_frameBuffer->createAttachment( m_diffuse.getTexture() );
-			m_specularAttach = m_frameBuffer->createAttachment( m_specular.getTexture() );
+			lightPass->initialise( scene, gpResult, sceneUbo );
+		}
 
-			m_frameBuffer->bind();
-			m_frameBuffer->attach( AttachmentPoint::eColour
-				, 0u
-				, m_diffuseAttach
-				, TextureType::eTwoDimensions );
-			m_frameBuffer->attach( AttachmentPoint::eColour
-				, 1u
-				, m_specularAttach
-				, TextureType::eTwoDimensions );
-			ENSURE( m_frameBuffer->isComplete() );
-			m_frameBuffer->setDrawBuffers();
-			m_frameBuffer->unbind();
-
-			m_lightPass[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPass >( engine
-				, *m_frameBuffer
-				, depthAttach
-				, gpInfoUbo
-				, false );
-			m_lightPass[size_t( LightType::ePoint )] = std::make_unique< PointLightPass >( engine
-				, *m_frameBuffer
-				, depthAttach
-				, gpInfoUbo
-				, false );
-			m_lightPass[size_t( LightType::eSpot )] = std::make_unique< SpotLightPass >( engine
-				, *m_frameBuffer
-				, depthAttach
-				, gpInfoUbo
-				, false );
-			m_lightPassShadow[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPassShadow >( engine
-				, *m_frameBuffer
-				, depthAttach
-				, gpInfoUbo );
-			m_lightPassShadow[size_t( LightType::ePoint )] = std::make_unique< PointLightPassShadow >( engine
-				, *m_frameBuffer
-				, depthAttach
-				, gpInfoUbo );
-			m_lightPassShadow[size_t( LightType::eSpot )] = std::make_unique< SpotLightPassShadow >( engine
-				, *m_frameBuffer
-				, depthAttach
-				, gpInfoUbo );
-
-			for ( auto & lightPass : m_lightPass )
-			{
-				lightPass->initialise( scene, sceneUbo );
-			}
-
-			for ( auto & lightPass : m_lightPassShadow )
-			{
-				lightPass->initialise( scene, sceneUbo );
-			}
+		for ( auto & lightPass : m_lightPassShadow )
+		{
+			lightPass->initialise( scene, gpResult, sceneUbo );
 		}
 	}
 
 	LightingPass::~LightingPass()
 	{
-		m_frameBuffer->bind();
-		m_frameBuffer->detachAll();
-		m_frameBuffer->unbind();
-		m_frameBuffer->cleanup();
-		m_diffuseAttach.reset();
-		m_specularAttach.reset();
-		m_diffuse.cleanup();
-		m_specular.cleanup();
-
 		for ( auto & lightPass : m_lightPass )
 		{
 			lightPass->cleanup();
@@ -152,18 +133,20 @@ namespace castor3d
 			lightPass->cleanup();
 			lightPass.reset();
 		}
+
+		m_diffuse.cleanup();
+		m_specular.cleanup();
 	}
 
-	bool LightingPass::render( Scene const & scene
+	renderer::Semaphore const * LightingPass::render( Scene const & scene
 		, Camera const & camera
 		, GeometryPassResult const & gp
+		, renderer::Semaphore const & toWait
 		, RenderInfo & info )
 	{
 		auto & cache = scene.getLightCache();
-		m_frameBuffer->bind( FrameBufferTarget::eDraw );
-		m_frameBuffer->clear( BufferComponent::eColour );
-
 		bool first{ true };
+		renderer::Semaphore const * semaphore = &toWait;
 
 		if ( !cache.isEmpty() )
 		{
@@ -173,32 +156,36 @@ namespace castor3d
 				, camera
 				, LightType::eDirectional
 				, gp
+				, semaphore
 				, first
 				, info );
 			doRenderLights( scene
 				, camera
 				, LightType::ePoint
 				, gp
+				, semaphore
 				, first
 				, info );
 			doRenderLights( scene
 				, camera
 				, LightType::eSpot
 				, gp
+				, semaphore
 				, first
 				, info );
 			first = false;
 			m_timer->stop();
 		}
 
-		return first;
+		return semaphore == &toWait ? nullptr, semaphore;
 	}
 
 	void LightingPass::doRenderLights( Scene const & scene
 		, Camera const & camera
 		, LightType p_type
 		, GeometryPassResult const & gp
-		, bool & p_first
+		, renderer::Semaphore const *& toWait
+		, bool & first
 		, RenderInfo & info )
 	{
 		auto & cache = scene.getLightCache();
@@ -215,25 +202,22 @@ namespace castor3d
 				{
 					if ( light->isShadowProducer() && light->getShadowMap() )
 					{
-						lightPassShadow.render( m_size
-							, gp
+						lightPassShadow.update( camera.getViewport().getSize()
 							, *light
-							, camera
-							, p_first
-							, light->getShadowMap() );
+							, camera );
+						lightPassShadow.render( first, *toWait, &light->getShadowMap()->getTexture() );
 					}
 					else
 					{
-						lightPass.render( m_size
-							, gp
+						lightPass.update( camera.getViewport().getSize()
 							, *light
-							, camera
-							, p_first
-							, nullptr );
+							, camera );
+						lightPass.render( first, *toWait, nullptr );
 					}
 
-					p_first = false;
+					first = false;
 					info.m_visibleLightsCount++;
+					toWait = &lightPass.getSemaphore();
 				}
 
 				info.m_totalLightsCount++;

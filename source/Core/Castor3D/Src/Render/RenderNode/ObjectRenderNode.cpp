@@ -15,14 +15,14 @@ namespace castor3d
 		, SceneNode & sceneNode
 		, Submesh & data
 		, Geometry & instance )
-		: m_pipeline{ pipeline }
-		, m_passNode{ std::move( passNode ) }
-		, m_modelMatrixUbo{ modelMatrixBuffer }
-		, m_modelUbo{ modelBuffer }
-		, m_buffers{ buffers }
-		, m_sceneNode{ sceneNode }
-		, m_data{ data }
-		, m_instance{ instance }
+		: pipeline{ pipeline }
+		, passNode{ std::move( passNode ) }
+		, modelMatrixUbo{ modelMatrixBuffer }
+		, modelUbo{ modelBuffer }
+		, buffers{ buffers }
+		, sceneNode{ sceneNode }
+		, data{ data }
+		, instance{ instance }
 	{
 	}
 
@@ -35,14 +35,14 @@ namespace castor3d
 		, SceneNode & sceneNode
 		, BillboardBase & data
 		, BillboardBase & instance )
-		: m_pipeline{ pipeline }
-		, m_passNode{ std::move( passNode ) }
-		, m_modelMatrixUbo{ modelMatrixBuffer }
-		, m_modelUbo{ modelBuffer }
-		, m_buffers{ buffers }
-		, m_sceneNode{ sceneNode }
-		, m_data{ data }
-		, m_instance{ instance }
+		: pipeline{ pipeline }
+		, passNode{ std::move( passNode ) }
+		, modelMatrixUbo{ modelMatrixBuffer }
+		, modelUbo{ modelBuffer }
+		, buffers{ buffers }
+		, sceneNode{ sceneNode }
+		, data{ data }
+		, instance{ instance }
 	{
 	}
 }

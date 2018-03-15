@@ -52,6 +52,8 @@ namespace castor3d
 			case castor3d::ParticleFormat::eMat4f:
 				return cuT( "mat4x4f" );
 			default:
+				assert( false );
+				return cuT( "vec4f" );
 				break;
 			}
 		}
@@ -85,6 +87,8 @@ namespace castor3d
 			case castor3d::ParticleFormat::eVec4f:
 				return renderer::Format::eR32G32B32A32_SFLOAT;
 			default:
+				assert( false );
+				return renderer::Format::eR32G32B32A32_SFLOAT;
 				break;
 			}
 		}

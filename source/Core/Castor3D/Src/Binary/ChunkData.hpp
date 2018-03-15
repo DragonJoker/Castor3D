@@ -1204,21 +1204,21 @@ namespace castor3d
 	{
 		if ( !castor::isBigEndian() )
 		{
-			castor::switchEndianness( p_value.m_pos[0] );
-			castor::switchEndianness( p_value.m_pos[1] );
-			castor::switchEndianness( p_value.m_pos[2] );
-			castor::switchEndianness( p_value.m_nml[0] );
-			castor::switchEndianness( p_value.m_nml[1] );
-			castor::switchEndianness( p_value.m_nml[2] );
-			castor::switchEndianness( p_value.m_tan[0] );
-			castor::switchEndianness( p_value.m_tan[1] );
-			castor::switchEndianness( p_value.m_tan[2] );
-			castor::switchEndianness( p_value.m_bin[0] );
-			castor::switchEndianness( p_value.m_bin[1] );
-			castor::switchEndianness( p_value.m_bin[2] );
-			castor::switchEndianness( p_value.m_tex[0] );
-			castor::switchEndianness( p_value.m_tex[1] );
-			castor::switchEndianness( p_value.m_tex[2] );
+			castor::switchEndianness( p_value.pos[0] );
+			castor::switchEndianness( p_value.pos[1] );
+			castor::switchEndianness( p_value.pos[2] );
+			castor::switchEndianness( p_value.nml[0] );
+			castor::switchEndianness( p_value.nml[1] );
+			castor::switchEndianness( p_value.nml[2] );
+			castor::switchEndianness( p_value.tan[0] );
+			castor::switchEndianness( p_value.tan[1] );
+			castor::switchEndianness( p_value.tan[2] );
+			castor::switchEndianness( p_value.bin[0] );
+			castor::switchEndianness( p_value.bin[1] );
+			castor::switchEndianness( p_value.bin[2] );
+			castor::switchEndianness( p_value.tex[0] );
+			castor::switchEndianness( p_value.tex[1] );
+			castor::switchEndianness( p_value.tex[2] );
 		}
 	}
 	/**

@@ -344,6 +344,13 @@ namespace castor3d
 			, std::vector< uint64_t > & offsets
 			, renderer::VertexLayoutCRefArray & layouts );
 
+	public:
+		static uint32_t constexpr Position = 0u;
+		static uint32_t constexpr Normal = 1u;
+		static uint32_t constexpr Tangent = 2u;
+		static uint32_t constexpr Bitangent = 3u;
+		static uint32_t constexpr Texture = 4u;
+
 	private:
 		Mesh & m_parentMesh;
 		uint32_t m_id;

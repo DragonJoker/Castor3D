@@ -7,6 +7,8 @@ See LICENSE file in root folder
 #include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Render/RenderPass.hpp"
 
+#include <Sync/Semaphore.hpp>
+
 namespace castor3d
 {
 	/*!
@@ -87,16 +89,45 @@ namespace castor3d
 		 *\brief		Render function.
 		 *\param[out]	info		Receives the render informations.
 		 *\param[out]	shadowMaps	The shadow maps.
-		 *\param[out]	jitter		The jittering value.
+		 *\param[in]	jitter		The jittering value.
 		 *\~french
 		 *\brief		Fonction de rendu.
 		 *\param[out]	info		Reçoit les informations de rendu.
 		 *\param[out]	shadowMaps	Les textures d'ombres.
-		 *\param[out]	jitter		La valeur de jittering.
+		 *\param[in]	jitter		La valeur de jittering.
 		 */
-		C3D_API virtual void render( RenderInfo & info
+		C3D_API virtual void update( RenderInfo & info
 			, ShadowMapLightTypeArray & shadowMaps
 			, castor::Point2r const & jitter ) = 0;
+		/**
+		 *\~english
+		 *\brief		Creates a blend state matching given blend modes.
+		 *\param[in]	colourBlendMode	The colour blend mode.
+		 *\param[in]	alphaBlendMode	The alpha blend mode.
+		 *\return		
+		 *\~french
+		 *\brief		Crée un état de mélange correspondant aux modes de mélange donnés.
+		 *\param[in]	colourBlendMode	Le mode de mélange couleurs.
+		 *\param[in]	alphaBlendMode	Le mode de mélange alpha.
+		 *\return		
+		 */
+		static renderer::ColourBlendState createBlendState( BlendMode colourBlendMode
+			, BlendMode alphaBlendMode );
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		inline renderer::Semaphore const & getSemaphore()const
+		{
+			REQUIRE( m_finished );
+			return *m_finished;
+		}
+		/**@}*/
 
 	protected:
 		/**
@@ -104,12 +135,12 @@ namespace castor3d
 		 *\brief		Render function.
 		 *\param[out]	info		Receives the render informations.
 		 *\param[out]	shadowMaps	The shadow maps.
-		 *\param[out]	jitter		The jittering value.
+		 *\param[in]	jitter		The jittering value.
 		 *\~french
 		 *\brief		Fonction de rendu.
 		 *\param[out]	info		Reçoit les informations de rendu.
 		 *\param[out]	shadowMaps	Les textures d'ombres.
-		 *\param[out]	jitter		La valeur de jittering.
+		 *\param[in]	jitter		La valeur de jittering.
 		 */
 		C3D_API void doUpdate( RenderInfo & info
 			, ShadowMapLightTypeArray & shadowMaps
@@ -119,18 +150,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Renders render nodes.
-		 *\param[in]		p_nodes		The scene render nodes.
+		 *\param[in]		nodes		The scene render nodes.
 		 *\param			camera		The viewing camera.
 		 *\param[in]		shadowMaps	The shadows maps.
 		 *\param[in, out]	count		Receives the rendered nodes count.
 		 *\~french
 		 *\brief			Dessine les noeuds de rendu.
-		 *\param[in]		p_nodes		Les noeuds de rendu de la scène.
+		 *\param[in]		nodes		Les noeuds de rendu de la scène.
 		 *\param			camera		La caméra regardant la scène.
 		 *\param[in]		shadowMaps	Les textures d'ombres.
 		 *\param[in, out]	count		Reçouit le nombre de noeuds dessinés.
 		 */
-		C3D_API void doRenderNodes( SceneRenderNodes & p_nodes
+		C3D_API void doUpdateNodes( SceneRenderNodes & nodes
 			, Camera const & camera
 			, ShadowMapLightTypeArray & shadowMaps
 			, castor::Point2r const & jitter
@@ -177,21 +208,12 @@ namespace castor3d
 			, PipelineFlags const & flags )override;
 
 	protected:
-		//!\~english	The rendered scne.
-		//!\~french		La scène rendue.
 		Scene const & m_scene;
-		//!\~english	The viewer camera, if any.
-		//!\~french		La caméra, s'il y en a une.
 		Camera * m_camera{ nullptr };
-		//!\~english	The scene render node.
-		//!\~french		Le noeud de rendu de la scène.
 		SceneRenderNode m_sceneNode;
-		//!\~english	Tells if the pass is used for an environment map rendering.
-		//!\~french		Dit si la passe est utilisée pour le rendu d'une texture d'environnement.
 		bool m_environment{ false };
-		//!\~english	The SSAO configuration.
-		//!\~french		La configuration du SSAO.
 		SsaoConfig m_ssaoConfig;
+		renderer::SemaphorePtr m_finished;
 	};
 }
 

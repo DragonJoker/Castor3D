@@ -19,10 +19,13 @@ namespace castor3d
 	struct PassRenderNode
 	{
 		C3D_API PassRenderNode( Pass & pass );
+		void fillDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t index
+			, renderer::DescriptorSet & descriptorSet );
 
 		//!\~english	The pass.
 		//!\~french		La passe.
-		Pass & m_pass;
+		Pass & pass;
 	};
 }
 

@@ -58,6 +58,9 @@ namespace castor3d
 			C3D_API void doDeclareDirectionalLight();
 			C3D_API void doDeclarePointLight();
 			C3D_API void doDeclareSpotLight();
+			C3D_API void doDeclareDirectionalLightUbo();
+			C3D_API void doDeclarePointLightUbo();
+			C3D_API void doDeclareSpotLightUbo();
 			C3D_API void doDeclareGetBaseLight();
 			C3D_API void doDeclareGetDirectionalLight();
 			C3D_API void doDeclareGetPointLight();
@@ -69,6 +72,9 @@ namespace castor3d
 			virtual void doDeclareComputeSpotLight() = 0;
 			virtual void doDeclareComputeOnePointLight() = 0;
 			virtual void doDeclareComputeOneSpotLight() = 0;
+
+		public:
+			static uint32_t constexpr UboBindingPoint = 6u;
 
 		protected:
 			ShadowType m_shadows;

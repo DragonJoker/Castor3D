@@ -9,6 +9,7 @@
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/Shaders/GlslShadow.hpp"
 
+#include <Descriptor/DescriptorSetLayout.hpp>
 #include <Pipeline/InputAssemblyState.hpp>
 #include <Pipeline/Pipeline.hpp>
 #include <Pipeline/PipelineLayout.hpp>
@@ -40,20 +41,28 @@ namespace castor3d
 	{
 	}
 
-	void RenderPipeline::cleanup()
-	{
-		m_pipeline.reset();
-		m_pipelineLayout.reset();
-	}
-
 	void RenderPipeline::initialise( renderer::RenderPass const & renderPass
 		, renderer::PrimitiveTopology topology )
 	{
+		renderer::VertexLayoutCRefArray vertexLayouts;
+
+		for ( auto & layout : m_vertexLayouts )
+		{
+			vertexLayouts.emplace_back( layout );
+		}
+
+		renderer::DescriptorSetLayoutCRefArray descriptorLayouts;
+
+		for ( auto & layout : m_descriptorLayouts )
+		{
+			descriptorLayouts.emplace_back( *layout );
+		}
+
 		renderer::GraphicsPipelineCreateInfo createInfo
 		{
 			m_program,
 			renderPass,
-			renderer::VertexInputState::create( m_vertexLayouts ),
+			renderer::VertexInputState::create( vertexLayouts ),
 			renderer::InputAssemblyState{ topology },
 			m_rsState,
 			m_msState,
@@ -79,8 +88,26 @@ namespace castor3d
 			createInfo.dynamicStates.push_back( renderer::DynamicState::eScissor );
 		}
 
-		m_pipelineLayout = getRenderSystem()->getCurrentDevice()->createPipelineLayout( m_descriptorLayouts
+		m_pipelineLayout = getRenderSystem()->getCurrentDevice()->createPipelineLayout( descriptorLayouts
 			, m_pushConstantRanges );
 		m_pipeline = m_pipelineLayout->createPipeline( createInfo );
+	}
+
+	void RenderPipeline::cleanup()
+	{
+		m_pipeline.reset();
+		m_pipelineLayout.reset();
+	}
+
+	void RenderPipeline::createDescriptorPools( renderer::UInt32Array maxSetsPerLayout )
+	{
+		REQUIRE( maxSetsPerLayout.size() == m_descriptorLayouts.size() );
+		uint32_t index = 0u;
+
+		for ( auto & descriptorLayout : m_descriptorLayouts )
+		{
+			m_descriptorPools.emplace_back( descriptorLayout->createPool( maxSetsPerLayout[index] ) );
+			++index;
+		}
 	}
 }

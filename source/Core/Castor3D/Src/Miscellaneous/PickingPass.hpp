@@ -62,148 +62,121 @@ namespace castor3d
 		C3D_API ~PickingPass();
 		/**
 		 *\~english
-		 *\brief		adds a scene rendered through this technique.
-		 *\param[in]	p_scene		The scene.
-		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\brief		Adds a scene rendered through this technique.
+		 *\param[in]	scene	The scene.
+		 *\param[in]	camera	The camera through which the scene is viewed.
 		 *\~french
 		 *\brief		Ajoute une scène dessinée via cette technique.
-		 *\param[in]	p_scene		La scène.
-		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	scene	La scène.
+		 *\param[in]	camera	La caméra à travers laquelle la scène est vue.
 		 */
-		C3D_API void addScene( Scene & p_scene, Camera & p_camera );
+		C3D_API void addScene( Scene & scene, Camera & camera );
 		/**
 		 *\~english
 		 *\brief		Picks a geometry at given mouse position.
-		 *\param[in]	p_position		The position in the pass.
-		 *\param[in]	p_camera		The viewing camera.
+		 *\param[in]	position	The position in the pass.
+		 *\param[in]	camera		The viewing camera.
 		 *\return		PickingPass::NodeType::eNone if nothing was picked.
 		 *\~french
 		 *\brief		Sélectionne la géométrie à la position de souris donnée.
-		 *\param[in]	p_position		La position dans la passe.
-		 *\param[in]	p_camera		La caméra regardant la scène.
+		 *\param[in]	position	La position dans la passe.
+		 *\param[in]	camera		La caméra regardant la scène.
 		 *\return		PickingPass::NodeType si rien n'a été pické.
 		 */
-		C3D_API NodeType pick( castor::Position const & p_position
-			, Camera const & p_camera );
+		C3D_API NodeType pick( castor::Position const & position
+			, Camera const & camera );
 		/**
-		 *\~english
-		 *\return		The picked geometry.
-		 *\~french
-		 *\return		La géométrie sélectionnée.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline GeometrySPtr getPickedGeometry()const
 		{
 			return m_geometry.lock();
 		}
-		/**
-		 *\~english
-		 *\return		The picked billboard.
-		 *\~french
-		 *\return		Le billboard sélectionné.
-		 */
+
 		inline BillboardBaseSPtr getPickedBillboard()const
 		{
 			return m_billboard.lock();
 		}
-		/**
-		 *\~english
-		 *\return		The picked submesh.
-		 *\~french
-		 *\return		Le sous-maillage sélectionné.
-		 */
+
 		inline SubmeshSPtr getPickedSubmesh()const
 		{
 			return m_submesh.lock();
 		}
-		/**
-		 *\~english
-		 *\return		The picked face index.
-		 *\~french
-		 *\return		L'indice de la face sélectionnée.
-		 */
+
 		inline uint32_t getPickedFace()const
 		{
 			return m_face;
 		}
+		/**@}*/
 
 	private:
-		void doRenderNodes( SceneRenderNodes & p_nodes
-			, Camera const & p_camera );
-
-	private:
-		/**
-		 *\~english
-		 *\brief		Executes the FBO picking.
-		 *\param[in]	p_position	The position in the pass.
-		 *\param[in]	p_camera	The viewing camera.
-		 *\param[in]	p_nodes		The render nodes.
-		 *\return		The picking data.
-		 *\~french
-		 *\brief		Exécute le picking FBO.
-		 *\param[in]	p_position	La position dans la passe.
-		 *\param[in]	p_camera	La caméra regardant la scène.
-		 *\param[in]	p_nodes		Les noeuds de rendu.
-		 *\return		Les données de picking.
-		 */
-		castor::Point3f doFboPick( castor::Position const & p_position
-			, Camera const & p_camera
-			, SceneRenderNodes & p_nodes );
-		/**
-		 *\~english
-		 *\brief		Picks the node at given picking data.
-		 *\param[in]	p_pixel	The picking data.
-		 *\param[in]	p_nodes	The render nodes.
-		 *\return		PickingPass::NodeType::eNone if nothing was picked.
-		 *\~french
-		 *\brief		Picke le noeud aux données de picking fournies.
-		 *\param[in]	p_pixel	Les données de picking.
-		 *\param[in]	p_nodes	Les noeuds de rendu.
-		 *\return		PickingPass::NodeType si rien n'a été pické.
-		 */
-		PickingPass::NodeType doPick( castor::Point3f const & p_pixel
-			, SceneRenderNodes & p_nodes );
+		void doUpdateNodes( SceneRenderNodes & nodes
+			, Camera const & camera );
+		castor::Point3f doFboPick( castor::Position const & position
+			, Camera const & camera
+			, renderer::CommandBuffer const & commandBuffer );
+		PickingPass::NodeType doPick( castor::Point3f const & pixel
+			, SceneRenderNodes & nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doRender
 		 */
-		void doUpdate( Scene const & p_scene
-			, SubmeshStaticRenderNodesByPipelineMap & p_nodes );
+		void doUpdate( Scene const & scene
+			, SubmeshStaticRenderNodesByPipelineMap & nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doRender
 		 */
-		void doUpdate( Scene const & p_scene
-			, StaticRenderNodesByPipelineMap & p_nodes );
+		void doUpdate( Scene const & scene
+			, StaticRenderNodesByPipelineMap & nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doRenderAnimatedSubmeshes
 		 */
-		void doUpdate( Scene const & p_scene
-			, SkinningRenderNodesByPipelineMap & p_nodes );
+		void doUpdate( Scene const & scene
+			, SkinningRenderNodesByPipelineMap & nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doRender
 		 */
-		void doUpdate( Scene const & p_scene
-			, SubmeshSkinningRenderNodesByPipelineMap & p_nodes );
+		void doUpdate( Scene const & scene
+			, SubmeshSkinningRenderNodesByPipelineMap & nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doRenderAnimatedSubmeshes
 		 */
-		void doUpdate( Scene const & p_scene
-			, MorphingRenderNodesByPipelineMap & p_nodes );
+		void doUpdate( Scene const & scene
+			, MorphingRenderNodesByPipelineMap & nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doRender
 		 */
-		void doUpdate( Scene const & p_scene
-			, BillboardRenderNodesByPipelineMap & p_nodes );
+		void doUpdate( Scene const & scene
+			, BillboardRenderNodesByPipelineMap & nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */
-		bool doInitialise( castor::Size const & p_size )override;
+		bool doInitialise( castor::Size const & size )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCleanup
 		 */
 		void doCleanup()override;
 		/**
+		 *\copydoc		castor3d::RenderPass::doFillDescriptor
+		 */
+		void doFillDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, BillboardListRenderNode & node )override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillDescriptor
+		 */
+		void doFillDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, SubmeshRenderNode & node )override;
+		/**
 		 *\copydoc		castor3d::RenderPass::doUpdate
 		 */
-		void doUpdate( RenderQueueArray & p_queues )override;
+		void doUpdate( RenderQueueArray & queues )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetGeometryShaderSource
 		 */
@@ -246,17 +219,17 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
-		void doUpdatePipeline( RenderPipeline & p_pipeline )const override;
+		void doUpdatePipeline( RenderPipeline & pipeline )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
 		 */
-		void doPrepareFrontPipeline( renderer::ShaderStageStateArray & p_program
-			, PipelineFlags const & p_flags )override;
+		void doPrepareFrontPipeline( renderer::ShaderStageStateArray & program
+			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
 		 */
-		void doPrepareBackPipeline( renderer::ShaderStageStateArray & p_program
-			, PipelineFlags const & p_flags )override;
+		void doPrepareBackPipeline( renderer::ShaderStageStateArray & program
+			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdateFlags
 		 */
@@ -276,6 +249,8 @@ namespace castor3d
 		renderer::TextureViewPtr m_depthView;
 		renderer::RenderPassPtr m_renderPass;
 		renderer::FrameBufferPtr m_frameBuffer;
+		renderer::BufferImageCopy m_copyRegion;
+		renderer::BufferPtr< castor::Point4f > m_stagingBuffer;
 		std::map< Scene const *, CameraQueueMap > m_scenes;
 		GeometryWPtr m_geometry;
 		BillboardBaseWPtr m_billboard;

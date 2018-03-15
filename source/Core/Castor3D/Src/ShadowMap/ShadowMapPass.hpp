@@ -96,15 +96,15 @@ namespace castor3d
 	protected:
 		/**
 		 *\~english
-		 *\brief		Renders the given nodes.
-		 *\param		nodes	The nodes to render.
+		 *\brief		Updates the given nodes.
+		 *\param		nodes	The nodes.
 		 *\param		camera	The viewing camera.
 		 *\~french
-		 *\brief		Dessine les noeuds donnés.
-		 *\param		nodes	Les noeuds à dessiner.
+		 *\brief		Met à jour les noeuds donnés.
+		 *\param		nodes	Les noeuds.
 		 *\param		camera	La caméra regardant la scène.
 		 */
-		void doRenderNodes( SceneRenderNodes & nodes
+		void doUpdateNodes( SceneRenderNodes & nodes
 			, Camera const & camera );
 
 	private:
@@ -128,7 +128,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Prépare le pipeline de rendu, en supprimant les faces arrière.
 		 */
-		virtual void doPreparePipeline( renderer::ShaderProgram & program
+		virtual void doPreparePipeline( renderer::ShaderStageStateArray & program
 			, PipelineFlags const & flags );
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline

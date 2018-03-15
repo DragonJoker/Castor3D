@@ -29,8 +29,8 @@ namespace castor3d
 			, sceneNode
 			, data
 			, instance }
-		, m_mesh{ mesh }
-		, m_morphingUbo{ morphingUbo }
+		, mesh{ mesh }
+		, morphingUbo{ morphingUbo }
 	{
 	}
 }

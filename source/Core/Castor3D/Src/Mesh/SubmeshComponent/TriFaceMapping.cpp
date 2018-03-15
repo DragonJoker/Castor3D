@@ -74,10 +74,10 @@ namespace castor3d
 	{
 		addFace( a, b, c );
 		addFace( a, c, d );
-		getOwner()->getPoint( a ).m_tex = Point3f{ minUV[0], minUV[1], 0.0f };
-		getOwner()->getPoint( b ).m_tex = Point3f{ maxUV[0], minUV[1], 0.0f };
-		getOwner()->getPoint( c ).m_tex = Point3f{ maxUV[0], maxUV[1], 0.0f };
-		getOwner()->getPoint( d ).m_tex = Point3f{ minUV[0], maxUV[1], 0.0f };
+		getOwner()->getPoint( a ).tex = Point3f{ minUV[0], minUV[1], 0.0f };
+		getOwner()->getPoint( b ).tex = Point3f{ maxUV[0], minUV[1], 0.0f };
+		getOwner()->getPoint( c ).tex = Point3f{ maxUV[0], maxUV[1], 0.0f };
+		getOwner()->getPoint( d ).tex = Point3f{ minUV[0], maxUV[1], 0.0f };
 	}
 
 	void TriFaceMapping::clearFaces()
@@ -170,11 +170,11 @@ namespace castor3d
 							for ( uint32_t * it = index + 0; it < index + indexSize; it += 3 )
 							{
 								double dDistance = 0.0;
-								auto & vtx1 = vertex[it[0]].m_pos;
+								auto & vtx1 = vertex[it[0]].pos;
 								dDistance += point::lengthSquared( vtx1 - cameraPosition );
-								auto & vtx2 = vertex[it[1]].m_pos;
+								auto & vtx2 = vertex[it[1]].pos;
 								dDistance += point::lengthSquared( vtx2 - cameraPosition );
-								auto & vtx3 = vertex[it[2]].m_pos;
+								auto & vtx3 = vertex[it[2]].pos;
 								dDistance += point::lengthSquared( vtx3 - cameraPosition );
 								arraySorted.push_back( FaceDistance{ { it[0], it[1], it[2] }, dDistance } );
 							}
@@ -198,9 +198,9 @@ namespace castor3d
 				}
 			}
 		}
-		catch ( Exception const & p_exc )
+		catch ( Exception const & exc )
 		{
-			Logger::logError( std::stringstream() << "Submesh::SortFaces - Error: " << p_exc.what() );
+			Logger::logError( std::stringstream() << "Submesh::SortFaces - Error: " << exc.what() );
 		}
 	}
 

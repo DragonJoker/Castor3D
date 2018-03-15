@@ -6,8 +6,8 @@ using namespace castor;
 
 namespace castor3d
 {
-	GenericPlugin::GenericPlugin( DynamicLibrarySPtr p_library, Engine * engine )
-		: Plugin( PluginType::eGeneric, p_library, *engine )
+	GenericPlugin::GenericPlugin( DynamicLibrarySPtr library, Engine * engine )
+		: Plugin( PluginType::eGeneric, library, *engine )
 	{
 		load();
 	}

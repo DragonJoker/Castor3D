@@ -44,11 +44,11 @@ namespace castor3d
 				, 0u
 				, renderer::MemoryPropertyFlag::eHostVisible );
 			m_animLayout = renderer::makeLayout< InstantiationData >( BindingPoint, renderer::VertexInputRate::eVertex );
-			m_animLayout->createAttribute( 0u, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, m_pos ) );
-			m_animLayout->createAttribute( 1u, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, m_nml ) );
-			m_animLayout->createAttribute( 2u, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, m_tan ) );
-			m_animLayout->createAttribute( 3u, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, m_bin ) );
-			m_animLayout->createAttribute( 4u, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, m_tex ) );
+			m_animLayout->createAttribute( Submesh::Position, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, pos ) );
+			m_animLayout->createAttribute( Submesh::Normal, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, nml ) );
+			m_animLayout->createAttribute( Submesh::Tangent, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, tan ) );
+			m_animLayout->createAttribute( Submesh::Bitangent, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, bin ) );
+			m_animLayout->createAttribute( Submesh::Texture, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, tex ) );
 		}
 
 		return m_animBuffer != nullptr;

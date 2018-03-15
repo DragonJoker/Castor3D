@@ -8,49 +8,49 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	SpecularGlossinessPbrPass::TextWriter::TextWriter( String const & p_tabs )
-		: castor::TextWriter< SpecularGlossinessPbrPass >{ p_tabs }
+	SpecularGlossinessPbrPass::TextWriter::TextWriter( String const & tabs )
+		: castor::TextWriter< SpecularGlossinessPbrPass >{ tabs }
 	{
 	}
 
-	bool SpecularGlossinessPbrPass::TextWriter::operator()( SpecularGlossinessPbrPass const & p_pass, TextFile & p_file )
+	bool SpecularGlossinessPbrPass::TextWriter::operator()( SpecularGlossinessPbrPass const & pass, TextFile & file )
 	{
 		Logger::logInfo( m_tabs + cuT( "Writing SpecularGlossinessPbrPass " ) );
-		bool result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "pass\n" ) ) > 0
-						&& p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "pass\n" ) ) > 0
+						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 		
 		if ( result )
 		{
-			result = p_file.print( 256, cuT( "%s\talbedo " ), m_tabs.c_str() ) > 0
-				&& RgbColour::TextWriter( String() )( p_pass.getDiffuse(), p_file )
-				&& p_file.writeText( cuT( "\n" ) ) > 0;
+			result = file.print( 256, cuT( "%s\talbedo " ), m_tabs.c_str() ) > 0
+				&& RgbColour::TextWriter( String() )( pass.getDiffuse(), file )
+				&& file.writeText( cuT( "\n" ) ) > 0;
 			castor::TextWriter< SpecularGlossinessPbrPass >::checkError( result, "SpecularGlossinessPbrPass albedo" );
 		}
 
 		if ( result )
 		{
-			result = p_file.print( 256, cuT( "%s\tspecular " ), m_tabs.c_str() ) > 0
-				&& RgbColour::TextWriter( String() )( p_pass.getSpecular(), p_file )
-				&& p_file.writeText( cuT( "\n" ) ) > 0;
+			result = file.print( 256, cuT( "%s\tspecular " ), m_tabs.c_str() ) > 0
+				&& RgbColour::TextWriter( String() )( pass.getSpecular(), file )
+				&& file.writeText( cuT( "\n" ) ) > 0;
 			castor::TextWriter< SpecularGlossinessPbrPass >::checkError( result, "SpecularGlossinessPbrPass specular" );
 		}
 
 		if ( result )
 		{
-			result = p_file.writeText( m_tabs + cuT( "\tglossiness " )
-				+ string::toString( p_pass.getGlossiness() )
+			result = file.writeText( m_tabs + cuT( "\tglossiness " )
+				+ string::toString( pass.getGlossiness() )
 				+ cuT( "\n" ) ) > 0;
 			castor::TextWriter< SpecularGlossinessPbrPass >::checkError( result, "SpecularGlossinessPbrPass glossiness" );
 		}
 
 		if ( result )
 		{
-			result = castor::TextWriter< Pass >{ m_tabs }( p_pass, p_file );
+			result = castor::TextWriter< Pass >{ m_tabs }( pass, file );
 		}
 
 		if ( result )
 		{
-			result = p_file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return result;
@@ -58,8 +58,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	SpecularGlossinessPbrPass::SpecularGlossinessPbrPass( Material & p_parent )
-		: Pass{ p_parent }
+	SpecularGlossinessPbrPass::SpecularGlossinessPbrPass( Material & parent )
+		: Pass{ parent }
 		, m_diffuse{ RgbColour::fromRGBA( 0xFFFFFFFF ) }
 		, m_specular{ RgbColour::fromRGBA( 0xFFFFFFFF ) }
 	{
@@ -69,9 +69,9 @@ namespace castor3d
 	{
 	}
 
-	void SpecularGlossinessPbrPass::accept( PassBuffer & p_buffer )const
+	void SpecularGlossinessPbrPass::accept( PassBuffer & buffer )const
 	{
-		p_buffer.visit( *this );
+		buffer.visit( *this );
 	}
 
 	void SpecularGlossinessPbrPass::doInitialise()
@@ -82,7 +82,7 @@ namespace castor3d
 	{
 	}
 
-	void SpecularGlossinessPbrPass::doSetOpacity( float p_value )
+	void SpecularGlossinessPbrPass::doSetOpacity( float value )
 	{
 	}
 }

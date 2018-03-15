@@ -50,7 +50,8 @@ namespace castor3d
 			 */
 			Program( Engine & engine
 				, glsl::Shader const & vtx
-				, glsl::Shader const & pxl );
+				, glsl::Shader const & pxl
+				, bool hasShadows );
 			/**
 			 *\~english
 			 *\brief		Destructor.
@@ -63,7 +64,10 @@ namespace castor3d
 			/**
 			 *\copydoc		castor3d::LightPass::Program::doCreatePipeline
 			 */
-			RenderPipelineUPtr doCreatePipeline( bool blend )override;
+			renderer::PipelinePtr doCreatePipeline( renderer::VertexLayout const & vertexLayout
+				, renderer::RenderPass const & renderPass
+				, bool blend )override;
+			virtual void doCreateUbo() = 0;
 		};
 
 	public:
@@ -86,8 +90,9 @@ namespace castor3d
 		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
 		MeshLightPass( Engine & engine
-			, FrameBuffer & frameBuffer
-			, FrameBufferAttachment & depthAttach
+			, renderer::TextureView const & depthView
+			, renderer::TextureView const & diffuseView
+			, renderer::TextureView const & specularView
 			, GpInfoUbo & gpInfoUbo
 			, LightType type
 			, bool hasShadows );
@@ -109,6 +114,7 @@ namespace castor3d
 		 *\param[in]	sceneUbo	L'UBO de scène.
 		 */
 		void initialise( Scene const & scene
+			, GeometryPassResult const & gp
 			, SceneUbo & sceneUbo )override;
 		/**
 		 *\~english
@@ -118,6 +124,21 @@ namespace castor3d
 		 */
 		void cleanup()override;
 		/**
+		 *\copydoc		castor3d::LightPass::update
+		 */
+		void update( castor::Size const & size
+			, Light const & light
+			, Camera const & camera )override;
+		/**
+		 *\~english
+		 *\brief		Renders the light pass.
+		 *\~french
+		 *\brief		Dessine la passe de rendu.
+		 */
+		void render( bool first
+			, renderer::Semaphore const & toWait
+			, TextureUnit * shadowMapOpt )override;
+		/**
 		 *\~english
 		 *\return		The number of primitives to draw.
 		 *\~french
@@ -126,12 +147,6 @@ namespace castor3d
 		uint32_t getCount()const override;
 
 	protected:
-		/**
-		 *\copydoc		castor3d::LightPass::doUpdate
-		 */
-		void doUpdate( castor::Size const & size
-			, Light const & light
-			, Camera const & camera )override;
 
 	private:
 		/**

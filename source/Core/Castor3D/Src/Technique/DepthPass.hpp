@@ -131,8 +131,7 @@ namespace castor3d
 			, renderer::CompareOp alphaFunc )const;
 
 	private:
-		//!\~english	The frame buffer.
-		//!\~french		Le tampon d'image.
+		renderer::RenderPassPtr m_renderPass;
 		renderer::FrameBufferPtr m_frameBuffer;
 	};
 }

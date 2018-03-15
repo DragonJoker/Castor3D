@@ -77,10 +77,10 @@ namespace castor3d
 		return m_buffer.createLayoutBinding( PassBufferIndex );
 	}
 
-	renderer::WriteDescriptorSet PassBuffer::createBinding( renderer::DescriptorSet & descriptorSet
+	void PassBuffer::createBinding( renderer::DescriptorSet & descriptorSet
 		, renderer::DescriptorSetLayoutBinding const & binding )const
 	{
-		return m_buffer.createBinding( descriptorSet, binding );
+		m_buffer.createBinding( descriptorSet, binding );
 	}
 
 	void PassBuffer::visit( LegacyPass const & pass )

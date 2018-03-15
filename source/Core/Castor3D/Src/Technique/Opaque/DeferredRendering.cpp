@@ -1,12 +1,13 @@
 #include "DeferredRendering.hpp"
 
-#include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/FrameBufferAttachment.hpp"
 #include "Render/RenderPassTimer.hpp"
 #include "Scene/Skybox.hpp"
 #include "Shader/PassBuffer/PassBuffer.hpp"
 #include "Technique/Opaque/OpaquePass.hpp"
 #include "Texture/Sampler.hpp"
+
+#include <RenderPass/FrameBuffer.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
 
 using namespace castor;
 
@@ -28,17 +29,35 @@ namespace castor3d
 			}
 			else
 			{
-				result = engine.getRenderSystem()->createSampler( name );
+				result = engine.getSamplerCache().add( cuT( "TextureProjection" ) );
 				result->setMinFilter( renderer::Filter::eNearest );
 				result->setMagFilter( renderer::Filter::eNearest );
 				result->setWrapS( renderer::WrapMode::eClampToEdge );
 				result->setWrapT( renderer::WrapMode::eClampToEdge );
 				result->setWrapR( renderer::WrapMode::eClampToEdge );
 				result->initialise();
-				cache.add( name, result );
 			}
 
 			return result;
+		}
+
+		TextureLayoutSPtr doCreateTexture( RenderSystem & renderSystem
+			, renderer::Format format
+			, Size const & size )
+		{
+			renderer::ImageCreateInfo image{};
+			image.arrayLayers = 1u;
+			image.extent.width = size.getWidth();
+			image.extent.height = size.getHeight();
+			image.extent.depth = 1u;
+			image.imageType = renderer::TextureType::e2D;
+			image.mipLevels = 1u;
+			image.samples = renderer::SampleCountFlag::e1;
+			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+			image.format = format;
+			return std::make_shared< TextureLayout >( renderSystem
+				, image
+				, renderer::MemoryPropertyFlag::eDeviceLocal );
 		}
 	}
 
@@ -46,109 +65,89 @@ namespace castor3d
 
 	DeferredRendering::DeferredRendering( Engine & engine
 		, OpaquePass & opaquePass
-		, FrameBuffer & frameBuffer
-		, FrameBufferAttachment & depthAttach
+		, TextureLayoutSPtr depthTexture
+		, TextureLayoutSPtr velocityTexture
 		, Size const & size
 		, Scene const & scene
 		, SsaoConfig const & config )
 		: m_engine{ engine }
 		, m_ssaoConfig{ config }
 		, m_opaquePass{ opaquePass }
-		, m_frameBuffer{ frameBuffer }
-		, m_depthAttach{ depthAttach }
 		, m_size{ size }
 		, m_gpInfoUbo{ engine }
 	{
 		auto & renderSystem = *engine.getRenderSystem();
-		m_geometryPassFrameBuffer = renderSystem.createFrameBuffer();
-		bool result = m_geometryPassFrameBuffer->initialise();
 
-		if ( result )
+		m_geometryPassResult[0] = std::make_unique< TextureUnit >( engine );
+		m_geometryPassResult[0]->setTexture( depthTexture );
+		m_geometryPassResult[0]->setSampler( doCreateSampler( engine, getTextureName( DsTexture::eDepth ) ) );
+		m_geometryPassResult[0]->initialise();
+
+		m_geometryPassResult[uint32_t( DsTexture::eData5 )] = std::make_unique< TextureUnit >( engine );
+		m_geometryPassResult[uint32_t( DsTexture::eData5 )]->setTexture( velocityTexture );
+		m_geometryPassResult[uint32_t( DsTexture::eData5 )]->setSampler( doCreateSampler( engine, getTextureName( DsTexture::eData5 ) ) );
+		m_geometryPassResult[uint32_t( DsTexture::eData5 )]->initialise();
+
+		for ( auto i = uint32_t( DsTexture::eData1 ); i < uint32_t( DsTexture::eData5 ); i++ )
 		{
-			m_geometryPassResult[0] = std::make_unique< TextureUnit >( engine );
-			m_geometryPassResult[0]->setIndex( MinTextureIndex );
-			m_geometryPassResult[0]->setTexture( m_depthAttach.getTexture() );
-			m_geometryPassResult[0]->setSampler( doCreateSampler( engine, getTextureName( DsTexture::eDepth ) ) );
-			m_geometryPassResult[0]->initialise();
-			m_geometryPassTexAttachs[0] = m_geometryPassFrameBuffer->createAttachment( m_depthAttach.getTexture() );
+			auto texture = doCreateTexture( renderSystem
+				, getTextureFormat( DsTexture( i ) )
+				, m_size );
+			texture->getImage().initialiseSource();
 
-			for ( auto i = uint32_t( DsTexture::eData1 ); i < uint32_t( DsTexture::eCount ); i++ )
-			{
-				auto texture = renderSystem.createTexture( TextureType::eTwoDimensions
-					, AccessType::eNone
-					, AccessType::eRead | AccessType::eWrite
-					, getTextureFormat( DsTexture( i ) )
-					, m_size );
-				texture->getImage().initialiseSource();
-
-				m_geometryPassResult[i] = std::make_unique< TextureUnit >( engine );
-				m_geometryPassResult[i]->setIndex( MinTextureIndex + i );
-				m_geometryPassResult[i]->setTexture( texture );
-				m_geometryPassResult[i]->setSampler( doCreateSampler( engine, getTextureName( DsTexture( i ) ) ) );
-				m_geometryPassResult[i]->initialise();
-
-				m_geometryPassTexAttachs[i] = m_geometryPassFrameBuffer->createAttachment( texture );
-			}
-
-			m_geometryPassFrameBuffer->bind();
-
-			for ( int i = 0; i < size_t( DsTexture::eCount ) && result; i++ )
-			{
-				m_geometryPassFrameBuffer->attach( getTextureAttachmentPoint( DsTexture( i ) )
-					, getTextureAttachmentIndex( DsTexture( i ) )
-					, m_geometryPassTexAttachs[i]
-					, m_geometryPassResult[i]->getType() );
-			}
-
-			ENSURE( m_geometryPassFrameBuffer->isComplete() );
-			m_geometryPassFrameBuffer->setDrawBuffers();
-			m_geometryPassFrameBuffer->unbind();
+			m_geometryPassResult[i] = std::make_unique< TextureUnit >( engine );
+			m_geometryPassResult[i]->setTexture( texture );
+			m_geometryPassResult[i]->setSampler( doCreateSampler( engine, getTextureName( DsTexture( i ) ) ) );
+			m_geometryPassResult[i]->initialise();
 		}
 
-		if ( result )
+		m_lightingPass = std::make_unique< LightingPass >( engine
+			, m_size
+			, scene
+			, m_geometryPassResult
+			, m_opaquePass
+			, depthTexture->getDefaultView()
+			, m_opaquePass.getSceneUbo()
+			, m_gpInfoUbo );
+		m_subsurfaceScattering = std::make_unique< SubsurfaceScatteringPass >( engine
+			, m_gpInfoUbo
+			, m_opaquePass.getSceneUbo()
+			, m_size
+			, m_geometryPassResult
+			, m_lightingPass->getDiffuse() );
+
+		if ( scene.needsSubsurfaceScattering() )
 		{
-			m_lightingPass = std::make_unique< LightingPass >( engine
-				, m_size
-				, scene
-				, m_opaquePass
-				, m_depthAttach
-				, m_opaquePass.getSceneUbo()
-				, m_gpInfoUbo );
-			m_subsurfaceScattering = std::make_unique< SubsurfaceScatteringPass >( engine
-				, m_gpInfoUbo
-				, m_opaquePass.getSceneUbo()
-				, m_size );
 			m_reflection = std::make_unique< ReflectionPass >( engine
 				, m_size
 				, m_opaquePass.getSceneUbo()
 				, m_gpInfoUbo
-				, m_ssaoConfig );
+				, m_ssaoConfig
+				, m_subsurfaceScattering->getResult()
+				, m_lightingPass->getSpecular() );
 		}
-
-		ENSURE( result );
+		else
+		{
+			m_reflection = std::make_unique< ReflectionPass >( engine
+				, m_size
+				, m_opaquePass.getSceneUbo()
+				, m_gpInfoUbo
+				, m_ssaoConfig
+				, m_lightingPass->getDiffuse()
+				, m_lightingPass->getSpecular() );
+		}
 	}
 
 	DeferredRendering::~DeferredRendering()
 	{
-		m_geometryPassFrameBuffer->bind();
-		m_geometryPassFrameBuffer->detachAll();
-		m_geometryPassFrameBuffer->unbind();
-		m_geometryPassFrameBuffer->cleanup();
-
-		for ( auto & attach : m_geometryPassTexAttachs )
-		{
-			attach.reset();
-		}
-
 		m_geometryPassResult[0].reset();
 
-		for ( uint32_t i = uint32_t( DsTexture::eData1 ); i < uint32_t( DsTexture::eCount ); i++ )
+		for ( auto i = uint32_t( DsTexture::eData1 ); i < uint32_t( DsTexture::eCount ); i++ )
 		{
 			m_geometryPassResult[i]->cleanup();
 			m_geometryPassResult[i].reset();
 		}
 
-		m_geometryPassFrameBuffer.reset();
 		m_reflection.reset();
 		m_subsurfaceScattering.reset();
 		m_lightingPass.reset();
@@ -159,85 +158,75 @@ namespace castor3d
 		, Camera const & camera
 		, ShadowMapLightTypeArray & shadowMaps
 		, Point2r const & jitter
-		, TextureUnit const & velocity )
+		, renderer::Semaphore const & toWait )
 	{
 		m_engine.setPerObjectLighting( false );
 		auto invView = camera.getView().getInverse().getTransposed();
 		auto invProj = camera.getViewport().getProjection().getInverse();
 		auto invViewProj = ( camera.getViewport().getProjection() * camera.getView() ).getInverse();
-		camera.apply();
 		m_opaquePass.getSceneUbo().update( scene, camera );
-
-		m_geometryPassFrameBuffer->bind( FrameBufferTarget::eDraw );
-		auto velocityAttach = m_geometryPassFrameBuffer->createAttachment( velocity.getTexture() );
-		m_geometryPassFrameBuffer->attach( AttachmentPoint::eColour
-			, getTextureAttachmentIndex( DsTexture::eMax ) + 1u
-			, velocityAttach
-			, velocity.getType() );
-		REQUIRE( m_geometryPassFrameBuffer->isComplete() );
-		m_geometryPassTexAttachs[size_t( DsTexture::eDepth )]->attach( AttachmentPoint::eDepth );
-		m_geometryPassFrameBuffer->setDrawBuffers();
-		m_geometryPassFrameBuffer->clear( BufferComponent::eColour );
-		m_opaquePass.render( info
-			, shadowMaps
-			, jitter );
-		m_geometryPassFrameBuffer->detach( velocityAttach );
-		m_geometryPassFrameBuffer->unbind();
-
 		m_gpInfoUbo.update( m_size
 			, camera
 			, invViewProj
 			, invView
 			, invProj );
-		m_lightingPass->render( scene
+		m_opaquePass.update( info
+			, shadowMaps
+			, jitter );
+
+		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
+		device.getGraphicsQueue().submit( m_opaquePass.getCommandBuffer()
+			, toWait
+			, renderer::PipelineStageFlag::eAllCommands
+			, m_opaquePass.getSemaphore()
+			, nullptr );
+
+		auto * semaphore = m_lightingPass->render( scene
 			, camera
 			, m_geometryPassResult
+			, m_opaquePass.getSemaphore()
 			, info );
+
+		semaphore = semaphore ? semaphore : &m_opaquePass.getSemaphore();
 
 		if ( scene.needsSubsurfaceScattering() )
 		{
-			m_subsurfaceScattering->render( m_geometryPassResult
-				, m_lightingPass->getDiffuse() );
-			m_reflection->render( m_geometryPassResult
-				, m_subsurfaceScattering->getResult()
-				, m_lightingPass->getSpecular()
-				, scene
-				, camera
-				, m_frameBuffer );
+			device.getGraphicsQueue().submit( m_subsurfaceScattering->getCommandBuffer()
+				, toWait
+				, renderer::PipelineStageFlag::eAllCommands
+				, *semaphore
+				, nullptr );
+			semaphore = &m_subsurfaceScattering->getSemaphore();
 		}
-		else
-		{
-			m_reflection->render( m_geometryPassResult
-				, m_lightingPass->getDiffuse()
-				, m_lightingPass->getSpecular()
-				, scene
-				, camera
-				, m_frameBuffer );
-		}
+
+		m_reflection->render( m_geometryPassResult
+			, *semaphore
+			, scene
+			, camera );
 	}
 
 	void DeferredRendering::debugDisplay()const
 	{
-		auto count = 8 + ( m_ssaoConfig.m_enabled ? 1 : 0 );
-		int width = int( m_size.getWidth() ) / count;
-		int height = int( m_size.getHeight() ) / count;
-		auto size = Size( width, height );
-		auto & context = *m_engine.getRenderSystem()->getCurrentContext();
-		auto index = 0;
-		context.renderDepth( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eDepth )]->getTexture() );
-		context.renderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData1 )]->getTexture() );
-		context.renderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData2 )]->getTexture() );
-		context.renderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData3 )]->getTexture() );
-		context.renderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData4 )]->getTexture() );
-		context.renderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData5 )]->getTexture() );
-		context.renderTexture( Position{ width * index++, 0 }, size, *m_lightingPass->getDiffuse().getTexture() );
-		context.renderTexture( Position{ width * index++, 0 }, size, *m_lightingPass->getSpecular().getTexture() );
+		//auto count = 8 + ( m_ssaoConfig.m_enabled ? 1 : 0 );
+		//int width = int( m_size.getWidth() ) / count;
+		//int height = int( m_size.getHeight() ) / count;
+		//auto size = Size( width, height );
+		//auto & context = *m_engine.getRenderSystem()->getCurrentContext();
+		//auto index = 0;
+		//context.renderDepth( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eDepth )]->getTexture() );
+		//context.renderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData1 )]->getTexture() );
+		//context.renderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData2 )]->getTexture() );
+		//context.renderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData3 )]->getTexture() );
+		//context.renderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData4 )]->getTexture() );
+		//context.renderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData5 )]->getTexture() );
+		//context.renderTexture( Position{ width * index++, 0 }, size, *m_lightingPass->getDiffuse().getTexture() );
+		//context.renderTexture( Position{ width * index++, 0 }, size, *m_lightingPass->getSpecular().getTexture() );
 
-		if ( m_ssaoConfig.m_enabled )
-		{
-			context.renderTexture( Position{ width * ( index++ ), 0 }, size, m_reflection->getSsao() );
-		}
+		//if ( m_ssaoConfig.m_enabled )
+		//{
+		//	context.renderTexture( Position{ width * ( index++ ), 0 }, size, m_reflection->getSsao() );
+		//}
 
-		m_subsurfaceScattering->debugDisplay( m_size );
+		//m_subsurfaceScattering->debugDisplay( m_size );
 	}
 }

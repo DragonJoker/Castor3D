@@ -9,6 +9,9 @@ See LICENSE file in root folder
 #include "Texture/TextureUnit.hpp"
 #include "Technique/Opaque/LightPass.hpp"
 
+#include <Command/CommandBuffer.hpp>
+#include <Sync/Semaphore.hpp>
+
 #include <Design/OwnedBy.hpp>
 
 namespace castor3d
@@ -59,18 +62,11 @@ namespace castor3d
 		C3D_API ~SubsurfaceScatteringPass();
 		/**
 		*\~english
-		*\brief		Applies Subsurface scattering.
+		*\brief		Prepares the command buffer.
 		*\~french
-		*\brief		Applique le Subsurface scattering.
+		*\brief		Prépare le tampon de commandes.
 		*/
-		C3D_API void prepare( renderer::CommandBuffer const & commandBuffer )const;
-		/**
-		 *\~english
-		 *\brief		Applies Subsurface scattering.
-		 *\~french
-		 *\brief		Applique le Subsurface scattering.
-		 */
-		C3D_API void render()const;
+		C3D_API void prepare();
 		/**
 		 *\~english
 		 *\brief		Dumps the results on the screen.
@@ -84,6 +80,18 @@ namespace castor3d
 		inline TextureUnit const & getResult()const
 		{
 			return m_result;
+		}
+
+		inline renderer::CommandBuffer const & getCommandBuffer()const
+		{
+			REQUIRE( m_commandBuffer );
+			return *m_commandBuffer;
+		}
+
+		inline renderer::Semaphore const & getSemaphore()const
+		{
+			REQUIRE( m_finished );
+			return *m_finished;
 		}
 
 	private:
@@ -128,7 +136,7 @@ namespace castor3d
 				, TextureUnit const & source
 				, TextureUnit const & destination
 				, bool isVertic );
-			void prepareFrame( renderer::CommandBuffer const & commandBuffer )const;
+			void prepareFrame( renderer::CommandBuffer & commandBuffer )const;
 
 		private:
 			void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
@@ -155,7 +163,7 @@ namespace castor3d
 				, TextureUnit const & source
 				, std::array< TextureUnit, 3u > const & blurResults
 				, TextureUnit const & destination );
-			void prepareFrame( renderer::CommandBuffer const & commandBuffer )const;
+			void prepareFrame( renderer::CommandBuffer & commandBuffer )const;
 
 		private:
 			void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
@@ -181,6 +189,8 @@ namespace castor3d
 		Blur m_blurX[3];
 		Blur m_blurY[3];
 		Combine m_combine;
+		renderer::CommandBufferPtr m_commandBuffer;
+		renderer::SemaphorePtr m_finished;
 	};
 }
 

@@ -4,13 +4,18 @@ See LICENSE file in root folder
 #ifndef ___C3D_DeferredLightPass_H___
 #define ___C3D_DeferredLightPass_H___
 
-#include <Pipeline/VertexLayout.hpp>
-#include "Render/Viewport.hpp"
 #include "Castor3DPrerequisites.hpp"
+#include "Miscellaneous/BlockTracker.hpp"
+#include "Render/Viewport.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
 #include "Shader/Ubos/GpInfoUbo.hpp"
 
-#include <Miscellaneous/BlockTracker.hpp>
+#include <Command/CommandBuffer.hpp>
+#include <Descriptor/DescriptorSet.hpp>
+#include <Pipeline/VertexLayout.hpp>
+#include <RenderPass/FrameBuffer.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <Sync/Semaphore.hpp>
 
 namespace castor3d
 {
@@ -27,11 +32,11 @@ namespace castor3d
 		: uint8_t
 	{
 		eDepth,
-		eData1,
-		eData2,
-		eData3,
-		eData4,
-		eData5,
+		eData1, // RGB => Normal, A => Object Material flags
+		eData2, // RGB => Diffuse/Albedo - SSR: A => Shininess - PBRMR: A => Unused - PBRSG: A => Glossiness
+		eData3, // A => AO - SSR/PBRSG: RGB => Specular - PBRMR: R => Metallic, G => Roughness, B => Unused
+		eData4, // RGB => Emissive, A => Transmittance
+		eData5, // RG => Velocity, B => Material Index, A => Unused
 		CASTOR_SCOPED_ENUM_BOUNDS( eDepth ),
 	};
 	/**
@@ -231,14 +236,15 @@ namespace castor3d
 			 */
 			Program( Engine & engine
 				, glsl::Shader const & vtx
-				, glsl::Shader const & pxl );
+				, glsl::Shader const & pxl
+				, bool hasShadows );
 			/**
 			 *\~english
 			 *\brief		Destructor.
 			 *\~french
 			 *\brief		Destructeur.
 			 */
-			virtual ~Program()noexcept;
+			virtual ~Program() = default;
 			/**
 			 *\~english
 			 *\brief		Initialises the program and its pipeline.
@@ -257,6 +263,7 @@ namespace castor3d
 			 */
 			void initialise( renderer::VertexBufferBase & vbo
 				, renderer::VertexLayout const & vertexLayout
+				, renderer::RenderPass const & renderPass
 				, MatrixUbo & matrixUbo
 				, SceneUbo & sceneUbo
 				, GpInfoUbo & gpInfoUbo
@@ -291,10 +298,49 @@ namespace castor3d
 			 *\param[in]	first	Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
 			 *\param[in]	offset	L'offset dans le VBO.
 			 */
-			void render( castor::Size const & size
+			void render( renderer::CommandBuffer & commandBuffer
 				, uint32_t count
 				, bool first
 				, uint32_t offset )const;
+			/**
+			*\~english
+			*name
+			*	Getters.
+			*\~french
+			*name
+			*	Accesseurs.
+			*/
+			/**@{*/
+			inline renderer::DescriptorSetLayout const & getUboDescriptorLayout()const
+			{
+				REQUIRE( m_uboDescriptorLayout );
+				return *m_uboDescriptorLayout;
+			}
+
+			inline renderer::DescriptorSetLayout const & getTextureDescriptorLayout()const
+			{
+				REQUIRE( m_textureDescriptorLayout );
+				return *m_textureDescriptorLayout;
+			}
+
+			inline renderer::DescriptorSetPool const & getUboDescriptorPool()const
+			{
+				REQUIRE( m_uboDescriptorPool );
+				return *m_uboDescriptorPool;
+			}
+
+			inline renderer::DescriptorSetPool const & getTextureDescriptorPool()const
+			{
+				REQUIRE( m_textureDescriptorPool );
+				return *m_textureDescriptorPool;
+			}
+
+			inline renderer::PipelineLayout const & getPipelineLayout()const
+			{
+				REQUIRE( m_pipelineLayout );
+				return *m_pipelineLayout;
+			}
+			/**@}*/
 
 		private:
 			/**
@@ -307,7 +353,9 @@ namespace castor3d
 			 *\param[in]	blend	Dit si le pipeline doit activer le blending.
 			 *\return		Le pipeline créé.
 			 */
-			virtual RenderPipelineUPtr doCreatePipeline( bool blend ) = 0;
+			virtual renderer::PipelinePtr doCreatePipeline( renderer::VertexLayout const & vertexLayout
+				, renderer::RenderPass const & renderPass
+				, bool blend ) = 0;
 			/**
 			 *\~english
 			 *\brief		Binds a light.
@@ -333,9 +381,15 @@ namespace castor3d
 			};
 			Engine & m_engine;
 			renderer::UniformBufferBase const * m_baseUbo{ nullptr };
-			renderer::ShaderProgram & m_program;
-			RenderPipelineSPtr m_blendPipeline;
-			RenderPipelineSPtr m_firstPipeline;
+			renderer::ShaderStageStateArray m_program;
+			renderer::DescriptorSetLayoutPtr m_uboDescriptorLayout;
+			renderer::DescriptorSetPoolPtr m_uboDescriptorPool;
+			renderer::DescriptorSetLayoutPtr m_textureDescriptorLayout;
+			renderer::DescriptorSetPoolPtr m_textureDescriptorPool;
+			renderer::PipelineLayoutPtr m_pipelineLayout;
+			renderer::PipelinePtr m_blendPipeline;
+			renderer::PipelinePtr m_firstPipeline;
+			bool m_shadows;
 		};
 		using ProgramPtr = std::unique_ptr< Program >;
 
@@ -358,6 +412,7 @@ namespace castor3d
 		 *\param[in]	sceneUbo	L'UBO de scène.
 		 */
 		virtual void initialise( Scene const & scene
+			, GeometryPassResult const & gp
 			, SceneUbo & sceneUbo ) = 0;
 		/**
 		 *\~english
@@ -368,28 +423,37 @@ namespace castor3d
 		virtual void cleanup() = 0;
 		/**
 		 *\~english
-		 *\brief		Renders the light pass on currently bound framebuffer.
-		 *\param[in]	size			The render area dimensions.
-		 *\param[in]	gp				The geometry pass result.
-		 *\param[in]	light			The light.
-		 *\param[in]	camera			The viewing camera.
-		 *\param[in]	first			Tells if this is the first light pass (\p true) or not (\p false).
-		 *\param[in]	shadowMapOpt	Optional shadow maps.
+		 *\brief		Updates the light pass.
+		 *\param[in]	size	The render area dimensions.
+		 *\param[in]	light	The light.
+		 *\param[in]	camera	The viewing camera.
 		 *\~french
-		 *\brief		Dessine la passe d'éclairage sur le tampon d'image donné.
-		 *\param[in]	size			Les dimensions de la zone de rendu.
-		 *\param[in]	gp				Le résultat de la geometry pass.
-		 *\param[in]	light			La source lumineuse.
-		 *\param[in]	camera			La caméra.
-		 *\param[in]	first			Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
-		 *\param[in]	shadowMapOpt	Les textures d'ombres optionnelles.
+		 *\brief		Met à jour la passe d'éclairage.
+		 *\param[in]	size	Les dimensions de la zone de rendu.
+		 *\param[in]	light	La source lumineuse.
+		 *\param[in]	camera	La caméra.
 		 */
-		virtual void render( castor::Size const & size
-			, GeometryPassResult const & gp
+		virtual void update( castor::Size const & size
 			, Light const & light
-			, Camera const & camera
-			, bool first
-			, ShadowMap * shadowMapOpt );
+			, Camera const & camera ) = 0;
+		/**
+		 *\~english
+		 *\brief		Renders the light pass.
+		 *\~french
+		 *\brief		Dessine la passe de rendu.
+		 */
+		virtual void render( bool first
+			, renderer::Semaphore const & toWait
+			, TextureUnit * shadowMapOpt );
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		/**
 		 *\~english
 		 *\return		The number of primitives to draw.
@@ -397,6 +461,13 @@ namespace castor3d
 		 *\return		Le nombre de primitives à dessiner.
 		 */
 		virtual uint32_t getCount()const = 0;
+
+		inline renderer::Semaphore const & getSemaphore()const
+		{
+			REQUIRE( m_signalReady );
+			return *m_signalReady;
+		}
+		/**@}*/
 
 	protected:
 		/**
@@ -416,8 +487,10 @@ namespace castor3d
 		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
 		LightPass( Engine & engine
-			, renderer::FrameBuffer & frameBuffer
-			, renderer::TextureView & depthView
+			, renderer::RenderPassPtr && renderPass
+			, renderer::TextureView const & depthView
+			, renderer::TextureView const & diffuseView
+			, renderer::TextureView const & specularView
 			, GpInfoUbo & gpInfoUbo
 			, bool hasShadows );
 		/**
@@ -437,6 +510,7 @@ namespace castor3d
 		 *\param[in]	modelMatrixUbo	L'UBO optionnel de matrices modèle.
 		 */
 		void doInitialise( Scene const & scene
+			, GeometryPassResult const & gp
 			, LightType type
 			, renderer::VertexBufferBase & vbo
 			, renderer::VertexLayout const & vertexLayout
@@ -449,36 +523,7 @@ namespace castor3d
 		 *\brief		Nettoie la passe d'éclairage.
 		 */
 		void doCleanup();
-		/**
-		 *\~english
-		 *\brief		Updates the light pass.
-		 *\param[in]	size	The render area dimensions.
-		 *\param[in]	light	The light.
-		 *\param[in]	camera	The viewing camera.
-		 *\~french
-		 *\brief		Met à jour la passe d'éclairage.
-		 *\param[in]	size	Les dimensions de la zone de rendu.
-		 *\param[in]	light	La source lumineuse.
-		 *\param[in]	camera	La caméra.
-		 */
-		virtual void doUpdate( castor::Size const & size
-			, Light const & light
-			, Camera const & camera ) = 0;
-		/**
-		 *\~english
-		 *\brief		Renders the light pass on currently bound framebuffer.
-		 *\param[in]	size	The render area dimensions.
-		 *\param[in]	gp		The geometry pass result.
-		 *\param[in]	first	Tells if this is the first light pass (\p true) or not (\p false).
-		 *\~french
-		 *\brief		Dessine la passe d'éclairage sur le tampon d'image donné.
-		 *\param[in]	size	Les dimensions de la zone de rendu.
-		 *\param[in]	gp		Le résultat de la geometry pass.
-		 *\param[in]	first	Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
-		 */
-		void doRender( castor::Size const & size
-			, GeometryPassResult const & gp
-			, bool first );
+		void doPrepareCommandBuffers( TextureUnit const * shadowMap );
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source for this light pass.
@@ -549,15 +594,21 @@ namespace castor3d
 
 	protected:
 		Engine & m_engine;
+		renderer::RenderPassPtr m_renderPass;
+		renderer::FrameBufferPtr m_frameBuffer;
+		renderer::DescriptorSetPtr m_uboDescriptorSet;
+		renderer::WriteDescriptorSetArray m_textureWrites;
+		renderer::DescriptorSetPtr m_textureDescriptorSet;
 		bool m_shadows;
 		MatrixUbo m_matrixUbo;
-		renderer::FrameBuffer & m_frameBuffer;
-		renderer::TextureView & m_depthView;
 		ProgramPtr m_program;
 		renderer::VertexBufferPtr< float > m_vertexBuffer;
 		renderer::VertexLayoutPtr m_vertexLayout;
 		GpInfoUbo & m_gpInfoUbo;
 		uint32_t m_offset{ 0u };
+		renderer::CommandBufferPtr m_firstCommandBuffer;
+		renderer::CommandBufferPtr m_blendCommandBuffer;
+		renderer::SemaphorePtr m_signalReady;
 	};
 }
 

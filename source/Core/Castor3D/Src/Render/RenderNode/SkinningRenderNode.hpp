@@ -33,10 +33,10 @@ namespace castor3d
 
 		//!\~english	The animated skeleton.
 		//!\~french		Le squelette animé.
-		AnimatedSkeleton & m_skeleton;
+		AnimatedSkeleton & skeleton;
 		//!\~english	The animation UBO.
 		//!\~french		L'UBO d'animation.
-		UniformBufferOffset< SkinningUbo::Configuration > m_skinningUbo;
+		UniformBufferOffset< SkinningUbo::Configuration > skinningUbo;
 	};
 }
 

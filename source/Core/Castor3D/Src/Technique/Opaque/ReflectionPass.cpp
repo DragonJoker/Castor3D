@@ -2,10 +2,6 @@
 
 #include "Engine.hpp"
 
-#include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/FrameBufferAttachment.hpp"
-#include "Buffer/GeometryBuffers.hpp"
-#include "Buffer/VertexBuffer.hpp"
 #include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -15,7 +11,6 @@
 #include "Scene/Skybox.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
 #include "Shader/Ubos/SceneUbo.hpp"
-#include "Shader/ShaderProgram.hpp"
 #include "Castor3DPrerequisites.hpp"
 #include "Shader/Shaders/GlslFog.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
@@ -24,6 +19,10 @@
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureView.hpp"
 #include "Texture/TextureLayout.hpp"
+
+#include <Buffer/VertexBuffer.hpp>
+#include <RenderPass/FrameBuffer.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
 
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
@@ -39,14 +38,19 @@ namespace castor3d
 	{
 		static uint32_t constexpr c_environmentCount = 16u;
 
-		VertexBufferSPtr doCreateVbo( Engine & engine )
+		renderer::VertexLayoutPtr doCreateVertexLayout( Engine & engine )
 		{
-			auto declaration = ParticleDeclaration(
-			{
-				ParticleElementDeclaration( cuT( "position" ), uint32_t( ElementUsage::ePosition ), renderer::AttributeFormat::eVec2 ),
-				ParticleElementDeclaration{ cuT( "texcoord" ), uint32_t( ElementUsage::eTexCoords ), renderer::AttributeFormat::eVec2 },
-			} );
+			auto result = std::make_unique< renderer::VertexLayout >( *engine.getRenderSystem()->getCurrentDevice()
+				, 0u
+				, renderer::VertexInputRate::eVertex
+				, 0u );
+			result->createAttribute( 0u, renderer::Format::eR32G32_SFLOAT, 0u );
+			result->createAttribute( 1u, renderer::Format::eR32G32_SFLOAT, 8u );
+			return result;
+		}
 
+		renderer::VertexBufferBasePtr doCreateVbo( Engine & engine )
+		{
 			float data[] =
 			{
 				0, 0, 0, 0,
@@ -57,23 +61,18 @@ namespace castor3d
 				1, 1, 1, 1
 			};
 
-			auto vertexBuffer = std::make_shared< VertexBuffer >( engine, declaration );
-			vertexBuffer->resize( uint32_t( sizeof( data ) ) );
-			uint8_t * buffer = vertexBuffer->getData();
-			std::memcpy( buffer, data, sizeof( data ) );
-			vertexBuffer->initialise( renderer::MemoryPropertyFlag::eHostVisible );
-			return vertexBuffer;
-		}
+			auto vertexBuffer = std::make_unique< renderer::VertexBufferBase >( engine.getRenderSystem()->getCurrentDevice()
+				, sizeof( data )
+				, 0u
+				, renderer::MemoryPropertyFlag::eHostVisible );
+			if ( auto * buffer = vertexBuffer->getBuffer().lock( 0u, vertexBuffer->getSize(), renderer::MemoryMapFlag::eWrite ) )
+			{
+				std::memcpy( buffer, data, sizeof( data ) );
+				vertexBuffer->getBuffer().flush( 0u, vertexBuffer->getSize() );
+				vertexBuffer->getBuffer().unlock();
+			}
 
-		GeometryBuffersSPtr doCreateVao( Engine & engine
-			, ShaderProgram & program
-			, VertexBuffer & vbo )
-		{
-			auto & renderSystem = *engine.getRenderSystem();
-			auto result = renderSystem.createGeometryBuffers( Topology::eTriangles
-				, program );
-			result->initialise( { vbo }, nullptr );
-			return result;
+			return vertexBuffer;
 		}
 
 		glsl::Shader doCreateVertexProgram( RenderSystem & renderSystem )
@@ -82,19 +81,18 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			UBO_MATRIX( writer, 0u );
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ) );
-			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ) );
+			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0 );
+			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 0 );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 			{
 				vtx_texture = texture;
-				gl_Position = c3d_projection * vec4( position.x(), position.y(), 0.0, 1.0 );
+				gl_Position = vec4( position.x(), position.y(), 0.0, 1.0 );
 			} );
 			return writer.finalise();
 		}
@@ -107,20 +105,20 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			UBO_SCENE( writer, 0u );
-			UBO_GPINFO( writer, 0u );
-			auto index = MinTextureIndex;
-			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++, 0u );
-			auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++, 0u );
-			auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++, 0u );
-			auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++, 0u );
-			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++, 0u );
-			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++, 0u );
-			auto c3d_mapSsao = writer.declSampler< Sampler2D >( cuT( "c3d_mapSsao" ), hasSsao ? index++ : 0u, 0u, hasSsao );
-			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), index++, 0u );
-			auto c3d_mapLightSpecular = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightSpecular" ), index++, 0u );
-			auto c3d_mapEnvironment = writer.declSamplerArray< SamplerCube >( cuT( "c3d_mapEnvironment" ), index++, 0u, c_environmentCount );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
+			UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
+			UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
+			auto index = 0u;
+			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++, 1u );
+			auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++, 1u );
+			auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++, 1u );
+			auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++, 1u );
+			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++, 1u );
+			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++, 1u );
+			auto c3d_mapSsao = writer.declSampler< Sampler2D >( cuT( "c3d_mapSsao" ), hasSsao ? index++ : 0u, 1u, hasSsao );
+			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), index++, 1u );
+			auto c3d_mapLightSpecular = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightSpecular" ), index++, 1u );
+			auto c3d_mapEnvironment = writer.declSamplerArray< SamplerCube >( cuT( "c3d_mapEnvironment" ), index++, 1u, c_environmentCount );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			shader::LegacyMaterials materials{ writer };
 			materials.declare();
@@ -133,7 +131,7 @@ namespace castor3d
 			shader::Fog fog{ fogType, writer };
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ) );
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0u );
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
@@ -258,23 +256,23 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			UBO_SCENE( writer, 0u );
-			UBO_GPINFO( writer, 0u );
-			auto index = MinTextureIndex;
-			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++, 0u );
-			auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++, 0u );
-			auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++, 0u );
-			auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++, 0u );
-			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++, 0u );
-			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++, 0u );
-			auto c3d_mapSsao = writer.declSampler< Sampler2D >( cuT( "c3d_mapSsao" ), hasSsao ? index++ : 0u, 0u, hasSsao );
-			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), index++, 0u );
-			auto c3d_mapLightSpecular = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightSpecular" ), index++, 0u );
-			auto c3d_mapBrdf = writer.declSampler< Sampler2D >( cuT( "c3d_mapBrdf" ), index++, 0u );
-			auto c3d_mapIrradiance = writer.declSampler< SamplerCube >( cuT( "c3d_mapIrradiance" ), index++, 0u );
-			auto c3d_mapPrefiltered = writer.declSampler< SamplerCube >( cuT( "c3d_mapPrefiltered" ), index++, 0u );
-			auto c3d_mapEnvironment = writer.declSamplerArray< SamplerCube >( cuT( "c3d_mapEnvironment" ), index++, 0u, c_environmentCount );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
+			UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
+			UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
+			auto index = 0u;
+			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++, 1u );
+			auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++, 1u );
+			auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++, 1u );
+			auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++, 1u );
+			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++, 1u );
+			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++, 1u );
+			auto c3d_mapSsao = writer.declSampler< Sampler2D >( cuT( "c3d_mapSsao" ), hasSsao ? index++ : 0u, 1u, hasSsao );
+			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), index++, 1u );
+			auto c3d_mapLightSpecular = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightSpecular" ), index++, 1u );
+			auto c3d_mapBrdf = writer.declSampler< Sampler2D >( cuT( "c3d_mapBrdf" ), index++, 1u );
+			auto c3d_mapIrradiance = writer.declSampler< SamplerCube >( cuT( "c3d_mapIrradiance" ), index++, 1u );
+			auto c3d_mapPrefiltered = writer.declSampler< SamplerCube >( cuT( "c3d_mapPrefiltered" ), index++, 1u );
+			auto c3d_mapEnvironment = writer.declSamplerArray< SamplerCube >( cuT( "c3d_mapEnvironment" ), index++, 1u, c_environmentCount );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			shader::PbrMRMaterials materials{ writer };
 			materials.declare();
@@ -288,7 +286,7 @@ namespace castor3d
 			shader::Fog fog{ fogType, writer };
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ) );
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0u );
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
@@ -562,23 +560,23 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			UBO_SCENE( writer, 0u );
-			UBO_GPINFO( writer, 0u );
-			auto index = MinTextureIndex;
-			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++, 0u );
-			auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++, 0u );
-			auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++, 0u );
-			auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++, 0u );
-			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++, 0u );
-			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++, 0u );
-			auto c3d_mapSsao = writer.declSampler< Sampler2D >( cuT( "c3d_mapSsao" ), hasSsao ? index++ : 0u, 0u, hasSsao );
-			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), index++, 0u );
-			auto c3d_mapLightSpecular = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightSpecular" ), index++, 0u );
-			auto c3d_mapBrdf = writer.declSampler< Sampler2D >( cuT( "c3d_mapBrdf" ), index++, 0u );
-			auto c3d_mapIrradiance = writer.declSampler< SamplerCube >( cuT( "c3d_mapIrradiance" ), index++, 0u );
-			auto c3d_mapPrefiltered = writer.declSampler< SamplerCube >( cuT( "c3d_mapPrefiltered" ), index++, 0u );
-			auto c3d_mapEnvironment = writer.declSamplerArray< SamplerCube >( cuT( "c3d_mapEnvironment" ), index++, 0u, c_environmentCount );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
+			UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
+			UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
+			auto index = 0u;
+			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++, 1u );
+			auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++, 1u );
+			auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++, 1u );
+			auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++, 1u );
+			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++, 1u );
+			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++, 1u );
+			auto c3d_mapSsao = writer.declSampler< Sampler2D >( cuT( "c3d_mapSsao" ), hasSsao ? index++ : 0u, 1u, hasSsao );
+			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), index++, 1u );
+			auto c3d_mapLightSpecular = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightSpecular" ), index++, 1u );
+			auto c3d_mapBrdf = writer.declSampler< Sampler2D >( cuT( "c3d_mapBrdf" ), index++, 1u );
+			auto c3d_mapIrradiance = writer.declSampler< SamplerCube >( cuT( "c3d_mapIrradiance" ), index++, 1u );
+			auto c3d_mapPrefiltered = writer.declSampler< SamplerCube >( cuT( "c3d_mapPrefiltered" ), index++, 1u );
+			auto c3d_mapEnvironment = writer.declSamplerArray< SamplerCube >( cuT( "c3d_mapEnvironment" ), index++, 1u, c_environmentCount );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			shader::PbrSGMaterials materials{ writer };
 			materials.declare();
@@ -592,7 +590,7 @@ namespace castor3d
 			shader::Fog fog{ fogType, writer };
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ) );
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0u );
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
@@ -871,7 +869,7 @@ namespace castor3d
 			return writer.finalise();
 		}
 
-		ShaderProgramSPtr doCreateProgram( Engine & engine
+		renderer::ShaderStageStateArray doCreateProgram( Engine & engine
 			, FogType fogType
 			, bool hasSsao
 			, MaterialType matType )
@@ -883,31 +881,33 @@ namespace castor3d
 				: matType == MaterialType::ePbrMetallicRoughness
 					? doCreatePbrMRPixelProgram( renderSystem, fogType, hasSsao )
 					: doCreatePbrSGPixelProgram( renderSystem, fogType, hasSsao );
-			auto result = engine.getShaderProgramCache().getNewProgram( false );
-			result->createObject( renderer::ShaderStageFlag::eVertex );
-			result->createObject( renderer::ShaderStageFlag::eFragment );
-			result->setSource( renderer::ShaderStageFlag::eVertex, vtx );
-			result->setSource( renderer::ShaderStageFlag::eFragment, pxl );
-			result->initialise();
+
+			auto & device = *renderSystem.getCurrentDevice();
+			renderer::ShaderStageStateArray result
+			{
+				{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
+				{ device.createShaderModule( renderer::ShaderStageFlag::eFragment ) }
+			};
+			result[0].module->loadShader( vtx.getSource() );
+			result[1].module->loadShader( pxl.getSource() );
 			return result;
 		}
 
-		RenderPipelineUPtr doCreateRenderPipeline( Engine & engine
-			, ShaderProgram & program
+		renderer::PipelinePtr doCreateRenderPipeline( Engine & engine
+			, renderer::ShaderStageStateArray program
 			, MatrixUbo & matrixUbo
 			, SceneUbo & sceneUbo
 			, GpInfoUbo & gpInfoUbo )
 		{
-			RasteriserState rsState;
-			rsState.setCulledFaces( Culling::eNone );
-			DepthStencilState dsState;
-			dsState.setDepthTest( false );
-			dsState.setDepthMask( WritingMask::eZero );
-			BlendState blState;
-			auto result = engine.getRenderSystem()->createRenderPipeline( std::move( dsState )
+			renderer::RasterisationState rsState;
+			rsState.cullMode = renderer::CullModeFlag::eNone;
+			renderer::DepthStencilState dsState{ 0u, false, false };
+			renderer::ColourBlendState blState = renderer::ColourBlendState::createDefault();
+			auto result = std::make_unique< RenderPipeline >( *engine.getRenderSystem()
+				, std::move( dsState )
 				, std::move( rsState )
 				, std::move( blState )
-				, MultisampleState{}
+				, renderer::MultisampleState{}
 				, program
 				, PipelineFlags{} );
 			result->addUniformBuffer( matrixUbo.getUbo() );
@@ -946,7 +946,7 @@ namespace castor3d
 	}
 
 	ReflectionPass::ProgramPipeline::ProgramPipeline( Engine & engine
-		, VertexBuffer & vbo
+		, renderer::VertexBufferBase & vbo
 		, MatrixUbo & matrixUbo
 		, SceneUbo & sceneUbo
 		, GpInfoUbo & gpInfoUbo
@@ -1034,7 +1034,7 @@ namespace castor3d
 
 		auto & maps = scene.getEnvironmentMaps();
 
-		auto index = MinTextureIndex;
+		auto index = MinBufferIndex;
 
 		for ( auto & buffer : gp )
 		{

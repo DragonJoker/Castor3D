@@ -8,11 +8,13 @@
 #include "Shader/PassBuffer/PassBuffer.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
 
+#include <Command/CommandBuffer.hpp>
 #include <RenderPass/FrameBuffer.hpp>
-#include <RenderPass/FrameBufferAttachmentArray.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <Shader/ShaderProgram.hpp>
+#include <Sync/BufferMemoryBarrier.hpp>
 
 #include <GlslSource.hpp>
 
@@ -64,7 +66,7 @@ namespace castor3d
 		}
 
 		template< bool Opaque, typename MapType >
-		inline void doRenderNonInstanced( RenderPass const & pass
+		inline void doUpdateNonInstanced( RenderPass const & pass
 			, renderer::UniformBuffer< PickingUboData > & ubo
 			, Scene const & scene
 			, PickingPass::NodeType type
@@ -85,7 +87,7 @@ namespace castor3d
 					data.nodeIndex = index++;
 					ubo->upload();
 
-					if ( renderNode.m_data.isInitialised() )
+					if ( renderNode.data.isInitialised() )
 					{
 						doUpdateNodeModelMatrix( renderNode );
 					}
@@ -255,50 +257,75 @@ namespace castor3d
 			if ( itCam != itScn->second.end() )
 			{
 				itCam->second.update();
-				auto & nodes = itCam->second.getRenderNodes();
-				auto pixel = doFboPick( position, camera, nodes );
-				result = doPick( pixel, nodes );
+				auto pixel = doFboPick( position, camera, itCam->second.getCommandBuffer() );
+				result = doPick( pixel, itCam->second.getRenderNodes() );
 			}
 		}
 
 		return result;
 	}
 
-	void PickingPass::doRenderNodes( SceneRenderNodes & nodes
+	void PickingPass::doUpdateNodes( SceneRenderNodes & nodes
 		, Camera const & camera )
 	{
 		m_matrixUbo.update( camera.getView()
 			, camera.getViewport().getProjection() );
-		doUpdate( nodes.m_scene, nodes.m_instantiatedStaticNodes.m_backCulled );
-		doUpdate( nodes.m_scene, nodes.m_staticNodes.m_backCulled );
-		doUpdate( nodes.m_scene, nodes.m_skinnedNodes.m_backCulled );
-		doUpdate( nodes.m_scene, nodes.m_instantiatedSkinnedNodes.m_backCulled );
-		doUpdate( nodes.m_scene, nodes.m_morphingNodes.m_backCulled );
-		doUpdate( nodes.m_scene, nodes.m_billboardNodes.m_backCulled );
+		doUpdate( nodes.scene, nodes.instancedStaticNodes.backCulled );
+		doUpdate( nodes.scene, nodes.staticNodes.backCulled );
+		doUpdate( nodes.scene, nodes.skinnedNodes.backCulled );
+		doUpdate( nodes.scene, nodes.instancedSkinnedNodes.backCulled );
+		doUpdate( nodes.scene, nodes.morphingNodes.backCulled );
+		doUpdate( nodes.scene, nodes.billboardNodes.backCulled );
 	}
 
 	Point3f PickingPass::doFboPick( Position const & position
 		, Camera const & camera
-		, SceneRenderNodes & nodes )
+		, renderer::CommandBuffer const & commandBuffer )
 	{
-		m_frameBuffer->bind( FrameBufferTarget::eDraw );
-		m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth );
-		getEngine()->getMaterialCache().getPassBuffer().bind();
-		camera.apply();
-		m_pickingUbo.bindTo( 7u );
-		doRenderNodes( nodes, camera );
-		m_frameBuffer->unbind();
-
-		Position offset
+		static renderer::ClearValueArray clearValues
 		{
-			position.x() - PickingOffset,
-			int32_t( camera.getHeight() - position.y() - PickingOffset )
+			renderer::ClearColorValue{ 0.0, 0.0, 0.0, 1.0 },
+			renderer::DepthStencilClearValue{ 0.0f, 1 }
 		};
-		m_frameBuffer->bind( FrameBufferTarget::eRead );
-		m_colourAttach->download( offset
-			, *m_buffer );
-		m_frameBuffer->unbind();
-		auto it = std::static_pointer_cast< PxBuffer< PixelFormat::eRGB32F > >( m_buffer )->begin();
+		auto & cmdBuffer = m_commandBuffers[0];
+
+		if ( cmdBuffer->begin() )
+		{
+			cmdBuffer->beginRenderPass( *m_renderPass
+				, *m_frameBuffer
+				, clearValues
+				, renderer::SubpassContents::eSecondaryCommandBuffers );
+			cmdBuffer->executeCommands( { commandBuffer } );
+			cmdBuffer->endRenderPass();
+
+			m_copyRegion.imageOffset.x = int32_t( position.x() - PickingOffset );
+			m_copyRegion.imageOffset.y = int32_t( camera.getHeight() - position.y() - PickingOffset );
+
+			cmdBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
+				, renderer::PipelineStageFlag::eTransfer
+				, m_stagingBuffer->getBuffer().makeTransferDestination() );
+			cmdBuffer->copyToBuffer( m_copyRegion
+				, *m_colourTexture
+				, m_stagingBuffer->getBuffer() );
+			cmdBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
+				, renderer::PipelineStageFlag::eTransfer
+				, m_stagingBuffer->getBuffer().makeMemoryTransitionBarrier( renderer::AccessFlag::eMemoryRead ) );
+			cmdBuffer->end();
+		}
+
+		auto & renderSystem = *getEngine()->getRenderSystem();
+		auto & device = *renderSystem.getCurrentDevice();
+		renderer::FencePtr fence = device.createFence();
+		device.getGraphicsQueue().submit( *cmdBuffer, fence.get() );
+		fence->wait( renderer::FenceTimeout );
+
+		if ( auto * data = m_stagingBuffer->lock( 0u, m_stagingBuffer->getCount(), renderer::MemoryMapFlag::eRead ) )
+		{
+			std::memcpy( m_buffer->ptr(), data, m_stagingBuffer->getCount() );
+			m_stagingBuffer->unlock();
+		}
+
+		auto it = std::static_pointer_cast< PxBuffer< PixelFormat::eRGBA32F > >( m_buffer )->begin();
 		it += ( PickingOffset * PickingWidth ) + PickingOffset - 1;
 		return Point3f{ reinterpret_cast< float const * >( it->constPtr() ) };
 	}
@@ -315,27 +342,27 @@ namespace castor3d
 			switch ( result )
 			{
 			case NodeType::eStatic:
-				doPickFromList( nodes.m_staticNodes.m_backCulled, pixel, m_geometry, m_submesh, m_face );
+				doPickFromList( nodes.staticNodes.backCulled, pixel, m_geometry, m_submesh, m_face );
 				break;
 
 			case NodeType::eInstantiatedStatic:
-				doPickFromInstantiatedList( nodes.m_instantiatedStaticNodes.m_backCulled, pixel, m_geometry, m_submesh, m_face );
+				doPickFromInstantiatedList( nodes.instancedStaticNodes.backCulled, pixel, m_geometry, m_submesh, m_face );
 				break;
 
 			case NodeType::eSkinning:
-				doPickFromList( nodes.m_skinnedNodes.m_backCulled, pixel, m_geometry, m_submesh, m_face );
+				doPickFromList( nodes.skinnedNodes.backCulled, pixel, m_geometry, m_submesh, m_face );
 				break;
 
 			case NodeType::eInstantiatedSkinning:
-				doPickFromInstantiatedList( nodes.m_instantiatedSkinnedNodes.m_backCulled, pixel, m_geometry, m_submesh, m_face );
+				doPickFromInstantiatedList( nodes.instancedSkinnedNodes.backCulled, pixel, m_geometry, m_submesh, m_face );
 				break;
 
 			case NodeType::eMorphing:
-				doPickFromList( nodes.m_morphingNodes.m_backCulled, pixel, m_geometry, m_submesh, m_face );
+				doPickFromList( nodes.morphingNodes.backCulled, pixel, m_geometry, m_submesh, m_face );
 				break;
 
 			case NodeType::eBillboard:
-				doPickFromList( nodes.m_billboardNodes.m_backCulled, pixel, m_billboard, m_billboard, m_face );
+				doPickFromList( nodes.billboardNodes.backCulled, pixel, m_billboard, m_billboard, m_face );
 				break;
 
 			default:
@@ -363,8 +390,7 @@ namespace castor3d
 			{
 				if ( !renderNodes.empty() && component.hasMatrixBuffer() )
 				{
-					auto count = doCopyNodesMatrices( renderNodes, component.getData() );
-					submesh.drawInstanced( renderNodes[0].m_buffers, count );
+					doCopyNodesMatrices( renderNodes, component.getData() );
 				}
 			} );
 	}
@@ -372,7 +398,7 @@ namespace castor3d
 	void PickingPass::doUpdate( Scene const & scene
 		, StaticRenderNodesByPipelineMap & nodes )
 	{
-		doRenderNonInstanced< true >( *this
+		doUpdateNonInstanced< true >( *this
 			, *m_pickingUbo
 			, scene
 			, NodeType::eStatic
@@ -382,7 +408,7 @@ namespace castor3d
 	void PickingPass::doUpdate( Scene const & scene
 		, SkinningRenderNodesByPipelineMap & nodes )
 	{
-		doRenderNonInstanced< true >( *this
+		doUpdateNonInstanced< true >( *this
 			, *m_pickingUbo
 			, scene
 			, NodeType::eSkinning
@@ -408,8 +434,7 @@ namespace castor3d
 					&& component.hasMatrixBuffer()
 					&& instantiatedBones.hasInstancedBonesBuffer() )
 				{
-					auto count = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
-					submesh.drawInstanced( renderNodes[0].m_buffers, count );
+					doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
 				}
 			} );
 	}
@@ -417,7 +442,7 @@ namespace castor3d
 	void PickingPass::doUpdate( Scene const & scene
 		, MorphingRenderNodesByPipelineMap & nodes )
 	{
-		doRenderNonInstanced< true >( *this
+		doUpdateNonInstanced< true >( *this
 			, *m_pickingUbo
 			, scene
 			, NodeType::eMorphing
@@ -427,7 +452,7 @@ namespace castor3d
 	void PickingPass::doUpdate( Scene const & scene
 		, BillboardRenderNodesByPipelineMap & nodes )
 	{
-		doRenderNonInstanced< true >( *this
+		doUpdateNonInstanced< true >( *this
 			, *m_pickingUbo
 			, scene
 			, NodeType::eBillboard
@@ -438,6 +463,8 @@ namespace castor3d
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
+		m_commandBuffers.emplace_back( device.getGraphicsCommandPool().createCommandBuffer( true ) );
+
 		m_pickingUbo = renderer::makeUniformBuffer< PickingUboData >( device
 			, 1u
 			, 0u
@@ -450,12 +477,25 @@ namespace castor3d
 			, renderer::MemoryPropertyFlag::eHostVisible );
 		m_colourView = createView( *m_colourTexture );
 
+		m_copyRegion.imageExtent.width = PickingWidth;
+		m_copyRegion.imageExtent.height = PickingWidth;
+		m_copyRegion.imageExtent.depth = 1u;
+		m_copyRegion.imageSubresource.aspectMask = m_colourView->getSubResourceRange().aspectMask;
+		m_copyRegion.imageSubresource.baseArrayLayer = 0u;
+		m_copyRegion.imageSubresource.layerCount = 1u;
+		m_copyRegion.imageSubresource.mipLevel = 0u;
+
 		m_depthTexture = createTexture( device
 			, size
 			, renderer::Format::eD32_SFLOAT
 			, renderer::ImageUsageFlag::eDepthStencilAttachment
 			, renderer::MemoryPropertyFlag::eDeviceLocal );
 		m_depthView = createView( *m_colourTexture );
+
+		m_stagingBuffer = renderer::makeBuffer< Point4f >( device
+			, PickingWidth * PickingWidth
+			, renderer::BufferTarget::eTransferDst
+			, renderer::MemoryPropertyFlag::eHostVisible );
 
 		m_buffer = PxBufferBase::create( Size{ PickingWidth, PickingWidth }
 			, convert( m_colourTexture->getFormat() ) );
@@ -535,6 +575,22 @@ namespace castor3d
 		}
 	}
 
+	void PickingPass::doFillDescriptor( renderer::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, BillboardListRenderNode & node )
+	{
+		node.descriptorSet->createBinding( layout.getBinding( index++ )
+			, *m_pickingUbo );
+	}
+
+	void PickingPass::doFillDescriptor( renderer::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, SubmeshRenderNode & node )
+	{
+		node.descriptorSet->createBinding( layout.getBinding( index++ )
+			, *m_pickingUbo );
+	}
+
 	void PickingPass::doUpdate( RenderQueueArray & CU_PARAM_UNUSED( queues ) )
 	{
 	}
@@ -610,7 +666,7 @@ namespace castor3d
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ), 1u );
 		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" ), 2u );
 		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( cuT( "c3d_mapOpacity" )
-			, MinTextureIndex
+			, MinBufferIndex
 			, 0u
 			, checkFlag( textureFlags, TextureChannel::eOpacity ) ) );
 
@@ -671,38 +727,17 @@ namespace castor3d
 	{
 		if ( m_backPipelines.find( flags ) == m_backPipelines.end() )
 		{
-			RasteriserState rsState;
-			rsState.setCulledFaces( Culling::eBack );
-			DepthStencilState dsState;
-			dsState.setDepthTest( true );
-			auto & pipeline = *m_backPipelines.emplace( flags
-				, getEngine()->getRenderSystem()->createRenderPipeline( std::move( dsState )
+			renderer::RasterisationState rsState;
+			rsState.cullMode = renderer::CullModeFlag::eBack;
+			renderer::DepthStencilState dsState{ 0u, true, false };
+			m_backPipelines.emplace( flags
+				, std::make_unique< RenderPipeline >( getEngine()->getRenderSystem()
+					, std::move( dsState )
 					, std::move( rsState )
-					, BlendState{}
-					, MultisampleState{}
+					, renderer::ColourBlendState::createDefault()
+					, renderer::MultisampleState{}
 					, program
 					, flags ) ).first->second;
-			pipeline.addUniformBuffer( m_matrixUbo.getUbo() );
-			pipeline.addUniformBuffer( m_modelMatrixUbo.getUbo() );
-			pipeline.addUniformBuffer( m_sceneUbo.getUbo() );
-
-			if ( checkFlag( flags.m_programFlags, ProgramFlag::eBillboards ) )
-			{
-				pipeline.addUniformBuffer( m_billboardUbo.getUbo() );
-			}
-
-			if ( checkFlag( flags.m_programFlags, ProgramFlag::eSkinning )
-				&& !checkFlag( flags.m_programFlags, ProgramFlag::eInstantiation ) )
-			{
-				pipeline.addUniformBuffer( m_skinningUbo.getUbo() );
-			}
-
-			if ( checkFlag( flags.m_programFlags, ProgramFlag::eMorphing ) )
-			{
-				pipeline.addUniformBuffer( m_morphingUbo.getUbo() );
-			}
-
-			pipeline.addUniformBuffer( m_pickingUbo );
 		}
 	}
 }

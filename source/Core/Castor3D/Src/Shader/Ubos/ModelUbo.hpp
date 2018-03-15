@@ -112,7 +112,7 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		static constexpr uint32_t BindingPoint = 4u;
+		static constexpr uint32_t BindingPoint = 5u;
 		//!\~english	Name of the model frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les données de modèle.
 		C3D_API static castor::String const BufferModel;

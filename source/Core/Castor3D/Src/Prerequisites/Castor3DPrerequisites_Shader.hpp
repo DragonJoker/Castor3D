@@ -8,7 +8,7 @@ namespace castor3d
 {
 	static uint32_t constexpr PassBufferIndex = 0u;
 	static uint32_t constexpr LightBufferIndex = 1u;
-	static uint32_t constexpr MinTextureIndex = 2u;
+	static uint32_t constexpr MinBufferIndex = 2u;
 
 	/**@name Shader */
 	//@{

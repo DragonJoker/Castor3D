@@ -29,21 +29,21 @@ namespace castor3d
 		{
 			for ( uint32_t i{ 0u }; i < count; ++i )
 			{
-				dst->m_pos[0] = U( src->m_pos[0] );
-				dst->m_pos[1] = U( src->m_pos[1] );
-				dst->m_pos[2] = U( src->m_pos[2] );
-				dst->m_nml[0] = U( src->m_nml[0] );
-				dst->m_nml[1] = U( src->m_nml[1] );
-				dst->m_nml[2] = U( src->m_nml[2] );
-				dst->m_tan[0] = U( src->m_tan[0] );
-				dst->m_tan[1] = U( src->m_tan[1] );
-				dst->m_tan[2] = U( src->m_tan[2] );
-				dst->m_bin[0] = U( src->m_bin[0] );
-				dst->m_bin[1] = U( src->m_bin[1] );
-				dst->m_bin[2] = U( src->m_bin[2] );
-				dst->m_tex[0] = U( src->m_tex[0] );
-				dst->m_tex[1] = U( src->m_tex[1] );
-				dst->m_tex[2] = U( src->m_tex[2] );
+				dst->pos[0] = U( src->pos[0] );
+				dst->pos[1] = U( src->pos[1] );
+				dst->pos[2] = U( src->pos[2] );
+				dst->nml[0] = U( src->nml[0] );
+				dst->nml[1] = U( src->nml[1] );
+				dst->nml[2] = U( src->nml[2] );
+				dst->tan[0] = U( src->tan[0] );
+				dst->tan[1] = U( src->tan[1] );
+				dst->tan[2] = U( src->tan[2] );
+				dst->bin[0] = U( src->bin[0] );
+				dst->bin[1] = U( src->bin[1] );
+				dst->bin[2] = U( src->bin[2] );
+				dst->tex[0] = U( src->tex[0] );
+				dst->tex[1] = U( src->tex[1] );
+				dst->tex[2] = U( src->tex[2] );
 				dst++;
 				src++;
 			}
@@ -242,11 +242,11 @@ namespace castor3d
 			}
 
 			m_vertexLayout = renderer::makeLayout< InstantiationData >( 0u, renderer::VertexInputRate::eVertex );
-			m_vertexLayout->createAttribute( 0u, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, m_pos ) );
-			m_vertexLayout->createAttribute( 1u, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, m_nml ) );
-			m_vertexLayout->createAttribute( 2u, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, m_tan ) );
-			m_vertexLayout->createAttribute( 3u, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, m_bin ) );
-			m_vertexLayout->createAttribute( 4u, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, m_tex ) );
+			m_vertexLayout->createAttribute( Position, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, pos ) );
+			m_vertexLayout->createAttribute( Normal, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, nml ) );
+			m_vertexLayout->createAttribute( Tangent, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, tan ) );
+			m_vertexLayout->createAttribute( Bitangent, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, bin ) );
+			m_vertexLayout->createAttribute( Texture, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, tex ) );
 
 			renderer::BufferCRefArray buffers;
 			renderer::UInt64Array offsets;
@@ -315,13 +315,13 @@ namespace castor3d
 	{
 		if ( !m_points.empty() )
 		{
-			Point3r min = m_points[0].m_pos;
-			Point3r max = m_points[0].m_pos;
+			Point3r min = m_points[0].pos;
+			Point3r max = m_points[0].pos;
 			uint32_t nbVertex = getPointsCount();
 
 			for ( uint32_t i = 1; i < nbVertex; i++ )
 			{
-				Point3r cur = m_points[i].m_pos;
+				Point3r cur = m_points[i].pos;
 				max[0] = std::max( cur[0], max[0] );
 				max[1] = std::max( cur[1], max[1] );
 				max[2] = std::max( cur[2], max[2] );
@@ -394,7 +394,7 @@ namespace castor3d
 
 		for ( auto it = m_points.begin(); it != m_points.end() && result == -1; ++it )
 		{
-			if ( point::distanceSquared( vertex, it->m_pos ) < precision )
+			if ( point::distanceSquared( vertex, it->pos ) < precision )
 			{
 				result = int( index );
 			}
@@ -408,7 +408,7 @@ namespace castor3d
 	InterleavedVertex Submesh::addPoint( real x, real y, real z )
 	{
 		InterleavedVertex result;
-		result.m_pos = Point3f{ x, y, z };
+		result.pos = Point3f{ x, y, z };
 		addPoint( result );
 		return result;
 	}

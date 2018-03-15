@@ -84,7 +84,7 @@ namespace castor3d
 		*\brief
 		*	Prépare les commandes de dessin du quad, dans le tampon de commandes donné.
 		*/
-		C3D_API void registerFrame( renderer::CommandBuffer & commandBuffer );
+		C3D_API void registerFrame( renderer::CommandBuffer & commandBuffer )const;
 		/**
 		*\~english
 		*\return
@@ -102,19 +102,19 @@ namespace castor3d
 	private:
 		virtual void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
 			, renderer::DescriptorSet & descriptorSet );
-		virtual void doRegisterFrame( renderer::CommandBuffer & commandBuffer );
+		virtual void doRegisterFrame( renderer::CommandBuffer & commandBuffer )const;
 
 	protected:
 		RenderSystem & m_renderSystem;
 		SamplerSPtr m_sampler;
-		RenderPipelineUPtr m_pipeline;
+		renderer::PipelinePtr m_pipeline;
 
 	private:
 		TexturedQuad m_vertexData;
 		renderer::VertexBufferPtr< TexturedQuad > m_vertexBuffer;
-		renderer::VertexLayoutPtr m_vertexLayout;
-		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
-		renderer::DescriptorSetPoolPtr m_descriptorPool;
+		renderer::DescriptorSetLayoutPtr m_descriptorSetLayout;
+		renderer::PipelineLayoutPtr m_pipelineLayout;
+		renderer::DescriptorSetPoolPtr m_descriptorSetPool;
 		renderer::DescriptorSetPtr m_descriptorSet;
 		renderer::CommandBufferPtr m_commandBuffer;
 	};

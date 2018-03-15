@@ -32,8 +32,8 @@ namespace castor3d
 	template< typename DataType, typename InstanceType >
 	inline void doUpdateObjectNode( ObjectRenderNode< DataType, InstanceType > & node )
 	{
-		auto & model = node.m_sceneNode.getDerivedTransformationMatrix();
-		node.m_modelMatrixUbo.getData().model = model;
+		auto & model = node.sceneNode.getDerivedTransformationMatrix();
+		node.modelMatrixUbo.getData().model = model;
 	}
 
 	inline void doUpdateNodeModelMatrix( StaticRenderNode & node )
@@ -59,8 +59,8 @@ namespace castor3d
 	template< typename NodeType >
 	inline void doUpdateNode( NodeType & node )
 	{
-		node.m_modelUbo.getData().shadowReceiver = node.m_instance.isShadowReceiver();
-		node.m_modelUbo.getData().materialIndex = node.m_passNode.m_pass.getId();
+		node.modelUbo.getData().shadowReceiver = node.instance.isShadowReceiver();
+		node.modelUbo.getData().materialIndex = node.passNode.pass.getId();
 		doUpdateNodeModelMatrix( node );
 	}
 }

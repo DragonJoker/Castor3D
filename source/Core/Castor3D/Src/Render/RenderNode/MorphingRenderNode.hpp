@@ -33,10 +33,10 @@ namespace castor3d
 
 		//!\~english	The animated mesh.
 		//!\~french		Le maillage animé.
-		AnimatedMesh & m_mesh;
+		AnimatedMesh & mesh;
 		//!\~english	The morphing UBO.
 		//!\~french		L'UBO de morphing.
-		UniformBufferOffset< MorphingUbo::Configuration > m_morphingUbo;
+		UniformBufferOffset< MorphingUbo::Configuration > morphingUbo;
 	};
 }
 

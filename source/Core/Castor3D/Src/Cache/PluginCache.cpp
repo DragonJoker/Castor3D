@@ -65,33 +65,33 @@ namespace castor3d
 		}
 	}
 
-	PluginSPtr PluginCache::loadPlugin( String const & p_pluginName, Path const & p_pathFolder )throw( )
+	PluginSPtr PluginCache::loadPlugin( String const & pluginName, Path const & pathFolder )throw( )
 	{
-		Path strFilePath{ CASTOR_DLL_PREFIX + p_pluginName + cuT( "." ) + CASTOR_DLL_EXT };
+		Path strFilePath{ CASTOR_DLL_PREFIX + pluginName + cuT( "." ) + CASTOR_DLL_EXT };
 		PluginSPtr result;
 
 		try
 		{
 			result = doloadPlugin( strFilePath );
 		}
-		catch ( VersionException & p_exc )
+		catch ( VersionException & exc )
 		{
-			Logger::logWarning( "loadPlugin - Fail - " + p_exc.getFullDescription() );
+			Logger::logWarning( "loadPlugin - Fail - " + exc.getFullDescription() );
 		}
-		catch ( PluginException & p_exc )
+		catch ( PluginException & exc )
 		{
-			if ( !p_pathFolder.empty() )
+			if ( !pathFolder.empty() )
 			{
-				result = loadPlugin( p_pathFolder / strFilePath );
+				result = loadPlugin( pathFolder / strFilePath );
 			}
 			else
 			{
-				Logger::logWarning( "loadPlugin - Fail - " + p_exc.getFullDescription() );
+				Logger::logWarning( "loadPlugin - Fail - " + exc.getFullDescription() );
 			}
 		}
-		catch ( std::exception & p_exc )
+		catch ( std::exception & exc )
 		{
-			Logger::logWarning( cuT( "loadPlugin - Fail - " ) + string::stringCast< xchar >( p_exc.what() ) );
+			Logger::logWarning( cuT( "loadPlugin - Fail - " ) + string::stringCast< xchar >( exc.what() ) );
 		}
 		catch ( ... )
 		{
@@ -101,25 +101,25 @@ namespace castor3d
 		return result;
 	}
 
-	PluginSPtr PluginCache::loadPlugin( Path const & p_fileFullPath )throw( )
+	PluginSPtr PluginCache::loadPlugin( Path const & fileFullPath )throw( )
 	{
 		PluginSPtr result;
 
 		try
 		{
-			result = doloadPlugin( p_fileFullPath );
+			result = doloadPlugin( fileFullPath );
 		}
-		catch ( VersionException & p_exc )
+		catch ( VersionException & exc )
 		{
-			Logger::logWarning( "loadPlugin - Fail - " + p_exc.getFullDescription() );
+			Logger::logWarning( "loadPlugin - Fail - " + exc.getFullDescription() );
 		}
-		catch ( PluginException & p_exc )
+		catch ( PluginException & exc )
 		{
-			Logger::logWarning( "loadPlugin - Fail - " + p_exc.getFullDescription() );
+			Logger::logWarning( "loadPlugin - Fail - " + exc.getFullDescription() );
 		}
-		catch ( std::exception & p_exc )
+		catch ( std::exception & exc )
 		{
-			Logger::logWarning( cuT( "loadPlugin - Fail - " ) + string::stringCast< xchar >( p_exc.what() ) );
+			Logger::logWarning( cuT( "loadPlugin - Fail - " ) + string::stringCast< xchar >( exc.what() ) );
 		}
 		catch ( ... )
 		{
@@ -129,18 +129,18 @@ namespace castor3d
 		return result;
 	}
 
-	PluginStrMap PluginCache::getPlugins( PluginType p_type )
+	PluginStrMap PluginCache::getPlugins( PluginType type )
 	{
 		auto lock = makeUniqueLock( m_mutexLoadedPlugins );
-		return m_loadedPlugins[size_t( p_type )];
+		return m_loadedPlugins[size_t( type )];
 	}
 
-	void PluginCache::loadAllPlugins( Path const & p_folder )
+	void PluginCache::loadAllPlugins( Path const & folder )
 	{
 		PathArray files;
-		File::listDirectoryFiles( p_folder, files );
+		File::listDirectoryFiles( folder, files );
 
-		if ( files.size() > 0 )
+		if ( !files.empty() )
 		{
 			for ( auto file : files )
 			{
@@ -159,25 +159,25 @@ namespace castor3d
 		}
 	}
 
-	PluginSPtr PluginCache::doloadPlugin( Path const & p_pathFile )
+	PluginSPtr PluginCache::doloadPlugin( Path const & pathFile )
 	{
 		PluginSPtr result;
 		auto lockTypes = makeUniqueLock( m_mutexLoadedPluginTypes );
-		auto it = m_loadedPluginTypes.find( p_pathFile );
+		auto it = m_loadedPluginTypes.find( pathFile );
 
 		if ( it == m_loadedPluginTypes.end() )
 		{
-			if ( !File::fileExists( p_pathFile ) )
+			if ( !File::fileExists( pathFile ) )
 			{
-				CASTOR_EXCEPTION( string::stringCast< char >( cuT( "File [" ) + p_pathFile + cuT( "] does not exist" ) ) );
+				CASTOR_EXCEPTION( string::stringCast< char >( cuT( "File [" ) + pathFile + cuT( "] does not exist" ) ) );
 			}
 
-			DynamicLibrarySPtr library = std::make_shared< DynamicLibrary >( p_pathFile );
+			DynamicLibrarySPtr library = std::make_shared< DynamicLibrary >( pathFile );
 			Plugin::PGetTypeFunction pfnGetType;
 
 			if ( !library->getFunction( pfnGetType, getTypeFunctionABIName ) )
 			{
-				String strError = cuT( "Error encountered while loading file [" ) + p_pathFile.getFileName( true ) + cuT( "] getType plug-in function => Not a Castor3D plug-in" );
+				String strError = cuT( "Error encountered while loading file [" ) + pathFile.getFileName( true ) + cuT( "] getType plug-in function => Not a Castor3D plug-in" );
 				CASTOR_PLUGIN_EXCEPTION( string::stringCast< char >( strError ), true );
 			}
 
@@ -225,7 +225,7 @@ namespace castor3d
 			default:
 				FAILURE( "Unknown plug-in type" );
 				{
-					String strError = cuT( "Error encountered while loading plug-in [" ) + p_pathFile.getFileName() + cuT( "] Unknown plug-in type" );
+					String strError = cuT( "Error encountered while loading plug-in [" ) + pathFile.getFileName() + cuT( "] Unknown plug-in type" );
 					CASTOR_PLUGIN_EXCEPTION( string::stringCast< char >( strError ), true );
 				}
 				break;
@@ -237,14 +237,14 @@ namespace castor3d
 
 			if ( toCheck <= version )
 			{
-				m_loadedPluginTypes.insert( std::make_pair( p_pathFile, type ) );
+				m_loadedPluginTypes.insert( std::make_pair( pathFile, type ) );
 				{
 					auto lockPlugins = makeUniqueLock( m_mutexLoadedPlugins );
-					m_loadedPlugins[size_t( type )].insert( std::make_pair( p_pathFile, result ) );
+					m_loadedPlugins[size_t( type )].insert( std::make_pair( pathFile, result ) );
 				}
 				{
 					auto lockLibraries = makeUniqueLock( m_mutexLibraries );
-					m_libraries[size_t( type )].insert( std::make_pair( p_pathFile, library ) );
+					m_libraries[size_t( type )].insert( std::make_pair( pathFile, library ) );
 				}
 				Logger::logInfo( StringStream() << cuT( "Plug-in [" ) << result->getName() << cuT( "] - Required engine version : " ) << toCheck << cuT( ", loaded" ) );
 			}
@@ -257,7 +257,7 @@ namespace castor3d
 		{
 			PluginType type = it->second;
 			auto lock = makeUniqueLock( m_mutexLoadedPlugins );
-			result = m_loadedPlugins[size_t( type )].find( p_pathFile )->second;
+			result = m_loadedPlugins[size_t( type )].find( pathFile )->second;
 		}
 
 		return result;

@@ -63,7 +63,7 @@ namespace light_streaks
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( castor3d::cuT( "c3d_mapDiffuse" ), castor3d::MinTextureIndex, 0u );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( castor3d::cuT( "c3d_mapDiffuse" ), castor3d::MinBufferIndex, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
@@ -94,7 +94,7 @@ namespace light_streaks
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( castor3d::cuT( "c3d_mapDiffuse" ), castor3d::MinTextureIndex, 0u );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( castor3d::cuT( "c3d_mapDiffuse" ), castor3d::MinBufferIndex, 0u );
 			UBO_KAWASE( writer );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
 
@@ -133,7 +133,7 @@ namespace light_streaks
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			auto index = castor3d::MinTextureIndex;
+			auto index = castor3d::MinBufferIndex;
 			auto c3d_mapScene = writer.declSampler< Sampler2D >( PostEffect::CombineMapScene, index++, 0u );
 			auto c3d_mapKawase1 = writer.declSampler< Sampler2D >( PostEffect::CombineMapKawase1, index++, 0u );
 			auto c3d_mapKawase2 = writer.declSampler< Sampler2D >( PostEffect::CombineMapKawase2, index++, 0u );
@@ -254,7 +254,7 @@ namespace light_streaks
 		m_viewport.update();
 		m_combineSurface.initialise( m_renderTarget
 			, size
-			, castor3d::MinTextureIndex
+			, castor3d::MinBufferIndex
 			, m_linearSampler );
 
 		size.getWidth() >>= 2;
@@ -264,11 +264,11 @@ namespace light_streaks
 		{
 			m_hiPassSurfaces[i].initialise( m_renderTarget
 				, size
-				, castor3d::MinTextureIndex
+				, castor3d::MinBufferIndex
 				, m_linearSampler );
 			m_kawaseSurfaces[i].initialise( m_renderTarget
 				, size
-				, castor3d::MinTextureIndex + 1u + i
+				, castor3d::MinBufferIndex + 1u + i
 				, m_linearSampler );
 		}
 
@@ -398,8 +398,8 @@ namespace light_streaks
 		auto const & kawase4 = m_kawaseSurfaces[3].m_colourTexture;
 		m_combinePipeline->apply();
 
-		p_origin.bind( castor3d::MinTextureIndex );
-		m_linearSampler->bind( castor3d::MinTextureIndex );
+		p_origin.bind( castor3d::MinBufferIndex );
+		m_linearSampler->bind( castor3d::MinBufferIndex );
 		kawase1.bind();
 		kawase2.bind();
 		kawase3.bind();
@@ -411,8 +411,8 @@ namespace light_streaks
 		kawase3.unbind();
 		kawase2.unbind();
 		kawase1.unbind();
-		m_linearSampler->unbind( castor3d::MinTextureIndex );
-		p_origin.unbind( castor3d::MinTextureIndex );
+		m_linearSampler->unbind( castor3d::MinBufferIndex );
+		p_origin.unbind( castor3d::MinBufferIndex );
 
 		destination->m_fbo->unbind();
 

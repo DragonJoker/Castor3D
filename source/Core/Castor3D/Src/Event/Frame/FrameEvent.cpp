@@ -6,8 +6,8 @@ using namespace castor;
 
 namespace castor3d
 {
-	FrameEvent::FrameEvent( EventType p_type )
-		: m_type( p_type )
+	FrameEvent::FrameEvent( EventType type )
+		: m_type( type )
 	{
 #if !defined( NDEBUG )
 

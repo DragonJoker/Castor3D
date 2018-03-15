@@ -74,16 +74,16 @@ namespace castor3d
 						? PassFlag::ePbrSpecularGlossiness
 						: PassFlag( 0u ) ) ) );
 			materials->declare();
-			UBO_SCENE( writer, 1u, 0u );
-			UBO_GPINFO( writer, 2u, 0u );
-			Ubo config{ writer, SubsurfaceScatteringPass::Config, 3u, 0u };
+			UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
+			UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
+			Ubo config{ writer, SubsurfaceScatteringPass::Config, 4u, 0u };
 			auto c3d_pixelSize = config.declMember< Float >( SubsurfaceScatteringPass::PixelSize );
 			auto c3d_correction = config.declMember< Float >( SubsurfaceScatteringPass::Correction );
 			config.end();
-			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), 4u, 0u );
-			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), 5u, 0u );
-			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), 6u, 0u );
-			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), 7u, 0u );
+			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), 6u, 0u );
+			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), 7u, 0u );
+			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), 8u, 0u );
+			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), 9u, 0u );
 
 			// Gaussian weights for the six samples around the current pixel:
 			//   -3 -2 -1 +1 +2 +3
@@ -322,7 +322,7 @@ namespace castor3d
 			TextureUnit unit{ engine };
 			unit.setTexture( texture );
 			unit.setSampler( sampler );
-			unit.setIndex( MinTextureIndex );
+			unit.setIndex( MinBufferIndex );
 			unit.initialise();
 			return unit;
 		}
@@ -356,7 +356,7 @@ namespace castor3d
 		renderPass.attachments[0].index = 0u;
 		renderPass.attachments[0].format = destination.getTexture()->getPixelFormat();
 		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
-		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
 		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
@@ -397,12 +397,12 @@ namespace castor3d
 		renderer::DescriptorSetLayoutBindingArray bindings
 		{
 			renderSystem.getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding(),
-			{ 1u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment }, // Scene UBO
-			{ 2u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment }, // GpInfo UBO
-			{ 3u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment }, // Blur UBO
-			{ 4u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment }, // Depth map
-			{ 5u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment }, // Translucency map
-			{ 6u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment }, // MaterialIndex map
+			{ SceneUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment }, // Scene UBO
+			{ GpInfoUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment }, // GpInfo UBO
+			{ 4u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment }, // Blur UBO
+			{ 6u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment }, // Depth map
+			{ 7u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment }, // Translucency map
+			{ 8u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment }, // MaterialIndex map
 		};
 
 		createPipeline( extent
@@ -414,13 +414,13 @@ namespace castor3d
 			, {} );
 	}
 
-	void SubsurfaceScatteringPass::Blur::prepareFrame( renderer::CommandBuffer const & commandBuffer )const
+	void SubsurfaceScatteringPass::Blur::prepareFrame( renderer::CommandBuffer & commandBuffer )const
 	{
 		commandBuffer.beginRenderPass( *m_renderPass
 			, *m_frameBuffer
 			, { renderer::ClearColorValue{ 0, 0, 0, 1 } }
-			, renderer::SubpassContents::eSecondaryCommandBuffers );
-		commandBuffer.executeCommands( { getCommandBuffer() } );
+			, renderer::SubpassContents::eInline );
+		registerFrame( commandBuffer );
 		commandBuffer.endRenderPass();
 	}
 
@@ -429,25 +429,25 @@ namespace castor3d
 	{
 		m_renderSystem.getEngine()->getMaterialCache().getPassBuffer().createBinding( descriptorSet
 			, descriptorSetLayout.getBinding( PassBufferIndex ) );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( SceneUbo::BindingPoint )
 			, m_sceneUbo.getUbo()
 			, 0u
 			, 1u );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 2u )
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( GpInfoUbo::BindingPoint )
 			, m_gpInfoUbo.getUbo()
 			, 0u
 			, 1u );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 3u )
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( 4u )
 			, m_blurUbo
 			, 0u
 			, 1u );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 4u )
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( 6u )
 			, m_geometryBufferResult[size_t( DsTexture::eDepth )]->getTexture()->getDefaultView()
 			, m_geometryBufferResult[size_t( DsTexture::eDepth )]->getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 5u )
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( 7u )
 			, m_geometryBufferResult[size_t( DsTexture::eData4 )]->getTexture()->getDefaultView()
 			, m_geometryBufferResult[size_t( DsTexture::eData4 )]->getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 6u )
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( 8u )
 			, m_geometryBufferResult[size_t( DsTexture::eData5 )]->getTexture()->getDefaultView()
 			, m_geometryBufferResult[size_t( DsTexture::eData5 )]->getSampler()->getSampler() );
 	}
@@ -478,7 +478,7 @@ namespace castor3d
 		renderPass.attachments[0].index = 0u;
 		renderPass.attachments[0].format = destination.getTexture()->getPixelFormat();
 		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
-		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
 		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
@@ -536,13 +536,13 @@ namespace castor3d
 			, {} );
 	}
 
-	void SubsurfaceScatteringPass::Combine::prepareFrame( renderer::CommandBuffer const & commandBuffer )const
+	void SubsurfaceScatteringPass::Combine::prepareFrame( renderer::CommandBuffer & commandBuffer )const
 	{
 		commandBuffer.beginRenderPass( *m_renderPass
 			, *m_frameBuffer
 			, { renderer::ClearColorValue{ 0, 0, 0, 1 } }
-		, renderer::SubpassContents::eSecondaryCommandBuffers );
-		commandBuffer.executeCommands( { getCommandBuffer() } );
+		, renderer::SubpassContents::eInline );
+		registerFrame( commandBuffer );
 		commandBuffer.endRenderPass();
 	}
 
@@ -642,15 +642,15 @@ namespace castor3d
 		}
 	}
 
-	void SubsurfaceScatteringPass::prepare( renderer::CommandBuffer const & commandBuffer )const
+	void SubsurfaceScatteringPass::prepare()
 	{
 		for ( size_t i{ 0u }; i < m_blurResults.size(); ++i )
 		{
-			m_blurX[i].prepareFrame( commandBuffer );
-			m_blurY[i].prepareFrame( commandBuffer );
+			m_blurX[i].prepareFrame( *m_commandBuffer );
+			m_blurY[i].prepareFrame( *m_commandBuffer );
 		}
 
-		m_combine.prepareFrame( commandBuffer );
+		m_combine.prepareFrame( *m_commandBuffer );
 	}
 
 	void SubsurfaceScatteringPass::debugDisplay( castor::Size const & size )const

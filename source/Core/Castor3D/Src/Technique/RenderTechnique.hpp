@@ -109,7 +109,6 @@ namespace castor3d
 		 *\param[out]	info		Reçoit les informations de rendu.
 		 */
 		C3D_API void render( castor::Point2r const & jitter
-			, TextureUnit const & velocity
 			, renderer::Semaphore const & waitSemaphore
 			, RenderInfo & info );
 		/**
@@ -129,80 +128,54 @@ namespace castor3d
 		 */
 		C3D_API void debugDisplay( castor::Size const & size )const;
 		/**
-		 *\~english
-		 *\return		The render area dimensions.
-		 *\~french
-		 *\return		Les dimensions de la zone de rendu.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline castor::Size const & getSize()const
 		{
 			return m_size;
 		}
-		/**
-		 *\~english
-		 *\return		The colour texture holding the render's result.
-		 *\~french
-		 *\return		La texture de couleurs contenant le résultat du rendu.
-		 */
+
 		inline TextureLayout const & getResult()const
 		{
 			REQUIRE( m_frameBuffer.m_colourTexture );
 			return *m_frameBuffer.m_colourTexture;
 		}
-		/**
-		 *\~english
-		 *\return		The depth texture holding the render's result.
-		 *\~french
-		 *\return		La texture de profondeurs contenant le résultat du rendu.
-		 */
+
 		inline TextureLayout const & getDepth()const
 		{
 			REQUIRE( m_frameBuffer.m_colourTexture );
 			return *m_frameBuffer.m_depthBuffer;
 		}
-		/**
-		 *\~english
-		 *\return		The opaque nodes render pass.
-		 *\~french
-		 *\return		La passe de rendu des noeuds opaques.
-		 */
+
 		inline RenderTechniquePass const & getOpaquePass()const
 		{
 			REQUIRE( m_opaquePass );
 			return *m_opaquePass;
 		}
-		/**
-		 *\~english
-		 *\return		The transparent nodes render pass.
-		 *\~french
-		 *\return		La passe de rendu des noeuds transparents.
-		 */
+
 		inline RenderTechniquePass const & getTransparentPass()const
 		{
 			REQUIRE( m_transparentPass );
 			return *m_transparentPass;
 		}
-		/**
-		 *\~english
-		 *\return		The transparent nodes render pass.
-		 *\~french
-		 *\return		La passe de rendu des noeuds transparents.
-		 */
+
 		inline renderer::Semaphore const & getSemaphore()const
 		{
 			REQUIRE( m_signalFinished );
 			return *m_signalFinished;
 		}
-		/**
-		 *\~english
-		 *\return		\p true if the samples count is greater than 1.
-		 *\~french
-		 *\return		\p true si le nombre d'échantillons est plus grand que 1.
-		 */
+
 		inline bool isMultisampling()const
 		{
 			return false;
 		}
+		/**@}*/
 
 	public:
 		using ShadowMapArray = std::vector< ShadowMapUPtr >;

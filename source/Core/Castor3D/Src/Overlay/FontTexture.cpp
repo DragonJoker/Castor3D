@@ -12,15 +12,15 @@ using namespace castor;
 
 namespace castor3d
 {
-	FontTexture::FontTexture( Engine & engine, FontSPtr p_font )
+	FontTexture::FontTexture( Engine & engine, FontSPtr font )
 		: OwnedBy< Engine >( engine )
-		, m_font( p_font )
+		, m_font( font )
 	{
-		uint32_t const maxWidth = p_font->getMaxWidth();
-		uint32_t const maxHeight = p_font->getMaxHeight();
-		uint32_t const count = uint32_t( std::ceil( std::distance( p_font->begin(), p_font->end() ) / 16.0 ) );
+		uint32_t const maxWidth = font->getMaxWidth();
+		uint32_t const maxHeight = font->getMaxHeight();
+		uint32_t const count = uint32_t( std::ceil( std::distance( font->begin(), font->end() ) / 16.0 ) );
 
-		SamplerSPtr sampler = getEngine()->getSamplerCache().add( p_font->getName() );
+		SamplerSPtr sampler = getEngine()->getSamplerCache().add( font->getName() );
 		sampler->setWrapS( renderer::WrapMode::eClampToEdge );
 		sampler->setWrapT( renderer::WrapMode::eClampToEdge );
 		sampler->setMinFilter( renderer::Filter::eLinear );
@@ -120,13 +120,13 @@ namespace castor3d
 		return getFont()->getName();
 	}
 
-	Position const & FontTexture::getGlyphPosition( char32_t p_char )const
+	Position const & FontTexture::getGlyphPosition( char32_t glyphChar )const
 	{
-		GlyphPositionMapConstIt it = m_glyphsPositions.find( p_char );
+		GlyphPositionMapConstIt it = m_glyphsPositions.find( glyphChar );
 
 		if ( it == m_glyphsPositions.end() )
 		{
-			CASTOR_EXCEPTION( std::string( "No loaded glyph for character " ) + string::stringCast< char >( string::toString( p_char ) ) );
+			CASTOR_EXCEPTION( std::string( "No loaded glyph for character " ) + string::stringCast< char >( string::toString( glyphChar ) ) );
 		}
 
 		return it->second;

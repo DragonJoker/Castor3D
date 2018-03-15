@@ -26,7 +26,7 @@ namespace castor3d
 			, sceneNode
 			, data
 			, data }
-		, m_billboardUbo{ billboardUbo }
+		, billboardUbo{ billboardUbo }
 	{
 	}
 }

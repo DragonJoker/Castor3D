@@ -48,7 +48,8 @@ namespace castor3d
 			 */
 			Program( Engine & engine
 				, glsl::Shader const & vtx
-				, glsl::Shader const & pxl );
+				, glsl::Shader const & pxl
+				, bool hasShadows );
 			/**
 			 *\~english
 			 *\brief		Destructor.
@@ -61,7 +62,9 @@ namespace castor3d
 			/**
 			 *\copydoc		castor3d::LightPass::Program::doCreatePipeline
 			 */
-			virtual RenderPipelineUPtr doCreatePipeline( bool blend )override;
+			renderer::PipelinePtr doCreatePipeline( renderer::VertexLayout const & vertexLayout
+				, renderer::RenderPass const & renderPass
+				, bool blend )override;
 			/**
 			 *\copydoc		castor3d::LightPass::Program::doBind
 			 */
@@ -99,36 +102,27 @@ namespace castor3d
 		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
 		DirectionalLightPass( Engine & engine
-			, renderer::FrameBuffer & frameBuffer
-			, renderer::TextureView & depthView
+			, renderer::TextureView const & depthView
+			, renderer::TextureView const & diffuseView
+			, renderer::TextureView const & specularView
 			, GpInfoUbo & gpInfoUbo
 			, bool hasShadows );
 		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		~DirectionalLightPass();
-		/**
-		 *\~english
-		 *\brief		Initialises the light pass.
-		 *\param[in]	scene		The scene.
-		 *\param[in]	sceneUbo	The scene UBO.
-		 *\~french
-		 *\brief		Initialise la passe d'éclairage.
-		 *\param[in]	scene		La scène.
-		 *\param[in]	sceneUbo	L'UBO de scène.
+		 *\copydoc		castor3d::LightPass::initialise
 		 */
 		void initialise( Scene const & scene
+			, GeometryPassResult const & gp
 			, SceneUbo & sceneUbo )override;
 		/**
-		 *\~english
-		 *\brief		Cleans up the light pass.
-		 *\~french
-		 *\brief		Nettoie la passe d'éclairage.
+		 *\copydoc		castor3d::LightPass::cleanup
 		 */
 		void cleanup()override;
+		/**
+		 *\copydoc		castor3d::LightPass::update
+		 */
+		void update( castor::Size const & size
+			, Light const & light
+			, Camera const & camera )override;
 		/**
 		 *\~english
 		 *\return		The number of primitives to draw.
@@ -136,14 +130,6 @@ namespace castor3d
 		 *\return		Le nombre de primitives à dessiner.
 		 */
 		uint32_t getCount()const override;
-
-	protected:
-		/**
-		 *\copydoc		castor3d::LightPass::doUpdate
-		 */
-		void doUpdate( castor::Size const & size
-			, Light const & light
-			, Camera const & camera )override;
 
 	private:
 		/**

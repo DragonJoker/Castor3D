@@ -7,31 +7,27 @@
 #include <Cache/SamplerCache.hpp>
 #include <Cache/ShaderCache.hpp>
 
-#include <FrameBuffer/BackBuffers.hpp>
-#include <FrameBuffer/RenderBufferAttachment.hpp>
-#include <FrameBuffer/DepthStencilRenderBuffer.hpp>
-#include <FrameBuffer/FrameBufferAttachment.hpp>
 #include <Mesh/Vertex.hpp>
-#include <Buffer/ParticleDeclaration.hpp>
-#include <Buffer/ParticleElementDeclaration.hpp>
-#include <Buffer/GeometryBuffers.hpp>
 #include <Buffer/VertexBuffer.hpp>
 #include <Miscellaneous/Parameter.hpp>
-#include <Render/Context.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderWindow.hpp>
 #include <Render/Viewport.hpp>
-#include <Shader/UniformBuffer.hpp>
 #include <Shader/Ubos/MatrixUbo.hpp>
-#include <Shader/ShaderProgram.hpp>
-#include <State/BlendState.hpp>
-#include <State/RasteriserState.hpp>
 #include <Technique/RenderTechnique.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
+
+#include <Buffer/UniformBuffer.hpp>
+#include <Buffer/VertexBuffer.hpp>
+#include <RenderPass/FrameBuffer.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <Pipeline/ColourBlendState.hpp>
+#include <Pipeline/RasterisationState.hpp>
 
 #include <numeric>
 
@@ -50,21 +46,20 @@ namespace smaa
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			UBO_MATRIX( writer, 0u );
 			auto c3d_pixelSize = writer.declConstant( constants::PixelSize
 				, vec2( Float( pixelSize[0] ), pixelSize[1] ) );
-			auto position = writer.declAttribute< Vec4 >( castor3d::cuT( "position" ) );
-			auto texture = writer.declAttribute< Vec2 >( castor3d::cuT( "texcoord" ) );
+			auto position = writer.declAttribute< Vec4 >( cuT( "position" ), 0u );
+			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
-			auto vtx_offset = writer.declOutput< Vec4 >( cuT( "vtx_offset" ), 3u );
+			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto vtx_offset = writer.declOutputArray< Vec4 >( cuT( "vtx_offset" ), 1u, 3u );
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					gl_Position = c3d_projection * position;
+					gl_Position = position;
 					vtx_texture = texture;
 
 					vtx_offset[0] = vec4( texture, texture ) + vec4( c3d_pixelSize, c3d_pixelSize ) * vec4( -1.0_f, 0.0, 0.0, -1.0 );
@@ -97,10 +92,10 @@ namespace smaa
 				, Float( predicationScale ) );
 			auto c3d_predicationStrength = writer.declConstant( constants::PredicationStrength
 				, Float( predicationStrength ) );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
-			auto vtx_offset = writer.declInput< Vec4 >( cuT( "vtx_offset" ), 3u );
-			auto c3d_colourTex = writer.declSampler< Sampler2D >( cuT( "c3d_colourTex" ), castor3d::MinTextureIndex + 0u, 0u );
-			auto c3d_predicationTex = writer.declSampler< Sampler2D >( cuT( "c3d_predicationTex" ), castor3d::MinTextureIndex + 1u, 0u, predication );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto vtx_offset = writer.declInputArray< Vec4 >( cuT( "vtx_offset" ), 1u, 3u );
+			auto c3d_colourTex = writer.declSampler< Sampler2D >( cuT( "c3d_colourTex" ), 0u, 0u );
+			auto c3d_predicationTex = writer.declSampler< Sampler2D >( cuT( "c3d_predicationTex" ), 1u, 0u, predication );
 
 			// Shader outputs
 			auto pxl_fragColour = writer.declFragData< Vec4 >( cuT( "pxl_fragColour" ), 0u );
@@ -224,24 +219,23 @@ namespace smaa
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			UBO_MATRIX( writer, 0u );
 			auto c3d_pixelSize = writer.declConstant( constants::PixelSize
 				, vec2( Float( pixelSize[0] ), pixelSize[1] ) );
 			auto c3d_maxSearchSteps = writer.declConstant( constants::MaxSearchSteps
 				, Int( maxSearchSteps ) );
-			auto position = writer.declAttribute< Vec4 >( castor3d::cuT( "position" ) );
-			auto texture = writer.declAttribute< Vec2 >( castor3d::cuT( "texcoord" ) );
+			auto position = writer.declAttribute< Vec4 >( cuT( "position" ), 0u );
+			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
-			auto vtx_pixcoord = writer.declOutput< Vec2 >( cuT( "vtx_pixcoord" ) );
-			auto vtx_offset = writer.declOutput< Vec4 >( cuT( "vtx_offset" ), 3u );
+			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto vtx_pixcoord = writer.declOutput< Vec2 >( cuT( "vtx_pixcoord" ), 1u );
+			auto vtx_offset = writer.declOutputArray< Vec4 >( cuT( "vtx_offset" ), 2u, 3u );
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					gl_Position = c3d_projection * position;
+					gl_Position = position;
 					vtx_texture = texture;
 					vtx_pixcoord = texture / c3d_pixelSize;
 
@@ -266,13 +260,15 @@ namespace smaa
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
-			auto vtx_pixcoord = writer.declInput< Vec2 >( cuT( "vtx_pixcoord" ) );
-			auto vtx_offset = writer.declInput< Vec4 >( cuT( "vtx_offset" ), 3u );
-			auto c3d_edgesTex = writer.declSampler< Sampler2D >( cuT( "c3d_edgesTex" ), castor3d::MinTextureIndex + 0u, 0u );
-			auto c3d_areaTex = writer.declSampler< Sampler2D >( cuT( "c3d_areaTex" ), castor3d::MinTextureIndex + 1u, 0u );
-			auto c3d_searchTex = writer.declSampler< Sampler2D >( cuT( "c3d_searchTex" ), castor3d::MinTextureIndex + 2u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto vtx_pixcoord = writer.declInput< Vec2 >( cuT( "vtx_pixcoord" ), 1u );
+			auto vtx_offset = writer.declInputArray< Vec4 >( cuT( "vtx_offset" ), 2u, 3u );
+			auto c3d_edgesTex = writer.declSampler< Sampler2D >( cuT( "c3d_edgesTex" ), 0u, 0u );
+			auto c3d_areaTex = writer.declSampler< Sampler2D >( cuT( "c3d_areaTex" ), 1u, 0u );
+			auto c3d_searchTex = writer.declSampler< Sampler2D >( cuT( "c3d_searchTex" ), 2u, 0u );
+
 			auto c3d_subsampleIndices = writer.declUniform< IVec4 >( constants::SubsampleIndices );
+
 			auto c3d_pixelSize = writer.declConstant( constants::PixelSize
 				, vec2( Float( pixelSize[0] ), pixelSize[1] ) );
 			auto c3d_maxSearchStepsDiag = writer.declConstant( constants::MaxSearchStepsDiag
@@ -882,21 +878,20 @@ namespace smaa
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			UBO_MATRIX( writer, 0u );
 			auto c3d_pixelSize = writer.declConstant( constants::PixelSize
 				, vec2( Float( pixelSize[0] ), pixelSize[1] ) );
-			auto position = writer.declAttribute< Vec4 >( castor3d::cuT( "position" ) );
-			auto texture = writer.declAttribute< Vec2 >( castor3d::cuT( "texcoord" ) );
+			auto position = writer.declAttribute< Vec4 >( cuT( "position" ), 0u );
+			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
-			auto vtx_offset = writer.declOutput< Vec4 >( cuT( "vtx_offset" ), 2u );
+			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto vtx_offset = writer.declOutputArray< Vec4 >( cuT( "vtx_offset" ), 1u, 2u );
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					gl_Position = c3d_projection * position;
+					gl_Position = position;
 					vtx_texture = texture;
 
 					vtx_offset[0] = vec4( texture, texture ) + vec4( c3d_pixelSize, c3d_pixelSize ) * vec4( -1.0_f, 0.0, 0.0, -1.0 );
@@ -913,11 +908,11 @@ namespace smaa
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
-			auto vtx_offset = writer.declInput< Vec4 >( cuT( "vtx_offset" ), 2u );
-			auto c3d_colourTex = writer.declSampler< Sampler2D >( cuT( "c3d_colourTex" ), castor3d::MinTextureIndex + 0u, 0u );
-			auto c3d_blendTex = writer.declSampler< Sampler2D >( cuT( "c3d_blendTex" ), castor3d::MinTextureIndex + 1u, 0u );
-			auto c3d_velocityTex = writer.declSampler< Sampler2D >( cuT( "c3d_velocityTex" ), castor3d::MinTextureIndex + 2u, 0u, reprojection );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto vtx_offset = writer.declInputArray< Vec4 >( cuT( "vtx_offset" ), 1u, 2u );
+			auto c3d_colourTex = writer.declSampler< Sampler2D >( cuT( "c3d_colourTex" ), 0u, 0u );
+			auto c3d_blendTex = writer.declSampler< Sampler2D >( cuT( "c3d_blendTex" ), 1u, 0u );
+			auto c3d_velocityTex = writer.declSampler< Sampler2D >( cuT( "c3d_velocityTex" ), 2u, 0u, reprojection );
 			auto c3d_pixelSize = writer.declConstant( constants::PixelSize
 				, vec2( Float( pixelSize[0] ), pixelSize[1] ) );
 
@@ -1053,18 +1048,17 @@ namespace smaa
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			UBO_MATRIX( writer, 0u );
-			auto position = writer.declAttribute< Vec4 >( castor3d::cuT( "position" ) );
-			auto texture = writer.declAttribute< Vec2 >( castor3d::cuT( "texcoord" ) );
+			auto position = writer.declAttribute< Vec4 >( cuT( "position" ), 0u );
+			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					gl_Position = c3d_projection * position;
+					gl_Position = position;
 					vtx_texture = texture;
 				} );
 			return writer.finalise();
@@ -1079,10 +1073,10 @@ namespace smaa
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
-			auto c3d_currentColourTex = writer.declSampler< Sampler2D >( cuT( "c3d_currentColourTex" ), castor3d::MinTextureIndex + 0u, 0u );
-			auto c3d_previousColourTex = writer.declSampler< Sampler2D >( cuT( "c3d_previousColourTex" ), castor3d::MinTextureIndex + 1u, 0u );
-			auto c3d_velocityTex = writer.declSampler< Sampler2D >( cuT( "c3d_velocityTex" ), castor3d::MinTextureIndex + 2u, 0u, reprojection );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto c3d_currentColourTex = writer.declSampler< Sampler2D >( cuT( "c3d_currentColourTex" ), 0u, 0u );
+			auto c3d_previousColourTex = writer.declSampler< Sampler2D >( cuT( "c3d_previousColourTex" ), 1u, 0u );
+			auto c3d_velocityTex = writer.declSampler< Sampler2D >( cuT( "c3d_velocityTex" ), 2u, 0u, reprojection );
 			auto c3d_reprojectionWeightScale = writer.declConstant( cuT( "c3d_reprojectionWeightScale" )
 				, Float( reprojectionWeightScale )
 				, reprojection );
@@ -1144,7 +1138,6 @@ namespace smaa
 			, renderSystem
 			, parameters
 			, true }
-		, m_matrixUbo{ *renderSystem.getEngine() }
 		, m_areaTex{ *renderSystem.getEngine() }
 		, m_searchTex{ *renderSystem.getEngine() }
 		, m_edgeDetectionSurface{ *renderSystem.getEngine() }
@@ -1281,8 +1274,6 @@ namespace smaa
 
 	void PostEffect::cleanup()
 	{
-		m_matrixUbo.getUbo().cleanup();
-
 		m_edgeDetectionSurface.cleanup();
 		m_depthAttach.reset();
 		m_depthBuffer->cleanup();
@@ -1456,7 +1447,7 @@ namespace smaa
 
 		m_edgeDetectionSurface.initialise( m_renderTarget
 			, m_renderTarget.getSize()
-			, castor3d::MinTextureIndex
+			, castor3d::MinBufferIndex
 			, m_linearSampler );
 		m_depthBuffer = getRenderSystem()->createTexture( castor3d::TextureType::eTwoDimensions
 			, castor3d::AccessType::eNone
@@ -1487,7 +1478,7 @@ namespace smaa
 		areaTexture->getImage().initialiseSource( areaTexBuffer );
 		m_areaTex.setTexture( areaTexture );
 		m_areaTex.setSampler( m_linearSampler );
-		m_areaTex.setIndex( castor3d::MinTextureIndex + 1u );
+		m_areaTex.setIndex( castor3d::MinBufferIndex + 1u );
 		m_areaTex.initialise();
 
 		auto searchTexBuffer = PxBufferBase::create( Size{ SEARCHTEX_WIDTH, SEARCHTEX_HEIGHT }
@@ -1500,7 +1491,7 @@ namespace smaa
 		searchTexture->getImage().initialiseSource( searchTexBuffer );
 		m_searchTex.setTexture( searchTexture );
 		m_searchTex.setSampler( m_pointSampler );
-		m_searchTex.setIndex( castor3d::MinTextureIndex + 2u );
+		m_searchTex.setIndex( castor3d::MinBufferIndex + 2u );
 		m_searchTex.initialise();
 
 		auto & cache = getRenderSystem()->getEngine()->getShaderProgramCache();
@@ -1536,7 +1527,7 @@ namespace smaa
 
 		m_blendingWeightCalculationSurface.initialise( m_renderTarget
 			, m_renderTarget.getSize()
-			, castor3d::MinTextureIndex + 1
+			, castor3d::MinBufferIndex + 1
 			, m_linearSampler );
 	}
 
@@ -1577,7 +1568,7 @@ namespace smaa
 			m_neighbourhoodBlendingSurface.emplace_back( *getRenderSystem()->getEngine() );
 			m_neighbourhoodBlendingSurface.back().initialise( m_renderTarget
 				, m_renderTarget.getSize()
-				, castor3d::MinTextureIndex + 1u
+				, castor3d::MinBufferIndex + 1u
 				, m_linearSampler
 				, PixelFormat::eA8R8G8B8_SRGB );
 			m_neighbourhoodBlendingSurface.back().m_fbo->setSRGB( true );
@@ -1617,7 +1608,7 @@ namespace smaa
 
 		m_reprojectSurface.initialise( m_renderTarget
 			, m_renderTarget.getSize()
-			, castor3d::MinTextureIndex + 1
+			, castor3d::MinBufferIndex + 1
 			, m_linearSampler );
 	}
 
@@ -1639,14 +1630,14 @@ namespace smaa
 		}
 		else
 		{
-			depthStencil->bind( castor3d::MinTextureIndex + 1u );
-			m_linearSampler->bind( castor3d::MinTextureIndex + 1u );
+			depthStencil->bind( castor3d::MinBufferIndex + 1u );
+			m_linearSampler->bind( castor3d::MinBufferIndex + 1u );
 			getRenderSystem()->getCurrentContext()->renderTexture( surface.m_size
 				, gammaSrc
 				, *m_edgeDetectionPipeline
 				, m_matrixUbo );
-			m_linearSampler->unbind( castor3d::MinTextureIndex + 1u );
-			depthStencil->unbind( castor3d::MinTextureIndex + 1u );
+			m_linearSampler->unbind( castor3d::MinBufferIndex + 1u );
+			depthStencil->unbind( castor3d::MinBufferIndex + 1u );
 		}
 
 		surface.m_fbo->unbind();
@@ -1681,14 +1672,14 @@ namespace smaa
 
 		if ( m_mode == Mode::eT2X )
 		{
-			m_renderTarget.getVelocity().getTexture()->bind( castor3d::MinTextureIndex + 2u );
-			m_renderTarget.getVelocity().getSampler()->bind( castor3d::MinTextureIndex + 2u );
+			m_renderTarget.getVelocity().getTexture()->bind( castor3d::MinBufferIndex + 2u );
+			m_renderTarget.getVelocity().getSampler()->bind( castor3d::MinBufferIndex + 2u );
 			getRenderSystem()->getCurrentContext()->renderTexture( surface.m_size
 				, gammaSrc
 				, *m_neighbourhoodBlendingPipeline
 				, m_matrixUbo );
-			m_renderTarget.getVelocity().getTexture()->unbind( castor3d::MinTextureIndex + 2u );
-			m_renderTarget.getVelocity().getSampler()->unbind( castor3d::MinTextureIndex + 2u );
+			m_renderTarget.getVelocity().getTexture()->unbind( castor3d::MinBufferIndex + 2u );
+			m_renderTarget.getVelocity().getSampler()->unbind( castor3d::MinBufferIndex + 2u );
 		}
 		else
 		{
@@ -1724,14 +1715,14 @@ namespace smaa
 
 		if ( m_mode == Mode::eT2X && m_reprojection )
 		{
-			m_renderTarget.getVelocity().getTexture()->bind( castor3d::MinTextureIndex + 2u );
-			m_renderTarget.getVelocity().getSampler()->bind( castor3d::MinTextureIndex + 2u );
+			m_renderTarget.getVelocity().getTexture()->bind( castor3d::MinBufferIndex + 2u );
+			m_renderTarget.getVelocity().getSampler()->bind( castor3d::MinBufferIndex + 2u );
 			getRenderSystem()->getCurrentContext()->renderTexture( surface.m_size
 				, *m_neighbourhoodBlendingSurface[curIndex].m_colourTexture.getTexture()
 				, *m_reprojectPipeline
 				, m_matrixUbo );
-			m_renderTarget.getVelocity().getTexture()->unbind( castor3d::MinTextureIndex + 2u );
-			m_renderTarget.getVelocity().getSampler()->unbind( castor3d::MinTextureIndex + 2u );
+			m_renderTarget.getVelocity().getTexture()->unbind( castor3d::MinBufferIndex + 2u );
+			m_renderTarget.getVelocity().getSampler()->unbind( castor3d::MinBufferIndex + 2u );
 		}
 		else
 		{

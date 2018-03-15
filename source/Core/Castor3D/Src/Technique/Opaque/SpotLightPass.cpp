@@ -38,12 +38,9 @@ namespace castor3d
 	
 	SpotLightPass::Program::Program( Engine & engine
 		, glsl::Shader const & vtx
-		, glsl::Shader const & pxl )
-		: MeshLightPass::Program{ engine, vtx, pxl }
-		, m_lightDirection{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_direction" ), renderer::ShaderStageFlag::eFragment ) }
-		, m_lightTransform{ m_program->createUniform< UniformType::eMat4x4f >( cuT( "light.m_transform" ), renderer::ShaderStageFlag::eFragment ) }
-		, m_lightExponent{ m_program->createUniform< UniformType::eFloat >( cuT( "light.m_exponent" ), renderer::ShaderStageFlag::eFragment ) }
-		, m_lightCutOff{ m_program->createUniform< UniformType::eFloat >( cuT( "light.m_cutOff" ), renderer::ShaderStageFlag::eFragment ) }
+		, glsl::Shader const & pxl
+		, bool hasShadows )
+		: MeshLightPass::Program{ engine, vtx, pxl, hasShadows }
 	{
 	}
 
@@ -55,9 +52,9 @@ namespace castor3d
 	{
 		auto & spotLight = *light.getSpotLight();
 		auto & data = m_ubo->getData( 0u );
-		data.colour = light.getColour();
-		data.intensity = light.getIntensity();
-		data.farPlane = light.getFarPlane();
+		data.base.colour = light.getColour();
+		data.base.intensity = light.getIntensity();
+		data.base.farPlane = light.getFarPlane();
 		data.attenuation = spotLight.getAttenuation();
 		data.position = light.getParent()->getDerivedPosition();
 		data.exponent = spotLight.getExponent();
@@ -67,16 +64,30 @@ namespace castor3d
 		m_ubo->upload();
 	}
 
+	void SpotLightPass::Program::doCreateUbo()
+	{
+		if ( !m_ubo )
+		{
+			m_ubo = renderer::makeUniformBuffer< Config >( *m_engine.getRenderSystem()->getCurrentDevice()
+				, 1u
+				, renderer::BufferTarget::eTransferDst
+				, renderer::MemoryPropertyFlag::eHostVisible );
+			m_baseUbo = &m_ubo->getUbo();
+		}
+	}
+
 	//*********************************************************************************************
 
 	SpotLightPass::SpotLightPass( Engine & engine
-		, FrameBuffer & frameBuffer
-		, FrameBufferAttachment & depthAttach
+		, renderer::TextureView const & depthView
+		, renderer::TextureView const & diffuseView
+		, renderer::TextureView const & specularView
 		, GpInfoUbo & gpInfoUbo
 		, bool hasShadows )
 		: MeshLightPass{ engine
-			, frameBuffer
-			, depthAttach
+			, depthView
+			, diffuseView
+			, specularView
 			, gpInfoUbo
 			, LightType::eSpot
 			, hasShadows }
@@ -111,7 +122,7 @@ namespace castor3d
 	LightPass::ProgramPtr SpotLightPass::doCreateProgram( glsl::Shader const & vtx
 		, glsl::Shader const & pxl )const
 	{
-		return std::make_unique< Program >( m_engine, vtx, pxl );
+		return std::make_unique< Program >( m_engine, vtx, pxl, m_shadows );
 	}
 
 	//*********************************************************************************************

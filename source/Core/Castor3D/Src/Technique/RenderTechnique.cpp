@@ -1,12 +1,6 @@
 #include "RenderTechnique.hpp"
 
 #include "Engine.hpp"
-#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
-#include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/ColourRenderBuffer.hpp"
-#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
-#include "FrameBuffer/FrameBufferAttachment.hpp"
-#include "FrameBuffer/RenderBufferAttachment.hpp"
 #include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Render/RenderPassTimer.hpp"
 #include "Render/RenderTarget.hpp"
@@ -18,17 +12,19 @@
 #include "ShadowMap/ShadowMapDirectional.hpp"
 #include "ShadowMap/ShadowMapPoint.hpp"
 #include "ShadowMap/ShadowMapSpot.hpp"
-
 #include "Technique/RenderTechniquePass.hpp"
-#include "Texture/TextureLayout.hpp"
 #include "Technique/ForwardRenderTechniquePass.hpp"
 #include "Technique/Opaque/OpaquePass.hpp"
 #include "Technique/Transparent/TransparentPass.hpp"
+#include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>
 
 #include "Shader/Shaders/GlslMaterial.hpp"
 #include "Shader/Shaders/GlslShadow.hpp"
+
+#include <RenderPass/FrameBuffer.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
 
 using namespace castor;
 
@@ -231,7 +227,6 @@ namespace castor3d
 	}
 
 	void RenderTechnique::render( Point2r const & jitter
-		, TextureUnit const & velocity
 		, renderer::Semaphore const & waitSemaphore
 		, RenderInfo & info )
 	{

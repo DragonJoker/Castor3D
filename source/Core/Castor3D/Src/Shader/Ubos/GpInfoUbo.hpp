@@ -96,7 +96,7 @@ namespace castor3d
 		static const castor::String View;
 		static const castor::String Proj;
 		static const castor::String RenderSize;
-		static constexpr uint32_t BindingPoint = 4u;
+		static constexpr uint32_t BindingPoint = 5u;
 
 	private:
 		Engine & m_engine;

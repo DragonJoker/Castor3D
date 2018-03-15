@@ -195,6 +195,10 @@ namespace castor3d
 
 			case castor3d::ParticleFormat::eMat4f:
 				return 64u;
+
+			default:
+				assert( false );
+				return 16u;
 			}
 		}
 

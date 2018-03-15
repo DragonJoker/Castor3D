@@ -291,20 +291,9 @@ namespace castor3d
 						, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
 						, renderer::SubpassContents::eInline );
 					m_commandBuffer->bindPipeline( *facePass.pipeline );
-					m_commandBuffer->setViewport( {
-						mipSize[0],
-						mipSize[0],
-						0,
-						0,
-					} );
-					m_commandBuffer->setScissor( {
-						0,
-						0,
-						mipSize[0],
-						mipSize[0],
-					} );
-					m_commandBuffer->pushConstants( *m_pipelineLayout
-						, *facePass.pushConstants );
+					m_commandBuffer->setViewport( { mipSize[0], mipSize[0], 0, 0 } );
+					m_commandBuffer->setScissor( { 0, 0, mipSize[0], mipSize[0] } );
+					m_commandBuffer->pushConstants( *m_pipelineLayout , *facePass.pushConstants );
 					m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 					m_commandBuffer->draw( 36u, 1u, 0u, 0u );
 					m_commandBuffer->endRenderPass();
@@ -355,7 +344,7 @@ namespace castor3d
 
 			// Inputs
 			auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ), 0u );
-			auto c3d_mapDiffuse = writer.declSampler< SamplerCube >( cuT( "c3d_mapDiffuse" ), MinTextureIndex, 0u );
+			auto c3d_mapDiffuse = writer.declSampler< SamplerCube >( cuT( "c3d_mapDiffuse" ), MinBufferIndex, 0u );
 			Ubo config{ writer, cuT( "Config" ), 0u };
 			auto c3d_roughness = config.declMember< Float >( cuT( "c3d_roughness" ) );
 			config.end();
@@ -364,17 +353,17 @@ namespace castor3d
 			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_FragColor" ), 0u );
 
 			auto distributionGGX = writer.implementFunction< Float >( cuT( "DistributionGGX" )
-				, [&]( Vec3 const & p_N
-					, Vec3 const & p_H
-					, Float const & p_roughness )
+				, [&]( Vec3 const & N
+					, Vec3 const & H
+					, Float const & roughness )
 				{
 					auto constexpr PI = 3.1415926535897932384626433832795028841968;
 					auto a = writer.declLocale( cuT( "a" )
-						, p_roughness * p_roughness );
+						, roughness * roughness );
 					auto a2 = writer.declLocale( cuT( "a2" )
 						, a * a );
 					auto NdotH = writer.declLocale( cuT( "NdotH" )
-						, max( dot( p_N, p_H ), 0.0 ) );
+						, max( dot( N, H ), 0.0 ) );
 					auto NdotH2 = writer.declLocale( cuT( "NdotH2" )
 						, NdotH * NdotH );
 
@@ -386,16 +375,16 @@ namespace castor3d
 
 					writer.returnStmt( nom / denom );
 				}
-				, InVec3{ &writer, cuT( "p_N" ) }
-				, InVec3{ &writer, cuT( "p_H" ) }
-				, InFloat{ &writer, cuT( "p_roughness" ) } );
+				, InVec3{ &writer, cuT( "N" ) }
+				, InVec3{ &writer, cuT( "H" ) }
+				, InFloat{ &writer, cuT( "roughness" ) } );
 
 			auto radicalInverse = writer.implementFunction< Float >( cuT( "RadicalInverse_VdC" )
-				, [&]( UInt const & p_bits )
+				, [&]( UInt const & inBits )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
 					auto bits = writer.declLocale( cuT( "bits" )
-						, p_bits );
+						, inBits );
 					bits = writer.paren( bits << 16u ) | writer.paren( bits >> 16u );
 					bits = writer.paren( writer.paren( bits & 0x55555555_ui ) << 1u ) | writer.paren( writer.paren( bits & 0xAAAAAAAA_ui ) >> 1u );
 					bits = writer.paren( writer.paren( bits & 0x33333333_ui ) << 2u ) | writer.paren( writer.paren( bits & 0xCCCCCCCC_ui ) >> 2u );
@@ -403,32 +392,32 @@ namespace castor3d
 					bits = writer.paren( writer.paren( bits & 0x00FF00FF_ui ) << 8u ) | writer.paren( writer.paren( bits & 0xFF00FF00_ui ) >> 8u );
 					writer.returnStmt( writer.cast< Float >( bits ) * 2.3283064365386963e-10 ); // / 0x100000000
 				}
-				, InUInt{ &writer, cuT( "p_bits" ) } );
+				, InUInt{ &writer, cuT( "inBits" ) } );
 
 			auto hammersley = writer.implementFunction< Vec2 >( cuT( "Hammersley" )
-				, [&]( UInt const & p_i
-					, UInt const & p_n )
+				, [&]( UInt const & i
+					, UInt const & n )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
-					writer.returnStmt( vec2( writer.cast< Float >( p_i ) / writer.cast< Float >( p_n ), radicalInverse( p_i ) ) );
+					writer.returnStmt( vec2( writer.cast< Float >( i ) / writer.cast< Float >( n ), radicalInverse( i ) ) );
 				}
-				, InUInt{ &writer, cuT( "p_i" ) }
-				, InUInt{ &writer, cuT( "p_n" ) } );
+				, InUInt{ &writer, cuT( "i" ) }
+				, InUInt{ &writer, cuT( "n" ) } );
 
 			auto importanceSample = writer.implementFunction< Vec3 >( cuT( "ImportanceSampleGGX" )
-				, [&]( Vec2 const & p_xi
-					, Vec3 const & p_n
-					, Float const & p_roughness )
+				, [&]( Vec2 const & xi
+					, Vec3 const & n
+					, Float const & roughness )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
 					auto constexpr PI = 3.1415926535897932384626433832795028841968;
 					auto a = writer.declLocale( cuT( "a" )
-						, p_roughness * p_roughness );
+						, roughness * roughness );
 
 					auto phi = writer.declLocale( cuT( "phi" )
-						, 2.0_f * PI * p_xi.x() );
+						, 2.0_f * PI * xi.x() );
 					auto cosTheta = writer.declLocale( cuT( "cosTheta" )
-						, sqrt( writer.paren( 1.0 - p_xi.y() ) / writer.paren( 1.0 + writer.paren( a * a - 1.0 ) * p_xi.y() ) ) );
+						, sqrt( writer.paren( 1.0 - xi.y() ) / writer.paren( 1.0 + writer.paren( a * a - 1.0 ) * xi.y() ) ) );
 					auto sinTheta = writer.declLocale( cuT( "sinTheta" )
 						, sqrt( 1.0 - cosTheta * cosTheta ) );
 
@@ -440,19 +429,19 @@ namespace castor3d
 
 					// from tangent-space vector to world-space sample vector
 					auto up = writer.declLocale( cuT( "up" )
-						, writer.ternary( glsl::abs( p_n.z() ) < 0.999, vec3( 0.0_f, 0.0, 1.0 ), vec3( 1.0_f, 0.0, 0.0 ) ) );
+						, writer.ternary( glsl::abs( n.z() ) < 0.999, vec3( 0.0_f, 0.0, 1.0 ), vec3( 1.0_f, 0.0, 0.0 ) ) );
 					auto tangent = writer.declLocale( cuT( "tangent" )
-						, normalize( cross( up, p_n ) ) );
+						, normalize( cross( up, n ) ) );
 					auto bitangent = writer.declLocale( cuT( "bitangent" )
-						, cross( p_n, tangent ) );
+						, cross( n, tangent ) );
 
 					auto sampleVec = writer.declLocale( cuT( "sampleVec" )
-						, tangent * H.x() + bitangent * H.y() + p_n * H.z() );
+						, tangent * H.x() + bitangent * H.y() + n * H.z() );
 					writer.returnStmt( normalize( sampleVec ) );
 				}
-				, InVec2{ &writer, cuT( "p_xi" ) }
-				, InVec3{ &writer, cuT( "p_n" ) }
-				, InFloat{ &writer, cuT( "p_roughness" ) } );
+				, InVec2{ &writer, cuT( "xi" ) }
+				, InVec3{ &writer, cuT( "n" ) }
+				, InFloat{ &writer, cuT( "roughness" ) } );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{

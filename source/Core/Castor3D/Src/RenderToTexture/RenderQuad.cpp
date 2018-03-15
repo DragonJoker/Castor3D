@@ -78,10 +78,10 @@ namespace castor3d
 
 	RenderQuad::~RenderQuad()
 	{
-		if ( m_pipeline )
-		{
-			m_pipeline->cleanup();
-		}
+		m_pipeline.reset();
+		m_pipelineLayout.reset();
+		m_descriptorSetPool.reset();
+		m_descriptorSetLayout.reset();
 	}
 
 	void RenderQuad::createPipeline( renderer::Extent2D const & size
@@ -106,51 +106,42 @@ namespace castor3d
 		}
 
 		// Initialise the vertex layout.
-		m_vertexLayout = renderer::makeLayout< TexturedQuad >( 0u );
-		m_vertexLayout->createAttribute( 0u, renderer::Format::eR32G32_SFLOAT, offsetof( TexturedQuad::Vertex, position ) );
-		m_vertexLayout->createAttribute( 0u, renderer::Format::eR32G32_SFLOAT, offsetof( TexturedQuad::Vertex, texture ) );
+		auto vertexLayout = renderer::makeLayout< TexturedQuad >( 0u );
+		vertexLayout->createAttribute( 0u, renderer::Format::eR32G32_SFLOAT, offsetof( TexturedQuad::Vertex, position ) );
+		vertexLayout->createAttribute( 0u, renderer::Format::eR32G32_SFLOAT, offsetof( TexturedQuad::Vertex, texture ) );
 
 		// Initialise the descriptor set.
 		auto textureBindingPoint = uint32_t( bindings.size() );
 		bindings.emplace_back( textureBindingPoint
 			, renderer::DescriptorType::eCombinedImageSampler
 			, renderer::ShaderStageFlag::eFragment );
-		m_descriptorLayout = device.createDescriptorSetLayout( std::move( bindings ) );
-		m_descriptorPool = m_descriptorLayout->createPool( 1u );
-		m_descriptorSet = m_descriptorPool->createDescriptorSet();
-		doFillDescriptorSet( *m_descriptorLayout, *m_descriptorSet );
-		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( textureBindingPoint )
+		m_descriptorSetLayout = device.createDescriptorSetLayout( std::move( bindings ) );
+		m_pipelineLayout = device.createPipelineLayout( { *m_descriptorSetLayout }, pushRanges );
+		m_descriptorSetPool = m_descriptorSetLayout->createPool( 1u );
+		m_descriptorSet = m_descriptorSetPool->createDescriptorSet();
+		doFillDescriptorSet( *m_descriptorSetLayout, *m_descriptorSet );
+		m_descriptorSet->createBinding( m_descriptorSetLayout->getBinding( textureBindingPoint )
 			, view
 			, m_sampler->getSampler() );
 		m_descriptorSet->update();
 
 		// Initialise the pipeline.
 		auto bdState = renderer::ColourBlendState::createDefault();
-		m_pipeline = std::make_unique< RenderPipeline >( m_renderSystem
-			, renderer::DepthStencilState{ 0u, false, false }
-			, renderer::RasterisationState{}
-			, std::move( bdState )
-			, renderer::MultisampleState{}
-			, program
-			, PipelineFlags{} );
-		m_pipeline->setPushConstantRanges( pushRanges );
-		m_pipeline->setDescriptorSetLayouts( { *m_descriptorLayout } );
-		m_pipeline->setVertexLayouts( { *m_vertexLayout } );
-		m_pipeline->setViewport( renderer::Viewport
+		m_pipeline = m_pipelineLayout->createPipeline( 
 		{
-			size.width,
-			size.height,
-			position.x(),
-			position.y(),
+			program,
+			renderPass,
+			renderer::VertexInputState::create( *vertexLayout ),
+			renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleStrip },
+			renderer::RasterisationState{},
+			renderer::MultisampleState{},
+			std::move( bdState ),
+			{},
+			renderer::DepthStencilState{ 0u, false, false },
+			std::nullopt,
+			renderer::Viewport{ size.width, size.height, position.x(), position.y() },
+			renderer::Scissor{ position.x(), position.y(), size.width, size.height }
 		} );
-		m_pipeline->setScissor( renderer::Scissor
-		{
-			position.x(),
-			position.y(),
-			size.width,
-			size.height,
-		} );
-		m_pipeline->initialise( renderPass, renderer::PrimitiveTopology::eTriangleStrip );
 	}
 
 	void RenderQuad::prepareFrame()
@@ -160,11 +151,11 @@ namespace castor3d
 		registerFrame( *m_commandBuffer );
 	}
 
-	void RenderQuad::registerFrame( renderer::CommandBuffer & commandBuffer )
+	void RenderQuad::registerFrame( renderer::CommandBuffer & commandBuffer )const
 	{
-		commandBuffer.bindPipeline( m_pipeline->getPipeline() );
+		commandBuffer.bindPipeline( *m_pipeline );
 		commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-		commandBuffer.bindDescriptorSet( *m_descriptorSet, m_pipeline->getPipelineLayout() );
+		commandBuffer.bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
 		doRegisterFrame( commandBuffer );
 		commandBuffer.draw( 4u );
 	}
@@ -174,7 +165,7 @@ namespace castor3d
 	{
 	}
 
-	void RenderQuad::doRegisterFrame( renderer::CommandBuffer & commandBuffer )
+	void RenderQuad::doRegisterFrame( renderer::CommandBuffer & commandBuffer )const
 	{
 	}
 }

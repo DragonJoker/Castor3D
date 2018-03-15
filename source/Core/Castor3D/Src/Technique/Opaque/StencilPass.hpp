@@ -6,6 +6,14 @@ See LICENSE file in root folder
 
 #include "LightPass.hpp"
 
+#include <Command/CommandBuffer.hpp>
+#include <Descriptor/DescriptorSet.hpp>
+#include <Descriptor/DescriptorSetLayout.hpp>
+#include <Descriptor/DescriptorSetPool.hpp>
+#include <Pipeline/Pipeline.hpp>
+#include <Pipeline/PipelineLayout.hpp>
+#include <Sync/Semaphore.hpp>
+
 namespace castor3d
 {
 	/*!
@@ -34,8 +42,8 @@ namespace castor3d
 		 *\param[in]	matrixUbo		L'UBO des matrices.
 		 *\param[in]	modelMatrixUbo	L'UBO des matrices modèle.
 		 */
-		StencilPass( FrameBuffer & frameBuffer
-			, FrameBufferAttachment & depthAttach
+		StencilPass( Engine const & engine
+			, renderer::TextureView const & depthView
 			, MatrixUbo & matrixUbo
 			, ModelMatrixUbo & modelMatrixUbo );
 		/**
@@ -46,7 +54,8 @@ namespace castor3d
 		 *\brief		Initialise le programme et son pipeline.
 		 *\param[in]	vbo	Le tampon de sommets contenant l'objet à dessiner.
 		 */
-		void initialise( VertexBuffer & vbo );
+		void initialise( renderer::VertexLayout const & vertexLayout
+			, renderer::VertexBufferBase & vbo );
 		/**
 		*\~english
 		*\brief		Cleans up the program and its pipeline.
@@ -57,38 +66,41 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders the stencil pass.
-		 *\param[in]	count	The number of primitives to draw.
 		 *\~french
 		 *\brief		Dessine la passe de stencil.
-		 *\param[in]	count	Le nombre de primitives à dessiner.
 		 */
-		void render( uint32_t count );
+		void render( renderer::Semaphore const & toWait );
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		inline renderer::Semaphore const & getSemaphore()const
+		{
+			REQUIRE( m_finished );
+			return *m_finished;
+		}
+		/**@}*/
 
 	private:
-		//!\~english	The target FBO.
-		//!\~french		Le FBO cible.
-		FrameBuffer & m_frameBuffer;
-		//!\~english	The target RBO attach.
-		//!\~french		L'attache de RBO cible.
-		FrameBufferAttachment & m_depthAttach;
-		//!\~english	The uniform buffer containing matrices data.
-		//!\~french		Le tampon d'uniformes contenant les données de matrices.
+		Engine const & m_engine;
+		renderer::TextureView const & m_depthView;
 		MatrixUbo & m_matrixUbo;
-		//!\~english	The uniform buffer containing the model data.
-		//!\~french		Le tampon d'uniformes contenant les données de modèle.
 		ModelMatrixUbo & m_modelMatrixUbo;
-		//!\~english	The shader program used to render lights.
-		//!\~french		Le shader utilisé pour rendre les lumières.
-		ShaderProgramSPtr m_program;
-		//!\~english	Geometry buffers holder.
-		//!\~french		Conteneur de buffers de géométries.
-		GeometryBuffersSPtr m_geometryBuffers;
-		//!\~english	The pipeline used by the light pass.
-		//!\~french		Le pipeline utilisé par la passe lumières.
-		RenderPipelineUPtr m_pipeline;
-		//!\~english	The vertex buffer used to render the pass.
-		//!\~french		Le tampon de sommets utilisé par le rendu de la passe.
-		VertexBuffer const * m_vbo{ nullptr };
+		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
+		renderer::DescriptorSetPoolPtr m_descriptorPool;
+		renderer::DescriptorSetPtr m_descriptorSet;
+		renderer::RenderPassPtr m_renderPass;
+		renderer::FrameBufferPtr m_frameBuffer;
+		renderer::PipelineLayoutPtr m_pipelineLayout;
+		renderer::PipelinePtr m_pipeline;
+		renderer::VertexBufferBase const * m_vbo{ nullptr };
+		renderer::CommandBufferPtr m_commandBuffer;
+		renderer::SemaphorePtr m_finished;
 	};
 }
 

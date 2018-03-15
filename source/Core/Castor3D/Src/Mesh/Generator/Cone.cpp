@@ -110,22 +110,22 @@ namespace castor3d
 			indexMappingBase->computeNormals( true );
 			indexMappingSide->computeNormals( true );
 
-			auto normal0Top = submeshSide[0].m_nml;
-			auto normal0Base = submeshSide[1].m_nml;
-			auto tangent0Top = submeshSide[0].m_tan;
-			auto tangent0Base = submeshSide[1].m_tan;
-			normal0Top += submeshSide[submeshSide.getPointsCount() - 2].m_nml;
-			normal0Base += submeshSide[submeshSide.getPointsCount() - 1].m_nml;
-			tangent0Top += submeshSide[submeshSide.getPointsCount() - 2].m_tan;
-			tangent0Base += submeshSide[submeshSide.getPointsCount() - 1].m_tan;
+			auto normal0Top = submeshSide[0].nml;
+			auto normal0Base = submeshSide[1].nml;
+			auto tangent0Top = submeshSide[0].tan;
+			auto tangent0Base = submeshSide[1].tan;
+			normal0Top += submeshSide[submeshSide.getPointsCount() - 2].nml;
+			normal0Base += submeshSide[submeshSide.getPointsCount() - 1].nml;
+			tangent0Top += submeshSide[submeshSide.getPointsCount() - 2].tan;
+			tangent0Base += submeshSide[submeshSide.getPointsCount() - 1].tan;
 			point::normalise( normal0Top );
 			point::normalise( normal0Base );
 			point::normalise( tangent0Top );
 			point::normalise( tangent0Base );
-			submeshSide[submeshSide.getPointsCount() - 2].m_nml = normal0Top;
-			submeshSide[submeshSide.getPointsCount() - 1].m_nml = normal0Base;
-			submeshSide[submeshSide.getPointsCount() - 2].m_tan = tangent0Top;
-			submeshSide[submeshSide.getPointsCount() - 1].m_tan = tangent0Base;
+			submeshSide[submeshSide.getPointsCount() - 2].nml = normal0Top;
+			submeshSide[submeshSide.getPointsCount() - 1].nml = normal0Base;
+			submeshSide[submeshSide.getPointsCount() - 2].tan = tangent0Top;
+			submeshSide[submeshSide.getPointsCount() - 1].tan = tangent0Base;
 		}
 	}
 }

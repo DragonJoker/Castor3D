@@ -66,9 +66,11 @@ namespace castor3d
 	{
 		renderer::BufferCRefArray vbo;
 		renderer::UInt64Array vboOffsets;
+		uint32_t vtxCount;
 		renderer::VertexLayoutCRefArray layouts;
 		renderer::BufferBase const * ibo{ nullptr };
 		uint64_t iboOffset;
+		uint32_t idxCount;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -121,8 +123,8 @@ namespace castor3d
 	*/
 	struct PipelineFlags
 	{
-		BlendMode m_colourBlendMode;
-		BlendMode m_alphaBlendMode;
+		BlendMode colourBlendMode;
+		BlendMode alphaBlendMode;
 		PassFlags m_passFlags;
 		TextureChannels m_textureFlags;
 		ProgramFlags m_programFlags;

@@ -53,13 +53,17 @@ namespace castor3d
 		std::vector< TextureViewUPtr > createSubviews( TextureLayout & layout
 			, renderer::ImageCreateInfo const & info )
 		{
+			renderer::ImageViewCreateInfo view{};
+			view.format = info.format;
+			view.viewType = getSubviewType( info.imageType, info );
+			view.subresourceRange.aspectMask = renderer::getAspectMask( info.format );
+			view.subresourceRange.baseArrayLayer = 0u;
+			view.subresourceRange.layerCount = info.arrayLayers;
+			view.subresourceRange.baseMipLevel = 0u;
+			view.subresourceRange.levelCount = info.mipLevels;
 			std::vector< TextureViewUPtr > result{ info.arrayLayers + 1u };
 			result[0] = std::make_unique< TextureView >( layout
-				, info.imageType
-				, 0u
-				, layout.getMipmapCount()
-				, 0u
-				, ~( 0u )
+				, view
 				, 0u );
 			return result;
 		}
@@ -80,14 +84,19 @@ namespace castor3d
 
 		if ( uint32_t( viewType ) != uint32_t( m_info.imageType ) )
 		{
+			renderer::ImageViewCreateInfo view{};
+			view.format = m_info.format;
+			view.viewType = viewType;
+			view.subresourceRange.aspectMask = renderer::getAspectMask( m_info.format );
+			view.subresourceRange.layerCount = 1u;
+			view.subresourceRange.baseMipLevel = 0u;
+			view.subresourceRange.levelCount = m_info.mipLevels;
+
 			for ( uint32_t i = 1u; i < m_views.size(); ++i )
 			{
+				view.subresourceRange.baseArrayLayer = i;
 				m_views[i] = std::make_unique< TextureView >( *this
-					, viewType
-					, 0u
-					, ~( 0u )
-					, i
-					, 1u
+					, view
 					, i );
 			}
 		}

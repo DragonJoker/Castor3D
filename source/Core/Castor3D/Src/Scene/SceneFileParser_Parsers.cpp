@@ -2516,21 +2516,21 @@ namespace castor3d
 
 			for ( auto & vertex : vertices )
 			{
-				std::memcpy( vertex.m_pos.ptr(), &parsingContext->vertexPos[index], sizeof( vertex.m_pos ) );
+				std::memcpy( vertex.pos.ptr(), &parsingContext->vertexPos[index], sizeof( vertex.pos ) );
 
 				if ( !parsingContext->vertexNml.empty() )
 				{
-					std::memcpy( vertex.m_nml.ptr(), &parsingContext->vertexNml[index], sizeof( vertex.m_nml ) );
+					std::memcpy( vertex.nml.ptr(), &parsingContext->vertexNml[index], sizeof( vertex.nml ) );
 				}
 
 				if ( !parsingContext->vertexTan.empty() )
 				{
-					std::memcpy( vertex.m_tan.ptr(), &parsingContext->vertexTan[index], sizeof( vertex.m_tan ) );
+					std::memcpy( vertex.tan.ptr(), &parsingContext->vertexTan[index], sizeof( vertex.tan ) );
 				}
 
 				if ( !parsingContext->vertexTex.empty() )
 				{
-					std::memcpy( vertex.m_tex.ptr(), &parsingContext->vertexTex[index], sizeof( vertex.m_tex ) );
+					std::memcpy( vertex.tex.ptr(), &parsingContext->vertexTex[index], sizeof( vertex.tex ) );
 				}
 
 				index += 3;
@@ -3938,7 +3938,7 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserCameraViewport )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->viewport = std::make_shared< Viewport >( *parsingContext->m_pParser->getEngine() );
+		parsingContext->viewport = std::make_shared< Viewport >();
 		parsingContext->viewport->setPerspective( Angle::fromDegrees( 0 ), 1, 0, 1 );
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eViewport )

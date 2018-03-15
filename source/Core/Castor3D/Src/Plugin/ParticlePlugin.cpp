@@ -6,8 +6,8 @@ using namespace castor;
 
 namespace castor3d
 {
-	ParticlePlugin::ParticlePlugin( DynamicLibrarySPtr p_library, Engine * engine )
-		: Plugin( PluginType::eParticle, p_library, *engine )
+	ParticlePlugin::ParticlePlugin( DynamicLibrarySPtr library, Engine * engine )
+		: Plugin( PluginType::eParticle, library, *engine )
 	{
 		load();
 	}

@@ -51,52 +51,52 @@ void Icosahedron::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 	real X = m_radius / sqrt( phi * sqrt( 5.0f ) );
 	real Z = X * phi;
 	vertex = Point3r( -X,  0,  Z );
-	memcpy( vertices[index].m_pos.ptr(), vertex.ptr(), 3 * sizeof( real ) );
-	memcpy( vertices[index].m_nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( real ) );
+	memcpy( vertices[index].pos.ptr(), vertex.ptr(), 3 * sizeof( real ) );
+	memcpy( vertices[index].nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( real ) );
 	++index;
 	vertex = Point3r( X,  0,  Z );
-	memcpy( vertices[index].m_pos.ptr(), vertex.ptr(), 3 * sizeof( real ) );
-	memcpy( vertices[index].m_nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( real ) );
+	memcpy( vertices[index].pos.ptr(), vertex.ptr(), 3 * sizeof( real ) );
+	memcpy( vertices[index].nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( real ) );
 	++index;
 	vertex = Point3r( -X,  0, -Z );
-	memcpy( vertices[index].m_pos.ptr(), vertex.ptr(), 3 * sizeof( real ) );
-	memcpy( vertices[index].m_nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( real ) );
+	memcpy( vertices[index].pos.ptr(), vertex.ptr(), 3 * sizeof( real ) );
+	memcpy( vertices[index].nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( real ) );
 	++index;
 	vertex = Point3r( X,  0, -Z );
-	memcpy( vertices[index].m_pos.ptr(), vertex.ptr(), 3 * sizeof( real ) );
-	memcpy( vertices[index].m_nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( real ) );
+	memcpy( vertices[index].pos.ptr(), vertex.ptr(), 3 * sizeof( real ) );
+	memcpy( vertices[index].nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( real ) );
 	++index;
 	vertex = Point3r( 0,  Z,  X );
-	memcpy( vertices[index].m_pos.ptr(), vertex.ptr(), 3 * sizeof( real ) );
-	memcpy( vertices[index].m_nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( real ) );
+	memcpy( vertices[index].pos.ptr(), vertex.ptr(), 3 * sizeof( real ) );
+	memcpy( vertices[index].nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( real ) );
 	++index;
 	vertex = Point3r( 0,  Z, -X );
-	memcpy( vertices[index].m_pos.ptr(), vertex.ptr(), 3 * sizeof( real ) );
-	memcpy( vertices[index].m_nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( real ) );
+	memcpy( vertices[index].pos.ptr(), vertex.ptr(), 3 * sizeof( real ) );
+	memcpy( vertices[index].nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( real ) );
 	++index;
 	vertex = Point3r( 0, -Z,  X );
-	memcpy( vertices[index].m_pos.ptr(), vertex.ptr(), 3 * sizeof( real ) );
-	memcpy( vertices[index].m_nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( real ) );
+	memcpy( vertices[index].pos.ptr(), vertex.ptr(), 3 * sizeof( real ) );
+	memcpy( vertices[index].nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( real ) );
 	++index;
 	vertex = Point3r( 0, -Z, -X );
-	memcpy( vertices[index].m_pos.ptr(), vertex.ptr(), 3 * sizeof( real ) );
-	memcpy( vertices[index].m_nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( real ) );
+	memcpy( vertices[index].pos.ptr(), vertex.ptr(), 3 * sizeof( real ) );
+	memcpy( vertices[index].nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( real ) );
 	++index;
 	vertex = Point3r( Z,  X,  0 );
-	memcpy( vertices[index].m_pos.ptr(), vertex.ptr(), 3 * sizeof( real ) );
-	memcpy( vertices[index].m_nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( real ) );
+	memcpy( vertices[index].pos.ptr(), vertex.ptr(), 3 * sizeof( real ) );
+	memcpy( vertices[index].nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( real ) );
 	++index;
 	vertex = Point3r( -Z,  X,  0 );
-	memcpy( vertices[index].m_pos.ptr(), vertex.ptr(), 3 * sizeof( real ) );
-	memcpy( vertices[index].m_nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( real ) );
+	memcpy( vertices[index].pos.ptr(), vertex.ptr(), 3 * sizeof( real ) );
+	memcpy( vertices[index].nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( real ) );
 	++index;
 	vertex = Point3r( Z, -X,  0 );
-	memcpy( vertices[index].m_pos.ptr(), vertex.ptr(), 3 * sizeof( real ) );
-	memcpy( vertices[index].m_nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( real ) );
+	memcpy( vertices[index].pos.ptr(), vertex.ptr(), 3 * sizeof( real ) );
+	memcpy( vertices[index].nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( real ) );
 	++index;
 	vertex = Point3r( -Z, -X,  0 );
-	memcpy( vertices[index].m_pos.ptr(), vertex.ptr(), 3 * sizeof( real ) );
-	memcpy( vertices[index].m_nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( real ) );
+	memcpy( vertices[index].pos.ptr(), vertex.ptr(), 3 * sizeof( real ) );
+	memcpy( vertices[index].nml.ptr(), point::getNormalised( vertex ).ptr(), 3 * sizeof( real ) );
 	submesh->addPoints( vertices );
 
 	// on construit toutes les faces de l'icosaèdre
@@ -128,24 +128,24 @@ void Icosahedron::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 
 	for ( auto const & face : faces )
 	{
-		auto posA = submesh->getPoint( face[0] ).m_pos;
-		auto posB = submesh->getPoint( face[1] ).m_pos;
-		auto posC = submesh->getPoint( face[2] ).m_pos;
+		auto posA = submesh->getPoint( face[0] ).pos;
+		auto posB = submesh->getPoint( face[1] ).pos;
+		auto posC = submesh->getPoint( face[2] ).pos;
 		real u = real( 0.5 ) * ( real( 1.0 ) + real( atan2( posA[2], posA[0] ) * ( 1 / Angle::Pi ) ) );
 		real v = real( acos( posA[1] ) * ( 1 / Angle::Pi ) );
-		submesh->getPoint( face[0] ).m_tex = Point3f{ u, v, 0 };
+		submesh->getPoint( face[0] ).tex = Point3f{ u, v, 0 };
 		u = real( 0.5 ) * ( real( 1.0 ) + real( atan2( posB[2], posB[0] ) * ( 1 / Angle::Pi ) ) );
 		v = real( acos( posB[1] ) * ( 1 / Angle::Pi ) );
-		submesh->getPoint( face[1] ).m_tex = Point3f{ u, v, 0 };
+		submesh->getPoint( face[1] ).tex = Point3f{ u, v, 0 };
 		u = real( 0.5 ) * ( real( 1.0 ) + real( atan2( posC[2], posC[0] ) * ( 1 / Angle::Pi ) ) );
 		v = real( acos( posC[1] ) * ( 1 / Angle::Pi ) );
-		submesh->getPoint( face[2] ).m_tex = Point3f{ u, v, 0 };
+		submesh->getPoint( face[2] ).tex = Point3f{ u, v, 0 };
 	}
 
 	for ( auto & vertex : submesh->getPoints() )
 	{
-		SphericalVertex vsVertex1( vertex.m_nml );
-		vertex.m_tex = Point3f{ vsVertex1.m_phi, vsVertex1.m_theta, 0 };
+		SphericalVertex vsVertex1( vertex.nml );
+		vertex.tex = Point3f{ vsVertex1.m_phi, vsVertex1.m_theta, 0 };
 	}
 
 	indexMapping->computeTangentsFromNormals();

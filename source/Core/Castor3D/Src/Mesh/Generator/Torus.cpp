@@ -25,35 +25,35 @@ MeshGeneratorSPtr Torus::create()
 	return std::make_shared< Torus >();
 }
 
-void Torus::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
+void Torus::doGenerate( Mesh & mesh, Parameters const & parameters )
 {
 	String param;
 
-	if ( p_parameters.get( cuT( "inner_size" ), param ) )
+	if ( parameters.get( cuT( "inner_size" ), param ) )
 	{
 		m_internalRadius = string::toFloat( param );
 	}
 
-	if ( p_parameters.get( cuT( "outer_size" ), param ) )
+	if ( parameters.get( cuT( "outer_size" ), param ) )
 	{
 		m_externalRadius = string::toFloat( param );
 	}
 
-	if ( p_parameters.get( cuT( "inner_count" ), param ) )
+	if ( parameters.get( cuT( "inner_count" ), param ) )
 	{
 		m_internalNbFaces = string::toUInt( param );
 	}
 
-	if ( p_parameters.get( cuT( "outer_count" ), param ) )
+	if ( parameters.get( cuT( "outer_count" ), param ) )
 	{
 		m_externalNbFaces = string::toUInt( param );
 	}
 
-	p_mesh.cleanup();
+	mesh.cleanup();
 
 	if ( m_internalNbFaces >= 3 && m_externalNbFaces >= 3 )
 	{
-		Submesh & submesh = *( p_mesh.createSubmesh() );
+		Submesh & submesh = *( mesh.createSubmesh() );
 		uint32_t uiCur = 0;
 		uint32_t uiPrv = 0;
 		uint32_t uiPCr = 0;
@@ -88,9 +88,9 @@ void Torus::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 			for ( uint32_t j = 0; j <= uiIntMax; j++ )
 			{
 				auto & vertex = submesh[j];
-				vertex = submesh.addPoint( vertex.m_pos[0] * cos( rAngleEx ), vertex.m_pos[1], vertex.m_pos[0] * sin( rAngleEx ) );
-				vertex.m_tex = Point3r{ real( i ) / m_externalNbFaces, real( j ) / m_internalNbFaces };
-				vertex.m_nml = point::getNormalised( Point3r( real( vertex.m_nml[0] * cos( rAngleEx ) ), real( vertex.m_nml[1] ), real( vertex.m_nml[0] * sin( rAngleEx ) ) ) );
+				vertex = submesh.addPoint( vertex.pos[0] * cos( rAngleEx ), vertex.pos[1], vertex.pos[0] * sin( rAngleEx ) );
+				vertex.tex = Point3r{ real( i ) / m_externalNbFaces, real( j ) / m_internalNbFaces };
+				vertex.nml = point::getNormalised( Point3r( real( vertex.nml[0] * cos( rAngleEx ) ), real( vertex.nml[1] ), real( vertex.nml[0] * sin( rAngleEx ) ) ) );
 			}
 
 			for ( uint32_t j = 0; j <= uiIntMax - 1; j++ )
@@ -126,5 +126,5 @@ void Torus::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 		submesh.setIndexMapping( indexMapping );
 	}
 
-	p_mesh.computeContainers();
+	mesh.computeContainers();
 }

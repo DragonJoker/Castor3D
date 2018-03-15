@@ -123,7 +123,7 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		static uint32_t constexpr BindingPoint = 1u;
+		static uint32_t constexpr BindingPoint = 2u;
 		C3D_API static castor::String const BufferMatrix;
 		C3D_API static castor::String const Projection;
 		C3D_API static castor::String const CurView;

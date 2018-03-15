@@ -20,7 +20,7 @@ namespace castor3d
 		static InterleavedVertexT createP( castor::Point3< T > const & pos )
 		{
 			InterleavedVertexT result;
-			result.m_pos = pos;
+			result.pos = pos;
 			return result;
 		}
 
@@ -28,8 +28,8 @@ namespace castor3d
 			, castor::Point3< T > const & nml )
 		{
 			InterleavedVertexT result;
-			result.m_pos = pos;
-			result.m_nml = nml;
+			result.pos = pos;
+			result.nml = nml;
 			return result;
 		}
 
@@ -37,8 +37,8 @@ namespace castor3d
 			, castor::Point3< T > const & tex )
 		{
 			InterleavedVertexT result;
-			result.m_pos = pos;
-			result.m_tex = tex;
+			result.pos = pos;
+			result.tex = tex;
 			return result;
 		}
 
@@ -46,8 +46,8 @@ namespace castor3d
 			, castor::Point2< T > const & tex )
 		{
 			InterleavedVertexT result;
-			result.m_pos = pos;
-			result.m_tex = Point3< T >{ tex };
+			result.pos = pos;
+			result.tex = Point3< T >{ tex };
 			return result;
 		}
 
@@ -56,9 +56,9 @@ namespace castor3d
 			, castor::Point3< T > const & tex )
 		{
 			InterleavedVertexT result;
-			result.m_pos = pos;
-			result.m_nml = nml;
-			result.m_tex = tex;
+			result.pos = pos;
+			result.nml = nml;
+			result.tex = tex;
 			return result;
 		}
 
@@ -67,27 +67,27 @@ namespace castor3d
 			, castor::Point2< T > const & tex )
 		{
 			InterleavedVertexT result;
-			result.m_pos = pos;
-			result.m_nml = nml;
-			result.m_tex = Point3< T >{ tex };
+			result.pos = pos;
+			result.nml = nml;
+			result.tex = Point3< T >{ tex };
 			return result;
 		}
 
 		//!\~english	The vertex coordinates.
 		//!\~french		La position du sommet.
-		castor::Point3< T > m_pos;
+		castor::Point3< T > pos;
 		//!\~english	The vertex normal.
 		//!\~french		La normale du sommet.
-		castor::Point3< T > m_nml;
+		castor::Point3< T > nml;
 		//!\~english	The vertex tangent.
 		//!\~french		La tangente du sommet.
-		castor::Point3< T > m_tan;
+		castor::Point3< T > tan;
 		//!\~english	The vertex bitangent.
 		//!\~french		La bitangente du sommet.
-		castor::Point3< T > m_bin;
+		castor::Point3< T > bin;
 		//!\~english	The vertex texture coordinates.
 		//!\~french		La coordonnées de texture du sommet.
-		castor::Point3< T > m_tex;
+		castor::Point3< T > tex;
 	};
 
 	template< typename T >

@@ -1,7 +1,6 @@
 #include "ShadowMapPass.hpp"
 
 #include "Mesh/Submesh.hpp"
-#include "Buffer/GeometryBuffers.hpp"
 #include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/BillboardList.hpp"
@@ -30,23 +29,23 @@ namespace castor3d
 
 	void ShadowMapPass::startTimer( renderer::CommandBuffer const & commandBuffer )
 	{
-		m_timer->start( commandBuffer );
+		m_timer->start();
 	}
 
 	void ShadowMapPass::stopTimer( renderer::CommandBuffer const & commandBuffer )
 	{
-		m_timer->stop( commandBuffer );
+		m_timer->stop();
 	}
 
-	void ShadowMapPass::doRenderNodes( SceneRenderNodes & nodes
+	void ShadowMapPass::doUpdateNodes( SceneRenderNodes & nodes
 		, Camera const & camera )
 	{
-		RenderPass::doUpdate( nodes.m_instantiatedStaticNodes.m_backCulled, camera );
-		RenderPass::doUpdate( nodes.m_staticNodes.m_backCulled, camera );
-		RenderPass::doUpdate( nodes.m_skinnedNodes.m_backCulled, camera );
-		RenderPass::doUpdate( nodes.m_instantiatedSkinnedNodes.m_backCulled, camera );
-		RenderPass::doUpdate( nodes.m_morphingNodes.m_backCulled, camera );
-		RenderPass::doUpdate( nodes.m_billboardNodes.m_backCulled, camera );
+		RenderPass::doUpdate( nodes.instancedStaticNodes.backCulled, camera );
+		RenderPass::doUpdate( nodes.staticNodes.backCulled, camera );
+		RenderPass::doUpdate( nodes.skinnedNodes.backCulled, camera );
+		RenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, camera );
+		RenderPass::doUpdate( nodes.morphingNodes.backCulled, camera );
+		RenderPass::doUpdate( nodes.billboardNodes.backCulled, camera );
 	}
 
 	void ShadowMapPass::doUpdateFlags( PassFlags & passFlags
@@ -60,52 +59,33 @@ namespace castor3d
 			, sceneFlags );
 	}
 
-	void ShadowMapPass::doPreparePipeline( ShaderProgram & program
+	void ShadowMapPass::doPreparePipeline( renderer::ShaderStageStateArray & program
 		, PipelineFlags const & flags )
 	{
 		if ( m_backPipelines.find( flags ) == m_backPipelines.end() )
 		{
-			RasteriserState rsState;
-			rsState.setCulledFaces( Culling::eNone );
-			DepthStencilState dsState;
-			dsState.setDepthTest( true );
+			renderer::RasterisationState rsState;
+			rsState.cullMode = renderer::CullModeFlag::eNone;
+			renderer::DepthStencilState dsState;
+			auto blState = renderer::ColourBlendState::createDefault();
 			auto & pipeline = *m_backPipelines.emplace( flags
-				, getEngine()->getRenderSystem()->createRenderPipeline( std::move( dsState )
+				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
+					, std::move( dsState )
 					, std::move( rsState )
-					, BlendState{}
-					, MultisampleState{}
+					, std::move( blState )
+					, renderer::MultisampleState{}
 					, program
 					, flags ) ).first->second;
 
 			getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
 				, [this, &pipeline, flags]()
 				{
-					pipeline.addUniformBuffer( m_matrixUbo.getUbo() );
-					pipeline.addUniformBuffer( m_modelUbo.getUbo() );
-					pipeline.addUniformBuffer( m_modelMatrixUbo.getUbo() );
-
-					if ( checkFlag( flags.m_programFlags, ProgramFlag::eBillboards ) )
-					{
-						pipeline.addUniformBuffer( m_billboardUbo.getUbo() );
-					}
-
-					if ( checkFlag( flags.m_programFlags, ProgramFlag::eSkinning )
-						&& !checkFlag( flags.m_programFlags, ProgramFlag::eInstantiation ) )
-					{
-						pipeline.addUniformBuffer( m_skinningUbo.getUbo() );
-					}
-
-					if ( checkFlag( flags.m_programFlags, ProgramFlag::eMorphing ) )
-					{
-						pipeline.addUniformBuffer( m_morphingUbo.getUbo() );
-					}
-
 					m_initialised = true;
 				} ) );
 		}
 	}
 
-	void ShadowMapPass::doUpdatePipeline( RenderPipeline & p_pipeline )const
+	void ShadowMapPass::doUpdatePipeline( RenderPipeline & pipeline )const
 	{
 	}
 

@@ -1,7 +1,7 @@
 #include "RenderPass.hpp"
 
+#include "Castor3DPrerequisites.hpp"
 #include "Engine.hpp"
-
 #include "Material/Pass.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPassTimer.hpp"
@@ -12,7 +12,7 @@
 #include "Scene/Geometry.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/SceneNode.hpp"
-#include "Castor3DPrerequisites.hpp"
+#include "Shader/PassBuffer/PassBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
 
@@ -34,11 +34,11 @@ namespace castor3d
 			, MapType & nodes
 			, FuncType function )
 		{
-			for ( auto itPipelines : nodes )
+			for ( auto & itPipelines : nodes )
 			{
-				for ( auto itPass : itPipelines.second )
+				for ( auto & itPass : itPipelines.second )
 				{
-					for ( auto itSubmeshes : itPass.second )
+					for ( auto & itSubmeshes : itPass.second )
 					{
 						function( *itPipelines.first
 							, *itPass.first
@@ -57,11 +57,11 @@ namespace castor3d
 			, ShadowMapLightTypeArray & shadowMaps
 			, FuncType function )
 		{
-			for ( auto itPipelines : nodes )
+			for ( auto & itPipelines : nodes )
 			{
-				for ( auto itPass : itPipelines.second )
+				for ( auto & itPass : itPipelines.second )
 				{
-					for ( auto itSubmeshes : itPass.second )
+					for ( auto & itSubmeshes : itPass.second )
 					{
 						function( *itPipelines.first
 							, *itPass.first
@@ -79,13 +79,13 @@ namespace castor3d
 			, MapType & nodes
 			, FuncType function )
 		{
-			for ( auto itPipelines : nodes )
+			for ( auto & itPipelines : nodes )
 			{
 				pass.updatePipeline( *itPipelines.first );
 
-				for ( auto itPass : itPipelines.second )
+				for ( auto & itPass : itPipelines.second )
 				{
-					for ( auto itSubmeshes : itPass.second )
+					for ( auto & itSubmeshes : itPass.second )
 					{
 						function( *itPipelines.first
 							, *itPass.first
@@ -105,13 +105,13 @@ namespace castor3d
 			, ShadowMapLightTypeArray & shadowMaps
 			, FuncType function )
 		{
-			for ( auto itPipelines : nodes )
+			for ( auto & itPipelines : nodes )
 			{
 				pass.updatePipeline( *itPipelines.first );
 
-				for ( auto itPass : itPipelines.second )
+				for ( auto & itPass : itPipelines.second )
 				{
-					for ( auto itSubmeshes : itPass.second )
+					for ( auto & itSubmeshes : itPass.second )
 					{
 						function( *itPipelines.first
 							, *itPass.first
@@ -127,7 +127,7 @@ namespace castor3d
 		inline void doRenderNonInstanced( RenderPass const & pass
 			, MapType & nodes )
 		{
-			for ( auto itPipelines : nodes )
+			for ( auto & itPipelines : nodes )
 			{
 				for ( auto & renderNode : itPipelines.second )
 				{
@@ -142,7 +142,7 @@ namespace castor3d
 			, Scene & scene
 			, ShadowMapLightTypeArray & shadowMaps )
 		{
-			for ( auto itPipelines : nodes )
+			for ( auto & itPipelines : nodes )
 			{
 				for ( auto & renderNode : itPipelines.second )
 				{
@@ -156,7 +156,7 @@ namespace castor3d
 			, Camera const & camera
 			, MapType & nodes )
 		{
-			for ( auto itPipelines : nodes )
+			for ( auto & itPipelines : nodes )
 			{
 				pass.updatePipeline( *itPipelines.first );
 
@@ -174,7 +174,7 @@ namespace castor3d
 			, Scene & scene
 			, ShadowMapLightTypeArray & shadowMaps )
 		{
-			for ( auto itPipelines : nodes )
+			for ( auto & itPipelines : nodes )
 			{
 				pass.updatePipeline( *itPipelines.first );
 
@@ -193,15 +193,15 @@ namespace castor3d
 			, ShadowMapLightTypeArray & shadowMaps
 			, RenderInfo & info )
 		{
-			for ( auto itPipelines : nodes )
+			for ( auto & itPipelines : nodes )
 			{
 				pass.updatePipeline( *itPipelines.first );
 
 				for ( auto & renderNode : itPipelines.second )
 				{
 					doUpdateNode( renderNode );
-					info.m_visibleFaceCount += details::getPrimitiveCount( renderNode.m_data );
-					info.m_visibleVertexCount += details::getVertexCount( renderNode.m_data );
+					info.m_visibleFaceCount += details::getPrimitiveCount( renderNode.data );
+					info.m_visibleVertexCount += details::getVertexCount( renderNode.data );
 					++info.m_drawCalls;
 					++info.m_visibleObjectsCount;
 				}
@@ -222,8 +222,8 @@ namespace castor3d
 
 			while ( i < count )
 			{
-				std::memcpy( buffer, it->m_sceneNode.getDerivedTransformationMatrix().constPtr(), mtxSize );
-				auto id = it->m_passNode.m_pass.getId() - 1;
+				std::memcpy( buffer, it->sceneNode.getDerivedTransformationMatrix().constPtr(), mtxSize );
+				auto id = it->passNode.pass.getId() - 1;
 				std::memcpy( buffer + mtxSize, &id, sizeof( int ) );
 				buffer += stride;
 				++i;
@@ -248,12 +248,12 @@ namespace castor3d
 
 			while ( i < count )
 			{
-				if ( it->m_sceneNode.isDisplayable()
-					&& it->m_sceneNode.isVisible()
-					&& camera.isVisible( it->m_instance, it->m_data ) )
+				if ( it->sceneNode.isDisplayable()
+					&& it->sceneNode.isVisible()
+					&& camera.isVisible( it->instance, it->data ) )
 				{
-					std::memcpy( buffer, it->m_sceneNode.getDerivedTransformationMatrix().constPtr(), mtxSize );
-					auto id = it->m_passNode.m_pass.getId() - 1;
+					std::memcpy( buffer, it->sceneNode.getDerivedTransformationMatrix().constPtr(), mtxSize );
+					auto id = it->passNode.pass.getId() - 1;
 					std::memcpy( buffer + mtxSize, &id, sizeof( int ) );
 					buffer += stride;
 				}
@@ -615,6 +615,158 @@ namespace castor3d
 			, sceneFlags );
 	}
 
+	void RenderPass::initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		, BillboardRenderNode & node )
+	{
+		auto & layout = descriptorPool.getLayout();
+		uint32_t index = 0u;
+		node.descriptorSet = descriptorPool.createDescriptorSet( 0u );
+		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.descriptorSet
+			, layout.getBinding( index++ ) );
+		node.descriptorSet->createBinding( layout.getBinding( LightBufferIndex )
+			, node.sceneNode.getScene()->getLightCache().getBuffer()
+			, node.sceneNode.getScene()->getLightCache().getView() );
+		node.descriptorSet->createBinding( layout.getBinding( MatrixUbo::BindingPoint )
+			, m_matrixUbo.getUbo() );
+		node.descriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
+			, m_sceneUbo.getUbo() );
+		node.descriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
+			, node.modelMatrixUbo.buffer->getBuffer()
+			, node.modelMatrixUbo.offset
+			, 1u );
+		node.descriptorSet->createBinding( layout.getBinding( ModelUbo::BindingPoint )
+			, node.modelUbo.buffer->getBuffer()
+			, node.modelUbo.offset
+			, 1u );
+		node.descriptorSet->createBinding( layout.getBinding( BillboardUbo::BindingPoint )
+			, node.billboardUbo.buffer->getBuffer()
+			, node.billboardUbo.offset
+			, 1u );
+		doFillDescriptor( layout, index, node );
+		node.passNode.fillDescriptor( layout
+			, index
+			, *node.descriptorSet );
+	}
+
+	void RenderPass::initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		, MorphingRenderNode & node )
+	{
+		auto & layout = descriptorPool.getLayout();
+		uint32_t index = 0u;
+		node.descriptorSet = descriptorPool.createDescriptorSet( 0u );
+		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.descriptorSet
+			, layout.getBinding( index++ ) );
+		node.descriptorSet->createBinding( layout.getBinding( LightBufferIndex )
+			, node.sceneNode.getScene()->getLightCache().getBuffer()
+			, node.sceneNode.getScene()->getLightCache().getView() );
+		node.descriptorSet->createBinding( layout.getBinding( MatrixUbo::BindingPoint )
+			, m_matrixUbo.getUbo() );
+		node.descriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
+			, m_sceneUbo.getUbo() );
+		node.descriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
+			, node.modelMatrixUbo.buffer->getBuffer()
+			, node.modelMatrixUbo.offset
+			, 1u );
+		node.descriptorSet->createBinding( layout.getBinding( ModelUbo::BindingPoint )
+			, node.modelUbo.buffer->getBuffer()
+			, node.modelUbo.offset
+			, 1u );
+		node.descriptorSet->createBinding( layout.getBinding( MorphingUbo::BindingPoint )
+			, node.morphingUbo.buffer->getBuffer()
+			, node.morphingUbo.offset
+			, 1u );
+		doFillDescriptor( layout, index, node );
+		node.passNode.fillDescriptor( layout
+			, index
+			, *node.descriptorSet );
+	}
+
+	void RenderPass::initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		, SkinningRenderNode & node )
+	{
+		auto & layout = descriptorPool.getLayout();
+		uint32_t index = 0u;
+		node.descriptorSet = descriptorPool.createDescriptorSet( 0u );
+		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.descriptorSet
+			, layout.getBinding( index++ ) );
+		node.descriptorSet->createBinding( layout.getBinding( LightBufferIndex )
+			, node.sceneNode.getScene()->getLightCache().getBuffer()
+			, node.sceneNode.getScene()->getLightCache().getView() );
+		node.descriptorSet->createBinding( layout.getBinding( MatrixUbo::BindingPoint )
+			, m_matrixUbo.getUbo() );
+		node.descriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
+			, m_sceneUbo.getUbo() );
+		node.descriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
+			, node.modelMatrixUbo.buffer->getBuffer()
+			, node.modelMatrixUbo.offset
+			, 1u );
+		node.descriptorSet->createBinding( layout.getBinding( ModelUbo::BindingPoint )
+			, node.modelUbo.buffer->getBuffer()
+			, node.modelUbo.offset
+			, 1u );
+		node.descriptorSet->createBinding( layout.getBinding( SkinningUbo::BindingPoint )
+			, node.skinningUbo.buffer->getBuffer()
+			, node.skinningUbo.offset
+			, 1u );
+		doFillDescriptor( layout, index, node );
+		node.passNode.fillDescriptor( layout
+			, index
+			, *node.descriptorSet );
+	}
+
+	void RenderPass::initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		, StaticRenderNode & node )
+	{
+		auto & layout = descriptorPool.getLayout();
+		uint32_t index = 0u;
+		node.descriptorSet = descriptorPool.createDescriptorSet( 0u );
+		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.descriptorSet
+			, layout.getBinding( index++ ) );
+		node.descriptorSet->createBinding( layout.getBinding( LightBufferIndex )
+			, node.sceneNode.getScene()->getLightCache().getBuffer()
+			, node.sceneNode.getScene()->getLightCache().getView() );
+		node.descriptorSet->createBinding( layout.getBinding( MatrixUbo::BindingPoint )
+			, m_matrixUbo.getUbo() );
+		node.descriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
+			, m_sceneUbo.getUbo() );
+		node.descriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
+			, node.modelMatrixUbo.buffer->getBuffer()
+			, node.modelMatrixUbo.offset
+			, 1u );
+		node.descriptorSet->createBinding( layout.getBinding( ModelUbo::BindingPoint )
+			, node.modelUbo.buffer->getBuffer()
+			, node.modelUbo.offset
+			, 1u );
+		doFillDescriptor( layout, index, node );
+		node.passNode.fillDescriptor( layout
+			, index
+			, *node.descriptorSet );
+	}
+
+	void RenderPass::initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		, SubmeshSkinninRenderNodesByPassMap & nodes )
+	{
+		for ( auto & passNodes : nodes )
+		{
+			for ( auto & submeshNodes : passNodes.second )
+			{
+				initialiseDescriptor( descriptorPool, submeshNodes.second[0] );
+			}
+		}
+	}
+
+	void RenderPass::initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		, SubmeshStaticRenderNodesByPassMap & nodes )
+	{
+		for ( auto & passNodes : nodes )
+		{
+			for ( auto & submeshNodes : passNodes.second )
+			{
+				initialiseDescriptor( descriptorPool, submeshNodes.second[0] );
+			}
+		}
+	}
+
 	PassRenderNode RenderPass::doCreatePassRenderNode( Pass & pass
 		, RenderPipeline & pipeline )
 	{
@@ -736,7 +888,7 @@ namespace castor3d
 		while ( i < count )
 		{
 			auto & node = *it;
-			node.m_skeleton.fillBuffer( buffer );
+			node.skeleton.fillBuffer( buffer );
 			buffer += stride;
 			++i;
 			++it;
@@ -1189,6 +1341,42 @@ namespace castor3d
 			, info );
 	}
 
+	renderer::DescriptorSetLayoutBindingArray RenderPass::doCreateUboBindings( PipelineFlags const & flags )const
+	{
+		renderer::DescriptorSetLayoutBindingArray uboBindings;
+
+		if ( !checkFlag( flags.m_programFlags, ProgramFlag::eDepthPass )
+			&& !checkFlag( flags.m_programFlags, ProgramFlag::ePicking )
+			&& !checkFlag( flags.m_programFlags, ProgramFlag::eShadowMapDirectional )
+			&& !checkFlag( flags.m_programFlags, ProgramFlag::eShadowMapPoint )
+			&& !checkFlag( flags.m_programFlags, ProgramFlag::eShadowMapSpot ) )
+		{
+			uboBindings.emplace_back( getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding() );
+		}
+
+		if ( checkFlag( flags.m_programFlags, ProgramFlag::eLighting ) )
+		{
+			uboBindings.emplace_back( LightBufferIndex, renderer::DescriptorType::eUniformTexelBuffer, renderer::ShaderStageFlag::eFragment );
+		}
+
+		uboBindings.emplace_back( MatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+		uboBindings.emplace_back( SceneUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+		uboBindings.emplace_back( ModelMatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+		uboBindings.emplace_back( ModelUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+
+		if ( checkFlag( flags.m_programFlags, ProgramFlag::eSkinning ) )
+		{
+			uboBindings.push_back( SkinningUbo::createLayoutBinding( SkinningUbo::BindingPoint, flags.m_programFlags ) );
+		}
+
+		if ( checkFlag( flags.m_programFlags, ProgramFlag::eMorphing ) )
+		{
+			uboBindings.emplace_back( MorphingUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+		}
+
+		return uboBindings;
+	}
+
 	glsl::Shader RenderPass::doGetVertexShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
@@ -1244,11 +1432,11 @@ namespace castor3d
 		auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
-		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
+		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
 		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
-		SkinningUbo::declare( writer, 0, programFlags );
-		UBO_MORPHING( writer, 0, programFlags );
+		SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, programFlags );
+		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, programFlags );
 
 		// Outputs
 		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" )

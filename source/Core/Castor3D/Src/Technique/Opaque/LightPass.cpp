@@ -1,24 +1,24 @@
 #include "LightPass.hpp"
 
-#include <Engine.hpp>
-#include <Buffer/GeometryBuffers.hpp>
-#include <Render/RenderPipeline.hpp>
-#include <Render/Viewport.hpp>
-#include <Scene/Camera.hpp>
-#include <Scene/Scene.hpp>
-#include <Shader/Ubos/ModelMatrixUbo.hpp>
-#include <Shader/Ubos/SceneUbo.hpp>
-#include <Shader/ShaderProgram.hpp>
-#include <Texture/Sampler.hpp>
-#include <Texture/TextureLayout.hpp>
-#include <Texture/TextureUnit.hpp>
+#include "Engine.hpp"
+#include "Render/RenderPipeline.hpp"
+#include "Render/Viewport.hpp"
+#include "Scene/Camera.hpp"
+#include "Scene/Scene.hpp"
+#include "Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Shader/Ubos/SceneUbo.hpp"
+#include "Texture/Sampler.hpp"
+#include "Texture/TextureLayout.hpp"
+#include "Texture/TextureUnit.hpp"
 
+#include <Image/Texture.hpp>
+#include <Image/TextureView.hpp>
 #include <Pipeline/ColourBlendState.hpp>
 #include <Pipeline/DepthStencilState.hpp>
 #include <Pipeline/MultisampleState.hpp>
 #include <Pipeline/RasterisationState.hpp>
-#include <RenderPass/FrameBuffer.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
+#include <RenderPass/RenderPass.hpp>
 
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
@@ -58,17 +58,17 @@ namespace castor3d
 		return Values[size_t( texture )];
 	}
 
-	PixelFormat getTextureFormat( DsTexture texture )
+	renderer::Format getTextureFormat( DsTexture texture )
 	{
-		static std::array< PixelFormat, size_t( DsTexture::eCount ) > Values
+		static std::array< renderer::Format, size_t( DsTexture::eCount ) > Values
 		{
 			{
-				PixelFormat::eD24S8,
-				PixelFormat::eRGBA32F,
-				PixelFormat::eRGBA16F32F,
-				PixelFormat::eRGBA16F32F,
-				PixelFormat::eRGBA16F32F,
-				PixelFormat::eRGBA16F32F,
+				renderer::Format::eD24_UNORM_S8_UINT,
+				renderer::Format::eR32G32B32A32_SFLOAT,
+				renderer::Format::eR16G16B16A16_SFLOAT,
+				renderer::Format::eR16G16B16A16_SFLOAT,
+				renderer::Format::eR16G16B16A16_SFLOAT,
+				renderer::Format::eR16G16B16A16_SFLOAT,
 			}
 		};
 
@@ -268,13 +268,18 @@ namespace castor3d
 
 	namespace
 	{
-		renderer::ShaderProgram & doCreateProgram( Engine & engine
+		renderer::ShaderStageStateArray doCreateProgram( Engine & engine
 			, glsl::Shader const & vtx
 			, glsl::Shader const & pxl )
 		{
-			auto program = engine.getShaderProgramCache().getNewProgram( false );
-			program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
-			program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
+			auto & device = *engine.getRenderSystem()->getCurrentDevice();
+			renderer::ShaderStageStateArray program
+			{
+				{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
+				{ device.createShaderModule( renderer::ShaderStageFlag::eFragment ) },
+			};
+			program[0].module->loadShader( vtx.getSource() );
+			program[1].module->loadShader( pxl.getSource() );
 			return program;
 		}
 	}
@@ -283,23 +288,17 @@ namespace castor3d
 
 	LightPass::Program::Program( Engine & engine
 		, glsl::Shader const & vtx
-		, glsl::Shader const & pxl )
+		, glsl::Shader const & pxl
+		, bool hasShadows )
 		: m_engine{ engine }
 		, m_program{ ::doCreateProgram( engine, vtx, pxl ) }
+		, m_shadows{ hasShadows }
 	{
-	}
-
-	LightPass::Program::~Program()
-	{
-		m_firstPipeline->cleanup();
-		m_blendPipeline->cleanup();
-		m_firstPipeline.reset();
-		m_blendPipeline.reset();
-		m_geometryBuffers.reset();
 	}
 
 	void LightPass::Program::initialise( renderer::VertexBufferBase & vbo
 		, renderer::VertexLayout const & vertexLayout
+		, renderer::RenderPass const & renderPass
 		, MatrixUbo & matrixUbo
 		, SceneUbo & sceneUbo
 		, GpInfoUbo & gpInfoUbo
@@ -307,30 +306,47 @@ namespace castor3d
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
-		m_geometryBuffers = device.createGeometryBuffers( vbo
-			, 0u
-			, vertexLayout );
-		m_firstPipeline = doCreatePipeline( false );
 
-		m_firstPipeline->addUniformBuffer( matrixUbo.getUbo() );
-		m_firstPipeline->addUniformBuffer( sceneUbo.getUbo() );
-		m_firstPipeline->addUniformBuffer( gpInfoUbo.getUbo() );
-
-		m_blendPipeline = doCreatePipeline( true );
-		m_blendPipeline->addUniformBuffer( matrixUbo.getUbo() );
-		m_blendPipeline->addUniformBuffer( sceneUbo.getUbo() );
-		m_blendPipeline->addUniformBuffer( gpInfoUbo.getUbo() );
+		renderer::DescriptorSetLayoutBindingArray setLayoutBindings
+		{
+			{ MatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment },
+			{ SceneUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment },
+			{ GpInfoUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment },
+		};
 
 		if ( modelMatrixUbo )
 		{
-			m_firstPipeline->addUniformBuffer( modelMatrixUbo->getUbo() );
-			m_blendPipeline->addUniformBuffer( modelMatrixUbo->getUbo() );
+			setLayoutBindings.emplace_back( ModelMatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
 		}
+
+		m_uboDescriptorLayout = device.createDescriptorSetLayout( std::move( setLayoutBindings ) );
+		m_uboDescriptorPool = m_uboDescriptorLayout->createPool( 2u );
+
+		setLayoutBindings = renderer::DescriptorSetLayoutBindingArray
+		{
+			{ 0u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
+			{ 1u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
+			{ 2u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
+			{ 3u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
+			{ 4u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
+			{ 5u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
+		};
+
+		if ( m_shadows )
+		{
+			setLayoutBindings.emplace_back( 6u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		m_textureDescriptorLayout = device.createDescriptorSetLayout( std::move( setLayoutBindings ) );
+		m_textureDescriptorPool = m_textureDescriptorLayout->createPool( 2u );
+
+		m_pipelineLayout = device.createPipelineLayout( { *m_uboDescriptorLayout, *m_textureDescriptorLayout } );
+		m_firstPipeline = doCreatePipeline( vertexLayout, renderPass, false );
+		m_blendPipeline = doCreatePipeline( vertexLayout, renderPass, true );
 	}
 
 	void LightPass::Program::cleanup()
 	{
-		m_geometryBuffers.reset();
 	}
 
 	void LightPass::Program::bind( Light const & light )
@@ -338,58 +354,75 @@ namespace castor3d
 		doBind( light );
 	}
 
-	void LightPass::Program::render( Size const & size
+	void LightPass::Program::render( renderer::CommandBuffer & commandBuffer
 		, uint32_t count
 		, bool first
 		, uint32_t offset )const
 	{
 		if ( first )
 		{
-			m_firstPipeline->apply();
+			commandBuffer.bindPipeline( *m_firstPipeline );
 		}
 		else
 		{
-			m_blendPipeline->apply();
+			commandBuffer.bindPipeline( *m_blendPipeline );
 		}
 
-		m_geometryBuffers->draw( count, offset );
+		commandBuffer.draw( count, offset );
 	}
 
 	//************************************************************************************************
 
 	LightPass::LightPass( Engine & engine
-		, renderer::FrameBuffer & frameBuffer
-		, renderer::TextureView & depthView
+		, renderer::RenderPassPtr && renderPass
+		, renderer::TextureView const & depthView
+		, renderer::TextureView const & diffuseView
+		, renderer::TextureView const & specularView
 		, GpInfoUbo & gpInfoUbo
 		, bool hasShadows )
 		: m_engine{ engine }
+		, m_renderPass{ std::move( renderPass ) }
 		, m_shadows{ hasShadows }
 		, m_matrixUbo{ engine }
-		, m_frameBuffer{ frameBuffer }
-		, m_depthView{ depthView }
 		, m_gpInfoUbo{ gpInfoUbo }
 	{
+		renderer::FrameBufferAttachmentArray attaches
+		{
+			{ *( m_renderPass->getAttachments().begin() + 0u ), depthView },
+			{ *( m_renderPass->getAttachments().begin() + 1u ), diffuseView },
+			{ *( m_renderPass->getAttachments().begin() + 2u ), specularView },
+		};
+		m_frameBuffer = m_renderPass->createFrameBuffer( { depthView.getTexture().getDimensions().width, depthView.getTexture().getDimensions().height }
+			, std::move( attaches ) );
 	}
 
-	void LightPass::render( Size const & size
-		, GeometryPassResult const & gp
-		, Light const & light
-		, Camera const & camera
-		, bool first
-		, ShadowMap * shadowMapOpt )
+	void LightPass::render( bool first
+		, renderer::Semaphore const & toWait
+		, TextureUnit * shadowMapOpt )
 	{
-		doUpdate( size
-			, light
-			, camera );
+		auto & renderSystem = *m_engine.getRenderSystem();
+		auto & device = *renderSystem.getCurrentDevice();
 
-		m_program->bind( light );
-
-		doRender( size
-			, gp
-			, first );
+		if ( first )
+		{
+			device.getGraphicsQueue().submit( *m_firstCommandBuffer
+				, toWait
+				, renderer::PipelineStageFlag::eVertexInput
+				, *m_signalReady
+				, nullptr );
+		}
+		else
+		{
+			device.getGraphicsQueue().submit( *m_blendCommandBuffer
+				, toWait
+				, renderer::PipelineStageFlag::eVertexInput
+				, *m_signalReady
+				, nullptr );
+		}
 	}
 
 	void LightPass::doInitialise( Scene const & scene
+		, GeometryPassResult const & gp
 		, LightType type
 		, renderer::VertexBufferBase & vbo
 		, renderer::VertexLayout const & vertexLayout
@@ -416,10 +449,81 @@ namespace castor3d
 
 		m_program->initialise( vbo
 			, vertexLayout
+			, *m_renderPass
 			, m_matrixUbo
 			, sceneUbo
 			, m_gpInfoUbo
 			, modelMatrixUbo );
+
+		m_uboDescriptorSet = m_program->getUboDescriptorPool().createDescriptorSet( 0u );
+		auto & uboLayout = m_program->getUboDescriptorLayout();
+		m_uboDescriptorSet->createBinding( uboLayout.getBinding( MatrixUbo::BindingPoint )
+			, m_matrixUbo.getUbo() );
+		m_uboDescriptorSet->createBinding( uboLayout.getBinding( SceneUbo::BindingPoint )
+			, sceneUbo.getUbo() );
+		m_uboDescriptorSet->createBinding( uboLayout.getBinding( GpInfoUbo::BindingPoint )
+			, m_gpInfoUbo.getUbo() );
+		if ( modelMatrixUbo )
+		{
+			m_uboDescriptorSet->createBinding( uboLayout.getBinding( ModelMatrixUbo::BindingPoint )
+				, modelMatrixUbo->getUbo() );
+		}
+		m_uboDescriptorSet->update();
+
+		auto & renderSystem = *m_engine.getRenderSystem();
+		auto & device = *renderSystem.getCurrentDevice();
+		m_firstCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
+		m_blendCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
+
+		m_textureDescriptorSet = m_program->getTextureDescriptorPool().createDescriptorSet( 1u );
+		auto & texLayout = m_program->getTextureDescriptorLayout();
+		auto writeBinding = [&gp]( uint32_t index )
+		{
+			return renderer::WriteDescriptorSet
+			{
+				index,
+				0u,
+				1u,
+				renderer::DescriptorType::eCombinedImageSampler,
+				renderer::DescriptorImageInfo
+				{
+					std::ref( gp[index]->getSampler()->getSampler() ),
+					std::ref( gp[index]->getTexture()->getDefaultView() ),
+					renderer::ImageLayout::eShaderReadOnlyOptimal
+				}
+			};
+		};
+		m_textureWrites.push_back( writeBinding( 0u ) );
+		m_textureWrites.push_back( writeBinding( 1u ) );
+		m_textureWrites.push_back( writeBinding( 2u ) );
+		m_textureWrites.push_back( writeBinding( 3u ) );
+		m_textureWrites.push_back( writeBinding( 4u ) );
+		m_textureWrites.push_back( writeBinding( 5u ) );
+
+		if ( m_shadows )
+		{
+			// Empty descriptor for shadow texture, that will be filled at runtime.
+			m_textureWrites.push_back(
+			{
+				6u,
+				0u,
+				1u,
+				renderer::DescriptorType::eCombinedImageSampler,
+				renderer::DescriptorImageInfo
+				{
+					std::nullopt,
+					std::nullopt,
+					renderer::ImageLayout::eShaderReadOnlyOptimal
+				}
+			} );
+			m_textureDescriptorSet->setBindings( m_textureWrites );
+		}
+		else
+		{
+			m_textureDescriptorSet->setBindings( m_textureWrites );
+			m_textureDescriptorSet->update();
+			doPrepareCommandBuffers( nullptr );
+		}
 	}
 
 	void LightPass::doCleanup()
@@ -429,32 +533,35 @@ namespace castor3d
 		m_matrixUbo.cleanup();
 	}
 
-	void LightPass::doRender( castor::Size const & size
-		, GeometryPassResult const & gp
-		, bool first )
+	void LightPass::doPrepareCommandBuffers( TextureUnit const * shadowMap )
 	{
-		m_frameBuffer.bind( FrameBufferTarget::eDraw );
-		m_depthAttach.attach( AttachmentPoint::eDepthStencil );
-		m_frameBuffer.setDrawBuffers();
-		gp[size_t( DsTexture::eDepth )]->bind();
-		gp[size_t( DsTexture::eData1 )]->bind();
-		gp[size_t( DsTexture::eData2 )]->bind();
-		gp[size_t( DsTexture::eData3 )]->bind();
-		gp[size_t( DsTexture::eData4 )]->bind();
-		gp[size_t( DsTexture::eData5 )]->bind();
+		static renderer::DepthStencilClearValue const clearDepthStencil{ 1.0, 1 };
+		static renderer::ClearColorValue const clearColour{ 0.0, 0.0, 0.0, 1.0 };
+		uint32_t const width = m_frameBuffer->getDimensions().width;
+		uint32_t const height = m_frameBuffer->getDimensions().height;
 
-		m_program->render( size
-			, getCount()
-			, first
-			, m_offset );
+		auto prepare = [this
+			, width
+			, height]( renderer::CommandBuffer & commandBuffer
+				, bool first )
+		{
+			if ( commandBuffer.begin() )
+			{
+				commandBuffer.beginRenderPass( *m_renderPass
+					, *m_frameBuffer
+					, { clearDepthStencil, clearColour, clearColour }
+				, renderer::SubpassContents::eInline );
+				commandBuffer.setViewport( { width, height, 0, 0 } );
+				commandBuffer.setScissor( { 0, 0, width, height } );
+				commandBuffer.bindDescriptorSets( { *m_uboDescriptorSet, *m_textureDescriptorSet }, m_program->getPipelineLayout() );
+				m_program->render( commandBuffer, getCount(), first, m_offset );
+				commandBuffer.endRenderPass();
+				commandBuffer.end();
+			}
+		};
 
-		gp[size_t( DsTexture::eData5 )]->unbind();
-		gp[size_t( DsTexture::eData4 )]->unbind();
-		gp[size_t( DsTexture::eData3 )]->unbind();
-		gp[size_t( DsTexture::eData2 )]->unbind();
-		gp[size_t( DsTexture::eData1 )]->unbind();
-		gp[size_t( DsTexture::eDepth )]->unbind();
-		m_frameBuffer.unbind();
+		prepare( *m_firstCommandBuffer, true );
+		prepare( *m_blendCommandBuffer, false );
 	}
 	
 	glsl::Shader LightPass::doGetLegacyPixelShaderSource( SceneFlags const & sceneFlags
@@ -464,24 +571,19 @@ namespace castor3d
 		GlslWriter writer = m_engine.getRenderSystem()->createGlslWriter();
 
 		// Shader inputs
-		UBO_MATRIX( writer, 0u );
-		UBO_SCENE( writer, 0u );
-		UBO_GPINFO( writer, 0u );
-		auto index = MinTextureIndex;
-		auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++, 0u );
-		auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++, 0u );
-		auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++, 0u );
-		auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++, 0u );
-		auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++, 0u );
-		auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++, 0u );
+		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
+		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
+		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
+		auto index = 0u;
+		auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++, 1u );
+		auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++, 1u );
+		auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++, 1u );
+		auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++, 1u );
+		auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++, 1u );
+		auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++, 1u );
 		auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 		auto shadowType = getShadowType( sceneFlags );
-
-		if ( type == LightType::ePoint && shadowType != ShadowType::eNone )
-		{
-			auto c3d_lightFarPlane = writer.declUniform< Float >( cuT( "c3d_lightFarPlane" ) );
-		}
 
 		// Shader outputs
 		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 0 );
@@ -626,24 +728,19 @@ namespace castor3d
 		GlslWriter writer = m_engine.getRenderSystem()->createGlslWriter();
 
 		// Shader inputs
-		UBO_MATRIX( writer, 0u );
-		UBO_SCENE( writer, 0u );
-		UBO_GPINFO( writer, 0u );
-		auto index = MinTextureIndex;
-		auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++, 0u );
-		auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++, 0u );
-		auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++, 0u );
-		auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++, 0u );
-		auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++, 0u );
-		auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++, 0u );
+		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
+		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
+		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
+		auto index = 0u;
+		auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++, 1u );
+		auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++, 1u );
+		auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++, 1u );
+		auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++, 1u );
+		auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++, 1u );
+		auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++, 1u );
 		auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 		auto shadowType = getShadowType( sceneFlags );
-
-		if ( type == LightType::ePoint && shadowType != ShadowType::eNone )
-		{
-			auto c3d_lightFarPlane = writer.declUniform< Float >( cuT( "c3d_lightFarPlane" ) );
-		}
 
 		// Shader outputs
 		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 0 );
@@ -848,24 +945,19 @@ namespace castor3d
 		GlslWriter writer = m_engine.getRenderSystem()->createGlslWriter();
 
 		// Shader inputs
-		UBO_MATRIX( writer, 0u );
-		UBO_SCENE( writer, 0u );
-		UBO_GPINFO( writer, 0u );
-		auto index = MinTextureIndex;
-		auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++, 0u );
-		auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++, 0u );
-		auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++, 0u );
-		auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++, 0u );
-		auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++, 0u );
-		auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++, 0u );
+		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
+		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
+		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
+		auto index = 0u;
+		auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++, 1u );
+		auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++, 1u );
+		auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++, 1u );
+		auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++, 1u );
+		auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++, 1u );
+		auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++, 1u );
 		auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 		auto shadowType = getShadowType( sceneFlags );
-
-		if ( type == LightType::ePoint && shadowType != ShadowType::eNone )
-		{
-			auto c3d_lightFarPlane = writer.declUniform< Float >( cuT( "c3d_lightFarPlane" ) );
-		}
 
 		// Utility functions
 		auto lighting = shader::pbr::sg::createLightingModel( writer

@@ -48,7 +48,8 @@ namespace castor3d
 			 */
 			Program( Engine & engine
 				, glsl::Shader const & vtx
-				, glsl::Shader const & pxl );
+				, glsl::Shader const & pxl
+				, bool hasShadows );
 			/**
 			 *\~english
 			 *\brief		Destructor.
@@ -62,17 +63,24 @@ namespace castor3d
 			 *\copydoc		castor3d::LightPass::Program::doBind
 			 */
 			void doBind( Light const & light )override;
+			/**
+			*\copydoc		castor3d::MeshLightPass::Program::doBind
+			*/
+			void doCreateUbo()override;
 
 		private:
 			struct Config
 			{
-				LightPass::Program::Config m_base;
+				LightPass::Program::Config base;
 				//!\~english	The variable containing the light position.
 				//!\~french		La variable contenant la position de la lumière.
 				castor::Point3f position;
 				//!\~english	The variable containing the light attenuation.
 				//!\~french		La variable contenant l'atténuation de la lumière.
 				castor::Point3f attenuation;
+				//!\~english	The variable containing the light index.
+				//!\~french		La variable contenant l'index de la lumière.
+				int index;
 				//!\~english	The variable containing the light direction.
 				//!\~french		La variable contenant la direction de la lumière.
 				castor::Point3f direction;
@@ -107,8 +115,9 @@ namespace castor3d
 		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
 		SpotLightPass( Engine & engine
-			, FrameBuffer & frameBuffer
-			, FrameBufferAttachment & depthAttach
+			, renderer::TextureView const & depthView
+			, renderer::TextureView const & diffuseView
+			, renderer::TextureView const & specularView
 			, GpInfoUbo & gpInfoUbo
 			, bool hasShadows );
 		/**

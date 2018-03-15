@@ -115,7 +115,7 @@ namespace castor3d
 				renderPass.attachments[0].index = 0u;
 				renderPass.attachments[0].format = m_swapChain->getFormat();
 				renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
-				renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eDontCare;
+				renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
 				renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 				renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 				renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
@@ -446,7 +446,7 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), MinTextureIndex, 0u );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), MinBufferIndex, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			// Shader outputs

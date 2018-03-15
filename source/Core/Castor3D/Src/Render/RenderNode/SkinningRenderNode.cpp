@@ -29,8 +29,8 @@ namespace castor3d
 			, sceneNode
 			, data
 			, instance }
-		, m_skeleton{ skeleton }
-		, m_skinningUbo{ skinningUbo }
+		, skeleton{ skeleton }
+		, skinningUbo{ skinningUbo }
 	{
 	}
 }
