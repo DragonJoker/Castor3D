@@ -6,7 +6,7 @@ namespace glsl
 	{
 		using type = typename TypeOf< T >::Type;
 		registerName( m_writer, name, TypeTraits< T >::TypeEnum );
-		m_writer.registerUniform( name, TypeTraits< T >::TypeEnum, 1u );
+		m_writer.registerUniform( name, location, TypeTraits< T >::TypeEnum, 1u );
 		m_stream << cuT( "layout( location = " ) << location << cuT( " ) uniform " ) << type().m_type << name << cuT( ";" ) << std::endl;
 		m_count++;
 		return T( &m_writer, name );
@@ -19,7 +19,7 @@ namespace glsl
 	{
 		using type = typename TypeOf< T >::Type;
 		registerName( m_writer, name, TypeTraits< T >::TypeEnum );
-		m_writer.registerUniform( name, TypeTraits< T >::TypeEnum, 1u );
+		m_writer.registerUniform( name, location, TypeTraits< T >::TypeEnum, dimension );
 		m_stream << cuT( "layout( location = " ) << location << cuT( " ) uniform " ) << type().m_type << name << cuT( "[" ) << dimension << cuT( "];" ) << std::endl;
 		m_count++;
 		return Array< T >( &m_writer, name, dimension );
@@ -31,7 +31,7 @@ namespace glsl
 	{
 		using type = typename TypeOf< T >::Type;
 		registerName( m_writer, name, TypeTraits< T >::TypeEnum );
-		m_writer.registerUniform( name, TypeTraits< T >::TypeEnum, 1u );
+		m_writer.registerUniform( name, location, TypeTraits< T >::TypeEnum, 1u );
 		m_stream << cuT( "layout( location = " ) << location << cuT( " ) uniform " ) << type().m_type << name << cuT( "[];" ) << std::endl;
 		m_count++;
 		return Array< T >( &m_writer, name, 0xFFFFFFFF );
@@ -44,7 +44,7 @@ namespace glsl
 	{
 		using type = typename TypeOf< T >::Type;
 		registerName( m_writer, name, TypeTraits< T >::TypeEnum );
-		m_writer.registerUniform( name, TypeTraits< T >::TypeEnum, 1u );
+		m_writer.registerUniform( name, location, TypeTraits< T >::TypeEnum, 1u, enabled );
 
 		if ( enabled )
 		{
@@ -63,7 +63,7 @@ namespace glsl
 	{
 		using type = typename TypeOf< T >::Type;
 		registerName( m_writer, name, TypeTraits< T >::TypeEnum );
-		m_writer.registerUniform( name, TypeTraits< T >::TypeEnum, 1u );
+		m_writer.registerUniform( name, location, TypeTraits< T >::TypeEnum, dimension, enabled );
 
 		if ( enabled )
 		{
@@ -81,7 +81,7 @@ namespace glsl
 	{
 		using type = typename TypeOf< T >::Type;
 		registerName( m_writer, name, TypeTraits< T >::TypeEnum );
-		m_writer.registerUniform( name, TypeTraits< T >::TypeEnum, 1u );
+		m_writer.registerUniform( name, location, TypeTraits< T >::TypeEnum, 1u, enabled );
 
 		if ( enabled )
 		{

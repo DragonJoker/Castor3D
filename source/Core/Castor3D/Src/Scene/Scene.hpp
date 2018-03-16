@@ -126,7 +126,9 @@ namespace castor3d
 		 *\param[in]	size	Les dimensions de la cible.
 		 *\param[in]	camera	La caméra courante.
 		 */
-		C3D_API void renderBackground( castor::Size const & size, Camera const & camera );
+		C3D_API renderer::Semaphore const * renderBackground( castor::Size const & size
+			, Camera const & camera
+			, renderer::Semaphore const & toWait );
 		/**
 		 *\~english
 		 *\brief		Updates the scene before render.

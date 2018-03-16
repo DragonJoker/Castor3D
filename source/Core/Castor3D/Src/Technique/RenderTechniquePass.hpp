@@ -129,6 +129,9 @@ namespace castor3d
 		}
 		/**@}*/
 
+	public:
+		using RenderPass::update;
+
 	protected:
 		/**
 		 *\~english

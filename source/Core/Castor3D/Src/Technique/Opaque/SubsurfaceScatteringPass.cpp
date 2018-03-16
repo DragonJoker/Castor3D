@@ -79,20 +79,15 @@ namespace castor3d
 			Ubo config{ writer, SubsurfaceScatteringPass::Config, 4u, 0u };
 			auto c3d_pixelSize = config.declMember< Float >( SubsurfaceScatteringPass::PixelSize );
 			auto c3d_correction = config.declMember< Float >( SubsurfaceScatteringPass::Correction );
+			// Gaussian weights for the six samples around the current pixel:
+			//   -3 -2 -1 +1 +2 +3
+			auto c3d_weights = config.declMember< Float >( SubsurfaceScatteringPass::Weights, 6u );
+			auto c3d_offsets = config.declMember< Float >( SubsurfaceScatteringPass::Offsets, 6u );
 			config.end();
 			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), 6u, 0u );
 			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), 7u, 0u );
 			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), 8u, 0u );
 			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), 9u, 0u );
-
-			// Gaussian weights for the six samples around the current pixel:
-			//   -3 -2 -1 +1 +2 +3
-			auto w = writer.declUniform( cuT( "w" )
-				, 6u
-				, std::vector< Float >{ { 0.006_f, 0.061_f, 0.242_f, 0.242_f, 0.061_f, 0.006_f } } );
-			auto o = writer.declUniform( cuT( "o" )
-				, 6u
-				, std::vector< Float >{ { -1.0, -0.6667, -0.3333, 0.3333, 0.6667, 1.0 } } );
 
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
@@ -162,7 +157,7 @@ namespace castor3d
 				for ( int i = 0; i < 6; i++ )
 				{
 					// Fetch color and depth for current sample:
-					offset = glsl::fma( vec2( o[i] ), finalStep, vtx_texture );
+					offset = glsl::fma( vec2( c3d_offsets[i] ), finalStep, vtx_texture );
 					color = texture( c3d_mapLightDiffuse, offset, 0.0_f ).rgb();
 					depth = texture( c3d_mapDepth, offset, 0.0_f ).r();
 					depth = utils.calcVSPosition( vtx_texture
@@ -174,7 +169,7 @@ namespace castor3d
 					color = mix( color, colorM.rgb(), s );
 
 					// Accumulate:
-					pxl_fragColor.rgb() += w[i] * color;
+					pxl_fragColor.rgb() += c3d_weights[i] * color;
 				}
 			} );
 			return writer.finalise();
@@ -312,12 +307,21 @@ namespace castor3d
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			auto sampler = doCreateSampler( engine );
+
+			renderer::ImageCreateInfo image{};
+			image.arrayLayers = 1u;
+			image.extent.width = size.getWidth();
+			image.extent.height = size.getHeight();
+			image.extent.depth = 1u;
+			image.format = renderer::Format::eR32G32B32A32_SFLOAT;
+			image.imageType = renderer::TextureType::e2D;
+			image.mipLevels = 1u;
+			image.samples = renderer::SampleCountFlag::e1;
+			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+
 			auto texture = std::make_shared< TextureLayout >( renderSystem
-				, renderer::TextureType::e2D
-				, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled
-				, renderer::MemoryPropertyFlag::eHostVisible
-				, PixelFormat::eRGBA32F
-				, size );
+				, image
+				, renderer::MemoryPropertyFlag::eHostVisible );
 			texture->getImage().initialiseSource();
 			TextureUnit unit{ engine };
 			unit.setTexture( texture );
@@ -576,6 +580,8 @@ namespace castor3d
 	String const SubsurfaceScatteringPass::Step = cuT( "c3d_step" );
 	String const SubsurfaceScatteringPass::Correction = cuT( "c3d_correction" );
 	String const SubsurfaceScatteringPass::PixelSize = cuT( "c3d_pixelSize" );
+	String const SubsurfaceScatteringPass::Weights = cuT( "c3d_weights" );
+	String const SubsurfaceScatteringPass::Offsets = cuT( "c3d_offsets" );
 
 	SubsurfaceScatteringPass::SubsurfaceScatteringPass( Engine & engine
 		, GpInfoUbo & gpInfoUbo
@@ -620,6 +626,8 @@ namespace castor3d
 		auto & configuration = m_blurConfigUbo->getData( 0u );
 		configuration.blurCorrection = 1.0f;
 		configuration.blurPixelSize = castor::Point2f{ 1.0f / m_size.getWidth(), 1.0f / m_size.getHeight() };
+		configuration.blurWeights = { 0.006f, 0.061f, 0.242f, 0.242f, 0.061f, 0.006f };
+		configuration.blurOffsets = { -1.0f, -0.6667f, -0.3333f, 0.3333f, 0.6667f, 1.0f };
 		m_blurConfigUbo->upload();
 
 		auto & weights = m_blurWeightsUbo->getData();

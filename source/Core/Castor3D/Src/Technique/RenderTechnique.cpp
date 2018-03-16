@@ -83,6 +83,30 @@ namespace castor3d
 				++it;
 			}
 		}
+
+		TextureLayoutSPtr doCreateTexture( Engine & engine
+			, Size const & size
+			, renderer::Format format
+			, renderer::ImageUsageFlag usage )
+		{
+			renderer::ImageCreateInfo image{};
+			image.arrayLayers = 1u;
+			image.extent.width = size.getWidth();
+			image.extent.height = size.getHeight();
+			image.extent.depth = 1u;
+			image.format = format;
+			image.imageType = renderer::TextureType::e2D;
+			image.mipLevels = 1u;
+			image.samples = renderer::SampleCountFlag::e1;
+			image.usage = renderer::ImageUsageFlag::eSampled | usage;
+
+			auto result = std::make_shared< TextureLayout >( *engine.getRenderSystem()
+				, image
+				, renderer::MemoryPropertyFlag::eDeviceLocal );
+			result->getImage().initialiseSource();
+			result->initialise();
+			return result;
+		}
 	}
 
 	//*************************************************************************************************
@@ -124,7 +148,6 @@ namespace castor3d
 			, config ) }
 #endif
 		, m_initialised{ false }
-		, m_frameBuffer{ *this }
 		, m_ssaoConfig{ config }
 	{
 		m_directionalShadowMaps.resize( 1u );
@@ -161,7 +184,14 @@ namespace castor3d
 		if ( !m_initialised )
 		{
 			m_size = m_renderTarget.getSize();
-			m_initialised = m_frameBuffer.initialise( m_size );
+			m_colourTexture = doCreateTexture( *getEngine()
+				, m_size
+				, renderer::Format::eR16G16B16A16_SFLOAT
+				, renderer::ImageUsageFlag::eColourAttachment );
+			m_depthBuffer = doCreateTexture( *getEngine()
+				, m_size
+				, renderer::Format::eD24_UNORM_S8_UINT
+				, renderer::ImageUsageFlag::eDepthStencilAttachment );
 			m_signalFinished = getEngine()->getRenderSystem()->getCurrentDevice()->createSemaphore();
 
 			if ( m_initialised )
@@ -176,17 +206,19 @@ namespace castor3d
 #if !DEBUG_FORWARD_RENDERING
 				m_deferredRendering = std::make_unique< DeferredRendering >( *getEngine()
 					, static_cast< OpaquePass & >( *m_opaquePass )
-					, *m_frameBuffer.m_frameBuffer
-					, *m_frameBuffer.m_depthAttach
+					, m_depthBuffer
+					, m_renderTarget.getVelocity().getTexture()
+					, m_renderTarget.getTexture().getTexture()
 					, m_renderTarget.getSize()
 					, *m_renderTarget.getScene()
+					, m_renderTarget.getCamera()->getViewport()
 					, m_ssaoConfig );
 #endif
 #if USE_WEIGHTED_BLEND
 				m_weightedBlendRendering = std::make_unique< WeightedBlendRendering >( *getEngine()
 					, static_cast< TransparentPass & >( *m_transparentPass )
-					, *m_frameBuffer.m_frameBuffer
-					, *m_frameBuffer.m_depthAttach
+					, m_depthBuffer->getDefaultView()
+					, m_colourTexture->getDefaultView()
 					, m_renderTarget.getSize()
 					, *m_renderTarget.getScene() );
 #endif
@@ -210,7 +242,10 @@ namespace castor3d
 		m_transparentPass->cleanup();
 		m_opaquePass->cleanup();
 		m_initialised = false;
-		m_frameBuffer.cleanup();
+		m_depthBuffer->cleanup();
+		m_colourTexture->cleanup();
+		m_depthBuffer.reset();
+		m_colourTexture.reset();
 	}
 
 	void RenderTechnique::update( RenderQueueArray & queues )
@@ -238,29 +273,35 @@ namespace castor3d
 		camera.update();
 
 		// Update part
-		doRenderEnvironmentMaps();
-		doRenderShadowMaps();
 		doUpdateParticles( info );
+		auto * semaphore = &waitSemaphore;
+		semaphore = doRenderEnvironmentMaps( *semaphore );
+		semaphore = doRenderShadowMaps( *semaphore );
+
+#if !DEBUG_FORWARD_RENDERING
+
+		m_deferredRendering->update( info
+			, scene
+			, camera
+			, m_activeShadowMaps
+			, jitter );
+
+#endif
+#if USE_WEIGHTED_BLEND
+
+		m_weightedBlendRendering->update( info
+			, scene
+			, camera
+			, m_activeShadowMaps
+			, jitter );
+
+#endif
 
 		// Render part
-		m_frameBuffer.m_frameBuffer->bind( FrameBufferTarget::eDraw );
-		m_frameBuffer.m_frameBuffer->setDrawBuffers();
-		m_frameBuffer.m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
-		m_frameBuffer.m_frameBuffer->unbind();
-
-		doRenderOpaque( jitter
-			, velocity
-			, info );
-
-		m_frameBuffer.m_frameBuffer->bind( FrameBufferTarget::eDraw );
-		m_frameBuffer.m_frameBuffer->setDrawBuffers();
-		scene.renderBackground( getSize(), camera );
-		m_frameBuffer.m_frameBuffer->unbind();
-
-		doRenderTransparent( jitter
-			, velocity
-			, info );
-		doApplyPostEffects();
+		semaphore = doRenderOpaque( jitter, info, *semaphore );
+		semaphore = scene.renderBackground( getSize(), camera, *semaphore );
+		semaphore = doRenderTransparent( jitter, info, *semaphore );
+		semaphore = doApplyPostEffects( *semaphore );
 
 		m_renderSystem.popScene();
 	}
@@ -380,66 +421,7 @@ namespace castor3d
 			, m_activeShadowMaps
 			, queues );
 	}
-
-	void RenderTechnique::doRenderShadowMaps()
-	{
-		getEngine()->getMaterialCache().getPassBuffer().bind();
-
-		for ( auto & array : m_activeShadowMaps )
-		{
-			for ( auto & shadowMap : array )
-			{
-				shadowMap.get().render();
-			}
-		}
-	}
-
-	void RenderTechnique::doRenderEnvironmentMaps()
-	{
-		auto & scene = *m_renderTarget.getScene();
-		auto & maps = scene.getEnvironmentMaps();
-		getEngine()->getMaterialCache().getPassBuffer().bind();
-
-		for ( auto & map : maps )
-		{
-			map.get().render();
-		}
-	}
-
-	void RenderTechnique::doRenderOpaque( Point2r const & jitter
-		, TextureUnit const & velocity
-		, RenderInfo & info )
-	{
-		auto & scene = *m_renderTarget.getScene();
-
-		if ( scene.hasOpaqueObjects() )
-		{
-			auto & camera = *m_renderTarget.getCamera();
-			getEngine()->getMaterialCache().getPassBuffer().bind();
-
-#if DEBUG_FORWARD_RENDERING
-
-			getEngine()->setPerObjectLighting( true );
-			camera.apply();
-			m_frameBuffer.m_frameBuffer->bind( FrameBufferTarget::eDraw );
-			m_frameBuffer.m_frameBuffer->setDrawBuffers();
-			m_frameBuffer.m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
-			m_opaquePass->render( info
-				, m_activeShadowMaps );
-
-#else
-
-			m_deferredRendering->render( info
-				, scene
-				, camera
-				, m_activeShadowMaps
-				, jitter
-				, velocity );
-
-#endif
-		}
-	}
-
+	
 	void RenderTechnique::doUpdateParticles( RenderInfo & info )
 	{
 		auto & scene = *m_renderTarget.getScene();
@@ -453,25 +435,83 @@ namespace castor3d
 		m_particleTimer->stop();
 	}
 
-	void RenderTechnique::doRenderTransparent( Point2r const & jitter
-		, TextureUnit const & velocity
-		, RenderInfo & info )
+	renderer::Semaphore const * RenderTechnique::doRenderShadowMaps( renderer::Semaphore const & semaphore )
 	{
+		renderer::Semaphore const * result = &semaphore;
+
+		for ( auto & array : m_activeShadowMaps )
+		{
+			for ( auto & shadowMap : array )
+			{
+				shadowMap.get().render( *result );
+				result = &shadowMap.get().getSemaphore();
+			}
+		}
+
+		return result;
+	}
+
+	renderer::Semaphore const * RenderTechnique::doRenderEnvironmentMaps( renderer::Semaphore const & semaphore )
+	{
+		renderer::Semaphore const * result = &semaphore;
+		auto & scene = *m_renderTarget.getScene();
+		auto & maps = scene.getEnvironmentMaps();
+
+		for ( auto & map : maps )
+		{
+			map.get().render( *result );
+			result = &map.get().getSemaphore();
+		}
+
+		return result;
+	}
+
+	renderer::Semaphore const * RenderTechnique::doRenderOpaque( Point2r const & jitter
+		, RenderInfo & info
+		, renderer::Semaphore const & semaphore )
+	{
+		renderer::Semaphore const * result = &semaphore;
+		auto & scene = *m_renderTarget.getScene();
+
+		if ( scene.hasOpaqueObjects() )
+		{
+			auto & camera = *m_renderTarget.getCamera();
+
+#if DEBUG_FORWARD_RENDERING
+
+			getEngine()->setPerObjectLighting( true );
+			camera.apply();
+			m_frameBuffer.m_frameBuffer->bind( FrameBufferTarget::eDraw );
+			m_frameBuffer.m_frameBuffer->setDrawBuffers();
+			m_frameBuffer.m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
+			m_opaquePass->render( info
+				, m_activeShadowMaps );
+
+#else
+
+			result = &m_deferredRendering->render( info, scene, camera, *result );
+
+#endif
+		}
+
+		return result;
+	}
+
+	renderer::Semaphore const * RenderTechnique::doRenderTransparent( Point2r const & jitter
+		, RenderInfo & info
+		, renderer::Semaphore const & semaphore )
+	{
+		renderer::Semaphore const * result = &semaphore;
 		auto & scene = *m_renderTarget.getScene();
 
 		if ( scene.hasTransparentObjects() )
 		{
 			auto & camera = *m_renderTarget.getCamera();
-			getEngine()->getMaterialCache().getPassBuffer().bind();
 
 #if USE_WEIGHTED_BLEND
 
-			m_weightedBlendRendering->render( info
-				, scene
-				, camera
-				, m_activeShadowMaps
-				, jitter
-				, velocity );
+			m_weightedBlendRendering->render( info, scene, *result );
+			result = &m_weightedBlendRendering->getSemaphore();
 
 #else
 
@@ -487,17 +527,27 @@ namespace castor3d
 
 #endif
 		}
+
+		return result;
 	}
 
-	void RenderTechnique::doApplyPostEffects()
+	renderer::Semaphore const * RenderTechnique::doApplyPostEffects( renderer::Semaphore const & semaphore )
 	{
+		renderer::Semaphore const * result = &semaphore;
 		m_postFxTimer->start();
+		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
 
 		for ( auto effect : m_renderTarget.getPostEffects() )
 		{
-			effect->apply( *m_frameBuffer.m_frameBuffer );
+			device.getGraphicsQueue().submit( effect->getCommands()
+				, *result
+				, renderer::PipelineStageFlag::eColourAttachmentOutput
+				, effect->getSemaphore()
+				, nullptr );
+			result = &effect->getSemaphore();
 		}
 
 		m_postFxTimer->stop();
+		return result;
 	}
 }

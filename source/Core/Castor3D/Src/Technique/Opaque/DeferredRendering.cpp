@@ -67,8 +67,10 @@ namespace castor3d
 		, OpaquePass & opaquePass
 		, TextureLayoutSPtr depthTexture
 		, TextureLayoutSPtr velocityTexture
+		, TextureLayoutSPtr resultTexture
 		, Size const & size
 		, Scene const & scene
+		, Viewport const & viewport
 		, SsaoConfig const & config )
 		: m_engine{ engine }
 		, m_ssaoConfig{ config }
@@ -119,22 +121,28 @@ namespace castor3d
 		if ( scene.needsSubsurfaceScattering() )
 		{
 			m_reflection = std::make_unique< ReflectionPass >( engine
-				, m_size
+				, scene
+				, m_geometryPassResult
+				, m_subsurfaceScattering->getResult().getTexture()->getDefaultView()
+				, m_lightingPass->getSpecular().getTexture()->getDefaultView()
+				, resultTexture->getDefaultView()
 				, m_opaquePass.getSceneUbo()
 				, m_gpInfoUbo
 				, m_ssaoConfig
-				, m_subsurfaceScattering->getResult()
-				, m_lightingPass->getSpecular() );
+				, viewport );
 		}
 		else
 		{
 			m_reflection = std::make_unique< ReflectionPass >( engine
-				, m_size
+				, scene
+				, m_geometryPassResult
+				, m_lightingPass->getDiffuse().getTexture()->getDefaultView()
+				, m_lightingPass->getSpecular().getTexture()->getDefaultView()
+				, resultTexture->getDefaultView()
 				, m_opaquePass.getSceneUbo()
 				, m_gpInfoUbo
 				, m_ssaoConfig
-				, m_lightingPass->getDiffuse()
-				, m_lightingPass->getSpecular() );
+				, viewport );
 		}
 	}
 
@@ -153,14 +161,12 @@ namespace castor3d
 		m_lightingPass.reset();
 	}
 
-	void DeferredRendering::render( RenderInfo & info
+	void DeferredRendering::update( RenderInfo & info
 		, Scene const & scene
 		, Camera const & camera
 		, ShadowMapLightTypeArray & shadowMaps
-		, Point2r const & jitter
-		, renderer::Semaphore const & toWait )
+		, Point2r const & jitter )
 	{
-		m_engine.setPerObjectLighting( false );
 		auto invView = camera.getView().getInverse().getTransposed();
 		auto invProj = camera.getViewport().getProjection().getInverse();
 		auto invViewProj = ( camera.getViewport().getProjection() * camera.getView() ).getInverse();
@@ -173,7 +179,16 @@ namespace castor3d
 		m_opaquePass.update( info
 			, shadowMaps
 			, jitter );
+		m_reflection->update( camera );
 
+	}
+
+	renderer::Semaphore const & DeferredRendering::render( RenderInfo & info
+		, Scene const & scene
+		, Camera const & camera
+		, renderer::Semaphore const & toWait )
+	{
+		m_engine.setPerObjectLighting( false );
 		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
 		device.getGraphicsQueue().submit( m_opaquePass.getCommandBuffer()
 			, toWait
@@ -199,10 +214,8 @@ namespace castor3d
 			semaphore = &m_subsurfaceScattering->getSemaphore();
 		}
 
-		m_reflection->render( m_geometryPassResult
-			, *semaphore
-			, scene
-			, camera );
+		m_reflection->render( *semaphore );
+		return m_reflection->getSemaphore();
 	}
 
 	void DeferredRendering::debugDisplay()const

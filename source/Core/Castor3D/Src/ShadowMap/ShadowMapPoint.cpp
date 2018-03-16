@@ -135,7 +135,14 @@ namespace castor3d
 		: ShadowMap{ engine
 			, doInitialisePointShadow( engine, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } )
 			, doInitialisePointLinearDepth( engine, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } )
-			, std::make_shared< ShadowMapPassPoint >( engine, scene, *this ) }
+			, {
+				std::make_shared< ShadowMapPassPoint >( engine, scene, *this ),
+				std::make_shared< ShadowMapPassPoint >( engine, scene, *this ),
+				std::make_shared< ShadowMapPassPoint >( engine, scene, *this ),
+				std::make_shared< ShadowMapPassPoint >( engine, scene, *this ),
+				std::make_shared< ShadowMapPassPoint >( engine, scene, *this ),
+				std::make_shared< ShadowMapPassPoint >( engine, scene, *this ),
+			} }
 	{
 	}
 
@@ -148,13 +155,20 @@ namespace castor3d
 		, Light & light
 		, uint32_t index )
 	{
-		m_pass->update( camera, queues, light, index );
+		for ( auto & pass : m_passes )
+		{
+			pass->update( camera, queues, light, index );
+		}
 	}
 
-	void ShadowMapPoint::render()
+	void ShadowMapPoint::render( renderer::Semaphore const & toWait )
 	{
 		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
-		device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
+		device.getGraphicsQueue().submit( *m_commandBuffer
+			, toWait
+			, renderer::PipelineStageFlag::eBottomOfPipe
+			, *m_finished
+			, nullptr );
 	}
 
 	void ShadowMapPoint::debugDisplay( castor::Size const & size, uint32_t index )
@@ -283,24 +297,24 @@ namespace castor3d
 		static float constexpr component = std::numeric_limits< float >::max();
 		static renderer::ClearColorValue const white{ component, component, component, component };
 		static renderer::DepthStencilClearValue const zero{ 1.0f, 0 };
-		face = 0u;
 
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
 		{
-			m_pass->startTimer( *m_commandBuffer );
-
-			for ( auto & frameBuffer : m_frameBuffers )
+			for ( size_t face = 0u; face < m_passes.size(); ++face )
 			{
+				auto & pass = m_passes[face];
+				auto & frameBuffer = m_frameBuffers[face];
+
+				pass->startTimer( *m_commandBuffer );
 				m_commandBuffer->beginRenderPass( *m_renderPass
 					, *frameBuffer.frameBuffer
 					, { zero, white, white }
-					, renderer::SubpassContents::eSecondaryCommandBuffers );
-				m_commandBuffer->executeCommands( { m_pass->getCommandBuffer( face ) } );
+				, renderer::SubpassContents::eSecondaryCommandBuffers );
+				m_commandBuffer->executeCommands( { pass->getCommandBuffer() } );
 				m_commandBuffer->endRenderPass();
-				++face;
+				pass->stopTimer( *m_commandBuffer );
 			}
 
-			m_pass->stopTimer( *m_commandBuffer );
 			m_commandBuffer->end();
 		}
 	}

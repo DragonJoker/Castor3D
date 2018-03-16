@@ -81,7 +81,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dessine la texture d'environnement.
 		 */
-		C3D_API void render();
+		C3D_API void render( renderer::Semaphore const & toWait );
 		/**
 		 *\~english
 		 *\brief		Dumps the environment map on screen.
@@ -94,45 +94,40 @@ namespace castor3d
 		 */
 		C3D_API void debugDisplay( castor::Size const & size, uint32_t index );
 		/**
-		 *\~english
-		 *\return		The reflection map.
-		 *\~english
-		 *\return		La texture d'environnement.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline TextureUnit & getTexture()
 		{
 			return m_environmentMap;
 		}
-		/**
-		 *\~english
-		 *\return		The reflection map.
-		 *\~english
-		 *\return		La texture d'environnement.
-		 */
+
 		inline TextureUnit const & getTexture()const
 		{
 			return m_environmentMap;
 		}
-		/**
-		 *\~english
-		 *\return		The reflection map dimensions.
-		 *\~english
-		 *\return		Les dimensions de la texture d'environnement.
-		 */
-		inline renderer::Extent3D getSize()const
+
+		inline renderer::Extent3D const & getSize()const
 		{
 			return m_environmentMap.getTexture()->getDimensions();
 		}
-		/**
-		 *\~english
-		 *\return		The reflection map index.
-		 *\~english
-		 *\return		L'indice de la texture d'environnement.
-		 */
+
 		inline uint32_t getIndex()const
 		{
 			return m_index;
 		}
+
+		inline renderer::Semaphore const & getSemaphore()const
+		{
+			REQUIRE( m_finished );
+			return *m_finished;
+		}
+		/**@}*/
 
 	private:
 		struct FrameBuffer
@@ -147,6 +142,7 @@ namespace castor3d
 		renderer::TextureViewPtr m_depthBufferView;
 		std::array< FrameBuffer, 6u > m_frameBuffers;
 		renderer::CommandBufferPtr m_commandBuffer;
+		renderer::SemaphorePtr m_finished;
 		SceneNode const & m_node;
 		OnSceneNodeChangedConnection m_onNodeChanged;
 		CubeMatrices m_matrices;

@@ -458,37 +458,29 @@ namespace castor3d
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const;
 		/**
-		 *\~english
-		 *\return		The multsampling status.
-		 *\~french
-		 *\return		Le statut d'échantillonnage.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline bool isOrderIndependent()const
 		{
 			return m_oit;
 		}
-		/**
-		 *\~english
-		 *\return		The Scene UBO.
-		 *\~french
-		 *\return		L'UBO de la scène.
-		 */
+
 		inline SceneUbo & getSceneUbo()
 		{
 			return m_sceneUbo;
 		}
-		/**
-		 *\~english
-		 *\return		The command buffer.
-		 *\~english
-		 *\return		Le tampon de commandes.
-		 */
-		inline renderer::CommandBuffer const & getCommandBuffer( uint32_t index = 0u )const
+
+		inline renderer::CommandBuffer const & getCommandBuffer()const
 		{
-			REQUIRE( m_commandBuffers.size() > index );
-			REQUIRE( m_commandBuffers[index] );
-			return *m_commandBuffers[index];
+			return m_renderQueue.getCommandBuffer();
 		}
+		/**@}*/
 
 	protected:
 		/**
@@ -1367,7 +1359,6 @@ namespace castor3d
 		UniformBufferPool< SkinningUbo::Configuration > m_skinningUboPool;
 		UniformBufferPool< MorphingUbo::Configuration > m_morphingUboPool;
 		RenderPassTimerSPtr m_timer;
-		std::vector< renderer::CommandBufferPtr > m_commandBuffers;
 	};
 }
 

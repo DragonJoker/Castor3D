@@ -268,7 +268,7 @@ namespace castor3d
 					, *frameBuffer.frameBuffer
 					, { white, white }
 					, renderer::SubpassContents::eSecondaryCommandBuffers );
-				m_commandBuffer->executeCommands( m_passes[face]->getCommandBuffers() );
+				m_commandBuffer->executeCommands( m_passes[face]->getCommandBuffer() );
 				m_commandBuffer->endRenderPass();
 				++face;
 			}
@@ -304,14 +304,18 @@ namespace castor3d
 		}
 	}
 
-	void EnvironmentMap::render()
+	void EnvironmentMap::render( renderer::Semaphore const & toWait )
 	{
 		m_render++;
 
 		if ( m_render == 5u )
 		{
 			auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
-			device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
+			device.getGraphicsQueue().submit( *m_commandBuffer
+				, toWait
+				, renderer::PipelineStageFlag::eBottomOfPipe
+				, *m_finished
+				, nullptr );
 			auto & scene = *m_node.getScene();
 
 			if ( scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness

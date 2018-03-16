@@ -871,24 +871,32 @@ namespace castor3d
 			} ) );
 	}
 
-	void Scene::renderBackground( Size const & size, Camera const & camera )
+	renderer::Semaphore const * Scene::renderBackground( castor::Size const & size
+		, Camera const & camera
+		, renderer::Semaphore const & toWait )
 	{
+		renderer::Semaphore const * result = &toWait;
+
 		if ( m_fog.getType() == FogType::eDisabled )
 		{
 			if ( m_backgroundImage && m_backgroundImage->isInitialised())
 			{
 				m_colour->render( *m_backgroundImage
-					, camera );
+					, camera
+					, *result );
+				result = &m_colour->getSemaphore();
 			}
 			else if ( m_skybox )
 			{
-				m_skybox->render( camera );
+				m_skybox->render( camera, *result );
+				result = &m_skybox->getSemaphore();
 			}
 			else
 			{
 				m_backgroundColourSkybox.setColour( m_backgroundColour );
 				m_backgroundColourSkybox.update();
-				m_backgroundColourSkybox.render( camera );
+				m_backgroundColourSkybox.render( camera, *result );
+				result = &m_backgroundColourSkybox.getSemaphore();
 			}
 		}
 		else if ( getMaterialsType() == MaterialType::ePbrMetallicRoughness
@@ -896,8 +904,11 @@ namespace castor3d
 		{
 			m_backgroundColourSkybox.setColour( m_backgroundColour );
 			m_backgroundColourSkybox.update();
-			m_backgroundColourSkybox.render( camera );
+			m_backgroundColourSkybox.render( camera, *result );
+			result = &m_backgroundColourSkybox.getSemaphore();
 		}
+
+		return result;
 	}
 
 	void Scene::update()

@@ -87,17 +87,13 @@ namespace castor3d
 	{
 	}
 
-	void DepthPass::render( RenderInfo & info
+	void DepthPass::update( RenderInfo & info
 		, ShadowMapLightTypeArray & shadowMaps
 		, Point2r const & jitter )
 	{
-		m_camera->apply();
-		m_frameBuffer->bind();
-		m_frameBuffer->clear( BufferComponent::eDepth | BufferComponent::eStencil );
-		doUpdate( info
+		RenderTechniquePass::doUpdate( info
 			, shadowMaps
 			, jitter );
-		m_frameBuffer->unbind();
 	}
 
 	void DepthPass::doUpdate( RenderQueueArray & queues )
@@ -129,11 +125,12 @@ namespace castor3d
 			renderer::RasterisationState rsState;
 			rsState.cullMode = renderer::CullModeFlag::eFront;
 			renderer::DepthStencilState dsState;
+			auto blState = renderer::ColourBlendState::createDefault();
 			auto & pipeline = *m_backPipelines.emplace( flags
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
 					, std::move( dsState )
 					, std::move( rsState )
-					, renderer::ColourBlendState::createDefault()
+					, std::move( blState )
 					, renderer::MultisampleState{}
 					, program
 					, flags ) ).first->second;
@@ -168,11 +165,12 @@ namespace castor3d
 			renderer::RasterisationState rsState;
 			rsState.cullMode = renderer::CullModeFlag::eBack;
 			renderer::DepthStencilState dsState;
+			auto blState = renderer::ColourBlendState::createDefault();
 			auto & pipeline = *m_backPipelines.emplace( flags
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
 					, std::move( dsState )
 					, std::move( rsState )
-					, renderer::ColourBlendState::createDefault()
+					, std::move( blState )
 					, renderer::MultisampleState{}
 					, program
 					, flags ) ).first->second;

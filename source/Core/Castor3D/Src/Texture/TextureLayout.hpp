@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "TextureView.hpp"
 
 #include <Image/ImageCreateInfo.hpp>
+#include <Image/Texture.hpp>
 
 namespace castor3d
 {

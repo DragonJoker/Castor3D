@@ -3,26 +3,21 @@
 #include "LineariseDepthPass.hpp"
 
 #include "Engine.hpp"
-#include "Buffer/GeometryBuffers.hpp"
-#include "Buffer/VertexBuffer.hpp"
 #include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/Camera.hpp"
-#include "Shader/ShaderProgram.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
 #include "Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
 
-#include <Buffer/GeometryBuffers.hpp>
 #include <Buffer/VertexBuffer.hpp>
 #include <Command/CommandBuffer.hpp>
 #include <Command/Queue.hpp>
 #include <Core/Device.hpp>
 #include <Descriptor/DescriptorSet.hpp>
-#include <Descriptor/DescriptorSetBinding.hpp>
 #include <Descriptor/DescriptorSetLayout.hpp>
 #include <Descriptor/DescriptorSetLayoutBinding.hpp>
 #include <Descriptor/DescriptorSetPool.hpp>
@@ -30,16 +25,18 @@
 #include <Image/TextureView.hpp>
 #include <Pipeline/ColourBlendState.hpp>
 #include <Pipeline/DepthStencilState.hpp>
+#include <Pipeline/InputAssemblyState.hpp>
 #include <Pipeline/MultisampleState.hpp>
+#include <Pipeline/Pipeline.hpp>
+#include <Pipeline/PipelineLayout.hpp>
 #include <Pipeline/RasterisationState.hpp>
+#include <Pipeline/ShaderStageState.hpp>
+#include <Pipeline/VertexInputState.hpp>
 #include <Pipeline/VertexLayout.hpp>
 #include <RenderPass/FrameBuffer.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
 #include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassAttachment.hpp>
-#include <RenderPass/RenderPassState.hpp>
-#include <RenderPass/RenderSubpass.hpp>
-#include <RenderPass/RenderSubpassState.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
 
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
@@ -495,42 +492,43 @@ namespace castor3d
 			return writer.finalise();
 		}
 
-		renderer::ShaderProgram & doGetProgram( Engine & engine
+		renderer::ShaderStageStateArray doGetProgram( Engine & engine
 			, SsaoConfig const & config )
 		{
+			auto & device = *engine.getRenderSystem()->getCurrentDevice();
 			auto vtx = doGetVertexProgram( engine );
 			auto pxl = doGetPixelProgram( engine, config );
-			auto & program = engine.getShaderProgramCache().getNewProgram( false );
-			program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
-			program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
+			renderer::ShaderStageStateArray program
+			{
+				{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
+				{ device.createShaderModule( renderer::ShaderStageFlag::eFragment ) },
+			};
+			program[0].module->loadShader( vtx.getSource() );
+			program[1].module->loadShader( pxl.getSource() );
 			return program;
 		}
 
-		RenderPipelineUPtr doCreatePipeline( Engine & engine
-			, renderer::ShaderProgram & program )
+		renderer::PipelinePtr doCreatePipeline( renderer::PipelineLayout const & layout
+			, renderer::ShaderStageStateArray program
+			, renderer::RenderPass const & renderPass
+			, renderer::VertexLayout const & vertexLayout
+			, renderer::Extent2D const & size )
 		{
-			renderer::DepthStencilState dsstate
+			return layout.createPipeline(
 			{
-				0u,
-				false,
-				false,
-			};
-			renderer::RasterisationState rsstate
-			{
-				0u,
-				false,
-				false,
-				renderer::PolygonMode::eFill,
-				renderer::CullModeFlag::eNone
-			};
-			auto bdstate = renderer::ColourBlendState::createDefault();
-			return std::make_unique< RenderPipeline >( *engine.getRenderSystem()
-				, std::move( dsstate )
-				, std::move( rsstate )
-				, std::move( bdstate )
-				, renderer::MultisampleState{}
-				, program
-				, PipelineFlags{} );
+				program,
+				renderPass,
+				renderer::VertexInputState::create( vertexLayout ),
+				renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleStrip },
+				renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eNone },
+				renderer::MultisampleState{},
+				renderer::ColourBlendState::createDefault(),
+				{},
+				renderer::DepthStencilState{ 0u, false, false, },
+				std::nullopt,
+				renderer::Viewport{ size.width, size.height, 0, 0 },
+				renderer::Scissor{ 0, 0, size.width, size.height }
+			} );
 		}
 
 		SamplerSPtr doCreateSampler( Engine & engine
@@ -555,16 +553,25 @@ namespace castor3d
 			return sampler;
 		}
 
-		TextureUnit doCreateTexture( Engine & engine, Size const & size )
+		TextureUnit doCreateTexture( Engine & engine, renderer::Extent2D const & size )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			auto sampler = doCreateSampler( engine, cuT( "SSAORaw_Result" ), renderer::WrapMode::eClampToEdge );
+
+			renderer::ImageCreateInfo image{};
+			image.arrayLayers = 1u;
+			image.extent.width = size.width;
+			image.extent.height = size.height;
+			image.extent.depth = 1u;
+			image.format = renderer::Format::eR32G32B32A32_SFLOAT;
+			image.imageType = renderer::TextureType::e2D;
+			image.mipLevels = 1u;
+			image.samples = renderer::SampleCountFlag::e1;
+			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+
 			auto ssaoResult = std::make_shared< TextureLayout >( renderSystem
-				, renderer::TextureType::e2D
-				, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled
-				, renderer::MemoryPropertyFlag::eDeviceLocal
-				, PixelFormat::eRGB32F
-				, size );
+				, image
+				, renderer::MemoryPropertyFlag::eDeviceLocal );
 			TextureUnit result{ engine };
 			result.setTexture( ssaoResult );
 			result.setSampler( sampler );
@@ -576,42 +583,54 @@ namespace castor3d
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			auto & device = *renderSystem.getCurrentDevice();
-			std::vector< renderer::PixelFormat > formats
-			{
-				PixelFormat::eRGB32F
-			};
-			renderer::RenderPassAttachmentArray attaches
-			{
-				renderer::RenderPassAttachment::createColourAttachment( 0u, PixelFormat::eRGB32F, true ),
-			};
-			renderer::ImageLayoutArray const initialLayouts
-			{
-				renderer::ImageLayout::eColourAttachmentOptimal,
-			};
-			renderer::ImageLayoutArray const finalLayouts
-			{
-				renderer::ImageLayout::eColourAttachmentOptimal,
-			};
-			renderer::RenderSubpassPtrArray subpasses;
-			subpasses.emplace_back( device.createRenderSubpass( attaches
-				, { renderer::PipelineStageFlag::eColourAttachmentOutput, renderer::AccessFlag::eColourAttachmentWrite } ) );
-			return device.createRenderPass( attaches
-				, std::move( subpasses )
-				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-					, renderer::AccessFlag::eColourAttachmentWrite
-					, initialLayouts }
-				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-					, renderer::AccessFlag::eColourAttachmentWrite
-					, finalLayouts } );
+
+			// Create the render pass.
+			renderer::RenderPassCreateInfo renderPass;
+			renderPass.flags = 0u;
+
+			renderPass.attachments.resize( 1u );
+			renderPass.attachments[0].index = 0u;
+			renderPass.attachments[0].format = renderer::Format::eR32G32B32A32_SFLOAT;
+			renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+			renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+			renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+			renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+			renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+			renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+			renderPass.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+			renderPass.subpasses.resize( 1u );
+			renderPass.subpasses[0].flags = 0u;
+			renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
+			renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
+
+			renderPass.dependencies.resize( 2u );
+			renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+			renderPass.dependencies[0].dstSubpass = 0u;
+			renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+			renderPass.dependencies[1].srcSubpass = 0u;
+			renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+			renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+			return device.createRenderPass( renderPass );
 		}
 
 		renderer::FrameBufferPtr doCreateFrameBuffer( renderer::RenderPass const & renderPass
 			, TextureUnit const & texture )
 		{
 			renderer::FrameBufferAttachmentArray attaches;
-			attaches.emplace_back( *( renderPass.begin() ), texture.getTexture()->getDefaultView() );
+			attaches.emplace_back( *( renderPass.getAttachments().begin() ), texture.getTexture()->getDefaultView() );
 			auto size = texture.getTexture()->getDimensions();
-			return renderPass.createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
+			return renderPass.createFrameBuffer( renderer::Extent2D{ size.width, size.height }
 				, std::move( attaches ) );
 		}
 
@@ -637,7 +656,8 @@ namespace castor3d
 						{ Point2f{ +1.0, +1.0 } },
 					}
 				};
-				result->unlock( 1u, true );
+				result->flush( 0u, 1u );
+				result->unlock();
 			}
 
 			return result;
@@ -647,12 +667,8 @@ namespace castor3d
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			auto & device = *renderSystem.getCurrentDevice();
-			auto result = renderer::makeLayout< NonTexturedQuad >( device
-				, 0u );
-			createVertexAttribute( result
-				, NonTexturedQuad::Vertex
-				, position
-				, 0u );
+			auto result = renderer::makeLayout< NonTexturedQuad >( 0u );
+			result->createAttribute( 0u, renderer::Format::eR32G32_SFLOAT, offsetof( NonTexturedQuad::Vertex, position ) );
 			return result;
 		}
 
@@ -694,7 +710,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	RawSsaoPass::RawSsaoPass( Engine & engine
-		, castor::Size const & size
+		, renderer::Extent2D const & size
 		, SsaoConfig const & config
 		, SsaoConfigUbo & ssaoConfigUbo
 		, TextureUnit const & linearisedDepthBuffer
@@ -714,26 +730,20 @@ namespace castor3d
 		, m_descriptorLayout{ doCreateDescriptorLayout( m_engine ) }
 		, m_descriptorPool{ m_descriptorLayout->createPool( 1u ) }
 		, m_descriptor{ doCreateDescriptor( *m_descriptorPool, *m_descriptorLayout, ssaoConfigUbo, linearisedDepthBuffer, normals, *m_sampler ) }
-		, m_pipeline{ doCreatePipeline( m_engine, m_program ) }
+		, m_pipelineLayout{ m_engine.getRenderSystem()->getCurrentDevice()->createPipelineLayout( *m_descriptorLayout ) }
 		, m_renderPass{ doCreateRenderPass( m_engine ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_result ) }
 		, m_vertexBuffer{ doCreateVertexBuffer( m_engine ) }
 		, m_vertexLayout{ doCreateVertexLayout( m_engine ) }
-		, m_geometryBuffers{ m_engine.getRenderSystem()->getCurrentDevice()->createGeometryBuffers( *m_vertexBuffer
-			, 0u
-			, *m_vertexLayout ) }
+		, m_pipeline{ doCreatePipeline( *m_pipelineLayout, m_program, *m_renderPass, *m_vertexLayout, size ) }
 		, m_commandBuffer{ m_engine.getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer() }
+		, m_finished{ engine.getRenderSystem()->getCurrentDevice()->createSemaphore() }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "SSAO" ), cuT( "Raw AO" ) ) }
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
-		m_pipeline->setDescriptorSetLayouts( { *m_descriptorLayout } );
-		m_pipeline->setVertexLayouts( { *m_vertexLayout } );
-		m_pipeline->setViewport( { size[0], size[1], 0, 0 } );
-		m_pipeline->setScissor( { 0, 0, size[0], size[1] } );
-		m_pipeline->initialise( *m_renderPass, renderer::PrimitiveTopology::eTriangleStrip );
 
-		static RgbaColour const colour = RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueWhite );
+		static renderer::ClearColorValue const colour{ 1.0, 1.0, 1.0, 1.0 };
 
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
 		{
@@ -747,10 +757,9 @@ namespace castor3d
 				, *m_frameBuffer
 				, { colour }
 				, renderer::SubpassContents::eInline );
-			m_commandBuffer->bindPipeline( m_pipeline->getPipeline() );
-			m_commandBuffer->bindDescriptorSet( *m_descriptor
-				, m_pipeline->getPipelineLayout() );
-			m_commandBuffer->bindGeometryBuffers( *m_geometryBuffers );
+			m_commandBuffer->bindPipeline( *m_pipeline );
+			m_commandBuffer->bindDescriptorSet( *m_descriptor, *m_pipelineLayout );
+			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 			m_commandBuffer->draw( 4u );
 			m_commandBuffer->endRenderPass();
 			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
@@ -764,23 +773,26 @@ namespace castor3d
 	{
 		m_timer.reset();
 		m_commandBuffer.reset();
+		m_pipeline.reset();
+		m_pipelineLayout.reset();
 		m_sampler.reset();
-		m_geometryBuffers.reset();
 		m_vertexLayout.reset();
 		m_vertexBuffer.reset();
 		m_frameBuffer.reset();
 		m_renderPass.reset();
-		m_pipeline->cleanup();
-		m_pipeline.reset();
 		m_result.cleanup();
 	}
 
-	void RawSsaoPass::compute()
+	void RawSsaoPass::compute( renderer::Semaphore const & toWait )const
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
 		m_timer->start();
-		device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
+		device.getGraphicsQueue().submit( *m_commandBuffer
+			, toWait
+			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, *m_finished
+			, nullptr );
 		m_timer->stop();
 	}
 }

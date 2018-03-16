@@ -197,7 +197,8 @@ namespace castor3d
 		m_ibl.reset();
 	}
 
-	void Skybox::render( Camera const & camera )
+	void Skybox::render( Camera const & camera
+		, renderer::Semaphore const & toWait )
 	{
 		if ( camera.getViewport().getSize() != m_size )
 		{
@@ -205,7 +206,11 @@ namespace castor3d
 			doPrepareFrame();
 		}
 
-		getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue().submit( *m_commandBuffer, nullptr );
+		getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue().submit( *m_commandBuffer
+			, toWait
+			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, *m_semaphore
+			, nullptr );
 	}
 
 	void Skybox::setEquiTexture( TextureLayoutSPtr texture
@@ -394,6 +399,7 @@ namespace castor3d
 	bool Skybox::doPrepareFrame()
 	{
 		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		m_semaphore = device.createSemaphore();
 
 		if ( !m_commandBuffer )
 		{

@@ -94,6 +94,18 @@ namespace castor3d
 		remFlag( sceneFlags, SceneFlag::eShadowFilterPcf );
 	}
 
+	void OpaquePass::doFillDescriptor( renderer::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, BillboardListRenderNode & node )
+	{
+	}
+
+	void OpaquePass::doFillDescriptor( renderer::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, SubmeshRenderNode & node )
+	{
+	}
+
 	glsl::Shader OpaquePass::doGetVertexShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags

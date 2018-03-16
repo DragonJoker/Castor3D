@@ -287,36 +287,36 @@ namespace castor3d
 			renderer::ClearColorValue{ 0.0, 0.0, 0.0, 1.0 },
 			renderer::DepthStencilClearValue{ 0.0f, 1 }
 		};
-		auto & cmdBuffer = m_commandBuffers[0];
+		auto & cmdBuffer = getCommandBuffer();
 
-		if ( cmdBuffer->begin() )
+		if ( cmdBuffer.begin() )
 		{
-			cmdBuffer->beginRenderPass( *m_renderPass
+			cmdBuffer.beginRenderPass( *m_renderPass
 				, *m_frameBuffer
 				, clearValues
 				, renderer::SubpassContents::eSecondaryCommandBuffers );
-			cmdBuffer->executeCommands( { commandBuffer } );
-			cmdBuffer->endRenderPass();
+			cmdBuffer.executeCommands( { commandBuffer } );
+			cmdBuffer.endRenderPass();
 
 			m_copyRegion.imageOffset.x = int32_t( position.x() - PickingOffset );
 			m_copyRegion.imageOffset.y = int32_t( camera.getHeight() - position.y() - PickingOffset );
 
-			cmdBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
+			cmdBuffer.memoryBarrier( renderer::PipelineStageFlag::eTransfer
 				, renderer::PipelineStageFlag::eTransfer
 				, m_stagingBuffer->getBuffer().makeTransferDestination() );
-			cmdBuffer->copyToBuffer( m_copyRegion
+			cmdBuffer.copyToBuffer( m_copyRegion
 				, *m_colourTexture
 				, m_stagingBuffer->getBuffer() );
-			cmdBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
+			cmdBuffer.memoryBarrier( renderer::PipelineStageFlag::eTransfer
 				, renderer::PipelineStageFlag::eTransfer
 				, m_stagingBuffer->getBuffer().makeMemoryTransitionBarrier( renderer::AccessFlag::eMemoryRead ) );
-			cmdBuffer->end();
+			cmdBuffer.end();
 		}
 
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
 		renderer::FencePtr fence = device.createFence();
-		device.getGraphicsQueue().submit( *cmdBuffer, fence.get() );
+		device.getGraphicsQueue().submit( cmdBuffer, fence.get() );
 		fence->wait( renderer::FenceTimeout );
 
 		if ( auto * data = m_stagingBuffer->lock( 0u, m_stagingBuffer->getCount(), renderer::MemoryMapFlag::eRead ) )
@@ -463,7 +463,6 @@ namespace castor3d
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
-		m_commandBuffers.emplace_back( device.getGraphicsCommandPool().createCommandBuffer( true ) );
 
 		m_pickingUbo = renderer::makeUniformBuffer< PickingUboData >( device
 			, 1u

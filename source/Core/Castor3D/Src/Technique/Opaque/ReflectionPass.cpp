@@ -20,9 +20,11 @@
 #include "Texture/TextureView.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <Buffer/VertexBuffer.hpp>
-#include <RenderPass/FrameBuffer.hpp>
+#include <Command/CommandBuffer.hpp>
+#include <Image/Texture.hpp>
+#include <Image/TextureView.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
 
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
@@ -38,12 +40,9 @@ namespace castor3d
 	{
 		static uint32_t constexpr c_environmentCount = 16u;
 
-		renderer::VertexLayoutPtr doCreateVertexLayout( Engine & engine )
+		renderer::VertexLayoutPtr doCreateVertexLayout()
 		{
-			auto result = std::make_unique< renderer::VertexLayout >( *engine.getRenderSystem()->getCurrentDevice()
-				, 0u
-				, renderer::VertexInputRate::eVertex
-				, 0u );
+			auto result = std::make_unique< renderer::VertexLayout >( 0u, 16u, renderer::VertexInputRate::eVertex );
 			result->createAttribute( 0u, renderer::Format::eR32G32_SFLOAT, 0u );
 			result->createAttribute( 1u, renderer::Format::eR32G32_SFLOAT, 8u );
 			return result;
@@ -61,8 +60,8 @@ namespace castor3d
 				1, 1, 1, 1
 			};
 
-			auto vertexBuffer = std::make_unique< renderer::VertexBufferBase >( engine.getRenderSystem()->getCurrentDevice()
-				, sizeof( data )
+			auto vertexBuffer = std::make_unique< renderer::VertexBufferBase >( *engine.getRenderSystem()->getCurrentDevice()
+				, uint32_t( sizeof( data ) )
 				, 0u
 				, renderer::MemoryPropertyFlag::eHostVisible );
 			if ( auto * buffer = vertexBuffer->getBuffer().lock( 0u, vertexBuffer->getSize(), renderer::MemoryMapFlag::eWrite ) )
@@ -893,27 +892,206 @@ namespace castor3d
 			return result;
 		}
 
-		renderer::PipelinePtr doCreateRenderPipeline( Engine & engine
+		inline renderer::DescriptorSetLayoutPtr doCreateUboDescriptorLayout( Engine & engine )
+		{
+			renderer::DescriptorSetLayoutBindingArray bindings
+			{
+				{ SceneUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
+				{ GpInfoUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
+			};
+			return engine.getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( bindings ) );
+		}
+
+		inline renderer::DescriptorSetPtr doCreateUboDescriptorSet( renderer::DescriptorSetPool & pool
+			, SceneUbo const & sceneUbo
+			, GpInfoUbo const & gpInfoUbo )
+		{
+			auto & layout = pool.getLayout();
+			auto result = pool.createDescriptorSet( 0u );
+			result->createBinding( layout.getBinding( SceneUbo::BindingPoint )
+				, sceneUbo.getUbo() );
+			result->createBinding( layout.getBinding( GpInfoUbo::BindingPoint )
+				, gpInfoUbo.getUbo() );
+			result->update();
+			return result;
+		}
+
+		inline renderer::RenderPassPtr doCreateRenderPass( Engine & engine
+			, renderer::Format format )
+		{
+			renderer::RenderPassCreateInfo renderPass{};
+			renderPass.flags = 0u;
+
+			renderPass.attachments.resize( 1u );
+			renderPass.attachments[0].index = 0u;
+			renderPass.attachments[0].format = format;
+			renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+			renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+			renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+			renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+			renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+			renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+			renderPass.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+
+			renderer::AttachmentReference colourReference;
+			colourReference.attachment = 0u;
+			colourReference.layout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+			renderPass.subpasses.resize( 1u );
+			renderPass.subpasses[0].flags = 0u;
+			renderPass.subpasses[0].colorAttachments = { colourReference };
+
+			renderPass.dependencies.resize( 2u );
+			renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+			renderPass.dependencies[0].dstSubpass = 0u;
+			renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+			renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
+			renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+			renderPass.dependencies[1].srcSubpass = 0u;
+			renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+			renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+			renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eMemoryRead;
+			renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+			return engine.getRenderSystem()->getCurrentDevice()->createRenderPass( renderPass );
+		}
+
+		inline renderer::FrameBufferPtr doCreateFrameBuffer( renderer::RenderPass const & renderPass
+			, renderer::Extent2D const size
+			, renderer::TextureView const & view )
+		{
+			renderer::FrameBufferAttachmentArray attaches
+			{
+				{ *renderPass.getAttachments().begin(), view }
+			};
+			return renderPass.createFrameBuffer( size, std::move( attaches ) );
+		}
+
+		inline renderer::DescriptorSetLayoutPtr doCreateTexDescriptorLayout( Engine & engine
+			, bool hasSsao
+			, MaterialType matType )
+		{
+			renderer::DescriptorSetLayoutBindingArray bindings
+			{
+				{ 0, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// DsTexture::eDepth
+				{ 1, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// DsTexture::eData1
+				{ 2, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// DsTexture::eData2
+				{ 3, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// DsTexture::eData3
+				{ 4, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// DsTexture::eData4
+				{ 5, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// DsTexture::eData5
+			};
+			uint32_t index = 6u;
+
+			if ( hasSsao )
+			{
+				bindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );	// c3d_mapSsao
+			}
+
+			bindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );	// c3d_mapLightDiffuse
+			bindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );	// c3d_mapLightSpecular
+
+			if ( matType != MaterialType::eLegacy )
+			{
+				bindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );	// c3d_mapBrdf
+				bindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );	// c3d_mapIrradiance
+				bindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );	// c3d_mapPrefiltered
+			}
+
+			bindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment, c_environmentCount );	// c3d_mapEnvironment
+			return engine.getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( bindings ) );
+		}
+
+		inline renderer::DescriptorSetPtr doCreateTexDescriptorSet( renderer::DescriptorSetPool & pool
+			, GeometryPassResult const & gp
+			, renderer::TextureView const & lightDiffuse
+			, renderer::TextureView const & lightSpecular
+			, renderer::TextureView const * ssao
+			, Scene const & scene
+			, MaterialType matType )
+		{
+			uint32_t index = 0u;
+			auto & layout = pool.getLayout();
+			auto result = pool.createDescriptorSet( 1u );
+			result->createBinding( layout.getBinding( index++ )
+				, gp[size_t( DsTexture::eDepth )]->getTexture()->getDefaultView()
+				, gp[size_t( DsTexture::eDepth )]->getSampler()->getSampler() );
+			result->createBinding( layout.getBinding( index++ )
+				, gp[size_t( DsTexture::eData1 )]->getTexture()->getDefaultView()
+				, gp[size_t( DsTexture::eData1 )]->getSampler()->getSampler() );
+			result->createBinding( layout.getBinding( index++ )
+				, gp[size_t( DsTexture::eData2 )]->getTexture()->getDefaultView()
+				, gp[size_t( DsTexture::eData2 )]->getSampler()->getSampler() );
+			result->createBinding( layout.getBinding( index++ )
+				, gp[size_t( DsTexture::eData3 )]->getTexture()->getDefaultView()
+				, gp[size_t( DsTexture::eData3 )]->getSampler()->getSampler() );
+			result->createBinding( layout.getBinding( index++ )
+				, gp[size_t( DsTexture::eData4 )]->getTexture()->getDefaultView()
+				, gp[size_t( DsTexture::eData4 )]->getSampler()->getSampler() );
+			result->createBinding( layout.getBinding( index++ )
+				, gp[size_t( DsTexture::eData5 )]->getTexture()->getDefaultView()
+				, gp[size_t( DsTexture::eData5 )]->getSampler()->getSampler() );
+
+			if ( ssao )
+			{
+				result->createBinding( layout.getBinding( index++ )
+					, *ssao
+					, gp[size_t( DsTexture::eData5 )]->getSampler()->getSampler() );
+			}
+
+			result->createBinding( layout.getBinding( index++ )
+				, lightDiffuse
+				, gp[size_t( DsTexture::eData4 )]->getSampler()->getSampler() );
+			result->createBinding( layout.getBinding( index++ )
+				, lightSpecular
+				, gp[size_t( DsTexture::eData5 )]->getSampler()->getSampler() );
+
+			if ( matType != MaterialType::eLegacy )
+			{
+				auto & skyboxIbl = scene.getSkybox().getIbl();
+				result->createBinding( layout.getBinding( index++ )
+					, skyboxIbl.getPrefilteredBrdf().getTexture()->getDefaultView()
+					, skyboxIbl.getPrefilteredBrdf().getSampler()->getSampler() );
+				result->createBinding( layout.getBinding( index++ )
+					, skyboxIbl.getIrradiance().getTexture()->getDefaultView()
+					, skyboxIbl.getIrradiance().getSampler()->getSampler() );
+				result->createBinding( layout.getBinding( index++ )
+					, skyboxIbl.getPrefilteredEnvironment().getTexture()->getDefaultView()
+					, skyboxIbl.getPrefilteredEnvironment().getSampler()->getSampler() );
+			}
+
+			result->update();
+			return result;
+		}
+
+		renderer::PipelinePtr doCreateRenderPipeline( renderer::PipelineLayout const & pipelineLayout
 			, renderer::ShaderStageStateArray program
-			, MatrixUbo & matrixUbo
-			, SceneUbo & sceneUbo
-			, GpInfoUbo & gpInfoUbo )
+			, renderer::RenderPass const & renderPass
+			, renderer::Extent2D const & size )
 		{
 			renderer::RasterisationState rsState;
 			rsState.cullMode = renderer::CullModeFlag::eNone;
 			renderer::DepthStencilState dsState{ 0u, false, false };
 			renderer::ColourBlendState blState = renderer::ColourBlendState::createDefault();
-			auto result = std::make_unique< RenderPipeline >( *engine.getRenderSystem()
-				, std::move( dsState )
-				, std::move( rsState )
-				, std::move( blState )
-				, renderer::MultisampleState{}
-				, program
-				, PipelineFlags{} );
-			result->addUniformBuffer( matrixUbo.getUbo() );
-			result->addUniformBuffer( sceneUbo.getUbo() );
-			result->addUniformBuffer( gpInfoUbo.getUbo() );
-			return result;
+			return pipelineLayout.createPipeline(
+			{
+				program,
+				renderPass,
+				renderer::VertexInputState::create( *doCreateVertexLayout() ),
+				renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleList },
+				rsState,
+				renderer::MultisampleState{},
+				blState,
+				{},
+				dsState,
+				std::nullopt,
+				renderer::Viewport{ size.width, size.height, 0, 0 },
+				renderer::Scissor{ 0, 0, size.width, size.height }
+			} );
 		}
 
 		template< typename T >
@@ -945,136 +1123,180 @@ namespace castor3d
 		}
 	}
 
+	//*********************************************************************************************
+
 	ReflectionPass::ProgramPipeline::ProgramPipeline( Engine & engine
+		, Scene const & scene
 		, renderer::VertexBufferBase & vbo
-		, MatrixUbo & matrixUbo
-		, SceneUbo & sceneUbo
-		, GpInfoUbo & gpInfoUbo
-		, bool hasSsao
+		, renderer::DescriptorSetLayout const & uboLayout
+		, renderer::DescriptorSet const & uboSet
+		, renderer::RenderPass const & renderPass
+		, renderer::FrameBuffer const & frameBuffer
+		, GeometryPassResult const & gp
+		, renderer::TextureView const & lightDiffuse
+		, renderer::TextureView const & lightSpecular
+		, renderer::TextureView const * ssao
+		, renderer::Extent2D const & size
 		, FogType fogType
 		, MaterialType matType )
-		: m_program{ doCreateProgram( engine, fogType, hasSsao, matType ) }
-		, m_geometryBuffers{ doCreateVao( engine, *m_program, vbo ) }
-		, m_pipeline{ doCreateRenderPipeline( engine, *m_program, matrixUbo, sceneUbo, gpInfoUbo ) }
+		: m_program{ doCreateProgram( engine, fogType, ssao != nullptr, matType ) }
+		, m_texDescriptorLayout{ doCreateTexDescriptorLayout( engine, ssao != nullptr, matType ) }
+		, m_texDescriptorPool{ m_texDescriptorLayout->createPool( 1u ) }
+		, m_texDescriptorSet{ doCreateTexDescriptorSet( *m_texDescriptorPool, gp, lightDiffuse, lightSpecular, ssao, scene, matType ) }
+		, m_pipelineLayout{ engine.getRenderSystem()->getCurrentDevice()->createPipelineLayout( { uboLayout, *m_texDescriptorLayout } ) }
+		, m_pipeline{ doCreateRenderPipeline( *m_pipelineLayout, m_program, renderPass, size ) }
+		, m_commandBuffer{ engine.getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer( true ) }
 	{
+		static renderer::ClearColorValue const clear{ 0.0, 0.0, 0.0, 0.0 };
+
+		if ( m_commandBuffer->begin() )
+		{
+			m_commandBuffer->beginRenderPass( renderPass
+				, frameBuffer
+				, { clear }
+				, renderer::SubpassContents::eInline );
+			m_commandBuffer->bindPipeline( *m_pipeline );
+			m_commandBuffer->bindDescriptorSets( { uboSet, *m_texDescriptorSet }, *m_pipelineLayout );
+			m_commandBuffer->bindVertexBuffer( 0u, vbo.getBuffer(), 0u );
+			m_commandBuffer->draw( 6u );
+			m_commandBuffer->endRenderPass();
+			m_commandBuffer->end();
+		}
 	}
 
-	ReflectionPass::ProgramPipeline::~ProgramPipeline()
-	{
-		m_pipeline->cleanup();
-		m_pipeline.reset();
-		m_geometryBuffers->cleanup();
-		m_geometryBuffers.reset();
-		m_program.reset();
-	}
-
-	void ReflectionPass::ProgramPipeline::render( VertexBuffer const & vbo )
-	{
-		m_pipeline->apply();
-		m_geometryBuffers->draw( 6u, 0u );
-	}
+	//*********************************************************************************************
 
 	ReflectionPass::ReflectionPass( Engine & engine
-		, Size const & size
+		, Scene const & scene
+		, GeometryPassResult const & gp
+		, renderer::TextureView const & lightDiffuse
+		, renderer::TextureView const & lightSpecular
+		, renderer::TextureView const & result
 		, SceneUbo & sceneUbo
 		, GpInfoUbo & gpInfoUbo
-		, SsaoConfig const & config )
+		, SsaoConfig const & config
+		, Viewport const & viewport )
 		: OwnedBy< Engine >{ engine }
-		, m_size{ size }
-		, m_viewport{ engine }
-		, m_vertexBuffer{ doCreateVbo( engine ) }
-		, m_matrixUbo{ engine }
+		, m_device{ *engine.getRenderSystem()->getCurrentDevice() }
+		, m_scene{ scene }
 		, m_gpInfoUbo{ gpInfoUbo }
+		, m_size{ result.getTexture().getDimensions().width, result.getTexture().getDimensions().height }
+		, m_vertexBuffer{ doCreateVbo( engine ) }
+		, m_uboDescriptorLayout{ doCreateUboDescriptorLayout( engine ) }
+		, m_uboDescriptorPool{ m_uboDescriptorLayout->createPool( 1u ) }
+		, m_uboDescriptorSet{ doCreateUboDescriptorSet( *m_uboDescriptorPool, sceneUbo, gpInfoUbo ) }
+		, m_renderPass{ doCreateRenderPass( engine, result.getFormat() ) }
+		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_size, result ) }
+		, m_finished{ m_device.createSemaphore() }
+		, m_ssao{ engine, m_size, config, gp, viewport }
 		, m_programs
 		{
 			{
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eDisabled, engine.getMaterialsType() },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eLinear, engine.getMaterialsType() },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eExponential, engine.getMaterialsType() },
-				ProgramPipeline{ engine, *m_vertexBuffer, m_matrixUbo, sceneUbo, m_gpInfoUbo, config.m_enabled, FogType::eSquaredExponential, engine.getMaterialsType() },
+				ProgramPipeline
+				{
+					engine,
+					scene,
+					*m_vertexBuffer,
+					*m_uboDescriptorLayout,
+					*m_uboDescriptorSet,
+					*m_renderPass,
+					*m_frameBuffer,
+					gp,
+					lightDiffuse,
+					lightSpecular,
+					config.m_enabled ? &m_ssao.getResult().getTexture()->getDefaultView() : nullptr,
+					m_size,
+					FogType::eDisabled,
+					engine.getMaterialsType()
+				},
+				ProgramPipeline
+				{
+					engine,
+					scene,
+					*m_vertexBuffer,
+					*m_uboDescriptorLayout,
+					*m_uboDescriptorSet,
+					*m_renderPass,
+					*m_frameBuffer,
+					gp,
+					lightDiffuse,
+					lightSpecular,
+					config.m_enabled ? &m_ssao.getResult().getTexture()->getDefaultView() : nullptr,
+					m_size,
+					FogType::eLinear,
+					engine.getMaterialsType()
+				},
+				ProgramPipeline
+				{
+					engine,
+					scene,
+					*m_vertexBuffer,
+					*m_uboDescriptorLayout,
+					*m_uboDescriptorSet,
+					*m_renderPass,
+					*m_frameBuffer,
+					gp,
+					lightDiffuse,
+					lightSpecular,
+					config.m_enabled ? &m_ssao.getResult().getTexture()->getDefaultView() : nullptr,
+					m_size,
+					FogType::eExponential,
+					engine.getMaterialsType()
+				},
+				ProgramPipeline
+				{
+					engine,
+					scene,
+					*m_vertexBuffer,
+					*m_uboDescriptorLayout,
+					*m_uboDescriptorSet,
+					*m_renderPass,
+					*m_frameBuffer,
+					gp,
+					lightDiffuse,
+					lightSpecular,
+					config.m_enabled ? &m_ssao.getResult().getTexture()->getDefaultView() : nullptr,
+					m_size,
+					FogType::eSquaredExponential,
+					engine.getMaterialsType()
+				},
 			}
 		}
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Reflection" ), cuT( "Reflection" ) ) }
 		, m_ssaoEnabled{ config.m_enabled }
-		, m_ssao{ engine, size, config }
 	{
 		m_viewport.setOrtho( 0, 1, 0, 1, 0, 1 );
-		m_viewport.initialise();
-		m_viewport.resize( m_size );
+		m_viewport.resize( { m_size.width, m_size.height } );
 		m_viewport.update();
-		m_matrixUbo.update( m_viewport.getProjection() );
 	}
 
-	ReflectionPass::~ReflectionPass()
+	void ReflectionPass::update( Camera const & camera )
 	{
-		m_matrixUbo.getUbo().cleanup();
-		m_vertexBuffer->cleanup();
+		if ( m_ssaoEnabled )
+		{
+			m_ssao.update( camera );
+		}
+
 	}
 
-	void ReflectionPass::render( GeometryPassResult & gp
-		, TextureUnit const & lightDiffuse
-		, TextureUnit const & lightSpecular
-		, Scene const & scene
-		, Camera const & camera
-		, FrameBuffer const & frameBuffer )
+	void ReflectionPass::render( renderer::Semaphore const & toWait )const
 	{
+		renderer::Semaphore const * semaphore = &toWait;
 		TextureUnit const * ssao = nullptr;
 
 		if ( m_ssaoEnabled )
 		{
-			m_ssao.render( gp
-				, camera );
-			ssao = &m_ssao.getResult();
+			m_ssao.render( toWait );
+			semaphore = &m_ssao.getSemaphore();
 		}
 
 		m_timer->start();
-		frameBuffer.bind( FrameBufferTarget::eDraw );
-		frameBuffer.setDrawBuffers();
-		m_viewport.apply();
-
-		auto & maps = scene.getEnvironmentMaps();
-
-		auto index = MinBufferIndex;
-
-		for ( auto & buffer : gp )
-		{
-			buffer->getTexture()->bind( index );
-			buffer->getSampler()->bind( index++ );
-		}
-
-		if ( m_ssaoEnabled )
-		{
-			ssao->getSampler()->bind( index );
-			ssao->getTexture()->bind( index++ );
-		}
-
-		lightDiffuse.getTexture()->bind( index );
-		lightDiffuse.getSampler()->bind( index++ );
-		lightSpecular.getTexture()->bind( index );
-		lightSpecular.getSampler()->bind( index++ );
-		auto program = size_t( scene.getFog().getType() );
-
-		if ( scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness
-			|| scene.getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
-		{
-			auto & skyboxIbl = scene.getSkybox().getIbl();
-			skyboxIbl.getPrefilteredBrdf().getTexture()->bind( index );
-			skyboxIbl.getPrefilteredBrdf().getSampler()->bind( index++ );
-			skyboxIbl.getIrradiance().getTexture()->bind( index );
-			skyboxIbl.getIrradiance().getSampler()->bind( index++ );
-			skyboxIbl.getPrefilteredEnvironment().getTexture()->bind( index );
-			skyboxIbl.getPrefilteredEnvironment().getSampler()->bind( index++ );
-		}
-
-		for ( auto & map : maps )
-		{
-			map.get().getTexture().getTexture()->bind( index );
-			map.get().getTexture().getSampler()->bind( index++ );
-		}
-
-		m_programs[program].render( *m_vertexBuffer );
-		frameBuffer.unbind();
-
+		auto program = size_t( m_scene.getFog().getType() );
+		m_device.getGraphicsQueue().submit( *m_programs[program].m_commandBuffer
+			, *semaphore
+			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, *m_finished
+			, nullptr );
 		m_timer->stop();
 	}
 }

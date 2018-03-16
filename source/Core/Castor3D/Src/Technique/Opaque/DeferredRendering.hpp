@@ -46,8 +46,10 @@ namespace castor3d
 			, OpaquePass & opaquePass
 			, TextureLayoutSPtr depthTexture
 			, TextureLayoutSPtr velocityTexture
+			, TextureLayoutSPtr resultTexture
 			, castor::Size const & size
 			, Scene const & scene
+			, Viewport const & viewport
 			, SsaoConfig const & config );
 		/**
 		 *\~english
@@ -58,27 +60,40 @@ namespace castor3d
 		~DeferredRendering();
 		/**
 		 *\~english
-		 *\brief		Renders opaque nodes.
+		 *\brief		Updates opaque pass.
 		 *\param[out]	info		Receives the render informations.
 		 *\param[out]	scene		The rendered scene.
 		 *\param[out]	camera		The viewer camera.
 		 *\param[out]	shadowMaps	The shadow maps.
 		 *\param[out]	jitter		The jittering value.
-		 *\param[out]	velocity	The velocity texture.
 		 *\~french
-		 *\brief		Dessine les noeuds opaques.
+		 *\brief		Met à jour la passe opaque.
 		 *\param[out]	info		Reçoit les informations de rendu.
 		 *\param[out]	scene		La scène rendue.
 		 *\param[out]	camera		La caméra par laquelle la scène est rendue.
 		 *\param[out]	shadowMaps	Les textures d'ombres.
 		 *\param[out]	jitter		La valeur de jittering.
-		 *\param[out]	velocity	La texture de vélocité.
 		 */
-		void render( RenderInfo & info
+		void update( RenderInfo & info
 			, Scene const & scene
 			, Camera const & camera
 			, ShadowMapLightTypeArray & shadowMaps
-			, castor::Point2r const & jitter
+			, castor::Point2r const & jitter );
+		/**
+		 *\~english
+		 *\brief		Renders opaque nodes.
+		 *\param[out]	info		Receives the render informations.
+		 *\param[out]	scene		The rendered scene.
+		 *\param[out]	camera		The viewer camera.
+		 *\~french
+		 *\brief		Dessine les noeuds opaques.
+		 *\param[out]	info		Reçoit les informations de rendu.
+		 *\param[out]	scene		La scène rendue.
+		 *\param[out]	camera		La caméra par laquelle la scène est rendue.
+		 */
+		renderer::Semaphore const & render( RenderInfo & info
+			, Scene const & scene
+			, Camera const & camera
 			, renderer::Semaphore const & toWait );
 		/**
 		 *\~english

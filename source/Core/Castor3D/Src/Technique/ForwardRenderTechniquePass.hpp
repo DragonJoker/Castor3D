@@ -86,7 +86,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::render
 		 */
-		C3D_API void render( RenderInfo & info
+		C3D_API void update( RenderInfo & info
 			, ShadowMapLightTypeArray & shadowMaps
 			, castor::Point2r const & jitter )override;
 

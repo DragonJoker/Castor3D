@@ -264,10 +264,16 @@ namespace castor3d
 			return program;
 		}
 
-		RenderPipelineUPtr doCreateRenderPipeline( Engine & engine
-			, renderer::ShaderStageStateArray const & program
+		renderer::PipelineLayoutPtr doCreateRenderPipelineLayout( Engine & engine
 			, renderer::DescriptorSetLayout const & uboLayout
-			, renderer::DescriptorSetLayout const & texLayout
+			, renderer::DescriptorSetLayout const & texLayout )
+		{
+			return engine.getRenderSystem()->getCurrentDevice()->createPipelineLayout( { uboLayout, texLayout } );
+		}
+
+		renderer::PipelinePtr doCreateRenderPipeline( renderer::PipelineLayout const & pipelineLayout
+			, renderer::ShaderStageStateArray const & program
+			, renderer::RenderPass const & renderPass
 			, renderer::VertexLayout const & vtxLayout )
 		{
 			renderer::DepthStencilState dsstate
@@ -294,30 +300,34 @@ namespace castor3d
 				renderer::BlendFactor::eInvSrcAlpha,
 				renderer::BlendOp::eAdd
 			} );
-			auto pipeline = std::make_unique< RenderPipeline >( *engine.getRenderSystem()
-				, std::move( dsstate )
-				, std::move( rsstate )
-				, std::move( bdState )
-				, renderer::MultisampleState{}
-				, program
-				, PipelineFlags{} );
-			pipeline->setDescriptorSetLayouts( { uboLayout, texLayout } );
-			pipeline->setVertexLayouts( { vtxLayout } );
-			return pipeline;
+			return pipelineLayout.createPipeline( {
+				program,
+				renderPass,
+				renderer::VertexInputState::create( vtxLayout ),
+				renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleStrip },
+				rsstate,
+				renderer::MultisampleState{},
+				bdState,
+				{ renderer::DynamicState::eViewport, renderer::DynamicState::eScissor },
+				dsstate,
+			} );
 		}
 	}
 
 	//*********************************************************************************************
 
 	FinalCombineProgram::FinalCombineProgram( Engine & engine
+		, renderer::RenderPass const & renderPass
 		, renderer::DescriptorSetLayout const & uboLayout
 		, renderer::DescriptorSetLayout const & texLayout
 		, renderer::VertexLayout const & vtxLayout
 		, FogType fogType )
-		: m_pipeline{ doCreateRenderPipeline( engine
-			, doCreateProgram( engine, fogType )
+		: m_pipelineLayout{ doCreateRenderPipelineLayout( engine
 			, uboLayout
-			, texLayout
+			, texLayout ) }
+		, m_pipeline{ doCreateRenderPipeline( *m_pipelineLayout
+			, doCreateProgram( engine, fogType )
+			, renderPass
 			, vtxLayout ) }
 		, m_commandBuffer{ engine.getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer( false ) }
 	{
@@ -325,26 +335,22 @@ namespace castor3d
 
 	FinalCombineProgram::~FinalCombineProgram()
 	{
-		m_pipeline->cleanup();
 		m_pipeline.reset();
 	}
 
-	void FinalCombineProgram::initialise( renderer::RenderPass const & renderPass
+	void FinalCombineProgram::prepare( renderer::RenderPass const & renderPass
 		, Size const & size
 		, renderer::DescriptorSet const & uboDescriptorSet
 		, renderer::DescriptorSet const & texDescriptorSet
 		, renderer::BufferBase const & vbo )
 	{
-		m_pipeline->initialise( renderPass, renderer::PrimitiveTopology::eTriangleStrip );
-
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eRenderPassContinue ) )
 		{
-			m_commandBuffer->bindPipeline( m_pipeline->getPipeline() );
-			m_commandBuffer->bindDescriptorSets( { uboDescriptorSet, texDescriptorSet }
-				, m_pipeline->getPipelineLayout() );
-			m_commandBuffer->bindVertexBuffer( 0u, vbo, 0u );
+			m_commandBuffer->bindPipeline( *m_pipeline );
 			m_commandBuffer->setViewport( { size.getWidth(), size.getHeight(), 0, 0 } );
 			m_commandBuffer->setScissor( { 0, 0, size.getWidth(), size.getHeight() } );
+			m_commandBuffer->bindDescriptorSets( { uboDescriptorSet, texDescriptorSet }, *m_pipelineLayout );
+			m_commandBuffer->bindVertexBuffer( 0u, vbo, 0u );
 			m_commandBuffer->draw( 4u );
 			m_commandBuffer->end();
 		}
@@ -371,19 +377,19 @@ namespace castor3d
 		, m_texDescriptorSet{ doCreateTexDescriptorSet( *m_texDescriptorPool, wbResult[0], wbResult[1], wbResult[2], *m_sampler ) }
 		, m_programs
 		{
-			FinalCombineProgram{ engine, *m_uboDescriptorLayout, *m_texDescriptorLayout, *m_vertexLayout, FogType::eDisabled },
-			FinalCombineProgram{ engine, *m_uboDescriptorLayout, *m_texDescriptorLayout, *m_vertexLayout, FogType::eLinear },
-			FinalCombineProgram{ engine, *m_uboDescriptorLayout, *m_texDescriptorLayout, *m_vertexLayout, FogType::eExponential },
-			FinalCombineProgram{ engine, *m_uboDescriptorLayout, *m_texDescriptorLayout, *m_vertexLayout, FogType::eSquaredExponential }
+			FinalCombineProgram{ engine, renderPass, *m_uboDescriptorLayout, *m_texDescriptorLayout, *m_vertexLayout, FogType::eDisabled },
+			FinalCombineProgram{ engine, renderPass, *m_uboDescriptorLayout, *m_texDescriptorLayout, *m_vertexLayout, FogType::eLinear },
+			FinalCombineProgram{ engine, renderPass, *m_uboDescriptorLayout, *m_texDescriptorLayout, *m_vertexLayout, FogType::eExponential },
+			FinalCombineProgram{ engine, renderPass, *m_uboDescriptorLayout, *m_texDescriptorLayout, *m_vertexLayout, FogType::eSquaredExponential }
 		}
 	{
 		for ( auto & program : m_programs )
 		{
-			program.initialise( renderPass
+			program.prepare( renderPass
 				, m_size
 				, *m_uboDescriptorSet
 				, *m_texDescriptorSet
-				, *m_vertexBuffer );
+				, m_vertexBuffer->getBuffer() );
 		}
 	}
 

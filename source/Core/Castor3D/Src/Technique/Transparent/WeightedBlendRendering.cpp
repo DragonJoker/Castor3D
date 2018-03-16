@@ -9,9 +9,7 @@
 #include <RenderPass/FrameBuffer.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
 #include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassState.hpp>
-#include <RenderPass/RenderSubpass.hpp>
-#include <RenderPass/RenderSubpassState.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
 
 using namespace castor;
 
@@ -20,52 +18,98 @@ namespace castor3d
 	namespace
 	{
 		renderer::RenderPassPtr doCreateRenderPass( Engine & engine
-			, renderer::TextureView & depthView
-			, renderer::TextureView & colourView )
+			, renderer::TextureView const & depthView
+			, renderer::TextureView const & colourView )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			auto & device = *renderSystem.getCurrentDevice();
-			std::vector< renderer::PixelFormat > formats
+
+			renderer::RenderPassCreateInfo createInfo{};
+			createInfo.flags = 0u;
+
+			createInfo.attachments.resize( 4u );
+			createInfo.attachments[0].index = 0u;
+			createInfo.attachments[0].format = depthView.getFormat();
+			createInfo.attachments[0].samples = renderer::SampleCountFlag::e1;
+			createInfo.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
+			createInfo.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+			createInfo.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+			createInfo.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+			createInfo.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+			createInfo.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+
+			createInfo.attachments[1].index = 1u;
+			createInfo.attachments[1].format = getTextureFormat( WbTexture::eAccumulation );
+			createInfo.attachments[1].samples = renderer::SampleCountFlag::e1;
+			createInfo.attachments[1].loadOp = renderer::AttachmentLoadOp::eClear;
+			createInfo.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
+			createInfo.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+			createInfo.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+			createInfo.attachments[1].initialLayout = renderer::ImageLayout::eUndefined;
+			createInfo.attachments[1].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+
+			createInfo.attachments[2].index = 2u;
+			createInfo.attachments[2].format = getTextureFormat( WbTexture::eRevealage );
+			createInfo.attachments[2].samples = renderer::SampleCountFlag::e1;
+			createInfo.attachments[2].loadOp = renderer::AttachmentLoadOp::eClear;
+			createInfo.attachments[2].storeOp = renderer::AttachmentStoreOp::eStore;
+			createInfo.attachments[2].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+			createInfo.attachments[2].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+			createInfo.attachments[2].initialLayout = renderer::ImageLayout::eUndefined;
+			createInfo.attachments[2].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+
+			createInfo.attachments[3].index = 3u;
+			createInfo.attachments[3].format = colourView.getFormat();
+			createInfo.attachments[3].samples = renderer::SampleCountFlag::e1;
+			createInfo.attachments[3].loadOp = renderer::AttachmentLoadOp::eLoad;
+			createInfo.attachments[3].storeOp = renderer::AttachmentStoreOp::eStore;
+			createInfo.attachments[3].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+			createInfo.attachments[3].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+			createInfo.attachments[3].initialLayout = renderer::ImageLayout::eUndefined;
+			createInfo.attachments[3].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+			renderer::AttachmentReference colourReference;
+			colourReference.attachment = 0u;
+			colourReference.layout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+			createInfo.subpasses.resize( 2u );
+			createInfo.subpasses[0].flags = 0u;
+			createInfo.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
+			createInfo.subpasses[0].colorAttachments =
 			{
-				depthView.getFormat(),
-				getTextureFormat( WbTexture::eAccumulation ),
-				getTextureFormat( WbTexture::eRevealage ),
-				colourView.getFormat()
+				{ 1u, renderer::ImageLayout::eColourAttachmentOptimal },
+				{ 2u, renderer::ImageLayout::eColourAttachmentOptimal },
 			};
-			renderer::RenderPassAttachmentArray attaches
-			{
-				renderer::RenderPassAttachment::createDepthStencilAttachment( depthView.getFormat(), false ),
-				renderer::RenderPassAttachment::createColourAttachment( 0u, getTextureFormat( WbTexture::eAccumulation ), true ),
-				renderer::RenderPassAttachment::createColourAttachment( 1u, getTextureFormat( WbTexture::eRevealage ), true ),
-				renderer::RenderPassAttachment::createColourAttachment( 2u, colourView.getFormat(), false ),
-			};
-			renderer::ImageLayoutArray const initialLayouts
-			{
-				renderer::ImageLayout::eDepthStencilAttachmentOptimal,
-				renderer::ImageLayout::eShaderReadOnlyOptimal,
-				renderer::ImageLayout::eShaderReadOnlyOptimal,
-				renderer::ImageLayout::eColourAttachmentOptimal,
-			};
-			renderer::ImageLayoutArray const finalLayouts
-			{
-				renderer::ImageLayout::eDepthStencilAttachmentOptimal,
-				renderer::ImageLayout::eShaderReadOnlyOptimal,
-				renderer::ImageLayout::eShaderReadOnlyOptimal,
-				renderer::ImageLayout::eColourAttachmentOptimal,
-			};
-			renderer::RenderSubpassPtrArray subpasses;
-			subpasses.emplace_back( device.createRenderSubpass( { attaches[0], attaches[1], attaches[2] }
-				, { renderer::PipelineStageFlag::eColourAttachmentOutput, renderer::AccessFlag::eColourAttachmentWrite } ) );
-			subpasses.emplace_back( device.createRenderSubpass( { attaches[3] }
-				, { renderer::PipelineStageFlag::eColourAttachmentOutput, renderer::AccessFlag::eColourAttachmentWrite } ) );
-			return device.createRenderPass( attaches
-				, std::move( subpasses )
-				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-					, renderer::AccessFlag::eColourAttachmentWrite
-					, initialLayouts }
-				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-					, renderer::AccessFlag::eColourAttachmentWrite
-					, finalLayouts } );
+
+			createInfo.subpasses[1].flags = 0u;
+			createInfo.subpasses[1].colorAttachments = { { 3u, renderer::ImageLayout::eColourAttachmentOptimal } };
+
+			createInfo.dependencies.resize( 3u );
+			createInfo.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+			createInfo.dependencies[0].dstSubpass = 0u;
+			createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+			createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
+			createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+			createInfo.dependencies[1].srcSubpass = 0u;
+			createInfo.dependencies[1].dstSubpass = 1u;
+			createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			createInfo.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+			createInfo.dependencies[2].srcSubpass = 1u;
+			createInfo.dependencies[2].dstSubpass = renderer::ExternalSubpass;
+			createInfo.dependencies[2].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			createInfo.dependencies[2].dstStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+			createInfo.dependencies[2].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			createInfo.dependencies[2].dstAccessMask = renderer::AccessFlag::eMemoryRead;
+			createInfo.dependencies[2].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+			return device.createRenderPass( createInfo );
 		}
 
 		renderer::TexturePtr doCreateTexture( Engine & engine
@@ -74,11 +118,20 @@ namespace castor3d
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			auto & device = *renderSystem.getCurrentDevice();
-			auto result = device.createTexture();
-			result->setImage( getTextureFormat( texture )
-				, renderer::Extent3D{ size.getWidth(), size.getHeight(), 1u }
-			, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled );
-			return result;
+
+			renderer::ImageCreateInfo image{};
+			image.arrayLayers = 1u;
+			image.extent.width = size.getWidth();
+			image.extent.height = size.getHeight();
+			image.extent.depth = 1u;
+			image.format = getTextureFormat( texture );
+			image.imageType = renderer::TextureType::e2D;
+			image.initialLayout = renderer::ImageLayout::eUndefined;
+			image.mipLevels = 1u;
+			image.samples = renderer::SampleCountFlag::e1;
+			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+
+			return device.createTexture( image, renderer::MemoryPropertyFlag::eDeviceLocal );
 		}
 
 		renderer::FrameBufferPtr doCreateFrameBuffer( renderer::RenderPass const & renderPass
@@ -100,8 +153,8 @@ namespace castor3d
 
 	WeightedBlendRendering::WeightedBlendRendering( Engine & engine
 		, TransparentPass & transparentPass
-		, renderer::TextureView & depthView
-		, renderer::TextureView & colourView
+		, renderer::TextureView const & depthView
+		, renderer::TextureView const & colourView
 		, castor::Size const & size
 		, Scene const & scene )
 		: m_engine{ engine }
@@ -119,26 +172,29 @@ namespace castor3d
 	{
 	}
 
-	void WeightedBlendRendering::update( Scene const & scene
-		, Camera const & camera )
+	void WeightedBlendRendering::update( RenderInfo & info
+		, Scene const & scene
+		, Camera const & camera
+		, ShadowMapLightTypeArray & shadowMaps
+		, Point2r const & jitter )
 	{
-		m_transparentPass.getSceneUbo().update( camera, scene.getFog() );
 		auto invView = camera.getView().getInverse().getTransposed();
 		auto invProj = camera.getViewport().getProjection().getInverse();
 		auto invViewProj = ( camera.getViewport().getProjection() * camera.getView() ).getInverse();
 
+		m_transparentPass.getSceneUbo().update( camera, scene.getFog() );
 		m_finalCombinePass.update( camera
 			, invViewProj
 			, invView
 			, invProj );
+		m_transparentPass.update( info
+			, shadowMaps
+			, jitter );
 	}
 
 	void WeightedBlendRendering::render( RenderInfo & info
 		, Scene const & scene
-		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps
-		, Point2r const & jitter
-		, TextureUnit const & velocity )
+		, renderer::Semaphore const & toWait )
 	{
 		static renderer::ClearColorValue accumClear{ 0.0, 0.0, 0.0, 0.0 };
 		static renderer::ClearColorValue revealClear{ 1.0, 1.0, 1.0, 1.0 };
@@ -151,14 +207,18 @@ namespace castor3d
 				, *m_frameBuffer
 				, { { accumClear }, { revealClear } }
 				, renderer::SubpassContents::eSecondaryCommandBuffers );
-			m_transparentPass.render( info
-				, shadowMaps
-				, jitter );
+			m_commandBuffer->executeCommands( { m_transparentPass.getCommandBuffer() } );
 			m_commandBuffer->nextSubpass( renderer::SubpassContents::eSecondaryCommandBuffers );
 			m_commandBuffer->executeCommands( { m_finalCombinePass.getCommandBuffer( scene.getFog().getType() ) } );
 			m_commandBuffer->endRenderPass();
 			m_commandBuffer->end();
 		}
+
+		m_engine.getRenderSystem()->getCurrentDevice()->getGraphicsQueue().submit( *m_commandBuffer
+			, toWait
+			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, *m_semaphore
+			, nullptr );
 	}
 
 	void WeightedBlendRendering::debugDisplay()

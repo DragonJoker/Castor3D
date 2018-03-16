@@ -100,7 +100,8 @@ namespace castor3d
 		 *\brief		Dessine la skybox.
 		 *\param[in]	camera	La caméra de la scène.
 		 */
-		C3D_API void render( Camera const & camera );
+		C3D_API void render( Camera const & camera
+			, renderer::Semaphore const & toWait );
 		/**
 		*\~english
 		*\return		Sets the skybox's equirectangular texture.
@@ -110,90 +111,74 @@ namespace castor3d
 		C3D_API void setEquiTexture( TextureLayoutSPtr texture
 			, castor::Size const & size );
 		/**
-		 *\~english
-		 *\return		The skybox's equirectangular texture path.
-		 *\~french
-		 *\return		Le chemin de l'image équirectangulaire de la skybox.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline castor::Path const & getEquiTexturePath()const
 		{
 			return m_equiTexturePath;
 		}
-		/**
-		*\~english
-		*\return		The skybox's texture.
-		*\~french
-		*\return		La texture de la skybox.
-		*/
+
 		inline TextureLayout const & getTexture()const
 		{
 			REQUIRE( m_texture );
 			return *m_texture;
 		}
-		/**
-		*\~english
-		*\return		The skybox's texture.
-		*\~french
-		*\return		La texture de la skybox.
-		*/
+
 		inline TextureLayout & getTexture()
 		{
 			REQUIRE( m_texture );
 			return *m_texture;
 		}
-		/**
-		 *\~english
-		 *\return		The skybox's texture image.
-		 *\~french
-		 *\return		L'image de la texture de la skybox.
-		 */
+
 		inline renderer::Texture const & getImage()const
 		{
 			REQUIRE( m_texture );
 			return m_texture->getTexture();
 		}
-		/**
-		 *\~english
-		 *\return		The skybox's texture.
-		 *\~french
-		 *\return		La texture de la skybox.
-		 */
+
 		inline renderer::TextureView const & getView()const
 		{
 			REQUIRE( m_texture );
 			return m_texture->getDefaultView();
 		}
-		/**
-		 *\~english
-		 *\return		The skybox's IBL textures.
-		 *\~french
-		 *\return		Les texture d'IBL de la skybox.
-		 */
+
+		inline renderer::Semaphore const & getSemaphore()const
+		{
+			REQUIRE( m_semaphore );
+			return *m_semaphore;
+		}
+
 		inline IblTextures const & getIbl()const
 		{
 			REQUIRE( m_ibl );
 			return *m_ibl;
 		}
+		/**@}*/
 		/**
-		 *\~english
-		 *\return		Sets the skybox's texture.
-		 *\~french
-		 *\return		Définit la texture de la skybox.
-		 */
-		inline void setTexture( TextureLayoutSPtr texture )
-		{
-			m_texture = std::move( texture );
-		}
-		/**
-		 *\~english
-		 *\return		Sets the skybox's scene.
-		 *\~french
-		 *\return		Définit la scène de la skybox.
-		 */
+		*\~english
+		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		*/
+		/**@{*/
 		inline void setScene( Scene & scene )
 		{
 			m_scene = &scene;
 		}
+
+		inline void setTexture( TextureLayoutSPtr texture )
+		{
+			m_texture = std::move( texture );
+		}
+		/**@}*/
 
 	protected:
 		virtual renderer::ShaderStageStateArray doInitialiseShader();
@@ -213,6 +198,7 @@ namespace castor3d
 		renderer::PipelineLayoutPtr m_pipelineLayout;
 		renderer::PipelinePtr m_pipeline;
 		renderer::CommandBufferPtr m_commandBuffer;
+		renderer::SemaphorePtr m_semaphore;
 		TextureLayoutSPtr m_equiTexture;
 		castor::Path m_equiTexturePath;
 		castor::Size m_equiSize;

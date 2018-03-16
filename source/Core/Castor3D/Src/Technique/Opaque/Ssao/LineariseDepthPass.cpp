@@ -77,8 +77,10 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), 0u, 0u );
-			auto c3d_clipInfo = writer.declUniform< Vec3 >( cuT( "c3d_clipInfo" ), 1u );
+			Pcb clipInfo{ writer, cuT( "ClipInfo" ), cuT( "clip" ) };
+			auto c3d_clipInfo = clipInfo.declMember< Vec3 >( cuT( "c3d_clipInfo" ), 0u );
+			clipInfo.end();
+			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), 1u, 0u );
 			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 			// Shader outputs
@@ -101,8 +103,10 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), 0u, 0u );
-			auto c3d_previousLevel = writer.declUniform< Int >( cuT( "c3d_previousLevel" ), 1u );
+			Pcb previousLevel{ writer, cuT( "PreviousLevel" ), cuT( "previous" ) };
+			auto c3d_previousLevel = previousLevel.declMember< Vec3 >( cuT( "c3d_previousLevel" ), 0u );
+			previousLevel.end();
+			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), 1u, 0u );
 			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 			// Shader outputs
@@ -203,17 +207,25 @@ namespace castor3d
 			return sampler;
 		}
 
-		TextureUnit doCreateTexture( Engine & engine, Size const & size )
+		TextureUnit doCreateTexture( Engine & engine, renderer::Extent2D const & size )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			auto sampler = doCreateSampler( engine, cuT( "LinearisePass_Result" ), renderer::WrapMode::eClampToEdge );
+
+			renderer::ImageCreateInfo image{};
+			image.arrayLayers = 1u;
+			image.extent.width = size.width;
+			image.extent.height = size.height;
+			image.extent.depth = 1u;
+			image.format = renderer::Format::eR32_SFLOAT;
+			image.imageType = renderer::TextureType::e2D;
+			image.mipLevels = LineariseDepthPass::MaxMipLevel + 1u;
+			image.samples = renderer::SampleCountFlag::e1;
+			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+
 			auto ssaoResult = std::make_shared< TextureLayout >( renderSystem
-				, renderer::TextureType::e2D
-				, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled
-				, renderer::MemoryPropertyFlag::eDeviceLocal
-				, PixelFormat::eL32F
-				, size
-				, LineariseDepthPass::MaxMipLevel + 1u );
+				, image
+				, renderer::MemoryPropertyFlag::eDeviceLocal );
 			TextureUnit result{ engine };
 			result.setTexture( ssaoResult );
 			result.setSampler( sampler );
@@ -318,7 +330,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	LineariseDepthPass::LineariseDepthPass( Engine & engine
-		, Size const & size
+		, renderer::Extent2D const & size
 		, SsaoConfigUbo & ssaoConfigUbo
 		, TextureUnit const & depthBuffer
 		, Viewport const & viewport )
@@ -337,6 +349,7 @@ namespace castor3d
 			, renderer::Filter::eNearest
 			, renderer::Filter::eNearest ) }
 		, m_commandBuffer{ m_engine.getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer() }
+		, m_finished{ engine.getRenderSystem()->getCurrentDevice()->createSemaphore() }
 		, m_clipInfo{ renderer::ShaderStageFlag::eFragment, { { 1u, 0u, renderer::ConstantFormat::eVec3f } } }
 		, m_lineariseProgram{ doGetLineariseProgram( m_engine ) }
 		, m_minifyProgram{ doGetMinifyProgram( m_engine ) }
@@ -350,7 +363,6 @@ namespace castor3d
 		// depth = 0 => result = z_n
 		// depth = 1 => result = z_f
 		*m_clipInfo.getData() = clipInfo;
-
 		doInitialiseLinearisePass();
 		doInitialiseMinifyPass();
 		doPrepareFrame();
@@ -365,12 +377,16 @@ namespace castor3d
 		m_result.cleanup();
 	}
 
-	void LineariseDepthPass::linearise()
+	void LineariseDepthPass::linearise( renderer::Semaphore const & toWait )const
 	{
 		m_timer->start();
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
-		device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
+		device.getGraphicsQueue().submit( *m_commandBuffer
+			, toWait
+			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, *m_finished
+			, nullptr );
 		m_timer->stop();
 	}
 

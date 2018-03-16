@@ -115,11 +115,23 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::render
 		 */
-		void render( RenderInfo & info
+		void update( RenderInfo & info
 			, ShadowMapLightTypeArray & shadowMaps
 			, castor::Point2r const & jitter )override;
 
 	private:
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillDescriptor
+		 */
+		void doFillDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, BillboardListRenderNode & node )override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillDescriptor
+		 */
+		void doFillDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, SubmeshRenderNode & node )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
 		 */
@@ -166,8 +178,6 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
 		void doUpdatePipeline( RenderPipeline & pipeline )const override;
-		void doCompletePipeline( PipelineFlags const & flags
-			, RenderPipeline & pipeline );
 
 	private:
 		renderer::RenderPassPtr m_renderPass;

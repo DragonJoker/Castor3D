@@ -76,14 +76,14 @@ namespace castor3d
 		return Values[size_t( texture )];
 	}
 
-	PixelFormat getTextureFormat( WbTexture texture )
+	renderer::Format getTextureFormat( WbTexture texture )
 	{
-		static std::array< PixelFormat, size_t( WbTexture::eCount ) > Values
+		static std::array< renderer::Format, size_t( WbTexture::eCount ) > Values
 		{
 			{
-				PixelFormat::eD24S8,
-				PixelFormat::eRGBA16F,
-				PixelFormat::eL16F,
+				renderer::Format::eD24_UNORM_S8_UINT,
+				renderer::Format::eR16G16B16A16_SFLOAT,
+				renderer::Format::eR16_SFLOAT,
 			}
 		};
 
@@ -109,13 +109,25 @@ namespace castor3d
 	{
 	}
 
-	void TransparentPass::render( RenderInfo & info
+	void TransparentPass::update( RenderInfo & info
 		, ShadowMapLightTypeArray & shadowMaps
 		, Point2r const & jitter )
 	{
 		doUpdate( info
 			, shadowMaps
 			, jitter );
+	}
+
+	void TransparentPass::doFillDescriptor( renderer::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, BillboardListRenderNode & node )
+	{
+	}
+
+	void TransparentPass::doFillDescriptor( renderer::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, SubmeshRenderNode & node )
+	{
 	}
 
 	void TransparentPass::doPrepareFrontPipeline( renderer::ShaderStageStateArray & program
@@ -125,20 +137,10 @@ namespace castor3d
 
 		if ( it == m_frontPipelines.end() )
 		{
-			renderer::DepthStencilState dsState
-			{
-				0u,
-				true,
-				false
-			};
-			renderer::RasterisationState rsState
-			{
-				0u,
-				false,
-				false,
-				renderer::PolygonMode::eFill,
-				renderer::CullModeFlag::eFront
-			};
+			renderer::DepthStencilState dsState;
+			dsState.depthWriteEnable = false;
+			renderer::RasterisationState rsState;
+			rsState.cullMode = renderer::CullModeFlag::eFront;
 			auto & pipeline = *m_frontPipelines.emplace( flags
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
 					, std::move( dsState )
@@ -148,12 +150,23 @@ namespace castor3d
 					, program
 					, flags ) ).first->second;
 
-			getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-				, [this, &pipeline, flags]()
+			auto initialise = [this, &pipeline, flags]()
 			{
-				doCompletePipeline( flags, pipeline );
-				pipeline.initialise( *m_renderPass, renderer::PrimitiveTopology::eTriangleList );
-			} ) );
+				auto uboBindings = doCreateUboBindings( flags );
+				auto layout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
+				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
+				layouts.emplace_back( std::move( layout ) );
+				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
+			};
+
+			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
+			{
+				initialise();
+			}
+			else
+			{
+				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, initialise ) );
+			}
 		}
 	}
 
@@ -164,20 +177,9 @@ namespace castor3d
 
 		if ( it == m_backPipelines.end() )
 		{
-			renderer::DepthStencilState dsState
-			{
-				0u,
-				true,
-				false
-			};
-			renderer::RasterisationState rsState
-			{
-				0u,
-				false,
-				false,
-				renderer::PolygonMode::eFill,
-				renderer::CullModeFlag::eBack
-			};
+			renderer::DepthStencilState dsState;
+			dsState.depthWriteEnable = false;
+			renderer::RasterisationState rsState;
 			auto & pipeline = *m_backPipelines.emplace( flags
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
 					, std::move( dsState )
@@ -187,12 +189,23 @@ namespace castor3d
 					, program
 					, flags ) ).first->second;
 
-			getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-				, [this, &pipeline, flags]()
+			auto initialise = [this, &pipeline, flags]()
 			{
-				doCompletePipeline( flags, pipeline );
-				pipeline.initialise( *m_renderPass, renderer::PrimitiveTopology::eTriangleList );
-			} ) );
+				auto uboBindings = doCreateUboBindings( flags );
+				auto layout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
+				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
+				layouts.emplace_back( std::move( layout ) );
+				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
+			};
+
+			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
+			{
+				initialise();
+			}
+			else
+			{
+				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, initialise ) );
+			}
 		}
 	}
 
@@ -254,8 +267,8 @@ namespace castor3d
 		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
 		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
-		SkinningUbo::declare( writer, 0, programFlags );
-		UBO_MORPHING( writer, 0, programFlags );
+		SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, programFlags );
+		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, programFlags );
 
 		// Outputs
 		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" )
@@ -1218,33 +1231,5 @@ namespace castor3d
 	{
 		auto & scene = *m_camera->getScene();
 		m_sceneUbo.update( scene, *m_camera, true );
-	}
-
-	void TransparentPass::doCompletePipeline( PipelineFlags const & flags
-		, RenderPipeline & pipeline )
-	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
-		m_scene.getLightCache().bindLights();
-		pipeline.addUniformBuffer( m_matrixUbo.getUbo() );
-		pipeline.addUniformBuffer( m_modelMatrixUbo.getUbo() );
-		pipeline.addUniformBuffer( m_sceneUbo.getUbo() );
-		pipeline.addUniformBuffer( m_modelUbo.getUbo() );
-
-		if ( checkFlag( flags.m_programFlags, ProgramFlag::eBillboards ) )
-		{
-			pipeline.addUniformBuffer( m_billboardUbo.getUbo() );
-		}
-
-		if ( checkFlag( flags.m_programFlags, ProgramFlag::eSkinning )
-			&& !checkFlag( flags.m_programFlags, ProgramFlag::eInstantiation ) )
-		{
-			pipeline.addUniformBuffer( m_skinningUbo.getUbo() );
-		}
-
-		if ( checkFlag( flags.m_programFlags, ProgramFlag::eMorphing ) )
-		{
-			pipeline.addUniformBuffer( m_morphingUbo.getUbo() );
-		}
 	}
 }

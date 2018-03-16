@@ -42,7 +42,7 @@ namespace castor3d
 		 *\param[in]	viewport		Le viewport depuis lequel on récupère les information de clip.
 		 */
 		LineariseDepthPass( Engine & engine
-			, castor::Size const & size
+			, renderer::Extent2D const & size
 			, SsaoConfigUbo & ssaoConfigUbo
 			, TextureUnit const & depthBuffer
 			, Viewport const & viewport );
@@ -59,17 +59,27 @@ namespace castor3d
 		 *\~french
 		 *\brief		Linéarise le tampon de profondeur.
 		 */
-		void linearise();
+		void linearise( renderer::Semaphore const & toWait )const;
 		/**
-		 *\~english
-		 *\return		The linearised depth buffer.
-		 *\~french
-		 *\return		Le tampon de profondeur linéarisé.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline TextureUnit const & getResult()const
 		{
 			return m_result;
 		}
+
+		inline renderer::Semaphore const & getSemaphore()const
+		{
+			REQUIRE( m_finished );
+			return *m_finished;
+		}
+		/**@}*/
 
 	private:
 		void doInitialiseLinearisePass();
@@ -85,7 +95,7 @@ namespace castor3d
 		Engine & m_engine;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		TextureUnit const & m_depthBuffer;
-		castor::Size m_size;
+		renderer::Extent2D m_size;
 		TextureUnit m_result;
 		RenderPassTimerSPtr m_timer;
 		renderer::RenderPassPtr m_renderPass;
@@ -93,6 +103,7 @@ namespace castor3d
 		renderer::VertexLayoutPtr m_vertexLayout;
 		renderer::SamplerPtr m_sampler;
 		renderer::CommandBufferPtr m_commandBuffer;
+		renderer::SemaphorePtr m_finished;
 		/**
 		*name
 		*	Linearisation.

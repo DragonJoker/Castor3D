@@ -177,7 +177,7 @@ namespace castor3d
 			m_timer->stop();
 		}
 
-		return semaphore == &toWait ? nullptr, semaphore;
+		return semaphore == &toWait ? nullptr : semaphore;
 	}
 
 	void LightingPass::doRenderLights( Scene const & scene

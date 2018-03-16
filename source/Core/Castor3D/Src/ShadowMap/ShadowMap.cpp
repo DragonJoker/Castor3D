@@ -33,11 +33,11 @@ namespace castor3d
 	ShadowMap::ShadowMap( Engine & engine
 		, TextureUnit && shadowMap
 		, TextureUnit && linearMap
-		, ShadowMapPassSPtr pass )
+		, std::vector< ShadowMapPassSPtr > passes )
 		: OwnedBy< Engine >{ engine }
 		, m_shadowMap{ std::move( shadowMap ) }
 		, m_linearMap{ std::move( linearMap ) }
-		, m_pass{ pass }
+		, m_passes{ std::move( passes ) }
 	{
 	}
 
@@ -54,11 +54,16 @@ namespace castor3d
 			m_shadowMap.initialise();
 			m_linearMap.initialise();
 			auto size = m_shadowMap.getTexture()->getDimensions();
-			result = m_pass->initialise( { size.width, size.height } );
+
+			for ( auto & pass : m_passes )
+			{
+				result &= pass->initialise( { size.width, size.height } );
+			}
 
 			if ( result )
 			{
 				doInitialise();
+				m_finished = getEngine()->getRenderSystem()->getCurrentDevice()->createSemaphore();
 				m_initialised = true;
 			}
 		}
@@ -68,11 +73,15 @@ namespace castor3d
 
 	void ShadowMap::cleanup()
 	{
-		m_pass->cleanup();
+		for ( auto & pass : m_passes )
+		{
+			pass->cleanup();
+		}
 
 		if ( m_initialised )
 		{
 			m_initialised = false;
+			m_finished.reset();
 			doCleanup();
 			m_shadowMap.cleanup();
 			m_linearMap.cleanup();

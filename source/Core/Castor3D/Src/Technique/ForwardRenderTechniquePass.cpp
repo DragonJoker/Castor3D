@@ -58,7 +58,7 @@ namespace castor3d
 	{
 	}
 
-	void ForwardRenderTechniquePass::render( RenderInfo & info
+	void ForwardRenderTechniquePass::update( RenderInfo & info
 		, ShadowMapLightTypeArray & shadowMaps
 		, Point2r const & jitter )
 	{

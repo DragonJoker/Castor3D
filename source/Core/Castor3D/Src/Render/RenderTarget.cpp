@@ -427,6 +427,7 @@ namespace castor3d
 		auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
 		auto const * semaphoreToWait = m_signalReady.get();
 		SceneSPtr scene = getScene();
+		m_toneMapping->update( scene->getHdrConfig() );
 
 		// Render the scene through the RenderTechnique.
 		m_renderTechnique->render( m_jitter
@@ -434,10 +435,9 @@ namespace castor3d
 			, info );
 		semaphoreToWait = &m_renderTechnique->getSemaphore();
 
-		// Then draw the render's result to the RenderTarget's frame buffer.
+		// Then draw the render's result to the RenderTarget's frame buffer, applying the tone mapping operator.
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
 		{
-			m_toneMapping->update( scene->getHdrConfig() );
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *fbo.m_frameBuffer
 				, { convert( RgbaColour::fromRGBA( toRGBAFloat( scene->getBackgroundColour() ) ) ) }

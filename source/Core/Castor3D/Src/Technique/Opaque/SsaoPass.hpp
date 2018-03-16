@@ -35,20 +35,20 @@ namespace castor3d
 		 *\param[in]	size		The render area dimensions.
 		 *\param[in]	config		The SSAO configuration.
 		 *\param[in]	gpResult	The geometry pass result.
-		 *\param[in]	camera		The viewing camera.
+		 *\param[in]	viewport	The viewport containing depth bounds.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
 		 *\param[in]	size		Les dimensions de la zone de rendu.
 		 *\param[in]	config		La configuration du SSAO.
 		 *\param[in]	gpResult	Le résultat de la geometry pass.
-		 *\param[in]	camera		La caméra de rendu.
+		 *\param[in]	viewport	Le viewport contenant les bornes de profondeur.
 		 */
 		SsaoPass( Engine & engine
-			, castor::Size const & size
+			, renderer::Extent2D const & size
 			, SsaoConfig const & config
 			, GeometryPassResult const & gpResult
-			, Camera const & camera );
+			, Viewport const & viewport );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -58,11 +58,18 @@ namespace castor3d
 		~SsaoPass();
 		/**
 		 *\~english
+		 *\brief		Updates the configuration UBO.
+		 *\~french
+		 *\brief		Met à jour l'UBO de configuration.
+		 */
+		void update( Camera const & camera );
+		/**
+		 *\~english
 		 *\brief		Renders the SSAO pass.
 		 *\~french
 		 *\brief		Dessine la passe SSAO.
 		 */
-		void render( Camera const & camera );
+		void render( renderer::Semaphore const & toWait )const;
 		/**
 		 *\~english
 		 *\return		The SSAO pass result.
@@ -70,6 +77,13 @@ namespace castor3d
 		 *\return		Le résultat de la passe SSAO.
 		 */
 		TextureUnit const & getResult()const;
+		/**
+		 *\~english
+		 *\return		The semaphore signaling the end of the pass.
+		 *\~french
+		 *\return		Le sémaphore signalant la fin de la passe.
+		 */
+		renderer::Semaphore const & getSemaphore()const;
 
 	private:
 		Engine & m_engine;

@@ -108,11 +108,15 @@ namespace castor3d
 		static castor::String const Step;
 		static castor::String const Correction;
 		static castor::String const PixelSize;
+		static castor::String const Weights;
+		static castor::String const Offsets;
 
 		struct BlurConfiguration
 		{
 			castor::Point2f blurPixelSize;
 			float blurCorrection;
+			std::array< float, 6u > blurWeights;
+			std::array< float, 6u > blurOffsets;
 		};
 
 		struct BlurWeights

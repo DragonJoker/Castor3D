@@ -129,7 +129,7 @@ namespace castor3d
 		: ShadowMap{ engine
 			, doInitialiseVariance( engine, Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize } )
 			, doInitialiseLinearDepth( engine, Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize } )
-			, std::make_shared< ShadowMapPassSpot >( engine, scene, *this ) }
+			, { std::make_shared< ShadowMapPassSpot >( engine, scene, *this ) } }
 	{
 	}
 
@@ -142,13 +142,17 @@ namespace castor3d
 		, Light & light
 		, uint32_t index )
 	{
-		m_pass->update( camera, queues, light, index );
+		m_passes[0]->update( camera, queues, light, index );
 	}
 
-	void ShadowMapSpot::render()
+	void ShadowMapSpot::render( renderer::Semaphore const & toWait )
 	{
 		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
-		device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
+		device.getGraphicsQueue().submit( *m_commandBuffer
+			, toWait
+			, renderer::PipelineStageFlag::eBottomOfPipe
+			, *m_finished
+			, nullptr );
 	}
 
 	void ShadowMapSpot::debugDisplay( castor::Size const & size, uint32_t index )
@@ -271,14 +275,14 @@ namespace castor3d
 
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
 		{
-			m_pass->startTimer( *m_commandBuffer );
+			m_passes[0]->startTimer( *m_commandBuffer );
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *m_frameBuffer
 				, { zero, black, black }
 				, renderer::SubpassContents::eSecondaryCommandBuffers );
-			m_commandBuffer->executeCommands( { m_pass->getCommandBuffer() } );
+			m_commandBuffer->executeCommands( { m_passes[0]->getCommandBuffer() } );
 			m_commandBuffer->endRenderPass();
-			m_pass->stopTimer( *m_commandBuffer );
+			m_passes[0]->stopTimer( *m_commandBuffer );
 			m_commandBuffer->end();
 
 			m_blur->blur();

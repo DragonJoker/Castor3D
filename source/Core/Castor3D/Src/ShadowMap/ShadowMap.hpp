@@ -29,18 +29,18 @@ namespace castor3d
 		 *\param[in]	engine		The engine.
 		 *\param[in]	shadowMap	The shadow map.
 		 *\param[in]	linearMap	The linear depth map.
-		 *\param[in]	pass		The pass used to render map.
+		 *\param[in]	passes		The passes used to render map.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
 		 *\param[in]	shadowMap	La texture d'ombres.
 		 *\param[in]	linearMap	La texture de profondeur linéaire.
-		 *\param[in]	pass		La passe utilisée pour rendre cette texture.
+		 *\param[in]	passes		Les passes utilisées pour rendre cette texture.
 		 */
 		C3D_API ShadowMap( Engine & engine
 			, TextureUnit && shadowMap
 			, TextureUnit && linearMap
-			, ShadowMapPassSPtr pass );
+			, std::vector< ShadowMapPassSPtr > passes );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -88,7 +88,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dessine la shadow map de la lumière donnée.
 		 */
-		C3D_API virtual void render() = 0;
+		C3D_API virtual void render( renderer::Semaphore const & toWait ) = 0;
 		/**
 		 *\~english
 		 *\brief		Dumps the shadow map on screen.
@@ -131,45 +131,40 @@ namespace castor3d
 			, SceneFlags const & sceneFlags
 			, renderer::CompareOp alphaFunc )const;
 		/**
-		 *\~english
-		 *\return		The shadow map.
-		 *\~english
-		 *\return		La texture d'ombres.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline TextureUnit & getTexture()
 		{
 			return m_shadowMap;
 		}
-		/**
-		 *\~english
-		 *\return		The shadow map.
-		 *\~english
-		 *\return		La texture d'ombres.
-		 */
+
 		inline TextureUnit const & getTexture()const
 		{
 			return m_shadowMap;
 		}
-		/**
-		 *\~english
-		 *\return		The linear depth map.
-		 *\~english
-		 *\return		La texture de profondeur linéaire.
-		 */
+
 		inline TextureUnit & getDepth()
 		{
 			return m_linearMap;
 		}
-		/**
-		 *\~english
-		 *\return		The linear depth map.
-		 *\~english
-		 *\return		La texture de profondeur linéaire.
-		 */
+
 		inline TextureUnit const & getDepth()const
 		{
 			return m_linearMap;
 		}
+
+		inline renderer::Semaphore const & getSemaphore()const
+		{
+			REQUIRE( m_finished );
+			return *m_finished;
+		}
+		/**@}*/
 
 	private:
 		/**
@@ -245,9 +240,10 @@ namespace castor3d
 	protected:
 		renderer::CommandBufferPtr m_commandBuffer;
 		std::set< std::reference_wrapper< GeometryBuffers > > m_geometryBuffers;
-		ShadowMapPassSPtr m_pass;
+		std::vector< ShadowMapPassSPtr > m_passes;
 		TextureUnit m_shadowMap;
 		TextureUnit m_linearMap;
+		renderer::SemaphorePtr m_finished;
 		bool m_initialised{ false };
 	};
 }

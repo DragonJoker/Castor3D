@@ -12,6 +12,15 @@ See LICENSE file in root folder
 #include "Shader/Ubos/GpInfoUbo.hpp"
 #include "Shader/Ubos/HdrConfigUbo.hpp"
 
+#include <Buffer/VertexBuffer.hpp>
+#include <Descriptor/DescriptorSet.hpp>
+#include <Descriptor/DescriptorSetLayout.hpp>
+#include <Descriptor/DescriptorSetPool.hpp>
+#include <Pipeline/Pipeline.hpp>
+#include <Pipeline/PipelineLayout.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <RenderPass/FrameBuffer.hpp>
+
 namespace castor3d
 {
 	/*!
@@ -30,65 +39,77 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	size		The render size.
-		 *\param[in]	sceneUbo	The scene UBO.
-		 *\param[in]	gpInfoUbo	The geometry pass UBO.
-		 *\param[in]	config		The SSAO configuration.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	size		Les dimensions du rendu.
-		 *\param[in]	sceneUbo	L'UBO de la scène.
-		 *\param[in]	gpInfoUbo	L'UBO de la passe géométrique.
-		 *\param[in]	config		La configuration du SSAO.
-		 */
-		ReflectionPass( Engine & engine
-			, castor::Size const & size
-			, SceneUbo & sceneUbo
-			, GpInfoUbo & gpInfoUbo
-			, SsaoConfig const & config );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		~ReflectionPass();
-		/**
-		 *\~english
-		 *\brief		Renders the reflection mapping.
+		 *\param[in]	engine			The engine.
+		 *\param[in]	scene			The rendered scene.
 		 *\param[in]	gp				The geometry pass result.
 		 *\param[in]	lightDiffuse	The diffuse result of the lighting pass.
 		 *\param[in]	lightSpecular	The specular result of the lighting pass.
-		 *\param[in]	scene			The rendered scene.
-		 *\param[in]	camera			The viewing camera.
-		 *\param[in]	frameBuffer		The target frame buffer.
+		 *\param[in]	result			The texture receiving the result.
+		 *\param[in]	sceneUbo		The scene UBO.
+		 *\param[in]	gpInfoUbo		The geometry pass UBO.
+		 *\param[in]	config			The SSAO configuration.
+		 *\param[in]	viewport		The viewport holding depth bounds.
 		 *\~french
-		 *\brief		Dessine le mapping de réflexion.
+		 *\brief		Constructeur.
+		 *\param[in]	engine			Le moteur.
+		 *\param[in]	scene			La scène rendue.
 		 *\param[in]	gp				Le résultat de la passe géométrique.
 		 *\param[in]	lightDiffuse	Le résultat diffus de la passe d'éclairage.
 		 *\param[in]	lightSpecular	Le résultat spéculaire de la passe d'éclairage.
-		 *\param[in]	scene			La scène rendue.
-		 *\param[in]	camera			La caméra de rendu.
-		 *\param[in]	frameBuffer		Le tampon d'image cible.
+		 *\param[in]	result			La texture recevant le résultat.
+		 *\param[in]	sceneUbo		L'UBO de la scène.
+		 *\param[in]	gpInfoUbo		L'UBO de la passe géométrique.
+		 *\param[in]	config			La configuration du SSAO.
+		 *\param[in]	viewport		Le viewport contenant les bornes profondeur.
 		 */
-		void render( GeometryPassResult & gp
-			, TextureUnit const & lightDiffuse
-			, TextureUnit const & lightSpecular
+		ReflectionPass( Engine & engine
 			, Scene const & scene
-			, Camera const & camera
-			, renderer::FrameBuffer const & frameBuffer );
+			, GeometryPassResult const & gp
+			, renderer::TextureView const & lightDiffuse
+			, renderer::TextureView const & lightSpecular
+			, renderer::TextureView const & result
+			, SceneUbo & sceneUbo
+			, GpInfoUbo & gpInfoUbo
+			, SsaoConfig const & config
+			, Viewport const & viewport );
 		/**
 		 *\~english
-		 *\return		The SSAO texture.
+		 *\brief		Updates the configuration UBO.
+		 *\param[in]	camera	The viewing camera.
 		 *\~french
-		 *\return		La texture SSAO.
+		 *\brief		Met à jour l'UBO de configuration.
+		 *\param[in]	camera	La caméra de rendu.
 		 */
+		void update( Camera const & camera );
+		/**
+		 *\~english
+		 *\brief		Renders the reflection mapping.
+		 *\param[in]	toWait	The semaphore to wait.
+		 *\~french
+		 *\brief		Dessine le mapping de réflexion.
+		 *\param[in]	toWait	Le sémaphore à attendre.
+		 */
+		void render( renderer::Semaphore const & toWait )const;
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline TextureLayout const & getSsao()const
 		{
 			return *m_ssao.getResult().getTexture();
 		}
+
+		inline renderer::Semaphore const & getSemaphore()const
+		{
+			REQUIRE( m_finished );
+			return *m_finished;
+		}
+		/**@}*/
 
 	private:
 		struct ProgramPipeline
@@ -98,34 +119,47 @@ namespace castor3d
 			ProgramPipeline & operator=( ProgramPipeline const & ) = delete;
 			ProgramPipeline & operator=( ProgramPipeline && ) = default;
 			ProgramPipeline( Engine & engine
+				, Scene const & scene
 				, renderer::VertexBufferBase & vbo
-				, MatrixUbo & matrixUbo
-				, SceneUbo & sceneUbo
-				, GpInfoUbo & gpInfoUbo
-				, bool hasSsao
+				, renderer::DescriptorSetLayout const & uboLayout
+				, renderer::DescriptorSet const & uboSet
+				, renderer::RenderPass const & renderPass
+				, renderer::FrameBuffer const & frameBuffer
+				, GeometryPassResult const & gp
+				, renderer::TextureView const & lightDiffuse
+				, renderer::TextureView const & lightSpecular
+				, renderer::TextureView const * ssao
+				, renderer::Extent2D const & size
 				, FogType fogType
 				, MaterialType matType );
-			~ProgramPipeline();
 
-			void render( renderer::VertexBufferBase const & vbo );
 			renderer::ShaderStageStateArray m_program;
+			renderer::DescriptorSetLayoutPtr m_texDescriptorLayout;
+			renderer::DescriptorSetPoolPtr m_texDescriptorPool;
+			renderer::DescriptorSetPtr m_texDescriptorSet;
+			renderer::PipelineLayoutPtr m_pipelineLayout;
 			renderer::PipelinePtr m_pipeline;
+			renderer::CommandBufferPtr m_commandBuffer;
 		};
 		using ReflectionPrograms = std::array< ProgramPipeline, size_t( FogType::eCount ) >;
-		castor::Size m_size;
+
+	private:
+		renderer::Device const & m_device;
+		Scene const & m_scene;
+		GpInfoUbo & m_gpInfoUbo;
+		renderer::Extent2D m_size;
 		Viewport m_viewport;
 		renderer::VertexBufferBasePtr m_vertexBuffer;
-		MatrixUbo m_matrixUbo;
-		GpInfoUbo & m_gpInfoUbo;
-		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
-		renderer::DescriptorSetPoolPtr m_descriptorPool;
+		renderer::DescriptorSetLayoutPtr m_uboDescriptorLayout;
+		renderer::DescriptorSetPoolPtr m_uboDescriptorPool;
 		renderer::DescriptorSetPtr m_uboDescriptorSet;
-		renderer::DescriptorSetPtr m_texDescriptorSet;
-		renderer::PipelineLayoutPtr m_pipelineLayout;
+		renderer::RenderPassPtr m_renderPass;
+		renderer::FrameBufferPtr m_frameBuffer;
+		renderer::SemaphorePtr m_finished;
+		SsaoPass m_ssao;
 		ReflectionPrograms m_programs;
 		RenderPassTimerSPtr m_timer;
 		bool m_ssaoEnabled{ false };
-		SsaoPass m_ssao;
 	};
 }
 

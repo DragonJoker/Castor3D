@@ -47,7 +47,7 @@ namespace castor3d
 		 *\param[in]	normals					Le tampon de normales.
 		 */
 		RawSsaoPass( Engine & engine
-			, castor::Size const & size
+			, renderer::Extent2D const & size
 			, SsaoConfig const & config
 			, SsaoConfigUbo & ssaoConfigUbo
 			, TextureUnit const & linearisedDepthBuffer
@@ -65,36 +65,48 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dessine la passe SSAO sur le tampon d'image actif.
 		 */
-		void compute();
+		void compute( renderer::Semaphore const & toWait )const;
 		/**
-		 *\~english
-		 *\return		The SSAO pass result.
-		 *\~french
-		 *\return		Le résultat de la passe SSAO.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline TextureUnit const & getResult()const
 		{
 			return m_result;
 		}
+
+		inline renderer::Semaphore const & getSemaphore()const
+		{
+			REQUIRE( m_finished );
+			return *m_finished;
+		}
+		/**@}*/
 
 	private:
 		Engine & m_engine;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		TextureUnit const & m_linearisedDepthBuffer;
 		TextureUnit const & m_normals;
-		castor::Size m_size;
+		renderer::Extent2D m_size;
 		TextureUnit m_result;
-		renderer::ShaderProgram & m_program;
+		renderer::ShaderStageStateArray m_program;
 		renderer::SamplerPtr m_sampler;
 		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
 		renderer::DescriptorSetPoolPtr m_descriptorPool;
 		renderer::DescriptorSetPtr m_descriptor;
-		RenderPipelineUPtr m_pipeline;
+		renderer::PipelineLayoutPtr m_pipelineLayout;
 		renderer::RenderPassPtr m_renderPass;
 		renderer::FrameBufferPtr m_frameBuffer;
 		renderer::VertexBufferPtr< NonTexturedQuad > m_vertexBuffer;
 		renderer::VertexLayoutPtr m_vertexLayout;
+		renderer::PipelinePtr m_pipeline;
 		renderer::CommandBufferPtr m_commandBuffer;
+		renderer::SemaphorePtr m_finished;
 		RenderPassTimerSPtr m_timer;
 
 	};

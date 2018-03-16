@@ -41,22 +41,10 @@ namespace castor3d
 		 */
 		WeightedBlendRendering( Engine & engine
 			, TransparentPass & transparentPass
-			, renderer::TextureView & depthView
-			, renderer::TextureView & colourView
+			, renderer::TextureView const & depthView
+			, renderer::TextureView const & colourView
 			, castor::Size const & size
 			, Scene const & scene );
-		/**
-		 *\~english
-		 *\brief		Renders opaque nodes.
-		 *\param[out]	scene		The rendered scene.
-		 *\param[out]	camera		The viewer camera.
-		 *\~french
-		 *\brief		Dessine les noeuds opaques.
-		 *\param[out]	scene		La scène rendue.
-		 *\param[out]	camera		La caméra par laquelle la scène est rendue.
-		 */
-		void update( Scene const & scene
-			, Camera const & camera );
 		/**
 		 *\~english
 		 *\brief		Renders opaque nodes.
@@ -65,7 +53,6 @@ namespace castor3d
 		 *\param[out]	camera		The viewer camera.
 		 *\param[out]	shadowMaps	The shadow maps.
 		 *\param[out]	jitter		The jittering value.
-		 *\param[out]	velocity	The velocity texture.
 		 *\~french
 		 *\brief		Dessine les noeuds opaques.
 		 *\param[out]	info		Reçoit les informations de rendu.
@@ -73,14 +60,25 @@ namespace castor3d
 		 *\param[out]	camera		La caméra par laquelle la scène est rendue.
 		 *\param[out]	shadowMaps	Les textures d'ombres.
 		 *\param[out]	jitter		La valeur de jittering.
-		 *\param[out]	velocity	La texture de vélocité.
 		 */
-		void render( RenderInfo & info
+		void update( RenderInfo & info
 			, Scene const & scene
 			, Camera const & camera
 			, ShadowMapLightTypeArray & shadowMaps
-			, castor::Point2r const & jitter
-			, TextureUnit const & velocity );
+			, castor::Point2r const & jitter );
+		/**
+		 *\~english
+		 *\brief		Renders opaque nodes.
+		 *\param[out]	info	Receives the render informations.
+		 *\param[out]	scene	The rendered scene.
+		 *\~french
+		 *\brief		Dessine les noeuds opaques.
+		 *\param[out]	info	Reçoit les informations de rendu.
+		 *\param[out]	scene	La scène rendue.
+		 */
+		void render( RenderInfo & info
+			, Scene const & scene
+			, renderer::Semaphore const & toWait );
 		/**
 		 *\~english
 		 *\brief		Displays debug data on screen.
@@ -89,15 +87,26 @@ namespace castor3d
 		 */
 		void debugDisplay();
 		/**
-		 *\~english
-		 *\return		The intermediate framebuffer.
-		 *\~french
-		 *\return		Le tampon d'image intermédiaire.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline renderer::FrameBuffer & getFbo()
 		{
+			REQUIRE( m_frameBuffer );
 			return *m_frameBuffer;
 		}
+
+		inline renderer::Semaphore & getSemaphore()
+		{
+			REQUIRE( m_semaphore );
+			return *m_semaphore;
+		}
+		/**@}*/
 
 	private:
 		Engine & m_engine;
@@ -112,6 +121,7 @@ namespace castor3d
 		renderer::FrameBufferPtr m_frameBuffer;
 		FinalCombinePass m_finalCombinePass;
 		renderer::CommandBufferPtr m_commandBuffer;
+		renderer::SemaphorePtr m_semaphore;
 	};
 }
 

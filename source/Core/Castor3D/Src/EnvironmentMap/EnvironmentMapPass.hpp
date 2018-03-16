@@ -84,14 +84,18 @@ namespace castor3d
 		 *\~french
 		 *\brief		Fonction de rendu.
 		 */
-		C3D_API void render();
+		C3D_API void render( renderer::Semaphore const & toWait );
 		/**
-		 *\~english
-		 *\return		The command buffers used to render the pass.
-		 *\~french
-		 *\brief		Les tampons de commands de rendu de la passe.
-		 */
-		C3D_API renderer::CommandBufferCRefArray getCommandBuffers()const;
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		C3D_API renderer::Semaphore const & getSemaphore()const;
+		/**@}*/
 
 	private:
 		SceneNodeSPtr m_node;

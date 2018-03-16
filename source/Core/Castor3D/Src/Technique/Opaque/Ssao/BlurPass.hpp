@@ -49,7 +49,7 @@ namespace castor3d
 		 *\param[in]	normals			Le tampon de normales.
 		 */
 		SsaoBlurPass( Engine & engine
-			, castor::Size const & size
+			, renderer::Extent2D const & size
 			, SsaoConfig const & config
 			, SsaoConfigUbo & ssaoConfigUbo
 			, castor::Point2i const & axis
@@ -68,30 +68,40 @@ namespace castor3d
 		 *\~french
 		 *\brief		Applique le flou.
 		 */
-		void blur();
+		void blur( renderer::Semaphore const & toWait )const;
 		/**
-		 *\~english
-		 *\return		The pass result.
-		 *\~french
-		 *\return		Le résultat de la passe.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline TextureUnit const & getResult()const
 		{
 			return m_result;
 		}
 
+		inline renderer::Semaphore const & getSemaphore()const
+		{
+			REQUIRE( m_finished );
+			return *m_finished;
+		}
+		/**@}*/
+
 	private:
 		void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
 			, renderer::DescriptorSet & descriptorSet )override;
-		void doRegisterFrame( renderer::CommandBuffer & commandBuffer )override;
+		void doRegisterFrame( renderer::CommandBuffer & commandBuffer )const override;
 
 	private:
 		Engine & m_engine;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		TextureUnit const & m_input;
 		TextureUnit const & m_normals;
-		renderer::ShaderProgram & m_program;
-		castor::Size m_size;
+		renderer::ShaderStageStateArray m_program;
+		renderer::Extent2D m_size;
 		TextureUnit m_result;
 		renderer::PushConstantsBuffer< castor::Point2i > m_axisUniform;
 		renderer::PushConstantRange m_pushConstantRange;
@@ -99,6 +109,7 @@ namespace castor3d
 		renderer::FrameBufferPtr m_fbo;
 		RenderPassTimerSPtr m_timer;
 		renderer::CommandBufferPtr m_commandBuffer;
+		renderer::SemaphorePtr m_finished;
 
 	};
 }

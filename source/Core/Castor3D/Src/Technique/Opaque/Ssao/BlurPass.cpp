@@ -4,7 +4,6 @@
 #include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
-#include "Shader/ShaderProgram.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
 #include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
@@ -18,13 +17,11 @@
 #include <Pipeline/DepthStencilState.hpp>
 #include <Pipeline/MultisampleState.hpp>
 #include <Pipeline/RasterisationState.hpp>
+#include <Pipeline/ShaderStageState.hpp>
 #include <RenderPass/FrameBuffer.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
 #include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassAttachment.hpp>
-#include <RenderPass/RenderPassState.hpp>
-#include <RenderPass/RenderSubpass.hpp>
-#include <RenderPass/RenderSubpassState.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
 
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
@@ -38,7 +35,7 @@ namespace castor3d
 {
 	namespace
 	{
-		static PixelFormat constexpr ColourFormat = PixelFormat::eA8R8G8B8;
+		static renderer::Format constexpr ColourFormat = renderer::Format::eR8G8B8A8_UNORM;
 
 		glsl::Shader doGetVertexProgram( Engine & engine )
 		{
@@ -342,15 +339,20 @@ namespace castor3d
 #undef keyPassThrough
 		}
 
-		renderer::ShaderProgram & doGetProgram( Engine & engine
+		renderer::ShaderStageStateArray doGetProgram( Engine & engine
 			, SsaoConfig const & config )
 		{
 			auto vtx = doGetVertexProgram( engine );
 			auto pxl = doGetPixelProgram( engine, config );
-			auto & program = engine.getShaderProgramCache().getNewProgram( false );
-			program.createModule( vtx.getSource(), renderer::ShaderStageFlag::eVertex );
-			program.createModule( pxl.getSource(), renderer::ShaderStageFlag::eFragment );
-			return program;
+			auto & device = *engine.getRenderSystem()->getCurrentDevice();
+			renderer::ShaderStageStateArray result
+			{
+				{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
+				{ device.createShaderModule( renderer::ShaderStageFlag::eFragment ) },
+			};
+			result[0].module->loadShader( vtx.getSource() );
+			result[1].module->loadShader( pxl.getSource() );
+			return result;
 		}
 
 		SamplerSPtr doCreateSampler( Engine & engine
@@ -375,16 +377,25 @@ namespace castor3d
 			return sampler;
 		}
 
-		TextureUnit doCreateTexture( Engine & engine, Size const & size )
+		TextureUnit doCreateTexture( Engine & engine, renderer::Extent2D const & size )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			auto sampler = doCreateSampler( engine, cuT( "SSAOBlur_Result" ), renderer::WrapMode::eClampToEdge );
+
+			renderer::ImageCreateInfo image{};
+			image.arrayLayers = 1u;
+			image.extent.width = size.width;
+			image.extent.height = size.height;
+			image.extent.depth = 1u;
+			image.format = ColourFormat;
+			image.imageType = renderer::TextureType::e2D;
+			image.mipLevels = 1u;
+			image.samples = renderer::SampleCountFlag::e1;
+			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+
 			auto ssaoResult = std::make_shared< TextureLayout >( renderSystem
-				, renderer::TextureType::e2D
-				, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled
-				, renderer::MemoryPropertyFlag::eDeviceLocal
-				, ColourFormat
-				, size );
+				, image
+				, renderer::MemoryPropertyFlag::eDeviceLocal );
 			TextureUnit result{ engine };
 			result.setTexture( ssaoResult );
 			result.setSampler( sampler );
@@ -396,42 +407,43 @@ namespace castor3d
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			auto & device = *renderSystem.getCurrentDevice();
-			std::vector< renderer::PixelFormat > formats
-			{
-				ColourFormat
-			};
-			renderer::RenderPassAttachmentArray attaches
-			{
-				renderer::RenderPassAttachment::createColourAttachment( 0u, ColourFormat, true ),
-			};
-			renderer::ImageLayoutArray const initialLayouts
-			{
-				renderer::ImageLayout::eColourAttachmentOptimal,
-			};
-			renderer::ImageLayoutArray const finalLayouts
-			{
-				renderer::ImageLayout::eShaderReadOnlyOptimal,
-			};
-			renderer::RenderSubpassPtrArray subpasses;
-			subpasses.emplace_back( device.createRenderSubpass( attaches
-				, { renderer::PipelineStageFlag::eColourAttachmentOutput, renderer::AccessFlag::eColourAttachmentWrite } ) );
-			return device.createRenderPass( attaches
-				, std::move( subpasses )
-				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-					, renderer::AccessFlag::eColourAttachmentWrite
-					, initialLayouts }
-				, renderer::RenderPassState{ renderer::PipelineStageFlag::eColourAttachmentOutput
-					, renderer::AccessFlag::eColourAttachmentWrite
-					, finalLayouts } );
+			renderer::RenderPassCreateInfo renderPass{};
+			renderPass.flags = 0u;
+
+			renderPass.attachments.resize( 1u );
+			renderPass.attachments[0].index = 0u;
+			renderPass.attachments[0].format = ColourFormat;
+			renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+			renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+			renderPass.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+			renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+			renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+			renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+			renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+
+			renderPass.dependencies.resize( 2u );
+			renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+			renderPass.dependencies[0].dstSubpass = 0u;
+			renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+			renderPass.subpasses.resize( 1u );
+			renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
+			renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
+
+			return device.createRenderPass( renderPass );
 		}
 
 		renderer::FrameBufferPtr doCreateFrameBuffer( renderer::RenderPass const & renderPass
 			, TextureUnit const & texture )
 		{
 			renderer::FrameBufferAttachmentArray attaches;
-			attaches.emplace_back( *( renderPass.begin() ), texture.getTexture()->getDefaultView() );
+			attaches.emplace_back( *( renderPass.getAttachments().begin() ), texture.getTexture()->getDefaultView() );
 			auto size = texture.getTexture()->getDimensions();
-			return renderPass.createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
+			return renderPass.createFrameBuffer( renderer::Extent2D{ size.width, size.height }
 				, std::move( attaches ) );
 		}
 	}
@@ -439,7 +451,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	SsaoBlurPass::SsaoBlurPass( Engine & engine
-		, Size const & size
+		, renderer::Extent2D const & size
 		, SsaoConfig const & config
 		, SsaoConfigUbo & ssaoConfigUbo
 		, Point2i const & axis
@@ -453,11 +465,12 @@ namespace castor3d
 		, m_program{ doGetProgram( m_engine, config ) }
 		, m_size{ size }
 		, m_result{ doCreateTexture( m_engine, m_size ) }
-		, m_axisUniform{ renderer::ShaderStageFlag::eFragment, { { 3u, 0u, renderer::Format::eR32G32_SINT } } }
+		, m_axisUniform{ renderer::ShaderStageFlag::eFragment, { { 3u, 0u, renderer::ConstantFormat::eVec2i } } }
 		, m_pushConstantRange{ renderer::ShaderStageFlag::eFragment, 0u, renderer::getSize( renderer::Format::eR32G32_SINT ) }
 		, m_renderPass{ doCreateRenderPass( m_engine ) }
 		, m_fbo{ doCreateFrameBuffer( *m_renderPass, m_result ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "SSAO" ), cuT( "Blur" ) ) }
+		, m_finished{ engine.getRenderSystem()->getCurrentDevice()->createSemaphore() }
 	{
 		*m_axisUniform.getData() = axis;
 		renderer::DescriptorSetLayoutBindingArray bindings
@@ -472,7 +485,7 @@ namespace castor3d
 			, *m_renderPass
 			, bindings
 			, { m_pushConstantRange } );
-		RgbaColour colour{ RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueWhite ) };
+		static renderer::ClearColorValue const colour{ 1.0, 1.0, 1.0, 1.0 };
 		auto & device = *m_renderSystem.getCurrentDevice();
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 
@@ -506,6 +519,18 @@ namespace castor3d
 		m_ssaoConfigUbo.cleanup();
 	}
 
+	void SsaoBlurPass::blur( renderer::Semaphore const & toWait )const
+	{
+		m_timer->start();
+		auto & device = *m_renderSystem.getCurrentDevice();
+		device.getGraphicsQueue().submit( *m_commandBuffer
+			, toWait
+			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, *m_finished
+			, nullptr );
+		m_timer->stop();
+	}
+
 	void SsaoBlurPass::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
 		, renderer::DescriptorSet & descriptorSet )
 	{
@@ -518,16 +543,8 @@ namespace castor3d
 			, m_sampler->getSampler() );
 	}
 
-	void SsaoBlurPass::doRegisterFrame( renderer::CommandBuffer & commandBuffer )
+	void SsaoBlurPass::doRegisterFrame( renderer::CommandBuffer & commandBuffer )const
 	{
-		commandBuffer.pushConstants( m_pipeline->getPipelineLayout(), m_axisUniform );
-	}
-
-	void SsaoBlurPass::blur()
-	{
-		m_timer->start();
-		auto & device = *m_renderSystem.getCurrentDevice();
-		device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
-		m_timer->stop();
+		commandBuffer.pushConstants( *m_pipelineLayout, m_axisUniform );
 	}
 }

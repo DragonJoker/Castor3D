@@ -26,12 +26,13 @@ namespace castor3d
 		FinalCombineProgram( FinalCombineProgram && rhs ) = default;
 		FinalCombineProgram & operator=( FinalCombineProgram && rhs ) = default;
 		FinalCombineProgram( Engine & engine
+			, renderer::RenderPass const & renderPass
 			, renderer::DescriptorSetLayout const & uboLayout
 			, renderer::DescriptorSetLayout const & texLayout
 			, renderer::VertexLayout const & vtxLayout
 			, FogType fogType );
 		~FinalCombineProgram();
-		void initialise( renderer::RenderPass const & renderPass
+		void prepare( renderer::RenderPass const & renderPass
 			, castor::Size const & size
 			, renderer::DescriptorSet const & uboDescriptorSet
 			, renderer::DescriptorSet const & texDescriptorSet
@@ -43,7 +44,8 @@ namespace castor3d
 		}
 
 	private:
-		RenderPipelineUPtr m_pipeline;
+		renderer::PipelineLayoutPtr m_pipelineLayout;
+		renderer::PipelinePtr m_pipeline;
 		renderer::CommandBufferPtr m_commandBuffer;
 	};
 	//!\~english	An array of FinalCombineProgram, one per fog type.

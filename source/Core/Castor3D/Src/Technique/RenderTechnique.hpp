@@ -7,12 +7,11 @@ See LICENSE file in root folder
 #include "HDR/ToneMapping.hpp"
 #include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Render/RenderInfo.hpp"
-#include "Texture/TextureUnit.hpp"
+#include "ShadowMap/ShadowMap.hpp"
 #include "Technique/DepthPass.hpp"
-#include "Technique/RenderTechniqueFbo.hpp"
 #include "Technique/Opaque/DeferredRendering.hpp"
 #include "Technique/Transparent/WeightedBlendRendering.hpp"
-#include "ShadowMap/ShadowMap.hpp"
+#include "Texture/TextureUnit.hpp"
 
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
@@ -143,14 +142,14 @@ namespace castor3d
 
 		inline TextureLayout const & getResult()const
 		{
-			REQUIRE( m_frameBuffer.m_colourTexture );
-			return *m_frameBuffer.m_colourTexture;
+			REQUIRE( m_colourTexture );
+			return *m_colourTexture;
 		}
 
 		inline TextureLayout const & getDepth()const
 		{
-			REQUIRE( m_frameBuffer.m_colourTexture );
-			return *m_frameBuffer.m_depthBuffer;
+			REQUIRE( m_depthBuffer );
+			return *m_depthBuffer;
 		}
 
 		inline RenderTechniquePass const & getOpaquePass()const
@@ -184,23 +183,24 @@ namespace castor3d
 		void doInitialiseShadowMaps();
 		void doCleanupShadowMaps();
 		void doUpdateShadowMaps( RenderQueueArray & queues );
-		void doRenderShadowMaps();
-		void doRenderEnvironmentMaps();
-		void doRenderOpaque( castor::Point2r const & jitter
-			, TextureUnit const & velocity
-			, RenderInfo & info );
 		void doUpdateParticles( RenderInfo & info );
-		void doRenderTransparent( castor::Point2r const & jitter
-			, TextureUnit const & velocity
-			, RenderInfo & info );
-		void doApplyPostEffects();
+		renderer::Semaphore const * doRenderShadowMaps( renderer::Semaphore const & semaphore );
+		renderer::Semaphore const * doRenderEnvironmentMaps( renderer::Semaphore const & semaphore );
+		renderer::Semaphore const * doRenderOpaque( castor::Point2r const & jitter
+			, RenderInfo & info
+			, renderer::Semaphore const & semaphore );
+		renderer::Semaphore const * doRenderTransparent( castor::Point2r const & jitter
+			, RenderInfo & info
+			, renderer::Semaphore const & semaphore );
+		renderer::Semaphore const * doApplyPostEffects( renderer::Semaphore const & semaphore );
 
 	private:
 		bool m_initialised;
 		RenderTarget & m_renderTarget;
 		RenderSystem & m_renderSystem;
 		castor::Size m_size;
-		RenderTechniqueFbo m_frameBuffer;
+		TextureLayoutSPtr m_colourTexture;
+		TextureLayoutSPtr m_depthBuffer;
 		std::unique_ptr< RenderTechniquePass > m_opaquePass;
 		std::unique_ptr< RenderTechniquePass > m_transparentPass;
 		SsaoConfig m_ssaoConfig;
