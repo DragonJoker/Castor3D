@@ -79,13 +79,6 @@ namespace castor3d
 		 */
 		C3D_API void update( SceneNode const & p_node, RenderQueueArray & p_queues );
 		/**
-		 *\~english
-		 *\brief		Render function.
-		 *\~french
-		 *\brief		Fonction de rendu.
-		 */
-		C3D_API void render( renderer::Semaphore const & toWait );
-		/**
 		*\~english
 		*name
 		*	Getters.
@@ -95,6 +88,9 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API renderer::Semaphore const & getSemaphore()const;
+		C3D_API renderer::CommandBuffer const & getOpaqueCommandBuffer()const;
+		C3D_API renderer::CommandBuffer const * getBackgroundCommandBuffer()const;
+		C3D_API renderer::CommandBuffer const & getTransparentCommandBuffer()const;
 		/**@}*/
 
 	private:

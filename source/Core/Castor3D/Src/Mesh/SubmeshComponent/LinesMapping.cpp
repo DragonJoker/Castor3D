@@ -78,7 +78,7 @@ namespace castor3d
 		return uint32_t( m_lines.size() );
 	}
 
-	uint32_t TriFaceMapping::getComponentsCount()const
+	uint32_t LinesMapping::getComponentsCount()const
 	{
 		return 2u;
 	}

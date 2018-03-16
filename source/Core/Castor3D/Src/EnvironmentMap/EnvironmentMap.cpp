@@ -268,7 +268,17 @@ namespace castor3d
 					, *frameBuffer.frameBuffer
 					, { white, white }
 					, renderer::SubpassContents::eSecondaryCommandBuffers );
-				m_commandBuffer->executeCommands( m_passes[face]->getCommandBuffer() );
+
+				renderer::CommandBufferCRefArray commands;
+				commands.emplace_back( m_passes[face]->getOpaqueCommandBuffer() );
+
+				if ( auto * bgCommands = m_passes[face]->getBackgroundCommandBuffer() )
+				{
+					commands.emplace_back( *bgCommands );
+				}
+
+				commands.emplace_back( m_passes[face]->getTransparentCommandBuffer() );
+				m_commandBuffer->executeCommands( commands );
 				m_commandBuffer->endRenderPass();
 				++face;
 			}

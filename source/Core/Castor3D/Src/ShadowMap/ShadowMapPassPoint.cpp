@@ -64,13 +64,13 @@ namespace castor3d
 		doUpdate( queues );
 	}
 
-	void ShadowMapPassPoint::render( uint32_t index )
+	void ShadowMapPassPoint::updateDeviceDependent( uint32_t index )
 	{
 		if ( m_initialised )
 		{
 			m_shadowConfig->upload();
 			m_matrixUbo.update( m_matrices[index], m_projection );
-			doUpdateNodes( m_renderQueue.getRenderNodes() );
+			doUpdateNodes( m_renderQueue.getAllRenderNodes() );
 		}
 	}
 
@@ -136,11 +136,12 @@ namespace castor3d
 			renderer::RasterisationState rsState;
 			rsState.cullMode = renderer::CullModeFlag::eNone;
 			renderer::DepthStencilState dsState;
+			auto bdState = renderer::ColourBlendState::createDefault();
 			auto & pipeline = *m_backPipelines.emplace( flags
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
 					, std::move( dsState )
 					, std::move( rsState )
-					, renderer::ColourBlendState::createDefault()
+					, std::move( bdState )
 					, renderer::MultisampleState{}
 					, program
 					, flags ) ).first->second;

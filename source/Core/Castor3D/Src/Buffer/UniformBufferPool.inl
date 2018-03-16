@@ -38,7 +38,7 @@ namespace castor3d
 
 		if ( itB == it->second.end() )
 		{
-			uint64_t maxSize = getRenderSystem()->getGpuInformations().getMaxValue( GpuMax::eUniformBufferSize );
+			uint64_t maxSize = getRenderSystem()->getCurrentDevice()->getProperties().limits.maxUniformBufferRange;
 			auto buffer = std::make_unique< UniformBuffer< T > >( *getRenderSystem()->getCurrentDevice()
 				, uint32_t( std::floor( float( maxSize ) / sizeof( T ) ) )
 				, flags );

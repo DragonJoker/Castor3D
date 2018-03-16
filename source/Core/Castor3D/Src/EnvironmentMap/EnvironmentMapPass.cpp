@@ -78,31 +78,27 @@ namespace castor3d
 		m_transparentPass->update( queues );
 	}
 
-	void EnvironmentMapPass::render( renderer::Semaphore const & toWait )
-	{
-		RenderInfo info;
-		ShadowMapLightTypeArray shadowMaps;
-		m_opaquePass->update( info, shadowMaps, Point2r{} );
-		m_transparentPass->update( info, shadowMaps, Point2r{} );
-
-		auto & scene = *m_camera->getScene();
-		auto & device = *scene.getEngine()->getRenderSystem()->getCurrentDevice();
-
-		device.getGraphicsQueue().submit( m_opaquePass->getCommandBuffer()
-			, toWait
-			, renderer::PipelineStageFlag::eAllCommands
-			, m_opaquePass->getSemaphore()
-			, nullptr );
-		auto & semaphore = *scene.renderBackground( { getOwner()->getSize().width, getOwner()->getSize().height }, *m_camera, m_opaquePass->getSemaphore() );
-		device.getGraphicsQueue().submit( m_transparentPass->getCommandBuffer()
-			, semaphore
-			, renderer::PipelineStageFlag::eAllCommands
-			, m_transparentPass->getSemaphore()
-			, nullptr );
-	}
-
 	renderer::Semaphore const & EnvironmentMapPass::getSemaphore()const
 	{
 		return m_transparentPass->getSemaphore();
+	}
+
+	renderer::CommandBuffer const & EnvironmentMapPass::getOpaqueCommandBuffer()const
+	{
+		return m_opaquePass->getCommandBuffer();
+	}
+
+	renderer::CommandBuffer const * EnvironmentMapPass::getBackgroundCommandBuffer()const
+	{
+		auto & scene = *m_camera->getScene();
+		renderer::CommandBuffer const * result{ nullptr };
+		renderer::Semaphore const * semaphore{ nullptr };
+		scene.getBackgroundCommands( result, semaphore );
+		return result;
+	}
+
+	renderer::CommandBuffer const & EnvironmentMapPass::getTransparentCommandBuffer()const
+	{
+		return m_transparentPass->getCommandBuffer();
 	}
 }

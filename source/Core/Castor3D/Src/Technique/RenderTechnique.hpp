@@ -189,6 +189,7 @@ namespace castor3d
 		renderer::Semaphore const * doRenderOpaque( castor::Point2r const & jitter
 			, RenderInfo & info
 			, renderer::Semaphore const & semaphore );
+		renderer::Semaphore const * doRenderBackground( renderer::Semaphore const & semaphore );
 		renderer::Semaphore const * doRenderTransparent( castor::Point2r const & jitter
 			, RenderInfo & info
 			, renderer::Semaphore const & semaphore );

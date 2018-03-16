@@ -15,6 +15,25 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	DECLARE_MULTIMAP( double, StaticRenderNode *, StaticRenderNodePtrByDistance );
+	DECLARE_MULTIMAP( double, SkinningRenderNode *, SkinningRenderNodePtrByDistance );
+	DECLARE_MULTIMAP( double, MorphingRenderNode *, MorphingRenderNodePtrByDistance );
+	DECLARE_MULTIMAP( double, BillboardRenderNode *, BillboardRenderNodePtrByDistance );
+	DECLARE_VECTOR( StaticRenderNode *, StaticRenderNodePtr );
+	DECLARE_VECTOR( SkinningRenderNode *, SkinningRenderNodePtr );
+	DECLARE_VECTOR( MorphingRenderNode *, MorphingRenderNodePtr );
+	DECLARE_VECTOR( BillboardRenderNode *, BillboardRenderNodePtr );
+	DECLARE_MAP( RenderPipelineRPtr, StaticRenderNodePtrArray, StaticRenderNodesPtrByPipeline );
+	DECLARE_MAP( RenderPipelineRPtr, SkinningRenderNodePtrArray, SkinningRenderNodesPtrByPipeline );
+	DECLARE_MAP( RenderPipelineRPtr, MorphingRenderNodePtrArray, MorphingRenderNodesPtrByPipeline );
+	DECLARE_MAP( RenderPipelineRPtr, BillboardRenderNodePtrArray, BillboardRenderNodesPtrByPipeline );
+	DECLARE_MAP( SubmeshRPtr, StaticRenderNodePtrArray, SubmeshStaticRenderNodesPtr );
+	DECLARE_MAP( SubmeshRPtr, SkinningRenderNodePtrArray, SubmeshSkinningRenderNodesPtr );
+	DECLARE_MAP( PassRPtr, SubmeshStaticRenderNodesPtrMap, SubmeshStaticRenderNodesPtrByPass );
+	DECLARE_MAP( RenderPipelineRPtr, SubmeshStaticRenderNodesPtrByPassMap, SubmeshStaticRenderNodesPtrByPipeline );
+	DECLARE_MAP( PassRPtr, SubmeshSkinningRenderNodesPtrMap, SubmeshSkinninRenderNodesPtrByPass );
+	DECLARE_MAP( RenderPipelineRPtr, SubmeshSkinninRenderNodesPtrByPassMap, SubmeshSkinningRenderNodesPtrByPipeline );
+
 	DECLARE_MULTIMAP( double, StaticRenderNode, StaticRenderNodeByDistance );
 	DECLARE_MULTIMAP( double, SkinningRenderNode, SkinningRenderNodeByDistance );
 	DECLARE_MULTIMAP( double, MorphingRenderNode, MorphingRenderNodeByDistance );
@@ -29,7 +48,6 @@ namespace castor3d
 	DECLARE_MAP( RenderPipelineRPtr, BillboardRenderNodeArray, BillboardRenderNodesByPipeline );
 	DECLARE_MAP( SubmeshRPtr, StaticRenderNodeArray, SubmeshStaticRenderNodes );
 	DECLARE_MAP( SubmeshRPtr, SkinningRenderNodeArray, SubmeshSkinningRenderNodes );
-
 	DECLARE_MAP( PassRPtr, SubmeshStaticRenderNodesMap, SubmeshStaticRenderNodesByPass );
 	DECLARE_MAP( RenderPipelineRPtr, SubmeshStaticRenderNodesByPassMap, SubmeshStaticRenderNodesByPipeline );
 	DECLARE_MAP( PassRPtr, SubmeshSkinningRenderNodesMap, SubmeshSkinninRenderNodesByPass );

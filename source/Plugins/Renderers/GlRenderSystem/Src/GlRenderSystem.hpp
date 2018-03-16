@@ -10,12 +10,12 @@ See LICENSE file in root folder
 
 namespace GlRender
 {
-	class GlRenderSystem
+	class RenderSystem
 		: public castor3d::RenderSystem
 	{
 	public:
-		explicit GlRenderSystem( castor3d::Engine & engine );
-		~GlRenderSystem();
+		explicit RenderSystem( castor3d::Engine & engine );
+		~RenderSystem();
 
 		static castor3d::RenderSystemUPtr create( castor3d::Engine & engine );
 

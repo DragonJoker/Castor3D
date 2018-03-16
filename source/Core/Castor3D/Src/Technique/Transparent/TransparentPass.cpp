@@ -1229,7 +1229,6 @@ namespace castor3d
 
 	void TransparentPass::doUpdatePipeline( RenderPipeline & pipeline )const
 	{
-		auto & scene = *m_camera->getScene();
-		m_sceneUbo.update( scene, *m_camera, true );
+		m_sceneUbo.update( *m_camera->getScene(), *m_camera, true );
 	}
 }

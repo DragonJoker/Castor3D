@@ -271,6 +271,7 @@ namespace castor3d
 		m_renderSystem.pushScene( &scene );
 		camera.resize( m_size );
 		camera.update();
+		scene.updateDeviceDependent( camera );
 
 		// Update part
 		doUpdateParticles( info );
@@ -299,7 +300,7 @@ namespace castor3d
 
 		// Render part
 		semaphore = doRenderOpaque( jitter, info, *semaphore );
-		semaphore = scene.renderBackground( getSize(), camera, *semaphore );
+		semaphore = doRenderBackground( *semaphore );
 		semaphore = doRenderTransparent( jitter, info, *semaphore );
 		semaphore = doApplyPostEffects( *semaphore );
 
@@ -492,6 +493,26 @@ namespace castor3d
 			result = &m_deferredRendering->render( info, scene, camera, *result );
 
 #endif
+		}
+
+		return result;
+	}
+
+	renderer::Semaphore const * RenderTechnique::doRenderBackground( renderer::Semaphore const & semaphore )
+	{
+		auto & scene = *m_renderTarget.getScene();
+		renderer::CommandBuffer const * bgCommands{ nullptr };
+		renderer::Semaphore const * bgSemaphore{ nullptr };
+		renderer::Semaphore const * result{ &semaphore };
+
+		if ( scene.getBackgroundCommands( bgCommands, bgSemaphore ) )
+		{
+			getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue().submit( *bgCommands
+				, *result
+				, renderer::PipelineStageFlag::eColourAttachmentOutput
+				, *bgSemaphore
+				, nullptr );
+			result = bgSemaphore;
 		}
 
 		return result;

@@ -94,14 +94,13 @@ namespace castor3d
 		C3D_API virtual void cleanup();
 		/**
 		 *\~english
-		 *\brief		Renders the skybox.
+		 *\brief		Updates the skybox.
 		 *\param[in]	camera	The scene's camera.
 		 *\~french
 		 *\brief		Dessine la skybox.
 		 *\param[in]	camera	La caméra de la scène.
 		 */
-		C3D_API void render( Camera const & camera
-			, renderer::Semaphore const & toWait );
+		C3D_API void update( Camera const & camera );
 		/**
 		*\~english
 		*\return		Sets the skybox's equirectangular texture.
@@ -148,16 +147,22 @@ namespace castor3d
 			return m_texture->getDefaultView();
 		}
 
+		inline IblTextures const & getIbl()const
+		{
+			REQUIRE( m_ibl );
+			return *m_ibl;
+		}
+
 		inline renderer::Semaphore const & getSemaphore()const
 		{
 			REQUIRE( m_semaphore );
 			return *m_semaphore;
 		}
 
-		inline IblTextures const & getIbl()const
+		inline renderer::CommandBuffer const & getCommandBuffer()const
 		{
-			REQUIRE( m_ibl );
-			return *m_ibl;
+			REQUIRE( m_commandBuffer );
+			return *m_commandBuffer;
 		}
 		/**@}*/
 		/**

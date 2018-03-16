@@ -85,13 +85,13 @@ namespace castor3d
 			, uint32_t index ) = 0;
 		/**
 		 *\~english
-		 *\brief		Render function.
+		 *\brief		Updates device dependent data.
 		 *\param[in]	index	The render index.
 		 *\~french
-		 *\brief		Fonction de rendu.
+		 *\brief		Met à jour les données dépendantes du device.
 		 *\param[in]	index	L'indice du rendu.
 		 */
-		C3D_API virtual void render( uint32_t index = 0 ) = 0;
+		C3D_API virtual void updateDeviceDependent( uint32_t index = 0 ) = 0;
 
 	protected:
 		/**
@@ -104,7 +104,7 @@ namespace castor3d
 		 *\param		nodes	Les noeuds.
 		 *\param		camera	La caméra regardant la scène.
 		 */
-		void doUpdateNodes( SceneRenderNodes & nodes
+		void doUpdateNodes( SceneCulledRenderNodes & nodes
 			, Camera const & camera );
 
 	private:

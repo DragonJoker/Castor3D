@@ -116,43 +116,48 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doUpdateNodes( SceneRenderNodes & nodes
-			, Camera const & camera );
+		void doUpdateNodes( SceneCulledRenderNodes & nodes );
 		castor::Point3f doFboPick( castor::Position const & position
 			, Camera const & camera
 			, renderer::CommandBuffer const & commandBuffer );
 		PickingPass::NodeType doPick( castor::Point3f const & pixel
-			, SceneRenderNodes & nodes );
+			, SceneCulledRenderNodes & nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doRender
 		 */
 		void doUpdate( Scene const & scene
-			, SubmeshStaticRenderNodesByPipelineMap & nodes );
+			, Camera const & camera
+			, SubmeshStaticRenderNodesPtrByPipelineMap & nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doRender
 		 */
 		void doUpdate( Scene const & scene
-			, StaticRenderNodesByPipelineMap & nodes );
+			, Camera const & camera
+			, StaticRenderNodesPtrByPipelineMap & nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doRenderAnimatedSubmeshes
 		 */
 		void doUpdate( Scene const & scene
-			, SkinningRenderNodesByPipelineMap & nodes );
+			, Camera const & camera
+			, SkinningRenderNodesPtrByPipelineMap & nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doRender
 		 */
 		void doUpdate( Scene const & scene
-			, SubmeshSkinningRenderNodesByPipelineMap & nodes );
+			, Camera const & camera
+			, SubmeshSkinningRenderNodesPtrByPipelineMap & nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doRenderAnimatedSubmeshes
 		 */
 		void doUpdate( Scene const & scene
-			, MorphingRenderNodesByPipelineMap & nodes );
+			, Camera const & camera
+			, MorphingRenderNodesPtrByPipelineMap & nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doRender
 		 */
 		void doUpdate( Scene const & scene
-			, BillboardRenderNodesByPipelineMap & nodes );
+			, Camera const & camera
+			, BillboardRenderNodesPtrByPipelineMap & nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */

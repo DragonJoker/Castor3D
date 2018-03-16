@@ -18,6 +18,7 @@
 #include <RenderPass/SubpassDependency.hpp>
 #include <RenderPass/SubpassDescription.hpp>
 #include <Shader/ShaderProgram.hpp>
+#include <Sync/ImageMemoryBarrier.hpp>
 
 #include <Graphics/Image.hpp>
 

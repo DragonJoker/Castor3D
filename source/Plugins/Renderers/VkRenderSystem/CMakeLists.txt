@@ -26,6 +26,8 @@ add_target(
 	"${CastorMinLibraries};VkRenderer"
 	"VkRenderSystemPch.hpp"
 	"VkRenderSystemPch.cpp"
+	"-DVkRenderer_STATIC"
+	"-DVkRenderer_STATIC"
 )
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Renderers" )

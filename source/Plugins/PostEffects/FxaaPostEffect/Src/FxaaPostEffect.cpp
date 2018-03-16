@@ -298,7 +298,7 @@ namespace fxaa
 		stages[0].module->loadShader( vtx.getSource() );
 		stages[1].module->loadShader( pxl.getSource() );
 
-		m_fxaaQuad = std::make_unique< RenderQuad >( *getRenderSystem(), size );
+		m_fxaaQuad = std::make_unique< RenderQuad >( *getRenderSystem(), { size.width, size.height } );
 		m_fxaaQuad->createPipeline( size
 			, Position{}
 			, stages

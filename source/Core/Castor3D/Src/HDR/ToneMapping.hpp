@@ -123,7 +123,7 @@ namespace castor3d
 		C3D_API virtual void doUpdate() = 0;
 
 	private:
-		void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
+		C3D_API void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
 			, renderer::DescriptorSet & descriptorSet )override;
 
 	protected:

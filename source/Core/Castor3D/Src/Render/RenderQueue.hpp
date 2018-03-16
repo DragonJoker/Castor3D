@@ -85,6 +85,56 @@ namespace castor3d
 	};
 	/*!
 	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		21/02/2016
+	\~english
+	\brief		The render nodes for a specific scene.
+	\~french
+	\brief		Les noeuds de rendu pour une scène spécifique.
+	*/
+	struct SceneCulledRenderNodes
+	{
+		using StaticNodesMap = RenderNodesT< StaticRenderNode, StaticRenderNodesPtrByPipelineMap >;
+		using SkinnedNodesMap = RenderNodesT< SkinningRenderNode, SkinningRenderNodesPtrByPipelineMap >;
+		using InstantiatedStaticNodesMap = RenderNodesT< StaticRenderNode, SubmeshStaticRenderNodesPtrByPipelineMap >;
+		using InstantiatedSkinnedNodesMap = RenderNodesT< SkinningRenderNode, SubmeshSkinningRenderNodesPtrByPipelineMap >;
+		using MorphingNodesMap = RenderNodesT< MorphingRenderNode, MorphingRenderNodesPtrByPipelineMap >;
+		using BillboardNodesMap = RenderNodesT< BillboardRenderNode, BillboardRenderNodesPtrByPipelineMap >;
+
+		//!\~english	The scene.
+		//!\~french		La scène.
+		Scene const & scene;
+		//!\~english	The camera.
+		//!\~french		La caméra.
+		Camera const & camera;
+		//!\~english	The static render nodes, sorted by shader program.
+		//!\~french		Les noeuds de rendu statiques, triés par programme shader.
+		StaticNodesMap staticNodes;
+		//!\~english	The animated render nodes, sorted by shader program.
+		//!\~french		Les noeuds de rendu animés, triés par programme shader.
+		SkinnedNodesMap skinnedNodes;
+		//!\~english	The instanced render nodes, sorted by shader program.
+		//!\~french		Les noeuds de rendu instanciés, triés par programme shader.
+		InstantiatedStaticNodesMap instancedStaticNodes;
+		//!\~english	The animated render nodes, sorted by shader program.
+		//!\~french		Les noeuds de rendu animés, triés par programme shader.
+		InstantiatedSkinnedNodesMap instancedSkinnedNodes;
+		//!\~english	The animated render nodes, sorted by shader program.
+		//!\~french		Les noeuds de rendu animés, triés par programme shader.
+		MorphingNodesMap morphingNodes;
+		//!\~english	The billboards render nodes, sorted by shader program.
+		//!\~french		Les noeuds de rendu de billboards, triés par programme shader.
+		BillboardNodesMap billboardNodes;
+
+		SceneCulledRenderNodes( Scene const & scene
+			, Camera const & camera )
+			: scene{ scene }
+			, camera{ camera }
+		{
+		}
+	};
+	/*!
+	\author		Sylvain DOREMUS
 	\version	0.7.0.0
 	\date		12/11/2012
 	\~english
@@ -141,17 +191,31 @@ namespace castor3d
 		 */
 		C3D_API void update();
 		/**
-		 *\~english
-		 *\brief		Retrieves a scene's nodes from a camera viewpoint.
-		 *\return		The render nodes.
-		 *\~french
-		 *\brief		Récupère les noeuds d'une scène, du point de vue d'une caméra.
-		 *\return		Les noeuds de rendu
-		 */
-		C3D_API renderer::CommandBuffer const & getCommandBuffer()const
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		C3D_API SceneRenderNodes & getAllRenderNodes()const
+		{
+			REQUIRE( m_renderNodes );
+			return *m_renderNodes;
+		}
+
+		C3D_API SceneCulledRenderNodes & getCulledRenderNodes()const
+		{
+			REQUIRE( m_culledRenderNodes );
+			return *m_culledRenderNodes;
+		}
+
+		inline renderer::CommandBuffer const & getCommandBuffer()const
 		{
 			return *m_commandBuffer;
 		}
+		/**@}*/
 
 	private:
 		void doPrepareAllNodesCommandBuffer();
@@ -164,6 +228,7 @@ namespace castor3d
 		bool m_opaque;
 		SceneNode const * m_ignoredNode{ nullptr };
 		std::unique_ptr< SceneRenderNodes > m_renderNodes;
+		std::unique_ptr< SceneCulledRenderNodes > m_culledRenderNodes;
 		renderer::CommandBufferPtr m_commandBuffer;
 		bool m_changed{ true };
 		bool m_isSceneChanged{ true };

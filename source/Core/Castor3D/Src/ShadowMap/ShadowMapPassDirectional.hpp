@@ -51,9 +51,9 @@ namespace castor3d
 			, Light & light
 			, uint32_t index )override;
 		/**
-		 *\copydoc		castor3d::ShadowMapPass::render
+		 *\copydoc		castor3d::ShadowMapPass::updateDeviceDependent
 		 */
-		void render( uint32_t index )override;
+		void updateDeviceDependent( uint32_t index )override;
 		/**
 		 *\~english
 		 *\return		The camera.

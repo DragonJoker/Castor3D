@@ -4,28 +4,32 @@
 #include <Cache/SamplerCache.hpp>
 #include <Cache/ShaderCache.hpp>
 
-#include <FrameBuffer/BackBuffers.hpp>
-#include <FrameBuffer/FrameBufferAttachment.hpp>
-#include <FrameBuffer/FrameBufferAttachment.hpp>
 #include <Mesh/Vertex.hpp>
-#include <Buffer/ParticleDeclaration.hpp>
-#include <Buffer/ParticleElementDeclaration.hpp>
-#include <Buffer/GeometryBuffers.hpp>
-#include <Buffer/VertexBuffer.hpp>
+#include <Scene/ParticleSystem/ParticleDeclaration.hpp>
+#include <Scene/ParticleSystem/ParticleElementDeclaration.hpp>
 #include <Miscellaneous/Parameter.hpp>
-#include <Render/Context.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderWindow.hpp>
 #include <Render/Viewport.hpp>
-#include <Shader/UniformBuffer.hpp>
 #include <Shader/ShaderProgram.hpp>
-#include <State/BlendState.hpp>
-#include <State/RasteriserState.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
+
+#include <Buffer/VertexBuffer.hpp>
+#include <Buffer/UniformBuffer.hpp>
+#include <Pipeline/ColourBlendState.hpp>
+#include <Pipeline/DepthStencilState.hpp>
+#include <Pipeline/Pipeline.hpp>
+#include <Pipeline/PipelineLayout.hpp>
+#include <Pipeline/RasterisationState.hpp>
+#include <Pipeline/ShaderStageState.hpp>
+#include <RenderPass/FrameBuffer.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
 
 #include <numeric>
 
@@ -43,19 +47,17 @@ namespace GrayScale
 			using namespace glsl;
 			GlslWriter writer = renderSystem->createGlslWriter();
 
-			UBO_MATRIX( writer, 0u );
-
 			// Shader inputs
-			Vec2 position = writer.declAttribute< Vec2 >( cuT( "position" ) );
+			Vec2 position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = position;
-				gl_Position = c3d_projection * vec4( position.xy(), 0.0, 1.0 );
+				gl_Position = vec4( position.xy(), 0.0, 1.0 );
 			} );
 			return writer.finalise();
 		}
@@ -66,11 +68,11 @@ namespace GrayScale
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), MinBufferIndex, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 0u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0u );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
@@ -90,7 +92,6 @@ namespace GrayScale
 	GrayScalePostEffect::GrayScalePostEffect( RenderTarget & p_renderTarget, RenderSystem & renderSystem, Parameters const & p_param )
 		: PostEffect{ GrayScalePostEffect::Type, p_renderTarget, renderSystem, p_param }
 		, m_surface{ *renderSystem.getEngine() }
-		, m_matrixUbo{ *renderSystem.getEngine() }
 	{
 		String name = cuT( "GrayScale" );
 
@@ -120,24 +121,19 @@ namespace GrayScale
 
 	bool GrayScalePostEffect::initialise()
 	{
-		auto & cache = getRenderSystem()->getEngine()->getShaderProgramCache();
+		auto & device = *getRenderSystem()->getCurrentDevice();
 		Size size = m_renderTarget.getSize();
 
 		auto vertex = getVertexProgram( getRenderSystem() );
 		auto fragment = getFragmentProgram( getRenderSystem() );
-		ShaderProgramSPtr program = cache.getNewProgram( false );
-		program->createObject( renderer::ShaderStageFlag::eVertex );
-		program->createObject( renderer::ShaderStageFlag::eFragment );
-		program->createUniform< UniformType::eSampler >( cuT( "c3d_mapDiffuse" ), renderer::ShaderStageFlag::eFragment )->setValue( MinBufferIndex );
-		program->setSource( renderer::ShaderStageFlag::eVertex, vertex );
-		program->setSource( renderer::ShaderStageFlag::eFragment, fragment );
-		program->initialise();
+		renderer::ShaderStageStateArray program
+		{
+			{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
+			{ device.createShaderModule( renderer::ShaderStageFlag::eFragment ) },
+		};
+		program[0].module->loadShader( vertex.getSource() );
+		program[1].module->loadShader( fragment.getSource() );
 
-		DepthStencilState dsstate;
-		dsstate.setDepthTest( false );
-		dsstate.setDepthMask( WritingMask::eZero );
-		RasteriserState rsstate;
-		rsstate.setCulledFaces( Culling::eBack );
 		m_pipeline = getRenderSystem()->createRenderPipeline( std::move( dsstate ), std::move( rsstate ), BlendState{}, MultisampleState{}, *program, PipelineFlags{} );
 		m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
 

@@ -118,24 +118,26 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		Renders the scene background (skybox or image).
-		 *\param[in]	size	The target dimensions.
-		 *\param[in]	camera	The current camera.
-		 *\~french
-		 *\brief		Rend l'arrière plan de la scène (skybox ou image).
-		 *\param[in]	size	Les dimensions de la cible.
-		 *\param[in]	camera	La caméra courante.
-		 */
-		C3D_API renderer::Semaphore const * renderBackground( castor::Size const & size
-			, Camera const & camera
-			, renderer::Semaphore const & toWait );
-		/**
-		 *\~english
 		 *\brief		Updates the scene before render.
 		 *\~french
 		 *\brief		Met à jour la scène avant le rendu.
 		 */
 		C3D_API void update();
+		/**
+		 *\~english
+		 *\brief		Updates the scene device dependant stuff.
+		 *\~french
+		 *\brief		Met à jour les objets de scène dépendant du device.
+		 */
+		C3D_API void updateDeviceDependent( Camera const & camera );
+		/**
+		 *\~english
+		 *\return		The command buffers used to render the background.
+		 *\~french
+		 *\brief		Le tampon de commandes utilisé pour dessiner l'arrière plan.
+		 */
+		C3D_API bool getBackgroundCommands( renderer::CommandBuffer const *& commandBuffer
+			, renderer::Semaphore const *& semaphore );
 		/**
 		 *\~english
 		 *\brief		Sets the background image for the scene

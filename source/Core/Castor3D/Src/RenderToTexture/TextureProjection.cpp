@@ -15,6 +15,7 @@
 #include <Descriptor/DescriptorSetLayoutBinding.hpp>
 #include <Descriptor/DescriptorSetPool.hpp>
 #include <Pipeline/ShaderStageState.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
 #include <Shader/ShaderModule.hpp>
 
 #include <GlslSource.hpp>
@@ -26,6 +27,7 @@ namespace castor3d
 	namespace
 	{
 	}
+
 	TextureProjection::TextureProjection( Engine & engine )
 		: OwnedBy< Engine >{ engine }
 		, m_matrixUbo{ engine }
@@ -44,13 +46,48 @@ namespace castor3d
 	{
 	}
 
-	void TextureProjection::initialise( renderer::TextureView const & texture
-		, renderer::RenderPass const & renderPass )
+	void TextureProjection::initialise( renderer::TextureView const & source
+		, renderer::Format targetColour
+		, renderer::Format targetDepth )
 	{
+		auto & renderSystem = *getEngine()->getRenderSystem();
+		auto & device = *renderSystem.getCurrentDevice();
+
+		renderer::RenderPassCreateInfo renderPass;
+		renderPass.flags = 0;
+
+		renderPass.attachments.resize( 2u );
+		renderPass.attachments[1].index = 0u;
+		renderPass.attachments[1].format = targetDepth;
+		renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[1].initialLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+		renderPass.attachments[1].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+
+		renderPass.attachments[0].index = 1u;
+		renderPass.attachments[0].format = targetColour;
+		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+		renderPass.subpasses.resize( 1u );
+		renderPass.subpasses[0].flags = 0u;
+		renderPass.subpasses[0].colorAttachments = { { 1u, renderer::ImageLayout::eColourAttachmentOptimal } };
+		renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
+
+		m_renderPass = device.createRenderPass( renderPass );
+
 		m_sampler->initialise();
 		auto & program = doInitialiseShader();
 		doInitialiseVertexBuffer();
-		doInitialisePipeline( program, texture, renderPass );
+		doInitialisePipeline( program, source, *m_renderPass );
 	}
 
 	void TextureProjection::cleanup()
@@ -74,6 +111,7 @@ namespace castor3d
 		if ( !m_commandBuffer )
 		{
 			m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer( false );
+			m_finished = device.createSemaphore();
 		}
 		else
 		{

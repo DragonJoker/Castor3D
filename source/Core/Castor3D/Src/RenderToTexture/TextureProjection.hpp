@@ -17,6 +17,8 @@ See LICENSE file in root folder
 #include <Pipeline/Pipeline.hpp>
 #include <Pipeline/PipelineLayout.hpp>
 #include <Pipeline/VertexLayout.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <Sync/Semaphore.hpp>
 
 #include <Design/OwnedBy.hpp>
 
@@ -48,8 +50,9 @@ namespace castor3d
 		*	Initialisation / Cleanup.
 		*/
 		/**@{*/
-		C3D_API void initialise( renderer::TextureView const & texture
-			, renderer::RenderPass const & renderPass );
+		C3D_API void initialise( renderer::TextureView const & source
+			, renderer::Format targetColour
+			, renderer::Format targetDepth );
 		C3D_API void cleanup();
 		/**@}*/
 		/**
@@ -59,12 +62,23 @@ namespace castor3d
 		/**@{*/
 		C3D_API void update( Camera const & camera );
 		/**@}*/
-
+		/**
+		*name
+		*	Getters.
+		*/
+		/**@{*/
 		inline renderer::CommandBuffer const & getCommandBuffer()const
 		{
 			REQUIRE( m_commandBuffer );
 			return *m_commandBuffer;
 		}
+
+		inline renderer::Semaphore const & getSemaphore()const
+		{
+			REQUIRE( m_finished );
+			return *m_finished;
+		}
+		/**@}*/
 
 	private:
 		renderer::ShaderStageStateArray doInitialiseShader();
@@ -78,6 +92,7 @@ namespace castor3d
 		MatrixUbo m_matrixUbo;
 		ModelMatrixUbo m_modelMatrixUbo;
 		castor::Size m_size;
+		renderer::RenderPassPtr m_renderPass;
 		renderer::PushConstantsBuffer< castor::Point2f > m_sizePushConstant;
 		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
 		renderer::DescriptorSetPoolPtr m_descriptorPool;
@@ -87,6 +102,7 @@ namespace castor3d
 		renderer::PipelinePtr m_pipeline;
 		SamplerSPtr m_sampler;
 		renderer::CommandBufferPtr m_commandBuffer;
+		renderer::SemaphorePtr m_finished;
 		castor::Matrix4x4r m_mtxModel;
 	};
 }

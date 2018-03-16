@@ -1,12 +1,16 @@
 #include "MeshAnimationInstanceSubmesh.hpp"
 
+#include "Engine.hpp"
 #include "Animation/Mesh/MeshAnimation.hpp"
 #include "MeshAnimationInstance.hpp"
+#include "Mesh/Mesh.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Mesh/SubmeshComponent/MorphComponent.hpp"
-#include "Buffer/VertexBuffer.hpp"
 #include "Scene/Geometry.hpp"
+#include "Scene/Scene.hpp"
 #include "Scene/Animation/AnimatedMesh.hpp"
+
+#include <Buffer/VertexBuffer.hpp>
 
 using namespace castor;
 
@@ -53,12 +57,22 @@ namespace castor3d
 	{
 		if ( &cur != m_cur )
 		{
-			auto & vertexBuffer = m_animationObject.getSubmesh().getVertexBuffer();
-			auto & animBuffer = m_animationObject.getComponent().getAnimationBuffer();
-			std::memcpy( vertexBuffer.getData(), prv.m_buffer.data(), vertexBuffer.getSize() );
-			std::memcpy( animBuffer.getData(), cur.m_buffer.data(), animBuffer.getSize() );
-			m_animationObject.getSubmesh().needsUpdate();
-			m_animationObject.getComponent().needsUpdate();
+			getOwner()->getAnimatedMesh().getMesh().getScene()->getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
+				, [this, cur, prv]()
+				{
+					auto & vertexBuffer = m_animationObject.getSubmesh().getVertexBuffer();
+					auto & animBuffer = m_animationObject.getComponent().getAnimationBuffer();
+
+					if ( auto * buffer = vertexBuffer.lock( 0u, vertexBuffer.getCount(), renderer::MemoryMapFlag::eWrite ) )
+					{
+						std::memcpy( buffer, prv.m_buffer.data(), vertexBuffer.getSize() );
+					}
+
+					if ( auto * buffer = animBuffer.lock( 0u, animBuffer.getCount(), renderer::MemoryMapFlag::eWrite ) )
+					{
+						std::memcpy( buffer, prv.m_buffer.data(), animBuffer.getSize() );
+					}
+				} ) );
 		}
 
 		getOwner()->getAnimatedMesh().getGeometry().setBoundingBox( m_animationObject.getSubmesh()

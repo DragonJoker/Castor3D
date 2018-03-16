@@ -802,7 +802,9 @@ namespace castor3d
 			{
 				m_backgroundColourSkybox.initialise();
 				m_colour = std::make_unique< TextureProjection >( *getEngine() );
-				m_colour->initialise( m_backgroundColourSkybox.getView() );
+				m_colour->initialise( m_backgroundColourSkybox.getView()
+					, renderer::Format::eR16G16B16A16_SFLOAT
+					, renderer::Format::eD24_UNORM_S8_UINT );
 			} ) );
 
 		m_initialised = true;
@@ -871,46 +873,6 @@ namespace castor3d
 			} ) );
 	}
 
-	renderer::Semaphore const * Scene::renderBackground( castor::Size const & size
-		, Camera const & camera
-		, renderer::Semaphore const & toWait )
-	{
-		renderer::Semaphore const * result = &toWait;
-
-		if ( m_fog.getType() == FogType::eDisabled )
-		{
-			if ( m_backgroundImage && m_backgroundImage->isInitialised())
-			{
-				m_colour->render( *m_backgroundImage
-					, camera
-					, *result );
-				result = &m_colour->getSemaphore();
-			}
-			else if ( m_skybox )
-			{
-				m_skybox->render( camera, *result );
-				result = &m_skybox->getSemaphore();
-			}
-			else
-			{
-				m_backgroundColourSkybox.setColour( m_backgroundColour );
-				m_backgroundColourSkybox.update();
-				m_backgroundColourSkybox.render( camera, *result );
-				result = &m_backgroundColourSkybox.getSemaphore();
-			}
-		}
-		else if ( getMaterialsType() == MaterialType::ePbrMetallicRoughness
-			|| getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
-		{
-			m_backgroundColourSkybox.setColour( m_backgroundColour );
-			m_backgroundColourSkybox.update();
-			m_backgroundColourSkybox.render( camera, *result );
-			result = &m_backgroundColourSkybox.getSemaphore();
-		}
-
-		return result;
-	}
-
 	void Scene::update()
 	{
 		m_rootNode->update();
@@ -920,6 +882,67 @@ namespace castor3d
 		getLightCache().update();
 		onUpdate( *this );
 		m_changed = false;
+	}
+
+	void Scene::updateDeviceDependent( Camera const & camera )
+	{
+		if ( m_fog.getType() == FogType::eDisabled )
+		{
+			if ( m_backgroundImage && m_backgroundImage->isInitialised() )
+			{
+			}
+			else if ( m_skybox )
+			{
+				m_skybox->update( camera );
+			}
+			else
+			{
+				m_backgroundColourSkybox.setColour( m_backgroundColour );
+				m_backgroundColourSkybox.update();
+			}
+		}
+		else if ( getMaterialsType() == MaterialType::ePbrMetallicRoughness
+			|| getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
+		{
+			m_backgroundColourSkybox.setColour( m_backgroundColour );
+			m_backgroundColourSkybox.update();
+		}
+	}
+
+	bool Scene::getBackgroundCommands( renderer::CommandBuffer const *& commandBuffer
+		, renderer::Semaphore const *& semaphore )
+	{
+		bool result{ false };
+
+		if ( m_fog.getType() == FogType::eDisabled )
+		{
+			result = true;
+
+			if ( m_backgroundImage && m_backgroundImage->isInitialised())
+			{
+				commandBuffer = &m_colour->getCommandBuffer();
+				semaphore = &m_colour->getSemaphore();
+			}
+			else if ( m_skybox )
+			{
+				commandBuffer = &m_skybox->getCommandBuffer();
+				semaphore = &m_skybox->getSemaphore();
+			}
+			else
+			{
+				commandBuffer = &m_backgroundColourSkybox.getCommandBuffer();
+				semaphore = &m_backgroundColourSkybox.getSemaphore();
+			}
+		}
+		else if ( getMaterialsType() == MaterialType::ePbrMetallicRoughness
+			|| getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
+		{
+			commandBuffer = &m_backgroundColourSkybox.getCommandBuffer();
+			semaphore = &m_backgroundColourSkybox.getSemaphore();
+			result = true;
+		}
+
+		return result;
 	}
 
 	bool Scene::setBackground( Path const & folder, Path const & relative )

@@ -197,20 +197,25 @@ namespace castor3d
 		m_ibl.reset();
 	}
 
-	void Skybox::render( Camera const & camera
-		, renderer::Semaphore const & toWait )
+	void Skybox::update( Camera const & camera )
 	{
-		if ( camera.getViewport().getSize() != m_size )
-		{
-			m_size = camera.getViewport().getSize();
-			doPrepareFrame();
-		}
+		auto & scene = *camera.getScene();
+		auto node = camera.getParent();
+		matrix::setTranslate( m_mtxModel, node->getDerivedPosition() );
+		m_viewport.setPerspective( 45.0_degrees
+			, camera.getViewport().getRatio()
+			, 0.1f
+			, 2.0f );
+		m_viewport.update();
+		m_matrixUbo.update( camera.getView()
+			//, m_viewport.getProjection() );
+			, camera.getViewport().getProjection() );
+		m_modelMatrixUbo.update( m_mtxModel );
 
-		getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue().submit( *m_commandBuffer
-			, toWait
-			, renderer::PipelineStageFlag::eColourAttachmentOutput
-			, *m_semaphore
-			, nullptr );
+		if ( !m_hdr )
+		{
+			m_configUbo.update( scene.getHdrConfig() );
+		}
 	}
 
 	void Skybox::setEquiTexture( TextureLayoutSPtr texture
@@ -403,30 +408,17 @@ namespace castor3d
 
 		if ( !m_commandBuffer )
 		{
-			m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
+			m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer( false );
 		}
-
-		renderer::ClearValueArray clearValues
-		{
-			renderer::ClearColorValue{}
-		};
 
 		auto result = m_commandBuffer->begin();
 
 		if ( result )
 		{
-			m_commandBuffer->beginRenderPass( *m_renderPass
-				, *m_frameBuffer
-				, clearValues
-				, renderer::SubpassContents::eInline );
-			m_commandBuffer->setViewport( { m_size.getWidth(), m_size.getHeight(), 0, 0 } );
-			m_commandBuffer->setScissor( { 0, 0, m_size.getWidth(), m_size.getHeight() } );
 			m_commandBuffer->bindPipeline( *m_pipeline );
 			m_commandBuffer->bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
 			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 			m_commandBuffer->draw( m_vertexBuffer->getCount() );
-			m_commandBuffer->endRenderPass();
-			result = m_commandBuffer->end();
 		}
 
 		return result;

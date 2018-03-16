@@ -77,6 +77,34 @@ namespace castor3d
 			itObject->second.emplace_back( std::move( node ) );
 		}
 
+		template< typename NodeType, typename MapType >
+		void doAddRenderNode( RenderPipeline & pipeline
+			, NodeType * node
+			, MapType & nodes )
+		{
+			using ObjectRenderNodesArray = typename MapType::mapped_type;
+			ObjectRenderNodesArray tmp;
+			auto itPipeline = nodes.emplace( &pipeline, std::move( tmp ) ).first;
+			itPipeline->second.emplace_back( node );
+		}
+
+		template< typename NodeType, typename MapType >
+		void doAddRenderNode( Pass & pass
+			, RenderPipeline & pipeline
+			, NodeType * node
+			, Submesh & object
+			, MapType & nodes )
+		{
+			using ObjectRenderNodesByPipelineMap = typename MapType::mapped_type;
+			using ObjectRenderNodesByPassMap = typename ObjectRenderNodesByPipelineMap::mapped_type;
+			using ObjectRenderNodesArray = typename ObjectRenderNodesByPassMap::mapped_type;
+
+			auto itPipeline = nodes.emplace( &pipeline, ObjectRenderNodesByPipelineMap{} ).first;
+			auto itPass = itPipeline->second.emplace( &pass, ObjectRenderNodesByPassMap{} ).first;
+			auto itObject = itPass->second.emplace( &object, ObjectRenderNodesArray{} ).first;
+			itObject->second.emplace_back( node );
+		}
+
 		AnimatedObjectSPtr doFindAnimatedObject( Scene const & scene
 			, String const & name )
 		{
@@ -392,7 +420,6 @@ namespace castor3d
 								if ( checkFlag( submeshFlags, ProgramFlag::eInstantiation )
 									&& !checkFlag( programFlags, ProgramFlag::eMorphing )
 									&& ( !pass->hasAlphaBlending() || renderPass.isOrderIndependent() )
-									&& renderPass.getEngine()->getRenderSystem()->getGpuInformations().hasInstancing()
 									&& !pass->hasEnvironmentMapping() )
 								{
 									addFlag( programFlags, ProgramFlag::eInstantiation );
@@ -636,38 +663,42 @@ namespace castor3d
 			}
 		}
 
-		template< typename MapType, typename ArrayType >
+		template< typename MapType, typename CulledMapType, typename ArrayType >
 		void doAddRenderNodes( Camera const & camera
+			, CulledMapType & outputNodes
 			, renderer::CommandBuffer const & commandBuffer
 			, RenderPipeline & pipeline
 			, Pass & pass
 			, Submesh & submesh
 			, ArrayType & renderNodes )
 		{
-			for ( auto const & node : renderNodes )
+			for ( auto & node : renderNodes )
 			{
 				if ( node.sceneNode.isDisplayable()
 					&& node.sceneNode.isVisible()
 					&& camera.isVisible( node.instance, node.data ) )
 				{
+					doAddRenderNode( pass, pipeline, &node, submesh, outputNodes );
 					doAddRenderNodeCommand( pass, pipeline, node, submesh, commandBuffer );
 				}
 			}
 		}
 
-		template< typename MapType >
+		template< typename MapType, typename CulledMapType >
 		void doParseRenderNodes( Camera const & camera
-			, MapType const & inputNodes
+			, MapType & inputNodes
+			, CulledMapType & outputNodes
 			, renderer::CommandBuffer const & commandBuffer )
 		{
 			for ( auto & pipelines : inputNodes )
 			{
-				for ( auto const & node : pipelines.second )
+				for ( auto & node : pipelines.second )
 				{
 					if ( node.sceneNode.isDisplayable()
 						&& node.sceneNode.isVisible()
 						&& camera.isVisible( node.instance, node.data ) )
 					{
+						doAddRenderNode( *pipelines.first, &node, outputNodes );
 						doAddRenderNodeCommand( *pipelines.first, node, commandBuffer );
 					}
 				}
@@ -676,12 +707,65 @@ namespace castor3d
 
 		template<>
 		void doParseRenderNodes( Camera const & camera
-			, BillboardRenderNodesByPipelineMap const & inputNodes
+			, BillboardRenderNodesByPipelineMap & inputNodes
+			, BillboardRenderNodesPtrByPipelineMap & outputNodes
 			, renderer::CommandBuffer const & commandBuffer )
 		{
 			for ( auto & pipelines : inputNodes )
 			{
-				for ( auto const & node : pipelines.second )
+				for ( auto & node : pipelines.second )
+				{
+					if ( node.sceneNode.isDisplayable()
+						 && node.sceneNode.isVisible() )
+					{
+						doAddRenderNode( *pipelines.first, &node, outputNodes );
+						doAddRenderNodeCommand( *pipelines.first, node, commandBuffer );
+					}
+				}
+			}
+		}
+
+		template< typename MapType, typename ArrayType >
+		void doAddRenderNodesCommands( renderer::CommandBuffer const & commandBuffer
+			, RenderPipeline & pipeline
+			, Pass & pass
+			, Submesh & submesh
+			, ArrayType & renderNodes )
+		{
+			for ( auto & node : renderNodes )
+			{
+				if ( node.sceneNode.isDisplayable()
+					&& node.sceneNode.isVisible() )
+				{
+					doAddRenderNodeCommand( pass, pipeline, node, submesh, commandBuffer );
+				}
+			}
+		}
+
+		template< typename MapType >
+		void doParseRenderNodesCommands( MapType & inputNodes
+			, renderer::CommandBuffer const & commandBuffer )
+		{
+			for ( auto & pipelines : inputNodes )
+			{
+				for ( auto & node : pipelines.second )
+				{
+					if ( node.sceneNode.isDisplayable()
+						&& node.sceneNode.isVisible() )
+					{
+						doAddRenderNodeCommand( *pipelines.first, node, commandBuffer );
+					}
+				}
+			}
+		}
+
+		template<>
+		void doParseRenderNodesCommands( BillboardRenderNodesByPipelineMap & inputNodes
+			, renderer::CommandBuffer const & commandBuffer )
+		{
+			for ( auto & pipelines : inputNodes )
+			{
+				for ( auto & node : pipelines.second )
 				{
 					if ( node.sceneNode.isDisplayable()
 						 && node.sceneNode.isVisible() )
@@ -714,6 +798,7 @@ namespace castor3d
 			, std::placeholders::_1 ) );
 		m_camera = &camera;
 		onCameraChanged( camera );
+		m_culledRenderNodes = std::make_unique< SceneCulledRenderNodes >( scene, camera );
 	}
 
 	void RenderQueue::initialise( Scene const & scene )
@@ -748,8 +833,8 @@ namespace castor3d
 			m_changed = false;
 		}
 	}
-	
-	void RenderQueue::doPrepareCulledNodesCommandBuffer()
+
+	void RenderQueue::doPrepareAllNodesCommandBuffer()
 	{
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eRenderPassContinue ) )
 		{
@@ -757,8 +842,7 @@ namespace castor3d
 			camera.update();
 
 			doTraverseNodes( m_renderNodes->instancedStaticNodes.frontCulled
-				, std::bind( doAddRenderNodes< SubmeshStaticRenderNodesByPipelineMap, StaticRenderNodeArray >
-					, std::ref( camera )
+				, std::bind( doAddRenderNodesCommands< SubmeshStaticRenderNodesByPipelineMap, StaticRenderNodeArray >
 					, std::ref( *m_commandBuffer )
 					, std::placeholders::_1
 					, std::placeholders::_2
@@ -766,8 +850,7 @@ namespace castor3d
 					, std::placeholders::_4 ) );
 
 			doTraverseNodes( m_renderNodes->instancedStaticNodes.backCulled
-				, std::bind( doAddRenderNodes< SubmeshStaticRenderNodesByPipelineMap, StaticRenderNodeArray >
-					, std::ref( camera )
+				, std::bind( doAddRenderNodesCommands< SubmeshStaticRenderNodesByPipelineMap, StaticRenderNodeArray >
 					, std::ref( *m_commandBuffer )
 					, std::placeholders::_1
 					, std::placeholders::_2
@@ -775,8 +858,7 @@ namespace castor3d
 					, std::placeholders::_4 ) );
 
 			doTraverseNodes( m_renderNodes->instancedSkinnedNodes.frontCulled
-				, std::bind( doAddRenderNodes< SubmeshSkinningRenderNodesByPipelineMap, SkinningRenderNodeArray >
-					, std::ref( camera )
+				, std::bind( doAddRenderNodesCommands< SubmeshSkinningRenderNodesByPipelineMap, SkinningRenderNodeArray >
 					, std::ref( *m_commandBuffer )
 					, std::placeholders::_1
 					, std::placeholders::_2
@@ -784,8 +866,89 @@ namespace castor3d
 					, std::placeholders::_4 ) );
 
 			doTraverseNodes( m_renderNodes->instancedSkinnedNodes.backCulled
-				, std::bind( doAddRenderNodes< SubmeshSkinningRenderNodesByPipelineMap, SkinningRenderNodeArray >
+				, std::bind( doAddRenderNodesCommands< SubmeshSkinningRenderNodesByPipelineMap, SkinningRenderNodeArray >
+					, std::ref( *m_commandBuffer )
+					, std::placeholders::_1
+					, std::placeholders::_2
+					, std::placeholders::_3
+					, std::placeholders::_4 ) );
+
+			doParseRenderNodesCommands( m_renderNodes->staticNodes.frontCulled
+				, *m_commandBuffer );
+			doParseRenderNodesCommands( m_renderNodes->staticNodes.backCulled
+				, *m_commandBuffer );
+
+			doParseRenderNodesCommands( m_renderNodes->skinnedNodes.frontCulled
+				, *m_commandBuffer );
+			doParseRenderNodesCommands( m_renderNodes->skinnedNodes.backCulled
+				, *m_commandBuffer );
+
+			doParseRenderNodesCommands( m_renderNodes->morphingNodes.frontCulled
+				, *m_commandBuffer );
+			doParseRenderNodesCommands( m_renderNodes->morphingNodes.backCulled
+				, *m_commandBuffer );
+
+			doParseRenderNodesCommands( m_renderNodes->billboardNodes.frontCulled
+				, *m_commandBuffer );
+			doParseRenderNodesCommands( m_renderNodes->billboardNodes.backCulled
+				, *m_commandBuffer );
+		}
+	}
+
+	void RenderQueue::doPrepareCulledNodesCommandBuffer()
+	{
+		m_culledRenderNodes->instancedStaticNodes.backCulled.clear();
+		m_culledRenderNodes->instancedStaticNodes.frontCulled.clear();
+		m_culledRenderNodes->staticNodes.backCulled.clear();
+		m_culledRenderNodes->staticNodes.frontCulled.clear();
+		m_culledRenderNodes->skinnedNodes.backCulled.clear();
+		m_culledRenderNodes->skinnedNodes.frontCulled.clear();
+		m_culledRenderNodes->instancedSkinnedNodes.backCulled.clear();
+		m_culledRenderNodes->instancedSkinnedNodes.frontCulled.clear();
+		m_culledRenderNodes->morphingNodes.backCulled.clear();
+		m_culledRenderNodes->morphingNodes.frontCulled.clear();
+		m_culledRenderNodes->billboardNodes.backCulled.clear();
+		m_culledRenderNodes->billboardNodes.frontCulled.clear();
+
+		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eRenderPassContinue ) )
+		{
+			auto & camera = *m_camera;
+			camera.update();
+
+			doTraverseNodes( m_renderNodes->instancedStaticNodes.frontCulled
+				, std::bind( doAddRenderNodes< SubmeshStaticRenderNodesByPipelineMap, SubmeshStaticRenderNodesPtrByPipelineMap, StaticRenderNodeArray >
 					, std::ref( camera )
+					, std::ref( m_culledRenderNodes->instancedStaticNodes.frontCulled )
+					, std::ref( *m_commandBuffer )
+					, std::placeholders::_1
+					, std::placeholders::_2
+					, std::placeholders::_3
+					, std::placeholders::_4 ) );
+
+			doTraverseNodes( m_renderNodes->instancedStaticNodes.backCulled
+				, std::bind( doAddRenderNodes< SubmeshStaticRenderNodesByPipelineMap, SubmeshStaticRenderNodesPtrByPipelineMap, StaticRenderNodeArray >
+					, std::ref( camera )
+					, std::ref( m_culledRenderNodes->instancedStaticNodes.backCulled )
+					, std::ref( *m_commandBuffer )
+					, std::placeholders::_1
+					, std::placeholders::_2
+					, std::placeholders::_3
+					, std::placeholders::_4 ) );
+
+			doTraverseNodes( m_renderNodes->instancedSkinnedNodes.frontCulled
+				, std::bind( doAddRenderNodes< SubmeshSkinningRenderNodesByPipelineMap, SubmeshSkinningRenderNodesPtrByPipelineMap, SkinningRenderNodeArray >
+					, std::ref( camera )
+					, std::ref( m_culledRenderNodes->instancedSkinnedNodes.frontCulled )
+					, std::ref( *m_commandBuffer )
+					, std::placeholders::_1
+					, std::placeholders::_2
+					, std::placeholders::_3
+					, std::placeholders::_4 ) );
+
+			doTraverseNodes( m_renderNodes->instancedSkinnedNodes.backCulled
+				, std::bind( doAddRenderNodes< SubmeshSkinningRenderNodesByPipelineMap, SubmeshSkinningRenderNodesPtrByPipelineMap, SkinningRenderNodeArray >
+					, std::ref( camera )
+					, std::ref( m_culledRenderNodes->instancedSkinnedNodes.backCulled )
 					, std::ref( *m_commandBuffer )
 					, std::placeholders::_1
 					, std::placeholders::_2
@@ -794,30 +957,38 @@ namespace castor3d
 
 			doParseRenderNodes( camera
 				, m_renderNodes->staticNodes.frontCulled
+				, m_culledRenderNodes->staticNodes.frontCulled
 				, *m_commandBuffer );
 			doParseRenderNodes( camera
 				, m_renderNodes->staticNodes.backCulled
+				, m_culledRenderNodes->staticNodes.backCulled
 				, *m_commandBuffer );
 
 			doParseRenderNodes( camera
 				, m_renderNodes->skinnedNodes.frontCulled
+				, m_culledRenderNodes->skinnedNodes.frontCulled
 				, *m_commandBuffer );
 			doParseRenderNodes( camera
 				, m_renderNodes->skinnedNodes.backCulled
+				, m_culledRenderNodes->skinnedNodes.backCulled
 				, *m_commandBuffer );
 
 			doParseRenderNodes( camera
 				, m_renderNodes->morphingNodes.frontCulled
+				, m_culledRenderNodes->morphingNodes.frontCulled
 				, *m_commandBuffer );
 			doParseRenderNodes( camera
 				, m_renderNodes->morphingNodes.backCulled
+				, m_culledRenderNodes->morphingNodes.backCulled
 				, *m_commandBuffer );
 
 			doParseRenderNodes( camera
 				, m_renderNodes->billboardNodes.frontCulled
+				, m_culledRenderNodes->billboardNodes.frontCulled
 				, *m_commandBuffer );
 			doParseRenderNodes( camera
 				, m_renderNodes->billboardNodes.backCulled
+				, m_culledRenderNodes->billboardNodes.backCulled
 				, *m_commandBuffer );
 		}
 	}

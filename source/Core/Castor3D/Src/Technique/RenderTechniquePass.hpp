@@ -164,7 +164,7 @@ namespace castor3d
 		 *\param[in]		shadowMaps	Les textures d'ombres.
 		 *\param[in, out]	count		Reçouit le nombre de noeuds dessinés.
 		 */
-		C3D_API void doUpdateNodes( SceneRenderNodes & nodes
+		C3D_API void doUpdateNodes( SceneCulledRenderNodes & nodes
 			, Camera const & camera
 			, ShadowMapLightTypeArray & shadowMaps
 			, castor::Point2r const & jitter

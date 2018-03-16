@@ -5,61 +5,74 @@
 #include <Engine.hpp>
 
 #include <Core/GlDevice.hpp>
+#include <Core/GlPhysicalDevice.hpp>
 #include <Core/GlRenderer.hpp>
 
-using namespace castor3d;
 using namespace castor;
 
 namespace GlRender
 {
-	String GlRenderSystem::Name = cuT( "OpenGL Renderer" );
-	String GlRenderSystem::Type = cuT( "opengl" );
+	String RenderSystem::Name = cuT( "OpenGL Renderer" );
+	String RenderSystem::Type = cuT( "opengl" );
 
-	GlRenderSystem::GlRenderSystem( Engine & engine )
-		: RenderSystem( engine, Name )
+	RenderSystem::RenderSystem( castor3d::Engine & engine )
+		: castor3d::RenderSystem( engine, Name )
 	{
-		m_renderer = std::make_unique< gl_renderer::Renderer >();
+		m_renderer = std::make_unique< gl_renderer::Renderer >( renderer::Renderer::Configuration
+		{
+			"Castor3D",
+			"Castor3D",
+#ifdef NDEBUG
+			false,
+#else
+			true,
+#endif
+		} );
 	}
 
-	GlRenderSystem::~GlRenderSystem()
+	RenderSystem::~RenderSystem()
 	{
 	}
 
-	RenderSystemUPtr GlRenderSystem::create( Engine & engine )
+	castor3d::RenderSystemUPtr RenderSystem::create( castor3d::Engine & engine )
 	{
-		return std::make_unique< GlRenderSystem >( engine );
+		return std::make_unique< RenderSystem >( engine );
 	}
 
-	void GlRenderSystem::doInitialise()
+	void RenderSystem::doInitialise()
 	{
 		if ( !m_initialised )
 		{
-			auto & device = static_cast< gl_renderer::Device const & >( getMainDevice() );
-			m_gpuInformations.setVendor( device.getVendor() );
-			m_gpuInformations.setRenderer( device.getRenderer() );
-			m_gpuInformations.setVersion( device.getVersionString() );
-			m_gpuInformations.setShaderLanguageVersion( device.getGlslVersion() );
-			m_gpuInformations.updateFeature( GpuFeature::eConstantsBuffers, true );
-			m_gpuInformations.updateFeature( GpuFeature::eTextureBuffers, true );
-			m_gpuInformations.updateFeature( GpuFeature::eInstancing, true );
-			m_gpuInformations.updateFeature( GpuFeature::eAccumulationBuffer, true );
-			m_gpuInformations.updateFeature( GpuFeature::eNonPowerOfTwoTextures, true );
-			m_gpuInformations.updateFeature( GpuFeature::eAtomicCounterBuffers, true );
-			m_gpuInformations.updateFeature( GpuFeature::eImmutableTextureStorage, true );
-			m_gpuInformations.updateFeature( GpuFeature::eShaderStorageBuffers, true );
-			m_gpuInformations.updateFeature( GpuFeature::eTransformFeedback, true );
+			auto & device = static_cast< gl_renderer::PhysicalDevice const & >( getMainDevice().getPhysicalDevice() );
+			StringStream stream;
+			int major = device.getProperties().apiVersion >> 22;
+			int minor = ( device.getProperties().apiVersion >> 12 ) & 0x0FFF;
+			stream << major << cuT( "." ) << minor;
 
-			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eCompute, true );
-			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eTessellationControl, true );
-			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eTessellationEvaluation, true );
-			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eGeometry, true );
+			m_gpuInformations.setRenderer( device.getProperties().deviceName );
+			m_gpuInformations.setVersion( stream.str() );
+			m_gpuInformations.setShaderLanguageVersion( device.getGlslVersion() );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eConstantsBuffers, true );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eTextureBuffers, true );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eInstancing, true );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eAccumulationBuffer, true );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eNonPowerOfTwoTextures, true );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eAtomicCounterBuffers, true );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eImmutableTextureStorage, device.findAll( { "GL_ARB_texture_view", "GL_ARB_texture_storage" } ) );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eShaderStorageBuffers, device.find( "GL_ARB_shader_storage_buffer_object" ) );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eTransformFeedback, true );
+
+			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eCompute, device.find( "GL_ARB_gpu_shader5" ) );
+			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eTessellationControl, device.getFeatures().tessellationShader );
+			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eTessellationEvaluation, device.getFeatures().tessellationShader );
+			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eGeometry, device.getFeatures().geometryShader );
 			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eFragment, true );
 			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eVertex, true );
 			m_initialised = true;
 		}
 	}
 
-	void GlRenderSystem::doCleanup()
+	void RenderSystem::doCleanup()
 	{
 		m_initialised = false;
 	}

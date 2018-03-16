@@ -158,14 +158,14 @@ namespace castor3d
 		, ShadowMapLightTypeArray & shadowMaps
 		, Point2r const & jitter )
 	{
-		doUpdateNodes( m_renderQueue.getRenderNodes()
+		doUpdateNodes( m_renderQueue.getCulledRenderNodes()
 			, *m_camera
 			, shadowMaps
 			, jitter
 			, info );
 	}
 
-	void RenderTechniquePass::doUpdateNodes( SceneRenderNodes & nodes
+	void RenderTechniquePass::doUpdateNodes( SceneCulledRenderNodes & nodes
 		, Camera const & camera
 		, ShadowMapLightTypeArray & shadowMaps
 		, Point2r const & jitter

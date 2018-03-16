@@ -605,7 +605,7 @@ namespace castor3d
 		 *\param[in]	camera			La caméra regardant la scène.
 		 *\param[in]	matrixBuffer	Le tampon de matrices.
 		 */
-		C3D_API uint32_t doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
+		C3D_API uint32_t doCopyNodesMatrices( StaticRenderNodePtrArray const & renderNodes
 			, Camera const & camera
 			, std::vector< InstantiationData > & matrixBuffer )const;
 		/**
@@ -624,7 +624,7 @@ namespace castor3d
 		 *\param[in]		matrixBuffer	Le tampon de matrices.
 		 *\param[in,out]	info			Reçoit les informations de rendu.
 		 */
-		C3D_API uint32_t doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
+		C3D_API uint32_t doCopyNodesMatrices( StaticRenderNodePtrArray const & renderNodes
 			, Camera const & camera
 			, std::vector< InstantiationData > & matrixBuffer
 			, RenderInfo & info )const;
@@ -640,7 +640,7 @@ namespace castor3d
 		 *\param[in]	camera			La caméra regardant la scène.
 		 *\param[in]	matrixBuffer	Le tampon de matrices.
 		 */
-		C3D_API uint32_t doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
+		C3D_API uint32_t doCopyNodesMatrices( SkinningRenderNodePtrArray const & renderNodes
 			, Camera const & camera
 			, std::vector< InstantiationData > & matrixBuffer )const;
 		/**
@@ -659,7 +659,7 @@ namespace castor3d
 		 *\param[in]		matrixBuffer	Le tampon de matrices.
 		 *\param[in,out]	info			Reçoit les informations de rendu.
 		 */
-		C3D_API uint32_t doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
+		C3D_API uint32_t doCopyNodesMatrices( SkinningRenderNodePtrArray const & renderNodes
 			, Camera const & camera
 			, std::vector< InstantiationData > & matrixBuffer
 			, RenderInfo & info )const;
@@ -694,6 +694,37 @@ namespace castor3d
 			, RenderInfo & info )const;
 		/**
 		 *\~english
+		 *\brief		Copies the instanced skinned nodes model matrices into given matrix buffer.
+		 *\param[in]	renderNodes	The instanced nodes.
+		 *\param[in]	bonesBuffer	The bones matrix buffer.
+		 *\~french
+		 *\brief		Copie les matrices de noeuds skinnés instanciés dans le tampon de matrices donné.
+		 *\param[in]	renderNodes	Les noeuds instanciés.
+		 *\param[in]	bonesBuffer	Le tampon de matrices des os.
+		 */
+		C3D_API uint32_t doCopyNodesBones( SkinningRenderNodePtrArray const & renderNodes
+			, Camera const & camera
+			, ShaderBuffer & bonesBuffer )const;
+		/**
+		 *\~english
+		 *\brief			Copies the instanced skinned nodes model matrices into given matrix buffer.
+		 *\remarks			The nodes which are copied will be registered in the rendered nodes list.
+		 *\param[in]		renderNodes	The instanced nodes.
+		 *\param[in]		bonesBuffer	The bones matrix buffer.
+		 *\param[in, out]	info		Receives the render informations.
+		 *\~french
+		 *\brief			Copie les matrices de noeuds skinnés instanciés dans le tampon de matrices donné.
+		 *\remarks			Les noeuds pour lesquels les matrices sont copiées seront enregistrés dans la liste des noeuds dessinés.
+		 *\param[in]		renderNodes	Les noeuds instanciés.
+		 *\param[in]		bonesBuffer	Le tampon de matrices des os.
+		 *\param[in,out]	info		Reçoit les informations de rendu.
+		 */
+		C3D_API uint32_t doCopyNodesBones( SkinningRenderNodePtrArray const & renderNodes
+			, Camera const & camera
+			, ShaderBuffer & bonesBuffer
+			, RenderInfo & info )const;
+		/**
+		 *\~english
 		 *\brief		Renders instanced submeshes.
 		 *\param[in]	nodes	The render nodes.
 		 *\~french
@@ -723,7 +754,7 @@ namespace castor3d
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 *\param[in]	camera	La caméra regardant la scène.
 		 */
-		C3D_API void doUpdate( SubmeshStaticRenderNodesByPipelineMap & nodes
+		C3D_API void doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes
 			, Camera const & camera )const;
 		/**
 		 *\~english
@@ -737,7 +768,7 @@ namespace castor3d
 		 *\param[in]	camera		La caméra regardant la scène.
 		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void doUpdate( SubmeshStaticRenderNodesByPipelineMap & nodes
+		C3D_API void doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes
 			, Camera const & camera
 			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
@@ -754,7 +785,7 @@ namespace castor3d
 		 *\param[in]		shadowMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
-		C3D_API void doUpdate( SubmeshStaticRenderNodesByPipelineMap & nodes
+		C3D_API void doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes
 			, Camera const & camera
 			, ShadowMapLightTypeArray & shadowMaps
 			, RenderInfo & info )const;
@@ -789,7 +820,7 @@ namespace castor3d
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 *\param[in]	camera	La caméra regardant la scène.
 		 */
-		C3D_API void doUpdate( StaticRenderNodesByPipelineMap & nodes
+		C3D_API void doUpdate( StaticRenderNodesPtrByPipelineMap & nodes
 			, Camera const & camera )const;
 		/**
 		 *\~english
@@ -803,7 +834,7 @@ namespace castor3d
 		 *\param[in]	camera		La caméra regardant la scène.
 		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void doUpdate( StaticRenderNodesByPipelineMap & nodes
+		C3D_API void doUpdate( StaticRenderNodesPtrByPipelineMap & nodes
 			, Camera const & camera
 			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
@@ -820,7 +851,7 @@ namespace castor3d
 		 *\param[in]		shadowMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
-		C3D_API void doUpdate( StaticRenderNodesByPipelineMap & nodes
+		C3D_API void doUpdate( StaticRenderNodesPtrByPipelineMap & nodes
 			, Camera const & camera
 			, ShadowMapLightTypeArray & shadowMaps
 			, RenderInfo & info )const;
@@ -855,7 +886,7 @@ namespace castor3d
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 *\param[in]	camera	La caméra regardant la scène.
 		 */
-		C3D_API void doUpdate( SkinningRenderNodesByPipelineMap & nodes
+		C3D_API void doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes
 			, Camera const & camera )const;
 		/**
 		 *\~english
@@ -869,7 +900,7 @@ namespace castor3d
 		 *\param[in]	camera		La caméra regardant la scène.
 		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void doUpdate( SkinningRenderNodesByPipelineMap & nodes
+		C3D_API void doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes
 			, Camera const & camera
 			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
@@ -886,7 +917,7 @@ namespace castor3d
 		 *\param[in]		shadowMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
-		C3D_API void doUpdate( SkinningRenderNodesByPipelineMap & nodes
+		C3D_API void doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes
 			, Camera const & camera
 			, ShadowMapLightTypeArray & shadowMaps
 			, RenderInfo & info )const;
@@ -921,7 +952,7 @@ namespace castor3d
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 *\param[in]	camera	La caméra regardant la scène.
 		 */
-		C3D_API void doUpdate( SubmeshSkinningRenderNodesByPipelineMap & nodes
+		C3D_API void doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes
 			, Camera const & camera )const;
 		/**
 		 *\~english
@@ -935,7 +966,7 @@ namespace castor3d
 		 *\param[in]	camera		La caméra regardant la scène.
 		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void doUpdate( SubmeshSkinningRenderNodesByPipelineMap & nodes
+		C3D_API void doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes
 			, Camera const & camera
 			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
@@ -952,7 +983,7 @@ namespace castor3d
 		 *\param[in]		shadowMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
-		C3D_API void doUpdate( SubmeshSkinningRenderNodesByPipelineMap & nodes
+		C3D_API void doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes
 			, Camera const & camera
 			, ShadowMapLightTypeArray & shadowMaps
 			, RenderInfo & info )const;
@@ -987,7 +1018,7 @@ namespace castor3d
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 *\param[in]	camera	La caméra regardant la scène.
 		 */
-		C3D_API void doUpdate( MorphingRenderNodesByPipelineMap & nodes
+		C3D_API void doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes
 			, Camera const & camera )const;
 		/**
 		 *\~english
@@ -1001,7 +1032,7 @@ namespace castor3d
 		 *\param[in]	camera		La caméra regardant la scène.
 		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void doUpdate( MorphingRenderNodesByPipelineMap & nodes
+		C3D_API void doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes
 			, Camera const & camera
 			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
@@ -1018,7 +1049,7 @@ namespace castor3d
 		 *\param[in]		shadowMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
-		C3D_API void doUpdate( MorphingRenderNodesByPipelineMap & nodes
+		C3D_API void doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes
 			, Camera const & camera
 			, ShadowMapLightTypeArray & shadowMaps
 			, RenderInfo & info )const;
@@ -1053,7 +1084,7 @@ namespace castor3d
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 *\param[in]	camera	La caméra regardant la scène.
 		 */
-		C3D_API void doUpdate( BillboardRenderNodesByPipelineMap & nodes
+		C3D_API void doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes
 			, Camera const & camera )const;
 		/**
 		 *\~english
@@ -1067,7 +1098,7 @@ namespace castor3d
 		 *\param[in]	camera		La caméra regardant la scène.
 		 *\param[in]	shadowMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void doUpdate( BillboardRenderNodesByPipelineMap & nodes
+		C3D_API void doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes
 			, Camera const & camera
 			, ShadowMapLightTypeArray & shadowMaps )const;
 		/**
@@ -1084,7 +1115,7 @@ namespace castor3d
 		 *\param[in]		shadowMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in,out]	info		Reçoit les informations de rendu.
 		 */
-		C3D_API void doUpdate( BillboardRenderNodesByPipelineMap & nodes
+		C3D_API void doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes
 			, Camera const & camera
 			, ShadowMapLightTypeArray & shadowMaps
 			, RenderInfo & info )const;

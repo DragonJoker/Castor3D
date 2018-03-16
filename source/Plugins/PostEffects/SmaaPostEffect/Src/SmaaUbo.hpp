@@ -1,10 +1,10 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3DSMAA_SmaaUbo_H___
 #define ___C3DSMAA_SmaaUbo_H___
 
-#include "Shader/UniformBuffer.hpp"
+#include <Castor3DPrerequisites.hpp>
 
 namespace smaa
 {

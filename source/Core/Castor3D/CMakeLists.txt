@@ -26,8 +26,8 @@ include_directories( ${CMAKE_SOURCE_DIR}/Core/GlslWriter/Src )
 add_target(
 	${PROJECT_NAME}
 	api_dll
-	"CastorUtils;GlslWriter"
-	"${CastorMinLibraries}"
+	"CastorUtils;GlslWriter;Renderer"
+	"${CastorMinLibraries};Renderer"
 	"Castor3DPch.hpp"
 	"Castor3DPch.cpp"
 )

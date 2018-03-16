@@ -1,4 +1,4 @@
-﻿#include "KawaseUbo.hpp"
+#include "KawaseUbo.hpp"
 
 #include <Engine.hpp>
 
@@ -15,22 +15,15 @@ namespace light_streaks
 	String const KawaseUbo::Pass = cuT( "c3d_passCount" );
 
 	KawaseUbo::KawaseUbo( Engine & engine )
-		: m_ubo{ KawaseUbo::Name
-			, *engine.getRenderSystem()
-			, KawaseUbo::BindingPoint }
-		, m_pixelSize{ m_ubo.createUniform< UniformType::eVec2f >( KawaseUbo::PixelSize ) }
-		, m_direction{ m_ubo.createUniform< UniformType::eVec2f >( KawaseUbo::Direction ) }
-		, m_samples{ m_ubo.createUniform< UniformType::eInt >( KawaseUbo::Samples ) }
-		, m_attenuation{ m_ubo.createUniform< UniformType::eFloat >( KawaseUbo::Attenuation ) }
-		, m_pass{ m_ubo.createUniform< UniformType::eInt >( KawaseUbo::Pass ) }
+		: m_ubo{ renderer::makeUniformBuffer< Configuration >( *engine.getRenderSystem()->getCurrentDevice()
+			, 1u
+			, 0u
+			, renderer::MemoryPropertyFlag::eHostVisible ) }
 	{
-		m_samples->setValue( 4 );
-		m_attenuation->setValue( 0.9f );
 	}
 
 	KawaseUbo::~KawaseUbo()
 	{
-		m_ubo.cleanup();
 	}
 
 	void KawaseUbo::update( Size const & size
@@ -38,11 +31,11 @@ namespace light_streaks
 		, uint32_t pass )
 	{
 		Point2f pixelSize{ 1.0f / size.getWidth(), 1.0f / size.getHeight() };
-		m_pixelSize->setValue( pixelSize );
-		m_direction->setValue( direction );
-		m_pass->setValue( int( pass ) );
-		m_ubo.update();
-		m_ubo.bindTo( KawaseUbo::BindingPoint );
+		auto & data = m_ubo->getData();
+		data.pixelSize = pixelSize;
+		data.direction = direction;
+		data.pass = int( pass );
+		m_ubo->upload();
 	}
 
 	//************************************************************************************************

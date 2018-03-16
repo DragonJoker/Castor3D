@@ -100,9 +100,9 @@ namespace castor3d
 		}
 
 	private:
-		virtual void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
+		C3D_API virtual void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
 			, renderer::DescriptorSet & descriptorSet );
-		virtual void doRegisterFrame( renderer::CommandBuffer & commandBuffer )const;
+		C3D_API virtual void doRegisterFrame( renderer::CommandBuffer & commandBuffer )const;
 
 	protected:
 		RenderSystem & m_renderSystem;

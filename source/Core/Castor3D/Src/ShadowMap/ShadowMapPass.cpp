@@ -37,7 +37,7 @@ namespace castor3d
 		m_timer->stop();
 	}
 
-	void ShadowMapPass::doUpdateNodes( SceneRenderNodes & nodes
+	void ShadowMapPass::doUpdateNodes( SceneCulledRenderNodes & nodes
 		, Camera const & camera )
 	{
 		RenderPass::doUpdate( nodes.instancedStaticNodes.backCulled, camera );

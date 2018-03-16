@@ -36,14 +36,14 @@ namespace castor3d
 		queues.emplace_back( m_renderQueue );
 	}
 
-	void ShadowMapPassSpot::render( uint32_t index )
+	void ShadowMapPassSpot::updateDeviceDependent( uint32_t index )
 	{
 		if ( m_camera && m_initialised )
 		{
 			m_shadowConfig->upload();
 			m_matrixUbo.update( m_camera->getView()
 				, m_camera->getViewport().getProjection() );
-			doUpdateNodes( m_renderQueue.getRenderNodes(), *m_camera );
+			doUpdateNodes( m_renderQueue.getCulledRenderNodes(), *m_camera );
 		}
 	}
 
@@ -101,11 +101,12 @@ namespace castor3d
 			renderer::RasterisationState rsState;
 			rsState.cullMode = renderer::CullModeFlag::eNone;
 			renderer::DepthStencilState dsState;
+			auto bdState = renderer::ColourBlendState::createDefault();
 			auto & pipeline = *m_backPipelines.emplace( flags
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
 					, std::move( dsState )
 					, std::move( rsState )
-					, renderer::ColourBlendState::createDefault()
+					, std::move( bdState )
 					, renderer::MultisampleState{}
 					, program
 					, flags ) ).first->second;

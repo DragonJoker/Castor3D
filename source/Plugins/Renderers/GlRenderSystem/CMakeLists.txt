@@ -25,6 +25,8 @@ add_target(
 	"${CastorMinLibraries};${OpenGlLibraries};GlRenderer"
 	"GlRenderSystemPch.hpp"
 	"GlRenderSystemPch.cpp"
+	"-DGlRenderer_STATIC"
+	"-DGlRenderer_STATIC"
 )
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Renderers" )

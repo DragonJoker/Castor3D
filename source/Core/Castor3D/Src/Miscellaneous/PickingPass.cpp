@@ -42,7 +42,6 @@ namespace castor3d
 			for ( auto itPipelines : nodes )
 			{
 				pass.updatePipeline( *itPipelines.first );
-				itPipelines.first->apply();
 				auto & data = ubo.getData();
 				data.drawIndex = uint8_t( type ) + ( ( count & 0x00FFFFFF ) << 8 );
 				uint32_t index{ 0u };
@@ -52,7 +51,7 @@ namespace castor3d
 					for ( auto itSubmeshes : itPass.second )
 					{
 						data.nodeIndex = index++;
-						ubo->upload();
+						ubo.upload();
 						function( *itPipelines.first
 							, *itPass.first
 							, *itSubmeshes.first
@@ -77,7 +76,6 @@ namespace castor3d
 			for ( auto itPipelines : nodes )
 			{
 				pass.updatePipeline( *itPipelines.first );
-				itPipelines.first->apply();
 				auto & data = ubo.getData();
 				data.drawIndex = uint8_t( type ) + ( ( count & 0x00FFFFFF ) << 8 );
 				uint32_t index{ 0u };
@@ -85,11 +83,11 @@ namespace castor3d
 				for ( auto & renderNode : itPipelines.second )
 				{
 					data.nodeIndex = index++;
-					ubo->upload();
+					ubo.upload();
 
-					if ( renderNode.data.isInitialised() )
+					if ( renderNode->data.isInitialised() )
 					{
-						doUpdateNodeModelMatrix( renderNode );
+						doUpdateNodeModelMatrix( *renderNode );
 					}
 				}
 
@@ -120,8 +118,8 @@ namespace castor3d
 			REQUIRE( itPipeline->second.size() > nodeIndex );
 			auto itNode = itPipeline->second.begin() + nodeIndex;
 
-			subnode = std::static_pointer_cast< SubNodeType >( itNode->m_data.shared_from_this() );
-			node = std::static_pointer_cast< NodeType >( itNode->m_instance.shared_from_this() );
+			subnode = std::static_pointer_cast< SubNodeType >( ( *itNode )->data.shared_from_this() );
+			node = std::static_pointer_cast< NodeType >( ( *itNode )->instance.shared_from_this() );
 			face = faceIndex;
 		}
 
@@ -175,8 +173,8 @@ namespace castor3d
 				REQUIRE( !itMesh->second.empty() );
 				auto itNode = itMesh->second.begin() + instanceIndex;
 
-				subnode = itNode->m_data.shared_from_this();
-				node = std::static_pointer_cast< Geometry >( itNode->m_instance.shared_from_this() );
+				subnode = ( *itNode )->data.shared_from_this();
+				node = std::static_pointer_cast< Geometry >( ( *itNode )->instance.shared_from_this() );
 				face = faceIndex;
 			}
 		}
@@ -258,24 +256,23 @@ namespace castor3d
 			{
 				itCam->second.update();
 				auto pixel = doFboPick( position, camera, itCam->second.getCommandBuffer() );
-				result = doPick( pixel, itCam->second.getRenderNodes() );
+				result = doPick( pixel, itCam->second.getCulledRenderNodes() );
 			}
 		}
 
 		return result;
 	}
 
-	void PickingPass::doUpdateNodes( SceneRenderNodes & nodes
-		, Camera const & camera )
+	void PickingPass::doUpdateNodes( SceneCulledRenderNodes & nodes )
 	{
-		m_matrixUbo.update( camera.getView()
-			, camera.getViewport().getProjection() );
-		doUpdate( nodes.scene, nodes.instancedStaticNodes.backCulled );
-		doUpdate( nodes.scene, nodes.staticNodes.backCulled );
-		doUpdate( nodes.scene, nodes.skinnedNodes.backCulled );
-		doUpdate( nodes.scene, nodes.instancedSkinnedNodes.backCulled );
-		doUpdate( nodes.scene, nodes.morphingNodes.backCulled );
-		doUpdate( nodes.scene, nodes.billboardNodes.backCulled );
+		m_matrixUbo.update( nodes.camera.getView()
+			, nodes.camera.getViewport().getProjection() );
+		doUpdate( nodes.scene, nodes.camera, nodes.instancedStaticNodes.backCulled );
+		doUpdate( nodes.scene, nodes.camera, nodes.staticNodes.backCulled );
+		doUpdate( nodes.scene, nodes.camera, nodes.skinnedNodes.backCulled );
+		doUpdate( nodes.scene, nodes.camera, nodes.instancedSkinnedNodes.backCulled );
+		doUpdate( nodes.scene, nodes.camera, nodes.morphingNodes.backCulled );
+		doUpdate( nodes.scene, nodes.camera, nodes.billboardNodes.backCulled );
 	}
 
 	Point3f PickingPass::doFboPick( Position const & position
@@ -331,7 +328,7 @@ namespace castor3d
 	}
 
 	PickingPass::NodeType PickingPass::doPick( Point3f const & pixel
-		, SceneRenderNodes & nodes )
+		, SceneCulledRenderNodes & nodes )
 	{
 		NodeType result{ NodeType::eNone };
 
@@ -376,27 +373,29 @@ namespace castor3d
 	}
 
 	void PickingPass::doUpdate( Scene const & scene
-		, SubmeshStaticRenderNodesByPipelineMap & nodes )
+		, Camera const & camera
+		, SubmeshStaticRenderNodesPtrByPipelineMap & nodes )
 	{
 		doTraverseNodes< true >( *this
 			, *m_pickingUbo
 			, nodes
 			, NodeType::eInstantiatedStatic
-			, [&scene, this]( RenderPipeline & pipeline
+			, [&scene, &camera, this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, InstantiationComponent & component
-				, StaticRenderNodeArray & renderNodes )
+				, StaticRenderNodePtrArray & renderNodes )
 			{
 				if ( !renderNodes.empty() && component.hasMatrixBuffer() )
 				{
-					doCopyNodesMatrices( renderNodes, component.getData() );
+					doCopyNodesMatrices( renderNodes, camera, component.getData() );
 				}
 			} );
 	}
 
 	void PickingPass::doUpdate( Scene const & scene
-		, StaticRenderNodesByPipelineMap & nodes )
+		, Camera const & camera
+		, StaticRenderNodesPtrByPipelineMap & nodes )
 	{
 		doUpdateNonInstanced< true >( *this
 			, *m_pickingUbo
@@ -406,7 +405,8 @@ namespace castor3d
 	}
 
 	void PickingPass::doUpdate( Scene const & scene
-		, SkinningRenderNodesByPipelineMap & nodes )
+		, Camera const & camera
+		, SkinningRenderNodesPtrByPipelineMap & nodes )
 	{
 		doUpdateNonInstanced< true >( *this
 			, *m_pickingUbo
@@ -416,17 +416,18 @@ namespace castor3d
 	}
 	
 	void PickingPass::doUpdate( Scene const & scene
-		, SubmeshSkinningRenderNodesByPipelineMap & nodes )
+		, Camera const & camera
+		, SubmeshSkinningRenderNodesPtrByPipelineMap & nodes )
 	{
 		doTraverseNodes< true >( *this
 			, *m_pickingUbo
 			, nodes
 			, NodeType::eInstantiatedSkinning
-			, [&scene, this]( RenderPipeline & pipeline
+			, [&scene, &camera, this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, InstantiationComponent & component
-				, SkinningRenderNodeArray & renderNodes )
+				, SkinningRenderNodePtrArray & renderNodes )
 			{
 				auto & instantiatedBones = submesh.getInstantiatedBones();
 
@@ -434,13 +435,14 @@ namespace castor3d
 					&& component.hasMatrixBuffer()
 					&& instantiatedBones.hasInstancedBonesBuffer() )
 				{
-					doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
+					doCopyNodesBones( renderNodes, camera, instantiatedBones.getInstancedBonesBuffer() );
 				}
 			} );
 	}
 
 	void PickingPass::doUpdate( Scene const & scene
-		, MorphingRenderNodesByPipelineMap & nodes )
+		, Camera const & camera
+		, MorphingRenderNodesPtrByPipelineMap & nodes )
 	{
 		doUpdateNonInstanced< true >( *this
 			, *m_pickingUbo
@@ -450,7 +452,8 @@ namespace castor3d
 	}
 
 	void PickingPass::doUpdate( Scene const & scene
-		, BillboardRenderNodesByPipelineMap & nodes )
+		, Camera const & camera
+		, BillboardRenderNodesPtrByPipelineMap & nodes )
 	{
 		doUpdateNonInstanced< true >( *this
 			, *m_pickingUbo
@@ -651,13 +654,13 @@ namespace castor3d
 		GlslWriter writer = m_renderSystem.createGlslWriter();
 
 		// UBOs
+		auto materials = shader::createMaterials( writer
+			, passFlags );
+		materials->declare();
 		Ubo uboPicking{ writer, Picking, 7u };
 		auto c3d_iDrawIndex( uboPicking.declMember< UInt >( DrawIndex ) );
 		auto c3d_iNodeIndex( uboPicking.declMember< UInt >( NodeIndex ) );
 		uboPicking.end();
-		auto materials = shader::createMaterials( writer
-			, passFlags );
-		materials->declare();
 
 		// Fragment Intputs
 		auto gl_PrimitiveID( writer.declBuiltin< UInt >( cuT( "gl_PrimitiveID" ) ) );
@@ -729,14 +732,33 @@ namespace castor3d
 			renderer::RasterisationState rsState;
 			rsState.cullMode = renderer::CullModeFlag::eBack;
 			renderer::DepthStencilState dsState{ 0u, true, false };
-			m_backPipelines.emplace( flags
-				, std::make_unique< RenderPipeline >( getEngine()->getRenderSystem()
+			auto bsState = renderer::ColourBlendState::createDefault();
+			auto & pipeline = *m_backPipelines.emplace( flags
+				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
 					, std::move( dsState )
 					, std::move( rsState )
-					, renderer::ColourBlendState::createDefault()
+					, std::move( bsState )
 					, renderer::MultisampleState{}
 					, program
 					, flags ) ).first->second;
+
+			auto initialise = [this, &pipeline, flags]()
+			{
+				auto uboBindings = doCreateUboBindings( flags );
+				auto layout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
+				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
+				layouts.emplace_back( std::move( layout ) );
+				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
+			};
+
+			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
+			{
+				initialise();
+			}
+			else
+			{
+				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, initialise ) );
+			}
 		}
 	}
 }
