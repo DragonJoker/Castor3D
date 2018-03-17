@@ -1,6 +1,7 @@
 #include "DebugOverlays.hpp"
 
 #include "Engine.hpp"
+#include "Event/Frame/FunctorEvent.hpp"
 #include "Overlay/PanelOverlay.hpp"
 #include "Overlay/TextOverlay.hpp"
 #include "Render/RenderPassTimer.hpp"
@@ -442,9 +443,14 @@ namespace castor3d
 			, m_renderInfo.m_drawCalls );
 		m_debugPanel->updatePosition();
 		m_debugPanel->setVisible( m_visible );
-		m_queries = getEngine()->getRenderSystem()->getCurrentDevice()->createQueryPool( renderer::QueryType::eTimestamp
-			, m_queriesCount
-			, 0u );
+
+		getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
+			, [this]()
+			{
+				m_queries = getEngine()->getRenderSystem()->getCurrentDevice()->createQueryPool( renderer::QueryType::eTimestamp
+					, m_queriesCount
+					, 0u );
+			} ) );
 	}
 
 	//*********************************************************************************************

@@ -17,6 +17,10 @@ namespace castor3d
 	ModelUbo::ModelUbo( Engine & engine )
 		: m_engine{ engine }
 	{
+		if ( engine.getRenderSystem()->hasCurrentDevice() )
+		{
+			initialise();
+		}
 	}
 
 	ModelUbo::~ModelUbo()
@@ -25,11 +29,14 @@ namespace castor3d
 
 	void ModelUbo::initialise()
 	{
-		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
-		m_ubo = renderer::makeUniformBuffer< Configuration >( device
-			, 1u
-			, renderer::BufferTarget::eTransferDst
-			, renderer::MemoryPropertyFlag::eHostVisible );
+		if ( !m_ubo )
+		{
+			auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
+			m_ubo = renderer::makeUniformBuffer< Configuration >( device
+				, 1u
+				, renderer::BufferTarget::eTransferDst
+				, renderer::MemoryPropertyFlag::eHostVisible );
+		}
 	}
 
 	void ModelUbo::cleanup()
@@ -39,6 +46,7 @@ namespace castor3d
 
 	void ModelUbo::setEnvMapIndex( uint32_t value )
 	{
+		REQUIRE( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );
 		configuration.environmentIndex = int32_t( value );
 	}
@@ -46,6 +54,7 @@ namespace castor3d
 	void ModelUbo::update( bool shadowReceiver
 		, uint32_t materialIndex )const
 	{
+		REQUIRE( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );
 		configuration.shadowReceiver = shadowReceiver ? 1 : 0;
 		configuration.materialIndex = materialIndex - 1;

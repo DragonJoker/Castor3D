@@ -92,6 +92,7 @@ namespace castor3d
 			if ( m_initialised )
 			{
 				m_device->enable();
+				getEngine()->getMaterialCache().initialise( getEngine()->getMaterialsType() );
 				m_swapChain = m_device->createSwapChain( { size.getWidth(), size.getHeight() } );
 				SceneSPtr scene = getScene();
 				m_swapChain->setClearColour( convert( RgbaColour::fromRGBA( toRGBAFloat( scene->getBackgroundColour() ) ) ) );
@@ -146,11 +147,12 @@ namespace castor3d
 
 				m_renderPass = m_device->createRenderPass( renderPass );
 
+				target->initialise( 1 );
+
 				doCreateSwapChainDependent();
 				doPrepareFrames();
 
 				m_transferCommandBuffer = m_device->getGraphicsCommandPool().createCommandBuffer();
-				target->initialise( 1 );
 				m_saveBuffer = PxBufferBase::create( target->getSize(), convert( target->getPixelFormat() ) );
 				m_stagingBuffer = std::make_unique< renderer::StagingBuffer >( *m_device
 					, renderer::BufferTarget::eTransferDst

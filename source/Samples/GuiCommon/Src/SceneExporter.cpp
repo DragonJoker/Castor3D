@@ -10,14 +10,13 @@
 #include <Mesh/Skeleton/Skeleton.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Vertex.hpp>
-#include <Buffer/GeometryBuffers.hpp>
-#include <Buffer/IndexBuffer.hpp>
-#include <Buffer/VertexBuffer.hpp>
 #include <Render/RenderWindow.hpp>
 #include <Scene/Scene.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
+
+#include <Buffer/VertexBuffer.hpp>
 
 #include <Data/BinaryFile.hpp>
 
@@ -250,55 +249,51 @@ namespace GuiCommon
 		return strReturn.str();
 	}
 
-	String ObjSceneExporter::doExportMesh( Mesh const & p_mesh, uint32_t & p_offset, uint32_t & p_count )const
+	String ObjSceneExporter::doExportMesh( Mesh const & mesh, uint32_t & offset, uint32_t & count )const
 	{
-		StringStream strReturn;
+		StringStream result;
 
-		for ( auto const & submesh : p_mesh )
+		for ( auto const & submesh : mesh )
 		{
-			StringStream strV;
-			StringStream strVT;
-			StringStream strVN;
-			StringStream strF;
-			VertexBuffer & vtxBuffer = submesh->getVertexBuffer();
-			IndexBuffer & idxBuffer = submesh->getIndexBuffer();
-			uint32_t stride = vtxBuffer.getDeclaration().stride();
-			uint32_t uiNbPoints = vtxBuffer.getSize() / stride;
-			uint32_t uiNbFaces = idxBuffer.getSize() / 3;
-			uint8_t * pVtx = vtxBuffer.getData();
-			uint32_t * pIdx = idxBuffer.getData();
-			Point3r ptPos;
-			Point3r ptNml;
-			Point3r ptTex;
-
-			for ( uint32_t j = 0; j < uiNbPoints; j++ )
+			if ( submesh->hasComponent( TriFaceMapping::Name ) )
 			{
-				real * vertex = reinterpret_cast< real * >( &pVtx[j * stride] );
-				Vertex::getPosition( vertex, ptPos );
-				Vertex::getNormal( vertex, ptNml );
-				Vertex::getTexCoord( vertex, ptTex );
-				strV  << cuT( "v " ) << ptPos[0] << " " << ptPos[1] << " " << ptPos[2] << cuT( "\n" );
-				strVN << cuT( "vn " ) << ptNml[0] << " " << ptNml[1] << " " << ptNml[2] << cuT( "\n" );
-				strVT << cuT( "vt " ) << ptTex[0] << " " << ptTex[1] << cuT( "\n" );
+				StringStream strV;
+				StringStream strVT;
+				StringStream strVN;
+				StringStream strF;
+				renderer::Buffer< uint32_t > & idxBuffer = submesh->getIndexBuffer();
+				auto stride = uint32_t( sizeof( InterleavedVertex ) );
+				uint32_t uiNbFaces = idxBuffer.getCount() / 3;
+				Point3r ptPos;
+				Point3r ptNml;
+				Point3r ptTex;
+
+				for ( auto & point : submesh->getPoints() )
+				{
+					strV << cuT( "v " ) << point.pos[0] << " " << point.pos[1] << " " << point.pos[2] << cuT( "\n" );
+					strVN << cuT( "vn " ) << point.nml[0] << " " << point.nml[1] << " " << point.nml[2] << cuT( "\n" );
+					strVT << cuT( "vt " ) << point.tex[0] << " " << point.tex[1] << cuT( "\n" );
+				}
+
+				strF << cuT( "usemtl " ) << submesh->getDefaultMaterial()->getName() << cuT( "\ns off\n" );
+				auto & indexMapping = *submesh->getComponent< TriFaceMapping >();
+
+				for ( uint32_t j = 0; j < indexMapping.getCount(); j++ )
+				{
+					auto & face = indexMapping[j * 3];
+					uint32_t v0 = offset + face[0];
+					uint32_t v1 = offset + face[1];
+					uint32_t v2 = offset + face[2];
+					strF << cuT( "f " ) << v0 << cuT( "/" ) << v0 << cuT( "/" ) << v0 << cuT( " " ) << v1 << cuT( "/" ) << v1 << cuT( "/" ) << v1 << cuT( " " ) << v2 << cuT( "/" ) << v2 << cuT( "/" ) << v2 << cuT( "\n" );
+				}
+
+				result << cuT( "g mesh" ) << count << cuT( "\n" ) << strV.str() << cuT( "\n" ) << strVN.str() << cuT( "\n" ) << strVT.str() << cuT( "\n" ) << strF.str() << cuT( "\n" );
+				offset += uint32_t( submesh->getPoints().size() );
+				count++;
 			}
-
-			strF << cuT( "usemtl " ) << submesh->getDefaultMaterial()->getName() << cuT( "\ns off\n" );
-
-			for ( uint32_t j = 0; j < uiNbFaces; j++ )
-			{
-				uint32_t * pFace = &pIdx[j * 3];
-				uint32_t v0 = p_offset + pFace[0];
-				uint32_t v1 = p_offset + pFace[1];
-				uint32_t v2 = p_offset + pFace[2];
-				strF << cuT( "f " ) << v0 << cuT( "/" ) << v0 << cuT( "/" ) << v0 << cuT( " " ) << v1 << cuT( "/" ) << v1 << cuT( "/" ) << v1 << cuT( " " ) << v2 << cuT( "/" ) << v2 << cuT( "/" ) << v2 << cuT( "\n" );
-			}
-
-			strReturn << cuT( "g mesh" ) << p_count << cuT( "\n" ) << strV.str() << cuT( "\n" ) << strVN.str() << cuT( "\n" ) << strVT.str() << cuT( "\n" ) << strF.str() << cuT( "\n" );
-			p_offset += uiNbPoints;
-			p_count++;
 		}
 
-		return strReturn.str();
+		return result.str();
 	}
 
 	//************************************************************************************************

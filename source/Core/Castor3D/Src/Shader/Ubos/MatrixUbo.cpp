@@ -22,6 +22,10 @@ namespace castor3d
 	MatrixUbo::MatrixUbo( Engine & engine )
 		: m_engine{ engine }
 	{
+		if ( engine.getRenderSystem()->hasCurrentDevice() )
+		{
+			initialise();
+		}
 	}
 
 	MatrixUbo::~MatrixUbo()
@@ -30,11 +34,14 @@ namespace castor3d
 
 	void MatrixUbo::initialise()
 	{
-		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
-		m_ubo = renderer::makeUniformBuffer< Configuration >( device
-			, 1u
-			, renderer::BufferTarget::eTransferDst
-			, renderer::MemoryPropertyFlag::eHostVisible );
+		if ( !m_ubo )
+		{
+			auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
+			m_ubo = renderer::makeUniformBuffer< Configuration >( device
+				, 1u
+				, renderer::BufferTarget::eTransferDst
+				, renderer::MemoryPropertyFlag::eHostVisible );
+		}
 	}
 
 	void MatrixUbo::cleanup()
@@ -46,6 +53,7 @@ namespace castor3d
 		, Matrix4x4r const & projection
 		, Point2r const & jitter )const
 	{
+		REQUIRE( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );
 		configuration.prvView = configuration.curView;
 		configuration.prvViewProj = configuration.curViewProj;
@@ -60,6 +68,7 @@ namespace castor3d
 
 	void MatrixUbo::update( Matrix4x4r const & projection )const
 	{
+		REQUIRE( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );
 		configuration.projection = projection;
 		configuration.invProjection = projection.getInverse();

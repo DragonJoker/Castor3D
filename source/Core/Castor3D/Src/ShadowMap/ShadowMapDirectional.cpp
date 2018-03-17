@@ -107,8 +107,8 @@ namespace castor3d
 			image.imageType = renderer::TextureType::e2D;
 			image.mipLevels = 1u;
 			image.samples = renderer::SampleCountFlag::e1;
-			image.usage = renderer::ImageUsageFlag::eDepthStencilAttachment;
-			image.format = renderer::Format::eD32_SFLOAT;
+			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+			image.format = renderer::Format::eR32_SFLOAT;
 
 			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
 				, image
@@ -131,7 +131,7 @@ namespace castor3d
 		: ShadowMap{ engine
 			, doInitialiseVariance( engine, Size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize } )
 			, doInitialiseDepth( engine, Size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize } )
-		, { std::make_shared< ShadowMapPassDirectional >( engine, scene, *this ) } }
+			, { std::make_shared< ShadowMapPassDirectional >( engine, scene, *this ) } }
 	{
 	}
 
@@ -147,14 +147,32 @@ namespace castor3d
 		m_passes[0]->update( camera, queues, light, index );
 	}
 
+
 	void ShadowMapDirectional::render( renderer::Semaphore const & toWait )
 	{
+		static renderer::ClearColorValue const black{ 0.0f, 0.0f, 0.0f, 1.0f };
+		static renderer::DepthStencilClearValue const zero{ 1.0f, 0 };
+
+		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
+		{
+			m_passes[0]->startTimer( *m_commandBuffer );
+			m_commandBuffer->beginRenderPass( *m_renderPass
+				, *m_frameBuffer
+				, { zero, black, black }
+			, renderer::SubpassContents::eSecondaryCommandBuffers );
+			m_commandBuffer->executeCommands( { m_passes[0]->getCommandBuffer() } );
+			m_commandBuffer->endRenderPass();
+			m_passes[0]->stopTimer( *m_commandBuffer );
+			m_commandBuffer->end();
+		}
+
 		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
 		device.getGraphicsQueue().submit( *m_commandBuffer
 			, toWait
 			, renderer::PipelineStageFlag::eBottomOfPipe
 			, *m_finished
 			, nullptr );
+		m_blur->blur();
 	}
 
 	void ShadowMapDirectional::debugDisplay( castor::Size const & size, uint32_t index )
@@ -203,7 +221,7 @@ namespace castor3d
 
 		renderPass.attachments.resize( 3u );
 		renderPass.attachments[0].index = 0u;
-		renderPass.attachments[0].format = renderer::Format::eD24_UNORM_S8_UINT;
+		renderPass.attachments[0].format = m_depthView->getFormat();
 		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
 		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
 		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
@@ -213,17 +231,17 @@ namespace castor3d
 		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
 
 		renderPass.attachments[1].index = 1u;
-		renderPass.attachments[1].format = renderer::Format::eR32_SFLOAT;
+		renderPass.attachments[1].format = m_linearMap.getTexture()->getPixelFormat();
 		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eClear;
 		renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
 		renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 		renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 		renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
 		renderPass.attachments[1].initialLayout = renderer::ImageLayout::eUndefined;
-		renderPass.attachments[1].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+		renderPass.attachments[1].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
 
 		renderPass.attachments[2].index = 2u;
-		renderPass.attachments[2].format = renderer::Format::eR32G32_SFLOAT;
+		renderPass.attachments[2].format = m_shadowMap.getTexture()->getPixelFormat();
 		renderPass.attachments[2].loadOp = renderer::AttachmentLoadOp::eClear;
 		renderPass.attachments[2].storeOp = renderer::AttachmentStoreOp::eStore;
 		renderPass.attachments[2].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
@@ -271,24 +289,6 @@ namespace castor3d
 			, size
 			, m_shadowMap.getTexture()->getPixelFormat()
 			, 5u );
-		
-		static renderer::ClearColorValue const black{ 0.0f, 0.0f, 0.0f, 1.0f };
-		static renderer::DepthStencilClearValue const zero{ 1.0f, 0 };
-
-		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
-		{
-			m_passes[0]->startTimer( *m_commandBuffer );
-			m_commandBuffer->beginRenderPass( *m_renderPass
-				, *m_frameBuffer
-				, { zero, black, black }
-				, renderer::SubpassContents::eSecondaryCommandBuffers );
-			m_commandBuffer->executeCommands( { m_passes[0]->getCommandBuffer() } );
-			m_commandBuffer->endRenderPass();
-			m_passes[0]->stopTimer( *m_commandBuffer );
-			m_commandBuffer->end();
-
-			m_blur->blur();
-		}
 	}
 
 	void ShadowMapDirectional::doCleanup()

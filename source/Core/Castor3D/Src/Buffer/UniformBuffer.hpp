@@ -54,7 +54,7 @@ namespace castor3d
 		 *\param[in]	size	La taille requise pour la mémoire.
 		 *\return		\p true s'il y a assez de mémoire restante pour la taille donnée.
 		 */
-		C3D_API bool hasAvailable()const;
+		inline bool hasAvailable()const;
 		/**
 		 *\~english
 		 *\brief		Allocates a memory chunk for a CPU buffer.
@@ -65,7 +65,7 @@ namespace castor3d
 		 *\param[in]	size	La taille requise pour la mémoire.
 		 *\return		L'offset de la zone mémoire.
 		 */
-		C3D_API uint32_t allocate();
+		inline uint32_t allocate();
 		/**
 		 *\~english
 		 *\brief		Deallocates memory.
@@ -74,7 +74,7 @@ namespace castor3d
 		 *\brief		Désalloue de la mémoire.
 		 *\param[in]	offset	L'offset de la zone mémoire.
 		 */
-		C3D_API void deallocate( uint32_t offset );
+		inline void deallocate( uint32_t offset );
 		/**
 		 *\~english
 		 *\brief		Transfers data to the GPU buffer from RAM.
@@ -89,7 +89,7 @@ namespace castor3d
 		 *\param[in]	count	Nombre d'éléments.
 		 *\param[in]	buffer	Les données.
 		 */
-		C3D_API void upload( renderer::StagingBuffer & stagingBuffer
+		inline void upload( renderer::StagingBuffer & stagingBuffer
 			, renderer::CommandBuffer const & commandBuffer
 			, uint32_t offset
 			, uint32_t count
@@ -109,7 +109,7 @@ namespace castor3d
 		 *\param[in]	count	Nombre d'éléments.
 		 *\param[out]	buffer	Les données.
 		 */
-		C3D_API void download( renderer::StagingBuffer & stagingBuffer
+		inline void download( renderer::StagingBuffer & stagingBuffer
 			, renderer::CommandBuffer const & commandBuffer
 			, uint32_t offset
 			, uint32_t count

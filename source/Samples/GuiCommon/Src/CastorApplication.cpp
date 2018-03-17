@@ -173,6 +173,7 @@ namespace GuiCommon
 		parser.AddOption( wxT( "l" ), wxT( "log" ), _( "Defines log level" ), wxCMD_LINE_VAL_NUMBER );
 		parser.AddParam( _( "The initial scene file" ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
 		parser.AddSwitch( wxT( "opengl" ), wxEmptyString, _( "Defines the renderer to OpenGl" ) );
+		parser.AddSwitch( wxT( "vulkan" ), wxEmptyString, _( "Defines the renderer to Vulkan" ) );
 		parser.AddSwitch( wxT( "test" ), wxEmptyString, _( "Defines the renderer to Test" ) );
 		bool result = parser.Parse( false ) == 0;
 
@@ -202,6 +203,11 @@ namespace GuiCommon
 			if ( parser.Found( wxT( "opengl" ) ) )
 			{
 				m_rendererType = cuT( "opengl" );
+			}
+
+			if ( parser.Found( wxT( "vulkan" ) ) )
+			{
+				m_rendererType = cuT( "vulkan" );
 			}
 
 			if ( parser.Found( wxT( "test" ) ) )

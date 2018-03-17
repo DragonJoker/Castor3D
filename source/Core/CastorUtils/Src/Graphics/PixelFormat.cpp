@@ -880,6 +880,10 @@ namespace castor
 					result = ( p_strFormat == PixelDefinitions< PixelFormat::eA8L8 >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
 
+				case PixelFormat::eAL16F:
+					result = ( p_strFormat == PixelDefinitions< PixelFormat::eL16F >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
+					break;
+
 				case PixelFormat::eAL32F:
 					result = ( p_strFormat == PixelDefinitions< PixelFormat::eAL32F >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;

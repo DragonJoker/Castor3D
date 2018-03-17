@@ -75,7 +75,8 @@ namespace castor3d
 		*\brief
 		*	Prépare les commandes de dessin du quad.
 		*/
-		C3D_API void prepareFrame();
+		C3D_API void prepareFrame( renderer::RenderPass const & renderPass
+			, uint32_t subpassIndex );
 		/**
 		*\~english
 		*\brief

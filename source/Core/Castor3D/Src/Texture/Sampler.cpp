@@ -128,9 +128,13 @@ namespace castor3d
 
 	bool Sampler::initialise()
 	{
-		auto device = getEngine()->getRenderSystem()->getCurrentDevice();
-		REQUIRE( device );
-		m_sampler = device->createSampler( m_info );
+		if ( !m_sampler )
+		{
+			auto device = getEngine()->getRenderSystem()->getCurrentDevice();
+			REQUIRE( device );
+			m_sampler = device->createSampler( m_info );
+		}
+
 		return true;
 	}
 

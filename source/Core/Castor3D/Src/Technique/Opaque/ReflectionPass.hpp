@@ -131,7 +131,8 @@ namespace castor3d
 				, renderer::TextureView const * ssao
 				, renderer::Extent2D const & size
 				, FogType fogType
-				, MaterialType matType );
+				, MaterialType matType
+				, SamplerSPtr sampler );
 
 			renderer::ShaderStageStateArray m_program;
 			renderer::DescriptorSetLayoutPtr m_texDescriptorLayout;
@@ -149,6 +150,7 @@ namespace castor3d
 		GpInfoUbo & m_gpInfoUbo;
 		renderer::Extent2D m_size;
 		Viewport m_viewport;
+		SamplerSPtr m_sampler;
 		renderer::VertexBufferBasePtr m_vertexBuffer;
 		renderer::DescriptorSetLayoutPtr m_uboDescriptorLayout;
 		renderer::DescriptorSetPoolPtr m_uboDescriptorPool;

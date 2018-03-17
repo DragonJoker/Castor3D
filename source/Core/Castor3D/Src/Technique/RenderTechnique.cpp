@@ -103,7 +103,7 @@ namespace castor3d
 			auto result = std::make_shared< TextureLayout >( *engine.getRenderSystem()
 				, image
 				, renderer::MemoryPropertyFlag::eDeviceLocal );
-			result->getImage().initialiseSource();
+			result->getDefaultImage().initialiseSource();
 			result->initialise();
 			return result;
 		}
@@ -194,39 +194,33 @@ namespace castor3d
 				, renderer::ImageUsageFlag::eDepthStencilAttachment );
 			m_signalFinished = getEngine()->getRenderSystem()->getCurrentDevice()->createSemaphore();
 
-			if ( m_initialised )
-			{
-				doInitialiseShadowMaps();
-				m_opaquePass->initialise( m_size );
-				m_transparentPass->initialise( m_size );
-			}
+			doInitialiseShadowMaps();
+			m_opaquePass->initialise( m_size );
+			m_transparentPass->initialise( m_size );
 
-			if ( m_initialised )
-			{
 #if !DEBUG_FORWARD_RENDERING
-				m_deferredRendering = std::make_unique< DeferredRendering >( *getEngine()
-					, static_cast< OpaquePass & >( *m_opaquePass )
-					, m_depthBuffer
-					, m_renderTarget.getVelocity().getTexture()
-					, m_renderTarget.getTexture().getTexture()
-					, m_renderTarget.getSize()
-					, *m_renderTarget.getScene()
-					, m_renderTarget.getCamera()->getViewport()
-					, m_ssaoConfig );
+			m_deferredRendering = std::make_unique< DeferredRendering >( *getEngine()
+				, static_cast< OpaquePass & >( *m_opaquePass )
+				, m_depthBuffer
+				, m_renderTarget.getVelocity().getTexture()
+				, m_renderTarget.getTexture().getTexture()
+				, m_renderTarget.getSize()
+				, *m_renderTarget.getScene()
+				, m_renderTarget.getCamera()->getViewport()
+				, m_ssaoConfig );
 #endif
 #if USE_WEIGHTED_BLEND
-				m_weightedBlendRendering = std::make_unique< WeightedBlendRendering >( *getEngine()
-					, static_cast< TransparentPass & >( *m_transparentPass )
-					, m_depthBuffer->getDefaultView()
-					, m_colourTexture->getDefaultView()
-					, m_renderTarget.getSize()
-					, *m_renderTarget.getScene() );
+			m_weightedBlendRendering = std::make_unique< WeightedBlendRendering >( *getEngine()
+				, static_cast< TransparentPass & >( *m_transparentPass )
+				, m_depthBuffer->getDefaultView()
+				, m_colourTexture->getDefaultView()
+				, m_renderTarget.getSize()
+				, *m_renderTarget.getScene() );
 #endif
-			}
 
 			m_particleTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Particles" ), cuT( "Particles" ) );
 			m_postFxTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "HDR Post effects" ), cuT( "HDR Post effects" ) );
-			ENSURE( m_initialised );
+			m_initialised = true;
 		}
 
 		return m_initialised;

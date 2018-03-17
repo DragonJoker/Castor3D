@@ -25,6 +25,10 @@ namespace castor3d
 	SceneUbo::SceneUbo( Engine & engine )
 		: m_engine{ engine }
 	{
+		if ( engine.getRenderSystem()->hasCurrentDevice() )
+		{
+			initialise();
+		}
 	}
 
 	SceneUbo::~SceneUbo()
@@ -33,11 +37,14 @@ namespace castor3d
 
 	void SceneUbo::initialise()
 	{
-		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
-		m_ubo = renderer::makeUniformBuffer< Configuration >( device
-			, 1u
-			, renderer::BufferTarget::eTransferDst
-			, renderer::MemoryPropertyFlag::eHostVisible );
+		if ( !m_ubo )
+		{
+			auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
+			m_ubo = renderer::makeUniformBuffer< Configuration >( device
+				, 1u
+				, renderer::BufferTarget::eTransferDst
+				, renderer::MemoryPropertyFlag::eHostVisible );
+		}
 	}
 
 	void SceneUbo::cleanup()
@@ -47,6 +54,7 @@ namespace castor3d
 
 	void SceneUbo::updateCameraPosition( Camera const & camera )const
 	{
+		REQUIRE( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );
 		configuration.cameraPos = camera.getParent()->getDerivedPosition();
 		configuration.ambientLight = toRGBAFloat( camera.getScene()->getAmbientLight() );
@@ -57,6 +65,7 @@ namespace castor3d
 	void SceneUbo::update( Camera const & camera
 		, Fog const & fog )const
 	{
+		REQUIRE( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );
 		configuration.fogType = int( fog.getType() );
 		configuration.fogDensity = fog.getDensity();
@@ -69,6 +78,7 @@ namespace castor3d
 		, Camera const & camera
 		, bool lights )const
 	{
+		REQUIRE( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );
 
 		if ( lights )

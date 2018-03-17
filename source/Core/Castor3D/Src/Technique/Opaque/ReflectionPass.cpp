@@ -1011,6 +1011,7 @@ namespace castor3d
 			, renderer::TextureView const & lightDiffuse
 			, renderer::TextureView const & lightSpecular
 			, renderer::TextureView const * ssao
+			, SamplerSPtr sampler
 			, Scene const & scene
 			, MaterialType matType )
 		{
@@ -1019,36 +1020,36 @@ namespace castor3d
 			auto result = pool.createDescriptorSet( 1u );
 			result->createBinding( layout.getBinding( index++ )
 				, gp[size_t( DsTexture::eDepth )]->getTexture()->getDefaultView()
-				, gp[size_t( DsTexture::eDepth )]->getSampler()->getSampler() );
+				, sampler->getSampler() );
 			result->createBinding( layout.getBinding( index++ )
 				, gp[size_t( DsTexture::eData1 )]->getTexture()->getDefaultView()
-				, gp[size_t( DsTexture::eData1 )]->getSampler()->getSampler() );
+				, sampler->getSampler() );
 			result->createBinding( layout.getBinding( index++ )
 				, gp[size_t( DsTexture::eData2 )]->getTexture()->getDefaultView()
-				, gp[size_t( DsTexture::eData2 )]->getSampler()->getSampler() );
+				, sampler->getSampler() );
 			result->createBinding( layout.getBinding( index++ )
 				, gp[size_t( DsTexture::eData3 )]->getTexture()->getDefaultView()
-				, gp[size_t( DsTexture::eData3 )]->getSampler()->getSampler() );
+				, sampler->getSampler() );
 			result->createBinding( layout.getBinding( index++ )
 				, gp[size_t( DsTexture::eData4 )]->getTexture()->getDefaultView()
-				, gp[size_t( DsTexture::eData4 )]->getSampler()->getSampler() );
+				, sampler->getSampler() );
 			result->createBinding( layout.getBinding( index++ )
 				, gp[size_t( DsTexture::eData5 )]->getTexture()->getDefaultView()
-				, gp[size_t( DsTexture::eData5 )]->getSampler()->getSampler() );
+				, sampler->getSampler() );
 
 			if ( ssao )
 			{
 				result->createBinding( layout.getBinding( index++ )
 					, *ssao
-					, gp[size_t( DsTexture::eData5 )]->getSampler()->getSampler() );
+					, sampler->getSampler() );
 			}
 
 			result->createBinding( layout.getBinding( index++ )
 				, lightDiffuse
-				, gp[size_t( DsTexture::eData4 )]->getSampler()->getSampler() );
+				, sampler->getSampler() );
 			result->createBinding( layout.getBinding( index++ )
 				, lightSpecular
-				, gp[size_t( DsTexture::eData5 )]->getSampler()->getSampler() );
+				, sampler->getSampler() );
 
 			if ( matType != MaterialType::eLegacy )
 			{
@@ -1138,11 +1139,12 @@ namespace castor3d
 		, renderer::TextureView const * ssao
 		, renderer::Extent2D const & size
 		, FogType fogType
-		, MaterialType matType )
+		, MaterialType matType
+		, SamplerSPtr sampler )
 		: m_program{ doCreateProgram( engine, fogType, ssao != nullptr, matType ) }
 		, m_texDescriptorLayout{ doCreateTexDescriptorLayout( engine, ssao != nullptr, matType ) }
 		, m_texDescriptorPool{ m_texDescriptorLayout->createPool( 1u ) }
-		, m_texDescriptorSet{ doCreateTexDescriptorSet( *m_texDescriptorPool, gp, lightDiffuse, lightSpecular, ssao, scene, matType ) }
+		, m_texDescriptorSet{ doCreateTexDescriptorSet( *m_texDescriptorPool, gp, lightDiffuse, lightSpecular, ssao, sampler, scene, matType ) }
 		, m_pipelineLayout{ engine.getRenderSystem()->getCurrentDevice()->createPipelineLayout( { uboLayout, *m_texDescriptorLayout } ) }
 		, m_pipeline{ doCreateRenderPipeline( *m_pipelineLayout, m_program, renderPass, size ) }
 		, m_commandBuffer{ engine.getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer( true ) }
@@ -1181,6 +1183,7 @@ namespace castor3d
 		, m_scene{ scene }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_size{ result.getTexture().getDimensions().width, result.getTexture().getDimensions().height }
+		, m_sampler{ engine.getDefaultSampler() }
 		, m_vertexBuffer{ doCreateVbo( engine ) }
 		, m_uboDescriptorLayout{ doCreateUboDescriptorLayout( engine ) }
 		, m_uboDescriptorPool{ m_uboDescriptorLayout->createPool( 1u ) }
@@ -1207,7 +1210,8 @@ namespace castor3d
 					config.m_enabled ? &m_ssao.getResult().getTexture()->getDefaultView() : nullptr,
 					m_size,
 					FogType::eDisabled,
-					engine.getMaterialsType()
+					engine.getMaterialsType(),
+					m_sampler
 				},
 				ProgramPipeline
 				{
@@ -1224,7 +1228,8 @@ namespace castor3d
 					config.m_enabled ? &m_ssao.getResult().getTexture()->getDefaultView() : nullptr,
 					m_size,
 					FogType::eLinear,
-					engine.getMaterialsType()
+					engine.getMaterialsType(),
+					m_sampler
 				},
 				ProgramPipeline
 				{
@@ -1241,7 +1246,8 @@ namespace castor3d
 					config.m_enabled ? &m_ssao.getResult().getTexture()->getDefaultView() : nullptr,
 					m_size,
 					FogType::eExponential,
-					engine.getMaterialsType()
+					engine.getMaterialsType(),
+					m_sampler
 				},
 				ProgramPipeline
 				{
@@ -1258,7 +1264,8 @@ namespace castor3d
 					config.m_enabled ? &m_ssao.getResult().getTexture()->getDefaultView() : nullptr,
 					m_size,
 					FogType::eSquaredExponential,
-					engine.getMaterialsType()
+					engine.getMaterialsType(),
+					m_sampler
 				},
 			}
 		}

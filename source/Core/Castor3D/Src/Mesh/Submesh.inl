@@ -241,6 +241,12 @@ namespace castor3d
 		m_components.emplace( mapping->getType(), mapping );
 	}
 
+	inline IndexMapping const & Submesh::getIndexMapping()const
+	{
+		REQUIRE( m_indexMapping );
+		return *m_indexMapping;
+	}
+
 	inline bool Submesh::hasComponent( castor::String const & name )const
 	{
 		return m_components.find( name ) != m_components.end();

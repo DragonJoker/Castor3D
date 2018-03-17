@@ -383,7 +383,7 @@ namespace castor3d
 	uint32_t Submesh::getPointsCount()const
 	{
 		return std::max< uint32_t >( uint32_t( m_points.size() )
-			, m_vertexBuffer->getCount() );
+			, ( m_vertexBuffer ? m_vertexBuffer->getCount() : 0u ) );
 	}
 
 	int Submesh::isInMyPoints( Point3r const & vertex

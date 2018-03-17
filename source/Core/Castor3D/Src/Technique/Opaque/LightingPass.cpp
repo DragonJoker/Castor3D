@@ -47,12 +47,12 @@ namespace castor3d
 			image.mipLevels = 1u;
 			image.samples = renderer::SampleCountFlag::e1;
 			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
-			image.format = renderer::Format::eR16G16B16_SFLOAT;
+			image.format = renderer::Format::eR16G16B16A16_SFLOAT;
 
 			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
 				, image
 				, renderer::MemoryPropertyFlag::eDeviceLocal );
-			texture->getImage().initialiseSource();
+			texture->getDefaultImage().initialiseSource();
 
 			TextureUnit result{ engine };
 			result.setTexture( texture );

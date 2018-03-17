@@ -97,7 +97,8 @@ namespace castor3d
 		return glsl::GlslWriter{ glsl::GlslWriterConfig{ m_gpuInformations.getShaderLanguageVersion()
 			, m_gpuInformations.hasConstantsBuffers()
 			, m_gpuInformations.hasTextureBuffers()
-			, m_gpuInformations.hasShaderStorageBuffers() } };
+			, m_gpuInformations.hasShaderStorageBuffers()
+			, false } };
 	}
 
 	GpuBufferOffset RenderSystem::getBuffer( renderer::BufferTarget type

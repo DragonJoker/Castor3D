@@ -176,7 +176,7 @@ namespace castor3d
 		if ( result && scene.hasBackgroundImage() )
 		{
 			Logger::logInfo( cuT( "Scene::write - Background image" ) );
-			Path relative = Scene::TextWriter::copyFile( Path{ scene.getBackgroundImage().getImage().toString() }, file.getFilePath(), Path{ cuT( "Textures" ) } );
+			Path relative = Scene::TextWriter::copyFile( Path{ scene.getBackgroundImage().getDefaultImage().toString() }, file.getFilePath(), Path{ cuT( "Textures" ) } );
 			result = file.writeText( m_tabs + cuT( "\tbackground_image \"" ) + relative + cuT( "\"\n" ) ) > 0;
 			castor::TextWriter< Scene >::checkError( result, "Scene background image" );
 		}

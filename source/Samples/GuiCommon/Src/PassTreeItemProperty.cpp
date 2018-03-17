@@ -1,4 +1,4 @@
-﻿#include "PassTreeItemProperty.hpp"
+#include "PassTreeItemProperty.hpp"
 
 #include "ShaderDialog.hpp"
 
@@ -337,12 +337,12 @@ namespace GuiCommon
 
 	bool PassTreeItemProperty::OnEditShader( wxPGProperty * p_property )
 	{
-		PassSPtr pass = getPass();
-		ShaderDialog * editor = new ShaderDialog( m_scene
-			, IsEditable()
-			, nullptr
-			, *pass );
-		editor->Show();
+		//PassSPtr pass = getPass();
+		//ShaderDialog * editor = new ShaderDialog( m_scene
+		//	, IsEditable()
+		//	, nullptr
+		//	, *pass );
+		//editor->Show();
 		return false;
 	}
 }

@@ -43,7 +43,7 @@ namespace castor3d
 		m_texture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
 			, image
 			, renderer::MemoryPropertyFlag::eHostVisible );
-		m_texture->getImage().initialiseSource();
+		m_texture->getDefaultImage().initialiseSource();
 	}
 
 	FontTexture::~FontTexture()
@@ -67,7 +67,7 @@ namespace castor3d
 			uint32_t const maxHeight = font->getMaxHeight();
 			uint32_t const count = uint32_t( std::ceil( std::distance( font->begin(), font->end() ) / 16.0 ) );
 			Size size{ maxWidth * 16, maxHeight * count };
-			auto & image = m_texture->getImage();
+			auto & image = m_texture->getDefaultImage();
 			image.initialiseSource( PxBufferBase::create( Size( maxWidth * 16, maxHeight * count ), PixelFormat::eL8 ) );
 
 			auto it = font->begin();

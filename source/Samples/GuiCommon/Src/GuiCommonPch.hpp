@@ -100,8 +100,6 @@ See LICENSE file in root folder
 #	include <Scene/Light/PointLight.hpp>
 #	include <Scene/Light/DirectionalLight.hpp>
 #	include <Scene/Light/SpotLight.hpp>
-#	include <Shader/ShaderProgram.hpp>
-#	include <Shader/Uniform/Uniform.hpp>
 #	include <Texture/TextureUnit.hpp>
 #	include <Texture/TextureLayout.hpp>
 

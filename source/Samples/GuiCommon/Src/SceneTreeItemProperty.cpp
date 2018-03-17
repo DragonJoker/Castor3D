@@ -1,4 +1,4 @@
-﻿#include "SceneTreeItemProperty.hpp"
+#include "SceneTreeItemProperty.hpp"
 
 #include <Render/RenderLoop.hpp>
 #include <Scene/Scene.hpp>
@@ -45,15 +45,15 @@ namespace GuiCommon
 		grid->Append( new wxColourProperty( PROPERTY_SCENE_AMBIENT_LIGHT ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( m_scene.getAmbientLight() ) ) ) );
 		grid->Append( new wxColourProperty( PROPERTY_SCENE_BACKGROUND_COLOUR ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( m_scene.getBackgroundColour() ) ) ) );
 
-		if ( m_scene.getBackgroundImage() )
+		if ( m_scene.hasBackgroundImage() )
 		{
 			grid->Append( doCreateTextureImageProperty( PROPERTY_SCENE_BACKGROUND_COLOUR, m_scene.getBackgroundImage() ) );
 		}
 	}
 
-	void SceneTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
+	void SceneTreeItemProperty::doPropertyChange( wxPropertyGridEvent & event )
 	{
-		wxPGProperty * property = p_event.GetProperty();
+		wxPGProperty * property = event.GetProperty();
 
 		if ( property )
 		{
@@ -80,11 +80,12 @@ namespace GuiCommon
 		}
 	}
 
-	wxPGProperty * SceneTreeItemProperty::doCreateTextureImageProperty( wxString const & p_name, castor3d::TextureLayoutSPtr p_texture )
+	wxPGProperty * SceneTreeItemProperty::doCreateTextureImageProperty( wxString const & name
+		, castor3d::TextureLayout const & texture )
 	{
 		wxPGProperty * property = nullptr;
 
-		if ( p_texture->getImage().isStaticSource() )
+		if ( texture.getImage().isStaticSource() )
 		{
 			property = new wxImageFileProperty( PROPERTY_SCENE_BACKGROUND_IMAGE );
 		}

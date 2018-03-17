@@ -4,7 +4,7 @@ namespace castor
 {
 	DynamicLibrary::DynamicLibrary( Path const & pathFile )noexcept
 		: m_library( nullptr )
-		, m_pathLibrary()
+		, m_pathLibrary( pathFile )
 	{
 		doOpen();
 	}

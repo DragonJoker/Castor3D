@@ -16,6 +16,10 @@ namespace castor3d
 	ModelMatrixUbo::ModelMatrixUbo( Engine & engine )
 		: m_engine{ engine }
 	{
+		if ( engine.getRenderSystem()->hasCurrentDevice() )
+		{
+			initialise();
+		}
 	}
 
 	ModelMatrixUbo::~ModelMatrixUbo()
@@ -24,11 +28,14 @@ namespace castor3d
 
 	void ModelMatrixUbo::initialise()
 	{
-		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
-		m_ubo = renderer::makeUniformBuffer< Configuration >( device
-			, 1u
-			, renderer::BufferTarget::eTransferDst
-			, renderer::MemoryPropertyFlag::eHostVisible );
+		if ( !m_ubo )
+		{
+			auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
+			m_ubo = renderer::makeUniformBuffer< Configuration >( device
+				, 1u
+				, renderer::BufferTarget::eTransferDst
+				, renderer::MemoryPropertyFlag::eHostVisible );
+		}
 	}
 
 	void ModelMatrixUbo::cleanup()

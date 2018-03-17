@@ -322,7 +322,7 @@ namespace castor3d
 			auto texture = std::make_shared< TextureLayout >( renderSystem
 				, image
 				, renderer::MemoryPropertyFlag::eHostVisible );
-			texture->getImage().initialiseSource();
+			texture->getDefaultImage().initialiseSource();
 			TextureUnit unit{ engine };
 			unit.setTexture( texture );
 			unit.setSampler( sampler );
@@ -447,13 +447,13 @@ namespace castor3d
 			, 1u );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 6u )
 			, m_geometryBufferResult[size_t( DsTexture::eDepth )]->getTexture()->getDefaultView()
-			, m_geometryBufferResult[size_t( DsTexture::eDepth )]->getSampler()->getSampler() );
+			, m_sampler->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 7u )
 			, m_geometryBufferResult[size_t( DsTexture::eData4 )]->getTexture()->getDefaultView()
-			, m_geometryBufferResult[size_t( DsTexture::eData4 )]->getSampler()->getSampler() );
+			, m_sampler->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 8u )
 			, m_geometryBufferResult[size_t( DsTexture::eData5 )]->getTexture()->getDefaultView()
-			, m_geometryBufferResult[size_t( DsTexture::eData5 )]->getSampler()->getSampler() );
+			, m_sampler->getSampler() );
 	}
 
 	//*********************************************************************************************
@@ -559,10 +559,10 @@ namespace castor3d
 			, m_blurUbo );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 2u )
 			, m_geometryBufferResult[size_t( DsTexture::eData4 )]->getTexture()->getDefaultView()
-			, m_geometryBufferResult[size_t( DsTexture::eData4 )]->getSampler()->getSampler() );
+			, m_sampler->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 3u )
 			, m_geometryBufferResult[size_t( DsTexture::eData5 )]->getTexture()->getDefaultView()
-			, m_geometryBufferResult[size_t( DsTexture::eData5 )]->getSampler()->getSampler() );
+			, m_sampler->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 4u )
 			, m_blurResults[0].getTexture()->getDefaultView()
 			, m_blurResults[0].getSampler()->getSampler() );

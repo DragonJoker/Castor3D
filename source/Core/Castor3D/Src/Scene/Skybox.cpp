@@ -221,7 +221,7 @@ namespace castor3d
 	void Skybox::setEquiTexture( TextureLayoutSPtr texture
 		, castor::Size const & size )
 	{
-		m_equiTexturePath = castor::Path( texture->getImage().toString() );
+		m_equiTexturePath = castor::Path( texture->getDefaultImage().toString() );
 		m_equiTexture = texture;
 		m_equiSize = size;
 	}

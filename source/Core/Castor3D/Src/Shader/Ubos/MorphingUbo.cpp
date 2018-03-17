@@ -15,6 +15,10 @@ namespace castor3d
 	MorphingUbo::MorphingUbo( Engine & engine )
 		: m_engine{ engine }
 	{
+		if ( engine.getRenderSystem()->hasCurrentDevice() )
+		{
+			initialise();
+		}
 	}
 
 	MorphingUbo::~MorphingUbo()
@@ -23,11 +27,14 @@ namespace castor3d
 
 	void MorphingUbo::initialise()
 	{
-		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
-		m_ubo = renderer::makeUniformBuffer< Configuration >( device
-			, 1u
-			, renderer::BufferTarget::eTransferDst
-			, renderer::MemoryPropertyFlag::eHostVisible );
+		if ( !m_ubo )
+		{
+			auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
+			m_ubo = renderer::makeUniformBuffer< Configuration >( device
+				, 1u
+				, renderer::BufferTarget::eTransferDst
+				, renderer::MemoryPropertyFlag::eHostVisible );
+		}
 	}
 
 	void MorphingUbo::cleanup()
@@ -37,6 +44,7 @@ namespace castor3d
 
 	void MorphingUbo::update( float time )const
 	{
+		REQUIRE( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );
 		configuration.time = time;
 		m_ubo->upload();

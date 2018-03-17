@@ -20,33 +20,36 @@ namespace castor3d
 
 	void MaterialCache::initialise( MaterialType type )
 	{
-		auto lock = makeUniqueLock( m_elements );
-
-		if ( !m_elements.has( Material::DefaultMaterialName ) )
+		if ( !m_passBuffer )
 		{
-			m_defaultMaterial = m_produce( Material::DefaultMaterialName, type );
-			m_defaultMaterial->createPass();
-			m_defaultMaterial->getPass( 0 )->setTwoSided( true );
-		}
-		else
-		{
-			m_defaultMaterial = m_elements.find( Material::DefaultMaterialName );
-			getEngine()->postEvent( makeInitialiseEvent( *m_defaultMaterial ) );
-		}
+			auto lock = makeUniqueLock( m_elements );
 
-		switch ( type )
-		{
-		case MaterialType::eLegacy:
-			m_passBuffer = std::make_shared< LegacyPassBuffer >( *getEngine(), shader::MaxMaterialsCount );
-			break;
+			if ( !m_elements.has( Material::DefaultMaterialName ) )
+			{
+				m_defaultMaterial = m_produce( Material::DefaultMaterialName, type );
+				m_defaultMaterial->createPass();
+				m_defaultMaterial->getPass( 0 )->setTwoSided( true );
+			}
+			else
+			{
+				m_defaultMaterial = m_elements.find( Material::DefaultMaterialName );
+				getEngine()->postEvent( makeInitialiseEvent( *m_defaultMaterial ) );
+			}
 
-		case MaterialType::ePbrMetallicRoughness:
-			m_passBuffer = std::make_shared< MetallicRoughnessPassBuffer >( *getEngine(), shader::MaxMaterialsCount );
-			break;
+			switch ( type )
+			{
+			case MaterialType::eLegacy:
+				m_passBuffer = std::make_shared< LegacyPassBuffer >( *getEngine(), shader::MaxMaterialsCount );
+				break;
 
-		case MaterialType::ePbrSpecularGlossiness:
-			m_passBuffer = std::make_shared< SpecularGlossinessPassBuffer >( *getEngine(), shader::MaxMaterialsCount );
-			break;
+			case MaterialType::ePbrMetallicRoughness:
+				m_passBuffer = std::make_shared< MetallicRoughnessPassBuffer >( *getEngine(), shader::MaxMaterialsCount );
+				break;
+
+			case MaterialType::ePbrSpecularGlossiness:
+				m_passBuffer = std::make_shared< SpecularGlossinessPassBuffer >( *getEngine(), shader::MaxMaterialsCount );
+				break;
+			}
 		}
 	}
 

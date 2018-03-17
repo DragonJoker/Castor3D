@@ -24,16 +24,16 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_editable	Tells if the properties are modifiable
-		 *\param[in]	p_geometry	The parent geometry
-		 *\param[in]	p_submesh	The target submesh
+		 *\param[in]	editable	Tells if the properties are modifiable
+		 *\param[in]	geometry	The parent geometry
+		 *\param[in]	submesh	The target submesh
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
-		 *\param[in]	p_geometry	La géométrie parente
-		 *\param[in]	p_submesh	Le maillage cible
+		 *\param[in]	editable	Dit si les propriétés sont modifiables
+		 *\param[in]	geometry	La géométrie parente
+		 *\param[in]	submesh	Le maillage cible
 		 */
-		SubmeshTreeItemProperty( bool p_editable, castor3d::Geometry & p_geometry, castor3d::Submesh & p_submesh );
+		SubmeshTreeItemProperty( bool editable, castor3d::Geometry & geometry, castor3d::Submesh & submesh );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -70,15 +70,15 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		virtual void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid );
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
 		 */
-		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
+		virtual void doPropertyChange( wxPropertyGridEvent & event );
 
 	private:
-		void OnMaterialChange( castor::String const & p_name );
-		void OnTopologyChange( castor3d::Topology p_value );
+		void OnMaterialChange( castor::String const & name );
+		void OnTopologyChange( renderer::PrimitiveTopology value );
 
 	private:
 		castor3d::Geometry & m_geometry;

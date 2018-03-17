@@ -239,7 +239,7 @@ namespace castor3d
 				indexBuffer.getBuffer().unlock();
 			}
 
-			m_faces.clear();
+			//m_faces.clear();
 		}
 	}
 }

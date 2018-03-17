@@ -104,8 +104,6 @@ namespace castor3d
 		void debugDisplay()const;
 
 	private:
-		using GeometryBufferTextures = std::array< TextureUnitUPtr, size_t( DsTexture::eCount ) >;
-
 		Engine & m_engine;
 		SsaoConfig const & m_ssaoConfig;
 		OpaquePass & m_opaquePass;
@@ -114,7 +112,8 @@ namespace castor3d
 		std::unique_ptr< LightingPass > m_lightingPass;
 		std::unique_ptr< ReflectionPass > m_reflection;
 		std::unique_ptr< SubsurfaceScatteringPass > m_subsurfaceScattering;
-		GeometryBufferTextures m_geometryPassResult;
+		GeometryPassResult m_geometryPassResult;
+		std::vector< renderer::TexturePtr > m_results;
 	};
 }
 

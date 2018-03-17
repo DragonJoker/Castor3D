@@ -27,9 +27,9 @@ namespace castor3d
 		if ( unit.isTextured() && unit.getTexture() )
 		{
 			auto texture = unit.getTexture();
-			auto image = texture->getImage().toString();
+			auto image = texture->getDefaultImage().toString();
 
-			if ( !image.empty() || !texture->getImage().isStaticSource() )
+			if ( !image.empty() || !texture->getDefaultImage().isStaticSource() )
 			{
 				if ( result )
 				{
@@ -116,7 +116,7 @@ namespace castor3d
 						break;
 					}
 
-					if ( !texture->getImage().isStaticSource() )
+					if ( !texture->getDefaultImage().isStaticSource() )
 					{
 						if ( result && unit.getRenderTarget() )
 						{
@@ -195,6 +195,7 @@ namespace castor3d
 			result = m_texture->initialise();
 			auto sampler = getSampler();
 			REQUIRE( sampler );
+			sampler->initialise();
 
 			if ( result
 				&& sampler

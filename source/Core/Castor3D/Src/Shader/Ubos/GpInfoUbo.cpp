@@ -21,6 +21,10 @@ namespace castor3d
 	GpInfoUbo::GpInfoUbo( Engine & engine )
 		: m_engine{ engine }
 	{
+		if ( engine.getRenderSystem()->hasCurrentDevice() )
+		{
+			initialise();
+		}
 	}
 
 	GpInfoUbo::~GpInfoUbo()
@@ -29,11 +33,14 @@ namespace castor3d
 
 	void GpInfoUbo::initialise()
 	{
-		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
-		m_ubo = renderer::makeUniformBuffer< Configuration >( device
-			, 1u
-			, renderer::BufferTarget::eTransferDst
-			, renderer::MemoryPropertyFlag::eHostVisible );
+		if ( !m_ubo )
+		{
+			auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
+			m_ubo = renderer::makeUniformBuffer< Configuration >( device
+				, 1u
+				, renderer::BufferTarget::eTransferDst
+				, renderer::MemoryPropertyFlag::eHostVisible );
+		}
 	}
 
 	void GpInfoUbo::cleanup()
@@ -47,6 +54,7 @@ namespace castor3d
 		, Matrix4x4r const & invView
 		, Matrix4x4r const & invProj )
 	{
+		REQUIRE( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );
 		configuration.invViewProj = invViewProj;
 		configuration.invView = invView;

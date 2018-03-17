@@ -49,7 +49,7 @@ namespace castor3d
 			, image
 			, renderer::MemoryPropertyFlag::eDeviceLocal );
 
-		colourTexture->getImage().initialiseSource();
+		colourTexture->getDefaultImage().initialiseSource();
 		m_colourTexture.setSampler( sampler );
 		m_colourTexture.setTexture( colourTexture );
 		m_colourTexture.initialise();

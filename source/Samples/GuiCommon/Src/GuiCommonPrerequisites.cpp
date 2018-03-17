@@ -20,7 +20,6 @@ using Bool = int;
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Material/Material.hpp>
 #include <Mesh/Mesh.hpp>
-#include <Miscellaneous/PlatformWindowHandle.hpp>
 #include <Plugin/Plugin.hpp>
 #include <Render/RenderWindow.hpp>
 #include <Scene/Scene.hpp>
@@ -28,6 +27,8 @@ using Bool = int;
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
+
+#include <Core/PlatformWindowHandle.hpp>
 
 #include <Graphics/PixelBufferBase.hpp>
 
@@ -353,30 +354,31 @@ namespace GuiCommon
 		Logger::logInfo( cuT( "Plugins loaded" ) );
 	}
 
-	castor3d::WindowHandle makeWindowHandle( wxWindow * p_window )
+	renderer::WindowHandle makeWindowHandle( wxWindow * window )
 	{
 #if defined( CASTOR_PLATFORM_WINDOWS )
 
-		return WindowHandle( std::make_shared< IMswWindowHandle >( p_window->GetHandle() ) );
+		return renderer::WindowHandle( std::make_unique< renderer::IMswWindowHandle >( ::GetModuleHandle( nullptr )
+			, window->GetHandle() ) );
 
 #elif defined( CASTOR_PLATFORM_LINUX )
 
-		GtkWidget * pGtkWidget = static_cast< GtkWidget * >( p_window->GetHandle() );
+		GtkWidget * gtkWidget = static_cast< GtkWidget * >( window->GetHandle() );
 		GLXDrawable drawable = 0;
-		Display * pDisplay = nullptr;
+		Display * display = nullptr;
 
-		if ( pGtkWidget && pGtkWidget->window )
+		if ( gtkWidget && gtkWidget->window )
 		{
-			drawable = GDK_WINDOW_XID( pGtkWidget->window );
-			GdkDisplay * pGtkDisplay = gtk_widget_get_display( pGtkWidget );
+			drawable = GDK_WINDOW_XID( gtkWidget->window );
+			GdkDisplay * gtkDisplay = gtk_widget_get_display( gtkWidget );
 
-			if ( pGtkDisplay )
+			if ( gtkDisplay )
 			{
-				pDisplay = gdk_x11_display_get_xdisplay( pGtkDisplay );
+				display = gdk_x11_display_get_xdisplay( gtkDisplay );
 			}
 		}
 
-		return WindowHandle( std::make_shared< IXWindowHandle >( drawable, pDisplay ) );
+		return renderer::WindowHandle( std::make_unique< renderer::IXWindowHandle >( drawable, display ) );
 
 #endif
 	}

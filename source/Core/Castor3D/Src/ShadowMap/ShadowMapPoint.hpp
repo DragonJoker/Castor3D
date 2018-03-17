@@ -107,7 +107,7 @@ namespace castor3d
 		{
 			renderer::FrameBufferPtr frameBuffer;
 			renderer::TextureViewPtr varianceView;
-			renderer::TextureView const * linearView;
+			renderer::TextureViewPtr linearView;
 		};
 		renderer::TexturePtr m_depthTexture;
 		renderer::TextureViewPtr m_depthView;

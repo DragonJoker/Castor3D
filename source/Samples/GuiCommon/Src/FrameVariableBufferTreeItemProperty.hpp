@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___GUICOMMON_FRAME_VARIABLE_BUFFER_TREE_ITEM_PROPERTY_H___
@@ -24,18 +24,18 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	engine	The engine, to post events to.
-		 *\param[in]	p_editable	Tells if the properties are modifiable
-		 *\param[in]	p_buffer	The target buffer
+		 *\param[in]	engine		The engine, to post events to.
+		 *\param[in]	editable	Tells if the properties are modifiable
+		 *\param[in]	buffer		The target buffer
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	engine	Le moteur, auquel on va poster les évènements
-		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
-		 *\param[in]	p_buffer	Le tampon cible
+		 *\param[in]	engine		Le moteur, auquel on va poster les évènements
+		 *\param[in]	editable	Dit si les propriétés sont modifiables
+		 *\param[in]	buffer		Le tampon cible
 		 */
 		FrameVariableBufferTreeItemProperty( castor3d::Engine * engine
-			, bool p_editable
-			, castor3d::UniformBuffer & p_buffer );
+			, bool editable
+			, renderer::UniformBufferBase & buffer );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -51,7 +51,7 @@ namespace GuiCommon
 		 *\brief		Récupère la caméra
 		 *\return		La valeur
 		 */
-		inline castor3d::UniformBuffer const & getBuffer()const
+		inline renderer::UniformBufferBase const & getBuffer()const
 		{
 			return m_buffer;
 		}
@@ -60,14 +60,14 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		virtual void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid );
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
 		 */
-		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
+		virtual void doPropertyChange( wxPropertyGridEvent & event );
 
 	private:
-		castor3d::UniformBuffer & m_buffer;
+		renderer::UniformBufferBase & m_buffer;
 	};
 }
 

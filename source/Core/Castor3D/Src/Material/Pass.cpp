@@ -420,9 +420,9 @@ namespace castor3d
 		{
 			auto texture = unit->getTexture();
 
-			if ( texture && texture->getImage().getBuffer() )
+			if ( texture && texture->getDefaultImage().getBuffer() )
 			{
-				PxBufferBaseSPtr extracted = texture->getImage().getBuffer();
+				PxBufferBaseSPtr extracted = texture->getDefaultImage().getBuffer();
 				result = PF::extractAlpha( extracted );
 
 				if ( result )
@@ -446,13 +446,13 @@ namespace castor3d
 
 		if ( opacityMap
 			&& opacityMap->getTexture()
-			&& opacityMap->getTexture()->getImage().getBuffer() )
+			&& opacityMap->getTexture()->getDefaultImage().getBuffer() )
 		{
-			if ( opacityMap->getTexture()->getImage().getBuffer()->format() != PixelFormat::eL8
-				&& opacityMap->getTexture()->getImage().getBuffer()->format() != PixelFormat::eL16F
-				&& opacityMap->getTexture()->getImage().getBuffer()->format() != PixelFormat::eL32F )
+			if ( opacityMap->getTexture()->getDefaultImage().getBuffer()->format() != PixelFormat::eL8
+				&& opacityMap->getTexture()->getDefaultImage().getBuffer()->format() != PixelFormat::eL16F
+				&& opacityMap->getTexture()->getDefaultImage().getBuffer()->format() != PixelFormat::eL32F )
 			{
-				PxBufferBaseSPtr reduced = opacityMap->getTexture()->getImage().getBuffer();
+				PxBufferBaseSPtr reduced = opacityMap->getTexture()->getDefaultImage().getBuffer();
 				PF::reduceToAlpha( reduced );
 				auto size = reduced->dimensions();
 				renderer::ImageCreateInfo createInfo{};
@@ -550,9 +550,9 @@ namespace castor3d
 		{
 			auto texture = unit->getTexture();
 
-			if ( texture && texture->getImage().getBuffer() )
+			if ( texture && texture->getDefaultImage().getBuffer() )
 			{
-				auto buffer = texture->getImage().getBuffer();
+				auto buffer = texture->getDefaultImage().getBuffer();
 
 				if ( buffer->format() != convert( format ) )
 				{

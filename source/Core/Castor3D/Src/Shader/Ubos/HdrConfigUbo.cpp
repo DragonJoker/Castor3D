@@ -17,6 +17,10 @@ namespace castor3d
 	HdrConfigUbo::HdrConfigUbo( Engine & engine )
 		: m_engine{ engine }
 	{
+		if ( engine.getRenderSystem()->hasCurrentDevice() )
+		{
+			initialise();
+		}
 	}
 
 	HdrConfigUbo::~HdrConfigUbo()
@@ -25,11 +29,14 @@ namespace castor3d
 
 	void HdrConfigUbo::initialise()
 	{
-		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
-		m_ubo = renderer::makeUniformBuffer< HdrConfig >( device
-			, 1u
-			, renderer::BufferTarget::eTransferDst
-			, renderer::MemoryPropertyFlag::eHostVisible );
+		if ( !m_ubo )
+		{
+			auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
+			m_ubo = renderer::makeUniformBuffer< HdrConfig >( device
+				, 1u
+				, renderer::BufferTarget::eTransferDst
+				, renderer::MemoryPropertyFlag::eHostVisible );
+		}
 	}
 
 	void HdrConfigUbo::cleanup()
@@ -39,6 +46,7 @@ namespace castor3d
 
 	void HdrConfigUbo::update( HdrConfig const & config )const
 	{
+		REQUIRE( m_ubo );
 		m_ubo->getData( 0u ).setExposure( config.getExposure() );
 		m_ubo->getData( 0u ).setGamma( config.getGamma() );
 		m_ubo->upload();

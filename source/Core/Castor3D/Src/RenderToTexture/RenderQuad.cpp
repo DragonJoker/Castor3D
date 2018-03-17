@@ -7,6 +7,7 @@
 
 #include <Buffer/VertexBuffer.hpp>
 #include <Command/CommandBuffer.hpp>
+#include <Command/CommandBufferInheritanceInfo.hpp>
 #include <Core/Device.hpp>
 #include <Descriptor/DescriptorSet.hpp>
 #include <Descriptor/DescriptorSetLayout.hpp>
@@ -120,6 +121,7 @@ namespace castor3d
 		m_descriptorSetPool = m_descriptorSetLayout->createPool( 1u );
 		m_descriptorSet = m_descriptorSetPool->createDescriptorSet();
 		doFillDescriptorSet( *m_descriptorSetLayout, *m_descriptorSet );
+		m_sampler->initialise();
 		m_descriptorSet->createBinding( m_descriptorSetLayout->getBinding( textureBindingPoint )
 			, view
 			, m_sampler->getSampler() );
@@ -144,11 +146,15 @@ namespace castor3d
 		} );
 	}
 
-	void RenderQuad::prepareFrame()
+	void RenderQuad::prepareFrame( renderer::RenderPass const & renderPass
+		, uint32_t subpassIndex )
 	{
 		auto & device = *m_renderSystem.getCurrentDevice();
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer( false );
+		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eRenderPassContinue
+			, renderer::CommandBufferInheritanceInfo{ &renderPass, subpassIndex, nullptr, false, 0u, 0u } );
 		registerFrame( *m_commandBuffer );
+		m_commandBuffer->end();
 	}
 
 	void RenderQuad::registerFrame( renderer::CommandBuffer & commandBuffer )const

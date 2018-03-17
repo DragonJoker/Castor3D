@@ -5,6 +5,7 @@
 #include "Render/Viewport.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
+#include "Shader/PassBuffer/PassBuffer.hpp"
 #include "Shader/Ubos/ModelMatrixUbo.hpp"
 #include "Shader/Ubos/SceneUbo.hpp"
 #include "Texture/Sampler.hpp"
@@ -307,12 +308,11 @@ namespace castor3d
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
 
-		renderer::DescriptorSetLayoutBindingArray setLayoutBindings
-		{
-			{ MatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment },
-			{ SceneUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment },
-			{ GpInfoUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment },
-		};
+		renderer::DescriptorSetLayoutBindingArray setLayoutBindings;
+		setLayoutBindings.emplace_back( m_engine.getMaterialCache().getPassBuffer().createLayoutBinding() );
+		setLayoutBindings.emplace_back( MatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
+		setLayoutBindings.emplace_back( SceneUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
+		setLayoutBindings.emplace_back( GpInfoUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
 
 		if ( modelMatrixUbo )
 		{
@@ -385,6 +385,7 @@ namespace castor3d
 		, m_shadows{ hasShadows }
 		, m_matrixUbo{ engine }
 		, m_gpInfoUbo{ gpInfoUbo }
+		, m_sampler{ engine.getDefaultSampler() }
 	{
 		renderer::FrameBufferAttachmentArray attaches
 		{
@@ -457,6 +458,7 @@ namespace castor3d
 
 		m_uboDescriptorSet = m_program->getUboDescriptorPool().createDescriptorSet( 0u );
 		auto & uboLayout = m_program->getUboDescriptorLayout();
+		m_engine.getMaterialCache().getPassBuffer().createBinding( *m_uboDescriptorSet, uboLayout.getBinding( 0u ) );
 		m_uboDescriptorSet->createBinding( uboLayout.getBinding( MatrixUbo::BindingPoint )
 			, m_matrixUbo.getUbo() );
 		m_uboDescriptorSet->createBinding( uboLayout.getBinding( SceneUbo::BindingPoint )
@@ -477,8 +479,10 @@ namespace castor3d
 
 		m_textureDescriptorSet = m_program->getTextureDescriptorPool().createDescriptorSet( 1u );
 		auto & texLayout = m_program->getTextureDescriptorLayout();
-		auto writeBinding = [&gp]( uint32_t index )
+		auto writeBinding = [&gp, this]( uint32_t index )
 		{
+			renderer::SamplerCRef sampler = std::ref( m_sampler->getSampler() );
+			renderer::TextureViewCRef view = std::ref( *m_views[index] );
 			return renderer::WriteDescriptorSet
 			{
 				index,
@@ -487,12 +491,36 @@ namespace castor3d
 				renderer::DescriptorType::eCombinedImageSampler,
 				renderer::DescriptorImageInfo
 				{
-					std::ref( gp[index]->getSampler()->getSampler() ),
-					std::ref( gp[index]->getTexture()->getDefaultView() ),
+					sampler,
+					view,
 					renderer::ImageLayout::eShaderReadOnlyOptimal
 				}
 			};
 		};
+		uint32_t index = 0u;
+		renderer::ImageViewCreateInfo view{};
+		view.viewType = renderer::TextureViewType::e2D;
+		view.subresourceRange.baseArrayLayer = 0u;
+		view.subresourceRange.baseMipLevel = 0u;
+		view.subresourceRange.layerCount = 1u;
+		view.subresourceRange.levelCount = 1u;
+
+		for ( auto & texture : gp )
+		{
+			if ( index == 0u )
+			{
+				view.subresourceRange.aspectMask = renderer::ImageAspectFlag::eDepth;
+			}
+			else
+			{
+				view.subresourceRange.aspectMask = renderer::ImageAspectFlag::eColour;
+			}
+
+			view.format = texture->getFormat();
+			m_views.emplace_back( texture->createView( view ) );
+			++index;
+		}
+
 		m_textureWrites.push_back( writeBinding( 0u ) );
 		m_textureWrites.push_back( writeBinding( 1u ) );
 		m_textureWrites.push_back( writeBinding( 2u ) );
@@ -655,7 +683,7 @@ namespace castor3d
 			{
 			case LightType::eDirectional:
 				{
-					auto light = writer.getBuiltin< shader::DirectionalLight >( cuT( "light" ) );
+					auto light = writer.declLocale< shader::DirectionalLight >( cuT( "light" ) );
 					lighting->compute( light
 						, eye
 						, shininess

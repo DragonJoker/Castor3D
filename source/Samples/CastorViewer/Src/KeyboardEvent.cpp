@@ -27,7 +27,7 @@ namespace CastorViewer
 
 		if ( pWindow )
 		{
-			pWindow->updateFullScreen( !pWindow->isFullscreen() );
+			pWindow->enableFullScreen( !pWindow->isFullscreen() );
 		}
 
 		return true;

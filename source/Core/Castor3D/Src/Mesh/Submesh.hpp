@@ -267,6 +267,13 @@ namespace castor3d
 		inline void setIndexMapping( IndexMappingSPtr mapping );
 		/**
 		 *\~english
+		 *\return		The index mapping.
+		 *\~french
+		 *\return		Le mappage d'indices.
+		 */
+		inline IndexMapping const & getIndexMapping()const;
+		/**
+		 *\~english
 		 *\brief		Adds a component.
 		 *\param[in]	name		The component name.
 		 *\param[in]	component	The component.

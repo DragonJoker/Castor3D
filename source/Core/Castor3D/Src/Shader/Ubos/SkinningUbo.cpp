@@ -20,6 +20,10 @@ namespace castor3d
 	SkinningUbo::SkinningUbo( Engine & engine )
 		: m_engine{ engine }
 	{
+		if ( engine.getRenderSystem()->hasCurrentDevice() )
+		{
+			initialise();
+		}
 	}
 
 	SkinningUbo::~SkinningUbo()
@@ -28,11 +32,14 @@ namespace castor3d
 
 	void SkinningUbo::initialise()
 	{
-		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
-		m_ubo = renderer::makeUniformBuffer< Configuration >( device
-			, 1u
-			, renderer::BufferTarget::eTransferDst
-			, renderer::MemoryPropertyFlag::eHostVisible );
+		if ( !m_ubo )
+		{
+			auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
+			m_ubo = renderer::makeUniformBuffer< Configuration >( device
+				, 1u
+				, renderer::BufferTarget::eTransferDst
+				, renderer::MemoryPropertyFlag::eHostVisible );
+		}
 	}
 
 	void SkinningUbo::cleanup()
@@ -42,6 +49,7 @@ namespace castor3d
 
 	void SkinningUbo::update( AnimatedSkeleton const & skeleton )const
 	{
+		REQUIRE( m_ubo );
 		skeleton.fillShader( m_ubo->getData( 0u ).bonesMatrix );
 		m_ubo->upload();
 	}

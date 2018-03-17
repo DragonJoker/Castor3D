@@ -16,9 +16,10 @@
 #include <Material/SpecularGlossinessPbrPass.hpp>
 #include <Mesh/Submesh.hpp>
 #include <ShadowMap/ShadowMapPass.hpp>
-#include <Miscellaneous/WindowHandle.hpp>
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderWindow.hpp>
+
+#include <Core/WindowHandle.hpp>
 
 using namespace castor3d;
 using namespace castor;

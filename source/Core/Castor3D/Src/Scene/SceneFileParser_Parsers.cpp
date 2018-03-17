@@ -3018,7 +3018,7 @@ namespace castor3d
 				{
 					String channels;
 					p_params[1]->get( channels );
-					auto buffer = texture->getImage().getBuffer();
+					auto buffer = texture->getDefaultImage().getBuffer();
 
 					if ( channels == cuT( "rgb" ) )
 					{
@@ -3056,7 +3056,7 @@ namespace castor3d
 						buffer = tmp;
 					}
 
-					texture->getImage().setBuffer( buffer );
+					texture->getDefaultImage().setBuffer( buffer );
 				}
 
 				parsingContext->textureUnit->setTexture( texture );

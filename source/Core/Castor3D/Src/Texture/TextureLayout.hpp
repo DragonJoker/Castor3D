@@ -118,31 +118,31 @@ namespace castor3d
 
 		inline TextureView const & getImage( size_t index = 0u )const
 		{
-			REQUIRE( index < m_views.size() - 1u && m_views[index + 1u] );
-			return *m_views[index + 1u];
+			REQUIRE( index < m_views.size() && m_views[index] );
+			return *m_views[index];
 		}
 
 		inline TextureView & getImage( size_t index = 0u )
 		{
-			REQUIRE( index < m_views.size() - 1u && m_views[index + 1u] );
-			return *m_views[index + 1u];
+			REQUIRE( index < m_views.size() && m_views[index] );
+			return *m_views[index];
 		}
 
 		inline TextureView const & getDefaultImage()const
 		{
-			REQUIRE( !m_views.empty() );
-			return *m_views[0];
+			REQUIRE( m_defaultView );
+			return *m_defaultView;
 		}
 
 		inline TextureView & getDefaultImage()
 		{
-			REQUIRE( !m_views.empty() );
-			return *m_views[0];
+			REQUIRE( m_defaultView );
+			return *m_defaultView;
 		}
 
 		inline renderer::TextureView const & getDefaultView()const
 		{
-			return m_defaultView.getView();
+			return m_defaultView->getView();
 		}
 
 		inline uint32_t getWidth()const
@@ -209,7 +209,7 @@ namespace castor3d
 		renderer::ImageCreateInfo m_info;
 		renderer::MemoryPropertyFlags m_properties;
 		std::vector< TextureViewUPtr > m_views;
-		TextureView & m_defaultView;
+		TextureViewUPtr m_defaultView;
 		renderer::TexturePtr m_texture;
 	};
 }

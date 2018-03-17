@@ -4,7 +4,6 @@
 #include <Material/Material.hpp>
 #include <Event/Frame/FunctorEvent.hpp>
 #include <Mesh/Submesh.hpp>
-#include <Buffer/GeometryBuffers.hpp>
 #include <Scene/Geometry.hpp>
 #include <Scene/Scene.hpp>
 
@@ -27,38 +26,40 @@ namespace GuiCommon
 		static wxString PROPERTY_SUBMESH_CUBE_BOX = _( "Cube box" );
 		static wxString PROPERTY_SUBMESH_SPHERE_BOX = _( "Sphere box" );
 		static wxString PROPERTY_TOPOLOGY = _( "Topology" );
-		static wxString PROPERTY_TOPOLOGY_POINTS = _( "Points" );
-		static wxString PROPERTY_TOPOLOGY_LINES = _( "Lines" );
-		static wxString PROPERTY_TOPOLOGY_LINE_LOOP = _( "Line Loop" );
+		static wxString PROPERTY_TOPOLOGY_POINT_LIST = _( "Point List" );
+		static wxString PROPERTY_TOPOLOGY_LINE_LIST = _( "Line List" );
 		static wxString PROPERTY_TOPOLOGY_LINE_STRIP = _( "Line Strip" );
-		static wxString PROPERTY_TOPOLOGY_TRIANGLES = _( "Triangles" );
+		static wxString PROPERTY_TOPOLOGY_TRIANGLE_LIST = _( "Triangle List" );
 		static wxString PROPERTY_TOPOLOGY_TRIANGLE_STRIP = _( "Triangle Strip" );
 		static wxString PROPERTY_TOPOLOGY_TRIANGLE_FAN = _( "Triangle Fan" );
-		static wxString PROPERTY_TOPOLOGY_QUADS = _( "Quads" );
-		static wxString PROPERTY_TOPOLOGY_QUAD_STRIP = _( "Quad Strip" );
-		static wxString PROPERTY_TOPOLOGY_POLYGON = _( "Polygon" );
+		static wxString PROPERTY_TOPOLOGY_LINE_LIST_WITH_ADJACENCY = _( "Line List With Adjacency" );
+		static wxString PROPERTY_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY = _( "Line Strip With Adjacency" );
+		static wxString PROPERTY_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY = _( "Triangle List With Adjacency" );
+		static wxString PROPERTY_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY = _( "Triangle Strip With Adjacency" );
+		static wxString PROPERTY_TOPOLOGY_PATCH_LIST = _( "Patch List" );
 	}
 
-	SubmeshTreeItemProperty::SubmeshTreeItemProperty( bool p_editable, Geometry & p_geometry, Submesh & p_submesh )
-		: TreeItemProperty( p_submesh.getScene()->getEngine(), p_editable, ePROPERTY_DATA_TYPE_SUBMESH )
-		, m_geometry( p_geometry )
-		, m_submesh( p_submesh )
+	SubmeshTreeItemProperty::SubmeshTreeItemProperty( bool editable, Geometry & geometry, Submesh & submesh )
+		: TreeItemProperty( submesh.getScene()->getEngine(), editable, ePROPERTY_DATA_TYPE_SUBMESH )
+		, m_geometry( geometry )
+		, m_submesh( submesh )
 	{
 		PROPERTY_CATEGORY_SUBMESH = _( "Submesh: " );
 		PROPERTY_SUBMESH_MATERIAL = _( "Material" );
 		PROPERTY_SUBMESH_CUBE_BOX = _( "Cube box" );
 		PROPERTY_SUBMESH_SPHERE_BOX = _( "Sphere box" );
 		PROPERTY_TOPOLOGY = _( "Topology" );
-		PROPERTY_TOPOLOGY_POINTS = _( "Points" );
-		PROPERTY_TOPOLOGY_LINES = _( "Lines" );
-		PROPERTY_TOPOLOGY_LINE_LOOP = _( "Line Loop" );
+		PROPERTY_TOPOLOGY_POINT_LIST = _( "Points" );
+		PROPERTY_TOPOLOGY_LINE_LIST = _( "Lines" );
 		PROPERTY_TOPOLOGY_LINE_STRIP = _( "Line Strip" );
-		PROPERTY_TOPOLOGY_TRIANGLES = _( "Triangles" );
+		PROPERTY_TOPOLOGY_TRIANGLE_LIST = _( "Triangle List" );
 		PROPERTY_TOPOLOGY_TRIANGLE_STRIP = _( "Triangle Strip" );
 		PROPERTY_TOPOLOGY_TRIANGLE_FAN = _( "Triangle Fan" );
-		PROPERTY_TOPOLOGY_QUADS = _( "Quads" );
-		PROPERTY_TOPOLOGY_QUAD_STRIP = _( "Quad Strip" );
-		PROPERTY_TOPOLOGY_POLYGON = _( "Polygon" );
+		PROPERTY_TOPOLOGY_LINE_LIST_WITH_ADJACENCY = _( "Line List With Adjacency" );
+		PROPERTY_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY = _( "Line Strip With Adjacency" );
+		PROPERTY_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY = _( "Triangle List With Adjacency" );
+		PROPERTY_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY = _( "Triangle Strip With Adjacency" );
+		PROPERTY_TOPOLOGY_PATCH_LIST = _( "Patch List" );
 
 		CreateTreeItemMenu();
 	}
@@ -67,49 +68,66 @@ namespace GuiCommon
 	{
 	}
 
-	void SubmeshTreeItemProperty::doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void SubmeshTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * p_grid )
 	{
 		wxPGChoices choices;
-		choices.Add( PROPERTY_TOPOLOGY_POINTS );
-		choices.Add( PROPERTY_TOPOLOGY_LINES );
-		choices.Add( PROPERTY_TOPOLOGY_LINE_LOOP );
+		choices.Add( PROPERTY_TOPOLOGY_POINT_LIST );
+		choices.Add( PROPERTY_TOPOLOGY_LINE_LIST );
 		choices.Add( PROPERTY_TOPOLOGY_LINE_STRIP );
-		choices.Add( PROPERTY_TOPOLOGY_TRIANGLES );
+		choices.Add( PROPERTY_TOPOLOGY_TRIANGLE_LIST );
 		choices.Add( PROPERTY_TOPOLOGY_TRIANGLE_STRIP );
 		choices.Add( PROPERTY_TOPOLOGY_TRIANGLE_FAN );
-		choices.Add( PROPERTY_TOPOLOGY_QUADS );
-		choices.Add( PROPERTY_TOPOLOGY_QUAD_STRIP );
-		choices.Add( PROPERTY_TOPOLOGY_POLYGON );
+		choices.Add( PROPERTY_TOPOLOGY_LINE_LIST_WITH_ADJACENCY );
+		choices.Add( PROPERTY_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY );
+		choices.Add( PROPERTY_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY );
+		choices.Add( PROPERTY_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY );
+		choices.Add( PROPERTY_TOPOLOGY_PATCH_LIST );
 		wxString selected;
 
 		switch ( m_submesh.getTopology() )
 		{
-		case Topology::ePoints:
-			selected = PROPERTY_TOPOLOGY_POINTS;
+		case renderer::PrimitiveTopology::ePointList:
+			selected = PROPERTY_TOPOLOGY_POINT_LIST;
 			break;
 
-		case Topology::eLines:
-			selected = PROPERTY_TOPOLOGY_LINES;
+		case renderer::PrimitiveTopology::eLineList:
+			selected = PROPERTY_TOPOLOGY_LINE_LIST;
 			break;
 
-		case Topology::eLineLoop:
-			selected = PROPERTY_TOPOLOGY_LINE_LOOP;
-			break;
-
-		case Topology::eLineStrip:
+		case renderer::PrimitiveTopology::eLineStrip:
 			selected = PROPERTY_TOPOLOGY_LINE_STRIP;
 			break;
 
-		case Topology::eTriangles:
-			selected = PROPERTY_TOPOLOGY_TRIANGLES;
+		case renderer::PrimitiveTopology::eTriangleList:
+			selected = PROPERTY_TOPOLOGY_TRIANGLE_LIST;
 			break;
 
-		case Topology::eTriangleStrips:
+		case renderer::PrimitiveTopology::eTriangleStrip:
 			selected = PROPERTY_TOPOLOGY_TRIANGLE_STRIP;
 			break;
 
-		case Topology::eTriangleFan:
+		case renderer::PrimitiveTopology::eTriangleFan:
 			selected = PROPERTY_TOPOLOGY_TRIANGLE_FAN;
+			break;
+
+		case renderer::PrimitiveTopology::eLineListWithAdjacency:
+			selected = PROPERTY_TOPOLOGY_LINE_LIST_WITH_ADJACENCY;
+			break;
+
+		case renderer::PrimitiveTopology::eLineStripWithAdjacency:
+			selected = PROPERTY_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY;
+			break;
+
+		case renderer::PrimitiveTopology::eTriangleListWithAdjacency:
+			selected = PROPERTY_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY;
+			break;
+
+		case renderer::PrimitiveTopology::eTriangleStripWithAdjacency:
+			selected = PROPERTY_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY;
+			break;
+
+		case renderer::PrimitiveTopology::ePatchList:
+			selected = PROPERTY_TOPOLOGY_PATCH_LIST;
 			break;
 		}
 
@@ -138,33 +156,49 @@ namespace GuiCommon
 			}
 			else if ( property->GetName() == PROPERTY_TOPOLOGY )
 			{
-				if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_POINTS )
+				if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_POINT_LIST )
 				{
-					OnTopologyChange( Topology::ePoints );
+					OnTopologyChange( renderer::PrimitiveTopology::ePointList );
 				}
-				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_LINES )
+				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_LINE_LIST )
 				{
-					OnTopologyChange( Topology::eLines );
-				}
-				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_LINE_LOOP )
-				{
-					OnTopologyChange( Topology::eLineLoop );
+					OnTopologyChange( renderer::PrimitiveTopology::eLineList );
 				}
 				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_LINE_STRIP )
 				{
-					OnTopologyChange( Topology::eLineStrip );
+					OnTopologyChange( renderer::PrimitiveTopology::eLineStrip );
 				}
-				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_TRIANGLES )
+				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_TRIANGLE_LIST )
 				{
-					OnTopologyChange( Topology::eTriangles );
+					OnTopologyChange( renderer::PrimitiveTopology::eTriangleList );
 				}
 				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_TRIANGLE_STRIP )
 				{
-					OnTopologyChange( Topology::eTriangleStrips );
+					OnTopologyChange( renderer::PrimitiveTopology::eTriangleStrip );
 				}
 				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_TRIANGLE_FAN )
 				{
-					OnTopologyChange( Topology::eTriangleFan );
+					OnTopologyChange( renderer::PrimitiveTopology::eTriangleFan );
+				}
+				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_LINE_LIST_WITH_ADJACENCY )
+				{
+					OnTopologyChange( renderer::PrimitiveTopology::eLineListWithAdjacency );
+				}
+				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY )
+				{
+					OnTopologyChange( renderer::PrimitiveTopology::eLineStripWithAdjacency );
+				}
+				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY )
+				{
+					OnTopologyChange( renderer::PrimitiveTopology::eTriangleListWithAdjacency );
+				}
+				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY )
+				{
+					OnTopologyChange( renderer::PrimitiveTopology::eTriangleStripWithAdjacency );
+				}
+				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_PATCH_LIST )
+				{
+					OnTopologyChange( renderer::PrimitiveTopology::ePatchList );
 				}
 			}
 		}
@@ -185,11 +219,11 @@ namespace GuiCommon
 		} );
 	}
 
-	void SubmeshTreeItemProperty::OnTopologyChange( Topology p_value )
+	void SubmeshTreeItemProperty::OnTopologyChange( renderer::PrimitiveTopology value )
 	{
-		doApplyChange( [p_value, this]()
+		doApplyChange( [value, this]()
 		{
-			m_submesh.setTopology( p_value );
+			m_submesh.setTopology( value );
 		} );
 	}
 }

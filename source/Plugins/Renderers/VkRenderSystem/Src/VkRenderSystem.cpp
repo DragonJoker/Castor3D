@@ -7,6 +7,8 @@
 #include <Core/VkDevice.hpp>
 #include <Core/VkRenderer.hpp>
 
+#include <GlslWriter.hpp>
+
 using namespace castor;
 
 namespace VkRender
@@ -36,6 +38,15 @@ namespace VkRender
 	castor3d::RenderSystemUPtr RenderSystem::create( castor3d::Engine & engine )
 	{
 		return std::make_unique< RenderSystem >( engine );
+	}
+
+	glsl::GlslWriter RenderSystem::createGlslWriter()
+	{
+		return glsl::GlslWriter{ glsl::GlslWriterConfig{ m_gpuInformations.getShaderLanguageVersion()
+			, m_gpuInformations.hasConstantsBuffers()
+			, m_gpuInformations.hasTextureBuffers()
+			, m_gpuInformations.hasShaderStorageBuffers()
+			, true } };
 	}
 
 	void RenderSystem::doInitialise()

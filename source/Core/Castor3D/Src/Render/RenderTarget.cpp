@@ -141,13 +141,13 @@ namespace castor3d
 		m_colourTexture.setTexture( texture );
 		m_colourTexture.setSampler( sampler );
 		m_colourTexture.setIndex( index );
-		m_colourTexture.getTexture()->getImage().initialiseSource();
+		m_colourTexture.getTexture()->getDefaultImage().initialiseSource();
 		m_colourTexture.getTexture()->initialise();
 
 		renderer::FrameBufferAttachmentArray attaches;
 		attaches.emplace_back( *renderPass.getAttachments().begin(), m_colourTexture.getTexture()->getDefaultView() );
 		m_frameBuffer = renderPass.createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
-			, {  } );
+			, std::move( attaches ) );
 
 		return true;
 	}
@@ -258,10 +258,6 @@ namespace castor3d
 				}
 			}
 
-			m_size.set( m_frameBuffer.m_colourTexture.getTexture()->getDimensions().width
-				, m_frameBuffer.m_colourTexture.getTexture()->getDimensions().height );
-			m_renderTechnique->initialise( index );
-
 			renderer::ImageCreateInfo image{};
 			image.flags = 0u;
 			image.arrayLayers = 1u;
@@ -281,8 +277,12 @@ namespace castor3d
 				, renderer::MemoryPropertyFlag::eDeviceLocal );
 			m_velocityTexture.setTexture( velocityTexture );
 			m_velocityTexture.setSampler( getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + string::toString( m_index ) + cuT( "_Point" ) ) );
-			m_velocityTexture.getTexture()->getImage().initialiseSource();
+			m_velocityTexture.getTexture()->getDefaultImage().initialiseSource();
 			m_velocityTexture.getTexture()->initialise();
+
+			m_size.set( m_frameBuffer.m_colourTexture.getTexture()->getDimensions().width
+				, m_frameBuffer.m_colourTexture.getTexture()->getDimensions().height );
+			m_renderTechnique->initialise( index );
 
 			m_postPostFxTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "sRGB Post effects" ), cuT( "sRGB Post effects" ) );
 			m_overlaysTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Overlays" ), cuT( "Overlays" ) );

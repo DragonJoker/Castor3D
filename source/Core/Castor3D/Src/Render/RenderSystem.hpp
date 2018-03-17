@@ -112,7 +112,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Une instance pré-configurée de GlslWriter.
 		 */
-		C3D_API glsl::GlslWriter createGlslWriter();
+		C3D_API virtual glsl::GlslWriter createGlslWriter();
 		/**
 		 *\~english
 		 *\return		The currently active device.

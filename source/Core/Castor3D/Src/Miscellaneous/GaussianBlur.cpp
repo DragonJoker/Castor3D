@@ -217,8 +217,8 @@ namespace castor3d
 			auto sampler = doCreateSampler( engine, name );
 			auto texture = std::make_shared< TextureLayout >( renderSystem
 				, image
-				, renderer::MemoryPropertyFlag::eHostVisible );
-			texture->getImage().initialiseSource();
+				, renderer::MemoryPropertyFlag::eDeviceLocal );
+			texture->getDefaultImage().initialiseSource();
 			TextureUnit unit{ engine };
 			unit.setTexture( texture );
 			unit.setSampler( sampler );
@@ -408,7 +408,7 @@ namespace castor3d
 			, *m_blurXPass
 			, bindings
 			, {} );
-		m_blurXQuad.prepareFrame();
+		m_blurXQuad.prepareFrame( *m_blurXPass, 0u );
 		return true;
 	}
 
@@ -439,7 +439,7 @@ namespace castor3d
 			, *m_blurYPass
 			, bindings
 			, {} );
-		m_blurYQuad.prepareFrame();
+		m_blurYQuad.prepareFrame( *m_blurYPass, 0u );
 		return true;
 	}
 }

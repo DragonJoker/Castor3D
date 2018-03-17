@@ -34,16 +34,16 @@ namespace GuiCommon
 			auto submesh = result->createSubmesh();
 			InterleavedVertexArray vertex
 			{
-				InterleavedVertex{ { -1, -1, -1 } },
-				InterleavedVertex{ { -1, +1, -1 } },
-				InterleavedVertex{ { +1, +1, -1 } },
-				InterleavedVertex{ { +1, -1, -1 } },
-				InterleavedVertex{ { -1, -1, +1 } },
-				InterleavedVertex{ { -1, +1, +1 } },
-				InterleavedVertex{ { +1, +1, +1 } },
-				InterleavedVertex{ { +1, -1, +1 } },
+				InterleavedVertex::createP( Point3f{ -1, -1, -1 } ),
+				InterleavedVertex::createP( Point3f{ -1, +1, -1 } ),
+				InterleavedVertex::createP( Point3f{ +1, +1, -1 } ),
+				InterleavedVertex::createP( Point3f{ +1, -1, -1 } ),
+				InterleavedVertex::createP( Point3f{ -1, -1, +1 } ),
+				InterleavedVertex::createP( Point3f{ -1, +1, +1 } ),
+				InterleavedVertex::createP( Point3f{ +1, +1, +1 } ),
+				InterleavedVertex::createP( Point3f{ +1, -1, +1 } ),
 			};
-			submesh->setTopology( Topology::eLines );
+			submesh->setTopology( renderer::PrimitiveTopology::eLineList );
 			submesh->addPoints( vertex );
 			auto mapping = std::make_shared< LinesMapping >( *submesh );
 			LineIndices lines[]
@@ -252,20 +252,21 @@ namespace GuiCommon
 		auto aabbMin = aabb.getMin();
 		auto aabbMax = aabb.getMax();
 		auto aabbSubmesh = m_aabbMesh->getSubmesh( 0u );
-		Vertex::setPosition( *aabbSubmesh->getPoint( 0u ), aabbMin[0], aabbMin[1], aabbMin[2] );
-		Vertex::setPosition( *aabbSubmesh->getPoint( 1u ), aabbMin[0], aabbMax[1], aabbMin[2] );
-		Vertex::setPosition( *aabbSubmesh->getPoint( 2u ), aabbMax[0], aabbMax[1], aabbMin[2] );
-		Vertex::setPosition( *aabbSubmesh->getPoint( 3u ), aabbMax[0], aabbMin[1], aabbMin[2] );
-		Vertex::setPosition( *aabbSubmesh->getPoint( 4u ), aabbMin[0], aabbMin[1], aabbMax[2] );
-		Vertex::setPosition( *aabbSubmesh->getPoint( 5u ), aabbMin[0], aabbMax[1], aabbMax[2] );
-		Vertex::setPosition( *aabbSubmesh->getPoint( 6u ), aabbMax[0], aabbMax[1], aabbMax[2] );
-		Vertex::setPosition( *aabbSubmesh->getPoint( 7u ), aabbMax[0], aabbMin[1], aabbMax[2] );
+		aabbSubmesh->getPoint( 0u ).pos = Point3f( aabbMin[0], aabbMin[1], aabbMin[2] );
+		aabbSubmesh->getPoint( 1u ).pos = Point3f( aabbMin[0], aabbMax[1], aabbMin[2] );
+		aabbSubmesh->getPoint( 2u ).pos = Point3f( aabbMax[0], aabbMax[1], aabbMin[2] );
+		aabbSubmesh->getPoint( 3u ).pos = Point3f( aabbMax[0], aabbMin[1], aabbMin[2] );
+		aabbSubmesh->getPoint( 4u ).pos = Point3f( aabbMin[0], aabbMin[1], aabbMax[2] );
+		aabbSubmesh->getPoint( 5u ).pos = Point3f( aabbMin[0], aabbMax[1], aabbMax[2] );
+		aabbSubmesh->getPoint( 6u ).pos = Point3f( aabbMax[0], aabbMax[1], aabbMax[2] );
+		aabbSubmesh->getPoint( 7u ).pos = Point3f( aabbMax[0], aabbMin[1], aabbMax[2] );
+		aabbSubmesh->needsUpdate();
 
 		Engine * engine = m_scene.getEngine();
 		engine->postEvent( makeFunctorEvent( EventType::ePreRender
 			, [this, aabbSubmesh]()
 			{
-				aabbSubmesh->getVertexBuffer().upload();
+				aabbSubmesh->update();
 			} ) );
 	}
 }

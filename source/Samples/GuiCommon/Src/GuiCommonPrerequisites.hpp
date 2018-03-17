@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___GUICOMMON_PREREQUISITES_H___
 
 #include <Castor3DPrerequisites.hpp>
+#include <Core/WindowHandle.hpp>
 #include <wx/wx.h>
 
 namespace GuiCommon
@@ -150,7 +151,6 @@ namespace GuiCommon
 	DECLARE_MAP( uint32_t, wxImage *, ImageId );
 	DECLARE_VECTOR( thread_sptr, ThreadPtr );
 	DECLARE_VECTOR( LanguageInfoPtr, LanguageInfoPtr );
-	DECLARE_MAP( int, castor3d::UniformWPtr, Uniform );
 	DECLARE_ARRAY( StyleInfoPtr, eSTC_TYPE_COUNT, StyleInfoPtr );
 
 	static const wxColour PANEL_BACKGROUND_COLOUR = wxColour( 30, 30, 30 );
@@ -246,7 +246,7 @@ namespace GuiCommon
 	 *\param[in]	p_window	La fenêtre
 	 *\return		Le WindowHandle créé
 	 */
-	castor3d::WindowHandle makeWindowHandle( wxWindow * p_window );
+	renderer::WindowHandle makeWindowHandle( wxWindow * p_window );
 	/**
 	 *\~english
 	 *\brief		Loads a font glyphs using wxWidgets

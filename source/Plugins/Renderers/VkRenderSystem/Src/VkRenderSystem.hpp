@@ -18,6 +18,10 @@ namespace VkRender
 		virtual ~RenderSystem();
 
 		static castor3d::RenderSystemUPtr create( castor3d::Engine & engine );
+		/**
+		 *\copydoc		castor3d::RenderSystem::doInitialise
+		 */
+		glsl::GlslWriter createGlslWriter()override;
 
 	private:
 		/**

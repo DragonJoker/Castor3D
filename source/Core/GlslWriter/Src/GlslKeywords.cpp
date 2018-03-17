@@ -147,7 +147,7 @@ namespace glsl
 
 	String KeywordsBase::getAttribute( uint32_t index )const
 	{
-		return getLayout( index ) + m_attribute;
+		return m_attribute;
 	}
 
 	String KeywordsBase::getUboLayout( Ubo::Layout layout, uint32_t index, uint32_t set )const

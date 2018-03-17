@@ -41,10 +41,12 @@ namespace castor3d
 			return result;
 		}
 
-		TextureLayoutSPtr doCreateTexture( RenderSystem & renderSystem
+		renderer::TexturePtr doCreateTexture( RenderSystem & renderSystem
 			, renderer::Format format
 			, Size const & size )
 		{
+			auto & device = *renderSystem.getCurrentDevice();
+
 			renderer::ImageCreateInfo image{};
 			image.arrayLayers = 1u;
 			image.extent.width = size.getWidth();
@@ -55,8 +57,8 @@ namespace castor3d
 			image.samples = renderer::SampleCountFlag::e1;
 			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
 			image.format = format;
-			return std::make_shared< TextureLayout >( renderSystem
-				, image
+
+			return device.createTexture( image
 				, renderer::MemoryPropertyFlag::eDeviceLocal );
 		}
 	}
@@ -80,28 +82,18 @@ namespace castor3d
 	{
 		auto & renderSystem = *engine.getRenderSystem();
 
-		m_geometryPassResult[0] = std::make_unique< TextureUnit >( engine );
-		m_geometryPassResult[0]->setTexture( depthTexture );
-		m_geometryPassResult[0]->setSampler( doCreateSampler( engine, getTextureName( DsTexture::eDepth ) ) );
-		m_geometryPassResult[0]->initialise();
-
-		m_geometryPassResult[uint32_t( DsTexture::eData5 )] = std::make_unique< TextureUnit >( engine );
-		m_geometryPassResult[uint32_t( DsTexture::eData5 )]->setTexture( velocityTexture );
-		m_geometryPassResult[uint32_t( DsTexture::eData5 )]->setSampler( doCreateSampler( engine, getTextureName( DsTexture::eData5 ) ) );
-		m_geometryPassResult[uint32_t( DsTexture::eData5 )]->initialise();
+		m_geometryPassResult[0] = &depthTexture->getTexture();
 
 		for ( auto i = uint32_t( DsTexture::eData1 ); i < uint32_t( DsTexture::eData5 ); i++ )
 		{
-			auto texture = doCreateTexture( renderSystem
+			m_results.emplace_back( doCreateTexture( renderSystem
 				, getTextureFormat( DsTexture( i ) )
-				, m_size );
-			texture->getImage().initialiseSource();
+				, m_size ) );
 
-			m_geometryPassResult[i] = std::make_unique< TextureUnit >( engine );
-			m_geometryPassResult[i]->setTexture( texture );
-			m_geometryPassResult[i]->setSampler( doCreateSampler( engine, getTextureName( DsTexture( i ) ) ) );
-			m_geometryPassResult[i]->initialise();
+			m_geometryPassResult[i] = m_results.back().get();
 		}
+
+		m_geometryPassResult[uint32_t( DsTexture::eData5 )] = &velocityTexture->getTexture();
 
 		m_lightingPass = std::make_unique< LightingPass >( engine
 			, m_size
@@ -148,14 +140,7 @@ namespace castor3d
 
 	DeferredRendering::~DeferredRendering()
 	{
-		m_geometryPassResult[0].reset();
-
-		for ( auto i = uint32_t( DsTexture::eData1 ); i < uint32_t( DsTexture::eCount ); i++ )
-		{
-			m_geometryPassResult[i]->cleanup();
-			m_geometryPassResult[i].reset();
-		}
-
+		m_results.clear();
 		m_reflection.reset();
 		m_subsurfaceScattering.reset();
 		m_lightingPass.reset();

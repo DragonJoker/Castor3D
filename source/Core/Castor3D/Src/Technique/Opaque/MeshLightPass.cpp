@@ -53,7 +53,7 @@ namespace castor3d
 			renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 			renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 			renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
-			renderPass.attachments[1].initialLayout = renderer::ImageLayout::eUndefined;
+			renderPass.attachments[1].initialLayout = renderer::ImageLayout::eColourAttachmentOptimal;
 			renderPass.attachments[1].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
 
 			renderPass.attachments[2].index = 2u;
@@ -63,7 +63,7 @@ namespace castor3d
 			renderPass.attachments[2].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 			renderPass.attachments[2].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 			renderPass.attachments[2].samples = renderer::SampleCountFlag::e1;
-			renderPass.attachments[2].initialLayout = renderer::ImageLayout::eUndefined;
+			renderPass.attachments[2].initialLayout = renderer::ImageLayout::eColourAttachmentOptimal;
 			renderPass.attachments[2].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
 
 			renderPass.dependencies.resize( 2u );
@@ -71,7 +71,7 @@ namespace castor3d
 			renderPass.dependencies[0].dstSubpass = 0u;
 			renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
 			renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eAllGraphics;
+			renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eTopOfPipe;
 			renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
 			renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
@@ -146,6 +146,7 @@ namespace castor3d
 			blstate = renderer::ColourBlendState::createDefault();
 		}
 
+		blstate.attachs.push_back( blstate.attachs.back() );
 		return m_pipelineLayout->createPipeline(
 		{
 			m_program,

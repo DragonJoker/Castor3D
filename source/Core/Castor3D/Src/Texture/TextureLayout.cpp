@@ -14,25 +14,26 @@ namespace castor3d
 	namespace
 	{
 		renderer::TextureViewType getSubviewType( renderer::TextureType type
-			, renderer::ImageCreateInfo const & info )
+			, renderer::ImageCreateFlags flags
+			, uint32_t arrayLayers )
 		{
 			renderer::TextureType result = type;
 
 			switch ( result )
 			{
 			case renderer::TextureType::e1D:
-				if ( info.arrayLayers > 1 )
+				if ( arrayLayers > 1 )
 				{
 					return renderer::TextureViewType::e1DArray;
 				}
 				return renderer::TextureViewType::e1D;
 
 			case renderer::TextureType::e2D:
-				if ( info.arrayLayers > 1 )
+				if ( arrayLayers > 1 )
 				{
-					if ( checkFlag( info.flags, renderer::ImageCreateFlag::eCubeCompatible ) )
+					if ( checkFlag( flags, renderer::ImageCreateFlag::eCubeCompatible ) )
 					{
-						REQUIRE( ( info.arrayLayers % 6 ) == 0 );
+						REQUIRE( ( arrayLayers % 6 ) == 0 );
 						return renderer::TextureViewType::eCube;
 					}
 
@@ -50,22 +51,22 @@ namespace castor3d
 			}
 		}
 
-		std::vector< TextureViewUPtr > createSubviews( TextureLayout & layout
-			, renderer::ImageCreateInfo const & info )
+		TextureViewUPtr createSubview( TextureLayout & layout
+			, renderer::ImageCreateInfo const & info
+			, uint32_t baseArrayLayer
+			, uint32_t arrayLayers )
 		{
 			renderer::ImageViewCreateInfo view{};
 			view.format = info.format;
-			view.viewType = getSubviewType( info.imageType, info );
+			view.viewType = getSubviewType( info.imageType, info.flags, arrayLayers );
 			view.subresourceRange.aspectMask = renderer::getAspectMask( info.format );
-			view.subresourceRange.baseArrayLayer = 0u;
-			view.subresourceRange.layerCount = info.arrayLayers;
+			view.subresourceRange.baseArrayLayer = baseArrayLayer;
+			view.subresourceRange.layerCount = arrayLayers;
 			view.subresourceRange.baseMipLevel = 0u;
 			view.subresourceRange.levelCount = info.mipLevels;
-			std::vector< TextureViewUPtr > result{ info.arrayLayers + 1u };
-			result[0] = std::make_unique< TextureView >( layout
+			return std::make_unique< TextureView >( layout
 				, view
 				, 0u );
-			return result;
 		}
 	}
 
@@ -77,27 +78,19 @@ namespace castor3d
 		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_info{ std::move( info ) }
 		, m_properties{ memoryProperties }
-		, m_views{ createSubviews( *this, m_info ) }
-		, m_defaultView{ *m_views[0] }
+		, m_defaultView{ createSubview( *this, m_info, 0u, m_info.arrayLayers ) }
 	{
-		auto viewType = getSubviewType( m_info.imageType, m_info );
+		uint32_t max = std::max( m_info.arrayLayers, m_info.extent.depth );
 
-		if ( uint32_t( viewType ) != uint32_t( m_info.imageType ) )
+		if ( max > 1u )
 		{
-			renderer::ImageViewCreateInfo view{};
-			view.format = m_info.format;
-			view.viewType = viewType;
-			view.subresourceRange.aspectMask = renderer::getAspectMask( m_info.format );
-			view.subresourceRange.layerCount = 1u;
-			view.subresourceRange.baseMipLevel = 0u;
-			view.subresourceRange.levelCount = m_info.mipLevels;
+			m_views.resize( max );
+			uint32_t index = 0u;
 
-			for ( uint32_t i = 1u; i < m_views.size(); ++i )
+			for ( auto & view : m_views )
 			{
-				view.subresourceRange.baseArrayLayer = i;
-				m_views[i] = std::make_unique< TextureView >( *this
-					, view
-					, i );
+				view = createSubview( *this, m_info, index, 1u );
+				++index;
 			}
 		}
 	}
@@ -110,7 +103,8 @@ namespace castor3d
 	{
 		if ( !m_initialised )
 		{
-			m_texture = getRenderSystem()->getCurrentDevice()->createTexture( m_info );
+			m_texture = getRenderSystem()->getCurrentDevice()->createTexture( m_info, m_properties );
+			m_defaultView->initialise();
 
 			for ( auto & view : m_views )
 			{
@@ -132,6 +126,7 @@ namespace castor3d
 				view->cleanup();
 			}
 
+			m_defaultView->cleanup();
 			m_texture.reset();
 		}
 
@@ -140,8 +135,11 @@ namespace castor3d
 
 	void TextureLayout::generateMipmaps()const
 	{
-		REQUIRE( m_texture );
-		m_texture->generateMipmaps();
+		if ( m_info.mipLevels > 1u )
+		{
+			REQUIRE( m_texture );
+			m_texture->generateMipmaps();
+		}
 	}
 
 	void TextureLayout::setSource( Path const & folder
