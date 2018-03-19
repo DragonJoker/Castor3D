@@ -48,7 +48,8 @@ namespace castor3d
 		 *\brief		Fonction d'initialisation.
 		 *\return		\p true if ok.
 		 */
-		C3D_API bool initialise()override;
+		C3D_API bool initialise( renderer::Format targetColour
+			, renderer::Format targetDepth )override;
 		/**
 		 *\~english
 		 *\brief		Updates the skybox.

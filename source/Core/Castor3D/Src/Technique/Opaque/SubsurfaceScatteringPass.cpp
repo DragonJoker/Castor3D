@@ -14,6 +14,7 @@
 #include "Shader/Shaders/GlslSssTransmittance.hpp"
 #include "Shader/Ubos/GpInfoUbo.hpp"
 #include "Shader/Ubos/SceneUbo.hpp"
+#include "Technique/Opaque/GeometryPassResult.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
@@ -321,7 +322,7 @@ namespace castor3d
 
 			auto texture = std::make_shared< TextureLayout >( renderSystem
 				, image
-				, renderer::MemoryPropertyFlag::eHostVisible );
+				, renderer::MemoryPropertyFlag::eDeviceLocal );
 			texture->getDefaultImage().initialiseSource();
 			TextureUnit unit{ engine };
 			unit.setTexture( texture );
@@ -375,7 +376,7 @@ namespace castor3d
 		renderPass.dependencies.resize( 2u );
 		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eAllCommands;
+		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
 		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
 		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
 		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
@@ -446,13 +447,13 @@ namespace castor3d
 			, 0u
 			, 1u );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 6u )
-			, m_geometryBufferResult[size_t( DsTexture::eDepth )]->getTexture()->getDefaultView()
+			, *m_geometryBufferResult.getViews()[size_t( DsTexture::eDepth )]
 			, m_sampler->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 7u )
-			, m_geometryBufferResult[size_t( DsTexture::eData4 )]->getTexture()->getDefaultView()
+			, *m_geometryBufferResult.getViews()[size_t( DsTexture::eData4 )]
 			, m_sampler->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 8u )
-			, m_geometryBufferResult[size_t( DsTexture::eData5 )]->getTexture()->getDefaultView()
+			, *m_geometryBufferResult.getViews()[size_t( DsTexture::eData5 )]
 			, m_sampler->getSampler() );
 	}
 
@@ -497,7 +498,7 @@ namespace castor3d
 		renderPass.dependencies.resize( 2u );
 		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eAllCommands;
+		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
 		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
 		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
 		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
@@ -558,10 +559,10 @@ namespace castor3d
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
 			, m_blurUbo );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 2u )
-			, m_geometryBufferResult[size_t( DsTexture::eData4 )]->getTexture()->getDefaultView()
+			, *m_geometryBufferResult.getViews()[size_t( DsTexture::eData4 )]
 			, m_sampler->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 3u )
-			, m_geometryBufferResult[size_t( DsTexture::eData5 )]->getTexture()->getDefaultView()
+			, *m_geometryBufferResult.getViews()[size_t( DsTexture::eData5 )]
 			, m_sampler->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 4u )
 			, m_blurResults[0].getTexture()->getDefaultView()

@@ -13,6 +13,8 @@
 
 #include <RenderPass/FrameBuffer.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
 #include <Shader/ShaderModule.hpp>
 
 #include <GlslSource.hpp>
@@ -126,6 +128,7 @@ namespace castor3d
 		, m_configUbo{ engine }
 		, m_declaration{ std::make_unique< renderer::VertexLayout >( 0u, uint32_t( sizeof( Point3f ) ), renderer::VertexInputRate::eVertex ) }
 	{
+		m_declaration->createAttribute( 0u, renderer::Format::eR32G32B32_SFLOAT, 0u );
 		String const skybox = cuT( "Skybox" );
 
 		if ( getEngine()->getSamplerCache().has( skybox ) )
@@ -158,7 +161,8 @@ namespace castor3d
 	{
 	}
 
-	bool Skybox::initialise()
+	bool Skybox::initialise( renderer::Format targetColour
+		, renderer::Format targetDepth )
 	{
 		REQUIRE( m_scene );
 		REQUIRE( m_texture );
@@ -167,6 +171,8 @@ namespace castor3d
 
 		if ( result )
 		{
+			doInitialiseRenderPass( targetColour, targetDepth );
+
 			if ( m_scene->getMaterialsType() == MaterialType::ePbrMetallicRoughness
 				|| m_scene->getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
 			{
@@ -176,6 +182,7 @@ namespace castor3d
 
 			result = doInitialiseVertexBuffer()
 				&& doInitialisePipeline( program );
+			doPrepareFrame();
 		}
 
 		return result;
@@ -259,7 +266,7 @@ namespace castor3d
 
 			// Inputs
 			UBO_HDR_CONFIG( writer, 2, 0 );
-			auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ), 3u );
+			auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ), 0u );
 			auto skybox = writer.declSampler< SamplerCube >( cuT( "skybox" ), MinBufferIndex, 0u );
 			glsl::Utils utils{ writer };
 
@@ -294,7 +301,7 @@ namespace castor3d
 		result.push_back( { renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
 		result.push_back( { renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
 		result[0].module->loadShader( vtx.getSource() );
-		result[0].module->loadShader( pxl.getSource() );
+		result[1].module->loadShader( pxl.getSource() );
 		return result;
 	}
 
@@ -373,6 +380,10 @@ namespace castor3d
 		m_descriptorSetLayout = device.createDescriptorSetLayout( std::move( setLayoutBindings ) );
 		m_pipelineLayout = device.createPipelineLayout( *m_descriptorSetLayout );
 
+		m_matrixUbo.initialise();
+		m_modelMatrixUbo.initialise();
+		m_configUbo.initialise();
+
 		m_descriptorSetPool = m_descriptorSetLayout->createPool( 1u );
 		m_descriptorSet = m_descriptorSetPool->createDescriptorSet( 0u );
 		m_descriptorSet->createBinding( m_descriptorSetLayout->getBinding( 0u )
@@ -422,5 +433,43 @@ namespace castor3d
 		}
 
 		return result;
+	}
+
+	void Skybox::doInitialiseRenderPass( renderer::Format targetColour
+		, renderer::Format targetDepth )
+	{
+		auto & renderSystem = *getEngine()->getRenderSystem();
+		auto & device = *renderSystem.getCurrentDevice();
+
+		renderer::RenderPassCreateInfo renderPass;
+		renderPass.flags = 0;
+
+		renderPass.attachments.resize( 2u );
+		renderPass.attachments[0].index = 0u;
+		renderPass.attachments[0].format = targetDepth;
+		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
+		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+
+		renderPass.attachments[1].index = 1u;
+		renderPass.attachments[1].format = targetColour;
+		renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eLoad;
+		renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[1].initialLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+		renderPass.attachments[1].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+		renderPass.subpasses.resize( 1u );
+		renderPass.subpasses[0].flags = 0u;
+		renderPass.subpasses[0].colorAttachments = { { 1u, renderer::ImageLayout::eColourAttachmentOptimal } };
+		renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
+
+		m_renderPass = device.createRenderPass( renderPass );
 	}
 }

@@ -304,6 +304,8 @@ namespace castor3d
 			m_overlayRenderer = std::make_shared< OverlayRenderer >( *getEngine()->getRenderSystem()
 				, m_frameBuffer.m_colourTexture.getTexture()->getDefaultView() );
 			m_overlayRenderer->initialise();
+
+			m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
 		}
 	}
 
@@ -312,6 +314,7 @@ namespace castor3d
 		if ( m_initialised )
 		{
 			m_initialised = false;
+			m_commandBuffer.reset();
 			m_overlayRenderer->cleanup();
 			m_overlayRenderer.reset();
 

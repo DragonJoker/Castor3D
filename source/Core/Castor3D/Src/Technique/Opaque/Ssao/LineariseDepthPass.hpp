@@ -44,7 +44,7 @@ namespace castor3d
 		LineariseDepthPass( Engine & engine
 			, renderer::Extent2D const & size
 			, SsaoConfigUbo & ssaoConfigUbo
-			, TextureUnit const & depthBuffer
+			, renderer::TextureView const & depthBuffer
 			, Viewport const & viewport );
 		/**
 		 *\~english
@@ -94,7 +94,7 @@ namespace castor3d
 	private:
 		Engine & m_engine;
 		SsaoConfigUbo & m_ssaoConfigUbo;
-		TextureUnit const & m_depthBuffer;
+		renderer::TextureView const & m_depthBuffer;
 		renderer::Extent2D m_size;
 		TextureUnit m_result;
 		RenderPassTimerSPtr m_timer;
@@ -110,6 +110,7 @@ namespace castor3d
 		*/
 		/**@{*/
 		renderer::ShaderStageStateArray m_lineariseProgram;
+		renderer::TextureViewPtr m_linearisedView;
 		renderer::FrameBufferPtr m_lineariseFrameBuffer;
 		renderer::DescriptorSetLayoutPtr m_lineariseDescriptorLayout;
 		renderer::DescriptorSetPoolPtr m_lineariseDescriptorPool;
@@ -125,10 +126,17 @@ namespace castor3d
 		/**@{*/
 		struct MinifyPipeline
 		{
-			renderer::TextureViewPtr view;
+			struct Configuration
+			{
+				int previousLevel;
+				castor::Point2i textureSize;
+			};
+
+			renderer::TextureView * sourceView;
+			renderer::TextureViewPtr targetView;
 			renderer::DescriptorSetPtr descriptor;
 			renderer::FrameBufferPtr frameBuffer;
-			renderer::PushConstantsBufferPtr< int > previousLevel;
+			renderer::PushConstantsBufferPtr< Configuration > previousLevel;
 			renderer::PushConstantRange pushConstants;
 			renderer::PipelinePtr pipeline;
 		};

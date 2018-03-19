@@ -51,7 +51,7 @@ namespace castor3d
 			, SsaoConfig const & config
 			, SsaoConfigUbo & ssaoConfigUbo
 			, TextureUnit const & linearisedDepthBuffer
-			, TextureUnit const & normals );
+			, renderer::TextureView const & normals );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -91,7 +91,7 @@ namespace castor3d
 		Engine & m_engine;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		TextureUnit const & m_linearisedDepthBuffer;
-		TextureUnit const & m_normals;
+		renderer::TextureView const & m_normals;
 		renderer::Extent2D m_size;
 		TextureUnit m_result;
 		renderer::ShaderStageStateArray m_program;

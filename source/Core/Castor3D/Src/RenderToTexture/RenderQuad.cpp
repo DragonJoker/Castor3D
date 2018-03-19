@@ -93,6 +93,7 @@ namespace castor3d
 		, renderer::DescriptorSetLayoutBindingArray bindings
 		, renderer::PushConstantRangeCRefArray const & pushRanges )
 	{
+		m_sampler->initialise();
 		auto & device = *m_renderSystem.getCurrentDevice();
 		// Initialise the vertex buffer.
 		m_vertexBuffer = renderer::makeVertexBuffer< TexturedQuad >( device
@@ -109,10 +110,23 @@ namespace castor3d
 		// Initialise the vertex layout.
 		auto vertexLayout = renderer::makeLayout< TexturedQuad >( 0u );
 		vertexLayout->createAttribute( 0u, renderer::Format::eR32G32_SFLOAT, offsetof( TexturedQuad::Vertex, position ) );
-		vertexLayout->createAttribute( 0u, renderer::Format::eR32G32_SFLOAT, offsetof( TexturedQuad::Vertex, texture ) );
+		vertexLayout->createAttribute( 1u, renderer::Format::eR32G32_SFLOAT, offsetof( TexturedQuad::Vertex, texture ) );
 
 		// Initialise the descriptor set.
 		auto textureBindingPoint = uint32_t( bindings.size() );
+
+		if ( !bindings.empty() )
+		{
+			--textureBindingPoint;
+
+			for ( auto & binding : bindings )
+			{
+				textureBindingPoint = std::max( textureBindingPoint, binding.getBindingPoint() );
+			}
+
+			++textureBindingPoint;
+		}
+
 		bindings.emplace_back( textureBindingPoint
 			, renderer::DescriptorType::eCombinedImageSampler
 			, renderer::ShaderStageFlag::eFragment );
@@ -121,7 +135,6 @@ namespace castor3d
 		m_descriptorSetPool = m_descriptorSetLayout->createPool( 1u );
 		m_descriptorSet = m_descriptorSetPool->createDescriptorSet();
 		doFillDescriptorSet( *m_descriptorSetLayout, *m_descriptorSet );
-		m_sampler->initialise();
 		m_descriptorSet->createBinding( m_descriptorSetLayout->getBinding( textureBindingPoint )
 			, view
 			, m_sampler->getSampler() );

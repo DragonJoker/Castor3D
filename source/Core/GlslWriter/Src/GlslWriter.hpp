@@ -29,6 +29,7 @@ namespace glsl
 	class GlslWriter
 	{
 		friend struct IndentBlock;
+		friend class Pcb;
 		friend class Ubo;
 		friend class Ssbo;
 
@@ -60,6 +61,11 @@ namespace glsl
 		inline bool hasShaderStorageBuffers()const
 		{
 			return m_config.m_hasShaderStorageBuffers;
+		}
+
+		inline bool isVulkan()const
+		{
+			return m_config.m_isVulkan;
 		}
 
 		inline bool hasTexelFetch()const

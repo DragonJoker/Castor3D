@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_DeferredRendering_H___
 #define ___C3D_DeferredRendering_H___
 
+#include "Technique/Opaque/GeometryPassResult.hpp"
 #include "Technique/Opaque/LightingPass.hpp"
 #include "Technique/Opaque/ReflectionPass.hpp"
 #include "Technique/Opaque/SubsurfaceScatteringPass.hpp"

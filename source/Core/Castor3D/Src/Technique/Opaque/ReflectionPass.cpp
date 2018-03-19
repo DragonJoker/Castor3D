@@ -1,8 +1,6 @@
 #include "ReflectionPass.hpp"
 
 #include "Engine.hpp"
-
-#include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
@@ -11,11 +9,12 @@
 #include "Scene/Skybox.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
 #include "Shader/Ubos/SceneUbo.hpp"
-#include "Castor3DPrerequisites.hpp"
 #include "Shader/Shaders/GlslFog.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
 #include "Shader/Shaders/GlslPhongReflection.hpp"
 #include "Shader/Shaders/GlslSssTransmittance.hpp"
+#include "Technique/Opaque/GeometryPassResult.hpp"
+#include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureView.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -81,7 +80,7 @@ namespace castor3d
 
 			// Shader inputs
 			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0 );
-			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 0 );
+			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1 );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
@@ -1015,27 +1014,28 @@ namespace castor3d
 			, Scene const & scene
 			, MaterialType matType )
 		{
+			sampler->initialise();
 			uint32_t index = 0u;
 			auto & layout = pool.getLayout();
 			auto result = pool.createDescriptorSet( 1u );
 			result->createBinding( layout.getBinding( index++ )
-				, gp[size_t( DsTexture::eDepth )]->getTexture()->getDefaultView()
-				, sampler->getSampler() );
+				, *gp.getViews()[size_t( DsTexture::eDepth )]
+				, gp.getSampler() );
 			result->createBinding( layout.getBinding( index++ )
-				, gp[size_t( DsTexture::eData1 )]->getTexture()->getDefaultView()
-				, sampler->getSampler() );
+				, *gp.getViews()[size_t( DsTexture::eData1 )]
+				, gp.getSampler() );
 			result->createBinding( layout.getBinding( index++ )
-				, gp[size_t( DsTexture::eData2 )]->getTexture()->getDefaultView()
-				, sampler->getSampler() );
+				, *gp.getViews()[size_t( DsTexture::eData2 )]
+				, gp.getSampler() );
 			result->createBinding( layout.getBinding( index++ )
-				, gp[size_t( DsTexture::eData3 )]->getTexture()->getDefaultView()
-				, sampler->getSampler() );
+				, *gp.getViews()[size_t( DsTexture::eData3 )]
+				, gp.getSampler() );
 			result->createBinding( layout.getBinding( index++ )
-				, gp[size_t( DsTexture::eData4 )]->getTexture()->getDefaultView()
-				, sampler->getSampler() );
+				, *gp.getViews()[size_t( DsTexture::eData4 )]
+				, gp.getSampler() );
 			result->createBinding( layout.getBinding( index++ )
-				, gp[size_t( DsTexture::eData5 )]->getTexture()->getDefaultView()
-				, sampler->getSampler() );
+				, *gp.getViews()[size_t( DsTexture::eData5 )]
+				, gp.getSampler() );
 
 			if ( ssao )
 			{

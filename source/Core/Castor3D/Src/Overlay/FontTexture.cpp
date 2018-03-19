@@ -42,7 +42,7 @@ namespace castor3d
 		image.usage = renderer::ImageUsageFlag::eTransferDst | renderer::ImageUsageFlag::eSampled;
 		m_texture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
 			, image
-			, renderer::MemoryPropertyFlag::eHostVisible );
+			, renderer::MemoryPropertyFlag::eDeviceLocal );
 		m_texture->getDefaultImage().initialiseSource();
 	}
 

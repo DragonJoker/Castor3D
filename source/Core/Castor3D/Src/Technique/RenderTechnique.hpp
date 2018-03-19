@@ -184,6 +184,7 @@ namespace castor3d
 		void doCleanupShadowMaps();
 		void doUpdateShadowMaps( RenderQueueArray & queues );
 		void doUpdateParticles( RenderInfo & info );
+		void doInitialiseRenderPass();
 		renderer::Semaphore const * doRenderShadowMaps( renderer::Semaphore const & semaphore );
 		renderer::Semaphore const * doRenderEnvironmentMaps( renderer::Semaphore const & semaphore );
 		renderer::Semaphore const * doRenderOpaque( castor::Point2r const & jitter
@@ -214,6 +215,9 @@ namespace castor3d
 		ShadowMapArray m_spotShadowMaps;
 		ShadowMapLightTypeArray m_activeShadowMaps;
 		renderer::SemaphorePtr m_signalFinished;
+		renderer::RenderPassPtr m_bgRenderPass;
+		renderer::FrameBufferPtr m_bgFrameBuffer;
+		renderer::CommandBufferPtr m_bgCommandBuffer;
 	};
 }
 

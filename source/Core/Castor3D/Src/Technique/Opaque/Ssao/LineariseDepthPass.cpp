@@ -35,6 +35,7 @@
 #include <RenderPass/FrameBufferAttachment.hpp>
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
+#include <Sync/ImageMemoryBarrier.hpp>
 
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
@@ -80,7 +81,7 @@ namespace castor3d
 			Pcb clipInfo{ writer, cuT( "ClipInfo" ), cuT( "clip" ) };
 			auto c3d_clipInfo = clipInfo.declMember< Vec3 >( cuT( "c3d_clipInfo" ), 0u );
 			clipInfo.end();
-			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), 1u, 0u );
+			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), 0u, 0u );
 			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 			// Shader outputs
@@ -104,9 +105,10 @@ namespace castor3d
 
 			// Shader inputs
 			Pcb previousLevel{ writer, cuT( "PreviousLevel" ), cuT( "previous" ) };
-			auto c3d_previousLevel = previousLevel.declMember< Vec3 >( cuT( "c3d_previousLevel" ), 0u );
+			auto c3d_previousLevel = previousLevel.declMember< Int >( cuT( "c3d_previousLevel" ), 0u );
+			auto c3d_textureSize = previousLevel.declMember< IVec2 >( cuT( "c3d_textureSize" ), 1u );
 			previousLevel.end();
-			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), 1u, 0u );
+			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), 0u, 0u );
 			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 			// Shader outputs
@@ -122,7 +124,7 @@ namespace castor3d
 					pxl_fragColor = texelFetch( c3d_mapDepth
 						, clamp( ssPosition * 2 + ivec2( ssPosition.y() & 1, ssPosition.x() & 1 )
 							, ivec2( 0_i )
-							, textureSize( c3d_mapDepth, c3d_previousLevel ) - ivec2( 1_i ) )
+							, c3d_textureSize - ivec2( 1_i ) )
 						, c3d_previousLevel ).r();
 				} );
 			return writer.finalise();
@@ -332,7 +334,7 @@ namespace castor3d
 	LineariseDepthPass::LineariseDepthPass( Engine & engine
 		, renderer::Extent2D const & size
 		, SsaoConfigUbo & ssaoConfigUbo
-		, TextureUnit const & depthBuffer
+		, renderer::TextureView const & depthBuffer
 		, Viewport const & viewport )
 		: m_engine{ engine }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
@@ -394,7 +396,9 @@ namespace castor3d
 	{
 		auto size = m_result.getTexture()->getDimensions();
 		renderer::FrameBufferAttachmentArray attaches;
-		attaches.emplace_back( *( m_renderPass->getAttachments().begin() ), m_result.getTexture()->getDefaultView() );
+		m_linearisedView = m_result.getTexture()->getTexture().createView( renderer::TextureViewType::e2D
+			, m_result.getTexture()->getPixelFormat() );
+		attaches.emplace_back( *( m_renderPass->getAttachments().begin() ), *m_linearisedView );
 		m_lineariseFrameBuffer = m_renderPass->createFrameBuffer( renderer::Extent2D{ size.width, size.height }
 			, std::move( attaches ) );
 		auto & renderSystem = *m_engine.getRenderSystem();
@@ -410,8 +414,9 @@ namespace castor3d
 		m_lineariseDescriptorPool = m_lineariseDescriptorLayout->createPool( 1u );
 		m_lineariseDescriptor = m_lineariseDescriptorPool->createDescriptorSet();
 		m_lineariseDescriptor->createBinding( m_lineariseDescriptorLayout->getBinding( 0u )
-			, m_result.getTexture()->getDefaultView()
+			, m_depthBuffer
 			, *m_sampler );
+		m_lineariseDescriptor->update();
 		m_linearisePipeline = m_linearisePipelineLayout->createPipeline( renderer::GraphicsPipelineCreateInfo
 		{
 			m_lineariseProgram,
@@ -439,28 +444,39 @@ namespace castor3d
 			{ 0u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment }
 		};
 		m_minifyDescriptorLayout = device.createDescriptorSetLayout( std::move( bindings ) );
-		renderer::PushConstantRange pushConstants{ renderer::ShaderStageFlag::eFragment, 0u, renderer::getSize( renderer::Format::eR32_SINT ) };
+		renderer::PushConstantRange pushConstants{ renderer::ShaderStageFlag::eFragment, 0u, uint32_t( sizeof( MinifyPipeline::Configuration ) ) };
 		m_minifyPipelineLayout = device.createPipelineLayout( *m_minifyDescriptorLayout, pushConstants );
 
 		m_minifyDescriptorPool = m_minifyDescriptorLayout->createPool( MaxMipLevel );
 		uint32_t index = 1u;
+		auto * view = m_linearisedView.get();
 
 		for ( auto & pipeline : m_minifyPipelines )
 		{
-			pipeline.view = m_result.getTexture()->getTexture().createView( renderer::TextureViewType::e2D
+			size.width >>= 1;
+			size.height >>= 1;
+			pipeline.sourceView = view;
+			pipeline.targetView = m_result.getTexture()->getTexture().createView( renderer::TextureViewType::e2D
 				, m_result.getTexture()->getPixelFormat()
 				, index );
 			pipeline.descriptor = m_minifyDescriptorPool->createDescriptorSet();
 			pipeline.descriptor->createBinding( m_minifyDescriptorLayout->getBinding( 0u )
-				, *pipeline.view
+				, *pipeline.sourceView
 				, *m_sampler );
+			pipeline.descriptor->update();
 			renderer::FrameBufferAttachmentArray attaches;
-			attaches.emplace_back( *( m_renderPass->getAttachments().begin() ), m_result.getTexture()->getDefaultView() );
+			attaches.emplace_back( *( m_renderPass->getAttachments().begin() ), *pipeline.targetView );
 			pipeline.frameBuffer = m_renderPass->createFrameBuffer( renderer::Extent2D{ size.width, size.height }
 				, std::move( attaches ) );
-			pipeline.previousLevel = std::make_unique< renderer::PushConstantsBuffer< int > >( renderer::ShaderStageFlag::eFragment
-				, renderer::PushConstantArray{ { 1u, 0u, renderer::ConstantFormat::eInt } } );
-			*pipeline.previousLevel->getData() = index - 1;
+			pipeline.previousLevel = std::make_unique< renderer::PushConstantsBuffer< MinifyPipeline::Configuration > >( renderer::ShaderStageFlag::eFragment
+				, renderer::PushConstantArray
+				{
+					{ 0u, offsetof( MinifyPipeline::Configuration, previousLevel ), renderer::ConstantFormat::eInt },
+					{ 1u, offsetof( MinifyPipeline::Configuration, textureSize ), renderer::ConstantFormat::eVec2i },
+				} );
+			auto & data = *pipeline.previousLevel->getData();
+			data.previousLevel = index - 1;
+			data.textureSize = Point2i{ size.width, size.height };
 			pipeline.pipeline = m_minifyPipelineLayout->createPipeline( renderer::GraphicsPipelineCreateInfo
 			{
 				m_minifyProgram,
@@ -476,6 +492,7 @@ namespace castor3d
 				renderer::Viewport{ size.width, size.height, 0, 0 },
 				renderer::Scissor{ 0, 0, size.width, size.height },
 			} );
+			view = pipeline.targetView.get();
 			++index;
 		}
 	}
@@ -498,7 +515,7 @@ namespace castor3d
 			pipeline.previousLevel.reset();
 			pipeline.frameBuffer.reset();
 			pipeline.descriptor.reset();
-			pipeline.view.reset();
+			pipeline.targetView.reset();
 		}
 
 		m_minifyDescriptorPool.reset();
@@ -532,6 +549,14 @@ namespace castor3d
 			// Minification passes.
 			for ( auto & pipeline : m_minifyPipelines )
 			{
+				m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+					, renderer::PipelineStageFlag::eFragmentShader
+					, pipeline.sourceView->makeShaderInputResource( renderer::ImageLayout::eColourAttachmentOptimal
+						, renderer::AccessFlag::eColourAttachmentWrite ) );
+				m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
+					, renderer::PipelineStageFlag::eColourAttachmentOutput
+					, pipeline.targetView->makeColourAttachment( renderer::ImageLayout::eUndefined
+						, renderer::AccessFlag::eMemoryWrite ) );
 				m_commandBuffer->beginRenderPass( *m_renderPass
 					, *pipeline.frameBuffer
 					, { colour }

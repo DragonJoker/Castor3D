@@ -456,7 +456,7 @@ namespace castor3d
 		, SsaoConfigUbo & ssaoConfigUbo
 		, Point2i const & axis
 		, TextureUnit const & input
-		, TextureUnit const & normals )
+		, renderer::TextureView const & normals )
 		: RenderQuad{ *engine.getRenderSystem(), true }
 		, m_engine{ engine }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
@@ -539,7 +539,7 @@ namespace castor3d
 			, 0u
 			, 1u );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
-			, m_normals.getTexture()->getDefaultView()
+			, m_normals
 			, m_sampler->getSampler() );
 	}
 

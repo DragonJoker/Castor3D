@@ -21,6 +21,7 @@
 #include <Pipeline/Pipeline.hpp>
 #include <Pipeline/PipelineLayout.hpp>
 #include <RenderPass/RenderPass.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
 #include <Shader/ShaderProgram.hpp>
 
 #include <Graphics/Font.hpp>
@@ -100,6 +101,11 @@ namespace castor3d
 	{
 		auto & device = *getRenderSystem()->getCurrentDevice();
 
+		if ( !m_renderPass )
+		{
+			doCreateRenderPass();
+		}
+
 		if ( !m_commandBuffer )
 		{
 			m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
@@ -129,10 +135,10 @@ namespace castor3d
 				, offsetof( TextOverlay::Vertex, coords ) );
 			m_textDeclaration->createAttribute( 1u
 				, renderer::Format::eR32G32_SFLOAT
-				, offsetof( TextOverlay::Vertex, text ) );
+				, offsetof( TextOverlay::Vertex, texture ) );
 			m_textDeclaration->createAttribute( 2u
 				, renderer::Format::eR32G32_SFLOAT
-				, offsetof( TextOverlay::Vertex, texture ) );
+				, offsetof( TextOverlay::Vertex, text ) );
 		}
 
 		if ( !m_panelVertexBuffer )
@@ -468,6 +474,32 @@ namespace castor3d
 		return result;
 	}
 
+	void OverlayRenderer::doCreateRenderPass()
+	{
+		auto & device = *getRenderSystem()->getCurrentDevice();
+
+		renderer::RenderPassCreateInfo renderPass;
+		renderPass.flags = 0u;
+
+		renderPass.attachments.resize( 1u );
+		renderPass.attachments[0].index = 0u;
+		renderPass.attachments[0].format = m_target.getFormat();
+		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
+		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+		renderPass.subpasses.resize( 1u );
+		renderPass.subpasses[0].flags = 0u;
+		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
+		renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
+
+		m_renderPass = device.createRenderPass( renderPass );
+	}
+
 	OverlayRenderer::Pipeline & OverlayRenderer::doGetPipeline( TextureChannels textureFlags
 		, std::map< uint32_t, Pipeline > & pipelines )
 	{
@@ -559,7 +591,7 @@ namespace castor3d
 		auto & device = *getRenderSystem()->getCurrentDevice();
 		auto vertexBuffer = renderer::makeVertexBuffer< TextOverlay::Vertex >( *getRenderSystem()->getCurrentDevice()
 			, C3D_MAX_CHARS_PER_BUFFER
-			, renderer::BufferTarget::eVertexBuffer | renderer::BufferTarget::eTransferDst
+			, renderer::BufferTarget::eTransferDst
 			, renderer::MemoryPropertyFlag::eHostVisible );
 		OverlayGeometryBuffers geometryBuffers;
 		geometryBuffers.m_noTexture.vbo = { vertexBuffer->getBuffer() };
@@ -677,9 +709,10 @@ namespace castor3d
 			UBO_OVERLAY( writer, OverlayUboBinding, 0u );
 
 			// Shader inputs
+			uint32_t index = 0u;
 			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
-			auto text = writer.declAttribute< Vec2 >( cuT( "text" ), 1u, checkFlag( textureFlags, TextureChannel::eText ) );
-			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 2u, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
+			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
+			auto text = writer.declAttribute< Vec2 >( cuT( "text" ), 2u, checkFlag( textureFlags, TextureChannel::eText ) );
 
 			// Shader outputs
 			auto vtx_text = writer.declOutput< Vec2 >( cuT( "vtx_text" ), 0u, checkFlag( textureFlags, TextureChannel::eText ) );

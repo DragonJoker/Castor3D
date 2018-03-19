@@ -197,6 +197,7 @@ namespace castor3d
 			, Pass const & pass
 			, TextureLayout const & texture
 			, Sampler const & sampler );
+		void doCreateRenderPass();
 
 	private:
 		renderer::TextureView const & m_target;

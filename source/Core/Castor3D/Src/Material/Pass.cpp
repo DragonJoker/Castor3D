@@ -471,7 +471,7 @@ namespace castor3d
 				createInfo.usage = renderer::ImageUsageFlag::eSampled;
 				auto texture = std::make_shared< TextureLayout >( *getOwner()->getEngine()->getRenderSystem()
 					, createInfo
-					, renderer::MemoryPropertyFlag::eHostVisible );
+					, renderer::MemoryPropertyFlag::eDeviceLocal );
 				texture->setSource( reduced );
 				opacityMap->setTexture( texture );
 				opacityBuffer.reset();
@@ -496,7 +496,7 @@ namespace castor3d
 			createInfo.usage = renderer::ImageUsageFlag::eSampled;
 			auto texture = std::make_shared< TextureLayout >( *getOwner()->getEngine()->getRenderSystem()
 				, createInfo
-				, renderer::MemoryPropertyFlag::eHostVisible );
+				, renderer::MemoryPropertyFlag::eDeviceLocal );
 			texture->setSource( opacityBuffer );
 			opacityMap = std::make_shared< TextureUnit >( *getOwner()->getEngine() );
 			opacityMap->setAutoMipmaps( opacitySource->getAutoMipmaps() );

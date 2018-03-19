@@ -163,7 +163,7 @@ namespace castor3d
 		, m_accumulation{ doCreateTexture( engine, m_size, WbTexture::eAccumulation ) }
 		, m_accumulationView{ m_accumulation->createView( renderer::TextureViewType::e2D, m_accumulation->getFormat() ) }
 		, m_revealage{ doCreateTexture( engine, m_size, WbTexture::eRevealage ) }
-		, m_revealageView{ m_revealage->createView( renderer::TextureViewType::e2D, m_accumulation->getFormat() ) }
+		, m_revealageView{ m_revealage->createView( renderer::TextureViewType::e2D, m_revealage->getFormat() ) }
 		, m_renderPass{ doCreateRenderPass( engine, depthView, colourView ) }
 		, m_weightedBlendPassResult{ { depthView, *m_accumulationView, *m_revealageView } }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_size, m_weightedBlendPassResult, colourView ) }

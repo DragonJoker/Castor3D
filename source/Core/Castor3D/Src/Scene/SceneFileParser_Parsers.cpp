@@ -3011,7 +3011,7 @@ namespace castor3d
 				image.usage = renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst;
 				auto texture = std::make_shared< TextureLayout >( *parsingContext->m_pParser->getEngine()->getRenderSystem()
 					, image
-					, renderer::MemoryPropertyFlag::eHostVisible );
+					, renderer::MemoryPropertyFlag::eDeviceLocal );
 				texture->setSource( folder, relative );
 
 				if ( p_params.size() >= 2 )
@@ -4381,7 +4381,7 @@ namespace castor3d
 				image.usage = renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst;
 				auto texture = std::make_shared< TextureLayout >( *parsingContext->scene->getEngine()->getRenderSystem()
 					, image
-					, renderer::MemoryPropertyFlag::eHostVisible );
+					, renderer::MemoryPropertyFlag::eDeviceLocal );
 				texture->getDefaultImage().initialiseSource( filePath, path );
 				parsingContext->pSkybox->setEquiTexture( texture
 					, size );

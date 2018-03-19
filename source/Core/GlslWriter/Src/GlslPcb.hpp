@@ -72,6 +72,7 @@ namespace glsl
 	private:
 		GlslWriter & m_writer;
 		castor::StringStream m_stream;
+		std::unique_ptr< IndentBlock > m_block;
 		castor::String m_name;
 		castor::String m_instance;
 		uint32_t m_count{ 0u };

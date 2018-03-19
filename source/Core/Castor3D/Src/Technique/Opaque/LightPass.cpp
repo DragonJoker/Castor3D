@@ -8,6 +8,7 @@
 #include "Shader/PassBuffer/PassBuffer.hpp"
 #include "Shader/Ubos/ModelMatrixUbo.hpp"
 #include "Shader/Ubos/SceneUbo.hpp"
+#include "Technique/Opaque//GeometryPassResult.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
@@ -20,6 +21,7 @@
 #include <Pipeline/RasterisationState.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
 #include <RenderPass/RenderPass.hpp>
+#include <Sync/ImageMemoryBarrier.hpp>
 
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
@@ -368,7 +370,7 @@ namespace castor3d
 			commandBuffer.bindPipeline( *m_blendPipeline );
 		}
 
-		commandBuffer.draw( count, offset );
+		commandBuffer.draw( count, 1u, offset );
 	}
 
 	//************************************************************************************************
@@ -430,6 +432,7 @@ namespace castor3d
 		, SceneUbo & sceneUbo
 		, ModelMatrixUbo * modelMatrixUbo )
 	{
+		m_geometryPassResult = &gp;
 		SceneFlags sceneFlags{ scene.getFlags() };
 
 		if ( scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness )
@@ -479,10 +482,10 @@ namespace castor3d
 
 		m_textureDescriptorSet = m_program->getTextureDescriptorPool().createDescriptorSet( 1u );
 		auto & texLayout = m_program->getTextureDescriptorLayout();
-		auto writeBinding = [&gp, this]( uint32_t index )
+		auto writeBinding = [&gp, this]( uint32_t index, renderer::ImageLayout layout )
 		{
-			renderer::SamplerCRef sampler = std::ref( m_sampler->getSampler() );
-			renderer::TextureViewCRef view = std::ref( *m_views[index] );
+			renderer::SamplerCRef sampler = std::ref( gp.getSampler() );
+			renderer::TextureViewCRef view = std::ref( *gp.getViews()[index] );
 			return renderer::WriteDescriptorSet
 			{
 				index,
@@ -493,40 +496,16 @@ namespace castor3d
 				{
 					sampler,
 					view,
-					renderer::ImageLayout::eShaderReadOnlyOptimal
+					layout,
 				}
 			};
 		};
-		uint32_t index = 0u;
-		renderer::ImageViewCreateInfo view{};
-		view.viewType = renderer::TextureViewType::e2D;
-		view.subresourceRange.baseArrayLayer = 0u;
-		view.subresourceRange.baseMipLevel = 0u;
-		view.subresourceRange.layerCount = 1u;
-		view.subresourceRange.levelCount = 1u;
-
-		for ( auto & texture : gp )
-		{
-			if ( index == 0u )
-			{
-				view.subresourceRange.aspectMask = renderer::ImageAspectFlag::eDepth;
-			}
-			else
-			{
-				view.subresourceRange.aspectMask = renderer::ImageAspectFlag::eColour;
-			}
-
-			view.format = texture->getFormat();
-			m_views.emplace_back( texture->createView( view ) );
-			++index;
-		}
-
-		m_textureWrites.push_back( writeBinding( 0u ) );
-		m_textureWrites.push_back( writeBinding( 1u ) );
-		m_textureWrites.push_back( writeBinding( 2u ) );
-		m_textureWrites.push_back( writeBinding( 3u ) );
-		m_textureWrites.push_back( writeBinding( 4u ) );
-		m_textureWrites.push_back( writeBinding( 5u ) );
+		m_textureWrites.push_back( writeBinding( 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal ) );
+		m_textureWrites.push_back( writeBinding( 1u, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
+		m_textureWrites.push_back( writeBinding( 2u, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
+		m_textureWrites.push_back( writeBinding( 3u, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
+		m_textureWrites.push_back( writeBinding( 4u, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
+		m_textureWrites.push_back( writeBinding( 5u, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
 
 		if ( m_shadows )
 		{
@@ -582,6 +561,7 @@ namespace castor3d
 				commandBuffer.setViewport( { width, height, 0, 0 } );
 				commandBuffer.setScissor( { 0, 0, width, height } );
 				commandBuffer.bindDescriptorSets( { *m_uboDescriptorSet, *m_textureDescriptorSet }, m_program->getPipelineLayout() );
+				commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 				m_program->render( commandBuffer, getCount(), first, m_offset );
 				commandBuffer.endRenderPass();
 				commandBuffer.end();

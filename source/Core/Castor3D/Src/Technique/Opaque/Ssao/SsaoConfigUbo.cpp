@@ -60,10 +60,18 @@ namespace castor3d
 	SsaoConfigUbo::SsaoConfigUbo( Engine & engine )
 		: m_engine{ engine }
 	{
+		if ( m_engine.getRenderSystem()->hasCurrentDevice() )
+		{
+			initialise();
+		}
 	}
 
 	SsaoConfigUbo::~SsaoConfigUbo()
 	{
+		if ( m_engine.getRenderSystem()->hasCurrentDevice() )
+		{
+			cleanup();
+		}
 	}
 
 	void SsaoConfigUbo::initialise()

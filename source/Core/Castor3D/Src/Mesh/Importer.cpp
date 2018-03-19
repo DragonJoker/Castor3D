@@ -170,7 +170,7 @@ namespace castor3d
 				createInfo.usage = renderer::ImageUsageFlag::eSampled;
 				auto texture = std::make_shared < TextureLayout >( *getEngine()->getRenderSystem()
 					, createInfo
-					, renderer::MemoryPropertyFlag::eHostVisible );
+					, renderer::MemoryPropertyFlag::eDeviceLocal );
 				texture->setSource( folder, relative );
 				unit->setTexture( texture );
 				unit->setChannel( channel );

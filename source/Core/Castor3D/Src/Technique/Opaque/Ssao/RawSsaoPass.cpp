@@ -689,7 +689,7 @@ namespace castor3d
 			, renderer::DescriptorSetLayout const & layout
 			, SsaoConfigUbo & ssaoConfigUbo
 			, TextureUnit const & linearisedDepthBuffer
-			, TextureUnit const & normals
+			, renderer::TextureView const & normals
 			, renderer::Sampler const & sampler )
 		{
 			auto result = pool.createDescriptorSet();
@@ -701,7 +701,7 @@ namespace castor3d
 				, linearisedDepthBuffer.getTexture()->getDefaultView()
 				, sampler );
 			result->createBinding( layout.getBinding( 2u )
-				, normals.getTexture()->getDefaultView()
+				, normals
 				, sampler );
 			return result;
 		}
@@ -714,7 +714,7 @@ namespace castor3d
 		, SsaoConfig const & config
 		, SsaoConfigUbo & ssaoConfigUbo
 		, TextureUnit const & linearisedDepthBuffer
-		, TextureUnit const & normals )
+		, renderer::TextureView const & normals )
 		: m_engine{ engine }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_linearisedDepthBuffer{ linearisedDepthBuffer }

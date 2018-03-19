@@ -57,25 +57,25 @@ namespace castor3d
 		renderPass.flags = 0;
 
 		renderPass.attachments.resize( 2u );
-		renderPass.attachments[1].index = 0u;
-		renderPass.attachments[1].format = targetDepth;
+		renderPass.attachments[0].index = 0u;
+		renderPass.attachments[0].format = targetDepth;
+		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
+		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+
+		renderPass.attachments[1].index = 1u;
+		renderPass.attachments[1].format = targetColour;
 		renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eLoad;
 		renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
 		renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 		renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[1].initialLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
-		renderPass.attachments[1].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
-
-		renderPass.attachments[0].index = 1u;
-		renderPass.attachments[0].format = targetColour;
-		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
-		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eColourAttachmentOptimal;
-		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+		renderPass.attachments[1].initialLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+		renderPass.attachments[1].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
 
 		renderPass.subpasses.resize( 1u );
 		renderPass.subpasses[0].flags = 0u;
@@ -289,6 +289,7 @@ namespace castor3d
 			std::move( dsState )
 		} );
 
+		m_descriptorPool = m_descriptorLayout->createPool( 1u );
 		m_descriptorSet = m_descriptorPool->createDescriptorSet( 0u );
 		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 0u )
 			, m_matrixUbo.getUbo()
@@ -301,7 +302,7 @@ namespace castor3d
 		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 2u )
 			, texture
 			, m_sampler->getSampler() );
-
+		m_descriptorSet->update();
 		return true;
 	}
 }

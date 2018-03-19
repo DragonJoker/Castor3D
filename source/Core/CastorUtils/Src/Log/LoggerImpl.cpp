@@ -87,9 +87,9 @@ namespace castor
 		time_t tTime;
 		time( &tTime );
 		castor::getLocaltime( &dtToday, &tTime );
-		char buffer[33] = { 0 };
-		strftime( buffer, 32, "%Y-%m-%d %H:%M:%S", &dtToday );
-		String timeStamp = string::stringCast< xchar >( buffer );
+		std::time_t end_time = std::chrono::system_clock::to_time_t( std::chrono::system_clock::now() );
+		std::string time = std::ctime( &end_time );
+		String timeStamp = string::stringCast< xchar >( time );
 		StringStream logs[size_t( LogType::eCount )];
 
 		try

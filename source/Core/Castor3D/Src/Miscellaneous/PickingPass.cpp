@@ -187,6 +187,7 @@ namespace castor3d
 		{
 			renderer::ImageCreateInfo image{};
 			image.arrayLayers = 1u;
+			image.mipLevels = 1u;
 			image.extent.width = size.getWidth();
 			image.extent.height = size.getHeight();
 			image.extent.depth = 1u;
@@ -476,7 +477,7 @@ namespace castor3d
 			, size
 			, renderer::Format::eR32G32B32A32_SFLOAT
 			, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eTransferSrc
-			, renderer::MemoryPropertyFlag::eHostVisible );
+			, renderer::MemoryPropertyFlag::eDeviceLocal );
 		m_colourView = createView( *m_colourTexture );
 
 		m_copyRegion.imageExtent.width = PickingWidth;

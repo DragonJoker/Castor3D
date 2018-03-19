@@ -19,6 +19,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	class GeometryPassResult;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.10.0
@@ -193,9 +194,6 @@ namespace castor3d
 	void decodeReceiver( glsl::GlslWriter & writer
 		, glsl::Int & encoded
 		, glsl::Int const & receiver );
-	//!\~english	The geometry pass result.
-	//!\~french		Le résultat de la geometry pass.
-	using GeometryPassResult = std::array< renderer::Texture const *, size_t( DsTexture::eCount ) >;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.10.0
@@ -605,12 +603,12 @@ namespace castor3d
 		SamplerSPtr m_sampler;
 		renderer::VertexBufferPtr< float > m_vertexBuffer;
 		renderer::VertexLayoutPtr m_vertexLayout;
-		std::vector< renderer::TextureViewPtr > m_views;
 		GpInfoUbo & m_gpInfoUbo;
 		uint32_t m_offset{ 0u };
 		renderer::CommandBufferPtr m_firstCommandBuffer;
 		renderer::CommandBufferPtr m_blendCommandBuffer;
 		renderer::SemaphorePtr m_signalReady;
+		GeometryPassResult const * m_geometryPassResult;
 	};
 }
 

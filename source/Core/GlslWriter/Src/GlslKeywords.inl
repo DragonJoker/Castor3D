@@ -869,26 +869,26 @@ namespace glsl
 				{ Ubo::Layout::ePacked, cuT( "packed" ) },
 			};
 
-			castor::String result;
+			castor::StringStream result;
 
 			if ( !m_uboLayout.empty() )
 			{
-				result = m_uboLayout + cuT( "( " ) + LayoutName[layout];
+				result << m_uboLayout << cuT( "( " ) << LayoutName[layout];
 
 				if ( !m_uboBinding.empty() )
 				{
-					result += cuT( ", " ) + m_uboBinding + cuT( " = " ) + string::toString( index );
+					result << cuT( ", " ) << m_uboBinding << cuT( " = " ) << index;
 				}
 
 				if ( !m_uboSet.empty() )
 				{
-					result += cuT( ", " ) + m_uboSet + cuT( " = " ) + string::toString( set );
+					result << cuT( ", " ) << m_uboSet << cuT( " = " ) << set;
 				}
 
-				result += cuT( " ) " );
+				result << cuT( " ) " );
 			}
 
-			return result;
+			return result.str();
 		}
 
 		castor::String getLayout( uint32_t index )const override

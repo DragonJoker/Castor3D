@@ -46,6 +46,7 @@ namespace castor3d
 			else
 			{
 				result = engine.getSamplerCache().add( name );
+				result->initialise();
 			}
 
 			return result;

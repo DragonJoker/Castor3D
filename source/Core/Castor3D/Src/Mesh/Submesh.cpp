@@ -490,7 +490,7 @@ namespace castor3d
 			{
 				m_vertexBuffer = renderer::makeVertexBuffer< InterleavedVertex >( device
 					, size
-					, renderer::BufferTarget::eVertexBuffer
+					, 0u
 					, renderer::MemoryPropertyFlag::eHostVisible );
 			}
 

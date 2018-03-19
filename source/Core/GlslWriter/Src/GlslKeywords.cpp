@@ -159,26 +159,26 @@ namespace glsl
 			{ Ubo::Layout::ePacked, cuT( "packed" ) },
 		};
 
-		String result;
+		StringStream result;
 
 		if ( !m_uboLayout.empty() )
 		{
-			result = m_uboLayout + cuT( "( " ) + LayoutName[layout];
+			result << m_uboLayout << cuT( "( " ) << LayoutName[layout];
 
 			if ( !m_uboBinding.empty() )
 			{
-				result += cuT( ", " ) + m_uboBinding + cuT( " = " ) + string::toString( index );
+				result << cuT( ", " ) << m_uboBinding << cuT( " = " ) << index;
 			}
 
 			if ( !m_uboSet.empty() )
 			{
-				result += cuT( ", " ) + m_uboSet + cuT( " = " ) + string::toString( set );
+				result << cuT( ", " ) << m_uboSet << cuT( " = " ) << set;
 			}
 
-			result += cuT( " ) " );
+			result << cuT( " ) " );
 		}
 
-		return result;
+		return result.str();
 	}
 
 	String KeywordsBase::getSsboLayout( Ssbo::Layout layout, uint32_t index, uint32_t set )const
@@ -191,82 +191,82 @@ namespace glsl
 			{ Ssbo::Layout::ePacked, cuT( "packed" ) },
 		};
 
-		String result;
+		StringStream result;
 
 		if ( !m_ssboLayout.empty() )
 		{
-			result = m_ssboLayout + cuT( "( " ) + LayoutName[layout];
+			result << m_ssboLayout << cuT( "( " ) << LayoutName[layout];
 
 			if ( !m_ssboBinding.empty() )
 			{
-				result += cuT( ", " ) + m_ssboBinding + cuT( " = " ) + string::toString( index );
+				result << cuT( ", " ) << m_ssboBinding << cuT( " = " ) << index;
 			}
 
 			if ( !m_ssboSet.empty() )
 			{
-				result += cuT( ", " ) + m_ssboSet + cuT( " = " ) + string::toString( index );
+				result << cuT( ", " ) << m_ssboSet << cuT( " = " ) << index;
 			}
 
-			result += cuT( " ) " );
+			result << cuT( " ) " );
 		}
 
-		return result;
+		return result.str();
 	}
 
 	String KeywordsBase::getTextureLayout( uint32_t index, uint32_t set )const
 	{
-		String result;
+		StringStream result;
 
 		if ( !m_textureLayout.empty() )
 		{
 			REQUIRE( !m_textureBinding.empty() );
-			result = m_textureLayout;
-			result += cuT( "( " ) + m_textureBinding + cuT( " = " ) + string::toString( index );
+			result << m_textureLayout;
+			result << cuT( "( " ) << m_textureBinding << cuT( " = " ) << index;
 
 			if ( !m_textureSet.empty() )
 			{
-				result += cuT( ", " ) + m_textureSet + cuT( " = " ) + string::toString( set );
+				result << cuT( ", " ) << m_textureSet << cuT( " = " ) << set;
 			}
 
-			result += cuT( " ) " );
+			result << cuT( " ) " );
 		}
 
-		return result;
+		return result.str();
 	}
 
 	String KeywordsBase::getUniformLayout( uint32_t location )const
 	{
-		String result;
+		StringStream result;
 
 		if ( !m_uniformLayout.empty() )
 		{
-			result = m_uniformLayout + cuT( "( location = " ) + string::toString( location ) + cuT( " ) " );
+			result << m_uniformLayout << cuT( "( location = " ) << location << cuT( " ) " );
 		}
 
-		return result;
+		return result.str();
 	}
 
 	String KeywordsBase::getInputLayout( uint32_t location )const
 	{
-		String result;
+		StringStream result;
 
 		if ( !m_inputLayout.empty() )
 		{
-			result = m_inputLayout + cuT( "( location = " ) + string::toString( location ) + cuT( " ) " );
+			result << m_inputLayout << cuT( "( location = " ) << location << cuT( " ) " );
 		}
 
-		return result;
+		return result.str();
 	}
 
 	String KeywordsBase::getOutputLayout( uint32_t location )const
 	{
-		String result;
+		StringStream result;
 
 		if ( !m_outputLayout.empty() )
 		{
-			result = m_outputLayout + cuT( "( location = " ) + string::toString( location ) + cuT( " ) " );
+			result << m_outputLayout << cuT( "( location = " ) << location << cuT( " ) " );
 		}
 
-		return result;
+		return result.str();
 	}
 }

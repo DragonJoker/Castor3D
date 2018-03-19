@@ -25,6 +25,8 @@
 
 #include <RenderPass/FrameBuffer.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
 
 using namespace castor;
 
@@ -195,6 +197,7 @@ namespace castor3d
 			m_signalFinished = getEngine()->getRenderSystem()->getCurrentDevice()->createSemaphore();
 
 			doInitialiseShadowMaps();
+			doInitialiseRenderPass();
 			m_opaquePass->initialise( m_size );
 			m_transparentPass->initialise( m_size );
 
@@ -228,6 +231,8 @@ namespace castor3d
 
 	void RenderTechnique::cleanup()
 	{
+		m_bgFrameBuffer.reset();
+		m_bgRenderPass.reset();
 		m_particleTimer.reset();
 		m_postFxTimer.reset();
 		m_weightedBlendRendering.reset();
@@ -430,6 +435,52 @@ namespace castor3d
 		m_particleTimer->stop();
 	}
 
+	void RenderTechnique::doInitialiseRenderPass()
+	{
+		auto & renderSystem = *getEngine()->getRenderSystem();
+		auto & device = *renderSystem.getCurrentDevice();
+		m_bgCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
+
+		renderer::RenderPassCreateInfo renderPass;
+		renderPass.flags = 0;
+
+		renderPass.attachments.resize( 2u );
+		renderPass.attachments[0].index = 0u;
+		renderPass.attachments[0].format = m_depthBuffer->getPixelFormat();
+		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
+		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+
+		renderPass.attachments[1].index = 1u;
+		renderPass.attachments[1].format = m_colourTexture->getPixelFormat();
+		renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eLoad;
+		renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[1].initialLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+		renderPass.attachments[1].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+		renderPass.subpasses.resize( 1u );
+		renderPass.subpasses[0].flags = 0u;
+		renderPass.subpasses[0].colorAttachments = { { 1u, renderer::ImageLayout::eColourAttachmentOptimal } };
+		renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
+
+		m_bgRenderPass = device.createRenderPass( renderPass );
+
+		renderer::FrameBufferAttachmentArray attaches
+		{
+			{ *( m_bgRenderPass->getAttachments().begin() + 0u ), m_depthBuffer->getDefaultView() },
+			{ *( m_bgRenderPass->getAttachments().begin() + 1u ), m_colourTexture->getDefaultView() },
+		};
+		m_bgFrameBuffer = m_bgRenderPass->createFrameBuffer( { m_colourTexture->getDimensions().width, m_colourTexture->getDimensions().height }
+			, std::move( attaches ) );
+	}
+
 	renderer::Semaphore const * RenderTechnique::doRenderShadowMaps( renderer::Semaphore const & semaphore )
 	{
 		renderer::Semaphore const * result = &semaphore;
@@ -501,11 +552,25 @@ namespace castor3d
 
 		if ( scene.getBackgroundCommands( bgCommands, bgSemaphore ) )
 		{
-			getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue().submit( *bgCommands
-				, *result
-				, renderer::PipelineStageFlag::eColourAttachmentOutput
-				, *bgSemaphore
-				, nullptr );
+			static renderer::ClearColorValue const colour;
+			static renderer::DepthStencilClearValue const depth;
+
+			if ( m_bgCommandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
+			{
+				m_bgCommandBuffer->beginRenderPass( *m_bgRenderPass
+					, *m_bgFrameBuffer
+					, { depth, colour }
+					, renderer::SubpassContents::eSecondaryCommandBuffers );
+				m_bgCommandBuffer->executeCommands( { *bgCommands } );
+				m_bgCommandBuffer->endRenderPass();
+				m_bgCommandBuffer->end();
+				getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue().submit( *m_bgCommandBuffer
+					, *result
+					, renderer::PipelineStageFlag::eColourAttachmentOutput
+					, *bgSemaphore
+					, nullptr );
+			}
+
 			result = bgSemaphore;
 		}
 

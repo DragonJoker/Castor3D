@@ -84,7 +84,8 @@ namespace castor3d
 		 *\brief		Fonction d'initialisation.
 		 *\return		\p true if ok.
 		 */
-		C3D_API virtual bool initialise();
+		C3D_API virtual bool initialise( renderer::Format targetColour
+			, renderer::Format targetDepth );
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
@@ -192,6 +193,8 @@ namespace castor3d
 		bool doInitialiseVertexBuffer();
 		bool doInitialisePipeline( renderer::ShaderStageStateArray & program );
 		bool doPrepareFrame();
+		void doInitialiseRenderPass( renderer::Format targetColour
+			, renderer::Format targetDepth );
 
 	protected:
 		SceneRPtr m_scene{ nullptr };

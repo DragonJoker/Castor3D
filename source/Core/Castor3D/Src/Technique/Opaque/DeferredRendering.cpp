@@ -40,27 +40,6 @@ namespace castor3d
 
 			return result;
 		}
-
-		renderer::TexturePtr doCreateTexture( RenderSystem & renderSystem
-			, renderer::Format format
-			, Size const & size )
-		{
-			auto & device = *renderSystem.getCurrentDevice();
-
-			renderer::ImageCreateInfo image{};
-			image.arrayLayers = 1u;
-			image.extent.width = size.getWidth();
-			image.extent.height = size.getHeight();
-			image.extent.depth = 1u;
-			image.imageType = renderer::TextureType::e2D;
-			image.mipLevels = 1u;
-			image.samples = renderer::SampleCountFlag::e1;
-			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
-			image.format = format;
-
-			return device.createTexture( image
-				, renderer::MemoryPropertyFlag::eDeviceLocal );
-		}
 	}
 
 	//*********************************************************************************************
@@ -79,21 +58,9 @@ namespace castor3d
 		, m_opaquePass{ opaquePass }
 		, m_size{ size }
 		, m_gpInfoUbo{ engine }
+		, m_geometryPassResult{ engine, depthTexture->getTexture(), velocityTexture->getTexture() }
 	{
 		auto & renderSystem = *engine.getRenderSystem();
-
-		m_geometryPassResult[0] = &depthTexture->getTexture();
-
-		for ( auto i = uint32_t( DsTexture::eData1 ); i < uint32_t( DsTexture::eData5 ); i++ )
-		{
-			m_results.emplace_back( doCreateTexture( renderSystem
-				, getTextureFormat( DsTexture( i ) )
-				, m_size ) );
-
-			m_geometryPassResult[i] = m_results.back().get();
-		}
-
-		m_geometryPassResult[uint32_t( DsTexture::eData5 )] = &velocityTexture->getTexture();
 
 		m_lightingPass = std::make_unique< LightingPass >( engine
 			, m_size

@@ -55,7 +55,8 @@ namespace castor3d
 	{
 	}
 
-	bool ColourSkybox::initialise()
+	bool ColourSkybox::initialise( renderer::Format targetColour
+		, renderer::Format targetDepth )
 	{
 		REQUIRE( m_scene );
 		static uint32_t constexpr Dim = 16u;
@@ -74,7 +75,7 @@ namespace castor3d
 		image.extent.height = Dim;
 		image.extent.depth = 1u;
 		image.format = renderer::Format::eR8G8B8_UNORM;
-		image.imageType = renderer::TextureType::e3D;
+		image.imageType = renderer::TextureType::e2D;
 		image.initialLayout = renderer::ImageLayout::eUndefined;
 		image.mipLevels = 1u;
 		image.samples = renderer::SampleCountFlag::e1;
@@ -83,7 +84,7 @@ namespace castor3d
 		image.usage = renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst;
 		m_texture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
 			, image
-			, renderer::MemoryPropertyFlag::eHostVisible );
+			, renderer::MemoryPropertyFlag::eDeviceLocal );
 
 		m_texture->getImage( 0u ).initialiseSource();
 		m_texture->getImage( 1u ).initialiseSource();
@@ -91,6 +92,7 @@ namespace castor3d
 		m_texture->getImage( 3u ).initialiseSource();
 		m_texture->getImage( 4u ).initialiseSource();
 		m_texture->getImage( 5u ).initialiseSource();
+		m_texture->initialise();
 		m_colour.reset();
 
 		m_cmdCopy = device.getGraphicsCommandPool().createCommandBuffer( true );
@@ -99,7 +101,7 @@ namespace castor3d
 			, m_stagingBuffer->getBuffer()
 			, m_texture->getTexture() );
 
-		return Skybox::initialise();
+		return Skybox::initialise( targetColour, targetDepth );
 	}
 
 	void ColourSkybox::update()

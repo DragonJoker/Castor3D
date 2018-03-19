@@ -54,7 +54,7 @@ namespace castor3d
 			, SsaoConfigUbo & ssaoConfigUbo
 			, castor::Point2i const & axis
 			, TextureUnit const & input
-			, TextureUnit const & normals );
+			, renderer::TextureView const & normals );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -99,7 +99,7 @@ namespace castor3d
 		Engine & m_engine;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		TextureUnit const & m_input;
-		TextureUnit const & m_normals;
+		renderer::TextureView const & m_normals;
 		renderer::ShaderStageStateArray m_program;
 		renderer::Extent2D m_size;
 		TextureUnit m_result;

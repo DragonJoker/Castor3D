@@ -800,7 +800,8 @@ namespace castor3d
 		getListener().postEvent( makeFunctorEvent( EventType::ePreRender
 			, [this]()
 			{
-				m_backgroundColourSkybox.initialise();
+				m_backgroundColourSkybox.initialise( renderer::Format::eR16G16B16A16_SFLOAT
+					, renderer::Format::eD24_UNORM_S8_UINT );
 				m_colour = std::make_unique< TextureProjection >( *getEngine() );
 				m_colour->initialise( m_backgroundColourSkybox.getView()
 					, renderer::Format::eR16G16B16A16_SFLOAT
@@ -963,7 +964,7 @@ namespace castor3d
 			image.usage = renderer::ImageUsageFlag::eSampled;
 			auto texture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
 				, image
-				, renderer::MemoryPropertyFlag::eHostVisible );
+				, renderer::MemoryPropertyFlag::eDeviceLocal );
 			texture->setSource( folder, relative );
 			m_backgroundImage = texture;
 			getListener().postEvent( makeFunctorEvent( EventType::ePreRender, [this]()
@@ -987,7 +988,8 @@ namespace castor3d
 		m_skybox->setScene( *this );
 		getListener().postEvent( makeFunctorEvent( EventType::ePreRender, [this]()
 		{
-			m_skybox->initialise();
+			m_skybox->initialise( renderer::Format::eR16G16B16A16_SFLOAT
+				, renderer::Format::eD24_UNORM_S8_UINT );
 		} ) );
 		return true;
 	}
@@ -1196,7 +1198,12 @@ namespace castor3d
 			m_skybox->getTexture().getImage( 3u ).initialiseSource( buffer );
 			m_skybox->getTexture().getImage( 4u ).initialiseSource( buffer );
 			m_skybox->getTexture().getImage( 5u ).initialiseSource( buffer );
-			getListener().postEvent( makeInitialiseEvent( *m_skybox ) );
+			getListener().postEvent( makeFunctorEvent( EventType::ePreRender
+				, [this]()
+				{
+					m_skybox->initialise( renderer::Format::eR16G16B16A16_SFLOAT
+						, renderer::Format::eD24_UNORM_S8_UINT );
+				} ) );
 		}
 	}
 

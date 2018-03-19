@@ -2,6 +2,7 @@
 
 #include "Engine.hpp"
 #include "Scene/Camera.hpp"
+#include "Technique/Opaque/GeometryPassResult.hpp"
 
 using namespace castor;
 using namespace castor3d;
@@ -17,10 +18,10 @@ namespace castor3d
 		, m_config{ config }
 		, m_matrixUbo{ engine }
 		, m_ssaoConfigUbo{ engine }
-		, m_linearisePass{ engine, size, m_ssaoConfigUbo, *gpResult[size_t( DsTexture::eDepth )], viewport }
-		, m_rawSsaoPass{ engine, size, config, m_ssaoConfigUbo, m_linearisePass.getResult(), *gpResult[size_t( DsTexture::eData1 )] }
-		, m_horizontalBlur{ engine, size, config, m_ssaoConfigUbo, Point2i{ 1, 0 }, m_rawSsaoPass.getResult(), *gpResult[size_t( DsTexture::eData1 )] }
-		, m_verticalBlur{ engine, size, config, m_ssaoConfigUbo, Point2i{ 0, 1 }, m_horizontalBlur.getResult(), *gpResult[size_t( DsTexture::eData1 )] }
+		, m_linearisePass{ engine, size, m_ssaoConfigUbo, *gpResult.getViews()[size_t( DsTexture::eDepth )], viewport }
+		, m_rawSsaoPass{ engine, size, config, m_ssaoConfigUbo, m_linearisePass.getResult(), *gpResult.getViews()[size_t( DsTexture::eData1 )] }
+		, m_horizontalBlur{ engine, size, config, m_ssaoConfigUbo, Point2i{ 1, 0 }, m_rawSsaoPass.getResult(), *gpResult.getViews()[size_t( DsTexture::eData1 )] }
+		, m_verticalBlur{ engine, size, config, m_ssaoConfigUbo, Point2i{ 0, 1 }, m_horizontalBlur.getResult(), *gpResult.getViews()[size_t( DsTexture::eData1 )] }
 	{
 	}
 
