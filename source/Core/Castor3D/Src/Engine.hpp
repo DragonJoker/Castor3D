@@ -122,17 +122,6 @@ namespace castor3d
 		C3D_API void setCleaned();
 		/**
 		 *\~english
-		 *\brief		Checks the current support for given shader model
-		 *\param[in]	p_eShaderModel	The shader model
-		 *\return		\p true if the shader model is supported in actual configuration
-		 *\~french
-		 *\brief		Vérifie le support du shader model donné
-		 *\param[in]	p_eShaderModel	le shader model
-		 *\return		\p true si le shader model est supporté dans la configuration actuelle
-		 */
-		C3D_API bool supportsShaderModel( ShaderModel p_eShaderModel );
-		/**
-		 *\~english
 		 *\brief		Registers additional parsers for SceneFileParser.
 		 *\param[in]	p_name		The registering name.
 		 *\param[in]	p_parsers	The parsers.

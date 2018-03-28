@@ -333,18 +333,6 @@ namespace castor3d
 		m_cleaned = true;
 	}
 
-	bool Engine::supportsShaderModel( ShaderModel p_eShaderModel )
-	{
-		bool result = false;
-
-		if ( m_renderSystem )
-		{
-			result = m_renderSystem->getGpuInformations().checkSupport( p_eShaderModel );
-		}
-
-		return result;
-	}
-
 	void Engine::registerParsers( castor::String const & name, castor::FileParser::AttributeParsersBySection const & p_parsers )
 	{
 		auto && it = m_additionalParsers.find( name );

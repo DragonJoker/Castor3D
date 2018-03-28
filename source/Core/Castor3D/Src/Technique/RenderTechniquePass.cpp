@@ -5,7 +5,7 @@
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderTarget.hpp"
 #include "Render/RenderNode/RenderNode_Render.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Shader/Program.hpp"
 #include "Shader/Shaders/GlslShadow.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
 
@@ -251,7 +251,8 @@ namespace castor3d
 		m_sceneUbo.update( m_scene, *m_camera );
 	}
 
-	void RenderTechniquePass::doPrepareFrontPipeline( renderer::ShaderStageStateArray & program
+	void RenderTechniquePass::doPrepareFrontPipeline( ShaderProgramSPtr program
+		, renderer::VertexLayoutCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
 		auto it = m_frontPipelines.find( flags );
@@ -270,14 +271,16 @@ namespace castor3d
 					, renderer::MultisampleState{}
 					, program
 					, flags ) ).first->second;
+			pipeline.setVertexLayouts( layouts );
 
 			auto initialise = [this, &pipeline, flags]()
 			{
 				auto uboBindings = doCreateUboBindings( flags );
 				auto layout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
-				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
-				layouts.emplace_back( std::move( layout ) );
-				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
+				std::vector< renderer::DescriptorSetLayoutPtr > descLayouts;
+				descLayouts.emplace_back( std::move( layout ) );
+				pipeline.setDescriptorSetLayouts( std::move( descLayouts ) );
+				pipeline.initialise( getRenderPass(), renderer::PrimitiveTopology::eTriangleList );
 			};
 
 			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
@@ -291,7 +294,8 @@ namespace castor3d
 		}
 	}
 
-	void RenderTechniquePass::doPrepareBackPipeline( renderer::ShaderStageStateArray & program
+	void RenderTechniquePass::doPrepareBackPipeline( ShaderProgramSPtr program
+		, renderer::VertexLayoutCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
 		auto it = m_backPipelines.find( flags );
@@ -309,14 +313,16 @@ namespace castor3d
 					, renderer::MultisampleState{}
 					, program
 					, flags ) ).first->second;
+			pipeline.setVertexLayouts( layouts );
 
 			auto initialise = [this, &pipeline, flags]()
 			{
 				auto uboBindings = doCreateUboBindings( flags );
 				auto layout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
-				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
-				layouts.emplace_back( std::move( layout ) );
-				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
+				std::vector< renderer::DescriptorSetLayoutPtr > descLayouts;
+				descLayouts.emplace_back( std::move( layout ) );
+				pipeline.setDescriptorSetLayouts( std::move( descLayouts ) );
+				pipeline.initialise( getRenderPass(), renderer::PrimitiveTopology::eTriangleList );
 			};
 
 			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )

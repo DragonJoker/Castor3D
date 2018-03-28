@@ -403,7 +403,8 @@ namespace castor3d
 		, TextureChannels & textureFlags
 		, ProgramFlags & programFlags
 		, SceneFlags & sceneFlags
-		, bool twoSided )
+		, bool twoSided
+		, renderer::VertexLayoutCRefArray const & layouts )
 	{
 		doUpdateFlags( passFlags
 			, textureFlags
@@ -440,8 +441,8 @@ namespace castor3d
 					, textureFlags
 					, programFlags
 					, sceneFlags };
-				doPrepareFrontPipeline( frontProgram, flags );
-				doPrepareBackPipeline( backProgram, flags );
+				doPrepareFrontPipeline( frontProgram, layouts, flags );
+				doPrepareBackPipeline( backProgram, layouts, flags );
 			}
 			else
 			{
@@ -460,10 +461,10 @@ namespace castor3d
 						, sceneFlags
 						, alphaFunc
 						, true );
-					doPrepareFrontPipeline( frontProgram, flags );
+					doPrepareFrontPipeline( frontProgram, layouts, flags );
 				}
 
-				doPrepareBackPipeline( backProgram, flags );
+				doPrepareBackPipeline( backProgram, layouts, flags );
 			}
 		}
 	}
@@ -625,9 +626,14 @@ namespace castor3d
 		node.descriptorSet = descriptorPool.createDescriptorSet( 0u );
 		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.descriptorSet
 			, layout.getBinding( index++ ) );
-		node.descriptorSet->createBinding( layout.getBinding( LightBufferIndex )
-			, node.sceneNode.getScene()->getLightCache().getBuffer()
-			, node.sceneNode.getScene()->getLightCache().getView() );
+
+		if ( checkFlag( node.pipeline.getFlags().m_programFlags, ProgramFlag::eLighting ) )
+		{
+			node.descriptorSet->createBinding( layout.getBinding( LightBufferIndex )
+				, node.sceneNode.getScene()->getLightCache().getBuffer()
+				, node.sceneNode.getScene()->getLightCache().getView() );
+		}
+
 		node.descriptorSet->createBinding( layout.getBinding( MatrixUbo::BindingPoint )
 			, m_matrixUbo.getUbo() );
 		node.descriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
@@ -658,9 +664,14 @@ namespace castor3d
 		node.descriptorSet = descriptorPool.createDescriptorSet( 0u );
 		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.descriptorSet
 			, layout.getBinding( index++ ) );
-		node.descriptorSet->createBinding( layout.getBinding( LightBufferIndex )
-			, node.sceneNode.getScene()->getLightCache().getBuffer()
-			, node.sceneNode.getScene()->getLightCache().getView() );
+
+		if ( checkFlag( node.pipeline.getFlags().m_programFlags, ProgramFlag::eLighting ) )
+		{
+			node.descriptorSet->createBinding( layout.getBinding( LightBufferIndex )
+				, node.sceneNode.getScene()->getLightCache().getBuffer()
+				, node.sceneNode.getScene()->getLightCache().getView() );
+		}
+
 		node.descriptorSet->createBinding( layout.getBinding( MatrixUbo::BindingPoint )
 			, m_matrixUbo.getUbo() );
 		node.descriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
@@ -691,9 +702,14 @@ namespace castor3d
 		node.descriptorSet = descriptorPool.createDescriptorSet( 0u );
 		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.descriptorSet
 			, layout.getBinding( index++ ) );
-		node.descriptorSet->createBinding( layout.getBinding( LightBufferIndex )
-			, node.sceneNode.getScene()->getLightCache().getBuffer()
-			, node.sceneNode.getScene()->getLightCache().getView() );
+
+		if ( checkFlag( node.pipeline.getFlags().m_programFlags, ProgramFlag::eLighting ) )
+		{
+			node.descriptorSet->createBinding( layout.getBinding( LightBufferIndex )
+				, node.sceneNode.getScene()->getLightCache().getBuffer()
+				, node.sceneNode.getScene()->getLightCache().getView() );
+		}
+
 		node.descriptorSet->createBinding( layout.getBinding( MatrixUbo::BindingPoint )
 			, m_matrixUbo.getUbo() );
 		node.descriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
@@ -724,9 +740,14 @@ namespace castor3d
 		node.descriptorSet = descriptorPool.createDescriptorSet( 0u );
 		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.descriptorSet
 			, layout.getBinding( index++ ) );
-		node.descriptorSet->createBinding( layout.getBinding( LightBufferIndex )
-			, node.sceneNode.getScene()->getLightCache().getBuffer()
-			, node.sceneNode.getScene()->getLightCache().getView() );
+
+		if ( checkFlag( node.pipeline.getFlags().m_programFlags, ProgramFlag::eLighting ) )
+		{
+			node.descriptorSet->createBinding( layout.getBinding( LightBufferIndex )
+				, node.sceneNode.getScene()->getLightCache().getBuffer()
+				, node.sceneNode.getScene()->getLightCache().getView() );
+		}
+
 		node.descriptorSet->createBinding( layout.getBinding( MatrixUbo::BindingPoint )
 			, m_matrixUbo.getUbo() );
 		node.descriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
@@ -784,7 +805,7 @@ namespace castor3d
 		return SceneRenderNode{};
 	}
 
-	renderer::ShaderStageStateArray RenderPass::doGetProgram( PassFlags const & passFlags
+	ShaderProgramSPtr RenderPass::doGetProgram( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags

@@ -15,69 +15,6 @@ namespace castor3d
 
 	/*!
 	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Enumeration of existing shader models
-	\~french
-	\brief		Enumération des modèles de shader existants
-	\remark
-	*/
-	enum class ShaderModel
-		: uint8_t
-	{
-		//!\~english	Vertex shaders.
-		//!\~french		Vertex shaders.
-		eModel1,
-		//!\~english	Pixel shaders.
-		//!\~french		Pixel shaders.
-		eModel2,
-		//!\~english	Geometry shaders.
-		//!\~french		Geometry shaders.
-		eModel3,
-		//!\~english	Tessellation shaders.
-		//!\~french		Tessellation shaders.
-		eModel4,
-		//!\~english	Compute shaders.
-		//!\~french		Compute shaders.
-		eModel5,
-		CASTOR_SCOPED_ENUM_BOUNDS( eModel1 )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		22/08/2012
-	\version	0.7.0.0
-	\~english
-	\brief		Shader status enueration
-	\~french
-	\brief		Enumération des statuts de shader
-	*/
-	enum class ShaderStatus
-		: uint8_t
-	{
-		eDontExist,
-		eNotCompiled,
-		eError,
-		eCompiled,
-		CASTOR_SCOPED_ENUM_BOUNDS( eDontExist )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		22/08/2012
-	\version	0.7.0.0
-	\~english
-	\brief		Program status enumeration
-	\~french
-	\brief		Enumération des statuts de programme
-	*/
-	enum class ProgramStatus
-		: uint8_t
-	{
-		eNotLinked,
-		eError,
-		eLinked,
-		CASTOR_SCOPED_ENUM_BOUNDS( eNotLinked )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
 	\date 		20/11/13
 	\version	0.7.0.0
 	\~english
@@ -150,8 +87,10 @@ namespace castor3d
 	class SkinningUbo;
 	class PassBuffer;
 	class ShaderBuffer;
+	class ShaderProgram;
 
 	DECLARE_SMART_PTR( ShaderBuffer );
+	DECLARE_SMART_PTR( ShaderProgram );
 
 	//@}
 

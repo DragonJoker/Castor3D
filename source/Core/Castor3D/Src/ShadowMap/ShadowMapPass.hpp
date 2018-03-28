@@ -128,8 +128,9 @@ namespace castor3d
 		 *\~french
 		 *\brief		Prépare le pipeline de rendu, en supprimant les faces arrière.
 		 */
-		virtual void doPreparePipeline( renderer::ShaderStageStateArray & program
-			, PipelineFlags const & flags );
+		virtual void doPreparePipeline( ShaderProgramSPtr program
+			, renderer::VertexLayoutCRefArray const & layouts
+			, PipelineFlags const & flags ) = 0;
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
@@ -137,12 +138,14 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
 		 */
-		void doPrepareFrontPipeline( renderer::ShaderStageStateArray & program
+		void doPrepareFrontPipeline( ShaderProgramSPtr program
+			, renderer::VertexLayoutCRefArray const & layouts
 			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
 		 */
-		void doPrepareBackPipeline( renderer::ShaderStageStateArray & program
+		void doPrepareBackPipeline( ShaderProgramSPtr program
+			, renderer::VertexLayoutCRefArray const & layouts
 			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource

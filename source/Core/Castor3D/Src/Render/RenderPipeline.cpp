@@ -6,13 +6,14 @@
 #include "Render/RenderSystem.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/Camera.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Shader/Program.hpp"
 #include "Shader/Shaders/GlslShadow.hpp"
 
 #include <Descriptor/DescriptorSetLayout.hpp>
 #include <Pipeline/InputAssemblyState.hpp>
 #include <Pipeline/Pipeline.hpp>
 #include <Pipeline/PipelineLayout.hpp>
+#include <Pipeline/ShaderStageState.hpp>
 
 #include <GlslSource.hpp>
 
@@ -25,7 +26,7 @@ namespace castor3d
 		, renderer::RasterisationState && rsState
 		, renderer::ColourBlendState && blState
 		, renderer::MultisampleState && msState
-		, renderer::ShaderStageStateArray program
+		, ShaderProgramSPtr program
 		, PipelineFlags const & flags )
 		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_dsState{ std::move( dsState ) }
@@ -60,7 +61,7 @@ namespace castor3d
 
 		renderer::GraphicsPipelineCreateInfo createInfo
 		{
-			m_program,
+			m_program->getStates(),
 			renderPass,
 			renderer::VertexInputState::create( vertexLayouts ),
 			renderer::InputAssemblyState{ topology },

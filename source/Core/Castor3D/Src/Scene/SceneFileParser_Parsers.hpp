@@ -85,7 +85,6 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserParticleSystemMaterial )
 	DECLARE_ATTRIBUTE_PARSER( parserParticleSystemDimensions )
 	DECLARE_ATTRIBUTE_PARSER( parserParticleSystemParticle )
-	DECLARE_ATTRIBUTE_PARSER( parserParticleSystemTFShader )
 	DECLARE_ATTRIBUTE_PARSER( parserParticleSystemCSShader )
 
 	// Particle parsers

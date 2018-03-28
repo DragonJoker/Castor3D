@@ -56,6 +56,20 @@ namespace castor3d
 		 *\copydoc		castor3d::ShadowMap::debugDisplay
 		 */
 		void debugDisplay( castor::Size const & size, uint32_t index )override;
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Setters.
+		*/
+		/**@{*/
+		inline renderer::TextureView const & getDepthView()const
+		{
+			return *m_depthView;
+		}
+		/**@}*/
 
 	private:
 		/**
@@ -82,10 +96,14 @@ namespace castor3d
 			, SceneFlags const & sceneFlags
 			, renderer::CompareOp alphaFunc )const override;
 
+	public:
+		static renderer::Format constexpr VarianceFormat = renderer::Format::eR32G32_SFLOAT;
+		static renderer::Format constexpr LinearDepthFormat = renderer::Format::eR32_SFLOAT;
+		static renderer::Format constexpr RawDepthFormat = renderer::Format::eD24_UNORM_S8_UINT;
+
 	private:
 		renderer::TexturePtr m_depthTexture;
 		renderer::TextureViewPtr m_depthView;
-		renderer::RenderPassPtr m_renderPass;
 		renderer::FrameBufferPtr m_frameBuffer;
 		std::unique_ptr< GaussianBlur > m_blur;
 	};

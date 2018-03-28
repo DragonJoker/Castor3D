@@ -38,12 +38,26 @@ namespace castor3d
 
 		if ( itB == it->second.end() )
 		{
-			uint64_t maxSize = getRenderSystem()->getCurrentDevice()->getProperties().limits.maxUniformBufferRange;
-			auto buffer = std::make_unique< UniformBuffer< T > >( *getRenderSystem()->getCurrentDevice()
+			uint64_t maxSize = getRenderSystem()->getMainDevice().getProperties().limits.maxUniformBufferRange;
+			auto buffer = std::make_unique< UniformBuffer< T > >( *getRenderSystem()
 				, uint32_t( std::floor( float( maxSize ) / sizeof( T ) ) )
 				, flags );
 			it->second.emplace_back( std::move( buffer ) );
 			itB = it->second.begin() + it->second.size() - 1;
+			auto & ubuffer = *it->second.back();
+
+			if ( getRenderSystem()->hasCurrentDevice() )
+			{
+				ubuffer.initialise();
+			}
+			else
+			{
+				getRenderSystem()->getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
+					, [&ubuffer]()
+					{
+						ubuffer.initialise();
+					} ) );
+			}
 		}
 
 		result.buffer = itB->get();

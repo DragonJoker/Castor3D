@@ -26,8 +26,6 @@ namespace castor3d
 	{
 		m_gpuInformations = std::move( p_informations );
 		doInitialise();
-		m_gpuInformations.updateMaxShaderModel();
-		REQUIRE( m_gpuInformations.getMaxShaderModel() >= ShaderModel::eModel2 );
 		Logger::logInfo( cuT( "Vendor: " ) + m_gpuInformations.getVendor() );
 		Logger::logInfo( cuT( "Renderer: " ) + m_gpuInformations.getRenderer() );
 		Logger::logInfo( cuT( "Version: " ) + m_gpuInformations.getVersion() );

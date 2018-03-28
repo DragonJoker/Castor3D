@@ -76,7 +76,7 @@ namespace castor3d
 			, renderer::RasterisationState && rsState
 			, renderer::ColourBlendState && blState
 			, renderer::MultisampleState && msState
-			, renderer::ShaderStageStateArray program
+			, ShaderProgramSPtr program
 			, PipelineFlags const & flags );
 		/**
 		*\~english
@@ -144,6 +144,15 @@ namespace castor3d
 		{
 			REQUIRE( !m_pipeline );
 			m_vertexLayouts = std::move( layouts );
+		}
+
+		inline void setVertexLayouts( renderer::VertexLayoutCRefArray const & layouts )
+		{
+			REQUIRE( !m_pipeline );
+			for ( auto & layout : layouts )
+			{
+				m_vertexLayouts.push_back( layout.get() );
+			}
 		}
 
 		inline void setDescriptorSetLayouts( std::vector< renderer::DescriptorSetLayoutPtr > && layouts )
@@ -214,7 +223,7 @@ namespace castor3d
 		renderer::RasterisationState m_rsState;
 		renderer::ColourBlendState m_blState;
 		renderer::MultisampleState m_msState;
-		renderer::ShaderStageStateArray m_program;
+		ShaderProgramSPtr m_program;
 		PipelineFlags m_flags;
 		std::vector< renderer::VertexLayout > m_vertexLayouts;
 		std::vector< renderer::DescriptorSetLayoutPtr > m_descriptorLayouts;

@@ -7,13 +7,13 @@
 #include "Render/RenderNode/RenderNode_Render.hpp"
 #include "Shader/PassBuffer/PassBuffer.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
+#include "Shader/Program.hpp"
 
 #include <Command/CommandBuffer.hpp>
 #include <RenderPass/FrameBuffer.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
-#include <Shader/ShaderProgram.hpp>
 #include <Sync/BufferMemoryBarrier.hpp>
 
 #include <GlslSource.hpp>
@@ -720,12 +720,14 @@ namespace castor3d
 	{
 	}
 
-	void PickingPass::doPrepareFrontPipeline( renderer::ShaderStageStateArray & program
+	void PickingPass::doPrepareFrontPipeline( ShaderProgramSPtr program
+		, renderer::VertexLayoutCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
 	}
 
-	void PickingPass::doPrepareBackPipeline( renderer::ShaderStageStateArray & program
+	void PickingPass::doPrepareBackPipeline( ShaderProgramSPtr program
+		, renderer::VertexLayoutCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
 		if ( m_backPipelines.find( flags ) == m_backPipelines.end() )
@@ -742,14 +744,16 @@ namespace castor3d
 					, renderer::MultisampleState{}
 					, program
 					, flags ) ).first->second;
+			pipeline.setVertexLayouts( layouts );
 
 			auto initialise = [this, &pipeline, flags]()
 			{
 				auto uboBindings = doCreateUboBindings( flags );
 				auto layout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
-				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
-				layouts.emplace_back( std::move( layout ) );
-				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
+				std::vector< renderer::DescriptorSetLayoutPtr > descLayouts;
+				descLayouts.emplace_back( std::move( layout ) );
+				pipeline.setDescriptorSetLayouts( std::move( descLayouts ) );
+				pipeline.initialise( getRenderPass(), renderer::PrimitiveTopology::eTriangleList );
 			};
 
 			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )

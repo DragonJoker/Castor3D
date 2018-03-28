@@ -39,11 +39,6 @@ namespace GuiCommon
 	//		return m_shaderSource;
 	//	}
 
-	//	castor3d::ShaderModel getShaderModel()const
-	//	{
-	//		return m_shaderModel;
-	//	}
-
 	//private:
 	//	void doInitialiseShaderLanguage();
 	//	void doInitialiseLayout();
@@ -63,7 +58,6 @@ namespace GuiCommon
 	//	wxString m_shaderSource;
 	//	castor3d::ShaderProgramWPtr m_shaderProgram;
 	//	castor3d::ShaderType m_shaderType;
-	//	castor3d::ShaderModel m_shaderModel;
 	//	bool m_canEdit;
 	//};
 }

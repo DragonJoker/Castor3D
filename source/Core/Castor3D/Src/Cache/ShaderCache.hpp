@@ -19,7 +19,7 @@ namespace castor3d
 	class ShaderProgramCache
 		: public castor::OwnedBy< Engine >
 	{
-		using ShaderProgramPtrArray = std::vector< renderer::ShaderStageStateArray >;
+		using ShaderProgramPtrArray = std::vector< ShaderProgramSPtr >;
 
 	public:
 		/**
@@ -62,7 +62,7 @@ namespace castor3d
 		 *\param[in]	initialise	Dit si on veut que le programme soit initialisé.
 		 *\return		Le programme créé.
 		 */
-		C3D_API renderer::ShaderStageStateArray getNewProgram( bool initialise );
+		C3D_API ShaderProgramSPtr getNewProgram( bool initialise );
 		/**
 		 *\~english
 		 *\brief		Looks for an automatically generated program corresponding to given flags.
@@ -86,7 +86,7 @@ namespace castor3d
 		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 *\return		Le programme trouvé ou créé.
 		 */
-		C3D_API renderer::ShaderStageStateArray getAutomaticProgram( RenderPass const & renderPass
+		C3D_API ShaderProgramSPtr getAutomaticProgram( RenderPass const & renderPass
 			, PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
@@ -173,7 +173,7 @@ namespace castor3d
 		 *\param[in]	initialise	Dit si on veut que le programme soit initialisé.
 		 *\param[in]	program		Le programme à ajouter.
 		 */
-		C3D_API renderer::ShaderStageStateArray doAddProgram( renderer::ShaderStageStateArray && program, bool initialise );
+		C3D_API ShaderProgramSPtr doAddProgram( ShaderProgramSPtr program, bool initialise );
 		/**
 		 *\~english
 		 *\brief		Looks for an automatically generated program corresponding to given flags.
@@ -197,7 +197,7 @@ namespace castor3d
 		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 *\return		Le programme trouvé ou créé.
 		 */
-		C3D_API renderer::ShaderStageStateArray doCreateAutomaticProgram( RenderPass const & renderPass
+		C3D_API ShaderProgramSPtr doCreateAutomaticProgram( RenderPass const & renderPass
 			, PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
@@ -226,7 +226,7 @@ namespace castor3d
 		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 *\return		Le programme trouvé.
 		 */
-		C3D_API renderer::ShaderStageStateArray doAddAutomaticProgram( renderer::ShaderStageStateArray && program
+		C3D_API ShaderProgramSPtr doAddAutomaticProgram( ShaderProgramSPtr program
 			, PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
@@ -253,7 +253,7 @@ namespace castor3d
 		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 *\return		Le programme créé.
 		 */
-		C3D_API renderer::ShaderStageStateArray doCreateBillboardProgram( RenderPass const & renderPass
+		C3D_API ShaderProgramSPtr doCreateBillboardProgram( RenderPass const & renderPass
 			, PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
@@ -277,7 +277,7 @@ namespace castor3d
 		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 *\return		Le programme trouvé.
 		 */
-		C3D_API renderer::ShaderStageStateArray doAddBillboardProgram( renderer::ShaderStageStateArray && program
+		C3D_API ShaderProgramSPtr doAddBillboardProgram( ShaderProgramSPtr program
 			, PassFlags const & passFlags
 			,TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
@@ -285,7 +285,7 @@ namespace castor3d
 			, renderer::CompareOp alphaFunc );
 
 	private:
-		DECLARE_MAP( uint64_t, renderer::ShaderStageStateArray, ShaderProgramPtrUInt64 );
+		DECLARE_MAP( uint64_t, ShaderProgramSPtr, ShaderProgramPtrUInt64 );
 		mutable std::recursive_mutex m_mutex;
 		//!\~english	The loaded shader programs.
 		//!\~french		Les programmes chargés.

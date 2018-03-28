@@ -93,7 +93,8 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::doPreparePipeline
 		 */
-		void doPreparePipeline( renderer::ShaderStageStateArray & program
+		void doPreparePipeline( ShaderProgramSPtr program
+			, renderer::VertexLayoutCRefArray const & layouts
 			, PipelineFlags const & flags )override;
 
 	public:

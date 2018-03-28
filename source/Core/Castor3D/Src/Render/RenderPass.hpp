@@ -20,6 +20,7 @@ See LICENSE file in root folder
 #include "Shader/Ubos/SkinningUbo.hpp"
 
 #include <Command/CommandBuffer.hpp>
+#include <RenderPass/RenderPass.hpp>
 
 #include <unordered_map>
 
@@ -216,7 +217,8 @@ namespace castor3d
 			, TextureChannels & textureFlags
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags
-			, bool twoSided );
+			, bool twoSided
+			, renderer::VertexLayoutCRefArray const & layouts );
 		/**
 		 *\~english
 		 *\brief		Retrieves the pipeline matching the given flags, for front face culling.
@@ -480,6 +482,11 @@ namespace castor3d
 		{
 			return m_renderQueue.getCommandBuffer();
 		}
+
+		inline renderer::RenderPass const & getRenderPass()const
+		{
+			return *m_renderPass;
+		}
 		/**@}*/
 
 	protected:
@@ -529,7 +536,7 @@ namespace castor3d
 		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API renderer::ShaderStageStateArray doGetProgram( PassFlags const & passFlags
+		C3D_API ShaderProgramSPtr doGetProgram( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -1324,7 +1331,8 @@ namespace castor3d
 		 *\param[in,out]	program	Le programme, mis à jour si besoin est.
 		 *\param[in]		flags	Les indicateurs de pipeline.
 		 */
-		C3D_API virtual void doPrepareFrontPipeline( renderer::ShaderStageStateArray & program
+		C3D_API virtual void doPrepareFrontPipeline( ShaderProgramSPtr program
+			, renderer::VertexLayoutCRefArray const & layouts
 			, PipelineFlags const & flags ) = 0;
 		/**
 		 *\~english
@@ -1336,7 +1344,8 @@ namespace castor3d
 		 *\param[in,out]	program	Le programme, mis à jour si besoin est.
 		 *\param[in]		flags	Les indicateurs de pipeline.
 		 */
-		C3D_API virtual void doPrepareBackPipeline( renderer::ShaderStageStateArray & program
+		C3D_API virtual void doPrepareBackPipeline( ShaderProgramSPtr program
+			, renderer::VertexLayoutCRefArray const & layouts
 			, PipelineFlags const & flags ) = 0;
 
 	public:
@@ -1389,6 +1398,7 @@ namespace castor3d
 		UniformBufferPool< BillboardUbo::Configuration > m_billboardUboPool;
 		UniformBufferPool< SkinningUbo::Configuration > m_skinningUboPool;
 		UniformBufferPool< MorphingUbo::Configuration > m_morphingUboPool;
+		renderer::RenderPassPtr m_renderPass;
 		RenderPassTimerSPtr m_timer;
 	};
 }

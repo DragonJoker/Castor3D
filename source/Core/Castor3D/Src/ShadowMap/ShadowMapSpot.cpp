@@ -60,7 +60,7 @@ namespace castor3d
 			image.mipLevels = 1u;
 			image.samples = renderer::SampleCountFlag::e1;
 			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
-			image.format = renderer::Format::eR32G32_SFLOAT;
+			image.format = ShadowMapSpot::VarianceFormat;
 
 			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
 				, image
@@ -106,7 +106,7 @@ namespace castor3d
 			image.mipLevels = 1u;
 			image.samples = renderer::SampleCountFlag::e1;
 			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
-			image.format = renderer::Format::eR32_SFLOAT;
+			image.format = ShadowMapSpot::LinearDepthFormat;
 
 			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
 				, image
@@ -152,14 +152,15 @@ namespace castor3d
 
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
 		{
-			m_passes[0]->startTimer( *m_commandBuffer );
-			m_commandBuffer->beginRenderPass( *m_renderPass
+			auto & pass = m_passes[0];
+			pass->startTimer( *m_commandBuffer );
+			m_commandBuffer->beginRenderPass( pass->getRenderPass()
 				, *m_frameBuffer
 				, { zero, black, black }
 			, renderer::SubpassContents::eSecondaryCommandBuffers );
-			m_commandBuffer->executeCommands( { m_passes[0]->getCommandBuffer() } );
+			m_commandBuffer->executeCommands( { pass->getCommandBuffer() } );
 			m_commandBuffer->endRenderPass();
-			m_passes[0]->stopTimer( *m_commandBuffer );
+			pass->stopTimer( *m_commandBuffer );
 			m_commandBuffer->end();
 		}
 
@@ -200,7 +201,7 @@ namespace castor3d
 		depth.mipLevels = 1u;
 		depth.samples = renderer::SampleCountFlag::e1;
 		depth.usage = renderer::ImageUsageFlag::eDepthStencilAttachment;
-		depth.format = renderer::Format::eD24_UNORM_S8_UINT;
+		depth.format = ShadowMapSpot::RawDepthFormat;
 		m_depthTexture = device.createTexture( depth, renderer::MemoryPropertyFlag::eDeviceLocal );
 
 		renderer::ImageViewCreateInfo depthView;
@@ -213,72 +214,12 @@ namespace castor3d
 		depthView.subresourceRange.levelCount = 1u;
 		m_depthView = m_depthTexture->createView( depthView );
 
-		// Create the render pass.
-		renderer::RenderPassCreateInfo renderPass;
-		renderPass.flags = 0u;
-
-		renderPass.attachments.resize( 3u );
-		renderPass.attachments[0].index = 0u;
-		renderPass.attachments[0].format = m_depthView->getFormat();
-		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
-		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
-
-		renderPass.attachments[1].index = 1u;
-		renderPass.attachments[1].format = m_linearMap.getTexture()->getPixelFormat();
-		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eClear;
-		renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[1].initialLayout = renderer::ImageLayout::eUndefined;
-		renderPass.attachments[1].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
-
-		renderPass.attachments[2].index = 2u;
-		renderPass.attachments[2].format = m_shadowMap.getTexture()->getPixelFormat();
-		renderPass.attachments[2].loadOp = renderer::AttachmentLoadOp::eClear;
-		renderPass.attachments[2].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[2].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[2].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[2].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[2].initialLayout = renderer::ImageLayout::eUndefined;
-		renderPass.attachments[2].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
-
-		renderPass.subpasses.resize( 1u );
-		renderPass.subpasses[0].flags = 0u;
-		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
-		renderPass.subpasses[0].colorAttachments.push_back( { 1u, renderer::ImageLayout::eColourAttachmentOptimal } );
-		renderPass.subpasses[0].colorAttachments.push_back( { 2u, renderer::ImageLayout::eColourAttachmentOptimal } );
-		renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
-
-		renderPass.dependencies.resize( 2u );
-		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
-		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
-
-		renderPass.dependencies[1].srcSubpass = 0u;
-		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
-
-		m_renderPass = device.createRenderPass( renderPass );
-
+		auto & renderPass = m_passes[0]->getRenderPass();
 		renderer::FrameBufferAttachmentArray attaches;
-		attaches.emplace_back( *( m_renderPass->getAttachments().begin() + 0u ), *m_depthView );
-		attaches.emplace_back( *( m_renderPass->getAttachments().begin() + 1u ), m_linearMap.getTexture()->getDefaultView() );
-		attaches.emplace_back( *( m_renderPass->getAttachments().begin() + 2u ), m_shadowMap.getTexture()->getDefaultView() );
-		m_frameBuffer = m_renderPass->createFrameBuffer( size, std::move( attaches ) );
+		attaches.emplace_back( *( renderPass.getAttachments().begin() + 0u ), *m_depthView );
+		attaches.emplace_back( *( renderPass.getAttachments().begin() + 1u ), m_linearMap.getTexture()->getDefaultView() );
+		attaches.emplace_back( *( renderPass.getAttachments().begin() + 2u ), m_shadowMap.getTexture()->getDefaultView() );
+		m_frameBuffer = renderPass.createFrameBuffer( size, std::move( attaches ) );
 
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 
@@ -292,7 +233,6 @@ namespace castor3d
 	void ShadowMapSpot::doCleanup()
 	{
 		m_frameBuffer.reset();
-		m_renderPass.reset();
 		m_blur.reset();
 		m_depthBuffer.reset();
 	}

@@ -118,8 +118,26 @@ namespace castor3d
 		void update( RenderInfo & info
 			, ShadowMapLightTypeArray & shadowMaps
 			, castor::Point2r const & jitter )override;
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		inline void setDepthFormat( renderer::Format value )
+		{
+			m_depthFormat = value;
+		}
+		/**@}*/
 
 	private:
+		/**
+		 *\copydoc		castor3d::RenderPass::doInitialise
+		 */
+		bool doInitialise( castor::Size const & size )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillDescriptor
 		 */
@@ -135,12 +153,14 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
 		 */
-		void doPrepareFrontPipeline( renderer::ShaderStageStateArray & program
+		void doPrepareFrontPipeline( ShaderProgramSPtr program
+			, renderer::VertexLayoutCRefArray const & layouts
 			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
 		 */
-		void doPrepareBackPipeline( renderer::ShaderStageStateArray & program
+		void doPrepareBackPipeline( ShaderProgramSPtr program
+			, renderer::VertexLayoutCRefArray const & layouts
 			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
@@ -180,7 +200,7 @@ namespace castor3d
 		void doUpdatePipeline( RenderPipeline & pipeline )const override;
 
 	private:
-		renderer::RenderPassPtr m_renderPass;
+		renderer::Format m_depthFormat;
 	};
 }
 

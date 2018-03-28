@@ -61,6 +61,7 @@ namespace castor3d
 		, m_geometryPassResult{ engine, depthTexture->getTexture(), velocityTexture->getTexture() }
 	{
 		auto & renderSystem = *engine.getRenderSystem();
+		m_opaquePass.initialiseRenderPass( m_geometryPassResult );
 
 		m_lightingPass = std::make_unique< LightingPass >( engine
 			, m_size

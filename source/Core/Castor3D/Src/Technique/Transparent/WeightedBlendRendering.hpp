@@ -95,12 +95,6 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline renderer::FrameBuffer & getFbo()
-		{
-			REQUIRE( m_frameBuffer );
-			return *m_frameBuffer;
-		}
-
 		inline renderer::Semaphore & getSemaphore()
 		{
 			REQUIRE( m_semaphore );
@@ -118,7 +112,8 @@ namespace castor3d
 		renderer::TextureViewPtr m_revealageView;
 		WeightedBlendTextures m_weightedBlendPassResult;
 		renderer::RenderPassPtr m_renderPass;
-		renderer::FrameBufferPtr m_frameBuffer;
+		renderer::FrameBufferPtr m_frameBufferWB;
+		renderer::FrameBufferPtr m_frameBufferCB;
 		FinalCombinePass m_finalCombinePass;
 		renderer::CommandBufferPtr m_commandBuffer;
 		renderer::SemaphorePtr m_semaphore;

@@ -1,20 +1,21 @@
 #include "TransparentPass.hpp"
 
-#include <Engine.hpp>
-#include <Render/RenderPipeline.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Render/RenderTarget.hpp>
-#include <Scene/Scene.hpp>
-#include <Scene/Skybox.hpp>
-#include <Shader/ShaderProgram.hpp>
-#include <Texture/Sampler.hpp>
-#include <Texture/TextureView.hpp>
-#include <Texture/TextureLayout.hpp>
+#include "Engine.hpp"
+#include "Render/RenderPipeline.hpp"
+#include "Render/RenderSystem.hpp"
+#include "Render/RenderTarget.hpp"
+#include "Scene/Scene.hpp"
+#include "Scene/Skybox.hpp"
+#include "Shader/Program.hpp"
+#include "Texture/Sampler.hpp"
+#include "Texture/TextureView.hpp"
+#include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
 
 #include <Pipeline/ColourBlendState.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
 
 #include "Shader/Shaders/GlslFog.hpp"
 #include "Shader/Shaders/GlslShadow.hpp"
@@ -57,6 +58,79 @@ namespace castor3d
 				renderer::BlendOp::eAdd,
 			} );
 			return bdState;
+		}
+
+		renderer::RenderPassPtr doCreateRenderPass( Engine & engine
+			, renderer::Format const & depthFormat )
+		{
+			auto & renderSystem = *engine.getRenderSystem();
+			auto & device = *renderSystem.getCurrentDevice();
+
+			renderer::RenderPassCreateInfo createInfo{};
+			createInfo.flags = 0u;
+
+			createInfo.attachments.resize( 3u );
+			createInfo.attachments[0].index = 0u;
+			createInfo.attachments[0].format = depthFormat;
+			createInfo.attachments[0].samples = renderer::SampleCountFlag::e1;
+			createInfo.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
+			createInfo.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+			createInfo.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+			createInfo.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+			createInfo.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+			createInfo.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+
+			createInfo.attachments[1].index = 1u;
+			createInfo.attachments[1].format = getTextureFormat( WbTexture::eAccumulation );
+			createInfo.attachments[1].samples = renderer::SampleCountFlag::e1;
+			createInfo.attachments[1].loadOp = renderer::AttachmentLoadOp::eClear;
+			createInfo.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
+			createInfo.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+			createInfo.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+			createInfo.attachments[1].initialLayout = renderer::ImageLayout::eUndefined;
+			createInfo.attachments[1].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+
+			createInfo.attachments[2].index = 2u;
+			createInfo.attachments[2].format = getTextureFormat( WbTexture::eRevealage );
+			createInfo.attachments[2].samples = renderer::SampleCountFlag::e1;
+			createInfo.attachments[2].loadOp = renderer::AttachmentLoadOp::eClear;
+			createInfo.attachments[2].storeOp = renderer::AttachmentStoreOp::eStore;
+			createInfo.attachments[2].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+			createInfo.attachments[2].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+			createInfo.attachments[2].initialLayout = renderer::ImageLayout::eUndefined;
+			createInfo.attachments[2].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+
+			renderer::AttachmentReference colourReference;
+			colourReference.attachment = 0u;
+			colourReference.layout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+			createInfo.subpasses.resize( 1u );
+			createInfo.subpasses[0].flags = 0u;
+			createInfo.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
+			createInfo.subpasses[0].colorAttachments =
+			{
+				{ 1u, renderer::ImageLayout::eColourAttachmentOptimal },
+				{ 2u, renderer::ImageLayout::eColourAttachmentOptimal },
+			};
+
+			createInfo.dependencies.resize( 2u );
+			createInfo.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+			createInfo.dependencies[0].dstSubpass = 0u;
+			createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+			createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
+			createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+			createInfo.dependencies[1].srcSubpass = 0u;
+			createInfo.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+			createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			createInfo.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+			return device.createRenderPass( createInfo );
 		}
 	}
 
@@ -118,6 +192,23 @@ namespace castor3d
 			, jitter );
 	}
 
+	bool TransparentPass::doInitialise( Size const & size )
+	{
+		m_renderPass = doCreateRenderPass( *getEngine(), m_depthFormat );
+		m_finished = getEngine()->getRenderSystem()->getCurrentDevice()->createSemaphore();
+
+		if ( m_camera )
+		{
+			m_renderQueue.initialise( m_scene, *m_camera );
+		}
+		else
+		{
+			m_renderQueue.initialise( m_scene );
+		}
+
+		return true;
+	}
+
 	void TransparentPass::doFillDescriptor( renderer::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, BillboardListRenderNode & node )
@@ -130,7 +221,8 @@ namespace castor3d
 	{
 	}
 
-	void TransparentPass::doPrepareFrontPipeline( renderer::ShaderStageStateArray & program
+	void TransparentPass::doPrepareFrontPipeline( ShaderProgramSPtr program
+		, renderer::VertexLayoutCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
 		auto it = m_frontPipelines.find( flags );
@@ -149,6 +241,7 @@ namespace castor3d
 					, renderer::MultisampleState{}
 					, program
 					, flags ) ).first->second;
+			pipeline.setVertexLayouts( layouts );
 
 			auto initialise = [this, &pipeline, flags]()
 			{
@@ -157,6 +250,7 @@ namespace castor3d
 				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
 				layouts.emplace_back( std::move( layout ) );
 				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
+				pipeline.initialise( getRenderPass(), renderer::PrimitiveTopology::eTriangleList );
 			};
 
 			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
@@ -170,7 +264,8 @@ namespace castor3d
 		}
 	}
 
-	void TransparentPass::doPrepareBackPipeline( renderer::ShaderStageStateArray & program
+	void TransparentPass::doPrepareBackPipeline( ShaderProgramSPtr program
+		, renderer::VertexLayoutCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
 		auto it = m_backPipelines.find( flags );
@@ -188,6 +283,7 @@ namespace castor3d
 					, renderer::MultisampleState{}
 					, program
 					, flags ) ).first->second;
+			pipeline.setVertexLayouts( layouts );
 
 			auto initialise = [this, &pipeline, flags]()
 			{
@@ -196,6 +292,7 @@ namespace castor3d
 				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
 				layouts.emplace_back( std::move( layout ) );
 				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
+				pipeline.initialise( getRenderPass(), renderer::PrimitiveTopology::eTriangleList );
 			};
 
 			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )

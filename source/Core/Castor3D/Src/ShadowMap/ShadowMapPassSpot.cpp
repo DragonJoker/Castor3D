@@ -2,6 +2,10 @@
 
 #include "Render/RenderPipeline.hpp"
 #include "Scene/Light/SpotLight.hpp"
+#include "ShadowMap/ShadowMapSpot.hpp"
+#include "Shader/Program.hpp"
+
+#include <RenderPass/RenderPassCreateInfo.hpp>
 
 using namespace castor;
 
@@ -49,6 +53,7 @@ namespace castor3d
 
 	bool ShadowMapPassSpot::doInitialise( Size const & size )
 	{
+		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
 		Viewport viewport;
 		m_camera = std::make_shared< Camera >( cuT( "ShadowMapSpot" )
 			, m_scene
@@ -56,7 +61,69 @@ namespace castor3d
 			, std::move( viewport ) );
 		m_camera->resize( size );
 
-		m_shadowConfig = renderer::makeUniformBuffer< Configuration >( *getEngine()->getRenderSystem()->getCurrentDevice()
+
+		// Create the render pass.
+		renderer::RenderPassCreateInfo renderPass;
+		renderPass.flags = 0u;
+
+		renderPass.attachments.resize( 3u );
+		renderPass.attachments[0].index = 0u;
+		renderPass.attachments[0].format = ShadowMapSpot::RawDepthFormat;
+		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+
+		renderPass.attachments[1].index = 1u;
+		renderPass.attachments[1].format = ShadowMapSpot::LinearDepthFormat;
+		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[1].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[1].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+		renderPass.attachments[2].index = 2u;
+		renderPass.attachments[2].format = ShadowMapSpot::VarianceFormat;
+		renderPass.attachments[2].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[2].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[2].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[2].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[2].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[2].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[2].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+		renderPass.subpasses.resize( 1u );
+		renderPass.subpasses[0].flags = 0u;
+		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
+		renderPass.subpasses[0].colorAttachments.push_back( { 1u, renderer::ImageLayout::eColourAttachmentOptimal } );
+		renderPass.subpasses[0].colorAttachments.push_back( { 2u, renderer::ImageLayout::eColourAttachmentOptimal } );
+		renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
+
+		renderPass.dependencies.resize( 2u );
+		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].dstSubpass = 0u;
+		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		renderPass.dependencies[1].srcSubpass = 0u;
+		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		m_renderPass = device.createRenderPass( renderPass );
+
+		m_shadowConfig = renderer::makeUniformBuffer< Configuration >( device
 			, 1u
 			, 0u
 			, renderer::MemoryPropertyFlag::eHostVisible | renderer::MemoryPropertyFlag::eHostCoherent );
@@ -93,7 +160,8 @@ namespace castor3d
 		queues.emplace_back( m_renderQueue );
 	}
 
-	void ShadowMapPassSpot::doPreparePipeline( renderer::ShaderStageStateArray & program
+	void ShadowMapPassSpot::doPreparePipeline( ShaderProgramSPtr program
+		, renderer::VertexLayoutCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
 		if ( m_backPipelines.find( flags ) == m_backPipelines.end() )
@@ -110,6 +178,7 @@ namespace castor3d
 					, renderer::MultisampleState{}
 					, program
 					, flags ) ).first->second;
+			pipeline.setVertexLayouts( layouts );
 
 			auto initialise = [this, &pipeline, flags]()
 			{
@@ -119,6 +188,7 @@ namespace castor3d
 				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
 				layouts.emplace_back( std::move( layout ) );
 				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
+				pipeline.initialise( getRenderPass(), renderer::PrimitiveTopology::eTriangleList );
 				m_initialised = true;
 			};
 

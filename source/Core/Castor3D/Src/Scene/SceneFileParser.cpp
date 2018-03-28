@@ -72,7 +72,7 @@ void SceneFileContext::initialise()
 	camera.reset();
 	material.reset();
 	textureUnit.reset();
-	shaderProgram.clear();
+	shaderProgram.reset();
 	sampler.reset();
 	strName.clear();
 	strName2.clear();
@@ -154,12 +154,6 @@ SceneFileParser::SceneFileParser( Engine & engine )
 	m_mapPrimitiveOutputTypes[cuT( "points" )] = uint32_t( renderer::PrimitiveTopology::ePointList );
 	m_mapPrimitiveOutputTypes[cuT( "line_strip" )] = uint32_t( renderer::PrimitiveTopology::eLineStrip );
 	m_mapPrimitiveOutputTypes[cuT( "triangle_strip" )] = uint32_t( renderer::PrimitiveTopology::eTriangleStrip );
-
-	m_mapModels[cuT( "sm_1" )] = uint32_t( ShaderModel::eModel1 );
-	m_mapModels[cuT( "sm_2" )] = uint32_t( ShaderModel::eModel2 );
-	m_mapModels[cuT( "sm_3" )] = uint32_t( ShaderModel::eModel3 );
-	m_mapModels[cuT( "sm_4" )] = uint32_t( ShaderModel::eModel4 );
-	m_mapModels[cuT( "sm_5" )] = uint32_t( ShaderModel::eModel5 );
 
 	m_mapViewportModes[cuT( "ortho" )] = uint32_t( ViewportType::eOrtho );
 	m_mapViewportModes[cuT( "perspective" )] = uint32_t( ViewportType::ePerspective );
@@ -416,7 +410,6 @@ void SceneFileParser::doInitialiseParser( Path const & path )
 	addParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "material" ), parserParticleSystemMaterial, { makeParameter< ParameterType::eName >() } );
 	addParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "dimensions" ), parserParticleSystemDimensions, { makeParameter< ParameterType::ePoint2F >() } );
 	addParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "particle" ), parserParticleSystemParticle );
-	addParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "tf_shader_program" ), parserParticleSystemTFShader );
 	addParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "cs_shader_program" ), parserParticleSystemCSShader );
 
 	addParser( uint32_t( CSCNSection::eParticle ), cuT( "variable" ), parserParticleVariable, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eCheckedText >( m_mapElementTypes ), makeParameter< ParameterType::eText >() } );

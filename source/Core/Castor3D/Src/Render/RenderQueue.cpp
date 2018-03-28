@@ -353,6 +353,46 @@ namespace castor3d
 					, std::ref( billboard ) ) );
 		}
 
+		template< typename MapType >
+		void doInitialiseNodes( RenderPass & renderPass
+			, MapType & pipelineNodes )
+		{
+			for ( auto & pipelineNode : pipelineNodes )
+			{
+				pipelineNode.first->createDescriptorPools( { uint32_t( pipelineNode.second.size() ) } );
+
+				for ( auto & node : pipelineNode.second )
+				{
+					renderPass.initialiseDescriptor( pipelineNode.first->getDescriptorPool( 0u ), node );
+				}
+			}
+		}
+
+		template< typename MapType >
+		void doInitialiseInstancedNodes( RenderPass & renderPass
+			, MapType & pipelineNodes )
+		{
+			for ( auto & pipelineNode : pipelineNodes )
+			{
+				uint32_t size = 0u;
+
+				for ( auto & passNodes : pipelineNode.second )
+				{
+					size += uint32_t( passNodes.second.size() );
+				}
+
+				pipelineNode.first->createDescriptorPools( { size } );
+
+				for ( auto & passNodes : pipelineNode.second )
+				{
+					for ( auto & submeshNodes : passNodes.second )
+					{
+						renderPass.initialiseDescriptor( pipelineNode.first->getDescriptorPool( 0u ), submeshNodes.second[0] );
+					}
+				}
+			}
+		}
+
 		void doSortRenderNodes( RenderPass & renderPass
 			, bool opaque
 			, SceneNode const * ignored
@@ -437,7 +477,8 @@ namespace castor3d
 									, textureFlags
 									, programFlags
 									, sceneFlags
-									, pass->IsTwoSided() );
+									, pass->IsTwoSided()
+									, { submesh->getVertexLayout() } );
 
 								if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) != opaque )
 								{
@@ -492,53 +533,21 @@ namespace castor3d
 				}
 			}
 
-			auto initialiseNodes = [&renderPass]( auto & pipelineNodes )
+			renderPass.getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
+				, [&renderPass, &nodes]()
 			{
-				for ( auto & pipelineNode : pipelineNodes )
-				{
-					pipelineNode.first->createDescriptorPools( { uint32_t( pipelineNode.second.size() ) } );
+				doInitialiseNodes( renderPass, nodes.staticNodes.frontCulled );
+				doInitialiseNodes( renderPass, nodes.staticNodes.backCulled );
+				doInitialiseNodes( renderPass, nodes.skinnedNodes.frontCulled );
+				doInitialiseNodes( renderPass, nodes.skinnedNodes.backCulled );
+				doInitialiseNodes( renderPass, nodes.morphingNodes.frontCulled );
+				doInitialiseNodes( renderPass, nodes.morphingNodes.backCulled );
 
-					for ( auto & node : pipelineNode.second )
-					{
-						renderPass.initialiseDescriptor( pipelineNode.first->getDescriptorPool( 0u ), node );
-					}
-				}
-			};
-
-			initialiseNodes( nodes.staticNodes.frontCulled );
-			initialiseNodes( nodes.staticNodes.backCulled );
-			initialiseNodes( nodes.skinnedNodes.frontCulled );
-			initialiseNodes( nodes.skinnedNodes.backCulled );
-			initialiseNodes( nodes.morphingNodes.frontCulled );
-			initialiseNodes( nodes.morphingNodes.backCulled );
-
-			auto initialiseInstancedNodes = [&renderPass]( auto & pipelineNodes )
-			{
-				for ( auto & pipelineNode : pipelineNodes )
-				{
-					uint32_t size = 0u;
-
-					for ( auto & passNodes : pipelineNode.second )
-					{
-						size += uint32_t( passNodes.second.size() );
-					}
-
-					pipelineNode.first->createDescriptorPools( { size } );
-
-					for ( auto & passNodes : pipelineNode.second )
-					{
-						for ( auto & submeshNodes : passNodes.second )
-						{
-							renderPass.initialiseDescriptor( pipelineNode.first->getDescriptorPool( 0u ), submeshNodes.second[0] );
-						}
-					}
-				}
-			};
-
-			initialiseInstancedNodes( nodes.instancedStaticNodes.frontCulled );
-			initialiseInstancedNodes( nodes.instancedStaticNodes.backCulled );
-			initialiseInstancedNodes( nodes.instancedSkinnedNodes.frontCulled );
-			initialiseInstancedNodes( nodes.instancedSkinnedNodes.backCulled );
+				doInitialiseInstancedNodes( renderPass, nodes.instancedStaticNodes.frontCulled );
+				doInitialiseInstancedNodes( renderPass, nodes.instancedStaticNodes.backCulled );
+				doInitialiseInstancedNodes( renderPass, nodes.instancedSkinnedNodes.frontCulled );
+				doInitialiseInstancedNodes( renderPass, nodes.instancedSkinnedNodes.backCulled );
+			} ) );
 		}
 
 		void doSortRenderNodes( RenderPass & renderPass
@@ -570,7 +579,8 @@ namespace castor3d
 						, textureFlags
 						, programFlags
 						, sceneFlags
-						, p_pass.IsTwoSided() );
+						, p_pass.IsTwoSided()
+						, billboard.getGeometryBuffers().layouts );
 
 					if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) != opaque
 						&& !isShadowMapProgram( programFlags ) )
@@ -821,13 +831,31 @@ namespace castor3d
 
 		if ( m_changed )
 		{
-			if ( m_camera )
+			if ( getOwner()->getEngine()->getRenderSystem()->hasCurrentDevice() )
 			{
-				doPrepareCulledNodesCommandBuffer();
+				if ( m_camera )
+				{
+					doPrepareCulledNodesCommandBuffer();
+				}
+				else
+				{
+					doPrepareAllNodesCommandBuffer();
+				}
 			}
 			else
 			{
-				doPrepareAllNodesCommandBuffer();
+				getOwner()->getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
+					, [this]()
+					{
+						if ( m_camera )
+						{
+							doPrepareCulledNodesCommandBuffer();
+						}
+						else
+						{
+							doPrepareAllNodesCommandBuffer();
+						}
+					} ) );
 			}
 
 			m_changed = false;

@@ -41,7 +41,7 @@
 #include "Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Scene/Light/PointLight.hpp"
 #include "Scene/Light/SpotLight.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Shader/Program.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
@@ -1313,28 +1313,10 @@ namespace castor3d
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eParticle )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserParticleSystemTFShader )
-	{
-		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->shaderProgram.clear();
-		parsingContext->shaderStage = renderer::ShaderStageFlag( 0u );
-		parsingContext->bBool1 = true;
-		
-		if ( !parsingContext->scene )
-		{
-			PARSING_ERROR( cuT( "No scene initialised." ) );
-		}
-		else
-		{
-			parsingContext->shaderProgram = parsingContext->m_pParser->getEngine()->getShaderProgramCache().getNewProgram( true );
-		}
-	}
-	END_ATTRIBUTE_PUSH( CSCNSection::eShaderProgram )
-
 	IMPLEMENT_ATTRIBUTE_PARSER( parserParticleSystemCSShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->shaderProgram.clear();
+		parsingContext->shaderProgram.reset();
 		parsingContext->shaderStage = renderer::ShaderStageFlag( 0u );
 		parsingContext->bBool1 = false;
 		
@@ -2839,7 +2821,7 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserPassShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->shaderProgram.clear();
+		parsingContext->shaderProgram.reset();
 		parsingContext->shaderStage = renderer::ShaderStageFlag( 0u );
 
 		if ( parsingContext->pass )
@@ -3147,138 +3129,42 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserVertexShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-		auto it = std::find_if( parsingContext->shaderProgram.begin()
-			, parsingContext->shaderProgram.end()
-			, []( renderer::ShaderStageState const & lookup )
-			{
-				return lookup.module->getStage() == renderer::ShaderStageFlag::eVertex;
-			} );
-
-		if ( it == parsingContext->shaderProgram.end() )
-		{
-			parsingContext->shaderProgram.push_back( { parsingContext->m_pParser->getEngine()->getRenderSystem()->getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
-			parsingContext->shaderStage = renderer::ShaderStageFlag::eVertex;
-		}
-		else
-		{
-			PARSING_ERROR( cuT( "Vertex shader is already initialised" ) );
-		}
+		parsingContext->shaderStage = renderer::ShaderStageFlag::eVertex;
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::shaderStage )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( parserPixelShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-		auto it = std::find_if( parsingContext->shaderProgram.begin()
-			, parsingContext->shaderProgram.end()
-			, []( renderer::ShaderStageState const & lookup )
-			{
-				return lookup.module->getStage() == renderer::ShaderStageFlag::eFragment;
-			} );
-
-		if ( it == parsingContext->shaderProgram.end() )
-		{
-			parsingContext->shaderProgram.push_back( { parsingContext->m_pParser->getEngine()->getRenderSystem()->getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-			parsingContext->shaderStage = renderer::ShaderStageFlag::eFragment;
-		}
-		else
-		{
-			PARSING_ERROR( cuT( "Shader not initialised" ) );
-		}
+		parsingContext->shaderStage = renderer::ShaderStageFlag::eFragment;
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::shaderStage )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( parserGeometryShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-		auto it = std::find_if( parsingContext->shaderProgram.begin()
-			, parsingContext->shaderProgram.end()
-			, []( renderer::ShaderStageState const & lookup )
-			{
-				return lookup.module->getStage() == renderer::ShaderStageFlag::eGeometry;
-			} );
-
-		if ( it == parsingContext->shaderProgram.end() )
-		{
-			parsingContext->shaderProgram.push_back( { parsingContext->m_pParser->getEngine()->getRenderSystem()->getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eGeometry ) } );
-			parsingContext->shaderStage = renderer::ShaderStageFlag::eGeometry;
-		}
-		else
-		{
-			PARSING_ERROR( cuT( "Shader not initialised" ) );
-		}
+		parsingContext->shaderStage = renderer::ShaderStageFlag::eGeometry;
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::shaderStage )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( parserHullShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-		auto it = std::find_if( parsingContext->shaderProgram.begin()
-			, parsingContext->shaderProgram.end()
-			, []( renderer::ShaderStageState const & lookup )
-			{
-				return lookup.module->getStage() == renderer::ShaderStageFlag::eTessellationControl;
-			} );
-
-		if ( it == parsingContext->shaderProgram.end() )
-		{
-			parsingContext->shaderProgram.push_back( { parsingContext->m_pParser->getEngine()->getRenderSystem()->getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eTessellationControl ) } );
-			parsingContext->shaderStage = renderer::ShaderStageFlag::eTessellationControl;
-		}
-		else
-		{
-			PARSING_ERROR( cuT( "Shader not initialised" ) );
-		}
+		parsingContext->shaderStage = renderer::ShaderStageFlag::eTessellationControl;
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::shaderStage )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( parserdomainShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-		auto it = std::find_if( parsingContext->shaderProgram.begin()
-			, parsingContext->shaderProgram.end()
-			, []( renderer::ShaderStageState const & lookup )
-			{
-				return lookup.module->getStage() == renderer::ShaderStageFlag::eTessellationEvaluation;
-			} );
-
-		if ( it == parsingContext->shaderProgram.end() )
-		{
-			parsingContext->shaderProgram.push_back( { parsingContext->m_pParser->getEngine()->getRenderSystem()->getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eTessellationEvaluation ) } );
-			parsingContext->shaderStage = renderer::ShaderStageFlag::eTessellationEvaluation;
-		}
-		else
-		{
-			PARSING_ERROR( cuT( "Shader not initialised" ) );
-		}
+		parsingContext->shaderStage = renderer::ShaderStageFlag::eTessellationEvaluation;
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::shaderStage )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( parserComputeShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-		auto it = std::find_if( parsingContext->shaderProgram.begin()
-			, parsingContext->shaderProgram.end()
-			, []( renderer::ShaderStageState const & lookup )
-			{
-				return lookup.module->getStage() == renderer::ShaderStageFlag::eCompute;
-			} );
-
-		if ( it == parsingContext->shaderProgram.end() )
-		{
-			parsingContext->shaderProgram.push_back( { parsingContext->m_pParser->getEngine()->getRenderSystem()->getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eCompute ) } );
-			parsingContext->shaderStage = renderer::ShaderStageFlag::eCompute;
-		}
-		else
-		{
-			PARSING_ERROR( cuT( "Shader not initialised" ) );
-		}
+		parsingContext->shaderStage = renderer::ShaderStageFlag::eCompute;
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::shaderStage )
 
@@ -3286,7 +3172,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->shaderProgram.empty() )
+		if ( !parsingContext->shaderProgram )
 		{
 			PARSING_ERROR( cuT( "No ShaderProgram initialised." ) );
 		}
@@ -3306,7 +3192,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->shaderProgram.empty() )
+		if ( !parsingContext->shaderProgram )
 		{
 			PARSING_ERROR( cuT( "No ShaderProgram initialised." ) );
 		}
@@ -3314,11 +3200,11 @@ namespace castor3d
 		{
 			if ( parsingContext->particleSystem )
 			{
-				parsingContext->particleSystem->setCSUpdateProgram( parsingContext->shaderProgram[0] );
+				parsingContext->particleSystem->setCSUpdateProgram( parsingContext->shaderProgram->getStates()[0] );
 				parsingContext->bBool1 = false;
 			}
 
-			parsingContext->shaderProgram.clear();
+			parsingContext->shaderProgram.reset();
 		}
 	}
 	END_ATTRIBUTE_POP()
@@ -3327,7 +3213,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->shaderProgram.empty() )
+		if ( !parsingContext->shaderProgram )
 		{
 			PARSING_ERROR( cuT( "No ShaderProgram initialised." ) );
 		}
@@ -3339,7 +3225,8 @@ namespace castor3d
 				Path path;
 				p_params[0]->get( uiModel );
 				p_params[1]->get( path );
-				parsingContext->shaderProgram.back().module->loadShader( p_context->m_file.getPath() / path );
+				parsingContext->shaderProgram->setFile( parsingContext->shaderStage
+					, p_context->m_file.getPath() / path );
 			}
 			else
 			{

@@ -82,10 +82,14 @@ namespace castor3d
 			, SceneFlags const & sceneFlags
 			, renderer::CompareOp alphaFunc )const override;
 
+	public:
+		static renderer::Format constexpr VarianceFormat = renderer::Format::eR32G32_SFLOAT;
+		static renderer::Format constexpr LinearDepthFormat = renderer::Format::eR32_SFLOAT;
+		static renderer::Format constexpr RawDepthFormat = renderer::Format::eD24_UNORM_S8_UINT;
+
 	private:
 		renderer::TexturePtr m_depthTexture;
 		renderer::TextureViewPtr m_depthView;
-		renderer::RenderPassPtr m_renderPass;
 		renderer::FrameBufferPtr m_frameBuffer;
 		renderer::TexturePtr m_depthBuffer;
 		renderer::TextureViewPtr m_depthBufferView;

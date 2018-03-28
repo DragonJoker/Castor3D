@@ -4,7 +4,7 @@
 #include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/BillboardList.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Shader/Program.hpp"
 #include "ShadowMap/ShadowMap.hpp"
 #include "Texture/TextureLayout.hpp"
 
@@ -59,46 +59,22 @@ namespace castor3d
 			, sceneFlags );
 	}
 
-	void ShadowMapPass::doPreparePipeline( renderer::ShaderStageStateArray & program
-		, PipelineFlags const & flags )
-	{
-		if ( m_backPipelines.find( flags ) == m_backPipelines.end() )
-		{
-			renderer::RasterisationState rsState;
-			rsState.cullMode = renderer::CullModeFlag::eNone;
-			renderer::DepthStencilState dsState;
-			auto blState = renderer::ColourBlendState::createDefault();
-			auto & pipeline = *m_backPipelines.emplace( flags
-				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
-					, std::move( dsState )
-					, std::move( rsState )
-					, std::move( blState )
-					, renderer::MultisampleState{}
-					, program
-					, flags ) ).first->second;
-
-			getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-				, [this, &pipeline, flags]()
-				{
-					m_initialised = true;
-				} ) );
-		}
-	}
-
 	void ShadowMapPass::doUpdatePipeline( RenderPipeline & pipeline )const
 	{
 	}
 
-	void ShadowMapPass::doPrepareFrontPipeline( renderer::ShaderStageStateArray & program
+	void ShadowMapPass::doPrepareFrontPipeline( ShaderProgramSPtr program
+		, renderer::VertexLayoutCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
-		doPreparePipeline( program, flags );
+		doPreparePipeline( program, layouts, flags );
 	}
 
-	void ShadowMapPass::doPrepareBackPipeline( renderer::ShaderStageStateArray & program
+	void ShadowMapPass::doPrepareBackPipeline( ShaderProgramSPtr program
+		, renderer::VertexLayoutCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
-		doPreparePipeline( program, flags );
+		doPreparePipeline( program, layouts, flags );
 	}
 
 	glsl::Shader ShadowMapPass::doGetVertexShaderSource( PassFlags const & passFlags

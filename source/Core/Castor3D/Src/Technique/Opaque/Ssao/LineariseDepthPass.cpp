@@ -160,33 +160,6 @@ namespace castor3d
 			return program;
 		}
 
-		RenderPipelineUPtr doCreatePipeline( Engine & engine
-			, renderer::ShaderStageStateArray program )
-		{
-			renderer::DepthStencilState dsstate
-			{
-				0u,
-				false,
-				false
-			};
-			renderer::RasterisationState rsstate
-			{
-				0u,
-				false,
-				false,
-				renderer::PolygonMode::eFill,
-				renderer::CullModeFlag::eNone
-			};
-			auto bdstate = renderer::ColourBlendState::createDefault();
-			return std::make_unique< RenderPipeline >( *engine.getRenderSystem()
-				, std::move( dsstate )
-				, std::move( rsstate )
-				, std::move( bdstate )
-				, renderer::MultisampleState{}
-				, std::move( program )
-				, PipelineFlags{} );
-		}
-
 		SamplerSPtr doCreateSampler( Engine & engine
 			, String const & name
 			, renderer::WrapMode mode )

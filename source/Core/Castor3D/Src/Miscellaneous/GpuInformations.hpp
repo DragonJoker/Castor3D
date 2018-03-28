@@ -248,59 +248,6 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Checks support for given shader model.
-		 *\param[in]	p_model	The shader model.
-		 *\return		\p false if the given model is not supported by current API.
-		 *\~french
-		 *\brief		Vérifie le support d'un modèle de shaders.
-		 *\param[in]	p_model	Le modèle de shaders.
-		 *\return		\p false si le modèle donné n'est pas supporté par l'API actuelle.
-		 */
-		inline bool checkSupport( ShaderModel model )const
-		{
-			return model <= m_maxShaderModel;
-		}
-		/**
-		 *\~english
-		 *\return		The maximum supported shader model.
-		 *\~french
-		 *\return		Le modèle de shader maximal supporté.
-		 */
-		inline ShaderModel getMaxShaderModel()const
-		{
-			return m_maxShaderModel;
-		}
-		/**
-		 *\~english
-		 *\return		The maximum supported shader model.
-		 *\~french
-		 *\return		Le modèle de shader maximal supporté.
-		 */
-		inline void updateMaxShaderModel()
-		{
-			if ( hasShaderType( renderer::ShaderStageFlag::eCompute ) )
-			{
-				m_maxShaderModel = ShaderModel::eModel5;
-			}
-			else if ( hasShaderType( renderer::ShaderStageFlag::eTessellationEvaluation ) )
-			{
-				m_maxShaderModel = ShaderModel::eModel4;
-			}
-			else if ( hasShaderType( renderer::ShaderStageFlag::eGeometry ) )
-			{
-				m_maxShaderModel = ShaderModel::eModel3;
-			}
-			else if ( hasShaderType( renderer::ShaderStageFlag::eFragment ) )
-			{
-				m_maxShaderModel = ShaderModel::eModel2;
-			}
-			else
-			{
-				m_maxShaderModel = ShaderModel::eModel1;
-			}
-		}
-		/**
-		 *\~english
 		 *\param[in]	type	The shader type.
 		 *\return		The shader type support status.
 		 *\~french
@@ -454,7 +401,6 @@ namespace castor3d
 
 	private:
 		GpuFeatures m_features{ 0u };
-		ShaderModel m_maxShaderModel{ ShaderModel::eMin };
 		uint32_t m_shaderLanguageVersion{ 0 };
 		std::map< renderer::ShaderStageFlag, bool > m_useShader;
 		std::map< GpuMax, int32_t > m_maxValues;

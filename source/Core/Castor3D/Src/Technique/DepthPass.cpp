@@ -1,13 +1,13 @@
 #include "DepthPass.hpp"
 
-#include <Engine.hpp>
-#include <Render/RenderPipeline.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Render/RenderTarget.hpp>
-#include <Shader/ShaderProgram.hpp>
-#include <Texture/Sampler.hpp>
-#include <Texture/TextureView.hpp>
-#include <Texture/TextureLayout.hpp>
+#include "Engine.hpp"
+#include "Render/RenderPipeline.hpp"
+#include "Render/RenderSystem.hpp"
+#include "Render/RenderTarget.hpp"
+#include "Shader/Program.hpp"
+#include "Texture/Sampler.hpp"
+#include "Texture/TextureView.hpp"
+#include "Texture/TextureLayout.hpp"
 
 #include <RenderPass/FrameBuffer.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
@@ -115,7 +115,8 @@ namespace castor3d
 	{
 	}
 
-	void DepthPass::doPrepareFrontPipeline( renderer::ShaderStageStateArray & program
+	void DepthPass::doPrepareFrontPipeline( ShaderProgramSPtr program
+		, renderer::VertexLayoutCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
 		auto it = m_frontPipelines.find( flags );
@@ -134,6 +135,7 @@ namespace castor3d
 					, renderer::MultisampleState{}
 					, program
 					, flags ) ).first->second;
+			pipeline.setVertexLayouts( layouts );
 
 			auto initialise = [this, &pipeline, flags]()
 			{
@@ -142,6 +144,7 @@ namespace castor3d
 				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
 				layouts.emplace_back( std::move( layout ) );
 				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
+				pipeline.initialise( getRenderPass(), renderer::PrimitiveTopology::eTriangleList );
 			};
 
 			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
@@ -155,7 +158,8 @@ namespace castor3d
 		}
 	}
 
-	void DepthPass::doPrepareBackPipeline( renderer::ShaderStageStateArray & program
+	void DepthPass::doPrepareBackPipeline( ShaderProgramSPtr program
+		, renderer::VertexLayoutCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
 		auto it = m_backPipelines.find( flags );
@@ -174,6 +178,7 @@ namespace castor3d
 					, renderer::MultisampleState{}
 					, program
 					, flags ) ).first->second;
+			pipeline.setVertexLayouts( layouts );
 
 			auto initialise = [this, &pipeline, flags]()
 			{
@@ -182,6 +187,7 @@ namespace castor3d
 				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
 				layouts.emplace_back( std::move( layout ) );
 				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
+				pipeline.initialise( getRenderPass(), renderer::PrimitiveTopology::eTriangleList );
 			};
 
 			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )

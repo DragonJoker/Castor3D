@@ -196,10 +196,11 @@ namespace castor3d
 			pxl = writer.finalise();
 		}
 
-		auto & cache = getEngine()->getShaderProgramCache();
-		auto program = cache.getNewProgram( false );
-		program.push_back( { renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
-		program.push_back( { renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
+		renderer::ShaderStageStateArray program
+		{
+			{ renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eVertex ) },
+			{ renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eFragment ) }
+		};
 		program[0].module->loadShader( vtx.getSource() );
 		program[1].module->loadShader( pxl.getSource() );
 		return program;

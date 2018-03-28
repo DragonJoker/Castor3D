@@ -137,6 +137,7 @@ namespace castor3d
 	class Context;
 	class EnvironmentMap;
 	class EnvironmentMapPass;
+	class GeometryPassResult;
 	class GpuInformations;
 	class HdrConfig;
 	class IblTextures;

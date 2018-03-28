@@ -198,10 +198,8 @@ namespace castor3d
 
 			doInitialiseShadowMaps();
 			doInitialiseRenderPass();
-			m_opaquePass->initialise( m_size );
-			m_transparentPass->initialise( m_size );
-
 #if !DEBUG_FORWARD_RENDERING
+			m_opaquePass->initialise( m_size );
 			m_deferredRendering = std::make_unique< DeferredRendering >( *getEngine()
 				, static_cast< OpaquePass & >( *m_opaquePass )
 				, m_depthBuffer
@@ -211,14 +209,20 @@ namespace castor3d
 				, *m_renderTarget.getScene()
 				, m_renderTarget.getCamera()->getViewport()
 				, m_ssaoConfig );
+#else
+			m_opaquePass->initialise( m_size );
 #endif
 #if USE_WEIGHTED_BLEND
+			static_cast< TransparentPass & >( *m_transparentPass ).setDepthFormat( m_depthBuffer->getPixelFormat() );
+			m_transparentPass->initialise( m_size );
 			m_weightedBlendRendering = std::make_unique< WeightedBlendRendering >( *getEngine()
 				, static_cast< TransparentPass & >( *m_transparentPass )
 				, m_depthBuffer->getDefaultView()
 				, m_colourTexture->getDefaultView()
 				, m_renderTarget.getSize()
 				, *m_renderTarget.getScene() );
+#else
+			m_transparentPass->initialise( m_size );
 #endif
 
 			m_particleTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Particles" ), cuT( "Particles" ) );

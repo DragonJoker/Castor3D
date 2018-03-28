@@ -149,12 +149,12 @@ namespace castor3d
 			return m_shadowMap;
 		}
 
-		inline TextureUnit & getDepth()
+		inline TextureUnit & getLinearDepth()
 		{
 			return m_linearMap;
 		}
 
-		inline TextureUnit const & getDepth()const
+		inline TextureUnit const & getLinearDepth()const
 		{
 			return m_linearMap;
 		}

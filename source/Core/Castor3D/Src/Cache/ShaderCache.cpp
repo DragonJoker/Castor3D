@@ -6,11 +6,11 @@
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Material/Pass.hpp"
 #include "Render/RenderPass.hpp"
+#include "Shader/Program.hpp"
 
 #include <GlslSource.hpp>
 
 #include <Core/Device.hpp>
-#include <Shader/ShaderProgram.hpp>
 
 using namespace castor;
 
@@ -50,7 +50,7 @@ namespace castor3d
 			getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
 				, [&program]()
 				{
-					program.clear();
+					program->cleanup();
 				} ) );
 		}
 	}
@@ -62,13 +62,12 @@ namespace castor3d
 		m_arrayPrograms.clear();
 	}
 
-	renderer::ShaderStageStateArray ShaderProgramCache::getNewProgram( bool initialise )
+	ShaderProgramSPtr ShaderProgramCache::getNewProgram( bool initialise )
 	{
-		renderer::ShaderStageStateArray result;
-		return doAddProgram( std::move( result ), initialise );
+		return doAddProgram( std::make_shared< ShaderProgram >( *getEngine()->getRenderSystem() ), initialise );
 	}
 
-	renderer::ShaderStageStateArray ShaderProgramCache::getAutomaticProgram( RenderPass const & renderPass
+	ShaderProgramSPtr ShaderProgramCache::getAutomaticProgram( RenderPass const & renderPass
 		, PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
@@ -98,7 +97,7 @@ namespace castor3d
 					, programFlags
 					, sceneFlags
 					, alphaFunc );
-				REQUIRE( !result.empty() );
+				REQUIRE( result );
 				return doAddBillboardProgram( std::move( result )
 					, passFlags
 					, textureFlags
@@ -130,7 +129,7 @@ namespace castor3d
 					, sceneFlags
 					, alphaFunc
 					, invertNormals );
-				REQUIRE( !result.empty() );
+				REQUIRE( result );
 				return doAddAutomaticProgram( std::move( result )
 					, passFlags
 					, textureFlags
@@ -142,14 +141,31 @@ namespace castor3d
 		}
 	}
 
-	renderer::ShaderStageStateArray ShaderProgramCache::doAddProgram( renderer::ShaderStageStateArray && program
+	ShaderProgramSPtr ShaderProgramCache::doAddProgram( ShaderProgramSPtr program
 		, bool initialise )
 	{
-		m_arrayPrograms.push_back( std::move( program ) );
+		m_arrayPrograms.push_back( program );
+
+		if ( initialise )
+		{
+			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
+			{
+				m_arrayPrograms.back()->initialise();
+			}
+			else
+			{
+				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
+					, [program]()
+					{
+						program->initialise();
+					} ) );
+			}
+		}
+
 		return m_arrayPrograms.back();
 	}
 
-	renderer::ShaderStageStateArray ShaderProgramCache::doCreateAutomaticProgram( RenderPass const & renderPass
+	ShaderProgramSPtr ShaderProgramCache::doCreateAutomaticProgram( RenderPass const & renderPass
 		, PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
@@ -157,16 +173,16 @@ namespace castor3d
 		, renderer::CompareOp alphaFunc
 		, bool invertNormals )const
 	{
-		renderer::ShaderStageStateArray result;
 		renderer::ShaderStageFlags matrixUboShaderMask = renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment;
-		result.push_back( { getEngine()->getRenderSystem()->getMainDevice().createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
-		result.push_back( { getEngine()->getRenderSystem()->getMainDevice().createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-		result[0].module->loadShader( renderPass.getVertexShaderSource( passFlags
+		ShaderProgramSPtr result = std::make_shared< ShaderProgram >( *getEngine()->getRenderSystem() );
+		result->setSource( renderer::ShaderStageFlag::eVertex
+			, renderPass.getVertexShaderSource( passFlags
 				, textureFlags
 				, programFlags
 				, sceneFlags
-				, invertNormals ).getSource() );
-		result[1].module->loadShader( renderPass.getPixelShaderSource( passFlags
+				, invertNormals ) );
+		result->setSource( renderer::ShaderStageFlag::eFragment
+			, renderPass.getPixelShaderSource( passFlags
 				, textureFlags
 				, programFlags
 				, sceneFlags
@@ -178,15 +194,14 @@ namespace castor3d
 
 		if ( !geometry.getSource().empty() )
 		{
-			result.push_back( { getEngine()->getRenderSystem()->getMainDevice().createShaderModule( renderer::ShaderStageFlag::eGeometry ) } );
 			addFlag( matrixUboShaderMask, renderer::ShaderStageFlag::eGeometry );
-			result[2].module->loadShader( geometry.getSource() );
+			result->setSource( renderer::ShaderStageFlag::eGeometry, geometry );
 		}
 
 		return result;
 	}
 
-	renderer::ShaderStageStateArray ShaderProgramCache::doAddAutomaticProgram( renderer::ShaderStageStateArray && program
+	ShaderProgramSPtr ShaderProgramCache::doAddAutomaticProgram( ShaderProgramSPtr program
 		, PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
@@ -211,7 +226,7 @@ namespace castor3d
 		return it->second;
 	}
 
-	renderer::ShaderStageStateArray ShaderProgramCache::doCreateBillboardProgram( RenderPass const & renderPass
+	ShaderProgramSPtr ShaderProgramCache::doCreateBillboardProgram( RenderPass const & renderPass
 		, PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
@@ -220,9 +235,6 @@ namespace castor3d
 	{
 		auto & engine = *getEngine();
 		auto & renderSystem = *engine.getRenderSystem();
-		renderer::ShaderStageStateArray result;
-		result.push_back( { getEngine()->getRenderSystem()->getMainDevice().createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
-		result.push_back( { getEngine()->getRenderSystem()->getMainDevice().createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
 		glsl::Shader vtxShader;
 		{
 			using namespace glsl;
@@ -307,12 +319,13 @@ namespace castor3d
 			, sceneFlags
 			, alphaFunc );
 
-		result[0].module->loadShader( vtxShader.getSource() );
-		result[1].module->loadShader( pxlShader.getSource() );
+		ShaderProgramSPtr result = std::make_shared< ShaderProgram >( *getEngine()->getRenderSystem() );
+		result->setSource( renderer::ShaderStageFlag::eVertex, vtxShader );
+		result->setSource( renderer::ShaderStageFlag::eFragment, pxlShader );
 		return result;
 	}
 
-	renderer::ShaderStageStateArray ShaderProgramCache::doAddBillboardProgram( renderer::ShaderStageStateArray && program
+	ShaderProgramSPtr ShaderProgramCache::doAddBillboardProgram( ShaderProgramSPtr program
 		, PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags

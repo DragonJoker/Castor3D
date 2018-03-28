@@ -389,9 +389,11 @@ namespace castor3d
 		auto const vertex = getVertexProgram( engine );
 		auto const blurX = getBlurXProgram( engine );
 
-		auto program = cache.getNewProgram( false );
-		program.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
-		program.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
+		renderer::ShaderStageStateArray program
+		{
+			{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
+			{ device.createShaderModule( renderer::ShaderStageFlag::eFragment ) }
+		};
 		program[0].module->loadShader( vertex.getSource() );
 		program[1].module->loadShader( blurX.getSource() );
 
@@ -420,9 +422,11 @@ namespace castor3d
 		auto const vertex = getVertexProgram( engine );
 		auto const blurY = getBlurYProgram( engine );
 
-		auto program = cache.getNewProgram( false );
-		program.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
-		program.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
+		renderer::ShaderStageStateArray program
+		{
+			{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
+			{ device.createShaderModule( renderer::ShaderStageFlag::eFragment ) }
+		};
 		program[0].module->loadShader( vertex.getSource() );
 		program[1].module->loadShader( blurY.getSource() );
 

@@ -47,6 +47,10 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::render
 		 */
+		void initialiseRenderPass( GeometryPassResult const & gpResult );
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::render
+		 */
 		void update( RenderInfo & info
 			, ShadowMapLightTypeArray & shadowMaps
 			, castor::Point2r const & jitter )override;
@@ -114,12 +118,14 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
 		 */
-		C3D_API void doPrepareFrontPipeline( renderer::ShaderStageStateArray & program
+		C3D_API void doPrepareFrontPipeline( ShaderProgramSPtr program
+			, renderer::VertexLayoutCRefArray const & layouts
 			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
 		 */
-		C3D_API void doPrepareBackPipeline( renderer::ShaderStageStateArray & program
+		C3D_API void doPrepareBackPipeline( ShaderProgramSPtr program
+			, renderer::VertexLayoutCRefArray const & layouts
 			, PipelineFlags const & flags )override;
 
 	private:

@@ -27,16 +27,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	device	The logical device.
-		 *\param[in]	count	The elements count.
-		 *\param[in]	flags	The buffer memory flags.
+		 *\param[in]	renderSystem	The RenderSystem.
+		 *\param[in]	count			The elements count.
+		 *\param[in]	flags			The buffer memory flags.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	device	Le périphérique logique.
-		 *\param[in]	count	Le nombre d'éléments.
-		 *\param[in]	flags	Les indicateurs de mémoire du tampon.
+		 *\param[in]	renderSystem	Le RenderSystem.
+		 *\param[in]	count			Le nombre d'éléments.
+		 *\param[in]	flags			Les indicateurs de mémoire du tampon.
 		 */
-		inline UniformBuffer( renderer::Device const & device
+		inline UniformBuffer( RenderSystem const & renderSystem
 			, uint32_t count
 			, renderer::MemoryPropertyFlags flags );
 		/**
@@ -46,6 +46,20 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		inline ~UniformBuffer();
+		/**
+		 *\~english
+		 *\brief		Initialises the GPU buffer.
+		 *\~french
+		 *\brief		Initialise le tampon GPU.
+		 */
+		inline void initialise();
+		/**
+		 *\~english
+		 *\brief		Cleans up the GPU buffer.
+		 *\~french
+		 *\brief		Nettoie le tampon GPU.
+		 */
+		inline void cleanup();
 		/**
 		 *\~english
 		 *\param[in]	size	The requested memory size.
@@ -141,8 +155,11 @@ namespace castor3d
 		}
 
 	private:
+		RenderSystem const & m_renderSystem;
+		uint32_t m_count;
 		renderer::UniformBufferPtr< T > m_buffer;
 		std::set< uint32_t > m_available;
+		renderer::MemoryPropertyFlags m_flags;
 	};
 }
 

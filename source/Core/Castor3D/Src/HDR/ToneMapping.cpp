@@ -40,8 +40,6 @@ namespace castor3d
 	{
 		m_configUbo.initialise();
 		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto program = getEngine()->getShaderProgramCache().getNewProgram( false );
-
 		m_signalFinished = renderSystem.getCurrentDevice()->createSemaphore();
 
 		glsl::Shader vtx;
@@ -66,8 +64,11 @@ namespace castor3d
 		}
 
 		auto pxl = doCreate();
-		program.push_back( { renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
-		program.push_back( { renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
+		renderer::ShaderStageStateArray program
+		{
+			{ renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eVertex ) },
+			{ renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eFragment ) }
+		};
 		program[0].module->loadShader( vtx.getSource() );
 		program[1].module->loadShader( pxl.getSource() );
 		renderer::DescriptorSetLayoutBindingArray bindings

@@ -36,7 +36,6 @@ namespace GuiCommon
 //		, m_stcContext( p_stcContext )
 //		, m_auiManager( this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
 //		, m_shaderType( p_type )
-//		, m_shaderModel( ShaderModel::eCount )
 //#if defined( NDEBUG )
 //		, m_canEdit( p_bCanEdit )
 //#else
@@ -44,61 +43,57 @@ namespace GuiCommon
 //#endif
 //	{
 //		doInitialiseShaderLanguage();
+//		doInitialiseLayout();
 //
-//		if ( m_shaderModel != ShaderModel::eCount )
+//		auto & engine = *p_shader->getRenderSystem()->getEngine();
+//		auto lock = castor::makeUniqueLock( engine.getRenderWindowCache() );
+//		auto it = engine.getRenderWindowCache().begin();
+//
+//		if ( it != engine.getRenderWindowCache().end() )
 //		{
-//			doInitialiseLayout();
+//			auto & technique = *it->second->getRenderTarget()->getTechnique();
+//			auto textureFlags = p_pass.getTextureFlags();
+//			auto passFlags = p_pass.getPassFlags();
+//			auto sceneFlags = p_scene.getFlags();
+//			ProgramFlags programFlags;
+//			RenderPipelineRPtr pipeline;
 //
-//			auto & engine = *p_shader->getRenderSystem()->getEngine();
-//			auto lock = castor::makeUniqueLock( engine.getRenderWindowCache() );
-//			auto it = engine.getRenderWindowCache().begin();
-//
-//			if ( it != engine.getRenderWindowCache().end() )
+//			if ( p_pass.hasAlphaBlending())
 //			{
-//				auto & technique = *it->second->getRenderTarget()->getTechnique();
-//				auto textureFlags = p_pass.getTextureFlags();
-//				auto passFlags = p_pass.getPassFlags();
-//				auto sceneFlags = p_scene.getFlags();
-//				ProgramFlags programFlags;
-//				RenderPipelineRPtr pipeline;
+//				technique.getTransparentPass().updateFlags( passFlags
+//					, textureFlags
+//					, programFlags
+//					, sceneFlags );
+//				pipeline = technique.getTransparentPass().getPipelineBack( p_pass.getColourBlendMode()
+//					, p_pass.getAlphaBlendMode()
+//					, p_pass.getAlphaFunc()
+//					, passFlags
+//					, textureFlags
+//					, programFlags
+//					, sceneFlags );
+//			}
+//			else
+//			{
+//				technique.getOpaquePass().updateFlags( passFlags
+//					, textureFlags
+//					, programFlags
+//					, sceneFlags );
+//				pipeline = technique.getOpaquePass().getPipelineBack( p_pass.getColourBlendMode()
+//					, p_pass.getAlphaBlendMode()
+//					, p_pass.getAlphaFunc()
+//					, passFlags
+//					, textureFlags
+//					, programFlags
+//					, sceneFlags );
+//			}
 //
-//				if ( p_pass.hasAlphaBlending())
-//				{
-//					technique.getTransparentPass().updateFlags( passFlags
-//						, textureFlags
-//						, programFlags
-//						, sceneFlags );
-//					pipeline = technique.getTransparentPass().getPipelineBack( p_pass.getColourBlendMode()
-//						, p_pass.getAlphaBlendMode()
-//						, p_pass.getAlphaFunc()
-//						, passFlags
-//						, textureFlags
-//						, programFlags
-//						, sceneFlags );
-//				}
-//				else
-//				{
-//					technique.getOpaquePass().updateFlags( passFlags
-//						, textureFlags
-//						, programFlags
-//						, sceneFlags );
-//					pipeline = technique.getOpaquePass().getPipelineBack( p_pass.getColourBlendMode()
-//						, p_pass.getAlphaBlendMode()
-//						, p_pass.getAlphaFunc()
-//						, passFlags
-//						, textureFlags
-//						, programFlags
-//						, sceneFlags );
-//				}
-//
-//				if ( pipeline )
-//				{
-//					doLoadPage( *pipeline );
-//				}
-//				else
-//				{
-//					Logger::logWarning( cuT( "Pipeline not found." ) );
-//				}
+//			if ( pipeline )
+//			{
+//				doLoadPage( *pipeline );
+//			}
+//			else
+//			{
+//				Logger::logWarning( cuT( "Pipeline not found." ) );
 //			}
 //		}
 //	}
@@ -142,9 +137,6 @@ namespace GuiCommon
 //
 //	void ShaderEditorPage::doInitialiseShaderLanguage()
 //	{
-//		m_shaderModel = ShaderModel::eCount;
-//		ShaderProgramSPtr program = m_shaderProgram.lock();
-//		m_shaderModel = program->getRenderSystem()->getGpuInformations().getMaxShaderModel();
 //	}
 //
 //	void ShaderEditorPage::doInitialiseLayout()
