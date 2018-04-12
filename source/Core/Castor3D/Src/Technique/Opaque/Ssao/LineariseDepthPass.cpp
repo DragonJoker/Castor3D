@@ -196,7 +196,7 @@ namespace castor3d
 			image.imageType = renderer::TextureType::e2D;
 			image.mipLevels = LineariseDepthPass::MaxMipLevel + 1u;
 			image.samples = renderer::SampleCountFlag::e1;
-			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst | renderer::ImageUsageFlag::eTransferSrc;
 
 			auto ssaoResult = std::make_shared< TextureLayout >( renderSystem
 				, image

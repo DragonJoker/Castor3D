@@ -36,7 +36,7 @@ namespace castor3d
 	{
 		if ( m_renderSystem.hasMainDevice() )
 		{
-			m_renderSystem.getMainDevice().enable();
+			m_renderSystem.getMainDevice()->enable();
 			getEngine()->getFrameListenerCache().forEach( []( FrameListener & p_listener )
 			{
 				p_listener.fireEvents( EventType::ePreRender );
@@ -45,7 +45,7 @@ namespace castor3d
 			{
 				p_listener.fireEvents( EventType::eQueueRender );
 			} );
-			m_renderSystem.getMainDevice().disable();
+			m_renderSystem.getMainDevice()->disable();
 		}
 		else
 		{
@@ -104,30 +104,30 @@ namespace castor3d
 		m_debugOverlays->unregisterTimer( timer );
 	}
 
-	renderer::Device const * RenderLoop::doCreateDevice( renderer::WindowHandle && handle
+	renderer::DevicePtr RenderLoop::doCreateDevice( renderer::WindowHandle && handle
 		, RenderWindow & window )
 	{
+		renderer::DevicePtr result;
+
 		try
 		{
-			auto device = m_renderSystem.createDevice( std::move( handle ) );
+			result = m_renderSystem.createDevice( std::move( handle ) );
 
-			if ( device )
+			if ( result )
 			{
-				window.setDevice( std::move( device ) );
+				window.setDevice( result );
 			}
-
-			return &window.getDevice();
 		}
-		catch ( castor::Exception & p_exc )
+		catch ( castor::Exception & exc )
 		{
-			Logger::logError( cuT( "createContext - " ) + p_exc.getFullDescription() );
+			Logger::logError( cuT( "createContext - " ) + exc.getFullDescription() );
 		}
-		catch ( std::exception & p_exc )
+		catch ( std::exception & exc )
 		{
-			Logger::logError( std::string( "createContext - " ) + p_exc.what() );
+			Logger::logError( std::string( "createContext - " ) + exc.what() );
 		}
 
-		return nullptr;
+		return result;
 	}
 
 	void RenderLoop::doRenderFrame()
@@ -155,11 +155,11 @@ namespace castor3d
 			auto guard = makeBlockGuard(
 				[this]()
 				{
-					m_renderSystem.getMainDevice().enable();
+					m_renderSystem.getMainDevice()->enable();
 				},
 				[this]()
 				{
-					m_renderSystem.getMainDevice().disable();
+					m_renderSystem.getMainDevice()->disable();
 				} );
 			doProcessEvents( EventType::ePreRender );
 			getEngine()->getMaterialCache().update();

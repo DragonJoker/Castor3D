@@ -145,10 +145,10 @@ namespace castor3d
 		}
 	}
 
-	renderer::Device const * RenderLoopAsync::doCreateMainDevice( renderer::WindowHandle && handle
+	renderer::DevicePtr RenderLoopAsync::doCreateMainDevice( renderer::WindowHandle && handle
 		, RenderWindow & window )
 	{
-		renderer::Device const * result{ nullptr };
+		renderer::DevicePtr result;
 
 		if ( !m_createContext )
 		{
@@ -163,7 +163,7 @@ namespace castor3d
 
 			m_createContext = false;
 			doSetWindow( nullptr );
-			result = &m_renderSystem.getMainDevice();
+			result = m_renderSystem.getMainDevice();
 		}
 
 		return result;
@@ -197,7 +197,7 @@ namespace castor3d
 
 					if ( device )
 					{
-						m_renderSystem.setMainDevice( *device );
+						m_renderSystem.setMainDevice( device );
 						device->enable();
 						GpuInformations info;
 						m_renderSystem.initialise( std::move( info ) );

@@ -106,6 +106,7 @@ namespace castor3d
 		Engine & m_engine;
 		TransparentPass & m_transparentPass;
 		castor::Size m_size;
+		renderer::TextureViewPtr m_depthView;
 		renderer::TexturePtr m_accumulation;
 		renderer::TextureViewPtr m_accumulationView;
 		renderer::TexturePtr m_revealage;

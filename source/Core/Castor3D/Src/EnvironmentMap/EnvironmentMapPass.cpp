@@ -88,15 +88,6 @@ namespace castor3d
 		return m_opaquePass->getCommandBuffer();
 	}
 
-	renderer::CommandBuffer const * EnvironmentMapPass::getBackgroundCommandBuffer()const
-	{
-		auto & scene = *m_camera->getScene();
-		renderer::CommandBuffer const * result{ nullptr };
-		renderer::Semaphore const * semaphore{ nullptr };
-		scene.getBackgroundCommands( result, semaphore );
-		return result;
-	}
-
 	renderer::CommandBuffer const & EnvironmentMapPass::getTransparentCommandBuffer()const
 	{
 		return m_transparentPass->getCommandBuffer();

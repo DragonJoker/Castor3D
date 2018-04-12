@@ -5,8 +5,10 @@
 #include "Render/RenderPipeline.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
+#include "Scene/Background/Visitor.hpp"
 #include "EnvironmentMap/EnvironmentMap.hpp"
 #include "RenderToTexture/EquirectangularToCube.hpp"
+#include "Scene/Background/Visitor.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -26,6 +28,7 @@ using namespace glsl;
 namespace castor3d
 {
 	//************************************************************************************************
+
 	namespace
 	{
 		renderer::ImageCreateInfo doGetImageCreate( renderer::Format format
@@ -51,12 +54,12 @@ namespace castor3d
 
 	//************************************************************************************************
 
-	Skybox::TextWriter::TextWriter( String const & tabs )
-		: castor::TextWriter< Skybox >{ tabs }
+	SkyboxBackground::TextWriter::TextWriter( String const & tabs )
+		: castor::TextWriter< SkyboxBackground >{ tabs }
 	{
 	}
 
-	bool Skybox::TextWriter::operator()( Skybox const & obj, TextFile & file )
+	bool SkyboxBackground::TextWriter::operator()( SkyboxBackground const & obj, TextFile & file )
 	{
 		static String const faces[]
 		{
@@ -80,7 +83,7 @@ namespace castor3d
 				, file.getFilePath()
 				, subfolder );
 			result = file.writeText( m_tabs + cuT( "\tequirectangular" ) + cuT( " \"" ) + relative + cuT( "\" 1024 1024\n" ) ) > 0;
-			castor::TextWriter< Skybox >::checkError( result, "Skybox equi-texture" );
+			castor::TextWriter< SkyboxBackground >::checkError( result, "Skybox equi-texture" );
 
 			if ( result )
 			{
@@ -104,7 +107,7 @@ namespace castor3d
 					, file.getFilePath()
 					, subfolder );
 				result = file.writeText( m_tabs + cuT( "\t" ) + faces[i] + cuT( " \"" ) + relative + cuT( "\"\n" ) ) > 0;
-				castor::TextWriter< Skybox >::checkError( result, ( "Skybox " + faces[i] ).c_str() );
+				castor::TextWriter< SkyboxBackground >::checkError( result, ( "Skybox " + faces[i] ).c_str() );
 			}
 
 			if ( result )
@@ -118,93 +121,48 @@ namespace castor3d
 
 	//************************************************************************************************
 
-	Skybox::Skybox( Engine & engine )
-		: OwnedBy< Engine >{ engine }
-		, m_texture{ std::make_shared< TextureLayout >( *engine.getRenderSystem()
-			, doGetImageCreate( renderer::Format::eR8G8B8A8_UNORM, { 512u, 512u } )
-			, renderer::MemoryPropertyFlag::eDeviceLocal ) }
+	SkyboxBackground::SkyboxBackground( Engine & engine
+		, Scene & scene )
+		: SceneBackground{ engine, scene, BackgroundType::eSkybox }
 		, m_matrixUbo{ engine }
 		, m_modelMatrixUbo{ engine }
-		, m_configUbo{ engine }
-		, m_declaration{ std::make_unique< renderer::VertexLayout >( 0u, uint32_t( sizeof( Point3f ) ), renderer::VertexInputRate::eVertex ) }
 	{
-		m_declaration->createAttribute( 0u, renderer::Format::eR32G32B32_SFLOAT, 0u );
-		String const skybox = cuT( "Skybox" );
-
-		if ( getEngine()->getSamplerCache().has( skybox ) )
-		{
-			m_sampler = getEngine()->getSamplerCache().find( skybox );
-		}
-		else
-		{
-			auto sampler = getEngine()->getSamplerCache().add( skybox );
-			sampler->setMinFilter( renderer::Filter::eLinear );
-			sampler->setMagFilter( renderer::Filter::eLinear );
-			sampler->setWrapS( renderer::WrapMode::eClampToEdge );
-			sampler->setWrapT( renderer::WrapMode::eClampToEdge );
-			sampler->setWrapR( renderer::WrapMode::eClampToEdge );
-			m_sampler = sampler;
-		}
-
-		m_bufferVertex =
-		{
-			{ Point3f{ -1.0_r, +1.0_r, -1.0_r }, Point3f{ +1.0_r, -1.0_r, -1.0_r }, Point3f{ -1.0_r, -1.0_r, -1.0_r }, Point3f{ +1.0_r, -1.0_r, -1.0_r }, Point3f{ -1.0_r, +1.0_r, -1.0_r }, Point3f{ +1.0_r, +1.0_r, -1.0_r } },
-			{ Point3f{ -1.0_r, -1.0_r, +1.0_r }, Point3f{ -1.0_r, +1.0_r, -1.0_r }, Point3f{ -1.0_r, -1.0_r, -1.0_r }, Point3f{ -1.0_r, +1.0_r, -1.0_r }, Point3f{ -1.0_r, -1.0_r, +1.0_r }, Point3f{ -1.0_r, +1.0_r, +1.0_r } },
-			{ Point3f{ +1.0_r, -1.0_r, -1.0_r }, Point3f{ +1.0_r, +1.0_r, +1.0_r }, Point3f{ +1.0_r, -1.0_r, +1.0_r }, Point3f{ +1.0_r, +1.0_r, +1.0_r }, Point3f{ +1.0_r, -1.0_r, -1.0_r }, Point3f{ +1.0_r, +1.0_r, -1.0_r } },
-			{ Point3f{ -1.0_r, -1.0_r, +1.0_r }, Point3f{ +1.0_r, +1.0_r, +1.0_r }, Point3f{ -1.0_r, +1.0_r, +1.0_r }, Point3f{ +1.0_r, +1.0_r, +1.0_r }, Point3f{ -1.0_r, -1.0_r, +1.0_r }, Point3f{ +1.0_r, -1.0_r, +1.0_r } },
-			{ Point3f{ -1.0_r, +1.0_r, -1.0_r }, Point3f{ +1.0_r, +1.0_r, +1.0_r }, Point3f{ +1.0_r, +1.0_r, -1.0_r }, Point3f{ +1.0_r, +1.0_r, +1.0_r }, Point3f{ -1.0_r, +1.0_r, -1.0_r }, Point3f{ -1.0_r, +1.0_r, +1.0_r } },
-			{ Point3f{ -1.0_r, -1.0_r, -1.0_r }, Point3f{ +1.0_r, -1.0_r, -1.0_r }, Point3f{ -1.0_r, -1.0_r, +1.0_r }, Point3f{ +1.0_r, -1.0_r, -1.0_r }, Point3f{ +1.0_r, -1.0_r, +1.0_r }, Point3f{ -1.0_r, -1.0_r, +1.0_r } },
-		};
+		m_texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
+			, doGetImageCreate( renderer::Format::eR8G8B8A8_UNORM, { 512u, 512u } )
+			, renderer::MemoryPropertyFlag::eDeviceLocal );
 	}
 
-	Skybox::~Skybox()
+	SkyboxBackground::~SkyboxBackground()
 	{
 	}
 
-	bool Skybox::initialise( renderer::Format targetColour
-		, renderer::Format targetDepth )
+	void SkyboxBackground::accept( BackgroundVisitor & visitor )const
 	{
-		REQUIRE( m_scene );
+		visitor.visit( *this );
+	}
+
+	bool SkyboxBackground::doInitialise( renderer::RenderPass const & renderPass )
+	{
 		REQUIRE( m_texture );
 		bool result = doInitialiseTexture();
 		auto & program = doInitialiseShader();
 
 		if ( result )
 		{
-			doInitialiseRenderPass( targetColour, targetDepth );
-
-			if ( m_scene->getMaterialsType() == MaterialType::ePbrMetallicRoughness
-				|| m_scene->getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
-			{
-				m_ibl = std::make_unique< IblTextures >( *m_scene, m_texture->getTexture() );
-				m_ibl->update();
-			}
-
 			result = doInitialiseVertexBuffer()
-				&& doInitialisePipeline( program );
-			doPrepareFrame();
+				&& doInitialisePipeline( program, renderPass );
 		}
 
 		return result;
 	}
 
-	void Skybox::cleanup()
+	void SkyboxBackground::doCleanup()
 	{
-		if ( m_texture )
-		{
-			m_texture->cleanup();
-			m_texture.reset();
-		}
-
-		m_vertexBuffer.reset();
 		m_matrixUbo.cleanup();
 		m_modelMatrixUbo.cleanup();
-		m_configUbo.cleanup();
-		m_pipeline.reset();
-		m_ibl.reset();
 	}
 
-	void Skybox::update( Camera const & camera )
+	void SkyboxBackground::doUpdate( Camera const & camera )
 	{
 		auto & scene = *camera.getScene();
 		auto node = camera.getParent();
@@ -218,14 +176,9 @@ namespace castor3d
 			//, m_viewport.getProjection() );
 			, camera.getViewport().getProjection() );
 		m_modelMatrixUbo.update( m_mtxModel );
-
-		if ( !m_hdr )
-		{
-			m_configUbo.update( scene.getHdrConfig() );
-		}
 	}
 
-	void Skybox::setEquiTexture( TextureLayoutSPtr texture
+	void SkyboxBackground::setEquiTexture( TextureLayoutSPtr texture
 		, castor::Size const & size )
 	{
 		m_equiTexturePath = castor::Path( texture->getDefaultImage().toString() );
@@ -233,7 +186,7 @@ namespace castor3d
 		m_equiSize = size;
 	}
 
-	renderer::ShaderStageStateArray Skybox::doInitialiseShader()
+	renderer::ShaderStageStateArray SkyboxBackground::doInitialiseShader()
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
 
@@ -267,7 +220,7 @@ namespace castor3d
 			// Inputs
 			UBO_HDR_CONFIG( writer, 2, 0 );
 			auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ), 0u );
-			auto skybox = writer.declSampler< SamplerCube >( cuT( "skybox" ), MinBufferIndex, 0u );
+			auto skybox = writer.declSampler< SamplerCube >( cuT( "skybox" ), 3u, 0u );
 			glsl::Utils utils{ writer };
 
 			if ( !m_hdr )
@@ -305,7 +258,7 @@ namespace castor3d
 		return result;
 	}
 
-	bool Skybox::doInitialiseVertexBuffer()
+	bool SkyboxBackground::doInitialiseVertexBuffer()
 	{
 		m_vertexBuffer = renderer::makeVertexBuffer< NonTexturedCube >( *getEngine()->getRenderSystem()->getCurrentDevice()
 			, 1u
@@ -314,7 +267,18 @@ namespace castor3d
 
 		if ( auto * buffer = m_vertexBuffer->lock( 0u, 1u, renderer::MemoryMapFlag::eWrite ) )
 		{
-			std::memcpy( buffer, m_bufferVertex.data(), m_vertexBuffer->getSize() );
+			NonTexturedCube bufferVertex
+			{
+				{
+					{ Point3f{ -1, +1, -1 }, Point3f{ +1, -1, -1 }, Point3f{ -1, -1, -1 }, Point3f{ +1, -1, -1 }, Point3f{ -1, +1, -1 }, Point3f{ +1, +1, -1 } },
+					{ Point3f{ -1, -1, +1 }, Point3f{ -1, +1, -1 }, Point3f{ -1, -1, -1 }, Point3f{ -1, +1, -1 }, Point3f{ -1, -1, +1 }, Point3f{ -1, +1, +1 } },
+					{ Point3f{ +1, -1, -1 }, Point3f{ +1, +1, +1 }, Point3f{ +1, -1, +1 }, Point3f{ +1, +1, +1 }, Point3f{ +1, -1, -1 }, Point3f{ +1, +1, -1 } },
+					{ Point3f{ -1, -1, +1 }, Point3f{ +1, +1, +1 }, Point3f{ -1, +1, +1 }, Point3f{ +1, +1, +1 }, Point3f{ -1, -1, +1 }, Point3f{ +1, -1, +1 } },
+					{ Point3f{ -1, +1, -1 }, Point3f{ +1, +1, +1 }, Point3f{ +1, +1, -1 }, Point3f{ +1, +1, +1 }, Point3f{ -1, +1, -1 }, Point3f{ -1, +1, +1 } },
+					{ Point3f{ -1, -1, -1 }, Point3f{ +1, -1, -1 }, Point3f{ -1, -1, +1 }, Point3f{ +1, -1, -1 }, Point3f{ +1, -1, +1 }, Point3f{ -1, -1, +1 } },
+				}
+			};
+			std::memcpy( buffer, bufferVertex.faces, m_vertexBuffer->getSize() );
 			m_vertexBuffer->flush( 0u, 1u );
 			m_vertexBuffer->unlock();
 		}
@@ -322,7 +286,7 @@ namespace castor3d
 		return true;
 	}
 
-	bool Skybox::doInitialiseTexture()
+	bool SkyboxBackground::doInitialiseTexture()
 	{
 		if ( m_equiTexture )
 		{
@@ -330,7 +294,9 @@ namespace castor3d
 			m_hdr = true;
 		}
 
+		m_sampler.lock()->initialise();
 		auto result = m_texture->initialise();
+		m_size.set( m_texture->getWidth(), m_texture->getHeight() );
 
 		if ( result )
 		{
@@ -340,7 +306,7 @@ namespace castor3d
 		return result;
 	}
 
-	void Skybox::doInitialiseEquiTexture()
+	void SkyboxBackground::doInitialiseEquiTexture()
 	{
 		auto & engine = *getEngine();
 		auto & renderSystem = *engine.getRenderSystem();
@@ -348,7 +314,7 @@ namespace castor3d
 
 		// create the cube texture.
 		m_texture = std::make_shared< TextureLayout >( renderSystem
-			, doGetImageCreate( renderer::Format::eR32G32B32_SFLOAT, m_equiSize )
+			, doGetImageCreate( renderer::Format::eR32G32B32A32_SFLOAT, m_equiSize )
 			, renderer::MemoryPropertyFlag::eDeviceLocal );
 		m_texture->getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource();
 		m_texture->getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource();
@@ -367,7 +333,8 @@ namespace castor3d
 		m_equiTexture.reset();
 	}
 
-	bool Skybox::doInitialisePipeline( renderer::ShaderStageStateArray & program )
+	bool SkyboxBackground::doInitialisePipeline( renderer::ShaderStageStateArray & program
+		, renderer::RenderPass const & renderPass )
 	{
 		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
 		renderer::DescriptorSetLayoutBindingArray setLayoutBindings
@@ -377,31 +344,33 @@ namespace castor3d
 			{ 2u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
 			{ 3u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
 		};
-		m_descriptorSetLayout = device.createDescriptorSetLayout( std::move( setLayoutBindings ) );
-		m_pipelineLayout = device.createPipelineLayout( *m_descriptorSetLayout );
+		m_descriptorLayout = device.createDescriptorSetLayout( std::move( setLayoutBindings ) );
+		m_pipelineLayout = device.createPipelineLayout( *m_descriptorLayout );
 
 		m_matrixUbo.initialise();
 		m_modelMatrixUbo.initialise();
-		m_configUbo.initialise();
 
-		m_descriptorSetPool = m_descriptorSetLayout->createPool( 1u );
-		m_descriptorSet = m_descriptorSetPool->createDescriptorSet( 0u );
-		m_descriptorSet->createBinding( m_descriptorSetLayout->getBinding( 0u )
+		m_descriptorPool = m_descriptorLayout->createPool( 1u );
+		m_descriptorSet = m_descriptorPool->createDescriptorSet( 0u );
+		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 0u )
 			, m_matrixUbo.getUbo() );
-		m_descriptorSet->createBinding( m_descriptorSetLayout->getBinding( 1u )
+		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 1u )
 			, m_modelMatrixUbo.getUbo() );
-		m_descriptorSet->createBinding( m_descriptorSetLayout->getBinding( 2u )
+		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 2u )
 			, m_configUbo.getUbo() );
-		m_descriptorSet->createBinding( m_descriptorSetLayout->getBinding( 3u )
+		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 3u )
 			, m_texture->getDefaultView()
 			, m_sampler.lock()->getSampler() );
 		m_descriptorSet->update();
+		renderer::VertexInputState vertexInput;
+		vertexInput.vertexBindingDescriptions.push_back( { 0u, sizeof( Point3f ), renderer::VertexInputRate::eVertex } );
+		vertexInput.vertexAttributeDescriptions.push_back( { 0u, 0u, renderer::Format::eR32G32B32_SFLOAT, 0u } );
 
 		m_pipeline = m_pipelineLayout->createPipeline( renderer::GraphicsPipelineCreateInfo
 		{
 			program,
-			*m_renderPass,
-			renderer::VertexInputState::create( *m_declaration ),
+			renderPass,
+			vertexInput,
 			renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleList },
 			renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eFront },
 			renderer::MultisampleState{},
@@ -410,66 +379,5 @@ namespace castor3d
 			renderer::DepthStencilState{ 0u, true, false, renderer::CompareOp::eLessEqual }
 		} );
 		return true;
-	}
-
-	bool Skybox::doPrepareFrame()
-	{
-		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
-		m_semaphore = device.createSemaphore();
-
-		if ( !m_commandBuffer )
-		{
-			m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer( false );
-		}
-
-		auto result = m_commandBuffer->begin();
-
-		if ( result )
-		{
-			m_commandBuffer->bindPipeline( *m_pipeline );
-			m_commandBuffer->bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
-			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-			m_commandBuffer->draw( m_vertexBuffer->getCount() );
-		}
-
-		return result;
-	}
-
-	void Skybox::doInitialiseRenderPass( renderer::Format targetColour
-		, renderer::Format targetDepth )
-	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
-
-		renderer::RenderPassCreateInfo renderPass;
-		renderPass.flags = 0;
-
-		renderPass.attachments.resize( 2u );
-		renderPass.attachments[0].index = 0u;
-		renderPass.attachments[0].format = targetDepth;
-		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
-		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
-		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
-
-		renderPass.attachments[1].index = 1u;
-		renderPass.attachments[1].format = targetColour;
-		renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eLoad;
-		renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[1].initialLayout = renderer::ImageLayout::eColourAttachmentOptimal;
-		renderPass.attachments[1].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
-
-		renderPass.subpasses.resize( 1u );
-		renderPass.subpasses[0].flags = 0u;
-		renderPass.subpasses[0].colorAttachments = { { 1u, renderer::ImageLayout::eColourAttachmentOptimal } };
-		renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
-
-		m_renderPass = device.createRenderPass( renderPass );
 	}
 }

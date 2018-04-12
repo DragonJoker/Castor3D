@@ -167,7 +167,7 @@ namespace castor3d
 		auto texture2 = writer.declAttribute< Vec3 >( cuT( "texture2" )
 			, RenderPass::VertexInputs::Texture2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
+		auto gl_InstanceID( writer.declBuiltin< Int >( writer.getInstanceID() ) );
 
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
 		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
@@ -395,8 +395,9 @@ namespace castor3d
 			, 0u
 			, ( checkFlag( textureFlags, TextureChannel::eReflection )
 				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) ) );
-		auto c3d_heightScale( writer.declUniform< Float >( cuT( "c3d_heightScale" )
-			, checkFlag( textureFlags, TextureChannel::eHeight ), 0.1_f ) );
+		auto c3d_heightScale( writer.declConstant< Float >( cuT( "c3d_heightScale" )
+			, 0.1_f
+			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
 
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
@@ -671,8 +672,9 @@ namespace castor3d
 		auto c3d_mapBrdf = writer.declSampler< Sampler2D >( cuT( "c3d_mapBrdf" )
 			, index++
 			, 0u );
-		auto c3d_heightScale( writer.declUniform< Float >( cuT( "c3d_heightScale" )
-			, checkFlag( textureFlags, TextureChannel::eHeight ), 0.1_f ) );
+		auto c3d_heightScale( writer.declConstant< Float >( cuT( "c3d_heightScale" )
+			, 0.1_f
+			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
 
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
@@ -922,8 +924,9 @@ namespace castor3d
 		auto c3d_mapBrdf = writer.declSampler< Sampler2D >( cuT( "c3d_mapBrdf" )
 			, index++
 			, 0u );
-		auto c3d_heightScale( writer.declUniform< Float >( cuT( "c3d_heightScale" )
-			, checkFlag( textureFlags, TextureChannel::eHeight ), 0.1_f ) );
+		auto c3d_heightScale( writer.declConstant< Float >( cuT( "c3d_heightScale" )
+			, 0.1_f
+			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
 
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 

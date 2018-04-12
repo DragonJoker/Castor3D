@@ -483,6 +483,11 @@ namespace castor3d
 			return m_renderQueue.getCommandBuffer();
 		}
 
+		inline bool hasNodes()const
+		{
+			return m_renderQueue.hasNodes();
+		}
+
 		inline renderer::RenderPass const & getRenderPass()const
 		{
 			return *m_renderPass;

@@ -54,6 +54,21 @@ namespace castor3d
 		void update( RenderInfo & info
 			, ShadowMapLightTypeArray & shadowMaps
 			, castor::Point2r const & jitter )override;
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		inline renderer::FrameBuffer const & getFrameBuffer()const
+		{
+			REQUIRE( m_frameBuffer );
+			return *m_frameBuffer;
+		}
+		/**@}*/
 
 	private:
 		/**
@@ -134,6 +149,8 @@ namespace castor3d
 		static castor::String const Output3;
 		static castor::String const Output4;
 		static castor::String const Output5;
+
+		renderer::FrameBufferPtr m_frameBuffer;
 	};
 }
 

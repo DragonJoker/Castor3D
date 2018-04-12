@@ -1,7 +1,7 @@
 #include "DeferredRendering.hpp"
 
 #include "Render/RenderPassTimer.hpp"
-#include "Scene/Skybox.hpp"
+#include "Scene/Background/Background.hpp"
 #include "Shader/PassBuffer/PassBuffer.hpp"
 #include "Technique/Opaque/OpaquePass.hpp"
 #include "Texture/Sampler.hpp"
@@ -50,7 +50,7 @@ namespace castor3d
 		, TextureLayoutSPtr velocityTexture
 		, TextureLayoutSPtr resultTexture
 		, Size const & size
-		, Scene const & scene
+		, Scene & scene
 		, Viewport const & viewport
 		, SsaoConfig const & config )
 		: m_engine{ engine }
@@ -104,6 +104,8 @@ namespace castor3d
 				, m_ssaoConfig
 				, viewport );
 		}
+
+		m_nodesCommands = renderSystem.getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer();
 	}
 
 	DeferredRendering::~DeferredRendering()
@@ -133,7 +135,6 @@ namespace castor3d
 			, shadowMaps
 			, jitter );
 		m_reflection->update( camera );
-
 	}
 
 	renderer::Semaphore const & DeferredRendering::render( RenderInfo & info
@@ -143,11 +144,37 @@ namespace castor3d
 	{
 		m_engine.setPerObjectLighting( false );
 		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
-		device.getGraphicsQueue().submit( m_opaquePass.getCommandBuffer()
-			, toWait
-			, renderer::PipelineStageFlag::eAllCommands
-			, m_opaquePass.getSemaphore()
-			, nullptr );
+		renderer::ClearColorValue colour
+		{
+			float( scene.getBackgroundColour().red() ),
+			float( scene.getBackgroundColour().green() ),
+			float( scene.getBackgroundColour().blue() ),
+			1.0f
+		};
+		renderer::DepthStencilClearValue depth{ 1.0, 0 };
+
+
+		if ( m_nodesCommands->begin() )
+		{
+			m_nodesCommands->beginRenderPass( m_opaquePass.getRenderPass()
+				, m_opaquePass.getFrameBuffer()
+				, { depth, colour, colour, colour, colour, colour }
+				, renderer::SubpassContents::eSecondaryCommandBuffers );
+
+			if ( m_opaquePass.hasNodes() )
+			{
+				m_nodesCommands->executeCommands( { m_opaquePass.getCommandBuffer() } );
+			}
+
+			m_nodesCommands->endRenderPass();
+			m_nodesCommands->end();
+			device.getGraphicsQueue().submit( { *m_nodesCommands }
+				, {}
+				, { renderer::PipelineStageFlag::eAllCommands }
+				, { m_opaquePass.getSemaphore() }
+				, nullptr );
+			device.getGraphicsQueue().waitIdle();
+		}
 
 		auto * semaphore = m_lightingPass->render( scene
 			, camera

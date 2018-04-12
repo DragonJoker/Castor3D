@@ -16,6 +16,7 @@
 #include <Miscellaneous/Parameter.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
+#include <Render/RenderPassTimer.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
@@ -325,7 +326,7 @@ namespace film_grain
 			, params );
 	}
 
-	bool PostEffect::initialise()
+	bool PostEffect::initialise( castor3d::RenderPassTimer const & timer )
 	{
 		auto & device = *getRenderSystem()->getCurrentDevice();
 		renderer::Extent2D size{ m_renderTarget.getSize()[0], m_renderTarget.getSize()[1] };
@@ -404,6 +405,12 @@ namespace film_grain
 		if ( result
 			&& m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
 		{
+			m_commandBuffer->resetQueryPool( timer.getQuery()
+				, 0u
+				, 2u );
+			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+				, timer.getQuery()
+				, 0u );
 			// Put image in the right state for rendering.
 			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
@@ -439,6 +446,9 @@ namespace film_grain
 				, renderer::PipelineStageFlag::eColourAttachmentOutput
 				, m_renderTarget.getTexture().getTexture()->getDefaultView().makeColourAttachment( renderer::ImageLayout::eTransferDstOptimal
 					, renderer::AccessFlag::eTransferWrite ) );
+			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+				, timer.getQuery()
+				, 1u );
 			m_commandBuffer->end();
 		}
 

@@ -49,7 +49,7 @@ namespace castor3d
 			, TextureLayoutSPtr velocityTexture
 			, TextureLayoutSPtr resultTexture
 			, castor::Size const & size
-			, Scene const & scene
+			, Scene & scene
 			, Viewport const & viewport
 			, SsaoConfig const & config );
 		/**
@@ -115,6 +115,7 @@ namespace castor3d
 		std::unique_ptr< SubsurfaceScatteringPass > m_subsurfaceScattering;
 		GeometryPassResult m_geometryPassResult;
 		std::vector< renderer::TexturePtr > m_results;
+		renderer::CommandBufferPtr m_nodesCommands;
 	};
 }
 

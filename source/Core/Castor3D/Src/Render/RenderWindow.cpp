@@ -149,6 +149,7 @@ namespace castor3d
 
 				target->initialise( 1 );
 
+				doCreateProgram();
 				doCreateSwapChainDependent();
 				doPrepareFrames();
 
@@ -172,32 +173,19 @@ namespace castor3d
 
 		if ( m_device )
 		{
-			if ( getEngine()->getRenderSystem()->hasCurrentDevice()
+			bool hasCurrent = getEngine()->getRenderSystem()->hasCurrentDevice();
+
+			if ( hasCurrent
 				&& getEngine()->getRenderSystem()->getCurrentDevice() != m_device.get() )
 			{
 				auto device = getEngine()->getRenderSystem()->getCurrentDevice();
 				device->disable();
-				m_device->enable();
-
-				m_pickingPass->cleanup();
-				RenderTargetSPtr target = getRenderTarget();
-
-				if ( target )
-				{
-					target->cleanup();
-				}
-
-				m_device->disable();
+				doCleanup( true );
+				device->enable();
 			}
 			else
 			{
-				m_pickingPass->cleanup();
-				RenderTargetSPtr target = getRenderTarget();
-
-				if ( target )
-				{
-					target->cleanup();
-				}
+				doCleanup( !hasCurrent );
 			}
 
 			getEngine()->getRenderSystem()->unregisterDevice( *m_device );
@@ -448,7 +436,7 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), MinBufferIndex, 0u );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 0u, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			// Shader outputs
@@ -461,6 +449,7 @@ namespace castor3d
 			pxl = writer.finalise();
 		}
 
+		m_program.clear();
 		m_program.push_back( { m_device->createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
 		m_program.push_back( { m_device->createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
 		m_program[0].module->loadShader( vtx.getSource() );
@@ -473,6 +462,7 @@ namespace castor3d
 		m_renderQuad = std::make_unique< RenderQuad >( *getEngine()->getRenderSystem()
 			, false
 			, false );
+		doCreateProgram();
 		m_renderQuad->createPipeline( renderer::Extent2D{ m_size[0], m_size[1] }
 			, castor::Position{}
 			, m_program
@@ -518,5 +508,33 @@ namespace castor3d
 	{
 		doCreateSwapChainDependent();
 		doPrepareFrames();
+	}
+
+	void RenderWindow::doCleanup( bool enableDevice )
+	{
+		if ( enableDevice )
+		{
+			m_device->enable();
+		}
+
+		m_pickingPass->cleanup();
+		RenderTargetSPtr target = getRenderTarget();
+
+		if ( target )
+		{
+			target->cleanup();
+		}
+
+		m_renderQuad.reset();
+		m_transferCommandBuffer.reset();
+		m_stagingBuffer.reset();
+		m_frameBuffers.clear();
+		m_commandBuffers.clear();
+		m_swapChain.reset();
+
+		if ( enableDevice )
+		{
+			m_device->disable();
+		}
 	}
 }

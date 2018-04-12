@@ -9,14 +9,15 @@ namespace castor3d
 	/**@name Scene */
 	//@{
 
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date		31/05/2016
-	\~english
-	\brief		Shadow filter types enumeration.
-	\~french
-	\brief		Enumération des types de filtrage des ombres.
+	/**
+	*\version
+	*	0.9.0
+	*\~english
+	*\brief
+	*	Shadow filter types enumeration.
+	*\~french
+	*\brief
+	*	Enumération des types de filtrage des ombres.
 	*/
 	enum class ShadowType
 	{
@@ -28,14 +29,15 @@ namespace castor3d
 		ePCF,
 		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
 	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date		31/05/2016
-	\~english
-	\brief		Fog types enumeration.
-	\~french
-	\brief		Enumération des types de brouillard.
+	/**
+	*\version
+	*	0.9.0
+	*\~english
+	*\brief
+	*	Fog types enumeration.
+	*\~french
+	*\brief
+	*	Enumération des types de brouillard.
 	*/
 	enum class FogType
 	{
@@ -54,14 +56,15 @@ namespace castor3d
 		eSquaredExponential,
 		CASTOR_SCOPED_ENUM_BOUNDS( eDisabled )
 	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date		08/03/2017
-	\~english
-	\brief		Scene flags enumeration.
-	\~french
-	\brief		Enumération des indicateurs de scène.
+	/**
+	*\version
+	*	0.9.0
+	*\~english
+	*\brief
+	*	Scene flags enumeration.
+	*\~french
+	*\brief
+	*	Enumération des indicateurs de scène.
 	*/
 	enum class SceneFlag
 		: uint16_t
@@ -85,35 +88,65 @@ namespace castor3d
 	};
 	IMPLEMENT_FLAGS( SceneFlag )
 	/**
-	 *\~english
-	 *\brief		Gives the shadow filter type matching the given flags.
-	 *\param[in]	p_flags	The scene flags.
-	 *\return		The shadow filter type.
-	 *\~french
-	 *\brief		Récupère le type de filtrage d'ombres correspondant aux indicateurs donnés.
-	 *\param[in]	p_flags	Les indicateurs de scène.
-	 *\return		Le type de filtrage d'ombres.
-	 */
-		C3D_API ShadowType getShadowType( SceneFlags const & p_flags );
-		/**
-		 *\~english
-		 *\brief		Gives the fog type matching the given flags.
-		 *\param[in]	p_flags	The scene flags.
-		 *\return		The fog type.
-		 *\~french
-		 *\brief		Récupère le type de brouillard correspondant aux indicateurs donnés.
-		 *\param[in]	p_flags	Les indicateurs de scène.
-		 *\return		Le type de brouillard.
-		 */
-	C3D_API FogType getFogType( SceneFlags const & p_flags );
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date		16/11/2016
-	\~english
-	\brief		Billboard rendering types enumeration.
-	\~french
-	\brief		Enumération des types de rendu des billboards.
+	*\~english
+	*\brief
+	*	Gives the shadow filter type matching the given flags.
+	*\param[in] flags
+	*	The scene flags.
+	*\return
+	*	The shadow filter type.
+	*\~french
+	*\brief
+	*	Récupère le type de filtrage d'ombres correspondant aux indicateurs donnés.
+	*\param[in] flags
+	*	Les indicateurs de scène.
+	*\return
+	*	Le type de filtrage d'ombres.
+	*/
+	C3D_API ShadowType getShadowType( SceneFlags const & flags );
+	/**
+	*\~english
+	*\brief
+	*	Gives the fog type matching the given flags.
+	*\param[in] flags
+	*	The scene flags.
+	*\return
+	*	The fog type.
+	*\~french
+	*\brief
+	*	Récupère le type de brouillard correspondant aux indicateurs donnés.
+	*\param[in] flags
+	*	Les indicateurs de scène.
+	*\return
+	*	Le type de brouillard.
+	*/
+	C3D_API FogType getFogType( SceneFlags const & flags );
+	/**
+	*\version
+	*	0.11.0
+	*\~english
+	*\brief
+	*	Scene background types enumeration.
+	*\~french
+	*\brief
+	*	Enumération des types de fond de scène.
+	*/
+	enum class BackgroundType
+	{
+		eColour,
+		eImage,
+		eSkybox,
+		CASTOR_SCOPED_ENUM_BOUNDS( eColour )
+	};
+	/**
+	*\version
+	*	0.9.0
+	*\~english
+	*\brief
+	*	Billboard rendering types enumeration.
+	*\~french
+	*\brief
+	*	Enumération des types de rendu des billboards.
 	*/
 	enum class BillboardType
 	{
@@ -125,14 +158,15 @@ namespace castor3d
 		eCylindrical,
 		CASTOR_SCOPED_ENUM_BOUNDS( eSpherical )
 	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date		16/11/2016
-	\~english
-	\brief		Billboard sizing types enumeration.
-	\~french
-	\brief		Enumération des types de dimensions des billboards.
+	/**
+	*\version
+	*	0.9.0
+	*\~english
+	*\brief
+	*	Billboard sizing types enumeration.
+	*\~french
+	*\brief
+	*	Enumération des types de dimensions des billboards.
 	*/
 	enum class BillboardSize
 	{
@@ -169,7 +203,11 @@ namespace castor3d
 	class SceneNode;
 	class SceneFileContext;
 	class SceneFileParser;
-	class Skybox;
+	class SceneBackground;
+	class SkyboxBackground;
+	class ColourBackground;
+	class ImageBackground;
+	class BackgroundVisitor;
 	class ParticleSystemImpl;
 	class ParticleSystem;
 	class CpuParticleSystem;
@@ -195,7 +233,7 @@ namespace castor3d
 	DECLARE_SMART_PTR( Scene );
 	DECLARE_SMART_PTR( SceneFileContext );
 	DECLARE_SMART_PTR( SceneFileParser );
-	DECLARE_SMART_PTR( Skybox );
+	DECLARE_SMART_PTR( SceneBackground );
 	DECLARE_SMART_PTR( ParticleSystem );
 	DECLARE_SMART_PTR( ParticleSystemImpl );
 	DECLARE_SMART_PTR( CpuParticleSystem );

@@ -6,13 +6,14 @@
 #include "Render/RenderSystem.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
-#include "Scene/Skybox.hpp"
-#include "Shader/Ubos/MatrixUbo.hpp"
-#include "Shader/Ubos/SceneUbo.hpp"
+#include "Scene/Background/Background.hpp"
+#include "Shader/PassBuffer/PassBuffer.hpp"
 #include "Shader/Shaders/GlslFog.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
 #include "Shader/Shaders/GlslPhongReflection.hpp"
 #include "Shader/Shaders/GlslSssTransmittance.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Shader/Ubos/SceneUbo.hpp"
 #include "Technique/Opaque/GeometryPassResult.hpp"
 #include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Texture/Sampler.hpp"
@@ -893,20 +894,25 @@ namespace castor3d
 
 		inline renderer::DescriptorSetLayoutPtr doCreateUboDescriptorLayout( Engine & engine )
 		{
+			auto & passBuffer = engine.getMaterialCache().getPassBuffer();
 			renderer::DescriptorSetLayoutBindingArray bindings
 			{
+				passBuffer.createLayoutBinding(),
 				{ SceneUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
 				{ GpInfoUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
 			};
 			return engine.getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( bindings ) );
 		}
 
-		inline renderer::DescriptorSetPtr doCreateUboDescriptorSet( renderer::DescriptorSetPool & pool
+		inline renderer::DescriptorSetPtr doCreateUboDescriptorSet( Engine & engine
+			, renderer::DescriptorSetPool & pool
 			, SceneUbo const & sceneUbo
 			, GpInfoUbo const & gpInfoUbo )
 		{
+			auto & passBuffer = engine.getMaterialCache().getPassBuffer();
 			auto & layout = pool.getLayout();
 			auto result = pool.createDescriptorSet( 0u );
+			passBuffer.createBinding( *result, layout.getBinding( PassBufferIndex ) );
 			result->createBinding( layout.getBinding( SceneUbo::BindingPoint )
 				, sceneUbo.getUbo() );
 			result->createBinding( layout.getBinding( GpInfoUbo::BindingPoint )
@@ -1006,66 +1012,57 @@ namespace castor3d
 		}
 
 		inline renderer::DescriptorSetPtr doCreateTexDescriptorSet( renderer::DescriptorSetPool & pool
+			, SamplerSPtr sampler )
+		{
+			sampler->initialise();
+			return pool.createDescriptorSet( 1u );
+		}
+
+		inline renderer::WriteDescriptorSetArray doCreateTexDescriptorWrites( renderer::DescriptorSetLayout const & layout
 			, GeometryPassResult const & gp
 			, renderer::TextureView const & lightDiffuse
 			, renderer::TextureView const & lightSpecular
 			, renderer::TextureView const * ssao
 			, SamplerSPtr sampler
-			, Scene const & scene
+			, Scene & scene
 			, MaterialType matType )
 		{
-			sampler->initialise();
 			uint32_t index = 0u;
-			auto & layout = pool.getLayout();
-			auto result = pool.createDescriptorSet( 1u );
-			result->createBinding( layout.getBinding( index++ )
-				, *gp.getViews()[size_t( DsTexture::eDepth )]
-				, gp.getSampler() );
-			result->createBinding( layout.getBinding( index++ )
-				, *gp.getViews()[size_t( DsTexture::eData1 )]
-				, gp.getSampler() );
-			result->createBinding( layout.getBinding( index++ )
-				, *gp.getViews()[size_t( DsTexture::eData2 )]
-				, gp.getSampler() );
-			result->createBinding( layout.getBinding( index++ )
-				, *gp.getViews()[size_t( DsTexture::eData3 )]
-				, gp.getSampler() );
-			result->createBinding( layout.getBinding( index++ )
-				, *gp.getViews()[size_t( DsTexture::eData4 )]
-				, gp.getSampler() );
-			result->createBinding( layout.getBinding( index++ )
-				, *gp.getViews()[size_t( DsTexture::eData5 )]
-				, gp.getSampler() );
+			auto imgLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+			renderer::WriteDescriptorSetArray result;
+			result.push_back( { index++, 0u, 1u, renderer::DescriptorType::eCombinedImageSampler, { { gp.getSampler(), *gp.getViews()[size_t( DsTexture::eDepth )], imgLayout } } } );
+			result.push_back( { index++, 0u, 1u, renderer::DescriptorType::eCombinedImageSampler, { { gp.getSampler(), *gp.getViews()[size_t( DsTexture::eData1 )], imgLayout } } } );
+			result.push_back( { index++, 0u, 1u, renderer::DescriptorType::eCombinedImageSampler, { { gp.getSampler(), *gp.getViews()[size_t( DsTexture::eData2 )], imgLayout } } } );
+			result.push_back( { index++, 0u, 1u, renderer::DescriptorType::eCombinedImageSampler, { { gp.getSampler(), *gp.getViews()[size_t( DsTexture::eData3 )], imgLayout } } } );
+			result.push_back( { index++, 0u, 1u, renderer::DescriptorType::eCombinedImageSampler, { { gp.getSampler(), *gp.getViews()[size_t( DsTexture::eData4 )], imgLayout } } } );
+			result.push_back( { index++, 0u, 1u, renderer::DescriptorType::eCombinedImageSampler, { { gp.getSampler(), *gp.getViews()[size_t( DsTexture::eData5 )], imgLayout } } } );
 
 			if ( ssao )
 			{
-				result->createBinding( layout.getBinding( index++ )
-					, *ssao
-					, sampler->getSampler() );
+				result.push_back( { index++, 0u, 1u, renderer::DescriptorType::eCombinedImageSampler, { { sampler->getSampler(), *ssao, imgLayout } } } );
 			}
 
-			result->createBinding( layout.getBinding( index++ )
-				, lightDiffuse
-				, sampler->getSampler() );
-			result->createBinding( layout.getBinding( index++ )
-				, lightSpecular
-				, sampler->getSampler() );
+			result.push_back( { index++, 0u, 1u, renderer::DescriptorType::eCombinedImageSampler, { { sampler->getSampler(), lightDiffuse, imgLayout } } } );
+			result.push_back( { index++, 0u, 1u, renderer::DescriptorType::eCombinedImageSampler, { { sampler->getSampler(), lightSpecular, imgLayout } } } );
+			auto & background = scene.getBackground();
 
-			if ( matType != MaterialType::eLegacy )
+			if ( matType != MaterialType::eLegacy
+				&& background.hasIbl() )
 			{
-				auto & skyboxIbl = scene.getSkybox().getIbl();
-				result->createBinding( layout.getBinding( index++ )
-					, skyboxIbl.getPrefilteredBrdf().getTexture()->getDefaultView()
-					, skyboxIbl.getPrefilteredBrdf().getSampler()->getSampler() );
-				result->createBinding( layout.getBinding( index++ )
-					, skyboxIbl.getIrradiance().getTexture()->getDefaultView()
-					, skyboxIbl.getIrradiance().getSampler()->getSampler() );
-				result->createBinding( layout.getBinding( index++ )
-					, skyboxIbl.getPrefilteredEnvironment().getTexture()->getDefaultView()
-					, skyboxIbl.getPrefilteredEnvironment().getSampler()->getSampler() );
+				auto & ibl = background.getIbl();
+				result.push_back( { index++, 0u, 1u, renderer::DescriptorType::eCombinedImageSampler, { { ibl.getPrefilteredBrdf().getSampler()->getSampler(), ibl.getPrefilteredBrdf().getTexture()->getDefaultView(), imgLayout } } } );
+				result.push_back( { index++, 0u, 1u, renderer::DescriptorType::eCombinedImageSampler, { { ibl.getIrradiance().getSampler()->getSampler(), ibl.getIrradiance().getTexture()->getDefaultView(), imgLayout } } } );
+				result.push_back( { index++, 0u, 1u, renderer::DescriptorType::eCombinedImageSampler, { { ibl.getPrefilteredEnvironment().getSampler()->getSampler(), ibl.getPrefilteredEnvironment().getTexture()->getDefaultView(), imgLayout } } } );
 			}
 
-			result->update();
+			result.push_back( { index++, 0u, c_environmentCount, renderer::DescriptorType::eCombinedImageSampler } );
+			result.back().imageInfo.reserve( c_environmentCount );
+
+			for ( auto i = 0u; i < c_environmentCount; ++i )
+			{
+				result.back().imageInfo.push_back( { sampler->getSampler(), background.getView(), renderer::ImageLayout::eShaderReadOnlyOptimal } );
+			}
+
 			return result;
 		}
 
@@ -1127,7 +1124,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	ReflectionPass::ProgramPipeline::ProgramPipeline( Engine & engine
-		, Scene const & scene
+		, Scene & scene
 		, renderer::VertexBufferBase & vbo
 		, renderer::DescriptorSetLayout const & uboLayout
 		, renderer::DescriptorSet const & uboSet
@@ -1144,12 +1141,15 @@ namespace castor3d
 		: m_program{ doCreateProgram( engine, fogType, ssao != nullptr, matType ) }
 		, m_texDescriptorLayout{ doCreateTexDescriptorLayout( engine, ssao != nullptr, matType ) }
 		, m_texDescriptorPool{ m_texDescriptorLayout->createPool( 1u ) }
-		, m_texDescriptorSet{ doCreateTexDescriptorSet( *m_texDescriptorPool, gp, lightDiffuse, lightSpecular, ssao, sampler, scene, matType ) }
+		, m_texDescriptorSet{ doCreateTexDescriptorSet( *m_texDescriptorPool, sampler ) }
+		, m_texDescriptorWrites{ doCreateTexDescriptorWrites( *m_texDescriptorLayout, gp, lightDiffuse, lightSpecular, ssao, sampler, scene, matType ) }
 		, m_pipelineLayout{ engine.getRenderSystem()->getCurrentDevice()->createPipelineLayout( { uboLayout, *m_texDescriptorLayout } ) }
 		, m_pipeline{ doCreateRenderPipeline( *m_pipelineLayout, m_program, renderPass, size ) }
 		, m_commandBuffer{ engine.getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer( true ) }
 	{
 		static renderer::ClearColorValue const clear{ 0.0, 0.0, 0.0, 0.0 };
+		m_texDescriptorSet->setBindings( m_texDescriptorWrites );
+		m_texDescriptorSet->update();
 
 		if ( m_commandBuffer->begin() )
 		{
@@ -1169,7 +1169,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	ReflectionPass::ReflectionPass( Engine & engine
-		, Scene const & scene
+		, Scene & scene
 		, GeometryPassResult const & gp
 		, renderer::TextureView const & lightDiffuse
 		, renderer::TextureView const & lightSpecular
@@ -1187,7 +1187,7 @@ namespace castor3d
 		, m_vertexBuffer{ doCreateVbo( engine ) }
 		, m_uboDescriptorLayout{ doCreateUboDescriptorLayout( engine ) }
 		, m_uboDescriptorPool{ m_uboDescriptorLayout->createPool( 1u ) }
-		, m_uboDescriptorSet{ doCreateUboDescriptorSet( *m_uboDescriptorPool, sceneUbo, gpInfoUbo ) }
+		, m_uboDescriptorSet{ doCreateUboDescriptorSet( engine, *m_uboDescriptorPool, sceneUbo, gpInfoUbo ) }
 		, m_renderPass{ doCreateRenderPass( engine, result.getFormat() ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_size, result ) }
 		, m_finished{ m_device.createSemaphore() }
@@ -1284,6 +1284,17 @@ namespace castor3d
 			m_ssao.update( camera );
 		}
 
+		auto & maps = m_scene.getEnvironmentMaps();
+		auto & program = m_programs[size_t( m_scene.getFog().getType() )];
+
+		//for ( auto & map : maps )
+		//{
+		//	map.get().getTexture().getTexture()->bind( index );
+		//	map.get().getTexture().getSampler()->bind( index++ );
+		//}
+
+		//program.m_texDescriptorSet->setBindings( program.m_texDescriptorWrites );
+		//program.m_texDescriptorSet->update();
 	}
 
 	void ReflectionPass::render( renderer::Semaphore const & toWait )const

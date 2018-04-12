@@ -75,7 +75,8 @@ namespace castor3d
 	}
 
 	renderer::ColourBlendState RenderTechniquePass::createBlendState( BlendMode colourBlendMode
-		, BlendMode alphaBlendMode )
+		, BlendMode alphaBlendMode
+		, uint32_t attachesCount )
 	{
 		renderer::ColourBlendStateAttachment attach;
 
@@ -150,7 +151,12 @@ namespace castor3d
 		}
 
 		renderer::ColourBlendState state;
-		state.attachs.push_back( attach );
+
+		for ( auto i = 0u; i < attachesCount; ++i )
+		{
+			state.attachs.push_back( attach );
+		}
+
 		return state;
 	}
 
@@ -267,11 +273,13 @@ namespace castor3d
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
 					, std::move( dsState )
 					, std::move( rsState )
-					, createBlendState( flags.colourBlendMode, flags.alphaBlendMode )
+					, createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u )
 					, renderer::MultisampleState{}
 					, program
 					, flags ) ).first->second;
 			pipeline.setVertexLayouts( layouts );
+			pipeline.setViewport( { m_camera->getViewport().getSize().getWidth(), m_camera->getViewport().getSize().getHeight(), 0, 0 } );
+			pipeline.setScissor( { 0, 0, m_camera->getViewport().getSize().getWidth(), m_camera->getViewport().getSize().getHeight() } );
 
 			auto initialise = [this, &pipeline, flags]()
 			{
@@ -309,11 +317,13 @@ namespace castor3d
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
 					, std::move( dsState )
 					, std::move( rsState )
-					, createBlendState( flags.colourBlendMode, flags.alphaBlendMode )
+					, createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u )
 					, renderer::MultisampleState{}
 					, program
 					, flags ) ).first->second;
 			pipeline.setVertexLayouts( layouts );
+			pipeline.setViewport( { m_camera->getViewport().getSize().getWidth(), m_camera->getViewport().getSize().getHeight(), 0, 0 } );
+			pipeline.setScissor( { 0, 0, m_camera->getViewport().getSize().getWidth(), m_camera->getViewport().getSize().getHeight() } );
 
 			auto initialise = [this, &pipeline, flags]()
 			{

@@ -38,7 +38,7 @@ namespace castor3d
 
 		if ( itB == it->second.end() )
 		{
-			uint64_t maxSize = getRenderSystem()->getMainDevice().getProperties().limits.maxUniformBufferRange;
+			uint64_t maxSize = getRenderSystem()->getMainDevice()->getProperties().limits.maxUniformBufferRange;
 			auto buffer = std::make_unique< UniformBuffer< T > >( *getRenderSystem()
 				, uint32_t( std::floor( float( maxSize ) / sizeof( T ) ) )
 				, flags );

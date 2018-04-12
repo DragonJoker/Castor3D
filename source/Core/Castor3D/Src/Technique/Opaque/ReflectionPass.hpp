@@ -63,7 +63,7 @@ namespace castor3d
 		 *\param[in]	viewport		Le viewport contenant les bornes profondeur.
 		 */
 		ReflectionPass( Engine & engine
-			, Scene const & scene
+			, Scene & scene
 			, GeometryPassResult const & gp
 			, renderer::TextureView const & lightDiffuse
 			, renderer::TextureView const & lightSpecular
@@ -119,7 +119,7 @@ namespace castor3d
 			ProgramPipeline & operator=( ProgramPipeline const & ) = delete;
 			ProgramPipeline & operator=( ProgramPipeline && ) = default;
 			ProgramPipeline( Engine & engine
-				, Scene const & scene
+				, Scene & scene
 				, renderer::VertexBufferBase & vbo
 				, renderer::DescriptorSetLayout const & uboLayout
 				, renderer::DescriptorSet const & uboSet
@@ -138,6 +138,7 @@ namespace castor3d
 			renderer::DescriptorSetLayoutPtr m_texDescriptorLayout;
 			renderer::DescriptorSetPoolPtr m_texDescriptorPool;
 			renderer::DescriptorSetPtr m_texDescriptorSet;
+			renderer::WriteDescriptorSetArray m_texDescriptorWrites;
 			renderer::PipelineLayoutPtr m_pipelineLayout;
 			renderer::PipelinePtr m_pipeline;
 			renderer::CommandBufferPtr m_commandBuffer;

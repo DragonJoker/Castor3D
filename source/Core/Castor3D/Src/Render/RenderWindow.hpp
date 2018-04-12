@@ -319,7 +319,7 @@ namespace castor3d
 		 *\brief		Définit le Context.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setDevice( renderer::DevicePtr && value )
+		inline void setDevice( renderer::DevicePtr value )
 		{
 			m_device = std::move( value );
 		}
@@ -404,6 +404,7 @@ namespace castor3d
 		void doCreateSwapChainDependent();
 		bool doPrepareFrames();
 		void doResetSwapChain();
+		void doCleanup( bool enableDevice );
 
 	private:
 		static uint32_t s_nbRenderWindows;

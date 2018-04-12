@@ -25,7 +25,7 @@ namespace Bloom
 		/**
 		 *\copydoc		castor3d::PostEffect::Initialise
 		 */
-		bool initialise()override;
+		bool initialise( castor3d::RenderPassTimer const & timer )override;
 		/**
 		 *\copydoc		castor3d::PostEffect::Cleanup
 		 */
@@ -48,7 +48,7 @@ namespace Bloom
 		castor3d::SamplerSPtr doCreateSampler( bool linear );
 		bool doInitialiseHiPass();
 		bool doInitialiseCombine();
-		bool doBuildCommandBuffer();
+		bool doBuildCommandBuffer( castor3d::RenderPassTimer const & timer );
 
 	private:
 		castor3d::SamplerSPtr m_linearSampler;

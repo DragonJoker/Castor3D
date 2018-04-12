@@ -19,8 +19,7 @@ See LICENSE file in root folder
 #include "Cache/SamplerCache.hpp"
 
 #include "HDR/HdrConfig.hpp"
-#include "RenderToTexture/TextureProjection.hpp"
-#include "Scene/ColourSkybox.hpp"
+#include "Scene/Background/Background.hpp"
 #include "Scene/Fog.hpp"
 #include "Scene/Shadow.hpp"
 
@@ -132,32 +131,13 @@ namespace castor3d
 		C3D_API void updateDeviceDependent( Camera const & camera );
 		/**
 		 *\~english
-		 *\return		The command buffers used to render the background.
+		 *\brief		Sets the background for the scene.
+		 *\param[in]	value	The new value.
 		 *\~french
-		 *\brief		Le tampon de commandes utilisé pour dessiner l'arrière plan.
+		 *\brief		Définit le fond de la scène.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		C3D_API bool getBackgroundCommands( renderer::CommandBuffer const *& commandBuffer
-			, renderer::Semaphore const *& semaphore );
-		/**
-		 *\~english
-		 *\brief		Sets the background image for the scene
-		 *\param[in]	folder		The folder containing the image.
-		 *\param[in]	relative	The image file path, relative to \p folder.
-		 *\~french
-		 *\brief		Définit l'image de fond pour la scène
-		 *\param[in]	folder		Le dossier contenant l'image.
-		 *\param[in]	relative	Le chemin d'accès à l'image, relatif à \p folder.
-		 */
-		C3D_API bool setBackground( castor::Path const & folder, castor::Path const & relative );
-		/**
-		 *\~english
-		 *\brief		Sets the skybox for the scene.
-		 *\param[in]	skybox	The skybox.
-		 *\~french
-		 *\brief		Définit la skybox de la scène.
-		 *\param[in]	skybox	La skybox.
-		 */
-		C3D_API bool setForeground( SkyboxUPtr && skybox );
+		C3D_API void setBackground( SceneBackgroundSPtr value );
 		/**
 		 *\~english
 		 *\brief		Imports a scene from an foreign file
@@ -242,329 +222,169 @@ namespace castor3d
 		 */
 		C3D_API EnvironmentMap & getEnvironmentMap( SceneNode const & node );
 		/**
-		 *\~english
-		 *\return		the IBL textures for given node, the skybox's one if no environment map exists for this SceneNode.
-		 *\param[in]	node	The scene node.
-		 *\~french
-		 *\return		Les textures d'IBL pour le noeud donné, celles de la skybox si aucune EnvironmentMap n'existe pour ce noeud.
-		 *\param[in]	node	Le noeud de scène.
-		 */
-		C3D_API IblTextures const & getIbl( SceneNode const & node )const;
-		/**
-		 *\~english
-		 *\return		The skybox.
-		 *\~french
-		 *\return		La skybox.
-		 */
-		C3D_API Skybox const & getSkybox()const;
-		/**
-		 *\~english
-		 *\return		The reflection maps list.
-		 *\~french
-		 *\return		La liste des reflection maps.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		inline SceneBackground const & getBackground()const
+		{
+			return *m_background;
+		}
+
+		inline SceneBackground & getBackground()
+		{
+			return *m_background;
+		}
+
 		inline std::vector< std::reference_wrapper< EnvironmentMap > > & getEnvironmentMaps()
 		{
 			return m_reflectionMapsArray;
 		}
-		/**
-		 *\~english
-		 *\return		The reflection maps list.
-		 *\~french
-		 *\return		La liste des reflection maps.
-		 */
+
 		inline std::vector< std::reference_wrapper< EnvironmentMap > > const & getEnvironmentMaps()const
 		{
 			return m_reflectionMapsArray;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the background colour
-		 *\param[in]	value	The new colour
-		 *\~french
-		 *\brief		Définit la couleur du fond
-		 *\param[in]	value	La nouvelle couleur
-		 */
-		inline void setBackgroundColour( castor::RgbColour const & value )
-		{
-			m_backgroundColour = value;
-		}
-		/**
-		 *\~english
-		 *\return		The background colour
-		 *\~french
-		 *\return		La couleur du fond
-		 */
+
 		inline castor::RgbColour const & getBackgroundColour()const
 		{
 			return m_backgroundColour;
 		}
-		/**
-		 *\~english
-		 *\return		The root node
-		 *\~french
-		 *\return		Le node racine
-		 */
+
 		inline SceneNodeSPtr getRootNode()const
 		{
 			return m_rootNode;
 		}
-		/**
-		 *\~english
-		 *\return		The cameras root node.
-		 *\~french
-		 *\return		Le node racine des caméras.
-		 */
+
 		inline SceneNodeSPtr getCameraRootNode()const
 		{
 			return m_rootCameraNode;
 		}
-		/**
-		 *\~english
-		 *\return		The objects root node
-		 *\~french
-		 *\return		Le node racine des objets.
-		 */
+
 		inline SceneNodeSPtr getObjectRootNode()const
 		{
 			return m_rootObjectNode;
 		}
-		/**
-		 *\~english
-		 *\return		\p false if the background image doesn't exist.
-		 *\~french
-		 *\return		\p false si l'image de fond n'existe pas.
-		 */
-		inline bool hasBackgroundImage()const
-		{
-			return m_backgroundImage != nullptr;
-		}
-		/**
-		 *\~english
-		 *\return		The scene background image.
-		 *\~french
-		 *\return		L'image de fond de la scène.
-		 */
-		inline TextureLayout const & getBackgroundImage()const
-		{
-			REQUIRE( m_backgroundImage );
-			return *m_backgroundImage;
-		}
-		/**
-		 *\~english
-		 *\return		The scene change status.
-		 *\~french
-		 *\return		Le statut de changement de la scène.
-		 */
+
 		inline bool hasChanged()const
 		{
 			return m_changed;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the scene changed status to \p true.
-		 *\~french
-		 *\brief		Définit le statut de changement de la scène to \p true.
-		 */
-		inline void setChanged()
-		{
-			m_changed = true;
-			onChanged( *this );
-		}
-		/**
-		 *\~english
-		 *\return		The ambient light colour
-		 *\~french
-		 *\return		La couleur de la lumière ambiante
-		 */
+
 		inline castor::RgbColour const & getAmbientLight()const
 		{
 			return m_ambientLight;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the ambient light colour.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit la couleur de la lumière ambiante.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setAmbientLight( castor::RgbColour const & value )
-		{
-			m_ambientLight = value;
-		}
-		/**
-		 *\~english
-		 *\return		\p true if the skybox is defined.
-		 *\~french
-		 *\return		\p true si la skybox est définie.
-		 */
-		inline bool hasSkybox()const
-		{
-			return m_skybox != nullptr;
-		}
-		/**
-		 *\~english
-		 *\return		The fog's parameters.
-		 *\~french
-		 *\return		Les paramètres du brouillard.
-		 */
+
 		inline Fog const & getFog()const
 		{
 			return m_fog;
 		}
-		/**
-		 *\~english
-		 *\return		The fog's parameters.
-		 *\~french
-		 *\return		Les paramètres du brouillard.
-		 */
+
 		inline Fog & getFog()
 		{
 			return m_fog;
 		}
-		/**
-		 *\~english
-		 *\return		The shadows parameters.
-		 *\~french
-		 *\return		Les paramètres des ombres.
-		 */
+
 		inline Shadow const & getShadow()const
 		{
 			return m_shadow;
 		}
-		/**
-		 *\~english
-		 *\return		The shadows parameters.
-		 *\~french
-		 *\return		Les paramètres des ombres.
-		 */
+
 		inline Shadow & getShadow()
 		{
 			return m_shadow;
 		}
-		/**
-		 *\~english
-		 *\return		The materials type.
-		 *\~french
-		 *\return		Le type des matériaux.
-		 */
+
 		inline MaterialType getMaterialsType()const
 		{
 			return getEngine()->getMaterialsType();
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the materials type.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit le type des matériaux.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setMaterialsType( MaterialType value )
-		{
-			getEngine()->setMaterialsType( value );
-		}
-		/**
-		 *\~english
-		 *\return		The scene's frame listener.
-		 *\~french
-		 *\return		Le frame listener de la scène.
-		 */
+
 		inline FrameListener const & getListener()const
 		{
 			REQUIRE( !m_listener.expired() );
 			return *m_listener.lock();
 		}
-		/**
-		 *\~english
-		 *\return		The scene's frame listener.
-		 *\~french
-		 *\return		Le frame listener de la scène.
-		 */
+
 		inline FrameListener & getListener()
 		{
 			REQUIRE( !m_listener.expired() );
 			return *m_listener.lock();
 		}
-		/**
-		 *\~english
-		 *\return		\p true if the scene is initialised.
-		 *\~french
-		 *\return		\p true si la scène est initialisée.
-		 */
+
 		inline bool isInitialised()const
 		{
 			return m_initialised;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the exposure value.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit la valeur de l'exposition.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setExposure( float value )
-		{
-			m_config.setExposure( value );
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the gamma correction value.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit la valeur de la correction gamma.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setGamma( float value )
-		{
-			m_config.setGamma( value );
-		}
-		/**
-		 *\~english
-		 *\return		The HDR configuration.
-		 *\~french
-		 *\return		La configuration HDR.
-		 */
+
 		inline HdrConfig const & getHdrConfig()const
 		{
 			return m_config;
 		}
-		/**
-		 *\~english
-		 *\return		Tells if the scene needs a subsurface scattering pass.
-		 *\~french
-		 *\return		Dit si la scène a besoin d'une passe de subsurface scattering.
-		 */
+
 		inline bool needsSubsurfaceScattering()const
 		{
 			return m_needsSubsurfaceScattering;
 		}
-		/**
-		 *\~english
-		 *\return		Tells if the scene has opaque objects.
-		 *\~french
-		 *\return		Dit si la scène a des objets opaques.
-		 */
+
 		inline bool hasOpaqueObjects()const
 		{
 			return m_hasOpaqueObjects;
 		}
-		/**
-		 *\~english
-		 *\return		Tells if the scene has opaque objects.
-		 *\~french
-		 *\return		Dit si la scène a des objets opaques.
-		 */
+
 		inline bool hasTransparentObjects()const
 		{
 			return m_hasTransparentObjects;
 		}
+		/**@}*/
+		/**
+		*\~english
+		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		*/
+		/**@{*/
+		inline void setBackgroundColour( castor::RgbColour const & value )
+		{
+			m_backgroundColour = value;
+		}
+
+		inline void setChanged()
+		{
+			m_changed = true;
+			onChanged( *this );
+		}
+
+		inline void setAmbientLight( castor::RgbColour const & value )
+		{
+			m_ambientLight = value;
+		}
+
+		inline void setMaterialsType( MaterialType value )
+		{
+			getEngine()->setMaterialsType( value );
+		}
+
+		inline void setExposure( float value )
+		{
+			m_config.setExposure( value );
+		}
+
+		inline void setGamma( float value )
+		{
+			m_config.setGamma( value );
+		}
+		/**@}*/
 
 	private:
 		void doUpdateAnimations();
-		void doUpdateNoSkybox();
 		void doUpdateMaterials();
 		void onMaterialChanged( Material const & material );
 
@@ -634,15 +454,9 @@ namespace castor3d
 		//!\~english	The scene background colour
 		//!\~french		La couleur de fond de la scène
 		castor::RgbColour m_backgroundColour;
-		//!\~english	The background image
-		//!\~french		L'image de fond
-		TextureLayoutSPtr m_backgroundImage;
-		//!\~english	The skybox
-		//!\~french		La skybox
-		SkyboxUPtr m_skybox;
-		//!\~english	The skybox for background colour.
-		//!\~french		La skybox pour la couleur de fond.
-		ColourSkybox m_backgroundColourSkybox;
+		//!\~english	The background.
+		//!\~french		Le fond.
+		SceneBackgroundSPtr m_background;
 		//!\~english	The LightCategory factory.
 		//!\~french		La fabrique de LightCategory.
 		LightFactory m_lightFactory;
@@ -652,9 +466,6 @@ namespace castor3d
 		//!\~english	The shadows parameters.
 		//!\~french		Les paramètres des ombres.
 		Shadow m_shadow;
-		//!\~english	The pipeline used to render the background image, if any.
-		//!\~french		Le pipeline utilisé pour le rendu de l'image de fond, s'il y en a une.
-		std::unique_ptr< TextureProjection > m_colour;
 		//!\~english	The frame listener for the scene.
 		//!\~french		Le frame listener pour la scène.
 		FrameListenerWPtr m_listener;

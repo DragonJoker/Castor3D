@@ -140,7 +140,7 @@ namespace castor3d
 		 *\brief		Fonction d'initialisation.
 		 *\return		\p true if ok.
 		 */
-		C3D_API virtual bool initialise() = 0;
+		C3D_API virtual bool initialise( RenderPassTimer const & timer ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function.

@@ -66,6 +66,50 @@ namespace castor3d
 		};
 		std::locale::global( std::locale() );
 		Image::initialiseImageLib();
+		renderer::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
+		{
+			if ( newLine )
+			{
+				Logger::logDebug( msg );
+			}
+			else
+			{
+				Logger::logDebugNoNL( msg );
+			}
+		} );
+		renderer::Logger::setInfoCallback( []( std::string const & msg, bool newLine )
+		{
+			if ( newLine )
+			{
+				Logger::logInfo( msg );
+			}
+			else
+			{
+				Logger::logInfoNoNL( msg );
+			}
+		} );
+		renderer::Logger::setWarningCallback( []( std::string const & msg, bool newLine )
+		{
+			if ( newLine )
+			{
+				Logger::logWarning( msg );
+			}
+			else
+			{
+				Logger::logWarningNoNL( msg );
+			}
+		} );
+		renderer::Logger::setErrorCallback( []( std::string const & msg, bool newLine )
+		{
+			if ( newLine )
+			{
+				Logger::logError( msg );
+			}
+			else
+			{
+				Logger::logErrorNoNL( msg );
+			}
+		} );
 
 		// m_listenerCache *MUST* be the first created.
 		m_listenerCache = makeCache< FrameListener, String >(	*this

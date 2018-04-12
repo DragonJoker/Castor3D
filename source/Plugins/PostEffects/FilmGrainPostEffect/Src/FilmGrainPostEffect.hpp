@@ -55,11 +55,11 @@ namespace film_grain
 		/**
 		 *\copydoc		castor3d::PostEffect::Initialise
 		 */
-		bool initialise() override;
+		bool initialise( castor3d::RenderPassTimer const & timer )override;
 		/**
 		 *\copydoc		castor3d::PostEffect::Cleanup
 		 */
-		void cleanup() override;
+		void cleanup()override;
 
 	private:
 		/**

@@ -2,9 +2,11 @@
 
 #include "Camera.hpp"
 #include "BillboardList.hpp"
-#include "ColourSkybox.hpp"
 #include "Geometry.hpp"
-#include "Skybox.hpp"
+#include "Background/Colour.hpp"
+#include "Background/Image.hpp"
+#include "Background/Skybox.hpp"
+#include "Background/BackgroundTextWriter.hpp"
 
 #include "Animation/AnimatedObjectGroup.hpp"
 #include "Event/Frame/CleanupEvent.hpp"
@@ -173,12 +175,22 @@ namespace castor3d
 			castor::TextWriter< Scene >::checkError( result, "Scene background colour" );
 		}
 
-		if ( result && scene.hasBackgroundImage() )
+		if ( result )
 		{
-			Logger::logInfo( cuT( "Scene::write - Background image" ) );
-			Path relative = Scene::TextWriter::copyFile( Path{ scene.getBackgroundImage().getDefaultImage().toString() }, file.getFilePath(), Path{ cuT( "Textures" ) } );
-			result = file.writeText( m_tabs + cuT( "\tbackground_image \"" ) + relative + cuT( "\"\n" ) ) > 0;
-			castor::TextWriter< Scene >::checkError( result, "Scene background image" );
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// HDR Configuration\n" ) ) > 0;
+
+			if ( result )
+			{
+				Logger::logInfo( cuT( "Scene::write - HDR Config" ) );
+				result = HdrConfig::TextWriter( m_tabs + cuT( "\t" ) )( scene.getHdrConfig(), file );
+			}
+		}
+
+		if ( result )
+		{
+			Logger::logInfo( cuT( "Scene::write - Background" ) );
+			BackgroundTextWriter writer{ file, m_tabs + cuT( "\t" ) };
+			scene.getBackground().accept( writer );
 		}
 
 		if ( result )
@@ -201,28 +213,6 @@ namespace castor3d
 				Logger::logInfo( cuT( "Scene::write - Fog density" ) );
 				result = file.writeText( m_tabs + cuT( "\tfog_density " ) + string::toString( scene.getFog().getDensity() ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Scene >::checkError( result, "Scene fog density" );
-			}
-		}
-
-		if ( result && scene.hasSkybox() )
-		{
-			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// HDR Configuration\n" ) ) > 0;
-
-			if ( result )
-			{
-				Logger::logInfo( cuT( "Scene::write - HDR Config" ) );
-				result = HdrConfig::TextWriter( m_tabs + cuT( "\t" ) )( scene.getHdrConfig(), file );
-			}
-		}
-
-		if ( result && scene.hasSkybox() )
-		{
-			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Skybox\n" ) ) > 0;
-
-			if ( result )
-			{
-				Logger::logInfo( cuT( "Scene::write - Skybox" ) );
-				result = Skybox::TextWriter( m_tabs + cuT( "\t" ) )( scene.getSkybox(), file );
 			}
 		}
 
@@ -449,7 +439,7 @@ namespace castor3d
 		, Named{ name }
 		, m_listener{ engine.getFrameListenerCache().add( cuT( "Scene_" ) + name + string::toString( (size_t)this ) ) }
 		, m_animationUpdater{ std::max( 2u, engine.getCpuInformations().getCoreCount() - ( engine.isThreaded() ? 2u : 1u ) ) }
-		, m_backgroundColourSkybox{ engine }
+		, m_background{ std::make_shared< ColourBackground >( engine, *this ) }
 	{
 		auto mergeObject = [this]( auto const & source
 			, auto & destination
@@ -740,8 +730,6 @@ namespace castor3d
 		m_onBillboardListChanged = m_billboardCache->onChanged.connect( std::bind( &Scene::setChanged, this ) );
 		m_onGeometryChanged = m_geometryCache->onChanged.connect( std::bind( &Scene::setChanged, this ) );
 		m_onSceneNodeChanged = m_sceneNodeCache->onChanged.connect( std::bind( &Scene::setChanged, this ) );
-		m_backgroundColourSkybox.setScene( *this );
-		m_backgroundColourSkybox.setColour( m_backgroundColour );
 	}
 
 	Scene::~Scene()
@@ -756,7 +744,7 @@ namespace castor3d
 		m_reflectionMapsArray.clear();
 		m_reflectionMaps.clear();
 
-		m_skybox.reset();
+		m_background.reset();
 		m_animatedObjectGroupCache.reset();
 		m_billboardCache.reset();
 		m_particleSystemCache.reset();
@@ -796,18 +784,6 @@ namespace castor3d
 	void Scene::initialise()
 	{
 		m_lightCache->initialise();
-
-		getListener().postEvent( makeFunctorEvent( EventType::ePreRender
-			, [this]()
-			{
-				m_backgroundColourSkybox.initialise( renderer::Format::eR16G16B16A16_SFLOAT
-					, renderer::Format::eD24_UNORM_S8_UINT );
-				m_colour = std::make_unique< TextureProjection >( *getEngine() );
-				m_colour->initialise( m_backgroundColourSkybox.getView()
-					, renderer::Format::eR16G16B16A16_SFLOAT
-					, renderer::Format::eD24_UNORM_S8_UINT );
-			} ) );
-
 		m_initialised = true;
 	}
 
@@ -842,35 +818,10 @@ namespace castor3d
 		getListener().postEvent( makeFunctorEvent( EventType::ePreRender
 			, [this]()
 			{
-				if ( m_colour )
+				if ( m_background )
 				{
-					m_colour->cleanup();
-					m_colour.reset();
+					m_background->cleanup();
 				}
-			} ) );
-
-		if ( m_backgroundImage )
-		{
-			getListener().postEvent( makeFunctorEvent( EventType::ePreRender
-				, [this]()
-				{
-					m_backgroundImage->cleanup();
-				} ) );
-		}
-
-		if ( m_skybox )
-		{
-			getListener().postEvent( makeFunctorEvent( EventType::ePreRender
-				, [this]()
-				{
-					m_skybox->cleanup();
-				} ) );
-		}
-
-		getListener().postEvent( makeFunctorEvent( EventType::ePreRender
-			, [this]()
-			{
-				m_backgroundColourSkybox.cleanup();
 			} ) );
 	}
 
@@ -878,7 +829,6 @@ namespace castor3d
 	{
 		m_rootNode->update();
 		doUpdateAnimations();
-		doUpdateNoSkybox();
 		doUpdateMaterials();
 		getLightCache().update();
 		onUpdate( *this );
@@ -887,126 +837,25 @@ namespace castor3d
 
 	void Scene::updateDeviceDependent( Camera const & camera )
 	{
-		if ( m_fog.getType() == FogType::eDisabled )
-		{
-			if ( m_backgroundImage && m_backgroundImage->isInitialised() )
-			{
-			}
-			else if ( m_skybox )
-			{
-				m_skybox->update( camera );
-			}
-			else
-			{
-				m_backgroundColourSkybox.setColour( m_backgroundColour );
-				m_backgroundColourSkybox.update();
-			}
-		}
-		else if ( getMaterialsType() == MaterialType::ePbrMetallicRoughness
-			|| getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
-		{
-			m_backgroundColourSkybox.setColour( m_backgroundColour );
-			m_backgroundColourSkybox.update();
-		}
+		m_background->update( camera );
 	}
 
-	bool Scene::getBackgroundCommands( renderer::CommandBuffer const *& commandBuffer
-		, renderer::Semaphore const *& semaphore )
+	void Scene::setBackground( SceneBackgroundSPtr value )
 	{
-		bool result{ false };
-
-		if ( m_fog.getType() == FogType::eDisabled )
-		{
-			result = true;
-
-			if ( m_backgroundImage && m_backgroundImage->isInitialised())
-			{
-				commandBuffer = &m_colour->getCommandBuffer();
-				semaphore = &m_colour->getSemaphore();
-			}
-			else if ( m_skybox )
-			{
-				commandBuffer = &m_skybox->getCommandBuffer();
-				semaphore = &m_skybox->getSemaphore();
-			}
-			else
-			{
-				commandBuffer = &m_backgroundColourSkybox.getCommandBuffer();
-				semaphore = &m_backgroundColourSkybox.getSemaphore();
-			}
-		}
-		else if ( getMaterialsType() == MaterialType::ePbrMetallicRoughness
-			|| getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
-		{
-			commandBuffer = &m_backgroundColourSkybox.getCommandBuffer();
-			semaphore = &m_backgroundColourSkybox.getSemaphore();
-			result = true;
-		}
-
-		return result;
-	}
-
-	bool Scene::setBackground( Path const & folder, Path const & relative )
-	{
-		bool result = false;
-
-		try
-		{
-			renderer::ImageCreateInfo image{};
-			image.arrayLayers = 1u;
-			image.flags = 0u;
-			image.imageType = renderer::TextureType::e2D;
-			image.initialLayout = renderer::ImageLayout::eUndefined;
-			image.mipLevels = 1u;
-			image.samples = renderer::SampleCountFlag::e1;
-			image.sharingMode = renderer::SharingMode::eExclusive;
-			image.tiling = renderer::ImageTiling::eOptimal;
-			image.usage = renderer::ImageUsageFlag::eSampled;
-			auto texture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
-				, image
-				, renderer::MemoryPropertyFlag::eDeviceLocal );
-			texture->setSource( folder, relative );
-			m_backgroundImage = texture;
-			getListener().postEvent( makeFunctorEvent( EventType::ePreRender, [this]()
-			{
-				m_backgroundImage->initialise();
-				m_backgroundImage->generateMipmaps();
-			} ) );
-			result = true;
-		}
-		catch ( castor::Exception & p_exc )
-		{
-			Logger::logError( p_exc.what() );
-		}
-
-		return result;
-	}
-
-	bool Scene::setForeground( SkyboxUPtr && skybox )
-	{
-		m_skybox = std::move( skybox );
-		m_skybox->setScene( *this );
-		getListener().postEvent( makeFunctorEvent( EventType::ePreRender, [this]()
-		{
-			m_skybox->initialise( renderer::Format::eR16G16B16A16_SFLOAT
-				, renderer::Format::eD24_UNORM_S8_UINT );
-		} ) );
-		return true;
+		m_background = std::move( value );
 	}
 
 	void Scene::merge( SceneSPtr scene )
 	{
-		{
-			scene->getAnimatedObjectGroupCache().mergeInto( *m_animatedObjectGroupCache );
-			scene->getCameraCache().mergeInto( *m_cameraCache );
-			scene->getBillboardListCache().mergeInto( *m_billboardCache );
-			scene->getParticleSystemCache().mergeInto( *m_particleSystemCache );
-			scene->getGeometryCache().mergeInto( *m_geometryCache );
-			scene->getLightCache().mergeInto( *m_lightCache );
-			scene->getSceneNodeCache().mergeInto( *m_sceneNodeCache );
-			m_ambientLight = scene->getAmbientLight();
-			setChanged();
-		}
+		scene->getAnimatedObjectGroupCache().mergeInto( *m_animatedObjectGroupCache );
+		scene->getCameraCache().mergeInto( *m_cameraCache );
+		scene->getBillboardListCache().mergeInto( *m_billboardCache );
+		scene->getParticleSystemCache().mergeInto( *m_particleSystemCache );
+		scene->getGeometryCache().mergeInto( *m_geometryCache );
+		scene->getLightCache().mergeInto( *m_lightCache );
+		scene->getSceneNodeCache().mergeInto( *m_sceneNodeCache );
+		m_ambientLight = scene->getAmbientLight();
+		setChanged();
 
 		scene->cleanup();
 	}
@@ -1122,29 +971,13 @@ namespace castor3d
 		return *m_reflectionMaps.find( &node )->second;
 	}
 
-	IblTextures const & Scene::getIbl( SceneNode const & node )const
-	{
-		return getSkybox().getIbl();
-	}
-
-	Skybox const & Scene::getSkybox()const
-	{
-		if ( m_fog.getType() == FogType::eDisabled
-			&& m_skybox )
-		{
-			return *m_skybox;
-		}
-
-		return m_backgroundColourSkybox;
-	}
-
 	void Scene::doUpdateAnimations()
 	{
 		std::vector< std::reference_wrapper< AnimatedObjectGroup > > groups;
 
 		m_animatedObjectGroupCache->forEach( [&groups]( AnimatedObjectGroup & group )
 		{
-			groups.push_back( group );
+			groups.emplace_back( group );
 		} );
 
 		if ( groups.size() > m_animationUpdater.getCount() )
@@ -1165,45 +998,6 @@ namespace castor3d
 			{
 				group.get().update();
 			}
-		}
-	}
-
-	void Scene::doUpdateNoSkybox()
-	{
-		if ( !m_skybox
-			&& !m_backgroundImage
-			&& getMaterialsType() == MaterialType::eLegacy )
-		{
-			m_skybox = std::make_unique< Skybox >( *getEngine() );
-			m_skybox->setScene( *this );
-			Size size{ 16, 16 };
-			constexpr PixelFormat format{ PixelFormat::eR8G8B8 };
-			UbPixel pixel{ true };
-			uint8_t c;
-			pixel.set< format >( { { m_backgroundColour.red().convertTo( c )
-				, m_backgroundColour.green().convertTo( c )
-				, m_backgroundColour.blue().convertTo( c ) } } );
-			auto buffer = PxBufferBase::create( size, format );
-			auto data = buffer->ptr();
-
-			for ( uint32_t i = 0u; i < 256; ++i )
-			{
-				std::memcpy( data, pixel.constPtr(), 3 );
-				data += 3;
-			}
-
-			m_skybox->getTexture().getImage( 0u ).initialiseSource( buffer );
-			m_skybox->getTexture().getImage( 1u ).initialiseSource( buffer );
-			m_skybox->getTexture().getImage( 2u ).initialiseSource( buffer );
-			m_skybox->getTexture().getImage( 3u ).initialiseSource( buffer );
-			m_skybox->getTexture().getImage( 4u ).initialiseSource( buffer );
-			m_skybox->getTexture().getImage( 5u ).initialiseSource( buffer );
-			getListener().postEvent( makeFunctorEvent( EventType::ePreRender
-				, [this]()
-				{
-					m_skybox->initialise( renderer::Format::eR16G16B16A16_SFLOAT
-						, renderer::Format::eD24_UNORM_S8_UINT );
-				} ) );
 		}
 	}
 

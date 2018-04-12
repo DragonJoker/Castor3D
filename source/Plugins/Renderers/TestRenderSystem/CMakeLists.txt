@@ -26,13 +26,13 @@ add_target(
 	"TestRenderSystemPch.cpp"
 )
 
-parse_subdir_files( FrameBuffer FrameBuffer )
-parse_subdir_files( Mesh Mesh )
-parse_subdir_files( Miscellaneous Miscellaneous )
-parse_subdir_files( Render Render )
-parse_subdir_files( Shader Shader )
-parse_subdir_files( State State )
-parse_subdir_files( Texture Texture )
+parse_subdir_files( Src/FrameBuffer FrameBuffer )
+parse_subdir_files( Src/Mesh Mesh )
+parse_subdir_files( Src/Miscellaneous Miscellaneous )
+parse_subdir_files( Src/Render Render )
+parse_subdir_files( Src/Shader Shader )
+parse_subdir_files( Src/State State )
+parse_subdir_files( Src/Texture Texture )
 
 set( Trs "yes" PARENT_SCOPE )
 

@@ -10,6 +10,7 @@
 #include <Texture/TextureUnit.hpp>
 
 #include <Buffer/VertexBuffer.hpp>
+#include <Command/CommandBufferInheritanceInfo.hpp>
 #include <Pipeline/ColourBlendState.hpp>
 #include <Pipeline/DepthStencilState.hpp>
 #include <Pipeline/MultisampleState.hpp>
@@ -117,6 +118,7 @@ namespace castor3d
 				, gpInfoUbo.getUbo()
 				, 0u
 				, 1u );
+			result->update();
 			return result;
 		}
 
@@ -150,6 +152,7 @@ namespace castor3d
 			result->createBinding( layout.getBinding( 2u )
 				, revealage.get()
 				, sampler.getSampler() );
+			result->update();
 			return result;
 		}
 
@@ -345,7 +348,16 @@ namespace castor3d
 		, renderer::DescriptorSet const & texDescriptorSet
 		, renderer::BufferBase const & vbo )
 	{
-		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eRenderPassContinue ) )
+		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eRenderPassContinue
+			, renderer::CommandBufferInheritanceInfo
+			{
+				&renderPass,
+				0u,
+				nullptr,
+				false,
+				0u,
+				0u
+			} ) )
 		{
 			m_commandBuffer->bindPipeline( *m_pipeline );
 			m_commandBuffer->setViewport( { size.getWidth(), size.getHeight(), 0, 0 } );

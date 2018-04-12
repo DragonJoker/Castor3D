@@ -78,9 +78,25 @@ namespace castor3d
 		//!\~french		Les noeuds de rendu de billboards, triés par programme shader.
 		BillboardNodesMap billboardNodes;
 
-		SceneRenderNodes( Scene const & scene )
+		inline SceneRenderNodes( Scene const & scene )
 			: scene{ scene }
 		{
+		}
+
+		inline bool hasNodes()const
+		{
+			return !staticNodes.backCulled.empty()
+				|| !staticNodes.frontCulled.empty()
+				|| !skinnedNodes.backCulled.empty()
+				|| !skinnedNodes.frontCulled.empty()
+				|| !instancedStaticNodes.backCulled.empty()
+				|| !instancedStaticNodes.frontCulled.empty()
+				|| !instancedSkinnedNodes.backCulled.empty()
+				|| !instancedSkinnedNodes.frontCulled.empty()
+				|| !morphingNodes.backCulled.empty()
+				|| !morphingNodes.frontCulled.empty()
+				|| !billboardNodes.backCulled.empty()
+				|| !billboardNodes.frontCulled.empty();
 		}
 	};
 	/*!
@@ -126,11 +142,27 @@ namespace castor3d
 		//!\~french		Les noeuds de rendu de billboards, triés par programme shader.
 		BillboardNodesMap billboardNodes;
 
-		SceneCulledRenderNodes( Scene const & scene
+		inline SceneCulledRenderNodes( Scene const & scene
 			, Camera const & camera )
 			: scene{ scene }
 			, camera{ camera }
 		{
+		}
+
+		inline bool hasNodes()const
+		{
+			return !staticNodes.backCulled.empty()
+				|| !staticNodes.frontCulled.empty()
+				|| !skinnedNodes.backCulled.empty()
+				|| !skinnedNodes.frontCulled.empty()
+				|| !instancedStaticNodes.backCulled.empty()
+				|| !instancedStaticNodes.frontCulled.empty()
+				|| !instancedSkinnedNodes.backCulled.empty()
+				|| !instancedSkinnedNodes.frontCulled.empty()
+				|| !morphingNodes.backCulled.empty()
+				|| !morphingNodes.frontCulled.empty()
+				|| !billboardNodes.backCulled.empty()
+				|| !billboardNodes.frontCulled.empty();
 		}
 	};
 	/*!
@@ -199,13 +231,13 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API SceneRenderNodes & getAllRenderNodes()const
+		inline SceneRenderNodes & getAllRenderNodes()const
 		{
 			REQUIRE( m_renderNodes );
 			return *m_renderNodes;
 		}
 
-		C3D_API SceneCulledRenderNodes & getCulledRenderNodes()const
+		inline SceneCulledRenderNodes & getCulledRenderNodes()const
 		{
 			REQUIRE( m_culledRenderNodes );
 			return *m_culledRenderNodes;
@@ -214,6 +246,15 @@ namespace castor3d
 		inline renderer::CommandBuffer const & getCommandBuffer()const
 		{
 			return *m_commandBuffer;
+		}
+
+		inline bool hasNodes()const
+		{
+			return m_culledRenderNodes
+				? m_culledRenderNodes->hasNodes()
+				: ( m_renderNodes
+					? m_renderNodes->hasNodes()
+					: false );
 		}
 		/**@}*/
 

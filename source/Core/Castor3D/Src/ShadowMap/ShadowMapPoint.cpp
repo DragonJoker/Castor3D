@@ -112,7 +112,7 @@ namespace castor3d
 			image.mipLevels = 1u;
 			image.samples = renderer::SampleCountFlag::e1;
 			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
-			image.format = ShadowMapPoint::RawDepthFormat;
+			image.format = ShadowMapPoint::LinearDepthFormat;
 
 			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
 				, image

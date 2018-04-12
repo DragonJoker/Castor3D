@@ -71,14 +71,14 @@ namespace castor3d
 		CASTOR_EXCEPTION( CALL_END_RENDERING );
 	}
 
-	renderer::Device const * RenderLoopSync::doCreateMainDevice( renderer::WindowHandle && handle
+	renderer::DevicePtr RenderLoopSync::doCreateMainDevice( renderer::WindowHandle && handle
 		, RenderWindow & window )
 	{
-		renderer::Device const * result = doCreateDevice( std::move( handle ), window );
+		auto result = doCreateDevice( std::move( handle ), window );
 
 		if ( result )
 		{
-			m_renderSystem.setMainDevice( *result );
+			m_renderSystem.setMainDevice( result );
 			result->enable();
 			GpuInformations info;
 			m_renderSystem.initialise( std::move( info ) );

@@ -103,7 +103,7 @@ namespace castor3d
 
 		if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
 		{
-			auto gl_InstanceID = writer.getBuiltin< glsl::Int >( cuT( "gl_InstanceID" ) );
+			auto gl_InstanceID = writer.getBuiltin< glsl::Int >( writer.getInstanceID() );
 			auto transform = writer.getBuiltin< glsl::Mat4 >( cuT( "transform" ) );
 			auto mtxInstanceOffset = writer.declLocale< Int >( cuT( "mtxInstanceOffset" )
 				, gl_InstanceID * 400_i );

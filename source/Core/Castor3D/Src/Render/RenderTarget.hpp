@@ -331,6 +331,12 @@ namespace castor3d
 		C3D_API void doRender( RenderInfo & info
 			, TargetFbo & fbo
 			, CameraSPtr camera );
+		C3D_API renderer::Semaphore const * doApplyHdrPostEffects( renderer::Semaphore const & toWait );
+		C3D_API renderer::Semaphore const * doApplyToneMapping( renderer::Semaphore const & toWait
+			, renderer::FrameBuffer const & frameBuffer );
+		C3D_API renderer::Semaphore const * doApplySRgbPostEffects( renderer::Semaphore const & toWait );
+		C3D_API renderer::Semaphore const * doRenderOverlays( renderer::Semaphore const & toWait
+			, Camera const & camera );
 
 	public:
 		//!\~english The render target default sampler name	\~french Le nom du sampler par défaut pour la cible de rendu
@@ -353,7 +359,9 @@ namespace castor3d
 		PostEffectPtrArray m_postEffects;
 		ToneMappingSPtr m_toneMapping;
 		PostEffectPtrArray m_postPostEffects;
+		RenderPassTimerSPtr m_postFxTimer;
 		RenderPassTimerSPtr m_postPostFxTimer;
+		RenderPassTimerSPtr m_toneMappingTimer;
 		RenderPassTimerSPtr m_overlaysTimer;
 		SsaoConfig m_ssaoConfig;
 		castor::Point2r m_jitter;

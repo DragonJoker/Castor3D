@@ -443,14 +443,6 @@ namespace castor3d
 			, m_renderInfo.m_drawCalls );
 		m_debugPanel->updatePosition();
 		m_debugPanel->setVisible( m_visible );
-
-		getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-			, [this]()
-			{
-				m_queries = getEngine()->getRenderSystem()->getCurrentDevice()->createQueryPool( renderer::QueryType::eTimestamp
-					, m_queriesCount
-					, 0u );
-			} ) );
 	}
 
 	//*********************************************************************************************

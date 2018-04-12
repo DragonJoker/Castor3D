@@ -42,6 +42,8 @@ namespace glsl
 		GlslWriter_API void inlineComment( castor::String const & comment );
 		GlslWriter_API void multilineComment( castor::String const & comment );
 		GlslWriter_API void enableExtension( castor::String const & name, uint32_t inCoreVersion );
+		GlslWriter_API castor::String getInstanceID();
+		GlslWriter_API castor::String getVertexID();
 
 		inline uint32_t getShaderLanguageVersion()const
 		{

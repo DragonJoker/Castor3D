@@ -19,6 +19,50 @@ namespace VkRender
 	RenderSystem::RenderSystem( castor3d::Engine & engine )
 		: castor3d::RenderSystem( engine, Name )
 	{
+		renderer::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
+		{
+			if ( newLine )
+			{
+				Logger::logDebug( msg );
+			}
+			else
+			{
+				Logger::logDebugNoNL( msg );
+			}
+		} );
+		renderer::Logger::setInfoCallback( []( std::string const & msg, bool newLine )
+		{
+			if ( newLine )
+			{
+				Logger::logInfo( msg );
+			}
+			else
+			{
+				Logger::logInfoNoNL( msg );
+			}
+		} );
+		renderer::Logger::setWarningCallback( []( std::string const & msg, bool newLine )
+		{
+			if ( newLine )
+			{
+				Logger::logWarning( msg );
+			}
+			else
+			{
+				Logger::logWarningNoNL( msg );
+			}
+		} );
+		renderer::Logger::setErrorCallback( []( std::string const & msg, bool newLine )
+		{
+			if ( newLine )
+			{
+				Logger::logError( msg );
+			}
+			else
+			{
+				Logger::logErrorNoNL( msg );
+			}
+		} );
 		m_renderer = std::make_unique< vk_renderer::Renderer >( renderer::Renderer::Configuration
 		{
 			"Castor3D",
@@ -53,7 +97,7 @@ namespace VkRender
 	{
 		if ( !m_initialised )
 		{
-			auto & device = static_cast< vk_renderer::Device const & >( getMainDevice() );
+			auto & device = static_cast< vk_renderer::Device const & >( *getMainDevice() );
 			StringStream stream;
 			stream << ( device.getProperties().apiVersion >> 22 ) << cuT( "." ) << ( ( device.getProperties().apiVersion >> 12 ) & 0x0FFF );
 

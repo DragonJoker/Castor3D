@@ -32,10 +32,16 @@ namespace castor3d
 		renderer::RenderPassPtr doCreateRenderPass( Engine & engine
 			, renderer::TextureView const & depthView
 			, renderer::TextureView const & diffuseView
-			, renderer::TextureView const & specularView )
+			, renderer::TextureView const & specularView
+			, bool first )
 		{
 			auto & device = *engine.getRenderSystem()->getCurrentDevice();
-
+			renderer::ImageLayout layout = first
+				? renderer::ImageLayout::eUndefined
+				: renderer::ImageLayout::eColourAttachmentOptimal;
+			renderer::AttachmentLoadOp loadOp = first
+				? renderer::AttachmentLoadOp::eClear
+				: renderer::AttachmentLoadOp::eLoad;
 			renderer::RenderPassCreateInfo renderPass;
 			renderPass.flags = 0u;
 
@@ -52,22 +58,22 @@ namespace castor3d
 
 			renderPass.attachments[1].index = 1u;
 			renderPass.attachments[1].format = diffuseView.getFormat();
-			renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eLoad;
+			renderPass.attachments[1].loadOp = loadOp;
 			renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
 			renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 			renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 			renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
-			renderPass.attachments[1].initialLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+			renderPass.attachments[1].initialLayout = layout;
 			renderPass.attachments[1].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
 
 			renderPass.attachments[2].index = 2u;
 			renderPass.attachments[2].format = specularView.getFormat();
-			renderPass.attachments[2].loadOp = renderer::AttachmentLoadOp::eLoad;
+			renderPass.attachments[2].loadOp = loadOp;
 			renderPass.attachments[2].storeOp = renderer::AttachmentStoreOp::eStore;
 			renderPass.attachments[2].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 			renderPass.attachments[2].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 			renderPass.attachments[2].samples = renderer::SampleCountFlag::e1;
-			renderPass.attachments[2].initialLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+			renderPass.attachments[2].initialLayout = layout;
 			renderPass.attachments[2].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
 
 			renderPass.dependencies.resize( 2u );
@@ -189,7 +195,8 @@ namespace castor3d
 		, GpInfoUbo & gpInfoUbo
 		, bool hasShadows )
 		: LightPass{ engine
-			, doCreateRenderPass( engine, depthView, diffuseView, specularView )
+			, doCreateRenderPass( engine, depthView, diffuseView, specularView, true )
+			, doCreateRenderPass( engine, depthView, diffuseView, specularView, false )
 			, depthView
 			, diffuseView
 			, specularView

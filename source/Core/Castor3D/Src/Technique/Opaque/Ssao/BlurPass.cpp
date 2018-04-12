@@ -65,31 +65,20 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			UBO_SSAO_CONFIG( writer, 0u, 0u );
-			auto c3d_mapNormal = writer.declSampler< Sampler2D >( cuT( "c3d_mapNormal" ), 1u, 0u, config.m_useNormalsBuffer );
-			auto c3d_mapInput = writer.declSampler< Sampler2D >( cuT( "c3d_mapInput" ), 2u, 0u );
-
 			/** (1, 0) or (0, 1)*/
-			auto c3d_axis = writer.declUniform< IVec2 >( cuT( "c3d_axis" ), 3u );
+			Ubo configuration{ writer, cuT( "BlurConfiguration" ), 1u, 0u };
+			auto c3d_axis = configuration.declMember< IVec2 >( cuT( "c3d_axis" ) );
+			REQUIRE( config.m_blurRadius > 0 && config.m_blurRadius < 7 );
+			auto gaussian = configuration.declMember< Float >( cuT( "gaussian" ), config.m_blurRadius + 1u );
+			configuration.end();
+			auto c3d_mapNormal = writer.declSampler< Sampler2D >( cuT( "c3d_mapNormal" ), 2u, 0u, config.m_useNormalsBuffer );
+			auto c3d_mapInput = writer.declSampler< Sampler2D >( cuT( "c3d_mapInput" ), 3u, 0u );
 
 			/** Same size as result buffer, do not offset by guard band when reading from it */
-			auto c3d_readMultiplyFirst = writer.declUniform( cuT( "c3d_readMultiplyFirst" ), 4u, config.m_useNormalsBuffer, vec4( 2.0_f ) );
-			auto c3d_readAddSecond = writer.declUniform( cuT( "c3d_readAddSecond" ), 5u, config.m_useNormalsBuffer, vec4( 1.0_f ) );
+			auto c3d_readMultiplyFirst = writer.declConstant< Vec4 >( cuT( "c3d_readMultiplyFirst" ), vec4( 2.0_f ), config.m_useNormalsBuffer );
+			auto c3d_readAddSecond = writer.declConstant< Vec4 >( cuT( "c3d_readAddSecond" ), vec4( 1.0_f ), config.m_useNormalsBuffer );
 
 			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
-
-			REQUIRE( config.m_blurRadius > 0 && config.m_blurRadius < 7 );
-			auto gaussian = writer.declUniformArray( cuT( "gaussian" ), 4u, config.m_blurRadius + 1u
-				, ( config.m_blurRadius == 1u
-					? std::vector< Float >{ { 0.5_f, 0.25_f } }
-					: ( config.m_blurRadius == 2u
-						? std::vector< Float >{ { 0.153170_f, 0.144893_f, 0.122649_f } }
-						: ( config.m_blurRadius == 3u
-							? std::vector< Float >{ { 0.153170_f, 0.144893_f, 0.122649_f, 0.092902_f } }
-							: ( config.m_blurRadius == 4u
-								? std::vector< Float >{ { 0.153170_f, 0.144893_f, 0.122649_f, 0.092902_f, 0.062970_f } }
-								: ( config.m_blurRadius == 5u
-									? std::vector< Float >{ { 0.111220_f, 0.107798_f, 0.098151_f, 0.083953_f, 0.067458_f, 0.050920_f } }
-									: std::vector< Float >{ { 0.111220_f, 0.107798_f, 0.098151_f, 0.083953_f, 0.067458_f, 0.050920_f, 0.036108_f } } ) ) ) ) ) );
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec3 >( cuT( "pxl_fragColor" ), 0u );
@@ -421,7 +410,7 @@ namespace castor3d
 			renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 			renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 
-			renderPass.dependencies.resize( 2u );
+			renderPass.dependencies.resize( 1u );
 			renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
 			renderPass.dependencies[0].dstSubpass = 0u;
 			renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
@@ -471,12 +460,61 @@ namespace castor3d
 		, m_fbo{ doCreateFrameBuffer( *m_renderPass, m_result ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "SSAO" ), cuT( "Blur" ) ) }
 		, m_finished{ engine.getRenderSystem()->getCurrentDevice()->createSemaphore() }
+		, m_configurationUbo{ renderer::makeUniformBuffer< Configuration >( *engine.getRenderSystem()->getCurrentDevice(), 1u, 0u, renderer::MemoryPropertyFlag::eHostVisible ) }
 	{
+		auto & configuration = m_configurationUbo->getData();
+
+		switch ( config.m_blurRadius )
+		{
+		case 1u:
+			configuration.gaussian[0] = 0.5f;
+			configuration.gaussian[1] = 0.25f;
+			break;
+		case 2u:
+			configuration.gaussian[0] = 0.153170f;
+			configuration.gaussian[1] = 0.144893f;
+			configuration.gaussian[2] = 0.122649f;
+			break;
+		case 3u:
+			configuration.gaussian[0] = 0.153170f;
+			configuration.gaussian[1] = 0.144893f;
+			configuration.gaussian[2] = 0.122649f;
+			configuration.gaussian[3] = 0.092902f;
+			break;
+		case 4u:
+			configuration.gaussian[0] = 0.153170f;
+			configuration.gaussian[1] = 0.144893f;
+			configuration.gaussian[2] = 0.122649f;
+			configuration.gaussian[3] = 0.092902f;
+			configuration.gaussian[4] = 0.062970f;
+			break;
+		case 5u:
+			configuration.gaussian[0] = 0.111220f;
+			configuration.gaussian[1] = 0.107798f;
+			configuration.gaussian[2] = 0.098151f;
+			configuration.gaussian[3] = 0.083953f;
+			configuration.gaussian[4] = 0.067458f;
+			configuration.gaussian[5] = 0.050920f;
+			break;
+		default:
+			configuration.gaussian[0] = 0.111220f;
+			configuration.gaussian[1] = 0.107798f;
+			configuration.gaussian[2] = 0.098151f;
+			configuration.gaussian[3] = 0.083953f;
+			configuration.gaussian[4] = 0.067458f;
+			configuration.gaussian[5] = 0.050920f;
+			configuration.gaussian[6] = 0.036108f;
+			break;
+		};
+
+		m_configurationUbo->upload();
+
 		*m_axisUniform.getData() = axis;
 		renderer::DescriptorSetLayoutBindingArray bindings
 		{
 			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
-			{ 1u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
+			{ 1u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
+			{ 2u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
 		};
 		createPipeline( size
 			, Position{}
@@ -539,6 +577,10 @@ namespace castor3d
 			, 0u
 			, 1u );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
+			, *m_configurationUbo
+			, 0u
+			, 1u );
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( 2u )
 			, m_normals
 			, m_sampler->getSampler() );
 	}

@@ -23,6 +23,7 @@
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <Shader/ShaderProgram.hpp>
+#include <Sync/Fence.hpp>
 
 #include <Graphics/Font.hpp>
 
@@ -109,11 +110,7 @@ namespace castor3d
 		if ( !m_commandBuffer )
 		{
 			m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
-		}
-
-		if ( !m_signalFinished )
-		{
-			m_signalFinished = device.createSemaphore();
+			m_fence = device.createFence( renderer::FenceCreateFlag::eSignaled );
 		}
 
 		if ( !m_declaration )
@@ -210,6 +207,7 @@ namespace castor3d
 
 		m_textsGeometryBuffers.clear();
 		m_textsVertexBuffers.clear();
+		m_fence.reset();
 		m_commandBuffer.reset();
 	}
 
@@ -345,7 +343,9 @@ namespace castor3d
 		}
 	}
 
-	void OverlayRenderer::beginRender( Viewport const & viewport )
+	void OverlayRenderer::beginRender( Viewport const & viewport
+		, RenderPassTimer const & timer
+		, renderer::Semaphore const & toWait )
 	{
 		auto size = viewport.getSize();
 
@@ -355,12 +355,37 @@ namespace castor3d
 			m_size = size;
 		}
 
+		static renderer::ClearColorValue clear{ 0.0f, 0.0f, 0.0f, 0.0f };
 		m_matrixUbo.update( viewport.getProjection() );
+		m_toWait = &toWait;
+		m_commandBuffer->begin();
+		m_commandBuffer->resetQueryPool( timer.getQuery()
+			, 0u
+			, 2u );
+		m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			, timer.getQuery()
+			, 0u );
+		m_commandBuffer->beginRenderPass( *m_renderPass
+			, *m_frameBuffer
+			, { clear }
+			, renderer::SubpassContents::eInline );
 	}
 
-	void OverlayRenderer::endRender()
+	void OverlayRenderer::endRender( RenderPassTimer const & timer )
 	{
 		m_sizeChanged = false;
+		m_commandBuffer->endRenderPass();
+		m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			, timer.getQuery()
+			, 1u );
+		m_commandBuffer->end();
+		m_fence->reset();
+		getRenderSystem()->getCurrentDevice()->getGraphicsQueue().submit( { *m_commandBuffer }
+			, { *m_toWait }
+			, { renderer::PipelineStageFlag::eColourAttachmentOutput }
+			, {}
+			, m_fence.get() );
+		m_fence->wait( renderer::FenceTimeout );
 	}
 
 	OverlayRenderer::OverlayRenderNode & OverlayRenderer::doGetPanelNode( Pass & pass )
@@ -414,7 +439,8 @@ namespace castor3d
 
 	renderer::DescriptorSetPtr OverlayRenderer::doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
 		, TextureChannels textureFlags
-		, Pass const & pass )
+		, Pass const & pass
+		, bool update )
 	{
 		remFlag( textureFlags, TextureChannel::eNormal );
 		remFlag( textureFlags, TextureChannel::eSpecular );
@@ -451,6 +477,11 @@ namespace castor3d
 				, pass.getTextureUnit( TextureChannel::eOpacity )->getSampler()->getSampler() );
 		}
 
+		if ( update )
+		{
+			result->update();
+		}
+
 		return result;
 	}
 
@@ -462,7 +493,8 @@ namespace castor3d
 	{
 		auto result = doCreateDescriptorSet( pipeline
 			, textureFlags
-			, pass );
+			, pass
+			, false );
 
 		if ( checkFlag( textureFlags, TextureChannel::eText ) )
 		{
@@ -471,6 +503,7 @@ namespace castor3d
 				, sampler.getSampler() );
 		}
 
+		result->update();
 		return result;
 	}
 
@@ -489,8 +522,25 @@ namespace castor3d
 		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
 		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+		renderPass.dependencies.resize( 2u );
+		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].dstSubpass = 0u;
+		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		renderPass.dependencies[1].srcSubpass = 0u;
+		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 		renderPass.subpasses.resize( 1u );
 		renderPass.subpasses[0].flags = 0u;
@@ -498,6 +548,11 @@ namespace castor3d
 		renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
 
 		m_renderPass = device.createRenderPass( renderPass );
+
+		renderer::FrameBufferAttachmentArray attaches;
+		attaches.emplace_back( *m_renderPass->getAttachments().begin(), m_target );
+		m_frameBuffer = m_renderPass->createFrameBuffer( { m_target.getTexture().getDimensions().width, m_target.getTexture().getDimensions().height }
+			, std::move( attaches ) );
 	}
 
 	OverlayRenderer::Pipeline & OverlayRenderer::doGetPipeline( TextureChannels textureFlags
@@ -534,7 +589,7 @@ namespace castor3d
 			// Matrix UBO
 			bindings.emplace_back( MatrixUboBinding
 				, renderer::DescriptorType::eUniformBuffer
-				, renderer::ShaderStageFlag::eFragment );
+				, renderer::ShaderStageFlag::eVertex );
 			// Matrix UBO
 			bindings.emplace_back( OverlayUboBinding
 				, renderer::DescriptorType::eUniformBuffer
@@ -612,7 +667,11 @@ namespace castor3d
 	{
 		auto & node = doGetPanelNode( pass );
 		m_overlayUbo.update( pass.getId() );
+		auto & queue = getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
+
 		commandBuffer.bindPipeline( *node.m_pipeline.pipeline );
+		commandBuffer.setViewport( { m_size.getWidth(), m_size.getHeight(), 0, 0 } );
+		commandBuffer.setScissor( { 0, 0, m_size.getWidth(), m_size.getHeight() } );
 		commandBuffer.bindDescriptorSet( *node.m_descriptorSet
 			, *node.m_pipeline.pipelineLayout );
 		commandBuffer.bindVertexBuffer( 0u, vertexBuffer.getBuffer(), 0u );
@@ -631,7 +690,10 @@ namespace castor3d
 	{
 		auto & node = doGetTextNode( pass, texture, sampler );
 		m_overlayUbo.update( pass.getId() );
+
 		commandBuffer.bindPipeline( *node.m_pipeline.pipeline );
+		commandBuffer.setViewport( { m_size.getWidth(), m_size.getHeight(), 0, 0 } );
+		commandBuffer.setScissor( { 0, 0, m_size.getWidth(), m_size.getHeight() } );
 		commandBuffer.bindDescriptorSet( *node.m_descriptorSet
 			, *node.m_pipeline.pipelineLayout );
 		commandBuffer.bindVertexBuffer( 0u, vertexBuffer.getBuffer(), 0u );

@@ -220,9 +220,9 @@ namespace castor3d
 		 *\brief		Définit le périphérique principal.
 		 *\param[in]	device	Le périphérique.
 		 */
-		inline void setMainDevice( renderer::Device const & device )
+		inline void setMainDevice( renderer::DevicePtr device )
 		{
-			m_mainDevice = &device;
+			m_mainDevice = device;
 		}
 		/**
 		 *\~english
@@ -240,10 +240,10 @@ namespace castor3d
 		 *\~french
 		 *\return		Le périphérique principal.
 		 */
-		inline renderer::Device const & getMainDevice()
+		inline renderer::DevicePtr getMainDevice()
 		{
 			REQUIRE( hasMainDevice() );
-			return *m_mainDevice;
+			return m_mainDevice;
 		}
 		/**
 		 *\~english
@@ -311,7 +311,7 @@ namespace castor3d
 		GpuInformations m_gpuInformations;
 		OverlayRendererSPtr m_overlayRenderer;
 		renderer::RendererPtr m_renderer;
-		renderer::Device const * m_mainDevice{ nullptr };
+		renderer::DevicePtr m_mainDevice;
 		renderer::Device const * m_currentDevice{ nullptr };
 		std::stack< SceneRPtr > m_stackScenes;
 		castor::String m_name;

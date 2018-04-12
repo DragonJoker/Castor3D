@@ -244,8 +244,8 @@ namespace castor3d
 			auto position = writer.declAttribute< Vec4 >( cuT( "position" ), 0u );
 			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
 			auto center = writer.declAttribute< Vec3 >( cuT( "center" ), 2u );
-			auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
-			auto gl_VertexID( writer.declBuiltin< Int >( cuT( "gl_VertexID" ) ) );
+			auto gl_InstanceID( writer.declBuiltin< Int >( writer.getInstanceID() ) );
+			auto gl_VertexID( writer.declBuiltin< Int >( writer.getVertexID() ) );
 			UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
 			UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
 			UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );

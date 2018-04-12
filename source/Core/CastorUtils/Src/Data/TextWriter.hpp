@@ -33,8 +33,8 @@ namespace castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		explicit TextWriter( String const & p_tabs )
-			: m_tabs{ p_tabs }
+		explicit TextWriter( String const & tabs )
+			: m_tabs{ tabs }
 		{
 		}
 		/**
@@ -47,27 +47,27 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Copies the file with given path to output folder.
-		 *\param[in]	p_path		The path of the file to copy.
-		 *\param[in]	p_folder	The output folder.
-		 *\param[in]	p_subfolder	The output subfolder.
+		 *\param[in]	path		The path of the file to copy.
+		 *\param[in]	folder		The output folder.
+		 *\param[in]	subfolder	The output subfolder.
 		 *\return		The copied file path, relative to output folder.
 		 *\~french
 		 *\brief		Copie le fichier dont le chemin est donné dans le dossier de sortie.
-		 *\param[in]	p_path		Le chemin du fichier à copier.
-		 *\param[in]	p_folder	Le dossier de sortie.
-		 *\param[in]	p_subfolder	Le sous-dossier de sortie.
+		 *\param[in]	path		Le chemin du fichier à copier.
+		 *\param[in]	folder		Le dossier de sortie.
+		 *\param[in]	subfolder	Le sous-dossier de sortie.
 		 *\return		Le chemin du fichier copié, relatif au dossier de sortie.
 		 */
-		static inline Path copyFile( Path const & p_path, Path const & p_folder, Path const & p_subfolder )
+		static inline Path copyFile( Path const & path, Path const & folder, Path const & subfolder )
 		{
-			Path relative{ p_subfolder.empty() ? p_path.getFileName( true ) : p_subfolder / p_path.getFileName( true ) };
+			Path relative{ subfolder.empty() ? path.getFileName( true ) : subfolder / path.getFileName( true ) };
 
-			if ( !File::directoryExists( p_folder / p_subfolder ) )
+			if ( !File::directoryExists( folder / subfolder ) )
 			{
-				File::directoryCreate( p_folder / p_subfolder );
+				File::directoryCreate( folder / subfolder );
 			}
 
-			File::copyFile( p_path, p_folder / p_subfolder );
+			File::copyFile( path, folder / subfolder );
 			return relative;
 		}
 		/**
@@ -76,11 +76,11 @@ namespace castor
 		 *\~french
 		 *\brief		Rapporte une erreur éventuelle.
 		 */
-		void checkError( bool p_error, char const * const p_action )
+		static inline void checkError( bool error, char const * const action )
 		{
-			if ( !p_error )
+			if ( !error )
 			{
-				Logger::logError( std::stringstream{} << p_action << " writing failed." );
+				Logger::logError( std::stringstream{} << action << " writing failed." );
 			}
 		}
 

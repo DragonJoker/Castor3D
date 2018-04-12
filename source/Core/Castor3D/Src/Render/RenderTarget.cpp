@@ -285,11 +285,13 @@ namespace castor3d
 			m_renderTechnique->initialise( index );
 
 			m_postPostFxTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "sRGB Post effects" ), cuT( "sRGB Post effects" ) );
+			m_postFxTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "HDR Post effects" ), cuT( "HDR Post effects" ) );
 			m_overlaysTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Overlays" ), cuT( "Overlays" ) );
+			m_toneMappingTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Tone Mapping" ), cuT( "Tone Mapping" ) );
 
 			for ( auto effect : m_postEffects )
 			{
-				effect->initialise();
+				effect->initialise( *m_postFxTimer );
 			}
 
 			m_initialised = m_toneMapping->initialise( getSize()
@@ -298,7 +300,7 @@ namespace castor3d
 
 			for ( auto effect : m_postPostEffects )
 			{
-				effect->initialise();
+				effect->initialise( *m_postPostFxTimer );
 			}
 
 			m_overlayRenderer = std::make_shared< OverlayRenderer >( *getEngine()->getRenderSystem()
@@ -306,6 +308,7 @@ namespace castor3d
 			m_overlayRenderer->initialise();
 
 			m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
+			m_signalReady = device.createSemaphore();
 		}
 	}
 
@@ -334,8 +337,10 @@ namespace castor3d
 			m_postEffects.clear();
 			m_postPostEffects.clear();
 
+			m_postFxTimer.reset();
 			m_postPostFxTimer.reset();
 			m_overlaysTimer.reset();
+			m_toneMappingTimer.reset();
 
 			m_velocityTexture.cleanup();
 			m_velocityTexture.setTexture( nullptr );
@@ -359,8 +364,10 @@ namespace castor3d
 
 				if ( camera )
 				{
+					getEngine()->getRenderSystem()->pushScene( scene.get() );
 					scene->getGeometryCache().fillInfo( info );
 					doRender( info, m_frameBuffer, getCamera() );
+					getEngine()->getRenderSystem()->popScene();
 				}
 			}
 		}
@@ -433,50 +440,119 @@ namespace castor3d
 		m_toneMapping->update( scene->getHdrConfig() );
 
 		// Render the scene through the RenderTechnique.
-		m_renderTechnique->render( m_jitter
+		semaphoreToWait = m_renderTechnique->render( m_jitter
 			, *semaphoreToWait
 			, info );
-		semaphoreToWait = &m_renderTechnique->getSemaphore();
+
+		// Draw HDR post effects.
+		semaphoreToWait = doApplyHdrPostEffects( *semaphoreToWait );
 
 		// Then draw the render's result to the RenderTarget's frame buffer, applying the tone mapping operator.
-		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
+		semaphoreToWait = doApplyToneMapping( *semaphoreToWait, *fbo.m_frameBuffer );
+
+		// Apply the sRGB post effects.
+		semaphoreToWait = doApplySRgbPostEffects( *semaphoreToWait );
+
+		// And now render overlays.
+		semaphoreToWait = doRenderOverlays( *semaphoreToWait, *camera );
+
+#if DISPLAY_DEBUG
+
+		m_renderTechnique->debugDisplay( Size{ camera->getWidth(), camera->getHeight() } );
+
+#endif
+	}
+
+	renderer::Semaphore const * RenderTarget::doApplyHdrPostEffects( renderer::Semaphore const & toWait )
+	{
+		auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
+		m_postFxTimer->start();
+		auto * result = &toWait;
+
+		for ( auto effect : m_postEffects )
 		{
-			m_commandBuffer->beginRenderPass( *m_renderPass
-				, *fbo.m_frameBuffer
-				, { convert( RgbaColour::fromRGBA( toRGBAFloat( scene->getBackgroundColour() ) ) ) }
-				, renderer::SubpassContents::eSecondaryCommandBuffers );
-			m_commandBuffer->executeCommands( { m_toneMapping->getCommandBuffer() } );
-			m_commandBuffer->endRenderPass();
-			m_commandBuffer->end();
+			queue.submit( effect->getCommands()
+				, *result
+				, renderer::PipelineStageFlag::eColourAttachmentOutput
+				, effect->getSemaphore()
+				, nullptr );
+			result = &effect->getSemaphore();
 		}
 
-		queue.submit( *m_commandBuffer
-			, *semaphoreToWait
-			, renderer::PipelineStageFlag::eAllCommands
-			, m_toneMapping->getSemaphore()
-			, nullptr );
-		semaphoreToWait = &m_toneMapping->getSemaphore();
+		m_postFxTimer->stop();
+		return result;
+	}
 
-		// Apply the post effects.
+	renderer::Semaphore const * RenderTarget::doApplyToneMapping( renderer::Semaphore const & toWait
+		, renderer::FrameBuffer const & frameBuffer )
+	{
+		auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
+		SceneSPtr scene = getScene();
+		m_toneMappingTimer->start();
+		auto * result = &toWait;
+
+		if ( m_commandBuffer->begin() )
+		{
+			m_commandBuffer->resetQueryPool( m_toneMappingTimer->getQuery()
+				, 0u
+				, 2u );
+			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+				, m_toneMappingTimer->getQuery()
+				, 0u );
+			m_commandBuffer->beginRenderPass( *m_renderPass
+				, frameBuffer
+				, { convert( RgbaColour::fromRGBA( toRGBAFloat( scene->getBackgroundColour() ) ) ) }
+			, renderer::SubpassContents::eSecondaryCommandBuffers );
+			m_commandBuffer->executeCommands( { m_toneMapping->getCommandBuffer() } );
+			m_commandBuffer->endRenderPass();
+			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+				, m_toneMappingTimer->getQuery()
+				, 1u );
+			m_commandBuffer->end();
+			queue.submit( *m_commandBuffer
+				, *result
+				, renderer::PipelineStageFlag::eColourAttachmentOutput
+				, m_toneMapping->getSemaphore()
+				, nullptr );
+			result = &m_toneMapping->getSemaphore();
+		}
+
+		m_toneMappingTimer->stop();
+		return result;
+	}
+
+	renderer::Semaphore const * RenderTarget::doApplySRgbPostEffects( renderer::Semaphore const & toWait )
+	{
+		auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
 		m_postPostFxTimer->start();
+		auto * result = &toWait;
 
 		for ( auto & effect : m_postPostEffects )
 		{
 			queue.submit( effect->getCommands()
-				, *semaphoreToWait
-				, renderer::PipelineStageFlag::eAllCommands
+				, *result
+				, renderer::PipelineStageFlag::eColourAttachmentOutput
 				, effect->getSemaphore()
 				, nullptr );
-			semaphoreToWait = &effect->getSemaphore();
+			result = &effect->getSemaphore();
 		}
 
 		m_postPostFxTimer->stop();
+		return result;
+	}
 
-		// And now render overlays.
+	renderer::Semaphore const * RenderTarget::doRenderOverlays( renderer::Semaphore const & toWait
+		, Camera const & camera )
+	{
+		auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
+		auto * result = &toWait;
 		m_overlaysTimer->start();
+		m_overlayRenderer->beginRender( camera.getViewport()
+			, *m_overlaysTimer
+			, *result );
+
 		{
 			auto lock = makeUniqueLock( getEngine()->getOverlayCache() );
-			m_overlayRenderer->beginRender( camera->getViewport() );
 
 			for ( auto category : getEngine()->getOverlayCache() )
 			{
@@ -487,20 +563,10 @@ namespace castor3d
 					category->render( *m_overlayRenderer );
 				}
 			}
-
-			m_overlayRenderer->endRender();
-			queue.submit( m_overlayRenderer->getCommands()
-				, *semaphoreToWait
-				, renderer::PipelineStageFlag::eAllCommands
-				, *m_signalFinished
-				, nullptr );
 		}
+
+		m_overlayRenderer->endRender( *m_overlaysTimer );
 		m_overlaysTimer->stop();
-
-#if DISPLAY_DEBUG
-
-		m_renderTechnique->debugDisplay( Size{ camera->getWidth(), camera->getHeight() } );
-
-#endif
+		return result;
 	}
 }

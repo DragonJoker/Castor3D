@@ -89,7 +89,6 @@ namespace castor3d
 		/**@{*/
 		C3D_API renderer::Semaphore const & getSemaphore()const;
 		C3D_API renderer::CommandBuffer const & getOpaqueCommandBuffer()const;
-		C3D_API renderer::CommandBuffer const * getBackgroundCommandBuffer()const;
 		C3D_API renderer::CommandBuffer const & getTransparentCommandBuffer()const;
 		/**@}*/
 

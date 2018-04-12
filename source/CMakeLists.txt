@@ -90,6 +90,8 @@ else ()
 	message( FATAL_ERROR "Unsupported compiler." )
 endif ()
 
+add_compile_options( $<$<CXX_COMPILER_ID:MSVC>:/MP> )
+
 find_package( Doxygen )
 
 #--------------------------------------------------------------------------------------------------
@@ -164,13 +166,13 @@ option( CASTOR_BUILDGRP_SETUP "Build setup projects" FALSE )
 # Small macro to add subdirectory files to current target source and header files
 macro( parse_subdir_files _FOLDER _GROUP )
 	file( GLOB _FOLDER_HEADER_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/${_FOLDER}/*.h
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/${_FOLDER}/*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/${_FOLDER}/*.inl
+		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.h
+		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.inl
  )
 	file( GLOB _FOLDER_SOURCE_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/${_FOLDER}/*.c
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/${_FOLDER}/*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.c
+		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.cpp
  )
 	source_group( "Header Files\\${_GROUP}" FILES ${_FOLDER_HEADER_FILES} )
 	source_group( "Source Files\\${_GROUP}" FILES ${_FOLDER_SOURCE_FILES} )

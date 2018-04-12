@@ -35,7 +35,7 @@ namespace castor3d
 			createInfo.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
 			createInfo.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 			createInfo.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-			createInfo.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+			createInfo.attachments[0].initialLayout = renderer::ImageLayout::eColourAttachmentOptimal;
 			createInfo.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
 
 			renderer::AttachmentReference colourReference;
@@ -113,6 +113,21 @@ namespace castor3d
 			return renderPass.createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
 				, std::move( attaches ) );
 		}
+
+		renderer::TextureViewPtr doCreateDepthView( Engine & engine
+			, renderer::TextureView const & depthView )
+		{
+			auto & depth = depthView.getTexture();
+			renderer::ImageViewCreateInfo view{};
+			view.format = depth.getFormat();
+			view.viewType = renderer::TextureViewType::e2D;
+			view.subresourceRange.aspectMask = renderer::ImageAspectFlag::eDepth;
+			view.subresourceRange.baseArrayLayer = 0u;
+			view.subresourceRange.layerCount = 1u;
+			view.subresourceRange.baseMipLevel = 0u;
+			view.subresourceRange.levelCount = 1u;
+			return depth.createView( view );
+		}
 	}
 
 	WeightedBlendRendering::WeightedBlendRendering( Engine & engine
@@ -124,15 +139,17 @@ namespace castor3d
 		: m_engine{ engine }
 		, m_transparentPass{ transparentPass }
 		, m_size{ size }
+		, m_depthView{ doCreateDepthView( engine, depthView ) }
 		, m_accumulation{ doCreateTexture( engine, m_size, WbTexture::eAccumulation ) }
 		, m_accumulationView{ m_accumulation->createView( renderer::TextureViewType::e2D, m_accumulation->getFormat() ) }
 		, m_revealage{ doCreateTexture( engine, m_size, WbTexture::eRevealage ) }
 		, m_revealageView{ m_revealage->createView( renderer::TextureViewType::e2D, m_revealage->getFormat() ) }
-		, m_renderPass{ doCreateRenderPass( engine, depthView, colourView ) }
-		, m_weightedBlendPassResult{ { depthView, *m_accumulationView, *m_revealageView } }
+		, m_renderPass{ doCreateRenderPass( engine, *m_depthView, colourView ) }
+		, m_weightedBlendPassResult{ { *m_depthView, *m_accumulationView, *m_revealageView } }
 		, m_frameBufferCB{ doCreateFrameBuffer( *m_renderPass, m_size, colourView ) }
 		, m_finalCombinePass{ engine, m_size, m_transparentPass.getSceneUbo(), m_weightedBlendPassResult, *m_renderPass }
 		, m_commandBuffer{ engine.getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer() }
+		, m_semaphore{ engine.getRenderSystem()->getCurrentDevice()->createSemaphore() }
 	{
 	}
 
@@ -165,8 +182,9 @@ namespace castor3d
 			m_frameBufferWB = doCreateFrameBuffer( m_transparentPass.getRenderPass(), m_size, m_weightedBlendPassResult );
 		}
 
-		static renderer::ClearColorValue accumClear{ 0.0, 0.0, 0.0, 0.0 };
-		static renderer::ClearColorValue revealClear{ 1.0, 1.0, 1.0, 1.0 };
+		static renderer::DepthStencilClearValue const depthClear{ 1.0, 0 };
+		static renderer::ClearColorValue const accumClear{ 0.0, 0.0, 0.0, 0.0 };
+		static renderer::ClearColorValue const revealClear{ 1.0, 1.0, 1.0, 1.0 };
 		m_engine.setPerObjectLighting( true );
 
 		// Accumulate blend.
@@ -174,14 +192,14 @@ namespace castor3d
 		{
 			m_commandBuffer->beginRenderPass( m_transparentPass.getRenderPass()
 				, *m_frameBufferWB
-				, { { accumClear }, { revealClear } }
+				, { depthClear, accumClear, revealClear }
 				, renderer::SubpassContents::eSecondaryCommandBuffers );
 			m_commandBuffer->executeCommands( { m_transparentPass.getCommandBuffer() } );
 			m_commandBuffer->endRenderPass();
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *m_frameBufferCB
 				, { { accumClear }, { revealClear } }
-			, renderer::SubpassContents::eSecondaryCommandBuffers );
+				, renderer::SubpassContents::eSecondaryCommandBuffers );
 			m_commandBuffer->executeCommands( { m_finalCombinePass.getCommandBuffer( scene.getFog().getType() ) } );
 			m_commandBuffer->endRenderPass();
 			m_commandBuffer->end();

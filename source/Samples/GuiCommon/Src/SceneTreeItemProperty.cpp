@@ -2,6 +2,8 @@
 
 #include <Render/RenderLoop.hpp>
 #include <Scene/Scene.hpp>
+#include <Scene/Background/Image.hpp>
+#include <Scene/Background/Skybox.hpp>
 #include <Texture/TextureLayout.hpp>
 
 #include "AdditionalProperties.hpp"
@@ -45,10 +47,10 @@ namespace GuiCommon
 		grid->Append( new wxColourProperty( PROPERTY_SCENE_AMBIENT_LIGHT ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( m_scene.getAmbientLight() ) ) ) );
 		grid->Append( new wxColourProperty( PROPERTY_SCENE_BACKGROUND_COLOUR ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( m_scene.getBackgroundColour() ) ) ) );
 
-		if ( m_scene.hasBackgroundImage() )
-		{
-			grid->Append( doCreateTextureImageProperty( PROPERTY_SCENE_BACKGROUND_COLOUR, m_scene.getBackgroundImage() ) );
-		}
+		//if ( m_scene.hasBackgroundImage() )
+		//{
+		//	grid->Append( doCreateTextureImageProperty( PROPERTY_SCENE_BACKGROUND_IMAGE, m_scene.getBackgroundImage() ) );
+		//}
 	}
 
 	void SceneTreeItemProperty::doPropertyChange( wxPropertyGridEvent & event )
@@ -123,7 +125,7 @@ namespace GuiCommon
 		{
 			doApplyChange( [this, value]()
 			{
-				m_scene.setBackground( Path{}, Path{ value } );
+				static_cast< ImageBackground & >( m_scene.getBackground() ).loadImage( Path{}, Path{ value } );
 			} );
 		}
 		else

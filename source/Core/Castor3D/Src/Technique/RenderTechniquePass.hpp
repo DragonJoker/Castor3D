@@ -112,7 +112,8 @@ namespace castor3d
 		 *\return		
 		 */
 		static renderer::ColourBlendState createBlendState( BlendMode colourBlendMode
-			, BlendMode alphaBlendMode );
+			, BlendMode alphaBlendMode
+			, uint32_t attachesCount );
 		/**
 		*\~english
 		*name

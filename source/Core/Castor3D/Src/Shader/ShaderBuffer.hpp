@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3DPrerequisites.hpp"
 
+#include <Buffer/UniformBuffer.hpp>
+
 namespace castor3d
 {
 	/*!

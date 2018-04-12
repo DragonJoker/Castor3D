@@ -10,7 +10,6 @@ See LICENSE file in root folder
 #include <FileParser/FileParserContext.hpp>
 
 #include "Mesh/Submesh.hpp"
-#include "Scene/Skybox.hpp"
 #include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Material/SubsurfaceScattering.hpp"
 
@@ -148,10 +147,11 @@ namespace castor3d
 		AnimatedObjectSPtr pAnimMesh;
 		AnimatedObjectSPtr pAnimMovable;
 		AnimationInstanceRPtr pAnimation;
-		SkyboxUPtr pSkybox;
+		SceneBackgroundSPtr pBackground;
 		ParticleSystemSPtr particleSystem;
 		SsaoConfig ssaoConfig;
 		SubsurfaceScatteringUPtr subsurfaceScattering;
+		std::shared_ptr< SkyboxBackground > skybox;
 	};
 	/*!
 	\author		Sylvain DOREMUS

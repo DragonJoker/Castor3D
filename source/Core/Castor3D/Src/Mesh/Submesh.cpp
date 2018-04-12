@@ -239,6 +239,7 @@ namespace castor3d
 			{
 				component.second->initialise();
 				component.second->fill();
+				component.second->upload();
 			}
 
 			m_vertexLayout = renderer::makeLayout< InstantiationData >( 0u, renderer::VertexInputRate::eVertex );
@@ -258,11 +259,15 @@ namespace castor3d
 			m_geometryBuffers.layouts = layouts;
 			m_geometryBuffers.ibo = &m_indexBuffer->getBuffer();
 			m_geometryBuffers.iboOffset = 0u;
+			m_geometryBuffers.idxCount = m_indexBuffer->getCount();
+			m_geometryBuffers.vtxCount = 0u;
 			m_generated = true;
 		}
 
 		if ( !m_initialised )
 		{
+			m_initialised = true;
+
 			for ( auto & component : m_components )
 			{
 				m_initialised &= component.second->initialise();
@@ -291,7 +296,7 @@ namespace castor3d
 	{
 		if ( m_dirty )
 		{
-			uint32_t size = uint32_t( m_points.size() );
+			auto size = uint32_t( m_points.size() );
 
 			if ( auto buffer = m_vertexBuffer->lock( 0u
 				, size

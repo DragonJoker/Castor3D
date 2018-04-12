@@ -70,6 +70,15 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
+		*	Cleans up GPU objects.
+		*\~french
+		*\brief
+		*	Nettoie les objets GPU.
+		*/
+		C3D_API void cleanup();
+		/**
+		*\~english
+		*\brief
 		*	Prpares the commands to render the quad.
 		*\~french
 		*\brief

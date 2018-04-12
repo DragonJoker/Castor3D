@@ -118,11 +118,11 @@ namespace castor
 	 *\param[in]	p_description	La description de l'assertion.
 	 */
 	template< typename Expr >
-	inline void cuAssert( Expr const & p_expr, char const * const p_description )
+	inline void cuAssert( Expr const & expr, char const * const description )
 	{
-		if ( !p_expr )
+		if ( !expr )
 		{
-			Logger::logError( std::stringstream() << "Assertion failed: " << p_description );
+			Logger::logError( std::stringstream() << "Assertion failed: " << description );
 			Logger::logError( std::stringstream() << Debug::Backtrace{} );
 			assert( false );
 		}

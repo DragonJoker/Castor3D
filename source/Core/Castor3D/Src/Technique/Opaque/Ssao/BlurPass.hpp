@@ -96,6 +96,12 @@ namespace castor3d
 		void doRegisterFrame( renderer::CommandBuffer & commandBuffer )const override;
 
 	private:
+		struct Configuration
+		{
+			castor::Point2i axis;
+			float gaussian[7];
+		};
+
 		Engine & m_engine;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		TextureUnit const & m_input;
@@ -110,6 +116,7 @@ namespace castor3d
 		RenderPassTimerSPtr m_timer;
 		renderer::CommandBufferPtr m_commandBuffer;
 		renderer::SemaphorePtr m_finished;
+		renderer::UniformBufferPtr< Configuration > m_configurationUbo;
 
 	};
 }

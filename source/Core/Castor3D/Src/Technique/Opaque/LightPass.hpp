@@ -261,7 +261,8 @@ namespace castor3d
 			 */
 			void initialise( renderer::VertexBufferBase & vbo
 				, renderer::VertexLayout const & vertexLayout
-				, renderer::RenderPass const & renderPass
+				, renderer::RenderPass const & firstRenderPass
+				, renderer::RenderPass const & blendRenderPass
 				, MatrixUbo & matrixUbo
 				, SceneUbo & sceneUbo
 				, GpInfoUbo & gpInfoUbo
@@ -485,7 +486,8 @@ namespace castor3d
 		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
 		LightPass( Engine & engine
-			, renderer::RenderPassPtr && renderPass
+			, renderer::RenderPassPtr && firstRenderPass
+			, renderer::RenderPassPtr && blendRenderPass
 			, renderer::TextureView const & depthView
 			, renderer::TextureView const & diffuseView
 			, renderer::TextureView const & specularView
@@ -591,9 +593,19 @@ namespace castor3d
 			, glsl::Shader const & pxl )const = 0;
 
 	protected:
+		struct RenderPass
+		{
+			RenderPass( renderer::RenderPassPtr && renderPass
+				, renderer::TextureView const & depthView
+				, renderer::TextureView const & diffuseView
+				, renderer::TextureView const & specularView );
+			renderer::RenderPassPtr renderPass;
+			renderer::FrameBufferPtr frameBuffer;
+			renderer::CommandBufferPtr commandBuffer;
+		};
 		Engine & m_engine;
-		renderer::RenderPassPtr m_renderPass;
-		renderer::FrameBufferPtr m_frameBuffer;
+		RenderPass m_firstRenderPass;
+		RenderPass m_blendRenderPass;
 		renderer::DescriptorSetPtr m_uboDescriptorSet;
 		renderer::WriteDescriptorSetArray m_textureWrites;
 		renderer::DescriptorSetPtr m_textureDescriptorSet;
@@ -605,8 +617,6 @@ namespace castor3d
 		renderer::VertexLayoutPtr m_vertexLayout;
 		GpInfoUbo & m_gpInfoUbo;
 		uint32_t m_offset{ 0u };
-		renderer::CommandBufferPtr m_firstCommandBuffer;
-		renderer::CommandBufferPtr m_blendCommandBuffer;
 		renderer::SemaphorePtr m_signalReady;
 		GeometryPassResult const * m_geometryPassResult;
 	};

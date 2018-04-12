@@ -125,6 +125,7 @@ namespace castor3d
 			m_geometryBuffers.vbo = buffers;
 			m_geometryBuffers.vboOffsets = offsets;
 			m_geometryBuffers.layouts = layouts;
+			m_geometryBuffers.vtxCount = 4u;
 			m_initialised = true;
 		}
 
@@ -141,6 +142,8 @@ namespace castor3d
 			m_geometryBuffers.layouts.clear();
 			m_geometryBuffers.ibo = nullptr;
 			m_geometryBuffers.iboOffset = 0u;
+			m_geometryBuffers.idxCount = 0u;
+			m_geometryBuffers.vtxCount = 0u;
 			m_quadLayout.reset();
 			m_quadBuffer.reset();
 		}

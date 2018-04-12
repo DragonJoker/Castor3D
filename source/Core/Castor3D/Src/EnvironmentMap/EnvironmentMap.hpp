@@ -35,14 +35,14 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine	The engine.
-		 *\param[in]	p_node		The scene node.
+		 *\param[in]	node	The scene node.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
-		 *\param[in]	p_node		Le noeud de scène.
+		 *\param[in]	node	Le noeud de scène.
 		 */
 		C3D_API EnvironmentMap( Engine & engine
-			, SceneNode & p_node );
+			, SceneNode & node );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -68,13 +68,13 @@ namespace castor3d
 		 *\~english
 		 *\brief		Updates the passes.
 		 *\remarks		Gather the render queues, for further update.
-		 *\param[out]	p_queues	Receives the render queues needed for the rendering of the frame.
+		 *\param[out]	queues	Receives the render queues needed for the rendering of the frame.
 		 *\~french
 		 *\brief		Met à jour les passes.
 		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
-		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
+		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API void update( RenderQueueArray & p_queues );
+		C3D_API void update( RenderQueueArray & queues );
 		/**
 		 *\~english
 		 *\brief		Renders the environment map.
@@ -135,6 +135,7 @@ namespace castor3d
 			renderer::RenderPassPtr renderPass;
 			renderer::FrameBufferPtr frameBuffer;
 			renderer::TextureViewPtr view;
+			renderer::CommandBufferPtr backgroundCommands;
 		};
 		static uint32_t m_count;
 		TextureUnit m_environmentMap;

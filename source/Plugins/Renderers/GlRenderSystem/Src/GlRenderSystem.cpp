@@ -18,6 +18,50 @@ namespace GlRender
 	RenderSystem::RenderSystem( castor3d::Engine & engine )
 		: castor3d::RenderSystem( engine, Name )
 	{
+		renderer::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
+		{
+			if ( newLine )
+			{
+				Logger::logDebug( msg );
+			}
+			else
+			{
+				Logger::logDebugNoNL( msg );
+			}
+		} );
+		renderer::Logger::setInfoCallback( []( std::string const & msg, bool newLine )
+		{
+			if ( newLine )
+			{
+				Logger::logInfo( msg );
+			}
+			else
+			{
+				Logger::logInfoNoNL( msg );
+			}
+		} );
+		renderer::Logger::setWarningCallback( []( std::string const & msg, bool newLine )
+		{
+			if ( newLine )
+			{
+				Logger::logWarning( msg );
+			}
+			else
+			{
+				Logger::logWarningNoNL( msg );
+			}
+		} );
+		renderer::Logger::setErrorCallback( []( std::string const & msg, bool newLine )
+		{
+			if ( newLine )
+			{
+				Logger::logError( msg );
+			}
+			else
+			{
+				Logger::logErrorNoNL( msg );
+			}
+		} );
 		m_renderer = std::make_unique< gl_renderer::Renderer >( renderer::Renderer::Configuration
 		{
 			"Castor3D",
@@ -43,7 +87,7 @@ namespace GlRender
 	{
 		if ( !m_initialised )
 		{
-			auto & device = static_cast< gl_renderer::PhysicalDevice const & >( getMainDevice().getPhysicalDevice() );
+			auto & device = static_cast< gl_renderer::PhysicalDevice const & >( getMainDevice()->getPhysicalDevice() );
 			StringStream stream;
 			int major = device.getProperties().apiVersion >> 22;
 			int minor = ( device.getProperties().apiVersion >> 12 ) & 0x0FFF;

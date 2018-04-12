@@ -45,6 +45,7 @@ namespace castor3d
 
 			// Shader inputs
 			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
+			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
@@ -53,13 +54,13 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					vtx_texture = position;
+					vtx_texture = texcoord;
 					gl_Position = vec4( position.x(), position.y(), 0.0, 1.0 );
 				} );
 			return writer.finalise();
 		}
 
-		glsl::Shader getBlurXProgram( Engine & engine )
+		glsl::Shader getBlurXProgram( Engine & engine, bool isDepth )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			using namespace glsl;
@@ -76,7 +77,7 @@ namespace castor3d
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0u );
-			auto gl_FragDepth = writer.declBuiltin< Float >( cuT( "gl_FragDepth" ) );
+			auto gl_FragDepth = writer.declBuiltin< Float >( cuT( "gl_FragDepth" ), isDepth );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
@@ -92,12 +93,15 @@ namespace castor3d
 				}
 				ROF;
 
-				gl_FragDepth = pxl_fragColor.r();
+				if ( isDepth )
+				{
+					gl_FragDepth = pxl_fragColor.r();
+				}
 			} );
 			return writer.finalise();
 		}
 
-		glsl::Shader getBlurYProgram( Engine & engine )
+		glsl::Shader getBlurYProgram( Engine & engine, bool isDepth )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			using namespace glsl;
@@ -114,7 +118,7 @@ namespace castor3d
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
-			auto gl_FragDepth = writer.declBuiltin< Float >( cuT( "gl_FragDepth" ) );
+			auto gl_FragDepth = writer.declBuiltin< Float >( cuT( "gl_FragDepth" ), isDepth );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
@@ -130,7 +134,10 @@ namespace castor3d
 				}
 				ROF;
 
-				gl_FragDepth = pxl_fragColor.r();
+				if ( isDepth )
+				{
+					gl_FragDepth = pxl_fragColor.r();
+				}
 			} );
 			return writer.finalise();
 		}
@@ -387,7 +394,7 @@ namespace castor3d
 		auto & device = *renderSystem.getCurrentDevice();
 		auto & cache = engine.getShaderProgramCache();
 		auto const vertex = getVertexProgram( engine );
-		auto const blurX = getBlurXProgram( engine );
+		auto const blurX = getBlurXProgram( engine, renderer::isDepthFormat( m_format ) );
 
 		renderer::ShaderStageStateArray program
 		{
@@ -420,7 +427,7 @@ namespace castor3d
 		auto & device = *renderSystem.getCurrentDevice();
 		auto & cache = engine.getShaderProgramCache();
 		auto const vertex = getVertexProgram( engine );
-		auto const blurY = getBlurYProgram( engine );
+		auto const blurY = getBlurYProgram( engine, renderer::isDepthFormat( m_format ) );
 
 		renderer::ShaderStageStateArray program
 		{

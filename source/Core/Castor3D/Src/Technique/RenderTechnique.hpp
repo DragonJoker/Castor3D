@@ -107,7 +107,7 @@ namespace castor3d
 		 *\param[out]	velocity	Reçoit le rendu des vélocités.
 		 *\param[out]	info		Reçoit les informations de rendu.
 		 */
-		C3D_API void render( castor::Point2r const & jitter
+		C3D_API renderer::Semaphore const * render( castor::Point2r const & jitter
 			, renderer::Semaphore const & waitSemaphore
 			, RenderInfo & info );
 		/**
@@ -184,7 +184,7 @@ namespace castor3d
 		void doCleanupShadowMaps();
 		void doUpdateShadowMaps( RenderQueueArray & queues );
 		void doUpdateParticles( RenderInfo & info );
-		void doInitialiseRenderPass();
+		void doInitialiseBackgroundRenderPass();
 		renderer::Semaphore const * doRenderShadowMaps( renderer::Semaphore const & semaphore );
 		renderer::Semaphore const * doRenderEnvironmentMaps( renderer::Semaphore const & semaphore );
 		renderer::Semaphore const * doRenderOpaque( castor::Point2r const & jitter
@@ -194,7 +194,6 @@ namespace castor3d
 		renderer::Semaphore const * doRenderTransparent( castor::Point2r const & jitter
 			, RenderInfo & info
 			, renderer::Semaphore const & semaphore );
-		renderer::Semaphore const * doApplyPostEffects( renderer::Semaphore const & semaphore );
 
 	private:
 		bool m_initialised;
@@ -209,7 +208,6 @@ namespace castor3d
 		std::unique_ptr< DeferredRendering > m_deferredRendering;
 		std::unique_ptr< WeightedBlendRendering > m_weightedBlendRendering;
 		RenderPassTimerSPtr m_particleTimer;
-		RenderPassTimerSPtr m_postFxTimer;
 		ShadowMapArray m_directionalShadowMaps;
 		ShadowMapArray m_pointShadowMaps;
 		ShadowMapArray m_spotShadowMaps;

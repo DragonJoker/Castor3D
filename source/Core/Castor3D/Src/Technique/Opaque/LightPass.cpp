@@ -301,7 +301,8 @@ namespace castor3d
 
 	void LightPass::Program::initialise( renderer::VertexBufferBase & vbo
 		, renderer::VertexLayout const & vertexLayout
-		, renderer::RenderPass const & renderPass
+		, renderer::RenderPass const & firstRenderPass
+		, renderer::RenderPass const & blendRenderPass
 		, MatrixUbo & matrixUbo
 		, SceneUbo & sceneUbo
 		, GpInfoUbo & gpInfoUbo
@@ -343,8 +344,8 @@ namespace castor3d
 		m_textureDescriptorPool = m_textureDescriptorLayout->createPool( 2u );
 
 		m_pipelineLayout = device.createPipelineLayout( { *m_uboDescriptorLayout, *m_textureDescriptorLayout } );
-		m_firstPipeline = doCreatePipeline( vertexLayout, renderPass, false );
-		m_blendPipeline = doCreatePipeline( vertexLayout, renderPass, true );
+		m_firstPipeline = doCreatePipeline( vertexLayout, firstRenderPass, false );
+		m_blendPipeline = doCreatePipeline( vertexLayout, blendRenderPass, true );
 	}
 
 	void LightPass::Program::cleanup()
@@ -375,28 +376,39 @@ namespace castor3d
 
 	//************************************************************************************************
 
+	LightPass::RenderPass::RenderPass( renderer::RenderPassPtr && renderPass
+		, renderer::TextureView const & depthView
+		, renderer::TextureView const & diffuseView
+		, renderer::TextureView const & specularView )
+		: renderPass{ std::move( renderPass ) }
+	{
+		renderer::FrameBufferAttachmentArray attaches
+		{
+			{ *( this->renderPass->getAttachments().begin() + 0u ), depthView },
+			{ *( this->renderPass->getAttachments().begin() + 1u ), diffuseView },
+			{ *( this->renderPass->getAttachments().begin() + 2u ), specularView },
+		};
+		frameBuffer = this->renderPass->createFrameBuffer( { depthView.getTexture().getDimensions().width, depthView.getTexture().getDimensions().height }
+			, std::move( attaches ) );
+	}
+
 	LightPass::LightPass( Engine & engine
-		, renderer::RenderPassPtr && renderPass
+		, renderer::RenderPassPtr && firstRenderPass
+		, renderer::RenderPassPtr && blendRenderPass
 		, renderer::TextureView const & depthView
 		, renderer::TextureView const & diffuseView
 		, renderer::TextureView const & specularView
 		, GpInfoUbo & gpInfoUbo
 		, bool hasShadows )
 		: m_engine{ engine }
-		, m_renderPass{ std::move( renderPass ) }
+		, m_firstRenderPass{std::move( firstRenderPass ), depthView, diffuseView, specularView }
+		, m_blendRenderPass{ std::move( blendRenderPass ), depthView, diffuseView, specularView }
 		, m_shadows{ hasShadows }
 		, m_matrixUbo{ engine }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_sampler{ engine.getDefaultSampler() }
+		, m_signalReady{ engine.getRenderSystem()->getCurrentDevice()->createSemaphore() }
 	{
-		renderer::FrameBufferAttachmentArray attaches
-		{
-			{ *( m_renderPass->getAttachments().begin() + 0u ), depthView },
-			{ *( m_renderPass->getAttachments().begin() + 1u ), diffuseView },
-			{ *( m_renderPass->getAttachments().begin() + 2u ), specularView },
-		};
-		m_frameBuffer = m_renderPass->createFrameBuffer( { depthView.getTexture().getDimensions().width, depthView.getTexture().getDimensions().height }
-			, std::move( attaches ) );
 	}
 
 	void LightPass::render( bool first
@@ -408,7 +420,7 @@ namespace castor3d
 
 		if ( first )
 		{
-			device.getGraphicsQueue().submit( *m_firstCommandBuffer
+			device.getGraphicsQueue().submit( *m_firstRenderPass.commandBuffer
 				, toWait
 				, renderer::PipelineStageFlag::eVertexInput
 				, *m_signalReady
@@ -416,7 +428,7 @@ namespace castor3d
 		}
 		else
 		{
-			device.getGraphicsQueue().submit( *m_blendCommandBuffer
+			device.getGraphicsQueue().submit( *m_blendRenderPass.commandBuffer
 				, toWait
 				, renderer::PipelineStageFlag::eVertexInput
 				, *m_signalReady
@@ -453,7 +465,8 @@ namespace castor3d
 
 		m_program->initialise( vbo
 			, vertexLayout
-			, *m_renderPass
+			, *m_firstRenderPass.renderPass
+			, *m_blendRenderPass.renderPass
 			, m_matrixUbo
 			, sceneUbo
 			, m_gpInfoUbo
@@ -477,8 +490,8 @@ namespace castor3d
 
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
-		m_firstCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
-		m_blendCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
+		m_firstRenderPass.commandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
+		m_blendRenderPass.commandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
 
 		m_textureDescriptorSet = m_program->getTextureDescriptorPool().createDescriptorSet( 1u );
 		auto & texLayout = m_program->getTextureDescriptorLayout();
@@ -492,12 +505,7 @@ namespace castor3d
 				0u,
 				1u,
 				renderer::DescriptorType::eCombinedImageSampler,
-				renderer::DescriptorImageInfo
-				{
-					sampler,
-					view,
-					layout,
-				}
+				{ { sampler, view, layout } }
 			};
 		};
 		m_textureWrites.push_back( writeBinding( 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal ) );
@@ -516,12 +524,7 @@ namespace castor3d
 				0u,
 				1u,
 				renderer::DescriptorType::eCombinedImageSampler,
-				renderer::DescriptorImageInfo
-				{
-					std::nullopt,
-					std::nullopt,
-					renderer::ImageLayout::eShaderReadOnlyOptimal
-				}
+				{ { std::nullopt, std::nullopt, renderer::ImageLayout::eShaderReadOnlyOptimal } }
 			} );
 			m_textureDescriptorSet->setBindings( m_textureWrites );
 		}
@@ -544,18 +547,20 @@ namespace castor3d
 	{
 		static renderer::DepthStencilClearValue const clearDepthStencil{ 1.0, 1 };
 		static renderer::ClearColorValue const clearColour{ 0.0, 0.0, 0.0, 1.0 };
-		uint32_t const width = m_frameBuffer->getDimensions().width;
-		uint32_t const height = m_frameBuffer->getDimensions().height;
+		uint32_t const width = m_firstRenderPass.frameBuffer->getDimensions().width;
+		uint32_t const height = m_firstRenderPass.frameBuffer->getDimensions().height;
 
 		auto prepare = [this
 			, width
-			, height]( renderer::CommandBuffer & commandBuffer
+			, height]( RenderPass & renderPass
 				, bool first )
 		{
+			auto & commandBuffer = *renderPass.commandBuffer;
+
 			if ( commandBuffer.begin() )
 			{
-				commandBuffer.beginRenderPass( *m_renderPass
-					, *m_frameBuffer
+				commandBuffer.beginRenderPass( *renderPass.renderPass
+					, *renderPass.frameBuffer
 					, { clearDepthStencil, clearColour, clearColour }
 				, renderer::SubpassContents::eInline );
 				commandBuffer.setViewport( { width, height, 0, 0 } );
@@ -568,8 +573,8 @@ namespace castor3d
 			}
 		};
 
-		prepare( *m_firstCommandBuffer, true );
-		prepare( *m_blendCommandBuffer, false );
+		prepare( m_firstRenderPass, true );
+		prepare( m_blendRenderPass, false );
 	}
 	
 	glsl::Shader LightPass::doGetLegacyPixelShaderSource( SceneFlags const & sceneFlags
@@ -594,8 +599,8 @@ namespace castor3d
 		auto shadowType = getShadowType( sceneFlags );
 
 		// Shader outputs
-		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 0 );
-		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 1 );
+		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 1 );
+		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 2 );
 
 		// Utility functions
 		auto lighting = shader::legacy::createLightingModel( writer
@@ -663,7 +668,7 @@ namespace castor3d
 			{
 			case LightType::eDirectional:
 				{
-					auto light = writer.declLocale< shader::DirectionalLight >( cuT( "light" ) );
+					auto light = writer.getBuiltin< shader::DirectionalLight >( cuT( "light" ) );
 					lighting->compute( light
 						, eye
 						, shininess
@@ -751,8 +756,8 @@ namespace castor3d
 		auto shadowType = getShadowType( sceneFlags );
 
 		// Shader outputs
-		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 0 );
-		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 1 );
+		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 1 );
+		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 2 );
 
 		// Utility functions
 		auto lighting = shader::pbr::mr::createLightingModel( writer
@@ -984,8 +989,8 @@ namespace castor3d
 		sss.declare( type );
 
 		// Shader outputs
-		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 0 );
-		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 1 );
+		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 1 );
+		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 2 );
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{

@@ -100,14 +100,16 @@ namespace castor3d
 		 *\brief		Commence le rendu des incrustations.
 		 *\param[in]	viewport	Le viewport de la fenêtre de rendu.
 		 */
-		C3D_API void beginRender( Viewport const & viewport );
+		C3D_API void beginRender( Viewport const & viewport
+			, RenderPassTimer const & timer
+			, renderer::Semaphore const & toWait );
 		/**
 		 *\~english
 		 *\brief		Ends the overlays rendering.
 		 *\~french
 		 *\brief		Termine le rendu des incrustations.
 		 */
-		C3D_API void endRender();
+		C3D_API void endRender( RenderPassTimer const & timer );
 		/**
 		*\~english
 		*name
@@ -121,12 +123,6 @@ namespace castor3d
 		{
 			REQUIRE( m_commandBuffer );
 			return *m_commandBuffer;
-		}
-
-		inline renderer::Semaphore const & getSemaphore()const
-		{
-			REQUIRE( m_signalFinished );
-			return *m_signalFinished;
 		}
 
 		castor::Size const & getSize()const
@@ -191,7 +187,8 @@ namespace castor3d
 		renderer::ShaderStageStateArray doCreateOverlayProgram( TextureChannels const & textureFlags );
 		renderer::DescriptorSetPtr doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
 			, TextureChannels textureFlags
-			, Pass const & pass );
+			, Pass const & pass
+			, bool update = true );
 		renderer::DescriptorSetPtr doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
 			, TextureChannels textureFlags
 			, Pass const & pass
@@ -202,7 +199,6 @@ namespace castor3d
 	private:
 		renderer::TextureView const & m_target;
 		renderer::CommandBufferPtr m_commandBuffer;
-		renderer::SemaphorePtr m_signalFinished;
 		renderer::VertexBufferPtr< OverlayCategory::Vertex > m_panelVertexBuffer;
 		renderer::VertexBufferPtr< OverlayCategory::Vertex > m_borderVertexBuffer;
 		std::vector< renderer::VertexBufferPtr< TextOverlay::Vertex > > m_textsVertexBuffers;
@@ -215,6 +211,7 @@ namespace castor3d
 		std::map< Pass *, OverlayRenderNode > m_mapPanelNodes;
 		std::map< Pass *, OverlayRenderNode > m_mapTextNodes;
 		renderer::RenderPassPtr m_renderPass;
+		renderer::FrameBufferPtr m_frameBuffer;
 		std::map< uint32_t, Pipeline > m_panelPipelines;
 		std::map< uint32_t, Pipeline > m_textPipelines;
 		int m_previousBorderZIndex{ 0 };
@@ -226,6 +223,8 @@ namespace castor3d
 		bool m_sizeChanged{ true };
 		MatrixUbo m_matrixUbo;
 		OverlayUbo m_overlayUbo;
+		renderer::Semaphore const * m_toWait;
+		renderer::FencePtr m_fence;
 	};
 }
 

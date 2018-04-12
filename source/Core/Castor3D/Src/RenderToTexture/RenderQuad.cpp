@@ -79,6 +79,11 @@ namespace castor3d
 
 	RenderQuad::~RenderQuad()
 	{
+		cleanup();
+	}
+
+	void RenderQuad::cleanup()
+	{
 		m_pipeline.reset();
 		m_pipelineLayout.reset();
 		m_descriptorSetPool.reset();

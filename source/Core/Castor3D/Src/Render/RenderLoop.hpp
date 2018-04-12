@@ -194,7 +194,7 @@ namespace castor3d
 		 *\param[in]	window	La fenêtre de rendu utilisée pour initialiser le contexte de rendu, recevra le contexte.
 		 *\return		Le contexte créé, ou l'existant.
 		 */
-		C3D_API renderer::Device const * doCreateDevice( renderer::WindowHandle && handle
+		C3D_API renderer::DevicePtr doCreateDevice( renderer::WindowHandle && handle
 			, RenderWindow & window );
 		/**
 		 *\~english
@@ -211,7 +211,7 @@ namespace castor3d
 		 *\brief		Demande la création du contexte de rendu principal.
 		 *\param[in]	window	La fenêtre de rendu utilisée pour initialiser le contexte de rendu, recevra le contexte.
 		 */
-		C3D_API virtual renderer::Device const * doCreateMainDevice( renderer::WindowHandle && handle
+		C3D_API virtual renderer::DevicePtr doCreateMainDevice( renderer::WindowHandle && handle
 			, RenderWindow & window ) = 0;
 
 	private:

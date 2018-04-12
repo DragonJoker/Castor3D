@@ -5,7 +5,6 @@
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
 #include "Scene/Scene.hpp"
-#include "Scene/Skybox.hpp"
 #include "Shader/Program.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureView.hpp"
@@ -74,10 +73,10 @@ namespace castor3d
 			createInfo.attachments[0].format = depthFormat;
 			createInfo.attachments[0].samples = renderer::SampleCountFlag::e1;
 			createInfo.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
-			createInfo.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+			createInfo.attachments[0].storeOp = renderer::AttachmentStoreOp::eDontCare;
 			createInfo.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 			createInfo.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-			createInfo.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+			createInfo.attachments[0].initialLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
 			createInfo.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
 
 			createInfo.attachments[1].index = 1u;
@@ -242,6 +241,8 @@ namespace castor3d
 					, program
 					, flags ) ).first->second;
 			pipeline.setVertexLayouts( layouts );
+			pipeline.setViewport( { m_camera->getViewport().getSize().getWidth(), m_camera->getViewport().getSize().getHeight(), 0, 0 } );
+			pipeline.setScissor( { 0, 0, m_camera->getViewport().getSize().getWidth(), m_camera->getViewport().getSize().getHeight() } );
 
 			auto initialise = [this, &pipeline, flags]()
 			{
@@ -284,6 +285,8 @@ namespace castor3d
 					, program
 					, flags ) ).first->second;
 			pipeline.setVertexLayouts( layouts );
+			pipeline.setViewport( { m_camera->getViewport().getSize().getWidth(), m_camera->getViewport().getSize().getHeight(), 0, 0 } );
+			pipeline.setScissor( { 0, 0, m_camera->getViewport().getSize().getWidth(), m_camera->getViewport().getSize().getHeight() } );
 
 			auto initialise = [this, &pipeline, flags]()
 			{
@@ -358,7 +361,7 @@ namespace castor3d
 		auto texture2 = writer.declAttribute< Vec3 >( cuT( "texture2" )
 			, RenderPass::VertexInputs::Texture2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
+		auto gl_InstanceID( writer.declBuiltin< Int >( writer.getInstanceID() ) );
 
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
 		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
@@ -591,8 +594,9 @@ namespace castor3d
 		auto c3d_fresnelPower = writer.declUniform< Float >( cuT( "c3d_fresnelPower" )
 			, checkFlag( textureFlags, TextureChannel::eReflection ) || checkFlag( textureFlags, TextureChannel::eRefraction )
 			, 0.30_f );
-		auto c3d_heightScale( writer.declUniform< Float >( cuT( "c3d_heightScale" )
-			, checkFlag( textureFlags, TextureChannel::eHeight ), 0.1_f ) );
+		auto c3d_heightScale( writer.declConstant< Float >( cuT( "c3d_heightScale" )
+			, 0.1_f
+			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
 
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
@@ -885,9 +889,9 @@ namespace castor3d
 		auto c3d_mapBrdf = writer.declSampler< Sampler2D >( cuT( "c3d_mapBrdf" )
 			, index++
 			, 0u );
-
-		auto c3d_heightScale( writer.declUniform< Float >( cuT( "c3d_heightScale" )
-			, checkFlag( textureFlags, TextureChannel::eHeight ), 0.1_f ) );
+		auto c3d_heightScale( writer.declConstant< Float >( cuT( "c3d_heightScale" )
+			, 0.1_f
+			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
 
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
@@ -1158,8 +1162,9 @@ namespace castor3d
 		auto c3d_mapBrdf = writer.declSampler< Sampler2D >( cuT( "c3d_mapBrdf" )
 			, index++
 			, 0u );
-		auto c3d_heightScale( writer.declUniform< Float >( cuT( "c3d_heightScale" )
-			, checkFlag( textureFlags, TextureChannel::eHeight ), 0.1_f ) );
+		auto c3d_heightScale( writer.declConstant< Float >( cuT( "c3d_heightScale" )
+			, 0.1_f
+			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
 
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 

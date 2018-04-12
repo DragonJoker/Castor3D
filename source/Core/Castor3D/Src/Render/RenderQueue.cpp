@@ -24,6 +24,8 @@
 
 #include <GlslSource.hpp>
 
+#include <Command/CommandBufferInheritanceInfo.hpp>
+
 using namespace castor;
 
 namespace castor3d
@@ -801,7 +803,7 @@ namespace castor3d
 	void RenderQueue::initialise( Scene const & scene
 		, Camera & camera )
 	{
-		m_commandBuffer = getOwner()->getEngine()->getRenderSystem()->getMainDevice().getGraphicsCommandPool().createCommandBuffer( false );
+		m_commandBuffer = getOwner()->getEngine()->getRenderSystem()->getMainDevice()->getGraphicsCommandPool().createCommandBuffer( false );
 		initialise( scene );
 		m_cameraChanged = camera.onChanged.connect( std::bind( &RenderQueue::onCameraChanged
 			, this
@@ -864,7 +866,16 @@ namespace castor3d
 
 	void RenderQueue::doPrepareAllNodesCommandBuffer()
 	{
-		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eRenderPassContinue ) )
+		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eRenderPassContinue
+			, renderer::CommandBufferInheritanceInfo
+			{
+				&getOwner()->getRenderPass(),
+				0u,
+				nullptr,
+				false,
+				0u,
+				0u
+			} ) )
 		{
 			auto & camera = *m_camera;
 			camera.update();
@@ -920,6 +931,8 @@ namespace castor3d
 				, *m_commandBuffer );
 			doParseRenderNodesCommands( m_renderNodes->billboardNodes.backCulled
 				, *m_commandBuffer );
+
+			m_commandBuffer->end();
 		}
 	}
 
@@ -938,11 +951,20 @@ namespace castor3d
 		m_culledRenderNodes->billboardNodes.backCulled.clear();
 		m_culledRenderNodes->billboardNodes.frontCulled.clear();
 
-		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eRenderPassContinue ) )
-		{
-			auto & camera = *m_camera;
-			camera.update();
+		auto & camera = *m_camera;
+		camera.update();
 
+		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eRenderPassContinue
+			, renderer::CommandBufferInheritanceInfo
+			{
+				&getOwner()->getRenderPass(),
+				0u,
+				nullptr,
+				false,
+				0u,
+				0u
+			} ) )
+		{
 			doTraverseNodes( m_renderNodes->instancedStaticNodes.frontCulled
 				, std::bind( doAddRenderNodes< SubmeshStaticRenderNodesByPipelineMap, SubmeshStaticRenderNodesPtrByPipelineMap, StaticRenderNodeArray >
 					, std::ref( camera )
@@ -1018,6 +1040,8 @@ namespace castor3d
 				, m_renderNodes->billboardNodes.backCulled
 				, m_culledRenderNodes->billboardNodes.backCulled
 				, *m_commandBuffer );
+
+			m_commandBuffer->end();
 		}
 	}
 

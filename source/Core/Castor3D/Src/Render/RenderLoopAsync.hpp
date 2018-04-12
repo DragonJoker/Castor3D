@@ -126,7 +126,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderLoop::doCreateMainDevice
 		 */
-		C3D_API renderer::Device const * doCreateMainDevice( renderer::WindowHandle && handle
+		C3D_API renderer::DevicePtr doCreateMainDevice( renderer::WindowHandle && handle
 			, RenderWindow & window )override;
 		/**
 		 *\~english

@@ -136,6 +136,8 @@ namespace castor3d
 					, program
 					, flags ) ).first->second;
 			pipeline.setVertexLayouts( layouts );
+			pipeline.setViewport( { m_camera->getViewport().getSize().getWidth(), m_camera->getViewport().getSize().getHeight(), 0, 0 } );
+			pipeline.setScissor( { 0, 0, m_camera->getViewport().getSize().getWidth(), m_camera->getViewport().getSize().getHeight() } );
 
 			auto initialise = [this, &pipeline, flags]()
 			{
@@ -179,6 +181,8 @@ namespace castor3d
 					, program
 					, flags ) ).first->second;
 			pipeline.setVertexLayouts( layouts );
+			pipeline.setViewport( { m_camera->getViewport().getSize().getWidth(), m_camera->getViewport().getSize().getHeight(), 0, 0 } );
+			pipeline.setScissor( { 0, 0, m_camera->getViewport().getSize().getWidth(), m_camera->getViewport().getSize().getHeight() } );
 
 			auto initialise = [this, &pipeline, flags]()
 			{
@@ -238,7 +242,7 @@ namespace castor3d
 		auto texture2 = writer.declAttribute< Vec3 >( cuT( "texture2" )
 			, RenderPass::VertexInputs::Texture2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
+		auto gl_InstanceID( writer.declBuiltin< Int >( writer.getInstanceID() ) );
 
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
 		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );

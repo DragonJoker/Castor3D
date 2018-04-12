@@ -346,8 +346,8 @@ namespace castor3d
 			, TextureUnit * shadowMapOpt )override
 		{
 			renderer::WriteDescriptorSet & write = m_textureDescriptorSet->getBinding( 6u );
-			write.imageInfo.value().imageView = std::ref( shadowMapOpt->getTexture()->getDefaultView() );
-			write.imageInfo.value().sampler = std::ref( shadowMapOpt->getSampler()->getSampler() );
+			write.imageInfo[0].imageView = std::ref( shadowMapOpt->getTexture()->getDefaultView() );
+			write.imageInfo[0].sampler = std::ref( shadowMapOpt->getSampler()->getSampler() );
 			m_textureDescriptorSet->update();
 			my_pass_type::render( first, toWait, nullptr );
 		}

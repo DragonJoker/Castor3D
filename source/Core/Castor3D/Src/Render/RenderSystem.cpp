@@ -19,7 +19,6 @@ namespace castor3d
 
 	RenderSystem::~RenderSystem()
 	{
-		//m_mainDevice.reset();
 	}
 
 	void RenderSystem::initialise( GpuInformations && p_informations )
@@ -34,11 +33,7 @@ namespace castor3d
 
 	void RenderSystem::cleanup()
 	{
-		//if ( m_mainDevice )
-		//{
-		//	delete m_mainDevice;
-		//}
-
+		m_mainDevice.reset();
 		doCleanup();
 
 #if C3D_TRACE_OBJECTS

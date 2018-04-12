@@ -6,6 +6,7 @@
 #include <Miscellaneous/Parameter.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
+#include <Render/RenderPassTimer.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 
@@ -178,7 +179,7 @@ namespace Bloom
 			, params );
 	}
 
-	bool BloomPostEffect::initialise()
+	bool BloomPostEffect::initialise( castor3d::RenderPassTimer const & timer )
 	{
 		auto & device = *getRenderSystem()->getCurrentDevice();
 		renderer::Extent2D size{ m_renderTarget.getSize()[0], m_renderTarget.getSize()[1] };
@@ -281,13 +282,13 @@ namespace Bloom
 
 		if ( result )
 		{
-			result = doBuildCommandBuffer();
+			result = doBuildCommandBuffer( timer );
 		}
 
 		return result;
 	}
 
-	bool BloomPostEffect::doBuildCommandBuffer()
+	bool BloomPostEffect::doBuildCommandBuffer( castor3d::RenderPassTimer const & timer )
 	{
 		renderer::Extent2D size{ m_renderTarget.getSize()[0], m_renderTarget.getSize()[1] };
 		std::vector< renderer::Extent2D > dimensions( FILTER_COUNT );
@@ -308,6 +309,12 @@ namespace Bloom
 
 		if ( result )
 		{
+			m_commandBuffer->resetQueryPool( timer.getQuery()
+				, 0u
+				, 2u );
+			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+				, timer.getQuery()
+				, 0u );
 			// Put image in the right state for rendering.
 			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
@@ -366,6 +373,9 @@ namespace Bloom
 			m_commandBuffer->draw( 4u );
 			m_commandBuffer->endRenderPass();
 
+			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+				, timer.getQuery()
+				, 1u );
 			m_commandBuffer->end();
 		}
 

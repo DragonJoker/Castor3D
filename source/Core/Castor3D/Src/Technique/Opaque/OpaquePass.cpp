@@ -104,6 +104,15 @@ namespace castor3d
 		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 		m_renderPass = device.createRenderPass( renderPass );
+		renderer::FrameBufferAttachmentArray attaches;
+
+		for ( size_t i = 0u; i < gpResult.getViews().size(); ++i )
+		{
+			attaches.emplace_back( *( m_renderPass->getAttachments().begin() + i ), *gpResult.getViews()[i] );
+		}
+
+		m_frameBuffer = m_renderPass->createFrameBuffer( { gpResult[0].getDimensions().width, gpResult[0].getDimensions().height }
+			, std::move( attaches ) );
 	}
 
 	void OpaquePass::update( RenderInfo & info
@@ -219,7 +228,7 @@ namespace castor3d
 		auto texture2 = writer.declAttribute< Vec3 >( cuT( "texture2" )
 			, RenderPass::VertexInputs::Texture2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
+		auto gl_InstanceID( writer.declBuiltin< Int >( writer.getInstanceID() ) );
 
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
 		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0u );
@@ -431,8 +440,9 @@ namespace castor3d
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ? index++ : 0u
 			, 1u
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ) );
-		auto c3d_heightScale( writer.declUniform< Float >( cuT( "c3d_heightScale" )
-			, checkFlag( textureFlags, TextureChannel::eHeight ), 0.1_f ) );
+		auto c3d_heightScale( writer.declConstant< Float >( cuT( "c3d_heightScale" )
+			, 0.1_f
+			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
 
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
@@ -624,8 +634,9 @@ namespace castor3d
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ? index++ : 0u
 			, 1u
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ) );
-		auto c3d_heightScale = writer.declUniform< Float >( cuT( "c3d_heightScale" )
-			, checkFlag( textureFlags, TextureChannel::eHeight ), 0.1_f );
+		auto c3d_heightScale( writer.declConstant< Float >( cuT( "c3d_heightScale" )
+			, 0.1_f
+			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
 
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
@@ -822,8 +833,9 @@ namespace castor3d
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ? index++ : 0u
 			, 1u
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ) );
-		auto c3d_heightScale = writer.declUniform< Float >( cuT( "c3d_heightScale" )
-			, checkFlag( textureFlags, TextureChannel::eHeight ), 0.1_f );
+		auto c3d_heightScale( writer.declConstant< Float >( cuT( "c3d_heightScale" )
+			, 0.1_f
+			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
 
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
@@ -962,11 +974,13 @@ namespace castor3d
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
 					, std::move( dsState )
 					, std::move( rsState )
-					, createBlendState( flags.colourBlendMode, flags.alphaBlendMode )
+					, createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 5u )
 					, renderer::MultisampleState{}
 					, program
 					, flags ) ).first->second;
 			pipeline.setVertexLayouts( layouts );
+			pipeline.setViewport( { m_frameBuffer->getDimensions().width, m_frameBuffer->getDimensions().height, 0, 0 } );
+			pipeline.setScissor( { 0, 0, m_frameBuffer->getDimensions().width, m_frameBuffer->getDimensions().height } );
 
 			auto initialise = [this, &pipeline, flags]()
 			{
@@ -1004,11 +1018,13 @@ namespace castor3d
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
 					, std::move( dsState )
 					, std::move( rsState )
-					, createBlendState( flags.colourBlendMode, flags.alphaBlendMode )
+					, createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 5u )
 					, renderer::MultisampleState{}
 					, program
 					, flags ) ).first->second;
 			pipeline.setVertexLayouts( layouts );
+			pipeline.setViewport( { m_frameBuffer->getDimensions().width, m_frameBuffer->getDimensions().height, 0, 0 } );
+			pipeline.setScissor( { 0, 0, m_frameBuffer->getDimensions().width, m_frameBuffer->getDimensions().height } );
 
 			auto initialise = [this, &pipeline, flags]()
 			{

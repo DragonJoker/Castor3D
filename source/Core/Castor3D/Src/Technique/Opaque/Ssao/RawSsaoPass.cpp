@@ -703,6 +703,7 @@ namespace castor3d
 			result->createBinding( layout.getBinding( 2u )
 				, normals
 				, sampler );
+			result->update();
 			return result;
 		}
 	}

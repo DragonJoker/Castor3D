@@ -1,6 +1,7 @@
 #include "MaterialCache.hpp"
 
 #include "Engine.hpp"
+#include "Event/Frame/FunctorEvent.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Material/Material.hpp"
 #include "Material/Pass.hpp"
@@ -55,7 +56,11 @@ namespace castor3d
 
 	void MaterialCache::cleanup()
 	{
-		m_passBuffer.reset();
+		getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
+			, [this]()
+			{
+				m_passBuffer.reset();
+			} ) );
 		auto lock = castor::makeUniqueLock( m_elements );
 
 		for ( auto it : m_elements )

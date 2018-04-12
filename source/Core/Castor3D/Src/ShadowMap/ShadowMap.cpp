@@ -168,7 +168,7 @@ namespace castor3d
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto texture2 = writer.declAttribute< Vec3 >( cuT( "texture2" )
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
+		auto gl_InstanceID( writer.declBuiltin< Int >( writer.getInstanceID() ) );
 
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
 		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );

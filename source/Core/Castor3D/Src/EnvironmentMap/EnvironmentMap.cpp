@@ -134,7 +134,7 @@ namespace castor3d
 	uint32_t EnvironmentMap::m_count = 0u;
 
 	EnvironmentMap::EnvironmentMap( Engine & engine
-		, SceneNode  & node )
+		, SceneNode & node )
 		: OwnedBy< Engine >{ engine }
 		, m_environmentMap{ doInitialisePoint( engine, MapSize, node.getScene()->getMaterialsType() ) }
 		, m_node{ node }
@@ -246,6 +246,9 @@ namespace castor3d
 			attaches.emplace_back( *( frameBuffer.renderPass->getAttachments().begin() + 1u ), *frameBuffer.view );
 			frameBuffer.frameBuffer = frameBuffer.renderPass->createFrameBuffer( renderer::Extent2D{ MapSize[0], MapSize[1] }
 				, std::move( attaches ) );
+			frameBuffer.backgroundCommands = device.getGraphicsCommandPool().createCommandBuffer( false );
+			m_node.getScene()->getBackground().prepareFrame( *frameBuffer.backgroundCommands
+				, *frameBuffer.renderPass );
 			++face;
 		}
 
@@ -268,17 +271,11 @@ namespace castor3d
 					, *frameBuffer.frameBuffer
 					, { white, white }
 					, renderer::SubpassContents::eSecondaryCommandBuffers );
-
-				renderer::CommandBufferCRefArray commands;
-				commands.emplace_back( m_passes[face]->getOpaqueCommandBuffer() );
-
-				if ( auto * bgCommands = m_passes[face]->getBackgroundCommandBuffer() )
-				{
-					commands.emplace_back( *bgCommands );
-				}
-
-				commands.emplace_back( m_passes[face]->getTransparentCommandBuffer() );
-				m_commandBuffer->executeCommands( commands );
+				m_commandBuffer->executeCommands( {
+					m_passes[face]->getOpaqueCommandBuffer(),
+					*frameBuffer.backgroundCommands,
+					m_passes[face]->getTransparentCommandBuffer(),
+				} );
 				m_commandBuffer->endRenderPass();
 				++face;
 			}

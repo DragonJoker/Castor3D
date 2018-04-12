@@ -39,6 +39,8 @@
 #include "Scene/BillboardList.hpp"
 #include "Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Scene/Animation/AnimatedObjectGroup.hpp"
+#include "Scene/Background/Image.hpp"
+#include "Scene/Background/Skybox.hpp"
 #include "Scene/Light/PointLight.hpp"
 #include "Scene/Light/SpotLight.hpp"
 #include "Shader/Program.hpp"
@@ -799,8 +801,12 @@ namespace castor3d
 		}
 		else if ( !p_params.empty() )
 		{
+			auto imgBackground = std::make_shared< ImageBackground >( *parsingContext->m_pParser->getEngine()
+				, *parsingContext->scene );
 			Path path;
-			parsingContext->scene->setBackground( p_context->m_file.getPath(), p_params[0]->get( path ) );
+			imgBackground->loadImage( p_context->m_file.getPath(), p_params[0]->get( path ) );
+			parsingContext->scene->setBackground( imgBackground );
+			parsingContext->skybox.reset();
 		}
 	}
 	END_ATTRIBUTE()
@@ -1084,7 +1090,8 @@ namespace castor3d
 		}
 		else
 		{
-			parsingContext->pSkybox = std::make_unique< Skybox >( *parsingContext->m_pParser->getEngine() );
+			parsingContext->skybox = std::make_shared< SkyboxBackground >( *parsingContext->m_pParser->getEngine()
+					, *parsingContext->scene );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eSkybox )
@@ -4240,7 +4247,7 @@ namespace castor3d
 		{
 			PARSING_ERROR( cuT( "Missing parameter." ) );
 		}
-		else if ( !parsingContext->pSkybox )
+		else if ( !parsingContext->skybox )
 		{
 			PARSING_ERROR( cuT( "No skybox initialised." ) );
 		}
@@ -4270,7 +4277,7 @@ namespace castor3d
 					, image
 					, renderer::MemoryPropertyFlag::eDeviceLocal );
 				texture->getDefaultImage().initialiseSource( filePath, path );
-				parsingContext->pSkybox->setEquiTexture( texture
+				parsingContext->skybox->setEquiTexture( texture
 					, size );
 			}
 			else
@@ -4285,10 +4292,10 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pSkybox )
+		if ( parsingContext->skybox )
 		{
 			Path path;
-			parsingContext->pSkybox->getTexture().getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource( p_context->m_file.getPath(), p_params[0]->get( path ) );
+			parsingContext->skybox->getTexture().getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource( p_context->m_file.getPath(), p_params[0]->get( path ) );
 		}
 		else
 		{
@@ -4301,11 +4308,11 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pSkybox )
+		if ( parsingContext->skybox )
 		{
 			Path path;
 			path = p_context->m_file.getPath() / p_params[0]->get( path );
-			parsingContext->pSkybox->getTexture().getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource( p_context->m_file.getPath(), p_params[0]->get( path ) );
+			parsingContext->skybox->getTexture().getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource( p_context->m_file.getPath(), p_params[0]->get( path ) );
 		}
 		else
 		{
@@ -4318,11 +4325,11 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pSkybox )
+		if ( parsingContext->skybox )
 		{
 			Path path;
 			path = p_context->m_file.getPath() / p_params[0]->get( path );
-			parsingContext->pSkybox->getTexture().getImage( uint32_t( CubeMapFace::eNegativeY ) ).initialiseSource( p_context->m_file.getPath(), p_params[0]->get( path ) );
+			parsingContext->skybox->getTexture().getImage( uint32_t( CubeMapFace::eNegativeY ) ).initialiseSource( p_context->m_file.getPath(), p_params[0]->get( path ) );
 		}
 		else
 		{
@@ -4335,11 +4342,11 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pSkybox )
+		if ( parsingContext->skybox )
 		{
 			Path path;
 			path = p_context->m_file.getPath() / p_params[0]->get( path );
-			parsingContext->pSkybox->getTexture().getImage( uint32_t( CubeMapFace::ePositiveY ) ).initialiseSource( p_context->m_file.getPath(), p_params[0]->get( path ) );
+			parsingContext->skybox->getTexture().getImage( uint32_t( CubeMapFace::ePositiveY ) ).initialiseSource( p_context->m_file.getPath(), p_params[0]->get( path ) );
 		}
 		else
 		{
@@ -4352,11 +4359,11 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pSkybox )
+		if ( parsingContext->skybox )
 		{
 			Path path;
 			path = p_context->m_file.getPath() / p_params[0]->get( path );
-			parsingContext->pSkybox->getTexture().getImage( uint32_t( CubeMapFace::eNegativeZ ) ).initialiseSource( p_context->m_file.getPath(), p_params[0]->get( path ) );
+			parsingContext->skybox->getTexture().getImage( uint32_t( CubeMapFace::eNegativeZ ) ).initialiseSource( p_context->m_file.getPath(), p_params[0]->get( path ) );
 		}
 		else
 		{
@@ -4369,11 +4376,11 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pSkybox )
+		if ( parsingContext->skybox )
 		{
 			Path path;
 			path = p_context->m_file.getPath() / p_params[0]->get( path );
-			parsingContext->pSkybox->getTexture().getImage( uint32_t( CubeMapFace::ePositiveZ ) ).initialiseSource( p_context->m_file.getPath(), p_params[0]->get( path ) );
+			parsingContext->skybox->getTexture().getImage( uint32_t( CubeMapFace::ePositiveZ ) ).initialiseSource( p_context->m_file.getPath(), p_params[0]->get( path ) );
 		}
 		else
 		{
@@ -4386,10 +4393,9 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->pSkybox )
+		if ( parsingContext->skybox )
 		{
-			parsingContext->scene->setForeground( std::move( parsingContext->pSkybox ) );
-			parsingContext->pSkybox.reset();
+			parsingContext->scene->setBackground( std::move( parsingContext->skybox ) );
 		}
 		else
 		{

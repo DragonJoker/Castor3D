@@ -210,11 +210,12 @@ namespace castor3d
 				0u,
 				1u,
 				renderer::DescriptorType::eCombinedImageSampler,
-				renderer::DescriptorImageInfo
 				{
-					std::ref( sampler->getSampler() ),
-					std::ref( m_texture->getDefaultView() ),
-					renderer::ImageLayout::eShaderReadOnlyOptimal,
+					{
+						std::ref( sampler->getSampler() ),
+						std::ref( m_texture->getDefaultView() ),
+						renderer::ImageLayout::eShaderReadOnlyOptimal,
+					}
 				}
 			};
 		}

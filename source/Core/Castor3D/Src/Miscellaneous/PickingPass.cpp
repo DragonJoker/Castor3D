@@ -493,7 +493,7 @@ namespace castor3d
 			, renderer::Format::eD32_SFLOAT
 			, renderer::ImageUsageFlag::eDepthStencilAttachment
 			, renderer::MemoryPropertyFlag::eDeviceLocal );
-		m_depthView = createView( *m_colourTexture );
+		m_depthView = createView( *m_depthTexture );
 
 		m_stagingBuffer = renderer::makeBuffer< Point4f >( device
 			, PickingWidth * PickingWidth
@@ -532,7 +532,7 @@ namespace castor3d
 		renderPass.subpasses[0].flags = 0u;
 		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
 		renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
-		renderPass.subpasses[0].colorAttachments.push_back( { 1u, renderer::ImageLayout::eDepthStencilAttachmentOptimal } );
+		renderPass.subpasses[0].depthStencilAttachment = { 1u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
 
 		renderPass.dependencies.resize( 2u );
 		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
@@ -565,17 +565,14 @@ namespace castor3d
 	void PickingPass::doCleanup()
 	{
 		m_buffer.reset();
+		m_stagingBuffer.reset();
 		m_pickingUbo.reset();
-
-		if ( m_frameBuffer )
-		{
-			m_frameBuffer.reset();
-			m_renderPass.reset();
-			m_colourView.reset();
-			m_colourTexture.reset();
-			m_depthView.reset();
-			m_depthTexture.reset();
-		}
+		m_frameBuffer.reset();
+		m_renderPass.reset();
+		m_colourView.reset();
+		m_colourTexture.reset();
+		m_depthView.reset();
+		m_depthTexture.reset();
 	}
 
 	void PickingPass::doFillDescriptor( renderer::DescriptorSetLayout const & layout
@@ -745,6 +742,8 @@ namespace castor3d
 					, program
 					, flags ) ).first->second;
 			pipeline.setVertexLayouts( layouts );
+			pipeline.setViewport( { m_colourTexture->getDimensions().width, m_colourTexture->getDimensions().height, 0, 0 } );
+			pipeline.setScissor( { 0, 0, m_colourTexture->getDimensions().width, m_colourTexture->getDimensions().height } );
 
 			auto initialise = [this, &pipeline, flags]()
 			{

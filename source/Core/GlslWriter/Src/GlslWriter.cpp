@@ -84,6 +84,30 @@ namespace glsl
 		}
 	}
 
+	castor::String GlslWriter::getInstanceID()
+	{
+		if ( m_config.m_isVulkan )
+		{
+			return cuT( "gl_InstanceIndex" );
+		}
+		else
+		{
+			return cuT( "gl_InstanceID" );
+		}
+	}
+
+	castor::String GlslWriter::getVertexID()
+	{
+		if ( m_config.m_isVulkan )
+		{
+			return cuT( "gl_VertexIndex" );
+		}
+		else
+		{
+			return cuT( "gl_VertexID" );
+		}
+	}
+
 	Shader GlslWriter::finalise()
 	{
 		m_shader.setSource( m_stream.str() );

@@ -43,12 +43,12 @@ namespace castor3d
 	{
 		m_cpuTime = m_cpuTimer.getElapsed();
 		renderer::UInt32Array values{ 0u, 0u };
-		m_timerQuery->getResults( 0u
-			, 2u
-			, 0u
-			, renderer::QueryResultFlag::eWait
-			, values );
-		m_gpuTime = Nanoseconds{ uint64_t( ( values[1] - values[0] ) / float( m_engine.getRenderSystem()->getCurrentDevice()->getTimestampPeriod() ) ) };
+		//m_timerQuery->getResults( 0u
+		//	, 2u
+		//	, 0u
+		//	, renderer::QueryResultFlag::eWait
+		//	, values );
+		//m_gpuTime = Nanoseconds{ uint64_t( ( values[1] - values[0] ) / float( m_engine.getRenderSystem()->getCurrentDevice()->getTimestampPeriod() ) ) };
 	}
 
 	void RenderPassTimer::reset()

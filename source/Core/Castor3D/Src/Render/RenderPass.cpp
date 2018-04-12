@@ -12,6 +12,7 @@
 #include "Scene/Geometry.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/SceneNode.hpp"
+#include "Scene/Animation/AnimatedSkeleton.hpp"
 #include "Shader/PassBuffer/PassBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
@@ -654,6 +655,7 @@ namespace castor3d
 		node.passNode.fillDescriptor( layout
 			, index
 			, *node.descriptorSet );
+		node.descriptorSet->update();
 	}
 
 	void RenderPass::initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
@@ -692,6 +694,7 @@ namespace castor3d
 		node.passNode.fillDescriptor( layout
 			, index
 			, *node.descriptorSet );
+		node.descriptorSet->update();
 	}
 
 	void RenderPass::initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
@@ -730,6 +733,7 @@ namespace castor3d
 		node.passNode.fillDescriptor( layout
 			, index
 			, *node.descriptorSet );
+		node.descriptorSet->update();
 	}
 
 	void RenderPass::initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
@@ -764,6 +768,7 @@ namespace castor3d
 		node.passNode.fillDescriptor( layout
 			, index
 			, *node.descriptorSet );
+		node.descriptorSet->update();
 	}
 
 	void RenderPass::initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
@@ -1488,7 +1493,7 @@ namespace castor3d
 		auto texture2 = writer.declAttribute< Vec3 >( cuT( "texture2" )
 			, RenderPass::VertexInputs::Texture2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
+		auto gl_InstanceID( writer.declBuiltin< Int >( writer.getInstanceID() ) );
 
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
