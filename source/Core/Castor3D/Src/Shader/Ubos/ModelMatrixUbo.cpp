@@ -55,8 +55,8 @@ namespace castor3d
 		, castor::Matrix3x3r const & normal )const
 	{
 		auto & configuration = m_ubo->getData( 0u );
-		configuration.normal = castor::Matrix4x4r{ normal };
-		configuration.model = model;
+		configuration.normal = convert( castor::Matrix4x4r{ normal } );
+		configuration.model = convert( model );
 		m_ubo->upload();
 	}
 }

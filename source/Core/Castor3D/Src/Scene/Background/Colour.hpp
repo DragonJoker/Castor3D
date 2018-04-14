@@ -102,19 +102,12 @@ namespace castor3d
 
 	private:
 		void doUpdateColour();
-		renderer::ShaderStageStateArray doInitialiseShader();
-		bool doInitialiseVertexBuffer();
-		bool doInitialisePipeline( renderer::ShaderStageStateArray & program
-			, renderer::RenderPass const & renderPass );
 
 	private:
 		castor::ChangeTracked< castor::HdrRgbColour > m_colour;
 		renderer::BufferPtr< castor::Point4f > m_stagingBuffer;
 		renderer::BufferImageCopyArray m_copyRegions;
 		renderer::CommandBufferPtr m_cmdCopy;
-		MatrixUbo m_matrixUbo;
-		ModelMatrixUbo m_modelMatrixUbo;
-		castor::Matrix4x4r m_mtxModel;
 		Viewport m_viewport;
 	};
 }

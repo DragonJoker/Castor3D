@@ -138,6 +138,8 @@ namespace castor3d
 	class TextureView
 		: public castor::OwnedBy< TextureLayout >
 	{
+		friend class TextureLayout;
+
 	public:
 		/*!
 		\author		Sylvain DOREMUS
@@ -281,6 +283,9 @@ namespace castor3d
 			return *m_view;
 		}
 		/**@}*/
+
+	private:
+		C3D_API void doUpdate( renderer::ImageViewCreateInfo info );
 
 	private:
 		uint32_t m_index;

@@ -282,9 +282,9 @@ namespace castor3d
 			return m_index;
 		}
 
-		inline PostEffectPtrArray const & getPostEffects()const
+		inline PostEffectPtrArray const & getHDRPostEffects()const
 		{
-			return m_postEffects;
+			return m_hdrPostEffects;
 		}
 
 		inline ToneMappingSPtr getToneMapping()const
@@ -356,9 +356,9 @@ namespace castor3d
 		renderer::Format m_pixelFormat;
 		uint32_t m_index;
 		Parameters m_techniqueParameters;
-		PostEffectPtrArray m_postEffects;
+		PostEffectPtrArray m_hdrPostEffects;
 		ToneMappingSPtr m_toneMapping;
-		PostEffectPtrArray m_postPostEffects;
+		PostEffectPtrArray m_srgbPostEffects;
 		RenderPassTimerSPtr m_postFxTimer;
 		RenderPassTimerSPtr m_postPostFxTimer;
 		RenderPassTimerSPtr m_toneMappingTimer;

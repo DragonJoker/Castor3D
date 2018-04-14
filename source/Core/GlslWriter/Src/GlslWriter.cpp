@@ -1,6 +1,7 @@
 #include "GlslWriter.hpp"
 
 #include "GlslVec.hpp"
+#include "GlslIntrinsics.hpp"
 
 #include <Log/Logger.hpp>
 
@@ -106,6 +107,16 @@ namespace glsl
 		{
 			return cuT( "gl_VertexID" );
 		}
+	}
+
+	Vec2 GlslWriter::adjustTexCoords( Vec2 const & texcoords )
+	{
+		if ( m_config.m_isVulkan )
+		{
+			return vec2( texcoords.x(), 1.0_f - texcoords.y() );
+		}
+
+		return texcoords;
 	}
 
 	Shader GlslWriter::finalise()

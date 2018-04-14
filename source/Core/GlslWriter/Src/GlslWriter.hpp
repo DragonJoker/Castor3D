@@ -44,6 +44,7 @@ namespace glsl
 		GlslWriter_API void enableExtension( castor::String const & name, uint32_t inCoreVersion );
 		GlslWriter_API castor::String getInstanceID();
 		GlslWriter_API castor::String getVertexID();
+		GlslWriter_API Vec2 adjustTexCoords( Vec2 const & texcoords );
 
 		inline uint32_t getShaderLanguageVersion()const
 		{

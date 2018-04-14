@@ -20,6 +20,7 @@ See LICENSE file in root folder
 #include <Pipeline/PipelineLayout.hpp>
 #include <RenderPass/FrameBuffer.hpp>
 #include <RenderPass/RenderPass.hpp>
+#include <Utils/Mat4.hpp>
 
 #include <array>
 
@@ -30,7 +31,7 @@ namespace castor3d
 	public:
 		EquirectangularToCube( renderer::Texture const & equiRectangular
 			, RenderSystem & renderSystem
-			, renderer::Texture const & texture );
+			, TextureLayout const & target );
 
 		void render();
 		void render( renderer::CommandBuffer & commandBuffer );
@@ -38,25 +39,23 @@ namespace castor3d
 	private:
 		struct FacePipeline
 		{
-			renderer::TextureViewPtr view;
-			renderer::RenderPassPtr renderPass;
+			renderer::TextureView const * view;
 			renderer::FrameBufferPtr frameBuffer;
 			renderer::PipelinePtr pipeline;
 			renderer::DescriptorSetPtr descriptorSet;
 		};
 
 		renderer::Device const & m_device;
-		renderer::Texture const & m_target;
 		renderer::CommandBufferPtr m_commandBuffer;
-		renderer::TexturePtr m_texture;
 		renderer::TextureViewPtr m_view;
 		renderer::SamplerPtr m_sampler;
-		renderer::UniformBufferPtr< castor::Matrix4x4f > m_matrixUbo;
+		renderer::UniformBufferPtr< renderer::Mat4 > m_matrixUbo;
 		renderer::VertexBufferPtr< castor::Point4f > m_vertexBuffer;
 		renderer::VertexLayoutPtr m_vertexLayout;
 		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
 		renderer::DescriptorSetPoolPtr m_descriptorPool;
 		renderer::PipelineLayoutPtr m_pipelineLayout;
+		renderer::RenderPassPtr m_renderPass;
 		std::array< FacePipeline, 6u > m_faces;
 	};
 }

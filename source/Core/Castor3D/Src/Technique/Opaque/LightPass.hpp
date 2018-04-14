@@ -366,20 +366,7 @@ namespace castor3d
 			virtual void doBind( Light const & light ) = 0;
 
 		public:
-			struct Config
-			{
-				//!\~english	The variable containing the light colour.
-				//!\~french		La variable contenant la couleur de la lumière.
-				castor::Point3f colour;
-				//!\~english	The variable containing the light intensities.
-				//!\~french		La variable contenant les intensités de la lumière.
-				castor::Point2f intensity;
-				//!\~english	The variable containing the light far plane position.
-				//!\~french		La variable contenant la position du plan lointain de la lumière.
-				float farPlane;
-			};
 			Engine & m_engine;
-			renderer::UniformBufferBase const * m_baseUbo{ nullptr };
 			renderer::ShaderStageStateArray m_program;
 			renderer::DescriptorSetLayoutPtr m_uboDescriptorLayout;
 			renderer::DescriptorSetPoolPtr m_uboDescriptorPool;
@@ -590,9 +577,21 @@ namespace castor3d
 		 *\return		Le programme créé.
 		 */
 		virtual ProgramPtr doCreateProgram( glsl::Shader const & vtx
-			, glsl::Shader const & pxl )const = 0;
+			, glsl::Shader const & pxl ) = 0;
 
 	protected:
+		struct Config
+		{
+			//!\~english	The variable containing the light colour.
+			//!\~french		La variable contenant la couleur de la lumière.
+			castor::Point3f colour;
+			//!\~english	The variable containing the light intensities.
+			//!\~french		La variable contenant les intensités de la lumière.
+			castor::Point2f intensity;
+			//!\~english	The variable containing the light far plane position.
+			//!\~french		La variable contenant la position du plan lointain de la lumière.
+			float farPlane;
+		};
 		struct RenderPass
 		{
 			RenderPass( renderer::RenderPassPtr && renderPass
@@ -609,6 +608,7 @@ namespace castor3d
 		renderer::DescriptorSetPtr m_uboDescriptorSet;
 		renderer::WriteDescriptorSetArray m_textureWrites;
 		renderer::DescriptorSetPtr m_textureDescriptorSet;
+		renderer::UniformBufferBase const * m_baseUbo{ nullptr };
 		bool m_shadows;
 		MatrixUbo m_matrixUbo;
 		ProgramPtr m_program;

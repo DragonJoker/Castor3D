@@ -73,39 +73,29 @@ namespace castor3d
 	{
 	}
 
-	void OverlayCategory::update()
+	void OverlayCategory::update( OverlayRenderer const & renderer )
 	{
 		if ( getOverlay().isVisible() )
 		{
-			OverlayRendererSPtr renderer;// = getOverlay().getEngine()->getOverlayCache().getRenderer();
-
-			if ( renderer )
+			if ( isPositionChanged() || renderer.isSizeChanged() )
 			{
-				if ( isPositionChanged() || renderer->isSizeChanged() )
-				{
-					doUpdatePosition();
-				}
-
-				if ( isSizeChanged() || renderer->isSizeChanged() )
-				{
-					doUpdateSize();
-				}
-
-				if ( isChanged() || isSizeChanged() || renderer->isSizeChanged() )
-				{
-					doUpdate();
-					doUpdateBuffer( renderer->getSize() );
-				}
-
-				m_positionChanged = false;
-				m_sizeChanged = false;
+				doUpdatePosition( renderer );
 			}
-		}
-	}
 
-	void OverlayCategory::render( OverlayRenderer & renderer )
-	{
-		doRender( renderer );
+			if ( isSizeChanged() || renderer.isSizeChanged() )
+			{
+				doUpdateSize( renderer );
+			}
+
+			if ( isChanged() || isSizeChanged() || renderer.isSizeChanged() )
+			{
+				doUpdate( renderer );
+				doUpdateBuffer( renderer.getSize() );
+			}
+
+			m_positionChanged = false;
+			m_sizeChanged = false;
+		}
 	}
 
 	void OverlayCategory::setMaterial( MaterialSPtr material )
@@ -212,10 +202,10 @@ namespace castor3d
 		return changed;
 	}
 
-	Point2d OverlayCategory::doGetTotalSize()const
+	Point2d OverlayCategory::doGetTotalSize( OverlayRenderer const & renderer )const
 	{
 		OverlaySPtr parent = getOverlay().getParent();
-		Size renderSize;// = getOverlay().getEngine()->getOverlayCache().getRenderer()->getSize();
+		Size renderSize = renderer.getSize();
 		Point2d totalSize( renderSize.getWidth(), renderSize.getHeight() );
 
 		if ( parent )
@@ -228,74 +218,64 @@ namespace castor3d
 		return totalSize;
 	}
 
-	void OverlayCategory::doUpdatePosition()
+	void OverlayCategory::doUpdatePosition( OverlayRenderer const & renderer )
 	{
-		OverlayRendererSPtr renderer;// = getOverlay().getEngine()->getOverlayCache().getRenderer();
-
-		if ( renderer )
+		if ( isPositionChanged() || renderer.isSizeChanged() )
 		{
-			if ( isPositionChanged() || renderer->isSizeChanged() )
+			Size renderSize = renderer.getSize();
+			Point2d totalSize = doGetTotalSize( renderer );
+			bool changed = m_positionChanged;
+			Position pos = getPixelPosition();
+			Point2d ptPos = getPosition();
+
+			if ( pos.x() )
 			{
-				Size renderSize;// = getOverlay().getEngine()->getOverlayCache().getRenderer()->getSize();
-				Point2d totalSize = doGetTotalSize();
-				bool changed = m_positionChanged;
-				Position pos = getPixelPosition();
-				Point2d ptPos = getPosition();
+				changed |= ptPos[0] != double( pos.x() ) / totalSize[0];
+				ptPos[0] = pos.x() / totalSize[0];
+				m_computeSize[0] = uint32_t( renderSize[0] );
+			}
 
-				if ( pos.x() )
-				{
-					changed |= ptPos[0] != double( pos.x() ) / totalSize[0];
-					ptPos[0] = pos.x() / totalSize[0];
-					m_computeSize[0] = uint32_t( renderSize[0] );
-				}
+			if ( pos.y() )
+			{
+				changed |= ptPos[1] != double( pos.y() ) / totalSize[1];
+				ptPos[1] = pos.y() / totalSize[1];
+				m_computeSize[1] = uint32_t( renderSize[1] );
+			}
 
-				if ( pos.y() )
-				{
-					changed |= ptPos[1] != double( pos.y() ) / totalSize[1];
-					ptPos[1] = pos.y() / totalSize[1];
-					m_computeSize[1] = uint32_t( renderSize[1] );
-				}
-
-				if ( changed )
-				{
-					setPosition( ptPos );
-				}
+			if ( changed )
+			{
+				setPosition( ptPos );
 			}
 		}
 	}
 
-	void OverlayCategory::doUpdateSize()
+	void OverlayCategory::doUpdateSize( OverlayRenderer const & renderer )
 	{
-		OverlayRendererSPtr renderer;// = getOverlay().getEngine()->getOverlayCache().getRenderer();
-
-		if ( renderer )
+		if ( isSizeChanged() || renderer.isSizeChanged() )
 		{
-			if ( isSizeChanged() || renderer->isSizeChanged() )
+			Size renderSize = renderer.getSize();
+			Point2d totalSize = doGetTotalSize( renderer );
+			bool changed = m_sizeChanged;
+			Size size = getPixelSize();
+			Point2d ptSize = getSize();
+
+			if ( size.getWidth() )
 			{
-				Size renderSize;// = getOverlay().getEngine()->getOverlayCache().getRenderer()->getSize();
-				Point2d totalSize = doGetTotalSize();
-				bool changed = m_sizeChanged;
-				Size size = getPixelSize();
-				Point2d ptSize = getSize();
+				changed |= ptSize[0] != double( size.getWidth() ) / totalSize[0];
+				ptSize[0] = size.getWidth() / totalSize[0];
+				m_computeSize[0] = uint32_t( renderSize[0] );
+			}
 
-				if ( size.getWidth() )
-				{
-					changed |= ptSize[0] != double( size.getWidth() ) / totalSize[0];
-					ptSize[0] = size.getWidth() / totalSize[0];
-					m_computeSize[0] = uint32_t( renderSize[0] );
-				}
+			if ( size.getHeight() )
+			{
+				changed |=  ptSize[1] != double( size.getHeight() ) / totalSize[1];
+				ptSize[1] = size.getHeight() / totalSize[1];
+				m_computeSize[1] = uint32_t( renderSize[1] );
+			}
 
-				if ( size.getHeight() )
-				{
-					changed |=  ptSize[1] != double( size.getHeight() ) / totalSize[1];
-					ptSize[1] = size.getHeight() / totalSize[1];
-					m_computeSize[1] = uint32_t( renderSize[1] );
-				}
-
-				if ( changed )
-				{
-					setSize( ptSize );
-				}
+			if ( changed )
+			{
+				setSize( ptSize );
 			}
 		}
 	}

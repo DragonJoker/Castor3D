@@ -120,8 +120,6 @@ namespace castor3d
 		, renderer::RenderPass const & renderPass
 		, bool blend )
 	{
-		doCreateUbo();
-
 		renderer::DepthStencilState dsstate;
 		dsstate.depthTestEnable = false;
 		dsstate.depthWriteEnable = false;

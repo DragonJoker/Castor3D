@@ -76,6 +76,11 @@ namespace castor3d
 		return std::make_shared< BorderPanelOverlay >();
 	}
 
+	void BorderPanelOverlay::accept( OverlayVisitor & visitor )const
+	{
+		visitor.visit( *this );
+	}
+
 	void BorderPanelOverlay::setBorderMaterial( MaterialSPtr material )
 	{
 		m_pBorderMaterial = material;
@@ -90,58 +95,54 @@ namespace castor3d
 		}
 	}
 
-	void BorderPanelOverlay::doUpdateSize()
+	void BorderPanelOverlay::doUpdateSize( OverlayRenderer const & renderer )
 	{
-		OverlayCategory::doUpdateSize();
-		OverlayRendererSPtr renderer;// = getOverlay().getEngine()->getOverlayCache().getRenderer();
+		OverlayCategory::doUpdateSize( renderer );
 
-		if ( renderer )
+		if ( isSizeChanged() || isChanged() || renderer.isSizeChanged() )
 		{
-			if ( isSizeChanged() || isChanged() || renderer->isSizeChanged() )
+			OverlaySPtr parent = getOverlay().getParent();
+			Size sz = renderer.getSize();
+			Point2d totalSize( sz.getWidth(), sz.getHeight() );
+
+			if ( parent )
 			{
-				OverlaySPtr parent = getOverlay().getParent();
-				Size sz = renderer->getSize();
-				Point2d totalSize( sz.getWidth(), sz.getHeight() );
+				Point2d parentSize = parent->getAbsoluteSize();
+				totalSize[0] = parentSize[0] * totalSize[0];
+				totalSize[1] = parentSize[1] * totalSize[1];
+			}
 
-				if ( parent )
-				{
-					Point2d parentSize = parent->getAbsoluteSize();
-					totalSize[0] = parentSize[0] * totalSize[0];
-					totalSize[1] = parentSize[1] * totalSize[1];
-				}
+			Rectangle sizes = getBorderPixelSize();
+			Point4d ptSizes = getBorderSize();
+			bool changed = m_borderChanged;
 
-				Rectangle sizes = getBorderPixelSize();
-				Point4d ptSizes = getBorderSize();
-				bool changed = m_borderChanged;
+			if ( sizes.left() )
+			{
+				changed |= ptSizes[0] != double( sizes.left() ) / totalSize[0];
+				ptSizes[0] = sizes.left() / totalSize[0];
+			}
 
-				if ( sizes.left() )
-				{
-					changed |= ptSizes[0] != double( sizes.left() ) / totalSize[0];
-					ptSizes[0] = sizes.left() / totalSize[0];
-				}
+			if ( sizes.top() )
+			{
+				changed |= ptSizes[1] != double(  sizes.top() ) / totalSize[1];
+				ptSizes[1] = sizes.top() / totalSize[1];
+			}
 
-				if ( sizes.top() )
-				{
-					changed |= ptSizes[1] != double(  sizes.top() ) / totalSize[1];
-					ptSizes[1] = sizes.top() / totalSize[1];
-				}
+			if ( sizes.right() )
+			{
+				changed |= ptSizes[2] != double( sizes.right() ) / totalSize[0];
+				ptSizes[2] = sizes.right() / totalSize[0];
+			}
 
-				if ( sizes.right() )
-				{
-					changed |= ptSizes[2] != double( sizes.right() ) / totalSize[0];
-					ptSizes[2] = sizes.right() / totalSize[0];
-				}
+			if ( sizes.bottom() )
+			{
+				changed |= ptSizes[3] != double( sizes.bottom() ) / totalSize[1];
+				ptSizes[3] = sizes.bottom() / totalSize[1];
+			}
 
-				if ( sizes.bottom() )
-				{
-					changed |= ptSizes[3] != double( sizes.bottom() ) / totalSize[1];
-					ptSizes[3] = sizes.bottom() / totalSize[1];
-				}
-
-				if ( changed )
-				{
-					setBorderSize( ptSizes );
-				}
+			if ( changed )
+			{
+				setBorderSize( ptSizes );
 			}
 		}
 	}
@@ -173,11 +174,6 @@ namespace castor3d
 		}
 
 		return absoluteSize;
-	}
-
-	void BorderPanelOverlay::doRender( OverlayRenderer & renderer )
-	{
-		renderer.drawBorderPanel( *this );
 	}
 
 	void BorderPanelOverlay::doUpdateBuffer( Size const & size )

@@ -95,7 +95,8 @@ namespace castor3d
 				getEngine()->getMaterialCache().initialise( getEngine()->getMaterialsType() );
 				m_swapChain = m_device->createSwapChain( { size.getWidth(), size.getHeight() } );
 				SceneSPtr scene = getScene();
-				m_swapChain->setClearColour( convert( RgbaColour::fromRGBA( toRGBAFloat( scene->getBackgroundColour() ) ) ) );
+				static renderer::ClearColorValue clear{ 0.0f, 0.0f, 0.0f, 1.0f };
+				m_swapChain->setClearColour( clear );
 				m_swapChainReset = m_swapChain->onReset.connect( [this]()
 				{
 					doResetSwapChain();
@@ -203,6 +204,9 @@ namespace castor3d
 
 			if ( target && target->isInitialised() )
 			{
+				auto & background = target->getScene()->getBackground();
+				background.update( *target->getCamera() );
+
 				if ( m_toSave )
 				{
 					ByteArray data;
@@ -477,28 +481,34 @@ namespace castor3d
 		bool result{ true };
 		m_commandBuffers = m_swapChain->createCommandBuffers();
 		m_frameBuffers = m_swapChain->createFrameBuffers( *m_renderPass );
+		auto & background = getRenderTarget()->getScene()->getBackground();
+		background.initialise( *m_renderPass );
 
 		for ( uint32_t i = 0u; i < m_commandBuffers.size() && result; ++i )
 		{
 			auto & frameBuffer = *m_frameBuffers[i];
 			auto & commandBuffer = *m_commandBuffers[i];
+			background.prepareFrame( commandBuffer
+				, m_size
+				, *m_renderPass
+				, frameBuffer );
 
-			if ( commandBuffer.begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
-			{
-				commandBuffer.beginRenderPass( *m_renderPass
-					, frameBuffer
-					, { m_swapChain->getClearColour() }
-					, renderer::SubpassContents::eInline );
-				m_renderQuad->registerFrame( commandBuffer );
-				commandBuffer.endRenderPass();
+			//if ( commandBuffer.begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
+			//{
+			//	commandBuffer.beginRenderPass( *m_renderPass
+			//		, frameBuffer
+			//		, { m_swapChain->getClearColour() }
+			//		, renderer::SubpassContents::eInline );
+			//	m_renderQuad->registerFrame( commandBuffer );
+			//	commandBuffer.endRenderPass();
 
-				result = commandBuffer.end();
+			//	result = commandBuffer.end();
 
-				if ( !result )
-				{
-					std::cerr << "Command buffers recording failed" << std::endl;
-				}
-			}
+			//	if ( !result )
+			//	{
+			//		std::cerr << "Command buffers recording failed" << std::endl;
+			//	}
+			//}
 		}
 
 		return result;
@@ -517,7 +527,9 @@ namespace castor3d
 			m_device->enable();
 		}
 
+		m_device->waitIdle();
 		m_pickingPass->cleanup();
+		m_overlayRenderer.reset();
 		RenderTargetSPtr target = getRenderTarget();
 
 		if ( target )
@@ -526,10 +538,13 @@ namespace castor3d
 		}
 
 		m_renderQuad.reset();
+		m_program.clear();
+		m_swapChainReset.disconnect();
+		m_commandBuffers.clear();
+		m_frameBuffers.clear();
 		m_transferCommandBuffer.reset();
 		m_stagingBuffer.reset();
-		m_frameBuffers.clear();
-		m_commandBuffers.clear();
+		m_renderPass.reset();
 		m_swapChain.reset();
 
 		if ( enableDevice )

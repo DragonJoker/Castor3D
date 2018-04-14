@@ -2,6 +2,7 @@
 
 #include "Engine.hpp"
 
+#include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Event/Frame/FrameListener.hpp"
 #include "Event/Frame/FunctorEvent.hpp"
@@ -33,9 +34,6 @@ namespace castor3d
 	ImageBackground::ImageBackground( Engine & engine
 		, Scene & scene )
 		: SceneBackground{ engine, scene, BackgroundType::eImage }
-		, m_matrixUbo{ engine }
-		, m_modelMatrixUbo{ engine }
-		, m_sizePushConstant{ renderer::ShaderStageFlag::eFragment, { { 0u, 0u, renderer::ConstantFormat::eVec2f } } }
 	{
 	}
 
@@ -58,18 +56,12 @@ namespace castor3d
 			image.samples = renderer::SampleCountFlag::e1;
 			image.sharingMode = renderer::SharingMode::eExclusive;
 			image.tiling = renderer::ImageTiling::eOptimal;
-			image.usage = renderer::ImageUsageFlag::eSampled;
+			image.usage = renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst;
 			auto texture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
 				, image
 				, renderer::MemoryPropertyFlag::eDeviceLocal );
 			texture->setSource( folder, relative );
 			m_texture = texture;
-			m_size.set( m_texture->getWidth(), m_texture->getHeight() );
-			m_scene.getListener().postEvent( makeFunctorEvent( EventType::ePreRender, [this]()
-			{
-				m_texture->initialise();
-				m_texture->generateMipmaps();
-			} ) );
 			result = true;
 		}
 		catch ( castor::Exception & p_exc )
@@ -80,99 +72,9 @@ namespace castor3d
 		return result;
 	}
 
-	bool ImageBackground::prepareFrame( renderer::CommandBuffer & commandBuffer
-		, renderer::RenderPass const & renderPass
-		, renderer::FrameBuffer const & frameBuffer )
-	{
-		renderer::ClearColorValue colour;
-		renderer::DepthStencilClearValue depth;
-		*m_sizePushConstant.getData() = Point2f{ m_size.getWidth()
-			, m_size.getHeight() };
-
-		auto result = commandBuffer.begin();
-
-		if ( result )
-		{
-			commandBuffer.beginRenderPass( renderPass
-				, frameBuffer
-				, { depth, colour }
-			, renderer::SubpassContents::eInline );
-			commandBuffer.bindPipeline( *m_pipeline );
-			commandBuffer.setViewport( { m_size.getWidth(), m_size.getHeight(), 0, 0 } );
-			commandBuffer.setScissor( { 0, 0, m_size.getWidth(), m_size.getHeight() } );
-			commandBuffer.bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
-			commandBuffer.pushConstants( *m_pipelineLayout, m_sizePushConstant );
-			commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-			commandBuffer.draw( 36u );
-			commandBuffer.endRenderPass();
-			result = commandBuffer.end();
-		}
-
-		return result;
-	}
-
-	bool ImageBackground::prepareFrame( renderer::CommandBuffer & commandBuffer
-		, renderer::RenderPass const & renderPass )
-	{
-		*m_sizePushConstant.getData() = Point2f{ m_size.getWidth()
-			, m_size.getHeight() };
-
-		auto result = commandBuffer.begin( renderer::CommandBufferUsageFlag::eRenderPassContinue
-			, renderer::CommandBufferInheritanceInfo
-			{
-				&renderPass,
-				0u,
-				nullptr,
-				false,
-				0u,
-				0u
-			} );
-
-		if ( result )
-		{
-			commandBuffer.bindPipeline( *m_pipeline );
-			commandBuffer.setViewport( { m_size.getWidth(), m_size.getHeight(), 0, 0 } );
-			commandBuffer.setScissor( { 0, 0, m_size.getWidth(), m_size.getHeight() } );
-			commandBuffer.bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
-			commandBuffer.pushConstants( *m_pipelineLayout, m_sizePushConstant );
-			commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-			commandBuffer.draw( 36u );
-			result = commandBuffer.end();
-		}
-
-		return result;
-	}
-
 	void ImageBackground::accept( BackgroundVisitor & visitor )const
 	{
 		visitor.visit( *this );
-	}
-
-	bool ImageBackground::doInitialise( renderer::RenderPass const & renderPass )
-	{
-		auto & program = doInitialiseShader();
-		doInitialiseVertexBuffer();
-		*m_sizePushConstant.getData() = Point2f{ m_size.getWidth()
-			, m_size.getHeight() };
-		doInitialisePipeline( program, renderPass );
-		return true;
-	}
-
-	void ImageBackground::doCleanup()
-	{
-		m_matrixUbo.cleanup();
-		m_modelMatrixUbo.cleanup();
-	}
-
-	void ImageBackground::doUpdate( Camera const & camera )
-	{
-		static Matrix3x3r const Identity{ 1.0f };
-		auto const & viewport = camera.getViewport();
-		auto node = camera.getParent();
-		matrix::setTranslate( m_mtxModel, node->getDerivedPosition() );
-		m_matrixUbo.update( camera.getView()
-			, viewport.getProjection() );
-		m_modelMatrixUbo.update( m_mtxModel, Identity );
 	}
 
 	renderer::ShaderStageStateArray ImageBackground::doInitialiseShader()
@@ -185,8 +87,8 @@ namespace castor3d
 
 			// Inputs
 			auto position = writer.declAttribute< Vec3 >( cuT( "position" ), 0u );
-			UBO_MATRIX( writer, 0, 0 );
-			UBO_MODEL_MATRIX( writer, 1, 0 );
+			UBO_MATRIX( writer, 0u, 0u );
+			UBO_MODEL_MATRIX( writer, 1u, 0u );
 
 			// Outputs
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
@@ -205,16 +107,37 @@ namespace castor3d
 			GlslWriter writer{ renderSystem.createGlslWriter() };
 
 			// Inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 2u, 0u );
-			auto c3d_size = writer.declUniform< Vec2 >( cuT( "c3d_size" ), 0u );
+			UBO_HDR_CONFIG( writer, 2u, 0u );
+			glsl::Ubo sizeUbo{ writer, cuT( "SizeUbo" ), 3u, 0u };
+			auto c3d_size = sizeUbo.declMember< Vec2 >( cuT( "c3d_size" ) );
+			sizeUbo.end();
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 4u, 0u );
 			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
+			glsl::Utils utils{ writer };
+
+			if ( !m_hdr )
+			{
+				utils.declareRemoveGamma();
+			}
 
 			// Outputs
 			auto pxl_FragColor = writer.declFragData< Vec4 >( cuT( "pxl_FragColor" ), 0u );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				pxl_FragColor = texture( c3d_mapDiffuse, gl_FragCoord.xy() / c3d_size );
+				auto texcoord = writer.declLocale( cuT( "texcoord" )
+					, gl_FragCoord.xy() / c3d_size );
+				auto colour = writer.declLocale( cuT( "colour" )
+					, texture( c3d_mapDiffuse, writer.adjustTexCoords( texcoord ) ) );
+
+				if ( !m_hdr )
+				{
+					pxl_FragColor = vec4( utils.removeGamma( c3d_gamma, colour.xyz() ), colour.w() );
+				}
+				else
+				{
+					pxl_FragColor = vec4( colour.xyz(), colour.w() );
+				}
 			} );
 
 			pxl = writer.finalise();
@@ -230,103 +153,60 @@ namespace castor3d
 		return program;
 	}
 
-	bool ImageBackground::doInitialiseVertexBuffer()
+	bool ImageBackground::doInitialise( renderer::RenderPass const & renderPass )
 	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
-		m_vertexBuffer = renderer::makeVertexBuffer< NonTexturedCube >( device
+		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		m_sizeUbo = renderer::makeUniformBuffer< Point2f >( device
 			, 1u
-			, renderer::BufferTarget::eTransferDst
+			, 0u
 			, renderer::MemoryPropertyFlag::eHostVisible );
-
-		if ( auto buffer = m_vertexBuffer->lock( 0u
-			, 1u
-			, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateRange ) )
-		{
-			*buffer = NonTexturedCube
-			{
-				{
-					{ Point3f{ -1.0, +1.0, -1.0 }, Point3f{ +1.0, -1.0, -1.0 }, Point3f{ -1.0, -1.0, -1.0 }, Point3f{ +1.0, -1.0, -1.0 }, Point3f{ -1.0, +1.0, -1.0 }, Point3f{ +1.0, +1.0, -1.0 } },
-					{ Point3f{ -1.0, -1.0, +1.0 }, Point3f{ -1.0, +1.0, -1.0 }, Point3f{ -1.0, -1.0, -1.0 }, Point3f{ -1.0, +1.0, -1.0 }, Point3f{ -1.0, -1.0, +1.0 }, Point3f{ -1.0, +1.0, +1.0 } },
-					{ Point3f{ +1.0, -1.0, -1.0 }, Point3f{ +1.0, +1.0, +1.0 }, Point3f{ +1.0, -1.0, +1.0 }, Point3f{ +1.0, +1.0, +1.0 }, Point3f{ +1.0, -1.0, -1.0 }, Point3f{ +1.0, +1.0, -1.0 } },
-					{ Point3f{ -1.0, -1.0, +1.0 }, Point3f{ +1.0, +1.0, +1.0 }, Point3f{ -1.0, +1.0, +1.0 }, Point3f{ +1.0, +1.0, +1.0 }, Point3f{ -1.0, -1.0, +1.0 }, Point3f{ +1.0, -1.0, +1.0 } },
-					{ Point3f{ -1.0, +1.0, -1.0 }, Point3f{ +1.0, +1.0, +1.0 }, Point3f{ +1.0, +1.0, -1.0 }, Point3f{ +1.0, +1.0, +1.0 }, Point3f{ -1.0, +1.0, -1.0 }, Point3f{ -1.0, +1.0, +1.0 } },
-					{ Point3f{ -1.0, -1.0, -1.0 }, Point3f{ +1.0, -1.0, -1.0 }, Point3f{ -1.0, -1.0, +1.0 }, Point3f{ +1.0, -1.0, -1.0 }, Point3f{ +1.0, -1.0, +1.0 }, Point3f{ -1.0, -1.0, +1.0 } },
-				}
-			};
-			m_vertexBuffer->flush( 0u, 1u );
-			m_vertexBuffer->unlock();
-		}
-
-		return true;
+		return m_texture->initialise();
 	}
 
-	bool ImageBackground::doInitialisePipeline( renderer::ShaderStageStateArray & program
-		, renderer::RenderPass const & renderPass )
+	void ImageBackground::doCleanup()
 	{
-		renderer::DepthStencilState dsState
+		m_texture->cleanup();
+		m_sizeUbo.reset();
+	}
+
+	void ImageBackground::doUpdate( Camera const & camera )
+	{
+		auto const & viewport = camera.getViewport();
+		m_sizeUbo->getData() = Point2f{ viewport.getWidth()
+			, viewport.getHeight() };
+		m_sizeUbo->upload();
+		m_matrixUbo.update( camera.getView()
+			, viewport.getProjection() );
+	}
+
+	void ImageBackground::doInitialiseDescriptorLayout()
+	{
+		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		renderer::DescriptorSetLayoutBindingArray setLayoutBindings
 		{
-			0u,
-			true,
-			false,
-			renderer::CompareOp::eLessEqual
+			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex },			// Matrix UBO
+			{ 1u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex },			// Model Matrix UBO
+			{ 2u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },			// HDR Config UBO
+			{ 3u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },			// Size UBO
+			{ 4u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// Image Map
 		};
+		m_descriptorLayout = device.createDescriptorSetLayout( std::move( setLayoutBindings ) );
+	}
 
-		renderer::RasterisationState rsState
-		{
-			0u,
-			false,
-			false,
-			renderer::PolygonMode::eFill,
-			renderer::CullModeFlag::eFront
-		};
-
-		auto vertexLayout = renderer::makeLayout< NonTexturedCube >( 0u );
-		vertexLayout->createAttribute( 0u
-			, renderer::Format::eR32G32B32_SFLOAT
-			, offsetof( NonTexturedCube::Quad::Vertex, position ) );
-
-		auto blState = renderer::ColourBlendState::createDefault();
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
-
-		renderer::DescriptorSetLayoutBindingArray bindings
-		{
-			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex },
-			{ 1u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex },
-			{ 2u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
-		};
-		m_descriptorLayout = device.createDescriptorSetLayout( std::move( bindings ) );
-		renderer::PushConstantRange pushRange{ renderer::ShaderStageFlag::eFragment, m_sizePushConstant.getOffset(), m_sizePushConstant.getSize() };
-		m_pipelineLayout = device.createPipelineLayout( *m_descriptorLayout, pushRange );
-
-		m_pipeline = m_pipelineLayout->createPipeline(
-		{
-			program,
-			renderPass,
-			renderer::VertexInputState::create( *vertexLayout ),
-			renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleList },
-			rsState,
-			renderer::MultisampleState{},
-			blState,
-			{ renderer::DynamicState::eViewport, renderer::DynamicState::eScissor },
-			std::move( dsState )
-		} );
-
-		m_descriptorPool = m_descriptorLayout->createPool( 1u );
+	void ImageBackground::doInitialiseDescriptorSet()
+	{
 		m_descriptorSet = m_descriptorPool->createDescriptorSet( 0u );
 		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 0u )
-			, m_matrixUbo.getUbo()
-			, 0u
-			, 1u );
+			, m_matrixUbo.getUbo() );
 		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 1u )
-			, m_modelMatrixUbo.getUbo()
-			, 0u
-			, 1u );
+			, m_modelMatrixUbo.getUbo() );
 		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 2u )
+			, m_configUbo.getUbo() );
+		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 3u )
+			, *m_sizeUbo );
+		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 4u )
 			, m_texture->getDefaultView()
 			, m_sampler.lock()->getSampler() );
 		m_descriptorSet->update();
-		return true;
 	}
 }

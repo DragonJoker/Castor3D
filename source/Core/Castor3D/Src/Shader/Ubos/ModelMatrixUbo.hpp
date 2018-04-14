@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "Castor3DPrerequisites.hpp"
 
 #include <Buffer/UniformBuffer.hpp>
+#include <Utils/Mat4.hpp>
 
 namespace castor3d
 {
@@ -24,8 +25,8 @@ namespace castor3d
 	public:
 		struct Configuration
 		{
-			castor::Matrix4x4f model;
-			castor::Matrix4x4f normal;
+			renderer::Mat4 model;
+			renderer::Mat4 normal;
 		};
 
 	public:

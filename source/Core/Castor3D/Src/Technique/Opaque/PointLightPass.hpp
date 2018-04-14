@@ -47,6 +47,7 @@ namespace castor3d
 			 *\param[in]	pxl		Le source du fagment shader.
 			 */
 			Program( Engine & engine
+				, PointLightPass & lightPass
 				, glsl::Shader const & vtx
 				, glsl::Shader const & pxl
 				, bool hasShadows );
@@ -63,26 +64,9 @@ namespace castor3d
 			 *\copydoc		castor3d::LightPass::Program::doBind
 			 */
 			void doBind( Light const & light )override;
-			/**
-			*\copydoc		castor3d::MeshLightPass::Program::doBind
-			*/
-			void doCreateUbo()override;
 
 		private:
-			struct Config
-			{
-				LightPass::Program::Config base;
-				//!\~english	The variable containing the light position.
-				//!\~french		La variable contenant la position de la lumière.
-				castor::Point3f position;
-				//!\~english	The variable containing the light attenuation.
-				//!\~french		La variable contenant l'atténuation de la lumière.
-				castor::Point3f attenuation;
-				//!\~english	The variable containing the light index.
-				//!\~french		La variable contenant l'index de la lumière.
-				int index;
-			};
-			renderer::UniformBufferPtr< Config > m_ubo;
+			PointLightPass & m_lightPass;
 		};
 
 	public:
@@ -121,7 +105,7 @@ namespace castor3d
 		 *\copydoc		castor3d::LightPass::doCreateProgram
 		 */
 		LightPass::ProgramPtr doCreateProgram( glsl::Shader const & vtx
-			, glsl::Shader const & pxl )const override;
+			, glsl::Shader const & pxl )override;
 		/**
 		 *\copydoc		castor3d::MeshLightPass::doGenerateVertices
 		 */
@@ -131,6 +115,22 @@ namespace castor3d
 		 */
 		castor::Matrix4x4r doComputeModelMatrix( Light const & light
 			, Camera const & camera )const override;
+
+	private:
+		struct Config
+		{
+			LightPass::Config base;
+			//!\~english	The variable containing the light position.
+			//!\~french		La variable contenant la position de la lumière.
+			castor::Point3f position;
+			//!\~english	The variable containing the light attenuation.
+			//!\~french		La variable contenant l'atténuation de la lumière.
+			castor::Point3f attenuation;
+			//!\~english	The variable containing the light index.
+			//!\~french		La variable contenant l'index de la lumière.
+			int index;
+		};
+		renderer::UniformBufferPtr< Config > m_ubo;
 	};
 }
 

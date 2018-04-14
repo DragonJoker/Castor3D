@@ -47,6 +47,7 @@ namespace castor3d
 			 *\param[in]	pxl		Le source du fagment shader.
 			 */
 			Program( Engine & engine
+				, DirectionalLightPass & pass
 				, glsl::Shader const & vtx
 				, glsl::Shader const & pxl
 				, bool hasShadows );
@@ -71,17 +72,7 @@ namespace castor3d
 			void doBind( Light const & light )override;
 
 		private:
-			struct Config
-			{
-				LightPass::Program::Config base;
-				//!\~english	The variable containing the light direction.
-				//!\~french		La variable contenant la direction de la lumière.
-				castor::Point3f direction;
-				//!\~english	The variable containing the light space transformation matrix.
-				//!\~french		La variable contenant la matrice de transformation de la lumière.
-				castor::Matrix4x4f transform;
-			};
-			renderer::UniformBufferPtr< Config > m_ubo;
+			DirectionalLightPass & m_lightPass;
 		};
 
 	public:
@@ -140,9 +131,20 @@ namespace castor3d
 		 *\copydoc		castor3d::LightPass::doCreateProgram
 		 */
 		LightPass::ProgramPtr doCreateProgram( glsl::Shader const & vtx
-			, glsl::Shader const & pxl )const override;
+			, glsl::Shader const & pxl )override;
 
 	private:
+		struct Config
+		{
+			LightPass::Config base;
+			//!\~english	The variable containing the light direction.
+			//!\~french		La variable contenant la direction de la lumière.
+			castor::Point3f direction;
+			//!\~english	The variable containing the light space transformation matrix.
+			//!\~french		La variable contenant la matrice de transformation de la lumière.
+			castor::Matrix4x4f transform;
+		};
+		renderer::UniformBufferPtr< Config > m_ubo;
 		Viewport m_viewport;
 	};
 }

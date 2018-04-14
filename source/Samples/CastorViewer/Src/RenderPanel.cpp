@@ -946,7 +946,7 @@ namespace CastorViewer
 
 				if ( m_mouseLeftDown )
 				{
-					m_currentState->addAngularVelocity( Point2r{ -deltaY, deltaX } );
+					m_currentState->addAngularVelocity( Point2r{ deltaY, deltaX } );
 				}
 				else if ( m_mouseRightDown )
 				{

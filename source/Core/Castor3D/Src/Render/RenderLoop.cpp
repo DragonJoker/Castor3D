@@ -191,7 +191,6 @@ namespace castor3d
 			technique.update( queues );
 		} );
 		doUpdateQueues( queues );
-		getEngine()->getOverlayCache().update();
 		m_debugOverlays->endCpuTask();
 	}
 

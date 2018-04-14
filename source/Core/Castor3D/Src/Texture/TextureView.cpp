@@ -3,8 +3,10 @@
 #include "Engine.hpp"
 #include "TextureLayout.hpp"
 
+#include <Buffer/StagingBuffer.hpp>
 #include <Core/Device.hpp>
 #include <Image/Texture.hpp>
+#include <Miscellaneous/BufferImageCopy.hpp>
 
 #include <Graphics/Image.hpp>
 
@@ -95,6 +97,8 @@ namespace castor3d
 				, m_folder{ folder }
 				, m_relative{ relative }
 			{
+				PxBufferBaseSPtr buffer;
+
 				if ( File::fileExists( folder / relative ) )
 				{
 					String name{ relative.getFileName() };
@@ -102,33 +106,28 @@ namespace castor3d
 					if ( m_engine.getImageCache().has( relative ) )
 					{
 						auto image = m_engine.getImageCache().find( relative );
-						m_buffer = image->getPixels();
+						buffer = image->getPixels();
 					}
 					else
 					{
 						auto image = m_engine.getImageCache().add( relative, folder / relative );
-						auto buffer = image->getPixels();
+						buffer = image->getPixels();
 						Size size{ buffer->dimensions() };
 						Size adjustedSize{ getNext2Pow( size.getWidth() ), getNext2Pow( size.getHeight() ) };
 
 						if ( adjustedSize != size )
 						{
-							m_buffer = image->resample( adjustedSize ).getPixels();
-						}
-						else
-						{
-							m_buffer = buffer;
+							buffer = image->resample( adjustedSize ).getPixels();
 						}
 					}
 				}
 
-				if ( !m_buffer )
+				if ( !buffer )
 				{
 					CASTOR_EXCEPTION( cuT( "TextureView::setSource - Couldn't load image " ) + relative );
 				}
 
-				m_format = convert( m_buffer->format() );
-				m_size = renderer::Extent3D{ m_buffer->dimensions().getWidth(), m_buffer->dimensions().getHeight(), 1u };
+				setBuffer( buffer );
 			}
 
 			virtual uint32_t getDepth()const
@@ -143,7 +142,46 @@ namespace castor3d
 
 			inline void setBuffer( PxBufferBaseSPtr buffer ) override
 			{
-				m_buffer = buffer;
+				if ( buffer->format() == PixelFormat::eR8G8B8 )
+				{
+					m_buffer = PxBufferBase::create( buffer->dimensions()
+						, PixelFormat::eA8R8G8B8
+						, buffer->constPtr()
+						, buffer->format() );
+				}
+				else if ( buffer->format() == PixelFormat::eR8G8B8_SRGB )
+				{
+					m_buffer = PxBufferBase::create( buffer->dimensions()
+						, PixelFormat::eA8R8G8B8_SRGB
+						, buffer->constPtr()
+						, buffer->format() );
+				}
+				else if ( buffer->format() == PixelFormat::eB8G8R8 )
+				{
+					m_buffer = PxBufferBase::create( buffer->dimensions()
+						, PixelFormat::eA8B8G8R8
+						, buffer->constPtr()
+						, buffer->format() );
+				}
+				else if ( buffer->format() == PixelFormat::eB8G8R8_SRGB )
+				{
+					m_buffer = PxBufferBase::create( buffer->dimensions()
+						, PixelFormat::eA8B8G8R8_SRGB
+						, buffer->constPtr()
+						, buffer->format() );
+				}
+				else if ( buffer->format() == PixelFormat::eRGB32F )
+				{
+					m_buffer = PxBufferBase::create( buffer->dimensions()
+						, PixelFormat::eRGBA32F
+						, buffer->constPtr()
+						, buffer->format() );
+				}
+				else
+				{
+					m_buffer = std::move( buffer );
+				}
+
 				m_format = convert( m_buffer->format() );
 				m_size = renderer::Extent3D{ m_buffer->dimensions().getWidth(), m_buffer->dimensions().getHeight(), 1u };
 			}
@@ -335,6 +373,17 @@ namespace castor3d
 	{
 		auto & device = *getOwner()->getRenderSystem()->getCurrentDevice();
 		m_view = getOwner()->getTexture().createView( m_info );
+
+		if ( m_source && m_source->isStatic() )
+		{
+			renderer::StagingBuffer stagingBuffer{ device, 0u, m_source->getBuffer()->size() };
+			auto commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+			stagingBuffer.uploadTextureData( *commandBuffer
+				, m_source->getBuffer()->constPtr()
+				, m_source->getBuffer()->size()
+				, *m_view );
+		}
+
 		return m_view != nullptr;
 	}
 
@@ -349,6 +398,7 @@ namespace castor3d
 		m_source = std::make_unique< StaticFileTextureSource >( *getOwner()->getRenderSystem()->getEngine()
 			, folder
 			, relative );
+		m_info.format = m_source->getPixelFormat();
 		getOwner()->doUpdateFromFirstImage( { m_source->getDimensions().width, m_source->getDimensions().height }
 			, m_source->getPixelFormat() );
 	}
@@ -362,11 +412,13 @@ namespace castor3d
 					, getOwner()->getHeight()
 					, getOwner()->getDepth() }
 				, buffer );
+			m_info.format = m_source->getPixelFormat();
 		}
 		else
 		{
 			m_source = std::make_unique< Static2DTextureSource >( *getOwner()->getRenderSystem()->getEngine()
 				, buffer );
+			m_info.format = m_source->getPixelFormat();
 		}
 
 		getOwner()->doUpdateFromFirstImage( { m_source->getDimensions().width, m_source->getDimensions().height }
@@ -382,12 +434,14 @@ namespace castor3d
 					, getOwner()->getHeight()
 					, getOwner()->getDepth() }
 				, getOwner()->getPixelFormat() );
+			m_info.format = m_source->getPixelFormat();
 		}
 		else
 		{
 			m_source = std::make_unique< Dynamic2DTextureSource >( *getOwner()->getRenderSystem()->getEngine()
 				, Size{ getOwner()->getWidth(), getOwner()->getHeight() }
 				, getOwner()->getPixelFormat() );
+			m_info.format = m_source->getPixelFormat();
 		}
 
 		getOwner()->doUpdateFromFirstImage( { m_source->getDimensions().width, m_source->getDimensions().height }
@@ -397,7 +451,18 @@ namespace castor3d
 	void TextureView::setBuffer( PxBufferBaseSPtr buffer )
 	{
 		m_source->setBuffer( buffer );
+		m_info.format = m_source->getPixelFormat();
 		getOwner()->doUpdateFromFirstImage( { m_source->getDimensions().width, m_source->getDimensions().height }
 			, m_source->getPixelFormat() );
+	}
+
+	void TextureView::doUpdate( renderer::ImageViewCreateInfo info )
+	{
+		m_info = info;
+
+		if ( m_view )
+		{
+			m_view = getOwner()->getTexture().createView( m_info );
+		}
 	}
 }

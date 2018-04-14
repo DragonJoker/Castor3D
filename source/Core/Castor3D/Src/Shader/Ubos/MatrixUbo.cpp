@@ -58,10 +58,10 @@ namespace castor3d
 		configuration.prvView = configuration.curView;
 		configuration.prvViewProj = configuration.curViewProj;
 		configuration.prvJitter = configuration.curJitter;
-		configuration.curView = view;
-		configuration.projection = projection;
-		configuration.curViewProj = projection * view;
-		configuration.invProjection = projection.getInverse();
+		configuration.curView = convert( view );
+		configuration.projection = convert( projection );
+		configuration.curViewProj = convert( projection * view );
+		configuration.invProjection = convert( projection.getInverse() );
 		configuration.curJitter = jitter;
 		m_ubo->upload();
 	}
@@ -70,8 +70,8 @@ namespace castor3d
 	{
 		REQUIRE( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );
-		configuration.projection = projection;
-		configuration.invProjection = projection.getInverse();
+		configuration.projection = convert( projection );
+		configuration.invProjection = convert( projection.getInverse() );
 		m_ubo->upload();
 	}
 }

@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_OVERLAY_CATEGORY_H___
 #define ___C3D_OVERLAY_CATEGORY_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "OverlayVisitor.hpp"
 
 #include <Graphics/Position.hpp>
 #include <Graphics/Size.hpp>
@@ -122,14 +122,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour la position, taille...
 		 */
-		C3D_API void update();
+		C3D_API void update( OverlayRenderer const & renderer );
 		/**
 		 *\~english
 		 *\brief		Draws the overlay
 		 *\~french
 		 *\brief		Dessine l'incrustation
 		 */
-		C3D_API void render( OverlayRenderer & renderer );
+		C3D_API virtual void accept( OverlayVisitor & renderer )const = 0;
 		/**
 		 *\~english
 		 *\brief		Sets the material
@@ -524,37 +524,28 @@ namespace castor3d
 		 *\~french
 		 *\return		La taille de l'écran ou du parent.
 		 */
-		castor::Point2d doGetTotalSize()const;
+		castor::Point2d doGetTotalSize( OverlayRenderer const & renderer )const;
 		/**
 		 *\~english
 		 *\brief		Updates the overlay position, taking care of wanted pixel position.
 		 *\~french
 		 *\brief		Met à jour la position de l'incrustation, en prenant en compte la la position en pixel voulue.
 		 */
-		virtual void doUpdatePosition();
+		virtual void doUpdatePosition( OverlayRenderer const & renderer );
 		/**
 		 *\~english
 		 *\brief		Updates the overlay size, taking care of wanted pixel size.
 		 *\~french
 		 *\brief		Met à jour la taille de l'incrustation, en prenant en compte la taille en pixel voulue.
 		 */
-		virtual void doUpdateSize();
-		/**
-		 *\~english
-		 *\brief		Draws the overlay
-		 *\param[in]	renderer	The renderer used to draw this overlay
-		 *\~french
-		 *\brief		Dessine l'incrustation
-		 *\param[in]	renderer	Le renderer utilisé pour dessiner cette incrustation
-		 */
-		virtual void doRender( OverlayRenderer & renderer ) = 0;
+		virtual void doUpdateSize( OverlayRenderer const & renderer );
 		/**
 		 *\~english
 		 *\brief		Updates the overlay position, size...
 		 *\~french
 		 *\brief		Met à jour la position, taille...
 		 */
-		virtual void doUpdate() {}
+		virtual void doUpdate( OverlayRenderer const & renderer ) {}
 		/**
 		 *\~english
 		 *\brief		Updates the vertex buffer.

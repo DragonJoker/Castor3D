@@ -146,9 +146,9 @@ namespace castor3d
 		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
 		renderer::ClearColorValue colour
 		{
-			float( scene.getBackgroundColour().red() ),
-			float( scene.getBackgroundColour().green() ),
-			float( scene.getBackgroundColour().blue() ),
+			0.0f,
+			0.0f,
+			0.0f,
 			1.0f
 		};
 		renderer::DepthStencilClearValue depth{ 1.0, 0 };

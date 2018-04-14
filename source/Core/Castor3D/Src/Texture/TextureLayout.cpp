@@ -51,8 +51,7 @@ namespace castor3d
 			}
 		}
 
-		TextureViewUPtr createSubview( TextureLayout & layout
-			, renderer::ImageCreateInfo const & info
+		renderer::ImageViewCreateInfo getSubviewCreateInfos( renderer::ImageCreateInfo const & info
 			, uint32_t baseArrayLayer
 			, uint32_t arrayLayers )
 		{
@@ -64,8 +63,16 @@ namespace castor3d
 			view.subresourceRange.layerCount = arrayLayers;
 			view.subresourceRange.baseMipLevel = 0u;
 			view.subresourceRange.levelCount = info.mipLevels;
+			return view;
+		}
+
+		TextureViewUPtr createSubview( TextureLayout & layout
+			, renderer::ImageCreateInfo const & info
+			, uint32_t baseArrayLayer
+			, uint32_t arrayLayers )
+		{
 			return std::make_unique< TextureView >( layout
-				, view
+				, getSubviewCreateInfos( info, baseArrayLayer, arrayLayers )
 				, 0u );
 		}
 	}
@@ -150,8 +157,19 @@ namespace castor3d
 	void TextureLayout::setSource( Path const & folder
 		, Path const & relative )
 	{
-		m_views[0]->initialiseSource( folder, relative );
-		auto buffer = m_views[0]->getBuffer();
+		TextureView * view;
+
+		if ( m_views.empty() )
+		{
+			view = m_defaultView.get();
+		}
+		else
+		{
+			view = m_views[0].get();
+		}
+
+		view->initialiseSource( folder, relative );
+		auto buffer = view->getBuffer();
 
 		if ( m_info.extent.width != buffer->dimensions().getWidth()
 			|| m_info.extent.height != buffer->dimensions().getHeight()
@@ -161,12 +179,24 @@ namespace castor3d
 			m_info.extent.height = buffer->dimensions().getHeight();
 			m_info.extent.depth = 1u;
 			m_info.format = convert( buffer->format() );
+			m_defaultView->doUpdate( getSubviewCreateInfos( m_info, 0u, m_info.arrayLayers ) );
 		}
 	}
 
 	void TextureLayout::setSource( PxBufferBaseSPtr buffer )
 	{
-		auto & image = m_views[0];
+		TextureView * view;
+
+		if ( m_views.empty() )
+		{
+			view = m_defaultView.get();
+		}
+		else
+		{
+			view = m_views[0].get();
+		}
+
+		auto & image = view;
 
 		if ( !image->hasSource() )
 		{
@@ -187,6 +217,7 @@ namespace castor3d
 			m_info.extent.height = buffer->dimensions().getHeight();
 			m_info.extent.depth = 1u;
 			m_info.format = convert( buffer->format() );
+			m_defaultView->doUpdate( getSubviewCreateInfos( m_info, 0u, m_info.arrayLayers ) );
 		}
 	}
 
@@ -202,6 +233,7 @@ namespace castor3d
 			m_info.extent.height = size.getHeight();
 			m_info.extent.depth = 1u;
 			m_info.format = format;
+			m_defaultView->doUpdate( getSubviewCreateInfos( m_info, 0u, m_info.arrayLayers ) );
 		}
 	}
 

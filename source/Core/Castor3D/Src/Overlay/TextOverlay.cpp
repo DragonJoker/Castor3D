@@ -142,6 +142,11 @@ namespace castor3d
 		return std::make_shared< TextOverlay >();
 	}
 
+	void TextOverlay::accept( OverlayVisitor & visitor )const
+	{
+		visitor.visit( *this );
+	}
+
 	void TextOverlay::setFont( String const & p_strFont )
 	{
 		// Récupération / Création de la police
@@ -174,7 +179,7 @@ namespace castor3d
 		m_textChanged = true;
 	}
 
-	void TextOverlay::doUpdate()
+	void TextOverlay::doUpdate( OverlayRenderer const & renderer )
 	{
 		FontTextureSPtr fontTexture = getFontTexture();
 
@@ -210,11 +215,6 @@ namespace castor3d
 				fontTexture->initialise();
 			} ) );
 		}
-	}
-
-	void TextOverlay::doRender( OverlayRenderer & renderer )
-	{
-		renderer.drawText( *this );
 	}
 
 	void TextOverlay::doUpdateBuffer( Size const & p_size
@@ -461,7 +461,7 @@ namespace castor3d
 
 			if ( charSize[0] > 0 )
 			{
-				p_line.m_characters.push_back( { Point2d{ p_left, 0.0 }, charSize, glyph } );
+				p_line.m_characters.emplace_back( Point2d{ p_left, 0.0 }, charSize, glyph );
 			}
 
 			p_left += charSize[0];

@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "Castor3DPrerequisites.hpp"
 
 #include <Buffer/UniformBuffer.hpp>
+#include <Utils/Mat4.hpp>
 
 namespace castor3d
 {
@@ -15,11 +16,11 @@ namespace castor3d
 	private:
 		struct Configuration
 		{
-			castor::Matrix4x4f invViewProj;
-			castor::Matrix4x4f invView;
-			castor::Matrix4x4f invProj;
-			castor::Matrix4x4f gView;
-			castor::Matrix4x4f gProj;
+			renderer::Mat4 invViewProj;
+			renderer::Mat4 invView;
+			renderer::Mat4 invProj;
+			renderer::Mat4 gView;
+			renderer::Mat4 gProj;
 			castor::Point2f renderSize;
 		};
 

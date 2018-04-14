@@ -109,16 +109,6 @@ namespace castor3d
 		}
 	}
 
-	void Cache< Overlay, castor::String >::update()
-	{
-		auto lock = makeUniqueLock( *this );
-
-		for ( auto category : m_overlays )
-		{
-			category->update();
-		}
-	}
-
 	bool Cache< Overlay, castor::String >::write( castor::TextFile & file )const
 	{
 		auto lock = makeUniqueLock( *this );

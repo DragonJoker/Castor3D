@@ -303,9 +303,10 @@ namespace castor3d
 			 *\param[in]	pxl		Le source du fagment shader.
 			 */
 			Program( Engine & engine
+				, LightPassShadow & lightPass
 				, glsl::Shader const & vtx
 				, glsl::Shader const & pxl )
-				: my_program_type( engine, vtx, pxl, true )
+				: my_program_type( engine, lightPass, vtx, pxl, true )
 			{
 			}
 		};
@@ -357,9 +358,10 @@ namespace castor3d
 		 *\copydoc		castor3d::LightPass::doCreateProgram
 		 */
 		typename LightPass::ProgramPtr doCreateProgram( glsl::Shader const & vtx
-			, glsl::Shader const & pxl )const override
+			, glsl::Shader const & pxl )override
 		{
 			auto result = std::make_unique< LightPassShadow::Program >( this->m_engine
+				, *this
 				, vtx
 				, pxl );
 			return result;

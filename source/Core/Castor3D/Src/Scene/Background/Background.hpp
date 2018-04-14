@@ -124,6 +124,7 @@ namespace castor3d
 		*	Le tampon d'images dans laquelle le fond est dessiné.
 		*/
 		C3D_API virtual bool prepareFrame( renderer::CommandBuffer & commandBuffer
+			, castor::Size const & size
 			, renderer::RenderPass const & renderPass
 			, renderer::FrameBuffer const & frameBuffer );
 		/**
@@ -134,8 +135,6 @@ namespace castor3d
 		*	Receives the commands.
 		*\param[in] renderPass
 		*	The render pass into which the background is drawn.
-		*\param[in] frameBuffer
-		*	The frame buffer into which the background is drawn.
 		*\~french
 		*\brief
 		*	Enregistre les commandes utilisées pour dessiner le fond.
@@ -143,10 +142,9 @@ namespace castor3d
 		*	Reçoit les commandes.
 		*\param[in] renderPass
 		*	La passe de rendu dans laquelle le fond est dessiné.
-		*\param[in] frameBuffer
-		*	Le tampon d'images dans laquelle le fond est dessiné.
 		*/
 		C3D_API virtual bool prepareFrame( renderer::CommandBuffer & commandBuffer
+			, castor::Size const & size
 			, renderer::RenderPass const & renderPass );
 		/**
 		*\~english
@@ -220,9 +218,42 @@ namespace castor3d
 			REQUIRE( m_ibl );
 			return *m_ibl;
 		}
+
+		inline RenderPassTimer const & getTimer()const
+		{
+			REQUIRE( m_timer );
+			return *m_timer;
+		}
 		/**@}*/
 
 	private:
+		/**
+		*\~english
+		*\return
+		*	The shader program used to render the background.
+		*\~french
+		*\brief
+		*	Le programme shader utilisé pour dessiner le fond.
+		*/
+		virtual renderer::ShaderStageStateArray doInitialiseShader();
+		/**
+		*\~english
+		*\return
+		*	Initialises the descriptor layout.
+		*\~french
+		*\brief
+		*	Initialise le layout de descripteurs.
+		*/
+		virtual void doInitialiseDescriptorLayout();
+		/**
+		*\~english
+		*\return
+		*	Initialises the descriptor set.
+		*\~french
+		*\brief
+		*	Initialise l'ensemble de descripteurs.
+		*/
+		virtual void doInitialiseDescriptorSet();
 		/**
 		*\~english
 		*\brief
@@ -259,11 +290,33 @@ namespace castor3d
 		*/
 		C3D_API virtual void doUpdate( Camera const & camera ) = 0;
 
+	private:
+		bool doInitialiseVertexBuffer();
+		bool doInitialisePipeline( renderer::ShaderStageStateArray program
+			, renderer::RenderPass const & renderPass );
+
 	protected:
+		struct Cube
+		{
+			struct Quad
+			{
+				struct Vertex
+				{
+					castor::Point3f position;
+				};
+
+				Vertex vertex[4];
+			};
+
+			Quad faces[6];
+		};
+
 		Scene & m_scene;
 		BackgroundType m_type;
 		bool m_hdr{ true };
-		castor::Size m_size;
+		MatrixUbo m_matrixUbo;
+		ModelMatrixUbo m_modelMatrixUbo;
+		castor::Matrix4x4r m_mtxModel;
 		HdrConfigUbo m_configUbo;
 		renderer::SemaphorePtr m_semaphore;
 		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
@@ -271,7 +324,9 @@ namespace castor3d
 		renderer::DescriptorSetPtr m_descriptorSet;
 		renderer::PipelineLayoutPtr m_pipelineLayout;
 		renderer::PipelinePtr m_pipeline;
-		renderer::VertexBufferPtr< NonTexturedCube > m_vertexBuffer;
+		renderer::VertexBufferPtr< Cube > m_vertexBuffer;
+		renderer::BufferPtr< uint16_t > m_indexBuffer;
+		RenderPassTimerSPtr m_timer;
 		TextureLayoutSPtr m_texture;
 		SamplerWPtr m_sampler;
 		std::unique_ptr< IblTextures > m_ibl;

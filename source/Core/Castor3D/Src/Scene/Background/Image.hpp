@@ -48,22 +48,23 @@ namespace castor3d
 		C3D_API bool loadImage( castor::Path const & folder
 			, castor::Path const & relative );
 		/**
-		*\copydoc	castor3d::SceneBackground::doPrepareFrame
-		*/
-		bool prepareFrame( renderer::CommandBuffer & commandBuffer
-			, renderer::RenderPass const & renderPass
-			, renderer::FrameBuffer const & frameBuffer )override;
-		/**
-		*\copydoc	castor3d::SceneBackground::doPrepareFrame
-		*/
-		bool prepareFrame( renderer::CommandBuffer & commandBuffer
-			, renderer::RenderPass const & renderPass )override;
-		/**
 		*\copydoc	castor3d::SceneBackground::accept
 		*/
 		C3D_API void accept( BackgroundVisitor & visitor )const override;
 
 	private:
+		/**
+		*\copydoc	castor3d::SceneBackground::doInitialiseShader
+		*/
+		renderer::ShaderStageStateArray doInitialiseShader()override;
+		/**
+		*\copydoc	castor3d::SceneBackground::doInitialiseDescriptorLayout
+		*/
+		void doInitialiseDescriptorLayout()override;
+		/**
+		*\copydoc	castor3d::SceneBackground::doInitialiseDescriptorSet
+		*/
+		void doInitialiseDescriptorSet()override;
 		/**
 		*\copydoc	castor3d::SceneBackground::doInitialise
 		*/
@@ -78,16 +79,7 @@ namespace castor3d
 		void doUpdate( Camera const & camera )override;
 
 	private:
-		renderer::ShaderStageStateArray doInitialiseShader();
-		bool doInitialiseVertexBuffer();
-		bool doInitialisePipeline( renderer::ShaderStageStateArray & program
-			, renderer::RenderPass const & renderPass );
-
-	private:
-		MatrixUbo m_matrixUbo;
-		ModelMatrixUbo m_modelMatrixUbo;
-		renderer::PushConstantsBuffer< castor::Point2f > m_sizePushConstant;
-		castor::Matrix4x4r m_mtxModel;
+		renderer::UniformBufferPtr< castor::Point2f > m_sizeUbo;
 	};
 }
 

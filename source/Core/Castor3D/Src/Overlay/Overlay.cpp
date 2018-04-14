@@ -48,20 +48,6 @@ namespace castor3d
 	{
 	}
 
-	void Overlay::render( castor::Size const & size
-		, OverlayRenderer & renderer )
-	{
-		if ( isVisible() )
-		{
-			m_category->render( renderer );
-
-			for ( auto overlay : m_overlays )
-			{
-				overlay->render( size, renderer );
-			}
-		}
-	}
-
 	void Overlay::addChild( OverlaySPtr overlay )
 	{
 		int index = 1;

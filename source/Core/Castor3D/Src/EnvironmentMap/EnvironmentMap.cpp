@@ -248,6 +248,7 @@ namespace castor3d
 				, std::move( attaches ) );
 			frameBuffer.backgroundCommands = device.getGraphicsCommandPool().createCommandBuffer( false );
 			m_node.getScene()->getBackground().prepareFrame( *frameBuffer.backgroundCommands
+				, Size{ MapSize[0], MapSize[1] }
 				, *frameBuffer.renderPass );
 			++face;
 		}

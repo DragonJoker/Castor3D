@@ -92,6 +92,10 @@ namespace castor3d
 		 */
 		C3D_API static OverlayCategorySPtr create();
 		/**
+		 *\copydoc	castor3d::OverlayCategory::accept
+		 */
+		C3D_API void accept( OverlayVisitor & visitor )const override;
+		/**
 		 *\copydoc		castor3d::OverlayCategory::createTextWriter
 		 */
 		C3D_API std::unique_ptr < OverlayCategory::TextWriter > createTextWriter( castor::String const & tabs )override
@@ -524,10 +528,6 @@ namespace castor3d
 
 	protected:
 		/**
-		 *\copydoc	castor3d::OverlayCategory::doRender
-		 */
-		C3D_API void doRender( OverlayRenderer & renderer )override;
-		/**
 		 *\~english
 		 *\brief		Updates the vertex buffer.
 		 *\param[in]	size	The render target size.
@@ -542,7 +542,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour la taille de l'incrustation, en prenant en compte la taille en pixel voulue.
 		 */
-		C3D_API void doUpdateSize()override;
+		C3D_API void doUpdateSize( OverlayRenderer const & renderer )override;
 
 	protected:
 		//!\~english	The border material.

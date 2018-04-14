@@ -147,13 +147,6 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		Updates overlays.
-		 *\~french
-		 *\brief		Met à jour les incrustations.
-		 */
-		C3D_API void update();
-		/**
-		 *\~english
 		 *\brief		Writes overlays in a text file
 		 *\param[out]	p_file	The file
 		 *\return		\p true if ok

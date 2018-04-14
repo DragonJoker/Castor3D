@@ -6,11 +6,13 @@ See LICENSE file in root folder
 
 #include "SubmeshComponent.hpp"
 
+#include <Utils/Mat4.hpp>
+
 namespace castor3d
 {
 	struct InstantiationData
 	{
-		std::array< float, 16u > m_matrix;
+		renderer::Mat4 m_matrix;
 		int m_material;
 	};
 	/*!

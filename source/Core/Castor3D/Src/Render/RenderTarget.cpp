@@ -87,7 +87,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			for ( auto const & effect : target.m_postEffects )
+			for ( auto const & effect : target.m_hdrPostEffects )
 			{
 				result = file.writeText( m_tabs + cuT( "\tpostfx \"" ) + effect->getName() + cuT( "\"" ) )
 						   && effect->writeInto( file )
@@ -289,7 +289,7 @@ namespace castor3d
 			m_overlaysTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Overlays" ), cuT( "Overlays" ) );
 			m_toneMappingTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Tone Mapping" ), cuT( "Tone Mapping" ) );
 
-			for ( auto effect : m_postEffects )
+			for ( auto effect : m_hdrPostEffects )
 			{
 				effect->initialise( *m_postFxTimer );
 			}
@@ -298,7 +298,7 @@ namespace castor3d
 				, m_renderTechnique->getResult()
 				, *m_renderPass );
 
-			for ( auto effect : m_postPostEffects )
+			for ( auto effect : m_srgbPostEffects )
 			{
 				effect->initialise( *m_postPostFxTimer );
 			}
@@ -317,11 +317,12 @@ namespace castor3d
 		if ( m_initialised )
 		{
 			m_initialised = false;
+			m_signalReady.reset();
 			m_commandBuffer.reset();
 			m_overlayRenderer->cleanup();
 			m_overlayRenderer.reset();
 
-			for ( auto effect : m_postPostEffects )
+			for ( auto effect : m_srgbPostEffects )
 			{
 				effect->cleanup();
 			}
@@ -329,13 +330,13 @@ namespace castor3d
 			m_toneMapping->cleanup();
 			m_toneMapping.reset();
 
-			for ( auto effect : m_postEffects )
+			for ( auto effect : m_hdrPostEffects )
 			{
 				effect->cleanup();
 			}
 
-			m_postEffects.clear();
-			m_postPostEffects.clear();
+			m_hdrPostEffects.clear();
+			m_srgbPostEffects.clear();
 
 			m_postFxTimer.reset();
 			m_postPostFxTimer.reset();
@@ -348,6 +349,7 @@ namespace castor3d
 			m_renderTechnique->cleanup();
 			m_frameBuffer.cleanup();
 			m_renderTechnique.reset();
+			m_renderPass.reset();
 			getEngine()->getRenderTechniqueCache().remove( cuT( "RenderTargetTechnique_" ) + string::toString( m_index ) );
 		}
 	}
@@ -366,7 +368,7 @@ namespace castor3d
 				{
 					getEngine()->getRenderSystem()->pushScene( scene.get() );
 					scene->getGeometryCache().fillInfo( info );
-					doRender( info, m_frameBuffer, getCamera() );
+					//doRender( info, m_frameBuffer, getCamera() );
 					getEngine()->getRenderSystem()->popScene();
 				}
 			}
@@ -389,6 +391,7 @@ namespace castor3d
 	void RenderTarget::setCamera( CameraSPtr camera )
 	{
 		m_camera = camera;
+		camera->resize( m_size );
 	}
 
 	void RenderTarget::setToneMappingType( String const & name
@@ -412,17 +415,23 @@ namespace castor3d
 	{
 		if ( effect->isAfterToneMapping() )
 		{
-			m_postPostEffects.push_back( effect );
+			m_srgbPostEffects.push_back( effect );
 		}
 		else
 		{
-			m_postEffects.push_back( effect );
+			m_hdrPostEffects.push_back( effect );
 		}
 	}
 
 	void RenderTarget::setSize( Size const & size )
 	{
 		m_size = size;
+		auto camera = getCamera();
+
+		if ( camera )
+		{
+			camera->resize( m_size );
+		}
 	}
 
 	void RenderTarget::addTechniqueParameters( Parameters const & parameters )
@@ -469,7 +478,7 @@ namespace castor3d
 		m_postFxTimer->start();
 		auto * result = &toWait;
 
-		for ( auto effect : m_postEffects )
+		for ( auto effect : m_hdrPostEffects )
 		{
 			queue.submit( effect->getCommands()
 				, *result
@@ -490,6 +499,7 @@ namespace castor3d
 		SceneSPtr scene = getScene();
 		m_toneMappingTimer->start();
 		auto * result = &toWait;
+		static renderer::ClearColorValue clear{ 0.0f, 0.0f, 0.0f, 1.0f };
 
 		if ( m_commandBuffer->begin() )
 		{
@@ -501,8 +511,8 @@ namespace castor3d
 				, 0u );
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, frameBuffer
-				, { convert( RgbaColour::fromRGBA( toRGBAFloat( scene->getBackgroundColour() ) ) ) }
-			, renderer::SubpassContents::eSecondaryCommandBuffers );
+				, { clear }
+				, renderer::SubpassContents::eSecondaryCommandBuffers );
 			m_commandBuffer->executeCommands( { m_toneMapping->getCommandBuffer() } );
 			m_commandBuffer->endRenderPass();
 			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
@@ -527,7 +537,7 @@ namespace castor3d
 		m_postPostFxTimer->start();
 		auto * result = &toWait;
 
-		for ( auto & effect : m_postPostEffects )
+		for ( auto & effect : m_srgbPostEffects )
 		{
 			queue.submit( effect->getCommands()
 				, *result
@@ -547,25 +557,39 @@ namespace castor3d
 		auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
 		auto * result = &toWait;
 		m_overlaysTimer->start();
-		m_overlayRenderer->beginRender( camera.getViewport()
-			, *m_overlaysTimer
-			, *result );
-
 		{
 			auto lock = makeUniqueLock( getEngine()->getOverlayCache() );
+			m_overlayRenderer->beginPrepare( camera.getViewport() );
+			auto preparer = m_overlayRenderer->getPreparer();
 
 			for ( auto category : getEngine()->getOverlayCache() )
 			{
 				SceneSPtr scene = category->getOverlay().getScene();
 
-				if ( category->getOverlay().isVisible() && ( !scene || scene->getName() == scene->getName() ) )
+				if ( category->getOverlay().isVisible() && ( !scene || scene->getName() == getScene()->getName() ) )
 				{
-					category->render( *m_overlayRenderer );
+					category->update( *m_overlayRenderer );
+					category->accept( preparer );
 				}
 			}
-		}
 
-		m_overlayRenderer->endRender( *m_overlaysTimer );
+			m_overlayRenderer->endPrepare();
+			m_overlayRenderer->beginRender( *m_overlaysTimer
+				, *result );
+			auto renderer = m_overlayRenderer->getRenderer();
+
+			for ( auto category : getEngine()->getOverlayCache() )
+			{
+				SceneSPtr scene = category->getOverlay().getScene();
+
+				if ( category->getOverlay().isVisible() && ( !scene || scene->getName() == getScene()->getName() ) )
+				{
+					category->accept( renderer );
+				}
+			}
+
+			m_overlayRenderer->endRender( *m_overlaysTimer );
+		}
 		m_overlaysTimer->stop();
 		return result;
 	}

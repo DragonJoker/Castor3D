@@ -565,14 +565,15 @@ namespace castor3d
 	void PickingPass::doCleanup()
 	{
 		m_buffer.reset();
-		m_stagingBuffer.reset();
 		m_pickingUbo.reset();
+		m_scenes.clear();
+		m_stagingBuffer.reset();
 		m_frameBuffer.reset();
 		m_renderPass.reset();
 		m_colourView.reset();
-		m_colourTexture.reset();
 		m_depthView.reset();
 		m_depthTexture.reset();
+		m_colourTexture.reset();
 	}
 
 	void PickingPass::doFillDescriptor( renderer::DescriptorSetLayout const & layout

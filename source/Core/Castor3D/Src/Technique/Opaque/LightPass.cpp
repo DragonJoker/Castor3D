@@ -322,6 +322,7 @@ namespace castor3d
 			setLayoutBindings.emplace_back( ModelMatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
 		}
 
+		setLayoutBindings.emplace_back( shader::LightingModel::UboBindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment );
 		m_uboDescriptorLayout = device.createDescriptorSetLayout( std::move( setLayoutBindings ) );
 		m_uboDescriptorPool = m_uboDescriptorLayout->createPool( 2u );
 
@@ -391,6 +392,8 @@ namespace castor3d
 		frameBuffer = this->renderPass->createFrameBuffer( { depthView.getTexture().getDimensions().width, depthView.getTexture().getDimensions().height }
 			, std::move( attaches ) );
 	}
+
+	//************************************************************************************************
 
 	LightPass::LightPass( Engine & engine
 		, renderer::RenderPassPtr && firstRenderPass
@@ -486,6 +489,10 @@ namespace castor3d
 			m_uboDescriptorSet->createBinding( uboLayout.getBinding( ModelMatrixUbo::BindingPoint )
 				, modelMatrixUbo->getUbo() );
 		}
+		m_uboDescriptorSet->createBinding( uboLayout.getBinding( shader::LightingModel::UboBindingPoint )
+			, *m_baseUbo
+			, 0u
+			, m_baseUbo->getElementSize() );
 		m_uboDescriptorSet->update();
 
 		auto & renderSystem = *m_engine.getRenderSystem();
@@ -599,8 +606,8 @@ namespace castor3d
 		auto shadowType = getShadowType( sceneFlags );
 
 		// Shader outputs
-		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 1 );
-		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 2 );
+		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 0 );
+		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 1 );
 
 		// Utility functions
 		auto lighting = shader::legacy::createLightingModel( writer
@@ -668,7 +675,8 @@ namespace castor3d
 			{
 			case LightType::eDirectional:
 				{
-					auto light = writer.getBuiltin< shader::DirectionalLight >( cuT( "light" ) );
+					auto c3d_light = writer.getBuiltin< shader::DirectionalLight >( cuT( "c3d_light" ) );
+					auto light = writer.declLocale( cuT( "light" ), c3d_light );
 					lighting->compute( light
 						, eye
 						, shininess
@@ -688,7 +696,8 @@ namespace castor3d
 
 			case LightType::ePoint:
 				{
-					auto light = writer.getBuiltin< shader::PointLight >( cuT( "light" ) );
+					auto c3d_light = writer.getBuiltin< shader::PointLight >( cuT( "c3d_light" ) );
+					auto light = writer.declLocale( cuT( "light" ), c3d_light );
 					lighting->compute( light
 						, eye
 						, shininess
@@ -708,7 +717,8 @@ namespace castor3d
 
 			case LightType::eSpot:
 				{
-					auto light = writer.getBuiltin< shader::SpotLight >( cuT( "light" ) );
+					auto c3d_light = writer.getBuiltin< shader::SpotLight >( cuT( "c3d_light" ) );
+					auto light = writer.declLocale( cuT( "light" ), c3d_light );
 					lighting->compute( light
 						, eye
 						, shininess
@@ -756,8 +766,8 @@ namespace castor3d
 		auto shadowType = getShadowType( sceneFlags );
 
 		// Shader outputs
-		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 1 );
-		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 2 );
+		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 0 );
+		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 1 );
 
 		// Utility functions
 		auto lighting = shader::pbr::mr::createLightingModel( writer
@@ -825,7 +835,8 @@ namespace castor3d
 			{
 			case LightType::eDirectional:
 				{
-					auto light = writer.getBuiltin< shader::DirectionalLight >( cuT( "light" ) );
+					auto c3d_light = writer.getBuiltin< shader::DirectionalLight >( cuT( "c3d_light" ) );
+					auto light = writer.declLocale( cuT( "light" ), c3d_light );
 #if !C3D_DISABLE_SSSSS_TRANSMITTANCE
 #	if !C3D_DEBUG_SSS_TRANSMITTANCE
 					lighting->compute( light
@@ -865,7 +876,8 @@ namespace castor3d
 
 			case LightType::ePoint:
 				{
-					auto light = writer.getBuiltin< shader::PointLight >( cuT( "light" ) );
+					auto c3d_light = writer.getBuiltin< shader::PointLight >( cuT( "c3d_light" ) );
+					auto light = writer.declLocale( cuT( "light" ), c3d_light );
 #if !C3D_DISABLE_SSSSS_TRANSMITTANCE
 #	if !C3D_DEBUG_SSS_TRANSMITTANCE
 					lighting->compute( light
@@ -905,7 +917,8 @@ namespace castor3d
 
 			case LightType::eSpot:
 				{
-					auto light = writer.getBuiltin< shader::SpotLight >( cuT( "light" ) );
+					auto c3d_light = writer.getBuiltin< shader::SpotLight >( cuT( "c3d_light" ) );
+					auto light = writer.declLocale( cuT( "light" ), c3d_light );
 #if !C3D_DISABLE_SSSSS_TRANSMITTANCE
 #	if !C3D_DEBUG_SSS_TRANSMITTANCE
 					lighting->compute( light
@@ -989,8 +1002,8 @@ namespace castor3d
 		sss.declare( type );
 
 		// Shader outputs
-		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 1 );
-		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 2 );
+		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 0 );
+		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 1 );
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -1044,7 +1057,8 @@ namespace castor3d
 			{
 			case LightType::eDirectional:
 				{
-					auto light = writer.getBuiltin< shader::DirectionalLight >( cuT( "light" ) );
+					auto c3d_light = writer.getBuiltin< shader::DirectionalLight >( cuT( "c3d_light" ) );
+					auto light = writer.declLocale( cuT( "light" ), c3d_light );
 					lighting->compute( light
 						, eye
 						, diffuse
@@ -1066,7 +1080,8 @@ namespace castor3d
 
 			case LightType::ePoint:
 				{
-					auto light = writer.getBuiltin< shader::PointLight >( cuT( "light" ) );
+					auto c3d_light = writer.getBuiltin< shader::PointLight >( cuT( "c3d_light" ) );
+					auto light = writer.declLocale( cuT( "light" ), c3d_light );
 					lighting->compute( light
 						, eye
 						, diffuse
@@ -1088,7 +1103,8 @@ namespace castor3d
 
 			case LightType::eSpot:
 				{
-					auto light = writer.getBuiltin< shader::SpotLight >( cuT( "light" ) );
+					auto c3d_light = writer.getBuiltin< shader::SpotLight >( cuT( "c3d_light" ) );
+					auto light = writer.declLocale( cuT( "light" ), c3d_light );
 					lighting->compute( light
 						, eye
 						, diffuse

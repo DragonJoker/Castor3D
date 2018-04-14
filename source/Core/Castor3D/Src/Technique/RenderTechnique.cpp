@@ -454,7 +454,7 @@ namespace castor3d
 		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
 		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
 
-		renderPass.attachments[1].index = 1u;
+		renderPass.attachments[1].index = 0u;
 		renderPass.attachments[1].format = m_colourTexture->getPixelFormat();
 		renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
 		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eLoad;
@@ -482,6 +482,7 @@ namespace castor3d
 		auto & background = m_renderTarget.getScene()->getBackground();
 		background.initialise( *m_bgRenderPass );
 		background.prepareFrame( *m_bgCommandBuffer
+			, Size{ m_colourTexture->getWidth(), m_colourTexture->getHeight() }
 			, *m_bgRenderPass
 			, *m_bgFrameBuffer );
 	}
@@ -549,11 +550,14 @@ namespace castor3d
 	{
 		auto & scene = *m_renderTarget.getScene();
 		auto & bgSemaphore = scene.getBackground().getSemaphore();
+		auto fence = getEngine()->getRenderSystem()->getCurrentDevice()->createFence();
 		getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue().submit( *m_bgCommandBuffer
 			, semaphore
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, bgSemaphore
-			, nullptr );
+			, fence.get() );
+		fence->wait( renderer::FenceTimeout );
+		getEngine()->getRenderSystem()->getCurrentDevice()->waitIdle();
 		return &bgSemaphore;
 	}
 

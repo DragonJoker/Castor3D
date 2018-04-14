@@ -17,7 +17,7 @@ namespace castor3d
 	template< typename NodeType >
 	inline void doUpdateNodeModelMatrix( NodeType & node )
 	{
-		node.modelMatrixUbo.getData().model = node.sceneNode.getDerivedTransformationMatrix();
+		node.modelMatrixUbo.getData().model = convert( node.sceneNode.getDerivedTransformationMatrix() );
 	}
 
 	template< typename NodeType >

@@ -108,6 +108,10 @@ namespace castor3d
 		 */
 		C3D_API static OverlayCategorySPtr create();
 		/**
+		 *\copydoc	castor3d::OverlayCategory::accept
+		 */
+		C3D_API void accept( OverlayVisitor & visitor )const override;
+		/**
 		 *\copydoc		castor3d::OverlayCategory::createTextWriter
 		 */
 		C3D_API std::unique_ptr < OverlayCategory::TextWriter > createTextWriter( castor::String const & tabs )override
@@ -409,13 +413,9 @@ namespace castor3d
 		using TextureCoordinates = std::array< float, 2 >;
 		DECLARE_VECTOR( TextureCoordinates, TextureCoords );
 		/**
-		 *\copydoc	castor3d::OverlayCategory::doRender
-		 */
-		C3D_API void doRender( OverlayRenderer & renderer )override;
-		/**
 		 *\copydoc	castor3d::OverlayCategory::doUpdate
 		 */
-		C3D_API void doUpdate()override;
+		C3D_API void doUpdate( OverlayRenderer const & renderer )override;
 		/**
 		 *\copydoc	castor3d::OverlayCategory::doUpdateBuffer
 		 */

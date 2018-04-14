@@ -67,7 +67,6 @@ namespace castor3d
 			renderer::PipelinePtr doCreatePipeline( renderer::VertexLayout const & vertexLayout
 				, renderer::RenderPass const & renderPass
 				, bool blend )override;
-			virtual void doCreateUbo() = 0;
 		};
 
 	public:

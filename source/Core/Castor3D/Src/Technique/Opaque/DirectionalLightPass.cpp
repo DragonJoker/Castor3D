@@ -109,10 +109,12 @@ namespace castor3d
 	//*********************************************************************************************
 
 	DirectionalLightPass::Program::Program( Engine & engine
+		, DirectionalLightPass & pass
 		, glsl::Shader const & vtx
 		, glsl::Shader const & pxl
 		, bool hasShadows )
 		: LightPass::Program{ engine, vtx, pxl, hasShadows }
+		, m_lightPass{ pass }
 	{
 	}
 
@@ -124,15 +126,6 @@ namespace castor3d
 		, renderer::RenderPass const & renderPass
 		, bool blend )
 	{
-		if ( !m_ubo )
-		{
-			m_ubo = renderer::makeUniformBuffer< Config >( *m_engine.getRenderSystem()->getCurrentDevice()
-				, 1u
-				, renderer::BufferTarget::eTransferDst
-				, renderer::MemoryPropertyFlag::eHostVisible );
-			m_baseUbo = &m_ubo->getUbo();
-		}
-
 		renderer::DepthStencilState dsstate
 		{
 			0u,
@@ -177,13 +170,13 @@ namespace castor3d
 	void DirectionalLightPass::Program::doBind( Light const & light )
 	{
 		auto & directionalLight = *light.getDirectionalLight();
-		auto & data = m_ubo->getData( 0u );
+		auto & data = m_lightPass.m_ubo->getData( 0u );
 		data.base.colour = light.getColour();
 		data.base.intensity = light.getIntensity();
 		data.base.farPlane = light.getFarPlane();
 		data.direction = directionalLight.getDirection();
 		data.transform = directionalLight.getLightSpaceTransform();
-		m_ubo->upload();
+		m_lightPass.m_ubo->upload();
 	}
 
 	//*********************************************************************************************
@@ -202,7 +195,12 @@ namespace castor3d
 			, specularView
 			, gpInfoUbo
 			, hasShadows }
+		, m_ubo{ renderer::makeUniformBuffer< Config >( *engine.getRenderSystem()->getCurrentDevice()
+			, 1u
+			, renderer::BufferTarget::eTransferDst
+			, renderer::MemoryPropertyFlag::eHostVisible ) }
 	{
+		m_baseUbo = &m_ubo->getUbo();
 		m_viewport.setOrtho( 0, 1, 0, 1, 0, 1 );
 	}
 
@@ -288,8 +286,8 @@ namespace castor3d
 	}
 
 	LightPass::ProgramPtr DirectionalLightPass::doCreateProgram( glsl::Shader const & vtx
-		, glsl::Shader const & pxl )const
+		, glsl::Shader const & pxl )
 	{
-		return std::make_unique< Program >( m_engine, vtx, pxl, m_shadows );
+		return std::make_unique< Program >( m_engine, *this, vtx, pxl, m_shadows );
 	}
 }

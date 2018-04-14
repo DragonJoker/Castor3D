@@ -151,20 +151,13 @@ namespace castor3d
 		void doUpdate( Camera const & camera );
 
 	private:
-		virtual renderer::ShaderStageStateArray doInitialiseShader();
 		bool doInitialiseTexture();
 		void doInitialiseEquiTexture();
-		bool doInitialiseVertexBuffer();
-		bool doInitialisePipeline( renderer::ShaderStageStateArray & program
-			, renderer::RenderPass const & renderPass );
 
 	private:
 		TextureLayoutSPtr m_equiTexture;
 		castor::Path m_equiTexturePath;
 		castor::Size m_equiSize;
-		MatrixUbo m_matrixUbo;
-		ModelMatrixUbo m_modelMatrixUbo;
-		castor::Matrix4x4r m_mtxModel;
 		Viewport m_viewport;
 	};
 }

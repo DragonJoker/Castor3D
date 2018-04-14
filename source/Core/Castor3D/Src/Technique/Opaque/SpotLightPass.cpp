@@ -37,10 +37,12 @@ namespace castor3d
 	//*********************************************************************************************
 	
 	SpotLightPass::Program::Program( Engine & engine
+		, SpotLightPass & lightPass
 		, glsl::Shader const & vtx
 		, glsl::Shader const & pxl
 		, bool hasShadows )
 		: MeshLightPass::Program{ engine, vtx, pxl, hasShadows }
+		, m_lightPass{ lightPass }
 	{
 	}
 
@@ -51,7 +53,7 @@ namespace castor3d
 	void SpotLightPass::Program::doBind( Light const & light )
 	{
 		auto & spotLight = *light.getSpotLight();
-		auto & data = m_ubo->getData( 0u );
+		auto & data = m_lightPass.m_ubo->getData( 0u );
 		data.base.colour = light.getColour();
 		data.base.intensity = light.getIntensity();
 		data.base.farPlane = light.getFarPlane();
@@ -61,19 +63,7 @@ namespace castor3d
 		data.cutOff = spotLight.getCutOff().cos();
 		data.direction = spotLight.getDirection();
 		data.transform = spotLight.getLightSpaceTransform();
-		m_ubo->upload();
-	}
-
-	void SpotLightPass::Program::doCreateUbo()
-	{
-		if ( !m_ubo )
-		{
-			m_ubo = renderer::makeUniformBuffer< Config >( *m_engine.getRenderSystem()->getCurrentDevice()
-				, 1u
-				, renderer::BufferTarget::eTransferDst
-				, renderer::MemoryPropertyFlag::eHostVisible );
-			m_baseUbo = &m_ubo->getUbo();
-		}
+		m_lightPass.m_ubo->upload();
 	}
 
 	//*********************************************************************************************
@@ -91,7 +81,12 @@ namespace castor3d
 			, gpInfoUbo
 			, LightType::eSpot
 			, hasShadows }
+		, m_ubo{ renderer::makeUniformBuffer< Config >( *m_engine.getRenderSystem()->getCurrentDevice()
+			, 1u
+			, renderer::BufferTarget::eTransferDst
+			, renderer::MemoryPropertyFlag::eHostVisible ) }
 	{
+		m_baseUbo = &m_ubo->getUbo();
 	}
 
 	SpotLightPass::~SpotLightPass()
@@ -120,9 +115,9 @@ namespace castor3d
 	}
 
 	LightPass::ProgramPtr SpotLightPass::doCreateProgram( glsl::Shader const & vtx
-		, glsl::Shader const & pxl )const
+		, glsl::Shader const & pxl )
 	{
-		return std::make_unique< Program >( m_engine, vtx, pxl, m_shadows );
+		return std::make_unique< Program >( m_engine, *this, vtx, pxl, m_shadows );
 	}
 
 	//*********************************************************************************************
