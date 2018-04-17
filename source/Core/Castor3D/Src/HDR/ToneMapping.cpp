@@ -48,7 +48,7 @@ namespace castor3d
 
 			// Shader inputs
 			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
-			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
+			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
@@ -56,7 +56,7 @@ namespace castor3d
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				vtx_texture = texture;
+				vtx_texture = texcoord;
 				gl_Position = vec4( position.x(), position.y(), 0.0, 1.0 );
 			} );
 
@@ -83,8 +83,6 @@ namespace castor3d
 			, bindings
 			, {} );
 		m_timer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Tone mapping" ), cuT( "Tone mapping" ) );
-
-		prepareFrame( renderPass, 0u );
 		return true;
 	}
 

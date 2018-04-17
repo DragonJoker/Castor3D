@@ -89,7 +89,6 @@ namespace castor3d
 		public:
 			explicit TargetFbo( RenderTarget & renderTarget );
 			bool initialise( renderer::RenderPass & renderPass
-				, uint32_t index
 				, castor::Size const & size );
 			void cleanup();
 
@@ -135,14 +134,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
-		 *\remarks		Initialises the buffers.
-		 *\param[in]	index	The base texture index.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
-		 *\remarks		Initialise les buffers.
-		 *\param[in]	index	L'index de texture de base.
 		 */
-		C3D_API void initialise( uint32_t index );
+		C3D_API void initialise();
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
@@ -328,13 +323,18 @@ namespace castor3d
 		/**@}*/
 
 	private:
+		C3D_API void doInitialiseRenderPass();
+		C3D_API bool doInitialiseFrameBuffer();
+		C3D_API bool doInitialiseVelocityTexture();
+		C3D_API bool doInitialiseTechnique();
+		C3D_API bool doInitialiseToneMapping();
 		C3D_API void doRender( RenderInfo & info
 			, TargetFbo & fbo
 			, CameraSPtr camera );
-		C3D_API renderer::Semaphore const * doApplyHdrPostEffects( renderer::Semaphore const & toWait );
-		C3D_API renderer::Semaphore const * doApplyToneMapping( renderer::Semaphore const & toWait
-			, renderer::FrameBuffer const & frameBuffer );
-		C3D_API renderer::Semaphore const * doApplySRgbPostEffects( renderer::Semaphore const & toWait );
+		C3D_API renderer::Semaphore const * doApplyPostEffects( renderer::Semaphore const & toWait
+			, PostEffectPtrArray const & effects
+			, RenderPassTimer & timer );
+		C3D_API renderer::Semaphore const * doApplyToneMapping( renderer::Semaphore const & toWait );
 		C3D_API renderer::Semaphore const * doRenderOverlays( renderer::Semaphore const & toWait
 			, Camera const & camera );
 
@@ -351,7 +351,7 @@ namespace castor3d
 		SceneWPtr m_scene;
 		CameraWPtr m_camera;
 		renderer::RenderPassPtr m_renderPass;
-		renderer::CommandBufferPtr m_commandBuffer;
+		renderer::CommandBufferPtr m_toneMappingCommandBuffer;
 		TargetFbo m_frameBuffer;
 		renderer::Format m_pixelFormat;
 		uint32_t m_index;
@@ -359,8 +359,8 @@ namespace castor3d
 		PostEffectPtrArray m_hdrPostEffects;
 		ToneMappingSPtr m_toneMapping;
 		PostEffectPtrArray m_srgbPostEffects;
-		RenderPassTimerSPtr m_postFxTimer;
-		RenderPassTimerSPtr m_postPostFxTimer;
+		RenderPassTimerSPtr m_hdrPostFxTimer;
+		RenderPassTimerSPtr m_srgbPostFxTimer;
 		RenderPassTimerSPtr m_toneMappingTimer;
 		RenderPassTimerSPtr m_overlaysTimer;
 		SsaoConfig m_ssaoConfig;

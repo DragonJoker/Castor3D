@@ -300,6 +300,13 @@ namespace glsl
 		/**@{*/
 		template< typename T > inline T declConstant( castor::String const & name, T const & rhs );
 		template< typename T > inline Optional< T > declConstant( castor::String const & name, T const & rhs, bool enabled );
+		/**
+		*name
+		*	Specialisation constant declaration.
+		*/
+		/**@{*/
+		template< typename T > inline T declSpecConstant( castor::String const & name, uint32_t location, T const & rhs );
+		template< typename T > inline Optional< T > declSpecConstant( castor::String const & name, uint32_t location, T const & rhs, bool enabled );
 		/**@}*/
 		/**
 		*name

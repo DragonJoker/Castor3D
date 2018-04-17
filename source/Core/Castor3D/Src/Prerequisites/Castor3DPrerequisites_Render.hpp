@@ -29,7 +29,7 @@ namespace castor3d
 			castor::Point2f texture;
 		};
 
-		Vertex vertex[4];
+		Vertex vertex[6];
 	};
 
 	struct NonTexturedCube

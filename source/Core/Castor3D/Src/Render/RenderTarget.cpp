@@ -114,7 +114,6 @@ namespace castor3d
 	}
 
 	bool RenderTarget::TargetFbo::initialise( renderer::RenderPass & renderPass
-		, uint32_t index
 		, Size const & size )
 	{
 		auto & renderSystem = *m_renderTarget.getEngine()->getRenderSystem();
@@ -140,7 +139,6 @@ namespace castor3d
 			, renderer::MemoryPropertyFlag::eDeviceLocal );
 		m_colourTexture.setTexture( texture );
 		m_colourTexture.setSampler( sampler );
-		m_colourTexture.setIndex( index );
 		m_colourTexture.getTexture()->getDefaultImage().initialiseSource();
 		m_colourTexture.getTexture()->initialise();
 
@@ -188,126 +186,55 @@ namespace castor3d
 	{
 	}
 
-	void RenderTarget::initialise( uint32_t index )
+	void RenderTarget::initialise()
 	{
 		if ( !m_initialised )
 		{
 			auto & renderSystem = *getEngine()->getRenderSystem();
 			auto & device = *renderSystem.getCurrentDevice();
+			doInitialiseRenderPass();
+			m_initialised = doInitialiseFrameBuffer();
 
-			renderer::RenderPassCreateInfo createInfo{};
-			createInfo.flags = 0u;
-
-			createInfo.attachments.resize( 1u );
-			createInfo.attachments[0].index = 0u;
-			createInfo.attachments[0].format = getPixelFormat();
-			createInfo.attachments[0].samples = renderer::SampleCountFlag::e1;
-			createInfo.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
-			createInfo.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
-			createInfo.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-			createInfo.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-			createInfo.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-			createInfo.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
-
-			renderer::AttachmentReference colourReference;
-			colourReference.attachment = 0u;
-			colourReference.layout = renderer::ImageLayout::eColourAttachmentOptimal;
-
-			createInfo.subpasses.resize( 1u );
-			createInfo.subpasses[0].flags = 0u;
-			createInfo.subpasses[0].colorAttachments = { colourReference };
-
-			createInfo.dependencies.resize( 2u );
-			createInfo.dependencies[0].srcSubpass = renderer::ExternalSubpass;
-			createInfo.dependencies[0].dstSubpass = 0u;
-			createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
-			createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
-			createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
-
-			createInfo.dependencies[1].srcSubpass = 0u;
-			createInfo.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-			createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
-			createInfo.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eMemoryRead;
-			createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
-
-			m_renderPass = device.createRenderPass( createInfo );
-			m_frameBuffer.initialise( *m_renderPass
-				, index
-				, m_size );
-
-			if ( !m_renderTechnique )
+			if ( m_initialised )
 			{
-				try
-				{
-					auto name = cuT( "RenderTargetTechnique_" ) + string::toString( m_index );
-					m_renderTechnique = getEngine()->getRenderTechniqueCache().add( name
-						, std::make_shared< RenderTechnique >( name
-							, *this
-							, *getEngine()->getRenderSystem()
-							, m_techniqueParameters
-							, m_ssaoConfig ) );
-				}
-				catch ( Exception & p_exc )
-				{
-					Logger::logError( cuT( "Couldn't load render technique: " ) + string::stringCast< xchar >( p_exc.getFullDescription() ) );
-					throw;
-				}
+				m_initialised = doInitialiseVelocityTexture();
 			}
 
-			renderer::ImageCreateInfo image{};
-			image.flags = 0u;
-			image.arrayLayers = 1u;
-			image.extent.width = m_size.getWidth();
-			image.extent.height = m_size.getHeight();
-			image.extent.depth = 1u;
-			image.format = renderer::Format::eR16G16B16A16_SFLOAT;
-			image.imageType = renderer::TextureType::e2D;
-			image.initialLayout = renderer::ImageLayout::eUndefined;
-			image.mipLevels = 1u;
-			image.samples = renderer::SampleCountFlag::e1;
-			image.sharingMode = renderer::SharingMode::eExclusive;
-			image.tiling = renderer::ImageTiling::eOptimal;
-			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
-			auto velocityTexture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
-				, image
-				, renderer::MemoryPropertyFlag::eDeviceLocal );
-			m_velocityTexture.setTexture( velocityTexture );
-			m_velocityTexture.setSampler( getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + string::toString( m_index ) + cuT( "_Point" ) ) );
-			m_velocityTexture.getTexture()->getDefaultImage().initialiseSource();
-			m_velocityTexture.getTexture()->initialise();
+			if ( m_initialised )
+			{
+				m_initialised = doInitialiseTechnique();
+			}
 
-			m_size.set( m_frameBuffer.m_colourTexture.getTexture()->getDimensions().width
-				, m_frameBuffer.m_colourTexture.getTexture()->getDimensions().height );
-			m_renderTechnique->initialise( index );
-
-			m_postPostFxTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "sRGB Post effects" ), cuT( "sRGB Post effects" ) );
-			m_postFxTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "HDR Post effects" ), cuT( "HDR Post effects" ) );
+			m_srgbPostFxTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "sRGB Post effects" ), cuT( "sRGB Post effects" ) );
+			m_hdrPostFxTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "HDR Post effects" ), cuT( "HDR Post effects" ) );
 			m_overlaysTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Overlays" ), cuT( "Overlays" ) );
 			m_toneMappingTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Tone Mapping" ), cuT( "Tone Mapping" ) );
 
 			for ( auto effect : m_hdrPostEffects )
 			{
-				effect->initialise( *m_postFxTimer );
+				if ( m_initialised )
+				{
+					m_initialised = effect->initialise( *m_hdrPostFxTimer );
+				}
 			}
 
-			m_initialised = m_toneMapping->initialise( getSize()
-				, m_renderTechnique->getResult()
-				, *m_renderPass );
+			if ( m_initialised )
+			{
+				m_initialised = doInitialiseToneMapping();
+			}
 
 			for ( auto effect : m_srgbPostEffects )
 			{
-				effect->initialise( *m_postPostFxTimer );
+				if ( m_initialised )
+				{
+					m_initialised = effect->initialise( *m_srgbPostFxTimer );
+				}
 			}
 
 			m_overlayRenderer = std::make_shared< OverlayRenderer >( *getEngine()->getRenderSystem()
 				, m_frameBuffer.m_colourTexture.getTexture()->getDefaultView() );
 			m_overlayRenderer->initialise();
 
-			m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
 			m_signalReady = device.createSemaphore();
 		}
 	}
@@ -318,7 +245,7 @@ namespace castor3d
 		{
 			m_initialised = false;
 			m_signalReady.reset();
-			m_commandBuffer.reset();
+			m_toneMappingCommandBuffer.reset();
 			m_overlayRenderer->cleanup();
 			m_overlayRenderer.reset();
 
@@ -338,8 +265,8 @@ namespace castor3d
 			m_hdrPostEffects.clear();
 			m_srgbPostEffects.clear();
 
-			m_postFxTimer.reset();
-			m_postPostFxTimer.reset();
+			m_srgbPostFxTimer.reset();
+			m_hdrPostFxTimer.reset();
 			m_overlaysTimer.reset();
 			m_toneMappingTimer.reset();
 
@@ -368,7 +295,7 @@ namespace castor3d
 				{
 					getEngine()->getRenderSystem()->pushScene( scene.get() );
 					scene->getGeometryCache().fillInfo( info );
-					//doRender( info, m_frameBuffer, getCamera() );
+					doRender( info, m_frameBuffer, getCamera() );
 					getEngine()->getRenderSystem()->popScene();
 				}
 			}
@@ -454,13 +381,17 @@ namespace castor3d
 			, info );
 
 		// Draw HDR post effects.
-		semaphoreToWait = doApplyHdrPostEffects( *semaphoreToWait );
+		semaphoreToWait = doApplyPostEffects( *semaphoreToWait
+			, m_hdrPostEffects
+			, *m_hdrPostFxTimer );
 
 		// Then draw the render's result to the RenderTarget's frame buffer, applying the tone mapping operator.
-		semaphoreToWait = doApplyToneMapping( *semaphoreToWait, *fbo.m_frameBuffer );
+		semaphoreToWait = doApplyToneMapping( *semaphoreToWait );
 
 		// Apply the sRGB post effects.
-		semaphoreToWait = doApplySRgbPostEffects( *semaphoreToWait );
+		semaphoreToWait = doApplyPostEffects( *semaphoreToWait
+			, m_srgbPostEffects
+			, *m_srgbPostFxTimer );
 
 		// And now render overlays.
 		semaphoreToWait = doRenderOverlays( *semaphoreToWait, *camera );
@@ -472,72 +403,154 @@ namespace castor3d
 #endif
 	}
 
-	renderer::Semaphore const * RenderTarget::doApplyHdrPostEffects( renderer::Semaphore const & toWait )
+	void RenderTarget::doInitialiseRenderPass()
 	{
-		auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
-		m_postFxTimer->start();
-		auto * result = &toWait;
+		renderer::RenderPassCreateInfo createInfo{};
+		createInfo.flags = 0u;
 
-		for ( auto effect : m_hdrPostEffects )
-		{
-			queue.submit( effect->getCommands()
-				, *result
-				, renderer::PipelineStageFlag::eColourAttachmentOutput
-				, effect->getSemaphore()
-				, nullptr );
-			result = &effect->getSemaphore();
-		}
+		createInfo.attachments.resize( 1u );
+		createInfo.attachments[0].format = getPixelFormat();
+		createInfo.attachments[0].samples = renderer::SampleCountFlag::e1;
+		createInfo.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+		createInfo.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+		createInfo.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		createInfo.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		createInfo.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+		createInfo.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
 
-		m_postFxTimer->stop();
+		renderer::AttachmentReference colourReference;
+		colourReference.attachment = 0u;
+		colourReference.layout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+		createInfo.subpasses.resize( 1u );
+		createInfo.subpasses[0].flags = 0u;
+		createInfo.subpasses[0].colorAttachments = { colourReference };
+
+		createInfo.dependencies.resize( 2u );
+		createInfo.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		createInfo.dependencies[0].dstSubpass = 0u;
+		createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+		createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
+		createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		createInfo.dependencies[1].srcSubpass = 0u;
+		createInfo.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+		createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+		createInfo.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eMemoryRead;
+		createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		m_renderPass = getEngine()->getRenderSystem()->getCurrentDevice()->createRenderPass( createInfo );
+	}
+
+	bool RenderTarget::doInitialiseFrameBuffer()
+	{
+		auto result = m_frameBuffer.initialise( *m_renderPass
+			, m_size );
+		m_size.set( m_frameBuffer.m_colourTexture.getTexture()->getDimensions().width
+			, m_frameBuffer.m_colourTexture.getTexture()->getDimensions().height );
 		return result;
 	}
 
-	renderer::Semaphore const * RenderTarget::doApplyToneMapping( renderer::Semaphore const & toWait
-		, renderer::FrameBuffer const & frameBuffer )
+	bool RenderTarget::doInitialiseVelocityTexture()
 	{
-		auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
-		SceneSPtr scene = getScene();
-		m_toneMappingTimer->start();
-		auto * result = &toWait;
-		static renderer::ClearColorValue clear{ 0.0f, 0.0f, 0.0f, 1.0f };
+		renderer::ImageCreateInfo image{};
+		image.flags = 0u;
+		image.arrayLayers = 1u;
+		image.extent.width = m_size.getWidth();
+		image.extent.height = m_size.getHeight();
+		image.extent.depth = 1u;
+		image.format = renderer::Format::eR16G16B16A16_SFLOAT;
+		image.imageType = renderer::TextureType::e2D;
+		image.initialLayout = renderer::ImageLayout::eUndefined;
+		image.mipLevels = 1u;
+		image.samples = renderer::SampleCountFlag::e1;
+		image.sharingMode = renderer::SharingMode::eExclusive;
+		image.tiling = renderer::ImageTiling::eOptimal;
+		image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+		auto velocityTexture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
+			, image
+			, renderer::MemoryPropertyFlag::eDeviceLocal );
+		m_velocityTexture.setTexture( velocityTexture );
+		m_velocityTexture.setSampler( getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + string::toString( m_index ) + cuT( "_Point" ) ) );
+		m_velocityTexture.getTexture()->getDefaultImage().initialiseSource();
+		return m_velocityTexture.getTexture()->initialise();
+	}
 
-		if ( m_commandBuffer->begin() )
+	bool RenderTarget::doInitialiseTechnique()
+	{
+		if ( !m_renderTechnique )
 		{
-			m_commandBuffer->resetQueryPool( m_toneMappingTimer->getQuery()
+			try
+			{
+				auto name = cuT( "RenderTargetTechnique_" ) + string::toString( m_index );
+				m_renderTechnique = getEngine()->getRenderTechniqueCache().add( name
+					, std::make_shared< RenderTechnique >( name
+						, *this
+						, *getEngine()->getRenderSystem()
+						, m_techniqueParameters
+						, m_ssaoConfig ) );
+			}
+			catch ( Exception & p_exc )
+			{
+				Logger::logError( cuT( "Couldn't load render technique: " ) + string::stringCast< xchar >( p_exc.getFullDescription() ) );
+				throw;
+			}
+		}
+
+		return m_renderTechnique->initialise();
+	}
+
+	bool RenderTarget::doInitialiseToneMapping()
+	{
+		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		auto result = m_toneMapping->initialise( getSize()
+			, m_renderTechnique->getResult()
+			, *m_renderPass );
+
+		m_toneMappingCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+		renderer::ClearColorValue const clear{ 0.0f, 0.0f, 1.0f, 1.0f };
+
+		if ( result )
+		{
+			result = m_toneMappingCommandBuffer->begin();
+		}
+
+		if ( result )
+		{
+			m_toneMappingCommandBuffer->resetQueryPool( m_toneMappingTimer->getQuery()
 				, 0u
 				, 2u );
-			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			m_toneMappingCommandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
 				, m_toneMappingTimer->getQuery()
 				, 0u );
-			m_commandBuffer->beginRenderPass( *m_renderPass
-				, frameBuffer
+			m_toneMappingCommandBuffer->beginRenderPass( *m_renderPass
+				, *m_frameBuffer.m_frameBuffer
 				, { clear }
-				, renderer::SubpassContents::eSecondaryCommandBuffers );
-			m_commandBuffer->executeCommands( { m_toneMapping->getCommandBuffer() } );
-			m_commandBuffer->endRenderPass();
-			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+				, renderer::SubpassContents::eInline );
+			m_toneMapping->registerFrame( *m_toneMappingCommandBuffer );
+			m_toneMappingCommandBuffer->endRenderPass();
+			m_toneMappingCommandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
 				, m_toneMappingTimer->getQuery()
 				, 1u );
-			m_commandBuffer->end();
-			queue.submit( *m_commandBuffer
-				, *result
-				, renderer::PipelineStageFlag::eColourAttachmentOutput
-				, m_toneMapping->getSemaphore()
-				, nullptr );
-			result = &m_toneMapping->getSemaphore();
+			result = m_toneMappingCommandBuffer->end();
 		}
 
-		m_toneMappingTimer->stop();
 		return result;
 	}
 
-	renderer::Semaphore const * RenderTarget::doApplySRgbPostEffects( renderer::Semaphore const & toWait )
+	renderer::Semaphore const * RenderTarget::doApplyPostEffects( renderer::Semaphore const & toWait
+		, PostEffectPtrArray const & effects
+		, RenderPassTimer & timer )
 	{
 		auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
-		m_postPostFxTimer->start();
+		timer.start();
 		auto * result = &toWait;
 
-		for ( auto & effect : m_srgbPostEffects )
+		for ( auto effect : effects )
 		{
 			queue.submit( effect->getCommands()
 				, *result
@@ -547,7 +560,22 @@ namespace castor3d
 			result = &effect->getSemaphore();
 		}
 
-		m_postPostFxTimer->stop();
+		timer.stop();
+		return result;
+	}
+
+	renderer::Semaphore const * RenderTarget::doApplyToneMapping( renderer::Semaphore const & toWait )
+	{
+		auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
+		m_toneMappingTimer->start();
+		auto * result = &toWait;
+		queue.submit( *m_toneMappingCommandBuffer
+			, *result
+			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, m_toneMapping->getSemaphore()
+			, nullptr );
+		m_toneMappingTimer->stop();
+		result = &m_toneMapping->getSemaphore();
 		return result;
 	}
 

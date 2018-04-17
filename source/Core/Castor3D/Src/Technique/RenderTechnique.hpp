@@ -69,14 +69,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
-		 *\param[in]	index		The base texture index.
 		 *\return		\p true if ok.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
-		 *\param[in]	index		L'index de texture de base.
 		 *\return		\p true if ok.
 		 */
-		C3D_API bool initialise( uint32_t & index );
+		C3D_API bool initialise();
 		/**
 		 *\~english
 		 *\brief		Cleanup function
@@ -181,12 +179,16 @@ namespace castor3d
 
 	private:
 		void doInitialiseShadowMaps();
+		void doInitialiseClearRenderPass();
+		void doInitialiseOpaquePass();
+		void doInitialiseBackgroundRenderPass();
+		void doInitialiseTransparentPass();
 		void doCleanupShadowMaps();
 		void doUpdateShadowMaps( RenderQueueArray & queues );
 		void doUpdateParticles( RenderInfo & info );
-		void doInitialiseBackgroundRenderPass();
 		renderer::Semaphore const * doRenderShadowMaps( renderer::Semaphore const & semaphore );
 		renderer::Semaphore const * doRenderEnvironmentMaps( renderer::Semaphore const & semaphore );
+		renderer::Semaphore const * doClear( renderer::Semaphore const & semaphore );
 		renderer::Semaphore const * doRenderOpaque( castor::Point2r const & jitter
 			, RenderInfo & info
 			, renderer::Semaphore const & semaphore );
@@ -216,6 +218,10 @@ namespace castor3d
 		renderer::RenderPassPtr m_bgRenderPass;
 		renderer::FrameBufferPtr m_bgFrameBuffer;
 		renderer::CommandBufferPtr m_bgCommandBuffer;
+		renderer::RenderPassPtr m_clearRenderPass;
+		renderer::FrameBufferPtr m_clearFrameBuffer;
+		renderer::CommandBufferPtr m_clearCommandBuffer;
+		renderer::SemaphorePtr m_clearSemaphore;
 	};
 }
 

@@ -144,33 +144,28 @@ namespace castor3d
 	{
 		m_engine.setPerObjectLighting( false );
 		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
-		renderer::ClearColorValue colour
+		static renderer::ClearValueArray const clearValues
 		{
-			0.0f,
-			0.0f,
-			0.0f,
-			1.0f
+			renderer::DepthStencilClearValue{ 1.0, 0 },
+			renderer::ClearColorValue{ 0.2f, 0.0f, 0.0f, 1.0f },
+			renderer::ClearColorValue{ 0.4f, 0.0f, 0.0f, 1.0f },
+			renderer::ClearColorValue{ 0.6f, 0.0f, 0.0f, 1.0f },
+			renderer::ClearColorValue{ 0.8f, 0.0f, 0.0f, 1.0f },
+			renderer::ClearColorValue{ 1.0f, 0.0f, 0.0f, 1.0f },
 		};
-		renderer::DepthStencilClearValue depth{ 1.0, 0 };
-
 
 		if ( m_nodesCommands->begin() )
 		{
 			m_nodesCommands->beginRenderPass( m_opaquePass.getRenderPass()
 				, m_opaquePass.getFrameBuffer()
-				, { depth, colour, colour, colour, colour, colour }
+				, clearValues
 				, renderer::SubpassContents::eSecondaryCommandBuffers );
-
-			if ( m_opaquePass.hasNodes() )
-			{
-				m_nodesCommands->executeCommands( { m_opaquePass.getCommandBuffer() } );
-			}
-
+			m_nodesCommands->executeCommands( { m_opaquePass.getCommandBuffer() } );
 			m_nodesCommands->endRenderPass();
 			m_nodesCommands->end();
 			device.getGraphicsQueue().submit( { *m_nodesCommands }
 				, {}
-				, { renderer::PipelineStageFlag::eAllCommands }
+				, { renderer::PipelineStageFlag::eColourAttachmentOutput }
 				, { m_opaquePass.getSemaphore() }
 				, nullptr );
 			device.getGraphicsQueue().waitIdle();

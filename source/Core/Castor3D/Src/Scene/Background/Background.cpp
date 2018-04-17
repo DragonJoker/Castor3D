@@ -56,8 +56,12 @@ namespace castor3d
 
 		m_sampler.lock()->initialise();
 		auto result = doInitialiseVertexBuffer()
-			&& doInitialise( renderPass )
-			&& doInitialisePipeline( doInitialiseShader(), renderPass );
+			&& doInitialise( renderPass );
+
+		if ( result )
+		{
+			doInitialisePipeline( doInitialiseShader(), renderPass );
+		}
 
 		if ( result
 			&& m_scene.getMaterialsType() != MaterialType::eLegacy
@@ -375,8 +379,7 @@ namespace castor3d
 			renderer::MultisampleState{},
 			renderer::ColourBlendState::createDefault(),
 			{ renderer::DynamicState::eViewport, renderer::DynamicState::eScissor },
-			renderer::DepthStencilState{ 0u, false, false }
-			//renderer::DepthStencilState{ 0u, true, false, renderer::CompareOp::eLessEqual }
+			renderer::DepthStencilState{ 0u, true, false, renderer::CompareOp::eLessEqual }
 		} );
 		return true;
 	}

@@ -76,6 +76,7 @@ namespace castor3d
 		: SceneBackground{ engine, scene, BackgroundType::eColour }
 		, m_copyRegions{ doInitialiseCopies() }
 	{
+		m_hdr = false;
 		m_texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
 			, doGetImageCreate()
 			, renderer::MemoryPropertyFlag::eDeviceLocal );

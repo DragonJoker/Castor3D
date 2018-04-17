@@ -67,7 +67,6 @@ namespace castor3d
 		renderPass.flags = 0u;
 
 		renderPass.attachments.resize( 3u );
-		renderPass.attachments[0].index = 0u;
 		renderPass.attachments[0].format = ShadowMapSpot::RawDepthFormat;
 		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
 		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
@@ -77,7 +76,6 @@ namespace castor3d
 		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
 		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
 
-		renderPass.attachments[1].index = 1u;
 		renderPass.attachments[1].format = ShadowMapSpot::LinearDepthFormat;
 		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eClear;
 		renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
@@ -87,7 +85,6 @@ namespace castor3d
 		renderPass.attachments[1].initialLayout = renderer::ImageLayout::eUndefined;
 		renderPass.attachments[1].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
 
-		renderPass.attachments[2].index = 2u;
 		renderPass.attachments[2].format = ShadowMapSpot::VarianceFormat;
 		renderPass.attachments[2].loadOp = renderer::AttachmentLoadOp::eClear;
 		renderPass.attachments[2].storeOp = renderer::AttachmentStoreOp::eStore;

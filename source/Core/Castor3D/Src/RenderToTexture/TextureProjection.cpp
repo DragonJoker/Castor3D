@@ -57,7 +57,6 @@ namespace castor3d
 		renderPass.flags = 0;
 
 		renderPass.attachments.resize( 2u );
-		renderPass.attachments[0].index = 0u;
 		renderPass.attachments[0].format = targetDepth;
 		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
 		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
@@ -67,7 +66,6 @@ namespace castor3d
 		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
 		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
 
-		renderPass.attachments[1].index = 1u;
 		renderPass.attachments[1].format = targetColour;
 		renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
 		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eLoad;

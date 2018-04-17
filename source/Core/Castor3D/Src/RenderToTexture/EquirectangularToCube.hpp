@@ -29,7 +29,7 @@ namespace castor3d
 	class EquirectangularToCube
 	{
 	public:
-		EquirectangularToCube( renderer::Texture const & equiRectangular
+		EquirectangularToCube( TextureLayout const & equiRectangular
 			, RenderSystem & renderSystem
 			, TextureLayout const & target );
 
@@ -47,10 +47,10 @@ namespace castor3d
 
 		renderer::Device const & m_device;
 		renderer::CommandBufferPtr m_commandBuffer;
-		renderer::TextureViewPtr m_view;
+		renderer::TextureView const & m_view;
 		renderer::SamplerPtr m_sampler;
 		renderer::UniformBufferPtr< renderer::Mat4 > m_matrixUbo;
-		renderer::VertexBufferPtr< castor::Point4f > m_vertexBuffer;
+		renderer::VertexBufferPtr< renderer::Vec4 > m_vertexBuffer;
 		renderer::VertexLayoutPtr m_vertexLayout;
 		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
 		renderer::DescriptorSetPoolPtr m_descriptorPool;

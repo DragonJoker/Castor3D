@@ -8,6 +8,8 @@ See LICENSE file in root folder
 
 #include <Render/RenderSystem.hpp>
 
+#include <Miscellaneous/DynamicLibrary.hpp>
+
 namespace GlRender
 {
 	class RenderSystem
@@ -18,16 +20,6 @@ namespace GlRender
 		~RenderSystem();
 
 		static castor3d::RenderSystemUPtr create( castor3d::Engine & engine );
-
-	private:
-		/**
-		 *\copydoc		castor3d::RenderSystem::doInitialise
-		 */
-		void doInitialise()override;
-		/**
-		 *\copydoc		castor3d::RenderSystem::doCleanup
-		 */
-		void doCleanup()override;
 
 	public:
 		C3D_Gl_API static castor::String Name;

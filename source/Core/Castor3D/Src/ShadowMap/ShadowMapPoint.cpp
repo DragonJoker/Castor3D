@@ -275,6 +275,9 @@ namespace castor3d
 			frameBuffer.varianceView.reset();
 			frameBuffer.linearView = nullptr;
 		}
+
+		m_depthView.reset();
+		m_depthTexture.reset();
 	}
 
 	void ShadowMapPoint::doUpdateFlags( PassFlags & passFlags

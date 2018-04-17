@@ -400,7 +400,6 @@ namespace castor3d
 			renderPass.flags = 0u;
 
 			renderPass.attachments.resize( 1u );
-			renderPass.attachments[0].index = 0u;
 			renderPass.attachments[0].format = ColourFormat;
 			renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
 			renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;

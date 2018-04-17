@@ -24,7 +24,36 @@ namespace castor3d
 	void RenderSystem::initialise( GpuInformations && p_informations )
 	{
 		m_gpuInformations = std::move( p_informations );
-		doInitialise();
+
+		if ( !m_initialised )
+		{
+			auto & device = *getMainDevice();
+			StringStream stream;
+			stream << ( device.getProperties().apiVersion >> 22 ) << cuT( "." ) << ( ( device.getProperties().apiVersion >> 12 ) & 0x0FFF );
+
+			m_gpuInformations.setRenderer( device.getProperties().deviceName );
+			m_gpuInformations.setVersion( stream.str() );
+			m_gpuInformations.setShaderLanguageVersion( device.getShaderVersion() );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eConstantsBuffers, true );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eTextureBuffers, true );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eInstancing, true );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eAccumulationBuffer, true );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eNonPowerOfTwoTextures, true );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eAtomicCounterBuffers, true );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eImmutableTextureStorage, true );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eShaderStorageBuffers, true );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eTransformFeedback, true );
+
+			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eCompute, true );
+			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eTessellationControl, device.getFeatures().tessellationShader );
+			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eTessellationEvaluation, device.getFeatures().tessellationShader );
+			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eGeometry, device.getFeatures().geometryShader );
+			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eFragment, true );
+			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eVertex, true );
+
+			m_initialised = true;
+		}
+
 		Logger::logInfo( cuT( "Vendor: " ) + m_gpuInformations.getVendor() );
 		Logger::logInfo( cuT( "Renderer: " ) + m_gpuInformations.getRenderer() );
 		Logger::logInfo( cuT( "Version: " ) + m_gpuInformations.getVersion() );
@@ -34,7 +63,6 @@ namespace castor3d
 	void RenderSystem::cleanup()
 	{
 		m_mainDevice.reset();
-		doCleanup();
 
 #if C3D_TRACE_OBJECTS
 

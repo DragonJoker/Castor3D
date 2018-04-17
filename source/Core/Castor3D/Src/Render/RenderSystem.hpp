@@ -290,22 +290,6 @@ namespace castor3d
 		}
 
 	protected:
-		/**
-		 *\~english
-		 *\brief		Initialises the render system
-		 *\~french
-		 *\brief		Initialise le render system
-		 */
-		C3D_API virtual void doInitialise() = 0;
-		/**
-		 *\~english
-		 *\brief		Cleans the render system up
-		 *\~french
-		 *\brief		Nettoie le render system
-		 */
-		C3D_API virtual void doCleanup() = 0;
-
-	protected:
 		std::recursive_mutex m_mutex;
 		bool m_initialised;
 		GpuInformations m_gpuInformations;

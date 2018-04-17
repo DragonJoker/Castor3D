@@ -508,7 +508,6 @@ namespace castor3d
 		renderPass.flags = 0u;
 
 		renderPass.attachments.resize( 2u );
-		renderPass.attachments[0].index = 0u;
 		renderPass.attachments[0].format = m_colourTexture->getFormat();
 		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
 		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
@@ -518,7 +517,6 @@ namespace castor3d
 		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
 		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eTransferDstOptimal;
 
-		renderPass.attachments[1].index = 1u;
 		renderPass.attachments[1].format = m_depthTexture->getFormat();
 		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eClear;
 		renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;

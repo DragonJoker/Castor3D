@@ -175,6 +175,17 @@ namespace castor3d
 		{
 			doInitialiseEquiTexture();
 		}
+		else
+		{
+			m_hdr = m_texture->getPixelFormat() == renderer::Format::eR32_SFLOAT
+				|| m_texture->getPixelFormat() == renderer::Format::eR32G32_SFLOAT
+				|| m_texture->getPixelFormat() == renderer::Format::eR32G32B32_SFLOAT
+				|| m_texture->getPixelFormat() == renderer::Format::eR32G32B32A32_SFLOAT
+				|| m_texture->getPixelFormat() == renderer::Format::eR16_SFLOAT
+				|| m_texture->getPixelFormat() == renderer::Format::eR16G16_SFLOAT
+				|| m_texture->getPixelFormat() == renderer::Format::eR16G16B16_SFLOAT
+				|| m_texture->getPixelFormat() == renderer::Format::eR16G16B16A16_SFLOAT;
+		}
 
 		m_sampler.lock()->initialise();
 		return m_texture->initialise();
@@ -187,12 +198,12 @@ namespace castor3d
 		m_equiTexture->initialise();
 
 		// create the cube texture if needed.
-		if ( m_texture->getPixelFormat() != renderer::Format::eR32G32B32A32_SFLOAT
+		if ( m_texture->getPixelFormat() != renderer::Format::eR16G16B16A16_SFLOAT
 			|| m_texture->getDimensions().width != m_equiSize.getWidth()
 			|| m_texture->getDimensions().height != m_equiSize.getHeight() )
 		{
 			m_texture = std::make_shared< TextureLayout >( renderSystem
-				, doGetImageCreate( renderer::Format::eR32G32B32A32_SFLOAT, m_equiSize, true )
+				, doGetImageCreate( renderer::Format::eR16G16B16A16_SFLOAT, m_equiSize, true )
 				, renderer::MemoryPropertyFlag::eDeviceLocal );
 			m_texture->getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource();
 			m_texture->getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource();
@@ -211,7 +222,7 @@ namespace castor3d
 				|| m_equiTexture->getPixelFormat() == renderer::Format::eR16G16B16_SFLOAT
 				|| m_equiTexture->getPixelFormat() == renderer::Format::eR16G16B16A16_SFLOAT;
 
-			EquirectangularToCube equiToCube{ m_equiTexture->getTexture()
+			EquirectangularToCube equiToCube{ *m_equiTexture
 				, renderSystem
 				, *m_texture };
 			equiToCube.render();

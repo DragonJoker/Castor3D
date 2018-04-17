@@ -727,7 +727,6 @@ namespace castor3d
 		renderPass.flags = 0u;
 
 		renderPass.attachments.resize( 1u );
-		renderPass.attachments[0].index = 0u;
 		renderPass.attachments[0].format = m_target.getFormat();
 		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
 		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;

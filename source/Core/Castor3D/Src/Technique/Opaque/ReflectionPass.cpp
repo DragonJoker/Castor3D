@@ -52,12 +52,12 @@ namespace castor3d
 		{
 			float data[] =
 			{
-				0, 0, 0, 0,
-				1, 1, 1, 1,
-				0, 1, 0, 1,
-				0, 0, 0, 0,
-				1, 0, 1, 0,
-				1, 1, 1, 1
+				-1, -1, 0, 0,
+				+1, +1, 1, 1,
+				-1, +1, 0, 1,
+				-1, -1, 0, 0,
+				+1, -1, 1, 0,
+				+1, +1, 1, 1
 			};
 
 			auto vertexBuffer = std::make_unique< renderer::VertexBufferBase >( *engine.getRenderSystem()->getCurrentDevice()
@@ -928,7 +928,6 @@ namespace castor3d
 			renderPass.flags = 0u;
 
 			renderPass.attachments.resize( 1u );
-			renderPass.attachments[0].index = 0u;
 			renderPass.attachments[0].format = format;
 			renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
 			renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
@@ -1147,7 +1146,7 @@ namespace castor3d
 		, m_pipeline{ doCreateRenderPipeline( *m_pipelineLayout, m_program, renderPass, size ) }
 		, m_commandBuffer{ engine.getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer( true ) }
 	{
-		static renderer::ClearColorValue const clear{ 0.0, 0.0, 0.0, 0.0 };
+		static renderer::ClearColorValue const clear{ 0.0, 1.0, 0.0, 0.0 };
 		m_texDescriptorSet->setBindings( m_texDescriptorWrites );
 		m_texDescriptorSet->update();
 

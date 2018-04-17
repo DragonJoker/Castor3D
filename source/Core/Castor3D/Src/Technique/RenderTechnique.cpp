@@ -181,7 +181,7 @@ namespace castor3d
 		m_opaquePass.reset();
 	}
 
-	bool RenderTechnique::initialise( uint32_t & index )
+	bool RenderTechnique::initialise()
 	{
 		if ( !m_initialised )
 		{
@@ -197,33 +197,10 @@ namespace castor3d
 			m_signalFinished = getEngine()->getRenderSystem()->getCurrentDevice()->createSemaphore();
 
 			doInitialiseShadowMaps();
+			doInitialiseClearRenderPass();
 			doInitialiseBackgroundRenderPass();
-#if !DEBUG_FORWARD_RENDERING
-			m_opaquePass->initialise( m_size );
-			m_deferredRendering = std::make_unique< DeferredRendering >( *getEngine()
-				, static_cast< OpaquePass & >( *m_opaquePass )
-				, m_depthBuffer
-				, m_renderTarget.getVelocity().getTexture()
-				, m_colourTexture
-				, m_renderTarget.getSize()
-				, *m_renderTarget.getScene()
-				, m_renderTarget.getCamera()->getViewport()
-				, m_ssaoConfig );
-#else
-			m_opaquePass->initialise( m_size );
-#endif
-#if USE_WEIGHTED_BLEND
-			static_cast< TransparentPass & >( *m_transparentPass ).setDepthFormat( m_depthBuffer->getPixelFormat() );
-			m_transparentPass->initialise( m_size );
-			m_weightedBlendRendering = std::make_unique< WeightedBlendRendering >( *getEngine()
-				, static_cast< TransparentPass & >( *m_transparentPass )
-				, m_depthBuffer->getDefaultView()
-				, m_colourTexture->getDefaultView()
-				, m_renderTarget.getSize()
-				, *m_renderTarget.getScene() );
-#else
-			m_transparentPass->initialise( m_size );
-#endif
+			doInitialiseOpaquePass();
+			doInitialiseTransparentPass();
 
 			m_particleTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Particles" ), cuT( "Particles" ) );
 			m_initialised = true;
@@ -234,6 +211,11 @@ namespace castor3d
 
 	void RenderTechnique::cleanup()
 	{
+		m_clearCommandBuffer.reset();
+		m_clearFrameBuffer.reset();
+		m_clearRenderPass.reset();
+		m_clearSemaphore.reset();
+		m_bgCommandBuffer.reset();
 		m_bgFrameBuffer.reset();
 		m_bgRenderPass.reset();
 		m_particleTimer.reset();
@@ -299,6 +281,7 @@ namespace castor3d
 #endif
 
 		// Render part
+		semaphore = doClear( *semaphore );
 		semaphore = doRenderOpaque( jitter, info, *semaphore );
 		semaphore = doRenderBackground( *semaphore );
 		semaphore = doRenderTransparent( jitter, info, *semaphore );
@@ -371,6 +354,140 @@ namespace castor3d
 			shadowMap->initialise();
 		}
 	}
+	
+	void RenderTechnique::doInitialiseClearRenderPass()
+	{
+		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		renderer::RenderPassCreateInfo renderPass;
+		renderPass.flags = 0;
+
+		renderPass.attachments.resize( 1u );
+		renderPass.attachments[0].format = m_depthBuffer->getPixelFormat();
+		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+
+		renderPass.subpasses.resize( 1u );
+		renderPass.subpasses[0].flags = 0u;
+		renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
+
+		m_clearRenderPass = device.createRenderPass( renderPass );
+
+		renderer::FrameBufferAttachmentArray attaches
+		{
+			{ *( m_clearRenderPass->getAttachments().begin() + 0u ), m_depthBuffer->getDefaultView() },
+		};
+		m_clearFrameBuffer = m_clearRenderPass->createFrameBuffer( { m_depthBuffer->getDimensions().width, m_depthBuffer->getDimensions().height }
+			, std::move( attaches ) );
+
+		m_clearCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+		static renderer::ClearValueArray const clearValues
+		{
+			renderer::DepthStencilClearValue{ 1.0, 0 },
+		};
+
+		if ( m_clearCommandBuffer->begin() )
+		{
+			m_clearCommandBuffer->beginRenderPass( *m_clearRenderPass
+				, *m_clearFrameBuffer
+				, clearValues
+				, renderer::SubpassContents::eInline );
+			m_clearCommandBuffer->endRenderPass();
+			m_clearCommandBuffer->end();
+		}
+
+		m_clearSemaphore = device.createSemaphore();
+	}
+
+	void RenderTechnique::doInitialiseOpaquePass()
+	{
+#if !DEBUG_FORWARD_RENDERING
+
+		m_opaquePass->initialise( m_size );
+		m_deferredRendering = std::make_unique< DeferredRendering >( *getEngine()
+			, static_cast< OpaquePass & >( *m_opaquePass )
+			, m_depthBuffer
+			, m_renderTarget.getVelocity().getTexture()
+			, m_colourTexture
+			, m_renderTarget.getSize()
+			, *m_renderTarget.getScene()
+			, m_renderTarget.getCamera()->getViewport()
+			, m_ssaoConfig );
+#else
+		m_opaquePass->initialise( m_size );
+#endif
+	}
+
+	void RenderTechnique::doInitialiseBackgroundRenderPass()
+	{
+		auto & renderSystem = *getEngine()->getRenderSystem();
+		auto & device = *renderSystem.getCurrentDevice();
+		m_bgCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
+
+		renderer::RenderPassCreateInfo renderPass;
+		renderPass.flags = 0;
+
+		renderPass.attachments.resize( 2u );
+		renderPass.attachments[0].format = m_depthBuffer->getPixelFormat();
+		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
+		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+
+		renderPass.attachments[1].format = m_colourTexture->getPixelFormat();
+		renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[1].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[1].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+		renderPass.subpasses.resize( 1u );
+		renderPass.subpasses[0].flags = 0u;
+		renderPass.subpasses[0].colorAttachments = { { 1u, renderer::ImageLayout::eColourAttachmentOptimal } };
+		renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
+
+		m_bgRenderPass = device.createRenderPass( renderPass );
+
+		renderer::FrameBufferAttachmentArray attaches
+		{
+			{ *( m_bgRenderPass->getAttachments().begin() + 0u ), m_depthBuffer->getDefaultView() },
+			{ *( m_bgRenderPass->getAttachments().begin() + 1u ), m_colourTexture->getDefaultView() },
+		};
+		m_bgFrameBuffer = m_bgRenderPass->createFrameBuffer( { m_depthBuffer->getDimensions().width, m_depthBuffer->getDimensions().height }
+			, std::move( attaches ) );
+
+		auto & background = m_renderTarget.getScene()->getBackground();
+		background.initialise( *m_bgRenderPass );
+		background.prepareFrame( *m_bgCommandBuffer
+			, Size{ m_colourTexture->getWidth(), m_colourTexture->getHeight() }
+			, *m_bgRenderPass
+			, *m_bgFrameBuffer );
+	}
+
+	void RenderTechnique::doInitialiseTransparentPass()
+	{
+#if USE_WEIGHTED_BLEND
+		static_cast< TransparentPass & >( *m_transparentPass ).setDepthFormat( m_depthBuffer->getPixelFormat() );
+		m_transparentPass->initialise( m_size );
+		m_weightedBlendRendering = std::make_unique< WeightedBlendRendering >( *getEngine()
+			, static_cast< TransparentPass & >( *m_transparentPass )
+			, m_depthBuffer->getDefaultView()
+			, m_colourTexture->getDefaultView()
+			, m_renderTarget.getSize()
+			, *m_renderTarget.getScene() );
+#else
+		m_transparentPass->initialise( m_size );
+#endif
+	}
 
 	void RenderTechnique::doCleanupShadowMaps()
 	{
@@ -434,59 +551,6 @@ namespace castor3d
 		m_particleTimer->stop();
 	}
 
-	void RenderTechnique::doInitialiseBackgroundRenderPass()
-	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
-		m_bgCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
-
-		renderer::RenderPassCreateInfo renderPass;
-		renderPass.flags = 0;
-
-		renderPass.attachments.resize( 2u );
-		renderPass.attachments[0].index = 0u;
-		renderPass.attachments[0].format = m_depthBuffer->getPixelFormat();
-		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
-		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
-		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
-
-		renderPass.attachments[1].index = 0u;
-		renderPass.attachments[1].format = m_colourTexture->getPixelFormat();
-		renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eLoad;
-		renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[1].initialLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
-		renderPass.attachments[1].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
-
-		renderPass.subpasses.resize( 1u );
-		renderPass.subpasses[0].flags = 0u;
-		renderPass.subpasses[0].colorAttachments = { { 1u, renderer::ImageLayout::eColourAttachmentOptimal } };
-		renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
-
-		m_bgRenderPass = device.createRenderPass( renderPass );
-
-		renderer::FrameBufferAttachmentArray attaches
-		{
-			{ *( m_bgRenderPass->getAttachments().begin() + 0u ), m_depthBuffer->getDefaultView() },
-			{ *( m_bgRenderPass->getAttachments().begin() + 1u ), m_colourTexture->getDefaultView() },
-		};
-		m_bgFrameBuffer = m_bgRenderPass->createFrameBuffer( { m_depthBuffer->getDimensions().width, m_depthBuffer->getDimensions().height }
-			, std::move( attaches ) );
-
-		auto & background = m_renderTarget.getScene()->getBackground();
-		background.initialise( *m_bgRenderPass );
-		background.prepareFrame( *m_bgCommandBuffer
-			, Size{ m_colourTexture->getWidth(), m_colourTexture->getHeight() }
-			, *m_bgRenderPass
-			, *m_bgFrameBuffer );
-	}
-
 	renderer::Semaphore const * RenderTechnique::doRenderShadowMaps( renderer::Semaphore const & semaphore )
 	{
 		renderer::Semaphore const * result = &semaphore;
@@ -518,30 +582,44 @@ namespace castor3d
 		return result;
 	}
 
+	renderer::Semaphore const * RenderTechnique::doClear( renderer::Semaphore const & semaphore )
+	{
+		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		device.getGraphicsQueue().submit( { *m_clearCommandBuffer }
+			, {}
+			, {}
+			, { *m_clearSemaphore }
+			, nullptr );
+		return m_clearSemaphore.get();
+	}
+
 	renderer::Semaphore const * RenderTechnique::doRenderOpaque( Point2r const & jitter
 		, RenderInfo & info
 		, renderer::Semaphore const & semaphore )
 	{
 		renderer::Semaphore const * result = &semaphore;
-		auto & scene = *m_renderTarget.getScene();
 
-		auto & camera = *m_renderTarget.getCamera();
+		if ( m_opaquePass->hasNodes() )
+		{
+			auto & scene = *m_renderTarget.getScene();
+			auto & camera = *m_renderTarget.getCamera();
 
 #if DEBUG_FORWARD_RENDERING
 
-		getEngine()->setPerObjectLighting( true );
-		camera.apply();
-		m_frameBuffer.m_frameBuffer->bind( FrameBufferTarget::eDraw );
-		m_frameBuffer.m_frameBuffer->setDrawBuffers();
-		m_frameBuffer.m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
-		m_opaquePass->render( info
-			, m_activeShadowMaps );
+			getEngine()->setPerObjectLighting( true );
+			camera.apply();
+			m_frameBuffer.m_frameBuffer->bind( FrameBufferTarget::eDraw );
+			m_frameBuffer.m_frameBuffer->setDrawBuffers();
+			m_frameBuffer.m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
+			m_opaquePass->render( info
+				, m_activeShadowMaps );
 
 #else
 
-		result = &m_deferredRendering->render( info, scene, camera, *result );
+			result = &m_deferredRendering->render( info, scene, camera, *result );
 
 #endif
+		}
 
 		return result;
 	}
@@ -566,10 +644,10 @@ namespace castor3d
 		, renderer::Semaphore const & semaphore )
 	{
 		renderer::Semaphore const * result = &semaphore;
-		auto & scene = *m_renderTarget.getScene();
 
 		if ( m_transparentPass->hasNodes() )
 		{
+			auto & scene = *m_renderTarget.getScene();
 			auto & camera = *m_renderTarget.getCamera();
 
 #if USE_WEIGHTED_BLEND

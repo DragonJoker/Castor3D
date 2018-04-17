@@ -61,21 +61,19 @@ namespace castor3d
 		renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
 
 		renderPass.attachments.resize( gpResult.getViews().size() );
-		renderPass.attachments[0].index = 0u;
 		renderPass.attachments[0].format = gpResult.getViews()[0]->getFormat();
-		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
 		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
 		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
 		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
 
 		for ( size_t i = 1u; i < gpResult.getViews().size(); ++i )
 		{
-			renderPass.attachments[i].index = uint32_t( i );
 			renderPass.attachments[i].format = gpResult.getViews()[i]->getFormat();
-			renderPass.attachments[i].loadOp = renderer::AttachmentLoadOp::eClear;
+			renderPass.attachments[i].loadOp = renderer::AttachmentLoadOp::eDontCare;
 			renderPass.attachments[i].storeOp = renderer::AttachmentStoreOp::eStore;
 			renderPass.attachments[i].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 			renderPass.attachments[i].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;

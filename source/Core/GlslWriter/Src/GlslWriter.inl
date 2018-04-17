@@ -165,6 +165,60 @@ namespace glsl
 	}
 	/**@}*/
 #pragma endregion
+#pragma region Specialisation constant declaration
+	/**
+	*name
+	*	Specialisation constant declaration.
+	*/
+	/**@{*/
+	template< typename T >
+	inline T GlslWriter::declSpecConstant( castor::String const & name
+		, uint32_t location
+		, T const & rhs )
+	{
+		using Type = typename TypeOf< T >::Type;
+		registerConstant( name, TypeTraits< Type >::TypeEnum );
+
+		if ( m_config.m_isVulkan )
+		{
+			*this << "layout( constant_id = " << location << " ) const " << TypeTraits< Type >::Name << " " << name << " = ";
+		}
+		else
+		{
+			*this << "layout( location = " << location << " ) uniform " << TypeTraits< Type >::Name << " " << name << " = ";
+		}
+
+		m_stream << castor::String( rhs ) << ";\n";
+		return T( this, name );
+	}
+
+	template< typename T >
+	inline Optional< T > GlslWriter::declSpecConstant( castor::String const & name
+		, uint32_t location
+		, T const & rhs
+		, bool enabled )
+	{
+		using Type = typename TypeOf< T >::Type;
+		registerConstant( name, TypeTraits< Type >::TypeEnum );
+
+		if ( enabled )
+		{
+			if ( m_config.m_isVulkan )
+			{
+				*this << "layout( constant_id = " << location << " ) const " << TypeTraits< Type >::Name << " " << name << " = ";
+			}
+			else
+			{
+				*this << "layout( location = " << location << " ) uniform " << TypeTraits< Type >::Name << " " << name << " = ";
+			}
+
+			m_stream << castor::String( rhs ) << ";\n";
+		}
+
+		return Optional< T >( this, name, enabled );
+	}
+	/**@}*/
+#pragma endregion
 #pragma region Sampler declaration
 	/**
 	*name

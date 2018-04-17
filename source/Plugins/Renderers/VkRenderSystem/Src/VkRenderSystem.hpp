@@ -8,6 +8,8 @@ See LICENSE file in root folder
 
 #include <Render/RenderSystem.hpp>
 
+#include <Miscellaneous/DynamicLibrary.hpp>
+
 namespace VkRender
 {
 	class RenderSystem
@@ -19,19 +21,9 @@ namespace VkRender
 
 		static castor3d::RenderSystemUPtr create( castor3d::Engine & engine );
 		/**
-		 *\copydoc		castor3d::RenderSystem::doInitialise
-		 */
+		*\copydoc		castor3d::RenderSystem::doInitialise
+		*/
 		glsl::GlslWriter createGlslWriter()override;
-
-	private:
-		/**
-		 *\copydoc		castor3d::RenderSystem::doInitialise
-		 */
-		void doInitialise()override;
-		/**
-		 *\copydoc		castor3d::RenderSystem::doCleanup
-		 */
-		void doCleanup()override;
 
 	public:
 		C3D_Vk_API static castor::String Name;

@@ -95,7 +95,7 @@ namespace castor3d
 				getEngine()->getMaterialCache().initialise( getEngine()->getMaterialsType() );
 				m_swapChain = m_device->createSwapChain( { size.getWidth(), size.getHeight() } );
 				SceneSPtr scene = getScene();
-				static renderer::ClearColorValue clear{ 0.0f, 0.0f, 0.0f, 1.0f };
+				static renderer::ClearColorValue clear{ 1.0f, 1.0f, 0.0f, 1.0f };
 				m_swapChain->setClearColour( clear );
 				m_swapChainReset = m_swapChain->onReset.connect( [this]()
 				{
@@ -114,7 +114,6 @@ namespace castor3d
 				renderPass.flags = 0u;
 
 				renderPass.attachments.resize( 1u );
-				renderPass.attachments[0].index = 0u;
 				renderPass.attachments[0].format = m_swapChain->getFormat();
 				renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
 				renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
@@ -148,7 +147,7 @@ namespace castor3d
 
 				m_renderPass = m_device->createRenderPass( renderPass );
 
-				target->initialise( 1 );
+				target->initialise();
 
 				doCreateProgram();
 				doCreateSwapChainDependent();
@@ -204,9 +203,6 @@ namespace castor3d
 
 			if ( target && target->isInitialised() )
 			{
-				auto & background = target->getScene()->getBackground();
-				background.update( *target->getCamera() );
-
 				if ( m_toSave )
 				{
 					ByteArray data;
@@ -481,34 +477,28 @@ namespace castor3d
 		bool result{ true };
 		m_commandBuffers = m_swapChain->createCommandBuffers();
 		m_frameBuffers = m_swapChain->createFrameBuffers( *m_renderPass );
-		auto & background = getRenderTarget()->getScene()->getBackground();
-		background.initialise( *m_renderPass );
 
 		for ( uint32_t i = 0u; i < m_commandBuffers.size() && result; ++i )
 		{
 			auto & frameBuffer = *m_frameBuffers[i];
 			auto & commandBuffer = *m_commandBuffers[i];
-			background.prepareFrame( commandBuffer
-				, m_size
-				, *m_renderPass
-				, frameBuffer );
 
-			//if ( commandBuffer.begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
-			//{
-			//	commandBuffer.beginRenderPass( *m_renderPass
-			//		, frameBuffer
-			//		, { m_swapChain->getClearColour() }
-			//		, renderer::SubpassContents::eInline );
-			//	m_renderQuad->registerFrame( commandBuffer );
-			//	commandBuffer.endRenderPass();
+			if ( commandBuffer.begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
+			{
+				commandBuffer.beginRenderPass( *m_renderPass
+					, frameBuffer
+					, { m_swapChain->getClearColour() }
+					, renderer::SubpassContents::eInline );
+				m_renderQuad->registerFrame( commandBuffer );
+				commandBuffer.endRenderPass();
 
-			//	result = commandBuffer.end();
+				result = commandBuffer.end();
 
-			//	if ( !result )
-			//	{
-			//		std::cerr << "Command buffers recording failed" << std::endl;
-			//	}
-			//}
+				if ( !result )
+				{
+					std::cerr << "Command buffers recording failed" << std::endl;
+				}
+			}
 		}
 
 		return result;

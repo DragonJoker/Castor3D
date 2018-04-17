@@ -232,9 +232,10 @@ namespace castor3d
 
 	void ShadowMapSpot::doCleanup()
 	{
-		m_frameBuffer.reset();
 		m_blur.reset();
-		m_depthBuffer.reset();
+		m_frameBuffer.reset();
+		m_depthView.reset();
+		m_depthTexture.reset();
 	}
 
 	void ShadowMapSpot::doUpdateFlags( PassFlags & passFlags

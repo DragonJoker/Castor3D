@@ -30,14 +30,14 @@ namespace castor3d
 	}
 
 	GeometryPassResult::GeometryPassResult( Engine & engine
-			, renderer::Texture const & depthTexture
-			, renderer::Texture const & velocityTexture )
+		, renderer::Texture const & depthTexture
+		, renderer::Texture const & velocityTexture )
 		: m_engine{ engine }
 	{
 		auto & renderSystem = *engine.getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
 
-		m_result[0] = &depthTexture;
+		m_result[uint32_t( DsTexture::eDepth )] = &depthTexture;
 
 		for ( auto i = uint32_t( DsTexture::eData1 ); i < uint32_t( DsTexture::eData5 ); i++ )
 		{

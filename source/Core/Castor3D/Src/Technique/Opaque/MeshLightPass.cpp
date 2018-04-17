@@ -42,7 +42,6 @@ namespace castor3d
 			renderPass.flags = 0u;
 
 			renderPass.attachments.resize( 3u );
-			renderPass.attachments[0].index = 0u;
 			renderPass.attachments[0].format = depthView.getFormat();
 			renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
 			renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
@@ -52,7 +51,6 @@ namespace castor3d
 			renderPass.attachments[0].initialLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
 			renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
 
-			renderPass.attachments[1].index = 1u;
 			renderPass.attachments[1].format = diffuseView.getFormat();
 			renderPass.attachments[1].loadOp = loadOp;
 			renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
@@ -62,7 +60,6 @@ namespace castor3d
 			renderPass.attachments[1].initialLayout = layout;
 			renderPass.attachments[1].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
 
-			renderPass.attachments[2].index = 2u;
 			renderPass.attachments[2].format = specularView.getFormat();
 			renderPass.attachments[2].loadOp = loadOp;
 			renderPass.attachments[2].storeOp = renderer::AttachmentStoreOp::eStore;

@@ -69,7 +69,6 @@ namespace castor3d
 			createInfo.flags = 0u;
 
 			createInfo.attachments.resize( 3u );
-			createInfo.attachments[0].index = 0u;
 			createInfo.attachments[0].format = depthFormat;
 			createInfo.attachments[0].samples = renderer::SampleCountFlag::e1;
 			createInfo.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
@@ -79,7 +78,6 @@ namespace castor3d
 			createInfo.attachments[0].initialLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
 			createInfo.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
 
-			createInfo.attachments[1].index = 1u;
 			createInfo.attachments[1].format = getTextureFormat( WbTexture::eAccumulation );
 			createInfo.attachments[1].samples = renderer::SampleCountFlag::e1;
 			createInfo.attachments[1].loadOp = renderer::AttachmentLoadOp::eClear;
@@ -89,7 +87,6 @@ namespace castor3d
 			createInfo.attachments[1].initialLayout = renderer::ImageLayout::eUndefined;
 			createInfo.attachments[1].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
 
-			createInfo.attachments[2].index = 2u;
 			createInfo.attachments[2].format = getTextureFormat( WbTexture::eRevealage );
 			createInfo.attachments[2].samples = renderer::SampleCountFlag::e1;
 			createInfo.attachments[2].loadOp = renderer::AttachmentLoadOp::eClear;

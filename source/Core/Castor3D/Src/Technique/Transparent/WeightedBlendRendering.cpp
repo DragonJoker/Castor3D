@@ -28,7 +28,6 @@ namespace castor3d
 			createInfo.flags = 0u;
 
 			createInfo.attachments.resize( 1u );
-			createInfo.attachments[0].index = 0u;
 			createInfo.attachments[0].format = colourView.getFormat();
 			createInfo.attachments[0].samples = renderer::SampleCountFlag::e1;
 			createInfo.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;

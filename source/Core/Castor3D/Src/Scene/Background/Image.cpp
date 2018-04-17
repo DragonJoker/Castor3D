@@ -160,6 +160,14 @@ namespace castor3d
 			, 1u
 			, 0u
 			, renderer::MemoryPropertyFlag::eHostVisible );
+		m_hdr = m_texture->getPixelFormat() == renderer::Format::eR32_SFLOAT
+			|| m_texture->getPixelFormat() == renderer::Format::eR32G32_SFLOAT
+			|| m_texture->getPixelFormat() == renderer::Format::eR32G32B32_SFLOAT
+			|| m_texture->getPixelFormat() == renderer::Format::eR32G32B32A32_SFLOAT
+			|| m_texture->getPixelFormat() == renderer::Format::eR16_SFLOAT
+			|| m_texture->getPixelFormat() == renderer::Format::eR16G16_SFLOAT
+			|| m_texture->getPixelFormat() == renderer::Format::eR16G16B16_SFLOAT
+			|| m_texture->getPixelFormat() == renderer::Format::eR16G16B16A16_SFLOAT;
 		return m_texture->initialise();
 	}
 
