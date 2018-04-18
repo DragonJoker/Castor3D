@@ -213,6 +213,7 @@ namespace castor3d
 
 		inline void setMipFilter( renderer::MipmapMode value )
 		{
+			m_mipmapIsSet = true;
 			m_info.mipmapMode = value;
 		}
 
@@ -271,6 +272,7 @@ namespace castor3d
 			renderer::BorderColour::eFloatOpaqueBlack,
 			false
 		};
+		bool m_mipmapIsSet{ false };
 		renderer::SamplerPtr m_sampler;
 	};
 }

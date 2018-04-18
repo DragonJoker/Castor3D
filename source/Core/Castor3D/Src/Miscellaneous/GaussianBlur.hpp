@@ -65,16 +65,10 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		inline renderer::RenderPass const & getBlurXPass()const
+		inline renderer::RenderPass const & getRenderPass()const
 		{
-			REQUIRE( m_blurXPass );
-			return *m_blurXPass;
-		}
-
-		inline renderer::RenderPass const & getBlurYPass()const
-		{
-			REQUIRE( m_blurYPass );
-			return *m_blurYPass;
+			REQUIRE( m_renderPass );
+			return *m_renderPass;
 		}
 
 		inline renderer::FrameBuffer const & getBlurXFrameBuffer()const
@@ -116,7 +110,8 @@ namespace castor3d
 		{
 			castor::Point2f textureSize;
 			uint32_t blurCoeffsCount;
-			std::array< castor::Point4f, 15 > blurCoeffs; // We then allow for 60 coeffs max.
+			uint32_t dump; // to keep a 16 byte alignment.
+			std::array< renderer::Vec4, GaussianBlur::MaxCoefficients / 4u > blurCoeffs; // We then allow for 60 coeffs max, to have a 256 bytes struct.
 		};
 
 		class RenderQuad
@@ -147,7 +142,7 @@ namespace castor3d
 		std::vector< float > m_kernel;
 		renderer::CommandBufferPtr m_commandBuffer;
 		renderer::UniformBufferPtr< Configuration > m_blurUbo;
-		renderer::RenderPassPtr m_blurXPass;
+		renderer::RenderPassPtr m_renderPass;
 		renderer::FrameBufferPtr m_blurXFbo;
 		RenderQuad m_blurXQuad;
 		renderer::RenderPassPtr m_blurYPass;

@@ -214,7 +214,8 @@ namespace castor3d
 			{
 				if ( m_initialised )
 				{
-					m_initialised = effect->initialise( *m_hdrPostFxTimer );
+					m_initialised = effect->initialise( m_renderTechnique->getResult()
+						, *m_hdrPostFxTimer );
 				}
 			}
 
@@ -227,7 +228,8 @@ namespace castor3d
 			{
 				if ( m_initialised )
 				{
-					m_initialised = effect->initialise( *m_srgbPostFxTimer );
+					m_initialised = effect->initialise( *m_frameBuffer.m_colourTexture.getTexture()
+						, *m_srgbPostFxTimer );
 				}
 			}
 

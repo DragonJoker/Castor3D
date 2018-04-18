@@ -281,6 +281,8 @@ namespace castor3d
 						{ Point2f{ -1.0, -1.0 } },
 						{ Point2f{ -1.0, +1.0 } },
 						{ Point2f{ +1.0, -1.0 } },
+						{ Point2f{ +1.0, -1.0 } },
+						{ Point2f{ -1.0, +1.0 } },
 						{ Point2f{ +1.0, +1.0 } },
 					}
 				};
@@ -295,7 +297,7 @@ namespace castor3d
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			auto & device = *renderSystem.getCurrentDevice();
-			auto result = renderer::makeLayout< NonTexturedQuad >( 0u );
+			auto result = renderer::makeLayout< NonTexturedQuad::Vertex >( 0u );
 			result->createAttribute( 0u, renderer::Format::eR32G32_SFLOAT, offsetof( NonTexturedQuad::Vertex, position ) );
 			return result;
 		}
@@ -394,7 +396,7 @@ namespace castor3d
 			m_lineariseProgram,
 			*m_renderPass,
 			renderer::VertexInputState::create( *m_vertexLayout ),
-			renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleStrip },
+			renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleList },
 			renderer::RasterisationState{},
 			renderer::MultisampleState{},
 			renderer::ColourBlendState::createDefault(),
@@ -454,7 +456,7 @@ namespace castor3d
 				m_minifyProgram,
 				*m_renderPass,
 				renderer::VertexInputState::create( *m_vertexLayout ),
-				renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleStrip },
+				renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleList },
 				renderer::RasterisationState{},
 				renderer::MultisampleState{},
 				renderer::ColourBlendState::createDefault(),
@@ -515,7 +517,7 @@ namespace castor3d
 			m_commandBuffer->bindDescriptorSet( *m_lineariseDescriptor, *m_linearisePipelineLayout );
 			m_commandBuffer->pushConstants( *m_linearisePipelineLayout, m_clipInfo );
 			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-			m_commandBuffer->draw( 4u );
+			m_commandBuffer->draw( 6u );
 			m_commandBuffer->endRenderPass();
 
 			// Minification passes.
@@ -537,7 +539,7 @@ namespace castor3d
 				m_commandBuffer->bindDescriptorSet( *pipeline.descriptor, *m_minifyPipelineLayout );
 				m_commandBuffer->pushConstants( *m_minifyPipelineLayout, *pipeline.previousLevel );
 				m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-				m_commandBuffer->draw( 4u );
+				m_commandBuffer->draw( 6u );
 				m_commandBuffer->endRenderPass();
 			}
 

@@ -90,5 +90,22 @@ namespace castor3d
 		return doWriteInto( p_file );
 	}
 
+	bool PostEffect::initialise( TextureLayout const & texture
+		, RenderPassTimer const & timer )
+	{
+		auto & device = *getRenderSystem()->getCurrentDevice();
+		m_signalFinished = device.createSemaphore();
+		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+		m_target = &texture;
+		return doInitialise( timer );
+	}
+
+	void PostEffect::cleanup()
+	{
+		doCleanup();
+		m_commandBuffer.reset();
+		m_signalFinished.reset();
+	}
+
 	//*********************************************************************************************
 }

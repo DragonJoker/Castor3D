@@ -519,7 +519,7 @@ namespace castor3d
 				program,
 				renderPass,
 				renderer::VertexInputState::create( vertexLayout ),
-				renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleStrip },
+				renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleList },
 				renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eNone },
 				renderer::MultisampleState{},
 				renderer::ColourBlendState::createDefault(),
@@ -652,6 +652,8 @@ namespace castor3d
 						{ Point2f{ -1.0, -1.0 } },
 						{ Point2f{ -1.0, +1.0 } },
 						{ Point2f{ +1.0, -1.0 } },
+						{ Point2f{ +1.0, -1.0 } },
+						{ Point2f{ -1.0, +1.0 } },
 						{ Point2f{ +1.0, +1.0 } },
 					}
 				};
@@ -666,7 +668,7 @@ namespace castor3d
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			auto & device = *renderSystem.getCurrentDevice();
-			auto result = renderer::makeLayout< NonTexturedQuad >( 0u );
+			auto result = renderer::makeLayout< NonTexturedQuad::Vertex >( 0u );
 			result->createAttribute( 0u, renderer::Format::eR32G32_SFLOAT, offsetof( NonTexturedQuad::Vertex, position ) );
 			return result;
 		}
@@ -760,7 +762,7 @@ namespace castor3d
 			m_commandBuffer->bindPipeline( *m_pipeline );
 			m_commandBuffer->bindDescriptorSet( *m_descriptor, *m_pipelineLayout );
 			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-			m_commandBuffer->draw( 4u );
+			m_commandBuffer->draw( 6u );
 			m_commandBuffer->endRenderPass();
 			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
 				, m_timer->getQuery()

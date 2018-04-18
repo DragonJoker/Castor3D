@@ -70,7 +70,8 @@ namespace castor3d
 			Ubo config{ writer, GaussianBlur::Config, 0u, 0u };
 			auto c3d_textureSize = config.declMember< Vec2 >( GaussianBlur::TextureSize );
 			auto c3d_coefficientsCount = config.declMember< UInt >( GaussianBlur::CoefficientsCount );
-			auto c3d_coefficients = config.declMember< Vec4 >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients / 4u );
+			auto c3d_dump = config.declMember< UInt >( cuT( "c3d_dump" ) ); // to keep a 16 byte alignment.
+			auto c3d_coefficients = config.declMember< Vec4 >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients / 4 );
 			config.end();
 			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
@@ -83,13 +84,13 @@ namespace castor3d
 			{
 				auto base = writer.declLocale( cuT( "base" ), vec2( 1.0_f, 0 ) / c3d_textureSize );
 				auto offset = writer.declLocale( cuT( "offset" ), vec2( 0.0_f, 0 ) );
-				pxl_fragColor = texture( c3d_mapDiffuse, vtx_texture ) * c3d_coefficients[0];
+				pxl_fragColor = texture( c3d_mapDiffuse, vtx_texture ) * c3d_coefficients[0][0];
 
 				FOR( writer, UInt, i, 1u, cuT( "i < c3d_coefficientsCount" ), cuT( "++i" ) )
 				{
 					offset += base;
-					pxl_fragColor += c3d_coefficients[i] * texture( c3d_mapDiffuse, vtx_texture - offset );
-					pxl_fragColor += c3d_coefficients[i] * texture( c3d_mapDiffuse, vtx_texture + offset );
+					pxl_fragColor += c3d_coefficients[i / 4][i % 4] * texture( c3d_mapDiffuse, vtx_texture - offset );
+					pxl_fragColor += c3d_coefficients[i / 4][i % 4] * texture( c3d_mapDiffuse, vtx_texture + offset );
 				}
 				ROF;
 
@@ -111,7 +112,8 @@ namespace castor3d
 			Ubo config{ writer, GaussianBlur::Config, 0u, 0u };
 			auto c3d_textureSize = config.declMember< Vec2 >( GaussianBlur::TextureSize );
 			auto c3d_coefficientsCount = config.declMember< UInt >( GaussianBlur::CoefficientsCount );
-			auto c3d_coefficients = config.declMember< Vec4 >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients / 4u );
+			auto c3d_dump = config.declMember< UInt >( cuT( "c3d_dump" ) ); // to keep a 16 byte alignment.
+			auto c3d_coefficients = config.declMember< Vec4 >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients / 4 );
 			config.end();
 			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
@@ -124,13 +126,13 @@ namespace castor3d
 			{
 				auto base = writer.declLocale( cuT( "base" ), vec2( 0.0_f, 1 ) / c3d_textureSize );
 				auto offset = writer.declLocale( cuT( "offset" ), vec2( 0.0_f, 0 ) );
-				pxl_fragColor = texture( c3d_mapDiffuse, vtx_texture ) * c3d_coefficients[0];
+				pxl_fragColor = texture( c3d_mapDiffuse, vtx_texture ) * c3d_coefficients[0][0];
 
 				FOR( writer, UInt, i, 1u, cuT( "i < c3d_coefficientsCount" ), cuT( "++i" ) )
 				{
 					offset += base;
-					pxl_fragColor += c3d_coefficients[i] * texture( c3d_mapDiffuse, vtx_texture - offset );
-					pxl_fragColor += c3d_coefficients[i] * texture( c3d_mapDiffuse, vtx_texture + offset );
+					pxl_fragColor += c3d_coefficients[i / 4][i % 4] * texture( c3d_mapDiffuse, vtx_texture - offset );
+					pxl_fragColor += c3d_coefficients[i / 4][i % 4] * texture( c3d_mapDiffuse, vtx_texture + offset );
 				}
 				ROF;
 
@@ -243,7 +245,7 @@ namespace castor3d
 			createInfo.attachments.resize( 1u );
 			createInfo.attachments[0].format = format;
 			createInfo.attachments[0].samples = renderer::SampleCountFlag::e1;
-			createInfo.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+			createInfo.attachments[0].loadOp = renderer::AttachmentLoadOp::eDontCare;
 			createInfo.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
 			createInfo.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 			createInfo.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
@@ -329,6 +331,7 @@ namespace castor3d
 		, m_size{ textureSize }
 		, m_format{ format }
 		, m_intermediate{ doCreateTexture( engine, textureSize, format, cuT( "GaussianBlur" ) ) }
+		, m_renderPass{ doCreateRenderPass( *engine.getRenderSystem()->getCurrentDevice(), m_format ) }
 		, m_blurUbo{ renderer::makeUniformBuffer< Configuration >( *engine.getRenderSystem()->getCurrentDevice()
 			, 1u
 			, renderer::BufferTarget::eTransferDst
@@ -354,10 +357,15 @@ namespace castor3d
 		, m_kernel{ getHalfPascal( kernelSize ) }
 	{
 		REQUIRE( kernelSize < MaxCoefficients );
-		m_blurUbo->getData( 0u ).blurCoeffsCount = uint32_t( m_kernel.size() );
-		std::memcpy( m_blurUbo->getData( 0u ).blurCoeffs.data()->ptr()
+		auto & data = m_blurUbo->getData( 0u );
+		data.blurCoeffsCount = uint32_t( m_kernel.size() );
+		data.dump = 0u;
+		std::memcpy( data.blurCoeffs.data()->ptr()
 			, m_kernel.data()
 			, sizeof( float ) * std::min( size_t( MaxCoefficients ), m_kernel.size() ) );
+		data.textureSize[0] = float( textureSize.width );
+		data.textureSize[1] = float( textureSize.height );
+		m_blurUbo->upload();
 		auto & device = *engine.getRenderSystem()->getCurrentDevice();
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 		doInitialiseBlurXProgram( engine );
@@ -365,13 +373,13 @@ namespace castor3d
 
 		if ( m_commandBuffer->begin() )
 		{
-			m_commandBuffer->beginRenderPass( *m_blurXPass
+			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *m_blurXFbo
 				, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
 			, renderer::SubpassContents::eSecondaryCommandBuffers );
 			m_commandBuffer->executeCommands( { m_blurXQuad.getCommandBuffer() } );
 			m_commandBuffer->endRenderPass();
-			m_commandBuffer->beginRenderPass( *m_blurYPass
+			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *m_blurYFbo
 				, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
 			, renderer::SubpassContents::eSecondaryCommandBuffers );
@@ -403,8 +411,7 @@ namespace castor3d
 		program[0].module->loadShader( vertex.getSource() );
 		program[1].module->loadShader( blurX.getSource() );
 
-		m_blurXPass = doCreateRenderPass( device, m_format );
-		m_blurXFbo = doCreateFbo( *m_blurXPass, m_intermediate.getTexture()->getDefaultView(), m_size );
+		m_blurXFbo = doCreateFbo( *m_renderPass, m_intermediate.getTexture()->getDefaultView(), m_size );
 		renderer::DescriptorSetLayoutBindingArray bindings
 		{
 			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment }
@@ -413,10 +420,10 @@ namespace castor3d
 			, Position{}
 			, program
 			, m_source
-			, *m_blurXPass
+			, *m_renderPass
 			, bindings
 			, {} );
-		m_blurXQuad.prepareFrame( *m_blurXPass, 0u );
+		m_blurXQuad.prepareFrame( *m_renderPass, 0u );
 		return true;
 	}
 
@@ -436,8 +443,7 @@ namespace castor3d
 		program[0].module->loadShader( vertex.getSource() );
 		program[1].module->loadShader( blurY.getSource() );
 
-		m_blurYPass = doCreateRenderPass( device, m_format );
-		m_blurYFbo = doCreateFbo( *m_blurYPass, m_intermediate.getTexture()->getDefaultView(), m_size );
+		m_blurYFbo = doCreateFbo( *m_renderPass, m_source, m_size );
 		renderer::DescriptorSetLayoutBindingArray bindings
 		{
 			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment }
@@ -445,11 +451,11 @@ namespace castor3d
 		m_blurYQuad.createPipeline( m_size
 			, Position{}
 			, program
-			, m_source
-			, *m_blurYPass
+			, m_intermediate.getTexture()->getDefaultView()
+			, *m_renderPass
 			, bindings
 			, {} );
-		m_blurYQuad.prepareFrame( *m_blurYPass, 0u );
+		m_blurYQuad.prepareFrame( *m_renderPass, 0u );
 		return true;
 	}
 }

@@ -33,6 +33,8 @@ namespace castor3d
 				{ Point2f{ -1.0, -1.0 } },
 				{ Point2f{ -1.0, +1.0 } },
 				{ Point2f{ +1.0, -1.0 } },
+				{ Point2f{ +1.0, -1.0 } },
+				{ Point2f{ -1.0, +1.0 } },
 				{ Point2f{ +1.0, +1.0 } },
 			}
 		}
@@ -46,7 +48,7 @@ namespace castor3d
 			, renderer::MemoryPropertyFlag::eHostVisible );
 
 		// Initialise the vertex layout.
-		m_vertexLayout = renderer::makeLayout< NonTexturedQuad >( 0u );
+		m_vertexLayout = renderer::makeLayout< NonTexturedQuad::Vertex >( 0u );
 		m_vertexLayout->createAttribute( 0u, renderer::Format::eR32G32_SFLOAT, offsetof( NonTexturedQuad::Vertex, position ) );
 
 		// Create the render pass.
@@ -102,7 +104,7 @@ namespace castor3d
 			doCreateProgram(),
 			*m_renderPass,
 			renderer::VertexInputState::create( *m_vertexLayout ),
-			renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleStrip },
+			renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleList },
 			renderer::RasterisationState{},
 			renderer::MultisampleState{},
 			renderer::ColourBlendState::createDefault(),
@@ -128,7 +130,7 @@ namespace castor3d
 				, renderer::SubpassContents::eInline );
 			m_commandBuffer->bindPipeline( *m_pipeline );
 			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-			m_commandBuffer->draw( 4u, 1u, 0u, 0u );
+			m_commandBuffer->draw( 6u );
 			m_commandBuffer->endRenderPass();
 			m_commandBuffer->end();
 		}

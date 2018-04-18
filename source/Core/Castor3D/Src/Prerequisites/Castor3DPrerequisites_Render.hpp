@@ -18,7 +18,7 @@ namespace castor3d
 			castor::Point2f position;
 		};
 
-		Vertex vertex[4];
+		Vertex vertex[6];
 	};
 
 	struct TexturedQuad

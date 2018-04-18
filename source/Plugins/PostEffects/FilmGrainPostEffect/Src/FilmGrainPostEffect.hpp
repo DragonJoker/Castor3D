@@ -52,16 +52,16 @@ namespace film_grain
 		static castor3d::PostEffectSPtr create( castor3d::RenderTarget & renderTarget
 			, castor3d::RenderSystem & renderSystem
 			, castor3d::Parameters const & params );
-		/**
-		 *\copydoc		castor3d::PostEffect::Initialise
-		 */
-		bool initialise( castor3d::RenderPassTimer const & timer )override;
-		/**
-		 *\copydoc		castor3d::PostEffect::Cleanup
-		 */
-		void cleanup()override;
 
 	private:
+		/**
+		 *\copydoc		castor3d::PostEffect::doInitialise
+		 */
+		bool doInitialise( castor3d::RenderPassTimer const & timer )override;
+		/**
+		 *\copydoc		castor3d::PostEffect::doCleanup
+		 */
+		void doCleanup()override;
 		/**
 		 *\copydoc		castor3d::PostEffect::doWriteInto
 		 */

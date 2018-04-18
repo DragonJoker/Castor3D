@@ -89,7 +89,7 @@ namespace castor3d
 		TextureLayoutSPtr doCreateTexture( Engine & engine
 			, Size const & size
 			, renderer::Format format
-			, renderer::ImageUsageFlag usage )
+			, renderer::ImageUsageFlags usage )
 		{
 			renderer::ImageCreateInfo image{};
 			image.arrayLayers = 1u;
@@ -189,7 +189,7 @@ namespace castor3d
 			m_colourTexture = doCreateTexture( *getEngine()
 				, m_size
 				, renderer::Format::eR16G16B16A16_SFLOAT
-				, renderer::ImageUsageFlag::eColourAttachment );
+				, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eTransferDst );
 			m_depthBuffer = doCreateTexture( *getEngine()
 				, m_size
 				, renderer::Format::eD24_UNORM_S8_UINT

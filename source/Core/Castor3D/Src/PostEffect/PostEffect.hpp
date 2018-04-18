@@ -140,14 +140,15 @@ namespace castor3d
 		 *\brief		Fonction d'initialisation.
 		 *\return		\p true if ok.
 		 */
-		C3D_API virtual bool initialise( RenderPassTimer const & timer ) = 0;
+		C3D_API bool initialise( TextureLayout const & texture
+			, RenderPassTimer const & timer );
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
 		 */
-		C3D_API virtual void cleanup() = 0;
+		C3D_API void cleanup();
 		/**
 		*\~english
 		*name
@@ -178,6 +179,22 @@ namespace castor3d
 	private:
 		/**
 		 *\~english
+		 *\brief		Initialisation function.
+		 *\return		\p true if ok.
+		 *\~french
+		 *\brief		Fonction d'initialisation.
+		 *\return		\p true if ok.
+		 */
+		C3D_API virtual bool doInitialise( RenderPassTimer const & timer ) = 0;
+		/**
+		 *\~english
+		 *\brief		Cleanup function.
+		 *\~french
+		 *\brief		Fonction de nettoyage.
+		 */
+		C3D_API virtual void doCleanup() = 0;
+		/**
+		 *\~english
 		 *\brief		Writes the effect into a text file.
 		 *\param[in]	file	The file.
 		 *\~french
@@ -189,6 +206,7 @@ namespace castor3d
 	protected:
 		RenderTarget & m_renderTarget;
 		bool m_postToneMapping{ false };
+		TextureLayout const * m_target{ nullptr };
 		renderer::CommandBufferPtr m_commandBuffer;
 		renderer::SemaphorePtr m_signalFinished;
 	};

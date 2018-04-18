@@ -326,11 +326,11 @@ namespace film_grain
 			, params );
 	}
 
-	bool PostEffect::initialise( castor3d::RenderPassTimer const & timer )
+	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
 	{
 		auto & device = *getRenderSystem()->getCurrentDevice();
-		renderer::Extent2D size{ m_renderTarget.getSize()[0], m_renderTarget.getSize()[1] };
-
+		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
+		m_sampler->initialise();
 		auto vtx = getVertexProgram( getRenderSystem() );
 		auto pxl = getFragmentProgram( getRenderSystem() );
 
@@ -347,7 +347,7 @@ namespace film_grain
 		renderPass.flags = 0u;
 
 		renderPass.attachments.resize( 1u );
-		renderPass.attachments[0].format = m_renderTarget.getPixelFormat();
+		renderPass.attachments[0].format = m_target->getPixelFormat();
 		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
 		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
 		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
@@ -390,14 +390,14 @@ namespace film_grain
 		m_quad->createPipeline( size
 			, Position{}
 			, stages
-			, m_renderTarget.getTexture().getTexture()->getDefaultView()
+			, m_target->getDefaultView()
 			, *m_renderPass
 			, bindings
 			, {} );
 
 		auto result = m_surface.initialise( m_renderTarget
 			, *m_renderPass
-			, m_renderTarget.getSize()
+			, castor::Size{ m_target->getWidth(), m_target->getHeight() }
 			, 0u
 			, m_sampler );
 
@@ -413,7 +413,7 @@ namespace film_grain
 			// Put image in the right state for rendering.
 			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
-				, m_renderTarget.getTexture().getTexture()->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eColourAttachmentOptimal
+				, m_target->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eColourAttachmentOptimal
 					, renderer::AccessFlag::eColourAttachmentWrite ) );
 
 			m_commandBuffer->beginRenderPass( *m_renderPass
@@ -427,8 +427,8 @@ namespace film_grain
 			renderer::ImageCopy imageCopy;
 			imageCopy.dstOffset = { 0, 0, 0 };
 			imageCopy.srcOffset = { 0, 0, 0 };
-			imageCopy.extent = m_renderTarget.getTexture().getTexture()->getDimensions();
-			imageCopy.dstSubresource.aspectMask = renderer::getAspectMask( m_renderTarget.getTexture().getTexture()->getDefaultView().getFormat() );
+			imageCopy.extent = m_target->getDimensions();
+			imageCopy.dstSubresource.aspectMask = renderer::getAspectMask( m_target->getDefaultView().getFormat() );
 			imageCopy.dstSubresource.baseArrayLayer = 0u;
 			imageCopy.dstSubresource.layerCount = 1u;
 			imageCopy.dstSubresource.mipLevel = 0u;
@@ -439,11 +439,11 @@ namespace film_grain
 			m_commandBuffer->copyImage( imageCopy
 				, m_surface.m_colourTexture.getTexture()->getTexture()
 				, renderer::ImageLayout::eColourAttachmentOptimal
-				, m_renderTarget.getTexture().getTexture()->getTexture()
+				, m_target->getTexture()
 				, renderer::ImageLayout::eShaderReadOnlyOptimal );
 			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
 				, renderer::PipelineStageFlag::eColourAttachmentOutput
-				, m_renderTarget.getTexture().getTexture()->getDefaultView().makeColourAttachment( renderer::ImageLayout::eTransferDstOptimal
+				, m_target->getDefaultView().makeColourAttachment( renderer::ImageLayout::eTransferDstOptimal
 					, renderer::AccessFlag::eTransferWrite ) );
 			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
 				, timer.getQuery()
@@ -454,7 +454,7 @@ namespace film_grain
 		return result;
 	}
 
-	void PostEffect::cleanup()
+	void PostEffect::doCleanup()
 	{
 		m_quad.reset();
 		m_commandBuffer.reset();

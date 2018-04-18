@@ -22,16 +22,16 @@ namespace Bloom
 		static castor3d::PostEffectSPtr create( castor3d::RenderTarget & renderTarget
 			, castor3d::RenderSystem & renderSystem
 			, castor3d::Parameters const & param );
-		/**
-		 *\copydoc		castor3d::PostEffect::Initialise
-		 */
-		bool initialise( castor3d::RenderPassTimer const & timer )override;
-		/**
-		 *\copydoc		castor3d::PostEffect::Cleanup
-		 */
-		void cleanup()override;
 
 	private:
+		/**
+		*\copydoc		castor3d::PostEffect::doInitialise
+		*/
+		bool doInitialise( castor3d::RenderPassTimer const & timer )override;
+		/**
+		*\copydoc		castor3d::PostEffect::doCleanup
+		*/
+		void doCleanup()override;
 		/**
 		 *\copydoc		castor3d::PostEffect::doWriteInto
 		 */
@@ -65,7 +65,6 @@ namespace Bloom
 		struct Surface
 		{
 			Surface( renderer::Texture const & texture
-				, uint32_t mipLevel
 				, renderer::Extent2D const & size
 				, renderer::RenderPass const & renderPass );
 			renderer::TextureViewPtr view;
@@ -77,7 +76,7 @@ namespace Bloom
 		{
 			Layout layout;
 			renderer::TexturePtr image;
-			std::vector< Surface > surfaces;
+			std::unique_ptr< Surface > surface;
 			renderer::PipelinePtr pipeline;
 		};
 
@@ -87,10 +86,10 @@ namespace Bloom
 			Pipeline combine;
 		} m_pipelines;
 
+		std::vector< renderer::TextureViewPtr > m_hiPassViews;
 		renderer::TextureViewPtr m_hiPassMipView;
 		std::vector< castor3d::GaussianBlurSPtr > m_blurs;
 		renderer::VertexBufferPtr< castor3d::NonTexturedQuad > m_vertexBuffer;
-		castor3d::NonTexturedQuad m_buffer;
 		uint32_t m_size;
 	};
 }
