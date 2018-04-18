@@ -4,7 +4,7 @@ link_directories( ${BOOST_LIBRARY_DIR} )
 
 set( ${PROJECT_NAME}_DESCRIPTION "Castor3D Python binding DLL." )
 set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-set( ${PROJECT_NAME}_VERSION_MINOR 10 )
+set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D )

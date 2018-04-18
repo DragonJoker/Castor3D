@@ -6,7 +6,7 @@ if ( MSVC )
 	if ( ATL_FOUND )
 		message( STATUS "+ Found ATL" )
 		set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-		set( ${PROJECT_NAME}_VERSION_MINOR 10 )
+		set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 		set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 		configure_file( 

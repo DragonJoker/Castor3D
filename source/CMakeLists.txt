@@ -9,9 +9,9 @@ set( MAIN_PROJECT_NAME "Castor3D" )
 
 # Set project version numbers
 set( VERSION_MAJOR 0 )
-set( VERSION_MINOR 10 )
+set( VERSION_MINOR 11 )
 set( VERSION_BUILD 0 )
-set( VERSION_YEAR 2016 )
+set( VERSION_YEAR 2018 )
 
 # Used to look for external modules
 set( CMAKE_MODULE_PATH

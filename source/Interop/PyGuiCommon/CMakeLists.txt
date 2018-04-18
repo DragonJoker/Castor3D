@@ -2,7 +2,7 @@ project( PyGuiCommon )
 
 set( ${PROJECT_NAME}_DESCRIPTION "GuiCommon Python binding DLL." )
 set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
-set( ${PROJECT_NAME}_VERSION_MINOR 10 )
+set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 #we look for wxWidgets
