@@ -215,25 +215,25 @@ namespace castor3d
 			m_hdrPostFxTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "HDR Post effects" ), cuT( "HDR Post effects" ) );
 			m_overlaysTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Overlays" ), cuT( "Overlays" ) );
 			m_toneMappingTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Tone Mapping" ), cuT( "Tone Mapping" ) );
-			TextureLayout const * sourceView{ &m_renderTechnique->getResult() };
 
-			for ( auto effect : m_hdrPostEffects )
+			if ( !m_hdrPostEffects.empty() )
 			{
-				if ( m_initialised )
+				auto const * sourceView = &m_renderTechnique->getResult();
+
+				for ( auto effect : m_hdrPostEffects )
 				{
-					m_initialised = effect->initialise( *sourceView
-						, *m_hdrPostFxTimer );
-					sourceView = &effect->getResult();
+					if ( m_initialised )
+					{
+						m_initialised = effect->initialise( *sourceView
+							, *m_hdrPostFxTimer );
+						sourceView = &effect->getResult();
+					}
 				}
-			}
 
-			if ( sourceView != &m_renderTechnique->getResult() )
-			{
 				doInitialiseCopyCommands( m_hdrCopyCommands
 					, sourceView->getDefaultView()
 					, m_renderTechnique->getResult().getDefaultView() );
 				m_hdrCopyFinished = device.createSemaphore();
-				sourceView = m_frameBuffer.m_colourTexture.getTexture().get();
 			}
 
 			if ( m_initialised )
@@ -241,18 +241,20 @@ namespace castor3d
 				m_initialised = doInitialiseToneMapping();
 			}
 
-			for ( auto effect : m_srgbPostEffects )
+			if ( !m_srgbPostEffects.empty() )
 			{
-				if ( m_initialised )
-				{
-					m_initialised = effect->initialise( *sourceView
-						, *m_srgbPostFxTimer );
-					sourceView = &effect->getResult();
-				}
-			}
+				auto const * sourceView = m_frameBuffer.m_colourTexture.getTexture().get();
 
-			if ( sourceView != m_frameBuffer.m_colourTexture.getTexture().get() )
-			{
+				for ( auto effect : m_srgbPostEffects )
+				{
+					if ( m_initialised )
+					{
+						m_initialised = effect->initialise( *sourceView
+							, *m_srgbPostFxTimer );
+						sourceView = &effect->getResult();
+					}
+				}
+
 				doInitialiseCopyCommands( m_srgbCopyCommands
 					, sourceView->getDefaultView()
 					, m_frameBuffer.m_colourTexture.getTexture()->getDefaultView() );

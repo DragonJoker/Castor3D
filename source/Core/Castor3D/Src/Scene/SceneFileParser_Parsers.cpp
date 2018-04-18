@@ -4272,13 +4272,60 @@ namespace castor3d
 				image.samples = renderer::SampleCountFlag::e1;
 				image.sharingMode = renderer::SharingMode::eExclusive;
 				image.tiling = renderer::ImageTiling::eOptimal;
-				image.usage = renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst;
+				image.usage = renderer::ImageUsageFlag::eSampled
+					| renderer::ImageUsageFlag::eTransferDst;
 				auto texture = std::make_shared< TextureLayout >( *parsingContext->scene->getEngine()->getRenderSystem()
 					, image
 					, renderer::MemoryPropertyFlag::eDeviceLocal );
 				texture->getDefaultImage().initialiseSource( filePath, path );
 				parsingContext->skybox->setEquiTexture( texture
 					, size );
+			}
+			else
+			{
+				PARSING_ERROR( cuT( "Couldn't load the image" ) );
+			}
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSkyboxCross )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( p_params.size() < 1 )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else if ( !parsingContext->skybox )
+		{
+			PARSING_ERROR( cuT( "No skybox initialised." ) );
+		}
+		else
+		{
+			Path path;
+			Path filePath = p_context->m_file.getPath();
+			p_params[0]->get( path );
+
+			if ( File::fileExists( filePath / path ) )
+			{
+				renderer::ImageCreateInfo image{};
+				image.arrayLayers = 1u;
+				image.extent.depth = 1u;
+				image.imageType = renderer::TextureType::e2D;
+				image.initialLayout = renderer::ImageLayout::eUndefined;
+				image.mipLevels = 1u;
+				image.samples = renderer::SampleCountFlag::e1;
+				image.sharingMode = renderer::SharingMode::eExclusive;
+				image.tiling = renderer::ImageTiling::eOptimal;
+				image.usage = renderer::ImageUsageFlag::eSampled
+					| renderer::ImageUsageFlag::eTransferSrc
+					| renderer::ImageUsageFlag::eTransferDst;
+				auto texture = std::make_shared< TextureLayout >( *parsingContext->scene->getEngine()->getRenderSystem()
+					, image
+					, renderer::MemoryPropertyFlag::eDeviceLocal );
+				texture->getDefaultImage().initialiseSource( filePath, path );
+				parsingContext->skybox->setCrossTexture( texture );
 			}
 			else
 			{

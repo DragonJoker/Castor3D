@@ -276,6 +276,7 @@ namespace castor3d
 
 	// Skybox parsers
 	DECLARE_ATTRIBUTE_PARSER( parserSkyboxEqui )
+	DECLARE_ATTRIBUTE_PARSER( parserSkyboxCross )
 	DECLARE_ATTRIBUTE_PARSER( parserSkyboxLeft )
 	DECLARE_ATTRIBUTE_PARSER( parserSkyboxRight )
 	DECLARE_ATTRIBUTE_PARSER( parserSkyboxTop )

@@ -113,12 +113,12 @@ namespace castor3d
 						auto image = m_engine.getImageCache().add( relative, folder / relative );
 						buffer = image->getPixels();
 						Size size{ buffer->dimensions() };
-						Size adjustedSize{ getNext2Pow( size.getWidth() ), getNext2Pow( size.getHeight() ) };
+						//Size adjustedSize{ getNext2Pow( size.getWidth() ), getNext2Pow( size.getHeight() ) };
 
-						if ( adjustedSize != size )
-						{
-							buffer = image->resample( adjustedSize ).getPixels();
-						}
+						//if ( adjustedSize != size )
+						//{
+						//	buffer = image->resample( adjustedSize ).getPixels();
+						//}
 					}
 				}
 

@@ -104,6 +104,15 @@ namespace castor3d
 		C3D_API void setEquiTexture( TextureLayoutSPtr texture
 			, castor::Size const & size );
 		/**
+		*\~english
+		*\return
+		*	Sets the skybox's cross texture.
+		*\~french
+		*\return
+		*	Définit la texture croix de la skybox.
+		*/
+		C3D_API void setCrossTexture( TextureLayoutSPtr texture );
+		/**
 		*\copydoc	castor3d::SceneBackground::accept
 		*/
 		C3D_API void accept( BackgroundVisitor & visitor )const override;
@@ -119,6 +128,16 @@ namespace castor3d
 		inline castor::Path const & getEquiTexturePath()const
 		{
 			return m_equiTexturePath;
+		}
+
+		inline castor::Size const & getEquiSize()const
+		{
+			return m_equiSize;
+		}
+
+		inline castor::Path const & getCrossTexturePath()const
+		{
+			return m_crossTexturePath;
 		}
 		/**@}*/
 		/**
@@ -153,11 +172,14 @@ namespace castor3d
 	private:
 		bool doInitialiseTexture();
 		void doInitialiseEquiTexture();
+		void doInitialiseCrossTexture();
 
 	private:
 		TextureLayoutSPtr m_equiTexture;
 		castor::Path m_equiTexturePath;
 		castor::Size m_equiSize;
+		TextureLayoutSPtr m_crossTexture;
+		castor::Path m_crossTexturePath;
 		Viewport m_viewport;
 	};
 }

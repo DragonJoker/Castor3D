@@ -13,11 +13,13 @@
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
+#include <Image/TextureView.hpp>
 #include <RenderPass/FrameBuffer.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <Shader/ShaderModule.hpp>
+#include <Sync/ImageMemoryBarrier.hpp>
 
 using namespace castor;
 using namespace glsl;
@@ -82,8 +84,29 @@ namespace castor3d
 			Path relative = Scene::TextWriter::copyFile( obj.getEquiTexturePath()
 				, file.getFilePath()
 				, subfolder );
-			result = file.writeText( m_tabs + cuT( "\tequirectangular" ) + cuT( " \"" ) + relative + cuT( "\" 1024 1024\n" ) ) > 0;
+			auto & size = obj.getEquiSize();
+			result = file.writeText( m_tabs + cuT( "\tequirectangular" )
+				+ cuT( " \"" ) + relative + cuT( "\" " )
+				+ string::toString( size.getWidth() ) + cuT( " " )
+				+ string::toString( size.getHeight() ) + cuT( "\n" ) ) > 0;
 			castor::TextWriter< SkyboxBackground >::checkError( result, "Skybox equi-texture" );
+
+			if ( result )
+			{
+				result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
+			}
+		}
+		else if ( !obj.getCrossTexturePath().empty()
+			&& castor::File::fileExists( obj.getCrossTexturePath() ) )
+		{
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "skybox\n" ) ) > 0
+				&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+			Path subfolder{ cuT( "Textures" ) };
+			Path relative = Scene::TextWriter::copyFile( obj.getCrossTexturePath()
+				, file.getFilePath()
+				, subfolder );
+			result = file.writeText( m_tabs + cuT( "\tcross" ) + cuT( " \"" ) + relative + cuT( "\"\n" ) ) > 0;
+			castor::TextWriter< SkyboxBackground >::checkError( result, "Skybox cross-texture" );
 
 			if ( result )
 			{
@@ -139,6 +162,20 @@ namespace castor3d
 		visitor.visit( *this );
 	}
 
+	void SkyboxBackground::setEquiTexture( TextureLayoutSPtr texture
+		, castor::Size const & size )
+	{
+		m_equiTexturePath = castor::Path( texture->getDefaultImage().toString() );
+		m_equiTexture = texture;
+		m_equiSize = size;
+	}
+
+	void SkyboxBackground::setCrossTexture( TextureLayoutSPtr texture )
+	{
+		m_crossTexturePath = castor::Path( texture->getDefaultImage().toString() );
+		m_crossTexture = texture;
+	}
+
 	bool SkyboxBackground::doInitialise( renderer::RenderPass const & renderPass )
 	{
 		REQUIRE( m_texture );
@@ -161,32 +198,25 @@ namespace castor3d
 			, m_viewport.getProjection() );
 	}
 
-	void SkyboxBackground::setEquiTexture( TextureLayoutSPtr texture
-		, castor::Size const & size )
-	{
-		m_equiTexturePath = castor::Path( texture->getDefaultImage().toString() );
-		m_equiTexture = texture;
-		m_equiSize = size;
-	}
-
 	bool SkyboxBackground::doInitialiseTexture()
 	{
 		if ( m_equiTexture )
 		{
 			doInitialiseEquiTexture();
 		}
-		else
+		else if ( m_crossTexture )
 		{
-			m_hdr = m_texture->getPixelFormat() == renderer::Format::eR32_SFLOAT
-				|| m_texture->getPixelFormat() == renderer::Format::eR32G32_SFLOAT
-				|| m_texture->getPixelFormat() == renderer::Format::eR32G32B32_SFLOAT
-				|| m_texture->getPixelFormat() == renderer::Format::eR32G32B32A32_SFLOAT
-				|| m_texture->getPixelFormat() == renderer::Format::eR16_SFLOAT
-				|| m_texture->getPixelFormat() == renderer::Format::eR16G16_SFLOAT
-				|| m_texture->getPixelFormat() == renderer::Format::eR16G16B16_SFLOAT
-				|| m_texture->getPixelFormat() == renderer::Format::eR16G16B16A16_SFLOAT;
+			doInitialiseCrossTexture();
 		}
 
+		m_hdr = m_texture->getPixelFormat() == renderer::Format::eR32_SFLOAT
+			|| m_texture->getPixelFormat() == renderer::Format::eR32G32_SFLOAT
+			|| m_texture->getPixelFormat() == renderer::Format::eR32G32B32_SFLOAT
+			|| m_texture->getPixelFormat() == renderer::Format::eR32G32B32A32_SFLOAT
+			|| m_texture->getPixelFormat() == renderer::Format::eR16_SFLOAT
+			|| m_texture->getPixelFormat() == renderer::Format::eR16G16_SFLOAT
+			|| m_texture->getPixelFormat() == renderer::Format::eR16G16B16_SFLOAT
+			|| m_texture->getPixelFormat() == renderer::Format::eR16G16B16A16_SFLOAT;
 		m_sampler.lock()->initialise();
 		return m_texture->initialise();
 	}
@@ -224,11 +254,136 @@ namespace castor3d
 
 			EquirectangularToCube equiToCube{ *m_equiTexture
 				, renderSystem
-				, *m_texture };
+				, *m_texture
+				, m_scene.getHdrConfig().getGamma() };
 			equiToCube.render();
 
 			m_equiTexture->cleanup();
 			m_equiTexture.reset();
 		}
+	}
+
+	void SkyboxBackground::doInitialiseCrossTexture()
+	{
+		auto & engine = *getEngine();
+		auto & renderSystem = *engine.getRenderSystem();
+		m_crossTexture->initialise();
+		auto width = m_crossTexture->getWidth() / 4u;
+		auto height = m_crossTexture->getHeight() / 3u;
+		REQUIRE( width == height );
+
+		// create the cube texture if needed.
+		m_texture = std::make_shared< TextureLayout >( renderSystem
+			, doGetImageCreate( m_crossTexture->getPixelFormat(), Size{ width, width }, true )
+			, renderer::MemoryPropertyFlag::eDeviceLocal );
+		m_texture->getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource();
+		m_texture->getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource();
+		m_texture->getImage( uint32_t( CubeMapFace::ePositiveY ) ).initialiseSource();
+		m_texture->getImage( uint32_t( CubeMapFace::eNegativeY ) ).initialiseSource();
+		m_texture->getImage( uint32_t( CubeMapFace::ePositiveZ ) ).initialiseSource();
+		m_texture->getImage( uint32_t( CubeMapFace::eNegativeZ ) ).initialiseSource();
+		m_texture->initialise();
+
+		renderer::ImageSubresourceLayers srcSubresource
+		{
+			m_crossTexture->getDefaultView().getSubResourceRange().aspectMask,
+			0,
+			0,
+			1,
+		};
+		renderer::ImageSubresourceLayers dstSubresource
+		{
+			m_texture->getDefaultView().getSubResourceRange().aspectMask,
+			0,
+			0,
+			1,
+		};
+		renderer::ImageCopy copyInfos[6];
+		copyInfos[uint32_t( CubeMapFace::ePositiveX )].extent = { width, width, 1u };
+		copyInfos[uint32_t( CubeMapFace::ePositiveX )].srcSubresource = srcSubresource;
+		copyInfos[uint32_t( CubeMapFace::ePositiveX )].srcOffset.x = width * 2;
+		copyInfos[uint32_t( CubeMapFace::ePositiveX )].srcOffset.y = width;
+		copyInfos[uint32_t( CubeMapFace::ePositiveX )].srcOffset.z = 0u;
+		copyInfos[uint32_t( CubeMapFace::ePositiveX )].dstSubresource = dstSubresource;
+		copyInfos[uint32_t( CubeMapFace::ePositiveX )].dstSubresource.baseArrayLayer = uint32_t( CubeMapFace::ePositiveX );
+		copyInfos[uint32_t( CubeMapFace::ePositiveX )].dstOffset = { 0u, 0u, 0u };
+
+		copyInfos[uint32_t( CubeMapFace::eNegativeX )].extent = { width, width, 1u };
+		copyInfos[uint32_t( CubeMapFace::eNegativeX )].srcSubresource = srcSubresource;
+		copyInfos[uint32_t( CubeMapFace::eNegativeX )].srcOffset.x = 0u;
+		copyInfos[uint32_t( CubeMapFace::eNegativeX )].srcOffset.y = width;
+		copyInfos[uint32_t( CubeMapFace::eNegativeX )].srcOffset.z = 0u;
+		copyInfos[uint32_t( CubeMapFace::eNegativeX )].dstSubresource = dstSubresource;
+		copyInfos[uint32_t( CubeMapFace::eNegativeX )].dstSubresource.baseArrayLayer = uint32_t( CubeMapFace::eNegativeX );
+		copyInfos[uint32_t( CubeMapFace::eNegativeX )].dstOffset = { 0u, 0u, 0u };
+
+		copyInfos[uint32_t( CubeMapFace::ePositiveY )].extent = { width, width, 1u };
+		copyInfos[uint32_t( CubeMapFace::ePositiveY )].srcSubresource = srcSubresource;
+		copyInfos[uint32_t( CubeMapFace::ePositiveY )].srcOffset.x = width;
+		copyInfos[uint32_t( CubeMapFace::ePositiveY )].srcOffset.y = 0u;
+		copyInfos[uint32_t( CubeMapFace::ePositiveY )].srcOffset.z = 0u;
+		copyInfos[uint32_t( CubeMapFace::ePositiveY )].dstSubresource = dstSubresource;
+		copyInfos[uint32_t( CubeMapFace::ePositiveY )].dstSubresource.baseArrayLayer = uint32_t( CubeMapFace::ePositiveY );
+		copyInfos[uint32_t( CubeMapFace::ePositiveY )].dstOffset = { 0u, 0u, 0u };
+
+		copyInfos[uint32_t( CubeMapFace::eNegativeY )].extent = { width, width, 1u };
+		copyInfos[uint32_t( CubeMapFace::eNegativeY )].srcSubresource = srcSubresource;
+		copyInfos[uint32_t( CubeMapFace::eNegativeY )].srcOffset.x = width;
+		copyInfos[uint32_t( CubeMapFace::eNegativeY )].srcOffset.y = width * 2u;
+		copyInfos[uint32_t( CubeMapFace::eNegativeY )].srcOffset.z = 0u;
+		copyInfos[uint32_t( CubeMapFace::eNegativeY )].dstSubresource = dstSubresource;
+		copyInfos[uint32_t( CubeMapFace::eNegativeY )].dstSubresource.baseArrayLayer = uint32_t( CubeMapFace::eNegativeY );
+		copyInfos[uint32_t( CubeMapFace::eNegativeY )].dstOffset = { 0u, 0u, 0u };
+
+		copyInfos[uint32_t( CubeMapFace::ePositiveZ )].extent = { width, width, 1u };
+		copyInfos[uint32_t( CubeMapFace::ePositiveZ )].srcSubresource = srcSubresource;
+		copyInfos[uint32_t( CubeMapFace::ePositiveZ )].srcOffset.x = width;
+		copyInfos[uint32_t( CubeMapFace::ePositiveZ )].srcOffset.y = width;
+		copyInfos[uint32_t( CubeMapFace::ePositiveZ )].srcOffset.z = 0u;
+		copyInfos[uint32_t( CubeMapFace::ePositiveZ )].dstSubresource = dstSubresource;
+		copyInfos[uint32_t( CubeMapFace::ePositiveZ )].dstSubresource.baseArrayLayer = uint32_t( CubeMapFace::ePositiveZ );
+		copyInfos[uint32_t( CubeMapFace::ePositiveZ )].dstOffset = { 0u, 0u, 0u };
+
+		copyInfos[uint32_t( CubeMapFace::eNegativeZ )].extent = { width, width, 1u };
+		copyInfos[uint32_t( CubeMapFace::eNegativeZ )].srcSubresource = srcSubresource;
+		copyInfos[uint32_t( CubeMapFace::eNegativeZ )].srcOffset.x = width * 3u;
+		copyInfos[uint32_t( CubeMapFace::eNegativeZ )].srcOffset.y = width;
+		copyInfos[uint32_t( CubeMapFace::eNegativeZ )].srcOffset.z = 0u;
+		copyInfos[uint32_t( CubeMapFace::eNegativeZ )].dstSubresource = dstSubresource;
+		copyInfos[uint32_t( CubeMapFace::eNegativeZ )].dstSubresource.baseArrayLayer = uint32_t( CubeMapFace::eNegativeZ );
+		copyInfos[uint32_t( CubeMapFace::eNegativeZ )].dstOffset = { 0u, 0u, 0u };
+
+		auto & device = *renderSystem.getCurrentDevice();
+		auto commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+		commandBuffer->begin();
+		commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTopOfPipe
+			, renderer::PipelineStageFlag::eTransfer
+			, m_crossTexture->getDefaultView().makeTransferSource( renderer::ImageLayout::eUndefined, 0u ) );
+		uint32_t index{ 0u };
+
+		for ( auto & copyInfo : copyInfos )
+		{
+			commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTopOfPipe
+				, renderer::PipelineStageFlag::eTransfer
+				, m_texture->getImage( index ).getView().makeTransferDestination( renderer::ImageLayout::eUndefined, 0u ) );
+			commandBuffer->copyImage( copyInfo
+				, m_crossTexture->getTexture()
+				, renderer::ImageLayout::eTransferSrcOptimal
+				, m_texture->getTexture()
+				, renderer::ImageLayout::eTransferDstOptimal );
+			commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
+				, renderer::PipelineStageFlag::eFragmentShader
+				, m_texture->getImage( index ).getView().makeShaderInputResource( renderer::ImageLayout::eTransferDstOptimal
+					, renderer::AccessFlag::eTransferWrite ) );
+			++index;
+		}
+
+		commandBuffer->end();
+		auto fence = device.createFence();
+		device.getGraphicsQueue().submit( *commandBuffer, nullptr );
+		device.waitIdle();
+
+		m_crossTexture->cleanup();
+		m_crossTexture.reset();
 	}
 }
