@@ -11,9 +11,6 @@ See LICENSE file in root folder
 
 namespace film_grain
 {
-	static const uint32_t FILTER_COUNT = 4;
-	static const uint32_t KERNEL_SIZE = 3;
-
 	class RenderQuad
 		: public castor3d::RenderQuad
 	{

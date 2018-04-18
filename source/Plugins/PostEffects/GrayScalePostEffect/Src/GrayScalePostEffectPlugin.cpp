@@ -1,4 +1,4 @@
-﻿#include <Log/Logger.hpp>
+#include <Log/Logger.hpp>
 
 #include <Engine.hpp>
 #include <Cache/TargetCache.hpp>
@@ -33,17 +33,17 @@ extern "C"
 
 	C3D_GrayScale_API void getName( char const ** p_name )
 	{
-		*p_name = GrayScale::GrayScalePostEffect::Name.c_str();
+		*p_name = GrayScale::PostEffect::Name.c_str();
 	}
 
 	C3D_GrayScale_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
 	{
-		engine->getRenderTargetCache().getPostEffectFactory().registerType( GrayScale::GrayScalePostEffect::Type
-			, &GrayScale::GrayScalePostEffect::create );
+		engine->getRenderTargetCache().getPostEffectFactory().registerType( GrayScale::PostEffect::Type
+			, &GrayScale::PostEffect::create );
 	}
 
 	C3D_GrayScale_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->getRenderTargetCache().getPostEffectFactory().unregisterType( GrayScale::GrayScalePostEffect::Type );
+		engine->getRenderTargetCache().getPostEffectFactory().unregisterType( GrayScale::PostEffect::Type );
 	}
 }

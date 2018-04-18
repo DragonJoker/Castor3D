@@ -11,26 +11,27 @@ See LICENSE file in root folder
 
 namespace GrayScale
 {
-	static const uint32_t FILTER_COUNT = 4;
-	static const uint32_t KERNEL_SIZE = 3;
-
-	class GrayScalePostEffect
+	class PostEffect
 		: public castor3d::PostEffect
 	{
 	public:
-		GrayScalePostEffect( castor3d::RenderTarget & p_renderTarget, castor3d::RenderSystem & renderSystem, castor3d::Parameters const & p_param );
-		~GrayScalePostEffect();
-		static castor3d::PostEffectSPtr create( castor3d::RenderTarget & p_renderTarget, castor3d::RenderSystem & renderSystem, castor3d::Parameters const & p_param );
-		/**
-		 *\copydoc		castor3d::PostEffect::Initialise
-		 */
-		bool initialise() override;
-		/**
-		 *\copydoc		castor3d::PostEffect::Cleanup
-		 */
-		void cleanup() override;
+		PostEffect( castor3d::RenderTarget & renderTarget
+			, castor3d::RenderSystem & renderSystem
+			, castor3d::Parameters const & params );
+		~PostEffect();
+		static castor3d::PostEffectSPtr create( castor3d::RenderTarget & renderTarget
+			, castor3d::RenderSystem & renderSystem
+			, castor3d::Parameters const & params );
 
 	private:
+		/**
+		*\copydoc		castor3d::PostEffect::doInitialise
+		*/
+		bool doInitialise( castor3d::RenderPassTimer const & timer ) override;
+		/**
+		*\copydoc		castor3d::PostEffect::doCleanup
+		*/
+		void doCleanup() override;
 		/**
 		 *\copydoc		castor3d::PostEffect::doWriteInto
 		 */
@@ -42,8 +43,9 @@ namespace GrayScale
 
 	private:
 		castor3d::SamplerSPtr m_sampler;
-		castor3d::RenderPipelineSPtr m_pipeline;
 		PostEffectSurface m_surface;
+		renderer::RenderPassPtr m_renderPass;
+		std::unique_ptr< castor3d::RenderQuad > m_quad;
 	};
 }
 

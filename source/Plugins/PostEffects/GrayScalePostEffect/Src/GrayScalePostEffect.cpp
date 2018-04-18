@@ -8,6 +8,7 @@
 #include <Scene/ParticleSystem/ParticleDeclaration.hpp>
 #include <Scene/ParticleSystem/ParticleElementDeclaration.hpp>
 #include <Miscellaneous/Parameter.hpp>
+#include <Render/RenderPassTimer.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
@@ -30,19 +31,17 @@
 #include <RenderPass/FrameBufferAttachment.hpp>
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
+#include <Sync/ImageMemoryBarrier.hpp>
 
 #include <numeric>
 
 #include <GlslSource.hpp>
 
-using namespace castor;
-using namespace castor3d;
-
 namespace GrayScale
 {
 	namespace
 	{
-		glsl::Shader getVertexProgram( RenderSystem * renderSystem )
+		glsl::Shader getVertexProgram( castor3d::RenderSystem * renderSystem )
 		{
 			using namespace glsl;
 			GlslWriter writer = renderSystem->createGlslWriter();
@@ -56,13 +55,13 @@ namespace GrayScale
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				vtx_texture = position;
+				vtx_texture = writer.paren( position + 1.0_f ) * 0.5_f;
 				gl_Position = vec4( position.xy(), 0.0, 1.0 );
 			} );
 			return writer.finalise();
 		}
 
-		glsl::Shader getFragmentProgram( RenderSystem * renderSystem )
+		glsl::Shader getFragmentProgram( castor3d::RenderSystem * renderSystem )
 		{
 			using namespace glsl;
 			GlslWriter writer = renderSystem->createGlslWriter();
@@ -76,9 +75,21 @@ namespace GrayScale
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto colour = writer.declLocale( cuT( "colour" ), texture( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz() );
-				auto average = writer.declLocale( cuT( "average" ), Float( 0.2126f ) * colour.r() + 0.7152f * colour.g() + 0.0722f * colour.b() );
-				pxl_fragColor = vec4( average, average, average, 1.0 );
+				if ( renderSystem->getCurrentDevice()->getClipDirection() == renderer::ClipDirection::eTopDown )
+				{
+					auto colour = writer.declLocale( cuT( "colour" )
+						, texture( c3d_mapDiffuse, vtx_texture ).xyz() );
+				}
+				else
+				{
+					auto colour = writer.declLocale( cuT( "colour" )
+						, texture( c3d_mapDiffuse, vec2( vtx_texture.x(), 1.0 - vtx_texture.y() ) ).xyz() );
+				}
+
+				auto colour = writer.declBuiltin< Vec3 >( cuT( "colour" ) );
+				auto average = writer.declLocale( cuT( "average" )
+					, Float( 0.2126f ) * colour.r() + 0.7152f * colour.g() + 0.0722f * colour.b() );
+				pxl_fragColor = vec4( vec3( average ), 1.0 );
 			} );
 			return writer.finalise();
 		}
@@ -86,11 +97,13 @@ namespace GrayScale
 
 	//*********************************************************************************************
 
-	String GrayScalePostEffect::Type = cuT( "grayscale" );
-	String GrayScalePostEffect::Name = cuT( "GrayScale PostEffect" );
+	String PostEffect::Type = cuT( "grayscale" );
+	String PostEffect::Name = cuT( "GrayScale PostEffect" );
 
-	GrayScalePostEffect::GrayScalePostEffect( RenderTarget & p_renderTarget, RenderSystem & renderSystem, Parameters const & p_param )
-		: PostEffect{ GrayScalePostEffect::Type, p_renderTarget, renderSystem, p_param }
+	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
+		, castor3d::RenderSystem & renderSystem
+		, castor3d::Parameters const & params )
+		: castor3d::PostEffect{ PostEffect::Type, renderTarget, renderSystem, params, false }
 		, m_surface{ *renderSystem.getEngine() }
 	{
 		String name = cuT( "GrayScale" );
@@ -98,11 +111,11 @@ namespace GrayScale
 		if ( !m_renderTarget.getEngine()->getSamplerCache().has( name ) )
 		{
 			m_sampler = m_renderTarget.getEngine()->getSamplerCache().add( name );
-			m_sampler->setMinFilter( renderer::Filter::eNearest );
-			m_sampler->setMagFilter( renderer::Filter::eNearest );
-			m_sampler->setWrapS( renderer::WrapMode::eClampToBorder );
-			m_sampler->setWrapT( renderer::WrapMode::eClampToBorder );
-			m_sampler->setWrapR( renderer::WrapMode::eClampToBorder );
+			m_sampler->setMinFilter( renderer::Filter::eLinear );
+			m_sampler->setMagFilter( renderer::Filter::eLinear );
+			m_sampler->setWrapS( renderer::WrapMode::eRepeat );
+			m_sampler->setWrapT( renderer::WrapMode::eRepeat );
+			m_sampler->setWrapR( renderer::WrapMode::eRepeat );
 		}
 		else
 		{
@@ -110,70 +123,117 @@ namespace GrayScale
 		}
 	}
 
-	GrayScalePostEffect::~GrayScalePostEffect()
+	PostEffect::~PostEffect()
 	{
 	}
 
-	PostEffectSPtr GrayScalePostEffect::create( RenderTarget & p_renderTarget, RenderSystem & renderSystem, Parameters const & p_param )
+	castor3d::PostEffectSPtr PostEffect::create( castor3d::RenderTarget & renderTarget
+		, castor3d::RenderSystem & renderSystem
+		, castor3d::Parameters const & params )
 	{
-		return std::make_shared< GrayScalePostEffect >( p_renderTarget, renderSystem, p_param );
+		return std::make_shared< PostEffect >( renderTarget, renderSystem, params );
 	}
 
-	bool GrayScalePostEffect::initialise()
+	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
 	{
 		auto & device = *getRenderSystem()->getCurrentDevice();
-		Size size = m_renderTarget.getSize();
+		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
+		m_sampler->initialise();
+		auto vtx = getVertexProgram( getRenderSystem() );
+		auto pxl = getFragmentProgram( getRenderSystem() );
 
-		auto vertex = getVertexProgram( getRenderSystem() );
-		auto fragment = getFragmentProgram( getRenderSystem() );
-		renderer::ShaderStageStateArray program
+		renderer::ShaderStageStateArray stages;
+		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
+		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
+		stages[0].module->loadShader( vtx.getSource() );
+		stages[1].module->loadShader( pxl.getSource() );
+
+		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+
+		// Create the render pass.
+		renderer::RenderPassCreateInfo renderPass;
+		renderPass.flags = 0u;
+
+		renderPass.attachments.resize( 1u );
+		renderPass.attachments[0].format = m_target->getPixelFormat();
+		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+		renderPass.subpasses.resize( 1u );
+		renderPass.subpasses[0].flags = 0u;
+		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
+		renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
+
+		m_renderPass = device.createRenderPass( renderPass );
+
+		renderer::DescriptorSetLayoutBindingArray bindings;
+		m_quad = std::make_unique< castor3d::RenderQuad >( *getRenderSystem(), true );
+		m_quad->createPipeline( size
+			, Position{}
+			, stages
+			, m_target->getDefaultView()
+			, *m_renderPass
+			, bindings
+			, {} );
+
+		auto result = m_surface.initialise( m_renderTarget
+			, *m_renderPass
+			, castor::Size{ m_target->getWidth(), m_target->getHeight() }
+			, 0u
+			, m_sampler
+			, m_target->getPixelFormat() );
+
+		if ( result
+			&& m_commandBuffer->begin() )
 		{
-			{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
-			{ device.createShaderModule( renderer::ShaderStageFlag::eFragment ) },
-		};
-		program[0].module->loadShader( vertex.getSource() );
-		program[1].module->loadShader( fragment.getSource() );
+			m_commandBuffer->resetQueryPool( timer.getQuery()
+				, 0u
+				, 2u );
+			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+				, timer.getQuery()
+				, 0u );
+			// Put image in the right state for rendering.
+			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+				, renderer::PipelineStageFlag::eFragmentShader
+				, m_target->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
 
-		m_pipeline = getRenderSystem()->createRenderPipeline( std::move( dsstate ), std::move( rsstate ), BlendState{}, MultisampleState{}, *program, PipelineFlags{} );
-		m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
+			m_commandBuffer->beginRenderPass( *m_renderPass
+				, *m_surface.m_fbo
+				, { renderer::ClearColorValue{} }
+				, renderer::SubpassContents::eInline );
+			m_quad->registerFrame( *m_commandBuffer );
+			m_commandBuffer->endRenderPass();
 
-		return m_surface.initialise( m_renderTarget
-			, size
-			, MinBufferIndex
-			, m_sampler );
+			// Blit the result to the render target image.
+			doCopyResultToTarget( m_surface.m_colourTexture.getTexture()->getDefaultView()
+				, *m_commandBuffer );
+
+			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+				, timer.getQuery()
+				, 1u );
+			m_commandBuffer->end();
+		}
+
+		return result;
 	}
 
-	void GrayScalePostEffect::cleanup()
+	void PostEffect::doCleanup()
 	{
+		m_quad.reset();
+		m_commandBuffer.reset();
+		m_renderPass.reset();
 		m_surface.cleanup();
 	}
 
-	bool GrayScalePostEffect::apply( FrameBuffer & p_framebuffer )
-	{
-		auto attach = p_framebuffer.getAttachment( AttachmentPoint::eColour, 0 );
-
-		if ( attach && attach->getAttachmentType() == AttachmentType::eTexture )
-		{
-			m_surface.m_fbo->bind( FrameBufferTarget::eDraw );
-			auto texture = std::static_pointer_cast< FrameBufferAttachment >( attach )->getTexture();
-			m_surface.m_fbo->clear( BufferComponent::eColour );
-			getRenderSystem()->getCurrentContext()->renderTexture( 
-				m_surface.m_size
-				, *texture
-				, *m_pipeline
-				, m_matrixUbo );
-			m_surface.m_fbo->unbind();
-
-			p_framebuffer.bind( FrameBufferTarget::eDraw );
-			getRenderSystem()->getCurrentContext()->renderTexture( texture->getDimensions(), *m_surface.m_colourTexture.getTexture() );
-			p_framebuffer.unbind();
-		}
-
-		return true;
-	}
-
-	bool GrayScalePostEffect::doWriteInto( TextFile & p_file )
+	bool PostEffect::doWriteInto( castor::TextFile & file )
 	{
 		return true;
 	}
+
+	//*********************************************************************************************
 }
