@@ -1,4 +1,4 @@
-﻿#include "XpmLoader.hpp"
+#include "XpmLoader.hpp"
 
 #include <Graphics/PixelBuffer.hpp>
 
@@ -102,6 +102,9 @@ namespace film_grain
 			}
 		}
 
-		return pixels;
+		return PxBufferBase::create( pixels->dimensions()
+			, PixelFormat::eA8R8G8B8
+			, pixels->constPtr()
+			, pixels->format() );
 	}
 }

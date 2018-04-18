@@ -520,13 +520,13 @@ namespace Bloom
 			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
 				, timer.getQuery()
 				, 0u );
-			// Put image in the right state for rendering.
+			// Put target image in fragment shader input layout.
 			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
 				, m_target->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eColourAttachmentOptimal
 					, renderer::AccessFlag::eColourAttachmentWrite ) );
 
-			// Hi-pass
+			// Hi-pass.
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *m_pipelines.hiPass.surface->frameBuffer
 				, clearValues[0]
@@ -540,14 +540,14 @@ namespace Bloom
 			m_commandBuffer->draw( 6u );
 			m_commandBuffer->endRenderPass();
 
-			// Downscale
+			// Downscale through mipmaps generation.
 			m_pipelines.hiPass.image->generateMipmaps( *m_commandBuffer );
 
-			// Blur passes
+			// Blur passes.
 			for ( uint32_t i = 0u; i < FILTER_COUNT; ++i )
 			{
 				auto & gaussianBlur = m_blurs[i];
-				// Horizontal
+				// Horizontal.
 				m_commandBuffer->beginRenderPass( gaussianBlur->getRenderPass()
 					, gaussianBlur->getBlurXFrameBuffer()
 					, clearValues[i]
@@ -555,7 +555,7 @@ namespace Bloom
 				m_commandBuffer->executeCommands( { gaussianBlur->getBlurXCommandBuffer() } );
 				m_commandBuffer->endRenderPass();
 
-				// Vertical
+				// Vertical.
 				m_commandBuffer->beginRenderPass( gaussianBlur->getRenderPass()
 					, gaussianBlur->getBlurYFrameBuffer()
 					, clearValues[i]
@@ -564,11 +564,12 @@ namespace Bloom
 				m_commandBuffer->endRenderPass();
 			}
 
+			// Put Hi-pass general view in fragment shader input layout.
 			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
 				, renderer::PipelineStageFlag::eFragmentShader
 				, m_hiPassMipView->makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
 
-			// Combine pass
+			// Combine pass.
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *m_pipelines.combine.surface->frameBuffer
 				, clearValues[FILTER_COUNT]
@@ -582,15 +583,9 @@ namespace Bloom
 			m_commandBuffer->draw( 6u );
 			m_commandBuffer->endRenderPass();
 
-			// Copy combine result to target
-			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
-				, renderer::PipelineStageFlag::eTransfer
-				, m_pipelines.combine.surface->view->makeTransferSource( renderer::ImageLayout::eUndefined, 0u ) );
-			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
-				, renderer::PipelineStageFlag::eTransfer
-				, m_target->getDefaultView().makeTransferDestination( renderer::ImageLayout::eUndefined, 0u ) );
-			m_commandBuffer->copyImage( *m_pipelines.combine.surface->view
-				, m_target->getDefaultView() );
+			// Blit the combination result to the target image.
+			doCopyResultToTarget( *m_pipelines.combine.surface->view
+				, *m_commandBuffer );
 
 			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
 				, timer.getQuery()

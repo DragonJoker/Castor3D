@@ -48,17 +48,25 @@ namespace castor3d
 		C3D_API ~RenderPassTimer();
 		/**
 		 *\~english
-		 *\brief		Starts the timers.
+		 *\brief		Starts the CPU timer, resets GPU time.
 		 *\~french
-		 *\brief		Démarre les timers.
+		 *\brief		Démarre le timer CPU, réinitialise le temps GPU.
 		 */
 		C3D_API void start();
 		/**
 		 *\~english
-		 *\brief		Stops the timers.
+		 *\brief		Retrieves GPU time and adds it to current time.
 		 *\~french
 		 *\brief
-		 *\brief		Arrête les timers.
+		 *\brief		Récupère le temps GPU et l'ajoute au temps actuel.
+		 */
+		C3D_API void step();
+		/**
+		 *\~english
+		 *\brief		Stops the CPU timer.
+		 *\~french
+		 *\brief
+		 *\brief		Arrête le timer CPU.
 		 */
 		C3D_API void stop();
 		/**

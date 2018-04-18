@@ -150,6 +150,15 @@ namespace castor3d
 		 */
 		C3D_API void cleanup();
 		/**
+		 *\~english
+		 *\brief		Updated needed data.
+		 *\param[in]	elapsedTime	The time elapsed since last frame, in seconds.
+		 *\~french
+		 *\brief		Met à jour les données en ayant besoin.
+		 *\param[in]	elapsedTime	Le temps écoulé depuis la dernière frame, en secondes.
+		 */
+		C3D_API virtual void update( castor::Nanoseconds const & elapsedTime );
+		/**
 		*\~english
 		*name
 		*	Getters.
@@ -175,6 +184,10 @@ namespace castor3d
 			return m_postToneMapping;
 		}
 		/**@}*/
+
+	protected:
+		C3D_API void doCopyResultToTarget( renderer::TextureView const & result
+			, renderer::CommandBuffer & commandBuffer );
 
 	private:
 		/**

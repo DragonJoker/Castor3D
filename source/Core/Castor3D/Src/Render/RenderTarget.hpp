@@ -15,7 +15,7 @@ See LICENSE file in root folder
 
 #include <Design/OwnedBy.hpp>
 #include <Graphics/Size.hpp>
-#include <Design/OwnedBy.hpp>
+#include <Miscellaneous/PreciseTimer.hpp>
 
 namespace castor3d
 {
@@ -286,6 +286,12 @@ namespace castor3d
 		{
 			return m_toneMapping;
 		}
+
+		inline renderer::Semaphore const & getSemaphore()const
+		{
+			REQUIRE( m_signalFinished );
+			return *m_signalFinished;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -333,7 +339,8 @@ namespace castor3d
 			, CameraSPtr camera );
 		C3D_API renderer::Semaphore const * doApplyPostEffects( renderer::Semaphore const & toWait
 			, PostEffectPtrArray const & effects
-			, RenderPassTimer & timer );
+			, RenderPassTimer & timer
+			, castor::Nanoseconds const & elapsedTime );
 		C3D_API renderer::Semaphore const * doApplyToneMapping( renderer::Semaphore const & toWait );
 		C3D_API renderer::Semaphore const * doRenderOverlays( renderer::Semaphore const & toWait
 			, Camera const & camera );
@@ -368,7 +375,9 @@ namespace castor3d
 		TextureUnit m_velocityTexture;
 		OverlayRendererSPtr m_overlayRenderer;
 		renderer::SemaphorePtr m_signalReady;
-		renderer::SemaphorePtr m_signalFinished;
+		renderer::Semaphore const * m_signalFinished;
+		renderer::FencePtr m_fence;
+		castor::PreciseTimer m_timer;
 	};
 }
 

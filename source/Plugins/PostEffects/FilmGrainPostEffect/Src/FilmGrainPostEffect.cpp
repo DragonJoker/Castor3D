@@ -21,6 +21,7 @@
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
+#include <Buffer/StagingBuffer.hpp>
 #include <Buffer/UniformBuffer.hpp>
 #include <Image/Texture.hpp>
 #include <RenderPass/RenderPass.hpp>
@@ -47,6 +48,7 @@ namespace film_grain
 		static String const Time = cuT( "c3d_time" );
 		static String const SrcTex = cuT( "c3d_srcTex" );
 		static String const NoiseTex = cuT( "c3d_noiseTex" );
+		static uint32_t constexpr NoiseMapCount = 6u;
 
 		glsl::Shader getVertexProgram( castor3d::RenderSystem * renderSystem )
 		{
@@ -62,7 +64,7 @@ namespace film_grain
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				vtx_texture = position;
+				vtx_texture = writer.paren( position + 1.0_f ) * 0.5_f;
 				gl_Position = vec4( position.xy(), 0.0, 1.0 );
 			} );
 			return writer.finalise();
@@ -74,15 +76,15 @@ namespace film_grain
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			glsl::Ubo filmGrain{ writer, FilmGrainUbo, 0u };
+			glsl::Ubo filmGrain{ writer, FilmGrainUbo, 0u, 0u };
 			auto c3d_pixelSize = filmGrain.declMember< Vec2 >( PixelSize );
 			auto c3d_noiseIntensity = filmGrain.declMember< Float >( NoiseIntensity );
 			auto c3d_exposure = filmGrain.declMember< Float >( Exposure );
 			auto c3d_time = filmGrain.declMember< Float >( Time );
 			filmGrain.end();
 
-			auto c3d_srcTex = writer.declSampler< Sampler2D >( SrcTex, 1u, 0u );
-			auto c3d_noiseTex = writer.declSampler< Sampler3D >( NoiseTex, 2u, 0u );
+			auto c3d_noiseTex = writer.declSampler< Sampler3D >( NoiseTex, 1u, 0u );
+			auto c3d_srcTex = writer.declSampler< Sampler2D >( SrcTex, 2u, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			// Shader outputs
@@ -101,7 +103,7 @@ namespace film_grain
 					}
 					FI;
 
-					writer.returnStmt( vec3( 1.0_f ) - 2.0_f * ( 1.0_f - a ) * ( 1.0_f - b ) );
+					writer.returnStmt( vec3( 1.0_f ) - 2.0_f * writer.paren( 1.0_f - a ) * writer.paren( 1.0_f - b ) );
 				}
 				, InVec3{ &writer, cuT( "a" ) }
 				, InVec3{ &writer, cuT( "b" ) } );
@@ -130,8 +132,18 @@ namespace film_grain
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto colour = writer.declLocale( cuT( "colour" )
-					, texture( c3d_srcTex, vtx_texture ).xyz() );
+				if ( renderSystem->getCurrentDevice()->getClipDirection() == renderer::ClipDirection::eTopDown )
+				{
+					auto colour = writer.declLocale( cuT( "colour" )
+						, texture( c3d_srcTex, vtx_texture ).xyz() );
+				}
+				else
+				{
+					auto colour = writer.declLocale( cuT( "colour" )
+						, texture( c3d_srcTex, vec2( vtx_texture.x(), 1.0 - vtx_texture.y() ) ).xyz() );
+				}
+
+				auto colour = writer.declBuiltin< Vec3 >( cuT( "colour" ) );
 				colour = addNoise( colour, vtx_texture );
 				plx_fragColor = vec4( colour, 1.0 );
 			} );
@@ -164,6 +176,7 @@ namespace film_grain
 			m_sampler->setWrapS( renderer::WrapMode::eRepeat );
 			m_sampler->setWrapT( renderer::WrapMode::eRepeat );
 			m_sampler->setWrapR( renderer::WrapMode::eRepeat );
+			m_sampler->initialise();
 		}
 		else
 		{
@@ -177,19 +190,29 @@ namespace film_grain
 		image.arrayLayers = 1u;
 		image.extent.width = 512u;
 		image.extent.height = 512u;
-		image.extent.depth = 6u;
-		image.format = renderer::Format::eR8G8B8_UNORM;
+		image.extent.depth = NoiseMapCount;
+		image.format = renderer::Format::eR8G8B8A8_UNORM;
 		image.imageType = renderer::TextureType::e3D;
 		image.initialLayout = renderer::ImageLayout::eUndefined;
-		image.mipLevels = FILTER_COUNT;
+		image.mipLevels = 1u;
 		image.samples = renderer::SampleCountFlag::e1;
 		image.sharingMode = renderer::SharingMode::eExclusive;
 		image.tiling = renderer::ImageTiling::eOptimal;
 		image.usage = renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst;
 		m_noise = device.createTexture( image, renderer::MemoryPropertyFlag::eDeviceLocal );
 
+		renderer::ImageViewCreateInfo imageView{};
+		imageView.format = image.format;
+		imageView.viewType = renderer::TextureViewType::e3D;
+		imageView.subresourceRange.aspectMask = renderer::getAspectMask( imageView.format );
+		imageView.subresourceRange.baseMipLevel = 0u;
+		imageView.subresourceRange.levelCount = 1u;
+		imageView.subresourceRange.baseArrayLayer = 0u;
+		imageView.subresourceRange.layerCount = 1u;
+		m_noiseView = m_noise->createView( imageView );
+
 		XpmLoader loader;
-		std::array< PxBufferBaseSPtr, 6u > buffers
+		std::array< PxBufferBaseSPtr, NoiseMapCount > buffers
 		{
 			loader.loadImage( NoiseLayer1_xpm, getCountOf( NoiseLayer1_xpm ) ),
 			loader.loadImage( NoiseLayer2_xpm, getCountOf( NoiseLayer2_xpm ) ),
@@ -199,59 +222,27 @@ namespace film_grain
 			loader.loadImage( NoiseLayer6_xpm, getCountOf( NoiseLayer6_xpm ) ),
 		};
 
-		uint32_t maxSize = 0u;
-		renderer::BufferImageCopyArray copyRegions( 6u );
-
-		for ( size_t i = 0u; i < buffers.size(); ++i )
-		{
-			copyRegions[i].imageExtent.width = buffers[i]->dimensions()[0];
-			copyRegions[i].imageExtent.height = buffers[i]->dimensions()[1];
-			copyRegions[i].imageExtent.depth = 1u;
-			copyRegions[i].imageOffset.x = 0;
-			copyRegions[i].imageOffset.y = 0;
-			copyRegions[i].imageOffset.z = uint32_t( i );
-			copyRegions[i].imageSubresource.aspectMask = renderer::getAspectMask( image.format );
-			copyRegions[i].imageSubresource.baseArrayLayer = 0u;
-			copyRegions[i].imageSubresource.layerCount = 1u;
-			copyRegions[i].imageSubresource.mipLevel = 0u;
-			copyRegions[i].levelSize = buffers[i]->size();
-			maxSize = std::max( maxSize, copyRegions[i].levelSize );
-		}
-
-		renderer::BufferBasePtr stagingBuffer = device.createBuffer( maxSize, renderer::BufferTarget::eTransferSrc );
+		uint32_t maxSize = buffers[0]->size();
+		renderer::StagingBuffer stagingBuffer{ device
+			, renderer::BufferTarget::eTransferSrc
+			, maxSize };
 		renderer::CommandBufferPtr cmdCopy = device.getGraphicsCommandPool().createCommandBuffer( true );
 
-		for ( size_t i = 0u; i < copyRegions.size(); ++i )
+		for ( uint32_t i = 0u; i < NoiseMapCount; ++i )
 		{
-			if ( auto * data = stagingBuffer->lock( 0u, copyRegions[i].levelSize, renderer::MemoryMapFlag::eWrite ) )
-			{
-				std::memcpy( data, buffers[i]->constPtr(), buffers[i]->size() );
-				stagingBuffer->flush( 0u, copyRegions[i].levelSize );
-				stagingBuffer->unlock();
-
-				if ( cmdCopy->begin() )
-				{
-					cmdCopy->copyToImage( copyRegions[i]
-						, *stagingBuffer
-						, *m_noise );
-					cmdCopy->end();
+			stagingBuffer.uploadTextureData( *cmdCopy
+				, {
+					m_noiseView->getSubResourceRange().aspectMask,
+					m_noiseView->getSubResourceRange().baseMipLevel,
+					m_noiseView->getSubResourceRange().baseArrayLayer,
+					m_noiseView->getSubResourceRange().layerCount,
 				}
-			}
+				, { 0, 0, int32_t( i ) }
+				, { image.extent.width, image.extent.height, 1u }
+				, buffers[i]->constPtr()
+				, buffers[i]->size()
+				, *m_noiseView );
 		}
-
-		renderer::ImageViewCreateInfo imageView{};
-		imageView.components.r = renderer::ComponentSwizzle::eIdentity;
-		imageView.components.g = renderer::ComponentSwizzle::eIdentity;
-		imageView.components.b = renderer::ComponentSwizzle::eIdentity;
-		imageView.components.a = renderer::ComponentSwizzle::eIdentity;
-		imageView.format = image.format;
-		imageView.viewType = renderer::TextureViewType::e3D;
-		imageView.subresourceRange.aspectMask = renderer::getAspectMask( imageView.format );
-		imageView.subresourceRange.baseMipLevel = 0u;
-		imageView.subresourceRange.levelCount = 1u;
-		imageView.subresourceRange.baseArrayLayer = 0u;
-		imageView.subresourceRange.layerCount = 1u;
-		m_noiseView = m_noise->createView( imageView );
 
 		m_configUbo = renderer::makeUniformBuffer< Configuration >( *m_renderSystem.getCurrentDevice()
 			, 1u
@@ -262,9 +253,10 @@ namespace film_grain
 		m_configUbo->getData( 0 ).m_exposure = 1.0f;
 	}
 
-	void RenderQuad::update( float time )
+	void RenderQuad::update( castor::Nanoseconds const & time )
 	{
-		m_configUbo->getData().m_time = time;
+		m_time += time.count();
+		m_configUbo->getData().m_time = ( m_time % NoiseMapCount ) / float( NoiseMapCount );
 		m_configUbo->upload();
 	}
 
@@ -302,10 +294,9 @@ namespace film_grain
 			m_sampler = m_renderTarget.getEngine()->getSamplerCache().add( name );
 			m_sampler->setMinFilter( renderer::Filter::eLinear );
 			m_sampler->setMagFilter( renderer::Filter::eLinear );
-			m_sampler->setMipFilter( renderer::MipmapMode::eLinear );
-			m_sampler->setWrapS( renderer::WrapMode::eClampToBorder );
-			m_sampler->setWrapT( renderer::WrapMode::eClampToBorder );
-			m_sampler->setWrapR( renderer::WrapMode::eClampToBorder );
+			m_sampler->setWrapS( renderer::WrapMode::eRepeat );
+			m_sampler->setWrapT( renderer::WrapMode::eRepeat );
+			m_sampler->setWrapR( renderer::WrapMode::eRepeat );
 		}
 		else
 		{
@@ -324,6 +315,11 @@ namespace film_grain
 		return std::make_shared< PostEffect >( renderTarget
 			, renderSystem
 			, params );
+	}
+
+	void PostEffect::update( castor::Nanoseconds const & elapsedTime )
+	{
+		m_quad->update( elapsedTime );
 	}
 
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
@@ -348,42 +344,25 @@ namespace film_grain
 
 		renderPass.attachments.resize( 1u );
 		renderPass.attachments[0].format = m_target->getPixelFormat();
-		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eDontCare;
 		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
 		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
 		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
 
 		renderPass.subpasses.resize( 1u );
 		renderPass.subpasses[0].flags = 0u;
 		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
 		renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
 
-		renderPass.dependencies.resize( 2u );
-		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
-		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eShaderRead;
-		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
-
-		renderPass.dependencies[1].srcSubpass = 0u;
-		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
-		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
-
 		m_renderPass = device.createRenderPass( renderPass );
 
 		renderer::DescriptorSetLayoutBindingArray bindings
 		{
 			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
-			{ 1u, renderer::DescriptorType::eSampledImage, renderer::ShaderStageFlag::eFragment },
+			{ 1u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
 		};
 
 		m_quad = std::make_unique< RenderQuad >( *getRenderSystem(), size );
@@ -399,10 +378,11 @@ namespace film_grain
 			, *m_renderPass
 			, castor::Size{ m_target->getWidth(), m_target->getHeight() }
 			, 0u
-			, m_sampler );
+			, m_sampler
+			, m_target->getPixelFormat() );
 
 		if ( result
-			&& m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
+			&& m_commandBuffer->begin() )
 		{
 			m_commandBuffer->resetQueryPool( timer.getQuery()
 				, 0u
@@ -413,38 +393,19 @@ namespace film_grain
 			// Put image in the right state for rendering.
 			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
-				, m_target->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eColourAttachmentOptimal
-					, renderer::AccessFlag::eColourAttachmentWrite ) );
+				, m_target->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
 
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *m_surface.m_fbo
-				, {}
+				, { renderer::ClearColorValue{} }
 				, renderer::SubpassContents::eInline );
 			m_quad->registerFrame( *m_commandBuffer );
 			m_commandBuffer->endRenderPass();
 
 			// Blit the result to the render target image.
-			renderer::ImageCopy imageCopy;
-			imageCopy.dstOffset = { 0, 0, 0 };
-			imageCopy.srcOffset = { 0, 0, 0 };
-			imageCopy.extent = m_target->getDimensions();
-			imageCopy.dstSubresource.aspectMask = renderer::getAspectMask( m_target->getDefaultView().getFormat() );
-			imageCopy.dstSubresource.baseArrayLayer = 0u;
-			imageCopy.dstSubresource.layerCount = 1u;
-			imageCopy.dstSubresource.mipLevel = 0u;
-			imageCopy.srcSubresource.aspectMask = renderer::getAspectMask( m_surface.m_colourTexture.getTexture()->getTexture().getFormat() );
-			imageCopy.srcSubresource.baseArrayLayer = 0u;
-			imageCopy.srcSubresource.layerCount = 1u;
-			imageCopy.srcSubresource.mipLevel = 0u;
-			m_commandBuffer->copyImage( imageCopy
-				, m_surface.m_colourTexture.getTexture()->getTexture()
-				, renderer::ImageLayout::eColourAttachmentOptimal
-				, m_target->getTexture()
-				, renderer::ImageLayout::eShaderReadOnlyOptimal );
-			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
-				, renderer::PipelineStageFlag::eColourAttachmentOutput
-				, m_target->getDefaultView().makeColourAttachment( renderer::ImageLayout::eTransferDstOptimal
-					, renderer::AccessFlag::eTransferWrite ) );
+			doCopyResultToTarget( m_surface.m_colourTexture.getTexture()->getDefaultView()
+				, *m_commandBuffer );
+
 			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
 				, timer.getQuery()
 				, 1u );

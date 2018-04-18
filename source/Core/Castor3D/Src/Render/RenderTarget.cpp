@@ -23,6 +23,7 @@
 #include <RenderPass/SubpassDescription.hpp>
 
 #include <Graphics/Image.hpp>
+#include <Miscellaneous/PreciseTimer.hpp>
 
 #if !defined( NDEBUG )
 #	define DISPLAY_DEBUG 1
@@ -133,7 +134,9 @@ namespace castor3d
 		createInfo.samples = renderer::SampleCountFlag::e1;
 		createInfo.sharingMode = renderer::SharingMode::eExclusive;
 		createInfo.tiling = renderer::ImageTiling::eOptimal;
-		createInfo.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+		createInfo.usage = renderer::ImageUsageFlag::eColourAttachment
+			| renderer::ImageUsageFlag::eSampled
+			| renderer::ImageUsageFlag::eTransferDst;
 		auto texture = std::make_shared< TextureLayout >( renderSystem
 			, createInfo
 			, renderer::MemoryPropertyFlag::eDeviceLocal );
@@ -238,6 +241,7 @@ namespace castor3d
 			m_overlayRenderer->initialise();
 
 			m_signalReady = device.createSemaphore();
+			m_fence = device.createFence( renderer::FenceCreateFlag::eSignaled );
 		}
 	}
 
@@ -246,6 +250,7 @@ namespace castor3d
 		if ( m_initialised )
 		{
 			m_initialised = false;
+			m_fence.reset();
 			m_signalReady.reset();
 			m_toneMappingCommandBuffer.reset();
 			m_overlayRenderer->cleanup();
@@ -372,31 +377,34 @@ namespace castor3d
 		, RenderTarget::TargetFbo & fbo
 		, CameraSPtr camera )
 	{
+		auto elapsedTime = m_timer.getElapsed();
 		auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
-		auto const * semaphoreToWait = m_signalReady.get();
+		m_signalFinished = m_signalReady.get();
 		SceneSPtr scene = getScene();
 		m_toneMapping->update( scene->getHdrConfig() );
 
 		// Render the scene through the RenderTechnique.
-		semaphoreToWait = m_renderTechnique->render( m_jitter
-			, *semaphoreToWait
+		m_signalFinished = m_renderTechnique->render( m_jitter
+			, *m_signalFinished
 			, info );
 
 		// Draw HDR post effects.
-		semaphoreToWait = doApplyPostEffects( *semaphoreToWait
+		m_signalFinished = doApplyPostEffects( *m_signalFinished
 			, m_hdrPostEffects
-			, *m_hdrPostFxTimer );
+			, *m_hdrPostFxTimer
+			, elapsedTime );
 
 		// Then draw the render's result to the RenderTarget's frame buffer, applying the tone mapping operator.
-		semaphoreToWait = doApplyToneMapping( *semaphoreToWait );
+		m_signalFinished = doApplyToneMapping( *m_signalFinished );
 
 		// Apply the sRGB post effects.
-		semaphoreToWait = doApplyPostEffects( *semaphoreToWait
+		m_signalFinished = doApplyPostEffects( *m_signalFinished
 			, m_srgbPostEffects
-			, *m_srgbPostFxTimer );
+			, *m_srgbPostFxTimer
+			, elapsedTime );
 
 		// And now render overlays.
-		semaphoreToWait = doRenderOverlays( *semaphoreToWait, *camera );
+		m_signalFinished = doRenderOverlays( *m_signalFinished, *camera );
 
 #if DISPLAY_DEBUG
 
@@ -546,7 +554,8 @@ namespace castor3d
 
 	renderer::Semaphore const * RenderTarget::doApplyPostEffects( renderer::Semaphore const & toWait
 		, PostEffectPtrArray const & effects
-		, RenderPassTimer & timer )
+		, RenderPassTimer & timer
+		, castor::Nanoseconds const & elapsedTime )
 	{
 		auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
 		timer.start();
@@ -554,11 +563,15 @@ namespace castor3d
 
 		for ( auto effect : effects )
 		{
+			m_fence->reset();
+			effect->update( elapsedTime );
 			queue.submit( effect->getCommands()
 				, *result
 				, renderer::PipelineStageFlag::eColourAttachmentOutput
 				, effect->getSemaphore()
-				, nullptr );
+				, m_fence.get() );
+			m_fence->wait( renderer::FenceTimeout );
+			timer.step();
 			result = &effect->getSemaphore();
 		}
 
@@ -571,11 +584,13 @@ namespace castor3d
 		auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
 		m_toneMappingTimer->start();
 		auto * result = &toWait;
+		m_fence->reset();
 		queue.submit( *m_toneMappingCommandBuffer
 			, *result
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, m_toneMapping->getSemaphore()
-			, nullptr );
+			, m_fence.get() );
+		m_fence->wait( renderer::FenceTimeout );
 		m_toneMappingTimer->stop();
 		result = &m_toneMapping->getSemaphore();
 		return result;

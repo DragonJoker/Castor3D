@@ -9,6 +9,7 @@
 #include <RenderPass/FrameBuffer.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
 #include <RenderPass/RenderPass.hpp>
+#include <Sync/ImageMemoryBarrier.hpp>
 
 using namespace castor;
 namespace castor3d
@@ -32,7 +33,7 @@ namespace castor3d
 		m_colourTexture.setIndex( index );
 
 		renderer::ImageCreateInfo image{};
-		image.flags = renderer::ImageCreateFlag::eCubeCompatible;
+		image.flags = 0u;
 		image.arrayLayers = 1u;
 		image.extent.width = size[0];
 		image.extent.height = size[1];
@@ -44,7 +45,9 @@ namespace castor3d
 		image.samples = renderer::SampleCountFlag::e1;
 		image.sharingMode = renderer::SharingMode::eExclusive;
 		image.tiling = renderer::ImageTiling::eOptimal;
-		image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+		image.usage = renderer::ImageUsageFlag::eColourAttachment
+			| renderer::ImageUsageFlag::eSampled
+			| renderer::ImageUsageFlag::eTransferSrc;
 		auto colourTexture = std::make_shared< TextureLayout >( *renderTarget.getEngine()->getRenderSystem()
 			, image
 			, renderer::MemoryPropertyFlag::eDeviceLocal );
@@ -105,6 +108,32 @@ namespace castor3d
 		doCleanup();
 		m_commandBuffer.reset();
 		m_signalFinished.reset();
+	}
+
+	void PostEffect::update( castor::Nanoseconds const & elapsedTime )
+	{
+	}
+
+	void PostEffect::doCopyResultToTarget( renderer::TextureView const & result
+		, renderer::CommandBuffer & commandBuffer )
+	{
+		// Put combine result image in transfer source layout.
+		commandBuffer.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+			, renderer::PipelineStageFlag::eTransfer
+			, result.makeTransferSource( renderer::ImageLayout::eColourAttachmentOptimal
+				, renderer::AccessFlag::eColourAttachmentWrite ) );
+		// Put target image in transfer destination layout.
+		commandBuffer.memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
+			, renderer::PipelineStageFlag::eTransfer
+			, m_target->getDefaultView().makeTransferDestination( renderer::ImageLayout::eUndefined, 0u ) );
+		// Copy result to target.
+		commandBuffer.copyImage( result
+			, m_target->getDefaultView() );
+		// Put target image in fragment shader input layout.
+		commandBuffer.memoryBarrier( renderer::PipelineStageFlag::eTransfer
+			, renderer::PipelineStageFlag::eFragmentShader
+			, m_target->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eTransferDstOptimal
+				, renderer::AccessFlag::eTransferWrite ) );
 	}
 
 	//*********************************************************************************************

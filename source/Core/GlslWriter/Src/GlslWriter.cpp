@@ -14,10 +14,10 @@ namespace glsl
 	{
 		*this << glsl::Version() << endl;
 
-//#if !defined( NDEBUG )
-//		*this << "#pragma optimize(off)" << endl;
-//		*this << "#pragma debug(on)" << endl;
-//#endif
+#if !defined( NDEBUG )
+		*this << "#pragma optimize(off)" << endl;
+		*this << "#pragma debug(on)" << endl;
+#endif
 	}
 
 	GlslWriter::GlslWriter( GlslWriter const & p_rhs )

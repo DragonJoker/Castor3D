@@ -20,7 +20,7 @@ namespace film_grain
 	public:
 		explicit RenderQuad( castor3d::RenderSystem & renderSystem
 			, renderer::Extent2D const & size );
-		void update( float time );
+		void update( castor::Nanoseconds const & time );
 
 	private:
 		void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
@@ -34,6 +34,7 @@ namespace film_grain
 			float m_exposure;
 			float m_time;
 		};
+		uint64_t m_time{ 0ull };
 		renderer::Extent2D m_size;
 		renderer::UniformBufferPtr< Configuration > m_configUbo;
 		castor3d::SamplerSPtr m_sampler;
@@ -52,6 +53,10 @@ namespace film_grain
 		static castor3d::PostEffectSPtr create( castor3d::RenderTarget & renderTarget
 			, castor3d::RenderSystem & renderSystem
 			, castor3d::Parameters const & params );
+		/**
+		 *\copydoc		castor3d::PostEffect::update
+		 */
+		void update( castor::Nanoseconds const & elapsedTime )override;
 
 	private:
 		/**

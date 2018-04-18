@@ -197,12 +197,12 @@ namespace castor3d
 	{
 		if ( m_initialised )
 		{
-			Engine * engine = getEngine();
 			RenderTargetSPtr target = getRenderTarget();
-			m_device->enable();
 
 			if ( target && target->isInitialised() )
 			{
+				m_device->enable();
+
 				if ( m_toSave )
 				{
 					ByteArray data;
@@ -218,24 +218,20 @@ namespace castor3d
 
 				if ( resources )
 				{
-					auto before = std::chrono::high_resolution_clock::now();
-					auto & queue = m_device->getGraphicsQueue();
-					auto res = queue.submit( *m_commandBuffers[resources->getBackBuffer()]
+					auto res = m_device->getGraphicsQueue().submit( *m_commandBuffers[resources->getBackBuffer()]
 						, resources->getImageAvailableSemaphore()
 						, renderer::PipelineStageFlag::eColourAttachmentOutput
 						, resources->getRenderingFinishedSemaphore()
 						, &resources->getFence() );
 					m_swapChain->present( *resources );
-
-					auto after = std::chrono::high_resolution_clock::now();
 				}
 				else
 				{
 					std::cerr << "Can't render" << std::endl;
 				}
-			}
 
-			m_device->disable();
+				m_device->disable();
+			}
 		}
 	}
 
