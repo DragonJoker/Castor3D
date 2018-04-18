@@ -239,7 +239,7 @@ namespace Bloom
 		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
 		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
 
 		renderPass.subpasses.resize( 1u );
 		renderPass.subpasses[0].flags = 0u;
@@ -266,15 +266,21 @@ namespace Bloom
 			| renderer::ImageUsageFlag::eSampled
 			| renderer::ImageUsageFlag::eTransferDst
 			| renderer::ImageUsageFlag::eTransferSrc;
+		m_pipelines.hiPass.image = std::make_shared< TextureLayout >( *getRenderSystem()
+			, image
+			, renderer::MemoryPropertyFlag::eDeviceLocal );
+		m_pipelines.hiPass.image->initialise();
 
-		m_pipelines.hiPass.image = device.createTexture( image, renderer::MemoryPropertyFlag::eDeviceLocal );
 		image.mipLevels = 1u;
 		image.usage = renderer::ImageUsageFlag::eColourAttachment
 			| renderer::ImageUsageFlag::eSampled
 			| renderer::ImageUsageFlag::eTransferSrc;
 		image.extent.width = size.width;
 		image.extent.height = size.height;
-		m_pipelines.combine.image = device.createTexture( image, renderer::MemoryPropertyFlag::eDeviceLocal );
+		m_pipelines.combine.image = std::make_shared< TextureLayout >( *getRenderSystem()
+			, image
+			, renderer::MemoryPropertyFlag::eDeviceLocal );
+		m_pipelines.combine.image->initialise();
 
 		bool result = doInitialiseHiPass();
 
@@ -309,6 +315,7 @@ namespace Bloom
 			result = doBuildCommandBuffer( timer );
 		}
 
+		m_result = m_pipelines.combine.image.get();
 		return result;
 	}
 
@@ -322,7 +329,6 @@ namespace Bloom
 		std::swap( m_pipelines.hiPass, dummy2 );
 
 		m_hiPassViews.clear();
-		m_hiPassMipView.reset();
 		m_linearSampler->cleanup();
 		m_nearestSampler->cleanup();
 
@@ -382,13 +388,13 @@ namespace Bloom
 		auto const hipass = getHiPassProgram( getRenderSystem() );
 
 		// Create the surface
-		m_pipelines.hiPass.surface = std::make_unique< Surface >( *m_pipelines.hiPass.image
+		m_pipelines.hiPass.surface = std::make_unique< Surface >( m_pipelines.hiPass.image->getTexture()
 			, size
 			, *m_renderPass );
 
 		// Create downsampled views.
 		renderer::ImageViewCreateInfo imageView{};
-		imageView.format = m_pipelines.hiPass.image->getFormat();
+		imageView.format = m_pipelines.hiPass.image->getPixelFormat();
 		imageView.viewType = renderer::TextureViewType::e2D;
 		imageView.subresourceRange.aspectMask = renderer::getAspectMask( imageView.format );
 		imageView.subresourceRange.baseMipLevel = 0u;
@@ -399,13 +405,8 @@ namespace Bloom
 		for ( uint32_t i = 1u; i < FILTER_COUNT; ++i )
 		{
 			imageView.subresourceRange.baseMipLevel = i;
-			m_hiPassViews.push_back( m_pipelines.hiPass.image->createView( imageView ) );
+			m_hiPassViews.push_back( m_pipelines.hiPass.image->getTexture().createView( imageView ) );
 		}
-
-		// Create global view on hi-pass image.
-		imageView.subresourceRange.baseMipLevel = 0u;
-		imageView.subresourceRange.levelCount = FILTER_COUNT;
-		m_hiPassMipView = m_pipelines.hiPass.image->createView( imageView );
 
 		// Create pipeline
 		renderer::VertexInputState inputState;
@@ -452,7 +453,7 @@ namespace Bloom
 		auto const combine = getCombineProgram( getRenderSystem() );
 
 		// Create view and associated frame buffer.
-		m_pipelines.combine.surface = std::make_unique< Surface >( *m_pipelines.combine.image
+		m_pipelines.combine.surface = std::make_unique< Surface >( m_pipelines.combine.image->getTexture()
 			, size
 			, *m_renderPass );
 
@@ -485,7 +486,7 @@ namespace Bloom
 		auto & surface = *m_pipelines.combine.surface;
 		surface.descriptorSet = m_pipelines.combine.layout.descriptorPool->createDescriptorSet( 0u );
 		surface.descriptorSet->createBinding( m_pipelines.combine.layout.descriptorLayout->getBinding( 0u )
-			, *m_hiPassMipView
+			, m_pipelines.hiPass.image->getDefaultView()
 			, m_linearSampler->getSampler()
 			, renderer::ImageLayout::eShaderReadOnlyOptimal );
 		surface.descriptorSet->createBinding( m_pipelines.combine.layout.descriptorLayout->getBinding( 1u )
@@ -541,7 +542,7 @@ namespace Bloom
 			m_commandBuffer->endRenderPass();
 
 			// Downscale through mipmaps generation.
-			m_pipelines.hiPass.image->generateMipmaps( *m_commandBuffer );
+			m_pipelines.hiPass.image->getTexture().generateMipmaps( *m_commandBuffer );
 
 			// Blur passes.
 			for ( uint32_t i = 0u; i < FILTER_COUNT; ++i )
@@ -567,7 +568,7 @@ namespace Bloom
 			// Put Hi-pass general view in fragment shader input layout.
 			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
 				, renderer::PipelineStageFlag::eFragmentShader
-				, m_hiPassMipView->makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+				, m_pipelines.hiPass.image->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
 
 			// Combine pass.
 			m_commandBuffer->beginRenderPass( *m_renderPass
@@ -582,10 +583,6 @@ namespace Bloom
 			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 			m_commandBuffer->draw( 6u );
 			m_commandBuffer->endRenderPass();
-
-			// Blit the combination result to the target image.
-			doCopyResultToTarget( *m_pipelines.combine.surface->view
-				, *m_commandBuffer );
 
 			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
 				, timer.getQuery()

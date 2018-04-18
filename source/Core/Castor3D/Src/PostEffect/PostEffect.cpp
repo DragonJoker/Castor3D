@@ -100,7 +100,9 @@ namespace castor3d
 		m_signalFinished = device.createSemaphore();
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 		m_target = &texture;
-		return doInitialise( timer );
+		auto result = doInitialise( timer );
+		ENSURE( m_result != nullptr );
+		return result;
 	}
 
 	void PostEffect::cleanup()
@@ -117,7 +119,7 @@ namespace castor3d
 	void PostEffect::doCopyResultToTarget( renderer::TextureView const & result
 		, renderer::CommandBuffer & commandBuffer )
 	{
-		// Put combine result image in transfer source layout.
+		// Put result image in transfer source layout.
 		commandBuffer.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 			, renderer::PipelineStageFlag::eTransfer
 			, result.makeTransferSource( renderer::ImageLayout::eColourAttachmentOptimal

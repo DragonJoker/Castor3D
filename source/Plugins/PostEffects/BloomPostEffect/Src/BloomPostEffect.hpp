@@ -75,7 +75,7 @@ namespace Bloom
 		struct Pipeline
 		{
 			Layout layout;
-			renderer::TexturePtr image;
+			castor3d::TextureLayoutSPtr image;
 			std::unique_ptr< Surface > surface;
 			renderer::PipelinePtr pipeline;
 		};
@@ -87,7 +87,6 @@ namespace Bloom
 		} m_pipelines;
 
 		std::vector< renderer::TextureViewPtr > m_hiPassViews;
-		renderer::TextureViewPtr m_hiPassMipView;
 		std::vector< castor3d::GaussianBlurSPtr > m_blurs;
 		renderer::VertexBufferPtr< castor3d::NonTexturedQuad > m_vertexBuffer;
 		uint32_t m_size;

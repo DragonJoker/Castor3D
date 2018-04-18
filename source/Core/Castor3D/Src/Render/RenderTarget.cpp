@@ -13,6 +13,7 @@
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
+#include <Command/CommandBuffer.hpp>
 #include <Core/Device.hpp>
 #include <Image/Texture.hpp>
 #include <RenderPass/FrameBuffer.hpp>
@@ -21,6 +22,7 @@
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/SubpassDependency.hpp>
 #include <RenderPass/SubpassDescription.hpp>
+#include <Sync/ImageMemoryBarrier.hpp>
 
 #include <Graphics/Image.hpp>
 #include <Miscellaneous/PreciseTimer.hpp>
@@ -136,7 +138,8 @@ namespace castor3d
 		createInfo.tiling = renderer::ImageTiling::eOptimal;
 		createInfo.usage = renderer::ImageUsageFlag::eColourAttachment
 			| renderer::ImageUsageFlag::eSampled
-			| renderer::ImageUsageFlag::eTransferDst;
+			| renderer::ImageUsageFlag::eTransferDst
+			| renderer::ImageUsageFlag::eTransferSrc;
 		auto texture = std::make_shared< TextureLayout >( renderSystem
 			, createInfo
 			, renderer::MemoryPropertyFlag::eDeviceLocal );
@@ -212,14 +215,25 @@ namespace castor3d
 			m_hdrPostFxTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "HDR Post effects" ), cuT( "HDR Post effects" ) );
 			m_overlaysTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Overlays" ), cuT( "Overlays" ) );
 			m_toneMappingTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Tone Mapping" ), cuT( "Tone Mapping" ) );
+			TextureLayout const * sourceView{ &m_renderTechnique->getResult() };
 
 			for ( auto effect : m_hdrPostEffects )
 			{
 				if ( m_initialised )
 				{
-					m_initialised = effect->initialise( m_renderTechnique->getResult()
+					m_initialised = effect->initialise( *sourceView
 						, *m_hdrPostFxTimer );
+					sourceView = &effect->getResult();
 				}
+			}
+
+			if ( sourceView != &m_renderTechnique->getResult() )
+			{
+				doInitialiseCopyCommands( m_hdrCopyCommands
+					, sourceView->getDefaultView()
+					, m_renderTechnique->getResult().getDefaultView() );
+				m_hdrCopyFinished = device.createSemaphore();
+				sourceView = m_frameBuffer.m_colourTexture.getTexture().get();
 			}
 
 			if ( m_initialised )
@@ -231,9 +245,19 @@ namespace castor3d
 			{
 				if ( m_initialised )
 				{
-					m_initialised = effect->initialise( *m_frameBuffer.m_colourTexture.getTexture()
+					m_initialised = effect->initialise( *sourceView
 						, *m_srgbPostFxTimer );
+					sourceView = &effect->getResult();
 				}
+			}
+
+			if ( sourceView != m_frameBuffer.m_colourTexture.getTexture().get() )
+			{
+				doInitialiseCopyCommands( m_srgbCopyCommands
+					, sourceView->getDefaultView()
+					, m_frameBuffer.m_colourTexture.getTexture()->getDefaultView() );
+				m_srgbCopyFinished = device.createSemaphore();
+				sourceView = nullptr;
 			}
 
 			m_overlayRenderer = std::make_shared< OverlayRenderer >( *getEngine()->getRenderSystem()
@@ -269,6 +293,10 @@ namespace castor3d
 				effect->cleanup();
 			}
 
+			m_hdrCopyCommands.reset();
+			m_srgbCopyCommands.reset();
+			m_hdrCopyFinished.reset();
+			m_srgbCopyFinished.reset();
 			m_hdrPostEffects.clear();
 			m_srgbPostEffects.clear();
 
@@ -371,46 +399,6 @@ namespace castor3d
 	void RenderTarget::addTechniqueParameters( Parameters const & parameters )
 	{
 		m_techniqueParameters.add( parameters );
-	}
-
-	void RenderTarget::doRender( RenderInfo & info
-		, RenderTarget::TargetFbo & fbo
-		, CameraSPtr camera )
-	{
-		auto elapsedTime = m_timer.getElapsed();
-		auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
-		m_signalFinished = m_signalReady.get();
-		SceneSPtr scene = getScene();
-		m_toneMapping->update( scene->getHdrConfig() );
-
-		// Render the scene through the RenderTechnique.
-		m_signalFinished = m_renderTechnique->render( m_jitter
-			, *m_signalFinished
-			, info );
-
-		// Draw HDR post effects.
-		m_signalFinished = doApplyPostEffects( *m_signalFinished
-			, m_hdrPostEffects
-			, *m_hdrPostFxTimer
-			, elapsedTime );
-
-		// Then draw the render's result to the RenderTarget's frame buffer, applying the tone mapping operator.
-		m_signalFinished = doApplyToneMapping( *m_signalFinished );
-
-		// Apply the sRGB post effects.
-		m_signalFinished = doApplyPostEffects( *m_signalFinished
-			, m_srgbPostEffects
-			, *m_srgbPostFxTimer
-			, elapsedTime );
-
-		// And now render overlays.
-		m_signalFinished = doRenderOverlays( *m_signalFinished, *camera );
-
-#if DISPLAY_DEBUG
-
-		m_renderTechnique->debugDisplay( Size{ camera->getWidth(), camera->getHeight() } );
-
-#endif
 	}
 
 	void RenderTarget::doInitialiseRenderPass()
@@ -552,30 +540,116 @@ namespace castor3d
 		return result;
 	}
 
+	void RenderTarget::doInitialiseCopyCommands( renderer::CommandBufferPtr & commandBuffer
+		, renderer::TextureView const & source
+		, renderer::TextureView const & target )
+	{
+		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+
+		commandBuffer->begin();
+		// Put source image in transfer source layout.
+		commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+			, renderer::PipelineStageFlag::eTransfer
+			, source.makeTransferSource( renderer::ImageLayout::eColourAttachmentOptimal
+				, renderer::AccessFlag::eColourAttachmentWrite ) );
+		// Put target image in transfer destination layout.
+		commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
+			, renderer::PipelineStageFlag::eTransfer
+			, target.makeTransferDestination( renderer::ImageLayout::eUndefined, 0u ) );
+		// Copy source to target.
+		commandBuffer->copyImage( source, target );
+		// Put target image in fragment shader input layout.
+		commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
+			, renderer::PipelineStageFlag::eFragmentShader
+			, target.makeShaderInputResource( renderer::ImageLayout::eTransferDstOptimal
+				, renderer::AccessFlag::eTransferWrite ) );
+		commandBuffer->end();
+	}
+
+	void RenderTarget::doRender( RenderInfo & info
+		, RenderTarget::TargetFbo & fbo
+		, CameraSPtr camera )
+	{
+		auto elapsedTime = m_timer.getElapsed();
+		auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
+		m_signalFinished = m_signalReady.get();
+		SceneSPtr scene = getScene();
+		m_toneMapping->update( scene->getHdrConfig() );
+
+		// Render the scene through the RenderTechnique.
+		m_signalFinished = m_renderTechnique->render( m_jitter
+			, *m_signalFinished
+			, info );
+
+		// Draw HDR post effects.
+		m_signalFinished = doApplyPostEffects( *m_signalFinished
+			, m_hdrPostEffects
+			, *m_hdrPostFxTimer
+			, *m_hdrCopyCommands
+			, *m_hdrCopyFinished
+			, elapsedTime );
+
+		// Then draw the render's result to the RenderTarget's frame buffer, applying the tone mapping operator.
+		m_signalFinished = doApplyToneMapping( *m_signalFinished );
+
+		// Apply the sRGB post effects.
+		m_signalFinished = doApplyPostEffects( *m_signalFinished
+			, m_srgbPostEffects
+			, *m_srgbPostFxTimer
+			, *m_srgbCopyCommands
+			, *m_srgbCopyFinished
+			, elapsedTime );
+
+		// And now render overlays.
+		m_signalFinished = doRenderOverlays( *m_signalFinished, *camera );
+
+#if DISPLAY_DEBUG
+
+		m_renderTechnique->debugDisplay( Size{ camera->getWidth(), camera->getHeight() } );
+
+#endif
+	}
+
 	renderer::Semaphore const * RenderTarget::doApplyPostEffects( renderer::Semaphore const & toWait
 		, PostEffectPtrArray const & effects
 		, RenderPassTimer & timer
+		, renderer::CommandBuffer const & commandBuffer
+		, renderer::Semaphore const & copyFinished
 		, castor::Nanoseconds const & elapsedTime )
 	{
-		auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
-		timer.start();
 		auto * result = &toWait;
 
-		for ( auto effect : effects )
+		if ( !effects.empty() )
 		{
+			auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
+			timer.start();
+
+			for ( auto effect : effects )
+			{
+				m_fence->reset();
+				effect->update( elapsedTime );
+				queue.submit( effect->getCommands()
+					, *result
+					, renderer::PipelineStageFlag::eColourAttachmentOutput
+					, effect->getSemaphore()
+					, m_fence.get() );
+				m_fence->wait( renderer::FenceTimeout );
+				timer.step();
+				result = &effect->getSemaphore();
+			}
+
 			m_fence->reset();
-			effect->update( elapsedTime );
-			queue.submit( effect->getCommands()
+			queue.submit( commandBuffer
 				, *result
 				, renderer::PipelineStageFlag::eColourAttachmentOutput
-				, effect->getSemaphore()
+				, copyFinished
 				, m_fence.get() );
 			m_fence->wait( renderer::FenceTimeout );
-			timer.step();
-			result = &effect->getSemaphore();
+			result = &copyFinished;
+			timer.stop();
 		}
 
-		timer.stop();
 		return result;
 	}
 

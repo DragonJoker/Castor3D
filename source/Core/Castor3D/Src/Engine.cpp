@@ -425,6 +425,11 @@ namespace castor3d
 		m_additionalSections.erase( it );
 	}
 
+	bool Engine::isTopDown()const
+	{
+		return m_renderSystem->getMainDevice()->getClipDirection() == renderer::ClipDirection::eTopDown;
+	}
+
 	void Engine::doLoadCoreData()
 	{
 		Path path = Engine::getDataDirectory() / cuT( "Castor3D" );

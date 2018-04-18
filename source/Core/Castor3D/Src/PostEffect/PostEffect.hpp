@@ -183,6 +183,12 @@ namespace castor3d
 		{
 			return m_postToneMapping;
 		}
+
+		inline TextureLayout const & getResult()const
+		{
+			REQUIRE( m_result );
+			return *m_result;
+		}
 		/**@}*/
 
 	protected:
@@ -222,6 +228,7 @@ namespace castor3d
 		TextureLayout const * m_target{ nullptr };
 		renderer::CommandBufferPtr m_commandBuffer;
 		renderer::SemaphorePtr m_signalFinished;
+		TextureLayout const * m_result{ nullptr };
 	};
 }
 

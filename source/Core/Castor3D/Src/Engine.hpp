@@ -162,6 +162,13 @@ namespace castor3d
 		C3D_API void unregisterSections( castor::String const & p_name );
 		/**
 		 *\~english
+		 *\return		\p true if the selected rendering API is top down.
+		 *\~french
+		 *\return		\p true si l'API de rendu sélectionnée est top down.
+		 */
+		C3D_API bool isTopDown()const;
+		/**
+		 *\~english
 		 *\brief		Retrieves plug-ins path
 		 *\return		The plug-ins path
 		 *\~french
@@ -188,329 +195,173 @@ namespace castor3d
 		 */
 		C3D_API static castor::Path getDataDirectory();
 		/**
-		 *\~english
-		 *\brief		Retrieves the images collection
-		 *\return		The collection
-		 *\~french
-		 *\brief		Récupère la collection d'images
-		 *\return		La collection
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline castor::ImageCache const & getImageCache()const
 		{
 			return m_imageCache;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the images collection
-		 *\return		The collection
-		 *\~french
-		 *\brief		Récupère la collection d'images
-		 *\return		La collection
-		 */
+
 		inline castor::ImageCache & getImageCache()
 		{
 			return m_imageCache;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the fonts collection
-		 *\return		The collection
-		 *\~french
-		 *\brief		Récupère la collection de polices
-		 *\return		La collection
-		 */
+
 		inline castor::FontCache const & getFontCache()const
 		{
 			return m_fontCache;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the fonts collection
-		 *\return		The collection
-		 *\~french
-		 *\brief		Récupère la collection de polices
-		 *\return		La collection
-		 */
+
 		inline castor::FontCache & getFontCache()
 		{
 			return m_fontCache;
 		}
-		/**
-		 *\~english
-		 *\return		The user input listener.
-		 *\~french
-		 *\return		Le listener d'entrées utilisateur.
-		 */
+
 		inline UserInputListenerSPtr getUserInputListener()
 		{
 			return m_userInputListener;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the user input listener.
-		 *\param[in]	p_listener	The new value.
-		 *\~french
-		 *\brief		Définit le listener d'entrées utilisateur.
-		 *\param[in]	p_listener	La nouvelle valeur.
-		 */
-		inline void setUserInputListener( UserInputListenerSPtr p_listener )
-		{
-			m_userInputListener = p_listener;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the RenderSystem
-		 *\return		The RenderSystem
-		 *\~french
-		 *\brief		Récupère le RenderSystem
-		 *\return		Le RenderSystem
-		 */
+
 		inline RenderSystem * getRenderSystem()const
 		{
 			return m_renderSystem.get();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the default Sampler
-		 *\return		The Sampler
-		 *\~french
-		 *\brief		Récupère le Sampler par défault
-		 *\return		Le Sampler
-		 */
+
 		inline SamplerSPtr getDefaultSampler()const
 		{
 			return m_defaultSampler;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the lighting Sampler.
-		 *\return		The Sampler.
-		 *\~french
-		 *\brief		Récupère le Sampler pour les éclairages.
-		 *\return		Le Sampler.
-		 */
+
 		inline SamplerSPtr getLightsSampler()const
 		{
 			return m_lightsSampler;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the SceneFileParser additional parsers.
-		 *\return		The parsers.
-		 *\~french
-		 *\brief		Récupère les analyseurs supplémentaires pour SceneFileParser.
-		 *\return		Les analyseurs.
-		 */
+
 		inline std::map< castor::String, castor::FileParser::AttributeParsersBySection > const & getAdditionalParsers()const
 		{
 			return m_additionalParsers;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the SceneFileParser additional sections.
-		 *\return		The sections.
-		 *\~french
-		 *\brief		Récupère les sections supplémentaires pour SceneFileParser.
-		 *\return		Les sections.
-		 */
+
 		inline std::map< castor::String, castor::StrUIntMap > const & getAdditionalSections()const
 		{
 			return m_additionalSections;
 		}
-		/**
-		 *\~english
-		 *\return		The engine version.
-		 *\~french
-		 *\return		La version du moteur.
-		 */
+
 		inline Version const & getVersion()const
 		{
 			return m_version;
 		}
-		/**
-		 *\~english
-		 *\return		The render loop.
-		 *\~french
-		 *\return		La boucle de rendu.
-		 */
+
 		inline bool hasRenderLoop()const
 		{
 			return m_renderLoop != nullptr;
 		}
-		/**
-		 *\~english
-		 *\return		The render loop.
-		 *\~french
-		 *\return		La boucle de rendu.
-		 */
+
 		inline RenderLoop const & getRenderLoop()const
 		{
 			return *m_renderLoop;
 		}
-		/**
-		 *\~english
-		 *\return		The render loop.
-		 *\~french
-		 *\return		La boucle de rendu.
-		 */
+
 		inline RenderLoop & getRenderLoop()
 		{
 			return *m_renderLoop;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the need for per object lighting.
-		 *\param[in]	p_value	The new value.
-		 *\~french
-		 *\brief		Définit le besoin d'un éclairage par objet.
-		 *\param[in]	p_value	La nouvelle valeur.
-		 */
-		inline void setPerObjectLighting( bool p_value )
-		{
-			m_perObjectLighting = p_value;
-		}
-		/**
-		 *\~english
-		 *\return		The need for per object lighting.
-		 *\~french
-		 *\return		Le besoin d'un éclairage par objet.
-		 */
+
 		inline bool getPerObjectLighting()
 		{
 			return m_perObjectLighting;
 		}
-		/**
-		 *\~english
-		 *\return		Tells if the engine uses an asynchronous render loop.
-		 *\~french
-		 *\return		Dit si le moteur utilise un boucle de rendu asynchrone.
-		 */
+
 		inline bool isThreaded()
 		{
 			return m_threaded;
 		}
-		/**
-		 *\~english
-		 *\return		The RenderSystem factory.
-		 *\~french
-		 *\return		La fabrique de RenderSystem.
-		 */
+
 		inline RenderSystemFactory const & getRenderSystemFactory()const
 		{
 			return m_renderSystemFactory;
 		}
-		/**
-		 *\~english
-		 *\return		The RenderSystem factory.
-		 *\~french
-		 *\return		La fabrique de RenderSystem.
-		 */
+
 		inline RenderSystemFactory & getRenderSystemFactory()
 		{
 			return m_renderSystemFactory;
 		}
-		/**
-		 *\~english
-		 *\return		The MeshGenerator factory.
-		 *\~french
-		 *\return		La fabrique de MeshGenerator.
-		 */
+
 		inline MeshFactory const & getMeshFactory()const
 		{
 			return m_meshFactory;
 		}
-		/**
-		 *\~english
-		 *\return		The MeshGenerator factory.
-		 *\~french
-		 *\return		La fabrique de MeshGenerator.
-		 */
+
 		inline MeshFactory & getMeshFactory()
 		{
 			return m_meshFactory;
 		}
-		/**
-		 *\~english
-		 *\return		The Subdivider factory.
-		 *\~french
-		 *\return		La fabrique de Subdivider.
-		 */
+
 		inline SubdividerFactory const & getSubdividerFactory()const
 		{
 			return m_subdividerFactory;
 		}
-		/**
-		 *\~english
-		 *\return		The Subdivider factory.
-		 *\~french
-		 *\return		La fabrique de Subdivider.
-		 */
+
 		inline SubdividerFactory & getSubdividerFactory()
 		{
 			return m_subdividerFactory;
 		}
-		/**
-		 *\~english
-		 *\return		The Importer factory.
-		 *\~french
-		 *\return		La fabrique de Importer.
-		 */
+
 		inline ImporterFactory const & getImporterFactory()const
 		{
 			return m_importerFactory;
 		}
-		/**
-		 *\~english
-		 *\return		The Subdivider factory.
-		 *\~french
-		 *\return		La fabrique de Subdivider.
-		 */
+
 		inline ImporterFactory & getImporterFactory()
 		{
 			return m_importerFactory;
 		}
-		/**
-		 *\~english
-		 *\return		The CpuParticleSystem factory.
-		 *\~french
-		 *\return		La fabrique de CpuParticleSystem.
-		 */
+
 		inline ParticleFactory & getParticleFactory()
 		{
 			return m_particleFactory;
 		}
-		/**
-		 *\~english
-		 *\return		The CPU informations.
-		 *\~french
-		 *\return		Les informations CPU.
-		 */
+
 		inline castor::CpuInformations const & getCpuInformations()const
 		{
 			return m_cpuInformations;
 		}
-		/**
-		 *\~english
-		 *\return		The materials type.
-		 *\~french
-		 *\return		Le type des matériaux.
-		 */
+
 		inline MaterialType getMaterialsType()const
 		{
 			return m_materialType;
 		}
+		/**@}*/
 		/**
-		 *\~english
-		 *\brief		Sets the materials type.
-		 *\param[in]	p_type	The new value.
-		 *\~french
-		 *\brief		Définit le type des matériaux.
-		 *\param[in]	p_type	La nouvelle valeur.
-		 */
+		*\~english
+		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		*/
+		/**@{*/
+		inline void setUserInputListener( UserInputListenerSPtr p_listener )
+		{
+			m_userInputListener = p_listener;
+		}
+
+		inline void setPerObjectLighting( bool p_value )
+		{
+			m_perObjectLighting = p_value;
+		}
+
 		inline void setMaterialsType( MaterialType p_type )
 		{
 			m_materialType = p_type;
 		}
+		/**@}*/
 
 	private:
 		void doLoadCoreData();

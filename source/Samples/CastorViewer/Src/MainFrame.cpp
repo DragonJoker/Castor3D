@@ -575,7 +575,9 @@ namespace CastorViewer
 				auto buffer = m_renderPanel->getRenderWindow()->getSavedFrame();
 				castor.getRenderLoop().resume();
 				Size size = buffer->dimensions();
-				CreateBitmapFromBuffer( buffer, true, bitmap );
+				CreateBitmapFromBuffer( buffer
+					, false
+					, bitmap );
 			}
 			else
 			{
@@ -583,7 +585,9 @@ namespace CastorViewer
 				castor.getRenderLoop().renderSyncFrame();
 				auto buffer = m_renderPanel->getRenderWindow()->getSavedFrame();
 				Size size = buffer->dimensions();
-				CreateBitmapFromBuffer( buffer, true, bitmap );
+				CreateBitmapFromBuffer( buffer
+					, false
+					, bitmap );
 			}
 
 			wxString strWildcard = _( "All supported files" );

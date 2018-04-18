@@ -334,12 +334,17 @@ namespace castor3d
 		C3D_API bool doInitialiseVelocityTexture();
 		C3D_API bool doInitialiseTechnique();
 		C3D_API bool doInitialiseToneMapping();
+		C3D_API void doInitialiseCopyCommands( renderer::CommandBufferPtr & commandBuffer
+			, renderer::TextureView const & source
+			, renderer::TextureView const & target );
 		C3D_API void doRender( RenderInfo & info
 			, TargetFbo & fbo
 			, CameraSPtr camera );
 		C3D_API renderer::Semaphore const * doApplyPostEffects( renderer::Semaphore const & toWait
 			, PostEffectPtrArray const & effects
 			, RenderPassTimer & timer
+			, renderer::CommandBuffer const & commandBuffer
+			, renderer::Semaphore const & copyFinished
 			, castor::Nanoseconds const & elapsedTime );
 		C3D_API renderer::Semaphore const * doApplyToneMapping( renderer::Semaphore const & toWait );
 		C3D_API renderer::Semaphore const * doRenderOverlays( renderer::Semaphore const & toWait
@@ -364,10 +369,14 @@ namespace castor3d
 		uint32_t m_index;
 		Parameters m_techniqueParameters;
 		PostEffectPtrArray m_hdrPostEffects;
+		RenderPassTimerSPtr m_hdrPostFxTimer;
+		renderer::CommandBufferPtr m_hdrCopyCommands;
+		renderer::SemaphorePtr m_hdrCopyFinished;
 		ToneMappingSPtr m_toneMapping;
 		PostEffectPtrArray m_srgbPostEffects;
-		RenderPassTimerSPtr m_hdrPostFxTimer;
 		RenderPassTimerSPtr m_srgbPostFxTimer;
+		renderer::CommandBufferPtr m_srgbCopyCommands;
+		renderer::SemaphorePtr m_srgbCopyFinished;
 		RenderPassTimerSPtr m_toneMappingTimer;
 		RenderPassTimerSPtr m_overlaysTimer;
 		SsaoConfig m_ssaoConfig;

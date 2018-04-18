@@ -402,16 +402,13 @@ namespace film_grain
 			m_quad->registerFrame( *m_commandBuffer );
 			m_commandBuffer->endRenderPass();
 
-			// Blit the result to the render target image.
-			doCopyResultToTarget( m_surface.m_colourTexture.getTexture()->getDefaultView()
-				, *m_commandBuffer );
-
 			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
 				, timer.getQuery()
 				, 1u );
 			m_commandBuffer->end();
 		}
 
+		m_result = m_surface.m_colourTexture.getTexture().get();
 		return result;
 	}
 
