@@ -1,4 +1,4 @@
-﻿#include "GlslWriterPrerequisites.hpp"
+#include "GlslWriterPrerequisites.hpp"
 
 #include "GlslWriter.hpp"
 
@@ -45,7 +45,7 @@ namespace glsl
 
 	void writeLine( GlslWriter & writer, castor::String const & p_line )
 	{
-		writer << p_line << Endl{};
+		writer << p_line << glsl::endl;
 	}
 
 	void registerName( GlslWriter & writer, castor::String const & p_name, TypeName p_type )

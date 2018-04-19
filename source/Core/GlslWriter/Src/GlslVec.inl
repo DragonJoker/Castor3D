@@ -1,4 +1,4 @@
-﻿namespace glsl
+namespace glsl
 {
 	//*****************************************************************************************
 
@@ -149,7 +149,7 @@
 	template< typename ValueT >
 	inline ValueT Vec2T< ValueT >::operator[]( int const & p_rhs )const
 	{
-		ValueT result{ m_writer, castor::String( *this ) + cuT( "[" ) + castor::string::toString( p_rhs ) + cuT( "]" ) };
+		ValueT result{ m_writer, castor::String( *this ) + cuT( "[" ) + castor::string::toString( p_rhs, 10, Expr::getLocale() ) + cuT( "]" ) };
 		return result;
 	}
 
@@ -202,7 +202,7 @@
 	template< typename ValueT >
 	inline ValueT Vec3T< ValueT >::operator[]( int const & p_rhs )const
 	{
-		ValueT result{ m_writer, castor::String( *this ) + cuT( "[" ) + castor::string::toString( p_rhs ) + cuT( "]" ) };
+		ValueT result{ m_writer, castor::String( *this ) + cuT( "[" ) + castor::string::toString( p_rhs, 10, Expr::getLocale() ) + cuT( "]" ) };
 		return result;
 	}
 
@@ -255,7 +255,7 @@
 	template< typename ValueT >
 	inline ValueT Vec4T< ValueT >::operator[]( int const & p_rhs )const
 	{
-		ValueT result{ m_writer, castor::String( *this ) + cuT( "[" ) + castor::string::toString( p_rhs ) + cuT( "]" ) };
+		ValueT result{ m_writer, castor::String( *this ) + cuT( "[" ) + castor::string::toString( p_rhs, 10, Expr::getLocale() ) + cuT( "]" ) };
 		return result;
 	}
 

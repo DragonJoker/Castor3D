@@ -21,7 +21,7 @@ namespace glsl
 			Swizzle< TInput, TOutput > & operator()( castor::String const & p_operator, Swizzle< TInput, TOutput > & p_lhs, Swizzle< UInput, TOutput > const & p_rhs )
 			{
 				p_lhs.updateWriter( *p_lhs.m_input );
-				*p_lhs.m_writer << p_lhs.m_value.str() << p_operator << castor::String( static_cast< TOutput >( p_rhs ) ) << cuT( ";" ) << Endl();
+				*p_lhs.m_writer << p_lhs.m_value.str() << p_operator << castor::String( static_cast< TOutput >( p_rhs ) ) << cuT( ";" ) << glsl::endl;
 				return p_lhs;
 			}
 		};
@@ -32,7 +32,7 @@ namespace glsl
 			Swizzle< TInput, TOutput > & operator()( castor::String const & p_operator, Swizzle< TInput, TOutput > & p_lhs, Swizzle< UInput, Float > const & p_rhs )
 			{
 				p_lhs.updateWriter( *p_lhs.m_input );
-				*p_lhs.m_writer << p_lhs.m_value.str() << p_operator << castor::String( static_cast< Float >( p_rhs ) ) << cuT( ";" ) << Endl();
+				*p_lhs.m_writer << p_lhs.m_value.str() << p_operator << castor::String( static_cast< Float >( p_rhs ) ) << cuT( ";" ) << glsl::endl;
 				return p_lhs;
 			}
 		};
@@ -43,7 +43,7 @@ namespace glsl
 			Swizzle< TInput, TOutput > & operator()( castor::String const & p_operator, Swizzle< TInput, TOutput > & p_lhs, Swizzle< UInput, Int > const & p_rhs )
 			{
 				p_lhs.updateWriter( *p_lhs.m_input );
-				*p_lhs.m_writer << p_lhs.m_value.str() << p_operator << castor::String( static_cast< Int >( p_rhs ) ) << cuT( ";" ) << Endl();
+				*p_lhs.m_writer << p_lhs.m_value.str() << p_operator << castor::String( static_cast< Int >( p_rhs ) ) << cuT( ";" ) << glsl::endl;
 				return p_lhs;
 			}
 		};
@@ -54,7 +54,7 @@ namespace glsl
 			Swizzle< Input, Output > & operator()( castor::String const & p_operator, Swizzle< Input, Output > & p_lhs, T p_rhs )
 			{
 				p_lhs.updateWriter( *p_lhs.m_input );
-				*p_lhs.m_writer << p_lhs.m_value.str() << p_operator << castor::string::toString( p_rhs ) << cuT( ";" ) << Endl();
+				*p_lhs.m_writer << p_lhs.m_value.str() << p_operator << castor::string::toString( p_rhs, Expr::getLocale() ) << cuT( ";" ) << glsl::endl;
 				return p_lhs;
 			}
 		};
@@ -291,7 +291,7 @@ namespace glsl
 	Output operator+( Swizzle< Input, Output > const & p_a, float p_b )
 	{
 		Output result( p_a.m_input->m_writer, p_a.m_input->m_type );
-		result.m_value << castor::String( static_cast< Output >( p_a ) ) << cuT( " + " ) << castor::string::toString( p_b );
+		result.m_value << castor::String( static_cast< Output >( p_a ) ) << cuT( " + " ) << castor::string::toString( p_b, Expr::getLocale() );
 		return result;
 	}
 
@@ -299,7 +299,7 @@ namespace glsl
 	Output operator-( Swizzle< Input, Output > const & p_a, float p_b )
 	{
 		Output result( p_a.m_input->m_writer, p_a.m_input->m_type );
-		result.m_value << castor::String( static_cast< Output >( p_a ) ) << cuT( " - " ) << castor::string::toString( p_b );
+		result.m_value << castor::String( static_cast< Output >( p_a ) ) << cuT( " - " ) << castor::string::toString( p_b, Expr::getLocale() );
 		return result;
 	}
 
@@ -307,7 +307,7 @@ namespace glsl
 	Output operator*( Swizzle< Input, Output > const & p_a, float p_b )
 	{
 		Output result( p_a.m_input->m_writer, p_a.m_input->m_type );
-		result.m_value << castor::String( static_cast< Output >( p_a ) ) << cuT( " * " ) << castor::string::toString( p_b );
+		result.m_value << castor::String( static_cast< Output >( p_a ) ) << cuT( " * " ) << castor::string::toString( p_b, Expr::getLocale() );
 		return result;
 	}
 
@@ -315,7 +315,7 @@ namespace glsl
 	Output operator/( Swizzle< Input, Output > const & p_a, float p_b )
 	{
 		Output result( p_a.m_input->m_writer, p_a.m_input->m_type );
-		result.m_value << castor::String( static_cast< Output >( p_a ) ) << cuT( " / " ) << castor::string::toString( p_b );
+		result.m_value << castor::String( static_cast< Output >( p_a ) ) << cuT( " / " ) << castor::string::toString( p_b, Expr::getLocale() );
 		return result;
 	}
 
@@ -323,7 +323,7 @@ namespace glsl
 	Output operator+( Swizzle< Input, Output > const & p_a, int p_b )
 	{
 		Output result( p_a.m_input->m_writer, p_a.m_input->m_type );
-		result.m_value << castor::String( static_cast< Output >( p_a ) ) << cuT( " + " ) << castor::string::toString( p_b );
+		result.m_value << castor::String( static_cast< Output >( p_a ) ) << cuT( " + " ) << castor::string::toString( p_b, 10, Expr::getLocale() );
 		return result;
 	}
 
@@ -331,7 +331,7 @@ namespace glsl
 	Output operator-( Swizzle< Input, Output > const & p_a, int p_b )
 	{
 		Output result( p_a.m_input->m_writer, p_a.m_input->m_type );
-		result.m_value << castor::String( static_cast< Output >( p_a ) ) << cuT( " - " ) << castor::string::toString( p_b );
+		result.m_value << castor::String( static_cast< Output >( p_a ) ) << cuT( " - " ) << castor::string::toString( p_b, 10, Expr::getLocale() );
 		return result;
 	}
 
@@ -339,7 +339,7 @@ namespace glsl
 	Output operator*( Swizzle< Input, Output > const & p_a, int p_b )
 	{
 		Output result( p_a.m_input->m_writer, p_a.m_input->m_type );
-		result.m_value << castor::String( static_cast< Output >( p_a ) ) << cuT( " * " ) << castor::string::toString( p_b );
+		result.m_value << castor::String( static_cast< Output >( p_a ) ) << cuT( " * " ) << castor::string::toString( p_b, 10, Expr::getLocale() );
 		return result;
 	}
 
@@ -347,7 +347,7 @@ namespace glsl
 	Output operator/( Swizzle< Input, Output > const & p_a, int p_b )
 	{
 		Output result( p_a.m_input->m_writer, p_a.m_input->m_type );
-		result.m_value << castor::String( static_cast< Output >( p_a ) ) << cuT( " / " ) << castor::string::toString( p_b );
+		result.m_value << castor::String( static_cast< Output >( p_a ) ) << cuT( " / " ) << castor::string::toString( p_b, 10, Expr::getLocale() );
 		return result;
 	}
 

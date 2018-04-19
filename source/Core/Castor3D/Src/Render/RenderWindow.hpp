@@ -427,6 +427,7 @@ namespace castor3d
 		bool m_fullscreen{ false };
 		castor::Size m_size;
 		bool m_toSave{ false };
+		bool m_dirty{ true };
 		castor::PxBufferBaseSPtr m_saveBuffer;
 		PickingPassUPtr m_pickingPass;
 	};

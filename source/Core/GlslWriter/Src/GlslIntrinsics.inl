@@ -685,16 +685,18 @@ namespace glsl
 
 		if ( a.isEnabled()
 			&& b.isEnabled()
-			&& c.isEnabled()
-			&& writer->getShaderLanguageVersion() < 400 )
+			&& c.isEnabled() )
 		{
-			Value result{ writer };
-			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
-			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+			if ( writer->getShaderLanguageVersion() < 400 )
+			{
+				Value result{ writer };
+				result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+				return result;
+			}
+			else
+			{
+				return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
+			}
 		}
 	}
 

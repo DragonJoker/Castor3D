@@ -10,8 +10,8 @@ namespace glsl
 		, m_name( p_name )
 		, m_block( nullptr )
 	{
-		m_writer << Endl();
-		m_writer << cuT( "struct " ) << p_name << Endl();
+		m_writer << glsl::endl;
+		m_writer << cuT( "struct " ) << p_name << glsl::endl;
 		m_block = new IndentBlock( m_writer );
 	}
 
@@ -27,6 +27,6 @@ namespace glsl
 	{
 		delete m_block;
 		m_block = nullptr;
-		m_writer << cuT( ";" ) << Endl();
+		m_writer << cuT( ";" ) << glsl::endl;
 	}
 }

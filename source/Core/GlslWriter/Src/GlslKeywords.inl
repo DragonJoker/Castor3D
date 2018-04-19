@@ -416,7 +416,7 @@ namespace glsl
 	public:
 		Keywords()
 		{
-			m_version = cuT( "#version " ) + castor::string::toString( Version );
+			m_version = cuT( "#version " ) + castor::string::toString( Version, 10, Expr::getLocale() );
 			m_attribute = cuT( "in" );
 			m_in = cuT( "in" );
 			m_out = cuT( "out" );
@@ -507,7 +507,7 @@ namespace glsl
 		Keywords()
 		{
 			m_uboLayout = cuT( "layout" );
-			m_version = cuT( "#version " ) + castor::string::toString( Version );
+			m_version = cuT( "#version " ) + castor::string::toString( Version, 10, Expr::getLocale() );
 			m_attribute = cuT( "in" );
 			m_in = cuT( "in" );
 			m_out = cuT( "out" );
@@ -603,7 +603,7 @@ namespace glsl
 			m_uniformLayout = cuT( "layout" );
 			m_inputLayout = cuT( "layout" );
 			m_outputLayout = cuT( "layout" );
-			m_version = cuT( "#version " ) + castor::string::toString( Version );
+			m_version = cuT( "#version " ) + castor::string::toString( Version, 10, Expr::getLocale() );
 			m_attribute = cuT( "in" );
 			m_in = cuT( "in" );
 			m_out = cuT( "out" );
@@ -668,7 +668,7 @@ namespace glsl
 
 		castor::String getLayout( uint32_t index )const override
 		{
-			return cuT( "layout( location=" ) + castor::string::toString( index ) + cuT( " ) " );
+			return cuT( "layout( location=" ) + castor::string::toString( index, 10, Expr::getLocale() ) + cuT( " ) " );
 		}
 
 		castor::String getFragData( uint32_t CU_PARAM_UNUSED( index ) )const override
@@ -699,7 +699,7 @@ namespace glsl
 			m_uniformLayout = cuT( "layout" );
 			m_inputLayout = cuT( "layout" );
 			m_outputLayout = cuT( "layout" );
-			m_version = cuT( "#version " ) + castor::string::toString( Version );
+			m_version = cuT( "#version " ) + castor::string::toString( Version, 10, Expr::getLocale() );
 			m_attribute = cuT( "in" );
 			m_in = cuT( "in" );
 			m_out = cuT( "out" );
@@ -764,7 +764,7 @@ namespace glsl
 
 		castor::String getLayout( uint32_t index )const override
 		{
-			return cuT( "layout( location=" ) + castor::string::toString( index ) + cuT( " ) " );
+			return cuT( "layout( location=" ) + castor::string::toString( index, 10, Expr::getLocale() ) + cuT( " ) " );
 		}
 
 		castor::String getFragData( uint32_t CU_PARAM_UNUSED( index ) )const override
@@ -797,7 +797,7 @@ namespace glsl
 			m_uniformLayout = cuT( "layout" );
 			m_inputLayout = cuT( "layout" );
 			m_outputLayout = cuT( "layout" );
-			m_version = cuT( "#version " ) + castor::string::toString( Version ) + cuT( "\n#extension GL_KHR_vulkan_glsl : enable\n" );
+			m_version = cuT( "#version " ) + castor::string::toString( Version, 10, Expr::getLocale() ) + cuT( "\n#extension GL_KHR_vulkan_glsl : enable\n" );
 			m_attribute = cuT( "in" );
 			m_in = cuT( "in" );
 			m_out = cuT( "out" );
@@ -893,7 +893,7 @@ namespace glsl
 
 		castor::String getLayout( uint32_t index )const override
 		{
-			return cuT( "layout( location=" ) + castor::string::toString( index ) + cuT( " ) " );
+			return cuT( "layout( location=" ) + castor::string::toString( index, 10, Expr::getLocale() ) + cuT( " ) " );
 		}
 
 		castor::String getFragData( uint32_t CU_PARAM_UNUSED( index ) )const override

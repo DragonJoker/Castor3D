@@ -105,73 +105,73 @@ namespace glsl
 
 	inline Int & Int::operator<<=( int i )
 	{
-		*m_writer << castor::String{ *this } << cuT( " <<= " ) << castor::string::toString( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " <<= " ) << castor::string::toString( i, 10, Expr::getLocale() ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	inline Int & Int::operator>>=( int i )
 	{
-		*m_writer << castor::String{ *this } << cuT( " >>= " ) << castor::string::toString( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " >>= " ) << castor::string::toString( i, 10, Expr::getLocale() ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	inline Int & Int::operator<<=( Int const & i )
 	{
-		*m_writer << castor::String{ *this } << cuT( " <<= " ) << castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " <<= " ) << castor::String( i ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	inline Int & Int::operator>>=( Int const & i )
 	{
-		*m_writer << castor::String{ *this } << cuT( " >>= " ) << castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " >>= " ) << castor::String( i ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	inline Int & Int::operator<<=( UInt const & i )
 	{
-		*m_writer << castor::String{ *this } << cuT( " <<= " ) << castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " <<= " ) << castor::String( i ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	inline Int & Int::operator>>=( UInt const & i )
 	{
-		*m_writer << castor::String{ *this } << cuT( " >>= " ) << castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " >>= " ) << castor::String( i ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	inline Int & Int::operator&=( int i )
 	{
-		*m_writer << castor::String{ *this } << cuT( " &= " ) << castor::string::toString( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " &= " ) << castor::string::toString( i, 10, Expr::getLocale() ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	inline Int & Int::operator|=( int i )
 	{
-		*m_writer << castor::String{ *this } << cuT( " |= " ) << castor::string::toString( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " |= " ) << castor::string::toString( i, 10, Expr::getLocale() ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	inline Int & Int::operator&=( Int const & i )
 	{
-		*m_writer << castor::String{ *this } << cuT( " &= " ) << castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " &= " ) << castor::String( i ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	inline Int & Int::operator|=( Int const & i )
 	{
-		*m_writer << castor::String{ *this } << cuT( " |= " ) << castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " |= " ) << castor::String( i ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	inline Int & Int::operator&=( UInt const & i )
 	{
-		*m_writer << castor::String{ *this } << cuT( " &= " ) << castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " &= " ) << castor::String( i ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	inline Int & Int::operator|=( UInt const & i )
 	{
-		*m_writer << castor::String{ *this } << cuT( " |= " ) << castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " |= " ) << castor::String( i ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
@@ -369,73 +369,73 @@ namespace glsl
 
 	inline UInt & UInt::operator<<=( int i )
 	{
-		*m_writer << castor::String{ *this } << cuT( " <<= " ) << castor::string::toString( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " <<= " ) << castor::string::toString( i, 10, Expr::getLocale() ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	inline UInt & UInt::operator>>=( int i )
 	{
-		*m_writer << castor::String{ *this } << cuT( " >>= " ) << castor::string::toString( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " >>= " ) << castor::string::toString( i, 10, Expr::getLocale() ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	inline UInt & UInt::operator<<=( Int const & i )
 	{
-		*m_writer << castor::String{ *this } << cuT( " <<= " ) << castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " <<= " ) << castor::String( i ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	inline UInt & UInt::operator>>=( Int const & i )
 	{
-		*m_writer << castor::String{ *this } << cuT( " >>= " ) << castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " >>= " ) << castor::String( i ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	inline UInt & UInt::operator<<=( UInt const & i )
 	{
-		*m_writer << castor::String{ *this } << cuT( " <<= " ) << castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " <<= " ) << castor::String( i ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	inline UInt & UInt::operator>>=( UInt const & i )
 	{
-		*m_writer << castor::String{ *this } << cuT( " >>= " ) << castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " >>= " ) << castor::String( i ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	inline UInt & UInt::operator&=( int i )
 	{
-		*m_writer << castor::String{ *this } << cuT( " &= " ) << castor::string::toString( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " &= " ) << castor::string::toString( i, 10, Expr::getLocale() ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	inline UInt & UInt::operator|=( int i )
 	{
-		*m_writer << castor::String{ *this } << cuT( " |= " ) << castor::string::toString( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " |= " ) << castor::string::toString( i, 10, Expr::getLocale() ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	inline UInt & UInt::operator&=( Int const & i )
 	{
-		*m_writer << castor::String{ *this } << cuT( " &= " ) << castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " &= " ) << castor::String( i ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	inline UInt & UInt::operator|=( Int const & i )
 	{
-		*m_writer << castor::String{ *this } << cuT( " |= " ) << castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " |= " ) << castor::String( i ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	inline UInt & UInt::operator&=( UInt const & i )
 	{
-		*m_writer << castor::String{ *this } << cuT( " &= " ) << castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " &= " ) << castor::String( i ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	inline UInt & UInt::operator|=( UInt const & i )
 	{
-		*m_writer << castor::String{ *this } << cuT( " |= " ) << castor::String( i ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " |= " ) << castor::String( i ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
@@ -650,7 +650,7 @@ namespace glsl
 	template< typename T >
 	Float & Float::operator=( float p_rhs )
 	{
-		*m_writer << castor::String( *this ) << cuT( " = " ) << castor::string::toString( p_rhs ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String( *this ) << cuT( " = " ) << castor::string::toString( p_rhs, Expr::getLocale() ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 

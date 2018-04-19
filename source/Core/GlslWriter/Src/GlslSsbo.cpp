@@ -15,6 +15,7 @@ namespace glsl
 		, m_block{ nullptr }
 		, m_info{ layout, bind, set }
 	{
+		m_stream.imbue( Expr::getLocale() );
 		m_stream << std::endl;
 		m_stream << m_writer.m_keywords->getSsboLayout( layout, bind, set ) << cuT( "buffer " ) << name << std::endl;
 		m_block = std::make_unique< IndentBlock >( m_stream );

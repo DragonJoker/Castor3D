@@ -228,32 +228,32 @@ namespace GuiCommon
 
 	bool CastorApplication::doInitialiseLocale( SplashScreen & p_splashScreen )
 	{
-		p_splashScreen.Step( _( "Loading language" ), 1 );
-		long lLanguage = wxLANGUAGE_DEFAULT;
-		Path pathCurrent = File::getExecutableDirectory().getPath();
+		//p_splashScreen.Step( _( "Loading language" ), 1 );
+		//long lLanguage = wxLANGUAGE_DEFAULT;
+		//Path pathCurrent = File::getExecutableDirectory().getPath();
 
-		// load language if possible, fall back to english otherwise
-		if ( wxLocale::IsAvailable( lLanguage ) )
-		{
-			m_locale = std::make_unique< wxLocale >( lLanguage, wxLOCALE_LOAD_DEFAULT );
-			// add locale search paths
-			m_locale->AddCatalogLookupPathPrefix( pathCurrent / cuT( "share" ) / m_internalName );
-			m_locale->AddCatalog( m_internalName );
+		//// load language if possible, fall back to english otherwise
+		//if ( wxLocale::IsAvailable( lLanguage ) )
+		//{
+		//	m_locale = std::make_unique< wxLocale >( lLanguage, wxLOCALE_LOAD_DEFAULT );
+		//	// add locale search paths
+		//	m_locale->AddCatalogLookupPathPrefix( pathCurrent / cuT( "share" ) / m_internalName );
+		//	m_locale->AddCatalog( m_internalName );
 
-			if ( !m_locale->IsOk() )
-			{
-				std::cerr << "Selected language is wrong" << std::endl;
-				lLanguage = wxLANGUAGE_ENGLISH;
-				m_locale = std::make_unique< wxLocale >( lLanguage );
-			}
-		}
-		else
-		{
-			std::cerr << "The selected language is not supported by your system."
-					  << "Try installing support for this language." << std::endl;
-			lLanguage = wxLANGUAGE_ENGLISH;
-			m_locale = std::make_unique< wxLocale >( lLanguage );
-		}
+		//	if ( !m_locale->IsOk() )
+		//	{
+		//		std::cerr << "Selected language is wrong" << std::endl;
+		//		lLanguage = wxLANGUAGE_ENGLISH;
+		//		m_locale = std::make_unique< wxLocale >( lLanguage );
+		//	}
+		//}
+		//else
+		//{
+		//	std::cerr << "The selected language is not supported by your system."
+		//			  << "Try installing support for this language." << std::endl;
+		//	lLanguage = wxLANGUAGE_ENGLISH;
+		//	m_locale = std::make_unique< wxLocale >( lLanguage );
+		//}
 
 		return true;
 	}

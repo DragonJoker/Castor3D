@@ -43,7 +43,7 @@ namespace castor
 
 		castor::String getLastErrorText()
 		{
-			DWORD dwError = ::GetLastError();
+			uint32_t dwError = ::GetLastError();
 			String strReturn = cuT( "0x" ) + string::toString( dwError, 16 );
 
 			if ( dwError != ERROR_SUCCESS )

@@ -12,6 +12,7 @@ namespace glsl
 		, m_name{ name }
 		, m_block{ nullptr }
 	{
+		m_stream.imbue( Expr::getLocale() );
 		m_stream << std::endl;
 
 		if ( writer.isVulkan() )

@@ -160,6 +160,7 @@ namespace glsl
 		};
 
 		StringStream result;
+		result.imbue( Expr::getLocale() );
 
 		if ( !m_uboLayout.empty() )
 		{
@@ -192,6 +193,7 @@ namespace glsl
 		};
 
 		StringStream result;
+		result.imbue( Expr::getLocale() );
 
 		if ( !m_ssboLayout.empty() )
 		{
@@ -216,6 +218,7 @@ namespace glsl
 	String KeywordsBase::getTextureLayout( uint32_t index, uint32_t set )const
 	{
 		StringStream result;
+		result.imbue( Expr::getLocale() );
 
 		if ( !m_textureLayout.empty() )
 		{
@@ -237,6 +240,7 @@ namespace glsl
 	String KeywordsBase::getUniformLayout( uint32_t location )const
 	{
 		StringStream result;
+		result.imbue( Expr::getLocale() );
 
 		if ( !m_uniformLayout.empty() )
 		{
@@ -249,6 +253,7 @@ namespace glsl
 	String KeywordsBase::getInputLayout( uint32_t location )const
 	{
 		StringStream result;
+		result.imbue( Expr::getLocale() );
 
 		if ( !m_inputLayout.empty() )
 		{
@@ -261,6 +266,7 @@ namespace glsl
 	String KeywordsBase::getOutputLayout( uint32_t location )const
 	{
 		StringStream result;
+		result.imbue( Expr::getLocale() );
 
 		if ( !m_outputLayout.empty() )
 		{

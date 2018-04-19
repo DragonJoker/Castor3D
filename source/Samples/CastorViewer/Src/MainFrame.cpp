@@ -215,8 +215,10 @@ namespace CastorViewer
 						}
 						else
 						{
+							m_renderPanel->disableWindowResize();
 							Maximize( false );
 							SetClientSize( size );
+							m_renderPanel->enableWindowResize();
 							Maximize();
 						}
 
@@ -769,6 +771,12 @@ namespace CastorViewer
 		m_auiManager.DetachPane( m_toolBar );
 		m_messageLog = nullptr;
 		m_errorLog = nullptr;
+
+		if ( m_renderPanel )
+		{
+			m_renderPanel->disableWindowResize();
+		}
+
 		Hide();
 
 		if ( m_timer )

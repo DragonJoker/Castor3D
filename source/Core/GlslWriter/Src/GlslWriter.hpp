@@ -14,6 +14,7 @@ See LICENSE file in root folder
 #include <Design/OwnedBy.hpp>
 
 #include <map>
+#include <locale>
 
 namespace glsl
 {
@@ -35,8 +36,6 @@ namespace glsl
 
 	public:
 		GlslWriter_API GlslWriter( GlslWriterConfig const & p_config );
-		GlslWriter_API GlslWriter( GlslWriter const & rhs );
-		GlslWriter_API GlslWriter & operator=( GlslWriter const & rhs );
 		GlslWriter_API void registerName( castor::String const & name, TypeName type );
 		GlslWriter_API void checkNameExists( castor::String const & name, TypeName type );
 		GlslWriter_API void inlineComment( castor::String const & comment );

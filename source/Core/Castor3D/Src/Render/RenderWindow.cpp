@@ -161,6 +161,7 @@ namespace castor3d
 				m_pickingPass->initialise( target->getSize() );
 				m_device->disable();
 				m_initialised = true;
+				m_dirty = false;
 			}
 		}
 
@@ -244,12 +245,14 @@ namespace castor3d
 	{
 		m_size = size;
 
-		if ( m_initialised )
+		if ( m_initialised && !m_dirty )
 		{
+			m_dirty = true;
 			getListener()->postEvent( makeFunctorEvent( EventType::ePreRender, [this]()
 			{
 				m_device->waitIdle();
 				m_swapChain->reset( { m_size.getWidth(), m_size.getHeight() } );
+				m_dirty = false;
 			} ) );
 		}
 	}
@@ -458,7 +461,6 @@ namespace castor3d
 		m_renderQuad = std::make_unique< RenderQuad >( *getEngine()->getRenderSystem()
 			, false
 			, false );
-		doCreateProgram();
 		m_renderQuad->createPipeline( renderer::Extent2D{ m_size[0], m_size[1] }
 			, castor::Position{}
 			, m_program

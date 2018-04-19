@@ -12,32 +12,13 @@ namespace glsl
 		, m_uniform( cuT( "uniform " ) )
 		, m_config( config )
 	{
+		m_stream.imbue( Expr::getLocale() );
 		*this << glsl::Version() << endl;
 
 #if !defined( NDEBUG )
 		*this << "#pragma optimize(off)" << endl;
 		*this << "#pragma debug(on)" << endl;
 #endif
-	}
-
-	GlslWriter::GlslWriter( GlslWriter const & p_rhs )
-		: m_keywords( glsl::KeywordsBase::get( p_rhs.m_config ) )
-		, m_attributeIndex( p_rhs.m_attributeIndex )
-		, m_layoutIndex( p_rhs.m_layoutIndex )
-		, m_uniform( p_rhs.m_uniform )
-		, m_config( p_rhs.m_config )
-	{
-		m_stream << p_rhs.m_stream.str();
-	}
-
-	GlslWriter & GlslWriter::operator=( GlslWriter const & p_rhs )
-	{
-		m_attributeIndex = p_rhs.m_attributeIndex;
-		m_layoutIndex = p_rhs.m_layoutIndex;
-		m_uniform = p_rhs.m_uniform;
-		m_config = p_rhs.m_config;
-		m_stream << p_rhs.m_stream.str();
-		return *this;
 	}
 
 	void GlslWriter::registerName( castor::String const & p_name, TypeName p_type )
@@ -132,17 +113,17 @@ namespace glsl
 
 	void GlslWriter::writeAssign( Type const & p_lhs, int const & p_rhs )
 	{
-		m_stream << castor::String( p_lhs ) << cuT( " = " ) << castor::string::toString( p_rhs ) << cuT( ";" ) << std::endl;
+		m_stream << castor::String( p_lhs ) << cuT( " = " ) << castor::string::toString( p_rhs, 10, Expr::getLocale() ) << cuT( ";" ) << std::endl;
 	}
 
 	void GlslWriter::writeAssign( Type const & p_lhs, unsigned int const & p_rhs )
 	{
-		m_stream << castor::String( p_lhs ) << cuT( " = " ) << castor::string::toString( p_rhs ) << cuT( "u;" ) << std::endl;
+		m_stream << castor::String( p_lhs ) << cuT( " = " ) << castor::string::toString( p_rhs, 10, Expr::getLocale() ) << cuT( "u;" ) << std::endl;
 	}
 
 	void GlslWriter::writeAssign( Type const & p_lhs, float const & p_rhs )
 	{
-		m_stream << castor::String( p_lhs ) << cuT( " = " ) << castor::string::toString( p_rhs ) << cuT( ";" ) << std::endl;
+		m_stream << castor::String( p_lhs ) << cuT( " = " ) << castor::string::toString( p_rhs, Expr::getLocale() ) << cuT( ";" ) << std::endl;
 	}
 
 	void GlslWriter::forStmt( Type && p_init, Expr const & p_cond, Expr const & p_incr, std::function< void() > p_function )

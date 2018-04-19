@@ -5,7 +5,7 @@ namespace glsl
 	{
 		using type = typename TypeOf< T >::Type;
 		registerName( m_writer, m_name + cuT( "::" ) + p_name, TypeTraits< T >::TypeEnum );
-		m_writer << type().m_type << p_name << cuT( ";" ) << Endl();
+		m_writer << type().m_type << p_name << cuT( ";" ) << glsl::endl;
 	}
 
 	template< typename T >
@@ -13,7 +13,7 @@ namespace glsl
 	{
 		using type = typename TypeOf< T >::Type;
 		registerName( m_writer, m_name + cuT( "::" ) + p_name, TypeTraits< T >::TypeEnum );
-		m_writer << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
+		m_writer << type().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << glsl::endl;
 	}
 
 	template< typename T >
@@ -21,7 +21,7 @@ namespace glsl
 	{
 		using type = typename TypeOf< T >::Type;
 		registerName( m_writer, m_name + cuT( "::" ) + p_name, TypeTraits< T >::TypeEnum );
-		m_writer << type().m_type << p_name << cuT( "[];" ) << Endl();
+		m_writer << type().m_type << p_name << cuT( "[];" ) << glsl::endl;
 	}
 
 	template< typename T >

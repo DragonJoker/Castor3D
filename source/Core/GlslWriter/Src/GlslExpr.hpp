@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "GlslKeywords.hpp"
 
+#include <locale>
+
 namespace glsl
 {
 	struct Expr
@@ -24,6 +26,8 @@ namespace glsl
 
 		GlslWriter * m_writer;
 		mutable castor::StringStream m_value;
+
+		GlslWriter_API static std::locale const & getLocale();
 	};
 
 	GlslWriter_API castor::String toString( Expr const & p_value );

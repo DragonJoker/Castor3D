@@ -529,7 +529,10 @@ namespace CastorViewer
 
 		if ( window )
 		{
-			window->resize( p_event.GetSize().x, p_event.GetSize().y );
+			if ( m_resizeWindow )
+			{
+				window->resize( p_event.GetSize().x, p_event.GetSize().y );
+			}
 		}
 		else
 		{
