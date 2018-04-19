@@ -71,7 +71,6 @@ namespace castor3d
 			C3D_API bool initialise( castor3d::RenderTarget & renderTarget
 				, renderer::RenderPass const & renderPass
 				, castor::Size const & size
-				, uint32_t index
 				, castor3d::SamplerSPtr sampler
 				, renderer::Format format = renderer::Format::eR32G32B32A32_SFLOAT
 				, uint32_t mipLevels = 1u );

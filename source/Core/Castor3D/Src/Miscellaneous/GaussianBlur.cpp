@@ -231,7 +231,6 @@ namespace castor3d
 			TextureUnit unit{ engine };
 			unit.setTexture( texture );
 			unit.setSampler( sampler );
-			unit.setIndex( MinBufferIndex );
 			unit.initialise();
 			return unit;
 		}

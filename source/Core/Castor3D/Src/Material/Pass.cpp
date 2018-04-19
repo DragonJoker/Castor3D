@@ -232,13 +232,6 @@ namespace castor3d
 		Logger::logInfo( StringStream() << cuT( "Destroying TextureUnit " ) << index );
 		auto it = m_textureUnits.begin();
 		m_textureUnits.erase( it + index );
-		uint32_t i = MinBufferIndex;
-
-		for ( it = m_textureUnits.begin(); it != m_textureUnits.end(); ++it )
-		{
-			( *it )->setIndex( ++i );
-		}
-
 		doUpdateFlags();
 		m_texturesReduced = false;
 	}
@@ -259,11 +252,6 @@ namespace castor3d
 	{
 		if ( !m_texturesReduced )
 		{
-			for ( auto unit : m_textureUnits )
-			{
-				unit->setIndex( 0u );
-			}
-
 			TextureUnitSPtr opacitySource;
 			PxBufferBaseSPtr opacityImage;
 
@@ -310,14 +298,6 @@ namespace castor3d
 						&& format != renderer::Format::eR32G32B32_SFLOAT
 						&& format != renderer::Format::eR16G16B16A16_SFLOAT
 						&& format != renderer::Format::eR32G32B32A32_SFLOAT;
-				}
-			}
-
-			for ( auto unit : m_textureUnits )
-			{
-				if ( !unit->getIndex() )
-				{
-					unit->setIndex( index++ );
 				}
 			}
 
@@ -431,8 +411,8 @@ namespace castor3d
 				}
 			}
 
-			unit->setIndex( index++ );
-			Logger::logDebug( cuT( "	" ) + getName( channel ) + cuT( " map at index " ) + string::toString( unit->getIndex() ) );
+			Logger::logDebug( cuT( "	" ) + getName( channel ) + cuT( " map at index " ) + string::toString( index ) );
+			++index;
 		}
 
 		return result;
@@ -508,14 +488,20 @@ namespace castor3d
 		}
 		else if ( opacityMap )
 		{
-			destroyTextureUnit( opacityMap->getIndex() );
+			auto it = std::find( m_textureUnits.begin()
+				, m_textureUnits.end()
+				, opacityMap );
+			REQUIRE( it != m_textureUnits.end() );
+			m_textureUnits.erase( it );
+			doUpdateFlags();
+			m_texturesReduced = false;
 			opacityMap.reset();
 		}
 
 		if ( opacityMap )
 		{
-			opacityMap->setIndex( index++ );
-			Logger::logDebug( StringStream() << cuT( "	Opacity map at index " ) << opacityMap->getIndex() );
+			Logger::logDebug( StringStream() << cuT( "	Opacity map at index " ) << index );
+			++index;
 			addFlag( m_textureFlags, TextureChannel::eOpacity );
 
 			if ( m_alphaBlendMode == BlendMode::eNoBlend )

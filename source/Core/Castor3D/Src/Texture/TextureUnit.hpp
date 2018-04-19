@@ -147,28 +147,6 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\return		The unit index.
-		 *\~french
-		 *\return		L'index de l'unité.
-		 */
-		inline uint32_t getIndex()const
-		{
-			return m_index;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the unit index.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit l'index de l'unité.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setIndex( uint32_t value )
-		{
-			m_index = value;
-		}
-		/**
-		 *\~english
 		 *\brief		Sets the target holding the texture.
 		 *\param[in]	value	The new value.
 		 *\~french
@@ -256,7 +234,6 @@ namespace castor3d
 
 	private:
 		friend class TextureRenderer;
-		uint32_t m_index;
 		TextureChannel m_channel;
 		castor::Matrix4x4r m_transformations;
 		TextureLayoutSPtr m_texture;
@@ -266,23 +243,6 @@ namespace castor3d
 		renderer::WriteDescriptorSet m_descriptor;
 		mutable bool m_changed;
 	};
-	/**
-	 *\~english
-	 *\brief			Stream operator.
-	 *\param[in,out]	streamOut	The stream receiving texture's data.
-	 *\param[in]		texture		The input texture.
-	 *\return			A reference to the stream.
-	 *\~french
-	 *\brief			Opérateur de flux.
-	 *\param[in,out]	streamOut	Le flux qui reçoit les données de la texture.
-	 *\param[in]		texture		La texture.
-	 *\return			Une référence sur le flux.
-	 */
-	inline std::ostream & operator<<( std::ostream & streamOut, TextureUnitSPtr const & texture )
-	{
-		streamOut << texture->getIndex();
-		return streamOut;
-	}
 }
 
 #endif

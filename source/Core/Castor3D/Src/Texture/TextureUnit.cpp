@@ -156,7 +156,6 @@ namespace castor3d
 
 	TextureUnit::TextureUnit( Engine & engine )
 		: OwnedBy< Engine >( engine )
-		, m_index( 0 )
 		, m_channel( TextureChannel::eDiffuse )
 		, m_autoMipmaps( false )
 		, m_changed( false )

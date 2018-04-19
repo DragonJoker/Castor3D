@@ -24,13 +24,11 @@ namespace castor3d
 	bool PostEffect::PostEffectSurface::initialise( RenderTarget & renderTarget
 		, renderer::RenderPass const & renderPass
 		, Size const & size
-		, uint32_t index
 		, SamplerSPtr sampler
 		, renderer::Format format
 		, uint32_t mipLevels )
 	{
 		m_size = size;
-		m_colourTexture.setIndex( index );
 
 		renderer::ImageCreateInfo image{};
 		image.flags = 0u;
