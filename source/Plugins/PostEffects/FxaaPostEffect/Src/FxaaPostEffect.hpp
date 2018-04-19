@@ -29,38 +29,34 @@ namespace fxaa
 			, renderer::DescriptorSet & descriptorSet )override;
 
 	private:
-		struct Configuration
-		{
-			castor::Point2f renderSize;
-			float subpixShift;
-			float spanMax;
-			float reduceMul;
-		};
-		castor::Size m_size;
-		renderer::UniformBufferPtr< Configuration > m_configUbo;
+		FxaaUbo m_fxaaUbo;
 	};
 
 	class PostEffect
 		: public castor3d::PostEffect
 	{
 	public:
-		PostEffect( castor3d::RenderTarget & p_renderTarget, castor3d::RenderSystem & renderSystem, castor3d::Parameters const & p_param );
+		PostEffect( castor3d::RenderTarget & renderTarget
+			, castor3d::RenderSystem & renderSystem
+			, castor3d::Parameters const & params );
 		~PostEffect();
-		static castor3d::PostEffectSPtr create( castor3d::RenderTarget & p_renderTarget, castor3d::RenderSystem & renderSystem, castor3d::Parameters const & p_param );
-		/**
-		 *\copydoc		castor3d::PostEffect::Initialise
-		 */
-		bool initialise() override;
-		/**
-		 *\copydoc		castor3d::PostEffect::Cleanup
-		 */
-		void cleanup() override;
+		static castor3d::PostEffectSPtr create( castor3d::RenderTarget & renderTarget
+			, castor3d::RenderSystem & renderSystem
+			, castor3d::Parameters const & params );
 
 	private:
 		/**
+		*\copydoc		castor3d::PostEffect::doInitialise
+		*/
+		bool doInitialise( castor3d::RenderPassTimer const & timer ) override;
+		/**
+		*\copydoc		castor3d::PostEffect::doCleanup
+		*/
+		void doCleanup() override;
+		/**
 		 *\copydoc		castor3d::PostEffect::doWriteInto
 		 */
-		bool doWriteInto( castor::TextFile & p_file ) override;
+		bool doWriteInto( castor::TextFile & file ) override;
 
 	public:
 		static castor::String Type;

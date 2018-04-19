@@ -149,7 +149,6 @@ namespace castor3d
 
 				target->initialise();
 
-				doCreateProgram();
 				doCreateSwapChainDependent();
 				doPrepareFrames();
 
@@ -461,6 +460,7 @@ namespace castor3d
 		m_renderQuad = std::make_unique< RenderQuad >( *getEngine()->getRenderSystem()
 			, false
 			, false );
+		doCreateProgram();
 		m_renderQuad->createPipeline( renderer::Extent2D{ m_size[0], m_size[1] }
 			, castor::Position{}
 			, m_program

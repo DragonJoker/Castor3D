@@ -14,16 +14,16 @@ namespace fxaa
 	private:
 		struct Configuration
 		{
+			castor::Point2f pixelSize;
 			float subpixShift;
 			float spanMax;
 			float reduceMul;
-			castor::Point2f renderSize;
 		};
 
 	public:
-		explicit FxaaUbo( castor3d::Engine & engine );
-		void update( castor::Size const & size
-			, float shift
+		explicit FxaaUbo( castor3d::Engine & engine
+			, castor::Size const & size );
+		void update( float shift
 			, float span
 			, float reduce );
 
@@ -37,20 +37,19 @@ namespace fxaa
 		static const castor::String SubpixShift;
 		static const castor::String SpanMax;
 		static const castor::String ReduceMul;
-		static const castor::String RenderSize;
-		static constexpr uint32_t BindingPoint = 2u;
+		static const castor::String PixelSize;
 
 	private:
 		renderer::UniformBufferPtr< Configuration > m_ubo;
 	};
 }
 
-#define UBO_FXAA( writer, set )\
-	glsl::Ubo fxaa{ writer, FxaaUbo::Name, FxaaUbo::BindingPoint, set };\
+#define UBO_FXAA( writer, binding, set )\
+	glsl::Ubo fxaa{ writer, FxaaUbo::Name, binding, set };\
+	auto c3d_pixelSize = fxaa.declMember< Vec2 >( FxaaUbo::PixelSize );\
 	auto c3d_subpixShift = fxaa.declMember< Float >( FxaaUbo::SubpixShift );\
 	auto c3d_spanMax = fxaa.declMember< Float >( FxaaUbo::SpanMax );\
 	auto c3d_reduceMul = fxaa.declMember< Float >( FxaaUbo::ReduceMul );\
-	auto c3d_renderSize = fxaa.declMember< Vec2 >( FxaaUbo::RenderSize );\
 	fxaa.end()
 
 #endif
