@@ -23,12 +23,14 @@ namespace light_streaks
 		};
 
 	public:
-		explicit KawaseUbo( castor3d::Engine & engine );
-		~KawaseUbo();
+		KawaseUbo( castor3d::Engine & engine );
 		void initialise();
-		void update( castor::Size const & size
+		void cleanup();
+		void update( uint32_t index
+			, renderer::Extent2D const & size
 			, castor::Point2f const & direction
 			, uint32_t pass );
+		void upload();
 
 		inline renderer::UniformBuffer< Configuration > & getUbo()
 		{
@@ -42,15 +44,15 @@ namespace light_streaks
 		static castor::String const Samples;
 		static castor::String const Attenuation;
 		static castor::String const Pass;
-		static constexpr uint32_t BindingPoint = 2u;
 
 	private:
+		castor3d::Engine & m_engine;
 		renderer::UniformBufferPtr< Configuration > m_ubo;
 	};
 }
 
-#define UBO_KAWASE( p_writer )\
-	glsl::Ubo kawase{ p_writer, KawaseUbo::Name, KawaseUbo::BindingPoint };\
+#define UBO_KAWASE( writer, binding, set )\
+	glsl::Ubo kawase{ writer, KawaseUbo::Name, binding, set };\
 	auto c3d_pixelSize = kawase.declMember< Vec2 >( KawaseUbo::PixelSize );\
 	auto c3d_direction = kawase.declMember< Vec2 >( KawaseUbo::Direction );\
 	auto c3d_samples = kawase.declMember< Int >( KawaseUbo::Samples );\
