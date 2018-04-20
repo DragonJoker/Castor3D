@@ -41,6 +41,7 @@ namespace fxaa
 			// Shader inputs
 			UBO_FXAA( writer, 0u, 0u );
 			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
+			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
@@ -50,7 +51,7 @@ namespace fxaa
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					vtx_texture = writer.paren( position + 1.0_f ) * 0.5_f;
+					vtx_texture = texcoord;
 					gl_Position = vec4( position.xy(), 0.0, 1.0 );
 					vtx_posPos.xy() = position.xy();
 					vtx_posPos.zw() = position.xy() - writer.paren( c3d_pixelSize * writer.paren( 0.5 + c3d_subpixShift ) );
@@ -123,12 +124,6 @@ namespace fxaa
 					auto texcoord1 = writer.declLocale( cuT( "texcoord1" )
 						, vtx_texture + dir * writer.paren( 2.0_f / 3.0_f - 0.5_f ) );
 
-					if ( renderSystem->getCurrentDevice()->getClipDirection() == renderer::ClipDirection::eBottomUp )
-					{
-						texcoord0 = vec2( texcoord0.x(), 1.0_f - texcoord0.y() );
-						texcoord1 = vec2( texcoord1.x(), 1.0_f - texcoord1.y() );
-					}
-
 					auto rgbA = writer.declLocale( cuT( "rgbA" )
 						, writer.paren( texture( c3d_mapDiffuse, texcoord0, 0.0_f ).rgb()
 								+ texture( c3d_mapDiffuse, texcoord1, 0.0_f ).rgb() )
@@ -136,12 +131,6 @@ namespace fxaa
 
 					texcoord0 = vtx_texture + dir * writer.paren( 0.0_f / 3.0_f - 0.5_f );
 					texcoord1 = vtx_texture + dir * writer.paren( 3.0_f / 3.0_f - 0.5_f );
-
-					if ( renderSystem->getCurrentDevice()->getClipDirection() == renderer::ClipDirection::eBottomUp )
-					{
-						texcoord0 = vec2( texcoord0.x(), 1.0_f - texcoord0.y() );
-						texcoord1 = vec2( texcoord1.x(), 1.0_f - texcoord1.y() );
-					}
 
 					auto rgbB = writer.declLocale( cuT( "rgbB" )
 						, writer.paren( rgbA * 1.0_f / 2.0_f )

@@ -57,6 +57,7 @@ namespace film_grain
 
 			// Shader inputs
 			Vec2 position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
+			Vec2 texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
@@ -64,7 +65,7 @@ namespace film_grain
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				vtx_texture = writer.paren( position + 1.0_f ) * 0.5_f;
+				vtx_texture = texcoord;
 				gl_Position = vec4( position.xy(), 0.0, 1.0 );
 			} );
 			return writer.finalise();
@@ -132,18 +133,8 @@ namespace film_grain
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				if ( renderSystem->getCurrentDevice()->getClipDirection() == renderer::ClipDirection::eTopDown )
-				{
-					auto colour = writer.declLocale( cuT( "colour" )
-						, texture( c3d_srcTex, vtx_texture ).xyz() );
-				}
-				else
-				{
-					auto colour = writer.declLocale( cuT( "colour" )
-						, texture( c3d_srcTex, vec2( vtx_texture.x(), 1.0 - vtx_texture.y() ) ).xyz() );
-				}
-
-				auto colour = writer.declBuiltin< Vec3 >( cuT( "colour" ) );
+				auto colour = writer.declLocale( cuT( "colour" )
+					, texture( c3d_srcTex, vtx_texture ).xyz() );
 				colour = addNoise( colour, vtx_texture );
 				plx_fragColor = vec4( colour, 1.0 );
 			} );

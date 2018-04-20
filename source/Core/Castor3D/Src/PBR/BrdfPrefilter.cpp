@@ -147,6 +147,7 @@ namespace castor3d
 
 			// Inputs
 			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
+			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
 
 			// Outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
@@ -154,7 +155,7 @@ namespace castor3d
 
 			std::function< void() > main = [&]()
 			{
-				vtx_texture = position;
+				vtx_texture = texcoord;
 				gl_Position = vec4( position.x(), position.y(), 0.0, 1.0 );
 			};
 
