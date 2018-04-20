@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include <Miscellaneous/GaussianBlur.hpp>
 #include <PostEffect/PostEffect.hpp>
+#include <PostEffect/PostEffectSurface.hpp>
 #include <Texture/TextureUnit.hpp>
 #include <Render/Viewport.hpp>
 #include <Shader/Ubos/MatrixUbo.hpp>
@@ -49,7 +50,7 @@ namespace light_streaks
 		static castor::String const CombineMapKawase3;
 		static castor::String const CombineMapKawase4;
 		static constexpr uint32_t Count{ 4u };
-		using SurfaceArray = std::array< PostEffectSurface, Count >;
+		using SurfaceArray = std::array< castor3d::PostEffectSurface, Count >;
 
 	private:
 		castor3d::SamplerSPtr doCreateSampler( bool linear );

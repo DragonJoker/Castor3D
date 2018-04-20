@@ -311,8 +311,7 @@ namespace fxaa
 			, {} );
 
 		// Initialise the surface.
-		auto result = m_surface.initialise( m_renderTarget
-			, *m_renderPass
+		auto result = m_surface.initialise( *m_renderPass
 			, castor::Size{ size.width, size.height }
 			, m_sampler
 			, m_target->getPixelFormat() );
@@ -326,8 +325,8 @@ namespace fxaa
 			{
 				auto & targetImage = m_target->getTexture();
 				auto & targetView = m_target->getDefaultView();
-				auto & surfaceImage = m_surface.m_colourTexture.getTexture()->getTexture();
-				auto & surfaceView = m_surface.m_colourTexture.getTexture()->getDefaultView();
+				auto & surfaceImage = m_surface.colourTexture->getTexture();
+				auto & surfaceView = m_surface.colourTexture->getDefaultView();
 
 				m_commandBuffer->resetQueryPool( timer.getQuery()
 					, 0u
@@ -343,7 +342,7 @@ namespace fxaa
 
 				// Render the effect.
 				m_commandBuffer->beginRenderPass( *m_renderPass
-					, *m_surface.m_fbo
+					, *m_surface.frameBuffer
 					, { renderer::ClearColorValue{} }
 					, renderer::SubpassContents::eInline );
 				m_fxaaQuad->registerFrame( *m_commandBuffer );
@@ -359,7 +358,7 @@ namespace fxaa
 		m_fxaaQuad->update( m_subpixShift
 			, m_spanMax
 			, m_reduceMul );
-		m_result = m_surface.m_colourTexture.getTexture().get();
+		m_result = m_surface.colourTexture.get();
 		return result;
 	}
 

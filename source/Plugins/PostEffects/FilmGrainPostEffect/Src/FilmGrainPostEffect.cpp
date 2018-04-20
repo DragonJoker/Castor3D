@@ -391,8 +391,7 @@ namespace film_grain
 			, bindings
 			, {} );
 
-		auto result = m_surface.initialise( m_renderTarget
-			, *m_renderPass
+		auto result = m_surface.initialise( *m_renderPass
 			, castor::Size{ m_target->getWidth(), m_target->getHeight() }
 			, m_sampler
 			, m_target->getPixelFormat() );
@@ -412,7 +411,7 @@ namespace film_grain
 				, m_target->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
 
 			m_commandBuffer->beginRenderPass( *m_renderPass
-				, *m_surface.m_fbo
+				, *m_surface.frameBuffer
 				, { renderer::ClearColorValue{} }
 				, renderer::SubpassContents::eInline );
 			m_quad->registerFrame( *m_commandBuffer );
@@ -424,7 +423,7 @@ namespace film_grain
 			m_commandBuffer->end();
 		}
 
-		m_result = m_surface.m_colourTexture.getTexture().get();
+		m_result = m_surface.colourTexture.get();
 		return result;
 	}
 

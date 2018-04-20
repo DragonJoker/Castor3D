@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "FxaaUbo.hpp"
 
 #include <PostEffect/PostEffect.hpp>
+#include <PostEffect/PostEffectSurface.hpp>
 #include <RenderToTexture/RenderQuad.hpp>
 #include <Texture/TextureUnit.hpp>
 #include <Render/Viewport.hpp>
@@ -67,7 +68,7 @@ namespace fxaa
 		float m_spanMax{ 8.0f };
 		float m_reduceMul{ 1.0f / 8.0f };
 		castor3d::SamplerSPtr m_sampler;
-		PostEffectSurface m_surface;
+		castor3d::PostEffectSurface m_surface;
 		renderer::RenderPassPtr m_renderPass;
 		std::unique_ptr< RenderQuad > m_fxaaQuad;
 	};

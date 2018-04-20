@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_FilmGrainPostEffect___
 
 #include <PostEffect/PostEffect.hpp>
+#include <PostEffect/PostEffectSurface.hpp>
 #include <RenderToTexture/RenderQuad.hpp>
 #include <Texture/TextureUnit.hpp>
 #include <Miscellaneous/PreciseTimer.hpp>
@@ -75,7 +76,7 @@ namespace film_grain
 
 	private:
 		castor3d::SamplerSPtr m_sampler;
-		PostEffectSurface m_surface;
+		castor3d::PostEffectSurface m_surface;
 		castor::PreciseTimer m_timer;
 		renderer::RenderPassPtr m_renderPass;
 		std::unique_ptr< RenderQuad > m_quad;

@@ -246,10 +246,10 @@ namespace smaa
 		}
 
 		auto effect = engine->getRenderTargetCache().getPostEffectFactory().create( PostEffect::Type
-			, *parsingContext->pRenderTarget
+			, *parsingContext->renderTarget
 			, *engine->getRenderSystem()
 			, parameters );
-		parsingContext->pRenderTarget->addPostEffect( effect );
+		parsingContext->renderTarget->addPostEffect( effect );
 
 		delete reinterpret_cast< ParserContext * >( p_context->unregisterUserContext( PostEffect::Type ) );
 	}

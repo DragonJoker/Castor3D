@@ -427,7 +427,7 @@ namespace castor3d
 
 	bool Engine::isTopDown()const
 	{
-		return m_renderSystem->getMainDevice()->getClipDirection() == renderer::ClipDirection::eTopDown;
+		return m_renderSystem->isTopDown();
 	}
 
 	void Engine::doLoadCoreData()

@@ -343,8 +343,8 @@ namespace castor3d
 		C3D_API renderer::Semaphore const * doApplyPostEffects( renderer::Semaphore const & toWait
 			, PostEffectPtrArray const & effects
 			, RenderPassTimer & timer
-			, renderer::CommandBuffer const & commandBuffer
-			, renderer::Semaphore const & copyFinished
+			, renderer::CommandBufferPtr const & copyCommandBuffer
+			, renderer::SemaphorePtr const & copyFinished
 			, castor::Nanoseconds const & elapsedTime );
 		C3D_API renderer::Semaphore const * doApplyToneMapping( renderer::Semaphore const & toWait );
 		C3D_API renderer::Semaphore const * doRenderOverlays( renderer::Semaphore const & toWait

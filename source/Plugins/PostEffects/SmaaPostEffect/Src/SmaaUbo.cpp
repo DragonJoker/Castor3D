@@ -1,4 +1,4 @@
-﻿#include "SmaaUbo.hpp"
+#include "SmaaUbo.hpp"
 
 #include <Engine.hpp>
 
@@ -22,5 +22,8 @@ namespace smaa
 		const String AreaTexMaxDistance = cuT( "c3d_areaTexMaxDistance" );
 		const String AreaTexMaxDistanceDiag = cuT( "c3d_areaTexMaxDistanceDiag" );
 		const String CornerRounding = cuT( "c3d_cornerRounding" );
+		const String SearchTexSize = cuT( "c3d_searchTexSize" );
+		const String SearchTexPackedSize = cuT( "c3d_searchTexPackedSize" );
+		const String CornerRoundingNorm = cuT( "c3d_cornerRoundingNorm" );
 	}
 }

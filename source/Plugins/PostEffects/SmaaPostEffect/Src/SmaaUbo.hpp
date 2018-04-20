@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3DSMAA_SmaaUbo_H___
 #define ___C3DSMAA_SmaaUbo_H___
 
-#include <Castor3DPrerequisites.hpp>
+#include <PostEffect/PostEffectSurface.hpp>
 
 namespace smaa
 {
@@ -23,6 +23,9 @@ namespace smaa
 		extern const castor::String AreaTexMaxDistance;
 		extern const castor::String AreaTexMaxDistanceDiag;
 		extern const castor::String CornerRounding;
+		extern const castor::String SearchTexSize;
+		extern const castor::String SearchTexPackedSize;
+		extern const castor::String CornerRoundingNorm;
 	}
 }
 

@@ -14,62 +14,6 @@
 using namespace castor;
 namespace castor3d
 {
-	//*********************************************************************************************
-
-	PostEffect::PostEffectSurface::PostEffectSurface( Engine & engine )
-		: m_colourTexture( engine )
-	{
-	}
-
-	bool PostEffect::PostEffectSurface::initialise( RenderTarget & renderTarget
-		, renderer::RenderPass const & renderPass
-		, Size const & size
-		, SamplerSPtr sampler
-		, renderer::Format format
-		, uint32_t mipLevels )
-	{
-		m_size = size;
-
-		renderer::ImageCreateInfo image{};
-		image.flags = 0u;
-		image.arrayLayers = 1u;
-		image.extent.width = size[0];
-		image.extent.height = size[1];
-		image.extent.depth = 1u;
-		image.format = format;
-		image.imageType = renderer::TextureType::e2D;
-		image.initialLayout = renderer::ImageLayout::eUndefined;
-		image.mipLevels = mipLevels;
-		image.samples = renderer::SampleCountFlag::e1;
-		image.sharingMode = renderer::SharingMode::eExclusive;
-		image.tiling = renderer::ImageTiling::eOptimal;
-		image.usage = renderer::ImageUsageFlag::eColourAttachment
-			| renderer::ImageUsageFlag::eSampled
-			| renderer::ImageUsageFlag::eTransferSrc;
-		auto colourTexture = std::make_shared< TextureLayout >( *renderTarget.getEngine()->getRenderSystem()
-			, image
-			, renderer::MemoryPropertyFlag::eDeviceLocal );
-
-		colourTexture->getDefaultImage().initialiseSource();
-		m_colourTexture.setSampler( sampler );
-		m_colourTexture.setTexture( colourTexture );
-		m_colourTexture.initialise();
-
-		renderer::FrameBufferAttachmentArray attaches;
-		attaches.emplace_back( *renderPass.getAttachments().begin(), colourTexture->getDefaultView() );
-		m_fbo = renderPass.createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
-			, std::move( attaches ) );
-		return true;
-	}
-
-	void PostEffect::PostEffectSurface::cleanup()
-	{
-		m_fbo.reset();
-		m_colourTexture.cleanup();
-	}
-
-	//*********************************************************************************************
-
 	PostEffect::PostEffect( String const & name
 		, RenderTarget & renderTarget
 		, RenderSystem & renderSystem
@@ -135,6 +79,4 @@ namespace castor3d
 			, m_target->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eTransferDstOptimal
 				, renderer::AccessFlag::eTransferWrite ) );
 	}
-
-	//*********************************************************************************************
 }

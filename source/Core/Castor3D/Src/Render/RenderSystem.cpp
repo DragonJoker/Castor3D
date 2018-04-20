@@ -8,10 +8,13 @@ using namespace castor;
 
 namespace castor3d
 {
-	RenderSystem::RenderSystem( Engine & engine, String const & p_name )
+	RenderSystem::RenderSystem( Engine & engine
+		, String const & name
+		, bool topDown )
 		: OwnedBy< Engine >{ engine }
-		, m_name{ p_name }
+		, m_name{ name }
 		, m_initialised{ false }
+		, m_topDown{ topDown }
 		, m_gpuInformations{}
 		, m_gpuBufferPool{ *this }
 	{

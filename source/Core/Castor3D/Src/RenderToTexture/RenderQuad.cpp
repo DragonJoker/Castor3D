@@ -67,12 +67,12 @@ namespace castor3d
 		, m_vertexData
 		{
 			{
-				{ Point2f{ -1.0, -1.0 }, Point2f{ ( invertU ? 1.0 : 0.0 ), 0.0 } },
-				{ Point2f{ -1.0, +1.0 }, Point2f{ ( invertU ? 1.0 : 0.0 ), 1.0 } },
-				{ Point2f{ +1.0, -1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), 0.0 } },
-				{ Point2f{ +1.0, -1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), 0.0 } },
-				{ Point2f{ -1.0, +1.0 }, Point2f{ ( invertU ? 1.0 : 0.0 ), 1.0 } },
-				{ Point2f{ +1.0, +1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), 1.0 } },
+				{ Point2f{ -1.0, -1.0 }, Point2f{ ( invertU ? 1.0 : 0.0 ), renderSystem.isTopDown() ? 0.0 : 1.0 } },
+				{ Point2f{ -1.0, +1.0 }, Point2f{ ( invertU ? 1.0 : 0.0 ), renderSystem.isTopDown() ? 1.0 : 0.0 } },
+				{ Point2f{ +1.0, -1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), renderSystem.isTopDown() ? 0.0 : 1.0 } },
+				{ Point2f{ +1.0, -1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), renderSystem.isTopDown() ? 0.0 : 1.0 } },
+				{ Point2f{ -1.0, +1.0 }, Point2f{ ( invertU ? 1.0 : 0.0 ), renderSystem.isTopDown() ? 1.0 : 0.0 } },
+				{ Point2f{ +1.0, +1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), renderSystem.isTopDown() ? 1.0 : 0.0 } },
 			}
 		}
 		, m_sampler{ doCreateSampler( m_renderSystem, nearest ) }
@@ -99,6 +99,25 @@ namespace castor3d
 		, renderer::RenderPass const & renderPass
 		, renderer::DescriptorSetLayoutBindingArray bindings
 		, renderer::PushConstantRangeCRefArray const & pushRanges )
+	{
+		createPipeline( size
+			, position
+			, program
+			, view
+			, renderPass
+			, bindings
+			, pushRanges
+			, renderer::DepthStencilState{ 0u, false, false } );
+	}
+
+	void RenderQuad::createPipeline( renderer::Extent2D const & size
+		, castor::Position const & position
+		, renderer::ShaderStageStateArray const & program
+		, renderer::TextureView const & view
+		, renderer::RenderPass const & renderPass
+		, renderer::DescriptorSetLayoutBindingArray bindings
+		, renderer::PushConstantRangeCRefArray const & pushRanges
+		, renderer::DepthStencilState const & dsState )
 	{
 		m_sampler->initialise();
 		auto & device = *m_renderSystem.getCurrentDevice();
@@ -175,7 +194,7 @@ namespace castor3d
 			renderer::MultisampleState{},
 			std::move( bdState ),
 			{},
-			renderer::DepthStencilState{ 0u, false, false },
+			dsState,
 			std::nullopt,
 			renderer::Viewport{ size.width, size.height, position.x(), position.y() },
 			renderer::Scissor{ position.x(), position.y(), size.width, size.height }

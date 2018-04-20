@@ -198,8 +198,7 @@ namespace GrayScale
 			, bindings
 			, {} );
 
-		auto result = m_surface.initialise( m_renderTarget
-			, *m_renderPass
+		auto result = m_surface.initialise( *m_renderPass
 			, castor::Size{ m_target->getWidth(), m_target->getHeight() }
 			, m_sampler
 			, m_target->getPixelFormat() );
@@ -213,13 +212,13 @@ namespace GrayScale
 			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
 				, timer.getQuery()
 				, 0u );
-			// Put image in the right state for rendering.
+			// Put target image in shader input layout.
 			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
 				, m_target->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
 
 			m_commandBuffer->beginRenderPass( *m_renderPass
-				, *m_surface.m_fbo
+				, *m_surface.frameBuffer
 				, { renderer::ClearColorValue{} }
 				, renderer::SubpassContents::eInline );
 			m_quad->registerFrame( *m_commandBuffer );
@@ -231,7 +230,7 @@ namespace GrayScale
 			m_commandBuffer->end();
 		}
 
-		m_result = m_surface.m_colourTexture.getTexture().get();
+		m_result = m_surface.colourTexture.get();
 		return result;
 	}
 

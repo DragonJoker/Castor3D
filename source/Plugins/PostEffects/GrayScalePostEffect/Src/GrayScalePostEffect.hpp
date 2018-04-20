@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_GrayScalePostEffect___
 
 #include <PostEffect/PostEffect.hpp>
+#include <PostEffect/PostEffectSurface.hpp>
 #include <Texture/TextureUnit.hpp>
 #include <Render/Viewport.hpp>
 #include <Shader/Ubos/MatrixUbo.hpp>
@@ -43,7 +44,7 @@ namespace GrayScale
 
 	private:
 		castor3d::SamplerSPtr m_sampler;
-		PostEffectSurface m_surface;
+		castor3d::PostEffectSurface m_surface;
 		renderer::RenderPassPtr m_renderPass;
 		std::unique_ptr< castor3d::RenderQuad > m_quad;
 	};

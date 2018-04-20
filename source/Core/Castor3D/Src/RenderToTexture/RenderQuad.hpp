@@ -70,6 +70,26 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
+		*	Creates the rendering pipeline.
+		*\param[in] program
+		*	The shader program.
+		*\~french
+		*\brief
+		*	Crée le pipeline de rendu.
+		*\param[in] program
+		*	Le programme shader.
+		*/
+		C3D_API void createPipeline( renderer::Extent2D const & size
+			, castor::Position const & position
+			, renderer::ShaderStageStateArray const & program
+			, renderer::TextureView const & view
+			, renderer::RenderPass const & renderPass
+			, renderer::DescriptorSetLayoutBindingArray bindings
+			, renderer::PushConstantRangeCRefArray const & pushRanges
+			, renderer::DepthStencilState const & dsState );
+		/**
+		*\~english
+		*\brief
 		*	Cleans up GPU objects.
 		*\~french
 		*\brief

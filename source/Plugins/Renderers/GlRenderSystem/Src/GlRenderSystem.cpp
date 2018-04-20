@@ -16,7 +16,7 @@ namespace GlRender
 	String RenderSystem::Type = cuT( "opengl" );
 
 	RenderSystem::RenderSystem( castor3d::Engine & engine )
-		: castor3d::RenderSystem( engine, Name )
+		: castor3d::RenderSystem( engine, Name, false )
 	{
 		renderer::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
 		{

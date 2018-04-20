@@ -16,7 +16,7 @@ namespace VkRender
 	String RenderSystem::Type = cuT( "vulkan" );
 
 	RenderSystem::RenderSystem( castor3d::Engine & engine )
-		: castor3d::RenderSystem( engine, Name )
+		: castor3d::RenderSystem( engine, Name, true )
 
 	{
 		renderer::Logger::setDebugCallback( []( std::string const & msg, bool newLine )

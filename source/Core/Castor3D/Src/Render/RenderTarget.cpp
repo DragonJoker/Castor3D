@@ -259,7 +259,6 @@ namespace castor3d
 					, sourceView->getDefaultView()
 					, m_frameBuffer.m_colourTexture.getTexture()->getDefaultView() );
 				m_srgbCopyFinished = device.createSemaphore();
-				sourceView = nullptr;
 			}
 
 			m_overlayRenderer = std::make_shared< OverlayRenderer >( *getEngine()->getRenderSystem()
@@ -550,22 +549,26 @@ namespace castor3d
 		commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 
 		commandBuffer->begin();
-		// Put source image in transfer source layout.
-		commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-			, renderer::PipelineStageFlag::eTransfer
-			, source.makeTransferSource( renderer::ImageLayout::eColourAttachmentOptimal
-				, renderer::AccessFlag::eColourAttachmentWrite ) );
-		// Put target image in transfer destination layout.
-		commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
-			, renderer::PipelineStageFlag::eTransfer
-			, target.makeTransferDestination( renderer::ImageLayout::eUndefined, 0u ) );
-		// Copy source to target.
-		commandBuffer->copyImage( source, target );
+
+		if ( &source != &target )
+		{
+			// Put source image in transfer source layout.
+			commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+				, renderer::PipelineStageFlag::eTransfer
+				, source.makeTransferSource( renderer::ImageLayout::eColourAttachmentOptimal
+					, renderer::AccessFlag::eColourAttachmentWrite ) );
+			// Put target image in transfer destination layout.
+			commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
+				, renderer::PipelineStageFlag::eTransfer
+				, target.makeTransferDestination( renderer::ImageLayout::eUndefined, 0u ) );
+			// Copy source to target.
+			commandBuffer->copyImage( source, target );
+		}
+
 		// Put target image in fragment shader input layout.
-		commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
+		commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 			, renderer::PipelineStageFlag::eFragmentShader
-			, target.makeShaderInputResource( renderer::ImageLayout::eTransferDstOptimal
-				, renderer::AccessFlag::eTransferWrite ) );
+			, target.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
 		commandBuffer->end();
 	}
 
@@ -588,8 +591,8 @@ namespace castor3d
 		m_signalFinished = doApplyPostEffects( *m_signalFinished
 			, m_hdrPostEffects
 			, *m_hdrPostFxTimer
-			, *m_hdrCopyCommands
-			, *m_hdrCopyFinished
+			, m_hdrCopyCommands
+			, m_hdrCopyFinished
 			, elapsedTime );
 
 		// Then draw the render's result to the RenderTarget's frame buffer, applying the tone mapping operator.
@@ -599,8 +602,8 @@ namespace castor3d
 		m_signalFinished = doApplyPostEffects( *m_signalFinished
 			, m_srgbPostEffects
 			, *m_srgbPostFxTimer
-			, *m_srgbCopyCommands
-			, *m_srgbCopyFinished
+			, m_srgbCopyCommands
+			, m_srgbCopyFinished
 			, elapsedTime );
 
 		// And now render overlays.
@@ -616,8 +619,8 @@ namespace castor3d
 	renderer::Semaphore const * RenderTarget::doApplyPostEffects( renderer::Semaphore const & toWait
 		, PostEffectPtrArray const & effects
 		, RenderPassTimer & timer
-		, renderer::CommandBuffer const & commandBuffer
-		, renderer::Semaphore const & copyFinished
+		, renderer::CommandBufferPtr const & copyCommandBuffer
+		, renderer::SemaphorePtr const & copyFinished
 		, castor::Nanoseconds const & elapsedTime )
 	{
 		auto * result = &toWait;
@@ -642,13 +645,14 @@ namespace castor3d
 			}
 
 			m_fence->reset();
-			queue.submit( commandBuffer
+			queue.submit( *copyCommandBuffer
 				, *result
 				, renderer::PipelineStageFlag::eColourAttachmentOutput
-				, copyFinished
+				, *copyFinished
 				, m_fence.get() );
 			m_fence->wait( renderer::FenceTimeout );
-			result = &copyFinished;
+			timer.step();
+			result = copyFinished.get();
 			timer.stop();
 		}
 

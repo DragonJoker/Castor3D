@@ -43,7 +43,9 @@ namespace castor3d
 		 *\param[in]	engine	Le moteur.
 		 *\param[in]	name	Le nom du renderer.
 		 */
-		C3D_API RenderSystem( Engine & engine, castor::String const & name );
+		C3D_API RenderSystem( Engine & engine
+			, castor::String const & name
+			, bool topDown );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -183,115 +185,85 @@ namespace castor3d
 		C3D_API renderer::DevicePtr createDevice( renderer::WindowHandle && handle
 			, uint32_t gpu = 0u );
 		/**
-		 *\~english
-		 *\return		The GPU informations.
-		 *\~french
-		 *\return		Les informations sur le GPU.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline GpuInformations const & getGpuInformations()const
 		{
 			return m_gpuInformations;
 		}
-		/**
-		 *\~english
-		 *\brief		Tells if the RenderSystem is initialised
-		 *\~french
-		 *\brief		Dit si le RenderSystem est initialisé
-		 */
+
 		inline bool isInitialised()const
 		{
 			return m_initialised;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the renderer API
-		 *\~french
-		 *\brief		Récupère l'API de rendu
-		 */
+
 		inline castor::String const & getRendererType()const
 		{
 			return m_name;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the main device.
-		 *\param[in]	device	The device.
-		 *\~french
-		 *\brief		Définit le périphérique principal.
-		 *\param[in]	device	Le périphérique.
-		 */
-		inline void setMainDevice( renderer::DevicePtr device )
-		{
-			m_mainDevice = device;
-		}
-		/**
-		 *\~english
-		 *\return		\p true if the main device has been created.
-		 *\~french
-		 *\return		\p true si le périphérique principal a été créé.
-		 */
+
 		inline bool hasMainDevice()
 		{
 			return m_mainDevice != nullptr;
 		}
-		/**
-		 *\~english
-		 *\return		The main device.
-		 *\~french
-		 *\return		Le périphérique principal.
-		 */
+
 		inline renderer::DevicePtr getMainDevice()
 		{
 			REQUIRE( hasMainDevice() );
 			return m_mainDevice;
 		}
-		/**
-		 *\~english
-		 *\return		The overlay renderer.
-		 *\~french
-		 *\return		Le renderer d'overlays.
-		 */
+
 		inline OverlayRendererSPtr getOverlayRenderer()
 		{
 			return m_overlayRenderer;
 		}
-		/**
-		 *\~english
-		 *\brief		Increments the GPU time.
-		 *\param[in]	time	The increment value.
-		 *\~french
-		 *\brief		Incrémente le temps CPU.
-		 *\param[in]	time	La valeur d'incrément.
-		 */
-		template< class Rep, class Period >
-		inline void incGpuTime( std::chrono::duration< Rep, Period > const & time )
-		{
-			m_gpuTime += std::chrono::duration_cast< castor::Nanoseconds >( time );
-		}
-		/**
-		 *\~english
-		 *\brief		Resets the GPU time.
-		 *\~french
-		 *\brief		Réinitialise le temps CPU.
-		 */
-		inline void resetGpuTime()
-		{
-			m_gpuTime = castor::Nanoseconds( 0 );
-		}
-		/**
-		 *\~english
-		 *\return		The GPU time.
-		 *\~french
-		 *\return		Le temps CPU.
-		 */
+
 		inline castor::Nanoseconds const & getGpuTime()const
 		{
 			return m_gpuTime;
 		}
 
+		inline bool isTopDown()const
+		{
+			return m_topDown;
+		}
+		/**@}*/
+		/**
+		*\~english
+		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		*/
+		/**@{*/
+		inline void setMainDevice( renderer::DevicePtr device )
+		{
+			m_mainDevice = device;
+		}
+
+		template< class Rep, class Period >
+		inline void incGpuTime( std::chrono::duration< Rep, Period > const & time )
+		{
+			m_gpuTime += std::chrono::duration_cast< castor::Nanoseconds >( time );
+		}
+
+		inline void resetGpuTime()
+		{
+			m_gpuTime = castor::Nanoseconds( 0 );
+		}
+		/**@}*/
+
 	protected:
 		std::recursive_mutex m_mutex;
 		bool m_initialised;
+		bool const m_topDown;
 		GpuInformations m_gpuInformations;
 		OverlayRendererSPtr m_overlayRenderer;
 		renderer::RendererPtr m_renderer;
