@@ -684,7 +684,9 @@ namespace castor3d
 		m_overlaysTimer->start();
 		{
 			auto lock = makeUniqueLock( getEngine()->getOverlayCache() );
-			m_overlayRenderer->beginPrepare( camera.getViewport() );
+			m_overlayRenderer->beginPrepare( camera.getViewport()
+				, *m_overlaysTimer
+				, *result );
 			auto preparer = m_overlayRenderer->getPreparer();
 
 			for ( auto category : getEngine()->getOverlayCache() )
@@ -698,22 +700,8 @@ namespace castor3d
 				}
 			}
 
-			m_overlayRenderer->endPrepare();
-			m_overlayRenderer->beginRender( *m_overlaysTimer
-				, *result );
-			auto renderer = m_overlayRenderer->getRenderer();
-
-			for ( auto category : getEngine()->getOverlayCache() )
-			{
-				SceneSPtr scene = category->getOverlay().getScene();
-
-				if ( category->getOverlay().isVisible() && ( !scene || scene->getName() == getScene()->getName() ) )
-				{
-					category->accept( renderer );
-				}
-			}
-
-			m_overlayRenderer->endRender( *m_overlaysTimer );
+			m_overlayRenderer->endPrepare( *m_overlaysTimer );
+			m_overlayRenderer->render();
 			m_overlaysTimer->step();
 		}
 		m_overlaysTimer->stop();

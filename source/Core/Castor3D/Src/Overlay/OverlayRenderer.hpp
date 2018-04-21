@@ -43,32 +43,14 @@ namespace castor3d
 			void visit( TextOverlay const & overlay )override;
 
 		private:
-			template< typename OverlayT, typename BufferIndexT, typename BufferPoolT >
+			template< typename QuadT, typename OverlayT, typename BufferIndexT, typename BufferPoolT, typename VertexT >
 			void doPrepareOverlay( OverlayT const & overlay
 				, Pass const & pass
 				, std::map< size_t, BufferIndexT > & overlays
 				, std::vector< BufferPoolT > & vertexBuffers
-				, std::vector < OverlayCategory::Vertex > const & vertices );
-
-		private:
-			OverlayRenderer & m_renderer;
-		};
-		class Renderer
-			: public OverlayVisitor
-		{
-		public:
-			Renderer( OverlayRenderer & renderer );
-
-			void visit( PanelOverlay const & overlay )override;
-			void visit( BorderPanelOverlay const & overlay )override;
-			void visit( TextOverlay const & overlay )override;
-
-		private:
-			template< typename QuadT, typename OverlayT, typename BufferIndexT >
-			void doPrepareOverlay( OverlayT const & overlay
-				, Pass const & pass
-				, std::map< size_t, BufferIndexT > & overlays
-				, std::vector < OverlayCategory::Vertex > const & vertices );
+				, std::vector < VertexT > const & vertices
+				, TextureLayoutSPtr textTexture = nullptr
+				, SamplerSPtr textSampler = nullptr );
 
 		private:
 			OverlayRenderer & m_renderer;
@@ -116,31 +98,23 @@ namespace castor3d
 		 *\brief		Commence la préparation des incrustations.
 		 *\param[in]	viewport	Le viewport de la fenêtre de rendu.
 		 */
-		C3D_API void beginPrepare( Viewport const & viewport );
+		C3D_API void beginPrepare( Viewport const & viewport
+			, RenderPassTimer const & timer
+			, renderer::Semaphore const & toWait );
 		/**
 		 *\~english
 		 *\brief		Ends the overlays preparation.
 		 *\~french
 		 *\brief		Termine la préparation des incrustations.
 		 */
-		C3D_API void endPrepare();
+		C3D_API void endPrepare( RenderPassTimer const & timer );
 		/**
 		 *\~english
-		 *\brief		Begins the overlays rendering.
-		 *\param[in]	viewport	The render window viewport.
+		 *\brief		Ends the overlays preparation.
 		 *\~french
-		 *\brief		Commence le rendu des incrustations.
-		 *\param[in]	viewport	Le viewport de la fenêtre de rendu.
+		 *\brief		Termine la préparation des incrustations.
 		 */
-		C3D_API void beginRender( RenderPassTimer const & timer
-			, renderer::Semaphore const & toWait );
-		/**
-		 *\~english
-		 *\brief		Ends the overlays rendering.
-		 *\~french
-		 *\brief		Termine le rendu des incrustations.
-		 */
-		C3D_API void endRender( RenderPassTimer const & timer );
+		C3D_API void render();
 		/**
 		*\~english
 		*name
@@ -169,11 +143,6 @@ namespace castor3d
 		Preparer getPreparer()
 		{
 			return Preparer{ *this };
-		}
-
-		Renderer getRenderer()
-		{
-			return Renderer{ *this };
 		}
 		/**@}*/
 
@@ -249,7 +218,7 @@ namespace castor3d
 		using PanelVertexBufferIndex = PanelVertexBufferPool::MyBufferIndex;
 		using BorderPanelVertexBufferPool = VertexBufferPool< OverlayCategory::Vertex, 8u * 6u >;
 		using BorderPanelVertexBufferIndex = BorderPanelVertexBufferPool::MyBufferIndex;
-		using TextVertexBufferPool = VertexBufferPool< OverlayCategory::Vertex, 600u >;
+		using TextVertexBufferPool = VertexBufferPool< TextOverlay::Vertex, 600u >;
 		using TextVertexBufferIndex = TextVertexBufferPool::MyBufferIndex;
 
 		OverlayRenderNode & doGetPanelNode( Pass const & pass );
@@ -258,10 +227,6 @@ namespace castor3d
 			, Sampler const & sampler );
 		Pipeline & doGetPipeline( TextureChannels textureFlags
 			, std::map< uint32_t, Pipeline > & pipelines );
-		TextVertexBufferPool & doCreateTextGeometryBuffers();
-		OverlayGeometryBuffers & doFillTextPart( int32_t count
-			, TextOverlay::VertexArray::const_iterator & it
-			, uint32_t index );
 		renderer::ShaderStageStateArray doCreateOverlayProgram( TextureChannels const & textureFlags );
 		renderer::DescriptorSetPtr doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
 			, TextureChannels textureFlags
@@ -279,7 +244,7 @@ namespace castor3d
 		void doCreateRenderPass();
 
 		template< typename VertexBufferIndexT, typename VertexBufferPoolT >
-		VertexBufferIndexT & doGetVertexBuffer( std::vector< VertexBufferPoolT > & pools
+		VertexBufferIndexT & doGetVertexBuffer( std::vector< std::unique_ptr< VertexBufferPoolT > > & pools
 			, std::map< size_t, VertexBufferIndexT > & overlays
 			, Overlay const & overlay
 			, Pass const & pass
@@ -297,7 +262,7 @@ namespace castor3d
 				{
 					if ( it == overlays.end() )
 					{
-						auto result = pool.allocate( node );
+						auto result = pool->allocate( node );
 
 						if ( bool( result ) )
 						{
@@ -305,13 +270,13 @@ namespace castor3d
 						}
 					}
 				}
-			}
 
-			if ( it == overlays.end() )
-			{
-				pools.emplace_back( device, layout, maxCount );
-				auto result = pools.back().allocate( node );
-				it = overlays.emplace( hash, std::move( result ) ).first;
+				if ( it == overlays.end() )
+				{
+					pools.emplace_back( std::make_unique< VertexBufferPoolT >( device, layout, maxCount ) );
+					auto result = pools.back()->allocate( node );
+					it = overlays.emplace( hash, std::move( result ) ).first;
+				}
 			}
 
 			return it->second;
@@ -323,9 +288,9 @@ namespace castor3d
 	private:
 		renderer::TextureView const & m_target;
 		renderer::CommandBufferPtr m_commandBuffer;
-		std::vector< PanelVertexBufferPool > m_panelVertexBuffers;
-		std::vector< BorderPanelVertexBufferPool > m_borderVertexBuffers;
-		std::vector< TextVertexBufferPool > m_textsVertexBuffers;
+		std::vector< std::unique_ptr< PanelVertexBufferPool > > m_panelVertexBuffers;
+		std::vector< std::unique_ptr< BorderPanelVertexBufferPool > > m_borderVertexBuffers;
+		std::vector< std::unique_ptr< TextVertexBufferPool > > m_textVertexBuffers;
 		std::map< size_t, PanelVertexBufferIndex > m_panelOverlays;
 		std::map< size_t, BorderPanelVertexBufferIndex > m_borderPanelOverlays;
 		std::map< size_t, TextVertexBufferIndex > m_textOverlays;
