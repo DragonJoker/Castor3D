@@ -43,6 +43,14 @@ namespace castor3d
 			void visit( TextOverlay const & overlay )override;
 
 		private:
+			template< typename OverlayT, typename BufferIndexT, typename BufferPoolT >
+			void doPrepareOverlay( OverlayT const & overlay
+				, Pass const & pass
+				, std::map< size_t, BufferIndexT > & overlays
+				, std::vector< BufferPoolT > & vertexBuffers
+				, std::vector < OverlayCategory::Vertex > const & vertices );
+
+		private:
 			OverlayRenderer & m_renderer;
 		};
 		class Renderer
@@ -56,22 +64,11 @@ namespace castor3d
 			void visit( TextOverlay const & overlay )override;
 
 		private:
-			void doDrawItem( renderer::CommandBuffer const & commandBuffer
-				, Material & material
-				, renderer::VertexBufferBase const & vertexBuffer
-				, uint32_t offset
-				, uint32_t count );
-			void doDrawItem( renderer::CommandBuffer const & commandBuffer
-				, Pass & pass
-				, renderer::VertexBufferBase const & vertexBuffer
-				, uint32_t offset
-				, uint32_t count );
-			void doDrawItem( renderer::CommandBuffer const & commandBuffer
-				, Pass & pass
-				, renderer::VertexBufferBase const & vertexBuffer
-				, TextureLayout const & texture
-				, Sampler const & sampler
-				, uint32_t count );
+			template< typename QuadT, typename OverlayT, typename BufferIndexT >
+			void doPrepareOverlay( OverlayT const & overlay
+				, Pass const & pass
+				, std::map< size_t, BufferIndexT > & overlays
+				, std::vector < OverlayCategory::Vertex > const & vertices );
 
 		private:
 			OverlayRenderer & m_renderer;
@@ -200,8 +197,7 @@ namespace castor3d
 		struct OverlayRenderNode
 		{
 			Pipeline & pipeline;
-			Pass & pass;
-			renderer::DescriptorSetPtr descriptorSet;
+			Pass const & pass;
 		};
 
 		struct OverlayGeometryBuffers
@@ -246,17 +242,18 @@ namespace castor3d
 			OverlayRenderNode & node;
 			uint32_t index;
 			OverlayGeometryBuffers geometryBuffers;
+			renderer::DescriptorSetPtr descriptorSet;
 		};
 
 		using PanelVertexBufferPool = VertexBufferPool< OverlayCategory::Vertex, 6u >;
 		using PanelVertexBufferIndex = PanelVertexBufferPool::MyBufferIndex;
 		using BorderPanelVertexBufferPool = VertexBufferPool< OverlayCategory::Vertex, 8u * 6u >;
 		using BorderPanelVertexBufferIndex = BorderPanelVertexBufferPool::MyBufferIndex;
-		using TextVertexBufferPool = VertexBufferPool< OverlayCategory::Vertex, 6u >;
+		using TextVertexBufferPool = VertexBufferPool< OverlayCategory::Vertex, 600u >;
 		using TextVertexBufferIndex = TextVertexBufferPool::MyBufferIndex;
 
-		OverlayRenderNode & doGetPanelNode( Pass & pass );
-		OverlayRenderNode & doGetTextNode( Pass & pass
+		OverlayRenderNode & doGetPanelNode( Pass const & pass );
+		OverlayRenderNode & doGetTextNode( Pass const & pass
 			, TextureLayout const & texture
 			, Sampler const & sampler );
 		Pipeline & doGetPipeline( TextureChannels textureFlags
@@ -282,7 +279,7 @@ namespace castor3d
 		void doCreateRenderPass();
 
 		template< typename VertexBufferIndexT, typename VertexBufferPoolT >
-		VertexBufferIndexT doGetVertexBuffer( std::vector< VertexBufferPoolT > & pools
+		VertexBufferIndexT & doGetVertexBuffer( std::vector< VertexBufferPoolT > & pools
 			, std::map< size_t, VertexBufferIndexT > & overlays
 			, Overlay const & overlay
 			, Pass const & pass
@@ -304,7 +301,7 @@ namespace castor3d
 
 						if ( bool( result ) )
 						{
-							it = overlays.emplace( hash, result ).first;
+							it = overlays.emplace( hash, std::move( result ) ).first;
 						}
 					}
 				}
@@ -314,7 +311,7 @@ namespace castor3d
 			{
 				pools.emplace_back( device, layout, maxCount );
 				auto result = pools.back().allocate( node );
-				it = overlays.emplace( hash, result ).first;
+				it = overlays.emplace( hash, std::move( result ) ).first;
 			}
 
 			return it->second;
@@ -335,8 +332,8 @@ namespace castor3d
 		renderer::VertexLayoutPtr m_declaration;
 		renderer::VertexLayoutPtr m_textDeclaration;
 		castor::Size m_size;
-		std::map< Pass *, OverlayRenderNode > m_mapPanelNodes;
-		std::map< Pass *, OverlayRenderNode > m_mapTextNodes;
+		std::map< Pass const *, OverlayRenderNode > m_mapPanelNodes;
+		std::map< Pass const *, OverlayRenderNode > m_mapTextNodes;
 		renderer::RenderPassPtr m_renderPass;
 		renderer::FrameBufferPtr m_frameBuffer;
 		std::map< uint32_t, Pipeline > m_panelPipelines;

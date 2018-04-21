@@ -714,6 +714,7 @@ namespace castor3d
 			}
 
 			m_overlayRenderer->endRender( *m_overlaysTimer );
+			m_overlaysTimer->step();
 		}
 		m_overlaysTimer->stop();
 		return result;

@@ -75,6 +75,41 @@ namespace castor3d
 			data.renderRatio = overlay.getRenderRatio( size );
 			data.materialIndex = pass.getId() - 1u;
 		}
+
+		template< typename OverlayT, typename QuadT >
+		struct BorderSizeGetter
+		{
+			castor::Rectangle operator()( OverlayT const & overlay, castor::Size const & size )const
+			{
+				return castor::Rectangle{};
+			}
+		};
+
+		template<>
+		struct BorderSizeGetter< BorderPanelOverlay, OverlayRenderer::BorderPanelVertexBufferPool::Quad >
+		{
+			castor::Rectangle operator()( BorderPanelOverlay const & overlay, castor::Size const & size )const
+			{
+				castor::Rectangle result = overlay.getAbsoluteBorderSize( size );
+
+				switch ( overlay.getBorderPosition() )
+				{
+				case BorderPosition::eMiddle:
+					result.set( result.left() / 2
+						, result.top() / 2
+						, result.right() / 2
+						, result.bottom() / 2 );
+					break;
+				case BorderPosition::eExternal:
+					break;
+				default:
+					result = castor::Rectangle{};
+					break;
+				}
+
+				return result;
+			}
+		};
 	}
 
 	//*********************************************************************************************
@@ -86,117 +121,78 @@ namespace castor3d
 
 	void OverlayRenderer::Preparer::visit( PanelOverlay const & overlay )
 	{
-		MaterialSPtr material = overlay.getMaterial();
-
-		if ( material )
+		if ( auto material = overlay.getMaterial() )
 		{
 			for ( auto & pass : *material )
 			{
-				auto bufferIndex = m_renderer.doGetVertexBuffer< PanelVertexBufferIndex >( m_renderer.m_panelVertexBuffers
+				doPrepareOverlay( overlay
+					, *pass
 					, m_renderer.m_panelOverlays
-					, overlay.getOverlay()
-					, *pass
-					, m_renderer.doGetPanelNode( *pass )
-					, *m_renderer.getRenderSystem()->getCurrentDevice()
-					, *m_renderer.m_declaration
-					, MaxPanelsPerBuffer );
-				doUpdateUbo( *bufferIndex.pool.ubo
-					, bufferIndex.index
-					, overlay
-					, *pass
-					, m_renderer.m_size );
-				doFillBuffers< OverlayCategory::Vertex >( overlay.getPanelVertex().begin()
-					, uint32_t( overlay.getPanelVertex().size() )
-					, bufferIndex );
-
-				if ( !bufferIndex.node.descriptorSet )
-				{
-					bufferIndex.node.descriptorSet = m_renderer.doCreateDescriptorSet( bufferIndex.node.pipeline
-						, pass->getTextureFlags()
-						, *pass
-						, *bufferIndex.pool.ubo
-						, bufferIndex.index );
-				}
+					, m_renderer.m_panelVertexBuffers
+					, overlay.getPanelVertex() );
 			}
 		}
 	}
 
 	void OverlayRenderer::Preparer::visit( BorderPanelOverlay const & overlay )
 	{
+		if ( auto material = overlay.getMaterial() )
 		{
-			auto material = overlay.getMaterial();
-
-			if ( material )
+			for ( auto & pass : *material )
 			{
-				for ( auto & pass : *material )
-				{
-					auto bufferIndex = m_renderer.doGetVertexBuffer< PanelVertexBufferIndex >( m_renderer.m_panelVertexBuffers
-						, m_renderer.m_panelOverlays
-						, overlay.getOverlay()
-						, *pass
-						, m_renderer.doGetPanelNode( *pass )
-						, *m_renderer.getRenderSystem()->getCurrentDevice()
-						, *m_renderer.m_declaration
-						, MaxPanelsPerBuffer );
-					doUpdateUbo( *bufferIndex.pool.ubo
-						, bufferIndex.index
-						, overlay
-						, *pass
-						, m_renderer.m_size );
-					doFillBuffers< OverlayCategory::Vertex >( overlay.getPanelVertex().begin()
-						, uint32_t( overlay.getPanelVertex().size() )
-						, bufferIndex );
-
-					if ( !bufferIndex.node.descriptorSet )
-					{
-						bufferIndex.node.descriptorSet = m_renderer.doCreateDescriptorSet( bufferIndex.node.pipeline
-							, pass->getTextureFlags()
-							, *pass
-							, *bufferIndex.pool.ubo
-							, bufferIndex.index );
-					}
-				}
+				doPrepareOverlay( overlay
+					, *pass
+					, m_renderer.m_panelOverlays
+					, m_renderer.m_panelVertexBuffers
+					, overlay.getPanelVertex() );
 			}
 		}
+
+		if ( auto material = overlay.getBorderMaterial() )
 		{
-			auto material = overlay.getBorderMaterial();
-
-			if ( material )
+			for ( auto & pass : *material )
 			{
-				for ( auto & pass : *material )
-				{
-					auto bufferIndex = m_renderer.doGetVertexBuffer< BorderPanelVertexBufferIndex >( m_renderer.m_borderVertexBuffers
-						, m_renderer.m_borderPanelOverlays
-						, overlay.getOverlay()
-						, *pass
-						, m_renderer.doGetPanelNode( *pass )
-						, *m_renderer.getRenderSystem()->getCurrentDevice()
-						, *m_renderer.m_declaration
-						, MaxPanelsPerBuffer );
-					doUpdateUbo( *bufferIndex.pool.ubo
-						, bufferIndex.index
-						, overlay
-						, *pass
-						, m_renderer.m_size );
-					doFillBuffers< OverlayCategory::Vertex >( overlay.getBorderVertex().begin()
-						, uint32_t( overlay.getBorderVertex().size() )
-						, bufferIndex );
-
-					if ( !bufferIndex.node.descriptorSet )
-					{
-						bufferIndex.node.descriptorSet = m_renderer.doCreateDescriptorSet( bufferIndex.node.pipeline
-							, pass->getTextureFlags()
-							, *pass
-							, *bufferIndex.pool.ubo
-							, bufferIndex.index );
-					}
-				}
+				doPrepareOverlay( overlay
+					, *pass
+					, m_renderer.m_borderPanelOverlays
+					, m_renderer.m_borderVertexBuffers
+					, overlay.getBorderVertex() );
 			}
 		}
 	}
 
 	void OverlayRenderer::Preparer::visit( TextOverlay const & overlay )
 	{
+	}
+
+	template< typename OverlayT, typename BufferIndexT, typename BufferPoolT >
+	void OverlayRenderer::Preparer::doPrepareOverlay( OverlayT const & overlay
+		, Pass const & pass
+		, std::map< size_t, BufferIndexT > & overlays
+		, std::vector< BufferPoolT > & vertexBuffers
+		, std::vector < OverlayCategory::Vertex > const & vertices )
+	{
+		auto & bufferIndex = m_renderer.doGetVertexBuffer< BufferIndexT >( vertexBuffers
+			, overlays
+			, overlay.getOverlay()
+			, pass
+			, m_renderer.doGetPanelNode( pass )
+			, *m_renderer.getRenderSystem()->getCurrentDevice()
+			, *m_renderer.m_declaration
+			, MaxPanelsPerBuffer );
+		doUpdateUbo( *bufferIndex.pool.ubo
+			, bufferIndex.index
+			, overlay
+			, pass
+			, m_renderer.m_size );
+		doFillBuffers< OverlayCategory::Vertex >( vertices.begin()
+			, uint32_t( vertices.size() )
+			, bufferIndex );
+		bufferIndex.descriptorSet = m_renderer.doCreateDescriptorSet( bufferIndex.node.pipeline
+			, pass.getTextureFlags()
+			, pass
+			, *bufferIndex.pool.ubo
+			, bufferIndex.index );
 	}
 
 	//*********************************************************************************************
@@ -208,27 +204,14 @@ namespace castor3d
 
 	void OverlayRenderer::Renderer::visit( PanelOverlay const & overlay )
 	{
-		MaterialSPtr material = overlay.getMaterial();
-
-		if ( material )
+		if ( auto material = overlay.getMaterial() )
 		{
-			auto & commandBuffer = *m_renderer.m_commandBuffer;
-
 			for ( auto & pass : *material )
 			{
-				auto bufferIndex = m_renderer.m_panelOverlays.at( doHashCombine( overlay.getOverlay(), *pass ) );
-				commandBuffer.bindPipeline( *bufferIndex.node.pipeline.pipeline );
-				commandBuffer.setViewport( { m_renderer.m_size.getWidth(), m_renderer.m_size.getHeight(), 0, 0 } );
-				commandBuffer.setScissor( { 0, 0, m_renderer.m_size.getWidth(), m_renderer.m_size.getHeight() } );
-				commandBuffer.bindDescriptorSet( *bufferIndex.node.descriptorSet
-					, *bufferIndex.node.pipeline.pipelineLayout );
-				commandBuffer.bindVertexBuffer( 0u
-					, bufferIndex.pool.buffer->getBuffer()
-					, uint32_t( bufferIndex.index * sizeof( PanelVertexBufferPool::Quad ) ) );
-				commandBuffer.draw( uint32_t( overlay.getPanelVertex().size() )
-					, 1u
-					, 0u
-					, 0u );
+				doPrepareOverlay< PanelVertexBufferPool::Quad >( overlay
+					, *pass
+					, m_renderer.m_panelOverlays
+					, overlay.getPanelVertex() );
 			}
 		}
 	}
@@ -236,50 +219,26 @@ namespace castor3d
 	void OverlayRenderer::Renderer::visit( BorderPanelOverlay const & overlay )
 	{
 		auto & commandBuffer = *m_renderer.m_commandBuffer;
-		{
-			auto material = overlay.getMaterial();
 
-			if ( material )
+		if ( auto material = overlay.getMaterial() )
+		{
+			for ( auto & pass : *material )
 			{
-				for ( auto & pass : *material )
-				{
-					auto bufferIndex = m_renderer.m_panelOverlays.at( doHashCombine( overlay.getOverlay(), *pass ) );
-					commandBuffer.bindPipeline( *bufferIndex.node.pipeline.pipeline );
-					commandBuffer.setViewport( { m_renderer.m_size.getWidth(), m_renderer.m_size.getHeight(), 0, 0 } );
-					commandBuffer.setScissor( { 0, 0, m_renderer.m_size.getWidth(), m_renderer.m_size.getHeight() } );
-					commandBuffer.bindDescriptorSet( *bufferIndex.node.descriptorSet
-						, *bufferIndex.node.pipeline.pipelineLayout );
-					commandBuffer.bindVertexBuffer( 0u
-						, bufferIndex.pool.buffer->getBuffer()
-						, uint32_t( bufferIndex.index * sizeof( PanelVertexBufferPool::Quad ) ) );
-					commandBuffer.draw( uint32_t( overlay.getPanelVertex().size() )
-						, 1u
-						, 0u
-						, 0u );
-				}
+				doPrepareOverlay< PanelVertexBufferPool::Quad >( overlay
+					, *pass
+					, m_renderer.m_panelOverlays
+					, overlay.getPanelVertex() );
 			}
 		}
-		{
-			auto material = overlay.getBorderMaterial();
 
-			if ( material )
+		if ( auto material = overlay.getBorderMaterial() )
+		{
+			for ( auto & pass : *material )
 			{
-				for ( auto & pass : *material )
-				{
-					auto bufferIndex = m_renderer.m_borderPanelOverlays.at( doHashCombine( overlay.getOverlay(), *pass ) );
-					commandBuffer.bindPipeline( *bufferIndex.node.pipeline.pipeline );
-					commandBuffer.setViewport( { m_renderer.m_size.getWidth(), m_renderer.m_size.getHeight(), 0, 0 } );
-					commandBuffer.setScissor( { 0, 0, m_renderer.m_size.getWidth(), m_renderer.m_size.getHeight() } );
-					commandBuffer.bindDescriptorSet( *bufferIndex.node.descriptorSet
-						, *bufferIndex.node.pipeline.pipelineLayout );
-					commandBuffer.bindVertexBuffer( 0u
-						, bufferIndex.pool.buffer->getBuffer()
-						, uint32_t( bufferIndex.index * sizeof( BorderPanelVertexBufferPool::Quad ) ) );
-					commandBuffer.draw( uint32_t( overlay.getPanelVertex().size() )
-						, 1u
-						, 0u
-						, 0u );
-				}
+				doPrepareOverlay< BorderPanelVertexBufferPool::Quad >( overlay
+					, *pass
+					, m_renderer.m_borderPanelOverlays
+					, overlay.getBorderVertex() );
 			}
 		}
 	}
@@ -359,33 +318,28 @@ namespace castor3d
 		//}
 	}
 
-	void OverlayRenderer::Renderer::doDrawItem( renderer::CommandBuffer const & commandBuffer
-		, Pass & pass
-		, renderer::VertexBufferBase const & vertexBuffer
-		, uint32_t offset
-		, uint32_t count )
+	template< typename QuadT, typename OverlayT, typename BufferIndexT >
+	void OverlayRenderer::Renderer::doPrepareOverlay( OverlayT const & overlay
+		, Pass const & pass
+		, std::map< size_t, BufferIndexT > & overlays
+		, std::vector < OverlayCategory::Vertex > const & vertices )
 	{
-		auto & node = m_renderer.doGetPanelNode( pass );
-		auto & queue = m_renderer.getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
-
-	}
-
-	void OverlayRenderer::Renderer::doDrawItem( renderer::CommandBuffer const & commandBuffer
-		, Pass & pass
-		, renderer::VertexBufferBase const & vertexBuffer
-		, TextureLayout const & texture
-		, Sampler const & sampler
-		, uint32_t count )
-	{
-		auto & node = m_renderer.doGetTextNode( pass, texture, sampler );
-
-		commandBuffer.bindPipeline( *node.pipeline.pipeline );
+		auto borderSize = BorderSizeGetter< OverlayT, QuadT >{}( overlay, m_renderer.m_size );
+		auto borderOffset = castor::Size{ uint32_t( borderSize.left() ), uint32_t( borderSize.top() ) };
+		auto borderExtent = borderOffset + castor::Size{ uint32_t( borderSize.right() ), uint32_t( borderSize.bottom() ) };
+		auto position = overlay.getAbsolutePosition( m_renderer.m_size ) - borderOffset;
+		auto size = overlay.getAbsoluteSize( m_renderer.m_size ) + borderExtent;
+		auto & commandBuffer = *m_renderer.m_commandBuffer;
+		auto & bufferIndex = overlays.at( doHashCombine( overlay.getOverlay(), pass ) );
+		commandBuffer.bindPipeline( *bufferIndex.node.pipeline.pipeline );
 		commandBuffer.setViewport( { m_renderer.m_size.getWidth(), m_renderer.m_size.getHeight(), 0, 0 } );
-		commandBuffer.setScissor( { 0, 0, m_renderer.m_size.getWidth(), m_renderer.m_size.getHeight() } );
-		commandBuffer.bindDescriptorSet( *node.descriptorSet
-			, *node.pipeline.pipelineLayout );
-		commandBuffer.bindVertexBuffer( 0u, vertexBuffer.getBuffer(), 0u );
-		commandBuffer.draw( count
+		commandBuffer.setScissor( { position[0], position[1], size[0], size[1] } );
+		commandBuffer.bindDescriptorSet( *bufferIndex.descriptorSet
+			, *bufferIndex.node.pipeline.pipelineLayout );
+		commandBuffer.bindVertexBuffer( 0u
+			, bufferIndex.pool.buffer->getBuffer()
+			, uint32_t( bufferIndex.index * sizeof( QuadT ) ) );
+		commandBuffer.draw( uint32_t( vertices.size() )
 			, 1u
 			, 0u
 			, 0u );
@@ -554,7 +508,7 @@ namespace castor3d
 				, float( m_size.getWidth() )
 				, 0.0f
 				, float( m_size.getHeight() )
-				, 0.0f
+				, -1.0f
 				, 1.0f ) );
 		}
 	}
@@ -599,7 +553,7 @@ namespace castor3d
 	{
 		m_sizeChanged = false;
 		m_commandBuffer->endRenderPass();
-		m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+		m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
 			, timer.getQuery()
 			, 1u );
 		m_commandBuffer->end();
@@ -612,7 +566,7 @@ namespace castor3d
 		m_fence->wait( renderer::FenceTimeout );
 	}
 
-	OverlayRenderer::OverlayRenderNode & OverlayRenderer::doGetPanelNode( Pass & pass )
+	OverlayRenderer::OverlayRenderNode & OverlayRenderer::doGetPanelNode( Pass const & pass )
 	{
 		auto it = m_mapPanelNodes.find( &pass );
 
@@ -626,7 +580,7 @@ namespace castor3d
 		return it->second;
 	}
 
-	OverlayRenderer::OverlayRenderNode & OverlayRenderer::doGetTextNode( Pass & pass
+	OverlayRenderer::OverlayRenderNode & OverlayRenderer::doGetTextNode( Pass const & pass
 		, TextureLayout const & texture
 		, Sampler const & sampler )
 	{
