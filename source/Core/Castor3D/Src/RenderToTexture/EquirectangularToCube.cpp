@@ -17,6 +17,7 @@
 #include <RenderPass/RenderSubpass.hpp>
 #include <RenderPass/RenderSubpassState.hpp>
 #include <Shader/ShaderProgram.hpp>
+#include <Sync/Fence.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
 #include <GlslSource.hpp>
@@ -246,7 +247,7 @@ namespace castor3d
 			renderPass.dependencies[1].srcSubpass = 0u;
 			renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
 			renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 			renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
 			renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
 			renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
@@ -315,10 +316,6 @@ namespace castor3d
 	{
 		for ( auto & facePipeline : m_faces )
 		{
-			commandBuffer.memoryBarrier( renderer::PipelineStageFlag::eTransfer
-				, renderer::PipelineStageFlag::eColourAttachmentOutput
-				, facePipeline.view->makeColourAttachment( renderer::ImageLayout::eUndefined
-					, 0u ) );
 			commandBuffer.beginRenderPass( *m_renderPass
 				, *facePipeline.frameBuffer
 				, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
@@ -338,8 +335,9 @@ namespace castor3d
 		{
 			render( *m_commandBuffer );
 			m_commandBuffer->end();
-			m_device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
-			m_device.getGraphicsQueue().waitIdle();
+			auto fence = m_device.createFence();
+			m_device.getGraphicsQueue().submit( *m_commandBuffer, fence.get() );
+			fence->wait( renderer::FenceTimeout );
 		}
 	}
 }

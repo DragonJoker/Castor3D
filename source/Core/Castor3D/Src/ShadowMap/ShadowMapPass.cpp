@@ -48,6 +48,19 @@ namespace castor3d
 		RenderPass::doUpdate( nodes.billboardNodes.backCulled, camera );
 	}
 
+	renderer::DescriptorSetLayoutBindingArray ShadowMapPass::doCreateTextureBindings( PipelineFlags const & flags )const
+	{
+		auto index = MinBufferIndex;
+		renderer::DescriptorSetLayoutBindingArray textureBindings;
+
+		if ( checkFlag( flags.m_textureFlags, TextureChannel::eOpacity ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		return textureBindings;
+	}
+
 	void ShadowMapPass::doUpdateFlags( PassFlags & passFlags
 		, TextureChannels & textureFlags
 		, ProgramFlags & programFlags
@@ -57,6 +70,26 @@ namespace castor3d
 			, textureFlags
 			, programFlags
 			, sceneFlags );
+	}
+
+	void ShadowMapPass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, BillboardListRenderNode & node )
+	{
+		node.passNode.fillDescriptor( layout
+			, index
+			, *node.texDescriptorSet
+			, true );
+	}
+
+	void ShadowMapPass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, SubmeshRenderNode & node )
+	{
+		node.passNode.fillDescriptor( layout
+			, index
+			, *node.texDescriptorSet
+			, true );
 	}
 
 	void ShadowMapPass::doUpdatePipeline( RenderPipeline & pipeline )const

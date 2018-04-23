@@ -67,9 +67,12 @@ namespace castor3d
 		//!\~english	The object instantiating the data.
 		//!\~french		L'objet instanciant les données.
 		InstanceType & instance;
-		//!\~english	The descriptor set for the object.
-		//!\~french		L'ensemble de descripteurs pour l'objet.
-		renderer::DescriptorSetPtr descriptorSet;
+		//!\~english	The UBO descriptor set for the object.
+		//!\~french		L'ensemble de descripteurs d'UBO pour l'objet.
+		renderer::DescriptorSetPtr uboDescriptorSet;
+		//!\~english	The textures descriptor set for the object.
+		//!\~french		L'ensemble de descripteurs de textures pour l'objet.
+		renderer::DescriptorSetPtr texDescriptorSet;
 	};
 	using SubmeshRenderNode = ObjectRenderNode< Submesh, Geometry >;
 	using BillboardListRenderNode = ObjectRenderNode< BillboardBase, BillboardBase >;

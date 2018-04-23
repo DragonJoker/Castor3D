@@ -54,9 +54,12 @@ namespace castor3d
 
 		renderer::DescriptorSetLayoutCRefArray descriptorLayouts;
 
-		for ( auto & layout : m_descriptorLayouts )
+		for ( auto & descriptorLayout : m_descriptorLayouts )
 		{
-			descriptorLayouts.emplace_back( *layout );
+			if ( !descriptorLayout->getBindings().empty() )
+			{
+				descriptorLayouts.emplace_back( *descriptorLayout );
+			}
 		}
 
 		renderer::GraphicsPipelineCreateInfo createInfo
@@ -100,15 +103,14 @@ namespace castor3d
 		m_pipelineLayout.reset();
 	}
 
-	void RenderPipeline::createDescriptorPools( renderer::UInt32Array maxSetsPerLayout )
+	void RenderPipeline::createDescriptorPools( uint32_t maxSets )
 	{
-		REQUIRE( maxSetsPerLayout.size() == m_descriptorLayouts.size() );
-		uint32_t index = 0u;
-
 		for ( auto & descriptorLayout : m_descriptorLayouts )
 		{
-			m_descriptorPools.emplace_back( descriptorLayout->createPool( maxSetsPerLayout[index] ) );
-			++index;
+			if ( !descriptorLayout->getBindings().empty() )
+			{
+				m_descriptorPools.emplace_back( descriptorLayout->createPool( maxSets ) );
+			}
 		}
 	}
 }

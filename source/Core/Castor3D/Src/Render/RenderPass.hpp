@@ -371,75 +371,147 @@ namespace castor3d
 		C3D_API void updatePipeline( RenderPipeline & pipeline )const;
 		/**
 		 *\~english
-		 *\brief		Initialises the descriptor set of a billboard node.
+		 *\brief		Initialises the UBO descriptor set of a billboard node.
 		 *\param[in]	descriptorPool	The pool.
 		 *\param[in]	node			The node.
 		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs pour un noeud de billboard.
+		 *\brief		Initialise l'ensemble de descripteurs d'UBO pour un noeud de billboard.
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	node			Le noeud.
 		 */
-		C3D_API void initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
 			, BillboardRenderNode & node );
 		/**
 		 *\~english
-		 *\brief		Initialises the descriptor set of a morphing node.
+		 *\brief		Initialises the UBO descriptor set of a morphing node.
 		 *\param[in]	descriptorPool	The pool.
 		 *\param[in]	node			The node.
 		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs pour un noeud de morphing.
+		 *\brief		Initialise l'ensemble de descripteurs d'UBO pour un noeud de morphing.
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	node			Le noeud.
 		 */
-		C3D_API void initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
 			, MorphingRenderNode & node );
 		/**
 		 *\~english
-		 *\brief		Initialises the descriptor set of a skinning node.
+		 *\brief		Initialises the UBO descriptor set of a skinning node.
 		 *\param[in]	descriptorPool	The pool.
 		 *\param[in]	node			The node.
 		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs pour un noeud de skinning.
+		 *\brief		Initialise l'ensemble de descripteurs d'UBO pour un noeud de skinning.
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	node			Les noeud.
 		 */
-		C3D_API void initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
 			, SkinningRenderNode & node );
 		/**
 		 *\~english
-		 *\brief		Initialises the descriptor set of a static node.
+		 *\brief		Initialises the UBO descriptor set of a static node.
 		 *\param[in]	descriptorPool	The pool.
 		 *\param[in]	node			The node.
 		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs pour un noeud statique.
+		 *\brief		Initialise l'ensemble de descripteurs d'UBO pour un noeud statique.
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	node			Le noeud.
 		 */
-		C3D_API void initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
 			, StaticRenderNode & node );
 		/**
 		 *\~english
-		 *\brief		Initialises the descriptor set of skining nodes.
+		 *\brief		Initialises the UBO descriptor set of skining nodes.
 		 *\param[in]	descriptorPool	The pool.
 		 *\param[in]	nodes			The nodes.
 		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs pour des noeuds de skining.
+		 *\brief		Initialise l'ensemble de descripteurs d'UBO pour des noeuds de skining.
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	nodes			Les noeuds.
 		 */
-		C3D_API void initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
 			, SubmeshSkinninRenderNodesByPassMap & nodes );
 		/**
 		 *\~english
-		 *\brief		Initialises the descriptor set of static nodes.
+		 *\brief		Initialises the UBO descriptor set of static nodes.
 		 *\param[in]	descriptorPool	The pool.
 		 *\param[in]	nodes			The nodes.
 		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs pour des noeuds statiques.
+		 *\brief		Initialise l'ensemble de descripteurs d'UBO pour des noeuds statiques.
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	nodes			Les noeuds.
 		 */
-		C3D_API void initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
+			, SubmeshStaticRenderNodesByPassMap & nodes );
+		/**
+		 *\~english
+		 *\brief		Initialises the textures descriptor set of a billboard node.
+		 *\param[in]	descriptorPool	The pool.
+		 *\param[in]	node			The node.
+		 *\~french
+		 *\brief		Initialise l'ensemble de descripteurs de textures pour un noeud de billboard.
+		 *\param[in]	descriptorPool	Le pool.
+		 *\param[in]	node			Le noeud.
+		 */
+		C3D_API void initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+			, BillboardRenderNode & node );
+		/**
+		 *\~english
+		 *\brief		Initialises the textures descriptor set of a morphing node.
+		 *\param[in]	descriptorPool	The pool.
+		 *\param[in]	node			The node.
+		 *\~french
+		 *\brief		Initialise l'ensemble de descripteurs de textures pour un noeud de morphing.
+		 *\param[in]	descriptorPool	Le pool.
+		 *\param[in]	node			Le noeud.
+		 */
+		C3D_API void initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+			, MorphingRenderNode & node );
+		/**
+		 *\~english
+		 *\brief		Initialises the textures descriptor set of a skinning node.
+		 *\param[in]	descriptorPool	The pool.
+		 *\param[in]	node			The node.
+		 *\~french
+		 *\brief		Initialise l'ensemble de descripteurs de textures pour un noeud de skinning.
+		 *\param[in]	descriptorPool	Le pool.
+		 *\param[in]	node			Les noeud.
+		 */
+		C3D_API void initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+			, SkinningRenderNode & node );
+		/**
+		 *\~english
+		 *\brief		Initialises the textures descriptor set of a static node.
+		 *\param[in]	descriptorPool	The pool.
+		 *\param[in]	node			The node.
+		 *\~french
+		 *\brief		Initialise l'ensemble de descripteurs de textures pour un noeud statique.
+		 *\param[in]	descriptorPool	Le pool.
+		 *\param[in]	node			Le noeud.
+		 */
+		C3D_API void initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+			, StaticRenderNode & node );
+		/**
+		 *\~english
+		 *\brief		Initialises the textures descriptor set of skinning nodes.
+		 *\param[in]	descriptorPool	The pool.
+		 *\param[in]	nodes			The nodes.
+		 *\~french
+		 *\brief		Initialise l'ensemble de descripteurs de textures pour des noeuds de skinning.
+		 *\param[in]	descriptorPool	Le pool.
+		 *\param[in]	nodes			Les noeuds.
+		 */
+		C3D_API void initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+			, SubmeshSkinninRenderNodesByPassMap & nodes );
+		/**
+		 *\~english
+		 *\brief		Initialises the textures descriptor set of static nodes.
+		 *\param[in]	descriptorPool	The pool.
+		 *\param[in]	nodes			The nodes.
+		 *\~french
+		 *\brief		Initialise l'ensemble de descripteurs de textures pour des noeuds statiques.
+		 *\param[in]	descriptorPool	Le pool.
+		 *\param[in]	nodes			Les noeuds.
+		 */
+		C3D_API void initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
 			, SubmeshStaticRenderNodesByPassMap & nodes );
 		/**
 		 *\~english
@@ -491,6 +563,16 @@ namespace castor3d
 		inline renderer::RenderPass const & getRenderPass()const
 		{
 			return *m_renderPass;
+		}
+
+		inline RenderPassTimer const & getTimer()const
+		{
+			return *m_timer;
+		}
+
+		inline RenderPassTimer & getTimer()
+		{
+			return *m_timer;
 		}
 		/**@}*/
 
@@ -1144,10 +1226,19 @@ namespace castor3d
 		 *\brief		Creates the common UBO descriptor layout bindings.
 		 *\param[in]	flags	The pipeline flags.
 		 *\~french
-		 *\brief		Crée les attaches de layout de descripteurs communs pour les IBO.
+		 *\brief		Crée les attaches de layout de descripteurs communs pour les UBO.
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
 		C3D_API virtual renderer::DescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const;
+		/**
+		 *\~english
+		 *\brief		Creates the common textures descriptor layout bindings.
+		 *\param[in]	flags	The pipeline flags.
+		 *\~french
+		 *\brief		Crée les attaches de layout de descripteurs communs pour les textures.
+		 *\param[in]	flags	Les indicateurs de pipeline.
+		 */
+		C3D_API virtual renderer::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const = 0;
 
 	private:
 		/**
@@ -1178,7 +1269,7 @@ namespace castor3d
 		 *\param[in]	layout	Le layout des descripteurs.
 		 *\param[in]	node	Le noeud.
 		 */
-		C3D_API virtual void doFillDescriptor( renderer::DescriptorSetLayout const & layout
+		C3D_API virtual void doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, BillboardListRenderNode & node ) = 0;
 		/**
@@ -1191,7 +1282,33 @@ namespace castor3d
 		 *\param[in]	layout	Le layout des descripteurs.
 		 *\param[in]	node	Le noeud.
 		 */
-		C3D_API virtual void doFillDescriptor( renderer::DescriptorSetLayout const & layout
+		C3D_API virtual void doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, SubmeshRenderNode & node ) = 0;
+		/**
+		 *\~english
+		 *\brief		Initialises the descriptor set of a billboard node.
+		 *\param[in]	layout	The descriptors layout.
+		 *\param[in]	node	The node.
+		 *\~french
+		 *\brief		Initialise l'ensemble de descripteurs pour un noeud de billboard.
+		 *\param[in]	layout	Le layout des descripteurs.
+		 *\param[in]	node	Le noeud.
+		 */
+		C3D_API virtual void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, BillboardListRenderNode & node ) = 0;
+		/**
+		 *\~english
+		 *\brief		Initialises the descriptor set of a morphing node.
+		 *\param[in]	layout	The descriptors layout.
+		 *\param[in]	node	The node.
+		 *\~french
+		 *\brief		Initialise l'ensemble de descripteurs pour un noeud de morphing.
+		 *\param[in]	layout	Le layout des descripteurs.
+		 *\param[in]	node	Le noeud.
+		 */
+		C3D_API virtual void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, SubmeshRenderNode & node ) = 0;
 		/**

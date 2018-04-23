@@ -73,6 +73,7 @@ namespace VkRender
 			true,
 #endif
 		} ) );
+		Logger::logInfo( cuT( "Using " ) + Name );
 	}
 
 	RenderSystem::~RenderSystem()

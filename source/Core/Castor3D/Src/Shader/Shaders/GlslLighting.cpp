@@ -233,23 +233,15 @@ namespace castor3d
 					{
 						auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
 						auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) );
-						auto colourIndex = m_writer.declLocale( cuT( "colourIndex" ), texelFetch( c3d_sLights, offset++ ) );
-						result.m_colour() = colourIndex.rgb();
-						result.m_index() = m_writer.cast< Int >( colourIndex.a() );
-						auto intensityFarPlane = m_writer.declLocale( cuT( "intensityFarPlane" ), texelFetch( c3d_sLights, offset++ ) );
-						result.m_intensity() = intensityFarPlane.rg();
-						result.m_farPlane() = intensityFarPlane.b();
+						result.m_colourIndex() = texelFetch( c3d_sLights, offset++ );
+						result.m_intensityFarPlane() = texelFetch( c3d_sLights, offset++ );
 					}
 					else
 					{
 						auto c3d_sLights = m_writer.getBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
 						auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) );
-						auto colourIndex = m_writer.declLocale( cuT( "colourIndex" ), texelFetch( c3d_sLights, offset++, 0 ) );
-						result.m_colour() = colourIndex.rgb();
-						result.m_index() = m_writer.cast< Int >( colourIndex.a() );
-						auto intensityFarPlane = m_writer.declLocale( cuT( "intensityFarPlane" ), texelFetch( c3d_sLights, offset++, 0 ) );
-						result.m_intensity() = intensityFarPlane.rg();
-						result.m_farPlane() = intensityFarPlane.b();
+						result.m_colourIndex() = texelFetch( c3d_sLights, offset++, 0 );
+						result.m_intensityFarPlane() = texelFetch( c3d_sLights, offset++, 0 );
 					}
 				}
 				else
@@ -360,9 +352,7 @@ namespace castor3d
 							result.m_position() = texelFetch( c3d_sLights, offset++ ).rgb();
 							result.m_attenuation() = texelFetch( c3d_sLights, offset++ ).rgb();
 							result.m_direction() = normalize( texelFetch( c3d_sLights, offset++ ).rgb() );
-							auto exponentCutOff = m_writer.declLocale( cuT( "exponentCutOff" ), texelFetch( c3d_sLights, offset++ ).rg() );
-							result.m_exponent() = exponentCutOff.x();
-							result.m_cutOff() = exponentCutOff.y();
+							result.m_exponentCutOff() = texelFetch( c3d_sLights, offset++ );
 							auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++ ) );
 							auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++ ) );
 							auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++ ) );
@@ -376,9 +366,7 @@ namespace castor3d
 							result.m_position() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
 							result.m_attenuation() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
 							result.m_direction() = normalize( texelFetch( c3d_sLights, offset++, 0 ).rgb() );
-							auto exponentCutOff = m_writer.declLocale( cuT( "exponentCutOff" ), texelFetch( c3d_sLights, offset++, 0 ).rg() );
-							result.m_exponent() = exponentCutOff.x();
-							result.m_cutOff() = exponentCutOff.y();
+							result.m_exponentCutOff() = texelFetch( c3d_sLights, offset++, 0 );
 							auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++, 0 ) );
 							auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++, 0 ) );
 							auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++, 0 ) );

@@ -121,7 +121,7 @@ namespace castor3d
 		 *\param[out]	texture	La texture recevant les données de la source lumineuse.
 		 *\param[in]	index	L'indice de la source lumineuse.
 		 */
-		C3D_API void bind( castor::PxBufferBase & texture, uint32_t index );
+		C3D_API void bind( castor::Point4f * buffer );
 		/**
 		 *\~english
 		 *\brief		Attaches this light to a Material.

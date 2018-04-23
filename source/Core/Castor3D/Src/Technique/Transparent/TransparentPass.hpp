@@ -26,6 +26,7 @@ namespace castor3d
 		eDepth,
 		eAccumulation,
 		eRevealage,
+		eVelocity,
 		CASTOR_SCOPED_ENUM_BOUNDS( eDepth ),
 	};
 	//!\~english	The weighted blend pass result.
@@ -138,18 +139,6 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */
 		bool doInitialise( castor::Size const & size )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillDescriptor
-		 */
-		void doFillDescriptor( renderer::DescriptorSetLayout const & layout
-			, uint32_t & index
-			, BillboardListRenderNode & node )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillDescriptor
-		 */
-		void doFillDescriptor( renderer::DescriptorSetLayout const & layout
-			, uint32_t & index
-			, SubmeshRenderNode & node )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
 		 */

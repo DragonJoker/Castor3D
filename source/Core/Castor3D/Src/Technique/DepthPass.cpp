@@ -110,6 +110,26 @@ namespace castor3d
 		remFlag( programFlags, ProgramFlag::eEnvironmentMapping );
 	}
 
+	void DepthPass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, BillboardListRenderNode & node )
+	{
+		node.passNode.fillDescriptor( layout
+			, index
+			, *node.texDescriptorSet
+			, true );
+	}
+
+	void DepthPass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, SubmeshRenderNode & node )
+	{
+		node.passNode.fillDescriptor( layout
+			, index
+			, *node.texDescriptorSet
+			, true );
+	}
+
 	void DepthPass::doUpdatePipeline( RenderPipeline & pipeline )const
 	{
 	}
@@ -141,9 +161,12 @@ namespace castor3d
 			auto initialise = [this, &pipeline, flags]()
 			{
 				auto uboBindings = doCreateUboBindings( flags );
-				auto layout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
+				auto textureBindings = doCreateTextureBindings( flags );
+				auto uboLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
+				auto texLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( textureBindings ) );
 				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
-				layouts.emplace_back( std::move( layout ) );
+				layouts.emplace_back( std::move( uboLayout ) );
+				layouts.emplace_back( std::move( texLayout ) );
 				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
 				pipeline.initialise( getRenderPass(), renderer::PrimitiveTopology::eTriangleList );
 			};
@@ -186,9 +209,12 @@ namespace castor3d
 			auto initialise = [this, &pipeline, flags]()
 			{
 				auto uboBindings = doCreateUboBindings( flags );
-				auto layout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
+				auto textureBindings = doCreateTextureBindings( flags );
+				auto uboLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
+				auto texLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( textureBindings ) );
 				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
-				layouts.emplace_back( std::move( layout ) );
+				layouts.emplace_back( std::move( uboLayout ) );
+				layouts.emplace_back( std::move( texLayout ) );
 				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
 				pipeline.initialise( getRenderPass(), renderer::PrimitiveTopology::eTriangleList );
 			};

@@ -43,6 +43,7 @@ namespace castor3d
 			, TransparentPass & transparentPass
 			, renderer::TextureView const & depthView
 			, renderer::TextureView const & colourView
+			, TextureLayoutSPtr velocityTexture
 			, castor::Size const & size
 			, Scene const & scene );
 		/**

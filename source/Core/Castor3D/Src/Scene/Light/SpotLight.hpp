@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SPOT_LIGHT_H___
@@ -205,9 +205,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor::LightCategory::doBind
 		 */
-		C3D_API void doBind( castor::PxBufferBase & texture
-			, uint32_t index
-			, uint32_t & offset )const override;
+		C3D_API void doBind( castor::Point4f * buffer )const override;
 
 	private:
 		//!\~english	The attenuation components : constant, linear and quadratic.
@@ -225,9 +223,6 @@ namespace castor3d
 		//!\~english	The light source direction.
 		//!\~french		La direction de la source lumineuse.
 		castor::Point3f m_direction;
-		//!\~english	The light source shadow map index.
-		//!\~french		L'index de la shadow map de la source lumineuse.
-		int32_t m_shadowMapIndex{ -1 };
 	};
 }
 

@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_POINT_LIGHT_H___
@@ -144,18 +144,13 @@ namespace castor3d
 		/**
 		 *\copydoc		castor::LightCategory::doBind
 		 */
-		C3D_API void doBind( castor::PxBufferBase & texture
-			, uint32_t index
-			, uint32_t & offset )const override;
+		C3D_API void doBind( castor::Point4f * buffer )const override;
 
 	private:
 		friend class Scene;
 		//!\~english	The attenuation components : constant, linear and quadratic.
 		//!\~french		Les composantes d'attenuation : constante, linéaire et quadratique.
 		castor::ChangeTracked< castor::Point3f > m_attenuation{ castor::Point3f{ 1.0f, 0.0f, 0.0f } };
-		//!\~english	The light source shadow map index.
-		//!\~french		L'index de la shadow map de la source lumineuse.
-		int32_t m_shadowMapIndex{ -1 };
 	};
 }
 

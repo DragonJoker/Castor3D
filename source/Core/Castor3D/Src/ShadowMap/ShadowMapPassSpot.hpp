@@ -75,15 +75,15 @@ namespace castor3d
 		 */
 		void doCleanup()override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doFillDescriptor
+		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
 		 */
-		void doFillDescriptor( renderer::DescriptorSetLayout const & layout
+		void doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, BillboardListRenderNode & node )override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doFillDescriptor
+		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
 		 */
-		void doFillDescriptor( renderer::DescriptorSetLayout const & layout
+		void doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, SubmeshRenderNode & node )override;
 		/**

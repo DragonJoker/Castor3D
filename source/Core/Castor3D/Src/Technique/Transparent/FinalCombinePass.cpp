@@ -57,7 +57,7 @@ namespace castor3d
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			auto & device = *renderSystem.getCurrentDevice();
-			renderer::VertexLayoutPtr result = renderer::makeLayout< TexturedQuad >( 0u );
+			renderer::VertexLayoutPtr result = renderer::makeLayout< TexturedQuad::Vertex >( 0u );
 			result->createAttribute( 0u, renderer::Format::eR32G32_SFLOAT, offsetof( TexturedQuad::Vertex, position ) );
 			result->createAttribute( 1u, renderer::Format::eR32G32_SFLOAT, offsetof( TexturedQuad::Vertex, texture ) );
 			return result;
@@ -79,10 +79,12 @@ namespace castor3d
 				*buffer = TexturedQuad
 				{
 					{
-						{ Point2f{ -1.0, -1.0 }, Point2f{ 0.0, 0.0 } },
-						{ Point2f{ -1.0, +1.0 }, Point2f{ 0.0, 1.0 } },
-						{ Point2f{ +1.0, -1.0 }, Point2f{ 1.0, 0.0 } },
-						{ Point2f{ +1.0, +1.0 }, Point2f{ 1.0, 1.0 } }
+						{ Point2f{ -1.0, -1.0 }, Point2f{ 0.0, renderSystem.isTopDown() ? 0.0 : 1.0 } },
+						{ Point2f{ -1.0, +1.0 }, Point2f{ 0.0, renderSystem.isTopDown() ? 1.0 : 0.0 } },
+						{ Point2f{ +1.0, -1.0 }, Point2f{ 1.0, renderSystem.isTopDown() ? 0.0 : 1.0 } },
+						{ Point2f{ +1.0, -1.0 }, Point2f{ 1.0, renderSystem.isTopDown() ? 0.0 : 1.0 } },
+						{ Point2f{ -1.0, +1.0 }, Point2f{ 0.0, renderSystem.isTopDown() ? 1.0 : 0.0 } },
+						{ Point2f{ +1.0, +1.0 }, Point2f{ 1.0, renderSystem.isTopDown() ? 1.0 : 0.0 } },
 					}
 				};
 				result->flush( 0u, 1u );
@@ -364,7 +366,7 @@ namespace castor3d
 			m_commandBuffer->setScissor( { 0, 0, size.getWidth(), size.getHeight() } );
 			m_commandBuffer->bindDescriptorSets( { uboDescriptorSet, texDescriptorSet }, *m_pipelineLayout );
 			m_commandBuffer->bindVertexBuffer( 0u, vbo, 0u );
-			m_commandBuffer->draw( 4u );
+			m_commandBuffer->draw( 6u );
 			m_commandBuffer->end();
 		}
 	}

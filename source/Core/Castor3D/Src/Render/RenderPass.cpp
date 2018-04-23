@@ -619,178 +619,230 @@ namespace castor3d
 			, sceneFlags );
 	}
 
-	void RenderPass::initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
+	void RenderPass::initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
 		, BillboardRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
 		uint32_t index = 0u;
-		node.descriptorSet = descriptorPool.createDescriptorSet( 0u );
-		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.descriptorSet
+		node.uboDescriptorSet = descriptorPool.createDescriptorSet( 0u );
+		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.uboDescriptorSet
 			, layout.getBinding( index++ ) );
 
 		if ( checkFlag( node.pipeline.getFlags().m_programFlags, ProgramFlag::eLighting ) )
 		{
-			node.descriptorSet->createBinding( layout.getBinding( LightBufferIndex )
+			node.uboDescriptorSet->createBinding( layout.getBinding( LightBufferIndex )
 				, node.sceneNode.getScene()->getLightCache().getBuffer()
 				, node.sceneNode.getScene()->getLightCache().getView() );
 		}
 
-		node.descriptorSet->createBinding( layout.getBinding( MatrixUbo::BindingPoint )
+		node.uboDescriptorSet->createBinding( layout.getBinding( MatrixUbo::BindingPoint )
 			, m_matrixUbo.getUbo() );
-		node.descriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
+		node.uboDescriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
 			, m_sceneUbo.getUbo() );
-		node.descriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
+		node.uboDescriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
 			, node.modelMatrixUbo.buffer->getBuffer()
 			, node.modelMatrixUbo.offset
 			, 1u );
-		node.descriptorSet->createBinding( layout.getBinding( ModelUbo::BindingPoint )
+		node.uboDescriptorSet->createBinding( layout.getBinding( ModelUbo::BindingPoint )
 			, node.modelUbo.buffer->getBuffer()
 			, node.modelUbo.offset
 			, 1u );
-		node.descriptorSet->createBinding( layout.getBinding( BillboardUbo::BindingPoint )
+		node.uboDescriptorSet->createBinding( layout.getBinding( BillboardUbo::BindingPoint )
 			, node.billboardUbo.buffer->getBuffer()
 			, node.billboardUbo.offset
 			, 1u );
-		doFillDescriptor( layout, index, node );
-		node.passNode.fillDescriptor( layout
-			, index
-			, *node.descriptorSet );
-		node.descriptorSet->update();
+		doFillUboDescriptor( layout, index, node );
+		node.uboDescriptorSet->update();
 	}
 
-	void RenderPass::initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
+	void RenderPass::initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
 		, MorphingRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
 		uint32_t index = 0u;
-		node.descriptorSet = descriptorPool.createDescriptorSet( 0u );
-		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.descriptorSet
+		node.uboDescriptorSet = descriptorPool.createDescriptorSet( 0u );
+		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.uboDescriptorSet
 			, layout.getBinding( index++ ) );
 
 		if ( checkFlag( node.pipeline.getFlags().m_programFlags, ProgramFlag::eLighting ) )
 		{
-			node.descriptorSet->createBinding( layout.getBinding( LightBufferIndex )
+			node.uboDescriptorSet->createBinding( layout.getBinding( LightBufferIndex )
 				, node.sceneNode.getScene()->getLightCache().getBuffer()
 				, node.sceneNode.getScene()->getLightCache().getView() );
 		}
 
-		node.descriptorSet->createBinding( layout.getBinding( MatrixUbo::BindingPoint )
+		node.uboDescriptorSet->createBinding( layout.getBinding( MatrixUbo::BindingPoint )
 			, m_matrixUbo.getUbo() );
-		node.descriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
+		node.uboDescriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
 			, m_sceneUbo.getUbo() );
-		node.descriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
+		node.uboDescriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
 			, node.modelMatrixUbo.buffer->getBuffer()
 			, node.modelMatrixUbo.offset
 			, 1u );
-		node.descriptorSet->createBinding( layout.getBinding( ModelUbo::BindingPoint )
+		node.uboDescriptorSet->createBinding( layout.getBinding( ModelUbo::BindingPoint )
 			, node.modelUbo.buffer->getBuffer()
 			, node.modelUbo.offset
 			, 1u );
-		node.descriptorSet->createBinding( layout.getBinding( MorphingUbo::BindingPoint )
+		node.uboDescriptorSet->createBinding( layout.getBinding( MorphingUbo::BindingPoint )
 			, node.morphingUbo.buffer->getBuffer()
 			, node.morphingUbo.offset
 			, 1u );
-		doFillDescriptor( layout, index, node );
-		node.passNode.fillDescriptor( layout
-			, index
-			, *node.descriptorSet );
-		node.descriptorSet->update();
+		doFillUboDescriptor( layout, index, node );
+		node.uboDescriptorSet->update();
 	}
 
-	void RenderPass::initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
+	void RenderPass::initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
 		, SkinningRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
 		uint32_t index = 0u;
-		node.descriptorSet = descriptorPool.createDescriptorSet( 0u );
-		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.descriptorSet
+		node.uboDescriptorSet = descriptorPool.createDescriptorSet( 0u );
+		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.uboDescriptorSet
 			, layout.getBinding( index++ ) );
 
 		if ( checkFlag( node.pipeline.getFlags().m_programFlags, ProgramFlag::eLighting ) )
 		{
-			node.descriptorSet->createBinding( layout.getBinding( LightBufferIndex )
+			node.uboDescriptorSet->createBinding( layout.getBinding( LightBufferIndex )
 				, node.sceneNode.getScene()->getLightCache().getBuffer()
 				, node.sceneNode.getScene()->getLightCache().getView() );
 		}
 
-		node.descriptorSet->createBinding( layout.getBinding( MatrixUbo::BindingPoint )
+		node.uboDescriptorSet->createBinding( layout.getBinding( MatrixUbo::BindingPoint )
 			, m_matrixUbo.getUbo() );
-		node.descriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
+		node.uboDescriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
 			, m_sceneUbo.getUbo() );
-		node.descriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
+		node.uboDescriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
 			, node.modelMatrixUbo.buffer->getBuffer()
 			, node.modelMatrixUbo.offset
 			, 1u );
-		node.descriptorSet->createBinding( layout.getBinding( ModelUbo::BindingPoint )
+		node.uboDescriptorSet->createBinding( layout.getBinding( ModelUbo::BindingPoint )
 			, node.modelUbo.buffer->getBuffer()
 			, node.modelUbo.offset
 			, 1u );
-		node.descriptorSet->createBinding( layout.getBinding( SkinningUbo::BindingPoint )
+		node.uboDescriptorSet->createBinding( layout.getBinding( SkinningUbo::BindingPoint )
 			, node.skinningUbo.buffer->getBuffer()
 			, node.skinningUbo.offset
 			, 1u );
-		doFillDescriptor( layout, index, node );
-		node.passNode.fillDescriptor( layout
-			, index
-			, *node.descriptorSet );
-		node.descriptorSet->update();
+		doFillUboDescriptor( layout, index, node );
+		node.uboDescriptorSet->update();
 	}
 
-	void RenderPass::initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
+	void RenderPass::initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
 		, StaticRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
 		uint32_t index = 0u;
-		node.descriptorSet = descriptorPool.createDescriptorSet( 0u );
-		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.descriptorSet
+		node.uboDescriptorSet = descriptorPool.createDescriptorSet( 0u );
+		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.uboDescriptorSet
 			, layout.getBinding( index++ ) );
 
 		if ( checkFlag( node.pipeline.getFlags().m_programFlags, ProgramFlag::eLighting ) )
 		{
-			node.descriptorSet->createBinding( layout.getBinding( LightBufferIndex )
+			node.uboDescriptorSet->createBinding( layout.getBinding( LightBufferIndex )
 				, node.sceneNode.getScene()->getLightCache().getBuffer()
 				, node.sceneNode.getScene()->getLightCache().getView() );
 		}
 
-		node.descriptorSet->createBinding( layout.getBinding( MatrixUbo::BindingPoint )
+		node.uboDescriptorSet->createBinding( layout.getBinding( MatrixUbo::BindingPoint )
 			, m_matrixUbo.getUbo() );
-		node.descriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
+		node.uboDescriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
 			, m_sceneUbo.getUbo() );
-		node.descriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
+		node.uboDescriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
 			, node.modelMatrixUbo.buffer->getBuffer()
 			, node.modelMatrixUbo.offset
 			, 1u );
-		node.descriptorSet->createBinding( layout.getBinding( ModelUbo::BindingPoint )
+		node.uboDescriptorSet->createBinding( layout.getBinding( ModelUbo::BindingPoint )
 			, node.modelUbo.buffer->getBuffer()
 			, node.modelUbo.offset
 			, 1u );
-		doFillDescriptor( layout, index, node );
-		node.passNode.fillDescriptor( layout
-			, index
-			, *node.descriptorSet );
-		node.descriptorSet->update();
+		doFillUboDescriptor( layout, index, node );
+		node.uboDescriptorSet->update();
 	}
 
-	void RenderPass::initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
+	void RenderPass::initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
 		, SubmeshSkinninRenderNodesByPassMap & nodes )
 	{
 		for ( auto & passNodes : nodes )
 		{
 			for ( auto & submeshNodes : passNodes.second )
 			{
-				initialiseDescriptor( descriptorPool, submeshNodes.second[0] );
+				initialiseUboDescriptor( descriptorPool, submeshNodes.second[0] );
 			}
 		}
 	}
 
-	void RenderPass::initialiseDescriptor( renderer::DescriptorSetPool const & descriptorPool
+	void RenderPass::initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
 		, SubmeshStaticRenderNodesByPassMap & nodes )
 	{
 		for ( auto & passNodes : nodes )
 		{
 			for ( auto & submeshNodes : passNodes.second )
 			{
-				initialiseDescriptor( descriptorPool, submeshNodes.second[0] );
+				initialiseUboDescriptor( descriptorPool, submeshNodes.second[0] );
+			}
+		}
+	}
+
+	void RenderPass::initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		, BillboardRenderNode & node )
+	{
+		auto & layout = descriptorPool.getLayout();
+		uint32_t index = MinBufferIndex;
+		node.texDescriptorSet = descriptorPool.createDescriptorSet( 1u );
+		doFillTextureDescriptor( layout, index, node );
+		node.texDescriptorSet->update();
+	}
+
+	void RenderPass::initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		, MorphingRenderNode & node )
+	{
+		auto & layout = descriptorPool.getLayout();
+		uint32_t index = MinBufferIndex;
+		node.texDescriptorSet = descriptorPool.createDescriptorSet( 1u );
+		doFillTextureDescriptor( layout, index, node );
+		node.texDescriptorSet->update();
+	}
+
+	void RenderPass::initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		, SkinningRenderNode & node )
+	{
+		auto & layout = descriptorPool.getLayout();
+		uint32_t index = MinBufferIndex;
+		node.texDescriptorSet = descriptorPool.createDescriptorSet( 1u );
+		doFillTextureDescriptor( layout, index, node );
+		node.texDescriptorSet->update();
+	}
+
+	void RenderPass::initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		, StaticRenderNode & node )
+	{
+		auto & layout = descriptorPool.getLayout();
+		uint32_t index = MinBufferIndex;
+		node.texDescriptorSet = descriptorPool.createDescriptorSet( 1u );
+		doFillTextureDescriptor( layout, index, node );
+		node.texDescriptorSet->update();
+	}
+
+	void RenderPass::initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		, SubmeshSkinninRenderNodesByPassMap & nodes )
+	{
+		for ( auto & passNodes : nodes )
+		{
+			for ( auto & submeshNodes : passNodes.second )
+			{
+				initialiseTextureDescriptor( descriptorPool, submeshNodes.second[0] );
+			}
+		}
+	}
+
+	void RenderPass::initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		, SubmeshStaticRenderNodesByPassMap & nodes )
+	{
+		for ( auto & passNodes : nodes )
+		{
+			for ( auto & submeshNodes : passNodes.second )
+			{
+				initialiseTextureDescriptor( descriptorPool, submeshNodes.second[0] );
 			}
 		}
 	}
@@ -1440,9 +1492,9 @@ namespace castor3d
 		}
 
 		uboBindings.emplace_back( MatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
-		uboBindings.emplace_back( SceneUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+		uboBindings.emplace_back( SceneUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
 		uboBindings.emplace_back( ModelMatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
-		uboBindings.emplace_back( ModelUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+		uboBindings.emplace_back( ModelUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
 
 		if ( checkFlag( flags.m_programFlags, ProgramFlag::eSkinning ) )
 		{

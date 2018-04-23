@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_DIRECTIONAL_LIGHT_H___
@@ -139,9 +139,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor::LightCategory::doBind
 		 */
-		C3D_API void doBind( castor::PxBufferBase & texture
-			, uint32_t index
-			, uint32_t & offset )const override;
+		C3D_API void doBind( castor::Point4f * buffer )const override;
 
 	private:
 		//!\~english	The light source direction.

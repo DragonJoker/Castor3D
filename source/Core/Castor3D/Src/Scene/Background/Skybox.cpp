@@ -380,7 +380,6 @@ namespace castor3d
 		}
 
 		commandBuffer->end();
-		auto fence = device.createFence();
 		device.getGraphicsQueue().submit( *commandBuffer, nullptr );
 		device.waitIdle();
 

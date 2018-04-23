@@ -69,6 +69,18 @@ namespace castor3d
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const override;
 		/**
+		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
+		 */
+		C3D_API void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, BillboardListRenderNode & nodes )override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
+		 */
+		C3D_API void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, SubmeshRenderNode & nodes )override;
+		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
 		C3D_API void doUpdatePipeline( RenderPipeline & pipeline)const override;

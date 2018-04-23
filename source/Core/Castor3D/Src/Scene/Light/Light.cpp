@@ -14,27 +14,31 @@ namespace castor3d
 {
 	//*************************************************************************************************
 
-	Light::TextWriter::TextWriter( String const & p_tabs )
-		: castor::TextWriter< Light >{ p_tabs }
+	Light::TextWriter::TextWriter( String const & tabs )
+		: castor::TextWriter< Light >{ tabs }
 	{
 	}
 
-	bool Light::TextWriter::operator()( Light const & p_object, TextFile & p_file )
+	bool Light::TextWriter::operator()( Light const & object, TextFile & file )
 	{
-		return p_object.m_category->createTextWriter( m_tabs )->writeInto( p_file );
+		return object.m_category->createTextWriter( m_tabs )->writeInto( file );
 	}
 
 	//*************************************************************************************************
 
-	Light::Light( String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, LightFactory & p_factory, LightType p_lightType )
-		: MovableObject{ p_name, p_scene, MovableType::eLight, p_node }
+	Light::Light( String const & name
+		, Scene & scene
+		, SceneNodeSPtr node
+		, LightFactory & factory
+		, LightType lightType )
+		: MovableObject{ name, scene, MovableType::eLight, node }
 	{
-		m_category = p_factory.create( p_lightType, std::ref( *this ) );
+		m_category = factory.create( lightType, std::ref( *this ) );
 
-		if ( p_node )
+		if ( node )
 		{
-			m_notifyIndex = p_node->onChanged.connect( std::bind( &Light::onNodeChanged, this, std::placeholders::_1 ) );
-			onNodeChanged( *p_node );
+			m_notifyIndex = node->onChanged.connect( std::bind( &Light::onNodeChanged, this, std::placeholders::_1 ) );
+			onNodeChanged( *node );
 		}
 	}
 
@@ -47,44 +51,29 @@ namespace castor3d
 		m_category->update();
 	}
 
-	void Light::updateShadow( Point3r const & p_target
-		, Viewport & p_viewport
-		, int32_t p_index )
+	void Light::updateShadow( Point3r const & target
+		, Viewport & viewport
+		, int32_t index )
 	{
-		m_category->updateShadow( p_target
-			, p_viewport
-			, p_index );
+		m_category->updateShadow( target
+			, viewport
+			, index );
 	}
 
-	void Light::bind( PxBufferBase & p_texture, uint32_t p_index )
+	void Light::bind( Point4f * buffer )
 	{
-		SceneNodeSPtr node = getParent();
-
-		switch ( m_category->getLightType() )
-		{
-		case LightType::eDirectional:
-			getDirectionalLight()->bind( p_texture, p_index );
-			break;
-
-		case LightType::ePoint:
-			getPointLight()->bind( p_texture, p_index );
-			break;
-
-		case LightType::eSpot:
-			getSpotLight()->bind( p_texture, p_index );
-			break;
-		}
+		m_category->bind( buffer );
 	}
 
-	void Light::attachTo( SceneNodeSPtr p_node )
+	void Light::attachTo( SceneNodeSPtr node )
 	{
-		MovableObject::attachTo( p_node );
-		auto node = getParent();
+		MovableObject::attachTo( node );
+		auto parent = getParent();
 
-		if ( node )
+		if ( parent )
 		{
-			m_notifyIndex = p_node->onChanged.connect( std::bind( &Light::onNodeChanged, this, std::placeholders::_1 ) );
-			onNodeChanged( *node );
+			m_notifyIndex = node->onChanged.connect( std::bind( &Light::onNodeChanged, this, std::placeholders::_1 ) );
+			onNodeChanged( *parent );
 		}
 	}
 
@@ -106,8 +95,8 @@ namespace castor3d
 		return std::static_pointer_cast< SpotLight >( m_category );
 	}
 
-	void Light::onNodeChanged( SceneNode const & p_node )
+	void Light::onNodeChanged( SceneNode const & node )
 	{
-		m_category->updateNode( p_node );
+		m_category->updateNode( node );
 	}
 }

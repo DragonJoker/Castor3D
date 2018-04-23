@@ -422,7 +422,7 @@ namespace castor3d
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				vtx_texture = vec2( texcoord.x(), 1.0_f - texcoord.y() );
+				vtx_texture = texcoord;
 				gl_Position = vec4( position, 0.0, 1.0 );
 			} );
 			vtx = writer.finalise();

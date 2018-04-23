@@ -83,18 +83,6 @@ namespace castor3d
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doFillDescriptor
-		 */
-		void doFillDescriptor( renderer::DescriptorSetLayout const & layout
-			, uint32_t & index
-			, BillboardListRenderNode & node )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillDescriptor
-		 */
-		void doFillDescriptor( renderer::DescriptorSetLayout const & layout
-			, uint32_t & index
-			, SubmeshRenderNode & node )override;
-		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
 		glsl::Shader doGetVertexShaderSource( PassFlags const & passFlags

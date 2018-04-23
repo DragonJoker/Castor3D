@@ -169,12 +169,11 @@ namespace castor3d
 		p_viewport.updateFar( m_farPlane );
 	}
 
-	void PointLight::doBind( castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const
+	void PointLight::doBind( Point4f * buffer )const
 	{
-		auto pos = getLight().getParent()->getDerivedPosition();
-		Point4r position{ pos[0], pos[1], pos[2], float( m_shadowMapIndex ) };
-		doCopyComponent( position, p_index, p_offset, p_texture );
-		doCopyComponent( m_attenuation, p_index, p_offset, p_texture );
+		auto position = getLight().getParent()->getDerivedPosition();
+		doCopyComponent( position, buffer );
+		doCopyComponent( m_attenuation, buffer );
 	}
 
 	void PointLight::setAttenuation( Point3f const & p_attenuation )

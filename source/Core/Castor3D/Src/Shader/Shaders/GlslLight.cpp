@@ -34,6 +34,16 @@ namespace castor3d
 			return *this;
 		}
 
+		Vec4 Light::m_colourIndex()const
+		{
+			return Vec4( m_writer, m_name + cuT( ".m_colourIndex" ) );
+		}
+
+		Vec4 Light::m_intensityFarPlane()const
+		{
+			return Vec4( m_writer, String( *this ) + cuT( ".m_intensityFarPlane" ) );
+		}
+
 		Vec3 Light::m_colour()const
 		{
 			return Vec3( m_writer, m_name + cuT( ".m_colourIndex.xyz" ) );
@@ -130,7 +140,7 @@ namespace castor3d
 
 		Vec3 PointLight::m_position()const
 		{
-			return Vec3( m_writer, String( *this ) + cuT( ".m_position" ) );
+			return Vec3( m_writer, String( *this ) + cuT( ".m_position.xyz" ) );
 		}
 
 		Vec3 PointLight::m_attenuation()const
@@ -183,6 +193,11 @@ namespace castor3d
 		Vec3 SpotLight::m_attenuation()const
 		{
 			return Vec3( m_writer, String( *this ) + cuT( ".m_attenuation.xyz" ) );
+		}
+
+		Vec4 SpotLight::m_exponentCutOff()const
+		{
+			return Vec4( m_writer, String( *this ) + cuT( ".m_exponentCutOff" ) );
 		}
 
 		Float SpotLight::m_exponent()const

@@ -197,6 +197,30 @@ namespace castor3d
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const override;
 		/**
+		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
+		 */
+		C3D_API void doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, BillboardListRenderNode & nodes )override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
+		 */
+		C3D_API void doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, SubmeshRenderNode & nodes )override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
+		 */
+		C3D_API void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, BillboardListRenderNode & nodes )override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
+		 */
+		C3D_API void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, SubmeshRenderNode & nodes )override;
+		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
 		C3D_API void doUpdatePipeline( RenderPipeline & pipeline )const override;
@@ -212,6 +236,12 @@ namespace castor3d
 		C3D_API void doPrepareBackPipeline( ShaderProgramSPtr program
 			, renderer::VertexLayoutCRefArray const & layouts
 			, PipelineFlags const & flags )override;
+
+	protected:
+		/**
+		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
+		 */
+		renderer::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 
 	protected:
 		Scene const & m_scene;

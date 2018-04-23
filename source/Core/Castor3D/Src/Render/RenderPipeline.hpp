@@ -117,16 +117,16 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
-		*	Creates the descriptor pools for \p maxSetsPerLayout descriptor sets per descriptor set layout.
-		*\param[in] maxSetsPerLayout
+		*	Creates the descriptor pools for \p maxSets descriptor sets per descriptor set layout.
+		*\param[in] maxSets
 		*	The number of descriptor sets to be allocatable by the pools, per layout.
 		*\~french
 		*\brief
-		*	Crée les pools de descripteurs pour \p maxSetsPerLayout ensembles de descripteurs par layout d'ensemble de descripteurs.
-		*\param[in] maxSetsPerLayout
+		*	Crée les pools de descripteurs pour \p maxSets ensembles de descripteurs par layout d'ensemble de descripteurs.
+		*\param[in] maxSets
 		*	Le nombre d'ensembles de descripteurs allouables par les pools, par layout.
 		*/
-		C3D_API void createDescriptorPools( renderer::UInt32Array maxSetsPerLayout );
+		C3D_API void createDescriptorPools( uint32_t maxSets );
 		/**
 		*\~english
 		*name

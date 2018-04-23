@@ -92,18 +92,6 @@ namespace castor3d
 
 	private:
 		/**
-		 *\copydoc		castor3d::RenderPass::doFillDescriptor
-		 */
-		void doFillDescriptor( renderer::DescriptorSetLayout const & layout
-			, uint32_t & index
-			, BillboardListRenderNode & node )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillDescriptor
-		 */
-		void doFillDescriptor( renderer::DescriptorSetLayout const & layout
-			, uint32_t & index
-			, SubmeshRenderNode & node )override;
-		/**
 		 *\copydoc		castor3d::RenderPass::doCreateUboBindings
 		 */
 		renderer::DescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;

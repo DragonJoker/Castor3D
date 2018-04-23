@@ -230,9 +230,9 @@ namespace castor3d
 
 	private:
 		LightsMap m_typeSortedLights;
+		mutable castor::Point4fArray m_lightsBuffer;
 		renderer::BufferPtr< castor::Point4f > m_textureBuffer;
 		renderer::BufferViewPtr m_textureView;
-		castor::PxBufferBaseSPtr m_lightsBuffer;
 		LightsRefArray m_dirtyLights;
 		std::map< Light *, OnLightChangedConnection > m_connections;
 	};

@@ -15,6 +15,22 @@ using namespace castor;
 
 namespace castor3d
 {
+	namespace
+	{
+		void doBindTexture( TextureUnitSPtr texture
+			, renderer::DescriptorSetLayout const & layout
+			, renderer::DescriptorSet & descriptorSet
+			, uint32_t & index )
+		{
+			if ( texture )
+			{
+				descriptorSet.createBinding( layout.getBinding( index++ )
+					, texture->getTexture()->getDefaultView()
+					, texture->getSampler()->getSampler() );
+			}
+		}
+	}
+
 	PassRenderNode::PassRenderNode( Pass & pass )
 		: pass{ pass }
 	{
@@ -22,13 +38,54 @@ namespace castor3d
 
 	void PassRenderNode::fillDescriptor( renderer::DescriptorSetLayout const & layout
 		, uint32_t index
-		, renderer::DescriptorSet & descriptorSet )
+		, renderer::DescriptorSet & descriptorSet
+		, bool opacityOnly )
 	{
-		for ( auto & texture : pass )
+		if ( opacityOnly )
 		{
-			descriptorSet.createBinding( layout.getBinding( index++ )
-				, texture->getTexture()->getDefaultView()
-				, texture->getSampler()->getSampler() );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eOpacity )
+				, layout
+				, descriptorSet
+				, index );
+		}
+		else
+		{
+			doBindTexture( pass.getTextureUnit( TextureChannel::eDiffuse )
+				, layout
+				, descriptorSet
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eSpecular )
+				, layout
+				, descriptorSet
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eGloss )
+				, layout
+				, descriptorSet
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eNormal )
+				, layout
+				, descriptorSet
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eOpacity )
+				, layout
+				, descriptorSet
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eHeight )
+				, layout
+				, descriptorSet
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eAmbientOcclusion )
+				, layout
+				, descriptorSet
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eEmissive )
+				, layout
+				, descriptorSet
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eTransmittance )
+				, layout
+				, descriptorSet
+				, index );
 		}
 	}
 }

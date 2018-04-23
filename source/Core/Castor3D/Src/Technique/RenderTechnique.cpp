@@ -361,7 +361,7 @@ namespace castor3d
 		renderer::RenderPassCreateInfo renderPass;
 		renderPass.flags = 0;
 
-		renderPass.attachments.resize( 1u );
+		renderPass.attachments.resize( 2u );
 		renderPass.attachments[0].format = m_depthBuffer->getPixelFormat();
 		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
 		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
@@ -371,15 +371,43 @@ namespace castor3d
 		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
 		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
 
+		renderPass.attachments[1].format = m_colourTexture->getPixelFormat();
+		renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[1].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[1].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+
 		renderPass.subpasses.resize( 1u );
 		renderPass.subpasses[0].flags = 0u;
 		renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
+		renderPass.subpasses[0].colorAttachments = { { 1u, renderer::ImageLayout::eColourAttachmentOptimal } };
+
+		renderPass.dependencies.resize( 2u );
+		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].dstSubpass = 0u;
+		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].srcAccessMask = 0u;
+		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		renderPass.dependencies[1].srcSubpass = 0u;
+		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 		m_clearRenderPass = device.createRenderPass( renderPass );
 
 		renderer::FrameBufferAttachmentArray attaches
 		{
 			{ *( m_clearRenderPass->getAttachments().begin() + 0u ), m_depthBuffer->getDefaultView() },
+			{ *( m_clearRenderPass->getAttachments().begin() + 1u ), m_colourTexture->getDefaultView() },
 		};
 		m_clearFrameBuffer = m_clearRenderPass->createFrameBuffer( { m_depthBuffer->getDimensions().width, m_depthBuffer->getDimensions().height }
 			, std::move( attaches ) );
@@ -388,6 +416,7 @@ namespace castor3d
 		static renderer::ClearValueArray const clearValues
 		{
 			renderer::DepthStencilClearValue{ 1.0, 0 },
+			renderer::ClearColorValue{},
 		};
 
 		if ( m_clearCommandBuffer->begin() )
@@ -482,6 +511,7 @@ namespace castor3d
 			, static_cast< TransparentPass & >( *m_transparentPass )
 			, m_depthBuffer->getDefaultView()
 			, m_colourTexture->getDefaultView()
+			, m_renderTarget.getVelocity().getTexture()
 			, m_renderTarget.getSize()
 			, *m_renderTarget.getScene() );
 #else

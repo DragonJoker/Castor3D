@@ -361,11 +361,17 @@ namespace castor3d
 		{
 			for ( auto & pipelineNode : pipelineNodes )
 			{
-				pipelineNode.first->createDescriptorPools( { uint32_t( pipelineNode.second.size() ) } );
+				pipelineNode.first->createDescriptorPools( uint32_t( pipelineNode.second.size() ) );
 
 				for ( auto & node : pipelineNode.second )
 				{
-					renderPass.initialiseDescriptor( pipelineNode.first->getDescriptorPool( 0u ), node );
+					renderPass.initialiseUboDescriptor( pipelineNode.first->getDescriptorPool( 0u ), node );
+					Pass & pass = node.passNode.pass;
+
+					if ( pass.getTextureUnitsCount() > 0u )
+					{
+						renderPass.initialiseTextureDescriptor( pipelineNode.first->getDescriptorPool( 1u ), node );
+					}
 				}
 			}
 		}
@@ -383,13 +389,19 @@ namespace castor3d
 					size += uint32_t( passNodes.second.size() );
 				}
 
-				pipelineNode.first->createDescriptorPools( { size } );
+				pipelineNode.first->createDescriptorPools( size );
 
 				for ( auto & passNodes : pipelineNode.second )
 				{
 					for ( auto & submeshNodes : passNodes.second )
 					{
-						renderPass.initialiseDescriptor( pipelineNode.first->getDescriptorPool( 0u ), submeshNodes.second[0] );
+						renderPass.initialiseUboDescriptor( pipelineNode.first->getDescriptorPool( 0u ), submeshNodes.second[0] );
+						Pass & pass = submeshNodes.second[0].passNode.pass;
+
+						if ( pass.getTextureUnitsCount() > 0u )
+						{
+							renderPass.initialiseTextureDescriptor( pipelineNode.first->getDescriptorPool( 1u ), submeshNodes.second[0] );
+						}
 					}
 				}
 			}
@@ -637,7 +649,13 @@ namespace castor3d
 			GeometryBuffers const & geometryBuffers = node.data.getGeometryBuffers();
 
 			commandBuffer.bindPipeline( pipeline.getPipeline() );
-			commandBuffer.bindDescriptorSet( *node.descriptorSet, pipeline.getPipelineLayout() );
+			commandBuffer.bindDescriptorSet( *node.uboDescriptorSet, pipeline.getPipelineLayout() );
+
+			if ( node.texDescriptorSet )
+			{
+				commandBuffer.bindDescriptorSet( *node.texDescriptorSet, pipeline.getPipelineLayout() );
+			}
+
 			commandBuffer.bindVertexBuffers( 0u, geometryBuffers.vbo, geometryBuffers.vboOffsets );
 
 			if ( geometryBuffers.ibo )
@@ -661,7 +679,13 @@ namespace castor3d
 			GeometryBuffers const & geometryBuffers = object.getGeometryBuffers();
 
 			commandBuffer.bindPipeline( pipeline.getPipeline() );
-			commandBuffer.bindDescriptorSet( *node.descriptorSet, pipeline.getPipelineLayout() );
+			commandBuffer.bindDescriptorSet( *node.uboDescriptorSet, pipeline.getPipelineLayout() );
+
+			if ( node.texDescriptorSet )
+			{
+				commandBuffer.bindDescriptorSet( *node.texDescriptorSet, pipeline.getPipelineLayout() );
+			}
+
 			commandBuffer.bindVertexBuffers( 0u, geometryBuffers.vbo, geometryBuffers.vboOffsets );
 
 			if ( geometryBuffers.ibo )

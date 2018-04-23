@@ -1,4 +1,4 @@
-﻿#include "SpotLight.hpp"
+#include "SpotLight.hpp"
 
 #include "Render/Viewport.hpp"
 #include "Technique/Opaque/LightPass.hpp"
@@ -197,15 +197,14 @@ namespace castor3d
 		p_viewport.update();
 	}
 
-	void SpotLight::doBind( castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const
+	void SpotLight::doBind( Point4f * buffer )const
 	{
-		auto pos = getLight().getParent()->getDerivedPosition();
-		Point4r position{ pos[0], pos[1], pos[2], float( m_shadowMapIndex ) };
-		doCopyComponent( position, p_index, p_offset, p_texture );
-		doCopyComponent( m_attenuation, p_index, p_offset, p_texture );
-		doCopyComponent( m_direction, p_index, p_offset, p_texture );
-		doCopyComponent( Point2f{ m_exponent, m_cutOff.value().cos() }, p_index, p_offset, p_texture );
-		doCopyComponent( m_lightSpace, p_index, p_offset, p_texture );
+		auto position = getLight().getParent()->getDerivedPosition();
+		doCopyComponent( position, buffer );
+		doCopyComponent( m_attenuation, buffer );
+		doCopyComponent( m_direction, buffer );
+		doCopyComponent( Point2f{ m_exponent, m_cutOff.value().cos() }, buffer );
+		doCopyComponent( m_lightSpace, buffer );
 	}
 
 	void SpotLight::setAttenuation( Point3f const & p_attenuation )

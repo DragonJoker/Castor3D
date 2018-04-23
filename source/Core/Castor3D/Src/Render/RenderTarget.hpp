@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "Miscellaneous/Parameter.hpp"
 #include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Render/RenderInfo.hpp"
+#include "RenderToTexture/RenderQuad.hpp"
 #include "Texture/TextureUnit.hpp"
 
 #include <RenderPass/FrameBuffer.hpp>
@@ -94,13 +95,13 @@ namespace castor3d
 
 			//!\~english	The texture receiving the color render.
 			//!\~french		La texture recevant le rendu couleur.
-			TextureUnit m_colourTexture;
+			TextureUnit colourTexture;
 			//!\~english	The frame buffer.
 			//!\~french		Le tampon d'image.
-			renderer::FrameBufferPtr m_frameBuffer;
+			renderer::FrameBufferPtr frameBuffer;
 
 		private:
-			RenderTarget & m_renderTarget;
+			RenderTarget & renderTarget;
 		};
 
 	public:
@@ -247,14 +248,9 @@ namespace castor3d
 			return m_camera.lock();
 		}
 
-		inline renderer::FrameBuffer const & getFrameBuffer()const
-		{
-			return *m_frameBuffer.m_frameBuffer;
-		}
-
 		inline TextureUnit const & getTexture()const
 		{
-			return m_frameBuffer.m_colourTexture;
+			return m_flippedFrameBuffer.colourTexture;
 		}
 
 		inline TextureUnit const & getVelocity()const
@@ -337,6 +333,7 @@ namespace castor3d
 		C3D_API void doInitialiseCopyCommands( renderer::CommandBufferPtr & commandBuffer
 			, renderer::TextureView const & source
 			, renderer::TextureView const & target );
+		C3D_API void doInitialiseFlip();
 		C3D_API void doRender( RenderInfo & info
 			, TargetFbo & fbo
 			, CameraSPtr camera );
@@ -349,6 +346,7 @@ namespace castor3d
 		C3D_API renderer::Semaphore const * doApplyToneMapping( renderer::Semaphore const & toWait );
 		C3D_API renderer::Semaphore const * doRenderOverlays( renderer::Semaphore const & toWait
 			, Camera const & camera );
+		C3D_API renderer::Semaphore const * doFlip( renderer::Semaphore const & toWait );
 
 	public:
 		//!\~english The render target default sampler name	\~french Le nom du sampler par défaut pour la cible de rendu
@@ -364,7 +362,8 @@ namespace castor3d
 		CameraWPtr m_camera;
 		renderer::RenderPassPtr m_renderPass;
 		renderer::CommandBufferPtr m_toneMappingCommandBuffer;
-		TargetFbo m_frameBuffer;
+		TargetFbo m_workFrameBuffer;
+		TargetFbo m_flippedFrameBuffer;
 		renderer::Format m_pixelFormat;
 		uint32_t m_index;
 		Parameters m_techniqueParameters;
@@ -379,6 +378,9 @@ namespace castor3d
 		renderer::SemaphorePtr m_srgbCopyFinished;
 		RenderPassTimerSPtr m_toneMappingTimer;
 		RenderPassTimerSPtr m_overlaysTimer;
+		std::unique_ptr< RenderQuad > m_flipQuad;
+		renderer::CommandBufferPtr m_flipCommands;
+		renderer::SemaphorePtr m_flipFinished;
 		SsaoConfig m_ssaoConfig;
 		castor::Point2r m_jitter;
 		TextureUnit m_velocityTexture;

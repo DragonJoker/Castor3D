@@ -578,7 +578,7 @@ namespace CastorViewer
 				castor.getRenderLoop().resume();
 				Size size = buffer->dimensions();
 				CreateBitmapFromBuffer( buffer
-					, castor.isTopDown()
+					, !castor.isTopDown()
 					, bitmap );
 			}
 			else
@@ -588,7 +588,7 @@ namespace CastorViewer
 				auto buffer = m_renderPanel->getRenderWindow()->getSavedFrame();
 				Size size = buffer->dimensions();
 				CreateBitmapFromBuffer( buffer
-					, castor.isTopDown()
+					, !castor.isTopDown()
 					, bitmap );
 			}
 

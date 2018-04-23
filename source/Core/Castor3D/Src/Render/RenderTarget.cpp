@@ -111,25 +111,25 @@ namespace castor3d
 	//*************************************************************************************************
 
 	RenderTarget::TargetFbo::TargetFbo( RenderTarget & renderTarget )
-		: m_renderTarget{ renderTarget }
-		, m_colourTexture{ *renderTarget.getEngine() }
+		: renderTarget{ renderTarget }
+		, colourTexture{ *renderTarget.getEngine() }
 	{
 	}
 
 	bool RenderTarget::TargetFbo::initialise( renderer::RenderPass & renderPass
 		, Size const & size )
 	{
-		auto & renderSystem = *m_renderTarget.getEngine()->getRenderSystem();
+		auto & renderSystem = *renderTarget.getEngine()->getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
 
-		SamplerSPtr sampler = m_renderTarget.getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + string::toString( m_renderTarget.m_index ) );
+		SamplerSPtr sampler = renderTarget.getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + string::toString( renderTarget.m_index ) );
 		renderer::ImageCreateInfo createInfo{};
 		createInfo.flags = 0u;
 		createInfo.arrayLayers = 1u;
 		createInfo.extent.width = size.getWidth();
 		createInfo.extent.height = size.getHeight();
 		createInfo.extent.depth = 1u;
-		createInfo.format = m_renderTarget.getPixelFormat();
+		createInfo.format = renderTarget.getPixelFormat();
 		createInfo.imageType = renderer::TextureType::e2D;
 		createInfo.initialLayout = renderer::ImageLayout::eUndefined;
 		createInfo.mipLevels = 1u;
@@ -143,14 +143,14 @@ namespace castor3d
 		auto texture = std::make_shared< TextureLayout >( renderSystem
 			, createInfo
 			, renderer::MemoryPropertyFlag::eDeviceLocal );
-		m_colourTexture.setTexture( texture );
-		m_colourTexture.setSampler( sampler );
-		m_colourTexture.getTexture()->getDefaultImage().initialiseSource();
-		m_colourTexture.getTexture()->initialise();
+		colourTexture.setTexture( texture );
+		colourTexture.setSampler( sampler );
+		colourTexture.getTexture()->getDefaultImage().initialiseSource();
+		colourTexture.getTexture()->initialise();
 
 		renderer::FrameBufferAttachmentArray attaches;
-		attaches.emplace_back( *renderPass.getAttachments().begin(), m_colourTexture.getTexture()->getDefaultView() );
-		m_frameBuffer = renderPass.createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
+		attaches.emplace_back( *renderPass.getAttachments().begin(), colourTexture.getTexture()->getDefaultView() );
+		frameBuffer = renderPass.createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
 			, std::move( attaches ) );
 
 		return true;
@@ -158,8 +158,8 @@ namespace castor3d
 
 	void RenderTarget::TargetFbo::cleanup()
 	{
-		m_colourTexture.cleanup();
-		m_frameBuffer.reset();
+		colourTexture.cleanup();
+		frameBuffer.reset();
 	}
 
 	//*************************************************************************************************
@@ -175,7 +175,8 @@ namespace castor3d
 		, m_size{ Size{ 100u, 100u } }
 		, m_renderTechnique{}
 		, m_index{ ++sm_uiCount }
-		, m_frameBuffer{ *this }
+		, m_workFrameBuffer{ *this }
+		, m_flippedFrameBuffer{ *this }
 		, m_velocityTexture{ engine }
 	{
 		m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( cuT( "linear" ), *getEngine(), Parameters{} );
@@ -243,7 +244,7 @@ namespace castor3d
 
 			if ( !m_srgbPostEffects.empty() )
 			{
-				auto const * sourceView = m_frameBuffer.m_colourTexture.getTexture().get();
+				auto const * sourceView = m_workFrameBuffer.colourTexture.getTexture().get();
 
 				for ( auto effect : m_srgbPostEffects )
 				{
@@ -257,12 +258,13 @@ namespace castor3d
 
 				doInitialiseCopyCommands( m_srgbCopyCommands
 					, sourceView->getDefaultView()
-					, m_frameBuffer.m_colourTexture.getTexture()->getDefaultView() );
+					, m_workFrameBuffer.colourTexture.getTexture()->getDefaultView() );
 				m_srgbCopyFinished = device.createSemaphore();
 			}
 
+			doInitialiseFlip();
 			m_overlayRenderer = std::make_shared< OverlayRenderer >( *getEngine()->getRenderSystem()
-				, m_frameBuffer.m_colourTexture.getTexture()->getDefaultView() );
+				, m_flippedFrameBuffer.colourTexture.getTexture()->getDefaultView() );
 			m_overlayRenderer->initialise();
 
 			m_signalReady = device.createSemaphore();
@@ -277,6 +279,11 @@ namespace castor3d
 			m_initialised = false;
 			m_fence.reset();
 			m_signalReady.reset();
+
+			m_flipQuad.reset();
+			m_flipCommands.reset();
+			m_flipFinished.reset();
+
 			m_toneMappingCommandBuffer.reset();
 			m_overlayRenderer->cleanup();
 			m_overlayRenderer.reset();
@@ -310,7 +317,8 @@ namespace castor3d
 			m_velocityTexture.setTexture( nullptr );
 
 			m_renderTechnique->cleanup();
-			m_frameBuffer.cleanup();
+			m_workFrameBuffer.cleanup();
+			m_flippedFrameBuffer.cleanup();
 			m_renderTechnique.reset();
 			m_renderPass.reset();
 			getEngine()->getRenderTechniqueCache().remove( cuT( "RenderTargetTechnique_" ) + string::toString( m_index ) );
@@ -331,7 +339,7 @@ namespace castor3d
 				{
 					getEngine()->getRenderSystem()->pushScene( scene.get() );
 					scene->getGeometryCache().fillInfo( info );
-					doRender( info, m_frameBuffer, getCamera() );
+					doRender( info, m_workFrameBuffer, getCamera() );
 					getEngine()->getRenderSystem()->popScene();
 				}
 			}
@@ -447,10 +455,17 @@ namespace castor3d
 
 	bool RenderTarget::doInitialiseFrameBuffer()
 	{
-		auto result = m_frameBuffer.initialise( *m_renderPass
+		auto result = m_workFrameBuffer.initialise( *m_renderPass
 			, m_size );
-		m_size.set( m_frameBuffer.m_colourTexture.getTexture()->getDimensions().width
-			, m_frameBuffer.m_colourTexture.getTexture()->getDimensions().height );
+		m_size.set( m_workFrameBuffer.colourTexture.getTexture()->getDimensions().width
+			, m_workFrameBuffer.colourTexture.getTexture()->getDimensions().height );
+
+		if ( result )
+		{
+			result = m_flippedFrameBuffer.initialise( *m_renderPass
+				, m_size );
+		}
+
 		return result;
 	}
 
@@ -527,7 +542,7 @@ namespace castor3d
 				, m_toneMappingTimer->getQuery()
 				, 0u );
 			m_toneMappingCommandBuffer->beginRenderPass( *m_renderPass
-				, *m_frameBuffer.m_frameBuffer
+				, *m_workFrameBuffer.frameBuffer
 				, { clear }
 				, renderer::SubpassContents::eInline );
 			m_toneMapping->registerFrame( *m_toneMappingCommandBuffer );
@@ -572,6 +587,78 @@ namespace castor3d
 		commandBuffer->end();
 	}
 
+	void RenderTarget::doInitialiseFlip()
+	{
+		auto & renderSystem = *getEngine()->getRenderSystem();
+		auto & device = *renderSystem.getCurrentDevice();
+
+		glsl::Shader vtx;
+		{
+			using namespace glsl;
+			auto writer = renderSystem.createGlslWriter();
+
+			// Shader inputs
+			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
+			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
+
+			// Shader outputs
+			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+
+			writer.implementFunction< void >( cuT( "main" ), [&]()
+			{
+				vtx_texture = vec2( texcoord.x(), 1.0_f - texcoord.y() );
+				gl_Position = vec4( position, 0.0, 1.0 );
+			} );
+			vtx = writer.finalise();
+		}
+
+		glsl::Shader pxl;
+		{
+			using namespace glsl;
+			auto writer = renderSystem.createGlslWriter();
+
+			// Shader inputs
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 0u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+
+			// Shader outputs
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+
+			writer.implementFunction< void >( cuT( "main" ), [&]()
+			{
+				pxl_fragColor = vec4( texture( c3d_mapDiffuse, vtx_texture ).xyz(), 1.0 );
+			} );
+			pxl = writer.finalise();
+		}
+
+		renderer::ShaderStageStateArray program;
+		program.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
+		program.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
+		program[0].module->loadShader( vtx.getSource() );
+		program[1].module->loadShader( pxl.getSource() );
+
+		m_flipCommands = device.getGraphicsCommandPool().createCommandBuffer();
+		m_flipFinished = device.createSemaphore();
+		m_flipQuad = std::make_unique< RenderQuad >( renderSystem, true );
+		m_flipQuad->createPipeline( { m_size.getWidth(), m_size.getHeight() }
+			, Position{}
+			, program
+			, m_workFrameBuffer.colourTexture.getTexture()->getDefaultView()
+			, *m_renderPass
+			, {}
+			, {} );
+
+		m_flipCommands->begin();
+		m_flipCommands->beginRenderPass( *m_renderPass
+			, *m_flippedFrameBuffer.frameBuffer
+			, { renderer::ClearColorValue{} }
+			, renderer::SubpassContents::eInline );
+		m_flipQuad->registerFrame( *m_flipCommands );
+		m_flipCommands->endRenderPass();
+		m_flipCommands->end();
+	}
+
 	void RenderTarget::doRender( RenderInfo & info
 		, RenderTarget::TargetFbo & fbo
 		, CameraSPtr camera )
@@ -605,6 +692,9 @@ namespace castor3d
 			, m_srgbCopyCommands
 			, m_srgbCopyFinished
 			, elapsedTime );
+
+		// Put the result in bottom up (since all work has been done in top down).
+		m_signalFinished = doFlip( *m_signalFinished );
 
 		// And now render overlays.
 		m_signalFinished = doRenderOverlays( *m_signalFinished, *camera );
@@ -671,6 +761,7 @@ namespace castor3d
 			, m_toneMapping->getSemaphore()
 			, m_fence.get() );
 		m_fence->wait( renderer::FenceTimeout );
+		m_toneMappingTimer->step();
 		m_toneMappingTimer->stop();
 		result = &m_toneMapping->getSemaphore();
 		return result;
@@ -693,7 +784,9 @@ namespace castor3d
 			{
 				SceneSPtr scene = category->getOverlay().getScene();
 
-				if ( category->getOverlay().isVisible() && ( !scene || scene->getName() == getScene()->getName() ) )
+				if ( category->getOverlay().isVisible()
+					&& ( ( !scene && m_type == TargetType::eWindow )
+						|| scene.get() == getScene().get() ) )
 				{
 					category->update( *m_overlayRenderer );
 					category->accept( preparer );
@@ -705,6 +798,21 @@ namespace castor3d
 			m_overlaysTimer->step();
 		}
 		m_overlaysTimer->stop();
+		return result;
+	}
+
+	renderer::Semaphore const * RenderTarget::doFlip( renderer::Semaphore const & toWait )
+	{
+		auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
+		auto * result = &toWait;
+		m_fence->reset();
+		queue.submit( *m_flipCommands
+			, *result
+			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, *m_flipFinished
+			, m_fence.get() );
+		m_fence->wait( renderer::FenceTimeout );
+		result = m_flipFinished.get();
 		return result;
 	}
 }

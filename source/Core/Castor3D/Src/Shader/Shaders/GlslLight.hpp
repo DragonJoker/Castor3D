@@ -19,6 +19,8 @@ namespace castor3d
 			C3D_API Light( glsl::GlslWriter * writer
 				, castor::String const & name = castor::String() );
 			C3D_API Light & operator=( Light const & rhs );
+			C3D_API glsl::Vec4 m_colourIndex()const;
+			C3D_API glsl::Vec4 m_intensityFarPlane()const;
 			C3D_API glsl::Vec3 m_colour()const;
 			C3D_API glsl::Vec2 m_intensity()const;
 			C3D_API glsl::Float m_farPlane()const;
@@ -84,6 +86,7 @@ namespace castor3d
 			C3D_API glsl::Vec3 m_position()const;
 			C3D_API glsl::Vec3 m_attenuation()const;
 			C3D_API glsl::Vec3 m_direction()const;
+			C3D_API glsl::Vec4 m_exponentCutOff()const;
 			C3D_API glsl::Float m_exponent()const;
 			C3D_API glsl::Float m_cutOff()const;
 			C3D_API glsl::Mat4 m_transform()const;

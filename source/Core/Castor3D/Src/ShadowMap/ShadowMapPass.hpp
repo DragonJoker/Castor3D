@@ -106,6 +106,10 @@ namespace castor3d
 		 */
 		void doUpdateNodes( SceneCulledRenderNodes & nodes
 			, Camera const & camera );
+		/**
+		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
+		 */
+		renderer::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 
 	private:
 		/**
@@ -122,6 +126,18 @@ namespace castor3d
 		 *\brief		Nettoie la passe.
 		 */
 		virtual void doCleanup()= 0;
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
+		 */
+		void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, BillboardListRenderNode & nodes )override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
+		 */
+		void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, SubmeshRenderNode & nodes )override;
 		/**
 		 *\~english
 		 *\brief		Prepares the pipeline, culling back faces.

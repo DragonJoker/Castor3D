@@ -111,19 +111,19 @@ namespace castor3d
 
 	void ObjectCache< Light, castor::String >::initialise()
 	{
-		m_lightsBuffer = PxBufferBase::create( { 1000u, 1u }, PixelFormat::eA8R8G8B8 );
+		m_lightsBuffer.resize( 1000u );
 		m_scene.getListener().postEvent( makeFunctorEvent( EventType::ePreRender
 			, [this]()
 			{
 				auto & device = *getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
 				m_textureBuffer = renderer::makeBuffer< castor::Point4f >( device
-					, 1000u
+					, uint32_t( m_lightsBuffer.size() )
 					, renderer::BufferTarget::eUniformTexelBuffer | renderer::BufferTarget::eTransferDst
 					, renderer::MemoryPropertyFlag::eHostVisible );
 				m_textureView = device.createBufferView( m_textureBuffer->getBuffer()
-					, convert( m_lightsBuffer->format() )
+					, renderer::Format::eR32G32B32A32_SFLOAT
 					, 0u
-					, m_lightsBuffer->size() );
+					, uint32_t( m_lightsBuffer.size() * sizeof( Point4f ) ) );
 			} ) );
 	}
 
@@ -234,6 +234,7 @@ namespace castor3d
 	void ObjectCache< Light, castor::String >::updateLightsTexture( Camera const & camera )const
 	{
 		int index = 0;
+		Point4f * data = m_lightsBuffer.data();
 
 		for ( auto lights : m_typeSortedLights )
 		{
@@ -243,22 +244,20 @@ namespace castor3d
 					|| camera.isVisible( light->getBoundingBox()
 						, light->getParent()->getDerivedTransformationMatrix() ) )
 				{
-					light->bind( *m_lightsBuffer, index++ );
+					light->bind( data );
+					data += shader::MaxLightComponentsCount;
 				}
 			}
 		}
 
-		auto locked = m_textureBuffer->getBuffer().lock( 0u
-			, m_textureBuffer->getBuffer().getSize()
-			, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateBuffer );
-
-		if ( locked )
+		if ( auto * locked = m_textureBuffer->lock( 0u
+			, m_textureBuffer->getCount()
+			, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateBuffer ) )
 		{
-			std::memcpy( locked, m_lightsBuffer->constPtr(), m_lightsBuffer->size() );
+			std::copy( m_lightsBuffer.begin(), m_lightsBuffer.end(), locked );
+			m_textureBuffer->flush( 0u, m_textureBuffer->getCount() );
+			m_textureBuffer->unlock();
 		}
-
-		m_textureBuffer->getBuffer().flush( 0u, m_textureBuffer->getBuffer().getSize() );
-		m_textureBuffer->getBuffer().unlock();
 	}
 
 	void ObjectCache< Light, castor::String >::onLightChanged( Light & light )

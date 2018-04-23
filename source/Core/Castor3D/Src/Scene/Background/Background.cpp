@@ -150,7 +150,7 @@ namespace castor3d
 			commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 			commandBuffer.bindIndexBuffer( m_indexBuffer->getBuffer(), 0u, renderer::IndexType::eUInt16 );
 			commandBuffer.drawIndexed( m_indexBuffer->getCount() );
-			commandBuffer.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			commandBuffer.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
 				, m_timer->getQuery()
 				, 1u );
 			commandBuffer.endRenderPass();

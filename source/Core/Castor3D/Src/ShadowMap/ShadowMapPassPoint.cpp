@@ -170,19 +170,19 @@ namespace castor3d
 		m_onNodeChanged.disconnect();
 	}
 
-	void ShadowMapPassPoint::doFillDescriptor( renderer::DescriptorSetLayout const & layout
+	void ShadowMapPassPoint::doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, BillboardListRenderNode & node )
 	{
-		node.descriptorSet->createBinding( layout.getBinding( ShadowMapPassPoint::UboBindingPoint )
+		node.uboDescriptorSet->createBinding( layout.getBinding( ShadowMapPassPoint::UboBindingPoint )
 			, *m_shadowConfig );
 	}
 
-	void ShadowMapPassPoint::doFillDescriptor( renderer::DescriptorSetLayout const & layout
+	void ShadowMapPassPoint::doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, SubmeshRenderNode & node )
 	{
-		node.descriptorSet->createBinding( layout.getBinding( ShadowMapPassPoint::UboBindingPoint )
+		node.uboDescriptorSet->createBinding( layout.getBinding( ShadowMapPassPoint::UboBindingPoint )
 			, *m_shadowConfig );
 	}
 
@@ -215,9 +215,12 @@ namespace castor3d
 			{
 				auto uboBindings = doCreateUboBindings( flags );
 				uboBindings.emplace_back( ShadowMapPassPoint::UboBindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment );
-				auto layout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
+				auto texBindings = doCreateTextureBindings( flags );
+				auto uboLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
+				auto texLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( texBindings ) );
 				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
-				layouts.emplace_back( std::move( layout ) );
+				layouts.emplace_back( std::move( uboLayout ) );
+				layouts.emplace_back( std::move( texLayout ) );
 				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
 				pipeline.initialise( getRenderPass(), renderer::PrimitiveTopology::eTriangleList );
 				m_initialised = true;

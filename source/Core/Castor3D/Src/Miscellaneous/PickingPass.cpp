@@ -574,20 +574,40 @@ namespace castor3d
 		m_colourTexture.reset();
 	}
 
-	void PickingPass::doFillDescriptor( renderer::DescriptorSetLayout const & layout
+	void PickingPass::doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, BillboardListRenderNode & node )
 	{
-		node.descriptorSet->createBinding( layout.getBinding( index++ )
+		node.uboDescriptorSet->createBinding( layout.getBinding( index++ )
 			, *m_pickingUbo );
 	}
 
-	void PickingPass::doFillDescriptor( renderer::DescriptorSetLayout const & layout
+	void PickingPass::doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, SubmeshRenderNode & node )
 	{
-		node.descriptorSet->createBinding( layout.getBinding( index++ )
+		node.uboDescriptorSet->createBinding( layout.getBinding( index++ )
 			, *m_pickingUbo );
+	}
+
+	void PickingPass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, BillboardListRenderNode & node )
+	{
+		node.passNode.fillDescriptor( layout
+			, index
+			, *node.texDescriptorSet
+			, true );
+	}
+
+	void PickingPass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, SubmeshRenderNode & node )
+	{
+		node.passNode.fillDescriptor( layout
+			, index
+			, *node.texDescriptorSet
+			, true );
 	}
 
 	void PickingPass::doUpdate( RenderQueueArray & CU_PARAM_UNUSED( queues ) )
@@ -716,6 +736,19 @@ namespace castor3d
 	{
 	}
 
+	renderer::DescriptorSetLayoutBindingArray PickingPass::doCreateTextureBindings( PipelineFlags const & flags )const
+	{
+		auto index = MinBufferIndex;
+		renderer::DescriptorSetLayoutBindingArray textureBindings;
+
+		if ( checkFlag( flags.m_textureFlags, TextureChannel::eOpacity ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		return textureBindings;
+	}
+
 	void PickingPass::doPrepareFrontPipeline( ShaderProgramSPtr program
 		, renderer::VertexLayoutCRefArray const & layouts
 		, PipelineFlags const & flags )
@@ -747,10 +780,13 @@ namespace castor3d
 			auto initialise = [this, &pipeline, flags]()
 			{
 				auto uboBindings = doCreateUboBindings( flags );
-				auto layout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
-				std::vector< renderer::DescriptorSetLayoutPtr > descLayouts;
-				descLayouts.emplace_back( std::move( layout ) );
-				pipeline.setDescriptorSetLayouts( std::move( descLayouts ) );
+				auto textureBindings = doCreateTextureBindings( flags );
+				auto uboLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
+				auto texLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( textureBindings ) );
+				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
+				layouts.emplace_back( std::move( uboLayout ) );
+				layouts.emplace_back( std::move( texLayout ) );
+				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
 				pipeline.initialise( getRenderPass(), renderer::PrimitiveTopology::eTriangleList );
 			};
 

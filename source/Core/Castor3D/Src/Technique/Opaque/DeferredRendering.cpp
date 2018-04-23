@@ -144,6 +144,7 @@ namespace castor3d
 	{
 		renderer::Semaphore const * result = &toWait;
 		m_engine.setPerObjectLighting( false );
+		m_opaquePass.getTimer().start();
 		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
 		static renderer::ClearValueArray const clearValues
 		{
@@ -157,12 +158,21 @@ namespace castor3d
 
 		if ( m_nodesCommands->begin() )
 		{
+			m_nodesCommands->resetQueryPool( m_opaquePass.getTimer().getQuery()
+				, 0u
+				, 2u );
+			m_nodesCommands->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+				, m_opaquePass.getTimer().getQuery()
+				, 0u );
 			m_nodesCommands->beginRenderPass( m_opaquePass.getRenderPass()
 				, m_opaquePass.getFrameBuffer()
 				, clearValues
 				, renderer::SubpassContents::eSecondaryCommandBuffers );
 			m_nodesCommands->executeCommands( { m_opaquePass.getCommandBuffer() } );
 			m_nodesCommands->endRenderPass();
+			m_nodesCommands->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
+				, m_opaquePass.getTimer().getQuery()
+				, 1u );
 			m_nodesCommands->end();
 			device.getGraphicsQueue().submit( { *m_nodesCommands }
 				, { *result }
@@ -170,6 +180,7 @@ namespace castor3d
 				, { m_opaquePass.getSemaphore() }
 				, nullptr );
 			device.getGraphicsQueue().waitIdle();
+			m_opaquePass.getTimer().step();
 			result = &m_opaquePass.getSemaphore();
 		}
 
@@ -191,6 +202,7 @@ namespace castor3d
 
 		m_reflection->render( *result );
 		result = &m_reflection->getSemaphore();
+		m_opaquePass.getTimer().stop();
 		return *result;
 	}
 
