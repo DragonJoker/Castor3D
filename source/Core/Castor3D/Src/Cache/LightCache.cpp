@@ -150,7 +150,7 @@ namespace castor3d
 
 			if ( m_elements.has( name ) )
 			{
-				castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
+				castor::Logger::logWarning( castor::makeStringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
 				result = m_elements.find( name );
 				m_dirtyLights.emplace_back( result.get() );
 				m_connections.emplace( result.get()
@@ -166,7 +166,7 @@ namespace castor3d
 		}
 		else
 		{
-			castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_NULL_OBJECT << getObjectTypeName() << cuT( ": " ) );
+			castor::Logger::logWarning( castor::makeStringStream() << WARNING_CACHE_NULL_OBJECT << getObjectTypeName() << cuT( ": " ) );
 		}
 
 		return result;
@@ -183,7 +183,7 @@ namespace castor3d
 			m_initialise( result );
 			m_elements.insert( name, result );
 			m_attach( result, parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
-			castor::Logger::logDebug( castor::StringStream() << INFO_CACHE_CREATED_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
+			castor::Logger::logDebug( castor::makeStringStream() << INFO_CACHE_CREATED_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
 			m_dirtyLights.emplace_back( result.get() );
 			m_connections.emplace( result.get()
 				, result->onChanged.connect( std::bind( &ObjectCache< Light, String >::onLightChanged
@@ -194,7 +194,7 @@ namespace castor3d
 		else
 		{
 			result = m_elements.find( name );
-			castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
+			castor::Logger::logWarning( castor::makeStringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
 		}
 
 		return result;

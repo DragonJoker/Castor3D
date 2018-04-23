@@ -87,22 +87,23 @@ void Torus::doGenerate( Mesh & mesh, Parameters const & parameters )
 
 			for ( uint32_t j = 0; j <= uiIntMax; j++ )
 			{
-				auto & vertex = submesh[j];
-				vertex = submesh.addPoint( vertex.pos[0] * cos( rAngleEx ), vertex.pos[1], vertex.pos[0] * sin( rAngleEx ) );
+				auto vertex = submesh[j];
+				vertex.pos = Point3r{ vertex.pos[0] * cos( rAngleEx ), vertex.pos[1], vertex.pos[0] * sin( rAngleEx ) };
 				vertex.tex = Point3r{ real( i ) / m_externalNbFaces, real( j ) / m_internalNbFaces };
 				vertex.nml = point::getNormalised( Point3r( real( vertex.nml[0] * cos( rAngleEx ) ), real( vertex.nml[1] ), real( vertex.nml[0] * sin( rAngleEx ) ) ) );
+				submesh.addPoint( vertex );
 			}
 
 			for ( uint32_t j = 0; j <= uiIntMax - 1; j++ )
 			{
-				indexMapping->addFace( uiCur + 1, uiPrv + 0, uiPrv + 1 );
-				indexMapping->addFace( uiCur + 0, uiPrv + 0, uiCur + 1 );
+				indexMapping->addFace( uiPrv + 0, uiCur + 1, uiPrv + 1 );
+				indexMapping->addFace( uiPrv + 0, uiCur + 0, uiCur + 1 );
 				uiPrv++;
 				uiCur++;
 			}
 
-			indexMapping->addFace( uiPCr + 0, uiPrv + 0, uiPPr + 0 );
-			indexMapping->addFace( uiCur + 0, uiPrv + 0, uiPCr + 0 );
+			indexMapping->addFace( uiPrv + 0, uiPCr + 0, uiPPr + 0 );
+			indexMapping->addFace( uiPrv + 0, uiCur + 0, uiPCr + 0 );
 			uiPrv++;
 			uiCur++;
 		}
@@ -113,14 +114,14 @@ void Torus::doGenerate( Mesh & mesh, Parameters const & parameters )
 
 		for ( uint32_t j = 0; j <= uiIntMax - 1; j++ )
 		{
-			indexMapping->addFace( uiCur + 1, uiPrv + 0, uiPrv + 1 );
-			indexMapping->addFace( uiCur + 0, uiPrv + 0, uiCur + 1 );
+			indexMapping->addFace( uiPrv + 0, uiCur + 1, uiPrv + 1 );
+			indexMapping->addFace( uiPrv + 0, uiCur + 0, uiCur + 1 );
 			uiPrv++;
 			uiCur++;
 		}
 
-		indexMapping->addFace( uiPCr + 0, uiPrv + 0, uiPPr + 0 );
-		indexMapping->addFace( uiCur + 0, uiPrv + 0, uiPCr + 0 );
+		indexMapping->addFace( uiPrv + 0, uiPCr + 0, uiPPr + 0 );
+		indexMapping->addFace( uiPrv + 0, uiCur + 0, uiPCr + 0 );
 
 		indexMapping->computeTangentsFromNormals();
 		submesh.setIndexMapping( indexMapping );

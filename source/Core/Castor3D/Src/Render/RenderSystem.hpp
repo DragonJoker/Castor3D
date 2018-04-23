@@ -186,6 +186,108 @@ namespace castor3d
 			, uint32_t gpu = 0u );
 		/**
 		*\~english
+		*\brief
+		*	Computes an frustum projection matrix.
+		*\param[in] left, right
+		*	The left and right planes position.
+		*\param[in] top, bottom
+		*	The top and bottom planes position.
+		*\param[in] zNear, zFar
+		*	The near and far planes position.
+		*\~french
+		*\brief
+		*	Calcule une matrice de projection frustum.
+		*\param[in] left, right
+		*	La position des plans gauche et droite.
+		*\param[in] top, bottom
+		*	La position des plans haut et bas.
+		*\param[in] zNear, zFar
+		*	La position des premier et arrière plans.
+		*/
+		C3D_API castor::Matrix4x4r getFrustum( float left
+			, float right
+			, float bottom
+			, float top
+			, float zNear
+			, float zFar )const;
+		/**
+		*\~english
+		*	Computes a perspective projection matrix.
+		*\param[in] fovy
+		*	The vertical aperture angle.
+		*\param[in] aspect
+		*	The width / height ratio.
+		*\param[in] zNear
+		*	The near plane position.
+		*\param[in] zFar
+		*	The far plane position.
+		*\~french
+		*\brief
+		*	Calcule une matrice de projection en perspective.
+		*\param[in] fovy
+		*	L'angle d'ouverture verticale.
+		*\param[in] aspect
+		*	Le ratio largeur / hauteur.
+		*\param[in] zNear
+		*	La position du premier plan (pour le clipping).
+		*\param[in] zFar
+		*	La position de l'arrière plan (pour le clipping).
+		*/
+		C3D_API castor::Matrix4x4r getPerspective( float radiansFovY
+			, float aspect
+			, float zNear
+			, float zFar )const;
+		/**
+		*\~english
+		*\brief
+		*	Computes an orthographic projection matrix.
+		*\param[in] left, right
+		*	The left and right planes position.
+		*\param[in] top, bottom
+		*	The top and bottom planes position.
+		*\param[in] zNear, zFar
+		*	The near and far planes position.
+		*\~french
+		*\brief
+		*	Calcule une matrice de projection orthographique.
+		*\param[in] left, right
+		*	La position des plans gauche et droite.
+		*\param[in] top, bottom
+		*	La position des plans haut et bas.
+		*\param[in] zNear, zFar
+		*	La position des premier et arrière plans.
+		*/
+		C3D_API castor::Matrix4x4r getOrtho( float left
+			, float right
+			, float bottom
+			, float top
+			, float zNear
+			, float zFar )const;
+		/**
+		*\~english
+		*	Computes a perspective projection matrix with no far plane clipping.
+		*\param[in] fovy
+		*	The vertical aperture angle.
+		*\param[in] aspect
+		*	The width / height ratio.
+		*\param[in] zNear
+		*	The near plane position.
+		*\~french
+		*\brief
+		*	Calcule une matrice de projection en perspective sans clipping
+		*	d'arrière plan.
+		*\param[in] fovy
+		*	L'angle d'ouverture verticale.
+		*\param[in] aspect
+		*	Le ratio largeur / hauteur.
+		*\param[in] zNear
+		*	La position du premier plan (pour le clipping).
+		*/
+		C3D_API castor::Matrix4x4r getInfinitePerspective( float radiansFovY
+			, float aspect
+			, float zNear )const;
+		/**
+		*\~english
 		*name
 		*	Getters.
 		*\~french

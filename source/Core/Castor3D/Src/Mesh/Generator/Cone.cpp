@@ -92,16 +92,16 @@ namespace castor3d
 			for ( i = 0; i < m_nbFaces - 1; i++ )
 			{
 				//Composition du bas
-				indexMappingBase->addFace( i, i + 1, bottomCenterIndex );
+				indexMappingBase->addFace( i + 1, i, bottomCenterIndex );
 			}
 
 			//Composition du bas
-			indexMappingBase->addFace( m_nbFaces - 1, 0, bottomCenterIndex );
+			indexMappingBase->addFace( 0, m_nbFaces - 1, bottomCenterIndex );
 
 			//Composition des côtés
 			for ( i = 0; i < 2 * m_nbFaces; i += 2 )
 			{
-				indexMappingSide->addFace( i + 0, i + 1, i + 2 );
+				indexMappingSide->addFace( i + 1, i + 0, i + 2 );
 			}
 
 			submeshBase.setIndexMapping( indexMappingBase );

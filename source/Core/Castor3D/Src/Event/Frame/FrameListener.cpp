@@ -54,17 +54,17 @@ namespace castor3d
 		}
 		catch ( Exception & exc )
 		{
-			Logger::logError( StringStream() << cuT( "Encountered exception while processing events: " ) << string::stringCast< xchar >( exc.getFullDescription() ) );
+			Logger::logError( castor::makeStringStream() << cuT( "Encountered exception while processing events: " ) << string::stringCast< xchar >( exc.getFullDescription() ) );
 			result = false;
 		}
 		catch ( std::exception & exc )
 		{
-			Logger::logError( StringStream() << cuT( "Encountered exception while processing events: " ) << string::stringCast< xchar >( exc.what() ) );
+			Logger::logError( castor::makeStringStream() << cuT( "Encountered exception while processing events: " ) << string::stringCast< xchar >( exc.what() ) );
 			result = false;
 		}
 		catch ( ... )
 		{
-			Logger::logError( StringStream() << cuT( "Encountered exception while processing events" ) );
+			Logger::logError( castor::makeStringStream() << cuT( "Encountered exception while processing events" ) );
 			result = false;
 		}
 

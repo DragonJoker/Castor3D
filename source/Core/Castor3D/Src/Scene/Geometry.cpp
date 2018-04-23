@@ -103,9 +103,8 @@ namespace castor3d
 				faceCount += nbFaces;
 				vertexCount += nbVertex;
 				mesh->computeContainers();
-				Logger::logInfo( StringStream()
-					<< cuT( "Geometry [" ) << getName() 
-					<< cuT( "] - NbVertex: " ) << nbVertex 
+				Logger::logInfo( makeStringStream() << cuT( "Geometry [" ) << getName()
+					<< cuT( "] - NbVertex: " ) << nbVertex
 					<< cuT( ", NbFaces: " ) << nbFaces );
 				m_listCreated = mesh->getSubmeshCount() > 0;
 			}

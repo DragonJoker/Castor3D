@@ -179,10 +179,10 @@ namespace Obj
 		m_mapOffsets[&pass] = offset;
 		m_mapScales[&pass] = scale;
 		m_mapTurbulences[&pass] = turbulence;
-		Logger::logDebug( StringStream() << cuT( "-	Texture :    " ) + value );
-		Logger::logDebug( StringStream() << cuT( "-	Offset :     " ) << offset );
-		Logger::logDebug( StringStream() << cuT( "-	Scale :      " ) << scale );
-		Logger::logDebug( StringStream() << cuT( "-	Turbulence : " ) << turbulence );
+		Logger::logDebug( makeStringStream() << cuT( "-	Texture :    " ) + value );
+		Logger::logDebug( makeStringStream() << cuT( "-	Offset :     " ) << offset );
+		Logger::logDebug( makeStringStream() << cuT( "-	Scale :      " ) << scale );
+		Logger::logDebug( makeStringStream() << cuT( "-	Turbulence : " ) << turbulence );
 
 		if ( !value.empty() )
 		{
@@ -692,6 +692,7 @@ namespace Obj
 					{
 						// Diffuse colour
 						StringStream stream( value );
+						stream.imbue( castor3d::Engine::getLocale() );
 						stream >> components[0] >> components[1] >> components[2];
 						pass->setDiffuse( castor::RgbColour::fromComponents( components[0], components[1], components[2]) );
 					}
@@ -699,6 +700,7 @@ namespace Obj
 					{
 						// Specular colour
 						StringStream stream( value );
+						stream.imbue( castor3d::Engine::getLocale() );
 						stream >> components[0] >> components[1] >> components[2];
 						pass->setSpecular( castor::RgbColour::fromComponents( components[0], components[1], components[2] ) );
 					}

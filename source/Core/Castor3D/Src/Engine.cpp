@@ -190,8 +190,7 @@ namespace castor3d
 			File::directoryCreate( getEngineDirectory() );
 		}
 
-		Logger::logInfo( StringStream() << cuT( "Castor3D - Core engine version : " ) << Version{} );
-		Logger::logDebug( StringStream() << m_cpuInformations );
+		Logger::logInfo( makeStringStream() << cuT( "Castor3D - Core engine version : " ) << Version{} << std::endl << m_cpuInformations );
 	}
 
 	Engine::~Engine()
@@ -365,6 +364,12 @@ namespace castor3d
 		Path pathUsr = pathBin.getPath();
 		pathReturn = pathUsr / cuT( "share" );
 		return pathReturn;
+	}
+
+	std::locale const & Engine::getLocale()
+	{
+		static std::locale const loc{ "C" };
+		return loc;
 	}
 
 	bool Engine::isCleaned()

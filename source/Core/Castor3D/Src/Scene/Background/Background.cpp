@@ -113,9 +113,11 @@ namespace castor3d
 			m_configUbo.update( m_scene.getHdrConfig() );
 		}
 
+		static castor::Point3r const Scale{ 1, -1, 1 };
 		static castor::Matrix3x3r const Identity{ 1.0f };
 		auto node = camera.getParent();
 		castor::matrix::setTranslate( m_mtxModel, node->getDerivedPosition() );
+		castor::matrix::scale( m_mtxModel, Scale );
 		m_modelMatrixUbo.update( m_mtxModel, Identity );
 		doUpdate( camera );
 	}
@@ -375,7 +377,7 @@ namespace castor3d
 			renderPass,
 			vertexInput,
 			renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleList },
-			renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eFront },
+			renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eBack },
 			renderer::MultisampleState{},
 			renderer::ColourBlendState::createDefault(),
 			{ renderer::DynamicState::eViewport, renderer::DynamicState::eScissor },

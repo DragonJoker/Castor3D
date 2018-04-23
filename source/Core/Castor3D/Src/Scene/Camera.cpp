@@ -70,7 +70,7 @@ namespace castor3d
 		: Camera{ name
 			, scene
 			, node
-			, Viewport{}
+			, Viewport{ *scene.getEngine() }
 			, invertX }
 	{
 	}

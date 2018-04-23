@@ -70,14 +70,14 @@ namespace castor
 
 					if ( !::SetConsoleWindowInfo( m_screenBuffer, TRUE, &windowRect ) )
 					{
-						StringStream text;
+						StringStream text{ makeStringStream() };
 						text << cuT( "Couldn't set console window size (0x" ) << std::hex << std::setw( 8 ) << std::right << std::setfill( '0' ) << ::GetLastError() << ")";
 						writeText( text.str(), true );
 					}
 				}
 				else
 				{
-					StringStream text;
+					StringStream text{ makeStringStream() };
 					text << cuT( "Couldn't set console screenbuffer size (0x" ) << std::hex << std::setw( 8 ) << std::right << std::setfill( '0' ) << ::GetLastError() << ")";
 					writeText( text.str(), true );
 				}

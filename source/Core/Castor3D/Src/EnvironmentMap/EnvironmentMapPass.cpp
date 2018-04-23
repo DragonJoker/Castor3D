@@ -3,6 +3,7 @@
 #include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Render/Viewport.hpp"
 #include "Scene/Camera.hpp"
+#include "Scene/Scene.hpp"
 #include "Technique/ForwardRenderTechniquePass.hpp"
 
 using namespace castor;
@@ -13,7 +14,7 @@ namespace castor3d
 	{
 		CameraSPtr doCreateCamera( SceneNode & node )
 		{
-			Viewport viewport;
+			Viewport viewport{ *node.getScene()->getEngine() };
 			return std::make_shared< Camera >( cuT( "EnvironmentMap_" ) + node.getName()
 				, *node.getScene()
 				, node.shared_from_this()

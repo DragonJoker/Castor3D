@@ -246,7 +246,7 @@ namespace castor3d
 					auto lockLibraries = makeUniqueLock( m_mutexLibraries );
 					m_libraries[size_t( type )].insert( std::make_pair( pathFile, library ) );
 				}
-				Logger::logInfo( StringStream() << cuT( "Plug-in [" ) << result->getName() << cuT( "] - Required engine version : " ) << toCheck << cuT( ", loaded" ) );
+				Logger::logInfo( castor::makeStringStream() << cuT( "Plug-in [" ) << result->getName() << cuT( "] - Required engine version : " ) << toCheck << cuT( ", loaded" ) );
 			}
 			else
 			{

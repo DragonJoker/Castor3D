@@ -58,9 +58,9 @@ namespace castor3d
 			uint32_t i = 0;
 			real rCosRot = cos( angleRotation );
 			real rSinRot = sin( angleRotation );
-			real rCos = real( 1 );
-			real rSin = real( 0 );
-			real rSinT = real( 0 );
+			real rCos = 1.0_r;
+			real rSin = 0.0_r;
+			real rSinT = 0.0_r;
 			InterleavedVertexArray topVertex;
 			InterleavedVertexArray baseVertex;
 			InterleavedVertexArray sideVertex;
@@ -76,12 +76,12 @@ namespace castor3d
 						, Point3f{ 0.0, 1.0, 0.0 }
 						, Point2f{ ( 1 + rCos ) / 2, ( 1 + rSinT ) / 2 } ) );
 				}
-				
+
 				sideVertex.push_back( InterleavedVertex::createPNT( Point3f{ m_radius * rCos, -m_height / 2, m_radius * rSin }
-					, Point3f{ rCos, rSin, 0.0 }
+					, Point3f{ -rCos, -rSin, 0.0 }
 					, Point2f{ real( 1.0 ) - real( i ) / m_nbFaces, real( 0.0 ) } ) );
 				sideVertex.push_back( InterleavedVertex::createPNT( Point3f{ m_radius * rCos, m_height / 2, m_radius * rSin }
-					, Point3f{ rCos, rSin, 0.0 }
+					, Point3f{ -rCos, -rSin, 0.0 }
 					, Point2f{ real( 1.0 ) - real( i ) / m_nbFaces, real( 1.0 ) } ) );
 
 				const real newCos = rCosRot * rCos - rSinRot * rSin;
@@ -115,21 +115,21 @@ namespace castor3d
 			for ( i = 0; i < m_nbFaces - 1; i++ )
 			{
 				//Composition du bas
-				indexMappingBase->addFace( i, i + 1, bottomCenterIndex );
+				indexMappingBase->addFace( i + 1, i, bottomCenterIndex );
 				//Composition du dessus
-				indexMappingTop->addFace( topCenterIndex, i, i + 1 );
+				indexMappingTop->addFace( i, topCenterIndex, i + 1 );
 			}
 
 			//Composition du bas
-			indexMappingBase->addFace( m_nbFaces - 1, 0, bottomCenterIndex );
+			indexMappingBase->addFace( 0, m_nbFaces - 1, bottomCenterIndex );
 			//Composition du dessus
-			indexMappingTop->addFace( topCenterIndex, m_nbFaces - 1, 0 );
+			indexMappingTop->addFace( m_nbFaces - 1, topCenterIndex, 0 );
 
 			//Composition des côtés
 			for ( i = 0; i < 2 * m_nbFaces; i += 2 )
 			{
-				indexMappingSide->addFace( i + 0, i + 1, i + 2 );
-				indexMappingSide->addFace( i + 1, i + 3, i + 2 );
+				indexMappingSide->addFace( i + 1, i + 0, i + 2 );
+				indexMappingSide->addFace( i + 3, i + 1, i + 2 );
 			}
 
 			indexMappingBase->computeTangentsFromNormals();

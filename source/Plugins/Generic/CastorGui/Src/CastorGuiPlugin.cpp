@@ -1,4 +1,4 @@
-﻿#include <Engine.hpp>
+#include <Engine.hpp>
 #include <Cache/ListenerCache.hpp>
 
 #include <Render/RenderSystem.hpp>
@@ -18,7 +18,7 @@ namespace CastorGui
 	{
 		void parseError( String const & p_error )
 		{
-			StringStream strError;
+			StringStream strError{ makeStringStream() };
 			strError << cuT( "Error, : " ) << p_error;
 			Logger::logError( strError.str() );
 		}

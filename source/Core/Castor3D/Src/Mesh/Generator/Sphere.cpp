@@ -96,8 +96,8 @@ void Sphere::doGenerate( Mesh & mesh, Parameters const & parameters )
 			// Reconstition des faces
 			for ( uint32_t i = 0; i < m_nbFaces; i++ )
 			{
-				indexMapping->addFace( iPrv + 0, iCur + 0, iPrv + 1 );
-				indexMapping->addFace( iCur + 0, iCur + 1, iPrv + 1 );
+				indexMapping->addFace( iCur + 0, iPrv + 0, iPrv + 1 );
+				indexMapping->addFace( iCur + 1, iCur + 0, iPrv + 1 );
 				iPrv++;
 				iCur++;
 			}

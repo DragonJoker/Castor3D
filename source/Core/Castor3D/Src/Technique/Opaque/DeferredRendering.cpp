@@ -142,16 +142,17 @@ namespace castor3d
 		, Camera const & camera
 		, renderer::Semaphore const & toWait )
 	{
+		renderer::Semaphore const * result = &toWait;
 		m_engine.setPerObjectLighting( false );
 		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
 		static renderer::ClearValueArray const clearValues
 		{
 			renderer::DepthStencilClearValue{ 1.0, 0 },
-			renderer::ClearColorValue{ 0.2f, 0.0f, 0.0f, 1.0f },
-			renderer::ClearColorValue{ 0.4f, 0.0f, 0.0f, 1.0f },
-			renderer::ClearColorValue{ 0.6f, 0.0f, 0.0f, 1.0f },
-			renderer::ClearColorValue{ 0.8f, 0.0f, 0.0f, 1.0f },
-			renderer::ClearColorValue{ 1.0f, 0.0f, 0.0f, 1.0f },
+			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
+			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
+			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
+			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
+			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
 		};
 
 		if ( m_nodesCommands->begin() )
@@ -164,33 +165,33 @@ namespace castor3d
 			m_nodesCommands->endRenderPass();
 			m_nodesCommands->end();
 			device.getGraphicsQueue().submit( { *m_nodesCommands }
-				, {}
+				, { *result }
 				, { renderer::PipelineStageFlag::eColourAttachmentOutput }
 				, { m_opaquePass.getSemaphore() }
 				, nullptr );
 			device.getGraphicsQueue().waitIdle();
+			result = &m_opaquePass.getSemaphore();
 		}
 
-		auto * semaphore = m_lightingPass->render( scene
+		result = m_lightingPass->render( scene
 			, camera
 			, m_geometryPassResult
-			, m_opaquePass.getSemaphore()
+			, *result
 			, info );
-
-		semaphore = semaphore ? semaphore : &m_opaquePass.getSemaphore();
 
 		if ( scene.needsSubsurfaceScattering() )
 		{
 			device.getGraphicsQueue().submit( m_subsurfaceScattering->getCommandBuffer()
-				, toWait
+				, *result
 				, renderer::PipelineStageFlag::eAllCommands
-				, *semaphore
+				, m_subsurfaceScattering->getSemaphore()
 				, nullptr );
-			semaphore = &m_subsurfaceScattering->getSemaphore();
+			result = &m_subsurfaceScattering->getSemaphore();
 		}
 
-		m_reflection->render( *semaphore );
-		return m_reflection->getSemaphore();
+		m_reflection->render( *result );
+		result = &m_reflection->getSemaphore();
+		return *result;
 	}
 
 	void DeferredRendering::debugDisplay()const

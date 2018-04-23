@@ -23,11 +23,11 @@
 	{\
 		if ( error == EINVAL )\
 		{\
-			Logger::logError( StringStream() << cuT( "Aligned allocation failed, alignment of " ) << a << cuT( " is not a power of two times sizeof( void * )" ) );\
+			Logger::logError( makeStringStream() << cuT( "Aligned allocation failed, alignment of " ) << a << cuT( " is not a power of two times sizeof( void * )" ) );\
 		}\
 		else if ( error == ENOMEM )\
 		{\
-			Logger::logError( StringStream() << cuT( "Aligned allocation failed, no memory available" ) );\
+			Logger::logError( makeStringStream() << cuT( "Aligned allocation failed, no memory available" ) );\
 		}\
 		m = nullptr;\
 	}

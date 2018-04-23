@@ -199,14 +199,14 @@ namespace castor3d
 
 					if ( m_shadows != ShadowType::eNone )
 					{
-						IF( m_writer, light.m_index() >= 0_i )
+						IF( m_writer, light.m_lightBase().m_index() >= 0_i )
 						{
 							shadowFactor = 1.0_f - min( receivesShadows
 								, m_shadowModel->computePointShadow( fragmentIn.m_vertex
 									, light.m_position().xyz()
 									, fragmentIn.m_normal
 									, light.m_lightBase().m_farPlane()
-									, light.m_index() ) );
+									, light.m_lightBase().m_index() ) );
 						}
 						FI;
 					}
@@ -266,14 +266,14 @@ namespace castor3d
 
 						if ( m_shadows != ShadowType::eNone )
 						{
-							IF( m_writer, light.m_index() >= 0_i )
+							IF( m_writer, light.m_lightBase().m_index() >= 0_i )
 							{
 								shadowFactor = 1.0_f - min( receivesShadows
 									, m_shadowModel->computeSpotShadow( light.m_transform()
 										, fragmentIn.m_vertex
 										, lightToVertex
 										, fragmentIn.m_normal
-										, light.m_index() ) );
+										, light.m_lightBase().m_index() ) );
 							}
 							FI;
 						}

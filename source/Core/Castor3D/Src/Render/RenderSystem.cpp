@@ -31,7 +31,7 @@ namespace castor3d
 		if ( !m_initialised )
 		{
 			auto & device = *getMainDevice();
-			StringStream stream;
+			StringStream stream( makeStringStream() );
 			stream << ( device.getProperties().apiVersion >> 22 ) << cuT( "." ) << ( ( device.getProperties().apiVersion >> 12 ) & 0x0FFF );
 
 			m_gpuInformations.setRenderer( device.getProperties().deviceName );
@@ -152,5 +152,40 @@ namespace castor3d
 		renderer::DevicePtr result = m_renderer->createDevice( m_renderer->createConnection( gpu, std::move( handle ) ) );
 		registerDevice( *result );
 		return result;
+	}
+
+	castor::Matrix4x4r RenderSystem::getFrustum( float left
+		, float right
+		, float bottom
+		, float top
+		, float zNear
+		, float zFar )const
+	{
+		return convert( m_renderer->frustum( left, right, bottom, top, zNear, zFar ) );
+	}
+
+	castor::Matrix4x4r RenderSystem::getPerspective( float radiansFovY
+		, float aspect
+		, float zNear
+		, float zFar )const
+	{
+		return convert( m_renderer->perspective( radiansFovY, aspect, zNear, zFar ) );
+	}
+
+	castor::Matrix4x4r RenderSystem::getOrtho( float left
+		, float right
+		, float bottom
+		, float top
+		, float zNear
+		, float zFar )const
+	{
+		return convert( m_renderer->ortho( left, right, bottom, top, zNear, zFar ) );
+	}
+
+	castor::Matrix4x4r RenderSystem::getInfinitePerspective( float radiansFovY
+		, float aspect
+		, float zNear )const
+	{
+		return convert( m_renderer->infinitePerspective( radiansFovY, aspect, zNear ) );
 	}
 }

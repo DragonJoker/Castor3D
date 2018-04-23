@@ -179,7 +179,7 @@ namespace castor3d
 			catch ( std::exception & exc )
 			{
 				unit.reset();
-				Logger::logWarning( StringStream() << cuT( "Error encountered while loading texture file " ) << path << cuT( ":\n" ) << exc.what() );
+				Logger::logWarning( makeStringStream() << cuT( "Error encountered while loading texture file " ) << path << cuT( ":\n" ) << exc.what() );
 			}
 			catch ( ... )
 			{
@@ -189,7 +189,7 @@ namespace castor3d
 		}
 		else
 		{
-			Logger::logWarning( StringStream() << cuT( "Couldn't load texture file " ) << path << cuT( ":\nFile does not exist." ) );
+			Logger::logWarning( makeStringStream() << cuT( "Couldn't load texture file " ) << path << cuT( ":\nFile does not exist." ) );
 		}
 
 		return unit;

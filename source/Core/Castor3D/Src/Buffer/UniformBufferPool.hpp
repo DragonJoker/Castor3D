@@ -78,6 +78,13 @@ namespace castor3d
 		void cleanup();
 		/**
 		 *\~english
+		 *\brief		Uploads all GPU buffers to VRAM.
+		 *\~french
+		 *\brief		Met à jour tous les tampons GPU en VRAM.
+		 */
+		void upload()const;
+		/**
+		 *\~english
 		 *\brief		Retrieves a uniform buffer.
 		 *\param[in]	flags	The buffer memory flags.
 		 *\return		The uniform buffer.
@@ -103,6 +110,10 @@ namespace castor3d
 		typename BufferArray::iterator doFindBuffer( BufferArray & array );
 
 	private:
+		uint32_t m_maxCount{ 0u };
+		uint32_t m_maxSize{ 0u };
+		renderer::StagingBufferPtr m_stagingBuffer;
+		renderer::CommandBufferPtr m_uploadCommandBuffer;
 		std::map< uint32_t, BufferArray > m_buffers;
 	};
 }

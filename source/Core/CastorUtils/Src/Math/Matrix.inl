@@ -627,7 +627,7 @@ namespace castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline castor::String & operator<<( castor::String & p_strOut, castor::Matrix< T, Columns, Rows > const & p_matrix )
 	{
-		castor::StringStream streamOut;
+		castor::StringStream streamOut{ makeStringStream() };
 		streamOut.precision( 10 );
 
 		for ( uint32_t i = 0; i < Columns; i++ )

@@ -74,7 +74,7 @@ namespace castor
 	template< typename T, uint32_t TCount >
 	bool Point< T, TCount >::TextWriter::operator()( Point< T, TCount > const & object, TextFile & file )
 	{
-		StringStream streamWord;
+		StringStream streamWord{ makeStringStream() };
 
 		for ( uint32_t i = 0; i < TCount; ++i )
 		{
@@ -863,7 +863,7 @@ namespace castor
 template< typename T, uint32_t TCount >
 inline castor::String & operator<<( castor::String & out, castor::Point< T, TCount > const & in )
 {
-	castor::StringStream stream;
+	castor::StringStream stream{ makeStringStream() };
 	stream << in;
 	out += stream.str();
 	return out;

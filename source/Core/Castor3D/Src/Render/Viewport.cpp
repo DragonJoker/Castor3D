@@ -56,7 +56,8 @@ namespace castor3d
 
 	const std::array< String, size_t( ViewportType::eCount ) > Viewport::string_type = { cuT( "ortho" ), cuT( "perspective" ), cuT( "frustum" ) };
 
-	Viewport::Viewport( ViewportType type
+	Viewport::Viewport( Engine const & engine
+		, ViewportType type
 		, castor::Angle const & fovY
 		, real aspect
 		, real left
@@ -65,7 +66,8 @@ namespace castor3d
 		, real top
 		, real near
 		, real far )
-		: m_type{ type }
+		: m_engine{ engine }
+		, m_type{ type }
 		, m_size{}
 		, m_modified{ true }
 		, m_fovY{ m_modified, fovY }
@@ -85,8 +87,8 @@ namespace castor3d
 		}
 	}
 
-	Viewport::Viewport()
-		: Viewport{ ViewportType::eOrtho, Angle{}, 1, 0, 1, 0, 1, 0, 1 }
+	Viewport::Viewport( Engine const & engine )
+		: Viewport{ engine, ViewportType::eOrtho, Angle{}, 1, 0, 1, 0, 1, 0, 1 }
 	{
 	}
 
@@ -205,7 +207,7 @@ namespace castor3d
 		, real near
 		, real far )
 	{
-		m_projection = matrix::perspective( fovy, aspect, near, far );
+		m_projection = m_engine.getRenderSystem()->getPerspective( fovy.radians(), aspect, near, far );
 	}
 
 	void Viewport::doComputeFrustum( real left
@@ -215,15 +217,7 @@ namespace castor3d
 		, real near
 		, real far )
 	{
-		// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/glFrustum.xml)
-		m_projection.initialise();
-		m_projection[0][0] = real( ( 2 * near ) / ( right - left ) );
-		m_projection[1][1] = real( ( 2 * near ) / ( top - bottom ) );
-		m_projection[2][0] = real( ( right + left ) / ( right - left ) );
-		m_projection[2][1] = real( ( top + bottom ) / ( top - bottom ) );
-		m_projection[2][2] = real( -( far + near ) / ( far - near ) );
-		m_projection[2][3] = real( -1 );
-		m_projection[3][2] = real( -( 2 * far * near ) / ( far - near ) );
+		m_projection = m_engine.getRenderSystem()->getFrustum( left, right, bottom, top, near, far );
 	}
 
 	void Viewport::doComputeOrtho( real left
@@ -233,14 +227,7 @@ namespace castor3d
 		, real near
 		, real far )
 	{
-		// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/glOrtho.xml)
-		m_projection.setIdentity();
-		m_projection[0][0] = real( 2 / ( right - left ) );
-		m_projection[1][1] = real( 2 / ( top - bottom ) );
-		m_projection[2][2] = real( -2 / ( far - near ) );
-		m_projection[3][0] = real( -( right + left ) / ( right - left ) );
-		m_projection[3][1] = real( -( top + bottom ) / ( top - bottom ) );
-		m_projection[3][2] = real( -( far + near ) / ( far - near ) );
+		m_projection = m_engine.getRenderSystem()->getOrtho( left, right, bottom, top, near, far );
 	}
 
 	void Viewport::doComputeLookAt( Point3r const & eye

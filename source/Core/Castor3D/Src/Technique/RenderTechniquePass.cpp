@@ -169,6 +169,8 @@ namespace castor3d
 			, shadowMaps
 			, jitter
 			, info );
+		doUpdateUbos( *m_camera
+			, jitter );
 	}
 
 	void RenderTechniquePass::doUpdateNodes( SceneCulledRenderNodes & nodes
@@ -184,12 +186,6 @@ namespace castor3d
 			|| !nodes.morphingNodes.backCulled.empty()
 			|| !nodes.billboardNodes.backCulled.empty() )
 		{
-			auto jitterProjSpace = jitter * 2.0_r;
-			jitterProjSpace[0] /= camera.getWidth();
-			jitterProjSpace[1] /= camera.getHeight();
-			m_matrixUbo.update( camera.getView()
-				, camera.getViewport().getProjection()
-				, jitterProjSpace );
 			RenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled, camera, shadowMaps );
 			RenderPass::doUpdate( nodes.staticNodes.frontCulled, camera, shadowMaps );
 			RenderPass::doUpdate( nodes.skinnedNodes.frontCulled, camera, shadowMaps );

@@ -62,9 +62,11 @@ namespace castor3d
 
 		renderPass.attachments.resize( gpResult.getViews().size() );
 		renderPass.attachments[0].format = gpResult.getViews()[0]->getFormat();
-		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
+		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
 		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilLoadOp = renderer::isDepthStencilFormat( renderPass.attachments[0].format )
+			? renderer::AttachmentLoadOp::eClear
+			: renderer::AttachmentLoadOp::eDontCare;
 		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
 		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
@@ -73,7 +75,7 @@ namespace castor3d
 		for ( size_t i = 1u; i < gpResult.getViews().size(); ++i )
 		{
 			renderPass.attachments[i].format = gpResult.getViews()[i]->getFormat();
-			renderPass.attachments[i].loadOp = renderer::AttachmentLoadOp::eDontCare;
+			renderPass.attachments[i].loadOp = renderer::AttachmentLoadOp::eClear;
 			renderPass.attachments[i].storeOp = renderer::AttachmentStoreOp::eStore;
 			renderPass.attachments[i].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 			renderPass.attachments[i].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
@@ -967,11 +969,10 @@ namespace castor3d
 		{
 			renderer::RasterisationState rsState;
 			rsState.cullMode = renderer::CullModeFlag::eFront;
-			renderer::DepthStencilState dsState;
-			auto & pipeline = *m_backPipelines.emplace( flags
+			auto & pipeline = *m_frontPipelines.emplace( flags
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
-					, std::move( dsState )
-					, std::move( rsState )
+					, renderer::DepthStencilState{ 0u, true, true }
+					, renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eFront }
 					, createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 5u )
 					, renderer::MultisampleState{}
 					, program
@@ -1009,13 +1010,10 @@ namespace castor3d
 
 		if ( it == m_backPipelines.end() )
 		{
-			renderer::RasterisationState rsState;
-			rsState.cullMode = renderer::CullModeFlag::eBack;
-			renderer::DepthStencilState dsState;
 			auto & pipeline = *m_backPipelines.emplace( flags
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
-					, std::move( dsState )
-					, std::move( rsState )
+					, renderer::DepthStencilState{ 0u, true, true }
+					, renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eBack }
 					, createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 5u )
 					, renderer::MultisampleState{}
 					, program

@@ -16,7 +16,7 @@ namespace castor3d
 	{
 		String getName( TextureChannel channel )
 		{
-			StringStream result;
+			StringStream result( makeStringStream() );
 
 			switch ( channel )
 			{
@@ -229,7 +229,7 @@ namespace castor3d
 	void Pass::destroyTextureUnit( uint32_t index )
 	{
 		REQUIRE( index < m_textureUnits.size() );
-		Logger::logInfo( StringStream() << cuT( "Destroying TextureUnit " ) << index );
+		Logger::logInfo( makeStringStream() << cuT( "Destroying TextureUnit " ) << index );
 		auto it = m_textureUnits.begin();
 		m_textureUnits.erase( it + index );
 		doUpdateFlags();
@@ -500,7 +500,7 @@ namespace castor3d
 
 		if ( opacityMap )
 		{
-			Logger::logDebug( StringStream() << cuT( "	Opacity map at index " ) << index );
+			Logger::logDebug( makeStringStream() << cuT( "	Opacity map at index " ) << index );
 			++index;
 			addFlag( m_textureFlags, TextureChannel::eOpacity );
 

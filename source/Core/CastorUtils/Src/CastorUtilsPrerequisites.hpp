@@ -11,11 +11,13 @@ See LICENSE file in root folder
 #include <functional>
 #include <iostream>
 #include <list>
+#include <locale>
 #include <map>
 #include <map>
 #include <memory>
 #include <regex>
 #include <set>
+#include <sstream>
 #include <string>
 #include <deque>
 #include <sstream>
@@ -570,6 +572,14 @@ namespace castor
 	template< typename Object, typename MemoryAllocator = NonAlignedMemoryAllocator > class FixedGrowingSizeMemoryData;
 	template< typename Object > class FixedSizeMarkedMemoryData;
 	template< typename Object > class FixedGrowingSizeMarkedMemoryData;
+
+	inline StringStream makeStringStream()
+	{
+		static std::locale const loc{ "C" };
+		StringStream result;
+		result.imbue( loc );
+		return result;
+	}
 }
 
 constexpr castor::real operator "" _r( long double value )

@@ -83,7 +83,7 @@ namespace castor3d
 		   , std::bind( OverlayCleaner{ *this }, std::placeholders::_1 )
 		   , std::move( merge ) )
 		, m_overlayCountPerLevel{ 1000, 0 }
-		, m_viewport{}
+		, m_viewport{ engine }
 	{
 		m_viewport.setOrtho( 0, 1, 1, 0, 0, 1000 );
 	}

@@ -87,7 +87,14 @@ namespace castor
 		std::string time = std::ctime( &endTime );
 		string::replace( time, "\n", std::string{} );
 		String timeStamp = string::stringCast< xchar >( time );
-		StringStream logs[size_t( LogType::eCount )];
+		StringStream logs[size_t( LogType::eCount )]
+		{
+			makeStringStream(),
+			makeStringStream(),
+			makeStringStream(),
+			makeStringStream(),
+			makeStringStream(),
+		};
 
 		try
 		{

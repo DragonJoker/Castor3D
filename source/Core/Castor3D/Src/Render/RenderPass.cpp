@@ -1405,6 +1405,22 @@ namespace castor3d
 			, info );
 	}
 
+	void RenderPass::doUpdateUbos( Camera const & camera
+		, Point2r const & jitter )
+	{
+		auto jitterProjSpace = jitter * 2.0_r;
+		jitterProjSpace[0] /= camera.getWidth();
+		jitterProjSpace[1] /= camera.getHeight();
+		m_matrixUbo.update( camera.getView()
+			, camera.getViewport().getProjection()
+			, jitterProjSpace );
+		m_modelUboPool.upload();
+		m_modelMatrixUboPool.upload();
+		m_billboardUboPool.upload();
+		m_skinningUboPool.upload();
+		m_morphingUboPool.upload();
+	}
+
 	renderer::DescriptorSetLayoutBindingArray RenderPass::doCreateUboBindings( PipelineFlags const & flags )const
 	{
 		renderer::DescriptorSetLayoutBindingArray uboBindings;

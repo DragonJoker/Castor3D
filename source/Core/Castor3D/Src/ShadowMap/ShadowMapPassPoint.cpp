@@ -43,6 +43,7 @@ namespace castor3d
 		, Scene & scene
 		, ShadowMap const & shadowMap )
 		: ShadowMapPass{ engine, scene, shadowMap }
+		, m_viewport{ engine }
 	{
 		m_renderQueue.initialise( scene );
 	}
@@ -93,7 +94,7 @@ namespace castor3d
 		real const aspect = real( size.getWidth() ) / size.getHeight();
 		real const near = 1.0_r;
 		real const far = 2000.0_r;
-		matrix::perspective( m_projection, 90.0_degrees, aspect, near, far );
+		m_projection = getEngine()->getRenderSystem()->getPerspective( ( 90.0_degrees ).radians(), aspect, near, far );
 
 		// Create the render pass.
 		renderer::RenderPassCreateInfo renderPass;

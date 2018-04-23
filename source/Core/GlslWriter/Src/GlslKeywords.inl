@@ -398,7 +398,7 @@ namespace glsl
 
 		castor::String getFragData( uint32_t index )const override
 		{
-			castor::StringStream stream;
+			castor::StringStream stream{ makeStringStream() };
 			stream << cuT( "gl_FragData[" ) << index << cuT( "]" );
 			return stream.str();
 		}
@@ -488,7 +488,7 @@ namespace glsl
 
 		castor::String getFragData( uint32_t index )const override
 		{
-			castor::StringStream stream;
+			castor::StringStream stream{ makeStringStream() };
 			stream << cuT( "gl_FragData[" ) << index << cuT( "]" );
 			return stream.str();
 		}
@@ -869,7 +869,7 @@ namespace glsl
 				{ Ubo::Layout::ePacked, cuT( "packed" ) },
 			};
 
-			castor::StringStream result;
+			castor::StringStream result{ makeStringStream() };
 
 			if ( !m_uboLayout.empty() )
 			{

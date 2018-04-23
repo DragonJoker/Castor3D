@@ -221,9 +221,7 @@ namespace castor3d
 		{
 			auto & indexBuffer = getOwner()->getIndexBuffer();
 
-			if ( uint32_t * buffer = reinterpret_cast< uint32_t * >( indexBuffer.getBuffer().lock( 0
-				, uint32_t( count * sizeof( uint32_t ) )
-				, renderer::MemoryMapFlag::eRead | renderer::MemoryMapFlag::eWrite ) ) )
+			if ( auto * buffer = indexBuffer.lock( 0, count, renderer::MemoryMapFlag::eWrite ) )
 			{
 				for ( auto const & face : m_faces )
 				{
@@ -235,8 +233,8 @@ namespace castor3d
 					++buffer;
 				}
 
-				indexBuffer.getBuffer().flush( 0u, uint32_t( count * sizeof( uint32_t ) ) );
-				indexBuffer.getBuffer().unlock();
+				indexBuffer.flush( 0u, count );
+				indexBuffer.unlock();
 			}
 
 			//m_faces.clear();

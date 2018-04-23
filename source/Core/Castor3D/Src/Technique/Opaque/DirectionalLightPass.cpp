@@ -156,7 +156,7 @@ namespace castor3d
 			renderPass,
 			renderer::VertexInputState::create( vertexLayout ),
 			renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleList },
-			renderer::RasterisationState{},
+			renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eNone },
 			renderer::MultisampleState{},
 			std::move( blstate ),
 			{ renderer::DynamicState::eViewport, renderer::DynamicState::eScissor },
@@ -168,11 +168,10 @@ namespace castor3d
 	{
 		auto & directionalLight = *light.getDirectionalLight();
 		auto & data = m_lightPass.m_ubo->getData( 0u );
-		data.base.colour = light.getColour();
-		data.base.intensity = light.getIntensity();
-		data.base.farPlane = light.getFarPlane();
-		data.direction = directionalLight.getDirection();
-		data.transform = directionalLight.getLightSpaceTransform();
+		data.base.colourIndex = renderer::Vec4{ light.getColour()[0], light.getColour()[1], light.getColour()[2], 0.0f };
+		data.base.intensityFarPlane = renderer::Vec4{ light.getIntensity()[0], light.getIntensity()[1], light.getFarPlane(), 0.0f };
+		data.direction = renderer::Vec4{ directionalLight.getDirection()[0], directionalLight.getDirection()[1], directionalLight.getDirection()[2], 0.0f };
+		data.transform = convert( directionalLight.getLightSpaceTransform() );
 		m_lightPass.m_ubo->upload();
 	}
 
@@ -196,9 +195,10 @@ namespace castor3d
 			, 1u
 			, renderer::BufferTarget::eTransferDst
 			, renderer::MemoryPropertyFlag::eHostVisible ) }
+		, m_viewport{ engine }
 	{
 		m_baseUbo = &m_ubo->getUbo();
-		m_viewport.setOrtho( 0, 1, 0, 1, 0, 1 );
+		m_viewport.setOrtho( -1, 1, -1, 1, -1, 1 );
 	}
 
 	void DirectionalLightPass::initialise( Scene const & scene
@@ -207,12 +207,12 @@ namespace castor3d
 	{
 		float data[] =
 		{
-			0, 0,
-			1, 1,
-			0, 1,
-			0, 0,
-			1, 0,
-			1, 1,
+			-1.0f, -1.0f,
+			-1.0f, +1.0f,
+			+1.0f, -1.0f,
+			+1.0f, -1.0f,
+			-1.0f, +1.0f,
+			+1.0f, +1.0f,
 		};
 
 		auto & renderSystem = *m_engine.getRenderSystem();
@@ -259,6 +259,7 @@ namespace castor3d
 	{
 		m_viewport.resize( size );
 		m_matrixUbo.update( camera.getView(), m_viewport.getProjection() );
+		m_program->bind( light );
 	}
 
 	glsl::Shader DirectionalLightPass::doGetVertexShaderSource( SceneFlags const & sceneFlags )const
@@ -269,14 +270,14 @@ namespace castor3d
 		// Shader inputs
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
 		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-		auto vertex = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
+		auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
 
 		// Shader outputs
 		auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
-			gl_Position = c3d_projection * vec4( vertex, 0.0, 1.0 );
+			gl_Position = c3d_projection * vec4( position, 0.0, 1.0 );
 		} );
 
 		return writer.finalise();

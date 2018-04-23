@@ -60,7 +60,7 @@ namespace castor
 		if ( Collection< Font, String >::has( p_name ) )
 		{
 			result = Collection< Font, String >::find( p_name );
-			Logger::logWarning( StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << cuT( "Font: " ) << p_name );
+			Logger::logWarning( makeStringStream() << WARNING_CACHE_DUPLICATE_OBJECT << cuT( "Font: " ) << p_name );
 		}
 		else
 		{
@@ -69,7 +69,7 @@ namespace castor
 			if ( File::fileExists( p_path ) )
 			{
 				result = std::make_shared< Font >( p_name, p_height, p_path );
-				Logger::logDebug( StringStream() << INFO_CACHE_CREATED_OBJECT << cuT( "Font: " ) << p_name );
+				Logger::logDebug( makeStringStream() << INFO_CACHE_CREATED_OBJECT << cuT( "Font: " ) << p_name );
 				Collection< Font, String >::insert( p_name, result );
 
 				if ( m_paths.find( name ) == m_paths.end() )
@@ -104,7 +104,7 @@ namespace castor
 		if ( Collection< Font, String >::has( p_name ) )
 		{
 			result = Collection< Font, String >::find( p_name );
-			Logger::logWarning( StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << cuT( "Font: " ) << p_name );
+			Logger::logWarning( makeStringStream() << WARNING_CACHE_DUPLICATE_OBJECT << cuT( "Font: " ) << p_name );
 		}
 		else
 		{

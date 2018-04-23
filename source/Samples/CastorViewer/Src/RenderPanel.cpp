@@ -949,11 +949,11 @@ namespace CastorViewer
 
 				if ( m_mouseLeftDown )
 				{
-					m_currentState->addAngularVelocity( Point2r{ deltaY, deltaX } );
+					m_currentState->addAngularVelocity( Point2r{ -deltaY, deltaX } );
 				}
 				else if ( m_mouseRightDown )
 				{
-					m_currentState->addScalarVelocity( Point3r{ deltaX, deltaY, 0.0_r } );
+					m_currentState->addScalarVelocity( Point3r{ deltaX, -deltaY, 0.0_r } );
 				}
 			}
 		}

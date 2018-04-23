@@ -23,11 +23,11 @@
 
 namespace
 {
-	void parseError( castor::String const & p_error )
+	void parseError( castor::String const & error )
 	{
-		castor::StringStream strError;
-		strError << cuT( "Error, : " ) << p_error;
-		castor::Logger::logError( strError.str() );
+		castor::StringStream stream{ castor::makeStringStream() };
+		stream << cuT( "Error, : " ) << error;
+		castor::Logger::logError( stream.str() );
 	}
 
 	void addParser( castor::FileParser::AttributeParsersBySection & parsers

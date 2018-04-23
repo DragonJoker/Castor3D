@@ -126,7 +126,7 @@ namespace castor3d
 			rsState.cullMode = renderer::CullModeFlag::eFront;
 			renderer::DepthStencilState dsState;
 			auto blState = renderer::ColourBlendState::createDefault();
-			auto & pipeline = *m_backPipelines.emplace( flags
+			auto & pipeline = *m_frontPipelines.emplace( flags
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
 					, std::move( dsState )
 					, std::move( rsState )

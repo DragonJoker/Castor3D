@@ -238,8 +238,8 @@ namespace castor3d
 			timer.get().reset();
 		}
 
-		m_cpuValue->setCaption( StringStream{} << cpu );
-		m_gpuValue->setCaption( StringStream{} << gpu );
+		m_cpuValue->setCaption( makeStringStream() << cpu );
+		m_gpuValue->setCaption( makeStringStream() << gpu );
 		return gpu;
 	}
 

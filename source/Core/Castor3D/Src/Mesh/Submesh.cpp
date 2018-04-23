@@ -242,7 +242,7 @@ namespace castor3d
 				component.second->upload();
 			}
 
-			m_vertexLayout = renderer::makeLayout< InstantiationData >( 0u, renderer::VertexInputRate::eVertex );
+			m_vertexLayout = renderer::makeLayout< InterleavedVertex >( 0u, renderer::VertexInputRate::eVertex );
 			m_vertexLayout->createAttribute( Position, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, pos ) );
 			m_vertexLayout->createAttribute( Normal, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, nml ) );
 			m_vertexLayout->createAttribute( Tangent, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, tan ) );

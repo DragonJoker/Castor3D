@@ -1,4 +1,4 @@
-﻿#include "Engine.hpp"
+#include "Engine.hpp"
 #include "Overlay/PanelOverlay.hpp"
 #include "Overlay/TextOverlay.hpp"
 #include "Render/RenderPassTimer.hpp"
@@ -88,7 +88,7 @@ namespace castor3d
 	template< typename T >
 	void DebugOverlays::DebugPanel< T >::update()
 	{
-		m_value->setCaption( StringStream{} << std::setprecision( 4 ) << m_v );
+		m_value->setCaption( castor::makeStringStream() << std::setprecision( 4 ) << m_v );
 	}
 
 	//*********************************************************************************************

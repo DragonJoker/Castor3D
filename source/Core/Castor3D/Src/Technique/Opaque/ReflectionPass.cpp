@@ -50,14 +50,14 @@ namespace castor3d
 
 		renderer::VertexBufferBasePtr doCreateVbo( Engine & engine )
 		{
-			float data[] =
+			float data[]
 			{
-				-1, -1, 0, 0,
-				+1, +1, 1, 1,
-				-1, +1, 0, 1,
-				-1, -1, 0, 0,
-				+1, -1, 1, 0,
-				+1, +1, 1, 1
+				-1, -1, 0, engine.isTopDown() ? 0.0f : 1.0f,
+				+1, +1, 1, engine.isTopDown() ? 1.0f : 0.0f,
+				-1, +1, 0, engine.isTopDown() ? 1.0f : 0.0f,
+				-1, -1, 0, engine.isTopDown() ? 0.0f : 1.0f,
+				+1, -1, 1, engine.isTopDown() ? 0.0f : 1.0f,
+				+1, +1, 1, engine.isTopDown() ? 1.0f : 0.0f
 			};
 
 			auto vertexBuffer = std::make_unique< renderer::VertexBufferBase >( *engine.getRenderSystem()->getCurrentDevice()
@@ -135,16 +135,20 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 			{
+				auto lightResultTexcoord = writer.declLocale( cuT( "lightResultTexcoord" )
+					, vtx_texture );
+				auto texcoord = writer.declLocale( cuT( "texcoord" )
+					, lightResultTexcoord );
 				auto data1 = writer.declLocale( cuT( "data1" )
-					, texture( c3d_mapData1, vtx_texture ) );
+					, texture( c3d_mapData1, texcoord ) );
 				auto data2 = writer.declLocale( cuT( "data2" )
-					, texture( c3d_mapData2, vtx_texture ) );
+					, texture( c3d_mapData2, texcoord ) );
 				auto data3 = writer.declLocale( cuT( "data3" )
-					, texture( c3d_mapData3, vtx_texture ) );
+					, texture( c3d_mapData3, texcoord ) );
 				auto data4 = writer.declLocale( cuT( "data4" )
-					, texture( c3d_mapData4, vtx_texture ) );
+					, texture( c3d_mapData4, texcoord ) );
 				auto data5 = writer.declLocale( cuT( "data5" )
-					, texture( c3d_mapData5, vtx_texture ) );
+					, texture( c3d_mapData5, texcoord ) );
 				auto flags = writer.declLocale( cuT( "flags" )
 					, data1.w() );
 				auto envMapIndex = writer.declLocale( cuT( "envMapIndex" )
@@ -155,6 +159,7 @@ namespace castor3d
 					, 0_i );
 				auto refraction = writer.declLocale( cuT( "refraction" )
 					, 0_i );
+
 				decodeMaterial( writer
 					, flags
 					, receiver
@@ -166,13 +171,13 @@ namespace castor3d
 				auto material = writer.declLocale( cuT( "material" )
 					, materials.getMaterial( materialId ) );
 				auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
-					, texture( c3d_mapLightDiffuse, vtx_texture ).xyz() );
+					, texture( c3d_mapLightDiffuse, lightResultTexcoord ).xyz() );
 				auto lightSpecular = writer.declLocale( cuT( "lightSpecular" )
-					, texture( c3d_mapLightSpecular, vtx_texture ).xyz() );
+					, texture( c3d_mapLightSpecular, lightResultTexcoord ).xyz() );
 				auto depth = writer.declLocale( cuT( "depth" )
-					, texture( c3d_mapDepth, vtx_texture, 0.0_f ).x() );
+					, texture( c3d_mapDepth, texcoord, 0.0_f ).x() );
 				auto position = writer.declLocale( cuT( "position" )
-					, utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ) );
+					, utils.calcWSPosition( texcoord, depth, c3d_mtxInvViewProj ) );
 				auto normal = writer.declLocale( cuT( "normal" )
 					, normalize( data1.xyz() ) );
 				auto diffuse = writer.declLocale( cuT( "diffuse" )
@@ -188,7 +193,7 @@ namespace castor3d
 
 				if ( hasSsao )
 				{
-					occlusion *= texture( c3d_mapSsao, vtx_texture ).r();
+					occlusion *= texture( c3d_mapSsao, texcoord ).r();
 				}
 
 				IF( writer, envMapIndex > 0_i && writer.paren( reflection != 0_i || refraction != 0_i ) )
@@ -238,8 +243,8 @@ namespace castor3d
 
 				if ( fogType != FogType::eDisabled )
 				{
-					position = utils.calcVSPosition( vtx_texture
-							, texture( c3d_mapDepth, vtx_texture ).r()
+					position = utils.calcVSPosition( texcoord
+							, texture( c3d_mapDepth, texcoord ).r()
 							, c3d_mtxInvProj );
 					fog.applyFog( pxl_fragColor, length( position ), position.z() );
 				}
@@ -290,8 +295,12 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 			{
+				auto lightResultTexcoord = writer.declLocale( cuT( "lightResultTexcoord" )
+					, vtx_texture );
+				auto texcoord = writer.declLocale( cuT( "texcoord" )
+					, writer.adjustTexCoords( lightResultTexcoord ) );
 				auto data1 = writer.declLocale( cuT( "data1" )
-					, texture( c3d_mapData1, vtx_texture ) );
+					, texture( c3d_mapData1, texcoord ) );
 				auto flags = writer.declLocale( cuT( "flags" )
 					, data1.w() );
 				auto envMapIndex = writer.declLocale( cuT( "envMapIndex" )
@@ -310,17 +319,17 @@ namespace castor3d
 					, envMapIndex );
 
 				auto data5 = writer.declLocale( cuT( "data5" )
-					, texture( c3d_mapData5, vtx_texture ) );
+					, texture( c3d_mapData5, texcoord ) );
 				auto materialId = writer.declLocale( cuT( "materialId" )
 					, writer.cast< Int >( data5.z() ) );
 				auto material = writer.declLocale( cuT( "material" )
 					, materials.getMaterial( materialId ) );
 				auto data2 = writer.declLocale( cuT( "data2" )
-					, texture( c3d_mapData2, vtx_texture ) );
+					, texture( c3d_mapData2, texcoord ) );
 				auto data3 = writer.declLocale( cuT( "data3" )
-					, texture( c3d_mapData3, vtx_texture ) );
+					, texture( c3d_mapData3, texcoord ) );
 				auto data4 = writer.declLocale( cuT( "data4" )
-					, texture( c3d_mapData4, vtx_texture ) );
+					, texture( c3d_mapData4, texcoord ) );
 				auto normal = writer.declLocale( cuT( "normal" )
 					, data1.xyz() );
 				auto albedo = writer.declLocale( cuT( "albedo" )
@@ -334,23 +343,23 @@ namespace castor3d
 				auto emissive = writer.declLocale( cuT( "emissive" )
 					, data4.xyz() );
 				auto depth = writer.declLocale( cuT( "depth" )
-					, texture( c3d_mapDepth, vtx_texture, 0.0_f ).x() );
+					, texture( c3d_mapDepth, texcoord, 0.0_f ).x() );
 				auto position = writer.declLocale( cuT( "position" )
-					, utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ) );
+					, utils.calcWSPosition( texcoord, depth, c3d_mtxInvViewProj ) );
 				auto incident = writer.declLocale( cuT( "incident" )
 					, normalize( position - c3d_cameraPosition ) );
 				auto ambient = writer.declLocale( cuT( "ambient" )
 					, c3d_ambientLight.xyz() );
 				auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
-					, texture( c3d_mapLightDiffuse, vtx_texture ).xyz() );
+					, texture( c3d_mapLightDiffuse, lightResultTexcoord ).xyz() );
 				auto lightSpecular = writer.declLocale( cuT( "lightSpecular" )
-					, texture( c3d_mapLightSpecular, vtx_texture ).xyz() );
+					, texture( c3d_mapLightSpecular, lightResultTexcoord ).xyz() );
 				auto ratio = writer.declLocale( cuT( "ratio" )
 					, material.m_refractionRatio() );
 
 				if ( hasSsao )
 				{
-					occlusion *= texture( c3d_mapSsao, vtx_texture ).r();
+					occlusion *= texture( c3d_mapSsao, texcoord ).r();
 				}
 
 				IF( writer, envMapIndex > 0_i )
@@ -542,8 +551,8 @@ namespace castor3d
 
 				if ( fogType != FogType::eDisabled )
 				{
-					position = utils.calcVSPosition( vtx_texture
-							, texture( c3d_mapDepth, vtx_texture ).r()
+					position = utils.calcVSPosition( texcoord
+							, texture( c3d_mapDepth, texcoord ).r()
 							, c3d_mtxInvProj );
 					fog.applyFog( pxl_fragColor, length( position ), position.z() );
 				}
@@ -594,8 +603,12 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 			{
+				auto lightResultTexcoord = writer.declLocale( cuT( "lightResultTexcoord" )
+					, vtx_texture );
+				auto texcoord = writer.declLocale( cuT( "texcoord" )
+					, writer.adjustTexCoords( lightResultTexcoord ) );
 				auto data1 = writer.declLocale( cuT( "data1" )
-					, texture( c3d_mapData1, vtx_texture ) );
+					, texture( c3d_mapData1, texcoord ) );
 				auto flags = writer.declLocale( cuT( "flags" )
 					, data1.w() );
 				auto envMapIndex = writer.declLocale( cuT( "envMapIndex" )
@@ -614,17 +627,17 @@ namespace castor3d
 					, envMapIndex );
 
 				auto data5 = writer.declLocale( cuT( "data5" )
-					, texture( c3d_mapData5, vtx_texture ) );
+					, texture( c3d_mapData5, texcoord ) );
 				auto materialId = writer.declLocale( cuT( "materialId" )
 					, writer.cast< Int >( data5.z() ) );
 				auto material = writer.declLocale( cuT( "material" )
 					, materials.getMaterial( materialId ) );
 				auto data2 = writer.declLocale( cuT( "data2" )
-					, texture( c3d_mapData2, vtx_texture ) );
+					, texture( c3d_mapData2, texcoord ) );
 				auto data3 = writer.declLocale( cuT( "data3" )
-					, texture( c3d_mapData3, vtx_texture ) );
+					, texture( c3d_mapData3, texcoord ) );
 				auto data4 = writer.declLocale( cuT( "data4" )
-					, texture( c3d_mapData4, vtx_texture ) );
+					, texture( c3d_mapData4, texcoord ) );
 				auto normal = writer.declLocale( cuT( "normal" )
 					, data1.xyz() );
 				auto diffuse = writer.declLocale( cuT( "diffuse" )
@@ -638,23 +651,23 @@ namespace castor3d
 				auto emissive = writer.declLocale( cuT( "emissive" )
 					, data4.xyz() );
 				auto depth = writer.declLocale( cuT( "depth" )
-					, texture( c3d_mapDepth, vtx_texture, 0.0_f ).x() );
+					, texture( c3d_mapDepth, texcoord, 0.0_f ).x() );
 				auto position = writer.declLocale( cuT( "position" )
-					, utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ) );
+					, utils.calcWSPosition( texcoord, depth, c3d_mtxInvViewProj ) );
 				auto incident = writer.declLocale( cuT( "incident" )
 					, normalize( position - c3d_cameraPosition ) );
 				auto ambient = writer.declLocale( cuT( "ambient" )
 					, c3d_ambientLight.xyz() );
 				auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
-					, texture( c3d_mapLightDiffuse, vtx_texture ).xyz() );
+					, texture( c3d_mapLightDiffuse, lightResultTexcoord ).xyz() );
 				auto lightSpecular = writer.declLocale( cuT( "lightSpecular" )
-					, texture( c3d_mapLightSpecular, vtx_texture ).xyz() );
+					, texture( c3d_mapLightSpecular, lightResultTexcoord ).xyz() );
 				auto ratio = writer.declLocale( cuT( "ratio" )
 					, material.m_refractionRatio() );
 
 				if ( hasSsao )
 				{
-					occlusion *= texture( c3d_mapSsao, vtx_texture ).r();
+					occlusion *= texture( c3d_mapSsao, texcoord ).r();
 				}
 
 				IF( writer, envMapIndex > 0_i )
@@ -859,8 +872,8 @@ namespace castor3d
 
 				if ( fogType != FogType::eDisabled )
 				{
-					position = utils.calcVSPosition( vtx_texture
-							, texture( c3d_mapDepth, vtx_texture ).r()
+					position = utils.calcVSPosition( texcoord
+							, texture( c3d_mapDepth, texcoord ).r()
 							, c3d_mtxInvProj );
 					fog.applyFog( pxl_fragColor, length( position ), position.z() );
 				}
@@ -1270,6 +1283,7 @@ namespace castor3d
 		}
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Reflection" ), cuT( "Reflection" ) ) }
 		, m_ssaoEnabled{ config.m_enabled }
+		, m_viewport{ engine }
 	{
 		m_viewport.setOrtho( 0, 1, 0, 1, 0, 1 );
 		m_viewport.resize( { m_size.width, m_size.height } );

@@ -146,7 +146,7 @@ namespace castor3d
 	{
 		auto & cache = scene.getLightCache();
 		bool first{ true };
-		renderer::Semaphore const * semaphore = &toWait;
+		renderer::Semaphore const * result = &toWait;
 
 		if ( !cache.isEmpty() )
 		{
@@ -156,28 +156,28 @@ namespace castor3d
 				, camera
 				, LightType::eDirectional
 				, gp
-				, semaphore
+				, result
 				, first
 				, info );
 			doRenderLights( scene
 				, camera
 				, LightType::ePoint
 				, gp
-				, semaphore
+				, result
 				, first
 				, info );
 			doRenderLights( scene
 				, camera
 				, LightType::eSpot
 				, gp
-				, semaphore
+				, result
 				, first
 				, info );
 			first = false;
 			m_timer->stop();
 		}
 
-		return semaphore == &toWait ? nullptr : semaphore;
+		return result;
 	}
 
 	void LightingPass::doRenderLights( Scene const & scene

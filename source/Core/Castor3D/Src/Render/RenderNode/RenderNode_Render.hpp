@@ -24,7 +24,7 @@ namespace castor3d
 	inline void doUpdateNode( NodeType & node )
 	{
 		node.modelUbo.getData().shadowReceiver = node.instance.isShadowReceiver();
-		node.modelUbo.getData().materialIndex = node.passNode.pass.getId();
+		node.modelUbo.getData().materialIndex = node.passNode.pass.getId() - 1u;
 		doUpdateNodeModelMatrix( node );
 	}
 }

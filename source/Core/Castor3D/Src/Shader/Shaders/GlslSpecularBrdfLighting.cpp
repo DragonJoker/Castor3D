@@ -245,7 +245,7 @@ namespace castor3d
 									, light.m_position().xyz()
 									, fragmentIn.m_normal
 									, light.m_lightBase().m_farPlane()
-									, light.m_index() ) );
+									, light.m_lightBase().m_index() ) );
 						}
 						FI;
 					}
@@ -319,7 +319,7 @@ namespace castor3d
 										, fragmentIn.m_vertex
 										, -lightToVertex
 										, fragmentIn.m_normal
-										, light.m_index() ) );
+										, light.m_lightBase().m_index() ) );
 							}
 							FI;
 						}

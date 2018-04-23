@@ -92,7 +92,8 @@ namespace castor3d
 		 *\param[in]	near	Position du plan proche.
 		 *\param[in]	far		Position du plan éloigné.
 		 */
-		C3D_API Viewport( ViewportType type
+		C3D_API Viewport( Engine const & engine
+			, ViewportType type
 			, castor::Angle const & fovy
 			, real aspect
 			, real left
@@ -111,7 +112,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API explicit Viewport();
+		C3D_API explicit Viewport( Engine const & engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -206,295 +207,163 @@ namespace castor3d
 		 */
 		C3D_API void resize( const castor::Size & value );
 		/**
-		 *\~english
-		 *\return		The viewport render size
-		 *\~french
-		 *\return		Les dimensions de rendu du viewport
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline const castor::Size & getSize()const
 		{
 			return m_size;
 		}
-		/**
-		 *\~english
-		 *\return		The viewport render position.
-		 *\~french
-		 *\return		La position de rendu du viewport.
-		 */
+
 		inline const castor::Position & getPosition()const
 		{
 			return m_position;
 		}
-		/**
-		 *\~english
-		 *\return		The viewport projection type
-		 *\~french
-		 *\return		Le type de projection du viewport
-		 */
+
 		inline ViewportType getType()const
 		{
 			return m_type;
 		}
-		/**
-		 *\~english
-		 *\return		The aspect ratio
-		 *\~french
-		 *\return		Le ratio d'aspect
-		 */
+
 		inline real getRatio()const
 		{
 			return m_ratio;
 		}
-		/**
-		 *\~english
-		 *\return		The near plane position
-		 *\~french
-		 *\return		La position du plan proche
-		 */
+
 		inline real getNear()const
 		{
 			return m_near.value();
 		}
-		/**
-		 *\~english
-		 *\return		The far plane position
-		 *\~french
-		 *\return		La position du plan lointain
-		 */
+
 		inline real getFar()const
 		{
 			return m_far.value();
 		}
-		/**
-		 *\~english
-		 *\return		The view vertical angle
-		 *\~french
-		 *\return		L'angle de vue vertical
-		 */
+
 		inline castor::Angle getFovY()const
 		{
 			return m_fovY.value();
 		}
-		/**
-		 *\~english
-		 *\return		The left plane position
-		 *\~french
-		 *\return		La position du plan gauche
-		 */
+
 		inline real getLeft()const
 		{
 			return m_left.value();
 		}
-		/**
-		 *\~english
-		 *\return		The right plane position
-		 *\~french
-		 *\return		La position du plan droit
-		 */
+
 		inline real getRight()const
 		{
 			return m_right.value();
 		}
-		/**
-		 *\~english
-		 *\return		The top plane position
-		 *\~french
-		 *\return		La position du plan haut
-		 */
+
 		inline real getTop()const
 		{
 			return m_top.value();
 		}
-		/**
-		 *\~english
-		 *\return		The bottom plane position
-		 *\~french
-		 *\return		La position du plan bas
-		 */
+
 		inline real getBottom()const
 		{
 			return m_bottom.value();
 		}
-		/**
-		 *\~english
-		 *\return		The viewport width
-		 *\~french
-		 *\return		La largeur du viewport
-		 */
+
 		inline uint32_t getWidth()const
 		{
 			return m_size.getWidth();
 		}
-		/**
-		 *\~english
-		 *\return		The viewport height
-		 *\~french
-		 *\return		La hauteur du viewport
-		 */
+
 		inline uint32_t getHeight()const
 		{
 			return m_size.getHeight();
 		}
-		/**
-		 *\~english
-		 *\return		The viewport modificiation status
-		 *\~french
-		 *\return		Le statut de modification du viewport
-		 */
+
 		inline bool isModified()const
 		{
 			return m_modified;
 		}
-		/**
-		 *\~english
-		 *\return		The projection matrix
-		 *\~french
-		 *\return		La matrice de projection
-		 */
+
 		inline castor::Matrix4x4r const & getProjection()const
 		{
 			return m_projection;
 		}
-		/**
-		*\~english
-		*\return		The internal viewport.
-		*\~french
-		*\return		Le viewport interne.
-		*/
+
 		inline renderer::Viewport const & getViewport()const
 		{
 			return m_viewport;
 		}
-		/**
-		*\~english
-		*\return		The internal scissor.
-		*\~french
-		*\return		Le scissor interne.
-		*/
+
 		inline renderer::Scissor const & getScissor()const
 		{
 			return m_scissor;
 		}
+
+		inline Engine const & getEngine()const
+		{
+			return m_engine;
+		}
+		/**@}*/
 		/**
-		 *\~english
-		 *\brief		Sets the viewport render position.
-		 *\param[in]	value	The new value
-		 *\~french
-		 *\brief		Définit la position de rendu du viewport.
-		 *\param[in]	value	La nouvelle valeur
-		 */
+		*\~english
+		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		*/
+		/**@{*/
 		inline void setPosition( const castor::Position & value )
 		{
 			m_position = value;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the viewport projection type
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le type de projection du viewport
-		 *\return		La valeur
-		 */
+
 		inline void updateType( ViewportType value )
 		{
 			m_type = value;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the aspect ratio
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le ratio d'aspect
-		 *\return		La valeur
-		 */
+
 		inline void updateRatio( real value )
 		{
 			m_ratio = value;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the near plane position
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la position du plan proche
-		 *\return		La valeur
-		 */
+
 		inline void updateNear( real value )
 		{
 			m_near = value;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the far plane position
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la position du plan lointain
-		 *\return		La valeur
-		 */
+
 		inline void updateFar( real value )
 		{
 			m_far = value;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the vertical view angle
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère l'angle de vue vertical
-		 *\return		La valeur
-		 */
+
 		inline void updateFovY( castor::Angle const & value )
 		{
 			m_fovY = value;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the left plane position
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la position du plan gauche
-		 *\return		La valeur
-		 */
+
 		inline void updateLeft( real value )
 		{
 			m_left = value;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the right plane position
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la position du plan droit
-		 *\return		La valeur
-		 */
+
 		inline void updateRight( real value )
 		{
 			m_right = value;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the top plane position
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la position du plan haut
-		 *\return		La valeur
-		 */
+
 		inline void updateTop( real value )
 		{
 			m_top = value;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the bottom plane position
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la position du plan bas
-		 *\return		La valeur
-		 */
+
 		inline void updateBottom( real value )
 		{
 			m_bottom = value;
 		}
+		/**@}*/
 
 	private:
 		/**
@@ -580,50 +449,21 @@ namespace castor3d
 			, castor::Point3r const & up );
 
 	private:
-		//!\~english	Tells the view frustum's planes need to be updated.
-		//!\~french		Dit que les plans du frustum de vue doivent être mis à jour
+		Engine const & m_engine;
 		bool m_modified{ true };
-		//!\~english	The left viewport plane.
-		//!\~french		Position du plan gauche.
 		castor::GroupChangeTracked< real > m_left;
-		//!\~english	The right viewport plane.
-		//!\~french		Position du plan droit
 		castor::GroupChangeTracked< real > m_right;
-		//!\~english	The top viewport plane.
-		//!\~french		Position du plan haut
 		castor::GroupChangeTracked< real > m_top;
-		//!\~english	The bottom viewport plane.
-		//!\~french		Position du plan bas
 		castor::GroupChangeTracked< real > m_bottom;
-		//!\~english	The viewport farthest viewable distance.
-		//!\~french		Position du plan lointain
 		castor::GroupChangeTracked< real > m_far;
-		//!\~english	The viewport nearest viewable distance.
-		//!\~french		Position du plan proche
 		castor::GroupChangeTracked< real > m_near;
-		//!\~english	The viewport vertical FOV.
-		//!\~french		Angle de vue vezrtical
 		castor::GroupChangeTracked< castor::Angle > m_fovY;
-		//!\~english	The display window ratio (4:3, 16:9, ...).
-		//!\~french		Ratio d'affichage
 		castor::GroupChangeTracked< real > m_ratio;
-		//!\~english	The projection type.
-		//!\~french		Type de projection
 		ViewportType m_type;
-		//!\~english	The viewport render size.
-		//!\~french		Dimensions du viewport
 		castor::Size m_size;
-		//!\~english	The viewport render position.
-		//!\~french		La position du viewport
 		castor::Position m_position;
-		//!\~english	The projection matrix.
-		//!\~french		La matrice de projection.
 		castor::Matrix4x4r m_projection;
-		//!\~english	The render API specific implementation.
-		//!\~french		L'implémentation spécifique à l'API de rendu.
 		renderer::Viewport m_viewport;
-		//!\~english	The render API specific implementation.
-		//!\~french		L'implémentation spécifique à l'API de rendu.
 		renderer::Scissor m_scissor;
 	};
 }

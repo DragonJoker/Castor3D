@@ -22,6 +22,21 @@ namespace castor3d
 	}
 
 	template< typename T >
+	void UniformBufferPool< T >::upload()const
+	{
+		for ( auto & bufferIt : m_buffers )
+		{
+			for ( auto & buffer : bufferIt.second )
+			{
+				buffer->upload( *m_stagingBuffer
+					, *m_uploadCommandBuffer
+					, 0u
+					, renderer::PipelineStageFlag::eVertexShader );
+			}
+		}
+	}
+
+	template< typename T >
 	UniformBufferOffset< T > UniformBufferPool< T >::getBuffer( renderer::MemoryPropertyFlags flags )
 	{
 		UniformBufferOffset< T > result;
@@ -38,9 +53,45 @@ namespace castor3d
 
 		if ( itB == it->second.end() )
 		{
-			uint64_t maxSize = getRenderSystem()->getMainDevice()->getProperties().limits.maxUniformBufferRange;
+			if ( !m_maxCount )
+			{
+				uint32_t maxSize = getRenderSystem()->getMainDevice()->getProperties().limits.maxUniformBufferRange;
+				uint32_t minOffset = uint32_t( getRenderSystem()->getMainDevice()->getProperties().limits.minUniformBufferOffsetAlignment );
+				uint32_t elementSize = 0u;
+				uint32_t size = uint32_t( sizeof( T ) );
+
+				while ( size > minOffset )
+				{
+					size -= minOffset;
+					elementSize += minOffset;
+				}
+
+				elementSize += minOffset;
+				m_maxCount = uint32_t( std::floor( float( maxSize ) / elementSize ) );
+				m_maxSize = uint32_t( m_maxCount * elementSize );
+
+				if ( getRenderSystem()->hasCurrentDevice() )
+				{
+					m_uploadCommandBuffer = getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer();
+					m_stagingBuffer = std::make_unique< renderer::StagingBuffer >( *getRenderSystem()->getCurrentDevice()
+						, renderer::BufferTarget::eTransferSrc
+						, m_maxSize );
+				}
+				else
+				{
+					getRenderSystem()->getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
+						, [this]()
+						{
+							m_uploadCommandBuffer = getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer();
+							m_stagingBuffer = std::make_unique< renderer::StagingBuffer >( *getRenderSystem()->getCurrentDevice()
+								, renderer::BufferTarget::eTransferSrc
+								, m_maxSize );
+						} ) );
+				}
+			}
+
 			auto buffer = std::make_unique< UniformBuffer< T > >( *getRenderSystem()
-				, uint32_t( std::floor( float( maxSize ) / sizeof( T ) ) )
+				, m_maxCount
 				, flags );
 			it->second.emplace_back( std::move( buffer ) );
 			itB = it->second.begin() + it->second.size() - 1;

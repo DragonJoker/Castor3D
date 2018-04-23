@@ -70,13 +70,10 @@ namespace castor3d
 	inline void UniformBuffer< T >::upload( renderer::StagingBuffer & stagingBuffer
 		, renderer::CommandBuffer const & commandBuffer
 		, uint32_t offset
-		, uint32_t count
-		, T const * buffer
 		, renderer::PipelineStageFlags flags )const
 	{
 		stagingBuffer.uploadUniformData( commandBuffer
-			, buffer
-			, count
+			, getBuffer().getDatas()
 			, offset
 			, getBuffer()
 			, flags );
@@ -86,13 +83,10 @@ namespace castor3d
 	inline void UniformBuffer< T >::download( renderer::StagingBuffer & stagingBuffer
 		, renderer::CommandBuffer const & commandBuffer
 		, uint32_t offset
-		, uint32_t count
-		, T * buffer
 		, renderer::PipelineStageFlags flags )const
 	{
 		stagingBuffer.downloadUniformData( commandBuffer
-			, buffer
-			, count
+			, getBuffer().getDatas()
 			, offset
 			, getBuffer()
 			, flags );

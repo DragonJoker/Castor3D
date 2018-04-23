@@ -629,6 +629,7 @@ namespace castor3d
 		{
 			auto texCoord = writer.declLocale( cuT( "texCoord" )
 				, utils.calcTexCoord( c3d_renderSize ) );
+			//texCoord = writer.adjustTexCoords( texCoord );
 			auto data1 = writer.declLocale( cuT( "data1" )
 				, texture( c3d_mapData1, texCoord ) );
 			auto data2 = writer.declLocale( cuT( "data2" )
@@ -789,6 +790,7 @@ namespace castor3d
 		{
 			auto texCoord = writer.declLocale( cuT( "texCoord" )
 				, utils.calcTexCoord( c3d_renderSize ) );
+			texCoord = writer.adjustTexCoords( texCoord );
 			auto data1 = writer.declLocale( cuT( "data1" )
 				, texture( c3d_mapData1, texCoord ) );
 			auto data2 = writer.declLocale( cuT( "data2" )
@@ -1009,6 +1011,7 @@ namespace castor3d
 		{
 			auto texCoord = writer.declLocale( cuT( "texCoord" )
 				, utils.calcTexCoord( c3d_renderSize ) );
+			texCoord = writer.adjustTexCoords( texCoord );
 			auto data1 = writer.declLocale( cuT( "data1" )
 				, texture( c3d_mapData1, texCoord ) );
 			auto data2 = writer.declLocale( cuT( "data2" )

@@ -195,6 +195,15 @@ namespace castor3d
 		 */
 		C3D_API static castor::Path getDataDirectory();
 		/**
+		 *\~english
+		 *\brief		Retrieves data path
+		 *\return		The data path
+		 *\~french
+		 *\brief		Récupère le chemin des données
+		 *\return		Le chemin des données
+		 */
+		C3D_API static std::locale const & getLocale();
+		/**
 		*\~english
 		*name
 		*	Getters.

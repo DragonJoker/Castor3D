@@ -51,7 +51,7 @@ namespace castor
 	template< typename ComponentType >
 	bool RgbColourT< ComponentType >::TextWriter::operator()( RgbColourT< ComponentType > const & colour, TextFile & file )
 	{
-		StringStream streamWord;
+		StringStream streamWord{ makeStringStream() };
 		streamWord.setf( std::ios::boolalpha );
 		streamWord.setf( std::ios::showpoint );
 

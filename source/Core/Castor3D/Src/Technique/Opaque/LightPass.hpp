@@ -584,13 +584,10 @@ namespace castor3d
 		{
 			//!\~english	The variable containing the light colour.
 			//!\~french		La variable contenant la couleur de la lumière.
-			castor::Point3f colour;
-			//!\~english	The variable containing the light intensities.
-			//!\~french		La variable contenant les intensités de la lumière.
-			castor::Point2f intensity;
-			//!\~english	The variable containing the light far plane position.
-			//!\~french		La variable contenant la position du plan lointain de la lumière.
-			float farPlane;
+			renderer::Vec4 colourIndex;
+			//!\~english	The variable containing the light intensities (RG) and far plane (B).
+			//!\~french		La variable contenant les intensités de la lumière (RG) et le plan éloigné (B).
+			renderer::Vec4 intensityFarPlane;
 		};
 		struct RenderPass
 		{

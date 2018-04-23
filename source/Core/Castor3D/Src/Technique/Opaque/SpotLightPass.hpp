@@ -120,27 +120,21 @@ namespace castor3d
 		struct Config
 		{
 			LightPass::Config base;
-			//!\~english	The variable containing the light position.
-			//!\~french		La variable contenant la position de la lumière.
-			castor::Point3f position;
-			//!\~english	The variable containing the light attenuation.
-			//!\~french		La variable contenant l'atténuation de la lumière.
-			castor::Point3f attenuation;
-			//!\~english	The variable containing the light index.
-			//!\~french		La variable contenant l'index de la lumière.
-			int index;
-			//!\~english	The variable containing the light direction.
-			//!\~french		La variable contenant la direction de la lumière.
-			castor::Point3f direction;
-			//!\~english	The variable containing the light exponent.
-			//!\~french		La variable contenant l'exposant de la lumière.
-			float exponent;
-			//!\~english	The variable containing the light cut off.
-			//!\~french		La variable contenant l'angle du cône de la lumière.
-			float cutOff;
+			//!\~english	The variable containing the light position (RGB).
+			//!\~french		La variable contenant la position de la lumière (RGB).
+			renderer::Vec4 position;
+			//!\~english	The variable containing the light attenuation (RGB) and index (A).
+			//!\~french		La variable contenant l'atténuation de la lumière (RGB) et son index (A).
+			renderer::Vec4 attenuation;
+			//!\~english	The variable containing the light direction (RGB).
+			//!\~french		La variable contenant la direction de la lumière (RGB).
+			renderer::Vec4 direction;
+			//!\~english	The variable containing the light exponent (R) and cutoff (G).
+			//!\~french		La variable contenant l'exposant de la lumière (R) et l'angle de son cône (G).
+			renderer::Vec4 exponentCutOff;
 			//!\~english	The variable containing the light space transformation matrix.
 			//!\~french		La variable contenant la matrice de transformation de la lumière.
-			castor::Matrix4x4f transform;
+			renderer::Mat4 transform;
 		};
 		renderer::UniformBufferPtr< Config > m_ubo;
 	};

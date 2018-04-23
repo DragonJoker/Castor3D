@@ -12,7 +12,7 @@ namespace castor
 
 	BlockTimer::~BlockTimer()
 	{
-		Logger::logInfo( StringStream() << cuT( "BlockTimer::Exited Block : " ) << m_strFunction
+		Logger::logInfo( makeStringStream() << cuT( "BlockTimer::Exited Block : " ) << m_strFunction
 			<< cuT( " in " ) << m_strFile
 			<< cuT( ", line " ) << m_uiLine
 			<< cuT( " - time: " ) << std::chrono::duration_cast< Milliseconds >( m_timer.getElapsed() ).count() << cuT( " ms" ) );

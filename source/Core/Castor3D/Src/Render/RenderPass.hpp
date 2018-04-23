@@ -1133,6 +1133,14 @@ namespace castor3d
 			, RenderInfo & info )const;
 		/**
 		 *\~english
+		 *\brief		Uploads UBO pools to VRAM.
+		 *\~french
+		 *\brief		Met à jour les pools d'UBO en VRAM.
+		 */
+		void doUpdateUbos( Camera const & camera
+			, Point2r const & jitter );
+		/**
+		 *\~english
 		 *\brief		Creates the common UBO descriptor layout bindings.
 		 *\param[in]	flags	The pipeline flags.
 		 *\~french

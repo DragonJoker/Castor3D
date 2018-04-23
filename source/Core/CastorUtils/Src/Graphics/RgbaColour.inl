@@ -53,7 +53,7 @@ namespace castor
 	bool RgbaColourT< ComponentType >::TextWriter::operator()( RgbaColourT< ComponentType > const & colour
 		, TextFile & file )
 	{
-		StringStream streamWord;
+		StringStream streamWord{ makeStringStream() };
 		streamWord.setf( std::ios::boolalpha );
 		streamWord.setf( std::ios::showpoint );
 

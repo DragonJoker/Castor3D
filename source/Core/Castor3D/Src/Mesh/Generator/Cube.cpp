@@ -127,44 +127,44 @@ namespace castor3d
 		if ( CptNegatif == 1 || CptNegatif == 3 )
 		{
 			// Faces du bas
-			mapping1->addFace( 0, 1, 2 );
-			mapping1->addFace( 2, 3, 0 );
+			mapping1->addFace( 0, 2, 1 );
+			mapping1->addFace( 2, 0, 3 );
 			// Faces du haut
-			mapping2->addFace( 0, 1, 2 );
-			mapping2->addFace( 2, 3, 0 );
+			mapping2->addFace( 0, 2, 1 );
+			mapping2->addFace( 2, 0, 3 );
 			// Faces de derrière
-			mapping3->addFace( 0, 1, 2 );
-			mapping3->addFace( 2, 3, 0 );
+			mapping3->addFace( 0, 2, 1 );
+			mapping3->addFace( 2, 0, 3 );
 			// Faces de devant
-			mapping4->addFace( 0, 1, 2 );
-			mapping4->addFace( 2, 3, 0 );
+			mapping4->addFace( 0, 2, 1 );
+			mapping4->addFace( 2, 0, 3 );
 			// Faces de droite
-			mapping5->addFace( 0, 1, 2 );
-			mapping5->addFace( 2, 3, 0 );
+			mapping5->addFace( 0, 2, 1 );
+			mapping5->addFace( 2, 0, 3 );
 			// Faces de gauche
-			mapping6->addFace( 0, 1, 2 );
-			mapping6->addFace( 2, 3, 0 );
+			mapping6->addFace( 0, 2, 1 );
+			mapping6->addFace( 2, 0, 3 );
 		}
 		else
 		{
 			// Faces du bas
-			mapping1->addFace( 3, 2, 1 );
-			mapping1->addFace( 1, 0, 3 );
+			mapping1->addFace( 3, 1, 2 );
+			mapping1->addFace( 1, 3, 0 );
 			// Faces du haut
-			mapping2->addFace( 3, 2, 1 );
-			mapping2->addFace( 1, 0, 3 );
+			mapping2->addFace( 3, 1, 2 );
+			mapping2->addFace( 1, 3, 0 );
 			// Faces de derrière
-			mapping3->addFace( 3, 2, 1 );
-			mapping3->addFace( 1, 0, 3 );
+			mapping3->addFace( 3, 1, 2 );
+			mapping3->addFace( 1, 3, 0 );
 			// Faces de devant
-			mapping4->addFace( 3, 2, 1 );
-			mapping4->addFace( 1, 0, 3 );
+			mapping4->addFace( 3, 1, 2 );
+			mapping4->addFace( 1, 3, 0 );
 			// Faces de droite
-			mapping5->addFace( 3, 2, 1 );
-			mapping5->addFace( 1, 0, 3 );
+			mapping5->addFace( 3, 1, 2 );
+			mapping5->addFace( 1, 3, 0 );
 			// Faces de gauche
-			mapping6->addFace( 3, 2, 1 );
-			mapping6->addFace( 1, 0, 3 );
+			mapping6->addFace( 3, 1, 2 );
+			mapping6->addFace( 1, 3, 0 );
 		}
 
 		mapping1->computeTangentsFromNormals();

@@ -15,7 +15,7 @@ namespace castor3d
 
 		String paramToString( String & p_sep, FragmentInput const & p_value )
 		{
-			StringStream result;
+			StringStream result{ makeStringStream() };
 			result << paramToString( p_sep, p_value.m_vertex );
 			result << paramToString( p_sep, p_value.m_normal );
 			return result.str();
@@ -23,7 +23,7 @@ namespace castor3d
 
 		String paramToString( String & p_sep, OutputComponents const & p_value )
 		{
-			StringStream result;
+			StringStream result{ makeStringStream() };
 			result << paramToString( p_sep, p_value.m_diffuse );
 			result << paramToString( p_sep, p_value.m_specular );
 			return result.str();
@@ -31,7 +31,7 @@ namespace castor3d
 
 		String toString( FragmentInput const & p_value )
 		{
-			StringStream result;
+			StringStream result{ makeStringStream() };
 			result << toString( p_value.m_vertex ) << ", ";
 			result << toString( p_value.m_normal );
 			return result.str();
@@ -39,7 +39,7 @@ namespace castor3d
 
 		String toString( OutputComponents const & p_value )
 		{
-			StringStream result;
+			StringStream result{ makeStringStream() };
 			result << toString( p_value.m_diffuse ) << ", ";
 			result << toString( p_value.m_specular );
 			return result.str();
@@ -165,9 +165,8 @@ namespace castor3d
 		void LightingModel::doDeclareLight()
 		{
 			Struct lightDecl = m_writer.getStruct( cuT( "Light" ) );
-			lightDecl.declMember< Vec3 >( cuT( "m_colour" ) );
-			lightDecl.declMember< Vec2 >( cuT( "m_intensity" ) );
-			lightDecl.declMember< Float >( cuT( "m_farPlane" ) );
+			lightDecl.declMember< Vec4 >( cuT( "m_colourIndex" ) );
+			lightDecl.declMember< Vec4 >( cuT( "m_intensityFarPlane" ) );
 			lightDecl.end();
 		}
 
@@ -175,7 +174,7 @@ namespace castor3d
 		{
 			Struct lightDecl = m_writer.getStruct( cuT( "DirectionalLight" ) );
 			lightDecl.declMember< Light >( cuT( "m_lightBase" ) );
-			lightDecl.declMember< Vec3 >( cuT( "m_direction" ) );
+			lightDecl.declMember< Vec4 >( cuT( "m_direction" ) );
 			lightDecl.declMember< Mat4 >( cuT( "m_transform" ) );
 			lightDecl.end();
 		}
@@ -184,9 +183,8 @@ namespace castor3d
 		{
 			Struct lightDecl = m_writer.getStruct( cuT( "PointLight" ) );
 			lightDecl.declMember< Light >( cuT( "m_lightBase" ) );
-			lightDecl.declMember< Vec3 >( cuT( "m_position" ) );
-			lightDecl.declMember< Vec3 >( cuT( "m_attenuation" ) );
-			lightDecl.declMember< Int >( cuT( "m_index" ) );
+			lightDecl.declMember< Vec4 >( cuT( "m_position" ) );
+			lightDecl.declMember< Vec4 >( cuT( "m_attenuation" ) );
 			lightDecl.end();
 		}
 
@@ -194,12 +192,10 @@ namespace castor3d
 		{
 			Struct lightDecl = m_writer.getStruct( cuT( "SpotLight" ) );
 			lightDecl.declMember< Light >( cuT( "m_lightBase" ) );
-			lightDecl.declMember< Vec3 >( cuT( "m_position" ) );
-			lightDecl.declMember< Vec3 >( cuT( "m_attenuation" ) );
-			lightDecl.declMember< Int >( cuT( "m_index" ) );
-			lightDecl.declMember< Vec3 >( cuT( "m_direction" ) );
-			lightDecl.declMember< Float >( cuT( "m_exponent" ) );
-			lightDecl.declMember< Float >( cuT( "m_cutOff" ) );
+			lightDecl.declMember< Vec4 >( cuT( "m_position" ) );
+			lightDecl.declMember< Vec4 >( cuT( "m_attenuation" ) );
+			lightDecl.declMember< Vec4 >( cuT( "m_direction" ) );
+			lightDecl.declMember< Vec4 >( cuT( "m_exponentCutOff" ) );
 			lightDecl.declMember< Mat4 >( cuT( "m_transform" ) );
 			lightDecl.end();
 		}
@@ -237,7 +233,9 @@ namespace castor3d
 					{
 						auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
 						auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) );
-						result.m_colour() = texelFetch( c3d_sLights, offset++ ).rgb();
+						auto colourIndex = m_writer.declLocale( cuT( "colourIndex" ), texelFetch( c3d_sLights, offset++ ) );
+						result.m_colour() = colourIndex.rgb();
+						result.m_index() = m_writer.cast< Int >( colourIndex.a() );
 						auto intensityFarPlane = m_writer.declLocale( cuT( "intensityFarPlane" ), texelFetch( c3d_sLights, offset++ ) );
 						result.m_intensity() = intensityFarPlane.rg();
 						result.m_farPlane() = intensityFarPlane.b();
@@ -246,7 +244,9 @@ namespace castor3d
 					{
 						auto c3d_sLights = m_writer.getBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
 						auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) );
-						result.m_colour() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
+						auto colourIndex = m_writer.declLocale( cuT( "colourIndex" ), texelFetch( c3d_sLights, offset++, 0 ) );
+						result.m_colour() = colourIndex.rgb();
+						result.m_index() = m_writer.cast< Int >( colourIndex.a() );
 						auto intensityFarPlane = m_writer.declLocale( cuT( "intensityFarPlane" ), texelFetch( c3d_sLights, offset++, 0 ) );
 						result.m_intensity() = intensityFarPlane.rg();
 						result.m_farPlane() = intensityFarPlane.b();
@@ -276,7 +276,8 @@ namespace castor3d
 						{
 							auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
 							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-							result.m_direction() = texelFetch( c3d_sLights, offset++ ).rgb();
+							auto direction = m_writer.declLocale( cuT( "direction" ), texelFetch( c3d_sLights, offset++ ) );
+							result.m_direction() = direction.rgb();
 							auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++ ) );
 							auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++ ) );
 							auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++ ) );
@@ -287,7 +288,8 @@ namespace castor3d
 						{
 							auto c3d_sLights = m_writer.getBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
 							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-							result.m_direction() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
+							auto direction = m_writer.declLocale( cuT( "direction" ), texelFetch( c3d_sLights, offset++, 0 ) );
+							result.m_direction() = direction.rgb();
 							auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++, 0 ) );
 							auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++, 0 ) );
 							auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++, 0 ) );
@@ -319,18 +321,14 @@ namespace castor3d
 						{
 							auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
 							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-							auto v4PosIndex = m_writer.declLocale( cuT( "v4PosIndex" ), texelFetch( c3d_sLights, offset++ ) );
-							result.m_position() = v4PosIndex.rgb();
-							result.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
+							result.m_position() = texelFetch( c3d_sLights, offset++ ).rgb();
 							result.m_attenuation() = texelFetch( c3d_sLights, offset++ ).rgb();
 						}
 						else
 						{
 							auto c3d_sLights = m_writer.getBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
 							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-							auto v4PosIndex = m_writer.declLocale( cuT( "v4PosIndex" ), texelFetch( c3d_sLights, offset++, 0 ) );
-							result.m_position() = v4PosIndex.rgb();
-							result.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
+							result.m_position() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
 							result.m_attenuation() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
 						}
 					}
@@ -359,13 +357,12 @@ namespace castor3d
 							auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
 							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
 							auto v4PosIndex = m_writer.declLocale( cuT( "v4PosIndex" ), texelFetch( c3d_sLights, offset++ ) );
-							result.m_position() = v4PosIndex.rgb();
-							result.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
+							result.m_position() = texelFetch( c3d_sLights, offset++ ).rgb();
 							result.m_attenuation() = texelFetch( c3d_sLights, offset++ ).rgb();
 							result.m_direction() = normalize( texelFetch( c3d_sLights, offset++ ).rgb() );
-							auto v2Spot = m_writer.declLocale( cuT( "v2Spot" ), texelFetch( c3d_sLights, offset++ ).rg() );
-							result.m_exponent() = v2Spot.x();
-							result.m_cutOff() = v2Spot.y();
+							auto exponentCutOff = m_writer.declLocale( cuT( "exponentCutOff" ), texelFetch( c3d_sLights, offset++ ).rg() );
+							result.m_exponent() = exponentCutOff.x();
+							result.m_cutOff() = exponentCutOff.y();
 							auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++ ) );
 							auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++ ) );
 							auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++ ) );
@@ -376,20 +373,17 @@ namespace castor3d
 						{
 							auto c3d_sLights = m_writer.getBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
 							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-							auto v4PosIndex = m_writer.declLocale( cuT( "v4PosIndex" ), texelFetch( c3d_sLights, offset++, 0 ) );
-							result.m_position() = v4PosIndex.rgb();
-							result.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
+							result.m_position() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
 							result.m_attenuation() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
 							result.m_direction() = normalize( texelFetch( c3d_sLights, offset++, 0 ).rgb() );
-							auto v2Spot = m_writer.declLocale( cuT( "v2Spot" ), texelFetch( c3d_sLights, offset++, 0 ).rg() );
-							result.m_exponent() = v2Spot.x();
-							result.m_cutOff() = v2Spot.y();
+							auto exponentCutOff = m_writer.declLocale( cuT( "exponentCutOff" ), texelFetch( c3d_sLights, offset++, 0 ).rg() );
+							result.m_exponent() = exponentCutOff.x();
+							result.m_cutOff() = exponentCutOff.y();
 							auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++, 0 ) );
 							auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++, 0 ) );
 							auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++, 0 ) );
 							auto v4MtxCol4 = m_writer.declLocale( cuT( "v4MtxCol4" ), texelFetch( c3d_sLights, offset++, 0 ) );
 							result.m_transform() = mat4( v4MtxCol1, v4MtxCol2, v4MtxCol3, v4MtxCol4 );
-							result.m_index() = m_writer.cast< Int >( texelFetch( c3d_sLights, offset++, 0 ).r() );
 						}
 					}
 					else

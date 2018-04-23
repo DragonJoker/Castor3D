@@ -248,7 +248,7 @@ namespace castor3d
 
 						if ( fileVersion < latestVersion )
 						{
-							castor::Logger::logWarning( castor::StringStream{} << cuT( "This file is using version " )
+							castor::Logger::logWarning( castor::makeStringStream() << cuT( "This file is using version " )
 								<< fileVersion
 								<< cuT( ", consider upgrading it to version " )
 								<< latestVersion

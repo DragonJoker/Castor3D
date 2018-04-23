@@ -57,14 +57,14 @@ namespace castor3d
 			for ( auto const & face : faces )
 			{
 				auto & vtx1 = points[face[0]];
-				auto & vtx2 = points[face[1]];
-				auto & vtx3 = points[face[2]];
+				auto & vtx2 = points[face[2]];
+				auto & vtx3 = points[face[1]];
 				auto const vec2m1 = vtx2.pos - vtx1.pos;
 				auto const vec3m1 = vtx3.pos - vtx1.pos;
 				auto const tex2m1 = vtx2.tex - vtx1.tex;
 				auto const tex3m1 = vtx3.tex - vtx1.tex;
 				auto const faceNormal = -point::cross( vec3m1, vec2m1 );
-				auto const faceTangent = ( vec2m1 * tex3m1[1] ) - ( vec3m1 * tex2m1[1] );
+				auto const faceTangent = ( vec3m1 * tex2m1[1] ) - ( vec2m1 * tex3m1[1] );
 				vtx1.nml += faceNormal;
 				vtx2.nml += faceNormal;
 				vtx3.nml += faceNormal;
@@ -96,7 +96,7 @@ namespace castor3d
 		}
 
 		// Eventually we normalize the normals and tangents
-		for ( auto vtx : points )
+		for ( auto & vtx : points )
 		{
 			point::normalise( vtx.nml );
 			point::normalise( vtx.tan );

@@ -54,7 +54,7 @@ namespace castor3d
 	bool ShadowMapPassSpot::doInitialise( Size const & size )
 	{
 		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
-		Viewport viewport;
+		Viewport viewport{ *getEngine() };
 		m_camera = std::make_shared< Camera >( cuT( "ShadowMapSpot" )
 			, m_scene
 			, m_scene.getCameraRootNode()

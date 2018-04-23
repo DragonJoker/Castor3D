@@ -106,8 +106,6 @@ namespace castor3d
 		inline void upload( renderer::StagingBuffer & stagingBuffer
 			, renderer::CommandBuffer const & commandBuffer
 			, uint32_t offset
-			, uint32_t count
-			, T const * buffer
 			, renderer::PipelineStageFlags flags )const;
 		/**
 		 *\~english
@@ -126,8 +124,6 @@ namespace castor3d
 		inline void download( renderer::StagingBuffer & stagingBuffer
 			, renderer::CommandBuffer const & commandBuffer
 			, uint32_t offset
-			, uint32_t count
-			, T * buffer
 			, renderer::PipelineStageFlags flags )const;
 		/**
 		*\~english
