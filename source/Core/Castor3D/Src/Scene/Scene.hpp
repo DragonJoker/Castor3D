@@ -397,104 +397,38 @@ namespace castor3d
 		mutable OnSceneUpdate onUpdate;
 
 	private:
-		//!\~english	Tells if the scene is initialised.
-		//!\~french		Dit si la scène est initialisée.
 		bool m_initialised{ false };
-		//!\~english	The root node
-		//!\~french		Le noeud père de tous les noeuds de la scène
 		SceneNodeSPtr m_rootNode;
-		//!\~english	The root node used only for cameras (used to ease the use of cameras)
-		//!\~french		Le noeud père de tous les noeuds de caméra
 		SceneNodeSPtr m_rootCameraNode;
-		//!\~english	The root node for every object other than camera (used to ease the use of cameras)
-		//!\~french		Le noeud père de tous les noeuds d'objet
 		SceneNodeSPtr m_rootObjectNode;
-		//!\~english	The scene nodes cache.
-		//!\~french		Le cache de noeuds de scène.
 		DECLARE_OBJECT_CACHE_MEMBER( sceneNode, SceneNode );
-		//!\~english	The camera cache.
-		//!\~french		Le cache de caméras.
 		DECLARE_OBJECT_CACHE_MEMBER( camera, Camera );
-		//!\~english	The lights cache.
-		//!\~french		Le cache de lumières.
 		DECLARE_OBJECT_CACHE_MEMBER( light, Light );
-		//!\~english	The geometies cache.
-		//!\~french		Le cache de géométries.
 		DECLARE_OBJECT_CACHE_MEMBER( geometry, Geometry );
-		//!\~english	The billboards cache.
-		//!\~french		Le cache de billboards.
 		DECLARE_OBJECT_CACHE_MEMBER( billboard, BillboardList );
-		//!\~english	The particle systems cache.
-		//!\~french		Le cache de systèmes de particules.
 		DECLARE_OBJECT_CACHE_MEMBER( particleSystem, ParticleSystem );
-		//!\~english	The meshes cache.
-		//!\~french		Le cache de maillages.
 		DECLARE_CACHE_MEMBER( mesh, Mesh );
-		//!\~english	The animated objects groups cache.
-		//!\~french		Le cache de groupes d'objets animés.
 		DECLARE_CACHE_MEMBER( animatedObjectGroup, AnimatedObjectGroup );
-		//!\~english	The overlays view.
-		//!\~french		La vue sur le incrustations de la scène.
 		DECLARE_CACHE_VIEW_MEMBER( overlay, Overlay, EventType::ePreRender );
-		//!\~english	The scene materials view.
-		//!\~french		La vue sur les matériaux de la scène.
 		DECLARE_CACHE_VIEW_MEMBER( material, Material, EventType::ePreRender );
-		//!\~english	The scene samplers view.
-		//!\~french		La vue sur les échantillonneurs de la scène.
 		DECLARE_CACHE_VIEW_MEMBER( sampler, Sampler, EventType::ePreRender );
-		//!\~english	The scene fonts view.
-		//!\~french		La vue sur les polices de la scène.
 		DECLARE_CACHE_VIEW_MEMBER_CU( font, Font, EventType::ePreRender );
-		//!\~english	Tells if the scene has changed, id est if a geometry has been created or added to it => Vertex buffers need to be generated
-		//!\~french		Dit si la scène a changé (si des géométries ont besoin d'être initialisées, essentiellement).
 		bool m_changed{ false };
-		//!\~english	Ambient light color
-		//!\~french		Couleur de la lumière ambiante
 		castor::RgbColour m_ambientLight;
-		//!\~english	The scene background colour
-		//!\~french		La couleur de fond de la scène
 		castor::RgbColour m_backgroundColour;
-		//!\~english	The background.
-		//!\~french		Le fond.
 		SceneBackgroundSPtr m_background;
-		//!\~english	The LightCategory factory.
-		//!\~french		La fabrique de LightCategory.
 		LightFactory m_lightFactory;
-		//!\~english	The fog's parameters.
-		//!\~french		Les paramètres de brouillard.
 		Fog m_fog;
-		//!\~english	The shadows parameters.
-		//!\~french		Les paramètres des ombres.
 		Shadow m_shadow;
-		//!\~english	The frame listener for the scene.
-		//!\~french		Le frame listener pour la scène.
 		FrameListenerWPtr m_listener;
-		//!\~english	The scene's reflection maps.
-		//!\~french		Les reflection maps de la scène.
 		std::map< SceneNode const *, std::unique_ptr< EnvironmentMap > > m_reflectionMaps;
-		//!\~english	The scene's reflection maps.
-		//!\~french		Les reflection maps de la scène.
 		std::vector< std::reference_wrapper< EnvironmentMap > > m_reflectionMapsArray;
-		//!\~english	The HDR configuration.
-		//!\~french		La configuration HDR.
 		HdrConfig m_config;
-		//!\~english	The pool used to update the animations.
-		//!\~french		Le pool de mise à jour des animations.
 		castor::ThreadPool m_animationUpdater;
-		//!\~english	Tells if the scene needs a subsurface scattering pass.
-		//!\~french		Dit si la scène a besoin d'une passe de subsurface scattering.
 		bool m_needsSubsurfaceScattering{ false };
-		//!\~english	Tells if the scene has opaque objects.
-		//!\~french		Dit si la scène a des objets opaques.
 		bool m_hasOpaqueObjects{ false };
-		//!\~english	Tells if the scene has transparent objects.
-		//!\~french		Dit si la scène a des objets transparents.
 		bool m_hasTransparentObjects{ false };
-		//!\~english	The connections to the material changed signals.
-		//!\~french		Les connections aux signaux de matériau changé.
 		std::map< MaterialSPtr, OnMaterialChangedConnection > m_materialsListeners;
-		//!\~english	Tells if the materials hav changed since last update.
-		//!\~french		Dit si les matériaux ont changé depuis la dernière mise à jour.
 		bool m_dirtyMaterials{ true };
 
 	public:

@@ -5,7 +5,6 @@ See LICENSE file in root folder
 #define ___C3D_RenderWindow_H___
 
 #include "Event/Frame/FrameListener.hpp"
-#include "Miscellaneous/PickingPass.hpp"
 #include "RenderToTexture/RenderQuad.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
 
@@ -429,7 +428,7 @@ namespace castor3d
 		bool m_toSave{ false };
 		bool m_dirty{ true };
 		castor::PxBufferBaseSPtr m_saveBuffer;
-		PickingPassUPtr m_pickingPass;
+		PickingPassSPtr m_pickingPass;
 	};
 }
 

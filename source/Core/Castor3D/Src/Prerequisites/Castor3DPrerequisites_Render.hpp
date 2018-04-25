@@ -171,6 +171,7 @@ namespace castor3d
 	struct MorphingRenderNode;
 	struct PassRenderNode;
 	struct PassRenderNodeUniforms;
+	struct RenderInfo;
 	struct SceneRenderNode;
 	struct SkinningRenderNode;
 	struct StaticRenderNode;

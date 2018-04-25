@@ -147,6 +147,7 @@ namespace castor
 			{
 				ePF = PixelFormat::eA8R8G8B8;
 				FIBITMAP * dib = FreeImage_ConvertTo32Bits( fiImage );
+				FreeImage_PreMultiplyWithAlpha( dib );
 				FreeImage_Unload( fiImage );
 				fiImage = dib;
 
@@ -172,6 +173,7 @@ namespace castor
 		{
 			ePF = PixelFormat::eA8R8G8B8;
 			FIBITMAP * dib = FreeImage_ConvertTo32Bits( fiImage );
+			FreeImage_PreMultiplyWithAlpha( dib );
 			FreeImage_Unload( fiImage );
 			fiImage = dib;
 

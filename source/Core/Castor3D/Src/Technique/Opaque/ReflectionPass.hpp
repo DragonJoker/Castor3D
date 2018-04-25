@@ -8,8 +8,6 @@ See LICENSE file in root folder
 #include "SsaoPass.hpp"
 #include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Render/RenderInfo.hpp"
-#include "Shader/Ubos/SceneUbo.hpp"
-#include "Shader/Ubos/GpInfoUbo.hpp"
 #include "Shader/Ubos/HdrConfigUbo.hpp"
 
 #include <Buffer/VertexBuffer.hpp>

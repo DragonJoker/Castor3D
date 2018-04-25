@@ -153,6 +153,20 @@ namespace castor3d
 		if ( result )
 		{
 			m_objects.insert( { object->getName(), object } );
+
+			switch ( object->getKind() )
+			{
+			case AnimationType::eMesh:
+				onMeshAdded( *this, static_cast< AnimatedMesh const & >( *object ) );
+				break;
+
+			case AnimationType::eSkeleton:
+				onSkeletonAdded( *this, static_cast< AnimatedSkeleton const & >( *object ) );
+				break;
+
+			default:
+				break;
+			}
 		}
 
 		for ( auto it : m_animations )

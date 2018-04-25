@@ -87,6 +87,56 @@ namespace castor
 				b += bpp;
 			}
 		}
+
+		bool preMultiplyWithAlpha( FIBITMAP * dib )
+		{
+			if ( !FreeImage_HasPixels( dib ) )
+			{
+				return false;
+			}
+
+			if ( ( FreeImage_GetBPP( dib ) != 32 ) || ( FreeImage_GetImageType( dib ) != FIT_BITMAP ) )
+			{
+				return false;
+			}
+
+			int width = FreeImage_GetWidth( dib );
+			int height = FreeImage_GetHeight( dib );
+
+			for ( int y = 0; y < height; y++ )
+			{
+				auto * bits = FreeImage_GetScanLine( dib, y );
+
+				for ( int x = 0; x < width; x++, bits += 4 )
+				{
+					const BYTE alpha = bits[FI_RGBA_ALPHA];
+
+					// slightly faster: care for two special cases
+					if ( alpha == 0x00 )
+					{
+						// special case for alpha == 0x00
+						// color * 0x00 / 0xFF = 0x00
+						bits[FI_RGBA_BLUE] = 0x00;
+						bits[FI_RGBA_GREEN] = 0x00;
+						bits[FI_RGBA_RED] = 0x00;
+					}
+					else if ( alpha == 0xFF )
+					{
+						// nothing to do for alpha == 0xFF
+						// color * 0xFF / 0xFF = color
+						continue;
+					}
+					else
+					{
+						bits[FI_RGBA_BLUE] = ( BYTE )( ( alpha * ( WORD )bits[FI_RGBA_BLUE] + 127 ) / 255 );
+						bits[FI_RGBA_GREEN] = ( BYTE )( ( alpha * ( WORD )bits[FI_RGBA_GREEN] + 127 ) / 255 );
+						bits[FI_RGBA_RED] = ( BYTE )( ( alpha * ( WORD )bits[FI_RGBA_RED] + 127 ) / 255 );
+					}
+				}
+			}
+
+			return true;
+		}
 	}
 
 	//************************************************************************************************
@@ -150,6 +200,7 @@ namespace castor
 			{
 				ePF = PixelFormat::eA8R8G8B8;
 				FIBITMAP * dib = FreeImage_ConvertTo32Bits( fiImage );
+				preMultiplyWithAlpha( dib );
 				FreeImage_Unload( fiImage );
 				fiImage = dib;
 
@@ -175,6 +226,7 @@ namespace castor
 		{
 			ePF = PixelFormat::eA8R8G8B8;
 			FIBITMAP * dib = FreeImage_ConvertTo32Bits( fiImage );
+			preMultiplyWithAlpha( dib );
 			FreeImage_Unload( fiImage );
 			fiImage = dib;
 

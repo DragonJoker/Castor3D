@@ -2,6 +2,7 @@
 
 #include "Event/Frame/FrameListener.hpp"
 #include "Mesh/Submesh.hpp"
+#include "Render/RenderPass.hpp"
 #include "Scene/Scene.hpp"
 
 using namespace castor;
@@ -147,12 +148,23 @@ namespace castor3d
 					, getMaxRefCount()
 					, 0u
 					, renderer::MemoryPropertyFlag::eHostVisible );
-				m_matrixLayout = renderer::makeLayout< InstantiationData >( BindingPoint, renderer::VertexInputRate::eInstance );
-				m_matrixLayout->createAttribute( 0u, renderer::Format::eR32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 0u * sizeof( Point4f ) );
-				m_matrixLayout->createAttribute( 1u, renderer::Format::eR32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 1u * sizeof( Point4f ) );
-				m_matrixLayout->createAttribute( 2u, renderer::Format::eR32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 2u * sizeof( Point4f ) );
-				m_matrixLayout->createAttribute( 3u, renderer::Format::eR32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 3u * sizeof( Point4f ) );
-				m_matrixLayout->createAttribute( 4u, renderer::Format::eR32_UINT, offsetof( InstantiationData, m_material ) );
+				m_matrixLayout = renderer::makeLayout< InstantiationData >( BindingPoint
+					, renderer::VertexInputRate::eInstance );
+				m_matrixLayout->createAttribute( RenderPass::VertexInputs::TransformLocation + 0u
+					, renderer::Format::eR32G32B32A32_SFLOAT
+					, offsetof( InstantiationData, m_matrix ) + 0u * sizeof( Point4f ) );
+				m_matrixLayout->createAttribute( RenderPass::VertexInputs::TransformLocation + 1u
+					, renderer::Format::eR32G32B32A32_SFLOAT
+					, offsetof( InstantiationData, m_matrix ) + 1u * sizeof( Point4f ) );
+				m_matrixLayout->createAttribute( RenderPass::VertexInputs::TransformLocation + 2u
+					, renderer::Format::eR32G32B32A32_SFLOAT
+					, offsetof( InstantiationData, m_matrix ) + 2u * sizeof( Point4f ) );
+				m_matrixLayout->createAttribute( RenderPass::VertexInputs::TransformLocation + 3u
+					, renderer::Format::eR32G32B32A32_SFLOAT
+					, offsetof( InstantiationData, m_matrix ) + 3u * sizeof( Point4f ) );
+				m_matrixLayout->createAttribute( RenderPass::VertexInputs::MaterialLocation
+					, renderer::Format::eR32_UINT
+					, offsetof( InstantiationData, m_material ) );
 				result = m_matrixBuffer != nullptr
 					&& m_matrixLayout != nullptr;
 			}

@@ -27,7 +27,8 @@ namespace castor3d
 			castor::Point4f ambientLight;
 			castor::Point4f backgroundColour;
 			castor::Point4i lightsCount;
-			castor::Point3f cameraPos;
+			castor::Point4f cameraPos;
+			castor::Point2i windowSize;
 			float cameraNearPlane;
 			float cameraFarPlane;
 			int32_t fogType;
@@ -115,6 +116,15 @@ namespace castor3d
 			, bool lights = true )const;
 		/**
 		 *\~english
+		 *\brief		Updates the UBO from given values.
+		 *\param[in]	window	The window dimensions.
+		 *\~french
+		 *\brief		Met à jour l'UBO avec les valeurs données.
+		 *\param[in]	window	Les dimensions de la fenêtre.
+		 */
+		C3D_API void setWindowSize( castor::Size const & window )const;
+		/**
+		 *\~english
 		 *\name			getters.
 		 *\~french
 		 *\name			getters.
@@ -147,6 +157,9 @@ namespace castor3d
 		//!\~english	Name of the camera position frame variable.
 		//!\~french		Nom de la frame variable contenant la position de la caméra.
 		C3D_API static castor::String const CameraPos;
+		//!\~english	Name of the window dimensions frame variable.
+		//!\~french		Nom de la frame variable contenant les dimensions de la fenêtre.
+		C3D_API static castor::String const WindowSize;
 		//!\~english	Name of the camera near plane frame variable.
 		//!\~french		Nom de la frame variable contenant la valeur du plan proche de la caméra.
 		C3D_API static castor::String const CameraNearPlane;
@@ -174,7 +187,8 @@ namespace castor3d
 	auto c3d_ambientLight = scene.declMember< glsl::Vec4 >( castor3d::SceneUbo::AmbientLight );\
 	auto c3d_backgroundColour = scene.declMember< glsl::Vec4 >( castor3d::SceneUbo::BackgroundColour );\
 	auto c3d_lightsCount = scene.declMember< glsl::IVec4 >( castor3d::SceneUbo::LightsCount );\
-	auto c3d_cameraPosition = scene.declMember< glsl::Vec3 >( castor3d::SceneUbo::CameraPos );\
+	auto c3d_cameraPosition = scene.declMember< glsl::Vec4 >( castor3d::SceneUbo::CameraPos );\
+	auto c3d_windowSize = scene.declMember< glsl::IVec2 >( castor3d::SceneUbo::WindowSize );\
 	auto c3d_cameraNearPlane = scene.declMember< glsl::Float >( castor3d::SceneUbo::CameraNearPlane ); \
 	auto c3d_cameraFarPlane = scene.declMember< glsl::Float >( castor3d::SceneUbo::CameraFarPlane );\
 	auto c3d_fogType = scene.declMember< glsl::Int >( castor3d::SceneUbo::FogType );\

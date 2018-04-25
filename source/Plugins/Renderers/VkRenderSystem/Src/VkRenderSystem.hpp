@@ -16,10 +16,12 @@ namespace VkRender
 		: public castor3d::RenderSystem
 	{
 	public:
-		explicit RenderSystem( castor3d::Engine & engine );
+		explicit RenderSystem( castor3d::Engine & engine
+			, castor::String const & appName );
 		virtual ~RenderSystem();
 
-		static castor3d::RenderSystemUPtr create( castor3d::Engine & engine );
+		static castor3d::RenderSystemUPtr create( castor3d::Engine & engine
+			, castor::String const & appName );
 		/**
 		*\copydoc		castor3d::RenderSystem::doInitialise
 		*/

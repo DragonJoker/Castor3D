@@ -8,6 +8,9 @@
 #include "Event/Frame/FunctorEvent.hpp"
 #include "Mesh/SubmeshComponent/BonesComponent.hpp"
 #include "Mesh/SubmeshComponent/InstantiationComponent.hpp"
+#include "Mesh/SubmeshComponent/TriFaceMapping.hpp"
+#include "Mesh/SubmeshComponent/LinesMapping.hpp"
+#include "Render/RenderPass.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/Scene.hpp"
 #include "Vertex.hpp"
@@ -63,22 +66,47 @@ namespace castor3d
 
 			if ( result )
 			{
-				InterleavedVertex const * srcbuf = reinterpret_cast< InterleavedVertex const * >( obj.getPoints().data() );
+				auto const * srcbuf = reinterpret_cast< InterleavedVertex const * >( obj.getPoints().data() );
 				std::vector< InterleavedVertexT< double > > dstbuf( count );
 				doCopyVertices( count, srcbuf, dstbuf.data() );
 				result = doWriteChunk( dstbuf, ChunkType::eSubmeshVertex, m_chunk );
 			}
 		}
 
-		if ( result && obj.hasComponent( TriFaceMapping::Name ) )
+		if ( result )
 		{
 			uint32_t count = obj.getFaceCount();
-			result = doWriteChunk( count, ChunkType::eSubmeshFaceCount, m_chunk );
 
-			if ( result )
+			if ( obj.hasComponent( TriFaceMapping::Name ) )
 			{
-				FaceIndices const * srcbuf = reinterpret_cast< FaceIndices const * >( obj.getComponent< TriFaceMapping >()->getFaces().data() );
-				result = doWriteChunk( srcbuf, count, ChunkType::eSubmeshFaces, m_chunk );
+				result = doWriteChunk( 3u, ChunkType::eSubmeshIndexComponentCount, m_chunk );
+
+				if ( result )
+				{
+					result = doWriteChunk( count, ChunkType::eSubmeshIndexCount, m_chunk );
+				}
+
+				if ( result )
+				{
+					auto const * srcbuf = reinterpret_cast< FaceIndices const * >( obj.getComponent< TriFaceMapping >()->getFaces().data() );
+					result = doWriteChunk( srcbuf, count, ChunkType::eSubmeshIndices, m_chunk );
+				}
+			}
+			else if ( obj.hasComponent( LinesMapping::Name ) )
+			{
+				result = doWriteChunk( 2u, ChunkType::eSubmeshIndexComponentCount, m_chunk );
+				uint32_t count = obj.getFaceCount();
+
+				if ( result )
+				{
+					result = doWriteChunk( count, ChunkType::eSubmeshIndexCount, m_chunk );
+				}
+
+				if ( result )
+				{
+					auto const * srcbuf = reinterpret_cast< LineIndices const * >( obj.getComponent< LinesMapping >()->getFaces().data() );
+					result = doWriteChunk( srcbuf, count, ChunkType::eSubmeshIndices, m_chunk );
+				}
 			}
 		}
 
@@ -102,9 +130,11 @@ namespace castor3d
 		bool result = true;
 		String name;
 		std::vector< FaceIndices > faces;
+		std::vector< LineIndices > lines;
 		std::vector< VertexBoneData > bones;
 		std::vector< InterleavedVertexT< double > > srcbuf;
 		uint32_t count{ 0u };
+		uint32_t components{ 0u };
 		uint32_t faceCount{ 0u };
 		uint32_t boneCount{ 0u };
 		BinaryChunk chunk;
@@ -115,25 +145,29 @@ namespace castor3d
 			switch ( chunk.getChunkType() )
 			{
 			case ChunkType::eSubmeshVertexCount:
-				result = doParseChunk( count, chunk );
-
-				if ( result )
+				if ( m_fileVersion > Version{ 1, 3, 0 } )
 				{
-					srcbuf.resize( count );
-				}
+					result = doParseChunk( count, chunk );
 
+					if ( result )
+					{
+						srcbuf.resize( count );
+					}
+				}
 				break;
 
 			case ChunkType::eSubmeshVertex:
-				result = doParseChunk( srcbuf, chunk );
-
-				if ( result && !srcbuf.empty() )
+				if ( m_fileVersion > Version{ 1, 3, 0 } )
 				{
-					std::vector< InterleavedVertex > dstbuf( srcbuf.size() );
-					doCopyVertices( uint32_t( srcbuf.size() ), srcbuf.data(), dstbuf.data() );
-					obj.addPoints( dstbuf );
-				}
+					result = doParseChunk( srcbuf, chunk );
 
+					if ( result && !srcbuf.empty() )
+					{
+						std::vector< InterleavedVertex > dstbuf( srcbuf.size() );
+						doCopyVertices( uint32_t( srcbuf.size() ), srcbuf.data(), dstbuf.data() );
+						obj.addPoints( dstbuf );
+					}
+				}
 				break;
 
 			case ChunkType::eSubmeshBoneCount:
@@ -175,6 +209,110 @@ namespace castor3d
 
 				break;
 
+			case ChunkType::eSubmeshIndexComponentCount:
+				result = doParseChunk( components, chunk );
+				break;
+
+			case ChunkType::eSubmeshIndexCount:
+				result = doParseChunk( count, chunk );
+
+				if ( result )
+				{
+					faceCount = count;
+
+					if ( components == 3u )
+					{
+						faces.resize( count );
+					}
+					else if ( components == 2u )
+					{
+						lines.resize( count );
+					}
+				}
+
+				break;
+
+			case ChunkType::eSubmeshIndices:
+
+				if ( faceCount > 0 )
+				{
+					if ( components == 3u )
+					{
+						result = doParseChunk( faces, chunk );
+
+						if ( result )
+						{
+							auto indexMapping = std::make_shared< TriFaceMapping >( obj );
+							indexMapping->addFaceGroup( faces );
+							obj.setIndexMapping( indexMapping );
+						}
+					}
+					else if ( components == 2u )
+					{
+						result = doParseChunk( lines, chunk );
+
+						if ( result )
+						{
+							auto indexMapping = std::make_shared< LinesMapping >( obj );
+							indexMapping->addLineGroup( lines );
+							obj.setIndexMapping( indexMapping );
+						}
+					}
+				}
+
+				faceCount = 0u;
+				break;
+
+			case ChunkType::eSubmeshFaceCount:
+				break;
+
+			case ChunkType::eSubmeshFaces:
+				break;
+
+			default:
+				result = false;
+				break;
+			}
+		}
+
+		return result;
+	}
+
+	bool BinaryParser< Submesh >::doParse_v1_3( Submesh & obj )
+	{
+		bool result = true;
+		std::vector< FaceIndices > faces;
+		std::vector< InterleavedVertexT< double > > srcbuf;
+		uint32_t count{ 0u };
+		uint32_t faceCount{ 0u };
+		BinaryChunk chunk;
+
+		while ( result && doGetSubChunk( chunk ) )
+		{
+			switch ( chunk.getChunkType() )
+			{
+			case ChunkType::eSubmeshVertexCount:
+				result = doParseChunk( count, chunk );
+
+				if ( result )
+				{
+					srcbuf.resize( count );
+				}
+
+				break;
+
+			case ChunkType::eSubmeshVertex:
+				result = doParseChunk( srcbuf, chunk );
+
+				if ( result && !srcbuf.empty() )
+				{
+					std::vector< InterleavedVertex > dstbuf( srcbuf.size() );
+					doCopyVertices( uint32_t( srcbuf.size() ), srcbuf.data(), dstbuf.data() );
+					obj.addPoints( dstbuf );
+				}
+
+				break;
+
 			case ChunkType::eSubmeshFaceCount:
 				result = doParseChunk( count, chunk );
 
@@ -192,15 +330,17 @@ namespace castor3d
 				if ( result && faceCount > 0 )
 				{
 					auto indexMapping = std::make_shared< TriFaceMapping >( obj );
+
+					for ( auto & face : faces )
+					{
+						std::swap( face.m_index[1], face.m_index[2] );
+					}
+
 					indexMapping->addFaceGroup( faces );
 					obj.setIndexMapping( indexMapping );
 				}
 
 				faceCount = 0u;
-				break;
-
-			default:
-				result = false;
 				break;
 			}
 		}
@@ -242,12 +382,23 @@ namespace castor3d
 				component.second->upload();
 			}
 
-			m_vertexLayout = renderer::makeLayout< InterleavedVertex >( 0u, renderer::VertexInputRate::eVertex );
-			m_vertexLayout->createAttribute( Position, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, pos ) );
-			m_vertexLayout->createAttribute( Normal, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, nml ) );
-			m_vertexLayout->createAttribute( Tangent, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, tan ) );
-			m_vertexLayout->createAttribute( Bitangent, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, bin ) );
-			m_vertexLayout->createAttribute( Texture, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, tex ) );
+			m_vertexLayout = renderer::makeLayout< InterleavedVertex >( 0u
+				, renderer::VertexInputRate::eVertex );
+			m_vertexLayout->createAttribute( RenderPass::VertexInputs::PositionLocation
+				, renderer::Format::eR32G32B32_SFLOAT
+				, offsetof( InterleavedVertex, pos ) );
+			m_vertexLayout->createAttribute( RenderPass::VertexInputs::NormalLocation
+				, renderer::Format::eR32G32B32_SFLOAT
+				, offsetof( InterleavedVertex, nml ) );
+			m_vertexLayout->createAttribute( RenderPass::VertexInputs::TangentLocation
+				, renderer::Format::eR32G32B32_SFLOAT
+				, offsetof( InterleavedVertex, tan ) );
+			m_vertexLayout->createAttribute( RenderPass::VertexInputs::BitangentLocation
+				, renderer::Format::eR32G32B32_SFLOAT
+				, offsetof( InterleavedVertex, bin ) );
+			m_vertexLayout->createAttribute( RenderPass::VertexInputs::TextureLocation
+				, renderer::Format::eR32G32B32_SFLOAT
+				, offsetof( InterleavedVertex, tex ) );
 
 			renderer::BufferCRefArray buffers;
 			renderer::UInt64Array offsets;

@@ -37,6 +37,8 @@
 #include "Render/RenderTarget.hpp"
 #include "Render/RenderWindow.hpp"
 #include "Scene/BillboardList.hpp"
+#include "Scene/Geometry.hpp"
+#include "Scene/Scene.hpp"
 #include "Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Scene/Background/Image.hpp"
@@ -949,7 +951,10 @@ namespace castor3d
 		else if ( !p_params.empty() )
 		{
 			p_params[0]->get( name );
-			parsingContext->geometry = parsingContext->scene->getGeometryCache().add( name, nullptr, nullptr );
+			parsingContext->geometry = std::make_shared< Geometry >( name
+				, *parsingContext->scene
+				, nullptr
+				, nullptr );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eObject )
@@ -1820,6 +1825,7 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserObjectEnd )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		parsingContext->scene->getGeometryCache().add( parsingContext->geometry );
 		parsingContext->geometry.reset();
 	}
 	END_ATTRIBUTE_POP()

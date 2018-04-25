@@ -31,7 +31,7 @@ namespace castor3d
 	( ( uint32_t( version ) >>  0 ) & uint32_t( 0xFF ) )
 	//!\~english	The current format version number.
 	//!\~french		La version actuelle du format.
-	uint32_t const CMSH_VERSION = MAKE_CMSH_VERSION( 0x01, 0x03, 0x0000 );
+	uint32_t const CMSH_VERSION = MAKE_CMSH_VERSION( 0x01, 0x04, 0x0000 );
 	//!\~english	A define to ease the declaration of a chunk id.
 	//!\~french		Un define pour faciliter la déclaration d'un id de chunk.
 #	define MAKE_CHUNK_ID( a, b, c, d, e, f, g, h )\
@@ -43,6 +43,8 @@ namespace castor3d
 	| (uint64_t( f ) << 16)\
 	| (uint64_t( g ) << 8)\
 	| (uint64_t( h ) << 0))
+#	define MAKE_DEPRECATED_CHUNK_ID( a, b, c, d, e, f, g, h )\
+	MAKE_CHUNK_ID( a, b, c, d, e, f, g, h )
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.7.0.0
@@ -61,7 +63,7 @@ namespace castor3d
 		eCmshVersion = MAKE_CHUNK_ID( 'C', 'M', 'S', 'H', 'V', 'R', 'S', 'N' ),
 		eName = MAKE_CHUNK_ID( 'N', 'A', 'M', 'E', ' ', ' ', ' ', ' ' ),
 		eMesh = MAKE_CHUNK_ID( 'M', 'E', 'S', 'H', ' ', ' ', ' ', ' ' ),
-		eSkeleton = MAKE_CHUNK_ID( 'S', 'K', 'E', 'L', 'E', 'T', 'O', 'N' ),
+		eSkeleton = MAKE_DEPRECATED_CHUNK_ID( 'S', 'K', 'E', 'L', 'E', 'T', 'O', 'N' ),
 		eSkeletonGlobalInverse = MAKE_CHUNK_ID( 'S', 'K', 'E', 'L', 'G', 'I', 'M', 'X' ),
 		eSkeletonBone = MAKE_CHUNK_ID( 'S', 'K', 'E', 'L', 'B', 'O', 'N', 'E' ),
 		eBoneParentName = MAKE_CHUNK_ID( 'B', 'O', 'N', 'E', 'P', 'A', 'R', 'T' ),
@@ -74,8 +76,8 @@ namespace castor3d
 		eSubmeshBones = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'B', 'O', 'N', 'E' ),
 		eSubmeshMatrixCount = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'M', 'X', 'C', 'T' ),
 		eSubmeshMatrices = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'M', 'T', 'R', 'X' ),
-		eSubmeshFaceCount = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'F', 'C', 'C', 'T' ),
-		eSubmeshFaces = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'F', 'A', 'C', 'E' ),
+		eSubmeshFaceCount = MAKE_DEPRECATED_CHUNK_ID( 'S', 'M', 'S', 'H', 'F', 'C', 'C', 'T' ),
+		eSubmeshFaces = MAKE_DEPRECATED_CHUNK_ID( 'S', 'M', 'S', 'H', 'F', 'A', 'C', 'E' ),
 		eAnimable = MAKE_CHUNK_ID( 'A', 'N', 'I', 'M', 'A', 'B', 'L', 'E' ),
 		eAnimation = MAKE_CHUNK_ID( 'A', 'N', 'M', 'A', 'T', 'I', 'O', 'N' ),
 		eAnimLength = MAKE_CHUNK_ID( 'A', 'N', 'M', 'L', 'E', 'N', 'G', 'T' ),
@@ -86,8 +88,8 @@ namespace castor3d
 		eSkeletonAnimationNode = MAKE_CHUNK_ID( 'A', 'N', 'S', 'K', 'N', 'O', 'D', 'E' ),
 		eSkeletonAnimationBone = MAKE_CHUNK_ID( 'A', 'N', 'S', 'K', 'B', 'O', 'N', 'E' ),
 		eMovingTransform = MAKE_CHUNK_ID( 'M', 'V', 'N', 'G', 'T', 'S', 'F', 'M' ),
-		eKeyframeCount = MAKE_CHUNK_ID( 'K', 'F', 'R', 'M', 'C', 'O', 'N', 'T' ),
-		eKeyframes = MAKE_CHUNK_ID( 'K', 'E', 'Y', 'F', 'R', 'M', 'E', 'S' ),
+		eKeyframeCount = MAKE_DEPRECATED_CHUNK_ID( 'K', 'F', 'R', 'M', 'C', 'O', 'N', 'T' ),
+		eKeyframes = MAKE_DEPRECATED_CHUNK_ID( 'K', 'E', 'Y', 'F', 'R', 'M', 'E', 'S' ),
 		eBonesComponent = MAKE_CHUNK_ID( 'B', 'O', 'N', 'E', 'C', 'O', 'M', 'P' ),
 		// Version 1.2
 		eMeshAnimationKeyFrame = MAKE_CHUNK_ID( 'M', 'S', 'A', 'N', 'K', 'F', 'R', 'M' ),
@@ -100,6 +102,10 @@ namespace castor3d
 		eSkeletonAnimationKeyFrameObjectType = MAKE_CHUNK_ID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'Y' ),
 		eSkeletonAnimationKeyFrameObjectName = MAKE_CHUNK_ID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'N' ),
 		eSkeletonAnimationKeyFrameObjectTransform = MAKE_CHUNK_ID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'T' ),
+		// Version 1.4
+		eSubmeshIndexComponentCount = MAKE_CHUNK_ID( 'S', 'M', 'F', 'C', 'C', 'P', 'C', 'T' ),
+		eSubmeshIndexCount = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'I', 'C', 'C', 'T' ),
+		eSubmeshIndices = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'I', 'D', 'C', 'S' ),
 	};
 	/**
 	 *\~english

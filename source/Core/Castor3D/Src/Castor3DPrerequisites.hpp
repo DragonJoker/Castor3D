@@ -403,12 +403,8 @@ namespace castor3d
 	template< typename ElementType, typename KeyType >
 	class ObjectCache;
 
-	using AnimatedObjectGroupCache = Cache< AnimatedObjectGroup, castor::String >;
-	using BillboardListCache = ObjectCache< BillboardList, castor::String >;
 	using CameraCache = ObjectCache< Camera, castor::String >;
 
-	DECLARE_SMART_PTR( AnimatedObjectGroupCache );
-	DECLARE_SMART_PTR( BillboardListCache );
 	DECLARE_SMART_PTR( CameraCache );
 
 	template< typename ResourceType, typename CacheType, EventType EventType >

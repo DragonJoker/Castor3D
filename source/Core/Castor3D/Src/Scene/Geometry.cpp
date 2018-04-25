@@ -163,6 +163,8 @@ namespace castor3d
 				{
 					getScene()->createEnvironmentMap( *getParent() );
 				}
+
+				onMaterialChanged( *this, submesh, oldMaterial, material );
 			}
 		}
 		else

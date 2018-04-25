@@ -19,7 +19,10 @@ namespace castor3d
 	\~french
 	\brief		La fabrique de techniques de rendu
 	*/
-	using RenderSystemFactory = castor::Factory< RenderSystem, castor::String, RenderSystemUPtr, std::function< RenderSystemUPtr( Engine & ) > >;
+	using RenderSystemFactory = castor::Factory< RenderSystem
+		, castor::String
+		, RenderSystemUPtr
+		, std::function< RenderSystemUPtr( Engine &, castor::String const & ) > >;
 }
 
 #endif

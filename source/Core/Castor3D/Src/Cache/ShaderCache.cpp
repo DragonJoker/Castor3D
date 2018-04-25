@@ -268,7 +268,7 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				auto bbcenter = writer.declLocale( cuT( "bbcenter" ), writer.paren( c3d_mtxModel * vec4( center, 1.0 ) ).xyz() );
-				auto toCamera = writer.declLocale( cuT( "toCamera" ), c3d_cameraPosition - bbcenter );
+				auto toCamera = writer.declLocale( cuT( "toCamera" ), c3d_cameraPosition.xyz() - bbcenter );
 				toCamera.y() = 0.0_f;
 				toCamera = normalize( toCamera );
 				auto right = writer.declLocale( cuT( "right" ), vec3( c3d_curView[0][0], c3d_curView[1][0], c3d_curView[2][0] ) );

@@ -229,6 +229,10 @@ namespace castor3d
 		m_colourTexture->cleanup();
 		m_depthBuffer.reset();
 		m_colourTexture.reset();
+
+		m_renderTarget.getScene()->getGeometryCache().cleanupUbos();
+		m_renderTarget.getScene()->getBillboardListCache().cleanupUbos();
+		m_renderTarget.getScene()->getAnimatedObjectGroupCache().cleanupUbos();
 	}
 
 	void RenderTechnique::update( RenderQueueArray & queues )

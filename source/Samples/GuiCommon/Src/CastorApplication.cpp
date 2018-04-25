@@ -270,7 +270,7 @@ namespace GuiCommon
 		Logger::setFileName( Engine::getEngineDirectory() / ( m_internalName + cuT( ".log" ) ) );
 		Logger::logInfo( m_internalName + cuT( " - Start" ) );
 
-		m_castor = new Engine();
+		m_castor = new Engine( m_internalName );
 		doloadPlugins( p_splashScreen );
 
 		p_splashScreen.Step( _( "Initialising Castor3D" ), 1 );

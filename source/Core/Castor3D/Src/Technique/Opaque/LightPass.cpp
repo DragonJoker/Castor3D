@@ -658,7 +658,7 @@ namespace castor3d
 			auto lightSpecular = writer.declLocale( cuT( "lightSpecular" )
 				, vec3( 0.0_f ) );
 			auto eye = writer.declLocale( cuT( "eye" )
-				, c3d_cameraPosition );
+				, c3d_cameraPosition.xyz() );
 			auto depth = writer.declLocale( cuT( "depth" )
 				, texture( c3d_mapDepth, texCoord, 0.0_f ).x() );
 			auto wsPosition = writer.declLocale( cuT( "wsPosition" )
@@ -819,7 +819,7 @@ namespace castor3d
 			auto lightSpecular = writer.declLocale( cuT( "lightSpecular" )
 				, vec3( 0.0_f ) );
 			auto eye = writer.declLocale( cuT( "eye" )
-				, c3d_cameraPosition );
+				, c3d_cameraPosition.xyz() );
 			auto depth = writer.declLocale( cuT( "depth" )
 				, texture( c3d_mapDepth, texCoord, 0.0_f ).x() );
 			auto wsPosition = writer.declLocale( cuT( "wsPosition" )
@@ -1042,7 +1042,7 @@ namespace castor3d
 			auto lightSpecular = writer.declLocale( cuT( "lightSpecular" )
 				, vec3( 0.0_f ) );
 			auto eye = writer.declLocale( cuT( "eye" )
-				, c3d_cameraPosition );
+				, c3d_cameraPosition.xyz() );
 			auto depth = writer.declLocale( cuT( "depth" )
 				, texture( c3d_mapDepth, texCoord, 0.0_f ).x() );
 			auto wsPosition = writer.declLocale( cuT( "wsPosition" )

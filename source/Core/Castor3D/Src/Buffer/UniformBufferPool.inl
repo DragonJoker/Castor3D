@@ -19,6 +19,8 @@ namespace castor3d
 	void UniformBufferPool< T >::cleanup()
 	{
 		m_buffers.clear();
+		m_uploadCommandBuffer.reset();
+		m_stagingBuffer.reset();
 	}
 
 	template< typename T >
@@ -55,8 +57,8 @@ namespace castor3d
 		{
 			if ( !m_maxCount )
 			{
-				uint32_t maxSize = getRenderSystem()->getMainDevice()->getProperties().limits.maxUniformBufferRange;
-				uint32_t minOffset = uint32_t( getRenderSystem()->getMainDevice()->getProperties().limits.minUniformBufferOffsetAlignment );
+				uint32_t maxSize = getRenderSystem()->getProperties().limits.maxUniformBufferRange;
+				uint32_t minOffset = uint32_t( getRenderSystem()->getProperties().limits.minUniformBufferOffsetAlignment );
 				uint32_t elementSize = 0u;
 				uint32_t size = uint32_t( sizeof( T ) );
 
@@ -120,14 +122,14 @@ namespace castor3d
 	template< typename T >
 	void UniformBufferPool< T >::putBuffer( UniformBufferOffset< T > const & bufferOffset )
 	{
-		auto key = uint32( bufferOffset.flags );
+		auto key = uint32_t( bufferOffset.flags );
 		auto it = m_buffers.find( key );
 		REQUIRE( it != m_buffers.end() );
 		auto itB = std::find_if( it->second.begin()
 			, it->second.end()
 			, [&bufferOffset]( std::unique_ptr< UniformBuffer< T > > const & lookup )
 			{
-				return &lookup.get() == &bufferOffset.buffer;
+				return lookup.get() == bufferOffset.buffer;
 			} );
 		REQUIRE( itB != it->second.end() );
 		( *itB )->deallocate( bufferOffset.offset );

@@ -492,7 +492,7 @@ namespace castor3d
 									, programFlags
 									, sceneFlags
 									, pass->IsTwoSided()
-									, { submesh->getVertexLayout() } );
+									, submesh->getGeometryBuffers().layouts );
 
 								if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) != opaque )
 								{
@@ -547,8 +547,7 @@ namespace castor3d
 				}
 			}
 
-			renderPass.getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-				, [&renderPass, &nodes]()
+			auto initialiseNodes = [&renderPass, &nodes]()
 			{
 				doInitialiseNodes( renderPass, nodes.staticNodes.frontCulled );
 				doInitialiseNodes( renderPass, nodes.staticNodes.backCulled );
@@ -561,7 +560,20 @@ namespace castor3d
 				doInitialiseInstancedNodes( renderPass, nodes.instancedStaticNodes.backCulled );
 				doInitialiseInstancedNodes( renderPass, nodes.instancedSkinnedNodes.frontCulled );
 				doInitialiseInstancedNodes( renderPass, nodes.instancedSkinnedNodes.backCulled );
-			} ) );
+			};
+
+			if ( renderPass.getEngine()->getRenderSystem()->hasCurrentDevice() )
+			{
+				initialiseNodes();
+			}
+			else
+			{
+				renderPass.getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
+					, [initialiseNodes]()
+					{
+						initialiseNodes();
+					} ) );
+			}
 		}
 
 		void doSortRenderNodes( RenderPass & renderPass
@@ -656,11 +668,18 @@ namespace castor3d
 				commandBuffer.bindDescriptorSet( *node.texDescriptorSet, pipeline.getPipelineLayout() );
 			}
 
-			commandBuffer.bindVertexBuffers( 0u, geometryBuffers.vbo, geometryBuffers.vboOffsets );
+			for ( uint32_t i = 0; i < geometryBuffers.vbo.size(); ++i )
+			{
+				commandBuffer.bindVertexBuffer( geometryBuffers.layouts[i].get().getBindingSlot()
+					, geometryBuffers.vbo[i]
+					, geometryBuffers.vboOffsets[i] );
+			}
 
 			if ( geometryBuffers.ibo )
 			{
-				commandBuffer.bindIndexBuffer( *geometryBuffers.ibo, geometryBuffers.iboOffset, renderer::IndexType::eUInt32 );
+				commandBuffer.bindIndexBuffer( *geometryBuffers.ibo
+					, geometryBuffers.iboOffset
+					, renderer::IndexType::eUInt32 );
 				commandBuffer.drawIndexed( geometryBuffers.idxCount );
 			}
 			else
@@ -686,11 +705,18 @@ namespace castor3d
 				commandBuffer.bindDescriptorSet( *node.texDescriptorSet, pipeline.getPipelineLayout() );
 			}
 
-			commandBuffer.bindVertexBuffers( 0u, geometryBuffers.vbo, geometryBuffers.vboOffsets );
+			for ( uint32_t i = 0; i < geometryBuffers.vbo.size(); ++i )
+			{
+				commandBuffer.bindVertexBuffer( geometryBuffers.layouts[i].get().getBindingSlot()
+					, geometryBuffers.vbo[i]
+					, geometryBuffers.vboOffsets[i] );
+			}
 
 			if ( geometryBuffers.ibo )
 			{
-				commandBuffer.bindIndexBuffer( *geometryBuffers.ibo, geometryBuffers.iboOffset, renderer::IndexType::eUInt32 );
+				commandBuffer.bindIndexBuffer( *geometryBuffers.ibo
+					, geometryBuffers.iboOffset
+					, renderer::IndexType::eUInt32 );
 				commandBuffer.drawIndexed( geometryBuffers.idxCount );
 			}
 			else

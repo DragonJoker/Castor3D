@@ -16,10 +16,12 @@ namespace GlRender
 		: public castor3d::RenderSystem
 	{
 	public:
-		explicit RenderSystem( castor3d::Engine & engine );
+		explicit RenderSystem( castor3d::Engine & engine
+			, castor::String const & appName );
 		~RenderSystem();
 
-		static castor3d::RenderSystemUPtr create( castor3d::Engine & engine );
+		static castor3d::RenderSystemUPtr create( castor3d::Engine & engine
+			, castor::String const & appName );
 
 	public:
 		C3D_Gl_API static castor::String Name;

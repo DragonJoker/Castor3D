@@ -88,8 +88,8 @@ namespace GrayScale
 
 	//*********************************************************************************************
 
-	String PostEffect::Type = cuT( "grayscale" );
-	String PostEffect::Name = cuT( "GrayScale PostEffect" );
+	castor::String PostEffect::Type = cuT( "grayscale" );
+	castor::String PostEffect::Name = cuT( "GrayScale PostEffect" );
 
 	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
 		, castor3d::RenderSystem & renderSystem
@@ -97,7 +97,7 @@ namespace GrayScale
 		: castor3d::PostEffect{ PostEffect::Type, renderTarget, renderSystem, params, false }
 		, m_surface{ *renderSystem.getEngine() }
 	{
-		String name = cuT( "GrayScale" );
+		castor::String name = cuT( "GrayScale" );
 
 		if ( !m_renderTarget.getEngine()->getSamplerCache().has( name ) )
 		{
@@ -182,7 +182,7 @@ namespace GrayScale
 		renderer::DescriptorSetLayoutBindingArray bindings;
 		m_quad = std::make_unique< castor3d::RenderQuad >( *getRenderSystem(), true );
 		m_quad->createPipeline( size
-			, Position{}
+			, castor::Position{}
 			, stages
 			, m_target->getDefaultView()
 			, *m_renderPass

@@ -84,11 +84,6 @@ namespace castor3d
 				{
 					data.nodeIndex = index++;
 					ubo.upload();
-
-					if ( renderNode->data.isInitialised() )
-					{
-						doUpdateNodeModelMatrix( *renderNode );
-					}
 				}
 
 				count++;
@@ -256,6 +251,7 @@ namespace castor3d
 			if ( itCam != itScn->second.end() )
 			{
 				itCam->second.update();
+				doUpdateNodes( itCam->second.getCulledRenderNodes() );
 				auto pixel = doFboPick( position, camera, itCam->second.getCommandBuffer() );
 				result = doPick( pixel, itCam->second.getCulledRenderNodes() );
 			}
@@ -285,43 +281,42 @@ namespace castor3d
 			renderer::ClearColorValue{ 0.0, 0.0, 0.0, 1.0 },
 			renderer::DepthStencilClearValue{ 0.0f, 1 }
 		};
-		auto & cmdBuffer = getCommandBuffer();
 
-		if ( cmdBuffer.begin() )
+		if ( m_commandBuffer->begin() )
 		{
-			cmdBuffer.beginRenderPass( *m_renderPass
+			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *m_frameBuffer
 				, clearValues
 				, renderer::SubpassContents::eSecondaryCommandBuffers );
-			cmdBuffer.executeCommands( { commandBuffer } );
-			cmdBuffer.endRenderPass();
+			m_commandBuffer->executeCommands( { commandBuffer } );
+			m_commandBuffer->endRenderPass();
 
-			m_copyRegion.imageOffset.x = int32_t( position.x() - PickingOffset );
-			m_copyRegion.imageOffset.y = int32_t( camera.getHeight() - position.y() - PickingOffset );
+			//m_copyRegion.imageOffset.x = int32_t( position.x() - PickingOffset );
+			//m_copyRegion.imageOffset.y = int32_t( camera.getHeight() - position.y() - PickingOffset );
 
-			cmdBuffer.memoryBarrier( renderer::PipelineStageFlag::eTransfer
-				, renderer::PipelineStageFlag::eTransfer
-				, m_stagingBuffer->getBuffer().makeTransferDestination() );
-			cmdBuffer.copyToBuffer( m_copyRegion
-				, *m_colourTexture
-				, m_stagingBuffer->getBuffer() );
-			cmdBuffer.memoryBarrier( renderer::PipelineStageFlag::eTransfer
-				, renderer::PipelineStageFlag::eTransfer
-				, m_stagingBuffer->getBuffer().makeMemoryTransitionBarrier( renderer::AccessFlag::eMemoryRead ) );
-			cmdBuffer.end();
+			//m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
+			//	, renderer::PipelineStageFlag::eTransfer
+			//	, m_stagingBuffer->getBuffer().makeTransferDestination() );
+			//m_commandBuffer->copyToBuffer( m_copyRegion
+			//	, *m_colourTexture
+			//	, m_stagingBuffer->getBuffer() );
+			//m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
+			//	, renderer::PipelineStageFlag::eTransfer
+			//	, m_stagingBuffer->getBuffer().makeMemoryTransitionBarrier( renderer::AccessFlag::eMemoryRead ) );
+			m_commandBuffer->end();
 		}
 
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
 		renderer::FencePtr fence = device.createFence();
-		device.getGraphicsQueue().submit( cmdBuffer, fence.get() );
+		device.getGraphicsQueue().submit( *m_commandBuffer, fence.get() );
 		fence->wait( renderer::FenceTimeout );
 
-		if ( auto * data = m_stagingBuffer->lock( 0u, m_stagingBuffer->getCount(), renderer::MemoryMapFlag::eRead ) )
-		{
-			std::memcpy( m_buffer->ptr(), data, m_stagingBuffer->getCount() );
-			m_stagingBuffer->unlock();
-		}
+		//if ( auto * data = m_stagingBuffer->lock( 0u, m_stagingBuffer->getCount(), renderer::MemoryMapFlag::eRead ) )
+		//{
+		//	std::memcpy( m_buffer->ptr(), data, m_stagingBuffer->getCount() );
+		//	m_stagingBuffer->unlock();
+		//}
 
 		auto it = std::static_pointer_cast< PxBuffer< PixelFormat::eRGBA32F > >( m_buffer )->begin();
 		it += ( PickingOffset * PickingWidth ) + PickingOffset - 1;
@@ -467,7 +462,7 @@ namespace castor3d
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
-
+		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 		m_pickingUbo = renderer::makeUniformBuffer< PickingUboData >( device
 			, 1u
 			, 0u
@@ -476,13 +471,19 @@ namespace castor3d
 		m_colourTexture = createTexture( device
 			, size
 			, renderer::Format::eR32G32B32A32_SFLOAT
-			, renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eTransferSrc
+			, renderer::ImageUsageFlag::eColourAttachment
+				| renderer::ImageUsageFlag::eTransferSrc
+				| renderer::ImageUsageFlag::eSampled
 			, renderer::MemoryPropertyFlag::eDeviceLocal );
 		m_colourView = createView( *m_colourTexture );
 
+		m_copyRegion.bufferImageHeight = 0u;
+		m_copyRegion.bufferOffset = 0u;
+		m_copyRegion.bufferRowLength = 0u;
 		m_copyRegion.imageExtent.width = PickingWidth;
 		m_copyRegion.imageExtent.height = PickingWidth;
 		m_copyRegion.imageExtent.depth = 1u;
+		m_copyRegion.imageOffset.z = 0u;
 		m_copyRegion.imageSubresource.aspectMask = m_colourView->getSubResourceRange().aspectMask;
 		m_copyRegion.imageSubresource.baseArrayLayer = 0u;
 		m_copyRegion.imageSubresource.layerCount = 1u;
@@ -515,7 +516,7 @@ namespace castor3d
 		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
 		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eTransferDstOptimal;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eTransferSrcOptimal;
 
 		renderPass.attachments[1].format = m_depthTexture->getFormat();
 		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eClear;
@@ -562,12 +563,12 @@ namespace castor3d
 
 	void PickingPass::doCleanup()
 	{
+		m_commandBuffer.reset();
 		m_buffer.reset();
 		m_pickingUbo.reset();
 		m_scenes.clear();
 		m_stagingBuffer.reset();
 		m_frameBuffer.reset();
-		m_renderPass.reset();
 		m_colourView.reset();
 		m_depthView.reset();
 		m_depthTexture.reset();
@@ -578,7 +579,7 @@ namespace castor3d
 		, uint32_t & index
 		, BillboardListRenderNode & node )
 	{
-		node.uboDescriptorSet->createBinding( layout.getBinding( index++ )
+		node.uboDescriptorSet->createBinding( layout.getBinding( UboBindingPoint )
 			, *m_pickingUbo );
 	}
 
@@ -586,7 +587,7 @@ namespace castor3d
 		, uint32_t & index
 		, SubmeshRenderNode & node )
 	{
-		node.uboDescriptorSet->createBinding( layout.getBinding( index++ )
+		node.uboDescriptorSet->createBinding( layout.getBinding( UboBindingPoint )
 			, *m_pickingUbo );
 	}
 
@@ -661,6 +662,109 @@ namespace castor3d
 			, alphaFunc );
 	}
 
+	glsl::Shader PickingPass::doGetVertexShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, bool invertNormals )const
+	{
+		using namespace glsl;
+		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
+		// Vertex inputs
+		auto position = writer.declAttribute< Vec4 >( cuT( "position" )
+			, RenderPass::VertexInputs::PositionLocation );
+		auto texture = writer.declAttribute< Vec3 >( cuT( "texcoord" )
+			, RenderPass::VertexInputs::TextureLocation );
+		auto bone_ids0 = writer.declAttribute< IVec4 >( cuT( "bone_ids0" )
+			, RenderPass::VertexInputs::BoneIds0Location
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto bone_ids1 = writer.declAttribute< IVec4 >( cuT( "bone_ids1" )
+			, RenderPass::VertexInputs::BoneIds1Location
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto weights0 = writer.declAttribute< Vec4 >( cuT( "weights0" )
+			, RenderPass::VertexInputs::Weights0Location
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto weights1 = writer.declAttribute< Vec4 >( cuT( "weights1" )
+			, RenderPass::VertexInputs::Weights1Location
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto transform = writer.declAttribute< Mat4 >( cuT( "transform" )
+			, RenderPass::VertexInputs::TransformLocation
+			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
+		auto material = writer.declAttribute< Int >( cuT( "material" )
+			, RenderPass::VertexInputs::MaterialLocation
+			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
+		auto position2 = writer.declAttribute< Vec4 >( cuT( "position2" )
+			, RenderPass::VertexInputs::Position2Location
+			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto texture2 = writer.declAttribute< Vec3 >( cuT( "texture2" )
+			, RenderPass::VertexInputs::Texture2Location
+			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto gl_InstanceID( writer.declBuiltin< Int >( writer.getInstanceID() ) );
+
+		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
+		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
+		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
+		SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, programFlags );
+		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, programFlags );
+
+		// Outputs
+		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" )
+			, RenderPass::VertexOutputs::TextureLocation );
+		auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" )
+			, RenderPass::VertexOutputs::InstanceLocation );
+		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
+			, RenderPass::VertexOutputs::MaterialLocation );
+		auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+
+		std::function< void() > main = [&]()
+		{
+			auto v4Vertex = writer.declLocale( cuT( "v4Vertex" )
+				, vec4( position.xyz(), 1.0 ) );
+			auto v3Texture = writer.declLocale( cuT( "v3Texture" )
+				, texture );
+			auto mtxModel = writer.declLocale< Mat4 >( cuT( "mtxModel" ) );
+
+			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
+			{
+				mtxModel = SkinningUbo::computeTransform( writer, programFlags );
+			}
+			else if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
+			{
+				mtxModel = transform;
+			}
+			else
+			{
+				mtxModel = c3d_mtxModel;
+			}
+
+			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
+			{
+				vtx_material = material;
+			}
+			else
+			{
+				vtx_material = c3d_materialIndex;
+			}
+
+			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
+			{
+				auto time = writer.declLocale( cuT( "time" )
+					, vec3( 1.0_f - c3d_time ) );
+				v4Vertex = vec4( glsl::fma( v4Vertex.xyz(), time, position2.xyz() * c3d_time ), 1.0 );
+				v3Texture = glsl::fma( v3Texture, time, texture2 * c3d_time );
+			}
+
+			vtx_texture = v3Texture;
+			v4Vertex = mtxModel * v4Vertex;
+			v4Vertex = c3d_curView * v4Vertex;
+			vtx_instance = gl_InstanceID;
+			gl_Position = c3d_projection * v4Vertex;
+		};
+
+		writer.implementFunction< void >( cuT( "main" ), main );
+		return writer.finalise();
+	}
+
 	glsl::Shader PickingPass::doGetPixelShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
@@ -681,9 +785,12 @@ namespace castor3d
 
 		// Fragment Intputs
 		auto gl_PrimitiveID( writer.declBuiltin< UInt >( cuT( "gl_PrimitiveID" ) ) );
-		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ), 0u );
-		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ), 1u );
-		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" ), 2u );
+		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" )
+			, RenderPass::VertexOutputs::TextureLocation );
+		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" )
+			, RenderPass::VertexOutputs::InstanceLocation );
+		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
+			, RenderPass::VertexOutputs::MaterialLocation );
 		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( cuT( "c3d_mapOpacity" )
 			, MinBufferIndex
 			, 0u
@@ -715,6 +822,7 @@ namespace castor3d
 			}
 
 			pxl_fragColor = vec4( c3d_iDrawIndex, c3d_iNodeIndex, vtx_instance, gl_PrimitiveID );
+			pxl_fragColor = vec4( 1.0_f, 1.0, 1.0, 1.0 );
 		} );
 
 		return writer.finalise();
@@ -734,6 +842,13 @@ namespace castor3d
 
 	void PickingPass::doUpdatePipeline( RenderPipeline & pipeline )const
 	{
+	}
+
+	renderer::DescriptorSetLayoutBindingArray PickingPass::doCreateUboBindings( PipelineFlags const & flags )const
+	{
+		renderer::DescriptorSetLayoutBindingArray result = RenderPass::doCreateUboBindings( flags );
+		result.emplace_back( UboBindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment );
+		return result;
 	}
 
 	renderer::DescriptorSetLayoutBindingArray PickingPass::doCreateTextureBindings( PipelineFlags const & flags )const

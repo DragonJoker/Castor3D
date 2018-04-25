@@ -11,7 +11,6 @@ namespace castor3d
 {
 	String const BillboardUbo::BufferBillboard = cuT( "Billboard" );
 	String const BillboardUbo::Dimensions = cuT( "c3d_dimensions" );
-	String const BillboardUbo::WindowSize = cuT( "c3d_windowSize" );
 
 	BillboardUbo::BillboardUbo( Engine & engine )
 		: m_engine{ engine }
@@ -48,11 +47,5 @@ namespace castor3d
 		REQUIRE( m_ubo );
 		m_ubo->getData( 0u ).dimensions = dimensions;
 		m_ubo->upload();
-	}
-
-	void BillboardUbo::setWindowSize( Size const & window )const
-	{
-		REQUIRE( m_ubo );
-		m_ubo->getData( 0u ).windowSize = castor::Point2i{ window[0], window[1] };
 	}
 }

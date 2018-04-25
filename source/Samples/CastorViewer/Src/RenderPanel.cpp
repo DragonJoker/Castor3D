@@ -15,6 +15,7 @@
 #include <Material/MetallicRoughnessPbrPass.hpp>
 #include <Material/SpecularGlossinessPbrPass.hpp>
 #include <Mesh/Submesh.hpp>
+#include <Miscellaneous/PickingPass.hpp>
 #include <ShadowMap/ShadowMapPass.hpp>
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderWindow.hpp>

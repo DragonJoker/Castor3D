@@ -15,7 +15,8 @@ namespace GlRender
 	String RenderSystem::Name = cuT( "OpenGL Renderer" );
 	String RenderSystem::Type = cuT( "opengl" );
 
-	RenderSystem::RenderSystem( castor3d::Engine & engine )
+	RenderSystem::RenderSystem( castor3d::Engine & engine
+		, castor::String const & appName )
 		: castor3d::RenderSystem( engine, Name, false )
 	{
 		renderer::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
@@ -64,7 +65,7 @@ namespace GlRender
 		} );
 		m_renderer.reset( createRenderer( renderer::Renderer::Configuration
 		{
-			"Castor3D",
+			string::stringCast< char >( appName ),
 			"Castor3D",
 #ifdef NDEBUG
 			false,
@@ -73,14 +74,19 @@ namespace GlRender
 #endif
 		} ) );
 		Logger::logInfo( cuT( "Using " ) + Name );
+		auto & gpu = m_renderer->getPhysicalDevice( 0u );
+		m_memoryProperties = gpu.getMemoryProperties();
+		m_properties = gpu.getProperties();
+		m_features = gpu.getFeatures();
 	}
 
 	RenderSystem::~RenderSystem()
 	{
 	}
 
-	castor3d::RenderSystemUPtr RenderSystem::create( castor3d::Engine & engine )
+	castor3d::RenderSystemUPtr RenderSystem::create( castor3d::Engine & engine
+		, castor::String const & appName )
 	{
-		return std::make_unique< RenderSystem >( engine );
+		return std::make_unique< RenderSystem >( engine, appName );
 	}
 }

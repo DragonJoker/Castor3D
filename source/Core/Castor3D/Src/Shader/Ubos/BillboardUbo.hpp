@@ -25,7 +25,6 @@ namespace castor3d
 		struct Configuration
 		{
 			castor::Point2f dimensions;
-			castor::Point2i windowSize;
 		};
 
 	public:
@@ -82,15 +81,6 @@ namespace castor3d
 		C3D_API void update( castor::Point2f const & dimensions )const;
 		/**
 		 *\~english
-		 *\brief		Updates the UBO from given values.
-		 *\param[in]	window	The window dimensions.
-		 *\~french
-		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	window	Les dimensions de la fenêtre.
-		 */
-		C3D_API void setWindowSize( castor::Size const & window )const;
-		/**
-		 *\~english
 		 *\name			getters.
 		 *\~french
 		 *\name			getters.
@@ -114,9 +104,6 @@ namespace castor3d
 		//!\~english	Name of the billboard dimensions frame variable.
 		//!\~french		Nom de la frame variable contenant les dimensions du billboard.
 		C3D_API static castor::String const Dimensions;
-		//!\~english	Name of the window dimensions frame variable.
-		//!\~french		Nom de la frame variable contenant les dimensions de la fenêtre.
-		C3D_API static castor::String const WindowSize;
 
 	private:
 		Engine & m_engine;
@@ -131,7 +118,6 @@ namespace castor3d
 		, set\
 		, glsl::Ubo::Layout::eStd140 };\
 	auto c3d_dimensions = billboard.declMember< Vec2 >( castor3d::BillboardUbo::Dimensions );\
-	auto c3d_windowSize = billboard.declMember< IVec2 >( castor3d::BillboardUbo::WindowSize );\
 	billboard.end()
 
 #endif

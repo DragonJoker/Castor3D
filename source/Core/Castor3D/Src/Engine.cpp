@@ -28,13 +28,14 @@ namespace castor3d
 	static const char * C3D_NO_RENDERSYSTEM = "No RenderSystem loaded, call castor3d::Engine::loadRenderer before castor3d::Engine::Initialise";
 	static const char * C3D_MAIN_LOOP_EXISTS = "Render loop is already started";
 
-	Engine::Engine()
+	Engine::Engine( castor::String const & appName )
 		: Unique< Engine >( this )
 		, m_renderSystem( nullptr )
 		, m_cleaned( true )
 		, m_perObjectLighting( true )
 		, m_threaded( false )
 		, m_materialType{ MaterialType::eLegacy }
+		, m_appName{ appName }
 	{
 		auto dummy = []( auto element )
 		{
@@ -64,7 +65,6 @@ namespace castor3d
 		   , auto element )
 		{
 		};
-		std::locale::global( std::locale() );
 		Image::initialiseImageLib();
 		renderer::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
 		{
@@ -328,7 +328,7 @@ namespace castor3d
 
 	bool Engine::loadRenderer( String const & type )
 	{
-		m_renderSystem = m_renderSystemFactory.create( type, *this );
+		m_renderSystem = m_renderSystemFactory.create( type, *this, m_appName );
 		return m_renderSystem != nullptr;
 	}
 

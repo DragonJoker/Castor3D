@@ -7,8 +7,10 @@ using namespace castor;
 
 namespace castor3d
 {
-	AnimatedObject::AnimatedObject( String const & name )
+	AnimatedObject::AnimatedObject( AnimationType kind
+		, String const & name )
 		: Named{ name }
+		, m_kind{ kind }
 	{
 	}
 

@@ -113,6 +113,11 @@ namespace castor3d
 		{
 			return m_face;
 		}
+
+		inline renderer::TextureView const & getResult()const
+		{
+			return *m_colourView;
+		}
 		/**@}*/
 
 	private:
@@ -202,6 +207,14 @@ namespace castor3d
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const override;
 		/**
+		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
+		 */
+		virtual glsl::Shader doGetVertexShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, bool invertNormals )const;
+		/**
 		 *\copydoc		castor3d::RenderPass::doGetLegacyPixelShaderSource
 		 */
 		glsl::Shader doGetLegacyPixelShaderSource( PassFlags const & passFlags
@@ -238,6 +251,10 @@ namespace castor3d
 		 */
 		void doUpdatePipeline( RenderPipeline & pipeline )const override;
 		/**
+		 *\copydoc		castor3d::RenderPass::doCreateUboBindings
+		 */
+		renderer::DescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
+		/**
 		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
 		 */
 		renderer::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
@@ -263,6 +280,7 @@ namespace castor3d
 
 	private:
 		using CameraQueueMap = std::map< Camera const *, RenderQueue >;
+		static uint32_t constexpr UboBindingPoint = 7u;
 
 	private:
 		std::map< castor::String, GeometryWPtr > m_pickable;
@@ -270,9 +288,9 @@ namespace castor3d
 		renderer::TexturePtr m_depthTexture;
 		renderer::TextureViewPtr m_colourView;
 		renderer::TextureViewPtr m_depthView;
-		renderer::RenderPassPtr m_renderPass;
 		renderer::FrameBufferPtr m_frameBuffer;
 		renderer::BufferImageCopy m_copyRegion;
+		renderer::CommandBufferPtr m_commandBuffer;
 		renderer::BufferPtr< castor::Point4f > m_stagingBuffer;
 		std::map< Scene const *, CameraQueueMap > m_scenes;
 		GeometryWPtr m_geometry;

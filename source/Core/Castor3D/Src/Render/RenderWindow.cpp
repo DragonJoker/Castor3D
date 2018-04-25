@@ -1,5 +1,6 @@
 #include "RenderWindow.hpp"
 
+#include "Miscellaneous/PickingPass.hpp"
 #include "Render/RenderLoop.hpp"
 #include "Render/RenderTarget.hpp"
 #include "RenderToTexture/RenderQuad.hpp"
@@ -61,7 +62,7 @@ namespace castor3d
 		, Named{ name }
 		, m_index{ s_nbRenderWindows++ }
 		, m_listener{ engine.getFrameListenerCache().add( cuT( "RenderWindow_" ) + string::toString( m_index ) ) }
-		, m_pickingPass{ std::make_unique< PickingPass >( engine ) }
+		, m_pickingPass{ std::make_shared< PickingPass >( engine ) }
 	{
 	}
 

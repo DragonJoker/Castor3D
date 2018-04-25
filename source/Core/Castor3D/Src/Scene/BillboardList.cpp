@@ -270,6 +270,21 @@ namespace castor3d
 		return result;
 	}
 
+	void BillboardBase::setMaterial( MaterialSPtr value )
+	{
+		MaterialSPtr oldMaterial = getMaterial();
+
+		if ( oldMaterial != value )
+		{
+			m_material = value;
+
+			if ( oldMaterial )
+			{
+				onMaterialChanged( *this, oldMaterial, value );
+			}
+		}
+	}
+
 	void BillboardBase::doGatherBuffers( renderer::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, renderer::VertexLayoutCRefArray & layouts )

@@ -274,7 +274,7 @@ namespace castor3d
 			auto tbn = writer.declLocale( cuT( "tbn" )
 				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
 			vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
-			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition;
+			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition.xyz();
 			vtx_curPosition = gl_Position.xyw();
 			vtx_prvPosition = prvPosition.xyw();
 			// Positions in projection space are in [-1, 1] range, while texture
@@ -451,7 +451,7 @@ namespace castor3d
 			auto matEmissive = writer.declLocale( cuT( "matEmissive" )
 				, vec3( material.m_emissive() ) );
 			auto worldEye = writer.declLocale( cuT( "worldEye" )
-				, vec3( c3d_cameraPosition.x(), c3d_cameraPosition.y(), c3d_cameraPosition.z() ) );
+				, c3d_cameraPosition.xyz() );
 			auto envAmbient = writer.declLocale( cuT( "envAmbient" )
 				, vec3( 1.0_f, 1.0_f, 1.0_f ) );
 			auto envDiffuse = writer.declLocale( cuT( "envDiffuse" )
@@ -493,7 +493,7 @@ namespace castor3d
 				|| checkFlag( textureFlags, TextureChannel::eRefraction ) )
 			{
 				auto incident = writer.declLocale( cuT( "incident" )
-					, reflections.computeIncident( vtx_worldPosition, c3d_cameraPosition ) );
+					, reflections.computeIncident( vtx_worldPosition, c3d_cameraPosition.xyz() ) );
 
 				if ( checkFlag( textureFlags, TextureChannel::eReflection )
 					&& checkFlag( textureFlags, TextureChannel::eRefraction ) )
@@ -775,7 +775,7 @@ namespace castor3d
 				, matAlbedo
 				, matMetallic
 				, matRoughness
-				, c3d_cameraPosition
+				, c3d_cameraPosition.xyz()
 				, c3d_mapIrradiance
 				, c3d_mapPrefiltered
 				, c3d_mapBrdf );
@@ -1027,7 +1027,7 @@ namespace castor3d
 				, matDiffuse
 				, matSpecular
 				, matGlossiness
-				, c3d_cameraPosition
+				, c3d_cameraPosition.xyz()
 				, c3d_mapIrradiance
 				, c3d_mapPrefiltered
 				, c3d_mapBrdf );

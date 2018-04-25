@@ -162,6 +162,12 @@ namespace castor3d
 					m_renderSystem.getMainDevice()->disable();
 				} );
 			doProcessEvents( EventType::ePreRender );
+			getEngine()->getSceneCache().forEach( []( Scene & scene )
+			{
+				scene.getGeometryCache().uploadUbos();
+				scene.getBillboardListCache().uploadUbos();
+				scene.getAnimatedObjectGroupCache().uploadUbos();
+			} );
 			getEngine()->getMaterialCache().update();
 			getEngine()->getRenderTargetCache().render( info );
 			doProcessEvents( EventType::eQueueRender );

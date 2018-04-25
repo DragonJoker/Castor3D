@@ -52,7 +52,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		C3D_API Engine();
+		C3D_API Engine( castor::String const & appName );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -376,101 +376,38 @@ namespace castor3d
 		void doLoadCoreData();
 
 	private:
-		//!\~english	The mutex, to make the engine resources access thread-safe.
-		//!\~french		Le mutex utilisé pour que l'accès aux ressources du moteur soit thread-safe.
+		castor::String const & m_appName;
 		std::recursive_mutex m_mutexResources;
-		//!\~english	The render loop.
-		//!\~french		La boucle de rendu.
 		RenderLoopUPtr m_renderLoop;
-		//!\~english	The engine version.
-		//!\~french		La version du moteur.
 		Version m_version;
-		//!\~english	The current RenderSystem.
-		//!\~french		Le RenderSystem courant.
 		RenderSystemUPtr m_renderSystem;
-		//!\~english	Tells if engine is cleaned up.
-		//!\~french		Dit si le moteur est nettoyé.
 		bool m_cleaned;
-		//!\~english	Tells if engine uses an asynchronous render loop.
-		//!\~french		Dit si le moteur utilise un boucle de rendu asynchrone.
 		bool m_threaded;
-		//!\~english	The need for per object lighting.
-		//!\~french		Le besoin d'un éclairage par objet.
 		bool m_perObjectLighting;
-		//!\~english	Default sampler.
-		//!\~french		Le sampler par défaut.
 		SamplerSPtr m_defaultSampler;
-		//!\~english	Lights textures sampler.
-		//!\~french		L'échantillonneur utilisé pour les textures de lumières.
 		SamplerSPtr m_lightsSampler;
-		//!\~english	The shaders collection.
-		//!\~french		La collection de shaders.
 		DECLARE_NAMED_CACHE_MEMBER( shader, ShaderProgram );
-		//!\~english	The sampler states collection.
-		//!\~french		La collection de sampler states.
 		DECLARE_CACHE_MEMBER( sampler, Sampler );
-		//!\~english	The materials cache.
-		//!\~french		Le cache de matériaux.
 		DECLARE_CACHE_MEMBER( material, Material );
-		//!\~english	The plug-ins cache.
-		//!\~french		Le cache de plug-ins.
 		DECLARE_CACHE_MEMBER( plugin, Plugin );
-		//!\~english	The overlays cache.
-		//!\~french		La cache d'overlays.
 		DECLARE_CACHE_MEMBER( overlay, Overlay );
-		//!\~english	The scenes cache.
-		//!\~french		La cache de scènes.
 		DECLARE_CACHE_MEMBER( scene, Scene );
-		//!\~english	The frame listeners cache.
-		//!\~french		Le cache de frame listeners.
 		DECLARE_CACHE_MEMBER( listener, FrameListener );
-		//!\~english	The render targets cache.
-		//!\~french		Le cache de cibles de rendu.
 		DECLARE_NAMED_CACHE_MEMBER( target, RenderTarget );
-		//!\~english	The render technique cache.
-		//!\~french		Le cache de techniques de rendu.
 		DECLARE_CACHE_MEMBER( technique, RenderTechnique );
-		//!\~english	The render windows cache.
-		//!\~french		Le cache de fenêtres de rendu.
 		DECLARE_CACHE_MEMBER( window, RenderWindow );
-		//!\~english	The fonts cache.
-		//!\~french		La cache de polices.
 		castor::FontCache m_fontCache;
-		//!\~english	The images cache.
-		//!\~french		La cache d'images.
 		castor::ImageCache m_imageCache;
-		//!\~english	The user input listener.
-		//!\~french		Le listener d'entrées utilisateur.
 		UserInputListenerSPtr m_userInputListener;
-		//!\~english	The map holding the parsers, sorted by section, and plug-in name.
-		//!\~french		La map de parseurs, triés par section, et nom de plug-in.
 		std::map< castor::String, castor::FileParser::AttributeParsersBySection > m_additionalParsers;
-		//!\~english	The map holding the sections, sorted plug-in name.
-		//!\~french		La map de sections, triées par nom de plug-in.
 		std::map< castor::String, castor::StrUIntMap > m_additionalSections;
-		//!\~english	The default frame listener.
-		//!\~french		Le frame listener par défaut.
 		FrameListenerWPtr m_defaultListener;
-		//!\~english	The RenderSystem factory.
-		//!\~french		La fabrique de RenderSystem.
 		RenderSystemFactory m_renderSystemFactory;
-		//!\~english	The MeshGenerator factory.
-		//!\~french		La fabrique de MeshGenerator.
 		MeshFactory m_meshFactory;
-		//!\~english	The subdivider factory.
-		//!\~french		La fabrique de subdiviseurs.
 		SubdividerFactory m_subdividerFactory;
-		//!\~english	The importer factory.
-		//!\~french		La fabrique d'importeurs.
 		ImporterFactory m_importerFactory;
-		//!\~english	The CpuParticleSystem factory.
-		//!\~french		La fabrique de CpuParticleSystem.
 		ParticleFactory m_particleFactory;
-		//!\~english	The CPU informations.
-		//!\~french		Les informations sur le CPU.
 		castor::CpuInformations m_cpuInformations;
-		//!\~english	The materials type.
-		//!\~french		Le type des matériaux.
 		MaterialType m_materialType;
 	};
 }

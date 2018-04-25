@@ -12,6 +12,10 @@ See LICENSE file in root folder
 
 #include <Design/OwnedBy.hpp>
 
+#include <Miscellaneous/PhysicalDeviceFeatures.hpp>
+#include <Miscellaneous/PhysicalDeviceMemoryProperties.hpp>
+#include <Miscellaneous/PhysicalDeviceProperties.hpp>
+
 namespace castor3d
 {
 	/*!
@@ -115,27 +119,6 @@ namespace castor3d
 		 *\brief		Une instance pré-configurée de GlslWriter.
 		 */
 		C3D_API virtual glsl::GlslWriter createGlslWriter();
-		/**
-		 *\~english
-		 *\return		The currently active device.
-		 *\~french
-		 *\return		Le périphérique actuellement actif.
-		 */
-		inline renderer::Device const * getCurrentDevice()const
-		{
-			REQUIRE( m_currentDevice );
-			return m_currentDevice;
-		}
-		/**
-		 *\~english
-		 *\return		Tells if there is an active device.
-		 *\~french
-		 *\return		Dit s'il y a un périphérique actif.
-		 */
-		inline bool hasCurrentDevice()const
-		{
-			return m_currentDevice != nullptr;
-		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a GPU buffer with the given size.
@@ -295,6 +278,32 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		inline renderer::PhysicalDeviceProperties const & getProperties()const
+		{
+			return m_properties;
+		}
+
+		inline renderer::PhysicalDeviceMemoryProperties const & getMemoryProperties()const
+		{
+			return m_memoryProperties;
+		}
+
+		inline renderer::PhysicalDeviceFeatures const & getFeatures()const
+		{
+			return m_features;
+		}
+
+		inline renderer::Device const * getCurrentDevice()const
+		{
+			REQUIRE( m_currentDevice );
+			return m_currentDevice;
+		}
+
+		inline bool hasCurrentDevice()const
+		{
+			return m_currentDevice != nullptr;
+		}
+
 		inline GpuInformations const & getGpuInformations()const
 		{
 			return m_gpuInformations;
@@ -377,6 +386,9 @@ namespace castor3d
 		GpuBufferPool m_gpuBufferPool;
 		std::map< renderer::Device *, renderer::DeviceEnabledConnection > m_deviceEnabledConnections;
 		std::map< renderer::Device *, renderer::DeviceDisabledConnection > m_deviceDisabledConnections;
+		renderer::PhysicalDeviceMemoryProperties m_memoryProperties{};
+		renderer::PhysicalDeviceFeatures m_features{};
+		renderer::PhysicalDeviceProperties m_properties{};
 
 #if C3D_TRACE_OBJECTS
 

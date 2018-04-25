@@ -201,37 +201,21 @@ namespace castor3d
 			return m_sphere;
 		}
 
+		OnSubmeshMaterialChanged onMaterialChanged;
+
 	private:
 		void doUpdateMesh();
 		void doUpdateContainers();
 
 	private:
-		//!\~english	The mesh.
-		//!\~french		Le maillage.
 		MeshWPtr m_mesh;
-		//!\~english	The mesh name
-		//!\~french		Le nom du maillage.
 		castor::String m_meshName;
-		//!\~english	Tells if the geometry has changed.
-		//!\~french		Dit si la géométrie a changé.
 		bool m_changed{ true };
-		//!<\~english	Tells if the mesh buffers are generated.
-		//!\~french		Dit si les tampons du mesh ont été générés.
 		bool m_listCreated{ false };
-		//!\~english	The submeshes materials.
-		//!\~french		Les matériaux des sous maillages.
 		SubmeshMaterialMap m_submeshesMaterials;
-		//!\~english	The submeshes bounding boxes.
-		//!\~french		Les bounding box des sous-maillages.
 		SubmeshBoundingBoxMap m_submeshesBoxes;
-		//!\~english	The submeshes bounding spheres.
-		//!\~french		Les bounding spheres des sous-maillages.
 		SubmeshBoundingSphereMap m_submeshesSpheres;
-		//!\~english	The whole geometry bounding box.
-		//!\~french		La bounding box de la géométrie complète.
 		castor::BoundingBox m_box;
-		//!\~english	The whole geometry bounding sphere.
-		//!\~french		La bounding sphere de la géométrie complète.
 		castor::BoundingSphere m_sphere;
 	};
 }

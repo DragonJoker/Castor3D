@@ -92,6 +92,13 @@ namespace castor3d
 		 */
 		C3D_API ProgramFlags getProgramFlags()const;
 		/**
+		 *\~english
+		 *\brief		Sets the material.
+		 *\~french
+		 *\brief		Définit le matériau.
+		 */
+		C3D_API void setMaterial( MaterialSPtr value );
+		/**
 		*\~english
 		*name
 		*	Getters.
@@ -169,11 +176,6 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		inline void setMaterial( MaterialSPtr value )
-		{
-			m_material = value;
-		}
-
 		inline void setDimensions( castor::Point2f const & value )
 		{
 			m_dimensions = value;
@@ -204,6 +206,8 @@ namespace castor3d
 			m_billboardSize = value;
 		}
 		/**@}*/
+
+		OnBillboardMaterialChanged onMaterialChanged;
 
 	private:
 		void doGatherBuffers( renderer::BufferCRefArray & buffers

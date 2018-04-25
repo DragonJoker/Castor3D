@@ -126,45 +126,12 @@ namespace castor3d
 
 		template< typename MapType >
 		inline void doRenderNonInstanced( RenderPass const & pass
-			, MapType & nodes )
-		{
-			for ( auto & itPipelines : nodes )
-			{
-				for ( auto & renderNode : itPipelines.second )
-				{
-					doUpdateNodeModelMatrix( renderNode );
-				}
-			}
-		}
-
-		template< typename MapType >
-		inline void doRenderNonInstanced( RenderPass const & pass
-			, MapType & nodes
-			, Scene & scene
-			, ShadowMapLightTypeArray & shadowMaps )
-		{
-			for ( auto & itPipelines : nodes )
-			{
-				for ( auto & renderNode : itPipelines.second )
-				{
-					doUpdateNode( renderNode );
-				}
-			}
-		}
-
-		template< typename MapType >
-		inline void doRenderNonInstanced( RenderPass const & pass
 			, Camera const & camera
 			, MapType & nodes )
 		{
 			for ( auto & itPipelines : nodes )
 			{
 				pass.updatePipeline( *itPipelines.first );
-
-				for ( auto & renderNode : itPipelines.second )
-				{
-					doUpdateNodeModelMatrix( *renderNode );
-				}
 			}
 		}
 
@@ -178,11 +145,6 @@ namespace castor3d
 			for ( auto & itPipelines : nodes )
 			{
 				pass.updatePipeline( *itPipelines.first );
-
-				for ( auto & renderNode : itPipelines.second )
-				{
-					doUpdateNode( *renderNode );
-				}
 			}
 		}
 
@@ -200,7 +162,6 @@ namespace castor3d
 
 				for ( auto & renderNode : itPipelines.second )
 				{
-					doUpdateNode( *renderNode );
 					info.m_visibleFaceCount += details::getPrimitiveCount( renderNode->data );
 					info.m_visibleVertexCount += details::getVertexCount( renderNode->data );
 					++info.m_drawCalls;
@@ -281,11 +242,6 @@ namespace castor3d
 		, m_opaque{ true }
 		, m_matrixUbo{ engine }
 		, m_sceneUbo{ engine }
-		, m_modelMatrixUboPool{ m_renderSystem }
-		, m_modelUboPool{ m_renderSystem }
-		, m_billboardUboPool{ m_renderSystem }
-		, m_skinningUboPool{ m_renderSystem }
-		, m_morphingUboPool{ m_renderSystem }
 	{
 	}
 
@@ -301,11 +257,6 @@ namespace castor3d
 		, m_opaque{ false }
 		, m_matrixUbo{ engine }
 		, m_sceneUbo{ engine }
-		, m_modelMatrixUboPool{ m_renderSystem }
-		, m_modelUboPool{ m_renderSystem }
-		, m_billboardUboPool{ m_renderSystem }
-		, m_skinningUboPool{ m_renderSystem }
-		, m_morphingUboPool{ m_renderSystem }
 	{
 	}
 
@@ -316,18 +267,17 @@ namespace castor3d
 	bool RenderPass::initialise( Size const & size )
 	{
 		m_timer = std::make_shared< RenderPassTimer >( *getEngine(), getName(), getName() );
+		m_matrixUbo.initialise();
+		m_sceneUbo.initialise();
+		m_sceneUbo.setWindowSize( size );
 		return doInitialise( size );
 	}
 
 	void RenderPass::cleanup()
 	{
-		m_skinningUboPool.cleanup();
-		m_morphingUboPool.cleanup();
-		m_billboardUboPool.cleanup();
-		m_modelUboPool.cleanup();
-		m_modelMatrixUboPool.cleanup();
 		m_matrixUbo.cleanup();
 		m_sceneUbo.cleanup();
+		m_renderPass.reset();
 		doCleanup();
 		m_timer.reset();
 	}
@@ -525,19 +475,22 @@ namespace castor3d
 		, AnimatedSkeleton & skeleton )
 	{
 		auto & buffers = submesh.getGeometryBuffers();
+		auto & scene = *primitive.getScene();
+		auto & geometryEntry = scene.getGeometryCache().getUbos( submesh, pass );
+		auto & animationEntry = scene.getAnimatedObjectGroupCache().getUbos( skeleton );
 
 		return SkinningRenderNode
 		{
 			pipeline,
 			doCreatePassRenderNode( pass, pipeline ),
-			m_modelMatrixUboPool.getBuffer( renderer::MemoryPropertyFlag::eDeviceLocal ),
-			m_modelUboPool.getBuffer( renderer::MemoryPropertyFlag::eDeviceLocal ),
+			geometryEntry.modelMatrixUbo,
+			geometryEntry.modelUbo,
 			buffers,
 			*primitive.getParent(),
 			submesh,
 			primitive,
 			skeleton,
-			m_skinningUboPool.getBuffer( renderer::MemoryPropertyFlag::eDeviceLocal )
+			animationEntry.skinningUbo
 		};
 	}
 
@@ -548,19 +501,23 @@ namespace castor3d
 		, AnimatedMesh & mesh )
 	{
 		auto & buffers = submesh.getGeometryBuffers();
+		auto & scene = *primitive.getScene();
+		auto & cache = scene.getGeometryCache();
+		auto & geometryEntry = scene.getGeometryCache().getUbos( submesh, pass );
+		auto & animationEntry = scene.getAnimatedObjectGroupCache().getUbos( mesh );
 
 		return MorphingRenderNode
 		{
 			pipeline,
 			doCreatePassRenderNode( pass, pipeline ),
-			m_modelMatrixUboPool.getBuffer( renderer::MemoryPropertyFlag::eDeviceLocal ),
-			m_modelUboPool.getBuffer( renderer::MemoryPropertyFlag::eDeviceLocal ),
+			geometryEntry.modelMatrixUbo,
+			geometryEntry.modelUbo,
 			buffers,
 			*primitive.getParent(),
 			submesh,
 			primitive,
 			mesh,
-			m_morphingUboPool.getBuffer( renderer::MemoryPropertyFlag::eDeviceLocal )
+			animationEntry.morphingUbo
 		};
 	}
 
@@ -570,13 +527,16 @@ namespace castor3d
 		, Geometry & primitive )
 	{
 		auto & buffers = submesh.getGeometryBuffers();
+		auto & scene = *primitive.getScene();
+		auto & cache = scene.getGeometryCache();
+		auto entry = cache.getUbos( submesh, pass );
 
 		return StaticRenderNode
 		{
 			pipeline,
 			doCreatePassRenderNode( pass, pipeline ),
-			m_modelMatrixUboPool.getBuffer( renderer::MemoryPropertyFlag::eDeviceLocal ),
-			m_modelUboPool.getBuffer( renderer::MemoryPropertyFlag::eDeviceLocal ),
+			entry.modelMatrixUbo,
+			entry.modelUbo,
 			buffers,
 			*primitive.getParent(),
 			submesh,
@@ -589,17 +549,20 @@ namespace castor3d
 		, BillboardBase & billboard )
 	{
 		auto & buffers = billboard.getGeometryBuffers();
+		auto & scene = billboard.getParentScene();
+		auto & cache = scene.getBillboardListCache();
+		auto entry = cache.getUbos( billboard, pass );
 
 		return BillboardRenderNode
 		{
 			pipeline,
 			doCreatePassRenderNode( pass, pipeline ),
-			m_modelMatrixUboPool.getBuffer( renderer::MemoryPropertyFlag::eDeviceLocal ),
-			m_modelUboPool.getBuffer( renderer::MemoryPropertyFlag::eDeviceLocal ),
+			entry.modelMatrixUbo,
+			entry.modelUbo,
 			buffers,
 			*billboard.getNode(),
 			billboard,
-			m_billboardUboPool.getBuffer( renderer::MemoryPropertyFlag::eDeviceLocal ),
+			entry.billboardUbo
 		};
 	}
 
@@ -1137,17 +1100,11 @@ namespace castor3d
 
 	void RenderPass::doUpdate( StaticRenderNodesByPipelineMap & nodes )const
 	{
-		doRenderNonInstanced( *this
-			, nodes );
 	}
 
 	void RenderPass::doUpdate( StaticRenderNodesByPipelineMap & nodes
 		, ShadowMapLightTypeArray & shadowMaps )const
 	{
-		doRenderNonInstanced( *this
-			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps );
 	}
 
 	void RenderPass::doUpdate( StaticRenderNodesPtrByPipelineMap & nodes
@@ -1184,17 +1141,11 @@ namespace castor3d
 
 	void RenderPass::doUpdate( SkinningRenderNodesByPipelineMap & nodes )const
 	{
-		doRenderNonInstanced( *this
-			, nodes );
 	}
 
 	void RenderPass::doUpdate( SkinningRenderNodesByPipelineMap & nodes
 		, ShadowMapLightTypeArray & shadowMaps )const
 	{
-		doRenderNonInstanced( *this
-			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps );
 	}
 
 	void RenderPass::doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes
@@ -1365,17 +1316,11 @@ namespace castor3d
 
 	void RenderPass::doUpdate( MorphingRenderNodesByPipelineMap & nodes )const
 	{
-		doRenderNonInstanced( *this
-			, nodes );
 	}
 
 	void RenderPass::doUpdate( MorphingRenderNodesByPipelineMap & nodes
 		, ShadowMapLightTypeArray & shadowMaps )const
 	{
-		doRenderNonInstanced( *this
-			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps );
 	}
 
 	void RenderPass::doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes
@@ -1412,17 +1357,11 @@ namespace castor3d
 
 	void RenderPass::doUpdate( BillboardRenderNodesByPipelineMap & nodes )const
 	{
-		doRenderNonInstanced( *this
-			, nodes );
 	}
 
 	void RenderPass::doUpdate( BillboardRenderNodesByPipelineMap & nodes
 		, ShadowMapLightTypeArray & shadowMaps )const
 	{
-		doRenderNonInstanced( *this
-			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps );
 	}
 
 	void RenderPass::doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes
@@ -1466,11 +1405,6 @@ namespace castor3d
 		m_matrixUbo.update( camera.getView()
 			, camera.getViewport().getProjection()
 			, jitterProjSpace );
-		m_modelUboPool.upload();
-		m_modelMatrixUboPool.upload();
-		m_billboardUboPool.upload();
-		m_skinningUboPool.upload();
-		m_morphingUboPool.upload();
 	}
 
 	renderer::DescriptorSetLayoutBindingArray RenderPass::doCreateUboBindings( PipelineFlags const & flags )const
@@ -1478,7 +1412,6 @@ namespace castor3d
 		renderer::DescriptorSetLayoutBindingArray uboBindings;
 
 		if ( !checkFlag( flags.m_programFlags, ProgramFlag::eDepthPass )
-			&& !checkFlag( flags.m_programFlags, ProgramFlag::ePicking )
 			&& !checkFlag( flags.m_programFlags, ProgramFlag::eShadowMapDirectional )
 			&& !checkFlag( flags.m_programFlags, ProgramFlag::eShadowMapPoint )
 			&& !checkFlag( flags.m_programFlags, ProgramFlag::eShadowMapSpot ) )
@@ -1665,7 +1598,7 @@ namespace castor3d
 			auto tbn = writer.declLocale( cuT( "tbn" )
 				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
 			vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
-			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition;
+			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition.xyz();
 		};
 
 		writer.implementFunction< void >( cuT( "main" ), main );

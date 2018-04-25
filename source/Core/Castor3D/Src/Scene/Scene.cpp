@@ -831,6 +831,9 @@ namespace castor3d
 		doUpdateAnimations();
 		doUpdateMaterials();
 		getLightCache().update();
+		getGeometryCache().update();
+		getBillboardListCache().update();
+		getAnimatedObjectGroupCache().update();
 		onUpdate( *this );
 		m_changed = false;
 	}

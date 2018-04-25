@@ -77,6 +77,18 @@ namespace castor3d
 
 				return *this;
 			}
+			uint32_t & operator[]( size_t index )
+			{
+				return data[index];
+			}
+			uint32_t const & operator[]( size_t index )const
+			{
+				return data[index];
+			}
+			size_t size()const
+			{
+				return data.size();
+			}
 		};
 		Ids m_ids;
 		//!\~english	The bones weights.
@@ -117,6 +129,18 @@ namespace castor3d
 				}
 
 				return *this;
+			}
+			float & operator[]( size_t index )
+			{
+				return data[index];
+			}
+			float const & operator[]( size_t index )const
+			{
+				return data[index];
+			}
+			size_t size()const
+			{
+				return data.size();
 			}
 		};
 		Weights m_weights;

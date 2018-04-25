@@ -248,6 +248,12 @@ namespace castor3d
 			return m_objects;
 		}
 
+	public:
+		OnAnimatedSkeletonChange onSkeletonAdded;
+		OnAnimatedSkeletonChange onSkeletonRemoved;
+		OnAnimatedMeshChange onMeshAdded;
+		OnAnimatedMeshChange onMeshRemoved;
+
 	private:
 		//!<\~english	The list of animations.
 		//!\~french		La liste des animations.

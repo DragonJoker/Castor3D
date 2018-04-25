@@ -43,7 +43,8 @@ namespace castor3d
 		 *\brief		Constructeur
 		 *\param[in]	name	Le nom de l'objet
 		 */
-		C3D_API explicit AnimatedObject( castor::String const & name );
+		C3D_API explicit AnimatedObject( AnimationType kind
+			, castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -110,18 +111,6 @@ namespace castor3d
 		C3D_API void pauseAllAnimations();
 		/**
 		 *\~english
-		 *\brief		Checks if an animation with given name exists.
-		 *\param[in]	name	The animation name.
-		 *\~french
-		 *\brief		Vérifie si l'animation avec le nom donné existe.
-		 *\param[in]	name	Le nom de l'animation.
-		 */
-		C3D_API bool hasAnimation( castor::String const & name )
-		{
-			return m_animations.find( name ) != m_animations.end();
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves an animation
 		 *\param[in]	name	The animation name
 		 *\return		The animation
@@ -148,15 +137,29 @@ namespace castor3d
 		 */
 		C3D_API virtual bool isPlayingAnimation()const = 0;
 		/**
-		 *\~english
-		 *\return		The animations for this object.
-		 *\~french
-		 *\return		Les animations de cet objet.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		inline bool hasAnimation( castor::String const & name )
+		{
+			return m_animations.find( name ) != m_animations.end();
+		}
+
 		inline AnimationInstancePtrStrMap const & getAnimations()const
 		{
 			return m_animations;
 		}
+
+		inline AnimationType getKind()const
+		{
+			return m_kind;
+		}
+		/**@}*/
 
 	private:
 		/**
@@ -198,6 +201,9 @@ namespace castor3d
 		//!\~english	All animations.
 		//!\~french		Toutes les animations.
 		AnimationInstancePtrStrMap m_animations;
+
+	private:
+		AnimationType m_kind;
 	};
 }
 

@@ -12,6 +12,7 @@
 #include "Shader/Shaders/GlslMaterial.hpp"
 #include "Shader/Shaders/GlslPhongReflection.hpp"
 #include "Shader/Shaders/GlslSssTransmittance.hpp"
+#include "Shader/Ubos/GpInfoUbo.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
 #include "Shader/Ubos/SceneUbo.hpp"
 #include "Technique/Opaque/GeometryPassResult.hpp"
@@ -199,7 +200,7 @@ namespace castor3d
 				IF( writer, envMapIndex > 0_i && writer.paren( reflection != 0_i || refraction != 0_i ) )
 				{
 					auto incident = writer.declLocale( cuT( "incident" )
-						, reflections.computeIncident( position, c3d_cameraPosition ) );
+						, reflections.computeIncident( position, c3d_cameraPosition.xyz() ) );
 					envMapIndex = envMapIndex - 1_i;
 
 					IF( writer, reflection != 0_i && refraction != 0_i )
@@ -347,7 +348,7 @@ namespace castor3d
 				auto position = writer.declLocale( cuT( "position" )
 					, utils.calcWSPosition( texcoord, depth, c3d_mtxInvViewProj ) );
 				auto incident = writer.declLocale( cuT( "incident" )
-					, normalize( position - c3d_cameraPosition ) );
+					, normalize( position - c3d_cameraPosition.xyz() ) );
 				auto ambient = writer.declLocale( cuT( "ambient" )
 					, c3d_ambientLight.xyz() );
 				auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
@@ -431,7 +432,7 @@ namespace castor3d
 								, albedo
 								, metalness
 								, roughness
-								, c3d_cameraPosition
+								, c3d_cameraPosition.xyz()
 								, c3d_mapIrradiance
 								, c3d_mapPrefiltered
 								, c3d_mapBrdf );
@@ -460,7 +461,7 @@ namespace castor3d
 								, albedo
 								, metalness
 								, roughness
-								, c3d_cameraPosition
+								, c3d_cameraPosition.xyz()
 								, c3d_mapIrradiance
 								, c3d_mapPrefiltered
 								, c3d_mapBrdf );
@@ -490,7 +491,7 @@ namespace castor3d
 								, albedo
 								, metalness
 								, roughness
-								, c3d_cameraPosition
+								, c3d_cameraPosition.xyz()
 								, c3d_mapIrradiance
 								, c3d_mapPrefiltered
 								, c3d_mapBrdf );
@@ -506,7 +507,7 @@ namespace castor3d
 							, albedo
 							, metalness
 							, roughness
-							, c3d_cameraPosition
+							, c3d_cameraPosition.xyz()
 							, c3d_mapIrradiance
 							, c3d_mapPrefiltered
 							, c3d_mapBrdf );
@@ -536,7 +537,7 @@ namespace castor3d
 							, albedo
 							, metalness
 							, roughness
-							, c3d_cameraPosition
+							, c3d_cameraPosition.xyz()
 							, c3d_mapIrradiance
 							, c3d_mapPrefiltered
 							, c3d_mapBrdf );
@@ -655,7 +656,7 @@ namespace castor3d
 				auto position = writer.declLocale( cuT( "position" )
 					, utils.calcWSPosition( texcoord, depth, c3d_mtxInvViewProj ) );
 				auto incident = writer.declLocale( cuT( "incident" )
-					, normalize( position - c3d_cameraPosition ) );
+					, normalize( position - c3d_cameraPosition.xyz() ) );
 				auto ambient = writer.declLocale( cuT( "ambient" )
 					, c3d_ambientLight.xyz() );
 				auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
@@ -742,7 +743,7 @@ namespace castor3d
 								, diffuse
 								, specular
 								, glossiness
-								, c3d_cameraPosition
+								, c3d_cameraPosition.xyz()
 								, c3d_mapIrradiance
 								, c3d_mapPrefiltered
 								, c3d_mapBrdf );
@@ -773,7 +774,7 @@ namespace castor3d
 								, diffuse
 								, specular
 								, glossiness
-								, c3d_cameraPosition
+								, c3d_cameraPosition.xyz()
 								, c3d_mapIrradiance
 								, c3d_mapPrefiltered
 								, c3d_mapBrdf );
@@ -805,7 +806,7 @@ namespace castor3d
 								, diffuse
 								, specular
 								, glossiness
-								, c3d_cameraPosition
+								, c3d_cameraPosition.xyz()
 								, c3d_mapIrradiance
 								, c3d_mapPrefiltered
 								, c3d_mapBrdf );
@@ -821,7 +822,7 @@ namespace castor3d
 							, diffuse
 							, specular
 							, glossiness
-							, c3d_cameraPosition
+							, c3d_cameraPosition.xyz()
 							, c3d_mapIrradiance
 							, c3d_mapPrefiltered
 							, c3d_mapBrdf );
@@ -855,7 +856,7 @@ namespace castor3d
 							, diffuse
 							, specular
 							, glossiness
-							, c3d_cameraPosition
+							, c3d_cameraPosition.xyz()
 							, c3d_mapIrradiance
 							, c3d_mapPrefiltered
 							, c3d_mapBrdf );

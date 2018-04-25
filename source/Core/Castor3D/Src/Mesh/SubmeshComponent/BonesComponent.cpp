@@ -2,6 +2,7 @@
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Skeleton/BonedVertex.hpp"
+#include "Render/RenderPass.hpp"
 #include "Scene/Scene.hpp"
 
 using namespace castor;
@@ -117,11 +118,20 @@ namespace castor3d
 				, uint32_t( m_bones.size() )
 				, 0u
 				, renderer::MemoryPropertyFlag::eHostVisible );
-			m_bonesLayout = renderer::makeLayout< VertexBoneData >( BindingPoint );
-			m_bonesLayout->createAttribute( 0u, renderer::Format::eR32G32B32A32_UINT, offsetof( VertexBoneData::Ids, id0 ) );
-			m_bonesLayout->createAttribute( 1u, renderer::Format::eR32G32B32A32_UINT, offsetof( VertexBoneData::Ids, id1 ) );
-			m_bonesLayout->createAttribute( 2u, renderer::Format::eR32G32B32A32_SFLOAT, offsetof( VertexBoneData::Weights, weight0 ) );
-			m_bonesLayout->createAttribute( 3u, renderer::Format::eR32G32B32A32_SFLOAT, offsetof( VertexBoneData::Weights, weight1 ) );
+			m_bonesLayout = renderer::makeLayout< VertexBoneData >( BindingPoint
+				, renderer::VertexInputRate::eVertex );
+			m_bonesLayout->createAttribute( RenderPass::VertexInputs::BoneIds0Location
+				, renderer::Format::eR32G32B32A32_SINT
+				, offsetof( VertexBoneData::Ids, id0 ) );
+			m_bonesLayout->createAttribute( RenderPass::VertexInputs::BoneIds1Location
+				, renderer::Format::eR32G32B32A32_SINT
+				, offsetof( VertexBoneData::Ids, id1 ) );
+			m_bonesLayout->createAttribute( RenderPass::VertexInputs::Weights0Location
+				, renderer::Format::eR32G32B32A32_SFLOAT
+				, sizeof( VertexBoneData::Ids ) + offsetof( VertexBoneData::Weights, weight0 ) );
+			m_bonesLayout->createAttribute( RenderPass::VertexInputs::Weights1Location
+				, renderer::Format::eR32G32B32A32_SFLOAT
+				, sizeof( VertexBoneData::Ids ) + offsetof( VertexBoneData::Weights, weight1 ) );
 		}
 
 		return m_bonesBuffer != nullptr;
@@ -144,9 +154,7 @@ namespace castor3d
 
 		if ( count )
 		{
-			if ( auto * buffer = m_bonesBuffer->lock( 0
-				, count
-				, renderer::MemoryMapFlag::eRead | renderer::MemoryMapFlag::eWrite ) )
+			if ( auto * buffer = m_bonesBuffer->lock( 0, count, renderer::MemoryMapFlag::eWrite ) )
 			{
 				std::copy( m_bones.begin(), m_bones.end(), buffer );
 				m_bonesBuffer->flush( 0u, count );

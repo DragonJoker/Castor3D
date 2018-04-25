@@ -622,7 +622,7 @@ namespace C3dAssimp
 			{
 				if ( face.mNumIndices == 3 )
 				{
-					mapping->addFace( face.mIndices[0], face.mIndices[1], face.mIndices[2] );
+					mapping->addFace( face.mIndices[0], face.mIndices[2], face.mIndices[1] );
 				}
 			}
 

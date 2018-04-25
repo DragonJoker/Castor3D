@@ -2,6 +2,7 @@
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
+#include "Render/RenderPass.hpp"
 #include "Scene/Scene.hpp"
 
 #include <Buffer/VertexBuffer.hpp>
@@ -43,12 +44,23 @@ namespace castor3d
 				, count
 				, 0u
 				, renderer::MemoryPropertyFlag::eHostVisible );
-			m_animLayout = renderer::makeLayout< InstantiationData >( BindingPoint, renderer::VertexInputRate::eVertex );
-			m_animLayout->createAttribute( Submesh::Position, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, pos ) );
-			m_animLayout->createAttribute( Submesh::Normal, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, nml ) );
-			m_animLayout->createAttribute( Submesh::Tangent, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, tan ) );
-			m_animLayout->createAttribute( Submesh::Bitangent, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, bin ) );
-			m_animLayout->createAttribute( Submesh::Texture, renderer::Format::eR32G32B32_SFLOAT, offsetof( InterleavedVertex, tex ) );
+			m_animLayout = renderer::makeLayout< InstantiationData >( BindingPoint
+				, renderer::VertexInputRate::eVertex );
+			m_animLayout->createAttribute( RenderPass::VertexInputs::Position2Location
+				, renderer::Format::eR32G32B32_SFLOAT
+				, offsetof( InterleavedVertex, pos ) );
+			m_animLayout->createAttribute( RenderPass::VertexInputs::Normal2Location
+				, renderer::Format::eR32G32B32_SFLOAT
+				, offsetof( InterleavedVertex, nml ) );
+			m_animLayout->createAttribute( RenderPass::VertexInputs::Tangent2Location
+				, renderer::Format::eR32G32B32_SFLOAT
+				, offsetof( InterleavedVertex, tan ) );
+			m_animLayout->createAttribute( RenderPass::VertexInputs::Bitangent2Location
+				, renderer::Format::eR32G32B32_SFLOAT
+				, offsetof( InterleavedVertex, bin ) );
+			m_animLayout->createAttribute( RenderPass::VertexInputs::Texture2Location
+				, renderer::Format::eR32G32B32_SFLOAT
+				, offsetof( InterleavedVertex, tex ) );
 		}
 
 		return m_animBuffer != nullptr;

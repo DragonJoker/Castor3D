@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_CHUNK_DATA_H___
 #define ___C3D_CHUNK_DATA_H___
 
-
 #include "Mesh/VertexGroup.hpp"
 #include "Mesh/SubmeshComponent/FaceIndices.hpp"
+#include "Mesh/SubmeshComponent/LineIndices.hpp"
 #include "Mesh/Skeleton/VertexBoneData.hpp"
 
 #include <Data/Endianness.hpp>
@@ -1253,6 +1253,22 @@ namespace castor3d
 			castor::switchEndianness( p_value.m_index[0] );
 			castor::switchEndianness( p_value.m_index[1] );
 			castor::switchEndianness( p_value.m_index[2] );
+		}
+	}
+	/**
+	 *\~english
+	 *\brief			Sets given value to big endian.
+	 *\param[in,out]	p_value	The value.
+	 *\~french
+	 *\brief			Met la valeur donnée en big endian.
+	 *\param[in,out]	p_value	La valeur.
+	 */
+	static inline void prepareChunkData( LineIndices & p_value )
+	{
+		if ( !castor::isBigEndian() )
+		{
+			castor::switchEndianness( p_value.m_index[0] );
+			castor::switchEndianness( p_value.m_index[1] );
 		}
 	}
 	/**

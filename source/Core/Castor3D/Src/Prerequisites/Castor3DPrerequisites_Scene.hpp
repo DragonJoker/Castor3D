@@ -294,6 +294,22 @@ namespace castor3d
 	using SubmeshBoundingSphereMap = std::map< Submesh const *, castor::BoundingSphere >;
 	using SubmeshMaterialMap = std::map< Submesh const *, MaterialWPtr >;
 
+	using OnSubmeshMaterialChangedFunction = std::function< void( Geometry const &, Submesh const &, MaterialSPtr oldMaterial, MaterialSPtr newMaterial) >;
+	using OnSubmeshMaterialChanged = castor::Signal< OnSubmeshMaterialChangedFunction >;
+	using OnSubmeshMaterialChangedConnection = OnSubmeshMaterialChanged::connection;
+
+	using OnBillboardMaterialChangedFunction = std::function< void( BillboardBase const &, MaterialSPtr oldMaterial, MaterialSPtr newMaterial ) >;
+	using OnBillboardMaterialChanged = castor::Signal< OnBillboardMaterialChangedFunction >;
+	using OnBillboardMaterialChangedConnection = OnBillboardMaterialChanged::connection;
+
+	using OnAnimatedSkeletonChangeFunction = std::function< void( AnimatedObjectGroup const &, AnimatedSkeleton const & ) >;
+	using OnAnimatedSkeletonChange = castor::Signal< OnAnimatedSkeletonChangeFunction >;
+	using OnAnimatedSkeletonChangeConnection = OnAnimatedSkeletonChange::connection;
+
+	using OnAnimatedMeshChangeFunction = std::function< void( AnimatedObjectGroup const &, AnimatedMesh const & ) >;
+	using OnAnimatedMeshChange = castor::Signal< OnAnimatedMeshChangeFunction >;
+	using OnAnimatedMeshChangeConnection = OnAnimatedMeshChange::connection;
+
 	//@}
 }
 

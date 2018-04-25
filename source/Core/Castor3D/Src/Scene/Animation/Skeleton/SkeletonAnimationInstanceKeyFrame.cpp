@@ -42,33 +42,22 @@ namespace castor3d
 				{
 					Matrix4x4r transform{ 1.0_r };
 
-					if ( boneData.m_weights.weight0[0] > 0 )
+					if ( boneData.m_weights[0] > 0 )
 					{
-						auto bone = *( skeleton.begin() + boneData.m_ids.id0[0] );
+						auto bone = *( skeleton.begin() + boneData.m_ids[0] );
 						auto it = keyFrame.find( *bone );
 						REQUIRE( it != keyFrame.end() );
-						transform = Matrix4x4r{ it->second * bone->getOffsetMatrix() * boneData.m_weights.weight0[0] };
+						transform = Matrix4x4r{ it->second * bone->getOffsetMatrix() * boneData.m_weights[0] };
 					}
 
-					for ( uint32_t i = 1; i < boneData.m_ids.id0.size(); ++i )
+					for ( uint32_t i = 1; i < boneData.m_ids.size(); ++i )
 					{
-						if ( boneData.m_weights.weight0[i] > 0 )
+						if ( boneData.m_weights[i] > 0 )
 						{
-							auto bone = *( skeleton.begin() + boneData.m_ids.id0[i] );
+							auto bone = *( skeleton.begin() + boneData.m_ids[i] );
 							auto it = keyFrame.find( *bone );
 							REQUIRE( it != keyFrame.end() );
-							transform += Matrix4x4r{ it->second * bone->getOffsetMatrix() * boneData.m_weights.weight0[i] };
-						}
-					}
-
-					for ( uint32_t i = 1; i < boneData.m_ids.id1.size(); ++i )
-					{
-						if ( boneData.m_weights.weight1[i] > 0 )
-						{
-							auto bone = *( skeleton.begin() + boneData.m_ids.id1[i] );
-							auto it = keyFrame.find( *bone );
-							REQUIRE( it != keyFrame.end() );
-							transform += Matrix4x4r{ it->second * bone->getOffsetMatrix() * boneData.m_weights.weight1[i] };
+							transform += Matrix4x4r{ it->second * bone->getOffsetMatrix() * boneData.m_weights[i] };
 						}
 					}
 

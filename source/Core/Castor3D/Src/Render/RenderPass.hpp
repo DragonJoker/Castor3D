@@ -7,7 +7,6 @@ See LICENSE file in root folder
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
 
-#include "Buffer/UniformBufferPool.hpp"
 #include "Mesh/SubmeshComponent/InstantiationComponent.hpp"
 #include "Render/RenderInfo.hpp"
 #include "Render/RenderQueue.hpp"
@@ -1490,13 +1489,13 @@ namespace castor3d
 			static uint32_t constexpr BoneIds1Location = 6u;
 			static uint32_t constexpr Weights0Location = 7u;
 			static uint32_t constexpr Weights1Location = 8u;
-			static uint32_t constexpr TransformLocation = 9u;
-			static uint32_t constexpr MaterialLocation = 10u;
-			static uint32_t constexpr Position2Location = 11u;
-			static uint32_t constexpr Normal2Location = 12u;
-			static uint32_t constexpr Tangent2Location = 13u;
-			static uint32_t constexpr Bitangent2Location = 14u;
-			static uint32_t constexpr Texture2Location = 15u;
+			static uint32_t constexpr TransformLocation = 9u; // 4 components since it is a matrix
+			static uint32_t constexpr MaterialLocation = 13u;
+			static uint32_t constexpr Position2Location = 41u;
+			static uint32_t constexpr Normal2Location = 15u;
+			static uint32_t constexpr Tangent2Location = 16u;
+			static uint32_t constexpr Bitangent2Location = 17u;
+			static uint32_t constexpr Texture2Location = 18u;
 		};
 		struct VertexOutputs
 		{
@@ -1523,11 +1522,6 @@ namespace castor3d
 		bool m_oit{ false };
 		SceneUbo m_sceneUbo;
 		MatrixUbo m_matrixUbo;
-		UniformBufferPool< ModelUbo::Configuration > m_modelUboPool;
-		UniformBufferPool< ModelMatrixUbo::Configuration > m_modelMatrixUboPool;
-		UniformBufferPool< BillboardUbo::Configuration > m_billboardUboPool;
-		UniformBufferPool< SkinningUbo::Configuration > m_skinningUboPool;
-		UniformBufferPool< MorphingUbo::Configuration > m_morphingUboPool;
 		renderer::RenderPassPtr m_renderPass;
 		RenderPassTimerSPtr m_timer;
 	};

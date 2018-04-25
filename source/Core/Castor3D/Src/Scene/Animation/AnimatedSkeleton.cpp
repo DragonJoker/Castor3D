@@ -15,7 +15,7 @@ namespace castor3d
 		, Skeleton & skeleton
 		, Mesh & mesh
 		, Geometry & geometry )
-		: AnimatedObject{ name }
+		: AnimatedObject{ AnimationType::eSkeleton, name }
 		, m_skeleton{ skeleton }
 		, m_mesh{ mesh }
 		, m_geometry{ geometry }
