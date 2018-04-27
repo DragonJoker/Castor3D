@@ -56,8 +56,7 @@ namespace castor3d
 
 	private:
 		RenderSystem & m_renderSystem;
-		NonTexturedQuad m_vertexData;
-		renderer::VertexBufferPtr< NonTexturedQuad > m_vertexBuffer;
+		renderer::VertexBufferPtr< TexturedQuad > m_vertexBuffer;
 		renderer::VertexLayoutPtr m_vertexLayout;
 		renderer::RenderPassPtr m_renderPass;
 		renderer::FrameBufferPtr m_frameBuffer;

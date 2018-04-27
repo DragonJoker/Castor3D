@@ -31,15 +31,17 @@ namespace castor3d
 {
 	namespace
 	{
-		TextureUnit doCreatePrefilteredBrdf( Engine & engine )
+		renderer::TexturePtr doCreatePrefilteredBrdf( RenderSystem const & renderSystem
+			, Size const & size )
 		{
+			auto & device = *renderSystem.getCurrentDevice();
 			renderer::ImageCreateInfo image{};
 			image.flags = 0u;
 			image.arrayLayers = 1u;
-			image.extent.width = 512u;
-			image.extent.height = 512u;
+			image.extent.width = size.getWidth();
+			image.extent.height = size.getHeight();
 			image.extent.depth = 1u;
-			image.format = renderer::Format::eR32G32B32_SFLOAT;
+			image.format = renderer::Format::eR32G32B32A32_SFLOAT;
 			image.imageType = renderer::TextureType::e2D;
 			image.initialLayout = renderer::ImageLayout::eUndefined;
 			image.mipLevels = 1u;
@@ -47,32 +49,31 @@ namespace castor3d
 			image.sharingMode = renderer::SharingMode::eExclusive;
 			image.tiling = renderer::ImageTiling::eOptimal;
 			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
-			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
-				, image
+			return device.createTexture( image
 				, renderer::MemoryPropertyFlag::eDeviceLocal );
-			SamplerSPtr sampler;
+		}
+
+		SamplerSPtr doCreateSampler( Engine & engine )
+		{
+			SamplerSPtr result;
 			auto name = cuT( "IblTexturesBRDF" );
 
 			if ( engine.getSamplerCache().has( name ) )
 			{
-				sampler = engine.getSamplerCache().find( name );
+				result = engine.getSamplerCache().find( name );
 			}
 			else
 			{
-				sampler = engine.getSamplerCache().create( name );
-				sampler->setMinFilter( renderer::Filter::eLinear );
-				sampler->setMagFilter( renderer::Filter::eLinear );
-				sampler->setWrapS( renderer::WrapMode::eClampToEdge );
-				sampler->setWrapT( renderer::WrapMode::eClampToEdge );
-				sampler->setWrapR( renderer::WrapMode::eClampToEdge );
-				engine.getSamplerCache().add( name, sampler );
+				result = engine.getSamplerCache().create( name );
+				result->setMinFilter( renderer::Filter::eLinear );
+				result->setMagFilter( renderer::Filter::eLinear );
+				result->setWrapS( renderer::WrapMode::eClampToEdge );
+				result->setWrapT( renderer::WrapMode::eClampToEdge );
+				result->setWrapR( renderer::WrapMode::eClampToEdge );
+				engine.getSamplerCache().add( name, result );
 			}
 
-			sampler->initialise();
-			TextureUnit result{ engine };
-			result.setTexture( texture );
-			result.setSampler( sampler );
-			result.initialise();
+			result->initialise();
 			return result;
 		}
 	}
@@ -82,19 +83,22 @@ namespace castor3d
 	IblTextures::IblTextures( Scene & scene
 		, renderer::Texture const & source )
 		: OwnedBy< Scene >{ scene }
-		, m_prefilteredBrdf{ doCreatePrefilteredBrdf( *scene.getEngine() ) }
-		, m_radianceComputer{ *scene.getEngine(), Size{ 512, 512 }, source }
+		, m_prefilteredBrdf{ doCreatePrefilteredBrdf( *scene.getEngine()->getRenderSystem(), Size{ 512u, 512u } ) }
+		, m_prefilteredBrdfView{ m_prefilteredBrdf->createView( renderer::TextureViewType::e2D, m_prefilteredBrdf->getFormat() ) }
+		, m_sampler{ doCreateSampler( *scene.getEngine() ) }
+		, m_radianceComputer{ *scene.getEngine(), Size{ 32u, 32u }, source }
 		, m_environmentPrefilter{ *scene.getEngine(), Size{ 128u, 128u }, source }
 	{
 		BrdfPrefilter filter{ *scene.getEngine()
-			, { m_prefilteredBrdf.getTexture()->getDimensions().width, m_prefilteredBrdf.getTexture()->getDimensions().height }
-			, m_prefilteredBrdf.getTexture()->getDefaultView() };
+			, { m_prefilteredBrdf->getDimensions().width, m_prefilteredBrdf->getDimensions().height }
+			, *m_prefilteredBrdfView };
 		filter.render();
 	}
 
 	IblTextures::~IblTextures()
 	{
-		m_prefilteredBrdf.cleanup();
+		m_prefilteredBrdfView.reset();
+		m_prefilteredBrdf.reset();
 	}
 
 	void IblTextures::update()
@@ -105,8 +109,8 @@ namespace castor3d
 
 	void IblTextures::debugDisplay( Size const & renderSize )const
 	{
-		int width = int( m_prefilteredBrdf.getTexture()->getWidth() );
-		int height = int( m_prefilteredBrdf.getTexture()->getHeight() );
+		int width = int( m_prefilteredBrdf->getDimensions().width );
+		int height = int( m_prefilteredBrdf->getDimensions().height );
 		int left = 0u;
 		int top = renderSize.getHeight() - height;
 		auto size = Size( width, height );

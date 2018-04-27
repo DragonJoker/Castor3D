@@ -16,14 +16,16 @@ namespace VkRender
 		: public castor3d::RenderSystem
 	{
 	public:
-		explicit RenderSystem( castor3d::Engine & engine
-			, castor::String const & appName );
-		virtual ~RenderSystem();
+		RenderSystem( castor3d::Engine & engine
+			, castor::String const & appName
+			, bool enableValidation );
+		~RenderSystem();
 
 		static castor3d::RenderSystemUPtr create( castor3d::Engine & engine
-			, castor::String const & appName );
+			, castor::String const & appName
+			, bool enableValidation );
 		/**
-		*\copydoc		castor3d::RenderSystem::doInitialise
+		*\copydoc		castor3d::RenderSystem::createGlslWriter
 		*/
 		glsl::GlslWriter createGlslWriter()override;
 

@@ -203,7 +203,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les indicateurs de shader.
 		 */
-		C3D_API ProgramFlags getProgramFlags()const;
+		C3D_API ProgramFlags getProgramFlags( MaterialSPtr material )const;
 		/**
 		 *\~english
 		 *\brief		Sets the material.
@@ -221,6 +221,13 @@ namespace castor3d
 		C3D_API void setMaterial( MaterialSPtr oldMaterial
 			, MaterialSPtr newMaterial
 			, bool update );
+		/**
+		*\~english
+		*\return		The geometry buffers for given material.
+		*\~french
+		*\return		Les tampons de géométrie associés au materiau donné.
+		*/
+		C3D_API GeometryBuffers const & getGeometryBuffers( MaterialSPtr material )const;
 		/**
 		 *\~english
 		 *\brief		Adds a points list to my list
@@ -327,7 +334,6 @@ namespace castor3d
 		inline renderer::VertexBuffer< InterleavedVertex > const & getVertexBuffer()const;
 		inline renderer::VertexBuffer< InterleavedVertex > & getVertexBuffer();
 		inline renderer::VertexLayout const & getVertexLayout()const;
-		inline GeometryBuffers const & getGeometryBuffers()const;
 		inline renderer::Buffer< uint32_t > const & getIndexBuffer()const;
 		inline renderer::Buffer< uint32_t > & getIndexBuffer();
 		inline bool isInitialised()const;
@@ -347,9 +353,6 @@ namespace castor3d
 
 	private:
 		void doGenerateVertexBuffer();
-		void doGatherBuffers( renderer::BufferCRefArray & buffers
-			, std::vector< uint64_t > & offsets
-			, renderer::VertexLayoutCRefArray & layouts );
 
 	public:
 		static uint32_t constexpr Position = 0u;
@@ -377,7 +380,7 @@ namespace castor3d
 		renderer::VertexBufferPtr< InterleavedVertex > m_vertexBuffer;
 		renderer::VertexLayoutPtr m_vertexLayout;
 		renderer::BufferPtr< uint32_t > m_indexBuffer;
-		GeometryBuffers m_geometryBuffers;
+		mutable std::map< MaterialSPtr, GeometryBuffers > m_geometryBuffers;
 
 		friend class BinaryWriter< Submesh >;
 		friend class BinaryParser< Submesh >;

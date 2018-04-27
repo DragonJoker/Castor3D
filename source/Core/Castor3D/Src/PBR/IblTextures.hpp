@@ -60,45 +60,50 @@ namespace castor3d
 		 */
 		C3D_API void debugDisplay( castor::Size const & size )const;
 		/**
-		 *\~english
-		 *\return		The irradiance texture.
-		 *\~french
-		 *\return		La texture d'irradiance.
-		 */
-		inline TextureUnit const & getIrradiance()const
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		inline renderer::TextureView const & getIrradianceTexture()const
 		{
 			return m_radianceComputer.getResult();
 		}
-		/**
-		 *\~english
-		 *\return		The prefiltered environment texture.
-		 *\~french
-		 *\return		La texture d'environnement préfiltrée.
-		 */
-		inline TextureUnit const & getPrefilteredEnvironment()const
+
+		inline renderer::TextureView const & getPrefilteredEnvironmentTexture()const
 		{
 			return m_environmentPrefilter.getResult();
 		}
-		/**
-		 *\~english
-		 *\return		The prefiltered BRDF texture.
-		 *\~french
-		 *\return		La texture BRDF préfiltrée.
-		 */
-		inline TextureUnit const & getPrefilteredBrdf()const
+
+		inline renderer::TextureView const & getPrefilteredBrdfTexture()const
 		{
-			return m_prefilteredBrdf;
+			return *m_prefilteredBrdfView;
 		}
 
+		inline renderer::Sampler const & getIrradianceSampler()const
+		{
+			return m_radianceComputer.getSampler();
+		}
+
+		inline renderer::Sampler const & getPrefilteredEnvironmentSampler()const
+		{
+			return m_environmentPrefilter.getSampler();
+		}
+
+		inline renderer::Sampler const & getPrefilteredBrdfSampler()const
+		{
+			return m_sampler->getSampler();
+		}
+		/**@}*/
+
 	private:
-		//!\~english	The prefiltered BRDF texture.
-		//!\~french		La texture BRDF préfiltrée.
-		TextureUnit m_prefilteredBrdf;
-		//!\~english	The radiance computer.
-		//!\~french		Le générateur de radiance.
+		renderer::TexturePtr m_prefilteredBrdf;
+		renderer::TextureViewPtr m_prefilteredBrdfView;
+		SamplerSPtr m_sampler;
 		RadianceComputer m_radianceComputer;
-		//!\~english	The environment prefilter pipeline.
-		//!\~french		Le pipeline de préfiltrage d'environnement.
 		EnvironmentPrefilter m_environmentPrefilter;
 	};
 }

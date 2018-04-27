@@ -211,6 +211,11 @@ namespace castor3d
 			return *m_descriptorLayouts[index];
 		}
 
+		inline bool hasDescriptorPool( uint32_t index )const
+		{
+			return index < m_descriptorPools.size();
+		}
+
 		inline renderer::DescriptorSetPool const & getDescriptorPool( uint32_t index )const
 		{
 			REQUIRE( index < m_descriptorPools.size() );

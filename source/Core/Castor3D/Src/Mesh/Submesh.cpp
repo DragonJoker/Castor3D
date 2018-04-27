@@ -356,7 +356,7 @@ namespace castor3d
 		, m_id{ id }
 		, m_defaultMaterial{ getScene()->getEngine()->getMaterialCache().getDefaultMaterial() }
 	{
-		addComponent( std::make_shared< InstantiationComponent >( *this ) );
+		addComponent( std::make_shared< InstantiationComponent >( *this, 2u ) );
 	}
 
 	Submesh::~Submesh()
@@ -382,36 +382,27 @@ namespace castor3d
 				component.second->upload();
 			}
 
-			m_vertexLayout = renderer::makeLayout< InterleavedVertex >( 0u
-				, renderer::VertexInputRate::eVertex );
-			m_vertexLayout->createAttribute( RenderPass::VertexInputs::PositionLocation
-				, renderer::Format::eR32G32B32_SFLOAT
-				, offsetof( InterleavedVertex, pos ) );
-			m_vertexLayout->createAttribute( RenderPass::VertexInputs::NormalLocation
-				, renderer::Format::eR32G32B32_SFLOAT
-				, offsetof( InterleavedVertex, nml ) );
-			m_vertexLayout->createAttribute( RenderPass::VertexInputs::TangentLocation
-				, renderer::Format::eR32G32B32_SFLOAT
-				, offsetof( InterleavedVertex, tan ) );
-			m_vertexLayout->createAttribute( RenderPass::VertexInputs::BitangentLocation
-				, renderer::Format::eR32G32B32_SFLOAT
-				, offsetof( InterleavedVertex, bin ) );
-			m_vertexLayout->createAttribute( RenderPass::VertexInputs::TextureLocation
-				, renderer::Format::eR32G32B32_SFLOAT
-				, offsetof( InterleavedVertex, tex ) );
+			if ( !m_vertexLayout )
+			{
+				m_vertexLayout = renderer::makeLayout< InterleavedVertex >( 0u
+					, renderer::VertexInputRate::eVertex );
+				m_vertexLayout->createAttribute( RenderPass::VertexInputs::PositionLocation
+					, renderer::Format::eR32G32B32_SFLOAT
+					, offsetof( InterleavedVertex, pos ) );
+				m_vertexLayout->createAttribute( RenderPass::VertexInputs::NormalLocation
+					, renderer::Format::eR32G32B32_SFLOAT
+					, offsetof( InterleavedVertex, nml ) );
+				m_vertexLayout->createAttribute( RenderPass::VertexInputs::TangentLocation
+					, renderer::Format::eR32G32B32_SFLOAT
+					, offsetof( InterleavedVertex, tan ) );
+				m_vertexLayout->createAttribute( RenderPass::VertexInputs::BitangentLocation
+					, renderer::Format::eR32G32B32_SFLOAT
+					, offsetof( InterleavedVertex, bin ) );
+				m_vertexLayout->createAttribute( RenderPass::VertexInputs::TextureLocation
+					, renderer::Format::eR32G32B32_SFLOAT
+					, offsetof( InterleavedVertex, tex ) );
+			}
 
-			renderer::BufferCRefArray buffers;
-			renderer::UInt64Array offsets;
-			renderer::VertexLayoutCRefArray layouts;
-			doGatherBuffers( buffers, offsets, layouts );
-
-			m_geometryBuffers.vbo = buffers;
-			m_geometryBuffers.vboOffsets = offsets;
-			m_geometryBuffers.layouts = layouts;
-			m_geometryBuffers.ibo = &m_indexBuffer->getBuffer();
-			m_geometryBuffers.iboOffset = 0u;
-			m_geometryBuffers.idxCount = m_indexBuffer->getCount();
-			m_geometryBuffers.vtxCount = 0u;
 			m_generated = true;
 		}
 
@@ -606,13 +597,13 @@ namespace castor3d
 		}
 	}
 
-	ProgramFlags Submesh::getProgramFlags()const
+	ProgramFlags Submesh::getProgramFlags( MaterialSPtr material )const
 	{
 		auto result = m_programFlags;
 
 		for ( auto & component : m_components )
 		{
-			result |= component.second->getProgramFlags();
+			result |= component.second->getProgramFlags( material );
 		}
 
 		return result;
@@ -631,6 +622,38 @@ namespace castor3d
 		{
 			component.second->setMaterial( oldMaterial, newMaterial, update );
 		}
+	}
+
+	GeometryBuffers const & Submesh::getGeometryBuffers( MaterialSPtr material )const
+	{
+		auto it = m_geometryBuffers.find( material );
+
+		if ( it == m_geometryBuffers.end() )
+		{
+			renderer::BufferCRefArray buffers;
+			renderer::UInt64Array offsets;
+			renderer::VertexLayoutCRefArray layouts;
+			buffers.emplace_back( m_vertexBuffer->getBuffer() );
+			offsets.emplace_back( 0u );
+			layouts.emplace_back( *m_vertexLayout );
+
+			for ( auto & component : m_components )
+			{
+				component.second->gather( material, buffers, offsets, layouts );
+			}
+
+			GeometryBuffers result;
+			result.vbo = buffers;
+			result.vboOffsets = offsets;
+			result.layouts = layouts;
+			result.ibo = &m_indexBuffer->getBuffer();
+			result.iboOffset = 0u;
+			result.idxCount = m_indexBuffer->getCount();
+			result.vtxCount = 0u;
+			it = m_geometryBuffers.emplace( material, std::move( result ) ).first;
+		}
+
+		return it->second;
 	}
 
 	void Submesh::doGenerateVertexBuffer()
@@ -660,20 +683,6 @@ namespace castor3d
 			}
 
 			//m_points.clear();
-		}
-	}
-
-	void Submesh::doGatherBuffers( renderer::BufferCRefArray & buffers
-		, std::vector< uint64_t > & offsets
-		, renderer::VertexLayoutCRefArray & layouts )
-	{
-		buffers.emplace_back( m_vertexBuffer->getBuffer() );
-		offsets.emplace_back( 0u );
-		layouts.emplace_back( *m_vertexLayout );
-
-		for ( auto & component : m_components )
-		{
-			component.second->gather( buffers, offsets, layouts );
 		}
 	}
 }

@@ -21,6 +21,8 @@
 #include <Shader/ShaderModule.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
+#include <GlslUtils.hpp>
+
 using namespace castor;
 using namespace glsl;
 
@@ -32,7 +34,8 @@ namespace castor3d
 	{
 		renderer::ImageCreateInfo doGetImageCreate( renderer::Format format
 			, Size const & dimensions
-			, bool attachment )
+			, bool attachment
+			, uint32_t mipLevel = 1u )
 		{
 			renderer::ImageCreateInfo result;
 			result.flags = renderer::ImageCreateFlag::eCubeCompatible;
@@ -43,7 +46,7 @@ namespace castor3d
 			result.format = format;
 			result.initialLayout = renderer::ImageLayout::eUndefined;
 			result.imageType = renderer::TextureType::e2D;
-			result.mipLevels = 1u;
+			result.mipLevels = mipLevel;
 			result.samples = renderer::SampleCountFlag::e1;
 			result.sharingMode = renderer::SharingMode::eExclusive;
 			result.tiling = renderer::ImageTiling::eOptimal;
@@ -149,9 +152,18 @@ namespace castor3d
 		: SceneBackground{ engine, scene, BackgroundType::eSkybox }
 		, m_viewport{ engine }
 	{
-		m_texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
-			, doGetImageCreate( renderer::Format::eR8G8B8A8_UNORM, { 512u, 512u }, false )
-			, renderer::MemoryPropertyFlag::eDeviceLocal );
+		if ( scene.getMaterialsType() != MaterialType::eLegacy )
+		{
+			m_texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
+				, doGetImageCreate( renderer::Format::eR8G8B8A8_UNORM, { 512u, 512u }, false, glsl::Utils::MaxIblReflectionLod + 1u )
+				, renderer::MemoryPropertyFlag::eDeviceLocal );
+		}
+		else
+		{
+			m_texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
+				, doGetImageCreate( renderer::Format::eR8G8B8A8_UNORM, { 512u, 512u }, false )
+				, renderer::MemoryPropertyFlag::eDeviceLocal );
+		}
 	}
 
 	SkyboxBackground::~SkyboxBackground()
@@ -233,9 +245,19 @@ namespace castor3d
 			|| m_texture->getDimensions().width != m_equiSize.getWidth()
 			|| m_texture->getDimensions().height != m_equiSize.getHeight() )
 		{
-			m_texture = std::make_shared< TextureLayout >( renderSystem
-				, doGetImageCreate( renderer::Format::eR16G16B16A16_SFLOAT, m_equiSize, true )
-				, renderer::MemoryPropertyFlag::eDeviceLocal );
+			if ( m_scene.getMaterialsType() != MaterialType::eLegacy )
+			{
+				m_texture = std::make_shared< TextureLayout >( renderSystem
+					, doGetImageCreate( renderer::Format::eR16G16B16A16_SFLOAT, m_equiSize, true, glsl::Utils::MaxIblReflectionLod + 1u )
+					, renderer::MemoryPropertyFlag::eDeviceLocal );
+			}
+			else
+			{
+				m_texture = std::make_shared< TextureLayout >( renderSystem
+					, doGetImageCreate( renderer::Format::eR16G16B16A16_SFLOAT, m_equiSize, true )
+					, renderer::MemoryPropertyFlag::eDeviceLocal );
+			}
+
 			m_texture->getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource();
 			m_texture->getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource();
 			m_texture->getImage( uint32_t( CubeMapFace::ePositiveY ) ).initialiseSource();
@@ -261,6 +283,11 @@ namespace castor3d
 
 			m_equiTexture->cleanup();
 			m_equiTexture.reset();
+
+			if ( m_scene.getMaterialsType() != MaterialType::eLegacy )
+			{
+				m_texture->generateMipmaps();
+			}
 		}
 	}
 

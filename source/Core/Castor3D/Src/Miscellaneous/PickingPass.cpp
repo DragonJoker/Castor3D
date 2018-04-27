@@ -1,6 +1,8 @@
 #include "PickingPass.hpp"
 
 #include "Cache/MaterialCache.hpp"
+#include "Material/Material.hpp"
+#include "Material/Pass.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Mesh/SubmeshComponent/InstantiationComponent.hpp"
 #include "Render/RenderPipeline.hpp"
@@ -382,9 +384,13 @@ namespace castor3d
 				, InstantiationComponent & component
 				, StaticRenderNodePtrArray & renderNodes )
 			{
-				if ( !renderNodes.empty() && component.hasMatrixBuffer() )
+				auto it = component.find( pass.getOwner()->shared_from_this() );
+
+				if ( !renderNodes.empty()
+					&& it != component.end()
+					&& it->second.buffer )
 				{
-					doCopyNodesMatrices( renderNodes, camera, component.getData() );
+					doCopyNodesMatrices( renderNodes, camera, it->second.data );
 				}
 			} );
 	}
@@ -426,9 +432,11 @@ namespace castor3d
 				, SkinningRenderNodePtrArray & renderNodes )
 			{
 				auto & instantiatedBones = submesh.getInstantiatedBones();
+				auto it = component.find( pass.getOwner()->shared_from_this() );
 
 				if ( !renderNodes.empty()
-					&& component.hasMatrixBuffer()
+					&& it != component.end()
+					&& it->second.buffer
 					&& instantiatedBones.hasInstancedBonesBuffer() )
 				{
 					doCopyNodesBones( renderNodes, camera, instantiatedBones.getInstancedBonesBuffer() );

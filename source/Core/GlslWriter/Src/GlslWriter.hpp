@@ -24,7 +24,11 @@ namespace glsl
 		bool m_hasConstantsBuffers;
 		bool m_hasTextureBuffers;
 		bool m_hasShaderStorageBuffers;
-		bool m_isVulkan;
+		bool m_hasPushConstants;
+		bool m_zeroToOneDepth;
+		bool m_isTopDown;
+		bool m_hasInstanceIndex;
+		bool m_hasVertexIndex;
 	};
 
 	class GlslWriter
@@ -65,9 +69,19 @@ namespace glsl
 			return m_config.m_hasShaderStorageBuffers;
 		}
 
-		inline bool isVulkan()const
+		inline bool hasPushConstants()const
 		{
-			return m_config.m_isVulkan;
+			return m_config.m_hasPushConstants;
+		}
+
+		inline bool isZeroToOneDepth()const
+		{
+			return m_config.m_zeroToOneDepth;
+		}
+
+		inline bool isTopDown()const
+		{
+			return m_config.m_isTopDown;
 		}
 
 		inline bool hasTexelFetch()const

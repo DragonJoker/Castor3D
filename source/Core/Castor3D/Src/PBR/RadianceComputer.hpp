@@ -4,9 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_RadianceComputer_H___
 #define ___C3D_RadianceComputer_H___
 
-#include "Texture/TextureUnit.hpp"
+#include "RenderToTexture/RenderCube.hpp"
+#include "Texture/Sampler.hpp"
 
+#include <Image/TextureView.hpp>
 #include <RenderPass/FrameBuffer.hpp>
+#include <RenderPass/RenderPass.hpp>
 
 #include <array>
 
@@ -22,6 +25,7 @@ namespace castor3d
 	\brief		Calcule la texture de radiance pour une texture d'environnement donnée.
 	*/
 	class RadianceComputer
+		: private RenderCube
 	{
 	public:
 		/**
@@ -47,47 +51,39 @@ namespace castor3d
 		 */
 		C3D_API void render();
 		/**
-		 *\~english
-		 *\return		The radiance map.
-		 *\~french
-		 *\return		La texture de radiance.
-		 */
-		inline TextureUnit const & getResult()const
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		inline renderer::TextureView const & getResult()const
 		{
-			return m_result;
+			return *m_resultView;
 		}
 
-	private:
-		/**
-		 *\~english
-		 *\brief		Creates the radiance computer shader program.
-		 *\~french
-		 *\brief		Crée le programme shader de calcul de la radiance.
-		 */
-		renderer::ShaderStageStateArray doCreateProgram();
+		inline renderer::Sampler const & getSampler()const
+		{
+			return m_sampler->getSampler();
+		}
+		/**@}*/
 
 	private:
 		struct RenderPass
 		{
-			renderer::TextureViewPtr srcView;
 			renderer::TextureViewPtr dstView;
-			renderer::DescriptorSetPtr descriptorSet;
-			renderer::RenderPassPtr renderPass;
 			renderer::FrameBufferPtr frameBuffer;
-			renderer::PipelinePtr pipeline;
 		};
-
 		using RenderPasses = std::array< RenderPass, 6 >;
+
 		RenderSystem & m_renderSystem;
-		TextureUnit m_result;
-		NonTexturedCube m_vertexData;
+		renderer::TexturePtr m_result;
+		renderer::TextureViewPtr m_resultView;
 		SamplerSPtr m_sampler;
-		renderer::VertexBufferPtr< NonTexturedCube > m_vertexBuffer;
-		renderer::VertexLayoutPtr m_vertexLayout;
-		renderer::UniformBufferPtr< castor::Matrix4x4f > m_configUbo;
-		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
-		renderer::DescriptorSetPoolPtr m_descriptorPool;
-		renderer::PipelineLayoutPtr m_pipelineLayout;
+		renderer::TextureViewPtr m_srcView;
+		renderer::RenderPassPtr m_renderPass;
 		RenderPasses m_renderPasses;
 		renderer::CommandBufferPtr m_commandBuffer;
 	};

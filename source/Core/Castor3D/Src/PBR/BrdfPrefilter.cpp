@@ -27,29 +27,41 @@ namespace castor3d
 		, castor::Size const & size
 		, renderer::TextureView const & dstTexture )
 		: m_renderSystem{ *engine.getRenderSystem() }
-		, m_vertexData
-		{
-			{
-				{ Point2f{ -1.0, -1.0 } },
-				{ Point2f{ -1.0, +1.0 } },
-				{ Point2f{ +1.0, -1.0 } },
-				{ Point2f{ +1.0, -1.0 } },
-				{ Point2f{ -1.0, +1.0 } },
-				{ Point2f{ +1.0, +1.0 } },
-			}
-		}
+		
 	{
 		auto & device = *m_renderSystem.getCurrentDevice();
 
 		// Initialise the vertex buffer.
-		m_vertexBuffer = renderer::makeVertexBuffer< NonTexturedQuad >( device
+		m_vertexBuffer = renderer::makeVertexBuffer< TexturedQuad >( device
 			, 1u
 			, 0u
 			, renderer::MemoryPropertyFlag::eHostVisible );
 
+		if ( auto buffer = m_vertexBuffer->lock( 0u, 1u, renderer::MemoryMapFlag::eWrite ) )
+		{
+			*buffer =
+			{
+				{
+					{ Point2f{ -1.0, -1.0 }, Point2f{ 0.0, m_renderSystem.isTopDown() ? 0.0 : 1.0 } },
+					{ Point2f{ -1.0, +1.0 }, Point2f{ 0.0, m_renderSystem.isTopDown() ? 1.0 : 0.0 } },
+					{ Point2f{ +1.0, -1.0 }, Point2f{ 1.0, m_renderSystem.isTopDown() ? 0.0 : 1.0 } },
+					{ Point2f{ +1.0, -1.0 }, Point2f{ 1.0, m_renderSystem.isTopDown() ? 0.0 : 1.0 } },
+					{ Point2f{ -1.0, +1.0 }, Point2f{ 0.0, m_renderSystem.isTopDown() ? 1.0 : 0.0 } },
+					{ Point2f{ +1.0, +1.0 }, Point2f{ 1.0, m_renderSystem.isTopDown() ? 1.0 : 0.0 } },
+				}
+			};
+			m_vertexBuffer->flush( 0u, 1u );
+			m_vertexBuffer->unlock();
+		}
+
 		// Initialise the vertex layout.
-		m_vertexLayout = renderer::makeLayout< NonTexturedQuad::Vertex >( 0u );
-		m_vertexLayout->createAttribute( 0u, renderer::Format::eR32G32_SFLOAT, offsetof( NonTexturedQuad::Vertex, position ) );
+		m_vertexLayout = renderer::makeLayout< TexturedQuad::Vertex >( 0u );
+		m_vertexLayout->createAttribute( 0u
+			, renderer::Format::eR32G32_SFLOAT
+			, offsetof( TexturedQuad::Vertex, position ) );
+		m_vertexLayout->createAttribute( 1u
+			, renderer::Format::eR32G32_SFLOAT
+			, offsetof( TexturedQuad::Vertex, texture ) );
 
 		// Create the render pass.
 		renderer::RenderPassCreateInfo createInfo{};
@@ -136,6 +148,7 @@ namespace castor3d
 		}
 
 		device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
+		device.getGraphicsQueue().waitIdle();
 	}
 
 	renderer::ShaderStageStateArray BrdfPrefilter::doCreateProgram()

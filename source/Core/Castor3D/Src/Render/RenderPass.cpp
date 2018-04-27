@@ -2,6 +2,7 @@
 
 #include "Castor3DPrerequisites.hpp"
 #include "Engine.hpp"
+#include "Material/Material.hpp"
 #include "Material/Pass.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPassTimer.hpp"
@@ -185,10 +186,9 @@ namespace castor3d
 			while ( i < count )
 			{
 				auto & node = *it;
-				std::memcpy( buffer, node.sceneNode.getDerivedTransformationMatrix().constPtr(), mtxSize );
-				auto id = node.passNode.pass.getId() - 1;
-				std::memcpy( buffer + mtxSize, &id, sizeof( int ) );
-				buffer += stride;
+				buffer->m_matrix = convert( node.sceneNode.getDerivedTransformationMatrix() );
+				buffer->m_material = node.passNode.pass.getId() - 1;
+				++buffer;
 				++i;
 				++it;
 			}
@@ -216,10 +216,9 @@ namespace castor3d
 					&& node->sceneNode.isVisible()
 					&& camera.isVisible( node->instance, node->data ) )
 				{
-					std::memcpy( buffer, node->sceneNode.getDerivedTransformationMatrix().constPtr(), mtxSize );
-					auto id = node->passNode.pass.getId() - 1;
-					std::memcpy( buffer + mtxSize, &id, sizeof( int ) );
-					buffer += stride;
+					buffer->m_matrix = convert( node->sceneNode.getDerivedTransformationMatrix() );
+					buffer->m_material = node->passNode.pass.getId() - 1;
+					++buffer;
 				}
 				++i;
 				++it;
@@ -474,7 +473,7 @@ namespace castor3d
 		, Geometry & primitive
 		, AnimatedSkeleton & skeleton )
 	{
-		auto & buffers = submesh.getGeometryBuffers();
+		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this() );
 		auto & scene = *primitive.getScene();
 		auto & geometryEntry = scene.getGeometryCache().getUbos( submesh, pass );
 		auto & animationEntry = scene.getAnimatedObjectGroupCache().getUbos( skeleton );
@@ -500,7 +499,7 @@ namespace castor3d
 		, Geometry & primitive
 		, AnimatedMesh & mesh )
 	{
-		auto & buffers = submesh.getGeometryBuffers();
+		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this() );
 		auto & scene = *primitive.getScene();
 		auto & cache = scene.getGeometryCache();
 		auto & geometryEntry = scene.getGeometryCache().getUbos( submesh, pass );
@@ -526,7 +525,7 @@ namespace castor3d
 		, Submesh & submesh
 		, Geometry & primitive )
 	{
-		auto & buffers = submesh.getGeometryBuffers();
+		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this() );
 		auto & scene = *primitive.getScene();
 		auto & cache = scene.getGeometryCache();
 		auto entry = cache.getUbos( submesh, pass );
@@ -602,10 +601,15 @@ namespace castor3d
 			, m_matrixUbo.getUbo() );
 		node.uboDescriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
 			, m_sceneUbo.getUbo() );
-		node.uboDescriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
-			, node.modelMatrixUbo.buffer->getBuffer()
-			, node.modelMatrixUbo.offset
-			, 1u );
+
+		if ( !checkFlag( node.pipeline.getFlags().m_programFlags, ProgramFlag::eInstantiation ) )
+		{
+			node.uboDescriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
+				, node.modelMatrixUbo.buffer->getBuffer()
+				, node.modelMatrixUbo.offset
+				, 1u );
+		}
+
 		node.uboDescriptorSet->createBinding( layout.getBinding( ModelUbo::BindingPoint )
 			, node.modelUbo.buffer->getBuffer()
 			, node.modelUbo.offset
@@ -638,10 +642,15 @@ namespace castor3d
 			, m_matrixUbo.getUbo() );
 		node.uboDescriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
 			, m_sceneUbo.getUbo() );
-		node.uboDescriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
-			, node.modelMatrixUbo.buffer->getBuffer()
-			, node.modelMatrixUbo.offset
-			, 1u );
+
+		if ( !checkFlag( node.pipeline.getFlags().m_programFlags, ProgramFlag::eInstantiation ) )
+		{
+			node.uboDescriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
+				, node.modelMatrixUbo.buffer->getBuffer()
+				, node.modelMatrixUbo.offset
+				, 1u );
+		}
+
 		node.uboDescriptorSet->createBinding( layout.getBinding( ModelUbo::BindingPoint )
 			, node.modelUbo.buffer->getBuffer()
 			, node.modelUbo.offset
@@ -674,10 +683,15 @@ namespace castor3d
 			, m_matrixUbo.getUbo() );
 		node.uboDescriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
 			, m_sceneUbo.getUbo() );
-		node.uboDescriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
-			, node.modelMatrixUbo.buffer->getBuffer()
-			, node.modelMatrixUbo.offset
-			, 1u );
+
+		if ( !checkFlag( node.pipeline.getFlags().m_programFlags, ProgramFlag::eInstantiation ) )
+		{
+			node.uboDescriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
+				, node.modelMatrixUbo.buffer->getBuffer()
+				, node.modelMatrixUbo.offset
+				, 1u );
+		}
+
 		node.uboDescriptorSet->createBinding( layout.getBinding( ModelUbo::BindingPoint )
 			, node.modelUbo.buffer->getBuffer()
 			, node.modelUbo.offset
@@ -710,10 +724,15 @@ namespace castor3d
 			, m_matrixUbo.getUbo() );
 		node.uboDescriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
 			, m_sceneUbo.getUbo() );
-		node.uboDescriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
-			, node.modelMatrixUbo.buffer->getBuffer()
-			, node.modelMatrixUbo.offset
-			, 1u );
+
+		if ( !checkFlag( node.pipeline.getFlags().m_programFlags, ProgramFlag::eInstantiation ) )
+		{
+			node.uboDescriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
+				, node.modelMatrixUbo.buffer->getBuffer()
+				, node.modelMatrixUbo.offset
+				, 1u );
+		}
+
 		node.uboDescriptorSet->createBinding( layout.getBinding( ModelUbo::BindingPoint )
 			, node.modelUbo.buffer->getBuffer()
 			, node.modelUbo.offset
@@ -793,7 +812,12 @@ namespace castor3d
 		{
 			for ( auto & submeshNodes : passNodes.second )
 			{
-				initialiseTextureDescriptor( descriptorPool, submeshNodes.second[0] );
+				Pass & pass = submeshNodes.second[0].passNode.pass;
+
+				if ( pass.getTextureUnitsCount() > 0u )
+				{
+					initialiseTextureDescriptor( descriptorPool, submeshNodes.second[0] );
+				}
 			}
 		}
 	}
@@ -805,7 +829,12 @@ namespace castor3d
 		{
 			for ( auto & submeshNodes : passNodes.second )
 			{
-				initialiseTextureDescriptor( descriptorPool, submeshNodes.second[0] );
+				Pass & pass = submeshNodes.second[0].passNode.pass;
+
+				if ( pass.getTextureUnitsCount() > 0u )
+				{
+					initialiseTextureDescriptor( descriptorPool, submeshNodes.second[0] );
+				}
 			}
 		}
 	}
@@ -995,10 +1024,14 @@ namespace castor3d
 				, InstantiationComponent & instantiation
 				, StaticRenderNodeArray & renderNodes )
 			{
-				if ( !renderNodes.empty() && instantiation.hasMatrixBuffer() )
+				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
+
+				if ( !renderNodes.empty()
+					&& it != instantiation.end()
+					&& it->second.buffer )
 				{
-					uint32_t count = doCopyNodesMatrices( renderNodes
-						, instantiation.getData() );
+					doCopyNodesMatrices( renderNodes
+						, it->second.data );
 				}
 			} );
 	}
@@ -1016,10 +1049,14 @@ namespace castor3d
 				, InstantiationComponent & instantiation
 				, StaticRenderNodeArray & renderNodes )
 			{
-				if ( !renderNodes.empty() && instantiation.hasMatrixBuffer() )
+				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
+
+				if ( !renderNodes.empty()
+					&& it != instantiation.end()
+					&& it->second.buffer )
 				{
-					uint32_t count = doCopyNodesMatrices( renderNodes
-						, instantiation.getData() );
+					doCopyNodesMatrices( renderNodes
+						, it->second.data );
 				}
 			} );
 	}
@@ -1036,11 +1073,15 @@ namespace castor3d
 				, InstantiationComponent & instantiation
 				, StaticRenderNodePtrArray & renderNodes )
 			{
-				if ( !renderNodes.empty() && instantiation.hasMatrixBuffer() )
+				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
+
+				if ( !renderNodes.empty()
+					&& it != instantiation.end()
+					&& it->second.buffer )
 				{
-					uint32_t count = doCopyNodesMatrices( renderNodes
+					doCopyNodesMatrices( renderNodes
 						, camera
-						, instantiation.getData() );
+						, it->second.data );
 				}
 			} );
 	}
@@ -1060,11 +1101,15 @@ namespace castor3d
 				, InstantiationComponent & instantiation
 				, StaticRenderNodePtrArray & renderNodes )
 			{
-				if ( !renderNodes.empty() && instantiation.hasMatrixBuffer() )
+				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
+
+				if ( !renderNodes.empty()
+					&& it != instantiation.end()
+					&& it->second.buffer )
 				{
-					uint32_t count = doCopyNodesMatrices( renderNodes
+					doCopyNodesMatrices( renderNodes
 						, camera
-						, instantiation.getData() );
+						, it->second.data );
 				}
 			} );
 	}
@@ -1085,11 +1130,15 @@ namespace castor3d
 				, InstantiationComponent & instantiation
 				, StaticRenderNodePtrArray & renderNodes )
 			{
-				if ( !renderNodes.empty() && instantiation.hasMatrixBuffer() )
+				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
+
+				if ( !renderNodes.empty()
+					&& it != instantiation.end()
+					&& it->second.buffer )
 				{
 					uint32_t count = doCopyNodesMatrices( renderNodes
 						, camera
-						, instantiation.getData()
+						, it->second.data
 						, info );
 					info.m_visibleFaceCount += submesh.getFaceCount() * count;
 					info.m_visibleVertexCount += submesh.getPointsCount() * count;
@@ -1191,12 +1240,14 @@ namespace castor3d
 				, SkinningRenderNodeArray & renderNodes )
 			{
 				auto & instantiatedBones = submesh.getInstantiatedBones();
+				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
 
 				if ( !renderNodes.empty()
-					&& instantiatedBones.hasInstancedBonesBuffer()
-					&& instantiation.hasMatrixBuffer() )
+					&& it != instantiation.end()
+					&& it->second.buffer
+					&& instantiatedBones.hasInstancedBonesBuffer() )
 				{
-					uint32_t count1 = doCopyNodesMatrices( renderNodes, instantiation.getData() );
+					uint32_t count1 = doCopyNodesMatrices( renderNodes, it->second.data );
 					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
 					REQUIRE( count1 == count2 );
 				}
@@ -1217,12 +1268,14 @@ namespace castor3d
 				, SkinningRenderNodeArray & renderNodes )
 			{
 				auto & instantiatedBones = submesh.getInstantiatedBones();
+				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
 
 				if ( !renderNodes.empty()
-					&& instantiatedBones.hasInstancedBonesBuffer()
-					&& instantiation.hasMatrixBuffer() )
+					&& it != instantiation.end()
+					&& it->second.buffer
+					&& instantiatedBones.hasInstancedBonesBuffer() )
 				{
-					uint32_t count1 = doCopyNodesMatrices( renderNodes, instantiation.getData() );
+					uint32_t count1 = doCopyNodesMatrices( renderNodes, it->second.data );
 					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
 					REQUIRE( count1 == count2 );
 				}
@@ -1242,12 +1295,14 @@ namespace castor3d
 				, SkinningRenderNodePtrArray & renderNodes )
 			{
 				auto & instantiatedBones = submesh.getInstantiatedBones();
+				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
 
 				if ( !renderNodes.empty()
-					&& instantiatedBones.hasInstancedBonesBuffer()
-					&& instantiation.hasMatrixBuffer() )
+					&& it != instantiation.end()
+					&& it->second.buffer
+					&& instantiatedBones.hasInstancedBonesBuffer() )
 				{
-					uint32_t count1 = doCopyNodesMatrices( renderNodes, camera, instantiation.getData() );
+					uint32_t count1 = doCopyNodesMatrices( renderNodes, camera, it->second.data );
 					uint32_t count2 = doCopyNodesBones( renderNodes, camera, instantiatedBones.getInstancedBonesBuffer() );
 					REQUIRE( count1 == count2 );
 				}
@@ -1270,12 +1325,14 @@ namespace castor3d
 				, SkinningRenderNodePtrArray & renderNodes )
 			{
 				auto & instantiatedBones = submesh.getInstantiatedBones();
+				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
 
 				if ( !renderNodes.empty()
-					&& instantiatedBones.hasInstancedBonesBuffer()
-					&& instantiation.hasMatrixBuffer() )
+					&& it != instantiation.end()
+					&& it->second.buffer
+					&& instantiatedBones.hasInstancedBonesBuffer() )
 				{
-					uint32_t count1 = doCopyNodesMatrices( renderNodes, camera, instantiation.getData() );
+					uint32_t count1 = doCopyNodesMatrices( renderNodes, camera, it->second.data );
 					uint32_t count2 = doCopyNodesBones( renderNodes, camera, instantiatedBones.getInstancedBonesBuffer() );
 					REQUIRE( count1 == count2 );
 				}
@@ -1299,12 +1356,14 @@ namespace castor3d
 				, SkinningRenderNodePtrArray & renderNodes )
 			{
 				auto & instantiatedBones = submesh.getInstantiatedBones();
+				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
 
 				if ( !renderNodes.empty()
-					&& instantiatedBones.hasInstancedBonesBuffer()
-					&& instantiation.hasMatrixBuffer() )
+					&& it != instantiation.end()
+					&& it->second.buffer
+					&& instantiatedBones.hasInstancedBonesBuffer() )
 				{
-					uint32_t count1 = doCopyNodesMatrices( renderNodes, camera, instantiation.getData(), info );
+					uint32_t count1 = doCopyNodesMatrices( renderNodes, camera, it->second.data, info );
 					uint32_t count2 = doCopyNodesBones( renderNodes, camera, instantiatedBones.getInstancedBonesBuffer(), info );
 					REQUIRE( count1 == count2 );
 					info.m_visibleFaceCount += submesh.getFaceCount() * count1;

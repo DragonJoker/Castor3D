@@ -105,7 +105,7 @@ namespace castor3d
 			switch ( m_type )
 			{
 			case castor3d::ViewportType::eOrtho:
-				doComputeOrtho( m_left
+				m_projection = m_engine.getRenderSystem()->getOrtho( m_left
 					, m_right
 					, m_bottom
 					, m_top
@@ -114,14 +114,14 @@ namespace castor3d
 				break;
 
 			case castor3d::ViewportType::ePerspective:
-				doComputePerspective( m_fovY
+				m_projection = m_engine.getRenderSystem()->getPerspective( m_fovY.value().radians()
 					, m_ratio
 					, m_near
 					, m_far );
 				break;
 
 			case castor3d::ViewportType::eFrustum:
-				doComputeFrustum( m_left
+				m_projection = m_engine.getRenderSystem()->getFrustum( m_left
 					, m_right
 					, m_bottom
 					, m_top
@@ -200,54 +200,5 @@ namespace castor3d
 		m_size = value;
 		m_viewport = renderer::Viewport{ m_size[0], m_size[1], 0, 0 };
 		m_scissor = renderer::Scissor{ 0, 0, m_size[0], m_size[1] };
-	}
-
-	void Viewport::doComputePerspective( Angle const & fovy
-		, real aspect
-		, real near
-		, real far )
-	{
-		m_projection = m_engine.getRenderSystem()->getPerspective( fovy.radians(), aspect, near, far );
-	}
-
-	void Viewport::doComputeFrustum( real left
-		, real right
-		, real bottom
-		, real top
-		, real near
-		, real far )
-	{
-		m_projection = m_engine.getRenderSystem()->getFrustum( left, right, bottom, top, near, far );
-	}
-
-	void Viewport::doComputeOrtho( real left
-		, real right
-		, real bottom
-		, real top
-		, real near
-		, real far )
-	{
-		m_projection = m_engine.getRenderSystem()->getOrtho( left, right, bottom, top, near, far );
-	}
-
-	void Viewport::doComputeLookAt( Point3r const & eye
-		, Point3r const & center
-		, Point3r const & up )
-	{
-		// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/gluLookAt.xml)
-		Point3r f{ point::getNormalised( center - eye ) };
-		Point3r u{ point::getNormalised( up ) };
-		Point3r s{ point::getNormalised( point::cross( f, u ) ) };
-		u = point::cross( s, f );
-		m_projection.setIdentity();
-		m_projection[0][0] = s[0];
-		m_projection[0][1] = u[0];
-		m_projection[0][2] = -f[0];
-		m_projection[1][0] = s[1];
-		m_projection[1][1] = u[1];
-		m_projection[1][2] = -f[1];
-		m_projection[2][0] = s[2];
-		m_projection[2][1] = u[2];
-		m_projection[2][2] = -f[2];
 	}
 }

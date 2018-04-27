@@ -26,7 +26,8 @@ namespace castor3d
 		cleanup();
 	}
 
-	void BonesInstantiationComponent::gather( renderer::BufferCRefArray & buffers
+	void BonesInstantiationComponent::gather( MaterialSPtr material
+		, renderer::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, renderer::VertexLayoutCRefArray & layouts )
 	{

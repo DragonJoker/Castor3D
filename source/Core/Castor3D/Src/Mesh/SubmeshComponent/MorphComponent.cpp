@@ -23,7 +23,8 @@ namespace castor3d
 		cleanup();
 	}
 
-	void MorphComponent::gather( renderer::BufferCRefArray & buffers
+	void MorphComponent::gather( MaterialSPtr material
+		, renderer::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, renderer::VertexLayoutCRefArray & layouts )
 	{

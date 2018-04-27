@@ -4,6 +4,8 @@
 
 #include <Core/Renderer.hpp>
 
+#include <GlslWriter.hpp>
+
 #include <Log/Logger.hpp>
 
 #include <Core/GlCreateRenderer.hpp>
@@ -12,11 +14,12 @@ using namespace castor;
 
 namespace GlRender
 {
-	String RenderSystem::Name = cuT( "OpenGL Renderer" );
+	String RenderSystem::Name = cuT( "OpenGL 4.x Renderer" );
 	String RenderSystem::Type = cuT( "opengl" );
 
 	RenderSystem::RenderSystem( castor3d::Engine & engine
-		, castor::String const & appName )
+		, castor::String const & appName
+		, bool enableValidation )
 		: castor3d::RenderSystem( engine, Name, false )
 	{
 		renderer::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
@@ -67,11 +70,7 @@ namespace GlRender
 		{
 			string::stringCast< char >( appName ),
 			"Castor3D",
-#ifdef NDEBUG
-			false,
-#else
-			true,
-#endif
+			enableValidation,
 		} ) );
 		Logger::logInfo( cuT( "Using " ) + Name );
 		auto & gpu = m_renderer->getPhysicalDevice( 0u );
@@ -85,8 +84,24 @@ namespace GlRender
 	}
 
 	castor3d::RenderSystemUPtr RenderSystem::create( castor3d::Engine & engine
-		, castor::String const & appName )
+		, castor::String const & appName
+		, bool enableValidation )
 	{
-		return std::make_unique< RenderSystem >( engine, appName );
+		return std::make_unique< RenderSystem >( engine
+			, appName
+			, enableValidation );
+	}
+
+	glsl::GlslWriter RenderSystem::createGlslWriter()
+	{
+		return glsl::GlslWriter{ glsl::GlslWriterConfig{ m_gpuInformations.getShaderLanguageVersion()
+			, m_gpuInformations.hasConstantsBuffers()
+			, m_gpuInformations.hasTextureBuffers()
+			, m_gpuInformations.hasShaderStorageBuffers()
+			, false
+			, false
+			, false
+			, false
+			, false } };
 	}
 }

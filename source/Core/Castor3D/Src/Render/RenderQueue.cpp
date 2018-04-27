@@ -383,6 +383,7 @@ namespace castor3d
 			for ( auto & pipelineNode : pipelineNodes )
 			{
 				uint32_t size = 0u;
+				RenderPipeline & pipeline = *pipelineNode.first;
 
 				for ( auto & passNodes : pipelineNode.second )
 				{
@@ -390,19 +391,13 @@ namespace castor3d
 				}
 
 				pipelineNode.first->createDescriptorPools( size );
+				renderPass.initialiseUboDescriptor( pipeline.getDescriptorPool( 0u )
+					, pipelineNode.second );
 
-				for ( auto & passNodes : pipelineNode.second )
+				if ( pipeline.hasDescriptorPool( 1u ) )
 				{
-					for ( auto & submeshNodes : passNodes.second )
-					{
-						renderPass.initialiseUboDescriptor( pipelineNode.first->getDescriptorPool( 0u ), submeshNodes.second[0] );
-						Pass & pass = submeshNodes.second[0].passNode.pass;
-
-						if ( pass.getTextureUnitsCount() > 0u )
-						{
-							renderPass.initialiseTextureDescriptor( pipelineNode.first->getDescriptorPool( 1u ), submeshNodes.second[0] );
-						}
-					}
+					renderPass.initialiseTextureDescriptor( pipeline.getDescriptorPool( 1u )
+						, pipelineNode.second );
 				}
 			}
 		}
@@ -444,10 +439,10 @@ namespace castor3d
 						{
 							for ( auto pass : *material )
 							{
-								auto programFlags = submesh->getProgramFlags();
+								auto programFlags = submesh->getProgramFlags( material );
 								auto sceneFlags = scene.getFlags();
 								auto passFlags = pass->getPassFlags();
-								auto submeshFlags = submesh->getProgramFlags();
+								auto submeshFlags = programFlags;
 								remFlag( programFlags, ProgramFlag::eSkinning );
 								remFlag( programFlags, ProgramFlag::eMorphing );
 								auto skeleton = std::static_pointer_cast< AnimatedSkeleton >( doFindAnimatedObject( scene, primitive.first + cuT( "_Skeleton" ) ) );
@@ -492,7 +487,7 @@ namespace castor3d
 									, programFlags
 									, sceneFlags
 									, pass->IsTwoSided()
-									, submesh->getGeometryBuffers().layouts );
+									, submesh->getGeometryBuffers( material ).layouts );
 
 								if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) != opaque )
 								{
@@ -653,12 +648,25 @@ namespace castor3d
 			}
 		}
 
+		GeometryBuffers const & getGeometryBuffers( Submesh const & submesh
+			, MaterialSPtr material )
+		{
+			return submesh.getGeometryBuffers( material );
+		}
+
+		GeometryBuffers const & getGeometryBuffers( BillboardBase const & billboard
+			, MaterialSPtr material )
+		{
+			return billboard.getGeometryBuffers();
+		}
+
 		template< typename NodeType >
 		void doAddRenderNodeCommand( RenderPipeline & pipeline
 			, NodeType const & node
-			, renderer::CommandBuffer const & commandBuffer )
+			, renderer::CommandBuffer const & commandBuffer
+			, uint32_t instanceCount = 1u )
 		{
-			GeometryBuffers const & geometryBuffers = node.data.getGeometryBuffers();
+			GeometryBuffers const & geometryBuffers = getGeometryBuffers( node.data, node.passNode.pass.getOwner()->shared_from_this() );
 
 			commandBuffer.bindPipeline( pipeline.getPipeline() );
 			commandBuffer.bindDescriptorSet( *node.uboDescriptorSet, pipeline.getPipelineLayout() );
@@ -680,11 +688,13 @@ namespace castor3d
 				commandBuffer.bindIndexBuffer( *geometryBuffers.ibo
 					, geometryBuffers.iboOffset
 					, renderer::IndexType::eUInt32 );
-				commandBuffer.drawIndexed( geometryBuffers.idxCount );
+				commandBuffer.drawIndexed( geometryBuffers.idxCount
+					, instanceCount );
 			}
 			else
 			{
-				commandBuffer.draw( geometryBuffers.vtxCount );
+				commandBuffer.draw( geometryBuffers.vtxCount
+					, instanceCount );
 			}
 		}
 
@@ -693,9 +703,10 @@ namespace castor3d
 			, RenderPipeline & pipeline
 			, NodeType const & node
 			, Submesh & object
-			, renderer::CommandBuffer const & commandBuffer )
+			, renderer::CommandBuffer const & commandBuffer
+			, uint32_t instanceCount = 1u )
 		{
-			GeometryBuffers const & geometryBuffers = object.getGeometryBuffers();
+			GeometryBuffers const & geometryBuffers = object.getGeometryBuffers( pass.getOwner()->shared_from_this() );
 
 			commandBuffer.bindPipeline( pipeline.getPipeline() );
 			commandBuffer.bindDescriptorSet( *node.uboDescriptorSet, pipeline.getPipelineLayout() );
@@ -717,11 +728,13 @@ namespace castor3d
 				commandBuffer.bindIndexBuffer( *geometryBuffers.ibo
 					, geometryBuffers.iboOffset
 					, renderer::IndexType::eUInt32 );
-				commandBuffer.drawIndexed( geometryBuffers.idxCount );
+				commandBuffer.drawIndexed( geometryBuffers.idxCount
+					, instanceCount );
 			}
 			else
 			{
-				commandBuffer.draw( geometryBuffers.vtxCount );
+				commandBuffer.draw( geometryBuffers.vtxCount
+					, instanceCount );
 			}
 		}
 
@@ -734,6 +747,8 @@ namespace castor3d
 			, Submesh & submesh
 			, ArrayType & renderNodes )
 		{
+			uint32_t count = 0u;
+
 			for ( auto & node : renderNodes )
 			{
 				if ( node.sceneNode.isDisplayable()
@@ -741,9 +756,11 @@ namespace castor3d
 					&& camera.isVisible( node.instance, node.data ) )
 				{
 					doAddRenderNode( pass, pipeline, &node, submesh, outputNodes );
-					doAddRenderNodeCommand( pass, pipeline, node, submesh, commandBuffer );
+					++count;
 				}
 			}
+
+			doAddRenderNodeCommand( pass, pipeline, renderNodes[0], submesh, commandBuffer, count );
 		}
 
 		template< typename MapType, typename CulledMapType >
@@ -794,14 +811,18 @@ namespace castor3d
 			, Submesh & submesh
 			, ArrayType & renderNodes )
 		{
+			uint32_t count = 0u;
+
 			for ( auto & node : renderNodes )
 			{
 				if ( node.sceneNode.isDisplayable()
 					&& node.sceneNode.isVisible() )
 				{
-					doAddRenderNodeCommand( pass, pipeline, node, submesh, commandBuffer );
+					++count;
 				}
 			}
+
+			doAddRenderNodeCommand( pass, pipeline, renderNodes[0], submesh, commandBuffer, count );
 		}
 
 		template< typename MapType >

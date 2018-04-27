@@ -167,7 +167,8 @@ namespace castor3d
 				createInfo.samples = renderer::SampleCountFlag::e1;
 				createInfo.sharingMode = renderer::SharingMode::eExclusive;
 				createInfo.tiling = renderer::ImageTiling::eOptimal;
-				createInfo.usage = renderer::ImageUsageFlag::eSampled;
+				createInfo.usage = renderer::ImageUsageFlag::eSampled
+					| renderer::ImageUsageFlag::eTransferDst;
 				auto texture = std::make_shared < TextureLayout >( *getEngine()->getRenderSystem()
 					, createInfo
 					, renderer::MemoryPropertyFlag::eDeviceLocal );

@@ -99,7 +99,8 @@ namespace castor3d
 		return getOwner()->getParent().getSkeleton();
 	}
 
-	void BonesComponent::gather( renderer::BufferCRefArray & buffers
+	void BonesComponent::gather( MaterialSPtr material
+		, renderer::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, renderer::VertexLayoutCRefArray & layouts )
 	{

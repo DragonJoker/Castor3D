@@ -27,6 +27,14 @@ namespace castor3d
 		: public SubmeshComponent
 	{
 	public:
+		struct Data
+		{
+			uint32_t count;
+			renderer::VertexBufferPtr< InstantiationData > buffer;
+			std::vector< InstantiationData > data;
+		};
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -89,7 +97,8 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
-		C3D_API void gather( renderer::BufferCRefArray & buffers
+		C3D_API void gather( MaterialSPtr material
+			, renderer::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
 			, renderer::VertexLayoutCRefArray & layouts )override;
 		/**
@@ -99,54 +108,43 @@ namespace castor3d
 			, MaterialSPtr newMaterial
 			, bool update )override;
 		/**
-		 *\~english
-		 *\return		The instantiation VertexBuffer.
-		 *\~french
-		 *\return		Le VertexBuffer d'instanciation.
-		 */
-		inline bool hasMatrixBuffer()const
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		inline std::map< MaterialSPtr, Data >::const_iterator end()const
 		{
-			return bool( m_matrixBuffer );
+			return m_instances.end();
 		}
-		/**
-		 *\~english
-		 *\return		The instantiation VertexBuffer.
-		 *\~french
-		 *\return		Le VertexBuffer d'instanciation.
-		 */
-		inline renderer::VertexBuffer< InstantiationData > const & getMatrixBuffer()const
+
+		inline std::map< MaterialSPtr, Data >::iterator end()
 		{
-			return *m_matrixBuffer;
+			return m_instances.end();
 		}
-		/**
-		 *\~english
-		 *\return		The instantiation VertexBuffer.
-		 *\~french
-		 *\return		Le VertexBuffer d'instanciation.
-		 */
-		inline renderer::VertexBuffer< InstantiationData > & getMatrixBuffer()
+
+		inline std::map< MaterialSPtr, Data >::const_iterator find( MaterialSPtr material )const
 		{
-			return *m_matrixBuffer;
+			return m_instances.find( material );
 		}
-		/**
-		 *\~english
-		 *\return		The instantiation VertexBuffer.
-		 *\~french
-		 *\return		Le VertexBuffer d'instanciation.
-		 */
-		inline std::vector< InstantiationData > & getData()
+
+		inline std::map< MaterialSPtr, Data >::iterator find( MaterialSPtr material )
 		{
-			return m_data;
+			needsUpdate();
+			return m_instances.find( material );
 		}
-		/**
-		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
-		 */
-		inline ProgramFlags getProgramFlags()const override
+
+		inline ProgramFlags getProgramFlags( MaterialSPtr material )const override
 		{
-			return hasMatrixBuffer()
+			auto it = find( material );
+			return ( it != end() && it->second.buffer )
 				? ProgramFlag::eInstantiation
 				: ProgramFlag( 0 );
 		}
+		/**@}*/
 
 	private:
 		bool doInitialise()override;
@@ -159,10 +157,8 @@ namespace castor3d
 		C3D_API static uint32_t constexpr BindingPoint = 2u;
 
 	private:
-		std::map< MaterialSPtr, uint32_t > m_instanceCount;
-		renderer::VertexBufferPtr< InstantiationData > m_matrixBuffer;
+		std::map< MaterialSPtr, Data > m_instances;
 		renderer::VertexLayoutPtr m_matrixLayout;
-		std::vector< InstantiationData > m_data;
 		uint32_t m_threshold;
 	};
 }

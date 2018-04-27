@@ -7,6 +7,7 @@
 #include <Command/Queue.hpp>
 #include <Core/Device.hpp>
 #include <Descriptor/DescriptorSetLayoutBinding.hpp>
+#include <Image/Texture.hpp>
 #include <Pipeline/DepthStencilState.hpp>
 #include <Pipeline/InputAssemblyState.hpp>
 #include <Pipeline/MultisampleState.hpp>
@@ -29,64 +30,10 @@ using namespace glsl;
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
 	namespace
 	{
-		renderer::SamplerPtr doCreateSampler( renderer::Device const & device )
-		{
-			return device.createSampler( renderer::WrapMode::eClampToEdge
-				, renderer::WrapMode::eRepeat
-				, renderer::WrapMode::eRepeat
-				, renderer::Filter::eLinear
-				, renderer::Filter::eLinear );
-		}
-
-		renderer::UniformBufferPtr< renderer::Mat4 > doCreateMatrixUbo( renderer::Device const & device
-			, renderer::CommandBuffer const & commandBuffer )
-		{
-			static renderer::Mat4 const projection = device.perspective( float( 90.0_degrees ), 1.0f, 0.1f, 10.0f );
-			static renderer::Mat4 const views[] =
-			{
-				convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +1.0f, +0.0f, +0.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ) ),
-				convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ -1.0f, +0.0f, +0.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ) ),
-				convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +1.0f, +0.0f }, Point3f{ 0.0f, +0.0f, +1.0f } ) ),
-				convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, -1.0f, +0.0f }, Point3f{ 0.0f, +0.0f, -1.0f } ) ),
-				convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +0.0f, +1.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ) ),
-				convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +0.0f, -1.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ) )
-			};
-
-			auto result = renderer::makeUniformBuffer< renderer::Mat4 >( device
-				, 6u
-				, renderer::BufferTarget::eTransferDst
-				, renderer::MemoryPropertyFlag::eDeviceLocal );
-
-			if ( device.getClipDirection() == renderer::ClipDirection::eTopDown )
-			{
-				result->getData( 0u ) = projection * views[0];
-				result->getData( 1u ) = projection * views[1];
-				result->getData( 2u ) = projection * views[2];
-				result->getData( 3u ) = projection * views[3];
-				result->getData( 4u ) = projection * views[4];
-				result->getData( 5u ) = projection * views[5];
-			}
-			else
-			{
-				result->getData( 0u ) = projection * views[0];
-				result->getData( 1u ) = projection * views[1];
-				result->getData( 2u ) = projection * views[3];
-				result->getData( 3u ) = projection * views[2];
-				result->getData( 4u ) = projection * views[4];
-				result->getData( 5u ) = projection * views[5];
-			}
-
-			renderer::StagingBuffer stagingBuffer{ device
-				, renderer::BufferTarget::eTransferDst
-				, 6u * result->getAlignedSize() };
-			stagingBuffer.uploadUniformData( commandBuffer
-				, result->getDatas()
-				, *result );
-			return result;
-		}
-
 		renderer::ShaderStageStateArray doCreateProgram( RenderSystem & renderSystem
 			, renderer::Format format
 			, float gamma )
@@ -170,50 +117,6 @@ namespace castor3d
 			return shaderStages;
 		}
 
-		renderer::VertexBufferPtr< renderer::Vec4 > doCreateVertexBuffer( renderer::Device const & device
-			, renderer::CommandBuffer const & commandBuffer )
-		{
-			std::vector< renderer::Vec4 > vertexData
-			{
-				{ -1, +1, -1, +1 }, { +1, -1, -1, +1 }, { -1, -1, -1, +1 }, { +1, -1, -1, +1 }, { -1, +1, -1, +1 }, { +1, +1, -1, +1 },// Back
-				{ -1, -1, +1, +1 }, { -1, +1, -1, +1 }, { -1, -1, -1, +1 }, { -1, +1, -1, +1 }, { -1, -1, +1, +1 }, { -1, +1, +1, +1 },// Left
-				{ +1, -1, -1, +1 }, { +1, +1, +1, +1 }, { +1, -1, +1, +1 }, { +1, +1, +1, +1 }, { +1, -1, -1, +1 }, { +1, +1, -1, +1 },// Right
-				{ -1, -1, +1, +1 }, { +1, +1, +1, +1 }, { -1, +1, +1, +1 }, { +1, +1, +1, +1 }, { -1, -1, +1, +1 }, { +1, -1, +1, +1 },// Front
-				{ -1, +1, -1, +1 }, { +1, +1, +1, +1 }, { +1, +1, -1, +1 }, { +1, +1, +1, +1 }, { -1, +1, -1, +1 }, { -1, +1, +1, +1 },// Top
-				{ -1, -1, -1, +1 }, { +1, -1, -1, +1 }, { -1, -1, +1, +1 }, { +1, -1, -1, +1 }, { +1, -1, +1, +1 }, { -1, -1, +1, +1 },// Bottom
-			};
-			auto result = renderer::makeVertexBuffer< renderer::Vec4 >( device
-				, uint32_t( vertexData.size() )
-				, renderer::BufferTarget::eTransferDst
-				, renderer::MemoryPropertyFlag::eHostVisible );
-
-			if ( auto * buffer = result->lock( 0u, result->getCount(), renderer::MemoryMapFlag::eWrite ) )
-			{
-				std::memcpy( buffer, vertexData.data(), vertexData.size() * sizeof( renderer::Vec4 ) );
-				result->flush( 0u, result->getCount() );
-				result->unlock();
-			}
-
-			return result;
-		}
-
-		renderer::VertexLayoutPtr doCreateVertexLayout( renderer::Device const & device )
-		{
-			auto result = renderer::makeLayout< renderer::Vec4 >( 0u );
-			result->createAttribute( 0u, renderer::Format::eR32G32B32A32_SFLOAT, 0u );
-			return result;
-		}
-
-		renderer::DescriptorSetLayoutPtr doCreateDescriptorSetLayout( renderer::Device const & device )
-		{
-			renderer::DescriptorSetLayoutBindingArray bindings
-			{
-				{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex },
-				{ 1u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
-			};
-			return device.createDescriptorSetLayout( std::move( bindings ) );
-		}
-
 		renderer::RenderPassPtr doCreateRenderPass( renderer::Device const & device
 			, renderer::Format format )
 		{
@@ -256,76 +159,57 @@ namespace castor3d
 		}
 	}
 
+	//*********************************************************************************************
+
 	EquirectangularToCube::EquirectangularToCube( TextureLayout const & equiRectangular
 		, RenderSystem & renderSystem
 		, TextureLayout const & target
 		, float gamma )
-		: m_device{ *renderSystem.getCurrentDevice() }
+		: RenderCube{ renderSystem, false }
+		, m_device{ *renderSystem.getCurrentDevice() }
 		, m_commandBuffer{ m_device.getGraphicsCommandPool().createCommandBuffer() }
 		, m_view{ equiRectangular.getDefaultView() }
-		, m_sampler{ doCreateSampler( m_device ) }
-		, m_matrixUbo{ doCreateMatrixUbo( m_device, *m_commandBuffer ) }
-		, m_vertexBuffer{ doCreateVertexBuffer( m_device, *m_commandBuffer ) }
-		, m_vertexLayout{ doCreateVertexLayout( m_device ) }
-		, m_descriptorLayout{ doCreateDescriptorSetLayout( m_device ) }
-		, m_descriptorPool{ m_descriptorLayout->createPool( 6u ) }
-		, m_pipelineLayout{ m_device.createPipelineLayout( *m_descriptorLayout ) }
 		, m_renderPass{ doCreateRenderPass( m_device, target.getPixelFormat() ) }
 	{
 		auto size = renderer::Extent2D{ target.getWidth(), target.getHeight() };
-		uint32_t face = 0u;
 		auto program = doCreateProgram( renderSystem, equiRectangular.getPixelFormat(), gamma );
+		uint32_t face = 0u;
 
-		for ( auto & facePipeline : m_faces )
+		for ( auto & facePipeline : m_frameBuffers )
 		{
 			renderer::FrameBufferAttachmentArray attaches;
-			facePipeline.view = &target.getImage( face ).getView();
+			facePipeline.view = target.getTexture().createView( renderer::TextureViewType::e2D
+				, target.getPixelFormat()
+				, 0u
+				, 1u
+				, face
+				, 1u ); &target.getImage( face ).getView();
 			attaches.emplace_back( *m_renderPass->getAttachments().begin(), *facePipeline.view );
 			facePipeline.frameBuffer = m_renderPass->createFrameBuffer( size, std::move( attaches ) );
-
-			facePipeline.pipeline = m_pipelineLayout->createPipeline( renderer::GraphicsPipelineCreateInfo
-			{
-				program,
-				*m_renderPass,
-				renderer::VertexInputState::create( *m_vertexLayout ),
-				renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleList },
-				renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eNone },
-				renderer::MultisampleState{},
-				renderer::ColourBlendState::createDefault(),
-				{},
-				renderer::DepthStencilState{ 0u, false, false },
-				renderer::TessellationState{},
-				renderer::Viewport{ size.width, size.height, 0, 0 },
-				renderer::Scissor{ 0, 0, size.width, size.height }
-			} );
-
-			facePipeline.descriptorSet = m_descriptorPool->createDescriptorSet();
-			facePipeline.descriptorSet->createBinding( m_descriptorLayout->getBinding( 0u )
-				, *m_matrixUbo
-				, face
-				, 1u );
-			facePipeline.descriptorSet->createBinding( m_descriptorLayout->getBinding( 1u )
-				, m_view
-				, *m_sampler );
-			facePipeline.descriptorSet->update();
 			++face;
 		}
+
+		createPipelines( size
+			, Position{}
+			, program
+			, m_view
+			, *m_renderPass
+			, {} );
 	}
 
 	void EquirectangularToCube::render( renderer::CommandBuffer & commandBuffer )
 	{
-		for ( auto & facePipeline : m_faces )
+		uint32_t face = 0u;
+
+		for ( auto & frameBuffer : m_frameBuffers )
 		{
 			commandBuffer.beginRenderPass( *m_renderPass
-				, *facePipeline.frameBuffer
+				, *frameBuffer.frameBuffer
 				, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
 				, renderer::SubpassContents::eInline );
-			commandBuffer.bindPipeline( *facePipeline.pipeline );
-			commandBuffer.bindDescriptorSet( *facePipeline.descriptorSet
-				, *m_pipelineLayout );
-			commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-			commandBuffer.draw( 36u );
+			registerFrame( commandBuffer, face );
 			commandBuffer.endRenderPass();
+			++face;
 		}
 	}
 
@@ -335,9 +219,12 @@ namespace castor3d
 		{
 			render( *m_commandBuffer );
 			m_commandBuffer->end();
+
 			auto fence = m_device.createFence();
 			m_device.getGraphicsQueue().submit( *m_commandBuffer, fence.get() );
 			fence->wait( renderer::FenceTimeout );
 		}
 	}
+
+	//*********************************************************************************************
 }

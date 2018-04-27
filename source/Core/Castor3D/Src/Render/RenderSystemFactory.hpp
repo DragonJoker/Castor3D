@@ -22,7 +22,9 @@ namespace castor3d
 	using RenderSystemFactory = castor::Factory< RenderSystem
 		, castor::String
 		, RenderSystemUPtr
-		, std::function< RenderSystemUPtr( Engine &, castor::String const & ) > >;
+		, std::function< RenderSystemUPtr( Engine &
+			, castor::String const &
+			, bool ) > >;
 }
 
 #endif

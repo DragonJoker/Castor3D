@@ -45,14 +45,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		adds bone datas.
-		 *\param[in]	p_begin	The bones data begin.
-		 *\param[in]	p_end	The bones data end.
+		 *\param[in]	begin	The bones data begin.
+		 *\param[in]	end		The bones data end.
 		 *\~french
 		 *\brief		Ajoute des données de bones.
-		 *\param[in]	p_begin	Le début des données de bones.
-		 *\param[in]	p_end	La fin des données de bones.
+		 *\param[in]	begin	Le début des données de bones.
+		 *\param[in]	end		La fin des données de bones.
 		 */
-		C3D_API void addBoneDatas( VertexBoneData const * const p_begin, VertexBoneData const * const p_end );
+		C3D_API void addBoneDatas( VertexBoneData const * const begin
+			, VertexBoneData const * const end );
 		/**
 		 *\~english
 		 *\return		The skeleton.
@@ -63,33 +64,34 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
-		C3D_API void gather( renderer::BufferCRefArray & buffers
+		C3D_API void gather( MaterialSPtr material
+			, renderer::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
 			, renderer::VertexLayoutCRefArray & layouts )override;
 		/**
 		 *\~english
 		 *\brief		adds bone datas.
-		 *\param[in]	p_boneData	The bone datas.
+		 *\param[in]	boneData	The bone datas.
 		 *\~french
 		 *\brief		Ajoute des données de bones.
-		 *\param[in]	p_boneData	Les données de bones.
+		 *\param[in]	boneData	Les données de bones.
 		 */
-		inline void addBoneDatas( std::vector< VertexBoneData > const & p_boneData )
+		inline void addBoneDatas( std::vector< VertexBoneData > const & boneData )
 		{
-			addBoneDatas( p_boneData.data(), p_boneData.data() + p_boneData.size() );
+			addBoneDatas( boneData.data(), boneData.data() + boneData.size() );
 		}
 		/**
 		 *\~english
 		 *\brief		adds bone datas.
-		 *\param[in]	p_boneData	The bone datas.
+		 *\param[in]	boneData	The bone datas.
 		 *\~french
 		 *\brief		Ajoute des données de bones.
-		 *\param[in]	p_boneData	Les données de bones.
+		 *\param[in]	boneData	Les données de bones.
 		 */
 		template< size_t Count >
-		inline void addBoneDatas( std::array< VertexBoneData, Count > const & p_boneData )
+		inline void addBoneDatas( std::array< VertexBoneData, Count > const & boneData )
 		{
-			addBoneDatas( p_boneData.data(), p_boneData.data() + p_boneData.size() );
+			addBoneDatas( boneData.data(), boneData.data() + boneData.size() );
 		}
 		/**
 		 *\~english
@@ -134,7 +136,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
 		 */
-		inline ProgramFlags getProgramFlags()const override
+		inline ProgramFlags getProgramFlags( MaterialSPtr material )const override
 		{
 			return hasBoneData()
 				? ProgramFlag::eSkinning

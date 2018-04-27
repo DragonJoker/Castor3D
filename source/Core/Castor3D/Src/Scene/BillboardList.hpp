@@ -137,7 +137,7 @@ namespace castor3d
 			return *m_vertexBuffer;
 		}
 
-		inline GeometryBuffers & getGeometryBuffers()
+		inline GeometryBuffers const & getGeometryBuffers()const
 		{
 			return m_geometryBuffers;
 		}

@@ -299,7 +299,7 @@ namespace castor3d
 				auto lightResultTexcoord = writer.declLocale( cuT( "lightResultTexcoord" )
 					, vtx_texture );
 				auto texcoord = writer.declLocale( cuT( "texcoord" )
-					, writer.adjustTexCoords( lightResultTexcoord ) );
+					, lightResultTexcoord );
 				auto data1 = writer.declLocale( cuT( "data1" )
 					, texture( c3d_mapData1, texcoord ) );
 				auto flags = writer.declLocale( cuT( "flags" )
@@ -607,7 +607,7 @@ namespace castor3d
 				auto lightResultTexcoord = writer.declLocale( cuT( "lightResultTexcoord" )
 					, vtx_texture );
 				auto texcoord = writer.declLocale( cuT( "texcoord" )
-					, writer.adjustTexCoords( lightResultTexcoord ) );
+					, lightResultTexcoord );
 				auto data1 = writer.declLocale( cuT( "data1" )
 					, texture( c3d_mapData1, texcoord ) );
 				auto flags = writer.declLocale( cuT( "flags" )
@@ -1063,9 +1063,9 @@ namespace castor3d
 				&& background.hasIbl() )
 			{
 				auto & ibl = background.getIbl();
-				result.push_back( { index++, 0u, 1u, renderer::DescriptorType::eCombinedImageSampler, { { ibl.getPrefilteredBrdf().getSampler()->getSampler(), ibl.getPrefilteredBrdf().getTexture()->getDefaultView(), imgLayout } } } );
-				result.push_back( { index++, 0u, 1u, renderer::DescriptorType::eCombinedImageSampler, { { ibl.getIrradiance().getSampler()->getSampler(), ibl.getIrradiance().getTexture()->getDefaultView(), imgLayout } } } );
-				result.push_back( { index++, 0u, 1u, renderer::DescriptorType::eCombinedImageSampler, { { ibl.getPrefilteredEnvironment().getSampler()->getSampler(), ibl.getPrefilteredEnvironment().getTexture()->getDefaultView(), imgLayout } } } );
+				result.push_back( { index++, 0u, 1u, renderer::DescriptorType::eCombinedImageSampler, { { ibl.getPrefilteredBrdfSampler(), ibl.getPrefilteredBrdfTexture(), imgLayout } } } );
+				result.push_back( { index++, 0u, 1u, renderer::DescriptorType::eCombinedImageSampler, { { ibl.getIrradianceSampler(), ibl.getIrradianceTexture(), imgLayout } } } );
+				result.push_back( { index++, 0u, 1u, renderer::DescriptorType::eCombinedImageSampler, { { ibl.getPrefilteredEnvironmentSampler(), ibl.getPrefilteredEnvironmentTexture(), imgLayout } } } );
 			}
 
 			result.push_back( { index++, 0u, c_environmentCount, renderer::DescriptorType::eCombinedImageSampler } );

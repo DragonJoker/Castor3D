@@ -31,12 +31,24 @@ namespace glsl
 				, Float const & depth
 				, Mat4 const & invProj )
 			{
-				auto csPosition = m_writer.declLocale( cuT( "psPosition" )
-					, vec3( uv * 2.0f - 1.0f, depth * 2.0 - 1.0 ) );
-				auto vsPosition = m_writer.declLocale( cuT( "vsPosition" )
-					, invProj * vec4( csPosition, 1.0 ) );
-				vsPosition.xyz() /= vsPosition.w();
-				m_writer.returnStmt( vsPosition.xyz() );
+				if ( m_writer.isZeroToOneDepth() )
+				{
+					auto csPosition = m_writer.declLocale( cuT( "csPosition" )
+						, vec3( uv * 2.0f - 1.0f, depth ) );
+					auto vsPosition = m_writer.declLocale( cuT( "vsPosition" )
+						, invProj * vec4( csPosition, 1.0 ) );
+					vsPosition.xyz() /= vsPosition.w();
+					m_writer.returnStmt( vsPosition.xyz() );
+				}
+				else
+				{
+					auto csPosition = m_writer.declLocale( cuT( "csPosition" )
+						, vec3( uv * 2.0f - 1.0f, depth * 2.0f - 1.0f ) );
+					auto vsPosition = m_writer.declLocale( cuT( "vsPosition" )
+						, invProj * vec4( csPosition, 1.0 ) );
+					vsPosition.xyz() /= vsPosition.w();
+					m_writer.returnStmt( vsPosition.xyz() );
+				}
 			}
 			, InVec2{ &m_writer, cuT( "uv" ) }
 			, InFloat{ &m_writer, cuT( "depth" ) }
@@ -50,12 +62,24 @@ namespace glsl
 				, Float const & depth
 				, Mat4 const & invViewProj )
 			{
-				auto csPosition = m_writer.declLocale( cuT( "psPosition" )
-					, vec3( uv * 2.0f - 1.0f, depth * 2.0 - 1.0 ) );
-				auto wsPosition = m_writer.declLocale( cuT( "wsPosition" )
-					, invViewProj * vec4( csPosition, 1.0 ) );
-				wsPosition.xyz() /= wsPosition.w();
-				m_writer.returnStmt( wsPosition.xyz() );
+				if ( m_writer.isZeroToOneDepth() )
+				{
+					auto csPosition = m_writer.declLocale( cuT( "psPosition" )
+						, vec3( uv * 2.0f - 1.0f, depth ) );
+					auto wsPosition = m_writer.declLocale( cuT( "wsPosition" )
+						, invViewProj * vec4( csPosition, 1.0 ) );
+					wsPosition.xyz() /= wsPosition.w();
+					m_writer.returnStmt( wsPosition.xyz() );
+				}
+				else
+				{
+					auto csPosition = m_writer.declLocale( cuT( "psPosition" )
+						, vec3( uv * 2.0f - 1.0f, depth * 2.0f - 1.0f ) );
+					auto wsPosition = m_writer.declLocale( cuT( "wsPosition" )
+						, invViewProj * vec4( csPosition, 1.0 ) );
+					wsPosition.xyz() /= wsPosition.w();
+					m_writer.returnStmt( wsPosition.xyz() );
+				}
 			}
 			, InVec2{ &m_writer, cuT( "uv" ) }
 			, InFloat{ &m_writer, cuT( "depth" ) }
@@ -94,7 +118,7 @@ namespace glsl
 				, Float const & farPlane )
 			{
 				auto z = m_writer.declLocale( cuT( "z" )
-					, depth * 2.0_f - 1.0_f );
+					, depth );
 				z *= m_writer.paren( farPlane - nearPlane );
 				m_writer.returnStmt( 2.0 * nearPlane / m_writer.paren( farPlane + nearPlane - z ) );
 			}

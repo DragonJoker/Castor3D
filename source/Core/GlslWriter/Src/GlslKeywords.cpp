@@ -18,7 +18,7 @@ namespace glsl
 	{
 		std::unique_ptr< KeywordsBase > result;
 
-		if ( config.m_isVulkan )
+		if ( config.m_hasPushConstants )
 		{
 			switch ( config.m_shaderLanguageVersion )
 			{

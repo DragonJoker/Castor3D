@@ -240,6 +240,7 @@ namespace castor3d
 		auto model = doComputeModelMatrix( light, camera );
 		m_matrixUbo.update( camera.getView(), camera.getViewport().getProjection() );
 		m_modelMatrixUbo.update( model );
+		m_program->bind( light );
 	}
 
 	void MeshLightPass::render( bool first

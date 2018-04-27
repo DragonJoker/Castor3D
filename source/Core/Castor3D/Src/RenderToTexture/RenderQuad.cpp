@@ -1,7 +1,6 @@
 #include "RenderQuad.hpp"
 
 #include "Engine.hpp"
-#include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Texture/Sampler.hpp"
 
@@ -87,9 +86,12 @@ namespace castor3d
 	void RenderQuad::cleanup()
 	{
 		m_pipeline.reset();
+		m_descriptorSet.reset();
 		m_pipelineLayout.reset();
 		m_descriptorSetPool.reset();
 		m_descriptorSetLayout.reset();
+		m_commandBuffer.reset();
+		m_vertexBuffer.reset();
 	}
 
 	void RenderQuad::createPipeline( renderer::Extent2D const & size

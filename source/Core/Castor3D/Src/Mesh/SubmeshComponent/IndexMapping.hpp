@@ -74,7 +74,8 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
-		inline void gather( renderer::BufferCRefArray & buffers
+		inline void gather( MaterialSPtr material
+			, renderer::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
 			, renderer::VertexLayoutCRefArray & layouts )override
 		{
@@ -82,7 +83,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
 		 */
-		inline ProgramFlags getProgramFlags()const override
+		inline ProgramFlags getProgramFlags( MaterialSPtr material )const override
 		{
 			return ProgramFlags{};
 		}

@@ -15,7 +15,7 @@ namespace glsl
 		m_stream.imbue( Expr::getLocale() );
 		m_stream << std::endl;
 
-		if ( writer.isVulkan() )
+		if ( writer.hasPushConstants() )
 		{
 			m_stream << cuT( "layout ( push_constant ) " ) << cuT( "uniform " ) << name << std::endl;
 			m_block = std::make_unique< IndentBlock >( m_stream );
@@ -24,7 +24,7 @@ namespace glsl
 
 	void Pcb::end()
 	{
-		if ( m_writer.isVulkan() )
+		if ( m_writer.hasPushConstants() )
 		{
 			m_block.reset();
 			m_stream << cuT( ";" ) << std::endl;

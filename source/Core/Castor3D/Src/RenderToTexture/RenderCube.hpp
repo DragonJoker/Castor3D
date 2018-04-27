@@ -1,53 +1,56 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_RenderQuad_H___
-#define ___C3D_RenderQuad_H___
+#ifndef ___C3D_RenderCube_H___
+#define ___C3D_RenderCube_H___
+#pragma once
 
 #include "Castor3DPrerequisites.hpp"
 
+#include <Buffer/UniformBuffer.hpp>
 #include <Buffer/VertexBuffer.hpp>
+#include <Command/CommandBuffer.hpp>
 #include <Descriptor/DescriptorSet.hpp>
 #include <Descriptor/DescriptorSetLayout.hpp>
 #include <Descriptor/DescriptorSetPool.hpp>
+#include <Image/Sampler.hpp>
+#include <Image/Texture.hpp>
+#include <Image/TextureView.hpp>
 #include <Pipeline/Pipeline.hpp>
 #include <Pipeline/PipelineLayout.hpp>
-#include <Pipeline/VertexLayout.hpp>
-#include <Pipeline/Viewport.hpp>
+#include <Utils/Mat4.hpp>
+
+#include <array>
 
 namespace castor3d
 {
 	/**
 	*\~english
 	*\brief
-	*	Class used to render a texture into a quad.
+	*	Class used to render a texture into a cube.
 	*\~french
 	*\brief
-	*	Classe utilisée pour rendre une texture dans un quad.
+	*	Classe utilisée pour rendre une texture dans un cube.
 	*/
-	class RenderQuad
+	class RenderCube
 	{
 	public:
-		C3D_API virtual ~RenderQuad();
+		C3D_API virtual ~RenderCube();
 		/**
 		*\~english
 		*\brief
 		*	Constructor.
 		*\param[in] renderSystem
 		*	The RenderSystem.
-		*\param[in] invertU
-		*	Tells if the U coordinate of UV must be inverted, thus mirroring the reulting image.
 		*\~french
 		*\brief
 		*	Constructeur.
 		*\param[in] renderSystem
 		*	Le RenderSystem.
-		*\param[in] invertU
-		*	Dit si la coordonnée U de l'UV doit être inversée, rendant ainsi un mirroir de l'image.
 		*/
-		C3D_API explicit RenderQuad( RenderSystem & renderSystem
+		C3D_API explicit RenderCube( RenderSystem & renderSystem
 			, bool nearest
-			, bool invertU = false );
+			, SamplerSPtr sampler = nullptr );
 		/**
 		*\~english
 		*\brief
@@ -60,12 +63,11 @@ namespace castor3d
 		*\param[in] program
 		*	Le programme shader.
 		*/
-		C3D_API void createPipeline( renderer::Extent2D const & size
+		C3D_API void createPipelines( renderer::Extent2D const & size
 			, castor::Position const & position
 			, renderer::ShaderStageStateArray const & program
 			, renderer::TextureView const & view
 			, renderer::RenderPass const & renderPass
-			, renderer::DescriptorSetLayoutBindingArray bindings
 			, renderer::PushConstantRangeCRefArray const & pushRanges );
 		/**
 		*\~english
@@ -79,12 +81,11 @@ namespace castor3d
 		*\param[in] program
 		*	Le programme shader.
 		*/
-		C3D_API void createPipeline( renderer::Extent2D const & size
+		C3D_API void createPipelines( renderer::Extent2D const & size
 			, castor::Position const & position
 			, renderer::ShaderStageStateArray const & program
 			, renderer::TextureView const & view
 			, renderer::RenderPass const & renderPass
-			, renderer::DescriptorSetLayoutBindingArray bindings
 			, renderer::PushConstantRangeCRefArray const & pushRanges
 			, renderer::DepthStencilState const & dsState );
 		/**
@@ -105,7 +106,8 @@ namespace castor3d
 		*	Prépare les commandes de dessin du quad.
 		*/
 		C3D_API void prepareFrame( renderer::RenderPass const & renderPass
-			, uint32_t subpassIndex );
+			, uint32_t subpassIndex
+			, uint32_t face );
 		/**
 		*\~english
 		*\brief
@@ -114,7 +116,8 @@ namespace castor3d
 		*\brief
 		*	Prépare les commandes de dessin du quad, dans le tampon de commandes donné.
 		*/
-		C3D_API void registerFrame( renderer::CommandBuffer & commandBuffer )const;
+		C3D_API void registerFrame( renderer::CommandBuffer & commandBuffer
+			, uint32_t face )const;
 		/**
 		*\~english
 		*\return
@@ -130,23 +133,32 @@ namespace castor3d
 		}
 
 	private:
+		C3D_API virtual void doFillDescriptorLayoutBindings( renderer::DescriptorSetLayoutBindingArray & bindings );
 		C3D_API virtual void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
-			, renderer::DescriptorSet & descriptorSet );
-		C3D_API virtual void doRegisterFrame( renderer::CommandBuffer & commandBuffer )const;
+			, renderer::DescriptorSet & descriptorSet
+			, uint32_t face );
+		C3D_API virtual void doRegisterFrame( renderer::CommandBuffer & commandBuffer
+			, uint32_t face )const;
 
 	protected:
 		RenderSystem & m_renderSystem;
 		SamplerSPtr m_sampler;
-		renderer::PipelinePtr m_pipeline;
 		renderer::PipelineLayoutPtr m_pipelineLayout;
 
 	private:
-		TexturedQuad m_vertexData;
-		renderer::VertexBufferPtr< TexturedQuad > m_vertexBuffer;
-		renderer::DescriptorSetLayoutPtr m_descriptorSetLayout;
-		renderer::DescriptorSetPoolPtr m_descriptorSetPool;
-		renderer::DescriptorSetPtr m_descriptorSet;
+		struct FacePipeline
+		{
+			renderer::PipelinePtr pipeline;
+			renderer::DescriptorSetPtr descriptorSet;
+		};
+
 		renderer::CommandBufferPtr m_commandBuffer;
+		renderer::UniformBufferPtr< renderer::Mat4 > m_matrixUbo;
+		renderer::VertexBufferPtr< renderer::Vec4 > m_vertexBuffer;
+		renderer::VertexLayoutPtr m_vertexLayout;
+		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
+		renderer::DescriptorSetPoolPtr m_descriptorPool;
+		std::array< FacePipeline, 6u > m_faces;
 	};
 }
 

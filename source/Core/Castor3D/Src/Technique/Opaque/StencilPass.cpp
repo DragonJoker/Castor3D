@@ -120,18 +120,15 @@ namespace castor3d
 		};
 		m_frameBuffer = m_renderPass->createFrameBuffer( size, std::move( attaches ) );
 
-		renderer::ShaderStageStateArray program
+		m_program =
 		{
 			{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
 		};
-		program[0].module->loadShader( doGetVertexShader( renderSystem ).getSource() );
-
-		renderer::RasterisationState rsstate;
-		rsstate.cullMode = renderer::CullModeFlag::eNone;
+		m_program[0].module->loadShader( doGetVertexShader( renderSystem ).getSource() );
 
 		renderer::DepthStencilState dsstate;
 		dsstate.depthTestEnable = true;
-		dsstate.depthTestEnable = false;
+		dsstate.depthWriteEnable = false;
 		dsstate.stencilTestEnable = true;
 		dsstate.back.compareMask = 0u;
 		dsstate.back.reference = 0u;
@@ -148,11 +145,11 @@ namespace castor3d
 
 		m_pipeline = m_pipelineLayout->createPipeline(
 		{
-			program,
+			m_program,
 			*m_renderPass,
 			renderer::VertexInputState::create( vertexLayout ),
 			renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleList },
-			rsstate,
+			renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eNone },
 			renderer::MultisampleState{},
 			renderer::ColourBlendState::createDefault(),
 			{},
@@ -185,6 +182,7 @@ namespace castor3d
 		m_finished.reset();
 		m_commandBuffer.reset();
 		m_pipeline.reset();
+		m_program.clear();
 		m_pipelineLayout.reset();
 		m_frameBuffer.reset();
 		m_renderPass.reset();
@@ -198,7 +196,7 @@ namespace castor3d
 		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
 		device.getGraphicsQueue().submit( *m_commandBuffer
 			, toWait
-			, renderer::PipelineStageFlag::eAllCommands
+			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
 			, nullptr );
 	}

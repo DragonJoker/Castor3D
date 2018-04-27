@@ -4,10 +4,13 @@ See LICENSE file in root folder
 #ifndef ___C3D_EnvironmentPrefilter_H___
 #define ___C3D_EnvironmentPrefilter_H___
 
-#include "Texture/TextureUnit.hpp"
+#include "RenderToTexture/RenderCube.hpp"
+#include "Texture/Sampler.hpp"
 
 #include <Buffer/PushConstantsBuffer.hpp>
+#include <Image/TextureView.hpp>
 #include <RenderPass/FrameBuffer.hpp>
+#include <RenderPass/RenderPass.hpp>
 
 #include <array>
 
@@ -24,6 +27,32 @@ namespace castor3d
 	*/
 	class EnvironmentPrefilter
 	{
+	private:
+		class MipRenderCube
+			: public RenderCube
+		{
+		public:
+			MipRenderCube( RenderSystem & renderSystem
+				, renderer::RenderPass const & renderPass
+				, uint32_t mipLevel
+				, renderer::Extent2D const & originalSize
+				, renderer::Extent2D const & size
+				, renderer::TextureView const & srcView
+				, renderer::Texture const & dstTexture
+				, SamplerSPtr sampler );
+			void registerFrames( renderer::CommandBuffer & commandBuffer );
+
+		private:
+			struct FrameBuffer
+			{
+				renderer::TextureViewPtr dstView;
+				renderer::FrameBufferPtr frameBuffer;
+			};
+			renderer::RenderPass const & m_renderPass;
+			SamplerSPtr m_sampler;
+			std::array< FrameBuffer, 6u > m_frameBuffers;
+		};
+
 	public:
 		/**
 		 *\~english
@@ -48,50 +77,33 @@ namespace castor3d
 		 */
 		C3D_API void render();
 		/**
-		 *\~english
-		 *\return		The prefiltered environment texture.
-		 *\~french
-		 *\return		La texture d'environnement préfiltrée.
-		 */
-		inline TextureUnit const & getResult()const
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		inline renderer::TextureView const & getResult()const
 		{
-			return m_result;
+			return *m_resultView;
 		}
 
-	private:
-		/**
-		 *\~english
-		 *\brief		Creates the filtering shader program.
-		 *\~french
-		 *\brief		Crée le programme shader de filtrage.
-		 */
-		renderer::ShaderStageStateArray doCreateProgram( castor::Size const & size );
-
-	private:
-		struct RenderPass
+		inline renderer::Sampler const & getSampler()const
 		{
-			renderer::TextureViewPtr srcView;
-			renderer::TextureViewPtr dstView;
-			renderer::DescriptorSetPtr descriptorSet;
-			renderer::RenderPassPtr renderPass;
-			renderer::FrameBufferPtr frameBuffer;
-			renderer::PipelinePtr pipeline;
-			renderer::PushConstantsBufferPtr< float > pushConstants;
-		};
+			return m_sampler->getSampler();
+		}
+		/**@}*/
 
-		using CubePasses = std::array< RenderPass, 6 >;
-		using RenderPasses = std::vector< CubePasses >;
+	private:
 		RenderSystem & m_renderSystem;
-		TextureUnit m_result;
-		NonTexturedCube m_vertexData;
+		renderer::TextureViewPtr m_srcView;
+		renderer::TexturePtr m_result;
+		renderer::TextureViewPtr m_resultView;
 		SamplerSPtr m_sampler;
-		renderer::VertexBufferPtr< NonTexturedCube > m_vertexBuffer;
-		renderer::VertexLayoutPtr m_vertexLayout;
-		renderer::UniformBufferPtr< castor::Matrix4x4f > m_configUbo;
-		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
-		renderer::DescriptorSetPoolPtr m_descriptorPool;
-		renderer::PipelineLayoutPtr m_pipelineLayout;
-		RenderPasses m_renderPasses;
+		renderer::RenderPassPtr m_renderPass;
+		std::vector< std::unique_ptr< MipRenderCube > > m_renderPasses;
 		renderer::CommandBufferPtr m_commandBuffer;
 	};
 }

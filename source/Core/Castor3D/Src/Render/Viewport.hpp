@@ -68,30 +68,6 @@ namespace castor3d
 		};
 
 	private:
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	type	Projection type.
-		 *\param[in]	fovy	Y Field of View.
-		 *\param[in]	aspect	Width / Height ratio.
-		 *\param[in]	left	Left clipping plane value.
-		 *\param[in]	right	Right clipping plane value.
-		 *\param[in]	bottom	Bottom clipping plane value.
-		 *\param[in]	top		Top clipping plane value.
-		 *\param[in]	near	Near clipping plane value.
-		 *\param[in]	far		Far clipping plane value.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	type	Type de projection.
-		 *\param[in]	fovy	Angle de vision Y.
-		 *\param[in]	aspect	Ratio Largeur / Hauteur.
-		 *\param[in]	left	Position du plan gauche.
-		 *\param[in]	right	Position du plan droit.
-		 *\param[in]	bottom	Position du plan bas.
-		 *\param[in]	top		Position du plan haut.
-		 *\param[in]	near	Position du plan proche.
-		 *\param[in]	far		Position du plan éloigné.
-		 */
 		C3D_API Viewport( Engine const & engine
 			, ViewportType type
 			, castor::Angle const & fovy
@@ -364,89 +340,6 @@ namespace castor3d
 			m_bottom = value;
 		}
 		/**@}*/
-
-	private:
-		/**
-		 *\~english
-		 *\brief		Builds a matrix that Sets a centered perspective projection from the given parameters
-		 *\param[in]	fovy	Y Field of View
-		 *\param[in]	aspect	Width / Height ratio
-		 *\param[in]	near	Near clipping plane value
-		 *\param[in]	far		Far clipping plane value
-		 *\~french
-		 *\brief		Construit une matrice de projection en perspective centrée
-		 *\param[in]	fovy	Angle de vision Y
-		 *\param[in]	aspect	Ratio Largeur / Hauteur
-		 *\param[in]	near	Position du plan proche
-		 *\param[in]	far		Position du plan lointain
-		 */
-		void doComputePerspective( castor::Angle const & fovy
-			, real aspect
-			, real near
-			, real far );
-		/**
-		 *\~english
-		 *\brief		Builds a matrix that Sets a non centered perspective projection from the given parameters
-		 *\param[in]	left	Left clipping plane value
-		 *\param[in]	right	Right clipping plane value
-		 *\param[in]	bottom	Bottom clipping plane value
-		 *\param[in]	top		Top clipping plane value
-		 *\param[in]	near	Near clipping plane value
-		 *\param[in]	far		Far clipping plane value
-		 *\~french
-		 *\brief		Construit une matrice de projection en perspective non centrée
-		 *\param[in]	left	Position du plan gauche
-		 *\param[in]	right	Position du plan droit
-		 *\param[in]	bottom	Position du plan bas
-		 *\param[in]	top		Position du plan haut
-		 *\param[in]	near	Position du plan proche
-		 *\param[in]	far		Position du plan lointain
-		 */
-		void doComputeFrustum( real left
-			, real right
-			, real bottom
-			, real top
-			, real near
-			, real far );
-		/**
-		 *\~english
-		 *\brief		Builds a matrix that Sets a non centered orthogonal projection from the given parameters
-		 *\param[in]	left	Left clipping plane value
-		 *\param[in]	right	Right clipping plane value
-		 *\param[in]	bottom	Bottom clipping plane value
-		 *\param[in]	top		Top clipping plane value
-		 *\param[in]	near	Near clipping plane value
-		 *\param[in]	far		Far clipping plane value
-		 *\~french
-		 *\brief		Construit une matrice de projection orthographique non centrée
-		 *\param[in]	left	Position du plan gauche
-		 *\param[in]	right	Position du plan droit
-		 *\param[in]	bottom	Position du plan bas
-		 *\param[in]	top		Position du plan haut
-		 *\param[in]	near	Position du plan proche
-		 *\param[in]	far		Position du plan lointain
-		 */
-		void doComputeOrtho( real left
-			, real right
-			, real bottom
-			, real top
-			, real near
-			, real far );
-		/**
-		 *\~english
-		 *\brief		Builds a view matrix that looks at a given point.
-		 *\param[in]	eye		The eye position.
-		 *\param[in]	center	The point to look at.
-		 *\param[in]	up		The up direction..
-		 *\~french
-		 *\brief		Construit une matrice de vue regardant un point donné.
-		 *\param[in]	eye		La position de l'oeil.
-		 *\param[in]	center	Le point à regarder.
-		 *\param[in]	up		La direction vers le haut.
-		 */
-		void doComputeLookAt( castor::Point3r const & eye
-			, castor::Point3r const & center
-			, castor::Point3r const & up );
 
 	private:
 		Engine const & m_engine;

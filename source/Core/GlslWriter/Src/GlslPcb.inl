@@ -8,7 +8,7 @@ namespace glsl
 		registerName( m_writer, name, TypeTraits< T >::TypeEnum );
 		m_writer.registerUniform( name, location, TypeTraits< T >::TypeEnum, 1u );
 
-		if ( m_writer.isVulkan() )
+		if ( m_writer.hasPushConstants() )
 		{
 			m_stream << type().m_type << name << cuT( ";" ) << std::endl;
 		}
@@ -30,7 +30,7 @@ namespace glsl
 		registerName( m_writer, name, TypeTraits< T >::TypeEnum );
 		m_writer.registerUniform( name, location, TypeTraits< T >::TypeEnum, dimension );
 
-		if ( m_writer.isVulkan() )
+		if ( m_writer.hasPushConstants() )
 		{
 			m_stream << type().m_type << name << cuT( "[" ) << dimension << cuT( "];" ) << std::endl;
 		}
@@ -51,7 +51,7 @@ namespace glsl
 		registerName( m_writer, name, TypeTraits< T >::TypeEnum );
 		m_writer.registerUniform( name, location, TypeTraits< T >::TypeEnum, 1u );
 
-		if ( m_writer.isVulkan() )
+		if ( m_writer.hasPushConstants() )
 		{
 			m_stream << type().m_type << name << cuT( "[];" ) << std::endl;
 		}
@@ -75,7 +75,7 @@ namespace glsl
 
 		if ( enabled )
 		{
-			if ( m_writer.isVulkan() )
+			if ( m_writer.hasPushConstants() )
 			{
 				m_stream << type().m_type << name << cuT( ";" ) << std::endl;
 			}
@@ -102,7 +102,7 @@ namespace glsl
 
 		if ( enabled )
 		{
-			if ( m_writer.isVulkan() )
+			if ( m_writer.hasPushConstants() )
 			{
 				m_stream << type().m_type << name << cuT( "[" ) << dimension << cuT( "]" ) << cuT( ";" ) << std::endl;
 			}
@@ -128,7 +128,7 @@ namespace glsl
 
 		if ( enabled )
 		{
-			if ( m_writer.isVulkan() )
+			if ( m_writer.hasPushConstants() )
 			{
 				m_stream << type().m_type << name << cuT( "[]" ) << cuT( ";" ) << std::endl;
 			}

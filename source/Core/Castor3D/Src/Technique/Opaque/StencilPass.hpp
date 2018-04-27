@@ -97,6 +97,7 @@ namespace castor3d
 		renderer::RenderPassPtr m_renderPass;
 		renderer::FrameBufferPtr m_frameBuffer;
 		renderer::PipelineLayoutPtr m_pipelineLayout;
+		renderer::ShaderStageStateArray m_program;
 		renderer::PipelinePtr m_pipeline;
 		renderer::VertexBufferBase const * m_vbo{ nullptr };
 		renderer::CommandBufferPtr m_commandBuffer;

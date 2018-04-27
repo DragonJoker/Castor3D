@@ -51,6 +51,8 @@ namespace castor3d
 			sampler->setWrapS( renderer::WrapMode::eClampToEdge );
 			sampler->setWrapT( renderer::WrapMode::eClampToEdge );
 			sampler->setWrapR( renderer::WrapMode::eClampToEdge );
+			sampler->setMinLod( 0.0f );
+			sampler->setMaxLod( 0.0f );
 			m_sampler = sampler;
 		}
 

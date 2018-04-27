@@ -1,24 +1,24 @@
 #include "Scene.hpp"
 
-#include "Camera.hpp"
-#include "BillboardList.hpp"
-#include "Geometry.hpp"
-#include "Background/Colour.hpp"
-#include "Background/Image.hpp"
-#include "Background/Skybox.hpp"
-#include "Background/BackgroundTextWriter.hpp"
-
 #include "Animation/AnimatedObjectGroup.hpp"
+#include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Event/Frame/CleanupEvent.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Material/Material.hpp"
 #include "Material/Pass.hpp"
 #include "Mesh/Mesh.hpp"
-#include "ParticleSystem/ParticleSystem.hpp"
-#include "EnvironmentMap/EnvironmentMap.hpp"
+#include "Mesh/Submesh.hpp"
 #include "Render/RenderLoop.hpp"
 #include "Render/RenderTarget.hpp"
 #include "Render/RenderWindow.hpp"
+#include "Scene/Camera.hpp"
+#include "Scene/BillboardList.hpp"
+#include "Scene/Geometry.hpp"
+#include "Scene/Background/Colour.hpp"
+#include "Scene/Background/Image.hpp"
+#include "Scene/Background/Skybox.hpp"
+#include "Scene/Background/BackgroundTextWriter.hpp"
+#include "Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -841,6 +841,13 @@ namespace castor3d
 	void Scene::updateDeviceDependent( Camera const & camera )
 	{
 		m_background->update( camera );
+		getMeshCache().forEach( []( Mesh & mesh )
+		{
+			for ( auto & submesh : mesh )
+			{
+				submesh->update();
+			}
+		} );
 	}
 
 	void Scene::setBackground( SceneBackgroundSPtr value )

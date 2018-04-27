@@ -52,7 +52,8 @@ namespace castor3d
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		C3D_API Engine( castor::String const & appName );
+		C3D_API Engine( castor::String const & appName
+			, bool enableValidation );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -409,6 +410,7 @@ namespace castor3d
 		ParticleFactory m_particleFactory;
 		castor::CpuInformations m_cpuInformations;
 		MaterialType m_materialType;
+		bool m_enableValidation{ false };
 	};
 }
 

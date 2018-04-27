@@ -16,7 +16,8 @@ namespace VkRender
 	String RenderSystem::Type = cuT( "vulkan" );
 
 	RenderSystem::RenderSystem( castor3d::Engine & engine
-		, castor::String const & appName )
+		, castor::String const & appName
+		, bool enableValidation )
 		: castor3d::RenderSystem( engine, Name, true )
 
 	{
@@ -68,11 +69,7 @@ namespace VkRender
 		{
 			string::stringCast< char >( appName ),
 			"Castor3D",
-#ifdef NDEBUG
-			false,
-#else
-			true,
-#endif
+			enableValidation,
 		} ) );
 		Logger::logInfo( cuT( "Using " ) + Name );
 		auto & gpu = m_renderer->getPhysicalDevice( 0u );
@@ -86,9 +83,12 @@ namespace VkRender
 	}
 
 	castor3d::RenderSystemUPtr RenderSystem::create( castor3d::Engine & engine
-		, castor::String const & appName )
+		, castor::String const & appName
+		, bool enableValidation )
 	{
-		return std::make_unique< RenderSystem >( engine, appName );
+		return std::make_unique< RenderSystem >( engine
+			, appName
+			, enableValidation );
 	}
 
 	glsl::GlslWriter RenderSystem::createGlslWriter()
@@ -97,6 +97,10 @@ namespace VkRender
 			, m_gpuInformations.hasConstantsBuffers()
 			, m_gpuInformations.hasTextureBuffers()
 			, m_gpuInformations.hasShaderStorageBuffers()
+			, true
+			, true
+			, true
+			, true
 			, true } };
 	}
 }

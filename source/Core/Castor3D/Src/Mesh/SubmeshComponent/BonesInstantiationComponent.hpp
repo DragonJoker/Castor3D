@@ -48,7 +48,8 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
-		C3D_API void gather( renderer::BufferCRefArray & buffers
+		C3D_API void gather( MaterialSPtr material
+			, renderer::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
 			, renderer::VertexLayoutCRefArray & layouts )override;
 		/**
@@ -97,7 +98,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les indicateurs de shader.
 		 */
-		inline ProgramFlags getProgramFlags()const override
+		inline ProgramFlags getProgramFlags( MaterialSPtr material )const override
 		{
 			return ProgramFlags( 0 );
 		}

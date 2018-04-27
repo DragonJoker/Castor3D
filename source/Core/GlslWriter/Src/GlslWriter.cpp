@@ -68,7 +68,7 @@ namespace glsl
 
 	castor::String GlslWriter::getInstanceID()
 	{
-		if ( m_config.m_isVulkan )
+		if ( m_config.m_hasInstanceIndex )
 		{
 			return cuT( "gl_InstanceIndex" );
 		}
@@ -80,7 +80,7 @@ namespace glsl
 
 	castor::String GlslWriter::getVertexID()
 	{
-		if ( m_config.m_isVulkan )
+		if ( m_config.m_hasVertexIndex )
 		{
 			return cuT( "gl_VertexIndex" );
 		}
@@ -92,7 +92,7 @@ namespace glsl
 
 	Vec2 GlslWriter::adjustTexCoords( Vec2 const & texcoords )
 	{
-		if ( m_config.m_isVulkan )
+		if ( m_config.m_isTopDown )
 		{
 			return vec2( texcoords.x(), 1.0_f - texcoords.y() );
 		}
