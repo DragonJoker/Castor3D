@@ -25,29 +25,30 @@ namespace castor3d
 		return std::make_shared< Cone >();
 	}
 
-	void Cone::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
+	void Cone::doGenerate( Mesh & mesh
+		, Parameters const & parameters )
 	{
 		String param;
 
-		if ( p_parameters.get( cuT( "faces" ), param ) )
+		if ( parameters.get( cuT( "faces" ), param ) )
 		{
 			m_nbFaces = string::toUInt( param );
 		}
 
-		if ( p_parameters.get( cuT( "radius" ), param ) )
+		if ( parameters.get( cuT( "radius" ), param ) )
 		{
 			m_radius = string::toFloat( param );
 		}
 
-		if ( p_parameters.get( cuT( "height" ), param ) )
+		if ( parameters.get( cuT( "height" ), param ) )
 		{
 			m_height = string::toFloat( param );
 		}
 
 		if ( m_nbFaces >= 2 && m_height > std::numeric_limits< real >::epsilon() && m_radius > std::numeric_limits< real >::epsilon() )
 		{
-			Submesh & submeshBase = *p_mesh.createSubmesh();
-			Submesh & submeshSide = *p_mesh.createSubmesh();
+			Submesh & submeshBase = *mesh.createSubmesh();
+			Submesh & submeshSide = *mesh.createSubmesh();
 			//CALCUL DE LA POSITION DES POINTS
 			real angleRotation = real( Angle::PiMult2 / m_nbFaces );
 			uint32_t i = 0;

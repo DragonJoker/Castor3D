@@ -159,8 +159,12 @@ SceneFileParser::SceneFileParser( Engine & engine )
 	m_mapViewportModes[cuT( "perspective" )] = uint32_t( ViewportType::ePerspective );
 	m_mapViewportModes[cuT( "frustum" )] = uint32_t( ViewportType::eFrustum );
 
-	m_mapInterpolationModes[cuT( "nearest" )] = uint32_t( renderer::Filter::eNearest );
-	m_mapInterpolationModes[cuT( "linear" )] = uint32_t( renderer::Filter::eLinear );
+	m_mapFilters[cuT( "nearest" )] = uint32_t( renderer::Filter::eNearest );
+	m_mapFilters[cuT( "linear" )] = uint32_t( renderer::Filter::eLinear );
+
+	m_mapMipmapModes[cuT( "none" )] = uint32_t( renderer::MipmapMode::eNone );
+	m_mapMipmapModes[cuT( "nearest" )] = uint32_t( renderer::MipmapMode::eNearest );
+	m_mapMipmapModes[cuT( "linear" )] = uint32_t( renderer::MipmapMode::eLinear );
 
 	m_mapWrappingModes[cuT( "repeat" )] = uint32_t( renderer::WrapMode::eRepeat );
 	m_mapWrappingModes[cuT( "mirrored_repeat" )] = uint32_t( renderer::WrapMode::eMirroredRepeat );
@@ -366,9 +370,9 @@ void SceneFileParser::doInitialiseParser( Path const & path )
 	addParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "ssao" ), parserRenderTargetSsao );
 	addParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "}" ), parserRenderTargetEnd );
 
-	addParser( uint32_t( CSCNSection::eSampler ), cuT( "min_filter" ), parserSamplerMinFilter, { makeParameter< ParameterType::eCheckedText >( m_mapInterpolationModes ) } );
-	addParser( uint32_t( CSCNSection::eSampler ), cuT( "mag_filter" ), parserSamplerMagFilter, { makeParameter< ParameterType::eCheckedText >( m_mapInterpolationModes ) } );
-	addParser( uint32_t( CSCNSection::eSampler ), cuT( "mip_filter" ), parserSamplerMipFilter, { makeParameter< ParameterType::eCheckedText >( m_mapInterpolationModes ) } );
+	addParser( uint32_t( CSCNSection::eSampler ), cuT( "min_filter" ), parserSamplerMinFilter, { makeParameter< ParameterType::eCheckedText >( m_mapFilters ) } );
+	addParser( uint32_t( CSCNSection::eSampler ), cuT( "mag_filter" ), parserSamplerMagFilter, { makeParameter< ParameterType::eCheckedText >( m_mapFilters ) } );
+	addParser( uint32_t( CSCNSection::eSampler ), cuT( "mip_filter" ), parserSamplerMipFilter, { makeParameter< ParameterType::eCheckedText >( m_mapMipmapModes ) } );
 	addParser( uint32_t( CSCNSection::eSampler ), cuT( "min_lod" ), parserSamplerMinLod, { makeParameter< ParameterType::eFloat >() } );
 	addParser( uint32_t( CSCNSection::eSampler ), cuT( "max_lod" ), parserSamplerMaxLod, { makeParameter< ParameterType::eFloat >() } );
 	addParser( uint32_t( CSCNSection::eSampler ), cuT( "lod_bias" ), parserSamplerLodBias, { makeParameter< ParameterType::eFloat >() } );
@@ -485,6 +489,7 @@ void SceneFileParser::doInitialiseParser( Path const & path )
 	addParser( uint32_t( CSCNSection::ePass ), cuT( "}" ), parserPassEnd );
 
 	addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "image" ), parserUnitImage, { makeParameter< ParameterType::ePath >() } );
+	addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "levels_count" ), parserUnitLevelsCount, { makeParameter< ParameterType::eUInt32 >() } );
 	addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "render_target" ), parserUnitRenderTarget );
 	addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "channel" ), parserUnitChannel, { makeParameter< ParameterType::eCheckedText >( m_mapTextureChannels ) } );
 	addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "sampler" ), parserUnitSampler, { makeParameter< ParameterType::eName >() } );

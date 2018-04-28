@@ -187,7 +187,7 @@ namespace castor3d
 			{
 				auto & node = *it;
 				buffer->m_matrix = convert( node.sceneNode.getDerivedTransformationMatrix() );
-				buffer->m_material = node.passNode.pass.getId() - 1;
+				buffer->m_material = node.passNode.pass.getId();
 				++buffer;
 				++i;
 				++it;
@@ -217,7 +217,7 @@ namespace castor3d
 					&& camera.isVisible( node->instance, node->data ) )
 				{
 					buffer->m_matrix = convert( node->sceneNode.getDerivedTransformationMatrix() );
-					buffer->m_material = node->passNode.pass.getId() - 1;
+					buffer->m_material = node->passNode.pass.getId();
 					++buffer;
 				}
 				++i;
@@ -230,12 +230,14 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	RenderPass::RenderPass( String const & name
+	RenderPass::RenderPass( String const & category
+		, String const & name
 		, Engine & engine
 		, SceneNode const * ignored )
 		: OwnedBy< Engine >{ engine }
 		, Named{ name }
 		, m_renderSystem{ *engine.getRenderSystem() }
+		, m_category{ category }
 		, m_oit{ true }
 		, m_renderQueue{ *this, true, ignored }
 		, m_opaque{ true }
@@ -244,13 +246,15 @@ namespace castor3d
 	{
 	}
 
-	RenderPass::RenderPass( String const & name
+	RenderPass::RenderPass( String const & category
+		, String const & name
 		, Engine & engine
 		, bool oit
 		, SceneNode const * ignored )
 		: OwnedBy< Engine >{ engine }
 		, Named{ name }
 		, m_renderSystem{ *engine.getRenderSystem() }
+		, m_category{ category }
 		, m_oit{ oit }
 		, m_renderQueue{ *this, false, ignored }
 		, m_opaque{ false }
@@ -265,7 +269,7 @@ namespace castor3d
 
 	bool RenderPass::initialise( Size const & size )
 	{
-		m_timer = std::make_shared< RenderPassTimer >( *getEngine(), getName(), getName() );
+		m_timer = std::make_shared< RenderPassTimer >( *getEngine(), m_category, getName() );
 		m_matrixUbo.initialise();
 		m_sceneUbo.initialise();
 		m_sceneUbo.setWindowSize( size );

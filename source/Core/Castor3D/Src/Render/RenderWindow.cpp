@@ -132,10 +132,10 @@ namespace castor3d
 				renderPass.dependencies.resize( 2u );
 				renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
 				renderPass.dependencies[0].dstSubpass = 0u;
-				renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
-				renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-				renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
-				renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+				renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+				renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
+				renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+				renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 				renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 				renderPass.dependencies[1].srcSubpass = 0u;
@@ -424,7 +424,7 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = texcoord;
-				gl_Position = vec4( position, 0.0, 1.0 );
+				gl_Position = writer.rendererScalePosition( vec4( position, 0.0, 1.0 ) );
 			} );
 			vtx = writer.finalise();
 		}

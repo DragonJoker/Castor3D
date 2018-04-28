@@ -76,18 +76,18 @@ namespace castor3d
 			renderPass.dependencies.resize( 2u );
 			renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
 			renderPass.dependencies[0].dstSubpass = 0u;
-			renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
-			renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eTopOfPipe;
-			renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
+			renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 			renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 			renderPass.dependencies[1].srcSubpass = 0u;
 			renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
 			renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
 			renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 			renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 			renderPass.subpasses.resize( 1u );
@@ -203,7 +203,8 @@ namespace castor3d
 
 	void DirectionalLightPass::initialise( Scene const & scene
 		, GeometryPassResult const & gp
-		, SceneUbo & sceneUbo )
+		, SceneUbo & sceneUbo
+		, RenderPassTimer & timer )
 	{
 		float data[] =
 		{
@@ -239,7 +240,8 @@ namespace castor3d
 			, *m_vertexBuffer
 			, *m_vertexLayout
 			, sceneUbo
-			, nullptr );
+			, nullptr
+			, timer );
 		m_viewport.update();
 	}
 

@@ -130,7 +130,8 @@ namespace castor3d
 				, renderer::Extent2D const & size
 				, FogType fogType
 				, MaterialType matType
-				, SamplerSPtr sampler );
+				, SamplerSPtr sampler
+				, RenderPassTimer & timer );
 
 			renderer::ShaderStageStateArray m_program;
 			renderer::DescriptorSetLayoutPtr m_texDescriptorLayout;
@@ -157,9 +158,10 @@ namespace castor3d
 		renderer::RenderPassPtr m_renderPass;
 		renderer::FrameBufferPtr m_frameBuffer;
 		renderer::SemaphorePtr m_finished;
+		renderer::FencePtr m_fence;
 		SsaoPass m_ssao;
-		ReflectionPrograms m_programs;
 		RenderPassTimerSPtr m_timer;
+		ReflectionPrograms m_programs;
 		bool m_ssaoEnabled{ false };
 	};
 }

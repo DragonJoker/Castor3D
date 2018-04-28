@@ -114,7 +114,8 @@ namespace castor3d
 		 */
 		void initialise( Scene const & scene
 			, GeometryPassResult const & gp
-			, SceneUbo & sceneUbo )override;
+			, SceneUbo & sceneUbo
+			, RenderPassTimer & timer )override;
 		/**
 		 *\~english
 		 *\brief		Cleans up the light pass.

@@ -196,9 +196,7 @@ namespace castor3d
 			REQUIRE( sampler );
 			sampler->initialise();
 
-			if ( result
-				&& sampler
-				&& sampler->getMipFilter() != renderer::MipmapMode::eNearest )
+			if ( result && m_texture->getMipmapCount() > 1u )
 			{
 				m_texture->generateMipmaps();
 			}

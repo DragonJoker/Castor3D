@@ -74,7 +74,7 @@ namespace castor3d
 			data.position = Point2f{ overlay.getAbsolutePosition() };
 			data.renderSize = Point2i{ size.getWidth(), size.getHeight() };
 			data.renderRatio = overlay.getRenderRatio( size );
-			data.materialIndex = pass.getId() - 1u;
+			data.materialIndex = pass.getId();
 		}
 
 		template< typename OverlayT, typename QuadT >
@@ -475,6 +475,7 @@ namespace castor3d
 			, {}
 			, m_fence.get() );
 		m_fence->wait( renderer::FenceTimeout );
+		getRenderSystem()->getCurrentDevice()->waitIdle();
 	}
 
 	OverlayRenderer::OverlayRenderNode & OverlayRenderer::doGetPanelNode( Pass const & pass )
@@ -601,27 +602,27 @@ namespace castor3d
 		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
 		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
 
-		renderPass.dependencies.resize( 2u );
-		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
-		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eShaderRead;
-		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
-
-		renderPass.dependencies[1].srcSubpass = 0u;
-		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
-		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
-
 		renderPass.subpasses.resize( 1u );
 		renderPass.subpasses[0].flags = 0u;
 		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
 		renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
+
+		renderPass.dependencies.resize( 2u );
+		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].dstSubpass = 0u;
+		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		renderPass.dependencies[1].srcSubpass = 0u;
+		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 		m_renderPass = device.createRenderPass( renderPass );
 

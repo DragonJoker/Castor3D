@@ -68,7 +68,8 @@ namespace castor3d
 		 *\param[in]	engine	Le moteur.
 		 *\param[in]	ignored	Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 */
-		C3D_API RenderPass( castor::String const & name
+		C3D_API RenderPass( castor::String const & category
+			, castor::String const & name
 			, Engine & engine
 			, SceneNode const * ignored );
 		/**
@@ -85,7 +86,8 @@ namespace castor3d
 		 *\param[in]	oit		Le statut de rendu indépendant de l'ordre des objets.
 		 *\param[in]	ignored	Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 */
-		C3D_API RenderPass( castor::String const & name
+		C3D_API RenderPass( castor::String const & category
+			, castor::String const & name
 			, Engine & engine
 			, bool oit
 			, SceneNode const * ignored );
@@ -1515,6 +1517,7 @@ namespace castor3d
 
 	protected:
 		RenderSystem & m_renderSystem;
+		castor::String m_category;
 		RenderQueue m_renderQueue;
 		bool m_opaque{ false };
 		std::map< PipelineFlags, RenderPipelineUPtr > m_frontPipelines;

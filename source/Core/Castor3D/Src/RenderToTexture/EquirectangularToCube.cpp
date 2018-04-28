@@ -65,7 +65,7 @@ namespace castor3d
 				std::function< void() > main = [&]()
 				{
 					vtx_position = position.xyz();
-					gl_Position = mtxViewProjection * position;
+					gl_Position = mtxViewProjection * writer.rendererScalePosition( position );
 				};
 
 				writer.implementFunction< void >( cuT( "main" ), main );
@@ -141,18 +141,18 @@ namespace castor3d
 			renderPass.dependencies.resize( 2u );
 			renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
 			renderPass.dependencies[0].dstSubpass = 0u;
-			renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
-			renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[0].srcAccessMask = 0u;
-			renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
+			renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 			renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 			renderPass.dependencies[1].srcSubpass = 0u;
 			renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-			renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 			renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
 			renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+			renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 			renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 			return device.createRenderPass( renderPass );
@@ -197,32 +197,35 @@ namespace castor3d
 			, {} );
 	}
 
-	void EquirectangularToCube::render( renderer::CommandBuffer & commandBuffer )
+	void EquirectangularToCube::render()
 	{
 		uint32_t face = 0u;
+		auto fence = m_device.createFence( renderer::FenceCreateFlag::eSignaled );
 
 		for ( auto & frameBuffer : m_frameBuffers )
 		{
-			commandBuffer.beginRenderPass( *m_renderPass
+			m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
+
+			if ( face == 0u )
+			{
+				m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
+					, renderer::PipelineStageFlag::eFragmentShader
+					, m_view.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+			}
+
+			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *frameBuffer.frameBuffer
 				, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
-				, renderer::SubpassContents::eInline );
-			registerFrame( commandBuffer, face );
-			commandBuffer.endRenderPass();
-			++face;
-		}
-	}
-
-	void EquirectangularToCube::render()
-	{
-		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
-		{
-			render( *m_commandBuffer );
+			, renderer::SubpassContents::eInline );
+			registerFrame( *m_commandBuffer, face );
+			m_commandBuffer->endRenderPass();
 			m_commandBuffer->end();
 
-			auto fence = m_device.createFence();
+			fence->reset();
 			m_device.getGraphicsQueue().submit( *m_commandBuffer, fence.get() );
 			fence->wait( renderer::FenceTimeout );
+			m_device.getGraphicsQueue().waitIdle();
+			++face;
 		}
 	}
 

@@ -36,6 +36,17 @@ namespace castor3d
 		, m_program{ std::move( program ) }
 		, m_flags( flags )
 	{
+		if ( !renderSystem.isTopDown() )
+		{
+			if ( m_rsState.cullMode == renderer::CullModeFlag::eFront )
+			{
+				m_rsState.cullMode = renderer::CullModeFlag::eBack;
+			}
+			else
+			{
+				m_rsState.cullMode = renderer::CullModeFlag::eFront;
+			}
+		}
 	}
 
 	RenderPipeline::~RenderPipeline()

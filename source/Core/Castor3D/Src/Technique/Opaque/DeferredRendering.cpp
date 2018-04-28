@@ -106,6 +106,7 @@ namespace castor3d
 		}
 
 		m_nodesCommands = renderSystem.getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer();
+		m_fence = renderSystem.getCurrentDevice()->createFence( renderer::FenceCreateFlag::eSignaled );
 	}
 
 	DeferredRendering::~DeferredRendering()
@@ -155,6 +156,7 @@ namespace castor3d
 			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
 			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
 		};
+		m_fence->reset();
 
 		if ( m_nodesCommands->begin() )
 		{
@@ -178,7 +180,8 @@ namespace castor3d
 				, { *result }
 				, { renderer::PipelineStageFlag::eColourAttachmentOutput }
 				, { m_opaquePass.getSemaphore() }
-				, nullptr );
+				, m_fence.get() );
+			m_fence->wait( renderer::FenceTimeout );
 			device.getGraphicsQueue().waitIdle();
 			m_opaquePass.getTimer().step();
 			result = &m_opaquePass.getSemaphore();
@@ -192,12 +195,14 @@ namespace castor3d
 
 		if ( scene.needsSubsurfaceScattering() )
 		{
+			m_fence->reset();
 			device.getGraphicsQueue().submit( m_subsurfaceScattering->getCommandBuffer()
 				, *result
 				, renderer::PipelineStageFlag::eAllCommands
 				, m_subsurfaceScattering->getSemaphore()
-				, nullptr );
+				, m_fence.get() );
 			result = &m_subsurfaceScattering->getSemaphore();
+			m_fence->wait( renderer::FenceTimeout );
 		}
 
 		m_reflection->render( *result );

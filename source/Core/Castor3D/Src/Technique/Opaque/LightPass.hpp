@@ -399,7 +399,8 @@ namespace castor3d
 		 */
 		virtual void initialise( Scene const & scene
 			, GeometryPassResult const & gp
-			, SceneUbo & sceneUbo ) = 0;
+			, SceneUbo & sceneUbo
+			, RenderPassTimer & timer ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans up the light pass.
@@ -502,7 +503,8 @@ namespace castor3d
 			, renderer::VertexBufferBase & vbo
 			, renderer::VertexLayout const & vertexLayout
 			, SceneUbo & sceneUbo
-			, ModelMatrixUbo * modelMatrixUbo );
+			, ModelMatrixUbo * modelMatrixUbo
+			, RenderPassTimer & timer );
 		/**
 		 *\~english
 		 *\brief		Cleans up the light pass.
@@ -510,7 +512,8 @@ namespace castor3d
 		 *\brief		Nettoie la passe d'éclairage.
 		 */
 		void doCleanup();
-		void doPrepareCommandBuffers( TextureUnit const * shadowMap );
+		void doPrepareCommandBuffers( TextureUnit const * shadowMap
+			, RenderPassTimer & timer );
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source for this light pass.
@@ -615,6 +618,7 @@ namespace castor3d
 		GpInfoUbo & m_gpInfoUbo;
 		uint32_t m_offset{ 0u };
 		renderer::SemaphorePtr m_signalReady;
+		renderer::FencePtr m_fence;
 		GeometryPassResult const * m_geometryPassResult;
 	};
 }

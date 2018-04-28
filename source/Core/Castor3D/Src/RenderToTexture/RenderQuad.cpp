@@ -66,12 +66,12 @@ namespace castor3d
 		, m_vertexData
 		{
 			{
-				{ Point2f{ -1.0, -1.0 }, Point2f{ ( invertU ? 1.0 : 0.0 ), renderSystem.isTopDown() ? 0.0 : 1.0 } },
-				{ Point2f{ -1.0, +1.0 }, Point2f{ ( invertU ? 1.0 : 0.0 ), renderSystem.isTopDown() ? 1.0 : 0.0 } },
-				{ Point2f{ +1.0, -1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), renderSystem.isTopDown() ? 0.0 : 1.0 } },
-				{ Point2f{ +1.0, -1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), renderSystem.isTopDown() ? 0.0 : 1.0 } },
-				{ Point2f{ -1.0, +1.0 }, Point2f{ ( invertU ? 1.0 : 0.0 ), renderSystem.isTopDown() ? 1.0 : 0.0 } },
-				{ Point2f{ +1.0, +1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), renderSystem.isTopDown() ? 1.0 : 0.0 } },
+				{ Point2f{ -1.0, -1.0 }, Point2f{ ( invertU ? 1.0 : 0.0 ), 0.0 } },
+				{ Point2f{ -1.0, +1.0 }, Point2f{ ( invertU ? 1.0 : 0.0 ), 1.0 } },
+				{ Point2f{ +1.0, -1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), 0.0 } },
+				{ Point2f{ +1.0, -1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), 0.0 } },
+				{ Point2f{ -1.0, +1.0 }, Point2f{ ( invertU ? 1.0 : 0.0 ), 1.0 } },
+				{ Point2f{ +1.0, +1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), 1.0 } },
 			}
 		}
 		, m_sampler{ doCreateSampler( m_renderSystem, nearest ) }

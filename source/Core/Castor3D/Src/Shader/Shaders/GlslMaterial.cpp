@@ -364,11 +364,11 @@ namespace castor3d
 			if ( m_writer.hasShaderStorageBuffers() )
 			{
 				auto tmp = m_writer.getBuiltinArray< LegacyMaterial >( cuT( "c3d_materials" ) );
-				return tmp[index];
+				return tmp[index - 1];
 			}
 			else
 			{
-				return m_getMaterial( index );
+				return m_getMaterial( index - 1 );
 			}
 		}
 
@@ -432,11 +432,11 @@ namespace castor3d
 			if ( m_writer.hasShaderStorageBuffers() )
 			{
 				auto tmp = m_writer.getBuiltinArray< MetallicRoughnessMaterial >( cuT( "c3d_materials" ) );
-				return tmp[index];
+				return tmp[index - 1];
 			}
 			else
 			{
-				return m_getMaterial( index );
+				return m_getMaterial( index - 1 );
 			}
 		}
 
@@ -494,11 +494,11 @@ namespace castor3d
 			if ( m_writer.hasShaderStorageBuffers() )
 			{
 				auto tmp = m_writer.getBuiltinArray< SpecularGlossinessMaterial >( cuT( "c3d_materials" ) );
-				return tmp[index];
+				return tmp[index - 1];
 			}
 			else
 			{
-				return m_getMaterial( index );
+				return m_getMaterial( index - 1 );
 			}
 		}
 

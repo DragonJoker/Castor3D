@@ -21,7 +21,6 @@ namespace castor3d
 			, TextureLayout const & target
 			, float gamma );
 		void render();
-		void render( renderer::CommandBuffer & commandBuffer );
 
 	private:
 		struct FrameBuffer

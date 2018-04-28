@@ -216,8 +216,10 @@ namespace glsl
 				R.y() = -R.y();
 				auto prefilteredColor = m_writer.declLocale( cuT( "prefilteredColor" )
 					, texture( prefilteredEnvMap, R, roughness * MaxIblReflectionLod ).rgb() );
+				auto envBRDFCoord = m_writer.declLocale( cuT( "envBRDFCoord" )
+					, vec2( NdotV, roughness ) );
 				auto envBRDF = m_writer.declLocale( cuT( "envBRDF" )
-					, texture( brdfMap, vec2( NdotV, roughness ) ).rg() );
+					, texture( brdfMap, envBRDFCoord ).rg() );
 				auto specularReflection = m_writer.declLocale( cuT( "specularReflection" )
 					, prefilteredColor * glsl::fma( kS
 						, vec3( envBRDF.x() )

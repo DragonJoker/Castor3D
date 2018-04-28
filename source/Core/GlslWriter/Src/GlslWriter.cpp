@@ -100,6 +100,13 @@ namespace glsl
 		return texcoords;
 	}
 
+	Vec4 GlslWriter::rendererScalePosition( Vec4 const & position )
+	{
+		return writeFunctionCall< Vec4 >( this
+			, cuT( "rendererScalePosition" )
+			, position );
+	}
+
 	Shader GlslWriter::finalise()
 	{
 		m_shader.setSource( m_stream.str() );

@@ -53,12 +53,12 @@ namespace castor3d
 		{
 			float data[]
 			{
-				-1, -1, 0, engine.isTopDown() ? 0.0f : 1.0f,
-				+1, +1, 1, engine.isTopDown() ? 1.0f : 0.0f,
-				-1, +1, 0, engine.isTopDown() ? 1.0f : 0.0f,
-				-1, -1, 0, engine.isTopDown() ? 0.0f : 1.0f,
-				+1, -1, 1, engine.isTopDown() ? 0.0f : 1.0f,
-				+1, +1, 1, engine.isTopDown() ? 1.0f : 0.0f
+				-1, -1, 0, 0,
+				+1, +1, 1, 1,
+				-1, +1, 0, 1,
+				-1, -1, 0, 0,
+				+1, -1, 1, 0,
+				+1, +1, 1, 1
 			};
 
 			auto vertexBuffer = std::make_unique< renderer::VertexBufferBase >( *engine.getRenderSystem()->getCurrentDevice()
@@ -140,6 +140,17 @@ namespace castor3d
 					, vtx_texture );
 				auto texcoord = writer.declLocale( cuT( "texcoord" )
 					, lightResultTexcoord );
+				auto data5 = writer.declLocale( cuT( "data5" )
+					, texture( c3d_mapData5, texcoord ) );
+				auto materialId = writer.declLocale( cuT( "materialId" )
+					, writer.cast< Int >( data5.z() ) );
+
+				IF( writer, materialId == 0_i )
+				{
+					writer.discard();
+				}
+				FI;
+
 				auto data1 = writer.declLocale( cuT( "data1" )
 					, texture( c3d_mapData1, texcoord ) );
 				auto data2 = writer.declLocale( cuT( "data2" )
@@ -148,8 +159,6 @@ namespace castor3d
 					, texture( c3d_mapData3, texcoord ) );
 				auto data4 = writer.declLocale( cuT( "data4" )
 					, texture( c3d_mapData4, texcoord ) );
-				auto data5 = writer.declLocale( cuT( "data5" )
-					, texture( c3d_mapData5, texcoord ) );
 				auto flags = writer.declLocale( cuT( "flags" )
 					, data1.w() );
 				auto envMapIndex = writer.declLocale( cuT( "envMapIndex" )
@@ -167,8 +176,6 @@ namespace castor3d
 					, reflection
 					, refraction
 					, envMapIndex );
-				auto materialId = writer.declLocale( cuT( "materialId" )
-					, writer.cast< Int >( data5.z() ) );
 				auto material = writer.declLocale( cuT( "material" )
 					, materials.getMaterial( materialId ) );
 				auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
@@ -300,6 +307,17 @@ namespace castor3d
 					, vtx_texture );
 				auto texcoord = writer.declLocale( cuT( "texcoord" )
 					, lightResultTexcoord );
+				auto data5 = writer.declLocale( cuT( "data5" )
+					, texture( c3d_mapData5, texcoord ) );
+				auto materialId = writer.declLocale( cuT( "materialId" )
+					, writer.cast< Int >( data5.z() ) );
+
+				IF( writer, materialId == 0_i )
+				{
+					writer.discard();
+				}
+				FI;
+
 				auto data1 = writer.declLocale( cuT( "data1" )
 					, texture( c3d_mapData1, texcoord ) );
 				auto flags = writer.declLocale( cuT( "flags" )
@@ -319,10 +337,6 @@ namespace castor3d
 					, refraction
 					, envMapIndex );
 
-				auto data5 = writer.declLocale( cuT( "data5" )
-					, texture( c3d_mapData5, texcoord ) );
-				auto materialId = writer.declLocale( cuT( "materialId" )
-					, writer.cast< Int >( data5.z() ) );
 				auto material = writer.declLocale( cuT( "material" )
 					, materials.getMaterial( materialId ) );
 				auto data2 = writer.declLocale( cuT( "data2" )
@@ -608,6 +622,17 @@ namespace castor3d
 					, vtx_texture );
 				auto texcoord = writer.declLocale( cuT( "texcoord" )
 					, lightResultTexcoord );
+				auto data5 = writer.declLocale( cuT( "data5" )
+					, texture( c3d_mapData5, texcoord ) );
+				auto materialId = writer.declLocale( cuT( "materialId" )
+					, writer.cast< Int >( data5.z() ) );
+
+				IF( writer, materialId == 0_i )
+				{
+					writer.discard();
+				}
+				FI;
+
 				auto data1 = writer.declLocale( cuT( "data1" )
 					, texture( c3d_mapData1, texcoord ) );
 				auto flags = writer.declLocale( cuT( "flags" )
@@ -627,10 +652,6 @@ namespace castor3d
 					, refraction
 					, envMapIndex );
 
-				auto data5 = writer.declLocale( cuT( "data5" )
-					, texture( c3d_mapData5, texcoord ) );
-				auto materialId = writer.declLocale( cuT( "materialId" )
-					, writer.cast< Int >( data5.z() ) );
 				auto material = writer.declLocale( cuT( "material" )
 					, materials.getMaterial( materialId ) );
 				auto data2 = writer.declLocale( cuT( "data2" )
@@ -962,18 +983,18 @@ namespace castor3d
 			renderPass.dependencies.resize( 2u );
 			renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
 			renderPass.dependencies[0].dstSubpass = 0u;
-			renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
-			renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
-			renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+			renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
 			renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 			renderPass.dependencies[1].srcSubpass = 0u;
 			renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
 			renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+			renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 			renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eMemoryRead;
+			renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
 			renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 			return engine.getRenderSystem()->getCurrentDevice()->createRenderPass( renderPass );
@@ -1150,7 +1171,8 @@ namespace castor3d
 		, renderer::Extent2D const & size
 		, FogType fogType
 		, MaterialType matType
-		, SamplerSPtr sampler )
+		, SamplerSPtr sampler
+		, RenderPassTimer & timer )
 		: m_program{ doCreateProgram( engine, fogType, ssao != nullptr, matType ) }
 		, m_texDescriptorLayout{ doCreateTexDescriptorLayout( engine, ssao != nullptr, matType ) }
 		, m_texDescriptorPool{ m_texDescriptorLayout->createPool( 1u ) }
@@ -1160,12 +1182,18 @@ namespace castor3d
 		, m_pipeline{ doCreateRenderPipeline( *m_pipelineLayout, m_program, renderPass, size ) }
 		, m_commandBuffer{ engine.getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer( true ) }
 	{
-		static renderer::ClearColorValue const clear{ 0.0, 1.0, 0.0, 0.0 };
+		static renderer::ClearColorValue const clear{ 0.0, 0.0, 0.0, 0.0 };
 		m_texDescriptorSet->setBindings( m_texDescriptorWrites );
 		m_texDescriptorSet->update();
 
 		if ( m_commandBuffer->begin() )
 		{
+			m_commandBuffer->resetQueryPool( timer.getQuery()
+				, 0u
+				, 2u );
+			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+				, timer.getQuery()
+				, 0u );
 			m_commandBuffer->beginRenderPass( renderPass
 				, frameBuffer
 				, { clear }
@@ -1175,6 +1203,9 @@ namespace castor3d
 			m_commandBuffer->bindVertexBuffer( 0u, vbo.getBuffer(), 0u );
 			m_commandBuffer->draw( 6u );
 			m_commandBuffer->endRenderPass();
+			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
+				, timer.getQuery()
+				, 1u );
 			m_commandBuffer->end();
 		}
 	}
@@ -1205,6 +1236,8 @@ namespace castor3d
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_size, result ) }
 		, m_finished{ m_device.createSemaphore() }
 		, m_ssao{ engine, m_size, config, gp, viewport }
+		, m_fence{ m_device.createFence( renderer::FenceCreateFlag::eSignaled ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Opaque pass" ), cuT( "Reflection" ) ) }
 		, m_programs
 		{
 			{
@@ -1224,7 +1257,8 @@ namespace castor3d
 					m_size,
 					FogType::eDisabled,
 					engine.getMaterialsType(),
-					m_sampler
+					m_sampler,
+					*m_timer
 				},
 				ProgramPipeline
 				{
@@ -1242,7 +1276,8 @@ namespace castor3d
 					m_size,
 					FogType::eLinear,
 					engine.getMaterialsType(),
-					m_sampler
+					m_sampler,
+					*m_timer
 				},
 				ProgramPipeline
 				{
@@ -1260,7 +1295,8 @@ namespace castor3d
 					m_size,
 					FogType::eExponential,
 					engine.getMaterialsType(),
-					m_sampler
+					m_sampler,
+					*m_timer
 				},
 				ProgramPipeline
 				{
@@ -1278,11 +1314,11 @@ namespace castor3d
 					m_size,
 					FogType::eSquaredExponential,
 					engine.getMaterialsType(),
-					m_sampler
+					m_sampler,
+					*m_timer
 				},
 			}
 		}
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Reflection" ), cuT( "Reflection" ) ) }
 		, m_ssaoEnabled{ config.m_enabled }
 		, m_viewport{ engine }
 	{
@@ -1324,11 +1360,14 @@ namespace castor3d
 
 		m_timer->start();
 		auto program = size_t( m_scene.getFog().getType() );
+		m_fence->reset();
 		m_device.getGraphicsQueue().submit( *m_programs[program].m_commandBuffer
 			, *semaphore
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
-			, nullptr );
+			, m_fence.get() );
+		m_fence->wait( renderer::FenceTimeout );
+		m_timer->step();
 		m_timer->stop();
 	}
 }

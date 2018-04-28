@@ -40,7 +40,8 @@ namespace castor3d
 				, renderer::TextureView const & srcView
 				, renderer::Texture const & dstTexture
 				, SamplerSPtr sampler );
-			void registerFrames( renderer::CommandBuffer & commandBuffer );
+			void registerFrames();
+			void render();
 
 		private:
 			struct FrameBuffer
@@ -48,7 +49,10 @@ namespace castor3d
 				renderer::TextureViewPtr dstView;
 				renderer::FrameBufferPtr frameBuffer;
 			};
+			renderer::Device const & m_device;
 			renderer::RenderPass const & m_renderPass;
+			renderer::CommandBufferPtr m_commandBuffer;
+			renderer::FencePtr m_fence;
 			SamplerSPtr m_sampler;
 			std::array< FrameBuffer, 6u > m_frameBuffers;
 		};
@@ -68,7 +72,8 @@ namespace castor3d
 		 */
 		C3D_API explicit EnvironmentPrefilter( Engine & engine
 			, castor::Size const & size
-			, renderer::Texture const & srcTexture );
+			, renderer::Texture const & srcTexture
+			, SamplerSPtr sampler );
 		/**
 		 *\~english
 		 *\brief		Generates the mipmap levels.
@@ -104,7 +109,6 @@ namespace castor3d
 		SamplerSPtr m_sampler;
 		renderer::RenderPassPtr m_renderPass;
 		std::vector< std::unique_ptr< MipRenderCube > > m_renderPasses;
-		renderer::CommandBufferPtr m_commandBuffer;
 	};
 }
 

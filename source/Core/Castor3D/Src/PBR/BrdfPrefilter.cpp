@@ -16,6 +16,7 @@
 #include <RenderPass/RenderSubpassState.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
 #include <Shader/ShaderProgram.hpp>
+#include <Sync/Fence.hpp>
 
 #include <GlslSource.hpp>
 
@@ -42,12 +43,12 @@ namespace castor3d
 			*buffer =
 			{
 				{
-					{ Point2f{ -1.0, -1.0 }, Point2f{ 0.0, m_renderSystem.isTopDown() ? 0.0 : 1.0 } },
-					{ Point2f{ -1.0, +1.0 }, Point2f{ 0.0, m_renderSystem.isTopDown() ? 1.0 : 0.0 } },
-					{ Point2f{ +1.0, -1.0 }, Point2f{ 1.0, m_renderSystem.isTopDown() ? 0.0 : 1.0 } },
-					{ Point2f{ +1.0, -1.0 }, Point2f{ 1.0, m_renderSystem.isTopDown() ? 0.0 : 1.0 } },
-					{ Point2f{ -1.0, +1.0 }, Point2f{ 0.0, m_renderSystem.isTopDown() ? 1.0 : 0.0 } },
-					{ Point2f{ +1.0, +1.0 }, Point2f{ 1.0, m_renderSystem.isTopDown() ? 1.0 : 0.0 } },
+					{ Point2f{ -1.0, -1.0 }, Point2f{ 0.0, 0.0 } },
+					{ Point2f{ -1.0, +1.0 }, Point2f{ 0.0, 1.0 } },
+					{ Point2f{ +1.0, -1.0 }, Point2f{ 1.0, 0.0 } },
+					{ Point2f{ +1.0, -1.0 }, Point2f{ 1.0, 0.0 } },
+					{ Point2f{ -1.0, +1.0 }, Point2f{ 0.0, 1.0 } },
+					{ Point2f{ +1.0, +1.0 }, Point2f{ 1.0, 1.0 } },
 				}
 			};
 			m_vertexBuffer->flush( 0u, 1u );
@@ -88,18 +89,18 @@ namespace castor3d
 		createInfo.dependencies.resize( 2u );
 		createInfo.dependencies[0].srcSubpass = renderer::ExternalSubpass;
 		createInfo.dependencies[0].dstSubpass = 0u;
-		createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
-		createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
-		createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 		createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 		createInfo.dependencies[1].srcSubpass = 0u;
 		createInfo.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-		createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
 		createInfo.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eMemoryRead;
+		createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 		createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 		m_renderPass = device.createRenderPass( createInfo );
@@ -133,6 +134,7 @@ namespace castor3d
 	void BrdfPrefilter::render()
 	{
 		auto & device = *m_renderSystem.getCurrentDevice();
+		auto fence = device.createFence();
 
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
 		{
@@ -147,7 +149,8 @@ namespace castor3d
 			m_commandBuffer->end();
 		}
 
-		device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
+		device.getGraphicsQueue().submit( *m_commandBuffer, fence.get() );
+		fence->wait( renderer::FenceTimeout );
 		device.getGraphicsQueue().waitIdle();
 	}
 
@@ -169,7 +172,7 @@ namespace castor3d
 			std::function< void() > main = [&]()
 			{
 				vtx_texture = texcoord;
-				gl_Position = vec4( position.x(), position.y(), 0.0, 1.0 );
+				gl_Position = writer.rendererScalePosition( vec4( position, 0.0, 1.0 ) );
 			};
 
 			writer.implementFunction< void >( cuT( "main" ), main );
@@ -348,7 +351,7 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					pxl_fragColor.xy() = integrateBRDF( vtx_texture.x(), vtx_texture.y() );
+					pxl_fragColor.xy() = integrateBRDF( vtx_texture.x(), 1.0_f - vtx_texture.y() );
 				} );
 
 			pxl = writer.finalise();

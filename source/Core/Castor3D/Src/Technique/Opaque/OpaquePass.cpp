@@ -36,6 +36,7 @@ namespace castor3d
 		, Camera * camera
 		, SsaoConfig const & config )
 		: castor3d::RenderTechniquePass{ cuT( "Opaque pass" )
+			, cuT( "Geometry pass" )
 			, scene
 			, camera
 			, false
@@ -90,17 +91,17 @@ namespace castor3d
 		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
 		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
 		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 		renderPass.dependencies[1].srcSubpass = 0u;
 		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
 		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
 		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 		m_renderPass = device.createRenderPass( renderPass );

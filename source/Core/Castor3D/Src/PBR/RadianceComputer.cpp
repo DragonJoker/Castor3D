@@ -10,6 +10,7 @@
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
 #include <Shader/ShaderProgram.hpp>
+#include <Sync/Fence.hpp>
 
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
@@ -203,18 +204,18 @@ namespace castor3d
 			createInfo.dependencies.resize( 2u );
 			createInfo.dependencies[0].srcSubpass = renderer::ExternalSubpass;
 			createInfo.dependencies[0].dstSubpass = 0u;
-			createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
-			createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
-			createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
+			createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 			createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 			createInfo.dependencies[1].srcSubpass = 0u;
 			createInfo.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-			createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
 			createInfo.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eMemoryRead;
+			createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+			createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 			createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 			return device.createRenderPass( createInfo );
@@ -283,7 +284,9 @@ namespace castor3d
 	void RadianceComputer::render()
 	{
 		auto & device = *m_renderSystem.getCurrentDevice();
-		device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
+		auto fence = device.createFence();
+		device.getGraphicsQueue().submit( *m_commandBuffer, fence.get() );
+		fence->wait( renderer::FenceTimeout );
 		device.getGraphicsQueue().waitIdle();
 	}
 

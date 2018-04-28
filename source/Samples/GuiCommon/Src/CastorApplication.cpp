@@ -173,7 +173,7 @@ namespace GuiCommon
 		parser.AddSwitch( wxT( "v" ), wxT( "validate" ), _( "Enables rendering API validation." ) );
 		parser.AddOption( wxT( "l" ), wxT( "log" ), _( "Defines log level." ), wxCMD_LINE_VAL_NUMBER );
 		parser.AddParam( _( "The initial scene file" ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
-		parser.AddSwitch( wxT( "opengl" ), wxEmptyString, _( "Defines the renderer to OpenGl." ) );
+		parser.AddSwitch( wxT( "opengl4" ), wxEmptyString, _( "Defines the renderer to OpenGl 4.x." ) );
 		parser.AddSwitch( wxT( "vulkan" ), wxEmptyString, _( "Defines the renderer to Vulkan." ) );
 		parser.AddSwitch( wxT( "test" ), wxEmptyString, _( "Defines the renderer to Test." ) );
 		bool result = parser.Parse( false ) == 0;
@@ -202,9 +202,9 @@ namespace GuiCommon
 			Logger::initialise( eLogLevel );
 			m_validation = parser.Found( wxT( 'v' ) );
 
-			if ( parser.Found( wxT( "opengl" ) ) )
+			if ( parser.Found( wxT( "opengl4" ) ) )
 			{
-				m_rendererType = cuT( "opengl" );
+				m_rendererType = cuT( "opengl4" );
 			}
 
 			if ( parser.Found( wxT( "vulkan" ) ) )

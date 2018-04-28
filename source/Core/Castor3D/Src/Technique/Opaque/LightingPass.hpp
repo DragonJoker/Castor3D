@@ -115,6 +115,7 @@ namespace castor3d
 		LightPasses m_lightPass;
 		LightPasses m_lightPassShadow;
 		RenderPassTimerSPtr m_timer;
+		renderer::FencePtr m_fence;
 	};
 }
 

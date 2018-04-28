@@ -39,13 +39,14 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	RenderTechniquePass::RenderTechniquePass( String const & name
+	RenderTechniquePass::RenderTechniquePass( String const & category
+		, String const & name
 		, Scene const & scene
 		, Camera * camera
 		, bool environment
 		, SceneNode const * ignored
 		, SsaoConfig const & config )
-		: RenderPass{ name, *scene.getEngine(), ignored }
+		: RenderPass{ category, name, *scene.getEngine(), ignored }
 		, m_scene{ scene }
 		, m_camera{ camera }
 		, m_sceneNode{}
@@ -54,14 +55,15 @@ namespace castor3d
 	{
 	}
 
-	RenderTechniquePass::RenderTechniquePass( String const & name
+	RenderTechniquePass::RenderTechniquePass( String const & category
+		, String const & name
 		, Scene & scene
 		, Camera * camera
 		, bool oit
 		, bool environment
 		, SceneNode const * ignored
 		, SsaoConfig const & config )
-		: RenderPass{ name, *scene.getEngine(), oit, ignored }
+		: RenderPass{ category, name, *scene.getEngine(), oit, ignored }
 		, m_scene{ scene }
 		, m_camera{ camera }
 		, m_sceneNode{}

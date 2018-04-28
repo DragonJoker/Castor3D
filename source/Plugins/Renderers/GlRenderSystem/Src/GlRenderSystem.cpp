@@ -15,7 +15,7 @@ using namespace castor;
 namespace GlRender
 {
 	String RenderSystem::Name = cuT( "OpenGL 4.x Renderer" );
-	String RenderSystem::Type = cuT( "opengl" );
+	String RenderSystem::Type = cuT( "opengl4" );
 
 	RenderSystem::RenderSystem( castor3d::Engine & engine
 		, castor::String const & appName

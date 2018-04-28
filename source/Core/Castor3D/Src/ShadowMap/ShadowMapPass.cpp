@@ -17,7 +17,7 @@ namespace castor3d
 	ShadowMapPass::ShadowMapPass( Engine & engine
 		, Scene & scene
 		, ShadowMap const & shadowMap )
-		: RenderPass{ cuT( "ShadowMap" ), engine, nullptr }
+		: RenderPass{ cuT( "ShadowMap" ), cuT( "ShadowMap" ), engine, nullptr }
 		, m_scene{ scene }
 		, m_shadowMap{ shadowMap }
 	{

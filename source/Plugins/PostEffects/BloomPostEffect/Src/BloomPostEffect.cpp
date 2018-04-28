@@ -49,7 +49,7 @@ namespace Bloom
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = writer.paren( position + 1.0 ) / 2.0;
-				gl_Position = vec4( position.xy(), 0.0, 1.0 );
+				gl_Position = writer.rendererScalePosition( vec4( position, 0.0, 1.0 ) );
 			} );
 			return writer.finalise();
 		}
@@ -103,13 +103,13 @@ namespace Bloom
 				auto texcoords = writer.declLocale( cuT( "texcoords" )
 					, writer.adjustTexCoords( vtx_texture ) );
 
-				if ( renderSystem->getCurrentDevice()->getClipDirection() == renderer::ClipDirection::eTopDown )
+				if ( writer.isTopDown() )
 				{
 					pxl_fragColor = texture( c3d_mapScene, vtx_texture );
 				}
 				else
 				{
-					pxl_fragColor = texture( c3d_mapScene, vec2( vtx_texture.x(), 1.0 - vtx_texture.y() ) );
+					pxl_fragColor = texture( c3d_mapScene, vec2( vtx_texture.x(), 1.0_f - vtx_texture.y() ) );
 				}
 
 				for ( uint32_t i = 0; i < FILTER_COUNT; ++i )
@@ -249,18 +249,18 @@ namespace Bloom
 		renderPass.dependencies.resize( 2u );
 		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
-		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
-		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 		renderPass.dependencies[1].srcSubpass = 0u;
 		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
 		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 		m_renderPass = device.createRenderPass( renderPass );

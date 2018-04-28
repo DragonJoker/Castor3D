@@ -1,6 +1,7 @@
 #include "LightPass.hpp"
 
 #include "Engine.hpp"
+#include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/Viewport.hpp"
 #include "Scene/Camera.hpp"
@@ -411,6 +412,7 @@ namespace castor3d
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_sampler{ engine.getDefaultSampler() }
 		, m_signalReady{ engine.getRenderSystem()->getCurrentDevice()->createSemaphore() }
+		, m_fence{ engine.getRenderSystem()->getCurrentDevice()->createFence( renderer::FenceCreateFlag::eSignaled ) }
 	{
 	}
 
@@ -420,6 +422,7 @@ namespace castor3d
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
+		m_fence->reset();
 
 		if ( first )
 		{
@@ -427,7 +430,7 @@ namespace castor3d
 				, toWait
 				, renderer::PipelineStageFlag::eVertexInput
 				, *m_signalReady
-				, nullptr );
+				, m_fence.get() );
 		}
 		else
 		{
@@ -435,8 +438,10 @@ namespace castor3d
 				, toWait
 				, renderer::PipelineStageFlag::eVertexInput
 				, *m_signalReady
-				, nullptr );
+				, m_fence.get() );
 		}
+
+		m_fence->wait( renderer::FenceTimeout );
 	}
 
 	void LightPass::doInitialise( Scene const & scene
@@ -445,7 +450,8 @@ namespace castor3d
 		, renderer::VertexBufferBase & vbo
 		, renderer::VertexLayout const & vertexLayout
 		, SceneUbo & sceneUbo
-		, ModelMatrixUbo * modelMatrixUbo )
+		, ModelMatrixUbo * modelMatrixUbo
+		, RenderPassTimer & timer )
 	{
 		m_geometryPassResult = &gp;
 		SceneFlags sceneFlags{ scene.getFlags() };
@@ -539,7 +545,7 @@ namespace castor3d
 		{
 			m_textureDescriptorSet->setBindings( m_textureWrites );
 			m_textureDescriptorSet->update();
-			doPrepareCommandBuffers( nullptr );
+			doPrepareCommandBuffers( nullptr, timer );
 		}
 	}
 
@@ -550,7 +556,8 @@ namespace castor3d
 		m_matrixUbo.cleanup();
 	}
 
-	void LightPass::doPrepareCommandBuffers( TextureUnit const * shadowMap )
+	void LightPass::doPrepareCommandBuffers( TextureUnit const * shadowMap
+		, RenderPassTimer & timer )
 	{
 		static renderer::DepthStencilClearValue const clearDepthStencil{ 1.0, 1 };
 		static renderer::ClearColorValue const clearColour{ 0.0, 0.0, 0.0, 1.0 };
@@ -558,6 +565,7 @@ namespace castor3d
 		uint32_t const height = m_firstRenderPass.frameBuffer->getDimensions().height;
 
 		auto prepare = [this
+			, &timer
 			, width
 			, height]( RenderPass & renderPass
 				, bool first )
@@ -566,6 +574,12 @@ namespace castor3d
 
 			if ( commandBuffer.begin() )
 			{
+				commandBuffer.resetQueryPool( timer.getQuery()
+					, 0u
+					, 2u );
+				commandBuffer.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+					, timer.getQuery()
+					, 0u );
 				commandBuffer.beginRenderPass( *renderPass.renderPass
 					, *renderPass.frameBuffer
 					, { clearDepthStencil, clearColour, clearColour }
@@ -576,6 +590,9 @@ namespace castor3d
 				commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 				m_program->render( commandBuffer, getCount(), first, m_offset );
 				commandBuffer.endRenderPass();
+				commandBuffer.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+					, timer.getQuery()
+					, 1u );
 				commandBuffer.end();
 			}
 		};

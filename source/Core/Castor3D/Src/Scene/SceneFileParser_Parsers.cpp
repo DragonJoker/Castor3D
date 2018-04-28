@@ -2822,6 +2822,7 @@ namespace castor3d
 
 		if ( parsingContext->pass )
 		{
+			parsingContext->uiUInt32 = 1u;
 			parsingContext->textureUnit = std::make_shared< TextureUnit >( *parsingContext->m_pParser->getEngine() );
 		}
 		else
@@ -2999,7 +3000,7 @@ namespace castor3d
 				image.extent.depth = 1u;
 				image.imageType = renderer::TextureType::e2D;
 				image.initialLayout = renderer::ImageLayout::eUndefined;
-				image.mipLevels = 1u;
+				image.mipLevels = parsingContext->uiUInt32;
 				image.samples = renderer::SampleCountFlag::e1;
 				image.sharingMode = renderer::SharingMode::eExclusive;
 				image.tiling = renderer::ImageTiling::eOptimal;
@@ -3056,6 +3057,25 @@ namespace castor3d
 
 				parsingContext->textureUnit->setTexture( texture );
 			}
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserUnitLevelsCount )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->textureUnit )
+		{
+			PARSING_ERROR( cuT( "No TextureUnit initialised." ) );
+		}
+		else if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			p_params[0]->get( parsingContext->uiUInt32 );
 		}
 	}
 	END_ATTRIBUTE()

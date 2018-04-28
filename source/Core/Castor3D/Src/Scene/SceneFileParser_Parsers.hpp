@@ -170,6 +170,7 @@ namespace castor3d
 
 	// Texture Unit Parsers
 	DECLARE_ATTRIBUTE_PARSER( parserUnitImage )
+	DECLARE_ATTRIBUTE_PARSER( parserUnitLevelsCount )
 	DECLARE_ATTRIBUTE_PARSER( parserUnitRenderTarget )
 	DECLARE_ATTRIBUTE_PARSER( parserUnitChannel )
 	DECLARE_ATTRIBUTE_PARSER( parserUnitSampler )

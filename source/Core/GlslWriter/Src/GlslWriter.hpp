@@ -48,6 +48,7 @@ namespace glsl
 		GlslWriter_API castor::String getInstanceID();
 		GlslWriter_API castor::String getVertexID();
 		GlslWriter_API Vec2 adjustTexCoords( Vec2 const & texcoords );
+		GlslWriter_API Vec4 rendererScalePosition( Vec4 const & position );
 
 		inline uint32_t getShaderLanguageVersion()const
 		{

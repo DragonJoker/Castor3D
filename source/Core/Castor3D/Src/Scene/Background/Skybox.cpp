@@ -19,6 +19,7 @@
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <Shader/ShaderModule.hpp>
+#include <Sync/Fence.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
 #include <GlslUtils.hpp>
@@ -54,6 +55,61 @@ namespace castor3d
 				| renderer::ImageUsageFlag::eTransferDst
 				| ( attachment ? renderer::ImageUsageFlag::eColourAttachment : renderer::ImageUsageFlag( 0u ) );
 			return result;
+		}
+
+		uint32_t getHighestOrderBit( uint32_t x )
+		{
+			static const int msb_lut[256] =
+			{
+				0, 0, 1, 1, 2, 2, 2, 2, // 0000_0000 - 0000_0111
+				3, 3, 3, 3, 3, 3, 3, 3, // 0000_1000 - 0000_1111
+				4, 4, 4, 4, 4, 4, 4, 4, // 0001_0000 - 0001_0111
+				4, 4, 4, 4, 4, 4, 4, 4, // 0001_1000 - 0001_1111
+				5, 5, 5, 5, 5, 5, 5, 5, // 0010_0000 - 0010_0111
+				5, 5, 5, 5, 5, 5, 5, 5, // 0010_1000 - 0010_1111
+				5, 5, 5, 5, 5, 5, 5, 5, // 0011_0000 - 0011_0111
+				5, 5, 5, 5, 5, 5, 5, 5, // 0011_1000 - 0011_1111
+
+				6, 6, 6, 6, 6, 6, 6, 6, // 0100_0000 - 0100_0111
+				6, 6, 6, 6, 6, 6, 6, 6, // 0100_1000 - 0100_1111
+				6, 6, 6, 6, 6, 6, 6, 6, // 0101_0000 - 0101_0111
+				6, 6, 6, 6, 6, 6, 6, 6, // 0101_1000 - 0101_1111
+				6, 6, 6, 6, 6, 6, 6, 6, // 0110_0000 - 0110_0111
+				6, 6, 6, 6, 6, 6, 6, 6, // 0110_1000 - 0110_1111
+				6, 6, 6, 6, 6, 6, 6, 6, // 0111_0000 - 0111_0111
+				6, 6, 6, 6, 6, 6, 6, 6, // 0111_1000 - 0111_1111
+
+				7, 7, 7, 7, 7, 7, 7, 7, // 1000_0000 - 1000_0111
+				7, 7, 7, 7, 7, 7, 7, 7, // 1000_1000 - 1000_1111
+				7, 7, 7, 7, 7, 7, 7, 7, // 1001_0000 - 1001_0111
+				7, 7, 7, 7, 7, 7, 7, 7, // 1001_1000 - 1001_1111
+				7, 7, 7, 7, 7, 7, 7, 7, // 1010_0000 - 1010_0111
+				7, 7, 7, 7, 7, 7, 7, 7, // 1010_1000 - 1010_1111
+				7, 7, 7, 7, 7, 7, 7, 7, // 1011_0000 - 1011_0111
+				7, 7, 7, 7, 7, 7, 7, 7, // 1011_1000 - 1011_1111
+
+				7, 7, 7, 7, 7, 7, 7, 7, // 1100_0000 - 1100_0111
+				7, 7, 7, 7, 7, 7, 7, 7, // 1100_1000 - 1100_1111
+				7, 7, 7, 7, 7, 7, 7, 7, // 1101_0000 - 1101_0111
+				7, 7, 7, 7, 7, 7, 7, 7, // 1101_1000 - 1101_1111
+				7, 7, 7, 7, 7, 7, 7, 7, // 1110_0000 - 1110_0111
+				7, 7, 7, 7, 7, 7, 7, 7, // 1110_1000 - 1110_1111
+				7, 7, 7, 7, 7, 7, 7, 7, // 1111_0000 - 1111_0111
+				7, 7, 7, 7, 7, 7, 7, 7, // 1111_1000 - 1111_1111
+			};
+
+			int byte;
+
+			for ( int byte_cnt = 3; byte_cnt >= 0; byte_cnt-- )
+			{
+				byte = ( x >> ( byte_cnt * 8 ) ) & 0xff;
+				if ( byte != 0 )
+				{
+					return msb_lut[byte] + ( byte_cnt * 8 );
+				}
+			}
+
+			return -1;
 		}
 	}
 
@@ -152,18 +208,9 @@ namespace castor3d
 		: SceneBackground{ engine, scene, BackgroundType::eSkybox }
 		, m_viewport{ engine }
 	{
-		if ( scene.getMaterialsType() != MaterialType::eLegacy )
-		{
-			m_texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
-				, doGetImageCreate( renderer::Format::eR8G8B8A8_UNORM, { 512u, 512u }, false, glsl::Utils::MaxIblReflectionLod + 1u )
-				, renderer::MemoryPropertyFlag::eDeviceLocal );
-		}
-		else
-		{
-			m_texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
-				, doGetImageCreate( renderer::Format::eR8G8B8A8_UNORM, { 512u, 512u }, false )
-				, renderer::MemoryPropertyFlag::eDeviceLocal );
-		}
+		m_texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
+			, doGetImageCreate( renderer::Format::eR8G8B8A8_UNORM, { 512u, 512u }, false )
+			, renderer::MemoryPropertyFlag::eDeviceLocal );
 	}
 
 	SkyboxBackground::~SkyboxBackground()
@@ -230,7 +277,6 @@ namespace castor3d
 			|| m_texture->getPixelFormat() == renderer::Format::eR16G16_SFLOAT
 			|| m_texture->getPixelFormat() == renderer::Format::eR16G16B16_SFLOAT
 			|| m_texture->getPixelFormat() == renderer::Format::eR16G16B16A16_SFLOAT;
-		m_sampler.lock()->initialise();
 		return m_texture->initialise();
 	}
 
@@ -245,18 +291,9 @@ namespace castor3d
 			|| m_texture->getDimensions().width != m_equiSize.getWidth()
 			|| m_texture->getDimensions().height != m_equiSize.getHeight() )
 		{
-			if ( m_scene.getMaterialsType() != MaterialType::eLegacy )
-			{
-				m_texture = std::make_shared< TextureLayout >( renderSystem
-					, doGetImageCreate( renderer::Format::eR16G16B16A16_SFLOAT, m_equiSize, true, glsl::Utils::MaxIblReflectionLod + 1u )
-					, renderer::MemoryPropertyFlag::eDeviceLocal );
-			}
-			else
-			{
-				m_texture = std::make_shared< TextureLayout >( renderSystem
-					, doGetImageCreate( renderer::Format::eR16G16B16A16_SFLOAT, m_equiSize, true )
-					, renderer::MemoryPropertyFlag::eDeviceLocal );
-			}
+			m_texture = std::make_shared< TextureLayout >( renderSystem
+				, doGetImageCreate( renderer::Format::eR16G16B16A16_SFLOAT, m_equiSize, true )
+				, renderer::MemoryPropertyFlag::eDeviceLocal );
 
 			m_texture->getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource();
 			m_texture->getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource();
@@ -407,7 +444,9 @@ namespace castor3d
 		}
 
 		commandBuffer->end();
-		device.getGraphicsQueue().submit( *commandBuffer, nullptr );
+		auto fence = device.createFence();
+		device.getGraphicsQueue().submit( *commandBuffer, fence.get() );
+		fence->wait( renderer::FenceTimeout );
 		device.waitIdle();
 
 		m_crossTexture->cleanup();

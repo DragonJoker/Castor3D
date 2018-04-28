@@ -221,7 +221,7 @@ namespace castor3d
 	}
 
 	PickingPass::PickingPass( Engine & engine )
-		: RenderPass{ cuT( "Picking" ), engine, nullptr }
+		: RenderPass{ cuT( "Picking" ), cuT( "Picking" ), engine, nullptr }
 	{
 	}
 

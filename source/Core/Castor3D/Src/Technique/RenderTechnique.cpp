@@ -284,6 +284,8 @@ namespace castor3d
 
 #endif
 
+		getEngine()->getRenderSystem()->getCurrentDevice()->waitIdle();
+
 		// Render part
 		semaphore = doClear( *semaphore );
 		semaphore = doRenderOpaque( jitter, info, *semaphore );
@@ -392,18 +394,18 @@ namespace castor3d
 		renderPass.dependencies.resize( 2u );
 		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
-		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].srcAccessMask = 0u;
-		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 		renderPass.dependencies[1].srcSubpass = 0u;
 		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
 		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 		m_clearRenderPass = device.createRenderPass( renderPass );
@@ -487,6 +489,23 @@ namespace castor3d
 		renderPass.subpasses[0].flags = 0u;
 		renderPass.subpasses[0].colorAttachments = { { 1u, renderer::ImageLayout::eColourAttachmentOptimal } };
 		renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
+
+		renderPass.dependencies.resize( 2u );
+		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].dstSubpass = 0u;
+		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		renderPass.dependencies[1].srcSubpass = 0u;
+		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 		m_bgRenderPass = device.createRenderPass( renderPass );
 
@@ -624,6 +643,7 @@ namespace castor3d
 			, {}
 			, { *m_clearSemaphore }
 			, nullptr );
+		device.waitIdle();
 		return m_clearSemaphore.get();
 	}
 
@@ -653,6 +673,7 @@ namespace castor3d
 			result = &m_deferredRendering->render( info, scene, camera, *result );
 
 #endif
+			getEngine()->getRenderSystem()->getCurrentDevice()->waitIdle();
 		}
 
 		return result;
@@ -702,6 +723,7 @@ namespace castor3d
 			m_frameBuffer.m_frameBuffer->unbind();
 
 #endif
+			getEngine()->getRenderSystem()->getCurrentDevice()->waitIdle();
 		}
 
 		return result;

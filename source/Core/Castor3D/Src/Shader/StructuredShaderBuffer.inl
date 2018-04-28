@@ -41,7 +41,7 @@ namespace castor3d
 	template< typename ElementTypeTraits >
 	void StructuredShaderBuffer< ElementTypeTraits >::remove( ElementType & element )
 	{
-		auto id = element.getId() - 1u;
+		auto id = element.getId();
 		REQUIRE( id < m_elements.size() );
 		REQUIRE( &element == m_elements[id] );
 		auto it = m_elements.erase( m_elements.begin() + id );

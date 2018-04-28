@@ -9,6 +9,7 @@
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
 #include <Shader/ShaderProgram.hpp>
+#include <Sync/Fence.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
 #include <GlslSource.hpp>
@@ -44,10 +45,13 @@ namespace castor3d
 				, renderer::MemoryPropertyFlag::eDeviceLocal );
 		}
 
-		SamplerSPtr doCreateSampler( Engine & engine )
+		SamplerSPtr doCreateSampler( Engine & engine
+			, uint32_t maxLod )
 		{
 			SamplerSPtr result;
-			auto name = cuT( "IblTexturesPrefiltered" );
+			StringStream stream = makeStringStream();
+			stream << cuT( "IblTexturesPrefiltered_" ) << maxLod;
+			auto name = stream.str();
 
 			if ( engine.getSamplerCache().has( name ) )
 			{
@@ -63,7 +67,7 @@ namespace castor3d
 				result->setWrapT( renderer::WrapMode::eClampToEdge );
 				result->setWrapR( renderer::WrapMode::eClampToEdge );
 				result->setMinLod( 0.0f );
-				result->setMaxLod( float( glsl::Utils::MaxIblReflectionLod ) );
+				result->setMaxLod( float( maxLod ) );
 				engine.getSamplerCache().add( name, result );
 			}
 
@@ -308,18 +312,18 @@ namespace castor3d
 			createInfo.dependencies.resize( 2u );
 			createInfo.dependencies[0].srcSubpass = renderer::ExternalSubpass;
 			createInfo.dependencies[0].dstSubpass = 0u;
-			createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
-			createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
-			createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
+			createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 			createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 			createInfo.dependencies[1].srcSubpass = 0u;
 			createInfo.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-			createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
 			createInfo.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eMemoryRead;
+			createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+			createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 			createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 			return device.createRenderPass( createInfo );
@@ -337,7 +341,10 @@ namespace castor3d
 		, renderer::Texture const & dstTexture
 		, SamplerSPtr sampler )
 		: RenderCube{ renderSystem, false, std::move( sampler ) }
+		, m_device{ *renderSystem.getCurrentDevice() }
 		, m_renderPass{ renderPass }
+		, m_commandBuffer{ m_device.getGraphicsCommandPool().createCommandBuffer() }
+		, m_fence{ m_device.createFence( renderer::FenceCreateFlag::eSignaled ) }
 	{
 		for ( auto face = 0u; face < 6u; ++face )
 		{
@@ -364,30 +371,43 @@ namespace castor3d
 			, {} );
 	}
 
-	void EnvironmentPrefilter::MipRenderCube::registerFrames( renderer::CommandBuffer & commandBuffer )
+	void EnvironmentPrefilter::MipRenderCube::registerFrames()
 	{
+		m_commandBuffer->begin();
+
 		for ( uint32_t face = 0u; face < 6u; ++face )
 		{
 			auto & frameBuffer = m_frameBuffers[face];
-			commandBuffer.beginRenderPass( m_renderPass
+			m_commandBuffer->beginRenderPass( m_renderPass
 				, *frameBuffer.frameBuffer
 				, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
-			, renderer::SubpassContents::eInline );
-			registerFrame( commandBuffer, face );
-			commandBuffer.endRenderPass();
+				, renderer::SubpassContents::eInline );
+			registerFrame( *m_commandBuffer, face );
+			m_commandBuffer->endRenderPass();
 		}
+
+		m_commandBuffer->end();
+	}
+
+	void EnvironmentPrefilter::MipRenderCube::render()
+	{
+		m_fence->reset();
+		m_device.getGraphicsQueue().submit( *m_commandBuffer, m_fence.get() );
+		m_fence->wait( renderer::FenceTimeout );
+		m_device.waitIdle();
 	}
 
 	//*********************************************************************************************
 
 	EnvironmentPrefilter::EnvironmentPrefilter( Engine & engine
 		, castor::Size const & size
-		, renderer::Texture const & srcTexture )
+		, renderer::Texture const & srcTexture
+		, SamplerSPtr sampler )
 		: m_renderSystem{ *engine.getRenderSystem() }
 		, m_srcView{ srcTexture.createView( renderer::TextureViewType::eCube, srcTexture.getFormat(), 0u, srcTexture.getMipmapLevels(), 0u, 6u ) }
 		, m_result{ doCreatePrefilteredTexture( m_renderSystem, size ) }
 		, m_resultView{ m_result->createView( renderer::TextureViewType::eCube, m_result->getFormat(), 0u, m_result->getMipmapLevels(), 0u, 6u ) }
-		, m_sampler{ doCreateSampler( engine ) }
+		, m_sampler{ doCreateSampler( engine, m_result->getMipmapLevels() - 1u ) }
 		, m_renderPass{ doCreateRenderPass( m_renderSystem, m_result->getFormat() ) }
 	{
 		auto & dstTexture = *m_result;
@@ -405,27 +425,21 @@ namespace castor3d
 				, mipSize
 				, *m_srcView
 				, dstTexture
-				, m_sampler ) );
+				, sampler ) );
 		}
 
-		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
-
-		if ( m_commandBuffer->begin() )
+		for ( auto & cubePass : m_renderPasses )
 		{
-			for ( auto & cubePass : m_renderPasses )
-			{
-				cubePass->registerFrames( *m_commandBuffer );
-			}
-
-			m_commandBuffer->end();
+			cubePass->registerFrames();
 		}
 	}
 
 	void EnvironmentPrefilter::render()
 	{
-		auto & device = *m_renderSystem.getCurrentDevice();
-		device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
-		device.getGraphicsQueue().waitIdle();
+		for ( auto & cubePass : m_renderPasses )
+		{
+			cubePass->render();
+		}
 	}
 
 	//*********************************************************************************************

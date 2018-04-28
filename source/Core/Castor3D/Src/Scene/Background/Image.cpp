@@ -127,19 +127,8 @@ namespace castor3d
 			{
 				auto texcoord = writer.declLocale( cuT( "texcoord" )
 					, gl_FragCoord.xy() / c3d_size );
-
-				if ( renderSystem.isTopDown() )
-				{
-					auto colour = writer.declLocale( cuT( "colour" )
-						, texture( c3d_mapDiffuse, texcoord ) );
-				}
-				else
-				{
-					auto colour = writer.declLocale( cuT( "colour" )
-						, texture( c3d_mapDiffuse, vec2( texcoord.x(), 1.0_f - texcoord.y() ) ) );
-				}
-
-				auto colour = writer.declBuiltin< Vec4 >( cuT( "colour" ) );
+				auto colour = writer.declLocale( cuT( "colour" )
+					, texture( c3d_mapDiffuse, texcoord ) );
 
 				if ( !m_hdr )
 				{

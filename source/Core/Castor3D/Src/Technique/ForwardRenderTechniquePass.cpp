@@ -29,6 +29,7 @@ namespace castor3d
 		, SceneNode const * ignored
 		, SsaoConfig const & config )
 		: RenderTechniquePass{ name
+			, name
 			, scene
 			, camera
 			, environment
@@ -45,6 +46,7 @@ namespace castor3d
 		, SceneNode const * ignored
 		, SsaoConfig const & config )
 		: RenderTechniquePass{ name
+			, name
 			, scene
 			, camera
 			, oit

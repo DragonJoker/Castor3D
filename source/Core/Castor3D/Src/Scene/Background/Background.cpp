@@ -36,29 +36,29 @@ namespace castor3d
 	{
 		m_semaphore = getEngine()->getRenderSystem()->getCurrentDevice()->createSemaphore();
 		m_configUbo.initialise();
-
+		auto result = doInitialiseVertexBuffer()
+			&& doInitialise( renderPass );
 		castor::String const name = cuT( "Skybox" );
+		SamplerSPtr sampler;
 
 		if ( getEngine()->getSamplerCache().has( name ) )
 		{
-			m_sampler = getEngine()->getSamplerCache().find( name );
+			sampler = getEngine()->getSamplerCache().find( name );
 		}
 		else
 		{
-			auto sampler = getEngine()->getSamplerCache().add( name );
+			sampler = getEngine()->getSamplerCache().add( name );
 			sampler->setMinFilter( renderer::Filter::eLinear );
 			sampler->setMagFilter( renderer::Filter::eLinear );
 			sampler->setWrapS( renderer::WrapMode::eClampToEdge );
 			sampler->setWrapT( renderer::WrapMode::eClampToEdge );
 			sampler->setWrapR( renderer::WrapMode::eClampToEdge );
 			sampler->setMinLod( 0.0f );
-			sampler->setMaxLod( 0.0f );
-			m_sampler = sampler;
+			sampler->setMaxLod( float( m_texture->getMipmapCount() - 1u ) );
 		}
 
-		m_sampler.lock()->initialise();
-		auto result = doInitialiseVertexBuffer()
-			&& doInitialise( renderPass );
+		sampler->initialise();
+		m_sampler = sampler;
 
 		if ( result )
 		{
@@ -69,7 +69,9 @@ namespace castor3d
 			&& m_scene.getMaterialsType() != MaterialType::eLegacy
 			&& m_texture->getLayersCount() == 6u )
 		{
-			m_ibl = std::make_unique< IblTextures >( m_scene, m_texture->getTexture() );
+			m_ibl = std::make_unique< IblTextures >( m_scene
+				, m_texture->getTexture()
+				, sampler );
 			m_ibl->update();
 		}
 
@@ -379,7 +381,7 @@ namespace castor3d
 			renderPass,
 			vertexInput,
 			renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleList },
-			renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eBack },
+			renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eNone },
 			renderer::MultisampleState{},
 			renderer::ColourBlendState::createDefault(),
 			{ renderer::DynamicState::eViewport, renderer::DynamicState::eScissor },

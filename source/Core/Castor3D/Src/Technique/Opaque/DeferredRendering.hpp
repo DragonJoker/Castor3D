@@ -116,6 +116,7 @@ namespace castor3d
 		GeometryPassResult m_geometryPassResult;
 		std::vector< renderer::TexturePtr > m_results;
 		renderer::CommandBufferPtr m_nodesCommands;
+		renderer::FencePtr m_fence;
 	};
 }
 

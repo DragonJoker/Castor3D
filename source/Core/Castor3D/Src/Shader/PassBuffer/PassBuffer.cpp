@@ -39,7 +39,7 @@ namespace castor3d
 
 	void PassBuffer::removePass( Pass & pass )
 	{
-		auto id = pass.getId() - 1u;
+		auto id = pass.getId();
 		REQUIRE( id < m_passes.size() );
 		REQUIRE( &pass == m_passes[id] );
 		auto it = m_passes.erase( m_passes.begin() + id );

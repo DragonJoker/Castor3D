@@ -27,6 +27,8 @@
 using namespace castor;
 using namespace glsl;
 
+#define C3D_GenerateBRDFIntegration 0
+
 namespace castor3d
 {
 	namespace
@@ -41,17 +43,59 @@ namespace castor3d
 			image.extent.width = size.getWidth();
 			image.extent.height = size.getHeight();
 			image.extent.depth = 1u;
+#if !C3D_GenerateBRDFIntegration
+			image.format = renderer::Format::eR8G8B8A8_UNORM;
+#else
 			image.format = renderer::Format::eR32G32B32A32_SFLOAT;
+#endif
 			image.imageType = renderer::TextureType::e2D;
 			image.initialLayout = renderer::ImageLayout::eUndefined;
 			image.mipLevels = 1u;
 			image.samples = renderer::SampleCountFlag::e1;
 			image.sharingMode = renderer::SharingMode::eExclusive;
 			image.tiling = renderer::ImageTiling::eOptimal;
-			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+			image.usage = renderer::ImageUsageFlag::eColourAttachment
+#if !C3D_GenerateBRDFIntegration
+				| renderer::ImageUsageFlag::eTransferDst
+#endif
+				| renderer::ImageUsageFlag::eSampled;
 			return device.createTexture( image
 				, renderer::MemoryPropertyFlag::eDeviceLocal );
 		}
+
+#if !C3D_GenerateBRDFIntegration
+		renderer::TextureViewPtr doCreatePrefilteredBrdfView( Engine & engine
+			, renderer::Texture const & texture )
+		{
+			PxBufferBaseSPtr buffer;
+
+			if ( engine.getImageCache().has( cuT( "BRDF" ) ) )
+			{
+				auto image = engine.getImageCache().find( cuT( "BRDF" ) );
+				buffer = image->getPixels();
+			}
+			else
+			{
+				auto imagePath = Engine::getEngineDirectory() / cuT( "Core" ) / cuT( "brdf.png" );
+				auto image = engine.getImageCache().add( cuT( "BRDF" ), imagePath );
+				buffer = image->getPixels();
+			}
+
+			buffer = PxBufferBase::create( buffer->dimensions()
+				, PixelFormat::eA8R8G8B8
+				, buffer->constPtr()
+				, buffer->format() );
+			auto result = texture.createView( renderer::TextureViewType::e2D, texture.getFormat() );
+			auto & device = *engine.getRenderSystem()->getCurrentDevice();
+			renderer::StagingBuffer stagingBuffer{ device, 0u, buffer->size() };
+			auto commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+			stagingBuffer.uploadTextureData( *commandBuffer
+				, buffer->constPtr()
+				, buffer->size()
+				, *result );
+			return result;
+		}
+#endif
 
 		SamplerSPtr doCreateSampler( Engine & engine )
 		{
@@ -81,18 +125,25 @@ namespace castor3d
 	//************************************************************************************************
 
 	IblTextures::IblTextures( Scene & scene
-		, renderer::Texture const & source )
+		, renderer::Texture const & source
+		, SamplerSPtr sampler )
 		: OwnedBy< Scene >{ scene }
 		, m_prefilteredBrdf{ doCreatePrefilteredBrdf( *scene.getEngine()->getRenderSystem(), Size{ 512u, 512u } ) }
+#if !C3D_GenerateBRDFIntegration
+		, m_prefilteredBrdfView{ doCreatePrefilteredBrdfView( *scene.getEngine(), *m_prefilteredBrdf ) }
+#else
 		, m_prefilteredBrdfView{ m_prefilteredBrdf->createView( renderer::TextureViewType::e2D, m_prefilteredBrdf->getFormat() ) }
+#endif
 		, m_sampler{ doCreateSampler( *scene.getEngine() ) }
 		, m_radianceComputer{ *scene.getEngine(), Size{ 32u, 32u }, source }
-		, m_environmentPrefilter{ *scene.getEngine(), Size{ 128u, 128u }, source }
+		, m_environmentPrefilter{ *scene.getEngine(), Size{ 128u, 128u }, source, std::move( sampler ) }
 	{
+#if C3D_GenerateBRDFIntegration
 		BrdfPrefilter filter{ *scene.getEngine()
 			, { m_prefilteredBrdf->getDimensions().width, m_prefilteredBrdf->getDimensions().height }
 			, *m_prefilteredBrdfView };
 		filter.render();
+#endif
 	}
 
 	IblTextures::~IblTextures()

@@ -73,7 +73,7 @@ namespace castor3d
 		: m_size{ size }
 		, m_diffuse{ doCreateTexture( engine, size ) }
 		, m_specular{ doCreateTexture( engine, size ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Lighting" ), cuT( "Lighting" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Opaque pass" ), cuT( "Lighting" ) ) }
 	{
 		m_lightPass[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPass >( engine
 			, depthView
@@ -111,12 +111,18 @@ namespace castor3d
 
 		for ( auto & lightPass : m_lightPass )
 		{
-			lightPass->initialise( scene, gpResult, sceneUbo );
+			lightPass->initialise( scene
+				, gpResult
+				, sceneUbo
+				, *m_timer );
 		}
 
 		for ( auto & lightPass : m_lightPassShadow )
 		{
-			lightPass->initialise( scene, gpResult, sceneUbo );
+			lightPass->initialise( scene
+				, gpResult
+				, sceneUbo
+				, *m_timer );
 		}
 	}
 
@@ -206,6 +212,7 @@ namespace castor3d
 							, *light
 							, camera );
 						lightPassShadow.render( first, *toWait, &light->getShadowMap()->getTexture() );
+						toWait = &lightPassShadow.getSemaphore();
 					}
 					else
 					{
@@ -213,11 +220,12 @@ namespace castor3d
 							, *light
 							, camera );
 						lightPass.render( first, *toWait, nullptr );
+						toWait = &lightPass.getSemaphore();
 					}
 
 					first = false;
 					info.m_visibleLightsCount++;
-					toWait = &lightPass.getSemaphore();
+					m_timer->step();
 				}
 
 				info.m_totalLightsCount++;

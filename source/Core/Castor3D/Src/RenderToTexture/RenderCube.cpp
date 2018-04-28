@@ -66,59 +66,22 @@ namespace castor3d
 				, renderer::BufferTarget::eTransferDst
 				, renderer::MemoryPropertyFlag::eDeviceLocal );
 
-			if ( srcIsCube && device.getClipDirection() == renderer::ClipDirection::eBottomUp )
+			renderer::Mat4 const views[] =
 			{
-				Matrix4x4f mtx;
-				matrix::setScale( mtx, Point3f{ 1.0, -1.0, 1.0 } );
-				renderer::Mat4 const scale = convert( mtx );
-				renderer::Mat4 const views[] =
-				{
-					convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +1.0f, +0.0f, +0.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ) ),// PositiveX
-					convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ -1.0f, +0.0f, +0.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ) ),// NegativeX
-					convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, -1.0f, +0.0f }, Point3f{ 0.0f, +0.0f, -1.0f } ) ),// PositiveY
-					convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +1.0f, +0.0f }, Point3f{ 0.0f, +0.0f, +1.0f } ) ),// NegativeY
-					convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +0.0f, +1.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ) ),// PositiveZ
-					convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +0.0f, -1.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ) )	// NegativeZ
-				};
+				convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +1.0f, +0.0f, +0.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ) ),
+				convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ -1.0f, +0.0f, +0.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ) ),
+				convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +1.0f, +0.0f }, Point3f{ 0.0f, +0.0f, +1.0f } ) ),
+				convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, -1.0f, +0.0f }, Point3f{ 0.0f, +0.0f, -1.0f } ) ),
+				convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +0.0f, +1.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ) ),
+				convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +0.0f, -1.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ) )
+			};
 
-				result->getData( 0u ) = projection * views[0] * scale;
-				result->getData( 1u ) = projection * views[1] * scale;
-				result->getData( 2u ) = projection * views[2] * scale;
-				result->getData( 3u ) = projection * views[3] * scale;
-				result->getData( 4u ) = projection * views[4] * scale;
-				result->getData( 5u ) = projection * views[5] * scale;
-			}
-			else
-			{
-				renderer::Mat4 const views[] =
-				{
-					convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +1.0f, +0.0f, +0.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ) ),
-					convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ -1.0f, +0.0f, +0.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ) ),
-					convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +1.0f, +0.0f }, Point3f{ 0.0f, +0.0f, +1.0f } ) ),
-					convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, -1.0f, +0.0f }, Point3f{ 0.0f, +0.0f, -1.0f } ) ),
-					convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +0.0f, +1.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ) ),
-					convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +0.0f, -1.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ) )
-				};
-
-				if ( device.getClipDirection() == renderer::ClipDirection::eTopDown )
-				{
-					result->getData( 0u ) = projection * views[0];
-					result->getData( 1u ) = projection * views[1];
-					result->getData( 2u ) = projection * views[2];
-					result->getData( 3u ) = projection * views[3];
-					result->getData( 4u ) = projection * views[4];
-					result->getData( 5u ) = projection * views[5];
-				}
-				else
-				{
-					result->getData( 0u ) = projection * views[0];
-					result->getData( 1u ) = projection * views[1];
-					result->getData( 2u ) = projection * views[3];
-					result->getData( 3u ) = projection * views[2];
-					result->getData( 4u ) = projection * views[4];
-					result->getData( 5u ) = projection * views[5];
-				}
-			}
+			result->getData( 0u ) = projection * views[0];
+			result->getData( 1u ) = projection * views[1];
+			result->getData( 2u ) = projection * views[2];
+			result->getData( 3u ) = projection * views[3];
+			result->getData( 4u ) = projection * views[4];
+			result->getData( 5u ) = projection * views[5];
 
 			renderer::StagingBuffer stagingBuffer{ device
 				, renderer::BufferTarget::eTransferSrc

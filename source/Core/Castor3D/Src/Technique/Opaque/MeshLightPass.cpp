@@ -72,18 +72,18 @@ namespace castor3d
 			renderPass.dependencies.resize( 2u );
 			renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
 			renderPass.dependencies[0].dstSubpass = 0u;
-			renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
-			renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eTopOfPipe;
-			renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
+			renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 			renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 			renderPass.dependencies[1].srcSubpass = 0u;
 			renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
 			renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
 			renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 			renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 			renderPass.subpasses.resize( 1u );
@@ -125,7 +125,9 @@ namespace castor3d
 		dsstate.back.reference = 0u;
 
 		renderer::RasterisationState rsstate;
-		rsstate.cullMode = renderer::CullModeFlag::eFront;
+		rsstate.cullMode = m_engine.isTopDown()
+			? renderer::CullModeFlag::eBack
+			: renderer::CullModeFlag::eFront;
 
 		renderer::ColourBlendState blstate;
 
@@ -154,7 +156,7 @@ namespace castor3d
 			renderPass,
 			renderer::VertexInputState::create( vertexLayout ),
 			renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleList },
-			renderer::RasterisationState{},
+			std::move( rsstate ),
 			renderer::MultisampleState{},
 			std::move( blstate ),
 			{ renderer::DynamicState::eViewport, renderer::DynamicState::eScissor },
@@ -192,7 +194,8 @@ namespace castor3d
 
 	void MeshLightPass::initialise( Scene const & scene
 		, GeometryPassResult const & gp
-		, SceneUbo & sceneUbo )
+		, SceneUbo & sceneUbo
+		, RenderPassTimer & timer )
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
@@ -221,7 +224,8 @@ namespace castor3d
 			, *m_vertexBuffer
 			, *declaration
 			, sceneUbo
-			, &m_modelMatrixUbo );
+			, &m_modelMatrixUbo
+			, timer );
 	}
 
 	void MeshLightPass::cleanup()
