@@ -108,7 +108,7 @@ namespace castor3d
 					, writer.cast< Int >( data5.z() ) );
 				auto translucency = writer.declLocale( cuT( "translucency" )
 					, data4.w() );
-				auto material = materials->getBaseMaterial( materialId );
+				auto material = materials->getBaseMaterial( materialId - 1u );
 
 				IF( writer, material->m_subsurfaceScatteringEnabled() == 0_i )
 				{
@@ -227,7 +227,7 @@ namespace castor3d
 					, writer.cast< Int >( data5.z() ) );
 				auto translucency = writer.declLocale( cuT( "translucency" )
 					, data4.w() );
-				auto material = materials->getBaseMaterial( materialId );
+				auto material = materials->getBaseMaterial( materialId - 1u );
 
 #if !C3D_DEBUG_SSS_TRANSMITTANCE
 				IF( writer, material->m_subsurfaceScatteringEnabled() == 0_i )

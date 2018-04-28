@@ -420,7 +420,7 @@ namespace castor3d
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto material = materials->getBaseMaterial( vtx_material );
+			auto material = materials->getBaseMaterial( vtx_material - 1u );
 			auto alpha = writer.declLocale( cuT( "alpha" )
 				, material->m_opacity() );
 			auto alphaRef = writer.declLocale( cuT( "alphaRef" )
