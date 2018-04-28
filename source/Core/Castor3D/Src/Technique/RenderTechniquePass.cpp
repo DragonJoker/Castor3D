@@ -289,15 +289,15 @@ namespace castor3d
 		, renderer::VertexLayoutCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
-		auto it = m_frontPipelines.find( flags );
-
-		if ( it == m_frontPipelines.end() )
+		auto & pipelines = doGetFrontPipelines();
+	
+		if ( pipelines.find( flags ) == pipelines.end() )
 		{
 			renderer::DepthStencilState dsState;
 			dsState.depthWriteEnable = !m_opaque;
 			renderer::RasterisationState rsState;
 			rsState.cullMode = renderer::CullModeFlag::eFront;
-			auto & pipeline = *m_frontPipelines.emplace( flags
+			auto & pipeline = *pipelines.emplace( flags
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
 					, std::move( dsState )
 					, std::move( rsState )
@@ -337,14 +337,14 @@ namespace castor3d
 		, renderer::VertexLayoutCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
-		auto it = m_backPipelines.find( flags );
-
-		if ( it == m_backPipelines.end() )
+		auto & pipelines = doGetBackPipelines();
+	
+		if ( pipelines.find( flags ) == pipelines.end() )
 		{
 			renderer::DepthStencilState dsState;
 			dsState.depthWriteEnable = !m_opaque;
 			renderer::RasterisationState rsState;
-			auto & pipeline = *m_backPipelines.emplace( flags
+			auto & pipeline = *pipelines.emplace( flags
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
 					, std::move( dsState )
 					, std::move( rsState )

@@ -195,13 +195,15 @@ namespace castor3d
 		, renderer::VertexLayoutCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
-		if ( m_backPipelines.find( flags ) == m_backPipelines.end() )
+		auto & pipelines = doGetBackPipelines();
+
+		if ( pipelines.find( flags ) == pipelines.end() )
 		{
 			renderer::RasterisationState rsState;
 			rsState.cullMode = renderer::CullModeFlag::eNone;
 			renderer::DepthStencilState dsState;
 			auto bdState = renderer::ColourBlendState::createDefault();
-			auto & pipeline = *m_backPipelines.emplace( flags
+			auto & pipeline = *pipelines.emplace( flags
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
 					, std::move( dsState )
 					, std::move( rsState )

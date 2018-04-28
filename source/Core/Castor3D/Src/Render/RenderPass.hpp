@@ -1223,6 +1223,42 @@ namespace castor3d
 		void doUpdateUbos( Camera const & camera
 			, Point2r const & jitter );
 		/**
+		*\~english
+		*\return
+		*	The front culled pipelines list.
+		*\~french
+		*\return
+		*	La liste des pipelines front culled.
+		*/
+		C3D_API std::map< PipelineFlags, RenderPipelineUPtr > & doGetFrontPipelines();
+		/**
+		*\~english
+		*\return
+		*	The back culled pipelines list.
+		*\~french
+		*\return
+		*	La liste des pipelines back culled.
+		*/
+		C3D_API std::map< PipelineFlags, RenderPipelineUPtr > & doGetBackPipelines();
+		/**
+		*\~english
+		*\return
+		*	The front culled pipelines list.
+		*\~french
+		*\return
+		*	La liste des pipelines front culled.
+		*/
+		C3D_API std::map< PipelineFlags, RenderPipelineUPtr > const & doGetFrontPipelines()const;
+		/**
+		*\~english
+		*\return
+		*	The back culled pipelines list.
+		*\~french
+		*\return
+		*	La liste des pipelines back culled.
+		*/
+		C3D_API std::map< PipelineFlags, RenderPipelineUPtr > const & doGetBackPipelines()const;
+		/**
 		 *\~english
 		 *\brief		Creates the common UBO descriptor layout bindings.
 		 *\param[in]	flags	The pipeline flags.
@@ -1520,13 +1556,15 @@ namespace castor3d
 		castor::String m_category;
 		RenderQueue m_renderQueue;
 		bool m_opaque{ false };
-		std::map< PipelineFlags, RenderPipelineUPtr > m_frontPipelines;
-		std::map< PipelineFlags, RenderPipelineUPtr > m_backPipelines;
 		bool m_oit{ false };
 		SceneUbo m_sceneUbo;
 		MatrixUbo m_matrixUbo;
 		renderer::RenderPassPtr m_renderPass;
 		RenderPassTimerSPtr m_timer;
+
+	private:
+		std::map< PipelineFlags, RenderPipelineUPtr > m_frontPipelines;
+		std::map< PipelineFlags, RenderPipelineUPtr > m_backPipelines;
 	};
 }
 

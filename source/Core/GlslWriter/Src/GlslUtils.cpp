@@ -117,10 +117,20 @@ namespace glsl
 				, Float const & nearPlane
 				, Float const & farPlane )
 			{
-				auto z = m_writer.declLocale( cuT( "z" )
-					, depth );
-				z *= m_writer.paren( farPlane - nearPlane );
-				m_writer.returnStmt( 2.0 * nearPlane / m_writer.paren( farPlane + nearPlane - z ) );
+				if ( m_writer.isZeroToOneDepth() )
+				{
+					auto z = m_writer.declLocale( cuT( "z" )
+						, depth );
+					z *= m_writer.paren( farPlane - nearPlane );
+					m_writer.returnStmt( 2.0 * nearPlane / m_writer.paren( farPlane + nearPlane - z ) );
+				}
+				else
+				{
+					auto z = m_writer.declLocale( cuT( "z" )
+						, depth * 2.0_f - 1.0_f );
+					z *= m_writer.paren( farPlane - nearPlane );
+					m_writer.returnStmt( 2.0 * nearPlane / m_writer.paren( farPlane + nearPlane - z ) );
+				}
 			}
 			, InFloat{ &m_writer, cuT( "depth" ) }
 			, InFloat{ &m_writer, cuT( "nearPlane" ) }
@@ -182,7 +192,7 @@ namespace glsl
 
 	void Utils::declareComputeMetallicIBL()
 	{
-		m_computeMetallicIBL = m_writer.implementFunction< Vec3 >( cuT( "ComputeIBL" )
+		m_computeMetallicIBL = m_writer.implementFunction< Vec3 >( cuT( "computeMetallicIBL" )
 			, [&]( Vec3 const & normal
 				, Vec3 const & position
 				, Vec3 const & albedo
@@ -242,7 +252,7 @@ namespace glsl
 
 	void Utils::declareComputeSpecularIBL()
 	{
-		m_computeSpecularIBL = m_writer.implementFunction< Vec3 >( cuT( "ComputeIBL" )
+		m_computeSpecularIBL = m_writer.implementFunction< Vec3 >( cuT( "computeSpecularIBL" )
 			, [&]( Vec3 const & normal
 				, Vec3 const & position
 				, Vec3 const & diffuse

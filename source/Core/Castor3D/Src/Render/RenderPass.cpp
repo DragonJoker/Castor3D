@@ -436,10 +436,11 @@ namespace castor3d
 			alphaBlendMode = BlendMode::eNoBlend;
 		}
 
-		auto it = m_frontPipelines.find( { colourBlendMode, alphaBlendMode, passFlags, textureFlags, programFlags, sceneFlags } );
+		auto & pipelines = doGetFrontPipelines();
+		auto it = pipelines.find( { colourBlendMode, alphaBlendMode, passFlags, textureFlags, programFlags, sceneFlags } );
 		RenderPipeline * result{ nullptr };
 
-		if ( it != m_frontPipelines.end() )
+		if ( it != pipelines.end() )
 		{
 			result = it->second.get();
 		}
@@ -460,10 +461,11 @@ namespace castor3d
 			alphaBlendMode = BlendMode::eNoBlend;
 		}
 
-		auto it = m_backPipelines.find( { colourBlendMode, alphaBlendMode, passFlags, textureFlags, programFlags, sceneFlags } );
+		auto & pipelines = doGetBackPipelines();
+		auto it = pipelines.find( { colourBlendMode, alphaBlendMode, passFlags, textureFlags, programFlags, sceneFlags } );
 		RenderPipeline * result{ nullptr };
 
-		if ( it != m_backPipelines.end() )
+		if ( it != pipelines.end() )
 		{
 			result = it->second.get();
 		}
@@ -1468,6 +1470,34 @@ namespace castor3d
 		m_matrixUbo.update( camera.getView()
 			, camera.getViewport().getProjection()
 			, jitterProjSpace );
+	}
+
+	std::map< PipelineFlags, RenderPipelineUPtr > & RenderPass::doGetFrontPipelines()
+	{
+		return getEngine()->isTopDown()
+			? m_frontPipelines
+			: m_backPipelines;
+	}
+
+	std::map< PipelineFlags, RenderPipelineUPtr > & RenderPass::doGetBackPipelines()
+	{
+		return getEngine()->isTopDown()
+			? m_backPipelines
+			: m_frontPipelines;
+	}
+
+	std::map< PipelineFlags, RenderPipelineUPtr > const & RenderPass::doGetFrontPipelines()const
+	{
+		return getEngine()->isTopDown()
+			? m_frontPipelines
+			: m_backPipelines;
+	}
+
+	std::map< PipelineFlags, RenderPipelineUPtr > const & RenderPass::doGetBackPipelines()const
+	{
+		return getEngine()->isTopDown()
+			? m_backPipelines
+			: m_frontPipelines;
 	}
 
 	renderer::DescriptorSetLayoutBindingArray RenderPass::doCreateUboBindings( PipelineFlags const & flags )const

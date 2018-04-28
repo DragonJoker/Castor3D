@@ -957,13 +957,11 @@ namespace castor3d
 		, renderer::VertexLayoutCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
-		auto it = m_frontPipelines.find( flags );
+		auto & pipelines = doGetFrontPipelines();
 
-		if ( it == m_frontPipelines.end() )
+		if ( pipelines.find( flags ) == pipelines.end() )
 		{
-			renderer::RasterisationState rsState;
-			rsState.cullMode = renderer::CullModeFlag::eFront;
-			auto & pipeline = *m_frontPipelines.emplace( flags
+			auto & pipeline = *pipelines.emplace( flags
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
 					, renderer::DepthStencilState{ 0u, true, true }
 					, renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eFront }
@@ -1003,11 +1001,11 @@ namespace castor3d
 		, renderer::VertexLayoutCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
-		auto it = m_backPipelines.find( flags );
+		auto & pipelines = doGetBackPipelines();
 
-		if ( it == m_backPipelines.end() )
+		if ( pipelines.find( flags ) == pipelines.end() )
 		{
-			auto & pipeline = *m_backPipelines.emplace( flags
+			auto & pipeline = *pipelines.emplace( flags
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
 					, renderer::DepthStencilState{ 0u, true, true }
 					, renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eBack }
