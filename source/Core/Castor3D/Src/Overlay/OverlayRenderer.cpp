@@ -346,6 +346,7 @@ namespace castor3d
 		if ( !m_commandBuffer )
 		{
 			m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+			m_finished = device.createSemaphore();
 			m_fence = device.createFence( renderer::FenceCreateFlag::eSignaled );
 		}
 
@@ -466,16 +467,17 @@ namespace castor3d
 		m_sizeChanged = false;
 	}
 
-	void OverlayRenderer::render(  )
+	void OverlayRenderer::render()
 	{
 		m_fence->reset();
-		getRenderSystem()->getCurrentDevice()->getGraphicsQueue().submit( { *m_commandBuffer }
+		auto & queue = getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
+		queue.submit( { *m_commandBuffer }
 			, { *m_toWait }
 			, { renderer::PipelineStageFlag::eColourAttachmentOutput }
-			, {}
+			, { *m_finished }
 			, m_fence.get() );
 		m_fence->wait( renderer::FenceTimeout );
-		getRenderSystem()->getCurrentDevice()->waitIdle();
+		queue.waitIdle();
 	}
 
 	OverlayRenderer::OverlayRenderNode & OverlayRenderer::doGetPanelNode( Pass const & pass )
@@ -816,7 +818,7 @@ namespace castor3d
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto material = materials->getBaseMaterial( c3d_materialIndex );
+				auto material = materials->getBaseMaterial( c3d_materialIndex - 1u );
 				auto diffuse = writer.declLocale( cuT( "diffuse" )
 					, material->m_diffuse() );
 				auto alpha = writer.declLocale( cuT( "alpha" )

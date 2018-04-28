@@ -797,6 +797,7 @@ namespace castor3d
 
 			m_overlayRenderer->endPrepare( *m_overlaysTimer );
 			m_overlayRenderer->render();
+			result = &m_overlayRenderer->getSemaphore();
 			m_overlaysTimer->step();
 		}
 		m_overlaysTimer->stop();
@@ -815,7 +816,7 @@ namespace castor3d
 			, m_fence.get() );
 		m_fence->wait( renderer::FenceTimeout );
 		result = m_flipFinished.get();
-		getEngine()->getRenderSystem()->getCurrentDevice()->waitIdle();
+		queue.waitIdle();
 		return result;
 	}
 }

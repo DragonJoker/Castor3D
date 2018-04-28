@@ -219,10 +219,10 @@ namespace castor3d
 
 				if ( resources )
 				{
-					auto res = m_device->getGraphicsQueue().submit( *m_commandBuffers[resources->getBackBuffer()]
-						, resources->getImageAvailableSemaphore()
-						, renderer::PipelineStageFlag::eColourAttachmentOutput
-						, resources->getRenderingFinishedSemaphore()
+					auto res = m_device->getGraphicsQueue().submit( { *m_commandBuffers[resources->getBackBuffer()] }
+						, { resources->getImageAvailableSemaphore(), target->getSemaphore() }
+						, { renderer::PipelineStageFlag::eColourAttachmentOutput, renderer::PipelineStageFlag::eColourAttachmentOutput }
+						, { resources->getRenderingFinishedSemaphore() }
 						, &resources->getFence() );
 					m_swapChain->present( *resources );
 				}

@@ -386,7 +386,7 @@ namespace castor3d
 		TextureUnit m_velocityTexture;
 		OverlayRendererSPtr m_overlayRenderer;
 		renderer::SemaphorePtr m_signalReady;
-		renderer::Semaphore const * m_signalFinished;
+		renderer::Semaphore const * m_signalFinished{ nullptr };
 		renderer::FencePtr m_fence;
 		castor::PreciseTimer m_timer;
 	};

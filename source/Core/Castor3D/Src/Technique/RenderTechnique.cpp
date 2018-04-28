@@ -262,6 +262,7 @@ namespace castor3d
 		// Update part
 		doUpdateParticles( info );
 		auto * semaphore = &waitSemaphore;
+		semaphore = doClear( *semaphore );
 		semaphore = doRenderEnvironmentMaps( *semaphore );
 		semaphore = doRenderShadowMaps( *semaphore );
 
@@ -287,7 +288,6 @@ namespace castor3d
 		getEngine()->getRenderSystem()->getCurrentDevice()->waitIdle();
 
 		// Render part
-		semaphore = doClear( *semaphore );
 		semaphore = doRenderOpaque( jitter, info, *semaphore );
 		semaphore = doRenderBackground( *semaphore );
 		semaphore = doRenderTransparent( jitter, info, *semaphore );

@@ -144,6 +144,11 @@ namespace castor3d
 		{
 			return Preparer{ *this };
 		}
+
+		renderer::Semaphore const & getSemaphore()
+		{
+			return *m_finished;
+		}
 		/**@}*/
 
 	private:
@@ -310,6 +315,7 @@ namespace castor3d
 		bool m_sizeChanged{ true };
 		MatrixUbo m_matrixUbo;
 		renderer::Semaphore const * m_toWait;
+		renderer::SemaphorePtr m_finished;
 		renderer::FencePtr m_fence;
 	};
 }
