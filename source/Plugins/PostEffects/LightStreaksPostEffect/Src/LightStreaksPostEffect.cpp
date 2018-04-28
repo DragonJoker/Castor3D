@@ -46,7 +46,7 @@ namespace light_streaks
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = writer.paren( position + 1.0 ) / 2.0;
-				gl_Position = vec4( position.xy(), 0.0, 1.0 );
+				gl_Position = writer.rendererScalePosition( vec4( position.xy(), 0.0, 1.0 ) );
 			} );
 			return writer.finalise();
 		}
