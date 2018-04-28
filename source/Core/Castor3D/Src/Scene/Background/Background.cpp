@@ -55,6 +55,11 @@ namespace castor3d
 			sampler->setWrapR( renderer::WrapMode::eClampToEdge );
 			sampler->setMinLod( 0.0f );
 			sampler->setMaxLod( float( m_texture->getMipmapCount() - 1u ) );
+
+			if ( m_texture->getMipmapCount() > 1u )
+			{
+				sampler->setMipFilter( renderer::MipmapMode::eLinear );
+			}
 		}
 
 		sampler->initialise();
