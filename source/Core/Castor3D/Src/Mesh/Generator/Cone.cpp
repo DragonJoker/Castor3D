@@ -127,6 +127,8 @@ namespace castor3d
 			submeshSide[submeshSide.getPointsCount() - 1].nml = normal0Base;
 			submeshSide[submeshSide.getPointsCount() - 2].tan = tangent0Top;
 			submeshSide[submeshSide.getPointsCount() - 1].tan = tangent0Base;
+
+			mesh.computeContainers();
 		}
 	}
 }

@@ -249,154 +249,115 @@ namespace castor3d
 		C3D_API void setPixelFormat( renderer::Format value );
 		/**
 		 *\~english
-		 *\return		The window index.
+		 *\brief		Adds a scene rendered through this technique.
+		 *\param[in]	scene	The scene.
+		 *\param[in]	camera	The camera through which the scene is viewed.
 		 *\~french
-		 *\return		L'index de la fenêtre.
+		 *\brief		Ajoute une scène dessinée via cette technique.
+		 *\param[in]	scene	La scène.
+		 *\param[in]	camera	La caméra à travers laquelle la scène est vue.
 		 */
+		C3D_API void addPickingScene( Scene & scene );
+		/**
+		 *\~english
+		 *\brief		Picks a geometry at given mouse position.
+		 *\param[in]	position	The position in the pass.
+		 *\return		PickNodeType::eNone if nothing was picked.
+		 *\~french
+		 *\brief		Sélectionne la géométrie à la position de souris donnée.
+		 *\param[in]	position	La position dans la passe.
+		 *\return		PickNodeType si rien n'a été pické.
+		 */
+		C3D_API PickNodeType pick( castor::Position const & position );
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline uint32_t getIndex()const
 		{
 			return m_index;
 		}
-		/**
-		 *\~english
-		 *\return		The intialisation status.
-		 *\~french
-		 *\return		Le statut de l'initialisation.
-		 */
+
 		inline bool isInitialised()const
 		{
 			return m_initialised;
 		}
-		/**
-		 *\~english
-		 *\return		The FrameListener.
-		 *\~french
-		 *\return		Le FrameListener.
-		 */
+
 		inline FrameListenerSPtr getListener()const
 		{
 			return m_listener.lock();
 		}
-		/**
-		 *\~english
-		 *\return		The context.
-		 *\~french
-		 *\return		Le contexte.
-		 */
+
 		inline renderer::Device const & getDevice()const
 		{
 			REQUIRE( m_device );
 			return *m_device;
 		}
-		/**
-		 *\~english
-		 *\return		The render target.
-		 *\~french
-		 *\return		La cible du rendu.
-		 */
+
 		inline RenderTargetSPtr getRenderTarget()const
 		{
 			return m_renderTarget.lock();
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the render target.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit la cible du rendu.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setRenderTarget( RenderTargetSPtr value )
-		{
-			m_renderTarget = value;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the Context.
-		 *\param[in]	value	The new value
-		 *\~french
-		 *\brief		Définit le Context.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setDevice( renderer::DevicePtr value )
-		{
-			m_device = std::move( value );
-		}
-		/**
-		 *\~english
-		 *\brief		Tells the context is using vsync.
-		 *\~french
-		 *\brief		Dit si le contexte utilise la vsync.
-		 */
-		inline bool getVSync()const
+
+		inline bool isVSyncEnabled()const
 		{
 			return m_vsync;
 		}
-		/**
-		 *\~english
-		 *\brief		Defines the vsync usage.
-		 *\param[in]	value	The usage.
-		 *\~french
-		 *\brief		Définit l'utilisation de la vsync.
-		 *\param[in]	value	L'utilisation.
-		 */
-		inline void setVSync( bool value )
-		{
-			m_vsync = value;
-		}
-		/**
-		 *\~english
-		 *\brief		Tells the rendering is fullscreen.
-		 *\~french
-		 *\brief		Dit si le rendu est en plein écran.
-		 */
+
 		inline bool isFullscreen()const
 		{
 			return m_fullscreen;
 		}
-		/**
-		 *\~english
-		 *\brief		Defines the fullscreen rendering status.
-		 *\param[in]	value	The status.
-		 *\~french
-		 *\brief		Définit le statut du rendu plein écran.
-		 *\param[in]	value	Le statut.
-		 */
-		inline void setFullscreen( bool value )
-		{
-			m_fullscreen = value;
-		}
-		/**
-		 *\~english
-		 *\brief		Tells the next frame must be saved.
-		 *\~french
-		 *\brief		Dit que la prochaine image doit être enregistrée.
-		 */
-		inline void saveFrame()
-		{
-			m_toSave = true;
-		}
-		/**
-		 *\~english
-		 *\return		The saved image.
-		 *\~french
-		 *\return		L'image enregistrée.
-		 */
+
 		inline castor::PxBufferBaseSPtr getSavedFrame()const
 		{
 			return m_saveBuffer;
 		}
+
+		C3D_API GeometrySPtr getPickedGeometry()const;
+		C3D_API BillboardBaseSPtr getPickedBillboard()const;
+		C3D_API SubmeshSPtr getPickedSubmesh()const;
+		C3D_API uint32_t getPickedFace()const;
+		/**@}*/
 		/**
-		 *\~english
-		 *\return		The picking pass.
-		 *\~french
-		 *\return		La passe de picking.
-		 */
-		inline PickingPass & getPickingPass()
+		*\~english
+		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		*/
+		/**@{*/
+		inline void setRenderTarget( RenderTargetSPtr value )
 		{
-			REQUIRE( m_pickingPass );
-			return *m_pickingPass;
+			m_renderTarget = value;
 		}
+
+		inline void setDevice( renderer::DevicePtr value )
+		{
+			m_device = std::move( value );
+		}
+
+		inline void enableVSync( bool value )
+		{
+			m_vsync = value;
+		}
+
+		inline void setFullscreen( bool value )
+		{
+			m_fullscreen = value;
+		}
+
+		inline void enableSaveFrame()
+		{
+			m_toSave = true;
+		}
+		/**@}*/
 
 	private:
 		void doCreateProgram();

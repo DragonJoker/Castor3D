@@ -129,11 +129,11 @@ namespace castor3d
 	{
 		renderer::DescriptorSetLayoutBindingArray uboBindings;
 
-		if ( !checkFlag( flags.m_programFlags, ProgramFlag::eDepthPass )
-			&& !checkFlag( flags.m_programFlags, ProgramFlag::ePicking )
-			&& !checkFlag( flags.m_programFlags, ProgramFlag::eShadowMapDirectional )
-			&& !checkFlag( flags.m_programFlags, ProgramFlag::eShadowMapPoint )
-			&& !checkFlag( flags.m_programFlags, ProgramFlag::eShadowMapSpot ) )
+		if ( !checkFlag( flags.programFlags, ProgramFlag::eDepthPass )
+			&& !checkFlag( flags.programFlags, ProgramFlag::ePicking )
+			&& !checkFlag( flags.programFlags, ProgramFlag::eShadowMapDirectional )
+			&& !checkFlag( flags.programFlags, ProgramFlag::eShadowMapPoint )
+			&& !checkFlag( flags.programFlags, ProgramFlag::eShadowMapSpot ) )
 		{
 			uboBindings.emplace_back( getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding() );
 		}
@@ -141,19 +141,19 @@ namespace castor3d
 		uboBindings.emplace_back( MatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
 		uboBindings.emplace_back( SceneUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
 
-		if ( !checkFlag( flags.m_programFlags, ProgramFlag::eInstantiation ) )
+		if ( !checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
 		{
 			uboBindings.emplace_back( ModelMatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
 		}
 
 		uboBindings.emplace_back( ModelUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
 
-		if ( checkFlag( flags.m_programFlags, ProgramFlag::eSkinning ) )
+		if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
 		{
-			uboBindings.push_back( SkinningUbo::createLayoutBinding( SkinningUbo::BindingPoint, flags.m_programFlags ) );
+			uboBindings.push_back( SkinningUbo::createLayoutBinding( SkinningUbo::BindingPoint, flags.programFlags ) );
 		}
 
-		if ( checkFlag( flags.m_programFlags, ProgramFlag::eMorphing ) )
+		if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
 		{
 			uboBindings.emplace_back( MorphingUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
 		}
@@ -983,7 +983,7 @@ namespace castor3d
 				layouts.emplace_back( std::move( uboLayout ) );
 				layouts.emplace_back( std::move( texLayout ) );
 				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
-				pipeline.initialise( getRenderPass(), renderer::PrimitiveTopology::eTriangleList );
+				pipeline.initialise( getRenderPass() );
 			};
 
 			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
@@ -1027,7 +1027,7 @@ namespace castor3d
 				layouts.emplace_back( std::move( uboLayout ) );
 				layouts.emplace_back( std::move( texLayout ) );
 				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
-				pipeline.initialise( getRenderPass(), renderer::PrimitiveTopology::eTriangleList );
+				pipeline.initialise( getRenderPass() );
 			};
 
 			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )

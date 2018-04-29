@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Shader/Ubos/BillboardUbo.hpp"
 #include "Shader/Ubos/ModelMatrixUbo.hpp"
 #include "Shader/Ubos/ModelUbo.hpp"
+#include "Shader/Ubos/PickingUbo.hpp"
 
 namespace castor3d
 {
@@ -55,6 +56,7 @@ namespace castor3d
 			UniformBufferOffset< ModelUbo::Configuration > modelUbo;
 			UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixUbo;
 			UniformBufferOffset< BillboardUbo::Configuration > billboardUbo;
+			UniformBufferOffset< PickingUbo::Configuration > pickingUbo;
 		};
 		using MyObjectCache = ObjectCacheBase< BillboardList, castor::String >;
 		using MyObjectCacheTraits = typename MyObjectCacheType::MyObjectCacheTraits;
@@ -187,6 +189,7 @@ namespace castor3d
 		UniformBufferPool< ModelUbo::Configuration > m_modelUboPool;
 		UniformBufferPool< ModelMatrixUbo::Configuration > m_modelMatrixUboPool;
 		UniformBufferPool< BillboardUbo::Configuration > m_billboardUboPool;
+		UniformBufferPool< PickingUbo::Configuration > m_pickingUboPool;
 	};
 	using BillboardListCache = ObjectCache< BillboardList, castor::String >;
 	DECLARE_SMART_PTR( BillboardListCache );

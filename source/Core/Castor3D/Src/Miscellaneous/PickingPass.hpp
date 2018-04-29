@@ -11,13 +11,10 @@ See LICENSE file in root folder
 #include <Image/Texture.hpp>
 #include <Pipeline/VertexLayout.hpp>
 
+#define C3D_DebugPicking 0
+
 namespace castor3d
 {
-	struct PickingUboData
-	{
-		uint32_t drawIndex;
-		uint32_t nodeIndex;
-	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
@@ -30,19 +27,6 @@ namespace castor3d
 	class PickingPass
 		: public RenderPass
 	{
-	public:
-		enum class NodeType
-			: uint8_t
-		{
-			eNone,
-			eStatic,
-			eInstantiatedStatic,
-			eSkinning,
-			eInstantiatedSkinning,
-			eMorphing,
-			eBillboard
-		};
-
 	public:
 		/**
 		 *\~english
@@ -76,14 +60,14 @@ namespace castor3d
 		 *\brief		Picks a geometry at given mouse position.
 		 *\param[in]	position	The position in the pass.
 		 *\param[in]	camera		The viewing camera.
-		 *\return		PickingPass::NodeType::eNone if nothing was picked.
+		 *\return		PickingPass::PickNodeType::eNone if nothing was picked.
 		 *\~french
 		 *\brief		Sélectionne la géométrie à la position de souris donnée.
 		 *\param[in]	position	La position dans la passe.
 		 *\param[in]	camera		La caméra regardant la scène.
-		 *\return		PickingPass::NodeType si rien n'a été pické.
+		 *\return		PickingPass::PickNodeType si rien n'a été pické.
 		 */
-		C3D_API NodeType pick( castor::Position const & position
+		C3D_API PickNodeType pick( castor::Position const & position
 			, Camera const & camera );
 		/**
 		*\~english
@@ -122,10 +106,10 @@ namespace castor3d
 
 	private:
 		void doUpdateNodes( SceneCulledRenderNodes & nodes );
-		castor::Point3f doFboPick( castor::Position const & position
+		castor::Point4f doFboPick( castor::Position const & position
 			, Camera const & camera
 			, renderer::CommandBuffer const & commandBuffer );
-		PickingPass::NodeType doPick( castor::Point3f const & pixel
+		PickingPass::PickNodeType doPick( castor::Point4f const & pixel
 			, SceneCulledRenderNodes & nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doRender
@@ -297,8 +281,7 @@ namespace castor3d
 		BillboardBaseWPtr m_billboard;
 		SubmeshWPtr m_submesh;
 		uint32_t m_face{ 0u };
-		renderer::UniformBufferPtr< PickingUboData > m_pickingUbo;
-		castor::PxBufferBaseSPtr m_buffer;
+		std::vector< castor::Point4f > m_buffer;
 	};
 }
 

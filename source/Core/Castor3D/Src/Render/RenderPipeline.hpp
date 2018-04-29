@@ -93,18 +93,13 @@ namespace castor3d
 		*	Initialises the pipeline.
 		*\param[in] renderPass
 		*	The render pass to which this pipeline is bound.
-		*\param[in] topology
-		*	The rendering topology.
 		*\~french
 		*\brief
 		*	Initialise le pipeline.
 		*\param[in] renderPass
 		*	La passe de rendu à laquelle ce pipeline est lié.
-		*\param[in] topology
-		*	La topology de dessin.
 		*/
-		C3D_API void initialise( renderer::RenderPass const & renderPass
-			, renderer::PrimitiveTopology topology );
+		C3D_API void initialise( renderer::RenderPass const & renderPass );
 		/**
 		*\~english
 		*\brief

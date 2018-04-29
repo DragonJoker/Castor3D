@@ -47,10 +47,12 @@ namespace castor3d
 			FrameListener & m_listener;
 		};
 
-		size_t hash( Submesh const & submesh
+		size_t hash( Geometry const & geometry
+			, Submesh const & submesh
 			, Pass const & pass )
 		{
-			size_t result = std::hash< Submesh const * >{}( &submesh );
+			size_t result = std::hash< Geometry const * >{}( &geometry );
+			castor::hashCombine( result, submesh );
 			castor::hashCombine( result, pass );
 			return result;
 		}
@@ -80,6 +82,7 @@ namespace castor3d
 			, std::move( detach ) )
 		, m_modelUboPool{ *engine.getRenderSystem() }
 		, m_modelMatrixUboPool{ *engine.getRenderSystem() }
+		, m_pickingUboPool{ *engine.getRenderSystem() }
 	{
 	}
 
@@ -116,21 +119,29 @@ namespace castor3d
 		}
 	}
 
-	void GeometryCache::uploadUbos()
+	void GeometryCache::uploadUbos()const
 	{
 		m_modelUboPool.upload();
 		m_modelMatrixUboPool.upload();
+	}
+
+	void GeometryCache::uploadPickingUbos()const
+	{
+		m_pickingUboPool.upload();
 	}
 
 	void GeometryCache::cleanupUbos()
 	{
 		m_modelUboPool.cleanup();
 		m_modelMatrixUboPool.cleanup();
+		m_pickingUboPool.cleanup();
 	}
 
-	GeometryCache::PoolsEntry GeometryCache::getUbos( Submesh const & submesh, Pass const & pass )const
+	GeometryCache::PoolsEntry GeometryCache::getUbos( Geometry const & geometry
+		, Submesh const & submesh
+		, Pass const & pass )const
 	{
-		return m_entries.at( hash( submesh, pass ) );
+		return m_entries.at( hash( geometry, submesh, pass ) );
 	}
 
 	void GeometryCache::clear()
@@ -141,6 +152,7 @@ namespace castor3d
 		{
 			m_modelUboPool.putBuffer( entry.second.modelUbo );
 			m_modelMatrixUboPool.putBuffer( entry.second.modelMatrixUbo );
+			m_pickingUboPool.putBuffer( entry.second.pickingUbo );
 		}
 
 		m_entries.clear();
@@ -187,16 +199,19 @@ namespace castor3d
 			pass,
 			m_modelUboPool.getBuffer( renderer::MemoryPropertyFlag::eHostVisible ),
 			m_modelMatrixUboPool.getBuffer( renderer::MemoryPropertyFlag::eHostVisible ),
+			m_pickingUboPool.getBuffer( renderer::MemoryPropertyFlag::eHostVisible ),
 		};
 	}
 
-	void GeometryCache::doRemoveEntry( Submesh const & submesh
+	void GeometryCache::doRemoveEntry( Geometry const & geometry
+		, Submesh const & submesh
 		, Pass const & pass )
 	{
-		auto entry = getUbos( submesh, pass );
-		m_entries.erase( hash( submesh, pass ) );
+		auto entry = getUbos( geometry, submesh, pass );
+		m_entries.erase( hash( geometry, submesh, pass ) );
 		m_modelUboPool.putBuffer( entry.modelUbo );
 		m_modelMatrixUboPool.putBuffer( entry.modelMatrixUbo );
+		m_pickingUboPool.putBuffer( entry.pickingUbo );
 	}
 
 	void GeometryCache::doRegister( Geometry & geometry )
@@ -210,7 +225,7 @@ namespace castor3d
 			{
 				for ( auto & pass : *oldMaterial )
 				{
-					doRemoveEntry( submesh, *pass );
+					doRemoveEntry( geometry, submesh, *pass );
 				}
 			}
 
@@ -218,7 +233,7 @@ namespace castor3d
 			{
 				for ( auto & pass : *newMaterial )
 				{
-					m_entries.emplace( hash( submesh, *pass )
+					m_entries.emplace( hash( geometry, submesh, *pass )
 						, doCreateEntry( geometry, submesh, *pass ) );
 				}
 			}
@@ -228,7 +243,7 @@ namespace castor3d
 		{
 			for ( auto & pass : *geometry.getMaterial( *submesh ) )
 			{
-				m_entries.emplace( hash( *submesh, *pass )
+				m_entries.emplace( hash( geometry, *submesh, *pass )
 					, doCreateEntry( geometry, *submesh, *pass ) );
 			}
 		}
@@ -242,7 +257,7 @@ namespace castor3d
 		{
 			for ( auto & pass : *geometry.getMaterial( *submesh ) )
 			{
-				doRemoveEntry( *submesh, *pass );
+				doRemoveEntry( geometry, *submesh, *pass );
 			}
 		}
 	}

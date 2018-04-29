@@ -53,8 +53,7 @@ namespace castor3d
 	{
 	}
 
-	void RenderPipeline::initialise( renderer::RenderPass const & renderPass
-		, renderer::PrimitiveTopology topology )
+	void RenderPipeline::initialise( renderer::RenderPass const & renderPass )
 	{
 		renderer::VertexLayoutCRefArray vertexLayouts;
 
@@ -78,7 +77,7 @@ namespace castor3d
 			m_program->getStates(),
 			renderPass,
 			renderer::VertexInputState::create( vertexLayouts ),
-			renderer::InputAssemblyState{ topology },
+			renderer::InputAssemblyState{ m_flags.topology },
 			m_rsState,
 			m_msState,
 			m_blState,
@@ -116,6 +115,8 @@ namespace castor3d
 
 	void RenderPipeline::createDescriptorPools( uint32_t maxSets )
 	{
+		m_descriptorPools.clear();
+
 		for ( auto & descriptorLayout : m_descriptorLayouts )
 		{
 			if ( !descriptorLayout->getBindings().empty() )

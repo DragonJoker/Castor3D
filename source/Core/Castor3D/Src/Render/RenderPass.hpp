@@ -27,17 +27,29 @@ namespace castor3d
 {
 	inline bool operator<( PipelineFlags const & lhs, PipelineFlags const & rhs )
 	{
-		return lhs.colourBlendMode < rhs.colourBlendMode
-			   || ( lhs.colourBlendMode == rhs.colourBlendMode
-					&& ( lhs.alphaBlendMode < rhs.alphaBlendMode
-						 || ( lhs.alphaBlendMode == rhs.alphaBlendMode
-							  && ( lhs.m_textureFlags < rhs.m_textureFlags
-								   || ( lhs.m_textureFlags == rhs.m_textureFlags
-										&& ( lhs.m_programFlags < rhs.m_programFlags
-											 || ( lhs.m_programFlags == rhs.m_programFlags
-												  && ( lhs.m_passFlags < rhs.m_passFlags
-													 || ( lhs.m_passFlags == rhs.m_passFlags
-														  && lhs.m_sceneFlags < rhs.m_sceneFlags ) ) ) ) ) ) ) ) );
+		return lhs.topology < rhs.topology
+			||	( lhs.topology == rhs.topology
+				&&	( lhs.colourBlendMode < rhs.colourBlendMode
+					||	( lhs.colourBlendMode == rhs.colourBlendMode
+						&&	( lhs.alphaBlendMode < rhs.alphaBlendMode
+							||	( lhs.alphaBlendMode == rhs.alphaBlendMode
+								&&	( lhs.textureFlags < rhs.textureFlags
+									||	( lhs.textureFlags == rhs.textureFlags
+										&&	( lhs.programFlags < rhs.programFlags
+											||	( lhs.programFlags == rhs.programFlags
+												&&	( lhs.passFlags < rhs.passFlags
+													|| ( lhs.passFlags == rhs.passFlags
+														&& lhs.sceneFlags < rhs.sceneFlags )
+													)
+												)
+											)
+										)
+									)
+								)
+							)
+						)
+					)
+				);
 	}
 	/*!
 	\author		Sylvain DOREMUS
@@ -218,6 +230,7 @@ namespace castor3d
 			, TextureChannels & textureFlags
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags
+			, renderer::PrimitiveTopology topology
 			, bool twoSided
 			, renderer::VertexLayoutCRefArray const & layouts );
 		/**
@@ -248,7 +261,8 @@ namespace castor3d
 			, PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
-			, SceneFlags const & sceneFlags )const;
+			, SceneFlags const & sceneFlags
+			, renderer::PrimitiveTopology topology )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pipeline matching the given flags, for back face culling.
@@ -277,7 +291,8 @@ namespace castor3d
 			, PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
-			, SceneFlags const & sceneFlags )const;
+			, SceneFlags const & sceneFlags
+			, renderer::PrimitiveTopology topology )const;
 		/**
 		 *\~english
 		 *\brief		Creates an animated render node.

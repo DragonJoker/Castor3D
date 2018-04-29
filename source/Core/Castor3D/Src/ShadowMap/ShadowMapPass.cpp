@@ -53,7 +53,7 @@ namespace castor3d
 		auto index = MinBufferIndex;
 		renderer::DescriptorSetLayoutBindingArray textureBindings;
 
-		if ( checkFlag( flags.m_textureFlags, TextureChannel::eOpacity ) )
+		if ( checkFlag( flags.textureFlags, TextureChannel::eOpacity ) )
 		{
 			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
 		}

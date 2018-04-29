@@ -10,6 +10,7 @@ See LICENSE file in root folder
 #include "Buffer/UniformBufferPool.hpp"
 #include "Shader/Ubos/ModelMatrixUbo.hpp"
 #include "Shader/Ubos/ModelUbo.hpp"
+#include "Shader/Ubos/PickingUbo.hpp"
 
 #include <Descriptor/DescriptorSet.hpp>
 
@@ -38,6 +39,7 @@ namespace castor3d
 			, PassRenderNode && passNode
 			, UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixBuffer
 			, UniformBufferOffset< ModelUbo::Configuration > modelBuffer
+			, UniformBufferOffset< PickingUbo::Configuration > pickingBuffer
 			, GeometryBuffers const & buffers
 			, SceneNode & sceneNode
 			, DataType & data
@@ -55,6 +57,9 @@ namespace castor3d
 		//!\~english	The model UBO.
 		//!\~french		L'UBO de modèle.
 		UniformBufferOffset< ModelUbo::Configuration > modelUbo;
+		//!\~english	The model UBO.
+		//!\~french		L'UBO de modèle.
+		UniformBufferOffset< PickingUbo::Configuration > pickingUbo;
 		//!\~english	The geometry buffers.
 		//!\~french		Les tampons de la géométrie.
 		GeometryBuffers const & buffers;

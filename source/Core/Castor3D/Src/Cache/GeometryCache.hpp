@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "Cache/ObjectCache.hpp"
 #include "Shader/Ubos/ModelMatrixUbo.hpp"
 #include "Shader/Ubos/ModelUbo.hpp"
+#include "Shader/Ubos/PickingUbo.hpp"
 
 namespace castor3d
 {
@@ -54,6 +55,7 @@ namespace castor3d
 			Pass const & pass;
 			UniformBufferOffset< ModelUbo::Configuration > modelUbo;
 			UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixUbo;
+			UniformBufferOffset< PickingUbo::Configuration > pickingUbo;
 		};
 		using MyObjectCache = ObjectCacheBase< Geometry, castor::String >;
 		using MyObjectCacheTraits = typename MyObjectCacheType::MyObjectCacheTraits;
@@ -133,7 +135,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour les pools d'UBO en VRAM.
 		 */
-		C3D_API void uploadUbos();
+		C3D_API void uploadUbos()const;
+		/**
+		 *\~english
+		 *\brief		Updates the picking UBO pools in VRAM.
+		 *\~french
+		 *\brief		Met à jour les pools d'UBO de picking en VRAM.
+		 */
+		C3D_API void uploadPickingUbos()const;
 		/**
 		 *\~english
 		 *\brief		Cleans up the UBO pools.
@@ -143,11 +152,13 @@ namespace castor3d
 		C3D_API void cleanupUbos();
 		/**
 		 *\~english
-		 *\brief		Cleans up the UBO pools.
+		 *\return		The UBOs for given geometry, submesh and pass.
 		 *\~french
-		 *\brief		Nettoie les pools d'UBO.
+		 *\brief		Les UBOs pour la géométrie, le sous-maillage et la passe donnés.
 		 */
-		C3D_API PoolsEntry getUbos( Submesh const & submesh, Pass const & pass )const;
+		C3D_API PoolsEntry getUbos( Geometry const & geometry
+			, Submesh const & submesh
+			, Pass const & pass )const;
 		/**
 		 *\~english
 		 *\brief		Flushes the collection.
@@ -195,7 +206,8 @@ namespace castor3d
 		PoolsEntry doCreateEntry( Geometry const & geometry
 			, Submesh const & submesh
 			, Pass const & pass );
-		void doRemoveEntry( Submesh const & submesh
+		void doRemoveEntry( Geometry const & geometry
+			, Submesh const & submesh
 			, Pass const & pass );
 		void doRegister( Geometry & geometry );
 		void doUnregister( Geometry & geometry );
@@ -207,6 +219,7 @@ namespace castor3d
 		std::map< Geometry *, OnSubmeshMaterialChangedConnection > m_connections;
 		UniformBufferPool< ModelUbo::Configuration > m_modelUboPool;
 		UniformBufferPool< ModelMatrixUbo::Configuration > m_modelMatrixUboPool;
+		UniformBufferPool< PickingUbo::Configuration > m_pickingUboPool;
 	};
 	using GeometryCache = ObjectCache< Geometry, castor::String >;
 	DECLARE_SMART_PTR( GeometryCache );

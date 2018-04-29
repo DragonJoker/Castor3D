@@ -283,6 +283,8 @@ namespace castor3d
 		m_renderPass.reset();
 		doCleanup();
 		m_timer.reset();
+		m_backPipelines.clear();
+		m_frontPipelines.clear();
 	}
 
 	void RenderPass::update( RenderQueueArray & queues )
@@ -357,6 +359,7 @@ namespace castor3d
 		, TextureChannels & textureFlags
 		, ProgramFlags & programFlags
 		, SceneFlags & sceneFlags
+		, renderer::PrimitiveTopology topology
 		, bool twoSided
 		, renderer::VertexLayoutCRefArray const & layouts )
 	{
@@ -394,7 +397,8 @@ namespace castor3d
 					, passFlags
 					, textureFlags
 					, programFlags
-					, sceneFlags };
+					, sceneFlags
+					, topology };
 				doPrepareFrontPipeline( frontProgram, layouts, flags );
 				doPrepareBackPipeline( backProgram, layouts, flags );
 			}
@@ -405,7 +409,8 @@ namespace castor3d
 					, passFlags
 					, textureFlags
 					, programFlags
-					, sceneFlags };
+					, sceneFlags
+					, topology };
 
 				if ( twoSided || checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
@@ -429,7 +434,8 @@ namespace castor3d
 		, PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
-		, SceneFlags const & sceneFlags )const
+		, SceneFlags const & sceneFlags
+		, renderer::PrimitiveTopology topology )const
 	{
 		if ( m_opaque )
 		{
@@ -437,7 +443,7 @@ namespace castor3d
 		}
 
 		auto & pipelines = doGetFrontPipelines();
-		auto it = pipelines.find( { colourBlendMode, alphaBlendMode, passFlags, textureFlags, programFlags, sceneFlags } );
+		auto it = pipelines.find( { colourBlendMode, alphaBlendMode, passFlags, textureFlags, programFlags, sceneFlags, topology } );
 		RenderPipeline * result{ nullptr };
 
 		if ( it != pipelines.end() )
@@ -454,7 +460,8 @@ namespace castor3d
 		, PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
-		, SceneFlags const & sceneFlags )const
+		, SceneFlags const & sceneFlags
+		, renderer::PrimitiveTopology topology )const
 	{
 		if ( m_opaque )
 		{
@@ -462,7 +469,7 @@ namespace castor3d
 		}
 
 		auto & pipelines = doGetBackPipelines();
-		auto it = pipelines.find( { colourBlendMode, alphaBlendMode, passFlags, textureFlags, programFlags, sceneFlags } );
+		auto it = pipelines.find( { colourBlendMode, alphaBlendMode, passFlags, textureFlags, programFlags, sceneFlags, topology } );
 		RenderPipeline * result{ nullptr };
 
 		if ( it != pipelines.end() )
@@ -481,7 +488,7 @@ namespace castor3d
 	{
 		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this() );
 		auto & scene = *primitive.getScene();
-		auto & geometryEntry = scene.getGeometryCache().getUbos( submesh, pass );
+		auto & geometryEntry = scene.getGeometryCache().getUbos( primitive, submesh, pass );
 		auto & animationEntry = scene.getAnimatedObjectGroupCache().getUbos( skeleton );
 
 		return SkinningRenderNode
@@ -490,6 +497,7 @@ namespace castor3d
 			doCreatePassRenderNode( pass, pipeline ),
 			geometryEntry.modelMatrixUbo,
 			geometryEntry.modelUbo,
+			geometryEntry.pickingUbo,
 			buffers,
 			*primitive.getParent(),
 			submesh,
@@ -507,8 +515,7 @@ namespace castor3d
 	{
 		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this() );
 		auto & scene = *primitive.getScene();
-		auto & cache = scene.getGeometryCache();
-		auto & geometryEntry = scene.getGeometryCache().getUbos( submesh, pass );
+		auto & geometryEntry = scene.getGeometryCache().getUbos( primitive, submesh, pass );
 		auto & animationEntry = scene.getAnimatedObjectGroupCache().getUbos( mesh );
 
 		return MorphingRenderNode
@@ -517,6 +524,7 @@ namespace castor3d
 			doCreatePassRenderNode( pass, pipeline ),
 			geometryEntry.modelMatrixUbo,
 			geometryEntry.modelUbo,
+			geometryEntry.pickingUbo,
 			buffers,
 			*primitive.getParent(),
 			submesh,
@@ -533,8 +541,7 @@ namespace castor3d
 	{
 		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this() );
 		auto & scene = *primitive.getScene();
-		auto & cache = scene.getGeometryCache();
-		auto entry = cache.getUbos( submesh, pass );
+		auto entry = scene.getGeometryCache().getUbos( primitive, submesh, pass );
 
 		return StaticRenderNode
 		{
@@ -542,6 +549,7 @@ namespace castor3d
 			doCreatePassRenderNode( pass, pipeline ),
 			entry.modelMatrixUbo,
 			entry.modelUbo,
+			entry.pickingUbo,
 			buffers,
 			*primitive.getParent(),
 			submesh,
@@ -555,8 +563,7 @@ namespace castor3d
 	{
 		auto & buffers = billboard.getGeometryBuffers();
 		auto & scene = billboard.getParentScene();
-		auto & cache = scene.getBillboardListCache();
-		auto entry = cache.getUbos( billboard, pass );
+		auto entry = scene.getBillboardListCache().getUbos( billboard, pass );
 
 		return BillboardRenderNode
 		{
@@ -564,6 +571,7 @@ namespace castor3d
 			doCreatePassRenderNode( pass, pipeline ),
 			entry.modelMatrixUbo,
 			entry.modelUbo,
+			entry.pickingUbo,
 			buffers,
 			*billboard.getNode(),
 			billboard,
@@ -596,7 +604,7 @@ namespace castor3d
 		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.uboDescriptorSet
 			, layout.getBinding( index++ ) );
 
-		if ( checkFlag( node.pipeline.getFlags().m_programFlags, ProgramFlag::eLighting ) )
+		if ( checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eLighting ) )
 		{
 			node.uboDescriptorSet->createBinding( layout.getBinding( LightBufferIndex )
 				, node.sceneNode.getScene()->getLightCache().getBuffer()
@@ -608,7 +616,7 @@ namespace castor3d
 		node.uboDescriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
 			, m_sceneUbo.getUbo() );
 
-		if ( !checkFlag( node.pipeline.getFlags().m_programFlags, ProgramFlag::eInstantiation ) )
+		if ( !checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
 		{
 			node.uboDescriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
 				, node.modelMatrixUbo.buffer->getBuffer()
@@ -637,7 +645,7 @@ namespace castor3d
 		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.uboDescriptorSet
 			, layout.getBinding( index++ ) );
 
-		if ( checkFlag( node.pipeline.getFlags().m_programFlags, ProgramFlag::eLighting ) )
+		if ( checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eLighting ) )
 		{
 			node.uboDescriptorSet->createBinding( layout.getBinding( LightBufferIndex )
 				, node.sceneNode.getScene()->getLightCache().getBuffer()
@@ -649,7 +657,7 @@ namespace castor3d
 		node.uboDescriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
 			, m_sceneUbo.getUbo() );
 
-		if ( !checkFlag( node.pipeline.getFlags().m_programFlags, ProgramFlag::eInstantiation ) )
+		if ( !checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
 		{
 			node.uboDescriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
 				, node.modelMatrixUbo.buffer->getBuffer()
@@ -678,7 +686,7 @@ namespace castor3d
 		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.uboDescriptorSet
 			, layout.getBinding( index++ ) );
 
-		if ( checkFlag( node.pipeline.getFlags().m_programFlags, ProgramFlag::eLighting ) )
+		if ( checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eLighting ) )
 		{
 			node.uboDescriptorSet->createBinding( layout.getBinding( LightBufferIndex )
 				, node.sceneNode.getScene()->getLightCache().getBuffer()
@@ -690,7 +698,7 @@ namespace castor3d
 		node.uboDescriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
 			, m_sceneUbo.getUbo() );
 
-		if ( !checkFlag( node.pipeline.getFlags().m_programFlags, ProgramFlag::eInstantiation ) )
+		if ( !checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
 		{
 			node.uboDescriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
 				, node.modelMatrixUbo.buffer->getBuffer()
@@ -719,7 +727,7 @@ namespace castor3d
 		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.uboDescriptorSet
 			, layout.getBinding( index++ ) );
 
-		if ( checkFlag( node.pipeline.getFlags().m_programFlags, ProgramFlag::eLighting ) )
+		if ( checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eLighting ) )
 		{
 			node.uboDescriptorSet->createBinding( layout.getBinding( LightBufferIndex )
 				, node.sceneNode.getScene()->getLightCache().getBuffer()
@@ -731,7 +739,7 @@ namespace castor3d
 		node.uboDescriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
 			, m_sceneUbo.getUbo() );
 
-		if ( !checkFlag( node.pipeline.getFlags().m_programFlags, ProgramFlag::eInstantiation ) )
+		if ( !checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
 		{
 			node.uboDescriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
 				, node.modelMatrixUbo.buffer->getBuffer()
@@ -1504,15 +1512,15 @@ namespace castor3d
 	{
 		renderer::DescriptorSetLayoutBindingArray uboBindings;
 
-		if ( !checkFlag( flags.m_programFlags, ProgramFlag::eDepthPass )
-			&& !checkFlag( flags.m_programFlags, ProgramFlag::eShadowMapDirectional )
-			&& !checkFlag( flags.m_programFlags, ProgramFlag::eShadowMapPoint )
-			&& !checkFlag( flags.m_programFlags, ProgramFlag::eShadowMapSpot ) )
+		if ( !checkFlag( flags.programFlags, ProgramFlag::eDepthPass )
+			&& !checkFlag( flags.programFlags, ProgramFlag::eShadowMapDirectional )
+			&& !checkFlag( flags.programFlags, ProgramFlag::eShadowMapPoint )
+			&& !checkFlag( flags.programFlags, ProgramFlag::eShadowMapSpot ) )
 		{
 			uboBindings.emplace_back( getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding() );
 		}
 
-		if ( checkFlag( flags.m_programFlags, ProgramFlag::eLighting ) )
+		if ( checkFlag( flags.programFlags, ProgramFlag::eLighting ) )
 		{
 			uboBindings.emplace_back( LightBufferIndex, renderer::DescriptorType::eUniformTexelBuffer, renderer::ShaderStageFlag::eFragment );
 		}
@@ -1522,14 +1530,19 @@ namespace castor3d
 		uboBindings.emplace_back( ModelMatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
 		uboBindings.emplace_back( ModelUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
 
-		if ( checkFlag( flags.m_programFlags, ProgramFlag::eSkinning ) )
+		if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
 		{
-			uboBindings.push_back( SkinningUbo::createLayoutBinding( SkinningUbo::BindingPoint, flags.m_programFlags ) );
+			uboBindings.push_back( SkinningUbo::createLayoutBinding( SkinningUbo::BindingPoint, flags.programFlags ) );
 		}
 
-		if ( checkFlag( flags.m_programFlags, ProgramFlag::eMorphing ) )
+		if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
 		{
 			uboBindings.emplace_back( MorphingUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+		}
+
+		if ( checkFlag( flags.programFlags, ProgramFlag::ePicking ) )
+		{
+			uboBindings.emplace_back( PickingUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment );
 		}
 
 		return uboBindings;

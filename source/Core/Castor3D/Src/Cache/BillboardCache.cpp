@@ -53,6 +53,7 @@ namespace castor3d
 		, m_modelUboPool{ *engine.getRenderSystem() }
 		, m_modelMatrixUboPool{ *engine.getRenderSystem() }
 		, m_billboardUboPool{ *engine.getRenderSystem() }
+		, m_pickingUboPool{ *engine.getRenderSystem() }
 	{
 	}
 
@@ -79,6 +80,7 @@ namespace castor3d
 		m_modelUboPool.upload();
 		m_modelMatrixUboPool.upload();
 		m_billboardUboPool.upload();
+		m_pickingUboPool.upload();
 	}
 
 	void BillboardListCache::cleanupUbos()
@@ -86,6 +88,7 @@ namespace castor3d
 		m_modelUboPool.cleanup();
 		m_modelMatrixUboPool.cleanup();
 		m_billboardUboPool.cleanup();
+		m_pickingUboPool.cleanup();
 	}
 
 	BillboardListCache::PoolsEntry BillboardListCache::getUbos( BillboardBase const & billboard, Pass const & pass )const
@@ -102,6 +105,7 @@ namespace castor3d
 			m_modelUboPool.putBuffer( entry.second.modelUbo );
 			m_modelMatrixUboPool.putBuffer( entry.second.modelMatrixUbo );
 			m_billboardUboPool.putBuffer( entry.second.billboardUbo );
+			m_pickingUboPool.putBuffer( entry.second.pickingUbo );
 		}
 	}
 
@@ -137,6 +141,7 @@ namespace castor3d
 			m_modelUboPool.getBuffer( renderer::MemoryPropertyFlag::eHostVisible ),
 			m_modelMatrixUboPool.getBuffer( renderer::MemoryPropertyFlag::eHostVisible ),
 			m_billboardUboPool.getBuffer( renderer::MemoryPropertyFlag::eHostVisible ),
+			m_pickingUboPool.getBuffer( renderer::MemoryPropertyFlag::eHostVisible ),
 		};
 	}
 
@@ -148,6 +153,7 @@ namespace castor3d
 		m_modelUboPool.putBuffer( entry.modelUbo );
 		m_modelMatrixUboPool.putBuffer( entry.modelMatrixUbo );
 		m_billboardUboPool.putBuffer( entry.billboardUbo );
+		m_pickingUboPool.putBuffer( entry.pickingUbo );
 	}
 
 	void BillboardListCache::doRegister( BillboardBase & billboard )

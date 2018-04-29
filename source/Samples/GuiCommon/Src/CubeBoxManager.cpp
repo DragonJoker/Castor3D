@@ -32,7 +32,7 @@ namespace GuiCommon
 			auto result = scene.getMeshCache().add( name );
 			result->setSerialisable( false );
 			auto submesh = result->createSubmesh();
-			InterleavedVertexArray vertex
+			static InterleavedVertexArray const vertex
 			{
 				InterleavedVertex::createP( Point3f{ -1, -1, -1 } ),
 				InterleavedVertex::createP( Point3f{ -1, +1, -1 } ),

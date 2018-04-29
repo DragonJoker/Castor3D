@@ -572,7 +572,7 @@ namespace CastorViewer
 			if ( castor.isThreaded() && !m_recorder.IsRecording() )
 			{
 				castor.getRenderLoop().pause();
-				m_renderPanel->getRenderWindow()->saveFrame();
+				m_renderPanel->getRenderWindow()->enableSaveFrame();
 				castor.getRenderLoop().renderSyncFrame();
 				auto buffer = m_renderPanel->getRenderWindow()->getSavedFrame();
 				castor.getRenderLoop().resume();
@@ -583,7 +583,7 @@ namespace CastorViewer
 			}
 			else
 			{
-				m_renderPanel->getRenderWindow()->saveFrame();
+				m_renderPanel->getRenderWindow()->enableSaveFrame();
 				castor.getRenderLoop().renderSyncFrame();
 				auto buffer = m_renderPanel->getRenderWindow()->getSavedFrame();
 				Size size = buffer->dimensions();

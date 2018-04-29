@@ -169,7 +169,7 @@ namespace castor3d
 				layouts.emplace_back( std::move( uboLayout ) );
 				layouts.emplace_back( std::move( texLayout ) );
 				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
-				pipeline.initialise( getRenderPass(), renderer::PrimitiveTopology::eTriangleList );
+				pipeline.initialise( getRenderPass() );
 			};
 
 			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
@@ -217,7 +217,7 @@ namespace castor3d
 				layouts.emplace_back( std::move( uboLayout ) );
 				layouts.emplace_back( std::move( texLayout ) );
 				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
-				pipeline.initialise( getRenderPass(), renderer::PrimitiveTopology::eTriangleList );
+				pipeline.initialise( getRenderPass() );
 			};
 
 			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )

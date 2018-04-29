@@ -138,6 +138,7 @@ namespace castor3d
 			, SceneFlags const & sceneFlags
 			, Pass & pass
 			, NodesType & nodes
+			, renderer::PrimitiveTopology topology
 			, CreatorFunc creator )
 		{
 			if ( pass.IsTwoSided()
@@ -149,7 +150,8 @@ namespace castor3d
 					, passFlags
 					, textureFlags
 					, programFlags
-					, sceneFlags );
+					, sceneFlags
+					, topology );
 
 				if ( pipeline )
 				{
@@ -163,7 +165,8 @@ namespace castor3d
 				, passFlags
 				, textureFlags
 				, programFlags
-				, sceneFlags );
+				, sceneFlags
+				, topology );
 
 			if ( pipeline )
 			{
@@ -194,7 +197,8 @@ namespace castor3d
 						, passFlags
 						, textureFlags
 						, programFlags
-						, sceneFlags );
+						, sceneFlags
+						, submesh.getTopology() );
 
 					if ( pipeline )
 					{
@@ -212,7 +216,8 @@ namespace castor3d
 					, passFlags
 					, textureFlags
 					, programFlags
-					, sceneFlags );
+					, sceneFlags
+					, submesh.getTopology() );
 
 				if ( pipeline )
 				{
@@ -232,6 +237,7 @@ namespace castor3d
 					, sceneFlags
 					, pass
 					, animated
+					, submesh.getTopology()
 					, std::bind( &RenderPass::createSkinningNode
 						, &renderPass
 						, std::ref( pass )
@@ -260,6 +266,7 @@ namespace castor3d
 				, sceneFlags
 				, pass
 				, animated
+				, submesh.getTopology()
 				, std::bind( &RenderPass::createMorphingNode
 					, &renderPass
 					, std::ref( pass )
@@ -291,7 +298,8 @@ namespace castor3d
 						, passFlags
 						, textureFlags
 						, programFlags
-						, sceneFlags );
+						, sceneFlags
+						, submesh.getTopology() );
 
 					if ( pipeline )
 					{
@@ -306,7 +314,8 @@ namespace castor3d
 					, passFlags
 					, textureFlags
 					, programFlags
-					, sceneFlags );
+					, sceneFlags
+					, submesh.getTopology() );
 
 				if ( pipeline )
 				{
@@ -323,6 +332,7 @@ namespace castor3d
 					, sceneFlags
 					, pass
 					, statics
+					, submesh.getTopology()
 					, std::bind( &RenderPass::createStaticNode
 						, &renderPass
 						, std::ref( pass )
@@ -348,6 +358,7 @@ namespace castor3d
 				, sceneFlags
 				, pass
 				, nodes
+				, renderer::PrimitiveTopology::eTriangleStrip
 				, std::bind( &RenderPass::createBillboardNode
 					, &renderPass
 					, std::ref( pass )
@@ -486,6 +497,7 @@ namespace castor3d
 									, textureFlags
 									, programFlags
 									, sceneFlags
+									, submesh->getTopology()
 									, pass->IsTwoSided()
 									, submesh->getGeometryBuffers( material ).layouts );
 
@@ -600,6 +612,7 @@ namespace castor3d
 						, textureFlags
 						, programFlags
 						, sceneFlags
+						, renderer::PrimitiveTopology::eTriangleStrip
 						, p_pass.IsTwoSided()
 						, billboard.getGeometryBuffers().layouts );
 

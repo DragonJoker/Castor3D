@@ -213,7 +213,7 @@ namespace castor3d
 				layouts.emplace_back( std::move( uboLayout ) );
 				layouts.emplace_back( std::move( texLayout ) );
 				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
-				pipeline.initialise( getRenderPass(), renderer::PrimitiveTopology::eTriangleList );
+				pipeline.initialise( getRenderPass() );
 				m_initialised = true;
 			};
 

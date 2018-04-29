@@ -8,8 +8,9 @@
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderNode/RenderNode_Render.hpp"
 #include "Shader/PassBuffer/PassBuffer.hpp"
-#include "Shader/Shaders/GlslMaterial.hpp"
 #include "Shader/Program.hpp"
+#include "Shader/Shaders/GlslMaterial.hpp"
+#include "Shader/Ubos/PickingUbo.hpp"
 
 #include <Command/CommandBuffer.hpp>
 #include <RenderPass/FrameBuffer.hpp>
@@ -34,9 +35,8 @@ namespace castor3d
 
 		template< bool Opaque, typename MapType, typename FuncType >
 		inline void doTraverseNodes( RenderPass const & pass
-			, renderer::UniformBuffer< PickingUboData > & ubo
 			, MapType & nodes
-			, PickingPass::NodeType type
+			, PickNodeType type
 			, FuncType function )
 		{
 			uint32_t count{ 1u };
@@ -44,21 +44,25 @@ namespace castor3d
 			for ( auto itPipelines : nodes )
 			{
 				pass.updatePipeline( *itPipelines.first );
-				auto & data = ubo.getData();
-				data.drawIndex = uint8_t( type ) + ( ( count & 0x00FFFFFF ) << 8 );
+				auto drawIndex = uint8_t( type ) + ( ( count & 0x00FFFFFF ) << 8 );
 				uint32_t index{ 0u };
 
 				for ( auto itPass : itPipelines.second )
 				{
 					for ( auto itSubmeshes : itPass.second )
 					{
-						data.nodeIndex = index++;
-						ubo.upload();
-						function( *itPipelines.first
-							, *itPass.first
-							, *itSubmeshes.first
-							, itSubmeshes.first->getInstantiation()
-							, itSubmeshes.second );
+						if ( !itSubmeshes.second.empty() )
+						{
+							auto & data = itSubmeshes.second[0]->pickingUbo.getData();
+							data.drawIndex = drawIndex;
+							data.nodeIndex = index++;
+
+							function( *itPipelines.first
+								, *itPass.first
+								, *itSubmeshes.first
+								, itSubmeshes.first->getInstantiation()
+								, itSubmeshes.second );
+						}
 					}
 				}
 
@@ -68,9 +72,8 @@ namespace castor3d
 
 		template< bool Opaque, typename MapType >
 		inline void doUpdateNonInstanced( RenderPass const & pass
-			, renderer::UniformBuffer< PickingUboData > & ubo
 			, Scene const & scene
-			, PickingPass::NodeType type
+			, PickNodeType type
 			, MapType & nodes )
 		{
 			uint32_t count{ 1u };
@@ -78,14 +81,14 @@ namespace castor3d
 			for ( auto itPipelines : nodes )
 			{
 				pass.updatePipeline( *itPipelines.first );
-				auto & data = ubo.getData();
-				data.drawIndex = uint8_t( type ) + ( ( count & 0x00FFFFFF ) << 8 );
+				auto drawIndex = uint8_t( type ) + ( ( count & 0x00FFFFFF ) << 8 );
 				uint32_t index{ 0u };
 
 				for ( auto & renderNode : itPipelines.second )
 				{
+					auto & data = renderNode->pickingUbo.getData();
+					data.drawIndex = drawIndex;
 					data.nodeIndex = index++;
-					ubo.upload();
 				}
 
 				count++;
@@ -94,7 +97,7 @@ namespace castor3d
 
 		template< typename MapType, typename NodeType, typename SubNodeType >
 		inline void doPickFromList( MapType const & map
-			, Point3f const & index
+			, Point4f const & index
 			, std::weak_ptr< NodeType > & node
 			, std::weak_ptr< SubNodeType > & subnode
 			, uint32_t & face )
@@ -122,7 +125,7 @@ namespace castor3d
 
 		template< typename MapType, typename NodeType, typename SubNodeType >
 		inline void doPickFromInstantiatedList( MapType const & map
-			, Point3f const & index
+			, Point4f const & index
 			, std::weak_ptr< NodeType > & node
 			, std::weak_ptr< SubNodeType > & subnode
 			, uint32_t & face )
@@ -236,10 +239,10 @@ namespace castor3d
 		itCam->second.initialise( scene, camera );
 	}
 
-	PickingPass::NodeType PickingPass::pick( Position const & position
+	PickNodeType PickingPass::pick( Position const & position
 		, Camera const & camera )
 	{
-		NodeType result{ NodeType::eNone };
+		PickNodeType result{ PickNodeType::eNone };
 		m_geometry.reset();
 		m_submesh.reset();
 		m_face = 0u;
@@ -272,16 +275,17 @@ namespace castor3d
 		doUpdate( nodes.scene, nodes.camera, nodes.instancedSkinnedNodes.backCulled );
 		doUpdate( nodes.scene, nodes.camera, nodes.morphingNodes.backCulled );
 		doUpdate( nodes.scene, nodes.camera, nodes.billboardNodes.backCulled );
+		nodes.scene.getGeometryCache().uploadPickingUbos();
 	}
 
-	Point3f PickingPass::doFboPick( Position const & position
+	Point4f PickingPass::doFboPick( Position const & position
 		, Camera const & camera
 		, renderer::CommandBuffer const & commandBuffer )
 	{
 		static renderer::ClearValueArray clearValues
 		{
 			renderer::ClearColorValue{ 0.0, 0.0, 0.0, 1.0 },
-			renderer::DepthStencilClearValue{ 0.0f, 1 }
+			renderer::DepthStencilClearValue{ 1.0f, 0 }
 		};
 
 		if ( m_commandBuffer->begin() )
@@ -293,18 +297,21 @@ namespace castor3d
 			m_commandBuffer->executeCommands( { commandBuffer } );
 			m_commandBuffer->endRenderPass();
 
-			//m_copyRegion.imageOffset.x = int32_t( position.x() - PickingOffset );
-			//m_copyRegion.imageOffset.y = int32_t( camera.getHeight() - position.y() - PickingOffset );
+			m_copyRegion.imageOffset.x = int32_t( position.x() - PickingOffset );
+			m_copyRegion.imageOffset.y = int32_t( camera.getHeight() - position.y() - PickingOffset );
 
-			//m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
-			//	, renderer::PipelineStageFlag::eTransfer
-			//	, m_stagingBuffer->getBuffer().makeTransferDestination() );
-			//m_commandBuffer->copyToBuffer( m_copyRegion
-			//	, *m_colourTexture
-			//	, m_stagingBuffer->getBuffer() );
-			//m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
-			//	, renderer::PipelineStageFlag::eTransfer
-			//	, m_stagingBuffer->getBuffer().makeMemoryTransitionBarrier( renderer::AccessFlag::eMemoryRead ) );
+#if !C3D_DebugPicking
+			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
+				, renderer::PipelineStageFlag::eTransfer
+				, m_stagingBuffer->getBuffer().makeTransferDestination() );
+			m_commandBuffer->copyToBuffer( m_copyRegion
+				, *m_colourTexture
+				, m_stagingBuffer->getBuffer() );
+			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
+				, renderer::PipelineStageFlag::eTransfer
+				, m_stagingBuffer->getBuffer().makeMemoryTransitionBarrier( renderer::AccessFlag::eMemoryRead ) );
+#endif
+
 			m_commandBuffer->end();
 		}
 
@@ -313,56 +320,59 @@ namespace castor3d
 		renderer::FencePtr fence = device.createFence();
 		device.getGraphicsQueue().submit( *m_commandBuffer, fence.get() );
 		fence->wait( renderer::FenceTimeout );
+		device.waitIdle();
 
-		//if ( auto * data = m_stagingBuffer->lock( 0u, m_stagingBuffer->getCount(), renderer::MemoryMapFlag::eRead ) )
-		//{
-		//	std::memcpy( m_buffer->ptr(), data, m_stagingBuffer->getCount() );
-		//	m_stagingBuffer->unlock();
-		//}
+#if !C3D_DebugPicking
+		if ( auto * data = m_stagingBuffer->lock( 0u, m_stagingBuffer->getCount(), renderer::MemoryMapFlag::eRead ) )
+		{
+			std::copy( data, data + m_stagingBuffer->getCount(), m_buffer.begin() );
+			m_stagingBuffer->unlock();
+		}
+#endif
 
-		auto it = std::static_pointer_cast< PxBuffer< PixelFormat::eRGBA32F > >( m_buffer )->begin();
+		auto it = m_buffer.begin();
 		it += ( PickingOffset * PickingWidth ) + PickingOffset - 1;
-		return Point3f{ reinterpret_cast< float const * >( it->constPtr() ) };
+		return *it;
 	}
 
-	PickingPass::NodeType PickingPass::doPick( Point3f const & pixel
+	PickNodeType PickingPass::doPick( Point4f const & pixel
 		, SceneCulledRenderNodes & nodes )
 	{
-		NodeType result{ NodeType::eNone };
+		PickNodeType result{ PickNodeType::eNone };
 
-		if ( castor::point::lengthSquared( pixel ) )
+		if ( castor::point::lengthSquared( Point3f{ pixel } ) )
 		{
-			result = NodeType( uint32_t( pixel[0] ) & 0xFF );
+			result = PickNodeType( uint32_t( pixel[0] ) & 0xFF );
 
 			switch ( result )
 			{
-			case NodeType::eStatic:
+			case PickNodeType::eStatic:
 				doPickFromList( nodes.staticNodes.backCulled, pixel, m_geometry, m_submesh, m_face );
 				break;
 
-			case NodeType::eInstantiatedStatic:
+			case PickNodeType::eInstantiatedStatic:
 				doPickFromInstantiatedList( nodes.instancedStaticNodes.backCulled, pixel, m_geometry, m_submesh, m_face );
 				break;
 
-			case NodeType::eSkinning:
+			case PickNodeType::eSkinning:
 				doPickFromList( nodes.skinnedNodes.backCulled, pixel, m_geometry, m_submesh, m_face );
 				break;
 
-			case NodeType::eInstantiatedSkinning:
+			case PickNodeType::eInstantiatedSkinning:
 				doPickFromInstantiatedList( nodes.instancedSkinnedNodes.backCulled, pixel, m_geometry, m_submesh, m_face );
 				break;
 
-			case NodeType::eMorphing:
+			case PickNodeType::eMorphing:
 				doPickFromList( nodes.morphingNodes.backCulled, pixel, m_geometry, m_submesh, m_face );
 				break;
 
-			case NodeType::eBillboard:
+			case PickNodeType::eBillboard:
 				doPickFromList( nodes.billboardNodes.backCulled, pixel, m_billboard, m_billboard, m_face );
 				break;
 
 			default:
 				FAILURE( "Unsupported index" );
-				result = NodeType::eNone;
+				result = PickNodeType::eNone;
 				break;
 			}
 		}
@@ -375,9 +385,8 @@ namespace castor3d
 		, SubmeshStaticRenderNodesPtrByPipelineMap & nodes )
 	{
 		doTraverseNodes< true >( *this
-			, *m_pickingUbo
 			, nodes
-			, NodeType::eInstantiatedStatic
+			, PickNodeType::eInstantiatedStatic
 			, [&scene, &camera, this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
@@ -386,8 +395,7 @@ namespace castor3d
 			{
 				auto it = component.find( pass.getOwner()->shared_from_this() );
 
-				if ( !renderNodes.empty()
-					&& it != component.end()
+				if ( it != component.end()
 					&& it->second.buffer )
 				{
 					doCopyNodesMatrices( renderNodes, camera, it->second.data );
@@ -400,9 +408,8 @@ namespace castor3d
 		, StaticRenderNodesPtrByPipelineMap & nodes )
 	{
 		doUpdateNonInstanced< true >( *this
-			, *m_pickingUbo
 			, scene
-			, NodeType::eStatic
+			, PickNodeType::eStatic
 			, nodes );
 	}
 
@@ -411,9 +418,8 @@ namespace castor3d
 		, SkinningRenderNodesPtrByPipelineMap & nodes )
 	{
 		doUpdateNonInstanced< true >( *this
-			, *m_pickingUbo
 			, scene
-			, NodeType::eSkinning
+			, PickNodeType::eSkinning
 			, nodes );
 	}
 	
@@ -422,9 +428,8 @@ namespace castor3d
 		, SubmeshSkinningRenderNodesPtrByPipelineMap & nodes )
 	{
 		doTraverseNodes< true >( *this
-			, *m_pickingUbo
 			, nodes
-			, NodeType::eInstantiatedSkinning
+			, PickNodeType::eInstantiatedSkinning
 			, [&scene, &camera, this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
@@ -449,9 +454,8 @@ namespace castor3d
 		, MorphingRenderNodesPtrByPipelineMap & nodes )
 	{
 		doUpdateNonInstanced< true >( *this
-			, *m_pickingUbo
 			, scene
-			, NodeType::eMorphing
+			, PickNodeType::eMorphing
 			, nodes );
 	}
 
@@ -460,9 +464,8 @@ namespace castor3d
 		, BillboardRenderNodesPtrByPipelineMap & nodes )
 	{
 		doUpdateNonInstanced< true >( *this
-			, *m_pickingUbo
 			, scene
-			, NodeType::eBillboard
+			, PickNodeType::eBillboard
 			, nodes );
 	}
 
@@ -471,10 +474,6 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
-		m_pickingUbo = renderer::makeUniformBuffer< PickingUboData >( device
-			, 1u
-			, 0u
-			, renderer::MemoryPropertyFlag::eHostVisible );
 
 		m_colourTexture = createTexture( device
 			, size
@@ -509,8 +508,7 @@ namespace castor3d
 			, renderer::BufferTarget::eTransferDst
 			, renderer::MemoryPropertyFlag::eHostVisible );
 
-		m_buffer = PxBufferBase::create( Size{ PickingWidth, PickingWidth }
-			, convert( m_colourTexture->getFormat() ) );
+		m_buffer.resize( PickingWidth * PickingWidth );
 
 		// Create the render pass.
 		renderer::RenderPassCreateInfo renderPass;
@@ -572,8 +570,6 @@ namespace castor3d
 	void PickingPass::doCleanup()
 	{
 		m_commandBuffer.reset();
-		m_buffer.reset();
-		m_pickingUbo.reset();
 		m_scenes.clear();
 		m_stagingBuffer.reset();
 		m_frameBuffer.reset();
@@ -587,16 +583,20 @@ namespace castor3d
 		, uint32_t & index
 		, BillboardListRenderNode & node )
 	{
-		node.uboDescriptorSet->createBinding( layout.getBinding( UboBindingPoint )
-			, *m_pickingUbo );
+		node.uboDescriptorSet->createBinding( layout.getBinding( PickingUbo::BindingPoint )
+			, node.pickingUbo.buffer->getBuffer()
+			, node.pickingUbo.offset
+			, 1u );
 	}
 
 	void PickingPass::doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, SubmeshRenderNode & node )
 	{
-		node.uboDescriptorSet->createBinding( layout.getBinding( UboBindingPoint )
-			, *m_pickingUbo );
+		node.uboDescriptorSet->createBinding( layout.getBinding( PickingUbo::BindingPoint )
+			, node.pickingUbo.buffer->getBuffer()
+			, node.pickingUbo.offset
+			, 1u );
 	}
 
 	void PickingPass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
@@ -786,10 +786,7 @@ namespace castor3d
 		auto materials = shader::createMaterials( writer
 			, passFlags );
 		materials->declare();
-		Ubo uboPicking{ writer, Picking, 7u };
-		auto c3d_iDrawIndex( uboPicking.declMember< UInt >( DrawIndex ) );
-		auto c3d_iNodeIndex( uboPicking.declMember< UInt >( NodeIndex ) );
-		uboPicking.end();
+		UBO_PICKING( writer, PickingUbo::BindingPoint, 0u );
 
 		// Fragment Intputs
 		auto gl_PrimitiveID( writer.declBuiltin< UInt >( cuT( "gl_PrimitiveID" ) ) );
@@ -829,8 +826,7 @@ namespace castor3d
 					, material->m_alphaRef() );
 			}
 
-			pxl_fragColor = vec4( c3d_iDrawIndex, c3d_iNodeIndex, vtx_instance, gl_PrimitiveID );
-			pxl_fragColor = vec4( 1.0_f, 1.0, 1.0, 1.0 );
+			pxl_fragColor = vec4( c3d_drawIndex, c3d_nodeIndex, vtx_instance, gl_PrimitiveID );
 		} );
 
 		return writer.finalise();
@@ -864,7 +860,7 @@ namespace castor3d
 		auto index = MinBufferIndex;
 		renderer::DescriptorSetLayoutBindingArray textureBindings;
 
-		if ( checkFlag( flags.m_textureFlags, TextureChannel::eOpacity ) )
+		if ( checkFlag( flags.textureFlags, TextureChannel::eOpacity ) )
 		{
 			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
 		}
@@ -886,14 +882,11 @@ namespace castor3d
 
 		if ( pipelines.find( flags ) == pipelines.end() )
 		{
-			renderer::RasterisationState rsState;
-			rsState.cullMode = renderer::CullModeFlag::eBack;
-			renderer::DepthStencilState dsState{ 0u, true, false };
 			auto bsState = renderer::ColourBlendState::createDefault();
 			auto & pipeline = *pipelines.emplace( flags
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
-					, std::move( dsState )
-					, std::move( rsState )
+					, renderer::DepthStencilState{ 0u, true, true }
+					, renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eBack }
 					, std::move( bsState )
 					, renderer::MultisampleState{}
 					, program
@@ -912,7 +905,7 @@ namespace castor3d
 				layouts.emplace_back( std::move( uboLayout ) );
 				layouts.emplace_back( std::move( texLayout ) );
 				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
-				pipeline.initialise( getRenderPass(), renderer::PrimitiveTopology::eTriangleList );
+				pipeline.initialise( getRenderPass() );
 			};
 
 			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )

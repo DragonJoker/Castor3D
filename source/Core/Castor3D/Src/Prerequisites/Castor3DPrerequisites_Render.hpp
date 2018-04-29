@@ -73,6 +73,24 @@ namespace castor3d
 		uint32_t idxCount;
 	};
 	/*!
+	\version	0.11.0
+	\~english
+	\brief		The picking node types.
+	\~french
+	\brief		Les types de noeud de picking.
+	*/
+	enum class PickNodeType
+		: uint8_t
+	{
+		eNone,
+		eStatic,
+		eInstantiatedStatic,
+		eSkinning,
+		eInstantiatedSkinning,
+		eMorphing,
+		eBillboard
+	};
+	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.6.1.0
 	\date		03/01/2011
@@ -125,10 +143,11 @@ namespace castor3d
 	{
 		BlendMode colourBlendMode;
 		BlendMode alphaBlendMode;
-		PassFlags m_passFlags;
-		TextureChannels m_textureFlags;
-		ProgramFlags m_programFlags;
-		SceneFlags m_sceneFlags;
+		PassFlags passFlags;
+		TextureChannels textureFlags;
+		ProgramFlags programFlags;
+		SceneFlags sceneFlags;
+		renderer::PrimitiveTopology topology;
 	};
 
 	template< typename T >

@@ -319,7 +319,7 @@ namespace castor3d
 				layouts.emplace_back( std::move( uboLayout ) );
 				layouts.emplace_back( std::move( texLayout ) );
 				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
-				pipeline.initialise( getRenderPass(), renderer::PrimitiveTopology::eTriangleList );
+				pipeline.initialise( getRenderPass() );
 			};
 
 			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
@@ -366,7 +366,7 @@ namespace castor3d
 				layouts.emplace_back( std::move( uboLayout ) );
 				layouts.emplace_back( std::move( texLayout ) );
 				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
-				pipeline.initialise( getRenderPass(), renderer::PrimitiveTopology::eTriangleList );
+				pipeline.initialise( getRenderPass() );
 			};
 
 			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
@@ -385,47 +385,47 @@ namespace castor3d
 		auto index = MinBufferIndex;
 		renderer::DescriptorSetLayoutBindingArray textureBindings;
 
-		if ( checkFlag( flags.m_textureFlags, TextureChannel::eDiffuse ) )
+		if ( checkFlag( flags.textureFlags, TextureChannel::eDiffuse ) )
 		{
 			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
 		}
 
-		if ( checkFlag( flags.m_textureFlags, TextureChannel::eSpecular ) )
+		if ( checkFlag( flags.textureFlags, TextureChannel::eSpecular ) )
 		{
 			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
 		}
 
-		if ( checkFlag( flags.m_textureFlags, TextureChannel::eGloss ) )
+		if ( checkFlag( flags.textureFlags, TextureChannel::eGloss ) )
 		{
 			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
 		}
 
-		if ( checkFlag( flags.m_textureFlags, TextureChannel::eNormal ) )
+		if ( checkFlag( flags.textureFlags, TextureChannel::eNormal ) )
 		{
 			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
 		}
 
-		if ( checkFlag( flags.m_textureFlags, TextureChannel::eOpacity ) )
+		if ( checkFlag( flags.textureFlags, TextureChannel::eOpacity ) )
 		{
 			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
 		}
 
-		if ( checkFlag( flags.m_textureFlags, TextureChannel::eHeight ) )
+		if ( checkFlag( flags.textureFlags, TextureChannel::eHeight ) )
 		{
 			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
 		}
 
-		if ( checkFlag( flags.m_textureFlags, TextureChannel::eAmbientOcclusion ) )
+		if ( checkFlag( flags.textureFlags, TextureChannel::eAmbientOcclusion ) )
 		{
 			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
 		}
 
-		if ( checkFlag( flags.m_textureFlags, TextureChannel::eEmissive ) )
+		if ( checkFlag( flags.textureFlags, TextureChannel::eEmissive ) )
 		{
 			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
 		}
 
-		if ( checkFlag( flags.m_textureFlags, TextureChannel::eTransmittance ) )
+		if ( checkFlag( flags.textureFlags, TextureChannel::eTransmittance ) )
 		{
 			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
 		}

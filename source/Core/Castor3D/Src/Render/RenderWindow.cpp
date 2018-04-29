@@ -33,7 +33,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = file.print( 256, cuT( "%s\tvsync %s\n" ), m_tabs.c_str(), window.getVSync() ? cuT( "true" ) : cuT( "false" ) ) > 0;
+			result = file.print( 256, cuT( "%s\tvsync %s\n" ), m_tabs.c_str(), window.isVSyncEnabled() ? cuT( "true" ) : cuT( "false" ) ) > 0;
 			castor::TextWriter< RenderWindow >::checkError( result, "RenderWindow vsync" );
 		}
 
@@ -149,6 +149,7 @@ namespace castor3d
 				m_renderPass = m_device->createRenderPass( renderPass );
 
 				target->initialise();
+				m_pickingPass->initialise( target->getSize() );
 
 				doCreateSwapChainDependent();
 				doPrepareFrames();
@@ -158,7 +159,6 @@ namespace castor3d
 				m_stagingBuffer = std::make_unique< renderer::StagingBuffer >( *m_device
 					, renderer::BufferTarget::eTransferDst
 					, m_saveBuffer->size() );
-				m_pickingPass->initialise( target->getSize() );
 				m_device->disable();
 				m_initialised = true;
 				m_dirty = false;
@@ -216,6 +216,9 @@ namespace castor3d
 				}
 
 				auto resources = m_swapChain->getResources();
+#if C3D_DebugPicking
+				m_pickingPass->pick( Position{}, *target->getCamera() );
+#endif
 
 				if ( resources )
 				{
@@ -405,6 +408,49 @@ namespace castor3d
 		return m_size;
 	}
 
+	void RenderWindow::addPickingScene( Scene & scene )
+	{
+		auto camera = getCamera();
+
+		if ( camera )
+		{
+			m_pickingPass->addScene( scene, *camera );
+		}
+	}
+
+	PickNodeType RenderWindow::pick( castor::Position const & position )
+	{
+		PickNodeType result = PickNodeType::eNone;
+		auto camera = getCamera();
+
+		if ( camera )
+		{
+			result = m_pickingPass->pick( position, *camera );
+		}
+
+		return result;
+	}
+
+	GeometrySPtr RenderWindow::getPickedGeometry()const
+	{
+		return m_pickingPass->getPickedGeometry();
+	}
+
+	BillboardBaseSPtr RenderWindow::getPickedBillboard()const
+	{
+		return m_pickingPass->getPickedBillboard();
+	}
+
+	SubmeshSPtr RenderWindow::getPickedSubmesh()const
+	{
+		return m_pickingPass->getPickedSubmesh();
+	}
+
+	uint32_t RenderWindow::getPickedFace()const
+	{
+		return m_pickingPass->getPickedFace();
+	}
+
 	void RenderWindow::doCreateProgram()
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
@@ -465,7 +511,11 @@ namespace castor3d
 		m_renderQuad->createPipeline( renderer::Extent2D{ m_size[0], m_size[1] }
 			, castor::Position{}
 			, m_program
+#if C3D_DebugPicking
+			, m_pickingPass->getResult()
+#else
 			, target->getTexture().getTexture()->getDefaultView()
+#endif
 			, *m_renderPass
 			, {}
 			, {} );

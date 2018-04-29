@@ -287,9 +287,9 @@ namespace castor3d
 		}
 		else if ( !p_params.empty() )
 		{
-			bool bValue;
-			p_params[0]->get( bValue );
-			parsingContext->window->setVSync( bValue );
+			bool value;
+			p_params[0]->get( value );
+			parsingContext->window->enableVSync( value );
 		}
 	}
 	END_ATTRIBUTE()
@@ -305,9 +305,9 @@ namespace castor3d
 		else if ( !p_params.empty() )
 		{
 
-			bool bValue;
-			p_params[0]->get( bValue );
-			parsingContext->window->setFullscreen( bValue );
+			bool value;
+			p_params[0]->get( value );
+			parsingContext->window->setFullscreen( value );
 		}
 	}
 	END_ATTRIBUTE()

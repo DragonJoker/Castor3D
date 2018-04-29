@@ -11,6 +11,7 @@ namespace castor3d
 		, PassRenderNode && passNode
 		, UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixBuffer
 		, UniformBufferOffset< ModelUbo::Configuration > modelBuffer
+		, UniformBufferOffset< PickingUbo::Configuration > pickingBuffer
 		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
 		, Submesh & data
@@ -19,6 +20,7 @@ namespace castor3d
 		, passNode{ std::move( passNode ) }
 		, modelMatrixUbo{ modelMatrixBuffer }
 		, modelUbo{ modelBuffer }
+		, pickingUbo{ pickingBuffer }
 		, buffers{ buffers }
 		, sceneNode{ sceneNode }
 		, data{ data }
@@ -31,6 +33,7 @@ namespace castor3d
 		, PassRenderNode && passNode
 		, UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixBuffer
 		, UniformBufferOffset< ModelUbo::Configuration > modelBuffer
+		, UniformBufferOffset< PickingUbo::Configuration > pickingBuffer
 		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
 		, BillboardBase & data
@@ -39,6 +42,7 @@ namespace castor3d
 		, passNode{ std::move( passNode ) }
 		, modelMatrixUbo{ modelMatrixBuffer }
 		, modelUbo{ modelBuffer }
+		, pickingUbo{ pickingBuffer }
 		, buffers{ buffers }
 		, sceneNode{ sceneNode }
 		, data{ data }

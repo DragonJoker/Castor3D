@@ -15,7 +15,6 @@
 #include <Material/MetallicRoughnessPbrPass.hpp>
 #include <Material/SpecularGlossinessPbrPass.hpp>
 #include <Mesh/Submesh.hpp>
-#include <Miscellaneous/PickingPass.hpp>
 #include <ShadowMap/ShadowMapPass.hpp>
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderWindow.hpp>
@@ -164,8 +163,7 @@ namespace CastorViewer
 					m_keyboardEvent = std::make_unique< KeyboardEvent >( window );
 
 					{
-						auto lock = makeUniqueLock( scene->getCameraCache() );
-						window->getPickingPass().addScene( *scene, *( scene->getCameraCache().begin()->second ) );
+						window->addPickingScene( *scene );
 					}
 
 					m_camera = camera;
@@ -789,12 +787,12 @@ namespace CastorViewer
 					{
 						Camera & camera = *window->getCamera();
 						camera.update();
-						auto type = window->getPickingPass().pick( Position{ int( x ), int( y ) }, camera );
+						auto type = window->pick( Position{ int( x ), int( y ) } );
 
-						if ( type != PickingPass::NodeType::eNone
-							&& type != PickingPass::NodeType::eBillboard )
+						if ( type != PickNodeType::eNone
+							&& type != PickNodeType::eBillboard )
 						{
-							doUpdateSelectedGeometry( window->getPickingPass().getPickedGeometry(), window->getPickingPass().getPickedSubmesh() );
+							doUpdateSelectedGeometry( window->getPickedGeometry(), window->getPickedSubmesh() );
 						}
 						else
 						{
@@ -850,14 +848,12 @@ namespace CastorViewer
 				auto y = m_oldY;
 				m_listener->postEvent( makeFunctorEvent( EventType::ePreRender, [this, window, x, y]()
 				{
-					Camera & camera = *window->getCamera();
-					camera.update();
-					auto type = window->getPickingPass().pick( Position{ int( x ), int( y ) }, camera );
+					auto type = window->pick( Position{ int( x ), int( y ) } );
 
-					if ( type != PickingPass::NodeType::eNone
-						&& type != PickingPass::NodeType::eBillboard )
+					if ( type != PickNodeType::eNone
+						&& type != PickNodeType::eBillboard )
 					{
-						doUpdateSelectedGeometry( window->getPickingPass().getPickedGeometry(), window->getPickingPass().getPickedSubmesh() );
+						doUpdateSelectedGeometry( window->getPickedGeometry(), window->getPickedSubmesh() );
 					}
 					else
 					{
