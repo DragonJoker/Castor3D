@@ -3234,7 +3234,7 @@ namespace castor3d
 		{
 			if ( parsingContext->particleSystem )
 			{
-				parsingContext->particleSystem->setCSUpdateProgram( parsingContext->shaderProgram->getStates()[0] );
+				parsingContext->particleSystem->setCSUpdateProgram( parsingContext->shaderProgram );
 				parsingContext->bBool1 = false;
 			}
 
@@ -3255,11 +3255,34 @@ namespace castor3d
 		{
 			if ( parsingContext->shaderStage != renderer::ShaderStageFlag( 0u ) )
 			{
-				uint32_t uiModel;
 				Path path;
 				p_params[0]->get( path );
 				parsingContext->shaderProgram->setFile( parsingContext->shaderStage
 					, p_context->m_file.getPath() / path );
+			}
+			else
+			{
+				PARSING_ERROR( cuT( "Shader not initialised" ) );
+			}
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserShaderGroupSizes )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->shaderProgram )
+		{
+			PARSING_ERROR( cuT( "No ShaderProgram initialised." ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			if ( parsingContext->shaderStage != renderer::ShaderStageFlag( 0u ) )
+			{
+				Point3i sizes;
+				p_params[0]->get( sizes );
+				parsingContext->particleSystem->setCSGroupSizes( sizes );
 			}
 			else
 			{

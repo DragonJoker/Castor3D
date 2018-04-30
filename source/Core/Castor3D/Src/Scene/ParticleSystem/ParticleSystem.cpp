@@ -268,7 +268,7 @@ namespace castor3d
 		m_impl = nullptr;
 	}
 
-	void ParticleSystem::update()
+	void ParticleSystem::update( RenderPassTimer & timer )
 	{
 		REQUIRE( m_impl );
 		auto time = std::chrono::duration_cast< Milliseconds >( m_timer.getElapsed() );
@@ -279,7 +279,7 @@ namespace castor3d
 		}
 
 		m_totalTime += time;
-		m_activeParticlesCount = m_impl->update( time, m_totalTime );
+		m_activeParticlesCount = m_impl->update( timer, time, m_totalTime );
 		getBillboards()->setCount( m_activeParticlesCount );
 		m_firstUpdate = false;
 	}
@@ -339,8 +339,13 @@ namespace castor3d
 		m_defaultValues[cuT ("out_") + name] = defaultValue;
 	}
 
-	void ParticleSystem::setCSUpdateProgram( renderer::ShaderStageState const & program )
+	void ParticleSystem::setCSUpdateProgram( ShaderProgramSPtr program )
 	{
 		m_csImpl->setUpdateProgram( program );
+	}
+
+	void ParticleSystem::setCSGroupSizes( castor::Point3i sizes )
+	{
+		m_csImpl->setGroupSizes( sizes );
 	}
 }

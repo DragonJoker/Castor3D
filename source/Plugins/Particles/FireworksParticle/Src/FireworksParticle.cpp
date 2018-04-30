@@ -205,7 +205,8 @@ namespace Fireworks
 		m_particles[m_firstUnused++] = particle;
 	}
 
-	uint32_t ParticleSystem::update( Milliseconds const & time
+	uint32_t ParticleSystem::update( RenderPassTimer & timer
+		, Milliseconds const & time
 		, Milliseconds const & total )
 	{
 		auto firstUnused = m_firstUnused;

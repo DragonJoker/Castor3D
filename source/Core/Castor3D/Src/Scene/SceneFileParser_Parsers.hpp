@@ -188,6 +188,7 @@ namespace castor3d
 
 	// Shader Program Parsers
 	DECLARE_ATTRIBUTE_PARSER( parserShaderProgramFile )
+	DECLARE_ATTRIBUTE_PARSER( parserShaderGroupSizes )
 
 	// Shader Program UBO Parsers
 	DECLARE_ATTRIBUTE_PARSER( parserShaderUboShaders )

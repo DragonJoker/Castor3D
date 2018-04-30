@@ -54,7 +54,8 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ParticleSystemImpl::update
 		 */
-		C3D_API uint32_t update( castor::Milliseconds const & time
+		C3D_API uint32_t update( RenderPassTimer & timer
+			, castor::Milliseconds const & time
 			, castor::Milliseconds const & total )override;
 		/**
 		 *\copydoc		castor3d::ParticleSystemImpl::addParticleVariable
@@ -63,12 +64,24 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Defines the program used to update the particles.
-		 *\param[in]	program	The program.
+		 *\param[in]	programFile	The program file path.
 		 *\~french
 		 *\brief		Définit le programme utilisé pour mettre à jour les particules.
-		 *\param[in]	program	Le programme.
+		 *\param[in]	programFile	Le chemin d'accès au fichier du programme.
 		 */
-		C3D_API void setUpdateProgram( renderer::ShaderStageState const & program );
+		C3D_API void setUpdateProgram( ShaderProgramSPtr program );
+		/**
+		 *\~english
+		 *\brief		Defines the workgroup sizes, as defined inside the compute shader.
+		 *\param[in]	sizes	The sizes.
+		 *\~french
+		 *\brief		Définit les dimensions des groupes de travail, tels que définis dans le compute shader.
+		 *\param[in]	sizes	Les dimensions.
+		 */
+		inline void setGroupSizes( castor::Point3i sizes )
+		{
+			m_worgGroupSizes = sizes;
+		}
 		/**
 		 *\~english
 		 *\return		\p false if the update program has not been set.
@@ -77,37 +90,14 @@ namespace castor3d
 		 */
 		inline bool hasUpdateProgram()const
 		{
-			return m_updateProgram.module != nullptr;
+			return m_program != nullptr;
 		}
 
 	private:
-		/**
-		 *\~english
-		 *\brief		Initialises the shader storage buffer holding the particles data.
-		 *\return		\p false on failure.
-		 *\~french
-		 *\brief		Initialise le tampon de stockage shader contenant les données des particules.
-		 *\return		\p false en cas d'échec.
-		 */
 		bool doInitialiseParticleStorage();
-		/**
-		 *\~english
-		 *\brief		Creates the storage buffer containing random values.
-		 *\return		\p false on failure.
-		 *\~french
-		 *\brief		Crée le tampon de stockage contenant des valeurs aléatoires.
-		 *\return		\p false en cas d'échec.
-		 */
 		bool doCreateRandomStorage();
-		/**
-		 *\~english
-		 *\brief		Creates the pipeline used to run the shader.
-		 *\return		\p false on failure.
-		 *\~french
-		 *\brief		Crée le pipeline utilisé pour lancer le shader.
-		 *\return		\p false en cas d'échec.
-		 */
 		bool doInitialisePipeline();
+		void doPrepareCommandBuffers();
 
 	protected:
 		struct Configuration
@@ -121,18 +111,20 @@ namespace castor3d
 
 	protected:
 		ParticleDeclaration m_inputs;
-		renderer::ShaderStageState m_updateProgram;
+		ShaderProgramSPtr m_program;
 		renderer::UniformBufferPtr< Configuration > m_ubo;
 		std::array< renderer::BufferPtr< uint8_t >, 2 > m_particlesStorages;
+		renderer::BufferPtr< uint32_t > m_generatedCountBuffer;
 		renderer::BufferPtr< castor::Point4f > m_randomStorage;
 		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
-		renderer::DescriptorSetPoolPtr m_descriptorPool;
-		renderer::DescriptorSetPtr m_descriptorSet;
 		renderer::PipelineLayoutPtr m_pipelineLayout;
 		renderer::ComputePipelinePtr m_pipeline;
+		renderer::DescriptorSetPoolPtr m_descriptorPool;
+		std::array< renderer::DescriptorSetPtr, 2u > m_descriptorSets;
+		renderer::CommandBufferPtr m_commandBuffer;
+		renderer::FencePtr m_fence;
 		uint32_t m_particlesCount{ 0u };
-		uint32_t m_worgGroupSize{ 128u };
-		renderer::BufferPtr< uint32_t > m_generatedCountBuffer;
+		castor::Point3i m_worgGroupSizes{ 128, 1, 1 };
 		uint32_t m_in{ 0 };
 		uint32_t m_out{ 1 };
 	};

@@ -86,20 +86,6 @@ namespace castor3d
 		 */
 		C3D_API void update();
 		/**
-		 *\~english
-		 *\return		The program flags.
-		 *\~french
-		 *\return		Les indicateurs de programme.
-		 */
-		C3D_API ProgramFlags getProgramFlags()const;
-		/**
-		 *\~english
-		 *\brief		Sets the material.
-		 *\~french
-		 *\brief		Définit le matériau.
-		 */
-		C3D_API void setMaterial( MaterialSPtr value );
-		/**
 		*\~english
 		*name
 		*	Getters.
@@ -167,6 +153,8 @@ namespace castor3d
 		{
 			return m_billboardSize;
 		}
+
+		C3D_API ProgramFlags getProgramFlags()const;
 		/**@}*/
 		/**
 		*\~english
@@ -187,11 +175,6 @@ namespace castor3d
 			m_centerOffset = value;
 		}
 
-		inline void setCount( uint32_t value )
-		{
-			m_count = value;
-		}
-
 		inline void setNode( SceneNodeSPtr value )
 		{
 			m_node = value;
@@ -206,6 +189,9 @@ namespace castor3d
 		{
 			m_billboardSize = value;
 		}
+
+		C3D_API void setMaterial( MaterialSPtr value );
+		C3D_API void setCount( uint32_t value );
 		/**@}*/
 
 		OnBillboardMaterialChanged onMaterialChanged;

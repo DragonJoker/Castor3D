@@ -109,7 +109,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour les particules.
 		 */
-		C3D_API void update();
+		C3D_API void update( RenderPassTimer & timer );
 		/**
 		 *\~english
 		 *\brief		Sets the material
@@ -174,7 +174,16 @@ namespace castor3d
 		 *\brief		Définit le programme utilisé pour mettre à jour les particules via un compute shader.
 		 *\param[in]	program	Le programme.
 		 */
-		C3D_API void setCSUpdateProgram( renderer::ShaderStageState const & program );
+		C3D_API void setCSUpdateProgram( ShaderProgramSPtr program );
+		/**
+		 *\~english
+		 *\brief		Defines the workgroup sizes, as defined inside the compute shader.
+		 *\param[in]	sizes	The sizes.
+		 *\~french
+		 *\brief		Définit les dimensions des groupes de travail, tels que définis dans le compute shader.
+		 *\param[in]	sizes	Les dimensions.
+		 */
+		C3D_API void setCSGroupSizes( castor::Point3i sizes );
 		/**
 		 *\~english
 		 *\return		The particles written at last update.

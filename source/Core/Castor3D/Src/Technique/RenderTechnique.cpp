@@ -598,7 +598,7 @@ namespace castor3d
 		m_particleTimer->start();
 		scene.getParticleSystemCache().forEach( [this, &info]( ParticleSystem & particleSystem )
 		{
-			particleSystem.update();
+			particleSystem.update( *m_particleTimer );
 			info.m_particlesCount += particleSystem.getParticlesCount();
 		} );
 		m_particleTimer->stop();

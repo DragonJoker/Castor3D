@@ -287,6 +287,15 @@ namespace castor3d
 		}
 	}
 
+	void BillboardBase::setCount( uint32_t value )
+	{
+		if ( m_count != value )
+		{
+			m_count = value;
+			getParentScene().setChanged();
+		}
+	}
+
 	void BillboardBase::doGatherBuffers( renderer::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, renderer::VertexLayoutCRefArray & layouts )

@@ -697,35 +697,38 @@ namespace castor3d
 			, renderer::CommandBuffer const & commandBuffer
 			, uint32_t instanceCount = 1u )
 		{
-			GeometryBuffers const & geometryBuffers = getGeometryBuffers( node.data, node.passNode.pass.getOwner()->shared_from_this() );
-
-			commandBuffer.bindPipeline( pipeline.getPipeline() );
-			commandBuffer.bindDescriptorSet( *node.uboDescriptorSet, pipeline.getPipelineLayout() );
-
-			if ( node.texDescriptorSet )
+			if ( instanceCount )
 			{
-				commandBuffer.bindDescriptorSet( *node.texDescriptorSet, pipeline.getPipelineLayout() );
-			}
+				GeometryBuffers const & geometryBuffers = getGeometryBuffers( node.data, node.passNode.pass.getOwner()->shared_from_this() );
 
-			for ( uint32_t i = 0; i < geometryBuffers.vbo.size(); ++i )
-			{
-				commandBuffer.bindVertexBuffer( geometryBuffers.layouts[i].get().getBindingSlot()
-					, geometryBuffers.vbo[i]
-					, geometryBuffers.vboOffsets[i] );
-			}
+				commandBuffer.bindPipeline( pipeline.getPipeline() );
+				commandBuffer.bindDescriptorSet( *node.uboDescriptorSet, pipeline.getPipelineLayout() );
 
-			if ( geometryBuffers.ibo )
-			{
-				commandBuffer.bindIndexBuffer( *geometryBuffers.ibo
-					, geometryBuffers.iboOffset
-					, renderer::IndexType::eUInt32 );
-				commandBuffer.drawIndexed( geometryBuffers.idxCount
-					, instanceCount );
-			}
-			else
-			{
-				commandBuffer.draw( geometryBuffers.vtxCount
-					, instanceCount );
+				if ( node.texDescriptorSet )
+				{
+					commandBuffer.bindDescriptorSet( *node.texDescriptorSet, pipeline.getPipelineLayout() );
+				}
+
+				for ( uint32_t i = 0; i < geometryBuffers.vbo.size(); ++i )
+				{
+					commandBuffer.bindVertexBuffer( geometryBuffers.layouts[i].get().getBindingSlot()
+						, geometryBuffers.vbo[i]
+						, geometryBuffers.vboOffsets[i] );
+				}
+
+				if ( geometryBuffers.ibo )
+				{
+					commandBuffer.bindIndexBuffer( *geometryBuffers.ibo
+						, geometryBuffers.iboOffset
+						, renderer::IndexType::eUInt32 );
+					commandBuffer.drawIndexed( geometryBuffers.idxCount
+						, instanceCount );
+				}
+				else
+				{
+					commandBuffer.draw( geometryBuffers.vtxCount
+						, instanceCount );
+				}
 			}
 		}
 
@@ -737,35 +740,38 @@ namespace castor3d
 			, renderer::CommandBuffer const & commandBuffer
 			, uint32_t instanceCount = 1u )
 		{
-			GeometryBuffers const & geometryBuffers = object.getGeometryBuffers( pass.getOwner()->shared_from_this() );
-
-			commandBuffer.bindPipeline( pipeline.getPipeline() );
-			commandBuffer.bindDescriptorSet( *node.uboDescriptorSet, pipeline.getPipelineLayout() );
-
-			if ( node.texDescriptorSet )
+			if ( instanceCount )
 			{
-				commandBuffer.bindDescriptorSet( *node.texDescriptorSet, pipeline.getPipelineLayout() );
-			}
+				GeometryBuffers const & geometryBuffers = object.getGeometryBuffers( pass.getOwner()->shared_from_this() );
 
-			for ( uint32_t i = 0; i < geometryBuffers.vbo.size(); ++i )
-			{
-				commandBuffer.bindVertexBuffer( geometryBuffers.layouts[i].get().getBindingSlot()
-					, geometryBuffers.vbo[i]
-					, geometryBuffers.vboOffsets[i] );
-			}
+				commandBuffer.bindPipeline( pipeline.getPipeline() );
+				commandBuffer.bindDescriptorSet( *node.uboDescriptorSet, pipeline.getPipelineLayout() );
 
-			if ( geometryBuffers.ibo )
-			{
-				commandBuffer.bindIndexBuffer( *geometryBuffers.ibo
-					, geometryBuffers.iboOffset
-					, renderer::IndexType::eUInt32 );
-				commandBuffer.drawIndexed( geometryBuffers.idxCount
-					, instanceCount );
-			}
-			else
-			{
-				commandBuffer.draw( geometryBuffers.vtxCount
-					, instanceCount );
+				if ( node.texDescriptorSet )
+				{
+					commandBuffer.bindDescriptorSet( *node.texDescriptorSet, pipeline.getPipelineLayout() );
+				}
+
+				for ( uint32_t i = 0; i < geometryBuffers.vbo.size(); ++i )
+				{
+					commandBuffer.bindVertexBuffer( geometryBuffers.layouts[i].get().getBindingSlot()
+						, geometryBuffers.vbo[i]
+						, geometryBuffers.vboOffsets[i] );
+				}
+
+				if ( geometryBuffers.ibo )
+				{
+					commandBuffer.bindIndexBuffer( *geometryBuffers.ibo
+						, geometryBuffers.iboOffset
+						, renderer::IndexType::eUInt32 );
+					commandBuffer.drawIndexed( geometryBuffers.idxCount
+						, instanceCount );
+				}
+				else
+				{
+					commandBuffer.draw( geometryBuffers.vtxCount
+						, instanceCount );
+				}
 			}
 		}
 

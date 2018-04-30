@@ -105,7 +105,8 @@ namespace castor3d
 		 *\param[in]	total	Le temps total écoulé.
 		 *\return		Le nombre de particules.
 		 */
-		C3D_API virtual uint32_t update( castor::Milliseconds const & time
+		C3D_API virtual uint32_t update( RenderPassTimer & timer
+			, castor::Milliseconds const & time
 			, castor::Milliseconds const & total ) = 0;
 		/**
 		 *\~english

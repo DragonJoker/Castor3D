@@ -1,14 +1,17 @@
 #include "ComputeParticleSystem.hpp"
 
 #include "Engine.hpp"
+#include "Render/RenderPassTimer.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Scene/ParticleSystem/Particle.hpp"
+#include "Shader/Program.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <Buffer/UniformBuffer.hpp>
+#include <Sync/BufferMemoryBarrier.hpp>
 
 #include <Graphics/PixelBuffer.hpp>
 
@@ -18,6 +21,22 @@ using namespace castor;
 
 namespace castor3d
 {
+	namespace
+	{
+		static uint32_t constexpr IndexBufferBinding = 0u;
+		static uint32_t constexpr RandomBufferBinding = 1u;
+		static uint32_t constexpr InParticlesBufferBinding = 2u;
+		static uint32_t constexpr OutParticlesBufferBinding = 3u;
+		static uint32_t constexpr ParticleSystemBufferBinding = 4u;
+
+		Point3ui doDispatch( uint32_t count, Point3i const & sizes )
+		{
+			uint32_t blockSize = sizes[0] * sizes[1] * sizes[2];
+			uint32_t numBlocks = ( count + blockSize - 1 ) / blockSize;
+			return Point3ui{ numBlocks, numBlocks, numBlocks };
+		}
+	}
+
 	ComputeParticleSystem::ComputeParticleSystem( ParticleSystem & parent )
 		: ParticleSystemImpl{ ParticleSystemImpl::Type::eComputeShader, parent }
 	{
@@ -29,7 +48,12 @@ namespace castor3d
 
 	bool ComputeParticleSystem::initialise()
 	{
-		bool result = m_updateProgram.module != nullptr;
+		bool result = m_program != nullptr;
+
+		if ( result )
+		{
+			result = m_program->initialise();
+		}
 
 		if ( result )
 		{
@@ -56,36 +80,45 @@ namespace castor3d
 			result = doInitialisePipeline();
 		}
 
+		if ( result )
+		{
+			doPrepareCommandBuffers();
+		}
+
 		return result;
 	}
 
 	void ComputeParticleSystem::cleanup()
 	{
-		if ( m_randomStorage )
+		m_fence.reset();
+		m_commandBuffer.reset();
+
+		for ( auto & descriptorSet : m_descriptorSets )
 		{
-			m_randomStorage.reset();
+			descriptorSet.reset();
 		}
+
+		m_descriptorPool.reset();
+		m_pipeline.reset();
+		m_pipelineLayout.reset();
+		m_descriptorLayout.reset();
+
+		m_randomStorage.reset();
 
 		for ( auto & storage : m_particlesStorages )
 		{
-			if ( storage )
-			{
-				storage.reset();
-			}
+			storage.reset();
 		}
 
-		if ( m_generatedCountBuffer )
-		{
-			m_generatedCountBuffer.reset();
-		}
-
+		m_generatedCountBuffer.reset();
 		m_ubo.reset();
-		m_updateProgram.module.reset();
 	}
 
-	uint32_t ComputeParticleSystem::update( Milliseconds const & time
+	uint32_t ComputeParticleSystem::update( RenderPassTimer & timer
+		, Milliseconds const & time
 		, Milliseconds const & totalTime )
 	{
+		auto & device = *getParent().getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
 		auto & data = m_ubo->getData( 0u );
 		data.deltaTime = float( time.count() );
 		data.time = float( totalTime.count() );
@@ -96,30 +129,99 @@ namespace castor3d
 
 		uint32_t counts[]{ 0u, 0u };
 
-		if ( auto buffer = m_generatedCountBuffer->lock( 0u
-			, 2u
-			, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateRange ) )
+		if ( auto buffer = m_generatedCountBuffer->lock( 0u, 2u, renderer::MemoryMapFlag::eWrite ) )
 		{
 			buffer[0] = counts[0];
 			buffer[1] = counts[1];
-			m_randomStorage->flush( 0u, 2u );
-			m_randomStorage->unlock();
+			m_generatedCountBuffer->flush( 0u, 2u );
+			m_generatedCountBuffer->unlock();
 		}
 
-		//m_computePipeline->run(
-		//	Point3ui{ std::max( 1u, uint32_t( std::ceil( float( particlesCount ) / m_worgGroupSize ) ) ), 1u, 1u },
-		//	Point3ui{ std::min( m_worgGroupSize, particlesCount ), 1u, 1u },
-		//	MemoryBarrier::eAtomicCounterBuffer | MemoryBarrier::eShaderStorageBuffer | MemoryBarrier::eVertexBuffer
-		//);
+		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
+		m_commandBuffer->resetQueryPool( timer.getQuery()
+			, 0u
+			, 2u );
+		m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			, timer.getQuery()
+			, 0u );
+		// Put buffers in appropriate state for compute
+		m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eHost
+			, renderer::PipelineStageFlag::eComputeShader
+			, m_generatedCountBuffer->getBuffer().makeMemoryTransitionBarrier( renderer::AccessFlag::eShaderRead | renderer::AccessFlag::eShaderWrite ) );
+		m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
+			, renderer::PipelineStageFlag::eComputeShader
+			, m_particlesStorages[m_in]->getBuffer().makeMemoryTransitionBarrier( renderer::AccessFlag::eShaderRead ) );
+		m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
+			, renderer::PipelineStageFlag::eComputeShader
+			, m_particlesStorages[m_out]->getBuffer().makeMemoryTransitionBarrier( renderer::AccessFlag::eShaderWrite ) );
+		// Dispatch compute
+		m_commandBuffer->bindPipeline( *m_pipeline, renderer::PipelineBindPoint::eCompute );
+		m_commandBuffer->bindDescriptorSet( *m_descriptorSets[m_in]
+			, *m_pipelineLayout
+			, renderer::PipelineBindPoint::eCompute );
+		auto dispatch = doDispatch( particlesCount, m_worgGroupSizes );
+		m_commandBuffer->dispatch( dispatch[0], dispatch[1], dispatch[2] );
+		// Put counts buffer to host visible state
+		m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eComputeShader
+			, renderer::PipelineStageFlag::eHost
+			, m_generatedCountBuffer->getBuffer().makeMemoryTransitionBarrier( renderer::AccessFlag::eHostRead ) );
+		m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eComputeShader
+			, renderer::PipelineStageFlag::eTransfer
+			, m_particlesStorages[m_in]->getBuffer().makeTransferSource() );
+		m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eComputeShader
+			, renderer::PipelineStageFlag::eTransfer
+			, m_particlesStorages[m_out]->getBuffer().makeTransferSource() );
+		m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
+			, timer.getQuery()
+			, 1u );
+		m_commandBuffer->end();
 
-		//m_generatedCountBuffer->download( 0u, 1u, &particlesCount );
-		//m_particlesCount = std::min( particlesCount, uint32_t( m_parent.getMaxParticlesCount() ) );
+		device.getComputeQueue().submit( *m_commandBuffer, m_fence.get() );
+		m_fence->wait( renderer::FenceTimeout );
+		m_fence->reset();
+		timer.step();
+		m_commandBuffer->reset();
 
-		//if ( m_particlesCount )
-		//{
-		//	m_parent.getBillboards()->getVertexBuffer().copy( *m_particlesStorages[m_out]
-		//		, m_particlesCount * m_inputs.stride());
-		//}
+		// Retrieve counts
+		if ( auto buffer = m_generatedCountBuffer->lock( 0u, 1u, renderer::MemoryMapFlag::eRead ) )
+		{
+			particlesCount = buffer[0];
+			m_generatedCountBuffer->unlock();
+			m_particlesCount = std::min( particlesCount, uint32_t( m_parent.getMaxParticlesCount() ) );
+			Logger::logDebug( makeStringStream() << cuT( "Particles : " ) << m_particlesCount );
+		}
+
+		if ( m_particlesCount )
+		{
+			m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
+			m_commandBuffer->resetQueryPool( timer.getQuery()
+				, 0u
+				, 2u );
+			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+				, timer.getQuery()
+				, 0u );
+			// Copy output storage to billboard's vertex buffer
+			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eVertexInput
+				, renderer::PipelineStageFlag::eTransfer
+				, m_parent.getBillboards()->getVertexBuffer().getBuffer().makeTransferDestination() );
+			m_commandBuffer->copyBuffer( m_particlesStorages[m_out]->getBuffer()
+				, m_parent.getBillboards()->getVertexBuffer().getBuffer()
+				, m_particlesCount * m_inputs.stride() );
+			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
+				, renderer::PipelineStageFlag::eVertexInput
+				, m_parent.getBillboards()->getVertexBuffer().getBuffer().makeVertexShaderInputResource() );
+			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
+				, timer.getQuery()
+				, 1u );
+			m_commandBuffer->end();
+
+			m_fence->reset();
+			device.getComputeQueue().submit( *m_commandBuffer, m_fence.get() );
+			m_fence->wait( renderer::FenceTimeout );
+			m_fence->reset();
+			timer.step();
+			m_commandBuffer->reset();
+		}
 
 		std::swap( m_in, m_out );
 		return m_particlesCount;
@@ -132,9 +234,9 @@ namespace castor3d
 		m_inputs.push_back( ParticleElementDeclaration{ name, 0u, type, m_inputs.stride() } );
 	}
 
-	void ComputeParticleSystem::setUpdateProgram( renderer::ShaderStageState const & program )
+	void ComputeParticleSystem::setUpdateProgram( ShaderProgramSPtr program )
 	{
-		m_updateProgram = program;
+		m_program = program;
 	}
 
 	bool ComputeParticleSystem::doInitialiseParticleStorage()
@@ -146,32 +248,32 @@ namespace castor3d
 			, renderer::BufferTarget::eStorageBuffer | renderer::BufferTarget::eTransferDst | renderer::BufferTarget::eTransferSrc
 			, renderer::MemoryPropertyFlag::eHostVisible );
 
-		m_particlesStorages[m_in] = renderer::makeBuffer< uint8_t >( device
+		m_particlesStorages[0] = renderer::makeBuffer< uint8_t >( device
 			, size
-			, renderer::BufferTarget::eStorageBuffer | renderer::BufferTarget::eTransferDst
+			, renderer::BufferTarget::eStorageBuffer | renderer::BufferTarget::eTransferDst | renderer::BufferTarget::eTransferSrc
 			, renderer::MemoryPropertyFlag::eHostVisible );
-
-		m_particlesStorages[m_in] = renderer::makeBuffer< uint8_t >( device
+		m_particlesStorages[1] = renderer::makeBuffer< uint8_t >( device
 			, size
-			, renderer::BufferTarget::eStorageBuffer | renderer::BufferTarget::eTransferDst
+			, renderer::BufferTarget::eStorageBuffer | renderer::BufferTarget::eTransferDst | renderer::BufferTarget::eTransferSrc
 			, renderer::MemoryPropertyFlag::eHostVisible );
-
 		Particle particle{ m_inputs, m_parent.getDefaultValues() };
 
-		if ( auto buffer = m_particlesStorages[m_in]->getBuffer().lock( 0u
-			, size
-			, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateRange ) )
+		auto initialise = [this, &size, &particle]( renderer::Buffer< uint8_t > & buffer )
 		{
-			for ( uint32_t i = 0u; i < m_parent.getMaxParticlesCount(); ++i )
+			if ( auto data = buffer.lock( 0u, size, renderer::MemoryMapFlag::eWrite ) )
 			{
-				std::memcpy( buffer, particle.getData(), m_inputs.stride() );
-				buffer += m_inputs.stride();
+				for ( uint32_t i = 0u; i < m_parent.getMaxParticlesCount(); ++i )
+				{
+					std::memcpy( data, particle.getData(), m_inputs.stride() );
+					data += m_inputs.stride();
+				}
+
+				buffer.getBuffer().flush( 0u, size );
+				buffer.getBuffer().unlock();
 			}
-
-			m_particlesStorages[m_in]->getBuffer().flush( 0u, size );
-			m_particlesStorages[m_in]->getBuffer().unlock();
-		}
-
+		};
+		initialise( *m_particlesStorages[0] );
+		initialise( *m_particlesStorages[1] );
 		return true;
 	}
 
@@ -211,20 +313,59 @@ namespace castor3d
 		auto & device = *getParent().getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
 		renderer::DescriptorSetLayoutBindingArray bindings
 		{
-			{ 0u, renderer::DescriptorType::eStorageBuffer, renderer::ShaderStageFlag::eCompute },
-			{ 1u, renderer::DescriptorType::eStorageBuffer, renderer::ShaderStageFlag::eCompute },
-			{ 2u, renderer::DescriptorType::eStorageBuffer, renderer::ShaderStageFlag::eCompute },
-			{ 3u, renderer::DescriptorType::eStorageBuffer, renderer::ShaderStageFlag::eCompute },
-			{ 4u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eCompute },
+			{ IndexBufferBinding, renderer::DescriptorType::eStorageBuffer, renderer::ShaderStageFlag::eCompute },
+			{ RandomBufferBinding, renderer::DescriptorType::eStorageBuffer, renderer::ShaderStageFlag::eCompute },
+			{ InParticlesBufferBinding, renderer::DescriptorType::eStorageBuffer, renderer::ShaderStageFlag::eCompute },
+			{ OutParticlesBufferBinding, renderer::DescriptorType::eStorageBuffer, renderer::ShaderStageFlag::eCompute },
+			{ ParticleSystemBufferBinding, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eCompute },
 		};
 		m_descriptorLayout = device.createDescriptorSetLayout( std::move( bindings ) );
-		m_descriptorPool = m_descriptorLayout->createPool( 1u );
-		m_descriptorSet = m_descriptorPool->createDescriptorSet( 0u );
 		m_pipelineLayout = device.createPipelineLayout( *m_descriptorLayout );
+
 		m_pipeline = m_pipelineLayout->createPipeline( renderer::ComputePipelineCreateInfo
 		{
-			m_updateProgram,
+			m_program->getStates()[0]
 		} );
+
+		auto initialiseDescriptor = [this]( renderer::DescriptorSet & descriptorSet
+			, uint32_t inIndex
+			, uint32_t outIndex )
+		{
+			descriptorSet.createBinding( m_descriptorLayout->getBinding( IndexBufferBinding )
+				, *m_generatedCountBuffer
+				, 0u
+				, m_generatedCountBuffer->getCount() );
+			descriptorSet.createBinding( m_descriptorLayout->getBinding( RandomBufferBinding )
+				, *m_randomStorage
+				, 0u
+				, m_randomStorage->getCount() );
+			descriptorSet.createBinding( m_descriptorLayout->getBinding( InParticlesBufferBinding )
+				, *m_particlesStorages[inIndex]
+				, 0u
+				, m_particlesStorages[inIndex]->getCount() );
+			descriptorSet.createBinding( m_descriptorLayout->getBinding( OutParticlesBufferBinding )
+				, *m_particlesStorages[outIndex]
+				, 0u
+				, m_particlesStorages[outIndex]->getCount() );
+			descriptorSet.createBinding( m_descriptorLayout->getBinding( ParticleSystemBufferBinding )
+				, *m_ubo
+				, 0u
+				, 1u );
+			descriptorSet.update();
+		};
+
+		m_descriptorPool = m_descriptorLayout->createPool( 2u );
+		m_descriptorSets[0] = m_descriptorPool->createDescriptorSet( 0u );
+		m_descriptorSets[1] = m_descriptorPool->createDescriptorSet( 0u );
+		initialiseDescriptor( *m_descriptorSets[0], 0u, 1u );
+		initialiseDescriptor( *m_descriptorSets[1], 1u, 0u );
 		return true;
+	}
+
+	void ComputeParticleSystem::doPrepareCommandBuffers()
+	{
+		auto & device = *getParent().getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
+		m_commandBuffer = device.getComputeCommandPool().createCommandBuffer();
+		m_fence = device.createFence();
 	}
 }

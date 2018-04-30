@@ -148,9 +148,11 @@ namespace castor3d
 			else if ( hasFile( stage ) )
 			{
 				m_states.push_back( { device.createShaderModule( stage ) } );
-				TextFile file{ getFile( stage ), File::OpenMode::eRead };
 				String source;
-				file.copytoString( source );
+				{
+					TextFile file{ getFile( stage ), File::OpenMode::eRead };
+					file.copytoString( source );
+				}
 				m_states.back().module->loadShader( source );
 			}
 		};
