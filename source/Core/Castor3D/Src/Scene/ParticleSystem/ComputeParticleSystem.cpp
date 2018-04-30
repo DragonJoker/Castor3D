@@ -188,7 +188,6 @@ namespace castor3d
 			particlesCount = buffer[0];
 			m_generatedCountBuffer->unlock();
 			m_particlesCount = std::min( particlesCount, uint32_t( m_parent.getMaxParticlesCount() ) );
-			Logger::logDebug( makeStringStream() << cuT( "Particles : " ) << m_particlesCount );
 		}
 
 		if ( m_particlesCount )
