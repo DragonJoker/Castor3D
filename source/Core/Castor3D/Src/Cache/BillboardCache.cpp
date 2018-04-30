@@ -1,7 +1,6 @@
 #include "BillboardCache.hpp"
 
 #include "Engine.hpp"
-
 #include "Event/Frame/FrameListener.hpp"
 #include "Event/Frame/FunctorEvent.hpp"
 #include "Material/Material.hpp"
@@ -9,23 +8,10 @@
 #include "Scene/BillboardList.hpp"
 #include "Scene/Scene.hpp"
 
-#include <Miscellaneous/Hash.hpp>
-
 using namespace castor;
 
 namespace castor3d
 {
-	namespace
-	{
-		size_t hash( BillboardBase const & billboard
-			, Pass const & pass )
-		{
-			size_t result = std::hash< BillboardBase const * >{}( &billboard );
-			castor::hashCombine( result, &pass );
-			return result;
-		}
-	}
-
 	template<> const String ObjectCacheTraits< BillboardList, String >::Name = cuT( "BillboardList" );
 
 	BillboardListCache::ObjectCache( Engine & engine
@@ -50,10 +36,7 @@ namespace castor3d
 			, std::move( merge )
 			, std::move( attach )
 			, std::move( detach ) )
-		, m_modelUboPool{ *engine.getRenderSystem() }
-		, m_modelMatrixUboPool{ *engine.getRenderSystem() }
-		, m_billboardUboPool{ *engine.getRenderSystem() }
-		, m_pickingUboPool{ *engine.getRenderSystem() }
+		, m_pools{ scene.getBillboardPools() }
 	{
 	}
 
@@ -61,60 +44,29 @@ namespace castor3d
 	{
 	}
 
-	void BillboardListCache::update()
-	{
-		for ( auto & [hash, entry] : m_entries )
-		{
-			auto & modelData = entry.modelUbo.getData();
-			modelData.shadowReceiver = entry.billboard.isShadowReceiver();
-			modelData.materialIndex = entry.pass.getId();
-			auto & modelMatrixData = entry.modelMatrixUbo.getData();
-			modelMatrixData.model = convert( entry.billboard.getNode()->getDerivedTransformationMatrix() );
-			auto & billboardData = entry.billboardUbo.getData();
-			billboardData.dimensions = entry.billboard.getDimensions();
-		}
-	}
-
-	void BillboardListCache::uploadUbos()
-	{
-		m_modelUboPool.upload();
-		m_modelMatrixUboPool.upload();
-		m_billboardUboPool.upload();
-		m_pickingUboPool.upload();
-	}
-
-	void BillboardListCache::cleanupUbos()
-	{
-		m_modelUboPool.cleanup();
-		m_modelMatrixUboPool.cleanup();
-		m_billboardUboPool.cleanup();
-		m_pickingUboPool.cleanup();
-	}
-
-	BillboardListCache::PoolsEntry BillboardListCache::getUbos( BillboardBase const & billboard, Pass const & pass )const
-	{
-		return m_entries.at( hash( billboard, pass ) );
-	}
-
 	void BillboardListCache::clear()
 	{
-		MyObjectCache::clear();
-
-		for ( auto & entry : m_entries )
+		for ( auto & element : m_elements )
 		{
-			m_modelUboPool.putBuffer( entry.second.modelUbo );
-			m_modelMatrixUboPool.putBuffer( entry.second.modelMatrixUbo );
-			m_billboardUboPool.putBuffer( entry.second.billboardUbo );
-			m_pickingUboPool.putBuffer( entry.second.pickingUbo );
+			m_pools.unregisterElement( *element.second );
 		}
+
+		MyObjectCache::clear();
 	}
 
 	BillboardListSPtr BillboardListCache::add( Key const & name
 		, SceneNodeSPtr parent )
 	{
 		auto result = MyObjectCache::add( name, parent );
-		doRegister( *result );
+		m_pools.registerElement( *result );
 		return result;
+	}
+
+	void BillboardListCache::add( ElementPtr element )
+	{
+		m_initialise( element );
+		MyObjectCache::add( element->getName(), element );
+		m_pools.registerElement( *element );
 	}
 
 	void BillboardListCache::remove( Key const & name )
@@ -127,73 +79,7 @@ namespace castor3d
 			m_detach( element );
 			m_elements.erase( name );
 			onChanged();
-			doUnregister( *element );
-		}
-	}
-	
-	BillboardListCache::PoolsEntry BillboardListCache::doCreateEntry( BillboardBase const & billboard
-		, Pass const & pass )
-	{
-		return
-		{
-			billboard,
-			pass,
-			m_modelUboPool.getBuffer( renderer::MemoryPropertyFlag::eHostVisible ),
-			m_modelMatrixUboPool.getBuffer( renderer::MemoryPropertyFlag::eHostVisible ),
-			m_billboardUboPool.getBuffer( renderer::MemoryPropertyFlag::eHostVisible ),
-			m_pickingUboPool.getBuffer( renderer::MemoryPropertyFlag::eHostVisible ),
-		};
-	}
-
-	void BillboardListCache::doRemoveEntry( BillboardBase const & billboard
-		, Pass const & pass )
-	{
-		auto entry = getUbos( billboard, pass );
-		m_entries.erase( hash( billboard, pass ) );
-		m_modelUboPool.putBuffer( entry.modelUbo );
-		m_modelMatrixUboPool.putBuffer( entry.modelMatrixUbo );
-		m_billboardUboPool.putBuffer( entry.billboardUbo );
-		m_pickingUboPool.putBuffer( entry.pickingUbo );
-	}
-
-	void BillboardListCache::doRegister( BillboardBase & billboard )
-	{
-		m_connections.emplace( &billboard, billboard.onMaterialChanged.connect( [this]( BillboardBase const & billboard
-			, MaterialSPtr oldMaterial
-			, MaterialSPtr newMaterial )
-		{
-			if ( oldMaterial )
-			{
-				for ( auto & pass : *oldMaterial )
-				{
-					doRemoveEntry( billboard, *pass );
-				}
-			}
-
-			if ( newMaterial )
-			{
-				for ( auto & pass : *newMaterial )
-				{
-					m_entries.emplace( hash( billboard, *pass )
-						, doCreateEntry( billboard, *pass ) );
-				}
-			}
-		} ) );
-
-		for ( auto & pass : *billboard.getMaterial() )
-		{
-			m_entries.emplace( hash( billboard, *pass )
-				, doCreateEntry( billboard, *pass ) );
-		}
-	}
-
-	void BillboardListCache::doUnregister( BillboardBase & billboard )
-	{
-		m_connections.erase( &billboard );
-
-		for ( auto & pass : *billboard.getMaterial() )
-		{
-			doRemoveEntry( billboard, *pass );
+			m_pools.unregisterElement( *element );
 		}
 	}
 }

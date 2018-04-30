@@ -241,10 +241,15 @@ namespace castor3d
 
 		for ( auto & submesh : *geometry.getMesh() )
 		{
-			for ( auto & pass : *geometry.getMaterial( *submesh ) )
+			auto material = geometry.getMaterial( *submesh );
+
+			if ( material )
 			{
-				m_entries.emplace( hash( geometry, *submesh, *pass )
-					, doCreateEntry( geometry, *submesh, *pass ) );
+				for ( auto & pass : *material )
+				{
+					m_entries.emplace( hash( geometry, *submesh, *pass )
+						, doCreateEntry( geometry, *submesh, *pass ) );
+				}
 			}
 		}
 	}

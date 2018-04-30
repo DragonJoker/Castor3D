@@ -852,6 +852,12 @@ namespace castor3d
 	{
 		renderer::DescriptorSetLayoutBindingArray result = RenderPass::doCreateUboBindings( flags );
 		result.emplace_back( UboBindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment );
+
+		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
+		{
+			result.emplace_back( BillboardUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+		}
+
 		return result;
 	}
 

@@ -165,7 +165,7 @@ namespace castor3d
 			getEngine()->getSceneCache().forEach( []( Scene & scene )
 			{
 				scene.getGeometryCache().uploadUbos();
-				scene.getBillboardListCache().uploadUbos();
+				scene.getBillboardPools().uploadUbos();
 				scene.getAnimatedObjectGroupCache().uploadUbos();
 			} );
 			getEngine()->getMaterialCache().update();

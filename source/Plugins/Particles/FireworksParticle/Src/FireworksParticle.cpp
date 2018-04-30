@@ -20,6 +20,14 @@ namespace Fireworks
 		constexpr float g_shell = 1.0f;
 		constexpr float g_secondaryShell = 2.0f;
 
+		enum
+		{
+			ePosition,
+			eType,
+			eVelocity,
+			eAge,
+		};
+
 		constexpr Milliseconds g_launcherCooldown = 100_ms;
 		constexpr Milliseconds g_shellLifetime = 10000_ms;
 		constexpr Milliseconds g_secondaryShellLifetime = 2500_ms;
@@ -47,7 +55,10 @@ namespace Fireworks
 			{
 				Point3f velocity{ doGetRandomDirection() * 5.0f };
 				velocity[1] = std::max( velocity[1] * 7.0f, 10.0f );
-				system.emitParticle( g_shell, Point3f{ position }, velocity, 0.0f );
+				system.emitParticle( g_shell
+					, Point3f{ position }
+					, velocity
+					, 0.0f );
 				age = 0.0f;
 			}
 
@@ -77,7 +88,10 @@ namespace Fireworks
 			{
 				for ( int i = 1; i < 10; ++i )
 				{
-					system.emitParticle( g_secondaryShell, Point3f{ position }, ( doGetRandomDirection() * 5.0f ) + velocity / 2.0f, 0.0f );
+					system.emitParticle( g_secondaryShell
+						, Point3f{ position }
+						, ( doGetRandomDirection() * 5.0f ) + velocity / 2.0f
+						, 0.0f );
 				}
 
 				// Turn this shell to a secondary shell, to decrease the holes in buffer
@@ -119,15 +133,30 @@ namespace Fireworks
 
 			if ( type == g_launcher )
 			{
-				doUpdateLauncher( system, time, type, position, velocity, age );
+				doUpdateLauncher( system
+					, time
+					, type
+					, position
+					, velocity
+					, age );
 			}
 			else if ( type == g_shell )
 			{
-				doUpdateShell( system, time, type, position, velocity, age );
+				doUpdateShell( system
+					, time
+					, type
+					, position
+					, velocity
+					, age );
 			}
 			else
 			{
-				doUpdateSecondaryShell( system, time, type, position, velocity, age );
+				doUpdateSecondaryShell( system
+					, time
+					, type
+					, position
+					, velocity
+					, age );
 			}
 		}
 
@@ -137,7 +166,7 @@ namespace Fireworks
 			{
 				auto & particle = particles[i];
 
-				if ( particle.getValue< ParticleFormat::eFloat >( 0u ) == 0.0f )
+				if ( particle.getValue< ParticleFormat::eFloat >( eType ) == 0.0f )
 				{
 					particle = std::move( particles[firstUnused - 1] );
 					--firstUnused;
@@ -169,10 +198,10 @@ namespace Fireworks
 		, float age )
 	{
 		Particle particle{ m_inputs };
-		particle.setValue< ParticleFormat::eFloat >( 0u, type );
-		particle.setValue< ParticleFormat::eVec3f >( 1u, position );
-		particle.setValue< ParticleFormat::eVec3f >( 2u, velocity );
-		particle.setValue< ParticleFormat::eFloat >( 3u, age );
+		particle.setValue< ParticleFormat::eFloat >( eType, type );
+		particle.setValue< ParticleFormat::eVec3f >( ePosition, position );
+		particle.setValue< ParticleFormat::eVec3f >( eVelocity, velocity );
+		particle.setValue< ParticleFormat::eFloat >( eAge, age );
 		m_particles[m_firstUnused++] = particle;
 	}
 
@@ -186,22 +215,19 @@ namespace Fireworks
 			auto & particle = m_particles[i];
 			Coords3f pos{ reinterpret_cast< float * >( particle.getData() + m_position->m_offset ) };
 			Coords3f vel{ reinterpret_cast< float * >( particle.getData() + m_velocity->m_offset ) };
-			doUpdateParticle(
-				*this,
-				time,
-				*reinterpret_cast< float * >( particle.getData() + m_type->m_offset ),
-				pos,
-				vel,
-				*reinterpret_cast< float * >( particle.getData() + m_age->m_offset ) );
+			doUpdateParticle( *this
+				, time
+				, *reinterpret_cast< float * >( particle.getData() + m_type->m_offset )
+				, pos
+				, vel
+				, *reinterpret_cast< float * >( particle.getData() + m_age->m_offset ) );
 		}
 
 		doPackParticles( m_particles, m_firstUnused );
 		auto & vbo = m_parent.getBillboards()->getVertexBuffer();
 		auto stride = m_inputs.stride();
 
-		if ( auto dst = vbo.getBuffer().lock( 0u
-			, m_firstUnused * stride
-			, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateRange ) )
+		if ( auto dst = vbo.getBuffer().lock( 0u, m_firstUnused * stride, renderer::MemoryMapFlag::eWrite ) )
 		{
 			for ( auto i = 0u; i < m_firstUnused; ++i )
 			{

@@ -110,9 +110,11 @@ namespace castor3d
 	{
 		if ( !m_initialised )
 		{
+			m_info.usage |= renderer::ImageUsageFlag::eTransferDst;
+
 			if ( m_info.mipLevels > 1u )
 			{
-				m_info.usage |= renderer::ImageUsageFlag::eTransferDst | renderer::ImageUsageFlag::eTransferSrc;
+				m_info.usage |= renderer::ImageUsageFlag::eTransferSrc;
 			}
 
 			m_texture = getRenderSystem()->getCurrentDevice()->createTexture( m_info, m_properties );

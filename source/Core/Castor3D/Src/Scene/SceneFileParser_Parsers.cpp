@@ -1009,7 +1009,7 @@ namespace castor3d
 		{
 			String name;
 			p_params[0]->get( name );
-			parsingContext->billboards = parsingContext->scene->getBillboardListCache().add( name, SceneNodeSPtr{} );
+			parsingContext->billboards = std::make_shared< BillboardList >( name, *parsingContext->scene, nullptr );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eBillboard )
@@ -3257,8 +3257,7 @@ namespace castor3d
 			{
 				uint32_t uiModel;
 				Path path;
-				p_params[0]->get( uiModel );
-				p_params[1]->get( path );
+				p_params[0]->get( path );
 				parsingContext->shaderProgram->setFile( parsingContext->shaderStage
 					, p_context->m_file.getPath() / path );
 			}
@@ -4094,7 +4093,7 @@ namespace castor3d
 	IMPLEMENT_ATTRIBUTE_PARSER( parserBillboardEnd )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		parsingContext->billboards = nullptr;
+		parsingContext->scene->getBillboardListCache().add( parsingContext->billboards );
 	}
 	END_ATTRIBUTE_POP()
 

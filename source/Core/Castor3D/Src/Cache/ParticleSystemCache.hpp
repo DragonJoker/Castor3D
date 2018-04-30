@@ -25,10 +25,10 @@ namespace castor3d
 		C3D_API static const castor::String Name;
 		using Producer = std::function< std::shared_ptr< ParticleSystem >( KeyType const &, SceneNodeSPtr, uint32_t ) >;
 		using Merger = std::function< void( ObjectCacheBase< ParticleSystem, KeyType > const &
-											, castor::Collection< ParticleSystem, KeyType > &
-											, std::shared_ptr< ParticleSystem >
-											, SceneNodeSPtr
-											, SceneNodeSPtr ) >;
+			, castor::Collection< ParticleSystem, KeyType > &
+			, std::shared_ptr< ParticleSystem >
+			, SceneNodeSPtr
+			, SceneNodeSPtr ) >;
 	};
 }
 

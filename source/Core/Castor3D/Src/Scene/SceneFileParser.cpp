@@ -201,20 +201,6 @@ SceneFileParser::SceneFileParser( Engine & engine )
 	m_mapVariableTypes[cuT( "mat3x3f" )] = uint32_t( ParticleFormat::eMat3f );
 	m_mapVariableTypes[cuT( "mat4x4f" )] = uint32_t( ParticleFormat::eMat4f );
 
-	m_mapElementTypes[cuT( "int" )] = uint32_t( renderer::Format::eR32_SINT );
-	m_mapElementTypes[cuT( "uint" )] = uint32_t( renderer::Format::eR32_UINT );
-	m_mapElementTypes[cuT( "float" )] = uint32_t( renderer::Format::eR32_SFLOAT );
-	m_mapElementTypes[cuT( "colour" )] = uint32_t( renderer::Format::eR32_UINT );
-	m_mapElementTypes[cuT( "vec2i" )] = uint32_t( renderer::Format::eR32G32_SINT );
-	m_mapElementTypes[cuT( "vec3i" )] = uint32_t( renderer::Format::eR32G32B32_SINT );
-	m_mapElementTypes[cuT( "vec4i" )] = uint32_t( renderer::Format::eR32G32B32A32_SINT );
-	m_mapElementTypes[cuT( "vec2ui" )] = uint32_t( renderer::Format::eR32G32_UINT );
-	m_mapElementTypes[cuT( "vec3ui" )] = uint32_t( renderer::Format::eR32G32B32_UINT );
-	m_mapElementTypes[cuT( "vec4ui" )] = uint32_t( renderer::Format::eR32G32B32A32_UINT );
-	m_mapElementTypes[cuT( "vec2f" )] = uint32_t( renderer::Format::eR32G32_SFLOAT );
-	m_mapElementTypes[cuT( "vec3f" )] = uint32_t( renderer::Format::eR32G32B32_SFLOAT );
-	m_mapElementTypes[cuT( "vec4f" )] = uint32_t( renderer::Format::eR32G32B32A32_SFLOAT );
-
 	m_mapMovables[cuT( "camera" )] = uint32_t( MovableType::eCamera );
 	m_mapMovables[cuT( "light" )] = uint32_t( MovableType::eLight );
 	m_mapMovables[cuT( "object" )] = uint32_t( MovableType::eGeometry );
@@ -416,7 +402,7 @@ void SceneFileParser::doInitialiseParser( Path const & path )
 	addParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "particle" ), parserParticleSystemParticle );
 	addParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "cs_shader_program" ), parserParticleSystemCSShader );
 
-	addParser( uint32_t( CSCNSection::eParticle ), cuT( "variable" ), parserParticleVariable, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eCheckedText >( m_mapElementTypes ), makeParameter< ParameterType::eText >() } );
+	addParser( uint32_t( CSCNSection::eParticle ), cuT( "variable" ), parserParticleVariable, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eCheckedText >( m_mapVariableTypes ), makeParameter< ParameterType::eText >() } );
 	addParser( uint32_t( CSCNSection::eParticle ), cuT( "type" ), parserParticleType, { makeParameter< ParameterType::eName >() } );
 
 	addParser( uint32_t( CSCNSection::eLight ), cuT( "parent" ), parserLightParent, { makeParameter< ParameterType::eName >() } );

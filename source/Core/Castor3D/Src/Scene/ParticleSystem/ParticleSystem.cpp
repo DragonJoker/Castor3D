@@ -176,7 +176,7 @@ namespace castor3d
 	ParticleSystem::ParticleSystem( String const & name
 		, Scene & scene
 		, SceneNodeSPtr parent
-		, size_t count )
+		, uint32_t count )
 		: MovableObject{ name, scene, MovableType::eParticleEmitter, parent }
 		, m_particlesCount{ count }
 		, m_csImpl{ std::make_unique< ComputeParticleSystem >( *this ) }
@@ -190,8 +190,8 @@ namespace castor3d
 	bool ParticleSystem::initialise()
 	{
 		auto & device = *getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
-		auto vertexLayout = std::make_unique< renderer::VertexLayout >( 0u, m_inputs.stride(), renderer::VertexInputRate::eInstance );
-		uint32_t index{ 0u };
+		auto vertexLayout = std::make_unique< renderer::VertexLayout >( 1u, m_inputs.stride(), renderer::VertexInputRate::eInstance );
+		uint32_t index{ 2u };
 
 		for ( auto & attribute : m_inputs )
 		{
@@ -219,14 +219,19 @@ namespace castor3d
 			}
 		}
 
+		auto stride = vertexLayout->getStride();
 		m_particlesBillboard = std::make_unique< BillboardBase >( *getScene()
 			, getScene()->getObjectRootNode()
-			, std::move( vertexLayout ) );
+			, std::move( vertexLayout )
+			, std::make_unique< renderer::VertexBufferBase >( device
+				, stride * m_particlesCount
+				, renderer::BufferTarget::eTransferDst
+				, renderer::MemoryPropertyFlag::eHostVisible ) );
 		m_particlesBillboard->setBillboardType( BillboardType::eSpherical );
 		m_particlesBillboard->setDimensions( m_dimensions );
 		m_particlesBillboard->setMaterial( m_material.lock() );
-		m_particlesBillboard->setCenterOffset( m_centerOffset );
-		bool result = m_particlesBillboard->initialise( uint32_t( m_particlesCount ) );
+		bool result = m_particlesBillboard->initialise( m_particlesCount );
+		getScene()->getBillboardPools().registerElement( *m_particlesBillboard );
 
 		if ( result )
 		{
@@ -255,6 +260,7 @@ namespace castor3d
 
 	void ParticleSystem::cleanup()
 	{
+		getScene()->getBillboardPools().unregisterElement( *m_particlesBillboard );
 		m_particlesBillboard->cleanup();
 		m_particlesBillboard.reset();
 		m_csImpl->cleanup();
@@ -329,19 +335,7 @@ namespace castor3d
 	{
 		m_csImpl->addParticleVariable( name, type, defaultValue );
 		m_cpuImpl->addParticleVariable( name, type, defaultValue );
-
-		if ( name == cuT( "center" )
-			 || name == cuT( "position" ) )
-		{
-			m_billboardInputs.push_back( ParticleElementDeclaration{ cuT( "center" ), 0u, type, m_billboardInputs.stride(), 1u } );
-			m_centerOffset = m_billboardInputs.stride();
-		}
-		else
-		{
-			m_billboardInputs.push_back( ParticleElementDeclaration{ name, 0u, type, m_billboardInputs.stride(), 1u } );
-		}
-
-		m_inputs.push_back( ParticleElementDeclaration{ name, 0u, type, m_billboardInputs.stride(), 1u } );
+		m_inputs.push_back( ParticleElementDeclaration{ name, 0u, type, m_inputs.stride(), 1u } );
 		m_defaultValues[cuT ("out_") + name] = defaultValue;
 	}
 

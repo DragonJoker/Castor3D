@@ -102,6 +102,11 @@ namespace castor3d
 			uboBindings.emplace_back( MorphingUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
 		}
 
+		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
+		{
+			uboBindings.emplace_back( BillboardUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+		}
+
 		return uboBindings;
 	}
 

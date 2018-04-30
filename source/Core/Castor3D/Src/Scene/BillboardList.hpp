@@ -42,7 +42,8 @@ namespace castor3d
 		 */
 		C3D_API BillboardBase( Scene & scene
 			, SceneNodeSPtr node
-			, renderer::VertexLayoutPtr && vertexLayout );
+			, renderer::VertexLayoutPtr && vertexLayout
+			, renderer::VertexBufferBasePtr && vertexBuffer = nullptr );
 		/**
 		 *\~english
 		 *\brief		Destructor.

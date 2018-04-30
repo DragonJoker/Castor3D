@@ -79,7 +79,7 @@ namespace castor3d
 		C3D_API ParticleSystem( castor::String const & name
 			, Scene & scene
 			, SceneNodeSPtr parent
-			, size_t count );
+			, uint32_t count );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -191,7 +191,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le nombre de particules maximum.
 		 */
-		C3D_API size_t getMaxParticlesCount()const
+		C3D_API uint32_t getMaxParticlesCount()const
 		{
 			return m_particlesCount;
 		}
@@ -246,9 +246,6 @@ namespace castor3d
 		//!\~english	The particle elements description.
 		//!\~french		La description des élément d'une particule.
 		ParticleDeclaration m_inputs;
-		//!\~english	The billboard vertex buffer elements description.
-		//!\~french		La description des élément du tampon de sommets des billboards.
-		ParticleDeclaration m_billboardInputs;
 		//!\~english	The billboards containing the particles.
 		//!\~french		Les billboards contenant les particules.
 		BillboardBaseSPtr m_particlesBillboard;
@@ -260,13 +257,10 @@ namespace castor3d
 		MaterialWPtr m_material;
 		//!\~english	The particles count.
 		//!\~french		Le nombre de particules.
-		size_t m_particlesCount{ 0u };
+		uint32_t m_particlesCount{ 0u };
 		//!\~english	The active particles count.
 		//!\~french		Le nombre de particules actives.
 		uint32_t m_activeParticlesCount{ 0u };
-		//!\~english	The offset of the center attribute in the vertex buffer.
-		//!\~french		Le décalage de l'attribut du centre dans le tampon de sommets..
-		uint32_t m_centerOffset{ 0u };
 		//!\~english	The timer, for the particles update.
 		//!\~french		Le timer, pour la mise à jour des particules.
 		castor::PreciseTimer m_timer;

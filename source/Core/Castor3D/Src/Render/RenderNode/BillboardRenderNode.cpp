@@ -15,10 +15,10 @@ namespace castor3d
 		, UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixBuffer
 		, UniformBufferOffset< ModelUbo::Configuration > modelBuffer
 		, UniformBufferOffset< PickingUbo::Configuration > pickingBuffer
+		, UniformBufferOffset< BillboardUbo::Configuration > billboardBuffer
 		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
-		, BillboardBase & data
-		, UniformBufferOffset< BillboardUbo::Configuration > billboardUbo )
+		, BillboardBase & data )
 		: BillboardListRenderNode{ pipeline
 			, std::move( passNode )
 			, modelMatrixBuffer
@@ -28,7 +28,7 @@ namespace castor3d
 			, sceneNode
 			, data
 			, data }
-		, billboardUbo{ billboardUbo }
+		, billboardUbo{ billboardBuffer }
 	{
 	}
 }

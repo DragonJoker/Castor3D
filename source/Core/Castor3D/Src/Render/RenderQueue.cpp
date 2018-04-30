@@ -141,8 +141,7 @@ namespace castor3d
 			, renderer::PrimitiveTopology topology
 			, CreatorFunc creator )
 		{
-			if ( pass.IsTwoSided()
-				|| pass.hasAlphaBlending() )
+			if ( pass.IsTwoSided() || pass.hasAlphaBlending() )
 			{
 				auto pipeline = renderPass.getPipelineFront( pass.getColourBlendMode()
 					, pass.getAlphaBlendMode()
@@ -659,6 +658,25 @@ namespace castor3d
 					}
 				}
 			}
+
+			auto initialiseNodes = [&renderPass, &nodes]()
+			{
+				doInitialiseNodes( renderPass, nodes.frontCulled );
+				doInitialiseNodes( renderPass, nodes.backCulled );
+			};
+
+			if ( renderPass.getEngine()->getRenderSystem()->hasCurrentDevice() )
+			{
+				initialiseNodes();
+			}
+			else
+			{
+				renderPass.getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
+					, [initialiseNodes]()
+				{
+					initialiseNodes();
+				} ) );
+			}
 		}
 
 		GeometryBuffers const & getGeometryBuffers( Submesh const & submesh
@@ -811,7 +829,7 @@ namespace castor3d
 						 && node.sceneNode.isVisible() )
 					{
 						doAddRenderNode( *pipelines.first, &node, outputNodes );
-						doAddRenderNodeCommand( *pipelines.first, node, commandBuffer );
+						doAddRenderNodeCommand( *pipelines.first, node, commandBuffer, node.instance.getCount() );
 					}
 				}
 			}
@@ -866,7 +884,7 @@ namespace castor3d
 					if ( node.sceneNode.isDisplayable()
 						 && node.sceneNode.isVisible() )
 					{
-						doAddRenderNodeCommand( *pipelines.first, node, commandBuffer );
+						doAddRenderNodeCommand( *pipelines.first, node, commandBuffer, node.instance.getCount() );
 					}
 				}
 			}

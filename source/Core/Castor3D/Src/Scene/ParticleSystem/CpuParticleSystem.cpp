@@ -25,11 +25,12 @@ namespace castor3d
 			m_particles.emplace_back( m_inputs, defaultValues );
 		}
 
-		return true;
+		return doInitialise();
 	}
 
 	void CpuParticleSystem::cleanup()
 	{
+		doCleanup();
 		m_particles.clear();
 	}
 

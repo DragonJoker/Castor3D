@@ -563,7 +563,7 @@ namespace castor3d
 	{
 		auto & buffers = billboard.getGeometryBuffers();
 		auto & scene = billboard.getParentScene();
-		auto entry = scene.getBillboardListCache().getUbos( billboard, pass );
+		auto entry = scene.getBillboardPools().getUbos( billboard, pass );
 
 		return BillboardRenderNode
 		{
@@ -572,10 +572,10 @@ namespace castor3d
 			entry.modelMatrixUbo,
 			entry.modelUbo,
 			entry.pickingUbo,
+			entry.billboardUbo,
 			buffers,
 			*billboard.getNode(),
-			billboard,
-			entry.billboardUbo
+			billboard
 		};
 	}
 
@@ -1543,6 +1543,11 @@ namespace castor3d
 		if ( checkFlag( flags.programFlags, ProgramFlag::ePicking ) )
 		{
 			uboBindings.emplace_back( PickingUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
+		{
+			uboBindings.emplace_back( BillboardUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
 		}
 
 		return uboBindings;

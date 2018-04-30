@@ -4,12 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_BillboardCache_H___
 #define ___C3D_BillboardCache_H___
 
-#include "Buffer/UniformBufferPool.hpp"
 #include "Cache/ObjectCache.hpp"
-#include "Shader/Ubos/BillboardUbo.hpp"
-#include "Shader/Ubos/ModelMatrixUbo.hpp"
-#include "Shader/Ubos/ModelUbo.hpp"
-#include "Shader/Ubos/PickingUbo.hpp"
+#include "Cache/BillboardUboPools.hpp"
 
 namespace castor3d
 {
@@ -49,15 +45,6 @@ namespace castor3d
 		: public ObjectCacheBase< BillboardList, castor::String >
 	{
 	public:
-		struct PoolsEntry
-		{
-			BillboardBase const & billboard;
-			Pass const & pass;
-			UniformBufferOffset< ModelUbo::Configuration > modelUbo;
-			UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixUbo;
-			UniformBufferOffset< BillboardUbo::Configuration > billboardUbo;
-			UniformBufferOffset< PickingUbo::Configuration > pickingUbo;
-		};
 		using MyObjectCache = ObjectCacheBase< BillboardList, castor::String >;
 		using MyObjectCacheTraits = typename MyObjectCacheType::MyObjectCacheTraits;
 		using Element = typename MyObjectCacheType::Element;
@@ -118,34 +105,6 @@ namespace castor3d
 		C3D_API ~ObjectCache();
 		/**
 		 *\~english
-		 *\brief		Updates the UBO pools data.
-		 *\~french
-		 *\brief		Met à jour le contenu des pools d'UBO.
-		 */
-		C3D_API void update();
-		/**
-		 *\~english
-		 *\brief		Updates the UBO pools in VRAM.
-		 *\~french
-		 *\brief		Met à jour les pools d'UBO en VRAM.
-		 */
-		C3D_API void uploadUbos();
-		/**
-		 *\~english
-		 *\brief		Cleans up the UBO pools.
-		 *\~french
-		 *\brief		Nettoie les pools d'UBO.
-		 */
-		C3D_API void cleanupUbos();
-		/**
-		 *\~english
-		 *\brief		Cleans up the UBO pools.
-		 *\~french
-		 *\brief		Nettoie les pools d'UBO.
-		 */
-		C3D_API PoolsEntry getUbos( BillboardBase const & billboard, Pass const & pass )const;
-		/**
-		 *\~english
 		 *\brief		Flushes the collection.
 		 *\~french
 		 *\brief		Vide la collection.
@@ -167,6 +126,19 @@ namespace castor3d
 			, SceneNodeSPtr parent );
 		/**
 		 *\~english
+		 *\brief		Creates an object.
+		 *\param[in]	name	The object name.
+		 *\param[in]	parent	The parent scene node.
+		 *\return		The created object.
+		 *\~french
+		 *\brief		Crée un objet.
+		 *\param[in]	name	Le nom d'objet.
+		 *\param[in]	parent	Le noeud de scène parent.
+		 *\return		L'objet créé.
+		 */
+		C3D_API void add( ElementPtr element );
+		/**
+		 *\~english
 		 *\brief		Removes an object, given a name.
 		 *\param[in]	name	The object name.
 		 *\~french
@@ -176,20 +148,7 @@ namespace castor3d
 		C3D_API void remove( Key const & name );
 
 	private:
-		PoolsEntry doCreateEntry( BillboardBase const & billboard
-			, Pass const & pass );
-		void doRemoveEntry( BillboardBase const & billboard
-			, Pass const & pass );
-		void doRegister( BillboardBase & billboard );
-		void doUnregister( BillboardBase & billboard );
-
-	private:
-		std::map< size_t, PoolsEntry > m_entries;
-		std::map< BillboardBase *, OnBillboardMaterialChangedConnection > m_connections;
-		UniformBufferPool< ModelUbo::Configuration > m_modelUboPool;
-		UniformBufferPool< ModelMatrixUbo::Configuration > m_modelMatrixUboPool;
-		UniformBufferPool< BillboardUbo::Configuration > m_billboardUboPool;
-		UniformBufferPool< PickingUbo::Configuration > m_pickingUboPool;
+		BillboardUboPools & m_pools;
 	};
 	using BillboardListCache = ObjectCache< BillboardList, castor::String >;
 	DECLARE_SMART_PTR( BillboardListCache );

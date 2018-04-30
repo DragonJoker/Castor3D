@@ -75,8 +75,10 @@ namespace castor3d
 
 	BillboardBase::BillboardBase( Scene & scene
 		, SceneNodeSPtr node
-		, renderer::VertexLayoutPtr && vertexLayout )
+		, renderer::VertexLayoutPtr && vertexLayout
+		, renderer::VertexBufferBasePtr && vertexBuffer )
 		: m_vertexLayout{ std::move( vertexLayout ) }
+		, m_vertexBuffer{ vertexBuffer ? std::move( vertexBuffer ) : nullptr }
 		, m_scene{ scene }
 		, m_node{ node }
 	{
@@ -93,8 +95,8 @@ namespace castor3d
 			m_count = count;
 			Quad vertices
 			{
-				Vertex{ castor::Point3f{ -0.5f, +0.5f, 1.0f }, castor::Point2f{ 0.0f, 1.0f } },
 				Vertex{ castor::Point3f{ -0.5f, -0.5f, 1.0f }, castor::Point2f{ 0.0f, 0.0f } },
+				Vertex{ castor::Point3f{ -0.5f, +0.5f, 1.0f }, castor::Point2f{ 0.0f, 1.0f } },
 				Vertex{ castor::Point3f{ +0.5f, -0.5f, 1.0f }, castor::Point2f{ 1.0f, 0.0f } },
 				Vertex{ castor::Point3f{ +0.5f, +0.5f, 1.0f }, castor::Point2f{ 1.0f, 1.0f } },
 			};
@@ -104,11 +106,9 @@ namespace castor3d
 				, renderer::BufferTarget::eTransferDst
 				, renderer::MemoryPropertyFlag::eHostVisible );
 
-			if ( auto buffer = m_quadBuffer->lock( 0u
-				, 1u
-				, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateRange ) )
+			if ( auto buffer = m_quadBuffer->lock( 0u, 1u, renderer::MemoryMapFlag::eWrite ) )
 			{
-				std::memcpy( buffer, vertices.data(), sizeof( Quad ) );
+				*buffer = vertices;
 				m_quadBuffer->flush( 0u, 1u );
 				m_quadBuffer->unlock();
 			}
@@ -146,6 +146,8 @@ namespace castor3d
 			m_geometryBuffers.vtxCount = 0u;
 			m_quadLayout.reset();
 			m_quadBuffer.reset();
+			m_vertexLayout.reset();
+			m_vertexBuffer.reset();
 		}
 	}
 
@@ -301,8 +303,8 @@ namespace castor3d
 
 	renderer::VertexLayoutPtr doCreateLayout( renderer::Device const & device )
 	{
-		renderer::VertexLayoutPtr result = renderer::makeLayout< castor::Point3f >( 0u );
-		result->createAttribute( 0u, renderer::Format::eR32G32B32_SFLOAT, 0u );
+		renderer::VertexLayoutPtr result = renderer::makeLayout< castor::Point3f >( 1u, renderer::VertexInputRate::eInstance );
+		result->createAttribute( 2u, renderer::Format::eR32G32B32_SFLOAT, 0u );
 		return result;
 	}
 
@@ -352,6 +354,9 @@ namespace castor3d
 					std::memcpy( buffer, pos.constPtr(), stride );
 					buffer += stride;
 				}
+
+				m_vertexBuffer->getBuffer().flush( 0u, uint32_t( stride * m_arrayPositions.size() ) );
+				m_vertexBuffer->getBuffer().unlock();
 			}
 		}
 

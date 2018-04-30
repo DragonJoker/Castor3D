@@ -25,14 +25,14 @@ namespace castor3d
 			, UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixBuffer
 			, UniformBufferOffset< ModelUbo::Configuration > modelBuffer
 			, UniformBufferOffset< PickingUbo::Configuration > pickingBuffer
+			, UniformBufferOffset< BillboardUbo::Configuration > billboardBuffer
 			, GeometryBuffers const & buffers
 			, SceneNode & sceneNode
-			, BillboardBase & data
-			, UniformBufferOffset< BillboardUbo::Configuration > billboardUbo );
+			, BillboardBase & data );
 
 		//!\~english	The billboard UBO.
 		//!\~french		L'UBO de billboard.
-		UniformBufferOffset< BillboardUbo::Configuration > & billboardUbo;
+		UniformBufferOffset< BillboardUbo::Configuration > billboardUbo;
 	};
 }
 

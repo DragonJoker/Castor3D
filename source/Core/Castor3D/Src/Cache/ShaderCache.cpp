@@ -254,15 +254,15 @@ namespace castor3d
 
 			// Shader outputs
 			uint32_t location{ 0u };
-			auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ), location++ );
-			auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" ), location++ );
-			auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" ), location++ );
-			auto vtx_normal = writer.declOutput< Vec3 >( cuT( "vtx_normal" ), location++ );
-			auto vtx_tangent = writer.declOutput< Vec3 >( cuT( "vtx_tangent" ), location++ );
-			auto vtx_bitangent = writer.declOutput< Vec3 >( cuT( "vtx_bitangent" ), location++ );
-			auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ), location++ );
-			auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" ), location++ );
-			auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" ), location++ );
+			auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ), RenderPass::VertexOutputs::WorldPositionLocation );
+			auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" ), RenderPass::VertexOutputs::CurPositionLocation );
+			auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" ), RenderPass::VertexOutputs::PrvPositionLocation );
+			auto vtx_normal = writer.declOutput< Vec3 >( cuT( "vtx_normal" ), RenderPass::VertexOutputs::NormalLocation );
+			auto vtx_tangent = writer.declOutput< Vec3 >( cuT( "vtx_tangent" ), RenderPass::VertexOutputs::TangentLocation );
+			auto vtx_bitangent = writer.declOutput< Vec3 >( cuT( "vtx_bitangent" ), RenderPass::VertexOutputs::BitangentLocation );
+			auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ), RenderPass::VertexOutputs::TextureLocation );
+			auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" ), RenderPass::VertexOutputs::InstanceLocation );
+			auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" ), RenderPass::VertexOutputs::MaterialLocation );
 			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
