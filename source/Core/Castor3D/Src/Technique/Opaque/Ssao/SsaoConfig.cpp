@@ -30,11 +30,11 @@ namespace castor3d
 				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig high quality" );
 			}
 
-			if ( result )
-			{
-				result = p_file.writeText( m_tabs + cuT( "\tuse_normals_buffer " ) + ( p_object.m_useNormalsBuffer ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
-				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig use normals buffer" );
-			}
+			//if ( result )
+			//{
+			//	result = p_file.writeText( m_tabs + cuT( "\tuse_normals_buffer " ) + ( p_object.m_useNormalsBuffer ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
+			//	castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig use normals buffer" );
+			//}
 
 			if ( result )
 			{
@@ -66,11 +66,11 @@ namespace castor3d
 				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig edge sharpness" );
 			}
 
-			if ( result )
-			{
-				result = p_file.writeText( m_tabs + cuT( "\tblur_high_quality " ) + ( p_object.m_blurHighQuality ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
-				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig blur high quality" );
-			}
+			//if ( result )
+			//{
+			//	result = p_file.writeText( m_tabs + cuT( "\tblur_high_quality " ) + ( p_object.m_blurHighQuality ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
+			//	castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig blur high quality" );
+			//}
 
 			if ( result )
 			{
