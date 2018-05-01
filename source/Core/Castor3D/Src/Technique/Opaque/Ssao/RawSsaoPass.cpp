@@ -795,6 +795,7 @@ namespace castor3d
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
 			, nullptr );
+		m_timer->step();
 		m_timer->stop();
 	}
 }
