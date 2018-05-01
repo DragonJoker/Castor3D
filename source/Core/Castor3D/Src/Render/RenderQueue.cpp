@@ -378,7 +378,7 @@ namespace castor3d
 					renderPass.initialiseUboDescriptor( pipelineNode.first->getDescriptorPool( 0u ), node );
 					Pass & pass = node.passNode.pass;
 
-					if ( pass.getTextureUnitsCount() > 0u )
+					if ( pipelineNode.first->hasDescriptorPool( 1u ) )
 					{
 						renderPass.initialiseTextureDescriptor( pipelineNode.first->getDescriptorPool( 1u ), node );
 					}
