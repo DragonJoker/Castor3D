@@ -101,7 +101,8 @@ namespace castor3d
 		renderer::RenderPassPtr m_renderPass;
 		renderer::VertexBufferPtr< NonTexturedQuad > m_vertexBuffer;
 		renderer::VertexLayoutPtr m_vertexLayout;
-		renderer::SamplerPtr m_sampler;
+		renderer::SamplerPtr m_lineariseSampler;
+		renderer::SamplerPtr m_minifySampler;
 		renderer::CommandBufferPtr m_commandBuffer;
 		renderer::SemaphorePtr m_finished;
 		/**
@@ -128,11 +129,11 @@ namespace castor3d
 		{
 			struct Configuration
 			{
-				int previousLevel;
 				castor::Point2i textureSize;
+				int previousLevel;
 			};
 
-			renderer::TextureView * sourceView;
+			renderer::TextureView const * sourceView;
 			renderer::TextureViewPtr targetView;
 			renderer::DescriptorSetPtr descriptor;
 			renderer::FrameBufferPtr frameBuffer;

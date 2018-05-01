@@ -14,28 +14,27 @@ namespace castor3d
 {
 	namespace
 	{
-		Matrix4x4d getProjectUnitMatrix( Viewport const & viewport )
+		renderer::Mat4 getProjectUnitMatrix( renderer::Device const & device
+			, Viewport const & viewport )
 		{
 			// Uses double precision because the division operations may otherwise 
 			// significantly hurt prevision.
 			double const screenWidth( viewport.getWidth() );
 			double const screenHeight( viewport.getHeight() );
 
-			double r, l, t, b, n, f, x, y;
+			double y = double( -viewport.getNear() ) * ( viewport.getFovY() / 2 ).tan();
+			double x = y * ( screenWidth / screenHeight );
 
-			y = -viewport.getNear() * ( viewport.getFovY() / 2 ).tan();
-			x = y * ( screenWidth / screenHeight );
-
-			n = -viewport.getNear();
-			f = -viewport.getFar();
+			float n = -viewport.getNear();
+			float f = -viewport.getFar();
 
 			// Scale the pixel offset relative to the (non-square!) pixels in the unit frustum
-			r = x;
-			l = -x;
-			t = y;
-			b = -y;
+			auto r = float( x );
+			auto l = float( -x );
+			auto t = float( y );
+			auto b = float( -y );
 
-			return matrix::frustum( l, r, b, t, n, f );
+			return device.frustum( l, r, b, t, n, f );
 		}
 	}
 
@@ -91,6 +90,7 @@ namespace castor3d
 	void SsaoConfigUbo::update( SsaoConfig const & config
 		, Camera const & camera )
 	{
+		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
 		auto & viewport = camera.getViewport();
 		int numSpiralTurns = 0;
 
@@ -134,7 +134,7 @@ namespace castor3d
 		float farZ = std::max( viewport.getFar(), -projScale * radius / MIN_AO_SS_RADIUS );
 		// Hack because setting farZ lower results in banding artefacts on some scenes, should tune later.
 		farZ = std::min( farZ, -1000.0f );
-		auto const proj = getProjectUnitMatrix( viewport );
+		auto const proj = getProjectUnitMatrix( device, viewport );
 
 		auto & configuration = m_ubo->getData( 0u );
 		configuration.numSamples = config.m_numSamples;
@@ -151,14 +151,14 @@ namespace castor3d
 		configuration.edgeSharpness = config.m_edgeSharpness;
 		configuration.blurStepSize = config.m_blurStepSize;
 		configuration.blurRadius = config.m_blurRadius;
-		configuration.projInfo = Point4f
+		configuration.projInfo = renderer::Vec4
 		{
 			-2.0f / ( viewport.getWidth() * proj[0][0] ),
 			-2.0f / ( viewport.getHeight() * proj[1][1] ),
 			( 1.0f - proj[0][2] ) / proj[0][0],
 			( 1.0f - proj[1][2] ) / proj[1][1]
 		};
-		configuration.invViewMatrix = camera.getView();
+		configuration.invViewMatrix = convert( camera.getView() );
 
 		m_ubo->upload();
 	}

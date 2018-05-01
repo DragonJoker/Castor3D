@@ -6,16 +6,14 @@ See LICENSE file in root folder
 
 #include "LightPass.hpp"
 
-#include "Technique/Opaque/Ssao/BlurPass.hpp"
-#include "Technique/Opaque/Ssao/LineariseDepthPass.hpp"
-#include "Technique/Opaque/Ssao/SsaoConfig.hpp"
-#include "Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
-#include "Technique/Opaque/Ssao/RawSsaoPass.hpp"
-#include "Render/RenderInfo.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
 
 namespace castor3d
 {
+	class SsaoConfigUbo;
+	class SsaoBlurPass;
+	class LineariseDepthPass;
+	class RawSsaoPass;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.10.0
@@ -89,11 +87,11 @@ namespace castor3d
 		Engine & m_engine;
 		SsaoConfig const & m_config;
 		MatrixUbo m_matrixUbo;
-		SsaoConfigUbo m_ssaoConfigUbo;
-		LineariseDepthPass m_linearisePass;
-		RawSsaoPass m_rawSsaoPass;
-		SsaoBlurPass m_horizontalBlur;
-		SsaoBlurPass m_verticalBlur;
+		std::shared_ptr< SsaoConfigUbo > m_ssaoConfigUbo;
+		std::shared_ptr< LineariseDepthPass > m_linearisePass;
+		std::shared_ptr< RawSsaoPass > m_rawSsaoPass;
+		std::shared_ptr< SsaoBlurPass > m_horizontalBlur;
+		std::shared_ptr< SsaoBlurPass > m_verticalBlur;
 	};
 }
 

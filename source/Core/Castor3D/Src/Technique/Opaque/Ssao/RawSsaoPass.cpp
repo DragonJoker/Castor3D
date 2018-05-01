@@ -68,7 +68,7 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					gl_Position = vec4( position, 0.0, 1.0 );
+					gl_Position = writer.rendererScalePosition( vec4( position, 0.0, 1.0 ) );
 				} );
 			return writer.finalise();
 		}
@@ -103,8 +103,8 @@ namespace castor3d
 
 			/** Same size as result buffer, do not offset by guard band when reading from it */
 			auto c3d_mapNormal = writer.declSampler< Sampler2D >( cuT( "c3d_mapNormal" ), 2u, 0u, config.m_useNormalsBuffer );
-			auto c3d_readMultiplyFirst = writer.declUniform( cuT( "c3d_readMultiplyFirst" ), 3u, config.m_useNormalsBuffer, vec4( 2.0_f ) );
-			auto c3d_readAddSecond = writer.declUniform( cuT( "c3d_readAddSecond" ), 4u, config.m_useNormalsBuffer, vec4( 1.0_f ) );
+			auto c3d_readMultiplyFirst = writer.declConstant( cuT( "c3d_readMultiplyFirst" ), vec4( 2.0_f ), config.m_useNormalsBuffer );
+			auto c3d_readAddSecond = writer.declConstant( cuT( "c3d_readAddSecond" ), vec4( 1.0_f ), config.m_useNormalsBuffer );
 
 			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
@@ -700,7 +700,7 @@ namespace castor3d
 				, 1u );
 			result->createBinding( layout.getBinding( 1u )
 				, linearisedDepthBuffer.getTexture()->getDefaultView()
-				, sampler );
+				, linearisedDepthBuffer.getSampler()->getSampler() );
 			result->createBinding( layout.getBinding( 2u )
 				, normals
 				, sampler );

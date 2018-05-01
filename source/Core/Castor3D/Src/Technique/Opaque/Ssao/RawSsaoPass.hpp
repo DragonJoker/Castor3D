@@ -4,7 +4,6 @@ See LICENSE file in root folder
 #ifndef ___C3D_RawSsaoPass_H___
 #define ___C3D_RawSsaoPass_H___
 
-#include "SsaoConfigUbo.hpp"
 #include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Render/RenderInfo.hpp"
 #include "Technique/Opaque/LightPass.hpp"

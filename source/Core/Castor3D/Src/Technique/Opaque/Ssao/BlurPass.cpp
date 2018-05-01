@@ -141,7 +141,7 @@ namespace castor3d
 					if ( config.m_useNormalsBuffer )
 					{
 						tapNormal = texelFetch( c3d_mapNormal, tapLoc, 0 ).xyz();
-						tapNormal = normalize( tapNormal * c3d_readMultiplyFirst.xyz() + c3d_readAddSecond.xyz() );
+						tapNormal = normalize( glsl::fma( tapNormal, c3d_readMultiplyFirst.xyz(), c3d_readAddSecond.xyz() ) );
 					}
 					else
 					{
@@ -470,8 +470,6 @@ namespace castor3d
 		, m_program{ doGetProgram( m_engine, config ) }
 		, m_size{ size }
 		, m_result{ doCreateTexture( m_engine, m_size ) }
-		, m_axisUniform{ renderer::ShaderStageFlag::eFragment, { { 3u, 0u, renderer::ConstantFormat::eVec2i } } }
-		, m_pushConstantRange{ renderer::ShaderStageFlag::eFragment, 0u, renderer::getSize( renderer::Format::eR32G32_SINT ) }
 		, m_renderPass{ doCreateRenderPass( m_engine ) }
 		, m_fbo{ doCreateFrameBuffer( *m_renderPass, m_result ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "SSAO" ), cuT( "Blur" ) ) }
@@ -523,9 +521,9 @@ namespace castor3d
 			break;
 		};
 
+		configuration.axis = axis;
 		m_configurationUbo->upload();
 
-		*m_axisUniform.getData() = axis;
 		renderer::DescriptorSetLayoutBindingArray bindings
 		{
 			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
@@ -538,7 +536,7 @@ namespace castor3d
 			, input.getTexture()->getDefaultView()
 			, *m_renderPass
 			, bindings
-			, { m_pushConstantRange } );
+			, {} );
 		static renderer::ClearColorValue const colour{ 1.0, 1.0, 1.0, 1.0 };
 		auto & device = *m_renderSystem.getCurrentDevice();
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
@@ -570,7 +568,6 @@ namespace castor3d
 		m_fbo.reset();
 		m_renderPass.reset();
 		m_result.cleanup();
-		m_ssaoConfigUbo.cleanup();
 	}
 
 	void SsaoBlurPass::blur( renderer::Semaphore const & toWait )const
@@ -603,6 +600,5 @@ namespace castor3d
 
 	void SsaoBlurPass::doRegisterFrame( renderer::CommandBuffer & commandBuffer )const
 	{
-		commandBuffer.pushConstants( *m_pipelineLayout, m_axisUniform );
 	}
 }

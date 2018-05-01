@@ -109,8 +109,6 @@ namespace castor3d
 		renderer::ShaderStageStateArray m_program;
 		renderer::Extent2D m_size;
 		TextureUnit m_result;
-		renderer::PushConstantsBuffer< castor::Point2i > m_axisUniform;
-		renderer::PushConstantRange m_pushConstantRange;
 		renderer::RenderPassPtr m_renderPass;
 		renderer::FrameBufferPtr m_fbo;
 		RenderPassTimerSPtr m_timer;

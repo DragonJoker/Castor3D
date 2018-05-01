@@ -66,7 +66,7 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					gl_Position = vec4( position, 0.0, 1.0 );
+					gl_Position = writer.rendererScalePosition( vec4( position, 0.0, 1.0 ) );
 				} );
 			return writer.finalise();
 		}
@@ -79,7 +79,7 @@ namespace castor3d
 
 			// Shader inputs
 			Pcb clipInfo{ writer, cuT( "ClipInfo" ), cuT( "clip" ) };
-			auto c3d_clipInfo = clipInfo.declMember< Vec3 >( cuT( "c3d_clipInfo" ), 0u );
+			auto c3d_clipInfo = clipInfo.declMember< Vec3 >( cuT( "c3d_clipInfo" ), 1u );
 			clipInfo.end();
 			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), 0u, 0u );
 			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
@@ -105,8 +105,8 @@ namespace castor3d
 
 			// Shader inputs
 			Pcb previousLevel{ writer, cuT( "PreviousLevel" ), cuT( "previous" ) };
-			auto c3d_previousLevel = previousLevel.declMember< Int >( cuT( "c3d_previousLevel" ), 0u );
 			auto c3d_textureSize = previousLevel.declMember< IVec2 >( cuT( "c3d_textureSize" ), 1u );
+			auto c3d_previousLevel = previousLevel.declMember< Int >( cuT( "c3d_previousLevel" ), 2u );
 			previousLevel.end();
 			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), 0u, 0u );
 			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
@@ -125,7 +125,7 @@ namespace castor3d
 						, clamp( ssPosition * 2 + ivec2( ssPosition.y() & 1, ssPosition.x() & 1 )
 							, ivec2( 0_i )
 							, c3d_textureSize - ivec2( 1_i ) )
-						, c3d_previousLevel ).r();
+						, 0/*c3d_previousLevel*/ ).r();
 				} );
 			return writer.finalise();
 		}
@@ -175,8 +175,11 @@ namespace castor3d
 				sampler = engine.getSamplerCache().add( name );
 				sampler->setMinFilter( renderer::Filter::eNearest );
 				sampler->setMagFilter( renderer::Filter::eNearest );
+				sampler->setMipFilter( renderer::MipmapMode::eNearest );
 				sampler->setWrapS( mode );
 				sampler->setWrapT( mode );
+				sampler->setMinLod( 0.0 );
+				sampler->setMaxLod( float( LineariseDepthPass::MaxMipLevel ) );
 			}
 
 			return sampler;
@@ -319,7 +322,12 @@ namespace castor3d
 		, m_renderPass{ doCreateRenderPass( m_engine ) }
 		, m_vertexBuffer{ doCreateVertexBuffer( m_engine ) }
 		, m_vertexLayout{ doCreateVertexLayout( m_engine ) }
-		, m_sampler{ m_engine.getRenderSystem()->getCurrentDevice()->createSampler( renderer::WrapMode::eClampToEdge
+		, m_lineariseSampler{ m_engine.getRenderSystem()->getCurrentDevice()->createSampler( renderer::WrapMode::eClampToEdge
+			, renderer::WrapMode::eClampToEdge
+			, renderer::WrapMode::eClampToEdge
+			, renderer::Filter::eNearest
+			, renderer::Filter::eNearest ) }
+		, m_minifySampler{ m_engine.getRenderSystem()->getCurrentDevice()->createSampler( renderer::WrapMode::eClampToEdge
 			, renderer::WrapMode::eClampToEdge
 			, renderer::WrapMode::eClampToEdge
 			, renderer::Filter::eNearest
@@ -389,7 +397,7 @@ namespace castor3d
 		m_lineariseDescriptor = m_lineariseDescriptorPool->createDescriptorSet();
 		m_lineariseDescriptor->createBinding( m_lineariseDescriptorLayout->getBinding( 0u )
 			, m_depthBuffer
-			, *m_sampler );
+			, *m_lineariseSampler );
 		m_lineariseDescriptor->update();
 		m_linearisePipeline = m_linearisePipelineLayout->createPipeline( renderer::GraphicsPipelineCreateInfo
 		{
@@ -436,7 +444,7 @@ namespace castor3d
 			pipeline.descriptor = m_minifyDescriptorPool->createDescriptorSet();
 			pipeline.descriptor->createBinding( m_minifyDescriptorLayout->getBinding( 0u )
 				, *pipeline.sourceView
-				, *m_sampler );
+				, *m_minifySampler );
 			pipeline.descriptor->update();
 			renderer::FrameBufferAttachmentArray attaches;
 			attaches.emplace_back( *( m_renderPass->getAttachments().begin() ), *pipeline.targetView );
@@ -445,12 +453,12 @@ namespace castor3d
 			pipeline.previousLevel = std::make_unique< renderer::PushConstantsBuffer< MinifyPipeline::Configuration > >( renderer::ShaderStageFlag::eFragment
 				, renderer::PushConstantArray
 				{
-					{ 0u, offsetof( MinifyPipeline::Configuration, previousLevel ), renderer::ConstantFormat::eInt },
 					{ 1u, offsetof( MinifyPipeline::Configuration, textureSize ), renderer::ConstantFormat::eVec2i },
+					{ 2u, offsetof( MinifyPipeline::Configuration, previousLevel ), renderer::ConstantFormat::eInt },
 				} );
 			auto & data = *pipeline.previousLevel->getData();
 			data.previousLevel = index - 1;
-			data.textureSize = Point2i{ size.width, size.height };
+			data.textureSize = Point2i{ size.width << 1, size.height << 1 };
 			pipeline.pipeline = m_minifyPipelineLayout->createPipeline( renderer::GraphicsPipelineCreateInfo
 			{
 				m_minifyProgram,
