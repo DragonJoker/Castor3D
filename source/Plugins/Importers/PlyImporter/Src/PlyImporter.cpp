@@ -206,7 +206,7 @@ namespace C3dPly
 				// Parsing triangles
 				FaceSPtr pFace;
 				std::vector< FaceIndices > faces( iNbFaces );
-				FaceIndices * pFaces = &faces[0];
+				FaceIndices * face = &faces[0];
 
 				for ( int i = 0; i < iNbFaces; i++ )
 				{
@@ -216,14 +216,14 @@ namespace C3dPly
 
 					if ( iNbVertex >= 3 )
 					{
-						ssToken >> pFaces->m_index[0] >> pFaces->m_index[1] >> pFaces->m_index[2];
-						pFaces++;
+						ssToken >> face->m_index[0] >> face->m_index[2] >> face->m_index[1];
+						++face;
 					}
 
 					ssToken.clear( std::istringstream::goodbit );
 				}
 
-				mapping->addFaceGroup( faces );
+				mapping->addFaceGroup( faces.data(), face );
 			}
 
 			result = true;
