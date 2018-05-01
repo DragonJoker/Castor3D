@@ -707,6 +707,23 @@ namespace castor3d
 	}
 	END_ATTRIBUTE()
 
+	IMPLEMENT_ATTRIBUTE_PARSER( parserSamplerAnisotropicFiltering )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->sampler )
+		{
+			PARSING_ERROR( cuT( "No sampler initialised." ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			bool value;
+			p_params[0]->get( value );
+			parsingContext->sampler->enableAnisotropicFiltering( value );
+		}
+	}
+	END_ATTRIBUTE()
+
 	IMPLEMENT_ATTRIBUTE_PARSER( parserSamplerMaxAnisotropy )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );

@@ -237,6 +237,11 @@ namespace castor3d
 			m_info.borderColor = value;
 		}
 
+		inline void enableAnisotropicFiltering( bool value )
+		{
+			m_info.anisotropyEnable = value;
+		}
+
 		inline void setMaxAnisotropy( float value )
 		{
 			m_info.maxAnisotropy = value;

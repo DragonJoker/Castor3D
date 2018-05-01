@@ -49,6 +49,7 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserSamplerVWrapMode )
 	DECLARE_ATTRIBUTE_PARSER( parserSamplerWWrapMode )
 	DECLARE_ATTRIBUTE_PARSER( parserSamplerBorderColour )
+	DECLARE_ATTRIBUTE_PARSER( parserSamplerAnisotropicFiltering )
 	DECLARE_ATTRIBUTE_PARSER( parserSamplerMaxAnisotropy )
 	DECLARE_ATTRIBUTE_PARSER( parserSamplerComparisonMode )
 	DECLARE_ATTRIBUTE_PARSER( parserSamplerComparisonFunc )
