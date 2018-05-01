@@ -33,7 +33,7 @@ namespace castor3d
 		{
 			uint32_t blockSize = sizes[0] * sizes[1] * sizes[2];
 			uint32_t numBlocks = ( count + blockSize - 1 ) / blockSize;
-			return Point3ui{ numBlocks, numBlocks, numBlocks };
+			return Point3ui{ numBlocks, sizes[1] > 1 ? numBlocks : 1, sizes[2] > 1 ? numBlocks : 1 };
 		}
 	}
 
