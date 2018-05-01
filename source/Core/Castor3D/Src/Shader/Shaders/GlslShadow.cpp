@@ -22,10 +22,10 @@ namespace castor3d
 		void Shadow::declare( ShadowType type
 			, uint32_t & index )
 		{
-			auto c3d_mapShadowDirectional = m_writer.declSampler< Sampler2D >( MapShadowDirectional, index++, 0u );
-			auto c3d_mapShadowSpot = m_writer.declSamplerArray< Sampler2D >( MapShadowSpot, index, 0u, SpotShadowMapCount );
+			auto c3d_mapShadowDirectional = m_writer.declSampler< Sampler2D >( MapShadowDirectional, index++, 1u );
+			auto c3d_mapShadowSpot = m_writer.declSamplerArray< Sampler2D >( MapShadowSpot, index, 1u, SpotShadowMapCount );
 			index += SpotShadowMapCount;
-			auto c3d_mapShadowPoint = m_writer.declSamplerArray< SamplerCube >( MapShadowPoint, index, 0u, PointShadowMapCount );
+			auto c3d_mapShadowPoint = m_writer.declSamplerArray< SamplerCube >( MapShadowPoint, index, 1u, PointShadowMapCount );
 			index += PointShadowMapCount;
 			doDeclareGetRandom();
 			doDeclareGetShadowOffset();
@@ -39,8 +39,8 @@ namespace castor3d
 		void Shadow::declareDirectional( ShadowType type
 			, uint32_t & index )
 		{
-			auto c3d_mapShadowDirectional = m_writer.declSampler< Sampler2D >( MapShadowDirectional, index++, 0u );
-			auto c3d_mapDepthDirectional = m_writer.declSampler< Sampler2D >( MapDepthDirectional, index++, 0u );
+			auto c3d_mapShadowDirectional = m_writer.declSampler< Sampler2D >( MapShadowDirectional, index++, 1u );
+			auto c3d_mapDepthDirectional = m_writer.declSampler< Sampler2D >( MapDepthDirectional, index++, 1u );
 			doDeclareGetRandom();
 			doDeclareGetShadowOffset();
 			doDeclareChebyshevUpperBound();
@@ -51,8 +51,8 @@ namespace castor3d
 		void Shadow::declarePoint( ShadowType type
 			, uint32_t & index )
 		{
-			auto c3d_mapShadowPoint = m_writer.declSampler< SamplerCube >( MapShadowPoint, index++, 0u );
-			auto c3d_mapDepthPoint = m_writer.declSampler< SamplerCube >( MapDepthPoint, index++, 0u );
+			auto c3d_mapShadowPoint = m_writer.declSampler< SamplerCube >( MapShadowPoint, index++, 1u );
+			auto c3d_mapDepthPoint = m_writer.declSampler< SamplerCube >( MapDepthPoint, index++, 1u );
 			doDeclareGetRandom();
 			doDeclareGetShadowOffset();
 			doDeclareChebyshevUpperBound();
@@ -62,8 +62,8 @@ namespace castor3d
 		void Shadow::declareSpot( ShadowType type
 			, uint32_t & index )
 		{
-			auto c3d_mapShadowSpot = m_writer.declSampler< Sampler2D >( MapShadowSpot, index++, 0u );
-			auto c3d_mapDepthSpot = m_writer.declSampler< Sampler2D >( MapDepthSpot, index++, 0u );
+			auto c3d_mapShadowSpot = m_writer.declSampler< Sampler2D >( MapShadowSpot, index++, 1u );
+			auto c3d_mapDepthSpot = m_writer.declSampler< Sampler2D >( MapDepthSpot, index++, 1u );
 			doDeclareGetRandom();
 			doDeclareGetShadowOffset();
 			doDeclareChebyshevUpperBound();
