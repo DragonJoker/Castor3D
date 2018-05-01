@@ -870,12 +870,21 @@ namespace glsl
 	template< typename T >
 	inline Array< T > GlslWriter::declLocaleArray( castor::String const & name
 		, uint32_t dimension
-		, T const & rhs )
+		, std::vector< T > const & rhs )
 	{
 		using Type = typename TypeOf< T >::Type;
 		registerName( name, TypeTraits< Type >::TypeEnum );
-		m_stream << TypeTraits< Type >::Name << " " << name << cuT( "[" ) << dimension << cuT( "]" ) << cuT( " = " ) << castor::String( rhs ) << cuT( ";" ) << std::endl;
-		return Array< T >( this, name );
+		*this << TypeTraits< Type >::Name << " " << name << cuT( "[" ) << dimension << cuT( "] = " ) << TypeTraits< Type >::Name << " " << cuT( "[]( " );
+		castor::String sep;
+
+		for ( auto const & value : rhs )
+		{
+			*this << sep << castor::String( value ) << endl;
+			sep = cuT( "\t, " );
+		}
+
+		*this << cuT( ");" ) << endl;
+		return Array< T >( this, name, dimension );
 	}
 
 	template< typename T >
@@ -898,14 +907,21 @@ namespace glsl
 	inline Optional< Array< T > > GlslWriter::declLocaleArray( castor::String const & name
 		, uint32_t dimension
 		, bool enabled
-		, T const & rhs )
+		, std::vector< T > const & rhs )
 	{
 		using Type = typename TypeOf< T >::Type;
 		registerName( name, TypeTraits< Type >::TypeEnum );
 
 		if ( enabled )
 		{
-			m_stream << TypeTraits< Type >::Name << " " << name << cuT( "[" ) << dimension << cuT( "]" ) << cuT( " = " ) << castor::String( rhs ) << cuT( ";" ) << std::endl;
+			*this << TypeTraits< Type >::Name << " " << name << cuT( "[" ) << dimension << cuT( "] = " ) << TypeTraits< Type >::Name << " " << cuT( "[]( " );
+			castor::String sep;
+
+			for ( auto const & value : rhs )
+			{
+				*this << sep << castor::String( value ) << endl;
+				sep = cuT( "\t, " );
+			}
 		}
 
 		return Optional< Array< T > >( this, name, dimension, enabled );

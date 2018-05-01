@@ -393,9 +393,9 @@ namespace glsl
 		template< typename T > inline Optional< T > declLocale( castor::String const & name, Optional< T > const & rhs );
 		template< typename T > inline Optional< T > declLocale( castor::String const & name, bool enabled, T const & rhs );
 		template< typename T > inline Array< T > declLocaleArray( castor::String const & name, uint32_t dimension );
-		template< typename T > inline Array< T > declLocaleArray( castor::String const & name, uint32_t dimension, T const & rhs );
+		template< typename T > inline Array< T > declLocaleArray( castor::String const & name, uint32_t dimension, std::vector< T > const & rhs );
 		template< typename T > inline Optional< Array< T > > declLocaleArray( castor::String const & name, uint32_t dimension, bool enabled );
-		template< typename T > inline Optional< Array< T > > declLocaleArray( castor::String const & name, uint32_t dimension, bool enabled, T const & rhs );
+		template< typename T > inline Optional< Array< T > > declLocaleArray( castor::String const & name, uint32_t dimension, bool enabled, std::vector< T > const & rhs );
 		/**@}*/
 		/**
 		*name

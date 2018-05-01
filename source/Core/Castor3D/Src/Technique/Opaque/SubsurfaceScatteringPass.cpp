@@ -78,12 +78,8 @@ namespace castor3d
 			UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 			UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
 			Ubo config{ writer, SubsurfaceScatteringPass::Config, 4u, 0u };
-			auto c3d_pixelSize = config.declMember< Float >( SubsurfaceScatteringPass::PixelSize );
+			auto c3d_pixelSize = config.declMember< Vec2 >( SubsurfaceScatteringPass::PixelSize );
 			auto c3d_correction = config.declMember< Float >( SubsurfaceScatteringPass::Correction );
-			// Gaussian weights for the six samples around the current pixel:
-			//   -3 -2 -1 +1 +2 +3
-			auto c3d_weights = config.declMember< Float >( SubsurfaceScatteringPass::Weights, 6u );
-			auto c3d_offsets = config.declMember< Float >( SubsurfaceScatteringPass::Offsets, 6u );
 			config.end();
 			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), 6u, 0u );
 			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), 7u, 0u );
@@ -108,7 +104,7 @@ namespace castor3d
 					, writer.cast< Int >( data5.z() ) );
 				auto translucency = writer.declLocale( cuT( "translucency" )
 					, data4.w() );
-				auto material = materials->getBaseMaterial( materialId - 1u );
+				auto material = materials->getBaseMaterial( materialId );
 
 				IF( writer, material->m_subsurfaceScatteringEnabled() == 0_i )
 				{
@@ -141,6 +137,7 @@ namespace castor3d
 				}
 
 				auto step = writer.declBuiltin< Vec2 >( cuT( "step" ) );
+
 				// Calculate the step that we will use to fetch the surrounding pixels,
 				// where "step" is:
 				//     step = sssStrength * gaussianWidth * pixelSize * dir
@@ -154,11 +151,20 @@ namespace castor3d
 				auto depth = writer.declLocale< Float >( cuT( "depth" ) );
 				auto s = writer.declLocale< Float >( cuT( "s" ) );
 
+				// Gaussian weights for the six samples around the current pixel:
+				//   -3 -2 -1 +1 +2 +3
+				auto w = writer.declLocaleArray( cuT( "w" )
+					, 6u
+					, std::vector< Float >{ { 0.006_f, 0.061_f, 0.242_f, 0.242_f, 0.061_f, 0.006_f } } );
+				auto o = writer.declLocaleArray( cuT( "o" )
+					, 6u
+					, std::vector< Float >{ { -1.0, -0.6667, -0.3333, 0.3333, 0.6667, 1.0 } } );
+
 				// Accumulate the other samples:
 				for ( int i = 0; i < 6; i++ )
 				{
 					// Fetch color and depth for current sample:
-					offset = glsl::fma( vec2( c3d_offsets[i] ), finalStep, vtx_texture );
+					offset = glsl::fma( vec2( o[i] ), finalStep, vtx_texture );
 					color = texture( c3d_mapLightDiffuse, offset, 0.0_f ).rgb();
 					depth = texture( c3d_mapDepth, offset, 0.0_f ).r();
 					depth = utils.calcVSPosition( vtx_texture
@@ -170,12 +176,12 @@ namespace castor3d
 					color = mix( color, colorM.rgb(), s );
 
 					// Accumulate:
-					pxl_fragColor.rgb() += c3d_weights[i] * color;
+					pxl_fragColor.rgb() += w[i] * color;
+					writer << glsl::endl;
 				}
 			} );
 			return writer.finalise();
 		}
-
 		glsl::Shader doGetCombineProgram( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
@@ -191,12 +197,6 @@ namespace castor3d
 						: PassFlag( 0u ) ) ) );
 			materials->declare();
 
-			Ubo weigthsUbo{ writer, cuT( "WeightsUBO" ), 1u, 0u };
-			auto c3d_originalWeight = weigthsUbo.declMember< Vec4 >( cuT( "c3d_originalWeight" ) );
-			auto c3d_blurWeights = weigthsUbo.declMember< Vec4 >( cuT( "c3d_blurWeights" ), 3u );
-			auto c3d_blurVariances = weigthsUbo.declMember< Float >( cuT( "c3d_blurVariances" ), 3u );
-			weigthsUbo.end();
-
 			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), 2u, 0u );
 			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), 3u, 0u );
 			auto c3d_mapBlur1 = writer.declSampler< Sampler2D >( cuT( "c3d_mapBlur1" ), 4u, 0u );
@@ -211,6 +211,22 @@ namespace castor3d
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
+				auto originalWeight = writer.declLocale< Vec4 >( cuT( "originalWeight" )
+					, vec4( 0.2406_f, 0.4475_f, 0.6159_f, 0.25_f ) );
+				auto blurWeights = writer.declLocaleArray< Vec4 >( cuT( "blurWeights" )
+					, 3u
+					, {
+						vec4( 0.1158_f, 0.3661_f, 0.3439_f, 0.25_f ),
+						vec4( 0.1836_f, 0.1864_f, 0.0_f, 0.25_f ),
+						vec4( 0.46_f, 0.0_f, 0.0402_f, 0.25_f )
+					} );
+				auto blurVariances = writer.declLocaleArray< Float >( cuT( "blurVariances" )
+					, 3u
+					, {
+						0.0516_f,
+						0.2719_f,
+						2.0062_f
+					} );
 				auto data4 = writer.declLocale( cuT( "data4" )
 					, texture( c3d_mapData4, vtx_texture ) );
 				auto data5 = writer.declLocale( cuT( "data5" )
@@ -227,7 +243,7 @@ namespace castor3d
 					, writer.cast< Int >( data5.z() ) );
 				auto translucency = writer.declLocale( cuT( "translucency" )
 					, data4.w() );
-				auto material = materials->getBaseMaterial( materialId - 1u );
+				auto material = materials->getBaseMaterial( materialId );
 
 #if !C3D_DEBUG_SSS_TRANSMITTANCE
 				IF( writer, material->m_subsurfaceScatteringEnabled() == 0_i )
@@ -236,10 +252,10 @@ namespace castor3d
 				}
 				ELSE
 				{
-					pxl_fragColor = original * c3d_originalWeight
-						+ blur1 * c3d_blurWeights[0]
-						+ blur2 * c3d_blurWeights[1]
-						+ blur3 * c3d_blurWeights[2];
+					pxl_fragColor = original * originalWeight
+						+ blur1 * blurWeights[0]
+						+ blur2 * blurWeights[1]
+						+ blur3 * blurWeights[2];
 				}
 				FI;
 #else
@@ -542,7 +558,7 @@ namespace castor3d
 	{
 		commandBuffer.beginRenderPass( *m_renderPass
 			, *m_frameBuffer
-			, { renderer::ClearColorValue{ 0, 0, 0, 1 } }
+			, { renderer::ClearColorValue{ 0, 1, 0, 1 } }
 		, renderer::SubpassContents::eInline );
 		registerFrame( commandBuffer );
 		commandBuffer.endRenderPass();
@@ -623,9 +639,7 @@ namespace castor3d
 	{
 		auto & configuration = m_blurConfigUbo->getData( 0u );
 		configuration.blurCorrection = 1.0f;
-		configuration.blurPixelSize = castor::Point2f{ 1.0f / m_size.getWidth(), 1.0f / m_size.getHeight() };
-		configuration.blurWeights = { 0.006f, 0.061f, 0.242f, 0.242f, 0.061f, 0.006f };
-		configuration.blurOffsets = { -1.0f, -0.6667f, -0.3333f, 0.3333f, 0.6667f, 1.0f };
+		configuration.blurPixelSize = Point2f{ 1.0f / m_size.getWidth(), 1.0f / m_size.getHeight() };
 		m_blurConfigUbo->upload();
 
 		auto & weights = m_blurWeightsUbo->getData();
@@ -633,8 +647,13 @@ namespace castor3d
 		weights.blurWeights[0] = Point4f{ 0.1158, 0.3661, 0.3439, 0.25 };
 		weights.blurWeights[1] = Point4f{ 0.1836, 0.1864, 0.0, 0.25 };
 		weights.blurWeights[2] = Point4f{ 0.46, 0.0, 0.0402, 0.25 };
-		weights.blurVariance = Point3f{ 0.0516, 0.2719, 2.0062 };
+		weights.blurVariance = Point4f{ 0.0516, 0.2719, 2.0062 };
 		m_blurWeightsUbo->upload();
+
+		auto & device = *engine.getRenderSystem()->getCurrentDevice();
+		m_finished = device.createSemaphore();
+		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+		prepare();
 	}
 
 	SubsurfaceScatteringPass::~SubsurfaceScatteringPass()
@@ -650,13 +669,17 @@ namespace castor3d
 
 	void SubsurfaceScatteringPass::prepare()
 	{
-		for ( size_t i{ 0u }; i < m_blurResults.size(); ++i )
+		if ( m_commandBuffer->begin() )
 		{
-			m_blurX[i].prepareFrame( *m_commandBuffer );
-			m_blurY[i].prepareFrame( *m_commandBuffer );
-		}
+			for ( size_t i{ 0u }; i < m_blurResults.size(); ++i )
+			{
+				m_blurX[i].prepareFrame( *m_commandBuffer );
+				m_blurY[i].prepareFrame( *m_commandBuffer );
+			}
 
-		m_combine.prepareFrame( *m_commandBuffer );
+			m_combine.prepareFrame( *m_commandBuffer );
+			m_commandBuffer->end();
+		}
 	}
 
 	void SubsurfaceScatteringPass::debugDisplay( castor::Size const & size )const

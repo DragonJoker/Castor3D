@@ -115,15 +115,13 @@ namespace castor3d
 		{
 			castor::Point2f blurPixelSize;
 			float blurCorrection;
-			std::array< float, 6u > blurWeights;
-			std::array< float, 6u > blurOffsets;
 		};
 
 		struct BlurWeights
 		{
 			castor::Point4f originalWeight;
 			castor::Point4f blurWeights[3u];
-			castor::Point3f blurVariance;
+			castor::Point4f blurVariance;
 		};
 
 	private:

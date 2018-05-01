@@ -818,7 +818,7 @@ namespace castor3d
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto material = materials->getBaseMaterial( c3d_materialIndex - 1u );
+				auto material = materials->getBaseMaterial( c3d_materialIndex );
 				auto diffuse = writer.declLocale( cuT( "diffuse" )
 					, material->m_diffuse() );
 				auto alpha = writer.declLocale( cuT( "alpha" )

@@ -49,7 +49,7 @@ namespace glsl
 
 	void GlslWriter::inlineComment( castor::String const & comment )
 	{
-		m_stream << cuT( "//" ) << comment << std::endl;
+		m_stream << cuT( "// " ) << comment << std::endl;
 	}
 
 	void GlslWriter::multilineComment( castor::String const & comment )

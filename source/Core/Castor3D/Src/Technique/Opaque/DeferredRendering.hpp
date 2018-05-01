@@ -111,7 +111,7 @@ namespace castor3d
 		castor::Size m_size;
 		GpInfoUbo m_gpInfoUbo;
 		std::unique_ptr< LightingPass > m_lightingPass;
-		std::unique_ptr< ReflectionPass > m_reflection;
+		std::vector< std::unique_ptr< ReflectionPass > > m_reflection;
 		std::unique_ptr< SubsurfaceScatteringPass > m_subsurfaceScattering;
 		GeometryPassResult m_geometryPassResult;
 		std::vector< renderer::TexturePtr > m_results;
