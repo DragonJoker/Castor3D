@@ -10,37 +10,37 @@ namespace castor
 
 		static void add( LhsPixel & p_lhs, RhsPixel const & p_rhs )
 		{
-			LhsPixel & rhs( p_rhs );
+			LhsPixel rhs( p_rhs );
 			PxOperators< FT, FT >::add( p_lhs, rhs );
 		}
 
 		static void subtract( LhsPixel & p_lhs, RhsPixel const & p_rhs )
 		{
-			LhsPixel & rhs( p_rhs );
+			LhsPixel rhs( p_rhs );
 			PxOperators< FT, FT >::subtract( p_lhs, rhs );
 		}
 
 		static void multiply( LhsPixel & p_lhs, RhsPixel const & p_rhs )
 		{
-			LhsPixel & rhs( p_rhs );
+			LhsPixel rhs( p_rhs );
 			PxOperators< FT, FT >::multiply( p_lhs, rhs );
 		}
 
 		static void divide( LhsPixel & p_lhs, RhsPixel const & p_rhs )
 		{
-			LhsPixel & rhs( p_rhs );
+			LhsPixel rhs( p_rhs );
 			PxOperators< FT, FT >::divide( p_lhs, rhs );
 		}
 
 		static void assign( LhsPixel & p_lhs, RhsPixel const & p_rhs )
 		{
-			LhsPixel & rhs( p_rhs );
+			LhsPixel rhs( p_rhs );
 			PxOperators< FT, FT >::assign( p_lhs, rhs );
 		}
 
 		static bool equals( LhsPixel const & p_lhs, RhsPixel const & p_rhs )
 		{
-			LhsPixel & rhs( p_rhs );
+			LhsPixel rhs( p_rhs );
 			return PxOperators< FT, FT >::equals( p_lhs, rhs );
 		}
 	};
@@ -89,13 +89,13 @@ namespace castor
 			}
 		}
 
-		static bool equals( LhsPixel & p_lhs, LhsPixel const & p_rhs )
+		static bool equals( LhsPixel const & p_lhs, LhsPixel const & p_rhs )
 		{
 			bool result = true;
 
 			for ( uint8_t i = 0; i < PixelDefinitions< FT >::Size; i++ )
 			{
-				result = p_lhs[i] == p_rhs[i];
+				result &= p_lhs[i] == p_rhs[i];
 			}
 
 			return result;

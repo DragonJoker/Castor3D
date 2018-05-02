@@ -13,6 +13,7 @@ See LICENSE file in root folder
 #include "TextOverlay.hpp"
 
 #include <Design/OwnedBy.hpp>
+#include <Miscellaneous/Hash.hpp>
 
 #ifdef drawText
 #	undef drawText
@@ -258,7 +259,8 @@ namespace castor3d
 			, renderer::VertexLayout const & layout
 			, uint32_t maxCount )
 		{
-			auto hash = doHashCombine( overlay, pass );
+			auto hash = std::hash< Overlay const * >{}( &overlay );
+			hash = castor::hashCombine( hash, pass );
 			auto it = overlays.find( hash );
 
 			if ( it == overlays.end() )
@@ -286,9 +288,6 @@ namespace castor3d
 
 			return it->second;
 		}
-
-		static size_t doHashCombine( Overlay const & overlay
-			, Pass const & pass );
 
 	private:
 		renderer::TextureView const & m_target;

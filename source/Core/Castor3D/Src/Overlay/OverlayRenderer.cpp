@@ -853,21 +853,5 @@ namespace castor3d
 		return result;
 	}
 
-	size_t OverlayRenderer::doHashCombine( Overlay const & overlay
-		, Pass const & pass )
-	{
-		const uint64_t kMul = 0x9ddfea08eb382d69ULL;
-		auto seed = std::hash< Overlay const * >{}( &overlay );
-
-		std::hash< Pass const * > hasher;
-		uint64_t a = ( hasher( &pass ) ^ seed ) * kMul;
-		a ^= ( a >> 47 );
-
-		uint64_t b = ( seed ^ a ) * kMul;
-		b ^= ( b >> 47 );
-
-		return static_cast< std::size_t >( b * kMul );
-	}
-
 	//*********************************************************************************************
 }

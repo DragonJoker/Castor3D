@@ -196,7 +196,8 @@ namespace castor3d
 			File::directoryCreate( getEngineDirectory() );
 		}
 
-		Logger::logInfo( makeStringStream() << cuT( "Castor3D - Core engine version : " ) << Version{} << std::endl << m_cpuInformations );
+		Logger::logInfo( makeStringStream() << cuT( "Castor3D - Core engine version : " ) << Version{} );
+		Logger::logDebug( makeStringStream() << m_cpuInformations );
 	}
 
 	Engine::~Engine()

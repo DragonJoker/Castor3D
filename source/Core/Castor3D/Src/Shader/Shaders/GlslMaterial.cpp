@@ -374,15 +374,9 @@ namespace castor3d
 
 		BaseMaterialUPtr LegacyMaterials::getBaseMaterial( Int const & index )const
 		{
-			if ( m_writer.hasShaderStorageBuffers() )
-			{
-				auto tmp = m_writer.getBuiltinArray< LegacyMaterial >( cuT( "c3d_materials" ) );
-				return std::make_unique< LegacyMaterial >( tmp[index] );
-			}
-			else
-			{
-				return std::make_unique< LegacyMaterial >( m_getMaterial( index ) );
-			}
+			auto material = m_writer.declLocale( cuT( "material" )
+				, getMaterial( index ) );
+			return std::make_unique< LegacyMaterial >( material );
 		}
 
 		//*********************************************************************************************
@@ -504,15 +498,9 @@ namespace castor3d
 
 		BaseMaterialUPtr PbrSGMaterials::getBaseMaterial( Int const & index )const
 		{
-			if ( m_writer.hasShaderStorageBuffers() )
-			{
-				auto tmp = m_writer.getBuiltinArray< SpecularGlossinessMaterial >( cuT( "c3d_materials" ) );
-				return std::make_unique< SpecularGlossinessMaterial >( tmp[index] );
-			}
-			else
-			{
-				return std::make_unique< SpecularGlossinessMaterial >( m_getMaterial( index ) );
-			}
+			auto material = m_writer.declLocale( cuT( "material" )
+				, getMaterial( index ) );
+			return std::make_unique< SpecularGlossinessMaterial >( material );
 		}
 
 		//*********************************************************************************************

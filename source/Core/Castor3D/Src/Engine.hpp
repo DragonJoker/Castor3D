@@ -377,7 +377,7 @@ namespace castor3d
 		void doLoadCoreData();
 
 	private:
-		castor::String const & m_appName;
+		castor::String const m_appName;
 		std::recursive_mutex m_mutexResources;
 		RenderLoopUPtr m_renderLoop;
 		Version m_version;
