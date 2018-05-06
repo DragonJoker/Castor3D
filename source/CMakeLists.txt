@@ -53,6 +53,8 @@ if ( EXISTS ${CMAKE_SOURCE_DIR}/../dependencies/${COMPILER_FOLDER}/${PROJECTS_PL
 	set( FreeImage_ROOT_DIR ${DEPENDENCIES_DIR}/FreeImage )
 	set( FbxSDK_ROOT_DIR ${DEPENDENCIES_DIR}/FbxSDK )
 	set( ASSIMP_ROOT_DIR ${DEPENDENCIES_DIR}/assimp )
+	set( glslang_ROOT_DIR ${DEPENDENCIES_DIR}/glslang )
+	set( SPIRV_ROOT_DIR ${DEPENDENCIES_DIR}/glslang )
 	set( GLM_ROOT_DIR ${DEPENDENCIES_DIR}/glm )
 	set( FFMPEG_DIR ${DEPENDENCIES_DIR}/ffmpeg )
 	set( OpenCV_DIR ${DEPENDENCIES_DIR}/opencv )

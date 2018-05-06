@@ -6,6 +6,7 @@
 #include "Shader/Program.hpp"
 #include "Shader/PassBuffer/PassBuffer.hpp"
 #include "ShadowMap/ShadowMapDirectional.hpp"
+#include "Technique/RenderTechniquePass.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
 #include "Texture/TextureView.hpp"
@@ -191,7 +192,7 @@ namespace castor3d
 			renderer::RasterisationState rsState;
 			rsState.cullMode = renderer::CullModeFlag::eNone;
 			renderer::DepthStencilState dsState;
-			auto bdState = renderer::ColourBlendState::createDefault();
+			auto bdState = RenderTechniquePass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 2u );
 			auto & pipeline = *pipelines.emplace( flags
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
 					, std::move( dsState )
@@ -201,6 +202,8 @@ namespace castor3d
 					, program
 					, flags ) ).first->second;
 			pipeline.setVertexLayouts( layouts );
+			pipeline.setViewport( { m_camera->getWidth(), m_camera->getHeight(), 0, 0 } );
+			pipeline.setScissor( { 0, 0, m_camera->getWidth(), m_camera->getHeight() } );
 
 			auto initialise = [this, &pipeline, flags]()
 			{

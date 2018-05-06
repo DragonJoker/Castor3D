@@ -106,7 +106,7 @@ namespace castor3d
 		 *\param[out]	info		Reçoit les informations de rendu.
 		 */
 		C3D_API renderer::Semaphore const * render( castor::Point2r const & jitter
-			, renderer::Semaphore const & waitSemaphore
+			, renderer::SemaphoreCRefArray const & waitSemaphores
 			, RenderInfo & info );
 		/**
 		 *\~english
@@ -183,12 +183,13 @@ namespace castor3d
 		void doInitialiseOpaquePass();
 		void doInitialiseBackgroundRenderPass();
 		void doInitialiseTransparentPass();
+		void doInitialiseDebugRenderPass();
 		void doCleanupShadowMaps();
 		void doUpdateShadowMaps( RenderQueueArray & queues );
 		void doUpdateParticles( RenderInfo & info );
 		renderer::Semaphore const * doRenderShadowMaps( renderer::Semaphore const & semaphore );
 		renderer::Semaphore const * doRenderEnvironmentMaps( renderer::Semaphore const & semaphore );
-		renderer::Semaphore const * doClear( renderer::Semaphore const & semaphore );
+		renderer::Semaphore const * doClear( renderer::SemaphoreCRefArray const & semaphores );
 		renderer::Semaphore const * doRenderOpaque( castor::Point2r const & jitter
 			, RenderInfo & info
 			, renderer::Semaphore const & semaphore );
@@ -222,6 +223,8 @@ namespace castor3d
 		renderer::FrameBufferPtr m_clearFrameBuffer;
 		renderer::CommandBufferPtr m_clearCommandBuffer;
 		renderer::SemaphorePtr m_clearSemaphore;
+		renderer::RenderPassPtr m_debugRenderPass;
+		renderer::FrameBufferPtr m_debugFrameBuffer;
 	};
 }
 

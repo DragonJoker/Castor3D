@@ -351,6 +351,8 @@ namespace castor3d
 		{
 			return m_billboardPools;
 		}
+
+		C3D_API renderer::SemaphoreCRefArray getRenderTargetsSemaphores()const;
 		/**@}*/
 		/**
 		*\~english

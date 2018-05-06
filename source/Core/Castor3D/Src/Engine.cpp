@@ -271,6 +271,13 @@ namespace castor3d
 			postEvent( makeInitialiseEvent( *m_defaultSampler ) );
 		}
 
+		//postEvent( makeFunctorEvent( EventType::ePreRender
+		//	, [this]()
+		//	{
+		//		m_renderDepth = std::make_unique< RenderDepthQuad >( *m_renderSystem );
+		//		m_renderDepth->initialise();
+		//	} ) );
+
 		if ( p_threaded )
 		{
 			m_renderLoop = std::make_unique< RenderLoopAsync >( *this, p_wanted );
@@ -301,6 +308,17 @@ namespace castor3d
 			m_overlayCache->cleanup();
 			m_materialCache->cleanup();
 			m_shaderCache->cleanup();
+
+			//if ( m_renderDepth )
+			//{
+			//	postEvent( makeFunctorEvent( EventType::ePreRender
+			//		, [this]()
+			//		{
+			//			m_renderDepth->cleanup();
+			//			m_renderDepth.reset();
+			//		} ) );
+			//	postEvent( makeCleanupEvent( *m_renderDepth ) );
+			//}
 
 			if ( m_lightsSampler )
 			{
@@ -443,6 +461,22 @@ namespace castor3d
 	bool Engine::isTopDown()const
 	{
 		return m_renderSystem->isTopDown();
+	}
+
+	void Engine::renderDepth( renderer::RenderPass const & renderPass
+		, renderer::FrameBuffer const & frameBuffer
+		, castor::Position const & position
+		, castor::Size const & size
+		, TextureLayout const & texture )
+	{
+		if ( m_renderDepth )
+		{
+			m_renderDepth->render( renderPass
+				, frameBuffer
+				, position
+				, size
+				, texture );
+		}
 	}
 
 	void Engine::doLoadCoreData()

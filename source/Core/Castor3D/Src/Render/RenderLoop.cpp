@@ -38,28 +38,28 @@ namespace castor3d
 		{
 			m_renderSystem.getMainDevice()->enable();
 			getEngine()->getFrameListenerCache().forEach( []( FrameListener & p_listener )
-			{
-				p_listener.fireEvents( EventType::ePreRender );
-			} );
+				{
+					p_listener.fireEvents( EventType::ePreRender );
+				} );
 			getEngine()->getFrameListenerCache().forEach( []( FrameListener & p_listener )
-			{
-				p_listener.fireEvents( EventType::eQueueRender );
-			} );
+				{
+					p_listener.fireEvents( EventType::eQueueRender );
+				} );
 			m_renderSystem.getMainDevice()->disable();
 		}
 		else
 		{
 			getEngine()->getFrameListenerCache().forEach( []( FrameListener & p_listener )
-			{
-				p_listener.flushEvents( EventType::ePreRender );
-				p_listener.flushEvents( EventType::eQueueRender );
-			} );
+				{
+					p_listener.flushEvents( EventType::ePreRender );
+					p_listener.flushEvents( EventType::eQueueRender );
+				} );
 		}
 
 		getEngine()->getFrameListenerCache().forEach( []( FrameListener & p_listener )
-		{
-			p_listener.fireEvents( EventType::ePostRender );
-		} );
+			{
+				p_listener.fireEvents( EventType::ePostRender );
+			} );
 	}
 
 	void RenderLoop::createDevice( renderer::WindowHandle && handle
@@ -87,11 +87,11 @@ namespace castor3d
 	void RenderLoop::flushEvents()
 	{
 		getEngine()->getFrameListenerCache().forEach( []( FrameListener & listener )
-		{
-			listener.flushEvents( EventType::ePreRender );
-			listener.flushEvents( EventType::eQueueRender );
-			listener.flushEvents( EventType::ePostRender );
-		} );
+			{
+				listener.flushEvents( EventType::ePreRender );
+				listener.flushEvents( EventType::eQueueRender );
+				listener.flushEvents( EventType::ePostRender );
+			} );
 	}
 
 	uint32_t RenderLoop::registerTimer( RenderPassTimer & timer )
@@ -144,9 +144,9 @@ namespace castor3d
 	void RenderLoop::doProcessEvents( EventType eventType )
 	{
 		getEngine()->getFrameListenerCache().forEach( [eventType]( FrameListener & listener )
-		{
-			listener.fireEvents( eventType );
-		} );
+			{
+				listener.fireEvents( eventType );
+			} );
 	}
 
 	void RenderLoop::doGpuStep( RenderInfo & info )
@@ -163,23 +163,20 @@ namespace castor3d
 				} );
 			doProcessEvents( EventType::ePreRender );
 			getEngine()->getSceneCache().forEach( []( Scene & scene )
-			{
-				scene.getGeometryCache().uploadUbos();
-				scene.getBillboardPools().uploadUbos();
-				scene.getAnimatedObjectGroupCache().uploadUbos();
-			} );
+				{
+					scene.getGeometryCache().uploadUbos();
+					scene.getBillboardPools().uploadUbos();
+					scene.getAnimatedObjectGroupCache().uploadUbos();
+				} );
 			getEngine()->getMaterialCache().update();
 			getEngine()->getRenderTargetCache().render( info );
 			doProcessEvents( EventType::eQueueRender );
 		}
 
-		getEngine()->getSceneCache().forEach( []( Scene & scene )
-		{
-			scene.getEngine()->getRenderWindowCache().forEach( []( RenderWindow & window )
+		getEngine()->getRenderWindowCache().forEach( []( RenderWindow & window )
 			{
 				window.render( true );
 			} );
-		} );
 
 		m_debugOverlays->endGpuTask();
 	}
@@ -188,14 +185,14 @@ namespace castor3d
 	{
 		doProcessEvents( EventType::ePostRender );
 		getEngine()->getSceneCache().forEach( []( Scene & scene )
-		{
-			scene.update();
-		} );
+			{
+				scene.update();
+			} );
 		RenderQueueArray queues;
 		getEngine()->getRenderTechniqueCache().forEach( [&queues]( RenderTechnique & technique )
-		{
-			technique.update( queues );
-		} );
+			{
+				technique.update( queues );
+			} );
 		doUpdateQueues( queues );
 		m_debugOverlays->endCpuTask();
 	}
@@ -207,9 +204,9 @@ namespace castor3d
 			for ( auto & queue : queues )
 			{
 				m_queueUpdater.pushJob( [&queue]()
-				{
-					queue.get().update();
-				} );
+					{
+						queue.get().update();
+					} );
 			}
 
 			m_queueUpdater.waitAll( Milliseconds::max() );

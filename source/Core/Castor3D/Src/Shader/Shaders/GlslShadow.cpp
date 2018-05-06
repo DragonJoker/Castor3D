@@ -166,15 +166,14 @@ namespace castor3d
 					, Float const & varianceFactor
 					, Float const & lightBleedingAmount )
 				{
+					auto p = m_writer.declLocale( cuT( "p" )
+						, step( moments.x() + lightBleedingAmount, distance ) );
 					auto variance = m_writer.declLocale( cuT( "variance" )
 						, glsl::max( moments.y() - m_writer.paren( moments.x() * moments.x() ), varianceFactor ) );
 					auto d = m_writer.declLocale( cuT( "d" )
 						, distance - moments.x() );
 					variance /= variance + d * d;
-					variance = clamp( m_writer.paren( variance - lightBleedingAmount ) / m_writer.paren( 1.0_f - lightBleedingAmount )
-						, 0.0_f
-						, 1.0_f );
-					m_writer.returnStmt( variance );
+					m_writer.returnStmt( glsl::max( p, clamp( variance, 0.0_f, 1.0_f ) ) );
 				}
 				, InVec2{ &m_writer, cuT( "moments" ) }
 				, InFloat{ &m_writer, cuT( "distance" ) }
@@ -190,7 +189,6 @@ namespace castor3d
 				{
 					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
 						, lightMatrix * vec4( worldSpacePosition, 1.0_f ) );
-					// Perspective divide (result in range [-1,1]).
 					m_writer.returnStmt( lightSpacePosition.xyz() / lightSpacePosition.w() );
 				}
 				, InMat4( &m_writer, cuT( "lightMatrix" ) )
@@ -211,16 +209,10 @@ namespace castor3d
 					auto moments = m_writer.declLocale( cuT( "moments" )
 						, texture( c3d_mapShadowDirectional, lightSpacePosition.xy() ).xy() );
 
-					IF( m_writer, lightSpacePosition.z() <= moments.x() )
-					{
-						m_writer.returnStmt( 0.0_f );
-					}
-					FI;
-
-					m_writer.returnStmt( 1.0_f - m_chebyshevUpperBound( moments
+					m_writer.returnStmt( m_chebyshevUpperBound( moments
 						, lightSpacePosition.z()
-						, 0.0000002_f
-						, 0.02_f ) );
+						, 0.0000004_f
+						, 0.01_f ) );
 				}
 				, InParam< Mat4 >( &m_writer, cuT( "lightMatrix" ) )
 				, InVec3( &m_writer, cuT( "worldSpacePosition" ) )
@@ -242,13 +234,6 @@ namespace castor3d
 						, m_getLightSpacePosition( lightMatrix, worldSpacePosition ) );
 					auto moments = m_writer.declLocale( cuT( "moments" )
 						, texture( c3d_mapShadowSpot[index], lightSpacePosition.xy() ).xy() );
-
-					IF( m_writer, lightSpacePosition.z() <= moments.x() )
-					{
-						m_writer.returnStmt( 1.0_f );
-					}
-					FI;
-
 					m_writer.returnStmt( m_chebyshevUpperBound( moments
 						, lightSpacePosition.z()
 						, 0.0000004_f
@@ -293,12 +278,10 @@ namespace castor3d
 								auto moments = m_writer.declLocale( cuT( "moments" )
 									, texture( c3d_mapShadowPoint[index]
 										, vertexToLight + vec3( x, y, z ) ).xy() );
-								shadowFactor += m_writer.ternary( depth <= moments.x()
-									, 0.0_f
-									, 1.0_f - m_chebyshevUpperBound( moments
-										, depth
-										, 0.00000002_f
-										, 0.01_f ) );
+								shadowFactor += 1.0_f - m_chebyshevUpperBound( moments
+									, depth
+									, 0.00000002_f
+									, 0.01_f );
 								numSamplesUsed += 1.0_f;
 							}
 							ROF;
@@ -329,14 +312,7 @@ namespace castor3d
 						, m_getLightSpacePosition( lightMatrix, worldSpacePosition ) );
 					auto moments = m_writer.declLocale( cuT( "moments" )
 						, texture( c3d_mapShadowSpot, lightSpacePosition.xy() ).xy() );
-
-					IF( m_writer, lightSpacePosition.z() <= moments.x() )
-					{
-						m_writer.returnStmt( 0.0_f );
-					}
-					FI;
-
-					m_writer.returnStmt( 1.0_f - m_chebyshevUpperBound( moments
+					m_writer.returnStmt( m_chebyshevUpperBound( moments
 						, lightSpacePosition.z()
 						, 0.0000004_f
 						, 0.01_f ) );
@@ -378,12 +354,10 @@ namespace castor3d
 								auto moments = m_writer.declLocale( cuT( "moments" )
 									, texture( c3d_mapShadowPoint
 										, vertexToLight + vec3( x, y, z ) ).xy() );
-								shadowFactor += m_writer.ternary( depth <= moments.x()
-									, 0.0_f
-									, 1.0_f - m_chebyshevUpperBound( moments
-										, depth
-										, 0.00000002_f
-										, 0.01_f ) );
+								shadowFactor += 1.0_f - m_chebyshevUpperBound( moments
+									, depth
+									, 0.00000002_f
+									, 0.01_f );
 								numSamplesUsed += 1.0_f;
 							}
 							ROF;

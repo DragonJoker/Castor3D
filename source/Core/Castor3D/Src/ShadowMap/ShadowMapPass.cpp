@@ -27,16 +27,6 @@ namespace castor3d
 	{
 	}
 
-	void ShadowMapPass::startTimer( renderer::CommandBuffer const & commandBuffer )
-	{
-		m_timer->start();
-	}
-
-	void ShadowMapPass::stopTimer( renderer::CommandBuffer const & commandBuffer )
-	{
-		m_timer->stop();
-	}
-
 	void ShadowMapPass::doUpdateNodes( SceneCulledRenderNodes & nodes
 		, Camera const & camera )
 	{

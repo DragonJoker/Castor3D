@@ -6,6 +6,7 @@
 #include "Scene/Light/PointLight.hpp"
 #include "Shader/Program.hpp"
 #include "ShadowMap/ShadowMapPoint.hpp"
+#include "Technique/RenderTechniquePass.hpp"
 #include "Texture/TextureView.hpp"
 
 #include <Graphics/Image.hpp>
@@ -160,6 +161,7 @@ namespace castor3d
 			, renderer::MemoryPropertyFlag::eHostVisible | renderer::MemoryPropertyFlag::eHostCoherent );
 
 		m_viewport.resize( size );
+		m_renderQueue.initialise( m_scene );
 		return true;
 	}
 
@@ -202,7 +204,7 @@ namespace castor3d
 			renderer::RasterisationState rsState;
 			rsState.cullMode = renderer::CullModeFlag::eNone;
 			renderer::DepthStencilState dsState;
-			auto bdState = renderer::ColourBlendState::createDefault();
+			auto bdState = RenderTechniquePass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 2u );
 			auto & pipeline = *pipelines.emplace( flags
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
 					, std::move( dsState )
@@ -212,6 +214,8 @@ namespace castor3d
 					, program
 					, flags ) ).first->second;
 			pipeline.setVertexLayouts( layouts );
+			pipeline.setViewport( { m_viewport.getWidth(), m_viewport.getHeight(), 0, 0 } );
+			pipeline.setScissor( { 0, 0, m_viewport.getWidth(), m_viewport.getHeight() } );
 
 			auto initialise = [this, &pipeline, flags]()
 			{

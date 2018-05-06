@@ -208,6 +208,16 @@ namespace castor3d
 	class LightPass
 	{
 	protected:
+		struct RenderPass
+		{
+			RenderPass( renderer::RenderPassPtr && renderPass
+				, renderer::TextureView const & depthView
+				, renderer::TextureView const & diffuseView
+				, renderer::TextureView const & specularView );
+			renderer::RenderPassPtr renderPass;
+			renderer::FrameBufferPtr frameBuffer;
+			renderer::CommandBufferPtr commandBuffer;
+		};
 		/*!
 		\author		Sylvain DOREMUS
 		\version	0.10.0
@@ -512,8 +522,8 @@ namespace castor3d
 		 *\brief		Nettoie la passe d'éclairage.
 		 */
 		void doCleanup();
-		void doPrepareCommandBuffers( TextureUnit const * shadowMap
-			, RenderPassTimer & timer );
+		void doPrepareCommandBuffer( TextureUnit const * shadowMap
+			, bool first );
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source for this light pass.
@@ -592,19 +602,10 @@ namespace castor3d
 			//!\~french		La variable contenant les intensités de la lumière (RG) et le plan éloigné (B).
 			renderer::Vec4 intensityFarPlane;
 		};
-		struct RenderPass
-		{
-			RenderPass( renderer::RenderPassPtr && renderPass
-				, renderer::TextureView const & depthView
-				, renderer::TextureView const & diffuseView
-				, renderer::TextureView const & specularView );
-			renderer::RenderPassPtr renderPass;
-			renderer::FrameBufferPtr frameBuffer;
-			renderer::CommandBufferPtr commandBuffer;
-		};
 		Engine & m_engine;
 		RenderPass m_firstRenderPass;
 		RenderPass m_blendRenderPass;
+		RenderPassTimer * m_timer{ nullptr };
 		renderer::DescriptorSetPtr m_uboDescriptorSet;
 		renderer::WriteDescriptorSetArray m_textureWrites;
 		renderer::DescriptorSetPtr m_textureDescriptorSet;

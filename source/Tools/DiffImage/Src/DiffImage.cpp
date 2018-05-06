@@ -173,18 +173,6 @@ int main( int argc, char * argv[] )
 		if ( !castor::File::fileExists( options.input ) )
 		{
 			std::cout << "Reference image [" << options.input << "] does not exist." << std::endl << std::endl;
-
-			for ( auto & file : options.outputs )
-			{
-				castor::File::deleteFile( file );
-				auto logFile = file.getPath() / ( file.getFileName() + cuT( ".log" ) );
-
-				if ( castor::File::fileExists( logFile ) )
-				{
-					castor::File::deleteFile( logFile );
-				}
-			}
-
 			return result;
 		}
 

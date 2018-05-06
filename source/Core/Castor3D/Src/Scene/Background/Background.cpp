@@ -145,13 +145,13 @@ namespace castor3d
 			commandBuffer.resetQueryPool( m_timer->getQuery()
 				, 0u
 				, 2u );
+			commandBuffer.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+				, m_timer->getQuery()
+				, 0u );
 			commandBuffer.beginRenderPass( renderPass
 				, frameBuffer
 				, { depth, colour }
 				, renderer::SubpassContents::eInline );
-			commandBuffer.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
-				, m_timer->getQuery()
-				, 0u );
 			commandBuffer.bindPipeline( *m_pipeline );
 			commandBuffer.setViewport( { size.getWidth(), size.getHeight(), 0, 0 } );
 			commandBuffer.setScissor( { 0, 0, size.getWidth(), size.getHeight() } );
@@ -159,10 +159,10 @@ namespace castor3d
 			commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 			commandBuffer.bindIndexBuffer( m_indexBuffer->getBuffer(), 0u, renderer::IndexType::eUInt16 );
 			commandBuffer.drawIndexed( m_indexBuffer->getCount() );
+			commandBuffer.endRenderPass();
 			commandBuffer.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
 				, m_timer->getQuery()
 				, 1u );
-			commandBuffer.endRenderPass();
 			result = commandBuffer.end();
 		}
 
@@ -219,7 +219,7 @@ namespace castor3d
 
 			std::function< void() > main = [&]()
 			{
-				gl_Position = writer.paren( c3d_projection * c3d_curView * c3d_mtxModel * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
+				gl_Position = writer.paren( c3d_projection * c3d_curView * c3d_mtxModel * vec4( position, 1.0 ) ).xyww();
 				vtx_texture = position;
 			};
 

@@ -201,6 +201,7 @@ namespace castor3d
 			doInitialiseBackgroundRenderPass();
 			doInitialiseOpaquePass();
 			doInitialiseTransparentPass();
+			doInitialiseDebugRenderPass();
 
 			m_particleTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Particles" ), cuT( "Particles" ) );
 			m_initialised = true;
@@ -215,6 +216,8 @@ namespace castor3d
 		m_clearFrameBuffer.reset();
 		m_clearRenderPass.reset();
 		m_clearSemaphore.reset();
+		m_debugFrameBuffer.reset();
+		m_debugRenderPass.reset();
 		m_bgCommandBuffer.reset();
 		m_bgFrameBuffer.reset();
 		m_bgRenderPass.reset();
@@ -249,7 +252,7 @@ namespace castor3d
 	}
 
 	renderer::Semaphore const * RenderTechnique::render( Point2r const & jitter
-		, renderer::Semaphore const & waitSemaphore
+		, renderer::SemaphoreCRefArray const & waitSemaphores
 		, RenderInfo & info )
 	{
 		auto & scene = *m_renderTarget.getScene();
@@ -261,8 +264,7 @@ namespace castor3d
 
 		// Update part
 		doUpdateParticles( info );
-		auto * semaphore = &waitSemaphore;
-		semaphore = doClear( *semaphore );
+		auto * semaphore = doClear( waitSemaphores );
 		semaphore = doRenderEnvironmentMaps( *semaphore );
 		semaphore = doRenderShadowMaps( *semaphore );
 
@@ -274,6 +276,11 @@ namespace castor3d
 			, m_activeShadowMaps
 			, jitter );
 
+#else
+
+		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).update( info
+			, m_activeShadowMaps
+			, jitter );
 #endif
 #if USE_WEIGHTED_BLEND
 
@@ -305,12 +312,14 @@ namespace castor3d
 
 #if DISPLAY_DEBUG_DEFERRED_BUFFERS && !DEBUG_FORWARD_RENDERING
 
-		m_deferredRendering->debugDisplay();
+		m_deferredRendering->debugDisplay( *m_debugRenderPass
+			, *m_debugFrameBuffer );
 
 #endif
 #if USE_WEIGHTED_BLEND && DISPLAY_DEBUG_WEIGHTED_BLEND_BUFFERS
 
-		m_weightedBlendRendering->debugDisplay();
+		m_weightedBlendRendering->debugDisplay( *m_debugRenderPass
+			, *m_debugFrameBuffer);
 
 #endif
 #if DISPLAY_DEBUG_IBL_BUFFERS
@@ -324,7 +333,10 @@ namespace castor3d
 
 		for ( auto & map : m_renderTarget.getScene()->getEnvironmentMaps() )
 		{
-			map.get().debugDisplay( size, index++ );
+			map.get().debugDisplay( *m_debugRenderPass
+				, *m_debugFrameBuffer
+				, size
+				, index++ );
 		}
 
 		index = 0u;
@@ -336,7 +348,10 @@ namespace castor3d
 		{
 			for ( auto & map : maps )
 			{
-				map.get().debugDisplay( size, index++ );
+				map.get().debugDisplay( *m_debugRenderPass
+					, *m_debugFrameBuffer
+					, size
+					, index++ );
 			}
 		}
 
@@ -394,18 +409,18 @@ namespace castor3d
 		renderPass.dependencies.resize( 2u );
 		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
-		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
 		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 		renderPass.dependencies[1].srcSubpass = 0u;
 		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
 		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
 		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
 		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 		m_clearRenderPass = device.createRenderPass( renderPass );
@@ -452,8 +467,15 @@ namespace castor3d
 			, *m_renderTarget.getScene()
 			, m_renderTarget.getCamera()->getViewport()
 			, m_ssaoConfig );
+
 #else
+
 		m_opaquePass->initialise( m_size );
+		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).initialiseRenderPass( m_colourTexture->getDefaultView()
+			, m_depthBuffer->getDefaultView()
+			, m_size
+			, true );
+
 #endif
 	}
 
@@ -478,11 +500,11 @@ namespace castor3d
 
 		renderPass.attachments[1].format = m_colourTexture->getPixelFormat();
 		renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eLoad;
 		renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
 		renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 		renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[1].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[1].initialLayout = renderer::ImageLayout::eColourAttachmentOptimal;
 		renderPass.attachments[1].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
 
 		renderPass.subpasses.resize( 1u );
@@ -494,17 +516,17 @@ namespace castor3d
 		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
 		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
 		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
 		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 		renderPass.dependencies[1].srcSubpass = 0u;
 		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
 		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
 		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
 		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 		m_bgRenderPass = device.createRenderPass( renderPass );
@@ -540,6 +562,38 @@ namespace castor3d
 #else
 		m_transparentPass->initialise( m_size );
 #endif
+	}
+
+	void RenderTechnique::doInitialiseDebugRenderPass()
+	{
+		auto & renderSystem = *getEngine()->getRenderSystem();
+		auto & device = *renderSystem.getCurrentDevice();
+
+		renderer::RenderPassCreateInfo renderPass;
+		renderPass.flags = 0;
+
+		renderPass.attachments.resize( 1u );
+		renderPass.attachments[0].format = m_colourTexture->getPixelFormat();
+		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
+		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+		renderPass.subpasses.resize( 1u );
+		renderPass.subpasses[0].flags = 0u;
+		renderPass.subpasses[0].colorAttachments = { { 0u, renderer::ImageLayout::eColourAttachmentOptimal } };
+
+		m_debugRenderPass = device.createRenderPass( renderPass );
+
+		renderer::FrameBufferAttachmentArray attaches
+		{
+			{ *( m_bgRenderPass->getAttachments().begin() + 0u ), m_colourTexture->getDefaultView() },
+		};
+		m_debugFrameBuffer = m_debugRenderPass->createFrameBuffer( { m_colourTexture->getDimensions().width, m_colourTexture->getDimensions().height }
+			, std::move( attaches ) );
 	}
 
 	void RenderTechnique::doCleanupShadowMaps()
@@ -635,12 +689,12 @@ namespace castor3d
 		return result;
 	}
 
-	renderer::Semaphore const * RenderTechnique::doClear( renderer::Semaphore const & semaphore )
+	renderer::Semaphore const * RenderTechnique::doClear( renderer::SemaphoreCRefArray const & semaphores )
 	{
 		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
 		device.getGraphicsQueue().submit( { *m_clearCommandBuffer }
-			, {}
-			, {}
+			, semaphores
+			, renderer::PipelineStageFlagsArray( semaphores.size(), renderer::PipelineStageFlag::eColourAttachmentOutput )
 			, { *m_clearSemaphore }
 			, nullptr );
 		device.waitIdle();
@@ -660,13 +714,7 @@ namespace castor3d
 
 #if DEBUG_FORWARD_RENDERING
 
-			getEngine()->setPerObjectLighting( true );
-			camera.apply();
-			m_frameBuffer.m_frameBuffer->bind( FrameBufferTarget::eDraw );
-			m_frameBuffer.m_frameBuffer->setDrawBuffers();
-			m_frameBuffer.m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth | BufferComponent::eStencil );
-			m_opaquePass->render( info
-				, m_activeShadowMaps );
+			result = &static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).render( info, scene, camera, *result );
 
 #else
 

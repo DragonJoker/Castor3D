@@ -139,6 +139,7 @@ namespace castor3d
 		SamplerSPtr m_sampler;
 		renderer::PipelinePtr m_pipeline;
 		renderer::PipelineLayoutPtr m_pipelineLayout;
+		renderer::CommandBufferPtr m_commandBuffer;
 
 	private:
 		TexturedQuad m_vertexData;
@@ -146,7 +147,6 @@ namespace castor3d
 		renderer::DescriptorSetLayoutPtr m_descriptorSetLayout;
 		renderer::DescriptorSetPoolPtr m_descriptorSetPool;
 		renderer::DescriptorSetPtr m_descriptorSet;
-		renderer::CommandBufferPtr m_commandBuffer;
 	};
 }
 

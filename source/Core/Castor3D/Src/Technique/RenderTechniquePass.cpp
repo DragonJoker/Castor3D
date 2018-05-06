@@ -294,7 +294,7 @@ namespace castor3d
 		if ( pipelines.find( flags ) == pipelines.end() )
 		{
 			renderer::DepthStencilState dsState;
-			dsState.depthWriteEnable = !m_opaque;
+			dsState.depthWriteEnable = m_opaque;
 			renderer::RasterisationState rsState;
 			rsState.cullMode = renderer::CullModeFlag::eFront;
 			auto & pipeline = *pipelines.emplace( flags
@@ -342,7 +342,7 @@ namespace castor3d
 		if ( pipelines.find( flags ) == pipelines.end() )
 		{
 			renderer::DepthStencilState dsState;
-			dsState.depthWriteEnable = !m_opaque;
+			dsState.depthWriteEnable = m_opaque;
 			renderer::RasterisationState rsState;
 			auto & pipeline = *pipelines.emplace( flags
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()

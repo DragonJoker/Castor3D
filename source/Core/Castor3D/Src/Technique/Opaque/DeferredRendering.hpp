@@ -102,7 +102,8 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dessine les données de débogage sur l'écran.
 		 */
-		void debugDisplay()const;
+		void debugDisplay( renderer::RenderPass const & renderPass
+			, renderer::FrameBuffer const & frameBuffer )const;
 
 	private:
 		Engine & m_engine;

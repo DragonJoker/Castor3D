@@ -86,15 +86,38 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::render
 		 */
+		void initialiseRenderPass( renderer::TextureView const & colourView
+			, renderer::TextureView const & depthView
+			, castor::Size const & size
+			, bool clear );
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::render
+		 */
 		C3D_API void update( RenderInfo & info
 			, ShadowMapLightTypeArray & shadowMaps
-			, castor::Point2r const & jitter )override;
+			, castor::Point2r const & jitter );
+		/**
+		 *\~english
+		 *\brief		Renders nodes.
+		 *\param[out]	info		Receives the render informations.
+		 *\param[out]	scene		The rendered scene.
+		 *\param[out]	camera		The viewer camera.
+		 *\~french
+		 *\brief		Dessine les noeuds.
+		 *\param[out]	info		Reçoit les informations de rendu.
+		 *\param[out]	scene		La scène rendue.
+		 *\param[out]	camera		La caméra par laquelle la scène est rendue.
+		 */
+		renderer::Semaphore const & render( RenderInfo & info
+			, Scene const & scene
+			, Camera const & camera
+			, renderer::Semaphore const & toWait );
 
 	private:
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateUboBindings
 		 */
-		renderer::DescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
+		C3D_API renderer::DescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
@@ -122,11 +145,16 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
 		 */
-		glsl::Shader doGetPbrSGPixelShaderSource( PassFlags const & passFlags
+		C3D_API glsl::Shader doGetPbrSGPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, renderer::CompareOp alphaFunc )const override;
+
+	private:
+		renderer::FrameBufferPtr m_frameBuffer;
+		renderer::CommandBufferPtr m_nodesCommands;
+		renderer::FencePtr m_fence;
 	};
 }
 

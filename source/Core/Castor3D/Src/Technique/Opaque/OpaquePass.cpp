@@ -81,8 +81,8 @@ namespace castor3d
 			renderPass.attachments[i].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 			renderPass.attachments[i].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 			renderPass.attachments[i].samples = renderer::SampleCountFlag::e1;
-			renderPass.attachments[i].initialLayout = renderer::ImageLayout::eUndefined;
-			renderPass.attachments[i].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+			renderPass.attachments[i].initialLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+			renderPass.attachments[i].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
 
 			renderPass.subpasses[0].colorAttachments.push_back( { uint32_t( i ), renderer::ImageLayout::eColourAttachmentOptimal } );
 		}
@@ -90,10 +90,10 @@ namespace castor3d
 		renderPass.dependencies.resize( 2u );
 		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
 		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 		renderPass.dependencies[1].srcSubpass = 0u;
@@ -129,11 +129,7 @@ namespace castor3d
 	{
 		renderer::DescriptorSetLayoutBindingArray uboBindings;
 
-		if ( !checkFlag( flags.programFlags, ProgramFlag::eDepthPass )
-			&& !checkFlag( flags.programFlags, ProgramFlag::ePicking )
-			&& !checkFlag( flags.programFlags, ProgramFlag::eShadowMapDirectional )
-			&& !checkFlag( flags.programFlags, ProgramFlag::eShadowMapPoint )
-			&& !checkFlag( flags.programFlags, ProgramFlag::eShadowMapSpot ) )
+		if ( !checkFlag( flags.programFlags, ProgramFlag::eDepthPass ) )
 		{
 			uboBindings.emplace_back( getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding() );
 		}
@@ -490,18 +486,18 @@ namespace castor3d
 					, material.m_alphaRef() );
 			}
 
+			auto gamma = writer.declLocale( cuT( "gamma" )
+				, material.m_gamma() );
 			auto normal = writer.declLocale( cuT( "normal" )
 				, normalize( vtx_normal ) );
 			auto diffuse = writer.declLocale( cuT( "diffuse" )
-				, material.m_diffuse() );
+				, utils.removeGamma( gamma, material.m_diffuse() ) );
 			auto specular = writer.declLocale( cuT( "specular" )
 				, material.m_specular() );
 			auto matShininess = writer.declLocale( cuT( "matShininess" )
 				, material.m_shininess() );
 			auto emissive = writer.declLocale( cuT( "emissive" )
 				, vec3( material.m_emissive() ) );
-			auto gamma = writer.declLocale( cuT( "gamma" )
-				, material.m_gamma() );
 			shader::legacy::computePreLightingMapContributions( writer
 				, normal
 				, matShininess

@@ -923,6 +923,7 @@ namespace castor3d
 
 	void RenderQueue::initialise( Scene const & scene )
 	{
+		m_commandBuffer = getOwner()->getEngine()->getRenderSystem()->getMainDevice()->getGraphicsCommandPool().createCommandBuffer( false );
 		m_sceneChanged = scene.onChanged.connect( std::bind( &RenderQueue::onSceneChanged
 			, this
 			, std::placeholders::_1 ) );
@@ -985,9 +986,6 @@ namespace castor3d
 				0u
 			} ) )
 		{
-			auto & camera = *m_camera;
-			camera.update();
-
 			doTraverseNodes( m_renderNodes->instancedStaticNodes.frontCulled
 				, std::bind( doAddRenderNodesCommands< SubmeshStaticRenderNodesByPipelineMap, StaticRenderNodeArray >
 					, std::ref( *m_commandBuffer )

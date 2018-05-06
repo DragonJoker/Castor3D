@@ -2,6 +2,7 @@
 
 #include "Cache/MaterialCache.hpp"
 #include "Mesh/Submesh.hpp"
+#include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderTarget.hpp"
 #include "Render/RenderNode/RenderNode_Render.hpp"
@@ -17,6 +18,8 @@
 #include "Shader/Shaders/GlslPhongReflection.hpp"
 #include "Shader/Shaders/GlslMetallicBrdfLighting.hpp"
 #include "Shader/Shaders/GlslSpecularBrdfLighting.hpp"
+
+#include <Image/TextureView.hpp>
 
 using namespace castor;
 
@@ -60,24 +63,142 @@ namespace castor3d
 	{
 	}
 
+	void ForwardRenderTechniquePass::initialiseRenderPass( renderer::TextureView const & colourView
+		, renderer::TextureView const & depthView
+		, castor::Size const & size
+		, bool clear )
+	{
+		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+
+		renderer::RenderPassCreateInfo renderPass;
+		renderPass.flags = 0u;
+
+		renderPass.attachments.resize( 2u );
+		renderPass.attachments[0].format = depthView.getFormat();
+		renderPass.attachments[0].loadOp = clear
+			? renderer::AttachmentLoadOp::eClear
+			: renderer::AttachmentLoadOp::eLoad;
+		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[0].stencilLoadOp = renderer::isDepthStencilFormat( renderPass.attachments[0].format )
+			? renderer::AttachmentLoadOp::eClear
+			: renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = renderer::isDepthStencilFormat( renderPass.attachments[0].format )
+			? renderer::AttachmentStoreOp::eStore
+			: renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+
+		renderPass.attachments[1].format = colourView.getFormat();
+		renderPass.attachments[1].loadOp = clear
+			? renderer::AttachmentLoadOp::eClear
+			: renderer::AttachmentLoadOp::eLoad;
+		renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[1].initialLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+		renderPass.attachments[1].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+		renderPass.subpasses.resize( 1u );
+		renderPass.subpasses[0].flags = 0u;
+		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
+		renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
+		renderPass.subpasses[0].colorAttachments.push_back( { 1u, renderer::ImageLayout::eColourAttachmentOptimal } );
+
+		renderPass.dependencies.resize( 2u );
+		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].dstSubpass = 0u;
+		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		renderPass.dependencies[1].srcSubpass = 0u;
+		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		m_renderPass = device.createRenderPass( renderPass );
+		renderer::FrameBufferAttachmentArray attaches;
+		attaches.emplace_back( *( m_renderPass->getAttachments().begin() + 0u ), depthView );
+		attaches.emplace_back( *( m_renderPass->getAttachments().begin() + 1u ), colourView );
+
+		m_frameBuffer = m_renderPass->createFrameBuffer( { colourView.getTexture().getDimensions().width, colourView.getTexture().getDimensions().height }
+			, std::move( attaches ) );
+
+		m_nodesCommands = device.getGraphicsCommandPool().createCommandBuffer();
+		m_fence = device.createFence( renderer::FenceCreateFlag::eSignaled );
+	}
+
 	void ForwardRenderTechniquePass::update( RenderInfo & info
 		, ShadowMapLightTypeArray & shadowMaps
 		, Point2r const & jitter )
 	{
+		getSceneUbo().update( m_scene, *m_camera );
 		doUpdate( info
 			, shadowMaps
 			, jitter );
+	}
+
+	renderer::Semaphore const & ForwardRenderTechniquePass::render( RenderInfo & info
+		, Scene const & scene
+		, Camera const & camera
+		, renderer::Semaphore const & toWait )
+	{
+		renderer::Semaphore const * result = &toWait;
+		getEngine()->setPerObjectLighting( true );
+		getTimer().start();
+		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		static renderer::ClearValueArray const clearValues
+		{
+			renderer::DepthStencilClearValue{ 1.0, 0 },
+			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
+		};
+		m_fence->reset();
+
+		if ( m_nodesCommands->begin() )
+		{
+			m_nodesCommands->resetQueryPool( getTimer().getQuery()
+				, 0u
+				, 2u );
+			m_nodesCommands->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+				, getTimer().getQuery()
+				, 0u );
+			m_nodesCommands->beginRenderPass( getRenderPass()
+				, *m_frameBuffer
+				, clearValues
+				, renderer::SubpassContents::eSecondaryCommandBuffers );
+			m_nodesCommands->executeCommands( { getCommandBuffer() } );
+			m_nodesCommands->endRenderPass();
+			m_nodesCommands->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
+				, getTimer().getQuery()
+				, 1u );
+			m_nodesCommands->end();
+			device.getGraphicsQueue().submit( { *m_nodesCommands }
+				, { *result }
+				, { renderer::PipelineStageFlag::eColourAttachmentOutput }
+				, { getSemaphore() }
+				, m_fence.get() );
+			m_fence->wait( renderer::FenceTimeout );
+			device.getGraphicsQueue().waitIdle();
+			getTimer().step();
+			result = &getSemaphore();
+		}
+
+		getTimer().stop();
+		return *result;
 	}
 
 	renderer::DescriptorSetLayoutBindingArray ForwardRenderTechniquePass::doCreateUboBindings( PipelineFlags const & flags )const
 	{
 		renderer::DescriptorSetLayoutBindingArray uboBindings;
 
-		if ( !checkFlag( flags.programFlags, ProgramFlag::eDepthPass )
-			&& !checkFlag( flags.programFlags, ProgramFlag::ePicking )
-			&& !checkFlag( flags.programFlags, ProgramFlag::eShadowMapDirectional )
-			&& !checkFlag( flags.programFlags, ProgramFlag::eShadowMapPoint )
-			&& !checkFlag( flags.programFlags, ProgramFlag::eShadowMapSpot ) )
+		if ( !checkFlag( flags.programFlags, ProgramFlag::eDepthPass ) )
 		{
 			uboBindings.emplace_back( getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding() );
 		}
@@ -89,7 +210,12 @@ namespace castor3d
 
 		uboBindings.emplace_back( MatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
 		uboBindings.emplace_back( SceneUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
-		uboBindings.emplace_back( ModelMatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+
+		if ( !checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
+		{
+			uboBindings.emplace_back( ModelMatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+		}
+
 		uboBindings.emplace_back( ModelUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
@@ -443,26 +569,18 @@ namespace castor3d
 					, material.m_alphaRef() );
 			}
 
+			auto gamma = writer.declLocale( cuT( "gamma" )
+				, material.m_gamma() );
 			auto normal = writer.declLocale( cuT( "normal" )
 				, normalize( vtx_normal ) );
-			auto ambient = writer.declLocale( cuT( "ambient" )
-				, c3d_ambientLight.xyz() );
-			auto matSpecular = writer.declLocale( cuT( "matSpecular" )
+			auto diffuse = writer.declLocale( cuT( "diffuse" )
+				, utils.removeGamma( gamma, material.m_diffuse() ) );
+			auto specular = writer.declLocale( cuT( "specular" )
 				, material.m_specular() );
 			auto matShininess = writer.declLocale( cuT( "matShininess" )
 				, material.m_shininess() );
-			auto matGamma = writer.declLocale( cuT( "matGamma" )
-				, material.m_gamma() );
-			auto matDiffuse = writer.declLocale( cuT( "matDiffuse" )
-				, utils.removeGamma( matGamma, material.m_diffuse() ) );
-			auto matEmissive = writer.declLocale( cuT( "matEmissive" )
+			auto emissive = writer.declLocale( cuT( "emissive" )
 				, vec3( material.m_emissive() ) );
-			auto worldEye = writer.declLocale( cuT( "worldEye" )
-				, c3d_cameraPosition.xyz() );
-			auto envAmbient = writer.declLocale( cuT( "envAmbient" )
-				, vec3( 1.0_f, 1.0_f, 1.0_f ) );
-			auto envDiffuse = writer.declLocale( cuT( "envDiffuse" )
-				, vec3( 1.0_f, 1.0_f, 1.0_f ) );
 			shader::legacy::computePreLightingMapContributions( writer
 				, normal
 				, matShininess
@@ -471,13 +589,15 @@ namespace castor3d
 				, sceneFlags
 				, passFlags );
 			shader::legacy::computePostLightingMapContributions( writer
-				, matDiffuse
-				, matSpecular
-				, matEmissive
-				, matGamma
+				, diffuse
+				, specular
+				, emissive
+				, gamma
 				, textureFlags
 				, programFlags
 				, sceneFlags );
+			auto worldEye = writer.declLocale( cuT( "worldEye" )
+				, c3d_cameraPosition.xyz() );
 			auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
 				, vec3( 0.0_f ) );
 			auto lightSpecular = writer.declLocale( cuT( "lightSpecular" )
@@ -488,13 +608,26 @@ namespace castor3d
 				, c3d_shadowReceiver
 				, shader::FragmentInput( vtx_worldPosition, normal )
 				, output );
-			auto occlusion = writer.declLocale( cuT( "occlusion" )
+			auto ambientOcclusion = writer.declLocale( cuT( "ambientOcclusion" )
 				, 1.0_f );
 
 			if ( checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) )
 			{
-				occlusion = texture( c3d_mapAmbientOcclusion, texCoord.xy() ).r();
+				ambientOcclusion = texture( c3d_mapAmbientOcclusion, texCoord.xy() ).r();
 			}
+
+			auto transmittance = writer.declLocale( cuT( "transmittance" )
+				, 0.0_f );
+
+			if ( checkFlag( textureFlags, TextureChannel::eTransmittance ) )
+			{
+				transmittance = texture( c3d_mapTransmittance, texCoord.xy() ).r();
+			}
+
+			auto ambient = writer.declLocale( cuT( "ambient" )
+				, clamp( c3d_ambientLight.xyz() + material.m_ambient() * material.m_diffuse()
+					, vec3( 0.0_f )
+					, vec3( 1.0_f ) ) );
 
 			if ( checkFlag( textureFlags, TextureChannel::eReflection )
 				|| checkFlag( textureFlags, TextureChannel::eRefraction ) )
@@ -505,38 +638,40 @@ namespace castor3d
 				if ( checkFlag( textureFlags, TextureChannel::eReflection )
 					&& checkFlag( textureFlags, TextureChannel::eRefraction ) )
 				{
-					pxl_fragColor.xyz() = reflections.computeReflRefr( incident
+					ambient = reflections.computeReflRefr( incident
 						, normal
-						, occlusion
+						, ambientOcclusion
 						, c3d_mapEnvironment
 						, material.m_refractionRatio()
-						, matDiffuse );
+						, diffuse );
+					diffuse = vec3( 0.0_f );
 				}
 				else if ( checkFlag( textureFlags, TextureChannel::eReflection ) )
 				{
-					pxl_fragColor.xyz() = reflections.computeRefl( incident
+					diffuse = reflections.computeRefl( incident
 						, normal
-						, occlusion
+						, ambientOcclusion
 						, c3d_mapEnvironment );
+					ambient = vec3( 0.0_f );
 				}
 				else
 				{
-					pxl_fragColor.xyz() = reflections.computeRefr( incident
+					ambient = reflections.computeRefr( incident
 						, normal
-						, occlusion
+						, ambientOcclusion
 						, c3d_mapEnvironment
 						, material.m_refractionRatio()
-						, matDiffuse );
+						, diffuse );
+					diffuse = vec3( 0.0_f );
 				}
 			}
 			else
 			{
-				pxl_fragColor.xyz() = glsl::fma( ambient + lightDiffuse
-					, matDiffuse
-					, glsl::fma( lightSpecular
-						, material.m_specular()
-						, matEmissive ) );
+				ambient *= ambientOcclusion * diffuse;
+				diffuse *= lightDiffuse;
 			}
+
+			pxl_fragColor = vec4( diffuse + lightSpecular + emissive + ambient, 1.0 );
 
 			if ( !m_opaque && alphaFunc != renderer::CompareOp::eAlways )
 			{

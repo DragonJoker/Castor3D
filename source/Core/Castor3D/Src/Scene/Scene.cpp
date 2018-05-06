@@ -983,6 +983,21 @@ namespace castor3d
 		return *m_reflectionMaps.find( &node )->second;
 	}
 
+	renderer::SemaphoreCRefArray Scene::getRenderTargetsSemaphores()const
+	{
+		renderer::SemaphoreCRefArray result;
+
+		for ( auto & target : getEngine()->getRenderTargetCache().getRenderTargets( TargetType::eTexture ) )
+		{
+			if ( target->getScene().get() != this )
+			{
+				result.emplace_back( target->getSemaphore() );
+			}
+		}
+
+		return result;
+	}
+
 	void Scene::doUpdateAnimations()
 	{
 		std::vector< std::reference_wrapper< AnimatedObjectGroup > > groups;

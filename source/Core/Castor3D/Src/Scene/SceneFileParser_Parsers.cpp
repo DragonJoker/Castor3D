@@ -3161,7 +3161,8 @@ namespace castor3d
 		if ( parsingContext->pass )
 		{
 			if ( parsingContext->textureUnit
-				&& parsingContext->textureUnit->getTexture() )
+				&& ( parsingContext->textureUnit->getTexture()
+					|| parsingContext->textureUnit->getRenderTarget() ) )
 			{
 				parsingContext->pass->addTextureUnit( parsingContext->textureUnit );
 			}

@@ -99,7 +99,9 @@ namespace castor3d
 		 *\param[in]	size	Les dimensions d'affichage.
 		 *\param[in]	index	L'indice de la texture d'ombres (pour calculer sa position).
 		 */
-		C3D_API virtual void debugDisplay( castor::Size const & size, uint32_t index ) = 0;
+		C3D_API virtual void debugDisplay( renderer::RenderPass const & renderPass
+			, renderer::FrameBuffer const & frameBuffer
+			, castor::Size const & size, uint32_t index ) = 0;
 		/**
 		 *\copydoc		castor3d::RenderPass::updateFlags
 		 */
@@ -239,6 +241,7 @@ namespace castor3d
 
 	protected:
 		renderer::CommandBufferPtr m_commandBuffer;
+		renderer::FencePtr m_fence;
 		std::set< std::reference_wrapper< GeometryBuffers > > m_geometryBuffers;
 		std::vector< ShadowMapPassSPtr > m_passes;
 		TextureUnit m_shadowMap;

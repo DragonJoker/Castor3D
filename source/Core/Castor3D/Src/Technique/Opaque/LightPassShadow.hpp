@@ -346,10 +346,7 @@ namespace castor3d
 			, renderer::Semaphore const & toWait
 			, TextureUnit * shadowMapOpt )override
 		{
-			renderer::WriteDescriptorSet & write = m_textureDescriptorSet->getBinding( 6u );
-			write.imageInfo[0].imageView = std::ref( shadowMapOpt->getTexture()->getDefaultView() );
-			write.imageInfo[0].sampler = std::ref( shadowMapOpt->getSampler()->getSampler() );
-			m_textureDescriptorSet->update();
+			doPrepareCommandBuffer( shadowMapOpt, first );
 			my_pass_type::render( first, toWait, nullptr );
 		}
 

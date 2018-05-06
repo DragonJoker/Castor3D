@@ -174,7 +174,7 @@ namespace castor3d
 				, { *result }
 				, { renderer::PipelineStageFlag::eColourAttachmentOutput }
 				, { m_opaquePass.getSemaphore() }
-			, m_fence.get() );
+				, m_fence.get() );
 			m_fence->wait( renderer::FenceTimeout );
 			device.getGraphicsQueue().waitIdle();
 			m_opaquePass.getTimer().step();
@@ -210,7 +210,8 @@ namespace castor3d
 		return *result;
 	}
 
-	void DeferredRendering::debugDisplay()const
+	void DeferredRendering::debugDisplay( renderer::RenderPass const & renderPass
+		, renderer::FrameBuffer const & frameBuffer )const
 	{
 		//auto count = 8 + ( m_ssaoConfig.m_enabled ? 1 : 0 );
 		//int width = int( m_size.getWidth() ) / count;

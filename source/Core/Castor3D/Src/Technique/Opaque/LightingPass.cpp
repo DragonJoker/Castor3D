@@ -211,7 +211,9 @@ namespace castor3d
 						lightPassShadow.update( camera.getViewport().getSize()
 							, *light
 							, camera );
-						lightPassShadow.render( first, *toWait, &light->getShadowMap()->getTexture() );
+						lightPassShadow.render( first
+							, *toWait
+							, &light->getShadowMap()->getTexture() );
 						toWait = &lightPassShadow.getSemaphore();
 					}
 					else
@@ -219,7 +221,9 @@ namespace castor3d
 						lightPass.update( camera.getViewport().getSize()
 							, *light
 							, camera );
-						lightPass.render( first, *toWait, nullptr );
+						lightPass.render( first
+							, *toWait
+							, nullptr );
 						toWait = &lightPass.getSemaphore();
 					}
 

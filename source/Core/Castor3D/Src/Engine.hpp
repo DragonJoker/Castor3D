@@ -15,13 +15,12 @@ See LICENSE file in root folder
 #include "Cache/TargetCache.hpp"
 #include "Cache/TechniqueCache.hpp"
 #include "Cache/WindowCache.hpp"
-
-#include "Miscellaneous/Version.hpp"
-
 #include "Mesh/ImporterFactory.hpp"
 #include "Mesh/MeshFactory.hpp"
 #include "Mesh/SubdividerFactory.hpp"
+#include "Miscellaneous/Version.hpp"
 #include "Render/RenderSystemFactory.hpp"
+#include "RenderToTexture/RenderDepthQuad.hpp"
 
 #include <FileParser/FileParser.hpp>
 #include <Graphics/FontCache.hpp>
@@ -168,6 +167,27 @@ namespace castor3d
 		 *\return		\p true si l'API de rendu sélectionnée est top down.
 		 */
 		C3D_API bool isTopDown()const;
+		/**
+		 *\~english
+		 *\brief		Renders the given depth texture to the given frame buffer.
+		 *\param[in]	renderPass	The render pass.
+		 *\param[in]	frameBuffer	The frame buffer.
+		 *\param[in]	position	The render viewport position.
+		 *\param[in]	size		The render viewport size.
+		 *\param[in]	texture		The texture.
+		 *\~french
+		 *\brief		Rend la texture profondeur donnée dans le tampon d'image donné.
+		 *\param[in]	renderPass	La passe de rendu.
+		 *\param[in]	frameBuffer	Le frame buffer.
+		 *\param[in]	position	La position du viewport de rendu.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		La texture.
+		 */
+		C3D_API void renderDepth( renderer::RenderPass const & renderPass
+			, renderer::FrameBuffer const & frameBuffer
+			, castor::Position const & position
+			, castor::Size const & size
+			, TextureLayout const & texture );
 		/**
 		 *\~english
 		 *\brief		Retrieves plug-ins path
@@ -411,6 +431,7 @@ namespace castor3d
 		castor::CpuInformations m_cpuInformations;
 		MaterialType m_materialType;
 		bool m_enableValidation{ false };
+		std::unique_ptr< RenderDepthQuad > m_renderDepth;
 	};
 }
 

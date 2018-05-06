@@ -725,7 +725,7 @@ namespace castor3d
 		uint32_t index = 0u;
 		node.uboDescriptorSet = descriptorPool.createDescriptorSet( 0u );
 		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.uboDescriptorSet
-			, layout.getBinding( index++ ) );
+			, layout.getBinding( PassBufferIndex ) );
 
 		if ( checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eLighting ) )
 		{
@@ -1512,10 +1512,7 @@ namespace castor3d
 	{
 		renderer::DescriptorSetLayoutBindingArray uboBindings;
 
-		if ( !checkFlag( flags.programFlags, ProgramFlag::eDepthPass )
-			&& !checkFlag( flags.programFlags, ProgramFlag::eShadowMapDirectional )
-			&& !checkFlag( flags.programFlags, ProgramFlag::eShadowMapPoint )
-			&& !checkFlag( flags.programFlags, ProgramFlag::eShadowMapSpot ) )
+		if ( !checkFlag( flags.programFlags, ProgramFlag::eDepthPass ) )
 		{
 			uboBindings.emplace_back( getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding() );
 		}

@@ -3,6 +3,7 @@
 #include "Engine.hpp"
 
 #include "Miscellaneous/GaussianBlur.hpp"
+#include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/Light/Light.hpp"
@@ -21,6 +22,7 @@
 #include <RenderPass/RenderSubpass.hpp>
 #include <RenderPass/RenderSubpassState.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
+#include <Sync/Fence.hpp>
 
 #include <GlslSource.hpp>
 
@@ -147,45 +149,65 @@ namespace castor3d
 		m_passes[0]->update( camera, queues, light, index );
 	}
 
-
 	void ShadowMapDirectional::render( renderer::Semaphore const & toWait )
 	{
 		static renderer::ClearColorValue const black{ 0.0f, 0.0f, 0.0f, 1.0f };
 		static renderer::DepthStencilClearValue const zero{ 1.0f, 0 };
+		m_passes[0]->updateDeviceDependent();
+		auto & timer = m_passes[0]->getTimer();
+		timer.start();
 
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
 		{
-			m_passes[0]->startTimer( *m_commandBuffer );
+			m_commandBuffer->resetQueryPool( timer.getQuery()
+				, 0u
+				, 2u );
+			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+				, timer.getQuery()
+				, 0u );
 			m_commandBuffer->beginRenderPass( m_passes[0]->getRenderPass()
 				, *m_frameBuffer
 				, { zero, black, black }
-			, renderer::SubpassContents::eSecondaryCommandBuffers );
+				, renderer::SubpassContents::eSecondaryCommandBuffers );
 			m_commandBuffer->executeCommands( { m_passes[0]->getCommandBuffer() } );
 			m_commandBuffer->endRenderPass();
-			m_passes[0]->stopTimer( *m_commandBuffer );
+			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
+				, timer.getQuery()
+				, 1u );
 			m_commandBuffer->end();
 		}
 
+		m_fence->reset();
 		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
 		device.getGraphicsQueue().submit( *m_commandBuffer
 			, toWait
 			, renderer::PipelineStageFlag::eBottomOfPipe
 			, *m_finished
-			, nullptr );
+			, m_fence.get() );
+		m_fence->wait( renderer::FenceTimeout );
+		timer.step();
 		m_blur->blur();
+		timer.stop();
 	}
 
-	void ShadowMapDirectional::debugDisplay( castor::Size const & size, uint32_t index )
+	void ShadowMapDirectional::debugDisplay( renderer::RenderPass const & renderPass
+		, renderer::FrameBuffer const & frameBuffer
+		, castor::Size const & size
+		, uint32_t index )
 	{
-		//Size displaySize{ 256u, 256u };
-		//Position position{ int32_t( displaySize.getWidth() * index * 3 ), int32_t( displaySize.getHeight() * 3u ) };
-		//getEngine()->getRenderSystem()->getCurrentContext()->renderVariance( position
-		//	, displaySize
-		//	, *m_shadowMap.getTexture() );
-		//position = Position{ int32_t( displaySize.getWidth() * ( 2 + index * 3 ) ), int32_t( displaySize.getHeight() * 3u ) };
-		//getEngine()->getRenderSystem()->getCurrentContext()->renderDepth( position
-		//	, displaySize
-		//	, *m_linearMap.getTexture() );
+		Size displaySize{ 256u, 256u };
+		Position position{ int32_t( displaySize.getWidth() * ( 0 + index * 2 ) ), int32_t( displaySize.getHeight() * 3u ) };
+		getEngine()->renderDepth( renderPass
+			, frameBuffer
+			, position
+			, displaySize
+			, *m_shadowMap.getTexture() );
+		position.offset( int32_t( displaySize.getWidth() ), 0 );
+		getEngine()->renderDepth( renderPass
+			, frameBuffer
+			, position
+			, displaySize
+			, *m_linearMap.getTexture() );
 	}
 
 	void ShadowMapDirectional::doInitialise()
@@ -261,9 +283,12 @@ namespace castor3d
 		auto c3d_farPlane( shadowMap.declMember< Float >( ShadowMapPassDirectional::FarPlane ) );
 		shadowMap.end();
 
-		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ), RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_viewPosition = writer.declInput< Vec3 >( cuT( "vtx_viewPosition" ), RenderPass::VertexOutputs::ViewPositionLocation );
-		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ), RenderPass::VertexOutputs::MaterialLocation );
+		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" )
+			, RenderPass::VertexOutputs::TextureLocation );
+		auto vtx_viewPosition = writer.declInput< Vec3 >( cuT( "vtx_viewPosition" )
+			, RenderPass::VertexOutputs::ViewPositionLocation );
+		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
+			, RenderPass::VertexOutputs::MaterialLocation );
 		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( cuT( "c3d_mapOpacity" )
 			, 0u
 			, 1u

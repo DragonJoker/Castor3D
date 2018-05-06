@@ -453,6 +453,7 @@ namespace castor3d
 		, ModelMatrixUbo * modelMatrixUbo
 		, RenderPassTimer & timer )
 	{
+		m_timer = &timer;
 		m_geometryPassResult = &gp;
 		SceneFlags sceneFlags{ scene.getFlags() };
 
@@ -528,24 +529,26 @@ namespace castor3d
 		m_textureWrites.push_back( writeBinding( 4u, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
 		m_textureWrites.push_back( writeBinding( 5u, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
 
+		m_textureDescriptorSet->setBindings( m_textureWrites );
+		m_textureDescriptorSet->update();
+
 		if ( m_shadows )
 		{
 			// Empty descriptor for shadow texture, that will be filled at runtime.
 			m_textureWrites.push_back(
-			{
-				6u,
-				0u,
-				1u,
-				renderer::DescriptorType::eCombinedImageSampler,
-				{ { std::nullopt, std::nullopt, renderer::ImageLayout::eShaderReadOnlyOptimal } }
-			} );
+				{
+					6u,
+					0u,
+					1u,
+					renderer::DescriptorType::eCombinedImageSampler,
+					{ { std::nullopt, std::nullopt, renderer::ImageLayout::eShaderReadOnlyOptimal } }
+				} );
 			m_textureDescriptorSet->setBindings( m_textureWrites );
 		}
 		else
 		{
-			m_textureDescriptorSet->setBindings( m_textureWrites );
-			m_textureDescriptorSet->update();
-			doPrepareCommandBuffers( nullptr, timer );
+			doPrepareCommandBuffer( nullptr, true );
+			doPrepareCommandBuffer( nullptr, false );
 		}
 	}
 
@@ -556,49 +559,52 @@ namespace castor3d
 		m_matrixUbo.cleanup();
 	}
 
-	void LightPass::doPrepareCommandBuffers( TextureUnit const * shadowMap
-		, RenderPassTimer & timer )
+	void LightPass::doPrepareCommandBuffer( TextureUnit const * shadowMap
+		, bool first )
 	{
 		static renderer::DepthStencilClearValue const clearDepthStencil{ 1.0, 1 };
 		static renderer::ClearColorValue const clearColour{ 0.0, 0.0, 0.0, 1.0 };
-		uint32_t const width = m_firstRenderPass.frameBuffer->getDimensions().width;
-		uint32_t const height = m_firstRenderPass.frameBuffer->getDimensions().height;
+		auto & renderPass = first
+			? m_firstRenderPass
+			: m_blendRenderPass;
+		uint32_t const width = renderPass.frameBuffer->getDimensions().width;
+		uint32_t const height = renderPass.frameBuffer->getDimensions().height;
+		renderer::CommandBufferUsageFlag usage{};
 
-		auto prepare = [this
-			, &timer
-			, width
-			, height]( RenderPass & renderPass
-				, bool first )
+		if ( shadowMap )
 		{
-			auto & commandBuffer = *renderPass.commandBuffer;
+			renderer::WriteDescriptorSet & write = m_textureDescriptorSet->getBinding( 6u );
+			write.imageInfo[0].imageView = std::ref( shadowMap->getTexture()->getDefaultView() );
+			write.imageInfo[0].sampler = std::ref( shadowMap->getSampler()->getSampler() );
+			m_textureDescriptorSet->update();
+			usage = renderer::CommandBufferUsageFlag::eOneTimeSubmit;
+		}
 
-			if ( commandBuffer.begin() )
-			{
-				commandBuffer.resetQueryPool( timer.getQuery()
-					, 0u
-					, 2u );
-				commandBuffer.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
-					, timer.getQuery()
-					, 0u );
-				commandBuffer.beginRenderPass( *renderPass.renderPass
-					, *renderPass.frameBuffer
-					, { clearDepthStencil, clearColour, clearColour }
+		auto & commandBuffer = *renderPass.commandBuffer;
+
+		if ( commandBuffer.begin( usage ) )
+		{
+			commandBuffer.resetQueryPool( m_timer->getQuery()
+				, 0u
+				, 2u );
+			commandBuffer.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+				, m_timer->getQuery()
+				, 0u );
+			commandBuffer.beginRenderPass( *renderPass.renderPass
+				, *renderPass.frameBuffer
+				, { clearDepthStencil, clearColour, clearColour }
 				, renderer::SubpassContents::eInline );
-				commandBuffer.setViewport( { width, height, 0, 0 } );
-				commandBuffer.setScissor( { 0, 0, width, height } );
-				commandBuffer.bindDescriptorSets( { *m_uboDescriptorSet, *m_textureDescriptorSet }, m_program->getPipelineLayout() );
-				commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-				m_program->render( commandBuffer, getCount(), first, m_offset );
-				commandBuffer.endRenderPass();
-				commandBuffer.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
-					, timer.getQuery()
-					, 1u );
-				commandBuffer.end();
-			}
-		};
-
-		prepare( m_firstRenderPass, true );
-		prepare( m_blendRenderPass, false );
+			commandBuffer.setViewport( { width, height, 0, 0 } );
+			commandBuffer.setScissor( { 0, 0, width, height } );
+			commandBuffer.bindDescriptorSets( { *m_uboDescriptorSet, *m_textureDescriptorSet }, m_program->getPipelineLayout() );
+			commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+			m_program->render( commandBuffer, getCount(), first, m_offset );
+			commandBuffer.endRenderPass();
+			commandBuffer.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
+				, m_timer->getQuery()
+				, 1u );
+			commandBuffer.end();
+		}
 	}
 	
 	glsl::Shader LightPass::doGetLegacyPixelShaderSource( SceneFlags const & sceneFlags

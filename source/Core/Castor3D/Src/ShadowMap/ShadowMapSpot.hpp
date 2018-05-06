@@ -55,7 +55,9 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMap::debugDisplay
 		 */
-		void debugDisplay( castor::Size const & size, uint32_t index )override;
+		void debugDisplay( renderer::RenderPass const & renderPass
+			, renderer::FrameBuffer const & frameBuffer
+			, castor::Size const & size, uint32_t index )override;
 
 	private:
 		/**

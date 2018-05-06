@@ -665,13 +665,18 @@ namespace castor3d
 	{
 		auto elapsedTime = m_timer.getElapsed();
 		auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
-		m_signalFinished = m_signalReady.get();
 		SceneSPtr scene = getScene();
 		m_toneMapping->update( scene->getHdrConfig() );
+		renderer::SemaphoreCRefArray signalsToWait;
+		
+		if ( m_type == TargetType::eWindow )
+		{
+			signalsToWait = scene->getRenderTargetsSemaphores();
+		}
 
 		// Render the scene through the RenderTechnique.
 		m_signalFinished = m_renderTechnique->render( m_jitter
-			, *m_signalFinished
+			, signalsToWait
 			, info );
 
 		// Draw HDR post effects.

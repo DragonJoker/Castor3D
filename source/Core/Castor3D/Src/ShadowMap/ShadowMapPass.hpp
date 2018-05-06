@@ -50,21 +50,6 @@ namespace castor3d
 		C3D_API ~ShadowMapPass();
 		/**
 		 *\~english
-		 *\brief		Starts the timers.
-		 *\~french
-		 *\brief		Démarre les timers.
-		 */
-		C3D_API void startTimer( renderer::CommandBuffer const & commandBuffer );
-		/**
-		 *\~english
-		 *\brief		Stops the timers.
-		 *\~french
-		 *\brief
-		 *\brief		Arrête les timers.
-		 */
-		C3D_API void stopTimer( renderer::CommandBuffer const & commandBuffer );
-		/**
-		 *\~english
 		 *\brief		Updates the render pass.
 		 *\remarks		Gather the render queues, for further update.
 		 *\param[in]	camera	The viewer camera.
@@ -92,6 +77,11 @@ namespace castor3d
 		 *\param[in]	index	L'indice du rendu.
 		 */
 		C3D_API virtual void updateDeviceDependent( uint32_t index = 0 ) = 0;
+
+		inline RenderPassTimer & getTimer()
+		{
+			return *m_timer;
+		}
 
 	protected:
 		/**
