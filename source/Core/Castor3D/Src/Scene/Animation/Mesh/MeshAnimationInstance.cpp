@@ -53,11 +53,11 @@ namespace castor3d
 			m_meshAnimation.findKeyFrame( m_currentTime
 				, m_prev
 				, m_curr );
-			float factor = float( ( m_currentTime - ( *m_prev )->getTimeIndex() ).count() ) / float( ( ( *m_curr )->getTimeIndex() - ( *m_prev )->getTimeIndex() ).count() );
+			m_ratio = float( ( m_currentTime - ( *m_prev )->getTimeIndex() ).count() ) / float( ( ( *m_curr )->getTimeIndex() - ( *m_prev )->getTimeIndex() ).count() );
 
 			for ( auto & submesh : m_submeshes )
 			{
-				submesh.second.update( factor
+				submesh.second.update( m_ratio
 					, static_cast< MeshAnimationKeyFrame const & >( *( *m_prev ) ).find( submesh.second.getSubmesh() )->second
 					, static_cast< MeshAnimationKeyFrame const & >( *( *m_curr ) ).find( submesh.second.getSubmesh() )->second );
 			}

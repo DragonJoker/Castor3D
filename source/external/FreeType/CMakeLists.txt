@@ -188,3 +188,4 @@ include_directories(
 add_definitions( -DFT2_BUILD_LIBRARY )
 
 add_library( ${PROJECT_NAME} STATIC ${${PROJECT_NAME}_HEADERS} ${${PROJECT_NAME}_SOURCES} )
+set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Core" )

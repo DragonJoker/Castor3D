@@ -86,28 +86,6 @@ namespace castor3d
 		 */
 		C3D_API static void computeTangentsFromNormals( Submesh & submesh
 			, TriFaceMapping & triFace );
-		/**
-		 *\~english
-		 *\brief		Computes tangent for each vertex of the submesh.
-		 *\remarks		This function supposes bitangents and normals are defined.
-		 *\param[in]	submesh	The submesh.
-		 *\~french
-		 *\brief		Calcule la tangente pour chaque vertex du sous-maillage.
-		 *\remarks		Cette fonction suppose que les bitangentes et les normales sont définies.
-		 *\param[in]	submesh	Le sous-maillage.
-		 */
-		C3D_API static void computeTangentsFromBitangents( Submesh & submesh );
-		/**
-		 *\~english
-		 *\brief		Computes bitangent for each vertex of the submesh.
-		 *\remarks		This function supposes the tangents and normals are defined.
-		 *\param[in]	submesh	The submesh.
-		 *\~french
-		 *\brief		Calcule la bitangente pour chaque vertex du sous-maillage.
-		 *\remarks		Cette fonction suppose que les tangentes et les normales sont définies.
-		 *\param[in]	submesh	Le sous-maillage.
-		 */
-		C3D_API static void computeBitangents( Submesh & submesh );
 	};
 }
 

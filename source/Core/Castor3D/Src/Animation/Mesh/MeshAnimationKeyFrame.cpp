@@ -12,6 +12,8 @@ namespace castor3d
 	namespace
 	{
 		using InterleavedVertexArrayd = InterleavedVertexTArray< double >;
+		template< typename T >
+		using OldInterleavedVertexTArray = std::vector< OldInterleavedVertexT< T > >;
 
 		template< typename T, typename U >
 		void doConvert( InterleavedVertexTArray< T > const & in
@@ -26,9 +28,32 @@ namespace castor3d
 				outVtx.pos[0] = U( inVtx.pos[0] );
 				outVtx.pos[1] = U( inVtx.pos[1] );
 				outVtx.pos[2] = U( inVtx.pos[2] );
-				outVtx.bin[0] = U( inVtx.bin[0] );
-				outVtx.bin[1] = U( inVtx.bin[1] );
-				outVtx.bin[2] = U( inVtx.bin[2] );
+				outVtx.nml[0] = U( inVtx.nml[0] );
+				outVtx.nml[1] = U( inVtx.nml[1] );
+				outVtx.nml[2] = U( inVtx.nml[2] );
+				outVtx.tan[0] = U( inVtx.tan[0] );
+				outVtx.tan[1] = U( inVtx.tan[1] );
+				outVtx.tan[2] = U( inVtx.tan[2] );
+				outVtx.tex[0] = U( inVtx.tex[0] );
+				outVtx.tex[1] = U( inVtx.tex[1] );
+				outVtx.tex[2] = U( inVtx.tex[2] );
+				++it;
+			}
+		}
+
+		template< typename T, typename U >
+		void doConvert( OldInterleavedVertexTArray< T > const & in
+			, InterleavedVertexTArray< U > & out )
+		{
+			out.resize( in.size() );
+			auto it = out.begin();
+
+			for ( auto & inVtx : in )
+			{
+				auto & outVtx = *it;
+				outVtx.pos[0] = U( inVtx.pos[0] );
+				outVtx.pos[1] = U( inVtx.pos[1] );
+				outVtx.pos[2] = U( inVtx.pos[2] );
 				outVtx.nml[0] = U( inVtx.nml[0] );
 				outVtx.nml[1] = U( inVtx.nml[1] );
 				outVtx.nml[2] = U( inVtx.nml[2] );
@@ -140,14 +165,46 @@ namespace castor3d
 				break;
 
 			case ChunkType::eMeshAnimationKeyFrameBufferData:
-				result = doParseChunk( buffer, chunk );
-
-				if ( result )
+				if ( m_fileVersion > Version{ 1, 3, 0 } )
 				{
-					doConvert( bufferd, buffer );
-					obj.addSubmeshBuffer( *submesh, buffer );
-				}
+					result = doParseChunk( bufferd, chunk );
 
+					if ( result )
+					{
+						doConvert( bufferd, buffer );
+						obj.addSubmeshBuffer( *submesh, buffer );
+					}
+				}
+				break;
+			}
+		}
+
+		return result;
+	}
+
+	bool BinaryParser< MeshAnimationKeyFrame >::doParse_v1_3( MeshAnimationKeyFrame & obj )
+	{
+		bool result = true;
+		OldInterleavedVertexTArray< double > bufferd;
+		InterleavedVertexArray buffer;
+		BinaryChunk chunk;
+		SubmeshSPtr submesh;
+
+		while ( result && doGetSubChunk( chunk ) )
+		{
+			switch ( chunk.getChunkType() )
+			{
+			case ChunkType::eMeshAnimationKeyFrameBufferData:
+				if ( m_fileVersion > Version{ 1, 3, 0 } )
+				{
+					result = doParseChunk( bufferd, chunk );
+
+					if ( result )
+					{
+						doConvert( bufferd, buffer );
+						obj.addSubmeshBuffer( *submesh, buffer );
+					}
+				}
 				break;
 			}
 		}

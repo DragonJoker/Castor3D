@@ -133,24 +133,6 @@ namespace castor3d
 		 */
 		C3D_API void computeTangentsFromNormals();
 		/**
-		 *\~english
-		 *\brief		Computes tangent for each vertex of the submesh.
-		 *\remarks		This function supposes bitangents and normals are defined.
-		 *\~french
-		 *\brief		Calcule la tangente pour chaque vertex du sous-maillage.
-		 *\remarks		Cette fonction suppose que les bitangentes et les normales sont définies.
-		 */
-		C3D_API void computeTangentsFromBitangents();
-		/**
-		 *\~english
-		 *\brief		Computes bitangent for each vertex of the submesh.
-		 *\remarks		This function supposes the tangents and normals are defined.
-		 *\~french
-		 *\brief		Calcule la bitangente pour chaque vertex du sous-maillage.
-		 *\remarks		Cette fonction suppose que les tangentes et les normales sont définies.
-		 */
-		C3D_API void computeBitangents();
-		/**
 		 *\copydoc		castor3d::IndexMapping::getCount
 		 */
 		C3D_API uint32_t getCount()const override;

@@ -197,12 +197,15 @@ namespace Fireworks
 		, castor::Point3f const & velocity
 		, float age )
 	{
-		Particle particle{ m_inputs };
-		particle.setValue< ParticleFormat::eFloat >( eType, type );
-		particle.setValue< ParticleFormat::eVec3f >( ePosition, position );
-		particle.setValue< ParticleFormat::eVec3f >( eVelocity, velocity );
-		particle.setValue< ParticleFormat::eFloat >( eAge, age );
-		m_particles[m_firstUnused++] = particle;
+		if ( m_firstUnused < m_particles.size() )
+		{
+			Particle particle{ m_inputs };
+			particle.setValue< ParticleFormat::eFloat >( eType, type );
+			particle.setValue< ParticleFormat::eVec3f >( ePosition, position );
+			particle.setValue< ParticleFormat::eVec3f >( eVelocity, velocity );
+			particle.setValue< ParticleFormat::eFloat >( eAge, age );
+			m_particles[m_firstUnused++] = particle;
+		}
 	}
 
 	uint32_t ParticleSystem::update( RenderPassTimer & timer

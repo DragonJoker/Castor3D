@@ -1565,8 +1565,6 @@ namespace castor3d
 			, RenderPass::VertexInputs::NormalLocation );
 		auto tangent = writer.declAttribute< Vec3 >( cuT( "tangent" )
 			, RenderPass::VertexInputs::TangentLocation );
-		auto bitangent = writer.declAttribute< Vec3 >( cuT( "bitangent" )
-			, RenderPass::VertexInputs::BitangentLocation );
 		auto texture = writer.declAttribute< Vec3 >( cuT( "texcoord" )
 			, RenderPass::VertexInputs::TextureLocation );
 		auto bone_ids0 = writer.declAttribute< IVec4 >( cuT( "bone_ids0" )
@@ -1595,9 +1593,6 @@ namespace castor3d
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto tangent2 = writer.declAttribute< Vec3 >( cuT( "tangent2" )
 			, RenderPass::VertexInputs::Tangent2Location
-			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto bitangent2 = writer.declAttribute< Vec3 >( cuT( "bitangent2" )
-			, RenderPass::VertexInputs::Bitangent2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto texture2 = writer.declAttribute< Vec3 >( cuT( "texture2" )
 			, RenderPass::VertexInputs::Texture2Location

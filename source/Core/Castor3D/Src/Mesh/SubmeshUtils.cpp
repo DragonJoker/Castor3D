@@ -179,26 +179,8 @@ namespace castor3d
 			auto & point = points[i];
 			Point3r tangent = point::getNormalised( value );
 			tangent -= point.nml * point::dot( tangent, point.nml );
-			Point3r bitangent = point::cross( point.nml, tangent );
 			point.tan = tangent;
-			point.bin = bitangent;
 			i++;
-		}
-	}
-
-	void SubmeshUtils::computeTangentsFromBitangents( Submesh & submesh )
-	{
-		for ( auto & point : submesh.getPoints() )
-		{
-			point.tan = point::cross( point.nml, point.bin );
-		}
-	}
-
-	void SubmeshUtils::computeBitangents( Submesh & submesh )
-	{
-		for ( auto & point : submesh.getPoints() )
-		{
-			point.bin = point::cross( point.tan, point.nml );
 		}
 	}
 }

@@ -2558,11 +2558,7 @@ namespace castor3d
 
 				if ( !parsingContext->vertexNml.empty() )
 				{
-					if ( !parsingContext->vertexTan.empty() )
-					{
-						mapping->computeBitangents();
-					}
-					else
+					if ( parsingContext->vertexTan.empty() )
 					{
 						mapping->computeTangentsFromNormals();
 					}

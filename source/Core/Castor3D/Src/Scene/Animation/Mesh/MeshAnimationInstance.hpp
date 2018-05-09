@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_MESH_ANIMATION_INSTANCE_H___
 
 #include "Scene/Animation/AnimationInstance.hpp"
+#include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 
 namespace castor3d
 {
@@ -79,6 +80,16 @@ namespace castor3d
 		{
 			return m_animatedMesh;
 		}
+		/**
+		 *\~english
+		 *\return		The current keyframe current ratio.
+		 *\~french
+		 *\return		Le ratio actuel dans la keyframe courante.
+		 */
+		inline float getRatio()const
+		{
+			return m_ratio;
+		}
 
 	private:
 		/**
@@ -87,21 +98,12 @@ namespace castor3d
 		void doUpdate()override;
 
 	protected:
-		//!\~english	The animated mesh.
-		//!\~french		Le maillage animé.
 		AnimatedMesh & m_animatedMesh;
-		//!\~english	The mesh animation.
-		//!\~french		L'animation de maillage.
 		MeshAnimation const & m_meshAnimation;
-		//!\~english	The animated submeshes.
-		//!\~french		Les sous-maillages animés.
 		MeshAnimationInstanceSubmeshMap m_submeshes;
-		//!\~english	Iterator to the previous keyframe (when playing the animation).
-		//!\~french		Itérateur sur la keyframe précédente (quand l'animation est jouée).
 		AnimationKeyFrameArray::iterator m_prev;
-		//!\~english	Iterator to the current keyframe (when playing the animation).
-		//!\~french		Itérateur sur la keyframe courante (quand l'animation est jouée).
 		AnimationKeyFrameArray::iterator m_curr;
+		float m_ratio{ 0.0f };
 
 		friend class BinaryWriter< MeshAnimation >;
 		friend class BinaryParser< MeshAnimation >;

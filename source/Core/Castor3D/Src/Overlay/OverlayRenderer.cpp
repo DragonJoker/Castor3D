@@ -826,17 +826,17 @@ namespace castor3d
 
 				if ( checkFlag( textureFlags, TextureChannel::eText ) )
 				{
-					alpha *= texture( c3d_mapText, vtx_text ).r();
+					alpha *= texture( c3d_mapText, vtx_text, 0.0_f ).r();
 				}
 
 				if ( checkFlag( textureFlags, TextureChannel::eDiffuse ) )
 				{
-					diffuse = texture( c3d_mapDiffuse, vtx_texture ).xyz();
+					diffuse = texture( c3d_mapDiffuse, vtx_texture, 0.0_f ).xyz();
 				}
 
 				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
-					alpha *= texture( c3d_mapOpacity, vtx_texture ).r();
+					alpha *= texture( c3d_mapOpacity, vtx_texture, 0.0_f ).r();
 				}
 
 				pxl_fragColor = vec4( diffuse.xyz(), alpha );

@@ -105,6 +105,7 @@ namespace castor3d
 			}
 
 			renderer::ImageCreateInfo image{};
+			image.flags = renderer::ImageCreateFlag::eCubeCompatible;
 			image.arrayLayers = 6u;
 			image.extent.width = size.getWidth();
 			image.extent.height = size.getHeight();

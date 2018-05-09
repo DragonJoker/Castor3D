@@ -70,7 +70,7 @@ namespace castor3d
 			: renderer::AttachmentLoadOp::eDontCare;
 		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
 		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
 
 		for ( size_t i = 1u; i < gpResult.getViews().size(); ++i )
@@ -81,7 +81,7 @@ namespace castor3d
 			renderPass.attachments[i].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 			renderPass.attachments[i].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 			renderPass.attachments[i].samples = renderer::SampleCountFlag::e1;
-			renderPass.attachments[i].initialLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+			renderPass.attachments[i].initialLayout = renderer::ImageLayout::eUndefined;
 			renderPass.attachments[i].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
 
 			renderPass.subpasses[0].colorAttachments.push_back( { uint32_t( i ), renderer::ImageLayout::eColourAttachmentOptimal } );
@@ -177,6 +177,9 @@ namespace castor3d
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
 	{
+		// Since their vertex attribute locations overlap, we must not have both set at the same time.
+		REQUIRE( ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? 1 : 0 )
+			+ ( checkFlag( programFlags, ProgramFlag::eMorphing ) ? 1 : 0 ) < 2 );
 		using namespace glsl;
 		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 		// Vertex inputs
@@ -186,8 +189,6 @@ namespace castor3d
 			, RenderPass::VertexInputs::NormalLocation );
 		auto tangent = writer.declAttribute< Vec3 >( cuT( "tangent" )
 			, RenderPass::VertexInputs::TangentLocation );
-		auto bitangent = writer.declAttribute< Vec3 >( cuT( "bitangent" )
-			, RenderPass::VertexInputs::BitangentLocation );
 		auto texture = writer.declAttribute< Vec3 >( cuT( "texcoord" )
 			, RenderPass::VertexInputs::TextureLocation );
 		auto bone_ids0 = writer.declAttribute< IVec4 >( cuT( "bone_ids0" )
@@ -216,9 +217,6 @@ namespace castor3d
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto tangent2 = writer.declAttribute< Vec3 >( cuT( "tangent2" )
 			, RenderPass::VertexInputs::Tangent2Location
-			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto bitangent2 = writer.declAttribute< Vec3 >( cuT( "bitangent2" )
-			, RenderPass::VertexInputs::Bitangent2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto texture2 = writer.declAttribute< Vec3 >( cuT( "texture2" )
 			, RenderPass::VertexInputs::Texture2Location

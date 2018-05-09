@@ -118,16 +118,6 @@ namespace castor3d
 			, *this );
 	}
 
-	void TriFaceMapping::computeTangentsFromBitangents()
-	{
-		SubmeshUtils::computeTangentsFromBitangents( *getOwner() );
-	}
-
-	void TriFaceMapping::computeBitangents()
-	{
-		SubmeshUtils::computeBitangents( *getOwner() );
-	}
-
 	uint32_t TriFaceMapping::getCount()const
 	{
 		return uint32_t( m_faces.size() );

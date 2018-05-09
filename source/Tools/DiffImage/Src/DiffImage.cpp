@@ -163,6 +163,23 @@ bool doCompareImages( castor::Image const & reference, castor::Path const & comp
 	return result;
 }
 
+bool doMoveOutput( castor::Path const & file
+	, castor::Path const & directory )
+{
+	if ( castor::File::fileExists( file ) )
+	{
+		castor::File::copyFile( file, directory );
+		castor::File::deleteFile( file );
+		auto logFile = file.getPath() / ( file.getFileName() + cuT( ".log" ) );
+
+		if ( castor::File::fileExists( logFile ) )
+		{
+			castor::File::copyFile( logFile, directory );
+			castor::File::deleteFile( logFile );
+		}
+	}
+}
+
 int main( int argc, char * argv[] )
 {
 	int result = EXIT_SUCCESS;
@@ -172,7 +189,20 @@ int main( int argc, char * argv[] )
 	{
 		if ( !castor::File::fileExists( options.input ) )
 		{
+			auto unprocessedDir = options.input.getPath() / cuT( "Unprocessed" );
+
+			if ( !castor::File::directoryExists( unprocessedDir ) )
+			{
+				castor::File::directoryCreate( unprocessedDir );
+			}
+
 			std::cout << "Reference image [" << options.input << "] does not exist." << std::endl << std::endl;
+
+			for ( auto & output : options.outputs )
+			{
+				doMoveOutput( output, unprocessedDir );
+			}
+
 			return result;
 		}
 
@@ -199,15 +229,7 @@ int main( int argc, char * argv[] )
 					if ( !doCompareImages( reference, output ) )
 					{
 						std::cerr << "Output image [" << output.getFileName( true ) << "] doesn't match reference image [" << options.input.getFileName( true ) << "]." << std::endl;
-						castor::File::copyFile( output, diffDir );
-						castor::File::deleteFile( output );
-						auto logFile = output.getPath() / ( output.getFileName() + cuT( ".log" ) );
-
-						if ( castor::File::fileExists( logFile ) )
-						{
-							castor::File::copyFile( logFile, diffDir );
-							castor::File::deleteFile( logFile );
-						}
+						doMoveOutput( output, diffDir );
 					}
 					else
 					{

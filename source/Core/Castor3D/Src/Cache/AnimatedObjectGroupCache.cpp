@@ -7,6 +7,7 @@
 #include "Scene/Animation/AnimatedMesh.hpp"
 #include "Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Scene/Animation/AnimatedSkeleton.hpp"
+#include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 #include "Mesh/Skeleton/Skeleton.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Scene/Scene.hpp"
@@ -45,6 +46,17 @@ namespace castor3d
 			auto & entry = pair.second;
 			auto & skinningData = entry.skinningUbo.getData();
 			entry.skeleton.fillShader( skinningData.bonesMatrix );
+		}
+
+		for ( auto & pair : m_meshEntries )
+		{
+			auto & entry = pair.second;
+			auto & morphingData = entry.morphingUbo.getData();
+
+			if ( entry.mesh.isPlayingAnimation() )
+			{
+				morphingData.time = entry.mesh.getPlayingAnimation().getRatio();
+			}
 		}
 	}
 

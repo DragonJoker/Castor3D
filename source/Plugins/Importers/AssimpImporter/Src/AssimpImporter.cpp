@@ -113,16 +113,6 @@ namespace C3dAssimp
 					vertex.tan[2] = real( aiMesh.mTangents[index].z );
 					++index;
 				}
-
-				index = 0u;
-
-				for ( auto & vertex : vertices )
-				{
-					vertex.bin[0] = real( aiMesh.mBitangents[index].x );
-					vertex.bin[1] = real( aiMesh.mBitangents[index].y );
-					vertex.bin[2] = real( aiMesh.mBitangents[index].z );
-					++index;
-				}
 			}
 
 			if ( aiMesh.HasTextureCoords( 0 ) )

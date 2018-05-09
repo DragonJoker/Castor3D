@@ -322,6 +322,9 @@ namespace castor3d
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
 	{
+		// Since their vertex attribute locations overlap, we must not have both set at the same time.
+		REQUIRE( ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? 1 : 0 )
+			+ ( checkFlag( programFlags, ProgramFlag::eMorphing ) ? 1 : 0 ) < 2 );
 		using namespace glsl;
 		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 		// Vertex inputs
@@ -331,8 +334,6 @@ namespace castor3d
 			, RenderPass::VertexInputs::NormalLocation );
 		auto tangent = writer.declAttribute< Vec3 >( cuT( "tangent" )
 			, RenderPass::VertexInputs::TangentLocation );
-		auto bitangent = writer.declAttribute< Vec3 >( cuT( "bitangent" )
-			, RenderPass::VertexInputs::BitangentLocation );
 		auto texture = writer.declAttribute< Vec3 >( cuT( "texcoord" )
 			, RenderPass::VertexInputs::TextureLocation );
 		auto bone_ids0 = writer.declAttribute< IVec4 >( cuT( "bone_ids0" )
@@ -362,13 +363,12 @@ namespace castor3d
 		auto tangent2 = writer.declAttribute< Vec3 >( cuT( "tangent2" )
 			, RenderPass::VertexInputs::Tangent2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto bitangent2 = writer.declAttribute< Vec3 >( cuT( "bitangent2" )
-			, RenderPass::VertexInputs::Bitangent2Location
-			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto texture2 = writer.declAttribute< Vec3 >( cuT( "texture2" )
 			, RenderPass::VertexInputs::Texture2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto gl_InstanceID( writer.declBuiltin< Int >( writer.getInstanceID() ) );
+		REQUIRE( ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? 1 : 0 )
+			+ ( checkFlag( programFlags, ProgramFlag::eMorphing ) ? 1 : 0 ) < 2 );
 
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );

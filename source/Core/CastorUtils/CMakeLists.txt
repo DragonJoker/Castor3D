@@ -5,12 +5,7 @@ project( CastorUtils )
 include( Doxygen )
 include( AndroidNdkModules )
 
-if ( ANDROID )
-	set( FREETYPE_FOUND TRUE )
-	set( FREETYPE_LIBRARIES FreeType )
-else ()
-	find_package( Freetype )
-endif ()
+set( FREETYPE_LIBRARIES FreeType )
 
 if ( MSW )
 	find_package( ZLIB 1.2.7 )
@@ -28,10 +23,6 @@ if( NOT WIN32 )
 	find_package( X11 )
 endif()
 
-if( FREETYPE_FOUND )
-	message( STATUS "+ Found FreeType (version ${FREETYPE_VERSION_STRING})" )
-endif()
-
 if( ZLIB_FOUND )
 	message( STATUS "+ Found Zlib (version ${ZLIB_VERSION_STRING})" )
 endif()
@@ -40,13 +31,9 @@ if( FREEIMAGE_FOUND )
 	message( STATUS "+ Found FreeImage (version ${FreeImage_VERSION_STRING})" )
 endif()
 
-if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND )
+if( FREEIMAGE_FOUND AND ZLIB_FOUND )
 	if ( ANDROID )
-		include_directories(
-			${CMAKE_SOURCE_DIR}/Core/FreeType/include
-			${CMAKE_SOURCE_DIR}/Core/FreeType/include/freetype
-			${ANDROID_NDK}/sources
-		)
+		include_directories( ${ANDROID_NDK}/sources )
 		android_ndk_import_module_cpufeatures()
 		set( CastorMinLibraries
 			${CastorMinLibraries}
@@ -55,16 +42,6 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND )
 			cpufeatures
 		)
 	else ()
-		# Don't ask me why, in Windows x64 it is different from other builds...
-		if ( ${FREETYPE_INCLUDE_DIR_ft2build} STREQUAL ${FREETYPE_INCLUDE_DIR_freetype2} )
-			set( FREETYPE_INCLUDE_DIR_freetype2 ${FREETYPE_INCLUDE_DIR_freetype2}/freetype CACHE STRING "" FORCE )
-			set( FREETYPE_INCLUDE_DIRS
-				${FREETYPE_INCLUDE_DIRS}
-				${FREETYPE_INCLUDE_DIR_freetype2}
-			)
-		endif ()
-
-		include_directories( ${FREETYPE_INCLUDE_DIRS} )
 		include_directories( ${FreeImage_INCLUDE_DIR} )
 	endif ()
 

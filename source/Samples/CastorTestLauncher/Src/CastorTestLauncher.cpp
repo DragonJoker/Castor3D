@@ -33,6 +33,7 @@ namespace test_launcher
 	{
 		wxCmdLineParser parser( wxApp::argc, wxApp::argv );
 		parser.AddSwitch( wxT( "h" ), wxT( "help" ), _( "Displays this help." ) );
+		parser.AddSwitch( wxT( "opengl3" ), wxEmptyString, _( "Defines the renderer to OpenGl 3.x." ) );
 		parser.AddSwitch( wxT( "opengl4" ), wxEmptyString, _( "Defines the renderer to OpenGl 4.x." ) );
 		parser.AddSwitch( wxT( "vulkan" ), wxEmptyString, _( "Defines the renderer to Vulkan." ) );
 		parser.AddParam( _( "The initial scene file" ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_MANDATORY );
@@ -49,7 +50,11 @@ namespace test_launcher
 		{
 			Logger::initialise( LogType::eInfo );
 
-			if ( parser.Found( wxT( "opengl4" ) ) )
+			if ( parser.Found( wxT( "opengl3" ) ) )
+			{
+				m_rendererType = cuT( "opengl3" );
+			}
+			else if ( parser.Found( wxT( "opengl4" ) ) )
 			{
 				m_rendererType = cuT( "opengl4" );
 			}

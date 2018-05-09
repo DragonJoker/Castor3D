@@ -27,6 +27,30 @@ namespace castor3d
 	{
 		template< typename T, typename U >
 		inline void doCopyVertices( uint32_t count
+			, OldInterleavedVertexT< T > const * src
+			, InterleavedVertexT< U > * dst )
+		{
+			for ( uint32_t i{ 0u }; i < count; ++i )
+			{
+				dst->pos[0] = U( src->pos[0] );
+				dst->pos[1] = U( src->pos[1] );
+				dst->pos[2] = U( src->pos[2] );
+				dst->nml[0] = U( src->nml[0] );
+				dst->nml[1] = U( src->nml[1] );
+				dst->nml[2] = U( src->nml[2] );
+				dst->tan[0] = U( src->tan[0] );
+				dst->tan[1] = U( src->tan[1] );
+				dst->tan[2] = U( src->tan[2] );
+				dst->tex[0] = U( src->tex[0] );
+				dst->tex[1] = U( src->tex[1] );
+				dst->tex[2] = U( src->tex[2] );
+				dst++;
+				src++;
+			}
+		}
+
+		template< typename T, typename U >
+		inline void doCopyVertices( uint32_t count
 			, InterleavedVertexT< T > const * src
 			, InterleavedVertexT< U > * dst )
 		{
@@ -41,9 +65,6 @@ namespace castor3d
 				dst->tan[0] = U( src->tan[0] );
 				dst->tan[1] = U( src->tan[1] );
 				dst->tan[2] = U( src->tan[2] );
-				dst->bin[0] = U( src->bin[0] );
-				dst->bin[1] = U( src->bin[1] );
-				dst->bin[2] = U( src->bin[2] );
 				dst->tex[0] = U( src->tex[0] );
 				dst->tex[1] = U( src->tex[1] );
 				dst->tex[2] = U( src->tex[2] );
@@ -282,7 +303,7 @@ namespace castor3d
 	{
 		bool result = true;
 		std::vector< FaceIndices > faces;
-		std::vector< InterleavedVertexT< double > > srcbuf;
+		std::vector< OldInterleavedVertexT< double > > srcbuf;
 		uint32_t count{ 0u };
 		uint32_t faceCount{ 0u };
 		BinaryChunk chunk;
@@ -395,9 +416,6 @@ namespace castor3d
 				m_vertexLayout->createAttribute( RenderPass::VertexInputs::TangentLocation
 					, renderer::Format::eR32G32B32_SFLOAT
 					, offsetof( InterleavedVertex, tan ) );
-				m_vertexLayout->createAttribute( RenderPass::VertexInputs::BitangentLocation
-					, renderer::Format::eR32G32B32_SFLOAT
-					, offsetof( InterleavedVertex, bin ) );
 				m_vertexLayout->createAttribute( RenderPass::VertexInputs::TextureLocation
 					, renderer::Format::eR32G32B32_SFLOAT
 					, offsetof( InterleavedVertex, tex ) );

@@ -541,12 +541,20 @@ namespace castor3d
 			m_toneMappingCommandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
 				, m_toneMappingTimer->getQuery()
 				, 0u );
+			// Put render technique image in shader input layout.
+			m_toneMappingCommandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+				, renderer::PipelineStageFlag::eFragmentShader
+				, m_renderTechnique->getResult().getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
 			m_toneMappingCommandBuffer->beginRenderPass( *m_renderPass
 				, *m_workFrameBuffer.frameBuffer
 				, { clear }
 				, renderer::SubpassContents::eInline );
 			m_toneMapping->registerFrame( *m_toneMappingCommandBuffer );
 			m_toneMappingCommandBuffer->endRenderPass();
+			// Put render technique image back in colour attachment layout.
+			m_toneMappingCommandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+				, renderer::PipelineStageFlag::eColourAttachmentOutput
+				, m_renderTechnique->getResult().getDefaultView().makeColourAttachment( renderer::ImageLayout::eUndefined, 0u ) );
 			m_toneMappingCommandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
 				, m_toneMappingTimer->getQuery()
 				, 1u );

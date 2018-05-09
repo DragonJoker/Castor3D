@@ -45,7 +45,7 @@ namespace castor3d
 				, count
 				, 0u
 				, renderer::MemoryPropertyFlag::eHostVisible );
-			m_animLayout = renderer::makeLayout< InstantiationData >( BindingPoint
+			m_animLayout = renderer::makeLayout< InterleavedVertex >( BindingPoint
 				, renderer::VertexInputRate::eVertex );
 			m_animLayout->createAttribute( RenderPass::VertexInputs::Position2Location
 				, renderer::Format::eR32G32B32_SFLOAT
@@ -56,9 +56,6 @@ namespace castor3d
 			m_animLayout->createAttribute( RenderPass::VertexInputs::Tangent2Location
 				, renderer::Format::eR32G32B32_SFLOAT
 				, offsetof( InterleavedVertex, tan ) );
-			m_animLayout->createAttribute( RenderPass::VertexInputs::Bitangent2Location
-				, renderer::Format::eR32G32B32_SFLOAT
-				, offsetof( InterleavedVertex, bin ) );
 			m_animLayout->createAttribute( RenderPass::VertexInputs::Texture2Location
 				, renderer::Format::eR32G32B32_SFLOAT
 				, offsetof( InterleavedVertex, tex ) );
@@ -80,13 +77,11 @@ namespace castor3d
 	void MorphComponent::doUpload()
 	{
 		auto & vertexBuffer = getOwner()->getVertexBuffer();
-		uint32_t count = vertexBuffer.getSize();
+		uint32_t count = vertexBuffer.getCount();
 
 		if ( count )
 		{
-			if ( auto * buffer = m_animBuffer->lock( 0
-				, count
-				, renderer::MemoryMapFlag::eRead | renderer::MemoryMapFlag::eWrite ) )
+			if ( auto * buffer = m_animBuffer->lock( 0, count, renderer::MemoryMapFlag::eWrite ) )
 			{
 				std::copy( m_data.begin(), m_data.end(), buffer );
 				m_animBuffer->flush( 0u, count );

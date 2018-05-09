@@ -970,7 +970,7 @@ namespace castor3d
 			renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 			renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 			renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-			renderPass.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+			renderPass.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
 
 			renderer::AttachmentReference colourReference;
 			colourReference.attachment = 0u;

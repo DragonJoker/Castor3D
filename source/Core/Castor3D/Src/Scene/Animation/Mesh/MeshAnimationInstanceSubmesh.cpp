@@ -66,11 +66,15 @@ namespace castor3d
 					if ( auto * buffer = vertexBuffer.lock( 0u, vertexBuffer.getCount(), renderer::MemoryMapFlag::eWrite ) )
 					{
 						std::memcpy( buffer, prv.m_buffer.data(), vertexBuffer.getSize() );
+						vertexBuffer.flush( 0u, vertexBuffer.getCount() );
+						vertexBuffer.unlock();
 					}
 
 					if ( auto * buffer = animBuffer.lock( 0u, animBuffer.getCount(), renderer::MemoryMapFlag::eWrite ) )
 					{
 						std::memcpy( buffer, prv.m_buffer.data(), animBuffer.getSize() );
+						animBuffer.flush( 0u, animBuffer.getCount() );
+						animBuffer.unlock();
 					}
 				} ) );
 		}

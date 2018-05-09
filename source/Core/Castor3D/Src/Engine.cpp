@@ -241,7 +241,6 @@ namespace castor3d
 			m_defaultSampler = m_samplerCache->add( cuT( "Default" ) );
 			m_defaultSampler->setMinFilter( renderer::Filter::eLinear );
 			m_defaultSampler->setMagFilter( renderer::Filter::eLinear );
-			m_defaultSampler->setMipFilter( renderer::MipmapMode::eLinear );
 			m_defaultSampler->setWrapS( renderer::WrapMode::eRepeat );
 			m_defaultSampler->setWrapT( renderer::WrapMode::eRepeat );
 			m_defaultSampler->setWrapR( renderer::WrapMode::eRepeat );

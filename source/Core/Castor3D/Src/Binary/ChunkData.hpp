@@ -21,6 +21,16 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	// Version 1.3 and before
+	template< typename T >
+	struct OldInterleavedVertexT
+	{
+		castor::Point3< T > pos;
+		castor::Point3< T > nml;
+		castor::Point3< T > tan;
+		castor::Point3< T > bin;
+		castor::Point3< T > tex;
+	};
 	/**
 	 *\~english
 	 *\brief		Retrieves the beginning of the buffer for given value.
@@ -1200,6 +1210,33 @@ namespace castor3d
 	 *\param[in,out]	p_value	La valeur.
 	 */
 	template< typename T >
+	static inline void prepareChunkData( OldInterleavedVertexT< T > & p_value )
+	{
+		if ( !castor::isBigEndian() )
+		{
+			castor::switchEndianness( p_value.pos[0] );
+			castor::switchEndianness( p_value.pos[1] );
+			castor::switchEndianness( p_value.pos[2] );
+			castor::switchEndianness( p_value.nml[0] );
+			castor::switchEndianness( p_value.nml[1] );
+			castor::switchEndianness( p_value.nml[2] );
+			castor::switchEndianness( p_value.tan[0] );
+			castor::switchEndianness( p_value.tan[1] );
+			castor::switchEndianness( p_value.tan[2] );
+			castor::switchEndianness( p_value.tex[0] );
+			castor::switchEndianness( p_value.tex[1] );
+			castor::switchEndianness( p_value.tex[2] );
+		}
+	}
+	/**
+	 *\~english
+	 *\brief			Sets given value to big endian.
+	 *\param[in,out]	p_value	The value.
+	 *\~french
+	 *\brief			Met la valeur donnée en big endian.
+	 *\param[in,out]	p_value	La valeur.
+	 */
+	template< typename T >
 	static inline void prepareChunkData( InterleavedVertexT< T > & p_value )
 	{
 		if ( !castor::isBigEndian() )
@@ -1213,9 +1250,6 @@ namespace castor3d
 			castor::switchEndianness( p_value.tan[0] );
 			castor::switchEndianness( p_value.tan[1] );
 			castor::switchEndianness( p_value.tan[2] );
-			castor::switchEndianness( p_value.bin[0] );
-			castor::switchEndianness( p_value.bin[1] );
-			castor::switchEndianness( p_value.bin[2] );
 			castor::switchEndianness( p_value.tex[0] );
 			castor::switchEndianness( p_value.tex[1] );
 			castor::switchEndianness( p_value.tex[2] );

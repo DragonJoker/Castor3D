@@ -160,7 +160,7 @@ namespace castor3d
 
 		if ( result && obj.m_csImpl->hasUpdateProgram() )
 		{
-			//result = ShaderProgram::TextWriter( m_tabs + cuT( "\t" ), cuT( "cs_shader_program" ) )( obj.m_csImpl->getUpdateProgram(), file );
+			result = ShaderProgram::TextWriter( m_tabs + cuT( "\t" ), cuT( "cs_shader_program" ) )( obj.m_csImpl->getUpdateProgram(), file );
 		}
 
 		if ( result )
@@ -280,7 +280,13 @@ namespace castor3d
 
 		m_totalTime += time;
 		m_activeParticlesCount = m_impl->update( timer, time, m_totalTime );
-		getBillboards()->setCount( m_activeParticlesCount );
+
+		if ( getBillboards()->getCount() != m_activeParticlesCount )
+		{
+			getBillboards()->setCount( m_activeParticlesCount );
+			getBillboards()->update();
+		}
+
 		m_firstUpdate = false;
 	}
 

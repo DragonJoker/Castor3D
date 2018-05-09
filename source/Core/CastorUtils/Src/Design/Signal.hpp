@@ -248,7 +248,13 @@ namespace castor
 		 */
 		my_connection connect( Function function )
 		{
-			uint32_t index = uint32_t( m_slots.size() ) + 1u;
+			uint32_t index = 1u;
+
+			if ( !m_slots.empty() )
+			{
+				index = m_slots.rbegin()->first + 1u;
+			}
+
 			m_slots.emplace( index, function );
 			return my_connection{ index, *this };
 		}

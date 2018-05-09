@@ -65,7 +65,7 @@ namespace light_streaks
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				pxl_fragColor = vec4( texture( c3d_mapDiffuse, writer.adjustTexCoords( vtx_texture ) ).xyz(), 1.0 );
+				pxl_fragColor = vec4( texture( c3d_mapDiffuse, writer.adjustTexCoords( vtx_texture ), 0.0f ).xyz(), 1.0 );
 				auto maxComponent = writer.declLocale( cuT( "maxComponent" ), glsl::max( pxl_fragColor.r(), pxl_fragColor.g() ) );
 				maxComponent = glsl::max( maxComponent, pxl_fragColor.b() );
 

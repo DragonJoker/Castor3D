@@ -911,7 +911,6 @@ namespace castor3d
 	void RenderQueue::initialise( Scene const & scene
 		, Camera & camera )
 	{
-		m_commandBuffer = getOwner()->getEngine()->getRenderSystem()->getMainDevice()->getGraphicsCommandPool().createCommandBuffer( false );
 		initialise( scene );
 		m_cameraChanged = camera.onChanged.connect( std::bind( &RenderQueue::onCameraChanged
 			, this

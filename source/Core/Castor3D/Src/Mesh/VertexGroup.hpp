@@ -82,9 +82,6 @@ namespace castor3d
 		//!\~english	The vertex tangent.
 		//!\~french		La tangente du sommet.
 		castor::Point3< T > tan;
-		//!\~english	The vertex bitangent.
-		//!\~french		La bitangente du sommet.
-		castor::Point3< T > bin;
 		//!\~english	The vertex texture coordinates.
 		//!\~french		La coordonnées de texture du sommet.
 		castor::Point3< T > tex;

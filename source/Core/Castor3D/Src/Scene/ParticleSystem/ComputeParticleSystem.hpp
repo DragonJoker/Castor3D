@@ -92,6 +92,16 @@ namespace castor3d
 		{
 			return m_program != nullptr;
 		}
+		/**
+		 *\~english
+		 *\return		The update program.
+		 *\~french
+		 *\return		Le programme de mise à jour.
+		 */
+		inline ShaderProgram const & getUpdateProgram()const
+		{
+			return *m_program;
+		}
 
 	private:
 		bool doInitialiseParticleStorage();
