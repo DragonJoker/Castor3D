@@ -50,8 +50,7 @@ namespace castor3d
 				, std::map< size_t, BufferIndexT > & overlays
 				, std::vector< BufferPoolT > & vertexBuffers
 				, std::vector < VertexT > const & vertices
-				, TextureLayoutSPtr textTexture = nullptr
-				, SamplerSPtr textSampler = nullptr );
+				, FontTextureSPtr fontTexture );
 
 		private:
 			OverlayRenderer & m_renderer;
@@ -218,6 +217,7 @@ namespace castor3d
 			uint32_t index;
 			OverlayGeometryBuffers geometryBuffers;
 			renderer::DescriptorSetPtr descriptorSet;
+			FontTexture::OnChanged::connection connection;
 		};
 
 		using PanelVertexBufferPool = VertexBufferPool< OverlayCategory::Vertex, 6u >;

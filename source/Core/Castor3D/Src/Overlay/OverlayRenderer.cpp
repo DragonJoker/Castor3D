@@ -130,7 +130,8 @@ namespace castor3d
 					, *pass
 					, m_renderer.m_panelOverlays
 					, m_renderer.m_panelVertexBuffers
-					, overlay.getPanelVertex() );
+					, overlay.getPanelVertex()
+					, nullptr );
 			}
 		}
 	}
@@ -145,7 +146,8 @@ namespace castor3d
 					, *pass
 					, m_renderer.m_panelOverlays
 					, m_renderer.m_panelVertexBuffers
-					, overlay.getPanelVertex() );
+					, overlay.getPanelVertex()
+					, nullptr );
 			}
 		}
 
@@ -157,7 +159,8 @@ namespace castor3d
 					, *pass
 					, m_renderer.m_borderPanelOverlays
 					, m_renderer.m_borderVertexBuffers
-					, overlay.getBorderVertex() );
+					, overlay.getBorderVertex()
+					, nullptr );
 			}
 		}
 	}
@@ -173,8 +176,7 @@ namespace castor3d
 					, m_renderer.m_textOverlays
 					, m_renderer.m_textVertexBuffers
 					, overlay.getTextVertex()
-					, overlay.getFontTexture()->getTexture()
-					, overlay.getFontTexture()->getSampler() );
+					, overlay.getFontTexture() );
 			}
 		}
 	}
@@ -185,8 +187,7 @@ namespace castor3d
 		, std::map< size_t, BufferIndexT > & overlays
 		, std::vector< BufferPoolT > & vertexBuffers
 		, std::vector < VertexT > const & vertices
-		, TextureLayoutSPtr textTexture
-		, SamplerSPtr textSampler )
+		, FontTextureSPtr fontTexture )
 	{
 		if ( !vertices.empty() )
 		{
@@ -194,11 +195,11 @@ namespace castor3d
 				, overlays
 				, overlay.getOverlay()
 				, pass
-				, textTexture && textSampler
-				? m_renderer.doGetTextNode( pass, *textTexture, *textSampler )
-				: m_renderer.doGetPanelNode( pass )
+				, ( fontTexture
+					? m_renderer.doGetTextNode( pass, *fontTexture->getTexture(), *fontTexture->getSampler() )
+					: m_renderer.doGetPanelNode( pass ) )
 				, *m_renderer.getRenderSystem()->getCurrentDevice()
-				, ( ( textTexture && textSampler )
+				, ( fontTexture
 					? *m_renderer.m_textDeclaration
 					: *m_renderer.m_declaration )
 				, MaxPanelsPerBuffer );
@@ -213,15 +214,19 @@ namespace castor3d
 
 			if ( !bufferIndex.descriptorSet )
 			{
-				if ( textTexture && textSampler )
+				if ( fontTexture )
 				{
 					bufferIndex.descriptorSet = m_renderer.doCreateDescriptorSet( bufferIndex.node.pipeline
 						, pass.getTextureFlags() | TextureChannel::eText
 						, pass
 						, *bufferIndex.pool.ubo
 						, bufferIndex.index
-						, *textTexture
-						, *textSampler );
+						, *fontTexture->getTexture()
+						, *fontTexture->getSampler() );
+					bufferIndex.connection = fontTexture->onChanged.connect( [&bufferIndex]( FontTexture const & )
+						{
+							bufferIndex.descriptorSet.reset();
+						} );
 				}
 				else
 				{

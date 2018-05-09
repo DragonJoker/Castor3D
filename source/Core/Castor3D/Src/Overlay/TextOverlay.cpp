@@ -181,6 +181,7 @@ namespace castor3d
 
 	void TextOverlay::doUpdate( OverlayRenderer const & renderer )
 	{
+		m_fontChanged = false;
 		FontTextureSPtr fontTexture = getFontTexture();
 
 		if ( !fontTexture )
@@ -209,11 +210,13 @@ namespace castor3d
 
 			fontTexture->update();
 
-			getOverlay().getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, [fontTexture]()
-			{
-				fontTexture->cleanup();
-				fontTexture->initialise();
-			} ) );
+			getOverlay().getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
+				, [this, fontTexture]()
+				{
+					m_fontChanged = true;
+					fontTexture->cleanup();
+					fontTexture->initialise();
+				} ) );
 		}
 	}
 

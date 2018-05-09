@@ -135,7 +135,7 @@ namespace castor3d
 		 *\brief		Récupère le nom de la police.
 		 *\return		La valeur.
 		 */
-		C3D_API castor::String const & getFontName()const
+		inline castor::String const & getFontName()const
 		{
 			return getFontTexture()->getFontName();
 		}
@@ -145,7 +145,7 @@ namespace castor3d
 		 *\~french
 		 *\return		\p true si cette incrustation a changé.
 		 */
-		C3D_API bool isChanged()const override
+		inline bool isChanged()const override
 		{
 			return m_textChanged;
 		}
@@ -158,6 +158,16 @@ namespace castor3d
 		inline FontTextureSPtr getFontTexture()const
 		{
 			return m_fontTexture.lock();
+		}
+		/**
+		 *\~english
+		 *\return		\p true if this overlay's font has changed.
+		 *\~french
+		 *\return		\p true si la police de cette incrustation a changé.
+		 */
+		inline bool isFontChanged()const
+		{
+			return m_fontChanged;
 		}
 		/**
 		 *\~english
@@ -527,45 +537,20 @@ namespace castor3d
 		C3D_API void doAlignVertically( double height
 			, DisplayableLineArray & lines );
 
-	protected:
-		//!\~english	The vertex buffer data.
-		//!\~french		Les données du tampon de sommets.
+	private:
 		VertexArray m_arrayVtx;
-		//!\~english	The current overlay caption.
-		//!\~french		Le texte courant de l'incrustation.
 		castor::String m_currentCaption;
-		//!\~english	The previous overlay caption.
-		//!\~french		Le texte précédent de l'incrustation.
 		castor::String m_previousCaption;
-		//!\~english	The texture associated to the overlay font.
-		//!\~french		La texture associée à la police de l'incrustation.
 		FontTextureWPtr m_fontTexture;
-		//!\~english	The wrapping mode.
-		//!\~french		Le mode de découpe du texte.
+		bool m_fontChanged{ true };
 		TextWrappingMode m_wrappingMode{ TextWrappingMode::eNone };
-		//!\~english	The lines spacing mode.
-		//!\~french		Le mode d'espacement des lignes.
 		TextLineSpacingMode m_lineSpacingMode{ TextLineSpacingMode::eOwnHeight };
-		//!\~english	The horizontal alignment.
-		//!\~french		L'alignement horizontal du texte.
 		HAlign m_hAlign{ HAlign::eLeft };
-		//!\~english	The vertical alignment.
-		//!\~french		L'alignement vertical du texte.
 		VAlign m_vAlign{ VAlign::eCenter };
-		//!\~english	Tells if the text (caption, wrap mode, or alignments) has changed.
-		//!\~french		Dit si le texte (contenu, mode de découpe, alignements) a changé.
 		bool m_textChanged{ true };
-		//!\~english	The size (in spaces) of tabulation character.
-		//!\~french		La taille (en espaces) du caractère de tabulation.
 		uint32_t m_tabSize{ 4 };
-		//!\~english	The connection to the FontTexture changed notification signal.
-		//!\~french		La connexion au signal de notification de changement de la texture.
 		FontTexture::OnChanged::connection m_connection;
-		//!\~english	The text texture mapping mode.
-		//!\~french		Le mode de mappage de texture du texte.
 		TextTexturingMode m_texturingMode{ TextTexturingMode::eText };
-		//!\~english	The text texture coordinates buffer data.
-		//!\~french		Les données du tampon de coordonnées de texture du texte.
 		TextureCoordsArray m_arrayTextTexture;
 	};
 }
