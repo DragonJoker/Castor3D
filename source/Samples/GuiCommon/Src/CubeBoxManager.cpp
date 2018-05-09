@@ -148,9 +148,10 @@ namespace GuiCommon
 						, m_object->getBoundingBox( *submesh ) ) );
 				}
 
-				m_sceneConnection = m_scene.onUpdate.connect( std::bind( &CubeBoxManager::onSceneUpdate
-					, this
-					, std::placeholders::_1 ) );
+				m_sceneConnection = m_scene.onUpdate.connect( [this]( Scene const & scene )
+					{
+						onSceneUpdate( scene );
+					} );
 			} ) );
 	}
 

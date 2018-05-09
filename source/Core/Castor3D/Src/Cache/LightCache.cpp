@@ -154,9 +154,10 @@ namespace castor3d
 				result = m_elements.find( name );
 				m_dirtyLights.emplace_back( result.get() );
 				m_connections.emplace( result.get()
-					, result->onChanged.connect( std::bind( &ObjectCache< Light, String >::onLightChanged
-						, this
-						, std::placeholders::_1 ) ) );
+					, result->onChanged.connect( [this]( Light & light )
+						{
+							onLightChanged( light );
+						} ) );
 			}
 			else
 			{
@@ -186,9 +187,10 @@ namespace castor3d
 			castor::Logger::logDebug( castor::makeStringStream() << INFO_CACHE_CREATED_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
 			m_dirtyLights.emplace_back( result.get() );
 			m_connections.emplace( result.get()
-				, result->onChanged.connect( std::bind( &ObjectCache< Light, String >::onLightChanged
-					, this
-					, std::placeholders::_1 ) ) );
+				, result->onChanged.connect( [this]( Light & light )
+					{
+						onLightChanged( light );
+					} ) );
 			onChanged();
 		}
 		else

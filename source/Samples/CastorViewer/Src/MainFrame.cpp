@@ -133,7 +133,10 @@ namespace CastorViewer
 
 	bool MainFrame::initialise()
 	{
-		Logger::registerCallback( std::bind( &MainFrame::doLogCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3 ), this );
+		Logger::registerCallback( [this]( String const & logText, LogType logType, bool newLine )
+			{
+				doLogCallback( logText, logType, newLine );
+			}, this );
 		bool result = doInitialiseImages();
 
 		if ( result )

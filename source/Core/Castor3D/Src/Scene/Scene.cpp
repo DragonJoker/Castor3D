@@ -694,9 +694,10 @@ namespace castor3d
 			{
 				this->getListener().postEvent( makeInitialiseEvent( *element ) );
 				this->m_materialsListeners.emplace( element
-					, element->onChanged.connect( std::bind( &Scene::onMaterialChanged
-						, this
-						, std::placeholders::_1 ) ) );
+					, element->onChanged.connect( [this]( Material const & material )
+						{
+							onMaterialChanged( material );
+						} ) );
 				m_dirtyMaterials = true;
 			}
 			, [this]( MaterialSPtr element )
@@ -726,11 +727,14 @@ namespace castor3d
 
 		m_sceneNodeCache->add( cuT( "ObjectRootNode" ), m_rootObjectNode );
 		m_sceneNodeCache->add( cuT( "CameraRootNode" ), m_rootCameraNode );
-
-		m_onParticleSystemChanged = m_particleSystemCache->onChanged.connect( std::bind( &Scene::setChanged, this ) );
-		m_onBillboardListChanged = m_billboardCache->onChanged.connect( std::bind( &Scene::setChanged, this ) );
-		m_onGeometryChanged = m_geometryCache->onChanged.connect( std::bind( &Scene::setChanged, this ) );
-		m_onSceneNodeChanged = m_sceneNodeCache->onChanged.connect( std::bind( &Scene::setChanged, this ) );
+		auto setThisChanged = [this]()
+		{
+			setChanged();
+		};
+		m_onParticleSystemChanged = m_particleSystemCache->onChanged.connect( setThisChanged );
+		m_onBillboardListChanged = m_billboardCache->onChanged.connect( setThisChanged );
+		m_onGeometryChanged = m_geometryCache->onChanged.connect( setThisChanged );
+		m_onSceneNodeChanged = m_sceneNodeCache->onChanged.connect( setThisChanged );
 	}
 
 	Scene::~Scene()

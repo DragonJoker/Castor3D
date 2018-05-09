@@ -8,7 +8,10 @@ namespace castor
 		: m_start{ false }
 		, m_terminate{ false }
 	{
-		m_thread = std::make_unique< std::thread >( std::bind( &WorkerThread::doRun, this ) );
+		m_thread = std::make_unique< std::thread >( [this]()
+			{
+				doRun();
+			} );
 	}
 
 	WorkerThread::~WorkerThread()noexcept

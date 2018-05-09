@@ -367,9 +367,10 @@ namespace castor3d
 	void Pass::setSubsurfaceScattering( SubsurfaceScatteringUPtr && value )
 	{
 		m_subsurfaceScattering = std::move( value );
-		m_sssConnection = m_subsurfaceScattering->onChanged.connect( std::bind( &Pass::onSssChanged
-			, this
-			, std::placeholders::_1 ) );
+		m_sssConnection = m_subsurfaceScattering->onChanged.connect( [this]( SubsurfaceScattering const & sss )
+			{
+				onSssChanged( sss );
+			} );
 		onChanged( *this );
 	}
 

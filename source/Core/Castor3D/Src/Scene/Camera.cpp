@@ -58,7 +58,10 @@ namespace castor3d
 	{
 		if ( node )
 		{
-			m_notifyIndex = node->onChanged.connect( std::bind( &Camera::onNodeChanged, this, std::placeholders::_1 ) );
+			m_notifyIndex = node->onChanged.connect( [this]( SceneNode const & node )
+				{
+					onNodeChanged( node );
+				} );
 			onNodeChanged( *node );
 		}
 	}
@@ -88,7 +91,10 @@ namespace castor3d
 
 			if ( node )
 			{
-				m_notifyIndex = node->onChanged.connect( std::bind( &Camera::onNodeChanged, this, std::placeholders::_1 ) );
+				m_notifyIndex = node->onChanged.connect( [this]( SceneNode const & node )
+					{
+						onNodeChanged( node );
+					} );
 				onNodeChanged( *node );
 			}
 		}

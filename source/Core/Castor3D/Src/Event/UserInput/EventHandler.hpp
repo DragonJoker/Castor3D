@@ -119,7 +119,11 @@ namespace castor3d
 		{
 			auto event = std::make_shared< MouseEvent >( p_event );
 			auto lock = castor::makeUniqueLock( m_mutex );
-			m_queue.push_back( { event, std::bind( &EventHandler::processMouseEvent, this, event ) } );
+			m_queue.emplace_back( event
+				, [this, event]()
+				{
+					processMouseEvent( event );
+				} );
 		}
 		/**
 		 *\~english
@@ -152,7 +156,11 @@ namespace castor3d
 		{
 			auto event = std::make_shared< KeyboardEvent >( p_event );
 			auto lock = castor::makeUniqueLock( m_mutex );
-			m_queue.push_back( { event, std::bind( &EventHandler::processKeyboardEvent, this, event ) } );
+			m_queue.emplace_back( event
+				, [this, event]()
+				{
+					processKeyboardEvent( event );
+				} );
 		}
 		/**
 		 *\~english
@@ -204,7 +212,11 @@ namespace castor3d
 		{
 			auto event = std::make_shared< HandlerEvent >( p_event );
 			auto lock = castor::makeUniqueLock( m_mutex );
-			m_queue.push_back( { event, std::bind( &EventHandler::processHandlerEvent, this, event ) } );
+			m_queue.emplace_back( event
+				, [this, event]()
+				{
+					processHandlerEvent( event );
+				} );
 		}
 		/**
 		 *\~english

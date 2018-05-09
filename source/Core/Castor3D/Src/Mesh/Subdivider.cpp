@@ -135,7 +135,10 @@ namespace castor3d
 
 		if ( threaded )
 		{
-			m_pThread = std::make_shared< std::thread >( std::bind( &Subdivider::doSubdivideThreaded, this ) );
+			m_pThread = std::make_shared< std::thread >( [this]()
+				{
+					doSubdivideThreaded();
+				} );
 		}
 		else
 		{

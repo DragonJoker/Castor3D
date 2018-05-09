@@ -64,7 +64,11 @@ namespace CastorGui
 			, Position( p_size.getWidth() - p_size.getHeight(), 0 )
 			, Size( p_size.getHeight(), p_size.getHeight() ) );
 		m_expand->setVisible( p_visible );
-		m_expandClickedConnection = m_expand->connect( ButtonEvent::eClicked, std::bind( &ComboBoxCtrl::doSwitchExpand, this ) );
+		m_expandClickedConnection = m_expand->connect( ButtonEvent::eClicked
+			, [this]()
+			{
+				doSwitchExpand();
+			} );
 
 		m_choices = std::make_shared< ListBoxCtrl >( p_name + cuT( "_Choices" )
 			, engine
@@ -76,7 +80,11 @@ namespace CastorGui
 			, Size( p_size.getWidth() - p_size.getHeight(), -1 )
 			, 0
 			, false );
-		m_choicesSelectedConnection = m_choices->connect( ListBoxEvent::eSelected, std::bind( &ComboBoxCtrl::onSelected, this, std::placeholders::_1 ) );
+		m_choicesSelectedConnection = m_choices->connect( ListBoxEvent::eSelected
+			, [this]( int selected )
+			{
+				onSelected( selected );
+			} );
 
 		TextOverlaySPtr text = getEngine().getOverlayCache().add( cuT( "T_CtrlCombo_" ) + string::toString( getId() )
 			, OverlayType::eText
