@@ -259,7 +259,7 @@ namespace castor3d
 		renderer::Semaphore const * result = &toWait;
 		m_render++;
 
-		//if ( m_render == 5u )
+		if ( m_render == 5u )
 		{
 			for ( auto & pass : m_passes )
 			{

@@ -4,6 +4,7 @@
 
 #include "Event/Frame/FrameListener.hpp"
 #include "Event/Frame/FunctorEvent.hpp"
+#include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Material/Material.hpp"
 #include "Material/Pass.hpp"
 #include "Mesh/Mesh.hpp"
@@ -117,6 +118,13 @@ namespace castor3d
 				auto & modelData = entry.modelUbo.getData();
 				modelData.shadowReceiver = entry.geometry.isShadowReceiver();
 				modelData.materialIndex = entry.pass.getId();
+
+				if ( entry.pass.hasEnvironmentMapping() )
+				{
+					auto & envMap = getScene()->getEnvironmentMap( *entry.geometry.getParent() );
+					modelData.environmentIndex = envMap.getIndex();
+				}
+
 				auto & modelMatrixData = entry.modelMatrixUbo.getData();
 				modelMatrixData.model = convert( entry.geometry.getParent()->getDerivedTransformationMatrix() );
 			}

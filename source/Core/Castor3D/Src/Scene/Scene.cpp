@@ -987,6 +987,12 @@ namespace castor3d
 		return *m_reflectionMaps.find( &node )->second;
 	}
 
+	EnvironmentMap const & Scene::getEnvironmentMap( SceneNode const & node )const
+	{
+		REQUIRE( hasEnvironmentMap( node ) );
+		return *m_reflectionMaps.find( &node )->second;
+	}
+
 	renderer::SemaphoreCRefArray Scene::getRenderTargetsSemaphores()const
 	{
 		renderer::SemaphoreCRefArray result;

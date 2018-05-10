@@ -222,7 +222,7 @@ namespace castor3d
 					}
 					ELSEIF( writer, reflection != 0_i )
 					{
-						diffuse = reflections.computeRefl( incident
+						diffuse *= reflections.computeRefl( incident
 							, normal
 							, occlusion
 							, c3d_mapEnvironment[envMapIndex] );
@@ -753,7 +753,8 @@ namespace castor3d
 							, reflect( incident, normal ) );
 						ambient = c3d_ambientLight.xyz()
 							* occlusion
-							* texture( c3d_mapEnvironment[envMapIndex], reflected ).xyz();
+							* texture( c3d_mapEnvironment[envMapIndex], reflected ).xyz()
+							* diffuse / length( diffuse );
 					}
 					ELSEIF( writer, refraction != 0_i )
 					{
@@ -1058,8 +1059,9 @@ namespace castor3d
 			, renderer::TextureView const & lightSpecular
 			, renderer::TextureView const * ssao
 			, SamplerSPtr sampler
-			, Scene & scene
-			, MaterialType matType )
+			, Scene const & scene
+			, MaterialType matType
+			, std::vector< std::reference_wrapper< EnvironmentMap > > const & envMaps )
 		{
 			uint32_t index = 0u;
 			auto imgLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
@@ -1092,9 +1094,25 @@ namespace castor3d
 			result.push_back( { index++, 0u, c_environmentCount, renderer::DescriptorType::eCombinedImageSampler } );
 			result.back().imageInfo.reserve( c_environmentCount );
 
-			for ( auto i = 0u; i < c_environmentCount; ++i )
+			auto & envWrites = result.back();
+			auto it = envMaps.begin();
+			uint32_t i = 0u;
+
+			while ( it != envMaps.end() && i < c_environmentCount )
 			{
-				result.back().imageInfo.push_back( { sampler->getSampler(), background.getView(), renderer::ImageLayout::eShaderReadOnlyOptimal } );
+				envWrites.imageInfo.push_back( { sampler->getSampler()
+					, it->get().getTexture().getTexture()->getDefaultView()
+					, renderer::ImageLayout::eShaderReadOnlyOptimal } );
+				++i;
+				++it;
+			}
+
+			while ( i < c_environmentCount )
+			{
+				envWrites.imageInfo.push_back( { sampler->getSampler()
+					, background.getView()
+					, renderer::ImageLayout::eShaderReadOnlyOptimal } );
+				++i;
 			}
 
 			return result;
@@ -1158,33 +1176,28 @@ namespace castor3d
 	//*********************************************************************************************
 
 	ReflectionPass::ProgramPipeline::ProgramPipeline( Engine & engine
-		, Scene & scene
-		, renderer::VertexBufferBase & vbo
 		, renderer::DescriptorSetLayout const & uboLayout
-		, renderer::DescriptorSet const & uboSet
+		, renderer::DescriptorSetLayout const & texLayout
 		, renderer::RenderPass const & renderPass
-		, renderer::FrameBuffer const & frameBuffer
-		, GeometryPassResult const & gp
-		, renderer::TextureView const & lightDiffuse
-		, renderer::TextureView const & lightSpecular
 		, renderer::TextureView const * ssao
 		, renderer::Extent2D const & size
 		, FogType fogType
-		, MaterialType matType
-		, SamplerSPtr sampler
-		, RenderPassTimer & timer )
+		, MaterialType matType )
 		: m_program{ doCreateProgram( engine, fogType, ssao != nullptr, matType ) }
-		, m_texDescriptorLayout{ doCreateTexDescriptorLayout( engine, ssao != nullptr, matType ) }
-		, m_texDescriptorPool{ m_texDescriptorLayout->createPool( 1u ) }
-		, m_texDescriptorSet{ doCreateTexDescriptorSet( *m_texDescriptorPool, sampler ) }
-		, m_texDescriptorWrites{ doCreateTexDescriptorWrites( *m_texDescriptorLayout, gp, lightDiffuse, lightSpecular, ssao, sampler, scene, matType ) }
-		, m_pipelineLayout{ engine.getRenderSystem()->getCurrentDevice()->createPipelineLayout( { uboLayout, *m_texDescriptorLayout } ) }
+		, m_pipelineLayout{ engine.getRenderSystem()->getCurrentDevice()->createPipelineLayout( { uboLayout, texLayout } ) }
 		, m_pipeline{ doCreateRenderPipeline( *m_pipelineLayout, m_program, renderPass, size ) }
 		, m_commandBuffer{ engine.getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer( true ) }
+		, m_renderPass{ &renderPass }
+	{
+	}
+
+	void ReflectionPass::ProgramPipeline::updateCommandBuffer( renderer::VertexBufferBase & vbo
+		, renderer::DescriptorSet const & uboSet
+		, renderer::DescriptorSet const & texSet
+		, renderer::FrameBuffer const & frameBuffer
+		, RenderPassTimer & timer )
 	{
 		static renderer::ClearColorValue const clear{ 0.0, 0.0, 0.0, 0.0 };
-		m_texDescriptorSet->setBindings( m_texDescriptorWrites );
-		m_texDescriptorSet->update();
 
 		if ( m_commandBuffer->begin() )
 		{
@@ -1194,12 +1207,12 @@ namespace castor3d
 			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
 				, timer.getQuery()
 				, 0u );
-			m_commandBuffer->beginRenderPass( renderPass
+			m_commandBuffer->beginRenderPass( *m_renderPass
 				, frameBuffer
 				, { clear }
 				, renderer::SubpassContents::eInline );
 			m_commandBuffer->bindPipeline( *m_pipeline );
-			m_commandBuffer->bindDescriptorSets( { uboSet, *m_texDescriptorSet }, *m_pipelineLayout );
+			m_commandBuffer->bindDescriptorSets( { uboSet, texSet }, *m_pipelineLayout );
 			m_commandBuffer->bindVertexBuffer( 0u, vbo.getBuffer(), 0u );
 			m_commandBuffer->draw( 6u );
 			m_commandBuffer->endRenderPass();
@@ -1228,10 +1241,17 @@ namespace castor3d
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_size{ result.getTexture().getDimensions().width, result.getTexture().getDimensions().height }
 		, m_sampler{ engine.getDefaultSampler() }
+		, m_geometryPassResult{ gp }
+		, m_lightDiffuse{ lightDiffuse }
+		, m_lightSpecular{ lightSpecular }
+		, m_ssaoConfig{ config }
 		, m_vertexBuffer{ doCreateVbo( engine ) }
 		, m_uboDescriptorLayout{ doCreateUboDescriptorLayout( engine ) }
 		, m_uboDescriptorPool{ m_uboDescriptorLayout->createPool( 1u ) }
 		, m_uboDescriptorSet{ doCreateUboDescriptorSet( engine, *m_uboDescriptorPool, sceneUbo, gpInfoUbo ) }
+		, m_texDescriptorLayout{ doCreateTexDescriptorLayout( engine, config.m_enabled, engine.getMaterialsType() ) }
+		, m_texDescriptorPool{ m_texDescriptorLayout->createPool( 1u ) }
+		, m_texDescriptorSet{ doCreateTexDescriptorSet( *m_texDescriptorPool, m_sampler ) }
 		, m_renderPass{ doCreateRenderPass( engine, result.getFormat() ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_size, result ) }
 		, m_finished{ m_device.createSemaphore() }
@@ -1244,78 +1264,46 @@ namespace castor3d
 				ProgramPipeline
 				{
 					engine,
-					scene,
-					*m_vertexBuffer,
 					*m_uboDescriptorLayout,
-					*m_uboDescriptorSet,
+					*m_texDescriptorLayout,
 					*m_renderPass,
-					*m_frameBuffer,
-					gp,
-					lightDiffuse,
-					lightSpecular,
 					config.m_enabled ? &m_ssao.getResult().getTexture()->getDefaultView() : nullptr,
 					m_size,
 					FogType::eDisabled,
 					engine.getMaterialsType(),
-					m_sampler,
-					*m_timer
 				},
 				ProgramPipeline
 				{
 					engine,
-					scene,
-					*m_vertexBuffer,
 					*m_uboDescriptorLayout,
-					*m_uboDescriptorSet,
+					*m_texDescriptorLayout,
 					*m_renderPass,
-					*m_frameBuffer,
-					gp,
-					lightDiffuse,
-					lightSpecular,
 					config.m_enabled ? &m_ssao.getResult().getTexture()->getDefaultView() : nullptr,
 					m_size,
 					FogType::eLinear,
 					engine.getMaterialsType(),
-					m_sampler,
-					*m_timer
 				},
 				ProgramPipeline
 				{
 					engine,
-					scene,
-					*m_vertexBuffer,
 					*m_uboDescriptorLayout,
-					*m_uboDescriptorSet,
+					*m_texDescriptorLayout,
 					*m_renderPass,
-					*m_frameBuffer,
-					gp,
-					lightDiffuse,
-					lightSpecular,
 					config.m_enabled ? &m_ssao.getResult().getTexture()->getDefaultView() : nullptr,
 					m_size,
 					FogType::eExponential,
 					engine.getMaterialsType(),
-					m_sampler,
-					*m_timer
 				},
 				ProgramPipeline
 				{
 					engine,
-					scene,
-					*m_vertexBuffer,
 					*m_uboDescriptorLayout,
-					*m_uboDescriptorSet,
+					*m_texDescriptorLayout,
 					*m_renderPass,
-					*m_frameBuffer,
-					gp,
-					lightDiffuse,
-					lightSpecular,
 					config.m_enabled ? &m_ssao.getResult().getTexture()->getDefaultView() : nullptr,
 					m_size,
 					FogType::eSquaredExponential,
 					engine.getMaterialsType(),
-					m_sampler,
-					*m_timer
 				},
 			}
 		}
@@ -1334,17 +1322,24 @@ namespace castor3d
 			m_ssao.update( camera );
 		}
 
-		auto & maps = m_scene.getEnvironmentMaps();
-		auto & program = m_programs[size_t( m_scene.getFog().getType() )];
-
-		//for ( auto & map : maps )
-		//{
-		//	map.get().getTexture().getTexture()->bind( index );
-		//	map.get().getTexture().getSampler()->bind( index++ );
-		//}
-
-		//program.m_texDescriptorSet->setBindings( program.m_texDescriptorWrites );
-		//program.m_texDescriptorSet->update();
+		auto index = size_t( m_scene.getFog().getType() );
+		auto & program = m_programs[index];
+		auto texDescriptorWrites = doCreateTexDescriptorWrites( *m_texDescriptorLayout
+			, m_geometryPassResult
+			, m_lightDiffuse
+			, m_lightSpecular
+			, m_ssaoConfig.m_enabled ? &m_ssao.getResult().getTexture()->getDefaultView() : nullptr
+			, m_sampler
+			, m_scene
+			, getEngine()->getMaterialsType()
+			, m_scene.getEnvironmentMaps() );
+		m_texDescriptorSet->setBindings( texDescriptorWrites );
+		m_texDescriptorSet->update();
+		program.updateCommandBuffer( *m_vertexBuffer
+			, *m_uboDescriptorSet
+			, *m_texDescriptorSet
+			, *m_frameBuffer
+			, *m_timer );
 	}
 
 	void ReflectionPass::render( renderer::Semaphore const & toWait )const
@@ -1359,9 +1354,10 @@ namespace castor3d
 		}
 
 		m_timer->start();
-		auto program = size_t( m_scene.getFog().getType() );
+		auto index = size_t( m_scene.getFog().getType() );
+		auto & program = m_programs[index];
 		m_fence->reset();
-		m_device.getGraphicsQueue().submit( *m_programs[program].m_commandBuffer
+		m_device.getGraphicsQueue().submit( *program.m_commandBuffer
 			, *semaphore
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished

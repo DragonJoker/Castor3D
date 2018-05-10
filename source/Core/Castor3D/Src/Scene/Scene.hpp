@@ -222,6 +222,17 @@ namespace castor3d
 		 */
 		C3D_API EnvironmentMap & getEnvironmentMap( SceneNode const & node );
 		/**
+		 *\~english
+		 *\remarks		Call hasEnvironmentMap before calling this function (since this one returns a reference to an existing EnvironmentMap).
+		 *\return		Retrieves the reflection map for given node.
+		 *\param[in]	node	The scene node.
+		 *\~french
+		 *\remarks		Appelez hasEnvironmentMap avant d'appeler cette fonction (celle-ci retournant une référence sur une EnvironmentMap existante)
+		 *\return		Récupère la reflection map pour le noeud donné.
+		 *\param[in]	node	Le noeud de scène.
+		 */
+		C3D_API EnvironmentMap const & getEnvironmentMap( SceneNode const & node )const;
+		/**
 		*\~english
 		*name
 		*	Getters.

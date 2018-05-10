@@ -117,27 +117,21 @@ namespace castor3d
 			ProgramPipeline & operator=( ProgramPipeline const & ) = delete;
 			ProgramPipeline & operator=( ProgramPipeline && ) = default;
 			ProgramPipeline( Engine & engine
-				, Scene & scene
-				, renderer::VertexBufferBase & vbo
 				, renderer::DescriptorSetLayout const & uboLayout
-				, renderer::DescriptorSet const & uboSet
+				, renderer::DescriptorSetLayout const & texLayout
 				, renderer::RenderPass const & renderPass
-				, renderer::FrameBuffer const & frameBuffer
-				, GeometryPassResult const & gp
-				, renderer::TextureView const & lightDiffuse
-				, renderer::TextureView const & lightSpecular
 				, renderer::TextureView const * ssao
 				, renderer::Extent2D const & size
 				, FogType fogType
-				, MaterialType matType
-				, SamplerSPtr sampler
+				, MaterialType matType );
+			void updateCommandBuffer( renderer::VertexBufferBase & vbo
+				, renderer::DescriptorSet const & uboSet
+				, renderer::DescriptorSet const & texSet
+				, renderer::FrameBuffer const & frameBuffer
 				, RenderPassTimer & timer );
 
+			renderer::RenderPass const * m_renderPass;
 			renderer::ShaderStageStateArray m_program;
-			renderer::DescriptorSetLayoutPtr m_texDescriptorLayout;
-			renderer::DescriptorSetPoolPtr m_texDescriptorPool;
-			renderer::DescriptorSetPtr m_texDescriptorSet;
-			renderer::WriteDescriptorSetArray m_texDescriptorWrites;
 			renderer::PipelineLayoutPtr m_pipelineLayout;
 			renderer::PipelinePtr m_pipeline;
 			renderer::CommandBufferPtr m_commandBuffer;
@@ -151,10 +145,18 @@ namespace castor3d
 		renderer::Extent2D m_size;
 		Viewport m_viewport;
 		SamplerSPtr m_sampler;
+		GeometryPassResult const & m_geometryPassResult;
+		renderer::TextureView const & m_lightDiffuse;
+		renderer::TextureView const & m_lightSpecular;
+		SsaoConfig const & m_ssaoConfig;
 		renderer::VertexBufferBasePtr m_vertexBuffer;
 		renderer::DescriptorSetLayoutPtr m_uboDescriptorLayout;
 		renderer::DescriptorSetPoolPtr m_uboDescriptorPool;
 		renderer::DescriptorSetPtr m_uboDescriptorSet;
+		renderer::DescriptorSetLayoutPtr m_texDescriptorLayout;
+		renderer::DescriptorSetPoolPtr m_texDescriptorPool;
+		renderer::DescriptorSetPtr m_texDescriptorSet;
+		renderer::WriteDescriptorSetArray m_texDescriptorWrites;
 		renderer::RenderPassPtr m_renderPass;
 		renderer::FrameBufferPtr m_frameBuffer;
 		renderer::SemaphorePtr m_finished;

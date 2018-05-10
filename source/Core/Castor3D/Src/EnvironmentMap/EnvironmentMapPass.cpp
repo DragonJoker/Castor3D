@@ -157,6 +157,7 @@ namespace castor3d
 		m_camera->getParent()->update();
 		m_camera->update();
 		castor::matrix::setTranslate( m_mtxModel, position );
+		castor::matrix::scale( m_mtxModel, Point3r{ 1, -1, 1 } );
 		static_cast< RenderTechniquePass & >( *m_opaquePass ).update( queues );
 		static_cast< RenderTechniquePass & >( *m_transparentPass ).update( queues );
 	}
