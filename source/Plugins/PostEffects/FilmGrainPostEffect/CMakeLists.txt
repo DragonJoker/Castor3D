@@ -1,7 +1,7 @@
 project( FilmGrainPostEffect )
 
-set( CastorBinsDependencies 
-	${CastorBinsDependencies}
+set( Castor3DBinsDependencies 
+	${Castor3DBinsDependencies}
 	${PROJECT_NAME}
 	PARENT_SCOPE
 )

@@ -100,16 +100,19 @@ find_package( Doxygen )
 #	Adding include dirs to include search path
 #--------------------------------------------------------------------------------------------------
 set( RENDERERLIB_DIR external/RendererLib/source/Renderer )
-include_directories( external/FreeType/include )
-include_directories( external/FreeType/include/freetype )
-include_directories( Core/CastorUtils/Src )
-include_directories( ${RENDERERLIB_DIR}/Renderer/Src )
-include_directories( Core/GlslWriter/Src )
-include_directories( Core/Castor3D/Src )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/external/FreeType/include )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/external/FreeType/include/freetype )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/Core/CastorUtils/Src )
 include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Core/CastorUtils/Src )
-include_directories( ${CMAKE_CURRENT_BINARY_DIR}/${RENDERERLIB_DIR}/Renderer/Src )
-include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Core/Castor3D/Src )
 
+set( Castor3DIncludeDirs
+	${CMAKE_CURRENT_SOURCE_DIR}/${RENDERERLIB_DIR}/Renderer/Src
+	${CMAKE_CURRENT_BINARY_DIR}/${RENDERERLIB_DIR}/Renderer/Src
+	${CMAKE_CURRENT_SOURCE_DIR}/Core/GlslWriter/Src
+	${CMAKE_CURRENT_BINARY_DIR}/Core/GlslWriter/Src
+	${CMAKE_CURRENT_SOURCE_DIR}/Core/Castor3D/Src
+	${CMAKE_CURRENT_BINARY_DIR}/Core/Castor3D/Src
+)
 
 if( Boost_FOUND )
 	include_directories( ${Boost_INCLUDE_DIRS} )
@@ -142,6 +145,10 @@ set( CastorMinLibraries
 
 set( CastorBinsDependencies
 	CastorUtils
+)
+
+set( Castor3DBinsDependencies
+	${CastorBinsDependencies}
 	Castor3D
 	VkRenderer
 	GlRenderer

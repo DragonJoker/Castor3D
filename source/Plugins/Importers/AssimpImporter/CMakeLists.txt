@@ -5,9 +5,7 @@ find_package( ASSIMP )
 if( ASSIMP_FOUND )
 	message( STATUS "+ Found Assimp" )
 
-    include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
-    include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D/Src )
-    include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
+	include_directories( ${Castor3DIncludeDirs} )
 	include_directories( ${ASSIMP_INCLUDE_DIR} )
 
 	set( ASSIMPLibraries "" )
@@ -19,8 +17,8 @@ if( ASSIMP_FOUND )
 		endif()
 	endforeach()
 
-	set( CastorBinsDependencies 
-		${CastorBinsDependencies}
+	set( Castor3DBinsDependencies 
+		${Castor3DBinsDependencies}
 		${PROJECT_NAME}
 		PARENT_SCOPE
 	)

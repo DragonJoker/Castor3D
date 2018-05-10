@@ -1,7 +1,7 @@
 project( GlslWriter )
 
-SET( CastorBinsDependencies 
-	${CastorBinsDependencies}
+SET( Castor3DBinsDependencies 
+	${Castor3DBinsDependencies}
 	${PROJECT_NAME}
 	PARENT_SCOPE
 )

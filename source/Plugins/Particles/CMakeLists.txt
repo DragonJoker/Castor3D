@@ -11,9 +11,8 @@ function( ParticlesBuild )
 
 		set( ParticlesIncludes
 			${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src
-			${CMAKE_SOURCE_DIR}/Core/Castor3D/Src
 			${CMAKE_BINARY_DIR}/Core/CastorUtils/Src
-			${CMAKE_SOURCE_DIR}/Core/GlslWriter/Src
+			${Castor3DIncludeDirs}
 		)
 
 		if( ${CASTOR_BUILD_PARTICLE_FIREWORKS} )
@@ -27,8 +26,8 @@ function( ParticlesBuild )
 			PARENT_SCOPE
 		)
 
-		set( CastorBinsDependencies
-			${CastorBinsDependencies}
+		set( Castor3DBinsDependencies
+			${Castor3DBinsDependencies}
 			PARENT_SCOPE
 		)
 	endif ()

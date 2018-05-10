@@ -1,7 +1,7 @@
 project( TestRenderSystem )
 
-SET( CastorBinsDependencies 
-	${CastorBinsDependencies}
+SET( Castor3DBinsDependencies 
+	${Castor3DBinsDependencies}
 	${PROJECT_NAME}
 	PARENT_SCOPE
 )
@@ -11,11 +11,9 @@ set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
-include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
-include_directories( ${CMAKE_SOURCE_DIR}/Core/TestslWriter/Src )
-include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D/Src )
+include_directories( ${Castor3DIncludeDirs} )
 include_directories( ${CMAKE_SOURCE_DIR}/Plugins/Renderers/TestRenderSystem/Src )
-include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
+include_directories( ${CMAKE_BINARY_DIR}/Plugins/Renderers/TestRenderSystem/Src )
 
 add_target(
 	${PROJECT_NAME}

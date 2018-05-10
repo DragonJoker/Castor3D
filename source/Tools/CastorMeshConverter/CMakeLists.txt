@@ -5,9 +5,7 @@ set( ${PROJECT_NAME}_VERSION_MAJOR	1 )
 set( ${PROJECT_NAME}_VERSION_MINOR	1 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
-include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
-include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D/Src )
-include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
+include_directories( ${Castor3DIncludeDirs} )
 
 add_target(
 	${PROJECT_NAME}

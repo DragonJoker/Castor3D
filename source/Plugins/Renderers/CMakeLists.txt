@@ -40,19 +40,19 @@ function( RenderersBuild )
 		endif ()
 	endif ()
 
-	if ( ${CASTOR_BUILDGRP_TEST} )
-		set( Build ${Trs} )
-		add_subdirectory( Plugins/Renderers/TestRenderSystem )
-		set( Trs ${Build} PARENT_SCOPE )
-	endif()
+	# if ( ${CASTOR_BUILDGRP_TEST} )
+		# set( Build ${Trs} )
+		# add_subdirectory( Plugins/Renderers/TestRenderSystem )
+		# set( Trs ${Build} PARENT_SCOPE )
+	# endif()
 
 	set( CastorMinLibraries
 		${CastorMinLibraries}
 		PARENT_SCOPE
 	)
 
-	set( CastorBinsDependencies
-		${CastorBinsDependencies}
+	set( Castor3DBinsDependencies
+		${Castor3DBinsDependencies}
 		PARENT_SCOPE
 	)
 endfunction( RenderersBuild )

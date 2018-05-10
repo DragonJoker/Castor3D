@@ -15,9 +15,7 @@ if ( MSVC )
 			NEWLINE_STYLE LF
 		)
 
-		include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D )
-		include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils )
-		include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
+		include_directories( ${Castor3DIncludeDirs} )
 		include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/Src )
 		include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/Src/Castor3D )
 		include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/Src/CastorUtils )
