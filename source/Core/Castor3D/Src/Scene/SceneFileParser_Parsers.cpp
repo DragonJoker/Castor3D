@@ -3158,7 +3158,9 @@ namespace castor3d
 		{
 			if ( parsingContext->textureUnit
 				&& ( parsingContext->textureUnit->getTexture()
-					|| parsingContext->textureUnit->getRenderTarget() ) )
+					|| parsingContext->textureUnit->getRenderTarget()
+					|| parsingContext->textureUnit->getChannel() == TextureChannel::eReflection
+					|| parsingContext->textureUnit->getChannel() == TextureChannel::eRefraction ) )
 			{
 				parsingContext->pass->addTextureUnit( parsingContext->textureUnit );
 			}

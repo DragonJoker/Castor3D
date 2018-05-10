@@ -186,7 +186,7 @@ namespace castor3d
 			, m_fence.get() );
 		m_fence->wait( renderer::FenceTimeout );
 		timer.step();
-		m_blur->blur();
+		//m_blur->blur();
 		timer.stop();
 	}
 

@@ -48,6 +48,12 @@ namespace castor3d
 		C3D_API bool loadImage( castor::Path const & folder
 			, castor::Path const & relative );
 		/**
+		*\copydoc	castor3d::SceneBackground::initialiseDescriptorSet
+		*/
+		void initialiseDescriptorSet( MatrixUbo const & matrixUbo
+			, ModelMatrixUbo const & modelMatrixUbo
+			, renderer::DescriptorSet & descriptorSet )const override;
+		/**
 		*\copydoc	castor3d::SceneBackground::accept
 		*/
 		C3D_API void accept( BackgroundVisitor & visitor )const override;
@@ -61,10 +67,6 @@ namespace castor3d
 		*\copydoc	castor3d::SceneBackground::doInitialiseDescriptorLayout
 		*/
 		void doInitialiseDescriptorLayout()override;
-		/**
-		*\copydoc	castor3d::SceneBackground::doInitialiseDescriptorSet
-		*/
-		void doInitialiseDescriptorSet()override;
 		/**
 		*\copydoc	castor3d::SceneBackground::doInitialise
 		*/

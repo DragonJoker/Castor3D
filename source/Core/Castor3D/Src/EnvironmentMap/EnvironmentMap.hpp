@@ -81,7 +81,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dessine la texture d'environnement.
 		 */
-		C3D_API void render( renderer::Semaphore const & toWait );
+		C3D_API renderer::Semaphore const & render( renderer::Semaphore const & toWait );
 		/**
 		 *\~english
 		 *\brief		Dumps the environment map on screen.
@@ -112,6 +112,16 @@ namespace castor3d
 			return m_environmentMap;
 		}
 
+		inline renderer::TextureView & getDepthView()
+		{
+			return *m_depthBufferView;
+		}
+
+		inline renderer::TextureView const & getDepthView()const
+		{
+			return *m_depthBufferView;
+		}
+
 		inline renderer::Extent3D const & getSize()const
 		{
 			return m_environmentMap.getTexture()->getDimensions();
@@ -121,29 +131,15 @@ namespace castor3d
 		{
 			return m_index;
 		}
-
-		inline renderer::Semaphore const & getSemaphore()const
-		{
-			REQUIRE( m_finished );
-			return *m_finished;
-		}
 		/**@}*/
 
 	private:
-		struct FrameBuffer
-		{
-			renderer::RenderPassPtr renderPass;
-			renderer::FrameBufferPtr frameBuffer;
-			renderer::TextureViewPtr view;
-			renderer::CommandBufferPtr backgroundCommands;
-		};
 		static uint32_t m_count;
 		TextureUnit m_environmentMap;
 		renderer::TexturePtr m_depthBuffer;
 		renderer::TextureViewPtr m_depthBufferView;
-		std::array< FrameBuffer, 6u > m_frameBuffers;
-		renderer::CommandBufferPtr m_commandBuffer;
-		renderer::SemaphorePtr m_finished;
+		renderer::RenderPassPtr m_renderPass;
+		renderer::DescriptorSetPoolPtr m_backgroundDescriptorPool;
 		SceneNode const & m_node;
 		OnSceneNodeChangedConnection m_onNodeChanged;
 		CubeMatrices m_matrices;

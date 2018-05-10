@@ -152,13 +152,10 @@ namespace castor3d
 				, frameBuffer
 				, { depth, colour }
 				, renderer::SubpassContents::eInline );
-			commandBuffer.bindPipeline( *m_pipeline );
-			commandBuffer.setViewport( { size.getWidth(), size.getHeight(), 0, 0 } );
-			commandBuffer.setScissor( { 0, 0, size.getWidth(), size.getHeight() } );
-			commandBuffer.bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
-			commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-			commandBuffer.bindIndexBuffer( m_indexBuffer->getBuffer(), 0u, renderer::IndexType::eUInt16 );
-			commandBuffer.drawIndexed( m_indexBuffer->getCount() );
+			doPrepareFrame( commandBuffer
+				, size
+				, renderPass
+				, *m_descriptorSet );
 			commandBuffer.endRenderPass();
 			commandBuffer.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
 				, m_timer->getQuery()
@@ -173,7 +170,18 @@ namespace castor3d
 		, castor::Size const & size
 		, renderer::RenderPass const & renderPass )
 	{
-		auto result = commandBuffer.begin(  renderer::CommandBufferUsageFlag::eRenderPassContinue
+		return prepareFrame( commandBuffer
+			, size
+			, renderPass
+			, *m_descriptorSet );
+	}
+
+	bool SceneBackground::prepareFrame( renderer::CommandBuffer & commandBuffer
+		, castor::Size const & size
+		, renderer::RenderPass const & renderPass
+		, renderer::DescriptorSet const & descriptorSet )const
+	{
+		auto result = commandBuffer.begin( renderer::CommandBufferUsageFlag::eRenderPassContinue
 			, renderer::CommandBufferInheritanceInfo
 			{
 				&renderPass,
@@ -186,17 +194,43 @@ namespace castor3d
 
 		if ( result )
 		{
-			commandBuffer.bindPipeline( *m_pipeline );
-			commandBuffer.setViewport( { size.getWidth(), size.getHeight(), 0, 0 } );
-			commandBuffer.setScissor( { 0, 0, size.getWidth(), size.getHeight() } );
-			commandBuffer.bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
-			commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-			commandBuffer.bindIndexBuffer( m_indexBuffer->getBuffer(), 0u, renderer::IndexType::eUInt16 );
-			commandBuffer.drawIndexed( m_indexBuffer->getCount() );
+			doPrepareFrame( commandBuffer
+				, size
+				, renderPass
+				, descriptorSet );
 			result = commandBuffer.end();
 		}
 
 		return result;
+	}
+
+	void SceneBackground::initialiseDescriptorSet( MatrixUbo const & matrixUbo
+		, ModelMatrixUbo const & modelMatrixUbo
+		, renderer::DescriptorSet & descriptorSet )const
+	{
+		descriptorSet.createBinding( m_descriptorLayout->getBinding( 0u )
+			, matrixUbo.getUbo() );
+		descriptorSet.createBinding( m_descriptorLayout->getBinding( 1u )
+			, modelMatrixUbo.getUbo() );
+		descriptorSet.createBinding( m_descriptorLayout->getBinding( 2u )
+			, m_configUbo.getUbo() );
+		descriptorSet.createBinding( m_descriptorLayout->getBinding( 3u )
+			, m_texture->getDefaultView()
+			, m_sampler.lock()->getSampler() );
+	}
+
+	void SceneBackground::doPrepareFrame( renderer::CommandBuffer & commandBuffer
+		, castor::Size const & size
+		, renderer::RenderPass const & renderPass
+		, renderer::DescriptorSet const & descriptorSet )const
+	{
+		commandBuffer.bindPipeline( *m_pipeline );
+		commandBuffer.setViewport( { size.getWidth(), size.getHeight(), 0, 0 } );
+		commandBuffer.setScissor( { 0, 0, size.getWidth(), size.getHeight() } );
+		commandBuffer.bindDescriptorSet( descriptorSet, *m_pipelineLayout );
+		commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+		commandBuffer.bindIndexBuffer( m_indexBuffer->getBuffer(), 0u, renderer::IndexType::eUInt16 );
+		commandBuffer.drawIndexed( m_indexBuffer->getCount() );
 	}
 
 	renderer::ShaderStageStateArray SceneBackground::doInitialiseShader()
@@ -285,21 +319,6 @@ namespace castor3d
 		m_descriptorLayout = device.createDescriptorSetLayout( std::move( setLayoutBindings ) );
 	}
 
-	void SceneBackground::doInitialiseDescriptorSet()
-	{
-		m_descriptorSet = m_descriptorPool->createDescriptorSet( 0u );
-		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 0u )
-			, m_matrixUbo.getUbo() );
-		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 1u )
-			, m_modelMatrixUbo.getUbo() );
-		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 2u )
-			, m_configUbo.getUbo() );
-		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 3u )
-			, m_texture->getDefaultView()
-			, m_sampler.lock()->getSampler() );
-		m_descriptorSet->update();
-	}
-
 	bool SceneBackground::doInitialiseVertexBuffer()
 	{
 		using castor::Point3f;
@@ -375,7 +394,11 @@ namespace castor3d
 		m_modelMatrixUbo.initialise();
 
 		m_descriptorPool = m_descriptorLayout->createPool( 1u );
-		doInitialiseDescriptorSet();
+		m_descriptorSet = m_descriptorPool->createDescriptorSet( 0u );
+		initialiseDescriptorSet( m_matrixUbo
+			, m_modelMatrixUbo
+			, *m_descriptorSet );
+		m_descriptorSet->update();
 		renderer::VertexInputState vertexInput;
 		vertexInput.vertexBindingDescriptions.push_back( { 0u, sizeof( castor::Point3f ), renderer::VertexInputRate::eVertex } );
 		vertexInput.vertexAttributeDescriptions.push_back( { 0u, 0u, renderer::Format::eR32G32B32_SFLOAT, 0u } );

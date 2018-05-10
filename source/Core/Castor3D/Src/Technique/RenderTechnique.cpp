@@ -703,8 +703,7 @@ namespace castor3d
 
 		for ( auto & map : maps )
 		{
-			map.get().render( *result );
-			result = &map.get().getSemaphore();
+			result = &map.get().render( *result );
 		}
 
 		return result;

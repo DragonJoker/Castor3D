@@ -58,12 +58,12 @@ namespace castor3d
 			}
 
 			renderer::ImageCreateInfo colour{};
-			colour.flags = 0u;
-			colour.arrayLayers = 1u;
+			colour.flags = renderer::ImageCreateFlag::eCubeCompatible;
+			colour.arrayLayers = 6u;
 			colour.extent.width = size[0];
 			colour.extent.height = size[1];
 			colour.extent.depth = 1u;
-			colour.format = renderer::Format::eR32G32B32A32_SFLOAT;
+			colour.format = renderer::Format::eR16G16B16A16_SFLOAT;
 			colour.imageType = renderer::TextureType::e2D;
 			colour.initialLayout = renderer::ImageLayout::eUndefined;
 			colour.mipLevels = 1u;
@@ -150,13 +150,14 @@ namespace castor3d
 	bool EnvironmentMap::initialise()
 	{
 		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		m_environmentMap.initialise();
 		renderer::ImageCreateInfo depthStencil{};
 		depthStencil.flags = 0u;
 		depthStencil.arrayLayers = 1u;
 		depthStencil.extent.width = MapSize[0];
 		depthStencil.extent.height = MapSize[1];
 		depthStencil.extent.depth = 1u;
-		depthStencil.format = renderer::Format::eD32_SFLOAT;
+		depthStencil.format = renderer::Format::eD24_UNORM_S8_UINT;
 		depthStencil.imageType = renderer::TextureType::e2D;
 		depthStencil.initialLayout = renderer::ImageLayout::eUndefined;
 		depthStencil.mipLevels = 1u;
@@ -172,36 +173,28 @@ namespace castor3d
 		createInfo.flags = 0u;
 
 		createInfo.attachments.resize( 2u );
-		createInfo.attachments[0].format = m_environmentMap.getTexture()->getPixelFormat();
+		createInfo.attachments[0].format = m_depthBuffer->getFormat();
 		createInfo.attachments[0].samples = renderer::SampleCountFlag::e1;
 		createInfo.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
 		createInfo.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
 		createInfo.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 		createInfo.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 		createInfo.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-		createInfo.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+		createInfo.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
 
-		createInfo.attachments[1].format = m_depthBuffer->getFormat();
+		createInfo.attachments[1].format = m_environmentMap.getTexture()->getPixelFormat();
 		createInfo.attachments[1].samples = renderer::SampleCountFlag::e1;
 		createInfo.attachments[1].loadOp = renderer::AttachmentLoadOp::eClear;
 		createInfo.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
 		createInfo.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 		createInfo.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 		createInfo.attachments[1].initialLayout = renderer::ImageLayout::eUndefined;
-		createInfo.attachments[1].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
-
-		renderer::AttachmentReference colourReference;
-		colourReference.attachment = 0u;
-		colourReference.layout = renderer::ImageLayout::eColourAttachmentOptimal;
-
-		renderer::AttachmentReference depthStencilReference;
-		depthStencilReference.attachment = 1u;
-		depthStencilReference.layout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+		createInfo.attachments[1].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
 
 		createInfo.subpasses.resize( 1u );
 		createInfo.subpasses[0].flags = 0u;
-		createInfo.subpasses[0].colorAttachments = { colourReference };
-		createInfo.subpasses[0].depthStencilAttachment = depthStencilReference;
+		createInfo.subpasses[0].colorAttachments.push_back( { 1u, renderer::ImageLayout::eColourAttachmentOptimal } );
+		createInfo.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
 
 		createInfo.dependencies.resize( 2u );
 		createInfo.dependencies[0].srcSubpass = renderer::ExternalSubpass;
@@ -215,89 +208,40 @@ namespace castor3d
 		createInfo.dependencies[1].srcSubpass = 0u;
 		createInfo.dependencies[1].dstSubpass = renderer::ExternalSubpass;
 		createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+		createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 		createInfo.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eMemoryRead;
+		createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
 		createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
+		m_renderPass = device.createRenderPass( createInfo );
 		auto & environment = m_environmentMap.getTexture()->getTexture();
-		renderer::ImageViewCreateInfo view;
-		view.components.r = renderer::ComponentSwizzle::eIdentity;
-		view.components.g = renderer::ComponentSwizzle::eIdentity;
-		view.components.b = renderer::ComponentSwizzle::eIdentity;
-		view.components.a = renderer::ComponentSwizzle::eIdentity;
-		view.format = environment.getFormat();
-		view.viewType = renderer::TextureViewType::e2D;
-		view.subresourceRange.aspectMask = renderer::getAspectMask( environment.getFormat() );
-		view.subresourceRange.baseMipLevel = 0u;
-		view.subresourceRange.levelCount = 1u;
-		view.subresourceRange.layerCount = 1u;
+		auto & background = m_node.getScene()->getBackground();
+		m_backgroundDescriptorPool = background.getDescriptorLayout().createPool( 6u );
 		uint32_t face = 0u;
-
-		for ( auto & frameBuffer : m_frameBuffers )
-		{
-			view.subresourceRange.baseArrayLayer = face;
-			frameBuffer.view = environment.createView( view );
-			frameBuffer.renderPass = device.createRenderPass( createInfo );
-			renderer::FrameBufferAttachmentArray attaches;
-			attaches.emplace_back( *( frameBuffer.renderPass->getAttachments().begin() + 0u ), *m_depthBufferView );
-			attaches.emplace_back( *( frameBuffer.renderPass->getAttachments().begin() + 1u ), *frameBuffer.view );
-			frameBuffer.frameBuffer = frameBuffer.renderPass->createFrameBuffer( renderer::Extent2D{ MapSize[0], MapSize[1] }
-				, std::move( attaches ) );
-			frameBuffer.backgroundCommands = device.getGraphicsCommandPool().createCommandBuffer( false );
-			m_node.getScene()->getBackground().prepareFrame( *frameBuffer.backgroundCommands
-				, Size{ MapSize[0], MapSize[1] }
-				, *frameBuffer.renderPass );
-			++face;
-		}
-
-		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 
 		for ( auto & pass : m_passes )
 		{
-			pass->initialise( MapSize );
+			pass->initialise( MapSize
+				, face
+				, *m_renderPass
+				, background
+				, *m_backgroundDescriptorPool );
+			++face;
 		}
 		
-		static float constexpr component = std::numeric_limits< float >::max();
-		static renderer::ClearColorValue const white{ component, component, component, component };
-		face = 0u;
-
-		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
-		{
-			for ( auto & frameBuffer : m_frameBuffers )
-			{
-				m_commandBuffer->beginRenderPass( *frameBuffer.renderPass
-					, *frameBuffer.frameBuffer
-					, { white, white }
-					, renderer::SubpassContents::eSecondaryCommandBuffers );
-				m_commandBuffer->executeCommands( {
-					m_passes[face]->getOpaqueCommandBuffer(),
-					*frameBuffer.backgroundCommands,
-					m_passes[face]->getTransparentCommandBuffer(),
-				} );
-				m_commandBuffer->endRenderPass();
-				++face;
-			}
-
-			m_commandBuffer->end();
-		}
 		return true;
 	}
 
 	void EnvironmentMap::cleanup()
 	{
-		for ( auto & frameBuffer : m_frameBuffers )
-		{
-			frameBuffer.frameBuffer.reset();
-			frameBuffer.renderPass.reset();
-			frameBuffer.view.reset();
-		}
-
 		for ( auto & pass : m_passes )
 		{
 			pass->cleanup();
 		}
 
+		m_backgroundDescriptorPool.reset();
+		m_renderPass.reset();
+		m_depthBufferView.reset();
 		m_depthBuffer.reset();
 		m_environmentMap.cleanup();
 	}
@@ -310,18 +254,18 @@ namespace castor3d
 		}
 	}
 
-	void EnvironmentMap::render( renderer::Semaphore const & toWait )
+	renderer::Semaphore const & EnvironmentMap::render( renderer::Semaphore const & toWait )
 	{
+		renderer::Semaphore const * result = &toWait;
 		m_render++;
 
-		if ( m_render == 5u )
+		//if ( m_render == 5u )
 		{
-			auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
-			device.getGraphicsQueue().submit( *m_commandBuffer
-				, toWait
-				, renderer::PipelineStageFlag::eBottomOfPipe
-				, *m_finished
-				, nullptr );
+			for ( auto & pass : m_passes )
+			{
+				result = &pass->render( *result );
+			}
+
 			auto & scene = *m_node.getScene();
 
 			if ( scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness
@@ -332,6 +276,8 @@ namespace castor3d
 
 			m_render = 0u;
 		}
+
+		return *result;
 	}
 
 	void EnvironmentMap::debugDisplay( castor::Size const & size, uint32_t index )

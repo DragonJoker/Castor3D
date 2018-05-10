@@ -151,6 +151,10 @@ namespace castor3d
 		C3D_API void doUpdate( RenderInfo & info
 			, ShadowMapLightTypeArray & shadowMaps
 			, castor::Point2r const & jitter = castor::Point2r{} );
+		/**
+		 *\copydoc		castor3d::RenderPass::doCleanup
+		 */
+		C3D_API virtual void doCleanup()override;
 
 	private:
 		/**
@@ -176,10 +180,6 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */
 		C3D_API bool doInitialise( castor::Size const & size )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doCleanup
-		 */
-		C3D_API void doCleanup()override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdate
 		 */

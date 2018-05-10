@@ -4,7 +4,12 @@
 #include "Render/Viewport.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
-#include "Technique/ForwardRenderTechniquePass.hpp"
+
+#include <Command/CommandBuffer.hpp>
+#include <Command/Queue.hpp>
+#include <Descriptor/DescriptorSet.hpp>
+#include <Descriptor/DescriptorSetPool.hpp>
+#include <Sync/Fence.hpp>
 
 using namespace castor;
 
@@ -15,10 +20,12 @@ namespace castor3d
 		CameraSPtr doCreateCamera( SceneNode & node )
 		{
 			Viewport viewport{ *node.getScene()->getEngine() };
-			return std::make_shared< Camera >( cuT( "EnvironmentMap_" ) + node.getName()
+			auto camera = std::make_shared< Camera >( cuT( "EnvironmentMap_" ) + node.getName()
 				, *node.getScene()
 				, node.shared_from_this()
 				, std::move( viewport ) );
+			camera->update();
+			return camera;
 		}
 	}
 
@@ -41,6 +48,9 @@ namespace castor3d
 			, true
 			, &objectNode
 			, SsaoConfig{} ) }
+		, m_mtxView{ m_camera->getView() }
+		, m_matrixUbo{ *reflectionMap.getEngine() }
+		, m_modelMatrixUbo{ *reflectionMap.getEngine() }
 	{
 	}
 
@@ -48,8 +58,13 @@ namespace castor3d
 	{
 	}
 
-	bool EnvironmentMapPass::initialise( Size const & size )
+	bool EnvironmentMapPass::initialise( Size const & size
+		, uint32_t face
+		, renderer::RenderPass const & renderPass
+		, SceneBackground const & background
+		, renderer::DescriptorSetPool const & pool )
 	{
+		auto & device = *getOwner()->getEngine()->getRenderSystem()->getCurrentDevice();
 		real const aspect = real( size.getWidth() ) / size.getHeight();
 		real const near = 0.1_r;
 		real const far = 1000.0_r;
@@ -58,15 +73,81 @@ namespace castor3d
 			, near
 			, far );
 		m_camera->resize( size );
+
+		static Matrix4x4r const projection = convert( device.perspective( ( 45.0_degrees ).radians()
+			, 1.0f
+			, 0.0f, 2.0f ) );
+		m_matrixUbo.initialise();
+		m_matrixUbo.update( m_mtxView, projection );
+		m_modelMatrixUbo.initialise();
+
+		// Initialise opaque pass.
+		m_opaquePass->initialiseRenderPass( getOwner()->getTexture().getTexture()->getDefaultView()
+			, getOwner()->getDepthView()
+			, size
+			, true );
 		m_opaquePass->initialise( size );
+
+		// Create custom background pass.
+		auto const & environment = getOwner()->getTexture().getTexture()->getTexture();
+		auto const & depthView = getOwner()->getDepthView();
+		renderer::ImageViewCreateInfo view{};
+		view.format = environment.getFormat();
+		view.viewType = renderer::TextureViewType::e2D;
+		view.subresourceRange.aspectMask = renderer::getAspectMask( environment.getFormat() );
+		view.subresourceRange.baseMipLevel = 0u;
+		view.subresourceRange.levelCount = 1u;
+		view.subresourceRange.baseArrayLayer = face;
+		view.subresourceRange.layerCount = 1u;
+		m_view = environment.createView( view );
+
+		renderer::FrameBufferAttachmentArray attaches;
+		attaches.emplace_back( *( renderPass.getAttachments().begin() + 0u ), depthView );
+		attaches.emplace_back( *( renderPass.getAttachments().begin() + 1u ), *m_view );
+		m_frameBuffer = renderPass.createFrameBuffer( renderer::Extent2D{ size[0], size[1] }
+			, std::move( attaches ) );
+
+		m_backgroundCommands = device.getGraphicsCommandPool().createCommandBuffer( false );
+		auto & commandBuffer = *m_backgroundCommands;
+		m_renderPass = &renderPass;
+
+		auto & descriptorLayout = pool.getLayout();
+		m_backgroundDescriptorSet = pool.createDescriptorSet( 0u );
+		background.initialiseDescriptorSet( m_matrixUbo
+			, m_modelMatrixUbo
+			, *m_backgroundDescriptorSet );
+		m_backgroundDescriptorSet->update();
+
+		background.prepareFrame( commandBuffer
+			, size
+			, renderPass
+			, *m_backgroundDescriptorSet );
+
+		// Initialise transparent pass.
+		m_transparentPass->initialiseRenderPass( getOwner()->getTexture().getTexture()->getDefaultView()
+			, getOwner()->getDepthView()
+			, size
+			, true );
 		m_transparentPass->initialise( size );
+		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+		m_finished = device.createSemaphore();
+		m_fence = device.createFence( renderer::FenceCreateFlag::eSignaled );
 		return true;
 	}
 
 	void EnvironmentMapPass::cleanup()
 	{
+		m_fence.reset();
+		m_finished.reset();
+		m_commandBuffer.reset();
+		m_backgroundCommands.reset();
+		m_backgroundDescriptorSet.reset();
+		m_frameBuffer.reset();
+		m_view.reset();
 		m_opaquePass->cleanup();
 		m_transparentPass->cleanup();
+		m_modelMatrixUbo.cleanup();
+		m_matrixUbo.cleanup();
 	}
 
 	void EnvironmentMapPass::update( SceneNode const & node, RenderQueueArray & queues )
@@ -75,22 +156,55 @@ namespace castor3d
 		m_camera->getParent()->setPosition( position );
 		m_camera->getParent()->update();
 		m_camera->update();
-		m_opaquePass->update( queues );
-		m_transparentPass->update( queues );
+		castor::matrix::setTranslate( m_mtxModel, position );
+		static_cast< RenderTechniquePass & >( *m_opaquePass ).update( queues );
+		static_cast< RenderTechniquePass & >( *m_transparentPass ).update( queues );
 	}
 
-	renderer::Semaphore const & EnvironmentMapPass::getSemaphore()const
+	renderer::Semaphore const & EnvironmentMapPass::render( renderer::Semaphore const & toWait )
 	{
-		return m_transparentPass->getSemaphore();
-	}
+		RenderInfo info;
+		ShadowMapLightTypeArray shadowmaps;
+		m_opaquePass->update( info, shadowmaps, {} );
+		m_transparentPass->update( info, shadowmaps, {} );
+		m_matrixUbo.update( m_camera->getView()
+			, m_camera->getViewport().getProjection() );
+		m_modelMatrixUbo.update( m_mtxModel );
 
-	renderer::CommandBuffer const & EnvironmentMapPass::getOpaqueCommandBuffer()const
-	{
-		return m_opaquePass->getCommandBuffer();
-	}
+		static renderer::ClearColorValue const black{};
+		static renderer::DepthStencilClearValue const depth{ 1.0, 0 };
 
-	renderer::CommandBuffer const & EnvironmentMapPass::getTransparentCommandBuffer()const
-	{
-		return m_transparentPass->getCommandBuffer();
+		m_commandBuffer->begin();
+		m_commandBuffer->beginRenderPass( *m_renderPass
+			, *m_frameBuffer
+			, { depth, black }
+			, renderer::SubpassContents::eSecondaryCommandBuffers );
+		renderer::CommandBufferCRefArray commandBuffers;
+
+		if ( m_opaquePass->hasNodes() )
+		{
+			commandBuffers.emplace_back( m_opaquePass->getCommandBuffer() );
+		}
+
+		commandBuffers.emplace_back( *m_backgroundCommands );
+
+		if ( m_transparentPass->hasNodes() )
+		{
+			commandBuffers.emplace_back( m_transparentPass->getCommandBuffer() );
+		}
+
+		m_commandBuffer->executeCommands( commandBuffers );
+		m_commandBuffer->endRenderPass();
+		m_commandBuffer->end();
+
+		auto & device = *getOwner()->getEngine()->getRenderSystem()->getCurrentDevice();
+		m_fence->reset();
+		device.getGraphicsQueue().submit( *m_commandBuffer
+			, toWait
+			, renderer::PipelineStageFlag::eBottomOfPipe
+			, *m_finished
+			, m_fence.get() );
+		m_fence->wait( renderer::FenceTimeout );
+		return *m_finished;
 	}
 }

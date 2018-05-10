@@ -39,6 +39,22 @@ namespace castor3d
 	class SceneBackground
 		: public castor::OwnedBy< Engine >
 	{
+	protected:
+		struct Cube
+		{
+			struct Quad
+			{
+				struct Vertex
+				{
+					castor::Point3f position;
+				};
+
+				Vertex vertex[4];
+			};
+
+			Quad faces[6];
+		};
+
 	public:
 		/**
 		*\~english
@@ -123,7 +139,7 @@ namespace castor3d
 		*\param[in] frameBuffer
 		*	Le tampon d'images dans laquelle le fond est dessiné.
 		*/
-		C3D_API virtual bool prepareFrame( renderer::CommandBuffer & commandBuffer
+		C3D_API bool prepareFrame( renderer::CommandBuffer & commandBuffer
 			, castor::Size const & size
 			, renderer::RenderPass const & renderPass
 			, renderer::FrameBuffer const & frameBuffer );
@@ -143,9 +159,40 @@ namespace castor3d
 		*\param[in] renderPass
 		*	La passe de rendu dans laquelle le fond est dessiné.
 		*/
-		C3D_API virtual bool prepareFrame( renderer::CommandBuffer & commandBuffer
+		C3D_API bool prepareFrame( renderer::CommandBuffer & commandBuffer
 			, castor::Size const & size
 			, renderer::RenderPass const & renderPass );
+		/**
+		*\~english
+		*\brief
+		*	Records the commands used to draw the background.
+		*\param[out] commandBuffer
+		*	Receives the commands.
+		*\param[in] renderPass
+		*	The render pass into which the background is drawn.
+		*\~french
+		*\brief
+		*	Enregistre les commandes utilisées pour dessiner le fond.
+		*\param[out] commandBuffer
+		*	Reçoit les commandes.
+		*\param[in] renderPass
+		*	La passe de rendu dans laquelle le fond est dessiné.
+		*/
+		C3D_API bool prepareFrame( renderer::CommandBuffer & commandBuffer
+			, castor::Size const & size
+			, renderer::RenderPass const & renderPass
+			, renderer::DescriptorSet const & descriptorSet )const;
+		/**
+		*\~english
+		*\return
+		*	Initialises the descriptor set.
+		*\~french
+		*\brief
+		*	Initialise l'ensemble de descripteurs.
+		*/
+		virtual void initialiseDescriptorSet( MatrixUbo const & matrixUbo
+			, ModelMatrixUbo const & modelMatrixUbo
+			, renderer::DescriptorSet & descriptorSet )const;
 		/**
 		*\~english
 		*\brief
@@ -224,9 +271,59 @@ namespace castor3d
 			REQUIRE( m_timer );
 			return *m_timer;
 		}
+
+		inline renderer::PipelineLayout const & getPipelineLayout()const
+		{
+			REQUIRE( m_pipelineLayout );
+			return *m_pipelineLayout;
+		}
+
+		inline renderer::Pipeline const & getPipeline()const
+		{
+			REQUIRE( m_pipeline );
+			return *m_pipeline;
+		}
+
+		inline renderer::DescriptorSetLayout const & getDescriptorLayout()const
+		{
+			REQUIRE( m_descriptorLayout );
+			return *m_descriptorLayout;
+		}
+
+		inline renderer::VertexBuffer< Cube > const & getVertexBuffer()const
+		{
+			REQUIRE( m_vertexBuffer );
+			return *m_vertexBuffer;
+		}
+
+		inline renderer::Buffer< uint16_t > const & getIndexBuffer()const
+		{
+			REQUIRE( m_indexBuffer );
+			return *m_indexBuffer;
+		}
 		/**@}*/
 
 	private:
+		/**
+		*\~english
+		*\brief
+		*	Records the commands used to draw the background.
+		*\param[out] commandBuffer
+		*	Receives the commands.
+		*\param[in] renderPass
+		*	The render pass into which the background is drawn.
+		*\~french
+		*\brief
+		*	Enregistre les commandes utilisées pour dessiner le fond.
+		*\param[out] commandBuffer
+		*	Reçoit les commandes.
+		*\param[in] renderPass
+		*	La passe de rendu dans laquelle le fond est dessiné.
+		*/
+		void doPrepareFrame( renderer::CommandBuffer & commandBuffer
+			, castor::Size const & size
+			, renderer::RenderPass const & renderPass
+			, renderer::DescriptorSet const & descriptorSet )const;
 		/**
 		*\~english
 		*\return
@@ -245,15 +342,6 @@ namespace castor3d
 		*	Initialise le layout de descripteurs.
 		*/
 		virtual void doInitialiseDescriptorLayout();
-		/**
-		*\~english
-		*\return
-		*	Initialises the descriptor set.
-		*\~french
-		*\brief
-		*	Initialise l'ensemble de descripteurs.
-		*/
-		virtual void doInitialiseDescriptorSet();
 		/**
 		*\~english
 		*\brief
@@ -296,21 +384,6 @@ namespace castor3d
 			, renderer::RenderPass const & renderPass );
 
 	protected:
-		struct Cube
-		{
-			struct Quad
-			{
-				struct Vertex
-				{
-					castor::Point3f position;
-				};
-
-				Vertex vertex[4];
-			};
-
-			Quad faces[6];
-		};
-
 		Scene & m_scene;
 		BackgroundType m_type;
 		bool m_hdr{ true };

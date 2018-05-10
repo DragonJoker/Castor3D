@@ -113,11 +113,21 @@ namespace castor3d
 			, Camera const & camera
 			, renderer::Semaphore const & toWait );
 
+	protected:
+		/**
+		 *\copydoc		castor3d::RenderPass::doCleanup
+		 */
+		C3D_API virtual void doCleanup()override;
+
 	private:
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateUboBindings
 		 */
 		C3D_API renderer::DescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
+		 */
+		C3D_API renderer::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
@@ -151,7 +161,7 @@ namespace castor3d
 			, SceneFlags const & sceneFlags
 			, renderer::CompareOp alphaFunc )const override;
 
-	private:
+	protected:
 		renderer::FrameBufferPtr m_frameBuffer;
 		renderer::CommandBufferPtr m_nodesCommands;
 		renderer::FencePtr m_fence;

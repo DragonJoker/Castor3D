@@ -201,20 +201,20 @@ namespace castor3d
 		m_descriptorLayout = device.createDescriptorSetLayout( std::move( setLayoutBindings ) );
 	}
 
-	void ImageBackground::doInitialiseDescriptorSet()
+	void ImageBackground::initialiseDescriptorSet( MatrixUbo const & matrixUbo
+		, ModelMatrixUbo const & modelMatrixUbo
+		, renderer::DescriptorSet & descriptorSet )const
 	{
-		m_descriptorSet = m_descriptorPool->createDescriptorSet( 0u );
-		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 0u )
-			, m_matrixUbo.getUbo() );
-		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 1u )
-			, m_modelMatrixUbo.getUbo() );
-		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 2u )
+		descriptorSet.createBinding( m_descriptorLayout->getBinding( 0u )
+			, matrixUbo.getUbo() );
+		descriptorSet.createBinding( m_descriptorLayout->getBinding( 1u )
+			, modelMatrixUbo.getUbo() );
+		descriptorSet.createBinding( m_descriptorLayout->getBinding( 2u )
 			, m_configUbo.getUbo() );
-		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 3u )
+		descriptorSet.createBinding( m_descriptorLayout->getBinding( 3u )
 			, *m_sizeUbo );
-		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 4u )
+		descriptorSet.createBinding( m_descriptorLayout->getBinding( 4u )
 			, m_texture->getDefaultView()
 			, m_sampler.lock()->getSampler() );
-		m_descriptorSet->update();
 	}
 }

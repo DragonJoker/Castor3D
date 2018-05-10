@@ -566,6 +566,11 @@ namespace castor3d
 			return m_sceneUbo;
 		}
 
+		inline MatrixUbo & getMatrixUbo()
+		{
+			return m_matrixUbo;
+		}
+
 		inline renderer::CommandBuffer const & getCommandBuffer()const
 		{
 			return m_renderQueue.getCommandBuffer();

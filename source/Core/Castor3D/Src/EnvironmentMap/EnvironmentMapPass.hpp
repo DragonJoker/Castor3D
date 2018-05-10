@@ -4,7 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_EnvironmentMapPass_H___
 #define ___C3D_EnvironmentMapPass_H___
 
-#include "Technique/RenderTechniquePass.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Technique/ForwardRenderTechniquePass.hpp"
 
 namespace castor3d
 {
@@ -28,18 +30,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_reflectionMap	The parent reflection map.
-		 *\param[in]	p_node			The node from which the camera is created.
-		 *\param[in]	p_objectNode	The node to which the object is attached.
+		 *\param[in]	reflectionMap	The parent reflection map.
+		 *\param[in]	node			The node from which the camera is created.
+		 *\param[in]	objectNode		The node to which the object is attached.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_reflectionMap	Le reflection map parente.
-		 *\param[in]	p_node			Le noeud depuis lequel on crée la caméra.
-		 *\param[in]	p_objectNode	Le noeud auquel l'objet est attaché.
+		 *\param[in]	reflectionMap	Le reflection map parente.
+		 *\param[in]	node			Le noeud depuis lequel on crée la caméra.
+		 *\param[in]	objectNode		Le noeud auquel l'objet est attaché.
 		 */
-		C3D_API EnvironmentMapPass( EnvironmentMap & p_reflectionMap
-			, SceneNodeSPtr p_node
-			, SceneNode const & p_objectNode );
+		C3D_API EnvironmentMapPass( EnvironmentMap & reflectionMap
+			, SceneNodeSPtr node
+			, SceneNode const & objectNode );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -57,7 +59,11 @@ namespace castor3d
 		 *\param		size	Les dimensions voulues pour la passe.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		bool initialise( castor::Size const & size );
+		bool initialise( castor::Size const & size
+			, uint32_t face
+			, renderer::RenderPass const & renderPass
+			, SceneBackground const & background
+			, renderer::DescriptorSetPool const & pool );
 		/**
 		 *\~english
 		 *\brief		Cleans up the pass.
@@ -69,34 +75,40 @@ namespace castor3d
 		 *\~english
 		 *\brief		Updates the render pass.
 		 *\remarks		Gather the render queues, for further update.
-		 *\param[in]	p_node		The base node.
-		 *\param[out]	p_queues	Receives the render queues needed for the rendering of the frame.
+		 *\param[in]	node	The base node.
+		 *\param[out]	queues	Receives the render queues needed for the rendering of the frame.
 		 *\~french
 		 *\brief		Met à jour la passe de rendu.
 		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
-		 *\param[in]	p_node		Le noeud de base.
-		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
+		 *\param[in]	node	Le noeud de base.
+		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API void update( SceneNode const & p_node, RenderQueueArray & p_queues );
+		C3D_API void update( SceneNode const & node, RenderQueueArray & queues );
 		/**
-		*\~english
-		*name
-		*	Getters.
-		*\~french
-		*name
-		*	Accesseurs.
-		*/
-		/**@{*/
-		C3D_API renderer::Semaphore const & getSemaphore()const;
-		C3D_API renderer::CommandBuffer const & getOpaqueCommandBuffer()const;
-		C3D_API renderer::CommandBuffer const & getTransparentCommandBuffer()const;
-		/**@}*/
+		 *\~english
+		 *\brief		Render function.
+		 *\~french
+		 *\brief		Fonction de rendu.
+		 */
+		C3D_API renderer::Semaphore const & render( renderer::Semaphore const & toWait );
 
 	private:
 		SceneNodeSPtr m_node;
 		CameraSPtr m_camera;
-		std::unique_ptr< RenderTechniquePass > m_opaquePass;
-		std::unique_ptr< RenderTechniquePass > m_transparentPass;
+		renderer::FrameBufferPtr m_frameBuffer;
+		renderer::TextureViewPtr m_view;
+		renderer::RenderPass const * m_renderPass{ nullptr };
+		renderer::CommandBufferPtr m_backgroundCommands;
+		renderer::DescriptorSetPtr m_backgroundDescriptorSet;
+		std::unique_ptr< ForwardRenderTechniquePass > m_opaquePass;
+		std::unique_ptr< ForwardRenderTechniquePass > m_transparentPass;
+		renderer::CommandBufferPtr m_commandBuffer;
+		renderer::SemaphorePtr m_finished;
+		renderer::FencePtr m_fence;
+		castor::Matrix4x4f m_mtxView;
+		castor::Matrix4x4f m_mtxModel;
+		MatrixUbo m_matrixUbo;
+		ModelMatrixUbo m_modelMatrixUbo;
 	};
 }
 

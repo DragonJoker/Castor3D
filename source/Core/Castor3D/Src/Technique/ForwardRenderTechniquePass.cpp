@@ -159,7 +159,6 @@ namespace castor3d
 			renderer::DepthStencilClearValue{ 1.0, 0 },
 			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
 		};
-		m_fence->reset();
 
 		if ( m_nodesCommands->begin() )
 		{
@@ -179,6 +178,7 @@ namespace castor3d
 				, getTimer().getQuery()
 				, 1u );
 			m_nodesCommands->end();
+			m_fence->reset();
 			device.getGraphicsQueue().submit( { *m_nodesCommands }
 				, { *result }
 				, { renderer::PipelineStageFlag::eColourAttachmentOutput }
@@ -192,6 +192,14 @@ namespace castor3d
 
 		getTimer().stop();
 		return *result;
+	}
+
+	void ForwardRenderTechniquePass::doCleanup()
+	{
+		m_fence.reset();
+		m_nodesCommands.reset();
+		m_frameBuffer.reset();
+		RenderTechniquePass::doCleanup();
 	}
 
 	renderer::DescriptorSetLayoutBindingArray ForwardRenderTechniquePass::doCreateUboBindings( PipelineFlags const & flags )const
@@ -234,6 +242,65 @@ namespace castor3d
 		}
 
 		return uboBindings;
+	}
+
+	renderer::DescriptorSetLayoutBindingArray ForwardRenderTechniquePass::doCreateTextureBindings( PipelineFlags const & flags )const
+	{
+		auto index = MinBufferIndex;
+		renderer::DescriptorSetLayoutBindingArray textureBindings;
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eDiffuse ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eSpecular ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eGloss ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eNormal ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eOpacity ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eHeight ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eAmbientOcclusion ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eEmissive ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eTransmittance ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eReflection )
+			|| checkFlag( flags.textureFlags, TextureChannel::eRefraction ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		return textureBindings;
 	}
 
 	glsl::Shader ForwardRenderTechniquePass::doGetVertexShaderSource( PassFlags const & passFlags

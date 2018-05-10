@@ -253,6 +253,7 @@ namespace castor3d
 	void RenderTechniquePass::doCleanup()
 	{
 		m_renderQueue.cleanup();
+		m_finished.reset();
 	}
 
 	void RenderTechniquePass::doUpdate( RenderQueueArray & queues )
