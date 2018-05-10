@@ -3518,6 +3518,10 @@ namespace castor
 				BufferConverter< PF, PixelFormat::eL8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
 				break;
 
+			case PixelFormat::eS8:
+				BufferConverter< PF, PixelFormat::eS8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				break;
+
 			default:
 				UNSUPPORTED_ERROR( "No conversion defined" );
 				break;

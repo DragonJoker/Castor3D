@@ -248,6 +248,8 @@ namespace castor3d
 	void DirectionalLightPass::cleanup()
 	{
 		doCleanup();
+		m_vertexLayout.reset();
+		m_vertexBuffer.reset();
 	}
 
 	uint32_t DirectionalLightPass::getCount()const

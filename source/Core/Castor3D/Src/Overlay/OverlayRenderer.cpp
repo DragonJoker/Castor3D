@@ -402,15 +402,24 @@ namespace castor3d
 	void OverlayRenderer::cleanup()
 	{
 		m_matrixUbo.cleanup();
-		m_panelPipelines.clear();
-		m_textPipelines.clear();
+		m_panelOverlays.clear();
+		m_borderPanelOverlays.clear();
+		m_textOverlays.clear();
 		m_mapPanelNodes.clear();
 		m_mapTextNodes.clear();
+		m_panelPipelines.clear();
+		m_textPipelines.clear();
 		m_panelVertexBuffers.clear();
 		m_borderVertexBuffers.clear();
 		m_textVertexBuffers.clear();
 		m_fence.reset();
 		m_commandBuffer.reset();
+		m_declaration.reset();
+		m_textDeclaration.reset();
+		m_frameBuffer.reset();
+		m_renderPass.reset();
+		m_toWait = nullptr;
+		m_finished.reset();
 	}
 
 	void OverlayRenderer::beginPrepare( Viewport const & viewport

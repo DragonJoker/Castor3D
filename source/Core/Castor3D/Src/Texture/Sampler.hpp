@@ -272,8 +272,8 @@ namespace castor3d
 			1.0f,
 			false,
 			renderer::CompareOp::eNever,
-			0.0f,
-			1.0f,
+			-1000.0f,
+			1000.0f,
 			renderer::BorderColour::eFloatOpaqueBlack,
 			false
 		};

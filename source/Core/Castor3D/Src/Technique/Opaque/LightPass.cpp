@@ -352,6 +352,13 @@ namespace castor3d
 
 	void LightPass::Program::cleanup()
 	{
+		m_blendPipeline.reset();
+		m_firstPipeline.reset();
+		m_pipelineLayout.reset();
+		m_textureDescriptorPool.reset();
+		m_textureDescriptorLayout.reset();
+		m_uboDescriptorPool.reset();
+		m_uboDescriptorLayout.reset();
 	}
 
 	void LightPass::Program::bind( Light const & light )
@@ -554,9 +561,13 @@ namespace castor3d
 
 	void LightPass::doCleanup()
 	{
+		m_matrixUbo.cleanup();
+		m_textureDescriptorSet.reset();
+		m_uboDescriptorSet.reset();
+		m_blendRenderPass.commandBuffer.reset();
+		m_firstRenderPass.commandBuffer.reset();
 		m_program->cleanup();
 		m_program.reset();
-		m_matrixUbo.cleanup();
 	}
 
 	void LightPass::doPrepareCommandBuffer( TextureUnit const * shadowMap

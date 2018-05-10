@@ -936,6 +936,15 @@ namespace castor3d
 		m_renderNodes = std::make_unique< SceneRenderNodes >( scene );
 	}
 
+	void RenderQueue::cleanup()
+	{
+		m_culledRenderNodes.reset();
+		m_renderNodes.reset();
+		m_sceneChanged.disconnect();
+		m_cameraChanged.disconnect();
+		m_commandBuffer.reset();
+	}
+
 	void RenderQueue::update()
 	{
 		if ( m_isSceneChanged )

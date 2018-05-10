@@ -132,6 +132,7 @@ namespace castor3d
 
 	void ShadowMapPassSpot::doCleanup()
 	{
+		m_renderQueue.cleanup();
 		m_shadowConfig.reset();
 		m_camera->detach();
 		m_camera.reset();

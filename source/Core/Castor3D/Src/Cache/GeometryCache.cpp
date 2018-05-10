@@ -111,11 +111,15 @@ namespace castor3d
 		for ( auto & pair : m_entries )
 		{
 			auto & entry = pair.second;
-			auto & modelData = entry.modelUbo.getData();
-			modelData.shadowReceiver = entry.geometry.isShadowReceiver();
-			modelData.materialIndex = entry.pass.getId();
-			auto & modelMatrixData = entry.modelMatrixUbo.getData();
-			modelMatrixData.model = convert( entry.geometry.getParent()->getDerivedTransformationMatrix() );
+
+			if ( entry.geometry.getParent() )
+			{
+				auto & modelData = entry.modelUbo.getData();
+				modelData.shadowReceiver = entry.geometry.isShadowReceiver();
+				modelData.materialIndex = entry.pass.getId();
+				auto & modelMatrixData = entry.modelMatrixUbo.getData();
+				modelMatrixData.model = convert( entry.geometry.getParent()->getDerivedTransformationMatrix() );
+			}
 		}
 	}
 

@@ -167,6 +167,7 @@ namespace castor3d
 
 	void ShadowMapPassPoint::doCleanup()
 	{
+		m_renderQueue.cleanup();
 		m_matrixUbo.cleanup();
 		m_shadowConfig.reset();
 		m_onNodeChanged.disconnect();

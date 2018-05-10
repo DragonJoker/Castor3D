@@ -177,6 +177,27 @@ namespace castor3d
 
 	RenderTechnique::~RenderTechnique()
 	{
+		m_debugFrameBuffer.reset();
+		m_debugRenderPass.reset();
+		m_clearSemaphore.reset();
+		m_clearCommandBuffer.reset();
+		m_clearFrameBuffer.reset();
+		m_clearRenderPass.reset();
+		m_bgCommandBuffer.reset();
+		m_bgFrameBuffer.reset();
+		m_bgRenderPass.reset();
+		m_signalFinished.reset();
+
+		for ( auto & array : m_activeShadowMaps )
+		{
+			array.clear();
+		}
+
+		m_directionalShadowMaps.clear();
+		m_pointShadowMaps.clear();
+		m_spotShadowMaps.clear();
+		m_deferredRendering.reset();
+		m_weightedBlendRendering.reset();
 		m_transparentPass.reset();
 		m_opaquePass.reset();
 	}

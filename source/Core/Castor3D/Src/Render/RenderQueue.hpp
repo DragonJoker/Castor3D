@@ -217,6 +217,13 @@ namespace castor3d
 		C3D_API void initialise( Scene const & scene );
 		/**
 		 *\~english
+		 *\brief		Cleans the queue up.
+		 *\~french
+		 *\brief		Nettoie la file de rendu.
+		 */
+		C3D_API void cleanup();
+		/**
+		 *\~english
 		 *\brief		Updates the render nodes.
 		 *\~french
 		 *\brief		Met à jour les noeuds de rendu.
