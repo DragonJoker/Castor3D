@@ -96,7 +96,6 @@ namespace castor3d
 		SceneNodeSPtr m_node;
 		CameraSPtr m_camera;
 		renderer::FrameBufferPtr m_frameBuffer;
-		renderer::TextureViewPtr m_view;
 		renderer::RenderPass const * m_renderPass{ nullptr };
 		renderer::CommandBufferPtr m_backgroundCommands;
 		renderer::DescriptorSetPtr m_backgroundDescriptorSet;

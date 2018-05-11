@@ -80,30 +80,21 @@ namespace castor3d
 		m_matrixUbo.initialise();
 		m_matrixUbo.update( m_mtxView, projection );
 		m_modelMatrixUbo.initialise();
+		auto const & environmentLayout = getOwner()->getTexture().getTexture();
+		auto const & environmentView = environmentLayout->getImage( face ).getView();
 
 		// Initialise opaque pass.
-		m_opaquePass->initialiseRenderPass( getOwner()->getTexture().getTexture()->getDefaultView()
+		m_opaquePass->initialiseRenderPass( environmentView
 			, getOwner()->getDepthView()
 			, size
 			, true );
 		m_opaquePass->initialise( size );
 
 		// Create custom background pass.
-		auto const & environment = getOwner()->getTexture().getTexture()->getTexture();
 		auto const & depthView = getOwner()->getDepthView();
-		renderer::ImageViewCreateInfo view{};
-		view.format = environment.getFormat();
-		view.viewType = renderer::TextureViewType::e2D;
-		view.subresourceRange.aspectMask = renderer::getAspectMask( environment.getFormat() );
-		view.subresourceRange.baseMipLevel = 0u;
-		view.subresourceRange.levelCount = 1u;
-		view.subresourceRange.baseArrayLayer = face;
-		view.subresourceRange.layerCount = 1u;
-		m_view = environment.createView( view );
-
 		renderer::FrameBufferAttachmentArray attaches;
 		attaches.emplace_back( *( renderPass.getAttachments().begin() + 0u ), depthView );
-		attaches.emplace_back( *( renderPass.getAttachments().begin() + 1u ), *m_view );
+		attaches.emplace_back( *( renderPass.getAttachments().begin() + 1u ), environmentView );
 		m_frameBuffer = renderPass.createFrameBuffer( renderer::Extent2D{ size[0], size[1] }
 			, std::move( attaches ) );
 
@@ -124,7 +115,7 @@ namespace castor3d
 			, *m_backgroundDescriptorSet );
 
 		// Initialise transparent pass.
-		m_transparentPass->initialiseRenderPass( getOwner()->getTexture().getTexture()->getDefaultView()
+		m_transparentPass->initialiseRenderPass( environmentView
 			, getOwner()->getDepthView()
 			, size
 			, true );
@@ -143,7 +134,6 @@ namespace castor3d
 		m_backgroundCommands.reset();
 		m_backgroundDescriptorSet.reset();
 		m_frameBuffer.reset();
-		m_view.reset();
 		m_opaquePass->cleanup();
 		m_transparentPass->cleanup();
 		m_modelMatrixUbo.cleanup();

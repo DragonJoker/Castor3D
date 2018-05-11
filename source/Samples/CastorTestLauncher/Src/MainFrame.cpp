@@ -287,6 +287,8 @@ namespace test_launcher
 			wxBitmap bitmap;
 			m_engine.getRenderLoop().renderSyncFrame();
 			m_engine.getRenderLoop().renderSyncFrame();
+			m_engine.getRenderLoop().renderSyncFrame();
+			m_engine.getRenderLoop().renderSyncFrame();
 			m_renderWindow->enableSaveFrame();
 			m_engine.getRenderLoop().renderSyncFrame();
 			auto buffer = m_renderWindow->getSavedFrame();

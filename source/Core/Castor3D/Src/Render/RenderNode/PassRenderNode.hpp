@@ -20,7 +20,7 @@ namespace castor3d
 	{
 		C3D_API PassRenderNode( Pass & pass );
 		void fillDescriptor( renderer::DescriptorSetLayout const & layout
-			, uint32_t index
+			, uint32_t & index
 			, renderer::DescriptorSet & descriptorSet
 			, bool opacityOnly = false );
 

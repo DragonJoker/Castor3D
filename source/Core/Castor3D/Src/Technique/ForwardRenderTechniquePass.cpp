@@ -668,6 +668,13 @@ namespace castor3d
 					, alpha
 					, material.m_alphaRef() );
 			}
+			else if ( !m_opaque && alphaFunc == renderer::CompareOp::eAlways )
+			{
+				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+				{
+					alpha *= texture( c3d_mapOpacity, texCoord.xy() ).r();
+				}
+			}
 
 			auto gamma = writer.declLocale( cuT( "gamma" )
 				, material.m_gamma() );
@@ -738,12 +745,28 @@ namespace castor3d
 				if ( checkFlag( textureFlags, TextureChannel::eReflection )
 					&& checkFlag( textureFlags, TextureChannel::eRefraction ) )
 				{
-					ambient = reflections.computeReflRefr( incident
+					auto reflection = writer.declLocale( cuT( "reflection" )
+						, reflections.computeRefl( incident
 						, normal
 						, ambientOcclusion
-						, c3d_mapEnvironment
-						, material.m_refractionRatio()
-						, diffuse );
+						, c3d_mapEnvironment ) );
+					auto subRatio = writer.declLocale( cuT( "subRatio" )
+						, 1.0_f - material.m_refractionRatio() );
+					auto addRatio = writer.declLocale( cuT( "addRatio" )
+						, 1.0_f + material.m_refractionRatio() );
+					auto reflectance = writer.declLocale( cuT( "reflectance" )
+						, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
+					auto product = writer.declLocale( cuT( "product" )
+						, max( 0.0_f, dot( -incident, -normal ) ) );
+					auto fresnel = writer.declLocale( cuT( "fresnel" )
+						, glsl::fma( 1.0_f - reflectance, pow( 1.0_f - product, 5.0_f ), reflectance ) );
+					auto refracted = writer.declLocale( cuT( "refracted" )
+						, refract( incident, -normal, material.m_refractionRatio() ) );
+					auto refraction = writer.declLocale( cuT( "refraction" )
+						, texture( c3d_mapEnvironment, refracted ).xyz() );
+					ambient = mix( refraction * diffuse / length( diffuse )
+						, reflection * reflection / length( reflection )
+						, fresnel );
 					diffuse = vec3( 0.0_f );
 				}
 				else if ( checkFlag( textureFlags, TextureChannel::eReflection ) )
@@ -756,12 +779,19 @@ namespace castor3d
 				}
 				else
 				{
-					ambient = reflections.computeRefr( incident
-						, normal
-						, ambientOcclusion
-						, c3d_mapEnvironment
-						, material.m_refractionRatio()
-						, diffuse );
+					auto subRatio = writer.declLocale( cuT( "subRatio" )
+						, 1.0_f - material.m_refractionRatio() );
+					auto addRatio = writer.declLocale( cuT( "addRatio" )
+						, 1.0_f + material.m_refractionRatio() );
+					auto reflectance = writer.declLocale( cuT( "reflectance" )
+						, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
+					auto product = writer.declLocale( cuT( "product" )
+						, max( 0.0_f, dot( -incident, -normal ) ) );
+					auto fresnel = writer.declLocale( cuT( "fresnel" )
+						, glsl::fma( 1.0_f - reflectance, pow( 1.0_f - product, 5.0_f ), reflectance ) );
+					auto refracted = writer.declLocale( cuT( "refracted" )
+						, refract( incident, -normal, material.m_refractionRatio() ) );
+					ambient = texture( c3d_mapEnvironment, refracted ).xyz() * diffuse / length( diffuse );
 					diffuse = vec3( 0.0_f );
 				}
 			}
@@ -771,28 +801,13 @@ namespace castor3d
 				diffuse *= lightDiffuse;
 			}
 
-			pxl_fragColor = vec4( diffuse + lightSpecular + emissive + ambient, 1.0 );
+			pxl_fragColor = vec4( diffuse + lightSpecular + emissive + ambient, alpha );
 
-			if ( !m_opaque && alphaFunc != renderer::CompareOp::eAlways )
-			{
-				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
-				{
-					alpha *= texture( c3d_mapOpacity, texCoord.xy() ).r();
-				}
-
-				pxl_fragColor.a() = alpha;
-			}
 
 			if ( getFogType( sceneFlags ) != FogType::eDisabled )
 			{
 				fog.applyFog( pxl_fragColor, length( vtx_viewPosition ), vtx_viewPosition.y() );
 			}
-
-			auto curPosition = writer.declLocale( cuT( "curPosition" )
-				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
-			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
-				, vtx_prvPosition.xy() / vtx_prvPosition.z() );
-			pxl_velocity.xy() = curPosition - prvPosition;
 		} );
 
 		return writer.finalise();
@@ -1114,12 +1129,6 @@ namespace castor3d
 			{
 				fog.applyFog( pxl_fragColor, length( vtx_viewPosition ), vtx_viewPosition.y() );
 			}
-
-			auto curPosition = writer.declLocale( cuT( "curPosition" )
-				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
-			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
-				, vtx_prvPosition.xy() / vtx_prvPosition.z() );
-			pxl_velocity.xy() = curPosition - prvPosition;
 		} );
 
 		return writer.finalise();
@@ -1445,12 +1454,6 @@ namespace castor3d
 			{
 				fog.applyFog( pxl_fragColor, length( vtx_viewPosition ), vtx_viewPosition.y() );
 			}
-
-			auto curPosition = writer.declLocale( cuT( "curPosition" )
-				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
-			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
-				, vtx_prvPosition.xy() / vtx_prvPosition.z() );
-			pxl_velocity.xy() = curPosition - prvPosition;
 		} );
 
 		return writer.finalise();

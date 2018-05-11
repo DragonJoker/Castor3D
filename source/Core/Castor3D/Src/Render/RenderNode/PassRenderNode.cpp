@@ -37,7 +37,7 @@ namespace castor3d
 	}
 
 	void PassRenderNode::fillDescriptor( renderer::DescriptorSetLayout const & layout
-		, uint32_t index
+		, uint32_t & index
 		, renderer::DescriptorSet & descriptorSet
 		, bool opacityOnly )
 	{
