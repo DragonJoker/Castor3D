@@ -15,11 +15,12 @@
 
 #include "Shader/Shaders/GlslFog.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
-#include "Shader/Shaders/GlslPhongLighting.hpp"
-#include "Shader/Shaders/GlslPhongReflection.hpp"
 #include "Shader/Shaders/GlslMetallicPbrReflection.hpp"
 #include "Shader/Shaders/GlslMetallicBrdfLighting.hpp"
+#include "Shader/Shaders/GlslPhongLighting.hpp"
+#include "Shader/Shaders/GlslPhongReflection.hpp"
 #include "Shader/Shaders/GlslSpecularBrdfLighting.hpp"
+#include "Shader/Shaders/GlslSpecularPbrReflection.hpp"
 
 #include <Image/TextureView.hpp>
 
@@ -1058,26 +1059,9 @@ namespace castor3d
 				auto ratio = writer.declLocale( cuT( "ratio" )
 					, material.m_refractionRatio() );
 
-				if ( checkFlag( textureFlags, TextureChannel::eReflection )
-					&& checkFlag( textureFlags, TextureChannel::eRefraction ) )
+				if ( checkFlag( textureFlags, TextureChannel::eReflection ) )
 				{
-					ambient = reflections.computeRefl( incident
-						, normal
-						, occlusion
-						, c3d_mapEnvironment
-						, c3d_ambientLight.xyz()
-						, matAlbedo );
-					ambient = reflections.computeRefr( incident
-						, normal
-						, occlusion
-						, c3d_mapEnvironment
-						, material.m_refractionRatio()
-						, ambient
-						, matAlbedo
-						, matRoughness );
-				}
-				else if ( checkFlag( textureFlags, TextureChannel::eReflection ) )
-				{
+					// Reflection from environment map.
 					ambient = reflections.computeRefl( incident
 						, normal
 						, occlusion
@@ -1087,6 +1071,7 @@ namespace castor3d
 				}
 				else
 				{
+					// Reflection from background skybox.
 					ambient = c3d_ambientLight.xyz()
 						* occlusion
 						* utils.computeMetallicIBL( normal
@@ -1098,18 +1083,40 @@ namespace castor3d
 							, c3d_mapIrradiance
 							, c3d_mapPrefiltered
 							, c3d_mapBrdf );
+				}
+
+				if ( checkFlag( textureFlags, TextureChannel::eRefraction ) )
+				{
+					// Refraction from environment map.
 					ambient = reflections.computeRefr( incident
 						, normal
 						, occlusion
 						, c3d_mapEnvironment
-						, material.m_refractionRatio()
+						, ratio
 						, ambient
 						, matAlbedo
 						, matRoughness );
 				}
+				else
+				{
+					IF( writer, ratio != 0.0_f )
+					{
+						// Refraction from background skybox.
+						ambient = reflections.computeRefr( incident
+							, normal
+							, occlusion
+							, c3d_mapPrefiltered
+							, material.m_refractionRatio()
+							, ambient
+							, matAlbedo
+							, matRoughness );
+					}
+					FI;
+				}
 			}
 			else
 			{
+				// Reflection from background skybox.
 				ambient *= occlusion * utils.computeMetallicIBL( normal
 					, vtx_worldPosition
 					, matAlbedo
@@ -1119,6 +1126,24 @@ namespace castor3d
 					, c3d_mapIrradiance
 					, c3d_mapPrefiltered
 					, c3d_mapBrdf );
+				auto ratio = writer.declLocale( cuT( "ratio" )
+					, material.m_refractionRatio() );
+
+				IF( writer, ratio != 0.0_f )
+				{
+					// Refraction from background skybox.
+					auto incident = writer.declLocale( cuT( "incident" )
+						, reflections.computeIncident( vtx_worldPosition, worldEye ) );
+					ambient = reflections.computeRefr( incident
+						, normal
+						, occlusion
+						, c3d_mapPrefiltered
+						, material.m_refractionRatio()
+						, ambient
+						, matAlbedo
+						, matRoughness );
+				}
+				FI;
 			}
 
 			pxl_fragColor.xyz() = glsl::fma( lightDiffuse
@@ -1257,6 +1282,7 @@ namespace castor3d
 		auto lighting = shader::pbr::sg::createLightingModel( writer
 			, getShadowType( sceneFlags )
 			, index );
+		shader::SpecularPbrReflectionModel reflections{ writer };
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
 		utils.declareApplyGamma();
@@ -1357,52 +1383,28 @@ namespace castor3d
 				, c3d_shadowReceiver
 				, shader::FragmentInput( vtx_worldPosition, normal )
 				, output );
-
+			
 			if ( checkFlag( textureFlags, TextureChannel::eReflection )
 				|| checkFlag( textureFlags, TextureChannel::eRefraction ) )
 			{
 				auto incident = writer.declLocale( cuT( "incident" )
-					, normalize( vtx_worldPosition - c3d_cameraPosition.xyz() ) );
+					, reflections.computeIncident( vtx_worldPosition, worldEye ) );
 				auto ratio = writer.declLocale( cuT( "ratio" )
 					, material.m_refractionRatio() );
 
-				if ( checkFlag( textureFlags, TextureChannel::eReflection )
-					&& checkFlag( textureFlags, TextureChannel::eRefraction ) )
+				if ( checkFlag( textureFlags, TextureChannel::eReflection ) )
 				{
-					auto reflected = writer.declLocale( cuT( "reflected" )
-						, reflect( incident, normal ) );
-					ambient = c3d_ambientLight.xyz()
-						* occlusion
-						* texture( c3d_mapEnvironment, reflected ).xyz() * matDiffuse / length( matDiffuse );
-					auto roughness = writer.declLocale( cuT( "roughness" )
-						, 1.0_f - matGlossiness );
-					auto subRatio = writer.declLocale( cuT( "subRatio" )
-						, 1.0_f - ratio );
-					auto addRatio = writer.declLocale( cuT( "addRatio" )
-						, 1.0_f + ratio );
-					auto reflectance = writer.declLocale( cuT( "reflectance" )
-						, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
-					auto product = writer.declLocale( cuT( "product" )
-						, max( 0.0_f, dot( -incident, normal ) ) );
-					auto fresnel = writer.declLocale( cuT( "fresnel" )
-						, glsl::fma( max( 1.0_f - roughness, reflectance ) - reflectance, pow( 1.0_f - product, 5.0_f ), reflectance ) );
-					auto refracted = writer.declLocale( cuT( "refracted" )
-						, refract( incident, normal, ratio ) );
-					ambient = mix( texture( c3d_mapEnvironment, refracted ).xyz() * matDiffuse / length( matDiffuse )
-						, ambient
-						, fresnel );
-				}
-				else if ( checkFlag( textureFlags, TextureChannel::eReflection ) )
-				{
-					auto reflected = writer.declLocale( cuT( "reflected" )
-						, reflect( incident, normal ) );
-					ambient = c3d_ambientLight.xyz()
-						* occlusion
-						* texture( c3d_mapEnvironment, reflected ).xyz()
-						* matDiffuse / length( matDiffuse );
+					// Reflection from environment map.
+					ambient = reflections.computeRefl( incident
+						, normal
+						, occlusion
+						, c3d_mapEnvironment
+						, c3d_ambientLight.xyz()
+						, matDiffuse );
 				}
 				else
 				{
+					// Reflection from background skybox.
 					ambient = c3d_ambientLight.xyz()
 						* occlusion
 						* utils.computeSpecularIBL( normal
@@ -1414,27 +1416,40 @@ namespace castor3d
 							, c3d_mapIrradiance
 							, c3d_mapPrefiltered
 							, c3d_mapBrdf );
-					auto roughness = writer.declLocale( cuT( "roughness" )
-						, 1.0_f - matGlossiness );
-					auto subRatio = writer.declLocale( cuT( "subRatio" )
-						, 1.0_f - ratio );
-					auto addRatio = writer.declLocale( cuT( "addRatio" )
-						, 1.0_f + ratio );
-					auto reflectance = writer.declLocale( cuT( "reflectance" )
-						, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
-					auto product = writer.declLocale( cuT( "product" )
-						, max( 0.0_f, dot( -incident, normal ) ) );
-					auto fresnel = writer.declLocale( cuT( "fresnel" )
-						, glsl::fma( max( 1.0_f - roughness, reflectance ) - reflectance, pow( 1.0_f - product, 5.0_f ), reflectance ) );
-					auto refracted = writer.declLocale( cuT( "refracted" )
-						, refract( incident, normal, ratio ) );
-					ambient = mix( texture( c3d_mapEnvironment, refracted ).xyz() * matDiffuse / length( matDiffuse )
+				}
+
+				if ( checkFlag( textureFlags, TextureChannel::eRefraction ) )
+				{
+					// Refraction from environment map.
+					ambient = reflections.computeRefr( incident
+						, normal
+						, occlusion
+						, c3d_mapEnvironment
+						, ratio
 						, ambient
-						, fresnel );
+						, matDiffuse
+						, matGlossiness );
+				}
+				else
+				{
+					IF( writer, ratio != 0.0_f )
+					{
+						// Refraction from background skybox.
+						ambient = reflections.computeRefr( incident
+							, normal
+							, occlusion
+							, c3d_mapPrefiltered
+							, material.m_refractionRatio()
+							, ambient
+							, matDiffuse
+							, matGlossiness );
+					}
+					FI;
 				}
 			}
 			else
 			{
+				// Reflection from background skybox.
 				ambient *= occlusion * utils.computeSpecularIBL( normal
 					, vtx_worldPosition
 					, matDiffuse
@@ -1444,6 +1459,24 @@ namespace castor3d
 					, c3d_mapIrradiance
 					, c3d_mapPrefiltered
 					, c3d_mapBrdf );
+				auto ratio = writer.declLocale( cuT( "ratio" )
+					, material.m_refractionRatio() );
+
+				IF( writer, ratio != 0.0_f )
+				{
+					// Refraction from background skybox.
+					auto incident = writer.declLocale( cuT( "incident" )
+						, reflections.computeIncident( vtx_worldPosition, worldEye ) );
+					ambient = reflections.computeRefr( incident
+						, normal
+						, occlusion
+						, c3d_mapPrefiltered
+						, material.m_refractionRatio()
+						, ambient
+						, matDiffuse
+						, matGlossiness );
+				}
+				FI;
 			}
 
 			pxl_fragColor.xyz() = glsl::fma( lightDiffuse

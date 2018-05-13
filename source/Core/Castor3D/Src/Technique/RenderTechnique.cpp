@@ -37,7 +37,7 @@ using namespace castor;
 #define DISPLAY_DEBUG_ENV_MAPS 0
 
 #define USE_WEIGHTED_BLEND 1
-#define DEBUG_FORWARD_RENDERING 1
+#define DEBUG_FORWARD_RENDERING 0
 
 namespace castor3d
 {

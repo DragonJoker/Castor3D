@@ -10,7 +10,9 @@
 #include "Shader/PassBuffer/PassBuffer.hpp"
 #include "Shader/Shaders/GlslFog.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
+#include "Shader/Shaders/GlslMetallicPbrReflection.hpp"
 #include "Shader/Shaders/GlslPhongReflection.hpp"
+#include "Shader/Shaders/GlslSpecularPbrReflection.hpp"
 #include "Shader/Shaders/GlslSssTransmittance.hpp"
 #include "Shader/Ubos/GpInfoUbo.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
@@ -295,6 +297,7 @@ namespace castor3d
 			utils.declareFresnelSchlick();
 			utils.declareComputeMetallicIBL();
 			declareDecodeMaterial( writer );
+			shader::MetallicPbrReflectionModel reflections{ writer };
 			shader::Fog fog{ fogType, writer };
 
 			// Shader outputs
@@ -361,16 +364,12 @@ namespace castor3d
 					, texture( c3d_mapDepth, texcoord, 0.0_f ).x() );
 				auto position = writer.declLocale( cuT( "position" )
 					, utils.calcWSPosition( texcoord, depth, c3d_mtxInvViewProj ) );
-				auto incident = writer.declLocale( cuT( "incident" )
-					, normalize( position - c3d_cameraPosition.xyz() ) );
 				auto ambient = writer.declLocale( cuT( "ambient" )
 					, c3d_ambientLight.xyz() );
 				auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
 					, texture( c3d_mapLightDiffuse, lightResultTexcoord ).xyz() );
 				auto lightSpecular = writer.declLocale( cuT( "lightSpecular" )
 					, texture( c3d_mapLightSpecular, lightResultTexcoord ).xyz() );
-				auto ratio = writer.declLocale( cuT( "ratio" )
-					, material.m_refractionRatio() );
 
 				if ( hasSsao )
 				{
@@ -380,124 +379,24 @@ namespace castor3d
 				IF( writer, envMapIndex > 0_i )
 				{
 					envMapIndex = envMapIndex - 1_i;
+					auto incident = writer.declLocale( cuT( "incident" )
+						, normalize( position - c3d_cameraPosition.xyz() ) );
+					auto ratio = writer.declLocale( cuT( "ratio" )
+						, material.m_refractionRatio() );
 
-					IF( writer, reflection != 0_i && refraction != 0_i )
+					IF( writer, reflection != 0_i )
 					{
-						auto reflected = writer.declLocale( cuT( "reflected" )
-							, reflect( incident, normal ) );
-						ambient = c3d_ambientLight.xyz()
-							* occlusion
-							* texture( c3d_mapEnvironment[envMapIndex], reflected ).xyz();
-						auto subRatio = writer.declLocale( cuT( "subRatio" )
-							, 1.0_f - ratio );
-						auto addRatio = writer.declLocale( cuT( "addRatio" )
-							, 1.0_f + ratio );
-						auto reflectance = writer.declLocale( cuT( "reflectance" )
-							, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
-						auto product = writer.declLocale( cuT( "product" )
-							, max( 0.0_f, dot( -incident, normal ) ) );
-						auto fresnel = writer.declLocale( cuT( "fresnel" )
-							, glsl::fma( max( 1.0_f - roughness, reflectance ) - reflectance, pow( 1.0_f - product, 5.0_f ), reflectance ) );
-						auto refracted = writer.declLocale( cuT( "refracted" )
-							, refract( incident, normal, ratio ) );
-						ambient = mix( texture( c3d_mapEnvironment[envMapIndex], refracted ).xyz() * albedo / length( albedo )
-							, ambient
-							, fresnel );
-					}
-					ELSEIF( writer, reflection != 0_i && ratio != 0.0_f )
-					{
-						auto reflected = writer.declLocale( cuT( "reflected" )
-							, reflect( incident, normal ) );
-						ambient = c3d_ambientLight.xyz()
-							* occlusion
-							* texture( c3d_mapEnvironment[envMapIndex], reflected ).xyz();
-						auto subRatio = writer.declLocale( cuT( "subRatio" )
-							, 1.0_f - ratio );
-						auto addRatio = writer.declLocale( cuT( "addRatio" )
-							, 1.0_f + ratio );
-						auto reflectance = writer.declLocale( cuT( "reflectance" )
-							, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
-						auto product = writer.declLocale( cuT( "product" )
-							, max( 0.0_f, dot( -incident, normal ) ) );
-						auto fresnel = writer.declLocale( cuT( "fresnel" )
-							, glsl::fma( max( 1.0_f - roughness, reflectance ) - reflectance, pow( 1.0_f - product, 5.0_f ), reflectance ) );
-						auto refracted = writer.declLocale( cuT( "refracted" )
-							, refract( incident, normal, ratio ) );
-						refracted.y() = -refracted.y();
-						ambient = mix( texture( c3d_mapPrefiltered, refracted, roughness * Utils::MaxIblReflectionLod ).xyz() * albedo / length( albedo )
-							, ambient
-							, fresnel );
-					}
-					ELSEIF( writer, reflection != 0_i )
-					{
-						auto reflected = writer.declLocale( cuT( "reflected" )
-							, reflect( incident, normal ) );
-						ambient = c3d_ambientLight.xyz()
-							* occlusion
-							* texture( c3d_mapEnvironment[envMapIndex], reflected ).xyz()
-							* albedo / length( albedo );
-					}
-					ELSEIF( writer, refraction != 0_i )
-					{
-						ambient = c3d_ambientLight.xyz()
-							* occlusion
-							* utils.computeMetallicIBL( normal
-								, position
-								, albedo
-								, metalness
-								, roughness
-								, c3d_cameraPosition.xyz()
-								, c3d_mapIrradiance
-								, c3d_mapPrefiltered
-								, c3d_mapBrdf );
-						auto subRatio = writer.declLocale( cuT( "subRatio" )
-							, 1.0_f - ratio );
-						auto addRatio = writer.declLocale( cuT( "addRatio" )
-							, 1.0_f + ratio );
-						auto reflectance = writer.declLocale( cuT( "reflectance" )
-							, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
-						auto product = writer.declLocale( cuT( "product" )
-							, max( 0.0_f, dot( -incident, normal ) ) );
-						auto fresnel = writer.declLocale( cuT( "fresnel" )
-							, glsl::fma( max( 1.0_f - roughness, reflectance ) - reflectance, pow( 1.0_f - product, 5.0_f ), reflectance ) );
-						auto refracted = writer.declLocale( cuT( "refracted" )
-							, refract( incident, normal, ratio ) );
-						ambient = mix( texture( c3d_mapEnvironment[envMapIndex], refracted ).xyz() * albedo / length( albedo )
-							, ambient
-							, fresnel );
-					}
-					ELSEIF( writer, ratio != 0.0_f )
-					{
-						ambient = c3d_ambientLight.xyz()
-							* occlusion
-							* utils.computeMetallicIBL( normal
-								, position
-								, albedo
-								, metalness
-								, roughness
-								, c3d_cameraPosition.xyz()
-								, c3d_mapIrradiance
-								, c3d_mapPrefiltered
-								, c3d_mapBrdf );
-						auto subRatio = writer.declLocale( cuT( "subRatio" )
-							, 1.0_f - ratio );
-						auto addRatio = writer.declLocale( cuT( "addRatio" )
-							, 1.0_f + ratio );
-						auto reflectance = writer.declLocale( cuT( "reflectance" )
-							, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
-						auto product = writer.declLocale( cuT( "product" )
-							, max( 0.0_f, dot( -incident, normal ) ) );
-						auto fresnel = writer.declLocale( cuT( "fresnel" )
-							, glsl::fma( max( 1.0_f - roughness, reflectance ) - reflectance, pow( 1.0_f - product, 5.0_f ), reflectance ) );
-						auto refracted = writer.declLocale( cuT( "refracted" )
-							, refract( incident, normal, ratio ) );
-						refracted.y() = -refracted.y();
-						ambient = mix( texture( c3d_mapPrefiltered, refracted, roughness * Utils::MaxIblReflectionLod ).xyz() * albedo / length( albedo )
-							, ambient
-							, fresnel );
+						// Reflection from environment map.
+						ambient = reflections.computeRefl( incident
+							, normal
+							, occlusion
+							, c3d_mapEnvironment[envMapIndex]
+							, c3d_ambientLight.xyz()
+							, albedo );
 					}
 					ELSE
 					{
+						// Reflection from background skybox.
 						ambient = c3d_ambientLight.xyz()
 							* occlusion
 							* utils.computeMetallicIBL( normal
@@ -511,39 +410,36 @@ namespace castor3d
 								, c3d_mapBrdf );
 					}
 					FI;
-				}
-				ELSEIF( writer, ratio != 0.0_f )
-				{
-					ambient = c3d_ambientLight.xyz()
-						* occlusion
-						* utils.computeMetallicIBL( normal
-							, position
+
+					IF ( writer, refraction != 0_i )
+					{
+						// Refraction from environment map.
+						ambient = reflections.computeRefr( incident
+							, normal
+							, occlusion
+							, c3d_mapEnvironment[envMapIndex]
+							, material.m_refractionRatio()
+							, ambient
 							, albedo
-							, metalness
-							, roughness
-							, c3d_cameraPosition.xyz()
-							, c3d_mapIrradiance
+							, roughness );
+					}
+					ELSEIF( writer, ratio != 0.0_f )
+					{
+						// Refraction from background skybox.
+						ambient = reflections.computeRefr( incident
+							, normal
+							, occlusion
 							, c3d_mapPrefiltered
-							, c3d_mapBrdf );
-					auto subRatio = writer.declLocale( cuT( "subRatio" )
-						, 1.0_f - ratio );
-					auto addRatio = writer.declLocale( cuT( "addRatio" )
-						, 1.0_f + ratio );
-					auto reflectance = writer.declLocale( cuT( "reflectance" )
-						, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
-					auto product = writer.declLocale( cuT( "product" )
-						, max( 0.0_f, dot( -incident, normal ) ) );
-					auto fresnel = writer.declLocale( cuT( "fresnel" )
-						, glsl::fma( max( 1.0_f - roughness, reflectance ) - reflectance, pow( 1.0_f - product, 5.0_f ), reflectance ) );
-					auto refracted = writer.declLocale( cuT( "refracted" )
-						, refract( incident, normal, ratio ) );
-					refracted.y() = -refracted.y();
-					ambient = mix( texture( c3d_mapPrefiltered, refracted, roughness * Utils::MaxIblReflectionLod ).xyz() * albedo / length( albedo )
-						, ambient
-						, fresnel );
+							, material.m_refractionRatio()
+							, ambient
+							, albedo
+							, roughness );
+					}
+					FI;
 				}
 				ELSE
 				{
+					// Reflection from background skybox.
 					ambient = c3d_ambientLight.xyz()
 						* occlusion
 						* utils.computeMetallicIBL( normal
@@ -555,6 +451,24 @@ namespace castor3d
 							, c3d_mapIrradiance
 							, c3d_mapPrefiltered
 							, c3d_mapBrdf );
+					auto ratio = writer.declLocale( cuT( "ratio" )
+						, material.m_refractionRatio() );
+
+					IF( writer, ratio != 0.0_f )
+					{
+						// Refraction from background skybox.
+						auto incident = writer.declLocale( cuT( "incident" )
+							, normalize( position - c3d_cameraPosition.xyz() ) );
+						ambient = reflections.computeRefr( incident
+							, normal
+							, occlusion
+							, c3d_mapPrefiltered
+							, material.m_refractionRatio()
+							, ambient
+							, albedo
+							, roughness );
+					}
+					FI;
 				}
 				FI;
 
@@ -610,6 +524,7 @@ namespace castor3d
 			utils.declareFresnelSchlick();
 			utils.declareComputeSpecularIBL();
 			declareDecodeMaterial( writer );
+			shader::SpecularPbrReflectionModel reflections{ writer };
 			shader::Fog fog{ fogType, writer };
 
 			// Shader outputs
@@ -676,16 +591,12 @@ namespace castor3d
 					, texture( c3d_mapDepth, texcoord, 0.0_f ).x() );
 				auto position = writer.declLocale( cuT( "position" )
 					, utils.calcWSPosition( texcoord, depth, c3d_mtxInvViewProj ) );
-				auto incident = writer.declLocale( cuT( "incident" )
-					, normalize( position - c3d_cameraPosition.xyz() ) );
 				auto ambient = writer.declLocale( cuT( "ambient" )
 					, c3d_ambientLight.xyz() );
 				auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
 					, texture( c3d_mapLightDiffuse, lightResultTexcoord ).xyz() );
 				auto lightSpecular = writer.declLocale( cuT( "lightSpecular" )
 					, texture( c3d_mapLightSpecular, lightResultTexcoord ).xyz() );
-				auto ratio = writer.declLocale( cuT( "ratio" )
-					, material.m_refractionRatio() );
 
 				if ( hasSsao )
 				{
@@ -695,132 +606,24 @@ namespace castor3d
 				IF( writer, envMapIndex > 0_i )
 				{
 					envMapIndex = envMapIndex - 1_i;
+					auto incident = writer.declLocale( cuT( "incident" )
+						, normalize( position - c3d_cameraPosition.xyz() ) );
+					auto ratio = writer.declLocale( cuT( "ratio" )
+						, material.m_refractionRatio() );
 
-					IF( writer, reflection != 0_i && refraction != 0_i )
+					IF( writer, reflection != 0_i )
 					{
-						auto reflected = writer.declLocale( cuT( "reflected" )
-							, reflect( incident, normal ) );
-						ambient = c3d_ambientLight.xyz()
-							* occlusion
-							* texture( c3d_mapEnvironment[envMapIndex], reflected ).xyz() * diffuse / length( diffuse );
-						auto roughness = writer.declLocale( cuT( "roughness" )
-							, 1.0_f - glossiness );
-						auto subRatio = writer.declLocale( cuT( "subRatio" )
-							, 1.0_f - ratio );
-						auto addRatio = writer.declLocale( cuT( "addRatio" )
-							, 1.0_f + ratio );
-						auto reflectance = writer.declLocale( cuT( "reflectance" )
-							, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
-						auto product = writer.declLocale( cuT( "product" )
-							, max( 0.0_f, dot( -incident, normal ) ) );
-						auto fresnel = writer.declLocale( cuT( "fresnel" )
-							, glsl::fma( max( 1.0_f - roughness, reflectance ) - reflectance, pow( 1.0_f - product, 5.0_f ), reflectance ) );
-						auto refracted = writer.declLocale( cuT( "refracted" )
-							, refract( incident, normal, ratio ) );
-						ambient = mix( texture( c3d_mapEnvironment[envMapIndex], refracted ).xyz() * diffuse / length( diffuse )
-							, ambient
-							, fresnel );
-					}
-					ELSEIF( writer, reflection != 0_i && ratio != 0.0_f )
-					{
-						auto reflected = writer.declLocale( cuT( "reflected" )
-							, reflect( incident, normal ) );
-						ambient = c3d_ambientLight.xyz()
-							* occlusion
-							* texture( c3d_mapEnvironment[envMapIndex], reflected ).xyz() * diffuse / length( diffuse );
-						auto roughness = writer.declLocale( cuT( "roughness" )
-							, 1.0_f - glossiness );
-						auto subRatio = writer.declLocale( cuT( "subRatio" )
-							, 1.0_f - ratio );
-						auto addRatio = writer.declLocale( cuT( "addRatio" )
-							, 1.0_f + ratio );
-						auto reflectance = writer.declLocale( cuT( "reflectance" )
-							, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
-						auto product = writer.declLocale( cuT( "product" )
-							, max( 0.0_f, dot( -incident, normal ) ) );
-						auto fresnel = writer.declLocale( cuT( "fresnel" )
-							, glsl::fma( max( 1.0_f - roughness, reflectance ) - reflectance, pow( 1.0_f - product, 5.0_f ), reflectance ) );
-						auto refracted = writer.declLocale( cuT( "refracted" )
-							, refract( incident, normal, ratio ) );
-						refracted.y() = -refracted.y();
-						ambient = mix( texture( c3d_mapPrefiltered, refracted, roughness * Utils::MaxIblReflectionLod ).xyz() * diffuse / length( diffuse )
-							, ambient
-							, fresnel );
-					}
-					ELSEIF( writer, reflection != 0_i )
-					{
-						auto reflected = writer.declLocale( cuT( "reflected" )
-							, reflect( incident, normal ) );
-						ambient = c3d_ambientLight.xyz()
-							* occlusion
-							* texture( c3d_mapEnvironment[envMapIndex], reflected ).xyz()
-							* diffuse / length( diffuse );
-					}
-					ELSEIF( writer, refraction != 0_i )
-					{
-						ambient = c3d_ambientLight.xyz()
-							* occlusion
-							* utils.computeSpecularIBL( normal
-								, position
-								, diffuse
-								, specular
-								, glossiness
-								, c3d_cameraPosition.xyz()
-								, c3d_mapIrradiance
-								, c3d_mapPrefiltered
-								, c3d_mapBrdf );
-						auto roughness = writer.declLocale( cuT( "roughness" )
-							, 1.0_f - glossiness );
-						auto subRatio = writer.declLocale( cuT( "subRatio" )
-							, 1.0_f - ratio );
-						auto addRatio = writer.declLocale( cuT( "addRatio" )
-							, 1.0_f + ratio );
-						auto reflectance = writer.declLocale( cuT( "reflectance" )
-							, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
-						auto product = writer.declLocale( cuT( "product" )
-							, max( 0.0_f, dot( -incident, normal ) ) );
-						auto fresnel = writer.declLocale( cuT( "fresnel" )
-							, glsl::fma( max( 1.0_f - roughness, reflectance ) - reflectance, pow( 1.0_f - product, 5.0_f ), reflectance ) );
-						auto refracted = writer.declLocale( cuT( "refracted" )
-							, refract( incident, normal, ratio ) );
-						ambient = mix( texture( c3d_mapEnvironment[envMapIndex], refracted ).xyz() * diffuse / length( diffuse )
-							, ambient
-							, fresnel );
-					}
-					ELSEIF( writer, ratio != 0.0_f )
-					{
-						ambient = c3d_ambientLight.xyz()
-							* occlusion
-							* utils.computeSpecularIBL( normal
-								, position
-								, diffuse
-								, specular
-								, glossiness
-								, c3d_cameraPosition.xyz()
-								, c3d_mapIrradiance
-								, c3d_mapPrefiltered
-								, c3d_mapBrdf );
-						auto roughness = writer.declLocale( cuT( "roughness" )
-							, 1.0_f - glossiness );
-						auto subRatio = writer.declLocale( cuT( "subRatio" )
-							, 1.0_f - ratio );
-						auto addRatio = writer.declLocale( cuT( "addRatio" )
-							, 1.0_f + ratio );
-						auto reflectance = writer.declLocale( cuT( "reflectance" )
-							, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
-						auto product = writer.declLocale( cuT( "product" )
-							, max( 0.0_f, dot( -incident, normal ) ) );
-						auto fresnel = writer.declLocale( cuT( "fresnel" )
-							, glsl::fma( max( 1.0_f - roughness, reflectance ) - reflectance, pow( 1.0_f - product, 5.0_f ), reflectance ) );
-						auto refracted = writer.declLocale( cuT( "refracted" )
-							, refract( incident, normal, ratio ) );
-						refracted.y() = -refracted.y();
-						ambient = mix( texture( c3d_mapPrefiltered, refracted, roughness * Utils::MaxIblReflectionLod ).xyz() * diffuse / length( diffuse )
-							, ambient
-							, fresnel );
+						// Reflection from environment map.
+						ambient = reflections.computeRefl( incident
+							, normal
+							, occlusion
+							, c3d_mapEnvironment[envMapIndex]
+							, c3d_ambientLight.xyz()
+							, diffuse );
 					}
 					ELSE
 					{
+						// Reflection from background skybox.
 						ambient = c3d_ambientLight.xyz()
 							* occlusion
 							* utils.computeSpecularIBL( normal
@@ -834,43 +637,36 @@ namespace castor3d
 								, c3d_mapBrdf );
 					}
 					FI;
-				}
-				ELSEIF( writer, ratio != 0.0_f )
-				{
-					ambient = c3d_ambientLight.xyz()
-						* occlusion
-						* utils.computeSpecularIBL( normal
-							, position
+
+					IF ( writer, refraction != 0_i )
+					{
+						// Refraction from environment map.
+						ambient = reflections.computeRefr( incident
+							, normal
+							, occlusion
+							, c3d_mapEnvironment[envMapIndex]
+							, material.m_refractionRatio()
+							, ambient
 							, diffuse
-							, specular
-							, glossiness
-							, c3d_cameraPosition.xyz()
-							, c3d_mapIrradiance
+							, glossiness );
+					}
+					ELSEIF( writer, ratio != 0.0_f )
+					{
+						// Refraction from background skybox.
+						ambient = reflections.computeRefr( incident
+							, normal
+							, occlusion
 							, c3d_mapPrefiltered
-							, c3d_mapBrdf );
-					auto ratio = writer.declLocale( cuT( "ratio" )
-						, material.m_refractionRatio() );
-					auto roughness = writer.declLocale( cuT( "roughness" )
-						, 1.0_f - glossiness );
-					auto subRatio = writer.declLocale( cuT( "subRatio" )
-						, 1.0_f - ratio );
-					auto addRatio = writer.declLocale( cuT( "addRatio" )
-						, 1.0_f + ratio );
-					auto reflectance = writer.declLocale( cuT( "reflectance" )
-						, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
-					auto product = writer.declLocale( cuT( "product" )
-						, max( 0.0_f, dot( -incident, normal ) ) );
-					auto fresnel = writer.declLocale( cuT( "fresnel" )
-						, glsl::fma( max( 1.0_f - roughness, reflectance ) - reflectance, pow( 1.0_f - product, 5.0_f ), reflectance ) );
-					auto refracted = writer.declLocale( cuT( "refract" )
-						, refract( incident, normal, ratio ) );
-					refracted.y() = writer.ternary( envMapIndex != 0_i, refracted.y(), -refracted.y() );
-					ambient = mix( texture( c3d_mapPrefiltered, refracted, roughness * Utils::MaxIblReflectionLod ).xyz() * diffuse / length( diffuse )
-						, ambient
-						, fresnel );
+							, material.m_refractionRatio()
+							, ambient
+							, diffuse
+							, glossiness );
+					}
+					FI;
 				}
 				ELSE
 				{
+					// Reflection from background skybox.
 					ambient = c3d_ambientLight.xyz()
 						* occlusion
 						* utils.computeSpecularIBL( normal
@@ -884,6 +680,22 @@ namespace castor3d
 							, c3d_mapBrdf );
 					auto ratio = writer.declLocale( cuT( "ratio" )
 						, material.m_refractionRatio() );
+
+					IF( writer, ratio != 0.0_f )
+					{
+						// Refraction from background skybox.
+						auto incident = writer.declLocale( cuT( "incident" )
+							, normalize( position - c3d_cameraPosition.xyz() ) );
+						ambient = reflections.computeRefr( incident
+							, normal
+							, occlusion
+							, c3d_mapPrefiltered
+							, material.m_refractionRatio()
+							, ambient
+							, diffuse
+							, glossiness );
+					}
+					FI;
 				}
 				FI;
 
