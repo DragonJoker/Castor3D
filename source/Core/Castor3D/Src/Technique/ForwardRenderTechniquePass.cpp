@@ -434,26 +434,26 @@ namespace castor3d
 				, vec4( tangent, 0.0 ) );
 			auto v3Texture = writer.declLocale( cuT( "v3Texture" )
 				, texture );
-			auto mtxModel = writer.declLocale< Mat4 >( cuT( "mtxModel" ) );
 
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 			{
-				mtxModel = SkinningUbo::computeTransform( writer, programFlags );
-				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
-					, transpose( inverse( mat3( mtxModel ) ) ) );
+				auto mtxModel = writer.declLocale( cuT( "mtxModel" )
+					, SkinningUbo::computeTransform( writer, programFlags ) );
 			}
 			else if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
-				mtxModel = transform;
-				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
-					, transpose( inverse( mat3( mtxModel ) ) ) );
+				auto mtxModel = writer.declLocale( cuT( "mtxModel" )
+					, transform );
 			}
 			else
 			{
-				mtxModel = c3d_mtxModel;
-				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
-					, mat3( c3d_mtxNormal ) );
+				auto mtxModel = writer.declLocale( cuT( "mtxModel" )
+					, c3d_mtxModel );
 			}
+
+			auto mtxModel = writer.declBuiltin< Mat4 >( cuT( "mtxModel" ) );
+			auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
+				, transpose( inverse( mat3( mtxModel ) ) ) );
 
 			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
@@ -479,18 +479,17 @@ namespace castor3d
 				, c3d_prvView * curPosition );
 			curPosition = c3d_curView * curPosition;
 			vtx_viewPosition = curPosition.xyz();
-			auto mtxNormal = writer.getBuiltin< Mat3 >( cuT( "mtxNormal" ) );
 
 			if ( invertNormals )
 			{
-				vtx_normal = normalize( writer.paren( mtxNormal * -v4Normal.xyz() ) );
+				vtx_normal = normalize( mtxNormal * -v4Normal.xyz() );
 			}
 			else
 			{
-				vtx_normal = normalize( writer.paren( mtxNormal * v4Normal.xyz() ) );
+				vtx_normal = normalize( mtxNormal * v4Normal.xyz() );
 			}
 
-			vtx_tangent = normalize( writer.paren( mtxNormal * v4Tangent.xyz() ) );
+			vtx_tangent = normalize( mtxNormal * v4Tangent.xyz() );
 			vtx_tangent = normalize( glsl::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
 			vtx_instance = gl_InstanceID;
@@ -745,28 +744,12 @@ namespace castor3d
 				if ( checkFlag( textureFlags, TextureChannel::eReflection )
 					&& checkFlag( textureFlags, TextureChannel::eRefraction ) )
 				{
-					auto reflection = writer.declLocale( cuT( "reflection" )
-						, reflections.computeRefl( incident
+					ambient = reflections.computeReflRefr( incident
 						, normal
 						, ambientOcclusion
-						, c3d_mapEnvironment ) );
-					auto subRatio = writer.declLocale( cuT( "subRatio" )
-						, 1.0_f - material.m_refractionRatio() );
-					auto addRatio = writer.declLocale( cuT( "addRatio" )
-						, 1.0_f + material.m_refractionRatio() );
-					auto reflectance = writer.declLocale( cuT( "reflectance" )
-						, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
-					auto product = writer.declLocale( cuT( "product" )
-						, max( 0.0_f, dot( -incident, -normal ) ) );
-					auto fresnel = writer.declLocale( cuT( "fresnel" )
-						, glsl::fma( 1.0_f - reflectance, pow( 1.0_f - product, 5.0_f ), reflectance ) );
-					auto refracted = writer.declLocale( cuT( "refracted" )
-						, refract( incident, -normal, material.m_refractionRatio() ) );
-					auto refraction = writer.declLocale( cuT( "refraction" )
-						, texture( c3d_mapEnvironment, refracted ).xyz() );
-					ambient = mix( refraction * diffuse / length( diffuse )
-						, reflection * reflection / length( reflection )
-						, fresnel );
+						, c3d_mapEnvironment
+						, material.m_refractionRatio()
+						, diffuse );
 					diffuse = vec3( 0.0_f );
 				}
 				else if ( checkFlag( textureFlags, TextureChannel::eReflection ) )
@@ -779,19 +762,12 @@ namespace castor3d
 				}
 				else
 				{
-					auto subRatio = writer.declLocale( cuT( "subRatio" )
-						, 1.0_f - material.m_refractionRatio() );
-					auto addRatio = writer.declLocale( cuT( "addRatio" )
-						, 1.0_f + material.m_refractionRatio() );
-					auto reflectance = writer.declLocale( cuT( "reflectance" )
-						, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
-					auto product = writer.declLocale( cuT( "product" )
-						, max( 0.0_f, dot( -incident, -normal ) ) );
-					auto fresnel = writer.declLocale( cuT( "fresnel" )
-						, glsl::fma( 1.0_f - reflectance, pow( 1.0_f - product, 5.0_f ), reflectance ) );
-					auto refracted = writer.declLocale( cuT( "refracted" )
-						, refract( incident, -normal, material.m_refractionRatio() ) );
-					ambient = texture( c3d_mapEnvironment, refracted ).xyz() * diffuse / length( diffuse );
+					ambient = reflections.computeRefr( incident
+						, normal
+						, ambientOcclusion
+						, c3d_mapEnvironment
+						, material.m_refractionRatio()
+						, diffuse );
 					diffuse = vec3( 0.0_f );
 				}
 			}
@@ -802,7 +778,6 @@ namespace castor3d
 			}
 
 			pxl_fragColor = vec4( diffuse + lightSpecular + emissive + ambient, alpha );
-
 
 			if ( getFogType( sceneFlags ) != FogType::eDisabled )
 			{
