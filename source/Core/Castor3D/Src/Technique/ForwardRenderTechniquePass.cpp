@@ -17,6 +17,7 @@
 #include "Shader/Shaders/GlslMaterial.hpp"
 #include "Shader/Shaders/GlslPhongLighting.hpp"
 #include "Shader/Shaders/GlslPhongReflection.hpp"
+#include "Shader/Shaders/GlslMetallicPbrReflection.hpp"
 #include "Shader/Shaders/GlslMetallicBrdfLighting.hpp"
 #include "Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 
@@ -301,6 +302,14 @@ namespace castor3d
 			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
 		}
 
+		if ( checkFlag( flags.passFlags, PassFlag::ePbrMetallicRoughness )
+			|| checkFlag( flags.passFlags, PassFlag::ePbrSpecularGlossiness ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );	// c3d_mapIrradiance
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );	// c3d_mapPrefiltered
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );	// c3d_mapBrdf
+		}
+
 		return textureBindings;
 	}
 
@@ -319,6 +328,25 @@ namespace castor3d
 				, envMap.getTexture().getTexture()->getDefaultView()
 				, envMap.getTexture().getSampler()->getSampler() );
 		}
+
+		if ( node.passNode.pass.getType() != MaterialType::eLegacy )
+		{
+			auto & background = node.sceneNode.getScene()->getBackground();
+
+			if ( background.hasIbl() )
+			{
+				auto & ibl = background.getIbl();
+				node.texDescriptorSet->createBinding( layout.getBinding( index++ )
+					, ibl.getIrradianceTexture()
+					, ibl.getIrradianceSampler() );
+				node.texDescriptorSet->createBinding( layout.getBinding( index++ )
+					, ibl.getPrefilteredEnvironmentTexture()
+					, ibl.getPrefilteredEnvironmentSampler() );
+				node.texDescriptorSet->createBinding( layout.getBinding( index++ )
+					, ibl.getPrefilteredBrdfTexture()
+					, ibl.getPrefilteredBrdfSampler() );
+			}
+		}
 	}
 
 	void ForwardRenderTechniquePass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
@@ -335,6 +363,25 @@ namespace castor3d
 			node.texDescriptorSet->createBinding( layout.getBinding( index++ )
 				, envMap.getTexture().getTexture()->getDefaultView()
 				, envMap.getTexture().getSampler()->getSampler() );
+		}
+
+		if ( node.passNode.pass.getType() != MaterialType::eLegacy )
+		{
+			auto & background = node.sceneNode.getScene()->getBackground();
+
+			if ( background.hasIbl() )
+			{
+				auto & ibl = background.getIbl();
+				node.texDescriptorSet->createBinding( layout.getBinding( index++ )
+					, ibl.getIrradianceTexture()
+					, ibl.getIrradianceSampler() );
+				node.texDescriptorSet->createBinding( layout.getBinding( index++ )
+					, ibl.getPrefilteredEnvironmentTexture()
+					, ibl.getPrefilteredEnvironmentSampler() );
+				node.texDescriptorSet->createBinding( layout.getBinding( index++ )
+					, ibl.getPrefilteredBrdfTexture()
+					, ibl.getPrefilteredBrdfSampler() );
+			}
 		}
 	}
 
@@ -885,13 +932,13 @@ namespace castor3d
 				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) ) );
 		auto c3d_mapIrradiance = writer.declSampler< SamplerCube >( cuT( "c3d_mapIrradiance" )
 			, index++
-			, 0u );
+			, 1u );
 		auto c3d_mapPrefiltered = writer.declSampler< SamplerCube >( cuT( "c3d_mapPrefiltered" )
 			, index++
-			, 0u );
+			, 1u );
 		auto c3d_mapBrdf = writer.declSampler< Sampler2D >( cuT( "c3d_mapBrdf" )
 			, index++
-			, 0u );
+			, 1u );
 		auto c3d_heightScale( writer.declConstant< Float >( cuT( "c3d_heightScale" )
 			, 0.1_f
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
@@ -901,6 +948,7 @@ namespace castor3d
 		auto lighting = shader::pbr::mr::createLightingModel( writer
 			, getShadowType( sceneFlags )
 			, index );
+		shader::MetallicPbrReflectionModel reflections{ writer };
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
 		utils.declareApplyGamma();
@@ -1006,42 +1054,36 @@ namespace castor3d
 				|| checkFlag( textureFlags, TextureChannel::eRefraction ) )
 			{
 				auto incident = writer.declLocale( cuT( "incident" )
-					, normalize( vtx_worldPosition - c3d_cameraPosition.xyz() ) );
+					, reflections.computeIncident( vtx_worldPosition, worldEye ) );
 				auto ratio = writer.declLocale( cuT( "ratio" )
 					, material.m_refractionRatio() );
 
 				if ( checkFlag( textureFlags, TextureChannel::eReflection )
 					&& checkFlag( textureFlags, TextureChannel::eRefraction ) )
 				{
-					auto reflected = writer.declLocale( cuT( "reflected" )
-						, reflect( incident, normal ) );
-					ambient = c3d_ambientLight.xyz()
-						* occlusion
-						* texture( c3d_mapEnvironment, reflected ).xyz();
-					auto subRatio = writer.declLocale( cuT( "subRatio" )
-						, 1.0_f - ratio );
-					auto addRatio = writer.declLocale( cuT( "addRatio" )
-						, 1.0_f + ratio );
-					auto reflectance = writer.declLocale( cuT( "reflectance" )
-						, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
-					auto product = writer.declLocale( cuT( "product" )
-						, max( 0.0_f, dot( -incident, normal ) ) );
-					auto fresnel = writer.declLocale( cuT( "fresnel" )
-						, glsl::fma( max( 1.0_f - matRoughness, reflectance ) - reflectance, pow( 1.0_f - product, 5.0_f ), reflectance ) );
-					auto refracted = writer.declLocale( cuT( "refracted" )
-						, refract( incident, normal, ratio ) );
-					ambient = mix( texture( c3d_mapEnvironment, refracted ).xyz() * matAlbedo / length( matAlbedo )
+					ambient = reflections.computeRefl( incident
+						, normal
+						, occlusion
+						, c3d_mapEnvironment
+						, c3d_ambientLight.xyz()
+						, matAlbedo );
+					ambient = reflections.computeRefr( incident
+						, normal
+						, occlusion
+						, c3d_mapEnvironment
+						, material.m_refractionRatio()
 						, ambient
-						, fresnel );
+						, matAlbedo
+						, matRoughness );
 				}
 				else if ( checkFlag( textureFlags, TextureChannel::eReflection ) )
 				{
-					auto reflected = writer.declLocale( cuT( "reflected" )
-						, reflect( incident, normal ) );
-					ambient = c3d_ambientLight.xyz()
-						* occlusion
-						* texture( c3d_mapEnvironment, reflected ).xyz()
-						* matAlbedo / length( matAlbedo );
+					ambient = reflections.computeRefl( incident
+						, normal
+						, occlusion
+						, c3d_mapEnvironment
+						, c3d_ambientLight.xyz()
+						, matAlbedo );
 				}
 				else
 				{
@@ -1056,21 +1098,14 @@ namespace castor3d
 							, c3d_mapIrradiance
 							, c3d_mapPrefiltered
 							, c3d_mapBrdf );
-					auto subRatio = writer.declLocale( cuT( "subRatio" )
-						, 1.0_f - ratio );
-					auto addRatio = writer.declLocale( cuT( "addRatio" )
-						, 1.0_f + ratio );
-					auto reflectance = writer.declLocale( cuT( "reflectance" )
-						, writer.paren( subRatio * subRatio ) / writer.paren( addRatio * addRatio ) );
-					auto product = writer.declLocale( cuT( "product" )
-						, max( 0.0_f, dot( -incident, normal ) ) );
-					auto fresnel = writer.declLocale( cuT( "fresnel" )
-						, glsl::fma( max( 1.0_f - matRoughness, reflectance ) - reflectance, pow( 1.0_f - product, 5.0_f ), reflectance ) );
-					auto refracted = writer.declLocale( cuT( "refracted" )
-						, refract( incident, normal, ratio ) );
-					ambient = mix( texture( c3d_mapEnvironment, refracted ).xyz() * matAlbedo / length( matAlbedo )
+					ambient = reflections.computeRefr( incident
+						, normal
+						, occlusion
+						, c3d_mapEnvironment
+						, material.m_refractionRatio()
 						, ambient
-						, fresnel );
+						, matAlbedo
+						, matRoughness );
 				}
 			}
 			else
@@ -1206,13 +1241,13 @@ namespace castor3d
 				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) ) );
 		auto c3d_mapIrradiance = writer.declSampler< SamplerCube >( cuT( "c3d_mapIrradiance" )
 			, index++
-			, 0u );
+			, 1u );
 		auto c3d_mapPrefiltered = writer.declSampler< SamplerCube >( cuT( "c3d_mapPrefiltered" )
 			, index++
-			, 0u );
+			, 1u );
 		auto c3d_mapBrdf = writer.declSampler< Sampler2D >( cuT( "c3d_mapBrdf" )
 			, index++
-			, 0u );
+			, 1u );
 		auto c3d_heightScale( writer.declConstant< Float >( cuT( "c3d_heightScale" )
 			, 0.1_f
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );

@@ -285,10 +285,13 @@ namespace test_launcher
 		if ( m_renderWindow )
 		{
 			wxBitmap bitmap;
-			m_engine.getRenderLoop().renderSyncFrame();
-			m_engine.getRenderLoop().renderSyncFrame();
-			m_engine.getRenderLoop().renderSyncFrame();
-			m_engine.getRenderLoop().renderSyncFrame();
+
+			// Prerender 10 frames, for environment maps.
+			for ( uint32_t i = 0; i < 10; ++i )
+			{
+				m_engine.getRenderLoop().renderSyncFrame();
+			}
+
 			m_renderWindow->enableSaveFrame();
 			m_engine.getRenderLoop().renderSyncFrame();
 			auto buffer = m_renderWindow->getSavedFrame();

@@ -45,13 +45,6 @@ namespace castor3d
 				sampler = engine.getSamplerCache().add( name );
 				sampler->setMinFilter( renderer::Filter::eLinear );
 				sampler->setMagFilter( renderer::Filter::eLinear );
-
-				if ( type == MaterialType::ePbrMetallicRoughness
-					|| type == MaterialType::ePbrSpecularGlossiness )
-				{
-					sampler->setMipFilter( renderer::MipmapMode::eLinear );
-				}
-
 				sampler->setWrapS( renderer::WrapMode::eClampToEdge );
 				sampler->setWrapT( renderer::WrapMode::eClampToEdge );
 				sampler->setWrapR( renderer::WrapMode::eClampToEdge );
