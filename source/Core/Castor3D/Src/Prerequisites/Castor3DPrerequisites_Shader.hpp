@@ -150,7 +150,6 @@ namespace castor3d
 				, SceneFlags const & sceneFlags );
 
 			C3D_API std::shared_ptr< PhongLightingModel > createLightingModel( glsl::GlslWriter & writer
-				, ShadowType shadows
 				, uint32_t & index );
 
 			C3D_API std::shared_ptr< PhongLightingModel > createLightingModel( glsl::GlslWriter & writer
@@ -181,7 +180,6 @@ namespace castor3d
 					, SceneFlags const & sceneFlags );
 
 				C3D_API std::shared_ptr< MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
-					, ShadowType shadows
 					, uint32_t & index );
 
 				C3D_API std::shared_ptr< MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
@@ -210,7 +208,6 @@ namespace castor3d
 					, SceneFlags const & sceneFlags );
 
 				C3D_API std::shared_ptr< SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
-					, ShadowType shadows
 					, uint32_t & index );
 
 				C3D_API std::shared_ptr< SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer

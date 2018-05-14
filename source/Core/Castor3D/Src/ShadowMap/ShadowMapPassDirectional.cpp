@@ -78,7 +78,7 @@ namespace castor3d
 		Viewport viewport{ *getEngine() };
 		auto w = float( size.getWidth() );
 		auto h = float( size.getHeight() );
-		viewport.setOrtho( -w / 2, w / 2, h / 2, -h / 2, -5120.0_r, 5120.0_r );
+		viewport.setOrtho( -1024, 1024, 1024, -1024, -5120.0_r, 5120.0_r );
 		viewport.update();
 		m_camera = std::make_shared< Camera >( cuT( "ShadowMapDirectional" )
 			, m_scene
@@ -203,8 +203,10 @@ namespace castor3d
 					, program
 					, flags ) ).first->second;
 			pipeline.setVertexLayouts( layouts );
-			pipeline.setViewport( { m_camera->getWidth(), m_camera->getHeight(), 0, 0 } );
-			pipeline.setScissor( { 0, 0, m_camera->getWidth(), m_camera->getHeight() } );
+			auto extent = renderer::Extent2D{ m_camera->getWidth(), m_camera->getHeight() };
+			auto offset = renderer::Offset2D{ 0, 0 };
+			pipeline.setViewport( { offset, extent } );
+			pipeline.setScissor( { offset, extent } );
 
 			auto initialise = [this, &pipeline, flags]()
 			{

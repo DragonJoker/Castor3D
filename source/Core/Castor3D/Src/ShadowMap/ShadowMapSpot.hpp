@@ -93,6 +93,7 @@ namespace castor3d
 		renderer::TexturePtr m_depthTexture;
 		renderer::TextureViewPtr m_depthView;
 		renderer::FrameBufferPtr m_frameBuffer;
+		ShadowType m_shadowType;
 		std::unique_ptr< GaussianBlur > m_blur;
 	};
 }

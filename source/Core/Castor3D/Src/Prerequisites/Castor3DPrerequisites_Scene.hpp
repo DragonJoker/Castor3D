@@ -24,9 +24,15 @@ namespace castor3d
 		//!\~english	No shadows at all.
 		//!\~french		Pas d'ombres du tout.
 		eNone,
+		//!\~english	No filtering.
+		//!\~french		Pas de filtrage.
+		eRaw,
 		//!\~english	PCF filtering.
 		//!\~french		Filtrage PCF.
 		ePCF,
+		//!\~english	Variance shadow mapping.
+		//!\~french		Filtrage par variance.
+		eVariance,
 		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
 	};
 	/**
@@ -80,30 +86,10 @@ namespace castor3d
 		eFogExponential = 0x002,
 		//!\~english	Squared exponential fog.
 		//!\~french		Brouillard exponentiel au carré.
-		eFogSquaredExponential = 0x003,
-		//!\~english	PCF filtering.
-		//!\~french		Filtrage PCF.
-		eShadowFilterPcf = 0x004,
+		eFogSquaredExponential = 0x004,
 		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
 	};
 	IMPLEMENT_FLAGS( SceneFlag )
-	/**
-	*\~english
-	*\brief
-	*	Gives the shadow filter type matching the given flags.
-	*\param[in] flags
-	*	The scene flags.
-	*\return
-	*	The shadow filter type.
-	*\~french
-	*\brief
-	*	Récupère le type de filtrage d'ombres correspondant aux indicateurs donnés.
-	*\param[in] flags
-	*	Les indicateurs de scène.
-	*\return
-	*	Le type de filtrage d'ombres.
-	*/
-	C3D_API ShadowType getShadowType( SceneFlags const & flags );
 	/**
 	*\~english
 	*\brief

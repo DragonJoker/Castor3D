@@ -90,16 +90,13 @@ namespace castor3d
 		 *\~english
 		 *\brief		Render function.
 		 *\param[out]	info		Receives the render informations.
-		 *\param[out]	shadowMaps	The shadow maps.
 		 *\param[in]	jitter		The jittering value.
 		 *\~french
 		 *\brief		Fonction de rendu.
 		 *\param[out]	info		Reçoit les informations de rendu.
-		 *\param[out]	shadowMaps	Les textures d'ombres.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
 		C3D_API virtual void update( RenderInfo & info
-			, ShadowMapLightTypeArray & shadowMaps
 			, castor::Point2r const & jitter ) = 0;
 		/**
 		 *\~english
@@ -140,16 +137,13 @@ namespace castor3d
 		 *\~english
 		 *\brief		Render function.
 		 *\param[out]	info		Receives the render informations.
-		 *\param[out]	shadowMaps	The shadow maps.
 		 *\param[in]	jitter		The jittering value.
 		 *\~french
 		 *\brief		Fonction de rendu.
 		 *\param[out]	info		Reçoit les informations de rendu.
-		 *\param[out]	shadowMaps	Les textures d'ombres.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
 		C3D_API void doUpdate( RenderInfo & info
-			, ShadowMapLightTypeArray & shadowMaps
 			, castor::Point2r const & jitter = castor::Point2r{} );
 		/**
 		 *\copydoc		castor3d::RenderPass::doCleanup
@@ -162,18 +156,15 @@ namespace castor3d
 		 *\brief			Renders render nodes.
 		 *\param[in]		nodes		The scene render nodes.
 		 *\param			camera		The viewing camera.
-		 *\param[in]		shadowMaps	The shadows maps.
 		 *\param[in, out]	count		Receives the rendered nodes count.
 		 *\~french
 		 *\brief			Dessine les noeuds de rendu.
 		 *\param[in]		nodes		Les noeuds de rendu de la scène.
 		 *\param			camera		La caméra regardant la scène.
-		 *\param[in]		shadowMaps	Les textures d'ombres.
 		 *\param[in, out]	count		Reçouit le nombre de noeuds dessinés.
 		 */
 		C3D_API void doUpdateNodes( SceneCulledRenderNodes & nodes
 			, Camera const & camera
-			, ShadowMapLightTypeArray & shadowMaps
 			, castor::Point2r const & jitter
 			, RenderInfo & info )const;
 		/**
@@ -215,13 +206,15 @@ namespace castor3d
 		 */
 		C3D_API void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
 			, uint32_t & index
-			, BillboardListRenderNode & nodes )override;
+			, BillboardListRenderNode & nodes
+			, ShadowMapLightTypeArray const & shadowMaps )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
 		 */
 		C3D_API void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
 			, uint32_t & index
-			, SubmeshRenderNode & nodes )override;
+			, SubmeshRenderNode & nodes
+			, ShadowMapLightTypeArray const & shadowMaps )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */

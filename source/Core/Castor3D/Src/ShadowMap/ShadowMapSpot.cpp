@@ -143,6 +143,7 @@ namespace castor3d
 		, Light & light
 		, uint32_t index )
 	{
+		m_shadowType = light.getShadowType();
 		m_passes[0]->update( camera, queues, light, index );
 	}
 
@@ -184,7 +185,12 @@ namespace castor3d
 			, m_fence.get() );
 		m_fence->wait( renderer::FenceTimeout );
 		timer.step();
-		//m_blur->blur();
+
+		if ( m_shadowType == ShadowType::eVariance )
+		{
+			m_blur->blur();
+		}
+
 		timer.stop();
 	}
 

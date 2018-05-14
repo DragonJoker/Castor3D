@@ -288,10 +288,9 @@ namespace castor3d
 			}
 
 			std::shared_ptr< PhongLightingModel > createLightingModel( glsl::GlslWriter & writer
-				, ShadowType shadows
 				, uint32_t & index )
 			{
-				auto result = std::make_shared< PhongLightingModel >( shadows, writer );
+				auto result = std::make_shared< PhongLightingModel >( writer );
 				result->declareModel( index );
 				return result;
 			}
@@ -301,20 +300,20 @@ namespace castor3d
 				, ShadowType shadows
 				, uint32_t & index )
 			{
-				auto result = std::make_shared< PhongLightingModel >( shadows, writer );
+				auto result = std::make_shared< PhongLightingModel >( writer );
 
 				switch ( lightType )
 				{
 				case LightType::eDirectional:
-					result->declareDirectionalModel( index );
+					result->declareDirectionalModel( shadows, index );
 					break;
 
 				case LightType::ePoint:
-					result->declarePointModel( index );
+					result->declarePointModel( shadows, index );
 					break;
 
 				case LightType::eSpot:
-					result->declareSpotModel( index );
+					result->declareSpotModel( shadows, index );
 					break;
 
 				default:
@@ -415,10 +414,9 @@ namespace castor3d
 				}
 
 				std::shared_ptr< MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
-					, ShadowType shadows
 					, uint32_t & index )
 				{
-					auto result = std::make_shared< MetallicBrdfLightingModel >( shadows, writer );
+					auto result = std::make_shared< MetallicBrdfLightingModel >( writer );
 					result->declareModel( index );
 					return result;
 				}
@@ -428,20 +426,20 @@ namespace castor3d
 					, ShadowType shadows
 					, uint32_t & index )
 				{
-					auto result = std::make_shared< MetallicBrdfLightingModel >( shadows, writer );
+					auto result = std::make_shared< MetallicBrdfLightingModel >( writer );
 
 					switch ( lightType )
 					{
 					case LightType::eDirectional:
-						result->declareDirectionalModel( index );
+						result->declareDirectionalModel( shadows, index );
 						break;
 
 					case LightType::ePoint:
-						result->declarePointModel( index );
+						result->declarePointModel( shadows, index );
 						break;
 
 					case LightType::eSpot:
-						result->declareSpotModel( index );
+						result->declareSpotModel( shadows, index );
 						break;
 
 					default:
@@ -539,10 +537,9 @@ namespace castor3d
 				}
 
 				std::shared_ptr< SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
-					, ShadowType shadows
 					, uint32_t & index )
 				{
-					auto result = std::make_shared< SpecularBrdfLightingModel >( shadows, writer );
+					auto result = std::make_shared< SpecularBrdfLightingModel >( writer );
 					result->declareModel( index );
 					return result;
 				}
@@ -552,20 +549,20 @@ namespace castor3d
 					, ShadowType shadows
 					, uint32_t & index )
 				{
-					auto result = std::make_shared< SpecularBrdfLightingModel >( shadows, writer );
+					auto result = std::make_shared< SpecularBrdfLightingModel >( writer );
 
 					switch ( lightType )
 					{
 					case LightType::eDirectional:
-						result->declareDirectionalModel( index );
+						result->declareDirectionalModel( shadows, index );
 						break;
 
 					case LightType::ePoint:
-						result->declarePointModel( index );
+						result->declarePointModel( shadows, index );
 						break;
 
 					case LightType::eSpot:
-						result->declareSpotModel( index );
+						result->declareSpotModel( shadows, index );
 						break;
 
 					default:
@@ -847,18 +844,6 @@ namespace castor3d
 		return checkFlag( flags, ProgramFlag::eShadowMapDirectional )
 			|| checkFlag( flags, ProgramFlag::eShadowMapSpot )
 			|| checkFlag( flags, ProgramFlag::eShadowMapPoint );
-	}
-
-	ShadowType getShadowType( SceneFlags const & flags )
-	{
-		ShadowType result = ShadowType::eNone;
-
-		if ( checkFlag( flags, SceneFlag::eShadowFilterPcf ) )
-		{
-			result = ShadowType::ePCF;
-		}
-
-		return result;
 	}
 
 	FogType getFogType( SceneFlags const & flags )

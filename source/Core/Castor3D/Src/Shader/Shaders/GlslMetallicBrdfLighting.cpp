@@ -13,8 +13,8 @@ namespace castor3d
 	{
 		const String MetallicBrdfLightingModel::Name = cuT( "pbr_mr" );
 
-		MetallicBrdfLightingModel::MetallicBrdfLightingModel( ShadowType shadows, GlslWriter & writer )
-			: LightingModel{ shadows, writer }
+		MetallicBrdfLightingModel::MetallicBrdfLightingModel( GlslWriter & writer )
+			: LightingModel{ writer }
 		{
 		}
 
@@ -173,14 +173,16 @@ namespace castor3d
 					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
 						, 1.0_f );
 
-					if ( m_shadows != ShadowType::eNone )
+					IF( m_writer, light.m_lightBase().m_shadowType() != Int( int( ShadowType::eNone ) ) )
 					{
 						shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-							, m_shadowModel->computeDirectionalShadow( light.m_transform()
+							, m_shadowModel->computeDirectionalShadow( light.m_lightBase().m_shadowType()
+								, light.m_transform()
 								, fragmentIn.m_vertex
 								, -lightDirection
 								, fragmentIn.m_normal ) );
 					}
+					FI;
 
 					doComputeLight( light.m_lightBase()
 						, worldEye
@@ -232,15 +234,17 @@ namespace castor3d
 					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
 						, 1.0_f );
 
-					if ( m_shadows != ShadowType::eNone )
+					IF( m_writer, light.m_lightBase().m_shadowType() != Int( int( ShadowType::eNone ) ) )
 					{
 						shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-							, m_shadowModel->computePointShadow( fragmentIn.m_vertex
+							, m_shadowModel->computePointShadow( light.m_lightBase().m_shadowType()
+								, fragmentIn.m_vertex
 								, light.m_position().xyz()
 								, fragmentIn.m_normal
 								, light.m_lightBase().m_farPlane()
 								, light.m_lightBase().m_index() ) );
 					}
+					FI;
 
 					doComputeLight( light.m_lightBase()
 						, worldEye
@@ -302,15 +306,17 @@ namespace castor3d
 					{
 						auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" ), Float( 1 ) );
 
-						if ( m_shadows != ShadowType::eNone )
+						IF( m_writer, light.m_lightBase().m_shadowType() != Int( int( ShadowType::eNone ) ) )
 						{
 							shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-								, m_shadowModel->computeSpotShadow( light.m_transform()
+								, m_shadowModel->computeSpotShadow( light.m_lightBase().m_shadowType()
+									, light.m_transform()
 									, fragmentIn.m_vertex
 									, -lightToVertex
 									, fragmentIn.m_normal
 									, light.m_lightBase().m_index() ) );
 						}
+						FI;
 
 						doComputeLight( light.m_lightBase()
 							, worldEye
@@ -345,11 +351,66 @@ namespace castor3d
 				, output );
 		}
 
-		void MetallicBrdfLightingModel::doDeclareComputeOnePointLight()
+		void MetallicBrdfLightingModel::doDeclareComputeOneDirectionalLight( ShadowType shadowType )
+		{
+			OutputComponents output{ m_writer };
+			m_computeDirectional = m_writer.implementFunction< Void >( cuT( "computeDirectionalLight" )
+				, [this, shadowType]( DirectionalLight const & light
+					, Vec3 const & worldEye
+					, Vec3 const & albedo
+					, Float const & metallic
+					, Float const & roughness
+					, Int const & receivesShadows
+					, FragmentInput const & fragmentIn
+					, OutputComponents & parentOutput )
+				{
+					OutputComponents output
+					{
+						m_writer.declLocale( cuT( "lightDiffuse" ), vec3( 0.0_f ) ),
+						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
+					};
+					PbrMRMaterials materials{ m_writer };
+					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
+						, normalize( -light.m_direction().xyz() ) );
+					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
+						, 1.0_f );
+
+					if ( shadowType != ShadowType::eNone )
+					{
+						shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+							, m_shadowModel->computeDirectionalShadow( light.m_transform()
+								, fragmentIn.m_vertex
+								, -lightDirection
+								, fragmentIn.m_normal ) );
+					}
+
+					doComputeLight( light.m_lightBase()
+						, worldEye
+						, lightDirection
+						, albedo
+						, metallic
+						, roughness
+						, shadowFactor
+						, fragmentIn
+						, output );
+					parentOutput.m_diffuse += output.m_diffuse;
+					parentOutput.m_specular += output.m_specular;
+				}
+				, DirectionalLight( &m_writer, cuT( "light" ) )
+				, InVec3( &m_writer, cuT( "worldEye" ) )
+				, InVec3( &m_writer, cuT( "albedo" ) )
+				, InFloat( &m_writer, cuT( "metallic" ) )
+				, InFloat( &m_writer, cuT( "roughness" ) )
+				, InInt( &m_writer, cuT( "receivesShadows" ) )
+				, FragmentInput{ m_writer }
+				, output );
+		}
+
+		void MetallicBrdfLightingModel::doDeclareComputeOnePointLight( ShadowType shadowType )
 		{
 			OutputComponents output{ m_writer };
 			m_computeOnePoint = m_writer.implementFunction< Void >( cuT( "computePointLight" )
-				, [this]( PointLight const & light
+				, [this, shadowType]( PointLight const & light
 					, Vec3 const & worldEye
 					, Vec3 const & albedo
 					, Float const & metallic
@@ -373,7 +434,7 @@ namespace castor3d
 					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
 						, 1.0_f );
 
-					if ( m_shadows != ShadowType::eNone )
+					if ( shadowType != ShadowType::eNone )
 					{
 						shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
 							, m_shadowModel->computePointShadow( fragmentIn.m_vertex
@@ -410,11 +471,11 @@ namespace castor3d
 				, output );
 		}
 
-		void MetallicBrdfLightingModel::doDeclareComputeOneSpotLight()
+		void MetallicBrdfLightingModel::doDeclareComputeOneSpotLight( ShadowType shadowType )
 		{
 			OutputComponents output{ m_writer };
 			m_computeOneSpot = m_writer.implementFunction< Void >( cuT( "computeSpotLight" )
-				, [this]( SpotLight const & light
+				, [this, shadowType]( SpotLight const & light
 					, Vec3 const & worldEye
 					, Vec3 const & albedo
 					, Float const & metallic
@@ -442,7 +503,7 @@ namespace castor3d
 					{
 						auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" ), Float( 1 ) );
 
-						if ( m_shadows != ShadowType::eNone )
+						if ( shadowType != ShadowType::eNone )
 						{
 							shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
 								, m_shadowModel->computeSpotShadow( light.m_transform()

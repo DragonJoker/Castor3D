@@ -24,28 +24,34 @@ namespace castor3d
 
 		public:
 			C3D_API explicit Shadow( glsl::GlslWriter & writer );
-			C3D_API void declare( ShadowType type
-				, uint32_t & index );
+			C3D_API void declare( uint32_t & index );
 			C3D_API void declareDirectional( ShadowType type
 				, uint32_t & index );
 			C3D_API void declarePoint( ShadowType type
 				, uint32_t & index );
 			C3D_API void declareSpot( ShadowType type
 				, uint32_t & index );
-			C3D_API glsl::Float computeDirectionalShadow( glsl::Mat4 const & lightMatrix
+			C3D_API glsl::Float computeDirectionalShadow( glsl::Int const & shadowType
+				, glsl::Mat4 const & lightMatrix
 				, glsl::Vec3 const & worldSpacePosition
 				, glsl::Vec3 const & lightDirection
 				, glsl::Vec3 const & normal );
-			C3D_API glsl::Float computeSpotShadow( glsl::Mat4 const & lightMatrix
+			C3D_API glsl::Float computeSpotShadow( glsl::Int const & shadowType
+				, glsl::Mat4 const & lightMatrix
 				, glsl::Vec3 const & worldSpacePosition
 				, glsl::Vec3 const & lightDirection
 				, glsl::Vec3 const & normal
 				, glsl::Int const & index );
-			C3D_API glsl::Float computePointShadow( glsl::Vec3 const & worldSpacePosition
+			C3D_API glsl::Float computePointShadow( glsl::Int const & shadowType
+				, glsl::Vec3 const & worldSpacePosition
 				, glsl::Vec3 const & lightDirection
 				, glsl::Vec3 const & normal
 				, glsl::Float const & farPlane
 				, glsl::Int const & index );
+			C3D_API glsl::Float computeDirectionalShadow( glsl::Mat4 const & lightMatrix
+				, glsl::Vec3 const & worldSpacePosition
+				, glsl::Vec3 const & lightDirection
+				, glsl::Vec3 const & normal );
 			C3D_API glsl::Float computeSpotShadow( glsl::Mat4 const & lightMatrix
 				, glsl::Vec3 const & worldSpacePosition
 				, glsl::Vec3 const & lightDirection
@@ -59,12 +65,15 @@ namespace castor3d
 			void doDeclareGetRandom();
 			void doDeclareGetShadowOffset();
 			void doDeclareChebyshevUpperBound();
+			void doDeclareTextureProj();
+			void doDeclareFilterPCF();
 			void doDeclareGetLightSpacePosition();
 			void doDeclareComputeDirectionalShadow();
 			void doDeclareComputeSpotShadow();
 			void doDeclareComputePointShadow();
-			void doDeclareComputeOneSpotShadow();
-			void doDeclareComputeOnePointShadow();
+			void doDeclareComputeOneDirectionalShadow( ShadowType type );
+			void doDeclareComputeOneSpotShadow( ShadowType type );
+			void doDeclareComputeOnePointShadow( ShadowType type );
 
 		private:
 			glsl::GlslWriter & m_writer;
@@ -72,32 +81,51 @@ namespace castor3d
 				, glsl::InVec4 > m_getRandom;
 			glsl::Function< glsl::Float
 				, glsl::InVec3
-				, glsl::InVec3 > m_getShadowOffset;
+				, glsl::InVec3
+				, glsl::InFloat
+				, glsl::InFloat > m_getShadowOffset;
+			glsl::Function< glsl::Float
+				, glsl::InVec4
+				, glsl::InVec2
+				, glsl::InSampler2D
+				, glsl::InFloat > m_textureProj;
+			glsl::Function< glsl::Float
+				, glsl::InVec4
+				, glsl::InSampler2D
+				, glsl::InFloat > m_filterPCF;
 			glsl::Function < glsl::Float
 				, glsl::InVec2
 				, glsl::InFloat
 				, glsl::InFloat
 				, glsl::InFloat > m_chebyshevUpperBound;
-			glsl::Function< glsl::Vec3
+			glsl::Function< glsl::Vec4
 				, glsl::InMat4
 				, glsl::InVec3 > m_getLightSpacePosition;
 			glsl::Function< glsl::Float
+				, glsl::InInt
 				, glsl::InMat4
 				, glsl::InVec3
 				, glsl::InVec3
 				, glsl::InVec3 > m_computeDirectional;
 			glsl::Function< glsl::Float
+				, glsl::InInt
 				, glsl::InMat4
 				, glsl::InVec3
 				, glsl::InVec3
 				, glsl::InVec3
 				, glsl::InInt > m_computeSpot;
 			glsl::Function< glsl::Float
+				, glsl::InInt
 				, glsl::InVec3
 				, glsl::InVec3
 				, glsl::InVec3
 				, glsl::InFloat
 				, glsl::InInt > m_computePoint;
+			glsl::Function< glsl::Float
+				, glsl::InMat4
+				, glsl::InVec3
+				, glsl::InVec3
+				, glsl::InVec3 > m_computeOneDirectional;
 			glsl::Function< glsl::Float
 				, glsl::InMat4
 				, glsl::InVec3

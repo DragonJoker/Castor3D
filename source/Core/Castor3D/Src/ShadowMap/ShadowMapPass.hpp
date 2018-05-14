@@ -121,13 +121,15 @@ namespace castor3d
 		 */
 		void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
 			, uint32_t & index
-			, BillboardListRenderNode & nodes )override;
+			, BillboardListRenderNode & nodes
+			, ShadowMapLightTypeArray const & shadowMaps )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
 		 */
 		void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
 			, uint32_t & index
-			, SubmeshRenderNode & nodes )override;
+			, SubmeshRenderNode & nodes
+			, ShadowMapLightTypeArray const & shadowMaps )override;
 		/**
 		 *\~english
 		 *\brief		Prepares the pipeline, culling back faces.

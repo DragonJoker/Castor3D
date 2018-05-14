@@ -167,19 +167,10 @@ namespace castor3d
 		m_cutOff.reset();
 	}
 
-	void SpotLight::updateShadow( Point3r const & p_target
-		, Viewport & p_viewport
-		, int32_t p_index )
+	void SpotLight::updateShadow( Point3r const & target
+		, Viewport & viewport
+		, int32_t index )
 	{
-		static const Matrix4x4r biasTransform{ []()
-		{
-			Matrix4x4r result;
-			matrix::setTransform( result
-				, Point3r{ 0.5, 0.5, 0.5 }
-				, Point3r{ 0.5, 0.5, 0.5 }
-				, Quaternion::identity() );
-			return result;
-		}() };
 		auto node = getLight().getParent();
 		node->update();
 		auto orientation = node->getDerivedOrientation();
@@ -187,14 +178,14 @@ namespace castor3d
 		Point3f up{ 0, 1, 0 };
 		orientation.transform( up, up );
 		matrix::lookAt( m_lightSpace, position, position + m_direction, up );
-		m_lightSpace = biasTransform * p_viewport.getProjection() * m_lightSpace;
-		m_shadowMapIndex = p_index;
+		m_lightSpace = viewport.getProjection() * m_lightSpace;
+		m_shadowMapIndex = index;
 
-		p_viewport.setPerspective( getCutOff() * 2
-			, p_viewport.getRatio()
+		viewport.setPerspective( getCutOff() * 2
+			, viewport.getRatio()
 			, 0.5_r
 			, m_farPlane );
-		p_viewport.update();
+		viewport.update();
 	}
 
 	void SpotLight::doBind( Point4f * buffer )const

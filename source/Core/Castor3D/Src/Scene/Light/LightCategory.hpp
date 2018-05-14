@@ -334,6 +334,24 @@ namespace castor3d
 		 *\~english
 		 *\brief		Copies the given light PixelComponents values into the buffer.
 		 *\param[in]	components	The components.
+		 *\param[in]	component1	The third component.
+		 *\param[in]	component2	The fourth component.
+		 *\param[out]	buffer		The destination buffer.
+		 *\~french
+		 *\brief		Copie les valeurs de la composante de lumière donnée dans le tampon.
+		 *\param[in]	components	La composante.
+		 *\param[in]	component1	La troisième composante.
+		 *\param[in]	component2	La quatrième composante.
+		 *\param[in]	buffer		Le tampon de destination.
+		 */
+		void doCopyComponent( castor::Point2f const & components
+			, float component1
+			, float component2
+			, castor::Point4f *& buffer )const;
+		/**
+		 *\~english
+		 *\brief		Copies the given light PixelComponents values into the buffer.
+		 *\param[in]	components	The components.
 		 *\param[out]	buffer		The destination buffer.
 		 *\~french
 		 *\brief		Copie les valeurs de la composante de lumière donnée dans le tampon.

@@ -258,7 +258,10 @@ namespace CastorViewer
 					m_toolBar->EnableTool( eID_TOOL_RECORD, true );
 
 #endif
-					SetTitle( wxT( "CastorViewer - " ) + m_filePath.getFileName( true ) );
+					SetTitle( wxT( "Castor Viewer - " )
+						+ make_wxString( scene->getEngine()->getRenderSystem()->getRendererType() )
+						+ wxT( " - " )
+						+ m_filePath.getFileName( true ) );
 				}
 
 				if ( wxGetApp().getCastor()->isThreaded() )

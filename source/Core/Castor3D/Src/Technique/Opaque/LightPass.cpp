@@ -423,17 +423,26 @@ namespace castor3d
 	{
 	}
 
+	void LightPass::update( castor::Size const & size
+		, Light const & light
+		, Camera const & camera )
+	{
+		m_pipeline = &m_pipelines[size_t( light.getShadowType() )];
+		doUpdate( size, light, camera );
+	}
+
 	void LightPass::render( bool first
 		, renderer::Semaphore const & toWait
 		, TextureUnit * shadowMapOpt )
 	{
+		REQUIRE( m_pipeline );
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
 		m_fence->reset();
 
 		if ( first )
 		{
-			device.getGraphicsQueue().submit( *m_firstRenderPass.commandBuffer
+			device.getGraphicsQueue().submit( *m_pipeline->firstCommandBuffer
 				, toWait
 				, renderer::PipelineStageFlag::eVertexInput
 				, *m_signalReady
@@ -441,7 +450,7 @@ namespace castor3d
 		}
 		else
 		{
-			device.getGraphicsQueue().submit( *m_blendRenderPass.commandBuffer
+			device.getGraphicsQueue().submit( *m_pipeline->blendCommandBuffer
 				, toWait
 				, renderer::PipelineStageFlag::eVertexInput
 				, *m_signalReady
@@ -453,7 +462,7 @@ namespace castor3d
 
 	void LightPass::doInitialise( Scene const & scene
 		, GeometryPassResult const & gp
-		, LightType type
+		, LightType lightType
 		, renderer::VertexBufferBase & vbo
 		, renderer::VertexLayout const & vertexLayout
 		, SceneUbo & sceneUbo
@@ -463,114 +472,124 @@ namespace castor3d
 		m_timer = &timer;
 		m_geometryPassResult = &gp;
 		SceneFlags sceneFlags{ scene.getFlags() };
-
-		if ( scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness )
-		{
-			m_program = doCreateProgram( doGetVertexShaderSource( sceneFlags )
-				, doGetPbrMRPixelShaderSource( sceneFlags, type ) );
-		}
-		else if ( scene.getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
-		{
-			m_program = doCreateProgram( doGetVertexShaderSource( sceneFlags )
-				, doGetPbrSGPixelShaderSource( sceneFlags, type ) );
-		}
-		else
-		{
-			m_program = doCreateProgram( doGetVertexShaderSource( sceneFlags )
-				, doGetLegacyPixelShaderSource( sceneFlags, type ) );
-		}
-
-		m_program->initialise( vbo
-			, vertexLayout
-			, *m_firstRenderPass.renderPass
-			, *m_blendRenderPass.renderPass
-			, m_matrixUbo
-			, sceneUbo
-			, m_gpInfoUbo
-			, modelMatrixUbo );
-
-		m_uboDescriptorSet = m_program->getUboDescriptorPool().createDescriptorSet( 0u );
-		auto & uboLayout = m_program->getUboDescriptorLayout();
-		m_engine.getMaterialCache().getPassBuffer().createBinding( *m_uboDescriptorSet, uboLayout.getBinding( 0u ) );
-		m_uboDescriptorSet->createBinding( uboLayout.getBinding( MatrixUbo::BindingPoint )
-			, m_matrixUbo.getUbo() );
-		m_uboDescriptorSet->createBinding( uboLayout.getBinding( SceneUbo::BindingPoint )
-			, sceneUbo.getUbo() );
-		m_uboDescriptorSet->createBinding( uboLayout.getBinding( GpInfoUbo::BindingPoint )
-			, m_gpInfoUbo.getUbo() );
-		if ( modelMatrixUbo )
-		{
-			m_uboDescriptorSet->createBinding( uboLayout.getBinding( ModelMatrixUbo::BindingPoint )
-				, modelMatrixUbo->getUbo() );
-		}
-		m_uboDescriptorSet->createBinding( uboLayout.getBinding( shader::LightingModel::UboBindingPoint )
-			, *m_baseUbo
-			, 0u
-			, m_baseUbo->getElementSize() );
-		m_uboDescriptorSet->update();
-
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
-		m_firstRenderPass.commandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
-		m_blendRenderPass.commandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
+		auto shadowType = uint32_t( ShadowType::eNone );
 
-		m_textureDescriptorSet = m_program->getTextureDescriptorPool().createDescriptorSet( 1u );
-		auto & texLayout = m_program->getTextureDescriptorLayout();
-		auto writeBinding = [&gp, this]( uint32_t index, renderer::ImageLayout layout )
+		for ( auto & pipeline : m_pipelines )
 		{
-			renderer::SamplerCRef sampler = std::ref( gp.getSampler() );
-			renderer::TextureViewCRef view = std::ref( *gp.getViews()[index] );
-			return renderer::WriteDescriptorSet
+			if ( scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness )
 			{
-				index,
-				0u,
-				1u,
-				renderer::DescriptorType::eCombinedImageSampler,
-				{ { sampler, view, layout } }
-			};
-		};
-		m_textureWrites.push_back( writeBinding( 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal ) );
-		m_textureWrites.push_back( writeBinding( 1u, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
-		m_textureWrites.push_back( writeBinding( 2u, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
-		m_textureWrites.push_back( writeBinding( 3u, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
-		m_textureWrites.push_back( writeBinding( 4u, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
-		m_textureWrites.push_back( writeBinding( 5u, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
+				pipeline.program = doCreateProgram( doGetVertexShaderSource( sceneFlags )
+					, doGetPbrMRPixelShaderSource( sceneFlags, lightType, ShadowType( shadowType ) ) );
+			}
+			else if ( scene.getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
+			{
+				pipeline.program = doCreateProgram( doGetVertexShaderSource( sceneFlags )
+					, doGetPbrSGPixelShaderSource( sceneFlags, lightType, ShadowType( shadowType ) ) );
+			}
+			else
+			{
+				pipeline.program = doCreateProgram( doGetVertexShaderSource( sceneFlags )
+					, doGetLegacyPixelShaderSource( sceneFlags, lightType, ShadowType( shadowType ) ) );
+			}
 
-		m_textureDescriptorSet->setBindings( m_textureWrites );
-		m_textureDescriptorSet->update();
+			pipeline.program->initialise( vbo
+				, vertexLayout
+				, *m_firstRenderPass.renderPass
+				, *m_blendRenderPass.renderPass
+				, m_matrixUbo
+				, sceneUbo
+				, m_gpInfoUbo
+				, modelMatrixUbo );
+			pipeline.uboDescriptorSet = pipeline.program->getUboDescriptorPool().createDescriptorSet( 0u );
+			auto & uboLayout = pipeline.program->getUboDescriptorLayout();
+			m_engine.getMaterialCache().getPassBuffer().createBinding( *pipeline.uboDescriptorSet, uboLayout.getBinding( 0u ) );
+			pipeline.uboDescriptorSet->createBinding( uboLayout.getBinding( MatrixUbo::BindingPoint )
+				, m_matrixUbo.getUbo() );
+			pipeline.uboDescriptorSet->createBinding( uboLayout.getBinding( SceneUbo::BindingPoint )
+				, sceneUbo.getUbo() );
+			pipeline.uboDescriptorSet->createBinding( uboLayout.getBinding( GpInfoUbo::BindingPoint )
+				, m_gpInfoUbo.getUbo() );
+			if ( modelMatrixUbo )
+			{
+				pipeline.uboDescriptorSet->createBinding( uboLayout.getBinding( ModelMatrixUbo::BindingPoint )
+					, modelMatrixUbo->getUbo() );
+			}
+			pipeline.uboDescriptorSet->createBinding( uboLayout.getBinding( shader::LightingModel::UboBindingPoint )
+				, *m_baseUbo
+				, 0u
+				, m_baseUbo->getElementSize() );
+			pipeline.uboDescriptorSet->update();
 
-		if ( m_shadows )
-		{
-			// Empty descriptor for shadow texture, that will be filled at runtime.
-			m_textureWrites.push_back(
+			pipeline.firstCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
+			pipeline.blendCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
+
+			pipeline.textureDescriptorSet = pipeline.program->getTextureDescriptorPool().createDescriptorSet( 1u );
+			auto & texLayout = pipeline.program->getTextureDescriptorLayout();
+			auto writeBinding = [&gp, this]( uint32_t index, renderer::ImageLayout layout )
+			{
+				renderer::SamplerCRef sampler = std::ref( gp.getSampler() );
+				renderer::TextureViewCRef view = std::ref( *gp.getViews()[index] );
+				return renderer::WriteDescriptorSet
 				{
-					6u,
+					index,
 					0u,
 					1u,
 					renderer::DescriptorType::eCombinedImageSampler,
-					{ { std::nullopt, std::nullopt, renderer::ImageLayout::eShaderReadOnlyOptimal } }
-				} );
-			m_textureDescriptorSet->setBindings( m_textureWrites );
-		}
-		else
-		{
-			doPrepareCommandBuffer( nullptr, true );
-			doPrepareCommandBuffer( nullptr, false );
+					{ { sampler, view, layout } }
+				};
+			};
+			pipeline.textureWrites.push_back( writeBinding( 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal ) );
+			pipeline.textureWrites.push_back( writeBinding( 1u, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
+			pipeline.textureWrites.push_back( writeBinding( 2u, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
+			pipeline.textureWrites.push_back( writeBinding( 3u, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
+			pipeline.textureWrites.push_back( writeBinding( 4u, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
+			pipeline.textureWrites.push_back( writeBinding( 5u, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
+
+			pipeline.textureDescriptorSet->setBindings( pipeline.textureWrites );
+			pipeline.textureDescriptorSet->update();
+
+			if ( m_shadows )
+			{
+				// Empty descriptor for shadow texture, that will be filled at runtime.
+				pipeline.textureWrites.push_back(
+					{
+						6u,
+						0u,
+						1u,
+						renderer::DescriptorType::eCombinedImageSampler,
+						{ { std::nullopt, std::nullopt, renderer::ImageLayout::eShaderReadOnlyOptimal } }
+					} );
+				pipeline.textureDescriptorSet->setBindings( pipeline.textureWrites );
+			}
+			else
+			{
+				doPrepareCommandBuffer( pipeline, nullptr, true );
+				doPrepareCommandBuffer( pipeline, nullptr, false );
+			}
+
+			++shadowType;
 		}
 	}
 
 	void LightPass::doCleanup()
 	{
 		m_matrixUbo.cleanup();
-		m_textureDescriptorSet.reset();
-		m_uboDescriptorSet.reset();
-		m_blendRenderPass.commandBuffer.reset();
-		m_firstRenderPass.commandBuffer.reset();
-		m_program->cleanup();
-		m_program.reset();
+
+		for ( auto & pipeline : m_pipelines )
+		{
+			pipeline.textureDescriptorSet.reset();
+			pipeline.uboDescriptorSet.reset();
+			pipeline.blendCommandBuffer.reset();
+			pipeline.firstCommandBuffer.reset();
+			pipeline.program->cleanup();
+			pipeline.program.reset();
+		}
 	}
 
-	void LightPass::doPrepareCommandBuffer( TextureUnit const * shadowMap
+	void LightPass::doPrepareCommandBuffer( Pipeline & pipeline
+		, TextureUnit const * shadowMap
 		, bool first )
 	{
 		static renderer::DepthStencilClearValue const clearDepthStencil{ 1.0, 1 };
@@ -584,14 +603,16 @@ namespace castor3d
 
 		if ( shadowMap )
 		{
-			renderer::WriteDescriptorSet & write = m_textureDescriptorSet->getBinding( 6u );
+			renderer::WriteDescriptorSet & write = pipeline.textureDescriptorSet->getBinding( 6u );
 			write.imageInfo[0].imageView = std::ref( shadowMap->getTexture()->getDefaultView() );
 			write.imageInfo[0].sampler = std::ref( shadowMap->getSampler()->getSampler() );
-			m_textureDescriptorSet->update();
+			pipeline.textureDescriptorSet->update();
 			usage = renderer::CommandBufferUsageFlag::eOneTimeSubmit;
 		}
 
-		auto & commandBuffer = *renderPass.commandBuffer;
+		auto & commandBuffer = first
+			? *pipeline.firstCommandBuffer
+			: *pipeline.blendCommandBuffer;
 
 		if ( commandBuffer.begin( usage ) )
 		{
@@ -607,9 +628,9 @@ namespace castor3d
 				, renderer::SubpassContents::eInline );
 			commandBuffer.setViewport( { width, height, 0, 0 } );
 			commandBuffer.setScissor( { 0, 0, width, height } );
-			commandBuffer.bindDescriptorSets( { *m_uboDescriptorSet, *m_textureDescriptorSet }, m_program->getPipelineLayout() );
+			commandBuffer.bindDescriptorSets( { *pipeline.uboDescriptorSet, *pipeline.textureDescriptorSet }, pipeline.program->getPipelineLayout() );
 			commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-			m_program->render( commandBuffer, getCount(), first, m_offset );
+			pipeline.program->render( commandBuffer, getCount(), first, m_offset );
 			commandBuffer.endRenderPass();
 			commandBuffer.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
 				, m_timer->getQuery()
@@ -619,7 +640,8 @@ namespace castor3d
 	}
 	
 	glsl::Shader LightPass::doGetLegacyPixelShaderSource( SceneFlags const & sceneFlags
-		, LightType type )const
+		, LightType lightType
+		, ShadowType shadowType )const
 	{
 		using namespace glsl;
 		GlslWriter writer = m_engine.getRenderSystem()->createGlslWriter();
@@ -637,7 +659,9 @@ namespace castor3d
 		auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++, 1u );
 		auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
-		auto shadowType = getShadowType( sceneFlags );
+		shadowType = m_shadows
+			? shadowType
+			: ShadowType::eNone;
 
 		// Shader outputs
 		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 0 );
@@ -645,8 +669,8 @@ namespace castor3d
 
 		// Utility functions
 		auto lighting = shader::legacy::createLightingModel( writer
-			, type
-			, m_shadows ? getShadowType( sceneFlags ) : ShadowType::eNone
+			, lightType
+			, shadowType
 			, index );
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
@@ -656,9 +680,8 @@ namespace castor3d
 		declareDecodeReceiver( writer );
 		shader::LegacyMaterials materials{ writer };
 		materials.declare();
-		shader::SssTransmittance sss{ writer
-			, m_shadows && shadowType != ShadowType::eNone };
-		sss.declare( type );
+		shader::SssTransmittance sss{ writer, shadowType != ShadowType::eNone };
+		sss.declare( lightType );
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -706,7 +729,7 @@ namespace castor3d
 
 			shader::OutputComponents output{ lightDiffuse, lightSpecular };
 
-			switch ( type )
+			switch ( lightType )
 			{
 			case LightType::eDirectional:
 				{
@@ -780,7 +803,8 @@ namespace castor3d
 	}
 	
 	glsl::Shader LightPass::doGetPbrMRPixelShaderSource( SceneFlags const & sceneFlags
-		, LightType type )const
+		, LightType lightType
+		, ShadowType shadowType )const
 	{
 		using namespace glsl;
 		GlslWriter writer = m_engine.getRenderSystem()->createGlslWriter();
@@ -798,7 +822,9 @@ namespace castor3d
 		auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++, 1u );
 		auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
-		auto shadowType = getShadowType( sceneFlags );
+		shadowType = m_shadows
+			? shadowType
+			: ShadowType::eNone;
 
 		// Shader outputs
 		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 0 );
@@ -806,8 +832,8 @@ namespace castor3d
 
 		// Utility functions
 		auto lighting = shader::pbr::mr::createLightingModel( writer
-			, type
-			, m_shadows ? shadowType : ShadowType::eNone
+			, lightType
+			, shadowType
 			, index );
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
@@ -818,7 +844,7 @@ namespace castor3d
 		materials.declare();
 		shader::SssTransmittance sss{ writer
 			, m_shadows && shadowType != ShadowType::eNone };
-		sss.declare( type );
+		sss.declare( lightType );
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -866,7 +892,7 @@ namespace castor3d
 
 			shader::OutputComponents output{ lightDiffuse, lightSpecular };
 
-			switch ( type )
+			switch ( lightType )
 			{
 			case LightType::eDirectional:
 				{
@@ -1000,7 +1026,8 @@ namespace castor3d
 	}
 	
 	glsl::Shader LightPass::doGetPbrSGPixelShaderSource( SceneFlags const & sceneFlags
-		, LightType type )const
+		, LightType lightType
+		, ShadowType shadowType )const
 	{
 		using namespace glsl;
 		GlslWriter writer = m_engine.getRenderSystem()->createGlslWriter();
@@ -1018,12 +1045,14 @@ namespace castor3d
 		auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++, 1u );
 		auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
-		auto shadowType = getShadowType( sceneFlags );
+		shadowType = m_shadows
+			? shadowType
+			: ShadowType::eNone;
 
 		// Utility functions
 		auto lighting = shader::pbr::sg::createLightingModel( writer
-			, type
-			, m_shadows ? getShadowType( sceneFlags ) : ShadowType::eNone
+			, lightType
+			, shadowType
 			, index );
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
@@ -1032,9 +1061,8 @@ namespace castor3d
 		shader::PbrSGMaterials materials{ writer };
 		materials.declare();
 		declareDecodeReceiver( writer );
-		shader::SssTransmittance sss{ writer
-			, m_shadows && shadowType != ShadowType::eNone };
-		sss.declare( type );
+		shader::SssTransmittance sss{ writer, shadowType != ShadowType::eNone };
+		sss.declare( lightType );
 
 		// Shader outputs
 		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 0 );
@@ -1088,7 +1116,7 @@ namespace castor3d
 
 			shader::OutputComponents output{ lightDiffuse, lightSpecular };
 
-			switch ( type )
+			switch ( lightType )
 			{
 			case LightType::eDirectional:
 				{

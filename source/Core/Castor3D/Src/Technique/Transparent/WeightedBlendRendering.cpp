@@ -158,7 +158,6 @@ namespace castor3d
 	void WeightedBlendRendering::update( RenderInfo & info
 		, Scene const & scene
 		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps
 		, Point2r const & jitter )
 	{
 		auto invView = camera.getView().getInverse().getTransposed();
@@ -171,7 +170,6 @@ namespace castor3d
 			, invView
 			, invProj );
 		m_transparentPass.update( info
-			, shadowMaps
 			, jitter );
 	}
 

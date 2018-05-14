@@ -371,7 +371,8 @@ namespace castor3d
 
 		template< typename MapType >
 		void doInitialiseNodes( RenderPass & renderPass
-			, MapType & pipelineNodes )
+			, MapType & pipelineNodes
+			, ShadowMapLightTypeArray const & shadowMaps )
 		{
 			for ( auto & pipelineNode : pipelineNodes )
 			{
@@ -384,7 +385,9 @@ namespace castor3d
 
 					if ( pipelineNode.first->hasDescriptorPool( 1u ) )
 					{
-						renderPass.initialiseTextureDescriptor( pipelineNode.first->getDescriptorPool( 1u ), node );
+						renderPass.initialiseTextureDescriptor( pipelineNode.first->getDescriptorPool( 1u )
+							, node
+							, shadowMaps );
 					}
 				}
 			}
@@ -392,7 +395,8 @@ namespace castor3d
 
 		template< typename MapType >
 		void doInitialiseInstancedNodes( RenderPass & renderPass
-			, MapType & pipelineNodes )
+			, MapType & pipelineNodes
+			, ShadowMapLightTypeArray const & shadowMaps )
 		{
 			for ( auto & pipelineNode : pipelineNodes )
 			{
@@ -411,7 +415,8 @@ namespace castor3d
 				if ( pipeline.hasDescriptorPool( 1u ) )
 				{
 					renderPass.initialiseTextureDescriptor( pipeline.getDescriptorPool( 1u )
-						, pipelineNode.second );
+						, pipelineNode.second
+						, shadowMaps );
 				}
 			}
 		}
@@ -419,7 +424,8 @@ namespace castor3d
 		void doSortRenderNodes( RenderPass & renderPass
 			, bool opaque
 			, SceneNode const * ignored
-			, SceneRenderNodes & nodes )
+			, SceneRenderNodes & nodes
+			, ShadowMapLightTypeArray const & shadowMaps )
 		{
 			nodes.staticNodes.frontCulled.clear();
 			nodes.staticNodes.backCulled.clear();
@@ -470,12 +476,6 @@ namespace castor3d
 								if ( mesh )
 								{
 									addFlag( programFlags, ProgramFlag::eMorphing );
-								}
-
-								if ( !shadows
-									|| !primitive.second->isShadowReceiver() )
-								{
-									remFlag( sceneFlags, SceneFlag::eShadowFilterPcf );
 								}
 
 								pass->prepareTextures();
@@ -557,19 +557,19 @@ namespace castor3d
 				}
 			}
 
-			auto initialiseNodes = [&renderPass, &nodes]()
+			auto initialiseNodes = [&renderPass, &nodes, shadowMaps]()
 			{
-				doInitialiseNodes( renderPass, nodes.staticNodes.frontCulled );
-				doInitialiseNodes( renderPass, nodes.staticNodes.backCulled );
-				doInitialiseNodes( renderPass, nodes.skinnedNodes.frontCulled );
-				doInitialiseNodes( renderPass, nodes.skinnedNodes.backCulled );
-				doInitialiseNodes( renderPass, nodes.morphingNodes.frontCulled );
-				doInitialiseNodes( renderPass, nodes.morphingNodes.backCulled );
+				doInitialiseNodes( renderPass, nodes.staticNodes.frontCulled, shadowMaps );
+				doInitialiseNodes( renderPass, nodes.staticNodes.backCulled, shadowMaps );
+				doInitialiseNodes( renderPass, nodes.skinnedNodes.frontCulled, shadowMaps );
+				doInitialiseNodes( renderPass, nodes.skinnedNodes.backCulled, shadowMaps );
+				doInitialiseNodes( renderPass, nodes.morphingNodes.frontCulled, shadowMaps );
+				doInitialiseNodes( renderPass, nodes.morphingNodes.backCulled, shadowMaps );
 
-				doInitialiseInstancedNodes( renderPass, nodes.instancedStaticNodes.frontCulled );
-				doInitialiseInstancedNodes( renderPass, nodes.instancedStaticNodes.backCulled );
-				doInitialiseInstancedNodes( renderPass, nodes.instancedSkinnedNodes.frontCulled );
-				doInitialiseInstancedNodes( renderPass, nodes.instancedSkinnedNodes.backCulled );
+				doInitialiseInstancedNodes( renderPass, nodes.instancedStaticNodes.frontCulled, shadowMaps );
+				doInitialiseInstancedNodes( renderPass, nodes.instancedStaticNodes.backCulled, shadowMaps );
+				doInitialiseInstancedNodes( renderPass, nodes.instancedSkinnedNodes.frontCulled, shadowMaps );
+				doInitialiseInstancedNodes( renderPass, nodes.instancedSkinnedNodes.backCulled, shadowMaps );
 			};
 
 			if ( renderPass.getEngine()->getRenderSystem()->hasCurrentDevice() )
@@ -589,7 +589,8 @@ namespace castor3d
 		void doSortRenderNodes( RenderPass & renderPass
 			, bool opaque
 			, Scene const & scene
-			, RenderNodesT< BillboardRenderNode, BillboardRenderNodesByPipelineMap > & nodes )
+			, RenderNodesT< BillboardRenderNode, BillboardRenderNodesByPipelineMap > & nodes
+			, ShadowMapLightTypeArray & shadowMaps )
 		{
 			bool shadows{ scene.hasShadows() };
 			auto addNode = [&opaque, &renderPass, &scene, &nodes, &shadows]( Pass & p_pass
@@ -600,12 +601,6 @@ namespace castor3d
 					auto sceneFlags = scene.getFlags();
 					auto passFlags = p_pass.getPassFlags();
 					addFlag( programFlags, ProgramFlag::eBillboards );
-
-					if ( !shadows
-						|| !billboard.isShadowReceiver() )
-					{
-						remFlag( sceneFlags, SceneFlag::eShadowFilterPcf );
-					}
 
 					auto textureFlags = p_pass.getTextureFlags();
 					renderPass.preparePipeline( p_pass.getColourBlendMode()
@@ -663,10 +658,10 @@ namespace castor3d
 				}
 			}
 
-			auto initialiseNodes = [&renderPass, &nodes]()
+			auto initialiseNodes = [&renderPass, &nodes, &shadowMaps]()
 			{
-				doInitialiseNodes( renderPass, nodes.frontCulled );
-				doInitialiseNodes( renderPass, nodes.backCulled );
+				doInitialiseNodes( renderPass, nodes.frontCulled, shadowMaps );
+				doInitialiseNodes( renderPass, nodes.backCulled, shadowMaps );
 			};
 
 			if ( renderPass.getEngine()->getRenderSystem()->hasCurrentDevice() )
@@ -945,11 +940,11 @@ namespace castor3d
 		m_commandBuffer.reset();
 	}
 
-	void RenderQueue::update()
+	void RenderQueue::update( ShadowMapLightTypeArray & shadowMaps )
 	{
 		if ( m_isSceneChanged )
 		{
-			doSortRenderNodes();
+			doSortRenderNodes( shadowMaps );
 			m_isSceneChanged = false;
 			m_changed = true;
 		}
@@ -1199,16 +1194,18 @@ namespace castor3d
 		}
 	}
 
-	void RenderQueue::doSortRenderNodes()
+	void RenderQueue::doSortRenderNodes( ShadowMapLightTypeArray & shadowMaps )
 	{
 		castor3d::doSortRenderNodes( *getOwner()
 			, m_opaque
 			, m_ignoredNode
-			, *m_renderNodes );
+			, *m_renderNodes
+			, shadowMaps );
 		castor3d::doSortRenderNodes( *getOwner()
 			, m_opaque
 			, m_renderNodes->scene
-			, m_renderNodes->billboardNodes );
+			, m_renderNodes->billboardNodes
+			, shadowMaps );
 	}
 
 	void RenderQueue::onSceneChanged( Scene const & scene )

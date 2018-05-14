@@ -162,6 +162,11 @@ namespace castor3d
 			return *m_transparentPass;
 		}
 
+		inline ShadowMapLightTypeArray const & getShadowMaps()const
+		{
+			return m_allShadowMaps;
+		}
+
 		inline renderer::Semaphore const & getSemaphore()const
 		{
 			REQUIRE( m_signalFinished );
@@ -211,9 +216,10 @@ namespace castor3d
 		std::unique_ptr< DeferredRendering > m_deferredRendering;
 		std::unique_ptr< WeightedBlendRendering > m_weightedBlendRendering;
 		RenderPassTimerSPtr m_particleTimer;
-		ShadowMapArray m_directionalShadowMaps;
+		ShadowMapUPtr m_directionalShadowMap;
 		ShadowMapArray m_pointShadowMaps;
 		ShadowMapArray m_spotShadowMaps;
+		ShadowMapLightTypeArray m_allShadowMaps;
 		ShadowMapLightTypeArray m_activeShadowMaps;
 		renderer::SemaphorePtr m_signalFinished;
 		renderer::RenderPassPtr m_bgRenderPass;

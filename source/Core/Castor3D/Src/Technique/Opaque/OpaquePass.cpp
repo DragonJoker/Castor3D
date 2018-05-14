@@ -117,12 +117,9 @@ namespace castor3d
 	}
 
 	void OpaquePass::update( RenderInfo & info
-		, ShadowMapLightTypeArray & shadowMaps
 		, Point2r const & jitter )
 	{
-		doUpdate( info
-			, shadowMaps
-			, jitter );
+		doUpdate( info, jitter );
 	}
 
 	renderer::DescriptorSetLayoutBindingArray OpaquePass::doCreateUboBindings( PipelineFlags const & flags )const
@@ -168,7 +165,6 @@ namespace castor3d
 		, SceneFlags & sceneFlags )const
 	{
 		remFlag( programFlags, ProgramFlag::eLighting );
-		remFlag( sceneFlags, SceneFlag::eShadowFilterPcf );
 	}
 
 	glsl::Shader OpaquePass::doGetVertexShaderSource( PassFlags const & passFlags

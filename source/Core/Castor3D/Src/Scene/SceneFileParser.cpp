@@ -252,6 +252,10 @@ SceneFileParser::SceneFileParser( Engine & engine )
 	m_mapMaterialTypes[cuT( "legacy" )] = uint32_t( MaterialType::eLegacy );
 	m_mapMaterialTypes[cuT( "pbr_metallic_roughness" )] = uint32_t( MaterialType::ePbrMetallicRoughness );
 	m_mapMaterialTypes[cuT( "pbr_specular_glossiness" )] = uint32_t( MaterialType::ePbrSpecularGlossiness );
+
+	m_mapShadowFilters[cuT( "raw" )] = uint32_t( ShadowType::eRaw );
+	m_mapShadowFilters[cuT( "pcf" )] = uint32_t( ShadowType::ePCF );
+	m_mapShadowFilters[cuT( "variance" )] = uint32_t( ShadowType::eVariance );
 }
 
 SceneFileParser::~SceneFileParser()
@@ -414,6 +418,7 @@ void SceneFileParser::doInitialiseParser( Path const & path )
 	addParser( uint32_t( CSCNSection::eLight ), cuT( "cut_off" ), parserLightCutOff, { makeParameter< ParameterType::eFloat >() } );
 	addParser( uint32_t( CSCNSection::eLight ), cuT( "exponent" ), parserLightExponent, { makeParameter< ParameterType::eFloat >() } );
 	addParser( uint32_t( CSCNSection::eLight ), cuT( "shadow_producer" ), parserLightShadowProducer, { makeParameter< ParameterType::eBool >() } );
+	addParser( uint32_t( CSCNSection::eLight ), cuT( "shadow_filter" ), parserLightShadowFilter, { makeParameter< ParameterType::eCheckedText >( m_mapShadowFilters ) } );
 
 	addParser( uint32_t( CSCNSection::eNode ), cuT( "parent" ), parserNodeParent, { makeParameter< ParameterType::eName >() } );
 	addParser( uint32_t( CSCNSection::eNode ), cuT( "position" ), parserNodePosition, { makeParameter< ParameterType::ePoint3F >() } );

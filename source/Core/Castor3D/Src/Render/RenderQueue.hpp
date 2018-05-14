@@ -228,7 +228,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour les noeuds de rendu.
 		 */
-		C3D_API void update();
+		C3D_API void update( ShadowMapLightTypeArray & shadowMaps );
 		/**
 		*\~english
 		*name
@@ -268,7 +268,7 @@ namespace castor3d
 	private:
 		void doPrepareAllNodesCommandBuffer();
 		void doPrepareCulledNodesCommandBuffer();
-		void doSortRenderNodes();
+		void doSortRenderNodes( ShadowMapLightTypeArray & shadowMaps );
 		void onSceneChanged( Scene const & scene );
 		void onCameraChanged( Camera const & camera );
 

@@ -188,34 +188,40 @@ namespace castor3d
 			{
 				scene.update();
 			} );
-		RenderQueueArray queues;
-		getEngine()->getRenderTechniqueCache().forEach( [&queues]( RenderTechnique & technique )
+		std::vector< TechniqueQueues > techniquesQueues;
+		getEngine()->getRenderTechniqueCache().forEach( [&techniquesQueues]( RenderTechnique & technique )
 			{
-				technique.update( queues );
+				TechniqueQueues techniqueQueues;
+				technique.update( techniqueQueues.queues );
+				techniqueQueues.shadowMaps = technique.getShadowMaps();
+				techniquesQueues.push_back( techniqueQueues );
 			} );
-		doUpdateQueues( queues );
+		doUpdateQueues( techniquesQueues );
 		m_debugOverlays->endCpuTask();
 	}
 
-	void RenderLoop::doUpdateQueues( RenderQueueArray & queues )
+	void RenderLoop::doUpdateQueues( std::vector< TechniqueQueues > & techniquesQueues )
 	{
-		if ( queues.size() > m_queueUpdater.getCount() )
+		for ( auto & techniqueQueues : techniquesQueues )
 		{
-			for ( auto & queue : queues )
+			if ( techniqueQueues.queues.size() > m_queueUpdater.getCount() )
 			{
-				m_queueUpdater.pushJob( [&queue]()
-					{
-						queue.get().update();
-					} );
-			}
+				for ( auto & queue : techniqueQueues.queues )
+				{
+					m_queueUpdater.pushJob( [&queue, &techniqueQueues]()
+						{
+							queue.get().update( techniqueQueues.shadowMaps );
+						} );
+				}
 
-			m_queueUpdater.waitAll( Milliseconds::max() );
-		}
-		else
-		{
-			for ( auto & queue : queues )
+				m_queueUpdater.waitAll( Milliseconds::max() );
+			}
+			else
 			{
-				queue.get().update();
+				for ( auto & queue : techniqueQueues.queues )
+				{
+					queue.get().update( techniqueQueues.shadowMaps );
+				}
 			}
 		}
 	}

@@ -157,6 +157,8 @@ namespace castor3d
 		, Light & light
 		, uint32_t index )
 	{
+		m_shadowType = light.getShadowType();
+
 		for ( auto & pass : m_passes )
 		{
 			pass->update( camera, queues, light, index );

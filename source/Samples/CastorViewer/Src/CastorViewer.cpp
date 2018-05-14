@@ -29,9 +29,9 @@ namespace CastorViewer
 {
 	CastorViewerApp::CastorViewerApp()
 		: CastorApplication{ cuT( "CastorViewer" )
-							 , cuT( "Castor Viewer" )
-							 , 7
-							 , Version{ CastorViewer_VERSION_MAJOR, CastorViewer_VERSION_MINOR, CastorViewer_VERSION_BUILD } }
+			, cuT( "Castor Viewer" )
+			, 7
+			, Version{ CastorViewer_VERSION_MAJOR, CastorViewer_VERSION_MINOR, CastorViewer_VERSION_BUILD } }
 		, m_mainFrame( nullptr )
 	{
 	}
@@ -57,7 +57,7 @@ namespace CastorViewer
 
 #endif
 
-		m_mainFrame = new MainFrame( p_splashScreen, make_wxString( m_internalName ) );
+		m_mainFrame = new MainFrame( p_splashScreen, make_wxString( m_displayName ) );
 		m_mainFrame->Maximize();
 		bool result = m_mainFrame->initialise();
 

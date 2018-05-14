@@ -937,16 +937,6 @@ namespace castor3d
 			break;
 		}
 
-		if ( hasShadows() )
-		{
-			switch ( m_shadow.getFilterType() )
-			{
-			case ShadowType::ePCF:
-				result |= SceneFlag::eShadowFilterPcf;
-				break;
-			}
-		}
-
 		return result;
 	}
 

@@ -119,6 +119,7 @@ namespace castor3d
 		renderer::TexturePtr m_depthTexture;
 		renderer::TextureViewPtr m_depthView;
 		std::array< FrameBuffer, 6u > m_frameBuffers;
+		ShadowType m_shadowType;
 	};
 }
 

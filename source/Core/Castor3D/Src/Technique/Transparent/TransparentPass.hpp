@@ -117,7 +117,6 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::render
 		 */
 		void update( RenderInfo & info
-			, ShadowMapLightTypeArray & shadowMaps
 			, castor::Point2r const & jitter )override;
 		/**
 		*\~english

@@ -23,6 +23,10 @@ namespace castor3d
 			, uint32_t & index
 			, renderer::DescriptorSet & descriptorSet
 			, bool opacityOnly = false );
+		void fillDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, renderer::WriteDescriptorSetArray & writes
+			, bool opacityOnly = false );
 
 		//!\~english	The pass.
 		//!\~french		La passe.

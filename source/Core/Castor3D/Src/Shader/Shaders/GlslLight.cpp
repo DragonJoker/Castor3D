@@ -59,6 +59,11 @@ namespace castor3d
 			return Float( m_writer, String( *this ) + cuT( ".m_intensityFarPlane.z" ) );
 		}
 
+		Int Light::m_shadowType()const
+		{
+			return Int( m_writer, cuT( "int( " ) + String( *this ) + cuT( ".m_intensityFarPlane.w )" ) );
+		}
+
 		Int Light::m_index()const
 		{
 			return Int( m_writer, cuT( "int( " ) + String( *this ) + cuT( ".m_colourIndex.w )" ) );

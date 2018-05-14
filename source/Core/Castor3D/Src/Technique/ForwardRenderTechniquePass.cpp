@@ -28,6 +28,56 @@ using namespace castor;
 
 namespace castor3d
 {
+	namespace
+	{
+		void doBindTexture( renderer::TextureView const & view
+			, renderer::Sampler const & sampler
+			, renderer::WriteDescriptorSetArray & writes
+			, uint32_t & index )
+		{
+			writes.push_back( renderer::WriteDescriptorSet
+				{
+					index++,
+					0u,
+					1u,
+					renderer::DescriptorType::eCombinedImageSampler,
+					{
+						{
+							sampler,
+							view,
+							renderer::ImageLayout::eShaderReadOnlyOptimal
+						},
+					}
+				} );
+		}
+
+		void doBindShadowMaps( ShadowMapRefArray const & shadowMaps
+			, renderer::WriteDescriptorSetArray & writes
+			, uint32_t & index )
+		{
+			std::vector< renderer::DescriptorImageInfo > shadowMapWrites;
+
+			for ( auto & shadowMap : shadowMaps )
+			{
+				shadowMapWrites.push_back( {
+					shadowMap.get().getTexture().getSampler()->getSampler(),
+					shadowMap.get().getTexture().getTexture()->getDefaultView(),
+					renderer::ImageLayout::eShaderReadOnlyOptimal
+					} );
+			}
+
+			writes.push_back( renderer::WriteDescriptorSet
+				{
+					index,
+					0u,
+					uint32_t( shadowMapWrites.size() ),
+					renderer::DescriptorType::eCombinedImageSampler,
+					shadowMapWrites
+				} );
+			index += uint32_t( shadowMapWrites.size() );
+		}
+	}
+
 	ForwardRenderTechniquePass::ForwardRenderTechniquePass( String const & name
 		, Scene & scene
 		, Camera * camera
@@ -139,13 +189,10 @@ namespace castor3d
 	}
 
 	void ForwardRenderTechniquePass::update( RenderInfo & info
-		, ShadowMapLightTypeArray & shadowMaps
 		, Point2r const & jitter )
 	{
 		getSceneUbo().update( m_scene, *m_camera );
-		doUpdate( info
-			, shadowMaps
-			, jitter );
+		doUpdate( info, jitter );
 	}
 
 	renderer::Semaphore const & ForwardRenderTechniquePass::render( RenderInfo & info
@@ -311,23 +358,35 @@ namespace castor3d
 			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );	// c3d_mapBrdf
 		}
 
+		if ( m_scene.hasShadows() )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );	// c3d_mapShadowDirectional
+			textureBindings.emplace_back( index, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment, shader::SpotShadowMapCount );	// c3d_mapShadowSpot
+			index += shader::SpotShadowMapCount;
+			textureBindings.emplace_back( index, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment, shader::PointShadowMapCount );	// c3d_mapShadowPoint
+			index += shader::PointShadowMapCount;
+		}
+
 		return textureBindings;
 	}
 
 	void ForwardRenderTechniquePass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
 		, uint32_t & index
-		, BillboardListRenderNode & node )
+		, BillboardListRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
 	{
+		renderer::WriteDescriptorSetArray writes;
 		node.passNode.fillDescriptor( layout
 			, index
-			, *node.texDescriptorSet );
+			, writes );
 
 		if ( node.passNode.pass.hasEnvironmentMapping() )
 		{
 			auto & envMap = m_scene.getEnvironmentMap( node.sceneNode );
-			node.texDescriptorSet->createBinding( layout.getBinding( index++ )
-				, envMap.getTexture().getTexture()->getDefaultView()
-				, envMap.getTexture().getSampler()->getSampler() );
+			doBindTexture( envMap.getTexture().getTexture()->getDefaultView()
+				, envMap.getTexture().getSampler()->getSampler()
+				, writes
+				, index );
 		}
 
 		if ( node.passNode.pass.getType() != MaterialType::eLegacy )
@@ -337,33 +396,48 @@ namespace castor3d
 			if ( background.hasIbl() )
 			{
 				auto & ibl = background.getIbl();
-				node.texDescriptorSet->createBinding( layout.getBinding( index++ )
-					, ibl.getIrradianceTexture()
-					, ibl.getIrradianceSampler() );
-				node.texDescriptorSet->createBinding( layout.getBinding( index++ )
-					, ibl.getPrefilteredEnvironmentTexture()
-					, ibl.getPrefilteredEnvironmentSampler() );
-				node.texDescriptorSet->createBinding( layout.getBinding( index++ )
-					, ibl.getPrefilteredBrdfTexture()
-					, ibl.getPrefilteredBrdfSampler() );
+				doBindTexture( ibl.getIrradianceTexture()
+					, ibl.getIrradianceSampler()
+					, writes
+					, index );
+				doBindTexture( ibl.getPrefilteredEnvironmentTexture()
+					, ibl.getPrefilteredEnvironmentSampler()
+					, writes
+					, index );
+				doBindTexture( ibl.getPrefilteredBrdfTexture()
+					, ibl.getPrefilteredBrdfSampler()
+					, writes
+					, index );
 			}
 		}
+
+		if ( m_scene.hasShadows() )
+		{
+			doBindShadowMaps( shadowMaps[size_t( LightType::eDirectional )], writes, index );
+			doBindShadowMaps( shadowMaps[size_t( LightType::eSpot )], writes, index );
+			doBindShadowMaps( shadowMaps[size_t( LightType::ePoint )], writes, index );
+		}
+
+		node.texDescriptorSet->setBindings( writes );
 	}
 
 	void ForwardRenderTechniquePass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
 		, uint32_t & index
-		, SubmeshRenderNode & node )
+		, SubmeshRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
 	{
+		renderer::WriteDescriptorSetArray writes;
 		node.passNode.fillDescriptor( layout
 			, index
-			, *node.texDescriptorSet );
+			, writes );
 
 		if ( node.passNode.pass.hasEnvironmentMapping() )
 		{
 			auto & envMap = m_scene.getEnvironmentMap( node.sceneNode );
-			node.texDescriptorSet->createBinding( layout.getBinding( index++ )
-				, envMap.getTexture().getTexture()->getDefaultView()
-				, envMap.getTexture().getSampler()->getSampler() );
+			doBindTexture( envMap.getTexture().getTexture()->getDefaultView()
+				, envMap.getTexture().getSampler()->getSampler()
+				, writes
+				, index );
 		}
 
 		if ( node.passNode.pass.getType() != MaterialType::eLegacy )
@@ -373,17 +447,29 @@ namespace castor3d
 			if ( background.hasIbl() )
 			{
 				auto & ibl = background.getIbl();
-				node.texDescriptorSet->createBinding( layout.getBinding( index++ )
-					, ibl.getIrradianceTexture()
-					, ibl.getIrradianceSampler() );
-				node.texDescriptorSet->createBinding( layout.getBinding( index++ )
-					, ibl.getPrefilteredEnvironmentTexture()
-					, ibl.getPrefilteredEnvironmentSampler() );
-				node.texDescriptorSet->createBinding( layout.getBinding( index++ )
-					, ibl.getPrefilteredBrdfTexture()
-					, ibl.getPrefilteredBrdfSampler() );
+				doBindTexture( ibl.getIrradianceTexture()
+					, ibl.getIrradianceSampler()
+					, writes
+					, index );
+				doBindTexture( ibl.getPrefilteredEnvironmentTexture()
+					, ibl.getPrefilteredEnvironmentSampler()
+					, writes
+					, index );
+				doBindTexture( ibl.getPrefilteredBrdfTexture()
+					, ibl.getPrefilteredBrdfSampler()
+					, writes
+					, index );
 			}
 		}
+
+		if ( m_scene.hasShadows() )
+		{
+			doBindShadowMaps( shadowMaps[size_t( LightType::eDirectional )], writes, index );
+			doBindShadowMaps( shadowMaps[size_t( LightType::eSpot )], writes, index );
+			doBindShadowMaps( shadowMaps[size_t( LightType::ePoint )], writes, index );
+		}
+
+		node.texDescriptorSet->setBindings( writes );
 	}
 
 	glsl::Shader ForwardRenderTechniquePass::doGetVertexShaderSource( PassFlags const & passFlags
@@ -670,7 +756,6 @@ namespace castor3d
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		auto lighting = shader::legacy::createLightingModel( writer
-			, getShadowType( sceneFlags )
 			, index );
 		shader::PhongReflectionModel reflections{ writer };
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
@@ -947,7 +1032,6 @@ namespace castor3d
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		auto lighting = shader::pbr::mr::createLightingModel( writer
-			, getShadowType( sceneFlags )
 			, index );
 		shader::MetallicPbrReflectionModel reflections{ writer };
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
@@ -1280,7 +1364,6 @@ namespace castor3d
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		auto lighting = shader::pbr::sg::createLightingModel( writer
-			, getShadowType( sceneFlags )
 			, index );
 		shader::SpecularPbrReflectionModel reflections{ writer };
 		shader::Fog fog{ getFogType( sceneFlags ), writer };

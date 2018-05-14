@@ -101,7 +101,7 @@ namespace castor3d
 		static castor::String const ShadowMapUbo;
 		static castor::String const FarPlane;
 		static uint32_t constexpr UboBindingPoint = 10u;
-		static uint32_t constexpr TextureSize = 2048;
+		static uint32_t constexpr TextureSize = 4096;
 
 		struct Configuration
 		{

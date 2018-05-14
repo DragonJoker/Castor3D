@@ -65,20 +65,17 @@ namespace castor3d
 		 *\param[out]	info		Receives the render informations.
 		 *\param[out]	scene		The rendered scene.
 		 *\param[out]	camera		The viewer camera.
-		 *\param[out]	shadowMaps	The shadow maps.
 		 *\param[out]	jitter		The jittering value.
 		 *\~french
 		 *\brief		Met à jour la passe opaque.
 		 *\param[out]	info		Reçoit les informations de rendu.
 		 *\param[out]	scene		La scène rendue.
 		 *\param[out]	camera		La caméra par laquelle la scène est rendue.
-		 *\param[out]	shadowMaps	Les textures d'ombres.
 		 *\param[out]	jitter		La valeur de jittering.
 		 */
 		void update( RenderInfo & info
 			, Scene const & scene
 			, Camera const & camera
-			, ShadowMapLightTypeArray & shadowMaps
 			, castor::Point2r const & jitter );
 		/**
 		 *\~english

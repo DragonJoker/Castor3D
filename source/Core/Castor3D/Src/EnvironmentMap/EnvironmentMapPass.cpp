@@ -155,9 +155,8 @@ namespace castor3d
 	renderer::Semaphore const & EnvironmentMapPass::render( renderer::Semaphore const & toWait )
 	{
 		RenderInfo info;
-		ShadowMapLightTypeArray shadowmaps;
-		m_opaquePass->update( info, shadowmaps, {} );
-		m_transparentPass->update( info, shadowmaps, {} );
+		m_opaquePass->update( info, {} );
+		m_transparentPass->update( info, {} );
 		m_matrixUbo.update( m_camera->getView()
 			, m_camera->getViewport().getProjection() );
 		m_modelMatrixUbo.update( m_mtxModel );

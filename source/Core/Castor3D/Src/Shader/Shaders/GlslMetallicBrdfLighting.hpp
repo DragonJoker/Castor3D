@@ -14,8 +14,7 @@ namespace castor3d
 			: public LightingModel
 		{
 		public:
-			C3D_API MetallicBrdfLightingModel( ShadowType shadows
-				, glsl::GlslWriter & writer );
+			C3D_API MetallicBrdfLightingModel( glsl::GlslWriter & writer );
 			C3D_API void computeCombined( glsl::Vec3 const & worldEye
 				, glsl::Vec3 const & albedo
 				, glsl::Float const & metallic
@@ -53,8 +52,9 @@ namespace castor3d
 			void doDeclareComputeDirectionalLight()override;
 			void doDeclareComputePointLight()override;
 			void doDeclareComputeSpotLight()override;
-			void doDeclareComputeOnePointLight()override;
-			void doDeclareComputeOneSpotLight()override;
+			void doDeclareComputeOneDirectionalLight( ShadowType shadowType )override;
+			void doDeclareComputeOnePointLight( ShadowType shadowType )override;
+			void doDeclareComputeOneSpotLight( ShadowType shadowType )override;
 
 			void doComputeLight( Light const & light
 				, glsl::Vec3 const & worldEye

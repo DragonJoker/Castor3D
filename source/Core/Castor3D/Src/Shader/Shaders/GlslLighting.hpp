@@ -41,12 +41,11 @@ namespace castor3d
 		class LightingModel
 		{
 		public:
-			C3D_API LightingModel( ShadowType shadows
-				, glsl::GlslWriter & writer );
+			C3D_API LightingModel( glsl::GlslWriter & writer );
 			C3D_API void declareModel( uint32_t & index );
-			C3D_API void declareDirectionalModel( uint32_t & index );
-			C3D_API void declarePointModel( uint32_t & index );
-			C3D_API void declareSpotModel( uint32_t & index );
+			C3D_API void declareDirectionalModel( ShadowType shadows, uint32_t & index );
+			C3D_API void declarePointModel( ShadowType shadows, uint32_t & index );
+			C3D_API void declareSpotModel( ShadowType shadows, uint32_t & index );
 			// Calls
 			C3D_API DirectionalLight getDirectionalLight( glsl::Int const & index )const;
 			C3D_API PointLight getPointLight( glsl::Int const & index )const;
@@ -70,14 +69,14 @@ namespace castor3d
 			virtual void doDeclareComputeDirectionalLight() = 0;
 			virtual void doDeclareComputePointLight() = 0;
 			virtual void doDeclareComputeSpotLight() = 0;
-			virtual void doDeclareComputeOnePointLight() = 0;
-			virtual void doDeclareComputeOneSpotLight() = 0;
+			virtual void doDeclareComputeOneDirectionalLight( ShadowType shadowType ) = 0;
+			virtual void doDeclareComputeOnePointLight( ShadowType shadowType ) = 0;
+			virtual void doDeclareComputeOneSpotLight( ShadowType shadowType ) = 0;
 
 		public:
 			static uint32_t constexpr UboBindingPoint = 6u;
 
 		protected:
-			ShadowType m_shadows;
 			glsl::GlslWriter & m_writer;
 			std::shared_ptr< Shadow > m_shadowModel;
 			glsl::Function< shader::DirectionalLight

@@ -255,7 +255,8 @@ namespace castor3d
 
 			if ( itCam != itScn->second.end() )
 			{
-				itCam->second.update();
+				ShadowMapLightTypeArray shadowMaps;
+				itCam->second.update( shadowMaps );
 				doUpdateNodes( itCam->second.getCulledRenderNodes() );
 				auto pixel = doFboPick( position, camera, itCam->second.getCommandBuffer() );
 				result = doPick( pixel, itCam->second.getCulledRenderNodes() );
@@ -601,7 +602,8 @@ namespace castor3d
 
 	void PickingPass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
 		, uint32_t & index
-		, BillboardListRenderNode & node )
+		, BillboardListRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		node.passNode.fillDescriptor( layout
 			, index
@@ -611,7 +613,8 @@ namespace castor3d
 
 	void PickingPass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
 		, uint32_t & index
-		, SubmeshRenderNode & node )
+		, SubmeshRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		node.passNode.fillDescriptor( layout
 			, index

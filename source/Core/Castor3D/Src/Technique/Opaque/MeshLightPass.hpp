@@ -124,12 +124,6 @@ namespace castor3d
 		 */
 		void cleanup()override;
 		/**
-		 *\copydoc		castor3d::LightPass::update
-		 */
-		void update( castor::Size const & size
-			, Light const & light
-			, Camera const & camera )override;
-		/**
 		 *\~english
 		 *\brief		Renders the light pass.
 		 *\~french
@@ -146,9 +140,13 @@ namespace castor3d
 		 */
 		uint32_t getCount()const override;
 
-	protected:
-
 	private:
+		/**
+		 *\copydoc		castor3d::LightPass::doUpdate
+		 */
+		void doUpdate( castor::Size const & size
+			, Light const & light
+			, Camera const & camera )override;
 		/**
 		 *\copydoc		castor3d::LightPass::doGetVertexShaderSource
 		 */

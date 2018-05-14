@@ -203,12 +203,9 @@ namespace castor3d
 	}
 
 	void TransparentPass::update( RenderInfo & info
-		, ShadowMapLightTypeArray & shadowMaps
 		, Point2r const & jitter )
 	{
-		doUpdate( info
-			, shadowMaps
-			, jitter );
+		doUpdate( info, jitter );
 	}
 
 	bool TransparentPass::doInitialise( Size const & size )
@@ -599,7 +596,6 @@ namespace castor3d
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		auto lighting = shader::legacy::createLightingModel( writer
-			, getShadowType( sceneFlags )
 			, index );
 		shader::PhongReflectionModel reflections{ writer };
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
@@ -896,7 +892,6 @@ namespace castor3d
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		auto lighting = shader::pbr::mr::createLightingModel( writer
-			, getShadowType( sceneFlags )
 			, index );
 		glsl::Utils utils{ writer };
 		utils.declareApplyGamma();
@@ -1169,7 +1164,6 @@ namespace castor3d
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		auto lighting = shader::pbr::sg::createLightingModel( writer
-			, getShadowType( sceneFlags )
 			, index );
 		glsl::Utils utils{ writer };
 		utils.declareApplyGamma();

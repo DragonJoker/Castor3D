@@ -101,6 +101,7 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserLightCutOff )
 	DECLARE_ATTRIBUTE_PARSER( parserLightExponent )
 	DECLARE_ATTRIBUTE_PARSER( parserLightShadowProducer )
+	DECLARE_ATTRIBUTE_PARSER( parserLightShadowFilter )
 
 	// Scene node parsers
 	DECLARE_ATTRIBUTE_PARSER( parserNodeParent )

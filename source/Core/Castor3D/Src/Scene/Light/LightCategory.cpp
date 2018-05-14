@@ -80,7 +80,7 @@ namespace castor3d
 	{
 		uint32_t offset = 0u;
 		doCopyComponent( getColour(), float( m_shadowMapIndex ), buffer );
-		doCopyComponent( getIntensity(), getFarPlane(), buffer );
+		doCopyComponent( getIntensity(), getFarPlane(), float( getLight().getShadowType() ), buffer );
 		doBind( buffer );
 	}
 
@@ -99,6 +99,18 @@ namespace castor3d
 		( *buffer )[0] = components[0];
 		( *buffer )[1] = components[1];
 		( *buffer )[2] = component;
+		++buffer;
+	}
+
+	void LightCategory::doCopyComponent( Point2f const & components
+		, float component1
+		, float component2
+		, Point4f *& buffer )const
+	{
+		( *buffer )[0] = components[0];
+		( *buffer )[1] = components[1];
+		( *buffer )[2] = component1;
+		( *buffer )[3] = component2;
 		++buffer;
 	}
 

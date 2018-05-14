@@ -215,10 +215,15 @@ namespace castor3d
 			, RenderWindow & window ) = 0;
 
 	private:
+		struct TechniqueQueues
+		{
+			RenderQueueArray queues;
+			ShadowMapLightTypeArray shadowMaps;
+		};
 		void doProcessEvents( EventType p_eventType );
 		void doGpuStep( RenderInfo & p_info );
 		void doCpuStep();
-		void doUpdateQueues( RenderQueueArray & p_queues );
+		void doUpdateQueues( std::vector< TechniqueQueues > & queues );
 
 	protected:
 		//!\~english	The current RenderSystem.

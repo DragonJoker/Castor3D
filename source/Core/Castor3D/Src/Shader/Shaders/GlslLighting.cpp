@@ -13,84 +13,79 @@ namespace castor3d
 	{
 		//***********************************************************************************************
 
-		String paramToString( String & p_sep, FragmentInput const & p_value )
+		String paramToString( String & sep, FragmentInput const & value )
 		{
 			StringStream result{ makeStringStream() };
-			result << paramToString( p_sep, p_value.m_vertex );
-			result << paramToString( p_sep, p_value.m_normal );
+			result << paramToString( sep, value.m_vertex );
+			result << paramToString( sep, value.m_normal );
 			return result.str();
 		}
 
-		String paramToString( String & p_sep, OutputComponents const & p_value )
+		String paramToString( String & sep, OutputComponents const & value )
 		{
 			StringStream result{ makeStringStream() };
-			result << paramToString( p_sep, p_value.m_diffuse );
-			result << paramToString( p_sep, p_value.m_specular );
+			result << paramToString( sep, value.m_diffuse );
+			result << paramToString( sep, value.m_specular );
 			return result.str();
 		}
 
-		String toString( FragmentInput const & p_value )
+		String toString( FragmentInput const & value )
 		{
 			StringStream result{ makeStringStream() };
-			result << toString( p_value.m_vertex ) << ", ";
-			result << toString( p_value.m_normal );
+			result << toString( value.m_vertex ) << ", ";
+			result << toString( value.m_normal );
 			return result.str();
 		}
 
-		String toString( OutputComponents const & p_value )
+		String toString( OutputComponents const & value )
 		{
 			StringStream result{ makeStringStream() };
-			result << toString( p_value.m_diffuse ) << ", ";
-			result << toString( p_value.m_specular );
+			result << toString( value.m_diffuse ) << ", ";
+			result << toString( value.m_specular );
 			return result.str();
 		}
 
 		//***********************************************************************************************
 
-		FragmentInput::FragmentInput( GlslWriter & p_writer )
-			: m_vertex{ &p_writer, cuT( "inVertex" ) }
-			, m_normal{ &p_writer, cuT( "inNormal" ) }
+		FragmentInput::FragmentInput( GlslWriter & writer )
+			: m_vertex{ &writer, cuT( "inVertex" ) }
+			, m_normal{ &writer, cuT( "inNormal" ) }
 		{
 		}
 
-		FragmentInput::FragmentInput( InVec3 const & p_v3Vertex
-			, InVec3 const & p_v3Normal )
-			: m_vertex{ p_v3Vertex }
-			, m_normal{ p_v3Normal }
-		{
-		}
-
-		//***********************************************************************************************
-
-		OutputComponents::OutputComponents( GlslWriter & p_writer )
-			: m_diffuse{ &p_writer, cuT( "outDiffuse" ) }
-			, m_specular{ &p_writer, cuT( "outSpecular" ) }
-		{
-		}
-
-		OutputComponents::OutputComponents( InOutVec3 const & p_v3Diffuse
-			, InOutVec3 const & p_v3Specular )
-			: m_diffuse{ p_v3Diffuse }
-			, m_specular{ p_v3Specular }
+		FragmentInput::FragmentInput( InVec3 const & v3Vertex
+			, InVec3 const & v3Normal )
+			: m_vertex{ v3Vertex }
+			, m_normal{ v3Normal }
 		{
 		}
 
 		//***********************************************************************************************
 
-		LightingModel::LightingModel( ShadowType p_shadows, GlslWriter & p_writer )
-			: m_shadows{ p_shadows }
-			, m_writer{ p_writer }
-			, m_shadowModel{ std::make_shared< Shadow >( p_writer ) }
+		OutputComponents::OutputComponents( GlslWriter & writer )
+			: m_diffuse{ &writer, cuT( "outDiffuse" ) }
+			, m_specular{ &writer, cuT( "outSpecular" ) }
+		{
+		}
+
+		OutputComponents::OutputComponents( InOutVec3 const & v3Diffuse
+			, InOutVec3 const & v3Specular )
+			: m_diffuse{ v3Diffuse }
+			, m_specular{ v3Specular }
+		{
+		}
+
+		//***********************************************************************************************
+
+		LightingModel::LightingModel( GlslWriter & writer )
+			: m_writer{ writer }
+			, m_shadowModel{ std::make_shared< Shadow >( writer ) }
 		{
 		}
 
 		void LightingModel::declareModel( uint32_t & index )
 		{
-			if ( m_shadows != ShadowType::eNone )
-			{
-				m_shadowModel->declare( m_shadows, index );
-			}
-
+			m_shadowModel->declare( index );
 			doDeclareLight();
 			doDeclareDirectionalLight();
 			doDeclarePointLight();
@@ -105,46 +100,46 @@ namespace castor3d
 			doDeclareComputeSpotLight();
 		}
 
-		void LightingModel::declareDirectionalModel( uint32_t & index )
+		void LightingModel::declareDirectionalModel( ShadowType shadows, uint32_t & index )
 		{
-			if ( m_shadows != ShadowType::eNone )
+			if ( shadows != ShadowType::eNone )
 			{
-				m_shadowModel->declareDirectional( m_shadows, index );
+				m_shadowModel->declareDirectional( shadows, index );
 			}
 
 			doDeclareLight();
 			doDeclareDirectionalLight();
 			doDeclareDirectionalLightUbo();
 			doDeclareModel();
-			doDeclareComputeDirectionalLight();
+			doDeclareComputeOneDirectionalLight( shadows );
 		}
 
-		void LightingModel::declarePointModel( uint32_t & index )
+		void LightingModel::declarePointModel( ShadowType shadows, uint32_t & index )
 		{
-			if ( m_shadows != ShadowType::eNone )
+			if ( shadows != ShadowType::eNone )
 			{
-				m_shadowModel->declarePoint( m_shadows, index );
+				m_shadowModel->declarePoint( shadows, index );
 			}
 
 			doDeclareLight();
 			doDeclarePointLight();
 			doDeclarePointLightUbo();
 			doDeclareModel();
-			doDeclareComputeOnePointLight();
+			doDeclareComputeOnePointLight( shadows );
 		}
 
-		void LightingModel::declareSpotModel( uint32_t & index )
+		void LightingModel::declareSpotModel( ShadowType shadows, uint32_t & index )
 		{
-			if ( m_shadows != ShadowType::eNone )
+			if ( shadows != ShadowType::eNone )
 			{
-				m_shadowModel->declareSpot( m_shadows, index );
+				m_shadowModel->declareSpot( shadows, index );
 			}
 
 			doDeclareLight();
 			doDeclareSpotLight();
 			doDeclareSpotLightUbo();
 			doDeclareModel();
-			doDeclareComputeOneSpotLight();
+			doDeclareComputeOneSpotLight( shadows );
 		}
 
 		DirectionalLight LightingModel::getDirectionalLight( Int const & index )const
@@ -384,9 +379,9 @@ namespace castor3d
 				, InInt{ &m_writer, cuT( "index" ) } );
 		}
 
-		Light LightingModel::getBaseLight( Type const & p_value )const
+		Light LightingModel::getBaseLight( Type const & value )const
 		{
-			return writeFunctionCall< Light >( &m_writer, cuT( "getBaseLight" ), p_value );
+			return writeFunctionCall< Light >( &m_writer, cuT( "getBaseLight" ), value );
 		}
 	}
 }

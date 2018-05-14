@@ -216,7 +216,6 @@ namespace castor3d
 				, renderer::TextureView const & specularView );
 			renderer::RenderPassPtr renderPass;
 			renderer::FrameBufferPtr frameBuffer;
-			renderer::CommandBufferPtr commandBuffer;
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -430,9 +429,9 @@ namespace castor3d
 		 *\param[in]	light	La source lumineuse.
 		 *\param[in]	camera	La caméra.
 		 */
-		virtual void update( castor::Size const & size
+		void update( castor::Size const & size
 			, Light const & light
-			, Camera const & camera ) = 0;
+			, Camera const & camera );
 		/**
 		 *\~english
 		 *\brief		Renders the light pass.
@@ -467,6 +466,15 @@ namespace castor3d
 		/**@}*/
 
 	protected:
+		struct Pipeline
+		{
+			ProgramPtr program;
+			renderer::DescriptorSetPtr uboDescriptorSet;
+			renderer::WriteDescriptorSetArray textureWrites;
+			renderer::DescriptorSetPtr textureDescriptorSet;
+			renderer::CommandBufferPtr firstCommandBuffer;
+			renderer::CommandBufferPtr blendCommandBuffer;
+		};
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -522,7 +530,35 @@ namespace castor3d
 		 *\brief		Nettoie la passe d'éclairage.
 		 */
 		void doCleanup();
-		void doPrepareCommandBuffer( TextureUnit const * shadowMap
+		/**
+		 *\~english
+		 *\brief		Updates the light pass.
+		 *\param[in]	size	The render area dimensions.
+		 *\param[in]	light	The light.
+		 *\param[in]	camera	The viewing camera.
+		 *\~french
+		 *\brief		Met à jour la passe d'éclairage.
+		 *\param[in]	size	Les dimensions de la zone de rendu.
+		 *\param[in]	light	La source lumineuse.
+		 *\param[in]	camera	La caméra.
+		 */
+		virtual void doUpdate( castor::Size const & size
+			, Light const & light
+			, Camera const & camera ) = 0;
+		/**
+		 *\~english
+		 *\brief		Prepares the command buffer for given pipeline.
+		 *\param[in]	pipeline	The light pass pipeline.
+		 *\param[in]	shadowMap	The optional shadow map.
+		 *\param[in]	first		Tells if this is the first pass (\p true) or the blend pass (\p false).
+		 *\~french
+		 *\brief		Prépare le tampon de commandes du pipeline donné.
+		 *\param[in]	pipeline	Le pipeline de la passe d'éclairage.
+		 *\param[in]	shadowMap	La texture d'ombres, optionnelle.
+		 *\param[in]	first		Dit s'il s'agit de la première passe (\p true) ou la passe de mélange (\p false).
+		 */
+		void doPrepareCommandBuffer( Pipeline & pipeline
+			, TextureUnit const * shadowMap
 			, bool first );
 		/**
 		 *\~english
@@ -537,7 +573,8 @@ namespace castor3d
 		 *\return		Le source.
 		 */
 		virtual glsl::Shader doGetLegacyPixelShaderSource( SceneFlags const & sceneFlags
-			, LightType type )const;
+			, LightType lightType
+			, ShadowType shadowType )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source for this light pass.
@@ -551,7 +588,8 @@ namespace castor3d
 		 *\return		Le source.
 		 */
 		virtual glsl::Shader doGetPbrMRPixelShaderSource( SceneFlags const & sceneFlags
-			, LightType type )const;
+			, LightType lightType
+			, ShadowType shadowType )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source for this light pass.
@@ -565,7 +603,8 @@ namespace castor3d
 		 *\return		Le source.
 		 */
 		virtual glsl::Shader doGetPbrSGPixelShaderSource( SceneFlags const & sceneFlags
-			, LightType type )const;
+			, LightType lightType
+			, ShadowType shadowType )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source for this light pass.
@@ -602,17 +641,16 @@ namespace castor3d
 			//!\~french		La variable contenant les intensités de la lumière (RG) et le plan éloigné (B).
 			renderer::Vec4 intensityFarPlane;
 		};
+
 		Engine & m_engine;
-		RenderPass m_firstRenderPass;
-		RenderPass m_blendRenderPass;
 		RenderPassTimer * m_timer{ nullptr };
-		renderer::DescriptorSetPtr m_uboDescriptorSet;
-		renderer::WriteDescriptorSetArray m_textureWrites;
-		renderer::DescriptorSetPtr m_textureDescriptorSet;
 		renderer::UniformBufferBase const * m_baseUbo{ nullptr };
 		bool m_shadows;
 		MatrixUbo m_matrixUbo;
-		ProgramPtr m_program;
+		RenderPass m_firstRenderPass;
+		RenderPass m_blendRenderPass;
+		std::array< Pipeline, size_t( ShadowType::eCount ) > m_pipelines;
+		Pipeline * m_pipeline{ nullptr };
 		SamplerSPtr m_sampler;
 		renderer::VertexBufferPtr< float > m_vertexBuffer;
 		renderer::VertexLayoutPtr m_vertexLayout;

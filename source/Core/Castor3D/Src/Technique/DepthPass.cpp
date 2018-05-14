@@ -88,11 +88,9 @@ namespace castor3d
 	}
 
 	void DepthPass::update( RenderInfo & info
-		, ShadowMapLightTypeArray & shadowMaps
 		, Point2r const & jitter )
 	{
 		RenderTechniquePass::doUpdate( info
-			, shadowMaps
 			, jitter );
 	}
 
@@ -113,7 +111,8 @@ namespace castor3d
 
 	void DepthPass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
 		, uint32_t & index
-		, BillboardListRenderNode & node )
+		, BillboardListRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		node.passNode.fillDescriptor( layout
 			, index
@@ -123,7 +122,8 @@ namespace castor3d
 
 	void DepthPass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
 		, uint32_t & index
-		, SubmeshRenderNode & node )
+		, SubmeshRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		node.passNode.fillDescriptor( layout
 			, index

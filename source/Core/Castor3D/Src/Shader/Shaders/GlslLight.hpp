@@ -24,6 +24,7 @@ namespace castor3d
 			C3D_API glsl::Vec3 m_colour()const;
 			C3D_API glsl::Vec2 m_intensity()const;
 			C3D_API glsl::Float m_farPlane()const;
+			C3D_API glsl::Int m_shadowType()const;
 			C3D_API glsl::Int m_index()const;
 
 			template< typename T >

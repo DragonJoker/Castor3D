@@ -132,300 +132,162 @@ namespace castor3d
 		 */
 		C3D_API void attachTo( SceneNodeSPtr node )override;
 		/**
-		 *\~english
-		 *\return		The DirectionalLight.
-		 *\~french
-		 *\return		La DirectionalLight.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		C3D_API DirectionalLightSPtr getDirectionalLight()const;
-		/**
-		 *\~english
-		 *\return		The PointLight.
-		 *\~french
-		 *\return		La PointLight.
-		 */
 		C3D_API PointLightSPtr getPointLight()const;
-		/**
-		 *\~english
-		 *\return		The SpotLight
-		 *\~french
-		 *\return		La SpotLight.
-		 */
 		C3D_API SpotLightSPtr getSpotLight()const;
-		/**
-		 *\~english
-		 *\return		The light type.
-		 *\~french
-		 *\return		Le type de lumière.
-		 */
+
 		inline LightType getLightType()const
 		{
 			return m_category->getLightType();
 		}
-		/**
-		 *\~english
-		 *\return		The light enabled status.
-		 *\~french
-		 *\return		Le statut d'activation de la lumière.
-		 */
+
 		inline bool isEnabled()const
 		{
 			return m_enabled;
 		}
-		/**
-		 *\~english
-		 *\return		The light colour.
-		 *\~french
-		 *\return		La couleur de la lumière.
-		 */
+
 		inline castor::Point3f const & getColour()const
 		{
 			return m_category->getColour();
 		}
-		/**
-		 *\~english
-		 *\return		The intensity values.
-		 *\~french
-		 *\return		Les valeurs d'intensité.
-		 */
+
 		inline castor::Point2f const & getIntensity()const
 		{
 			return m_category->getIntensity();
 		}
-		/**
-		 *\~english
-		 *\return		The depth of the far plane.
-		 *\~french
-		 *\return		La profondeur du plan éloigné.
-		 */
+
 		inline float getFarPlane()const
 		{
 			return m_category->getFarPlane();
 		}
-		/**
-		 *\~english
-		 *\return		The diffuse intensity.
-		 *\~french
-		 *\return		L'intensité diffuse.
-		 */
+
 		inline float getDiffuseIntensity()const
 		{
 			return m_category->getDiffuseIntensity();
 		}
-		/**
-		 *\~english
-		 *\return		The specular intensity.
-		 *\~french
-		 *\return		L'intensité spéculaire.
-		 */
+
 		inline float getSpecularIntensity()const
 		{
 			return m_category->getSpecularIntensity();
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the colour.
-		 *\param[in]	values	The new value.
-		 *\~french
-		 *\brief		Définit la couleur.
-		 *\param[in]	values	La nouvelle valeur.
-		 */
-		inline void setColour( float * values )
-		{
-			m_category->setColour( castor::Point3f( values[0], values[1], values[2] ) );
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the colour.
-		 *\param[in]	r, g, b	The RGB components.
-		 *\~french
-		 *\brief		Définit la couleur.
-		 *\param[in]	r, g, b	Les composantes RGB.
-		 */
-		inline void setColour( float r, float g, float b )
-		{
-			m_category->setColour( castor::Point3f( r, g, b ) );
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the colour.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit la couleur.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setColour( castor::Point3f const & value )
-		{
-			m_category->setColour( value );
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the colour.
-		 *\param[in]	value	The new value
-		 *\~french
-		 *\brief		Définit la couleur.
-		 *\param[in]	value	La nouvelle valeur
-		 */
-		inline void setColour( castor::RgbColour const & value )
-		{
-			m_category->setColour( toRGBFloat( value ) );
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the light's intensity values.
-		 *\param[in]	values	The new values.
-		 *\~french
-		 *\brief		Définit les valeurs d'intensité.
-		 *\param[in]	values	Les nouvelles valeurs.
-		 */
-		inline void setIntensity( float * values )
-		{
-			m_category->setIntensity( castor::Point2f( values[0], values[1] ) );
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the light's intensity values.
-		 *\param[in]	d, s	The new values.
-		 *\~french
-		 *\brief		Définit les valeurs d'intensité.
-		 *\param[in]	d, s	Les nouvelles valeurs.
-		 */
-		inline void setIntensity( float d, float s )
-		{
-			m_category->setIntensity( castor::Point2f( d, s ) );
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the light's intensity values.
-		 *\param[in]	value	The new values.
-		 *\~french
-		 *\brief		Définit les valeurs d'intensité.
-		 *\param[in]	value	Les nouvelles valeurs.
-		 */
-		inline void setIntensity( castor::Point2f const & value )
-		{
-			m_category->setIntensity( value );
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the diffuse intensity.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit l'intensité diffuse.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setDiffuseIntensity( float value )
-		{
-			m_category->setDiffuseIntensity( value );
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the specular intensity.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit l'intensité spéculaire.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setSpecularIntensity( float value )
-		{
-			m_category->setSpecularIntensity( value );
-		}
-		/**
-		 *\~english
-		 *\return		The light's cube box.
-		 *\~french
-		 *\return		La cube box de la lumière.
-		 */
+
 		inline castor::BoundingBox const & getBoundingBox()const
 		{
 			return m_category->getBoundingBox();
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the light enabled status.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit le statut d'activation de la lumère.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setEnabled( bool value )
-		{
-			m_enabled = value;
-		}
-		/**
-		 *\~english
-		 *\brief		Enables the light.
-		 *\~french
-		 *\brief		Active la lumière.
-		 */
-		inline void enable()
-		{
-			setEnabled( true );
-		}
-		/**
-		 *\~english
-		 *\brief		Disables the light.
-		 *\~french
-		 *\brief		Désactive la lumière.
-		 */
-		inline void disable()
-		{
-			setEnabled( false );
-		}
-		/**
-		 *\~english
-		 *\return		The light category.
-		 *\~french
-		 *\return		La catégorie de source lumineuse.
-		 */
+
 		inline LightCategorySPtr getCategory()const
 		{
 			return m_category;
 		}
-		/**
-		 *\~english
-		 *\return		Tells if the light casts shadows.
-		 *\~french
-		 *\return		Dit si la lumière projette des ombres.
-		 */
+
 		inline bool isShadowProducer()const
 		{
 			return m_shadowCaster;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the light shadow casting status.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit le statut de projection d'ombre de la lumère
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setShadowProducer( bool value )
+
+		inline ShadowType getShadowType()const
 		{
-			m_shadowCaster = value;
+			return m_shadowType;
 		}
-		/**
-		 *\~english
-		 *\return		Tells if the light casts shadows.
-		 *\~french
-		 *\return		Dit si la lumière projette des ombres.
-		 */
+
 		inline ShadowMapRPtr getShadowMap()const
 		{
 			return m_shadowMap;
 		}
+		/**@}*/
 		/**
-		 *\~english
-		 *\brief		Sets the light's shadow map.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit la texture d'ombres de la lumière.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
+		*\~english
+		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		*/
+		/**@{*/
+		inline void setColour( float * values )
+		{
+			m_category->setColour( castor::Point3f( values[0], values[1], values[2] ) );
+		}
+
+		inline void setColour( float r, float g, float b )
+		{
+			m_category->setColour( castor::Point3f( r, g, b ) );
+		}
+
+		inline void setColour( castor::Point3f const & value )
+		{
+			m_category->setColour( value );
+		}
+
+		inline void setColour( castor::RgbColour const & value )
+		{
+			m_category->setColour( toRGBFloat( value ) );
+		}
+
+		inline void setIntensity( float * values )
+		{
+			m_category->setIntensity( castor::Point2f( values[0], values[1] ) );
+		}
+
+		inline void setIntensity( float d, float s )
+		{
+			m_category->setIntensity( castor::Point2f( d, s ) );
+		}
+
+		inline void setIntensity( castor::Point2f const & value )
+		{
+			m_category->setIntensity( value );
+		}
+
+		inline void setDiffuseIntensity( float value )
+		{
+			m_category->setDiffuseIntensity( value );
+		}
+
+		inline void setSpecularIntensity( float value )
+		{
+			m_category->setSpecularIntensity( value );
+		}
+
+		inline void setEnabled( bool value )
+		{
+			m_enabled = value;
+		}
+
+		inline void enable()
+		{
+			setEnabled( true );
+		}
+
+		inline void disable()
+		{
+			setEnabled( false );
+		}
+
+		inline void setShadowProducer( bool value )
+		{
+			m_shadowCaster = value;
+		}
+
+		inline void setShadowType( ShadowType value )
+		{
+			m_shadowType = value;
+		}
+
 		inline void setShadowMap( ShadowMapRPtr value )
 		{
 			m_shadowMap = value;
 		}
+		/**@}*/
 
 	public:
 		OnLightChanged onChanged;
@@ -434,17 +296,10 @@ namespace castor3d
 		void onNodeChanged( SceneNode const & node );
 
 	protected:
-		//!\~english	Tells the light is enabled.
-		//!\~french		Dit si la lumière est active ou pas.
 		bool m_enabled{ false };
-		//!\~english	Tells if the light casts shadows.
-		//!\~french		Dit si la lumière projette des ombres.
 		bool m_shadowCaster{ false };
-		//!\~english	The Light category that effectively holds light data.
-		//!\~french		la light category contenant les données de la lumière.
+		ShadowType m_shadowType{ ShadowType::eNone };
 		LightCategorySPtr m_category;
-		//!\~english	The shadow map.
-		//!\~french		La texture d'ombres.
 		ShadowMapRPtr m_shadowMap{ nullptr };
 	};
 }

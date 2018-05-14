@@ -29,6 +29,32 @@ namespace castor3d
 					, texture->getSampler()->getSampler() );
 			}
 		}
+
+		void doBindTexture( TextureUnitSPtr texture
+			, renderer::DescriptorSetLayout const & layout
+			, renderer::WriteDescriptorSetArray & writes
+			, uint32_t & index )
+		{
+			if ( texture )
+			{
+				writes.push_back( renderer::WriteDescriptorSet
+					{
+						index++,
+						0u,
+						1u,
+						renderer::DescriptorType::eCombinedImageSampler,
+						{
+							{
+								texture->getSampler()->getSampler(),
+								texture->getTexture()->getDefaultView(),
+								renderer::ImageLayout::eShaderReadOnlyOptimal
+							},
+						},
+						{},
+						{}
+					} );
+			}
+		}
 	}
 
 	PassRenderNode::PassRenderNode( Pass & pass )
@@ -85,6 +111,59 @@ namespace castor3d
 			doBindTexture( pass.getTextureUnit( TextureChannel::eTransmittance )
 				, layout
 				, descriptorSet
+				, index );
+		}
+	}
+
+	void PassRenderNode::fillDescriptor( renderer::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, renderer::WriteDescriptorSetArray & writes
+		, bool opacityOnly )
+	{
+		if ( opacityOnly )
+		{
+			doBindTexture( pass.getTextureUnit( TextureChannel::eOpacity )
+				, layout
+				, writes
+				, index );
+		}
+		else
+		{
+			doBindTexture( pass.getTextureUnit( TextureChannel::eDiffuse )
+				, layout
+				, writes
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eSpecular )
+				, layout
+				, writes
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eGloss )
+				, layout
+				, writes
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eNormal )
+				, layout
+				, writes
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eOpacity )
+				, layout
+				, writes
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eHeight )
+				, layout
+				, writes
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eAmbientOcclusion )
+				, layout
+				, writes
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eEmissive )
+				, layout
+				, writes
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eTransmittance )
+				, layout
+				, writes
 				, index );
 		}
 	}

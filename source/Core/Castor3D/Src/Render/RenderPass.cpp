@@ -54,57 +54,8 @@ namespace castor3d
 
 		template< typename MapType, typename FuncType >
 		inline void doTraverseNodes( RenderPass const & pass
-			, MapType & nodes
-			, Scene & scene
-			, ShadowMapLightTypeArray & shadowMaps
-			, FuncType function )
-		{
-			for ( auto & itPipelines : nodes )
-			{
-				for ( auto & itPass : itPipelines.second )
-				{
-					for ( auto & itSubmeshes : itPass.second )
-					{
-						function( *itPipelines.first
-							, *itPass.first
-							, *itSubmeshes.first
-							, itSubmeshes.first->getInstantiation()
-							, itSubmeshes.second );
-					}
-				}
-			}
-		}
-
-		template< typename MapType, typename FuncType >
-		inline void doTraverseNodes( RenderPass const & pass
 			, Camera const & camera
 			, MapType & nodes
-			, FuncType function )
-		{
-			for ( auto & itPipelines : nodes )
-			{
-				pass.updatePipeline( *itPipelines.first );
-
-				for ( auto & itPass : itPipelines.second )
-				{
-					for ( auto & itSubmeshes : itPass.second )
-					{
-						function( *itPipelines.first
-							, *itPass.first
-							, *itSubmeshes.first
-							, itSubmeshes.first->getInstantiation()
-							, itSubmeshes.second );
-					}
-				}
-			}
-		}
-
-		template< typename MapType, typename FuncType >
-		inline void doTraverseNodes( RenderPass const & pass
-			, Camera const & camera
-			, MapType & nodes
-			, Scene & scene
-			, ShadowMapLightTypeArray & shadowMaps
 			, FuncType function )
 		{
 			for ( auto & itPipelines : nodes )
@@ -140,8 +91,7 @@ namespace castor3d
 		inline void doRenderNonInstanced( RenderPass const & pass
 			, Camera const & camera
 			, MapType & nodes
-			, Scene & scene
-			, ShadowMapLightTypeArray & shadowMaps )
+			, Scene & scene )
 		{
 			for ( auto & itPipelines : nodes )
 			{
@@ -154,7 +104,6 @@ namespace castor3d
 			, Camera const & camera
 			, MapType & nodes
 			, Scene & scene
-			, ShadowMapLightTypeArray & shadowMaps
 			, RenderInfo & info )
 		{
 			for ( auto & itPipelines : nodes )
@@ -780,47 +729,52 @@ namespace castor3d
 	}
 
 	void RenderPass::initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
-		, BillboardRenderNode & node )
+		, BillboardRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto & layout = descriptorPool.getLayout();
 		uint32_t index = MinBufferIndex;
 		node.texDescriptorSet = descriptorPool.createDescriptorSet( 1u );
-		doFillTextureDescriptor( layout, index, node );
+		doFillTextureDescriptor( layout, index, node, shadowMaps );
 		node.texDescriptorSet->update();
 	}
 
 	void RenderPass::initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
-		, MorphingRenderNode & node )
+		, MorphingRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto & layout = descriptorPool.getLayout();
 		uint32_t index = MinBufferIndex;
 		node.texDescriptorSet = descriptorPool.createDescriptorSet( 1u );
-		doFillTextureDescriptor( layout, index, node );
+		doFillTextureDescriptor( layout, index, node, shadowMaps );
 		node.texDescriptorSet->update();
 	}
 
 	void RenderPass::initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
-		, SkinningRenderNode & node )
+		, SkinningRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto & layout = descriptorPool.getLayout();
 		uint32_t index = MinBufferIndex;
 		node.texDescriptorSet = descriptorPool.createDescriptorSet( 1u );
-		doFillTextureDescriptor( layout, index, node );
+		doFillTextureDescriptor( layout, index, node, shadowMaps );
 		node.texDescriptorSet->update();
 	}
 
 	void RenderPass::initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
-		, StaticRenderNode & node )
+		, StaticRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto & layout = descriptorPool.getLayout();
 		uint32_t index = MinBufferIndex;
 		node.texDescriptorSet = descriptorPool.createDescriptorSet( 1u );
-		doFillTextureDescriptor( layout, index, node );
+		doFillTextureDescriptor( layout, index, node, shadowMaps );
 		node.texDescriptorSet->update();
 	}
 
 	void RenderPass::initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
-		, SubmeshSkinninRenderNodesByPassMap & nodes )
+		, SubmeshSkinninRenderNodesByPassMap & nodes
+		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		for ( auto & passNodes : nodes )
 		{
@@ -830,14 +784,17 @@ namespace castor3d
 
 				if ( pass.getTextureUnitsCount() > 0u )
 				{
-					initialiseTextureDescriptor( descriptorPool, submeshNodes.second[0] );
+					initialiseTextureDescriptor( descriptorPool
+						, submeshNodes.second[0]
+						, shadowMaps );
 				}
 			}
 		}
 	}
 
 	void RenderPass::initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
-		, SubmeshStaticRenderNodesByPassMap & nodes )
+		, SubmeshStaticRenderNodesByPassMap & nodes
+		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		for ( auto & passNodes : nodes )
 		{
@@ -847,7 +804,9 @@ namespace castor3d
 
 				if ( pass.getTextureUnitsCount() > 0u )
 				{
-					initialiseTextureDescriptor( descriptorPool, submeshNodes.second[0] );
+					initialiseTextureDescriptor( descriptorPool
+						, submeshNodes.second[0]
+						, shadowMaps );
 				}
 			}
 		}
@@ -1050,31 +1009,6 @@ namespace castor3d
 			} );
 	}
 
-	void RenderPass::doUpdate( SubmeshStaticRenderNodesByPipelineMap & nodes
-		, ShadowMapLightTypeArray & shadowMaps )const
-	{
-		doTraverseNodes( *this
-			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps
-			, [this]( RenderPipeline & pipeline
-				, Pass & pass
-				, Submesh & submesh
-				, InstantiationComponent & instantiation
-				, StaticRenderNodeArray & renderNodes )
-			{
-				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
-
-				if ( !renderNodes.empty()
-					&& it != instantiation.end()
-					&& it->second.buffer )
-				{
-					doCopyNodesMatrices( renderNodes
-						, it->second.data );
-				}
-			} );
-	}
-
 	void RenderPass::doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes
 		, Camera const & camera )const
 	{
@@ -1102,42 +1036,11 @@ namespace castor3d
 
 	void RenderPass::doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes
 		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps )const
-	{
-		doTraverseNodes( *this
-			, camera
-			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps
-			, [this, &camera]( RenderPipeline & pipeline
-				, Pass & pass
-				, Submesh & submesh
-				, InstantiationComponent & instantiation
-				, StaticRenderNodePtrArray & renderNodes )
-			{
-				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
-
-				if ( !renderNodes.empty()
-					&& it != instantiation.end()
-					&& it->second.buffer )
-				{
-					doCopyNodesMatrices( renderNodes
-						, camera
-						, it->second.data );
-				}
-			} );
-	}
-
-	void RenderPass::doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes
-		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps
 		, RenderInfo & info )const
 	{
 		doTraverseNodes( *this
 			, camera
 			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps
 			, [this, &camera, &info]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
@@ -1165,11 +1068,6 @@ namespace castor3d
 	{
 	}
 
-	void RenderPass::doUpdate( StaticRenderNodesByPipelineMap & nodes
-		, ShadowMapLightTypeArray & shadowMaps )const
-	{
-	}
-
 	void RenderPass::doUpdate( StaticRenderNodesPtrByPipelineMap & nodes
 		, Camera const & camera )const
 	{
@@ -1180,25 +1078,12 @@ namespace castor3d
 
 	void RenderPass::doUpdate( StaticRenderNodesPtrByPipelineMap & nodes
 		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps )const
-	{
-		doRenderNonInstanced( *this
-			, camera
-			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps );
-	}
-
-	void RenderPass::doUpdate( StaticRenderNodesPtrByPipelineMap & nodes
-		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps
 		, RenderInfo & info )const
 	{
 		doRenderNonInstanced( *this
 			, camera
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps
 			, info );
 	}
 
@@ -1206,11 +1091,6 @@ namespace castor3d
 	{
 	}
 
-	void RenderPass::doUpdate( SkinningRenderNodesByPipelineMap & nodes
-		, ShadowMapLightTypeArray & shadowMaps )const
-	{
-	}
-
 	void RenderPass::doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes
 		, Camera const & camera )const
 	{
@@ -1221,25 +1101,12 @@ namespace castor3d
 
 	void RenderPass::doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes
 		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps )const
-	{
-		doRenderNonInstanced( *this
-			, camera
-			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps );
-	}
-
-	void RenderPass::doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes
-		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps
 		, RenderInfo & info )const
 	{
 		doRenderNonInstanced( *this
 			, camera
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps
 			, info );
 	}
 
@@ -1268,34 +1135,6 @@ namespace castor3d
 			} );
 	}
 
-	void RenderPass::doUpdate( SubmeshSkinningRenderNodesByPipelineMap & nodes
-		, ShadowMapLightTypeArray & shadowMaps )const
-	{
-		doTraverseNodes( *this
-			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps
-			, [this]( RenderPipeline & pipeline
-				, Pass & pass
-				, Submesh & submesh
-				, InstantiationComponent & instantiation
-				, SkinningRenderNodeArray & renderNodes )
-			{
-				auto & instantiatedBones = submesh.getInstantiatedBones();
-				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
-
-				if ( !renderNodes.empty()
-					&& it != instantiation.end()
-					&& it->second.buffer
-					&& instantiatedBones.hasInstancedBonesBuffer() )
-				{
-					uint32_t count1 = doCopyNodesMatrices( renderNodes, it->second.data );
-					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
-					REQUIRE( count1 == count2 );
-				}
-			} );
-	}
-
 	void RenderPass::doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes
 		, Camera const & camera )const
 	{
@@ -1325,44 +1164,11 @@ namespace castor3d
 
 	void RenderPass::doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes
 		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps )const
-	{
-		doTraverseNodes( *this
-			, camera
-			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps
-			, [this, &camera]( RenderPipeline & pipeline
-				, Pass & pass
-				, Submesh & submesh
-				, InstantiationComponent & instantiation
-				, SkinningRenderNodePtrArray & renderNodes )
-			{
-				auto & instantiatedBones = submesh.getInstantiatedBones();
-				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
-
-				if ( !renderNodes.empty()
-					&& it != instantiation.end()
-					&& it->second.buffer
-					&& instantiatedBones.hasInstancedBonesBuffer() )
-				{
-					uint32_t count1 = doCopyNodesMatrices( renderNodes, camera, it->second.data );
-					uint32_t count2 = doCopyNodesBones( renderNodes, camera, instantiatedBones.getInstancedBonesBuffer() );
-					REQUIRE( count1 == count2 );
-				}
-			} );
-	}
-
-	void RenderPass::doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes
-		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps
 		, RenderInfo & info )const
 	{
 		doTraverseNodes( *this
 			, camera
 			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps
 			, [this, &camera, &info]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
@@ -1391,11 +1197,6 @@ namespace castor3d
 	{
 	}
 
-	void RenderPass::doUpdate( MorphingRenderNodesByPipelineMap & nodes
-		, ShadowMapLightTypeArray & shadowMaps )const
-	{
-	}
-
 	void RenderPass::doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes
 		, Camera const & camera )const
 	{
@@ -1406,25 +1207,12 @@ namespace castor3d
 
 	void RenderPass::doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes
 		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps )const
-	{
-		doRenderNonInstanced( *this
-			, camera
-			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps );
-	}
-
-	void RenderPass::doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes
-		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps
 		, RenderInfo & info )const
 	{
 		doRenderNonInstanced( *this
 			, camera
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps
 			, info );
 	}
 
@@ -1432,11 +1220,6 @@ namespace castor3d
 	{
 	}
 
-	void RenderPass::doUpdate( BillboardRenderNodesByPipelineMap & nodes
-		, ShadowMapLightTypeArray & shadowMaps )const
-	{
-	}
-
 	void RenderPass::doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes
 		, Camera const & camera )const
 	{
@@ -1447,25 +1230,12 @@ namespace castor3d
 
 	void RenderPass::doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes
 		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps )const
-	{
-		doRenderNonInstanced( *this
-			, camera
-			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps );
-	}
-
-	void RenderPass::doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes
-		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps
 		, RenderInfo & info )const
 	{
 		doRenderNonInstanced( *this
 			, camera
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps
 			, info );
 	}
 

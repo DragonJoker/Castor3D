@@ -301,16 +301,6 @@ namespace castor3d
 			return m_fog;
 		}
 
-		inline Shadow const & getShadow()const
-		{
-			return m_shadow;
-		}
-
-		inline Shadow & getShadow()
-		{
-			return m_shadow;
-		}
-
 		inline MaterialType getMaterialsType()const
 		{
 			return getEngine()->getMaterialsType();
@@ -443,7 +433,6 @@ namespace castor3d
 		SceneBackgroundSPtr m_background;
 		LightFactory m_lightFactory;
 		Fog m_fog;
-		Shadow m_shadow;
 		FrameListenerWPtr m_listener;
 		std::map< SceneNode const *, std::unique_ptr< EnvironmentMap > > m_reflectionMaps;
 		std::vector< std::reference_wrapper< EnvironmentMap > > m_reflectionMapsArray;

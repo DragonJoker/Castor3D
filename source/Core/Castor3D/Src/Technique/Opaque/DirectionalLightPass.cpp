@@ -257,13 +257,13 @@ namespace castor3d
 		return VertexCount;
 	}
 
-	void DirectionalLightPass::update( Size const & size
+	void DirectionalLightPass::doUpdate( Size const & size
 		, Light const & light
 		, Camera const & camera )
 	{
 		m_viewport.resize( size );
 		m_matrixUbo.update( camera.getView(), m_viewport.getProjection() );
-		m_program->bind( light );
+		m_pipeline->program->bind( light );
 	}
 
 	glsl::Shader DirectionalLightPass::doGetVertexShaderSource( SceneFlags const & sceneFlags )const

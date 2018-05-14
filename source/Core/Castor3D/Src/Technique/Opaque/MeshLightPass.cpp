@@ -237,16 +237,6 @@ namespace castor3d
 		m_matrixUbo.cleanup();
 	}
 
-	void MeshLightPass::update( Size const & size
-		, Light const & light
-		, Camera const & camera )
-	{
-		auto model = doComputeModelMatrix( light, camera );
-		m_matrixUbo.update( camera.getView(), camera.getViewport().getProjection() );
-		m_modelMatrixUbo.update( model );
-		m_program->bind( light );
-	}
-
 	void MeshLightPass::render( bool first
 		, renderer::Semaphore const & toWait
 		, TextureUnit * shadowMapOpt )
@@ -260,6 +250,16 @@ namespace castor3d
 	uint32_t MeshLightPass::getCount()const
 	{
 		return m_count;
+	}
+
+	void MeshLightPass::doUpdate( Size const & size
+		, Light const & light
+		, Camera const & camera )
+	{
+		auto model = doComputeModelMatrix( light, camera );
+		m_matrixUbo.update( camera.getView(), camera.getViewport().getProjection() );
+		m_modelMatrixUbo.update( model );
+		m_pipeline->program->bind( light );
 	}
 
 	glsl::Shader MeshLightPass::doGetVertexShaderSource( SceneFlags const & sceneFlags )const

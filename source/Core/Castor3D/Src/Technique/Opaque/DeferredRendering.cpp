@@ -113,7 +113,6 @@ namespace castor3d
 	void DeferredRendering::update( RenderInfo & info
 		, Scene const & scene
 		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps
 		, Point2r const & jitter )
 	{
 		auto invView = camera.getView().getInverse().getTransposed();
@@ -126,7 +125,6 @@ namespace castor3d
 			, invView
 			, invProj );
 		m_opaquePass.update( info
-			, shadowMaps
 			, jitter );
 		m_reflection[0]->update( camera );
 		m_reflection[1]->update( camera );

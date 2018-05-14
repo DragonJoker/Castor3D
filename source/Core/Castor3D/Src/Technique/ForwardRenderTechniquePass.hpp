@@ -94,7 +94,6 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::render
 		 */
 		C3D_API void update( RenderInfo & info
-			, ShadowMapLightTypeArray & shadowMaps
 			, castor::Point2r const & jitter );
 		/**
 		 *\~english
@@ -133,13 +132,15 @@ namespace castor3d
 		 */
 		C3D_API void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
 			, uint32_t & index
-			, BillboardListRenderNode & nodes )override;
+			, BillboardListRenderNode & nodes
+			, ShadowMapLightTypeArray const & shadowMaps )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
 		 */
 		C3D_API void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
 			, uint32_t & index
-			, SubmeshRenderNode & nodes )override;
+			, SubmeshRenderNode & nodes
+			, ShadowMapLightTypeArray const & shadowMaps )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
