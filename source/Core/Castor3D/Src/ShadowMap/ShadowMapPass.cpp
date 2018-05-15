@@ -30,6 +30,13 @@ namespace castor3d
 	void ShadowMapPass::doUpdateNodes( SceneCulledRenderNodes & nodes
 		, Camera const & camera )
 	{
+		RenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled, camera );
+		RenderPass::doUpdate( nodes.staticNodes.frontCulled, camera );
+		RenderPass::doUpdate( nodes.skinnedNodes.frontCulled, camera );
+		RenderPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled, camera );
+		RenderPass::doUpdate( nodes.morphingNodes.frontCulled, camera );
+		RenderPass::doUpdate( nodes.billboardNodes.frontCulled, camera );
+
 		RenderPass::doUpdate( nodes.instancedStaticNodes.backCulled, camera );
 		RenderPass::doUpdate( nodes.staticNodes.backCulled, camera );
 		RenderPass::doUpdate( nodes.skinnedNodes.backCulled, camera );
@@ -86,20 +93,6 @@ namespace castor3d
 
 	void ShadowMapPass::doUpdatePipeline( RenderPipeline & pipeline )const
 	{
-	}
-
-	void ShadowMapPass::doPrepareFrontPipeline( ShaderProgramSPtr program
-		, renderer::VertexLayoutCRefArray const & layouts
-		, PipelineFlags const & flags )
-	{
-		doPreparePipeline( program, layouts, flags );
-	}
-
-	void ShadowMapPass::doPrepareBackPipeline( ShaderProgramSPtr program
-		, renderer::VertexLayoutCRefArray const & layouts
-		, PipelineFlags const & flags )
-	{
-		doPreparePipeline( program, layouts, flags );
 	}
 
 	glsl::Shader ShadowMapPass::doGetVertexShaderSource( PassFlags const & passFlags

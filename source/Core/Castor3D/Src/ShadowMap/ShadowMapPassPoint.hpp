@@ -87,9 +87,15 @@ namespace castor3d
 		 */
 		void doUpdate( RenderQueueArray & queues )override;
 		/**
-		 *\copydoc		castor3d::ShadowMapPass::doPreparePipeline
+		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
 		 */
-		void doPreparePipeline( ShaderProgramSPtr program
+		void doPrepareFrontPipeline( ShaderProgramSPtr program
+			, renderer::VertexLayoutCRefArray const & layouts
+			, PipelineFlags const & flags )override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
+		 */
+		void doPrepareBackPipeline( ShaderProgramSPtr program
 			, renderer::VertexLayoutCRefArray const & layouts
 			, PipelineFlags const & flags )override;
 

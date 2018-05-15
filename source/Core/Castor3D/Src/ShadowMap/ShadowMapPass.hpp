@@ -131,30 +131,9 @@ namespace castor3d
 			, SubmeshRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		/**
-		 *\~english
-		 *\brief		Prepares the pipeline, culling back faces.
-		 *\~french
-		 *\brief		Prépare le pipeline de rendu, en supprimant les faces arrière.
-		 */
-		virtual void doPreparePipeline( ShaderProgramSPtr program
-			, renderer::VertexLayoutCRefArray const & layouts
-			, PipelineFlags const & flags ) = 0;
-		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
 		void doUpdatePipeline( RenderPipeline & pipeline )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
-		 */
-		void doPrepareFrontPipeline( ShaderProgramSPtr program
-			, renderer::VertexLayoutCRefArray const & layouts
-			, PipelineFlags const & flags )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
-		 */
-		void doPrepareBackPipeline( ShaderProgramSPtr program
-			, renderer::VertexLayoutCRefArray const & layouts
-			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */

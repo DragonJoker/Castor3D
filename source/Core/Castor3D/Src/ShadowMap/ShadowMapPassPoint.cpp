@@ -194,7 +194,57 @@ namespace castor3d
 		queues.emplace_back( m_renderQueue );
 	}
 
-	void ShadowMapPassPoint::doPreparePipeline( ShaderProgramSPtr program
+	void ShadowMapPassPoint::doPrepareFrontPipeline( ShaderProgramSPtr program
+		, renderer::VertexLayoutCRefArray const & layouts
+		, PipelineFlags const & flags )
+	{
+		auto & pipelines = doGetFrontPipelines();
+
+		if ( pipelines.find( flags ) == pipelines.end() )
+		{
+			renderer::RasterisationState rsState;
+			rsState.cullMode = renderer::CullModeFlag::eFront;
+			renderer::DepthStencilState dsState;
+			auto bdState = RenderTechniquePass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 2u );
+			auto & pipeline = *pipelines.emplace( flags
+				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
+					, std::move( dsState )
+					, std::move( rsState )
+					, std::move( bdState )
+					, renderer::MultisampleState{}
+					, program
+					, flags ) ).first->second;
+			pipeline.setVertexLayouts( layouts );
+			pipeline.setViewport( { m_viewport.getWidth(), m_viewport.getHeight(), 0, 0 } );
+			pipeline.setScissor( { 0, 0, m_viewport.getWidth(), m_viewport.getHeight() } );
+
+			auto initialise = [this, &pipeline, flags]()
+			{
+				auto uboBindings = doCreateUboBindings( flags );
+				uboBindings.emplace_back( ShadowMapPassPoint::UboBindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment );
+				auto texBindings = doCreateTextureBindings( flags );
+				auto uboLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
+				auto texLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( texBindings ) );
+				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
+				layouts.emplace_back( std::move( uboLayout ) );
+				layouts.emplace_back( std::move( texLayout ) );
+				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
+				pipeline.initialise( getRenderPass() );
+				m_initialised = true;
+			};
+
+			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
+			{
+				initialise();
+			}
+			else
+			{
+				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, initialise ) );
+			}
+		}
+	}
+
+	void ShadowMapPassPoint::doPrepareBackPipeline( ShaderProgramSPtr program
 		, renderer::VertexLayoutCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
@@ -203,7 +253,7 @@ namespace castor3d
 		if ( pipelines.find( flags ) == pipelines.end() )
 		{
 			renderer::RasterisationState rsState;
-			rsState.cullMode = renderer::CullModeFlag::eNone;
+			rsState.cullMode = renderer::CullModeFlag::eBack;
 			renderer::DepthStencilState dsState;
 			auto bdState = RenderTechniquePass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 2u );
 			auto & pipeline = *pipelines.emplace( flags

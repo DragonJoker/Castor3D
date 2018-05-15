@@ -62,6 +62,25 @@ namespace castor3d
 				, glsl::Float const & farPlane );
 
 		private:
+			glsl::Float chebyshevUpperBound( glsl::Vec2 const & moments
+				, glsl::Float const & distance
+				, glsl::Float const & minVariance
+				, glsl::Float const & varianceBias );
+			glsl::Float getShadowOffset( glsl::Vec3 const & normal
+				, glsl::Vec3 const & lightDirection
+				, glsl::Float const & minOffset
+				, glsl::Float const & maxSlopeOffset );
+			glsl::Float textureProj( glsl::Vec4 const & lightSpacePosition
+				, glsl::Vec2 const & offset
+				, glsl::Sampler2D const & shadowMap
+				, glsl::Float const & bias );
+			glsl::Float filterPCF( glsl::Vec4 const & lightSpacePosition
+				, glsl::Sampler2D const & shadowMap
+				, glsl::Float const & bias );
+			glsl::Vec4 getLightSpacePosition( glsl::Mat4 const & lightMatrix
+				, glsl::Vec3 const & worldSpacePosition );
+
+		private:
 			void doDeclareGetRandom();
 			void doDeclareGetShadowOffset();
 			void doDeclareChebyshevUpperBound();

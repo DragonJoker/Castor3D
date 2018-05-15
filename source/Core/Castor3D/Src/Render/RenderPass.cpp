@@ -78,6 +78,16 @@ namespace castor3d
 
 		template< typename MapType >
 		inline void doRenderNonInstanced( RenderPass const & pass
+			, MapType & nodes )
+		{
+			for ( auto & itPipelines : nodes )
+			{
+				pass.updatePipeline( *itPipelines.first );
+			}
+		}
+
+		template< typename MapType >
+		inline void doRenderNonInstanced( RenderPass const & pass
 			, Camera const & camera
 			, MapType & nodes )
 		{
@@ -1066,6 +1076,8 @@ namespace castor3d
 
 	void RenderPass::doUpdate( StaticRenderNodesByPipelineMap & nodes )const
 	{
+		doRenderNonInstanced( *this
+			, nodes );
 	}
 
 	void RenderPass::doUpdate( StaticRenderNodesPtrByPipelineMap & nodes

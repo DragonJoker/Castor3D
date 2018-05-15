@@ -35,7 +35,7 @@ namespace castor3d
 {
 	namespace
 	{
-		TextureUnit doInitialisePointShadow( Engine & engine
+		TextureUnit doInitialiseVariance( Engine & engine
 			, Size const & size )
 		{
 			String const name = cuT( "ShadowMap_Point_Shadow" );
@@ -83,7 +83,7 @@ namespace castor3d
 			return unit;
 		}
 
-		TextureUnit doInitialisePointLinearDepth( Engine & engine
+		TextureUnit doInitialiseDepth( Engine & engine
 			, Size const & size )
 		{
 			String const name = cuT( "ShadowMap_Point_Depth" );
@@ -135,8 +135,8 @@ namespace castor3d
 	ShadowMapPoint::ShadowMapPoint( Engine & engine
 		, Scene & scene )
 		: ShadowMap{ engine
-			, doInitialisePointShadow( engine, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } )
-			, doInitialisePointLinearDepth( engine, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } )
+			, doInitialiseVariance( engine, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } )
+			, doInitialiseDepth( engine, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } )
 			, {
 				std::make_shared< ShadowMapPassPoint >( engine, scene, *this ),
 				std::make_shared< ShadowMapPassPoint >( engine, scene, *this ),
