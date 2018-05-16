@@ -72,24 +72,14 @@ namespace castor3d
 				m_maxCount = uint32_t( std::floor( float( maxSize ) / elementSize ) );
 				m_maxSize = uint32_t( m_maxCount * elementSize );
 
-				if ( getRenderSystem()->hasCurrentDevice() )
-				{
-					m_uploadCommandBuffer = getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer();
-					m_stagingBuffer = std::make_unique< renderer::StagingBuffer >( *getRenderSystem()->getCurrentDevice()
-						, renderer::BufferTarget::eTransferSrc
-						, m_maxSize );
-				}
-				else
-				{
-					getRenderSystem()->getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-						, [this]()
-						{
-							m_uploadCommandBuffer = getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer();
-							m_stagingBuffer = std::make_unique< renderer::StagingBuffer >( *getRenderSystem()->getCurrentDevice()
-								, renderer::BufferTarget::eTransferSrc
-								, m_maxSize );
-						} ) );
-				}
+				getRenderSystem()->getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+					, [this]()
+					{
+						m_uploadCommandBuffer = getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer();
+						m_stagingBuffer = std::make_unique< renderer::StagingBuffer >( *getRenderSystem()->getCurrentDevice()
+							, renderer::BufferTarget::eTransferSrc
+							, m_maxSize );
+					} ) );
 			}
 
 			auto buffer = std::make_unique< UniformBuffer< T > >( *getRenderSystem()
@@ -99,18 +89,11 @@ namespace castor3d
 			itB = it->second.begin() + it->second.size() - 1;
 			auto & ubuffer = *it->second.back();
 
-			if ( getRenderSystem()->hasCurrentDevice() )
-			{
-				ubuffer.initialise();
-			}
-			else
-			{
-				getRenderSystem()->getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-					, [&ubuffer]()
-					{
-						ubuffer.initialise();
-					} ) );
-			}
+			getRenderSystem()->getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+				, [&ubuffer]()
+				{
+					ubuffer.initialise();
+				} ) );
 		}
 
 		result.buffer = itB->get();

@@ -177,7 +177,7 @@ namespace castor3d
 	protected:
 		Scene & m_scene;
 		ShadowMap const & m_shadowMap;
-		bool m_initialised{ false };
+		mutable bool m_initialised{ false };
 	};
 }
 

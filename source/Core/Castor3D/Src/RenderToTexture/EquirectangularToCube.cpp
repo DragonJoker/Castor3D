@@ -60,12 +60,12 @@ namespace castor3d
 
 				// Outputs
 				auto vtx_position = writer.declOutput< Vec3 >( cuT( "vtx_position" ), 0u );
-				auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+				auto out = gl_PerVertex{ writer };
 
 				std::function< void() > main = [&]()
 				{
 					vtx_position = position.xyz();
-					gl_Position = mtxViewProjection * writer.rendererScalePosition( position );
+					out.gl_Position() = mtxViewProjection * writer.rendererScalePosition( position );
 				};
 
 				writer.implementFunction< void >( cuT( "main" ), main );

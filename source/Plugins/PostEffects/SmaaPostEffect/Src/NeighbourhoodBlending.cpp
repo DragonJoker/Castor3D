@@ -39,12 +39,12 @@ namespace smaa
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
 			auto vtx_offset = writer.declOutputArray< Vec4 >( cuT( "vtx_offset" ), 1u, 2u );
-			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto out = gl_PerVertex{ writer };
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					gl_Position = vec4( position, 0.0, 1.0 );
+					out.gl_Position() = vec4( position, 0.0, 1.0 );
 					vtx_texture = texcoord;
 
 					vtx_offset[0] = vec4( vtx_texture, vtx_texture ) + vec4( c3d_pixelSize, c3d_pixelSize ) * vec4( -1.0_f, 0.0, 0.0, -1.0 );

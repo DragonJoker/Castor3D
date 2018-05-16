@@ -211,7 +211,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
-		auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+		auto out = gl_PerVertex{ writer };
 
 		std::function< void() > main = [&]()
 		{
@@ -254,7 +254,7 @@ namespace castor3d
 			vtx_instance = gl_InstanceID;
 			v4Vertex = c3d_curView * v4Vertex;
 			vtx_viewPosition = v4Vertex.xyz();
-			gl_Position = c3d_projection * v4Vertex;
+			out.gl_Position() = c3d_projection * v4Vertex;
 		};
 
 		writer.implementFunction< void >( cuT( "main" ), main );

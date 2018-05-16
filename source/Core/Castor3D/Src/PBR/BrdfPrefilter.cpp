@@ -167,12 +167,12 @@ namespace castor3d
 
 			// Outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto out = gl_PerVertex{ writer };
 
 			std::function< void() > main = [&]()
 			{
 				vtx_texture = texcoord;
-				gl_Position = writer.rendererScalePosition( vec4( position, 0.0, 1.0 ) );
+				out.gl_Position() = writer.rendererScalePosition( vec4( position, 0.0, 1.0 ) );
 			};
 
 			writer.implementFunction< void >( cuT( "main" ), main );

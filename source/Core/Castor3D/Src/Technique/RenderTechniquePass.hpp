@@ -99,21 +99,6 @@ namespace castor3d
 		C3D_API virtual void update( RenderInfo & info
 			, castor::Point2r const & jitter ) = 0;
 		/**
-		 *\~english
-		 *\brief		Creates a blend state matching given blend modes.
-		 *\param[in]	colourBlendMode	The colour blend mode.
-		 *\param[in]	alphaBlendMode	The alpha blend mode.
-		 *\return		
-		 *\~french
-		 *\brief		Crée un état de mélange correspondant aux modes de mélange donnés.
-		 *\param[in]	colourBlendMode	Le mode de mélange couleurs.
-		 *\param[in]	alphaBlendMode	Le mode de mélange alpha.
-		 *\return		
-		 */
-		static renderer::ColourBlendState createBlendState( BlendMode colourBlendMode
-			, BlendMode alphaBlendMode
-			, uint32_t attachesCount );
-		/**
 		*\~english
 		*name
 		*	Getters.
@@ -220,17 +205,13 @@ namespace castor3d
 		 */
 		C3D_API void doUpdatePipeline( RenderPipeline & pipeline )const override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
+		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
 		 */
-		C3D_API void doPrepareFrontPipeline( ShaderProgramSPtr program
-			, renderer::VertexLayoutCRefArray const & layouts
-			, PipelineFlags const & flags )override;
+		renderer::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
+		 *\copydoc		castor3d::RenderPass::doCreateBlendState
 		 */
-		C3D_API void doPrepareBackPipeline( ShaderProgramSPtr program
-			, renderer::VertexLayoutCRefArray const & layouts
-			, PipelineFlags const & flags )override;
+		renderer::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
 
 	protected:
 		/**

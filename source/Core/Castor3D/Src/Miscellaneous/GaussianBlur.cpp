@@ -49,13 +49,13 @@ namespace castor3d
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto out = gl_PerVertex{ writer };
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
 					vtx_texture = texcoord;
-					gl_Position = vec4( position.x(), position.y(), 0.0, 1.0 );
+					out.gl_Position() = vec4( position.x(), position.y(), 0.0, 1.0 );
 				} );
 			return writer.finalise();
 		}
@@ -89,8 +89,8 @@ namespace castor3d
 				FOR( writer, UInt, i, 1u, cuT( "i < c3d_coefficientsCount" ), cuT( "++i" ) )
 				{
 					offset += base;
-					pxl_fragColor += c3d_coefficients[i / 4][i % 4] * texture( c3d_mapDiffuse, vtx_texture - offset );
-					pxl_fragColor += c3d_coefficients[i / 4][i % 4] * texture( c3d_mapDiffuse, vtx_texture + offset );
+					pxl_fragColor += c3d_coefficients[i / 4_ui][i % 4_ui] * texture( c3d_mapDiffuse, vtx_texture - offset );
+					pxl_fragColor += c3d_coefficients[i / 4_ui][i % 4_ui] * texture( c3d_mapDiffuse, vtx_texture + offset );
 				}
 				ROF;
 
@@ -131,8 +131,8 @@ namespace castor3d
 				FOR( writer, UInt, i, 1u, cuT( "i < c3d_coefficientsCount" ), cuT( "++i" ) )
 				{
 					offset += base;
-					pxl_fragColor += c3d_coefficients[i / 4][i % 4] * texture( c3d_mapDiffuse, vtx_texture - offset );
-					pxl_fragColor += c3d_coefficients[i / 4][i % 4] * texture( c3d_mapDiffuse, vtx_texture + offset );
+					pxl_fragColor += c3d_coefficients[i / 4_ui][i % 4_ui] * texture( c3d_mapDiffuse, vtx_texture - offset );
+					pxl_fragColor += c3d_coefficients[i / 4_ui][i % 4_ui] * texture( c3d_mapDiffuse, vtx_texture + offset );
 				}
 				ROF;
 

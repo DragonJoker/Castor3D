@@ -46,13 +46,13 @@ namespace fxaa
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
 			auto vtx_posPos = writer.declOutput< Vec4 >( PosPos, 1u );
-			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto out = gl_PerVertex{ writer };
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
 					vtx_texture = texcoord;
-					gl_Position = vec4( position.xy(), 0.0, 1.0 );
+					out.gl_Position() = vec4( position.xy(), 0.0, 1.0 );
 					vtx_posPos.xy() = position.xy();
 					vtx_posPos.zw() = position.xy() - writer.paren( c3d_pixelSize * writer.paren( 0.5 + c3d_subpixShift ) );
 				} );

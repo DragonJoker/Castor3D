@@ -148,18 +148,11 @@ namespace castor3d
 
 		if ( initialise )
 		{
-			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
-			{
-				m_arrayPrograms.back()->initialise();
-			}
-			else
-			{
-				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-					, [program]()
-					{
-						program->initialise();
-					} ) );
-			}
+			getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+				, [program]()
+				{
+					program->initialise();
+				} ) );
 		}
 
 		return m_arrayPrograms.back();
@@ -263,7 +256,7 @@ namespace castor3d
 			auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ), RenderPass::VertexOutputs::TextureLocation );
 			auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" ), RenderPass::VertexOutputs::InstanceLocation );
 			auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" ), RenderPass::VertexOutputs::MaterialLocation );
-			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto out = gl_PerVertex{ writer };
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
@@ -304,9 +297,9 @@ namespace castor3d
 					, writer.paren( c3d_curView * vec4( vtx_worldPosition, 1.0 ) ).xyz() );
 				auto prvPosition = writer.declLocale( cuT( "prvPosition" )
 					, writer.paren( c3d_prvView * vec4( vtx_worldPosition, 1.0 ) ) );
-				gl_Position = c3d_projection * vec4( curPosition, 1.0 );
+				out.gl_Position() = c3d_projection * vec4( curPosition, 1.0 );
 				prvPosition = c3d_projection * prvPosition;
-				vtx_curPosition = gl_Position.xyw();
+				vtx_curPosition = out.gl_Position().xyw();
 				vtx_prvPosition = prvPosition.xyw();
 			} );
 

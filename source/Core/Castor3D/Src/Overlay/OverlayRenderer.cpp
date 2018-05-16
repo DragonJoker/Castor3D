@@ -758,7 +758,7 @@ namespace castor3d
 			// Shader outputs
 			auto vtx_text = writer.declOutput< Vec2 >( cuT( "vtx_text" ), 0u, checkFlag( textureFlags, TextureChannel::eText ) );
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 1u, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
-			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto out = gl_PerVertex{ writer };
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
@@ -774,7 +774,7 @@ namespace castor3d
 
 				auto size = writer.declLocale( cuT( "size" )
 					, c3d_renderRatio * c3d_renderSize );
-				gl_Position = c3d_projection * vec4( size * writer.paren( c3d_position + position )
+				out.gl_Position() = c3d_projection * vec4( size * writer.paren( c3d_position + position )
 					, 0.0
 					, 1.0 );
 			} );

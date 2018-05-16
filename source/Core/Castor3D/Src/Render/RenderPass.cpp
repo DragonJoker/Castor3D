@@ -232,6 +232,7 @@ namespace castor3d
 		m_matrixUbo.initialise();
 		m_sceneUbo.initialise();
 		m_sceneUbo.setWindowSize( size );
+		m_size = size;
 		return doInitialise( size );
 	}
 
@@ -552,6 +553,92 @@ namespace castor3d
 			, textureFlags
 			, programFlags
 			, sceneFlags );
+	}
+
+	renderer::ColourBlendState RenderPass::createBlendState( BlendMode colourBlendMode
+		, BlendMode alphaBlendMode
+		, uint32_t attachesCount )
+	{
+		renderer::ColourBlendStateAttachment attach;
+
+		switch ( colourBlendMode )
+		{
+		case BlendMode::eNoBlend:
+			attach.srcColorBlendFactor = renderer::BlendFactor::eOne;
+			attach.dstColorBlendFactor = renderer::BlendFactor::eZero;
+			break;
+
+		case BlendMode::eAdditive:
+			attach.blendEnable = true;
+			attach.srcColorBlendFactor = renderer::BlendFactor::eOne;
+			attach.dstColorBlendFactor = renderer::BlendFactor::eOne;
+			break;
+
+		case BlendMode::eMultiplicative:
+			attach.blendEnable = true;
+			attach.srcColorBlendFactor = renderer::BlendFactor::eZero;
+			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcColour;
+			break;
+
+		case BlendMode::eInterpolative:
+			attach.blendEnable = true;
+			attach.srcColorBlendFactor = renderer::BlendFactor::eSrcColour;
+			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcColour;
+			break;
+
+		default:
+			attach.blendEnable = true;
+			attach.srcColorBlendFactor = renderer::BlendFactor::eSrcColour;
+			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcColour;
+			break;
+		}
+
+		switch ( alphaBlendMode )
+		{
+		case BlendMode::eNoBlend:
+			attach.srcAlphaBlendFactor = renderer::BlendFactor::eOne;
+			attach.dstAlphaBlendFactor = renderer::BlendFactor::eZero;
+			break;
+
+		case BlendMode::eAdditive:
+			attach.blendEnable = true;
+			attach.srcAlphaBlendFactor = renderer::BlendFactor::eOne;
+			attach.dstAlphaBlendFactor = renderer::BlendFactor::eOne;
+			break;
+
+		case BlendMode::eMultiplicative:
+			attach.blendEnable = true;
+			attach.srcAlphaBlendFactor = renderer::BlendFactor::eZero;
+			attach.dstAlphaBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
+			attach.srcColorBlendFactor = renderer::BlendFactor::eZero;
+			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
+			break;
+
+		case BlendMode::eInterpolative:
+			attach.blendEnable = true;
+			attach.srcAlphaBlendFactor = renderer::BlendFactor::eSrcAlpha;
+			attach.dstAlphaBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
+			attach.srcColorBlendFactor = renderer::BlendFactor::eSrcAlpha;
+			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
+			break;
+
+		default:
+			attach.blendEnable = true;
+			attach.srcAlphaBlendFactor = renderer::BlendFactor::eSrcAlpha;
+			attach.dstAlphaBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
+			attach.srcColorBlendFactor = renderer::BlendFactor::eSrcAlpha;
+			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
+			break;
+		}
+
+		renderer::ColourBlendState state;
+
+		for ( auto i = 0u; i < attachesCount; ++i )
+		{
+			state.attachs.push_back( attach );
+		}
+
+		return state;
 	}
 
 	void RenderPass::initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
@@ -1290,6 +1377,82 @@ namespace castor3d
 			: m_frontPipelines;
 	}
 
+	void RenderPass::doPrepareFrontPipeline( ShaderProgramSPtr program
+		, renderer::VertexLayoutCRefArray const & layouts
+		, PipelineFlags const & flags )
+	{
+		auto & pipelines = doGetFrontPipelines();
+
+		if ( pipelines.find( flags ) == pipelines.end() )
+		{
+			auto dsState = doCreateDepthStencilState( flags );
+			auto bdState = doCreateBlendState( flags );
+			auto & pipeline = *pipelines.emplace( flags
+				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
+					, std::move( dsState )
+					, renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eFront }
+					, std::move( bdState )
+					, renderer::MultisampleState{}
+					, program
+					, flags ) ).first->second;
+			pipeline.setVertexLayouts( layouts );
+			pipeline.setViewport( { m_size.getWidth(), m_size.getHeight(), 0, 0 } );
+			pipeline.setScissor( { 0, 0, m_size.getWidth(), m_size.getHeight() } );
+
+			auto initialise = [this, &pipeline, flags]()
+			{
+				auto uboBindings = doCreateUboBindings( flags );
+				auto texBindings = doCreateTextureBindings( flags );
+				auto uboLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
+				auto texLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( texBindings ) );
+				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
+				layouts.emplace_back( std::move( uboLayout ) );
+				layouts.emplace_back( std::move( texLayout ) );
+				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
+				pipeline.initialise( getRenderPass() );
+			};
+			getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender, initialise ) );
+		}
+	}
+
+	void RenderPass::doPrepareBackPipeline( ShaderProgramSPtr program
+		, renderer::VertexLayoutCRefArray const & layouts
+		, PipelineFlags const & flags )
+	{
+		auto & pipelines = doGetBackPipelines();
+
+		if ( pipelines.find( flags ) == pipelines.end() )
+		{
+			auto dsState = doCreateDepthStencilState( flags );
+			auto bdState = doCreateBlendState( flags );
+			auto & pipeline = *pipelines.emplace( flags
+				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
+					, std::move( dsState )
+					, renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eBack }
+					, std::move( bdState )
+					, renderer::MultisampleState{}
+					, program
+					, flags ) ).first->second;
+			pipeline.setVertexLayouts( layouts );
+			pipeline.setViewport( { m_size.getWidth(), m_size.getHeight(), 0, 0 } );
+			pipeline.setScissor( { 0, 0, m_size.getWidth(), m_size.getHeight() } );
+
+			auto initialise = [this, &pipeline, flags]()
+			{
+				auto uboBindings = doCreateUboBindings( flags );
+				auto texBindings = doCreateTextureBindings( flags );
+				auto uboLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
+				auto texLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( texBindings ) );
+				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
+				layouts.emplace_back( std::move( uboLayout ) );
+				layouts.emplace_back( std::move( texLayout ) );
+				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
+				pipeline.initialise( getRenderPass() );
+			};
+			getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender, initialise ) );
+		}
+	}
+
 	renderer::DescriptorSetLayoutBindingArray RenderPass::doCreateUboBindings( PipelineFlags const & flags )const
 	{
 		renderer::DescriptorSetLayoutBindingArray uboBindings;
@@ -1407,7 +1570,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
-		auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+		auto out = gl_PerVertex{ writer };
 
 		std::function< void() > main = [&]()
 		{
@@ -1478,7 +1641,7 @@ namespace castor3d
 			vtx_tangent = normalize( glsl::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
 			vtx_instance = gl_InstanceID;
-			gl_Position = c3d_projection * v4Vertex;
+			out.gl_Position() = c3d_projection * v4Vertex;
 
 			auto tbn = writer.declLocale( cuT( "tbn" )
 				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );

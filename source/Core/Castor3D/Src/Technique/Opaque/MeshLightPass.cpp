@@ -274,11 +274,11 @@ namespace castor3d
 		auto vertex = writer.declAttribute< Vec3 >( cuT( "position" ), 0u );
 
 		// Shader outputs
-		auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+		auto out = gl_PerVertex{ writer };
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
-			gl_Position = c3d_projection * c3d_curView * c3d_mtxModel * vec4( vertex, 1.0_f );
+			out.gl_Position() = c3d_projection * c3d_curView * c3d_mtxModel * vec4( vertex, 1.0_f );
 		} );
 
 		return writer.finalise();

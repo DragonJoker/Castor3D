@@ -249,7 +249,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
-		auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+		auto out = gl_PerVertex{ writer };
 
 		std::function< void() > main = [&]()
 		{
@@ -304,7 +304,7 @@ namespace castor3d
 			vtx_worldPosition = curPosition.xyz();
 			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
 				, c3d_prvViewProj * curPosition );
-			gl_Position = c3d_curViewProj * curPosition;
+			out.gl_Position() = c3d_curViewProj * curPosition;
 
 			if ( invertNormals )
 			{
@@ -324,14 +324,14 @@ namespace castor3d
 			// (note that for providing the jitter in non-homogeneous projection space,
 			//  pixel coordinates (screen space) need to multiplied by two in the C++
 			//  code)
-			gl_Position.xy() -= c3d_curJitter * gl_Position.w();
-			prvPosition.xy() -= c3d_prvJitter * gl_Position.w();
+			out.gl_Position().xy() -= c3d_curJitter * out.gl_Position().w();
+			prvPosition.xy() -= c3d_prvJitter * out.gl_Position().w();
 
 			auto tbn = writer.declLocale( cuT( "tbn" )
 				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
 			vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
 			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition.xyz();
-			vtx_curPosition = gl_Position.xyw();
+			vtx_curPosition = out.gl_Position().xyw();
 			vtx_prvPosition = prvPosition.xyw();
 			// Positions in projection space are in [-1, 1] range, while texture
 			// coordinates are in [0, 1] range. So, we divide by 2 to get velocities in
@@ -941,91 +941,13 @@ namespace castor3d
 	{
 	}
 
-	void OpaquePass::doPrepareFrontPipeline( ShaderProgramSPtr program
-		, renderer::VertexLayoutCRefArray const & layouts
-		, PipelineFlags const & flags )
+	renderer::DepthStencilState OpaquePass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
-		auto & pipelines = doGetFrontPipelines();
-
-		if ( pipelines.find( flags ) == pipelines.end() )
-		{
-			auto & pipeline = *pipelines.emplace( flags
-				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
-					, renderer::DepthStencilState{ 0u, true, true }
-					, renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eFront }
-					, createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 5u )
-					, renderer::MultisampleState{}
-					, program
-					, flags ) ).first->second;
-			pipeline.setVertexLayouts( layouts );
-			pipeline.setViewport( { m_frameBuffer->getDimensions().width, m_frameBuffer->getDimensions().height, 0, 0 } );
-			pipeline.setScissor( { 0, 0, m_frameBuffer->getDimensions().width, m_frameBuffer->getDimensions().height } );
-
-			auto initialise = [this, &pipeline, flags]()
-			{
-				auto uboBindings = doCreateUboBindings( flags );
-				auto textureBindings = doCreateTextureBindings( flags );
-				auto uboLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
-				auto texLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( textureBindings ) );
-				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
-				layouts.emplace_back( std::move( uboLayout ) );
-				layouts.emplace_back( std::move( texLayout ) );
-				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
-				pipeline.initialise( getRenderPass() );
-			};
-
-			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
-			{
-				initialise();
-			}
-			else
-			{
-				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, initialise ) );
-			}
-		}
+		return renderer::DepthStencilState{ 0u, true, true };
 	}
 
-	void OpaquePass::doPrepareBackPipeline( ShaderProgramSPtr program
-		, renderer::VertexLayoutCRefArray const & layouts
-		, PipelineFlags const & flags )
+	renderer::ColourBlendState OpaquePass::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		auto & pipelines = doGetBackPipelines();
-
-		if ( pipelines.find( flags ) == pipelines.end() )
-		{
-			auto & pipeline = *pipelines.emplace( flags
-				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
-					, renderer::DepthStencilState{ 0u, true, true }
-					, renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eBack }
-					, createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 5u )
-					, renderer::MultisampleState{}
-					, program
-					, flags ) ).first->second;
-			pipeline.setVertexLayouts( layouts );
-			pipeline.setViewport( { m_frameBuffer->getDimensions().width, m_frameBuffer->getDimensions().height, 0, 0 } );
-			pipeline.setScissor( { 0, 0, m_frameBuffer->getDimensions().width, m_frameBuffer->getDimensions().height } );
-
-			auto initialise = [this, &pipeline, flags]()
-			{
-				auto uboBindings = doCreateUboBindings( flags );
-				auto textureBindings = doCreateTextureBindings( flags );
-				auto uboLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
-				auto texLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( textureBindings ) );
-				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
-				layouts.emplace_back( std::move( uboLayout ) );
-				layouts.emplace_back( std::move( texLayout ) );
-				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
-				pipeline.initialise( getRenderPass() );
-			};
-
-			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
-			{
-				initialise();
-			}
-			else
-			{
-				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, initialise ) );
-			}
-		}
+		return RenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 5u );
 	}
 }

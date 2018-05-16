@@ -159,7 +159,7 @@ namespace castor3d
 		};
 		//!\~english	Extended data size.
 		//!\~french		La taille des données étendues.
-		static constexpr uint32_t ExtendedDataSize = sizeof( RgbaColour ) * 2;
+		static constexpr uint32_t ExtendedDataSize = sizeof( RgbaColour ) * 11;
 
 	protected:
 		C3D_API void doVisitExtended( Pass const & pass

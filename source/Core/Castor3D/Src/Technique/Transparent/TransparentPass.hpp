@@ -139,17 +139,13 @@ namespace castor3d
 		 */
 		bool doInitialise( castor::Size const & size )override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
+		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
 		 */
-		void doPrepareFrontPipeline( ShaderProgramSPtr program
-			, renderer::VertexLayoutCRefArray const & layouts
-			, PipelineFlags const & flags )override;
+		renderer::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
+		 *\copydoc		castor3d::RenderPass::doCreateBlendState
 		 */
-		void doPrepareBackPipeline( ShaderProgramSPtr program
-			, renderer::VertexLayoutCRefArray const & layouts
-			, PipelineFlags const & flags )override;
+		renderer::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */

@@ -180,11 +180,11 @@ namespace castor3d
 			UBO_MODEL_MATRIX( writer, 1, 0 );
 
 			// Outputs
-			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto out = gl_PerVertex{ writer };
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				gl_Position = writer.paren( c3d_projection * c3d_curView * c3d_mtxModel * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
+				out.gl_Position() = writer.paren( c3d_projection * c3d_curView * c3d_mtxModel * vec4( position, 1.0 ) ).xyww();
 			} );
 
 			vtx = writer.finalise();

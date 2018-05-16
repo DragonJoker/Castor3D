@@ -249,11 +249,11 @@ namespace castor3d
 
 			// Outputs
 			auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ), 0u );
-			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto out = gl_PerVertex{ writer };
 
 			std::function< void() > main = [&]()
 			{
-				gl_Position = writer.paren( c3d_projection * c3d_curView * c3d_mtxModel * vec4( position, 1.0 ) ).xyww();
+				out.gl_Position() = writer.paren( c3d_projection * c3d_curView * c3d_mtxModel * vec4( position, 1.0 ) ).xyww();
 				vtx_texture = position;
 			};
 

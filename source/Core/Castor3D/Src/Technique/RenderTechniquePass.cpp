@@ -76,92 +76,6 @@ namespace castor3d
 	{
 	}
 
-	renderer::ColourBlendState RenderTechniquePass::createBlendState( BlendMode colourBlendMode
-		, BlendMode alphaBlendMode
-		, uint32_t attachesCount )
-	{
-		renderer::ColourBlendStateAttachment attach;
-
-		switch ( colourBlendMode )
-		{
-		case BlendMode::eNoBlend:
-			attach.srcColorBlendFactor = renderer::BlendFactor::eOne;
-			attach.dstColorBlendFactor = renderer::BlendFactor::eZero;
-			break;
-
-		case BlendMode::eAdditive:
-			attach.blendEnable = true;
-			attach.srcColorBlendFactor = renderer::BlendFactor::eOne;
-			attach.dstColorBlendFactor = renderer::BlendFactor::eOne;
-			break;
-
-		case BlendMode::eMultiplicative:
-			attach.blendEnable = true;
-			attach.srcColorBlendFactor = renderer::BlendFactor::eZero;
-			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcColour;
-			break;
-
-		case BlendMode::eInterpolative:
-			attach.blendEnable = true;
-			attach.srcColorBlendFactor = renderer::BlendFactor::eSrcColour;
-			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcColour;
-			break;
-
-		default:
-			attach.blendEnable = true;
-			attach.srcColorBlendFactor = renderer::BlendFactor::eSrcColour;
-			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcColour;
-			break;
-		}
-
-		switch ( alphaBlendMode )
-		{
-		case BlendMode::eNoBlend:
-			attach.srcAlphaBlendFactor = renderer::BlendFactor::eOne;
-			attach.dstAlphaBlendFactor = renderer::BlendFactor::eZero;
-			break;
-
-		case BlendMode::eAdditive:
-			attach.blendEnable = true;
-			attach.srcAlphaBlendFactor = renderer::BlendFactor::eOne;
-			attach.dstAlphaBlendFactor = renderer::BlendFactor::eOne;
-			break;
-
-		case BlendMode::eMultiplicative:
-			attach.blendEnable = true;
-			attach.srcAlphaBlendFactor = renderer::BlendFactor::eZero;
-			attach.dstAlphaBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
-			attach.srcColorBlendFactor = renderer::BlendFactor::eZero;
-			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
-			break;
-
-		case BlendMode::eInterpolative:
-			attach.blendEnable = true;
-			attach.srcAlphaBlendFactor = renderer::BlendFactor::eSrcAlpha;
-			attach.dstAlphaBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
-			attach.srcColorBlendFactor = renderer::BlendFactor::eSrcAlpha;
-			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
-			break;
-
-		default:
-			attach.blendEnable = true;
-			attach.srcAlphaBlendFactor = renderer::BlendFactor::eSrcAlpha;
-			attach.dstAlphaBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
-			attach.srcColorBlendFactor = renderer::BlendFactor::eSrcAlpha;
-			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
-			break;
-		}
-
-		renderer::ColourBlendState state;
-
-		for ( auto i = 0u; i < attachesCount; ++i )
-		{
-			state.attachs.push_back( attach );
-		}
-
-		return state;
-	}
-
 	void RenderTechniquePass::doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, BillboardListRenderNode & node )
@@ -286,99 +200,14 @@ namespace castor3d
 		m_sceneUbo.update( m_scene, *m_camera );
 	}
 
-	void RenderTechniquePass::doPrepareFrontPipeline( ShaderProgramSPtr program
-		, renderer::VertexLayoutCRefArray const & layouts
-		, PipelineFlags const & flags )
+	renderer::DepthStencilState RenderTechniquePass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
-		auto & pipelines = doGetFrontPipelines();
-	
-		if ( pipelines.find( flags ) == pipelines.end() )
-		{
-			renderer::DepthStencilState dsState;
-			dsState.depthWriteEnable = m_opaque;
-			renderer::RasterisationState rsState;
-			rsState.cullMode = renderer::CullModeFlag::eFront;
-			auto & pipeline = *pipelines.emplace( flags
-				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
-					, std::move( dsState )
-					, std::move( rsState )
-					, createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u )
-					, renderer::MultisampleState{}
-					, program
-					, flags ) ).first->second;
-			pipeline.setVertexLayouts( layouts );
-			pipeline.setViewport( { m_camera->getViewport().getSize().getWidth(), m_camera->getViewport().getSize().getHeight(), 0, 0 } );
-			pipeline.setScissor( { 0, 0, m_camera->getViewport().getSize().getWidth(), m_camera->getViewport().getSize().getHeight() } );
-
-			auto initialise = [this, &pipeline, flags]()
-			{
-				auto uboBindings = doCreateUboBindings( flags );
-				auto textureBindings = doCreateTextureBindings( flags );
-				auto uboLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
-				auto texLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( textureBindings ) );
-				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
-				layouts.emplace_back( std::move( uboLayout ) );
-				layouts.emplace_back( std::move( texLayout ) );
-				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
-				pipeline.initialise( getRenderPass() );
-			};
-
-			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
-			{
-				initialise();
-			}
-			else
-			{
-				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, initialise ) );
-			}
-		}
+		return renderer::DepthStencilState{ 0u, true, m_opaque };
 	}
 
-	void RenderTechniquePass::doPrepareBackPipeline( ShaderProgramSPtr program
-		, renderer::VertexLayoutCRefArray const & layouts
-		, PipelineFlags const & flags )
+	renderer::ColourBlendState RenderTechniquePass::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		auto & pipelines = doGetBackPipelines();
-	
-		if ( pipelines.find( flags ) == pipelines.end() )
-		{
-			renderer::DepthStencilState dsState;
-			dsState.depthWriteEnable = m_opaque;
-			renderer::RasterisationState rsState;
-			auto & pipeline = *pipelines.emplace( flags
-				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
-					, std::move( dsState )
-					, std::move( rsState )
-					, createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u )
-					, renderer::MultisampleState{}
-					, program
-					, flags ) ).first->second;
-			pipeline.setVertexLayouts( layouts );
-			pipeline.setViewport( { m_camera->getViewport().getSize().getWidth(), m_camera->getViewport().getSize().getHeight(), 0, 0 } );
-			pipeline.setScissor( { 0, 0, m_camera->getViewport().getSize().getWidth(), m_camera->getViewport().getSize().getHeight() } );
-
-			auto initialise = [this, &pipeline, flags]()
-			{
-				auto uboBindings = doCreateUboBindings( flags );
-				auto textureBindings = doCreateTextureBindings( flags );
-				auto uboLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
-				auto texLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( textureBindings ) );
-				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
-				layouts.emplace_back( std::move( uboLayout ) );
-				layouts.emplace_back( std::move( texLayout ) );
-				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
-				pipeline.initialise( getRenderPass() );
-			};
-
-			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
-			{
-				initialise();
-			}
-			else
-			{
-				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, initialise ) );
-			}
-		}
+		return RenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u );
 	}
 
 	renderer::DescriptorSetLayoutBindingArray RenderTechniquePass::doCreateTextureBindings( PipelineFlags const & flags )const

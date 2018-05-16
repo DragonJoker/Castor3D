@@ -725,7 +725,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
-		auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+		auto out = gl_PerVertex{ writer };
 
 		std::function< void() > main = [&]()
 		{
@@ -769,7 +769,7 @@ namespace castor3d
 			v4Vertex = mtxModel * v4Vertex;
 			v4Vertex = c3d_curView * v4Vertex;
 			vtx_instance = gl_InstanceID;
-			gl_Position = c3d_projection * v4Vertex;
+			out.gl_Position() = c3d_projection * v4Vertex;
 		};
 
 		writer.implementFunction< void >( cuT( "main" ), main );
@@ -877,54 +877,19 @@ namespace castor3d
 		return textureBindings;
 	}
 
+	renderer::DepthStencilState PickingPass::doCreateDepthStencilState( PipelineFlags const & flags )const
+	{
+		return renderer::DepthStencilState{ 0u, true, true };
+	}
+
+	renderer::ColourBlendState PickingPass::doCreateBlendState( PipelineFlags const & flags )const
+	{
+		return RenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 2u );
+	}
+
 	void PickingPass::doPrepareFrontPipeline( ShaderProgramSPtr program
 		, renderer::VertexLayoutCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
-	}
-
-	void PickingPass::doPrepareBackPipeline( ShaderProgramSPtr program
-		, renderer::VertexLayoutCRefArray const & layouts
-		, PipelineFlags const & flags )
-	{
-		auto & pipelines = doGetBackPipelines();
-
-		if ( pipelines.find( flags ) == pipelines.end() )
-		{
-			auto bsState = renderer::ColourBlendState::createDefault();
-			auto & pipeline = *pipelines.emplace( flags
-				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
-					, renderer::DepthStencilState{ 0u, true, true }
-					, renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eBack }
-					, std::move( bsState )
-					, renderer::MultisampleState{}
-					, program
-					, flags ) ).first->second;
-			pipeline.setVertexLayouts( layouts );
-			pipeline.setViewport( { m_colourTexture->getDimensions().width, m_colourTexture->getDimensions().height, 0, 0 } );
-			pipeline.setScissor( { 0, 0, m_colourTexture->getDimensions().width, m_colourTexture->getDimensions().height } );
-
-			auto initialise = [this, &pipeline, flags]()
-			{
-				auto uboBindings = doCreateUboBindings( flags );
-				auto textureBindings = doCreateTextureBindings( flags );
-				auto uboLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
-				auto texLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( textureBindings ) );
-				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
-				layouts.emplace_back( std::move( uboLayout ) );
-				layouts.emplace_back( std::move( texLayout ) );
-				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
-				pipeline.initialise( getRenderPass() );
-			};
-
-			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
-			{
-				initialise();
-			}
-			else
-			{
-				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, initialise ) );
-			}
-		}
 	}
 }

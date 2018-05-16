@@ -556,7 +556,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
-		auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+		auto out = gl_PerVertex{ writer };
 
 		std::function< void() > main = [&]()
 		{
@@ -627,21 +627,21 @@ namespace castor3d
 			vtx_tangent = normalize( glsl::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
 			vtx_instance = gl_InstanceID;
-			gl_Position = c3d_projection * curPosition;
+			out.gl_Position() = c3d_projection * curPosition;
 			prvPosition = c3d_projection * prvPosition;
 			// Convert the jitter from non-homogeneous coordiantes to homogeneous
 			// coordinates and add it:
 			// (note that for providing the jitter in non-homogeneous projection space,
 			//  pixel coordinates (screen space) need to multiplied by two in the C++
 			//  code)
-			gl_Position.xy() -= c3d_curJitter * gl_Position.w();
-			prvPosition.xy() -= c3d_prvJitter * gl_Position.w();
+			out.gl_Position().xy() -= c3d_curJitter * out.gl_Position().w();
+			prvPosition.xy() -= c3d_prvJitter * out.gl_Position().w();
 
 			auto tbn = writer.declLocale( cuT( "tbn" )
 				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
 			vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
 			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition.xyz();
-			vtx_curPosition = gl_Position.xyw();
+			vtx_curPosition = out.gl_Position().xyw();
 			vtx_prvPosition = prvPosition.xyw();
 			// Positions in projection space are in [-1, 1] range, while texture
 			// coordinates are in [0, 1] range. So, we divide by 2 to get velocities in

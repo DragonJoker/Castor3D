@@ -63,14 +63,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialisation function, Sets the wanted frame rate
-		 *\param[in]	p_wantedFPS		The wanted FPS count
-		 *\param[in]	p_threaded		If \p false, the render can't be threaded
+		 *\param[in]	wantedFPS		The wanted FPS count
+		 *\param[in]	threaded		If \p false, the render can't be threaded
 		 *\~french
 		 *\brief		Fonction d'initialisation, définit le frame rate voulu
-		 *\param[in]	p_wantedFPS		Le nombre voulu de FPS
-		 *\param[in]	p_threaded		Si \p false, le rendu ne peut pas être threadé
+		 *\param[in]	wantedFPS		Le nombre voulu de FPS
+		 *\param[in]	threaded		Si \p false, le rendu ne peut pas être threadé
 		 */
-		C3D_API void initialise( uint32_t p_wantedFPS = 100, bool p_threaded = false );
+		C3D_API void initialise( uint32_t wantedFPS = 100, bool threaded = false );
 		/**
 		 *\~english
 		 *\brief		Cleanup function, destroys everything created from the beginning
@@ -83,23 +83,32 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Loads a renderer plug-in, given the renderer type
-		 *\param[in]	p_type	The renderer type
+		 *\param[in]	type	The renderer type
 		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Charge un plug-in de rendu, selon le type de rendu
-		 *\param[in]	p_type	Le type de rendu
+		 *\param[in]	type	Le type de rendu
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool loadRenderer( castor::String const & p_type );
+		C3D_API bool loadRenderer( castor::String const & type );
+		/**
+		 *\~english
+		 *\brief		If a device is enabled, executes the given event, if not posts it to the default frame listener.
+		 *\param[in]	event	The event.
+		 *\~french
+		 *\brief		Si un device est actif, exécute l'évènement donné, sinon il est ajouté au frame listener par défaut.
+		 *\param[in]	event	L'évènement.
+		 */
+		C3D_API void sendEvent( FrameEventUPtr && event );
 		/**
 		 *\~english
 		 *\brief		Posts a frame event to the default frame listener
-		 *\param[in]	p_pEvent	The event to add
+		 *\param[in]	event	The event to add
 		 *\~french
 		 *\brief		Ajoute un évènement de frame au frame listener par défaut
-		 *\param[in]	p_pEvent	L'évènement
+		 *\param[in]	event	L'évènement
 		 */
-		C3D_API void postEvent( FrameEventUPtr && p_pEvent );
+		C3D_API void postEvent( FrameEventUPtr && event );
 		/**
 		 *\~english
 		 *\brief		Retrieves the cleanup status
@@ -123,43 +132,43 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Registers additional parsers for SceneFileParser.
-		 *\param[in]	p_name		The registering name.
-		 *\param[in]	p_parsers	The parsers.
+		 *\param[in]	name	The registering name.
+		 *\param[in]	parsers	The parsers.
 		 *\~french
 		 *\brief		Enregistre des analyseurs supplémentaires pour SceneFileParser.
-		 *\param[in]	p_name		Le nom d'enregistrement.
-		 *\param[in]	p_parsers	Les analyseurs.
+		 *\param[in]	name	Le nom d'enregistrement.
+		 *\param[in]	parsers	Les analyseurs.
 		 */
-		C3D_API void registerParsers( castor::String const & p_name, castor::FileParser::AttributeParsersBySection const & p_parsers );
+		C3D_API void registerParsers( castor::String const & name, castor::FileParser::AttributeParsersBySection const & parsers );
 		/**
 		 *\~english
 		 *\brief		Registers additional sections for SceneFileParser.
-		 *\param[in]	p_name		The registering name.
-		 *\param[in]	p_sections	The sections.
+		 *\param[in]	name		The registering name.
+		 *\param[in]	sections	The sections.
 		 *\~french
 		 *\brief		Enregistre des sections supplémentaires pour SceneFileParser.
-		 *\param[in]	p_name		Le nom d'enregistrement.
-		 *\param[in]	p_sections	Les sections.
+		 *\param[in]	name		Le nom d'enregistrement.
+		 *\param[in]	sections	Les sections.
 		 */
-		C3D_API void registerSections( castor::String const & p_name, castor::StrUIntMap const & p_sections );
+		C3D_API void registerSections( castor::String const & name, castor::StrUIntMap const & sections );
 		/**
 		 *\~english
 		 *\brief		Unregisters parsers for SceneFileParser.
-		 *\param[in]	p_name		The registering name.
+		 *\param[in]	name		The registering name.
 		 *\~french
 		 *\brief		Désenregistre des analyseurs pour SceneFileParser.
-		 *\param[in]	p_name		Le nom d'enregistrement.
+		 *\param[in]	name		Le nom d'enregistrement.
 		 */
-		C3D_API void unregisterParsers( castor::String const & p_name );
+		C3D_API void unregisterParsers( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Unregisters sections for SceneFileParser.
-		 *\param[in]	p_name		The registering name.
+		 *\param[in]	name		The registering name.
 		 *\~french
 		 *\brief		Désenregistre des sections pour SceneFileParser.
-		 *\param[in]	p_name		Le nom d'enregistrement.
+		 *\param[in]	name		Le nom d'enregistrement.
 		 */
-		C3D_API void unregisterSections( castor::String const & p_name );
+		C3D_API void unregisterSections( castor::String const & name );
 		/**
 		 *\~english
 		 *\return		\p true if the selected rendering API is top down.
@@ -377,19 +386,19 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		inline void setUserInputListener( UserInputListenerSPtr p_listener )
+		inline void setUserInputListener( UserInputListenerSPtr listener )
 		{
-			m_userInputListener = p_listener;
+			m_userInputListener = listener;
 		}
 
-		inline void setPerObjectLighting( bool p_value )
+		inline void setPerObjectLighting( bool value )
 		{
-			m_perObjectLighting = p_value;
+			m_perObjectLighting = value;
 		}
 
-		inline void setMaterialsType( MaterialType p_type )
+		inline void setMaterialsType( MaterialType type )
 		{
-			m_materialType = p_type;
+			m_materialType = type;
 		}
 		/**@}*/
 

@@ -245,15 +245,17 @@ namespace castor3d
 		 */
 		renderer::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 		/**
+		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
+		 */
+		renderer::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doCreateBlendState
+		 */
+		renderer::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
+		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
 		 */
 		void doPrepareFrontPipeline( ShaderProgramSPtr program
-			, renderer::VertexLayoutCRefArray const & layouts
-			, PipelineFlags const & flags )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
-		 */
-		void doPrepareBackPipeline( ShaderProgramSPtr program
 			, renderer::VertexLayoutCRefArray const & layouts
 			, PipelineFlags const & flags )override;
 		/**

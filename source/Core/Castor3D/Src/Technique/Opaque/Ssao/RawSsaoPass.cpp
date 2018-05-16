@@ -63,12 +63,12 @@ namespace castor3d
 			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
 
 			// Shader outputs
-			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto out = gl_PerVertex{ writer };
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					gl_Position = writer.rendererScalePosition( vec4( position, 0.0, 1.0 ) );
+					out.gl_Position() = writer.rendererScalePosition( vec4( position, 0.0, 1.0 ) );
 				} );
 			return writer.finalise();
 		}

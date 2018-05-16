@@ -5,6 +5,7 @@
 #include "Render/RenderPipeline.hpp"
 #include "Scene/Light/PointLight.hpp"
 #include "Shader/Program.hpp"
+#include "Shader/PassBuffer/PassBuffer.hpp"
 #include "ShadowMap/ShadowMapPoint.hpp"
 #include "Technique/RenderTechniquePass.hpp"
 #include "Texture/TextureView.hpp"
@@ -194,103 +195,21 @@ namespace castor3d
 		queues.emplace_back( m_renderQueue );
 	}
 
-	void ShadowMapPassPoint::doPrepareFrontPipeline( ShaderProgramSPtr program
-		, renderer::VertexLayoutCRefArray const & layouts
-		, PipelineFlags const & flags )
+	renderer::DescriptorSetLayoutBindingArray ShadowMapPassPoint::doCreateUboBindings( PipelineFlags const & flags )const
 	{
-		auto & pipelines = doGetFrontPipelines();
-
-		if ( pipelines.find( flags ) == pipelines.end() )
-		{
-			renderer::RasterisationState rsState;
-			rsState.cullMode = renderer::CullModeFlag::eFront;
-			renderer::DepthStencilState dsState;
-			auto bdState = RenderTechniquePass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 2u );
-			auto & pipeline = *pipelines.emplace( flags
-				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
-					, std::move( dsState )
-					, std::move( rsState )
-					, std::move( bdState )
-					, renderer::MultisampleState{}
-					, program
-					, flags ) ).first->second;
-			pipeline.setVertexLayouts( layouts );
-			pipeline.setViewport( { m_viewport.getWidth(), m_viewport.getHeight(), 0, 0 } );
-			pipeline.setScissor( { 0, 0, m_viewport.getWidth(), m_viewport.getHeight() } );
-
-			auto initialise = [this, &pipeline, flags]()
-			{
-				auto uboBindings = doCreateUboBindings( flags );
-				uboBindings.emplace_back( ShadowMapPassPoint::UboBindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment );
-				auto texBindings = doCreateTextureBindings( flags );
-				auto uboLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
-				auto texLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( texBindings ) );
-				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
-				layouts.emplace_back( std::move( uboLayout ) );
-				layouts.emplace_back( std::move( texLayout ) );
-				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
-				pipeline.initialise( getRenderPass() );
-				m_initialised = true;
-			};
-
-			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
-			{
-				initialise();
-			}
-			else
-			{
-				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, initialise ) );
-			}
-		}
+		auto uboBindings = RenderPass::doCreateUboBindings( flags );
+		uboBindings.emplace_back( ShadowMapPassPoint::UboBindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment );
+		m_initialised = true;
+		return uboBindings;
 	}
 
-	void ShadowMapPassPoint::doPrepareBackPipeline( ShaderProgramSPtr program
-		, renderer::VertexLayoutCRefArray const & layouts
-		, PipelineFlags const & flags )
+	renderer::DepthStencilState ShadowMapPassPoint::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
-		auto & pipelines = doGetBackPipelines();
+		return renderer::DepthStencilState{ 0u, true, true };
+	}
 
-		if ( pipelines.find( flags ) == pipelines.end() )
-		{
-			renderer::RasterisationState rsState;
-			rsState.cullMode = renderer::CullModeFlag::eBack;
-			renderer::DepthStencilState dsState;
-			auto bdState = RenderTechniquePass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 2u );
-			auto & pipeline = *pipelines.emplace( flags
-				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
-					, std::move( dsState )
-					, std::move( rsState )
-					, std::move( bdState )
-					, renderer::MultisampleState{}
-					, program
-					, flags ) ).first->second;
-			pipeline.setVertexLayouts( layouts );
-			pipeline.setViewport( { m_viewport.getWidth(), m_viewport.getHeight(), 0, 0 } );
-			pipeline.setScissor( { 0, 0, m_viewport.getWidth(), m_viewport.getHeight() } );
-
-			auto initialise = [this, &pipeline, flags]()
-			{
-				auto uboBindings = doCreateUboBindings( flags );
-				uboBindings.emplace_back( ShadowMapPassPoint::UboBindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment );
-				auto texBindings = doCreateTextureBindings( flags );
-				auto uboLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
-				auto texLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( texBindings ) );
-				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
-				layouts.emplace_back( std::move( uboLayout ) );
-				layouts.emplace_back( std::move( texLayout ) );
-				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
-				pipeline.initialise( getRenderPass() );
-				m_initialised = true;
-			};
-
-			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
-			{
-				initialise();
-			}
-			else
-			{
-				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, initialise ) );
-			}
-		}
+	renderer::ColourBlendState ShadowMapPassPoint::doCreateBlendState( PipelineFlags const & flags )const
+	{
+		return RenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 2u );
 	}
 }

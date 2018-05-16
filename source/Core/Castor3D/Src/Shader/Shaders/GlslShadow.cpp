@@ -299,21 +299,6 @@ namespace castor3d
 					, Float const & minVariance
 					, Float const & varianceBias )
 				{
-					//// NVidia paper implementation
-					//auto my = m_writer.declLocale( cuT( "my" )
-					//	, moments.y() );
-					//auto mx2 = m_writer.declLocale( cuT( "mx2" )
-					//	, moments.x() * moments.x() );
-					//auto variance = m_writer.declLocale( cuT( "variance" )
-					//	, my - mx2 );
-					//auto md = m_writer.declLocale( cuT( "md" )
-					//	, moments.x() - distance );
-					//auto md2 = m_writer.declLocale( cuT( "md2" )
-					//	, md * md );
-					//auto p = m_writer.declLocale( cuT( "p" )
-					//	, variance / m_writer.paren( variance + md2 ) );
-					//m_writer.returnStmt( glsl::max( p, m_writer.cast< Float >( distance <= moments.x() ) ) );
-
 					auto p = m_writer.declLocale( cuT( "p" )
 						, step( moments.x() + varianceBias, distance ) );
 					auto variance = m_writer.declLocale( cuT( "variance" )
@@ -683,7 +668,7 @@ namespace castor3d
 								, Float( maxDirectionalSlopeOffset ) ) );
 						m_writer.returnStmt( filterPCF( lightSpacePosition
 							, c3d_mapShadowDirectional
-							, bias * 2.0_f ) );
+							, bias ) );
 					}
 					else if ( type == ShadowType::eVariance )
 					{

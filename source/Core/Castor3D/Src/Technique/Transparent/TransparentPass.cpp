@@ -33,42 +33,6 @@ namespace castor3d
 
 	namespace
 	{
-		renderer::ColourBlendState doCreateBlendState()
-		{
-			renderer::ColourBlendState bdState;
-			bdState.attachs.push_back( renderer::ColourBlendStateAttachment
-			{
-				true,
-				renderer::BlendFactor::eOne,
-				renderer::BlendFactor::eOne,
-				renderer::BlendOp::eAdd,
-				renderer::BlendFactor::eOne,
-				renderer::BlendFactor::eOne,
-				renderer::BlendOp::eAdd,
-			} );
-			bdState.attachs.push_back( renderer::ColourBlendStateAttachment
-			{
-				true,
-				renderer::BlendFactor::eZero,
-				renderer::BlendFactor::eInvSrcColour,
-				renderer::BlendOp::eAdd,
-				renderer::BlendFactor::eZero,
-				renderer::BlendFactor::eInvSrcColour,
-				renderer::BlendOp::eAdd,
-			} );
-			bdState.attachs.push_back( renderer::ColourBlendStateAttachment
-			{
-				false,
-				renderer::BlendFactor::eOne,
-				renderer::BlendFactor::eZero,
-				renderer::BlendOp::eAdd,
-				renderer::BlendFactor::eOne,
-				renderer::BlendFactor::eZero,
-				renderer::BlendOp::eAdd,
-			} );
-			return bdState;
-		}
-
 		renderer::RenderPassPtr doCreateRenderPass( Engine & engine
 			, renderer::Format const & depthFormat )
 		{
@@ -225,92 +189,45 @@ namespace castor3d
 		return true;
 	}
 
-	void TransparentPass::doPrepareFrontPipeline( ShaderProgramSPtr program
-		, renderer::VertexLayoutCRefArray const & layouts
-		, PipelineFlags const & flags )
+	renderer::DepthStencilState TransparentPass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
-		auto & pipelines = doGetFrontPipelines();
-	
-		if ( pipelines.find( flags ) == pipelines.end() )
-		{
-			auto & pipeline = *pipelines.emplace( flags
-				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
-					, renderer::DepthStencilState{ 0u, true, false }
-					, renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eFront }
-					, doCreateBlendState()
-					, renderer::MultisampleState{}
-					, program
-					, flags ) ).first->second;
-			pipeline.setVertexLayouts( layouts );
-			pipeline.setViewport( { m_camera->getViewport().getSize().getWidth(), m_camera->getViewport().getSize().getHeight(), 0, 0 } );
-			pipeline.setScissor( { 0, 0, m_camera->getViewport().getSize().getWidth(), m_camera->getViewport().getSize().getHeight() } );
-
-			auto initialise = [this, &pipeline, flags]()
-			{
-				auto uboBindings = doCreateUboBindings( flags );
-				auto textureBindings = doCreateTextureBindings( flags );
-				auto uboLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
-				auto texLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( textureBindings ) );
-				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
-				layouts.emplace_back( std::move( uboLayout ) );
-				layouts.emplace_back( std::move( texLayout ) );
-				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
-				pipeline.initialise( getRenderPass() );
-			};
-
-			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
-			{
-				initialise();
-			}
-			else
-			{
-				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, initialise ) );
-			}
-		}
+		return renderer::DepthStencilState{ 0u, true, false };
 	}
 
-	void TransparentPass::doPrepareBackPipeline( ShaderProgramSPtr program
-		, renderer::VertexLayoutCRefArray const & layouts
-		, PipelineFlags const & flags )
+	renderer::ColourBlendState TransparentPass::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		auto & pipelines = doGetBackPipelines();
-
-		if ( pipelines.find( flags ) == pipelines.end() )
-		{
-			auto & pipeline = *pipelines.emplace( flags
-				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
-					, renderer::DepthStencilState{ 0u, true, false }
-					, renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eBack }
-					, doCreateBlendState()
-					, renderer::MultisampleState{}
-					, program
-					, flags ) ).first->second;
-			pipeline.setVertexLayouts( layouts );
-			pipeline.setViewport( { m_camera->getViewport().getSize().getWidth(), m_camera->getViewport().getSize().getHeight(), 0, 0 } );
-			pipeline.setScissor( { 0, 0, m_camera->getViewport().getSize().getWidth(), m_camera->getViewport().getSize().getHeight() } );
-
-			auto initialise = [this, &pipeline, flags]()
+		renderer::ColourBlendState bdState;
+		bdState.attachs.push_back( renderer::ColourBlendStateAttachment
 			{
-				auto uboBindings = doCreateUboBindings( flags );
-				auto textureBindings = doCreateTextureBindings( flags );
-				auto uboLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
-				auto texLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( textureBindings ) );
-				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
-				layouts.emplace_back( std::move( uboLayout ) );
-				layouts.emplace_back( std::move( texLayout ) );
-				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
-				pipeline.initialise( getRenderPass() );
-			};
-
-			if ( getEngine()->getRenderSystem()->hasCurrentDevice() )
+				true,
+				renderer::BlendFactor::eOne,
+				renderer::BlendFactor::eOne,
+				renderer::BlendOp::eAdd,
+				renderer::BlendFactor::eOne,
+				renderer::BlendFactor::eOne,
+				renderer::BlendOp::eAdd,
+			} );
+		bdState.attachs.push_back( renderer::ColourBlendStateAttachment
 			{
-				initialise();
-			}
-			else
+				true,
+				renderer::BlendFactor::eZero,
+				renderer::BlendFactor::eInvSrcColour,
+				renderer::BlendOp::eAdd,
+				renderer::BlendFactor::eZero,
+				renderer::BlendFactor::eInvSrcColour,
+				renderer::BlendOp::eAdd,
+			} );
+		bdState.attachs.push_back( renderer::ColourBlendStateAttachment
 			{
-				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, initialise ) );
-			}
-		}
+				false,
+				renderer::BlendFactor::eOne,
+				renderer::BlendFactor::eZero,
+				renderer::BlendOp::eAdd,
+				renderer::BlendFactor::eOne,
+				renderer::BlendFactor::eZero,
+				renderer::BlendOp::eAdd,
+			} );
+		return bdState;
 	}
 
 	glsl::Shader TransparentPass::doGetVertexShaderSource( PassFlags const & passFlags
@@ -399,7 +316,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
-		auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+		auto out = gl_PerVertex{ writer };
 
 		std::function< void() > main = [&]()
 		{
@@ -454,7 +371,7 @@ namespace castor3d
 			vtx_worldPosition = curPosition.xyz();
 			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
 				, c3d_prvViewProj * curPosition );
-			gl_Position = c3d_curViewProj * curPosition;
+			out.gl_Position() = c3d_curViewProj * curPosition;
 			auto mtxNormal = writer.getBuiltin< Mat3 >( cuT( "mtxNormal" ) );
 
 			if ( invertNormals )
@@ -475,13 +392,13 @@ namespace castor3d
 			// (note that for providing the jitter in non-homogeneous projection space,
 			//  pixel coordinates (screen space) need to multiplied by two in the C++
 			//  code)
-			gl_Position.xy() -= c3d_curJitter * gl_Position.w();
-			prvPosition.xy() -= c3d_prvJitter * gl_Position.w();
+			out.gl_Position().xy() -= c3d_curJitter * out.gl_Position().w();
+			prvPosition.xy() -= c3d_prvJitter * out.gl_Position().w();
 
 			auto tbn = writer.declLocale( cuT( "tbn" ), transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
 			vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
 			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition.xyz();
-			vtx_curPosition = gl_Position.xyw();
+			vtx_curPosition = out.gl_Position().xyw();
 			vtx_prvPosition = prvPosition.xyw();
 			// Positions in projection space are in [-1, 1] range, while texture
 			// coordinates are in [0, 1] range. So, we divide by 2 to get velocities in

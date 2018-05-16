@@ -91,17 +91,17 @@ namespace castor3d
 		 */
 		void doUpdate( RenderQueueArray & queues )override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
+		 *\copydoc		castor3d::RenderPass::doCreateUboBindings
 		 */
-		void doPrepareFrontPipeline( ShaderProgramSPtr program
-			, renderer::VertexLayoutCRefArray const & layouts
-			, PipelineFlags const & flags )override;
+		renderer::DescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
+		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
 		 */
-		void doPrepareBackPipeline( ShaderProgramSPtr program
-			, renderer::VertexLayoutCRefArray const & layouts
-			, PipelineFlags const & flags )override;
+		renderer::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doCreateBlendState
+		 */
+		renderer::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
 
 	public:
 		static castor::String const ShadowMapUbo;

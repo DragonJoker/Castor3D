@@ -9,7 +9,6 @@
 #include "Scene/Light/Light.hpp"
 #include "Scene/Light/DirectionalLight.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3DPrerequisites.hpp"
 #include "ShadowMap/ShadowMapPassDirectional.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureView.hpp"

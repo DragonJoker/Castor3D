@@ -94,12 +94,12 @@ namespace castor3d
 
 				// Outputs
 				auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ), 0u );
-				auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+				auto out = gl_PerVertex{ writer };
 
 				std::function< void() > main = [&]()
 				{
 					vtx_worldPosition = position;
-					gl_Position = writer.paren( c3d_viewProjection * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
+					out.gl_Position() = writer.paren( c3d_viewProjection * vec4( position, 1.0 ) ).xyww();
 				};
 
 				writer.implementFunction< void >( cuT( "main" ), main );

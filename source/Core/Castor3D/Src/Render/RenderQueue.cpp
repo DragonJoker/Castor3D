@@ -557,33 +557,21 @@ namespace castor3d
 				}
 			}
 
-			auto initialiseNodes = [&renderPass, &nodes, shadowMaps]()
-			{
-				doInitialiseNodes( renderPass, nodes.staticNodes.frontCulled, shadowMaps );
-				doInitialiseNodes( renderPass, nodes.staticNodes.backCulled, shadowMaps );
-				doInitialiseNodes( renderPass, nodes.skinnedNodes.frontCulled, shadowMaps );
-				doInitialiseNodes( renderPass, nodes.skinnedNodes.backCulled, shadowMaps );
-				doInitialiseNodes( renderPass, nodes.morphingNodes.frontCulled, shadowMaps );
-				doInitialiseNodes( renderPass, nodes.morphingNodes.backCulled, shadowMaps );
+			renderPass.getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+				, [&renderPass, &nodes, shadowMaps]()
+				{
+					doInitialiseNodes( renderPass, nodes.staticNodes.frontCulled, shadowMaps );
+					doInitialiseNodes( renderPass, nodes.staticNodes.backCulled, shadowMaps );
+					doInitialiseNodes( renderPass, nodes.skinnedNodes.frontCulled, shadowMaps );
+					doInitialiseNodes( renderPass, nodes.skinnedNodes.backCulled, shadowMaps );
+					doInitialiseNodes( renderPass, nodes.morphingNodes.frontCulled, shadowMaps );
+					doInitialiseNodes( renderPass, nodes.morphingNodes.backCulled, shadowMaps );
 
-				doInitialiseInstancedNodes( renderPass, nodes.instancedStaticNodes.frontCulled, shadowMaps );
-				doInitialiseInstancedNodes( renderPass, nodes.instancedStaticNodes.backCulled, shadowMaps );
-				doInitialiseInstancedNodes( renderPass, nodes.instancedSkinnedNodes.frontCulled, shadowMaps );
-				doInitialiseInstancedNodes( renderPass, nodes.instancedSkinnedNodes.backCulled, shadowMaps );
-			};
-
-			if ( renderPass.getEngine()->getRenderSystem()->hasCurrentDevice() )
-			{
-				initialiseNodes();
-			}
-			else
-			{
-				renderPass.getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-					, [initialiseNodes]()
-					{
-						initialiseNodes();
-					} ) );
-			}
+					doInitialiseInstancedNodes( renderPass, nodes.instancedStaticNodes.frontCulled, shadowMaps );
+					doInitialiseInstancedNodes( renderPass, nodes.instancedStaticNodes.backCulled, shadowMaps );
+					doInitialiseInstancedNodes( renderPass, nodes.instancedSkinnedNodes.frontCulled, shadowMaps );
+					doInitialiseInstancedNodes( renderPass, nodes.instancedSkinnedNodes.backCulled, shadowMaps );
+				} ) );
 		}
 
 		void doSortRenderNodes( RenderPass & renderPass
@@ -658,24 +646,12 @@ namespace castor3d
 				}
 			}
 
-			auto initialiseNodes = [&renderPass, &nodes, &shadowMaps]()
-			{
-				doInitialiseNodes( renderPass, nodes.frontCulled, shadowMaps );
-				doInitialiseNodes( renderPass, nodes.backCulled, shadowMaps );
-			};
-
-			if ( renderPass.getEngine()->getRenderSystem()->hasCurrentDevice() )
-			{
-				initialiseNodes();
-			}
-			else
-			{
-				renderPass.getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-					, [initialiseNodes]()
+			renderPass.getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+				, [&renderPass, &nodes, &shadowMaps]()
 				{
-					initialiseNodes();
+					doInitialiseNodes( renderPass, nodes.frontCulled, shadowMaps );
+					doInitialiseNodes( renderPass, nodes.backCulled, shadowMaps );
 				} ) );
-			}
 		}
 
 		GeometryBuffers const & getGeometryBuffers( Submesh const & submesh
@@ -951,32 +927,18 @@ namespace castor3d
 
 		if ( m_changed )
 		{
-			if ( getOwner()->getEngine()->getRenderSystem()->hasCurrentDevice() )
-			{
-				if ( m_camera )
+			getOwner()->getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+				, [this]()
 				{
-					doPrepareCulledNodesCommandBuffer();
-				}
-				else
-				{
-					doPrepareAllNodesCommandBuffer();
-				}
-			}
-			else
-			{
-				getOwner()->getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-					, [this]()
+					if ( m_camera )
 					{
-						if ( m_camera )
-						{
-							doPrepareCulledNodesCommandBuffer();
-						}
-						else
-						{
-							doPrepareAllNodesCommandBuffer();
-						}
-					} ) );
-			}
+						doPrepareCulledNodesCommandBuffer();
+					}
+					else
+					{
+						doPrepareAllNodesCommandBuffer();
+					}
+				} ) );
 
 			m_changed = false;
 		}

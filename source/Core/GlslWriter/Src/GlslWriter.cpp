@@ -19,6 +19,14 @@ namespace glsl
 		*this << "#pragma optimize(off)" << endl;
 		*this << "#pragma debug(on)" << endl;
 #endif
+
+		if ( m_config.m_shaderLanguageVersion < 430 )
+		{
+			*this << "#extension GL_ARB_explicit_attrib_location : enable" << endl;
+			*this << "#extension GL_ARB_explicit_uniform_location : enable" << endl;
+			*this << "#extension GL_ARB_separate_shader_objects : enable" << endl;
+			*this << "#extension GL_ARB_shading_language_420pack : enable" << endl;
+		}
 	}
 
 	void GlslWriter::registerName( castor::String const & p_name, TypeName p_type )

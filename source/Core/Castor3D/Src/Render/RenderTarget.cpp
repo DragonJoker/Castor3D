@@ -611,12 +611,12 @@ namespace castor3d
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto out = gl_PerVertex{ writer };
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = vec2( texcoord.x(), 1.0_f - texcoord.y() );
-				gl_Position = vec4( position, 0.0, 1.0 );
+				out.gl_Position() = vec4( position, 0.0, 1.0 );
 			} );
 			vtx = writer.finalise();
 		}

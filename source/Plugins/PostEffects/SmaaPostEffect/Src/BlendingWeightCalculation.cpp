@@ -47,12 +47,12 @@ namespace smaa
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
 			auto vtx_pixcoord = writer.declOutput< Vec2 >( cuT( "vtx_pixcoord" ), 1u );
 			auto vtx_offset = writer.declOutputArray< Vec4 >( cuT( "vtx_offset" ), 2u, 3u );
-			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto out = gl_PerVertex{ writer };
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					gl_Position = vec4( position, 0.0, 1.0 );
+					out.gl_Position() = vec4( position, 0.0, 1.0 );
 					vtx_texture = texcoord;
 					vtx_pixcoord = vtx_texture / c3d_pixelSize;
 

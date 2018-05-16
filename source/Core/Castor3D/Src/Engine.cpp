@@ -228,13 +228,13 @@ namespace castor3d
 		Image::cleanupImageLib();
 	}
 
-	void Engine::initialise( uint32_t p_wanted, bool p_threaded )
+	void Engine::initialise( uint32_t wanted, bool threaded )
 	{
 #if !defined( NDEBUG )
 		Debug::initialise();
 #endif
 
-		m_threaded = p_threaded;
+		m_threaded = threaded;
 
 		if ( m_renderSystem )
 		{
@@ -270,20 +270,13 @@ namespace castor3d
 			postEvent( makeInitialiseEvent( *m_defaultSampler ) );
 		}
 
-		//postEvent( makeFunctorEvent( EventType::ePreRender
-		//	, [this]()
-		//	{
-		//		m_renderDepth = std::make_unique< RenderDepthQuad >( *m_renderSystem );
-		//		m_renderDepth->initialise();
-		//	} ) );
-
-		if ( p_threaded )
+		if ( threaded )
 		{
-			m_renderLoop = std::make_unique< RenderLoopAsync >( *this, p_wanted );
+			m_renderLoop = std::make_unique< RenderLoopAsync >( *this, wanted );
 		}
 		else
 		{
-			m_renderLoop = std::make_unique< RenderLoopSync >( *this, p_wanted );
+			m_renderLoop = std::make_unique< RenderLoopSync >( *this, wanted );
 		}
 
 		m_cleaned = false;
@@ -307,17 +300,6 @@ namespace castor3d
 			m_overlayCache->cleanup();
 			m_materialCache->cleanup();
 			m_shaderCache->cleanup();
-
-			//if ( m_renderDepth )
-			//{
-			//	postEvent( makeFunctorEvent( EventType::ePreRender
-			//		, [this]()
-			//		{
-			//			m_renderDepth->cleanup();
-			//			m_renderDepth.reset();
-			//		} ) );
-			//	postEvent( makeCleanupEvent( *m_renderDepth ) );
-			//}
 
 			if ( m_lightsSampler )
 			{
@@ -359,14 +341,26 @@ namespace castor3d
 		return m_renderSystem != nullptr;
 	}
 
-	void Engine::postEvent( FrameEventUPtr && p_event )
+	void Engine::sendEvent( FrameEventUPtr && event )
+	{
+		if ( m_renderSystem && m_renderSystem->hasCurrentDevice() )
+		{
+			event->apply();
+		}
+		else
+		{
+			postEvent( std::move( event ) );
+		}
+	}
+
+	void Engine::postEvent( FrameEventUPtr && event )
 	{
 		auto lock = makeUniqueLock( *m_listenerCache );
 		FrameListenerSPtr listener = m_defaultListener.lock();
 
 		if ( listener )
 		{
-			listener->postEvent( std::move( p_event ) );
+			listener->postEvent( std::move( event ) );
 		}
 	}
 
@@ -409,7 +403,7 @@ namespace castor3d
 		m_cleaned = true;
 	}
 
-	void Engine::registerParsers( castor::String const & name, castor::FileParser::AttributeParsersBySection const & p_parsers )
+	void Engine::registerParsers( castor::String const & name, castor::FileParser::AttributeParsersBySection const & parsers )
 	{
 		auto && it = m_additionalParsers.find( name );
 
@@ -418,10 +412,10 @@ namespace castor3d
 			CASTOR_EXCEPTION( "registerParsers - Duplicate entry for " + name );
 		}
 
-		m_additionalParsers.emplace( name, p_parsers );
+		m_additionalParsers.emplace( name, parsers );
 	}
 
-	void Engine::registerSections( castor::String const & name, castor::StrUIntMap const & p_sections )
+	void Engine::registerSections( castor::String const & name, castor::StrUIntMap const & sections )
 	{
 		auto && it = m_additionalSections.find( name );
 
@@ -430,7 +424,7 @@ namespace castor3d
 			CASTOR_EXCEPTION( "registerSections - Duplicate entry for " + name );
 		}
 
-		m_additionalSections.emplace( name, p_sections );
+		m_additionalSections.emplace( name, sections );
 	}
 
 	void Engine::unregisterParsers( castor::String const & name )

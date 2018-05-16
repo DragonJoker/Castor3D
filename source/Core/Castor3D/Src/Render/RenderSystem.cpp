@@ -44,10 +44,10 @@ namespace castor3d
 			m_gpuInformations.updateFeature( castor3d::GpuFeature::eNonPowerOfTwoTextures, true );
 			m_gpuInformations.updateFeature( castor3d::GpuFeature::eAtomicCounterBuffers, true );
 			m_gpuInformations.updateFeature( castor3d::GpuFeature::eImmutableTextureStorage, true );
-			m_gpuInformations.updateFeature( castor3d::GpuFeature::eShaderStorageBuffers, true );
-			m_gpuInformations.updateFeature( castor3d::GpuFeature::eTransformFeedback, true );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eShaderStorageBuffers, device.getRenderer().getFeatures().hasStorageBuffers );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eTransformFeedback, false );
 
-			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eCompute, true );
+			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eCompute, device.getRenderer().getFeatures().hasComputeShaders );
 			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eTessellationControl, device.getFeatures().tessellationShader );
 			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eTessellationEvaluation, device.getFeatures().tessellationShader );
 			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eGeometry, device.getFeatures().geometryShader );

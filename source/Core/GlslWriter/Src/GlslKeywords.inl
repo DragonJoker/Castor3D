@@ -500,7 +500,7 @@ namespace glsl
 	};
 
 	template< int Version, bool IsVulkan >
-	class Keywords< Version, IsVulkan, typename std::enable_if < ( Version >= 140 ) && ( Version < 330 ) && !IsVulkan >::type >
+	class Keywords< Version, IsVulkan, typename std::enable_if < ( Version >= 140 ) && ( Version < 150 ) && !IsVulkan >::type >
 		: public KeywordsBase
 	{
 	public:
@@ -573,6 +573,102 @@ namespace glsl
 		castor::String getLayout( uint32_t CU_PARAM_UNUSED( index ) )const override
 		{
 			return cuT( "" );
+		}
+
+		castor::String getFragData( uint32_t CU_PARAM_UNUSED( index ) )const override
+		{
+			return cuT( "" );
+		}
+
+		bool hasNamedFragData()const override
+		{
+			return true;
+		}
+	};
+
+	template< int Version, bool IsVulkan >
+	class Keywords< Version, IsVulkan, typename std::enable_if< ( Version >= 150 ) && ( Version < 330 ) && !IsVulkan >::type >
+		: public KeywordsBase
+	{
+	public:
+		Keywords()
+		{
+			m_uboLayout = cuT( "layout" );
+			m_uboSet = cuT( "set" );
+			m_uboBinding = cuT( "binding" );
+			m_ssboLayout = cuT( "layout" );
+			m_ssboBinding = cuT( "binding" );
+			m_textureLayout = cuT( "layout" );
+			m_textureBinding = cuT( "binding" );
+			m_uniformLayout = cuT( "layout" );
+			m_inputLayout = cuT( "layout" );
+			m_outputLayout = cuT( "layout" );
+			m_version = cuT( "#version " ) + castor::string::toString( Version, 10, Expr::getLocale() );
+			m_attribute = cuT( "in" );
+			m_in = cuT( "in" );
+			m_out = cuT( "out" );
+			m_texture1D = cuT( "texture" );
+			m_texture1DLod = cuT( "textureLod" );
+			m_texture1DOffset = cuT( "textureOffset" );
+			m_texture1DOffsetLod = cuT( "textureOffset" );
+			m_texture1DLodOffset = cuT( "textureLodOffset" );
+			m_texture2D = cuT( "texture" );
+			m_texture2DLod = cuT( "textureLod" );
+			m_texture2DOffset = cuT( "textureOffset" );
+			m_texture2DOffsetLod = cuT( "textureOffset" );
+			m_texture2DLodOffset = cuT( "textureLodOffset" );
+			m_texture3D = cuT( "texture" );
+			m_texture3DLod = cuT( "textureLod" );
+			m_texture3DOffset = cuT( "textureOffset" );
+			m_texture3DOffsetLod = cuT( "textureOffset" );
+			m_texture3DLodOffset = cuT( "textureLodOffset" );
+			m_textureCube = cuT( "texture" );
+			m_textureCubeLod = cuT( "textureLod" );
+			m_texture1DArray = cuT( "texture" );
+			m_texture1DArrayLod = cuT( "textureLod" );
+			m_texture1DArrayOffset = cuT( "textureOffset" );
+			m_texture1DArrayOffsetLod = cuT( "textureOffset" );
+			m_texture1DArrayLodOffset = cuT( "textureLodOffset" );
+			m_texture2DArray = cuT( "texture" );
+			m_texture2DArrayLod = cuT( "textureLod" );
+			m_texture2DArrayOffset = cuT( "textureOffset" );
+			m_texture2DArrayOffsetLod = cuT( "textureOffset" );
+			m_texture2DArrayLodOffset = cuT( "textureLodOffset" );
+			m_textureCubeArray = cuT( "texture" );
+			m_textureCubeArrayLod = cuT( "textureLod" );
+			m_texture1DShadow = cuT( "texture" );
+			m_texture1DShadowLod = cuT( "textureLod" );
+			m_texture1DShadowOffset = cuT( "textureOffset" );
+			m_texture1DShadowOffsetLod = cuT( "textureOffset" );
+			m_texture1DShadowLodOffset = cuT( "textureLodOffset" );
+			m_texture2DShadow = cuT( "texture" );
+			m_texture2DShadowLod = cuT( "textureLod" );
+			m_texture2DShadowOffset = cuT( "textureOffset" );
+			m_texture2DShadowOffsetLod = cuT( "textureOffset" );
+			m_texture2DShadowLodOffset = cuT( "textureLodOffset" );
+			m_textureCubeShadow = cuT( "texture" );
+			m_textureCubeShadowLod = cuT( "texture" );
+			m_texture1DArrayShadow = cuT( "texture" );
+			m_texture1DArrayShadowLod = cuT( "textureLod" );
+			m_texture1DArrayShadowOffset = cuT( "textureOffset" );
+			m_texture1DArrayShadowOffsetLod = cuT( "textureOffset" );
+			m_texture1DArrayShadowLodOffset = cuT( "textureLodOffset" );
+			m_texture2DArrayShadow = cuT( "texture" );
+			m_texture2DArrayShadowLod = cuT( "textureLod" );
+			m_texture2DArrayShadowOffset = cuT( "textureOffset" );
+			m_texture2DArrayShadowOffsetLod = cuT( "textureOffset" );
+			m_texture2DArrayShadowLodOffset = cuT( "textureLodOffset" );
+			m_textureCubeArrayShadow = cuT( "texture" );
+			m_textureCubeArrayShadowLod = cuT( "textureLod" );
+			m_texelFetchBuffer = cuT( "texelFetch" );
+			m_texelFetch1D = cuT( "texelFetch" );
+			m_texelFetch2D = cuT( "texelFetch" );
+			m_texelFetch3D = cuT( "texelFetch" );
+		}
+
+		castor::String getLayout( uint32_t index )const override
+		{
+			return cuT( "layout( location=" ) + castor::string::toString( index, 10, Expr::getLocale() ) + cuT( " ) " );
 		}
 
 		castor::String getFragData( uint32_t CU_PARAM_UNUSED( index ) )const override

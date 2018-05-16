@@ -554,6 +554,21 @@ namespace castor3d
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const;
 		/**
+		 *\~english
+		 *\brief		Creates a blend state matching given blend modes.
+		 *\param[in]	colourBlendMode	The colour blend mode.
+		 *\param[in]	alphaBlendMode	The alpha blend mode.
+		 *\return		
+		 *\~french
+		 *\brief		Crée un état de mélange correspondant aux modes de mélange donnés.
+		 *\param[in]	colourBlendMode	Le mode de mélange couleurs.
+		 *\param[in]	alphaBlendMode	Le mode de mélange alpha.
+		 *\return		
+		 */
+		C3D_API static renderer::ColourBlendState createBlendState( BlendMode colourBlendMode
+			, BlendMode alphaBlendMode
+			, uint32_t attachesCount );
+		/**
 		*\~english
 		*name
 		*	Getters.
@@ -1106,6 +1121,32 @@ namespace castor3d
 		C3D_API std::map< PipelineFlags, RenderPipelineUPtr > const & doGetBackPipelines()const;
 		/**
 		 *\~english
+		 *\brief			Prepares the pipeline, culling front faces.
+		 *\param[in,out]	program	The program, and updates it if needed.
+		 *\param[in]		flags	The pipeline flags.
+		 *\~french
+		 *\brief			Prépare le pipeline de rendu, en supprimant les faces avant.
+		 *\param[in,out]	program	Le programme, mis à jour si besoin est.
+		 *\param[in]		flags	Les indicateurs de pipeline.
+		 */
+		C3D_API virtual void doPrepareFrontPipeline( ShaderProgramSPtr program
+			, renderer::VertexLayoutCRefArray const & layouts
+			, PipelineFlags const & flags );
+		/**
+		 *\~english
+		 *\brief			Prepares the pipeline, culling back faces.
+		 *\param[in,out]	program	The program, and updates it if needed.
+		 *\param[in]		flags	The pipeline flags.
+		 *\~french
+		 *\brief			Prépare le pipeline de rendu, en supprimant les faces arrière.
+		 *\param[in,out]	program	Le programme, mis à jour si besoin est.
+		 *\param[in]		flags	Les indicateurs de pipeline.
+		 */
+		C3D_API virtual void doPrepareBackPipeline( ShaderProgramSPtr program
+			, renderer::VertexLayoutCRefArray const & layouts
+			, PipelineFlags const & flags );
+		/**
+		 *\~english
 		 *\brief		Creates the common UBO descriptor layout bindings.
 		 *\param[in]	flags	The pipeline flags.
 		 *\~french
@@ -1122,6 +1163,24 @@ namespace castor3d
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
 		C3D_API virtual renderer::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const = 0;
+		/**
+		 *\~english
+		 *\brief		Creates the depth stencil state.
+		 *\param[in]	flags	The pipeline flags.
+		 *\~french
+		 *\brief		Crée l'attache de profondeur et stencil.
+		 *\param[in]	flags	Les indicateurs de pipeline.
+		 */
+		C3D_API virtual renderer::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const = 0;
+		/**
+		 *\~english
+		 *\brief		Creates the colour blend state.
+		 *\param[in]	flags	The pipeline flags.
+		 *\~french
+		 *\brief		Crée l'attache de mélange des couleurs.
+		 *\param[in]	flags	Les indicateurs de pipeline.
+		 */
+		C3D_API virtual renderer::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const = 0;
 
 	private:
 		/**
@@ -1336,32 +1395,6 @@ namespace castor3d
 		 *\param[in]	pipeline	Le pipeline de rendu.
 		 */
 		C3D_API virtual void doUpdatePipeline( RenderPipeline & pipeline  )const = 0;
-		/**
-		 *\~english
-		 *\brief			Prepares the pipeline, culling front faces.
-		 *\param[in,out]	program	The program, and updates it if needed.
-		 *\param[in]		flags	The pipeline flags.
-		 *\~french
-		 *\brief			Prépare le pipeline de rendu, en supprimant les faces avant.
-		 *\param[in,out]	program	Le programme, mis à jour si besoin est.
-		 *\param[in]		flags	Les indicateurs de pipeline.
-		 */
-		C3D_API virtual void doPrepareFrontPipeline( ShaderProgramSPtr program
-			, renderer::VertexLayoutCRefArray const & layouts
-			, PipelineFlags const & flags ) = 0;
-		/**
-		 *\~english
-		 *\brief			Prepares the pipeline, culling back faces.
-		 *\param[in,out]	program	The program, and updates it if needed.
-		 *\param[in]		flags	The pipeline flags.
-		 *\~french
-		 *\brief			Prépare le pipeline de rendu, en supprimant les faces arrière.
-		 *\param[in,out]	program	Le programme, mis à jour si besoin est.
-		 *\param[in]		flags	Les indicateurs de pipeline.
-		 */
-		C3D_API virtual void doPrepareBackPipeline( ShaderProgramSPtr program
-			, renderer::VertexLayoutCRefArray const & layouts
-			, PipelineFlags const & flags ) = 0;
 
 	public:
 		struct VertexInputs
@@ -1411,6 +1444,7 @@ namespace castor3d
 		MatrixUbo m_matrixUbo;
 		renderer::RenderPassPtr m_renderPass;
 		RenderPassTimerSPtr m_timer;
+		castor::Size m_size;
 
 	private:
 		std::map< PipelineFlags, RenderPipelineUPtr > m_frontPipelines;

@@ -61,12 +61,12 @@ namespace film_grain
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto out = gl_PerVertex{ writer };
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = texcoord;
-				gl_Position = vec4( position.xy(), 0.0, 1.0 );
+				out.gl_Position() = vec4( position.xy(), 0.0, 1.0 );
 			} );
 			return writer.finalise();
 		}
