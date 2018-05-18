@@ -536,26 +536,26 @@ namespace castor3d
 				, vec4( tangent, 0.0 ) );
 			auto v3Texture = writer.declLocale( cuT( "v3Texture" )
 				, texture );
-			auto mtxModel = writer.declLocale< Mat4 >( cuT( "mtxModel" ) );
 
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 			{
-				mtxModel = SkinningUbo::computeTransform( writer, programFlags );
-				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
-					, transpose( inverse( mat3( mtxModel ) ) ) );
+				auto mtxModel = writer.declLocale( cuT( "mtxModel" )
+					, SkinningUbo::computeTransform( writer, programFlags ) );
 			}
 			else if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
-				mtxModel = transform;
-				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
-					, transpose( inverse( mat3( mtxModel ) ) ) );
+				auto mtxModel = writer.declLocale( cuT( "mtxModel" )
+					, transform );
 			}
 			else
 			{
-				mtxModel = c3d_mtxModel;
-				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
-					, mat3( c3d_mtxNormal ) );
+				auto mtxModel = writer.declLocale( cuT( "mtxModel" )
+					, c3d_mtxModel );
 			}
+
+			auto mtxModel = writer.declBuiltin< Mat4 >( cuT( "mtxModel" ) );
+			auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
+				, transpose( inverse( mat3( mtxModel ) ) ) );
 
 			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
@@ -580,7 +580,6 @@ namespace castor3d
 			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
 				, c3d_prvViewProj * curPosition );
 			out.gl_Position() = c3d_curViewProj * curPosition;
-			auto mtxNormal = writer.getBuiltin< Mat3 >( cuT( "mtxNormal" ) );
 
 			if ( invertNormals )
 			{

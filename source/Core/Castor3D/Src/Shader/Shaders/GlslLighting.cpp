@@ -7,6 +7,8 @@
 using namespace castor;
 using namespace glsl;
 
+#define C3D_DebugLightBuffer 0
+
 namespace castor3d
 {
 	namespace shader
@@ -221,7 +223,10 @@ namespace castor3d
 			auto get = [this]( Int const & index )
 			{
 				auto result = m_writer.declLocale< Light >( cuT( "result" ) );
-
+#if C3D_DebugLightBuffer
+				result.m_colourIndex() = vec4( 1.0_f, 1.0, 1.0, -1.0 );
+				result.m_intensityFarPlane() = vec4( 0.8_f, 1.0, 1.0, 0.0 );
+#else
 				if ( m_writer.hasTexelFetch() )
 				{
 					if ( m_writer.hasTextureBuffers() )
@@ -243,7 +248,7 @@ namespace castor3d
 				{
 					CASTOR_EXCEPTION( "TBOS are required" );
 				}
-
+#endif
 				m_writer.returnStmt( result );
 			};
 			m_writer.implementFunction< Light >( cuT( "getBaseLight" ), get, Int( &m_writer, cuT( "index" ) ) );
@@ -257,6 +262,14 @@ namespace castor3d
 					DirectionalLight result = m_writer.declLocale< DirectionalLight >( cuT( "result" ) );
 					result.m_lightBase() = getBaseLight( index );
 
+#if C3D_DebugLightBuffer
+					result.m_direction() = vec3( 0.0_f, -0.7071068287, 0.7071067691 );
+					auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), vec4( 1.0_f, 0.0, 0.0, 0.0 ) );
+					auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), vec4( 0.0_f, 1.0, 0.0, 0.0 ) );
+					auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), vec4( 0.0_f, 0.0, 1.0, 0.0 ) );
+					auto v4MtxCol4 = m_writer.declLocale( cuT( "v4MtxCol4" ), vec4( 0.0_f, 0.0, 0.0, 1.0 ) );
+					result.m_transform() = mat4( v4MtxCol1, v4MtxCol2, v4MtxCol3, v4MtxCol4 );
+#else
 					if ( m_writer.hasTexelFetch() )
 					{
 						if ( m_writer.hasTextureBuffers() )
@@ -288,7 +301,7 @@ namespace castor3d
 					{
 						CASTOR_EXCEPTION( "TBOS are required" );
 					}
-
+#endif
 					m_writer.returnStmt( result );
 				}
 				, InInt{ &m_writer, cuT( "index" ) } );
