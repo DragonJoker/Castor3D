@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
-  <Type Name="castor::PointDataHolder&lt;*, 2&gt;">
+  <Type Name="castor::Point&lt;*, 2&gt;">
     <DisplayString>{{x={m_coords[0]} y={m_coords[1]}}}</DisplayString>
     <Expand>
       <Item Name="x">m_coords[0]</Item>
@@ -8,7 +8,7 @@
     </Expand>
   </Type>
 
-  <Type Name="castor::PointDataHolder&lt;*, 3&gt;">
+  <Type Name="castor::Point&lt;*, 3&gt;">
     <DisplayString>{{x={m_coords[0]} y={m_coords[1]} z={m_coords[2]}}}</DisplayString>
     <Expand>
       <Item Name="x">m_coords[0]</Item>
@@ -17,7 +17,7 @@
     </Expand>
   </Type>
 
-  <Type Name="castor::PointDataHolder&lt;*, 4&gt;">
+  <Type Name="castor::Point&lt;*, 4&gt;">
     <DisplayString>{{x={m_coords[0]} y={m_coords[1]} z={m_coords[2]} w={m_coords[3]}}}</DisplayString>
     <Expand>
       <Item Name="x">m_coords[0]</Item>

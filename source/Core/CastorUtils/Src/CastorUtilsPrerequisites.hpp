@@ -222,6 +222,7 @@ namespace castor
 	\brief		Structure utilisée pour les constructeurs d'objets à ne pas initialiser.
 	*/
 	struct NoInit {};
+	static NoInit constexpr noInit;
 
 	template< typename Type >
 	class AngleT;

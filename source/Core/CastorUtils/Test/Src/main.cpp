@@ -42,10 +42,10 @@ int main( int argc, char const * argv[] )
 	Testing::registerType( std::make_unique< Testing::CastorUtilsSignalTest >() );
 	Testing::registerType( std::make_unique< Testing::CastorUtilsWorkerThreadTest >() );
 	Testing::registerType( std::make_unique< Testing::CastorUtilsThreadPoolTest >() );
-	Testing::registerType( std::make_unique< Testing::CastorUtilsMatrixBench >() );
 	Testing::registerType( std::make_unique< Testing::CastorUtilsArrayViewTest >() );
 	Testing::registerType( std::make_unique< Testing::CastorUtilsUniqueTest >() );
 	Testing::registerType( std::make_unique< Testing::CastorUtilsMatrixTest >() );
+	Testing::registerType( std::make_unique< Testing::CastorUtilsMatrixBench >() );
 	Testing::registerType( std::make_unique< Testing::CastorUtilsPixelFormatTest >() );
 	//Testing::registerType( std::make_unique< Testing::CastorUtilsStringTest >() );
 	Testing::registerType( std::make_unique< Testing::CastorUtilsZipTest >() );

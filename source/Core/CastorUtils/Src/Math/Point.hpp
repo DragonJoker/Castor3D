@@ -15,99 +15,6 @@ namespace castor
 {
 	/*!
 	\author		Sylvain DOREMUS
-	\date		15/01/2016
-	\~english
-	\brief		Holds the point coords, and can be specialised to customise the behaviour.
-	\~french
-	\brief		Contient les coordonnées du point, peut être spécialisée, afin de personnaliser le comportement.
-	*/
-	template< typename T, uint32_t TCount >
-	class PointDataHolder
-	{
-	public:
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\~french
-		 *\brief		Constructeur
-		 */
-		inline PointDataHolder()
-		{
-		}
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		inline ~PointDataHolder()
-		{
-		}
-
-	protected:
-		inline void initialise()
-		{
-			for ( auto & coord : m_coords )
-			{
-				coord = T{};
-			}
-		}
-
-	protected:
-		//!\~english The point data.	\~french Les données du point.
-		T m_coords[TCount];
-	};
-
-#if CASTOR_USE_SSE2
-
-	/*!
-	\author		Sylvain DOREMUS
-	\date		15/01/2016
-	\~english
-	\brief		Specialisation for 4 floats, allocates an aligned buffer.
-	\~french
-	\brief		Spécialisation pour 4 floats, alloue un tampon aligné.
-	*/
-	template<>
-	class PointDataHolder< float, 4 >
-	{
-	public:
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\~french
-		 *\brief		Constructeur
-		 */
-		inline PointDataHolder()
-			: m_coords( alignedAlloc< float >( 16, 16 ) )
-		{
-		}
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		inline ~PointDataHolder()
-		{
-			alignedFree( m_coords );
-		}
-
-	protected:
-		inline void initialise()
-		{
-			std::memset( m_coords, 0, 16 );
-		}
-
-	protected:
-		//!\~english The point data.	\~french Les données du point.
-		float * m_coords;
-	};
-
-#endif
-
-	/*!
-	\author		Sylvain DOREMUS
 	\date		14/02/2010
 	\~english
 	\brief		Templated static dimensions point representation
@@ -118,7 +25,6 @@ namespace castor
 	*/
 	template< typename T, uint32_t TCount >
 	class Point
-		: public PointDataHolder< T, TCount >
 	{
 	public:
 		/*!
@@ -232,7 +138,6 @@ namespace castor
 		explicit Point( U const * rhs );
 		template< typename ValueA, typename ValueB, typename ... Values >
 		explicit Point( ValueA a, ValueB b, Values ... values );
-		~Point();
 		/**@}*/
 		/**
 		 *\~english
@@ -348,56 +253,6 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the data at given index
-		 *\remarks		No check is made, if you make an index error, expect a crash
-		 *\return		A constant reference on data at wanted index
-		 *\~french
-		 *\brief		Récupère la donnée à l'index donné
-		 *\remarks		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous à un crash
-		 *\return		Une référence constante sur la donnée à l'index voulu
-		 */
-		inline T const & operator[]( uint32_t index )const
-		{
-			return this->m_coords[index];
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the data at given index
-		 *\remarks		No check is made, if you make an index error, expect a crash
-		 *\return		A reference on data at wanted index
-		 *\~french
-		 *\brief		Récupère la donnée à l'index donné
-		 *\remarks		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous à un crash
-		 *\return		Une référence sur la donnée à l'index voulu
-		 */
-		inline T & operator[]( uint32_t index )
-		{
-			return this->m_coords[index];
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the data at given index
-		 *\remarks		This fonction checks the index and throws an exception if it is out of bounds
-		 *\return		A constant reference on data at wanted index
-		 *\~french
-		 *\brief		Récupère la donnée à l'index donné
-		 *\remarks		Cette fonction vérifie l'index et lance une exception s'il est hors bornes
-		 *\return		Une référence constante sur la donnée à l'index voulu
-		 */
-		T const & at( uint32_t index )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the data at given index
-		 *\remarks		This fonction checks the index and throws an exception if it is out of bounds
-		 *\return		A reference on data at wanted index
-		 *\~french
-		 *\brief		Récupère la donnée à l'index donné
-		 *\remarks		Cette fonction vérifie l'index et lance une exception s'il est hors bornes
-		 *\return		Une référence sur la donnée à l'index voulu
-		 */
-		T & at( uint32_t index );
-		/**
-		 *\~english
 		 *\brief		Retrieves the pointer on datas
 		 *\return		The pointer
 		 *\~french
@@ -406,7 +261,7 @@ namespace castor
 		 */
 		inline T * ptr()
 		{
-			return &this->m_coords[0];
+			return m_coords.data();
 		}
 		/**
 		 *\~english
@@ -418,62 +273,57 @@ namespace castor
 		 */
 		inline T const * constPtr()const
 		{
-			return &this->m_coords[0];
+			return m_coords.data();
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves an iterator to the first element
-		 *\return		The iterator
+		 *name Array access.
 		 *\~french
-		 *\brief		Récupère un itérateur sur le premier élément
-		 *\return		L'itérateur
-		 */
+		 *name Accesseurs de tableau.
+		**/
+		/**@{*/
+		inline T const & operator[]( uint32_t index )const
+		{
+			return m_coords[index];
+		}
+
+		inline T & operator[]( uint32_t index )
+		{
+			return m_coords[index];
+		}
+
 		inline iterator begin()
 		{
-			return &this->m_coords[0];
+			return &m_coords[0];
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves a constant iterator to the first element
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur constant sur le premier élément
-		 *\return		L'itérateur
-		 */
+
 		inline const_iterator begin()const
 		{
-			return &this->m_coords[0];
+			return &m_coords[0];
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the last element
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur sur le dernier élément
-		 *\return		L'itérateur
-		 */
+
 		inline const_iterator end()const
 		{
-			return &this->m_coords[0] + TCount;
+			return &m_coords[0] + TCount;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the last element
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur sur le dernier élément
-		 *\return		L'itérateur
-		 */
+
 		inline iterator end()
 		{
-			return &this->m_coords[0] + TCount;
+			return &m_coords[0] + TCount;
 		}
+
+		T const & at( uint32_t index )const;
+		T & at( uint32_t index );
+		/**@}*/
+
+	private:
+		std::array< T, TCount > m_coords;
 	};
 	/**
 	 *\~english
-	 *name Comparison operators.
+	 *name Logic operators.
 	 *\~french
-	 *name Opérateurs de comparaison.
+	 *name Opérateurs logiques
 	**/
 	/**@{*/
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >

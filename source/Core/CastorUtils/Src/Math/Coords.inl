@@ -91,6 +91,12 @@ namespace castor
 	}
 
 	template< typename T, uint32_t Count >
+	Coords< T, Count >::Coords( Point< T, Count > & rhs )
+		: m_coords( rhs.ptr() )
+	{
+	}
+
+	template< typename T, uint32_t Count >
 	inline Coords< T, Count >::~Coords()
 	{
 	}
