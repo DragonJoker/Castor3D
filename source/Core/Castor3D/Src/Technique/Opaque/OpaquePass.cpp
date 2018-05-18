@@ -116,6 +116,23 @@ namespace castor3d
 			, std::move( attaches ) );
 	}
 
+	void OpaquePass::accept( RenderTechniqueVisitor & visitor )
+	{
+		auto shaderProgram = getEngine()->getShaderProgramCache().getAutomaticProgram( *this
+			, visitor.getPassFlags()
+			, visitor.getTextureFlags()
+			, ProgramFlags{}
+			, visitor.getSceneFlags()
+			, visitor.getAlphaFunc()
+			, false );
+		visitor.visit( cuT( "Object" )
+			, renderer::ShaderStageFlag::eVertex
+			, shaderProgram->getSource( renderer::ShaderStageFlag::eVertex ) );
+		visitor.visit( cuT( "Object" )
+			, renderer::ShaderStageFlag::eFragment
+			, shaderProgram->getSource( renderer::ShaderStageFlag::eFragment ) );
+	}
+
 	void OpaquePass::update( RenderInfo & info
 		, Point2r const & jitter )
 	{

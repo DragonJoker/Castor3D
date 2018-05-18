@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Render/RenderInfo.hpp"
 #include "Shader/Ubos/HdrConfigUbo.hpp"
+#include "Technique/RenderTechniqueVisitor.hpp"
 
 #include <Buffer/VertexBuffer.hpp>
 #include <Descriptor/DescriptorSet.hpp>
@@ -68,7 +69,7 @@ namespace castor3d
 			, renderer::TextureView const & result
 			, SceneUbo & sceneUbo
 			, GpInfoUbo & gpInfoUbo
-			, SsaoConfig const & config
+			, SsaoConfig & config
 			, Viewport const & viewport );
 		/**
 		 *\~english
@@ -88,6 +89,10 @@ namespace castor3d
 		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
 		void render( renderer::Semaphore const & toWait )const;
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		C3D_API void accept( RenderTechniqueVisitor & visitor );
 		/**
 		*\~english
 		*name
@@ -129,8 +134,11 @@ namespace castor3d
 				, renderer::DescriptorSet const & texSet
 				, renderer::FrameBuffer const & frameBuffer
 				, RenderPassTimer & timer );
+			void accept( RenderTechniqueVisitor & visitor );
 
 			renderer::RenderPass const * m_renderPass;
+			glsl::Shader m_vertexShader;
+			glsl::Shader m_pixelShader;
 			renderer::ShaderStageStateArray m_program;
 			renderer::PipelineLayoutPtr m_pipelineLayout;
 			renderer::PipelinePtr m_pipeline;

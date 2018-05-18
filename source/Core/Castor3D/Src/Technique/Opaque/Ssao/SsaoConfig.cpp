@@ -89,4 +89,44 @@ namespace castor3d
 
 		return result;
 	}
+
+	void SsaoConfig::accept( castor::String const & name
+		, RenderTechniqueVisitor & visitor )
+	{
+		visitor.visit( name
+			, renderer::ShaderStageFlag::eFragment
+			, cuT( "SSAO" )
+			, cuT( "Radius" )
+			, m_radius );
+		visitor.visit( name
+			, renderer::ShaderStageFlag::eFragment
+			, cuT( "SSAO" )
+			, cuT( "Bias" )
+			, m_bias );
+		visitor.visit( name
+			, renderer::ShaderStageFlag::eFragment
+			, cuT( "SSAO" )
+			, cuT( "Bias" )
+			, m_intensity );
+		visitor.visit( name
+			, renderer::ShaderStageFlag::eFragment
+			, cuT( "SSAO" )
+			, cuT( "Samples" )
+			, m_numSamples );
+		visitor.visit( name
+			, renderer::ShaderStageFlag::eFragment
+			, cuT( "SSAO" )
+			, cuT( "Edge Sharpness" )
+			, m_edgeSharpness );
+		visitor.visit( name
+			, renderer::ShaderStageFlag::eFragment
+			, cuT( "SSAO" )
+			, cuT( "Blur Step Size" )
+			, m_blurStepSize );
+		visitor.visit( name
+			, renderer::ShaderStageFlag::eFragment
+			, cuT( "SSAO" )
+			, cuT( "Blur Radius" )
+			, m_blurRadius );
+	}
 }

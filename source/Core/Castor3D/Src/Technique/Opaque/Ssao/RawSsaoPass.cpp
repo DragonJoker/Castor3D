@@ -493,18 +493,20 @@ namespace castor3d
 		}
 
 		renderer::ShaderStageStateArray doGetProgram( Engine & engine
-			, SsaoConfig const & config )
+			, SsaoConfig const & config
+			, glsl::Shader & vertexShader
+			, glsl::Shader & pixelShader )
 		{
 			auto & device = *engine.getRenderSystem()->getCurrentDevice();
-			auto vtx = doGetVertexProgram( engine );
-			auto pxl = doGetPixelProgram( engine, config );
+			vertexShader = doGetVertexProgram( engine );
+			pixelShader = doGetPixelProgram( engine, config );
 			renderer::ShaderStageStateArray program
 			{
 				{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
 				{ device.createShaderModule( renderer::ShaderStageFlag::eFragment ) },
 			};
-			program[0].module->loadShader( vtx.getSource() );
-			program[1].module->loadShader( pxl.getSource() );
+			program[0].module->loadShader( vertexShader.getSource() );
+			program[1].module->loadShader( pixelShader.getSource() );
 			return program;
 		}
 
@@ -723,7 +725,7 @@ namespace castor3d
 		, m_normals{ normals }
 		, m_size{ size }
 		, m_result{ doCreateTexture( m_engine, m_size ) }
-		, m_program{ doGetProgram( m_engine, config ) }
+		, m_program{ doGetProgram( m_engine, config, m_vertexShader, m_pixelShader ) }
 		, m_sampler{ m_engine.getRenderSystem()->getCurrentDevice()->createSampler( renderer::WrapMode::eClampToEdge
 			, renderer::WrapMode::eClampToEdge
 			, renderer::WrapMode::eClampToEdge
@@ -797,5 +799,17 @@ namespace castor3d
 			, nullptr );
 		m_timer->step();
 		m_timer->stop();
+	}
+
+	void RawSsaoPass::accept( SsaoConfig & config
+		, RenderTechniqueVisitor & visitor )
+	{
+		visitor.visit( cuT( "SSAO - Raw" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_vertexShader );
+		visitor.visit( cuT( "SSAO - Raw" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_pixelShader );
+		config.accept( cuT( "SSAO - Raw" ), visitor );
 	}
 }

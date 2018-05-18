@@ -6,10 +6,13 @@ See LICENSE file in root folder
 
 #include "Render/Viewport.hpp"
 #include "RenderToTexture/RenderQuad.hpp"
+#include "Technique/RenderTechniqueVisitor.hpp"
 #include "Texture/TextureUnit.hpp"
 
 #include <Buffer/PushConstantsBuffer.hpp>
 #include <Miscellaneous/PushConstantRange.hpp>
+
+#include <GlslShader.hpp>
 
 namespace castor3d
 {
@@ -70,6 +73,12 @@ namespace castor3d
 		 */
 		void blur( renderer::Semaphore const & toWait )const;
 		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		C3D_API void accept( bool horizontal
+			, SsaoConfig & config
+			, RenderTechniqueVisitor & visitor );
+		/**
 		*\~english
 		*name
 		*	Getters.
@@ -106,6 +115,8 @@ namespace castor3d
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		TextureUnit const & m_input;
 		renderer::TextureView const & m_normals;
+		glsl::Shader m_vertexShader;
+		glsl::Shader m_pixelShader;
 		renderer::ShaderStageStateArray m_program;
 		renderer::Extent2D m_size;
 		TextureUnit m_result;

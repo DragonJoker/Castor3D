@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_SsaoConfig_H___
 #define ___C3D_SsaoConfig_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Technique/RenderTechniqueVisitor.hpp"
 
 #include <Math/RangedValue.hpp>
 
@@ -54,6 +54,11 @@ namespace castor3d
 			 */
 			C3D_API bool operator()( castor3d::SsaoConfig const & config, castor::TextFile & file )override;
 		};
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		C3D_API void accept( castor::String const & name
+			, RenderTechniqueVisitor & visitor );
 
 		//!\~english	The effect activation status.
 		//!\~french		Le statut d'activation de l'effet.

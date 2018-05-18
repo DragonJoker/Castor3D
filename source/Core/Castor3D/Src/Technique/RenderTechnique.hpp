@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Render/RenderInfo.hpp"
 #include "ShadowMap/ShadowMap.hpp"
 #include "Technique/DepthPass.hpp"
+#include "Technique/RenderTechniqueVisitor.hpp"
 #include "Technique/Opaque/DeferredRendering.hpp"
 #include "Technique/Transparent/WeightedBlendRendering.hpp"
 #include "Texture/TextureUnit.hpp"
@@ -124,6 +125,13 @@ namespace castor3d
 		 *\brief		Affiche les dumps de debug.
 		 */
 		C3D_API void debugDisplay( castor::Size const & size )const;
+		/**
+		*\~english
+		*\brief		Visitor acceptance function.
+		*\~french
+		*\brief		Fonction d'acceptation de visiteur.
+		*/
+		C3D_API void accept( RenderTechniqueVisitor & visitor );
 		/**
 		*\~english
 		*name

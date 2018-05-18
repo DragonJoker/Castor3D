@@ -241,4 +241,10 @@ namespace castor3d
 		//context.renderTexture( Position{ left, top - height * index++ }, size, *m_weightedBlendPassResult[size_t( WbTexture::eRevealage )]->getTexture() );
 		//context.renderTexture( Position{ left, top - height * index++ }, size, *m_weightedBlendPassResult[size_t( WbTexture::eAccumulation )]->getTexture() );
 	}
+
+	void WeightedBlendRendering::accept( RenderTechniqueVisitor & visitor )
+	{
+		m_transparentPass.accept( visitor );
+		m_finalCombinePass.accept( visitor );
+	}
 }

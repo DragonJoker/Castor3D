@@ -4,10 +4,13 @@ See LICENSE file in root folder
 #ifndef ___C3D_RawSsaoPass_H___
 #define ___C3D_RawSsaoPass_H___
 
-#include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Render/RenderInfo.hpp"
+#include "Technique/RenderTechniqueVisitor.hpp"
+#include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Technique/Opaque/LightPass.hpp"
 #include "Texture/TextureUnit.hpp"
+
+#include <GlslShader.hpp>
 
 namespace castor3d
 {
@@ -66,6 +69,11 @@ namespace castor3d
 		 */
 		void compute( renderer::Semaphore const & toWait )const;
 		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		C3D_API void accept( SsaoConfig & config
+			, RenderTechniqueVisitor & visitor );
+		/**
 		*\~english
 		*name
 		*	Getters.
@@ -93,6 +101,8 @@ namespace castor3d
 		renderer::TextureView const & m_normals;
 		renderer::Extent2D m_size;
 		TextureUnit m_result;
+		glsl::Shader m_vertexShader;
+		glsl::Shader m_pixelShader;
 		renderer::ShaderStageStateArray m_program;
 		renderer::SamplerPtr m_sampler;
 		renderer::DescriptorSetLayoutPtr m_descriptorLayout;

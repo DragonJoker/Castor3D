@@ -32,6 +32,7 @@ namespace GuiCommon
 		eID_GRID_COMPUTE,
 		eID_MENU_QUIT,
 		eID_MENU_PREFS,
+		eID_PAGES
 	}	eID;
 
 	ShaderDialog::ShaderDialog( Engine * engine
@@ -76,7 +77,11 @@ namespace GuiCommon
 	void ShaderDialog::doInitialiseLayout()
 	{
 		wxSize size = GetClientSize();
-		m_editors = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH );
+		m_editors = new wxAuiNotebook( this
+			, eID_PAGES
+			, wxDefaultPosition
+			, wxDefaultSize
+			, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH | wxAUI_NB_SCROLL_BUTTONS );
 		m_editors->SetArtProvider( new AuiTabArt );
 
 		m_auiManager.SetArtProvider( new AuiDockArt );
@@ -153,17 +158,23 @@ namespace GuiCommon
 	BEGIN_EVENT_TABLE( ShaderDialog, wxFrame )
 		EVT_CLOSE( ShaderDialog::onClose )
 		EVT_MENU( eID_MENU_QUIT, ShaderDialog::onMenuClose )
+		EVT_AUINOTEBOOK_PAGE_CHANGED( eID_PAGES, ShaderDialog::onPageChanged )
 	END_EVENT_TABLE()
 
-	void ShaderDialog::onClose( wxCloseEvent & p_event )
+	void ShaderDialog::onClose( wxCloseEvent & event )
 	{
 		doCleanup();
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void ShaderDialog::onMenuClose( wxCommandEvent & p_event )
+	void ShaderDialog::onMenuClose( wxCommandEvent & event )
 	{
 		Close();
-		p_event.Skip();
+		event.Skip();
+	}
+
+	void ShaderDialog::onPageChanged( wxAuiNotebookEvent & event )
+	{
+		event.Skip();
 	}
 }

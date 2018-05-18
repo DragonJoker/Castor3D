@@ -255,18 +255,20 @@ namespace castor3d
 		}
 		
 		renderer::ShaderStageStateArray doCreateProgram( Engine & engine
-			, FogType fogType )
+			, FogType fogType
+			, glsl::Shader & vertexShader
+			, glsl::Shader & pixelShader )
 		{
 			auto & device = *engine.getRenderSystem()->getCurrentDevice();
-			auto vtx = doGetVertexProgram( engine );
-			auto pxl = doGetPixelProgram( engine, fogType );
+			vertexShader = doGetVertexProgram( engine );
+			pixelShader = doGetPixelProgram( engine, fogType );
 			renderer::ShaderStageStateArray program
 			{
 				{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
 				{ device.createShaderModule( renderer::ShaderStageFlag::eFragment ) },
 			};
-			program[0].module->loadShader( vtx.getSource() );
-			program[1].module->loadShader( pxl.getSource() );
+			program[0].module->loadShader( vertexShader.getSource() );
+			program[1].module->loadShader( pixelShader.getSource() );
 			return program;
 		}
 
@@ -332,7 +334,7 @@ namespace castor3d
 			, uboLayout
 			, texLayout ) }
 		, m_pipeline{ doCreateRenderPipeline( *m_pipelineLayout
-			, doCreateProgram( engine, fogType )
+			, doCreateProgram( engine, fogType, m_vertexShader, m_pixelShader )
 			, renderPass
 			, vtxLayout ) }
 		, m_commandBuffer{ engine.getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer( false ) }
@@ -369,6 +371,16 @@ namespace castor3d
 			m_commandBuffer->draw( 6u );
 			m_commandBuffer->end();
 		}
+	}
+
+	void FinalCombineProgram::accept( RenderTechniqueVisitor & visitor )
+	{
+		visitor.visit( cuT( "Combine" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_vertexShader );
+		visitor.visit( cuT( "Combine" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_pixelShader );
 	}
 
 	//*********************************************************************************************
@@ -428,6 +440,11 @@ namespace castor3d
 	renderer::CommandBuffer const & FinalCombinePass::getCommandBuffer( FogType fogType )
 	{
 		return m_programs[size_t( fogType )].getCommandBuffer();
+	}
+
+	void FinalCombinePass::accept( RenderTechniqueVisitor & visitor )
+	{
+		m_programs[size_t( getFogType( visitor.getSceneFlags() ) )].accept( visitor );
 	}
 
 	//*********************************************************************************************

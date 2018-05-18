@@ -6,7 +6,10 @@ See LICENSE file in root folder
 
 #include "Shader/Ubos/GpInfoUbo.hpp"
 #include "Shader/Ubos/SceneUbo.hpp"
+#include "Technique/RenderTechniqueVisitor.hpp"
 #include "TransparentPass.hpp"
+
+#include <GlslShader.hpp>
 
 namespace castor3d
 {
@@ -37,6 +40,7 @@ namespace castor3d
 			, renderer::DescriptorSet const & uboDescriptorSet
 			, renderer::DescriptorSet const & texDescriptorSet
 			, renderer::BufferBase const & vbo );
+		void accept( RenderTechniqueVisitor & visitor );
 		inline renderer::CommandBuffer const & getCommandBuffer()const
 		{
 			REQUIRE( m_commandBuffer );
@@ -44,6 +48,8 @@ namespace castor3d
 		}
 
 	private:
+		glsl::Shader m_vertexShader;
+		glsl::Shader m_pixelShader;
 		renderer::PipelineLayoutPtr m_pipelineLayout;
 		renderer::PipelinePtr m_pipeline;
 		renderer::CommandBufferPtr m_commandBuffer;
@@ -112,6 +118,10 @@ namespace castor3d
 		 *\brief		Récupère le tampon de commandes pour le type de brouillard donné.
 		 */
 		renderer::CommandBuffer const & getCommandBuffer( FogType fogType );
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		void accept( RenderTechniqueVisitor & visitor );
 
 	private:
 		castor::Size m_size;

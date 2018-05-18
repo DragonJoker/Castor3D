@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "RenderToTexture/RenderQuad.hpp"
 #include "Texture/TextureUnit.hpp"
 #include "Technique/Opaque/LightPass.hpp"
+#include "Technique/RenderTechniqueVisitor.hpp"
 
 #include <Command/CommandBuffer.hpp>
 #include <Sync/Semaphore.hpp>
@@ -76,6 +77,10 @@ namespace castor3d
 		 *\param[in]	size	Les dimensions d'affichage.
 		 */
 		C3D_API void debugDisplay( castor::Size const & size )const;
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		C3D_API void accept( RenderTechniqueVisitor & visitor );
 
 		inline TextureUnit const & getResult()const
 		{
@@ -137,7 +142,8 @@ namespace castor3d
 				, GeometryPassResult const & gp
 				, TextureUnit const & source
 				, TextureUnit const & destination
-				, bool isVertic );
+				, bool isVertic
+				, renderer::ShaderStageStateArray const & shaderStages );
 			void prepareFrame( renderer::CommandBuffer & commandBuffer )const;
 
 		private:
@@ -164,7 +170,8 @@ namespace castor3d
 				, GeometryPassResult const & gp
 				, TextureUnit const & source
 				, std::array< TextureUnit, 3u > const & blurResults
-				, TextureUnit const & destination );
+				, TextureUnit const & destination
+				, renderer::ShaderStageStateArray const & shaderStages );
 			void prepareFrame( renderer::CommandBuffer & commandBuffer )const;
 
 		private:
@@ -188,8 +195,17 @@ namespace castor3d
 		TextureUnit m_intermediate;
 		std::array< TextureUnit, 3u > m_blurResults;
 		TextureUnit m_result;
+		glsl::Shader m_blurHorizVertexShader;
+		glsl::Shader m_blurHorizPixelShader;
+		renderer::ShaderStageStateArray m_blurHorizProgram;
 		Blur m_blurX[3];
+		glsl::Shader m_blurVerticVertexShader;
+		glsl::Shader m_blurVerticPixelShader;
+		renderer::ShaderStageStateArray m_blurVerticProgram;
 		Blur m_blurY[3];
+		glsl::Shader m_combineVertexShader;
+		glsl::Shader m_combinePixelShader;
+		renderer::ShaderStageStateArray m_combineProgram;
 		Combine m_combine;
 		renderer::CommandBufferPtr m_commandBuffer;
 		renderer::SemaphorePtr m_finished;

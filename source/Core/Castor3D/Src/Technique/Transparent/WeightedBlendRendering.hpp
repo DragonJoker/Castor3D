@@ -85,6 +85,10 @@ namespace castor3d
 		 */
 		void debugDisplay();
 		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		void accept( RenderTechniqueVisitor & visitor );
+		/**
 		*\~english
 		*name
 		*	Getters.

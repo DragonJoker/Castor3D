@@ -119,6 +119,10 @@ namespace castor3d
 		void update( RenderInfo & info
 			, castor::Point2r const & jitter )override;
 		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		C3D_API void accept( RenderTechniqueVisitor & visitor );
+		/**
 		*\~english
 		*name
 		*	Getters.

@@ -130,33 +130,37 @@ namespace castor3d
 			return writer.finalise();
 		}
 
-		renderer::ShaderStageStateArray doGetLineariseProgram( Engine & engine )
+		renderer::ShaderStageStateArray doGetLineariseProgram( Engine & engine
+			, glsl::Shader & vertexShader
+			, glsl::Shader & pixelShader )
 		{
 			auto & device = *engine.getRenderSystem()->getCurrentDevice();
-			auto vtx = doGetVertexProgram( engine );
-			auto pxl = doGetLinearisePixelProgram( engine );
+			vertexShader = doGetVertexProgram( engine );
+			pixelShader = doGetLinearisePixelProgram( engine );
 			renderer::ShaderStageStateArray program
 			{
 				{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
 				{ device.createShaderModule( renderer::ShaderStageFlag::eFragment ) },
 			};
-			program[0].module->loadShader( vtx.getSource() );
-			program[1].module->loadShader( pxl.getSource() );
+			program[0].module->loadShader( vertexShader.getSource() );
+			program[1].module->loadShader( pixelShader.getSource() );
 			return program;
 		}
 
-		renderer::ShaderStageStateArray doGetMinifyProgram( Engine & engine )
+		renderer::ShaderStageStateArray doGetMinifyProgram( Engine & engine
+			, glsl::Shader & vertexShader
+			, glsl::Shader & pixelShader )
 		{
 			auto & device = *engine.getRenderSystem()->getCurrentDevice();
-			auto vtx = doGetVertexProgram( engine );
-			auto pxl = doGetMinifyPixelProgram( engine );
+			vertexShader = doGetVertexProgram( engine );
+			pixelShader = doGetMinifyPixelProgram( engine );
 			renderer::ShaderStageStateArray program
 			{
 				{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
 				{ device.createShaderModule( renderer::ShaderStageFlag::eFragment ) },
 			};
-			program[0].module->loadShader( vtx.getSource() );
-			program[1].module->loadShader( pxl.getSource() );
+			program[0].module->loadShader( vertexShader.getSource() );
+			program[1].module->loadShader( pixelShader.getSource() );
 			return program;
 		}
 
@@ -335,8 +339,8 @@ namespace castor3d
 		, m_commandBuffer{ m_engine.getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer() }
 		, m_finished{ engine.getRenderSystem()->getCurrentDevice()->createSemaphore() }
 		, m_clipInfo{ renderer::ShaderStageFlag::eFragment, { { 1u, 0u, renderer::ConstantFormat::eVec3f } } }
-		, m_lineariseProgram{ doGetLineariseProgram( m_engine ) }
-		, m_minifyProgram{ doGetMinifyProgram( m_engine ) }
+		, m_lineariseProgram{ doGetLineariseProgram( m_engine, m_lineariseVertexShader, m_linearisePixelShader ) }
+		, m_minifyProgram{ doGetMinifyProgram( m_engine, m_minifyVertexShader, m_minifyPixelShader ) }
 	{
 		auto z_f = viewport.getFar();
 		auto z_n = viewport.getNear();
@@ -373,6 +377,23 @@ namespace castor3d
 			, nullptr );
 		m_timer->step();
 		m_timer->stop();
+	}
+
+	void LineariseDepthPass::accept( RenderTechniqueVisitor & visitor )
+	{
+		visitor.visit( cuT( "SSAO - Linearise" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_lineariseVertexShader );
+		visitor.visit( cuT( "SSAO - Linearise" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_linearisePixelShader );
+
+		visitor.visit( cuT( "SSAO - Minify" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_minifyVertexShader );
+		visitor.visit( cuT( "SSAO - Minify" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_minifyPixelShader );
 	}
 
 	void LineariseDepthPass::doInitialiseLinearisePass()

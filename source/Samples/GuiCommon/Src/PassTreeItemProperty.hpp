@@ -28,16 +28,19 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_editable	Tells if the properties are modifiable.
-		 *\param[in]	p_pass		The target pass.
-		 *\param[in]	p_scene		The scene.
+		 *\param[in]	editable	Tells if the properties are modifiable.
+		 *\param[in]	pass		The target pass.
+		 *\param[in]	scene		The scene.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_editable	Dit si les propriétés sont modifiables.
-		 *\param[in]	p_pass		La passe cible.
-		 *\param[in]	p_scene		La scène.
+		 *\param[in]	editable	Dit si les propriétés sont modifiables.
+		 *\param[in]	pass		La passe cible.
+		 *\param[in]	scene		La scène.
 		 */
-		PassTreeItemProperty( bool p_editable, castor3d::PassSPtr p_pass, castor3d::Scene & p_scene );
+		PassTreeItemProperty( bool editable
+			, castor3d::PassSPtr pass
+			, castor3d::Scene & scene
+			, wxWindow * parent );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -101,6 +104,7 @@ namespace GuiCommon
 	private:
 		castor3d::PassWPtr m_pass;
 		castor3d::Scene & m_scene;
+		wxWindow * m_parent;
 	};
 }
 

@@ -76,6 +76,10 @@ namespace castor3d
 	{
 	}
 
+	void RenderTechniquePass::accept( RenderTechniqueVisitor & visitor )
+	{
+	}
+
 	void RenderTechniquePass::doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, BillboardListRenderNode & node )

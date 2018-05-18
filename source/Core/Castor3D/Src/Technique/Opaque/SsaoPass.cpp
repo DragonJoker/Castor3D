@@ -16,7 +16,7 @@ namespace castor3d
 {
 	SsaoPass::SsaoPass( Engine & engine
 		, renderer::Extent2D const & size
-		, SsaoConfig const & config
+		, SsaoConfig & config
 		, GeometryPassResult const & gpResult
 		, Viewport const & viewport )
 		: m_engine{ engine }
@@ -68,6 +68,14 @@ namespace castor3d
 		m_rawSsaoPass->compute( m_linearisePass->getSemaphore() );
 		m_horizontalBlur->blur( m_rawSsaoPass->getSemaphore() );
 		m_verticalBlur->blur( m_horizontalBlur->getSemaphore() );
+	}
+
+	void SsaoPass::accept( RenderTechniqueVisitor & visitor )
+	{
+		m_linearisePass->accept( visitor );
+		m_rawSsaoPass->accept( m_config, visitor );
+		m_horizontalBlur->accept( true, m_config, visitor );
+		m_verticalBlur->accept( false, m_config, visitor );
 	}
 
 	TextureUnit const & SsaoPass::getResult()const

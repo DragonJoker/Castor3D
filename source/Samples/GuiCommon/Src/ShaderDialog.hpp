@@ -35,6 +35,7 @@ namespace GuiCommon
 		void onOk( wxCommandEvent & event );
 		void onCancel( wxCommandEvent & event );
 		void onMenuClose( wxCommandEvent & event );
+		void onPageChanged( wxAuiNotebookEvent & event );
 
 	private:
 		castor3d::Engine * m_engine;

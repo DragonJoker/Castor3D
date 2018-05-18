@@ -5,8 +5,8 @@ See LICENSE file in root folder
 #define ___C3D_DeferredSsaoPass_H___
 
 #include "LightPass.hpp"
-
 #include "Shader/Ubos/MatrixUbo.hpp"
+#include "Technique/RenderTechniqueVisitor.hpp"
 
 namespace castor3d
 {
@@ -44,7 +44,7 @@ namespace castor3d
 		 */
 		SsaoPass( Engine & engine
 			, renderer::Extent2D const & size
-			, SsaoConfig const & config
+			, SsaoConfig & config
 			, GeometryPassResult const & gpResult
 			, Viewport const & viewport );
 		/**
@@ -69,6 +69,10 @@ namespace castor3d
 		 */
 		void render( renderer::Semaphore const & toWait )const;
 		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		void accept( RenderTechniqueVisitor & visitor );
+		/**
 		 *\~english
 		 *\return		The SSAO pass result.
 		 *\~french
@@ -85,7 +89,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		SsaoConfig const & m_config;
+		SsaoConfig & m_config;
 		MatrixUbo m_matrixUbo;
 		std::shared_ptr< SsaoConfigUbo > m_ssaoConfigUbo;
 		std::shared_ptr< LineariseDepthPass > m_linearisePass;

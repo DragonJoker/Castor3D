@@ -52,7 +52,7 @@ namespace castor3d
 		, Size const & size
 		, Scene & scene
 		, Viewport const & viewport
-		, SsaoConfig const & config )
+		, SsaoConfig & config )
 		: m_engine{ engine }
 		, m_ssaoConfig{ config }
 		, m_opaquePass{ opaquePass }
@@ -232,5 +232,20 @@ namespace castor3d
 		//}
 
 		//m_subsurfaceScattering->debugDisplay( m_size );
+	}
+
+	void DeferredRendering::accept( RenderTechniqueVisitor & visitor )
+	{
+		m_opaquePass.accept( visitor );
+
+		if ( visitor.getScene().needsSubsurfaceScattering() )
+		{
+			m_subsurfaceScattering->accept( visitor );
+			m_reflection[1]->accept( visitor );
+		}
+		else
+		{
+			m_reflection[0]->accept( visitor );
+		}
 	}
 }

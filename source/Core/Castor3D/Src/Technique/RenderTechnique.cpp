@@ -410,6 +410,35 @@ namespace castor3d
 #endif
 	}
 
+	void RenderTechnique::accept( RenderTechniqueVisitor & visitor )
+	{
+		ShaderProgramSPtr shaderProgram;
+
+		if ( checkFlag( visitor.getPassFlags(), PassFlag::eAlphaBlending ) )
+		{
+#if DEBUG_FORWARD_RENDERING
+			m_transparentPass->accept( visitor );
+#else
+			m_weightedBlendRendering->accept( visitor );
+#endif
+			shaderProgram = getEngine()->getShaderProgramCache().getAutomaticProgram( getTransparentPass()
+				, visitor.getPassFlags()
+				, visitor.getTextureFlags()
+				, ProgramFlags{}
+				, visitor.getSceneFlags()
+				, visitor.getAlphaFunc()
+				, false );
+		}
+		else
+		{
+#if DEBUG_FORWARD_RENDERING
+			m_opaquePass->accept( visitor );
+#else
+			m_deferredRendering->accept( visitor );
+#endif
+		}
+	}
+
 	void RenderTechnique::doInitialiseShadowMaps()
 	{
 		m_directionalShadowMap->initialise();

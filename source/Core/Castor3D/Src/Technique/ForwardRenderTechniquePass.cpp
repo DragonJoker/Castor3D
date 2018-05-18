@@ -188,6 +188,23 @@ namespace castor3d
 		m_fence = device.createFence( renderer::FenceCreateFlag::eSignaled );
 	}
 
+	void ForwardRenderTechniquePass::accept( RenderTechniqueVisitor & visitor )
+	{
+		auto shaderProgram = getEngine()->getShaderProgramCache().getAutomaticProgram( *this
+			, visitor.getPassFlags()
+			, visitor.getTextureFlags()
+			, ProgramFlags{}
+			, visitor.getSceneFlags()
+			, visitor.getAlphaFunc()
+			, false );
+		visitor.visit( cuT( "Object" )
+			, renderer::ShaderStageFlag::eVertex
+			, shaderProgram->getSource( renderer::ShaderStageFlag::eVertex ) );
+		visitor.visit( cuT( "Object" )
+			, renderer::ShaderStageFlag::eFragment
+			, shaderProgram->getSource( renderer::ShaderStageFlag::eFragment ) );
+	}
+
 	void ForwardRenderTechniquePass::update( RenderInfo & info
 		, Point2r const & jitter )
 	{

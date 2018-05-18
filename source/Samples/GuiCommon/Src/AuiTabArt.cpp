@@ -51,15 +51,42 @@ namespace GuiCommon
 			ret += wxT( "..." );
 			return ret;
 		}
+
+		static const unsigned char leftBits[] = {
+			0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfe, 0x7f, 0xfe, 0x3f, 0xfe,
+			0x1f, 0xfe, 0x0f, 0xfe, 0x1f, 0xfe, 0x3f, 0xfe, 0x7f, 0xfe, 0xff, 0xfe,
+			0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
+
+		static const unsigned char rightBits[] = {
+			0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xdf, 0xff, 0x9f, 0xff, 0x1f, 0xff,
+			0x1f, 0xfe, 0x1f, 0xfc, 0x1f, 0xfe, 0x1f, 0xff, 0x9f, 0xff, 0xdf, 0xff,
+			0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
+
+		wxBitmap AuiBitmapFromBits( const unsigned char bits[], int w, int h,
+			const wxColour& color )
+		{
+			wxImage img = wxBitmap( ( const char* )bits, w, h ).ConvertToImage();
+			img.Replace( 0, 0, 0, 123, 123, 123 );
+			img.Replace( 255, 255, 255, color.Red(), color.Green(), color.Blue() );
+			img.SetMaskColour( 123, 123, 123 );
+			return wxBitmap( img );
+		}
 	}
 
 	AuiTabArt::AuiTabArt()
+		: m_disabledColour{ 128, 128, 128 }
 	{
 		wxAuiDefaultTabArt::SetColour( INACTIVE_TAB_COLOUR );
 		wxAuiDefaultTabArt::SetActiveColour( ACTIVE_TAB_COLOUR );
 		wxAuiDefaultTabArt::SetMeasuringFont( wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false ) );
 		wxAuiDefaultTabArt::SetNormalFont( wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false ) );
 		wxAuiDefaultTabArt::SetSelectedFont( wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false ) );
+
+		m_activeLeftBmp = AuiBitmapFromBits( leftBits, 16, 16, ACTIVE_TAB_COLOUR );
+		m_disabledLeftBmp = AuiBitmapFromBits( leftBits, 16, 16, m_disabledColour );
+
+		m_activeRightBmp = AuiBitmapFromBits( rightBits, 16, 16, ACTIVE_TAB_COLOUR );
+		m_disabledRightBmp = AuiBitmapFromBits( rightBits, 16, 16, m_disabledColour );
 	}
 
 	wxAuiTabArt * AuiTabArt::Clone()
@@ -82,7 +109,7 @@ namespace GuiCommon
 	// inRect  - rectangle the tab should be confined to
 	// caption  - tab's caption
 	// active   - whether or not the tab is active
-	// out_rect - actual output rectangle
+	// outRect - actual output rectangle
 	// xExtent - the advance x; where the next tab should start
 	void AuiTabArt::DrawTab( wxDC & dc
 		, wxWindow * wnd
@@ -316,5 +343,97 @@ namespace GuiCommon
 		*outTabRect = wxRect( tabX, tabY, tabWidth, tabHeight );
 
 		dc.DestroyClippingRegion();
+	}
+
+	void AuiTabArt::DrawButton( wxDC & dc
+		, wxWindow * wnd
+		, const wxRect & inRect
+		, int bitmapId
+		, int buttonState
+		, int orientation
+		, wxRect * outRect )
+	{
+		switch ( bitmapId )
+		{
+		case wxAUI_BUTTON_CLOSE:
+		case wxAUI_BUTTON_WINDOWLIST:
+			wxAuiDefaultTabArt::DrawButton( dc, wnd, inRect, bitmapId, buttonState, orientation, outRect );
+			return;
+		}
+
+		wxBitmap bmp;
+
+		switch ( bitmapId )
+		{
+		case wxAUI_BUTTON_LEFT:
+			if ( buttonState & wxAUI_BUTTON_STATE_DISABLED )
+			{
+				bmp = m_disabledLeftBmp;
+				dc.SetPen( m_disabledColour );
+			}
+			else
+			{
+				bmp = m_activeLeftBmp;
+				dc.SetPen( m_activeColour );
+			}
+			break;
+		case wxAUI_BUTTON_RIGHT:
+			if ( buttonState & wxAUI_BUTTON_STATE_DISABLED )
+			{
+				bmp = m_disabledRightBmp;
+				dc.SetPen( m_disabledColour );
+			}
+			else
+			{
+				bmp = m_activeRightBmp;
+				dc.SetPen( m_activeColour );
+			}
+			break;
+		}
+
+		if ( !bmp.IsOk() )
+			return;
+
+		wxRect rect = inRect;
+		wxRect bmpRect = inRect;
+		auto width = bmp.GetWidth() + 1;
+
+		if ( orientation == wxLEFT )
+		{
+			rect.SetX( inRect.x );
+			rect.SetY( ( ( inRect.y + inRect.height ) / 2 ) - ( bmp.GetHeight() / 2 ) );
+			rect.SetWidth( width );
+			rect.SetHeight( bmp.GetHeight() );
+
+			bmpRect.SetX( inRect.x );
+			bmpRect.SetY( ( ( inRect.y + inRect.height ) / 2 ) - ( bmp.GetHeight() / 2 ) );
+			bmpRect.SetWidth( bmp.GetWidth() );
+			bmpRect.SetHeight( bmp.GetHeight() );
+
+			dc.DrawLine( rect.GetRightTop(), rect.GetRightBottom() );
+		}
+		else
+		{
+			rect.SetX( inRect.x + inRect.width - width );
+			rect.SetY( ( ( inRect.y + inRect.height ) / 2 ) - ( bmp.GetHeight() / 2 ) );
+			rect.SetWidth( width );
+			rect.SetHeight( bmp.GetHeight() );
+
+			bmpRect.SetX( inRect.x + inRect.width - bmp.GetWidth() );
+			bmpRect.SetY( ( ( inRect.y + inRect.height ) / 2 ) - ( bmp.GetHeight() / 2 ) );
+			bmpRect.SetWidth( bmp.GetWidth() );
+			bmpRect.SetHeight( bmp.GetHeight() );
+
+			dc.DrawLine( rect.GetLeftTop(), rect.GetLeftBottom() );
+		}
+
+		if ( buttonState == wxAUI_BUTTON_STATE_PRESSED )
+		{
+			bmpRect.x++;
+			bmpRect.y++;
+		}
+
+		dc.DrawBitmap( bmp, bmpRect.x, bmpRect.y, true );
+		*outRect = rect;
 	}
 }

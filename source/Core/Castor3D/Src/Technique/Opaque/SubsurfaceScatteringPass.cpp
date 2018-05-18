@@ -266,35 +266,39 @@ namespace castor3d
 		}
 
 		renderer::ShaderStageStateArray doCreateBlurProgram( Engine & engine
-			, bool isVertic )
+			, bool isVertic
+			, glsl::Shader & vertexShader
+			, glsl::Shader & pixelShader )
 		{
 			auto & device = *engine.getRenderSystem()->getCurrentDevice();
-			auto const vtx = doGetVertexProgram( engine );
-			auto const pxl = doGetBlurProgram( engine, isVertic );
+			vertexShader = doGetVertexProgram( engine );
+			pixelShader = doGetBlurProgram( engine, isVertic );
 
 			renderer::ShaderStageStateArray program
 			{
 				{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
 				{ device.createShaderModule( renderer::ShaderStageFlag::eFragment ) },
 			};
-			program[0].module->loadShader( vtx.getSource() );
-			program[1].module->loadShader( pxl.getSource() );
+			program[0].module->loadShader( vertexShader.getSource() );
+			program[1].module->loadShader( pixelShader.getSource() );
 			return program;
 		}
 
-		renderer::ShaderStageStateArray doCreateCombineProgram( Engine & engine )
+		renderer::ShaderStageStateArray doCreateCombineProgram( Engine & engine
+			, glsl::Shader & vertexShader
+			, glsl::Shader & pixelShader )
 		{
 			auto & device = *engine.getRenderSystem()->getCurrentDevice();
-			auto const vtx = doGetVertexProgram( engine );
-			auto const pxl = doGetCombineProgram( engine );
+			vertexShader = doGetVertexProgram( engine );
+			pixelShader = doGetCombineProgram( engine );
 
 			renderer::ShaderStageStateArray program
 			{
 				{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
 				{ device.createShaderModule( renderer::ShaderStageFlag::eFragment ) },
 			};
-			program[0].module->loadShader( vtx.getSource() );
-			program[1].module->loadShader( pxl.getSource() );
+			program[0].module->loadShader( vertexShader.getSource() );
+			program[1].module->loadShader( pixelShader.getSource() );
 			return program;
 		}
 
@@ -358,7 +362,8 @@ namespace castor3d
 		, GeometryPassResult const & gp
 		, TextureUnit const & source
 		, TextureUnit const & destination
-		, bool isVertic )
+		, bool isVertic
+		, renderer::ShaderStageStateArray const & shaderStages )
 		: RenderQuad{ renderSystem, false, false }
 		, m_renderSystem{ renderSystem }
 		, m_geometryBufferResult{ gp }
@@ -426,7 +431,7 @@ namespace castor3d
 
 		createPipeline( extent
 			, Position{}
-			, doCreateBlurProgram( *renderSystem.getEngine(), isVertic )
+			, shaderStages
 			, source.getTexture()->getDefaultView()
 			, *m_renderPass
 			, bindings
@@ -479,7 +484,8 @@ namespace castor3d
 		, GeometryPassResult const & gp
 		, TextureUnit const & source
 		, std::array< TextureUnit, 3u > const & blurResults
-		, TextureUnit const & destination )
+		, TextureUnit const & destination
+		, renderer::ShaderStageStateArray const & shaderStages )
 		: RenderQuad{ renderSystem, false, false }
 		, m_renderSystem{ renderSystem }
 		, m_blurUbo{ blurUbo }
@@ -547,7 +553,7 @@ namespace castor3d
 
 		createPipeline( extent
 			, Position{}
-			, doCreateCombineProgram( *renderSystem.getEngine() )
+			, shaderStages
 			, source.getTexture()->getDefaultView()
 			, *m_renderPass
 			, bindings
@@ -614,6 +620,9 @@ namespace castor3d
 			, renderer::BufferTarget::eTransferDst
 			, renderer::MemoryPropertyFlag::eHostVisible ) }
 		, m_intermediate{ doCreateTexture( engine, textureSize ) }
+		, m_blurHorizProgram{ doCreateBlurProgram( engine, false, m_blurHorizVertexShader, m_blurHorizPixelShader ) }
+		, m_blurVerticProgram{ doCreateBlurProgram( engine, true, m_blurVerticVertexShader, m_blurVerticPixelShader ) }
+		, m_combineProgram{ doCreateCombineProgram( engine, m_combineVertexShader, m_combinePixelShader ) }
 		, m_blurResults
 		{
 			{
@@ -625,17 +634,17 @@ namespace castor3d
 		, m_result{ doCreateTexture( engine, textureSize ) }
 		, m_blurX
 		{
-			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, lightDiffuse, m_intermediate, false },
-			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, m_blurResults[0], m_intermediate, false },
-			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, m_blurResults[1], m_intermediate, false },
+			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, lightDiffuse, m_intermediate, false, m_blurHorizProgram },
+			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, m_blurResults[0], m_intermediate, false, m_blurHorizProgram },
+			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, m_blurResults[1], m_intermediate, false, m_blurHorizProgram },
 		}
 		, m_blurY
 		{
-			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, m_intermediate, m_blurResults[0], true },
-			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, m_intermediate, m_blurResults[1], true },
-			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, m_intermediate, m_blurResults[2], true },
+			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, m_intermediate, m_blurResults[0], true, m_blurVerticProgram },
+			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, m_intermediate, m_blurResults[1], true, m_blurVerticProgram },
+			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, m_intermediate, m_blurResults[2], true, m_blurVerticProgram },
 		}
-		, m_combine{ *engine.getRenderSystem(), textureSize, *m_blurWeightsUbo, gp, lightDiffuse, m_blurResults, m_result }
+		, m_combine{ *engine.getRenderSystem(), textureSize, *m_blurWeightsUbo, gp, lightDiffuse, m_blurResults, m_result, m_combineProgram }
 	{
 		auto & configuration = m_blurConfigUbo->getData( 0u );
 		configuration.blurCorrection = 1.0f;
@@ -703,5 +712,29 @@ namespace castor3d
 		//context.renderTexture( Position{ width * index++, top }
 		//	, renderSize
 		//	, *m_result.getTexture() );
+	}
+
+	void SubsurfaceScatteringPass::accept( RenderTechniqueVisitor & visitor )
+	{
+		visitor.visit( cuT( "SSSSS - Blur X" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_blurHorizVertexShader );
+		visitor.visit( cuT( "SSSSS - Blur X" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_blurHorizPixelShader );
+
+		visitor.visit( cuT( "SSSSS - Blur Y" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_blurVerticVertexShader );
+		visitor.visit( cuT( "SSSSS - Blur Y" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_blurVerticPixelShader );
+
+		visitor.visit( cuT( "SSSSS - Combine" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_combineVertexShader );
+		visitor.visit( cuT( "SSSSS - Combine" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_combinePixelShader );
 	}
 }

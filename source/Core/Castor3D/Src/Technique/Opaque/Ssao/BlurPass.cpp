@@ -329,18 +329,20 @@ namespace castor3d
 		}
 
 		renderer::ShaderStageStateArray doGetProgram( Engine & engine
-			, SsaoConfig const & config )
+			, SsaoConfig const & config
+			, glsl::Shader & vertexShader
+			, glsl::Shader & pixelShader )
 		{
-			auto vtx = doGetVertexProgram( engine );
-			auto pxl = doGetPixelProgram( engine, config );
+			vertexShader = doGetVertexProgram( engine );
+			pixelShader = doGetPixelProgram( engine, config );
 			auto & device = *engine.getRenderSystem()->getCurrentDevice();
 			renderer::ShaderStageStateArray result
 			{
 				{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
 				{ device.createShaderModule( renderer::ShaderStageFlag::eFragment ) },
 			};
-			result[0].module->loadShader( vtx.getSource() );
-			result[1].module->loadShader( pxl.getSource() );
+			result[0].module->loadShader( vertexShader.getSource() );
+			result[1].module->loadShader( pixelShader.getSource() );
 			return result;
 		}
 
@@ -467,7 +469,7 @@ namespace castor3d
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_input{ input }
 		, m_normals{ normals }
-		, m_program{ doGetProgram( m_engine, config ) }
+		, m_program{ doGetProgram( m_engine, config, m_vertexShader, m_pixelShader ) }
 		, m_size{ size }
 		, m_result{ doCreateTexture( m_engine, m_size ) }
 		, m_renderPass{ doCreateRenderPass( m_engine ) }
@@ -581,6 +583,33 @@ namespace castor3d
 			, nullptr );
 		m_timer->step();
 		m_timer->stop();
+	}
+
+	void SsaoBlurPass::accept( bool horizontal
+		, SsaoConfig & config
+		, RenderTechniqueVisitor & visitor )
+	{
+		castor::StringStream stream{ castor::makeStringStream() };
+		stream << cuT( "SSAO - " );
+
+		if ( horizontal )
+		{
+			stream << cuT( "Horizontal - " );
+		}
+		else
+		{
+			stream << cuT( "Vertical - " );
+		}
+
+		stream << cuT( "Blur" );
+		auto name = stream.str();
+		visitor.visit( name
+			, renderer::ShaderStageFlag::eVertex
+			, m_vertexShader );
+		visitor.visit( name
+			, renderer::ShaderStageFlag::eFragment
+			, m_pixelShader );
+		config.accept( name, visitor );
 	}
 
 	void SsaoBlurPass::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout

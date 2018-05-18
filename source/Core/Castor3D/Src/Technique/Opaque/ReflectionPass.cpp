@@ -719,11 +719,13 @@ namespace castor3d
 		renderer::ShaderStageStateArray doCreateProgram( Engine & engine
 			, FogType fogType
 			, bool hasSsao
-			, MaterialType matType )
+			, MaterialType matType
+			, glsl::Shader & vertexShader
+			, glsl::Shader & pixelShader )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			auto vtx = doCreateVertexProgram( renderSystem );
-			auto pxl = matType == MaterialType::eLegacy
+			vertexShader = doCreateVertexProgram( renderSystem );
+			pixelShader = matType == MaterialType::eLegacy
 				? doCreateLegacyPixelProgram( renderSystem, fogType, hasSsao )
 				: matType == MaterialType::ePbrMetallicRoughness
 					? doCreatePbrMRPixelProgram( renderSystem, fogType, hasSsao )
@@ -735,8 +737,8 @@ namespace castor3d
 				{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
 				{ device.createShaderModule( renderer::ShaderStageFlag::eFragment ) }
 			};
-			result[0].module->loadShader( vtx.getSource() );
-			result[1].module->loadShader( pxl.getSource() );
+			result[0].module->loadShader( vertexShader.getSource() );
+			result[1].module->loadShader( pixelShader.getSource() );
 			return result;
 		}
 
@@ -995,7 +997,7 @@ namespace castor3d
 		, renderer::Extent2D const & size
 		, FogType fogType
 		, MaterialType matType )
-		: m_program{ doCreateProgram( engine, fogType, ssao != nullptr, matType ) }
+		: m_program{ doCreateProgram( engine, fogType, ssao != nullptr, matType, m_vertexShader, m_pixelShader ) }
 		, m_pipelineLayout{ engine.getRenderSystem()->getCurrentDevice()->createPipelineLayout( { uboLayout, texLayout } ) }
 		, m_pipeline{ doCreateRenderPipeline( *m_pipelineLayout, m_program, renderPass, size ) }
 		, m_commandBuffer{ engine.getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer( true ) }
@@ -1035,6 +1037,16 @@ namespace castor3d
 		}
 	}
 
+	void ReflectionPass::ProgramPipeline::accept( RenderTechniqueVisitor & visitor )
+	{
+		visitor.visit( cuT( "Reflection" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_vertexShader );
+		visitor.visit( cuT( "Reflection" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_pixelShader );
+	}
+
 	//*********************************************************************************************
 
 	ReflectionPass::ReflectionPass( Engine & engine
@@ -1045,7 +1057,7 @@ namespace castor3d
 		, renderer::TextureView const & result
 		, SceneUbo & sceneUbo
 		, GpInfoUbo & gpInfoUbo
-		, SsaoConfig const & config
+		, SsaoConfig & config
 		, Viewport const & viewport )
 		: OwnedBy< Engine >{ engine }
 		, m_device{ *engine.getRenderSystem()->getCurrentDevice() }
@@ -1177,5 +1189,17 @@ namespace castor3d
 		m_fence->wait( renderer::FenceTimeout );
 		m_timer->step();
 		m_timer->stop();
+	}
+
+	void ReflectionPass::accept( RenderTechniqueVisitor & visitor )
+	{
+		if ( m_ssaoEnabled )
+		{
+			m_ssao.accept( visitor );
+		}
+
+		auto index = size_t( m_scene.getFog().getType() );
+		auto & program = m_programs[index];
+		program.accept( visitor );
 	}
 }

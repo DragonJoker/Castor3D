@@ -91,10 +91,14 @@ namespace castor3d
 			, castor::Size const & size
 			, bool clear );
 		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
+		/**
 		 *\copydoc		castor3d::RenderTechniquePass::render
 		 */
 		C3D_API void update( RenderInfo & info
-			, castor::Point2r const & jitter );
+			, castor::Point2r const & jitter )override;
 		/**
 		 *\~english
 		 *\brief		Renders nodes.

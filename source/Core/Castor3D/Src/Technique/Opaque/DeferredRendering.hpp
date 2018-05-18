@@ -51,7 +51,7 @@ namespace castor3d
 			, castor::Size const & size
 			, Scene & scene
 			, Viewport const & viewport
-			, SsaoConfig const & config );
+			, SsaoConfig & config );
 		/**
 		 *\~english
 		 *\brief		Destroys deferred rendering related stuff.
@@ -101,10 +101,14 @@ namespace castor3d
 		 */
 		void debugDisplay( renderer::RenderPass const & renderPass
 			, renderer::FrameBuffer const & frameBuffer )const;
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		void accept( RenderTechniqueVisitor & visitor );
 
 	private:
 		Engine & m_engine;
-		SsaoConfig const & m_ssaoConfig;
+		SsaoConfig & m_ssaoConfig;
 		OpaquePass & m_opaquePass;
 		castor::Size m_size;
 		GpInfoUbo m_gpInfoUbo;

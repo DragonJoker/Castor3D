@@ -5,10 +5,13 @@ See LICENSE file in root folder
 #define ___C3D_LineariseDepthPass_H___
 
 #include "Render/Viewport.hpp"
+#include "Technique/RenderTechniqueVisitor.hpp"
 #include "Texture/TextureUnit.hpp"
 
 #include <Buffer/PushConstantsBuffer.hpp>
 #include <Miscellaneous/PushConstantRange.hpp>
+
+#include <GlslShader.hpp>
 
 namespace castor3d
 {
@@ -61,6 +64,10 @@ namespace castor3d
 		 */
 		void linearise( renderer::Semaphore const & toWait )const;
 		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		C3D_API void accept( RenderTechniqueVisitor & visitor );
+		/**
 		*\~english
 		*name
 		*	Getters.
@@ -110,6 +117,8 @@ namespace castor3d
 		*	Linearisation.
 		*/
 		/**@{*/
+		glsl::Shader m_lineariseVertexShader;
+		glsl::Shader m_linearisePixelShader;
 		renderer::ShaderStageStateArray m_lineariseProgram;
 		renderer::TextureViewPtr m_linearisedView;
 		renderer::FrameBufferPtr m_lineariseFrameBuffer;
@@ -142,6 +151,8 @@ namespace castor3d
 			renderer::PipelinePtr pipeline;
 		};
 
+		glsl::Shader m_minifyVertexShader;
+		glsl::Shader m_minifyPixelShader;
 		renderer::ShaderStageStateArray m_minifyProgram;
 		renderer::DescriptorSetLayoutPtr m_minifyDescriptorLayout;
 		renderer::PipelineLayoutPtr m_minifyPipelineLayout;

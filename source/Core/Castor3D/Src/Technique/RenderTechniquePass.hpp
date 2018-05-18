@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderTechniquePass_H___
 #define ___C3D_RenderTechniquePass_H___
 
+#include "Technique/RenderTechniqueVisitor.hpp"
 #include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Render/RenderPass.hpp"
 
@@ -86,6 +87,13 @@ namespace castor3d
 		 *\brief		Destructeur
 		 */
 		C3D_API virtual ~RenderTechniquePass();
+		/**
+		 *\~english
+		 *\brief		Visitor acceptance function.
+		 *\~french
+		 *\brief		Fonction d'acceptation de visiteur.
+		 */
+		C3D_API virtual void accept( RenderTechniqueVisitor & visitor );
 		/**
 		 *\~english
 		 *\brief		Render function.

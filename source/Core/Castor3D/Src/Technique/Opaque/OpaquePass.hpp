@@ -49,6 +49,10 @@ namespace castor3d
 		 */
 		void initialiseRenderPass( GeometryPassResult const & gpResult );
 		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
+		/**
 		 *\copydoc		castor3d::RenderTechniquePass::render
 		 */
 		void update( RenderInfo & info

@@ -221,6 +221,23 @@ namespace castor3d
 		doUpdate( info, jitter );
 	}
 
+	void TransparentPass::accept( RenderTechniqueVisitor & visitor )
+	{
+		auto shaderProgram = getEngine()->getShaderProgramCache().getAutomaticProgram( *this
+			, visitor.getPassFlags()
+			, visitor.getTextureFlags()
+			, ProgramFlags{}
+			, visitor.getSceneFlags()
+			, visitor.getAlphaFunc()
+			, false );
+		visitor.visit( cuT( "Object" )
+			, renderer::ShaderStageFlag::eVertex
+			, shaderProgram->getSource( renderer::ShaderStageFlag::eVertex ) );
+		visitor.visit( cuT( "Object" )
+			, renderer::ShaderStageFlag::eFragment
+			, shaderProgram->getSource( renderer::ShaderStageFlag::eFragment ) );
+	}
+
 	bool TransparentPass::doInitialise( Size const & size )
 	{
 		m_renderPass = doCreateRenderPass( *getEngine(), m_depthFormat );
