@@ -260,6 +260,12 @@ namespace castor3d
 			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
 		}
 
+		if ( checkFlag( flags.textureFlags, TextureChannel::eReflection )
+			|| checkFlag( flags.textureFlags, TextureChannel::eRefraction ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
 		return textureBindings;
 	}
 }

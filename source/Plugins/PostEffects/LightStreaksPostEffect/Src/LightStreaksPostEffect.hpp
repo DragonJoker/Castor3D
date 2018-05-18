@@ -13,6 +13,8 @@ See LICENSE file in root folder
 #include <Render/Viewport.hpp>
 #include <Shader/Ubos/MatrixUbo.hpp>
 
+#include <GlslShader.hpp>
+
 namespace light_streaks
 {
 	class PostEffect
@@ -26,6 +28,10 @@ namespace light_streaks
 		static castor3d::PostEffectSPtr create( castor3d::RenderTarget & renderTarget
 			, castor3d::RenderSystem & renderSystem
 			, castor3d::Parameters const & params );
+		/**
+		 *\copydoc		castor3d::PostEffect::accept
+		 */
+		void accept( castor3d::PipelineVisitorBase & visitor )override;
 
 	private:
 		/**
@@ -83,6 +89,8 @@ namespace light_streaks
 			Layout layout;
 			std::vector< Surface > surfaces;
 			renderer::PipelinePtr pipeline;
+			glsl::Shader vertexShader;
+			glsl::Shader pixelShader;
 		};
 
 		castor3d::SamplerSPtr m_linearSampler;

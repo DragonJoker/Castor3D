@@ -39,6 +39,16 @@ namespace smaa
 			return m_surface.colourTexture;
 		}
 
+		inline glsl::Shader const & getVertexShader()const
+		{
+			return m_vertexShader;
+		}
+
+		inline glsl::Shader const & getPixelShader()const
+		{
+			return m_pixelShader;
+		}
+
 	private:
 		void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
 			, renderer::DescriptorSet & descriptorSet )override;
@@ -49,6 +59,8 @@ namespace smaa
 		renderer::TextureView const & m_currentColourView;
 		renderer::TextureView const & m_previousColourView;
 		renderer::TextureView const * m_velocityView;
+		glsl::Shader m_vertexShader;
+		glsl::Shader m_pixelShader;
 	};
 }
 

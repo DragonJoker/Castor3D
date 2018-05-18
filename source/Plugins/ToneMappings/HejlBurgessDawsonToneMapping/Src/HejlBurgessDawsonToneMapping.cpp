@@ -13,11 +13,13 @@ using namespace glsl;
 
 namespace HejlBurgessDawson
 {
-	String ToneMapping::Name = cuT( "hejl" );
+	String ToneMapping::Type = cuT( "hejl" );
+	String ToneMapping::Name = cuT( "Hejl Burgess Dawson Tone Mapping" );
 
 	ToneMapping::ToneMapping( Engine & engine
+		, HdrConfig & hdrConfig
 		, Parameters const & parameters )
-		: castor3d::ToneMapping{ Name, engine, parameters }
+		: castor3d::ToneMapping{ Type, Name, engine, hdrConfig, parameters }
 	{
 	}
 
@@ -26,9 +28,12 @@ namespace HejlBurgessDawson
 	}
 
 	ToneMappingSPtr ToneMapping::create( Engine & engine
+		, HdrConfig & hdrConfig
 		, Parameters const & parameters )
 	{
-		return std::make_shared< ToneMapping >( engine, parameters );
+		return std::make_shared< ToneMapping >( engine
+			, hdrConfig
+			, parameters );
 	}
 
 	glsl::Shader ToneMapping::doCreate()

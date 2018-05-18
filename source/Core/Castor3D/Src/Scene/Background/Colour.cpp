@@ -77,7 +77,7 @@ namespace castor3d
 		, m_copyRegions{ doInitialiseCopies() }
 		, m_viewport{ engine }
 	{
-		m_hdr = true;
+		m_hdr = false;
 		m_texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
 			, doGetImageCreate()
 			, renderer::MemoryPropertyFlag::eDeviceLocal );
@@ -95,9 +95,7 @@ namespace castor3d
 	bool ColourBackground::doInitialise( renderer::RenderPass const & renderPass )
 	{
 		auto & value = m_scene.getBackgroundColour();
-		m_colour = HdrRgbColour::fromComponents( pow( value.red(), m_scene.getHdrConfig().getGamma() )
-			, pow( value.green(), m_scene.getHdrConfig().getGamma() )
-			, pow( value.blue(), m_scene.getHdrConfig().getGamma() ) );
+		m_colour = HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
 		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
 		m_stagingBuffer = renderer::makeBuffer< Point4f >( device
 			, 256u
@@ -146,9 +144,7 @@ namespace castor3d
 	void ColourBackground::doUpdate( Camera const & camera )
 	{
 		auto & value = m_scene.getBackgroundColour();
-		m_colour = HdrRgbColour::fromComponents( pow( value.red(), m_scene.getHdrConfig().getGamma() )
-			, pow( value.green(), m_scene.getHdrConfig().getGamma() )
-			, pow( value.blue(), m_scene.getHdrConfig().getGamma() ) );
+		m_colour = HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
 
 		if ( m_colour.isDirty() )
 		{

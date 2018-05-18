@@ -15,12 +15,14 @@ using namespace castor;
 namespace castor3d
 {
 	PostEffect::PostEffect( String const & name
+		, castor::String const & fullName
 		, RenderTarget & renderTarget
 		, RenderSystem & renderSystem
 		, Parameters const & CU_PARAM_UNUSED( parameters )
 		, bool postToneMapping )
 		: OwnedBy< RenderSystem >{ renderSystem }
 		, Named{ name }
+		, m_fullName{ fullName }
 		, m_renderTarget{ renderTarget }
 		, m_postToneMapping{ postToneMapping }
 	{
@@ -39,8 +41,6 @@ namespace castor3d
 		, RenderPassTimer const & timer )
 	{
 		auto & device = *getRenderSystem()->getCurrentDevice();
-		m_signalFinished = device.createSemaphore();
-		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 		m_target = &texture;
 		auto result = doInitialise( timer );
 		ENSURE( m_result != nullptr );
@@ -49,9 +49,8 @@ namespace castor3d
 
 	void PostEffect::cleanup()
 	{
+		m_commands.clear();
 		doCleanup();
-		m_commandBuffer.reset();
-		m_signalFinished.reset();
 	}
 
 	void PostEffect::update( castor::Nanoseconds const & elapsedTime )

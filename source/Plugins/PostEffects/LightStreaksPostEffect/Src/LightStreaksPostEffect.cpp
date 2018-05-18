@@ -205,6 +205,7 @@ namespace light_streaks
 		, castor3d::RenderSystem & renderSystem
 		, castor3d::Parameters const & params )
 		: castor3d::PostEffect( PostEffect::Type
+			, PostEffect::Name
 			, renderTarget
 			, renderSystem
 			, params )
@@ -225,6 +226,40 @@ namespace light_streaks
 		return std::make_shared< PostEffect >( renderTarget
 			, renderSystem
 			, params );
+	}
+
+	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
+	{
+		visitor.visit( cuT( "HiPass" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_pipelines.hiPass.vertexShader );
+		visitor.visit( cuT( "HiPass" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_pipelines.hiPass.pixelShader );
+
+		visitor.visit( cuT( "Kawase" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_pipelines.kawase.vertexShader );
+		visitor.visit( cuT( "Kawase" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_pipelines.kawase.pixelShader );
+		visitor.visit( cuT( "Kawase" )
+			, renderer::ShaderStageFlag::eFragment
+			, cuT( "Kawase" )
+			, cuT( "Attenuation" )
+			, m_kawaseUbo.getUbo().getData().attenuation );
+		visitor.visit( cuT( "Kawase" )
+			, renderer::ShaderStageFlag::eFragment
+			, cuT( "Kawase" )
+			, cuT( "Samples" )
+			, m_kawaseUbo.getUbo().getData().samples );
+
+		visitor.visit( cuT( "Combine" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_pipelines.combine.vertexShader );
+		visitor.visit( cuT( "Combine" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_pipelines.combine.pixelShader );
 	}
 
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
@@ -446,8 +481,8 @@ namespace light_streaks
 	{
 		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
 		auto & device = *getRenderSystem()->getCurrentDevice();
-		auto const vertex = getVertexProgram( getRenderSystem() );
-		auto const hipass = getHiPassProgram( getRenderSystem() );
+		m_pipelines.hiPass.vertexShader = getVertexProgram( getRenderSystem() );
+		m_pipelines.hiPass.pixelShader = getHiPassProgram( getRenderSystem() );
 
 		// Create pipeline
 		renderer::VertexInputState inputState;
@@ -457,8 +492,8 @@ namespace light_streaks
 		renderer::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
 		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( vertex.getSource() );
-		stages[1].module->loadShader( hipass.getSource() );
+		stages[0].module->loadShader( m_pipelines.hiPass.vertexShader.getSource() );
+		stages[1].module->loadShader( m_pipelines.hiPass.pixelShader.getSource() );
 
 		renderer::GraphicsPipelineCreateInfo pipeline
 		{
@@ -493,8 +528,8 @@ namespace light_streaks
 	{
 		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
 		auto & device = *getRenderSystem()->getCurrentDevice();
-		auto const vertex = getVertexProgram( getRenderSystem() );
-		auto const kawase = getKawaseProgram( getRenderSystem() );
+		m_pipelines.kawase.vertexShader = getVertexProgram( getRenderSystem() );
+		m_pipelines.kawase.pixelShader = getKawaseProgram( getRenderSystem() );
 
 		// Create pipeline
 		renderer::VertexInputState inputState;
@@ -504,8 +539,8 @@ namespace light_streaks
 		renderer::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
 		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( vertex.getSource() );
-		stages[1].module->loadShader( kawase.getSource() );
+		stages[0].module->loadShader( m_pipelines.kawase.vertexShader.getSource() );
+		stages[1].module->loadShader( m_pipelines.kawase.pixelShader.getSource() );
 
 		renderer::GraphicsPipelineCreateInfo pipeline
 		{
@@ -552,8 +587,8 @@ namespace light_streaks
 	{
 		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
 		auto & device = *getRenderSystem()->getCurrentDevice();
-		auto const vertex = getVertexProgram( getRenderSystem() );
-		auto const combine = getCombineProgram( getRenderSystem() );
+		m_pipelines.combine.vertexShader = getVertexProgram( getRenderSystem() );
+		m_pipelines.combine.pixelShader = getCombineProgram( getRenderSystem() );
 
 		// Create pipeline
 		renderer::VertexInputState inputState;
@@ -563,8 +598,8 @@ namespace light_streaks
 		renderer::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
 		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( vertex.getSource() );
-		stages[1].module->loadShader( combine.getSource() );
+		stages[0].module->loadShader( m_pipelines.combine.vertexShader.getSource() );
+		stages[1].module->loadShader( m_pipelines.combine.pixelShader.getSource() );
 
 		renderer::GraphicsPipelineCreateInfo pipeline
 		{
@@ -610,6 +645,7 @@ namespace light_streaks
 
 	bool PostEffect::doBuildCommandBuffer( castor3d::RenderPassTimer const & timer )
 	{
+		auto & device = *getRenderSystem()->getCurrentDevice();
 		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
 
 		// Fill command buffer.
@@ -621,58 +657,90 @@ namespace light_streaks
 			{ renderer::ClearColorValue{ 1.0, 1.0, 0.0, 1.0 } },
 			{ renderer::ClearColorValue{ 0.0, 1.0, 1.0, 1.0 } },
 		};
-		bool result = m_commandBuffer->begin();
+		auto & hiPassSurface = m_pipelines.hiPass.surfaces[0];
+		castor3d::CommandsSemaphore hiPassCommands
+		{
+			device.getGraphicsCommandPool().createCommandBuffer(),
+			device.createSemaphore()
+		};
+		auto & hiPassCmd = *hiPassCommands.commandBuffer;
+		bool result = hiPassCmd.begin();
 
 		if ( result )
 		{
-			m_commandBuffer->resetQueryPool( timer.getQuery()
+			hiPassCmd.resetQueryPool( timer.getQuery()
 				, 0u
 				, 2u );
-			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			hiPassCmd.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
 				, timer.getQuery()
 				, 0u );
 			// Put target image in fragment shader input layout.
-			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+			hiPassCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
 				, m_target->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eColourAttachmentOptimal
 					, renderer::AccessFlag::eColourAttachmentWrite ) );
 
 			// Hi-pass.
-			auto & hiPassSurface = m_pipelines.hiPass.surfaces[0];
-			m_commandBuffer->beginRenderPass( *m_renderPass
+			hiPassCmd.beginRenderPass( *m_renderPass
 				, *hiPassSurface.frameBuffer
 				, clearValues[0]
 				, renderer::SubpassContents::eInline );
-			m_commandBuffer->setViewport( { hiPassSurface.image->getWidth(), hiPassSurface.image->getHeight(), 0, 0, } );
-			m_commandBuffer->setScissor( { 0, 0, hiPassSurface.image->getWidth(), hiPassSurface.image->getHeight() } );
-			m_commandBuffer->bindPipeline( *m_pipelines.hiPass.pipeline );
-			m_commandBuffer->bindDescriptorSet( *hiPassSurface.descriptorSets.back(),
+			hiPassCmd.setViewport( { hiPassSurface.image->getWidth(), hiPassSurface.image->getHeight(), 0, 0, } );
+			hiPassCmd.setScissor( { 0, 0, hiPassSurface.image->getWidth(), hiPassSurface.image->getHeight() } );
+			hiPassCmd.bindPipeline( *m_pipelines.hiPass.pipeline );
+			hiPassCmd.bindDescriptorSet( *hiPassSurface.descriptorSets.back(),
 				*m_pipelines.hiPass.layout.pipelineLayout );
-			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-			m_commandBuffer->draw( 6u );
-			m_commandBuffer->endRenderPass();
-
+			hiPassCmd.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+			hiPassCmd.draw( 6u );
+			hiPassCmd.endRenderPass();
 			// Put source image in transfer source layout
-			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
+			hiPassCmd.memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
 				, renderer::PipelineStageFlag::eTransfer
 				, hiPassSurface.image->getDefaultView().makeTransferSource( renderer::ImageLayout::eUndefined, 0u ) );
+			result = hiPassCmd.end();
+			m_commands.emplace_back( std::move( hiPassCommands ) );
+		}
 
+		castor3d::CommandsSemaphore copyCommands
+		{
+			device.getGraphicsCommandPool().createCommandBuffer(),
+			device.createSemaphore()
+		};
+		auto & copyCmd = *copyCommands.commandBuffer;
+		result = copyCmd.begin();
+
+		if ( result )
+		{
 			// Copy Hi pass result to other Hi pass surfaces
 			for ( uint32_t i = 1u; i < Count; ++i )
 			{
 				// Put destination image in transfer destination layout
-				m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
+				copyCmd.memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
 					, renderer::PipelineStageFlag::eTransfer
 					, m_pipelines.hiPass.surfaces[i].image->getDefaultView().makeTransferDestination( renderer::ImageLayout::eUndefined, 0u ) );
-				m_commandBuffer->copyImage( hiPassSurface.image->getDefaultView()
+				copyCmd.copyImage( hiPassSurface.image->getDefaultView()
 					, m_pipelines.hiPass.surfaces[i].image->getDefaultView() );
 				// Put back destination image in shader input layout
-				m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
+				copyCmd.memoryBarrier( renderer::PipelineStageFlag::eTransfer
 					, renderer::PipelineStageFlag::eFragmentShader
 					, m_pipelines.hiPass.surfaces[i].image->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eTransferDstOptimal
 						, renderer::AccessFlag::eTransferWrite ) );
 			}
 
+			copyCmd.end();
+			m_commands.emplace_back( std::move( copyCommands ) );
+		}
+
+		castor3d::CommandsSemaphore kawaseCommands
+		{
+			device.getGraphicsCommandPool().createCommandBuffer(),
+			device.createSemaphore()
+		};
+		auto & kawaseCmd = *kawaseCommands.commandBuffer;
+		result = kawaseCmd.begin();
+
+		if ( result )
+		{
 			// Kawase blur passes.
 			for ( uint32_t i = 0u; i < Count; ++i )
 			{
@@ -683,50 +751,65 @@ namespace light_streaks
 				for ( uint32_t j = 0u; j < 3u; ++j )
 				{
 					// Put source image in shader input layout
-					m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
+					kawaseCmd.memoryBarrier( renderer::PipelineStageFlag::eTransfer
 						, renderer::PipelineStageFlag::eFragmentShader
 						, source->image->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
 
-					m_commandBuffer->beginRenderPass( *m_renderPass
+					kawaseCmd.beginRenderPass( *m_renderPass
 						, *destination->frameBuffer
 						, clearValues[i]
 						, renderer::SubpassContents::eInline );
-					m_commandBuffer->setViewport( { destination->image->getWidth(), destination->image->getHeight(), 0, 0, } );
-					m_commandBuffer->setScissor( { 0, 0, destination->image->getWidth(), destination->image->getHeight() } );
-					m_commandBuffer->bindPipeline( *m_pipelines.kawase.pipeline );
-					m_commandBuffer->bindDescriptorSet( *kawaseSurface.descriptorSets[j],
+					kawaseCmd.setViewport( { destination->image->getWidth(), destination->image->getHeight(), 0, 0, } );
+					kawaseCmd.setScissor( { 0, 0, destination->image->getWidth(), destination->image->getHeight() } );
+					kawaseCmd.bindPipeline( *m_pipelines.kawase.pipeline );
+					kawaseCmd.bindDescriptorSet( *kawaseSurface.descriptorSets[j],
 						*m_pipelines.kawase.layout.pipelineLayout );
-					m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-					m_commandBuffer->draw( 6u );
-					m_commandBuffer->endRenderPass();
+					kawaseCmd.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+					kawaseCmd.draw( 6u );
+					kawaseCmd.endRenderPass();
 					std::swap( destination, source );
 				}
 
 				// Put Kawase surface's general view in fragment shader input layout.
-				m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
+				kawaseCmd.memoryBarrier( renderer::PipelineStageFlag::eTransfer
 					, renderer::PipelineStageFlag::eFragmentShader
 					, kawaseSurface.image->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
 			}
 
+			kawaseCmd.end();
+			m_commands.emplace_back( std::move( kawaseCommands ) );
+		}
+
+		castor3d::CommandsSemaphore combineCommands
+		{
+			device.getGraphicsCommandPool().createCommandBuffer(),
+			device.createSemaphore()
+		};
+		auto & combineCmd = *combineCommands.commandBuffer;
+		result = combineCmd.begin();
+
+		if ( result )
+		{
 			// Combine pass.
 			auto & combineSurface = m_pipelines.combine.surfaces.back();
-			m_commandBuffer->beginRenderPass( *m_renderPass
+			combineCmd.beginRenderPass( *m_renderPass
 				, *combineSurface.frameBuffer
 				, clearValues[Count]
 				, renderer::SubpassContents::eInline );
-			m_commandBuffer->setViewport( { size.width, size.height, 0, 0, } );
-			m_commandBuffer->setScissor( { 0, 0, size.width, size.height } );
-			m_commandBuffer->bindPipeline( *m_pipelines.combine.pipeline );
-			m_commandBuffer->bindDescriptorSet( *combineSurface.descriptorSets.back()
+			combineCmd.setViewport( { size.width, size.height, 0, 0, } );
+			combineCmd.setScissor( { 0, 0, size.width, size.height } );
+			combineCmd.bindPipeline( *m_pipelines.combine.pipeline );
+			combineCmd.bindDescriptorSet( *combineSurface.descriptorSets.back()
 				, *m_pipelines.combine.layout.pipelineLayout );
-			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-			m_commandBuffer->draw( 6u );
-			m_commandBuffer->endRenderPass();
+			combineCmd.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+			combineCmd.draw( 6u );
+			combineCmd.endRenderPass();
 
-			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			combineCmd.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
 				, timer.getQuery()
 				, 1u );
-			result = m_commandBuffer->end();
+			result = combineCmd.end();
+			m_commands.emplace_back( std::move( combineCommands ) );
 		}
 
 		return result;

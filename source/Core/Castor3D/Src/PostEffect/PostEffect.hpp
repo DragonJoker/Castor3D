@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_PostEffect_H___
 #define ___C3D_PostEffect_H___
 
+#include "Miscellaneous/PipelineVisitor.hpp"
+
 #include "Render/RenderTarget.hpp"
 #include "Texture/TextureUnit.hpp"
 
@@ -12,6 +14,12 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	struct CommandsSemaphore
+	{
+		renderer::CommandBufferPtr commandBuffer;
+		renderer::SemaphorePtr semaphore;
+	};
+	using CommandsSemaphoreArray = std::vector< CommandsSemaphore >;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.7.0.0
@@ -34,6 +42,7 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	name			The effect name.
+		 *\param[in]	fullName		The effect full (fancy) name.
 		 *\param[in]	renderTarget	The render target to which is attached this effect.
 		 *\param[in]	renderSystem	The render system.
 		 *\param[in]	parameters		The optional parameters.
@@ -41,12 +50,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	name			Le nom de l'effet.
+		 *\param[in]	fullName		Le nom complet (et joli) de l'effet.
 		 *\param[in]	renderTarget	La cible de rendu sur laquelle cet effet s'applique.
 		 *\param[in]	renderSystem	Le render system.
 		 *\param[in]	parameters		Les paramètres optionnels.
 		 *\param[in]	postToneMapping	Dit si l'effet s'applique après le mappage de tons.
 		 */
 		C3D_API PostEffect( castor::String const & name
+			, castor::String const & fullName
 			, RenderTarget & renderTarget
 			, RenderSystem & renderSystem
 			, Parameters const & parameters
@@ -94,6 +105,13 @@ namespace castor3d
 		 */
 		C3D_API virtual void update( castor::Nanoseconds const & elapsedTime );
 		/**
+		 *\~english
+		 *\brief		Visitor acceptance function.
+		 *\~french
+		 *\brief		Fonction d'acceptation de visiteur.
+		 */
+		C3D_API virtual void accept( PipelineVisitorBase & visitor ) = 0;
+		/**
 		*\~english
 		*name
 		*	Getters.
@@ -102,16 +120,9 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		inline renderer::CommandBuffer const & getCommands()const
+		inline CommandsSemaphoreArray const & getCommands()const
 		{
-			REQUIRE( m_commandBuffer );
-			return *m_commandBuffer;
-		}
-
-		inline renderer::Semaphore const & getSemaphore()const
-		{
-			REQUIRE( m_signalFinished );
-			return *m_signalFinished;
+			return m_commands;
 		}
 
 		inline bool isAfterToneMapping()const
@@ -123,6 +134,11 @@ namespace castor3d
 		{
 			REQUIRE( m_result );
 			return *m_result;
+		}
+
+		inline castor::String const & getFullName()const
+		{
+			return m_fullName;
 		}
 		/**@}*/
 
@@ -158,11 +174,11 @@ namespace castor3d
 		C3D_API virtual bool doWriteInto( castor::TextFile & file ) = 0;
 
 	protected:
+		castor::String m_fullName;
 		RenderTarget & m_renderTarget;
 		bool m_postToneMapping{ false };
 		TextureLayout const * m_target{ nullptr };
-		renderer::CommandBufferPtr m_commandBuffer;
-		renderer::SemaphorePtr m_signalFinished;
+		CommandsSemaphoreArray m_commands;
 		TextureLayout const * m_result{ nullptr };
 	};
 }

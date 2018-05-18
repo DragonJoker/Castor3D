@@ -85,7 +85,7 @@ namespace smaa
 			auto c3d_areaTexPixelSize = writer.declConstant( constants::AreaTexPixelSize
 				, vec2( 1.0_f / 160.0_f, 1.0_f / 560.0_f ) );
 			auto c3d_areaTexSubtexSize = writer.declConstant( constants::AreaTexSubtexSize
-				, 1.0_f / 7.0_f );
+				, writer.paren( 1.0_f / 7.0_f ) );
 			auto c3d_areaTexMaxDistance = writer.declConstant< Int >( constants::AreaTexMaxDistance
 				, 16_i );
 			auto c3d_areaTexMaxDistanceDiag = writer.declConstant< Int >( constants::AreaTexMaxDistanceDiag
@@ -797,10 +797,10 @@ namespace smaa
 		m_renderPass = device.createRenderPass( renderPass );
 
 		auto pixelSize = Point2f{ 1.0f / size.width, 1.0f / size.height };
-		auto vertex = doBlendingWeightCalculationVP( *renderTarget.getEngine()->getRenderSystem()
+		m_vertexShader = doBlendingWeightCalculationVP( *renderTarget.getEngine()->getRenderSystem()
 			, pixelSize
 			, maxSearchSteps );
-		auto fragment = doBlendingWeightCalculationFP( *renderTarget.getEngine()->getRenderSystem()
+		m_pixelShader = doBlendingWeightCalculationFP( *renderTarget.getEngine()->getRenderSystem()
 			, pixelSize
 			, cornerRounding
 			, maxSearchStepsDiag );
@@ -808,8 +808,8 @@ namespace smaa
 		renderer::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
 		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( vertex.getSource() );
-		stages[1].module->loadShader( fragment.getSource() );
+		stages[0].module->loadShader( m_vertexShader.getSource() );
+		stages[1].module->loadShader( m_pixelShader.getSource() );
 
 		renderer::DepthStencilState dsstate
 		{

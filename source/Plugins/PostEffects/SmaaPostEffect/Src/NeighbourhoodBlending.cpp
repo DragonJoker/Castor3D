@@ -251,17 +251,17 @@ namespace smaa
 		m_renderPass = device.createRenderPass( renderPass );
 
 		auto pixelSize = Point2f{ 1.0f / size.width, 1.0f / size.height };
-		auto vertex = doGetNeighbourhoodBlendingVP( *renderTarget.getEngine()->getRenderSystem()
+		m_vertexShader = doGetNeighbourhoodBlendingVP( *renderTarget.getEngine()->getRenderSystem()
 			, pixelSize );
-		auto fragment = doGetNeighbourhoodBlendingFP( *renderTarget.getEngine()->getRenderSystem()
+		m_pixelShader = doGetNeighbourhoodBlendingFP( *renderTarget.getEngine()->getRenderSystem()
 			, pixelSize
 			, velocityView != nullptr );
 
 		renderer::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
 		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( vertex.getSource() );
-		stages[1].module->loadShader( fragment.getSource() );
+		stages[0].module->loadShader( m_vertexShader.getSource() );
+		stages[1].module->loadShader( m_pixelShader.getSource() );
 
 		renderer::DescriptorSetLayoutBindingArray setLayoutBindings;
 		setLayoutBindings.emplace_back( 0u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );

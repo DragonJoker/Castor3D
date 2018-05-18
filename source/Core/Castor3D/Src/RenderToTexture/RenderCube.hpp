@@ -153,8 +153,8 @@ namespace castor3d
 		};
 
 		renderer::CommandBufferPtr m_commandBuffer;
-		renderer::UniformBufferPtr< renderer::Mat4 > m_matrixUbo;
-		renderer::VertexBufferPtr< renderer::Vec4 > m_vertexBuffer;
+		renderer::UniformBufferPtr< castor::Matrix4x4f > m_matrixUbo;
+		renderer::VertexBufferPtr< castor::Point4f > m_vertexBuffer;
 		renderer::VertexLayoutPtr m_vertexLayout;
 		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
 		renderer::DescriptorSetPoolPtr m_descriptorPool;

@@ -97,6 +97,26 @@ namespace castor3d
 		{
 			return m_gamma;
 		}
+		/**
+		 *\~english
+		 *\return		The exposure value.
+		 *\~french
+		 *\return		La valeur de l'exposition.
+		 */
+		inline float & getExposure()
+		{
+			return m_exposure;
+		}
+		/**
+		 *\~english
+		 *\return		The gamma correction value.
+		 *\~french
+		 *\return		La valeur de la correction gamma.
+		 */
+		inline float & getGamma()
+		{
+			return m_gamma;
+		}
 
 	private:
 		//!\~english	The exposure value.

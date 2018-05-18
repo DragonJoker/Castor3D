@@ -156,6 +156,7 @@ namespace Bloom
 		, RenderSystem & renderSystem
 		, Parameters const & params )
 		: PostEffect( BloomPostEffect::Type
+			, BloomPostEffect::Name
 			, renderTarget
 			, renderSystem
 			, params )
@@ -176,6 +177,40 @@ namespace Bloom
 		return std::make_shared< BloomPostEffect >( renderTarget
 			, renderSystem
 			, params );
+	}
+
+	void BloomPostEffect::accept( PipelineVisitorBase & visitor )
+	{
+		visitor.visit( cuT( "HiPass" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_pipelines.hiPass.vertexShader );
+		visitor.visit( cuT( "HiPass" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_pipelines.hiPass.pixelShader );
+
+		visitor.visit( cuT( "BlurX" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_blurs[0]->getBlurXVertexShader() );
+		visitor.visit( cuT( "BlurX" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_blurs[0]->getBlurXVertexShader() );
+
+		visitor.visit( cuT( "BlurY" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_blurs[0]->getBlurYVertexShader() );
+		visitor.visit( cuT( "BlurY" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_blurs[0]->getBlurYVertexShader() );
+
+		visitor.visit( cuT( "Combine" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_pipelines.combine.vertexShader );
+		visitor.visit( cuT( "Combine" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_pipelines.combine.pixelShader );
+
+		visitor.visit( cuT( "Size" )
+			, m_size );
 	}
 
 	bool BloomPostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
@@ -401,8 +436,8 @@ namespace Bloom
 		size.width >>= 1;
 		size.height >>= 1;
 		auto & device = *getRenderSystem()->getCurrentDevice();
-		auto const vertex = getVertexProgram( getRenderSystem() );
-		auto const hipass = getHiPassProgram( getRenderSystem() );
+		m_pipelines.hiPass.vertexShader = getVertexProgram( getRenderSystem() );
+		m_pipelines.hiPass.pixelShader = getHiPassProgram( getRenderSystem() );
 
 		// Create the surface
 		m_pipelines.hiPass.surface = std::make_unique< Surface >( m_pipelines.hiPass.image->getTexture()
@@ -433,8 +468,8 @@ namespace Bloom
 		renderer::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
 		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( vertex.getSource() );
-		stages[1].module->loadShader( hipass.getSource() );
+		stages[0].module->loadShader( m_pipelines.hiPass.vertexShader.getSource() );
+		stages[1].module->loadShader( m_pipelines.hiPass.pixelShader.getSource() );
 
 		renderer::GraphicsPipelineCreateInfo pipeline
 		{
@@ -466,8 +501,8 @@ namespace Bloom
 	{
 		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
 		auto & device = *getRenderSystem()->getCurrentDevice();
-		auto const vertex = getVertexProgram( getRenderSystem() );
-		auto const combine = getCombineProgram( getRenderSystem() );
+		m_pipelines.combine.vertexShader = getVertexProgram( getRenderSystem() );
+		m_pipelines.combine.pixelShader = getCombineProgram( getRenderSystem() );
 
 		// Create view and associated frame buffer.
 		m_pipelines.combine.surface = std::make_unique< Surface >( m_pipelines.combine.image->getTexture()
@@ -482,8 +517,8 @@ namespace Bloom
 		renderer::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
 		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( vertex.getSource() );
-		stages[1].module->loadShader( combine.getSource() );
+		stages[0].module->loadShader( m_pipelines.combine.vertexShader.getSource() );
+		stages[1].module->loadShader( m_pipelines.combine.pixelShader.getSource() );
 
 		renderer::GraphicsPipelineCreateInfo pipeline
 		{
@@ -517,6 +552,7 @@ namespace Bloom
 
 	bool BloomPostEffect::doBuildCommandBuffer( castor3d::RenderPassTimer const & timer )
 	{
+		auto & device = *getRenderSystem()->getCurrentDevice();
 		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
 
 		// Fill command buffer.
@@ -528,83 +564,129 @@ namespace Bloom
 			{ renderer::ClearColorValue{ 1.0, 1.0, 0.0, 1.0 } },
 			{ renderer::ClearColorValue{ 0.0, 1.0, 1.0, 1.0 } },
 		};
-		bool result = m_commandBuffer->begin();
+		castor3d::CommandsSemaphore hiPassCommands
+		{
+			device.getGraphicsCommandPool().createCommandBuffer(),
+			device.createSemaphore()
+		};
+		auto & hiPassCmd = *hiPassCommands.commandBuffer;
+		bool result = hiPassCmd.begin();
 
 		if ( result )
 		{
-			m_commandBuffer->resetQueryPool( timer.getQuery()
+			hiPassCmd.resetQueryPool( timer.getQuery()
 				, 0u
 				, 2u );
-			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			hiPassCmd.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
 				, timer.getQuery()
 				, 0u );
 			// Put target image in fragment shader input layout.
-			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+			hiPassCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
 				, m_target->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eColourAttachmentOptimal
 					, renderer::AccessFlag::eColourAttachmentWrite ) );
 
 			// Hi-pass.
-			m_commandBuffer->beginRenderPass( *m_renderPass
+			hiPassCmd.beginRenderPass( *m_renderPass
 				, *m_pipelines.hiPass.surface->frameBuffer
 				, clearValues[0]
 				, renderer::SubpassContents::eInline );
-			m_commandBuffer->setViewport( { size.width >> 1, size.height >> 1, 0, 0, } );
-			m_commandBuffer->setScissor( { 0, 0, size.width >> 1, size.height >> 1 } );
-			m_commandBuffer->bindPipeline( *m_pipelines.hiPass.pipeline );
-			m_commandBuffer->bindDescriptorSet( *m_pipelines.hiPass.surface->descriptorSet, 
+			hiPassCmd.setViewport( { size.width >> 1, size.height >> 1, 0, 0, } );
+			hiPassCmd.setScissor( { 0, 0, size.width >> 1, size.height >> 1 } );
+			hiPassCmd.bindPipeline( *m_pipelines.hiPass.pipeline );
+			hiPassCmd.bindDescriptorSet( *m_pipelines.hiPass.surface->descriptorSet,
 				*m_pipelines.hiPass.layout.pipelineLayout );
-			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-			m_commandBuffer->draw( 6u );
-			m_commandBuffer->endRenderPass();
+			hiPassCmd.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+			hiPassCmd.draw( 6u );
+			hiPassCmd.endRenderPass();
+			result = hiPassCmd.end();
+			m_commands.emplace_back( std::move( hiPassCommands ) );
+		}
 
+		castor3d::CommandsSemaphore downScaleCommands
+		{
+			device.getGraphicsCommandPool().createCommandBuffer(),
+			device.createSemaphore()
+		};
+		auto & downScaleCmd = *downScaleCommands.commandBuffer;
+		result = downScaleCmd.begin();
+
+		if ( result )
+		{
 			// Downscale through mipmaps generation.
-			m_pipelines.hiPass.image->getTexture().generateMipmaps( *m_commandBuffer );
+			m_pipelines.hiPass.image->getTexture().generateMipmaps( downScaleCmd );
+			result = downScaleCmd.end();
+			m_commands.emplace_back( std::move( downScaleCommands ) );
+		}
 
+		castor3d::CommandsSemaphore blurCommands
+		{
+			device.getGraphicsCommandPool().createCommandBuffer(),
+			device.createSemaphore()
+		};
+		auto & blurCmd = *blurCommands.commandBuffer;
+		result = blurCmd.begin();
+
+		if ( result )
+		{
 			// Blur passes.
 			for ( uint32_t i = 0u; i < FILTER_COUNT; ++i )
 			{
 				auto & gaussianBlur = m_blurs[i];
 				// Horizontal.
-				m_commandBuffer->beginRenderPass( gaussianBlur->getRenderPass()
+				blurCmd.beginRenderPass( gaussianBlur->getRenderPass()
 					, gaussianBlur->getBlurXFrameBuffer()
 					, clearValues[i]
 					, renderer::SubpassContents::eSecondaryCommandBuffers );
-				m_commandBuffer->executeCommands( { gaussianBlur->getBlurXCommandBuffer() } );
-				m_commandBuffer->endRenderPass();
+				blurCmd.executeCommands( { gaussianBlur->getBlurXCommandBuffer() } );
+				blurCmd.endRenderPass();
 
 				// Vertical.
-				m_commandBuffer->beginRenderPass( gaussianBlur->getRenderPass()
+				blurCmd.beginRenderPass( gaussianBlur->getRenderPass()
 					, gaussianBlur->getBlurYFrameBuffer()
 					, clearValues[i]
 					, renderer::SubpassContents::eSecondaryCommandBuffers );
-				m_commandBuffer->executeCommands( { gaussianBlur->getBlurYCommandBuffer() } );
-				m_commandBuffer->endRenderPass();
+				blurCmd.executeCommands( { gaussianBlur->getBlurYCommandBuffer() } );
+				blurCmd.endRenderPass();
 			}
 
 			// Put Hi-pass general view in fragment shader input layout.
-			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
+			blurCmd.memoryBarrier( renderer::PipelineStageFlag::eTransfer
 				, renderer::PipelineStageFlag::eFragmentShader
 				, m_pipelines.hiPass.image->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+			blurCmd.end();
+			m_commands.emplace_back( std::move( blurCommands ) );
+		}
 
+		castor3d::CommandsSemaphore combineCommands
+		{
+			device.getGraphicsCommandPool().createCommandBuffer(),
+			device.createSemaphore()
+		};
+		auto & combineCmd = *combineCommands.commandBuffer;
+		result = combineCmd.begin();
+
+		if ( result )
+		{
 			// Combine pass.
-			m_commandBuffer->beginRenderPass( *m_renderPass
+			combineCmd.beginRenderPass( *m_renderPass
 				, *m_pipelines.combine.surface->frameBuffer
 				, clearValues[FILTER_COUNT]
 				, renderer::SubpassContents::eInline );
-			m_commandBuffer->setViewport( { size.width, size.height, 0, 0, } );
-			m_commandBuffer->setScissor( { 0, 0, size.width, size.height } );
-			m_commandBuffer->bindPipeline( *m_pipelines.combine.pipeline );
-			m_commandBuffer->bindDescriptorSet( *m_pipelines.combine.surface->descriptorSet
+			combineCmd.setViewport( { size.width, size.height, 0, 0, } );
+			combineCmd.setScissor( { 0, 0, size.width, size.height } );
+			combineCmd.bindPipeline( *m_pipelines.combine.pipeline );
+			combineCmd.bindDescriptorSet( *m_pipelines.combine.surface->descriptorSet
 				, *m_pipelines.combine.layout.pipelineLayout );
-			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-			m_commandBuffer->draw( 6u );
-			m_commandBuffer->endRenderPass();
+			combineCmd.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+			combineCmd.draw( 6u );
+			combineCmd.endRenderPass();
 
-			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			combineCmd.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
 				, timer.getQuery()
 				, 1u );
-			m_commandBuffer->end();
+			combineCmd.end();
+			m_commands.emplace_back( std::move( combineCommands ) );
 		}
 
 		return result;

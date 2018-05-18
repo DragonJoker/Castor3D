@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include <PostEffect/PostEffectSurface.hpp>
 
+#include <GlslShader.hpp>
+
 namespace smaa
 {
 	namespace constants

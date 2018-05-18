@@ -36,6 +36,7 @@ namespace castor3d
 				, 1u
 				, renderer::BufferTarget::eTransferDst
 				, renderer::MemoryPropertyFlag::eHostVisible );
+			m_ubo->upload();
 		}
 	}
 

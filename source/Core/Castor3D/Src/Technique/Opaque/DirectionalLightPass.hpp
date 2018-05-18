@@ -140,10 +140,10 @@ namespace castor3d
 			LightPass::Config base;
 			//!\~english	The variable containing the light direction.
 			//!\~french		La variable contenant la direction de la lumière.
-			renderer::Vec4 direction;
+			castor::Point4f direction;
 			//!\~english	The variable containing the light space transformation matrix.
 			//!\~french		La variable contenant la matrice de transformation de la lumière.
-			renderer::Mat4 transform;
+			castor::Matrix4x4f transform;
 		};
 		renderer::UniformBufferPtr< Config > m_ubo;
 		Viewport m_viewport;

@@ -24,7 +24,6 @@ namespace castor3d
 		, m_type{ type }
 		, m_matrixUbo{ engine }
 		, m_modelMatrixUbo{ engine }
-		, m_configUbo{ engine }
 	{
 	}
 
@@ -32,10 +31,10 @@ namespace castor3d
 	{
 	}
 
-	bool SceneBackground::initialise( renderer::RenderPass const & renderPass )
+	bool SceneBackground::initialise( renderer::RenderPass const & renderPass
+		, HdrConfigUbo const & hdrConfigUbo )
 	{
 		m_semaphore = getEngine()->getRenderSystem()->getCurrentDevice()->createSemaphore();
-		m_configUbo.initialise();
 		auto result = doInitialiseVertexBuffer()
 			&& doInitialise( renderPass );
 		castor::String const name = cuT( "Skybox" );
@@ -67,7 +66,9 @@ namespace castor3d
 
 		if ( result )
 		{
-			doInitialisePipeline( doInitialiseShader(), renderPass );
+			doInitialisePipeline( doInitialiseShader()
+				, renderPass
+				, hdrConfigUbo );
 		}
 
 		if ( result
@@ -96,7 +97,6 @@ namespace castor3d
 
 		m_matrixUbo.cleanup();
 		m_modelMatrixUbo.cleanup();
-		m_configUbo.cleanup();
 		m_pipeline.reset();
 		m_indexBuffer.reset();
 		m_vertexBuffer.reset();
@@ -117,11 +117,6 @@ namespace castor3d
 
 	void SceneBackground::update( Camera const & camera )
 	{
-		if ( !m_hdr )
-		{
-			m_configUbo.update( m_scene.getHdrConfig() );
-		}
-
 		static castor::Point3r const Scale{ 1, -1, 1 };
 		static castor::Matrix3x3r const Identity{ 1.0f };
 		auto node = camera.getParent();
@@ -206,6 +201,7 @@ namespace castor3d
 
 	void SceneBackground::initialiseDescriptorSet( MatrixUbo const & matrixUbo
 		, ModelMatrixUbo const & modelMatrixUbo
+		, HdrConfigUbo const & hdrConfigUbo
 		, renderer::DescriptorSet & descriptorSet )const
 	{
 		descriptorSet.createBinding( m_descriptorLayout->getBinding( 0u )
@@ -213,7 +209,7 @@ namespace castor3d
 		descriptorSet.createBinding( m_descriptorLayout->getBinding( 1u )
 			, modelMatrixUbo.getUbo() );
 		descriptorSet.createBinding( m_descriptorLayout->getBinding( 2u )
-			, m_configUbo.getUbo() );
+			, hdrConfigUbo.getUbo() );
 		descriptorSet.createBinding( m_descriptorLayout->getBinding( 3u )
 			, m_texture->getDefaultView()
 			, m_sampler.lock()->getSampler() );
@@ -384,7 +380,8 @@ namespace castor3d
 	}
 
 	bool SceneBackground::doInitialisePipeline( renderer::ShaderStageStateArray program
-		, renderer::RenderPass const & renderPass )
+		, renderer::RenderPass const & renderPass
+		, HdrConfigUbo const & hdrConfigUbo )
 	{
 		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
 		doInitialiseDescriptorLayout();
@@ -397,6 +394,7 @@ namespace castor3d
 		m_descriptorSet = m_descriptorPool->createDescriptorSet( 0u );
 		initialiseDescriptorSet( m_matrixUbo
 			, m_modelMatrixUbo
+			, hdrConfigUbo
 			, *m_descriptorSet );
 		m_descriptorSet->update();
 		renderer::VertexInputState vertexInput;

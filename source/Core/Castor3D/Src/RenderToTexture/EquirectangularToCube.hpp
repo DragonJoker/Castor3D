@@ -18,8 +18,7 @@ namespace castor3d
 	public:
 		EquirectangularToCube( TextureLayout const & equiRectangular
 			, RenderSystem & renderSystem
-			, TextureLayout const & target
-			, float gamma );
+			, TextureLayout const & target );
 		void render();
 
 	private:

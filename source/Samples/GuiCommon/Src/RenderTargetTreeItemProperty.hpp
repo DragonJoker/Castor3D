@@ -31,7 +31,8 @@ namespace GuiCommon
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_target	L'objet cible
 		 */
-		RenderTargetTreeItemProperty( bool p_editable, castor3d::RenderTargetSPtr p_target );
+		RenderTargetTreeItemProperty( bool editable
+			, castor3d::RenderTargetSPtr target );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -56,11 +57,12 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		virtual void doCreateProperties( wxPGEditor * editor
+			, wxPropertyGrid * grid );
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
 		 */
-		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
+		virtual void doPropertyChange( wxPropertyGridEvent & event );
 
 	private:
 		castor3d::RenderTargetWPtr m_target;

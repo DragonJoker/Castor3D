@@ -171,13 +171,6 @@ namespace castor3d
 		}
 	}
 
-	renderer::Mat4 convert( castor::Matrix4x4f const & value )
-	{
-		renderer::Mat4 result{ renderer::noInit };
-		std::memcpy( &result[0][0], value.constPtr(), 16 * sizeof( float ) );
-		return result;
-	}
-
 	castor::Matrix4x4f convert( renderer::Mat4 const & value )
 	{
 		castor::Matrix4x4f result;

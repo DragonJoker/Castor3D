@@ -168,10 +168,10 @@ namespace castor3d
 	{
 		auto & directionalLight = *light.getDirectionalLight();
 		auto & data = m_lightPass.m_ubo->getData( 0u );
-		data.base.colourIndex = renderer::Vec4{ light.getColour()[0], light.getColour()[1], light.getColour()[2], 0.0f };
-		data.base.intensityFarPlane = renderer::Vec4{ light.getIntensity()[0], light.getIntensity()[1], light.getFarPlane(), 0.0f };
-		data.direction = renderer::Vec4{ directionalLight.getDirection()[0], directionalLight.getDirection()[1], directionalLight.getDirection()[2], 0.0f };
-		data.transform = convert( directionalLight.getLightSpaceTransform() );
+		data.base.colourIndex = castor::Point4f{ light.getColour()[0], light.getColour()[1], light.getColour()[2], 0.0f };
+		data.base.intensityFarPlane = castor::Point4f{ light.getIntensity()[0], light.getIntensity()[1], light.getFarPlane(), 0.0f };
+		data.direction = castor::Point4f{ directionalLight.getDirection()[0], directionalLight.getDirection()[1], directionalLight.getDirection()[2], 0.0f };
+		data.transform = directionalLight.getLightSpaceTransform();
 		m_lightPass.m_ubo->upload();
 	}
 

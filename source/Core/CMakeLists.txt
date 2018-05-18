@@ -1,4 +1,3 @@
-option( CASTOR_BUILD_CASTOR3D "Build Castor3D" TRUE )
 option( CASTOR_BUILD_TEST_CASTORUTILS "Build CastorUtils test application" TRUE )
 option( CASTOR_BUILD_TEST_CASTOR3D "Build Castor3D test application" TRUE )
 option( CASTOR_BUILD_TEST_RENDERER "Build Renderer test applications" TRUE )

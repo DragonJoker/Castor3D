@@ -147,7 +147,6 @@ namespace castor3d
 		, RenderSystem & renderSystem
 		, Parameters const & parameters
 		, SsaoConfig const & config )
-
 		: OwnedBy< Engine >{ *renderSystem.getEngine() }
 		, Named{ name }
 		, m_renderTarget{ renderTarget }
@@ -180,6 +179,7 @@ namespace castor3d
 #endif
 		, m_initialised{ false }
 		, m_ssaoConfig{ config }
+		, m_hdrConfigUbo{ *renderSystem.getEngine() }
 	{
 		m_pointShadowMaps.resize( shader::PointShadowMapCount );
 		m_spotShadowMaps.resize( shader::SpotShadowMapCount );
@@ -244,6 +244,7 @@ namespace castor3d
 				, renderer::Format::eD24_UNORM_S8_UINT
 				, renderer::ImageUsageFlag::eDepthStencilAttachment );
 			m_signalFinished = getEngine()->getRenderSystem()->getCurrentDevice()->createSemaphore();
+			m_hdrConfigUbo.initialise();
 
 			doInitialiseShadowMaps();
 			doInitialiseClearRenderPass();
@@ -274,6 +275,7 @@ namespace castor3d
 		m_weightedBlendRendering.reset();
 		m_deferredRendering.reset();
 		doCleanupShadowMaps();
+		m_hdrConfigUbo.cleanup();
 		m_transparentPass->cleanup();
 		m_opaquePass->cleanup();
 		m_initialised = false;
@@ -313,6 +315,7 @@ namespace castor3d
 
 		// Update part
 		doUpdateParticles( info );
+		m_hdrConfigUbo.update( m_renderTarget.getHdrConfig() );
 		auto * semaphore = doClear( waitSemaphores );
 		semaphore = doRenderEnvironmentMaps( *semaphore );
 		semaphore = doRenderShadowMaps( *semaphore );
@@ -586,7 +589,7 @@ namespace castor3d
 			, std::move( attaches ) );
 
 		auto & background = m_renderTarget.getScene()->getBackground();
-		background.initialise( *m_bgRenderPass );
+		background.initialise( *m_bgRenderPass, m_hdrConfigUbo );
 		background.prepareFrame( *m_bgCommandBuffer
 			, Size{ m_colourTexture->getWidth(), m_colourTexture->getHeight() }
 			, *m_bgRenderPass

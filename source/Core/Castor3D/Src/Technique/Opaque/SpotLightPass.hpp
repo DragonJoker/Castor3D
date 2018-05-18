@@ -122,19 +122,19 @@ namespace castor3d
 			LightPass::Config base;
 			//!\~english	The variable containing the light position (RGB).
 			//!\~french		La variable contenant la position de la lumière (RGB).
-			renderer::Vec4 position;
+			castor::Point4f position;
 			//!\~english	The variable containing the light attenuation (RGB) and index (A).
 			//!\~french		La variable contenant l'atténuation de la lumière (RGB) et son index (A).
-			renderer::Vec4 attenuation;
+			castor::Point4f attenuation;
 			//!\~english	The variable containing the light direction (RGB).
 			//!\~french		La variable contenant la direction de la lumière (RGB).
-			renderer::Vec4 direction;
+			castor::Point4f direction;
 			//!\~english	The variable containing the light exponent (R) and cutoff (G).
 			//!\~french		La variable contenant l'exposant de la lumière (R) et l'angle de son cône (G).
-			renderer::Vec4 exponentCutOff;
+			castor::Point4f exponentCutOff;
 			//!\~english	The variable containing the light space transformation matrix.
 			//!\~french		La variable contenant la matrice de transformation de la lumière.
-			renderer::Mat4 transform;
+			castor::Matrix4x4f transform;
 		};
 		renderer::UniformBufferPtr< Config > m_ubo;
 	};

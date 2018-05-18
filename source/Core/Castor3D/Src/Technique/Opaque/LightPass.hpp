@@ -636,10 +636,10 @@ namespace castor3d
 		{
 			//!\~english	The variable containing the light colour.
 			//!\~french		La variable contenant la couleur de la lumière.
-			renderer::Vec4 colourIndex;
+			castor::Point4f colourIndex;
 			//!\~english	The variable containing the light intensities (RG) and far plane (B).
 			//!\~french		La variable contenant les intensités de la lumière (RG) et le plan éloigné (B).
-			renderer::Vec4 intensityFarPlane;
+			castor::Point4f intensityFarPlane;
 		};
 
 		Engine & m_engine;

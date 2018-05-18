@@ -177,6 +177,7 @@ add_definitions(
 
 option( CASTOR_BUILDGRP_TEST "Build test projects" FALSE )
 option( CASTOR_BUILDGRP_SETUP "Build setup projects" FALSE )
+option( CASTOR_BUILD_CASTOR3D "Build Castor3D" TRUE )
 
 # Small macro to add subdirectory files to current target source and header files
 macro( parse_subdir_files _FOLDER _GROUP )
@@ -200,7 +201,9 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 		endif ()
 
 		add_subdirectory( external/FreeType )
-		add_subdirectory( ${RENDERERLIB_DIR} )
+		if ( ${CASTOR_BUILD_CASTOR3D} )
+			add_subdirectory( ${RENDERERLIB_DIR} )
+		endif ()
 		add_subdirectory( Core )
 		if ( ${CASTOR_BUILD_CASTOR3D} )
 			add_subdirectory( Plugins )

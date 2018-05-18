@@ -145,7 +145,7 @@ namespace castor3d
 			while ( i < count )
 			{
 				auto & node = *it;
-				buffer->m_matrix = convert( node.sceneNode.getDerivedTransformationMatrix() );
+				buffer->m_matrix = node.sceneNode.getDerivedTransformationMatrix();
 				buffer->m_material = node.passNode.pass.getId();
 				++buffer;
 				++i;
@@ -175,7 +175,7 @@ namespace castor3d
 					&& node->sceneNode.isVisible()
 					&& camera.isVisible( node->instance, node->data ) )
 				{
-					buffer->m_matrix = convert( node->sceneNode.getDerivedTransformationMatrix() );
+					buffer->m_matrix = node->sceneNode.getDerivedTransformationMatrix();
 					buffer->m_material = node->passNode.pass.getId();
 					++buffer;
 				}
@@ -1399,19 +1399,19 @@ namespace castor3d
 			pipeline.setViewport( { m_size.getWidth(), m_size.getHeight(), 0, 0 } );
 			pipeline.setScissor( { 0, 0, m_size.getWidth(), m_size.getHeight() } );
 
-			auto initialise = [this, &pipeline, flags]()
-			{
-				auto uboBindings = doCreateUboBindings( flags );
-				auto texBindings = doCreateTextureBindings( flags );
-				auto uboLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
-				auto texLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( texBindings ) );
-				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
-				layouts.emplace_back( std::move( uboLayout ) );
-				layouts.emplace_back( std::move( texLayout ) );
-				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
-				pipeline.initialise( getRenderPass() );
-			};
-			getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender, initialise ) );
+			getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+				, [this, &pipeline, flags]()
+				{
+					auto uboBindings = doCreateUboBindings( flags );
+					auto texBindings = doCreateTextureBindings( flags );
+					auto uboLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
+					auto texLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( texBindings ) );
+					std::vector< renderer::DescriptorSetLayoutPtr > layouts;
+					layouts.emplace_back( std::move( uboLayout ) );
+					layouts.emplace_back( std::move( texLayout ) );
+					pipeline.setDescriptorSetLayouts( std::move( layouts ) );
+					pipeline.initialise( getRenderPass() );
+				} ) );
 		}
 	}
 
@@ -1437,19 +1437,19 @@ namespace castor3d
 			pipeline.setViewport( { m_size.getWidth(), m_size.getHeight(), 0, 0 } );
 			pipeline.setScissor( { 0, 0, m_size.getWidth(), m_size.getHeight() } );
 
-			auto initialise = [this, &pipeline, flags]()
-			{
-				auto uboBindings = doCreateUboBindings( flags );
-				auto texBindings = doCreateTextureBindings( flags );
-				auto uboLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
-				auto texLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( texBindings ) );
-				std::vector< renderer::DescriptorSetLayoutPtr > layouts;
-				layouts.emplace_back( std::move( uboLayout ) );
-				layouts.emplace_back( std::move( texLayout ) );
-				pipeline.setDescriptorSetLayouts( std::move( layouts ) );
-				pipeline.initialise( getRenderPass() );
-			};
-			getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender, initialise ) );
+			getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+				, [this, &pipeline, flags]()
+				{
+					auto uboBindings = doCreateUboBindings( flags );
+					auto texBindings = doCreateTextureBindings( flags );
+					auto uboLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
+					auto texLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( texBindings ) );
+					std::vector< renderer::DescriptorSetLayoutPtr > layouts;
+					layouts.emplace_back( std::move( uboLayout ) );
+					layouts.emplace_back( std::move( texLayout ) );
+					pipeline.setDescriptorSetLayouts( std::move( layouts ) );
+					pipeline.initialise( getRenderPass() );
+				} ) );
 		}
 	}
 

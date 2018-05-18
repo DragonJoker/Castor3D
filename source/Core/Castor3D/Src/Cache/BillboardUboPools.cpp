@@ -42,7 +42,7 @@ namespace castor3d
 			modelData.shadowReceiver = entry.billboard.isShadowReceiver();
 			modelData.materialIndex = entry.pass.getId();
 			auto & modelMatrixData = entry.modelMatrixUbo.getData();
-			modelMatrixData.model = convert( entry.billboard.getNode()->getDerivedTransformationMatrix() );
+			modelMatrixData.model = entry.billboard.getNode()->getDerivedTransformationMatrix();
 			auto & billboardData = entry.billboardUbo.getData();
 			billboardData.dimensions = entry.billboard.getDimensions();
 		}

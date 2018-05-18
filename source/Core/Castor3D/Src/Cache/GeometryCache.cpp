@@ -126,7 +126,7 @@ namespace castor3d
 				}
 
 				auto & modelMatrixData = entry.modelMatrixUbo.getData();
-				modelMatrixData.model = convert( entry.geometry.getParent()->getDerivedTransformationMatrix() );
+				modelMatrixData.model = entry.geometry.getParent()->getDerivedTransformationMatrix();
 			}
 		}
 	}

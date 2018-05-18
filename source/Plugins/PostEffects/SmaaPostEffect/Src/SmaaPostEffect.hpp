@@ -43,6 +43,10 @@ namespace smaa
 		*\copydoc		castor3d::PostEffect::update
 		*/
 		void update( castor::Nanoseconds const & elapsedTime )override;
+		/**
+		 *\copydoc		castor3d::PostEffect::accept
+		 */
+		void accept( castor3d::PipelineVisitorBase & visitor )override;
 
 	private:
 		/**
@@ -64,7 +68,7 @@ namespace smaa
 		void doInitialiseNeighbourhoodBlending();
 		void doInitialiseReproject();
 		void doBuildCommandBuffers( castor3d::RenderPassTimer const & timer );
-		renderer::CommandBufferPtr doBuildCommandBuffer( castor3d::RenderPassTimer const & timer
+		castor3d::CommandsSemaphoreArray doBuildCommandBuffer( castor3d::RenderPassTimer const & timer
 			, uint32_t index );
 
 	public:
@@ -96,12 +100,15 @@ namespace smaa
 		};
 		uint32_t m_maxSubsampleIndices{ 1u };
 		std::vector< castor::Point2r > m_jitters;
+		uint32_t m_curIndex{ 0u };
 
 		std::unique_ptr< EdgeDetection > m_edgeDetection;
 		std::unique_ptr< BlendingWeightCalculation > m_blendingWeightCalculation;
 		std::unique_ptr< NeighbourhoodBlending > m_neighbourhoodBlending;
 		std::vector< std::unique_ptr< Reproject > > m_reproject;
-		std::vector< renderer::CommandBufferPtr > m_commandBuffers;
+		std::vector< castor3d::CommandsSemaphoreArray > m_commandBuffers;
+		renderer::TextureView const * m_srgbTexture{ nullptr };
+		renderer::TextureView const * m_hdrTexture{ nullptr };
 	};
 }
 

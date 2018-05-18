@@ -29,8 +29,8 @@ namespace castor3d
 			//
 			//	where P is the projection matrix that maps camera space points
 			//	to [-1, 1] x [-1, 1].  That is, SsaoConfigUbo::getProjectUnitMatrix().
-			renderer::Vec4 projInfo;
-			renderer::Mat4 invViewMatrix;
+			castor::Point4f projInfo;
+			castor::Matrix4x4f invViewMatrix;
 			// Integer number of samples to take at each pixel.
 			int32_t numSamples;
 			// This is the number of turns around the circle that the spiral pattern makes.

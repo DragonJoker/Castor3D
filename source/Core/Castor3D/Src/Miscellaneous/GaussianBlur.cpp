@@ -399,16 +399,16 @@ namespace castor3d
 		auto & renderSystem = *engine.getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
 		auto & cache = engine.getShaderProgramCache();
-		auto const vertex = getVertexProgram( engine );
-		auto const blurX = getBlurXProgram( engine, renderer::isDepthFormat( m_format ) );
+		m_blurXVertexShader = getVertexProgram( engine );
+		m_blurXPixelShader = getBlurXProgram( engine, renderer::isDepthFormat( m_format ) );
 
 		renderer::ShaderStageStateArray program
 		{
 			{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
 			{ device.createShaderModule( renderer::ShaderStageFlag::eFragment ) }
 		};
-		program[0].module->loadShader( vertex.getSource() );
-		program[1].module->loadShader( blurX.getSource() );
+		program[0].module->loadShader( m_blurXVertexShader.getSource() );
+		program[1].module->loadShader( m_blurXPixelShader.getSource() );
 
 		m_blurXFbo = doCreateFbo( *m_renderPass, m_intermediate.getTexture()->getDefaultView(), m_size );
 		renderer::DescriptorSetLayoutBindingArray bindings
@@ -431,16 +431,16 @@ namespace castor3d
 		auto & renderSystem = *engine.getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
 		auto & cache = engine.getShaderProgramCache();
-		auto const vertex = getVertexProgram( engine );
-		auto const blurY = getBlurYProgram( engine, renderer::isDepthFormat( m_format ) );
+		m_blurYVertexShader = getVertexProgram( engine );
+		m_blurYPixelShader = getBlurYProgram( engine, renderer::isDepthFormat( m_format ) );
 
 		renderer::ShaderStageStateArray program
 		{
 			{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
 			{ device.createShaderModule( renderer::ShaderStageFlag::eFragment ) }
 		};
-		program[0].module->loadShader( vertex.getSource() );
-		program[1].module->loadShader( blurY.getSource() );
+		program[0].module->loadShader( m_blurYVertexShader.getSource() );
+		program[1].module->loadShader( m_blurYPixelShader.getSource() );
 
 		m_blurYFbo = doCreateFbo( *m_renderPass, m_source, m_size );
 		renderer::DescriptorSetLayoutBindingArray bindings

@@ -194,13 +194,26 @@ namespace smaa
 				} );
 			return writer.finalise();
 		}
+
+		renderer::TextureViewPtr doCreatePredicationView( renderer::Texture const & texture )
+		{
+			renderer::ImageViewCreateInfo view{};
+			view.format = texture.getFormat();
+			view.viewType = renderer::TextureViewType::e2D;
+			view.subresourceRange.aspectMask = renderer::ImageAspectFlag::eDepth;
+			view.subresourceRange.baseArrayLayer = 0u;
+			view.subresourceRange.layerCount = 1u;
+			view.subresourceRange.baseMipLevel = 0u;
+			view.subresourceRange.levelCount = 1u;
+			return texture.createView( view );
+		}
 	}
 
 	//*********************************************************************************************
 
 	EdgeDetection::EdgeDetection( castor3d::RenderTarget & renderTarget
 		, renderer::TextureView const & colourView
-		, renderer::TextureView const * predicationView
+		, renderer::Texture const * predication
 		, castor3d::SamplerSPtr sampler
 		, float threshold
 		, float predicationThreshold
@@ -209,7 +222,7 @@ namespace smaa
 		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), true, false }
 		, m_surface{ *renderTarget.getEngine() }
 		, m_colourView{ colourView }
-		, m_predicationView{ predicationView }
+		, m_predicationView{ predication ? doCreatePredicationView( *predication ) : nullptr }
 	{
 		renderer::Extent2D size{ m_colourView.getTexture().getDimensions().width
 			, m_colourView.getTexture().getDimensions().height };
@@ -263,9 +276,9 @@ namespace smaa
 		m_renderPass = device.createRenderPass( renderPass );
 
 		auto pixelSize = Point2f{ 1.0f / size.width, 1.0f / size.height };
-		auto vertex = doGetEdgeDetectionVP( *renderTarget.getEngine()->getRenderSystem()
+		m_vertexShader = doGetEdgeDetectionVP( *renderTarget.getEngine()->getRenderSystem()
 			, pixelSize );
-		auto fragment = doGetEdgeDetectionFP( *renderTarget.getEngine()->getRenderSystem()
+		m_pixelShader = doGetEdgeDetectionFP( *renderTarget.getEngine()->getRenderSystem()
 			, pixelSize
 			, threshold
 			, m_predicationView != nullptr
@@ -276,8 +289,8 @@ namespace smaa
 		renderer::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
 		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( vertex.getSource() );
-		stages[1].module->loadShader( fragment.getSource() );
+		stages[0].module->loadShader( m_vertexShader.getSource() );
+		stages[1].module->loadShader( m_pixelShader.getSource() );
 
 		renderer::DepthStencilState dsstate
 		{
@@ -303,7 +316,7 @@ namespace smaa
 		if ( m_predicationView )
 		{
 			setLayoutBindings.emplace_back( 0u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
-			view = m_predicationView;
+			view = m_predicationView.get();
 		}
 
 		createPipeline( size

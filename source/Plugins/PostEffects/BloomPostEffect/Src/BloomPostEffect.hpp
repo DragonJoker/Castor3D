@@ -22,6 +22,10 @@ namespace Bloom
 		static castor3d::PostEffectSPtr create( castor3d::RenderTarget & renderTarget
 			, castor3d::RenderSystem & renderSystem
 			, castor3d::Parameters const & param );
+		/**
+		 *\copydoc		castor3d::PostEffect::accept
+		 */
+		void accept( castor3d::PipelineVisitorBase & visitor )override;
 
 	private:
 		/**
@@ -77,6 +81,8 @@ namespace Bloom
 			Layout layout;
 			castor3d::TextureLayoutSPtr image;
 			std::unique_ptr< Surface > surface;
+			glsl::Shader vertexShader;
+			glsl::Shader pixelShader;
 			renderer::PipelinePtr pipeline;
 		};
 

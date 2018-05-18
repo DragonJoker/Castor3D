@@ -56,11 +56,11 @@ namespace castor3d
 	{
 		REQUIRE( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );
-		configuration.invViewProj = convert( invViewProj );
-		configuration.invView = convert( invView );
-		configuration.invProj = convert( invProj );
-		configuration.gView = convert( camera.getView() );
-		configuration.gProj = convert( camera.getViewport().getProjection() );
+		configuration.invViewProj = invViewProj;
+		configuration.invView = invView;
+		configuration.invProj = invProj;
+		configuration.gView = camera.getView();
+		configuration.gProj = camera.getViewport().getProjection();
 		configuration.renderSize = Point2f( renderSize.getWidth(), renderSize.getHeight() );
 		m_ubo->upload();
 	}

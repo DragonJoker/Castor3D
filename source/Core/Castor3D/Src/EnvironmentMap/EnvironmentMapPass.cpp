@@ -51,6 +51,7 @@ namespace castor3d
 		, m_mtxView{ m_camera->getView() }
 		, m_matrixUbo{ *reflectionMap.getEngine() }
 		, m_modelMatrixUbo{ *reflectionMap.getEngine() }
+		, m_hdrConfigUbo{ *reflectionMap.getEngine() }
 	{
 	}
 
@@ -80,6 +81,7 @@ namespace castor3d
 		m_matrixUbo.initialise();
 		m_matrixUbo.update( m_mtxView, projection );
 		m_modelMatrixUbo.initialise();
+		m_hdrConfigUbo.initialise();
 		auto const & environmentLayout = getOwner()->getTexture().getTexture();
 		auto const & environmentView = environmentLayout->getImage( face ).getView();
 
@@ -106,6 +108,7 @@ namespace castor3d
 		m_backgroundDescriptorSet = pool.createDescriptorSet( 0u );
 		background.initialiseDescriptorSet( m_matrixUbo
 			, m_modelMatrixUbo
+			, m_hdrConfigUbo
 			, *m_backgroundDescriptorSet );
 		m_backgroundDescriptorSet->update();
 
@@ -136,6 +139,7 @@ namespace castor3d
 		m_frameBuffer.reset();
 		m_opaquePass->cleanup();
 		m_transparentPass->cleanup();
+		m_hdrConfigUbo.cleanup();
 		m_modelMatrixUbo.cleanup();
 		m_matrixUbo.cleanup();
 	}

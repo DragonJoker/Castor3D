@@ -151,14 +151,14 @@ namespace castor3d
 		configuration.edgeSharpness = config.m_edgeSharpness;
 		configuration.blurStepSize = config.m_blurStepSize;
 		configuration.blurRadius = config.m_blurRadius;
-		configuration.projInfo = renderer::Vec4
+		configuration.projInfo = castor::Point4f
 		{
 			-2.0f / ( viewport.getWidth() * proj[0][0] ),
 			-2.0f / ( viewport.getHeight() * proj[1][1] ),
 			( 1.0f - proj[0][2] ) / proj[0][0],
 			( 1.0f - proj[1][2] ) / proj[1][1]
 		};
-		configuration.invViewMatrix = convert( camera.getView() );
+		configuration.invViewMatrix = camera.getView();
 
 		m_ubo->upload();
 	}

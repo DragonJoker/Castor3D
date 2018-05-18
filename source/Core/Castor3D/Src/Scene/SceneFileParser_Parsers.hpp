@@ -36,6 +36,7 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserRenderTargetPostEffect )
 	DECLARE_ATTRIBUTE_PARSER( parserRenderTargetToneMapping )
 	DECLARE_ATTRIBUTE_PARSER( parserRenderTargetSsao )
+	DECLARE_ATTRIBUTE_PARSER( parserRenderTargetHdrConfig )
 	DECLARE_ATTRIBUTE_PARSER( parserRenderTargetEnd )
 
 	// Sampler parsers
@@ -77,7 +78,6 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserSceneFogType )
 	DECLARE_ATTRIBUTE_PARSER( parserSceneFogDensity )
 	DECLARE_ATTRIBUTE_PARSER( parserSceneParticleSystem )
-	DECLARE_ATTRIBUTE_PARSER( parserSceneHdrConfig )
 	DECLARE_ATTRIBUTE_PARSER( parserMesh )
 
 	// ParticleSystem parsers

@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_FRAME_VARIABLE_BUFFER_TREE_ITEM_PROPERTY_H___
 #define ___GUICOMMON_FRAME_VARIABLE_BUFFER_TREE_ITEM_PROPERTY_H___
 
+#include "ShaderSource.hpp"
 #include "TreeItemProperty.hpp"
 
 namespace GuiCommon
@@ -35,7 +36,7 @@ namespace GuiCommon
 		 */
 		FrameVariableBufferTreeItemProperty( castor3d::Engine * engine
 			, bool editable
-			, renderer::UniformBufferBase & buffer );
+			, UniformBufferValues & buffer );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -43,18 +44,6 @@ namespace GuiCommon
 		 *\brief		Destructeur
 		 */
 		~FrameVariableBufferTreeItemProperty();
-		/**
-		 *\~english
-		 *\brief		Retrieves the camera
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la caméra
-		 *\return		La valeur
-		 */
-		inline renderer::UniformBufferBase const & getBuffer()const
-		{
-			return m_buffer;
-		}
 
 	private:
 		/**
@@ -67,7 +56,7 @@ namespace GuiCommon
 		virtual void doPropertyChange( wxPropertyGridEvent & event );
 
 	private:
-		renderer::UniformBufferBase & m_buffer;
+		UniformBufferValues & m_buffer;
 	};
 }
 

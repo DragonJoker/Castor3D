@@ -108,6 +108,7 @@ namespace castor3d
 		castor::Matrix4x4f m_mtxModel;
 		MatrixUbo m_matrixUbo;
 		ModelMatrixUbo m_modelMatrixUbo;
+		HdrConfigUbo m_hdrConfigUbo;
 	};
 }
 

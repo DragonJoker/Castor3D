@@ -4,46 +4,42 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_FRAME_VARIABLES_LIST_VIEW_H___
 #define ___GUICOMMON_FRAME_VARIABLES_LIST_VIEW_H___
 
-#include "GuiCommonPrerequisites.hpp"
+#include "ShaderSource.hpp"
 
 #include <wx/treectrl.h>
 
 namespace GuiCommon
 {
-	//class FrameVariablesList
-	//	: public wxTreeCtrl
-	//{
-	//public:
-	//	FrameVariablesList( PropertiesContainer * p_propertiesHolder
-	//		, wxWindow * p_parent
-	//		, wxPoint const & p_ptPos = wxDefaultPosition
-	//		, wxSize const & p_size = wxDefaultSize );
-	//	~FrameVariablesList();
+	class FrameVariablesList
+		: public wxTreeCtrl
+	{
+	public:
+		FrameVariablesList( castor3d::Engine * engine
+			, PropertiesContainer * propertiesHolder
+			, wxWindow * parent
+			, wxPoint const & ptPos = wxDefaultPosition
+			, wxSize const & size = wxDefaultSize );
+		~FrameVariablesList();
 
-	//	void LoadVariables( castor3d::ShaderType p_type
-	//		, castor3d::ShaderProgramSPtr p_program
-	//		, castor3d::RenderPipeline & p_pipeline );
-	//	void UnloadVariables();
+		void loadVariables( renderer::ShaderStageFlag stage
+			, std::vector< UniformBufferValues > & ubos );
+		void unloadVariables();
 
-	//private:
-	//	void doAddBuffer( wxTreeItemId p_id
-	//		, castor3d::UniformBuffer & p_buffer );
-	//	void doAddVariable( wxTreeItemId p_id
-	//		, castor3d::UniformSPtr p_variable
-	//		, castor3d::UniformBuffer & p_buffer );
-	//	void doAddVariable( wxTreeItemId p_id
-	//		, castor3d::PushUniformSPtr p_variable
-	//		, castor3d::ShaderType p_type );
+	private:
+		void doAddBuffer( wxTreeItemId id
+			, UniformBufferValues & buffer );
+		void doAddVariable( wxTreeItemId id
+			, UniformValueBase & uniform );
 
-	//	DECLARE_EVENT_TABLE()
-	//	void OnClose( wxCloseEvent & p_event );
-	//	void OnSelectItem( wxTreeEvent & p_event );
-	//	void OnMouseRButtonUp( wxTreeEvent & p_event );
+		DECLARE_EVENT_TABLE()
+		void onClose( wxCloseEvent & event );
+		void onSelectItem( wxTreeEvent & event );
+		void onMouseRButtonUp( wxTreeEvent & event );
 
-	//private:
-	//	castor3d::ShaderProgramWPtr m_program;
-	//	PropertiesContainer * m_propertiesHolder;
-	//};
+	private:
+		castor3d::Engine * m_engine;
+		PropertiesContainer * m_propertiesHolder;
+	};
 }
 
 #endif

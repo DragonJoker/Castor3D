@@ -177,17 +177,6 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// HDR Configuration\n" ) ) > 0;
-
-			if ( result )
-			{
-				Logger::logInfo( cuT( "Scene::write - HDR Config" ) );
-				result = HdrConfig::TextWriter( m_tabs + cuT( "\t" ) )( scene.getHdrConfig(), file );
-			}
-		}
-
-		if ( result )
-		{
 			Logger::logInfo( cuT( "Scene::write - Background" ) );
 			BackgroundTextWriter writer{ file, m_tabs + cuT( "\t" ) };
 			scene.getBackground().accept( writer );

@@ -213,6 +213,7 @@ namespace castor3d
 		std::unique_ptr< RenderTechniquePass > m_opaquePass;
 		std::unique_ptr< RenderTechniquePass > m_transparentPass;
 		SsaoConfig m_ssaoConfig;
+		HdrConfigUbo m_hdrConfigUbo;
 		std::unique_ptr< DeferredRendering > m_deferredRendering;
 		std::unique_ptr< WeightedBlendRendering > m_weightedBlendRendering;
 		RenderPassTimerSPtr m_particleTimer;

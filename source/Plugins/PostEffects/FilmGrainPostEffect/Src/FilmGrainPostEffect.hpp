@@ -10,20 +10,13 @@ See LICENSE file in root folder
 #include <Texture/TextureUnit.hpp>
 #include <Miscellaneous/PreciseTimer.hpp>
 
+#include <GlslShader.hpp>
+
 namespace film_grain
 {
 	class RenderQuad
 		: public castor3d::RenderQuad
 	{
-	public:
-		explicit RenderQuad( castor3d::RenderSystem & renderSystem
-			, renderer::Extent2D const & size );
-		void update( castor::Nanoseconds const & time );
-
-	private:
-		void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
-			, renderer::DescriptorSet & descriptorSet )override;
-
 	private:
 		struct Configuration
 		{
@@ -32,6 +25,27 @@ namespace film_grain
 			float m_exposure;
 			float m_time;
 		};
+
+	public:
+		explicit RenderQuad( castor3d::RenderSystem & renderSystem
+			, renderer::Extent2D const & size );
+		void update( castor::Nanoseconds const & time );
+
+		inline renderer::UniformBuffer< Configuration > const & getUbo()const
+		{
+			return *m_configUbo;
+		}
+
+		inline renderer::UniformBuffer< Configuration > & getUbo()
+		{
+			return *m_configUbo;
+		}
+
+	private:
+		void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
+			, renderer::DescriptorSet & descriptorSet )override;
+
+	private:
 		uint64_t m_time{ 0ull };
 		renderer::Extent2D m_size;
 		renderer::UniformBufferPtr< Configuration > m_configUbo;
@@ -55,6 +69,10 @@ namespace film_grain
 		 *\copydoc		castor3d::PostEffect::update
 		 */
 		void update( castor::Nanoseconds const & elapsedTime )override;
+		/**
+		 *\copydoc		castor3d::PostEffect::accept
+		 */
+		void accept( castor3d::PipelineVisitorBase & visitor )override;
 
 	private:
 		/**
@@ -80,6 +98,8 @@ namespace film_grain
 		castor::PreciseTimer m_timer;
 		renderer::RenderPassPtr m_renderPass;
 		std::unique_ptr< RenderQuad > m_quad;
+		glsl::Shader m_vertexShader;
+		glsl::Shader m_pixelShader;
 	};
 }
 

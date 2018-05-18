@@ -203,6 +203,7 @@ namespace castor3d
 
 	void ImageBackground::initialiseDescriptorSet( MatrixUbo const & matrixUbo
 		, ModelMatrixUbo const & modelMatrixUbo
+		, HdrConfigUbo const & hdrConfigUbo
 		, renderer::DescriptorSet & descriptorSet )const
 	{
 		descriptorSet.createBinding( m_descriptorLayout->getBinding( 0u )
@@ -210,7 +211,7 @@ namespace castor3d
 		descriptorSet.createBinding( m_descriptorLayout->getBinding( 1u )
 			, modelMatrixUbo.getUbo() );
 		descriptorSet.createBinding( m_descriptorLayout->getBinding( 2u )
-			, m_configUbo.getUbo() );
+			, hdrConfigUbo.getUbo() );
 		descriptorSet.createBinding( m_descriptorLayout->getBinding( 3u )
 			, *m_sizeUbo );
 		descriptorSet.createBinding( m_descriptorLayout->getBinding( 4u )

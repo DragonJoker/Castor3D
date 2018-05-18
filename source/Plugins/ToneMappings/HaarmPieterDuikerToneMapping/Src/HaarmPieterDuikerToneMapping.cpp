@@ -13,11 +13,13 @@ using namespace glsl;
 
 namespace HaarmPieterDuiker
 {
-	String ToneMapping::Name = cuT( "haarm" );
+	String ToneMapping::Type = cuT( "haarm" );
+	String ToneMapping::Name = cuT( "Haarm Pieter Duiker Tone Mapping" );
 
 	ToneMapping::ToneMapping( Engine & engine
+		, HdrConfig & hdrConfig
 		, Parameters const & parameters )
-		: castor3d::ToneMapping{ Name, engine, parameters }
+		: castor3d::ToneMapping{ Type, Name, engine, hdrConfig, parameters }
 	{
 	}
 
@@ -26,9 +28,12 @@ namespace HaarmPieterDuiker
 	}
 
 	ToneMappingSPtr ToneMapping::create( Engine & engine
+		, castor3d::HdrConfig & hdrConfig
 		, Parameters const & parameters )
 	{
-		return std::make_shared< ToneMapping >( engine, parameters );
+		return std::make_shared< ToneMapping >( engine
+			, hdrConfig
+			, parameters );
 	}
 
 	glsl::Shader ToneMapping::doCreate()

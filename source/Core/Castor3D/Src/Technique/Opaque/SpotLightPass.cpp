@@ -54,15 +54,15 @@ namespace castor3d
 	{
 		auto & spotLight = *light.getSpotLight();
 		auto & data = m_lightPass.m_ubo->getData( 0u );
-		data.base.colourIndex = renderer::Vec4{ light.getColour()[0], light.getColour()[1], light.getColour()[2], 0.0f };
-		data.base.intensityFarPlane = renderer::Vec4{ light.getIntensity()[0], light.getIntensity()[1], light.getFarPlane(), 0.0f };
+		data.base.colourIndex = castor::Point4f{ light.getColour()[0], light.getColour()[1], light.getColour()[2], 0.0f };
+		data.base.intensityFarPlane = castor::Point4f{ light.getIntensity()[0], light.getIntensity()[1], light.getFarPlane(), 0.0f };
 		auto position = light.getParent()->getDerivedPosition();
-		data.position = renderer::Vec4{ position[0], position[1], position[2], 0.0f };
-		data.attenuation = renderer::Vec4{ spotLight.getAttenuation()[0], spotLight.getAttenuation()[1], spotLight.getAttenuation()[2], 0.0f };
-		data.exponentCutOff.r = spotLight.getExponent();
-		data.exponentCutOff.g = spotLight.getCutOff().cos();
-		data.direction = renderer::Vec4{ spotLight.getDirection()[0], spotLight.getDirection()[1], spotLight.getDirection()[2], 0.0f };
-		data.transform = convert( spotLight.getLightSpaceTransform() );
+		data.position = castor::Point4f{ position[0], position[1], position[2], 0.0f };
+		data.attenuation = castor::Point4f{ spotLight.getAttenuation()[0], spotLight.getAttenuation()[1], spotLight.getAttenuation()[2], 0.0f };
+		data.exponentCutOff[0] = spotLight.getExponent();
+		data.exponentCutOff[1] = spotLight.getCutOff().cos();
+		data.direction = castor::Point4f{ spotLight.getDirection()[0], spotLight.getDirection()[1], spotLight.getDirection()[2], 0.0f };
+		data.transform = spotLight.getLightSpaceTransform();
 		m_lightPass.m_ubo->upload();
 	}
 

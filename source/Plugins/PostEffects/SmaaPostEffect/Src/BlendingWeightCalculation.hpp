@@ -41,6 +41,21 @@ namespace smaa
 			return m_surface.colourTexture;
 		}
 
+		inline renderer::UniformBuffer< castor::Point4i > & getUbo()
+		{
+			return *m_ubo;
+		}
+
+		inline glsl::Shader const & getVertexShader()const
+		{
+			return m_vertexShader;
+		}
+
+		inline glsl::Shader const & getPixelShader()const
+		{
+			return m_pixelShader;
+		}
+
 	private:
 		void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
 			, renderer::DescriptorSet & descriptorSet )override;
@@ -52,6 +67,8 @@ namespace smaa
 		renderer::UniformBufferPtr< castor::Point4i > m_ubo;
 		castor3d::TextureLayoutSPtr m_areaTex;
 		castor3d::TextureLayoutSPtr m_searchTex;
+		glsl::Shader m_vertexShader;
+		glsl::Shader m_pixelShader;
 	};
 }
 

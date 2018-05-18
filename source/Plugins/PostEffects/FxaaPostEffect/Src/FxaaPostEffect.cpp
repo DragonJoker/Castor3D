@@ -181,6 +181,7 @@ namespace fxaa
 		, castor3d::RenderSystem & renderSystem
 		, castor3d::Parameters const & parameters )
 		: castor3d::PostEffect{ PostEffect::Type
+			, PostEffect::Name
 			, renderTarget
 			, renderSystem
 			, parameters }
@@ -229,6 +230,31 @@ namespace fxaa
 		, castor3d::Parameters const & params )
 	{
 		return std::make_shared< PostEffect >( renderTarget, renderSystem, params );
+	}
+
+	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
+	{
+		visitor.visit( cuT( "FXAA" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_vertexShader );
+		visitor.visit( cuT( "FXAA" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_pixelShader );
+		visitor.visit( cuT( "FXAA" )
+			, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment
+			, cuT( "FXAA" )
+			, cuT( "SubPixShift" )
+			, m_subpixShift );
+		visitor.visit( cuT( "FXAA" )
+			, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment
+			, cuT( "FXAA" )
+			, cuT( "SpanMax" )
+			, m_spanMax );
+		visitor.visit( cuT( "FXAA" )
+			, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment
+			, cuT( "FXAA" )
+			, cuT( "ReduceMul" )
+			, m_reduceMul );
 	}
 
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
@@ -280,14 +306,14 @@ namespace fxaa
 		{
 			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment },
 		};
-		auto vtx = getFxaaVertexProgram( getRenderSystem() );
-		auto pxl = getFxaaFragmentProgram( getRenderSystem() );
+		m_vertexShader = getFxaaVertexProgram( getRenderSystem() );
+		m_pixelShader = getFxaaFragmentProgram( getRenderSystem() );
 
 		renderer::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
 		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( vtx.getSource() );
-		stages[1].module->loadShader( pxl.getSource() );
+		stages[0].module->loadShader( m_vertexShader.getSource() );
+		stages[1].module->loadShader( m_pixelShader.getSource() );
 
 		m_fxaaQuad = std::make_unique< RenderQuad >( *getRenderSystem()
 			, castor::Size{ size.width, size.height } );
@@ -304,43 +330,48 @@ namespace fxaa
 			, castor::Size{ size.width, size.height }
 			, m_sampler
 			, m_target->getPixelFormat() );
+		castor3d::CommandsSemaphore commands
+		{
+			device.getGraphicsCommandPool().createCommandBuffer(),
+			device.createSemaphore()
+		};
+		auto & cmd = *commands.commandBuffer;
 
 		if ( result )
 		{
 			// Initialise the command buffer.
-			m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
-
-			if ( m_commandBuffer->begin() )
+			if ( cmd.begin() )
 			{
 				auto & targetImage = m_target->getTexture();
 				auto & targetView = m_target->getDefaultView();
 				auto & surfaceImage = m_surface.colourTexture->getTexture();
 				auto & surfaceView = m_surface.colourTexture->getDefaultView();
 
-				m_commandBuffer->resetQueryPool( timer.getQuery()
+				cmd.resetQueryPool( timer.getQuery()
 					, 0u
 					, 2u );
-				m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+				cmd.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
 					, timer.getQuery()
 					, 0u );
 
 				// Put target image in shader input layout.
-				m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+				cmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 					, renderer::PipelineStageFlag::eFragmentShader
 					, targetView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
 
 				// Render the effect.
-				m_commandBuffer->beginRenderPass( *m_renderPass
+				cmd.beginRenderPass( *m_renderPass
 					, *m_surface.frameBuffer
 					, { renderer::ClearColorValue{} }
 					, renderer::SubpassContents::eInline );
-				m_fxaaQuad->registerFrame( *m_commandBuffer );
-				m_commandBuffer->endRenderPass();
+				m_fxaaQuad->registerFrame( cmd );
+				cmd.endRenderPass();
 
-				m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+				cmd.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
 					, timer.getQuery()
 					, 1u );
-				m_commandBuffer->end();
+				cmd.end();
+				m_commands.emplace_back( std::move( commands ) );
 			}
 		}
 
@@ -354,7 +385,6 @@ namespace fxaa
 	void PostEffect::doCleanup()
 	{
 		m_fxaaQuad.reset();
-		m_commandBuffer.reset();
 		m_surface.cleanup();
 		m_renderPass.reset();
 	}

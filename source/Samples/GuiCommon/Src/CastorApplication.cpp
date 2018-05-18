@@ -22,6 +22,8 @@
 #include "xpms/animation_sel.xpm"
 #include "xpms/billboard.xpm"
 #include "xpms/billboard_sel.xpm"
+#include "xpms/bone.xpm"
+#include "xpms/bone_sel.xpm"
 #include "xpms/border_panel.xpm"
 #include "xpms/border_panel_sel.xpm"
 #include "xpms/camera.xpm"
@@ -47,12 +49,16 @@
 #include "xpms/panel_sel.xpm"
 #include "xpms/point.xpm"
 #include "xpms/point_sel.xpm"
+#include "xpms/post_effect.xpm"
+#include "xpms/post_effect_sel.xpm"
 #include "xpms/render_target.xpm"
 #include "xpms/render_target_sel.xpm"
 #include "xpms/render_window.xpm"
 #include "xpms/render_window_sel.xpm"
 #include "xpms/scene.xpm"
 #include "xpms/scene_sel.xpm"
+#include "xpms/skeleton.xpm"
+#include "xpms/skeleton_sel.xpm"
 #include "xpms/spot.xpm"
 #include "xpms/spot_sel.xpm"
 #include "xpms/submesh.xpm"
@@ -61,6 +67,8 @@
 #include "xpms/text_sel.xpm"
 #include "xpms/texture.xpm"
 #include "xpms/texture_sel.xpm"
+#include "xpms/tone_mapping.xpm"
+#include "xpms/tone_mapping_sel.xpm"
 #include "xpms/viewport.xpm"
 #include "xpms/viewport_sel.xpm"
 
@@ -334,8 +342,12 @@ namespace GuiCommon
 		ImagesLoader::addBitmap( eBMP_ANIMATED_OBJECT_SEL, animated_object_sel_xpm );
 		ImagesLoader::addBitmap( eBMP_ANIMATION, animation_xpm );
 		ImagesLoader::addBitmap( eBMP_ANIMATION_SEL, animation_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_BONE, bone_xpm );
+		ImagesLoader::addBitmap( eBMP_BONE_SEL, bone_sel_xpm );
 		ImagesLoader::addBitmap( eBMP_SCENE, scene_xpm );
 		ImagesLoader::addBitmap( eBMP_SCENE_SEL, scene_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_SKELETON, skeleton_xpm );
+		ImagesLoader::addBitmap( eBMP_SKELETON_SEL, skeleton_sel_xpm );
 		ImagesLoader::addBitmap( eBMP_NODE, node_xpm );
 		ImagesLoader::addBitmap( eBMP_NODE_SEL, node_sel_xpm );
 		ImagesLoader::addBitmap( eBMP_CAMERA, camera_xpm );
@@ -366,6 +378,10 @@ namespace GuiCommon
 		ImagesLoader::addBitmap( eBMP_BILLBOARD_SEL, billboard_sel_xpm );
 		ImagesLoader::addBitmap( eBMP_VIEWPORT, viewport_xpm );
 		ImagesLoader::addBitmap( eBMP_VIEWPORT_SEL, viewport_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_POST_EFFECT, post_effect_xpm );
+		ImagesLoader::addBitmap( eBMP_POST_EFFECT_SEL, post_effect_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_TONE_MAPPING, tone_mapping_xpm );
+		ImagesLoader::addBitmap( eBMP_TONE_MAPPING_SEL, tone_mapping_sel_xpm );
 		ImagesLoader::addBitmap( eBMP_RENDER_TARGET, render_target_xpm );
 		ImagesLoader::addBitmap( eBMP_RENDER_TARGET_SEL, render_target_sel_xpm );
 		ImagesLoader::addBitmap( eBMP_RENDER_WINDOW, render_window_xpm );

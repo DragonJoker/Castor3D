@@ -33,6 +33,7 @@ namespace smaa
 		, castor3d::RenderSystem & renderSystem
 		, castor3d::Parameters const & parameters )
 		: castor3d::PostEffect{ PostEffect::Type
+			, PostEffect::Name
 			, renderTarget
 			, renderSystem
 			, parameters
@@ -152,24 +153,65 @@ namespace smaa
 			, parameters );
 	}
 
+	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
+	{
+		visitor.visit( cuT( "EdgeDetection" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_edgeDetection->getVertexShader() );
+		visitor.visit( cuT( "EdgeDetection" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_edgeDetection->getPixelShader() );
+
+		visitor.visit( cuT( "BlendingWeightCalculation" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_blendingWeightCalculation->getVertexShader() );
+		visitor.visit( cuT( "BlendingWeightCalculation" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_blendingWeightCalculation->getPixelShader() );
+
+		visitor.visit( cuT( "NeighbourhoodBlending" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_neighbourhoodBlending->getVertexShader() );
+		visitor.visit( cuT( "NeighbourhoodBlending" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_neighbourhoodBlending->getPixelShader() );
+
+		if ( m_mode == Mode::eT2X )
+		{
+			uint32_t index = 0;
+
+			for ( auto & reproject : m_reproject )
+			{
+				visitor.visit( cuT( "Reproject " ) + string::toString( index, std::locale{ "C" } )
+					, renderer::ShaderStageFlag::eVertex
+					, reproject->getVertexShader() );
+				visitor.visit( cuT( "Reproject " ) + string::toString( index, std::locale{ "C" } )
+					, renderer::ShaderStageFlag::eFragment
+					, reproject->getPixelShader() );
+				++index;
+			}
+		}
+	}
+
 	void PostEffect::update( castor::Nanoseconds const & elapsedTime )
 	{
-		auto prvIndex = m_subsampleIndex;
-		auto curIndex = ( m_subsampleIndex + 1 ) % uint32_t( m_jitters.size() );
-
-		if ( prvIndex != curIndex )
+		if ( m_maxSubsampleIndices > 1u )
 		{
-			std::swap( m_commandBuffer, m_commandBuffers[prvIndex] );
-			std::swap( m_commandBuffer, m_commandBuffers[curIndex] );
+			std::swap( m_commands, m_commandBuffers[m_curIndex] );
+			m_curIndex = ( m_subsampleIndex + 1 ) % m_maxSubsampleIndices;
+			std::swap( m_commands, m_commandBuffers[m_curIndex] );
 		}
 
 		m_blendingWeightCalculation->update( m_smaaSubsampleIndices[m_subsampleIndex] );
-		m_subsampleIndex = curIndex;
+		m_subsampleIndex = m_curIndex;
 		m_renderTarget.setJitter( m_jitters[m_subsampleIndex] );
 	}
 
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
 	{
+		m_srgbTexture = &m_target->getDefaultView();
+		m_hdrTexture = &m_renderTarget.getTechnique()->getResult().getDefaultView();
+
 		m_pointSampler->initialise();
 		m_linearSampler->initialise();
 		doInitialiseEdgeDetection();
@@ -198,95 +240,151 @@ namespace smaa
 	{
 		for ( uint32_t i = 0u; i < m_maxSubsampleIndices; ++i )
 		{
-			m_commandBuffers.push_back( doBuildCommandBuffer( timer, i ) );
+			m_commandBuffers.emplace_back( doBuildCommandBuffer( timer, i ) );
 		}
 
 		if ( m_maxSubsampleIndices == 1 )
 		{
-			m_commandBuffer = std::move( m_commandBuffers[0] );
+			m_commands = std::move( m_commandBuffers[0] );
+		}
+		else
+		{
+			m_curIndex = m_maxSubsampleIndices - 1u;
+			m_subsampleIndex = m_curIndex;
+			std::swap( m_commands, m_commandBuffers[m_curIndex] );
 		}
 	}
 
-	renderer::CommandBufferPtr PostEffect::doBuildCommandBuffer( castor3d::RenderPassTimer const & timer
+	castor3d::CommandsSemaphoreArray PostEffect::doBuildCommandBuffer( castor3d::RenderPassTimer const & timer
 		, uint32_t index )
 	{
-		auto & srgbTexture = m_renderTarget.getTexture().getTexture()->getDefaultView();
-		auto & hdrTexture = m_target->getDefaultView();
-
 		auto & renderSystem = *m_renderTarget.getEngine()->getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
-		renderer::CommandBufferPtr result = device.getGraphicsCommandPool().createCommandBuffer();
+		castor3d::CommandsSemaphoreArray result;
 
-		if ( result->begin() )
+		castor3d::CommandsSemaphore edgeDetectionCommands
 		{
-			result->resetQueryPool( timer.getQuery()
+			device.getGraphicsCommandPool().createCommandBuffer(),
+			device.createSemaphore()
+		};
+		auto & edgeDetectionCmd = *edgeDetectionCommands.commandBuffer;
+
+		if ( edgeDetectionCmd.begin() )
+		{
+			edgeDetectionCmd.resetQueryPool( timer.getQuery()
 				, 0u
 				, 2u );
-			result->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			edgeDetectionCmd.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
 				, timer.getQuery()
 				, 0u );
 			// Put SRGB image in shader input layout.
-			result->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+			edgeDetectionCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
-				, srgbTexture.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+				, m_srgbTexture->makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
 			// Put HDR image in shader input layout.
-			result->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+			edgeDetectionCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
-				, hdrTexture.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+				, m_hdrTexture->makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
 
-			result->beginRenderPass( m_edgeDetection->getRenderPass()
+			edgeDetectionCmd.beginRenderPass( m_edgeDetection->getRenderPass()
 				, m_edgeDetection->getFrameBuffer()
 				, { renderer::ClearColorValue{}, renderer::DepthStencilClearValue{ 1.0f, 0 } }
 				, renderer::SubpassContents::eInline );
-			m_edgeDetection->registerFrame( *result );
-			result->endRenderPass();
-			
+			m_edgeDetection->registerFrame( edgeDetectionCmd );
+			edgeDetectionCmd.endRenderPass();
+			edgeDetectionCmd.end();
+			result.emplace_back( std::move( edgeDetectionCommands ) );
+		}
+
+		castor3d::CommandsSemaphore blendingWeightCommands
+		{
+			device.getGraphicsCommandPool().createCommandBuffer(),
+			device.createSemaphore()
+		};
+		auto & blendingWeightCmd = *blendingWeightCommands.commandBuffer;
+
+		if ( blendingWeightCmd.begin() )
+		{
 			// Put edge detection image in shader input layout.
-			result->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+			blendingWeightCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
 				, m_edgeDetection->getSurface()->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
-			result->beginRenderPass( m_blendingWeightCalculation->getRenderPass()
+			blendingWeightCmd.beginRenderPass( m_blendingWeightCalculation->getRenderPass()
 				, m_blendingWeightCalculation->getFrameBuffer()
 				, { renderer::ClearColorValue{}, renderer::DepthStencilClearValue{ 1.0f, 0 } }
 				, renderer::SubpassContents::eInline );
-			m_blendingWeightCalculation->registerFrame( *result );
-			result->endRenderPass();
+			m_blendingWeightCalculation->registerFrame( blendingWeightCmd );
+			blendingWeightCmd.endRenderPass();
+			blendingWeightCmd.end();
+			result.emplace_back( std::move( blendingWeightCommands ) );
+		}
 
+		castor3d::CommandsSemaphore neighbourhoodBlendingCommands
+		{
+			device.getGraphicsCommandPool().createCommandBuffer(),
+			device.createSemaphore()
+		};
+		auto & neighbourhoodBlendingCmd = *neighbourhoodBlendingCommands.commandBuffer;
+
+		if ( neighbourhoodBlendingCmd.begin() )
+		{
 			// Put blending weights image in shader input layout.
-			result->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+			neighbourhoodBlendingCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
 				, m_blendingWeightCalculation->getSurface()->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
-			result->beginRenderPass( m_neighbourhoodBlending->getRenderPass()
+			neighbourhoodBlendingCmd.beginRenderPass( m_neighbourhoodBlending->getRenderPass()
 				, m_neighbourhoodBlending->getFrameBuffer( index )
 				, { renderer::ClearColorValue{} }
 				, renderer::SubpassContents::eInline );
-			m_neighbourhoodBlending->registerFrame( *result );
-			result->endRenderPass();
-			auto resultSurface = m_neighbourhoodBlending->getSurface( index );
-
-			if ( m_mode == Mode::eT2X )
-			{
-				auto & reproject = *m_reproject[index];
-				// Put neighbourhood image in shader input layout.
-				result->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-					, renderer::PipelineStageFlag::eFragmentShader
-					, resultSurface->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
-				result->beginRenderPass( reproject.getRenderPass()
-					, reproject.getFrameBuffer()
-					, { renderer::ClearColorValue{} }
-					, renderer::SubpassContents::eInline );
-				reproject.registerFrame( *result );
-				result->endRenderPass();
-				resultSurface = reproject.getSurface();
-			}
-
-			doCopyResultToTarget( resultSurface->getDefaultView()
-				, *result );
-			result->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
-				, timer.getQuery()
-				, 1u );
-			result->end();
+			m_neighbourhoodBlending->registerFrame( neighbourhoodBlendingCmd );
+			neighbourhoodBlendingCmd.endRenderPass();
+			neighbourhoodBlendingCmd.end();
+			result.emplace_back( std::move( neighbourhoodBlendingCommands ) );
 		}
+
+		auto resultSurface = m_neighbourhoodBlending->getSurface( index );
+
+		if ( m_mode == Mode::eT2X )
+		{
+			castor3d::CommandsSemaphore reprojectCommands
+			{
+				device.getGraphicsCommandPool().createCommandBuffer(),
+				device.createSemaphore()
+			};
+			auto & reprojectCmd = *reprojectCommands.commandBuffer;
+
+			reprojectCmd.begin();
+			auto & reproject = *m_reproject[index];
+			// Put neighbourhood image in shader input layout.
+			reprojectCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+				, renderer::PipelineStageFlag::eFragmentShader
+				, resultSurface->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+			reprojectCmd.beginRenderPass( reproject.getRenderPass()
+				, reproject.getFrameBuffer()
+				, { renderer::ClearColorValue{} }
+				, renderer::SubpassContents::eInline );
+			reproject.registerFrame( reprojectCmd );
+			reprojectCmd.endRenderPass();
+			reprojectCmd.end();
+			result.emplace_back( std::move( reprojectCommands ) );
+			resultSurface = reproject.getSurface();
+		}
+
+		castor3d::CommandsSemaphore copyCommands
+		{
+			device.getGraphicsCommandPool().createCommandBuffer(),
+			device.createSemaphore()
+		};
+		auto & copyCmd = *copyCommands.commandBuffer;
+
+		copyCmd.begin();
+		doCopyResultToTarget( resultSurface->getDefaultView()
+			, copyCmd );
+		copyCmd.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
+			, timer.getQuery()
+			, 1u );
+		copyCmd.end();
+		result.emplace_back( std::move( copyCommands ) );
 
 		return result;
 	}
@@ -359,18 +457,18 @@ namespace smaa
 
 	void PostEffect::doInitialiseEdgeDetection()
 	{
-		renderer::TextureView const * predicationView = nullptr;
+		renderer::Texture const * predication = nullptr;
 
 		switch ( m_mode )
 		{
 		case Mode::eT2X:
-			predicationView = &m_renderTarget.getTechnique()->getDepth().getDefaultView();
+			predication = &m_renderTarget.getTechnique()->getDepth().getTexture();
 			break;
 		}
 
 		m_edgeDetection = std::make_unique< EdgeDetection >( m_renderTarget
-			, m_renderTarget.getTechnique()->getResult().getDefaultView()
-			, predicationView
+			, *m_hdrTexture
+			, predication
 			, m_linearSampler
 			, m_smaaThreshold
 			, m_smaaPredicationThreshold
@@ -417,10 +515,10 @@ namespace smaa
 
 		for ( uint32_t i = 0u; i < m_maxSubsampleIndices; ++i )
 		{
-			auto & previous = m_neighbourhoodBlending->getSurface( i )->getDefaultView();
-			auto & current = i == m_maxSubsampleIndices - 1
-				? m_neighbourhoodBlending->getSurface( 0 )->getDefaultView()
-				: m_neighbourhoodBlending->getSurface( i )->getDefaultView();
+			auto & previous = i == 0u
+				? m_neighbourhoodBlending->getSurface( m_maxSubsampleIndices - 1 )->getDefaultView()
+				: m_neighbourhoodBlending->getSurface( i - 1 )->getDefaultView();
+			auto & current = m_neighbourhoodBlending->getSurface( i )->getDefaultView();
 			m_reproject.emplace_back( std::make_unique< Reproject >( m_renderTarget
 				, current
 				, previous

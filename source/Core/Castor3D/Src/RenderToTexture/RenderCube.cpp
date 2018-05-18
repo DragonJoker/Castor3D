@@ -55,25 +55,25 @@ namespace castor3d
 			return sampler;
 		}
 
-		renderer::UniformBufferPtr< renderer::Mat4 > doCreateMatrixUbo( renderer::Device const & device
+		renderer::UniformBufferPtr< castor::Matrix4x4f > doCreateMatrixUbo( renderer::Device const & device
 			, renderer::CommandBuffer const & commandBuffer
 			, bool srcIsCube )
 		{
-			static renderer::Mat4 const projection = device.perspective( float( 90.0_degrees ), 1.0f, 0.1f, 10.0f );
+			static castor::Matrix4x4f const projection = convert( device.perspective( float( 90.0_degrees ), 1.0f, 0.1f, 10.0f ) );
 
-			auto result = renderer::makeUniformBuffer< renderer::Mat4 >( device
+			auto result = renderer::makeUniformBuffer< castor::Matrix4x4f >( device
 				, 6u
 				, renderer::BufferTarget::eTransferDst
 				, renderer::MemoryPropertyFlag::eDeviceLocal );
 
-			renderer::Mat4 const views[] =
+			castor::Matrix4x4f const views[] =
 			{
-				convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +1.0f, +0.0f, +0.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ) ),
-				convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ -1.0f, +0.0f, +0.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ) ),
-				convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +1.0f, +0.0f }, Point3f{ 0.0f, +0.0f, +1.0f } ) ),
-				convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, -1.0f, +0.0f }, Point3f{ 0.0f, +0.0f, -1.0f } ) ),
-				convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +0.0f, +1.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ) ),
-				convert( matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +0.0f, -1.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ) )
+				matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +1.0f, +0.0f, +0.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ),
+				matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ -1.0f, +0.0f, +0.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ),
+				matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +1.0f, +0.0f }, Point3f{ 0.0f, +0.0f, +1.0f } ),
+				matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, -1.0f, +0.0f }, Point3f{ 0.0f, +0.0f, -1.0f } ),
+				matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +0.0f, +1.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ),
+				matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +0.0f, -1.0f }, Point3f{ 0.0f, -1.0f, +0.0f } )
 			};
 
 			result->getData( 0u ) = projection * views[0];
@@ -92,19 +92,19 @@ namespace castor3d
 			return result;
 		}
 
-		renderer::VertexBufferPtr< renderer::Vec4 > doCreateVertexBuffer( renderer::Device const & device
+		renderer::VertexBufferPtr< castor::Point4f > doCreateVertexBuffer( renderer::Device const & device
 			, renderer::CommandBuffer const & commandBuffer )
 		{
-			std::vector< renderer::Vec4 > vertexData
+			std::vector< castor::Point4f > vertexData
 			{
-				{ -1, +1, -1, +1 }, { +1, -1, -1, +1 }, { -1, -1, -1, +1 }, { +1, -1, -1, +1 }, { -1, +1, -1, +1 }, { +1, +1, -1, +1 },// Back
-				{ -1, -1, +1, +1 }, { -1, +1, -1, +1 }, { -1, -1, -1, +1 }, { -1, +1, -1, +1 }, { -1, -1, +1, +1 }, { -1, +1, +1, +1 },// Left
-				{ +1, -1, -1, +1 }, { +1, +1, +1, +1 }, { +1, -1, +1, +1 }, { +1, +1, +1, +1 }, { +1, -1, -1, +1 }, { +1, +1, -1, +1 },// Right
-				{ -1, -1, +1, +1 }, { +1, +1, +1, +1 }, { -1, +1, +1, +1 }, { +1, +1, +1, +1 }, { -1, -1, +1, +1 }, { +1, -1, +1, +1 },// Front
-				{ -1, +1, -1, +1 }, { +1, +1, +1, +1 }, { +1, +1, -1, +1 }, { +1, +1, +1, +1 }, { -1, +1, -1, +1 }, { -1, +1, +1, +1 },// Top
-				{ -1, -1, -1, +1 }, { +1, -1, -1, +1 }, { -1, -1, +1, +1 }, { +1, -1, -1, +1 }, { +1, -1, +1, +1 }, { -1, -1, +1, +1 },// Bottom
+				castor::Point4f{ -1, +1, -1, +1 }, castor::Point4f{ +1, -1, -1, +1 }, castor::Point4f{ -1, -1, -1, +1 }, castor::Point4f{ +1, -1, -1, +1 }, castor::Point4f{ -1, +1, -1, +1 }, castor::Point4f{ +1, +1, -1, +1 },// Back
+				castor::Point4f{ -1, -1, +1, +1 }, castor::Point4f{ -1, +1, -1, +1 }, castor::Point4f{ -1, -1, -1, +1 }, castor::Point4f{ -1, +1, -1, +1 }, castor::Point4f{ -1, -1, +1, +1 }, castor::Point4f{ -1, +1, +1, +1 },// Left
+				castor::Point4f{ +1, -1, -1, +1 }, castor::Point4f{ +1, +1, +1, +1 }, castor::Point4f{ +1, -1, +1, +1 }, castor::Point4f{ +1, +1, +1, +1 }, castor::Point4f{ +1, -1, -1, +1 }, castor::Point4f{ +1, +1, -1, +1 },// Right
+				castor::Point4f{ -1, -1, +1, +1 }, castor::Point4f{ +1, +1, +1, +1 }, castor::Point4f{ -1, +1, +1, +1 }, castor::Point4f{ +1, +1, +1, +1 }, castor::Point4f{ -1, -1, +1, +1 }, castor::Point4f{ +1, -1, +1, +1 },// Front
+				castor::Point4f{ -1, +1, -1, +1 }, castor::Point4f{ +1, +1, +1, +1 }, castor::Point4f{ +1, +1, -1, +1 }, castor::Point4f{ +1, +1, +1, +1 }, castor::Point4f{ -1, +1, -1, +1 }, castor::Point4f{ -1, +1, +1, +1 },// Top
+				castor::Point4f{ -1, -1, -1, +1 }, castor::Point4f{ +1, -1, -1, +1 }, castor::Point4f{ -1, -1, +1, +1 }, castor::Point4f{ +1, -1, -1, +1 }, castor::Point4f{ +1, -1, +1, +1 }, castor::Point4f{ -1, -1, +1, +1 },// Bottom
 			};
-			auto result = renderer::makeVertexBuffer< renderer::Vec4 >( device
+			auto result = renderer::makeVertexBuffer< castor::Point4f >( device
 				, uint32_t( vertexData.size() )
 				, renderer::BufferTarget::eTransferDst
 				, renderer::MemoryPropertyFlag::eDeviceLocal );
@@ -123,7 +123,7 @@ namespace castor3d
 			renderer::VertexInputState result;
 			result.vertexBindingDescriptions.push_back( {
 				0u,
-				uint32_t( sizeof( renderer::Vec4 ) ),
+				uint32_t( sizeof( castor::Point4f ) ),
 				renderer::VertexInputRate::eVertex
 			} );
 			result.vertexAttributeDescriptions.push_back( {

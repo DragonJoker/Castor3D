@@ -10,11 +10,10 @@ namespace GuiCommon
 {
 	FrameVariableBufferTreeItemProperty::FrameVariableBufferTreeItemProperty( Engine * engine
 		, bool editable
-		, renderer::UniformBufferBase & buffer )
-		: TreeItemProperty( engine, editable, ePROPERTY_DATA_TYPE_CAMERA )
-		, m_buffer( buffer )
+		, UniformBufferValues & buffer )
+		: TreeItemProperty{ engine, editable, ePROPERTY_DATA_TYPE_CAMERA }
+		, m_buffer{ buffer }
 	{
-
 		CreateTreeItemMenu();
 	}
 

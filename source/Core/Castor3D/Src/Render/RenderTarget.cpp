@@ -78,14 +78,9 @@ namespace castor3d
 			castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget tone mapping" );
 		}
 
-		if ( result
-			&& target.m_renderTechnique
-			&& target.m_renderTechnique->isMultisampling() )
+		if ( result )
 		{
-			result = file.writeText( m_tabs + cuT( "\t" ) )
-				&& target.m_renderTechnique->writeInto( file )
-				&& file.writeText( cuT( "\n" ) ) > 0;
-			castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget technique" );
+			result = HdrConfig::TextWriter( m_tabs + cuT( "\t" ) )( target.getHdrConfig(), file );
 		}
 
 		if ( result )
@@ -100,6 +95,18 @@ namespace castor3d
 		}
 
 		if ( result )
+			if ( result )
+			{
+				for ( auto const & effect : target.m_srgbPostEffects )
+				{
+					result = file.writeText( m_tabs + cuT( "\tpostfx \"" ) + effect->getName() + cuT( "\"" ) )
+						&& effect->writeInto( file )
+						&& file.writeText( cuT( "\n" ) ) > 0;
+					castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget post effect" );
+				}
+			}
+
+
 		{
 			result = SsaoConfig::TextWriter{ m_tabs + cuT( "\t" ) }( target.m_ssaoConfig, file );
 		}
@@ -170,7 +177,7 @@ namespace castor3d
 	RenderTarget::RenderTarget( Engine & engine, TargetType type )
 		: OwnedBy< Engine >{ engine }
 		, m_type{ type }
-		, m_pixelFormat{ PixelFormat::eA8R8G8B8 }
+		, m_pixelFormat{ renderer::Format::eR8G8B8A8_UNORM }
 		, m_initialised{ false }
 		, m_size{ Size{ 100u, 100u } }
 		, m_renderTechnique{}
@@ -179,7 +186,10 @@ namespace castor3d
 		, m_flippedFrameBuffer{ *this }
 		, m_velocityTexture{ engine }
 	{
-		m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( cuT( "linear" ), *getEngine(), Parameters{} );
+		m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( cuT( "linear" )
+			, *getEngine()
+			, m_hdrConfig
+			, Parameters{} );
 		SamplerSPtr sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + string::toString( m_index ) );
 		sampler->setMinFilter( renderer::Filter::eLinear );
 		sampler->setMagFilter( renderer::Filter::eLinear );
@@ -379,7 +389,10 @@ namespace castor3d
 			} ) );
 		}
 
-		m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( name, *getEngine(), parameters );
+		m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( name
+			, *getEngine()
+			, m_hdrConfig
+			, parameters );
 	}
 
 	void RenderTarget::addPostEffect( PostEffectSPtr effect )
@@ -674,7 +687,7 @@ namespace castor3d
 		auto elapsedTime = m_timer.getElapsed();
 		auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
 		SceneSPtr scene = getScene();
-		m_toneMapping->update( scene->getHdrConfig() );
+		m_toneMapping->update();
 		renderer::SemaphoreCRefArray signalsToWait;
 		
 		if ( m_type == TargetType::eWindow )
@@ -735,16 +748,21 @@ namespace castor3d
 
 			for ( auto effect : effects )
 			{
-				m_fence->reset();
 				effect->update( elapsedTime );
-				queue.submit( effect->getCommands()
-					, *result
-					, renderer::PipelineStageFlag::eColourAttachmentOutput
-					, effect->getSemaphore()
-					, m_fence.get() );
-				m_fence->wait( renderer::FenceTimeout );
+
+				for ( auto & commands : effect->getCommands() )
+				{
+					m_fence->reset();
+					queue.submit( *commands.commandBuffer
+						, *result
+						, renderer::PipelineStageFlag::eColourAttachmentOutput
+						, *commands.semaphore
+						, m_fence.get() );
+					m_fence->wait( renderer::FenceTimeout );
+					result = commands.semaphore.get();
+				}
+
 				timer.step();
-				result = &effect->getSemaphore();
 			}
 
 			m_fence->reset();

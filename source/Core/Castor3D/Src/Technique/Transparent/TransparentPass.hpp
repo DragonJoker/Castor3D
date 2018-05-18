@@ -147,6 +147,24 @@ namespace castor3d
 		 */
 		renderer::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
 		/**
+		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
+		 */
+		void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, BillboardListRenderNode & nodes
+			, ShadowMapLightTypeArray const & shadowMaps )override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
+		 */
+		void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, SubmeshRenderNode & nodes
+			, ShadowMapLightTypeArray const & shadowMaps )override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
+		 */
+		renderer::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
+		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
 		glsl::Shader doGetVertexShaderSource( PassFlags const & passFlags

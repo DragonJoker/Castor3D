@@ -32,6 +32,7 @@ namespace HaarmPieterDuiker
 		 *\param[in]	parameters	Les paramètres spécifiques à l'implémentation.
 		 */
 		ToneMapping( castor3d::Engine & engine
+			, castor3d::HdrConfig & hdrConfig
 			, castor3d::Parameters const & parameters );
 		/**
 		 *\~english
@@ -51,6 +52,7 @@ namespace HaarmPieterDuiker
 		 *\param[in]	parameters	Les paramètres spécifiques à l'implémentation.
 		 */
 		static castor3d::ToneMappingSPtr create( castor3d::Engine & engine
+			, castor3d::HdrConfig & hdrConfig
 			, castor3d::Parameters const & parameters );
 
 	private:
@@ -68,6 +70,7 @@ namespace HaarmPieterDuiker
 		virtual void doUpdate()override;
 
 	public:
+		static castor::String Type;
 		static castor::String Name;
 	};
 }

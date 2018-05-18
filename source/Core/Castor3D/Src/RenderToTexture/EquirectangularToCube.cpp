@@ -35,17 +35,8 @@ namespace castor3d
 	namespace
 	{
 		renderer::ShaderStageStateArray doCreateProgram( RenderSystem & renderSystem
-			, renderer::Format format
-			, float gamma )
+			, renderer::Format format )
 		{
-			bool hdr = format == renderer::Format::eR32_SFLOAT
-				|| format == renderer::Format::eR32G32_SFLOAT
-				|| format == renderer::Format::eR32G32B32_SFLOAT
-				|| format == renderer::Format::eR32G32B32A32_SFLOAT
-				|| format == renderer::Format::eR16_SFLOAT
-				|| format == renderer::Format::eR16G16_SFLOAT
-				|| format == renderer::Format::eR16G16B16_SFLOAT
-				|| format == renderer::Format::eR16G16B16A16_SFLOAT;
 			auto & device = *renderSystem.getCurrentDevice();
 
 			glsl::Shader vtx;
@@ -97,11 +88,6 @@ namespace castor3d
 				{
 					auto uv = writer.declLocale( cuT( "uv" ), sampleSphericalMap( normalize( vtx_position ) ) );
 					pxl_colour = vec4( texture( mapColour, writer.adjustTexCoords( uv ) ).rgb(), 1.0 );
-
-					if ( !hdr )
-					{
-						pxl_colour.rgb() = glsl::pow( pxl_colour.rgb(), vec3( Float( gamma ) ) );
-					}
 				};
 
 				writer.implementFunction< void >( cuT( "main" ), main );
@@ -163,8 +149,7 @@ namespace castor3d
 
 	EquirectangularToCube::EquirectangularToCube( TextureLayout const & equiRectangular
 		, RenderSystem & renderSystem
-		, TextureLayout const & target
-		, float gamma )
+		, TextureLayout const & target )
 		: RenderCube{ renderSystem, false }
 		, m_device{ *renderSystem.getCurrentDevice() }
 		, m_commandBuffer{ m_device.getGraphicsCommandPool().createCommandBuffer() }
@@ -172,7 +157,7 @@ namespace castor3d
 		, m_renderPass{ doCreateRenderPass( m_device, target.getPixelFormat() ) }
 	{
 		auto size = renderer::Extent2D{ target.getWidth(), target.getHeight() };
-		auto program = doCreateProgram( renderSystem, equiRectangular.getPixelFormat(), gamma );
+		auto program = doCreateProgram( renderSystem, equiRectangular.getPixelFormat() );
 		uint32_t face = 0u;
 
 		for ( auto & facePipeline : m_frameBuffers )

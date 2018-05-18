@@ -52,6 +52,7 @@ namespace castor3d
 		*/
 		void initialiseDescriptorSet( MatrixUbo const & matrixUbo
 			, ModelMatrixUbo const & modelMatrixUbo
+			, HdrConfigUbo const & hdrConfigUbo
 			, renderer::DescriptorSet & descriptorSet )const override;
 		/**
 		*\copydoc	castor3d::SceneBackground::accept

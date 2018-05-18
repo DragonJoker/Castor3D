@@ -18,7 +18,6 @@ See LICENSE file in root folder
 #include "Cache/ParticleSystemCache.hpp"
 #include "Cache/SamplerCache.hpp"
 
-#include "HDR/HdrConfig.hpp"
 #include "Scene/Background/Background.hpp"
 #include "Scene/Fog.hpp"
 #include "Scene/Shadow.hpp"
@@ -323,11 +322,6 @@ namespace castor3d
 			return m_initialised;
 		}
 
-		inline HdrConfig const & getHdrConfig()const
-		{
-			return m_config;
-		}
-
 		inline bool needsSubsurfaceScattering()const
 		{
 			return m_needsSubsurfaceScattering;
@@ -384,16 +378,6 @@ namespace castor3d
 		{
 			getEngine()->setMaterialsType( value );
 		}
-
-		inline void setExposure( float value )
-		{
-			m_config.setExposure( value );
-		}
-
-		inline void setGamma( float value )
-		{
-			m_config.setGamma( value );
-		}
 		/**@}*/
 
 	private:
@@ -436,7 +420,6 @@ namespace castor3d
 		FrameListenerWPtr m_listener;
 		std::map< SceneNode const *, std::unique_ptr< EnvironmentMap > > m_reflectionMaps;
 		std::vector< std::reference_wrapper< EnvironmentMap > > m_reflectionMapsArray;
-		HdrConfig m_config;
 		castor::ThreadPool m_animationUpdater;
 		bool m_needsSubsurfaceScattering{ false };
 		bool m_hasOpaqueObjects{ false };

@@ -13,6 +13,8 @@ See LICENSE file in root folder
 #include <Render/Viewport.hpp>
 #include <Shader/Ubos/MatrixUbo.hpp>
 
+#include <GlslShader.hpp>
+
 namespace fxaa
 {
 	class RenderQuad
@@ -44,6 +46,10 @@ namespace fxaa
 		static castor3d::PostEffectSPtr create( castor3d::RenderTarget & renderTarget
 			, castor3d::RenderSystem & renderSystem
 			, castor3d::Parameters const & params );
+		/**
+		 *\copydoc		castor3d::PostEffect::accept
+		 */
+		void accept( castor3d::PipelineVisitorBase & visitor )override;
 
 	private:
 		/**
@@ -71,6 +77,8 @@ namespace fxaa
 		castor3d::PostEffectSurface m_surface;
 		renderer::RenderPassPtr m_renderPass;
 		std::unique_ptr< RenderQuad > m_fxaaQuad;
+		glsl::Shader m_vertexShader;
+		glsl::Shader m_pixelShader;
 	};
 }
 

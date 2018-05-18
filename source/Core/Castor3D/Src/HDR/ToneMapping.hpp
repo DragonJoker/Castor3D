@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_TONE_MAPPING_H___
 #define ___C3D_TONE_MAPPING_H___
 
+#include "ToneMappingVisitor.hpp"
+
 #include "Render/RenderInfo.hpp"
 #include "RenderToTexture/RenderQuad.hpp"
 #include "Castor3DPrerequisites.hpp"
@@ -12,6 +14,8 @@ See LICENSE file in root folder
 
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
+
+#include <GlslShader.hpp>
 
 namespace castor3d
 {
@@ -34,16 +38,20 @@ namespace castor3d
 		 *\~english
 		 *\brief		Specified constructor.
 		 *\param[in]	name		The tone mapping name.
+		 *\param[in]	fullName	The tone mapping full (fancy) name.
 		 *\param[in]	engine		The engine.
 		 *\param[in]	parameters	The implementation specific parameters.
 		 *\~french
 		 *\brief		Constructeur spécifié.
 		 *\param[in]	name		Le nom du mappage de tons.
+		 *\param[in]	fullName	Le nom complet (et joli) du mappage de tons.
 		 *\param[in]	engine		Le moteur.
 		 *\param[in]	parameters	Les paramètres spécifiques à l'implémentation.
 		 */
 		C3D_API ToneMapping( castor::String const & name
+			, castor::String const & fullName
 			, Engine & engine
+			, HdrConfig & config
 			, Parameters const & parameters );
 		/**
 		 *\~english
@@ -76,9 +84,14 @@ namespace castor3d
 		 *\brief		Met à jour le tone mapping.
 		 *\param[in]	config	La configuration HDR.
 		 */
-		C3D_API void update( HdrConfig const & config );
-
-		using RenderQuad::registerFrame;
+		C3D_API void update();
+		/**
+		 *\~english
+		 *\brief		Visitor acceptance function.
+		 *\~french
+		 *\brief		Fonction d'acceptation de visiteur.
+		 */
+		C3D_API virtual void accept( ToneMappingVisitor & visitor );
 		/**
 		*\~english
 		*name
@@ -93,7 +106,15 @@ namespace castor3d
 			REQUIRE( m_signalFinished );
 			return *m_signalFinished;
 		}
+
+		inline castor::String const & getFullName()const
+		{
+			return m_fullName;
+		}
 		/**@}*/
+
+	public:
+		using RenderQuad::registerFrame;
 
 	private:
 		/**
@@ -127,9 +148,13 @@ namespace castor3d
 			, renderer::DescriptorSet & descriptorSet )override;
 
 	protected:
-		HdrConfigUbo m_configUbo;
+		castor::String m_fullName;
+		HdrConfig & m_config;
+		HdrConfigUbo m_hdrConfigUbo;
 		RenderPassTimerSPtr m_timer;
 		renderer::SemaphorePtr m_signalFinished;
+		glsl::Shader m_vertexShader;
+		glsl::Shader m_pixelShader;
 	};
 }
 

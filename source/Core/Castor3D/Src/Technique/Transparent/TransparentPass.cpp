@@ -1,9 +1,11 @@
 #include "TransparentPass.hpp"
 
 #include "Engine.hpp"
+#include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
+#include "Render/RenderNode/RenderNode_Render.hpp"
 #include "Scene/Scene.hpp"
 #include "Shader/Program.hpp"
 #include "Texture/Sampler.hpp"
@@ -111,6 +113,53 @@ namespace castor3d
 			createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 			return device.createRenderPass( createInfo );
+		}
+
+		void doBindTexture( renderer::TextureView const & view
+			, renderer::Sampler const & sampler
+			, renderer::WriteDescriptorSetArray & writes
+			, uint32_t & index )
+		{
+			writes.push_back( renderer::WriteDescriptorSet
+				{
+					index++,
+					0u,
+					1u,
+					renderer::DescriptorType::eCombinedImageSampler,
+				{
+					{
+						sampler,
+						view,
+						renderer::ImageLayout::eShaderReadOnlyOptimal
+					},
+				}
+				} );
+		}
+
+		void doBindShadowMaps( ShadowMapRefArray const & shadowMaps
+			, renderer::WriteDescriptorSetArray & writes
+			, uint32_t & index )
+		{
+			std::vector< renderer::DescriptorImageInfo > shadowMapWrites;
+
+			for ( auto & shadowMap : shadowMaps )
+			{
+				shadowMapWrites.push_back( {
+					shadowMap.get().getTexture().getSampler()->getSampler(),
+					shadowMap.get().getTexture().getTexture()->getDefaultView(),
+					renderer::ImageLayout::eShaderReadOnlyOptimal
+					} );
+			}
+
+			writes.push_back( renderer::WriteDescriptorSet
+				{
+					index,
+					0u,
+					uint32_t( shadowMapWrites.size() ),
+					renderer::DescriptorType::eCombinedImageSampler,
+					shadowMapWrites
+				} );
+			index += uint32_t( shadowMapWrites.size() );
 		}
 	}
 
@@ -228,6 +277,165 @@ namespace castor3d
 				renderer::BlendOp::eAdd,
 			} );
 		return bdState;
+	}
+
+	void TransparentPass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, BillboardListRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
+	{
+		renderer::WriteDescriptorSetArray writes;
+		node.passNode.fillDescriptor( layout
+			, index
+			, writes );
+
+		if ( node.passNode.pass.hasEnvironmentMapping() )
+		{
+			auto & envMap = m_scene.getEnvironmentMap( node.sceneNode );
+			doBindTexture( envMap.getTexture().getTexture()->getDefaultView()
+				, envMap.getTexture().getSampler()->getSampler()
+				, writes
+				, index );
+		}
+
+		if ( node.passNode.pass.getType() != MaterialType::eLegacy )
+		{
+			auto & background = node.sceneNode.getScene()->getBackground();
+
+			if ( background.hasIbl() )
+			{
+				auto & ibl = background.getIbl();
+				doBindTexture( ibl.getIrradianceTexture()
+					, ibl.getIrradianceSampler()
+					, writes
+					, index );
+				doBindTexture( ibl.getPrefilteredEnvironmentTexture()
+					, ibl.getPrefilteredEnvironmentSampler()
+					, writes
+					, index );
+				doBindTexture( ibl.getPrefilteredBrdfTexture()
+					, ibl.getPrefilteredBrdfSampler()
+					, writes
+					, index );
+			}
+		}
+
+		doBindShadowMaps( shadowMaps[size_t( LightType::eDirectional )], writes, index );
+		doBindShadowMaps( shadowMaps[size_t( LightType::eSpot )], writes, index );
+		doBindShadowMaps( shadowMaps[size_t( LightType::ePoint )], writes, index );
+		node.texDescriptorSet->setBindings( writes );
+	}
+
+	void TransparentPass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, SubmeshRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
+	{
+		renderer::WriteDescriptorSetArray writes;
+		node.passNode.fillDescriptor( layout
+			, index
+			, writes );
+
+		if ( node.passNode.pass.hasEnvironmentMapping() )
+		{
+			auto & envMap = m_scene.getEnvironmentMap( node.sceneNode );
+			doBindTexture( envMap.getTexture().getTexture()->getDefaultView()
+				, envMap.getTexture().getSampler()->getSampler()
+				, writes
+				, index );
+		}
+
+		if ( node.passNode.pass.getType() != MaterialType::eLegacy )
+		{
+			auto & background = node.sceneNode.getScene()->getBackground();
+
+			if ( background.hasIbl() )
+			{
+				auto & ibl = background.getIbl();
+				doBindTexture( ibl.getIrradianceTexture()
+					, ibl.getIrradianceSampler()
+					, writes
+					, index );
+				doBindTexture( ibl.getPrefilteredEnvironmentTexture()
+					, ibl.getPrefilteredEnvironmentSampler()
+					, writes
+					, index );
+				doBindTexture( ibl.getPrefilteredBrdfTexture()
+					, ibl.getPrefilteredBrdfSampler()
+					, writes
+					, index );
+			}
+		}
+
+		doBindShadowMaps( shadowMaps[size_t( LightType::eDirectional )], writes, index );
+		doBindShadowMaps( shadowMaps[size_t( LightType::eSpot )], writes, index );
+		doBindShadowMaps( shadowMaps[size_t( LightType::ePoint )], writes, index );
+		node.texDescriptorSet->setBindings( writes );
+	}
+
+	renderer::DescriptorSetLayoutBindingArray TransparentPass::doCreateTextureBindings( PipelineFlags const & flags )const
+	{
+		auto index = MinBufferIndex;
+		renderer::DescriptorSetLayoutBindingArray textureBindings;
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eDiffuse ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eSpecular ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eGloss ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eNormal ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eOpacity ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eHeight ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eAmbientOcclusion ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eEmissive ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eTransmittance ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eReflection )
+			|| checkFlag( flags.textureFlags, TextureChannel::eRefraction ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment, 1u );
+		textureBindings.emplace_back( index, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment, shader::SpotShadowMapCount );
+		index += shader::SpotShadowMapCount;
+		textureBindings.emplace_back( index, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment, shader::PointShadowMapCount );
+		index += shader::PointShadowMapCount;
+
+		return textureBindings;
 	}
 
 	glsl::Shader TransparentPass::doGetVertexShaderSource( PassFlags const & passFlags

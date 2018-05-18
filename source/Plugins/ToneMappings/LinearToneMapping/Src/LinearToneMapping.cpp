@@ -14,11 +14,13 @@ using namespace castor3d;
 
 namespace Linear
 {
-	String ToneMapping::Name = cuT( "linear" );
+	String ToneMapping::Type = cuT( "linear" );
+	String ToneMapping::Name = cuT( "Linear Tone Mapping" );
 
 	ToneMapping::ToneMapping( Engine & engine
+		, HdrConfig & hdrConfig
 		, Parameters const & parameters )
-		: castor3d::ToneMapping{ Name, engine, parameters }
+		: castor3d::ToneMapping{ Type, Name, engine, hdrConfig, parameters }
 	{
 	}
 
@@ -27,9 +29,12 @@ namespace Linear
 	}
 
 	ToneMappingSPtr ToneMapping::create( Engine & engine
+		, HdrConfig & hdrConfig
 		, Parameters const & parameters )
 	{
-		return std::make_shared< ToneMapping >( engine, parameters );
+		return std::make_shared< ToneMapping >( engine
+			, hdrConfig
+			, parameters );
 	}
 
 	glsl::Shader ToneMapping::doCreate()

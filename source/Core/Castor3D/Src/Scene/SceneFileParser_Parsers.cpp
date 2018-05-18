@@ -497,6 +497,17 @@ namespace castor3d
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eSsao )
+		
+	IMPLEMENT_ATTRIBUTE_PARSER( parserRenderTargetHdrConfig )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->renderTarget )
+		{
+			PARSING_ERROR( cuT( "No scene initialised." ) );
+		}
+	}
+	END_ATTRIBUTE_PUSH( CSCNSection::eHdrConfig )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( parserRenderTargetEnd )
 	{
@@ -1175,17 +1186,6 @@ namespace castor3d
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eParticleSystem )
-
-	IMPLEMENT_ATTRIBUTE_PARSER( parserSceneHdrConfig )
-	{
-		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-		if ( !parsingContext->scene )
-		{
-			PARSING_ERROR( cuT( "No scene initialised." ) );
-		}
-	}
-	END_ATTRIBUTE_PUSH( CSCNSection::eHdrConfig )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( parserMesh )
 	{
@@ -4905,9 +4905,9 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->scene )
+		if ( !parsingContext->renderTarget )
 		{
-			PARSING_ERROR( cuT( "No scene initialised." ) );
+			PARSING_ERROR( cuT( "No render target initialised." ) );
 		}
 		else if ( p_params.empty() )
 		{
@@ -4917,7 +4917,7 @@ namespace castor3d
 		{
 			float value;
 			p_params[0]->get( value );
-			parsingContext->scene->setExposure( value );
+			parsingContext->renderTarget->setExposure( value );
 		}
 	}
 	END_ATTRIBUTE()
@@ -4926,9 +4926,9 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !parsingContext->scene )
+		if ( !parsingContext->renderTarget )
 		{
-			PARSING_ERROR( cuT( "No scene initialised." ) );
+			PARSING_ERROR( cuT( "No render target initialised." ) );
 		}
 		else if ( p_params.empty() )
 		{
@@ -4938,7 +4938,7 @@ namespace castor3d
 		{
 			float value;
 			p_params[0]->get( value );
-			parsingContext->scene->setGamma( value );
+			parsingContext->renderTarget->setGamma( value );
 		}
 	}
 	END_ATTRIBUTE()

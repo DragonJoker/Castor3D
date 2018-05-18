@@ -12,7 +12,7 @@ namespace castor3d
 {
 	struct InstantiationData
 	{
-		renderer::Mat4 m_matrix;
+		castor::Matrix4x4f m_matrix;
 		int m_material;
 	};
 	/*!

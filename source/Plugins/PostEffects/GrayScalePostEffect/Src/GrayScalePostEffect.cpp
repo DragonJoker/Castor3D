@@ -94,7 +94,12 @@ namespace GrayScale
 	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
 		, castor3d::RenderSystem & renderSystem
 		, castor3d::Parameters const & params )
-		: castor3d::PostEffect{ PostEffect::Type, renderTarget, renderSystem, params, false }
+		: castor3d::PostEffect{ PostEffect::Type
+			, PostEffect::Name
+			, renderTarget
+			, renderSystem
+			, params
+			, false }
 		, m_surface{ *renderSystem.getEngine() }
 	{
 		castor::String name = cuT( "GrayScale" );
@@ -125,21 +130,29 @@ namespace GrayScale
 		return std::make_shared< PostEffect >( renderTarget, renderSystem, params );
 	}
 
+	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
+	{
+		visitor.visit( cuT( "GrayScale" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_vertexShader );
+		visitor.visit( cuT( "GrayScale" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_pixelShader );
+	}
+
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
 	{
 		auto & device = *getRenderSystem()->getCurrentDevice();
 		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
 		m_sampler->initialise();
-		auto vtx = getVertexProgram( getRenderSystem() );
-		auto pxl = getFragmentProgram( getRenderSystem() );
+		m_vertexShader = getVertexProgram( getRenderSystem() );
+		m_pixelShader = getFragmentProgram( getRenderSystem() );
 
 		renderer::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
 		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( vtx.getSource() );
-		stages[1].module->loadShader( pxl.getSource() );
-
-		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+		stages[0].module->loadShader( m_vertexShader.getSource() );
+		stages[1].module->loadShader( m_pixelShader.getSource() );
 
 		// Create the render pass.
 		renderer::RenderPassCreateInfo renderPass;
@@ -193,32 +206,39 @@ namespace GrayScale
 			, castor::Size{ m_target->getWidth(), m_target->getHeight() }
 			, m_sampler
 			, m_target->getPixelFormat() );
+		castor3d::CommandsSemaphore commands
+		{
+			device.getGraphicsCommandPool().createCommandBuffer(),
+			device.createSemaphore()
+		};
+		auto & cmd = *commands.commandBuffer;
 
 		if ( result
-			&& m_commandBuffer->begin() )
+			&& cmd.begin() )
 		{
-			m_commandBuffer->resetQueryPool( timer.getQuery()
+			cmd.resetQueryPool( timer.getQuery()
 				, 0u
 				, 2u );
-			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			cmd.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
 				, timer.getQuery()
 				, 0u );
 			// Put target image in shader input layout.
-			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+			cmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
 				, m_target->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
 
-			m_commandBuffer->beginRenderPass( *m_renderPass
+			cmd.beginRenderPass( *m_renderPass
 				, *m_surface.frameBuffer
 				, { renderer::ClearColorValue{} }
 				, renderer::SubpassContents::eInline );
-			m_quad->registerFrame( *m_commandBuffer );
-			m_commandBuffer->endRenderPass();
+			m_quad->registerFrame( cmd );
+			cmd.endRenderPass();
 
-			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			cmd.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
 				, timer.getQuery()
 				, 1u );
-			m_commandBuffer->end();
+			cmd.end();
+			m_commands.emplace_back( std::move( commands ) );
 		}
 
 		m_result = m_surface.colourTexture.get();
@@ -228,7 +248,6 @@ namespace GrayScale
 	void PostEffect::doCleanup()
 	{
 		m_quad.reset();
-		m_commandBuffer.reset();
 		m_renderPass.reset();
 		m_surface.cleanup();
 	}

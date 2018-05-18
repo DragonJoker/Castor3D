@@ -68,7 +68,7 @@ namespace castor3d
 		 *\brief		Remplit une variable de shader avec les transformations du squelette de cet objet.
 		 *\param[out]	variable	Reçoit les transformations.
 		 */
-		C3D_API void fillShader( renderer::Mat4 * variable )const;
+		C3D_API void fillShader( castor::Matrix4x4f * variable )const;
 		/**
 		 *\~english
 		 *\brief		Fills a buffer with this object's skeleton transforms.

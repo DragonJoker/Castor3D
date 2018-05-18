@@ -19,7 +19,7 @@ namespace smaa
 	public:
 		EdgeDetection( castor3d::RenderTarget & renderTarget
 			, renderer::TextureView const & colourView
-			, renderer::TextureView const * predicationView
+			, renderer::Texture const * predication
 			, castor3d::SamplerSPtr sampler
 			, float threshold
 			, float predicationThreshold
@@ -46,6 +46,16 @@ namespace smaa
 			return m_surface.depthTexture;
 		}
 
+		inline glsl::Shader const & getVertexShader()const
+		{
+			return m_vertexShader;
+		}
+
+		inline glsl::Shader const & getPixelShader()const
+		{
+			return m_pixelShader;
+		}
+
 	private:
 		void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
 			, renderer::DescriptorSet & descriptorSet )override;
@@ -54,7 +64,9 @@ namespace smaa
 		renderer::RenderPassPtr m_renderPass;
 		castor3d::PostEffectSurface m_surface;
 		renderer::TextureView const & m_colourView;
-		renderer::TextureView const * m_predicationView;
+		renderer::TextureViewPtr m_predicationView;
+		glsl::Shader m_vertexShader;
+		glsl::Shader m_pixelShader;
 	};
 }
 

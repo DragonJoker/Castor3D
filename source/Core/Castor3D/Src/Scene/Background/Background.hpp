@@ -96,7 +96,8 @@ namespace castor3d
 		*\return
 		*	\p true if ok.
 		*/
-		C3D_API bool initialise( renderer::RenderPass const & renderPass );
+		C3D_API bool initialise( renderer::RenderPass const & renderPass
+			, HdrConfigUbo const & hdrConfigUbo );
 		/**
 		*\~english
 		*\brief
@@ -192,6 +193,7 @@ namespace castor3d
 		*/
 		virtual void initialiseDescriptorSet( MatrixUbo const & matrixUbo
 			, ModelMatrixUbo const & modelMatrixUbo
+			, HdrConfigUbo const & hdrConfigUbo
 			, renderer::DescriptorSet & descriptorSet )const;
 		/**
 		*\~english
@@ -381,7 +383,8 @@ namespace castor3d
 	private:
 		bool doInitialiseVertexBuffer();
 		bool doInitialisePipeline( renderer::ShaderStageStateArray program
-			, renderer::RenderPass const & renderPass );
+			, renderer::RenderPass const & renderPass
+			, HdrConfigUbo const & hdrConfigUbo );
 
 	protected:
 		Scene & m_scene;
@@ -390,7 +393,6 @@ namespace castor3d
 		MatrixUbo m_matrixUbo;
 		ModelMatrixUbo m_modelMatrixUbo;
 		castor::Matrix4x4r m_mtxModel;
-		HdrConfigUbo m_configUbo;
 		renderer::SemaphorePtr m_semaphore;
 		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
 		renderer::DescriptorSetPoolPtr m_descriptorPool;

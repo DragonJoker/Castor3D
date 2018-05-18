@@ -21,12 +21,16 @@ using namespace glsl;
 namespace castor3d
 {
 	ToneMapping::ToneMapping( castor::String const & name
+		, castor::String const & fullName
 		, Engine & engine
+		, HdrConfig & config
 		, Parameters const & parameters )
 		: OwnedBy< Engine >{ engine }
 		, Named{ name }
 		, RenderQuad{ *engine.getRenderSystem(), true, false }
-		, m_configUbo{ engine }
+		, m_config{ config }
+		, m_fullName{ fullName }
+		, m_hdrConfigUbo{ engine }
 	{
 	}
 
@@ -38,11 +42,10 @@ namespace castor3d
 		, TextureLayout const & source
 		, renderer::RenderPass const & renderPass )
 	{
-		m_configUbo.initialise();
+		m_hdrConfigUbo.initialise();
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		m_signalFinished = renderSystem.getCurrentDevice()->createSemaphore();
 
-		glsl::Shader vtx;
 		{
 			auto writer = renderSystem.createGlslWriter();
 
@@ -60,17 +63,17 @@ namespace castor3d
 				out.gl_Position() = vec4( position.x(), position.y(), 0.0, 1.0 );
 			} );
 
-			vtx = writer.finalise();
+			m_vertexShader = writer.finalise();
 		}
 
-		auto pxl = doCreate();
+		m_pixelShader = doCreate();
 		renderer::ShaderStageStateArray program
 		{
 			{ renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eVertex ) },
 			{ renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eFragment ) }
 		};
-		program[0].module->loadShader( vtx.getSource() );
-		program[1].module->loadShader( pxl.getSource() );
+		program[0].module->loadShader( m_vertexShader.getSource() );
+		program[1].module->loadShader( m_pixelShader.getSource() );
 		renderer::DescriptorSetLayoutBindingArray bindings
 		{
 			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
@@ -90,20 +93,33 @@ namespace castor3d
 	{
 		m_timer.reset();
 		doDestroy();
-		m_configUbo.cleanup();
+		m_hdrConfigUbo.cleanup();
 	}
 
-	void ToneMapping::update( HdrConfig const & config )
+	void ToneMapping::update()
 	{
-		m_configUbo.update( config );
+		m_hdrConfigUbo.update( m_config );
 		doUpdate();
+	}
+
+	void ToneMapping::accept( ToneMappingVisitor & visitor )
+	{
+		visitor.visit( cuT( "ToneMapping" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_vertexShader );
+		visitor.visit( cuT( "ToneMapping" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_pixelShader );
+		visitor.visit( cuT( "ToneMapping" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_config );
 	}
 
 	void ToneMapping::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
 		, renderer::DescriptorSet & descriptorSet )
 	{
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
-			, m_configUbo.getUbo()
+			, m_hdrConfigUbo.getUbo()
 			, 0u
 			, 1u );
 	}

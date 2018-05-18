@@ -12,6 +12,7 @@ See LICENSE file in root folder
 #include <RenderPass/RenderPass.hpp>
 
 #include <Design/OwnedBy.hpp>
+#include <GlslShader.hpp>
 
 namespace castor3d
 {
@@ -92,6 +93,26 @@ namespace castor3d
 		{
 			return m_blurYQuad.getCommandBuffer();
 		}
+
+		inline glsl::Shader const & getBlurXVertexShader()const
+		{
+			return m_blurXVertexShader;
+		}
+
+		inline glsl::Shader const & getBlurXPixelShader()const
+		{
+			return m_blurXPixelShader;
+		}
+
+		inline glsl::Shader const & getBlurYVertexShader()const
+		{
+			return m_blurYVertexShader;
+		}
+
+		inline glsl::Shader const & getBlurYPixelShader()const
+		{
+			return m_blurYPixelShader;
+		}
 		/**@}*/
 
 	private:
@@ -111,7 +132,7 @@ namespace castor3d
 			castor::Point2f textureSize;
 			uint32_t blurCoeffsCount;
 			uint32_t dump; // to keep a 16 byte alignment.
-			std::array< renderer::Vec4, GaussianBlur::MaxCoefficients / 4u > blurCoeffs; // We then allow for 60 coeffs max, to have a 256 bytes struct.
+			std::array< castor::Point4f, GaussianBlur::MaxCoefficients / 4u > blurCoeffs; // We then allow for 60 coeffs max, to have a 256 bytes struct.
 		};
 
 		class RenderQuad
@@ -144,9 +165,13 @@ namespace castor3d
 		renderer::UniformBufferPtr< Configuration > m_blurUbo;
 		renderer::RenderPassPtr m_renderPass;
 		renderer::FrameBufferPtr m_blurXFbo;
+		glsl::Shader m_blurXVertexShader;
+		glsl::Shader m_blurXPixelShader;
 		RenderQuad m_blurXQuad;
 		renderer::RenderPassPtr m_blurYPass;
 		renderer::FrameBufferPtr m_blurYFbo;
+		glsl::Shader m_blurYVertexShader;
+		glsl::Shader m_blurYPixelShader;
 		RenderQuad m_blurYQuad;
 
 

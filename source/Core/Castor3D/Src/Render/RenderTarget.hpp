@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_RENDER_TARGET_H___
 #define ___C3D_RENDER_TARGET_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "HDR/HdrConfig.hpp"
 #include "Miscellaneous/Parameter.hpp"
 #include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Render/RenderInfo.hpp"
@@ -278,6 +278,11 @@ namespace castor3d
 			return m_hdrPostEffects;
 		}
 
+		inline PostEffectPtrArray const & getSRGBPostEffects()const
+		{
+			return m_srgbPostEffects;
+		}
+
 		inline ToneMappingSPtr getToneMapping()const
 		{
 			return m_toneMapping;
@@ -287,6 +292,11 @@ namespace castor3d
 		{
 			REQUIRE( m_signalFinished );
 			return *m_signalFinished;
+		}
+
+		inline HdrConfig const & getHdrConfig()const
+		{
+			return m_hdrConfig;
 		}
 		/**@}*/
 		/**
@@ -321,6 +331,16 @@ namespace castor3d
 		inline void setJitter( castor::Point2r const & value )
 		{
 			m_jitter = value;
+		}
+
+		inline void setExposure( float value )
+		{
+			m_hdrConfig.setExposure( value );
+		}
+
+		inline void setGamma( float value )
+		{
+			m_hdrConfig.setGamma( value );
 		}
 		/**@}*/
 
@@ -371,6 +391,7 @@ namespace castor3d
 		RenderPassTimerSPtr m_hdrPostFxTimer;
 		renderer::CommandBufferPtr m_hdrCopyCommands;
 		renderer::SemaphorePtr m_hdrCopyFinished;
+		HdrConfig m_hdrConfig;
 		ToneMappingSPtr m_toneMapping;
 		PostEffectPtrArray m_srgbPostEffects;
 		RenderPassTimerSPtr m_srgbPostFxTimer;
