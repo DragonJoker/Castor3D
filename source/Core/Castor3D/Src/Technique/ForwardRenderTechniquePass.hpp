@@ -102,19 +102,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders nodes.
-		 *\param[out]	info		Receives the render informations.
-		 *\param[out]	scene		The rendered scene.
-		 *\param[out]	camera		The viewer camera.
+		 *\param[out]	toWait	The semaphore to wait for.
 		 *\~french
 		 *\brief		Dessine les noeuds.
-		 *\param[out]	info		Reçoit les informations de rendu.
-		 *\param[out]	scene		La scène rendue.
-		 *\param[out]	camera		La caméra par laquelle la scène est rendue.
+		 *\param[out]	toWait	Le sémaphore à attendre.
 		 */
-		renderer::Semaphore const & render( RenderInfo & info
-			, Scene const & scene
-			, Camera const & camera
-			, renderer::Semaphore const & toWait );
+		renderer::Semaphore const & render( renderer::Semaphore const & toWait );
 
 	protected:
 		/**

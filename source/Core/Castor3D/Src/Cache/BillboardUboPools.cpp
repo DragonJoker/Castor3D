@@ -36,8 +36,9 @@ namespace castor3d
 
 	void BillboardUboPools::update()
 	{
-		for ( auto & [hash, entry] : m_entries )
+		for ( auto & pair : m_entries )
 		{
+			auto & entry = pair.second;
 			auto & modelData = entry.modelUbo.getData();
 			modelData.shadowReceiver = entry.billboard.isShadowReceiver();
 			modelData.materialIndex = entry.pass.getId();

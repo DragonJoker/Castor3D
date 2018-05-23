@@ -112,7 +112,7 @@ namespace castor3d
 		}
 		else
 		{
-			auto & result = getPoint( index );
+			auto result = getPoint( index );
 			auto position = result.m_vertex.pos;
 
 			if ( position != point )

@@ -29,6 +29,7 @@ namespace glsl
 		bool m_isTopDown;
 		bool m_hasInstanceIndex;
 		bool m_hasVertexIndex;
+		bool m_hasSpecialisationConstants;
 	};
 
 	class GlslWriter

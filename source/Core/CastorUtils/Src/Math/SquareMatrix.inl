@@ -235,11 +235,9 @@ namespace castor
 
 				lhs[0][0] = ( l11 * r11 + l21 * r12);
 				lhs[0][1] = ( l12 * r11 + l22 * r12);
-				lhs[0][2] = ( l13 * r11 + l23 * r12);
 
 				lhs[1][0] = ( l11 * r21 + l21 * r22);
 				lhs[1][1] = ( l12 * r21 + l22 * r22);
-				lhs[1][2] = ( l13 * r21 + l23 * r22);
 			}
 		};
 
@@ -507,7 +505,7 @@ namespace castor
 	}
 
 	template< typename T, uint32_t Count >
-	inline T SquareMatrix< T, Count >::getCofactor( uint32_t column, uint32_t _row )const
+	inline T SquareMatrix< T, Count >::getCofactor( uint32_t column, uint32_t row )const
 	{
 		return CoFactorComputer< T, Count >::get( *this, column, row );
 	}

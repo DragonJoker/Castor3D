@@ -62,7 +62,7 @@ namespace castor
 
 #if !defined( NDEBUG )
 
-			StringStream stream{ makeStringStream() };
+			StringStream stream{ castor::makeStringStream() };
 			stream << Debug::Backtrace{};
 			m_stack = stream.str();
 

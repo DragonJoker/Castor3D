@@ -48,7 +48,7 @@ namespace castor3d
 				, OutputComponents & output )const;
 
 		protected:
-			void doDeclareModel();
+			void doDeclareModel()override;
 			void doDeclareComputeDirectionalLight()override;
 			void doDeclareComputePointLight()override;
 			void doDeclareComputeSpotLight()override;
@@ -152,6 +152,16 @@ namespace castor3d
 				, glsl::InFloat
 				, FragmentInput
 				, OutputComponents & > m_computeLight;
+			glsl::Function< glsl::Void
+				, InLight
+				, glsl::InVec3
+				, glsl::InVec3
+				, glsl::InVec3
+				, glsl::InFloat
+				, glsl::InFloat
+				, glsl::InFloat
+				, FragmentInput
+				, OutputComponents & > m_computeOneLight;
 		};
 	}
 }

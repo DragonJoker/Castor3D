@@ -300,7 +300,14 @@ namespace test_launcher
 				, false
 				, bitmap );
 			auto image = bitmap.ConvertToImage();
-			Path outputPath = m_filePath.getPath() / ( m_filePath.getFileName() + cuT( "_" ) + renderer + cuT( ".png" ) );
+			auto folder = m_filePath.getPath() / cuT( "Compare" );
+
+			if ( !castor::File::directoryExists( folder ) )
+			{
+				castor::File::directoryCreate( folder );
+			}
+
+			Path outputPath = folder / ( m_filePath.getFileName() + cuT( "_" ) + renderer + cuT( ".png" ) );
 			image.SaveFile( wxString( outputPath ) );
 		}
 	}

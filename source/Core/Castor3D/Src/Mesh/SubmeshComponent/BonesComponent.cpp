@@ -123,16 +123,16 @@ namespace castor3d
 				, renderer::VertexInputRate::eVertex );
 			m_bonesLayout->createAttribute( RenderPass::VertexInputs::BoneIds0Location
 				, renderer::Format::eR32G32B32A32_SINT
-				, offsetof( VertexBoneData::Ids, id0 ) );
+				, offsetof( VertexBoneData::Ids::ids, id0 ) );
 			m_bonesLayout->createAttribute( RenderPass::VertexInputs::BoneIds1Location
 				, renderer::Format::eR32G32B32A32_SINT
-				, offsetof( VertexBoneData::Ids, id1 ) );
+				, offsetof( VertexBoneData::Ids::ids, id1 ) );
 			m_bonesLayout->createAttribute( RenderPass::VertexInputs::Weights0Location
 				, renderer::Format::eR32G32B32A32_SFLOAT
-				, sizeof( VertexBoneData::Ids ) + offsetof( VertexBoneData::Weights, weight0 ) );
+				, sizeof( VertexBoneData::Ids ) + offsetof( VertexBoneData::Weights::weights, weight0 ) );
 			m_bonesLayout->createAttribute( RenderPass::VertexInputs::Weights1Location
 				, renderer::Format::eR32G32B32A32_SFLOAT
-				, sizeof( VertexBoneData::Ids ) + offsetof( VertexBoneData::Weights, weight1 ) );
+				, sizeof( VertexBoneData::Ids ) + offsetof( VertexBoneData::Weights::weights, weight1 ) );
 		}
 
 		return m_bonesBuffer != nullptr;

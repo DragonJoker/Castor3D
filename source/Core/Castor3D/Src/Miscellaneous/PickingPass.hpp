@@ -109,7 +109,7 @@ namespace castor3d
 		castor::Point4f doFboPick( castor::Position const & position
 			, Camera const & camera
 			, renderer::CommandBuffer const & commandBuffer );
-		PickingPass::PickNodeType doPick( castor::Point4f const & pixel
+		PickNodeType doPick( castor::Point4f const & pixel
 			, SceneCulledRenderNodes & nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doRender

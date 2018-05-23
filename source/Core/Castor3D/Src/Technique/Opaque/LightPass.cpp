@@ -326,20 +326,21 @@ namespace castor3d
 		setLayoutBindings.emplace_back( shader::LightingModel::UboBindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment );
 		m_uboDescriptorLayout = device.createDescriptorSetLayout( std::move( setLayoutBindings ) );
 		m_uboDescriptorPool = m_uboDescriptorLayout->createPool( 2u );
+		uint32_t index = MinBufferIndex;
 
 		setLayoutBindings = renderer::DescriptorSetLayoutBindingArray
 		{
-			{ 0u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
-			{ 1u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
-			{ 2u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
-			{ 3u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
-			{ 4u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
-			{ 5u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
+			{ index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
+			{ index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
+			{ index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
+			{ index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
+			{ index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
+			{ index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
 		};
 
 		if ( m_shadows )
 		{
-			setLayoutBindings.emplace_back( 6u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			setLayoutBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
 		}
 
 		m_textureDescriptorLayout = device.createDescriptorSetLayout( std::move( setLayoutBindings ) );
@@ -530,7 +531,7 @@ namespace castor3d
 			auto writeBinding = [&gp, this]( uint32_t index, renderer::ImageLayout layout )
 			{
 				renderer::SamplerCRef sampler = std::ref( gp.getSampler() );
-				renderer::TextureViewCRef view = std::ref( *gp.getViews()[index] );
+				renderer::TextureViewCRef view = std::cref( *gp.getViews()[index - MinBufferIndex] );
 				return renderer::WriteDescriptorSet
 				{
 					index,
@@ -540,12 +541,13 @@ namespace castor3d
 					{ { sampler, view, layout } }
 				};
 			};
-			pipeline.textureWrites.push_back( writeBinding( 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal ) );
-			pipeline.textureWrites.push_back( writeBinding( 1u, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
-			pipeline.textureWrites.push_back( writeBinding( 2u, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
-			pipeline.textureWrites.push_back( writeBinding( 3u, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
-			pipeline.textureWrites.push_back( writeBinding( 4u, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
-			pipeline.textureWrites.push_back( writeBinding( 5u, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
+			uint32_t index = MinBufferIndex;
+			pipeline.textureWrites.push_back( writeBinding( index++, renderer::ImageLayout::eDepthStencilAttachmentOptimal ) );
+			pipeline.textureWrites.push_back( writeBinding( index++, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
+			pipeline.textureWrites.push_back( writeBinding( index++, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
+			pipeline.textureWrites.push_back( writeBinding( index++, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
+			pipeline.textureWrites.push_back( writeBinding( index++, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
+			pipeline.textureWrites.push_back( writeBinding( index++, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
 
 			pipeline.textureDescriptorSet->setBindings( pipeline.textureWrites );
 			pipeline.textureDescriptorSet->update();
@@ -555,7 +557,7 @@ namespace castor3d
 				// Empty descriptor for shadow texture, that will be filled at runtime.
 				pipeline.textureWrites.push_back(
 					{
-						6u,
+						index++,
 						0u,
 						1u,
 						renderer::DescriptorType::eCombinedImageSampler,
@@ -650,7 +652,7 @@ namespace castor3d
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-		auto index = 0u;
+		auto index = MinBufferIndex;
 		auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++, 1u );
 		auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++, 1u );
 		auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++, 1u );
@@ -813,7 +815,7 @@ namespace castor3d
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-		auto index = 0u;
+		auto index = MinBufferIndex;
 		auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++, 1u );
 		auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++, 1u );
 		auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++, 1u );
@@ -1036,7 +1038,7 @@ namespace castor3d
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-		auto index = 0u;
+		auto index = MinBufferIndex;
 		auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++, 1u );
 		auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++, 1u );
 		auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++, 1u );

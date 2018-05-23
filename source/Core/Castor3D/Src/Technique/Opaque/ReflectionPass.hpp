@@ -20,6 +20,8 @@ See LICENSE file in root folder
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/FrameBuffer.hpp>
 
+#include <GlslShader.hpp>
+
 namespace castor3d
 {
 	/*!

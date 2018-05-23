@@ -102,6 +102,7 @@ namespace Gl3Render
 			, false
 			, false
 			, false
-			, false } };
+			, false
+			, m_renderer->getPhysicalDevice( 0u ).isSPIRVSupported() } };
 	}
 }

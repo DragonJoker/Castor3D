@@ -379,7 +379,7 @@ namespace glsl
 	template< typename ValueA, typename ValueB >
 	ValueB smoothstep( ValueA const & edge0, ValueA const & edge1, ValueB const & x )
 	{
-		return writeFunctionCall< ValueB >( findWriter( edge0, edge1, x ), cuT( "smoothstep" ), p_edge0, p_edge1,x );
+		return writeFunctionCall< ValueB >( findWriter( edge0, edge1, x ), cuT( "smoothstep" ), edge0, edge1,x );
 	}
 
 	template< typename Value >

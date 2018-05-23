@@ -21,6 +21,8 @@
 #include <RenderPass/FrameBufferAttachment.hpp>
 #include <Shader/ShaderProgram.hpp>
 
+#include <Graphics/Image.hpp>
+
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
 

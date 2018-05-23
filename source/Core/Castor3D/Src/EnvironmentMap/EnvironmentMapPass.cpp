@@ -13,6 +13,8 @@
 
 using namespace castor;
 
+#define C3D_SeparatePasses 0
+
 namespace castor3d
 {
 	namespace
@@ -84,6 +86,7 @@ namespace castor3d
 		m_hdrConfigUbo.initialise();
 		auto const & environmentLayout = getOwner()->getTexture().getTexture();
 		auto const & environmentView = environmentLayout->getImage( face ).getView();
+		auto const & depthView = getOwner()->getDepthView();
 
 		// Initialise opaque pass.
 		m_opaquePass->initialiseRenderPass( environmentView
@@ -93,17 +96,14 @@ namespace castor3d
 		m_opaquePass->initialise( size );
 
 		// Create custom background pass.
-		auto const & depthView = getOwner()->getDepthView();
 		renderer::FrameBufferAttachmentArray attaches;
 		attaches.emplace_back( *( renderPass.getAttachments().begin() + 0u ), depthView );
 		attaches.emplace_back( *( renderPass.getAttachments().begin() + 1u ), environmentView );
 		m_frameBuffer = renderPass.createFrameBuffer( renderer::Extent2D{ size[0], size[1] }
 			, std::move( attaches ) );
-
 		m_backgroundCommands = device.getGraphicsCommandPool().createCommandBuffer( false );
 		auto & commandBuffer = *m_backgroundCommands;
 		m_renderPass = &renderPass;
-
 		auto & descriptorLayout = pool.getLayout();
 		m_backgroundDescriptorSet = pool.createDescriptorSet( 0u );
 		background.initialiseDescriptorSet( m_matrixUbo
@@ -111,7 +111,6 @@ namespace castor3d
 			, m_hdrConfigUbo
 			, *m_backgroundDescriptorSet );
 		m_backgroundDescriptorSet->update();
-
 		background.prepareFrame( commandBuffer
 			, size
 			, renderPass
@@ -121,8 +120,9 @@ namespace castor3d
 		m_transparentPass->initialiseRenderPass( environmentView
 			, getOwner()->getDepthView()
 			, size
-			, true );
+			, false );
 		m_transparentPass->initialise( size );
+
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 		m_finished = device.createSemaphore();
 		m_fence = device.createFence( renderer::FenceCreateFlag::eSignaled );
@@ -158,15 +158,42 @@ namespace castor3d
 
 	renderer::Semaphore const & EnvironmentMapPass::render( renderer::Semaphore const & toWait )
 	{
+		auto & device = *getOwner()->getEngine()->getRenderSystem()->getCurrentDevice();
 		RenderInfo info;
 		m_opaquePass->update( info, {} );
 		m_transparentPass->update( info, {} );
 		m_matrixUbo.update( m_camera->getView()
 			, m_camera->getViewport().getProjection() );
 		m_modelMatrixUbo.update( m_mtxModel );
+		renderer::Semaphore const * result = &toWait;
 
 		static renderer::ClearColorValue const black{};
 		static renderer::DepthStencilClearValue const depth{ 1.0, 0 };
+
+#if C3D_SeparatePasses
+
+		result = &m_opaquePass->render( *result );
+
+		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
+		m_commandBuffer->beginRenderPass( *m_renderPass
+			, *m_frameBuffer
+			, { depth, black }
+			, renderer::SubpassContents::eSecondaryCommandBuffers );
+		m_commandBuffer->executeCommands( { *m_backgroundCommands } );
+		m_commandBuffer->endRenderPass();
+		m_commandBuffer->end();
+		m_fence->reset();
+		device.getGraphicsQueue().submit( *m_commandBuffer
+			, *result
+			, renderer::PipelineStageFlag::eBottomOfPipe
+			, *m_finished
+			, m_fence.get() );
+		m_fence->wait( renderer::FenceTimeout );
+		result = m_finished.get();
+
+		result = &m_transparentPass->render( *result );
+
+#else
 
 		m_commandBuffer->begin();
 		m_commandBuffer->beginRenderPass( *m_renderPass
@@ -191,7 +218,6 @@ namespace castor3d
 		m_commandBuffer->endRenderPass();
 		m_commandBuffer->end();
 
-		auto & device = *getOwner()->getEngine()->getRenderSystem()->getCurrentDevice();
 		m_fence->reset();
 		device.getGraphicsQueue().submit( *m_commandBuffer
 			, toWait
@@ -200,5 +226,8 @@ namespace castor3d
 			, m_fence.get() );
 		m_fence->wait( renderer::FenceTimeout );
 		return *m_finished;
+
+#endif
+		return *result;
 	}
 }

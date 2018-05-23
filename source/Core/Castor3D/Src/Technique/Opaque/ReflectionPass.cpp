@@ -109,7 +109,7 @@ namespace castor3d
 			// Shader inputs
 			UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 			UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-			auto index = 0u;
+			uint32_t index = MinBufferIndex;
 			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++, 1u );
 			auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++, 1u );
 			auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++, 1u );
@@ -272,7 +272,7 @@ namespace castor3d
 			// Shader inputs
 			UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 			UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-			auto index = 0u;
+			auto index = MinBufferIndex;
 			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++, 1u );
 			auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++, 1u );
 			auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++, 1u );
@@ -499,7 +499,7 @@ namespace castor3d
 			// Shader inputs
 			UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 			UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-			auto index = 0u;
+			auto index = MinBufferIndex;
 			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++, 1u );
 			auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++, 1u );
 			auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++, 1u );
@@ -830,16 +830,16 @@ namespace castor3d
 			, bool hasSsao
 			, MaterialType matType )
 		{
+			uint32_t index = MinBufferIndex;
 			renderer::DescriptorSetLayoutBindingArray bindings
 			{
-				{ 0, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// DsTexture::eDepth
-				{ 1, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// DsTexture::eData1
-				{ 2, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// DsTexture::eData2
-				{ 3, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// DsTexture::eData3
-				{ 4, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// DsTexture::eData4
-				{ 5, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// DsTexture::eData5
+				{ index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// DsTexture::eDepth
+				{ index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// DsTexture::eData1
+				{ index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// DsTexture::eData2
+				{ index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// DsTexture::eData3
+				{ index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// DsTexture::eData4
+				{ index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// DsTexture::eData5
 			};
-			uint32_t index = 6u;
 
 			if ( hasSsao )
 			{
@@ -877,7 +877,7 @@ namespace castor3d
 			, MaterialType matType
 			, std::vector< std::reference_wrapper< EnvironmentMap > > const & envMaps )
 		{
-			uint32_t index = 0u;
+			uint32_t index = MinBufferIndex;
 			auto imgLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
 			renderer::WriteDescriptorSetArray result;
 			result.push_back( { index++, 0u, 1u, renderer::DescriptorType::eCombinedImageSampler, { { gp.getSampler(), *gp.getViews()[size_t( DsTexture::eDepth )], imgLayout } } } );

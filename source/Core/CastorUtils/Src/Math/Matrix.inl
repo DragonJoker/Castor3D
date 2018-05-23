@@ -603,7 +603,7 @@ namespace castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline castor::String & operator<<( castor::String & text, castor::Matrix< T, Columns, Rows > const & matrix )
 	{
-		castor::StringStream stream{ makeStringStream() };
+		castor::StringStream stream{ castor::makeStringStream() };
 		stream.precision( 10 );
 		stream << matrix;
 		text += stream.str();

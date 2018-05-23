@@ -6,9 +6,9 @@ namespace glsl
 	{
 		using type = typename TypeOf< T >::Type;
 		registerName( m_writer, name, TypeTraits< T >::TypeEnum );
-		m_writer.registerUniform( name, location, TypeTraits< T >::TypeEnum, 1u );
+		registerUniform( m_writer, name, location, TypeTraits< T >::TypeEnum, 1u );
 
-		if ( m_writer.hasPushConstants() )
+		if ( hasPushConstants( m_writer ) )
 		{
 			m_stream << type().m_type << name << cuT( ";" ) << std::endl;
 		}
@@ -28,9 +28,9 @@ namespace glsl
 	{
 		using type = typename TypeOf< T >::Type;
 		registerName( m_writer, name, TypeTraits< T >::TypeEnum );
-		m_writer.registerUniform( name, location, TypeTraits< T >::TypeEnum, dimension );
+		registerUniform( m_writer, name, location, TypeTraits< T >::TypeEnum, dimension );
 
-		if ( m_writer.hasPushConstants() )
+		if ( hasPushConstants( m_writer ) )
 		{
 			m_stream << type().m_type << name << cuT( "[" ) << dimension << cuT( "];" ) << std::endl;
 		}
@@ -49,9 +49,9 @@ namespace glsl
 	{
 		using type = typename TypeOf< T >::Type;
 		registerName( m_writer, name, TypeTraits< T >::TypeEnum );
-		m_writer.registerUniform( name, location, TypeTraits< T >::TypeEnum, 1u );
+		registerUniform( m_writer, name, location, TypeTraits< T >::TypeEnum, 1u );
 
-		if ( m_writer.hasPushConstants() )
+		if ( hasPushConstants( m_writer ) )
 		{
 			m_stream << type().m_type << name << cuT( "[];" ) << std::endl;
 		}
@@ -71,11 +71,11 @@ namespace glsl
 	{
 		using type = typename TypeOf< T >::Type;
 		registerName( m_writer, name, TypeTraits< T >::TypeEnum );
-		m_writer.registerUniform( name, location, TypeTraits< T >::TypeEnum, 1u, enabled );
+		registerUniform( m_writer, name, location, TypeTraits< T >::TypeEnum, 1u, enabled );
 
 		if ( enabled )
 		{
-			if ( m_writer.hasPushConstants() )
+			if ( hasPushConstants( m_writer ) )
 			{
 				m_stream << type().m_type << name << cuT( ";" ) << std::endl;
 			}
@@ -98,11 +98,11 @@ namespace glsl
 	{
 		using type = typename TypeOf< T >::Type;
 		registerName( m_writer, name, TypeTraits< T >::TypeEnum );
-		m_writer.registerUniform( name, location, TypeTraits< T >::TypeEnum, dimension, enabled );
+		registerUniform( m_writer, name, location, TypeTraits< T >::TypeEnum, dimension, enabled );
 
 		if ( enabled )
 		{
-			if ( m_writer.hasPushConstants() )
+			if ( hasPushConstants( m_writer ) )
 			{
 				m_stream << type().m_type << name << cuT( "[" ) << dimension << cuT( "]" ) << cuT( ";" ) << std::endl;
 			}
@@ -124,11 +124,11 @@ namespace glsl
 	{
 		using type = typename TypeOf< T >::Type;
 		registerName( m_writer, name, TypeTraits< T >::TypeEnum );
-		m_writer.registerUniform( name, location, TypeTraits< T >::TypeEnum, 1u, enabled );
+		registerUniform( m_writer, name, location, TypeTraits< T >::TypeEnum, 1u, enabled );
 
 		if ( enabled )
 		{
-			if ( m_writer.hasPushConstants() )
+			if ( hasPushConstants( m_writer ) )
 			{
 				m_stream << type().m_type << name << cuT( "[]" ) << cuT( ";" ) << std::endl;
 			}

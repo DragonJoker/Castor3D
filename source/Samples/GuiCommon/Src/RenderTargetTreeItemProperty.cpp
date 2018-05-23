@@ -16,7 +16,7 @@ namespace GuiCommon
 	{
 		static wxString PROPERTY_CATEGORY_RENDER_TARGET = _( "Render Target: " );
 		static wxString PROPERTY_RENDER_TARGET_SHADER = _( "Shader" );
-		static wxString PROPERTY_RENDER_TARGET_EDIT_SHADER = _( "Edit Shader..." );
+		static wxString PROPERTY_RENDER_TARGET_EDIT_SHADER = _( "View Shaders..." );
 	}
 
 	RenderTargetTreeItemProperty::RenderTargetTreeItemProperty( bool editable
@@ -26,7 +26,7 @@ namespace GuiCommon
 	{
 		PROPERTY_CATEGORY_RENDER_TARGET = _( "Render Target: " );
 		PROPERTY_RENDER_TARGET_SHADER = _( "Shader" );
-		PROPERTY_RENDER_TARGET_EDIT_SHADER = _( "Edit Shader..." );
+		PROPERTY_RENDER_TARGET_EDIT_SHADER = _( "View Shaders..." );
 
 		CreateTreeItemMenu();
 	}

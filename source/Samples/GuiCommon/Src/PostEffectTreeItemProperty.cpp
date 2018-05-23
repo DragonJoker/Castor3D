@@ -16,7 +16,7 @@ namespace GuiCommon
 	{
 		static wxString PROPERTY_CATEGORY_POST_EFFECT = _( "Post Effect: " );
 		static wxString PROPERTY_POST_EFFECT_SHADER = _( "Shader" );
-		static wxString PROPERTY_POST_EFFECT_EDIT_SHADER = _( "Edit Shader..." );
+		static wxString PROPERTY_POST_EFFECT_EDIT_SHADER = _( "View Shaders..." );
 
 		class PostEffectShaderGatherer
 			: public castor3d::PipelineVisitor
@@ -229,7 +229,7 @@ namespace GuiCommon
 	{
 		PROPERTY_CATEGORY_POST_EFFECT = _( "Post Effect: " );
 		PROPERTY_POST_EFFECT_SHADER = _( "Shader" );
-		PROPERTY_POST_EFFECT_EDIT_SHADER = _( "Edit Shader..." );
+		PROPERTY_POST_EFFECT_EDIT_SHADER = _( "View Shaders..." );
 
 		CreateTreeItemMenu();
 	}

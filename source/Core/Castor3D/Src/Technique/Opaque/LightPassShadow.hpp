@@ -346,7 +346,7 @@ namespace castor3d
 			, renderer::Semaphore const & toWait
 			, TextureUnit * shadowMapOpt )override
 		{
-			doPrepareCommandBuffer( *m_pipeline, shadowMapOpt, first );
+			this->doPrepareCommandBuffer( *this->m_pipeline, shadowMapOpt, first );
 			my_pass_type::render( first, toWait, nullptr );
 		}
 

@@ -27,6 +27,8 @@
 #include <Graphics/Image.hpp>
 #include <Miscellaneous/PreciseTimer.hpp>
 
+#include <GlslSource.hpp>
+
 #if !defined( NDEBUG )
 #	define DISPLAY_DEBUG 1
 #else

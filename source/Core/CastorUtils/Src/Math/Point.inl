@@ -74,7 +74,7 @@ namespace castor
 	template< typename T, uint32_t TCount >
 	bool Point< T, TCount >::TextWriter::operator()( Point< T, TCount > const & object, TextFile & file )
 	{
-		StringStream streamWord{ makeStringStream() };
+		StringStream streamWord{ castor::makeStringStream() };
 
 		for ( uint32_t i = 0; i < TCount; ++i )
 		{
@@ -138,7 +138,7 @@ namespace castor
 	{
 		static uint32_t constexpr MinCount = MinValue< TCount, UCount >::value;
 
-		if constexpr( std::is_same< T, U >::value )
+		if ( std::is_same< T, U >::value )
 		{
 			std::copy( rhs.begin()
 				, rhs.begin() + MinCount
@@ -152,7 +152,7 @@ namespace castor
 			}
 		}
 
-		if constexpr( TCount > UCount )
+		if ( TCount > UCount )
 		{
 			for ( uint32_t i = UCount; i < TCount; ++i )
 			{
@@ -167,7 +167,7 @@ namespace castor
 	{
 		static uint32_t constexpr MinCount = MinValue< TCount, UCount >::value;
 
-		if constexpr( std::is_same< T, U >::value )
+		if ( std::is_same< T, U >::value )
 		{
 			std::copy( rhs.begin()
 				, rhs.begin() + MinCount
@@ -181,7 +181,7 @@ namespace castor
 			}
 		}
 
-		if constexpr( TCount > UCount )
+		if ( TCount > UCount )
 		{
 			for ( uint32_t i = UCount; i < TCount; ++i )
 			{
@@ -878,7 +878,7 @@ namespace castor
 template< typename T, uint32_t TCount >
 inline castor::String & operator<<( castor::String & out, castor::Point< T, TCount > const & in )
 {
-	castor::StringStream stream{ makeStringStream() };
+	castor::StringStream stream{ castor::makeStringStream() };
 	stream << in;
 	out += stream.str();
 	return out;

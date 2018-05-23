@@ -75,7 +75,7 @@ bool doParseArgs( int argc
 
 	for ( auto & arg : args )
 	{
-		options.outputs.emplace_back( file.getPath() / ( file.getFileName() + cuT( "_" ) + arg + cuT( ".png" ) ) );
+		options.outputs.emplace_back( file.getPath() / cuT( "Compare" ) / ( file.getFileName() + cuT( "_" ) + arg + cuT( ".png" ) ) );
 	}
 
 	return true;
@@ -163,7 +163,7 @@ bool doCompareImages( castor::Image const & reference, castor::Path const & comp
 	return result;
 }
 
-bool doMoveOutput( castor::Path const & file
+void doMoveOutput( castor::Path const & file
 	, castor::Path const & directory )
 {
 	if ( castor::File::fileExists( file ) )
@@ -189,7 +189,7 @@ int main( int argc, char * argv[] )
 	{
 		if ( !castor::File::fileExists( options.input ) )
 		{
-			auto unprocessedDir = options.input.getPath() / cuT( "Unprocessed" );
+			auto unprocessedDir = options.input.getPath() / cuT( "Compare" ) / cuT( "Unprocessed" );
 
 			if ( !castor::File::directoryExists( unprocessedDir ) )
 			{
@@ -206,7 +206,7 @@ int main( int argc, char * argv[] )
 			return result;
 		}
 
-		auto diffDir = options.input.getPath() / cuT( "Diff" );
+		auto diffDir = options.input.getPath() / cuT( "Compare" ) / cuT( "Diff" );
 
 		if ( !castor::File::directoryExists( diffDir ) )
 		{

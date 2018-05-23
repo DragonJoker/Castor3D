@@ -23,6 +23,7 @@
 #include "Shader/Shaders/GlslSpecularPbrReflection.hpp"
 
 #include <Image/TextureView.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
 
 using namespace castor;
 
@@ -132,14 +133,16 @@ namespace castor3d
 			? renderer::AttachmentLoadOp::eClear
 			: renderer::AttachmentLoadOp::eLoad;
 		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[0].stencilLoadOp = renderer::isDepthStencilFormat( renderPass.attachments[0].format )
+		renderPass.attachments[0].stencilLoadOp = ( clear && renderer::isDepthStencilFormat( renderPass.attachments[0].format ) )
 			? renderer::AttachmentLoadOp::eClear
 			: renderer::AttachmentLoadOp::eDontCare;
 		renderPass.attachments[0].stencilStoreOp = renderer::isDepthStencilFormat( renderPass.attachments[0].format )
 			? renderer::AttachmentStoreOp::eStore
 			: renderer::AttachmentStoreOp::eDontCare;
 		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+		renderPass.attachments[0].initialLayout = clear
+			? renderer::ImageLayout::eUndefined
+			: renderer::ImageLayout::eDepthStencilAttachmentOptimal;
 		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
 
 		renderPass.attachments[1].format = colourView.getFormat();
@@ -150,7 +153,9 @@ namespace castor3d
 		renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 		renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 		renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[1].initialLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+		renderPass.attachments[1].initialLayout = clear
+			? renderer::ImageLayout::eUndefined
+			: renderer::ImageLayout::eColourAttachmentOptimal;
 		renderPass.attachments[1].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
 
 		renderPass.subpasses.resize( 1u );
@@ -162,18 +167,26 @@ namespace castor3d
 		renderPass.dependencies.resize( 2u );
 		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].srcStageMask = clear
+			? renderer::PipelineStageFlag::eFragmentShader
+			: renderer::PipelineStageFlag::eColourAttachmentOutput;
 		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].srcAccessMask = clear
+			? renderer::AccessFlag::eShaderRead
+			: renderer::AccessFlag::eColourAttachmentWrite;
 		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
 		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 		renderPass.dependencies[1].srcSubpass = 0u;
 		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
 		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = clear
+			? renderer::PipelineStageFlag::eColourAttachmentOutput
+			: renderer::PipelineStageFlag::eFragmentShader;
 		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = clear
+			? renderer::AccessFlag::eColourAttachmentWrite
+			: renderer::AccessFlag::eShaderRead;
 		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 		m_renderPass = device.createRenderPass( renderPass );
@@ -212,52 +225,54 @@ namespace castor3d
 		doUpdate( info, jitter );
 	}
 
-	renderer::Semaphore const & ForwardRenderTechniquePass::render( RenderInfo & info
-		, Scene const & scene
-		, Camera const & camera
-		, renderer::Semaphore const & toWait )
+	renderer::Semaphore const & ForwardRenderTechniquePass::render( renderer::Semaphore const & toWait )
 	{
 		renderer::Semaphore const * result = &toWait;
-		getEngine()->setPerObjectLighting( true );
-		getTimer().start();
-		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
-		static renderer::ClearValueArray const clearValues
-		{
-			renderer::DepthStencilClearValue{ 1.0, 0 },
-			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
-		};
 
-		if ( m_nodesCommands->begin() )
+		if ( hasNodes() )
 		{
-			m_nodesCommands->resetQueryPool( getTimer().getQuery()
-				, 0u
-				, 2u );
-			m_nodesCommands->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
-				, getTimer().getQuery()
-				, 0u );
-			m_nodesCommands->beginRenderPass( getRenderPass()
-				, *m_frameBuffer
-				, clearValues
-				, renderer::SubpassContents::eSecondaryCommandBuffers );
-			m_nodesCommands->executeCommands( { getCommandBuffer() } );
-			m_nodesCommands->endRenderPass();
-			m_nodesCommands->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, getTimer().getQuery()
-				, 1u );
-			m_nodesCommands->end();
-			m_fence->reset();
-			device.getGraphicsQueue().submit( { *m_nodesCommands }
-				, { *result }
-				, { renderer::PipelineStageFlag::eColourAttachmentOutput }
-				, { getSemaphore() }
-				, m_fence.get() );
-			m_fence->wait( renderer::FenceTimeout );
-			device.getGraphicsQueue().waitIdle();
-			getTimer().step();
-			result = &getSemaphore();
+			getEngine()->setPerObjectLighting( true );
+			getTimer().start();
+			auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+			static renderer::ClearValueArray const clearValues
+			{
+				renderer::DepthStencilClearValue{ 1.0, 0 },
+				renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
+			};
+
+			if ( m_nodesCommands->begin() )
+			{
+				m_nodesCommands->resetQueryPool( getTimer().getQuery()
+					, 0u
+					, 2u );
+				m_nodesCommands->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+					, getTimer().getQuery()
+					, 0u );
+				m_nodesCommands->beginRenderPass( getRenderPass()
+					, *m_frameBuffer
+					, clearValues
+					, renderer::SubpassContents::eSecondaryCommandBuffers );
+				m_nodesCommands->executeCommands( { getCommandBuffer() } );
+				m_nodesCommands->endRenderPass();
+				m_nodesCommands->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
+					, getTimer().getQuery()
+					, 1u );
+				m_nodesCommands->end();
+				m_fence->reset();
+				device.getGraphicsQueue().submit( { *m_nodesCommands }
+					, { *result }
+					, { renderer::PipelineStageFlag::eColourAttachmentOutput }
+					, { getSemaphore() }
+					, m_fence.get() );
+				m_fence->wait( renderer::FenceTimeout );
+				device.getGraphicsQueue().waitIdle();
+				getTimer().step();
+				result = &getSemaphore();
+			}
+
+			getTimer().stop();
 		}
 
-		getTimer().stop();
 		return *result;
 	}
 
@@ -375,15 +390,11 @@ namespace castor3d
 			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );	// c3d_mapBrdf
 		}
 
-		if ( m_scene.hasShadows() )
-		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );	// c3d_mapShadowDirectional
-			textureBindings.emplace_back( index, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment, shader::SpotShadowMapCount );	// c3d_mapShadowSpot
-			index += shader::SpotShadowMapCount;
-			textureBindings.emplace_back( index, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment, shader::PointShadowMapCount );	// c3d_mapShadowPoint
-			index += shader::PointShadowMapCount;
-		}
-
+		textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );	// c3d_mapShadowDirectional
+		textureBindings.emplace_back( index, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment, shader::SpotShadowMapCount );	// c3d_mapShadowSpot
+		index += shader::SpotShadowMapCount;
+		textureBindings.emplace_back( index, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment, shader::PointShadowMapCount );	// c3d_mapShadowPoint
+		index += shader::PointShadowMapCount;
 		return textureBindings;
 	}
 
@@ -428,13 +439,9 @@ namespace castor3d
 			}
 		}
 
-		if ( m_scene.hasShadows() )
-		{
-			doBindShadowMaps( shadowMaps[size_t( LightType::eDirectional )], writes, index );
-			doBindShadowMaps( shadowMaps[size_t( LightType::eSpot )], writes, index );
-			doBindShadowMaps( shadowMaps[size_t( LightType::ePoint )], writes, index );
-		}
-
+		doBindShadowMaps( shadowMaps[size_t( LightType::eDirectional )], writes, index );
+		doBindShadowMaps( shadowMaps[size_t( LightType::eSpot )], writes, index );
+		doBindShadowMaps( shadowMaps[size_t( LightType::ePoint )], writes, index );
 		node.texDescriptorSet->setBindings( writes );
 	}
 
@@ -479,13 +486,9 @@ namespace castor3d
 			}
 		}
 
-		if ( m_scene.hasShadows() )
-		{
-			doBindShadowMaps( shadowMaps[size_t( LightType::eDirectional )], writes, index );
-			doBindShadowMaps( shadowMaps[size_t( LightType::eSpot )], writes, index );
-			doBindShadowMaps( shadowMaps[size_t( LightType::ePoint )], writes, index );
-		}
-
+		doBindShadowMaps( shadowMaps[size_t( LightType::eDirectional )], writes, index );
+		doBindShadowMaps( shadowMaps[size_t( LightType::eSpot )], writes, index );
+		doBindShadowMaps( shadowMaps[size_t( LightType::ePoint )], writes, index );
 		node.texDescriptorSet->setBindings( writes );
 	}
 
@@ -784,7 +787,6 @@ namespace castor3d
 
 		// Fragment Outputs
 		auto pxl_fragColor( writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 ) );
-		auto pxl_velocity( writer.declFragData< Vec4 >( cuT( "pxl_velocity" ), 1 ) );
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -1062,7 +1064,6 @@ namespace castor3d
 
 		// Fragment Outputs
 		auto pxl_fragColor( writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 ) );
-		auto pxl_velocity( writer.declFragData< Vec4 >( cuT( "pxl_velocity" ), 1 ) );
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -1394,7 +1395,6 @@ namespace castor3d
 
 		// Fragment Outputs
 		auto pxl_fragColor( writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 ) );
-		auto pxl_velocity( writer.declFragData< Vec4 >( cuT( "pxl_velocity" ), 1 ) );
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{

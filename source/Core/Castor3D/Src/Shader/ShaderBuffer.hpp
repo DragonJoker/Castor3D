@@ -97,15 +97,9 @@ namespace castor3d
 			return uint32_t( m_data.size() );
 		}
 
-	protected:
-		//!\~english	The SSBO.
-		//!\~french		Le SSBO.
-		renderer::BufferBasePtr m_ssbo;
-		//!\~english	The TBO.
-		//!\~french		Le TBO.
-		renderer::UniformBufferBasePtr m_tbo;
-		//!\~english	The storage data.
-		//!\~french		Les données du stockage.
+	private:
+		renderer::BufferBasePtr m_buffer;
+		renderer::BufferViewPtr m_bufferView;
 		renderer::ByteArray m_data;
 	};
 }

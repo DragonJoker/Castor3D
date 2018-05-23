@@ -100,7 +100,7 @@ namespace castor3d
 		m_renderPass = device.createRenderPass( renderPass );
 
 		m_sampler->initialise();
-		auto & program = doInitialiseShader();
+		auto program = doInitialiseShader();
 		doInitialiseVertexBuffer();
 		doInitialisePipeline( program, source, *m_renderPass );
 	}

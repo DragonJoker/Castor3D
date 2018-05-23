@@ -83,6 +83,7 @@ namespace castor3d
 		sampler.compareOp = renderer::CompareOp::eNever;
 		sampler.minFilter = renderer::Filter::eLinear;
 		sampler.magFilter = renderer::Filter::eLinear;
+		sampler.mipmapMode = renderer::MipmapMode::eNone;
 		sampler.maxAnisotropy = 0.0f;
 		sampler.maxLod = 1.0f;
 		sampler.minLod = 0.0f;

@@ -20,6 +20,9 @@ set( CMAKE_MODULE_PATH
 	${CMAKE_SOURCE_DIR}/CMake/Toolchains
 )
 set( CMAKE_TEMPLATES_DIR ${CMAKE_SOURCE_DIR}/CMake/Templates )
+
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 # Experimental Precompiled headers support for GCC
 include( PCHSupport )
 

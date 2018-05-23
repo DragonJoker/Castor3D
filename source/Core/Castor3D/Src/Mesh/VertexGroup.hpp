@@ -47,7 +47,7 @@ namespace castor3d
 		{
 			InterleavedVertexT result;
 			result.pos = pos;
-			result.tex = Point3< T >{ tex };
+			result.tex = castor::Point3< T >{ tex };
 			return result;
 		}
 
@@ -69,7 +69,7 @@ namespace castor3d
 			InterleavedVertexT result;
 			result.pos = pos;
 			result.nml = nml;
-			result.tex = Point3< T >{ tex };
+			result.tex = castor::Point3< T >{ tex };
 			return result;
 		}
 

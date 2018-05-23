@@ -57,4 +57,19 @@ namespace glsl
 	{
 		writer.checkNameExists( p_name, p_type );
 	}
+
+	void registerUniform( GlslWriter & writer
+		, castor::String const & name
+		, uint32_t location
+		, TypeName type
+		, uint32_t count
+		, bool enabled )
+	{
+		writer.registerUniform( name, location, type, count, enabled );
+	}
+
+	 bool hasPushConstants( GlslWriter const & writer )
+	 {
+		 return writer.hasPushConstants();
+	 }
 }

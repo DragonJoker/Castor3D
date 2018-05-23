@@ -64,7 +64,7 @@ namespace castor
 	template< typename T >
 	bool QuaternionT< T >::TextWriter::operator()( QuaternionT< T > const & p_object, TextFile & p_file )
 	{
-		StringStream streamWord{ makeStringStream() };
+		StringStream streamWord{ castor::makeStringStream() };
 		Point3< T > axis;
 		Angle angle;
 		p_object.toAxisAngle( axis, angle );

@@ -263,6 +263,13 @@ namespace glsl
 	GlslWriter_API void writeLine( GlslWriter & writer, castor::String const & p_line );
 	GlslWriter_API void registerName( GlslWriter & writer, castor::String const & p_name, TypeName p_type );
 	GlslWriter_API void checkNameExists( GlslWriter & writer, castor::String const & p_name, TypeName p_type );
+	GlslWriter_API void registerUniform( GlslWriter & writer
+		, castor::String const & name
+		, uint32_t location
+		, TypeName type
+		, uint32_t count
+		, bool enabled = true );
+	GlslWriter_API bool hasPushConstants( GlslWriter const & writer );
 }
 
 #include "GlslWriterPrerequisites.inl"

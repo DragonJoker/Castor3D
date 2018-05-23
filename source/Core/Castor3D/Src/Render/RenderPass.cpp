@@ -337,7 +337,7 @@ namespace castor3d
 				alphaBlendMode = BlendMode::eNoBlend;
 			}
 
-			auto & backProgram = doGetProgram( passFlags
+			auto backProgram = doGetProgram( passFlags
 				, textureFlags
 				, programFlags
 				, sceneFlags
@@ -346,7 +346,7 @@ namespace castor3d
 
 			if ( !m_opaque )
 			{
-				auto & frontProgram = doGetProgram( passFlags
+				auto frontProgram = doGetProgram( passFlags
 					, textureFlags
 					, programFlags
 					, sceneFlags
@@ -374,7 +374,7 @@ namespace castor3d
 
 				if ( twoSided || checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
-					auto & frontProgram = doGetProgram( passFlags
+					auto frontProgram = doGetProgram( passFlags
 						, textureFlags
 						, programFlags
 						, sceneFlags
@@ -448,8 +448,8 @@ namespace castor3d
 	{
 		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this() );
 		auto & scene = *primitive.getScene();
-		auto & geometryEntry = scene.getGeometryCache().getUbos( primitive, submesh, pass );
-		auto & animationEntry = scene.getAnimatedObjectGroupCache().getUbos( skeleton );
+		auto geometryEntry = scene.getGeometryCache().getUbos( primitive, submesh, pass );
+		auto animationEntry = scene.getAnimatedObjectGroupCache().getUbos( skeleton );
 
 		return SkinningRenderNode
 		{
@@ -475,8 +475,8 @@ namespace castor3d
 	{
 		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this() );
 		auto & scene = *primitive.getScene();
-		auto & geometryEntry = scene.getGeometryCache().getUbos( primitive, submesh, pass );
-		auto & animationEntry = scene.getAnimatedObjectGroupCache().getUbos( mesh );
+		auto geometryEntry = scene.getGeometryCache().getUbos( primitive, submesh, pass );
+		auto animationEntry = scene.getAnimatedObjectGroupCache().getUbos( mesh );
 
 		return MorphingRenderNode
 		{

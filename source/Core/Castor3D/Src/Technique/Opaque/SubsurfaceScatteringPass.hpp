@@ -13,6 +13,8 @@ See LICENSE file in root folder
 #include <Command/CommandBuffer.hpp>
 #include <Sync/Semaphore.hpp>
 
+#include <GlslShader.hpp>
+
 #include <Design/OwnedBy.hpp>
 
 namespace castor3d

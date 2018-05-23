@@ -123,7 +123,7 @@ namespace test_launcher
 
 		if ( doParseCommandLine() )
 		{
-			Logger::setFileName( m_fileName.getPath() / m_fileName.getFileName() + cuT( "_" ) + m_rendererType + cuT( ".log" ) );
+			Logger::setFileName( m_fileName.getPath() / cuT( "Compare" ) / m_fileName.getFileName() + cuT( "_" ) + m_rendererType + cuT( ".log" ) );
 			Logger::logInfo( cuT( "Start" ) );
 
 			try

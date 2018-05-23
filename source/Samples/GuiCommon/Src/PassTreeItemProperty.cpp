@@ -36,7 +36,7 @@ namespace GuiCommon
 		static wxString PROPERTY_PASS_SHADER = _( "Shader" );
 		static wxString PROPERTY_PASS_REFRACTION = _( "Refraction" );
 		static wxString PROPERTY_PASS_GLOSSINESS = _( "Glossiness" );
-		static wxString PROPERTY_PASS_EDIT_SHADER = _( "Edit Shader..." );
+		static wxString PROPERTY_PASS_EDIT_SHADER = _( "View Shaders..." );
 
 		class PassShaderGatherer
 			: public castor3d::RenderTechniqueVisitor
@@ -299,7 +299,7 @@ namespace GuiCommon
 		PROPERTY_PASS_METALLIC = _( "Metallic" );
 		PROPERTY_PASS_SHADER = _( "Shader" );
 		PROPERTY_PASS_GLOSSINESS = _( "Glossiness" );
-		PROPERTY_PASS_EDIT_SHADER = _( "Edit Shader..." );
+		PROPERTY_PASS_EDIT_SHADER = _( "View Shaders..." );
 
 		CreateTreeItemMenu();
 	}

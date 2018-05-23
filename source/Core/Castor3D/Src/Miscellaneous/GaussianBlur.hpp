@@ -161,7 +161,8 @@ namespace castor3d
 		TextureUnit m_intermediate;
 
 		std::vector< float > m_kernel;
-		renderer::CommandBufferPtr m_commandBuffer;
+		renderer::CommandBufferPtr m_horizCommandBuffer;
+		renderer::CommandBufferPtr m_verticCommandBuffer;
 		renderer::UniformBufferPtr< Configuration > m_blurUbo;
 		renderer::RenderPassPtr m_renderPass;
 		renderer::FrameBufferPtr m_blurXFbo;

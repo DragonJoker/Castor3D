@@ -17,33 +17,31 @@ namespace castor3d
 
 	namespace
 	{
-		renderer::BufferBasePtr doGetSsbo( Engine & engine
+		renderer::BufferBasePtr doCreateBuffer( Engine & engine
 			, uint32_t size )
 		{
 			renderer::BufferBasePtr result;
-
-			if ( engine.getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers ) )
-			{
-				result = engine.getRenderSystem()->getCurrentDevice()->createBuffer( size
-					, renderer::BufferTarget::eStorageBuffer
-					, renderer::MemoryPropertyFlag::eHostVisible );
-			}
-
+			renderer::BufferTarget target = engine.getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers )
+				? renderer::BufferTarget::eStorageBuffer
+				: renderer::BufferTarget::eUniformTexelBuffer;
+			result = engine.getRenderSystem()->getCurrentDevice()->createBuffer( size
+				, target | renderer::BufferTarget::eTransferDst
+				, renderer::MemoryPropertyFlag::eHostVisible );
 			return result;
 		}
 
-		renderer::UniformBufferBasePtr doGetTbo( Engine & engine
+		renderer::BufferViewPtr doCreateView( Engine & engine
 			, uint32_t size
-			, bool isTbo )
+			, renderer::BufferBase const & buffer )
 		{
-			renderer::UniformBufferBasePtr result;
+			renderer::BufferViewPtr result;
 
-			if ( isTbo )
+			if ( !engine.getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers ) )
 			{
-				result = engine.getRenderSystem()->getCurrentDevice()->createUniformBuffer( 1u
-					, size
-					, renderer::BufferTarget::eUniformTexelBuffer
-					, renderer::MemoryPropertyFlag::eHostVisible );
+				result = engine.getRenderSystem()->getCurrentDevice()->createBufferView( buffer
+					, renderer::Format::eR32G32B32A32_SFLOAT
+					, 0u
+					, uint32_t( buffer.getSize() ) );
 			}
 
 			return result;
@@ -54,16 +52,16 @@ namespace castor3d
 
 	ShaderBuffer::ShaderBuffer( Engine & engine
 		, uint32_t size )
-		: m_ssbo{ doGetSsbo( engine, size ) }
-		, m_tbo{ doGetTbo( engine, size, m_ssbo == nullptr ) }
+		: m_buffer{ doCreateBuffer( engine, size ) }
+		, m_bufferView{ doCreateView( engine, size, *m_buffer ) }
 		, m_data( size_t( size ), uint8_t( 0 ) )
 	{
 	}
 
 	ShaderBuffer::~ShaderBuffer()
 	{
-		m_ssbo.reset();
-		m_tbo.reset();
+		m_bufferView.reset();
+		m_buffer.reset();
 	}
 
 	void ShaderBuffer::update()
@@ -74,57 +72,42 @@ namespace castor3d
 	void ShaderBuffer::update( uint32_t offset, uint32_t size )
 	{
 		REQUIRE( size + offset <= m_data.size() );
-
-		if ( m_ssbo )
+		if ( uint8_t * buffer = m_buffer->lock( offset
+			, size
+			, renderer::MemoryMapFlag::eWrite ) )
 		{
-			if ( uint8_t * buffer = m_ssbo->lock( offset
-				, size
-				, renderer::MemoryMapFlag::eWrite ) )
-			{
-				std::memcpy( buffer, m_data.data(), size );
-				m_ssbo->flush( 0u, size );
-				m_ssbo->unlock();
-			}
-		}
-		else
-		{
-			if ( uint8_t * buffer = m_tbo->getBuffer().lock( offset
-				, size
-				, renderer::MemoryMapFlag::eWrite ) )
-			{
-				std::memcpy( buffer, m_data.data(), size );
-				m_tbo->getBuffer().flush( 0u, size );
-				m_tbo->getBuffer().unlock();
-			}
+			std::memcpy( buffer, m_data.data(), size );
+			m_buffer->flush( 0u, size );
+			m_buffer->unlock();
 		}
 	}
 
 	renderer::DescriptorSetLayoutBinding ShaderBuffer::createLayoutBinding( uint32_t index )const
 	{
-		if ( m_ssbo )
+		if ( m_bufferView )
 		{
-			return { index, renderer::DescriptorType::eStorageBuffer, renderer::ShaderStageFlag::eFragment };
+			return { index, renderer::DescriptorType::eUniformTexelBuffer, renderer::ShaderStageFlag::eFragment };
 		}
 		else
 		{
-			return { index, renderer::DescriptorType::eUniformTexelBuffer, renderer::ShaderStageFlag::eFragment };
+			return { index, renderer::DescriptorType::eStorageBuffer, renderer::ShaderStageFlag::eFragment };
 		}
 	}
 
 	void ShaderBuffer::createBinding( renderer::DescriptorSet & descriptorSet
 		, renderer::DescriptorSetLayoutBinding const & binding )const
 	{
-		if ( m_ssbo )
+		if ( m_bufferView )
 		{
 			descriptorSet.createBinding( binding
-				, *m_ssbo
-				, 0u
-				, uint32_t( m_data.size() ) );
+				, *m_buffer
+				, *m_bufferView
+				, 0u );
 		}
 		else
 		{
 			descriptorSet.createBinding( binding
-				, *m_tbo
+				, *m_buffer
 				, 0u
 				, uint32_t( m_data.size() ) );
 		}

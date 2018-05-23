@@ -393,8 +393,8 @@ namespace castor3d
 						, shadowFactor
 						, fragmentIn
 						, output );
-					parentOutput.m_diffuse += output.m_diffuse;
-					parentOutput.m_specular += output.m_specular;
+					parentOutput.m_diffuse = output.m_diffuse;
+					parentOutput.m_specular = output.m_specular;
 				}
 				, DirectionalLight( &m_writer, cuT( "light" ) )
 				, InVec3( &m_writer, cuT( "worldEye" ) )
@@ -458,8 +458,8 @@ namespace castor3d
 							, glsl::fma( light.m_attenuation().y()
 								, distance
 								, light.m_attenuation().x() ) ) );
-					parentOutput.m_diffuse += output.m_diffuse / attenuation;
-					parentOutput.m_specular += output.m_specular / attenuation;
+					parentOutput.m_diffuse = output.m_diffuse / attenuation;
+					parentOutput.m_specular = output.m_specular / attenuation;
 				}
 				, PointLight( &m_writer, cuT( "light" ) )
 				, InVec3( &m_writer, cuT( "worldEye" ) )
@@ -530,8 +530,8 @@ namespace castor3d
 						spotFactor = glsl::fma( m_writer.paren( spotFactor - 1.0_f )
 							, 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff() )
 							, 1.0_f );
-						parentOutput.m_diffuse += spotFactor * output.m_diffuse / attenuation;
-						parentOutput.m_specular += spotFactor * output.m_specular / attenuation;
+						parentOutput.m_diffuse = spotFactor * output.m_diffuse / attenuation;
+						parentOutput.m_specular = spotFactor * output.m_specular / attenuation;
 					}
 					FI;
 				}
@@ -564,7 +564,7 @@ namespace castor3d
 					auto L = m_writer.declLocale( cuT( "L" )
 						, normalize( direction ) );
 					auto V = m_writer.declLocale( cuT( "V" )
-						, normalize( normalize( worldEye - fragmentIn.m_vertex ) ) );
+						, normalize( worldEye - fragmentIn.m_vertex ) );
 					auto H = m_writer.declLocale( cuT( "H" )
 						, normalize( L + V ) );
 					auto N = m_writer.declLocale( cuT( "N" )

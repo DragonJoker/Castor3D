@@ -16,7 +16,7 @@ namespace GuiCommon
 	{
 		static wxString PROPERTY_CATEGORY_TONE_MAPPING = _( "Tone Mapping: " );
 		static wxString PROPERTY_TONE_MAPPING_SHADER = _( "Shader" );
-		static wxString PROPERTY_TONE_MAPPING_EDIT_SHADER = _( "Edit Shader..." );
+		static wxString PROPERTY_TONE_MAPPING_EDIT_SHADER = _( "View Shaders..." );
 
 		class ToneMappingShaderGatherer
 			: public castor3d::ToneMappingVisitor
@@ -89,7 +89,7 @@ namespace GuiCommon
 	{
 		PROPERTY_CATEGORY_TONE_MAPPING = _( "Tone Mapping: " );
 		PROPERTY_TONE_MAPPING_SHADER = _( "Shader" );
-		PROPERTY_TONE_MAPPING_EDIT_SHADER = _( "Edit Shader..." );
+		PROPERTY_TONE_MAPPING_EDIT_SHADER = _( "View Shaders..." );
 
 		CreateTreeItemMenu();
 	}

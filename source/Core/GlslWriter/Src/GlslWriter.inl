@@ -179,7 +179,7 @@ namespace glsl
 		using Type = typename TypeOf< T >::Type;
 		registerConstant( name, TypeTraits< Type >::TypeEnum );
 
-		if ( m_config.m_isVulkan )
+		if ( m_config.m_hasSpecialisationConstants )
 		{
 			*this << "layout( constant_id = " << location << " ) const " << TypeTraits< Type >::Name << " " << name << " = ";
 		}
@@ -203,7 +203,7 @@ namespace glsl
 
 		if ( enabled )
 		{
-			if ( m_config.m_isVulkan )
+			if ( m_config.m_hasSpecialisationConstants )
 			{
 				*this << "layout( constant_id = " << location << " ) const " << TypeTraits< Type >::Name << " " << name << " = ";
 			}

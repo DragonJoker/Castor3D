@@ -3,6 +3,10 @@
 #include "Engine.hpp"
 #include "Texture/TextureLayout.hpp"
 
+#include <Command/CommandBuffer.hpp>
+#include <RenderPass/ClearValue.hpp>
+#include <Sync/Fence.hpp>
+
 #include <GlslSource.hpp>
 
 using namespace castor;

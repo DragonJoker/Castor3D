@@ -42,7 +42,7 @@ namespace castor3d
 		//!\~french		L'ID des bones.
 		union Ids
 		{
-			struct
+			struct ids
 			{
 				castor::Point4ui id0;
 				castor::Point4ui id1;
@@ -95,7 +95,7 @@ namespace castor3d
 		//!\~french		Les poids des bones.
 		union Weights
 		{
-			struct
+			struct weights
 			{
 				castor::Point4f weight0;
 				castor::Point4f weight1;

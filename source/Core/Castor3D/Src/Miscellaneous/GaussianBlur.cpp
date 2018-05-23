@@ -244,7 +244,7 @@ namespace castor3d
 			createInfo.attachments.resize( 1u );
 			createInfo.attachments[0].format = format;
 			createInfo.attachments[0].samples = renderer::SampleCountFlag::e1;
-			createInfo.attachments[0].loadOp = renderer::AttachmentLoadOp::eDontCare;
+			createInfo.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
 			createInfo.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
 			createInfo.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 			createInfo.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
@@ -262,18 +262,18 @@ namespace castor3d
 			createInfo.dependencies.resize( 2u );
 			createInfo.dependencies[0].srcSubpass = renderer::ExternalSubpass;
 			createInfo.dependencies[0].dstSubpass = 0u;
-			createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+			createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eHost;
 			createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
+			createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eHostWrite;
 			createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
 			createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 			createInfo.dependencies[1].srcSubpass = 0u;
 			createInfo.dependencies[1].dstSubpass = renderer::ExternalSubpass;
 			createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+			createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 			createInfo.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eMemoryRead;
+			createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
 			createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 			return device.createRenderPass( createInfo );
@@ -366,32 +366,41 @@ namespace castor3d
 		data.textureSize[1] = float( textureSize.height );
 		m_blurUbo->upload();
 		auto & device = *engine.getRenderSystem()->getCurrentDevice();
-		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+		m_horizCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+		m_verticCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 		doInitialiseBlurXProgram( engine );
 		doInitialiseBlurYProgram( engine );
 
-		if ( m_commandBuffer->begin() )
+		if ( m_horizCommandBuffer->begin() )
 		{
-			m_commandBuffer->beginRenderPass( *m_renderPass
+			m_horizCommandBuffer->beginRenderPass( *m_renderPass
 				, *m_blurXFbo
 				, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
 			, renderer::SubpassContents::eSecondaryCommandBuffers );
-			m_commandBuffer->executeCommands( { m_blurXQuad.getCommandBuffer() } );
-			m_commandBuffer->endRenderPass();
-			m_commandBuffer->beginRenderPass( *m_renderPass
+			m_horizCommandBuffer->executeCommands( { m_blurXQuad.getCommandBuffer() } );
+			m_horizCommandBuffer->endRenderPass();
+			m_horizCommandBuffer->end();
+		}
+
+		if ( m_verticCommandBuffer->begin() )
+		{
+			m_verticCommandBuffer->beginRenderPass( *m_renderPass
 				, *m_blurYFbo
 				, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
 			, renderer::SubpassContents::eSecondaryCommandBuffers );
-			m_commandBuffer->executeCommands( { m_blurYQuad.getCommandBuffer() } );
-			m_commandBuffer->endRenderPass();
-			m_commandBuffer->end();
+			m_verticCommandBuffer->executeCommands( { m_blurYQuad.getCommandBuffer() } );
+			m_verticCommandBuffer->endRenderPass();
+			m_verticCommandBuffer->end();
 		}
 	}
 
 	void GaussianBlur::blur()
 	{
 		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
-		device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
+		device.getGraphicsQueue().submit( *m_horizCommandBuffer, nullptr );
+		device.getGraphicsQueue().waitIdle();
+		device.getGraphicsQueue().submit( *m_verticCommandBuffer, nullptr );
+		device.getGraphicsQueue().waitIdle();
 	}
 
 	bool GaussianBlur::doInitialiseBlurXProgram( Engine & engine )

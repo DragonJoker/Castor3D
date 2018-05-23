@@ -101,6 +101,7 @@ namespace VkRender
 			, true
 			, true
 			, true
+			, true
 			, true } };
 	}
 }
