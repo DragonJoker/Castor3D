@@ -117,6 +117,13 @@ namespace castor3d
 		C3D_API void unregisterTimer( RenderPassTimer & timer );
 		/**
 		 *\~english
+		 *\return		The debug overlays shown status.
+		 *\~french
+		 *\return		Le statut d'affichage des incrustations de débogage.
+		 */
+		C3D_API bool hasDebugOverlays()const;
+		/**
+		 *\~english
 		 *\brief		Starts threaded render loop.
 		 *\~french
 		 *\brief		Commence le rendu threadé.
@@ -171,16 +178,6 @@ namespace castor3d
 		inline uint32_t getWantedFps()
 		{
 			return m_wantedFPS;
-		}
-		/**
-		 *\~english
-		 *\return		The debug overlays shown status.
-		 *\~french
-		 *\return		Le statut d'affichage des incrustations de débogage.
-		 */
-		inline bool hasDebugOverlays()const
-		{
-			return m_debugOverlays != nullptr;
 		}
 
 	protected:

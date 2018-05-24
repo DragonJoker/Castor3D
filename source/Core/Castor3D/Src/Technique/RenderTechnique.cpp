@@ -262,6 +262,7 @@ namespace castor3d
 
 	void RenderTechnique::cleanup()
 	{
+		m_onBgChanged.disconnect();
 		m_clearCommandBuffer.reset();
 		m_clearFrameBuffer.reset();
 		m_clearRenderPass.reset();
@@ -618,11 +619,19 @@ namespace castor3d
 			, std::move( attaches ) );
 
 		auto & background = m_renderTarget.getScene()->getBackground();
-		background.initialise( *m_bgRenderPass, m_hdrConfigUbo );
-		background.prepareFrame( *m_bgCommandBuffer
-			, Size{ m_colourTexture->getWidth(), m_colourTexture->getHeight() }
-			, *m_bgRenderPass
-			, *m_bgFrameBuffer );
+		auto prepareBackground = [&background, this]()
+		{
+			background.initialise( *m_bgRenderPass, m_hdrConfigUbo );
+			background.prepareFrame( *m_bgCommandBuffer
+				, Size{ m_colourTexture->getWidth(), m_colourTexture->getHeight() }
+				, *m_bgRenderPass
+				, *m_bgFrameBuffer );
+		};
+		prepareBackground();
+		m_onBgChanged = background.onChanged.connect( [prepareBackground, this]( SceneBackground const & )
+			{
+				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, prepareBackground ) );
+			} );
 	}
 
 	void RenderTechnique::doInitialiseTransparentPass()

@@ -20,6 +20,8 @@
 #include "xpms/animated_object_sel.xpm"
 #include "xpms/animation.xpm"
 #include "xpms/animation_sel.xpm"
+#include "xpms/background.xpm"
+#include "xpms/background_sel.xpm"
 #include "xpms/billboard.xpm"
 #include "xpms/billboard_sel.xpm"
 #include "xpms/bone.xpm"
@@ -390,6 +392,8 @@ namespace GuiCommon
 		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_SEL, frame_variable_sel_xpm );
 		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_BUFFER, frame_variable_buffer_xpm );
 		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL, frame_variable_buffer_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_BACKGROUND, background_xpm );
+		ImagesLoader::addBitmap( eBMP_BACKGROUND_SEL, background_sel_xpm );
 		ImagesLoader::addBitmap( eBMP_COLLAPSE_ALL, collapse_all_xpm );
 		ImagesLoader::addBitmap( eBMP_EXPAND_ALL, expand_all_xpm );
 		doLoadAppImages();

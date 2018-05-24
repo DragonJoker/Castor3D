@@ -350,7 +350,7 @@ namespace fxaa
 				cmd.resetQueryPool( timer.getQuery()
 					, 0u
 					, 2u );
-				cmd.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+				cmd.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
 					, timer.getQuery()
 					, 0u );
 
@@ -367,7 +367,7 @@ namespace fxaa
 				m_fxaaQuad->registerFrame( cmd );
 				cmd.endRenderPass();
 
-				cmd.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+				cmd.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
 					, timer.getQuery()
 					, 1u );
 				cmd.end();

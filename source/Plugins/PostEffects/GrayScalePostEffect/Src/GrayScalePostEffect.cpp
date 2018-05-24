@@ -55,10 +55,10 @@ namespace GrayScale
 			auto out = gl_PerVertex{ writer };
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				vtx_texture = texcoord;
-				out.gl_Position() = vec4( position.xy(), 0.0, 1.0 );
-			} );
+				{
+					vtx_texture = texcoord;
+					out.gl_Position() = vec4( position, 0.0, 1.0 );
+				} );
 			return writer.finalise();
 		}
 
@@ -68,22 +68,40 @@ namespace GrayScale
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 0u, 0u );
+			auto configUbo = glsl::Ubo{ writer, cuT( "Configuration" ), 0u, 0u };
+			auto c3d_factors = configUbo.declMember< Vec3 >( cuT( "c3d_factors" ) );
+			configUbo.end();
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0u );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				auto colour = writer.declLocale( cuT( "colour" )
-					, texture( c3d_mapDiffuse, vtx_texture ).xyz() );
-				auto average = writer.declLocale( cuT( "average" )
-					, Float( 0.2126f ) * colour.r() + 0.7152f * colour.g() + 0.0722f * colour.b() );
-				pxl_fragColor = vec4( vec3( average ), 1.0 );
-			} );
+				{
+					auto colour = writer.declLocale( cuT( "colour" )
+						, texture( c3d_mapDiffuse, vtx_texture ).xyz() );
+					pxl_fragColor = vec4( vec3( dot( c3d_factors, colour ) ), 1.0 );
+				} );
 			return writer.finalise();
 		}
+	}
+
+	//*********************************************************************************************
+
+	PostEffect::Quad::Quad( castor3d::RenderSystem & renderSystem
+		, renderer::UniformBuffer< castor::Point3f > const & configUbo )
+		: castor3d::RenderQuad{ renderSystem, true }
+		, m_configUbo{ configUbo }
+	{
+	}
+
+	void PostEffect::Quad::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
+		, renderer::DescriptorSet & descriptorSet )
+	{
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
+			, m_configUbo
+			, 0u );
 	}
 
 	//*********************************************************************************************
@@ -130,6 +148,16 @@ namespace GrayScale
 		return std::make_shared< PostEffect >( renderTarget, renderSystem, params );
 	}
 
+	void PostEffect::update( castor::Nanoseconds const & elapsedTime )
+	{
+		if ( m_factors.isDirty() )
+		{
+			m_configUbo->getData() = m_factors.value();
+			m_configUbo->upload();
+			m_factors.reset();
+		}
+	}
+
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
 		visitor.visit( cuT( "GrayScale" )
@@ -138,6 +166,11 @@ namespace GrayScale
 		visitor.visit( cuT( "GrayScale" )
 			, renderer::ShaderStageFlag::eFragment
 			, m_pixelShader );
+		visitor.visit( cuT( "GrayScale" )
+			, renderer::ShaderStageFlag::eFragment
+			, cuT( "Configuration" )
+			, cuT( "Factors" )
+			, m_factors );
 	}
 
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
@@ -147,6 +180,14 @@ namespace GrayScale
 		m_sampler->initialise();
 		m_vertexShader = getVertexProgram( getRenderSystem() );
 		m_pixelShader = getFragmentProgram( getRenderSystem() );
+
+		m_configUbo = renderer::makeUniformBuffer< castor::Point3f >( device
+			, 1u
+			, 0u
+			, renderer::MemoryPropertyFlag::eHostVisible );
+		m_configUbo->getData() = m_factors.value();
+		m_configUbo->upload();
+		m_factors.reset();
 
 		renderer::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
@@ -192,8 +233,11 @@ namespace GrayScale
 
 		m_renderPass = device.createRenderPass( renderPass );
 
-		renderer::DescriptorSetLayoutBindingArray bindings;
-		m_quad = std::make_unique< castor3d::RenderQuad >( *getRenderSystem(), true );
+		renderer::DescriptorSetLayoutBindingArray bindings
+		{
+			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment }
+		};
+		m_quad = std::make_unique< Quad >( *getRenderSystem(), *m_configUbo );
 		m_quad->createPipeline( size
 			, castor::Position{}
 			, stages
@@ -219,7 +263,7 @@ namespace GrayScale
 			cmd.resetQueryPool( timer.getQuery()
 				, 0u
 				, 2u );
-			cmd.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			cmd.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
 				, timer.getQuery()
 				, 0u );
 			// Put target image in shader input layout.
@@ -234,7 +278,7 @@ namespace GrayScale
 			m_quad->registerFrame( cmd );
 			cmd.endRenderPass();
 
-			cmd.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			cmd.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
 				, timer.getQuery()
 				, 1u );
 			cmd.end();
@@ -250,6 +294,7 @@ namespace GrayScale
 		m_quad.reset();
 		m_renderPass.reset();
 		m_surface.cleanup();
+		m_configUbo.reset();
 	}
 
 	bool PostEffect::doWriteInto( castor::TextFile & file )

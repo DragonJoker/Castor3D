@@ -12,11 +12,29 @@ See LICENSE file in root folder
 
 #include <GlslShader.hpp>
 
+#include <Design/ChangeTracked.hpp>
+
 namespace GrayScale
 {
 	class PostEffect
 		: public castor3d::PostEffect
 	{
+	private:
+		class Quad
+			: public castor3d::RenderQuad
+		{
+		public:
+			Quad( castor3d::RenderSystem & renderSystem
+				, renderer::UniformBuffer< castor::Point3f > const & configUbo );
+
+		private:
+			void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
+				, renderer::DescriptorSet & descriptorSet );
+
+		private:
+			renderer::UniformBuffer< castor::Point3f > const & m_configUbo;
+		};
+
 	public:
 		PostEffect( castor3d::RenderTarget & renderTarget
 			, castor3d::RenderSystem & renderSystem
@@ -25,6 +43,10 @@ namespace GrayScale
 		static castor3d::PostEffectSPtr create( castor3d::RenderTarget & renderTarget
 			, castor3d::RenderSystem & renderSystem
 			, castor3d::Parameters const & params );
+		/**
+		 *\copydoc		castor3d::PostEffect::update
+		 */
+		void update( castor::Nanoseconds const & elapsedTime )override;
 		/**
 		 *\copydoc		castor3d::PostEffect::accept
 		 */
@@ -52,7 +74,9 @@ namespace GrayScale
 		castor3d::SamplerSPtr m_sampler;
 		castor3d::PostEffectSurface m_surface;
 		renderer::RenderPassPtr m_renderPass;
-		std::unique_ptr< castor3d::RenderQuad > m_quad;
+		renderer::UniformBufferPtr< castor::Point3f > m_configUbo;
+		std::unique_ptr< Quad > m_quad;
+		castor::ChangeTracked< castor::Point3f > m_factors{ castor::Point3f{ 0.2126f, 0.7152f, 0.0722f } };
 		glsl::Shader m_vertexShader;
 		glsl::Shader m_pixelShader;
 	};

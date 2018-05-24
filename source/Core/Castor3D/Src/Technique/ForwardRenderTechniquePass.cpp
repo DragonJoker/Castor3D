@@ -245,7 +245,7 @@ namespace castor3d
 				m_nodesCommands->resetQueryPool( getTimer().getQuery()
 					, 0u
 					, 2u );
-				m_nodesCommands->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+				m_nodesCommands->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
 					, getTimer().getQuery()
 					, 0u );
 				m_nodesCommands->beginRenderPass( getRenderPass()

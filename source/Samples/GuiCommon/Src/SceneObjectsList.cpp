@@ -3,6 +3,7 @@
 #include "AnimatedObjectGroupTreeItemProperty.hpp"
 #include "AnimatedObjectTreeItemProperty.hpp"
 #include "AnimationTreeItemProperty.hpp"
+#include "BackgroundTreeItemProperty.hpp"
 #include "BillboardTreeItemProperty.hpp"
 #include "BoneTreeItemProperty.hpp"
 #include "CameraTreeItemProperty.hpp"
@@ -116,6 +117,8 @@ namespace GuiCommon
 			ImagesLoader::getBitmap( eBMP_SKELETON_SEL ),
 			ImagesLoader::getBitmap( eBMP_BONE ),
 			ImagesLoader::getBitmap( eBMP_BONE_SEL ),
+			ImagesLoader::getBitmap( eBMP_BACKGROUND ),
+			ImagesLoader::getBitmap( eBMP_BACKGROUND_SEL ),
 		};
 
 		auto * imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
@@ -150,7 +153,14 @@ namespace GuiCommon
 			wxTreeItemId sceneId = AddRoot( scene->getName()
 				, eBMP_SCENE
 				, eBMP_SCENE_SEL
-				, new SceneTreeItemProperty( m_propertiesHolder->IsEditable(), *scene ) );
+				, new SceneTreeItemProperty( this, m_propertiesHolder->IsEditable(), *scene ) );
+
+			AppendItem( sceneId
+				, _( "Background" )
+				, eBMP_BACKGROUND
+				, eBMP_BACKGROUND_SEL
+				, new BackgroundTreeItemProperty( this, m_propertiesHolder->IsEditable(), scene->getBackground() ) );
+
 			scene->getEngine()->getRenderWindowCache().lock();
 
 			for ( auto it : scene->getEngine()->getRenderWindowCache() )

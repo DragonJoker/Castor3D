@@ -96,13 +96,103 @@ namespace castor3d
 		/**
 		*\~english
 		*\return
+		*	Sets the skybox's left face texture.
+		*\~french
+		*\return
+		*	Définit la texture de la face gauche de la skybox.
+		*/
+		C3D_API void loadLeftImage( castor::Path const & folder
+			, castor::Path const & relative );
+		/**
+		*\~english
+		*\return
+		*	Sets the skybox's left face texture.
+		*\~french
+		*\return
+		*	Définit la texture de la face gauche de la skybox.
+		*/
+		C3D_API void loadRightImage( castor::Path const & folder
+			, castor::Path const & relative );
+		/**
+		*\~english
+		*\return
+		*	Sets the skybox's left face texture.
+		*\~french
+		*\return
+		*	Définit la texture de la face gauche de la skybox.
+		*/
+		C3D_API void loadTopImage( castor::Path const & folder
+			, castor::Path const & relative );
+		/**
+		*\~english
+		*\return
+		*	Sets the skybox's left face texture.
+		*\~french
+		*\return
+		*	Définit la texture de la face gauche de la skybox.
+		*/
+		C3D_API void loadBottomImage( castor::Path const & folder
+			, castor::Path const & relative );
+		/**
+		*\~english
+		*\return
+		*	Sets the skybox's left face texture.
+		*\~french
+		*\return
+		*	Définit la texture de la face gauche de la skybox.
+		*/
+		C3D_API void loadFrontImage( castor::Path const & folder
+			, castor::Path const & relative );
+		/**
+		*\~english
+		*\return
+		*	Sets the skybox's left face texture.
+		*\~french
+		*\return
+		*	Définit la texture de la face gauche de la skybox.
+		*/
+		C3D_API void loadBackImage( castor::Path const & folder
+			, castor::Path const & relative );
+		/**
+		*\~english
+		*\return
 		*	Sets the skybox's equirectangular texture.
 		*\~french
 		*\return
 		*	Définit la texture équirectangulaire de la skybox.
 		*/
 		C3D_API void setEquiTexture( TextureLayoutSPtr texture
-			, castor::Size const & size );
+			, uint32_t size );
+		/**
+		*\~english
+		*\return
+		*	Sets the skybox's equirectangular texture.
+		*\~french
+		*\return
+		*	Définit la texture équirectangulaire de la skybox.
+		*/
+		C3D_API void loadEquiTexture( castor::Path const & folder
+			, castor::Path const & relative
+			, uint32_t size );
+		/**
+		*\~english
+		*\return
+		*	Sets the size of the skybox generated from the equirectangular texture.
+		*\~french
+		*\return
+		*	Définit les dimensions de la skybox extraite depuis la texture équirectangulaire de la skybox.
+		*/
+		C3D_API void setEquiSize( uint32_t size );
+		/**
+		*\~english
+		*\return
+		*	Sets the skybox's cross texture.
+		*\~french
+		*\return
+		*	Définit la texture croix de la skybox.
+		*/
+		C3D_API void loadCrossTexture( castor::Path const & folder
+			, castor::Path const & relative );
 		/**
 		*\~english
 		*\return

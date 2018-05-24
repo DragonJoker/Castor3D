@@ -16,6 +16,13 @@ namespace castor3d
 {
 	struct CommandsSemaphore
 	{
+		CommandsSemaphore( renderer::CommandBufferPtr && commandBuffer
+			, renderer::SemaphorePtr && semaphore )
+			: commandBuffer{ std::move( commandBuffer ) }
+			, semaphore{ std::move( semaphore ) }
+		{
+		}
+
 		renderer::CommandBufferPtr commandBuffer;
 		renderer::SemaphorePtr semaphore;
 	};

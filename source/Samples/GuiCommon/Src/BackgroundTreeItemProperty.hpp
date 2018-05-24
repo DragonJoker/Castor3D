@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___GUICOMMON_SCENE_TREE_ITEM_PROPERTY_H___
-#define ___GUICOMMON_SCENE_TREE_ITEM_PROPERTY_H___
+#ifndef ___GUICOMMON_BackgroundTreeItemProperty_HPP___
+#define ___GUICOMMON_BackgroundTreeItemProperty_HPP___
 
 #include "TreeItemProperty.hpp"
 
@@ -17,7 +17,7 @@ namespace GuiCommon
 	\~french
 	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesContainer, pour les scànes
 	*/
-	class SceneTreeItemProperty
+	class BackgroundTreeItemProperty
 		: public TreeItemProperty
 		, public wxEvtHandler
 	{
@@ -32,28 +32,16 @@ namespace GuiCommon
 		 *\param[in]	editable	Dit si les propriétés sont modifiables
 		 *\param[in]	scene		L'objet cible
 		 */
-		SceneTreeItemProperty( wxWindow * parent
+		BackgroundTreeItemProperty( wxWindow * parent
 			, bool editable
-			, castor3d::Scene & scene );
+			, castor3d::SceneBackground & background );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~SceneTreeItemProperty();
-		/**
-		 *\~english
-		 *\brief		Retrieves the object
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère l'objet
-		 *\return		La valeur
-		 */
-		inline castor3d::Scene & getScene()
-		{
-			return m_scene;
-		}
+		~BackgroundTreeItemProperty();
 
 	private:
 		/**
@@ -66,12 +54,24 @@ namespace GuiCommon
 		virtual void doPropertyChange( wxPropertyGridEvent & event );
 
 	private:
-		void onDebugOverlaysChange( bool const & value );
-		void onAmbientLightChange( castor::RgbColour const & value );
+		wxPGProperty * doCreateTextureImageProperty( wxString const & name
+			, castor3d::TextureLayout const & texture );
+		void onBackgroundColourChange( castor::RgbColour const & value );
+		void onBackgroundImageChange( castor::String const & value );
+		void onBackgroundLeftImageChange( castor::String const & value );
+		void onBackgroundRightImageChange( castor::String const & value );
+		void onBackgroundTopImageChange( castor::String const & value );
+		void onBackgroundBottomImageChange( castor::String const & value );
+		void onBackgroundFrontImageChange( castor::String const & value );
+		void onBackgroundBackImageChange( castor::String const & value );
+		void onBackgroundCrossImageChange( castor::String const & value );
+		void onBackgroundEquirectangularImageChange( castor::String const & value );
+		void onBackgroundEquirectangularDimensionsChange( uint32_t value );
 
 	private:
-		castor3d::Scene & m_scene;
+		castor3d::SceneBackground & m_background;
 		wxWindow * m_parent;
+		wxPGProperty * m_backgroundProperty{ nullptr };
 	};
 }
 

@@ -120,13 +120,12 @@ namespace castor3d
 		bool doInitialiseBlurYProgram( Engine & engine );
 
 	public:
-		static castor::String const Config;
-		static castor::String const Coefficients;
-		static castor::String const CoefficientsCount;
-		static castor::String const TextureSize;
-		static constexpr uint32_t MaxCoefficients{ 60u };
+		C3D_API static castor::String const Config;
+		C3D_API static castor::String const Coefficients;
+		C3D_API static castor::String const CoefficientsCount;
+		C3D_API static castor::String const TextureSize;
+		C3D_API static constexpr uint32_t MaxCoefficients{ 60u };
 
-	private:
 		struct Configuration
 		{
 			castor::Point2f textureSize;
@@ -135,6 +134,7 @@ namespace castor3d
 			std::array< castor::Point4f, GaussianBlur::MaxCoefficients / 4u > blurCoeffs; // We then allow for 60 coeffs max, to have a 256 bytes struct.
 		};
 
+	private:
 		class RenderQuad
 			: public castor3d::RenderQuad
 		{

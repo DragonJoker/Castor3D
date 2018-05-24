@@ -53,7 +53,9 @@ namespace castor3d
 
 		renderer::ImageViewCreateInfo getSubviewCreateInfos( renderer::ImageCreateInfo const & info
 			, uint32_t baseArrayLayer
-			, uint32_t arrayLayers )
+			, uint32_t arrayLayers
+			, uint32_t baseMipLevel
+			, uint32_t levelCount )
 		{
 			renderer::ImageViewCreateInfo view{};
 			view.format = info.format;
@@ -61,8 +63,8 @@ namespace castor3d
 			view.subresourceRange.aspectMask = renderer::getAspectMask( info.format );
 			view.subresourceRange.baseArrayLayer = baseArrayLayer;
 			view.subresourceRange.layerCount = arrayLayers;
-			view.subresourceRange.baseMipLevel = 0u;
-			view.subresourceRange.levelCount = info.mipLevels;
+			view.subresourceRange.baseMipLevel = baseMipLevel;
+			view.subresourceRange.levelCount = levelCount;
 			return view;
 		}
 
@@ -72,7 +74,17 @@ namespace castor3d
 			, uint32_t arrayLayers )
 		{
 			return std::make_unique< TextureView >( layout
-				, getSubviewCreateInfos( info, baseArrayLayer, arrayLayers )
+				, getSubviewCreateInfos( info, baseArrayLayer, arrayLayers, 0u, info.mipLevels )
+				, 0u );
+		}
+
+		TextureViewUPtr createMipSubview( TextureLayout & layout
+			, renderer::ImageCreateInfo const & info
+			, uint32_t baseMipLevel
+			, uint32_t levelCount )
+		{
+			return std::make_unique< TextureView >( layout
+				, getSubviewCreateInfos( info, 0u, info.arrayLayers, baseMipLevel, levelCount )
 				, 0u );
 		}
 	}
@@ -99,6 +111,22 @@ namespace castor3d
 				view = createSubview( *this, m_info, index, 1u );
 				++index;
 			}
+		}
+		else if ( info.mipLevels > 1u )
+		{
+			m_views.resize( info.mipLevels );
+			uint32_t index = 0u;
+
+			for ( auto & view : m_views )
+			{
+				view = createMipSubview( *this, m_info, index, 1u );
+				++index;
+			}
+		}
+		else
+		{
+			m_views.resize( 1u );
+			m_views.back() = createSubview( *this, m_info, 0u, 1u );
 		}
 	}
 
@@ -181,7 +209,9 @@ namespace castor3d
 			m_info.extent.height = buffer->dimensions().getHeight();
 			m_info.extent.depth = 1u;
 			m_info.format = convert( buffer->format() );
-			m_defaultView->doUpdate( getSubviewCreateInfos( m_info, 0u, m_info.arrayLayers ) );
+			m_defaultView->doUpdate( getSubviewCreateInfos( m_info, 0u, m_info.arrayLayers, 0u, 1u ) );
+			REQUIRE( m_views.size() == 1u );
+			m_views.back()->doUpdate( getSubviewCreateInfos( m_info, 0u, m_info.arrayLayers, 0u, 1u ) );
 		}
 	}
 
@@ -219,7 +249,9 @@ namespace castor3d
 			m_info.extent.height = buffer->dimensions().getHeight();
 			m_info.extent.depth = 1u;
 			m_info.format = convert( buffer->format() );
-			m_defaultView->doUpdate( getSubviewCreateInfos( m_info, 0u, m_info.arrayLayers ) );
+			m_defaultView->doUpdate( getSubviewCreateInfos( m_info, 0u, m_info.arrayLayers, 0u, 1u ) );
+			REQUIRE( m_views.size() == 1u );
+			m_views.back()->doUpdate( getSubviewCreateInfos( m_info, 0u, m_info.arrayLayers, 0u, 1u ) );
 		}
 	}
 
@@ -235,7 +267,12 @@ namespace castor3d
 			m_info.extent.height = size.getHeight();
 			m_info.extent.depth = 1u;
 			m_info.format = format;
-			m_defaultView->doUpdate( getSubviewCreateInfos( m_info, 0u, m_info.arrayLayers ) );
+			m_defaultView->doUpdate( getSubviewCreateInfos( m_info, 0u, m_info.arrayLayers, 0u, 1u ) );
+
+			if ( m_views.size() == 1 )
+			{
+				m_views.front()->doUpdate( getSubviewCreateInfos( m_info, 0u, m_info.arrayLayers, 0u, 1u ) );
+			}
 		}
 	}
 

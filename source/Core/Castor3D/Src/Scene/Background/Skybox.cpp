@@ -167,18 +167,114 @@ namespace castor3d
 		visitor.visit( *this );
 	}
 
+	void SkyboxBackground::loadLeftImage( castor::Path const & folder
+		, castor::Path const & relative )
+	{
+		getTexture().getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource( folder, relative );
+		notifyChanged();
+	}
+
+	void SkyboxBackground::loadRightImage( castor::Path const & folder
+		, castor::Path const & relative )
+	{
+		getTexture().getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource( folder, relative );
+		notifyChanged();
+	}
+
+	void SkyboxBackground::loadTopImage( castor::Path const & folder
+		, castor::Path const & relative )
+	{
+		getTexture().getImage( uint32_t( CubeMapFace::eNegativeY ) ).initialiseSource( folder, relative );
+		notifyChanged();
+	}
+
+	void SkyboxBackground::loadBottomImage( castor::Path const & folder
+		, castor::Path const & relative )
+	{
+		getTexture().getImage( uint32_t( CubeMapFace::ePositiveY ) ).initialiseSource( folder, relative );
+		notifyChanged();
+	}
+
+	void SkyboxBackground::loadFrontImage( castor::Path const & folder
+		, castor::Path const & relative )
+	{
+		getTexture().getImage( uint32_t( CubeMapFace::eNegativeZ ) ).initialiseSource( folder, relative );
+		notifyChanged();
+	}
+
+	void SkyboxBackground::loadBackImage( castor::Path const & folder
+		, castor::Path const & relative )
+	{
+		getTexture().getImage( uint32_t( CubeMapFace::ePositiveZ ) ).initialiseSource( folder, relative );
+		notifyChanged();
+	}
+
+	void SkyboxBackground::loadEquiTexture( castor::Path const & folder
+		, castor::Path const & relative
+		, uint32_t size )
+	{
+		renderer::ImageCreateInfo image{};
+		image.arrayLayers = 1u;
+		image.extent.width = size;
+		image.extent.height = size;
+		image.extent.depth = 1u;
+		image.imageType = renderer::TextureType::e2D;
+		image.initialLayout = renderer::ImageLayout::eUndefined;
+		image.mipLevels = 1u;
+		image.samples = renderer::SampleCountFlag::e1;
+		image.sharingMode = renderer::SharingMode::eExclusive;
+		image.tiling = renderer::ImageTiling::eOptimal;
+		image.usage = renderer::ImageUsageFlag::eSampled
+			| renderer::ImageUsageFlag::eTransferDst;
+		auto texture = std::make_shared< TextureLayout >( *getScene().getEngine()->getRenderSystem()
+			, image
+			, renderer::MemoryPropertyFlag::eDeviceLocal );
+		texture->getDefaultImage().initialiseSource( folder, relative );
+		setEquiTexture( texture, size );
+	}
+
 	void SkyboxBackground::setEquiTexture( TextureLayoutSPtr texture
-		, castor::Size const & size )
+		, uint32_t size )
 	{
 		m_equiTexturePath = castor::Path( texture->getDefaultImage().toString() );
 		m_equiTexture = texture;
-		m_equiSize = size;
+		m_equiSize.set( size, size );
+		notifyChanged();
+	}
+
+	void SkyboxBackground::setEquiSize( uint32_t size )
+	{
+		m_equiSize.set( size, size );
+		notifyChanged();
+	}
+
+	void SkyboxBackground::loadCrossTexture( castor::Path const & folder
+		, castor::Path const & relative )
+	{
+		renderer::ImageCreateInfo image{};
+		image.arrayLayers = 1u;
+		image.extent.depth = 1u;
+		image.imageType = renderer::TextureType::e2D;
+		image.initialLayout = renderer::ImageLayout::eUndefined;
+		image.mipLevels = 1u;
+		image.samples = renderer::SampleCountFlag::e1;
+		image.sharingMode = renderer::SharingMode::eExclusive;
+		image.tiling = renderer::ImageTiling::eOptimal;
+		image.usage = renderer::ImageUsageFlag::eSampled
+			| renderer::ImageUsageFlag::eTransferSrc
+			| renderer::ImageUsageFlag::eTransferDst;
+		auto texture = std::make_shared< TextureLayout >( *getScene().getEngine()->getRenderSystem()
+			, image
+			, renderer::MemoryPropertyFlag::eDeviceLocal );
+		texture->getDefaultImage().initialiseSource( folder, relative );
+		setCrossTexture( texture );
 	}
 
 	void SkyboxBackground::setCrossTexture( TextureLayoutSPtr texture )
 	{
 		m_crossTexturePath = castor::Path( texture->getDefaultImage().toString() );
 		m_crossTexture = texture;
+		notifyChanged();
 	}
 
 	bool SkyboxBackground::doInitialise( renderer::RenderPass const & renderPass )
@@ -252,14 +348,13 @@ namespace castor3d
 				, *m_texture };
 			equiToCube.render();
 
-			m_equiTexture->cleanup();
-			m_equiTexture.reset();
-
 			if ( m_scene.getMaterialsType() != MaterialType::eLegacy )
 			{
 				m_texture->generateMipmaps();
 			}
 		}
+
+		m_equiTexture->cleanup();
 	}
 
 	void SkyboxBackground::doInitialiseCrossTexture()
@@ -384,6 +479,5 @@ namespace castor3d
 		device.waitIdle();
 
 		m_crossTexture->cleanup();
-		m_crossTexture.reset();
 	}
 }

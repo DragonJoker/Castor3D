@@ -120,6 +120,16 @@ namespace castor3d
 		 *\param[in]	timer	Le timer à désenregistrer.
 		 */
 		void unregisterTimer( RenderPassTimer & timer );
+		/**
+		 *\~english
+		 *\return		The debug overlays shown status.
+		 *\~french
+		 *\return		Le statut d'affichage des incrustations de débogage.
+		 */
+		inline bool isShown()const
+		{
+			return m_visible;
+		}
 
 	private:
 		void doCreateDebugPanel( OverlayCache & cache );

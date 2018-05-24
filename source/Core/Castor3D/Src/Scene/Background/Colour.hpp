@@ -84,6 +84,11 @@ namespace castor3d
 			REQUIRE( m_texture );
 			return m_texture->getDefaultView();
 		}
+
+		inline castor::HdrRgbColour const & getColour()const
+		{
+			return m_colour;
+		}
 		/**@}*/
 
 	private:

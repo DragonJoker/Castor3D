@@ -240,6 +240,7 @@ namespace castor3d
 		renderer::SemaphorePtr m_clearSemaphore;
 		renderer::RenderPassPtr m_debugRenderPass;
 		renderer::FrameBufferPtr m_debugFrameBuffer;
+		OnBackgroundChangedConnection m_onBgChanged;
 	};
 }
 

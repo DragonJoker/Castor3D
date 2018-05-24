@@ -671,7 +671,7 @@ namespace light_streaks
 			hiPassCmd.resetQueryPool( timer.getQuery()
 				, 0u
 				, 2u );
-			hiPassCmd.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			hiPassCmd.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
 				, timer.getQuery()
 				, 0u );
 			// Put target image in fragment shader input layout.
@@ -805,7 +805,7 @@ namespace light_streaks
 			combineCmd.draw( 6u );
 			combineCmd.endRenderPass();
 
-			combineCmd.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			combineCmd.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
 				, timer.getQuery()
 				, 1u );
 			result = combineCmd.end();

@@ -5,7 +5,7 @@ namespace castor
 {
 	//*************************************************************************************************
 
-	namespace
+	namespace details
 	{
 		template< typename T, uint32_t TCount, uint32_t Index, typename U, typename ... Values >
 		void construct( Point< T, TCount > & result, U current, Values ... );
@@ -33,6 +33,49 @@ namespace castor
 				construct< T, TCount, Index + 1, Values... >( result, values... );
 			}
 		}
+
+		template< typename SrcType, typename DstType, uint32_t SrcCount, uint32_t DstCount >
+		struct DataCopier
+		{
+			static uint32_t constexpr MinCount = MinValue< SrcCount, DstCount >::value;
+
+			void operator()( SrcType const * src
+				, DstType * dst )
+			{
+				for ( uint32_t i = 0; i < MinCount; i++ )
+				{
+					dst[i] = DstType( src[i] );
+				}
+
+				if ( DstCount > MinCount )
+				{
+					for ( uint32_t i = MinCount; i < DstCount; ++i )
+					{
+						dst[i] = DstType{};
+					}
+				}
+			}
+		};
+
+		template< typename Type, uint32_t SrcCount, uint32_t DstCount >
+		struct DataCopier< Type, Type, SrcCount, DstCount >
+		{
+			static uint32_t constexpr MinCount = MinValue< SrcCount, DstCount >::value;
+
+			void operator()( Type const * src
+				, Type * dst )
+			{
+				std::copy( src, src + MinCount, dst );
+
+				if ( DstCount > MinCount )
+				{
+					for ( uint32_t i = MinCount; i < DstCount; ++i )
+					{
+						dst[i] = Type{};
+					}
+				}
+			}
+		};
 	}
 
 	//*************************************************************************************************
@@ -137,28 +180,8 @@ namespace castor
 	Point< T, TCount >::Point( Point< U, UCount > const & rhs )
 	{
 		static uint32_t constexpr MinCount = MinValue< TCount, UCount >::value;
-
-		if ( std::is_same< T, U >::value )
-		{
-			std::copy( rhs.begin()
-				, rhs.begin() + MinCount
-				, m_coords.begin() );
-		}
-		else
-		{
-			for ( uint32_t i = 0; i < MinCount; i++ )
-			{
-				m_coords[i] = T( rhs[i] );
-			}
-		}
-
-		if ( TCount > UCount )
-		{
-			for ( uint32_t i = UCount; i < TCount; ++i )
-			{
-				m_coords[i] = T{};
-			}
-		}
+		details::DataCopier< U, T, UCount, TCount > copier;
+		copier( rhs.constPtr(), ptr() );
 	}
 
 	template< typename T, uint32_t TCount >
@@ -166,28 +189,8 @@ namespace castor
 	Point< T, TCount >::Point( Coords< U, UCount > const & rhs )
 	{
 		static uint32_t constexpr MinCount = MinValue< TCount, UCount >::value;
-
-		if ( std::is_same< T, U >::value )
-		{
-			std::copy( rhs.begin()
-				, rhs.begin() + MinCount
-				, m_coords.begin() );
-		}
-		else
-		{
-			for ( uint32_t i = 0; i < MinCount; i++ )
-			{
-				m_coords[i] = T( rhs[i] );
-			}
-		}
-
-		if ( TCount > UCount )
-		{
-			for ( uint32_t i = UCount; i < TCount; ++i )
-			{
-				m_coords[i] = T{};
-			}
-		}
+		details::DataCopier< U, T, UCount, TCount > copier;
+		copier( rhs.constPtr(), ptr() );
 	}
 
 	template< typename T, uint32_t TCount >
@@ -214,7 +217,7 @@ namespace castor
 	Point< T, TCount >::Point( ValueA a, ValueB b, Values ... values )
 		: m_coords{}
 	{
-		construct< T, TCount, 0, ValueA, ValueB, Values... >( *this, a, b, values... );
+		details::construct< T, TCount, 0, ValueA, ValueB, Values... >( *this, a, b, values... );
 	}
 
 	template< typename T, uint32_t TCount >

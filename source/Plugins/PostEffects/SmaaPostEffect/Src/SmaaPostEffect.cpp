@@ -274,7 +274,7 @@ namespace smaa
 			edgeDetectionCmd.resetQueryPool( timer.getQuery()
 				, 0u
 				, 2u );
-			edgeDetectionCmd.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			edgeDetectionCmd.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
 				, timer.getQuery()
 				, 0u );
 			// Put SRGB image in shader input layout.

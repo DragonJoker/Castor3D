@@ -4341,27 +4341,9 @@ namespace castor3d
 
 			if ( File::fileExists( filePath / path ) )
 			{
-				Size size;
+				uint32_t size;
 				p_params[1]->get( size );
-				renderer::ImageCreateInfo image{};
-				image.arrayLayers = 1u;
-				image.extent.width = size.getWidth();
-				image.extent.height = size.getHeight();
-				image.extent.depth = 1u;
-				image.imageType = renderer::TextureType::e2D;
-				image.initialLayout = renderer::ImageLayout::eUndefined;
-				image.mipLevels = 1u;
-				image.samples = renderer::SampleCountFlag::e1;
-				image.sharingMode = renderer::SharingMode::eExclusive;
-				image.tiling = renderer::ImageTiling::eOptimal;
-				image.usage = renderer::ImageUsageFlag::eSampled
-					| renderer::ImageUsageFlag::eTransferDst;
-				auto texture = std::make_shared< TextureLayout >( *parsingContext->scene->getEngine()->getRenderSystem()
-					, image
-					, renderer::MemoryPropertyFlag::eDeviceLocal );
-				texture->getDefaultImage().initialiseSource( filePath, path );
-				parsingContext->skybox->setEquiTexture( texture
-					, size );
+				parsingContext->skybox->loadEquiTexture( filePath, path, size );
 			}
 			else
 			{
@@ -4391,23 +4373,7 @@ namespace castor3d
 
 			if ( File::fileExists( filePath / path ) )
 			{
-				renderer::ImageCreateInfo image{};
-				image.arrayLayers = 1u;
-				image.extent.depth = 1u;
-				image.imageType = renderer::TextureType::e2D;
-				image.initialLayout = renderer::ImageLayout::eUndefined;
-				image.mipLevels = 1u;
-				image.samples = renderer::SampleCountFlag::e1;
-				image.sharingMode = renderer::SharingMode::eExclusive;
-				image.tiling = renderer::ImageTiling::eOptimal;
-				image.usage = renderer::ImageUsageFlag::eSampled
-					| renderer::ImageUsageFlag::eTransferSrc
-					| renderer::ImageUsageFlag::eTransferDst;
-				auto texture = std::make_shared< TextureLayout >( *parsingContext->scene->getEngine()->getRenderSystem()
-					, image
-					, renderer::MemoryPropertyFlag::eDeviceLocal );
-				texture->getDefaultImage().initialiseSource( filePath, path );
-				parsingContext->skybox->setCrossTexture( texture );
+				parsingContext->skybox->loadCrossTexture( filePath, path );
 			}
 			else
 			{
@@ -4424,7 +4390,7 @@ namespace castor3d
 		if ( parsingContext->skybox )
 		{
 			Path path;
-			parsingContext->skybox->getTexture().getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource( p_context->m_file.getPath(), p_params[0]->get( path ) );
+			parsingContext->skybox->loadLeftImage( p_context->m_file.getPath(), p_params[0]->get( path ) );
 		}
 		else
 		{
@@ -4440,8 +4406,7 @@ namespace castor3d
 		if ( parsingContext->skybox )
 		{
 			Path path;
-			path = p_context->m_file.getPath() / p_params[0]->get( path );
-			parsingContext->skybox->getTexture().getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource( p_context->m_file.getPath(), p_params[0]->get( path ) );
+			parsingContext->skybox->loadRightImage( p_context->m_file.getPath(), p_params[0]->get( path ) );
 		}
 		else
 		{
@@ -4457,8 +4422,7 @@ namespace castor3d
 		if ( parsingContext->skybox )
 		{
 			Path path;
-			path = p_context->m_file.getPath() / p_params[0]->get( path );
-			parsingContext->skybox->getTexture().getImage( uint32_t( CubeMapFace::eNegativeY ) ).initialiseSource( p_context->m_file.getPath(), p_params[0]->get( path ) );
+			parsingContext->skybox->loadTopImage( p_context->m_file.getPath(), p_params[0]->get( path ) );
 		}
 		else
 		{
@@ -4474,8 +4438,7 @@ namespace castor3d
 		if ( parsingContext->skybox )
 		{
 			Path path;
-			path = p_context->m_file.getPath() / p_params[0]->get( path );
-			parsingContext->skybox->getTexture().getImage( uint32_t( CubeMapFace::ePositiveY ) ).initialiseSource( p_context->m_file.getPath(), p_params[0]->get( path ) );
+			parsingContext->skybox->loadBottomImage( p_context->m_file.getPath(), p_params[0]->get( path ) );
 		}
 		else
 		{
@@ -4491,8 +4454,7 @@ namespace castor3d
 		if ( parsingContext->skybox )
 		{
 			Path path;
-			path = p_context->m_file.getPath() / p_params[0]->get( path );
-			parsingContext->skybox->getTexture().getImage( uint32_t( CubeMapFace::eNegativeZ ) ).initialiseSource( p_context->m_file.getPath(), p_params[0]->get( path ) );
+			parsingContext->skybox->loadFrontImage( p_context->m_file.getPath(), p_params[0]->get( path ) );
 		}
 		else
 		{
@@ -4508,8 +4470,7 @@ namespace castor3d
 		if ( parsingContext->skybox )
 		{
 			Path path;
-			path = p_context->m_file.getPath() / p_params[0]->get( path );
-			parsingContext->skybox->getTexture().getImage( uint32_t( CubeMapFace::ePositiveZ ) ).initialiseSource( p_context->m_file.getPath(), p_params[0]->get( path ) );
+			parsingContext->skybox->loadBackImage( p_context->m_file.getPath(), p_params[0]->get( path ) );
 		}
 		else
 		{

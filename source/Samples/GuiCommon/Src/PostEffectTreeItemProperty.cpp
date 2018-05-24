@@ -161,6 +161,123 @@ namespace GuiCommon
 				doVisit( name, shaders, ubo, uniform, value );
 			}
 
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< float > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< int32_t > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< uint32_t > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< castor::Point2f > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< castor::Point2i > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< castor::Point2ui > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< castor::Point3f > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< castor::Point3i > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< castor::Point3ui > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< castor::Point4f > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< castor::Point4i > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< castor::Point4ui > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< castor::Matrix4x4f > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
 		private:
 			ShaderSource & doGetSource( castor::String const & name )
 			{
@@ -209,6 +326,18 @@ namespace GuiCommon
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, T & value )
+			{
+				auto & source = doGetSource( name );
+				auto & uboValues = doGetUbo( source, shaders, ubo );
+				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value ) );
+			}
+
+			template< typename T >
+			void doVisitTracked( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< T > & value )
 			{
 				auto & source = doGetSource( name );
 				auto & uboValues = doGetUbo( source, shaders, ubo );

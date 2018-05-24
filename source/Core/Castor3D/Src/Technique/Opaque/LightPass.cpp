@@ -621,7 +621,7 @@ namespace castor3d
 			commandBuffer.resetQueryPool( m_timer->getQuery()
 				, 0u
 				, 2u );
-			commandBuffer.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			commandBuffer.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
 				, m_timer->getQuery()
 				, 0u );
 			commandBuffer.beginRenderPass( *renderPass.renderPass

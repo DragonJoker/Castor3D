@@ -104,6 +104,12 @@ namespace castor3d
 		m_debugOverlays->unregisterTimer( timer );
 	}
 
+	bool RenderLoop::hasDebugOverlays()const
+	{
+		return m_debugOverlays != nullptr
+			&& m_debugOverlays->isShown();
+	}
+
 	renderer::DevicePtr RenderLoop::doCreateDevice( renderer::WindowHandle && handle
 		, RenderWindow & window )
 	{

@@ -141,7 +141,7 @@ namespace castor3d
 		m_commandBuffer->resetQueryPool( timer.getQuery()
 			, 0u
 			, 2u );
-		m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+		m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
 			, timer.getQuery()
 			, 0u );
 		// Put buffers in appropriate state for compute
@@ -196,7 +196,7 @@ namespace castor3d
 			m_commandBuffer->resetQueryPool( timer.getQuery()
 				, 0u
 				, 2u );
-			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
 				, timer.getQuery()
 				, 0u );
 			// Copy output storage to billboard's vertex buffer

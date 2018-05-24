@@ -119,9 +119,11 @@ namespace GuiCommon
 	{
 	protected:
 		UniformValueBase( wxString const & name
-			, UniformType type )
+			, UniformType type
+			, bool isTracked )
 			: m_name{ name }
 			, m_type{ type }
+			, m_isTracked{ isTracked }
 		{
 		}
 
@@ -140,9 +142,15 @@ namespace GuiCommon
 			return m_type;
 		}
 
+		inline bool isTracked()const
+		{
+			return m_isTracked;
+		}
+
 	private:
 		wxString m_name;
 		UniformType m_type;
+		bool m_isTracked;
 	};
 
 	template< typename T >
@@ -152,7 +160,7 @@ namespace GuiCommon
 	public:
 		UniformValue( wxString const & name
 			, T & value )
-			: UniformValueBase{ name, UniformTyper< T >::value }
+			: UniformValueBase{ name, UniformTyper< T >::value, false }
 			, m_value{ value }
 		{
 		}
@@ -169,6 +177,32 @@ namespace GuiCommon
 
 	private:
 		T & m_value;
+	};
+
+	template< typename T >
+	class UniformValue< castor::ChangeTracked< T > >
+		: public UniformValueBase
+	{
+	public:
+		UniformValue( wxString const & name
+			, castor::ChangeTracked< T > & value )
+			: UniformValueBase{ name, UniformTyper< T >::value, true }
+			, m_value{ value }
+		{
+		}
+
+		inline T const & getValue()const
+		{
+			return m_value.value();
+		}
+
+		inline castor::ChangeTracked< T > & getValue()
+		{
+			return m_value;
+		}
+
+	private:
+		castor::ChangeTracked< T > & m_value;
 	};
 
 	template< typename T >

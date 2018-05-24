@@ -244,7 +244,7 @@ namespace castor3d
 				}
 
 				doInitialiseCopyCommands( m_hdrCopyCommands
-					, sourceView->getDefaultView()
+					, sourceView->getImage().getView()
 					, m_renderTechnique->getResult().getDefaultView() );
 				m_hdrCopyFinished = device.createSemaphore();
 			}
@@ -553,7 +553,7 @@ namespace castor3d
 			m_toneMappingCommandBuffer->resetQueryPool( m_toneMappingTimer->getQuery()
 				, 0u
 				, 2u );
-			m_toneMappingCommandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			m_toneMappingCommandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
 				, m_toneMappingTimer->getQuery()
 				, 0u );
 			// Put render technique image in shader input layout.
@@ -570,7 +570,7 @@ namespace castor3d
 			m_toneMappingCommandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eColourAttachmentOutput
 				, m_renderTechnique->getResult().getDefaultView().makeColourAttachment( renderer::ImageLayout::eUndefined, 0u ) );
-			m_toneMappingCommandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			m_toneMappingCommandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
 				, m_toneMappingTimer->getQuery()
 				, 1u );
 			result = m_toneMappingCommandBuffer->end();
@@ -593,8 +593,7 @@ namespace castor3d
 			// Put source image in transfer source layout.
 			commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eTransfer
-				, source.makeTransferSource( renderer::ImageLayout::eColourAttachmentOptimal
-					, renderer::AccessFlag::eColourAttachmentWrite ) );
+				, source.makeTransferSource( renderer::ImageLayout::eUndefined, 0u ) );
 			// Put target image in transfer destination layout.
 			commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
 				, renderer::PipelineStageFlag::eTransfer
@@ -754,30 +753,25 @@ namespace castor3d
 
 				for ( auto & commands : effect->getCommands() )
 				{
-					m_fence->reset();
 					queue.submit( *commands.commandBuffer
 						, *result
 						, renderer::PipelineStageFlag::eColourAttachmentOutput
 						, *commands.semaphore
-						, m_fence.get() );
-					m_fence->wait( renderer::FenceTimeout );
+						, nullptr );
 					result = commands.semaphore.get();
 				}
 
 				timer.step();
 			}
 
-			m_fence->reset();
 			queue.submit( *copyCommandBuffer
 				, *result
 				, renderer::PipelineStageFlag::eColourAttachmentOutput
 				, *copyFinished
-				, m_fence.get() );
-			m_fence->wait( renderer::FenceTimeout );
+				, nullptr );
 			timer.step();
 			result = copyFinished.get();
 			timer.stop();
-			getEngine()->getRenderSystem()->getCurrentDevice()->waitIdle();
 		}
 
 		return result;

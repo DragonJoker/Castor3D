@@ -35,7 +35,7 @@ namespace castor3d
 		, HdrConfigUbo const & hdrConfigUbo )
 	{
 		m_semaphore = getEngine()->getRenderSystem()->getCurrentDevice()->createSemaphore();
-		auto result = doInitialiseVertexBuffer()
+		m_initialised = doInitialiseVertexBuffer()
 			&& doInitialise( renderPass );
 		castor::String const name = cuT( "Skybox" );
 		SamplerSPtr sampler;
@@ -64,14 +64,14 @@ namespace castor3d
 		sampler->initialise();
 		m_sampler = sampler;
 
-		if ( result )
+		if ( m_initialised )
 		{
 			doInitialisePipeline( doInitialiseShader()
 				, renderPass
 				, hdrConfigUbo );
 		}
 
-		if ( result
+		if ( m_initialised
 			&& m_scene.getMaterialsType() != MaterialType::eLegacy
 			&& m_texture->getLayersCount() == 6u )
 		{
@@ -81,12 +81,12 @@ namespace castor3d
 			m_ibl->update();
 		}
 
-		if ( result )
+		if ( m_initialised )
 		{
 			m_timer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Background" ), cuT( "Background" ) );
 		}
 
-		return result;
+		return m_initialised;
 	}
 
 	void SceneBackground::cleanup()
@@ -117,13 +117,16 @@ namespace castor3d
 
 	void SceneBackground::update( Camera const & camera )
 	{
-		static castor::Point3r const Scale{ 1, -1, 1 };
-		static castor::Matrix3x3r const Identity{ 1.0f };
-		auto node = camera.getParent();
-		castor::matrix::setTranslate( m_mtxModel, node->getDerivedPosition() );
-		castor::matrix::scale( m_mtxModel, Scale );
-		m_modelMatrixUbo.update( m_mtxModel, Identity );
-		doUpdate( camera );
+		if ( m_initialised )
+		{
+			static castor::Point3r const Scale{ 1, -1, 1 };
+			static castor::Matrix3x3r const Identity{ 1.0f };
+			auto node = camera.getParent();
+			castor::matrix::setTranslate( m_mtxModel, node->getDerivedPosition() );
+			castor::matrix::scale( m_mtxModel, Scale );
+			m_modelMatrixUbo.update( m_mtxModel, Identity );
+			doUpdate( camera );
+		}
 	}
 
 	bool SceneBackground::prepareFrame( renderer::CommandBuffer & commandBuffer
@@ -131,6 +134,7 @@ namespace castor3d
 		, renderer::RenderPass const & renderPass
 		, renderer::FrameBuffer const & frameBuffer )
 	{
+		REQUIRE( m_initialised );
 		renderer::ClearColorValue colour;
 		renderer::DepthStencilClearValue depth;
 		auto result = commandBuffer.begin();
@@ -140,7 +144,7 @@ namespace castor3d
 			commandBuffer.resetQueryPool( m_timer->getQuery()
 				, 0u
 				, 2u );
-			commandBuffer.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			commandBuffer.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
 				, m_timer->getQuery()
 				, 0u );
 			commandBuffer.beginRenderPass( renderPass
@@ -165,6 +169,7 @@ namespace castor3d
 		, castor::Size const & size
 		, renderer::RenderPass const & renderPass )
 	{
+		REQUIRE( m_initialised );
 		return prepareFrame( commandBuffer
 			, size
 			, renderPass
@@ -176,6 +181,7 @@ namespace castor3d
 		, renderer::RenderPass const & renderPass
 		, renderer::DescriptorSet const & descriptorSet )const
 	{
+		REQUIRE( m_initialised );
 		auto result = commandBuffer.begin( renderer::CommandBufferUsageFlag::eRenderPassContinue
 			, renderer::CommandBufferInheritanceInfo
 			{
@@ -215,11 +221,21 @@ namespace castor3d
 			, m_sampler.lock()->getSampler() );
 	}
 
+	void SceneBackground::notifyChanged()
+	{
+		if ( m_initialised )
+		{
+			m_initialised = false;
+			onChanged( *this );
+		}
+	}
+
 	void SceneBackground::doPrepareFrame( renderer::CommandBuffer & commandBuffer
 		, castor::Size const & size
 		, renderer::RenderPass const & renderPass
 		, renderer::DescriptorSet const & descriptorSet )const
 	{
+		REQUIRE( m_initialised );
 		commandBuffer.bindPipeline( *m_pipeline );
 		commandBuffer.setViewport( { size.getWidth(), size.getHeight(), 0, 0 } );
 		commandBuffer.setScissor( { 0, 0, size.getWidth(), size.getHeight() } );
@@ -384,12 +400,14 @@ namespace castor3d
 		, HdrConfigUbo const & hdrConfigUbo )
 	{
 		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		m_pipelineLayout.reset();
 		doInitialiseDescriptorLayout();
 		m_pipelineLayout = device.createPipelineLayout( *m_descriptorLayout );
 
 		m_matrixUbo.initialise();
 		m_modelMatrixUbo.initialise();
 
+		m_descriptorSet.reset();
 		m_descriptorPool = m_descriptorLayout->createPool( 1u );
 		m_descriptorSet = m_descriptorPool->createDescriptorSet( 0u );
 		initialiseDescriptorSet( m_matrixUbo

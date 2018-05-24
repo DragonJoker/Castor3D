@@ -534,7 +534,7 @@ namespace castor3d
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
 		{
 			m_commandBuffer->resetQueryPool( m_timer->getQuery(), 0u, 2u );
-			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
 				, m_timer->getQuery()
 				, 0u );
 

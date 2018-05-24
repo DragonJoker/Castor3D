@@ -62,6 +62,7 @@ namespace castor3d
 				, renderer::MemoryPropertyFlag::eDeviceLocal );
 			texture->setSource( folder, relative );
 			m_texture = texture;
+			notifyChanged();
 			result = true;
 		}
 		catch ( castor::Exception & p_exc )

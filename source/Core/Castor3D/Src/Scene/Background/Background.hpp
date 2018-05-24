@@ -22,6 +22,10 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	class SceneBackground;
+	using BackgroundChangedFunc = std::function< void( SceneBackground const & ) >;
+	using OnBackgroundChanged = castor::Signal< BackgroundChangedFunc >;
+	using OnBackgroundChangedConnection = OnBackgroundChanged::connection;
 	/**
 	*\author
 	*	Sylvain DOREMUS
@@ -191,10 +195,19 @@ namespace castor3d
 		*\brief
 		*	Initialise l'ensemble de descripteurs.
 		*/
-		virtual void initialiseDescriptorSet( MatrixUbo const & matrixUbo
+		C3D_API virtual void initialiseDescriptorSet( MatrixUbo const & matrixUbo
 			, ModelMatrixUbo const & modelMatrixUbo
 			, HdrConfigUbo const & hdrConfigUbo
 			, renderer::DescriptorSet & descriptorSet )const;
+		/**
+		*\~english
+		*\return
+		*	Notifies a change to apply on GPU for the background.
+		*\~french
+		*\brief
+		*	Notifie un changement affectant le GPU pour le fond.
+		*/
+		C3D_API void notifyChanged();
 		/**
 		*\~english
 		*\brief
@@ -224,6 +237,11 @@ namespace castor3d
 		}
 
 		inline Scene const & getScene()const
+		{
+			return m_scene;
+		}
+
+		inline Scene & getScene()
 		{
 			return m_scene;
 		}
@@ -380,6 +398,9 @@ namespace castor3d
 		*/
 		C3D_API virtual void doUpdate( Camera const & camera ) = 0;
 
+	public:
+		OnBackgroundChanged onChanged;
+
 	private:
 		bool doInitialiseVertexBuffer();
 		bool doInitialisePipeline( renderer::ShaderStageStateArray program
@@ -389,6 +410,7 @@ namespace castor3d
 	protected:
 		Scene & m_scene;
 		BackgroundType m_type;
+		std::atomic_bool m_initialised{ false };
 		bool m_hdr{ true };
 		MatrixUbo m_matrixUbo;
 		ModelMatrixUbo m_modelMatrixUbo;

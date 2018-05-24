@@ -418,7 +418,7 @@ namespace film_grain
 			cmd.resetQueryPool( timer.getQuery()
 				, 0u
 				, 2u );
-			cmd.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			cmd.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
 				, timer.getQuery()
 				, 0u );
 			// Put image in the right state for rendering.
@@ -433,7 +433,7 @@ namespace film_grain
 			m_quad->registerFrame( cmd );
 			cmd.endRenderPass();
 
-			cmd.writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			cmd.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
 				, timer.getQuery()
 				, 1u );
 			cmd.end();

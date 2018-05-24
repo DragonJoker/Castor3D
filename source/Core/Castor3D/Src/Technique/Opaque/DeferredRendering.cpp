@@ -155,7 +155,7 @@ namespace castor3d
 			m_nodesCommands->resetQueryPool( m_opaquePass.getTimer().getQuery()
 				, 0u
 				, 2u );
-			m_nodesCommands->writeTimestamp( renderer::PipelineStageFlag::eTopOfPipe
+			m_nodesCommands->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
 				, m_opaquePass.getTimer().getQuery()
 				, 0u );
 			m_nodesCommands->beginRenderPass( m_opaquePass.getRenderPass()
