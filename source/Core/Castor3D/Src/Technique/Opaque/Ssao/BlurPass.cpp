@@ -545,20 +545,13 @@ namespace castor3d
 
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
 		{
-			m_commandBuffer->resetQueryPool( m_timer->getQuery()
-				, 0u
-				, 2u );
-			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, m_timer->getQuery()
-				, 0u );
+			m_timer->beginPass( *m_commandBuffer );
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *m_fbo
 				, { colour }
 				, renderer::SubpassContents::eInline );
 			registerFrame( *m_commandBuffer );
-			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, m_timer->getQuery()
-				, 1u );
+			m_timer->endPass( *m_commandBuffer );
 			m_commandBuffer->endRenderPass();
 			m_commandBuffer->end();
 		}
@@ -575,13 +568,13 @@ namespace castor3d
 	void SsaoBlurPass::blur( renderer::Semaphore const & toWait )const
 	{
 		m_timer->start();
+		m_timer->notifyPassRender();
 		auto & device = *m_renderSystem.getCurrentDevice();
 		device.getGraphicsQueue().submit( *m_commandBuffer
 			, toWait
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
 			, nullptr );
-		m_timer->step();
 		m_timer->stop();
 	}
 

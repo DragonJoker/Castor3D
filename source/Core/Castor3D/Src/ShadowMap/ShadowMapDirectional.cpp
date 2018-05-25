@@ -159,21 +159,15 @@ namespace castor3d
 
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
 		{
-			m_commandBuffer->resetQueryPool( timer.getQuery()
-				, 0u
-				, 2u );
-			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, timer.getQuery()
-				, 0u );
+			timer.notifyPassRender();
+			timer.beginPass( *m_commandBuffer );
 			m_commandBuffer->beginRenderPass( m_passes[0]->getRenderPass()
 				, *m_frameBuffer
 				, { zero, black, black }
 				, renderer::SubpassContents::eSecondaryCommandBuffers );
 			m_commandBuffer->executeCommands( { m_passes[0]->getCommandBuffer() } );
 			m_commandBuffer->endRenderPass();
-			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, timer.getQuery()
-				, 1u );
+			timer.endPass( *m_commandBuffer );
 			m_commandBuffer->end();
 		}
 
@@ -185,7 +179,6 @@ namespace castor3d
 			, *m_finished
 			, m_fence.get() );
 		m_fence->wait( renderer::FenceTimeout );
-		timer.step();
 
 		if ( m_shadowType == ShadowType::eVariance )
 		{

@@ -37,12 +37,17 @@ namespace castor3d
 		return doWriteInto( p_file );
 	}
 
-	bool PostEffect::initialise( TextureLayout const & texture
-		, RenderPassTimer const & timer )
+	bool PostEffect::initialise( TextureLayout const & texture )
 	{
 		auto & device = *getRenderSystem()->getCurrentDevice();
 		m_target = &texture;
-		auto result = doInitialise( timer );
+		m_timer = std::make_unique< RenderPassTimer >( *getRenderSystem()->getEngine()
+			, ( m_postToneMapping
+				? String{ cuT( "sRGB PostEffect" ) }
+				: String{ cuT( "HDR PostEffect" ) } )
+			, m_fullName
+			, m_passesCount );
+		auto result = doInitialise( *m_timer );
 		ENSURE( m_result != nullptr );
 		return result;
 	}
@@ -51,6 +56,23 @@ namespace castor3d
 	{
 		m_commands.clear();
 		doCleanup();
+		m_timer.reset();
+	}
+
+	void PostEffect::start()
+	{
+		m_timer->start();
+		m_currentPass = 0u;
+	}
+
+	void PostEffect::notifyPassRender()
+	{
+		m_timer->notifyPassRender( m_currentPass++ );
+	}
+
+	void PostEffect::stop()
+	{
+		m_timer->stop();
 	}
 
 	void PostEffect::update( castor::Nanoseconds const & elapsedTime )

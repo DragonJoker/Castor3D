@@ -138,12 +138,7 @@ namespace castor3d
 		}
 
 		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
-		m_commandBuffer->resetQueryPool( timer.getQuery()
-			, 0u
-			, 2u );
-		m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-			, timer.getQuery()
-			, 0u );
+		timer.beginPass( *m_commandBuffer, 0u );
 		// Put buffers in appropriate state for compute
 		m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eHost
 			, renderer::PipelineStageFlag::eComputeShader
@@ -171,15 +166,12 @@ namespace castor3d
 		m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eComputeShader
 			, renderer::PipelineStageFlag::eTransfer
 			, m_particlesStorages[m_out]->getBuffer().makeTransferSource() );
-		m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-			, timer.getQuery()
-			, 1u );
+		timer.endPass( *m_commandBuffer, 0u );
 		m_commandBuffer->end();
 
 		device.getComputeQueue().submit( *m_commandBuffer, m_fence.get() );
 		m_fence->wait( renderer::FenceTimeout );
 		m_fence->reset();
-		timer.step();
 		m_commandBuffer->reset();
 
 		// Retrieve counts
@@ -193,12 +185,7 @@ namespace castor3d
 		if ( m_particlesCount )
 		{
 			m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
-			m_commandBuffer->resetQueryPool( timer.getQuery()
-				, 0u
-				, 2u );
-			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, timer.getQuery()
-				, 0u );
+			timer.beginPass( *m_commandBuffer, 1u );
 			// Copy output storage to billboard's vertex buffer
 			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eVertexInput
 				, renderer::PipelineStageFlag::eTransfer
@@ -209,16 +196,13 @@ namespace castor3d
 			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
 				, renderer::PipelineStageFlag::eVertexInput
 				, m_parent.getBillboards()->getVertexBuffer().getBuffer().makeVertexShaderInputResource() );
-			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, timer.getQuery()
-				, 1u );
+			timer.endPass( *m_commandBuffer, 1u );
 			m_commandBuffer->end();
 
 			m_fence->reset();
 			device.getComputeQueue().submit( *m_commandBuffer, m_fence.get() );
 			m_fence->wait( renderer::FenceTimeout );
 			m_fence->reset();
-			timer.step();
 			m_commandBuffer->reset();
 		}
 

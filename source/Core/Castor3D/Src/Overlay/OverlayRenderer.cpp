@@ -443,12 +443,7 @@ namespace castor3d
 		static renderer::ClearColorValue clear{ 0.0f, 0.0f, 0.0f, 0.0f };
 		m_toWait = &toWait;
 		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
-		m_commandBuffer->resetQueryPool( timer.getQuery()
-			, 0u
-			, 2u );
-		m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-			, timer.getQuery()
-			, 0u );
+		timer.beginPass( *m_commandBuffer );
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
 			, { clear }
@@ -458,9 +453,7 @@ namespace castor3d
 	void OverlayRenderer::endPrepare( RenderPassTimer const & timer )
 	{
 		m_commandBuffer->endRenderPass();
-		m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-			, timer.getQuery()
-			, 1u );
+		timer.endPass( *m_commandBuffer );
 		m_commandBuffer->end();
 
 		for ( auto & pool : m_panelVertexBuffers )
@@ -481,10 +474,11 @@ namespace castor3d
 		m_sizeChanged = false;
 	}
 
-	void OverlayRenderer::render()
+	void OverlayRenderer::render( RenderPassTimer & timer )
 	{
 		m_fence->reset();
 		auto & queue = getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
+		timer.notifyPassRender();
 		queue.submit( { *m_commandBuffer }
 			, { *m_toWait }
 			, { renderer::PipelineStageFlag::eColourAttachmentOutput }

@@ -15,6 +15,8 @@ See LICENSE file in root folder
 
 #include <GlslShader.hpp>
 
+#include <Design/ChangeTracked.hpp>
+
 namespace fxaa
 {
 	class RenderQuad
@@ -47,6 +49,10 @@ namespace fxaa
 			, castor3d::RenderSystem & renderSystem
 			, castor3d::Parameters const & params );
 		/**
+		 *\copydoc		castor3d::PostEffect::update
+		 */
+		void update( castor::Nanoseconds const & elapsedTime )override;
+		/**
 		 *\copydoc		castor3d::PostEffect::accept
 		 */
 		void accept( castor3d::PipelineVisitorBase & visitor )override;
@@ -70,9 +76,9 @@ namespace fxaa
 		static castor::String Name;
 
 	private:
-		float m_subpixShift{ 1.0f / 4.0f };
-		float m_spanMax{ 8.0f };
-		float m_reduceMul{ 1.0f / 8.0f };
+		castor::ChangeTracked< float > m_subpixShift{ { 1.0f / 4.0f } };
+		castor::ChangeTracked< float > m_spanMax{ { 8.0f } };
+		castor::ChangeTracked< float > m_reduceMul{ { 1.0f / 8.0f } };
 		castor3d::SamplerSPtr m_sampler;
 		castor3d::PostEffectSurface m_surface;
 		renderer::RenderPassPtr m_renderPass;

@@ -120,6 +120,7 @@ namespace castor3d
 		FinalCombinePass m_finalCombinePass;
 		renderer::CommandBufferPtr m_commandBuffer;
 		renderer::SemaphorePtr m_semaphore;
+		RenderPassTimerSPtr m_timer;
 	};
 }
 

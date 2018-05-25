@@ -151,7 +151,6 @@ namespace castor3d
 		castor::String m_fullName;
 		HdrConfig & m_config;
 		HdrConfigUbo m_hdrConfigUbo;
-		RenderPassTimerSPtr m_timer;
 		renderer::SemaphorePtr m_signalFinished;
 		glsl::Shader m_vertexShader;
 		glsl::Shader m_pixelShader;

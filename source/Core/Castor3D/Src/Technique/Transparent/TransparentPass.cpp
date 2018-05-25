@@ -200,7 +200,7 @@ namespace castor3d
 	TransparentPass::TransparentPass( Scene & scene
 		, Camera * camera
 		, SsaoConfig const & config )
-		: castor3d::RenderTechniquePass{ cuT( "Transparent pass" )
+		: castor3d::RenderTechniquePass{ cuT( "Transparent" )
 			, cuT( "Accumulation" )
 			, scene
 			, camera

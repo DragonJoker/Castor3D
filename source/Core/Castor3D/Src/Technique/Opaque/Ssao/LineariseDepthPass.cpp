@@ -368,6 +368,7 @@ namespace castor3d
 	void LineariseDepthPass::linearise( renderer::Semaphore const & toWait )const
 	{
 		m_timer->start();
+		m_timer->notifyPassRender();
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
 		device.getGraphicsQueue().submit( *m_commandBuffer
@@ -375,7 +376,6 @@ namespace castor3d
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
 			, nullptr );
-		m_timer->step();
 		m_timer->stop();
 	}
 
@@ -533,10 +533,7 @@ namespace castor3d
 
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
 		{
-			m_commandBuffer->resetQueryPool( m_timer->getQuery(), 0u, 2u );
-			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, m_timer->getQuery()
-				, 0u );
+			m_timer->beginPass( *m_commandBuffer );
 
 			// Linearisation pass.
 			m_commandBuffer->beginRenderPass( *m_renderPass
@@ -573,9 +570,7 @@ namespace castor3d
 				m_commandBuffer->endRenderPass();
 			}
 
-			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, m_timer->getQuery()
-				, 1u );
+			m_timer->endPass( *m_commandBuffer );
 			m_commandBuffer->end();
 		}
 	}

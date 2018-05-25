@@ -359,7 +359,6 @@ namespace castor3d
 			, CameraSPtr camera );
 		C3D_API renderer::Semaphore const * doApplyPostEffects( renderer::Semaphore const & toWait
 			, PostEffectPtrArray const & effects
-			, RenderPassTimer & timer
 			, renderer::CommandBufferPtr const & copyCommandBuffer
 			, renderer::SemaphorePtr const & copyFinished
 			, castor::Nanoseconds const & elapsedTime );
@@ -388,13 +387,11 @@ namespace castor3d
 		uint32_t m_index;
 		Parameters m_techniqueParameters;
 		PostEffectPtrArray m_hdrPostEffects;
-		RenderPassTimerSPtr m_hdrPostFxTimer;
 		renderer::CommandBufferPtr m_hdrCopyCommands;
 		renderer::SemaphorePtr m_hdrCopyFinished;
 		HdrConfig m_hdrConfig;
 		ToneMappingSPtr m_toneMapping;
 		PostEffectPtrArray m_srgbPostEffects;
-		RenderPassTimerSPtr m_srgbPostFxTimer;
 		renderer::CommandBufferPtr m_srgbCopyCommands;
 		renderer::SemaphorePtr m_srgbCopyFinished;
 		RenderPassTimerSPtr m_toneMappingTimer;

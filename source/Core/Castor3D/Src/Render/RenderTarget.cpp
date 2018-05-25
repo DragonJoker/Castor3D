@@ -224,8 +224,6 @@ namespace castor3d
 				m_initialised = doInitialiseTechnique();
 			}
 
-			m_srgbPostFxTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "sRGB Post effects" ), cuT( "sRGB Post effects" ) );
-			m_hdrPostFxTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "HDR Post effects" ), cuT( "HDR Post effects" ) );
 			m_overlaysTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Overlays" ), cuT( "Overlays" ) );
 			m_toneMappingTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Tone Mapping" ), cuT( "Tone Mapping" ) );
 
@@ -237,8 +235,7 @@ namespace castor3d
 				{
 					if ( m_initialised )
 					{
-						m_initialised = effect->initialise( *sourceView
-							, *m_hdrPostFxTimer );
+						m_initialised = effect->initialise( *sourceView );
 						sourceView = &effect->getResult();
 					}
 				}
@@ -262,8 +259,7 @@ namespace castor3d
 				{
 					if ( m_initialised )
 					{
-						m_initialised = effect->initialise( *sourceView
-							, *m_srgbPostFxTimer );
+						m_initialised = effect->initialise( *sourceView );
 						sourceView = &effect->getResult();
 					}
 				}
@@ -320,8 +316,6 @@ namespace castor3d
 			m_hdrPostEffects.clear();
 			m_srgbPostEffects.clear();
 
-			m_srgbPostFxTimer.reset();
-			m_hdrPostFxTimer.reset();
 			m_overlaysTimer.reset();
 			m_toneMappingTimer.reset();
 
@@ -550,12 +544,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			m_toneMappingCommandBuffer->resetQueryPool( m_toneMappingTimer->getQuery()
-				, 0u
-				, 2u );
-			m_toneMappingCommandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, m_toneMappingTimer->getQuery()
-				, 0u );
+			m_toneMappingTimer->beginPass( *m_toneMappingCommandBuffer );
 			// Put render technique image in shader input layout.
 			m_toneMappingCommandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
@@ -570,9 +559,7 @@ namespace castor3d
 			m_toneMappingCommandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eColourAttachmentOutput
 				, m_renderTechnique->getResult().getDefaultView().makeColourAttachment( renderer::ImageLayout::eUndefined, 0u ) );
-			m_toneMappingCommandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, m_toneMappingTimer->getQuery()
-				, 1u );
+			m_toneMappingTimer->endPass( *m_toneMappingCommandBuffer );
 			result = m_toneMappingCommandBuffer->end();
 		}
 
@@ -704,7 +691,6 @@ namespace castor3d
 		// Draw HDR post effects.
 		m_signalFinished = doApplyPostEffects( *m_signalFinished
 			, m_hdrPostEffects
-			, *m_hdrPostFxTimer
 			, m_hdrCopyCommands
 			, m_hdrCopyFinished
 			, elapsedTime );
@@ -715,7 +701,6 @@ namespace castor3d
 		// Apply the sRGB post effects.
 		m_signalFinished = doApplyPostEffects( *m_signalFinished
 			, m_srgbPostEffects
-			, *m_srgbPostFxTimer
 			, m_srgbCopyCommands
 			, m_srgbCopyFinished
 			, elapsedTime );
@@ -735,7 +720,6 @@ namespace castor3d
 
 	renderer::Semaphore const * RenderTarget::doApplyPostEffects( renderer::Semaphore const & toWait
 		, PostEffectPtrArray const & effects
-		, RenderPassTimer & timer
 		, renderer::CommandBufferPtr const & copyCommandBuffer
 		, renderer::SemaphorePtr const & copyFinished
 		, castor::Nanoseconds const & elapsedTime )
@@ -745,14 +729,15 @@ namespace castor3d
 		if ( !effects.empty() )
 		{
 			auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
-			timer.start();
 
 			for ( auto effect : effects )
 			{
+				effect->start();
 				effect->update( elapsedTime );
 
 				for ( auto & commands : effect->getCommands() )
 				{
+					effect->notifyPassRender();
 					queue.submit( *commands.commandBuffer
 						, *result
 						, renderer::PipelineStageFlag::eColourAttachmentOutput
@@ -761,7 +746,7 @@ namespace castor3d
 					result = commands.semaphore.get();
 				}
 
-				timer.step();
+				effect->stop();
 			}
 
 			queue.submit( *copyCommandBuffer
@@ -769,9 +754,7 @@ namespace castor3d
 				, renderer::PipelineStageFlag::eColourAttachmentOutput
 				, *copyFinished
 				, nullptr );
-			timer.step();
 			result = copyFinished.get();
-			timer.stop();
 		}
 
 		return result;
@@ -781,6 +764,7 @@ namespace castor3d
 	{
 		auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
 		m_toneMappingTimer->start();
+		m_toneMappingTimer->notifyPassRender();
 		auto * result = &toWait;
 		m_fence->reset();
 		queue.submit( *m_toneMappingCommandBuffer
@@ -789,7 +773,6 @@ namespace castor3d
 			, m_toneMapping->getSemaphore()
 			, m_fence.get() );
 		m_fence->wait( renderer::FenceTimeout );
-		m_toneMappingTimer->step();
 		m_toneMappingTimer->stop();
 		result = &m_toneMapping->getSemaphore();
 		getEngine()->getRenderSystem()->getCurrentDevice()->waitIdle();
@@ -823,9 +806,8 @@ namespace castor3d
 			}
 
 			m_overlayRenderer->endPrepare( *m_overlaysTimer );
-			m_overlayRenderer->render();
+			m_overlayRenderer->render( *m_overlaysTimer );
 			result = &m_overlayRenderer->getSemaphore();
-			m_overlaysTimer->step();
 		}
 		m_overlaysTimer->stop();
 		return result;

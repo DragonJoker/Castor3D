@@ -152,21 +152,15 @@ namespace castor3d
 
 		if ( m_nodesCommands->begin() )
 		{
-			m_nodesCommands->resetQueryPool( m_opaquePass.getTimer().getQuery()
-				, 0u
-				, 2u );
-			m_nodesCommands->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, m_opaquePass.getTimer().getQuery()
-				, 0u );
+			m_opaquePass.getTimer().beginPass( *m_nodesCommands );
+			m_opaquePass.getTimer().notifyPassRender();
 			m_nodesCommands->beginRenderPass( m_opaquePass.getRenderPass()
 				, m_opaquePass.getFrameBuffer()
 				, clearValues
 				, renderer::SubpassContents::eSecondaryCommandBuffers );
 			m_nodesCommands->executeCommands( { m_opaquePass.getCommandBuffer() } );
 			m_nodesCommands->endRenderPass();
-			m_nodesCommands->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, m_opaquePass.getTimer().getQuery()
-				, 1u );
+			m_opaquePass.getTimer().endPass( *m_nodesCommands );
 			m_nodesCommands->end();
 			device.getGraphicsQueue().submit( { *m_nodesCommands }
 				, { *result }
@@ -175,7 +169,6 @@ namespace castor3d
 				, m_fence.get() );
 			m_fence->wait( renderer::FenceTimeout );
 			device.getGraphicsQueue().waitIdle();
-			m_opaquePass.getTimer().step();
 			result = &m_opaquePass.getSemaphore();
 		}
 
@@ -187,21 +180,12 @@ namespace castor3d
 
 		if ( scene.needsSubsurfaceScattering() )
 		{
-			m_fence->reset();
-			device.getGraphicsQueue().submit( m_subsurfaceScattering->getCommandBuffer()
-				, *result
-				, renderer::PipelineStageFlag::eColourAttachmentOutput
-				, m_subsurfaceScattering->getSemaphore()
-				, m_fence.get() );
-			result = &m_subsurfaceScattering->getSemaphore();
-			m_fence->wait( renderer::FenceTimeout );
-			m_reflection[1]->render( *result );
-			result = &m_reflection[1]->getSemaphore();
+			result = &m_subsurfaceScattering->render( *result );
+			result = &m_reflection[1]->render( *result );
 		}
 		else
 		{
-			m_reflection[0]->render( *result );
-			result = &m_reflection[0]->getSemaphore();
+			result = &m_reflection[0]->render( *result );
 		}
 
 		m_opaquePass.getTimer().stop();

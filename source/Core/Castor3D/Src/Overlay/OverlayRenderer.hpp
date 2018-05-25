@@ -114,7 +114,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Termine la préparation des incrustations.
 		 */
-		C3D_API void render();
+		C3D_API void render( RenderPassTimer & timer );
 		/**
 		*\~english
 		*name

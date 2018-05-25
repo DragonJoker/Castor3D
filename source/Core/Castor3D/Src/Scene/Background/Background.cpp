@@ -141,12 +141,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			commandBuffer.resetQueryPool( m_timer->getQuery()
-				, 0u
-				, 2u );
-			commandBuffer.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, m_timer->getQuery()
-				, 0u );
+			m_timer->beginPass( commandBuffer );
 			commandBuffer.beginRenderPass( renderPass
 				, frameBuffer
 				, { depth, colour }
@@ -156,9 +151,7 @@ namespace castor3d
 				, renderPass
 				, *m_descriptorSet );
 			commandBuffer.endRenderPass();
-			commandBuffer.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, m_timer->getQuery()
-				, 1u );
+			m_timer->endPass( commandBuffer );
 			result = commandBuffer.end();
 		}
 
@@ -219,6 +212,21 @@ namespace castor3d
 		descriptorSet.createBinding( m_descriptorLayout->getBinding( 3u )
 			, m_texture->getDefaultView()
 			, m_sampler.lock()->getSampler() );
+	}
+
+	void SceneBackground::start()
+	{
+		m_timer->start();
+	}
+
+	void SceneBackground::notifyPassRender()
+	{
+		m_timer->notifyPassRender();
+	}
+
+	void SceneBackground::stop()
+	{
+		m_timer->stop();
 	}
 
 	void SceneBackground::notifyChanged()

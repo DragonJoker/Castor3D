@@ -110,6 +110,13 @@ namespace Bloom
 		{
 			m_blurKernelSize = uint32_t( string::toLong( count ) );
 		}
+
+		if ( params.get( cuT( "Passes" ), count ) )
+		{
+			m_blurPassesCount = uint32_t( string::toLong( count ) );
+		}
+
+		m_passesCount = m_blurPassesCount * 2u + 2u;
 	}
 
 	castor3d::PostEffectSPtr PostEffect::create( castor3d::RenderTarget & renderTarget

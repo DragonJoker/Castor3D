@@ -72,6 +72,15 @@ namespace castor3d
 		C3D_API void prepare();
 		/**
 		 *\~english
+		 *\brief		Renders the subsurfaces scattering.
+		 *\param[in]	toWait	The semaphore to wait.
+		 *\~french
+		 *\brief		Dessine le subsurfaces scattering.
+		 *\param[in]	toWait	Le sémaphore à attendre.
+		 */
+		renderer::Semaphore const & render( renderer::Semaphore const & toWait )const;
+		/**
+		 *\~english
 		 *\brief		Dumps the results on the screen.
 		 *\param[in]	size	The dump dimensions.
 		 *\~french
@@ -87,18 +96,6 @@ namespace castor3d
 		inline TextureUnit const & getResult()const
 		{
 			return m_result;
-		}
-
-		inline renderer::CommandBuffer const & getCommandBuffer()const
-		{
-			REQUIRE( m_commandBuffer );
-			return *m_commandBuffer;
-		}
-
-		inline renderer::Semaphore const & getSemaphore()const
-		{
-			REQUIRE( m_finished );
-			return *m_finished;
 		}
 
 	private:
@@ -211,6 +208,8 @@ namespace castor3d
 		Combine m_combine;
 		renderer::CommandBufferPtr m_commandBuffer;
 		renderer::SemaphorePtr m_finished;
+		renderer::FencePtr m_fence;
+		RenderPassTimerSPtr m_timer;
 	};
 }
 

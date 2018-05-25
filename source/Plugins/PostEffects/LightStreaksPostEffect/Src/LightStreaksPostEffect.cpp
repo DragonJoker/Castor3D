@@ -213,6 +213,8 @@ namespace light_streaks
 	{
 		m_linearSampler = doCreateSampler( true );
 		m_nearestSampler = doCreateSampler( false );
+
+		m_passesCount = 4u;
 	}
 
 	PostEffect::~PostEffect()
@@ -668,12 +670,7 @@ namespace light_streaks
 
 		if ( result )
 		{
-			hiPassCmd.resetQueryPool( timer.getQuery()
-				, 0u
-				, 2u );
-			hiPassCmd.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, timer.getQuery()
-				, 0u );
+			timer.beginPass( hiPassCmd, 0u );
 			// Put target image in fragment shader input layout.
 			hiPassCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
@@ -697,6 +694,7 @@ namespace light_streaks
 			hiPassCmd.memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
 				, renderer::PipelineStageFlag::eTransfer
 				, hiPassSurface.image->getDefaultView().makeTransferSource( renderer::ImageLayout::eUndefined, 0u ) );
+			timer.endPass( hiPassCmd, 0u );
 			result = hiPassCmd.end();
 			m_commands.emplace_back( std::move( hiPassCommands ) );
 		}
@@ -711,6 +709,7 @@ namespace light_streaks
 
 		if ( result )
 		{
+			timer.beginPass( copyCmd, 1u );
 			// Copy Hi pass result to other Hi pass surfaces
 			for ( uint32_t i = 1u; i < Count; ++i )
 			{
@@ -727,6 +726,7 @@ namespace light_streaks
 						, renderer::AccessFlag::eTransferWrite ) );
 			}
 
+			timer.endPass( copyCmd, 1u );
 			copyCmd.end();
 			m_commands.emplace_back( std::move( copyCommands ) );
 		}
@@ -741,6 +741,7 @@ namespace light_streaks
 
 		if ( result )
 		{
+			timer.beginPass( kawaseCmd, 2u );
 			// Kawase blur passes.
 			for ( uint32_t i = 0u; i < Count; ++i )
 			{
@@ -776,6 +777,7 @@ namespace light_streaks
 					, kawaseSurface.image->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
 			}
 
+			timer.endPass( kawaseCmd, 2u );
 			kawaseCmd.end();
 			m_commands.emplace_back( std::move( kawaseCommands ) );
 		}
@@ -790,6 +792,7 @@ namespace light_streaks
 
 		if ( result )
 		{
+			timer.beginPass( combineCmd, 3u );
 			// Combine pass.
 			auto & combineSurface = m_pipelines.combine.surfaces.back();
 			combineCmd.beginRenderPass( *m_renderPass
@@ -805,9 +808,7 @@ namespace light_streaks
 			combineCmd.draw( 6u );
 			combineCmd.endRenderPass();
 
-			combineCmd.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, timer.getQuery()
-				, 1u );
+			timer.endPass( combineCmd, 3u );
 			result = combineCmd.end();
 			m_commands.emplace_back( std::move( combineCommands ) );
 		}

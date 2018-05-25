@@ -73,7 +73,7 @@ namespace castor3d
 		: m_size{ size }
 		, m_diffuse{ doCreateTexture( engine, size ) }
 		, m_specular{ doCreateTexture( engine, size ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Opaque pass" ), cuT( "Lighting" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Opaque" ), cuT( "Lighting pass" ) ) }
 	{
 		m_lightPass[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPass >( engine
 			, depthView
@@ -229,7 +229,6 @@ namespace castor3d
 
 					first = false;
 					info.m_visibleLightsCount++;
-					m_timer->step();
 				}
 
 				info.m_totalLightsCount++;

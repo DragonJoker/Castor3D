@@ -220,12 +220,7 @@ namespace Bloom
 
 		if ( cmd.begin() )
 		{
-			cmd.resetQueryPool( timer.getQuery()
-				, 0u
-				, 2u );
-			cmd.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, timer.getQuery()
-				, 0u );
+			timer.beginPass( cmd, 0u );
 			cmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
 				, m_sceneView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
@@ -235,13 +230,10 @@ namespace Bloom
 				, renderer::SubpassContents::eInline );
 			registerFrame( cmd );
 			cmd.endRenderPass();
-#if Bloom_DebugHiPass
-			cmd.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, timer.getQuery()
-				, 1u );
-#else
+#if !Bloom_DebugHiPass
 			m_image->getTexture().generateMipmaps( cmd );
 #endif
+			timer.endPass( cmd, 0u );
 			cmd.end();
 		}
 

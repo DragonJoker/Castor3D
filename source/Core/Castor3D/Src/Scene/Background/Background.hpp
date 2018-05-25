@@ -200,6 +200,28 @@ namespace castor3d
 			, HdrConfigUbo const & hdrConfigUbo
 			, renderer::DescriptorSet & descriptorSet )const;
 		/**
+		 *\~english
+		 *\brief		Starts the CPU timer, resets GPU time.
+		 *\~french
+		 *\brief		Démarre le timer CPU, réinitialise le temps GPU.
+		 */
+		C3D_API void start();
+		/**
+		 *\~english
+		 *\brief		Notifies the given pass render.
+		 *\~french
+		 *\brief		Notifie le rendu de la passe donnée.
+		 */
+		C3D_API void notifyPassRender();
+		/**
+		 *\~english
+		 *\brief		Stops the CPU timer.
+		 *\~french
+		 *\brief
+		 *\brief		Arrête le timer CPU.
+		 */
+		C3D_API void stop();
+		/**
 		*\~english
 		*\return
 		*	Notifies a change to apply on GPU for the background.
@@ -284,12 +306,6 @@ namespace castor3d
 		{
 			REQUIRE( m_ibl );
 			return *m_ibl;
-		}
-
-		inline RenderPassTimer const & getTimer()const
-		{
-			REQUIRE( m_timer );
-			return *m_timer;
 		}
 
 		inline renderer::PipelineLayout const & getPipelineLayout()const

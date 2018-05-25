@@ -35,7 +35,7 @@ namespace castor3d
 	OpaquePass::OpaquePass( Scene & scene
 		, Camera * camera
 		, SsaoConfig const & config )
-		: castor3d::RenderTechniquePass{ cuT( "Opaque pass" )
+		: castor3d::RenderTechniquePass{ cuT( "Opaque" )
 			, cuT( "Geometry pass" )
 			, scene
 			, camera

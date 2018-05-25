@@ -85,13 +85,11 @@ namespace castor3d
 			, renderPass
 			, bindings
 			, {} );
-		m_timer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Tone mapping" ), cuT( "Tone mapping" ) );
 		return true;
 	}
 
 	void ToneMapping::cleanup()
 	{
-		m_timer.reset();
 		doDestroy();
 		m_hdrConfigUbo.cleanup();
 	}

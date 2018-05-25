@@ -90,7 +90,7 @@ namespace castor3d
 		 *\brief		Dessine le mapping de réflexion.
 		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
-		void render( renderer::Semaphore const & toWait )const;
+		renderer::Semaphore const & render( renderer::Semaphore const & toWait )const;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -107,12 +107,6 @@ namespace castor3d
 		inline TextureLayout const & getSsao()const
 		{
 			return *m_ssao.getResult().getTexture();
-		}
-
-		inline renderer::Semaphore const & getSemaphore()const
-		{
-			REQUIRE( m_finished );
-			return *m_finished;
 		}
 		/**@}*/
 

@@ -260,12 +260,8 @@ namespace GrayScale
 		if ( result
 			&& cmd.begin() )
 		{
-			cmd.resetQueryPool( timer.getQuery()
-				, 0u
-				, 2u );
-			cmd.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, timer.getQuery()
-				, 0u );
+			timer.beginPass( cmd );
+
 			// Put target image in shader input layout.
 			cmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
@@ -278,9 +274,7 @@ namespace GrayScale
 			m_quad->registerFrame( cmd );
 			cmd.endRenderPass();
 
-			cmd.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, timer.getQuery()
-				, 1u );
+			timer.endPass( cmd );
 			cmd.end();
 			m_commands.emplace_back( std::move( commands ) );
 		}

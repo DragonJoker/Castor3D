@@ -152,6 +152,7 @@ namespace castor3d
 		, m_finalCombinePass{ engine, m_size, m_transparentPass.getSceneUbo(), m_weightedBlendPassResult, *m_renderPass }
 		, m_commandBuffer{ engine.getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer() }
 		, m_semaphore{ engine.getRenderSystem()->getCurrentDevice()->createSemaphore() }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Transparent" ), cuT( "Resolve" ) ) }
 	{
 	}
 
@@ -189,31 +190,30 @@ namespace castor3d
 		m_engine.setPerObjectLighting( true );
 		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
 		m_transparentPass.getTimer().start();
+		m_timer->start();
+		m_transparentPass.getTimer().notifyPassRender();
+		m_timer->notifyPassRender();
 
 		// Accumulate blend.
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
 		{
-			m_commandBuffer->resetQueryPool( m_transparentPass.getTimer().getQuery()
-				, 0u
-				, 2u );
-			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, m_transparentPass.getTimer().getQuery()
-				, 0u );
+			m_transparentPass.getTimer().beginPass( *m_commandBuffer );
+			m_transparentPass.getTimer().notifyPassRender();
 			m_commandBuffer->beginRenderPass( m_transparentPass.getRenderPass()
 				, *m_frameBufferWB
 				, { depthClear, accumClear, revealClear, velocityClear }
 				, renderer::SubpassContents::eSecondaryCommandBuffers );
 			m_commandBuffer->executeCommands( { m_transparentPass.getCommandBuffer() } );
 			m_commandBuffer->endRenderPass();
+			m_transparentPass.getTimer().endPass( *m_commandBuffer );
+			m_timer->beginPass( *m_commandBuffer );
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *m_frameBufferCB
 				, { accumClear }
 				, renderer::SubpassContents::eSecondaryCommandBuffers );
 			m_commandBuffer->executeCommands( { m_finalCombinePass.getCommandBuffer( scene.getFog().getType() ) } );
 			m_commandBuffer->endRenderPass();
-			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, m_transparentPass.getTimer().getQuery()
-				, 1u );
+			m_timer->endPass( *m_commandBuffer );
 			m_commandBuffer->end();
 		}
 
@@ -223,7 +223,7 @@ namespace castor3d
 			, *m_semaphore
 			, nullptr );
 		device.getGraphicsQueue().waitIdle();
-		m_transparentPass.getTimer().step();
+		m_timer->stop();
 		m_transparentPass.getTimer().stop();
 	}
 

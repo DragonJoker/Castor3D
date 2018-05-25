@@ -1015,12 +1015,7 @@ namespace castor3d
 
 		if ( m_commandBuffer->begin() )
 		{
-			m_commandBuffer->resetQueryPool( timer.getQuery()
-				, 0u
-				, 2u );
-			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, timer.getQuery()
-				, 0u );
+			timer.beginPass( *m_commandBuffer );
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, frameBuffer
 				, { clear }
@@ -1030,9 +1025,7 @@ namespace castor3d
 			m_commandBuffer->bindVertexBuffer( 0u, vbo.getBuffer(), 0u );
 			m_commandBuffer->draw( 6u );
 			m_commandBuffer->endRenderPass();
-			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, timer.getQuery()
-				, 1u );
+			timer.endPass( *m_commandBuffer );
 			m_commandBuffer->end();
 		}
 	}
@@ -1081,7 +1074,7 @@ namespace castor3d
 		, m_finished{ m_device.createSemaphore() }
 		, m_ssao{ engine, m_size, config, gp, viewport }
 		, m_fence{ m_device.createFence( renderer::FenceCreateFlag::eSignaled ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Opaque pass" ), cuT( "Reflection" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Opaque" ), cuT( "Reflection pass" ) ) }
 		, m_programs
 		{
 			{
@@ -1166,7 +1159,7 @@ namespace castor3d
 			, *m_timer );
 	}
 
-	void ReflectionPass::render( renderer::Semaphore const & toWait )const
+	renderer::Semaphore const & ReflectionPass::render( renderer::Semaphore const & toWait )const
 	{
 		renderer::Semaphore const * semaphore = &toWait;
 		TextureUnit const * ssao = nullptr;
@@ -1178,6 +1171,7 @@ namespace castor3d
 		}
 
 		m_timer->start();
+		m_timer->notifyPassRender();
 		auto index = size_t( m_scene.getFog().getType() );
 		auto & program = m_programs[index];
 		m_fence->reset();
@@ -1187,8 +1181,8 @@ namespace castor3d
 			, *m_finished
 			, m_fence.get() );
 		m_fence->wait( renderer::FenceTimeout );
-		m_timer->step();
 		m_timer->stop();
+		return *m_finished;
 	}
 
 	void ReflectionPass::accept( RenderTechniqueVisitor & visitor )

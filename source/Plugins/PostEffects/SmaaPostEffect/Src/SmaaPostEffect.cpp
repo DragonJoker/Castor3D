@@ -100,8 +100,11 @@ namespace smaa
 			}
 		}
 
+		m_passesCount = 4u;
+
 		if ( m_mode == Mode::eT2X )
 		{
+			++m_passesCount;
 			parameters.get( cuT( "reprojection" ), m_reprojection );
 			parameters.get( cuT( "reprojectionWeightScale" ), m_reprojectionWeightScale );
 		}
@@ -271,12 +274,7 @@ namespace smaa
 
 		if ( edgeDetectionCmd.begin() )
 		{
-			edgeDetectionCmd.resetQueryPool( timer.getQuery()
-				, 0u
-				, 2u );
-			edgeDetectionCmd.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, timer.getQuery()
-				, 0u );
+			timer.beginPass( edgeDetectionCmd, 0u );
 			// Put SRGB image in shader input layout.
 			edgeDetectionCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
@@ -292,6 +290,7 @@ namespace smaa
 				, renderer::SubpassContents::eInline );
 			m_edgeDetection->registerFrame( edgeDetectionCmd );
 			edgeDetectionCmd.endRenderPass();
+			timer.endPass( edgeDetectionCmd, 0u );
 			edgeDetectionCmd.end();
 			result.emplace_back( std::move( edgeDetectionCommands ) );
 		}
@@ -305,6 +304,7 @@ namespace smaa
 
 		if ( blendingWeightCmd.begin() )
 		{
+			timer.beginPass( blendingWeightCmd, 1u );
 			// Put edge detection image in shader input layout.
 			blendingWeightCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
@@ -315,6 +315,7 @@ namespace smaa
 				, renderer::SubpassContents::eInline );
 			m_blendingWeightCalculation->registerFrame( blendingWeightCmd );
 			blendingWeightCmd.endRenderPass();
+			timer.endPass( blendingWeightCmd, 1u );
 			blendingWeightCmd.end();
 			result.emplace_back( std::move( blendingWeightCommands ) );
 		}
@@ -328,6 +329,7 @@ namespace smaa
 
 		if ( neighbourhoodBlendingCmd.begin() )
 		{
+			timer.beginPass( neighbourhoodBlendingCmd, 2u );
 			// Put blending weights image in shader input layout.
 			neighbourhoodBlendingCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
@@ -338,6 +340,7 @@ namespace smaa
 				, renderer::SubpassContents::eInline );
 			m_neighbourhoodBlending->registerFrame( neighbourhoodBlendingCmd );
 			neighbourhoodBlendingCmd.endRenderPass();
+			timer.endPass( neighbourhoodBlendingCmd, 2u );
 			neighbourhoodBlendingCmd.end();
 			result.emplace_back( std::move( neighbourhoodBlendingCommands ) );
 		}
@@ -354,6 +357,7 @@ namespace smaa
 			auto & reprojectCmd = *reprojectCommands.commandBuffer;
 
 			reprojectCmd.begin();
+			timer.beginPass( reprojectCmd, 3u );
 			auto & reproject = *m_reproject[index];
 			// Put neighbourhood image in shader input layout.
 			reprojectCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
@@ -365,6 +369,7 @@ namespace smaa
 				, renderer::SubpassContents::eInline );
 			reproject.registerFrame( reprojectCmd );
 			reprojectCmd.endRenderPass();
+			timer.endPass( reprojectCmd, 3u );
 			reprojectCmd.end();
 			result.emplace_back( std::move( reprojectCommands ) );
 			resultSurface = reproject.getSurface();
@@ -378,11 +383,10 @@ namespace smaa
 		auto & copyCmd = *copyCommands.commandBuffer;
 
 		copyCmd.begin();
+		timer.beginPass( copyCmd, 4u );
 		doCopyResultToTarget( resultSurface->getDefaultView()
 			, copyCmd );
-		copyCmd.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-			, timer.getQuery()
-			, 1u );
+		timer.endPass( copyCmd, 4u );
 		copyCmd.end();
 		result.emplace_back( std::move( copyCommands ) );
 

@@ -224,11 +224,12 @@ namespace castor3d
 			RenderPassOverlays( RenderPassOverlays && ) = default;
 			RenderPassOverlays & operator=( RenderPassOverlays && ) = default;
 			RenderPassOverlays( castor::String const & category
-				, uint32_t index
 				, OverlayCache & cache );
 			~RenderPassOverlays();
+			void initialise( uint32_t index );
 			void addTimer( RenderPassTimer & timer );
 			bool removeTimer( RenderPassTimer & timer );
+			void retrieveGpuTime();
 			castor::Nanoseconds update();
 			void setVisible( bool visible );
 
@@ -273,6 +274,7 @@ namespace castor3d
 		RenderInfo m_renderInfo;
 		renderer::QueryPoolPtr m_queries;
 		uint32_t m_queriesCount{ 0u };
+		bool m_dirty{ false };
 	};
 }
 

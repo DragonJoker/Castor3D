@@ -618,12 +618,7 @@ namespace castor3d
 
 		if ( commandBuffer.begin( usage ) )
 		{
-			commandBuffer.resetQueryPool( m_timer->getQuery()
-				, 0u
-				, 2u );
-			commandBuffer.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, m_timer->getQuery()
-				, 0u );
+			m_timer->beginPass( commandBuffer );
 			commandBuffer.beginRenderPass( *renderPass.renderPass
 				, *renderPass.frameBuffer
 				, { clearDepthStencil, clearColour, clearColour }
@@ -634,9 +629,7 @@ namespace castor3d
 			commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 			pipeline.program->render( commandBuffer, getCount(), first, m_offset );
 			commandBuffer.endRenderPass();
-			commandBuffer.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, m_timer->getQuery()
-				, 1u );
+			m_timer->endPass( commandBuffer );
 			commandBuffer.end();
 		}
 	}

@@ -371,10 +371,12 @@ namespace Bloom
 			, m_pixelShader
 			, *m_blurUbo
 			, m_blurPassesCount ) }
+		, m_isVertical{ isVertical }
 	{
 	}
 
-	castor3d::CommandsSemaphoreArray BlurPass::getCommands( renderer::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const
+	castor3d::CommandsSemaphoreArray BlurPass::getCommands( castor3d::RenderPassTimer const & timer
+		, renderer::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const
 	{
 		castor3d::CommandsSemaphoreArray result;
 
@@ -387,6 +389,7 @@ namespace Bloom
 
 			if ( cmd.begin() )
 			{
+				timer.beginPass( cmd, 1u + ( m_isVertical ? 1u : 0u ) * m_blurPassesCount + i );
 				cmd.beginRenderPass( *m_renderPass
 					, *blur.frameBuffer
 					, { renderer::ClearColorValue{ 0.0, 0.0, 0.0, 0.0 } }
@@ -396,6 +399,7 @@ namespace Bloom
 				cmd.bindVertexBuffer( 0u, vertexBuffer.getBuffer(), 0u );
 				cmd.draw( 6u );
 				cmd.endRenderPass();
+				timer.endPass( cmd, 1u + ( m_isVertical ? 1u : 0u ) * m_blurPassesCount + i );
 				cmd.end();
 			}
 

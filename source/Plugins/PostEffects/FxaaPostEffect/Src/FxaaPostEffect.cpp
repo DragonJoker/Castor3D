@@ -257,6 +257,21 @@ namespace fxaa
 			, m_reduceMul );
 	}
 
+	void PostEffect::update( castor::Nanoseconds const & elapsedTime )
+	{
+		if ( m_subpixShift.isDirty()
+			|| m_spanMax.isDirty()
+			|| m_reduceMul.isDirty() )
+		{
+			m_fxaaQuad->update( m_subpixShift
+				, m_spanMax
+				, m_reduceMul );
+			m_subpixShift.reset();
+			m_spanMax.reset();
+			m_reduceMul.reset();
+		}
+	}
+
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
 	{
 		m_sampler->initialise();
@@ -347,12 +362,7 @@ namespace fxaa
 				auto & surfaceImage = m_surface.colourTexture->getTexture();
 				auto & surfaceView = m_surface.colourTexture->getDefaultView();
 
-				cmd.resetQueryPool( timer.getQuery()
-					, 0u
-					, 2u );
-				cmd.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-					, timer.getQuery()
-					, 0u );
+				timer.beginPass( cmd );
 
 				// Put target image in shader input layout.
 				cmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
@@ -367,9 +377,7 @@ namespace fxaa
 				m_fxaaQuad->registerFrame( cmd );
 				cmd.endRenderPass();
 
-				cmd.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-					, timer.getQuery()
-					, 1u );
+				timer.endPass( cmd );
 				cmd.end();
 				m_commands.emplace_back( std::move( commands ) );
 			}
@@ -378,6 +386,9 @@ namespace fxaa
 		m_fxaaQuad->update( m_subpixShift
 			, m_spanMax
 			, m_reduceMul );
+		m_subpixShift.reset();
+		m_spanMax.reset();
+		m_reduceMul.reset();
 		m_result = m_surface.colourTexture.get();
 		return result;
 	}

@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Miscellaneous/PipelineVisitor.hpp"
 
+#include "Render/RenderPassTimer.hpp"
 #include "Render/RenderTarget.hpp"
 #include "Texture/TextureUnit.hpp"
 
@@ -93,8 +94,7 @@ namespace castor3d
 		 *\brief		Fonction d'initialisation.
 		 *\return		\p true if ok.
 		 */
-		C3D_API bool initialise( TextureLayout const & texture
-			, RenderPassTimer const & timer );
+		C3D_API bool initialise( TextureLayout const & texture );
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
@@ -102,6 +102,27 @@ namespace castor3d
 		 *\brief		Fonction de nettoyage.
 		 */
 		C3D_API void cleanup();
+		/**
+		 *\~english
+		 *\brief		Starts rendering the effect.
+		 *\~french
+		 *\brief		Démarre le rendu de l'effet.
+		 */
+		C3D_API void start();
+		/**
+		 *\~english
+		 *\brief		Notifies a pass render.
+		 *\~french
+		 *\brief		Notifie le rendu d'une passe.
+		 */
+		C3D_API void notifyPassRender();
+		/**
+		 *\~english
+		 *\brief		Ends rendering the effect.
+		 *\~french
+		 *\brief		Termine le rendu de l'effet.
+		 */
+		C3D_API void stop();
 		/**
 		 *\~english
 		 *\brief		Updated needed data.
@@ -183,6 +204,9 @@ namespace castor3d
 	protected:
 		castor::String m_fullName;
 		RenderTarget & m_renderTarget;
+		uint32_t m_passesCount{ 1u };
+		uint32_t m_currentPass{ 0u };
+		std::unique_ptr< RenderPassTimer > m_timer;
 		bool m_postToneMapping{ false };
 		TextureLayout const * m_target{ nullptr };
 		CommandsSemaphoreArray m_commands;

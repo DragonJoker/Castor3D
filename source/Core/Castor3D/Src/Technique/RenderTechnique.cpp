@@ -813,7 +813,10 @@ namespace castor3d
 	renderer::Semaphore const * RenderTechnique::doRenderBackground( renderer::Semaphore const & semaphore )
 	{
 		auto & scene = *m_renderTarget.getScene();
-		auto & bgSemaphore = scene.getBackground().getSemaphore();
+		auto & background = scene.getBackground();
+		auto & bgSemaphore = background.getSemaphore();
+		background.start();
+		background.notifyPassRender();
 		auto fence = getEngine()->getRenderSystem()->getCurrentDevice()->createFence();
 		getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue().submit( *m_bgCommandBuffer
 			, semaphore
@@ -822,6 +825,7 @@ namespace castor3d
 			, fence.get() );
 		fence->wait( renderer::FenceTimeout );
 		getEngine()->getRenderSystem()->getCurrentDevice()->waitIdle();
+		background.stop();
 		return &bgSemaphore;
 	}
 

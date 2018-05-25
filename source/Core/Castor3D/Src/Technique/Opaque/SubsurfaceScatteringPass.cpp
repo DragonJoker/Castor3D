@@ -645,6 +645,7 @@ namespace castor3d
 			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, m_intermediate, m_blurResults[2], true, m_blurVerticProgram },
 		}
 		, m_combine{ *engine.getRenderSystem(), textureSize, *m_blurWeightsUbo, gp, lightDiffuse, m_blurResults, m_result, m_combineProgram }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Opaque" ), cuT( "SSSSS pass" ) ) }
 	{
 		auto & configuration = m_blurConfigUbo->getData( 0u );
 		configuration.blurCorrection = 1.0f;
@@ -661,6 +662,7 @@ namespace castor3d
 
 		auto & device = *engine.getRenderSystem()->getCurrentDevice();
 		m_finished = device.createSemaphore();
+		m_fence = device.createFence( renderer::FenceCreateFlag::eSignaled );
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 		prepare();
 	}
@@ -680,6 +682,7 @@ namespace castor3d
 	{
 		if ( m_commandBuffer->begin() )
 		{
+			m_timer->beginPass( *m_commandBuffer );
 			for ( size_t i{ 0u }; i < m_blurResults.size(); ++i )
 			{
 				m_blurX[i].prepareFrame( *m_commandBuffer );
@@ -687,8 +690,23 @@ namespace castor3d
 			}
 
 			m_combine.prepareFrame( *m_commandBuffer );
+			m_timer->endPass( *m_commandBuffer );
 			m_commandBuffer->end();
 		}
+	}
+
+	renderer::Semaphore const & SubsurfaceScatteringPass::render( renderer::Semaphore const & toWait )const
+	{
+		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		m_timer->notifyPassRender();
+		m_fence->reset();
+		device.getGraphicsQueue().submit( *m_commandBuffer
+			, toWait
+			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, *m_finished
+			, m_fence.get() );
+		m_fence->wait( renderer::FenceTimeout );
+		return *m_finished;
 	}
 
 	void SubsurfaceScatteringPass::debugDisplay( castor::Size const & size )const

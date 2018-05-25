@@ -57,6 +57,7 @@ namespace Bloom
 		renderer::DescriptorSetPoolPtr m_descriptorPool;
 		renderer::DescriptorSetPtr m_descriptorSet;
 		renderer::CommandBufferPtr m_commandBuffer;
+		uint32_t m_blurPassesCount;
 	};
 }
 

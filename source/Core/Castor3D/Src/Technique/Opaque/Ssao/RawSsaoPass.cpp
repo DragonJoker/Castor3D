@@ -751,12 +751,7 @@ namespace castor3d
 
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
 		{
-			m_commandBuffer->resetQueryPool( m_timer->getQuery()
-				, 0u
-				, 2u );
-			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, m_timer->getQuery()
-				, 0u );
+			m_timer->beginPass( *m_commandBuffer );
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *m_frameBuffer
 				, { colour }
@@ -766,9 +761,7 @@ namespace castor3d
 			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 			m_commandBuffer->draw( 6u );
 			m_commandBuffer->endRenderPass();
-			m_commandBuffer->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, m_timer->getQuery()
-				, 1u );
+			m_timer->endPass( *m_commandBuffer );
 			m_commandBuffer->end();
 		}
 	}
@@ -792,12 +785,12 @@ namespace castor3d
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
 		m_timer->start();
+		m_timer->notifyPassRender();
 		device.getGraphicsQueue().submit( *m_commandBuffer
 			, toWait
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
 			, nullptr );
-		m_timer->step();
 		m_timer->stop();
 	}
 

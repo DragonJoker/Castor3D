@@ -106,8 +106,7 @@ namespace castor3d
 
 	bool RenderLoop::hasDebugOverlays()const
 	{
-		return m_debugOverlays != nullptr
-			&& m_debugOverlays->isShown();
+		return m_debugOverlays->isShown();
 	}
 
 	renderer::DevicePtr RenderLoop::doCreateDevice( renderer::WindowHandle && handle
@@ -184,7 +183,18 @@ namespace castor3d
 				window.render( true );
 			} );
 
-		m_debugOverlays->endGpuTask();
+		{
+			auto guard = makeBlockGuard(
+				[this]()
+				{
+					m_renderSystem.getMainDevice()->enable();
+				},
+				[this]()
+				{
+					m_renderSystem.getMainDevice()->disable();
+				} );
+			m_debugOverlays->endGpuTask();
+		}
 	}
 
 	void RenderLoop::doCpuStep()

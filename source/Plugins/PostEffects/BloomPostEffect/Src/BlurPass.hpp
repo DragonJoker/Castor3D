@@ -20,7 +20,8 @@ namespace Bloom
 			, uint32_t blurKernelSize
 			, uint32_t blurPassesCount
 			, bool isVertical );
-		castor3d::CommandsSemaphoreArray getCommands( renderer::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const;
+		castor3d::CommandsSemaphoreArray getCommands( castor3d::RenderPassTimer const & timer
+			, renderer::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const;
 
 		inline glsl::Shader const & getVertexShader()const
 		{
@@ -68,6 +69,7 @@ namespace Bloom
 		glsl::Shader m_pixelShader;
 		renderer::DescriptorSetPoolPtr m_descriptorPool;
 		std::vector< Subpass > m_passes;
+		bool m_isVertical;
 	};
 }
 

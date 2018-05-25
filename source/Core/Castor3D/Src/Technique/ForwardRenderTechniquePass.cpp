@@ -240,23 +240,17 @@ namespace castor3d
 				renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
 			};
 
-			if ( m_nodesCommands->begin() )
+			if ( m_nodesCommands->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
 			{
-				m_nodesCommands->resetQueryPool( getTimer().getQuery()
-					, 0u
-					, 2u );
-				m_nodesCommands->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-					, getTimer().getQuery()
-					, 0u );
+				getTimer().beginPass( *m_nodesCommands );
+				getTimer().notifyPassRender();
 				m_nodesCommands->beginRenderPass( getRenderPass()
 					, *m_frameBuffer
 					, clearValues
 					, renderer::SubpassContents::eSecondaryCommandBuffers );
 				m_nodesCommands->executeCommands( { getCommandBuffer() } );
 				m_nodesCommands->endRenderPass();
-				m_nodesCommands->writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-					, getTimer().getQuery()
-					, 1u );
+				getTimer().endPass( *m_nodesCommands );
 				m_nodesCommands->end();
 				m_fence->reset();
 				device.getGraphicsQueue().submit( { *m_nodesCommands }
@@ -266,7 +260,6 @@ namespace castor3d
 					, m_fence.get() );
 				m_fence->wait( renderer::FenceTimeout );
 				device.getGraphicsQueue().waitIdle();
-				getTimer().step();
 				result = &getSemaphore();
 			}
 

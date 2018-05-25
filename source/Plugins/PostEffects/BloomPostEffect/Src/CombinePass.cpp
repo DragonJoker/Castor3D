@@ -279,6 +279,7 @@ namespace Bloom
 			, float( blurPassesCount ) ) }
 		, m_descriptorPool{ m_descriptorLayout->createPool( 1u ) }
 		, m_descriptorSet{ doCreateDescriptorSet( *m_descriptorPool, sceneView, blurView, *m_sceneSampler, *m_blurSampler ) }
+		, m_blurPassesCount{ blurPassesCount }
 	{
 	}
 
@@ -290,6 +291,7 @@ namespace Bloom
 
 		if ( cmd.begin() )
 		{
+			timer.beginPass( cmd, 1u + ( m_blurPassesCount * 2u ) );
 			cmd.beginRenderPass( *m_renderPass
 				, *m_frameBuffer
 				, { renderer::ClearColorValue{ 0.0, 0.0, 0.0, 0.0 } }
@@ -299,9 +301,7 @@ namespace Bloom
 			cmd.bindVertexBuffer( 0u, vertexBuffer.getBuffer(), 0u );
 			cmd.draw( 6u );
 			cmd.endRenderPass();
-			cmd.writeTimestamp( renderer::PipelineStageFlag::eBottomOfPipe
-				, timer.getQuery()
-				, 1u );
+			timer.endPass( cmd, 1u + ( m_blurPassesCount * 2u ) );
 			cmd.end();
 		}
 
