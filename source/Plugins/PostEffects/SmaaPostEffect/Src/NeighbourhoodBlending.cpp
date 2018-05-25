@@ -286,7 +286,6 @@ namespace smaa
 			m_surfaces.emplace_back( *renderTarget.getEngine() );
 			m_surfaces.back().initialise( *m_renderPass
 				, castor::Size{ size.width, size.height }
-				, sampler
 				, renderer::Format::eR8G8B8A8_SRGB );
 		}
 	}

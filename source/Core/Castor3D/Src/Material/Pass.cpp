@@ -260,7 +260,7 @@ namespace castor3d
 			doPrepareTexture( TextureChannel::eSpecular, index );
 			doPrepareTexture( TextureChannel::eGloss, index );
 			doPrepareTexture( TextureChannel::eNormal, index );
-			doPrepareOpacity( opacitySource, opacityImage, index );
+			doPrepareOpacity( index );
 			doPrepareTexture( TextureChannel::eHeight, index );
 			doPrepareTexture( TextureChannel::eAmbientOcclusion, index );
 			doPrepareTexture( TextureChannel::eEmissive, index );
@@ -269,7 +269,7 @@ namespace castor3d
 			doReduceTexture( TextureChannel::eSpecular
 				, getType() == MaterialType::ePbrMetallicRoughness
 					? renderer::Format::eR8_UNORM
-					: renderer::Format::eR8G8B8_UNORM );
+					: renderer::Format::eR8G8B8A8_UNORM );
 			doReduceTexture( TextureChannel::eGloss
 				, renderer::Format::eR8_UNORM );
 			doReduceTexture( TextureChannel::eHeight
@@ -399,19 +399,6 @@ namespace castor3d
 
 		if ( unit )
 		{
-			auto texture = unit->getTexture();
-
-			if ( texture && texture->getDefaultImage().getBuffer() )
-			{
-				PxBufferBaseSPtr extracted = texture->getDefaultImage().getBuffer();
-				result = PF::extractAlpha( extracted );
-
-				if ( result )
-				{
-					texture->setSource( extracted );
-				}
-			}
-
 			Logger::logDebug( cuT( "	" ) + getName( channel ) + cuT( " map at index " ) + string::toString( index ) );
 			++index;
 		}
@@ -419,9 +406,7 @@ namespace castor3d
 		return result;
 	}
 
-	void Pass::doPrepareOpacity( TextureUnitSPtr opacitySource
-		, PxBufferBaseSPtr opacityBuffer
-		, uint32_t & index )
+	void Pass::doPrepareOpacity( uint32_t & index )
 	{
 		TextureUnitSPtr opacityMap = getTextureUnit( TextureChannel::eOpacity );
 
@@ -429,11 +414,13 @@ namespace castor3d
 			&& opacityMap->getTexture()
 			&& opacityMap->getTexture()->getDefaultImage().getBuffer() )
 		{
-			if ( opacityMap->getTexture()->getDefaultImage().getBuffer()->format() != PixelFormat::eL8
-				&& opacityMap->getTexture()->getDefaultImage().getBuffer()->format() != PixelFormat::eL16F
-				&& opacityMap->getTexture()->getDefaultImage().getBuffer()->format() != PixelFormat::eL32F )
+			auto buffer = opacityMap->getTexture()->getDefaultImage().getBuffer();
+
+			if ( buffer->format() != PixelFormat::eL8
+				&& buffer->format() != PixelFormat::eL16F
+				&& buffer->format() != PixelFormat::eL32F )
 			{
-				PxBufferBaseSPtr reduced = opacityMap->getTexture()->getDefaultImage().getBuffer();
+				PxBufferBaseSPtr reduced = buffer;
 				PF::reduceToAlpha( reduced );
 				auto size = reduced->dimensions();
 				renderer::ImageCreateInfo createInfo{};
@@ -455,37 +442,7 @@ namespace castor3d
 					, renderer::MemoryPropertyFlag::eDeviceLocal );
 				texture->setSource( reduced );
 				opacityMap->setTexture( texture );
-				opacityBuffer.reset();
 			}
-		}
-		else if ( opacityBuffer )
-		{
-			auto size = opacityBuffer->dimensions();
-			renderer::ImageCreateInfo createInfo{};
-			createInfo.flags = 0u;
-			createInfo.arrayLayers = 1u;
-			createInfo.extent.width = size.getWidth();
-			createInfo.extent.height = size.getHeight();
-			createInfo.extent.depth = 1u;
-			createInfo.format = convert( opacityBuffer->format() );
-			createInfo.imageType = renderer::TextureType::e2D;
-			createInfo.initialLayout = renderer::ImageLayout::eUndefined;
-			createInfo.mipLevels = 1u;
-			createInfo.samples = renderer::SampleCountFlag::e1;
-			createInfo.sharingMode = renderer::SharingMode::eExclusive;
-			createInfo.tiling = renderer::ImageTiling::eOptimal;
-			createInfo.usage = renderer::ImageUsageFlag::eSampled;
-			auto texture = std::make_shared< TextureLayout >( *getOwner()->getEngine()->getRenderSystem()
-				, createInfo
-				, renderer::MemoryPropertyFlag::eDeviceLocal );
-			texture->setSource( opacityBuffer );
-			opacityMap = std::make_shared< TextureUnit >( *getOwner()->getEngine() );
-			opacityMap->setAutoMipmaps( opacitySource->getAutoMipmaps() );
-			opacityMap->setChannel( TextureChannel::eOpacity );
-			opacityMap->setSampler( opacitySource->getSampler() );
-			opacityMap->setTexture( texture );
-			addTextureUnit( opacityMap );
-			opacityBuffer.reset();
 		}
 		else if ( opacityMap )
 		{

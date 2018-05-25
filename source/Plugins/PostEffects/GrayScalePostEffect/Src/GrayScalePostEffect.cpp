@@ -120,21 +120,6 @@ namespace GrayScale
 			, false }
 		, m_surface{ *renderSystem.getEngine() }
 	{
-		castor::String name = cuT( "GrayScale" );
-
-		if ( !m_renderTarget.getEngine()->getSamplerCache().has( name ) )
-		{
-			m_sampler = m_renderTarget.getEngine()->getSamplerCache().add( name );
-			m_sampler->setMinFilter( renderer::Filter::eLinear );
-			m_sampler->setMagFilter( renderer::Filter::eLinear );
-			m_sampler->setWrapS( renderer::WrapMode::eRepeat );
-			m_sampler->setWrapT( renderer::WrapMode::eRepeat );
-			m_sampler->setWrapR( renderer::WrapMode::eRepeat );
-		}
-		else
-		{
-			m_sampler = m_renderTarget.getEngine()->getSamplerCache().find( name );
-		}
 	}
 
 	PostEffect::~PostEffect()
@@ -177,9 +162,13 @@ namespace GrayScale
 	{
 		auto & device = *getRenderSystem()->getCurrentDevice();
 		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
-		m_sampler->initialise();
 		m_vertexShader = getVertexProgram( getRenderSystem() );
 		m_pixelShader = getFragmentProgram( getRenderSystem() );
+		renderer::ShaderStageStateArray stages;
+		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
+		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
+		stages[0].module->loadShader( m_vertexShader.getSource() );
+		stages[1].module->loadShader( m_pixelShader.getSource() );
 
 		m_configUbo = renderer::makeUniformBuffer< castor::Point3f >( device
 			, 1u
@@ -188,12 +177,6 @@ namespace GrayScale
 		m_configUbo->getData() = m_factors.value();
 		m_configUbo->upload();
 		m_factors.reset();
-
-		renderer::ShaderStageStateArray stages;
-		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
-		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( m_vertexShader.getSource() );
-		stages[1].module->loadShader( m_pixelShader.getSource() );
 
 		// Create the render pass.
 		renderer::RenderPassCreateInfo renderPass;
@@ -248,7 +231,6 @@ namespace GrayScale
 
 		auto result = m_surface.initialise( *m_renderPass
 			, castor::Size{ m_target->getWidth(), m_target->getHeight() }
-			, m_sampler
 			, m_target->getPixelFormat() );
 		castor3d::CommandsSemaphore commands
 		{
@@ -257,8 +239,7 @@ namespace GrayScale
 		};
 		auto & cmd = *commands.commandBuffer;
 
-		if ( result
-			&& cmd.begin() )
+		if ( result && cmd.begin() )
 		{
 			timer.beginPass( cmd );
 

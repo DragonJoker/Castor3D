@@ -5,11 +5,12 @@ See LICENSE file in root folder
 #define ___C3D_Bloom_HiPass___
 
 #include <PostEffect/PostEffect.hpp>
+#include <PostEffect/PostEffectSurface.hpp>
 #include <RenderToTexture/RenderQuad.hpp>
 
 #include <GlslShader.hpp>
 
-#define Bloom_DebugHiPass 1
+#define Bloom_DebugHiPass 0
 
 namespace Bloom
 {
@@ -22,8 +23,7 @@ namespace Bloom
 			, renderer::TextureView const & sceneView
 			, renderer::Extent2D size
 			, uint32_t blurPassesCount );
-		castor3d::CommandsSemaphore getCommands( castor3d::RenderPassTimer const & timer
-			, renderer::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const;
+		castor3d::CommandsSemaphore getCommands( castor3d::RenderPassTimer const & timer )const;
 
 		inline glsl::Shader const & getVertexShader()const
 		{
@@ -37,17 +37,16 @@ namespace Bloom
 
 		inline castor3d::TextureLayout const & getResult()const
 		{
-			return *m_image;
+			return *m_surface.colourTexture;
 		}
 
 	private:
 		renderer::Device const & m_device;
 		renderer::TextureView const & m_sceneView;
-		castor3d::TextureLayoutSPtr m_image;
 		glsl::Shader m_vertexShader;
 		glsl::Shader m_pixelShader;
 		renderer::RenderPassPtr m_renderPass;
-		renderer::FrameBufferPtr m_frameBuffer;
+		castor3d::PostEffectSurface m_surface;
 	};
 }
 

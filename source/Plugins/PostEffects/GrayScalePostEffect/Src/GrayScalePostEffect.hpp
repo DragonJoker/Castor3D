@@ -71,7 +71,6 @@ namespace GrayScale
 		static castor::String Name;
 
 	private:
-		castor3d::SamplerSPtr m_sampler;
 		castor3d::PostEffectSurface m_surface;
 		renderer::RenderPassPtr m_renderPass;
 		renderer::UniformBufferPtr< castor::Point3f > m_configUbo;

@@ -49,10 +49,10 @@ namespace Bloom
 			auto out = gl_PerVertex{ writer };
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				vtx_texture = texcoord;
-				out.gl_Position() = vec4( position, 0.0, 1.0 );
-			} );
+				{
+					vtx_texture = texcoord;
+					out.gl_Position() = vec4( position, 0.0, 1.0 );
+				} );
 			return writer.finalise();
 		}
 
@@ -85,40 +85,6 @@ namespace Bloom
 				FI;
 			} );
 			return writer.finalise();
-		}
-
-		castor3d::TextureLayoutSPtr doCreateTexture( castor3d::RenderSystem & renderSystem
-			, renderer::Extent2D const & size
-			, renderer::Format format
-			, uint32_t blurPassesCount )
-		{
-			renderer::ImageCreateInfo image{};
-			image.flags = 0u;
-			image.arrayLayers = 1u;
-#if Bloom_DebugHiPass
-			image.extent.width = size.width;
-			image.extent.height = size.height;
-#else
-			image.extent.width = size.width >> 1;
-			image.extent.height = size.height >> 1;
-#endif
-			image.extent.depth = 1u;
-			image.format = format;
-			image.imageType = renderer::TextureType::e2D;
-			image.initialLayout = renderer::ImageLayout::eUndefined;
-			image.mipLevels = blurPassesCount;
-			image.samples = renderer::SampleCountFlag::e1;
-			image.sharingMode = renderer::SharingMode::eExclusive;
-			image.tiling = renderer::ImageTiling::eOptimal;
-			image.usage = renderer::ImageUsageFlag::eColourAttachment
-				| renderer::ImageUsageFlag::eSampled
-				| renderer::ImageUsageFlag::eTransferDst
-				| renderer::ImageUsageFlag::eTransferSrc;
-			auto texture = std::make_shared< castor3d::TextureLayout >( renderSystem
-				, image
-				, renderer::MemoryPropertyFlag::eDeviceLocal );
-			texture->initialise();
-			return texture;
 		}
 
 		renderer::RenderPassPtr doCreateRenderPass( renderer::Device const & device
@@ -161,18 +127,6 @@ namespace Bloom
 
 			return device.createRenderPass( renderPass );
 		}
-
-		renderer::FrameBufferPtr doCreateFrameBuffer( renderer::RenderPass const & renderPass
-			, renderer::TextureView const & view
-			, renderer::Extent2D const & size )
-		{
-			renderer::FrameBufferAttachmentArray attachments{ { *renderPass.getAttachments().begin(), view } };
-#if Bloom_DebugHiPass
-			return renderPass.createFrameBuffer( { size.width, size.height }, std::move( attachments ) );
-#else
-			return renderPass.createFrameBuffer( { size.width >> 1, size.height >> 1 }, std::move( attachments ) );
-#endif
-		}
 	}
 
 	//*********************************************************************************************
@@ -185,11 +139,10 @@ namespace Bloom
 		: castor3d::RenderQuad{ renderSystem, true }
 		, m_device{ *renderSystem.getCurrentDevice() }
 		, m_sceneView{ sceneView }
-		, m_image{ doCreateTexture( renderSystem, size, format, blurPassesCount ) }
 		, m_vertexShader{ getVertexProgram( renderSystem ) }
 		, m_pixelShader{ getPixelProgram( renderSystem ) }
 		, m_renderPass{ doCreateRenderPass( m_device, format ) }
-		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_image->getImage().getView(), size ) }
+		, m_surface{ *renderSystem.getEngine() }
 	{
 		renderer::ShaderStageStateArray shaderStages;
 		shaderStages.push_back( { m_device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
@@ -200,6 +153,8 @@ namespace Bloom
 #if !Bloom_DebugHiPass
 		size.width >>= 1;
 		size.height >>= 1;
+#else
+		blurPassesCount = 1u;
 #endif
 
 		renderer::DescriptorSetLayoutBindingArray bindings;
@@ -210,33 +165,44 @@ namespace Bloom
 			, *m_renderPass
 			, bindings
 			, {} );
+		m_surface.initialise( *m_renderPass
+			, { size.width, size.height }
+			, m_sceneView.getFormat()
+			, blurPassesCount );
 	}
 
-	castor3d::CommandsSemaphore HiPass::getCommands( castor3d::RenderPassTimer const & timer
-		, renderer::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const
+	castor3d::CommandsSemaphore HiPass::getCommands( castor3d::RenderPassTimer const & timer )const
 	{
-		auto result = m_device.getGraphicsCommandPool().createCommandBuffer( true );
-		auto & cmd = *result;
+		castor3d::CommandsSemaphore commands
+		{
+			m_device.getGraphicsCommandPool().createCommandBuffer(),
+			m_device.createSemaphore()
+		};
+		auto & cmd = *commands.commandBuffer;
 
 		if ( cmd.begin() )
 		{
 			timer.beginPass( cmd, 0u );
+
+			// Put target image in shader input layout.
 			cmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
 				, m_sceneView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+
 			cmd.beginRenderPass( *m_renderPass
-				, *m_frameBuffer
-				, { renderer::ClearColorValue{ 0.0, 0.0, 0.0, 0.0 } }
+				, *m_surface.frameBuffer
+				, { renderer::ClearColorValue{} }
 				, renderer::SubpassContents::eInline );
 			registerFrame( cmd );
 			cmd.endRenderPass();
 #if !Bloom_DebugHiPass
-			m_image->getTexture().generateMipmaps( cmd );
+			m_surface.colourTexture->getTexture().generateMipmaps( cmd );
 #endif
+
 			timer.endPass( cmd, 0u );
 			cmd.end();
 		}
 
-		return { std::move( result ), m_device.createSemaphore() };
+		return commands;
 	}
 }

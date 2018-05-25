@@ -189,7 +189,7 @@ namespace castor3d
 	{
 		TextureView * view;
 
-		if ( m_views.empty() )
+		if ( m_views.size() == 1 )
 		{
 			view = m_defaultView.get();
 		}

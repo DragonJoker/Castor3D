@@ -579,9 +579,7 @@ namespace castor3d
 		 *\param[in]		opacityImage	Le canal alpha de opacitySource.
 		 *\param[in,out]	index			L'index de la texture.
 		 */
-		void doPrepareOpacity( TextureUnitSPtr opacitySource
-			, castor::PxBufferBaseSPtr opacityImage
-			, uint32_t & index );
+		void doPrepareOpacity( uint32_t & index );
 		/**
 		 *\~english
 		 *\brief		Updates the texture flags depending on the texture units.

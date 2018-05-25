@@ -343,7 +343,6 @@ namespace fxaa
 		// Initialise the surface.
 		auto result = m_surface.initialise( *m_renderPass
 			, castor::Size{ size.width, size.height }
-			, m_sampler
 			, m_target->getPixelFormat() );
 		castor3d::CommandsSemaphore commands
 		{

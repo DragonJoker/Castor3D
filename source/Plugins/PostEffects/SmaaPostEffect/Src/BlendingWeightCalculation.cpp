@@ -844,7 +844,6 @@ namespace smaa
 			, dsstate );
 		m_surface.initialise( *m_renderPass
 			, castor::Size{ size.width, size.height }
-			, sampler
 			, m_edgeDetectionView.getFormat()
 			, depthView );
 	}

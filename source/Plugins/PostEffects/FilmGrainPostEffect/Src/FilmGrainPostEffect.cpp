@@ -403,7 +403,6 @@ namespace film_grain
 
 		auto result = m_surface.initialise( *m_renderPass
 			, castor::Size{ m_target->getWidth(), m_target->getHeight() }
-			, m_sampler
 			, m_target->getPixelFormat() );
 		castor3d::CommandsSemaphore commands
 		{

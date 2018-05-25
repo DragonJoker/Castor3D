@@ -41,11 +41,14 @@ namespace castor3d
 	{
 		auto & device = *getRenderSystem()->getCurrentDevice();
 		m_target = &texture;
+		auto name = m_fullName;
+		name = castor::string::replace( name, cuT( "PostEffect" ), castor::String{} );
+		name = castor::string::replace( name, cuT( "Post Effect" ), castor::String{} );
 		m_timer = std::make_unique< RenderPassTimer >( *getRenderSystem()->getEngine()
 			, ( m_postToneMapping
 				? String{ cuT( "sRGB PostEffect" ) }
 				: String{ cuT( "HDR PostEffect" ) } )
-			, m_fullName
+			, name
 			, m_passesCount );
 		auto result = doInitialise( *m_timer );
 		ENSURE( m_result != nullptr );

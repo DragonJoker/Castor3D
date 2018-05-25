@@ -51,6 +51,11 @@ namespace castor3d
 					| renderer::ImageUsageFlag::eSampled;
 			}
 
+			if ( mipLevels > 1 )
+			{
+				image.usage |= renderer::ImageUsageFlag::eTransferDst;
+			}
+
 			return std::make_shared< TextureLayout >( renderSystem
 				, image
 				, renderer::MemoryPropertyFlag::eDeviceLocal );
@@ -64,13 +69,11 @@ namespace castor3d
 
 	bool PostEffectSurface::initialise( renderer::RenderPass const & renderPass
 		, Size const & size
-		, SamplerSPtr sampler
 		, renderer::Format format
 		, uint32_t mipLevels )
 	{
 		return initialise( renderPass
 			, size
-			, sampler
 			, doCreateTexture( *getEngine()->getRenderSystem()
 				, size
 				, format
@@ -81,13 +84,11 @@ namespace castor3d
 
 	bool PostEffectSurface::initialise( renderer::RenderPass const & renderPass
 		, Size const & size
-		, SamplerSPtr sampler
 		, renderer::Format colourFormat
 		, renderer::Format depthFormat )
 	{
 		return initialise( renderPass
 			, size
-			, sampler
 			, doCreateTexture( *getEngine()->getRenderSystem()
 				, size
 				, colourFormat
@@ -102,25 +103,21 @@ namespace castor3d
 
 	bool PostEffectSurface::initialise( renderer::RenderPass const & renderPass
 		, castor::Size const & size
-		, SamplerSPtr sampler
 		, TextureLayoutSPtr colourTexture )
 	{
 		return initialise( renderPass
 			, size
-			, sampler
 			, colourTexture
 			, nullptr );
 	}
 
 	bool PostEffectSurface::initialise( renderer::RenderPass const & renderPass
 		, castor::Size const & size
-		, SamplerSPtr sampler
 		, TextureLayoutSPtr colourTexture
 		, renderer::Format depthFormat )
 	{
 		return initialise( renderPass
 			, size
-			, sampler
 			, colourTexture
 			, doCreateTexture( *getEngine()->getRenderSystem()
 				, size
@@ -131,13 +128,11 @@ namespace castor3d
 
 	bool PostEffectSurface::initialise( renderer::RenderPass const & renderPass
 		, castor::Size const & size
-		, SamplerSPtr sampler
 		, renderer::Format colourFormat
 		, TextureLayoutSPtr depthTexture )
 	{
 		return initialise( renderPass
 			, size
-			, sampler
 			, doCreateTexture( *getEngine()->getRenderSystem()
 				, size
 				, colourFormat
@@ -148,12 +143,10 @@ namespace castor3d
 
 	bool PostEffectSurface::initialise( renderer::RenderPass const & renderPass
 		, Size const & size
-		, SamplerSPtr sampler
 		, TextureLayoutSPtr colourTexture
 		, TextureLayoutSPtr depthTexture )
 	{
 		this->size = size;
-		this->sampler = sampler;
 		renderer::FrameBufferAttachmentArray attaches;
 		uint32_t index = 0u;
 
@@ -161,7 +154,7 @@ namespace castor3d
 		{
 			this->colourTexture = colourTexture;
 			this->colourTexture->initialise();
-			attaches.emplace_back( *( renderPass.getAttachments().begin() + index ), colourTexture->getDefaultView() );
+			attaches.emplace_back( *( renderPass.getAttachments().begin() + index ), colourTexture->getImage().getView() );
 			++index;
 		}
 
@@ -181,7 +174,6 @@ namespace castor3d
 	void PostEffectSurface::cleanup()
 	{
 		frameBuffer.reset();
-		sampler.reset();
 
 		if ( colourTexture )
 		{

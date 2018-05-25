@@ -72,7 +72,7 @@ namespace Bloom
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				auto texcoords = writer.declLocale( cuT( "texcoords" )
-					, writer.adjustTexCoords( vtx_texture ) );
+					, vec2( vtx_texture.x(), 1.0_f - vtx_texture.y() ) );
 
 				if ( writer.isTopDown() )
 				{
@@ -80,7 +80,7 @@ namespace Bloom
 				}
 				else
 				{
-					pxl_fragColor = texture( c3d_mapScene, vec2( vtx_texture.x(), 1.0_f - vtx_texture.y() ) );
+					pxl_fragColor = texture( c3d_mapScene, texcoords );
 				}
 
 				for ( uint32_t i = 0; i < blurPassesCount; ++i )

@@ -812,19 +812,15 @@ namespace castor3d
 
 	renderer::Semaphore const * RenderTechnique::doRenderBackground( renderer::Semaphore const & semaphore )
 	{
-		auto & scene = *m_renderTarget.getScene();
-		auto & background = scene.getBackground();
+		auto & background = m_renderTarget.getScene()->getBackground();
 		auto & bgSemaphore = background.getSemaphore();
 		background.start();
 		background.notifyPassRender();
-		auto fence = getEngine()->getRenderSystem()->getCurrentDevice()->createFence();
 		getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue().submit( *m_bgCommandBuffer
 			, semaphore
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, bgSemaphore
-			, fence.get() );
-		fence->wait( renderer::FenceTimeout );
-		getEngine()->getRenderSystem()->getCurrentDevice()->waitIdle();
+			, nullptr );
 		background.stop();
 		return &bgSemaphore;
 	}

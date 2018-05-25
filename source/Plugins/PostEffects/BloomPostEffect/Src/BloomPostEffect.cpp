@@ -35,57 +35,6 @@ namespace Bloom
 	{
 		static uint32_t constexpr BaseFilterCount = 4u;
 		static uint32_t constexpr BaseKernelSize = 5u;
-
-		glsl::Shader getVertexProgram( castor3d::RenderSystem * renderSystem )
-		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
-
-			// Shader inputs
-			Vec2 position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
-
-			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto out = gl_PerVertex{ writer };
-
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				vtx_texture = writer.paren( position + 1.0 ) / 2.0;
-				out.gl_Position() = writer.rendererScalePosition( vec4( position, 0.0, 1.0 ) );
-			} );
-			return writer.finalise();
-		}
-
-		glsl::Shader getHiPassProgram( castor3d::RenderSystem * renderSystem )
-		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
-
-			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 0u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
-
-			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
-
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				pxl_fragColor = vec4( texture( c3d_mapDiffuse, writer.adjustTexCoords( vtx_texture ), 0.0f ).xyz(), 1.0 );
-				auto maxComponent = writer.declLocale( cuT( "maxComponent" ), glsl::max( pxl_fragColor.r(), pxl_fragColor.g() ) );
-				maxComponent = glsl::max( maxComponent, pxl_fragColor.b() );
-
-				IF( writer, maxComponent > 1.0_f )
-				{
-					pxl_fragColor.xyz() /= maxComponent;
-				}
-				ELSE
-				{
-					pxl_fragColor.xyz() = vec3( 0.0_f, 0.0_f, 0.0_f );
-				}
-				FI;
-			} );
-			return writer.finalise();
-		}
 	}
 
 	//*********************************************************************************************
@@ -137,6 +86,7 @@ namespace Bloom
 			, renderer::ShaderStageFlag::eFragment
 			, m_hiPass->getPixelShader() );
 
+#if !Bloom_DebugHiPass
 		visitor.visit( cuT( "BlurX" )
 			, renderer::ShaderStageFlag::eVertex
 			, m_blurXPass->getVertexShader() );
@@ -160,6 +110,7 @@ namespace Bloom
 
 		visitor.visit( cuT( "Kernel Size" )
 			, m_blurKernelSize );
+#endif
 	}
 
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
@@ -167,6 +118,7 @@ namespace Bloom
 		auto & device = *getRenderSystem()->getCurrentDevice();
 		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
 
+#if !Bloom_DebugHiPass
 		// Create vertex buffer
 		m_vertexBuffer = renderer::makeVertexBuffer< castor3d::NonTexturedQuad >( device
 			, 1u
@@ -211,6 +163,7 @@ namespace Bloom
 			, image
 			, renderer::MemoryPropertyFlag::eDeviceLocal );
 		m_blurTexture->initialise();
+#endif
 
 		m_hiPass = std::make_unique< HiPass >( *getRenderSystem()
 			, m_target->getPixelFormat()
@@ -241,15 +194,15 @@ namespace Bloom
 			, size
 			, m_blurPassesCount );
 #endif
-		m_commands.emplace_back( std::move( m_hiPass->getCommands( timer, *m_vertexBuffer ) ) );
+		m_commands.emplace_back( std::move( m_hiPass->getCommands( timer ) ) );
 
 #if !Bloom_DebugHiPass
-		for ( auto & command : m_blurXPass->getCommands( *m_vertexBuffer ) )
+		for ( auto & command : m_blurXPass->getCommands( timer, *m_vertexBuffer ) )
 		{
 			m_commands.emplace_back( std::move( command ) );
 		}
 
-		for ( auto & command : m_blurYPass->getCommands( *m_vertexBuffer ) )
+		for ( auto & command : m_blurYPass->getCommands( timer, *m_vertexBuffer ) )
 		{
 			m_commands.emplace_back( std::move( command ) );
 		}
@@ -277,6 +230,7 @@ namespace Bloom
 
 	bool PostEffect::doWriteInto( TextFile & file )
 	{
-		return file.writeText( cuT( " -Size=" ) + string::toString( m_blurKernelSize ) ) > 0;
+		return file.writeText( cuT( " -Size=" ) + string::toString( m_blurKernelSize )
+			+ cuT( " -Passes=" ) + string::toString( m_blurPassesCount ) ) > 0;
 	}
 }

@@ -38,126 +38,106 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the surface.
-		 *\param[in]	renderTarget	The render target to which is attached this effect.
-		 *\param[in]	size			The surface size.
-		 *\param[in]	index			The surface index.
-		 *\param[in]	sampler			The surface sampler.
-		 *\param[in]	format			The surface pixel format.
+		 *\param[in]	renderPass		The render pass from which the frame buffer is created.
+		 *\param[in]	size			The surface's size.
+		 *\param[in]	format			The surface's colour pixel format.
+		 *\param[in]	mipLevels		The surface's colour texture mipmap level.
 		 *\~french
 		 *\brief		Initialise la surface.
-		 *\param[in]	renderTarget	La cible de rendu sur laquelle cet effet s'applique.
+		 *\param[in]	renderPass		La passe de rendu depuis laquelle le frame buffer est créé.
 		 *\param[in]	size			Les dimensions de la surface.
-		 *\param[in]	index			L'index de la surface.
-		 *\param[in]	sampler			L'échantillonneur de la surface.
-		 *\param[in]	format			Le format des pixels de la surface.
+		 *\param[in]	format			Le format des pixels couleur de la surface.
+		 *\param[in]	mipLevels		Le nombre de niveausx de mipmap de la texture couleur de la surface.
 		 */
 		C3D_API bool initialise( renderer::RenderPass const & renderPass
 			, castor::Size const & size
-			, SamplerSPtr sampler
 			, renderer::Format format = renderer::Format::eR32G32B32A32_SFLOAT
 			, uint32_t mipLevels = 1u );
 		/**
 		 *\~english
 		 *\brief		Initialises the surface.
-		 *\param[in]	renderTarget	The render target to which is attached this effect.
-		 *\param[in]	size			The surface size.
-		 *\param[in]	index			The surface index.
-		 *\param[in]	sampler			The surface sampler.
-		 *\param[in]	format			The surface pixel format.
+		 *\param[in]	renderPass		The render pass from which the frame buffer is created.
+		 *\param[in]	size			The surface's size.
+		 *\param[in]	colourFormat	The surface's colour pixel format.
+		 *\param[in]	depthFormat		The surface's depth pixel format.
 		 *\~french
 		 *\brief		Initialise la surface.
-		 *\param[in]	renderTarget	La cible de rendu sur laquelle cet effet s'applique.
+		 *\param[in]	renderPass		La passe de rendu depuis laquelle le frame buffer est créé.
 		 *\param[in]	size			Les dimensions de la surface.
-		 *\param[in]	index			L'index de la surface.
-		 *\param[in]	sampler			L'échantillonneur de la surface.
-		 *\param[in]	format			Le format des pixels de la surface.
+		 *\param[in]	colourFormat	Le format des pixels couleur de la surface.
+		 *\param[in]	depthFormat		Le format des pixels profondeur de la surface.
 		 */
 		C3D_API bool initialise( renderer::RenderPass const & renderPass
 			, castor::Size const & size
-			, SamplerSPtr sampler
 			, renderer::Format colourFormat
 			, renderer::Format depthFormat );
 		/**
 		 *\~english
 		 *\brief		Initialises the surface.
-		 *\param[in]	renderTarget	The render target to which is attached this effect.
-		 *\param[in]	size			The surface size.
-		 *\param[in]	index			The surface index.
-		 *\param[in]	sampler			The surface sampler.
-		 *\param[in]	format			The surface pixel format.
+		 *\param[in]	renderPass		The render pass from which the frame buffer is created.
+		 *\param[in]	size			The surface's size.
+		 *\param[in]	colourTexture	The surface's colour texture.
 		 *\~french
 		 *\brief		Initialise la surface.
-		 *\param[in]	renderTarget	La cible de rendu sur laquelle cet effet s'applique.
+		 *\param[in]	renderPass		La passe de rendu depuis laquelle le frame buffer est créé.
 		 *\param[in]	size			Les dimensions de la surface.
-		 *\param[in]	index			L'index de la surface.
-		 *\param[in]	sampler			L'échantillonneur de la surface.
-		 *\param[in]	format			Le format des pixels de la surface.
+		 *\param[in]	colourTexture	La texture couleur de la surface.
 		 */
 		C3D_API bool initialise( renderer::RenderPass const & renderPass
 			, castor::Size const & size
-			, SamplerSPtr sampler
 			, TextureLayoutSPtr colourTexture );
 		/**
 		 *\~english
 		 *\brief		Initialises the surface.
-		 *\param[in]	renderTarget	The render target to which is attached this effect.
-		 *\param[in]	size			The surface size.
-		 *\param[in]	index			The surface index.
-		 *\param[in]	sampler			The surface sampler.
-		 *\param[in]	format			The surface pixel format.
+		 *\param[in]	renderPass		The render pass from which the frame buffer is created.
+		 *\param[in]	size			The surface's size.
+		 *\param[in]	colourTexture	The surface's colour texture.
+		 *\param[in]	depthFormat		The surface's depth pixel format.
 		 *\~french
 		 *\brief		Initialise la surface.
-		 *\param[in]	renderTarget	La cible de rendu sur laquelle cet effet s'applique.
+		 *\param[in]	renderPass		La passe de rendu depuis laquelle le frame buffer est créé.
 		 *\param[in]	size			Les dimensions de la surface.
-		 *\param[in]	index			L'index de la surface.
-		 *\param[in]	sampler			L'échantillonneur de la surface.
-		 *\param[in]	format			Le format des pixels de la surface.
+		 *\param[in]	colourTexture	La texture couleur de la surface.
+		 *\param[in]	depthFormat		Le format des pixels profondeur de la surface.
 		 */
 		C3D_API bool initialise( renderer::RenderPass const & renderPass
 			, castor::Size const & size
-			, SamplerSPtr sampler
 			, TextureLayoutSPtr colourTexture
 			, renderer::Format depthFormat );
 		/**
 		 *\~english
 		 *\brief		Initialises the surface.
-		 *\param[in]	renderTarget	The render target to which is attached this effect.
-		 *\param[in]	size			The surface size.
-		 *\param[in]	index			The surface index.
-		 *\param[in]	sampler			The surface sampler.
-		 *\param[in]	format			The surface pixel format.
+		 *\param[in]	renderPass		The render pass from which the frame buffer is created.
+		 *\param[in]	size			The surface's size.
+		 *\param[in]	colourFormat	The surface's colour pixel format.
+		 *\param[in]	colourTexture	The surface's depth texture.
 		 *\~french
 		 *\brief		Initialise la surface.
-		 *\param[in]	renderTarget	La cible de rendu sur laquelle cet effet s'applique.
+		 *\param[in]	renderPass		La passe de rendu depuis laquelle le frame buffer est créé.
 		 *\param[in]	size			Les dimensions de la surface.
-		 *\param[in]	index			L'index de la surface.
-		 *\param[in]	sampler			L'échantillonneur de la surface.
-		 *\param[in]	format			Le format des pixels de la surface.
+		 *\param[in]	colourFormat	Le format des pixels couleur de la surface.
+		 *\param[in]	depthTexture	La texture profondeur de la surface.
 		 */
 		C3D_API bool initialise( renderer::RenderPass const & renderPass
 			, castor::Size const & size
-			, SamplerSPtr sampler
 			, renderer::Format colourFormat
 			, TextureLayoutSPtr depthTexture );
 		/**
 		 *\~english
 		 *\brief		Initialises the surface.
-		 *\param[in]	renderTarget	The render target to which is attached this effect.
-		 *\param[in]	size			The surface size.
-		 *\param[in]	index			The surface index.
-		 *\param[in]	sampler			The surface sampler.
-		 *\param[in]	format			The surface pixel format.
+		 *\param[in]	renderPass		The render pass from which the frame buffer is created.
+		 *\param[in]	size			The surface's size.
+		 *\param[in]	colourTexture	The surface's colour texture.
+		 *\param[in]	colourTexture	The surface's depth texture.
 		 *\~french
 		 *\brief		Initialise la surface.
-		 *\param[in]	renderTarget	La cible de rendu sur laquelle cet effet s'applique.
+		 *\param[in]	renderPass		La passe de rendu depuis laquelle le frame buffer est créé.
 		 *\param[in]	size			Les dimensions de la surface.
-		 *\param[in]	index			L'index de la surface.
-		 *\param[in]	sampler			L'échantillonneur de la surface.
-		 *\param[in]	format			Le format des pixels de la surface.
+		 *\param[in]	colourTexture	La texture couleur de la surface.
+		 *\param[in]	depthTexture	La texture profondeur de la surface.
 		 */
 		C3D_API bool initialise( renderer::RenderPass const & renderPass
 			, castor::Size const & size
-			, SamplerSPtr sampler
 			, TextureLayoutSPtr colourTexture
 			, TextureLayoutSPtr depthTexture );
 		/**
@@ -171,9 +151,6 @@ namespace castor3d
 		//!\~english	The surface framebuffer.
 		//!\~french		Le framebuffer de la surface.
 		renderer::FrameBufferPtr frameBuffer;
-		//!\~english	The sampler.
-		//!\~french		L'échantillonneur.
-		SamplerSPtr sampler;
 		//!\~english	The surface colour texture.
 		//!\~french		La texture couleur de la surface.
 		TextureLayoutSPtr colourTexture;

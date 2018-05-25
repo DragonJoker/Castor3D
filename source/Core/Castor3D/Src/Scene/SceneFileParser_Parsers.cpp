@@ -3046,40 +3046,59 @@ namespace castor3d
 					p_params[1]->get( channels );
 					auto buffer = texture->getDefaultImage().getBuffer();
 
-					if ( channels == cuT( "rgb" ) )
+					if ( channels == cuT( "r" ) )
 					{
-						buffer = PxBufferBase::create( buffer->dimensions()
-							, PF::getPFWithoutAlpha( buffer->format() )
-							, buffer->constPtr()
-							, buffer->format() );
-					}
-					else if ( channels == cuT( "r" ) )
-					{
-						auto format = ( buffer->format() == PixelFormat::eR8G8B8
-							|| buffer->format() == PixelFormat::eB8G8R8
-							|| buffer->format() == PixelFormat::eR8G8B8_SRGB
-							|| buffer->format() == PixelFormat::eB8G8R8_SRGB
-							|| buffer->format() == PixelFormat::eA8R8G8B8
-							|| buffer->format() == PixelFormat::eA8B8G8R8
-							|| buffer->format() == PixelFormat::eA8R8G8B8_SRGB
-							|| buffer->format() == PixelFormat::eA8B8G8R8_SRGB )
+						auto srcFormat = buffer->format();
+						auto dstFormat = ( ( srcFormat == PixelFormat::eR8G8B8
+							|| srcFormat == PixelFormat::eB8G8R8
+							|| srcFormat == PixelFormat::eR8G8B8_SRGB
+							|| srcFormat == PixelFormat::eB8G8R8_SRGB
+							|| srcFormat == PixelFormat::eA8R8G8B8
+							|| srcFormat == PixelFormat::eA8B8G8R8
+							|| srcFormat == PixelFormat::eA8R8G8B8_SRGB
+							|| srcFormat == PixelFormat::eA8B8G8R8_SRGB )
 							? PixelFormat::eL8
-							: ( buffer->format() == PixelFormat::eRGB16F
-								|| buffer->format() == PixelFormat::eRGBA16F )
+							: ( ( srcFormat == PixelFormat::eRGB16F
+								|| srcFormat == PixelFormat::eRGBA16F )
 								? PixelFormat::eL16F
-								: ( buffer->format() == PixelFormat::eRGB32F
-									|| buffer->format() == PixelFormat::eRGBA32F )
+								: ( ( srcFormat == PixelFormat::eRGB32F
+									|| srcFormat == PixelFormat::eRGBA32F )
 									? PixelFormat::eL32F
-									: buffer->format();
+									: srcFormat ) ) );
 						buffer = PxBufferBase::create( buffer->dimensions()
-							, format
+							, dstFormat
 							, buffer->constPtr()
-							, buffer->format() );
+							, srcFormat );
 					}
 					else if ( channels == cuT( "a" ) )
 					{
 						auto tmp = PF::extractAlpha( buffer );
 						buffer = tmp;
+					}
+					else
+					{
+						auto srcFormat = buffer->format();
+						auto dstFormat = ( srcFormat == PixelFormat::eR8G8B8
+							? PixelFormat::eA8R8G8B8
+							: ( srcFormat == PixelFormat::eB8G8R8
+								? PixelFormat::eA8B8G8R8
+								: ( srcFormat == PixelFormat::eR8G8B8_SRGB
+									? PixelFormat::eA8R8G8B8_SRGB
+									: ( srcFormat == PixelFormat::eB8G8R8_SRGB
+										? PixelFormat::eA8B8G8R8_SRGB
+										: ( srcFormat == PixelFormat::eRGB16F
+											? PixelFormat::eRGBA16F
+											: ( srcFormat == PixelFormat::eRGB32F
+												? PixelFormat::eRGBA32F
+												: srcFormat ) ) ) ) ) );
+
+						if ( srcFormat != dstFormat )
+						{
+							buffer = PxBufferBase::create( buffer->dimensions()
+								, dstFormat
+								, buffer->constPtr()
+								, srcFormat );
+						}
 					}
 
 					texture->getDefaultImage().setBuffer( buffer );
