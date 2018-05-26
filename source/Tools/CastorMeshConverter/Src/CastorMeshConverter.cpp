@@ -143,7 +143,7 @@ bool doInitialiseEngine( castor3d::Engine & engine )
 			, renderers.end()
 			, []( std::pair< castor::String, castor3d::PluginSPtr > const & pair )
 		{
-			return pair.first.find( "Test" ) != castor::String::npos;
+			return pair.first.find( "Vk" ) != castor::String::npos;
 		} );
 
 		if ( renderer != renderers.end() )
@@ -310,7 +310,7 @@ int main( int argc, char * argv[] )
 #endif
 
 		castor::Logger::setFileName( castor::File::getExecutableDirectory() / cuT( "Tests.log" ) );
-		castor3d::Engine engine;
+		castor3d::Engine engine{ cuT( "MeshConverter" ), false };
 
 		if ( doInitialiseEngine( engine ) )
 		{
@@ -338,10 +338,10 @@ int main( int argc, char * argv[] )
 
 			if ( mesh )
 			{
-				for ( auto & submesh : *mesh )
-				{
-					submesh->initialise();
-				}
+				//for ( auto & submesh : *mesh )
+				//{
+				//	submesh->initialise();
+				//}
 
 				doWriteObject( path, *mesh );
 			}
