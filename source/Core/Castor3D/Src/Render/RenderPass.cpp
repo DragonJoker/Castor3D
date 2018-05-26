@@ -358,7 +358,8 @@ namespace castor3d
 					, textureFlags
 					, programFlags
 					, sceneFlags
-					, topology };
+					, topology
+					, alphaFunc };
 				doPrepareFrontPipeline( frontProgram, layouts, flags );
 				doPrepareBackPipeline( backProgram, layouts, flags );
 			}
@@ -370,7 +371,8 @@ namespace castor3d
 					, textureFlags
 					, programFlags
 					, sceneFlags
-					, topology };
+					, topology
+					, alphaFunc };
 
 				if ( twoSided || checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
@@ -403,7 +405,7 @@ namespace castor3d
 		}
 
 		auto & pipelines = doGetFrontPipelines();
-		auto it = pipelines.find( { colourBlendMode, alphaBlendMode, passFlags, textureFlags, programFlags, sceneFlags, topology } );
+		auto it = pipelines.find( { colourBlendMode, alphaBlendMode, passFlags, textureFlags, programFlags, sceneFlags, topology, alphaFunc } );
 		RenderPipeline * result{ nullptr };
 
 		if ( it != pipelines.end() )
@@ -429,7 +431,7 @@ namespace castor3d
 		}
 
 		auto & pipelines = doGetBackPipelines();
-		auto it = pipelines.find( { colourBlendMode, alphaBlendMode, passFlags, textureFlags, programFlags, sceneFlags, topology } );
+		auto it = pipelines.find( { colourBlendMode, alphaBlendMode, passFlags, textureFlags, programFlags, sceneFlags, topology, alphaFunc } );
 		RenderPipeline * result{ nullptr };
 
 		if ( it != pipelines.end() )

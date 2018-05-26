@@ -13,8 +13,6 @@
 
 using namespace castor;
 
-#define C3D_SeparatePasses 0
-
 namespace castor3d
 {
 	namespace
@@ -28,6 +26,20 @@ namespace castor3d
 				, std::move( viewport ) );
 			camera->update();
 			return camera;
+		}
+
+		renderer::TextureViewPtr doCreateView( TextureView const & image
+			, uint32_t face )
+		{
+			renderer::ImageViewCreateInfo view{};
+			view.format = image.getView().getFormat();
+			view.viewType = renderer::TextureViewType::e2D;
+			view.subresourceRange.aspectMask = renderer::ImageAspectFlag::eColour;
+			view.subresourceRange.baseArrayLayer = face;
+			view.subresourceRange.layerCount = 1u;
+			view.subresourceRange.baseMipLevel = 0u;
+			view.subresourceRange.levelCount = 1u;
+			return image.getOwner()->getTexture().createView( view );
 		}
 	}
 
@@ -85,11 +97,11 @@ namespace castor3d
 		m_modelMatrixUbo.initialise();
 		m_hdrConfigUbo.initialise();
 		auto const & environmentLayout = getOwner()->getTexture().getTexture();
-		auto const & environmentView = environmentLayout->getImage( face ).getView();
+		m_envView = doCreateView( environmentLayout->getImage( face ), face );
 		auto const & depthView = getOwner()->getDepthView();
 
 		// Initialise opaque pass.
-		m_opaquePass->initialiseRenderPass( environmentView
+		m_opaquePass->initialiseRenderPass( *m_envView
 			, getOwner()->getDepthView()
 			, size
 			, true );
@@ -98,7 +110,7 @@ namespace castor3d
 		// Create custom background pass.
 		renderer::FrameBufferAttachmentArray attaches;
 		attaches.emplace_back( *( renderPass.getAttachments().begin() + 0u ), depthView );
-		attaches.emplace_back( *( renderPass.getAttachments().begin() + 1u ), environmentView );
+		attaches.emplace_back( *( renderPass.getAttachments().begin() + 1u ), *m_envView );
 		m_frameBuffer = renderPass.createFrameBuffer( renderer::Extent2D{ size[0], size[1] }
 			, std::move( attaches ) );
 		m_backgroundCommands = device.getGraphicsCommandPool().createCommandBuffer( false );
@@ -117,7 +129,7 @@ namespace castor3d
 			, *m_backgroundDescriptorSet );
 
 		// Initialise transparent pass.
-		m_transparentPass->initialiseRenderPass( environmentView
+		m_transparentPass->initialiseRenderPass( *m_envView
 			, getOwner()->getDepthView()
 			, size
 			, false );
@@ -139,6 +151,7 @@ namespace castor3d
 		m_frameBuffer.reset();
 		m_opaquePass->cleanup();
 		m_transparentPass->cleanup();
+		m_envView.reset();
 		m_hdrConfigUbo.cleanup();
 		m_modelMatrixUbo.cleanup();
 		m_matrixUbo.cleanup();
@@ -170,31 +183,6 @@ namespace castor3d
 		static renderer::ClearColorValue const black{};
 		static renderer::DepthStencilClearValue const depth{ 1.0, 0 };
 
-#if C3D_SeparatePasses
-
-		result = &m_opaquePass->render( *result );
-
-		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
-		m_commandBuffer->beginRenderPass( *m_renderPass
-			, *m_frameBuffer
-			, { depth, black }
-			, renderer::SubpassContents::eSecondaryCommandBuffers );
-		m_commandBuffer->executeCommands( { *m_backgroundCommands } );
-		m_commandBuffer->endRenderPass();
-		m_commandBuffer->end();
-		m_fence->reset();
-		device.getGraphicsQueue().submit( *m_commandBuffer
-			, *result
-			, renderer::PipelineStageFlag::eBottomOfPipe
-			, *m_finished
-			, m_fence.get() );
-		m_fence->wait( renderer::FenceTimeout );
-		result = m_finished.get();
-
-		result = &m_transparentPass->render( *result );
-
-#else
-
 		m_commandBuffer->begin();
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
@@ -218,16 +206,11 @@ namespace castor3d
 		m_commandBuffer->endRenderPass();
 		m_commandBuffer->end();
 
-		m_fence->reset();
 		device.getGraphicsQueue().submit( *m_commandBuffer
 			, toWait
 			, renderer::PipelineStageFlag::eBottomOfPipe
 			, *m_finished
-			, m_fence.get() );
-		m_fence->wait( renderer::FenceTimeout );
+			, nullptr );
 		return *m_finished;
-
-#endif
-		return *result;
 	}
 }

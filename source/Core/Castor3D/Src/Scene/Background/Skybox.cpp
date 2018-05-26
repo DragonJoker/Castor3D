@@ -154,7 +154,7 @@ namespace castor3d
 		, m_viewport{ engine }
 	{
 		m_texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
-			, doGetImageCreate( renderer::Format::eR8G8B8A8_UNORM, { 512u, 512u }, false )
+			, doGetImageCreate( renderer::Format::eR8G8B8A8_UNORM, { 16u, 16u }, false )
 			, renderer::MemoryPropertyFlag::eDeviceLocal );
 	}
 

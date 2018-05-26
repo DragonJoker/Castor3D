@@ -27,19 +27,23 @@ namespace castor3d
 {
 	inline bool operator<( PipelineFlags const & lhs, PipelineFlags const & rhs )
 	{
-		return lhs.topology < rhs.topology
-			||	( lhs.topology == rhs.topology
-				&&	( lhs.colourBlendMode < rhs.colourBlendMode
-					||	( lhs.colourBlendMode == rhs.colourBlendMode
-						&&	( lhs.alphaBlendMode < rhs.alphaBlendMode
-							||	( lhs.alphaBlendMode == rhs.alphaBlendMode
-								&&	( lhs.textureFlags < rhs.textureFlags
-									||	( lhs.textureFlags == rhs.textureFlags
-										&&	( lhs.programFlags < rhs.programFlags
-											||	( lhs.programFlags == rhs.programFlags
-												&&	( lhs.passFlags < rhs.passFlags
-													|| ( lhs.passFlags == rhs.passFlags
-														&& lhs.sceneFlags < rhs.sceneFlags )
+		return lhs.alphaFunc < rhs.alphaFunc
+			|| ( lhs.alphaFunc == rhs.alphaFunc
+				&& ( lhs.topology < rhs.topology
+					||	( lhs.topology == rhs.topology
+						&&	( lhs.colourBlendMode < rhs.colourBlendMode
+							||	( lhs.colourBlendMode == rhs.colourBlendMode
+								&&	( lhs.alphaBlendMode < rhs.alphaBlendMode
+									||	( lhs.alphaBlendMode == rhs.alphaBlendMode
+										&&	( lhs.textureFlags < rhs.textureFlags
+											||	( lhs.textureFlags == rhs.textureFlags
+												&&	( lhs.programFlags < rhs.programFlags
+													||	( lhs.programFlags == rhs.programFlags
+														&&	( lhs.passFlags < rhs.passFlags
+															|| ( lhs.passFlags == rhs.passFlags
+																&& lhs.sceneFlags < rhs.sceneFlags )
+															)
+														)
 													)
 												)
 											)

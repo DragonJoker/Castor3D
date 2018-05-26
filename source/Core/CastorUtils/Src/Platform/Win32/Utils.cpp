@@ -63,10 +63,11 @@ namespace castor
 
 					if ( length > 0 )
 					{
-						std::vector< char > buffer( size_t( length + 1 ), char{} );
-						WideCharToMultiByte( CP_UTF8, 0u, errorText, -1, buffer.data(), length, 0u, 0u );
-						String converted{ buffer.begin(), buffer.end() };
-						stream << cuT( " (" ) << converted << cuT( ")" );
+						String converted( size_t( length ), 0 );
+						WideCharToMultiByte( CP_UTF8, 0u, errorText, -1, converted.data(), length, 0u, 0u );
+						string::replace( converted, "\r", String{} );
+						string::replace( converted, "\n", String{} );
+						stream << cuT( " (" ) << converted.c_str() << cuT( ")" );
 					}
 				}
 				else

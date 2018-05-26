@@ -26,14 +26,13 @@ namespace castor3d
 {
 	namespace
 	{
-		static Size const MapSize{ 1024, 1024 };
+		static Size const MapSize{ 128, 128 };
 
-		TextureUnit doInitialisePoint( Engine & engine
-			, Size const & size
-			, MaterialType type )
+		SamplerSPtr doCreateSampler( Engine & engine
+			, uint32_t levelCount )
 		{
-			String const name = cuT( "EnvironmentMap" );
-
+			static uint32_t id = 0u;
+			String const name = cuT( "EnvironmentMap_" ) + string::toString( id++, 10, std::locale{ "C" } );
 			SamplerSPtr sampler;
 
 			if ( engine.getSamplerCache().has( name ) )
@@ -48,8 +47,24 @@ namespace castor3d
 				sampler->setWrapS( renderer::WrapMode::eClampToEdge );
 				sampler->setWrapT( renderer::WrapMode::eClampToEdge );
 				sampler->setWrapR( renderer::WrapMode::eClampToEdge );
+
+				if ( levelCount > 1u )
+				{
+					sampler->setMipFilter( renderer::MipmapMode::eLinear );
+					sampler->setMinLod( 0.0f );
+					sampler->setMaxLod( float( levelCount - 1u ) );
+					sampler->enableAnisotropicFiltering( true );
+					sampler->setMaxAnisotropy( sampler->getMaxLod() );
+				}
 			}
 
+			return sampler;
+		}
+
+		TextureUnit doInitialisePoint( Engine & engine
+			, Size const & size
+			, MaterialType type )
+		{
 			renderer::ImageCreateInfo colour{};
 			colour.flags = renderer::ImageCreateFlag::eCubeCompatible;
 			colour.arrayLayers = 6u;
@@ -59,17 +74,20 @@ namespace castor3d
 			colour.format = renderer::Format::eR16G16B16A16_SFLOAT;
 			colour.imageType = renderer::TextureType::e2D;
 			colour.initialLayout = renderer::ImageLayout::eUndefined;
-			colour.mipLevels = 1u;
+			colour.mipLevels = 6u;
 			colour.samples = renderer::SampleCountFlag::e1;
 			colour.sharingMode = renderer::SharingMode::eExclusive;
 			colour.tiling = renderer::ImageTiling::eOptimal;
-			colour.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+			colour.usage = renderer::ImageUsageFlag::eColourAttachment
+				| renderer::ImageUsageFlag::eSampled
+				| renderer::ImageUsageFlag::eTransferDst
+				| renderer::ImageUsageFlag::eTransferSrc;
 			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
 				, colour
 				, renderer::MemoryPropertyFlag::eDeviceLocal );
 			TextureUnit unit{ engine };
 			unit.setTexture( texture );
-			unit.setSampler( sampler );
+			unit.setSampler( doCreateSampler( engine, texture->getMipmapCount() ) );
 
 			for ( auto & image : *texture )
 			{
@@ -261,7 +279,8 @@ namespace castor3d
 
 			auto & scene = *m_node.getScene();
 
-			if ( scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness
+			if ( m_environmentMap.getTexture()->getMipmapCount() > 1u
+				|| scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness
 				|| scene.getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
 			{
 				m_environmentMap.getTexture()->generateMipmaps();

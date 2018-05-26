@@ -446,6 +446,14 @@ namespace castor3d
 			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
 		}
 
+		if ( checkFlag( flags.passFlags, PassFlag::ePbrMetallicRoughness )
+			|| checkFlag( flags.passFlags, PassFlag::ePbrSpecularGlossiness ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );	// c3d_mapIrradiance
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );	// c3d_mapPrefiltered
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );	// c3d_mapBrdf
+		}
+
 		textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment, 1u );
 		textureBindings.emplace_back( index, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment, shader::SpotShadowMapCount );
 		index += shader::SpotShadowMapCount;
@@ -1019,13 +1027,13 @@ namespace castor3d
 				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) );
 		auto c3d_mapIrradiance = writer.declSampler< SamplerCube >( cuT( "c3d_mapIrradiance" )
 			, index++
-			, 0u );
+			, 1u );
 		auto c3d_mapPrefiltered = writer.declSampler< SamplerCube >( cuT( "c3d_mapPrefiltered" )
 			, index++
-			, 0u );
+			, 1u );
 		auto c3d_mapBrdf = writer.declSampler< Sampler2D >( cuT( "c3d_mapBrdf" )
 			, index++
-			, 0u );
+			, 1u );
 		auto c3d_heightScale( writer.declConstant< Float >( cuT( "c3d_heightScale" )
 			, 0.1_f
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
@@ -1039,7 +1047,7 @@ namespace castor3d
 		utils.declareRemoveGamma();
 		utils.declareLineariseDepth();
 		utils.declareFresnelSchlick();
-		utils.declareComputeMetallicIBL();
+		utils.declareComputeIBL();
 
 		if ( checkFlag( textureFlags, TextureChannel::eNormal ) )
 		{
@@ -1291,13 +1299,13 @@ namespace castor3d
 				|| checkFlag( textureFlags, TextureChannel::eRefraction ) ) );
 		auto c3d_mapIrradiance = writer.declSampler< SamplerCube >( cuT( "c3d_mapIrradiance" )
 			, index++
-			, 0u );
+			, 1u );
 		auto c3d_mapPrefiltered = writer.declSampler< SamplerCube >( cuT( "c3d_mapPrefiltered" )
 			, index++
-			, 0u );
+			, 1u );
 		auto c3d_mapBrdf = writer.declSampler< Sampler2D >( cuT( "c3d_mapBrdf" )
 			, index++
-			, 0u );
+			, 1u );
 		auto c3d_heightScale( writer.declConstant< Float >( cuT( "c3d_heightScale" )
 			, 0.1_f
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
@@ -1311,7 +1319,7 @@ namespace castor3d
 		utils.declareRemoveGamma();
 		utils.declareLineariseDepth();
 		utils.declareFresnelSchlick();
-		utils.declareComputeSpecularIBL();
+		utils.declareComputeIBL();
 
 		if ( checkFlag( textureFlags, TextureChannel::eNormal ) )
 		{

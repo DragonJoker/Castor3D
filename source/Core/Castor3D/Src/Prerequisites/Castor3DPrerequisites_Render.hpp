@@ -148,6 +148,7 @@ namespace castor3d
 		ProgramFlags programFlags;
 		SceneFlags sceneFlags;
 		renderer::PrimitiveTopology topology;
+		renderer::CompareOp alphaFunc;
 	};
 
 	template< typename T >

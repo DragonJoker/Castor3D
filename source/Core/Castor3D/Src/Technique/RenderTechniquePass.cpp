@@ -239,7 +239,10 @@ namespace castor3d
 			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
 		}
 
-		if ( checkFlag( flags.textureFlags, TextureChannel::eOpacity ) )
+		bool opacityMap = checkFlag( flags.textureFlags, TextureChannel::eOpacity )
+			&& ( !m_opaque || flags.alphaFunc != renderer::CompareOp::eAlways );
+
+		if ( opacityMap )
 		{
 			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
 		}

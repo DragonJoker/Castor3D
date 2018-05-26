@@ -732,14 +732,29 @@ namespace castor3d
 	void RenderTechnique::doUpdateParticles( RenderInfo & info )
 	{
 		auto & scene = *m_renderTarget.getScene();
+		auto & cache = scene.getParticleSystemCache();
+		auto lock = makeUniqueLock( cache );
 
-		m_particleTimer->start();
-		scene.getParticleSystemCache().forEach( [this, &info]( ParticleSystem & particleSystem )
+		if ( !cache.isEmpty() )
 		{
-			particleSystem.update( *m_particleTimer );
-			info.m_particlesCount += particleSystem.getParticlesCount();
-		} );
-		m_particleTimer->stop();
+			if ( m_particleTimer->getCount() < cache.getObjectCount() )
+			{
+				m_particleTimer->updateCount( 2u * cache.getObjectCount() );
+			}
+
+			m_particleTimer->start();
+			uint32_t index = 0u;
+
+			for ( auto & particleSystem : cache )
+			{
+				particleSystem.second->update( *m_particleTimer, index );
+				m_particleTimer->notifyPassRender( index++ );
+				m_particleTimer->notifyPassRender( index++ );
+				info.m_particlesCount += particleSystem.second->getParticlesCount();
+			}
+
+			m_particleTimer->stop();
+		}
 	}
 
 	renderer::Semaphore const * RenderTechnique::doRenderShadowMaps( renderer::Semaphore const & semaphore )

@@ -295,7 +295,7 @@ namespace castor3d
 			utils.declareCalcWSPosition();
 			utils.declareCalcVSPosition();
 			utils.declareFresnelSchlick();
-			utils.declareComputeMetallicIBL();
+			utils.declareComputeIBL();
 			declareDecodeMaterial( writer );
 			shader::MetallicPbrReflectionModel reflections{ writer };
 			shader::Fog fog{ fogType, writer };
@@ -522,7 +522,7 @@ namespace castor3d
 			utils.declareCalcWSPosition();
 			utils.declareCalcVSPosition();
 			utils.declareFresnelSchlick();
-			utils.declareComputeSpecularIBL();
+			utils.declareComputeIBL();
 			declareDecodeMaterial( writer );
 			shader::SpecularPbrReflectionModel reflections{ writer };
 			shader::Fog fog{ fogType, writer };
@@ -914,7 +914,7 @@ namespace castor3d
 
 			while ( it != envMaps.end() && i < c_environmentCount )
 			{
-				envWrites.imageInfo.push_back( { sampler->getSampler()
+				envWrites.imageInfo.push_back( { it->get().getTexture().getSampler()->getSampler()
 					, it->get().getTexture().getTexture()->getDefaultView()
 					, renderer::ImageLayout::eShaderReadOnlyOptimal } );
 				++i;

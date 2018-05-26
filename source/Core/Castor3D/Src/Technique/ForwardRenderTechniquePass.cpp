@@ -344,7 +344,10 @@ namespace castor3d
 			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
 		}
 
-		if ( checkFlag( flags.textureFlags, TextureChannel::eOpacity ) )
+		bool opacityMap = checkFlag( flags.textureFlags, TextureChannel::eOpacity )
+			&& ( !m_opaque || flags.alphaFunc != renderer::CompareOp::eAlways );
+
+		if ( opacityMap )
 		{
 			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
 		}
@@ -736,10 +739,12 @@ namespace castor3d
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ? index++ : 0u
 			, 1u
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ) );
+		bool opacityMap = checkFlag( textureFlags, TextureChannel::eOpacity )
+			&& ( !m_opaque || alphaFunc != renderer::CompareOp::eAlways );
 		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( cuT( "c3d_mapOpacity" )
-			, ( checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != renderer::CompareOp::eAlways ) ? index++ : 0u
+			, opacityMap ? index++ : 0u
 			, 1u
-			, checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != renderer::CompareOp::eAlways ) );
+			, opacityMap ) );
 		auto c3d_mapHeight( writer.declSampler< Sampler2D >( cuT( "c3d_mapHeight" )
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ? index++ : 0u
 			, 1u
@@ -1002,10 +1007,12 @@ namespace castor3d
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ? index++ : 0u
 			, 1u
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ) );
+		bool opacityMap = checkFlag( textureFlags, TextureChannel::eOpacity )
+			&& ( !m_opaque || alphaFunc != renderer::CompareOp::eAlways );
 		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( cuT( "c3d_mapOpacity" )
-			, ( checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != renderer::CompareOp::eAlways ) ? index++ : 0u
+			, opacityMap ? index++ : 0u
 			, 1u
-			, checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != renderer::CompareOp::eAlways ) );
+			, opacityMap ) );
 		auto c3d_mapHeight( writer.declSampler< Sampler2D >( cuT( "c3d_mapHeight" )
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ? index++ : 0u
 			, 1u
@@ -1051,7 +1058,7 @@ namespace castor3d
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
 		utils.declareFresnelSchlick();
-		utils.declareComputeMetallicIBL();
+		utils.declareComputeIBL();
 
 		auto parallaxMapping = shader::declareParallaxMappingFunc( writer, textureFlags, programFlags );
 
@@ -1333,10 +1340,12 @@ namespace castor3d
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ? index++ : 0u
 			, 1u
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ) );
+		bool opacityMap = checkFlag( textureFlags, TextureChannel::eOpacity )
+			&& ( !m_opaque || alphaFunc != renderer::CompareOp::eAlways );
 		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( cuT( "c3d_mapOpacity" )
-			, ( checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != renderer::CompareOp::eAlways ) ? index++ : 0u
+			, opacityMap ? index++ : 0u
 			, 1u
-			, checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != renderer::CompareOp::eAlways ) );
+			, opacityMap ) );
 		auto c3d_mapHeight( writer.declSampler< Sampler2D >( cuT( "c3d_mapHeight" )
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ? index++ : 0u
 			, 1u
@@ -1382,7 +1391,7 @@ namespace castor3d
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
 		utils.declareFresnelSchlick();
-		utils.declareComputeSpecularIBL();
+		utils.declareComputeIBL();
 
 		auto parallaxMapping = shader::declareParallaxMappingFunc( writer, textureFlags, programFlags );
 
