@@ -268,7 +268,8 @@ namespace castor3d
 		m_impl = nullptr;
 	}
 
-	void ParticleSystem::update( RenderPassTimer & timer )
+	void ParticleSystem::update( RenderPassTimer & timer
+		, uint32_t index )
 	{
 		REQUIRE( m_impl );
 		auto time = std::chrono::duration_cast< Milliseconds >( m_timer.getElapsed() );
@@ -279,7 +280,7 @@ namespace castor3d
 		}
 
 		m_totalTime += time;
-		m_activeParticlesCount = m_impl->update( timer, time, m_totalTime );
+		m_activeParticlesCount = m_impl->update( timer, time, m_totalTime, index );
 
 		if ( getBillboards()->getCount() != m_activeParticlesCount )
 		{

@@ -163,7 +163,7 @@ namespace castor3d
 				createInfo.arrayLayers = 1u;
 				createInfo.imageType = renderer::TextureType::e2D;
 				createInfo.initialLayout = renderer::ImageLayout::eUndefined;
-				createInfo.mipLevels = 1u;
+				createInfo.mipLevels = 6u;
 				createInfo.samples = renderer::SampleCountFlag::e1;
 				createInfo.sharingMode = renderer::SharingMode::eExclusive;
 				createInfo.tiling = renderer::ImageTiling::eOptimal;

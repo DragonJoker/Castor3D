@@ -56,7 +56,8 @@ namespace castor3d
 		 */
 		C3D_API uint32_t update( RenderPassTimer & timer
 			, castor::Milliseconds const & time
-			, castor::Milliseconds const & total )override;
+			, castor::Milliseconds const & total
+			, uint32_t index )override;
 		/**
 		 *\copydoc		castor3d::ParticleSystemImpl::addParticleVariable
 		 */

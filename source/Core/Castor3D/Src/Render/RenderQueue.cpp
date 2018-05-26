@@ -647,7 +647,7 @@ namespace castor3d
 			}
 
 			renderPass.getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
-				, [&renderPass, &nodes, &shadowMaps]()
+				, [&renderPass, &nodes, shadowMaps]()
 				{
 					doInitialiseNodes( renderPass, nodes.frontCulled, shadowMaps );
 					doInitialiseNodes( renderPass, nodes.backCulled, shadowMaps );

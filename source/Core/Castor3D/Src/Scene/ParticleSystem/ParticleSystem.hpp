@@ -109,7 +109,8 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour les particules.
 		 */
-		C3D_API void update( RenderPassTimer & timer );
+		C3D_API void update( RenderPassTimer & timer
+			, uint32_t index );
 		/**
 		 *\~english
 		 *\brief		Sets the material

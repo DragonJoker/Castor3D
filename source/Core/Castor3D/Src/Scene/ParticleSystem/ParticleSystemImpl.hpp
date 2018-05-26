@@ -107,7 +107,8 @@ namespace castor3d
 		 */
 		C3D_API virtual uint32_t update( RenderPassTimer & timer
 			, castor::Milliseconds const & time
-			, castor::Milliseconds const & total ) = 0;
+			, castor::Milliseconds const & total
+			, uint32_t index ) = 0;
 		/**
 		 *\~english
 		 *\return		The implementation type.

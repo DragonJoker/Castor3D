@@ -24,7 +24,8 @@ namespace Fireworks
 		 */
 		uint32_t update( castor3d::RenderPassTimer & timer
 			, castor::Milliseconds const & time
-			, castor::Milliseconds const & totalTime )override;
+			, castor::Milliseconds const & totalTime
+			, uint32_t index )override;
 
 	private:
 		/**

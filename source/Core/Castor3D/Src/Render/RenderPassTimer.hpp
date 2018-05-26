@@ -67,7 +67,6 @@ namespace castor3d
 		 *\~english
 		 *\brief		Stops the CPU timer.
 		 *\~french
-		 *\brief
 		 *\brief		Arrête le timer CPU.
 		 */
 		C3D_API void stop();
@@ -75,7 +74,6 @@ namespace castor3d
 		 *\~english
 		 *\brief		Reset the timer's times.
 		 *\~french
-		 *\brief
 		 *\brief		Réinitialise les temps du timer.
 		 */
 		C3D_API void reset();
@@ -83,7 +81,6 @@ namespace castor3d
 		 *\~english
 		 *\brief		Writes the timestamp for the beginning of the pass.
 		 *\~french
-		 *\brief
 		 *\brief		Ecrit le timestamp pour le début de la passe.
 		 */
 		C3D_API void beginPass( renderer::CommandBuffer const & cmd
@@ -92,7 +89,6 @@ namespace castor3d
 		 *\~english
 		 *\brief		Writes the timestamp for the end of the pass.
 		 *\~french
-		 *\brief
 		 *\brief		Ecrit le timestamp pour la fin de la passe.
 		 */
 		C3D_API void endPass( renderer::CommandBuffer const & cmd
@@ -101,40 +97,45 @@ namespace castor3d
 		 *\~english
 		 *\brief		Retrieves GPU time from the query.
 		 *\~french
-		 *\brief
 		 *\brief		Récupère le temps GPU depuis la requête.
 		 */
 		C3D_API void retrieveGpuTime();
 		/**
 		 *\~english
-		 *\return		The CPU time.
+		 *\brief		Updates the passes count to the given value.
 		 *\~french
-		 *\return		Le temps CPU.
+		 *\brief		Met à jour le nombre de passes à la valeur donnée.
 		 */
+		C3D_API void updateCount( uint32_t count );
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline castor::Nanoseconds getCpuTime()const
 		{
 			return m_cpuTime;
 		}
-		/**
-		 *\~english
-		 *\return		The CPU time.
-		 *\~french
-		 *\return		Le temps CPU.
-		 */
+
 		inline castor::Nanoseconds getGpuTime()const
 		{
 			return m_gpuTime;
 		}
-		/**
-		 *\~english
-		 *\return		The render pass category.
-		 *\~french
-		 *\return		La categorie de la passe de rendu.
-		 */
+
+		inline uint32_t getCount()const
+		{
+			return m_passesCount;
+		}
+
 		inline castor::String const & getCategory()const
 		{
 			return m_category;
 		}
+		/**@}*/
 
 	private:
 		Engine & m_engine;

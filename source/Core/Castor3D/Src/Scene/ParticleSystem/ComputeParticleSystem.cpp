@@ -116,7 +116,8 @@ namespace castor3d
 
 	uint32_t ComputeParticleSystem::update( RenderPassTimer & timer
 		, Milliseconds const & time
-		, Milliseconds const & totalTime )
+		, Milliseconds const & totalTime
+		, uint32_t index )
 	{
 		auto & device = *getParent().getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
 		auto & data = m_ubo->getData( 0u );
@@ -138,7 +139,7 @@ namespace castor3d
 		}
 
 		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
-		timer.beginPass( *m_commandBuffer, 0u );
+		timer.beginPass( *m_commandBuffer, index + 0u );
 		// Put buffers in appropriate state for compute
 		m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eHost
 			, renderer::PipelineStageFlag::eComputeShader
@@ -166,7 +167,7 @@ namespace castor3d
 		m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eComputeShader
 			, renderer::PipelineStageFlag::eTransfer
 			, m_particlesStorages[m_out]->getBuffer().makeTransferSource() );
-		timer.endPass( *m_commandBuffer, 0u );
+		timer.endPass( *m_commandBuffer, index + 0u );
 		m_commandBuffer->end();
 
 		device.getComputeQueue().submit( *m_commandBuffer, m_fence.get() );
@@ -185,7 +186,7 @@ namespace castor3d
 		if ( m_particlesCount )
 		{
 			m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
-			timer.beginPass( *m_commandBuffer, 1u );
+			timer.beginPass( *m_commandBuffer, index + 1u );
 			// Copy output storage to billboard's vertex buffer
 			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eVertexInput
 				, renderer::PipelineStageFlag::eTransfer
@@ -196,7 +197,7 @@ namespace castor3d
 			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
 				, renderer::PipelineStageFlag::eVertexInput
 				, m_parent.getBillboards()->getVertexBuffer().getBuffer().makeVertexShaderInputResource() );
-			timer.endPass( *m_commandBuffer, 1u );
+			timer.endPass( *m_commandBuffer, index + 1u );
 			m_commandBuffer->end();
 
 			m_fence->reset();

@@ -187,19 +187,8 @@ namespace castor3d
 	void TextureLayout::setSource( Path const & folder
 		, Path const & relative )
 	{
-		TextureView * view;
-
-		if ( m_views.size() == 1 )
-		{
-			view = m_defaultView.get();
-		}
-		else
-		{
-			view = m_views[0].get();
-		}
-
-		view->initialiseSource( folder, relative );
-		auto buffer = view->getBuffer();
+		m_defaultView->initialiseSource( folder, relative );
+		auto buffer = m_defaultView->getBuffer();
 
 		if ( m_info.extent.width != buffer->dimensions().getWidth()
 			|| m_info.extent.height != buffer->dimensions().getHeight()
@@ -217,29 +206,16 @@ namespace castor3d
 
 	void TextureLayout::setSource( PxBufferBaseSPtr buffer )
 	{
-		TextureView * view;
-
-		if ( m_views.empty() )
+		if ( !m_defaultView->hasSource() )
 		{
-			view = m_defaultView.get();
+			m_defaultView->initialiseSource( buffer );
 		}
 		else
 		{
-			view = m_views[0].get();
+			m_defaultView->setBuffer( buffer );
 		}
 
-		auto & image = view;
-
-		if ( !image->hasSource() )
-		{
-			image->initialiseSource( buffer );
-		}
-		else
-		{
-			image->setBuffer( buffer );
-		}
-
-		buffer = image->getBuffer();
+		buffer = m_defaultView->getBuffer();
 
 		if ( m_info.extent.width != buffer->dimensions().getWidth()
 			|| m_info.extent.height != buffer->dimensions().getHeight()
@@ -269,9 +245,15 @@ namespace castor3d
 			m_info.format = format;
 			m_defaultView->doUpdate( getSubviewCreateInfos( m_info, 0u, m_info.arrayLayers, 0u, 1u ) );
 
-			if ( m_views.size() == 1 )
+			if ( m_views.size() == 1
+				|| m_info.mipLevels > 1u )
 			{
-				m_views.front()->doUpdate( getSubviewCreateInfos( m_info, 0u, m_info.arrayLayers, 0u, 1u ) );
+				uint32_t index = 0u;
+
+				for ( auto & view : m_views )
+				{
+					view->doUpdate( getSubviewCreateInfos( m_info, 0u, 1u, index++, 1u ) );
+				}
 			}
 		}
 	}

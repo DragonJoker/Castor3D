@@ -210,7 +210,8 @@ namespace Fireworks
 
 	uint32_t ParticleSystem::update( RenderPassTimer & timer
 		, Milliseconds const & time
-		, Milliseconds const & total )
+		, Milliseconds const & total
+		, uint32_t index )
 	{
 		auto firstUnused = m_firstUnused;
 

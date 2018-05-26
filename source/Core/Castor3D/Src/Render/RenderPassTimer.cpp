@@ -101,4 +101,12 @@ namespace castor3d
 			}
 		}
 	}
+
+	void RenderPassTimer::updateCount( uint32_t count )
+	{
+		m_passesCount = count;
+		m_timerQuery = m_engine.getRenderSystem()->getCurrentDevice()->createQueryPool( renderer::QueryType::eTimestamp
+			, 2u * m_passesCount
+			, 0u );
+	}
 }
