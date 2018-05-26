@@ -56,36 +56,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	IMPLEMENT_ATTRIBUTE_PARSER( parserRootMtlFile )
-	{
-		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-		if ( p_params.empty() )
-		{
-			PARSING_ERROR( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			Path path;
-			path = p_context->m_file.getPath() / p_params[0]->get( path );
-
-			if ( File::fileExists( path ) )
-			{
-				Logger::logInfo( cuT( "Loading materials file : " ) + path );
-
-				if ( parsingContext->m_pParser->getEngine()->getMaterialCache().read( path ) )
-				{
-					Logger::logInfo( cuT( "Materials read" ) );
-				}
-				else
-				{
-					Logger::logInfo( cuT( "Can't read materials" ) );
-				}
-			}
-		}
-	}
-	END_ATTRIBUTE()
-
 	IMPLEMENT_ATTRIBUTE_PARSER( parserRootScene )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -3025,86 +2995,14 @@ namespace castor3d
 			if ( !relative.empty() )
 			{
 				parsingContext->textureUnit->setAutoMipmaps( true );
-				renderer::ImageCreateInfo image{};
-				image.arrayLayers = 1u;
-				image.extent.depth = 1u;
-				image.imageType = renderer::TextureType::e2D;
-				image.initialLayout = renderer::ImageLayout::eUndefined;
-				image.mipLevels = parsingContext->uiUInt32;
-				image.samples = renderer::SampleCountFlag::e1;
-				image.sharingMode = renderer::SharingMode::eExclusive;
-				image.tiling = renderer::ImageTiling::eOptimal;
-				image.usage = renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst;
-				auto texture = std::make_shared< TextureLayout >( *parsingContext->m_pParser->getEngine()->getRenderSystem()
-					, image
-					, renderer::MemoryPropertyFlag::eDeviceLocal );
-				texture->setSource( folder, relative );
+				parsingContext->folder = folder;
+				parsingContext->relative = relative;
+				parsingContext->strName.clear();
 
 				if ( p_params.size() >= 2 )
 				{
-					String channels;
-					p_params[1]->get( channels );
-					auto buffer = texture->getDefaultImage().getBuffer();
-
-					if ( channels == cuT( "r" ) )
-					{
-						auto srcFormat = buffer->format();
-						auto dstFormat = ( ( srcFormat == PixelFormat::eR8G8B8
-							|| srcFormat == PixelFormat::eB8G8R8
-							|| srcFormat == PixelFormat::eR8G8B8_SRGB
-							|| srcFormat == PixelFormat::eB8G8R8_SRGB
-							|| srcFormat == PixelFormat::eA8R8G8B8
-							|| srcFormat == PixelFormat::eA8B8G8R8
-							|| srcFormat == PixelFormat::eA8R8G8B8_SRGB
-							|| srcFormat == PixelFormat::eA8B8G8R8_SRGB )
-							? PixelFormat::eL8
-							: ( ( srcFormat == PixelFormat::eRGB16F
-								|| srcFormat == PixelFormat::eRGBA16F )
-								? PixelFormat::eL16F
-								: ( ( srcFormat == PixelFormat::eRGB32F
-									|| srcFormat == PixelFormat::eRGBA32F )
-									? PixelFormat::eL32F
-									: srcFormat ) ) );
-						buffer = PxBufferBase::create( buffer->dimensions()
-							, dstFormat
-							, buffer->constPtr()
-							, srcFormat );
-					}
-					else if ( channels == cuT( "a" ) )
-					{
-						auto tmp = PF::extractAlpha( buffer );
-						buffer = tmp;
-					}
-					else
-					{
-						auto srcFormat = buffer->format();
-						auto dstFormat = ( srcFormat == PixelFormat::eR8G8B8
-							? PixelFormat::eA8R8G8B8
-							: ( srcFormat == PixelFormat::eB8G8R8
-								? PixelFormat::eA8B8G8R8
-								: ( srcFormat == PixelFormat::eR8G8B8_SRGB
-									? PixelFormat::eA8R8G8B8_SRGB
-									: ( srcFormat == PixelFormat::eB8G8R8_SRGB
-										? PixelFormat::eA8B8G8R8_SRGB
-										: ( srcFormat == PixelFormat::eRGB16F
-											? PixelFormat::eRGBA16F
-											: ( srcFormat == PixelFormat::eRGB32F
-												? PixelFormat::eRGBA32F
-												: srcFormat ) ) ) ) ) );
-
-						if ( srcFormat != dstFormat )
-						{
-							buffer = PxBufferBase::create( buffer->dimensions()
-								, dstFormat
-								, buffer->constPtr()
-								, srcFormat );
-						}
-					}
-
-					texture->getDefaultImage().setBuffer( buffer );
+					p_params[1]->get( parsingContext->strName );
 				}
-
-				parsingContext->textureUnit->setTexture( texture );
 			}
 		}
 	}
@@ -3124,7 +3022,7 @@ namespace castor3d
 		}
 		else
 		{
-			p_params[0]->get( parsingContext->uiUInt32 );
+			p_params[0]->get( parsingContext->imageInfo.mipLevels );
 		}
 	}
 	END_ATTRIBUTE()
@@ -3192,17 +3090,94 @@ namespace castor3d
 
 		if ( parsingContext->pass )
 		{
-			if ( parsingContext->textureUnit
-				&& ( parsingContext->textureUnit->getTexture()
-					|| parsingContext->textureUnit->getRenderTarget()
-					|| parsingContext->textureUnit->getChannel() == TextureChannel::eReflection
-					|| parsingContext->textureUnit->getChannel() == TextureChannel::eRefraction ) )
+			if ( !parsingContext->textureUnit )
 			{
-				parsingContext->pass->addTextureUnit( parsingContext->textureUnit );
+				PARSING_ERROR( cuT( "TextureUnit not initialised" ) );
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "TextureUnit not initialised" ) );
+				if ( parsingContext->textureUnit->getRenderTarget()
+					|| parsingContext->textureUnit->getChannel() == TextureChannel::eReflection
+					|| parsingContext->textureUnit->getChannel() == TextureChannel::eRefraction )
+				{
+					parsingContext->pass->addTextureUnit( parsingContext->textureUnit );
+				}
+				else if ( parsingContext->folder.empty() && parsingContext->relative.empty() )
+				{
+					PARSING_ERROR( cuT( "TextureUnit's image not initialised" ) );
+				}
+				else
+				{
+					auto texture = std::make_shared< TextureLayout >( *parsingContext->m_pParser->getEngine()->getRenderSystem()
+						, parsingContext->imageInfo
+						, renderer::MemoryPropertyFlag::eDeviceLocal );
+					texture->setSource( parsingContext->folder, parsingContext->relative );
+
+					if ( !parsingContext->strName.empty() )
+					{
+						parsingContext->buffer = texture->getDefaultImage().getBuffer();
+
+						if ( parsingContext->strName == cuT( "r" ) )
+						{
+							auto srcFormat = parsingContext->buffer->format();
+							auto dstFormat = ( ( srcFormat == PixelFormat::eR8G8B8
+								|| srcFormat == PixelFormat::eB8G8R8
+								|| srcFormat == PixelFormat::eR8G8B8_SRGB
+								|| srcFormat == PixelFormat::eB8G8R8_SRGB
+								|| srcFormat == PixelFormat::eA8R8G8B8
+								|| srcFormat == PixelFormat::eA8B8G8R8
+								|| srcFormat == PixelFormat::eA8R8G8B8_SRGB
+								|| srcFormat == PixelFormat::eA8B8G8R8_SRGB )
+								? PixelFormat::eL8
+								: ( ( srcFormat == PixelFormat::eRGB16F
+									|| srcFormat == PixelFormat::eRGBA16F )
+									? PixelFormat::eL16F
+									: ( ( srcFormat == PixelFormat::eRGB32F
+										|| srcFormat == PixelFormat::eRGBA32F )
+										? PixelFormat::eL32F
+										: srcFormat ) ) );
+							parsingContext->buffer = PxBufferBase::create( parsingContext->buffer->dimensions()
+								, dstFormat
+								, parsingContext->buffer->constPtr()
+								, srcFormat );
+						}
+						else if ( parsingContext->strName == cuT( "a" ) )
+						{
+							auto tmp = PF::extractAlpha( parsingContext->buffer );
+							parsingContext->buffer = tmp;
+						}
+						else
+						{
+							auto srcFormat = parsingContext->buffer->format();
+							auto dstFormat = ( srcFormat == PixelFormat::eR8G8B8
+								? PixelFormat::eA8R8G8B8
+								: ( srcFormat == PixelFormat::eB8G8R8
+									? PixelFormat::eA8B8G8R8
+									: ( srcFormat == PixelFormat::eR8G8B8_SRGB
+										? PixelFormat::eA8R8G8B8_SRGB
+										: ( srcFormat == PixelFormat::eB8G8R8_SRGB
+											? PixelFormat::eA8B8G8R8_SRGB
+											: ( srcFormat == PixelFormat::eRGB16F
+												? PixelFormat::eRGBA16F
+												: ( srcFormat == PixelFormat::eRGB32F
+													? PixelFormat::eRGBA32F
+													: srcFormat ) ) ) ) ) );
+
+							if ( srcFormat != dstFormat )
+							{
+								parsingContext->buffer = PxBufferBase::create( parsingContext->buffer->dimensions()
+									, dstFormat
+									, parsingContext->buffer->constPtr()
+									, srcFormat );
+							}
+						}
+
+						texture->getDefaultImage().setBuffer( parsingContext->buffer );
+					}
+
+					parsingContext->textureUnit->setTexture( texture );
+					parsingContext->pass->addTextureUnit( parsingContext->textureUnit );
+				}
 			}
 		}
 		else

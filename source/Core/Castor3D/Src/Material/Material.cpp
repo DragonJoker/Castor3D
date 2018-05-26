@@ -4,8 +4,6 @@
 #include "MetallicRoughnessPbrPass.hpp"
 #include "SpecularGlossinessPbrPass.hpp"
 
-#include "Scene/SceneFileParser.hpp"
-
 using namespace castor;
 
 namespace castor3d

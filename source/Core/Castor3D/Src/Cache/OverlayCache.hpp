@@ -147,17 +147,6 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		Writes overlays in a text file
-		 *\param[out]	p_file	The file
-		 *\return		\p true if ok
-		 *\~french
-		 *\brief		Ecrit les overlays dans un fichier texte
-		 *\param[out]	p_file	Le fichier
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API bool write( castor::TextFile & p_file )const;
-		/**
-		 *\~english
 		 *\brief		Retrieves a FontTexture given a font name.
 		 *\param[in]	p_name	The font name.
 		 *\return		The FontTexture if it exist, nullptr if not.

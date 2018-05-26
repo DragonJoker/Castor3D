@@ -5,7 +5,6 @@
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Material/Material.hpp"
 #include "Material/Pass.hpp"
-#include "Scene/SceneFileParser.hpp"
 #include "Shader/PassBuffer/LegacyPassBuffer.hpp"
 #include "Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp"
 #include "Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp"
@@ -171,48 +170,5 @@ namespace castor3d
 			names.push_back( it->first );
 			it++;
 		}
-	}
-
-	bool MaterialCache::write( TextFile & file )const
-	{
-		auto lockA = makeUniqueLock( m_elements );
-		{
-			auto lockB = makeUniqueLock( getEngine()->getSamplerCache() );
-			getEngine()->getSamplerCache().lock();
-
-			for ( auto it : getEngine()->getSamplerCache() )
-			{
-				Sampler::TextWriter( String{} )( *it.second, file );
-			}
-		}
-
-		bool result = true;
-		auto it = m_elements.begin();
-		bool first = true;
-
-		while ( result && it != m_elements.end() )
-		{
-			if ( first )
-			{
-				first = false;
-			}
-			else
-			{
-				file.writeText( cuT( "\n" ) );
-			}
-
-			result = Material::TextWriter( String() )( * it->second, file );
-			++it;
-		}
-
-		return result;
-	}
-
-	bool MaterialCache::read( Path const & path )
-	{
-		auto lock = makeUniqueLock( m_elements );
-		SceneFileParser parser( *getEngine() );
-		parser.parseFile( path );
-		return true;
 	}
 }

@@ -5,7 +5,6 @@
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Overlay/OverlayRenderer.hpp"
 #include "Scene/Scene.hpp"
-#include "Scene/SceneFileParser.hpp"
 
 #include <Graphics/Font.hpp>
 
@@ -107,33 +106,6 @@ namespace castor3d
 		{
 			getEngine()->postEvent( makeCleanupEvent( *it.second ) );
 		}
-	}
-
-	bool Cache< Overlay, castor::String >::write( castor::TextFile & file )const
-	{
-		auto lock = makeUniqueLock( *this );
-		bool result = true;
-		auto it = m_overlays.begin();
-		bool first = true;
-
-		while ( result && it != m_overlays.end() )
-		{
-			Overlay const & overlay = ( *it )->getOverlay();
-
-			if ( first )
-			{
-				first = false;
-			}
-			else
-			{
-				file.writeText( cuT( "\n" ) );
-			}
-
-			result = Overlay::TextWriter( String{} )( overlay, file );
-			++it;
-		}
-
-		return result;
 	}
 
 	FontTextureSPtr Cache< Overlay, castor::String >::getFontTexture( castor::String const & name )

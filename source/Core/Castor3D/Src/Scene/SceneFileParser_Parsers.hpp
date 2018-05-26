@@ -10,7 +10,6 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	// Root parsers
-	DECLARE_ATTRIBUTE_PARSER( parserRootMtlFile )
 	DECLARE_ATTRIBUTE_PARSER( parserRootScene )
 	DECLARE_ATTRIBUTE_PARSER( parserRootFont )
 	DECLARE_ATTRIBUTE_PARSER( parserRootMaterial )

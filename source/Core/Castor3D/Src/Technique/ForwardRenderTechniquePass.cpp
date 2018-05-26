@@ -252,14 +252,11 @@ namespace castor3d
 				m_nodesCommands->endRenderPass();
 				getTimer().endPass( *m_nodesCommands );
 				m_nodesCommands->end();
-				m_fence->reset();
 				device.getGraphicsQueue().submit( { *m_nodesCommands }
 					, { *result }
 					, { renderer::PipelineStageFlag::eColourAttachmentOutput }
 					, { getSemaphore() }
-					, m_fence.get() );
-				m_fence->wait( renderer::FenceTimeout );
-				device.getGraphicsQueue().waitIdle();
+					, nullptr );
 				result = &getSemaphore();
 			}
 

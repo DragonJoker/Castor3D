@@ -108,8 +108,12 @@ namespace castor3d
 		MetallicRoughnessPbrPassSPtr pbrMRPass;
 		SpecularGlossinessPbrPassSPtr pbrSGPass;
 		PassSPtr pass;
+		renderer::ImageCreateInfo imageInfo;
 		TextureUnitSPtr textureUnit;
 		ShaderProgramSPtr shaderProgram;
+		castor::PxBufferBaseSPtr buffer;
+		castor::Path folder;
+		castor::Path relative;
 		renderer::ShaderStageFlag shaderStage;
 		renderer::UniformBufferBasePtr uniformBuffer;
 		OverlaySPtr overlay;

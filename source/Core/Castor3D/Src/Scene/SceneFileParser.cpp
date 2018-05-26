@@ -23,6 +23,18 @@ SceneFileContext::SceneFileContext( Path const & path, SceneFileParser * parser 
 	, material()
 	, pass()
 	, legacyPass()
+	, imageInfo
+	{
+		0u,
+		renderer::TextureType::e2D,
+		renderer::Format::eUndefined,
+		{ 1u, 1u, 1u },
+		1u,
+		1u,
+		renderer::SampleCountFlag::e1,
+		renderer::ImageTiling::eOptimal,
+		renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst
+	}
 	, textureUnit()
 	, shaderProgram()
 	, shaderStage( renderer::ShaderStageFlag( 0u ) )
@@ -78,6 +90,18 @@ void SceneFileContext::initialise()
 	strName2.clear();
 	mapScenes.clear();
 	subsurfaceScattering.reset();
+	imageInfo =
+	{
+		0u,
+		renderer::TextureType::e2D,
+		renderer::Format::eUndefined,
+		{ 1u, 1u, 1u },
+		1u,
+		1u,
+		renderer::SampleCountFlag::e1,
+		renderer::ImageTiling::eOptimal,
+		renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst
+	};
 }
 
 //****************************************************************************************************
@@ -334,7 +358,6 @@ void SceneFileParser::doInitialiseParser( Path const & path )
 		m_context = context;
 	}
 
-	addParser( uint32_t( CSCNSection::eRoot ), cuT( "mtl_file" ), parserRootMtlFile, { makeParameter< ParameterType::ePath >() } );
 	addParser( uint32_t( CSCNSection::eRoot ), cuT( "scene" ), parserRootScene, { makeParameter< ParameterType::eName >() } );
 	addParser( uint32_t( CSCNSection::eRoot ), cuT( "font" ), parserRootFont, { makeParameter< ParameterType::eName >() } );
 	addParser( uint32_t( CSCNSection::eRoot ), cuT( "material" ), parserRootMaterial, { makeParameter< ParameterType::eName >() } );
