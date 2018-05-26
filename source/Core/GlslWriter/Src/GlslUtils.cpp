@@ -31,24 +31,15 @@ namespace glsl
 				, Float const & depth
 				, Mat4 const & invProj )
 			{
-				if ( m_writer.isZeroToOneDepth() )
-				{
-					auto csPosition = m_writer.declLocale( cuT( "csPosition" )
-						, vec3( uv * 2.0f - 1.0f, depth ) );
-					auto vsPosition = m_writer.declLocale( cuT( "vsPosition" )
-						, invProj * vec4( csPosition, 1.0 ) );
-					vsPosition.xyz() /= vsPosition.w();
-					m_writer.returnStmt( vsPosition.xyz() );
-				}
-				else
-				{
-					auto csPosition = m_writer.declLocale( cuT( "csPosition" )
-						, vec3( uv * 2.0f - 1.0f, depth * 2.0f - 1.0f ) );
-					auto vsPosition = m_writer.declLocale( cuT( "vsPosition" )
-						, invProj * vec4( csPosition, 1.0 ) );
-					vsPosition.xyz() /= vsPosition.w();
-					m_writer.returnStmt( vsPosition.xyz() );
-				}
+				auto csPosition = m_writer.declLocale( cuT( "csPosition" )
+					, vec3( uv * 2.0f - 1.0f
+						, ( m_writer.isZeroToOneDepth()
+							? depth
+							: depth * 2.0f - 1.0f ) ) );
+				auto vsPosition = m_writer.declLocale( cuT( "vsPosition" )
+					, invProj * vec4( csPosition, 1.0 ) );
+				vsPosition.xyz() /= vsPosition.w();
+				m_writer.returnStmt( vsPosition.xyz() );
 			}
 			, InVec2{ &m_writer, cuT( "uv" ) }
 			, InFloat{ &m_writer, cuT( "depth" ) }
@@ -62,24 +53,15 @@ namespace glsl
 				, Float const & depth
 				, Mat4 const & invViewProj )
 			{
-				if ( m_writer.isZeroToOneDepth() )
-				{
-					auto csPosition = m_writer.declLocale( cuT( "psPosition" )
-						, vec3( uv * 2.0f - 1.0f, depth ) );
-					auto wsPosition = m_writer.declLocale( cuT( "wsPosition" )
-						, invViewProj * vec4( csPosition, 1.0 ) );
-					wsPosition.xyz() /= wsPosition.w();
-					m_writer.returnStmt( wsPosition.xyz() );
-				}
-				else
-				{
-					auto csPosition = m_writer.declLocale( cuT( "psPosition" )
-						, vec3( uv * 2.0f - 1.0f, depth * 2.0f - 1.0f ) );
-					auto wsPosition = m_writer.declLocale( cuT( "wsPosition" )
-						, invViewProj * vec4( csPosition, 1.0 ) );
-					wsPosition.xyz() /= wsPosition.w();
-					m_writer.returnStmt( wsPosition.xyz() );
-				}
+				auto csPosition = m_writer.declLocale( cuT( "psPosition" )
+					, vec3( uv * 2.0f - 1.0f
+						, ( m_writer.isZeroToOneDepth()
+							? depth
+							: depth * 2.0f - 1.0f ) ) );
+				auto wsPosition = m_writer.declLocale( cuT( "wsPosition" )
+					, invViewProj * vec4( csPosition, 1.0 ) );
+				wsPosition.xyz() /= wsPosition.w();
+				m_writer.returnStmt( wsPosition.xyz() );
 			}
 			, InVec2{ &m_writer, cuT( "uv" ) }
 			, InFloat{ &m_writer, cuT( "depth" ) }
@@ -117,20 +99,12 @@ namespace glsl
 				, Float const & nearPlane
 				, Float const & farPlane )
 			{
-				if ( m_writer.isZeroToOneDepth() )
-				{
-					auto z = m_writer.declLocale( cuT( "z" )
-						, depth );
-					z *= m_writer.paren( farPlane - nearPlane );
-					m_writer.returnStmt( 2.0 * nearPlane / m_writer.paren( farPlane + nearPlane - z ) );
-				}
-				else
-				{
-					auto z = m_writer.declLocale( cuT( "z" )
-						, depth * 2.0_f - 1.0_f );
-					z *= m_writer.paren( farPlane - nearPlane );
-					m_writer.returnStmt( 2.0 * nearPlane / m_writer.paren( farPlane + nearPlane - z ) );
-				}
+				auto z = m_writer.declLocale( cuT( "z" )
+					, ( m_writer.isZeroToOneDepth()
+						? depth
+						: depth * 2.0_f - 1.0_f ) );
+				z *= m_writer.paren( farPlane - nearPlane );
+				m_writer.returnStmt( 2.0 * farPlane * nearPlane / m_writer.paren( farPlane + nearPlane - z ) );
 			}
 			, InFloat{ &m_writer, cuT( "depth" ) }
 			, InFloat{ &m_writer, cuT( "nearPlane" ) }
@@ -190,14 +164,15 @@ namespace glsl
 			, InFloat{ &m_writer, cuT( "roughness" ) } );
 	}
 
-	void Utils::declareComputeMetallicIBL()
+	void Utils::declareComputeIBL()
 	{
-		m_computeMetallicIBL = m_writer.implementFunction< Vec3 >( cuT( "computeMetallicIBL" )
+		m_computeIBL = m_writer.implementFunction< Vec3 >( cuT( "computeIBL" )
 			, [&]( Vec3 const & normal
 				, Vec3 const & position
-				, Vec3 const & albedo
-				, Float const & metallic
+				, Vec3 const & baseColour
+				, Vec3 const & f0
 				, Float const & roughness
+				, Float const & metallic
 				, Vec3 const & worldEye
 				, SamplerCube const & irradianceMap
 				, SamplerCube const & prefilteredEnvMap
@@ -207,8 +182,6 @@ namespace glsl
 					, normalize( worldEye - position ) );
 				auto NdotV = m_writer.declLocale( cuT( "NdotV" )
 					, max( dot( normal, V ), 0.0 ) );
-				auto f0 = m_writer.declLocale( cuT( "f0" )
-					, mix( vec3( 0.04_f ), albedo, metallic ) );
 				auto F = m_writer.declLocale( cuT( "F" )
 					, fresnelSchlick( NdotV, f0, roughness ) );
 				auto kS = m_writer.declLocale( cuT( "kS" )
@@ -219,7 +192,7 @@ namespace glsl
 				auto irradiance = m_writer.declLocale( cuT( "irradiance" )
 					, texture( irradianceMap, vec3( normal.x(), -normal.y(), normal.z() ) ).rgb() );
 				auto diffuseReflection = m_writer.declLocale( cuT( "diffuseReflection" )
-					, irradiance * albedo );
+					, irradiance * baseColour );
 
 				auto R = m_writer.declLocale( cuT( "R" )
 					, reflect( -V, normal ) );
@@ -242,68 +215,9 @@ namespace glsl
 			, InVec3{ &m_writer, cuT( "normal" ) }
 			, InVec3{ &m_writer, cuT( "position" ) }
 			, InVec3{ &m_writer, cuT( "albedo" ) }
-			, InFloat{ &m_writer, cuT( "metallic" ) }
+			, InVec3{ &m_writer, cuT( "f0" ) }
 			, InFloat{ &m_writer, cuT( "roughness" ) }
-			, InVec3{ &m_writer, cuT( "worldEye" ) }
-			, InParam< SamplerCube >{ &m_writer, cuT( "irradianceMap" ) }
-			, InParam< SamplerCube >{ &m_writer, cuT( "prefilteredEnvMap" ) }
-			, InParam< Sampler2D >{ &m_writer, cuT( "brdfMap" ) } );
-	}
-
-	void Utils::declareComputeSpecularIBL()
-	{
-		m_computeSpecularIBL = m_writer.implementFunction< Vec3 >( cuT( "computeSpecularIBL" )
-			, [&]( Vec3 const & normal
-				, Vec3 const & position
-				, Vec3 const & diffuse
-				, Vec3 const & specular
-				, Float const & glossiness
-				, Vec3 const & worldEye
-				, SamplerCube const & irradianceMap
-				, SamplerCube const & prefilteredEnvMap
-				, Sampler2D const & brdfMap )
-			{
-				auto roughness = m_writer.declLocale( cuT( "roughness" )
-					, 1.0_f - glossiness );
-				auto V = m_writer.declLocale( cuT( "V" )
-					, normalize( worldEye - position ) );
-				auto NdotV = m_writer.declLocale( cuT( "NdotV" )
-					, max( dot( normal, V ), 0.0 ) );
-				auto f0 = m_writer.declLocale( cuT( "f0" )
-					, specular );
-				auto F = m_writer.declLocale( cuT( "F" )
-					, fresnelSchlick( NdotV, f0, roughness ) );
-				auto kS = m_writer.declLocale( cuT( "kS" )
-					, F );
-				auto kD = m_writer.declLocale( cuT( "kD" )
-					, vec3( 1.0_f ) - kS );
-				kD *= 1.0 - length( specular );
-				auto irradiance = m_writer.declLocale( cuT( "irradiance" )
-					, texture( irradianceMap, vec3( normal.x(), -normal.y(), normal.z() ) ).rgb() );
-				auto diffuseReflection = m_writer.declLocale( cuT( "diffuseReflection" )
-					, irradiance * diffuse );
-
-				auto R = m_writer.declLocale( cuT( "R" )
-					, reflect( -V, normal ) );
-				R.y() = -R.y();
-				auto prefilteredColor = m_writer.declLocale( cuT( "prefilteredColor" )
-					, texture( prefilteredEnvMap, R, roughness * MaxIblReflectionLod ).rgb() );
-				auto envBRDF = m_writer.declLocale( cuT( "envBRDF" )
-					, texture( brdfMap, vec2( NdotV, roughness ) ).rg() );
-				auto specularReflection = m_writer.declLocale( cuT( "specularReflection" )
-					, prefilteredColor * glsl::fma( kS
-						, vec3( envBRDF.x() )
-						, vec3( envBRDF.y() ) ) );
-
-				m_writer.returnStmt( glsl::fma( kD
-					, diffuseReflection
-					, specularReflection ) );
-			}
-			, InVec3{ &m_writer, cuT( "normal" ) }
-			, InVec3{ &m_writer, cuT( "position" ) }
-			, InVec3{ &m_writer, cuT( "diffuse" ) }
-			, InVec3{ &m_writer, cuT( "specular" ) }
-			, InFloat{ &m_writer, cuT( "glossiness" ) }
+			, InFloat{ &m_writer, cuT( "metallic" ) }
 			, InVec3{ &m_writer, cuT( "worldEye" ) }
 			, InParam< SamplerCube >{ &m_writer, cuT( "irradianceMap" ) }
 			, InParam< SamplerCube >{ &m_writer, cuT( "prefilteredEnvMap" ) }
@@ -384,12 +298,13 @@ namespace glsl
 		, SamplerCube const & prefilteredEnvMap
 		, Sampler2D const & brdfMap )
 	{
-		return m_computeMetallicIBL( normal
+		return m_computeIBL( normal
 			, position
 			, albedo
-			, metallic
+			, mix( vec3( 0.04_f ), albedo, metallic )
 			, roughness
-			, worldEye 
+			, metallic
+			, worldEye
 			, irradianceMap
 			, prefilteredEnvMap
 			, brdfMap );
@@ -405,12 +320,13 @@ namespace glsl
 		, SamplerCube const & prefilteredEnvMap
 		, Sampler2D const & brdfMap )
 	{
-		return m_computeSpecularIBL( normal
+		return m_computeIBL( normal
 			, position
 			, diffuse
 			, specular
-			, glossiness
-			, worldEye 
+			, 1.0_f - glossiness
+			, length( specular )
+			, worldEye
 			, irradianceMap
 			, prefilteredEnvMap
 			, brdfMap );
