@@ -248,6 +248,11 @@ namespace castor3d
 		CASTOR_SCOPED_ENUM_BOUNDS( ePreRender )
 	};
 
+	template< class TParsed >
+	class BinaryWriter;
+	template< class TParsed >
+	class BinaryParser;
+
 	class DebugOverlays;
 	class Engine;
 	class Plugin;

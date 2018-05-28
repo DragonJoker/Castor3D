@@ -438,7 +438,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dessine la passe de rendu.
 		 */
-		virtual void render( bool first
+		virtual void render( uint32_t index
 			, renderer::Semaphore const & toWait
 			, TextureUnit * shadowMapOpt );
 		/**
@@ -649,6 +649,7 @@ namespace castor3d
 		MatrixUbo m_matrixUbo;
 		RenderPass m_firstRenderPass;
 		RenderPass m_blendRenderPass;
+		renderer::CommandBufferPtr m_commandBuffer;
 		std::array< Pipeline, size_t( ShadowType::eCount ) > m_pipelines;
 		Pipeline * m_pipeline{ nullptr };
 		SamplerSPtr m_sampler;

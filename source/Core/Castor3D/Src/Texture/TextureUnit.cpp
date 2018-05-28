@@ -34,13 +34,19 @@ namespace castor3d
 				if ( result )
 				{
 					result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "texture_unit\n" ) ) > 0
-							   && file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 				}
 
 				if ( result && unit.getSampler() && unit.getSampler()->getName() != cuT( "Default" ) )
 				{
 					result = file.writeText( m_tabs + cuT( "\tsampler \"" ) + unit.getSampler()->getName() + cuT( "\"\n" ) ) > 0;
 					castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit sampler" );
+				}
+
+				if ( result && unit.getTexture()->getMipmapCount() > 1 )
+				{
+					result = file.writeText( m_tabs + cuT( "\tlevels_count " ) + string::toString( unit.getTexture()->getMipmapCount(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+					castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit mip level count" );
 				}
 
 				if ( result && unit.getChannel() != TextureChannel::eUndefined )

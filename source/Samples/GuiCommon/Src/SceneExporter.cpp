@@ -1,6 +1,8 @@
 #include "SceneExporter.hpp"
 
 #include <Engine.hpp>
+#include <Binary/BinaryMesh.hpp>
+#include <Binary/BinarySkeleton.hpp>
 #include <Cache/CacheView.hpp>
 #include <Material/Material.hpp>
 #include <Material/LegacyPass.hpp>

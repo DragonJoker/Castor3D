@@ -64,13 +64,15 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = file.print( 256, ( m_tabs + cuT( "\tsize %d %d\n" ) ).c_str(), target.getSize().getWidth(), target.getSize().getHeight() ) > 0;
+			result = file.writeText( m_tabs + cuT( "\tsize " )
+				+ string::toString( target.getSize().getWidth(), std::locale{ "C" } ) + cuT( " " )
+				+ string::toString( target.getSize().getHeight(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 			castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget size" );
 		}
 
 		if ( result )
 		{
-			result = file.writeText( m_tabs + cuT( "\tformat " ) + renderer::getName( target.getPixelFormat() ) + cuT( "\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\tformat " ) + PF::getFormatName( convert( target.getPixelFormat() ) ) + cuT( "\n" ) ) > 0;
 			castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget format" );
 		}
 

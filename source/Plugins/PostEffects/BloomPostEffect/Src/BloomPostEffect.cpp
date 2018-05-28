@@ -230,7 +230,7 @@ namespace Bloom
 
 	bool PostEffect::doWriteInto( TextFile & file )
 	{
-		return file.writeText( cuT( " -Size=" ) + string::toString( m_blurKernelSize )
-			+ cuT( " -Passes=" ) + string::toString( m_blurPassesCount ) ) > 0;
+		return file.writeText( cuT( " -Size=" ) + string::toString( m_blurKernelSize, std::locale{ "C" } )
+			+ cuT( " -Passes=" ) + string::toString( m_blurPassesCount, std::locale{ "C" } ) ) > 0;
 	}
 }

@@ -168,6 +168,15 @@ namespace castor3d
 
 		if ( result )
 		{
+			Logger::logInfo( cuT( "Scene::write - Ambient light" ) );
+			result = file.print( 256, cuT( "%s\tambient_light " ), m_tabs.c_str() ) > 0
+				&& RgbColour::TextWriter( String() )( scene.getAmbientLight(), file )
+				&& file.writeText( cuT( "\n" ) ) > 0;
+			castor::TextWriter< Scene >::checkError( result, "Scene ambient light" );
+		}
+
+		if ( result )
+		{
 			Logger::logInfo( cuT( "Scene::write - Background colour" ) );
 			result = file.print( 256, cuT( "\n%s\tbackground_colour " ), m_tabs.c_str() ) > 0
 				&& RgbColour::TextWriter( String() )( scene.getBackgroundColour(), file )
@@ -182,15 +191,6 @@ namespace castor3d
 			scene.getBackground().accept( writer );
 		}
 
-		if ( result )
-		{
-			Logger::logInfo( cuT( "Scene::write - Ambient light" ) );
-			result = file.print( 256, cuT( "%s\tambient_light " ), m_tabs.c_str() ) > 0
-				&& RgbColour::TextWriter( String() )( scene.getAmbientLight(), file )
-				&& file.writeText( cuT( "\n" ) ) > 0;
-			castor::TextWriter< Scene >::checkError( result, "Scene ambient light" );
-		}
-
 		if ( result && scene.getFog().getType() != FogType::eDisabled )
 		{
 			Logger::logInfo( cuT( "Scene::write - Fog type" ) );
@@ -200,7 +200,7 @@ namespace castor3d
 			if ( result )
 			{
 				Logger::logInfo( cuT( "Scene::write - Fog density" ) );
-				result = file.writeText( m_tabs + cuT( "\tfog_density " ) + string::toString( scene.getFog().getDensity() ) + cuT( "\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tfog_density " ) + string::toString( scene.getFog().getDensity(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Scene >::checkError( result, "Scene fog density" );
 			}
 		}

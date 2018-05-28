@@ -38,31 +38,31 @@ namespace castor3d
 
 			if ( result )
 			{
-				result = p_file.writeText( m_tabs + cuT( "\tintensity " ) + string::toString( p_object.m_intensity ) + cuT( "\n" ) ) > 0;
+				result = p_file.writeText( m_tabs + cuT( "\tintensity " ) + string::toString( p_object.m_intensity, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig intensity" );
 			}
 
 			if ( result )
 			{
-				result = p_file.writeText( m_tabs + cuT( "\tradius " ) + string::toString( p_object.m_radius ) + cuT( "\n" ) ) > 0;
+				result = p_file.writeText( m_tabs + cuT( "\tradius " ) + string::toString( p_object.m_radius, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig radius" );
 			}
 
 			if ( result )
 			{
-				result = p_file.writeText( m_tabs + cuT( "\tbias " ) + string::toString( p_object.m_bias ) + cuT( "\n" ) ) > 0;
+				result = p_file.writeText( m_tabs + cuT( "\tbias " ) + string::toString( p_object.m_bias, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig bias" );
 			}
 
 			if ( result )
 			{
-				result = p_file.writeText( m_tabs + cuT( "\tnum_samples " ) + string::toString( p_object.m_numSamples ) + cuT( "\n" ) ) > 0;
+				result = p_file.writeText( m_tabs + cuT( "\tnum_samples " ) + string::toString( p_object.m_numSamples, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig num samples" );
 			}
 
 			if ( result )
 			{
-				result = p_file.writeText( m_tabs + cuT( "\tedge_sharpness " ) + string::toString( p_object.m_edgeSharpness ) + cuT( "\n" ) ) > 0;
+				result = p_file.writeText( m_tabs + cuT( "\tedge_sharpness " ) + string::toString( p_object.m_edgeSharpness, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig edge sharpness" );
 			}
 
@@ -74,13 +74,13 @@ namespace castor3d
 
 			if ( result )
 			{
-				result = p_file.writeText( m_tabs + cuT( "\tblur_step_size " ) + string::toString( p_object.m_blurStepSize ) + cuT( "\n" ) ) > 0;
+				result = p_file.writeText( m_tabs + cuT( "\tblur_step_size " ) + string::toString( p_object.m_blurStepSize, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig blur step size" );
 			}
 
 			if ( result )
 			{
-				result = p_file.writeText( m_tabs + cuT( "\tblur_radius " ) + string::toString( p_object.m_blurRadius ) + cuT( "\n" ) ) > 0;
+				result = p_file.writeText( m_tabs + cuT( "\tblur_radius " ) + string::toString( p_object.m_blurRadius, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig blur radius" );
 			}
 

@@ -4,8 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_ANIMABLE_H___
 #define ___C3D_ANIMABLE_H___
 
-#include "Binary/BinaryParser.hpp"
-#include "Binary/BinaryWriter.hpp"
+#include "Castor3DPrerequisites.hpp"
 
 #include <Design/OwnedBy.hpp>
 

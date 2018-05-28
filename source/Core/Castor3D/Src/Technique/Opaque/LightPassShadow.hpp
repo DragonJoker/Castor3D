@@ -342,12 +342,12 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::LightPass::render
 		 */
-		void render( bool first
+		void render( uint32_t index
 			, renderer::Semaphore const & toWait
 			, TextureUnit * shadowMapOpt )override
 		{
-			this->doPrepareCommandBuffer( *this->m_pipeline, shadowMapOpt, first );
-			my_pass_type::render( first, toWait, nullptr );
+			this->doPrepareCommandBuffer( *this->m_pipeline, shadowMapOpt, !index );
+			my_pass_type::render( index, toWait, nullptr );
 		}
 
 	private:

@@ -189,14 +189,11 @@ namespace castor3d
 		static renderer::ClearColorValue const velocityClear{};
 		m_engine.setPerObjectLighting( true );
 		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
-		m_transparentPass.getTimer().start();
-		m_timer->start();
-		m_transparentPass.getTimer().notifyPassRender();
-		m_timer->notifyPassRender();
 
 		// Accumulate blend.
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
 		{
+			m_transparentPass.getTimer().start();
 			m_transparentPass.getTimer().beginPass( *m_commandBuffer );
 			m_transparentPass.getTimer().notifyPassRender();
 			m_commandBuffer->beginRenderPass( m_transparentPass.getRenderPass()
@@ -206,7 +203,11 @@ namespace castor3d
 			m_commandBuffer->executeCommands( { m_transparentPass.getCommandBuffer() } );
 			m_commandBuffer->endRenderPass();
 			m_transparentPass.getTimer().endPass( *m_commandBuffer );
+			m_transparentPass.getTimer().stop();
+
+			m_timer->start();
 			m_timer->beginPass( *m_commandBuffer );
+			m_timer->notifyPassRender();
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *m_frameBufferCB
 				, { accumClear }
@@ -215,6 +216,7 @@ namespace castor3d
 			m_commandBuffer->endRenderPass();
 			m_timer->endPass( *m_commandBuffer );
 			m_commandBuffer->end();
+			m_timer->stop();
 		}
 
 		device.getGraphicsQueue().submit( *m_commandBuffer
@@ -222,9 +224,6 @@ namespace castor3d
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_semaphore
 			, nullptr );
-		device.getGraphicsQueue().waitIdle();
-		m_timer->stop();
-		m_transparentPass.getTimer().stop();
 	}
 
 	void WeightedBlendRendering::debugDisplay()

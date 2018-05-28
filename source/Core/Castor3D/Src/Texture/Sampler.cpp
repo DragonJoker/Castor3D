@@ -65,23 +65,25 @@ namespace castor3d
 
 			if ( result )
 			{
-				result = file.print( 256, cuT( "%s\tmin_lod %.2f\n" ), m_tabs.c_str(), sampler.getMinLod() ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tmin_lod " ) + string::toString( sampler.getMinLod(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Sampler >::checkError( result, "Sampler min lod" );
 			}
 
 			if ( result )
 			{
-				result = file.print( 256, cuT( "%s\tmax_lod %.2f\n" ), m_tabs.c_str(), sampler.getMaxLod() ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tmax_lod " ) + string::toString( sampler.getMaxLod(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Sampler >::checkError( result, "Sampler max lod" );
 			}
 
 			if ( result )
 			{
-				result = file.print( 256, cuT( "%s\tlod_bias %.2f\n" ), m_tabs.c_str(), sampler.getLodBias() ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tlod_bias " ) + string::toString( sampler.getLodBias(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Sampler >::checkError( result, "Sampler lod bias" );
 			}
 
-			if ( result && sampler.getCompareOp() != renderer::CompareOp::eAlways )
+			if ( result
+				&& sampler.getCompareOp() != renderer::CompareOp::eNever
+				&& sampler.getCompareOp() != renderer::CompareOp::eAlways )
 			{
 				result = file.writeText( m_tabs + cuT( "\tcomparison_mode ref_to_texture\n" ) ) > 0;
 				castor::TextWriter< Sampler >::checkError( result, "Sampler comparison mode" );
@@ -101,7 +103,7 @@ namespace castor3d
 
 			if ( result )
 			{
-				result = file.print( 256, cuT( "%s\tmax_anisotropy %.2f\n" ), m_tabs.c_str(), sampler.getMaxAnisotropy() ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tmax_anisotropy " ) + string::toString( sampler.getMaxAnisotropy(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Sampler >::checkError( result, "Sampler max anisotropy" );
 			}
 

@@ -22,7 +22,23 @@ namespace castor3d
 	template< class TParsed >
 	class BinaryParserBase
 	{
+		template< typename T >
+		friend class BinaryParserBase;
+
 	public:
+		/**
+		 *\~english
+		 *\brief		Creates a binary parser.
+		 *\~french
+		 *\brief		Crée un parser binaire.
+		 */
+		template< typename T >
+		inline BinaryParser< T > createBinaryParser()
+		{
+			BinaryParser< T > parser;
+			parser.m_fileVersion = m_fileVersion;
+			return parser;
+		}
 		/**
 		 *\~english
 		 *\brief		From file reader function
@@ -486,8 +502,6 @@ namespace castor3d
 		//!\~french		La version du chunk dans le fichier.
 		mutable Version m_fileVersion;
 	};
-	template< class TParsed >
-	class BinaryParser;
 }
 
 #endif

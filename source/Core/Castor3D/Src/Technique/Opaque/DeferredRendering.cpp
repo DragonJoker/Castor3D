@@ -148,7 +148,6 @@ namespace castor3d
 			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
 			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
 		};
-		m_fence->reset();
 
 		if ( m_nodesCommands->begin() )
 		{
@@ -166,9 +165,7 @@ namespace castor3d
 				, { *result }
 				, { renderer::PipelineStageFlag::eColourAttachmentOutput }
 				, { m_opaquePass.getSemaphore() }
-				, m_fence.get() );
-			m_fence->wait( renderer::FenceTimeout );
-			device.getGraphicsQueue().waitIdle();
+				, nullptr );
 			result = &m_opaquePass.getSemaphore();
 		}
 

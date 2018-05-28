@@ -699,13 +699,11 @@ namespace castor3d
 	{
 		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
 		m_timer->notifyPassRender();
-		m_fence->reset();
 		device.getGraphicsQueue().submit( *m_commandBuffer
 			, toWait
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
-			, m_fence.get() );
-		m_fence->wait( renderer::FenceTimeout );
+			, nullptr );
 		return *m_finished;
 	}
 

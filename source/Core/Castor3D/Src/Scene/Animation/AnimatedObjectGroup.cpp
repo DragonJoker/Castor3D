@@ -68,7 +68,7 @@ namespace castor3d
 				result &= file.writeText( m_tabs + cuT( "\tanimation \"" ) + it.first + cuT( "\"\n" ) ) > 0
 							&& file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0
 							&& file.writeText( m_tabs + cuT( "\t\tlooped " ) + String{ it.second.m_looped ? cuT( "true" ) : cuT( "false" ) } +cuT( "\n" ) ) > 0
-							&& file.writeText( m_tabs + cuT( "\t\tscale " ) + string::toString( it.second.m_scale ) + cuT( "\n" ) ) > 0
+							&& file.writeText( m_tabs + cuT( "\t\tscale " ) + string::toString( it.second.m_scale, std::locale{ "C" } ) + cuT( "\n" ) ) > 0
 							&& file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
 				castor::TextWriter< AnimatedObjectGroup >::checkError( result, "AnimatedObjectGroup animation" );
 			}

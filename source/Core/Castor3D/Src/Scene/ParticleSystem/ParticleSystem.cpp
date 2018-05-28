@@ -112,13 +112,15 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = file.print( 256, cuT( "%s\tparticles_count %d\n" ), m_tabs.c_str(), uint32_t( obj.getMaxParticlesCount() ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\tparticles_count " ) + string::toString( obj.getMaxParticlesCount(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 			MovableObject::TextWriter::checkError( result, "ParticleSystem particles count" );
 		}
 
 		if ( result )
 		{
-			result = file.print( 256, cuT( "%s\tdimensions %f %f\n" ), m_tabs.c_str(), obj.getDimensions()[0], obj.getDimensions()[1] ) > 0;
+			result = file.writeText( m_tabs + cuT( "\tdimensions " )
+				+ string::toString( obj.getDimensions()[0], std::locale{ "C" } ) + cuT( " " )
+				+ string::toString( obj.getDimensions()[1], std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 			MovableObject::TextWriter::checkError( result, "ParticleSystem dimensions" );
 		}
 

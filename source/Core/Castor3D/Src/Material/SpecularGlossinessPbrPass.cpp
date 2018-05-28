@@ -21,7 +21,7 @@ namespace castor3d
 		
 		if ( result )
 		{
-			result = file.print( 256, cuT( "%s\talbedo " ), m_tabs.c_str() ) > 0
+			result = file.print( 256, cuT( "%s\tdiffuse " ), m_tabs.c_str() ) > 0
 				&& RgbColour::TextWriter( String() )( pass.getDiffuse(), file )
 				&& file.writeText( cuT( "\n" ) ) > 0;
 			castor::TextWriter< SpecularGlossinessPbrPass >::checkError( result, "SpecularGlossinessPbrPass albedo" );
@@ -38,14 +38,14 @@ namespace castor3d
 		if ( result )
 		{
 			result = file.writeText( m_tabs + cuT( "\tglossiness " )
-				+ string::toString( pass.getGlossiness() )
+				+ string::toString( pass.getGlossiness(), std::locale{ "C" } )
 				+ cuT( "\n" ) ) > 0;
 			castor::TextWriter< SpecularGlossinessPbrPass >::checkError( result, "SpecularGlossinessPbrPass glossiness" );
 		}
 
 		if ( result )
 		{
-			result = castor::TextWriter< Pass >{ m_tabs }( pass, file );
+			result = Pass::TextWriter{ m_tabs }( pass, file );
 		}
 
 		if ( result )

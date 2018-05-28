@@ -30,7 +30,7 @@ namespace castor3d
 		if ( result && pass.getRoughness() != 1 )
 		{
 			result = file.writeText( m_tabs + cuT( "\troughness " )
-				+ string::toString( pass.getRoughness() )
+				+ string::toString( pass.getRoughness(), std::locale{ "C" } )
 				+ cuT( "\n" ) ) > 0;
 			castor::TextWriter< MetallicRoughnessPbrPass >::checkError( result, "MetallicRoughnessPbrPass roughness" );
 		}
@@ -38,7 +38,7 @@ namespace castor3d
 		if ( result && pass.getMetallic() != 0 )
 		{
 			result = file.writeText( m_tabs + cuT( "\tmetallic " )
-				+ string::toString( pass.getMetallic() )
+				+ string::toString( pass.getMetallic(), std::locale{ "C" } )
 				+ cuT( "\n" ) ) > 0;
 			castor::TextWriter< MetallicRoughnessPbrPass >::checkError( result, "MetallicRoughnessPbrPass reflectance" );
 		}

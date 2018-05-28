@@ -3112,69 +3112,64 @@ namespace castor3d
 						, parsingContext->imageInfo
 						, renderer::MemoryPropertyFlag::eDeviceLocal );
 					texture->setSource( parsingContext->folder, parsingContext->relative );
+					parsingContext->buffer = texture->getDefaultImage().getBuffer();
 
-					if ( !parsingContext->strName.empty() )
+					if ( parsingContext->strName == cuT( "r" ) )
 					{
-						parsingContext->buffer = texture->getDefaultImage().getBuffer();
+						auto srcFormat = parsingContext->buffer->format();
+						auto dstFormat = ( ( srcFormat == PixelFormat::eR8G8B8
+							|| srcFormat == PixelFormat::eB8G8R8
+							|| srcFormat == PixelFormat::eR8G8B8_SRGB
+							|| srcFormat == PixelFormat::eB8G8R8_SRGB
+							|| srcFormat == PixelFormat::eA8R8G8B8
+							|| srcFormat == PixelFormat::eA8B8G8R8
+							|| srcFormat == PixelFormat::eA8R8G8B8_SRGB
+							|| srcFormat == PixelFormat::eA8B8G8R8_SRGB )
+							? PixelFormat::eL8
+							: ( ( srcFormat == PixelFormat::eRGB16F
+								|| srcFormat == PixelFormat::eRGBA16F )
+								? PixelFormat::eL16F
+								: ( ( srcFormat == PixelFormat::eRGB32F
+									|| srcFormat == PixelFormat::eRGBA32F )
+									? PixelFormat::eL32F
+									: srcFormat ) ) );
+						parsingContext->buffer = PxBufferBase::create( parsingContext->buffer->dimensions()
+							, dstFormat
+							, parsingContext->buffer->constPtr()
+							, srcFormat );
+					}
+					else if ( parsingContext->strName == cuT( "a" ) )
+					{
+						auto tmp = PF::extractAlpha( parsingContext->buffer );
+						parsingContext->buffer = tmp;
+					}
+					else
+					{
+						auto srcFormat = parsingContext->buffer->format();
+						auto dstFormat = ( srcFormat == PixelFormat::eR8G8B8
+							? PixelFormat::eA8R8G8B8
+							: ( srcFormat == PixelFormat::eB8G8R8
+								? PixelFormat::eA8B8G8R8
+								: ( srcFormat == PixelFormat::eR8G8B8_SRGB
+									? PixelFormat::eA8R8G8B8_SRGB
+									: ( srcFormat == PixelFormat::eB8G8R8_SRGB
+										? PixelFormat::eA8B8G8R8_SRGB
+										: ( srcFormat == PixelFormat::eRGB16F
+											? PixelFormat::eRGBA16F
+											: ( srcFormat == PixelFormat::eRGB32F
+												? PixelFormat::eRGBA32F
+												: srcFormat ) ) ) ) ) );
 
-						if ( parsingContext->strName == cuT( "r" ) )
+						if ( srcFormat != dstFormat )
 						{
-							auto srcFormat = parsingContext->buffer->format();
-							auto dstFormat = ( ( srcFormat == PixelFormat::eR8G8B8
-								|| srcFormat == PixelFormat::eB8G8R8
-								|| srcFormat == PixelFormat::eR8G8B8_SRGB
-								|| srcFormat == PixelFormat::eB8G8R8_SRGB
-								|| srcFormat == PixelFormat::eA8R8G8B8
-								|| srcFormat == PixelFormat::eA8B8G8R8
-								|| srcFormat == PixelFormat::eA8R8G8B8_SRGB
-								|| srcFormat == PixelFormat::eA8B8G8R8_SRGB )
-								? PixelFormat::eL8
-								: ( ( srcFormat == PixelFormat::eRGB16F
-									|| srcFormat == PixelFormat::eRGBA16F )
-									? PixelFormat::eL16F
-									: ( ( srcFormat == PixelFormat::eRGB32F
-										|| srcFormat == PixelFormat::eRGBA32F )
-										? PixelFormat::eL32F
-										: srcFormat ) ) );
 							parsingContext->buffer = PxBufferBase::create( parsingContext->buffer->dimensions()
 								, dstFormat
 								, parsingContext->buffer->constPtr()
 								, srcFormat );
 						}
-						else if ( parsingContext->strName == cuT( "a" ) )
-						{
-							auto tmp = PF::extractAlpha( parsingContext->buffer );
-							parsingContext->buffer = tmp;
-						}
-						else
-						{
-							auto srcFormat = parsingContext->buffer->format();
-							auto dstFormat = ( srcFormat == PixelFormat::eR8G8B8
-								? PixelFormat::eA8R8G8B8
-								: ( srcFormat == PixelFormat::eB8G8R8
-									? PixelFormat::eA8B8G8R8
-									: ( srcFormat == PixelFormat::eR8G8B8_SRGB
-										? PixelFormat::eA8R8G8B8_SRGB
-										: ( srcFormat == PixelFormat::eB8G8R8_SRGB
-											? PixelFormat::eA8B8G8R8_SRGB
-											: ( srcFormat == PixelFormat::eRGB16F
-												? PixelFormat::eRGBA16F
-												: ( srcFormat == PixelFormat::eRGB32F
-													? PixelFormat::eRGBA32F
-													: srcFormat ) ) ) ) ) );
-
-							if ( srcFormat != dstFormat )
-							{
-								parsingContext->buffer = PxBufferBase::create( parsingContext->buffer->dimensions()
-									, dstFormat
-									, parsingContext->buffer->constPtr()
-									, srcFormat );
-							}
-						}
-
-						texture->getDefaultImage().setBuffer( parsingContext->buffer );
 					}
 
+					texture->getDefaultImage().setBuffer( parsingContext->buffer );
 					parsingContext->textureUnit->setTexture( texture );
 					parsingContext->pass->addTextureUnit( parsingContext->textureUnit );
 				}

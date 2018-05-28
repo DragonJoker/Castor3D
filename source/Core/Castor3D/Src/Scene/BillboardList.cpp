@@ -44,7 +44,9 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = file.print( 256, cuT( "%s\tdimensions %d %d\n" ), m_tabs.c_str(), obj.getDimensions()[0], obj.getDimensions()[1] ) > 0;
+			result = file.writeText( m_tabs + cuT( "\tdimensions " )
+				+ string::toString( obj.getDimensions()[0], std::locale{ "C" } ) + cuT( " " )
+				+ string::toString( obj.getDimensions()[1], std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 			MovableObject::TextWriter::checkError( result, "BillboardList dimensions" );
 		}
 
@@ -56,7 +58,10 @@ namespace castor3d
 
 			for ( auto const & point : obj )
 			{
-				result &= file.print( 256, cuT( "%s\t\tpos %f %f %f" ), m_tabs.c_str(), point[0], point[1], point[2] ) > 0;
+				result = file.writeText( m_tabs + cuT( "\t\tpos " )
+					+ string::toString( point[0], std::locale{ "C" } ) + cuT( " " )
+					+ string::toString( point[1], std::locale{ "C" } ) + cuT( " " )
+					+ string::toString( point[2], std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				MovableObject::TextWriter::checkError( result, "BillboardList position" );
 			}
 

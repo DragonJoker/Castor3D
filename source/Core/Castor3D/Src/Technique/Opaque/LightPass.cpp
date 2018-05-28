@@ -432,33 +432,47 @@ namespace castor3d
 		doUpdate( size, light, camera );
 	}
 
-	void LightPass::render( bool first
+	void LightPass::render( uint32_t index
 		, renderer::Semaphore const & toWait
 		, TextureUnit * shadowMapOpt )
 	{
+		static renderer::DepthStencilClearValue const clearDepthStencil{ 1.0, 1 };
+		static renderer::ClearColorValue const clearColour{ 0.0, 0.0, 0.0, 1.0 };
 		REQUIRE( m_pipeline );
-		auto & renderSystem = *m_engine.getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
-		m_fence->reset();
+		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
 
-		if ( first )
+		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
 		{
-			device.getGraphicsQueue().submit( *m_pipeline->firstCommandBuffer
-				, toWait
-				, renderer::PipelineStageFlag::eVertexInput
-				, *m_signalReady
-				, m_fence.get() );
-		}
-		else
-		{
-			device.getGraphicsQueue().submit( *m_pipeline->blendCommandBuffer
-				, toWait
-				, renderer::PipelineStageFlag::eVertexInput
-				, *m_signalReady
-				, m_fence.get() );
-		}
+			m_timer->beginPass( *m_commandBuffer, index );
+			m_timer->notifyPassRender( index );
 
-		m_fence->wait( renderer::FenceTimeout );
+			if ( !index )
+			{
+				m_commandBuffer->beginRenderPass( *m_firstRenderPass.renderPass
+					, *m_firstRenderPass.frameBuffer
+					, { clearDepthStencil, clearColour, clearColour }
+					, renderer::SubpassContents::eSecondaryCommandBuffers );
+				m_commandBuffer->executeCommands( { *m_pipeline->firstCommandBuffer } );
+			}
+			else
+			{
+				m_commandBuffer->beginRenderPass( *m_blendRenderPass.renderPass
+					, *m_blendRenderPass.frameBuffer
+					, { clearDepthStencil, clearColour, clearColour }
+					, renderer::SubpassContents::eSecondaryCommandBuffers );
+				m_commandBuffer->executeCommands( { *m_pipeline->blendCommandBuffer } );
+			}
+
+			m_commandBuffer->endRenderPass();
+			m_timer->endPass( *m_commandBuffer, index );
+			m_commandBuffer->end();
+
+			device.getGraphicsQueue().submit( *m_commandBuffer
+				, toWait
+				, renderer::PipelineStageFlag::eColourAttachmentOutput
+				, *m_signalReady
+				, nullptr );
+		}
 	}
 
 	void LightPass::doInitialise( Scene const & scene
@@ -523,8 +537,9 @@ namespace castor3d
 				, m_baseUbo->getElementSize() );
 			pipeline.uboDescriptorSet->update();
 
-			pipeline.firstCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
-			pipeline.blendCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
+			pipeline.firstCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer( false );
+			pipeline.blendCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer( false );
+			m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
 
 			pipeline.textureDescriptorSet = pipeline.program->getTextureDescriptorPool().createDescriptorSet( 1u );
 			auto & texLayout = pipeline.program->getTextureDescriptorLayout();
@@ -578,6 +593,7 @@ namespace castor3d
 	void LightPass::doCleanup()
 	{
 		m_matrixUbo.cleanup();
+		m_commandBuffer.reset();
 
 		for ( auto & pipeline : m_pipelines )
 		{
@@ -594,14 +610,12 @@ namespace castor3d
 		, TextureUnit const * shadowMap
 		, bool first )
 	{
-		static renderer::DepthStencilClearValue const clearDepthStencil{ 1.0, 1 };
-		static renderer::ClearColorValue const clearColour{ 0.0, 0.0, 0.0, 1.0 };
-		auto & renderPass = first
-			? m_firstRenderPass
-			: m_blendRenderPass;
-		uint32_t const width = renderPass.frameBuffer->getDimensions().width;
-		uint32_t const height = renderPass.frameBuffer->getDimensions().height;
-		renderer::CommandBufferUsageFlag usage{};
+		auto & dimensions = first
+			? m_firstRenderPass.frameBuffer->getDimensions()
+			: m_blendRenderPass.frameBuffer->getDimensions();
+		auto & commandBuffer = first
+			? *pipeline.firstCommandBuffer
+			: *pipeline.blendCommandBuffer;
 
 		if ( shadowMap )
 		{
@@ -609,27 +623,15 @@ namespace castor3d
 			write.imageInfo[0].imageView = std::ref( shadowMap->getTexture()->getDefaultView() );
 			write.imageInfo[0].sampler = std::ref( shadowMap->getSampler()->getSampler() );
 			pipeline.textureDescriptorSet->update();
-			usage = renderer::CommandBufferUsageFlag::eOneTimeSubmit;
 		}
 
-		auto & commandBuffer = first
-			? *pipeline.firstCommandBuffer
-			: *pipeline.blendCommandBuffer;
-
-		if ( commandBuffer.begin( usage ) )
+		if ( commandBuffer.begin() )
 		{
-			m_timer->beginPass( commandBuffer );
-			commandBuffer.beginRenderPass( *renderPass.renderPass
-				, *renderPass.frameBuffer
-				, { clearDepthStencil, clearColour, clearColour }
-				, renderer::SubpassContents::eInline );
-			commandBuffer.setViewport( { width, height, 0, 0 } );
-			commandBuffer.setScissor( { 0, 0, width, height } );
+			commandBuffer.setViewport( { { 0, 0 }, dimensions } );
+			commandBuffer.setScissor( { { 0, 0 }, dimensions } );
 			commandBuffer.bindDescriptorSets( { *pipeline.uboDescriptorSet, *pipeline.textureDescriptorSet }, pipeline.program->getPipelineLayout() );
 			commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 			pipeline.program->render( commandBuffer, getCount(), first, m_offset );
-			commandBuffer.endRenderPass();
-			m_timer->endPass( commandBuffer );
 			commandBuffer.end();
 		}
 	}

@@ -106,13 +106,13 @@ namespace castor3d
 
 		if ( result && pass.getOpacity() < 1 )
 		{
-			result = file.writeText( m_tabs + cuT( "\talpha " ) + string::toString( pass.getOpacity() ) + cuT( "\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\talpha " ) + string::toString( pass.getOpacity(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 			castor::TextWriter< Pass >::checkError( result, "Pass opacity" );
 		}
 
 		if ( result && pass.getEmissive() > 0 )
 		{
-			result = file.writeText( m_tabs + cuT( "\temissive " ) + string::toString( pass.getEmissive() ) + cuT( "\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\temissive " ) + string::toString( pass.getEmissive(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 			castor::TextWriter< Pass >::checkError( result, "Pass emissive" );
 		}
 
@@ -134,7 +134,7 @@ namespace castor3d
 			{
 				result = file.writeText( m_tabs + cuT( "\talpha_func " )
 					+ strAlphaFuncs[pass.getAlphaFunc()] + cuT( " " )
-					+ string::toString( pass.getAlphaValue() ) + cuT( "\n" ) ) > 0;
+					+ string::toString( pass.getAlphaValue(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Pass >::checkError( result, "Pass alpha function" );
 			}
 			else if ( pass.hasAlphaBlending()

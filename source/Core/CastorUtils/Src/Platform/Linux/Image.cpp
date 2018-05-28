@@ -15,7 +15,7 @@ namespace castor
 
 	namespace
 	{
-		uint32_t Next2Pow( uint32_t p_uiDim )
+		uint32_t next2Pow( uint32_t p_uiDim )
 		{
 			static uint32_t TwoPows[] = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576 };// should be enough for image dimensions ...
 			static uint32_t Size = sizeof( TwoPows ) / sizeof( uint32_t );
@@ -29,25 +29,25 @@ namespace castor
 			return uiReturn;
 		}
 
-		uint32_t DLL_CALLCONV ReadProc( void * p_buffer, uint32_t p_uiSize, uint32_t p_count, fi_handle p_fiHandle )
+		uint32_t DLL_CALLCONV readProc( void * p_buffer, uint32_t p_uiSize, uint32_t p_count, fi_handle p_fiHandle )
 		{
 			BinaryFile * pFile = reinterpret_cast< BinaryFile * >( p_fiHandle );
 			return uint32_t( pFile->readArray( reinterpret_cast< uint8_t * >( p_buffer ), p_uiSize * p_count ) );
 		}
 
-		int DLL_CALLCONV SeekProc( fi_handle p_fiHandle, long p_lOffset, int p_iOrigin )
+		int DLL_CALLCONV seekProc( fi_handle p_fiHandle, long p_lOffset, int p_iOrigin )
 		{
 			BinaryFile * pFile = reinterpret_cast< BinaryFile * >( p_fiHandle );
 			return pFile->seek( p_lOffset, File::OffsetMode( p_iOrigin ) );
 		}
 
-		long DLL_CALLCONV TellProc( fi_handle p_fiHandle )
+		long DLL_CALLCONV tellProc( fi_handle p_fiHandle )
 		{
 			BinaryFile * pFile = reinterpret_cast< BinaryFile * >( p_fiHandle );
 			return long( pFile->tell() );
 		}
 
-		void FreeImageErrorHandler( FREE_IMAGE_FORMAT fif, const char * message )
+		void freeImageErrorHandler( FREE_IMAGE_FORMAT fif, const char * message )
 		{
 			if ( fif != FIF_UNKNOWN )
 			{
@@ -59,7 +59,7 @@ namespace castor
 			}
 		}
 
-		void SwapComponents( uint8_t * p_pixels, PixelFormat p_format, uint32_t p_width, uint32_t p_height )
+		void swapComponents( uint8_t * p_pixels, PixelFormat p_format, uint32_t p_width, uint32_t p_height )
 		{
 			uint32_t count{ p_width * p_height };
 			uint32_t bpp{ PF::getBytesPerPixel( p_format ) };
@@ -124,10 +124,10 @@ namespace castor
 		{
 			BinaryFile file( p_path, uint32_t( File::OpenMode::eRead ) | uint32_t( File::OpenMode::eBinary ) );
 			FreeImageIO fiIo;
-			fiIo.read_proc = ReadProc;
+			fiIo.read_proc = readProc;
 			fiIo.write_proc = nullptr;
-			fiIo.seek_proc = SeekProc;
-			fiIo.tell_proc = TellProc;
+			fiIo.seek_proc = seekProc;
+			fiIo.tell_proc = tellProc;
 			fiImage = FreeImage_LoadFromHandle( fiFormat, & fiIo, fi_handle( & file ), flags );
 
 			if ( !fiImage )
@@ -158,8 +158,8 @@ namespace castor
 			}
 			else
 			{
-				ePF = PixelFormat::eR8G8B8;
-				FIBITMAP * dib = FreeImage_ConvertTo24Bits( fiImage );
+				ePF = PixelFormat::eA8R8G8B8;
+				FIBITMAP * dib = FreeImage_ConvertTo32Bits( fiImage );
 				FreeImage_Unload( fiImage );
 				fiImage = dib;
 
@@ -201,8 +201,8 @@ namespace castor
 		}
 		else
 		{
-			ePF = PixelFormat::eR8G8B8;
-			FIBITMAP * dib = FreeImage_ConvertTo24Bits( fiImage );
+			ePF = PixelFormat::eA8R8G8B8;
+			FIBITMAP * dib = FreeImage_ConvertTo32Bits( fiImage );
 			FreeImage_Unload( fiImage );
 			fiImage = dib;
 
@@ -217,7 +217,7 @@ namespace castor
 			uint8_t * pixels = FreeImage_GetBits( fiImage );
 #if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_BGR
 
-			SwapComponents( pixels, ePF, width, height );
+			swapComponents( pixels, ePF, width, height );
 
 #endif
 			p_image.m_buffer = PxBufferBase::create( size, ePF, pixels, ePF );
@@ -248,7 +248,7 @@ namespace castor
 
 #if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_BGR
 
-			SwapComponents( pBufferRGB->ptr(), PixelFormat::eA8R8G8B8, w, h );
+			swapComponents( pBufferRGB->ptr(), PixelFormat::eA8R8G8B8, w, h );
 
 #endif
 
@@ -270,7 +270,7 @@ namespace castor
 
 #if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_BGR
 
-				SwapComponents( pBufferRGB->ptr(), PixelFormat::eRGBA32F, w, h );
+				swapComponents( pBufferRGB->ptr(), PixelFormat::eRGBA32F, w, h );
 
 #endif
 
@@ -289,7 +289,7 @@ namespace castor
 
 #if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_BGR
 
-				SwapComponents( pBufferRGB->ptr(), PixelFormat::eRGB32F, w, h );
+				swapComponents( pBufferRGB->ptr(), PixelFormat::eRGB32F, w, h );
 
 #endif
 
@@ -317,7 +317,7 @@ namespace castor
 
 #if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_BGR
 
-				SwapComponents( pBuffer->ptr(), PixelFormat::eR8G8B8, w, h );
+				swapComponents( pBuffer->ptr(), PixelFormat::eR8G8B8, w, h );
 
 #endif
 				w *= 3;
@@ -399,7 +399,7 @@ namespace castor
 
 #if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_BGR
 
-					SwapComponents( pixels, m_buffer->format(), width, height );
+					swapComponents( pixels, m_buffer->format(), width, height );
 
 #endif
 					m_buffer = PxBufferBase::create( p_size, ePF, pixels, ePF );
@@ -415,7 +415,7 @@ namespace castor
 	void Image::initialiseImageLib()
 	{
 		FreeImage_Initialise();
-		FreeImage_SetOutputMessage( FreeImageErrorHandler );
+		FreeImage_SetOutputMessage( freeImageErrorHandler );
 	}
 
 	void Image::cleanupImageLib()

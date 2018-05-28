@@ -105,7 +105,7 @@ namespace castor3d
 			, LightType type
 			, GeometryPassResult const & gp
 			, renderer::Semaphore const *& toWait
-			, bool & first
+			, uint32_t & index
 			, RenderInfo & info );
 
 	private:

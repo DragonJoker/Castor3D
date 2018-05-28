@@ -237,14 +237,12 @@ namespace castor3d
 		m_matrixUbo.cleanup();
 	}
 
-	void MeshLightPass::render( bool first
+	void MeshLightPass::render( uint32_t index
 		, renderer::Semaphore const & toWait
 		, TextureUnit * shadowMapOpt )
 	{
-		auto & renderSystem = *m_engine.getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
 		m_stencilPass.render( toWait );
-		LightPass::render( first, m_stencilPass.getSemaphore(), shadowMapOpt );
+		LightPass::render( index, m_stencilPass.getSemaphore(), shadowMapOpt );
 	}
 
 	uint32_t MeshLightPass::getCount()const

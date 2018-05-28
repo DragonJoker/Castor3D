@@ -819,7 +819,6 @@ namespace castor3d
 			result = &m_deferredRendering->render( info, scene, camera, *result );
 
 #endif
-			getEngine()->getRenderSystem()->getCurrentDevice()->waitIdle();
 		}
 
 		return result;

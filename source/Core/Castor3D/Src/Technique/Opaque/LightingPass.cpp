@@ -151,35 +151,43 @@ namespace castor3d
 		, RenderInfo & info )
 	{
 		auto & cache = scene.getLightCache();
-		bool first{ true };
 		renderer::Semaphore const * result = &toWait;
 
 		if ( !cache.isEmpty() )
 		{
 			m_timer->start();
 			auto lock = makeUniqueLock( cache );
+			auto count = cache.getLightsCount( LightType::eDirectional )
+				+ cache.getLightsCount( LightType::ePoint )
+				+ cache.getLightsCount( LightType::eSpot );
+
+			if ( m_timer->getCount() != count )
+			{
+				m_timer->updateCount( count );
+			}
+
+			uint32_t index = 0;
 			doRenderLights( scene
 				, camera
 				, LightType::eDirectional
 				, gp
 				, result
-				, first
+				, index
 				, info );
 			doRenderLights( scene
 				, camera
 				, LightType::ePoint
 				, gp
 				, result
-				, first
+				, index
 				, info );
 			doRenderLights( scene
 				, camera
 				, LightType::eSpot
 				, gp
 				, result
-				, first
+				, index
 				, info );
-			first = false;
 			m_timer->stop();
 		}
 
@@ -191,7 +199,7 @@ namespace castor3d
 		, LightType p_type
 		, GeometryPassResult const & gp
 		, renderer::Semaphore const *& toWait
-		, bool & first
+		, uint32_t & index
 		, RenderInfo & info )
 	{
 		auto & cache = scene.getLightCache();
@@ -211,7 +219,7 @@ namespace castor3d
 						lightPassShadow.update( camera.getViewport().getSize()
 							, *light
 							, camera );
-						lightPassShadow.render( first
+						lightPassShadow.render( index
 							, *toWait
 							, &light->getShadowMap()->getTexture() );
 						toWait = &lightPassShadow.getSemaphore();
@@ -221,13 +229,13 @@ namespace castor3d
 						lightPass.update( camera.getViewport().getSize()
 							, *light
 							, camera );
-						lightPass.render( first
+						lightPass.render( index
 							, *toWait
 							, nullptr );
 						toWait = &lightPass.getSemaphore();
 					}
 
-					first = false;
+					++index;
 					info.m_visibleLightsCount++;
 				}
 

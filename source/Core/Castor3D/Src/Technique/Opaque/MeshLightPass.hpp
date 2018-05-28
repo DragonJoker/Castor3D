@@ -129,7 +129,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dessine la passe de rendu.
 		 */
-		void render( bool first
+		void render( uint32_t index
 			, renderer::Semaphore const & toWait
 			, TextureUnit * shadowMapOpt )override;
 		/**

@@ -91,8 +91,7 @@ namespace castor3d
 			auto & size = obj.getEquiSize();
 			result = file.writeText( m_tabs + cuT( "\tequirectangular" )
 				+ cuT( " \"" ) + relative + cuT( "\" " )
-				+ string::toString( size.getWidth() ) + cuT( " " )
-				+ string::toString( size.getHeight() ) + cuT( "\n" ) ) > 0;
+				+ string::toString( size.getWidth(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 			castor::TextWriter< SkyboxBackground >::checkError( result, "Skybox equi-texture" );
 
 			if ( result )

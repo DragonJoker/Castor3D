@@ -1174,13 +1174,11 @@ namespace castor3d
 		m_timer->notifyPassRender();
 		auto index = size_t( m_scene.getFog().getType() );
 		auto & program = m_programs[index];
-		m_fence->reset();
 		m_device.getGraphicsQueue().submit( *program.m_commandBuffer
 			, *semaphore
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
-			, m_fence.get() );
-		m_fence->wait( renderer::FenceTimeout );
+			, nullptr );
 		m_timer->stop();
 		return *m_finished;
 	}
