@@ -277,6 +277,11 @@ namespace castor3d
 			return m_index;
 		}
 
+		inline uint32_t getBaseMipLevel()const
+		{
+			return m_info.subresourceRange.baseMipLevel;
+		}
+
 		inline renderer::TextureView const & getView()const
 		{
 			REQUIRE( m_view );

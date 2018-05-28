@@ -565,7 +565,7 @@ namespace castor3d
 		m_result.cleanup();
 	}
 
-	void SsaoBlurPass::blur( renderer::Semaphore const & toWait )const
+	renderer::Semaphore const & SsaoBlurPass::blur( renderer::Semaphore const & toWait )const
 	{
 		m_timer->start();
 		m_timer->notifyPassRender();
@@ -576,6 +576,7 @@ namespace castor3d
 			, *m_finished
 			, nullptr );
 		m_timer->stop();
+		return *m_finished;
 	}
 
 	void SsaoBlurPass::accept( bool horizontal

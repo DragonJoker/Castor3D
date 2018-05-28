@@ -67,7 +67,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dessine la passe SSAO sur le tampon d'image actif.
 		 */
-		void compute( renderer::Semaphore const & toWait )const;
+		renderer::Semaphore const & compute( renderer::Semaphore const & toWait )const;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -85,12 +85,6 @@ namespace castor3d
 		inline TextureUnit const & getResult()const
 		{
 			return m_result;
-		}
-
-		inline renderer::Semaphore const & getSemaphore()const
-		{
-			REQUIRE( m_finished );
-			return *m_finished;
 		}
 		/**@}*/
 

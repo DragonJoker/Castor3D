@@ -85,9 +85,10 @@ namespace castor3d
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "skybox\n" ) ) > 0
 				&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 			Path subfolder{ cuT( "Textures" ) };
-			Path relative = Scene::TextWriter::copyFile( obj.getEquiTexturePath()
+			String relative = Scene::TextWriter::copyFile( obj.getEquiTexturePath()
 				, file.getFilePath()
 				, subfolder );
+			string::replace( relative, cuT( "\\" ), cuT( "/" ) );
 			auto & size = obj.getEquiSize();
 			result = file.writeText( m_tabs + cuT( "\tequirectangular" )
 				+ cuT( " \"" ) + relative + cuT( "\" " )
@@ -105,9 +106,10 @@ namespace castor3d
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "skybox\n" ) ) > 0
 				&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 			Path subfolder{ cuT( "Textures" ) };
-			Path relative = Scene::TextWriter::copyFile( obj.getCrossTexturePath()
+			String relative = Scene::TextWriter::copyFile( obj.getCrossTexturePath()
 				, file.getFilePath()
 				, subfolder );
+			string::replace( relative, cuT( "\\" ), cuT( "/" ) );
 			result = file.writeText( m_tabs + cuT( "\tcross" ) + cuT( " \"" ) + relative + cuT( "\"\n" ) ) > 0;
 			castor::TextWriter< SkyboxBackground >::checkError( result, "Skybox cross-texture" );
 
@@ -129,9 +131,10 @@ namespace castor3d
 
 			for ( uint32_t i = 0; i < 6 && result; ++i )
 			{
-				Path relative = Scene::TextWriter::copyFile( Path{ obj.m_texture->getImage( size_t( CubeMapFace( i ) ) ).toString() }
+				String relative = Scene::TextWriter::copyFile( Path{ obj.m_texture->getImage( size_t( CubeMapFace( i ) ) ).toString() }
 					, file.getFilePath()
 					, subfolder );
+				string::replace( relative, cuT( "\\" ), cuT( "/" ) );
 				result = file.writeText( m_tabs + cuT( "\t" ) + faces[i] + cuT( " \"" ) + relative + cuT( "\"\n" ) ) > 0;
 				castor::TextWriter< SkyboxBackground >::checkError( result, ( "Skybox " + faces[i] ).c_str() );
 			}

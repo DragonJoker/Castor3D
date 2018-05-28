@@ -2,6 +2,8 @@
 
 #include "Engine.hpp"
 
+#include <Miscellaneous/BitSize.hpp>
+
 #include <Image/Texture.hpp>
 #include <Image/TextureView.hpp>
 
@@ -87,6 +89,14 @@ namespace castor3d
 				, getSubviewCreateInfos( info, 0u, info.arrayLayers, baseMipLevel, levelCount )
 				, 0u );
 		}
+
+		uint32_t getMaxMipLevels( uint32_t mipLevels
+			, renderer::Extent3D const & extent )
+		{
+			auto min = std::min( extent.width, extent.height );
+			auto bitSize = uint32_t( castor::getBitSize( min ) );
+			return std::min( bitSize, mipLevels );
+		}
 	}
 
 	//************************************************************************************************
@@ -144,6 +154,10 @@ namespace castor3d
 			{
 				m_info.usage |= renderer::ImageUsageFlag::eTransferSrc;
 			}
+			else if ( m_info.mipLevels == 0 )
+			{
+				m_info.mipLevels = 1u;
+			}
 
 			m_texture = getRenderSystem()->getCurrentDevice()->createTexture( m_info, m_properties );
 			m_defaultView->initialise();
@@ -188,20 +202,6 @@ namespace castor3d
 		, Path const & relative )
 	{
 		m_defaultView->initialiseSource( folder, relative );
-		auto buffer = m_defaultView->getBuffer();
-
-		if ( m_info.extent.width != buffer->dimensions().getWidth()
-			|| m_info.extent.height != buffer->dimensions().getHeight()
-			|| m_info.format != convert( buffer->format() ) )
-		{
-			m_info.extent.width = buffer->dimensions().getWidth();
-			m_info.extent.height = buffer->dimensions().getHeight();
-			m_info.extent.depth = 1u;
-			m_info.format = convert( buffer->format() );
-			m_defaultView->doUpdate( getSubviewCreateInfos( m_info, 0u, m_info.arrayLayers, 0u, 1u ) );
-			REQUIRE( m_views.size() == 1u );
-			m_views.back()->doUpdate( getSubviewCreateInfos( m_info, 0u, m_info.arrayLayers, 0u, 1u ) );
-		}
 	}
 
 	void TextureLayout::setSource( PxBufferBaseSPtr buffer )
@@ -213,21 +213,6 @@ namespace castor3d
 		else
 		{
 			m_defaultView->setBuffer( buffer );
-		}
-
-		buffer = m_defaultView->getBuffer();
-
-		if ( m_info.extent.width != buffer->dimensions().getWidth()
-			|| m_info.extent.height != buffer->dimensions().getHeight()
-			|| m_info.format != convert( buffer->format() ) )
-		{
-			m_info.extent.width = buffer->dimensions().getWidth();
-			m_info.extent.height = buffer->dimensions().getHeight();
-			m_info.extent.depth = 1u;
-			m_info.format = convert( buffer->format() );
-			m_defaultView->doUpdate( getSubviewCreateInfos( m_info, 0u, m_info.arrayLayers, 0u, 1u ) );
-			REQUIRE( m_views.size() == 1u );
-			m_views.back()->doUpdate( getSubviewCreateInfos( m_info, 0u, m_info.arrayLayers, 0u, 1u ) );
 		}
 	}
 
@@ -243,16 +228,52 @@ namespace castor3d
 			m_info.extent.height = size.getHeight();
 			m_info.extent.depth = 1u;
 			m_info.format = format;
-			m_defaultView->doUpdate( getSubviewCreateInfos( m_info, 0u, m_info.arrayLayers, 0u, 1u ) );
+			auto mipLevels = m_info.mipLevels;
 
-			if ( m_views.size() == 1
-				|| m_info.mipLevels > 1u )
+			if ( m_info.mipLevels > 1u )
 			{
-				uint32_t index = 0u;
+				m_info.mipLevels = getMaxMipLevels( m_info.mipLevels
+					, m_info.extent );
+			}
 
-				for ( auto & view : m_views )
+			m_defaultView->doUpdate( getSubviewCreateInfos( m_info, 0u, m_info.arrayLayers, 0u, m_info.mipLevels ) );
+
+			if ( m_views.size() == 1 )
+			{
+				m_views.back()->doUpdate( getSubviewCreateInfos( m_info, 0u, 1u, 0u, 1u ) );
+			}
+			else if ( mipLevels > 1u )
+			{
+				m_info.usage |= renderer::ImageUsageFlag::eTransferSrc;
+
+				if ( m_info.mipLevels != mipLevels )
 				{
-					view->doUpdate( getSubviewCreateInfos( m_info, 0u, 1u, index++, 1u ) );
+					auto it = m_views.begin();
+					uint32_t index = 0u;
+
+					while ( it != m_views.end() )
+					{
+						auto & view = *it;
+
+						if ( view->getBaseMipLevel() >= m_info.mipLevels )
+						{
+							it = m_views.erase( it );
+						}
+						else
+						{
+							view->doUpdate( getSubviewCreateInfos( m_info, 0u, 1u, index++, 1u ) );
+							++it;
+						}
+					}
+				}
+				else
+				{
+					uint32_t index = 0u;
+
+					for ( auto & view : m_views )
+					{
+						view->doUpdate( getSubviewCreateInfos( m_info, 0u, 1u, index++, 1u ) );
+					}
 				}
 			}
 		}

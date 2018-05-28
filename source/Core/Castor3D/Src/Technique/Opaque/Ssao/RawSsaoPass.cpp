@@ -780,7 +780,7 @@ namespace castor3d
 		m_result.cleanup();
 	}
 
-	void RawSsaoPass::compute( renderer::Semaphore const & toWait )const
+	renderer::Semaphore const & RawSsaoPass::compute( renderer::Semaphore const & toWait )const
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
@@ -792,6 +792,7 @@ namespace castor3d
 			, *m_finished
 			, nullptr );
 		m_timer->stop();
+		return *m_finished.get();
 	}
 
 	void RawSsaoPass::accept( SsaoConfig & config

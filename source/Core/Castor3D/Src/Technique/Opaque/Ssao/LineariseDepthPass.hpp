@@ -62,7 +62,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Linéarise le tampon de profondeur.
 		 */
-		void linearise( renderer::Semaphore const & toWait )const;
+		renderer::Semaphore const & linearise( renderer::Semaphore const & toWait )const;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -79,12 +79,6 @@ namespace castor3d
 		inline TextureUnit const & getResult()const
 		{
 			return m_result;
-		}
-
-		inline renderer::Semaphore const & getSemaphore()const
-		{
-			REQUIRE( m_finished );
-			return *m_finished;
 		}
 		/**@}*/
 

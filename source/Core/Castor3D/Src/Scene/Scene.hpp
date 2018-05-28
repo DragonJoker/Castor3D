@@ -67,7 +67,8 @@ namespace castor3d
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( castor::String const & tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs
+				, castor::Path const & materialsFile = castor::Path{} );
 			/**
 			 *\~english
 			 *\brief		Writes a scene into a text file
@@ -79,6 +80,9 @@ namespace castor3d
 			 *\param[in]	file	Le fichier
 			 */
 			C3D_API bool operator()( Scene const & scene, castor::TextFile & file )override;
+
+		private:
+			castor::Path const & m_materialsFile;
 		};
 
 	public:

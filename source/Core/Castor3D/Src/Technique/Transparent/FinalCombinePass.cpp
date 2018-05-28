@@ -244,9 +244,13 @@ namespace castor3d
 
 					if ( fogType != FogType::eDisabled )
 					{
+						auto texCoord = writer.declLocale( cuT( "texCoord" )
+							, ( writer.isTopDown()
+								? vtx_texture
+								: vec2( vtx_texture.x(), 1.0 - vtx_texture.y() ) ) );
 						auto position = writer.declLocale( cuT( "position" )
 							, utils.calcVSPosition( vtx_texture
-								, texture( c3d_mapDepth, vtx_texture ).r()
+								, texture( c3d_mapDepth, texCoord ).r()
 								, c3d_mtxInvProj ) );
 						fog.applyFog( pxl_fragColor, length( position ), position.z() );
 					}

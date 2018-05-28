@@ -112,8 +112,10 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	Scene::TextWriter::TextWriter( String const & tabs )
+	Scene::TextWriter::TextWriter( castor::String const & tabs
+		, castor::Path const & materialsFile )
 		: castor::TextWriter< Scene >{ tabs }
+		, m_materialsFile{ materialsFile }
 	{
 	}
 
@@ -178,10 +180,19 @@ namespace castor3d
 		if ( result )
 		{
 			Logger::logInfo( cuT( "Scene::write - Background colour" ) );
-			result = file.print( 256, cuT( "\n%s\tbackground_colour " ), m_tabs.c_str() ) > 0
+			result = file.print( 256, cuT( "%s\tbackground_colour " ), m_tabs.c_str() ) > 0
 				&& RgbColour::TextWriter( String() )( scene.getBackgroundColour(), file )
 				&& file.writeText( cuT( "\n" ) ) > 0;
 			castor::TextWriter< Scene >::checkError( result, "Scene background colour" );
+		}
+
+		if ( result && !m_materialsFile.empty() )
+		{
+			Logger::logInfo( cuT( "Scene::write - Materials file" ) );
+			String path = m_materialsFile;
+			string::replace( path, cuT( "\\" ), cuT( "/" ) );
+			result = file.writeText( m_tabs + cuT( "\tinclude \"" ) + path +cuT( "\"\n" ) ) > 0;
+			castor::TextWriter< Scene >::checkError( result, "Scene material file" );
 		}
 
 		if ( result )
@@ -213,20 +224,23 @@ namespace castor3d
 				, file );
 		}
 
-		if ( result )
+		if ( m_materialsFile.empty() )
 		{
-			result = writeView< Sampler >( scene.getSamplerView()
-				, cuT( "Samplers" )
-				, m_tabs
-				, file );
-		}
+			if ( result )
+			{
+				result = writeView< Sampler >( scene.getSamplerView()
+					, cuT( "Samplers" )
+					, m_tabs
+					, file );
+			}
 
-		if ( result )
-		{
-			result = writeView< Material >( scene.getMaterialView()
-				, cuT( "Materials" )
-				, m_tabs
-				, file );
+			if ( result )
+			{
+				result = writeView< Material >( scene.getMaterialView()
+					, cuT( "Materials" )
+					, m_tabs
+					, file );
+			}
 		}
 
 		if ( result && !scene.getOverlayView().isEmpty() )

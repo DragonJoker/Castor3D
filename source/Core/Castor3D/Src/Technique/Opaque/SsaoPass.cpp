@@ -62,12 +62,14 @@ namespace castor3d
 		m_ssaoConfigUbo->update( m_config, camera );
 	}
 
-	void SsaoPass::render( renderer::Semaphore const & toWait )const
+	renderer::Semaphore const & SsaoPass::render( renderer::Semaphore const & toWait )const
 	{
-		m_linearisePass->linearise( toWait );
-		m_rawSsaoPass->compute( m_linearisePass->getSemaphore() );
-		m_horizontalBlur->blur( m_rawSsaoPass->getSemaphore() );
-		m_verticalBlur->blur( m_horizontalBlur->getSemaphore() );
+		auto * result = &toWait;
+		result = &m_linearisePass->linearise( *result );
+		result = &m_rawSsaoPass->compute( *result );
+		result = &m_horizontalBlur->blur( *result );
+		result = &m_verticalBlur->blur( *result );
+		return *result;
 	}
 
 	void SsaoPass::accept( RenderTechniqueVisitor & visitor )
@@ -81,10 +83,5 @@ namespace castor3d
 	TextureUnit const & SsaoPass::getResult()const
 	{
 		return m_verticalBlur->getResult();
-	}
-
-	renderer::Semaphore const & SsaoPass::getSemaphore()const
-	{
-		return m_verticalBlur->getSemaphore();
 	}
 }

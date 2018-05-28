@@ -74,7 +74,7 @@ namespace castor3d
 			colour.format = renderer::Format::eR16G16B16A16_SFLOAT;
 			colour.imageType = renderer::TextureType::e2D;
 			colour.initialLayout = renderer::ImageLayout::eUndefined;
-			colour.mipLevels = 6u;
+			colour.mipLevels = 20u;
 			colour.samples = renderer::SampleCountFlag::e1;
 			colour.sharingMode = renderer::SharingMode::eExclusive;
 			colour.tiling = renderer::ImageTiling::eOptimal;

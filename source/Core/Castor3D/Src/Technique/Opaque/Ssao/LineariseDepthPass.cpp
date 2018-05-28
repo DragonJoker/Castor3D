@@ -365,7 +365,7 @@ namespace castor3d
 		m_result.cleanup();
 	}
 
-	void LineariseDepthPass::linearise( renderer::Semaphore const & toWait )const
+	renderer::Semaphore const & LineariseDepthPass::linearise( renderer::Semaphore const & toWait )const
 	{
 		m_timer->start();
 		m_timer->notifyPassRender();
@@ -377,6 +377,7 @@ namespace castor3d
 			, *m_finished
 			, nullptr );
 		m_timer->stop();
+		return *m_finished;
 	}
 
 	void LineariseDepthPass::accept( RenderTechniqueVisitor & visitor )

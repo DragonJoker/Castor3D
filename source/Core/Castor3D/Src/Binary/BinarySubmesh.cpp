@@ -287,7 +287,7 @@ namespace castor3d
 	{
 		bool result = true;
 
-		if ( m_fileVersion == Version{ 1, 3, 0 } )
+		if ( m_fileVersion <= Version{ 1, 3, 0 } )
 		{
 			std::vector< FaceIndices > faces;
 			std::vector< OldInterleavedVertexT< double > > srcbuf;

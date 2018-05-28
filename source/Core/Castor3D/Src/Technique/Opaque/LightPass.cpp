@@ -610,12 +610,13 @@ namespace castor3d
 		, TextureUnit const * shadowMap
 		, bool first )
 	{
-		auto & dimensions = first
-			? m_firstRenderPass.frameBuffer->getDimensions()
-			: m_blendRenderPass.frameBuffer->getDimensions();
+		auto & renderPass = first
+			? m_firstRenderPass
+			: m_blendRenderPass;
 		auto & commandBuffer = first
 			? *pipeline.firstCommandBuffer
 			: *pipeline.blendCommandBuffer;
+		auto & dimensions = renderPass.frameBuffer->getDimensions();
 
 		if ( shadowMap )
 		{
@@ -625,7 +626,16 @@ namespace castor3d
 			pipeline.textureDescriptorSet->update();
 		}
 
-		if ( commandBuffer.begin() )
+		if ( commandBuffer.begin( renderer::CommandBufferUsageFlag::eRenderPassContinue
+			, renderer::CommandBufferInheritanceInfo
+			{
+				renderPass.renderPass.get(),
+				0u,
+				renderPass.frameBuffer.get(),
+				false,
+				0u,
+				0u
+			} ) )
 		{
 			commandBuffer.setViewport( { { 0, 0 }, dimensions } );
 			commandBuffer.setScissor( { { 0, 0 }, dimensions } );

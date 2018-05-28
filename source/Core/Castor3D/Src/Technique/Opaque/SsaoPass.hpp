@@ -67,7 +67,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dessine la passe SSAO.
 		 */
-		void render( renderer::Semaphore const & toWait )const;
+		renderer::Semaphore const & render( renderer::Semaphore const & toWait )const;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -79,13 +79,6 @@ namespace castor3d
 		 *\return		Le résultat de la passe SSAO.
 		 */
 		TextureUnit const & getResult()const;
-		/**
-		 *\~english
-		 *\return		The semaphore signaling the end of the pass.
-		 *\~french
-		 *\return		Le sémaphore signalant la fin de la passe.
-		 */
-		renderer::Semaphore const & getSemaphore()const;
 
 	private:
 		Engine & m_engine;

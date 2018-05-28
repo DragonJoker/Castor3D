@@ -172,7 +172,6 @@ namespace castor3d
 
 #endif
 
-		return true;
 		return result;
 	}
 
@@ -234,7 +233,6 @@ namespace castor3d
 
 #endif
 
-		return true;
 		return result;
 	}
 
@@ -290,7 +288,6 @@ namespace castor3d
 
 #endif
 
-		return true;
 		return result;
 	}
 }

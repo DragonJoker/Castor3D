@@ -26,19 +26,19 @@ namespace castor3d
 		{
 			if ( p_viewport.getType() == ViewportType::eOrtho || p_viewport.getType() == ViewportType::eFrustum )
 			{
-				result = p_file.writeText( m_tabs + cuT( "\tnear " ) + string::toString( p_viewport.getNear() ) + cuT( "\n" ) ) > 0
-						   && p_file.writeText( m_tabs + cuT( "\tfar " ) + string::toString( p_viewport.getFar() ) + cuT( "\n" ) ) > 0
-						   && p_file.writeText( m_tabs + cuT( "\tleft " ) + string::toString( p_viewport.getLeft() ) + cuT( "\n" ) ) > 0
-						   && p_file.writeText( m_tabs + cuT( "\tright " ) + string::toString( p_viewport.getRight() ) + cuT( "\n" ) ) > 0
-						   && p_file.writeText( m_tabs + cuT( "\ttop " ) + string::toString( p_viewport.getTop() ) + cuT( "\n" ) ) > 0
-						   && p_file.writeText( m_tabs + cuT( "\tbottom " ) + string::toString( p_viewport.getBottom() ) + cuT( "\n" ) ) > 0;
+				result = p_file.writeText( m_tabs + cuT( "\tnear " ) + string::toString( p_viewport.getNear(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0
+						   && p_file.writeText( m_tabs + cuT( "\tfar " ) + string::toString( p_viewport.getFar(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0
+						   && p_file.writeText( m_tabs + cuT( "\tleft " ) + string::toString( p_viewport.getLeft(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0
+						   && p_file.writeText( m_tabs + cuT( "\tright " ) + string::toString( p_viewport.getRight(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0
+						   && p_file.writeText( m_tabs + cuT( "\ttop " ) + string::toString( p_viewport.getTop(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0
+						   && p_file.writeText( m_tabs + cuT( "\tbottom " ) + string::toString( p_viewport.getBottom(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 			}
 			else
 			{
-				result = p_file.writeText( m_tabs + cuT( "\tnear " ) + string::toString( p_viewport.getNear() ) + cuT( "\n" ) ) > 0
-						   && p_file.writeText( m_tabs + cuT( "\taspect_ratio " ) + string::toString( p_viewport.getRatio() ) + cuT( "\n" ) ) > 0
-						   && p_file.writeText( m_tabs + cuT( "\tfar " ) + string::toString( p_viewport.getFar() ) + cuT( "\n" ) ) > 0
-						   && p_file.writeText( m_tabs + cuT( "\tfov_y " ) + string::toString( p_viewport.getFovY().degrees() ) + cuT( "\n" ) ) > 0;
+				result = p_file.writeText( m_tabs + cuT( "\tnear " ) + string::toString( p_viewport.getNear(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0
+						   && p_file.writeText( m_tabs + cuT( "\taspect_ratio " ) + string::toString( p_viewport.getRatio(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0
+						   && p_file.writeText( m_tabs + cuT( "\tfar " ) + string::toString( p_viewport.getFar(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0
+						   && p_file.writeText( m_tabs + cuT( "\tfov_y " ) + string::toString( p_viewport.getFovY().degrees(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 			}
 
 			castor::TextWriter< Viewport >::checkError( result, "Viewport values" );

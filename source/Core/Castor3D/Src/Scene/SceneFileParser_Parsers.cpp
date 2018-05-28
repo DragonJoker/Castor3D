@@ -3108,11 +3108,28 @@ namespace castor3d
 				}
 				else
 				{
+					if ( !parsingContext->imageInfo.mipLevels )
+					{
+						parsingContext->imageInfo.mipLevels = 20;
+					}
+
 					auto texture = std::make_shared< TextureLayout >( *parsingContext->m_pParser->getEngine()->getRenderSystem()
 						, parsingContext->imageInfo
 						, renderer::MemoryPropertyFlag::eDeviceLocal );
 					texture->setSource( parsingContext->folder, parsingContext->relative );
 					parsingContext->buffer = texture->getDefaultImage().getBuffer();
+					parsingContext->imageInfo =
+					{
+						0u,
+						renderer::TextureType::e2D,
+						renderer::Format::eUndefined,
+						{ 1u, 1u, 1u },
+						0u,
+						1u,
+						renderer::SampleCountFlag::e1,
+						renderer::ImageTiling::eOptimal,
+						renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst
+					};
 
 					if ( parsingContext->strName == cuT( "r" ) )
 					{

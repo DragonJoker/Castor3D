@@ -1166,8 +1166,7 @@ namespace castor3d
 
 		if ( m_ssaoEnabled )
 		{
-			m_ssao.render( toWait );
-			semaphore = &m_ssao.getSemaphore();
+			semaphore = &m_ssao.render( *semaphore );
 		}
 
 		m_timer->start();

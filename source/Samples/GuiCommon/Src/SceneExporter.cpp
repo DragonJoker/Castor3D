@@ -300,22 +300,73 @@ namespace GuiCommon
 
 	//************************************************************************************************
 
-	void CscnSceneExporter::ExportScene( Scene const & p_scene, Path const & p_fileName )
+	namespace
 	{
-		bool result = true;
-		Path folder = p_fileName.getPath() / p_fileName.getFileName();
+		template< typename ObjType, typename ViewType >
+		bool writeView( ViewType const & view
+			, String const & elemsName
+			, TextFile & file )
+		{
+			bool result = true;
+
+			if ( !view.isEmpty() )
+			{
+				result = file.writeText( cuT( "\n// " ) + elemsName + cuT( "\n" ) ) > 0;
+
+				if ( result )
+				{
+					Logger::logInfo( cuT( "Scene::write - " ) + elemsName );
+
+					for ( auto const & name : view )
+					{
+						auto elem = view.find( name );
+						result &= typename ObjType::TextWriter{ String{} }( *elem, file );
+					}
+				}
+			}
+
+			return result;
+		}
+	}
+
+	void CscnSceneExporter::ExportScene( Scene const & scene
+		, Path const & fileName )
+	{
+		Path folder = fileName.getPath() / fileName.getFileName();
 
 		if ( !File::directoryExists( folder ) )
 		{
 			File::directoryCreate( folder );
 		}
 
-		Path filePath = folder / p_fileName.getFileName();
+		if ( !File::directoryExists( folder / cuT( "Materials" ) ) )
+		{
+			File::directoryCreate( folder / cuT( "Materials" ) );
+		}
+
+		Path filePath = folder / ( fileName.getFileName() + cuT( ".cscn" ) );
+		filePath = Path{ filePath };
+		bool result = false;
+		{
+			TextFile mtlFile( filePath, File::OpenMode::eWrite, File::EncodingMode::eASCII );
+			result = writeView< Sampler >( scene.getSamplerView()
+				, cuT( "Samplers" )
+				, mtlFile );
+
+			if ( result )
+			{
+				result = writeView< Material >( scene.getMaterialView()
+					, cuT( "Materials" )
+					, mtlFile );
+			}
+		}
 
 		if ( result )
 		{
-			TextFile scnFile( Path{ filePath + cuT( ".cscn" ) }, File::OpenMode::eWrite, File::EncodingMode::eASCII );
-			result = Scene::TextWriter( String() )( p_scene, scnFile );
+			File::copyFile( filePath, folder / cuT( "Materials" ) );
+			File::deleteFile( filePath );
+			TextFile scnFile( Path{ filePath }, File::OpenMode::eWrite, File::EncodingMode::eASCII );
+			result = Scene::TextWriter( String(), cuT( "Materials" ) / filePath.getFileName( true ) )( scene, scnFile );
 		}
 
 		Path subfolder{ cuT( "Meshes" ) };
@@ -327,9 +378,9 @@ namespace GuiCommon
 				File::directoryCreate( folder / subfolder );
 			}
 
-			auto lock = makeUniqueLock( p_scene.getMeshCache() );
+			auto lock = makeUniqueLock( scene.getMeshCache() );
 
-			for ( auto const & it : p_scene.getMeshCache() )
+			for ( auto const & it : scene.getMeshCache() )
 			{
 				auto mesh = it.second;
 

@@ -286,7 +286,7 @@ namespace castor3d
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
 		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( cuT( "c3d_mapOpacity" )
-			, 0u
+			, MinBufferIndex
 			, 1u
 			, checkFlag( textureFlags, TextureChannel::eOpacity ) ) );
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
