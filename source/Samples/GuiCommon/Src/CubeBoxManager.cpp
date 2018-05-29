@@ -74,16 +74,32 @@ namespace GuiCommon
 				switch ( scene.getMaterialsType() )
 				{
 				case MaterialType::eLegacy:
-					std::static_pointer_cast< LegacyPass >( pass )->setDiffuse( RgbColour::fromPredefined( colour ) );
-					std::static_pointer_cast< LegacyPass >( pass )->setAmbient( 1.0f );
+					{
+						auto & legacy = *std::static_pointer_cast< LegacyPass >( pass );
+						legacy.setDiffuse( RgbColour::fromPredefined( colour ) );
+						legacy.setSpecular( RgbColour::fromPredefined( colour ) );
+						legacy.setAmbient( 1.0f );
+					}
 					break;
 
 				case MaterialType::ePbrMetallicRoughness:
-					std::static_pointer_cast< MetallicRoughnessPbrPass >( pass )->setAlbedo( RgbColour::fromPredefined( colour ) );
+					{
+						auto & pbrmr = *std::static_pointer_cast< MetallicRoughnessPbrPass >( pass );
+						pbrmr.setAlbedo( RgbColour::fromPredefined( colour ) );
+						pbrmr.setRoughness( 1.0f );
+						pbrmr.setMetallic( 0.0f );
+						pbrmr.setEmissive( 1.0f );
+					}
 					break;
 
 				case MaterialType::ePbrSpecularGlossiness:
-					std::static_pointer_cast< SpecularGlossinessPbrPass >( pass )->setDiffuse( RgbColour::fromPredefined( colour ) );
+					{
+						auto & pbrsg = *std::static_pointer_cast< SpecularGlossinessPbrPass >( pass );
+						pbrsg.setDiffuse( RgbColour::fromPredefined( colour ) );
+						pbrsg.setSpecular( RgbColour::fromPredefined( colour ) );
+						pbrsg.setGlossiness( 0.0f );
+						pbrsg.setEmissive( 1.0f );
+					}
 					break;
 				}
 			}

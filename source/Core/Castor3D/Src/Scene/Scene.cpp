@@ -443,6 +443,7 @@ namespace castor3d
 		, m_listener{ engine.getFrameListenerCache().add( cuT( "Scene_" ) + name + string::toString( (size_t)this ) ) }
 		, m_animationUpdater{ std::max( 2u, engine.getCpuInformations().getCoreCount() - ( engine.isThreaded() ? 2u : 1u ) ) }
 		, m_background{ std::make_shared< ColourBackground >( engine, *this ) }
+		, m_colourBackground{ std::make_shared< ColourBackground >( engine, *this ) }
 		, m_billboardPools{ *engine.getRenderSystem() }
 	{
 		auto mergeObject = [this]( auto const & source
@@ -753,6 +754,7 @@ namespace castor3d
 		m_reflectionMaps.clear();
 
 		m_background.reset();
+		m_colourBackground.reset();
 		m_animatedObjectGroupCache.reset();
 		m_billboardCache.reset();
 		m_particleSystemCache.reset();
@@ -826,10 +828,8 @@ namespace castor3d
 		getListener().postEvent( makeFunctorEvent( EventType::ePreRender
 			, [this]()
 			{
-				if ( m_background )
-				{
-					m_background->cleanup();
-				}
+				m_background->cleanup();
+				m_colourBackground->cleanup();
 				m_billboardPools.clear();
 			} ) );
 	}
@@ -850,6 +850,7 @@ namespace castor3d
 	void Scene::updateDeviceDependent( Camera const & camera )
 	{
 		m_background->update( camera );
+		m_colourBackground->update( camera );
 		getMeshCache().forEach( []( Mesh & mesh )
 		{
 			for ( auto & submesh : mesh )

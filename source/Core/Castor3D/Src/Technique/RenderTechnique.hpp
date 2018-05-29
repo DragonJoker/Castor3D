@@ -192,21 +192,19 @@ namespace castor3d
 
 	private:
 		void doInitialiseShadowMaps();
-		void doInitialiseClearRenderPass();
+		void doInitialiseBackgroundPass();
 		void doInitialiseOpaquePass();
-		void doInitialiseBackgroundRenderPass();
 		void doInitialiseTransparentPass();
-		void doInitialiseDebugRenderPass();
+		void doInitialiseDebugPass();
 		void doCleanupShadowMaps();
 		void doUpdateShadowMaps( RenderQueueArray & queues );
 		void doUpdateParticles( RenderInfo & info );
 		renderer::Semaphore const * doRenderShadowMaps( renderer::Semaphore const & semaphore );
 		renderer::Semaphore const * doRenderEnvironmentMaps( renderer::Semaphore const & semaphore );
-		renderer::Semaphore const * doClear( renderer::SemaphoreCRefArray const & semaphores );
+		renderer::Semaphore const * doRenderBackground( renderer::SemaphoreCRefArray const & semaphores );
 		renderer::Semaphore const * doRenderOpaque( castor::Point2r const & jitter
 			, RenderInfo & info
 			, renderer::Semaphore const & semaphore );
-		renderer::Semaphore const * doRenderBackground( renderer::Semaphore const & semaphore );
 		renderer::Semaphore const * doRenderTransparent( castor::Point2r const & jitter
 			, RenderInfo & info
 			, renderer::Semaphore const & semaphore );
@@ -234,13 +232,11 @@ namespace castor3d
 		renderer::RenderPassPtr m_bgRenderPass;
 		renderer::FrameBufferPtr m_bgFrameBuffer;
 		renderer::CommandBufferPtr m_bgCommandBuffer;
-		renderer::RenderPassPtr m_clearRenderPass;
-		renderer::FrameBufferPtr m_clearFrameBuffer;
-		renderer::CommandBufferPtr m_clearCommandBuffer;
-		renderer::SemaphorePtr m_clearSemaphore;
+		renderer::CommandBufferPtr m_cbgCommandBuffer;
 		renderer::RenderPassPtr m_debugRenderPass;
 		renderer::FrameBufferPtr m_debugFrameBuffer;
 		OnBackgroundChangedConnection m_onBgChanged;
+		OnBackgroundChangedConnection m_onCBgChanged;
 	};
 }
 

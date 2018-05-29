@@ -136,7 +136,7 @@ namespace castor3d
 	{
 		REQUIRE( m_initialised );
 		renderer::ClearColorValue colour;
-		renderer::DepthStencilClearValue depth;
+		renderer::DepthStencilClearValue depth{ 1.0, 0 };
 		auto result = commandBuffer.begin();
 
 		if ( result )
@@ -437,7 +437,7 @@ namespace castor3d
 			renderer::MultisampleState{},
 			renderer::ColourBlendState::createDefault(),
 			{ renderer::DynamicState::eViewport, renderer::DynamicState::eScissor },
-			renderer::DepthStencilState{ 0u, true, false, renderer::CompareOp::eLessEqual }
+			renderer::DepthStencilState{ 0u, false, false, renderer::CompareOp::eLessEqual }
 		} );
 		return true;
 	}

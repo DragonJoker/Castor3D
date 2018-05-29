@@ -254,6 +254,16 @@ namespace castor3d
 			return *m_background;
 		}
 
+		inline SceneBackground const & getColourBackground()const
+		{
+			return *m_colourBackground;
+		}
+
+		inline SceneBackground & getColourBackground()
+		{
+			return *m_colourBackground;
+		}
+
 		inline std::vector< std::reference_wrapper< EnvironmentMap > > & getEnvironmentMaps()
 		{
 			return m_reflectionMapsArray;
@@ -419,6 +429,7 @@ namespace castor3d
 		castor::RgbColour m_ambientLight;
 		castor::RgbColour m_backgroundColour;
 		SceneBackgroundSPtr m_background;
+		SceneBackgroundSPtr m_colourBackground;
 		LightFactory m_lightFactory;
 		Fog m_fog;
 		FrameListenerWPtr m_listener;

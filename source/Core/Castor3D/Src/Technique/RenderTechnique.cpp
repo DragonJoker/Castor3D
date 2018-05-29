@@ -37,7 +37,7 @@ using namespace castor;
 #define DISPLAY_DEBUG_ENV_MAPS 0
 
 #define USE_WEIGHTED_BLEND 1
-#define DEBUG_FORWARD_RENDERING 0
+#define DEBUG_FORWARD_RENDERING 1
 
 namespace castor3d
 {
@@ -207,10 +207,7 @@ namespace castor3d
 	{
 		m_debugFrameBuffer.reset();
 		m_debugRenderPass.reset();
-		m_clearSemaphore.reset();
-		m_clearCommandBuffer.reset();
-		m_clearFrameBuffer.reset();
-		m_clearRenderPass.reset();
+		m_cbgCommandBuffer.reset();
 		m_bgCommandBuffer.reset();
 		m_bgFrameBuffer.reset();
 		m_bgRenderPass.reset();
@@ -247,11 +244,10 @@ namespace castor3d
 			m_hdrConfigUbo.initialise();
 
 			doInitialiseShadowMaps();
-			doInitialiseClearRenderPass();
-			doInitialiseBackgroundRenderPass();
+			doInitialiseBackgroundPass();
 			doInitialiseOpaquePass();
 			doInitialiseTransparentPass();
-			doInitialiseDebugRenderPass();
+			doInitialiseDebugPass();
 
 			m_particleTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Particles" ), cuT( "Particles" ) );
 			m_initialised = true;
@@ -263,13 +259,10 @@ namespace castor3d
 	void RenderTechnique::cleanup()
 	{
 		m_onBgChanged.disconnect();
-		m_clearCommandBuffer.reset();
-		m_clearFrameBuffer.reset();
-		m_clearRenderPass.reset();
-		m_clearSemaphore.reset();
 		m_debugFrameBuffer.reset();
 		m_debugRenderPass.reset();
 		m_bgCommandBuffer.reset();
+		m_cbgCommandBuffer.reset();
 		m_bgFrameBuffer.reset();
 		m_bgRenderPass.reset();
 		m_particleTimer.reset();
@@ -317,7 +310,7 @@ namespace castor3d
 		// Update part
 		doUpdateParticles( info );
 		m_hdrConfigUbo.update( m_renderTarget.getHdrConfig() );
-		auto * semaphore = doClear( waitSemaphores );
+		auto * semaphore = doRenderBackground( waitSemaphores );
 		semaphore = doRenderEnvironmentMaps( *semaphore );
 		semaphore = doRenderShadowMaps( *semaphore );
 
@@ -349,7 +342,6 @@ namespace castor3d
 
 		// Render part
 		semaphore = doRenderOpaque( jitter, info, *semaphore );
-		semaphore = doRenderBackground( *semaphore );
 		semaphore = doRenderTransparent( jitter, info, *semaphore );
 		return semaphore;
 	}
@@ -454,10 +446,14 @@ namespace castor3d
 			shadowMap->initialise();
 		}
 	}
-	
-	void RenderTechnique::doInitialiseClearRenderPass()
+
+	void RenderTechnique::doInitialiseBackgroundPass()
 	{
-		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & renderSystem = *getEngine()->getRenderSystem();
+		auto & device = *renderSystem.getCurrentDevice();
+		m_bgCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
+		m_cbgCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
+
 		renderer::RenderPassCreateInfo renderPass;
 		renderPass.flags = 0;
 
@@ -484,112 +480,6 @@ namespace castor3d
 		renderPass.subpasses[0].flags = 0u;
 		renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
 		renderPass.subpasses[0].colorAttachments = { { 1u, renderer::ImageLayout::eColourAttachmentOptimal } };
-
-		renderPass.dependencies.resize( 2u );
-		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
-		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eShaderRead;
-		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
-
-		renderPass.dependencies[1].srcSubpass = 0u;
-		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
-
-		m_clearRenderPass = device.createRenderPass( renderPass );
-
-		renderer::FrameBufferAttachmentArray attaches
-		{
-			{ *( m_clearRenderPass->getAttachments().begin() + 0u ), m_depthBuffer->getDefaultView() },
-			{ *( m_clearRenderPass->getAttachments().begin() + 1u ), m_colourTexture->getDefaultView() },
-		};
-		m_clearFrameBuffer = m_clearRenderPass->createFrameBuffer( { m_depthBuffer->getDimensions().width, m_depthBuffer->getDimensions().height }
-			, std::move( attaches ) );
-
-		m_clearCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
-		static renderer::ClearValueArray const clearValues
-		{
-			renderer::DepthStencilClearValue{ 1.0, 0 },
-			renderer::ClearColorValue{},
-		};
-
-		if ( m_clearCommandBuffer->begin() )
-		{
-			m_clearCommandBuffer->beginRenderPass( *m_clearRenderPass
-				, *m_clearFrameBuffer
-				, clearValues
-				, renderer::SubpassContents::eInline );
-			m_clearCommandBuffer->endRenderPass();
-			m_clearCommandBuffer->end();
-		}
-
-		m_clearSemaphore = device.createSemaphore();
-	}
-
-	void RenderTechnique::doInitialiseOpaquePass()
-	{
-#if !DEBUG_FORWARD_RENDERING
-
-		m_opaquePass->initialise( m_size );
-		m_deferredRendering = std::make_unique< DeferredRendering >( *getEngine()
-			, static_cast< OpaquePass & >( *m_opaquePass )
-			, m_depthBuffer
-			, m_renderTarget.getVelocity().getTexture()
-			, m_colourTexture
-			, m_renderTarget.getSize()
-			, *m_renderTarget.getScene()
-			, m_renderTarget.getCamera()->getViewport()
-			, m_ssaoConfig );
-
-#else
-
-		m_opaquePass->initialise( m_size );
-		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).initialiseRenderPass( m_colourTexture->getDefaultView()
-			, m_depthBuffer->getDefaultView()
-			, m_size
-			, true );
-
-#endif
-	}
-
-	void RenderTechnique::doInitialiseBackgroundRenderPass()
-	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
-		m_bgCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
-
-		renderer::RenderPassCreateInfo renderPass;
-		renderPass.flags = 0;
-
-		renderPass.attachments.resize( 2u );
-		renderPass.attachments[0].format = m_depthBuffer->getPixelFormat();
-		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
-		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
-		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
-
-		renderPass.attachments[1].format = m_colourTexture->getPixelFormat();
-		renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eLoad;
-		renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[1].initialLayout = renderer::ImageLayout::eColourAttachmentOptimal;
-		renderPass.attachments[1].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
-
-		renderPass.subpasses.resize( 1u );
-		renderPass.subpasses[0].flags = 0u;
-		renderPass.subpasses[0].colorAttachments = { { 1u, renderer::ImageLayout::eColourAttachmentOptimal } };
-		renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
 
 		renderPass.dependencies.resize( 2u );
 		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
@@ -632,6 +522,46 @@ namespace castor3d
 			{
 				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, prepareBackground ) );
 			} );
+		auto & cbackground = m_renderTarget.getScene()->getColourBackground();
+		auto prepareCBackground = [&cbackground, this]()
+		{
+			cbackground.initialise( *m_bgRenderPass, m_hdrConfigUbo );
+			cbackground.prepareFrame( *m_cbgCommandBuffer
+				, Size{ m_colourTexture->getWidth(), m_colourTexture->getHeight() }
+				, *m_bgRenderPass
+				, *m_bgFrameBuffer );
+		};
+		prepareCBackground();
+		m_onCBgChanged = cbackground.onChanged.connect( [prepareCBackground, this]( SceneBackground const & )
+			{
+				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, prepareCBackground ) );
+			} );
+	}
+
+	void RenderTechnique::doInitialiseOpaquePass()
+	{
+#if !DEBUG_FORWARD_RENDERING
+
+		m_opaquePass->initialise( m_size );
+		m_deferredRendering = std::make_unique< DeferredRendering >( *getEngine()
+			, static_cast< OpaquePass & >( *m_opaquePass )
+			, m_depthBuffer
+			, m_renderTarget.getVelocity().getTexture()
+			, m_colourTexture
+			, m_renderTarget.getSize()
+			, *m_renderTarget.getScene()
+			, m_renderTarget.getCamera()->getViewport()
+			, m_ssaoConfig );
+
+#else
+
+		m_opaquePass->initialise( m_size );
+		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).initialiseRenderPass( m_colourTexture->getDefaultView()
+			, m_depthBuffer->getDefaultView()
+			, m_size
+			, false );
+
+#endif
 	}
 
 	void RenderTechnique::doInitialiseTransparentPass()
@@ -651,7 +581,7 @@ namespace castor3d
 #endif
 	}
 
-	void RenderTechnique::doInitialiseDebugRenderPass()
+	void RenderTechnique::doInitialiseDebugPass()
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = *renderSystem.getCurrentDevice();
@@ -787,16 +717,35 @@ namespace castor3d
 		return result;
 	}
 
-	renderer::Semaphore const * RenderTechnique::doClear( renderer::SemaphoreCRefArray const & semaphores )
+	renderer::Semaphore const * RenderTechnique::doRenderBackground( renderer::SemaphoreCRefArray const & semaphores )
 	{
-		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
-		device.getGraphicsQueue().submit( { *m_clearCommandBuffer }
+		if ( m_renderTarget.getScene()->getFog().getType() != FogType::eDisabled )
+		{
+			auto & background = m_renderTarget.getScene()->getColourBackground();
+			auto & bgSemaphore = background.getSemaphore();
+			background.start();
+			background.notifyPassRender();
+			getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue().submit( { *m_cbgCommandBuffer }
+				, semaphores
+				, renderer::PipelineStageFlagsArray( semaphores.size(), renderer::PipelineStageFlag::eColourAttachmentOutput )
+				, { bgSemaphore }
+				, nullptr );
+			background.stop();
+			return &bgSemaphore;
+		}
+
+		auto & background = m_renderTarget.getScene()->getBackground();
+		auto & bgSemaphore = background.getSemaphore();
+		background.start();
+		background.notifyPassRender();
+		getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue().submit( { *m_bgCommandBuffer }
 			, semaphores
 			, renderer::PipelineStageFlagsArray( semaphores.size(), renderer::PipelineStageFlag::eColourAttachmentOutput )
-			, { *m_clearSemaphore }
+			, { bgSemaphore }
 			, nullptr );
-		device.waitIdle();
-		return m_clearSemaphore.get();
+		background.stop();
+		return &bgSemaphore;
+
 	}
 
 	renderer::Semaphore const * RenderTechnique::doRenderOpaque( Point2r const & jitter
@@ -812,7 +761,7 @@ namespace castor3d
 
 #if DEBUG_FORWARD_RENDERING
 
-			result = &static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).render( info, scene, camera, *result );
+			result = &static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).render( *result );
 
 #else
 
@@ -822,21 +771,6 @@ namespace castor3d
 		}
 
 		return result;
-	}
-
-	renderer::Semaphore const * RenderTechnique::doRenderBackground( renderer::Semaphore const & semaphore )
-	{
-		auto & background = m_renderTarget.getScene()->getBackground();
-		auto & bgSemaphore = background.getSemaphore();
-		background.start();
-		background.notifyPassRender();
-		getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue().submit( *m_bgCommandBuffer
-			, semaphore
-			, renderer::PipelineStageFlag::eColourAttachmentOutput
-			, bgSemaphore
-			, nullptr );
-		background.stop();
-		return &bgSemaphore;
 	}
 
 	renderer::Semaphore const * RenderTechnique::doRenderTransparent( Point2r const & jitter
