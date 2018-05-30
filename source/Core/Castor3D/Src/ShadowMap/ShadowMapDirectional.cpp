@@ -52,7 +52,7 @@ namespace castor3d
 				sampler->setWrapS( renderer::WrapMode::eClampToBorder );
 				sampler->setWrapT( renderer::WrapMode::eClampToBorder );
 				sampler->setWrapR( renderer::WrapMode::eClampToBorder );
-				sampler->setBorderColour( renderer::BorderColour::eFloatOpaqueWhite );
+				sampler->setBorderColour( renderer::BorderColour::eFloatOpaqueBlack );
 			}
 
 			renderer::ImageCreateInfo image{};

@@ -12,6 +12,19 @@ namespace castor3d
 {
 	namespace shader
 	{
+		struct OutputComponents
+		{
+			C3D_API explicit OutputComponents( glsl::GlslWriter & writer );
+			C3D_API OutputComponents( glsl::InOutVec3 const & diffuse
+				, glsl::InOutVec3 const & specular );
+			glsl::InOutVec3 m_diffuse;
+			glsl::InOutVec3 m_specular;
+		};
+
+		C3D_API castor::String paramToString( castor::String & sep
+			, OutputComponents const & value );
+		C3D_API castor::String toString( OutputComponents const & value );
+
 		class Shadow
 		{
 		public:
@@ -48,6 +61,14 @@ namespace castor3d
 				, glsl::Vec3 const & normal
 				, glsl::Float const & farPlane
 				, glsl::Int const & index );
+			C3D_API void computeVolumetric( glsl::Int const & shadowType
+				, glsl::Vec3 const & worldSpacePosition
+				, glsl::Vec3 const & eyePosition
+				, glsl::Mat4 const & lightMatrix
+				, glsl::Vec3 const & lightDirection
+				, glsl::Vec3 const & lightColour
+				, glsl::Vec2 const & lightIntensity
+				, OutputComponents & parentOutput );
 			C3D_API glsl::Float computeDirectionalShadow( glsl::Mat4 const & lightMatrix
 				, glsl::Vec3 const & worldSpacePosition
 				, glsl::Vec3 const & lightDirection
@@ -60,6 +81,13 @@ namespace castor3d
 				, glsl::Vec3 const & lightDirection
 				, glsl::Vec3 const & normal
 				, glsl::Float const & farPlane );
+			C3D_API void computeVolumetric( glsl::Vec3 const & worldSpacePosition
+				, glsl::Vec3 const & eyePosition
+				, glsl::Mat4 const & lightMatrix
+				, glsl::Vec3 const & lightDirection
+				, glsl::Vec3 const & lightColour
+				, glsl::Vec2 const & lightIntensity
+				, OutputComponents & parentOutput );
 
 		private:
 			glsl::Float chebyshevUpperBound( glsl::Vec2 const & moments
@@ -90,9 +118,11 @@ namespace castor3d
 			void doDeclareComputeDirectionalShadow();
 			void doDeclareComputeSpotShadow();
 			void doDeclareComputePointShadow();
+			void doDeclareVolumetric();
 			void doDeclareComputeOneDirectionalShadow( ShadowType type );
 			void doDeclareComputeOneSpotShadow( ShadowType type );
 			void doDeclareComputeOnePointShadow( ShadowType type );
+			void doDeclareOneVolumetric( ShadowType type );
 
 		private:
 			glsl::GlslWriter & m_writer;
@@ -155,6 +185,23 @@ namespace castor3d
 				, glsl::InVec3
 				, glsl::InVec3
 				, glsl::InFloat > m_computeOnePoint;
+			glsl::Function< glsl::Void
+				, glsl::InInt
+				, glsl::InVec3
+				, glsl::InVec3
+				, glsl::InMat4
+				, glsl::InVec3
+				, glsl::InVec3
+				, glsl::InVec2
+				, OutputComponents & > m_computeVolumetric;
+			glsl::Function< glsl::Void
+				, glsl::InVec3
+				, glsl::InVec3
+				, glsl::InMat4
+				, glsl::InVec3
+				, glsl::InVec3
+				, glsl::InVec2
+				, OutputComponents & > m_computeOneVolumetric;
 		};
 	}
 }

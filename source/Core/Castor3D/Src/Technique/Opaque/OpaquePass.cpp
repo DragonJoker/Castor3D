@@ -52,6 +52,7 @@ namespace castor3d
 	void OpaquePass::initialiseRenderPass( GeometryPassResult const & gpResult )
 	{
 		auto & device = getCurrentDevice( *this );
+		m_nodesCommands = device.getGraphicsCommandPool().createCommandBuffer();
 		renderer::RenderPassCreateInfo renderPass;
 		renderPass.flags = 0u;
 
@@ -134,6 +135,46 @@ namespace castor3d
 		, Point2r const & jitter )
 	{
 		doUpdate( info, jitter );
+	}
+
+	renderer::Semaphore const & OpaquePass::render( renderer::Semaphore const & toWait )
+	{
+		static renderer::ClearValueArray const clearValues
+		{
+			renderer::DepthStencilClearValue{ 1.0, 0 },
+			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
+			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
+			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
+			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
+			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
+		};
+		auto * result = &toWait;
+		auto & timer = getTimer();
+		auto & device = getCurrentDevice( *this );
+
+		if ( m_nodesCommands->begin() )
+		{
+			timer.start();
+			timer.beginPass( *m_nodesCommands );
+			timer.notifyPassRender();
+			m_nodesCommands->beginRenderPass( getRenderPass()
+				, *m_frameBuffer
+				, clearValues
+				, renderer::SubpassContents::eSecondaryCommandBuffers );
+			m_nodesCommands->executeCommands( { getCommandBuffer() } );
+			m_nodesCommands->endRenderPass();
+			timer.endPass( *m_nodesCommands );
+			m_nodesCommands->end();
+			device.getGraphicsQueue().submit( *m_nodesCommands
+				, *result
+				, renderer::PipelineStageFlag::eColourAttachmentOutput
+				, getSemaphore()
+				, nullptr );
+			result = &getSemaphore();
+			timer.stop();
+		}
+
+		return *result;
 	}
 
 	renderer::DescriptorSetLayoutBindingArray OpaquePass::doCreateUboBindings( PipelineFlags const & flags )const

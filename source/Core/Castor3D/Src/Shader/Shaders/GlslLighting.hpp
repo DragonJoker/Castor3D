@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_GlslLighting_H___
 #define ___C3D_GlslLighting_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "GlslShadow.hpp"
 
 #include <GlslIntrinsics.hpp>
 
@@ -21,22 +21,10 @@ namespace castor3d
 			glsl::InVec3 m_normal;
 		};
 
-		struct OutputComponents
-		{
-			C3D_API explicit OutputComponents( glsl::GlslWriter & writer );
-			C3D_API OutputComponents( glsl::InOutVec3 const & diffuse
-				, glsl::InOutVec3 const & specular );
-			glsl::InOutVec3 m_diffuse;
-			glsl::InOutVec3 m_specular;
-		};
-
 		C3D_API castor::String paramToString( castor::String & sep
 			, FragmentInput const & value );
-		C3D_API castor::String paramToString( castor::String & sep
-			, OutputComponents const & value );
 
 		C3D_API castor::String toString( FragmentInput const & value );
-		C3D_API castor::String toString( OutputComponents const & value );
 
 		class LightingModel
 		{

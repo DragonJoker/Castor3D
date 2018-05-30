@@ -1050,29 +1050,28 @@ namespace castor3d
 		, renderer::TextureView const & result
 		, SceneUbo & sceneUbo
 		, GpInfoUbo & gpInfoUbo
-		, SsaoConfig & config
+		, renderer::TextureView const * ssao
 		, Viewport const & viewport )
 		: OwnedBy< Engine >{ engine }
 		, m_device{ getCurrentDevice( engine ) }
 		, m_scene{ scene }
 		, m_gpInfoUbo{ gpInfoUbo }
+		, m_ssaoResult{ ssao }
 		, m_size{ result.getTexture().getDimensions().width, result.getTexture().getDimensions().height }
 		, m_sampler{ engine.getDefaultSampler() }
 		, m_geometryPassResult{ gp }
 		, m_lightDiffuse{ lightDiffuse }
 		, m_lightSpecular{ lightSpecular }
-		, m_ssaoConfig{ config }
 		, m_vertexBuffer{ doCreateVbo( engine ) }
 		, m_uboDescriptorLayout{ doCreateUboDescriptorLayout( engine ) }
 		, m_uboDescriptorPool{ m_uboDescriptorLayout->createPool( 1u ) }
 		, m_uboDescriptorSet{ doCreateUboDescriptorSet( engine, *m_uboDescriptorPool, sceneUbo, gpInfoUbo ) }
-		, m_texDescriptorLayout{ doCreateTexDescriptorLayout( engine, config.m_enabled, engine.getMaterialsType() ) }
+		, m_texDescriptorLayout{ doCreateTexDescriptorLayout( engine, m_ssaoResult != nullptr, engine.getMaterialsType() ) }
 		, m_texDescriptorPool{ m_texDescriptorLayout->createPool( 1u ) }
 		, m_texDescriptorSet{ doCreateTexDescriptorSet( *m_texDescriptorPool, m_sampler ) }
 		, m_renderPass{ doCreateRenderPass( engine, result.getFormat() ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_size, result ) }
 		, m_finished{ m_device.createSemaphore() }
-		, m_ssao{ engine, m_size, config, gp, viewport }
 		, m_fence{ m_device.createFence( renderer::FenceCreateFlag::eSignaled ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Opaque" ), cuT( "Reflection pass" ) ) }
 		, m_programs
@@ -1084,7 +1083,7 @@ namespace castor3d
 					*m_uboDescriptorLayout,
 					*m_texDescriptorLayout,
 					*m_renderPass,
-					config.m_enabled ? &m_ssao.getResult().getTexture()->getDefaultView() : nullptr,
+					m_ssaoResult,
 					m_size,
 					FogType::eDisabled,
 					engine.getMaterialsType(),
@@ -1095,7 +1094,7 @@ namespace castor3d
 					*m_uboDescriptorLayout,
 					*m_texDescriptorLayout,
 					*m_renderPass,
-					config.m_enabled ? &m_ssao.getResult().getTexture()->getDefaultView() : nullptr,
+					m_ssaoResult,
 					m_size,
 					FogType::eLinear,
 					engine.getMaterialsType(),
@@ -1106,7 +1105,7 @@ namespace castor3d
 					*m_uboDescriptorLayout,
 					*m_texDescriptorLayout,
 					*m_renderPass,
-					config.m_enabled ? &m_ssao.getResult().getTexture()->getDefaultView() : nullptr,
+					m_ssaoResult,
 					m_size,
 					FogType::eExponential,
 					engine.getMaterialsType(),
@@ -1117,14 +1116,14 @@ namespace castor3d
 					*m_uboDescriptorLayout,
 					*m_texDescriptorLayout,
 					*m_renderPass,
-					config.m_enabled ? &m_ssao.getResult().getTexture()->getDefaultView() : nullptr,
+					m_ssaoResult,
 					m_size,
 					FogType::eSquaredExponential,
 					engine.getMaterialsType(),
 				},
 			}
 		}
-		, m_ssaoEnabled{ config.m_enabled }
+		, m_ssaoEnabled{ ssao != nullptr }
 		, m_viewport{ engine }
 	{
 		m_viewport.setOrtho( 0, 1, 0, 1, 0, 1 );
@@ -1134,18 +1133,13 @@ namespace castor3d
 
 	void ReflectionPass::update( Camera const & camera )
 	{
-		if ( m_ssaoEnabled )
-		{
-			m_ssao.update( camera );
-		}
-
 		auto index = size_t( m_scene.getFog().getType() );
 		auto & program = m_programs[index];
 		auto texDescriptorWrites = doCreateTexDescriptorWrites( *m_texDescriptorLayout
 			, m_geometryPassResult
 			, m_lightDiffuse
 			, m_lightSpecular
-			, m_ssaoConfig.m_enabled ? &m_ssao.getResult().getTexture()->getDefaultView() : nullptr
+			, m_ssaoResult
 			, m_sampler
 			, m_scene
 			, getEngine()->getMaterialsType()
@@ -1162,13 +1156,6 @@ namespace castor3d
 	renderer::Semaphore const & ReflectionPass::render( renderer::Semaphore const & toWait )const
 	{
 		auto * result = &toWait;
-		TextureUnit const * ssao = nullptr;
-
-		if ( m_ssaoEnabled )
-		{
-			result = &m_ssao.render( *result );
-		}
-
 		m_timer->start();
 		m_timer->notifyPassRender();
 		auto index = size_t( m_scene.getFog().getType() );
@@ -1185,11 +1172,6 @@ namespace castor3d
 
 	void ReflectionPass::accept( RenderTechniqueVisitor & visitor )
 	{
-		if ( m_ssaoEnabled )
-		{
-			m_ssao.accept( visitor );
-		}
-
 		auto index = size_t( m_scene.getFog().getType() );
 		auto & program = m_programs[index];
 		program.accept( visitor );

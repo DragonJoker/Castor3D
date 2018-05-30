@@ -23,27 +23,11 @@ namespace castor3d
 			return result.str();
 		}
 
-		String paramToString( String & sep, OutputComponents const & value )
-		{
-			StringStream result{ makeStringStream() };
-			result << paramToString( sep, value.m_diffuse );
-			result << paramToString( sep, value.m_specular );
-			return result.str();
-		}
-
 		String toString( FragmentInput const & value )
 		{
 			StringStream result{ makeStringStream() };
 			result << toString( value.m_vertex ) << ", ";
 			result << toString( value.m_normal );
-			return result.str();
-		}
-
-		String toString( OutputComponents const & value )
-		{
-			StringStream result{ makeStringStream() };
-			result << toString( value.m_diffuse ) << ", ";
-			result << toString( value.m_specular );
 			return result.str();
 		}
 
@@ -59,21 +43,6 @@ namespace castor3d
 			, InVec3 const & v3Normal )
 			: m_vertex{ v3Vertex }
 			, m_normal{ v3Normal }
-		{
-		}
-
-		//***********************************************************************************************
-
-		OutputComponents::OutputComponents( GlslWriter & writer )
-			: m_diffuse{ &writer, cuT( "outDiffuse" ) }
-			, m_specular{ &writer, cuT( "outSpecular" ) }
-		{
-		}
-
-		OutputComponents::OutputComponents( InOutVec3 const & v3Diffuse
-			, InOutVec3 const & v3Specular )
-			: m_diffuse{ v3Diffuse }
-			, m_specular{ v3Specular }
 		{
 		}
 

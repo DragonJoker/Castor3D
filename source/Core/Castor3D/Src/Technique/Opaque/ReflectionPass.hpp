@@ -5,7 +5,6 @@ See LICENSE file in root folder
 #define ___C3D_DeferredReflectionPass_H___
 
 #include "LightPass.hpp"
-#include "SsaoPass.hpp"
 #include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Render/RenderInfo.hpp"
 #include "Shader/Ubos/HdrConfigUbo.hpp"
@@ -71,7 +70,7 @@ namespace castor3d
 			, renderer::TextureView const & result
 			, SceneUbo & sceneUbo
 			, GpInfoUbo & gpInfoUbo
-			, SsaoConfig & config
+			, renderer::TextureView const * ssao
 			, Viewport const & viewport );
 		/**
 		 *\~english
@@ -95,20 +94,6 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
-		/**
-		*\~english
-		*name
-		*	Getters.
-		*\~french
-		*name
-		*	Accesseurs.
-		*/
-		/**@{*/
-		inline TextureLayout const & getSsao()const
-		{
-			return *m_ssao.getResult().getTexture();
-		}
-		/**@}*/
 
 	private:
 		struct ProgramPipeline
@@ -146,13 +131,13 @@ namespace castor3d
 		renderer::Device const & m_device;
 		Scene const & m_scene;
 		GpInfoUbo & m_gpInfoUbo;
+		renderer::TextureView const * m_ssaoResult;
 		renderer::Extent2D m_size;
 		Viewport m_viewport;
 		SamplerSPtr m_sampler;
 		GeometryPassResult const & m_geometryPassResult;
 		renderer::TextureView const & m_lightDiffuse;
 		renderer::TextureView const & m_lightSpecular;
-		SsaoConfig const & m_ssaoConfig;
 		renderer::VertexBufferBasePtr m_vertexBuffer;
 		renderer::DescriptorSetLayoutPtr m_uboDescriptorLayout;
 		renderer::DescriptorSetPoolPtr m_uboDescriptorPool;
@@ -165,7 +150,6 @@ namespace castor3d
 		renderer::FrameBufferPtr m_frameBuffer;
 		renderer::SemaphorePtr m_finished;
 		renderer::FencePtr m_fence;
-		SsaoPass m_ssao;
 		RenderPassTimerSPtr m_timer;
 		ReflectionPrograms m_programs;
 		bool m_ssaoEnabled{ false };

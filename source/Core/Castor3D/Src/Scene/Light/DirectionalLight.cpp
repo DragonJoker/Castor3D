@@ -58,7 +58,7 @@ namespace castor3d
 		auto node = getLight().getParent();
 		node->update();
 		auto orientation = node->getDerivedOrientation();
-		Point3f position;
+		Point3f position{ target };
 		Point3f up{ 0, 1, 0 };
 		orientation.transform( up, up );
 		matrix::lookAt( m_lightSpace, position, position + m_direction, up );

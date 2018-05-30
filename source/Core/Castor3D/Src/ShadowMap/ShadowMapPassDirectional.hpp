@@ -54,16 +54,6 @@ namespace castor3d
 		 *\copydoc		castor3d::ShadowMapPass::updateDeviceDependent
 		 */
 		void updateDeviceDependent( uint32_t index )override;
-		/**
-		 *\~english
-		 *\return		The camera.
-		 *\~french
-		 *\return		La caméra.
-		 */
-		inline CameraSPtr getCamera()const
-		{
-			return m_camera;
-		}
 
 	private:
 		/**

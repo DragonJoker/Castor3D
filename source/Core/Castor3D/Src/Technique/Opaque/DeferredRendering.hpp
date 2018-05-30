@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "Technique/Opaque/GeometryPassResult.hpp"
 #include "Technique/Opaque/LightingPass.hpp"
 #include "Technique/Opaque/ReflectionPass.hpp"
+#include "Technique/Opaque/SsaoPass.hpp"
 #include "Technique/Opaque/SubsurfaceScatteringPass.hpp"
 
 namespace castor3d
@@ -113,12 +114,11 @@ namespace castor3d
 		castor::Size m_size;
 		GpInfoUbo m_gpInfoUbo;
 		std::unique_ptr< LightingPass > m_lightingPass;
-		std::vector< std::unique_ptr< ReflectionPass > > m_reflection;
+		std::unique_ptr< SsaoPass > m_ssao;
 		std::unique_ptr< SubsurfaceScatteringPass > m_subsurfaceScattering;
+		std::vector< std::unique_ptr< ReflectionPass > > m_reflection;
 		GeometryPassResult m_geometryPassResult;
 		std::vector< renderer::TexturePtr > m_results;
-		renderer::CommandBufferPtr m_nodesCommands;
-		renderer::FencePtr m_fence;
 	};
 }
 

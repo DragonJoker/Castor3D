@@ -71,6 +71,11 @@ namespace castor3d
 			, depthTexture->getDefaultView()
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo );
+		m_ssao = std::make_unique< SsaoPass >( engine
+			, renderer::Extent2D{ m_size.getWidth(), m_size.getHeight() }
+			, m_ssaoConfig
+			, m_geometryPassResult
+			, viewport );
 		m_subsurfaceScattering = std::make_unique< SubsurfaceScatteringPass >( engine
 			, m_gpInfoUbo
 			, m_opaquePass.getSceneUbo()
@@ -85,7 +90,7 @@ namespace castor3d
 			, resultTexture->getDefaultView()
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
-			, m_ssaoConfig
+			, m_ssaoConfig.m_enabled ? &m_ssao->getResult().getTexture()->getDefaultView() : nullptr
 			, viewport ) );
 		m_reflection.emplace_back( std::make_unique< ReflectionPass >( engine
 			, scene
@@ -95,11 +100,8 @@ namespace castor3d
 			, resultTexture->getDefaultView()
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
-			, m_ssaoConfig
+			, m_ssaoConfig.m_enabled ? &m_ssao->getResult().getTexture()->getDefaultView() : nullptr
 			, viewport ) );
-
-		m_nodesCommands = getCurrentDevice( renderSystem ).getGraphicsCommandPool().createCommandBuffer();
-		m_fence = getCurrentDevice( renderSystem ).createFence( renderer::FenceCreateFlag::eSignaled );
 	}
 
 	DeferredRendering::~DeferredRendering()
@@ -126,8 +128,20 @@ namespace castor3d
 			, invProj );
 		m_opaquePass.update( info
 			, jitter );
-		m_reflection[0]->update( camera );
-		m_reflection[1]->update( camera );
+
+		if ( m_ssaoConfig.m_enabled )
+		{
+			m_ssao->update( camera );
+		}
+
+		if ( scene.needsSubsurfaceScattering() )
+		{
+			m_reflection[1]->update( camera );
+		}
+		else
+		{
+			m_reflection[0]->update( camera );
+		}
 	}
 
 	renderer::Semaphore const & DeferredRendering::render( RenderInfo & info
@@ -137,43 +151,17 @@ namespace castor3d
 	{
 		renderer::Semaphore const * result = &toWait;
 		m_engine.setPerObjectLighting( false );
-		m_opaquePass.getTimer().start();
-		auto & device = getCurrentDevice( m_engine );
-		static renderer::ClearValueArray const clearValues
-		{
-			renderer::DepthStencilClearValue{ 1.0, 0 },
-			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
-			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
-			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
-			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
-			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
-		};
-
-		if ( m_nodesCommands->begin() )
-		{
-			m_opaquePass.getTimer().beginPass( *m_nodesCommands );
-			m_opaquePass.getTimer().notifyPassRender();
-			m_nodesCommands->beginRenderPass( m_opaquePass.getRenderPass()
-				, m_opaquePass.getFrameBuffer()
-				, clearValues
-				, renderer::SubpassContents::eSecondaryCommandBuffers );
-			m_nodesCommands->executeCommands( { m_opaquePass.getCommandBuffer() } );
-			m_nodesCommands->endRenderPass();
-			m_opaquePass.getTimer().endPass( *m_nodesCommands );
-			m_nodesCommands->end();
-			device.getGraphicsQueue().submit( *m_nodesCommands
-				, *result
-				, renderer::PipelineStageFlag::eColourAttachmentOutput
-				, m_opaquePass.getSemaphore()
-				, nullptr );
-			result = &m_opaquePass.getSemaphore();
-		}
-
+		result = &m_opaquePass.render( *result );
 		result = &m_lightingPass->render( scene
 			, camera
 			, m_geometryPassResult
 			, *result
 			, info );
+
+		if ( m_ssaoConfig.m_enabled )
+		{
+			result = &m_ssao->render( *result );
+		}
 
 		if ( scene.needsSubsurfaceScattering() )
 		{
@@ -185,7 +173,6 @@ namespace castor3d
 			result = &m_reflection[0]->render( *result );
 		}
 
-		m_opaquePass.getTimer().stop();
 		return *result;
 	}
 
@@ -218,6 +205,11 @@ namespace castor3d
 	void DeferredRendering::accept( RenderTechniqueVisitor & visitor )
 	{
 		m_opaquePass.accept( visitor );
+
+		if ( m_ssaoConfig.m_enabled )
+		{
+			m_ssao->accept( visitor );
+		}
 
 		if ( visitor.getScene().needsSubsurfaceScattering() )
 		{

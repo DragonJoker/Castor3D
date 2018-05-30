@@ -18,54 +18,6 @@ namespace castor3d
 {
 	namespace
 	{
-		renderer::RenderPassPtr doCreateRenderPass( Engine & engine
-			, renderer::TextureView const & depthView
-			, renderer::TextureView const & colourView )
-		{
-			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = getCurrentDevice( renderSystem );
-
-			renderer::RenderPassCreateInfo createInfo{};
-			createInfo.flags = 0u;
-
-			createInfo.attachments.resize( 1u );
-			createInfo.attachments[0].format = colourView.getFormat();
-			createInfo.attachments[0].samples = renderer::SampleCountFlag::e1;
-			createInfo.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
-			createInfo.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
-			createInfo.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-			createInfo.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-			createInfo.attachments[0].initialLayout = renderer::ImageLayout::eColourAttachmentOptimal;
-			createInfo.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
-
-			renderer::AttachmentReference colourReference;
-			colourReference.attachment = 0u;
-			colourReference.layout = renderer::ImageLayout::eColourAttachmentOptimal;
-
-			createInfo.subpasses.resize( 1u );
-			createInfo.subpasses[0].flags = 0u;
-			createInfo.subpasses[0].colorAttachments = { { 0u, renderer::ImageLayout::eColourAttachmentOptimal } };
-
-			//createInfo.dependencies.resize( 2u );
-			//createInfo.dependencies[0].srcSubpass = renderer::ExternalSubpass;
-			//createInfo.dependencies[0].dstSubpass = 0u;
-			//createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			//createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
-			//createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			//createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-			//createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
-
-			//createInfo.dependencies[1].srcSubpass = 0u;
-			//createInfo.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-			//createInfo.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			//createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
-			//createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			//createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-			//createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
-
-			return device.createRenderPass( createInfo );
-		}
-
 		renderer::TexturePtr doCreateTexture( Engine & engine
 			, Size const & size
 			, WbTexture texture )
@@ -103,18 +55,6 @@ namespace castor3d
 				, std::move( attaches ) );
 		}
 
-		renderer::FrameBufferPtr doCreateFrameBuffer( renderer::RenderPass const & renderPass
-			, Size const & size
-			, renderer::TextureView const & colourView )
-		{
-			renderer::FrameBufferAttachmentArray attaches
-			{
-				{ *( renderPass.getAttachments().begin() + 0u ), colourView },
-			};
-			return renderPass.createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
-				, std::move( attaches ) );
-		}
-
 		renderer::TextureViewPtr doCreateDepthView( Engine & engine
 			, renderer::TextureView const & depthView )
 		{
@@ -146,13 +86,8 @@ namespace castor3d
 		, m_accumulationView{ m_accumulation->createView( renderer::TextureViewType::e2D, m_accumulation->getFormat() ) }
 		, m_revealage{ doCreateTexture( engine, m_size, WbTexture::eRevealage ) }
 		, m_revealageView{ m_revealage->createView( renderer::TextureViewType::e2D, m_revealage->getFormat() ) }
-		, m_renderPass{ doCreateRenderPass( engine, *m_depthView, colourView ) }
 		, m_weightedBlendPassResult{ { *m_depthView, *m_accumulationView, *m_revealageView, velocityTexture->getDefaultView() } }
-		, m_frameBufferCB{ doCreateFrameBuffer( *m_renderPass, m_size, colourView ) }
-		, m_finalCombinePass{ engine, m_size, m_transparentPass.getSceneUbo(), m_weightedBlendPassResult, *m_renderPass }
-		, m_commandBuffer{ getCurrentDevice( engine ).getGraphicsCommandPool().createCommandBuffer() }
-		, m_semaphore{ getCurrentDevice( engine ).createSemaphore() }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Transparent" ), cuT( "Resolve" ) ) }
+		, m_finalCombinePass{ engine, m_size, m_transparentPass.getSceneUbo(), m_weightedBlendPassResult, colourView }
 	{
 	}
 
@@ -178,53 +113,20 @@ namespace castor3d
 		, Scene const & scene
 		, renderer::Semaphore const & toWait )
 	{
-		if ( !m_frameBufferWB )
+		if ( !m_frameBuffer )
 		{
-			m_frameBufferWB = doCreateFrameBuffer( m_transparentPass.getRenderPass(), m_size, m_weightedBlendPassResult );
+			m_frameBuffer = doCreateFrameBuffer( m_transparentPass.getRenderPass()
+				, m_size
+				, m_weightedBlendPassResult );
 		}
 
-		static renderer::DepthStencilClearValue const depthClear{ 1.0, 0 };
-		static renderer::ClearColorValue const accumClear{ 0.0, 0.0, 0.0, 0.0 };
-		static renderer::ClearColorValue const revealClear{ 1.0, 1.0, 1.0, 1.0 };
-		static renderer::ClearColorValue const velocityClear{};
 		m_engine.setPerObjectLighting( true );
-		auto & device = getCurrentDevice( m_engine );
-
-		// Accumulate blend.
-		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
-		{
-			m_transparentPass.getTimer().start();
-			m_transparentPass.getTimer().beginPass( *m_commandBuffer );
-			m_transparentPass.getTimer().notifyPassRender();
-			m_commandBuffer->beginRenderPass( m_transparentPass.getRenderPass()
-				, *m_frameBufferWB
-				, { depthClear, accumClear, revealClear, velocityClear }
-				, renderer::SubpassContents::eSecondaryCommandBuffers );
-			m_commandBuffer->executeCommands( { m_transparentPass.getCommandBuffer() } );
-			m_commandBuffer->endRenderPass();
-			m_transparentPass.getTimer().endPass( *m_commandBuffer );
-			m_transparentPass.getTimer().stop();
-
-			m_timer->start();
-			m_timer->beginPass( *m_commandBuffer );
-			m_timer->notifyPassRender();
-			m_commandBuffer->beginRenderPass( *m_renderPass
-				, *m_frameBufferCB
-				, { accumClear }
-				, renderer::SubpassContents::eSecondaryCommandBuffers );
-			m_commandBuffer->executeCommands( { m_finalCombinePass.getCommandBuffer( scene.getFog().getType() ) } );
-			m_commandBuffer->endRenderPass();
-			m_timer->endPass( *m_commandBuffer );
-			m_commandBuffer->end();
-			m_timer->stop();
-		}
-
-		device.getGraphicsQueue().submit( *m_commandBuffer
-			, toWait
-			, renderer::PipelineStageFlag::eColourAttachmentOutput
-			, *m_semaphore
-			, nullptr );
-		return *m_semaphore;
+		auto * result = &toWait;
+		result = &m_transparentPass.render( *m_frameBuffer
+			, *result );
+		result = &m_finalCombinePass.render( scene.getFog().getType()
+			, *result );
+		return *result;
 	}
 
 	void WeightedBlendRendering::debugDisplay()

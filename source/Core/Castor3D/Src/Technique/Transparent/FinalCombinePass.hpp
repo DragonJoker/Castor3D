@@ -30,13 +30,13 @@ namespace castor3d
 		FinalCombineProgram & operator=( FinalCombineProgram && rhs ) = default;
 		FinalCombineProgram( Engine & engine
 			, renderer::RenderPass const & renderPass
+			, RenderPassTimer & timer
 			, renderer::DescriptorSetLayout const & uboLayout
 			, renderer::DescriptorSetLayout const & texLayout
 			, renderer::VertexLayout const & vtxLayout
 			, FogType fogType );
 		~FinalCombineProgram();
-		void prepare( renderer::RenderPass const & renderPass
-			, castor::Size const & size
+		void prepare( renderer::FrameBuffer const & frameBuffer
 			, renderer::DescriptorSet const & uboDescriptorSet
 			, renderer::DescriptorSet const & texDescriptorSet
 			, renderer::BufferBase const & vbo );
@@ -48,6 +48,8 @@ namespace castor3d
 		}
 
 	private:
+		RenderPassTimer & m_timer;
+		renderer::RenderPass const & m_renderPass;
 		glsl::Shader m_vertexShader;
 		glsl::Shader m_pixelShader;
 		renderer::PipelineLayoutPtr m_pipelineLayout;
@@ -85,7 +87,7 @@ namespace castor3d
 			, castor::Size const & size
 			, SceneUbo & sceneUbo
 			, WeightedBlendTextures const & wbResult
-			, renderer::RenderPass const & renderPass );
+			, renderer::TextureView const & colourView );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -113,11 +115,12 @@ namespace castor3d
 			, Matrix4x4r const & invProj );
 		/**
 		 *\~english
-		 *\brief		Retrieves the command buffer for given fog type.
+		 *\brief		Renders the combine pass.
 		 *\~french
-		 *\brief		Récupère le tampon de commandes pour le type de brouillard donné.
+		 *\brief		Dessine la passe de combinaison.
 		 */
-		renderer::CommandBuffer const & getCommandBuffer( FogType fogType );
+		renderer::Semaphore const & render( FogType fogType
+			, renderer::Semaphore const & toWait );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -125,6 +128,7 @@ namespace castor3d
 
 	private:
 		castor::Size m_size;
+		Engine & m_engine;
 		SceneUbo & m_sceneUbo;
 		GpInfoUbo m_gpInfo;
 		SamplerSPtr m_sampler;
@@ -136,7 +140,11 @@ namespace castor3d
 		renderer::DescriptorSetLayoutPtr m_texDescriptorLayout;
 		renderer::DescriptorSetPoolPtr m_texDescriptorPool;
 		renderer::DescriptorSetPtr m_texDescriptorSet;
+		renderer::RenderPassPtr m_renderPass;
+		RenderPassTimerSPtr m_timer;
 		FinalCombinePrograms m_programs;
+		renderer::FrameBufferPtr m_frameBuffer;
+		renderer::SemaphorePtr m_semaphore;
 	};
 }
 

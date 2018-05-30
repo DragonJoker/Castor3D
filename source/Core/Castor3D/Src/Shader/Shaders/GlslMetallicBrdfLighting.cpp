@@ -193,6 +193,20 @@ namespace castor3d
 						, shadowFactor
 						, fragmentIn
 						, output );
+
+					IF( m_writer, light.m_lightBase().m_shadowType() != Int( int( ShadowType::eNone ) ) )
+					{
+						m_shadowModel->computeVolumetric( light.m_lightBase().m_shadowType()
+							, fragmentIn.m_vertex
+							, worldEye
+							, light.m_transform()
+							, -lightDirection
+							, light.m_lightBase().m_colour()
+							, light.m_lightBase().m_intensity()
+							, output );
+					}
+					FI
+
 					parentOutput.m_diffuse += output.m_diffuse;
 					parentOutput.m_specular += output.m_specular;
 				}
@@ -393,6 +407,18 @@ namespace castor3d
 						, shadowFactor
 						, fragmentIn
 						, output );
+
+					if ( shadowType != ShadowType::eNone )
+					{
+						m_shadowModel->computeVolumetric( fragmentIn.m_vertex
+							, worldEye
+							, light.m_transform()
+							, -lightDirection
+							, light.m_lightBase().m_colour()
+							, light.m_lightBase().m_intensity()
+							, output );
+					}
+
 					parentOutput.m_diffuse = output.m_diffuse;
 					parentOutput.m_specular = output.m_specular;
 				}

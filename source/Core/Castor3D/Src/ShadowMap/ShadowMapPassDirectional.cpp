@@ -40,11 +40,25 @@ namespace castor3d
 		, Light & light
 		, uint32_t index )
 	{
-		light.updateShadow( light.getParent()->getDerivedPosition()
-			, m_camera->getViewport()
-			, index );
+		auto cameraNode = camera.getParent();
+		auto lightNode = light.getParent();
 		m_camera->attachTo( light.getParent() );
 		m_camera->update();
+		light.updateShadow( cameraNode->getDerivedPosition()
+			, m_camera->getViewport()
+			, index );
+
+		auto position = cameraNode->getDerivedPosition();
+		auto const & orientation = lightNode->getDerivedOrientation();
+		Point3r right{ 1.0_r, 0.0_r, 0.0_r };
+		Point3r up{ 0.0_r, 1.0_r, 0.0_r };
+		orientation.transform( right, right );
+		orientation.transform( up, up );
+		Point3r front{ point::cross( right, up ) };
+		up = point::cross( front, right );
+
+		// Update view matrix
+		matrix::lookAt( m_view, position, position + front, up );
 
 		if ( light.getDirectionalLight()->getFarPlane() != m_farPlane )
 		{
@@ -66,7 +80,7 @@ namespace castor3d
 				m_shadowConfig->upload();
 			}
 
-			m_matrixUbo.update( m_camera->getView()
+			m_matrixUbo.update( m_view
 				, m_camera->getViewport().getProjection() );
 			doUpdateNodes( m_renderQueue.getCulledRenderNodes(), *m_camera );
 		}
@@ -78,7 +92,7 @@ namespace castor3d
 		Viewport viewport{ *getEngine() };
 		auto w = float( size.getWidth() );
 		auto h = float( size.getHeight() );
-		viewport.setOrtho( -1024, 1024, 1024, -1024, -5120.0_r, 5120.0_r );
+		viewport.setOrtho( -w / 2, w / 2, h / 2, -h / 2, -5120.0_r, 5120.0_r );
 		viewport.update();
 		m_camera = std::make_shared< Camera >( cuT( "ShadowMapDirectional" )
 			, m_scene

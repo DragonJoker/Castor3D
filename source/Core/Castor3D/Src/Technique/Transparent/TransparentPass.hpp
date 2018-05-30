@@ -119,6 +119,14 @@ namespace castor3d
 		void update( RenderInfo & info
 			, castor::Point2r const & jitter )override;
 		/**
+		 *\~english
+		 *\brief		Renders transparent nodes.
+		 *\~french
+		 *\brief		Dessine les noeuds transparents.
+		 */
+		renderer::Semaphore const & render( renderer::FrameBuffer const & frameBuffer
+			, renderer::Semaphore const & toWait );
+		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
@@ -207,6 +215,7 @@ namespace castor3d
 
 	private:
 		renderer::Format m_depthFormat;
+		renderer::CommandBufferPtr m_nodesCommands;
 	};
 }
 

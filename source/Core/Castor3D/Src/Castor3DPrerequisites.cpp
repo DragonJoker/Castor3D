@@ -239,7 +239,7 @@ namespace castor3d
 				if ( checkFlag( textureFlags, TextureChannel::eGloss ) )
 				{
 					auto c3d_mapGloss( writer.getBuiltin< Sampler2D >( cuT( "c3d_mapGloss" ) ) );
-					shininess = texture( c3d_mapGloss, texCoord.xy() ).r() * 128.0_f;
+					shininess = texture( c3d_mapGloss, texCoord.xy() ).r() * 255.0_f;
 				}
 			}
 

@@ -1,6 +1,7 @@
 #include "FinalCombinePass.hpp"
 
 #include <Engine.hpp>
+#include <Render/RenderPassTimer.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Scene/Camera.hpp>
@@ -324,24 +325,83 @@ namespace castor3d
 				dsstate,
 			} );
 		}
+
+		renderer::RenderPassPtr doCreateRenderPass( Engine & engine
+			, renderer::TextureView const & colourView )
+		{
+			renderer::RenderPassCreateInfo renderPass{};
+			renderPass.flags = 0u;
+
+			renderPass.attachments.resize( 1u );
+			renderPass.attachments[0].format = colourView.getFormat();
+			renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+			renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
+			renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+			renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+			renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+			renderPass.attachments[0].initialLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+			renderPass.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+			renderer::AttachmentReference colourReference;
+			colourReference.attachment = 0u;
+			colourReference.layout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+			renderPass.subpasses.resize( 1u );
+			renderPass.subpasses[0].flags = 0u;
+			renderPass.subpasses[0].colorAttachments = { { 0u, renderer::ImageLayout::eColourAttachmentOptimal } };
+
+			renderPass.dependencies.resize( 2u );
+			renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+			renderPass.dependencies[0].dstSubpass = 0u;
+			renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+			renderPass.dependencies[1].srcSubpass = 0u;
+			renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+			renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+			renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+			renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+			return getCurrentDevice( engine ).createRenderPass( renderPass );
+		}
+
+		renderer::FrameBufferPtr doCreateFrameBuffer( renderer::RenderPass const & renderPass
+			, Size const & size
+			, renderer::TextureView const & colourView )
+		{
+			renderer::FrameBufferAttachmentArray attaches
+			{
+				{ *( renderPass.getAttachments().begin() + 0u ), colourView },
+			};
+			return renderPass.createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
+			, std::move( attaches ) );
+		}
 	}
 
 	//*********************************************************************************************
 
 	FinalCombineProgram::FinalCombineProgram( Engine & engine
 		, renderer::RenderPass const & renderPass
+		, RenderPassTimer & timer
 		, renderer::DescriptorSetLayout const & uboLayout
 		, renderer::DescriptorSetLayout const & texLayout
 		, renderer::VertexLayout const & vtxLayout
 		, FogType fogType )
-		: m_pipelineLayout{ doCreateRenderPipelineLayout( engine
+		: m_timer{ timer }
+		, m_renderPass{ renderPass }
+		, m_pipelineLayout{ doCreateRenderPipelineLayout( engine
 			, uboLayout
 			, texLayout ) }
 		, m_pipeline{ doCreateRenderPipeline( *m_pipelineLayout
 			, doCreateProgram( engine, fogType, m_vertexShader, m_pixelShader )
 			, renderPass
 			, vtxLayout ) }
-		, m_commandBuffer{ getCurrentDevice( engine ).getGraphicsCommandPool().createCommandBuffer( false ) }
+		, m_commandBuffer{ getCurrentDevice( engine ).getGraphicsCommandPool().createCommandBuffer( true ) }
 	{
 	}
 
@@ -350,29 +410,26 @@ namespace castor3d
 		m_pipeline.reset();
 	}
 
-	void FinalCombineProgram::prepare( renderer::RenderPass const & renderPass
-		, Size const & size
+	void FinalCombineProgram::prepare( renderer::FrameBuffer const & frameBuffer
 		, renderer::DescriptorSet const & uboDescriptorSet
 		, renderer::DescriptorSet const & texDescriptorSet
 		, renderer::BufferBase const & vbo )
 	{
-		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eRenderPassContinue
-			, renderer::CommandBufferInheritanceInfo
-			{
-				&renderPass,
-				0u,
-				nullptr,
-				false,
-				0u,
-				0u
-			} ) )
+		if ( m_commandBuffer->begin() )
 		{
+			m_timer.beginPass( *m_commandBuffer );
+			m_commandBuffer->beginRenderPass( m_renderPass
+				, frameBuffer
+				, { renderer::ClearColorValue{} }
+				, renderer::SubpassContents::eInline );
 			m_commandBuffer->bindPipeline( *m_pipeline );
-			m_commandBuffer->setViewport( { size.getWidth(), size.getHeight(), 0, 0 } );
-			m_commandBuffer->setScissor( { 0, 0, size.getWidth(), size.getHeight() } );
+			m_commandBuffer->setViewport( { renderer::Offset2D{}, frameBuffer.getDimensions() } );
+			m_commandBuffer->setScissor( { renderer::Offset2D{}, frameBuffer.getDimensions() } );
 			m_commandBuffer->bindDescriptorSets( { uboDescriptorSet, texDescriptorSet }, *m_pipelineLayout );
 			m_commandBuffer->bindVertexBuffer( 0u, vbo, 0u );
 			m_commandBuffer->draw( 6u );
+			m_commandBuffer->endRenderPass();
+			m_timer.endPass( *m_commandBuffer );
 			m_commandBuffer->end();
 		}
 	}
@@ -393,31 +450,35 @@ namespace castor3d
 		, Size const & size
 		, SceneUbo & sceneUbo
 		, WeightedBlendTextures const & wbResult
-		, renderer::RenderPass const & renderPass )
+		, renderer::TextureView const & colourView )
 		: m_size{ size }
+		, m_engine{ engine }
 		, m_sceneUbo{ sceneUbo }
-		, m_gpInfo{ engine }
-		, m_sampler{ doCreateSampler( engine ) }
-		, m_vertexBuffer{ doCreateVbo( engine ) }
-		, m_vertexLayout{ doCreateVertexLayout( engine ) }
-		, m_uboDescriptorLayout{ doCreateUboDescriptorLayout( engine ) }
+		, m_gpInfo{ m_engine }
+		, m_sampler{ doCreateSampler( m_engine ) }
+		, m_vertexBuffer{ doCreateVbo( m_engine ) }
+		, m_vertexLayout{ doCreateVertexLayout( m_engine ) }
+		, m_uboDescriptorLayout{ doCreateUboDescriptorLayout( m_engine ) }
 		, m_uboDescriptorPool{ m_uboDescriptorLayout->createPool( uint32_t( FogType::eCount ) ) }
 		, m_uboDescriptorSet{ doCreateUboDescriptorSet( *m_uboDescriptorPool, m_sceneUbo, m_gpInfo ) }
-		, m_texDescriptorLayout{ doCreateTexDescriptorLayout( engine ) }
+		, m_texDescriptorLayout{ doCreateTexDescriptorLayout( m_engine ) }
 		, m_texDescriptorPool{ m_texDescriptorLayout->createPool( uint32_t( FogType::eCount ) ) }
 		, m_texDescriptorSet{ doCreateTexDescriptorSet( *m_texDescriptorPool, wbResult[0], wbResult[1], wbResult[2], *m_sampler ) }
+		, m_renderPass{ doCreateRenderPass( m_engine, colourView ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "Transparent" ), cuT( "Resolve" ) ) }
 		, m_programs
 		{
-			FinalCombineProgram{ engine, renderPass, *m_uboDescriptorLayout, *m_texDescriptorLayout, *m_vertexLayout, FogType::eDisabled },
-			FinalCombineProgram{ engine, renderPass, *m_uboDescriptorLayout, *m_texDescriptorLayout, *m_vertexLayout, FogType::eLinear },
-			FinalCombineProgram{ engine, renderPass, *m_uboDescriptorLayout, *m_texDescriptorLayout, *m_vertexLayout, FogType::eExponential },
-			FinalCombineProgram{ engine, renderPass, *m_uboDescriptorLayout, *m_texDescriptorLayout, *m_vertexLayout, FogType::eSquaredExponential }
+			FinalCombineProgram{ m_engine, *m_renderPass, *m_timer, *m_uboDescriptorLayout, *m_texDescriptorLayout, *m_vertexLayout, FogType::eDisabled },
+			FinalCombineProgram{ m_engine, *m_renderPass, *m_timer, *m_uboDescriptorLayout, *m_texDescriptorLayout, *m_vertexLayout, FogType::eLinear },
+			FinalCombineProgram{ m_engine, *m_renderPass, *m_timer, *m_uboDescriptorLayout, *m_texDescriptorLayout, *m_vertexLayout, FogType::eExponential },
+			FinalCombineProgram{ m_engine, *m_renderPass, *m_timer, *m_uboDescriptorLayout, *m_texDescriptorLayout, *m_vertexLayout, FogType::eSquaredExponential }
 		}
+		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_size, colourView ) }
+		, m_semaphore{ getCurrentDevice( m_engine ).createSemaphore() }
 	{
 		for ( auto & program : m_programs )
 		{
-			program.prepare( renderPass
-				, m_size
+			program.prepare( *m_frameBuffer
 				, *m_uboDescriptorSet
 				, *m_texDescriptorSet
 				, m_vertexBuffer->getBuffer() );
@@ -441,9 +502,19 @@ namespace castor3d
 			, invProj );
 	}
 
-	renderer::CommandBuffer const & FinalCombinePass::getCommandBuffer( FogType fogType )
+	renderer::Semaphore const & FinalCombinePass::render( FogType fogType
+		, renderer::Semaphore const & toWait )
 	{
-		return m_programs[size_t( fogType )].getCommandBuffer();
+		auto & program = m_programs[size_t( fogType )];
+		m_timer->start();
+		m_timer->notifyPassRender();
+		getCurrentDevice( m_engine ).getGraphicsQueue().submit( program.getCommandBuffer()
+			, toWait
+			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, *m_semaphore
+			, nullptr );
+		m_timer->stop();
+		return *m_semaphore;
 	}
 
 	void FinalCombinePass::accept( RenderTechniqueVisitor & visitor )
