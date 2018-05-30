@@ -449,7 +449,7 @@ namespace castor3d
 		copyInfos[uint32_t( CubeMapFace::eNegativeZ )].dstSubresource.baseArrayLayer = uint32_t( CubeMapFace::eNegativeZ );
 		copyInfos[uint32_t( CubeMapFace::eNegativeZ )].dstOffset = { 0u, 0u, 0u };
 
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( renderSystem );
 		auto commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 		commandBuffer->begin();
 		commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTopOfPipe
@@ -475,10 +475,8 @@ namespace castor3d
 		}
 
 		commandBuffer->end();
-		auto fence = device.createFence();
-		device.getGraphicsQueue().submit( *commandBuffer, fence.get() );
-		fence->wait( renderer::FenceTimeout );
-		device.waitIdle();
+		device.getGraphicsQueue().submit( *commandBuffer, nullptr );
+		device.getGraphicsQueue().waitIdle();
 
 		m_crossTexture->cleanup();
 	}

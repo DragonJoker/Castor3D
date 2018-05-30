@@ -153,7 +153,7 @@ namespace castor3d
 
 	bool RenderTechniquePass::doInitialise( Size const & CU_PARAM_UNUSED( size ) )
 	{
-		m_finished = getEngine()->getRenderSystem()->getCurrentDevice()->createSemaphore();
+		m_finished = getCurrentDevice( *this ).createSemaphore();
 
 		if ( m_camera )
 		{

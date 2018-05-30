@@ -144,7 +144,7 @@ namespace castor3d
 		m_specular.cleanup();
 	}
 
-	renderer::Semaphore const * LightingPass::render( Scene const & scene
+	renderer::Semaphore const & LightingPass::render( Scene const & scene
 		, Camera const & camera
 		, GeometryPassResult const & gp
 		, renderer::Semaphore const & toWait
@@ -167,41 +167,42 @@ namespace castor3d
 			}
 
 			uint32_t index = 0;
-			doRenderLights( scene
+			result = &doRenderLights( scene
 				, camera
 				, LightType::eDirectional
 				, gp
-				, result
+				, *result
 				, index
 				, info );
-			doRenderLights( scene
+			result = &doRenderLights( scene
 				, camera
 				, LightType::ePoint
 				, gp
-				, result
+				, *result
 				, index
 				, info );
-			doRenderLights( scene
+			result = &doRenderLights( scene
 				, camera
 				, LightType::eSpot
 				, gp
-				, result
+				, *result
 				, index
 				, info );
 			m_timer->stop();
 		}
 
-		return result;
+		return *result;
 	}
 
-	void LightingPass::doRenderLights( Scene const & scene
+	renderer::Semaphore const & LightingPass::doRenderLights( Scene const & scene
 		, Camera const & camera
 		, LightType p_type
 		, GeometryPassResult const & gp
-		, renderer::Semaphore const *& toWait
+		, renderer::Semaphore const & toWait
 		, uint32_t & index
 		, RenderInfo & info )
 	{
+		auto result = &toWait;
 		auto & cache = scene.getLightCache();
 
 		if ( cache.getLightsCount( p_type ) )
@@ -219,20 +220,18 @@ namespace castor3d
 						lightPassShadow.update( camera.getViewport().getSize()
 							, *light
 							, camera );
-						lightPassShadow.render( index
-							, *toWait
+						result = &lightPassShadow.render( index
+							, *result
 							, &light->getShadowMap()->getTexture() );
-						toWait = &lightPassShadow.getSemaphore();
 					}
 					else
 					{
 						lightPass.update( camera.getViewport().getSize()
 							, *light
 							, camera );
-						lightPass.render( index
-							, *toWait
+						result = &lightPass.render( index
+							, *result
 							, nullptr );
-						toWait = &lightPass.getSemaphore();
 					}
 
 					++index;
@@ -242,5 +241,7 @@ namespace castor3d
 				info.m_totalLightsCount++;
 			}
 		}
+
+		return *result;
 	}
 }

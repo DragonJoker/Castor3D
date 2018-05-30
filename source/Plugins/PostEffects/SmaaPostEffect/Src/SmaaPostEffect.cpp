@@ -262,7 +262,7 @@ namespace smaa
 		, uint32_t index )
 	{
 		auto & renderSystem = *m_renderTarget.getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( renderSystem );
 		castor3d::CommandsSemaphoreArray result;
 
 		castor3d::CommandsSemaphore edgeDetectionCommands

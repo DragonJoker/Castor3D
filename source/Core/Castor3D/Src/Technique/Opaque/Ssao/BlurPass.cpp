@@ -335,7 +335,7 @@ namespace castor3d
 		{
 			vertexShader = doGetVertexProgram( engine );
 			pixelShader = doGetPixelProgram( engine, config );
-			auto & device = *engine.getRenderSystem()->getCurrentDevice();
+			auto & device = getCurrentDevice( engine );
 			renderer::ShaderStageStateArray result
 			{
 				{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
@@ -397,7 +397,7 @@ namespace castor3d
 		renderer::RenderPassPtr doCreateRenderPass( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = *renderSystem.getCurrentDevice();
+			auto & device = getCurrentDevice( renderSystem );
 			renderer::RenderPassCreateInfo renderPass{};
 			renderPass.flags = 0u;
 
@@ -475,8 +475,8 @@ namespace castor3d
 		, m_renderPass{ doCreateRenderPass( m_engine ) }
 		, m_fbo{ doCreateFrameBuffer( *m_renderPass, m_result ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "SSAO" ), cuT( "Blur" ) ) }
-		, m_finished{ engine.getRenderSystem()->getCurrentDevice()->createSemaphore() }
-		, m_configurationUbo{ renderer::makeUniformBuffer< Configuration >( *engine.getRenderSystem()->getCurrentDevice(), 1u, 0u, renderer::MemoryPropertyFlag::eHostVisible ) }
+		, m_finished{ getCurrentDevice( engine ).createSemaphore() }
+		, m_configurationUbo{ renderer::makeUniformBuffer< Configuration >( getCurrentDevice( engine ), 1u, 0u, renderer::MemoryPropertyFlag::eHostVisible ) }
 	{
 		auto & configuration = m_configurationUbo->getData();
 
@@ -540,7 +540,7 @@ namespace castor3d
 			, bindings
 			, {} );
 		static renderer::ClearColorValue const colour{ 1.0, 1.0, 1.0, 1.0 };
-		auto & device = *m_renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( m_renderSystem );
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
@@ -569,7 +569,7 @@ namespace castor3d
 	{
 		m_timer->start();
 		m_timer->notifyPassRender();
-		auto & device = *m_renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( m_renderSystem );
 		device.getGraphicsQueue().submit( *m_commandBuffer
 			, toWait
 			, renderer::PipelineStageFlag::eColourAttachmentOutput

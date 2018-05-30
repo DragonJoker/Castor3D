@@ -80,7 +80,7 @@ namespace castor3d
 	{
 		static renderer::ClearColorValue const clear{ 0.0, 0.0, 0.0, 0.0 };
 		cleanup();
-		auto & device = *m_renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( m_renderSystem );
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 		createPipeline( { size.getWidth(), size.getHeight() }
 			, position
@@ -99,9 +99,7 @@ namespace castor3d
 		m_commandBuffer->endRenderPass();
 		m_commandBuffer->end();
 
-		auto fence = device.createFence();
-		device.getGraphicsQueue().submit( *m_commandBuffer
-			, fence.get() );
-		fence->wait( renderer::FenceTimeout );
+		device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
+		device.getGraphicsQueue().waitIdle();
 	}
 }

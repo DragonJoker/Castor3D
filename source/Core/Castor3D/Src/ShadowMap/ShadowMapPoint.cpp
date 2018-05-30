@@ -165,7 +165,7 @@ namespace castor3d
 		}
 	}
 
-	void ShadowMapPoint::render( renderer::Semaphore const & toWait )
+	renderer::Semaphore const & ShadowMapPoint::render( renderer::Semaphore const & toWait )
 	{
 		static float constexpr component = std::numeric_limits< float >::max();
 		static renderer::ClearColorValue const white{ component, component, component, component };
@@ -201,15 +201,14 @@ namespace castor3d
 			m_commandBuffer->end();
 		}
 
-		m_fence->reset();
-		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 		device.getGraphicsQueue().submit( *m_commandBuffer
 			, toWait
-			, renderer::PipelineStageFlag::eBottomOfPipe
+			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
-			, m_fence.get() );
-		m_fence->wait( renderer::FenceTimeout );
+			, nullptr );
 		timer.stop();
+		return *m_finished;
 	}
 
 	void ShadowMapPoint::debugDisplay( renderer::RenderPass const & renderPass
@@ -230,7 +229,7 @@ namespace castor3d
 	void ShadowMapPoint::doInitialise()
 	{
 		renderer::Extent2D size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize };
-		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 
 		renderer::ImageCreateInfo depth{};
 		depth.arrayLayers = 1u;

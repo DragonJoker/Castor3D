@@ -226,7 +226,7 @@ namespace smaa
 	{
 		renderer::Extent2D size{ m_colourView.getTexture().getDimensions().width
 			, m_colourView.getTexture().getDimensions().height };
-		auto & device = *renderTarget.getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( renderTarget );
 
 		// Create the render pass.
 		renderer::RenderPassCreateInfo renderPass;

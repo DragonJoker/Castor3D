@@ -146,8 +146,8 @@ namespace castor3d
 
 		renderer::ShaderStageStateArray program
 		{
-			{ renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eVertex ) },
-			{ renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eFragment ) }
+			{ getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eVertex ) },
+			{ getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eFragment ) }
 		};
 		program[0].module->loadShader( vtx.getSource() );
 		program[1].module->loadShader( pxl.getSource() );
@@ -156,7 +156,7 @@ namespace castor3d
 
 	bool ImageBackground::doInitialise( renderer::RenderPass const & renderPass )
 	{
-		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 		m_sizeUbo = renderer::makeUniformBuffer< Point2f >( device
 			, 1u
 			, 0u
@@ -190,7 +190,7 @@ namespace castor3d
 
 	void ImageBackground::doInitialiseDescriptorLayout()
 	{
-		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 		renderer::DescriptorSetLayoutBindingArray setLayoutBindings
 		{
 			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex },			// Matrix UBO

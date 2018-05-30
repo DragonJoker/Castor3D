@@ -105,7 +105,7 @@ namespace castor3d
 				Vertex{ castor::Point3f{ +0.5f, -0.5f, 1.0f }, castor::Point2f{ 1.0f, 0.0f } },
 				Vertex{ castor::Point3f{ +0.5f, +0.5f, 1.0f }, castor::Point2f{ 1.0f, 1.0f } },
 			};
-			auto & device = *m_scene.getEngine()->getRenderSystem()->getCurrentDevice();
+			auto & device = getCurrentDevice( m_scene );
 			m_quadBuffer = renderer::makeVertexBuffer< Quad >( device
 				, 1u
 				, renderer::BufferTarget::eTransferDst
@@ -349,11 +349,11 @@ namespace castor3d
 		{
 			if ( !m_vertexLayout )
 			{
-				m_vertexLayout = doCreateLayout( *m_scene.getEngine()->getRenderSystem()->getCurrentDevice() );
+				m_vertexLayout = doCreateLayout( getCurrentDevice( m_scene ) );
 			}
 
 			uint32_t stride = m_vertexLayout->getStride();
-			auto & device = *m_scene.getEngine()->getRenderSystem()->getCurrentDevice();
+			auto & device = getCurrentDevice( m_scene );
 			m_vertexBuffer = renderer::makeVertexBuffer< castor::Point3f >( device
 				, uint32_t( m_arrayPositions.size() )
 				, renderer::BufferTarget::eTransferDst

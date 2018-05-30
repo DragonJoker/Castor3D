@@ -26,7 +26,7 @@ namespace castor3d
 		renderer::TexturePtr doCreatePrefilteredTexture( RenderSystem const & renderSystem
 			, Size const & size )
 		{
-			auto & device = *renderSystem.getCurrentDevice();
+			auto & device = getCurrentDevice( renderSystem );
 			renderer::ImageCreateInfo image{};
 			image.flags = renderer::ImageCreateFlag::eCubeCompatible;
 			image.arrayLayers = 6u;
@@ -276,8 +276,8 @@ namespace castor3d
 
 			renderer::ShaderStageStateArray program
 			{
-				{ renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eVertex ) },
-				{ renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eFragment ) }
+				{ getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eVertex ) },
+				{ getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eFragment ) }
 			};
 			program[0].module->loadShader( vtx.getSource() );
 			program[1].module->loadShader( pxl.getSource() );
@@ -287,7 +287,7 @@ namespace castor3d
 		renderer::RenderPassPtr doCreateRenderPass( RenderSystem const & renderSystem
 			, renderer::Format format )
 		{
-			auto & device = *renderSystem.getCurrentDevice();
+			auto & device = getCurrentDevice( renderSystem );
 			renderer::RenderPassCreateInfo createInfo{};
 			createInfo.flags = 0u;
 
@@ -299,7 +299,7 @@ namespace castor3d
 			createInfo.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 			createInfo.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 			createInfo.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-			createInfo.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+			createInfo.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
 
 			renderer::AttachmentReference colourReference;
 			colourReference.attachment = 0u;
@@ -309,22 +309,14 @@ namespace castor3d
 			createInfo.subpasses[0].flags = 0u;
 			createInfo.subpasses[0].colorAttachments = { colourReference };
 
-			createInfo.dependencies.resize( 2u );
-			createInfo.dependencies[0].srcSubpass = renderer::ExternalSubpass;
-			createInfo.dependencies[0].dstSubpass = 0u;
+			createInfo.dependencies.resize( 1u );
+			createInfo.dependencies[0].srcSubpass = 0u;
+			createInfo.dependencies[0].dstSubpass = renderer::ExternalSubpass;
 			createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
 			createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
 			createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
 			createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 			createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
-
-			createInfo.dependencies[1].srcSubpass = 0u;
-			createInfo.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-			createInfo.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
-			createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-			createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 			return device.createRenderPass( createInfo );
 		}
@@ -341,7 +333,7 @@ namespace castor3d
 		, renderer::Texture const & dstTexture
 		, SamplerSPtr sampler )
 		: RenderCube{ renderSystem, false, std::move( sampler ) }
-		, m_device{ *renderSystem.getCurrentDevice() }
+		, m_device{ getCurrentDevice( renderSystem ) }
 		, m_renderPass{ renderPass }
 		, m_commandBuffer{ m_device.getGraphicsCommandPool().createCommandBuffer() }
 		, m_fence{ m_device.createFence( renderer::FenceCreateFlag::eSignaled ) }
@@ -411,7 +403,7 @@ namespace castor3d
 		, m_renderPass{ doCreateRenderPass( m_renderSystem, m_result->getFormat() ) }
 	{
 		auto & dstTexture = *m_result;
-		auto & device = *m_renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( m_renderSystem );
 		renderer::Extent2D originalSize{ size.getWidth(), size.getHeight() };
 
 		for ( auto mipLevel = 0u; mipLevel < glsl::Utils::MaxIblReflectionLod + 1u; ++mipLevel )

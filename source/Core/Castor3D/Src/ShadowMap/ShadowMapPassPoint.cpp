@@ -92,7 +92,7 @@ namespace castor3d
 
 	bool ShadowMapPassPoint::doInitialise( Size const & size )
 	{
-		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 		real const aspect = real( size.getWidth() ) / size.getHeight();
 		real const near = 1.0_r;
 		real const far = 2000.0_r;

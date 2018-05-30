@@ -40,7 +40,7 @@ namespace castor3d
 		if ( !m_generated )
 		{
 			doGenerateVertexBuffer();
-			auto & device = *getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
+			auto & device = getCurrentDevice( *this );
 			m_indexBuffer = renderer::makeBuffer< uint32_t >( device
 				, m_indexMapping->getCount() * m_indexMapping->getComponentsCount()
 				, renderer::BufferTarget::eIndexBuffer
@@ -326,7 +326,7 @@ namespace castor3d
 
 	void Submesh::doGenerateVertexBuffer()
 	{
-		auto & device = *getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 		uint32_t stride = sizeof( InterleavedVertex );
 		uint32_t size = uint32_t( m_points.size() );
 

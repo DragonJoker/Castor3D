@@ -276,7 +276,7 @@ namespace fxaa
 	{
 		m_sampler->initialise();
 
-		auto & device = *getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
 
 		// Create the render pass.

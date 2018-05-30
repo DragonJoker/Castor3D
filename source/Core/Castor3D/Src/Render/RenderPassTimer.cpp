@@ -19,7 +19,7 @@ namespace castor3d
 		, m_engine{ engine }
 		, m_passesCount{ passesCount }
 		, m_category{ category }
-		, m_timerQuery{ engine.getRenderSystem()->getCurrentDevice()->createQueryPool( renderer::QueryType::eTimestamp
+		, m_timerQuery{ getCurrentDevice( engine ).createQueryPool( renderer::QueryType::eTimestamp
 			, 2u * passesCount
 			, 0u ) }
 		, m_cpuTime{ 0_ns }
@@ -83,7 +83,7 @@ namespace castor3d
 
 	void RenderPassTimer::retrieveGpuTime()
 	{
-		static float const period = float( m_engine.getRenderSystem()->getCurrentDevice()->getTimestampPeriod() );
+		static float const period = float( getCurrentDevice( m_engine ).getTimestampPeriod() );
 		m_gpuTime = Nanoseconds{};
 
 		for ( uint32_t i = 0; i < m_passesCount; ++i )
@@ -105,7 +105,7 @@ namespace castor3d
 	void RenderPassTimer::updateCount( uint32_t count )
 	{
 		m_passesCount = count;
-		m_timerQuery = m_engine.getRenderSystem()->getCurrentDevice()->createQueryPool( renderer::QueryType::eTimestamp
+		m_timerQuery = getCurrentDevice( m_engine ).createQueryPool( renderer::QueryType::eTimestamp
 			, 2u * m_passesCount
 			, 0u );
 	}

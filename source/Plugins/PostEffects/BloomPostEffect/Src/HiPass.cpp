@@ -137,7 +137,7 @@ namespace Bloom
 		, renderer::Extent2D size
 		, uint32_t blurPassesCount )
 		: castor3d::RenderQuad{ renderSystem, true }
-		, m_device{ *renderSystem.getCurrentDevice() }
+		, m_device{ getCurrentDevice( renderSystem ) }
 		, m_sceneView{ sceneView }
 		, m_vertexShader{ getVertexProgram( renderSystem ) }
 		, m_pixelShader{ getPixelProgram( renderSystem ) }

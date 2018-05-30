@@ -63,7 +63,7 @@ namespace castor3d
 				+1, +1, 1, 1
 			};
 
-			auto vertexBuffer = std::make_unique< renderer::VertexBufferBase >( *engine.getRenderSystem()->getCurrentDevice()
+			auto vertexBuffer = std::make_unique< renderer::VertexBufferBase >( getCurrentDevice( engine )
 				, uint32_t( sizeof( data ) )
 				, 0u
 				, renderer::MemoryPropertyFlag::eHostVisible );
@@ -731,7 +731,7 @@ namespace castor3d
 					? doCreatePbrMRPixelProgram( renderSystem, fogType, hasSsao )
 					: doCreatePbrSGPixelProgram( renderSystem, fogType, hasSsao );
 
-			auto & device = *renderSystem.getCurrentDevice();
+			auto & device = getCurrentDevice( renderSystem );
 			renderer::ShaderStageStateArray result
 			{
 				{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
@@ -751,7 +751,7 @@ namespace castor3d
 				{ SceneUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
 				{ GpInfoUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
 			};
-			return engine.getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( bindings ) );
+			return getCurrentDevice( engine ).createDescriptorSetLayout( std::move( bindings ) );
 		}
 
 		inline renderer::DescriptorSetPtr doCreateUboDescriptorSet( Engine & engine
@@ -780,11 +780,11 @@ namespace castor3d
 			renderPass.attachments.resize( 1u );
 			renderPass.attachments[0].format = format;
 			renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-			renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+			renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
 			renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
 			renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 			renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-			renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+			renderPass.attachments[0].initialLayout = renderer::ImageLayout::eColourAttachmentOptimal;
 			renderPass.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
 
 			renderer::AttachmentReference colourReference;
@@ -799,9 +799,9 @@ namespace castor3d
 			renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
 			renderPass.dependencies[0].dstSubpass = 0u;
 			renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+			renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
 			renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
+			renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
 			renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 			renderPass.dependencies[1].srcSubpass = 0u;
@@ -812,7 +812,7 @@ namespace castor3d
 			renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
 			renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
-			return engine.getRenderSystem()->getCurrentDevice()->createRenderPass( renderPass );
+			return getCurrentDevice( engine ).createRenderPass( renderPass );
 		}
 
 		inline renderer::FrameBufferPtr doCreateFrameBuffer( renderer::RenderPass const & renderPass
@@ -857,7 +857,7 @@ namespace castor3d
 			}
 
 			bindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment, c_environmentCount );	// c3d_mapEnvironment
-			return engine.getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( bindings ) );
+			return getCurrentDevice( engine ).createDescriptorSetLayout( std::move( bindings ) );
 		}
 
 		inline renderer::DescriptorSetPtr doCreateTexDescriptorSet( renderer::DescriptorSetPool & pool
@@ -998,9 +998,9 @@ namespace castor3d
 		, FogType fogType
 		, MaterialType matType )
 		: m_program{ doCreateProgram( engine, fogType, ssao != nullptr, matType, m_vertexShader, m_pixelShader ) }
-		, m_pipelineLayout{ engine.getRenderSystem()->getCurrentDevice()->createPipelineLayout( { uboLayout, texLayout } ) }
+		, m_pipelineLayout{ getCurrentDevice( engine ).createPipelineLayout( { uboLayout, texLayout } ) }
 		, m_pipeline{ doCreateRenderPipeline( *m_pipelineLayout, m_program, renderPass, size ) }
-		, m_commandBuffer{ engine.getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer( true ) }
+		, m_commandBuffer{ getCurrentDevice( engine ).getGraphicsCommandPool().createCommandBuffer( true ) }
 		, m_renderPass{ &renderPass }
 	{
 	}
@@ -1053,7 +1053,7 @@ namespace castor3d
 		, SsaoConfig & config
 		, Viewport const & viewport )
 		: OwnedBy< Engine >{ engine }
-		, m_device{ *engine.getRenderSystem()->getCurrentDevice() }
+		, m_device{ getCurrentDevice( engine ) }
 		, m_scene{ scene }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_size{ result.getTexture().getDimensions().width, result.getTexture().getDimensions().height }
@@ -1161,12 +1161,12 @@ namespace castor3d
 
 	renderer::Semaphore const & ReflectionPass::render( renderer::Semaphore const & toWait )const
 	{
-		renderer::Semaphore const * semaphore = &toWait;
+		auto * result = &toWait;
 		TextureUnit const * ssao = nullptr;
 
 		if ( m_ssaoEnabled )
 		{
-			semaphore = &m_ssao.render( *semaphore );
+			result = &m_ssao.render( *result );
 		}
 
 		m_timer->start();
@@ -1174,12 +1174,13 @@ namespace castor3d
 		auto index = size_t( m_scene.getFog().getType() );
 		auto & program = m_programs[index];
 		m_device.getGraphicsQueue().submit( *program.m_commandBuffer
-			, *semaphore
+			, *result
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
 			, nullptr );
 		m_timer->stop();
-		return *m_finished;
+		result = m_finished.get();
+		return *result;
 	}
 
 	void ReflectionPass::accept( RenderTechniqueVisitor & visitor )

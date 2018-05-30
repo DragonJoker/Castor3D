@@ -497,7 +497,7 @@ namespace castor3d
 			, glsl::Shader & vertexShader
 			, glsl::Shader & pixelShader )
 		{
-			auto & device = *engine.getRenderSystem()->getCurrentDevice();
+			auto & device = getCurrentDevice( engine );
 			vertexShader = doGetVertexProgram( engine );
 			pixelShader = doGetPixelProgram( engine, config );
 			renderer::ShaderStageStateArray program
@@ -584,7 +584,7 @@ namespace castor3d
 		renderer::RenderPassPtr doCreateRenderPass( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = *renderSystem.getCurrentDevice();
+			auto & device = getCurrentDevice( renderSystem );
 
 			// Create the render pass.
 			renderer::RenderPassCreateInfo renderPass;
@@ -638,7 +638,7 @@ namespace castor3d
 		renderer::VertexBufferPtr< NonTexturedQuad > doCreateVertexBuffer( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = *renderSystem.getCurrentDevice();
+			auto & device = getCurrentDevice( renderSystem );
 			auto result = renderer::makeVertexBuffer< NonTexturedQuad >( device
 				, 1u
 				, 0u
@@ -669,7 +669,7 @@ namespace castor3d
 		renderer::VertexLayoutPtr doCreateVertexLayout( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = *renderSystem.getCurrentDevice();
+			auto & device = getCurrentDevice( renderSystem );
 			auto result = renderer::makeLayout< NonTexturedQuad::Vertex >( 0u );
 			result->createAttribute( 0u, renderer::Format::eR32G32_SFLOAT, offsetof( NonTexturedQuad::Vertex, position ) );
 			return result;
@@ -678,7 +678,7 @@ namespace castor3d
 		renderer::DescriptorSetLayoutPtr doCreateDescriptorLayout( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = *renderSystem.getCurrentDevice();
+			auto & device = getCurrentDevice( renderSystem );
 			renderer::DescriptorSetLayoutBindingArray bindings
 			{
 				{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
@@ -726,7 +726,7 @@ namespace castor3d
 		, m_size{ size }
 		, m_result{ doCreateTexture( m_engine, m_size ) }
 		, m_program{ doGetProgram( m_engine, config, m_vertexShader, m_pixelShader ) }
-		, m_sampler{ m_engine.getRenderSystem()->getCurrentDevice()->createSampler( renderer::WrapMode::eClampToEdge
+		, m_sampler{ getCurrentDevice( m_engine ).createSampler( renderer::WrapMode::eClampToEdge
 			, renderer::WrapMode::eClampToEdge
 			, renderer::WrapMode::eClampToEdge
 			, renderer::Filter::eNearest
@@ -734,18 +734,18 @@ namespace castor3d
 		, m_descriptorLayout{ doCreateDescriptorLayout( m_engine ) }
 		, m_descriptorPool{ m_descriptorLayout->createPool( 1u ) }
 		, m_descriptor{ doCreateDescriptor( *m_descriptorPool, *m_descriptorLayout, ssaoConfigUbo, linearisedDepthBuffer, normals, *m_sampler ) }
-		, m_pipelineLayout{ m_engine.getRenderSystem()->getCurrentDevice()->createPipelineLayout( *m_descriptorLayout ) }
+		, m_pipelineLayout{ getCurrentDevice( m_engine ).createPipelineLayout( *m_descriptorLayout ) }
 		, m_renderPass{ doCreateRenderPass( m_engine ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_result ) }
 		, m_vertexBuffer{ doCreateVertexBuffer( m_engine ) }
 		, m_vertexLayout{ doCreateVertexLayout( m_engine ) }
 		, m_pipeline{ doCreatePipeline( *m_pipelineLayout, m_program, *m_renderPass, *m_vertexLayout, size ) }
-		, m_commandBuffer{ m_engine.getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer() }
-		, m_finished{ engine.getRenderSystem()->getCurrentDevice()->createSemaphore() }
+		, m_commandBuffer{ getCurrentDevice( m_engine ).getGraphicsCommandPool().createCommandBuffer() }
+		, m_finished{ getCurrentDevice( m_engine ).createSemaphore() }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "SSAO" ), cuT( "Raw AO" ) ) }
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( renderSystem );
 
 		static renderer::ClearColorValue const colour{ 1.0, 1.0, 1.0, 1.0 };
 
@@ -783,7 +783,7 @@ namespace castor3d
 	renderer::Semaphore const & RawSsaoPass::compute( renderer::Semaphore const & toWait )const
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( renderSystem );
 		m_timer->start();
 		m_timer->notifyPassRender();
 		device.getGraphicsQueue().submit( *m_commandBuffer

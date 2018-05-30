@@ -131,7 +131,7 @@ namespace Bloom
 			return texture.createView( imageView );
 		}
 
-		renderer::RenderPassPtr doCreateRenderPass( castor3d::RenderSystem const & renderSystem
+		renderer::RenderPassPtr doCreateRenderPass( renderer::Device const & device
 			, renderer::Format format )
 		{
 			renderer::RenderPassCreateInfo renderPass{};
@@ -165,7 +165,7 @@ namespace Bloom
 			renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
 			renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
 
-			return renderSystem.getCurrentDevice()->createRenderPass( renderPass );
+			return device.createRenderPass( renderPass );
 		}
 
 		renderer::FrameBufferPtr doCreateFrameBuffer( renderer::RenderPass const & renderPass
@@ -176,24 +176,23 @@ namespace Bloom
 			return renderPass.createFrameBuffer( size, std::move( attachments ) );
 		}
 
-		renderer::DescriptorSetLayoutPtr doCreateDescriptorLayout( castor3d::RenderSystem const & renderSystem )
+		renderer::DescriptorSetLayoutPtr doCreateDescriptorLayout( renderer::Device const & device )
 		{
 			renderer::DescriptorSetLayoutBindingArray setLayoutBindings
 			{
 				{ 0u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
 				{ 1u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment }
 			};
-			return renderSystem.getCurrentDevice()->createDescriptorSetLayout( std::move( setLayoutBindings ) );
+			return device.createDescriptorSetLayout( std::move( setLayoutBindings ) );
 		}
 
-		renderer::PipelinePtr doCreatePipeline( castor3d::RenderSystem const & renderSystem
+		renderer::PipelinePtr doCreatePipeline( renderer::Device const & device
 			, renderer::PipelineLayout const & pipelineLayout
 			, glsl::Shader const & vertexShader
 			, glsl::Shader const & pixelShader
 			, renderer::RenderPass const & renderPass
 			, renderer::Extent2D const & size )
 		{
-			auto & device = *renderSystem.getCurrentDevice();
 			renderer::VertexInputState inputState;
 			inputState.vertexBindingDescriptions.push_back( { 0u, sizeof( castor3d::NonTexturedQuad::Vertex ), renderer::VertexInputRate::eVertex } );
 			inputState.vertexAttributeDescriptions.push_back( { 0u, 0u, renderer::Format::eR32G32_SFLOAT, 0u } );
@@ -254,22 +253,22 @@ namespace Bloom
 		, renderer::TextureView const & blurView
 		, renderer::Extent2D const & size
 		, uint32_t blurPassesCount )
-		: m_device{ *renderSystem.getCurrentDevice() }
+		: m_device{ getCurrentDevice( renderSystem ) }
 		, m_image{ doCreateTexture( renderSystem, size, format ) }
 		, m_view{ doCreateView( m_image->getTexture() ) }
 		, m_vertexShader{ getVertexProgram( renderSystem ) }
 		, m_pixelShader{ getPixelProgram( renderSystem, blurPassesCount ) }
-		, m_renderPass{ doCreateRenderPass( renderSystem, format ) }
+		, m_renderPass{ doCreateRenderPass( m_device, format ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, *m_view, size ) }
-		, m_descriptorLayout{ doCreateDescriptorLayout( renderSystem ) }
-		, m_pipelineLayout{ renderSystem.getCurrentDevice()->createPipelineLayout( *m_descriptorLayout ) }
-		, m_pipeline{ doCreatePipeline( renderSystem, *m_pipelineLayout, m_vertexShader, m_pixelShader, *m_renderPass, size ) }
-		, m_sceneSampler{ renderSystem.getCurrentDevice()->createSampler( renderer::WrapMode::eClampToEdge
+		, m_descriptorLayout{ doCreateDescriptorLayout( m_device ) }
+		, m_pipelineLayout{ m_device.createPipelineLayout( *m_descriptorLayout ) }
+		, m_pipeline{ doCreatePipeline( m_device, *m_pipelineLayout, m_vertexShader, m_pixelShader, *m_renderPass, size ) }
+		, m_sceneSampler{ m_device.createSampler( renderer::WrapMode::eClampToEdge
 			, renderer::WrapMode::eClampToEdge
 			, renderer::WrapMode::eClampToEdge
 			, renderer::Filter::eLinear
 			, renderer::Filter::eLinear ) }
-		, m_blurSampler{ renderSystem.getCurrentDevice()->createSampler( renderer::WrapMode::eClampToEdge
+		, m_blurSampler{ m_device.createSampler( renderer::WrapMode::eClampToEdge
 			, renderer::WrapMode::eClampToEdge
 			, renderer::WrapMode::eClampToEdge
 			, renderer::Filter::eLinear

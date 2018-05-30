@@ -184,7 +184,7 @@ namespace castor3d
 		, renderer::DepthStencilState const & dsState )
 	{
 		m_sampler->initialise();
-		auto & device = *m_renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( m_renderSystem );
 		auto commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 		m_matrixUbo = doCreateMatrixUbo( device, *commandBuffer, view.getType() == renderer::TextureViewType::eCube );
 		m_vertexBuffer = doCreateVertexBuffer( device, *commandBuffer );
@@ -257,7 +257,7 @@ namespace castor3d
 		, uint32_t subpassIndex
 		, uint32_t face )
 	{
-		auto & device = *m_renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( m_renderSystem );
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer( false );
 		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eRenderPassContinue
 			, renderer::CommandBufferInheritanceInfo

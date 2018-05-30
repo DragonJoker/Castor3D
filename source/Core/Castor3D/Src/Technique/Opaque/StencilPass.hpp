@@ -69,7 +69,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dessine la passe de stencil.
 		 */
-		void render( renderer::Semaphore const & toWait );
+		renderer::Semaphore const & render( renderer::Semaphore const & toWait );
 		/**
 		*\~english
 		*name

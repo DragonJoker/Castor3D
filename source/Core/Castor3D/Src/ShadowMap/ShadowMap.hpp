@@ -88,7 +88,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dessine la shadow map de la lumière donnée.
 		 */
-		C3D_API virtual void render( renderer::Semaphore const & toWait ) = 0;
+		C3D_API virtual renderer::Semaphore const & render( renderer::Semaphore const & toWait ) = 0;
 		/**
 		 *\~english
 		 *\brief		Dumps the shadow map on screen.
@@ -159,12 +159,6 @@ namespace castor3d
 		inline TextureUnit const & getLinearDepth()const
 		{
 			return m_linearMap;
-		}
-
-		inline renderer::Semaphore const & getSemaphore()const
-		{
-			REQUIRE( m_finished );
-			return *m_finished;
 		}
 		/**@}*/
 

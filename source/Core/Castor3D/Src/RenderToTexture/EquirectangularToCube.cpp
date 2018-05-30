@@ -37,7 +37,7 @@ namespace castor3d
 		renderer::ShaderStageStateArray doCreateProgram( RenderSystem & renderSystem
 			, renderer::Format format )
 		{
-			auto & device = *renderSystem.getCurrentDevice();
+			auto & device = getCurrentDevice( renderSystem );
 
 			glsl::Shader vtx;
 			{
@@ -151,7 +151,7 @@ namespace castor3d
 		, RenderSystem & renderSystem
 		, TextureLayout const & target )
 		: RenderCube{ renderSystem, false }
-		, m_device{ *renderSystem.getCurrentDevice() }
+		, m_device{ getCurrentDevice( renderSystem ) }
 		, m_commandBuffer{ m_device.getGraphicsCommandPool().createCommandBuffer() }
 		, m_view{ equiRectangular.getDefaultView() }
 		, m_renderPass{ doCreateRenderPass( m_device, target.getPixelFormat() ) }
@@ -185,7 +185,6 @@ namespace castor3d
 	void EquirectangularToCube::render()
 	{
 		uint32_t face = 0u;
-		auto fence = m_device.createFence( renderer::FenceCreateFlag::eSignaled );
 
 		for ( auto & frameBuffer : m_frameBuffers )
 		{
@@ -201,14 +200,12 @@ namespace castor3d
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *frameBuffer.frameBuffer
 				, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
-			, renderer::SubpassContents::eInline );
+				, renderer::SubpassContents::eInline );
 			registerFrame( *m_commandBuffer, face );
 			m_commandBuffer->endRenderPass();
 			m_commandBuffer->end();
 
-			fence->reset();
-			m_device.getGraphicsQueue().submit( *m_commandBuffer, fence.get() );
-			fence->wait( renderer::FenceTimeout );
+			m_device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
 			m_device.getGraphicsQueue().waitIdle();
 			++face;
 		}

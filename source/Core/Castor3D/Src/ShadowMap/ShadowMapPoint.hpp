@@ -51,7 +51,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMap::render
 		 */
-		void render( renderer::Semaphore const & toWait )override;
+		renderer::Semaphore const & render( renderer::Semaphore const & toWait )override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::debugDisplay
 		 */

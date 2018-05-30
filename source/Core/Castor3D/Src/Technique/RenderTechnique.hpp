@@ -106,7 +106,7 @@ namespace castor3d
 		 *\param[out]	velocity	Reçoit le rendu des vélocités.
 		 *\param[out]	info		Reçoit les informations de rendu.
 		 */
-		C3D_API renderer::Semaphore const * render( castor::Point2r const & jitter
+		C3D_API renderer::Semaphore const & render( castor::Point2r const & jitter
 			, renderer::SemaphoreCRefArray const & waitSemaphores
 			, RenderInfo & info );
 		/**
@@ -199,13 +199,13 @@ namespace castor3d
 		void doCleanupShadowMaps();
 		void doUpdateShadowMaps( RenderQueueArray & queues );
 		void doUpdateParticles( RenderInfo & info );
-		renderer::Semaphore const * doRenderShadowMaps( renderer::Semaphore const & semaphore );
-		renderer::Semaphore const * doRenderEnvironmentMaps( renderer::Semaphore const & semaphore );
-		renderer::Semaphore const * doRenderBackground( renderer::SemaphoreCRefArray const & semaphores );
-		renderer::Semaphore const * doRenderOpaque( castor::Point2r const & jitter
+		renderer::Semaphore const & doRenderShadowMaps( renderer::Semaphore const & semaphore );
+		renderer::Semaphore const & doRenderEnvironmentMaps( renderer::Semaphore const & semaphore );
+		renderer::Semaphore const & doRenderBackground( renderer::SemaphoreCRefArray const & semaphores );
+		renderer::Semaphore const & doRenderOpaque( castor::Point2r const & jitter
 			, RenderInfo & info
 			, renderer::Semaphore const & semaphore );
-		renderer::Semaphore const * doRenderTransparent( castor::Point2r const & jitter
+		renderer::Semaphore const & doRenderTransparent( castor::Point2r const & jitter
 			, RenderInfo & info
 			, renderer::Semaphore const & semaphore );
 

@@ -34,7 +34,7 @@ namespace castor3d
 	bool SceneBackground::initialise( renderer::RenderPass const & renderPass
 		, HdrConfigUbo const & hdrConfigUbo )
 	{
-		m_semaphore = getEngine()->getRenderSystem()->getCurrentDevice()->createSemaphore();
+		m_semaphore = getCurrentDevice( *this ).createSemaphore();
 		m_initialised = doInitialiseVertexBuffer()
 			&& doInitialise( renderPass );
 		castor::String const name = cuT( "Skybox" );
@@ -319,8 +319,8 @@ namespace castor3d
 		}
 
 		renderer::ShaderStageStateArray result;
-		result.push_back( { renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
-		result.push_back( { renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
+		result.push_back( { getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
+		result.push_back( { getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
 		result[0].module->loadShader( vtx.getSource() );
 		result[1].module->loadShader( pxl.getSource() );
 		return result;
@@ -328,7 +328,7 @@ namespace castor3d
 
 	void SceneBackground::doInitialiseDescriptorLayout()
 	{
-		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 		renderer::DescriptorSetLayoutBindingArray setLayoutBindings
 		{
 			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex },			// Matrix UBO
@@ -343,7 +343,7 @@ namespace castor3d
 	{
 		using castor::Point3f;
 		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( renderSystem );
 		renderer::StagingBuffer stagingBuffer{ device, 0u, sizeof( Cube ) };
 		auto commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 
@@ -407,7 +407,7 @@ namespace castor3d
 		, renderer::RenderPass const & renderPass
 		, HdrConfigUbo const & hdrConfigUbo )
 	{
-		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 		m_pipelineLayout.reset();
 		doInitialiseDescriptorLayout();
 		m_pipelineLayout = device.createPipelineLayout( *m_descriptorLayout );

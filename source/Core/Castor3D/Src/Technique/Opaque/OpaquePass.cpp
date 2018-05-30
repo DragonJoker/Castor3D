@@ -51,8 +51,7 @@ namespace castor3d
 
 	void OpaquePass::initialiseRenderPass( GeometryPassResult const & gpResult )
 	{
-		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
-
+		auto & device = getCurrentDevice( *this );
 		renderer::RenderPassCreateInfo renderPass;
 		renderPass.flags = 0u;
 
@@ -65,13 +64,11 @@ namespace castor3d
 		renderPass.attachments[0].format = gpResult.getViews()[0]->getFormat();
 		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
 		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[0].stencilLoadOp = renderer::isDepthStencilFormat( renderPass.attachments[0].format )
-			? renderer::AttachmentLoadOp::eClear
-			: renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
 		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
 
 		for ( size_t i = 1u; i < gpResult.getViews().size(); ++i )
 		{
@@ -90,9 +87,9 @@ namespace castor3d
 		renderPass.dependencies.resize( 2u );
 		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
 		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
 		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
 		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 

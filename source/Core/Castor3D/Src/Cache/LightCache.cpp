@@ -115,7 +115,7 @@ namespace castor3d
 		m_scene.getListener().postEvent( makeFunctorEvent( EventType::ePreRender
 			, [this]()
 			{
-				auto & device = *getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
+				auto & device = getCurrentDevice( *getScene() );
 				m_textureBuffer = renderer::makeBuffer< castor::Point4f >( device
 					, uint32_t( m_lightsBuffer.size() )
 					, renderer::BufferTarget::eUniformTexelBuffer | renderer::BufferTarget::eTransferDst

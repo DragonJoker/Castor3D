@@ -73,7 +73,7 @@ namespace castor3d
 		 *\param[in]	gp		Le résultat de la geometry pass.
 		 *\param[out]	info	Les informations de rendu.
 		 */
-		renderer::Semaphore const * render( Scene const & scene
+		renderer::Semaphore const & render( Scene const & scene
 			, Camera const & camera
 			, GeometryPassResult const & gp
 			, renderer::Semaphore const & toWait
@@ -100,11 +100,11 @@ namespace castor3d
 		}
 
 	private:
-		void doRenderLights( Scene const & scene
+		renderer::Semaphore const & doRenderLights( Scene const & scene
 			, Camera const & camera
 			, LightType type
 			, GeometryPassResult const & gp
-			, renderer::Semaphore const *& toWait
+			, renderer::Semaphore const & toWait
 			, uint32_t & index
 			, RenderInfo & info );
 

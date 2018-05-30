@@ -174,7 +174,7 @@ namespace film_grain
 			m_sampler = m_renderSystem.getEngine()->getSamplerCache().find( name );
 		}
 
-		auto & device = *m_renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( m_renderSystem );
 
 		renderer::ImageCreateInfo image{};
 		image.flags = 0u;
@@ -235,7 +235,7 @@ namespace film_grain
 				, *m_noiseView );
 		}
 
-		m_configUbo = renderer::makeUniformBuffer< Configuration >( *m_renderSystem.getCurrentDevice()
+		m_configUbo = renderer::makeUniformBuffer< Configuration >( getCurrentDevice( m_renderSystem )
 			, 1u
 			, renderer::BufferTarget::eTransferDst
 			, renderer::MemoryPropertyFlag::eHostVisible );
@@ -336,7 +336,7 @@ namespace film_grain
 
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
 	{
-		auto & device = *getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
 		m_sampler->initialise();
 		m_vertexShader = getVertexProgram( getRenderSystem() );

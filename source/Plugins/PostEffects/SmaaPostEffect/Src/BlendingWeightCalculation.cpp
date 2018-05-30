@@ -706,7 +706,7 @@ namespace smaa
 		renderer::Extent2D size{ m_edgeDetectionView.getTexture().getDimensions().width
 			, m_edgeDetectionView.getTexture().getDimensions().height };
 		auto & renderSystem = *renderTarget.getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( renderSystem );
 
 		m_ubo = renderer::makeUniformBuffer< castor::Point4i >( device
 			, 1u

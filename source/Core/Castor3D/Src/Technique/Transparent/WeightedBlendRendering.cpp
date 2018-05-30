@@ -23,7 +23,7 @@ namespace castor3d
 			, renderer::TextureView const & colourView )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = *renderSystem.getCurrentDevice();
+			auto & device = getCurrentDevice( renderSystem );
 
 			renderer::RenderPassCreateInfo createInfo{};
 			createInfo.flags = 0u;
@@ -46,22 +46,22 @@ namespace castor3d
 			createInfo.subpasses[0].flags = 0u;
 			createInfo.subpasses[0].colorAttachments = { { 0u, renderer::ImageLayout::eColourAttachmentOptimal } };
 
-			createInfo.dependencies.resize( 2u );
-			createInfo.dependencies[0].srcSubpass = renderer::ExternalSubpass;
-			createInfo.dependencies[0].dstSubpass = 0u;
-			createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
-			createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-			createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+			//createInfo.dependencies.resize( 2u );
+			//createInfo.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+			//createInfo.dependencies[0].dstSubpass = 0u;
+			//createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			//createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
+			//createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			//createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+			//createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
-			createInfo.dependencies[1].srcSubpass = 0u;
-			createInfo.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-			createInfo.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
-			createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-			createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+			//createInfo.dependencies[1].srcSubpass = 0u;
+			//createInfo.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+			//createInfo.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			//createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+			//createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			//createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+			//createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 			return device.createRenderPass( createInfo );
 		}
@@ -71,7 +71,7 @@ namespace castor3d
 			, WbTexture texture )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = *renderSystem.getCurrentDevice();
+			auto & device = getCurrentDevice( renderSystem );
 
 			renderer::ImageCreateInfo image{};
 			image.arrayLayers = 1u;
@@ -150,8 +150,8 @@ namespace castor3d
 		, m_weightedBlendPassResult{ { *m_depthView, *m_accumulationView, *m_revealageView, velocityTexture->getDefaultView() } }
 		, m_frameBufferCB{ doCreateFrameBuffer( *m_renderPass, m_size, colourView ) }
 		, m_finalCombinePass{ engine, m_size, m_transparentPass.getSceneUbo(), m_weightedBlendPassResult, *m_renderPass }
-		, m_commandBuffer{ engine.getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer() }
-		, m_semaphore{ engine.getRenderSystem()->getCurrentDevice()->createSemaphore() }
+		, m_commandBuffer{ getCurrentDevice( engine ).getGraphicsCommandPool().createCommandBuffer() }
+		, m_semaphore{ getCurrentDevice( engine ).createSemaphore() }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Transparent" ), cuT( "Resolve" ) ) }
 	{
 	}
@@ -174,7 +174,7 @@ namespace castor3d
 			, jitter );
 	}
 
-	void WeightedBlendRendering::render( RenderInfo & info
+	renderer::Semaphore const & WeightedBlendRendering::render( RenderInfo & info
 		, Scene const & scene
 		, renderer::Semaphore const & toWait )
 	{
@@ -188,7 +188,7 @@ namespace castor3d
 		static renderer::ClearColorValue const revealClear{ 1.0, 1.0, 1.0, 1.0 };
 		static renderer::ClearColorValue const velocityClear{};
 		m_engine.setPerObjectLighting( true );
-		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( m_engine );
 
 		// Accumulate blend.
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
@@ -224,6 +224,7 @@ namespace castor3d
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_semaphore
 			, nullptr );
+		return *m_semaphore;
 	}
 
 	void WeightedBlendRendering::debugDisplay()

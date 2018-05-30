@@ -38,7 +38,7 @@ namespace castor3d
 		renderer::TexturePtr doCreatePrefilteredBrdf( RenderSystem const & renderSystem
 			, Size const & size )
 		{
-			auto & device = *renderSystem.getCurrentDevice();
+			auto & device = getCurrentDevice( renderSystem );
 			renderer::ImageCreateInfo image{};
 			image.flags = 0u;
 			image.arrayLayers = 1u;
@@ -88,7 +88,7 @@ namespace castor3d
 				, buffer->constPtr()
 				, buffer->format() );
 			auto result = texture.createView( renderer::TextureViewType::e2D, texture.getFormat() );
-			auto & device = *engine.getRenderSystem()->getCurrentDevice();
+			auto & device = getCurrentDevice( engine );
 			renderer::StagingBuffer stagingBuffer{ device, 0u, buffer->size() };
 			auto commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 			stagingBuffer.uploadTextureData( *commandBuffer

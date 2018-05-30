@@ -39,7 +39,7 @@ namespace castor3d
 			, renderer::Format const & depthFormat )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = *renderSystem.getCurrentDevice();
+			auto & device = getCurrentDevice( renderSystem );
 
 			renderer::RenderPassCreateInfo createInfo{};
 			createInfo.flags = 0u;
@@ -95,22 +95,22 @@ namespace castor3d
 				{ 3u, renderer::ImageLayout::eColourAttachmentOptimal },
 			};
 
-			createInfo.dependencies.resize( 2u );
-			createInfo.dependencies[0].srcSubpass = renderer::ExternalSubpass;
-			createInfo.dependencies[0].dstSubpass = 0u;
-			createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
-			createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-			createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+			//createInfo.dependencies.resize( 2u );
+			//createInfo.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+			//createInfo.dependencies[0].dstSubpass = 0u;
+			//createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			//createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
+			//createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			//createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+			//createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
-			createInfo.dependencies[1].srcSubpass = 0u;
-			createInfo.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-			createInfo.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
-			createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-			createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+			//createInfo.dependencies[1].srcSubpass = 0u;
+			//createInfo.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+			//createInfo.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			//createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+			//createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			//createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+			//createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 			return device.createRenderPass( createInfo );
 		}
@@ -241,7 +241,7 @@ namespace castor3d
 	bool TransparentPass::doInitialise( Size const & size )
 	{
 		m_renderPass = doCreateRenderPass( *getEngine(), m_depthFormat );
-		m_finished = getEngine()->getRenderSystem()->getCurrentDevice()->createSemaphore();
+		m_finished = getCurrentDevice( *this ).createSemaphore();
 
 		if ( m_camera )
 		{

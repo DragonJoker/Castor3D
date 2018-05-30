@@ -56,7 +56,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Applique le flou sur la texture.
 		 */
-		C3D_API void blur();
+		C3D_API renderer::Semaphore const & blur( renderer::Semaphore const & toWait );
 		/**
 		*\~english
 		*name
@@ -116,8 +116,8 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		bool doInitialiseBlurXProgram( Engine & engine );
-		bool doInitialiseBlurYProgram( Engine & engine );
+		bool doInitialiseBlurXProgram();
+		bool doInitialiseBlurYProgram();
 
 	public:
 		C3D_API static castor::String const Config;
@@ -163,6 +163,8 @@ namespace castor3d
 		std::vector< float > m_kernel;
 		renderer::CommandBufferPtr m_horizCommandBuffer;
 		renderer::CommandBufferPtr m_verticCommandBuffer;
+		renderer::SemaphorePtr m_horizSemaphore;
+		renderer::SemaphorePtr m_verticSemaphore;
 		renderer::UniformBufferPtr< Configuration > m_blurUbo;
 		renderer::RenderPassPtr m_renderPass;
 		renderer::FrameBufferPtr m_blurXFbo;

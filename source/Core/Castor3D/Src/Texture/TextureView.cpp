@@ -371,7 +371,7 @@ namespace castor3d
 
 	bool TextureView::initialise()
 	{
-		auto & device = *getOwner()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *getOwner() );
 		m_view = getOwner()->getTexture().createView( m_info );
 
 		if ( m_source && m_source->isStatic() )

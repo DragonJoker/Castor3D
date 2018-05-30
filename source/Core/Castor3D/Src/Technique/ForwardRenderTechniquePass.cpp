@@ -122,7 +122,7 @@ namespace castor3d
 		, castor::Size const & size
 		, bool clear )
 	{
-		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 
 		renderer::RenderPassCreateInfo renderPass;
 		renderPass.flags = 0u;
@@ -233,7 +233,7 @@ namespace castor3d
 		{
 			getEngine()->setPerObjectLighting( true );
 			getTimer().start();
-			auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+			auto & device = getCurrentDevice( *this );
 			static renderer::ClearValueArray const clearValues
 			{
 				renderer::DepthStencilClearValue{ 1.0, 0 },

@@ -28,9 +28,8 @@ namespace castor3d
 		, castor::Size const & size
 		, renderer::TextureView const & dstTexture )
 		: m_renderSystem{ *engine.getRenderSystem() }
-		
 	{
-		auto & device = *m_renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( m_renderSystem );
 
 		// Initialise the vertex buffer.
 		m_vertexBuffer = renderer::makeVertexBuffer< TexturedQuad >( device
@@ -133,7 +132,7 @@ namespace castor3d
 
 	void BrdfPrefilter::render()
 	{
-		auto & device = *m_renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( m_renderSystem );
 		auto fence = device.createFence();
 
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
@@ -359,8 +358,8 @@ namespace castor3d
 
 		renderer::ShaderStageStateArray program
 		{
-			{ m_renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eVertex ) },
-			{ m_renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eFragment ) }
+			{ getCurrentDevice( m_renderSystem ).createShaderModule( renderer::ShaderStageFlag::eVertex ) },
+			{ getCurrentDevice( m_renderSystem ).createShaderModule( renderer::ShaderStageFlag::eFragment ) }
 		};
 		program[0].module->loadShader( vtx.getSource() );
 		program[1].module->loadShader( pxl.getSource() );

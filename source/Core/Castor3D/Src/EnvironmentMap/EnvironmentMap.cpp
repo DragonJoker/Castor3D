@@ -160,7 +160,7 @@ namespace castor3d
 
 	bool EnvironmentMap::initialise()
 	{
-		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 		m_environmentMap.initialise();
 		renderer::ImageCreateInfo depthStencil{};
 		depthStencil.flags = 0u;

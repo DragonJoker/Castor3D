@@ -37,7 +37,7 @@ namespace castor3d
 			, nullptr
 			, ssaoConfig }
 	{
-		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 		renderer::Extent2D size{ depthBuffer->getDimensions().width, depthBuffer->getDimensions().height };
 
 		// Create the render pass.

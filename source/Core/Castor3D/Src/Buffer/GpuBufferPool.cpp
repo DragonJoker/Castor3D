@@ -43,7 +43,7 @@ namespace castor3d
 			&& target != renderer::BufferTarget::eVertexBuffer )
 		{
 			std::unique_ptr< GpuBuffer > buffer = std::make_unique< GpuBuffer >();
-			buffer->doInitialiseStorage( *getRenderSystem()->getCurrentDevice()
+			buffer->doInitialiseStorage( getCurrentDevice( *getRenderSystem() )
 				, size
 				, target | renderer::BufferTarget::eTransferDst
 				, renderer::MemoryPropertyFlag::eHostVisible );
@@ -78,7 +78,7 @@ namespace castor3d
 				REQUIRE( maxSize >= size );
 
 				std::unique_ptr< GpuBuffer > buffer = std::make_unique< GpuBuffer >();
-				buffer->initialiseStorage( *getRenderSystem()->getCurrentDevice()
+				buffer->initialiseStorage( getCurrentDevice( *getRenderSystem() )
 					, level
 					, 96u
 					, target

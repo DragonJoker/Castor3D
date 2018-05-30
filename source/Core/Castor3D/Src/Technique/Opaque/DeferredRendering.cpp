@@ -98,8 +98,8 @@ namespace castor3d
 			, m_ssaoConfig
 			, viewport ) );
 
-		m_nodesCommands = renderSystem.getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer();
-		m_fence = renderSystem.getCurrentDevice()->createFence( renderer::FenceCreateFlag::eSignaled );
+		m_nodesCommands = getCurrentDevice( renderSystem ).getGraphicsCommandPool().createCommandBuffer();
+		m_fence = getCurrentDevice( renderSystem ).createFence( renderer::FenceCreateFlag::eSignaled );
 	}
 
 	DeferredRendering::~DeferredRendering()
@@ -138,7 +138,7 @@ namespace castor3d
 		renderer::Semaphore const * result = &toWait;
 		m_engine.setPerObjectLighting( false );
 		m_opaquePass.getTimer().start();
-		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( m_engine );
 		static renderer::ClearValueArray const clearValues
 		{
 			renderer::DepthStencilClearValue{ 1.0, 0 },
@@ -161,15 +161,15 @@ namespace castor3d
 			m_nodesCommands->endRenderPass();
 			m_opaquePass.getTimer().endPass( *m_nodesCommands );
 			m_nodesCommands->end();
-			device.getGraphicsQueue().submit( { *m_nodesCommands }
-				, { *result }
-				, { renderer::PipelineStageFlag::eColourAttachmentOutput }
-				, { m_opaquePass.getSemaphore() }
+			device.getGraphicsQueue().submit( *m_nodesCommands
+				, *result
+				, renderer::PipelineStageFlag::eColourAttachmentOutput
+				, m_opaquePass.getSemaphore()
 				, nullptr );
 			result = &m_opaquePass.getSemaphore();
 		}
 
-		result = m_lightingPass->render( scene
+		result = &m_lightingPass->render( scene
 			, camera
 			, m_geometryPassResult
 			, *result

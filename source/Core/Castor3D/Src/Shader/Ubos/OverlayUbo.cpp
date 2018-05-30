@@ -16,7 +16,7 @@ namespace castor3d
 
 	OverlayUbo::OverlayUbo( Engine & engine )
 		: m_engine{ engine }
-		, m_ubo{ renderer::makeUniformBuffer< Configuration >( *engine.getRenderSystem()->getCurrentDevice()
+		, m_ubo{ renderer::makeUniformBuffer< Configuration >( getCurrentDevice( engine )
 			, 1u
 			, renderer::BufferTarget::eTransferDst
 			, renderer::MemoryPropertyFlag::eHostVisible ) }

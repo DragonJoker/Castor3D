@@ -132,9 +132,7 @@ namespace castor3d
 	{
 		if ( !m_sampler )
 		{
-			auto device = getEngine()->getRenderSystem()->getCurrentDevice();
-			REQUIRE( device );
-			m_sampler = device->createSampler( m_info );
+			m_sampler = getCurrentDevice( *this ).createSampler( m_info );
 		}
 
 		return true;

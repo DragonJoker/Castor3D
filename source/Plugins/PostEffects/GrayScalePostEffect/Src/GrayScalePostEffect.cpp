@@ -160,7 +160,7 @@ namespace GrayScale
 
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
 	{
-		auto & device = *getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
 		m_vertexShader = getVertexProgram( getRenderSystem() );
 		m_pixelShader = getFragmentProgram( getRenderSystem() );

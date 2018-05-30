@@ -23,7 +23,7 @@ namespace light_streaks
 
 	void KawaseUbo::initialise()
 	{
-		m_ubo = renderer::makeUniformBuffer< Configuration >( *m_engine.getRenderSystem()->getCurrentDevice()
+		m_ubo = renderer::makeUniformBuffer< Configuration >( getCurrentDevice( m_engine )
 			, PostEffect::Count * 3u
 			, 0u
 			, renderer::MemoryPropertyFlag::eHostVisible );

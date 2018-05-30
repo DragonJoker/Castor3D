@@ -79,7 +79,7 @@ namespace castor3d
 		, SceneBackground const & background
 		, renderer::DescriptorSetPool const & pool )
 	{
-		auto & device = *getOwner()->getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *getOwner() );
 		real const aspect = real( size.getWidth() ) / size.getHeight();
 		real const near = 0.1_r;
 		real const far = 1000.0_r;
@@ -171,7 +171,7 @@ namespace castor3d
 
 	renderer::Semaphore const & EnvironmentMapPass::render( renderer::Semaphore const & toWait )
 	{
-		auto & device = *getOwner()->getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *getOwner() );
 		RenderInfo info;
 		m_opaquePass->update( info, {} );
 		m_transparentPass->update( info, {} );
@@ -208,7 +208,7 @@ namespace castor3d
 
 		device.getGraphicsQueue().submit( *m_commandBuffer
 			, toWait
-			, renderer::PipelineStageFlag::eBottomOfPipe
+			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
 			, nullptr );
 		return *m_finished;

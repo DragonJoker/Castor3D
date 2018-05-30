@@ -75,7 +75,7 @@ namespace castor3d
 
 	void SsaoConfigUbo::initialise()
 	{
-		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( m_engine );
 		m_ubo = renderer::makeUniformBuffer< Configuration >( device
 			, 1u
 			, renderer::BufferTarget::eTransferDst
@@ -90,7 +90,7 @@ namespace castor3d
 	void SsaoConfigUbo::update( SsaoConfig const & config
 		, Camera const & camera )
 	{
-		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( m_engine );
 		auto & viewport = camera.getViewport();
 		int numSpiralTurns = 0;
 

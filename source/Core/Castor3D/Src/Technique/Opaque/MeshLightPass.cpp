@@ -31,7 +31,7 @@ namespace castor3d
 			, renderer::TextureView const & specularView
 			, bool first )
 		{
-			auto & device = *engine.getRenderSystem()->getCurrentDevice();
+			auto & device = getCurrentDevice( engine );
 			renderer::ImageLayout layout = first
 				? renderer::ImageLayout::eUndefined
 				: renderer::ImageLayout::eColourAttachmentOptimal;
@@ -198,7 +198,7 @@ namespace castor3d
 		, RenderPassTimer & timer )
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( renderSystem );
 
 		auto declaration = renderer::makeLayout< Point3f >( 0u );
 		declaration->createAttribute( 0u, renderer::Format::eR32G32B32_SFLOAT, 0u );
@@ -237,12 +237,14 @@ namespace castor3d
 		m_matrixUbo.cleanup();
 	}
 
-	void MeshLightPass::render( uint32_t index
+	renderer::Semaphore const & MeshLightPass::render( uint32_t index
 		, renderer::Semaphore const & toWait
 		, TextureUnit * shadowMapOpt )
 	{
-		m_stencilPass.render( toWait );
-		LightPass::render( index, m_stencilPass.getSemaphore(), shadowMapOpt );
+		auto * result = &toWait;
+		result = &m_stencilPass.render( *result );
+		result = &LightPass::render( index, *result, shadowMapOpt );
+		return *result;
 	}
 
 	uint32_t MeshLightPass::getCount()const

@@ -35,7 +35,7 @@ namespace castor3d
 		: m_engine{ engine }
 	{
 		auto & renderSystem = *engine.getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( renderSystem );
 
 		m_result[uint32_t( DsTexture::eDepth )] = &depthTexture;
 

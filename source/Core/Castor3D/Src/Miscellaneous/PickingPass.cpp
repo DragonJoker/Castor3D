@@ -316,8 +316,7 @@ namespace castor3d
 			m_commandBuffer->end();
 		}
 
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 		renderer::FencePtr fence = device.createFence();
 		device.getGraphicsQueue().submit( *m_commandBuffer, fence.get() );
 		fence->wait( renderer::FenceTimeout );
@@ -472,8 +471,7 @@ namespace castor3d
 
 	bool PickingPass::doInitialise( Size const & size )
 	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 
 		m_colourTexture = createTexture( device
@@ -884,7 +882,7 @@ namespace castor3d
 
 	renderer::ColourBlendState PickingPass::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		return RenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 2u );
+		return RenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u );
 	}
 
 	void PickingPass::doPrepareFrontPipeline( ShaderProgramSPtr program

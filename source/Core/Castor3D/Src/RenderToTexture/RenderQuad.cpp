@@ -122,7 +122,7 @@ namespace castor3d
 		, renderer::DepthStencilState const & dsState )
 	{
 		m_sampler->initialise();
-		auto & device = *m_renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( m_renderSystem );
 		// Initialise the vertex buffer.
 		m_vertexBuffer = renderer::makeVertexBuffer< TexturedQuad >( device
 			, 1u
@@ -206,7 +206,7 @@ namespace castor3d
 	void RenderQuad::prepareFrame( renderer::RenderPass const & renderPass
 		, uint32_t subpassIndex )
 	{
-		auto & device = *m_renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( m_renderSystem );
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer( false );
 		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eRenderPassContinue
 			, renderer::CommandBufferInheritanceInfo{ &renderPass, subpassIndex, nullptr, false, 0u, 0u } );

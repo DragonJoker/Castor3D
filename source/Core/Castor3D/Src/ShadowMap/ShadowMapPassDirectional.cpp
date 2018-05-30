@@ -74,7 +74,7 @@ namespace castor3d
 
 	bool ShadowMapPassDirectional::doInitialise( Size const & size )
 	{
-		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 		Viewport viewport{ *getEngine() };
 		auto w = float( size.getWidth() );
 		auto h = float( size.getHeight() );

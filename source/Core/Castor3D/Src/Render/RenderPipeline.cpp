@@ -102,7 +102,7 @@ namespace castor3d
 			createInfo.dynamicStates.push_back( renderer::DynamicState::eScissor );
 		}
 
-		m_pipelineLayout = getRenderSystem()->getCurrentDevice()->createPipelineLayout( descriptorLayouts
+		m_pipelineLayout = getCurrentDevice( *this ).createPipelineLayout( descriptorLayouts
 			, m_pushConstantRanges );
 		m_pipeline = m_pipelineLayout->createPipeline( createInfo );
 	}

@@ -32,7 +32,7 @@ namespace castor3d
 	inline void UniformBuffer< T >::initialise()
 	{
 		REQUIRE( m_renderSystem.hasCurrentDevice() );
-		m_buffer = renderer::makeUniformBuffer< T >( *m_renderSystem.getCurrentDevice()
+		m_buffer = renderer::makeUniformBuffer< T >( getCurrentDevice( m_renderSystem )
 			, m_count
 			, renderer::BufferTarget::eTransferDst
 			, m_flags );

@@ -75,8 +75,8 @@ namespace castor3d
 				getRenderSystem()->getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
 					, [this]()
 					{
-						m_uploadCommandBuffer = getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer();
-						m_stagingBuffer = std::make_unique< renderer::StagingBuffer >( *getRenderSystem()->getCurrentDevice()
+						m_uploadCommandBuffer = getCurrentDevice( *getRenderSystem() ).getGraphicsCommandPool().createCommandBuffer();
+						m_stagingBuffer = std::make_unique< renderer::StagingBuffer >( getCurrentDevice( *getRenderSystem() )
 							, renderer::BufferTarget::eTransferSrc
 							, m_maxSize );
 					} ) );

@@ -149,7 +149,7 @@ namespace castor3d
 		m_passes[0]->update( camera, queues, light, index );
 	}
 
-	void ShadowMapDirectional::render( renderer::Semaphore const & toWait )
+	renderer::Semaphore const & ShadowMapDirectional::render( renderer::Semaphore const & toWait )
 	{
 		static renderer::ClearColorValue const black{ 0.0f, 0.0f, 0.0f, 1.0f };
 		static renderer::DepthStencilClearValue const zero{ 1.0f, 0 };
@@ -171,21 +171,22 @@ namespace castor3d
 			m_commandBuffer->end();
 		}
 
-		m_fence->reset();
-		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
+		auto * result = &toWait;
 		device.getGraphicsQueue().submit( *m_commandBuffer
-			, toWait
-			, renderer::PipelineStageFlag::eBottomOfPipe
+			, *result
+			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
-			, m_fence.get() );
-		m_fence->wait( renderer::FenceTimeout );
+			, nullptr );
+		result = m_finished.get();
 
 		if ( m_shadowType == ShadowType::eVariance )
 		{
-			m_blur->blur();
+			result = &m_blur->blur( *result );
 		}
 
 		timer.stop();
+		return *result;
 	}
 
 	void ShadowMapDirectional::debugDisplay( renderer::RenderPass const & renderPass
@@ -211,7 +212,7 @@ namespace castor3d
 	void ShadowMapDirectional::doInitialise()
 	{
 		renderer::Extent2D size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize };
-		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 
 		renderer::ImageCreateInfo depth{};
 		depth.arrayLayers = 1u;

@@ -357,15 +357,15 @@ namespace castor3d
 		C3D_API void doRender( RenderInfo & info
 			, TargetFbo & fbo
 			, CameraSPtr camera );
-		C3D_API renderer::Semaphore const * doApplyPostEffects( renderer::Semaphore const & toWait
+		C3D_API renderer::Semaphore const & doApplyPostEffects( renderer::Semaphore const & toWait
 			, PostEffectPtrArray const & effects
 			, renderer::CommandBufferPtr const & copyCommandBuffer
 			, renderer::SemaphorePtr const & copyFinished
 			, castor::Nanoseconds const & elapsedTime );
-		C3D_API renderer::Semaphore const * doApplyToneMapping( renderer::Semaphore const & toWait );
-		C3D_API renderer::Semaphore const * doRenderOverlays( renderer::Semaphore const & toWait
+		C3D_API renderer::Semaphore const & doApplyToneMapping( renderer::Semaphore const & toWait );
+		C3D_API renderer::Semaphore const & doRenderOverlays( renderer::Semaphore const & toWait
 			, Camera const & camera );
-		C3D_API renderer::Semaphore const * doFlip( renderer::Semaphore const & toWait );
+		C3D_API renderer::Semaphore const & doFlip( renderer::Semaphore const & toWait );
 
 	public:
 		//!\~english The render target default sampler name	\~french Le nom du sampler par défaut pour la cible de rendu

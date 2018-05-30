@@ -44,7 +44,7 @@ namespace castor3d
 	{
 		m_hdrConfigUbo.initialise();
 		auto & renderSystem = *getEngine()->getRenderSystem();
-		m_signalFinished = renderSystem.getCurrentDevice()->createSemaphore();
+		m_signalFinished = getCurrentDevice( renderSystem ).createSemaphore();
 
 		{
 			auto writer = renderSystem.createGlslWriter();
@@ -69,8 +69,8 @@ namespace castor3d
 		m_pixelShader = doCreate();
 		renderer::ShaderStageStateArray program
 		{
-			{ renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eVertex ) },
-			{ renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eFragment ) }
+			{ getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eVertex ) },
+			{ getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eFragment ) }
 		};
 		program[0].module->loadShader( m_vertexShader.getSource() );
 		program[1].module->loadShader( m_pixelShader.getSource() );

@@ -56,7 +56,7 @@ namespace castor3d
 		renderer::VertexLayoutPtr doCreateVertexLayout( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = *renderSystem.getCurrentDevice();
+			auto & device = getCurrentDevice( renderSystem );
 			renderer::VertexLayoutPtr result = renderer::makeLayout< TexturedQuad::Vertex >( 0u );
 			result->createAttribute( 0u, renderer::Format::eR32G32_SFLOAT, offsetof( TexturedQuad::Vertex, position ) );
 			result->createAttribute( 1u, renderer::Format::eR32G32_SFLOAT, offsetof( TexturedQuad::Vertex, texture ) );
@@ -66,7 +66,7 @@ namespace castor3d
 		renderer::VertexBufferPtr< TexturedQuad > doCreateVbo( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = *renderSystem.getCurrentDevice();
+			auto & device = getCurrentDevice( renderSystem );
 			auto result = renderer::makeVertexBuffer< TexturedQuad >( device
 				, 1u
 				, renderer::BufferTarget::eTransferDst
@@ -97,7 +97,7 @@ namespace castor3d
 		renderer::DescriptorSetLayoutPtr doCreateUboDescriptorLayout( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = *renderSystem.getCurrentDevice();
+			auto & device = getCurrentDevice( renderSystem );
 			renderer::DescriptorSetLayoutBindingArray bindings
 			{
 				{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
@@ -127,7 +127,7 @@ namespace castor3d
 		renderer::DescriptorSetLayoutPtr doCreateTexDescriptorLayout( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = *renderSystem.getCurrentDevice();
+			auto & device = getCurrentDevice( renderSystem );
 			renderer::DescriptorSetLayoutBindingArray bindings
 			{
 				{ 0u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
@@ -263,7 +263,7 @@ namespace castor3d
 			, glsl::Shader & vertexShader
 			, glsl::Shader & pixelShader )
 		{
-			auto & device = *engine.getRenderSystem()->getCurrentDevice();
+			auto & device = getCurrentDevice( engine );
 			vertexShader = doGetVertexProgram( engine );
 			pixelShader = doGetPixelProgram( engine, fogType );
 			renderer::ShaderStageStateArray program
@@ -280,7 +280,7 @@ namespace castor3d
 			, renderer::DescriptorSetLayout const & uboLayout
 			, renderer::DescriptorSetLayout const & texLayout )
 		{
-			return engine.getRenderSystem()->getCurrentDevice()->createPipelineLayout( { uboLayout, texLayout } );
+			return getCurrentDevice( engine ).createPipelineLayout( { uboLayout, texLayout } );
 		}
 
 		renderer::PipelinePtr doCreateRenderPipeline( renderer::PipelineLayout const & pipelineLayout
@@ -341,7 +341,7 @@ namespace castor3d
 			, doCreateProgram( engine, fogType, m_vertexShader, m_pixelShader )
 			, renderPass
 			, vtxLayout ) }
-		, m_commandBuffer{ engine.getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer( false ) }
+		, m_commandBuffer{ getCurrentDevice( engine ).getGraphicsCommandPool().createCommandBuffer( false ) }
 	{
 	}
 

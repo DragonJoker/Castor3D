@@ -438,7 +438,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dessine la passe de rendu.
 		 */
-		virtual void render( uint32_t index
+		virtual renderer::Semaphore const & render( uint32_t index
 			, renderer::Semaphore const & toWait
 			, TextureUnit * shadowMapOpt );
 		/**

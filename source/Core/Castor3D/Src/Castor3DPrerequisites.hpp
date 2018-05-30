@@ -531,4 +531,26 @@ DECLARED_EXPORTED_OWNED_BY( C3D_API, castor3d::Engine, Engine )
 DECLARED_EXPORTED_OWNED_BY( C3D_API, castor3d::RenderSystem, RenderSystem )
 DECLARED_EXPORTED_OWNED_BY( C3D_API, castor3d::Scene, Scene )
 
+namespace castor3d
+{
+	C3D_API renderer::Device const & getCurrentDevice( RenderSystem const & obj );
+	C3D_API renderer::Device const & getCurrentDevice( Engine const & obj );
+	C3D_API renderer::Device const & getCurrentDevice( Scene const & obj );
+
+	inline renderer::Device const & getCurrentDevice( castor::OwnedBy< RenderSystem > const & obj )
+	{
+		return getCurrentDevice( *obj.getRenderSystem() );
+	}
+
+	inline renderer::Device const & getCurrentDevice( castor::OwnedBy< Engine > const & obj )
+	{
+		return getCurrentDevice( *obj.getEngine() );
+	}
+
+	inline renderer::Device const & getCurrentDevice( castor::OwnedBy< Scene > const & obj )
+	{
+		return getCurrentDevice( *obj.getScene() );
+	}
+}
+
 #endif

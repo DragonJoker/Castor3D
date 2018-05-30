@@ -881,7 +881,7 @@ namespace castor3d
 			{
 				Pass & pass = submeshNodes.second[0].passNode.pass;
 
-				if ( pass.getTextureUnitsCount() > 0u )
+				if ( submeshNodes.second[0].pipeline.hasDescriptorPool( 1u ) )
 				{
 					initialiseTextureDescriptor( descriptorPool
 						, submeshNodes.second[0]
@@ -901,7 +901,7 @@ namespace castor3d
 			{
 				Pass & pass = submeshNodes.second[0].passNode.pass;
 
-				if ( pass.getTextureUnitsCount() > 0u )
+				if ( submeshNodes.second[0].pipeline.hasDescriptorPool( 1u ) )
 				{
 					initialiseTextureDescriptor( descriptorPool
 						, submeshNodes.second[0]
@@ -1406,8 +1406,8 @@ namespace castor3d
 				{
 					auto uboBindings = doCreateUboBindings( flags );
 					auto texBindings = doCreateTextureBindings( flags );
-					auto uboLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
-					auto texLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( texBindings ) );
+					auto uboLayout = getCurrentDevice( *this ).createDescriptorSetLayout( std::move( uboBindings ) );
+					auto texLayout = getCurrentDevice( *this ).createDescriptorSetLayout( std::move( texBindings ) );
 					std::vector< renderer::DescriptorSetLayoutPtr > layouts;
 					layouts.emplace_back( std::move( uboLayout ) );
 					layouts.emplace_back( std::move( texLayout ) );
@@ -1444,8 +1444,8 @@ namespace castor3d
 				{
 					auto uboBindings = doCreateUboBindings( flags );
 					auto texBindings = doCreateTextureBindings( flags );
-					auto uboLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( uboBindings ) );
-					auto texLayout = getEngine()->getRenderSystem()->getCurrentDevice()->createDescriptorSetLayout( std::move( texBindings ) );
+					auto uboLayout = getCurrentDevice( *this ).createDescriptorSetLayout( std::move( uboBindings ) );
+					auto texLayout = getCurrentDevice( *this ).createDescriptorSetLayout( std::move( texBindings ) );
 					std::vector< renderer::DescriptorSetLayoutPtr > layouts;
 					layouts.emplace_back( std::move( uboLayout ) );
 					layouts.emplace_back( std::move( texLayout ) );

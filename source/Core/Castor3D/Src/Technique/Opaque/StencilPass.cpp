@@ -32,7 +32,7 @@ namespace castor3d
 		renderer::RenderPassPtr doCreateRenderPass( Engine const & engine
 			, renderer::TextureView const & depthView )
 		{
-			auto & device = *engine.getRenderSystem()->getCurrentDevice();
+			auto & device = getCurrentDevice( engine );
 
 			renderer::RenderPassCreateInfo renderPass;
 			renderPass.flags = 0u;
@@ -94,7 +94,7 @@ namespace castor3d
 	{
 		m_vbo = &vbo;
 		auto & renderSystem = *m_engine.getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( renderSystem );
 		renderer::Extent2D size{ m_depthView.getTexture().getDimensions().width, m_depthView.getTexture().getDimensions().height };
 
 		renderer::DescriptorSetLayoutBindingArray setLayoutBindings
@@ -191,14 +191,15 @@ namespace castor3d
 		m_descriptorLayout.reset();
 	}
 
-	void StencilPass::render( renderer::Semaphore const & toWait )
+	renderer::Semaphore const & StencilPass::render( renderer::Semaphore const & toWait )
 	{
-		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( m_engine );
 		device.getGraphicsQueue().submit( *m_commandBuffer
 			, toWait
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
 			, nullptr );
+		return *m_finished;
 	}
 
 	//*********************************************************************************************

@@ -96,7 +96,7 @@ namespace castor3d
 	{
 		auto & value = m_scene.getBackgroundColour();
 		m_colour = HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
-		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 		m_stagingBuffer = renderer::makeBuffer< Point4f >( device
 			, 256u
 			, renderer::BufferTarget::eTransferSrc
@@ -175,7 +175,7 @@ namespace castor3d
 
 			m_stagingBuffer->flush( 0u, 256u );
 			m_stagingBuffer->unlock();
-			auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+			auto & device = getCurrentDevice( *this );
 			device.getGraphicsQueue().submit( *m_cmdCopy, nullptr );
 			device.getGraphicsQueue().waitIdle();
 			m_colour.reset();

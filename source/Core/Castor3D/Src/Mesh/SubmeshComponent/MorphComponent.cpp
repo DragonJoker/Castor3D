@@ -40,7 +40,7 @@ namespace castor3d
 
 		if ( !m_animBuffer || m_animBuffer->getCount() != count )
 		{
-			auto & device = *getOwner()->getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
+			auto & device = getCurrentDevice( *getOwner() );
 			m_animBuffer = renderer::makeVertexBuffer< InterleavedVertex >( device
 				, count
 				, 0u

@@ -160,7 +160,7 @@ namespace castor3d
 					, offsetof( InstantiationData, m_material ) );
 			}
 
-			auto & device = *getOwner()->getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
+			auto & device = getCurrentDevice( *getOwner() );
 
 			for ( auto & data : m_instances )
 			{

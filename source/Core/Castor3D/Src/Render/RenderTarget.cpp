@@ -131,7 +131,7 @@ namespace castor3d
 		, Size const & size )
 	{
 		auto & renderSystem = *renderTarget.getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( renderSystem );
 
 		SamplerSPtr sampler = renderTarget.getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + string::toString( renderTarget.m_index ) );
 		renderer::ImageCreateInfo createInfo{};
@@ -212,7 +212,7 @@ namespace castor3d
 		if ( !m_initialised )
 		{
 			auto & renderSystem = *getEngine()->getRenderSystem();
-			auto & device = *renderSystem.getCurrentDevice();
+			auto & device = getCurrentDevice( renderSystem );
 			doInitialiseRenderPass();
 			m_initialised = doInitialiseFrameBuffer();
 
@@ -444,24 +444,24 @@ namespace castor3d
 		createInfo.subpasses[0].flags = 0u;
 		createInfo.subpasses[0].colorAttachments = { colourReference };
 
-		createInfo.dependencies.resize( 2u );
-		createInfo.dependencies[0].srcSubpass = renderer::ExternalSubpass;
-		createInfo.dependencies[0].dstSubpass = 0u;
-		createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
-		createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+		//createInfo.dependencies.resize( 2u );
+		//createInfo.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		//createInfo.dependencies[0].dstSubpass = 0u;
+		//createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		//createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		//createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		//createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		//createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
-		createInfo.dependencies[1].srcSubpass = 0u;
-		createInfo.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-		createInfo.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
-		createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+		//createInfo.dependencies[1].srcSubpass = 0u;
+		//createInfo.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+		//createInfo.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		//createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		//createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		//createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		//createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
-		m_renderPass = getEngine()->getRenderSystem()->getCurrentDevice()->createRenderPass( createInfo );
+		m_renderPass = getCurrentDevice( *this ).createRenderPass( createInfo );
 	}
 
 	bool RenderTarget::doInitialiseFrameBuffer()
@@ -531,7 +531,7 @@ namespace castor3d
 
 	bool RenderTarget::doInitialiseToneMapping()
 	{
-		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 		auto result = m_toneMapping->initialise( getSize()
 			, m_renderTechnique->getResult()
 			, *m_renderPass );
@@ -572,7 +572,7 @@ namespace castor3d
 		, renderer::TextureView const & source
 		, renderer::TextureView const & target )
 	{
-		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 		commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 
 		commandBuffer->begin();
@@ -601,7 +601,7 @@ namespace castor3d
 	void RenderTarget::doInitialiseFlip()
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( renderSystem );
 
 		glsl::Shader vtx;
 		{
@@ -675,7 +675,7 @@ namespace castor3d
 		, CameraSPtr camera )
 	{
 		auto elapsedTime = m_timer.getElapsed();
-		auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
+		auto & queue = getCurrentDevice( *this ).getGraphicsQueue();
 		SceneSPtr scene = getScene();
 		m_toneMapping->update();
 		renderer::SemaphoreCRefArray signalsToWait;
@@ -686,32 +686,32 @@ namespace castor3d
 		}
 
 		// Render the scene through the RenderTechnique.
-		m_signalFinished = m_renderTechnique->render( m_jitter
+		m_signalFinished = &m_renderTechnique->render( m_jitter
 			, signalsToWait
 			, info );
 
 		// Draw HDR post effects.
-		m_signalFinished = doApplyPostEffects( *m_signalFinished
+		m_signalFinished = &doApplyPostEffects( *m_signalFinished
 			, m_hdrPostEffects
 			, m_hdrCopyCommands
 			, m_hdrCopyFinished
 			, elapsedTime );
 
 		// Then draw the render's result to the RenderTarget's frame buffer, applying the tone mapping operator.
-		m_signalFinished = doApplyToneMapping( *m_signalFinished );
+		m_signalFinished = &doApplyToneMapping( *m_signalFinished );
 
 		// Apply the sRGB post effects.
-		m_signalFinished = doApplyPostEffects( *m_signalFinished
+		m_signalFinished = &doApplyPostEffects( *m_signalFinished
 			, m_srgbPostEffects
 			, m_srgbCopyCommands
 			, m_srgbCopyFinished
 			, elapsedTime );
 
 		// Put the result in bottom up (since all work has been done in top down).
-		m_signalFinished = doFlip( *m_signalFinished );
+		m_signalFinished = &doFlip( *m_signalFinished );
 
 		// And now render overlays.
-		m_signalFinished = doRenderOverlays( *m_signalFinished, *camera );
+		m_signalFinished = &doRenderOverlays( *m_signalFinished, *camera );
 
 #if DISPLAY_DEBUG
 
@@ -720,7 +720,7 @@ namespace castor3d
 #endif
 	}
 
-	renderer::Semaphore const * RenderTarget::doApplyPostEffects( renderer::Semaphore const & toWait
+	renderer::Semaphore const & RenderTarget::doApplyPostEffects( renderer::Semaphore const & toWait
 		, PostEffectPtrArray const & effects
 		, renderer::CommandBufferPtr const & copyCommandBuffer
 		, renderer::SemaphorePtr const & copyFinished
@@ -730,7 +730,7 @@ namespace castor3d
 
 		if ( !effects.empty() )
 		{
-			auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
+			auto & queue = getCurrentDevice( *this ).getGraphicsQueue();
 
 			for ( auto effect : effects )
 			{
@@ -759,32 +759,29 @@ namespace castor3d
 			result = copyFinished.get();
 		}
 
-		return result;
+		return *result;
 	}
 
-	renderer::Semaphore const * RenderTarget::doApplyToneMapping( renderer::Semaphore const & toWait )
+	renderer::Semaphore const & RenderTarget::doApplyToneMapping( renderer::Semaphore const & toWait )
 	{
-		auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
+		auto & queue = getCurrentDevice( *this ).getGraphicsQueue();
 		m_toneMappingTimer->start();
 		m_toneMappingTimer->notifyPassRender();
 		auto * result = &toWait;
-		m_fence->reset();
 		queue.submit( *m_toneMappingCommandBuffer
 			, *result
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, m_toneMapping->getSemaphore()
-			, m_fence.get() );
-		m_fence->wait( renderer::FenceTimeout );
+			, nullptr );
 		m_toneMappingTimer->stop();
 		result = &m_toneMapping->getSemaphore();
-		getEngine()->getRenderSystem()->getCurrentDevice()->waitIdle();
-		return result;
+		return *result;
 	}
 
-	renderer::Semaphore const * RenderTarget::doRenderOverlays( renderer::Semaphore const & toWait
+	renderer::Semaphore const & RenderTarget::doRenderOverlays( renderer::Semaphore const & toWait
 		, Camera const & camera )
 	{
-		auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
+		auto & queue = getCurrentDevice( *this ).getGraphicsQueue();
 		auto * result = &toWait;
 		m_overlaysTimer->start();
 		{
@@ -812,22 +809,19 @@ namespace castor3d
 			result = &m_overlayRenderer->getSemaphore();
 		}
 		m_overlaysTimer->stop();
-		return result;
+		return *result;
 	}
 
-	renderer::Semaphore const * RenderTarget::doFlip( renderer::Semaphore const & toWait )
+	renderer::Semaphore const & RenderTarget::doFlip( renderer::Semaphore const & toWait )
 	{
-		auto & queue = getEngine()->getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
+		auto & queue = getCurrentDevice( *this ).getGraphicsQueue();
 		auto * result = &toWait;
-		m_fence->reset();
 		queue.submit( *m_flipCommands
 			, *result
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_flipFinished
-			, m_fence.get() );
-		m_fence->wait( renderer::FenceTimeout );
+			, nullptr );
 		result = m_flipFinished.get();
-		queue.waitIdle();
-		return result;
+		return *result;
 	}
 }

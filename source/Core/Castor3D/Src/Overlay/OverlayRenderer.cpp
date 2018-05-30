@@ -198,7 +198,7 @@ namespace castor3d
 				, ( fontTexture
 					? m_renderer.doGetTextNode( pass, *fontTexture->getTexture(), *fontTexture->getSampler() )
 					: m_renderer.doGetPanelNode( pass ) )
-				, *m_renderer.getRenderSystem()->getCurrentDevice()
+				, getCurrentDevice( m_renderer )
 				, ( fontTexture
 					? *m_renderer.m_textDeclaration
 					: *m_renderer.m_declaration )
@@ -341,7 +341,7 @@ namespace castor3d
 
 	void OverlayRenderer::initialise()
 	{
-		auto & device = *getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 
 		if ( !m_renderPass )
 		{
@@ -476,16 +476,13 @@ namespace castor3d
 
 	void OverlayRenderer::render( RenderPassTimer & timer )
 	{
-		m_fence->reset();
-		auto & queue = getRenderSystem()->getCurrentDevice()->getGraphicsQueue();
+		auto & queue = getCurrentDevice( *this ).getGraphicsQueue();
 		timer.notifyPassRender();
-		queue.submit( { *m_commandBuffer }
-			, { *m_toWait }
-			, { renderer::PipelineStageFlag::eColourAttachmentOutput }
-			, { *m_finished }
-			, m_fence.get() );
-		m_fence->wait( renderer::FenceTimeout );
-		queue.waitIdle();
+		queue.submit( *m_commandBuffer
+			, *m_toWait
+			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, *m_finished
+			, nullptr );
 	}
 
 	OverlayRenderer::OverlayRenderNode & OverlayRenderer::doGetPanelNode( Pass const & pass )
@@ -597,7 +594,7 @@ namespace castor3d
 
 	void OverlayRenderer::doCreateRenderPass()
 	{
-		auto & device = *getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 
 		renderer::RenderPassCreateInfo renderPass;
 		renderPass.flags = 0u;
@@ -656,7 +653,7 @@ namespace castor3d
 		if ( it == pipelines.end() )
 		{
 			// Since it does not exist yet, create it and initialise it
-			auto & device = *getRenderSystem()->getCurrentDevice();
+			auto & device = getCurrentDevice( *this );
 			auto program = doCreateOverlayProgram( textureFlags );
 
 			renderer::ColourBlendState blState{};
@@ -854,8 +851,8 @@ namespace castor3d
 		}
 
 		renderer::ShaderStageStateArray result;
-		result.push_back( { getRenderSystem()->getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
-		result.push_back( { getRenderSystem()->getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
+		result.push_back( { getCurrentDevice( *this ).createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
+		result.push_back( { getCurrentDevice( *this ).createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
 		result[0].module->loadShader( vtx.getSource() );
 		result[1].module->loadShader( pxl.getSource() );
 		return result;

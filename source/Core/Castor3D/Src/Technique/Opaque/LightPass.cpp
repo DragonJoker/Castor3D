@@ -276,7 +276,7 @@ namespace castor3d
 			, glsl::Shader const & vtx
 			, glsl::Shader const & pxl )
 		{
-			auto & device = *engine.getRenderSystem()->getCurrentDevice();
+			auto & device = getCurrentDevice( engine );
 			renderer::ShaderStageStateArray program
 			{
 				{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
@@ -310,7 +310,7 @@ namespace castor3d
 		, ModelMatrixUbo * modelMatrixUbo )
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( renderSystem );
 
 		renderer::DescriptorSetLayoutBindingArray setLayoutBindings;
 		setLayoutBindings.emplace_back( m_engine.getMaterialCache().getPassBuffer().createLayoutBinding() );
@@ -419,8 +419,8 @@ namespace castor3d
 		, m_matrixUbo{ engine }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_sampler{ engine.getDefaultSampler() }
-		, m_signalReady{ engine.getRenderSystem()->getCurrentDevice()->createSemaphore() }
-		, m_fence{ engine.getRenderSystem()->getCurrentDevice()->createFence( renderer::FenceCreateFlag::eSignaled ) }
+		, m_signalReady{ getCurrentDevice( engine ).createSemaphore() }
+		, m_fence{ getCurrentDevice( engine ).createFence( renderer::FenceCreateFlag::eSignaled ) }
 	{
 	}
 
@@ -432,14 +432,15 @@ namespace castor3d
 		doUpdate( size, light, camera );
 	}
 
-	void LightPass::render( uint32_t index
+	renderer::Semaphore const & LightPass::render( uint32_t index
 		, renderer::Semaphore const & toWait
 		, TextureUnit * shadowMapOpt )
 	{
 		static renderer::DepthStencilClearValue const clearDepthStencil{ 1.0, 1 };
 		static renderer::ClearColorValue const clearColour{ 0.0, 0.0, 0.0, 1.0 };
 		REQUIRE( m_pipeline );
-		auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
+		auto result = &toWait;
+		auto & device = getCurrentDevice( m_engine );
 
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
 		{
@@ -468,11 +469,14 @@ namespace castor3d
 			m_commandBuffer->end();
 
 			device.getGraphicsQueue().submit( *m_commandBuffer
-				, toWait
+				, *result
 				, renderer::PipelineStageFlag::eColourAttachmentOutput
 				, *m_signalReady
 				, nullptr );
+			result = m_signalReady.get();
 		}
+
+		return *result;
 	}
 
 	void LightPass::doInitialise( Scene const & scene
@@ -488,7 +492,7 @@ namespace castor3d
 		m_geometryPassResult = &gp;
 		SceneFlags sceneFlags{ scene.getFlags() };
 		auto & renderSystem = *m_engine.getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( renderSystem );
 		auto shadowType = uint32_t( ShadowType::eNone );
 
 		for ( auto & pipeline : m_pipelines )

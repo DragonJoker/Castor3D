@@ -35,7 +35,7 @@ namespace castor3d
 			, renderer::TextureView const & specularView
 			, bool first )
 		{
-			auto & device = *engine.getRenderSystem()->getCurrentDevice();
+			auto & device = getCurrentDevice( engine );
 			renderer::ImageLayout layout = first
 				? renderer::ImageLayout::eUndefined
 				: renderer::ImageLayout::eColourAttachmentOptimal;
@@ -52,7 +52,7 @@ namespace castor3d
 			renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 			renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 			renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-			renderPass.attachments[0].initialLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+			renderPass.attachments[0].initialLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
 			renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
 
 			renderPass.attachments[1].format = diffuseView.getFormat();
@@ -191,7 +191,7 @@ namespace castor3d
 			, specularView
 			, gpInfoUbo
 			, hasShadows }
-		, m_ubo{ renderer::makeUniformBuffer< Config >( *engine.getRenderSystem()->getCurrentDevice()
+		, m_ubo{ renderer::makeUniformBuffer< Config >( getCurrentDevice( engine )
 			, 1u
 			, renderer::BufferTarget::eTransferDst
 			, renderer::MemoryPropertyFlag::eHostVisible ) }
@@ -217,7 +217,7 @@ namespace castor3d
 		};
 
 		auto & renderSystem = *m_engine.getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( renderSystem );
 		m_vertexBuffer = renderer::makeVertexBuffer< float >( device
 			, 12u
 			, 0u

@@ -74,7 +74,7 @@ namespace castor3d
 		 *\param[out]	info	Reçoit les informations de rendu.
 		 *\param[out]	scene	La scène rendue.
 		 */
-		void render( RenderInfo & info
+		renderer::Semaphore const & render( RenderInfo & info
 			, Scene const & scene
 			, renderer::Semaphore const & toWait );
 		/**
@@ -88,21 +88,6 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		void accept( RenderTechniqueVisitor & visitor );
-		/**
-		*\~english
-		*name
-		*	Getters.
-		*\~french
-		*name
-		*	Accesseurs.
-		*/
-		/**@{*/
-		inline renderer::Semaphore & getSemaphore()
-		{
-			REQUIRE( m_semaphore );
-			return *m_semaphore;
-		}
-		/**@}*/
 
 	private:
 		Engine & m_engine;

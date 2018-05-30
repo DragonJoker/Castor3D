@@ -858,4 +858,19 @@ namespace castor3d
 
 		return result;
 	}
+
+	renderer::Device const & getCurrentDevice( RenderSystem const & obj )
+	{
+		return *obj.getCurrentDevice();
+	}
+
+	renderer::Device const & getCurrentDevice( Engine const & obj )
+	{
+		return getCurrentDevice( *obj.getRenderSystem() );
+	}
+
+	renderer::Device const & getCurrentDevice( Scene const & obj )
+	{
+		return getCurrentDevice( *obj.getEngine() );
+	}
 }

@@ -57,7 +57,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			auto & device = *getParent().getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
+			auto & device = getCurrentDevice( getParent() );
 			m_ubo = renderer::makeUniformBuffer< Configuration >( device
 				, 1u
 				, renderer::BufferTarget::eTransferDst
@@ -119,7 +119,7 @@ namespace castor3d
 		, Milliseconds const & totalTime
 		, uint32_t index )
 	{
-		auto & device = *getParent().getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( getParent() );
 		auto & data = m_ubo->getData( 0u );
 		data.deltaTime = float( time.count() );
 		data.time = float( totalTime.count() );
@@ -226,7 +226,7 @@ namespace castor3d
 	bool ComputeParticleSystem::doInitialiseParticleStorage()
 	{
 		auto size = uint32_t( m_parent.getMaxParticlesCount() * m_inputs.stride() );
-		auto & device = *getParent().getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( getParent() );
 		m_generatedCountBuffer = renderer::makeBuffer< uint32_t >( device
 			, 2u
 			, renderer::BufferTarget::eStorageBuffer | renderer::BufferTarget::eTransferDst | renderer::BufferTarget::eTransferSrc
@@ -263,7 +263,7 @@ namespace castor3d
 
 	bool ComputeParticleSystem::doCreateRandomStorage()
 	{
-		auto & device = *getParent().getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( getParent() );
 		uint32_t size = 1024u;
 		m_randomStorage = renderer::makeBuffer< castor::Point4f >( device
 			, 1024
@@ -294,7 +294,7 @@ namespace castor3d
 
 	bool ComputeParticleSystem::doInitialisePipeline()
 	{
-		auto & device = *getParent().getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( getParent() );
 		renderer::DescriptorSetLayoutBindingArray bindings
 		{
 			{ IndexBufferBinding, renderer::DescriptorType::eStorageBuffer, renderer::ShaderStageFlag::eCompute },
@@ -348,7 +348,7 @@ namespace castor3d
 
 	void ComputeParticleSystem::doPrepareCommandBuffers()
 	{
-		auto & device = *getParent().getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( getParent() );
 		m_commandBuffer = device.getComputeCommandPool().createCommandBuffer();
 		m_fence = device.createFence();
 	}

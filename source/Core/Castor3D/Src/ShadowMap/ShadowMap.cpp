@@ -63,8 +63,8 @@ namespace castor3d
 			if ( result )
 			{
 				doInitialise();
-				m_finished = getEngine()->getRenderSystem()->getCurrentDevice()->createSemaphore();
-				m_fence = getEngine()->getRenderSystem()->getCurrentDevice()->createFence( renderer::FenceCreateFlag::eSignaled );
+				m_finished = getCurrentDevice( *this ).createSemaphore();
+				m_fence = getCurrentDevice( *this ).createFence( renderer::FenceCreateFlag::eSignaled );
 				m_initialised = true;
 			}
 		}

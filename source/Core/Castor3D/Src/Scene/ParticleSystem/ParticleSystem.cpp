@@ -191,7 +191,7 @@ namespace castor3d
 
 	bool ParticleSystem::initialise()
 	{
-		auto & device = *getScene()->getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 		auto vertexLayout = std::make_unique< renderer::VertexLayout >( 1u, m_inputs.stride(), renderer::VertexInputRate::eInstance );
 		uint32_t index{ 2u };
 

@@ -270,7 +270,7 @@ namespace castor3d
 			, glsl::Shader & vertexShader
 			, glsl::Shader & pixelShader )
 		{
-			auto & device = *engine.getRenderSystem()->getCurrentDevice();
+			auto & device = getCurrentDevice( engine );
 			vertexShader = doGetVertexProgram( engine );
 			pixelShader = doGetBlurProgram( engine, isVertic );
 
@@ -288,7 +288,7 @@ namespace castor3d
 			, glsl::Shader & vertexShader
 			, glsl::Shader & pixelShader )
 		{
-			auto & device = *engine.getRenderSystem()->getCurrentDevice();
+			auto & device = getCurrentDevice( engine );
 			vertexShader = doGetVertexProgram( engine );
 			pixelShader = doGetCombineProgram( engine );
 
@@ -371,7 +371,7 @@ namespace castor3d
 		, m_sceneUbo{ sceneUbo }
 		, m_blurUbo{ blurUbo }
 	{
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( renderSystem );
 
 		// Create the render pass.
 		renderer::RenderPassCreateInfo renderPass;
@@ -391,7 +391,7 @@ namespace castor3d
 		renderPass.subpasses[0].flags = 0u;
 		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
 		renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
-
+		
 		renderPass.dependencies.resize( 2u );
 		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
@@ -493,7 +493,7 @@ namespace castor3d
 		, m_source{ source }
 		, m_blurResults{ blurResults }
 	{
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( renderSystem );
 
 		// Create the render pass.
 		renderer::RenderPassCreateInfo renderPass;
@@ -611,11 +611,11 @@ namespace castor3d
 		, TextureUnit const & lightDiffuse )
 		: OwnedBy< Engine >{ engine }
 		, m_size{ textureSize }
-		, m_blurConfigUbo{ renderer::makeUniformBuffer< BlurConfiguration >( *engine.getRenderSystem()->getCurrentDevice()
+		, m_blurConfigUbo{ renderer::makeUniformBuffer< BlurConfiguration >( getCurrentDevice( engine )
 			, 1u
 			, renderer::BufferTarget::eTransferDst
 			, renderer::MemoryPropertyFlag::eHostVisible ) }
-		, m_blurWeightsUbo{ renderer::makeUniformBuffer< BlurWeights >( *engine.getRenderSystem()->getCurrentDevice()
+		, m_blurWeightsUbo{ renderer::makeUniformBuffer< BlurWeights >( getCurrentDevice( engine )
 			, 1u
 			, renderer::BufferTarget::eTransferDst
 			, renderer::MemoryPropertyFlag::eHostVisible ) }
@@ -660,7 +660,7 @@ namespace castor3d
 		weights.blurVariance = Point4f{ 0.0516, 0.2719, 2.0062 };
 		m_blurWeightsUbo->upload();
 
-		auto & device = *engine.getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( engine );
 		m_finished = device.createSemaphore();
 		m_fence = device.createFence( renderer::FenceCreateFlag::eSignaled );
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
@@ -697,7 +697,7 @@ namespace castor3d
 
 	renderer::Semaphore const & SubsurfaceScatteringPass::render( renderer::Semaphore const & toWait )const
 	{
-		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 		m_timer->notifyPassRender();
 		device.getGraphicsQueue().submit( *m_commandBuffer
 			, toWait

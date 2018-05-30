@@ -81,7 +81,7 @@ namespace castor3d
 			, gpInfoUbo
 			, LightType::eSpot
 			, hasShadows }
-		, m_ubo{ renderer::makeUniformBuffer< Config >( *m_engine.getRenderSystem()->getCurrentDevice()
+		, m_ubo{ renderer::makeUniformBuffer< Config >( getCurrentDevice( m_engine )
 			, 1u
 			, renderer::BufferTarget::eTransferDst
 			, renderer::MemoryPropertyFlag::eHostVisible ) }

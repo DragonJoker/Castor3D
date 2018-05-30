@@ -104,7 +104,7 @@ namespace light_streaks
 				auto texcoords = writer.declLocale( cuT( "texcoords" )
 					, vtx_texture );
 
-				if ( renderSystem->getCurrentDevice()->getClipDirection() != renderer::ClipDirection::eTopDown )
+				if ( getCurrentDevice( *renderSystem ).getClipDirection() != renderer::ClipDirection::eTopDown )
 				{
 					texcoords = vec2( texcoords.x(), 1.0 - texcoords.y() );
 				}
@@ -270,7 +270,7 @@ namespace light_streaks
 		m_linearSampler->initialise();
 		m_nearestSampler->initialise();
 		auto & engine = *getRenderSystem()->getEngine();
-		auto & device = *getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
 
 		// Create vertex buffer
@@ -482,7 +482,7 @@ namespace light_streaks
 	bool PostEffect::doInitialiseHiPassProgram()
 	{
 		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
-		auto & device = *getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 		m_pipelines.hiPass.vertexShader = getVertexProgram( getRenderSystem() );
 		m_pipelines.hiPass.pixelShader = getHiPassProgram( getRenderSystem() );
 
@@ -529,7 +529,7 @@ namespace light_streaks
 	bool PostEffect::doInitialiseKawaseProgram()
 	{
 		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
-		auto & device = *getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 		m_pipelines.kawase.vertexShader = getVertexProgram( getRenderSystem() );
 		m_pipelines.kawase.pixelShader = getKawaseProgram( getRenderSystem() );
 
@@ -588,7 +588,7 @@ namespace light_streaks
 	bool PostEffect::doInitialiseCombineProgram()
 	{
 		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
-		auto & device = *getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 		m_pipelines.combine.vertexShader = getVertexProgram( getRenderSystem() );
 		m_pipelines.combine.pixelShader = getCombineProgram( getRenderSystem() );
 
@@ -647,7 +647,7 @@ namespace light_streaks
 
 	bool PostEffect::doBuildCommandBuffer( castor3d::RenderPassTimer const & timer )
 	{
-		auto & device = *getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
 
 		// Fill command buffer.

@@ -37,9 +37,8 @@ namespace castor3d
 {
 	namespace
 	{
-		glsl::Shader getVertexProgram( Engine & engine )
+		glsl::Shader getVertexProgram( RenderSystem & renderSystem )
 		{
-			auto & renderSystem = *engine.getRenderSystem();
 			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 
@@ -60,9 +59,8 @@ namespace castor3d
 			return writer.finalise();
 		}
 
-		glsl::Shader getBlurXProgram( Engine & engine, bool isDepth )
+		glsl::Shader getBlurXProgram( RenderSystem & renderSystem, bool isDepth )
 		{
-			auto & renderSystem = *engine.getRenderSystem();
 			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 
@@ -102,9 +100,8 @@ namespace castor3d
 			return writer.finalise();
 		}
 
-		glsl::Shader getBlurYProgram( Engine & engine, bool isDepth )
+		glsl::Shader getBlurYProgram( RenderSystem & renderSystem, bool isDepth )
 		{
-			auto & renderSystem = *engine.getRenderSystem();
 			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
 
@@ -330,8 +327,8 @@ namespace castor3d
 		, m_size{ textureSize }
 		, m_format{ format }
 		, m_intermediate{ doCreateTexture( engine, textureSize, format, cuT( "GaussianBlur" ) ) }
-		, m_renderPass{ doCreateRenderPass( *engine.getRenderSystem()->getCurrentDevice(), m_format ) }
-		, m_blurUbo{ renderer::makeUniformBuffer< Configuration >( *engine.getRenderSystem()->getCurrentDevice()
+		, m_renderPass{ doCreateRenderPass( getCurrentDevice( engine ), m_format ) }
+		, m_blurUbo{ renderer::makeUniformBuffer< Configuration >( getCurrentDevice( engine )
 			, 1u
 			, renderer::BufferTarget::eTransferDst
 			, renderer::MemoryPropertyFlag::eHostVisible ) }
@@ -365,11 +362,13 @@ namespace castor3d
 		data.textureSize[0] = float( textureSize.width );
 		data.textureSize[1] = float( textureSize.height );
 		m_blurUbo->upload();
-		auto & device = *engine.getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( engine );
 		m_horizCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 		m_verticCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
-		doInitialiseBlurXProgram( engine );
-		doInitialiseBlurYProgram( engine );
+		m_horizSemaphore = device.createSemaphore();
+		m_verticSemaphore = device.createSemaphore();
+		doInitialiseBlurXProgram();
+		doInitialiseBlurYProgram();
 
 		if ( m_horizCommandBuffer->begin() )
 		{
@@ -394,22 +393,31 @@ namespace castor3d
 		}
 	}
 
-	void GaussianBlur::blur()
+	renderer::Semaphore const & GaussianBlur::blur( renderer::Semaphore const & toWait )
 	{
-		auto & device = *getEngine()->getRenderSystem()->getCurrentDevice();
-		device.getGraphicsQueue().submit( *m_horizCommandBuffer, nullptr );
-		device.getGraphicsQueue().waitIdle();
-		device.getGraphicsQueue().submit( *m_verticCommandBuffer, nullptr );
-		device.getGraphicsQueue().waitIdle();
+		auto * result = &toWait;
+		auto & device = getCurrentDevice( *this );
+		device.getGraphicsQueue().submit( *m_horizCommandBuffer
+			, *result
+			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, *m_horizSemaphore
+			, nullptr );
+		result = m_horizSemaphore.get();
+		device.getGraphicsQueue().submit( *m_verticCommandBuffer
+			, *result
+			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, *m_verticSemaphore
+			, nullptr );
+		result = m_verticSemaphore.get();
+		return *result;
 	}
 
-	bool GaussianBlur::doInitialiseBlurXProgram( Engine & engine )
+	bool GaussianBlur::doInitialiseBlurXProgram()
 	{
-		auto & renderSystem = *engine.getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
-		auto & cache = engine.getShaderProgramCache();
-		m_blurXVertexShader = getVertexProgram( engine );
-		m_blurXPixelShader = getBlurXProgram( engine, renderer::isDepthFormat( m_format ) );
+		auto & device = getCurrentDevice( *this );
+		auto & cache = getEngine()->getShaderProgramCache();
+		m_blurXVertexShader = getVertexProgram( *getEngine()->getRenderSystem() );
+		m_blurXPixelShader = getBlurXProgram( *getEngine()->getRenderSystem(), renderer::isDepthFormat( m_format ) );
 
 		renderer::ShaderStageStateArray program
 		{
@@ -435,13 +443,12 @@ namespace castor3d
 		return true;
 	}
 
-	bool GaussianBlur::doInitialiseBlurYProgram( Engine & engine )
+	bool GaussianBlur::doInitialiseBlurYProgram()
 	{
-		auto & renderSystem = *engine.getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
-		auto & cache = engine.getShaderProgramCache();
-		m_blurYVertexShader = getVertexProgram( engine );
-		m_blurYPixelShader = getBlurYProgram( engine, renderer::isDepthFormat( m_format ) );
+		auto & device = getCurrentDevice( *this );
+		auto & cache = getEngine()->getShaderProgramCache();
+		m_blurYVertexShader = getVertexProgram( *getEngine()->getRenderSystem() );
+		m_blurYPixelShader = getBlurYProgram( *getEngine()->getRenderSystem(), renderer::isDepthFormat( m_format ) );
 
 		renderer::ShaderStageStateArray program
 		{

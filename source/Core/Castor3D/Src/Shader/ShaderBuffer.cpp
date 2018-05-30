@@ -24,7 +24,7 @@ namespace castor3d
 			renderer::BufferTarget target = engine.getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers )
 				? renderer::BufferTarget::eStorageBuffer
 				: renderer::BufferTarget::eUniformTexelBuffer;
-			result = engine.getRenderSystem()->getCurrentDevice()->createBuffer( size
+			result = getCurrentDevice( engine ).createBuffer( size
 				, target | renderer::BufferTarget::eTransferDst
 				, renderer::MemoryPropertyFlag::eHostVisible );
 			return result;
@@ -38,7 +38,7 @@ namespace castor3d
 
 			if ( !engine.getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers ) )
 			{
-				result = engine.getRenderSystem()->getCurrentDevice()->createBufferView( buffer
+				result = getCurrentDevice( engine ).createBufferView( buffer
 					, renderer::Format::eR32G32B32A32_SFLOAT
 					, 0u
 					, uint32_t( buffer.getSize() ) );

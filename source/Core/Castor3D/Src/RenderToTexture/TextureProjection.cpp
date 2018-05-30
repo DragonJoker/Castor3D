@@ -51,7 +51,7 @@ namespace castor3d
 		, renderer::Format targetDepth )
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( renderSystem );
 
 		renderer::RenderPassCreateInfo renderPass;
 		renderPass.flags = 0;
@@ -121,7 +121,7 @@ namespace castor3d
 	void TextureProjection::doPrepareFrame()
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( renderSystem );
 
 		if ( !m_commandBuffer )
 		{
@@ -213,8 +213,8 @@ namespace castor3d
 
 		renderer::ShaderStageStateArray program
 		{
-			{ renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eVertex ) },
-			{ renderSystem.getCurrentDevice()->createShaderModule( renderer::ShaderStageFlag::eFragment ) }
+			{ getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eVertex ) },
+			{ getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eFragment ) }
 		};
 		program[0].module->loadShader( vtx.getSource() );
 		program[1].module->loadShader( pxl.getSource() );
@@ -224,7 +224,7 @@ namespace castor3d
 	bool TextureProjection::doInitialiseVertexBuffer()
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( renderSystem );
 		m_vertexBuffer = renderer::makeVertexBuffer< NonTexturedCube >( device
 			, 1u
 			, renderer::BufferTarget::eTransferDst
@@ -280,7 +280,7 @@ namespace castor3d
 
 		auto blState = renderer::ColourBlendState::createDefault();
 		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( renderSystem );
 
 		renderer::DescriptorSetLayoutBindingArray bindings
 		{

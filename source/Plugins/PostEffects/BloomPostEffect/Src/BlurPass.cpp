@@ -349,7 +349,7 @@ namespace Bloom
 		, uint32_t blurKernelSize
 		, uint32_t blurPassesCount
 		, bool isVertical )
-		: m_device{ *renderSystem.getCurrentDevice() }
+		: m_device{ getCurrentDevice( renderSystem ) }
 		, m_blurKernelSize{ blurKernelSize }
 		, m_blurPassesCount{ blurPassesCount }
 		, m_blurUbo{ doCreateUbo( m_device, dimensions, m_blurKernelSize, m_blurPassesCount, isVertical ) }

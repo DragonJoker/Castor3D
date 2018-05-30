@@ -134,7 +134,7 @@ namespace castor3d
 			, glsl::Shader & vertexShader
 			, glsl::Shader & pixelShader )
 		{
-			auto & device = *engine.getRenderSystem()->getCurrentDevice();
+			auto & device = getCurrentDevice( engine );
 			vertexShader = doGetVertexProgram( engine );
 			pixelShader = doGetLinearisePixelProgram( engine );
 			renderer::ShaderStageStateArray program
@@ -151,7 +151,7 @@ namespace castor3d
 			, glsl::Shader & vertexShader
 			, glsl::Shader & pixelShader )
 		{
-			auto & device = *engine.getRenderSystem()->getCurrentDevice();
+			auto & device = getCurrentDevice( engine );
 			vertexShader = doGetVertexProgram( engine );
 			pixelShader = doGetMinifyPixelProgram( engine );
 			renderer::ShaderStageStateArray program
@@ -218,7 +218,7 @@ namespace castor3d
 		renderer::RenderPassPtr doCreateRenderPass( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = *renderSystem.getCurrentDevice();
+			auto & device = getCurrentDevice( renderSystem );
 
 			// Create the render pass.
 			renderer::RenderPassCreateInfo renderPass;
@@ -272,7 +272,7 @@ namespace castor3d
 		renderer::VertexBufferPtr< NonTexturedQuad > doCreateVertexBuffer( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = *renderSystem.getCurrentDevice();
+			auto & device = getCurrentDevice( renderSystem );
 			auto result = renderer::makeVertexBuffer< NonTexturedQuad >( device
 				, 1u
 				, 0u
@@ -303,7 +303,7 @@ namespace castor3d
 		renderer::VertexLayoutPtr doCreateVertexLayout( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = *renderSystem.getCurrentDevice();
+			auto & device = getCurrentDevice( renderSystem );
 			auto result = renderer::makeLayout< NonTexturedQuad::Vertex >( 0u );
 			result->createAttribute( 0u, renderer::Format::eR32G32_SFLOAT, offsetof( NonTexturedQuad::Vertex, position ) );
 			return result;
@@ -326,18 +326,18 @@ namespace castor3d
 		, m_renderPass{ doCreateRenderPass( m_engine ) }
 		, m_vertexBuffer{ doCreateVertexBuffer( m_engine ) }
 		, m_vertexLayout{ doCreateVertexLayout( m_engine ) }
-		, m_lineariseSampler{ m_engine.getRenderSystem()->getCurrentDevice()->createSampler( renderer::WrapMode::eClampToEdge
+		, m_lineariseSampler{ getCurrentDevice( m_engine ).createSampler( renderer::WrapMode::eClampToEdge
 			, renderer::WrapMode::eClampToEdge
 			, renderer::WrapMode::eClampToEdge
 			, renderer::Filter::eNearest
 			, renderer::Filter::eNearest ) }
-		, m_minifySampler{ m_engine.getRenderSystem()->getCurrentDevice()->createSampler( renderer::WrapMode::eClampToEdge
+		, m_minifySampler{ getCurrentDevice( m_engine ).createSampler( renderer::WrapMode::eClampToEdge
 			, renderer::WrapMode::eClampToEdge
 			, renderer::WrapMode::eClampToEdge
 			, renderer::Filter::eNearest
 			, renderer::Filter::eNearest ) }
-		, m_commandBuffer{ m_engine.getRenderSystem()->getCurrentDevice()->getGraphicsCommandPool().createCommandBuffer() }
-		, m_finished{ engine.getRenderSystem()->getCurrentDevice()->createSemaphore() }
+		, m_commandBuffer{ getCurrentDevice( m_engine ).getGraphicsCommandPool().createCommandBuffer() }
+		, m_finished{ getCurrentDevice( engine ).createSemaphore() }
 		, m_clipInfo{ renderer::ShaderStageFlag::eFragment, { { 1u, 0u, renderer::ConstantFormat::eVec3f } } }
 		, m_lineariseProgram{ doGetLineariseProgram( m_engine, m_lineariseVertexShader, m_linearisePixelShader ) }
 		, m_minifyProgram{ doGetMinifyProgram( m_engine, m_minifyVertexShader, m_minifyPixelShader ) }
@@ -370,7 +370,7 @@ namespace castor3d
 		m_timer->start();
 		m_timer->notifyPassRender();
 		auto & renderSystem = *m_engine.getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( renderSystem );
 		device.getGraphicsQueue().submit( *m_commandBuffer
 			, toWait
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
@@ -407,7 +407,7 @@ namespace castor3d
 		m_lineariseFrameBuffer = m_renderPass->createFrameBuffer( renderer::Extent2D{ size.width, size.height }
 			, std::move( attaches ) );
 		auto & renderSystem = *m_engine.getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( renderSystem );
 		renderer::DescriptorSetLayoutBindingArray bindings
 		{
 			{ 0u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment }
@@ -442,7 +442,7 @@ namespace castor3d
 	void LineariseDepthPass::doInitialiseMinifyPass()
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = getCurrentDevice( renderSystem );
 		auto size = m_result.getTexture()->getDimensions();
 		renderer::DescriptorSetLayoutBindingArray bindings
 		{

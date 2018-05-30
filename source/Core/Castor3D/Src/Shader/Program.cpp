@@ -136,7 +136,7 @@ namespace castor3d
 
 	bool ShaderProgram::initialise()
 	{
-		auto & device = *getRenderSystem()->getCurrentDevice();
+		auto & device = getCurrentDevice( *this );
 
 		auto loadShader = [this, &device]( renderer::ShaderStageFlag stage )
 		{

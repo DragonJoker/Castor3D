@@ -36,7 +36,7 @@ namespace castor3d
 	{
 		if ( !m_ubo )
 		{
-			auto & device = *m_engine.getRenderSystem()->getCurrentDevice();
+			auto & device = getCurrentDevice( m_engine );
 			m_ubo = renderer::makeUniformBuffer< Configuration >( device
 				, 1u
 				, renderer::BufferTarget::eTransferDst

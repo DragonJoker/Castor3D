@@ -12,7 +12,7 @@ namespace fxaa
 
 	FxaaUbo::FxaaUbo( castor3d::Engine & engine
 		, castor::Size const & size )
-		: m_ubo{ renderer::makeUniformBuffer< Configuration >( *engine.getRenderSystem()->getCurrentDevice()
+		: m_ubo{ renderer::makeUniformBuffer< Configuration >( getCurrentDevice( engine )
 			, 1u
 			, 0u
 			, renderer::MemoryPropertyFlag::eHostVisible | renderer::MemoryPropertyFlag::eHostCoherent ) }

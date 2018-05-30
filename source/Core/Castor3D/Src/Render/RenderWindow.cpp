@@ -177,12 +177,12 @@ namespace castor3d
 			bool hasCurrent = getEngine()->getRenderSystem()->hasCurrentDevice();
 
 			if ( hasCurrent
-				&& getEngine()->getRenderSystem()->getCurrentDevice() != m_device.get() )
+				&& &getCurrentDevice( *this ) != m_device.get() )
 			{
-				auto device = getEngine()->getRenderSystem()->getCurrentDevice();
-				device->disable();
+				auto & device = getCurrentDevice( *this );
+				device.disable();
 				doCleanup( true );
-				device->enable();
+				device.enable();
 			}
 			else
 			{
@@ -227,6 +227,7 @@ namespace castor3d
 						, { renderer::PipelineStageFlag::eColourAttachmentOutput, renderer::PipelineStageFlag::eColourAttachmentOutput }
 						, { resources->getRenderingFinishedSemaphore() }
 						, &resources->getFence() );
+					m_device->waitIdle();
 					m_swapChain->present( *resources );
 				}
 				else

@@ -159,7 +159,7 @@ namespace castor3d
 				m_info.mipLevels = 1u;
 			}
 
-			m_texture = getRenderSystem()->getCurrentDevice()->createTexture( m_info, m_properties );
+			m_texture = getCurrentDevice( *this ).createTexture( m_info, m_properties );
 			m_defaultView->initialise();
 
 			for ( auto & view : m_views )
