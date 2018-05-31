@@ -44,9 +44,12 @@ namespace castor3d
 			void doDeclareComputeDirectionalLight()override;
 			void doDeclareComputePointLight()override;
 			void doDeclareComputeSpotLight()override;
-			void doDeclareComputeOneDirectionalLight( ShadowType shadowType )override;
-			void doDeclareComputeOnePointLight( ShadowType shadowType )override;
-			void doDeclareComputeOneSpotLight( ShadowType shadowType )override;
+			void doDeclareComputeOneDirectionalLight( ShadowType shadowType
+				, bool volumetric )override;
+			void doDeclareComputeOnePointLight( ShadowType shadowType
+				, bool volumetric )override;
+			void doDeclareComputeOneSpotLight( ShadowType shadowType
+				, bool volumetric )override;
 
 			void doComputeLight( Light const & light
 				, glsl::Vec3 const & worldEye

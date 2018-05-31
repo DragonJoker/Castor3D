@@ -205,6 +205,7 @@ namespace castor3d
 	void DeferredRendering::accept( RenderTechniqueVisitor & visitor )
 	{
 		m_opaquePass.accept( visitor );
+		m_lightingPass->accept( visitor );
 
 		if ( m_ssaoConfig.m_enabled )
 		{

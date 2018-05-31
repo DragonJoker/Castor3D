@@ -71,7 +71,9 @@ namespace castor3d
 			doDeclareComputeSpotLight();
 		}
 
-		void LightingModel::declareDirectionalModel( ShadowType shadows, uint32_t & index )
+		void LightingModel::declareDirectionalModel( ShadowType shadows
+			, bool volumetric
+			, uint32_t & index )
 		{
 			if ( shadows != ShadowType::eNone )
 			{
@@ -82,10 +84,12 @@ namespace castor3d
 			doDeclareDirectionalLight();
 			doDeclareDirectionalLightUbo();
 			doDeclareModel();
-			doDeclareComputeOneDirectionalLight( shadows );
+			doDeclareComputeOneDirectionalLight( shadows, volumetric );
 		}
 
-		void LightingModel::declarePointModel( ShadowType shadows, uint32_t & index )
+		void LightingModel::declarePointModel( ShadowType shadows
+			, bool volumetric
+			, uint32_t & index )
 		{
 			if ( shadows != ShadowType::eNone )
 			{
@@ -96,10 +100,12 @@ namespace castor3d
 			doDeclarePointLight();
 			doDeclarePointLightUbo();
 			doDeclareModel();
-			doDeclareComputeOnePointLight( shadows );
+			doDeclareComputeOnePointLight( shadows, volumetric );
 		}
 
-		void LightingModel::declareSpotModel( ShadowType shadows, uint32_t & index )
+		void LightingModel::declareSpotModel( ShadowType shadows
+			, bool volumetric
+			, uint32_t & index )
 		{
 			if ( shadows != ShadowType::eNone )
 			{
@@ -110,7 +116,7 @@ namespace castor3d
 			doDeclareSpotLight();
 			doDeclareSpotLightUbo();
 			doDeclareModel();
-			doDeclareComputeOneSpotLight( shadows );
+			doDeclareComputeOneSpotLight( shadows, volumetric );
 		}
 
 		DirectionalLight LightingModel::getDirectionalLight( Int const & index )const
@@ -133,6 +139,7 @@ namespace castor3d
 			Struct lightDecl = m_writer.getStruct( cuT( "Light" ) );
 			lightDecl.declMember< Vec4 >( cuT( "m_colourIndex" ) );
 			lightDecl.declMember< Vec4 >( cuT( "m_intensityFarPlane" ) );
+			lightDecl.declMember< Vec4 >( cuT( "m_volumetric" ) );
 			lightDecl.end();
 		}
 
@@ -204,6 +211,7 @@ namespace castor3d
 						auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) );
 						result.m_colourIndex() = texelFetch( c3d_sLights, offset++ );
 						result.m_intensityFarPlane() = texelFetch( c3d_sLights, offset++ );
+						result.m_volumetric() = texelFetch( c3d_sLights, offset++ );
 					}
 					else
 					{
@@ -211,6 +219,7 @@ namespace castor3d
 						auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) );
 						result.m_colourIndex() = texelFetch( c3d_sLights, offset++, 0 );
 						result.m_intensityFarPlane() = texelFetch( c3d_sLights, offset++, 0 );
+						result.m_volumetric() = texelFetch( c3d_sLights, offset++, 0 );
 					}
 				}
 				else

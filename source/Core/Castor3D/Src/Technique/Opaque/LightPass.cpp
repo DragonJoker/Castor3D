@@ -428,7 +428,8 @@ namespace castor3d
 		, Light const & light
 		, Camera const & camera )
 	{
-		m_pipeline = &m_pipelines[size_t( light.getShadowType() )];
+		auto index = size_t( light.getShadowType() ) + size_t( ( light.getVolumetricSteps() > 0 ? 1u : 0u ) * size_t( ShadowType::eCount ) );
+		m_pipeline = &m_pipelines[index];
 		doUpdate( size, light, camera );
 	}
 
@@ -493,26 +494,39 @@ namespace castor3d
 		SceneFlags sceneFlags{ scene.getFlags() };
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = getCurrentDevice( renderSystem );
-		auto shadowType = uint32_t( ShadowType::eNone );
+		auto pipelineIndex = 0u;
 
 		for ( auto & pipeline : m_pipelines )
 		{
+			auto shadowType = ShadowType( pipelineIndex % uint32_t( ShadowType::eCount ) );
+			bool volumetric = pipelineIndex >= uint32_t( ShadowType::eCount );
+
 			if ( scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness )
 			{
-				pipeline.program = doCreateProgram( doGetVertexShaderSource( sceneFlags )
-					, doGetPbrMRPixelShaderSource( sceneFlags, lightType, ShadowType( shadowType ) ) );
+				m_vertexShader = doGetVertexShaderSource( sceneFlags );
+				m_pixelShader = doGetPbrMRPixelShaderSource( sceneFlags
+					, lightType
+					, shadowType
+					, volumetric );
 			}
 			else if ( scene.getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
 			{
-				pipeline.program = doCreateProgram( doGetVertexShaderSource( sceneFlags )
-					, doGetPbrSGPixelShaderSource( sceneFlags, lightType, ShadowType( shadowType ) ) );
+				m_vertexShader = doGetVertexShaderSource( sceneFlags );
+				m_pixelShader = doGetPbrSGPixelShaderSource( sceneFlags
+					, lightType
+					, shadowType
+					, volumetric );
 			}
 			else
 			{
-				pipeline.program = doCreateProgram( doGetVertexShaderSource( sceneFlags )
-					, doGetLegacyPixelShaderSource( sceneFlags, lightType, ShadowType( shadowType ) ) );
+				m_vertexShader = doGetVertexShaderSource( sceneFlags );
+				m_pixelShader = doGetLegacyPixelShaderSource( sceneFlags
+					, lightType
+					, shadowType
+					, volumetric );
 			}
 
+			pipeline.program = doCreateProgram();
 			pipeline.program->initialise( vbo
 				, vertexLayout
 				, *m_firstRenderPass.renderPass
@@ -590,7 +604,7 @@ namespace castor3d
 				doPrepareCommandBuffer( pipeline, nullptr, false );
 			}
 
-			++shadowType;
+			++pipelineIndex;
 		}
 	}
 
@@ -652,7 +666,8 @@ namespace castor3d
 	
 	glsl::Shader LightPass::doGetLegacyPixelShaderSource( SceneFlags const & sceneFlags
 		, LightType lightType
-		, ShadowType shadowType )const
+		, ShadowType shadowType
+		, bool volumetric )const
 	{
 		using namespace glsl;
 		GlslWriter writer = m_engine.getRenderSystem()->createGlslWriter();
@@ -682,6 +697,7 @@ namespace castor3d
 		auto lighting = shader::legacy::createLightingModel( writer
 			, lightType
 			, shadowType
+			, volumetric
 			, index );
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
@@ -815,7 +831,8 @@ namespace castor3d
 	
 	glsl::Shader LightPass::doGetPbrMRPixelShaderSource( SceneFlags const & sceneFlags
 		, LightType lightType
-		, ShadowType shadowType )const
+		, ShadowType shadowType
+		, bool volumetric )const
 	{
 		using namespace glsl;
 		GlslWriter writer = m_engine.getRenderSystem()->createGlslWriter();
@@ -845,6 +862,7 @@ namespace castor3d
 		auto lighting = shader::pbr::mr::createLightingModel( writer
 			, lightType
 			, shadowType
+			, volumetric
 			, index );
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
@@ -1038,7 +1056,8 @@ namespace castor3d
 	
 	glsl::Shader LightPass::doGetPbrSGPixelShaderSource( SceneFlags const & sceneFlags
 		, LightType lightType
-		, ShadowType shadowType )const
+		, ShadowType shadowType
+		, bool volumetric )const
 	{
 		using namespace glsl;
 		GlslWriter writer = m_engine.getRenderSystem()->createGlslWriter();
@@ -1064,6 +1083,7 @@ namespace castor3d
 		auto lighting = shader::pbr::sg::createLightingModel( writer
 			, lightType
 			, shadowType
+			, volumetric
 			, index );
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };

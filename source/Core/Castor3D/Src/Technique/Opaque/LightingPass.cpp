@@ -194,6 +194,16 @@ namespace castor3d
 		return *result;
 	}
 
+	void LightingPass::accept( RenderTechniqueVisitor & visitor )
+	{
+		m_lightPass[size_t( LightType::eDirectional )]->accept( visitor );
+		m_lightPass[size_t( LightType::ePoint )]->accept( visitor );
+		m_lightPass[size_t( LightType::eSpot )]->accept( visitor );
+		m_lightPassShadow[size_t( LightType::eDirectional )]->accept( visitor );
+		m_lightPassShadow[size_t( LightType::ePoint )]->accept( visitor );
+		m_lightPassShadow[size_t( LightType::eSpot )]->accept( visitor );
+	}
+
 	renderer::Semaphore const & LightingPass::doRenderLights( Scene const & scene
 		, Camera const & camera
 		, LightType p_type

@@ -44,6 +44,11 @@ namespace castor3d
 			return Vec4( m_writer, String( *this ) + cuT( ".m_intensityFarPlane" ) );
 		}
 
+		Vec4 Light::m_volumetric()const
+		{
+			return Vec4( m_writer, String( *this ) + cuT( ".m_volumetric" ) );
+		}
+
 		Vec3 Light::m_colour()const
 		{
 			return Vec3( m_writer, m_name + cuT( ".m_colourIndex.xyz" ) );
@@ -67,6 +72,16 @@ namespace castor3d
 		Int Light::m_index()const
 		{
 			return Int( m_writer, cuT( "int( " ) + String( *this ) + cuT( ".m_colourIndex.w )" ) );
+		}
+
+		UInt Light::m_volumetricSteps()const
+		{
+			return UInt( m_writer, cuT( "uint( " ) + String( *this ) + cuT( ".m_volumetric.x )" ) );
+		}
+
+		Float Light::m_volumetricScattering()const
+		{
+			return Int( m_writer, cuT( "int( " ) + String( *this ) + cuT( ".m_volumetric.y )" ) );
 		}
 
 		//*********************************************************************************************

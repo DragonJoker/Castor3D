@@ -99,13 +99,16 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		~PointLightPass();
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		void accept( RenderTechniqueVisitor & visitor )override;
 
 	private:
 		/**
 		 *\copydoc		castor3d::LightPass::doCreateProgram
 		 */
-		LightPass::ProgramPtr doCreateProgram( glsl::Shader const & vtx
-			, glsl::Shader const & pxl )override;
+		LightPass::ProgramPtr doCreateProgram()override;
 		/**
 		 *\copydoc		castor3d::MeshLightPass::doGenerateVertices
 		 */

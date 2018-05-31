@@ -22,6 +22,12 @@ namespace castor3d
 			{ LightType::ePoint, cuT( "point" ) },
 			{ LightType::eSpot, cuT( "spot" ) },
 		};
+		static std::map< ShadowType, String > filter
+		{
+			{ ShadowType::eRaw, cuT( "raw" ) },
+			{ ShadowType::ePCF, cuT( "pcf" ) },
+			{ ShadowType::eVariance, cuT( "variance" ) },
+		};
 
 		Logger::logInfo( m_tabs + cuT( "Writing Light " ) + p_light.getLight().getName() );
 		bool result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "light \"" ) + p_light.getLight().getName() + cuT( "\"\n" ) ) > 0
@@ -57,7 +63,20 @@ namespace castor3d
 
 		if ( result && p_light.getLight().isShadowProducer() )
 		{
-			result = p_file.writeText( m_tabs + cuT( "\tshadow_producer true\n" ) ) > 0;
+			result = p_file.writeText( m_tabs + cuT( "\tshadow\n" ) ) > 0
+				&& p_file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0;
+			result = p_file.writeText( m_tabs + cuT( "\t\tproducer true\n" ) ) > 0;
+			result = p_file.writeText( m_tabs + cuT( "\t\tfilter " ) + filter[p_light.getLight().getShadowType()] + cuT( "\n" ) ) > 0;
+
+			if ( p_light.getVolumetricSteps() )
+			{
+				result = p_file.writeText( m_tabs + cuT( "\t\tvolumetric_steps " )
+					+ string::toString( p_light.getVolumetricSteps(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				result = p_file.writeText( m_tabs + cuT( "\t\tvolumetric_scattering " )
+					+ string::toString( p_light.getVolumetricScatteringFactor(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+			}
+
+			result = p_file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
 			castor::TextWriter< LightCategory >::checkError( result, "LightCategory shadow producer" );
 		}
 
@@ -81,6 +100,7 @@ namespace castor3d
 		uint32_t offset = 0u;
 		doCopyComponent( getColour(), float( m_shadowMapIndex ), buffer );
 		doCopyComponent( getIntensity(), getFarPlane(), float( getLight().getShadowType() ), buffer );
+		doCopyComponent( float( getVolumetricSteps() ), getVolumetricScatteringFactor(), 0.0f, 0.0f, buffer );
 		doBind( buffer );
 	}
 
@@ -111,6 +131,19 @@ namespace castor3d
 		( *buffer )[1] = components[1];
 		( *buffer )[2] = component1;
 		( *buffer )[3] = component2;
+		++buffer;
+	}
+
+	void LightCategory::doCopyComponent( float component0
+		, float component1
+		, float component2
+		, float component3
+		, castor::Point4f *& buffer )const
+	{
+		( *buffer )[0] = component0;
+		( *buffer )[1] = component1;
+		( *buffer )[2] = component2;
+		( *buffer )[3] = component3;
 		++buffer;
 	}
 

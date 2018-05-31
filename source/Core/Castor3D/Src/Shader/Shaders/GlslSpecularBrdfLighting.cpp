@@ -198,7 +198,8 @@ namespace castor3d
 						, fragmentIn
 						, output );
 
-					IF( m_writer, light.m_lightBase().m_shadowType() != Int( int( ShadowType::eNone ) ) )
+					IF( m_writer, light.m_lightBase().m_shadowType() != Int( int( ShadowType::eNone ) )
+						&& light.m_lightBase().m_volumetricSteps() != 0_ui )
 					{
 						m_shadowModel->computeVolumetric( light.m_lightBase().m_shadowType()
 							, fragmentIn.m_vertex
@@ -207,6 +208,8 @@ namespace castor3d
 							, light.m_direction()
 							, light.m_lightBase().m_colour()
 							, light.m_lightBase().m_intensity()
+							, light.m_lightBase().m_volumetricSteps()
+							, light.m_lightBase().m_volumetricScattering()
 							, output );
 					}
 					FI;
@@ -377,11 +380,12 @@ namespace castor3d
 				, output );
 		}
 
-		void SpecularBrdfLightingModel::doDeclareComputeOneDirectionalLight( ShadowType shadowType )
+		void SpecularBrdfLightingModel::doDeclareComputeOneDirectionalLight( ShadowType shadowType
+			, bool volumetric )
 		{
 			OutputComponents output{ m_writer };
 			m_computeDirectional = m_writer.implementFunction< Void >( cuT( "computeDirectionalLight" )
-				, [this, shadowType]( DirectionalLight const & light
+				, [this, shadowType, volumetric]( DirectionalLight const & light
 					, Vec3 const & worldEye
 					, Vec3 const & diffuse
 					, Vec3 const & specular
@@ -424,7 +428,7 @@ namespace castor3d
 						, fragmentIn
 						, output );
 
-					if ( shadowType != ShadowType::eNone )
+					if ( shadowType != ShadowType::eNone && volumetric )
 					{
 						m_shadowModel->computeVolumetric( fragmentIn.m_vertex
 							, worldEye
@@ -432,6 +436,8 @@ namespace castor3d
 							, light.m_direction()
 							, light.m_lightBase().m_colour()
 							, light.m_lightBase().m_intensity()
+							, light.m_lightBase().m_volumetricSteps()
+							, light.m_lightBase().m_volumetricScattering()
 							, output );
 					}
 
@@ -448,7 +454,8 @@ namespace castor3d
 				, output );
 		}
 
-		void SpecularBrdfLightingModel::doDeclareComputeOnePointLight( ShadowType shadowType )
+		void SpecularBrdfLightingModel::doDeclareComputeOnePointLight( ShadowType shadowType
+			, bool volumetric )
 		{
 			OutputComponents output{ m_writer };
 			m_computeOnePoint = m_writer.implementFunction< Void >( cuT( "computePointLight" )
@@ -513,7 +520,8 @@ namespace castor3d
 				, output );
 		}
 
-		void SpecularBrdfLightingModel::doDeclareComputeOneSpotLight( ShadowType shadowType )
+		void SpecularBrdfLightingModel::doDeclareComputeOneSpotLight( ShadowType shadowType
+			, bool volumetric )
 		{
 			OutputComponents output{ m_writer };
 			m_computeOneSpot = m_writer.implementFunction< Void >( cuT( "computeSpotLight" )

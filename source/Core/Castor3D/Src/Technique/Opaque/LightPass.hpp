@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Render/Viewport.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
 #include "Shader/Ubos/GpInfoUbo.hpp"
+#include "Technique/RenderTechniqueVisitor.hpp"
 
 #include <Command/CommandBuffer.hpp>
 #include <Descriptor/DescriptorSet.hpp>
@@ -16,6 +17,8 @@ See LICENSE file in root folder
 #include <RenderPass/FrameBuffer.hpp>
 #include <RenderPass/RenderPass.hpp>
 #include <Sync/Semaphore.hpp>
+
+#include <GlslShader.hpp>
 
 namespace castor3d
 {
@@ -442,6 +445,10 @@ namespace castor3d
 			, renderer::Semaphore const & toWait
 			, TextureUnit * shadowMapOpt );
 		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		virtual void accept( RenderTechniqueVisitor & visitor ) = 0;
+		/**
 		*\~english
 		*name
 		*	Getters.
@@ -574,7 +581,8 @@ namespace castor3d
 		 */
 		virtual glsl::Shader doGetLegacyPixelShaderSource( SceneFlags const & sceneFlags
 			, LightType lightType
-			, ShadowType shadowType )const;
+			, ShadowType shadowType
+			, bool volumetric )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source for this light pass.
@@ -589,7 +597,8 @@ namespace castor3d
 		 */
 		virtual glsl::Shader doGetPbrMRPixelShaderSource( SceneFlags const & sceneFlags
 			, LightType lightType
-			, ShadowType shadowType )const;
+			, ShadowType shadowType
+			, bool volumetric )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source for this light pass.
@@ -604,7 +613,8 @@ namespace castor3d
 		 */
 		virtual glsl::Shader doGetPbrSGPixelShaderSource( SceneFlags const & sceneFlags
 			, LightType lightType
-			, ShadowType shadowType )const;
+			, ShadowType shadowType
+			, bool volumetric )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source for this light pass.
@@ -628,8 +638,7 @@ namespace castor3d
 		 *\param[in]	pxl		Le source du fagment shader.
 		 *\return		Le programme créé.
 		 */
-		virtual ProgramPtr doCreateProgram( glsl::Shader const & vtx
-			, glsl::Shader const & pxl ) = 0;
+		virtual ProgramPtr doCreateProgram() = 0;
 
 	protected:
 		struct Config
@@ -640,6 +649,9 @@ namespace castor3d
 			//!\~english	The variable containing the light intensities (RG) and far plane (B).
 			//!\~french		La variable contenant les intensités de la lumière (RG) et le plan éloigné (B).
 			castor::Point4f intensityFarPlane;
+			//!\~english	The variable containing the light volumetric scattering data.
+			//!\~french		La variable contenant les données de volumetric scattering.
+			castor::Point4f volumetric;
 		};
 
 		Engine & m_engine;
@@ -649,8 +661,10 @@ namespace castor3d
 		MatrixUbo m_matrixUbo;
 		RenderPass m_firstRenderPass;
 		RenderPass m_blendRenderPass;
+		glsl::Shader m_vertexShader;
+		glsl::Shader m_pixelShader;
 		renderer::CommandBufferPtr m_commandBuffer;
-		std::array< Pipeline, size_t( ShadowType::eCount ) > m_pipelines;
+		std::array< Pipeline, size_t( ShadowType::eCount ) * 2u > m_pipelines; // * 2u for volumetric scattering or not.
 		Pipeline * m_pipeline{ nullptr };
 		SamplerSPtr m_sampler;
 		renderer::VertexBufferPtr< float > m_vertexBuffer;

@@ -182,6 +182,30 @@ namespace castor3d
 		}
 		/**
 		 *\~english
+		 *\brief		Sets the volumetric scattering steps count.
+		 *\param[in]	value	The new value.
+		 *\~french
+		 *\brief		Définit le nombre d'étapes du volumetric scattering.
+		 *\param[in]	value	La nouvelle valeur.
+		 */
+		inline void setVolumetricSteps( uint32_t value )
+		{
+			m_volumetricSteps = value;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the volumetric scattering factor.
+		 *\param[in]	value	The new value.
+		 *\~french
+		 *\brief		Définit le facteur du volumetric scattering.
+		 *\param[in]	value	La nouvelle valeur.
+		 */
+		inline void setVolumetricScatteringFactor( float value )
+		{
+			m_volumetricScattering = value;
+		}
+		/**
+		 *\~english
 		 *\return		The light type.
 		 *\~french
 		 *\return		Le type de lumière.
@@ -239,6 +263,26 @@ namespace castor3d
 		inline float getFarPlane()const
 		{
 			return m_farPlane;
+		}
+		/**
+		 *\~english
+		 *\return		The step count used for volumetric scattering.
+		 *\~french
+		 *\return		Le nombre d'étapes utilisé pour le volumetric scattering.
+		 */
+		inline uint32_t getVolumetricSteps()const
+		{
+			return m_volumetricSteps;
+		}
+		/**
+		 *\~english
+		 *\return		The volumetric scattering factor.
+		 *\~french
+		 *\return		Le facteur de volumetric scattering.
+		 */
+		inline float getVolumetricScatteringFactor()const
+		{
+			return m_volumetricScattering;
 		}
 		/**
 		 *\~english
@@ -351,6 +395,21 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Copies the given light PixelComponents values into the buffer.
+		 *\param[in]	component0, component1, component2, component3	The components.
+		 *\param[out]	buffer		The destination buffer.
+		 *\~french
+		 *\brief		Copie les valeurs de la composante de lumière donnée dans le tampon.
+		 *\param[in]	component0, component1, component2, component3	Les composantes.
+		 *\param[in]	buffer		Le tampon de destination.
+		 */
+		void doCopyComponent( float component0
+			, float component1
+			, float component2
+			, float component3
+			, castor::Point4f *& buffer )const;
+		/**
+		 *\~english
+		 *\brief		Copies the given light PixelComponents values into the buffer.
 		 *\param[in]	components	The components.
 		 *\param[out]	buffer		The destination buffer.
 		 *\~french
@@ -459,18 +518,12 @@ namespace castor3d
 		int32_t m_shadowMapIndex{ -1 };
 
 	private:
-		//!\~english	The light type.
-		//!\~french		Le type de lumière.
 		LightType m_lightType;
-		//!\~english	The parent light.
-		//!\~french		La lumière parente.
 		Light & m_light;
-		//!\~english	The colour.
-		//!\~french		La couleur.
 		castor::Point3f m_colour{ 1.0, 1.0, 1.0 };
-		//!\~english	The intensity values.
-		//!\~french		Les valeurs d'intensité.
 		castor::Point2f m_intensity{ 1.0, 1.0 };
+		uint32_t m_volumetricSteps{ 0u };
+		float m_volumetricScattering{ 0.2f };
 	};
 }
 

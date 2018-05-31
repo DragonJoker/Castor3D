@@ -1554,7 +1554,18 @@ namespace castor3d
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserLightShadowProducer )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserLightShadows )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->light )
+		{
+			PARSING_ERROR( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+	}
+	END_ATTRIBUTE_PUSH( CSCNSection::eShadows )
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserShadowsProducer )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
@@ -1571,7 +1582,7 @@ namespace castor3d
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserLightShadowFilter )
+	IMPLEMENT_ATTRIBUTE_PARSER( parserShadowsFilter )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
@@ -1584,6 +1595,40 @@ namespace castor3d
 			uint32_t value;
 			p_params[0]->get( value );
 			parsingContext->light->setShadowType( ShadowType( value ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserShadowsVolumetricSteps )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->light )
+		{
+			PARSING_ERROR( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			uint32_t value;
+			p_params[0]->get( value );
+			parsingContext->light->setVolumetricSteps( value );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserShadowsVolumetricScatteringFactor )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->light )
+		{
+			PARSING_ERROR( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			float value;
+			p_params[0]->get( value );
+			parsingContext->light->setVolumetricScatteringFactor( value );
 		}
 	}
 	END_ATTRIBUTE()

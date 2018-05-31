@@ -354,13 +354,12 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::LightPass::doCreateProgram
 		 */
-		typename LightPass::ProgramPtr doCreateProgram( glsl::Shader const & vtx
-			, glsl::Shader const & pxl )override
+		typename LightPass::ProgramPtr doCreateProgram()override
 		{
 			auto result = std::make_unique< LightPassShadow::Program >( this->m_engine
 				, *this
-				, vtx
-				, pxl );
+				, m_vertexShader
+				, m_pixelShader );
 			return result;
 		}
 	};

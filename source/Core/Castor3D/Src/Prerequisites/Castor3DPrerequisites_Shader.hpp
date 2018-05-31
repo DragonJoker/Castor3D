@@ -155,6 +155,7 @@ namespace castor3d
 			C3D_API std::shared_ptr< PhongLightingModel > createLightingModel( glsl::GlslWriter & writer
 				, LightType light
 				, ShadowType shadows
+				, bool volumetric
 				, uint32_t & index );
 		}
 
@@ -185,6 +186,7 @@ namespace castor3d
 				C3D_API std::shared_ptr< MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
 					, LightType light
 					, ShadowType shadows
+					, bool volumetric
 					, uint32_t & index );
 			}
 
@@ -213,6 +215,7 @@ namespace castor3d
 				C3D_API std::shared_ptr< SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
 					, LightType light
 					, ShadowType shadows
+					, bool volumetric
 					, uint32_t & index );
 			}
 		}

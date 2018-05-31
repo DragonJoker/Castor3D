@@ -68,6 +68,8 @@ namespace castor3d
 				, glsl::Vec3 const & lightDirection
 				, glsl::Vec3 const & lightColour
 				, glsl::Vec2 const & lightIntensity
+				, glsl::UInt const & lightVolumetricSteps
+				, glsl::Float const & lightVolumetricScattering
 				, OutputComponents & parentOutput );
 			C3D_API glsl::Float computeDirectionalShadow( glsl::Mat4 const & lightMatrix
 				, glsl::Vec3 const & worldSpacePosition
@@ -87,6 +89,8 @@ namespace castor3d
 				, glsl::Vec3 const & lightDirection
 				, glsl::Vec3 const & lightColour
 				, glsl::Vec2 const & lightIntensity
+				, glsl::UInt const & lightVolumetricSteps
+				, glsl::Float const & lightVolumetricScattering
 				, OutputComponents & parentOutput );
 
 		private:
@@ -170,6 +174,17 @@ namespace castor3d
 				, glsl::InVec3
 				, glsl::InFloat
 				, glsl::InInt > m_computePoint;
+			glsl::Function< glsl::Void
+				, glsl::InInt
+				, glsl::InVec3
+				, glsl::InVec3
+				, glsl::InMat4
+				, glsl::InVec3
+				, glsl::InVec3
+				, glsl::InVec2
+				, glsl::InUInt
+				, glsl::InFloat
+				, OutputComponents & > m_computeVolumetric;
 			glsl::Function< glsl::Float
 				, glsl::InMat4
 				, glsl::InVec3
@@ -186,21 +201,14 @@ namespace castor3d
 				, glsl::InVec3
 				, glsl::InFloat > m_computeOnePoint;
 			glsl::Function< glsl::Void
-				, glsl::InInt
 				, glsl::InVec3
 				, glsl::InVec3
 				, glsl::InMat4
 				, glsl::InVec3
 				, glsl::InVec3
 				, glsl::InVec2
-				, OutputComponents & > m_computeVolumetric;
-			glsl::Function< glsl::Void
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InMat4
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InVec2
+				, glsl::InUInt
+				, glsl::InFloat
 				, OutputComponents & > m_computeOneVolumetric;
 		};
 	}

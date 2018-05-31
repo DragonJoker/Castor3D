@@ -221,6 +221,8 @@ namespace castor3d
 			, Vec3 const & lightDirection
 			, Vec3 const & lightColour
 			, Vec2 const & lightIntensity
+			, UInt const & lightVolumetricSteps
+			, Float const & lightVolumetricScattering
 			, OutputComponents & parentOutput )
 		{
 			m_writer << m_computeVolumetric( shadowType
@@ -230,6 +232,8 @@ namespace castor3d
 				, lightDirection
 				, lightColour
 				, lightIntensity
+				, lightVolumetricSteps
+				, lightVolumetricScattering
 				, parentOutput );
 			m_writer << glsl::endi;
 		}
@@ -273,6 +277,8 @@ namespace castor3d
 			, Vec3 const & lightDirection
 			, Vec3 const & lightColour
 			, Vec2 const & lightIntensity
+			, UInt const & lightVolumetricSteps
+			, Float const & lightVolumetricScattering
 			, OutputComponents & parentOutput )
 		{
 			m_writer << m_computeOneVolumetric( worldSpacePosition
@@ -281,6 +287,8 @@ namespace castor3d
 				, lightDirection
 				, lightColour
 				, lightIntensity
+				, lightVolumetricSteps
+				, lightVolumetricScattering
 				, parentOutput );
 			m_writer << glsl::endi;
 		}
@@ -721,6 +729,8 @@ namespace castor3d
 					, Vec3 const & lightDirection
 					, Vec3 const & lightColour
 					, Vec2 const & lightIntensity
+					, UInt const & lightVolumetricSteps
+					, Float const & lightVolumetricScattering
 					, OutputComponents & parentOutput )
 				{
 					auto constexpr PI = 3.1415926535897932384626433832795028841968;
@@ -730,8 +740,6 @@ namespace castor3d
 							0.75_f, 0.22_f, 0.875_f, 0.375_f,
 							0.1875_f, 0.6875_f, 0.0625_f, 0.5625_f,
 							0.9375_f, 0.4375_f, 0.8125_f, 0.3125_f ) );
-					auto volumetricSteps = m_writer.declConstant( cuT( "volumetricSteps" )
-						, 10_ui );
 					auto gl_FragCoord = m_writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 					auto rayVector = m_writer.declLocale( cuT( "rayVector" )
@@ -741,7 +749,7 @@ namespace castor3d
 					auto rayDirection = m_writer.declLocale( cuT( "rayDirection" )
 						, rayVector / rayLength );
 					auto stepLength = m_writer.declLocale( cuT( "stepLength" )
-						, rayLength / volumetricSteps );
+						, rayLength / lightVolumetricSteps );
 					auto step = m_writer.declLocale( cuT( "step" )
 						, rayDirection * stepLength );
 					auto screenUV = m_writer.declLocale( cuT( "screenUV" )
@@ -756,12 +764,10 @@ namespace castor3d
 
 					auto RdotL = m_writer.declLocale( cuT( "RdotL" )
 						, dot( rayDirection, lightDirection ) );
-					auto volumetricScattering = m_writer.declConstant( cuT( "volumetricScattering" )
-						, 0.2_f );
-					auto sqVolumetricScattering = m_writer.declConstant( cuT( "sqVolumetricScattering" )
-						, volumetricScattering * volumetricScattering );
-					auto dblVolumetricScattering = m_writer.declConstant( cuT( "dblVolumetricScattering" )
-						, 2.0_f * volumetricScattering );
+					auto sqVolumetricScattering = m_writer.declLocale( cuT( "sqVolumetricScattering" )
+						, lightVolumetricScattering * lightVolumetricScattering );
+					auto dblVolumetricScattering = m_writer.declLocale( cuT( "dblVolumetricScattering" )
+						, 2.0_f * lightVolumetricScattering );
 					auto oneMinusVolumeScattering = m_writer.declLocale( cuT( "oneMinusVolumeScattering" )
 						, 1.0_f - sqVolumetricScattering );
 					auto scattering = m_writer.declLocale( cuT( "scattering" )
@@ -769,7 +775,7 @@ namespace castor3d
 							* Float( PI )
 							* pow( 1.0_f + sqVolumetricScattering - dblVolumetricScattering * RdotL, 1.5_f ) ) );
 
-					FOR( m_writer, Int, i, 0, "i < volumetricSteps", "++i" )
+					FOR( m_writer, Int, i, 0, "i < lightVolumetricSteps", "++i" )
 					{
 						IF ( m_writer, m_computeDirectional( shadowType, lightMatrix, currentPosition, lightDirection, vec3( 0.0_f ) ) < 0.5_f )
 						{
@@ -781,7 +787,7 @@ namespace castor3d
 					}
 					ROF;
 
-					volumetric /= volumetricSteps;
+					volumetric /= lightVolumetricSteps;
 					parentOutput.m_diffuse += volumetric * lightIntensity.x() * 1.0_f * lightColour;
 					parentOutput.m_specular += volumetric * lightIntensity.y() * 1.0_f * lightColour;
 				}
@@ -792,6 +798,8 @@ namespace castor3d
 				, InVec3{ &m_writer, cuT( "lightDirection" ) }
 				, InVec3{ &m_writer, cuT( "lightColour" ) }
 				, InVec2{ &m_writer, cuT( "lightIntensity" ) }
+				, InUInt{ &m_writer, cuT( "lightVolumetricSteps" ) }
+				, InFloat{ &m_writer, cuT( "lightVolumetricScattering" ) }
 				, output );
 		}
 
@@ -1008,6 +1016,8 @@ namespace castor3d
 					, Vec3 const & lightDirection
 					, Vec3 const & lightColour
 					, Vec2 const & lightIntensity
+					, UInt const & lightVolumetricSteps
+					, Float const & lightVolumetricScattering
 					, OutputComponents & parentOutput )
 				{
 					auto constexpr PI = 3.1415926535897932384626433832795028841968;
@@ -1017,8 +1027,6 @@ namespace castor3d
 							0.75_f, 0.22_f, 0.875_f, 0.375_f,
 							0.1875_f, 0.6875_f, 0.0625_f, 0.5625_f,
 							0.9375_f, 0.4375_f, 0.8125_f, 0.3125_f ) );
-					auto volumetricSteps = m_writer.declConstant( cuT( "volumetricSteps" )
-						, 10_ui );
 					auto gl_FragCoord = m_writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
 					auto rayVector = m_writer.declLocale( cuT( "rayVector" )
@@ -1028,7 +1036,7 @@ namespace castor3d
 					auto rayDirection = m_writer.declLocale( cuT( "rayDirection" )
 						, rayVector / rayLength );
 					auto stepLength = m_writer.declLocale( cuT( "stepLength" )
-						, rayLength / volumetricSteps );
+						, rayLength / lightVolumetricSteps );
 					auto step = m_writer.declLocale( cuT( "step" )
 						, rayDirection * stepLength );
 					auto screenUV = m_writer.declLocale( cuT( "screenUV" )
@@ -1043,12 +1051,10 @@ namespace castor3d
 
 					auto RdotL = m_writer.declLocale( cuT( "RdotL" )
 						, dot( rayDirection, lightDirection ) );
-					auto volumetricScattering = m_writer.declConstant( cuT( "volumetricScattering" )
-						, 0.2_f );
-					auto sqVolumetricScattering = m_writer.declConstant( cuT( "sqVolumetricScattering" )
-						, volumetricScattering * volumetricScattering );
-					auto dblVolumetricScattering = m_writer.declConstant( cuT( "dblVolumetricScattering" )
-						, 2.0_f * volumetricScattering );
+					auto sqVolumetricScattering = m_writer.declLocale( cuT( "sqVolumetricScattering" )
+						, lightVolumetricScattering * lightVolumetricScattering );
+					auto dblVolumetricScattering = m_writer.declLocale( cuT( "dblVolumetricScattering" )
+						, 2.0_f * lightVolumetricScattering );
 					auto oneMinusVolumeScattering = m_writer.declLocale( cuT( "oneMinusVolumeScattering" )
 						, 1.0_f - sqVolumetricScattering );
 					auto scattering = m_writer.declLocale( cuT( "scattering" )
@@ -1056,7 +1062,7 @@ namespace castor3d
 							* Float( PI )
 							* pow( 1.0_f + sqVolumetricScattering - dblVolumetricScattering * RdotL, 1.5_f ) ) );
 
-					FOR( m_writer, Int, i, 0, "i < volumetricSteps", "++i" )
+					FOR( m_writer, Int, i, 0, "i < lightVolumetricSteps", "++i" )
 					{
 						IF ( m_writer, m_computeOneDirectional( lightMatrix, currentPosition, lightDirection, vec3( 0.0_f ) ) > 0.5_f )
 						{
@@ -1068,7 +1074,7 @@ namespace castor3d
 					}
 					ROF;
 
-					volumetric /= volumetricSteps;
+					volumetric /= lightVolumetricSteps;
 					parentOutput.m_diffuse += volumetric * lightIntensity.x() * 1.0_f * lightColour;
 					parentOutput.m_specular += volumetric * lightIntensity.y() * 1.0_f * lightColour;
 				}
@@ -1078,6 +1084,8 @@ namespace castor3d
 				, InVec3{ &m_writer, cuT( "lightDirection" ) }
 				, InVec3{ &m_writer, cuT( "lightColour" ) }
 				, InVec2{ &m_writer, cuT( "lightIntensity" ) }
+				, InUInt{ &m_writer, cuT( "lightVolumetricSteps" ) }
+				, InFloat{ &m_writer, cuT( "lightVolumetricScattering" ) }
 				, output );
 		}
 	}

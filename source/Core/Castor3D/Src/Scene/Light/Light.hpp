@@ -184,6 +184,16 @@ namespace castor3d
 			return m_category->getBoundingBox();
 		}
 
+		inline uint32_t getVolumetricSteps()const
+		{
+			return m_category->getVolumetricSteps();
+		}
+
+		inline float getVolumetricScatteringFactor()const
+		{
+			return m_category->getVolumetricScatteringFactor();
+		}
+
 		inline LightCategorySPtr getCategory()const
 		{
 			return m_category;
@@ -256,6 +266,16 @@ namespace castor3d
 		inline void setSpecularIntensity( float value )
 		{
 			m_category->setSpecularIntensity( value );
+		}
+
+		inline void setVolumetricSteps( uint32_t value )
+		{
+			m_category->setVolumetricSteps( value );
+		}
+
+		inline void setVolumetricScatteringFactor( float value )
+		{
+			m_category->setVolumetricScatteringFactor( value );
 		}
 
 		inline void setEnabled( bool value )

@@ -56,6 +56,7 @@ namespace castor3d
 		auto & data = m_lightPass.m_ubo->getData( 0u );
 		data.base.colourIndex = castor::Point4f{ light.getColour()[0], light.getColour()[1], light.getColour()[2], 0.0f };
 		data.base.intensityFarPlane = castor::Point4f{ light.getIntensity()[0], light.getIntensity()[1], light.getFarPlane(), 0.0f };
+		data.base.volumetric = castor::Point4f{ light.getVolumetricSteps(), light.getVolumetricScatteringFactor(), 0.0f, 0.0f };
 		auto position = light.getParent()->getDerivedPosition();
 		data.position = castor::Point4f{ position[0], position[1], position[2], 0.0f };
 		data.attenuation = castor::Point4f{ spotLight.getAttenuation()[0], spotLight.getAttenuation()[1], spotLight.getAttenuation()[2], 0.0f };
@@ -93,6 +94,20 @@ namespace castor3d
 	{
 	}
 
+	void SpotLightPass::accept( RenderTechniqueVisitor & visitor )
+	{
+		String name = cuT( "SpotLight" );
+
+		if ( m_shadows )
+		{
+			name += cuT( " Shadow" );
+		}
+
+		visitor.visit( name
+			, renderer::ShaderStageFlag::eFragment
+			, m_pixelShader );
+	}
+
 	Point3fArray SpotLightPass::doGenerateVertices()const
 	{
 		return SpotLight::generateVertices();
@@ -114,10 +129,13 @@ namespace castor3d
 		return model;
 	}
 
-	LightPass::ProgramPtr SpotLightPass::doCreateProgram( glsl::Shader const & vtx
-		, glsl::Shader const & pxl )
+	LightPass::ProgramPtr SpotLightPass::doCreateProgram()
 	{
-		return std::make_unique< Program >( m_engine, *this, vtx, pxl, m_shadows );
+		return std::make_unique< Program >( m_engine
+			, *this
+			, m_vertexShader
+			, m_pixelShader
+			, m_shadows );
 	}
 
 	//*********************************************************************************************

@@ -110,6 +110,10 @@ namespace castor3d
 		 */
 		void cleanup()override;
 		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		void accept( RenderTechniqueVisitor & visitor )override;
+		/**
 		 *\~english
 		 *\return		The number of primitives to draw.
 		 *\~french
@@ -131,8 +135,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::LightPass::doCreateProgram
 		 */
-		LightPass::ProgramPtr doCreateProgram( glsl::Shader const & vtx
-			, glsl::Shader const & pxl )override;
+		LightPass::ProgramPtr doCreateProgram()override;
 
 	private:
 		struct Config

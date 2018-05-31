@@ -79,6 +79,10 @@ namespace castor3d
 			, renderer::Semaphore const & toWait
 			, RenderInfo & info );
 		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		void accept( RenderTechniqueVisitor & visitor );
+		/**
 		 *\~english
 		 *\return		The light pass diffuse result.
 		 *\~french

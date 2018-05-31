@@ -291,6 +291,7 @@ namespace castor3d
 			std::shared_ptr< PhongLightingModel > createLightingModel( glsl::GlslWriter & writer
 				, LightType lightType
 				, ShadowType shadows
+				, bool volumetric
 				, uint32_t & index )
 			{
 				auto result = std::make_shared< PhongLightingModel >( writer );
@@ -298,15 +299,15 @@ namespace castor3d
 				switch ( lightType )
 				{
 				case LightType::eDirectional:
-					result->declareDirectionalModel( shadows, index );
+					result->declareDirectionalModel( shadows, volumetric, index );
 					break;
 
 				case LightType::ePoint:
-					result->declarePointModel( shadows, index );
+					result->declarePointModel( shadows, volumetric, index );
 					break;
 
 				case LightType::eSpot:
-					result->declareSpotModel( shadows, index );
+					result->declareSpotModel( shadows, volumetric, index );
 					break;
 
 				default:
@@ -417,6 +418,7 @@ namespace castor3d
 				std::shared_ptr< MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
 					, LightType lightType
 					, ShadowType shadows
+					, bool volumetric
 					, uint32_t & index )
 				{
 					auto result = std::make_shared< MetallicBrdfLightingModel >( writer );
@@ -424,15 +426,15 @@ namespace castor3d
 					switch ( lightType )
 					{
 					case LightType::eDirectional:
-						result->declareDirectionalModel( shadows, index );
+						result->declareDirectionalModel( shadows, volumetric, index );
 						break;
 
 					case LightType::ePoint:
-						result->declarePointModel( shadows, index );
+						result->declarePointModel( shadows, volumetric, index );
 						break;
 
 					case LightType::eSpot:
-						result->declareSpotModel( shadows, index );
+						result->declareSpotModel( shadows, volumetric, index );
 						break;
 
 					default:
@@ -540,6 +542,7 @@ namespace castor3d
 				std::shared_ptr< SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
 					, LightType lightType
 					, ShadowType shadows
+					, bool volumetric
 					, uint32_t & index )
 				{
 					auto result = std::make_shared< SpecularBrdfLightingModel >( writer );
@@ -547,15 +550,15 @@ namespace castor3d
 					switch ( lightType )
 					{
 					case LightType::eDirectional:
-						result->declareDirectionalModel( shadows, index );
+						result->declareDirectionalModel( shadows, volumetric, index );
 						break;
 
 					case LightType::ePoint:
-						result->declarePointModel( shadows, index );
+						result->declarePointModel( shadows, volumetric, index );
 						break;
 
 					case LightType::eSpot:
-						result->declareSpotModel( shadows, index );
+						result->declareSpotModel( shadows, volumetric, index );
 						break;
 
 					default:

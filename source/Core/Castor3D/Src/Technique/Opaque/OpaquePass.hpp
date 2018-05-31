@@ -51,7 +51,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
-		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
+		void accept( RenderTechniqueVisitor & visitor )override;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::render
 		 */

@@ -21,11 +21,14 @@ namespace castor3d
 			C3D_API Light & operator=( Light const & rhs );
 			C3D_API glsl::Vec4 m_colourIndex()const;
 			C3D_API glsl::Vec4 m_intensityFarPlane()const;
+			C3D_API glsl::Vec4 m_volumetric()const;
 			C3D_API glsl::Vec3 m_colour()const;
 			C3D_API glsl::Vec2 m_intensity()const;
 			C3D_API glsl::Float m_farPlane()const;
 			C3D_API glsl::Int m_shadowType()const;
 			C3D_API glsl::Int m_index()const;
+			C3D_API glsl::UInt m_volumetricSteps()const;
+			C3D_API glsl::Float m_volumetricScattering()const;
 
 			template< typename T >
 			inline Light & operator=( T const & rhs )

@@ -170,6 +170,7 @@ namespace castor3d
 		auto & data = m_lightPass.m_ubo->getData( 0u );
 		data.base.colourIndex = castor::Point4f{ light.getColour()[0], light.getColour()[1], light.getColour()[2], 0.0f };
 		data.base.intensityFarPlane = castor::Point4f{ light.getIntensity()[0], light.getIntensity()[1], light.getFarPlane(), 0.0f };
+		data.base.volumetric = castor::Point4f{ light.getVolumetricSteps(), light.getVolumetricScatteringFactor(), 0.0f, 0.0f };
 		data.direction = castor::Point4f{ directionalLight.getDirection()[0], directionalLight.getDirection()[1], directionalLight.getDirection()[2], 0.0f };
 		data.transform = directionalLight.getLightSpaceTransform();
 		m_lightPass.m_ubo->upload();
@@ -252,6 +253,20 @@ namespace castor3d
 		m_vertexBuffer.reset();
 	}
 
+	void DirectionalLightPass::accept( RenderTechniqueVisitor & visitor )
+	{
+		String name = cuT( "DirectionalLight" );
+
+		if ( m_shadows )
+		{
+			name += cuT( " Shadow" );
+		}
+
+		visitor.visit( name
+			, renderer::ShaderStageFlag::eFragment
+			, m_pixelShader );
+	}
+
 	uint32_t DirectionalLightPass::getCount()const
 	{
 		return VertexCount;
@@ -287,9 +302,12 @@ namespace castor3d
 		return writer.finalise();
 	}
 
-	LightPass::ProgramPtr DirectionalLightPass::doCreateProgram( glsl::Shader const & vtx
-		, glsl::Shader const & pxl )
+	LightPass::ProgramPtr DirectionalLightPass::doCreateProgram()
 	{
-		return std::make_unique< Program >( m_engine, *this, vtx, pxl, m_shadows );
+		return std::make_unique< Program >( m_engine
+			, *this
+			, m_vertexShader
+			, m_pixelShader
+			, m_shadows );
 	}
 }
