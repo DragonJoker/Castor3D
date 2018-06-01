@@ -35,86 +35,6 @@ namespace castor3d
 
 	namespace
 	{
-		renderer::RenderPassPtr doCreateRenderPass( Engine & engine
-			, renderer::Format const & depthFormat )
-		{
-			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = getCurrentDevice( renderSystem );
-
-			renderer::RenderPassCreateInfo renderPass{};
-			renderPass.flags = 0u;
-
-			renderPass.attachments.resize( uint32_t( WbTexture::eCount ) );
-			renderPass.attachments[0].format = depthFormat;
-			renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-			renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
-			renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eDontCare;
-			renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-			renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-			renderPass.attachments[0].initialLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
-			renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
-
-			renderPass.attachments[1].format = getTextureFormat( WbTexture::eAccumulation );
-			renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
-			renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eClear;
-			renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
-			renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-			renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-			renderPass.attachments[1].initialLayout = renderer::ImageLayout::eUndefined;
-			renderPass.attachments[1].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
-
-			renderPass.attachments[2].format = getTextureFormat( WbTexture::eRevealage );
-			renderPass.attachments[2].samples = renderer::SampleCountFlag::e1;
-			renderPass.attachments[2].loadOp = renderer::AttachmentLoadOp::eClear;
-			renderPass.attachments[2].storeOp = renderer::AttachmentStoreOp::eStore;
-			renderPass.attachments[2].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-			renderPass.attachments[2].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-			renderPass.attachments[2].initialLayout = renderer::ImageLayout::eUndefined;
-			renderPass.attachments[2].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
-
-			renderPass.attachments[3].format = getTextureFormat( WbTexture::eVelocity );
-			renderPass.attachments[3].samples = renderer::SampleCountFlag::e1;
-			renderPass.attachments[3].loadOp = renderer::AttachmentLoadOp::eDontCare;
-			renderPass.attachments[3].storeOp = renderer::AttachmentStoreOp::eStore;
-			renderPass.attachments[3].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-			renderPass.attachments[3].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-			renderPass.attachments[3].initialLayout = renderer::ImageLayout::eUndefined;
-			renderPass.attachments[3].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
-
-			renderer::AttachmentReference colourReference;
-			colourReference.attachment = 0u;
-			colourReference.layout = renderer::ImageLayout::eColourAttachmentOptimal;
-
-			renderPass.subpasses.resize( 1u );
-			renderPass.subpasses[0].flags = 0u;
-			renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
-			renderPass.subpasses[0].colorAttachments =
-			{
-				{ 1u, renderer::ImageLayout::eColourAttachmentOptimal },
-				{ 2u, renderer::ImageLayout::eColourAttachmentOptimal },
-				{ 3u, renderer::ImageLayout::eColourAttachmentOptimal },
-			};
-
-			renderPass.dependencies.resize( 2u );
-			renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
-			renderPass.dependencies[0].dstSubpass = 0u;
-			renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
-
-			renderPass.dependencies[1].srcSubpass = 0u;
-			renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-			renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-			renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
-			renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
-
-			return device.createRenderPass( renderPass );
-		}
-
 		void doBindTexture( renderer::TextureView const & view
 			, renderer::Sampler const & sampler
 			, renderer::WriteDescriptorSetArray & writes
@@ -215,43 +135,139 @@ namespace castor3d
 	{
 	}
 
+	void TransparentPass::initialiseRenderPass( WeightedBlendTextures const & wbpResult )
+	{
+		auto & device = getCurrentDevice( *this );
+
+		renderer::RenderPassCreateInfo renderPass{};
+		renderPass.flags = 0u;
+
+		renderPass.attachments.resize( uint32_t( WbTexture::eCount ) );
+		renderPass.attachments[0].format = wbpResult[0].get().getFormat();
+		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
+		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+
+		renderPass.attachments[1].format = wbpResult[1].get().getFormat();
+		renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[1].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[1].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+
+		renderPass.attachments[2].format = wbpResult[2].get().getFormat();
+		renderPass.attachments[2].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[2].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[2].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[2].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[2].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[2].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[2].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+
+		renderPass.attachments[3].format = wbpResult[3].get().getFormat();
+		renderPass.attachments[3].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[3].loadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[3].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[3].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[3].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[3].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[3].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+
+		renderer::AttachmentReference colourReference;
+		colourReference.attachment = 0u;
+		colourReference.layout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+		renderPass.subpasses.resize( 1u );
+		renderPass.subpasses[0].flags = 0u;
+		renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
+		renderPass.subpasses[0].colorAttachments =
+		{
+			{ 1u, renderer::ImageLayout::eColourAttachmentOptimal },
+			{ 2u, renderer::ImageLayout::eColourAttachmentOptimal },
+			{ 3u, renderer::ImageLayout::eColourAttachmentOptimal },
+		};
+
+		renderPass.dependencies.resize( 2u );
+		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].dstSubpass = 0u;
+		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		renderPass.dependencies[1].srcSubpass = 0u;
+		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		m_renderPass =  device.createRenderPass( renderPass );
+		renderer::FrameBufferAttachmentArray attaches;
+
+		for ( size_t i = 0u; i < wbpResult.size(); ++i )
+		{
+			attaches.emplace_back( *( m_renderPass->getAttachments().begin() + i ), wbpResult[i].get() );
+		}
+
+		m_frameBuffer = m_renderPass->createFrameBuffer( { wbpResult[0].get().getTexture().getDimensions().width, wbpResult[0].get().getTexture().getDimensions().height }
+			, std::move( attaches ) );
+
+		m_nodesCommands = getCurrentDevice( *this ).getGraphicsCommandPool().createCommandBuffer();
+	}
+
 	void TransparentPass::update( RenderInfo & info
 		, Point2r const & jitter )
 	{
 		doUpdate( info, jitter );
 	}
 
-	renderer::Semaphore const & TransparentPass::render( renderer::FrameBuffer const & frameBuffer
-		, renderer::Semaphore const & toWait )
+	renderer::Semaphore const & TransparentPass::render( renderer::Semaphore const & toWait )
 	{
-		static renderer::DepthStencilClearValue const depthClear{ 1.0, 0 };
-		static renderer::ClearColorValue const accumClear{ 0.0, 0.0, 0.0, 0.0 };
-		static renderer::ClearColorValue const revealClear{ 1.0, 1.0, 1.0, 1.0 };
-		static renderer::ClearColorValue const velocityClear{};
+		static renderer::ClearValueArray const clearValues
+		{
+			renderer::DepthStencilClearValue{ 1.0, 0 },
+			renderer::ClearColorValue{ 0.0, 0.0, 0.0, 0.0 },
+			renderer::ClearColorValue{ 1.0, 1.0, 1.0, 1.0 },
+			renderer::ClearColorValue{},
+		};
+
+		auto * result = &toWait;
 		auto & timer = getTimer();
+		auto & device = getCurrentDevice( *this );
 		timer.start();
 
-		if ( m_nodesCommands->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
+		if ( m_nodesCommands->begin() )
 		{
 			timer.beginPass( *m_nodesCommands );
 			timer.notifyPassRender();
-			m_nodesCommands->beginRenderPass( getRenderPass()
-				, frameBuffer
-				, { depthClear, accumClear, revealClear, velocityClear }
+			m_nodesCommands->beginRenderPass( *m_renderPass
+				, *m_frameBuffer
+				, clearValues
 				, renderer::SubpassContents::eSecondaryCommandBuffers );
 			m_nodesCommands->executeCommands( { getCommandBuffer() } );
 			m_nodesCommands->endRenderPass();
 			timer.endPass( *m_nodesCommands );
 			m_nodesCommands->end();
-			getCurrentDevice( *this ).getGraphicsQueue().submit( *m_nodesCommands
-				, toWait
+
+			device.getGraphicsQueue().submit( *m_nodesCommands
+				, *result
 				, renderer::PipelineStageFlag::eColourAttachmentOutput
 				, getSemaphore()
 				, nullptr );
+			result = &getSemaphore();
 		}
 
 		timer.stop();
-		return getSemaphore();
+		return *result;
 	}
 
 	void TransparentPass::accept( RenderTechniqueVisitor & visitor )
@@ -273,9 +289,7 @@ namespace castor3d
 
 	bool TransparentPass::doInitialise( Size const & size )
 	{
-		m_renderPass = doCreateRenderPass( *getEngine(), m_depthFormat );
 		m_finished = getCurrentDevice( *this ).createSemaphore();
-		m_nodesCommands = getCurrentDevice( *this ).getGraphicsCommandPool().createCommandBuffer();
 
 		if ( m_camera )
 		{

@@ -37,6 +37,8 @@
 using namespace castor;
 using namespace castor3d;
 
+#define C3D_DebugSSAO 0
+
 namespace castor3d
 {
 	namespace
@@ -258,6 +260,10 @@ namespace castor3d
 							, c3d_mtxInvProj );
 					fog.applyFog( pxl_fragColor, length( position ), position.z() );
 				}
+
+#if C3D_DebugSSAO
+				pxl_fragColor = vec4( vec3( occlusion ), 1.0 );
+#endif
 			} );
 			return writer.finalise();
 		}
@@ -485,6 +491,10 @@ namespace castor3d
 							, c3d_mtxInvProj );
 					fog.applyFog( pxl_fragColor, length( position ), position.z() );
 				}
+
+#if C3D_DebugSSAO
+				pxl_fragColor = vec4( vec3( occlusion ), 1.0 );
+#endif
 			} );
 			return writer.finalise();
 		}
@@ -712,6 +722,10 @@ namespace castor3d
 							, c3d_mtxInvProj );
 					fog.applyFog( pxl_fragColor, length( position ), position.z() );
 				}
+
+#if C3D_DebugSSAO
+				pxl_fragColor = vec4( vec3( occlusion ), 1.0 );
+#endif
 			} );
 			return writer.finalise();
 		}

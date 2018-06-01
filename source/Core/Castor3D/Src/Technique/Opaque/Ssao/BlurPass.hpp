@@ -102,7 +102,8 @@ namespace castor3d
 		struct Configuration
 		{
 			castor::Point2i axis;
-			float gaussian[7];
+			castor::Point2i dummy;
+			castor::Point4f gaussian[2];
 		};
 
 		Engine & m_engine;

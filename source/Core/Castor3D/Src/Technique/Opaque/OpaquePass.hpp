@@ -45,7 +45,10 @@ namespace castor3d
 		 */
 		virtual ~OpaquePass();
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::render
+		 *\~english
+		 *\brief		Initialises the render pass.
+		 *\~french
+		 *\brief		Initialise la passe de rendu.
 		 */
 		void initialiseRenderPass( GeometryPassResult const & gpResult );
 		/**

@@ -15,12 +15,14 @@
 #include <Command/CommandBuffer.hpp>
 #include <Command/Queue.hpp>
 #include <Core/Device.hpp>
+#include <Core/Renderer.hpp>
 #include <Descriptor/DescriptorSet.hpp>
 #include <Descriptor/DescriptorSetLayout.hpp>
 #include <Descriptor/DescriptorSetLayoutBinding.hpp>
 #include <Descriptor/DescriptorSetPool.hpp>
 #include <Image/Texture.hpp>
 #include <Image/TextureView.hpp>
+#include <Miscellaneous/RendererFeatures.hpp>
 #include <Pipeline/ColourBlendState.hpp>
 #include <Pipeline/DepthStencilState.hpp>
 #include <Pipeline/InputAssemblyState.hpp>
@@ -121,11 +123,22 @@ namespace castor3d
 						, ivec2( gl_FragCoord.xy() ) );
 
 					// Rotated grid subsampling to avoid XY directional bias or Z precision bias while downsampling.
-					pxl_fragColor = texelFetch( c3d_mapDepth
-						, clamp( ssPosition * 2 + ivec2( ssPosition.y() & 1, ssPosition.x() & 1 )
-							, ivec2( 0_i )
-							, c3d_textureSize - ivec2( 1_i ) )
-						, 0/*c3d_previousLevel*/ ).r();
+					if ( renderSystem.getCurrentDevice()->getRenderer().getFeatures().hasStorageBuffers )
+					{
+						pxl_fragColor = texelFetch( c3d_mapDepth
+							, clamp( ssPosition * 2 + ivec2( ssPosition.y() & 1, ssPosition.x() & 1 )
+								, ivec2( 0_i )
+								, c3d_textureSize - ivec2( 1_i ) )
+							, 0_i ).r();
+					}
+					else
+					{
+						pxl_fragColor = texelFetch( c3d_mapDepth
+							, clamp( ssPosition * 2 + ivec2( ssPosition.y() & 1, ssPosition.x() & 1 )
+								, ivec2( 0_i )
+								, c3d_textureSize - ivec2( 1_i ) )
+							, c3d_previousLevel ).r();
+					}
 				} );
 			return writer.finalise();
 		}
@@ -245,7 +258,7 @@ namespace castor3d
 			renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
 			renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
 			renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+			renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
 			renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 			renderPass.dependencies[1].srcSubpass = 0u;
@@ -454,16 +467,23 @@ namespace castor3d
 
 		m_minifyDescriptorPool = m_minifyDescriptorLayout->createPool( MaxMipLevel );
 		uint32_t index = 1u;
-		auto * view = m_linearisedView.get();
+		auto * sourceView = m_linearisedView.get();
+		renderer::ImageViewCreateInfo viewInfo{};
+		viewInfo.format = m_result.getTexture()->getPixelFormat();
+		viewInfo.viewType = renderer::TextureViewType::e2D;
+		viewInfo.subresourceRange.aspectMask = renderer::ImageAspectFlag::eColour;
+		viewInfo.subresourceRange.baseArrayLayer = 0u;
+		viewInfo.subresourceRange.layerCount = 1u;
+		viewInfo.subresourceRange.baseMipLevel = 0u;
+		viewInfo.subresourceRange.levelCount = 1u;
 
 		for ( auto & pipeline : m_minifyPipelines )
 		{
 			size.width >>= 1;
 			size.height >>= 1;
-			pipeline.sourceView = view;
-			pipeline.targetView = m_result.getTexture()->getTexture().createView( renderer::TextureViewType::e2D
-				, m_result.getTexture()->getPixelFormat()
-				, index );
+			pipeline.sourceView = sourceView;
+			viewInfo.subresourceRange.baseMipLevel = index;
+			pipeline.targetView = m_result.getTexture()->getTexture().createView( viewInfo );
 			pipeline.descriptor = m_minifyDescriptorPool->createDescriptorSet();
 			pipeline.descriptor->createBinding( m_minifyDescriptorLayout->getBinding( 0u )
 				, *pipeline.sourceView
@@ -497,7 +517,7 @@ namespace castor3d
 				renderer::Viewport{ size.width, size.height, 0, 0 },
 				renderer::Scissor{ 0, 0, size.width, size.height },
 			} );
-			view = pipeline.targetView.get();
+			sourceView = pipeline.targetView.get();
 			++index;
 		}
 	}
@@ -532,7 +552,7 @@ namespace castor3d
 	{
 		static renderer::ClearColorValue const colour{ 0.0, 0.0, 0.0, 0.0 };
 
-		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
+		if ( m_commandBuffer->begin() )
 		{
 			m_timer->beginPass( *m_commandBuffer );
 
@@ -547,18 +567,17 @@ namespace castor3d
 			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 			m_commandBuffer->draw( 6u );
 			m_commandBuffer->endRenderPass();
+			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+				, renderer::PipelineStageFlag::eFragmentShader
+				, m_linearisedView->makeShaderInputResource( renderer::ImageLayout::eColourAttachmentOptimal
+					, renderer::AccessFlag::eColourAttachmentWrite ) );
 
 			// Minification passes.
 			for ( auto & pipeline : m_minifyPipelines )
 			{
-				m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-					, renderer::PipelineStageFlag::eFragmentShader
-					, pipeline.sourceView->makeShaderInputResource( renderer::ImageLayout::eColourAttachmentOptimal
-						, renderer::AccessFlag::eColourAttachmentWrite ) );
 				m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
 					, renderer::PipelineStageFlag::eColourAttachmentOutput
-					, pipeline.targetView->makeColourAttachment( renderer::ImageLayout::eUndefined
-						, renderer::AccessFlag::eMemoryWrite ) );
+					, pipeline.targetView->makeColourAttachment( renderer::ImageLayout::eUndefined, 0u ) );
 				m_commandBuffer->beginRenderPass( *m_renderPass
 					, *pipeline.frameBuffer
 					, { colour }
@@ -569,6 +588,10 @@ namespace castor3d
 				m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 				m_commandBuffer->draw( 6u );
 				m_commandBuffer->endRenderPass();
+				m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+					, renderer::PipelineStageFlag::eFragmentShader
+					, pipeline.targetView->makeShaderInputResource( renderer::ImageLayout::eColourAttachmentOptimal
+						, renderer::AccessFlag::eColourAttachmentWrite ) );
 			}
 
 			m_timer->endPass( *m_commandBuffer );

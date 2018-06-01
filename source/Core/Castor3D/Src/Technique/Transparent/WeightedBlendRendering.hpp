@@ -99,7 +99,6 @@ namespace castor3d
 		renderer::TexturePtr m_revealage;
 		renderer::TextureViewPtr m_revealageView;
 		WeightedBlendTextures m_weightedBlendPassResult;
-		renderer::FrameBufferPtr m_frameBuffer;
 		FinalCombinePass m_finalCombinePass;
 	};
 }

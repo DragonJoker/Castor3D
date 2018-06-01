@@ -68,8 +68,9 @@ namespace castor3d
 			/** (1, 0) or (0, 1)*/
 			Ubo configuration{ writer, cuT( "BlurConfiguration" ), 1u, 0u };
 			auto c3d_axis = configuration.declMember< IVec2 >( cuT( "c3d_axis" ) );
+			auto c3d_dummy = configuration.declMember< IVec2 >( cuT( "c3d_dummy" ) );
 			REQUIRE( config.m_blurRadius > 0 && config.m_blurRadius < 7 );
-			auto gaussian = configuration.declMember< Float >( cuT( "gaussian" ), config.m_blurRadius + 1u );
+			auto c3d_gaussian = configuration.declMember< Vec4 >( cuT( "c3d_gaussian" ), 2u );
 			configuration.end();
 			auto c3d_mapNormal = writer.declSampler< Sampler2D >( cuT( "c3d_mapNormal" ), 2u, 0u, config.m_useNormalsBuffer );
 			auto c3d_mapInput = writer.declSampler< Sampler2D >( cuT( "c3d_mapInput" ), 3u, 0u );
@@ -276,7 +277,7 @@ namespace castor3d
 					// Base weight for depth falloff.  Increase this for more blurriness,
 					// decrease it for better edge discrimination
 					auto BASE = writer.declLocale( cuT( "BASE" )
-						, gaussian[0] );
+						, c3d_gaussian[0][0] );
 					auto totalWeight = writer.declLocale( cuT( "totalWeight" )
 						, BASE );
 					sum *= totalWeight;
@@ -295,7 +296,7 @@ namespace castor3d
 
 							// spatial domain: offset gaussian tap
 							auto weight = writer.declLocale( cuT( "weight" )
-								, 0.3_f + gaussian[abs( r )] );
+								, 0.3_f + c3d_gaussian[abs( r ) % 2][abs( r ) / 2] );
 
 							auto tapKey = writer.declLocale< Float >( cuT( "tapKey" ) );
 							auto value = writer.declLocale< Float >( cuT( "value" ) );
@@ -483,43 +484,43 @@ namespace castor3d
 		switch ( config.m_blurRadius )
 		{
 		case 1u:
-			configuration.gaussian[0] = 0.5f;
-			configuration.gaussian[1] = 0.25f;
+			configuration.gaussian[0][0] = 0.5f;
+			configuration.gaussian[0][1] = 0.25f;
 			break;
 		case 2u:
-			configuration.gaussian[0] = 0.153170f;
-			configuration.gaussian[1] = 0.144893f;
-			configuration.gaussian[2] = 0.122649f;
+			configuration.gaussian[0][0] = 0.153170f;
+			configuration.gaussian[0][1] = 0.144893f;
+			configuration.gaussian[0][2] = 0.122649f;
 			break;
 		case 3u:
-			configuration.gaussian[0] = 0.153170f;
-			configuration.gaussian[1] = 0.144893f;
-			configuration.gaussian[2] = 0.122649f;
-			configuration.gaussian[3] = 0.092902f;
+			configuration.gaussian[0][0] = 0.153170f;
+			configuration.gaussian[0][1] = 0.144893f;
+			configuration.gaussian[0][2] = 0.122649f;
+			configuration.gaussian[0][3] = 0.092902f;
 			break;
 		case 4u:
-			configuration.gaussian[0] = 0.153170f;
-			configuration.gaussian[1] = 0.144893f;
-			configuration.gaussian[2] = 0.122649f;
-			configuration.gaussian[3] = 0.092902f;
-			configuration.gaussian[4] = 0.062970f;
+			configuration.gaussian[0][0] = 0.153170f;
+			configuration.gaussian[0][1] = 0.144893f;
+			configuration.gaussian[0][2] = 0.122649f;
+			configuration.gaussian[0][3] = 0.092902f;
+			configuration.gaussian[1][0] = 0.062970f;
 			break;
 		case 5u:
-			configuration.gaussian[0] = 0.111220f;
-			configuration.gaussian[1] = 0.107798f;
-			configuration.gaussian[2] = 0.098151f;
-			configuration.gaussian[3] = 0.083953f;
-			configuration.gaussian[4] = 0.067458f;
-			configuration.gaussian[5] = 0.050920f;
+			configuration.gaussian[0][0] = 0.111220f;
+			configuration.gaussian[0][1] = 0.107798f;
+			configuration.gaussian[0][2] = 0.098151f;
+			configuration.gaussian[0][3] = 0.083953f;
+			configuration.gaussian[1][0] = 0.067458f;
+			configuration.gaussian[1][1] = 0.050920f;
 			break;
 		default:
-			configuration.gaussian[0] = 0.111220f;
-			configuration.gaussian[1] = 0.107798f;
-			configuration.gaussian[2] = 0.098151f;
-			configuration.gaussian[3] = 0.083953f;
-			configuration.gaussian[4] = 0.067458f;
-			configuration.gaussian[5] = 0.050920f;
-			configuration.gaussian[6] = 0.036108f;
+			configuration.gaussian[0][0] = 0.111220f;
+			configuration.gaussian[0][1] = 0.107798f;
+			configuration.gaussian[0][2] = 0.098151f;
+			configuration.gaussian[0][3] = 0.083953f;
+			configuration.gaussian[1][0] = 0.067458f;
+			configuration.gaussian[1][1] = 0.050920f;
+			configuration.gaussian[1][2] = 0.036108f;
 			break;
 		};
 

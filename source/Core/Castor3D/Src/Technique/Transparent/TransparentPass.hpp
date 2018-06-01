@@ -114,6 +114,13 @@ namespace castor3d
 		 */
 		virtual ~TransparentPass();
 		/**
+		 *\~english
+		 *\brief		Initialises the render pass.
+		 *\~french
+		 *\brief		Initialise la passe de rendu.
+		 */
+		void initialiseRenderPass( WeightedBlendTextures const & wbpResult );
+		/**
 		 *\copydoc		castor3d::RenderTechniquePass::render
 		 */
 		void update( RenderInfo & info
@@ -124,8 +131,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dessine les noeuds transparents.
 		 */
-		renderer::Semaphore const & render( renderer::FrameBuffer const & frameBuffer
-			, renderer::Semaphore const & toWait );
+		renderer::Semaphore const & render( renderer::Semaphore const & toWait );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -216,6 +222,7 @@ namespace castor3d
 	private:
 		renderer::Format m_depthFormat;
 		renderer::CommandBufferPtr m_nodesCommands;
+		renderer::FrameBufferPtr m_frameBuffer;
 	};
 }
 

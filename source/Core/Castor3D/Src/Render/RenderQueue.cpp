@@ -930,6 +930,8 @@ namespace castor3d
 			getOwner()->getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
 				, [this]()
 				{
+					m_commandBuffer->reset();
+
 					if ( m_camera )
 					{
 						doPrepareCulledNodesCommandBuffer();

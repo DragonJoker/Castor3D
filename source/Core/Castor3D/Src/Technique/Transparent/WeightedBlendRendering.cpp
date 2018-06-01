@@ -40,21 +40,6 @@ namespace castor3d
 			return device.createTexture( image, renderer::MemoryPropertyFlag::eDeviceLocal );
 		}
 
-		renderer::FrameBufferPtr doCreateFrameBuffer( renderer::RenderPass const & renderPass
-			, Size const & size
-			, WeightedBlendTextures const & wbResult )
-		{
-			renderer::FrameBufferAttachmentArray attaches;
-
-			for ( uint32_t i = 0; i < uint32_t( WbTexture::eCount ); ++i )
-			{
-				attaches.emplace_back( *( renderPass.getAttachments().begin() + i ), wbResult[i] );
-			}
-
-			return renderPass.createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
-				, std::move( attaches ) );
-		}
-
 		renderer::TextureViewPtr doCreateDepthView( Engine & engine
 			, renderer::TextureView const & depthView )
 		{
@@ -89,6 +74,8 @@ namespace castor3d
 		, m_weightedBlendPassResult{ { *m_depthView, *m_accumulationView, *m_revealageView, velocityTexture->getDefaultView() } }
 		, m_finalCombinePass{ engine, m_size, m_transparentPass.getSceneUbo(), m_weightedBlendPassResult, colourView }
 	{
+		m_transparentPass.initialiseRenderPass( m_weightedBlendPassResult );
+		m_transparentPass.initialise( m_size );
 	}
 
 	void WeightedBlendRendering::update( RenderInfo & info
@@ -113,17 +100,9 @@ namespace castor3d
 		, Scene const & scene
 		, renderer::Semaphore const & toWait )
 	{
-		if ( !m_frameBuffer )
-		{
-			m_frameBuffer = doCreateFrameBuffer( m_transparentPass.getRenderPass()
-				, m_size
-				, m_weightedBlendPassResult );
-		}
-
 		m_engine.setPerObjectLighting( true );
 		auto * result = &toWait;
-		result = &m_transparentPass.render( *m_frameBuffer
-			, *result );
+		result = &m_transparentPass.render( *result );
 		result = &m_finalCombinePass.render( scene.getFog().getType()
 			, *result );
 		return *result;

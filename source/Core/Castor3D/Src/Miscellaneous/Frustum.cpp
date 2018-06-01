@@ -9,7 +9,7 @@
 
 using namespace castor;
 
-#define DEBUG_FRUSTUM 0
+#define C3D_DebugFrustum 0
 
 namespace castor3d
 {
@@ -130,7 +130,7 @@ namespace castor3d
 			&& results[size_t( FrustumPlane::eTop )]
 			&& results[size_t( FrustumPlane::eBottom )];
 
-#if DEBUG_FRUSTUM
+#if C3D_DebugFrustum
 
 		if ( !result )
 		{
@@ -199,7 +199,7 @@ namespace castor3d
 			&& results[size_t( FrustumPlane::eTop )]
 			&& results[size_t( FrustumPlane::eBottom )];
 
-#if DEBUG_FRUSTUM
+#if C3D_DebugFrustum
 
 		if ( !result )
 		{
@@ -255,7 +255,7 @@ namespace castor3d
 			&& results[size_t( FrustumPlane::eTop )]
 			&& results[size_t( FrustumPlane::eBottom )];
 
-#if DEBUG_FRUSTUM
+#if C3D_DebugFrustum
 
 		if ( !result )
 		{

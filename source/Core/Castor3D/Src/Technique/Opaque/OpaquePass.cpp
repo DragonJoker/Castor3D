@@ -52,7 +52,6 @@ namespace castor3d
 	void OpaquePass::initialiseRenderPass( GeometryPassResult const & gpResult )
 	{
 		auto & device = getCurrentDevice( *this );
-		m_nodesCommands = device.getGraphicsCommandPool().createCommandBuffer();
 		renderer::RenderPassCreateInfo renderPass;
 		renderPass.flags = 0u;
 
@@ -112,6 +111,8 @@ namespace castor3d
 
 		m_frameBuffer = m_renderPass->createFrameBuffer( { gpResult[0].getDimensions().width, gpResult[0].getDimensions().height }
 			, std::move( attaches ) );
+		auto & timer = getTimer();
+		m_nodesCommands = device.getGraphicsCommandPool().createCommandBuffer();
 	}
 
 	void OpaquePass::accept( RenderTechniqueVisitor & visitor )
@@ -148,13 +149,14 @@ namespace castor3d
 			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
 			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
 		};
+
 		auto * result = &toWait;
 		auto & timer = getTimer();
 		auto & device = getCurrentDevice( *this );
+		timer.start();
 
 		if ( m_nodesCommands->begin() )
 		{
-			timer.start();
 			timer.beginPass( *m_nodesCommands );
 			timer.notifyPassRender();
 			m_nodesCommands->beginRenderPass( getRenderPass()
@@ -165,15 +167,16 @@ namespace castor3d
 			m_nodesCommands->endRenderPass();
 			timer.endPass( *m_nodesCommands );
 			m_nodesCommands->end();
+
 			device.getGraphicsQueue().submit( *m_nodesCommands
 				, *result
 				, renderer::PipelineStageFlag::eColourAttachmentOutput
 				, getSemaphore()
 				, nullptr );
 			result = &getSemaphore();
-			timer.stop();
 		}
 
+		timer.stop();
 		return *result;
 	}
 

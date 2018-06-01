@@ -557,7 +557,6 @@ namespace castor3d
 	{
 #if C3D_UseWeightedBlendedRendering
 
-		static_cast< TransparentPass & >( *m_transparentPass ).setDepthFormat( m_depthBuffer->getPixelFormat() );
 		m_transparentPass->initialise( m_size );
 		m_weightedBlendRendering = std::make_unique< WeightedBlendRendering >( *getEngine()
 			, static_cast< TransparentPass & >( *m_transparentPass )

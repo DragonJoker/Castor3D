@@ -775,7 +775,7 @@ namespace castor3d
 							* Float( PI )
 							* pow( 1.0_f + sqVolumetricScattering - dblVolumetricScattering * RdotL, 1.5_f ) ) );
 
-					FOR( m_writer, Int, i, 0, "i < lightVolumetricSteps", "++i" )
+					FOR( m_writer, Int, i, 0, "i < int( lightVolumetricSteps )", "++i" )
 					{
 						IF ( m_writer, m_computeDirectional( shadowType, lightMatrix, currentPosition, lightDirection, vec3( 0.0_f ) ) < 0.5_f )
 						{
@@ -1062,7 +1062,7 @@ namespace castor3d
 							* Float( PI )
 							* pow( 1.0_f + sqVolumetricScattering - dblVolumetricScattering * RdotL, 1.5_f ) ) );
 
-					FOR( m_writer, Int, i, 0, "i < lightVolumetricSteps", "++i" )
+					FOR( m_writer, Int, i, 0, "i < int( lightVolumetricSteps )", "++i" )
 					{
 						IF ( m_writer, m_computeOneDirectional( lightMatrix, currentPosition, lightDirection, vec3( 0.0_f ) ) > 0.5_f )
 						{
