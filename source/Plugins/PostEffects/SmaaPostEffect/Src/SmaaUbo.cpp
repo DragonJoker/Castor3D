@@ -9,8 +9,9 @@ namespace smaa
 {
 	namespace constants
 	{
-		const String PixelSize = cuT( "c3d_pixelSize" );
+		const String RenderTargetMetrics = cuT( "c3d_renderTargetMetrics" );
 		const String Threshold = cuT( "c3d_threshold" );
+		const String DepthThreshold = cuT( "c3d_depthThreshold" );
 		const String PredicationScale = cuT( "c3d_predicationScale" );
 		const String PredicationThreshold = cuT( "c3d_predicationThreshold" );
 		const String PredicationStrength = cuT( "c3d_predicationStrength" );

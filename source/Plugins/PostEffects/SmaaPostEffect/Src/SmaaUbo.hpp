@@ -12,8 +12,9 @@ namespace smaa
 {
 	namespace constants
 	{
-		extern const castor::String PixelSize;
+		extern const castor::String RenderTargetMetrics;
 		extern const castor::String Threshold;
+		extern const castor::String DepthThreshold;
 		extern const castor::String PredicationScale;
 		extern const castor::String PredicationThreshold;
 		extern const castor::String PredicationStrength;

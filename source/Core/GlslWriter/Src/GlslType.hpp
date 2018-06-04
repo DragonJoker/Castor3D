@@ -49,6 +49,12 @@ namespace glsl
 		return result;
 	}
 
+	template< typename T >
+	T const & operator+( T const & p_value )
+	{
+		return p_value;
+	}
+
 	GlslWriter_API castor::String toString( Type const & p_value );
 	GlslWriter_API castor::String paramToString( castor::String & p_sep, Type const & p_value );
 }

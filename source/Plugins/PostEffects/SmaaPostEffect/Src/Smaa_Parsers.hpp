@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___Smaa_Parsers_H___
@@ -20,6 +20,7 @@ namespace smaa
 	DECLARE_ATTRIBUTE_PARSER( parserSmaa )
 	DECLARE_ATTRIBUTE_PARSER( parserMode )
 	DECLARE_ATTRIBUTE_PARSER( parserPreset )
+	DECLARE_ATTRIBUTE_PARSER( parserEdgeDetection )
 	DECLARE_ATTRIBUTE_PARSER( parserThreshold )
 	DECLARE_ATTRIBUTE_PARSER( parserMaxSearchSteps )
 	DECLARE_ATTRIBUTE_PARSER( parserMaxSearchStepsDiag )

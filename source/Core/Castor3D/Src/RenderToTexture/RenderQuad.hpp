@@ -87,7 +87,7 @@ namespace castor3d
 			, renderer::RenderPass const & renderPass
 			, renderer::DescriptorSetLayoutBindingArray bindings
 			, renderer::PushConstantRangeCRefArray const & pushRanges
-			, renderer::DepthStencilState const & dsState );
+			, renderer::DepthStencilState dsState );
 		/**
 		*\~english
 		*\brief
@@ -148,6 +148,7 @@ namespace castor3d
 		renderer::DescriptorSetLayoutPtr m_descriptorSetLayout;
 		renderer::DescriptorSetPoolPtr m_descriptorSetPool;
 		renderer::DescriptorSetPtr m_descriptorSet;
+		renderer::TextureView const * m_sourceView{ nullptr };
 	};
 }
 

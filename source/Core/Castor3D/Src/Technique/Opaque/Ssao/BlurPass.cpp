@@ -412,15 +412,6 @@ namespace castor3d
 			renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
 			renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 
-			renderPass.dependencies.resize( 1u );
-			renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
-			renderPass.dependencies[0].dstSubpass = 0u;
-			renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
-
 			renderPass.subpasses.resize( 1u );
 			renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
 			renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;

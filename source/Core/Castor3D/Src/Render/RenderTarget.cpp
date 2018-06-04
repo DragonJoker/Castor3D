@@ -423,45 +423,41 @@ namespace castor3d
 
 	void RenderTarget::doInitialiseRenderPass()
 	{
-		renderer::RenderPassCreateInfo createInfo{};
-		createInfo.flags = 0u;
+		renderer::RenderPassCreateInfo renderPass{};
+		renderPass.flags = 0u;
 
-		createInfo.attachments.resize( 1u );
-		createInfo.attachments[0].format = getPixelFormat();
-		createInfo.attachments[0].samples = renderer::SampleCountFlag::e1;
-		createInfo.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
-		createInfo.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
-		createInfo.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		createInfo.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		createInfo.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-		createInfo.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+		renderPass.attachments.resize( 1u );
+		renderPass.attachments[0].format = getPixelFormat();
+		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
 
-		renderer::AttachmentReference colourReference;
-		colourReference.attachment = 0u;
-		colourReference.layout = renderer::ImageLayout::eColourAttachmentOptimal;
+		renderPass.subpasses.resize( 1u );
+		renderPass.subpasses[0].flags = 0u;
+		renderPass.subpasses[0].colorAttachments = { { 0u, renderer::ImageLayout::eColourAttachmentOptimal } };
 
-		createInfo.subpasses.resize( 1u );
-		createInfo.subpasses[0].flags = 0u;
-		createInfo.subpasses[0].colorAttachments = { colourReference };
+		renderPass.dependencies.resize( 2u );
+		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].dstSubpass = 0u;
+		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
+		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite | renderer::AccessFlag::eColourAttachmentRead;
+		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
-		//createInfo.dependencies.resize( 2u );
-		//createInfo.dependencies[0].srcSubpass = renderer::ExternalSubpass;
-		//createInfo.dependencies[0].dstSubpass = 0u;
-		//createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		//createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
-		//createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		//createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		//createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+		renderPass.dependencies[1].srcSubpass = 0u;
+		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite | renderer::AccessFlag::eColourAttachmentRead;
+		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eMemoryRead;
+		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
-		//createInfo.dependencies[1].srcSubpass = 0u;
-		//createInfo.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-		//createInfo.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		//createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
-		//createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		//createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		//createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
-
-		m_renderPass = getCurrentDevice( *this ).createRenderPass( createInfo );
+		m_renderPass = getCurrentDevice( *this ).createRenderPass( renderPass );
 	}
 
 	bool RenderTarget::doInitialiseFrameBuffer()

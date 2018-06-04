@@ -119,8 +119,9 @@ namespace castor3d
 		, renderer::RenderPass const & renderPass
 		, renderer::DescriptorSetLayoutBindingArray bindings
 		, renderer::PushConstantRangeCRefArray const & pushRanges
-		, renderer::DepthStencilState const & dsState )
+		, renderer::DepthStencilState dsState )
 	{
+		m_sourceView = &view;
 		m_sampler->initialise();
 		auto & device = getCurrentDevice( m_renderSystem );
 		// Initialise the vertex buffer.
@@ -128,6 +129,11 @@ namespace castor3d
 			, 1u
 			, 0u
 			, renderer::MemoryPropertyFlag::eHostVisible );
+
+		if ( device.getClipDirection() == renderer::ClipDirection::eTopDown )
+		{
+			std::swap( dsState.front, dsState.back );
+		}
 
 		if ( auto buffer = m_vertexBuffer->lock( 0u, 1u, renderer::MemoryMapFlag::eWrite ) )
 		{
@@ -180,7 +186,7 @@ namespace castor3d
 		m_descriptorSet = m_descriptorSetPool->createDescriptorSet();
 		doFillDescriptorSet( *m_descriptorSetLayout, *m_descriptorSet );
 		m_descriptorSet->createBinding( m_descriptorSetLayout->getBinding( textureBindingPoint )
-			, view
+			, *m_sourceView
 			, m_sampler->getSampler() );
 		m_descriptorSet->update();
 
@@ -216,6 +222,7 @@ namespace castor3d
 
 	void RenderQuad::registerFrame( renderer::CommandBuffer & commandBuffer )const
 	{
+		// Put source image in shader input layout.
 		commandBuffer.bindPipeline( *m_pipeline );
 		commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 		commandBuffer.bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );

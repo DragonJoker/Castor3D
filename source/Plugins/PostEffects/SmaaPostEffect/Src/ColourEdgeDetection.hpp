@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3DSMAA_BlendingWeightCalculation_H___
-#define ___C3DSMAA_BlendingWeightCalculation_H___
+#ifndef ___C3DSMAA_ColourEdgeDetection_H___
+#define ___C3DSMAA_ColourEdgeDetection_H___
 
 #include "SmaaConfig.hpp"
 
@@ -14,18 +14,17 @@ See LICENSE file in root folder
 
 namespace smaa
 {
-	class BlendingWeightCalculation
+	class ColourEdgeDetection
 		: public castor3d::RenderQuad
 	{
 	public:
-		BlendingWeightCalculation( castor3d::RenderTarget & renderTarget
-			, renderer::TextureView const & edgeDetectionView
-			, castor3d::TextureLayoutSPtr depthView
+		ColourEdgeDetection( castor3d::RenderTarget & renderTarget
+			, renderer::TextureView const & colourView
+			, renderer::Texture const * predication
 			, castor3d::SamplerSPtr sampler
 			, SmaaConfig const & config );
 		castor3d::CommandsSemaphore prepareCommands( castor3d::RenderPassTimer const & timer
 			, uint32_t passIndex );
-		void update( castor::Point4i const & subsampleIndices );
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
 		inline castor3d::TextureLayoutSPtr getSurface()const
@@ -33,9 +32,9 @@ namespace smaa
 			return m_surface.colourTexture;
 		}
 
-		inline renderer::UniformBuffer< castor::Point4i > & getUbo()
+		inline castor3d::TextureLayoutSPtr const & getDepth()const
 		{
-			return *m_ubo;
+			return m_surface.depthTexture;
 		}
 
 	private:
@@ -43,12 +42,10 @@ namespace smaa
 			, renderer::DescriptorSet & descriptorSet )override;
 
 	private:
-		renderer::TextureView const & m_edgeDetectionView;
 		renderer::RenderPassPtr m_renderPass;
 		castor3d::PostEffectSurface m_surface;
-		renderer::UniformBufferPtr< castor::Point4i > m_ubo;
-		castor3d::TextureLayoutSPtr m_areaTex;
-		castor3d::TextureLayoutSPtr m_searchTex;
+		renderer::TextureView const & m_colourView;
+		renderer::TextureViewPtr m_predicationView;
 		glsl::Shader m_vertexShader;
 		glsl::Shader m_pixelShader;
 	};

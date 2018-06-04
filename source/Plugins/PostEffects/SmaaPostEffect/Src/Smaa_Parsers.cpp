@@ -15,25 +15,25 @@ namespace smaa
 {
 	namespace
 	{
-		castor::String doGetName( PostEffect::Mode mode )
+		castor::String doGetName( Mode mode )
 		{
 			castor::String result;
 
 			switch ( mode )
 			{
-			case PostEffect::Mode::e1X:
+			case Mode::e1X:
 				result = cuT( "1X" );
 				break;
 
-			case PostEffect::Mode::eT2X:
+			case Mode::eT2X:
 				result = cuT( "T2X" );
 				break;
 
-			case PostEffect::Mode::eS2X:
+			case Mode::eS2X:
 				result = cuT( "S2X" );
 				break;
 
-			case PostEffect::Mode::e4X:
+			case Mode::e4X:
 				result = cuT( "4X" );
 				break;
 			}
@@ -41,30 +41,52 @@ namespace smaa
 			return result;
 		}
 
-		castor::String doGetName( PostEffect::Preset preset )
+		castor::String doGetName( Preset preset )
 		{
 			castor::String result;
 
 			switch ( preset )
 			{
-			case PostEffect::Preset::eLow:
+			case Preset::eLow:
 				result = cuT( "low" );
 				break;
 
-			case PostEffect::Preset::eMedium:
+			case Preset::eMedium:
 				result = cuT( "medium" );
 				break;
 
-			case PostEffect::Preset::eHigh:
+			case Preset::eHigh:
 				result = cuT( "high" );
 				break;
 
-			case PostEffect::Preset::eUltra:
+			case Preset::eUltra:
 				result = cuT( "ultra" );
 				break;
 
-			case PostEffect::Preset::eCustom:
+			case Preset::eCustom:
 				result = cuT( "custom" );
+				break;
+			}
+
+			return result;
+		}
+
+		castor::String doGetName( EdgeDetection detection )
+		{
+			castor::String result;
+
+			switch ( detection )
+			{
+			case EdgeDetection::eDepth:
+				result = cuT( "depth" );
+				break;
+
+			case EdgeDetection::eColour:
+				result = cuT( "colour" );
+				break;
+
+			case EdgeDetection::eLuma:
+				result = cuT( "luma" );
 				break;
 			}
 
@@ -75,8 +97,9 @@ namespace smaa
 	struct ParserContext
 	{
 		castor3d::Engine * engine{ nullptr };
-		PostEffect::Mode mode{ PostEffect::Mode::e1X };
-		PostEffect::Preset preset{ PostEffect::Preset::eCustom };
+		Mode mode{ Mode::e1X };
+		Preset preset{ Preset::eCustom };
+		EdgeDetection detection{ EdgeDetection::eLuma };
 		float threshold{ 0.1f };
 		int maxSearchSteps{ 16 };
 		int maxSearchStepsDiag{ 8 };
@@ -110,7 +133,7 @@ namespace smaa
 		{
 			uint32_t value{ 0u };
 			p_params[0]->get( value );
-			context.mode = PostEffect::Mode( value );
+			context.mode = Mode( value );
 		}
 	}
 	END_ATTRIBUTE()
@@ -127,7 +150,24 @@ namespace smaa
 		{
 			uint32_t value{ 0u };
 			p_params[0]->get( value );
-			context.preset = PostEffect::Preset( value );
+			context.preset = Preset( value );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserEdgeDetection )
+	{
+		auto & context = getParserContext( p_context );
+
+		if ( p_params.empty() )
+		{
+			PARSING_ERROR( "Missing parameter" );
+		}
+		else
+		{
+			uint32_t value{ 0u };
+			p_params[0]->get( value );
+			context.detection = EdgeDetection( value );
 		}
 	}
 	END_ATTRIBUTE()
@@ -230,8 +270,9 @@ namespace smaa
 		castor3d::Parameters parameters;
 		parameters.add( cuT( "mode" ), doGetName( context.mode ) );
 		parameters.add( cuT( "preset" ), doGetName( context.preset ) );
+		parameters.add( cuT( "edgeDetection" ), doGetName( context.detection ) );
 
-		if ( context.preset == PostEffect::Preset::eCustom )
+		if ( context.preset == Preset::eCustom )
 		{
 			parameters.add( cuT( "threshold" ), context.threshold );
 			parameters.add( cuT( "maxSearchSteps" ), context.maxSearchSteps );
@@ -239,7 +280,7 @@ namespace smaa
 			parameters.add( cuT( "cornerRounding" ), context.cornerRounding );
 		}
 
-		if ( context.mode == PostEffect::Mode::eT2X )
+		if ( context.mode == Mode::eT2X )
 		{
 			parameters.add( cuT( "reprojection" ), context.reprojection );
 			parameters.add( cuT( "reprojectionWeightScale" ), context.reprojectionWeightScale );

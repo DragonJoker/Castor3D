@@ -53,18 +53,24 @@ namespace
 	{
 		static castor::UIntStrMap modes
 		{
-			{ "1X", uint32_t( smaa::PostEffect::Mode::e1X ) },
-			{ "T2X", uint32_t( smaa::PostEffect::Mode::eT2X ) },
-			{ "S2X", uint32_t( smaa::PostEffect::Mode::eS2X ) },
-			{ "4X", uint32_t( smaa::PostEffect::Mode::e4X ) }
+			{ "1X", uint32_t( smaa::Mode::e1X ) },
+			{ "T2X", uint32_t( smaa::Mode::eT2X ) },
+			{ "S2X", uint32_t( smaa::Mode::eS2X ) },
+			{ "4X", uint32_t( smaa::Mode::e4X ) }
 		};
 		static castor::UIntStrMap presets
 		{
-			{ "low", uint32_t( smaa::PostEffect::Preset::eLow ) },
-			{ "medium", uint32_t( smaa::PostEffect::Preset::eMedium ) },
-			{ "high", uint32_t( smaa::PostEffect::Preset::eHigh ) },
-			{ "ultra", uint32_t( smaa::PostEffect::Preset::eUltra ) },
-			{ "custom", uint32_t( smaa::PostEffect::Preset::eCustom ) }
+			{ "low", uint32_t( smaa::Preset::eLow ) },
+			{ "medium", uint32_t( smaa::Preset::eMedium ) },
+			{ "high", uint32_t( smaa::Preset::eHigh ) },
+			{ "ultra", uint32_t( smaa::Preset::eUltra ) },
+			{ "custom", uint32_t( smaa::Preset::eCustom ) }
+		};
+		static castor::UIntStrMap detections
+		{
+			{ "depth", uint32_t( smaa::EdgeDetection::eDepth ) },
+			{ "colour", uint32_t( smaa::EdgeDetection::eColour ) },
+			{ "luma", uint32_t( smaa::EdgeDetection::eLuma ) }
 		};
 		castor::FileParser::AttributeParsersBySection result;
 
@@ -72,6 +78,7 @@ namespace
 
 		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "mode" ), &smaa::parserMode, { castor::makeParameter< castor::ParameterType::eCheckedText >( modes ) } );
 		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "preset" ), &smaa::parserPreset, { castor::makeParameter< castor::ParameterType::eCheckedText >( presets ) } );
+		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "edgeDetection" ), &smaa::parserEdgeDetection, { castor::makeParameter< castor::ParameterType::eCheckedText >( detections ) } );
 		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "threshold" ), &smaa::parserThreshold, { castor::makeParameter< castor::ParameterType::eFloat >( castor::makeRange( 0.0f, 0.5f ) ) } );
 		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "maxSearchSteps" ), &smaa::parserMaxSearchSteps, { castor::makeParameter< castor::ParameterType::eInt32 >( castor::makeRange( 0, 98 ) ) } );
 		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "maxSearchStepsDiag" ), &smaa::parserMaxSearchStepsDiag, { castor::makeParameter< castor::ParameterType::eInt32 >( castor::makeRange( 0, 20 ) ) } );

@@ -1,7 +1,10 @@
 #include "Reproject.hpp"
 
+#include "SmaaUbo.hpp"
+
 #include <Engine.hpp>
 
+#include <Render/RenderPassTimer.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
 #include <Texture/Sampler.hpp>
@@ -13,6 +16,7 @@
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <Pipeline/DepthStencilState.hpp>
+#include <Sync/ImageMemoryBarrier.hpp>
 
 #include <numeric>
 
@@ -114,7 +118,7 @@ namespace smaa
 		, renderer::TextureView const & previousColourView
 		, renderer::TextureView const * velocityView
 		, castor3d::SamplerSPtr sampler
-		, float reprojectionWeightScale )
+		, SmaaConfig const & config )
 		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), true, false }
 		, m_currentColourView{ currentColourView }
 		, m_previousColourView{ previousColourView }
@@ -137,7 +141,7 @@ namespace smaa
 		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
 		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
 		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
 
 		renderPass.subpasses.resize( 1u );
 		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
@@ -146,7 +150,7 @@ namespace smaa
 		renderPass.dependencies.resize( 2u );
 		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite | renderer::AccessFlag::eColourAttachmentRead;
 		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
 		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
 		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
@@ -154,7 +158,7 @@ namespace smaa
 
 		renderPass.dependencies[1].srcSubpass = 0u;
 		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite | renderer::AccessFlag::eColourAttachmentRead;
 		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
 		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
 		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
@@ -166,7 +170,7 @@ namespace smaa
 		m_vertexShader = doGetReprojectVP( *renderTarget.getEngine()->getRenderSystem() );
 		m_pixelShader = doGetReprojectFP( *renderTarget.getEngine()->getRenderSystem()
 			, velocityView != nullptr
-			, reprojectionWeightScale );
+			, config.reprojectionWeightScale );
 
 		renderer::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
@@ -194,6 +198,51 @@ namespace smaa
 		m_surface.initialise( *m_renderPass
 			, castor::Size{ size.width, size.height }
 			, renderTarget.getPixelFormat() );
+	}
+
+	castor3d::CommandsSemaphore Reproject::prepareCommands( castor3d::RenderPassTimer const & timer
+		, uint32_t passIndex )
+	{
+		auto & device = getCurrentDevice( m_renderSystem );
+		castor3d::CommandsSemaphore reprojectCommands
+		{
+			device.getGraphicsCommandPool().createCommandBuffer(),
+			device.createSemaphore()
+		};
+		auto & reprojectCmd = *reprojectCommands.commandBuffer;
+
+		if ( reprojectCmd.begin() )
+		{
+			timer.beginPass( reprojectCmd, passIndex );
+			// Put neighbourhood images in shader input layout.
+			reprojectCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+				, renderer::PipelineStageFlag::eFragmentShader
+				, m_currentColourView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+			reprojectCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+				, renderer::PipelineStageFlag::eFragmentShader
+				, m_previousColourView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+
+			reprojectCmd.beginRenderPass( *m_renderPass
+				, *m_surface.frameBuffer
+				, { renderer::ClearColorValue{} }
+				, renderer::SubpassContents::eInline );
+			registerFrame( reprojectCmd );
+			reprojectCmd.endRenderPass();
+			timer.endPass( reprojectCmd, passIndex );
+			reprojectCmd.end();
+		}
+
+		return std::move( reprojectCommands );
+	}
+
+	void Reproject::accept( castor3d::PipelineVisitorBase & visitor )
+	{
+		visitor.visit( cuT( "Reproject" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_vertexShader );
+		visitor.visit( cuT( "Reproject" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_pixelShader );
 	}
 
 	void Reproject::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout

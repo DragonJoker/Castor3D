@@ -1,16 +1,22 @@
-#include "EdgeDetection.hpp"
+#include "ColourEdgeDetection.hpp"
+
+#include "SmaaUbo.hpp"
 
 #include <Engine.hpp>
 
+#include <Render/RenderPassTimer.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
 #include <Texture/Sampler.hpp>
+#include <Texture/TextureLayout.hpp>
 
+#include <Core/Renderer.hpp>
 #include <Image/Texture.hpp>
 #include <Image/TextureView.hpp>
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <Pipeline/DepthStencilState.hpp>
+#include <Sync/ImageMemoryBarrier.hpp>
 
 #include <numeric>
 
@@ -23,14 +29,14 @@ namespace smaa
 	namespace
 	{
 		glsl::Shader doGetEdgeDetectionVP( castor3d::RenderSystem & renderSystem
-			, Point2f const & pixelSize )
+			, Point4f const & renderTargetMetrics )
 		{
 			using namespace glsl;
 			GlslWriter writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			auto c3d_pixelSize = writer.declConstant( constants::PixelSize
-				, vec2( Float( pixelSize[0] ), pixelSize[1] ) );
+			auto c3d_renderTargetMetrics = writer.declConstant( constants::RenderTargetMetrics
+				, vec4( Float( renderTargetMetrics[0] ), renderTargetMetrics[1], renderTargetMetrics[2], renderTargetMetrics[3] ) );
 			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
 			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
 
@@ -42,39 +48,36 @@ namespace smaa
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					out.gl_Position() = vec4( position, 0.0, 1.0 );
 					vtx_texture = texcoord;
+					out.gl_Position() = vec4( position, 0.0, 1.0 );
 
-					vtx_offset[0] = vec4( vtx_texture, vtx_texture ) + vec4( c3d_pixelSize, c3d_pixelSize ) * vec4( -1.0_f, 0.0, 0.0, -1.0 );
-					vtx_offset[1] = vec4( vtx_texture, vtx_texture ) + vec4( c3d_pixelSize, c3d_pixelSize ) * vec4( 1.0_f, 0.0, 0.0, 1.0 );
-					vtx_offset[2] = vec4( vtx_texture, vtx_texture ) + vec4( c3d_pixelSize, c3d_pixelSize ) * vec4( -2.0_f, 0.0, 0.0, -2.0 );
+					vtx_offset[0] = fma( c3d_renderTargetMetrics.xyxy(), vec4( -1.0_f, 0.0, 0.0, -1.0 ), vec4( vtx_texture, vtx_texture ) );
+					vtx_offset[1] = fma( c3d_renderTargetMetrics.xyxy(), vec4( +1.0_f, 0.0, 0.0, +1.0 ), vec4( vtx_texture, vtx_texture ) );
+					vtx_offset[2] = fma( c3d_renderTargetMetrics.xyxy(), vec4( -2.0_f, 0.0, 0.0, -2.0 ), vec4( vtx_texture, vtx_texture ) );
 				} );
 			return writer.finalise();
 		}
 
 		glsl::Shader doGetEdgeDetectionFP( castor3d::RenderSystem & renderSystem
-			, Point2f const & pixelSize
-			, float threshold
+			, Point4f const & renderTargetMetrics
 			, bool predicationEnabled
-			, float predicationThreshold
-			, float predicationScale
-			, float predicationStrength )
+			, SmaaConfig const & config )
 		{
 			using namespace glsl;
 			GlslWriter writer = renderSystem.createGlslWriter();
 			writer.enableExtension( cuT( "GL_ARB_texture_gather" ), 400u );
 
 			// Shader inputs
-			auto c3d_pixelSize = writer.declConstant( constants::PixelSize
-				, vec2( Float( pixelSize[0] ), pixelSize[1] ) );
+			auto c3d_renderTargetMetrics = writer.declConstant( constants::RenderTargetMetrics
+				, vec4( Float( renderTargetMetrics[0] ), renderTargetMetrics[1], renderTargetMetrics[2], renderTargetMetrics[3] ) );
 			auto c3d_threshold = writer.declConstant( constants::Threshold
-				, Float( threshold ) );
+				, Float( config.threshold ) );
 			auto c3d_predicationThreshold = writer.declConstant( constants::PredicationThreshold
-				, Float( predicationThreshold ) );
+				, Float( config.predicationThreshold ) );
 			auto c3d_predicationScale = writer.declConstant( constants::PredicationScale
-				, Float( predicationScale ) );
+				, Float( config.predicationScale ) );
 			auto c3d_predicationStrength = writer.declConstant( constants::PredicationStrength
-				, Float( predicationStrength ) );
+				, Float( config.predicationStrength ) );
 
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 			auto vtx_offset = writer.declInputArray< Vec4 >( cuT( "vtx_offset" ), 1u, 3u );
@@ -95,7 +98,7 @@ namespace smaa
 					, [&]()
 					{
 						writer.returnStmt( textureGather( c3d_predicationTex
-							, vtx_texture + c3d_pixelSize * vec2( -0.5_f, -0.5 ) ).grb() );
+							, vtx_texture + c3d_renderTargetMetrics.xy() * vec2( -0.5_f, -0.5 ) ).grb() );
 					} );
 
 				/**
@@ -133,19 +136,23 @@ namespace smaa
 
 					auto threshold = writer.getBuiltin< Vec2 >( cuT( "threshold" ) );
 
-					// Calculate lumas:
-					auto weights = writer.declLocale( cuT( "weights" )
-						, vec3( 0.2126_f, 0.7152, 0.0722 ) );
-					auto L = writer.declLocale( cuT( "L" )
-						, dot( texture( c3d_colourTex, vtx_texture ).rgb(), weights ) );
-					auto Lleft = writer.declLocale( cuT( "Lleft" )
-						, dot( texture( c3d_colourTex, vtx_offset[0].xy() ).rgb(), weights ) );
-					auto Ltop = writer.declLocale( cuT( "Ltop" )
-						, dot( texture( c3d_colourTex, vtx_offset[0].zw() ).rgb(), weights ) );
+					// Calculate color deltas:
+					auto delta = writer.declLocale< Vec4 >( cuT( "delta" ) );
+					auto C = writer.declLocale( cuT( "C" )
+						, texture( c3d_colourTex, vtx_texture ).rgb() );
+
+					auto Cleft = writer.declLocale( cuT( "Cleft" )
+						, texture( c3d_colourTex, vtx_offset[0].xy() ).rgb() );
+					auto t = writer.declLocale( cuT( "t" )
+						, abs( C - Cleft ) );
+					delta.x() = max( max( t.r(), t.g() ), t.b() );
+
+					auto Ctop = writer.declLocale( cuT( "Ctop" )
+						, texture( c3d_colourTex, vtx_offset[0].zw() ).rgb() );
+					t = abs( C - Ctop );
+					delta.y() = max( max( t.r(), t.g() ), t.b() );
 
 					// We do the usual threshold:
-					auto delta = writer.declLocale< Vec4 >( cuT( "delta" ) );
-					delta.xy() = abs( vec2( L ) - vec2( Lleft, Ltop ) );
 					auto edges = writer.declLocale( cuT( "edges" )
 						, step( threshold, delta.xy() ) );
 
@@ -157,11 +164,15 @@ namespace smaa
 					FI;
 
 					// Calculate right and bottom deltas:
-					auto Lright = writer.declLocale( cuT( "Lright" )
-						, dot( texture( c3d_colourTex, vtx_offset[1].xy() ).rgb(), weights ) );
-					auto Lbottom = writer.declLocale( cuT( "Lbottom" )
-						, dot( texture( c3d_colourTex, vtx_offset[1].zw() ).rgb(), weights ) );
-					delta.zw() = abs( vec2( L ) - vec2( Lright, Lbottom ) );
+					auto Cright = writer.declLocale( cuT( "Cright" )
+						, texture( c3d_colourTex, vtx_offset[1].xy() ).rgb() );
+					t = abs( C - Cright );
+					delta.z() = max( max( t.r(), t.g() ), t.b() );
+
+					auto Cbottom = writer.declLocale( cuT( "Cbottom" )
+						, texture( c3d_colourTex, vtx_offset[1].zw() ).rgb() );
+					t = abs( C - Cbottom );
+					delta.w() = max( max( t.r(), t.g() ), t.b() );
 
 					// Calculate the maximum delta in the direct neighborhood:
 					auto maxDelta = writer.declLocale( cuT( "maxDelta" )
@@ -169,26 +180,21 @@ namespace smaa
 					maxDelta = max( maxDelta.xx(), maxDelta.yy() );
 
 					// Calculate left-left and top-top deltas:
-					auto Lleftleft = writer.declLocale( cuT( "Lleftleft" )
-						, dot( texture( c3d_colourTex, vtx_offset[2].xy() ).rgb(), weights ) );
-					auto Ltoptop = writer.declLocale( cuT( "Ltoptop" )
-						, dot( texture( c3d_colourTex, vtx_offset[2].zw() ).rgb(), weights ) );
-					delta.zw() = abs( vec2( Lleft, Ltop ) - vec2( Lleftleft, Ltoptop ) );
+					auto Cleftleft = writer.declLocale( cuT( "Cleftleft" )
+						, texture( c3d_colourTex, vtx_offset[2].xy() ).rgb() );
+					t = abs( C - Cleftleft );
+					delta.z() = max( max( t.r(), t.g() ), t.b() );
+
+					auto Ctoptop = writer.declLocale( cuT( "Ctoptop" )
+						, texture( c3d_colourTex, vtx_offset[2].zw() ).rgb() );
+					t = abs( C - Ctoptop );
+					delta.z() = max( max( t.r(), t.g() ), t.b() );
 
 					// Calculate the final maximum delta:
 					maxDelta = max( maxDelta.xy(), delta.zw() );
 
-					/**
-					* Each edge with a delta in luma of less than 50% of the maximum luma
-					* surrounding this pixel is discarded. This allows to eliminate spurious
-					* crossing edges, and is based on the fact that, if there is too much
-					* contrast in a direction, that will hide contrast in the other
-					* neighbors.
-					* This is done after the discard intentionally as this situation doesn't
-					* happen too frequently (but it's important to do as it prevents some
-					* edges from going undetected).
-					*/
-					edges.xy() *= step( 0.5_f * maxDelta, delta.xy() );
+					// Local contrast adaptation:
+					edges.xy() *= step( maxDelta, config.localContrastAdaptationFactor * delta.xy() );
 
 					pxl_fragColour = vec4( edges, 0.0_f, 0.0_f );
 				} );
@@ -211,14 +217,11 @@ namespace smaa
 
 	//*********************************************************************************************
 
-	EdgeDetection::EdgeDetection( castor3d::RenderTarget & renderTarget
+	ColourEdgeDetection::ColourEdgeDetection( castor3d::RenderTarget & renderTarget
 		, renderer::TextureView const & colourView
 		, renderer::Texture const * predication
 		, castor3d::SamplerSPtr sampler
-		, float threshold
-		, float predicationThreshold
-		, float predicationScale
-		, float predicationStrength )
+		, SmaaConfig const & config )
 		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), true, false }
 		, m_surface{ *renderTarget.getEngine() }
 		, m_colourView{ colourView }
@@ -243,8 +246,8 @@ namespace smaa
 		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
 
 		renderPass.attachments[1].format = renderer::Format::eS8_UINT;
-		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
 		renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eClear;
 		renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eStore;
 		renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
@@ -259,32 +262,29 @@ namespace smaa
 		renderPass.dependencies.resize( 2u );
 		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
-		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
+		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite | renderer::AccessFlag::eColourAttachmentRead;
+		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
 		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 		renderPass.dependencies[1].srcSubpass = 0u;
 		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite | renderer::AccessFlag::eColourAttachmentRead;
+		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eMemoryRead;
 		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
 		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 		m_renderPass = device.createRenderPass( renderPass );
 
-		auto pixelSize = Point2f{ 1.0f / size.width, 1.0f / size.height };
+		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
 		m_vertexShader = doGetEdgeDetectionVP( *renderTarget.getEngine()->getRenderSystem()
 			, pixelSize );
 		m_pixelShader = doGetEdgeDetectionFP( *renderTarget.getEngine()->getRenderSystem()
 			, pixelSize
-			, threshold
 			, m_predicationView != nullptr
-			, predicationThreshold
-			, predicationScale
-			, predicationStrength );
+			, config );
 
 		renderer::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
@@ -292,23 +292,17 @@ namespace smaa
 		stages[0].module->loadShader( m_vertexShader.getSource() );
 		stages[1].module->loadShader( m_pixelShader.getSource() );
 
-		renderer::DepthStencilState dsstate
+		renderer::DepthStencilState dsstate{ 0u, false, false };
+		dsstate.stencilTestEnable = true;
+		dsstate.front =
 		{
-			0u,
-			false,
-			false,
-			renderer::CompareOp::eLess,
-			false,
-			true,
-			{
-				renderer::StencilOp::eReplace,
-				renderer::StencilOp::eKeep,
-				renderer::StencilOp::eKeep,
-				renderer::CompareOp::eNever,
-				0xFFFFFFFFu,
-				0xFFFFFFFFu,
-				0x00000001u,
-			},
+			renderer::StencilOp::eReplace,
+			renderer::StencilOp::eKeep,
+			renderer::StencilOp::eKeep,
+			renderer::CompareOp::eNever,
+			0xFFFFFFFFu,
+			0xFFFFFFFFu,
+			0x00000001u,
 		};
 		renderer::DescriptorSetLayoutBindingArray setLayoutBindings;
 		auto * view = &m_colourView;
@@ -329,11 +323,53 @@ namespace smaa
 			, dsstate );
 		m_surface.initialise( *m_renderPass
 			, castor::Size{ size.width, size.height }
-			, m_colourView.getFormat()
+			, renderer::Format::eR8G8B8A8_UNORM
 			, renderer::Format::eS8_UINT );
 	}
 
-	void EdgeDetection::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
+	castor3d::CommandsSemaphore ColourEdgeDetection::prepareCommands( castor3d::RenderPassTimer const & timer
+		, uint32_t passIndex )
+	{
+		auto & device = getCurrentDevice( m_renderSystem );
+		castor3d::CommandsSemaphore edgeDetectionCommands
+		{
+			device.getGraphicsCommandPool().createCommandBuffer(),
+			device.createSemaphore()
+		};
+		auto & edgeDetectionCmd = *edgeDetectionCommands.commandBuffer;
+
+		if ( edgeDetectionCmd.begin() )
+		{
+			timer.beginPass( edgeDetectionCmd, passIndex );
+			// Put source image in shader input layout.
+			edgeDetectionCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+				, renderer::PipelineStageFlag::eFragmentShader
+				, m_colourView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+
+			edgeDetectionCmd.beginRenderPass( *m_renderPass
+				, *m_surface.frameBuffer
+				, { renderer::ClearColorValue{ 0.0, 0.0, 0.0, 0.0 }, renderer::DepthStencilClearValue{ 1.0f, 0 } }
+				, renderer::SubpassContents::eInline );
+			registerFrame( edgeDetectionCmd );
+			edgeDetectionCmd.endRenderPass();
+			timer.endPass( edgeDetectionCmd, passIndex );
+			edgeDetectionCmd.end();
+		}
+
+		return std::move( edgeDetectionCommands );
+	}
+
+	void ColourEdgeDetection::accept( castor3d::PipelineVisitorBase & visitor )
+	{
+		visitor.visit( cuT( "ColourEdgeDetection" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_vertexShader );
+		visitor.visit( cuT( "ColourEdgeDetection" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_pixelShader );
+	}
+
+	void ColourEdgeDetection::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
 		, renderer::DescriptorSet & descriptorSet )
 	{
 		if ( m_predicationView )
