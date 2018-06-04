@@ -4,9 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_SmaaPostEffect_H___
 #define ___C3D_SmaaPostEffect_H___
 
-#include "ColourEdgeDetection.hpp"
-#include "DepthEdgeDetection.hpp"
-#include "LumaEdgeDetection.hpp"
+#include "EdgeDetection.hpp"
 #include "BlendingWeightCalculation.hpp"
 #include "NeighbourhoodBlending.hpp"
 #include "Reproject.hpp"
@@ -65,9 +63,7 @@ namespace smaa
 		SmaaConfig m_config;
 		uint32_t m_curIndex{ 0u };
 
-		std::unique_ptr< DepthEdgeDetection > m_depthEdgeDetection;
-		std::unique_ptr< ColourEdgeDetection > m_colourEdgeDetection;
-		std::unique_ptr< LumaEdgeDetection > m_lumaEdgeDetection;
+		std::unique_ptr< EdgeDetection > m_edgeDetection;
 		std::unique_ptr< BlendingWeightCalculation > m_blendingWeightCalculation;
 		std::unique_ptr< NeighbourhoodBlending > m_neighbourhoodBlending;
 		std::vector< std::unique_ptr< Reproject > > m_reproject;

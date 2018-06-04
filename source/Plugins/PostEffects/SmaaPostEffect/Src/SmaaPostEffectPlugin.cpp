@@ -68,9 +68,9 @@ namespace
 		};
 		static castor::UIntStrMap detections
 		{
-			{ "depth", uint32_t( smaa::EdgeDetection::eDepth ) },
-			{ "colour", uint32_t( smaa::EdgeDetection::eColour ) },
-			{ "luma", uint32_t( smaa::EdgeDetection::eLuma ) }
+			{ "depth", uint32_t( smaa::EdgeDetectionType::eDepth ) },
+			{ "colour", uint32_t( smaa::EdgeDetectionType::eColour ) },
+			{ "luma", uint32_t( smaa::EdgeDetectionType::eLuma ) }
 		};
 		castor::FileParser::AttributeParsersBySection result;
 
@@ -79,12 +79,17 @@ namespace
 		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "mode" ), &smaa::parserMode, { castor::makeParameter< castor::ParameterType::eCheckedText >( modes ) } );
 		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "preset" ), &smaa::parserPreset, { castor::makeParameter< castor::ParameterType::eCheckedText >( presets ) } );
 		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "edgeDetection" ), &smaa::parserEdgeDetection, { castor::makeParameter< castor::ParameterType::eCheckedText >( detections ) } );
+		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "disableDiagonalDetection" ), &smaa::parserDisableDiagonalDetection, { castor::makeParameter< castor::ParameterType::eBool >() } );
+		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "disableCornerDetection" ), &smaa::parserDisableCornerDetection, { castor::makeParameter< castor::ParameterType::eBool >() } );
 		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "threshold" ), &smaa::parserThreshold, { castor::makeParameter< castor::ParameterType::eFloat >( castor::makeRange( 0.0f, 0.5f ) ) } );
-		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "maxSearchSteps" ), &smaa::parserMaxSearchSteps, { castor::makeParameter< castor::ParameterType::eInt32 >( castor::makeRange( 0, 98 ) ) } );
+		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "maxSearchSteps" ), &smaa::parserMaxSearchSteps, { castor::makeParameter< castor::ParameterType::eInt32 >( castor::makeRange( 0, 112 ) ) } );
 		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "maxSearchStepsDiag" ), &smaa::parserMaxSearchStepsDiag, { castor::makeParameter< castor::ParameterType::eInt32 >( castor::makeRange( 0, 20 ) ) } );
 		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "cornerRounding" ), &smaa::parserCornerRounding, { castor::makeParameter< castor::ParameterType::eInt32 >( castor::makeRange( 0, 100 ) ) } );
 		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "reprojection" ), &smaa::parserReprojection, { castor::makeParameter< castor::ParameterType::eBool >() } );
+		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "predicationScale" ), &smaa::parserPredicationScale, { castor::makeParameter< castor::ParameterType::eFloat >( castor::makeRange( 1.0f, 5.0f ) ) } );
+		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "predicationStrength" ), &smaa::parserPredicationStrength, { castor::makeParameter< castor::ParameterType::eFloat >( castor::makeRange( 0.0f, 1.0f ) ) } );
 		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "reprojectionWeightScale" ), &smaa::parserReprojectionWeightScale, { castor::makeParameter< castor::ParameterType::eFloat >( castor::makeRange( 0.0f, 80.0f ) ) } );
+		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "localContrastAdaptationFactor" ), &smaa::parserLocalContrastAdaptationFactor, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "}" ), &smaa::parserSmaaEnd );
 
 		return result;

@@ -33,11 +33,6 @@ namespace smaa
 			return m_surface.colourTexture;
 		}
 
-		inline renderer::UniformBuffer< castor::Point4i > & getUbo()
-		{
-			return *m_ubo;
-		}
-
 	private:
 		void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
 			, renderer::DescriptorSet & descriptorSet )override;
@@ -46,7 +41,7 @@ namespace smaa
 		renderer::TextureView const & m_edgeDetectionView;
 		renderer::RenderPassPtr m_renderPass;
 		castor3d::PostEffectSurface m_surface;
-		renderer::UniformBufferPtr< castor::Point4i > m_ubo;
+		renderer::UniformBufferPtr< castor::Point4f > m_ubo;
 		castor3d::TextureLayoutSPtr m_areaTex;
 		castor3d::TextureLayoutSPtr m_searchTex;
 		glsl::Shader m_vertexShader;

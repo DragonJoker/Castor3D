@@ -13,7 +13,9 @@ namespace smaa
 	namespace constants
 	{
 		extern const castor::String RenderTargetMetrics;
+		extern const castor::String Predication;
 		extern const castor::String Threshold;
+		extern const castor::String LocalContrastAdaptationFactor;
 		extern const castor::String DepthThreshold;
 		extern const castor::String PredicationScale;
 		extern const castor::String PredicationThreshold;
@@ -29,6 +31,8 @@ namespace smaa
 		extern const castor::String SearchTexSize;
 		extern const castor::String SearchTexPackedSize;
 		extern const castor::String CornerRoundingNorm;
+		extern const castor::String DisableDiagDetection;
+		extern const castor::String DisableCornerDetection;
 	}
 }
 

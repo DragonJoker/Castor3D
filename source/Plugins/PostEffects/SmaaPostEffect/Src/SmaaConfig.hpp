@@ -25,7 +25,7 @@ namespace smaa
 		eCustom
 	};
 
-	enum class EdgeDetection
+	enum class EdgeDetectionType
 	{
 		eDepth,
 		eColour,
@@ -45,53 +45,53 @@ namespace smaa
 
 			if ( value == cuT( "low" ) )
 			{
-				threshold = 0.15f;
-				maxSearchSteps = 4;
-				maxSearchStepsDiag = 0;
-				cornerRounding = 100;
+				data.threshold = 0.15f;
+				data.maxSearchSteps = 4;
+				data.maxSearchStepsDiag = 0;
+				data.cornerRounding = 100;
 			}
 			else if ( value == cuT( "medium" ) )
 			{
-				threshold = 0.1f;
-				maxSearchSteps = 8;
-				maxSearchStepsDiag = 0;
-				cornerRounding = 100;
+				data.threshold = 0.1f;
+				data.maxSearchSteps = 8;
+				data.maxSearchStepsDiag = 0;
+				data.cornerRounding = 100;
 			}
 			else if ( value == cuT( "high" ) )
 			{
-				threshold = 0.1f;
-				maxSearchSteps = 16;
-				maxSearchStepsDiag = 8;
-				cornerRounding = 25;
+				data.threshold = 0.1f;
+				data.maxSearchSteps = 16;
+				data.maxSearchStepsDiag = 8;
+				data.cornerRounding = 25;
 			}
 			else if ( value == cuT( "ultra" ) )
 			{
-				threshold = 0.05f;
-				maxSearchSteps = 32;
-				maxSearchStepsDiag = 16;
-				cornerRounding = 25;
+				data.threshold = 0.05f;
+				data.maxSearchSteps = 32;
+				data.maxSearchStepsDiag = 16;
+				data.cornerRounding = 25;
 			}
 			else if ( value == cuT( "custom" ) )
 			{
-				parameters.get( cuT( "threshold" ), threshold );
-				parameters.get( cuT( "maxSearchSteps" ), maxSearchSteps );
-				parameters.get( cuT( "maxSearchStepsDiag" ), maxSearchStepsDiag );
-				parameters.get( cuT( "cornerRounding" ), cornerRounding );
+				parameters.get( cuT( "threshold" ), data.threshold );
+				parameters.get( cuT( "maxSearchSteps" ), data.maxSearchSteps );
+				parameters.get( cuT( "maxSearchStepsDiag" ), data.maxSearchStepsDiag );
+				parameters.get( cuT( "cornerRounding" ), data.cornerRounding );
 			}
 
 			if ( parameters.get( cuT( "mode" ), value ) )
 			{
 				if ( value == cuT( "T2X" ) )
 				{
-					mode = Mode::eT2X;
+					data.mode = Mode::eT2X;
 				}
 				else if ( value == cuT( "S2X" ) )
 				{
-					mode = Mode::eS2X;
+					data.mode = Mode::eS2X;
 				}
 				else if ( value == cuT( "4X" ) )
 				{
-					mode = Mode::e4X;
+					data.mode = Mode::e4X;
 				}
 			}
 
@@ -99,18 +99,21 @@ namespace smaa
 			{
 				if ( value == cuT( "colour" ) )
 				{
-					edgeDetection = EdgeDetection::eColour;
+					data.edgeDetection = EdgeDetectionType::eColour;
 				}
 				else if ( value == cuT( "depth" ) )
 				{
-					edgeDetection = EdgeDetection::eDepth;
+					data.edgeDetection = EdgeDetectionType::eDepth;
 				}
 			}
 
-			disableDiagonalDetection = parameters.get( cuT( "disableDiagonalDetection" ), value );
-			disableCornerDetection = parameters.get( cuT( "disableCornerDetection" ), value );
+			parameters.get( cuT( "disableDiagonalDetection" ), data.disableDiagonalDetection );
+			parameters.get( cuT( "disableCornerDetection" ), data.disableCornerDetection );
+			parameters.get( cuT( "localContrastAdaptationFactor" ), data.localContrastAdaptationFactor );
+			parameters.get( cuT( "predicationScale" ), data.predicationScale );
+			parameters.get( cuT( "predicationStrength" ), data.predicationStrength );
 
-			switch ( mode )
+			switch ( data.mode )
 			{
 			case Mode::e1X:
 				subsampleIndices[0] = castor::Point4i{ 0, 0, 0, 0 };
@@ -150,7 +153,7 @@ namespace smaa
 				break;
 			}
 
-			switch ( mode )
+			switch ( data.mode )
 			{
 			case Mode::e1X:
 			case Mode::eS2X:
@@ -169,21 +172,25 @@ namespace smaa
 			}
 		}
 
-		Mode mode{ Mode::e1X };
-		EdgeDetection edgeDetection{ EdgeDetection::eLuma };
+		struct Data
+		{
+			Mode mode{ Mode::e1X };
+			EdgeDetectionType edgeDetection{ EdgeDetectionType::eLuma };
+			bool reprojection{ false };
+			bool disableDiagonalDetection{ false };
+			bool disableCornerDetection{ false };
+			float reprojectionWeightScale{ 30.0f };
+			float threshold{ 0.1f };
+			int maxSearchSteps{ 16 };
+			int maxSearchStepsDiag{ 8 };
+			int cornerRounding{ 25 };
+			float predicationThreshold{ 0.01f };
+			float predicationScale{ 2.0f };
+			float predicationStrength{ 0.4f };
+			float localContrastAdaptationFactor{ 2.0f };
+		};
+		Data data;
 		uint32_t subsampleIndex{ 0u };
-		bool reprojection{ false };
-		bool disableDiagonalDetection{ false };
-		bool disableCornerDetection{ false };
-		float reprojectionWeightScale{ 30.0f };
-		float threshold{ 0.1f };
-		int maxSearchSteps{ 16 };
-		int maxSearchStepsDiag{ 8 };
-		int cornerRounding{ 25 };
-		float predicationThreshold{ 0.01f };
-		float predicationScale{ 2.0f };
-		float predicationStrength{ 0.4f };
-		float localContrastAdaptationFactor{ 2.0f };
 		std::array< castor::Point4i, 4u > subsampleIndices;
 		uint32_t maxSubsampleIndices{ 1u };
 		std::vector< castor::Point2r > jitters;

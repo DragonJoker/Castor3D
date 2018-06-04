@@ -71,21 +71,21 @@ namespace smaa
 			return result;
 		}
 
-		castor::String doGetName( EdgeDetection detection )
+		castor::String doGetName( EdgeDetectionType detection )
 		{
 			castor::String result;
 
 			switch ( detection )
 			{
-			case EdgeDetection::eDepth:
+			case EdgeDetectionType::eDepth:
 				result = cuT( "depth" );
 				break;
 
-			case EdgeDetection::eColour:
+			case EdgeDetectionType::eColour:
 				result = cuT( "colour" );
 				break;
 
-			case EdgeDetection::eLuma:
+			case EdgeDetectionType::eLuma:
 				result = cuT( "luma" );
 				break;
 			}
@@ -97,15 +97,8 @@ namespace smaa
 	struct ParserContext
 	{
 		castor3d::Engine * engine{ nullptr };
-		Mode mode{ Mode::e1X };
-		Preset preset{ Preset::eCustom };
-		EdgeDetection detection{ EdgeDetection::eLuma };
-		float threshold{ 0.1f };
-		int maxSearchSteps{ 16 };
-		int maxSearchStepsDiag{ 8 };
-		int cornerRounding{ 100 };
-		bool reprojection{ false };
-		float reprojectionWeightScale{ 30.0f };
+		Preset preset;
+		SmaaConfig::Data data;
 	};
 
 	ParserContext & getParserContext( castor::FileParserContextSPtr context )
@@ -133,7 +126,7 @@ namespace smaa
 		{
 			uint32_t value{ 0u };
 			p_params[0]->get( value );
-			context.mode = Mode( value );
+			context.data.mode = Mode( value );
 		}
 	}
 	END_ATTRIBUTE()
@@ -167,7 +160,37 @@ namespace smaa
 		{
 			uint32_t value{ 0u };
 			p_params[0]->get( value );
-			context.detection = EdgeDetection( value );
+			context.data.edgeDetection = EdgeDetectionType( value );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserDisableDiagonalDetection )
+	{
+		auto & context = getParserContext( p_context );
+
+		if ( p_params.empty() )
+		{
+			PARSING_ERROR( "Missing parameter" );
+		}
+		else
+		{
+			p_params[0]->get( context.data.disableDiagonalDetection );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserDisableCornerDetection )
+	{
+		auto & context = getParserContext( p_context );
+
+		if ( p_params.empty() )
+		{
+			PARSING_ERROR( "Missing parameter" );
+		}
+		else
+		{
+			p_params[0]->get( context.data.disableCornerDetection );
 		}
 	}
 	END_ATTRIBUTE()
@@ -182,7 +205,7 @@ namespace smaa
 		}
 		else
 		{
-			p_params[0]->get( context.threshold );
+			p_params[0]->get( context.data.threshold );
 		}
 	}
 	END_ATTRIBUTE()
@@ -197,7 +220,7 @@ namespace smaa
 		}
 		else
 		{
-			p_params[0]->get( context.maxSearchSteps );
+			p_params[0]->get( context.data.maxSearchSteps );
 		}
 	}
 	END_ATTRIBUTE()
@@ -212,7 +235,7 @@ namespace smaa
 		}
 		else
 		{
-			p_params[0]->get( context.maxSearchStepsDiag );
+			p_params[0]->get( context.data.maxSearchStepsDiag );
 		}
 	}
 	END_ATTRIBUTE()
@@ -227,7 +250,7 @@ namespace smaa
 		}
 		else
 		{
-			p_params[0]->get( context.cornerRounding );
+			p_params[0]->get( context.data.cornerRounding );
 		}
 	}
 	END_ATTRIBUTE()
@@ -242,7 +265,7 @@ namespace smaa
 		}
 		else
 		{
-			p_params[0]->get( context.reprojection );
+			p_params[0]->get( context.data.reprojection );
 		}
 	}
 	END_ATTRIBUTE()
@@ -257,7 +280,52 @@ namespace smaa
 		}
 		else
 		{
-			p_params[0]->get( context.reprojectionWeightScale );
+			p_params[0]->get( context.data.reprojectionWeightScale );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserLocalContrastAdaptationFactor )
+	{
+		auto & context = getParserContext( p_context );
+
+		if ( p_params.empty() )
+		{
+			PARSING_ERROR( "Missing parameter" );
+		}
+		else
+		{
+			p_params[0]->get( context.data.localContrastAdaptationFactor );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserPredicationScale )
+	{
+		auto & context = getParserContext( p_context );
+
+		if ( p_params.empty() )
+		{
+			PARSING_ERROR( "Missing parameter" );
+		}
+		else
+		{
+			p_params[0]->get( context.data.predicationScale );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserPredicationStrength )
+	{
+		auto & context = getParserContext( p_context );
+
+		if ( p_params.empty() )
+		{
+			PARSING_ERROR( "Missing parameter" );
+		}
+		else
+		{
+			p_params[0]->get( context.data.predicationStrength );
 		}
 	}
 	END_ATTRIBUTE()
@@ -268,22 +336,27 @@ namespace smaa
 		auto engine = context.engine;
 		auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( p_context );
 		castor3d::Parameters parameters;
-		parameters.add( cuT( "mode" ), doGetName( context.mode ) );
+		parameters.add( cuT( "mode" ), doGetName( context.data.mode ) );
 		parameters.add( cuT( "preset" ), doGetName( context.preset ) );
-		parameters.add( cuT( "edgeDetection" ), doGetName( context.detection ) );
+		parameters.add( cuT( "edgeDetection" ), doGetName( context.data.edgeDetection ) );
+		parameters.add( cuT( "disableDiagonalDetection" ), context.data.disableDiagonalDetection );
+		parameters.add( cuT( "disableCornerDetection" ), context.data.disableCornerDetection );
+		parameters.add( cuT( "localContrastAdaptationFactor" ), context.data.localContrastAdaptationFactor );
+		parameters.add( cuT( "predicationScale" ), context.data.predicationScale );
+		parameters.add( cuT( "predicationStrength" ), context.data.predicationStrength );
 
 		if ( context.preset == Preset::eCustom )
 		{
-			parameters.add( cuT( "threshold" ), context.threshold );
-			parameters.add( cuT( "maxSearchSteps" ), context.maxSearchSteps );
-			parameters.add( cuT( "maxSearchStepsDiag" ), context.maxSearchStepsDiag );
-			parameters.add( cuT( "cornerRounding" ), context.cornerRounding );
+			parameters.add( cuT( "threshold" ), context.data.threshold );
+			parameters.add( cuT( "maxSearchSteps" ), context.data.maxSearchSteps );
+			parameters.add( cuT( "maxSearchStepsDiag" ), context.data.maxSearchStepsDiag );
+			parameters.add( cuT( "cornerRounding" ), context.data.cornerRounding );
 		}
 
-		if ( context.mode == Mode::eT2X )
+		if ( context.data.mode == Mode::eT2X )
 		{
-			parameters.add( cuT( "reprojection" ), context.reprojection );
-			parameters.add( cuT( "reprojectionWeightScale" ), context.reprojectionWeightScale );
+			parameters.add( cuT( "reprojection" ), context.data.reprojection );
+			parameters.add( cuT( "reprojectionWeightScale" ), context.data.reprojectionWeightScale );
 		}
 
 		auto effect = engine->getRenderTargetCache().getPostEffectFactory().create( PostEffect::Type

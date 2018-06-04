@@ -170,7 +170,7 @@ namespace smaa
 		m_vertexShader = doGetReprojectVP( *renderTarget.getEngine()->getRenderSystem() );
 		m_pixelShader = doGetReprojectFP( *renderTarget.getEngine()->getRenderSystem()
 			, velocityView != nullptr
-			, config.reprojectionWeightScale );
+			, config.data.reprojectionWeightScale );
 
 		renderer::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );

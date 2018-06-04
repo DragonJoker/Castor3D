@@ -1,5 +1,9 @@
 #include "SmaaPostEffect.hpp"
 
+#include "ColourEdgeDetection.hpp"
+#include "DepthEdgeDetection.hpp"
+#include "LumaEdgeDetection.hpp"
+
 #include <Engine.hpp>
 #include <Cache/SamplerCache.hpp>
 #include <Miscellaneous/Parameter.hpp>
@@ -175,7 +179,7 @@ namespace smaa
 	{
 		m_passesCount = 5u;
 
-		if ( m_config.mode == Mode::eT2X )
+		if ( m_config.data.mode == Mode::eT2X )
 		{
 			++m_passesCount;
 		}
@@ -196,19 +200,9 @@ namespace smaa
 
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
-		if ( m_depthEdgeDetection )
+		if ( m_edgeDetection )
 		{
-			m_depthEdgeDetection->accept( visitor );
-		}
-
-		if ( m_colourEdgeDetection )
-		{
-			m_colourEdgeDetection->accept( visitor );
-		}
-
-		if ( m_lumaEdgeDetection )
-		{
-			m_lumaEdgeDetection->accept( visitor );
+			m_edgeDetection->accept( visitor );
 		}
 
 		if ( m_blendingWeightCalculation )
@@ -250,45 +244,37 @@ namespace smaa
 		m_hdrTextureView = &m_renderTarget.getTechnique()->getResult().getDefaultView();
 		m_pointSampler->initialise();
 		m_linearSampler->initialise();
-		renderer::TextureView const * edgeColourView{ nullptr };
-		castor3d::TextureLayoutSPtr edgeDepthView;
 
-		switch ( m_config.edgeDetection )
+		switch ( m_config.data.edgeDetection )
 		{
-		case EdgeDetection::eDepth:
-			m_depthEdgeDetection = std::make_unique< DepthEdgeDetection >( m_renderTarget
+		case EdgeDetectionType::eDepth:
+			m_edgeDetection = std::make_unique< DepthEdgeDetection >( m_renderTarget
 				, m_renderTarget.getTechnique()->getDepth().getDefaultView()
 				, m_linearSampler
 				, m_config );
-			edgeColourView = &m_depthEdgeDetection->getSurface()->getDefaultView();
-			edgeDepthView = m_depthEdgeDetection->getDepth();
 			break;
 
-		case EdgeDetection::eColour:
-			m_colourEdgeDetection = std::make_unique< ColourEdgeDetection >( m_renderTarget
+		case EdgeDetectionType::eColour:
+			m_edgeDetection = std::make_unique< ColourEdgeDetection >( m_renderTarget
 				, *m_srgbTextureView
 				, doGetPredicationTexture()
 				, m_linearSampler
 				, m_config );
-			edgeColourView = &m_colourEdgeDetection->getSurface()->getDefaultView();
-			edgeDepthView = m_colourEdgeDetection->getDepth();
 			break;
 
-		case EdgeDetection::eLuma:
-			m_lumaEdgeDetection = std::make_unique< LumaEdgeDetection >( m_renderTarget
+		case EdgeDetectionType::eLuma:
+			m_edgeDetection = std::make_unique< LumaEdgeDetection >( m_renderTarget
 				, *m_srgbTextureView
 				, doGetPredicationTexture()
 				, m_linearSampler
 				, m_config );
-			edgeColourView = &m_lumaEdgeDetection->getSurface()->getDefaultView();
-			edgeDepthView = m_lumaEdgeDetection->getDepth();
 			break;
 		}
 
 #if !C3D_DebugEdgeDetection
 		m_blendingWeightCalculation = std::make_unique< BlendingWeightCalculation >( m_renderTarget
-			, *edgeColourView
-			, edgeDepthView
+			, m_edgeDetection->getSurface()->getDefaultView()
+			, m_edgeDetection->getDepth()
 			, m_linearSampler
 			, m_config );
 		auto * velocityView = doGetVelocityView();
@@ -344,9 +330,7 @@ namespace smaa
 		m_reproject.clear();
 		m_neighbourhoodBlending.reset();
 		m_blendingWeightCalculation.reset();
-		m_lumaEdgeDetection.reset();
-		m_colourEdgeDetection.reset();
-		m_depthEdgeDetection.reset();
+		m_edgeDetection.reset();
 	}
 
 	void PostEffect::doBuildCommandBuffers( castor3d::RenderPassTimer const & timer )
@@ -374,22 +358,10 @@ namespace smaa
 		castor3d::CommandsSemaphoreArray result;
 		uint32_t passIndex = 0u;
 
-		if ( m_depthEdgeDetection )
+		if ( m_edgeDetection )
 		{
-			result.emplace_back( m_depthEdgeDetection->prepareCommands( timer, passIndex++ ) );
-			m_smaaResult = m_depthEdgeDetection->getSurface().get();
-		}
-
-		if ( m_colourEdgeDetection )
-		{
-			result.emplace_back( m_colourEdgeDetection->prepareCommands( timer, passIndex++ ) );
-			m_smaaResult = m_colourEdgeDetection->getSurface().get();
-		}
-
-		if ( m_lumaEdgeDetection )
-		{
-			result.emplace_back( m_lumaEdgeDetection->prepareCommands( timer, passIndex++ ) );
-			m_smaaResult = m_lumaEdgeDetection->getSurface().get();
+			result.emplace_back( m_edgeDetection->prepareCommands( timer, passIndex++ ) );
+			m_smaaResult = m_edgeDetection->getSurface().get();
 		}
 
 		if ( m_blendingWeightCalculation )
@@ -406,7 +378,7 @@ namespace smaa
 
 		if ( !m_reproject.empty() )
 		{
-			if ( m_config.mode == Mode::eT2X )
+			if ( m_config.data.mode == Mode::eT2X )
 			{
 				auto & reproject = *m_reproject[index];
 				result.emplace_back( reproject.prepareCommands( timer, passIndex++ ) );
@@ -460,7 +432,7 @@ namespace smaa
 	{
 		renderer::Texture const * predication = nullptr;
 
-		switch ( m_config.mode )
+		switch ( m_config.data.mode )
 		{
 		case Mode::eT2X:
 			predication = &m_renderTarget.getTechnique()->getDepth().getTexture();
@@ -474,7 +446,7 @@ namespace smaa
 	{
 		renderer::TextureView const * velocityView = nullptr;
 
-		switch ( m_config.mode )
+		switch ( m_config.data.mode )
 		{
 		case Mode::eT2X:
 			velocityView = &m_renderTarget.getVelocity().getTexture()->getDefaultView();
