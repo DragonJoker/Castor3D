@@ -65,6 +65,10 @@ namespace smaa
 			using namespace glsl;
 			GlslWriter writer = renderSystem.createGlslWriter();
 			writeConstants( writer, config, renderTargetMetrics, false );
+			writer.declConstant( constants::Reprojection
+				, 1_i
+				, reprojection );
+
 			writer << getSmaaShader();
 
 			// Shader inputs

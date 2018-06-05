@@ -110,6 +110,7 @@ namespace smaa
 			parameters.get( cuT( "disableDiagonalDetection" ), data.disableDiagonalDetection );
 			parameters.get( cuT( "disableCornerDetection" ), data.disableCornerDetection );
 			parameters.get( cuT( "localContrastAdaptationFactor" ), data.localContrastAdaptationFactor );
+			parameters.get( cuT( "enablePredication" ), data.enablePredication );
 			parameters.get( cuT( "predicationScale" ), data.predicationScale );
 			parameters.get( cuT( "predicationStrength" ), data.predicationStrength );
 
@@ -121,6 +122,8 @@ namespace smaa
 				break;
 
 			case Mode::eT2X:
+				parameters.get( cuT( "enableReprojection" ), data.enableReprojection );
+				// no break wanted here.
 			case Mode::eS2X:
 				/***
 				* Sample positions (bottom-to-top y axis):
@@ -176,7 +179,8 @@ namespace smaa
 		{
 			Mode mode{ Mode::e1X };
 			EdgeDetectionType edgeDetection{ EdgeDetectionType::eLuma };
-			bool reprojection{ false };
+			bool enableReprojection{ false };
+			bool enablePredication{ false };
 			bool disableDiagonalDetection{ false };
 			bool disableCornerDetection{ false };
 			float reprojectionWeightScale{ 30.0f };

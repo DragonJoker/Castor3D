@@ -399,7 +399,10 @@ namespace smaa
 		switch ( m_config.data.mode )
 		{
 		case Mode::eT2X:
-			predication = &m_renderTarget.getTechnique()->getDepth().getTexture();
+			if ( m_config.data.enablePredication )
+			{
+				predication = &m_renderTarget.getTechnique()->getDepth().getTexture();
+			}
 			break;
 		}
 
@@ -413,7 +416,10 @@ namespace smaa
 		switch ( m_config.data.mode )
 		{
 		case Mode::eT2X:
-			velocityView = &m_renderTarget.getVelocity().getTexture()->getDefaultView();
+			if ( m_config.data.enableReprojection )
+			{
+				velocityView = &m_renderTarget.getVelocity().getTexture()->getDefaultView();
+			}
 			break;
 		}
 

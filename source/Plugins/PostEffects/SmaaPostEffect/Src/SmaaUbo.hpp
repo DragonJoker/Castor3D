@@ -33,6 +33,7 @@ namespace smaa
 		extern const castor::String CornerRoundingNorm;
 		extern const castor::String DisableDiagDetection;
 		extern const castor::String DisableCornerDetection;
+		extern const castor::String Reprojection;
 	}
 }
 

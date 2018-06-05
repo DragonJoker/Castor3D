@@ -255,6 +255,21 @@ namespace smaa
 	}
 	END_ATTRIBUTE()
 		
+	IMPLEMENT_ATTRIBUTE_PARSER( parserPredication )
+	{
+		auto & context = getParserContext( p_context );
+
+		if ( p_params.empty() )
+		{
+			PARSING_ERROR( "Missing parameter" );
+		}
+		else
+		{
+			p_params[0]->get( context.data.enablePredication );
+		}
+	}
+	END_ATTRIBUTE()
+		
 	IMPLEMENT_ATTRIBUTE_PARSER( parserReprojection )
 	{
 		auto & context = getParserContext( p_context );
@@ -265,7 +280,7 @@ namespace smaa
 		}
 		else
 		{
-			p_params[0]->get( context.data.reprojection );
+			p_params[0]->get( context.data.enableReprojection );
 		}
 	}
 	END_ATTRIBUTE()
@@ -342,6 +357,7 @@ namespace smaa
 		parameters.add( cuT( "disableDiagonalDetection" ), context.data.disableDiagonalDetection );
 		parameters.add( cuT( "disableCornerDetection" ), context.data.disableCornerDetection );
 		parameters.add( cuT( "localContrastAdaptationFactor" ), context.data.localContrastAdaptationFactor );
+		parameters.add( cuT( "enablePredication" ), context.data.enablePredication );
 		parameters.add( cuT( "predicationScale" ), context.data.predicationScale );
 		parameters.add( cuT( "predicationStrength" ), context.data.predicationStrength );
 
@@ -355,7 +371,7 @@ namespace smaa
 
 		if ( context.data.mode == Mode::eT2X )
 		{
-			parameters.add( cuT( "reprojection" ), context.data.reprojection );
+			parameters.add( cuT( "enableReprojection" ), context.data.enableReprojection );
 			parameters.add( cuT( "reprojectionWeightScale" ), context.data.reprojectionWeightScale );
 		}
 
