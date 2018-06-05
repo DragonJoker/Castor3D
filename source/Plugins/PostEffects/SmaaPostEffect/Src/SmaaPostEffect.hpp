@@ -58,8 +58,6 @@ namespace smaa
 		static castor::String Name;
 
 	private:
-		castor3d::SamplerSPtr m_pointSampler;
-		castor3d::SamplerSPtr m_linearSampler;
 		SmaaConfig m_config;
 		uint32_t m_curIndex{ 0u };
 
@@ -68,7 +66,9 @@ namespace smaa
 		std::unique_ptr< NeighbourhoodBlending > m_neighbourhoodBlending;
 		std::vector< std::unique_ptr< Reproject > > m_reproject;
 		std::vector< castor3d::CommandsSemaphoreArray > m_commandBuffers;
+		// sRGB view.
 		renderer::TextureView const * m_srgbTextureView{ nullptr };
+		// Gamma view.
 		renderer::TextureView const * m_hdrTextureView{ nullptr };
 		castor3d::TextureLayout * m_smaaResult{ nullptr };
 

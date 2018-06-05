@@ -33,7 +33,7 @@ namespace smaa
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- */)" } +castor::String{ R"(
+ */)" } + castor::String{ R"(
 
 
 /**
@@ -59,7 +59,7 @@ namespace smaa
  *
  * The shader has three passes, chained together as follows:
  *
- *                           |input|------------------�
+ *                           |input|------------------·
  *                              v                     |
  *                    [ SMAA*EdgeDetection ]          |
  *                              v                     |
@@ -69,7 +69,7 @@ namespace smaa
  *                              v                     |
  *                          |blendTex|                |
  *                              v                     |
- *                [ SMAANeighborhoodBlending ] <------�
+ *                [ SMAANeighborhoodBlending ] <------·
  *                              v
  *                           |output|
  *
@@ -191,7 +191,7 @@ namespace smaa
  *  9. After you get the last pass to work, it's time to optimize. You'll have
  *     to initialize a stencil buffer in the first pass (discard is already in
  *     the code), then mask execution by using it the second pass. The last
- *     pass should be executed in all pixels.)" } +castor::String{ R"(
+ *     pass should be executed in all pixels.)" } + castor::String{ R"(
  *
  *
  * After this point you can choose to enable predicated thresholding,
@@ -641,10 +641,10 @@ void SMAAMovc(bool2 cond, inout float2 variable, float2 value) {
 void SMAAMovc(bool4 cond, inout float4 variable, float4 value) {
     SMAAMovc(cond.xy, variable.xy, value.xy);
     SMAAMovc(cond.zw, variable.zw, value.zw);
-}
+})" } +castor::String{ R"(
 
 
-#if SMAA_INCLUDE_VS)" } +castor::String{ R"(
+#if SMAA_INCLUDE_VS
 //-----------------------------------------------------------------------------
 // Vertex Shaders
 
@@ -746,7 +746,7 @@ float2 SMAALumaEdgeDetectionPS(float2 texcoord,
     edges.xy *= step(finalDelta, SMAA_LOCAL_CONTRAST_ADAPTATION_FACTOR * delta.xy);
 
     return edges;
-}
+})" } +castor::String{ R"(
 
 /**
  * Color Edge Detection
@@ -832,7 +832,7 @@ float2 SMAADepthEdgeDetectionPS(float2 texcoord,
         discard;
 
     return edges;
-})" } + castor::String{ R"(
+})" } +castor::String{ R"(
 
 //-----------------------------------------------------------------------------
 // Diagonal Search Functions
@@ -992,7 +992,7 @@ float2 SMAACalculateDiagWeights(SMAATexture2D(edgesTex), SMAATexture2D(areaTex),
 
     return weights;
 }
-#endif)" } + castor::String{ R"(
+#endif)" } +castor::String{ R"(
 
 //-----------------------------------------------------------------------------
 // Horizontal/Vertical Search Functions
@@ -1109,7 +1109,7 @@ float2 SMAAArea(SMAATexture2D(areaTex), float2 dist, float e1, float e2, float o
 
     // Do it!
     return SMAA_AREATEX_SELECT(SMAASampleLevelZero(areaTex, texcoord));
-})" } + castor::String{ R"(
+})" } +castor::String{ R"(
 
 //-----------------------------------------------------------------------------
 // Corner Detection Functions
@@ -1146,7 +1146,7 @@ void SMAADetectVerticalCornerPattern(SMAATexture2D(edgesTex), inout float2 weigh
 
     weights *= saturate(factor);
     #endif
-})" } + castor::String{ R"(
+})" } +castor::String{ R"(
 
 //-----------------------------------------------------------------------------
 // Blending Weight Calculation Pixel Shader (Second Pass)
@@ -1253,7 +1253,7 @@ float4 SMAABlendingWeightCalculationPS(float2 texcoord,
     }
 
     return weights;
-})" } + castor::String{ R"(
+})" } +castor::String{ R"(
 
 //-----------------------------------------------------------------------------
 // Neighborhood Blending Pixel Shader (Third Pass)
@@ -1314,7 +1314,7 @@ float4 SMAANeighborhoodBlendingPS(float2 texcoord,
 
         return color;
     }
-})" } + castor::String{ R"(
+})" } +castor::String{ R"(
 
 //-----------------------------------------------------------------------------
 // Temporal Resolve Pixel Shader (Optional Pass)
@@ -1364,10 +1364,11 @@ void SMAASeparatePS(float4 position,
     target0 = SMAALoad(colorTexMS, pos, 0);
     target1 = SMAALoad(colorTexMS, pos, 1);
 }
-#endif
+#endif)" } +castor::String{ R"(
 
 //-----------------------------------------------------------------------------
-#endif // SMAA_INCLUDE_PS)" };
+#endif // SMAA_INCLUDE_PS
+)" };
 		return result;
 	}
 
@@ -1377,11 +1378,21 @@ void SMAASeparatePS(float4 position,
 		, bool vertexShader )
 	{
 		using namespace glsl;
-		writer.declConstant( cuT( "SMAA_GLSL_4" ), 1_i );
+
+		if ( writer.getShaderLanguageVersion() >= 400 )
+		{
+			writer.declConstant( cuT( "SMAA_GLSL_4" ), 1_i );
+		}
+		else
+		{
+			writer.declConstant( cuT( "SMAA_GLSL_3" ), 1_i );
+		}
+
 		writer.declConstant( cuT( "SMAA_THRESHOLD" ), Float( config.data.threshold ) );
 		writer.declConstant( cuT( "SMAA_MAX_SEARCH_STEPS" ), Int( config.data.maxSearchSteps ) );
 		writer.declConstant( cuT( "SMAA_MAX_SEARCH_STEPS_DIAG" ), Int( config.data.maxSearchStepsDiag ) );
 		writer.declConstant( cuT( "SMAA_CORNER_ROUNDING" ), Int( config.data.cornerRounding ) );
+		writer.declConstant( cuT( "SMAA_PIXEL_SIZE" ), vec2( Float( renderTargetMetrics[0] ), renderTargetMetrics[1] ) );
 		writer.declConstant( cuT( "SMAA_RT_METRICS" ), vec4( Float( renderTargetMetrics[0] ), renderTargetMetrics[1], renderTargetMetrics[2], renderTargetMetrics[3] ) );
 		writer.declConstant( cuT( "SMAA_INCLUDE_PS" ), vertexShader ? 0_i : 1_i );
 		writer.declConstant( cuT( "SMAA_INCLUDE_VS" ), vertexShader ? 1_i : 0_i );

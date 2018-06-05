@@ -56,6 +56,7 @@ namespace smaa
 			writer.declConstant( constants::PredicationStrength
 				, Float( config.data.predicationStrength )
 				, predicationEnabled );
+			writer << getSmaaShader() << endi;
 
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 			auto vtx_offset = writer.declInputArray< Vec4 >( cuT( "vtx_offset" ), 1u, 3u );
@@ -64,8 +65,6 @@ namespace smaa
 
 			// Shader outputs
 			auto pxl_fragColour = writer.declFragData< Vec4 >( cuT( "pxl_fragColour" ), 0u );
-
-			writer << getSmaaShader() << endi;
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
@@ -103,9 +102,8 @@ namespace smaa
 	ColourEdgeDetection::ColourEdgeDetection( castor3d::RenderTarget & renderTarget
 		, renderer::TextureView const & colourView
 		, renderer::Texture const * predication
-		, castor3d::SamplerSPtr sampler
 		, SmaaConfig const & config )
-		: EdgeDetection{ renderTarget, sampler, config }
+		: EdgeDetection{ renderTarget, config }
 		, m_colourView{ colourView }
 		, m_predicationView{ predication ? doCreatePredicationView( *predication ) : nullptr }
 	{

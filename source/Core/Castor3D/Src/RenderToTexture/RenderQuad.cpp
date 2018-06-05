@@ -61,18 +61,15 @@ namespace castor3d
 
 	RenderQuad::RenderQuad( RenderSystem & renderSystem
 		, bool nearest
-		, bool invertU )
+		, bool invertU
+		, bool invertV )
 		: m_renderSystem{ renderSystem }
 		, m_vertexData
 		{
-			{
-				{ Point2f{ -1.0, -1.0 }, Point2f{ ( invertU ? 1.0 : 0.0 ), 0.0 } },
-				{ Point2f{ -1.0, +1.0 }, Point2f{ ( invertU ? 1.0 : 0.0 ), 1.0 } },
-				{ Point2f{ +1.0, -1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), 0.0 } },
-				{ Point2f{ +1.0, -1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), 0.0 } },
-				{ Point2f{ -1.0, +1.0 }, Point2f{ ( invertU ? 1.0 : 0.0 ), 1.0 } },
-				{ Point2f{ +1.0, +1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), 1.0 } },
-			}
+			TexturedQuad::Vertex{ Point2f{ -1.0, -1.0 }, Point2f{ ( invertU ? 1.0 : 0.0 ), ( invertV ? 1.0 : 0.0 ) } },
+			TexturedQuad::Vertex{ Point2f{ -1.0, +1.0 }, Point2f{ ( invertU ? 1.0 : 0.0 ), ( invertV ? 0.0 : 1.0 ) } },
+			TexturedQuad::Vertex{ Point2f{ +1.0, -1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), ( invertV ? 1.0 : 0.0 ) } },
+			TexturedQuad::Vertex{ Point2f{ +1.0, +1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), ( invertV ? 0.0 : 1.0 ) } },
 		}
 		, m_sampler{ doCreateSampler( m_renderSystem, nearest ) }
 	{
@@ -125,8 +122,8 @@ namespace castor3d
 		m_sampler->initialise();
 		auto & device = getCurrentDevice( m_renderSystem );
 		// Initialise the vertex buffer.
-		m_vertexBuffer = renderer::makeVertexBuffer< TexturedQuad >( device
-			, 1u
+		m_vertexBuffer = renderer::makeVertexBuffer< TexturedQuad::Vertex >( device
+			, 4u
 			, 0u
 			, renderer::MemoryPropertyFlag::eHostVisible );
 
@@ -137,7 +134,7 @@ namespace castor3d
 
 		if ( auto buffer = m_vertexBuffer->lock( 0u, 1u, renderer::MemoryMapFlag::eWrite ) )
 		{
-			*buffer = m_vertexData;
+			std::copy( m_vertexData.begin(), m_vertexData.end(), buffer );
 			m_vertexBuffer->flush( 0u, 1u );
 			m_vertexBuffer->unlock();
 		}
@@ -146,7 +143,7 @@ namespace castor3d
 		renderer::VertexInputState vertexState;
 		vertexState.vertexBindingDescriptions.push_back( {
 			0u,
-			4 * sizeof( float ),
+			sizeof( TexturedQuad::Vertex ),
 			renderer::VertexInputRate::eVertex
 		} );
 		vertexState.vertexAttributeDescriptions.push_back( {
@@ -197,7 +194,7 @@ namespace castor3d
 			program,
 			renderPass,
 			vertexState,
-			renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleList },
+			renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleStrip },
 			renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eNone },
 			renderer::MultisampleState{},
 			std::move( bdState ),
@@ -227,7 +224,7 @@ namespace castor3d
 		commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 		commandBuffer.bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
 		doRegisterFrame( commandBuffer );
-		commandBuffer.draw( 6u );
+		commandBuffer.draw( 4u );
 	}
 
 	void RenderQuad::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout

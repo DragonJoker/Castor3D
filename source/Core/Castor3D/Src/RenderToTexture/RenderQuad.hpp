@@ -48,7 +48,8 @@ namespace castor3d
 		*/
 		C3D_API explicit RenderQuad( RenderSystem & renderSystem
 			, bool nearest
-			, bool invertU = false );
+			, bool invertU = false
+			, bool invertV = false );
 		/**
 		*\~english
 		*\brief
@@ -143,8 +144,8 @@ namespace castor3d
 		renderer::CommandBufferPtr m_commandBuffer;
 
 	private:
-		TexturedQuad m_vertexData;
-		renderer::VertexBufferPtr< TexturedQuad > m_vertexBuffer;
+		std::array< TexturedQuad::Vertex, 4u > m_vertexData;
+		renderer::VertexBufferPtr< TexturedQuad::Vertex > m_vertexBuffer;
 		renderer::DescriptorSetLayoutPtr m_descriptorSetLayout;
 		renderer::DescriptorSetPoolPtr m_descriptorSetPool;
 		renderer::DescriptorSetPtr m_descriptorSet;

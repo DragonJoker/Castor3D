@@ -21,7 +21,6 @@ namespace smaa
 		BlendingWeightCalculation( castor3d::RenderTarget & renderTarget
 			, renderer::TextureView const & edgeDetectionView
 			, castor3d::TextureLayoutSPtr depthView
-			, castor3d::SamplerSPtr sampler
 			, SmaaConfig const & config );
 		castor3d::CommandsSemaphore prepareCommands( castor3d::RenderPassTimer const & timer
 			, uint32_t passIndex );
@@ -41,7 +40,8 @@ namespace smaa
 		renderer::TextureView const & m_edgeDetectionView;
 		renderer::RenderPassPtr m_renderPass;
 		castor3d::PostEffectSurface m_surface;
-		renderer::UniformBufferPtr< castor::Point4f > m_ubo;
+		renderer::SamplerPtr m_pointSampler;
+		renderer::UniformBufferPtr< castor::Point4i > m_ubo;
 		castor3d::TextureLayoutSPtr m_areaTex;
 		castor3d::TextureLayoutSPtr m_searchTex;
 		glsl::Shader m_vertexShader;

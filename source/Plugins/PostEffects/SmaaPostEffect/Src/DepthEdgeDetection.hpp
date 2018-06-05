@@ -14,7 +14,6 @@ namespace smaa
 	public:
 		DepthEdgeDetection( castor3d::RenderTarget & renderTarget
 			, renderer::TextureView const & depthView
-			, castor3d::SamplerSPtr sampler
 			, SmaaConfig const & config );
 		castor3d::CommandsSemaphore prepareCommands( castor3d::RenderPassTimer const & timer
 			, uint32_t passIndex )override;

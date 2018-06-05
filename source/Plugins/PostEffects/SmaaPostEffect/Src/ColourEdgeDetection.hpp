@@ -15,7 +15,6 @@ namespace smaa
 		ColourEdgeDetection( castor3d::RenderTarget & renderTarget
 			, renderer::TextureView const & colourView
 			, renderer::Texture const * predication
-			, castor3d::SamplerSPtr sampler
 			, SmaaConfig const & config );
 		castor3d::CommandsSemaphore prepareCommands( castor3d::RenderPassTimer const & timer
 			, uint32_t passIndex )override;

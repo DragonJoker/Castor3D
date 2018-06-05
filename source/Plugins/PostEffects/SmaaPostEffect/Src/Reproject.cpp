@@ -117,7 +117,6 @@ namespace smaa
 		, renderer::TextureView const & currentColourView
 		, renderer::TextureView const & previousColourView
 		, renderer::TextureView const * velocityView
-		, castor3d::SamplerSPtr sampler
 		, SmaaConfig const & config )
 		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), true, false }
 		, m_currentColourView{ currentColourView }

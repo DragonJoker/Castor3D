@@ -38,6 +38,8 @@ namespace smaa
 
 			// Shader inputs
 			writeConstants( writer, config, renderTargetMetrics, true );
+			writer << getSmaaShader();
+
 			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
 			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
 
@@ -46,14 +48,12 @@ namespace smaa
 			auto vtx_offset = writer.declOutputArray< Vec4 >( cuT( "vtx_offset" ), 1u, 3u );
 			auto out = gl_PerVertex{ writer };
 
-			writer << getSmaaShader() << endi;
-
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					vtx_texture = texcoord;
 					out.gl_Position() = vec4( position, 0.0, 1.0 );
-					writer << "SMAAEdgeDetectionVS( texcoord, vtx_offset )" << endi;
+					vtx_texture = texcoord;
+					writer << "SMAAEdgeDetectionVS( vtx_texture, vtx_offset )" << endi;
 				} );
 			return writer.finalise();
 		}
@@ -62,9 +62,8 @@ namespace smaa
 	//*********************************************************************************************
 
 	EdgeDetection::EdgeDetection( castor3d::RenderTarget & renderTarget
-		, castor3d::SamplerSPtr sampler
 		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), true, false }
+		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), false, false }
 		, m_config{ config }
 		, m_surface{ *renderTarget.getEngine() }
 	{

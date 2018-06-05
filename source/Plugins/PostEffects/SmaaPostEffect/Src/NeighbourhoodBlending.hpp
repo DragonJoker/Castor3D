@@ -22,7 +22,6 @@ namespace smaa
 			, renderer::TextureView const & sourceView
 			, renderer::TextureView const & blendView
 			, renderer::TextureView const * velocityView
-			, castor3d::SamplerSPtr sampler
 			, SmaaConfig const & config );
 		castor3d::CommandsSemaphore prepareCommands( castor3d::RenderPassTimer const & timer
 			, uint32_t passIndex

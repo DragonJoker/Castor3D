@@ -43,6 +43,7 @@ namespace smaa
 				, Float( config.data.threshold ) );
 			auto c3d_depthThreshold = writer.declConstant( constants::DepthThreshold
 				, c3d_threshold * 0.1_f );
+			writer << getSmaaShader() << endi;
 
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 			auto vtx_offset = writer.declInputArray< Vec4 >( cuT( "vtx_offset" ), 1u, 3u );
@@ -51,11 +52,6 @@ namespace smaa
 			// Shader outputs
 			auto pxl_fragColour = writer.declFragData< Vec4 >( cuT( "pxl_fragColour" ), 0u );
 
-			writer << getSmaaShader() << endi;
-
-			/**
-			* Gathers current pixel, and the top-left neighbors.
-			*/
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
@@ -70,9 +66,8 @@ namespace smaa
 
 	DepthEdgeDetection::DepthEdgeDetection( castor3d::RenderTarget & renderTarget
 		, renderer::TextureView const & depthView
-		, castor3d::SamplerSPtr sampler
 		, SmaaConfig const & config )
-		: EdgeDetection{ renderTarget, sampler, config }
+		: EdgeDetection{ renderTarget, config }
 		, m_depthView{ depthView }
 	{
 		renderer::Extent2D size{ m_depthView.getTexture().getDimensions().width

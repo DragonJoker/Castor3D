@@ -30,7 +30,7 @@
 using namespace castor;
 
 #define C3D_DebugEdgeDetection 0
-#define C3D_DebugBlendingWeightCalculation 1
+#define C3D_DebugBlendingWeightCalculation 0
 #define C3D_DebugNeighbourhoodBlending 1
 
 namespace smaa
@@ -39,32 +39,6 @@ namespace smaa
 
 	namespace
 	{
-		castor3d::SamplerSPtr doCreateSampler( castor3d::Engine & engine
-			, bool linear
-			, castor::String const & name )
-		{
-			castor3d::SamplerSPtr result;
-			renderer::Filter filter = linear
-				? renderer::Filter::eLinear
-				: renderer::Filter::eNearest;
-
-			if ( !engine.getSamplerCache().has( name ) )
-			{
-				result = engine.getSamplerCache().add( name );
-				result->setMinFilter( renderer::Filter::eNearest );
-				result->setMagFilter( renderer::Filter::eNearest );
-				result->setWrapS( renderer::WrapMode::eClampToBorder );
-				result->setWrapT( renderer::WrapMode::eClampToBorder );
-				result->setWrapR( renderer::WrapMode::eClampToBorder );
-			}
-			else
-			{
-				result = engine.getSamplerCache().find( name );
-			}
-
-			return result;
-		}
-
 		glsl::Shader doGetCopyVertexShader( castor3d::RenderSystem & renderSystem )
 		{
 			using namespace glsl;
@@ -174,8 +148,6 @@ namespace smaa
 			, parameters
 			, true }
 		, m_config{ parameters }
-		, m_pointSampler{ doCreateSampler( *renderSystem.getEngine(), false, cuT( "SMAA_Point" ) ) }
-		, m_linearSampler{ doCreateSampler( *renderSystem.getEngine(), false, cuT( "SMAA_Linear" ) ) }
 	{
 		m_passesCount = 5u;
 
@@ -242,15 +214,12 @@ namespace smaa
 	{
 		m_srgbTextureView = &m_target->getDefaultView();
 		m_hdrTextureView = &m_renderTarget.getTechnique()->getResult().getDefaultView();
-		m_pointSampler->initialise();
-		m_linearSampler->initialise();
 
 		switch ( m_config.data.edgeDetection )
 		{
 		case EdgeDetectionType::eDepth:
 			m_edgeDetection = std::make_unique< DepthEdgeDetection >( m_renderTarget
 				, m_renderTarget.getTechnique()->getDepth().getDefaultView()
-				, m_linearSampler
 				, m_config );
 			break;
 
@@ -258,7 +227,6 @@ namespace smaa
 			m_edgeDetection = std::make_unique< ColourEdgeDetection >( m_renderTarget
 				, *m_srgbTextureView
 				, doGetPredicationTexture()
-				, m_linearSampler
 				, m_config );
 			break;
 
@@ -266,7 +234,6 @@ namespace smaa
 			m_edgeDetection = std::make_unique< LumaEdgeDetection >( m_renderTarget
 				, *m_srgbTextureView
 				, doGetPredicationTexture()
-				, m_linearSampler
 				, m_config );
 			break;
 		}
@@ -275,7 +242,6 @@ namespace smaa
 		m_blendingWeightCalculation = std::make_unique< BlendingWeightCalculation >( m_renderTarget
 			, m_edgeDetection->getSurface()->getDefaultView()
 			, m_edgeDetection->getDepth()
-			, m_linearSampler
 			, m_config );
 		auto * velocityView = doGetVelocityView();
 
@@ -284,7 +250,6 @@ namespace smaa
 			, *m_srgbTextureView
 			, m_blendingWeightCalculation->getSurface()->getDefaultView()
 			, velocityView
-			, m_linearSampler
 			, m_config );
 
 #		if !C3D_DebugNeighbourhoodBlending
@@ -300,7 +265,6 @@ namespace smaa
 					, current
 					, previous
 					, velocityView
-					, m_linearSampler
 					, m_config ) );
 			}
 		}

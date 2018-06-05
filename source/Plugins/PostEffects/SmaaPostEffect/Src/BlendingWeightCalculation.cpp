@@ -42,6 +42,7 @@ namespace smaa
 			writeConstants( writer, config, renderTargetMetrics, true );
 			writer.declConstant( constants::MaxSearchSteps
 				, Int( config.data.maxSearchSteps ) );
+			writer << getSmaaShader();
 
 			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
 			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
@@ -52,13 +53,10 @@ namespace smaa
 			auto vtx_offset = writer.declOutputArray< Vec4 >( cuT( "vtx_offset" ), 2u, 3u );
 			auto out = gl_PerVertex{ writer };
 
-			writer << getSmaaShader() << endi;
-
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
 					out.gl_Position() = vec4( position, 0.0, 1.0 );
-					vtx_texture = vec2( texcoord.x(), 1.0_f - texcoord.y() );
 					vtx_texture = texcoord;
 					writer << "SMAABlendingWeightCalculationVS( vtx_texture, vtx_pixcoord, vtx_offset )" << endi;
 				} );
@@ -73,10 +71,11 @@ namespace smaa
 			GlslWriter writer = renderSystem.createGlslWriter();
 
 			writeConstants( writer, config, renderTargetMetrics, false );
+			writer << getSmaaShader();
 
 			// Shader inputs
 			glsl::Ubo ubo{ writer, cuT( "Subsample" ), 0u, 0u };
-			auto c3d_subsampleIndices = ubo.declMember< Vec4 >( constants::SubsampleIndices );
+			auto c3d_subsampleIndices = ubo.declMember< IVec4 >( constants::SubsampleIndices );
 			ubo.end();
 			auto c3d_areaTex = writer.declSampler< Sampler2D >( cuT( "c3d_areaTex" ), 1u, 0u );
 			auto c3d_searchTex = writer.declSampler< Sampler2D >( cuT( "c3d_searchTex" ), 2u, 0u );
@@ -88,14 +87,37 @@ namespace smaa
 			// Shader outputs
 			auto pxl_fragColour = writer.declFragData< Vec4 >( cuT( "pxl_fragColour" ), 0u );
 
-			writer << getSmaaShader() << endi;
-
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
 					writer << "pxl_fragColour = SMAABlendingWeightCalculationPS( vtx_texture, vtx_pixcoord, vtx_offset, c3d_edgesTex, c3d_areaTex, c3d_searchTex, c3d_subsampleIndices )" << endi;
 				} );
 			return writer.finalise();
+		}
+
+		renderer::SamplerPtr doCreateSampler( castor3d::Engine & engine
+			, castor::String const & name )
+		{
+			auto & device = getCurrentDevice( engine );
+			renderer::SamplerCreateInfo sampler
+			{
+				renderer::Filter::eNearest,
+				renderer::Filter::eNearest,
+				renderer::MipmapMode::eNone,
+				renderer::WrapMode::eClampToEdge,
+				renderer::WrapMode::eClampToEdge,
+				renderer::WrapMode::eClampToEdge,
+				0.0f,
+				false,
+				1.0f,
+				false,
+				renderer::CompareOp::eNever,
+				-1000.0f,
+				1000.0f,
+				renderer::BorderColour::eFloatOpaqueBlack,
+				false
+			};
+			return device.createSampler( sampler );
 		}
 	}
 
@@ -104,18 +126,18 @@ namespace smaa
 	BlendingWeightCalculation::BlendingWeightCalculation( castor3d::RenderTarget & renderTarget
 		, renderer::TextureView const & edgeDetectionView
 		, castor3d::TextureLayoutSPtr depthView
-		, castor3d::SamplerSPtr sampler
 		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), true, false }
+		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), false, false }
 		, m_edgeDetectionView{ edgeDetectionView }
 		, m_surface{ *renderTarget.getEngine() }
+		, m_pointSampler{ doCreateSampler( *renderTarget.getEngine(), cuT( "SMAA_Point" ) ) }
 	{
 		renderer::Extent2D size{ m_edgeDetectionView.getTexture().getDimensions().width
 			, m_edgeDetectionView.getTexture().getDimensions().height };
 		auto & renderSystem = *renderTarget.getEngine()->getRenderSystem();
 		auto & device = getCurrentDevice( renderSystem );
 
-		m_ubo = renderer::makeUniformBuffer< castor::Point4f >( device
+		m_ubo = renderer::makeUniformBuffer< castor::Point4i >( device
 			, 1u
 			, 0u
 			, renderer::MemoryPropertyFlag::eHostVisible );
@@ -182,6 +204,7 @@ namespace smaa
 
 		renderPass.subpasses.resize( 1u );
 		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
+		renderPass.subpasses[0].depthStencilAttachment = { 1u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
 		renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
 
 		renderPass.dependencies.resize( 2u );
@@ -286,7 +309,7 @@ namespace smaa
 	void BlendingWeightCalculation::update( castor::Point4i const & subsampleIndices )
 	{
 		auto & data = m_ubo->getData();
-		data = Point4f{ subsampleIndices };
+		data = Point4i{ subsampleIndices };
 		m_ubo->upload();
 	}
 
@@ -300,7 +323,7 @@ namespace smaa
 			, m_sampler->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 2u )
 			, m_searchTex->getDefaultView()
-			, m_sampler->getSampler() );
+			, *m_pointSampler );
 	}
 
 	//*********************************************************************************************

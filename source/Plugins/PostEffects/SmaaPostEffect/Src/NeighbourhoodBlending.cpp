@@ -1,6 +1,7 @@
 #include "NeighbourhoodBlending.hpp"
 
 #include "SmaaUbo.hpp"
+#include "SMAA.hpp"
 
 #include <Engine.hpp>
 
@@ -29,14 +30,15 @@ namespace smaa
 	namespace
 	{
 		glsl::Shader doGetNeighbourhoodBlendingVP( castor3d::RenderSystem & renderSystem
-			, Point4f const & renderTargetMetrics )
+			, Point4f const & renderTargetMetrics
+			, SmaaConfig const & config )
 		{
 			using namespace glsl;
 			GlslWriter writer = renderSystem.createGlslWriter();
+			writeConstants( writer, config, renderTargetMetrics, true );
+			writer << getSmaaShader();
 
 			// Shader inputs
-			auto c3d_renderTargetMetrics = writer.declConstant( constants::RenderTargetMetrics
-				, vec4( Float( renderTargetMetrics[0] ), renderTargetMetrics[1], renderTargetMetrics[2], renderTargetMetrics[3] ) );
 			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
 			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
 
@@ -50,21 +52,20 @@ namespace smaa
 				{
 					out.gl_Position() = vec4( position, 0.0, 1.0 );
 					vtx_texture = texcoord;
-
-					vtx_offset = fma( c3d_renderTargetMetrics.xyxy(), vec4( 1.0_f, 0.0, 0.0, 1.0 ), vec4( vtx_texture, vtx_texture ) );
+					writer << "SMAANeighborhoodBlendingVS( vtx_texture, vtx_offset )" << endi;
 				} );
 			return writer.finalise();
 		}
 
 		glsl::Shader doGetNeighbourhoodBlendingFP( castor3d::RenderSystem & renderSystem
 			, Point4f const & renderTargetMetrics
+			, SmaaConfig const & config
 			, bool reprojection )
 		{
 			using namespace glsl;
 			GlslWriter writer = renderSystem.createGlslWriter();
-
-			auto c3d_renderTargetMetrics = writer.declConstant( constants::RenderTargetMetrics
-				, vec4( Float( renderTargetMetrics[0] ), renderTargetMetrics[1], renderTargetMetrics[2], renderTargetMetrics[3] ) );
+			writeConstants( writer, config, renderTargetMetrics, false );
+			writer << getSmaaShader();
 
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
@@ -76,98 +77,17 @@ namespace smaa
 			// Shader outputs
 			auto pxl_fragColour = writer.declFragData< Vec4 >( cuT( "pxl_fragColour" ), 0u );
 
-			auto movc2 = writer.implementFunction< Void >( cuT( "movc2" )
-				, [&]( BVec2 const & cond
-					, Vec2 variable
-					, Vec2 const & value )
-				{
-					IF( writer, cond.x() )
-					{
-						variable.x() = value.x();
-					}
-					FI;
-					IF( writer, cond.y() )
-					{
-						variable.y() = value.y();
-					}
-					FI;
-				}
-				, InBVec2{ &writer, cuT( "cond" ) }
-				, InOutVec2{ &writer, cuT( "variable" ) }
-				, InVec2{ &writer, cuT( "value" ) } );
-
-			auto movc4 = writer.implementFunction< Void >( cuT( "movc4" )
-				, [&]( BVec4 const & cond
-					, Vec4 variable
-					, Vec4 const & value )
-				{
-					writer << movc2( cond.xy(), variable.xy(), value.xy() ) << endi;
-					writer << movc2( cond.zw(), variable.zw(), value.zw() ) << endi;
-				}
-				, InBVec4{ &writer, cuT( "cond" ) }
-				, InOutVec4{ &writer, cuT( "variable" ) }
-				, InVec4{ &writer, cuT( "value" ) } );
-
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					auto texcoord = writer.declLocale( cuT( "texcoord" )
-						, vtx_texture );
-					// Fetch the blending weights for current pixel:
-					auto a = writer.declLocale< Vec4 >( cuT( "a" ) );
-					a.x() = texture( c3d_blendTex, vtx_offset.xy() ).a(); // Right
-					a.y() = texture( c3d_blendTex, vtx_offset.zw() ).g(); // Top
-					a.wz() = texture( c3d_blendTex, texcoord ).xz(); // Bottom / Left
-
-					// Is there any blending weight with a value greater than 0.0?
-					IF( writer, dot( a, vec4( 1.0_f ) ) < 1e-5_f )
+					if ( reprojection )
 					{
-						pxl_fragColour = texture( c3d_colourTex, texcoord, 0.0_f );
-
-						if ( reprojection )
-						{
-							auto velocity = writer.declLocale( cuT( "velocity" )
-								, texture( c3d_velocityTex, texcoord ).rg() );
-
-							// Pack velocity into the alpha channel:
-							pxl_fragColour.a() = sqrt( 5.0_f * length( velocity ) );
-						}
+						writer << "pxl_fragColour = SMAANeighborhoodBlendingPS( vtx_texture, vtx_offset, c3d_colourTex, c3d_blendTex, c3d_velocityTex )" << endi;
 					}
-					ELSE
+					else
 					{
-						auto h = writer.declLocale( cuT( "h" )
-							, max( a.x(), a.z() ) > max( a.y(), a.w() ) ); // max(horizontal) > max(vertical)
-
-						// Calculate the blending offsets:
-						auto blendingOffset = writer.declLocale( cuT( "blendingOffset" )
-							, vec4( 0.0_f, a.y(), 0.0, a.w() ) );
-						auto blendingWeight = writer.declLocale( cuT( "blendingWeight" )
-							, a.yw() );
-						writer << movc4( bvec4( h, h, h, h ), blendingOffset, vec4( a.x(), 0.0, a.z(), 0.0 ) ) << endi;
-						writer << movc2( bvec2( h, h ), blendingWeight, a.xz() ) << endi;
-						blendingWeight /= dot( blendingWeight, vec2( 1.0_f, 1.0 ) );
-
-						// Calculate the texture coordinates:
-						auto blendingCoord = writer.declLocale( cuT( "blendingCoord" )
-							, fma( blendingOffset, vec4( c3d_renderTargetMetrics.xy(), -c3d_renderTargetMetrics.xy() ), vec4( texcoord, texcoord ) ) );
-
-						// We exploit bilinear filtering to mix current pixel with the chosen
-						// neighbor:
-						pxl_fragColour = vec4( blendingWeight.x() ) * texture( c3d_colourTex, blendingCoord.xy(), 0.0 );
-						pxl_fragColour += vec4( blendingWeight.y() ) * texture( c3d_colourTex, blendingCoord.zw(), 0.0 );
-
-						if ( reprojection )
-						{
-							// Antialias velocity for proper reprojection in a later stage:
-							auto velocity = writer.declLocale( cuT( "velocity" )
-								, vec2( blendingWeight.x() ) * texture( c3d_velocityTex, blendingCoord.xy(), 0.0 ).rg() );
-							velocity += vec2( blendingWeight.y() ) * texture( c3d_velocityTex, blendingCoord.zw(), 0.0 ).rg();
-
-							// Pack velocity into the alpha channel:
-							pxl_fragColour.a() = sqrt( 5.0 * length( velocity ) );
-						}
+						writer << "pxl_fragColour = SMAANeighborhoodBlendingPS( vtx_texture, vtx_offset, c3d_colourTex, c3d_blendTex )" << endi;
 					}
-					FI;
 				} );
 			return writer.finalise();
 		}
@@ -179,9 +99,8 @@ namespace smaa
 		, renderer::TextureView const & sourceView
 		, renderer::TextureView const & blendView
 		, renderer::TextureView const * velocityView
-		, castor3d::SamplerSPtr sampler
 		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), true, false }
+		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), false, false }
 		, m_sourceView{ sourceView }
 		, m_blendView{ blendView }
 		, m_velocityView{ velocityView }
@@ -229,9 +148,11 @@ namespace smaa
 
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
 		m_vertexShader = doGetNeighbourhoodBlendingVP( *renderTarget.getEngine()->getRenderSystem()
-			, pixelSize );
+			, pixelSize
+			, config );
 		m_pixelShader = doGetNeighbourhoodBlendingFP( *renderTarget.getEngine()->getRenderSystem()
 			, pixelSize
+			, config
 			, velocityView != nullptr );
 
 		renderer::ShaderStageStateArray stages;
