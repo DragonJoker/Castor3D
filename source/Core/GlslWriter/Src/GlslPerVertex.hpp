@@ -11,16 +11,22 @@ namespace glsl
 	struct gl_PerVertex
 		: public Type
 	{
-		inline gl_PerVertex();
-		inline gl_PerVertex( GlslWriter & writer, castor::String const & p_name = castor::String() );
-		inline gl_PerVertex & operator=( gl_PerVertex const & p_rhs );
-		template< typename T > inline gl_PerVertex & operator=( T const & p_rhs );
-		inline Vec4 gl_Position()const;
-		inline Float gl_PointSize()const;
-		inline Float gl_ClipDistance()const;
+		enum Source
+		{
+			eVertexOutput,
+			eTessellationControlInput,
+			eTessellationControlOutput,
+			eTessellationEvaluationInput,
+			eTessellationEvaluationOutput,
+			eGeometryInput,
+			eGeometryOutput,
+		};
+		GlslWriter_API gl_PerVertex();
+		GlslWriter_API gl_PerVertex( GlslWriter & writer, Source source = eVertexOutput );
+		GlslWriter_API Vec4 gl_Position()const;
+		GlslWriter_API Float gl_PointSize()const;
+		GlslWriter_API Float gl_ClipDistance()const;
 	};
 }
-
-#include "GlslPerVertex.inl"
 
 #endif
