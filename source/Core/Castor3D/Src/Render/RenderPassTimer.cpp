@@ -108,5 +108,6 @@ namespace castor3d
 		m_timerQuery = getCurrentDevice( m_engine ).createQueryPool( renderer::QueryType::eTimestamp
 			, 2u * m_passesCount
 			, 0u );
+		m_startedPasses.resize( m_passesCount );
 	}
 }
