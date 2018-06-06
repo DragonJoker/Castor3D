@@ -116,6 +116,11 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		inline uint32_t getThreshold()const
+		{
+			return m_threshold;
+		}
+
 		inline std::map< MaterialSPtr, Data >::const_iterator end()const
 		{
 			return m_instances.end();

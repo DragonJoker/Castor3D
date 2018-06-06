@@ -758,10 +758,20 @@ namespace castor3d
 			, node.modelUbo.buffer->getBuffer()
 			, node.modelUbo.offset
 			, 1u );
-		node.uboDescriptorSet->createBinding( layout.getBinding( SkinningUbo::BindingPoint )
-			, node.skinningUbo.buffer->getBuffer()
-			, node.skinningUbo.offset
-			, 1u );
+
+		if ( checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
+		{
+			node.data.getInstantiatedBones().getInstancedBonesBuffer().createBinding( *node.uboDescriptorSet
+				, layout.getBinding( SkinningUbo::BindingPoint ) );
+		}
+		else
+		{
+			node.uboDescriptorSet->createBinding( layout.getBinding( SkinningUbo::BindingPoint )
+				, node.skinningUbo.buffer->getBuffer()
+				, node.skinningUbo.offset
+				, 1u );
+		}
+
 		doFillUboDescriptor( layout, index, node );
 		node.uboDescriptorSet->update();
 	}

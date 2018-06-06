@@ -206,7 +206,7 @@ namespace glsl
 
 			if ( !m_ssboSet.empty() )
 			{
-				result << cuT( ", " ) << m_ssboSet << cuT( " = " ) << index;
+				result << cuT( ", " ) << m_ssboSet << cuT( " = " ) << set;
 			}
 
 			result << cuT( " ) " );

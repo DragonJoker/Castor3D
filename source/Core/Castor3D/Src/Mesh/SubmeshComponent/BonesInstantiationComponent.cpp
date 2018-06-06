@@ -35,7 +35,23 @@ namespace castor3d
 
 	bool BonesInstantiationComponent::doInitialise()
 	{
-		return true;
+		bool result = true;
+		auto count = m_instantiation.getMaxRefCount();
+
+		if ( count > m_instantiation.getThreshold() )
+		{
+			if ( !m_instancedBonesBuffer )
+			{
+				auto stride = uint32_t( sizeof( float ) * 16u * 400u );
+				m_instancedBonesBuffer = std::make_unique< ShaderBuffer >( *getOwner()->getScene()->getEngine(), count * stride );
+			}
+		}
+		else
+		{
+			m_instancedBonesBuffer.reset();
+		}
+
+		return result;
 	}
 
 	void BonesInstantiationComponent::doCleanup()
@@ -50,13 +66,13 @@ namespace castor3d
 			auto count = m_instantiation.getMaxRefCount();
 			auto stride = uint32_t( sizeof( float ) * 16u * 400u );
 
-			if ( count > 1
+			if ( count > m_instantiation.getThreshold()
 				&& ( !m_instancedBonesBuffer || m_instancedBonesBuffer->getSize() < count * stride ) )
 			{
 				m_instancedBonesBuffer = std::make_unique< ShaderBuffer >( *getOwner()->getScene()->getEngine()
 					, count * stride );
 			}
-			else
+			else if ( count <= m_instantiation.getThreshold() )
 			{
 				m_instancedBonesBuffer.reset();
 			}

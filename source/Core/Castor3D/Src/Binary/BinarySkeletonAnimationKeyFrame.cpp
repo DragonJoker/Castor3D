@@ -92,7 +92,7 @@ namespace castor3d
 	{
 		bool result = true;
 
-		if ( m_fileVersion == Version{ 1, 3, 0 } )
+		if ( m_fileVersion <= Version{ 1, 3, 0 } )
 		{
 			SquareMatrix< double, 4 > matrix;
 			String name;
