@@ -5,6 +5,7 @@
 #include "Render/RenderTarget.hpp"
 
 #include <Core/Device.hpp>
+#include <Core/PhysicalDevice.hpp>
 
 using namespace castor;
 
@@ -132,7 +133,9 @@ namespace castor3d
 	{
 		if ( !m_sampler )
 		{
-			m_sampler = getCurrentDevice( *this ).createSampler( m_info );
+			auto & device = getCurrentDevice( *this );
+			m_info.maxAnisotropy = std::min( m_info.maxAnisotropy, device.getPhysicalDevice().getProperties().limits.maxSamplerAnisotropy );
+			m_sampler = device.createSampler( m_info );
 		}
 
 		return true;

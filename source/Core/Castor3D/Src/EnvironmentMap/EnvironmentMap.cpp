@@ -9,6 +9,8 @@
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
+#include <Miscellaneous/BitSize.hpp>
+
 #include <Image/Texture.hpp>
 #include <Image/TextureView.hpp>
 #include <RenderPass/RenderPass.hpp>
@@ -74,7 +76,7 @@ namespace castor3d
 			colour.format = renderer::Format::eR16G16B16A16_SFLOAT;
 			colour.imageType = renderer::TextureType::e2D;
 			colour.initialLayout = renderer::ImageLayout::eUndefined;
-			colour.mipLevels = 20u;
+			colour.mipLevels = castor::getBitSize( std::min( size[0], size[1] ) );
 			colour.samples = renderer::SampleCountFlag::e1;
 			colour.sharingMode = renderer::SharingMode::eExclusive;
 			colour.tiling = renderer::ImageTiling::eOptimal;
