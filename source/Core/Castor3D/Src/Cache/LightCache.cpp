@@ -235,7 +235,7 @@ namespace castor3d
 
 	void ObjectCache< Light, castor::String >::updateLightsTexture( Camera const & camera )const
 	{
-		int index = 0;
+		uint32_t index = 0;
 		Point4f * data = m_lightsBuffer.data();
 
 		for ( auto lights : m_typeSortedLights )
@@ -248,17 +248,21 @@ namespace castor3d
 				{
 					light->bind( data );
 					data += shader::MaxLightComponentsCount;
+					index += shader::MaxLightComponentsCount;
 				}
 			}
 		}
 
-		if ( auto * locked = m_textureBuffer->lock( 0u
-			, m_textureBuffer->getCount()
-			, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateBuffer ) )
+		if ( index )
 		{
-			std::copy( m_lightsBuffer.begin(), m_lightsBuffer.end(), locked );
-			m_textureBuffer->flush( 0u, m_textureBuffer->getCount() );
-			m_textureBuffer->unlock();
+			if ( auto * locked = m_textureBuffer->lock( 0u
+				, index
+				, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateBuffer ) )
+			{
+				std::copy( m_lightsBuffer.begin(), m_lightsBuffer.begin() + index, locked );
+				m_textureBuffer->flush( 0u, index );
+				m_textureBuffer->unlock();
+			}
 		}
 	}
 

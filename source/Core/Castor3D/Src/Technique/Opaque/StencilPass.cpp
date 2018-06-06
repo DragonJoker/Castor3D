@@ -164,6 +164,9 @@ namespace castor3d
 
 		if ( m_commandBuffer->begin() )
 		{
+			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
+				, renderer::PipelineStageFlag::eEarlyFragmentTests
+				, m_depthView.makeDepthStencilAttachment( renderer::ImageLayout::eUndefined, 0u ) );
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *m_frameBuffer
 				, { renderer::DepthStencilClearValue{ 1.0, 0 } }
