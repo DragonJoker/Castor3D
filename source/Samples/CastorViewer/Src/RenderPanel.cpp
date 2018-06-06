@@ -362,7 +362,7 @@ namespace CastorViewer
 
 			if ( geometry )
 			{
-				m_cubeManager->displayObject( *geometry );
+				m_cubeManager->displayObject( *geometry, *submesh );
 			}
 
 			m_selectedGeometry = geometry;
