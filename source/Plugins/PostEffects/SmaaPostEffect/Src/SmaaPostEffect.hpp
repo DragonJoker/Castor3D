@@ -59,7 +59,7 @@ namespace smaa
 
 	private:
 		SmaaConfig m_config;
-		uint32_t m_curIndex{ 0u };
+		uint32_t m_frameIndex{ 0u };
 
 		std::unique_ptr< EdgeDetection > m_edgeDetection;
 		std::unique_ptr< BlendingWeightCalculation > m_blendingWeightCalculation;

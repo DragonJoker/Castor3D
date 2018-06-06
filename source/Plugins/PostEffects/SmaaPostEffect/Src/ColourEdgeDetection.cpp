@@ -56,7 +56,7 @@ namespace smaa
 			writer.declConstant( constants::PredicationStrength
 				, Float( config.data.predicationStrength )
 				, predicationEnabled );
-			writer << getSmaaShader() << endi;
+			writer << getSmaaShader();
 
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 			auto vtx_offset = writer.declInputArray< Vec4 >( cuT( "vtx_offset" ), 1u, 3u );

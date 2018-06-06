@@ -1,6 +1,7 @@
 #include "Reproject.hpp"
 
 #include "SmaaUbo.hpp"
+#include "SMAA.hpp"
 
 #include <Engine.hpp>
 
@@ -28,7 +29,9 @@ namespace smaa
 {
 	namespace
 	{
-		glsl::Shader doGetReprojectVP( castor3d::RenderSystem & renderSystem )
+		glsl::Shader doGetReprojectVP( castor3d::RenderSystem & renderSystem
+			, Point4f const & renderTargetMetrics
+			, SmaaConfig const & config )
 		{
 			using namespace glsl;
 			GlslWriter writer = renderSystem.createGlslWriter();
@@ -51,15 +54,19 @@ namespace smaa
 		}
 
 		glsl::Shader doGetReprojectFP( castor3d::RenderSystem & renderSystem
-			, float reprojectionWeightScale
+			, Point4f const & renderTargetMetrics
+			, SmaaConfig const & config
 			, bool reprojection )
 		{
 			using namespace glsl;
 			GlslWriter writer = renderSystem.createGlslWriter();
-
-			auto c3d_reprojectionWeightScale = writer.declConstant( cuT( "c3d_reprojectionWeightScale" )
-				, Float( reprojectionWeightScale )
+			writeConstants( writer, config, renderTargetMetrics, false );
+			writer.declConstant( constants::Reprojection
+				, 1_i
 				, reprojection );
+			writer.declConstant( constants::ReprojectionWeightScale
+				, Float( config.data.reprojectionWeightScale ) );
+			writer << getSmaaShader();
 
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
@@ -75,36 +82,11 @@ namespace smaa
 				{
 					if ( reprojection )
 					{
-						// Velocity is assumed to be calculated for motion blur, so we need to
-						// inverse it for reprojection:
-						auto velocity = writer.declLocale( cuT( "velocity" )
-							, -texture( c3d_velocityTex, vtx_texture ).rg() );
-
-						// Fetch current pixel:
-						auto current = writer.declLocale( cuT( "current" )
-							, texture( c3d_currentColourTex, vtx_texture ) );
-
-						// Reproject current coordinates and fetch previous pixel:
-						auto previous = writer.declLocale( cuT( "previous" )
-							, texture( c3d_previousColourTex, vtx_texture + velocity ) );
-
-						// Attenuate the previous pixel if the velocity is different:
-						auto delta = writer.declLocale( cuT( "delta" )
-							, abs( current.a() * current.a() - previous.a() * previous.a() ) / 5.0 );
-						auto weight = writer.declLocale( cuT( "weight" )
-							, 0.5_f * clamp( 1.0_f - writer.paren( sqrt( delta ) * c3d_reprojectionWeightScale ), 0.0_f, 1.0_f ) );
-
-						// Blend the pixels according to the calculated weight:
-						pxl_fragColour = mix( current, previous, weight );
+						writer << "pxl_fragColour = SMAAResolvePS( vtx_texture, c3d_currentColourTex, c3d_previousColourTex, c3d_velocityTex )" << endi;
 					}
 					else
 					{
-						// Just blend the pixels:
-						auto current = writer.declLocale( cuT( "current" )
-							, texture( c3d_currentColourTex, vtx_texture ) );
-						auto previous = writer.declLocale( cuT( "previous" )
-							, texture( c3d_previousColourTex, vtx_texture ) );
-						pxl_fragColour = mix( current, previous, 0.5 );
+						writer << "pxl_fragColour = SMAAResolvePS( vtx_texture, c3d_currentColourTex, c3d_previousColourTex )" << endi;
 					}
 				} );
 			return writer.finalise();
@@ -165,11 +147,14 @@ namespace smaa
 
 		m_renderPass = device.createRenderPass( renderPass );
 
-		auto pixelSize = Point2f{ 1.0f / size.width, 1.0f / size.height };
-		m_vertexShader = doGetReprojectVP( *renderTarget.getEngine()->getRenderSystem() );
+		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
+		m_vertexShader = doGetReprojectVP( *renderTarget.getEngine()->getRenderSystem()
+			, pixelSize
+			, config );
 		m_pixelShader = doGetReprojectFP( *renderTarget.getEngine()->getRenderSystem()
-			, velocityView != nullptr
-			, config.data.reprojectionWeightScale );
+			, pixelSize
+			, config
+			, velocityView != nullptr );
 
 		renderer::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );

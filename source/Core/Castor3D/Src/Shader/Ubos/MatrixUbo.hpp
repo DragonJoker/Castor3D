@@ -31,8 +31,7 @@ namespace castor3d
 			castor::Matrix4x4f prvView;
 			castor::Matrix4x4f curViewProj;
 			castor::Matrix4x4f prvViewProj;
-			castor::Point2f curJitter;
-			castor::Point2f prvJitter;
+			castor::Point2f jitter;
 		};
 
 	public:
@@ -132,8 +131,7 @@ namespace castor3d
 		C3D_API static castor::String const CurViewProj;
 		C3D_API static castor::String const PrvViewProj;
 		C3D_API static castor::String const InvProjection;
-		C3D_API static castor::String const CurJitter;
-		C3D_API static castor::String const PrvJitter;
+		C3D_API static castor::String const Jitter;
 
 	private:
 		Engine & m_engine;
@@ -152,8 +150,7 @@ namespace castor3d
 	auto c3d_prvView = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::PrvView );\
 	auto c3d_curViewProj = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::CurViewProj );\
 	auto c3d_prvViewProj = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::PrvViewProj );\
-	auto c3d_curJitter = matrices.declMember< glsl::Vec2 >( castor3d::MatrixUbo::CurJitter );\
-	auto c3d_prvJitter = matrices.declMember< glsl::Vec2 >( castor3d::MatrixUbo::PrvJitter );\
+	auto c3d_jitter = matrices.declMember< glsl::Vec2 >( castor3d::MatrixUbo::Jitter );\
 	matrices.end()
 
 #endif

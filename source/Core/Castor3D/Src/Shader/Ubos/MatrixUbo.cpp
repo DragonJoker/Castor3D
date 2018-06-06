@@ -16,8 +16,7 @@ namespace castor3d
 	String const MatrixUbo::CurViewProj = cuT( "c3d_curViewProj" );
 	String const MatrixUbo::PrvViewProj = cuT( "c3d_prvViewProj" );
 	String const MatrixUbo::InvProjection = cuT( "c3d_invProjection" );
-	String const MatrixUbo::CurJitter = cuT( "c3d_curJitter" );
-	String const MatrixUbo::PrvJitter = cuT( "c3d_prvJitter" );
+	String const MatrixUbo::Jitter = cuT( "c3d_jitter" );
 
 	MatrixUbo::MatrixUbo( Engine & engine )
 		: m_engine{ engine }
@@ -57,12 +56,11 @@ namespace castor3d
 		auto & configuration = m_ubo->getData( 0u );
 		configuration.prvView = configuration.curView;
 		configuration.prvViewProj = configuration.curViewProj;
-		configuration.prvJitter = configuration.curJitter;
 		configuration.curView = view;
 		configuration.projection = projection;
 		configuration.curViewProj = projection * view;
 		configuration.invProjection = projection.getInverse();
-		configuration.curJitter = jitter;
+		configuration.jitter = jitter;
 		m_ubo->upload();
 	}
 

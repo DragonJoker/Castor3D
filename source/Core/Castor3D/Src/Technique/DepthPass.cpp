@@ -248,8 +248,8 @@ namespace castor3d
 				// (note that for providing the jitter in non-homogeneous projection space,
 				//  pixel coordinates (screen space) need to multiplied by two in the C++
 				//  code)
-				out.gl_Position().xy() -= c3d_curJitter * out.gl_Position().w();
-				prvPosition.xy() -= c3d_prvJitter * out.gl_Position().w();
+				out.gl_Position().xy() -= c3d_jitter * out.gl_Position().w();
+				prvPosition.xy() -= c3d_jitter * out.gl_Position().w();
 				vtx_curPosition = out.gl_Position().xyw();
 				vtx_prvPosition = prvPosition.xyw();
 				// Positions in projection space are in [-1, 1] range, while texture

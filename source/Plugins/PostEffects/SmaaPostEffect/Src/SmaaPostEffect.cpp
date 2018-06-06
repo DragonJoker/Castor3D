@@ -31,7 +31,8 @@ using namespace castor;
 
 #define C3D_DebugEdgeDetection 0
 #define C3D_DebugBlendingWeightCalculation 0
-#define C3D_DebugNeighbourhoodBlending 1
+#define C3D_DebugNeighbourhoodBlending 0
+#define C3D_DebugVelocity 0
 
 namespace smaa
 {
@@ -61,7 +62,8 @@ namespace smaa
 			return writer.finalise();
 		}
 
-		glsl::Shader doGetCopyPixelShader( castor3d::RenderSystem & renderSystem )
+		glsl::Shader doGetCopyPixelShader( castor3d::RenderSystem & renderSystem
+			, SmaaConfig const & config)
 		{
 			using namespace glsl;
 			GlslWriter writer = renderSystem.createGlslWriter();
@@ -76,7 +78,16 @@ namespace smaa
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					pxl_fragColour = texture( c3d_map, vtx_texture );
+					if ( config.data.mode == Mode::eT2X
+						&& config.data.enableReprojection
+						&& C3D_DebugVelocity )
+					{
+						pxl_fragColour = vec4( texture( c3d_map, vtx_texture ).xy(), 0.0, 1.0 );
+					}
+					else
+					{
+						pxl_fragColour = texture( c3d_map, vtx_texture );
+					}
 				} );
 			return writer.finalise();
 		}
@@ -197,15 +208,15 @@ namespace smaa
 	{
 		if ( m_config.maxSubsampleIndices > 1u )
 		{
-			std::swap( m_commands, m_commandBuffers[m_curIndex] );
-			m_curIndex = ( m_config.subsampleIndex + 1 ) % m_config.maxSubsampleIndices;
-			std::swap( m_commands, m_commandBuffers[m_curIndex] );
+			std::swap( m_commands, m_commandBuffers[m_frameIndex] );
+			m_frameIndex = ( m_config.subsampleIndex + 1 ) % m_config.maxSubsampleIndices;
+			std::swap( m_commands, m_commandBuffers[m_frameIndex] );
 		}
 
 		if ( m_blendingWeightCalculation )
 		{
 			m_blendingWeightCalculation->update( m_config.subsampleIndices[m_config.subsampleIndex] );
-			m_config.subsampleIndex = m_curIndex;
+			m_config.subsampleIndex = m_frameIndex;
 			m_renderTarget.setJitter( m_config.jitters[m_config.subsampleIndex] );
 		}
 	}
@@ -253,7 +264,7 @@ namespace smaa
 			, m_config );
 
 #		if !C3D_DebugNeighbourhoodBlending
-		if ( m_config.mode == Mode::eT2X )
+		if ( m_config.data.mode == Mode::eT2X )
 		{
 			for ( uint32_t i = 0u; i < m_config.maxSubsampleIndices; ++i )
 			{
@@ -276,7 +287,7 @@ namespace smaa
 		m_copyProgram.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
 		m_copyProgram.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
 		m_copyProgram[0].module->loadShader( doGetCopyVertexShader( *getRenderSystem() ).getSource() );
-		m_copyProgram[1].module->loadShader( doGetCopyPixelShader( *getRenderSystem() ).getSource() );
+		m_copyProgram[1].module->loadShader( doGetCopyPixelShader( *getRenderSystem(), m_config ).getSource() );
 		m_copyRenderPass = doCreateRenderPass( device, m_target->getPixelFormat() );
 		m_copyFrameBuffer = doCreateFrameBuffer( *m_copyRenderPass, *m_target );
 
@@ -310,9 +321,9 @@ namespace smaa
 		}
 		else
 		{
-			m_curIndex = m_config.maxSubsampleIndices - 1u;
-			m_config.subsampleIndex = m_curIndex;
-			std::swap( m_commands, m_commandBuffers[m_curIndex] );
+			m_frameIndex = m_config.maxSubsampleIndices - 1u;
+			m_config.subsampleIndex = m_frameIndex;
+			std::swap( m_commands, m_commandBuffers[m_frameIndex] );
 		}
 	}
 
@@ -342,12 +353,16 @@ namespace smaa
 
 		if ( !m_reproject.empty() )
 		{
-			if ( m_config.data.mode == Mode::eT2X )
-			{
-				auto & reproject = *m_reproject[index];
-				result.emplace_back( reproject.prepareCommands( timer, passIndex++ ) );
-				m_smaaResult = reproject.getSurface().get();
-			}
+			auto & reproject = *m_reproject[index];
+			result.emplace_back( reproject.prepareCommands( timer, passIndex++ ) );
+			m_smaaResult = reproject.getSurface().get();
+		}
+
+		if ( m_config.data.enableReprojection
+			&& m_config.data.mode == Mode::eT2X
+			&& C3D_DebugVelocity )
+		{
+			m_smaaResult = m_renderTarget.getVelocity().getTexture().get();
 		}
 
 		auto & device = getCurrentDevice( m_renderTarget );
@@ -396,14 +411,9 @@ namespace smaa
 	{
 		renderer::Texture const * predication = nullptr;
 
-		switch ( m_config.data.mode )
+		if ( m_config.data.enablePredication )
 		{
-		case Mode::eT2X:
-			if ( m_config.data.enablePredication )
-			{
-				predication = &m_renderTarget.getTechnique()->getDepth().getTexture();
-			}
-			break;
+			predication = &m_renderTarget.getTechnique()->getDepth().getTexture();
 		}
 
 		return predication;

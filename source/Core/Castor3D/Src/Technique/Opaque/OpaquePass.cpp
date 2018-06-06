@@ -438,8 +438,8 @@ namespace castor3d
 			// (note that for providing the jitter in non-homogeneous projection space,
 			//  pixel coordinates (screen space) need to multiplied by two in the C++
 			//  code)
-			out.gl_Position().xy() -= c3d_curJitter * out.gl_Position().w();
-			prvPosition.xy() -= c3d_prvJitter * out.gl_Position().w();
+			out.gl_Position().xy() -= c3d_jitter * out.gl_Position().w();
+			prvPosition.xy() -= c3d_jitter * out.gl_Position().w();
 
 			auto tbn = writer.declLocale( cuT( "tbn" )
 				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );

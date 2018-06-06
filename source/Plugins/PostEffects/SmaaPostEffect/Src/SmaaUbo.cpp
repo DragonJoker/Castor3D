@@ -35,7 +35,10 @@ namespace smaa
 		const String CornerRoundingNorm = cuT( "SMAA_CORNER_ROUNDING_NORM" );
 		const String CornerRounding = cuT( "SMAA_CORNER_ROUNDING" );
 
-		const String SubsampleIndices = cuT( "c3d_subsampleIndices" );
+		// Reprojection
 		const String Reprojection = cuT( "SMAA_REPROJECTION" );
+		const String ReprojectionWeightScale = cuT( "SMAA_REPROJECTION_WEIGHT_SCALE" );
+
+		const String SubsampleIndices = cuT( "c3d_subsampleIndices" );
 	}
 }

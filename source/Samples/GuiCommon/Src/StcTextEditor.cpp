@@ -131,10 +131,16 @@ StcTextEditor::StcTextEditor( StcContext & p_context, wxWindow * p_parent, wxWin
 	SetTabWidth( m_iTabSpaces );
 	SetSelAlpha( 127 );
 	SetSelBackground( true, wxColour( 51, 153, 255, 127 ) );
+	SetFoldMarginColour( true, PANEL_BACKGROUND_COLOUR );
+	SetFoldMarginHiColour( true, PANEL_BACKGROUND_COLOUR );
+	StyleSetBackground( wxSTC_STYLE_DEFAULT, PANEL_BACKGROUND_COLOUR );
+	StyleSetForeground( wxSTC_STYLE_DEFAULT, PANEL_FOREGROUND_COLOUR );
+	StyleSetBackground( wxSTC_C_COMMENT, PANEL_BACKGROUND_COLOUR );
 	SetViewEOL( m_context.getDisplayEOLEnable() );
 	SetIndentationGuides( m_context.getIndentGuideEnable() );
 	SetEdgeMode( m_context.getLongLineOnEnable() ? wxSTC_EDGE_LINE : wxSTC_EDGE_NONE );
-	SetViewWhiteSpace( m_context.getWhiteSpaceEnable() ? wxSTC_WS_VISIBLEALWAYS : wxSTC_WS_INVISIBLE );
+	SetWhitespaceForeground( true, ACTIVE_TAB_COLOUR );
+	SetViewWhiteSpace( wxSTC_WS_VISIBLEALWAYS );
 	SetOvertype( m_context.getOverTypeInitial() );
 	SetReadOnly( m_context.getReadOnlyInitial() );
 	SetWrapMode( m_context.getWrapModeInitial() ? wxSTC_WRAP_WORD : wxSTC_WRAP_NONE );
