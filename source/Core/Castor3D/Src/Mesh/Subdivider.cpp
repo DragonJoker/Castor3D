@@ -15,9 +15,9 @@ namespace castor3d
 {
 	Subdivider::Subdivider()
 		: m_submesh( )
-		, m_bGenerateBuffers( true )
-		, m_pfnSubdivisionEnd( nullptr )
-		, m_bThreaded( false )
+		, m_generateBuffers( true )
+		, m_onSubdivisionEnd( nullptr )
+		, m_threaded( false )
 	{
 	}
 
@@ -26,7 +26,10 @@ namespace castor3d
 		cleanup();
 	}
 
-	void Subdivider::subdivide( SubmeshSPtr submesh, int occurences, bool generateBuffers, bool threaded )
+	void Subdivider::subdivide( SubmeshSPtr submesh
+		, int occurences
+		, bool generateBuffers
+		, bool threaded )
 	{
 		for ( int i = 0; i < occurences; ++i )
 		{
@@ -36,35 +39,32 @@ namespace castor3d
 
 	void Subdivider::cleanup()
 	{
-		m_pfnSubdivisionEnd = nullptr;
+		m_onSubdivisionEnd = nullptr;
 
-		if ( m_bThreaded && m_pThread )
+		if ( m_threaded && m_thread )
 		{
-			m_pThread->join();
+			m_thread->join();
 		}
 
-		m_pThread.reset();
-		m_bThreaded = false;
+		m_thread.reset();
+		m_threaded = false;
 		m_submesh.reset();
 		m_arrayFaces.clear();
 	}
 
-	SubmeshVertex Subdivider::addPoint( real x, real y, real z )
+	SubmeshVertex & Subdivider::addPoint( real x, real y, real z )
 	{
 		auto index = m_submesh->getPointsCount();
-		return
-		{
-			index,
-			m_submesh->addPoint( x, y, z )
-		};
+		m_points.emplace_back( std::make_unique< SubmeshVertex >( SubmeshVertex{ index, m_submesh->addPoint( x, y, z ) } ) );
+		return *m_points.back();
 	}
 
-	SubmeshVertex Subdivider::addPoint( Point3r const & v )
+	SubmeshVertex & Subdivider::addPoint( Point3r const & v )
 	{
 		return addPoint( v[0], v[1], v[2] );
 	}
 
-	SubmeshVertex Subdivider::addPoint( real * v )
+	SubmeshVertex & Subdivider::addPoint( real * v )
 	{
 		return addPoint( v[0], v[1], v[2] );
 	}
@@ -87,13 +87,9 @@ namespace castor3d
 		return m_submesh->getPointsCount();
 	}
 
-	SubmeshVertex Subdivider::getPoint( uint32_t i )const
+	SubmeshVertex & Subdivider::getPoint( uint32_t i )const
 	{
-		return
-		{
-			i,
-			m_submesh->getPoint( i )
-		};
+		return *m_points[i];
 	}
 
 	InterleavedVertexArray const & Subdivider::getPoints()const
@@ -101,41 +97,39 @@ namespace castor3d
 		return m_submesh->getPoints();
 	}
 
-	SubmeshVertex Subdivider::doTryAddPoint( Point3r const & point )
+	SubmeshVertex & Subdivider::doTryAddPoint( Point3r const & point )
 	{
-		std::unique_lock< std::recursive_mutex > lock( m_mutex );
+		auto lock = makeUniqueLock( m_mutex );
 		int index = -1;
 
 		if ( ( index = isInMyPoints( point, 0.00001 ) ) < 0 )
 		{
 			return addPoint( point );
 		}
-		else
+
+		auto & result = getPoint( index );
+		auto position = result.m_vertex.pos;
+
+		if ( position != point )
 		{
-			auto result = getPoint( index );
-			auto position = result.m_vertex.pos;
-
-			if ( position != point )
-			{
-				result.m_vertex.pos = ( position + point ) / real( 2 );
-			}
-
-			return result;
+			result.m_vertex.pos = ( position + point ) / real( 2 );
 		}
+
+		return result;
 	}
 
 	void Subdivider::doSubdivide( SubmeshSPtr submesh, bool generateBuffers, bool threaded )
 	{
 		m_submesh = submesh;
-		m_bGenerateBuffers = generateBuffers;
+		m_generateBuffers = generateBuffers;
 		m_submesh->computeContainers();
 
 		doInitialise();
-		m_bThreaded = threaded;
+		m_threaded = threaded;
 
 		if ( threaded )
 		{
-			m_pThread = std::make_shared< std::thread >( [this]()
+			m_thread = std::make_shared< std::thread >( [this]()
 				{
 					doSubdivideThreaded();
 				} );
@@ -156,7 +150,7 @@ namespace castor3d
 	{
 		m_submesh->computeNormals( true );
 
-		if ( m_bGenerateBuffers && !m_bThreaded )
+		if ( m_generateBuffers && !m_threaded )
 		{
 			m_submesh->initialise();
 		}
@@ -170,7 +164,7 @@ namespace castor3d
 		doSubdivide();
 		doSwapBuffers();
 
-		if ( m_bGenerateBuffers )
+		if ( m_generateBuffers )
 		{
 			m_submesh->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePreRender, [this]()
 			{
@@ -179,9 +173,9 @@ namespace castor3d
 			} ) );
 		}
 
-		if ( m_pfnSubdivisionEnd )
+		if ( m_onSubdivisionEnd )
 		{
-			m_pfnSubdivisionEnd( *this );
+			m_onSubdivisionEnd( *this );
 		}
 
 		return 0;

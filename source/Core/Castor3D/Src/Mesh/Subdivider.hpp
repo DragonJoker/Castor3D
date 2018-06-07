@@ -75,7 +75,7 @@ namespace castor3d
 		 *\param[in]	x, y, z	Les coordonnées de la position du sommet
 		 *\return		Le sommet créé
 		 */
-		C3D_API SubmeshVertex addPoint( real x, real y, real z );
+		C3D_API SubmeshVertex & addPoint( real x, real y, real z );
 		/**
 		 *\~english
 		 *\brief		adds a vertex to my list
@@ -86,7 +86,7 @@ namespace castor3d
 		 *\param[in]	position	La position du sommet à ajouter
 		 *\return		Le sommet créé
 		 */
-		C3D_API SubmeshVertex addPoint( castor::Point3r const & position );
+		C3D_API SubmeshVertex & addPoint( castor::Point3r const & position );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a vertex to my list
@@ -97,7 +97,7 @@ namespace castor3d
 		 *\param[in]	position	Les coordonnées de la position du sommet à ajouter
 		 *\return		Le sommet créé
 		 */
-		C3D_API SubmeshVertex addPoint( real * position );
+		C3D_API SubmeshVertex & addPoint( real * position );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a face
@@ -145,7 +145,7 @@ namespace castor3d
 		 *\param[in]	i	L'indice du position
 		 *\return		La valeur
 		 */
-		C3D_API SubmeshVertex getPoint( uint32_t i )const;
+		C3D_API SubmeshVertex & getPoint( uint32_t i )const;
 		/**
 		 *\~english
 		 *\return		Retrieves the points array
@@ -165,7 +165,7 @@ namespace castor3d
 		 */
 		inline void setSubdivisionEndCallback( SubdivisionEndFunction subdivisionEndFunc )
 		{
-			m_pfnSubdivisionEnd = subdivisionEndFunc;
+			m_onSubdivisionEnd = subdivisionEndFunc;
 		}
 
 	protected:
@@ -186,7 +186,7 @@ namespace castor3d
 		 *\param[in]	position	Les coordonnées de la position du sommet à ajouter
 		 *\return		Le sommet créé
 		 */
-		C3D_API SubmeshVertex doTryAddPoint( castor::Point3r const & position );
+		C3D_API SubmeshVertex & doTryAddPoint( castor::Point3r const & position );
 		/**
 		 *\~english
 		 *\brief		Main subdivision function
@@ -260,19 +260,29 @@ namespace castor3d
 			, SubmeshVertex & p );
 
 	protected:
-		//!\~english The submesh being subdivided	\~french Le sous-maillage à diviser
+		//!\~english	The submesh being subdivided.
+		//\~french		Le sous-maillage à diviser.
 		SubmeshSPtr m_submesh;
-		//!\~english The faces	\~french Les faces
+		//!\~english	The points.
+		//\~french		Les points.
+		std::vector< std::unique_ptr< castor3d::SubmeshVertex > > m_points;
+		//!\~english	The faces.
+		//\~french		Les faces.
 		FaceArray m_arrayFaces;
-		//!\~english Tells if the buffers must be generatef	\~french Dit si les tampons doivent être générés
-		bool m_bGenerateBuffers;
-		//!\~english The subdivision end callback	\~french Le callback de fin de subdivision
-		SubdivisionEndFunction m_pfnSubdivisionEnd;
-		//!\~english The subdivision thread	\~french Le thread de subdivision
-		std::shared_ptr< std::thread > m_pThread;
-		//!\~english Tells that the subdivision is threaded	\~french Dit si la subdivision est threadée
-		bool m_bThreaded;
-		//!\~english The subdivision thread mutex	\~french Le mutex du thread de subdivision
+		//!\~english	Tells if the buffers must be generated.
+		//\~french		Dit si les tampons doivent être générés.
+		bool m_generateBuffers;
+		//!\~english	The subdivision end callback.
+		//\~french		Le callback de fin de subdivision.
+		SubdivisionEndFunction m_onSubdivisionEnd;
+		//!\~english	The subdivision thread.
+		//\~french		Le thread de subdivision.
+		std::shared_ptr< std::thread > m_thread;
+		//!\~english	Tells that the subdivision is threaded.
+		//\~french		Dit si la subdivision est threadée.
+		bool m_threaded;
+		//!\~english	The subdivision thread mutex.
+		//\~french		Le mutex du thread de subdivision.
 		std::recursive_mutex m_mutex;
 	};
 }
