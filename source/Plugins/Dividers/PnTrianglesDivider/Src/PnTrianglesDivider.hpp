@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_PnTrianglesDivider___
@@ -33,7 +33,7 @@ namespace PnTriangles
 	*/
 	struct Patch
 	{
-		Patch( Plane const & p_p1, Plane const & p_p2, Plane const & p_p3 );
+		Patch( Plane const & p1, Plane const & p2, Plane const & p3 );
 
 		castor::Point3r b300;
 		castor::Point3r b030;
@@ -67,7 +67,10 @@ namespace PnTriangles
 		/**
 		 *\copydoc		castor3d::Subdivider::Subdivide
 		 */
-		void subdivide( castor3d::SubmeshSPtr p_submesh, int p_occurences, bool p_generateBuffers = true, bool p_threaded = false )override;
+		void subdivide( castor3d::SubmeshSPtr submesh
+			, int occurences
+			, bool generateBuffers
+			, bool p_threaded )override;
 
 	private:
 		/**
@@ -82,8 +85,15 @@ namespace PnTriangles
 		 *\copydoc		castor3d::Subdivider::doAddGeneratedFaces
 		 */
 		void doAddGeneratedFaces()override;
-		void doComputeFaces( double u0, double v0, double u2, double v2, int p_occurences, Patch const & p_patch );
-		castor3d::BufferElementGroupSPtr doComputePoint( double u, double v, Patch const & p_patch );
+		void doComputeFaces( double u0
+			, double v0
+			, double u2
+			, double v2
+			, int occurences
+			, Patch const & patch );
+		castor3d::SubmeshVertex & doComputePoint( double u
+			, double v
+			, Patch const & patch );
 
 	public:
 		static castor::String const Name;
