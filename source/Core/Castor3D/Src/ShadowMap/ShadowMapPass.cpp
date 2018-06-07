@@ -17,7 +17,7 @@ namespace castor3d
 	ShadowMapPass::ShadowMapPass( Engine & engine
 		, Scene & scene
 		, ShadowMap const & shadowMap )
-		: RenderPass{ cuT( "ShadowMap" ), cuT( "ShadowMap" ), engine, nullptr }
+		: RenderPass{ cuT( "ShadowMap" ), cuT( "ShadowMap" ), engine }
 		, m_scene{ scene }
 		, m_shadowMap{ shadowMap }
 	{
@@ -30,19 +30,22 @@ namespace castor3d
 	void ShadowMapPass::doUpdateNodes( SceneCulledRenderNodes & nodes
 		, Camera const & camera )
 	{
-		RenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled, camera );
-		RenderPass::doUpdate( nodes.staticNodes.frontCulled, camera );
-		RenderPass::doUpdate( nodes.skinnedNodes.frontCulled, camera );
-		RenderPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled, camera );
-		RenderPass::doUpdate( nodes.morphingNodes.frontCulled, camera );
-		RenderPass::doUpdate( nodes.billboardNodes.frontCulled, camera );
+		if ( nodes.hasNodes() )
+		{
+			RenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled, camera );
+			RenderPass::doUpdate( nodes.staticNodes.frontCulled, camera );
+			RenderPass::doUpdate( nodes.skinnedNodes.frontCulled, camera );
+			RenderPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled, camera );
+			RenderPass::doUpdate( nodes.morphingNodes.frontCulled, camera );
+			RenderPass::doUpdate( nodes.billboardNodes.frontCulled, camera );
 
-		RenderPass::doUpdate( nodes.instancedStaticNodes.backCulled, camera );
-		RenderPass::doUpdate( nodes.staticNodes.backCulled, camera );
-		RenderPass::doUpdate( nodes.skinnedNodes.backCulled, camera );
-		RenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, camera );
-		RenderPass::doUpdate( nodes.morphingNodes.backCulled, camera );
-		RenderPass::doUpdate( nodes.billboardNodes.backCulled, camera );
+			RenderPass::doUpdate( nodes.instancedStaticNodes.backCulled, camera );
+			RenderPass::doUpdate( nodes.staticNodes.backCulled, camera );
+			RenderPass::doUpdate( nodes.skinnedNodes.backCulled, camera );
+			RenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, camera );
+			RenderPass::doUpdate( nodes.morphingNodes.backCulled, camera );
+			RenderPass::doUpdate( nodes.billboardNodes.backCulled, camera );
+		}
 	}
 
 	renderer::DescriptorSetLayoutBindingArray ShadowMapPass::doCreateTextureBindings( PipelineFlags const & flags )const

@@ -42,8 +42,10 @@ namespace castor3d
 
 		//***********************************************************************************************
 
-		auto constexpr minDirectionalOffset = 0.00001f;
-		auto constexpr maxDirectionalSlopeOffset = 0.0001f;
+		auto constexpr minRawDirectionalOffset = 0.001f;
+		auto constexpr maxRawDirectionalSlopeOffset = 0.001f;
+		auto constexpr minPcfDirectionalOffset = 0.001f;
+		auto constexpr maxPcfDirectionalSlopeOffset = 0.001f;
 		auto constexpr minSpotOffset = 0.00001f;
 		auto constexpr maxSpotSlopeOffset = 0.0001f;
 		auto constexpr minPointOffset = 0.00001f;
@@ -520,8 +522,8 @@ namespace castor3d
 						auto bias = m_writer.declLocale( cuT( "offset" )
 							, getShadowOffset( normal
 								, lightDirection
-								, Float( minDirectionalOffset )
-								, Float( maxDirectionalSlopeOffset ) ) );
+								, Float( minRawDirectionalOffset )
+								, Float( maxRawDirectionalSlopeOffset ) ) );
 						m_writer.returnStmt( textureProj( lightSpacePosition
 							, vec2( 0.0_f )
 							, c3d_mapShadowDirectional
@@ -532,8 +534,8 @@ namespace castor3d
 						auto bias = m_writer.declLocale( cuT( "offset" )
 							, getShadowOffset( normal
 								, lightDirection
-								, Float( minDirectionalOffset )
-								, Float( maxDirectionalSlopeOffset ) ) );
+								, Float( minPcfDirectionalOffset )
+								, Float( maxPcfDirectionalSlopeOffset ) ) );
 						m_writer.returnStmt( filterPCF( lightSpacePosition
 							, c3d_mapShadowDirectional
 							, bias ) );
@@ -820,8 +822,8 @@ namespace castor3d
 						auto bias = m_writer.declLocale( cuT( "bias" )
 							, getShadowOffset( normal
 								, lightDirection
-								, Float( minDirectionalOffset )
-								, Float( maxDirectionalSlopeOffset ) ) );
+								, Float( minRawDirectionalOffset )
+								, Float( maxRawDirectionalSlopeOffset ) ) );
 						m_writer.returnStmt( textureProj( lightSpacePosition
 							, vec2( 0.0_f )
 							, c3d_mapShadowDirectional
@@ -832,8 +834,8 @@ namespace castor3d
 						auto bias = m_writer.declLocale( cuT( "bias" )
 							, getShadowOffset( normal
 								, lightDirection
-								, Float( minDirectionalOffset )
-								, Float( maxDirectionalSlopeOffset ) ) );
+								, Float( minPcfDirectionalOffset )
+								, Float( maxPcfDirectionalSlopeOffset ) ) );
 						m_writer.returnStmt( filterPCF( lightSpacePosition
 							, c3d_mapShadowDirectional
 							, bias ) );

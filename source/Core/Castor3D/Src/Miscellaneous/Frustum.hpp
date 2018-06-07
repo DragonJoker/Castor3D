@@ -22,6 +22,9 @@ namespace castor3d
 	class Frustum
 	{
 	public:
+		using Planes = std::array< castor::PlaneEquation, size_t( FrustumPlane::eCount ) >;
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -41,7 +44,7 @@ namespace castor3d
 		 *\param[in]	projection	La matrice de projection.
 		 *\param[in]	view		Le matrice de vue.
 		 */
-		C3D_API void update( castor::Matrix4x4r const & projection
+		C3D_API Planes update( castor::Matrix4x4r const & projection
 			, castor::Matrix4x4r const & view );
 		/**
 		 *\~english
@@ -57,7 +60,7 @@ namespace castor3d
 		 *\param[in]	up			Le vecteur Y.
 		 *\param[in]	front		Le vecteur Z.
 		 */
-		C3D_API void update( castor::Point3r const & position
+		C3D_API Planes update( castor::Point3r const & position
 			, castor::Point3r const & right
 			, castor::Point3r const & up
 			, castor::Point3r const & front );
@@ -73,7 +76,7 @@ namespace castor3d
 		 *\param[in]	target	La position de la cible de la vue.
 		 *\param[in]	up		La direction du vecteur haut, selon l'orientation de la vue.
 		 */
-		C3D_API void update( castor::Point3r const & eye
+		C3D_API Planes update( castor::Point3r const & eye
 			, castor::Point3r const & target
 			, castor::Point3r const & up );
 		/**
@@ -122,15 +125,8 @@ namespace castor3d
 		C3D_API bool isVisible( castor::Point3r const & point )const;
 
 	private:
-		//!\~english	The viewport.
-		//!\~french		Le viewport.
 		Viewport & m_viewport;
-		//!\~english	The view frustum's corners.
-		//!\~french		Les coins du frustum de vue.
-		std::array< castor::Point3r, size_t( FrustumCorner::eCount ) > m_corners;
-		//!\~english	The view frustum's planes.
-		//!\~french		Les plans du frustum de vue.
-		std::array< castor::PlaneEquation, size_t( FrustumPlane::eCount ) > m_planes;
+		Planes m_planes;
 	};
 }
 

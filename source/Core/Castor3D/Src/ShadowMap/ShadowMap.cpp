@@ -215,21 +215,24 @@ namespace castor3d
 
 		std::function< void() > main = [&]()
 		{
-			auto v4Vertex = writer.declLocale( cuT( "v4Vertex" ), vec4( position.xyz(), 1.0 ) );
-			auto v3Texture = writer.declLocale( cuT( "v3Texture" ), texture );
-			auto mtxModel = writer.declLocale< Mat4 >( cuT( "mtxModel" ) );
+			auto vertexPosition = writer.declLocale( cuT( "vertexPosition" )
+				, vec4( position.xyz(), 1.0 ) );
+			vtx_texture = texture;
 
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 			{
-				mtxModel = SkinningUbo::computeTransform( writer, programFlags );
+				auto mtxModel = writer.declLocale< Mat4 >( cuT( "mtxModel" )
+					, SkinningUbo::computeTransform( writer, programFlags ) );
 			}
 			else if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
-				mtxModel = transform;
+				auto mtxModel = writer.declLocale< Mat4 >( cuT( "mtxModel" )
+					, transform );
 			}
 			else
 			{
-				mtxModel = c3d_mtxModel;
+				auto mtxModel = writer.declLocale< Mat4 >( cuT( "mtxModel" )
+					, c3d_mtxModel );
 			}
 
 			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
@@ -244,17 +247,17 @@ namespace castor3d
 			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
 			{
 				auto time = writer.declLocale( cuT( "time" ), 1.0_f - c3d_time );
-				v4Vertex = vec4( v4Vertex.xyz() * time + position2.xyz() * c3d_time, 1.0 );
-				v3Texture = v3Texture * writer.paren( 1.0_f - c3d_time ) + texture2 * c3d_time;
+				vertexPosition = vec4( vertexPosition.xyz() * time + position2.xyz() * c3d_time, 1.0 );
+				vtx_texture = vtx_texture * writer.paren( 1.0_f - c3d_time ) + texture2 * c3d_time;
 			}
 
-			vtx_texture = v3Texture;
-			v4Vertex = mtxModel * v4Vertex;
-			vtx_worldPosition = v4Vertex.xyz();
+			auto mtxModel = writer.declBuiltin< Mat4 >( cuT( "mtxModel" ) );
+			vertexPosition = mtxModel * vertexPosition;
+			vtx_worldPosition = vertexPosition.xyz();
 			vtx_instance = gl_InstanceID;
-			v4Vertex = c3d_curView * v4Vertex;
-			vtx_viewPosition = v4Vertex.xyz();
-			out.gl_Position() = c3d_projection * v4Vertex;
+			vertexPosition = c3d_curView * vertexPosition;
+			vtx_viewPosition = vertexPosition.xyz();
+			out.gl_Position() = c3d_projection * vertexPosition;
 		};
 
 		writer.implementFunction< void >( cuT( "main" ), main );

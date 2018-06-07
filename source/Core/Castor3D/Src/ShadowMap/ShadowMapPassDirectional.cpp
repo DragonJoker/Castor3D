@@ -92,7 +92,7 @@ namespace castor3d
 		Viewport viewport{ *getEngine() };
 		auto w = float( size.getWidth() );
 		auto h = float( size.getHeight() );
-		viewport.setOrtho( -w / 2, w / 2, h / 2, -h / 2, -5120.0_r, 5120.0_r );
+		viewport.setOrtho( -w / 2, w / 2, -h / 2, h / 2, -5120.0_r, 5120.0_r );
 		viewport.update();
 		m_camera = std::make_shared< Camera >( cuT( "ShadowMapDirectional" )
 			, m_scene

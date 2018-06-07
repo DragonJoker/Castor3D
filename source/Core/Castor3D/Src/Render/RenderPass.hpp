@@ -77,6 +77,35 @@ namespace castor3d
 		 *\brief		Constructor for opaque nodes.
 		 *\param[in]	name	The pass name.
 		 *\param[in]	engine	The engine.
+		 *\~french
+		 *\brief		Constructeur pour les noeuds opaques.
+		 *\param[in]	name	Le nom de la passe.
+		 *\param[in]	engine	Le moteur.
+		 */
+		C3D_API RenderPass( castor::String const & category
+			, castor::String const & name
+			, Engine & engine );
+		/**
+		 *\~english
+		 *\brief		Constructor for transparent nodes.
+		 *\param[in]	name	The pass name.
+		 *\param[in]	engine	The engine.
+		 *\param[in]	oit		The order independant status.
+		 *\~french
+		 *\brief		Constructeur pour les noeuds transparents.
+		 *\param[in]	name	Le nom de la passe.
+		 *\param[in]	engine	Le moteur.
+		 *\param[in]	oit		Le statut de rendu indépendant de l'ordre des objets.
+		 */
+		C3D_API RenderPass( castor::String const & category
+			, castor::String const & name
+			, Engine & engine
+			, bool oit );
+		/**
+		 *\~english
+		 *\brief		Constructor for opaque nodes.
+		 *\param[in]	name	The pass name.
+		 *\param[in]	engine	The engine.
 		 *\param[in]	ignored	The geometries attached to this node will be ignored in the render.
 		 *\~french
 		 *\brief		Constructeur pour les noeuds opaques.

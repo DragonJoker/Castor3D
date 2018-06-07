@@ -10,6 +10,7 @@
 using namespace castor;
 
 #define C3D_DebugFrustum 0
+#define C3D_DisableFrustumCulling 0
 
 namespace castor3d
 {
@@ -18,29 +19,64 @@ namespace castor3d
 	{
 	}
 
-	void Frustum::update( Matrix4x4r const & projection
+	Frustum::Planes Frustum::update( Matrix4x4r const & projection
 		, Matrix4x4r const & view )
 	{
+#if !C3D_DisableFrustumCulling
 		auto const viewProjection = projection * view;
-		auto near = viewProjection[3] + viewProjection[2];
-		auto far = viewProjection[3] - viewProjection[2];
-		auto left = viewProjection[3] + viewProjection[0];
-		auto right = viewProjection[3] - viewProjection[0];
-		auto bottom = viewProjection[3] + viewProjection[1];
-		auto top = viewProjection[3] - viewProjection[1];
-		m_planes[size_t( FrustumPlane::eNear )].set( Point3r{ near[0], near[1], near[2] }, near[3] );
-		m_planes[size_t( FrustumPlane::eFar )].set( Point3r{ far[0], far[1], far[2] }, far[3] );
-		m_planes[size_t( FrustumPlane::eLeft )].set( Point3r{ left[0], left[1], left[2] }, left[3] );
-		m_planes[size_t( FrustumPlane::eRight )].set( Point3r{ right[0], right[1], right[2] }, right[3] );
-		m_planes[size_t( FrustumPlane::eBottom )].set( Point3r{ bottom[0], bottom[1], bottom[2] }, bottom[3] );
-		m_planes[size_t( FrustumPlane::eTop )].set( Point3r{ top[0], top[1], top[2] }, top[3] );
+		std::array< Point4f, size_t( FrustumPlane::eCount ) > points;
+
+		const Point4f w{ viewProjection[0][3]
+			, viewProjection[1][3]
+			, viewProjection[2][3]
+			, viewProjection[3][3] };
+		const Point4f z{ viewProjection[0][2]
+			, viewProjection[1][2]
+			, viewProjection[2][2]
+			, viewProjection[3][2] };
+		points[size_t( FrustumPlane::eNear )] = w + z;
+		points[size_t( FrustumPlane::eFar )] = w - z;
+
+		const Point4f x{ viewProjection[0][0]
+			, viewProjection[1][0]
+			, viewProjection[2][0]
+			, viewProjection[3][0] };
+		points[size_t( FrustumPlane::eLeft )] = w - x;
+		points[size_t( FrustumPlane::eRight )] = w + x;
+
+		const Point4f y{ viewProjection[0][1]
+			, viewProjection[1][1]
+			, viewProjection[2][1]
+			, viewProjection[3][1] };
+		points[size_t( FrustumPlane::eTop )] = w - y;
+		points[size_t( FrustumPlane::eBottom )] = w + y;
+
+		for ( auto & point : points )
+		{
+			auto invLen = float( 1.0f / sqrt( point[0] * point[0] + point[1] * point[1] + point[2] * point[2] ) );
+			point[0] *= invLen;
+			point[1] *= invLen;
+			point[2] *= invLen;
+			point[3] *= invLen;
+		}
+
+		m_planes[size_t( FrustumPlane::eNear )].set( Point3r{ points[size_t( FrustumPlane::eNear )] }, points[size_t( FrustumPlane::eNear )][3] );
+		m_planes[size_t( FrustumPlane::eFar )].set( Point3r{ points[size_t( FrustumPlane::eFar )] }, points[size_t( FrustumPlane::eFar )][3] );
+		m_planes[size_t( FrustumPlane::eLeft )].set( Point3r{ points[size_t( FrustumPlane::eLeft )] }, points[size_t( FrustumPlane::eLeft )][3] );
+		m_planes[size_t( FrustumPlane::eRight )].set( Point3r{ points[size_t( FrustumPlane::eRight )] }, points[size_t( FrustumPlane::eRight )][3] );
+		m_planes[size_t( FrustumPlane::eTop )].set( Point3r{ points[size_t( FrustumPlane::eTop )] }, points[size_t( FrustumPlane::eTop )][3] );
+		m_planes[size_t( FrustumPlane::eBottom )].set( Point3r{ points[size_t( FrustumPlane::eBottom )] }, points[size_t( FrustumPlane::eBottom )][3] );
+#endif
+
+		return m_planes;
 	}
 
-	void Frustum::update( Point3r const & position
+	Frustum::Planes Frustum::update( Point3r const & position
 		, Point3r const & right
 		, Point3r const & up
 		, Point3r const & front )
 	{
+#if !C3D_DisableFrustumCulling
 		// Retrieve near and far planes' dimensions
 		real farH{ 0.0_r };
 		real farW{ 0.0_r };
@@ -69,49 +105,60 @@ namespace castor3d
 		// Compute planes' corners
 		Point3r nc{ position + front * near };
 		Point3r fc{ position + front * far };
-		m_corners[size_t( FrustumCorner::eFarLeftBottom )] = fc - up * farH - right * farW;
-		m_corners[size_t( FrustumCorner::eFarLeftTop )] = fc + up * farH - right * farW;
-		m_corners[size_t( FrustumCorner::eFarRightTop )] = fc + up * farH + right * farW;
-		m_corners[size_t( FrustumCorner::eFarRightBottom )] = fc - up * farH + right * farW;
-		m_corners[size_t( FrustumCorner::eNearLeftBottom )] = nc - up * nearH - right * nearW;
-		m_corners[size_t( FrustumCorner::eNearLeftTop )] = nc + up * nearH - right * nearW;
-		m_corners[size_t( FrustumCorner::eNearRightTop )] = nc + up * nearH + right * nearW;
-		m_corners[size_t( FrustumCorner::eNearRightBottom )] = nc - up * nearH + right * nearW;
+		std::array< castor::Point3r, size_t( FrustumCorner::eCount ) > corners;
+		corners[size_t( FrustumCorner::eFarLeftBottom )] = fc - up * farH - right * farW;
+		corners[size_t( FrustumCorner::eFarLeftTop )] = fc + up * farH - right * farW;
+		corners[size_t( FrustumCorner::eFarRightTop )] = fc + up * farH + right * farW;
+		corners[size_t( FrustumCorner::eFarRightBottom )] = fc - up * farH + right * farW;
+		corners[size_t( FrustumCorner::eNearLeftBottom )] = nc - up * nearH - right * nearW;
+		corners[size_t( FrustumCorner::eNearLeftTop )] = nc + up * nearH - right * nearW;
+		corners[size_t( FrustumCorner::eNearRightTop )] = nc + up * nearH + right * nearW;
+		corners[size_t( FrustumCorner::eNearRightBottom )] = nc - up * nearH + right * nearW;
 
 		// Fill planes
-		m_planes[size_t( FrustumPlane::eBottom )].set( m_corners[size_t( FrustumCorner::eNearLeftBottom )]
-			, m_corners[size_t( FrustumCorner::eNearRightBottom )]
-			, m_corners[size_t( FrustumCorner::eFarRightBottom )] );
-		m_planes[size_t( FrustumPlane::eFar )].set( m_corners[size_t( FrustumCorner::eFarRightTop )]
-			, m_corners[size_t( FrustumCorner::eFarLeftTop )]
-			, m_corners[size_t( FrustumCorner::eFarLeftBottom )] );
-		m_planes[size_t( FrustumPlane::eLeft )].set( m_corners[size_t( FrustumCorner::eNearLeftTop )]
-			, m_corners[size_t( FrustumCorner::eNearLeftBottom )]
-			, m_corners[size_t( FrustumCorner::eFarLeftBottom )] );
-		m_planes[size_t( FrustumPlane::eNear )].set( m_corners[size_t( FrustumCorner::eNearLeftTop )]
-			, m_corners[size_t( FrustumCorner::eNearRightTop )]
-			, m_corners[size_t( FrustumCorner::eNearRightBottom )] );
-		m_planes[size_t( FrustumPlane::eRight )].set( m_corners[size_t( FrustumCorner::eNearRightBottom )]
-			, m_corners[size_t( FrustumCorner::eNearRightTop )]
-			, m_corners[size_t( FrustumCorner::eFarRightBottom )] );
-		m_planes[size_t( FrustumPlane::eTop )].set( m_corners[size_t( FrustumCorner::eNearRightTop )]
-			, m_corners[size_t( FrustumCorner::eNearLeftTop )]
-			, m_corners[size_t( FrustumCorner::eFarLeftTop )] );
+		m_planes[size_t( FrustumPlane::eBottom )].set( corners[size_t( FrustumCorner::eNearLeftBottom )]
+			, corners[size_t( FrustumCorner::eNearRightBottom )]
+			, corners[size_t( FrustumCorner::eFarRightBottom )] );
+		m_planes[size_t( FrustumPlane::eFar )].set( corners[size_t( FrustumCorner::eFarRightTop )]
+			, corners[size_t( FrustumCorner::eFarLeftTop )]
+			, corners[size_t( FrustumCorner::eFarLeftBottom )] );
+		m_planes[size_t( FrustumPlane::eLeft )].set( corners[size_t( FrustumCorner::eNearLeftTop )]
+			, corners[size_t( FrustumCorner::eNearLeftBottom )]
+			, corners[size_t( FrustumCorner::eFarLeftBottom )] );
+		m_planes[size_t( FrustumPlane::eNear )].set( corners[size_t( FrustumCorner::eNearLeftTop )]
+			, corners[size_t( FrustumCorner::eNearRightTop )]
+			, corners[size_t( FrustumCorner::eNearRightBottom )] );
+		m_planes[size_t( FrustumPlane::eRight )].set( corners[size_t( FrustumCorner::eNearRightBottom )]
+			, corners[size_t( FrustumCorner::eNearRightTop )]
+			, corners[size_t( FrustumCorner::eFarRightBottom )] );
+		m_planes[size_t( FrustumPlane::eTop )].set( corners[size_t( FrustumCorner::eNearRightTop )]
+			, corners[size_t( FrustumCorner::eNearLeftTop )]
+			, corners[size_t( FrustumCorner::eFarLeftTop )] );
+#endif
+
+		return m_planes;
 	}
 
-	void Frustum::update( Point3r const & eye
+	Frustum::Planes Frustum::update( Point3r const & eye
 		, Point3r const & target
 		, Point3r const & up )
 	{
+#if !C3D_DisableFrustumCulling
 		auto f = point::getNormalised( target - eye );
 		auto u = point::getNormalised( up );
 		auto r = point::cross( f, u );
 		update( eye, r, u, f );
+#endif
+
+		return m_planes;
 	}
 
 	bool Frustum::isVisible( BoundingBox const & box
 		, Matrix4x4r const & transformations )const
 	{
+#if C3D_DisableFrustumCulling
+		return true;
+#else
 		//see http://www.lighthouse3d.com/tutorials/view-frustum-culling/
 		auto aabb = box.getAxisAligned( transformations );
 		bool results[size_t( FrustumPlane::eCount )] =
@@ -130,7 +177,7 @@ namespace castor3d
 			&& results[size_t( FrustumPlane::eTop )]
 			&& results[size_t( FrustumPlane::eBottom )];
 
-#if C3D_DebugFrustum
+#	if C3D_DebugFrustum
 
 		if ( !result )
 		{
@@ -170,15 +217,19 @@ namespace castor3d
 					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << dimension[2] << std::endl;
 		}
 
-#endif
+#	endif
 
 		return result;
+#endif
 	}
 
 	bool Frustum::isVisible( BoundingSphere const & sphere
 		, Matrix4x4r const & transformations
 		, Point3r const & scale)const
 	{
+#if C3D_DisableFrustumCulling
+		return true;
+#else
 		//see http://www.lighthouse3d.com/tutorials/view-frustum-culling/
 		auto maxScale = std::max( scale[0], std::max( scale[1], scale[2] ) );
 		Point3r center = transformations * sphere.getCenter();
@@ -199,7 +250,7 @@ namespace castor3d
 			&& results[size_t( FrustumPlane::eTop )]
 			&& results[size_t( FrustumPlane::eBottom )];
 
-#if C3D_DebugFrustum
+#	if C3D_DebugFrustum
 
 		if ( !result )
 		{
@@ -231,13 +282,17 @@ namespace castor3d
 				<< cuT( " - R: " ) << std::setw( 7 ) << std::setprecision( 4 ) << radius << std::endl;
 		}
 
-#endif
+#	endif
 
 		return result;
+#endif
 	}
 
 	bool Frustum::isVisible( Point3r const & point )const
 	{
+#if C3D_DisableFrustumCulling
+		return true;
+#else
 		//see http://www.lighthouse3d.com/tutorials/view-frustum-culling/
 		bool results[size_t( FrustumPlane::eCount )] =
 		{
@@ -255,7 +310,7 @@ namespace castor3d
 			&& results[size_t( FrustumPlane::eTop )]
 			&& results[size_t( FrustumPlane::eBottom )];
 
-#if C3D_DebugFrustum
+#	if C3D_DebugFrustum
 
 		if ( !result )
 		{
@@ -286,8 +341,9 @@ namespace castor3d
 					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << point[2] << std::endl;
 		}
 
-#endif
+#	endif
 
 		return result;
+#endif
 	}
 }

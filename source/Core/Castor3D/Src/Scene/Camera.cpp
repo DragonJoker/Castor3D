@@ -127,7 +127,7 @@ namespace castor3d
 					matrix::scale( m_view, Point3f{ -1.0f, 1.0f, 1.0f } );
 				}
 
-				m_frustum.update( position, right, up, front );
+				m_frustum.update( m_viewport.getProjection(), m_view );
 				m_nodeChanged = false;
 			}
 		}

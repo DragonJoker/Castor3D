@@ -128,12 +128,7 @@ namespace castor3d
 		, Point2r const & jitter
 		, RenderInfo & info )const
 	{
-		if ( !nodes.staticNodes.backCulled.empty()
-			|| !nodes.instancedStaticNodes.backCulled.empty()
-			|| !nodes.skinnedNodes.backCulled.empty()
-			|| !nodes.instancedSkinnedNodes.backCulled.empty()
-			|| !nodes.morphingNodes.backCulled.empty()
-			|| !nodes.billboardNodes.backCulled.empty() )
+		if ( nodes.hasNodes() )
 		{
 			RenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled, camera );
 			RenderPass::doUpdate( nodes.staticNodes.frontCulled, camera );

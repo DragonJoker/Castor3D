@@ -191,6 +191,37 @@ namespace castor3d
 
 	RenderPass::RenderPass( String const & category
 		, String const & name
+		, Engine & engine )
+		: OwnedBy< Engine >{ engine }
+		, Named{ name }
+		, m_renderSystem{ *engine.getRenderSystem() }
+		, m_category{ category }
+		, m_oit{ true }
+		, m_renderQueue{ *this, true, nullptr }
+		, m_opaque{ true }
+		, m_matrixUbo{ engine }
+		, m_sceneUbo{ engine }
+	{
+	}
+
+	RenderPass::RenderPass( String const & category
+		, String const & name
+		, Engine & engine
+		, bool oit )
+		: OwnedBy< Engine >{ engine }
+		, Named{ name }
+		, m_renderSystem{ *engine.getRenderSystem() }
+		, m_category{ category }
+		, m_oit{ oit }
+		, m_renderQueue{ *this, false, nullptr }
+		, m_opaque{ false }
+		, m_matrixUbo{ engine }
+		, m_sceneUbo{ engine }
+	{
+	}
+
+	RenderPass::RenderPass( String const & category
+		, String const & name
 		, Engine & engine
 		, SceneNode const * ignored )
 		: OwnedBy< Engine >{ engine }
