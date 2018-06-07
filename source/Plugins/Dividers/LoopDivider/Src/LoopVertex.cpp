@@ -4,27 +4,22 @@ using namespace castor;
 
 namespace Loop
 {
-	Vertex::Vertex( castor3d::BufferElementGroupSPtr p_point )
-		:	m_ptPoint( p_point	)
+	Vertex::Vertex( castor3d::SubmeshVertex vertex )
+		: m_vertex{ std::move( vertex ) }
 	{
-	}
-
-	Vertex::~Vertex()
-	{
-		m_mapEdges.clear();
 	}
 
 	bool Vertex::hasEdge( uint32_t p_index )
 	{
-		return m_mapEdges.find( p_index ) != m_mapEdges.end();
+		return m_edges.find( p_index ) != m_edges.end();
 	}
 
 	EdgeSPtr Vertex::getEdge( uint32_t p_index )
 	{
 		EdgeSPtr result;
-		EdgePtrUIntMap::iterator it = m_mapEdges.find( p_index );
+		auto it = m_edges.find( p_index );
 
-		if ( it != m_mapEdges.end() )
+		if ( it != m_edges.end() )
 		{
 			result = it->second;
 		}
@@ -34,21 +29,21 @@ namespace Loop
 
 	void Vertex::addEdge( EdgeSPtr p_pEdge, uint32_t p_index )
 	{
-		EdgePtrUIntMap::iterator it = m_mapEdges.find( p_index );
+		auto it = m_edges.find( p_index );
 
-		if ( it == m_mapEdges.end() )
+		if ( it == m_edges.end() )
 		{
-			m_mapEdges.insert( std::make_pair( p_index, p_pEdge ) );
+			m_edges.insert( std::make_pair( p_index, p_pEdge ) );
 		}
 	}
 
 	void Vertex::removeEdge( uint32_t p_index )
 	{
-		EdgePtrUIntMap::iterator it = m_mapEdges.find( p_index );
+		auto it = m_edges.find( p_index );
 
-		if ( it != m_mapEdges.end() )
+		if ( it != m_edges.end() )
 		{
-			m_mapEdges.erase( it );
+			m_edges.erase( it );
 		}
 	}
 }

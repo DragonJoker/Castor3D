@@ -16,42 +16,35 @@ namespace Loop
 	*/
 	class Edge
 	{
-	private:
-		VertexWPtr m_firstVertex;
-		VertexWPtr m_secondVertex;
-		castor3d::Face const * m_firstFace;
-		castor3d::Face const * m_secondFace;
-		VertexSPtr m_createdVertex;
-		bool m_divided;
-		bool m_toDivide;
-		bool m_toDelete;
-
 	public:
 		/**
+		 *\brief
 		 * Constructor
-		 *\param[in]	p_v1	The 1st point
-		 *\param[in]	p_v2	The 2nd point
-		 *\param[in]	p_f1	The 1st face of the edge
-		 *\param[in]	p_toDivide	Tells if the edge has to be divided
+		 *\param[in]	v1			The 1st point
+		 *\param[in]	v2			The 2nd point
+		 *\param[in]	f1			The 1st face of the edge
+		 *\param[in]	toDivide	Tells if the edge has to be divided
 		 */
-		Edge( VertexSPtr p_v1, VertexSPtr p_v2, castor3d::Face const & p_f1, bool p_toDivide );
+		Edge( VertexSPtr v1
+			, VertexSPtr v2
+			, castor3d::Face const & f1
+			, bool toDivide );
 		/**
-		 * Destructor
+		 *\brief
+		 * Adds a face to the edge (max 2 faces, 1 at each side of the edge).
+		 *\param[in]	face	Pointer to the face to add.
 		 */
-		~Edge();
+		void addFace( castor3d::Face const & face );
 		/**
-		 * adds a face to the edge (max 2 faces, 1 at each side of the edge)
-		 *\param[in]	p_face	Pointer to the face to add
-		 */
-		void addFace( castor3d::Face const & p_face );
-		/**
+		 *\brief
 		 * Divides the edge id est adds a vertex in a portion of the edge determined by p_value (0.5 = middle).
-		 * doesn't divide the faces
-		 *\param[in]	p_submesh	The submesh to which the newly created point is added
-		 *\param[in]	p_value	Percentage of the segment [m_firstVertex,m_secondVertex]
-		 *\return	The created point
+		 *\remarks
+		 * Doesn't divide the faces.
+		 *\param[in]	divider	The subdivider to which the newly created point is added.
+		 *\param[in]	value	Percentage of the segment [m_firstVertex,m_secondVertex].
+		 *\return	The created point.
 		 */
-		VertexSPtr divide( Subdivider * p_pDivider, castor::real p_value );
+		VertexSPtr divide( Subdivider * divider, castor::real value );
 
 	public:
 		/**@name Accessors */
@@ -88,6 +81,16 @@ namespace Loop
 			m_toDelete = true;
 		}
 		//@}
+
+	private:
+		VertexWPtr m_firstVertex;
+		VertexWPtr m_secondVertex;
+		castor3d::Face const * m_firstFace;
+		castor3d::Face const * m_secondFace;
+		VertexSPtr m_createdVertex;
+		bool m_divided;
+		bool m_toDivide;
+		bool m_toDelete;
 	};
 }
 

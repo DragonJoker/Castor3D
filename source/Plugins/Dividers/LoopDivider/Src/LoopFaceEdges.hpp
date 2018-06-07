@@ -16,48 +16,42 @@ namespace Loop
 	*/
 	class FaceEdges
 	{
-	private:
-		Subdivider * m_pDivider;
-		VertexWPtr m_pVertex0;
-		VertexWPtr m_pVertex1;
-		VertexWPtr m_pVertex2;
-		castor3d::Face m_face;
-		EdgeSPtr m_edgeAB;
-		EdgeSPtr m_edgeBC;
-		EdgeSPtr m_edgeCA;
-		bool m_bOwnFace;
-
 	public:
 		/**
+		 *\brief
 		 * Constructor
-		 *\param[in]	p_submesh	The submesh holding the face
-		 *\param[in]	p_face	The face
-		 *\param[in,out]	p_existingEdges	The map of already existing edges, sorted by vertex
-		 *\param[in,out]	p_vertexNeighbourhood	The list of vertices neighbours
-		 *\param[in,out]	p_allEdges	All the edges
+		 *\param[in]		divider		The divider holding the face.
+		 *\param[in]		face		The face.
+		 *\param[in,out]	vertices	The vertices map, by index.
 		 */
-		FaceEdges( Subdivider * p_pDivider, castor3d::Face p_face,  VertexPtrUIntMap & p_mapVertex );
+		FaceEdges( Subdivider * divider
+			, castor3d::Face face
+			,  VertexPtrUIntMap & vertices );
 		/**
+		 *\brief
 		 * Constructor
-		 *\param[in]	p_submesh	The submesh holding the face
-		 *\param[in]	p_face	The face
-		 *\param[in]	ab	Edge between 1st and 2nd vertex
-		 *\param[in]	bc	Edge between 2nd and 3rd vertex
-		 *\param[in]	ca	Edge between 3rd and 1st vertex
+		 *\param[in]	divider	The divider holding the face.
+		 *\param[in]	face	The face.
+		 *\param[in]	ab		Edge between 1st and 2nd vertex.
+		 *\param[in]	bc		Edge between 2nd and 3rd vertex.
+		 *\param[in]	ca		Edge between 3rd and 1st vertex.
 		 */
-		FaceEdges( Subdivider * p_pDivider, castor3d::Face p_face, EdgeSPtr ab, EdgeSPtr bc, EdgeSPtr ca );
+		FaceEdges( Subdivider * divider
+			, castor3d::Face face
+			, EdgeSPtr ab
+			, EdgeSPtr bc
+			, EdgeSPtr ca );
 		/**
-		 * Divides the edges held, creates needed faces to complete the division
-		 *\param[in]	p_value	The weight of division (if 0.5, divides all edges in the middle)
-		 *\param[in,out]	p_existingEdges	The map of already existing edges, sorted by vertex
-		 *\param[in,out]	p_vertexNeighbourhood	The list of vertices neighbours
-		 *\param[in,out]	p_allEdges	All the edges
-		 *\param[in,out]	p_newFaces	The array of newly created faces. All faces created by the subdivision are put inside it
-		 *\param[in,out]	p_newVertices	The array of newly created vertices. All vertices created by the subdivision are put inside it
+		 *\brief
+		 * Divides the edges held, creates needed faces to complete the division.
+		 *\param[in]		value		The weight of division (if 0.5, divides all edges in the middle).
+		 *\param[in,out]	vertices	The vertices map, by index.
+		 *\param[in,out]	newFaces	The array of newly created faces. All faces created by the subdivision are put inside it.
 		 */
-		void divide( castor::real p_value, VertexPtrUIntMap & p_mapVertex, FaceEdgesPtrArray & p_newFaces );
+		void divide( castor::real value
+			, VertexPtrUIntMap & vertices
+			, FaceEdgesPtrArray & newFaces );
 
-	public:
 		/**@name Accessors */
 		//@{
 		inline EdgeSPtr getEdgesAB()
@@ -75,10 +69,37 @@ namespace Loop
 		//@}
 
 	private:
-		void doAddFaceAndEdges( VertexSPtr p_a, VertexSPtr p_b, VertexSPtr p_c, castor::Point3r const & p_aTex, castor::Point3r const & p_bTex, castor::Point3r const & p_cTex, FaceEdgesPtrArray & p_newFaces );
-		void doAddFaceAndEdges( VertexSPtr p_a, VertexSPtr p_b, VertexSPtr p_c, castor::Point3r const & p_aTex, castor::Point3r const & p_bTex, castor::Point3r const & p_cTex, EdgeSPtr p_edgeAB, EdgeSPtr p_edgeBC, EdgeSPtr p_edgeCA, FaceEdgesPtrArray & p_newFaces );
-		EdgeSPtr doAddEdge( VertexSPtr p_v1, VertexSPtr p_v2, bool p_toDivide );
-		void doRemoveEdge( EdgeSPtr p_edge );
+		void doAddFaceAndEdges( VertexSPtr a
+			, VertexSPtr b
+			, VertexSPtr c
+			, castor::Point3r const & aTex
+			, castor::Point3r const & bTex
+			, castor::Point3r const & cTex
+			, FaceEdgesPtrArray & newFaces );
+		void doAddFaceAndEdges( VertexSPtr a
+			, VertexSPtr b
+			, VertexSPtr c
+			, castor::Point3r const & aTex
+			, castor::Point3r const & bTex
+			, castor::Point3r const & cTex
+			, EdgeSPtr edgeAB
+			, EdgeSPtr edgeBC
+			, EdgeSPtr edgeCA
+			, FaceEdgesPtrArray & newFaces );
+		EdgeSPtr doAddEdge( VertexSPtr v1
+			, VertexSPtr v2
+			, bool toDivide );
+		void doRemoveEdge( Edge const & edge );
+
+	private:
+		Subdivider * m_divider;
+		VertexWPtr m_vertex0;
+		VertexWPtr m_vertex1;
+		VertexWPtr m_vertex2;
+		castor3d::Face m_face;
+		EdgeSPtr m_edgeAB;
+		EdgeSPtr m_edgeBC;
+		EdgeSPtr m_edgeCA;
 	};
 }
 

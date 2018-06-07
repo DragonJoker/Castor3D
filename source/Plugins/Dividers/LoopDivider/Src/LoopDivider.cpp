@@ -1,4 +1,4 @@
-﻿#include "LoopDivider.hpp"
+#include "LoopDivider.hpp"
 
 #include "LoopVertex.hpp"
 #include "LoopFaceEdges.hpp"
@@ -24,7 +24,7 @@ namespace Loop
 	String const Subdivider::Type = cuT( "loop" );
 
 	Subdivider::Subdivider()
-		:	castor3d::Subdivider()
+		: castor3d::Subdivider()
 	{
 	}
 
@@ -42,27 +42,27 @@ namespace Loop
 	{
 		castor3d::Subdivider::cleanup();
 		m_facesEdges.clear();
-		m_mapVertex.clear();
+		m_vertices.clear();
 	}
 
 	VertexSPtr Subdivider::addPoint( real x, real y, real z )
 	{
 		VertexSPtr result = std::make_shared< Vertex >( castor3d::Subdivider::addPoint( x, y, z ) );
-		m_mapVertex.insert( std::make_pair( result->getIndex(), result ) );
+		m_vertices.emplace( result->getIndex(), result );
 		return result;
 	}
 
-	VertexSPtr Subdivider::addPoint( Point3r const & p_v )
+	VertexSPtr Subdivider::addPoint( Point3r const & v )
 	{
-		VertexSPtr result = std::make_shared< Vertex >( castor3d::Subdivider::addPoint( p_v ) );
-		m_mapVertex.insert( std::make_pair( result->getIndex(), result ) );
+		VertexSPtr result = std::make_shared< Vertex >( castor3d::Subdivider::addPoint( v ) );
+		m_vertices.emplace( result->getIndex(), result );
 		return result;
 	}
 
-	VertexSPtr Subdivider::addPoint( real * p_v )
+	VertexSPtr Subdivider::addPoint( real * v )
 	{
-		VertexSPtr result = std::make_shared< Vertex >( castor3d::Subdivider::addPoint( p_v ) );
-		m_mapVertex.insert( std::make_pair( result->getIndex(), result ) );
+		VertexSPtr result = std::make_shared< Vertex >( castor3d::Subdivider::addPoint( v ) );
+		m_vertices.emplace( result->getIndex(), result );
 		return result;
 	}
 
@@ -74,12 +74,13 @@ namespace Loop
 
 		for ( auto & point : getPoints() )
 		{
-			m_mapVertex.insert( std::make_pair( index++, std::make_shared< Vertex >( point ) ) );
+			m_vertices.emplace( index, std::make_shared< Vertex >( castor3d::SubmeshVertex{ index, point } ) );
+			++index;
 		}
 
 		for ( auto & face : m_indexMapping->getFaces() )
 		{
-			m_facesEdges.push_back( std::make_shared< FaceEdges >( this, face, m_mapVertex ) );
+			m_facesEdges.emplace_back( std::make_shared< FaceEdges >( this, face, m_vertices ) );
 		}
 
 		m_indexMapping->clearFaces();
@@ -106,7 +107,7 @@ namespace Loop
 
 		for ( auto & faceEdges : old )
 		{
-			faceEdges->divide( real( 0.5 ), m_mapVertex, m_facesEdges );
+			faceEdges->divide( real( 0.5 ), m_vertices, m_facesEdges );
 		}
 	}
 
@@ -114,19 +115,17 @@ namespace Loop
 	{
 		std::map< uint32_t, Point3r > positions;
 
-		for ( auto & it : m_mapVertex )
+		for ( auto & it : m_vertices )
 		{
-			Point3r point;
-			castor3d::Vertex::getPosition( it.second->getPoint(), point );
-			positions.insert( std::make_pair( it.first, point ) );
+			Point3r point = it.second->getPoint().pos;
+			positions.emplace( it.first, point );
 		}
 
-		for ( auto & it : m_mapVertex )
+		for ( auto & it : m_vertices )
 		{
 			VertexSPtr vertex = it.second;
 			uint32_t nbEdges = vertex->size();
-			Coords3r position;
-			castor3d::Vertex::getPosition( vertex->getPoint(), position );
+			Point3r & position = vertex->getPoint().pos;
 			real alpha = real( getAlpha( nbEdges ) );
 			position *= alpha;
 
@@ -138,14 +137,14 @@ namespace Loop
 			position /= alpha + nbEdges;
 		}
 
-		for ( auto & face : m_indexMapping->getFaces() )
+		for ( auto & face : m_arrayFaces )
 		{
 			Coords3r dump;
-			castor3d::Vertex::setPosition( m_submesh->getPoint( face[0] ), castor3d::Vertex::getPosition( m_mapVertex[face[0]]->getPoint(), dump ) );
-			castor3d::Vertex::setPosition( m_submesh->getPoint( face[1] ), castor3d::Vertex::getPosition( m_mapVertex[face[1]]->getPoint(), dump ) );
-			castor3d::Vertex::setPosition( m_submesh->getPoint( face[2] ), castor3d::Vertex::getPosition( m_mapVertex[face[2]]->getPoint(), dump ) );
+			m_submesh->getPoint( face[0] ).pos = m_vertices[face[0]]->getPoint().pos;
+			m_submesh->getPoint( face[1] ).pos = m_vertices[face[1]]->getPoint().pos;
+			m_submesh->getPoint( face[2] ).pos = m_vertices[face[2]]->getPoint().pos;
 		}
 
-		m_mapVertex.clear();
+		m_vertices.clear();
 	}
 }
