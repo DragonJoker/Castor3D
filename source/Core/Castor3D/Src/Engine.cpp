@@ -155,12 +155,6 @@ namespace castor3d
 			, PluginCache::Initialiser{ []( PluginSPtr ){} }
 			, PluginCache::Cleaner{ []( PluginSPtr ){} }
 			, PluginCache::Merger{} );
-			
-			makeCache< Plugin, String >( *this
-			, []( String const & name, PluginType type, castor::DynamicLibrarySPtr library )
-			{
-				return nullptr;
-			} );
 		m_overlayCache = makeCache< Overlay, String >(	*this
 			, [this]( String const & name, OverlayType type, SceneSPtr scene, OverlaySPtr parent )
 			{
