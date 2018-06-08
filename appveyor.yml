@@ -1,7 +1,7 @@
 version: '{branch}-rev{build}'
 
 os:
-  - Visual Studio 2015
+  - Visual Studio 2017
 
 platform:
   - Win32
@@ -12,6 +12,7 @@ environment:
 
 configuration:
   - Release
+  - Debug
 
 clone_folder:
   C:\projects\Castor3D
@@ -45,16 +46,22 @@ install:
   - cmd: cd C:\projects\Castor3D
   - cmd: md build
   - cmd: cd build
-  - cmake -G "%CMAKE_GENERATOR_NAME%" -DCMAKE_BUILD_TYPE=%configuration% ../source -DPROJECTS_USE_PRECOMPILED_HEADERS=ON -DCASTOR_BUILDGRP_PARTICLES=ON -DCASTOR_BUILDGRP_TEST=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_SAMPLE=ON -DCASTOR_BUILDGRP_DIVIDER=ON -DCASTOR_BUILDGRP_TONEMAPS=ON -DCASTOR_BUILDGRP_GENERIC=ON -DCASTOR_BUILDGRP_IMPORTER=ON -DCASTOR_BUILDGRP_POSTFX=ON -DCASTOR_BUILD_SAMPLE_CASTOR_TD=OFF -DCASTOR_BUILD_SAMPLE_CASTOR_VIEWER=ON -DCASTOR_BUILD_TEST_CASTOR3D=OFF -DCASTOR_BUILD_TEST_RENDERER_OGL=OFF -DCASTOR_FORCE_ALL_IMPORTERS=OFF
+  - cmake -G "%CMAKE_GENERATOR_NAME%" -DCMAKE_BUILD_TYPE=%configuration% ../source -DPROJECTS_USE_PRECOMPILED_HEADERS=ON -DCASTOR_BUILDGRP_PARTICLES=ON -DCASTOR_BUILDGRP_TEST=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_SAMPLE=ON -DCASTOR_BUILDGRP_DIVIDER=ON -DCASTOR_BUILDGRP_TONEMAPS=ON -DCASTOR_BUILDGRP_GENERIC=ON -DCASTOR_BUILDGRP_IMPORTER=ON -DCASTOR_BUILDGRP_POSTFX=ON -DCASTOR_BUILD_SAMPLE_CASTOR_TD=OFF -DCASTOR_BUILD_SAMPLE_CASTOR_VIEWER=ON -DCASTOR_BUILD_TEST_CASTOR3D=OFF -DCASTOR_BUILD_TEST_RENDERER_OGL=OFF -DCASTOR_FORCE_ALL_IMPORTERS=OFF -DCMAKE_INSTALL_PREFIX=C:\projects\Castor3D\package\Castor3D
 
 build:
   project: build/Castor3D.sln
   parallel: true
 
 after_build:
-  - cmd: cd C:\projects\Castor3D\binaries
-  - cmd: 7z a Castor3D-%PLATFORM_NAME%.7z .\%PLATFORM_NAME%\Release\*
+  - cmd: cd C:\projects\Castor3D\build
+  - cmake --build . --target install --config %CONFIGURATION%
+  - cmd: cd ..
+  - cmd: 7z a Castor3D-%PLATFORM_NAME%.zip .\package\Castor3D\*
   
 test_script:
   - cmd: cd C:\projects\Castor3D\build
   - cmd: ctest --build-config %configuration% --output-on-failure
+
+artifacts:
+  - path: Castor3D-%PLATFORM_NAME%.zip
+    name: Castor3D binaries %PLATFORM_NAME%
