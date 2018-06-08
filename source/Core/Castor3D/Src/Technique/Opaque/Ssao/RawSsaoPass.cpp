@@ -742,9 +742,6 @@ namespace castor3d
 		, m_finished{ getCurrentDevice( m_engine ).createSemaphore() }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "SSAO" ), cuT( "Raw AO" ) ) }
 	{
-		auto & renderSystem = *m_engine.getRenderSystem();
-		auto & device = getCurrentDevice( renderSystem );
-
 		static renderer::ClearColorValue const colour{ 1.0, 1.0, 1.0, 1.0 };
 
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )

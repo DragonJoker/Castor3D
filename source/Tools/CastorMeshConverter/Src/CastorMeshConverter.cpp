@@ -307,7 +307,6 @@ struct ObjectPostWriter< true, castor3d::Mesh >
 		, Options const & options )
 	{
 		auto name = options.output + cuT( "_" ) + castor::string::toString( options.submesh, std::locale{ "C" } );
-		auto & scene = *object.getScene();
 		auto newPath = path / ( options.output + cuT( "Integration.cscn" ) );
 		auto & submesh = *object.getSubmesh( 0u );
 		castor::Point3f position;

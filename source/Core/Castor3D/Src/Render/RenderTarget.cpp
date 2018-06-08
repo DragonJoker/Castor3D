@@ -775,7 +775,6 @@ namespace castor3d
 	renderer::Semaphore const & RenderTarget::doRenderOverlays( renderer::Semaphore const & toWait
 		, Camera const & camera )
 	{
-		auto & queue = getCurrentDevice( *this ).getGraphicsQueue();
 		auto * result = &toWait;
 		m_overlaysTimer->start();
 		{
