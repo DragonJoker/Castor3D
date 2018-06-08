@@ -6,14 +6,6 @@ using namespace castor;
 
 namespace glsl
 {
-	namespace
-	{
-		template< bool IsVulkan >
-		std::unique_ptr< KeywordsBase > getKeywords( GlslWriterConfig const & config )
-		{
-		}
-	}
-
 	std::unique_ptr< KeywordsBase > KeywordsBase::get( GlslWriterConfig const & config )
 	{
 		std::unique_ptr< KeywordsBase > result;
