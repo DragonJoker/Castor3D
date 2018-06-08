@@ -219,10 +219,6 @@ if( FREEIMAGE_FOUND AND ZLIB_FOUND )
 		else ()
 			copy_dll( ${PROJECT_NAME} ${ZLIB_LIBRARY} ${ZLIB_LIBRARY} )
 		endif ()
-
-		if ( ${PROJECTS_PLATFORM} STREQUAL "x86" )
-			copy_dll( ${PROJECT_NAME} ${FREETYPE_LIBRARY} ${FREETYPE_LIBRARY} 6 )
-		endif ()
 		copy_dll( ${PROJECT_NAME} ${FreeImage_LIBRARIES} ${FreeImage_LIBRARIES} )
 	endif ()
 
