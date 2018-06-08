@@ -43,8 +43,8 @@ before_script:
   - sudo apt-get install libassimp-dev
   - sudo apt-get install libwxgtk3.0-dev
   - sudo apt-get install libgtk2.0-dev
-  - export CXX="g++-5"
-  - export CC="gcc-5"
+  - export CXX="g++-8"
+  - export CC="gcc-8"
 
 script:
   - mkdir -p build

@@ -40,7 +40,7 @@ install:
   - cmd: 7z x glm-0.9.5.2-win32.zip
   - cmd: 7z x zlib-1.2.7-win32.zip
   - cmd: 7z x wxWidgets-3.1.0-win32-headers.zip
-  - cmd: 7z x wxWidgets-3.1.0-win32-libs-%DEPS_CONFIG_NAME%.zip
+  - cmd: 7z x wxWidgets-3.1.0-win32-libs-%DEPS_CONFIG_NAME%-update-4.3.zip
   - cmd: cd C:\projects\Castor3D
   - cmd: md build
   - cmd: cd build
