@@ -152,17 +152,9 @@ namespace castor3d
 			{
 				return nullptr;
 			}
-			, []( PluginSPtr )
-			{
-			}
-				, []( PluginSPtr )
-			{
-			}
-			, []( PluginCache const &
-				, castor::Collection< Plugin, castor::String > &
-				, PluginSPtr )
-			{
-			} );
+			, PluginCache::Initialiser{ []( PluginSPtr ){} }
+			, PluginCache::Cleaner{ []( PluginSPtr ){} }
+			, PluginCache::Merger{} );
 			
 			makeCache< Plugin, String >( *this
 			, []( String const & name, PluginType type, castor::DynamicLibrarySPtr library )
