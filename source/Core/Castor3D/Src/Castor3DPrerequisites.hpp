@@ -290,7 +290,7 @@ namespace castor3d
 	DECLARE_SMART_PTR( RenderPassTimer );
 	DECLARE_SMART_PTR( GaussianBlur );
 
-	castor::Matrix4x4f convert( renderer::Mat4 const & value );
+	castor::Matrix4x4f convert( std::array< float, 16 > const & value );
 	renderer::ClearColorValue convert( castor::RgbaColour const & value );
 	castor::RgbaColour convert( renderer::ClearColorValue const & value );
 

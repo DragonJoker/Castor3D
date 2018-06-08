@@ -14,7 +14,7 @@ namespace castor3d
 {
 	namespace
 	{
-		renderer::Mat4 getProjectUnitMatrix( renderer::Device const & device
+		castor::Matrix4x4f getProjectUnitMatrix( renderer::Device const & device
 			, Viewport const & viewport )
 		{
 			// Uses double precision because the division operations may otherwise 
@@ -34,7 +34,7 @@ namespace castor3d
 			auto t = float( y );
 			auto b = float( -y );
 
-			return device.frustum( l, r, b, t, n, f );
+			return convert( device.frustum( l, r, b, t, n, f ) );
 		}
 	}
 

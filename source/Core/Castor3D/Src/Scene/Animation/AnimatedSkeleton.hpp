@@ -6,8 +6,6 @@ See LICENSE file in root folder
 
 #include "AnimatedObject.hpp"
 
-#include <Utils/Mat4.hpp>
-
 namespace castor3d
 {
 	/*!

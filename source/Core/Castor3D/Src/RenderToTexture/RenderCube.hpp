@@ -18,7 +18,6 @@ See LICENSE file in root folder
 #include <Image/TextureView.hpp>
 #include <Pipeline/Pipeline.hpp>
 #include <Pipeline/PipelineLayout.hpp>
-#include <Utils/Mat4.hpp>
 
 #include <array>
 
