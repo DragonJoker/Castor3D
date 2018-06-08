@@ -14,11 +14,11 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - g++-5
+      - g++-8
 
 env:
   global:
-    - COMPILER=g++-5
+    - COMPILER=g++-8
   matrix:
     - CU_TEST=true CU_IMPORTERS=false CU_DIVIDERS=false CU_POSTFXS=false CU_TONEMAPS=false CU_GENERICS=false CU_PARTICLES=false CU_GENERATORS=false CU_RENDERERS=false CU_SAMPLES=false
     - CU_TEST=false CU_IMPORTERS=true CU_DIVIDERS=false CU_POSTFXS=false CU_TONEMAPS=false CU_GENERICS=false CU_PARTICLES=false CU_GENERATORS=false CU_RENDERERS=false CU_SAMPLES=false
@@ -34,7 +34,7 @@ env:
 before_script:
   - sudo apt-get update -qq
   - sudo apt-get install libc6-dev
-  - sudo apt-get install gcc-5-multilib g++-5-multilib
+  - sudo apt-get install gcc-8-multilib g++-8-multilib
   - sudo apt-get install cmake
   - sudo apt-get install libfreeimage-dev
   - sudo apt-get install libfreetype6-dev
