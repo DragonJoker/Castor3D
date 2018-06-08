@@ -147,7 +147,24 @@ namespace castor3d
 			, eventInit
 			, eventClean
 			, mergeResource );
-		m_pluginCache = makeCache< Plugin, String >( *this
+		m_pluginCache = std::make_unique< PluginCache >( *this
+			, []( String const & name, PluginType type, castor::DynamicLibrarySPtr library )
+			{
+				return nullptr;
+			}
+			, []( PluginSPtr )
+			{
+			}
+				, []( PluginSPtr )
+			{
+			}
+			, []( PluginCache const &
+				, castor::Collection< Plugin, castor::String > &
+				, PluginSPtr )
+			{
+			} );
+			
+			makeCache< Plugin, String >( *this
 			, []( String const & name, PluginType type, castor::DynamicLibrarySPtr library )
 			{
 				return nullptr;
