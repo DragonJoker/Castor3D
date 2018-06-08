@@ -9,6 +9,7 @@ using namespace castor;
 
 namespace castor3d
 {
+	uint32_t const ModelMatrixUbo::BindingPoint = 4u;
 	String const ModelMatrixUbo::BufferModelMatrix = cuT( "ModelMatrices" );
 	String const ModelMatrixUbo::MtxModel = cuT( "c3d_mtxModel" );
 	String const ModelMatrixUbo::MtxNormal = cuT( "c3d_mtxNormal" );

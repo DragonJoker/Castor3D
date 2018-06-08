@@ -7,6 +7,7 @@ using namespace castor;
 
 namespace castor3d
 {
+	uint32_t const OverlayUbo::BindingPoint = 2u;
 	String const OverlayUbo::BufferOverlayName = cuT( "Overlay" );
 	String const OverlayUbo::BufferOverlayInstance = cuT( "overlay" );
 	String const OverlayUbo::Position = cuT( "c3d_position" );

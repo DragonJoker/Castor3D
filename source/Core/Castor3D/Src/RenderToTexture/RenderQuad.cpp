@@ -75,6 +75,21 @@ namespace castor3d
 	{
 	}
 
+	RenderQuad::RenderQuad( RenderQuad && rhs )
+		: m_renderSystem{ rhs.m_renderSystem }
+		, m_sampler{ std::move( rhs.m_sampler ) }
+		, m_pipeline{ std::move( rhs.m_pipeline ) }
+		, m_pipelineLayout{ std::move( rhs.m_pipelineLayout ) }
+		, m_commandBuffer{ std::move( rhs.m_commandBuffer ) }
+		, m_vertexData{ std::move( rhs.m_vertexData ) }
+		, m_vertexBuffer{ std::move( rhs.m_vertexBuffer ) }
+		, m_descriptorSetLayout{ std::move( rhs.m_descriptorSetLayout ) }
+		, m_descriptorSetPool{ std::move( rhs.m_descriptorSetPool ) }
+		, m_descriptorSet{ std::move( rhs.m_descriptorSet ) }
+		, m_sourceView{ std::move( rhs.m_sourceView ) }
+	{
+	}
+
 	RenderQuad::~RenderQuad()
 	{
 		cleanup();

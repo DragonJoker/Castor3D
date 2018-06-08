@@ -30,6 +30,7 @@ namespace castor3d
 	{
 	public:
 		C3D_API virtual ~RenderQuad();
+		C3D_API explicit RenderQuad( RenderQuad && rhs );
 		/**
 		*\~english
 		*\brief

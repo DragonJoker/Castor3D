@@ -4,7 +4,6 @@
 #include <wx/propgrid/advprops.h>
 
 using namespace castor;
-using namespace renderer;
 
 WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( Matrix2x2f )
 WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( Matrix3x3f )

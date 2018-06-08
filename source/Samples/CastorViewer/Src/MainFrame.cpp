@@ -16,6 +16,7 @@
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderLoop.hpp>
 #include <Render/RenderWindow.hpp>
+#include <Scene/Scene.hpp>
 
 #include <ImagesLoader.hpp>
 #include <MaterialsList.hpp>

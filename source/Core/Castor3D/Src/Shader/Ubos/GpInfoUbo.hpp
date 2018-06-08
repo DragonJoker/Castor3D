@@ -90,14 +90,14 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		static const castor::String GPInfo;
-		static const castor::String InvViewProj;
-		static const castor::String InvView;
-		static const castor::String InvProj;
-		static const castor::String View;
-		static const castor::String Proj;
-		static const castor::String RenderSize;
-		static constexpr uint32_t BindingPoint = 5u;
+		C3D_API static const castor::String GPInfo;
+		C3D_API static const castor::String InvViewProj;
+		C3D_API static const castor::String InvView;
+		C3D_API static const castor::String InvProj;
+		C3D_API static const castor::String View;
+		C3D_API static const castor::String Proj;
+		C3D_API static const castor::String RenderSize;
+		C3D_API static uint32_t const BindingPoint;
 
 	private:
 		Engine & m_engine;

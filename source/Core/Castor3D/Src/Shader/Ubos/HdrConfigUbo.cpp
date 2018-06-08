@@ -10,6 +10,7 @@ using namespace castor;
 
 namespace castor3d
 {
+	uint32_t const HdrConfigUbo::BindingPoint = 8u;
 	String const HdrConfigUbo::BufferHdrConfig = cuT( "HdrConfig" );
 	String const HdrConfigUbo::Exposure = cuT( "c3d_exposure" );
 	String const HdrConfigUbo::Gamma = cuT( "c3d_gamma" );

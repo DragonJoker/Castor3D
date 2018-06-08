@@ -48,6 +48,8 @@ namespace castor3d
 
 		//***********************************************************************************************
 
+		uint32_t const LightingModel::UboBindingPoint = 6u;
+
 		LightingModel::LightingModel( GlslWriter & writer )
 			: m_writer{ writer }
 			, m_shadowModel{ std::make_shared< Shadow >( writer ) }

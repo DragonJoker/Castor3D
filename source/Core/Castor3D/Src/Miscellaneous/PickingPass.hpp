@@ -268,7 +268,7 @@ namespace castor3d
 
 	private:
 		using CameraQueueMap = std::map< Camera const *, RenderQueue >;
-		static uint32_t constexpr UboBindingPoint = 7u;
+		C3D_API static uint32_t const UboBindingPoint;
 
 	private:
 		std::map< castor::String, GeometryWPtr > m_pickable;

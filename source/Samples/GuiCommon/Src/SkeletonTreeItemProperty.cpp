@@ -1,6 +1,7 @@
 #include "SkeletonTreeItemProperty.hpp"
 
 #include <Mesh/Skeleton/Skeleton.hpp>
+#include <Scene/Scene.hpp>
 
 #include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>

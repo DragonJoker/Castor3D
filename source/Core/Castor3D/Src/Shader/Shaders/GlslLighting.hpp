@@ -71,7 +71,7 @@ namespace castor3d
 				, bool volumetric ) = 0;
 
 		public:
-			static uint32_t constexpr UboBindingPoint = 6u;
+			C3D_API static uint32_t const UboBindingPoint;
 
 		protected:
 			glsl::GlslWriter & m_writer;

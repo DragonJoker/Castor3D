@@ -1,6 +1,8 @@
 #include "SkeletonAnimationTreeItemProperty.hpp"
 
+#include <Animation/Animable.hpp>
 #include <Animation/Skeleton/SkeletonAnimation.hpp>
+#include <Scene/Scene.hpp>
 
 #include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>

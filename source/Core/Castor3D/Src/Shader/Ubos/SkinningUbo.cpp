@@ -14,6 +14,7 @@ using namespace castor;
 
 namespace castor3d
 {
+	uint32_t const SkinningUbo::BindingPoint = 6u;
 	String const SkinningUbo::BufferSkinning = cuT( "Skinning" );
 	String const SkinningUbo::Bones = cuT( "c3d_mtxBones" );
 

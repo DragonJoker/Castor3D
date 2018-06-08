@@ -12,6 +12,7 @@ using namespace castor;
 
 namespace castor3d
 {
+	uint32_t const SceneUbo::BindingPoint = 3u;
 	String const SceneUbo::BufferScene = cuT( "Scene" );
 	String const SceneUbo::AmbientLight = cuT( "c3d_ambientLight" );
 	String const SceneUbo::LightsCount = cuT( "c3d_lightsCount" );

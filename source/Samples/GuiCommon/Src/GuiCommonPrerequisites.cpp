@@ -13,6 +13,8 @@
 using Bool = int;
 #endif
 
+#include <Core/PlatformWindowHandle.hpp>
+
 #include <Graphics/Font.hpp>
 
 #include <Engine.hpp>
@@ -28,14 +30,11 @@ using Bool = int;
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
-#include <Core/PlatformWindowHandle.hpp>
-
 #include <Graphics/PixelBufferBase.hpp>
 
 #include <wx/window.h>
 #include <wx/rawbmp.h>
 
-using namespace castor;
 using namespace castor3d;
 
 namespace GuiCommon
@@ -62,7 +61,7 @@ namespace GuiCommon
 			{
 			}
 
-			virtual void loadGlyph( Glyph & p_glyph )
+			virtual void loadGlyph( castor::Glyph & p_glyph )
 			{
 				//FT_Glyph ftGlyph;
 				//CHECK_FT_ERR( FT_Load_Glyph, m_face, FT_get_Char_Index( m_face, p_glyph.getCharacter() ), FT_LOAD_DEFAULT );
@@ -190,18 +189,21 @@ namespace GuiCommon
 			}
 			catch ( ... )
 			{
-				Logger::logWarning( cuT( "CreateBitmapFromBuffer encountered an exception" ) );
+				castor::Logger::logWarning( cuT( "CreateBitmapFromBuffer encountered an exception" ) );
 			}
 		}
 	}
 
-	void CreateBitmapFromBuffer( PxBufferBaseSPtr p_buffer, bool p_flip, wxBitmap & p_bitmap )
+	void CreateBitmapFromBuffer( castor::PxBufferBaseSPtr p_buffer, bool p_flip, wxBitmap & p_bitmap )
 	{
-		PxBufferBaseSPtr buffer;
+		castor::PxBufferBaseSPtr buffer;
 
-		if ( p_buffer->format() != PixelFormat::eA8R8G8B8 )
+		if ( p_buffer->format() != castor::PixelFormat::eA8R8G8B8 )
 		{
-			buffer = PxBufferBase::create( Size( p_buffer->getWidth(), p_buffer->getHeight() ), PixelFormat::eA8R8G8B8, p_buffer->constPtr(), p_buffer->format() );
+			buffer = castor::PxBufferBase::create( castor::Size( p_buffer->getWidth(), p_buffer->getHeight() )
+				, castor::PixelFormat::eA8R8G8B8
+				, p_buffer->constPtr()
+				, p_buffer->format() );
 		}
 		else
 		{
@@ -219,7 +221,7 @@ namespace GuiCommon
 		}
 		else
 		{
-			Path path{ p_pUnit->getTexture()->getImage().toString() };
+			castor::Path path{ p_pUnit->getTexture()->getImage().toString() };
 
 			if ( !path.empty() )
 			{
@@ -235,24 +237,27 @@ namespace GuiCommon
 					}
 					else
 					{
-						Logger::logWarning( cuT( "CreateBitmapFromBuffer encountered a problem loading file [" ) + path + cuT( "]" ) );
+						castor::Logger::logWarning( cuT( "CreateBitmapFromBuffer encountered a problem loading file [" ) + path + cuT( "]" ) );
 					}
 				}
 				else
 				{
-					Logger::logWarning( cuT( "CreateBitmapFromBuffer encountered a problem loading file [" ) + path + cuT( "] : Unsupported format" ) );
+					castor::Logger::logWarning( cuT( "CreateBitmapFromBuffer encountered a problem loading file [" ) + path + cuT( "] : Unsupported format" ) );
 				}
 			}
 		}
 	}
 
-	RenderWindowSPtr loadScene( Engine & engine, Path const & p_fileName, uint32_t p_wantedFps, bool p_threaded )
+	RenderWindowSPtr loadScene( Engine & engine
+		, castor::Path const & p_fileName
+		, uint32_t p_wantedFps
+		, bool p_threaded )
 	{
 		RenderWindowSPtr result;
 
-		if ( File::fileExists( p_fileName ) )
+		if ( castor::File::fileExists( p_fileName ) )
 		{
-			Logger::logInfo( cuT( "Loading scene file : " ) + p_fileName );
+			castor::Logger::logInfo( cuT( "Loading scene file : " ) + p_fileName );
 
 			if ( p_fileName.getExtension() == cuT( "cscn" ) || p_fileName.getExtension() == cuT( "zip" ) )
 			{
@@ -266,7 +271,7 @@ namespace GuiCommon
 					}
 					else
 					{
-						Logger::logWarning( cuT( "Can't read scene file" ) );
+						castor::Logger::logWarning( cuT( "Can't read scene file" ) );
 					}
 				}
 				catch ( std::exception & exc )
@@ -285,19 +290,19 @@ namespace GuiCommon
 
 	void loadPlugins( castor3d::Engine & engine )
 	{
-		PathArray arrayFiles;
-		File::listDirectoryFiles( Engine::getPluginsDirectory(), arrayFiles );
-		PathArray arrayKept;
+		castor::PathArray arrayFiles;
+		castor::File::listDirectoryFiles( Engine::getPluginsDirectory(), arrayFiles );
+		castor::PathArray arrayKept;
 
 		// Exclude debug plug-in in release builds, and release plug-ins in debug builds
 		for ( auto file : arrayFiles )
 		{
 #if defined( NDEBUG )
 
-			if ( file.find( String( cuT( "d." ) ) + CASTOR_DLL_EXT ) == String::npos )
+			if ( file.find( castor::String( cuT( "d." ) ) + CASTOR_DLL_EXT ) == String::npos )
 #else
 
-			if ( file.find( String( cuT( "d." ) ) + CASTOR_DLL_EXT ) != String::npos )
+			if ( file.find( castor::String( cuT( "d." ) ) + CASTOR_DLL_EXT ) != String::npos )
 
 #endif
 			{
@@ -307,15 +312,15 @@ namespace GuiCommon
 
 		if ( !arrayKept.empty() )
 		{
-			PathArray arrayFailed;
-			PathArray otherPlugins;
+			castor::PathArray arrayFailed;
+			castor::PathArray otherPlugins;
 
 			for ( auto file : arrayKept )
 			{
 				if ( file.getExtension() == CASTOR_DLL_EXT )
 				{
 					// Since techniques depend on renderers, we load these first
-					if ( file.find( cuT( "RenderSystem" ) ) != String::npos )
+					if ( file.find( cuT( "RenderSystem" ) ) != castor::String::npos )
 					{
 						if ( !engine.getPluginCache().loadPlugin( file ) )
 						{
@@ -340,18 +345,18 @@ namespace GuiCommon
 
 			if ( !arrayFailed.empty() )
 			{
-				Logger::logWarning( cuT( "Some plug-ins couldn't be loaded :" ) );
+				castor::Logger::logWarning( cuT( "Some plug-ins couldn't be loaded :" ) );
 
 				for ( auto file : arrayFailed )
 				{
-					Logger::logWarning( Path( file ).getFileName() );
+					castor::Logger::logWarning( Path( file ).getFileName() );
 				}
 
 				arrayFailed.clear();
 			}
 		}
 
-		Logger::logInfo( cuT( "Plugins loaded" ) );
+		castor::Logger::logInfo( cuT( "Plugins loaded" ) );
 	}
 
 	renderer::WindowHandle makeWindowHandle( wxWindow * window )
@@ -383,11 +388,11 @@ namespace GuiCommon
 #endif
 	}
 
-	FontSPtr make_Font( Engine * engine, wxFont const & p_font )
+	castor::FontSPtr make_Font( Engine * engine, wxFont const & p_font )
 	{
-		String name = make_String( p_font.GetFaceName() ) + string::toString( p_font.GetPointSize() );
+		castor::String name = make_String( p_font.GetFaceName() ) + castor::string::toString( p_font.GetPointSize() );
 		auto & cache = engine->getFontCache();
-		FontSPtr font = cache.find( name );
+		castor::FontSPtr font = cache.find( name );
 
 		if ( !font )
 		{

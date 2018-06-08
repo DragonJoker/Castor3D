@@ -9,6 +9,7 @@ using namespace castor;
 
 namespace castor3d
 {
+	uint32_t const MorphingUbo::BindingPoint = 7u;
 	String const MorphingUbo::BufferMorphing = cuT( "Morphing" );
 	String const MorphingUbo::Time = cuT( "c3d_time" );
 

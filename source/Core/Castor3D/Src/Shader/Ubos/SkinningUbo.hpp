@@ -140,7 +140,7 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		static constexpr uint32_t BindingPoint = 6u;
+		C3D_API static uint32_t const BindingPoint;
 		//!\~english	Name of the skinning animation frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les données d'animation de skinning.
 		C3D_API static castor::String const BufferSkinning;

@@ -143,6 +143,7 @@ namespace castor3d
 				, TextureUnit const & destination
 				, bool isVertic
 				, renderer::ShaderStageStateArray const & shaderStages );
+			Blur( Blur && rhs );
 			void prepareFrame( renderer::CommandBuffer & commandBuffer )const;
 
 		private:
@@ -171,6 +172,7 @@ namespace castor3d
 				, std::array< TextureUnit, 3u > const & blurResults
 				, TextureUnit const & destination
 				, renderer::ShaderStageStateArray const & shaderStages );
+			Combine( Combine && rhs );
 			void prepareFrame( renderer::CommandBuffer & commandBuffer )const;
 
 		private:

@@ -358,8 +358,8 @@ namespace castor3d
 		{
 			auto result = std::make_unique< LightPassShadow::Program >( this->m_engine
 				, *this
-				, m_vertexShader
-				, m_pixelShader );
+				, this->m_vertexShader
+				, this->m_pixelShader );
 			return result;
 		}
 	};

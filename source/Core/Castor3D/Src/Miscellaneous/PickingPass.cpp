@@ -223,6 +223,8 @@ namespace castor3d
 		static int constexpr PickingOffset = int( PickingWidth / 2 );
 	}
 
+	uint32_t const PickingPass::UboBindingPoint = 7u;
+
 	PickingPass::PickingPass( Engine & engine )
 		: RenderPass{ cuT( "Picking" ), cuT( "Picking" ), engine, nullptr }
 	{

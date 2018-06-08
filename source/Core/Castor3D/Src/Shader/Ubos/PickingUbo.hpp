@@ -102,7 +102,7 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		static constexpr uint32_t BindingPoint = 10u;
+		C3D_API static const uint32_t BindingPoint;
 		//!\~english	Name of the picking information frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les informations de picking.
 		C3D_API static castor::String const BufferPicking;

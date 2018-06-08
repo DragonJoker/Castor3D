@@ -9,6 +9,7 @@ using namespace castor;
 
 namespace castor3d
 {
+	const uint32_t PickingUbo::BindingPoint = 10u;
 	String const PickingUbo::BufferPicking = cuT( "Picking" );
 	String const PickingUbo::DrawIndex = cuT( "c3d_drawIndex" );
 	String const PickingUbo::NodeIndex = cuT( "c3d_nodeIndex" );

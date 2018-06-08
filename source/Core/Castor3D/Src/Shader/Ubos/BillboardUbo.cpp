@@ -9,6 +9,7 @@ using namespace castor;
 
 namespace castor3d
 {
+	const uint32_t BillboardUbo::BindingPoint = 9u;
 	String const BillboardUbo::BufferBillboard = cuT( "Billboard" );
 	String const BillboardUbo::Dimensions = cuT( "c3d_dimensions" );
 

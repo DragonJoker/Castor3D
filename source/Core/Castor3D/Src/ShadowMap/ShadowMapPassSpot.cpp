@@ -13,6 +13,8 @@ using namespace castor;
 
 namespace castor3d
 {
+	uint32_t const ShadowMapPassSpot::UboBindingPoint = 10u;
+	uint32_t const ShadowMapPassSpot::TextureSize = 512;
 	String const ShadowMapPassSpot::ShadowMapUbo = cuT( "ShadowMap" );
 	String const ShadowMapPassSpot::FarPlane = cuT( "c3d_farPlane" );
 

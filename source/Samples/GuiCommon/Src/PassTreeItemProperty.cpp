@@ -8,6 +8,7 @@
 #include <Material/LegacyPass.hpp>
 #include <Material/MetallicRoughnessPbrPass.hpp>
 #include <Material/SpecularGlossinessPbrPass.hpp>
+#include <Render/RenderWindow.hpp>
 #include <Technique/RenderTechnique.hpp>
 
 #include "AdditionalProperties.hpp"

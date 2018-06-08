@@ -1,6 +1,7 @@
 #include "FrameVariableTreeItemProperty.hpp"
 
 #include <Render/RenderSystem.hpp>
+#include <Design/ChangeTracked.hpp>
 
 #include "PointProperties.hpp"
 #include "MatrixProperties.hpp"

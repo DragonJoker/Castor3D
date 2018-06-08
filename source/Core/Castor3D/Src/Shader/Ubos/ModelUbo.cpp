@@ -9,6 +9,7 @@ using namespace castor;
 
 namespace castor3d
 {
+	uint32_t const ModelUbo::BindingPoint = 5u;
 	String const ModelUbo::BufferModel = cuT( "Model" );
 	String const ModelUbo::ShadowReceiver = cuT( "c3d_shadowReceiver" );
 	String const ModelUbo::MaterialIndex = cuT( "c3d_materialIndex" );

@@ -4,6 +4,9 @@
 #include "AdditionalProperties.hpp"
 
 #include <PostEffect/PostEffect.hpp>
+#include <Render/RenderSystem.hpp>
+
+#include <GlslShader.hpp>
 
 #include <wx/propgrid/advprops.h>
 

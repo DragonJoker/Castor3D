@@ -9,6 +9,7 @@ using namespace castor;
 
 namespace castor3d
 {
+	uint32_t const MatrixUbo::BindingPoint = 2u;
 	String const MatrixUbo::BufferMatrix = cuT( "Matrices" );
 	String const MatrixUbo::Projection = cuT( "c3d_projection" );
 	String const MatrixUbo::CurView = cuT( "c3d_curView" );

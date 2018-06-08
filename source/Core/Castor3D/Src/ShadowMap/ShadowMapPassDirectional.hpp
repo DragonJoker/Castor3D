@@ -94,10 +94,10 @@ namespace castor3d
 		renderer::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
 
 	public:
-		static castor::String const ShadowMapUbo;
-		static castor::String const FarPlane;
-		static uint32_t constexpr UboBindingPoint = 10u;
-		static uint32_t constexpr TextureSize = 4096;
+		C3D_API static castor::String const ShadowMapUbo;
+		C3D_API static castor::String const FarPlane;
+		C3D_API static uint32_t const UboBindingPoint;
+		C3D_API static uint32_t const TextureSize;
 
 		struct Configuration
 		{

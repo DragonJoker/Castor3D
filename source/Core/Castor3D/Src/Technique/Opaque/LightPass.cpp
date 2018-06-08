@@ -14,6 +14,7 @@
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
 
+#include <Command/CommandBufferInheritanceInfo.hpp>
 #include <Image/Texture.hpp>
 #include <Image/TextureView.hpp>
 #include <Pipeline/ColourBlendState.hpp>

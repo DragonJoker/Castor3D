@@ -5,6 +5,8 @@
 
 #include <HDR/ToneMapping.hpp>
 
+#include <GlslShader.hpp>
+
 #include <wx/propgrid/advprops.h>
 
 using namespace castor3d;

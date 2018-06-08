@@ -438,6 +438,18 @@ namespace castor3d
 			, {} );
 	}
 
+	SubsurfaceScatteringPass::Blur::Blur( Blur && rhs )
+		: RenderQuad{ std::forward< RenderQuad >( rhs ) }
+		, m_renderSystem{ rhs.m_renderSystem }
+		, m_geometryBufferResult{ rhs.m_geometryBufferResult }
+		, m_gpInfoUbo{ rhs.m_gpInfoUbo }
+		, m_sceneUbo{ rhs.m_sceneUbo }
+		, m_blurUbo{ rhs.m_blurUbo }
+		, m_renderPass{ std::move( rhs.m_renderPass ) }
+		, m_frameBuffer{ std::move( rhs.m_frameBuffer ) }
+	{
+	}
+
 	void SubsurfaceScatteringPass::Blur::prepareFrame( renderer::CommandBuffer & commandBuffer )const
 	{
 		commandBuffer.beginRenderPass( *m_renderPass
@@ -558,6 +570,18 @@ namespace castor3d
 			, *m_renderPass
 			, bindings
 			, {} );
+	}
+
+	SubsurfaceScatteringPass::Combine::Combine( Combine && rhs )
+		: RenderQuad{ std::forward< RenderQuad >( rhs ) }
+		, m_renderSystem{ rhs.m_renderSystem }
+		, m_blurUbo{ rhs.m_blurUbo }
+		, m_geometryBufferResult{ rhs.m_geometryBufferResult }
+		, m_source{ rhs.m_source }
+		, m_blurResults{ rhs.m_blurResults }
+		, m_renderPass{ std::move( rhs.m_renderPass ) }
+		, m_frameBuffer{ std::move( rhs.m_frameBuffer ) }
+	{
 	}
 
 	void SubsurfaceScatteringPass::Combine::prepareFrame( renderer::CommandBuffer & commandBuffer )const

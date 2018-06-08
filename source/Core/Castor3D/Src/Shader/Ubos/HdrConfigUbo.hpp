@@ -92,7 +92,7 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		static constexpr uint32_t BindingPoint = 8u;
+		C3D_API static uint32_t const BindingPoint;
 		//!\~english	Name of the HDR configuration frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant la configuration du HDR.
 		C3D_API static castor::String const BufferHdrConfig;

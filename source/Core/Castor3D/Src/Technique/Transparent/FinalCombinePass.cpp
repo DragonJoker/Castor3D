@@ -18,6 +18,8 @@
 #include <Pipeline/RasterisationState.hpp>
 #include <RenderPass/FrameBuffer.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
+#include <RenderPass/SubpassDependency.hpp>
 #include <Shader/ShaderProgram.hpp>
 
 #include <GlslSource.hpp>

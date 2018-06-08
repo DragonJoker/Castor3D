@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "GuiCommonPrerequisites.hpp"
 
+#include <Design/ChangeTracked.hpp>
+
 #include <wx/propgrid/propgrid.h>
 
 namespace GuiCommon

@@ -37,6 +37,8 @@ namespace castor3d
 		}
 	}
 
+	uint32_t const ShadowMapPassPoint::TextureSize = 1024;
+	uint32_t const ShadowMapPassPoint::UboBindingPoint = 10u;
 	String const ShadowMapPassPoint::ShadowMapUbo = cuT( "ShadowMap" );
 	String const ShadowMapPassPoint::WorldLightPosition = cuT( "c3d_worldLightPosition" );
 	String const ShadowMapPassPoint::FarPlane = cuT( "c3d_farPlane" );
