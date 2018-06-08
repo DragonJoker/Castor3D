@@ -1,3 +1,4 @@
+#include "Engine.hpp"
 #include "Render/RenderSystem.hpp"
 
 #include <Core/Device.hpp>
