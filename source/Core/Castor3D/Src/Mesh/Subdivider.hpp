@@ -165,7 +165,7 @@ namespace castor3d
 		 */
 		inline void setSubdivisionEndCallback( SubdivisionEndFunction subdivisionEndFunc )
 		{
-			m_onSubdivisionEnd = subdivisionEndFunc;
+			m_onSubdivisionEnd = std::move( subdivisionEndFunc );
 		}
 
 	protected:

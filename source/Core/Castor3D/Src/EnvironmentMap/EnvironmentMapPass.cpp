@@ -116,7 +116,6 @@ namespace castor3d
 		m_backgroundCommands = device.getGraphicsCommandPool().createCommandBuffer( false );
 		auto & commandBuffer = *m_backgroundCommands;
 		m_renderPass = &renderPass;
-		auto & descriptorLayout = pool.getLayout();
 		m_backgroundDescriptorSet = pool.createDescriptorSet( 0u );
 		background.initialiseDescriptorSet( m_matrixUbo
 			, m_modelMatrixUbo
@@ -211,6 +210,7 @@ namespace castor3d
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
 			, nullptr );
-		return *m_finished;
+		result = m_finished.get();
+		return *result;
 	}
 }

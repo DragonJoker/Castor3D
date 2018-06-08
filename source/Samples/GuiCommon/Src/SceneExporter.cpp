@@ -265,7 +265,6 @@ namespace GuiCommon
 				StringStream strF( makeStringStream() );
 				renderer::Buffer< uint32_t > & idxBuffer = submesh->getIndexBuffer();
 				auto stride = uint32_t( sizeof( InterleavedVertex ) );
-				uint32_t uiNbFaces = idxBuffer.getCount() / 3;
 				Point3r ptPos;
 				Point3r ptNml;
 				Point3r ptTex;

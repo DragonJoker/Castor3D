@@ -14,12 +14,7 @@ namespace castor3d
 
 	bool BinaryWriter< Mesh >::doWrite( Mesh const & obj )
 	{
-		bool result = true;
-
-		if ( result )
-		{
-			result = doWriteChunk( obj.getName(), ChunkType::eName, m_chunk );
-		}
+		bool result = doWriteChunk( obj.getName(), ChunkType::eName, m_chunk );
 
 		for ( auto submesh : obj )
 		{

@@ -50,7 +50,7 @@ namespace GuiCommon
 			}
 
 		private:
-			BackgroundDisplayer( wxPropertyGrid & grid )
+			explicit BackgroundDisplayer( wxPropertyGrid & grid )
 				: m_grid{ grid }
 			{
 			}
@@ -129,26 +129,22 @@ namespace GuiCommon
 			wxPGProperty * doCreateTextureImageProperty( wxString const & name
 				, castor3d::TextureLayout const & texture )
 			{
-				wxPGProperty * property = nullptr;
 				REQUIRE( texture.getImage().isStaticSource() );
 				auto source = texture.getImage().toString();
-				property = new wxImageFileProperty{ name
+				return new wxImageFileProperty{ name
 					, name
 					, make_wxString( source ) };
-				return property;
 			}
 
 			wxPGProperty * doCreateTextureImageProperty( wxString const & name
 				, castor3d::TextureLayout const & texture
 				, castor3d::CubeMapFace face )
 			{
-				wxPGProperty * property = nullptr;
 				REQUIRE( texture.getImage( uint32_t( face ) ).isStaticSource() );
 				auto source = texture.getImage( uint32_t( face ) ).toString();
-				property = new wxImageFileProperty{ name
+				return new wxImageFileProperty{ name
 					, name
 					, make_wxString( source ) };
-				return property;
 			}
 
 		private:

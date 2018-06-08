@@ -24,7 +24,7 @@ namespace GuiCommon
 			: public castor3d::ToneMappingVisitor
 		{
 		private:
-			ToneMappingShaderGatherer( ShaderSources & sources )
+			explicit ToneMappingShaderGatherer( ShaderSources & sources )
 				: castor3d::ToneMappingVisitor{}
 				, m_sources{ sources }
 			{

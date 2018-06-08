@@ -403,7 +403,6 @@ namespace castor3d
 		, m_renderPass{ doCreateRenderPass( m_renderSystem, m_result->getFormat() ) }
 	{
 		auto & dstTexture = *m_result;
-		auto & device = getCurrentDevice( m_renderSystem );
 		renderer::Extent2D originalSize{ size.getWidth(), size.getHeight() };
 
 		for ( auto mipLevel = 0u; mipLevel < glsl::Utils::MaxIblReflectionLod + 1u; ++mipLevel )

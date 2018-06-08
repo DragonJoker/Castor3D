@@ -58,8 +58,6 @@ namespace castor3d
 
 		renderer::VertexLayoutPtr doCreateVertexLayout( Engine & engine )
 		{
-			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = getCurrentDevice( renderSystem );
 			renderer::VertexLayoutPtr result = renderer::makeLayout< TexturedQuad::Vertex >( 0u );
 			result->createAttribute( 0u, renderer::Format::eR32G32_SFLOAT, offsetof( TexturedQuad::Vertex, position ) );
 			result->createAttribute( 1u, renderer::Format::eR32G32_SFLOAT, offsetof( TexturedQuad::Vertex, texture ) );

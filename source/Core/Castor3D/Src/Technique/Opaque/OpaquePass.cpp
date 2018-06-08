@@ -111,7 +111,6 @@ namespace castor3d
 
 		m_frameBuffer = m_renderPass->createFrameBuffer( { gpResult[0].getDimensions().width, gpResult[0].getDimensions().height }
 			, std::move( attaches ) );
-		auto & timer = getTimer();
 		m_nodesCommands = device.getGraphicsCommandPool().createCommandBuffer();
 	}
 

@@ -14,7 +14,7 @@ namespace castor3d
 			: public LightingModel
 		{
 		public:
-			C3D_API MetallicBrdfLightingModel( glsl::GlslWriter & writer );
+			C3D_API explicit MetallicBrdfLightingModel( glsl::GlslWriter & writer );
 			C3D_API void computeCombined( glsl::Vec3 const & worldEye
 				, glsl::Vec3 const & albedo
 				, glsl::Float const & metallic

@@ -415,7 +415,6 @@ namespace castor3d
 	bool GaussianBlur::doInitialiseBlurXProgram()
 	{
 		auto & device = getCurrentDevice( *this );
-		auto & cache = getEngine()->getShaderProgramCache();
 		m_blurXVertexShader = getVertexProgram( *getEngine()->getRenderSystem() );
 		m_blurXPixelShader = getBlurXProgram( *getEngine()->getRenderSystem(), renderer::isDepthFormat( m_format ) );
 

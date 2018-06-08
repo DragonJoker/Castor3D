@@ -131,7 +131,6 @@ namespace castor3d
 		, Size const & size )
 	{
 		auto & renderSystem = *renderTarget.getEngine()->getRenderSystem();
-		auto & device = getCurrentDevice( renderSystem );
 
 		SamplerSPtr sampler = renderTarget.getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + string::toString( renderTarget.m_index ) );
 		renderer::ImageCreateInfo createInfo{};
@@ -671,7 +670,6 @@ namespace castor3d
 		, CameraSPtr camera )
 	{
 		auto elapsedTime = m_timer.getElapsed();
-		auto & queue = getCurrentDevice( *this ).getGraphicsQueue();
 		SceneSPtr scene = getScene();
 		m_toneMapping->update();
 		renderer::SemaphoreCRefArray signalsToWait;

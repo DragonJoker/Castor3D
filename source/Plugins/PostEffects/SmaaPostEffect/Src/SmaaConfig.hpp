@@ -34,7 +34,7 @@ namespace smaa
 
 	struct SmaaConfig
 	{
-		SmaaConfig( castor3d::Parameters const & parameters )
+		explicit SmaaConfig( castor3d::Parameters const & parameters )
 		{
 			castor::String value;
 

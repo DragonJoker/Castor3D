@@ -57,10 +57,6 @@ after_build:
   - cmake --build . --target install --config %CONFIGURATION%
   - cmd: cd ..
   - cmd: 7z a Castor3D-%PLATFORM_NAME%.zip .\package\Castor3D\*
-  
-test_script:
-  - cmd: cd C:\projects\Castor3D\build
-  - cmd: ctest --build-config %configuration% --output-on-failure
 
 artifacts:
   - path: Castor3D-%PLATFORM_NAME%.zip

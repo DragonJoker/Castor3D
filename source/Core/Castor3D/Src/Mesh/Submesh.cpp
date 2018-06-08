@@ -327,7 +327,6 @@ namespace castor3d
 	void Submesh::doGenerateVertexBuffer()
 	{
 		auto & device = getCurrentDevice( *this );
-		uint32_t stride = sizeof( InterleavedVertex );
 		uint32_t size = uint32_t( m_points.size() );
 
 		if ( size )

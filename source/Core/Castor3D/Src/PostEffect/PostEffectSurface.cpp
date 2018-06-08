@@ -163,7 +163,6 @@ namespace castor3d
 			this->depthTexture = depthTexture;
 			this->depthTexture->initialise();
 			attaches.emplace_back( *( renderPass.getAttachments().begin() + index ), depthTexture->getDefaultView() );
-			++index;
 		}
 
 		frameBuffer = renderPass.createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }

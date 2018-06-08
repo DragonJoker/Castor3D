@@ -14,12 +14,7 @@ namespace castor3d
 
 	bool BinaryWriter< Skeleton >::doWrite( Skeleton const & obj )
 	{
-		bool result = true;
-
-		if ( result )
-		{
-			result = doWriteChunk( obj.getGlobalInverseTransform(), ChunkType::eSkeletonGlobalInverse, m_chunk );
-		}
+		bool result = doWriteChunk( obj.getGlobalInverseTransform(), ChunkType::eSkeletonGlobalInverse, m_chunk );
 
 		for ( auto bone : obj.m_bones )
 		{

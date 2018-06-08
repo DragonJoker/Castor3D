@@ -40,7 +40,6 @@ namespace castor3d
 	{
 		bool result = false;
 		bool hasFile = false;
-		uint8_t i = 0;
 
 		for ( auto module : shaderProgram.m_modules )
 		{

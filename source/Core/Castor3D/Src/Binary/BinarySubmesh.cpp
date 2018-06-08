@@ -67,22 +67,17 @@ namespace castor3d
 
 	bool BinaryWriter< Submesh >::doWrite( Submesh const & obj )
 	{
-		bool result = true;
+		auto count = obj.getPointsCount();
+		bool result = doWriteChunk( count, ChunkType::eSubmeshVertexCount, m_chunk );
 
 		if ( result )
 		{
-			auto count = obj.getPointsCount();
-			result = doWriteChunk( count, ChunkType::eSubmeshVertexCount, m_chunk );
-
-			if ( result )
-			{
-				result = doWriteChunk( obj.getPoints(), ChunkType::eSubmeshVertex, m_chunk );
-			}
+			result = doWriteChunk( obj.getPoints(), ChunkType::eSubmeshVertex, m_chunk );
 		}
 
 		if ( result )
 		{
-			uint32_t count = obj.getFaceCount();
+			count = obj.getFaceCount();
 
 			if ( obj.hasComponent( TriFaceMapping::Name ) )
 			{
@@ -102,7 +97,7 @@ namespace castor3d
 			else if ( obj.hasComponent( LinesMapping::Name ) )
 			{
 				result = doWriteChunk( 2u, ChunkType::eSubmeshIndexComponentCount, m_chunk );
-				uint32_t count = obj.getFaceCount();
+				count = obj.getFaceCount();
 
 				if ( result )
 				{

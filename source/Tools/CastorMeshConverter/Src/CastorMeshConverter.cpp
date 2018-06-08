@@ -268,32 +268,31 @@ struct ObjectPostWriter< false, castor3d::Mesh >
 
 		if ( result && !options.split )
 		{
-			auto & scene = *object.getScene();
 			auto newPath = path / ( options.output + cuT( "Integration.cscn" ) );
 			castor::TextFile file{ newPath, castor::File::OpenMode::eWrite };
-			file.writeText( cuT( "\tmesh \"" ) + options.output + cuT( "\"\n" ) );
-			file.writeText( cuT( "\t{\n" ) );
-			file.writeText( cuT( "\t\timport \"Meshes/" ) + options.output + cuT( ".cmsh\"\n" ) );
-			file.writeText( cuT( "\t}\n" ) );
-			file.writeText( cuT( "\tscene_node \"" ) + options.output + cuT( "\"\n" ) );
-			file.writeText( cuT( "\t{\n" ) );
-			file.writeText( cuT( "\t\tposition 0.0 0.0 0.0\n" ) );
-			file.writeText( cuT( "\t}\n" ) );
-			file.writeText( cuT( "\tobject \"" ) + options.output + cuT( "\"\n" ) );
-			file.writeText( cuT( "\t{\n" ) );
-			file.writeText( cuT( "\t\tparent \"" ) + options.output + cuT( "\"\n" ) );
-			file.writeText( cuT( "\t\tmesh \"" ) + options.output + cuT( "\"\n" ) );
-			file.writeText( cuT( "\t\tmaterials\n" ) );
-			file.writeText( cuT( "\t\t{\n\n" ) );
+			result = file.writeText( cuT( "\tmesh \"" ) + options.output + cuT( "\"\n" ) )
+				&& file.writeText( cuT( "\t{\n" ) )
+				&& file.writeText( cuT( "\t\timport \"Meshes/" ) + options.output + cuT( ".cmsh\"\n" ) )
+				&& file.writeText( cuT( "\t}\n" ) )
+				&& file.writeText( cuT( "\tscene_node \"" ) + options.output + cuT( "\"\n" ) )
+				&& file.writeText( cuT( "\t{\n" ) )
+				&& file.writeText( cuT( "\t\tposition 0.0 0.0 0.0\n" ) )
+				&& file.writeText( cuT( "\t}\n" ) )
+				&& file.writeText( cuT( "\tobject \"" ) + options.output + cuT( "\"\n" ) )
+				&& file.writeText( cuT( "\t{\n" ) )
+				&& file.writeText( cuT( "\t\tparent \"" ) + options.output + cuT( "\"\n" ) )
+				&& file.writeText( cuT( "\t\tmesh \"" ) + options.output + cuT( "\"\n" ) )
+				&& file.writeText( cuT( "\t\tmaterials\n" ) )
+				&& file.writeText( cuT( "\t\t{\n\n" ) );
 			uint32_t index = 0u;
 
 			for ( auto & submesh : object )
 			{
-				file.writeText( cuT( "\t\tmaterial " ) + castor::string::toString( index++, std::locale{ "C" } ) + cuT( " \"" ) + submesh->getDefaultMaterial()->getName() + cuT( "\"\n" ) );
+				result &= file.writeText( cuT( "\t\tmaterial " ) + castor::string::toString( index++, std::locale{ "C" } ) + cuT( " \"" ) + submesh->getDefaultMaterial()->getName() + cuT( "\"\n" ) );
 			}
 
-			file.writeText( cuT( "\t}\n" ) );
-			file.writeText( cuT( "}\n" ) );
+			result &= file.writeText( cuT( "\t}\n" ) );
+			result &= file.writeText( cuT( "}\n" ) );
 		}
 
 		return result;
@@ -307,42 +306,35 @@ struct ObjectPostWriter< true, castor3d::Mesh >
 		, castor3d::Mesh const & object
 		, Options const & options )
 	{
-		bool result = true;
-
-		if ( result )
-		{
-			auto name = options.output + cuT( "_" ) + castor::string::toString( options.submesh, std::locale{ "C" } );
-			auto & scene = *object.getScene();
-			auto newPath = path / ( options.output + cuT( "Integration.cscn" ) );
-			auto & submesh = *object.getSubmesh( 0u );
-			castor::Point3f position;
+		auto name = options.output + cuT( "_" ) + castor::string::toString( options.submesh, std::locale{ "C" } );
+		auto & scene = *object.getScene();
+		auto newPath = path / ( options.output + cuT( "Integration.cscn" ) );
+		auto & submesh = *object.getSubmesh( 0u );
+		castor::Point3f position;
 			
-			if ( options.recenter )
-			{
-				position = submesh.getBoundingBox().getCenter();
-			}
-
-			auto stream = castor::makeStringStream();
-			stream << position[0] << cuT( " " ) << position[1] << cuT( " " ) << position[2];
-
-			castor::TextFile file{ newPath, castor::File::OpenMode::eAppend };
-			file.writeText( cuT( "\tmesh \"" ) + name + cuT( "\"\n" ) );
-			file.writeText( cuT( "\t{\n" ) );
-			file.writeText( cuT( "\t\timport \"Meshes/" ) + name + cuT( ".cmsh\"\n" ) );
-			file.writeText( cuT( "\t}\n" ) );
-			file.writeText( cuT( "\tscene_node \"" ) + name + cuT( "\"\n" ) );
-			file.writeText( cuT( "\t{\n" ) );
-			file.writeText( cuT( "\t\tposition " ) + stream.str() + cuT( "\n" ) );
-			file.writeText( cuT( "\t}\n" ) );
-			file.writeText( cuT( "\tobject \"" ) + name + cuT( "\"\n" ) );
-			file.writeText( cuT( "\t{\n" ) );
-			file.writeText( cuT( "\t\tparent \"" ) + name + cuT( "\"\n" ) );
-			file.writeText( cuT( "\t\tmesh \"" ) + name + cuT( "\"\n" ) );
-			file.writeText( cuT( "\t\tmaterial \"" ) + object.getSubmesh( 0u )->getDefaultMaterial()->getName() + cuT( "\"\n" ) );
-			file.writeText( cuT( "\t}\n\n" ) );
+		if ( options.recenter )
+		{
+			position = submesh.getBoundingBox().getCenter();
 		}
 
-		return result;
+		auto stream = castor::makeStringStream();
+		stream << position[0] << cuT( " " ) << position[1] << cuT( " " ) << position[2];
+
+		castor::TextFile file{ newPath, castor::File::OpenMode::eAppend };
+		return file.writeText( cuT( "\tmesh \"" ) + name + cuT( "\"\n" ) )
+			&& file.writeText( cuT( "\t{\n" ) )
+			&& file.writeText( cuT( "\t\timport \"Meshes/" ) + name + cuT( ".cmsh\"\n" ) )
+			&& file.writeText( cuT( "\t}\n" ) )
+			&& file.writeText( cuT( "\tscene_node \"" ) + name + cuT( "\"\n" ) )
+			&& file.writeText( cuT( "\t{\n" ) )
+			&& file.writeText( cuT( "\t\tposition " ) + stream.str() + cuT( "\n" ) )
+			&& file.writeText( cuT( "\t}\n" ) )
+			&& file.writeText( cuT( "\tobject \"" ) + name + cuT( "\"\n" ) )
+			&& file.writeText( cuT( "\t{\n" ) )
+			&& file.writeText( cuT( "\t\tparent \"" ) + name + cuT( "\"\n" ) )
+			&& file.writeText( cuT( "\t\tmesh \"" ) + name + cuT( "\"\n" ) )
+			&& file.writeText( cuT( "\t\tmaterial \"" ) + object.getSubmesh( 0u )->getDefaultMaterial()->getName() + cuT( "\"\n" ) )
+			&& file.writeText( cuT( "\t}\n\n" ) );
 	}
 };
 

@@ -31,7 +31,7 @@ namespace castor
 		 *\brief		Constructeur, charge la bibliothèque
 		 *\param[in]	pathFile	Le chemin du fichier
 		 */
-		CU_API DynamicLibrary( Path const & pathFile )noexcept;
+		CU_API explicit DynamicLibrary( Path const & pathFile )noexcept;
 		/**
 		 *\~english
 		 *\brief		Constructor, loads the library.
@@ -40,7 +40,7 @@ namespace castor
 		 *\brief		Constructeur, charge la bibliothèque
 		 *\param[in]	pathFile	Le chemin du fichier
 		 */
-		CU_API DynamicLibrary( String const & pathFile )noexcept;
+		CU_API explicit DynamicLibrary( String const & pathFile )noexcept;
 		/**
 		 *\~english
 		 *\brief		Copy constructor

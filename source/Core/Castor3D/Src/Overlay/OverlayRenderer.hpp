@@ -37,7 +37,7 @@ namespace castor3d
 			: public OverlayVisitor
 		{
 		public:
-			Preparer( OverlayRenderer & renderer );
+			explicit Preparer( OverlayRenderer & renderer );
 
 			void visit( PanelOverlay const & overlay )override;
 			void visit( BorderPanelOverlay const & overlay )override;
@@ -313,7 +313,7 @@ namespace castor3d
 		castor::String m_previousCaption;
 		bool m_sizeChanged{ true };
 		MatrixUbo m_matrixUbo;
-		renderer::Semaphore const * m_toWait;
+		renderer::Semaphore const * m_toWait{ nullptr };
 		renderer::SemaphorePtr m_finished;
 		renderer::FencePtr m_fence;
 	};

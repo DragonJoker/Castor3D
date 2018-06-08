@@ -13,12 +13,7 @@ namespace castor3d
 
 	bool BinaryWriter< SkeletonAnimationKeyFrame >::doWrite( SkeletonAnimationKeyFrame const & obj )
 	{
-		bool result = true;
-
-		if ( result )
-		{
-			result = doWriteChunk( double( obj.getTimeIndex().count() ) / 1000.0, ChunkType::eSkeletonAnimationKeyFrameTime, m_chunk );
-		}
+		bool result = doWriteChunk( double( obj.getTimeIndex().count() ) / 1000.0, ChunkType::eSkeletonAnimationKeyFrameTime, m_chunk );
 
 		for ( auto & it : obj.m_transforms )
 		{

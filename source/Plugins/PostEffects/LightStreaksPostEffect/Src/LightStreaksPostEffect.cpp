@@ -269,7 +269,6 @@ namespace light_streaks
 		m_kawaseUbo.initialise();
 		m_linearSampler->initialise();
 		m_nearestSampler->initialise();
-		auto & engine = *getRenderSystem()->getEngine();
 		auto & device = getCurrentDevice( *this );
 		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
 

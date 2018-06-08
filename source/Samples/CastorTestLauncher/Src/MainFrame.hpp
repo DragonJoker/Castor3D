@@ -19,7 +19,7 @@ namespace test_launcher
 		: public wxFrame
 	{
 	public:
-		MainFrame( castor3d::Engine & engine );
+		explicit MainFrame( castor3d::Engine & engine );
 		~MainFrame();
 
 		bool initialise();

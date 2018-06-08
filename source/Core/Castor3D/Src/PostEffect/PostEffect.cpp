@@ -39,7 +39,6 @@ namespace castor3d
 
 	bool PostEffect::initialise( TextureLayout const & texture )
 	{
-		auto & device = getCurrentDevice( *this );
 		m_target = &texture;
 		auto name = m_fullName;
 		name = castor::string::replace( name, cuT( "PostEffect" ), castor::String{} );

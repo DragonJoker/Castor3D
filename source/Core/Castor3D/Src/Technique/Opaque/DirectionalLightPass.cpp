@@ -207,16 +207,6 @@ namespace castor3d
 		, SceneUbo & sceneUbo
 		, RenderPassTimer & timer )
 	{
-		float data[] =
-		{
-			-1.0f, -1.0f,
-			-1.0f, +1.0f,
-			+1.0f, -1.0f,
-			+1.0f, -1.0f,
-			-1.0f, +1.0f,
-			+1.0f, +1.0f,
-		};
-
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = getCurrentDevice( renderSystem );
 		m_vertexBuffer = renderer::makeVertexBuffer< float >( device
@@ -228,6 +218,15 @@ namespace castor3d
 			, m_vertexBuffer->getCount()
 			, renderer::MemoryMapFlag::eInvalidateRange | renderer::MemoryMapFlag::eWrite ) )
 		{
+			float data[] =
+			{
+				-1.0f, -1.0f,
+				-1.0f, +1.0f,
+				+1.0f, -1.0f,
+				+1.0f, -1.0f,
+				-1.0f, +1.0f,
+				+1.0f, +1.0f,
+			};
 			std::memcpy( buffer, data, sizeof( data ) );
 			m_vertexBuffer->flush( 0u, m_vertexBuffer->getCount() );
 			m_vertexBuffer->unlock();
