@@ -152,10 +152,8 @@ set( CastorBinsDependencies
 
 set( Castor3DBinsDependencies
 	${CastorBinsDependencies}
+	Renderer
 	Castor3D
-	VkRenderer
-	GlRenderer
-	Gl3Renderer
 )
 
 #--------------------------------------------------------------------------------------------------
@@ -203,10 +201,6 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			enable_testing()
 		endif ()
 
-		add_subdirectory( external/FreeType )
-		if ( ${CASTOR_BUILD_CASTOR3D} )
-			add_subdirectory( ${RENDERERLIB_DIR} )
-		endif ()
 		add_subdirectory( Core )
 		if ( ${CASTOR_BUILD_CASTOR3D} )
 			add_subdirectory( Plugins )
@@ -214,6 +208,17 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			add_subdirectory( Interop )
 		endif ()
 		add_subdirectory( Tools )
+
+		add_subdirectory( external/FreeType )
+		if ( ${CASTOR_BUILD_CASTOR3D} )
+			if ( NOT CASTOR_BUILDGRP_RENDERER )
+				set( RENDERER_BUILD_RENDERER_PLUGINS FALSE )
+			else ()
+				set( RENDERER_BUILD_RENDERER_PLUGINS TRUE )
+				set( RENDERER_STATIC_RENDERER_PLUGINS TRUE )
+			endif ()
+			add_subdirectory( ${RENDERERLIB_DIR} )
+		endif ()
 
 		CoreInit()
 		if ( ${CASTOR_BUILD_CASTOR3D} )

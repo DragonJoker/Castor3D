@@ -152,9 +152,9 @@ namespace castor3d
 			{
 				return nullptr;
 			}
-			, PluginCache::Initialiser{ []( PluginSPtr ){} }
-			, PluginCache::Cleaner{ []( PluginSPtr ){} }
-			, PluginCache::Merger{} );
+			, dummy
+			, dummy
+			, mergeResource );
 		m_overlayCache = makeCache< Overlay, String >(	*this
 			, [this]( String const & name, OverlayType type, SceneSPtr scene, OverlaySPtr parent )
 			{
