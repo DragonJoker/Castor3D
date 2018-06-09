@@ -23,7 +23,7 @@ env:
 git:
     submodules: false
 
-before-install:
+before_install:
     - git submodule update --init -- "source/CMake"
     - git submodule update --init -- "source/external/RendererLib"
 
