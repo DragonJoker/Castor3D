@@ -13,7 +13,7 @@ add_target(
 	${PROJECT_NAME}
 	lib
 	"CastorUtils"
-	"CastorUtils;${CastorMinLibraries}"
+	"CastorUtils;${CastorBinsDependencies}"
 )
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Test" )

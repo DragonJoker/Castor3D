@@ -13,9 +13,9 @@ namespace Uncharted2
 	\version	0.8.0
 	\date		11/03/2016
 	\~english
-	\brief		Implements Reinhard tone mapping algorithm.
+	\brief		Implements Uncharted 2 tone mapping algorithm.
 	\~french
-	\brief		Implémente l'algorithme de mappage de ton de Reinhard
+	\brief		Implémente l'algorithme de mappage de ton d'Uncharted 2.
 	*/
 	class ToneMapping
 		: public castor3d::ToneMapping
@@ -32,6 +32,7 @@ namespace Uncharted2
 		 *\param[in]	parameters	Les paramètres spécifiques à l'implémentation.
 		 */
 		ToneMapping( castor3d::Engine & engine
+			, castor3d::HdrConfig & hdrConfig
 			, castor3d::Parameters const & parameters );
 		/**
 		 *\~english
@@ -51,6 +52,7 @@ namespace Uncharted2
 		 *\param[in]	parameters	Les paramètres spécifiques à l'implémentation.
 		 */
 		static castor3d::ToneMappingSPtr create( castor3d::Engine & engine
+			, castor3d::HdrConfig & hdrConfig
 			, castor3d::Parameters const & parameters );
 
 	private:
@@ -68,6 +70,7 @@ namespace Uncharted2
 		void doUpdate()override;
 
 	public:
+		static castor::String Type;
 		static castor::String Name;
 	};
 }

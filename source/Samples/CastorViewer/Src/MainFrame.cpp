@@ -16,6 +16,7 @@
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderLoop.hpp>
 #include <Render/RenderWindow.hpp>
+#include <Scene/Scene.hpp>
 
 #include <ImagesLoader.hpp>
 #include <MaterialsList.hpp>
@@ -133,7 +134,10 @@ namespace CastorViewer
 
 	bool MainFrame::initialise()
 	{
-		Logger::registerCallback( std::bind( &MainFrame::doLogCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3 ), this );
+		Logger::registerCallback( [this]( String const & logText, LogType logType, bool newLine )
+			{
+				doLogCallback( logText, logType, newLine );
+			}, this );
 		bool result = doInitialiseImages();
 
 		if ( result )
@@ -215,8 +219,10 @@ namespace CastorViewer
 						}
 						else
 						{
+							m_renderPanel->disableWindowResize();
 							Maximize( false );
 							SetClientSize( size );
+							m_renderPanel->enableWindowResize();
 							Maximize();
 						}
 
@@ -253,7 +259,10 @@ namespace CastorViewer
 					m_toolBar->EnableTool( eID_TOOL_RECORD, true );
 
 #endif
-					SetTitle( wxT( "CastorViewer - " ) + m_filePath.getFileName( true ) );
+					SetTitle( wxT( "Castor Viewer - " )
+						+ make_wxString( scene->getEngine()->getRenderSystem()->getRendererType() )
+						+ wxT( " - " )
+						+ m_filePath.getFileName( true ) );
 				}
 
 				if ( wxGetApp().getCastor()->isThreaded() )
@@ -570,20 +579,24 @@ namespace CastorViewer
 			if ( castor.isThreaded() && !m_recorder.IsRecording() )
 			{
 				castor.getRenderLoop().pause();
-				m_renderPanel->getRenderWindow()->saveFrame();
+				m_renderPanel->getRenderWindow()->enableSaveFrame();
 				castor.getRenderLoop().renderSyncFrame();
 				auto buffer = m_renderPanel->getRenderWindow()->getSavedFrame();
 				castor.getRenderLoop().resume();
 				Size size = buffer->dimensions();
-				CreateBitmapFromBuffer( buffer, true, bitmap );
+				CreateBitmapFromBuffer( buffer
+					, false
+					, bitmap );
 			}
 			else
 			{
-				m_renderPanel->getRenderWindow()->saveFrame();
+				m_renderPanel->getRenderWindow()->enableSaveFrame();
 				castor.getRenderLoop().renderSyncFrame();
 				auto buffer = m_renderPanel->getRenderWindow()->getSavedFrame();
 				Size size = buffer->dimensions();
-				CreateBitmapFromBuffer( buffer, true, bitmap );
+				CreateBitmapFromBuffer( buffer
+					, false
+					, bitmap );
 			}
 
 			wxString strWildcard = _( "All supported files" );
@@ -765,6 +778,12 @@ namespace CastorViewer
 		m_auiManager.DetachPane( m_toolBar );
 		m_messageLog = nullptr;
 		m_errorLog = nullptr;
+
+		if ( m_renderPanel )
+		{
+			m_renderPanel->disableWindowResize();
+		}
+
 		Hide();
 
 		if ( m_timer )

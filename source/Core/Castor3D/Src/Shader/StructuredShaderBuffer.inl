@@ -1,7 +1,8 @@
 #include "Engine.hpp"
 #include "Render/RenderSystem.hpp"
-#include "Texture/TextureLayout.hpp"
 #include "Texture/Sampler.hpp"
+
+#include <Image/Texture.hpp>
 
 namespace castor3d
 {
@@ -40,7 +41,7 @@ namespace castor3d
 	template< typename ElementTypeTraits >
 	void StructuredShaderBuffer< ElementTypeTraits >::remove( ElementType & element )
 	{
-		auto id = element.getId() - 1u;
+		auto id = element.getId();
 		REQUIRE( id < m_elements.size() );
 		REQUIRE( &element == m_elements[id] );
 		auto it = m_elements.erase( m_elements.begin() + id );

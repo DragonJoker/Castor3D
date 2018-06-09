@@ -17,7 +17,7 @@ namespace glsl
 		using my_mat = Mat2T< ValueT >;
 
 		inline Mat2T();
-		inline Mat2T( GlslWriter * p_writer, castor::String const & p_name = castor::String() );
+		inline Mat2T( GlslWriter * writer, castor::String const & p_name = castor::String() );
 		inline my_mat & operator=( my_mat const & p_rhs );
 		template< typename RhsT > inline my_mat & operator=( RhsT const & p_rhs );
 		template< typename IndexT > inline my_vec operator[]( IndexT const & p_rhs )const;
@@ -33,7 +33,7 @@ namespace glsl
 		using my_mat = Mat3T< ValueT >;
 
 		inline Mat3T();
-		inline Mat3T( GlslWriter * p_writer, castor::String const & p_name = castor::String() );
+		inline Mat3T( GlslWriter * writer, castor::String const & p_name = castor::String() );
 		inline my_mat & operator=( my_mat const & p_rhs );
 		template< typename RhsT > inline my_mat & operator=( RhsT const & p_rhs );
 		template< typename IndexT > inline my_vec operator[]( IndexT const & p_rhs )const;
@@ -49,7 +49,7 @@ namespace glsl
 		using my_mat = Mat4T< ValueT >;
 
 		inline Mat4T();
-		inline Mat4T( GlslWriter * p_writer, castor::String const & p_name = castor::String() );
+		inline Mat4T( GlslWriter * writer, castor::String const & p_name = castor::String() );
 		inline my_mat & operator=( my_mat const & p_rhs );
 		template< typename RhsT > inline my_mat & operator=( RhsT const & p_rhs );
 		template< typename IndexT > inline my_vec operator[]( IndexT const & p_rhs )const;

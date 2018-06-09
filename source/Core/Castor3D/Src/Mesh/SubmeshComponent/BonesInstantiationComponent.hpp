@@ -7,6 +7,8 @@ See LICENSE file in root folder
 #include "BonesComponent.hpp"
 #include "InstantiationComponent.hpp"
 
+#include "Shader/ShaderBuffer.hpp"
+
 namespace castor3d
 {
 	/*!
@@ -46,7 +48,10 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
-		C3D_API void gather( VertexBufferArray & buffers )override;
+		C3D_API void gather( MaterialSPtr material
+			, renderer::BufferCRefArray & buffers
+			, std::vector< uint64_t > & offsets
+			, renderer::VertexLayoutCRefArray & layouts )override;
 		/**
 		 *\~english
 		 *\return		The skeleton.
@@ -73,7 +78,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le ShaderStorageBuffer d'instanciation des os.
 		 */
-		inline ShaderStorageBuffer const & getInstancedBonesBuffer()const
+		inline ShaderBuffer const & getInstancedBonesBuffer()const
 		{
 			return *m_instancedBonesBuffer;
 		}
@@ -83,7 +88,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le ShaderStorageBuffer d'instanciation des os.
 		 */
-		inline ShaderStorageBuffer & getInstancedBonesBuffer()
+		inline ShaderBuffer & getInstancedBonesBuffer()
 		{
 			return *m_instancedBonesBuffer;
 		}
@@ -93,7 +98,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les indicateurs de shader.
 		 */
-		inline ProgramFlags getProgramFlags()const override
+		inline ProgramFlags getProgramFlags( MaterialSPtr material )const override
 		{
 			return ProgramFlags( 0 );
 		}
@@ -108,15 +113,9 @@ namespace castor3d
 		C3D_API static castor::String const Name;
 
 	private:
-		//!\~english	The instantiation component.
-		//!\~french		Le composant d'instantiation.
 		InstantiationComponent const & m_instantiation;
-		//!\~english	The skinning component.
-		//!\~french		Le composant de skinning.
 		BonesComponent const & m_bones;
-		//!\~english	The bones buffer (instantiation).
-		//!\~french		Le tampon de bones (instanciation).
-		ShaderStorageBufferSPtr m_instancedBonesBuffer;
+		ShaderBufferUPtr m_instancedBonesBuffer;
 	};
 }
 

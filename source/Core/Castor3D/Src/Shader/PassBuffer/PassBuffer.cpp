@@ -5,6 +5,8 @@
 #include "Render/RenderSystem.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
 
+#include <Descriptor/DescriptorSetLayoutBinding.hpp>
+
 #include <Design/ArrayView.hpp>
 
 using namespace castor;
@@ -37,7 +39,7 @@ namespace castor3d
 
 	void PassBuffer::removePass( Pass & pass )
 	{
-		auto id = pass.getId() - 1u;
+		auto id = pass.getId();
 		REQUIRE( id < m_passes.size() );
 		REQUIRE( &pass == m_passes[id] );
 		auto it = m_passes.erase( m_passes.begin() + id );
@@ -70,9 +72,15 @@ namespace castor3d
 		}
 	}
 
-	void PassBuffer::bind()const
+	renderer::DescriptorSetLayoutBinding PassBuffer::createLayoutBinding()const
 	{
-		m_buffer.bind( PassBufferIndex );
+		return m_buffer.createLayoutBinding( PassBufferIndex );
+	}
+
+	void PassBuffer::createBinding( renderer::DescriptorSet & descriptorSet
+		, renderer::DescriptorSetLayoutBinding const & binding )const
+	{
+		m_buffer.createBinding( descriptorSet, binding );
 	}
 
 	void PassBuffer::visit( LegacyPass const & pass )

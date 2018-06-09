@@ -1,4 +1,4 @@
-﻿namespace glsl
+namespace glsl
 {
 	//*****************************************************************************************
 
@@ -117,8 +117,8 @@
 	}
 
 	template< typename ValueT >
-	Mat2T< ValueT >::Mat2T( GlslWriter * p_writer, castor::String const & p_name )
-		: Type( details::Mat2Traits< ValueT >::getName(), p_writer, p_name )
+	Mat2T< ValueT >::Mat2T( GlslWriter * writer, castor::String const & p_name )
+		: Type( details::Mat2Traits< ValueT >::getName(), writer, p_name )
 	{
 	}
 
@@ -158,7 +158,7 @@
 	template< typename ValueT >
 	Vec2T< ValueT > Mat2T< ValueT >::operator[]( int const & p_rhs )const
 	{
-		Vec2T< ValueT > result{ m_writer, castor::String( *this ) + cuT( "[" ) + castor::string::toString( p_rhs ) + cuT( "]" ) };
+		Vec2T< ValueT > result{ m_writer, castor::String( *this ) + cuT( "[" ) + castor::string::toString( p_rhs, 10, Expr::getLocale() ) + cuT( "]" ) };
 		return result;
 	}
 
@@ -171,8 +171,8 @@
 	}
 
 	template< typename ValueT >
-	Mat3T< ValueT >::Mat3T( GlslWriter * p_writer, castor::String const & p_name )
-		: Type( details::Mat3Traits< ValueT >::getName(), p_writer, p_name )
+	Mat3T< ValueT >::Mat3T( GlslWriter * writer, castor::String const & p_name )
+		: Type( details::Mat3Traits< ValueT >::getName(), writer, p_name )
 	{
 	}
 
@@ -212,7 +212,7 @@
 	template< typename ValueT >
 	Vec3T< ValueT > Mat3T< ValueT >::operator[]( int const & p_rhs )const
 	{
-		Vec3T< ValueT > result{ m_writer, castor::String( *this ) + cuT( "[" ) + castor::string::toString( p_rhs ) + cuT( "]" ) };
+		Vec3T< ValueT > result{ m_writer, castor::String( *this ) + cuT( "[" ) + castor::string::toString( p_rhs, 10, Expr::getLocale() ) + cuT( "]" ) };
 		return result;
 	}
 
@@ -225,8 +225,8 @@
 	}
 
 	template< typename ValueT >
-	Mat4T< ValueT >::Mat4T( GlslWriter * p_writer, castor::String const & p_name )
-		: Type( details::Mat4Traits< ValueT >::getName(), p_writer, p_name )
+	Mat4T< ValueT >::Mat4T( GlslWriter * writer, castor::String const & p_name )
+		: Type( details::Mat4Traits< ValueT >::getName(), writer, p_name )
 	{
 	}
 
@@ -266,7 +266,7 @@
 	template< typename ValueT >
 	Vec4T< ValueT > Mat4T< ValueT >::operator[]( int const & p_rhs )const
 	{
-		Vec4T< ValueT > result{ m_writer, castor::String( *this ) + cuT( "[" ) + castor::string::toString( p_rhs ) + cuT( "]" ) };
+		Vec4T< ValueT > result{ m_writer, castor::String( *this ) + cuT( "[" ) + castor::string::toString( p_rhs, 10, Expr::getLocale() ) + cuT( "]" ) };
 		return result;
 	}
 

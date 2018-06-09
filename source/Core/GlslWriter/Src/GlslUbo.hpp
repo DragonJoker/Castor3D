@@ -21,45 +21,46 @@ namespace glsl
 
 		using Info = BoInfo< Ubo::Layout >;
 
-		GlslWriter_API Ubo( GlslWriter & p_writer
-			, castor::String const & p_name
-			, uint32_t p_bind
-			, Layout p_layout = Layout::eStd140 );
+		GlslWriter_API Ubo( GlslWriter & writer
+			, castor::String const & name
+			, uint32_t bind
+			, uint32_t set = 0u
+			, Layout layout = Layout::eStd140 );
 		GlslWriter_API void end();
 
 		template< typename T >
-		inline T declMember( castor::String const & p_name );
+		inline T declMember( castor::String const & name );
 		template< typename T >
-		inline Array< T > declMember( castor::String const & p_name
+		inline Array< T > declMember( castor::String const & name
 			, uint32_t p_dimension );
 		template< typename T >
-		inline Array< T > declMemberArray( castor::String const & p_name );
+		inline Array< T > declMemberArray( castor::String const & name );
 		template< typename T >
-		inline Optional< T > declMember( castor::String const & p_name
+		inline Optional< T > declMember( castor::String const & name
 			, bool p_enabled );
 		template< typename T >
-		inline Optional< Array< T > > declMember( castor::String const & p_name
+		inline Optional< Array< T > > declMember( castor::String const & name
 			, uint32_t p_dimension
 			, bool p_enabled );
 		template< typename T >
-		inline Optional< Array< T > > declMemberArray( castor::String const & p_name
+		inline Optional< Array< T > > declMemberArray( castor::String const & name
 			, bool p_enabled );
 		template< typename T >
-		inline T getMember( castor::String const & p_name );
+		inline T getMember( castor::String const & name );
 		template< typename T >
-		inline Array< T > getMember( castor::String const & p_name
+		inline Array< T > getMember( castor::String const & name
 			, uint32_t p_dimension );
 		template< typename T >
-		inline Array< T > getMemberArray( castor::String const & p_name );
+		inline Array< T > getMemberArray( castor::String const & name );
 		template< typename T >
-		inline Optional< T > getMember( castor::String const & p_name
+		inline Optional< T > getMember( castor::String const & name
 			, bool p_enabled );
 		template< typename T >
-		inline Optional< Array< T > > getMember( castor::String const & p_name
+		inline Optional< Array< T > > getMember( castor::String const & name
 			, uint32_t p_dimension
 			, bool p_enabled );
 		template< typename T >
-		inline Optional< Array< T > > getMemberArray( castor::String const & p_name
+		inline Optional< Array< T > > getMemberArray( castor::String const & name
 			, bool p_enabled );
 
 	private:

@@ -11,7 +11,7 @@
 #include "Mesh/Vertex.hpp"
 #include "Scene/Geometry.hpp"
 #include "Scene/Scene.hpp"
-#include "Texture/TextureImage.hpp"
+#include "Texture/TextureView.hpp"
 #include "Texture/TextureLayout.hpp"
 
 using namespace castor;
@@ -84,9 +84,7 @@ namespace castor3d
 					{
 						for ( auto & vertex : submesh->getPoints() )
 						{
-							Coords3r position;
-							Vertex::getPosition( vertex, position );
-							position *= scale;
+							vertex.pos *= scale;
 						}
 					}
 				}
@@ -135,10 +133,10 @@ namespace castor3d
 			File::listDirectoryFiles( m_filePath, files, true );
 			auto it = std::find_if( files.begin()
 				, files.end()
-				, [&fileName]( Path const & p_file )
+				, [&fileName]( Path const & file )
 				{
-					return p_file.getFileName( true ) == fileName
-						   || p_file.getFileName( true ).find( fileName ) == 0;
+					return file.getFileName( true ) == fileName
+						   || file.getFileName( true ).find( fileName ) == 0;
 				} );
 
 			folder = m_filePath;
@@ -160,18 +158,29 @@ namespace castor3d
 			{
 				TextureUnitSPtr unit = std::make_shared< TextureUnit >( *pass.getOwner()->getEngine() );
 				unit->setAutoMipmaps( true );
-				auto texture = getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
-					, AccessType::eRead
-					, AccessType::eRead );
+				renderer::ImageCreateInfo createInfo{};
+				createInfo.flags = 0u;
+				createInfo.arrayLayers = 1u;
+				createInfo.imageType = renderer::TextureType::e2D;
+				createInfo.initialLayout = renderer::ImageLayout::eUndefined;
+				createInfo.mipLevels = 20u;
+				createInfo.samples = renderer::SampleCountFlag::e1;
+				createInfo.sharingMode = renderer::SharingMode::eExclusive;
+				createInfo.tiling = renderer::ImageTiling::eOptimal;
+				createInfo.usage = renderer::ImageUsageFlag::eSampled
+					| renderer::ImageUsageFlag::eTransferDst;
+				auto texture = std::make_shared < TextureLayout >( *getEngine()->getRenderSystem()
+					, createInfo
+					, renderer::MemoryPropertyFlag::eDeviceLocal );
 				texture->setSource( folder, relative );
 				unit->setTexture( texture );
 				unit->setChannel( channel );
 				pass.addTextureUnit( unit );
 			}
-			catch ( std::exception & p_exc )
+			catch ( std::exception & exc )
 			{
 				unit.reset();
-				Logger::logWarning( StringStream() << cuT( "Error encountered while loading texture file " ) << path << cuT( ":\n" ) << p_exc.what() );
+				Logger::logWarning( makeStringStream() << cuT( "Error encountered while loading texture file " ) << path << cuT( ":\n" ) << exc.what() );
 			}
 			catch ( ... )
 			{
@@ -181,7 +190,7 @@ namespace castor3d
 		}
 		else
 		{
-			Logger::logWarning( StringStream() << cuT( "Couldn't load texture file " ) << path << cuT( ":\nFile does not exist." ) );
+			Logger::logWarning( makeStringStream() << cuT( "Couldn't load texture file " ) << path << cuT( ":\nFile does not exist." ) );
 		}
 
 		return unit;

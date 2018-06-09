@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___GLSL_Shader_H___
@@ -6,19 +6,34 @@ See LICENSE file in root folder
 
 #include "GlslSsbo.hpp"
 #include "GlslUbo.hpp"
+#include "GlslPcb.hpp"
 
 namespace glsl
 {
 	struct UniformInfo
 	{
 		TypeName m_type;
+		uint32_t m_location;
 		uint32_t m_count;
+	};
+
+	struct InputInfo
+	{
+		TypeName m_type;
+		uint32_t m_location;
+	};
+
+	struct OutputInfo
+	{
+		TypeName m_type;
+		uint32_t m_location;
 	};
 
 	struct SamplerInfo
 	{
 		TypeName m_type;
 		uint32_t m_binding;
+		uint32_t m_set;
 		uint32_t m_count;
 	};
 
@@ -46,34 +61,39 @@ namespace glsl
 		inline void registerSampler( castor::String const & name
 			, TypeName type
 			, uint32_t binding
+			, uint32_t set
 			, uint32_t count )
 		{
-			m_samplers.emplace( name, SamplerInfo{ type, binding, count } );
+			m_samplers.emplace( name, SamplerInfo{ type, binding, set, count } );
 		}
 
 		inline void registerUniform( castor::String const & name
+			, uint32_t location
 			, TypeName type
 			, uint32_t count )
 		{
-			m_uniforms.emplace( name, UniformInfo{ type, count } );
+			m_uniforms.emplace( name, UniformInfo{ type, location, count } );
 		}
 
 		inline void registerAttribute( castor::String const & name
+			, uint32_t location
 			, TypeName type )
 		{
-			m_inputs.emplace( name, type );
+			m_inputs.emplace( name, InputInfo{ type, location } );
 		}
 
 		inline void registerInput( castor::String const & name
+			, uint32_t location
 			, TypeName type )
 		{
-			m_inputs.emplace( name, type );
+			m_inputs.emplace( name, InputInfo{ type, location } );
 		}
 
 		inline void registerOutput( castor::String const & name
+			, uint32_t location
 			, TypeName type )
 		{
-			m_outputs.emplace( name, type );
+			m_outputs.emplace( name, OutputInfo{ type, location } );
 		}
 
 		inline void setSource( castor::String const & src )
@@ -93,12 +113,12 @@ namespace glsl
 
 		inline TypeName getInputType( castor::String const & name )const
 		{
-			return m_inputs.at( name );
+			return m_inputs.at( name ).m_type;
 		}
 
 		inline TypeName getOutputType( castor::String const & name )const
 		{
-			return m_outputs.at( name );
+			return m_outputs.at( name ).m_type;
 		}
 		
 		inline TypeName getUniformType( castor::String const & name )const
@@ -126,9 +146,14 @@ namespace glsl
 			return m_uniforms;
 		}
 
-		inline std::map< castor::String, SamplerInfo > const & getSamplers()const
+		inline std::map< castor::String, InputInfo > const & getInputs()const
 		{
-			return m_samplers;
+			return m_inputs;
+		}
+
+		inline std::map< castor::String, OutputInfo > const & getOutputs()const
+		{
+			return m_outputs;
 		}
 
 	private:
@@ -138,8 +163,8 @@ namespace glsl
 		std::map< castor::String, TypeName > m_constants;
 		std::map< castor::String, SamplerInfo > m_samplers;
 		std::map< castor::String, UniformInfo > m_uniforms;
-		std::map< castor::String, TypeName > m_inputs;
-		std::map< castor::String, TypeName > m_outputs;
+		std::map< castor::String, InputInfo > m_inputs;
+		std::map< castor::String, OutputInfo > m_outputs;
 	};
 }
 

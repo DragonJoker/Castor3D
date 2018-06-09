@@ -43,52 +43,52 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine			The engine.
-		 *\param[in]	p_scene				The scene.
-		 *\param[in]	p_rootNode			The root node.
-		 *\param[in]	p_rootCameraNode	The cameras root node.
-		 *\param[in]	p_rootObjectNode	The objects root node.
-		 *\param[in]	p_produce			The element producer.
-		 *\param[in]	p_initialise		The element initialiser.
-		 *\param[in]	p_clean				The element cleaner.
-		 *\param[in]	p_merge				The element collection merger.
-		 *\param[in]	p_attach			The element attacher (to a scene node).
-		 *\param[in]	p_detach			The element detacher (from a scene node).
+		 *\param[in]	scene			The scene.
+		 *\param[in]	rootNode		The root node.
+		 *\param[in]	rootCameraNode	The cameras root node.
+		 *\param[in]	rootObjectNode	The objects root node.
+		 *\param[in]	produce			The element producer.
+		 *\param[in]	initialise		The element initialiser.
+		 *\param[in]	clean			The element cleaner.
+		 *\param[in]	merge			The element collection merger.
+		 *\param[in]	attach			The element attacher (to a scene node).
+		 *\param[in]	detach			The element detacher (from a scene node).
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine			Le moteur.
-		 *\param[in]	p_scene				La scène.
-		 *\param[in]	p_rootNode			Le noeud racine.
-		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
-		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
-		 *\param[in]	p_produce			Le créateur d'objet.
-		 *\param[in]	p_initialise		L'initialiseur d'objet.
-		 *\param[in]	p_clean				Le nettoyeur d'objet.
-		 *\param[in]	p_merge				Le fusionneur de collection d'objets.
-		 *\param[in]	p_attach			L'attacheur d'objet (à un noeud de scène).
-		 *\param[in]	p_detach			Le détacheur d'objet (d'un noeud de scène).
+		 *\param[in]	scene			La scène.
+		 *\param[in]	rootNode		Le noeud racine.
+		 *\param[in]	rootCameraNode	Le noeud racine des caméras.
+		 *\param[in]	rootObjectNode	Le noeud racine des objets.
+		 *\param[in]	produce			Le créateur d'objet.
+		 *\param[in]	initialise		L'initialiseur d'objet.
+		 *\param[in]	clean			Le nettoyeur d'objet.
+		 *\param[in]	merge			Le fusionneur de collection d'objets.
+		 *\param[in]	attach			L'attacheur d'objet (à un noeud de scène).
+		 *\param[in]	detach			Le détacheur d'objet (d'un noeud de scène).
 		 */
 		inline ObjectCacheBase( Engine & engine
-								, Scene & p_scene
-								, SceneNodeSPtr p_rootNode
-								, SceneNodeSPtr p_rootCameraNode
-								, SceneNodeSPtr p_rootObjectNode
-								, Producer && p_produce
-								, Initialiser && p_initialise = Initialiser{}
-								, Cleaner && p_clean = Cleaner{}
-								, Merger && p_merge = Merger{}
-								, Attacher && p_attach = Attacher{}
-								, Detacher && p_detach = Detacher{} )
+			, Scene & scene
+			, SceneNodeSPtr rootNode
+			, SceneNodeSPtr rootCameraNode
+			, SceneNodeSPtr rootObjectNode
+			, Producer && produce
+			, Initialiser && initialise = Initialiser{}
+			, Cleaner && clean = Cleaner{}
+			, Merger && merge = Merger{}
+			, Attacher && attach = Attacher{}
+			, Detacher && detach = Detacher{} )
 			: m_engine( engine )
-			, m_scene( p_scene )
-			, m_rootNode( p_rootNode )
-			, m_rootCameraNode( p_rootCameraNode )
-			, m_rootObjectNode( p_rootObjectNode )
-			, m_produce( std::move( p_produce ) )
-			, m_initialise( std::move( p_initialise ) )
-			, m_clean( std::move( p_clean ) )
-			, m_merge( std::move( p_merge ) )
-			, m_attach( std::move( p_attach ) )
-			, m_detach( std::move( p_detach ) )
+			, m_scene( scene )
+			, m_rootNode( rootNode )
+			, m_rootCameraNode( rootCameraNode )
+			, m_rootObjectNode( rootObjectNode )
+			, m_produce( std::move( produce ) )
+			, m_initialise( std::move( initialise ) )
+			, m_clean( std::move( clean ) )
+			, m_merge( std::move( merge ) )
+			, m_attach( std::move( attach ) )
+			, m_detach( std::move(  detach ) )
 		{
 		}
 		/**
@@ -102,7 +102,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets all the elements to be cleaned up.
+		 *\brief		Sets all the elements to be cleaned up.
 		 *\~french
 		 *\brief		Met tous les éléments à nettoyer.
 		 */
@@ -141,37 +141,38 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		adds an object.
-		 *\param[in]	p_name		The object name.
-		 *\param[in]	p_element	The object.
+		 *\param[in]	name	The object name.
+		 *\param[in]	element	The object.
 		 *\return		The added object, or the existing one.
 		 *\~french
 		 *\brief		Ajoute un objet.
-		 *\param[in]	p_name		Le nom d'objet.
-		 *\param[in]	p_element	L'objet.
+		 *\param[in]	name	Le nom d'objet.
+		 *\param[in]	element	L'objet.
 		 *\return		L'objet ajouté, ou celui existant.
 		 */
-		inline ElementPtr add( Key const & p_name, ElementPtr p_element )
+		inline ElementPtr add( Key const & name
+			, ElementPtr element )
 		{
-			ElementPtr result{ p_element };
+			ElementPtr result{ element };
 
-			if ( p_element )
+			if ( element )
 			{
 				auto lock = castor::makeUniqueLock( m_elements );
 
-				if ( m_elements.has( p_name ) )
+				if ( m_elements.has( name ) )
 				{
-					castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << p_name );
-					result = m_elements.find( p_name );
+					castor::Logger::logWarning( castor::makeStringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
+					result = m_elements.find( name );
 				}
 				else
 				{
-					m_elements.insert( p_name, p_element );
+					m_elements.insert( name, element );
 					onChanged();
 				}
 			}
 			else
 			{
-				castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_NULL_OBJECT << getObjectTypeName() << cuT( ": " ) );
+				castor::Logger::logWarning( castor::makeStringStream() << WARNING_CACHE_NULL_OBJECT << getObjectTypeName() << cuT( ": " ) );
 			}
 
 			return result;
@@ -179,36 +180,37 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates an object.
-		 *\param[in]	p_name			The object name.
-		 *\param[in]	p_parent		The parent scene node.
-		 *\param[in]	p_parameters	The other constructor parameters.
+		 *\param[in]	name		The object name.
+		 *\param[in]	parent		The parent scene node.
+		 *\param[in]	parameters	The other constructor parameters.
 		 *\return		The created object.
 		 *\~french
 		 *\brief		Crée un objet.
-		 *\param[in]	p_name			Le nom d'objet.
-		 *\param[in]	p_parent		Le noeud de scène parent.
-		 *\param[in]	p_parameters	Les autres paramètres de construction.
+		 *\param[in]	name		Le nom d'objet.
+		 *\param[in]	parent		Le noeud de scène parent.
+		 *\param[in]	parameters	Les autres paramètres de construction.
 		 *\return		L'objet créé.
 		 */
 		template< typename ... Parameters >
-		inline ElementPtr add( Key const & p_name, SceneNodeSPtr p_parent, Parameters && ... p_parameters )
+		inline ElementPtr add( Key const & name
+			, SceneNodeSPtr parent, Parameters && ... parameters )
 		{
 			auto lock = castor::makeUniqueLock( m_elements );
 			ElementPtr result;
 
-			if ( !m_elements.has( p_name ) )
+			if ( !m_elements.has( name ) )
 			{
-				result = m_produce( p_name, p_parent, std::forward< Parameters >( p_parameters )... );
+				result = m_produce( name, parent, std::forward< Parameters >( parameters )... );
 				m_initialise( result );
-				m_elements.insert( p_name, result );
-				m_attach( result, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
-				castor::Logger::logDebug( castor::StringStream() << INFO_CACHE_CREATED_OBJECT << getObjectTypeName() << cuT( ": " ) << p_name );
+				m_elements.insert( name, result );
+				m_attach( result, parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
+				castor::Logger::logDebug( castor::makeStringStream() << INFO_CACHE_CREATED_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
 				onChanged();
 			}
 			else
 			{
-				result = m_elements.find( p_name );
-				castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << p_name );
+				result = m_elements.find( name );
+				castor::Logger::logWarning( castor::makeStringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
 			}
 
 			return result;
@@ -216,39 +218,43 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Removes an object, given a name.
-		 *\param[in]	p_name		The object name.
+		 *\param[in]	name		The object name.
 		 *\~french
 		 *\brief		Retire un objet à partir d'un nom.
-		 *\param[in]	p_name		Le nom d'objet.
+		 *\param[in]	name		Le nom d'objet.
 		 */
-		inline void remove( Key const & p_name )
+		inline void remove( Key const & name )
 		{
 			auto lock = castor::makeUniqueLock( m_elements );
 
-			if ( m_elements.has( p_name ) )
+			if ( m_elements.has( name ) )
 			{
-				auto element = m_elements.find( p_name );
+				auto element = m_elements.find( name );
 				m_detach( element );
-				m_elements.erase( p_name );
+				m_elements.erase( name );
 				onChanged();
 			}
 		}
 		/**
 		 *\~english
 		 *\return		Merges this cache's elements to the one given.
-		 *\param[out]	p_destination		The destination cache.
+		 *\param[out]	destination		The destination cache.
 		 *\~french
 		 *\return		Met les éléments de ce cache dans ceux de celui donné.
-		 *\param[out]	p_destination		Le cache de destination.
+		 *\param[out]	destination		Le cache de destination.
 		 */
-		inline void mergeInto( MyObjectCacheType & p_destination )
+		inline void mergeInto( MyObjectCacheType & destination )
 		{
 			auto lock = castor::makeUniqueLock( m_elements );
-			auto lockOther = castor::makeUniqueLock( p_destination.m_elements );
+			auto lockOther = castor::makeUniqueLock( destination.m_elements );
 
 			for ( auto it : m_elements )
 			{
-				m_merge( *this, p_destination.m_elements, it.second, p_destination.m_rootCameraNode.lock(), p_destination.m_rootObjectNode.lock() );
+				m_merge( *this
+					, destination.m_elements
+					, it.second
+					, destination.m_rootCameraNode.lock()
+					, destination.m_rootObjectNode.lock() );
 			}
 
 			clear();
@@ -257,37 +263,37 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Applies a function to all the elements of this cache.
-		 *\param[in]	p_func	The function.
+		 *\param[in]	func	The function.
 		 *\~french
 		 *\brief		Applique une fonction à tous les éléments de ce cache.
-		 *\param[in]	p_func	La fonction.
+		 *\param[in]	func	La fonction.
 		 */
 		template< typename FuncType >
-		inline void forEach( FuncType p_func )const
+		inline void forEach( FuncType func )const
 		{
 			auto lock = castor::makeUniqueLock( m_elements );
 
 			for ( auto const & element : m_elements )
 			{
-				p_func( *element.second );
+				func( *element.second );
 			}
 		}
 		/**
 		 *\~english
 		 *\brief		Applies a function to all the elements of this cache.
-		 *\param[in]	p_func	The function.
+		 *\param[in]	func	The function.
 		 *\~french
 		 *\brief		Applique une fonction à tous les éléments de ce cache.
-		 *\param[in]	p_func	La fonction.
+		 *\param[in]	func	La fonction.
 		 */
 		template< typename FuncType >
-		inline void forEach( FuncType p_func )
+		inline void forEach( FuncType func )
 		{
 			auto lock = castor::makeUniqueLock( m_elements );
 
 			for ( auto & element : m_elements )
 			{
-				p_func( *element.second );
+				func( *element.second );
 			}
 		}
 		/**
@@ -332,29 +338,29 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\param[in]	p_name		The object name.
+		 *\param[in]	name	The object name.
 		 *\return		\p true if an element with given name exists.
 		 *\~french
-		 *\param[in]	p_name		Le nom d'objet.
+		 *\param[in]	name	Le nom d'objet.
 		 *\return		\p true Si un élément avec le nom donné existe.
 		 */
-		inline bool has( Key const & p_name )const
+		inline bool has( Key const & name )const
 		{
-			return m_elements.has( p_name );
+			return m_elements.has( name );
 		}
 		/**
 		 *\~english
 		 *\brief		Looks for an element with given name.
-		 *\param[in]	p_name		The object name.
+		 *\param[in]	name	The object name.
 		 *\return		The found element, nullptr if not found.
 		 *\~french
 		 *\brief		Cherche un élément par son nom.
-		 *\param[in]	p_name		Le nom d'objet.
+		 *\param[in]	name	Le nom d'objet.
 		 *\return		L'élément trouvé, nullptr si non trouvé.
 		 */
-		inline ElementPtr find( Key const & p_name )const
+		inline ElementPtr find( Key const & name )const
 		{
-			return m_elements.find( p_name );
+			return m_elements.find( name );
 		}
 		/**
 		 *\~english
@@ -501,52 +507,52 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine			The engine.
-		 *\param[in]	p_scene				The scene.
-		 *\param[in]	p_rootNode			The root node.
-		 *\param[in]	p_rootCameraNode	The cameras root node.
-		 *\param[in]	p_rootObjectNode	The objects root node.
-		 *\param[in]	p_produce			The element producer.
-		 *\param[in]	p_initialise		The element initialiser.
-		 *\param[in]	p_clean				The element cleaner.
-		 *\param[in]	p_merge				The element collection merger.
-		 *\param[in]	p_attach			The element attacher (to a scene node).
-		 *\param[in]	p_detach			The element detacher (from a scene node).
+		 *\param[in]	scene			The scene.
+		 *\param[in]	rootNode		The root node.
+		 *\param[in]	rootCameraNode	The cameras root node.
+		 *\param[in]	rootObjectNode	The objects root node.
+		 *\param[in]	produce			The element producer.
+		 *\param[in]	initialise		The element initialiser.
+		 *\param[in]	clean			The element cleaner.
+		 *\param[in]	merge			The element collection merger.
+		 *\param[in]	attach			The element attacher (to a scene node).
+		 *\param[in]	detach			The element detacher (from a scene node).
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine			Le moteur.
-		 *\param[in]	p_scene				La scène.
-		 *\param[in]	p_rootNode			Le noeud racine.
-		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
-		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
-		 *\param[in]	p_produce			Le créateur d'objet.
-		 *\param[in]	p_initialise		L'initialiseur d'objet.
-		 *\param[in]	p_clean				Le nettoyeur d'objet.
-		 *\param[in]	p_merge				Le fusionneur de collection d'objets.
-		 *\param[in]	p_attach			L'attacheur d'objet (à un noeud de scène).
-		 *\param[in]	p_detach			Le détacheur d'objet (d'un noeud de scène).
+		 *\param[in]	scene			La scène.
+		 *\param[in]	rootNode		Le noeud racine.
+		 *\param[in]	rootCameraNode	Le noeud racine des caméras.
+		 *\param[in]	rootObjectNode	Le noeud racine des objets.
+		 *\param[in]	produce			Le créateur d'objet.
+		 *\param[in]	initialise		L'initialiseur d'objet.
+		 *\param[in]	clean			Le nettoyeur d'objet.
+		 *\param[in]	merge			Le fusionneur de collection d'objets.
+		 *\param[in]	attach			L'attacheur d'objet (à un noeud de scène).
+		 *\param[in]	detach			Le détacheur d'objet (d'un noeud de scène).
 		 */
 		inline ObjectCache( Engine & engine
-							, Scene & p_scene
-							, SceneNodeSPtr p_rootNode
-							, SceneNodeSPtr p_rootCameraNode
-							, SceneNodeSPtr p_rootObjectNode
-							, Producer && p_produce
-							, Initialiser && p_initialise = Initialiser{}
-							, Cleaner && p_clean = Cleaner{}
-							, Merger && p_merge = Merger{}
-							, Attacher && p_attach = Attacher{}
-							, Detacher && p_detach = Detacher{} )
+			, Scene & scene
+			, SceneNodeSPtr rootNode
+			, SceneNodeSPtr rootCameraNode
+			, SceneNodeSPtr rootObjectNode
+			, Producer && produce
+			, Initialiser && initialise = Initialiser{}
+			, Cleaner && clean = Cleaner{}
+			, Merger && merge = Merger{}
+			, Attacher && attach = Attacher{}
+			, Detacher && detach = Detacher{} )
 			: MyObjectCacheType( engine
-								 , p_scene
-								 , p_rootNode
-								 , p_rootCameraNode
-								 , p_rootObjectNode
-								 , std::move( p_produce )
-								 , std::move( p_initialise )
-								 , std::move( p_clean )
-								 , std::move( p_merge )
-								 , std::move( p_attach )
-								 , std::move( p_detach ) )
+				, scene
+				, rootNode
+				, rootCameraNode
+				, rootObjectNode
+				, std::move( produce )
+				, std::move( initialise )
+				, std::move( clean )
+				, std::move( merge )
+				, std::move( attach )
+				, std::move( detach ) )
 		{
 		}
 		/**
@@ -563,59 +569,59 @@ namespace castor3d
 	 *\~english
 	 *\brief		Creates an object cache.
 	 *\param[in]	engine			The engine.
-	 *\param[in]	p_scene				The scene.
-	 *\param[in]	p_rootNode			The scene root node.
-	 *\param[in]	p_rootCameraNode	The root node for cameras.
-	 *\param[in]	p_rootObjectNode	The root node for objects.
-	 *\param[in]	p_produce			The element producer.
-	 *\param[in]	p_initialise		The element initialiser.
-	 *\param[in]	p_clean				The element cleaner.
-	 *\param[in]	p_merge				The element collection merger.
-	 *\param[in]	p_attach			The element attacher (to a scene node).
-	 *\param[in]	p_detach			The element detacher (from a scene node).
+	 *\param[in]	scene			The scene.
+	 *\param[in]	rootNode		The scene root node.
+	 *\param[in]	rootCameraNode	The root node for cameras.
+	 *\param[in]	rootObjectNode	The root node for objects.
+	 *\param[in]	produce			The element producer.
+	 *\param[in]	initialise		The element initialiser.
+	 *\param[in]	clean			The element cleaner.
+	 *\param[in]	merge			The element collection merger.
+	 *\param[in]	attach			The element attacher (to a scene node).
+	 *\param[in]	detach			The element detacher (from a scene node).
 	 *\~french
 	 *\brief		Crée un cache d'objets.
 	 *\param[in]	engine			Le moteur.
-	 *\param[in]	p_scene				La scène.
-	 *\param[in]	p_rootNode			Le noeud racine de la scène.
-	 *\param[in]	p_rootCameraNode	Le noeud racine pour les caméras.
-	 *\param[in]	p_rootObjectNode	Le noeud racine pour les objets.
-	 *\param[in]	p_produce			Le créateur d'objet.
-	 *\param[in]	p_initialise		L'initialiseur d'objet.
-	 *\param[in]	p_clean				Le nettoyeur d'objet.
-	 *\param[in]	p_merge				Le fusionneur de collection d'objets.
-	 *\param[in]	p_attach			L'attacheur d'objet (à un noeud de scène).
-	 *\param[in]	p_detach			Le détacheur d'objet (d'un noeud de scène).
+	 *\param[in]	scene			La scène.
+	 *\param[in]	rootNode		Le noeud racine de la scène.
+	 *\param[in]	rootCameraNode	Le noeud racine pour les caméras.
+	 *\param[in]	rootObjectNode	Le noeud racine pour les objets.
+	 *\param[in]	produce			Le créateur d'objet.
+	 *\param[in]	initialise		L'initialiseur d'objet.
+	 *\param[in]	clean			Le nettoyeur d'objet.
+	 *\param[in]	merge			Le fusionneur de collection d'objets.
+	 *\param[in]	attach			L'attacheur d'objet (à un noeud de scène).
+	 *\param[in]	detach			Le détacheur d'objet (d'un noeud de scène).
 	 */
 	template< typename ElementType, typename KeyType >
 	inline std::unique_ptr< ObjectCache< ElementType, KeyType > >
 	makeObjectCache( Engine & engine
-		, Scene & p_scene
-		, SceneNodeSPtr p_rootNode
-		, SceneNodeSPtr p_rootCameraNode
-		, SceneNodeSPtr p_rootObjectNode
-		, typename ObjectCacheTraits< ElementType, KeyType >::Producer && p_produce
-		, ElementInitialiser< ElementType > && p_initialise = []( std::shared_ptr< ElementType > ){}
-		, ElementCleaner< ElementType > && p_clean = []( std::shared_ptr< ElementType > ){}
-		, typename ObjectCacheTraits< ElementType, KeyType >::Merger && p_merge = []( ObjectCacheBase< ElementType, KeyType > const &
+		, Scene & scene
+		, SceneNodeSPtr rootNode
+		, SceneNodeSPtr rootCameraNode
+		, SceneNodeSPtr rootObjectNode
+		, typename ObjectCacheTraits< ElementType, KeyType >::Producer && produce
+		, ElementInitialiser< ElementType > && initialise = []( std::shared_ptr< ElementType > ){}
+		, ElementCleaner< ElementType > && clean = []( std::shared_ptr< ElementType > ){}
+		, typename ObjectCacheTraits< ElementType, KeyType >::Merger && merge = []( ObjectCacheBase< ElementType, KeyType > const &
 			, castor::Collection< ElementType, KeyType > &
 			, std::shared_ptr< ElementType >
 			, SceneNodeSPtr
 			, SceneNodeSPtr ){}
-		, ElementAttacher< ElementType > && p_attach = []( std::shared_ptr< ElementType >, SceneNodeSPtr, SceneNodeSPtr, SceneNodeSPtr, SceneNodeSPtr ){}
-		, ElementDetacher< ElementType > && p_detach = []( std::shared_ptr< ElementType > ){} )
+		, ElementAttacher< ElementType > && attach = []( std::shared_ptr< ElementType >, SceneNodeSPtr, SceneNodeSPtr, SceneNodeSPtr, SceneNodeSPtr ){}
+		, ElementDetacher< ElementType > && detach = []( std::shared_ptr< ElementType > ){} )
 	{
 		return std::make_unique< ObjectCache< ElementType, KeyType > >( engine
-			, p_scene
-			, p_rootNode
-			, p_rootCameraNode
-			, p_rootObjectNode
-			, std::move( p_produce )
-			, std::move( p_initialise )
-			, std::move( p_clean )
-			, std::move( p_merge )
-			, std::move( p_attach )
-			, std::move( p_detach ) );
+			, scene
+			, rootNode
+			, rootCameraNode
+			, rootObjectNode
+			, std::move( produce )
+			, std::move( initialise )
+			, std::move( clean )
+			, std::move( merge )
+			, std::move( attach )
+			, std::move( detach ) );
 	}
 }
 

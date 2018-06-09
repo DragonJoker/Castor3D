@@ -1,4 +1,4 @@
-﻿#include "TextureUnit.hpp"
+#include "TextureUnit.hpp"
 
 #include "Engine.hpp"
 
@@ -27,20 +27,26 @@ namespace castor3d
 		if ( unit.isTextured() && unit.getTexture() )
 		{
 			auto texture = unit.getTexture();
-			auto image = texture->getImage().toString();
+			auto image = texture->getDefaultImage().toString();
 
-			if ( !image.empty() || !texture->getImage().isStaticSource() )
+			if ( !image.empty() || !texture->getDefaultImage().isStaticSource() )
 			{
 				if ( result )
 				{
 					result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "texture_unit\n" ) ) > 0
-							   && file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 				}
 
 				if ( result && unit.getSampler() && unit.getSampler()->getName() != cuT( "Default" ) )
 				{
 					result = file.writeText( m_tabs + cuT( "\tsampler \"" ) + unit.getSampler()->getName() + cuT( "\"\n" ) ) > 0;
 					castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit sampler" );
+				}
+
+				if ( result && unit.getTexture()->getMipmapCount() > 1 )
+				{
+					result = file.writeText( m_tabs + cuT( "\tlevels_count " ) + string::toString( unit.getTexture()->getMipmapCount(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+					castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit mip level count" );
 				}
 
 				if ( result && unit.getChannel() != TextureChannel::eUndefined )
@@ -116,7 +122,7 @@ namespace castor3d
 						break;
 					}
 
-					if ( !texture->getImage().isStaticSource() )
+					if ( !texture->getDefaultImage().isStaticSource() )
 					{
 						if ( result && unit.getRenderTarget() )
 						{
@@ -137,6 +143,7 @@ namespace castor3d
 						{
 							result = file.writeText( m_tabs + cuT( "\timage \"" ) + path + cuT( "\" rgb\n" ) ) > 0;
 						}
+
 						castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit image" );
 					}
 
@@ -155,7 +162,6 @@ namespace castor3d
 
 	TextureUnit::TextureUnit( Engine & engine )
 		: OwnedBy< Engine >( engine )
-		, m_index( 0 )
 		, m_channel( TextureChannel::eDiffuse )
 		, m_autoMipmaps( false )
 		, m_changed( false )
@@ -185,7 +191,7 @@ namespace castor3d
 
 		if ( target )
 		{
-			target->initialise( getIndex() );
+			target->initialise();
 			m_texture = target->getTexture().getTexture();
 			result = true;
 		}
@@ -193,15 +199,28 @@ namespace castor3d
 		{
 			result = m_texture->initialise();
 			auto sampler = getSampler();
+			REQUIRE( sampler );
+			sampler->initialise();
 
-			if ( result
-				&& sampler
-				&& sampler->getInterpolationMode( InterpolationFilter::eMip ) != InterpolationMode::eNearest )
+			if ( result && m_texture->getMipmapCount() > 1u )
 			{
-				m_texture->bind( MinTextureIndex );
 				m_texture->generateMipmaps();
-				m_texture->unbind( MinTextureIndex );
 			}
+
+			m_descriptor = renderer::WriteDescriptorSet
+			{
+				0u,
+				0u,
+				1u,
+				renderer::DescriptorType::eCombinedImageSampler,
+				{
+					{
+						std::ref( sampler->getSampler() ),
+						std::ref( m_texture->getDefaultView() ),
+						renderer::ImageLayout::eShaderReadOnlyOptimal,
+					}
+				}
+			};
 		}
 
 		return result;
@@ -222,45 +241,7 @@ namespace castor3d
 		}
 	}
 
-	void TextureUnit::bind()const
-	{
-		if ( m_texture && m_texture->isInitialised() )
-		{
-			m_texture->bind( m_index );
-
-			if ( m_changed
-				&& m_autoMipmaps
-				&& m_texture->getType() != TextureType::eBuffer )
-			{
-				m_texture->generateMipmaps();
-				m_changed = false;
-			}
-
-			auto sampler = getSampler();
-
-			if ( sampler )
-			{
-				sampler->bind( m_index );
-			}
-		}
-	}
-
-	void TextureUnit::unbind()const
-	{
-		auto sampler = getSampler();
-
-		if ( sampler )
-		{
-			sampler->unbind( m_index );
-		}
-
-		if ( m_texture && m_texture->isInitialised() )
-		{
-			m_texture->unbind( m_index );
-		}
-	}
-
-	TextureType TextureUnit::getType()const
+	renderer::TextureType TextureUnit::getType()const
 	{
 		REQUIRE( m_texture );
 		return m_texture->getType();

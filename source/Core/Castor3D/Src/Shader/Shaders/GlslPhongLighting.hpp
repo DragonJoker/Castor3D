@@ -14,8 +14,7 @@ namespace castor3d
 			: public LightingModel
 		{
 		public:
-			C3D_API PhongLightingModel( ShadowType shadows
-				, glsl::GlslWriter & writer );
+			C3D_API PhongLightingModel( glsl::GlslWriter & writer );
 			C3D_API void computeCombined( glsl::Vec3 const & worldEye
 				, glsl::Float const & shininess
 				, glsl::Int const & receivesShadows
@@ -45,8 +44,12 @@ namespace castor3d
 			void doDeclareComputeDirectionalLight()override;
 			void doDeclareComputePointLight()override;
 			void doDeclareComputeSpotLight()override;
-			void doDeclareComputeOnePointLight()override;
-			void doDeclareComputeOneSpotLight()override;
+			void doDeclareComputeOneDirectionalLight( ShadowType shadowType
+				, bool volumetric )override;
+			void doDeclareComputeOnePointLight( ShadowType shadowType
+				, bool volumetric )override;
+			void doDeclareComputeOneSpotLight( ShadowType shadowType
+				, bool volumetric )override;
 
 			void doComputeLight( Light const & light
 				, glsl::Vec3 const & worldEye

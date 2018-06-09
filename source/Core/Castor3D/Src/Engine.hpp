@@ -15,13 +15,12 @@ See LICENSE file in root folder
 #include "Cache/TargetCache.hpp"
 #include "Cache/TechniqueCache.hpp"
 #include "Cache/WindowCache.hpp"
-
-#include "Miscellaneous/Version.hpp"
-
 #include "Mesh/ImporterFactory.hpp"
 #include "Mesh/MeshFactory.hpp"
 #include "Mesh/SubdividerFactory.hpp"
+#include "Miscellaneous/Version.hpp"
 #include "Render/RenderSystemFactory.hpp"
+#include "RenderToTexture/RenderDepthQuad.hpp"
 
 #include <FileParser/FileParser.hpp>
 #include <Graphics/FontCache.hpp>
@@ -52,7 +51,8 @@ namespace castor3d
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		C3D_API Engine();
+		C3D_API Engine( castor::String const & appName
+			, bool enableValidation );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -62,15 +62,15 @@ namespace castor3d
 		C3D_API ~Engine();
 		/**
 		 *\~english
-		 *\brief		Initialisation function, sets the wanted frame rate
-		 *\param[in]	p_wantedFPS		The wanted FPS count
-		 *\param[in]	p_threaded		If \p false, the render can't be threaded
+		 *\brief		Initialisation function, Sets the wanted frame rate
+		 *\param[in]	wantedFPS		The wanted FPS count
+		 *\param[in]	threaded		If \p false, the render can't be threaded
 		 *\~french
 		 *\brief		Fonction d'initialisation, définit le frame rate voulu
-		 *\param[in]	p_wantedFPS		Le nombre voulu de FPS
-		 *\param[in]	p_threaded		Si \p false, le rendu ne peut pas être threadé
+		 *\param[in]	wantedFPS		Le nombre voulu de FPS
+		 *\param[in]	threaded		Si \p false, le rendu ne peut pas être threadé
 		 */
-		C3D_API void initialise( uint32_t p_wantedFPS = 100, bool p_threaded = false );
+		C3D_API void initialise( uint32_t wantedFPS = 100, bool threaded = false );
 		/**
 		 *\~english
 		 *\brief		Cleanup function, destroys everything created from the beginning
@@ -83,23 +83,32 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Loads a renderer plug-in, given the renderer type
-		 *\param[in]	p_type	The renderer type
+		 *\param[in]	type	The renderer type
 		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Charge un plug-in de rendu, selon le type de rendu
-		 *\param[in]	p_type	Le type de rendu
+		 *\param[in]	type	Le type de rendu
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool loadRenderer( castor::String const & p_type );
+		C3D_API bool loadRenderer( castor::String const & type );
+		/**
+		 *\~english
+		 *\brief		If a device is enabled, executes the given event, if not posts it to the default frame listener.
+		 *\param[in]	event	The event.
+		 *\~french
+		 *\brief		Si un device est actif, exécute l'évènement donné, sinon il est ajouté au frame listener par défaut.
+		 *\param[in]	event	L'évènement.
+		 */
+		C3D_API void sendEvent( FrameEventUPtr && event );
 		/**
 		 *\~english
 		 *\brief		Posts a frame event to the default frame listener
-		 *\param[in]	p_pEvent	The event to add
+		 *\param[in]	event	The event to add
 		 *\~french
 		 *\brief		Ajoute un évènement de frame au frame listener par défaut
-		 *\param[in]	p_pEvent	L'évènement
+		 *\param[in]	event	L'évènement
 		 */
-		C3D_API void postEvent( FrameEventUPtr && p_pEvent );
+		C3D_API void postEvent( FrameEventUPtr && event );
 		/**
 		 *\~english
 		 *\brief		Retrieves the cleanup status
@@ -122,55 +131,72 @@ namespace castor3d
 		C3D_API void setCleaned();
 		/**
 		 *\~english
-		 *\brief		Checks the current support for given shader model
-		 *\param[in]	p_eShaderModel	The shader model
-		 *\return		\p true if the shader model is supported in actual configuration
-		 *\~french
-		 *\brief		Vérifie le support du shader model donné
-		 *\param[in]	p_eShaderModel	le shader model
-		 *\return		\p true si le shader model est supporté dans la configuration actuelle
-		 */
-		C3D_API bool supportsShaderModel( ShaderModel p_eShaderModel );
-		/**
-		 *\~english
 		 *\brief		Registers additional parsers for SceneFileParser.
-		 *\param[in]	p_name		The registering name.
-		 *\param[in]	p_parsers	The parsers.
+		 *\param[in]	name	The registering name.
+		 *\param[in]	parsers	The parsers.
 		 *\~french
 		 *\brief		Enregistre des analyseurs supplémentaires pour SceneFileParser.
-		 *\param[in]	p_name		Le nom d'enregistrement.
-		 *\param[in]	p_parsers	Les analyseurs.
+		 *\param[in]	name	Le nom d'enregistrement.
+		 *\param[in]	parsers	Les analyseurs.
 		 */
-		C3D_API void registerParsers( castor::String const & p_name, castor::FileParser::AttributeParsersBySection const & p_parsers );
+		C3D_API void registerParsers( castor::String const & name, castor::FileParser::AttributeParsersBySection const & parsers );
 		/**
 		 *\~english
 		 *\brief		Registers additional sections for SceneFileParser.
-		 *\param[in]	p_name		The registering name.
-		 *\param[in]	p_sections	The sections.
+		 *\param[in]	name		The registering name.
+		 *\param[in]	sections	The sections.
 		 *\~french
 		 *\brief		Enregistre des sections supplémentaires pour SceneFileParser.
-		 *\param[in]	p_name		Le nom d'enregistrement.
-		 *\param[in]	p_sections	Les sections.
+		 *\param[in]	name		Le nom d'enregistrement.
+		 *\param[in]	sections	Les sections.
 		 */
-		C3D_API void registerSections( castor::String const & p_name, castor::StrUIntMap const & p_sections );
+		C3D_API void registerSections( castor::String const & name, castor::StrUIntMap const & sections );
 		/**
 		 *\~english
 		 *\brief		Unregisters parsers for SceneFileParser.
-		 *\param[in]	p_name		The registering name.
+		 *\param[in]	name		The registering name.
 		 *\~french
 		 *\brief		Désenregistre des analyseurs pour SceneFileParser.
-		 *\param[in]	p_name		Le nom d'enregistrement.
+		 *\param[in]	name		Le nom d'enregistrement.
 		 */
-		C3D_API void unregisterParsers( castor::String const & p_name );
+		C3D_API void unregisterParsers( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Unregisters sections for SceneFileParser.
-		 *\param[in]	p_name		The registering name.
+		 *\param[in]	name		The registering name.
 		 *\~french
 		 *\brief		Désenregistre des sections pour SceneFileParser.
-		 *\param[in]	p_name		Le nom d'enregistrement.
+		 *\param[in]	name		Le nom d'enregistrement.
 		 */
-		C3D_API void unregisterSections( castor::String const & p_name );
+		C3D_API void unregisterSections( castor::String const & name );
+		/**
+		 *\~english
+		 *\return		\p true if the selected rendering API is top down.
+		 *\~french
+		 *\return		\p true si l'API de rendu sélectionnée est top down.
+		 */
+		C3D_API bool isTopDown()const;
+		/**
+		 *\~english
+		 *\brief		Renders the given depth texture to the given frame buffer.
+		 *\param[in]	renderPass	The render pass.
+		 *\param[in]	frameBuffer	The frame buffer.
+		 *\param[in]	position	The render viewport position.
+		 *\param[in]	size		The render viewport size.
+		 *\param[in]	texture		The texture.
+		 *\~french
+		 *\brief		Rend la texture profondeur donnée dans le tampon d'image donné.
+		 *\param[in]	renderPass	La passe de rendu.
+		 *\param[in]	frameBuffer	Le frame buffer.
+		 *\param[in]	position	La position du viewport de rendu.
+		 *\param[in]	size		La taille du viewport de rendu.
+		 *\param[in]	texture		La texture.
+		 */
+		C3D_API void renderDepth( renderer::RenderPass const & renderPass
+			, renderer::FrameBuffer const & frameBuffer
+			, castor::Position const & position
+			, castor::Size const & size
+			, TextureLayout const & texture );
 		/**
 		 *\~english
 		 *\brief		Retrieves plug-ins path
@@ -200,429 +226,221 @@ namespace castor3d
 		C3D_API static castor::Path getDataDirectory();
 		/**
 		 *\~english
-		 *\brief		Retrieves the images collection
-		 *\return		The collection
+		 *\brief		Retrieves data path
+		 *\return		The data path
 		 *\~french
-		 *\brief		Récupère la collection d'images
-		 *\return		La collection
+		 *\brief		Récupère le chemin des données
+		 *\return		Le chemin des données
 		 */
+		C3D_API static std::locale const & getLocale();
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline castor::ImageCache const & getImageCache()const
 		{
 			return m_imageCache;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the images collection
-		 *\return		The collection
-		 *\~french
-		 *\brief		Récupère la collection d'images
-		 *\return		La collection
-		 */
+
 		inline castor::ImageCache & getImageCache()
 		{
 			return m_imageCache;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the fonts collection
-		 *\return		The collection
-		 *\~french
-		 *\brief		Récupère la collection de polices
-		 *\return		La collection
-		 */
+
 		inline castor::FontCache const & getFontCache()const
 		{
 			return m_fontCache;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the fonts collection
-		 *\return		The collection
-		 *\~french
-		 *\brief		Récupère la collection de polices
-		 *\return		La collection
-		 */
+
 		inline castor::FontCache & getFontCache()
 		{
 			return m_fontCache;
 		}
-		/**
-		 *\~english
-		 *\return		The user input listener.
-		 *\~french
-		 *\return		Le listener d'entrées utilisateur.
-		 */
+
 		inline UserInputListenerSPtr getUserInputListener()
 		{
 			return m_userInputListener;
 		}
-		/**
-		 *\~english
-		 *\brief		sets the user input listener.
-		 *\param[in]	p_listener	The new value.
-		 *\~french
-		 *\brief		Définit le listener d'entrées utilisateur.
-		 *\param[in]	p_listener	La nouvelle valeur.
-		 */
-		inline void setUserInputListener( UserInputListenerSPtr p_listener )
-		{
-			m_userInputListener = p_listener;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the RenderSystem
-		 *\return		The RenderSystem
-		 *\~french
-		 *\brief		Récupère le RenderSystem
-		 *\return		Le RenderSystem
-		 */
+
 		inline RenderSystem * getRenderSystem()const
 		{
 			return m_renderSystem.get();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the default Sampler
-		 *\return		The Sampler
-		 *\~french
-		 *\brief		Récupère le Sampler par défault
-		 *\return		Le Sampler
-		 */
+
 		inline SamplerSPtr getDefaultSampler()const
 		{
 			return m_defaultSampler;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the lighting Sampler.
-		 *\return		The Sampler.
-		 *\~french
-		 *\brief		Récupère le Sampler pour les éclairages.
-		 *\return		Le Sampler.
-		 */
+
 		inline SamplerSPtr getLightsSampler()const
 		{
 			return m_lightsSampler;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the SceneFileParser additional parsers.
-		 *\return		The parsers.
-		 *\~french
-		 *\brief		Récupère les analyseurs supplémentaires pour SceneFileParser.
-		 *\return		Les analyseurs.
-		 */
+
 		inline std::map< castor::String, castor::FileParser::AttributeParsersBySection > const & getAdditionalParsers()const
 		{
 			return m_additionalParsers;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the SceneFileParser additional sections.
-		 *\return		The sections.
-		 *\~french
-		 *\brief		Récupère les sections supplémentaires pour SceneFileParser.
-		 *\return		Les sections.
-		 */
+
 		inline std::map< castor::String, castor::StrUIntMap > const & getAdditionalSections()const
 		{
 			return m_additionalSections;
 		}
-		/**
-		 *\~english
-		 *\return		The engine version.
-		 *\~french
-		 *\return		La version du moteur.
-		 */
+
 		inline Version const & getVersion()const
 		{
 			return m_version;
 		}
-		/**
-		 *\~english
-		 *\return		The render loop.
-		 *\~french
-		 *\return		La boucle de rendu.
-		 */
+
 		inline bool hasRenderLoop()const
 		{
 			return m_renderLoop != nullptr;
 		}
-		/**
-		 *\~english
-		 *\return		The render loop.
-		 *\~french
-		 *\return		La boucle de rendu.
-		 */
+
 		inline RenderLoop const & getRenderLoop()const
 		{
 			return *m_renderLoop;
 		}
-		/**
-		 *\~english
-		 *\return		The render loop.
-		 *\~french
-		 *\return		La boucle de rendu.
-		 */
+
 		inline RenderLoop & getRenderLoop()
 		{
 			return *m_renderLoop;
 		}
-		/**
-		 *\~english
-		 *\brief		sets the need for per object lighting.
-		 *\param[in]	p_value	The new value.
-		 *\~french
-		 *\brief		Définit le besoin d'un éclairage par objet.
-		 *\param[in]	p_value	La nouvelle valeur.
-		 */
-		inline void setPerObjectLighting( bool p_value )
-		{
-			m_perObjectLighting = p_value;
-		}
-		/**
-		 *\~english
-		 *\return		The need for per object lighting.
-		 *\~french
-		 *\return		Le besoin d'un éclairage par objet.
-		 */
+
 		inline bool getPerObjectLighting()
 		{
 			return m_perObjectLighting;
 		}
-		/**
-		 *\~english
-		 *\return		Tells if the engine uses an asynchronous render loop.
-		 *\~french
-		 *\return		Dit si le moteur utilise un boucle de rendu asynchrone.
-		 */
+
 		inline bool isThreaded()
 		{
 			return m_threaded;
 		}
-		/**
-		 *\~english
-		 *\return		The RenderSystem factory.
-		 *\~french
-		 *\return		La fabrique de RenderSystem.
-		 */
+
 		inline RenderSystemFactory const & getRenderSystemFactory()const
 		{
 			return m_renderSystemFactory;
 		}
-		/**
-		 *\~english
-		 *\return		The RenderSystem factory.
-		 *\~french
-		 *\return		La fabrique de RenderSystem.
-		 */
+
 		inline RenderSystemFactory & getRenderSystemFactory()
 		{
 			return m_renderSystemFactory;
 		}
-		/**
-		 *\~english
-		 *\return		The MeshGenerator factory.
-		 *\~french
-		 *\return		La fabrique de MeshGenerator.
-		 */
+
 		inline MeshFactory const & getMeshFactory()const
 		{
 			return m_meshFactory;
 		}
-		/**
-		 *\~english
-		 *\return		The MeshGenerator factory.
-		 *\~french
-		 *\return		La fabrique de MeshGenerator.
-		 */
+
 		inline MeshFactory & getMeshFactory()
 		{
 			return m_meshFactory;
 		}
-		/**
-		 *\~english
-		 *\return		The Subdivider factory.
-		 *\~french
-		 *\return		La fabrique de Subdivider.
-		 */
+
 		inline SubdividerFactory const & getSubdividerFactory()const
 		{
 			return m_subdividerFactory;
 		}
-		/**
-		 *\~english
-		 *\return		The Subdivider factory.
-		 *\~french
-		 *\return		La fabrique de Subdivider.
-		 */
+
 		inline SubdividerFactory & getSubdividerFactory()
 		{
 			return m_subdividerFactory;
 		}
-		/**
-		 *\~english
-		 *\return		The Importer factory.
-		 *\~french
-		 *\return		La fabrique de Importer.
-		 */
+
 		inline ImporterFactory const & getImporterFactory()const
 		{
 			return m_importerFactory;
 		}
-		/**
-		 *\~english
-		 *\return		The Subdivider factory.
-		 *\~french
-		 *\return		La fabrique de Subdivider.
-		 */
+
 		inline ImporterFactory & getImporterFactory()
 		{
 			return m_importerFactory;
 		}
-		/**
-		 *\~english
-		 *\return		The CpuParticleSystem factory.
-		 *\~french
-		 *\return		La fabrique de CpuParticleSystem.
-		 */
+
 		inline ParticleFactory & getParticleFactory()
 		{
 			return m_particleFactory;
 		}
-		/**
-		 *\~english
-		 *\return		The CPU informations.
-		 *\~french
-		 *\return		Les informations CPU.
-		 */
+
 		inline castor::CpuInformations const & getCpuInformations()const
 		{
 			return m_cpuInformations;
 		}
-		/**
-		 *\~english
-		 *\return		The materials type.
-		 *\~french
-		 *\return		Le type des matériaux.
-		 */
+
 		inline MaterialType getMaterialsType()const
 		{
 			return m_materialType;
 		}
+		/**@}*/
 		/**
-		 *\~english
-		 *\brief		sets the materials type.
-		 *\param[in]	p_type	The new value.
-		 *\~french
-		 *\brief		Définit le type des matériaux.
-		 *\param[in]	p_type	La nouvelle valeur.
-		 */
-		inline void setMaterialsType( MaterialType p_type )
+		*\~english
+		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		*/
+		/**@{*/
+		inline void setUserInputListener( UserInputListenerSPtr listener )
 		{
-			m_materialType = p_type;
+			m_userInputListener = listener;
 		}
+
+		inline void setPerObjectLighting( bool value )
+		{
+			m_perObjectLighting = value;
+		}
+
+		inline void setMaterialsType( MaterialType type )
+		{
+			m_materialType = type;
+		}
+		/**@}*/
 
 	private:
 		void doLoadCoreData();
 
 	private:
-		//!\~english	The mutex, to make the engine resources access thread-safe.
-		//!\~french		Le mutex utilisé pour que l'accès aux ressources du moteur soit thread-safe.
+		castor::String const m_appName;
 		std::recursive_mutex m_mutexResources;
-		//!\~english	The render loop.
-		//!\~french		La boucle de rendu.
 		RenderLoopUPtr m_renderLoop;
-		//!\~english	The engine version.
-		//!\~french		La version du moteur.
 		Version m_version;
-		//!\~english	The current RenderSystem.
-		//!\~french		Le RenderSystem courant.
 		RenderSystemUPtr m_renderSystem;
-		//!\~english	Tells if engine is cleaned up.
-		//!\~french		Dit si le moteur est nettoyé.
 		bool m_cleaned;
-		//!\~english	Tells if engine uses an asynchronous render loop.
-		//!\~french		Dit si le moteur utilise un boucle de rendu asynchrone.
 		bool m_threaded;
-		//!\~english	The need for per object lighting.
-		//!\~french		Le besoin d'un éclairage par objet.
 		bool m_perObjectLighting;
-		//!\~english	Default sampler.
-		//!\~french		Le sampler par défaut.
 		SamplerSPtr m_defaultSampler;
-		//!\~english	Lights textures sampler.
-		//!\~french		L'échantillonneur utilisé pour les textures de lumières.
 		SamplerSPtr m_lightsSampler;
-		//!\~english	The shaders collection.
-		//!\~french		La collection de shaders.
 		DECLARE_NAMED_CACHE_MEMBER( shader, ShaderProgram );
-		//!\~english	The sampler states collection.
-		//!\~french		La collection de sampler states.
 		DECLARE_CACHE_MEMBER( sampler, Sampler );
-		//!\~english	The materials cache.
-		//!\~french		Le cache de matériaux.
 		DECLARE_CACHE_MEMBER( material, Material );
-		//!\~english	The plug-ins cache.
-		//!\~french		Le cache de plug-ins.
 		DECLARE_CACHE_MEMBER( plugin, Plugin );
-		//!\~english	The overlays cache.
-		//!\~french		La cache d'overlays.
 		DECLARE_CACHE_MEMBER( overlay, Overlay );
-		//!\~english	The scenes cache.
-		//!\~french		La cache de scènes.
 		DECLARE_CACHE_MEMBER( scene, Scene );
-		//!\~english	The frame listeners cache.
-		//!\~french		Le cache de frame listeners.
 		DECLARE_CACHE_MEMBER( listener, FrameListener );
-		//!\~english	The render targets cache.
-		//!\~french		Le cache de cibles de rendu.
 		DECLARE_NAMED_CACHE_MEMBER( target, RenderTarget );
-		//!\~english	The render technique cache.
-		//!\~french		Le cache de techniques de rendu.
 		DECLARE_CACHE_MEMBER( technique, RenderTechnique );
-		//!\~english	The render windows cache.
-		//!\~french		Le cache de fenêtres de rendu.
 		DECLARE_CACHE_MEMBER( window, RenderWindow );
-		//!\~english	The fonts cache.
-		//!\~french		La cache de polices.
 		castor::FontCache m_fontCache;
-		//!\~english	The images cache.
-		//!\~french		La cache d'images.
 		castor::ImageCache m_imageCache;
-		//!\~english	The user input listener.
-		//!\~french		Le listener d'entrées utilisateur.
 		UserInputListenerSPtr m_userInputListener;
-		//!\~english	The map holding the parsers, sorted by section, and plug-in name.
-		//!\~french		La map de parseurs, triés par section, et nom de plug-in.
 		std::map< castor::String, castor::FileParser::AttributeParsersBySection > m_additionalParsers;
-		//!\~english	The map holding the sections, sorted plug-in name.
-		//!\~french		La map de sections, triées par nom de plug-in.
 		std::map< castor::String, castor::StrUIntMap > m_additionalSections;
-		//!\~english	The default frame listener.
-		//!\~french		Le frame listener par défaut.
 		FrameListenerWPtr m_defaultListener;
-		//!\~english	The RenderSystem factory.
-		//!\~french		La fabrique de RenderSystem.
 		RenderSystemFactory m_renderSystemFactory;
-		//!\~english	The MeshGenerator factory.
-		//!\~french		La fabrique de MeshGenerator.
 		MeshFactory m_meshFactory;
-		//!\~english	The subdivider factory.
-		//!\~french		La fabrique de subdiviseurs.
 		SubdividerFactory m_subdividerFactory;
-		//!\~english	The importer factory.
-		//!\~french		La fabrique d'importeurs.
 		ImporterFactory m_importerFactory;
-		//!\~english	The CpuParticleSystem factory.
-		//!\~french		La fabrique de CpuParticleSystem.
 		ParticleFactory m_particleFactory;
-		//!\~english	The CPU informations.
-		//!\~french		Les informations sur le CPU.
 		castor::CpuInformations m_cpuInformations;
-		//!\~english	The materials type.
-		//!\~french		Le type des matériaux.
 		MaterialType m_materialType;
+		bool m_enableValidation{ false };
+		std::unique_ptr< RenderDepthQuad > m_renderDepth;
 	};
 }
 

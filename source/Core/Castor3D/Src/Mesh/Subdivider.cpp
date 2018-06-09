@@ -1,4 +1,4 @@
-﻿#include "Subdivider.hpp"
+#include "Subdivider.hpp"
 
 #include "Engine.hpp"
 #include "SubmeshComponent/Face.hpp"
@@ -14,10 +14,10 @@ using namespace castor;
 namespace castor3d
 {
 	Subdivider::Subdivider()
-		:	m_submesh( )
-		,	m_bGenerateBuffers( true )
-		,	m_pfnSubdivisionEnd( nullptr )
-		,	m_bThreaded( false )
+		: m_submesh( )
+		, m_generateBuffers( true )
+		, m_onSubdivisionEnd( nullptr )
+		, m_threaded( false )
 	{
 	}
 
@@ -26,42 +26,47 @@ namespace castor3d
 		cleanup();
 	}
 
-	void Subdivider::subdivide( SubmeshSPtr p_submesh, int p_occurences, bool p_generateBuffers, bool p_threaded )
+	void Subdivider::subdivide( SubmeshSPtr submesh
+		, int occurences
+		, bool generateBuffers
+		, bool threaded )
 	{
-		for ( int i = 0; i < p_occurences; ++i )
+		for ( int i = 0; i < occurences; ++i )
 		{
-			doSubdivide( p_submesh, p_generateBuffers, p_threaded );
+			doSubdivide( submesh, generateBuffers, threaded );
 		}
 	}
 
 	void Subdivider::cleanup()
 	{
-		m_pfnSubdivisionEnd = nullptr;
+		m_onSubdivisionEnd = nullptr;
 
-		if ( m_bThreaded && m_pThread )
+		if ( m_threaded && m_thread )
 		{
-			m_pThread->join();
+			m_thread->join();
 		}
 
-		m_pThread.reset();
-		m_bThreaded = false;
+		m_thread.reset();
+		m_threaded = false;
 		m_submesh.reset();
 		m_arrayFaces.clear();
 	}
 
-	BufferElementGroupSPtr Subdivider::addPoint( real x, real y, real z )
+	SubmeshVertex & Subdivider::addPoint( real x, real y, real z )
 	{
-		return m_submesh->addPoint( x, y, z );
+		auto index = m_submesh->getPointsCount();
+		m_points.emplace_back( std::make_unique< SubmeshVertex >( SubmeshVertex{ index, m_submesh->addPoint( x, y, z ) } ) );
+		return *m_points.back();
 	}
 
-	BufferElementGroupSPtr Subdivider::addPoint( Point3r const & p_v )
+	SubmeshVertex & Subdivider::addPoint( Point3r const & v )
 	{
-		return addPoint( p_v[0], p_v[1], p_v[2] );
+		return addPoint( v[0], v[1], v[2] );
 	}
 
-	BufferElementGroupSPtr Subdivider::addPoint( real * p_v )
+	SubmeshVertex & Subdivider::addPoint( real * v )
 	{
-		return addPoint( p_v[0], p_v[1], p_v[2] );
+		return addPoint( v[0], v[1], v[2] );
 	}
 
 	Face Subdivider::addFace( uint32_t a, uint32_t b, uint32_t c )
@@ -72,9 +77,9 @@ namespace castor3d
 		return result;
 	}
 
-	int Subdivider::isInMyPoints( Point3r const & p_vertex, double p_precision )
+	int Subdivider::isInMyPoints( Point3r const & vertex, double precision )
 	{
-		return m_submesh->isInMyPoints( p_vertex, p_precision );
+		return m_submesh->isInMyPoints( vertex, precision );
 	}
 
 	uint32_t Subdivider::getPointsCount()const
@@ -82,53 +87,52 @@ namespace castor3d
 		return m_submesh->getPointsCount();
 	}
 
-	BufferElementGroupSPtr Subdivider::getPoint( uint32_t i )const
+	SubmeshVertex & Subdivider::getPoint( uint32_t i )const
 	{
-		return m_submesh->getPoint( i );
+		return *m_points[i];
 	}
 
-	VertexPtrArray const & Subdivider::getPoints()const
+	InterleavedVertexArray const & Subdivider::getPoints()const
 	{
 		return m_submesh->getPoints();
 	}
 
-	castor3d::BufferElementGroupSPtr Subdivider::doTryAddPoint( Point3r const & p_point )
+	SubmeshVertex & Subdivider::doTryAddPoint( Point3r const & point )
 	{
-		std::unique_lock< std::recursive_mutex > lock( m_mutex );
+		auto lock = makeUniqueLock( m_mutex );
 		int index = -1;
-		castor3d::BufferElementGroupSPtr result;
 
-		if ( ( index = isInMyPoints( p_point, 0.00001 ) ) < 0 )
+		if ( ( index = isInMyPoints( point, 0.00001 ) ) < 0 )
 		{
-			result = addPoint( p_point );
+			return addPoint( point );
 		}
-		else
-		{
-			result = getPoint( index );
-			Coords3r coords;
-			castor3d::Vertex::getPosition( *result, coords );
 
-			if ( coords != p_point )
-			{
-				castor3d::Vertex::setPosition( *result, ( coords + p_point ) / real( 2 ) );
-			}
+		auto & result = getPoint( index );
+		auto position = result.m_vertex.pos;
+
+		if ( position != point )
+		{
+			result.m_vertex.pos = ( position + point ) / real( 2 );
 		}
 
 		return result;
 	}
 
-	void Subdivider::doSubdivide( SubmeshSPtr p_submesh, bool p_generateBuffers, bool p_threaded )
+	void Subdivider::doSubdivide( SubmeshSPtr submesh, bool generateBuffers, bool threaded )
 	{
-		m_submesh = p_submesh;
-		m_bGenerateBuffers = p_generateBuffers;
+		m_submesh = submesh;
+		m_generateBuffers = generateBuffers;
 		m_submesh->computeContainers();
 
 		doInitialise();
-		m_bThreaded = p_threaded;
+		m_threaded = threaded;
 
-		if ( p_threaded )
+		if ( threaded )
 		{
-			m_pThread = std::make_shared< std::thread >( std::bind( &Subdivider::doSubdivideThreaded, this ) );
+			m_thread = std::make_shared< std::thread >( [this]()
+				{
+					doSubdivideThreaded();
+				} );
 		}
 		else
 		{
@@ -146,7 +150,7 @@ namespace castor3d
 	{
 		m_submesh->computeNormals( true );
 
-		if ( m_bGenerateBuffers && !m_bThreaded )
+		if ( m_generateBuffers && !m_threaded )
 		{
 			m_submesh->initialise();
 		}
@@ -160,7 +164,7 @@ namespace castor3d
 		doSubdivide();
 		doSwapBuffers();
 
-		if ( m_bGenerateBuffers )
+		if ( m_generateBuffers )
 		{
 			m_submesh->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePreRender, [this]()
 			{
@@ -169,59 +173,59 @@ namespace castor3d
 			} ) );
 		}
 
-		if ( m_pfnSubdivisionEnd )
+		if ( m_onSubdivisionEnd )
 		{
-			m_pfnSubdivisionEnd( *this );
+			m_onSubdivisionEnd( *this );
 		}
 
 		return 0;
 	}
 
-	void Subdivider::doSetTextCoords( BufferElementGroup const & p_a, BufferElementGroup const & p_b, BufferElementGroup const & p_c, BufferElementGroup & p_d, BufferElementGroup & p_e, BufferElementGroup & p_f )
+	void Subdivider::doSetTextCoords( SubmeshVertex const & a
+		, SubmeshVertex const & b
+		, SubmeshVertex const & c
+		, SubmeshVertex & d
+		, SubmeshVertex & e
+		, SubmeshVertex & f )
 	{
-		Point3r aTex;
-		Point3r bTex;
-		Point3r cTex;
-		Vertex::getTexCoord( p_a, aTex );
-		Vertex::getTexCoord( p_b, bTex );
-		Vertex::getTexCoord( p_c, cTex );
-		Vertex::setTexCoord( p_d, ( aTex + bTex ) / real( 2.0 ) );
-		Vertex::setTexCoord( p_e, ( bTex + cTex ) / real( 2.0 ) );
-		Vertex::setTexCoord( p_f, ( aTex + cTex ) / real( 2.0 ) );
-		addFace( p_a.getIndex(), p_d.getIndex(), p_f.getIndex() );
-		addFace( p_b.getIndex(), p_e.getIndex(), p_d.getIndex() );
-		addFace( p_c.getIndex(), p_f.getIndex(), p_e.getIndex() );
-		addFace( p_d.getIndex(), p_e.getIndex(), p_f.getIndex() );
+		Point3r aTex = a.m_vertex.tex;
+		Point3r bTex = b.m_vertex.tex;
+		Point3r cTex = c.m_vertex.tex;
+		d.m_vertex.tex = ( aTex + bTex ) / real( 2.0 );
+		e.m_vertex.tex = ( bTex + cTex ) / real( 2.0 );
+		f.m_vertex.tex = ( aTex + cTex ) / real( 2.0 );
+		addFace( a.m_index, d.m_index, f.m_index );
+		addFace( b.m_index, e.m_index, d.m_index );
+		addFace( c.m_index, f.m_index, e.m_index );
+		addFace( d.m_index, e.m_index, f.m_index );
 	}
 
-	void Subdivider::doSetTextCoords( BufferElementGroup const & p_a, BufferElementGroup const & p_b, BufferElementGroup const & p_c, BufferElementGroup & p_p )
+	void Subdivider::doSetTextCoords( SubmeshVertex const & a
+		, SubmeshVertex const & b
+		, SubmeshVertex const & c
+		, SubmeshVertex & p )
 	{
-		Point3r aTex;
-		Point3r bTex;
-		Point3r cTex;
-		Vertex::getTexCoord( p_a, aTex );
-		Vertex::getTexCoord( p_b, bTex );
-		Vertex::getTexCoord( p_c, cTex );
-		Vertex::setTexCoord( p_p, ( aTex + bTex + cTex ) / real( 3.0 ) );
-		addFace( p_a.getIndex(), p_b.getIndex(), p_p.getIndex() );
-		addFace( p_b.getIndex(), p_c.getIndex(), p_p.getIndex() );
-		addFace( p_c.getIndex(), p_a.getIndex(), p_p.getIndex() );
+		Point3r aTex = a.m_vertex.tex;
+		Point3r bTex = b.m_vertex.tex;
+		Point3r cTex = c.m_vertex.tex;
+		p.m_vertex.tex = ( aTex + bTex + cTex ) / real( 3.0 );
+		addFace( a.m_index, b.m_index, p.m_index );
+		addFace( b.m_index, c.m_index, p.m_index );
+		addFace( c.m_index, a.m_index, p.m_index );
 	}
 }
 
-String & operator << ( String & p_stream, castor3d::BufferElementGroup const & p_vertex )
+String & operator << ( String & stream, castor3d::SubmeshVertex const & vertex )
 {
-	Point3r ptPos( reinterpret_cast< real const * >( p_vertex.constPtr() ) );
-	p_stream += cuT( "Vertex[" );
-	p_stream += string::toString( p_vertex.getIndex() );
-	p_stream += cuT( "] - Buffer : [" );
-	p_stream += string::toString( ptPos.constPtr() );
-	p_stream += cuT( "] - (" );
-	p_stream += string::toString( ptPos[0] );
-	p_stream += cuT( "," );
-	p_stream += string::toString( ptPos[1] );
-	p_stream += cuT( "," );
-	p_stream += string::toString( ptPos[2] );
-	p_stream += cuT( ")" );
-	return p_stream;
+	auto & ptPos = vertex.m_vertex.pos;
+	stream += cuT( "Vertex[" );
+	stream += string::toString( vertex.m_index );
+	stream += cuT( "] - Buffer : (" );
+	stream += string::toString( ptPos[0] );
+	stream += cuT( "," );
+	stream += string::toString( ptPos[1] );
+	stream += cuT( "," );
+	stream += string::toString( ptPos[2] );
+	stream += cuT( ")" );
+	return stream;
 }

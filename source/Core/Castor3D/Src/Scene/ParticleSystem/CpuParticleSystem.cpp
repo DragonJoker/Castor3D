@@ -6,8 +6,8 @@ using namespace castor;
 
 namespace castor3d
 {
-	CpuParticleSystem::CpuParticleSystem( ParticleSystem & p_parent )
-		: ParticleSystemImpl{ ParticleSystemImpl::Type::eCpu, p_parent }
+	CpuParticleSystem::CpuParticleSystem( ParticleSystem & parent )
+		: ParticleSystemImpl{ ParticleSystemImpl::Type::eCpu, parent }
 	{
 	}
 
@@ -25,16 +25,17 @@ namespace castor3d
 			m_particles.emplace_back( m_inputs, defaultValues );
 		}
 
-		return true;
+		return doInitialise();
 	}
 
 	void CpuParticleSystem::cleanup()
 	{
+		doCleanup();
 		m_particles.clear();
 	}
 
-	void CpuParticleSystem::addParticleVariable( castor::String const & p_name, ElementType p_type, castor::String const & p_defaultValue )
+	void CpuParticleSystem::addParticleVariable( castor::String const & name, ParticleFormat type, castor::String const & defaultValue )
 	{
-		m_inputs.push_back( BufferElementDeclaration{ p_name, 0u, p_type, m_inputs.stride() } );
+		m_inputs.push_back( ParticleElementDeclaration{ name, 0u, type, m_inputs.stride() } );
 	}
 }

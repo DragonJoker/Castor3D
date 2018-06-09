@@ -4,15 +4,19 @@ See LICENSE file in root folder
 #ifndef ___C3D_RENDER_TARGET_H___
 #define ___C3D_RENDER_TARGET_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "HDR/HdrConfig.hpp"
 #include "Miscellaneous/Parameter.hpp"
 #include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Render/RenderInfo.hpp"
+#include "RenderToTexture/RenderQuad.hpp"
 #include "Texture/TextureUnit.hpp"
+
+#include <RenderPass/FrameBuffer.hpp>
+#include <Sync/Semaphore.hpp>
 
 #include <Design/OwnedBy.hpp>
 #include <Graphics/Size.hpp>
-#include <Design/OwnedBy.hpp>
+#include <Miscellaneous/PreciseTimer.hpp>
 
 namespace castor3d
 {
@@ -71,7 +75,7 @@ namespace castor3d
 			C3D_API bool operator()( castor3d::RenderTarget const & target, castor::TextFile & file )override;
 		};
 
-	private:
+	public:
 		/*!
 		\author		Sylvain DOREMUS
 		\version	0.7.0.0
@@ -85,21 +89,19 @@ namespace castor3d
 		{
 		public:
 			explicit TargetFbo( RenderTarget & renderTarget );
-			bool initialise( uint32_t index, castor::Size const & size );
+			bool initialise( renderer::RenderPass & renderPass
+				, castor::Size const & size );
 			void cleanup();
 
 			//!\~english	The texture receiving the color render.
 			//!\~french		La texture recevant le rendu couleur.
-			TextureUnit m_colourTexture;
+			TextureUnit colourTexture;
 			//!\~english	The frame buffer.
 			//!\~french		Le tampon d'image.
-			FrameBufferSPtr m_frameBuffer;
-			//!\~english	The attach between the colour texture and main frame buffer.
-			//!\~french		L'attache entre la texture de couleurs et le tampon principal.
-			TextureAttachmentSPtr m_colourAttach;
+			renderer::FrameBufferPtr frameBuffer;
 
 		private:
-			RenderTarget & m_renderTarget;
+			RenderTarget & renderTarget;
 		};
 
 	public:
@@ -133,14 +135,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
-		 *\remarks		Initialises the buffers.
-		 *\param[in]	index	The base texture index.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
-		 *\remarks		Initialise les buffers.
-		 *\param[in]	index	L'index de texture de base.
 		 */
-		C3D_API void initialise( uint32_t index );
+		C3D_API void initialise();
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
@@ -150,7 +148,7 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		sets the target dimensions.
+		 *\brief		Sets the target dimensions.
 		 *\remarks		This method must be called before initialisation, otherwise it will have no effect.
 		 *\param[in]	size	The new dimensions.
 		 *\~english
@@ -177,7 +175,7 @@ namespace castor3d
 		C3D_API ViewportType getViewportType()const;
 		/**
 		 *\~english
-		 *\brief		sets the ViewportType.
+		 *\brief		Sets the ViewportType.
 		 *\param[in]	value	The new ViewportType.
 		 *\~french
 		 *\brief		Définit le ViewportType.
@@ -186,7 +184,7 @@ namespace castor3d
 		C3D_API void setViewportType( ViewportType value );
 		/**
 		 *\~english
-		 *\brief		sets the camera.
+		 *\brief		Sets the camera.
 		 *\remarks		Defines also LEye and REye cameras.
 		 *\param[in]	camera	The new camera.
 		 *\~french
@@ -197,7 +195,7 @@ namespace castor3d
 		C3D_API void setCamera( CameraSPtr camera );
 		/**
 		 *\~english
-		 *\brief		sets the tone mapping implementation type.
+		 *\brief		Sets the tone mapping implementation type.
 		 *\param[in]	name		The type.
 		 *\param[in]	parameters	The parameters.
 		 *\~french
@@ -217,263 +215,198 @@ namespace castor3d
 		 */
 		C3D_API void addPostEffect( PostEffectSPtr effect );
 		/**
-		 *\~english
-		 *\return		The intialisation status.
-		 *\~french
-		 *\return		Le statut de l'initialisation.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		**/
+		/**@{*/
 		inline bool isInitialised()const
 		{
 			return m_initialised;
 		}
-		/**
-		 *\~english
-		 *\return		The target's dimensions.
-		 *\~english
-		 *\return		Les dimensions de la cible.
-		 */
+
 		castor::Size const & getSize()const
 		{
 			return m_size;
 		}
-		/**
-		 *\~english
-		 *\return		The RenderTechnique.
-		 *\~french
-		 *\return		La RenderTechnique.
-		 */
+
 		inline RenderTechniqueSPtr getTechnique()const
 		{
 			return m_renderTechnique;
 		}
-		/**
-		 *\~english
-		 *\brief		Defines the RenderTechnique.
-		 *\param[in]	technique	The RenderTechnique.
-		 *\~french
-		 *\brief		Définit la RenderTechnique.
-		 *\param[in]	technique	La RenderTechnique.
-		 */
-		inline void setTechnique( RenderTechniqueSPtr technique )
-		{
-			m_renderTechnique = technique;
-		}
-		/**
-		 *\~english
-		 *\return		The Scene.
-		 *\~french
-		 *\return		La Scene.
-		 */
+
 		inline SceneSPtr getScene()const
 		{
 			return m_scene.lock();
 		}
-		/**
-		 *\~english
-		 *\return		The Camera.
-		 *\~french
-		 *\return		La Camera.
-		 */
+
 		inline CameraSPtr getCamera()const
 		{
 			return m_camera.lock();
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the Scene.
-		 *\param[in]	scene	The new Scene.
-		 *\~french
-		 *\brief		Définit la Scene.
-		 *\param[in]	scene	La nouvelle Scene.
-		 */
-		inline void setScene( SceneSPtr scene )
-		{
-			m_scene = scene;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the SSAO configuration.
-		 *\param[in]	config	The new value.
-		 *\~french
-		 *\brief		Définit la configuration du SSAO.
-		 *\param[in]	config	La nouvelle value.
-		 */
-		inline void setSsaoConfig( SsaoConfig const & config )
-		{
-			m_ssaoConfig = config;
-		}
-		/**
-		 *\~english
-		 *\return		The frame buffer.
-		 *\~french
-		 *\return		Le tampon d'image.
-		 */
-		inline FrameBufferSPtr getFrameBuffer()const
-		{
-			return m_frameBuffer.m_frameBuffer;
-		}
-		/**
-		 *\~english
-		 *\return		The RGB texture.
-		 *\~french
-		 *\return		La texture RGB.
-		 */
+
 		inline TextureUnit const & getTexture()const
 		{
-			return m_frameBuffer.m_colourTexture;
+			return m_flippedFrameBuffer.colourTexture;
 		}
-		/**
-		 *\~english
-		 *\return		The velocity texture.
-		 *\~french
-		 *\return		La texture de vélocités.
-		 */
+
 		inline TextureUnit const & getVelocity()const
 		{
 			return m_velocityTexture;
 		}
-		/**
-		 *\~english
-		 *\return		The window pixel format.
-		 *\~french
-		 *\return		Le format des pixels de la fenêtre.
-		 */
-		inline castor::PixelFormat getPixelFormat()const
+
+		inline renderer::Format getPixelFormat()const
 		{
 			return m_pixelFormat;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the window pixel format
-		 *\param[in]	value	The new window pixel format
-		 *\~french
-		 *\brief		Définit le format des pixels de la fenêtre
-		 *\param[in]	value	Le nouveau format des pixels de la fenêtre
-		 */
-		inline void setPixelFormat( castor::PixelFormat value )
-		{
-			m_pixelFormat = value;
-		}
-		/**
-		 *\~english
-		 *\return		The target type.
-		 *\~french
-		 *\return		Le type de cible.
-		 */
+
 		inline TargetType getTargetType()const
 		{
 			return m_type;
 		}
-		/**
-		 *\~english
-		 *\return		The target index.
-		 *\~french
-		 *\return		L'indice de la cible.
-		 */
+
 		inline uint32_t getIndex()const
 		{
 			return m_index;
 		}
-		/**
-		 *\~english
-		 *\return		The post effects array.
-		 *\~french
-		 *\return		Le tableau d'effets de post rendu.
-		 */
-		inline PostEffectPtrArray const & getPostEffects()const
+
+		inline PostEffectPtrArray const & getHDRPostEffects()const
 		{
-			return m_postEffects;
+			return m_hdrPostEffects;
 		}
-		/**
-		 *\~english
-		 *\return		The tone mapping implementation.
-		 *\~french
-		 *\return		L'implémentation de mappage de tons.
-		 */
+
+		inline PostEffectPtrArray const & getSRGBPostEffects()const
+		{
+			return m_srgbPostEffects;
+		}
+
 		inline ToneMappingSPtr getToneMapping()const
 		{
 			return m_toneMapping;
 		}
+
+		inline renderer::Semaphore const & getSemaphore()const
+		{
+			REQUIRE( m_signalFinished );
+			return *m_signalFinished;
+		}
+
+		inline HdrConfig const & getHdrConfig()const
+		{
+			return m_hdrConfig;
+		}
+		/**@}*/
 		/**
-		 *\~english
-		 *\brief		Sets the jittering value.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit la valeur de jittering.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
+		*\~english
+		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		**/
+		/**@{*/
+		inline void setTechnique( RenderTechniqueSPtr technique )
+		{
+			m_renderTechnique = technique;
+		}
+
+		inline void setScene( SceneSPtr scene )
+		{
+			m_scene = scene;
+		}
+
+		inline void setSsaoConfig( SsaoConfig const & config )
+		{
+			m_ssaoConfig = config;
+		}
+
+		inline void setPixelFormat( renderer::Format value )
+		{
+			m_pixelFormat = value;
+		}
+
 		inline void setJitter( castor::Point2r const & value )
 		{
 			m_jitter = value;
 		}
 
+		inline void setExposure( float value )
+		{
+			m_hdrConfig.setExposure( value );
+		}
+
+		inline void setGamma( float value )
+		{
+			m_hdrConfig.setGamma( value );
+		}
+		/**@}*/
+
 	private:
+		C3D_API void doInitialiseRenderPass();
+		C3D_API bool doInitialiseFrameBuffer();
+		C3D_API bool doInitialiseVelocityTexture();
+		C3D_API bool doInitialiseTechnique();
+		C3D_API bool doInitialiseToneMapping();
+		C3D_API void doInitialiseCopyCommands( renderer::CommandBufferPtr & commandBuffer
+			, renderer::TextureView const & source
+			, renderer::TextureView const & target );
+		C3D_API void doInitialiseFlip();
 		C3D_API void doRender( RenderInfo & info
 			, TargetFbo & fbo
 			, CameraSPtr camera );
+		C3D_API renderer::Semaphore const & doApplyPostEffects( renderer::Semaphore const & toWait
+			, PostEffectPtrArray const & effects
+			, renderer::CommandBufferPtr const & copyCommandBuffer
+			, renderer::SemaphorePtr const & copyFinished
+			, castor::Nanoseconds const & elapsedTime );
+		C3D_API renderer::Semaphore const & doApplyToneMapping( renderer::Semaphore const & toWait );
+		C3D_API renderer::Semaphore const & doRenderOverlays( renderer::Semaphore const & toWait
+			, Camera const & camera );
+		C3D_API renderer::Semaphore const & doFlip( renderer::Semaphore const & toWait );
 
 	public:
 		//!\~english The render target default sampler name	\~french Le nom du sampler par défaut pour la cible de rendu
 		C3D_API static const castor::String DefaultSamplerName;
 
 	private:
-		//!\~english	The number of actually created render targets.
-		//!\~french		Le compte de render target actuellement créées.
 		static uint32_t sm_uiCount;
-		//!\~english	The render target type.
-		//!\~french		Type de RenderTarget.
 		TargetType m_type;
-		//!\~english	Tells if the target is initalised.
-		//!\~french		Dit si la cible est initialisée.
 		bool m_initialised;
-		//!\~english	The target size.
-		//!\~french		Les dimensions de la cible.
 		castor::Size m_size;
-		//!\~english	The technique used to render this target.
-		//!\~french		La technique utilisée pour rendre cette cible.
 		RenderTechniqueSPtr m_renderTechnique;
-		//!\~english	The scene rendered in this render target.
-		//!\~french		La scène rendue par cette RenderTarget.
 		SceneWPtr m_scene;
-		//!\~english	The camera used to render the scene.
-		//!\~french		La caméra utilisée pour rendre la scène.
 		CameraWPtr m_camera;
-		//!\~english	Frame buffer.
-		//!\~french		tampon d'image.
-		TargetFbo m_frameBuffer;
-		//!\~english	The target display format.
-		//!\~french		Le format des pixels de la cible.
-		castor::PixelFormat m_pixelFormat;
-		//!\~english	This render target's index.
-		//!\~french		L'index de cette render target.
+		renderer::RenderPassPtr m_renderPass;
+		renderer::CommandBufferPtr m_toneMappingCommandBuffer;
+		TargetFbo m_workFrameBuffer;
+		TargetFbo m_flippedFrameBuffer;
+		renderer::Format m_pixelFormat;
 		uint32_t m_index;
-		//!\~english	The render technique parameters.
-		//!\~french		Les paramètres de la technique de rendu.
 		Parameters m_techniqueParameters;
-		//!\~english	The post effects.
-		//!\~french		Les effets post rendu.
-		PostEffectPtrArray m_postEffects;
-		//!\~english	The tone mapping implementation.
-		//!\~french		L'implémentation de mappage de ton.
+		PostEffectPtrArray m_hdrPostEffects;
+		renderer::CommandBufferPtr m_hdrCopyCommands;
+		renderer::SemaphorePtr m_hdrCopyFinished;
+		HdrConfig m_hdrConfig;
 		ToneMappingSPtr m_toneMapping;
-		//!\~english	The post effects applying after tone mapping.
-		//!\~french		Les effets post rendu s'appliquant après le mappage de tons.
-		PostEffectPtrArray m_postPostEffects;
-		//!\~english	The post effect timer.
-		//!\~french		Le timer d'effets post-rendu.
-		RenderPassTimerSPtr m_postPostFxTimer;
-		//!\~english	The overlay rendering timer.
-		//!\~french		Le timer de rendu des incrustations.
+		PostEffectPtrArray m_srgbPostEffects;
+		renderer::CommandBufferPtr m_srgbCopyCommands;
+		renderer::SemaphorePtr m_srgbCopyFinished;
+		RenderPassTimerSPtr m_toneMappingTimer;
 		RenderPassTimerSPtr m_overlaysTimer;
-		//!\~english	The SSAO configuration.
-		//!\~french		La configuration du SSAO.
+		std::unique_ptr< RenderQuad > m_flipQuad;
+		renderer::CommandBufferPtr m_flipCommands;
+		renderer::SemaphorePtr m_flipFinished;
 		SsaoConfig m_ssaoConfig;
-		//!\~english	The jittering value.
-		//!\~french		La valeur de jittering.
 		castor::Point2r m_jitter;
-		//!\~english	The texture receiving the velocity render.
-		//!\~french		La texture recevant le rendu vélocité.
 		TextureUnit m_velocityTexture;
+		OverlayRendererSPtr m_overlayRenderer;
+		renderer::SemaphorePtr m_signalReady;
+		renderer::Semaphore const * m_signalFinished{ nullptr };
+		renderer::FencePtr m_fence;
+		castor::PreciseTimer m_timer;
 	};
 }
 

@@ -1,22 +1,19 @@
-option( CASTOR_BUILD_CASTOR3D "Build Castor3D" TRUE )
 option( CASTOR_BUILD_TEST_CASTORUTILS "Build CastorUtils test application" TRUE )
 option( CASTOR_BUILD_TEST_CASTOR3D "Build Castor3D test application" TRUE )
+option( CASTOR_BUILD_TEST_RENDERER "Build Renderer test applications" FALSE )
 
 function( CoreInit )
 	set( Cutils "no (Not wanted)" PARENT_SCOPE )
 	set( CUtlT "no (Not wanted)" PARENT_SCOPE )
 	set( GlslW "no (Not wanted)" PARENT_SCOPE )
 	set( C3D "no (Not wanted)" PARENT_SCOPE )
+	set( Rnd "no (Not wanted)" PARENT_SCOPE )
 	set( C3DT "no (Not wanted)" PARENT_SCOPE )
 	set( CT "no (Not wanted)" PARENT_SCOPE )
 endfunction( CoreInit )
 
 function( CoreBuild )
 	set( Error FALSE )
-
-	if ( ANDROID )
-		add_subdirectory( Core/FreeType )
-	endif ()
 
 	set( Build ${Cutils} )
 	add_subdirectory( Core/CastorUtils )
@@ -31,7 +28,7 @@ function( CoreBuild )
 		PARENT_SCOPE
 	)
 
-	if ( ${CASTOR_BUILD_CASTOR3D} )
+	if ( CASTOR_BUILD_CASTOR3D )
 		set( Build ${GlslW} )
 		add_subdirectory( Core/GlslWriter )
 		set( GlslW ${Build} PARENT_SCOPE )
@@ -41,21 +38,27 @@ function( CoreBuild )
 		set( C3D ${Build} PARENT_SCOPE )
 	endif ()
 
-	if( ${CASTOR_BUILDGRP_TEST} )
+	if( CASTOR_BUILDGRP_TEST )
 		set( Build ${CT} )
 		add_subdirectory( Core/CastorTest )
 		set( CT ${Build} PARENT_SCOPE )
 
-		if ( ${CASTOR_BUILD_TEST_CASTORUTILS} )
+		if ( CASTOR_BUILD_TEST_CASTORUTILS )
 			set( Build ${CUtlT} )
 			add_subdirectory( Core/CastorUtils/Test )
 			set( CUtlT ${Build} PARENT_SCOPE )
 		endif ()
 
-		if ( ${CASTOR_BUILD_CASTOR3D} AND ${CASTOR_BUILD_TEST_CASTOR3D} )
+		if ( CASTOR_BUILD_CASTOR3D AND CASTOR_BUILD_TEST_CASTOR3D )
 			set( Build ${C3DT} )
 			add_subdirectory( Core/Castor3D/Test )
 			set( C3DT ${Build} PARENT_SCOPE )
+		endif()
+
+		if ( CASTOR_BUILDGRP_RENDERER AND CASTOR_BUILD_TEST_RENDERER )
+			set( Build ${RdrT} )
+			add_subdirectory( Core/Renderer/Test )
+			set( RdrT ${Build} PARENT_SCOPE )
 		endif()
 	endif()
 
@@ -163,6 +166,33 @@ function( CoreSetup )
 			DESCRIPTION "Development files for GlslWriter."
 			GROUP Development
 			DEPENDS Castor3D CastorUtils_dev Castor3D Castor3D_dev
+			INSTALL_TYPES Developer Full
+		)
+
+		cpack_add_component( Renderer
+			DISPLAY_NAME "Renderer"
+			DESCRIPTION "Base renderer API."
+			REQUIRED
+			GROUP Core
+			INSTALL_TYPES Minimal Full
+		)
+		cpack_add_component( Renderer_dev
+			DISPLAY_NAME "Renderer SDK"
+			DESCRIPTION "Development files for Renderer."
+			GROUP Development
+			DEPENDS CastorUtils CastorUtils_dev
+			INSTALL_TYPES Developer Full
+		)
+		cpack_add_component( Renderer_French_Doc
+			DISPLAY_NAME "Renderer French help"
+			DESCRIPTION "Renderer French HTML documentation."
+			GROUP Documentation
+			INSTALL_TYPES Developer Full
+		)
+		cpack_add_component( Renderer_English_Doc
+			DISPLAY_NAME "Renderer English help"
+			DESCRIPTION "Renderer English HTML documentation."
+			GROUP Documentation
 			INSTALL_TYPES Developer Full
 		)
 

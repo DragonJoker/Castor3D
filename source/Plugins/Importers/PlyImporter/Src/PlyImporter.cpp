@@ -1,4 +1,4 @@
-﻿#include "PlyImporter.hpp"
+#include "PlyImporter.hpp"
 
 #include <Engine.hpp>
 
@@ -68,9 +68,6 @@ namespace C3dPly
 		std::istringstream ssToken;
 		String::size_type stIndex;
 		int iNbProperties = 0;
-		VertexSPtr pVertex;
-		Coords3r ptNml;
-		Coords2r ptTex;
 		SubmeshSPtr submesh = p_mesh.createSubmesh();
 		MaterialSPtr pMaterial = p_mesh.getScene()->getMaterialView().find( materialName );
 
@@ -110,7 +107,7 @@ namespace C3dPly
 						ssToken.str( strLine.substr( std::string( "element vertex " ).length() ) );
 						ssToken >> iNbVertex;
 						ssToken.clear( std::istringstream::goodbit );
-						Logger::logInfo( StringStream() << cuT( "Vertices: " ) << iNbVertex );
+						Logger::logInfo( castor::makeStringStream() << cuT( "Vertices: " ) << iNbVertex );
 						break;
 					}
 				}
@@ -127,7 +124,7 @@ namespace C3dPly
 					else
 					{
 						isFile.seekg( -isFile.gcount() ); // Unget last line
-						Logger::logDebug( StringStream() << cuT( "Vertex properties: " ) << iNbProperties );
+						Logger::logDebug( castor::makeStringStream() << cuT( "Vertex properties: " ) << iNbProperties );
 						break;
 					}
 				}
@@ -146,7 +143,7 @@ namespace C3dPly
 						ssToken.str( strLine.substr( std::string( "element face " ).size() ) );
 						ssToken >> iNbFaces;
 						ssToken.clear( std::istringstream::goodbit );
-						Logger::logInfo( StringStream() << cuT( "Triangles: " ) << iNbFaces );
+						Logger::logInfo( castor::makeStringStream() << cuT( "Triangles: " ) << iNbFaces );
 						break;
 					}
 				}
@@ -175,9 +172,9 @@ namespace C3dPly
 					{
 						std::getline( isFile, strLine );
 						ssToken.str( strLine );
-						ssToken >> vertex.m_pos[0] >> vertex.m_pos[1] >> vertex.m_pos[2];
-						ssToken >> vertex.m_nml[0] >> vertex.m_nml[1] >> vertex.m_nml[2];
-						ssToken >> vertex.m_tex[0] >> vertex.m_tex[1];
+						ssToken >> vertex.pos[0] >> vertex.pos[1] >> vertex.pos[2];
+						ssToken >> vertex.nml[0] >> vertex.nml[1] >> vertex.nml[2];
+						ssToken >> vertex.tex[0] >> vertex.tex[1];
 						ssToken.clear( std::istringstream::goodbit );
 					}
 				}
@@ -188,8 +185,8 @@ namespace C3dPly
 					{
 						std::getline( isFile, strLine );
 						ssToken.str( strLine );
-						ssToken >> vertex.m_pos[0] >> vertex.m_pos[1] >> vertex.m_pos[2];
-						ssToken >> vertex.m_nml[0] >> vertex.m_nml[1] >> vertex.m_nml[2];
+						ssToken >> vertex.pos[0] >> vertex.pos[1] >> vertex.pos[2];
+						ssToken >> vertex.nml[0] >> vertex.nml[1] >> vertex.nml[2];
 						ssToken.clear( std::istringstream::goodbit );
 					}
 				}
@@ -200,7 +197,7 @@ namespace C3dPly
 					{
 						std::getline( isFile, strLine );
 						ssToken.str( strLine );
-						ssToken >> vertex.m_pos[0] >> vertex.m_pos[1] >> vertex.m_pos[2];
+						ssToken >> vertex.pos[0] >> vertex.pos[1] >> vertex.pos[2];
 						ssToken.clear( std::istringstream::goodbit );
 					}
 				}
@@ -209,7 +206,7 @@ namespace C3dPly
 				// Parsing triangles
 				FaceSPtr pFace;
 				std::vector< FaceIndices > faces( iNbFaces );
-				FaceIndices * pFaces = &faces[0];
+				FaceIndices * face = &faces[0];
 
 				for ( int i = 0; i < iNbFaces; i++ )
 				{
@@ -219,14 +216,14 @@ namespace C3dPly
 
 					if ( iNbVertex >= 3 )
 					{
-						ssToken >> pFaces->m_index[0] >> pFaces->m_index[1] >> pFaces->m_index[2];
-						pFaces++;
+						ssToken >> face->m_index[0] >> face->m_index[2] >> face->m_index[1];
+						++face;
 					}
 
 					ssToken.clear( std::istringstream::goodbit );
 				}
 
-				mapping->addFaceGroup( faces );
+				mapping->addFaceGroup( faces.data(), face );
 			}
 
 			result = true;

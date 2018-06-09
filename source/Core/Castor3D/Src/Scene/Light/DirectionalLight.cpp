@@ -1,4 +1,4 @@
-﻿#include "DirectionalLight.hpp"
+#include "DirectionalLight.hpp"
 
 #include "Render/Viewport.hpp"
 
@@ -6,33 +6,35 @@ using namespace castor;
 
 namespace castor3d
 {
-	DirectionalLight::TextWriter::TextWriter( String const & p_tabs, DirectionalLight const * p_category )
-		: LightCategory::TextWriter{ p_tabs }
-		, m_category{ p_category }
+	DirectionalLight::TextWriter::TextWriter( String const & tabs
+		, DirectionalLight const * category )
+		: LightCategory::TextWriter{ tabs }
+		, m_category{ category }
 	{
 	}
 
-	bool DirectionalLight::TextWriter::operator()( DirectionalLight const & p_light, TextFile & p_file )
+	bool DirectionalLight::TextWriter::operator()( DirectionalLight const & light
+		, TextFile & file )
 	{
-		bool result = LightCategory::TextWriter::operator()( p_light, p_file );
+		bool result = LightCategory::TextWriter::operator()( light, file );
 
 		if ( result )
 		{
-			result = p_file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return result;
 	}
 
-	bool DirectionalLight::TextWriter::writeInto( castor::TextFile & p_file )
+	bool DirectionalLight::TextWriter::writeInto( castor::TextFile & file )
 	{
-		return ( *this )( *m_category, p_file );
+		return ( *this )( *m_category, file );
 	}
 
 	//*************************************************************************************************
 
-	DirectionalLight::DirectionalLight( Light & p_light )
-		: LightCategory{ LightType::eDirectional, p_light }
+	DirectionalLight::DirectionalLight( Light & light )
+		: LightCategory{ LightType::eDirectional, light }
 	{
 	}
 
@@ -40,48 +42,39 @@ namespace castor3d
 	{
 	}
 
-	LightCategoryUPtr DirectionalLight::create( Light & p_light )
+	LightCategoryUPtr DirectionalLight::create( Light & light )
 	{
-		return std::unique_ptr< DirectionalLight >( new DirectionalLight{ p_light } );
+		return std::unique_ptr< DirectionalLight >( new DirectionalLight{ light } );
 	}
 
 	void DirectionalLight::update()
 	{
 	}
 
-	void DirectionalLight::updateShadow( Point3r const & p_target
-		, Viewport & p_viewport
-		, int32_t p_index )
+	void DirectionalLight::updateShadow( Point3r const & target
+		, Viewport & viewport
+		, int32_t index )
 	{
-		static const Matrix4x4r biasTransform{ []()
-		{
-			Matrix4x4r result;
-			matrix::setTransform( result
-				, Point3r{ 0.5, 0.5, 0.5 }
-				, Point3r{ 0.5, 0.5, 0.5 }
-			, Quaternion::identity() );
-			return result;
-		}( ) };
 		auto node = getLight().getParent();
 		node->update();
 		auto orientation = node->getDerivedOrientation();
-		Point3f position;
+		Point3f position{ target };
 		Point3f up{ 0, 1, 0 };
 		orientation.transform( up, up );
 		matrix::lookAt( m_lightSpace, position, position + m_direction, up );
-		m_lightSpace = biasTransform * p_viewport.getProjection() * m_lightSpace;
-		m_farPlane = p_viewport.getFar() - p_viewport.getNear();
+		m_lightSpace = viewport.getProjection() * m_lightSpace;
+		m_farPlane = viewport.getFar() - viewport.getNear();
 	}
 
-	void DirectionalLight::updateNode( SceneNode const & p_node )
+	void DirectionalLight::updateNode( SceneNode const & node )
 	{
 		m_direction = Point3f{ 0, 0, 1 };
-		p_node.getDerivedOrientation().transform( m_direction, m_direction );
+		node.getDerivedOrientation().transform( m_direction, m_direction );
 	}
 
-	void DirectionalLight::doBind( castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const
+	void DirectionalLight::doBind( Point4f * buffer )const
 	{
-		doCopyComponent( m_direction, p_index, p_offset, p_texture );
-		doCopyComponent( m_lightSpace, p_index, p_offset, p_texture );
+		doCopyComponent( m_direction, buffer );
+		doCopyComponent( m_lightSpace, buffer );
 	}
 }

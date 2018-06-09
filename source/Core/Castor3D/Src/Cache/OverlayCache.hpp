@@ -147,42 +147,6 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		Initialises or cleans up the OverlayRenderer, according to engine rendering status
-		 *\~french
-		 *\brief		Initialise ou nettoie l'OverlayRenderer, selon le statut du rendu
-		 */
-		C3D_API void updateRenderer();
-		/**
-		 *\~english
-		 *\brief		Updates overlays.
-		 *\~french
-		 *\brief		Met à jour les incrustations.
-		 */
-		C3D_API void update();
-		/**
-		 *\~english
-		 *\brief		Renders all visible overlays
-		 *\param[in]	p_scene	The scene displayed, to display its overlays and the global ones
-		 *\param[in]	p_size	The render target size
-		 *\~french
-		 *\brief		Fonction de rendu des overlays visibles
-		 *\param[in]	p_scene	La scène rendue, pour afficher ses overlays en plus des globaux
-		 *\param[in]	p_size	Les dimensions de la cible du rendu
-		 */
-		C3D_API void render( Scene const & p_scene, castor::Size const & p_size );
-		/**
-		 *\~english
-		 *\brief		Writes overlays in a text file
-		 *\param[out]	p_file	The file
-		 *\return		\p true if ok
-		 *\~french
-		 *\brief		Ecrit les overlays dans un fichier texte
-		 *\param[out]	p_file	Le fichier
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API bool write( castor::TextFile & p_file )const;
-		/**
-		 *\~english
 		 *\brief		Retrieves a FontTexture given a font name.
 		 *\param[in]	p_name	The font name.
 		 *\return		The FontTexture if it exist, nullptr if not.
@@ -255,18 +219,6 @@ namespace castor3d
 				m_clean( element );
 				m_elements.erase( name );
 			}
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the overlay renderer
-		 *\return		The overlay renderer
-		 *\~french
-		 *\brief		Récupère le renderer d'incrustation
-		 *\return		Le renderer d'incrustation
-		 */
-		OverlayRendererSPtr getRenderer()const
-		{
-			return m_pRenderer;
 		}
 		/**
 		 *\~english
@@ -348,9 +300,6 @@ namespace castor3d
 		//!\~english	The overlays, in rendering order.
 		//!\~french		Les incrustations, dans l'ordre de rendu.
 		OverlayCategorySet m_overlays;
-		//!\~english	The overlay renderer.
-		//!\~french		le renderer d'incrustation.
-		OverlayRendererSPtr m_pRenderer;
 		//!\~english	The rendering viewport.
 		//!\~french		Le viewport de rendu.
 		Viewport m_viewport;

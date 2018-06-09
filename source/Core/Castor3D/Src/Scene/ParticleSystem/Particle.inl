@@ -1,524 +1,408 @@
 namespace castor3d
 {
 	template< typename T, size_t Count >
-	void ParseArray( castor::String const & p_src, T * p_dst )
+	void ParseArray( castor::String const & src, T * dst )
 	{
-		auto array = castor::string::split( p_src, cuT( " \t" ), Count - 1, false );
+		auto array = castor::string::split( src, cuT( " \t" ), Count - 1, false );
 
 		if ( array.size() >= Count )
 		{
 			for ( size_t i = 0; i < Count; ++i )
 			{
-				castor::string::parse( array[i], p_dst[i] );
+				castor::string::parse( array[i], dst[i] );
 			}
 		}
 	}
 
 	template<>
-	struct ElementTyper< ElementType::eFloat >
+	struct ElementTyper< ParticleFormat::eFloat >
 	{
 		using Type = float;
 
-		static inline Type parse( castor::String const & p_value )
+		static inline Type parse( castor::String const & value )
 		{
 			Type result;
-			castor::string::parse( p_value, result );
+			castor::string::parse( value, result );
 			return result;
 		}
 
-		static inline float const * getPointer( Type const & p_value )
+		static inline float const * getPointer( Type const & value )
 		{
-			return &p_value;
+			return &value;
 		}
 
-		static inline float * getPointer( Type & p_value )
+		static inline float * getPointer( Type & value )
 		{
-			return &p_value;
+			return &value;
 		}
 	};
 
 	template<>
-	struct ElementTyper< ElementType::eVec2 >
+	struct ElementTyper< ParticleFormat::eVec2f >
 	{
 		using Type = castor::Point2f;
 
-		static inline Type parse( castor::String const & p_value )
+		static inline Type parse( castor::String const & value )
 		{
 			Type result;
-			ParseArray< float, 2 >( p_value, result.ptr() );
+			ParseArray< float, 2 >( value, result.ptr() );
 			return result;
 		}
 
-		static inline float const * getPointer( Type const & p_value )
+		static inline float const * getPointer( Type const & value )
 		{
-			return p_value.constPtr();
+			return value.constPtr();
 		}
 
-		static inline float * getPointer( Type & p_value )
+		static inline float * getPointer( Type & value )
 		{
-			return p_value.ptr();
+			return value.ptr();
 		}
 	};
 
 	template<>
-	struct ElementTyper< ElementType::eVec3 >
+	struct ElementTyper< ParticleFormat::eVec3f >
 	{
 		using Type = castor::Point3f;
 
-		static inline Type parse( castor::String const & p_value )
+		static inline Type parse( castor::String const & value )
 		{
 			Type result;
-			ParseArray< float, 3 >( p_value, result.ptr() );
+			ParseArray< float, 3 >( value, result.ptr() );
 			return result;
 		}
 
-		static inline float const * getPointer( Type const & p_value )
+		static inline float const * getPointer( Type const & value )
 		{
-			return p_value.constPtr();
+			return value.constPtr();
 		}
 
-		static inline float * getPointer( Type & p_value )
+		static inline float * getPointer( Type & value )
 		{
-			return p_value.ptr();
+			return value.ptr();
 		}
 	};
 
 	template<>
-	struct ElementTyper< ElementType::eVec4 >
+	struct ElementTyper< ParticleFormat::eVec4f >
 	{
 		using Type = castor::Point4f;
 
-		static inline Type parse( castor::String const & p_value )
+		static inline Type parse( castor::String const & value )
 		{
 			Type result;
-			ParseArray< float, 4 >( p_value, result.ptr() );
+			ParseArray< float, 4 >( value, result.ptr() );
 			return result;
 		}
 
-		static inline float const * getPointer( Type const & p_value )
+		static inline float const * getPointer( Type const & value )
 		{
-			return p_value.constPtr();
+			return value.constPtr();
 		}
 
-		static inline float * getPointer( Type & p_value )
+		static inline float * getPointer( Type & value )
 		{
-			return p_value.ptr();
+			return value.ptr();
 		}
 	};
 
 	template<>
-	struct ElementTyper< ElementType::eColour >
-	{
-		using Type = uint32_t;
-
-		static inline Type parse( castor::String const & p_value )
-		{
-			Type result{};
-			return result;
-		}
-
-		static inline uint32_t const * getPointer( Type const & p_value )
-		{
-			return &p_value;
-		}
-
-		static inline uint32_t * getPointer( Type & p_value )
-		{
-			return &p_value;
-		}
-	};
-
-	template<>
-	struct ElementTyper< ElementType::eInt >
+	struct ElementTyper< ParticleFormat::eInt >
 	{
 		using Type = int;
 
-		static inline Type parse( castor::String const & p_value )
+		static inline Type parse( castor::String const & value )
 		{
 			Type result;
-			castor::string::parse( p_value, result );
+			castor::string::parse( value, result );
 			return result;
 		}
 
-		static inline int const * getPointer( Type const & p_value )
+		static inline int const * getPointer( Type const & value )
 		{
-			return &p_value;
+			return &value;
 		}
 
-		static inline int * getPointer( Type & p_value )
+		static inline int * getPointer( Type & value )
 		{
-			return &p_value;
+			return &value;
 		}
 	};
 
 	template<>
-	struct ElementTyper< ElementType::eIVec2 >
+	struct ElementTyper< ParticleFormat::eVec2i >
 	{
 		using Type = castor::Point2i;
 
-		static inline Type parse( castor::String const & p_value )
+		static inline Type parse( castor::String const & value )
 		{
 			Type result;
-			ParseArray< int, 2 >( p_value, result.ptr() );
+			ParseArray< int, 2 >( value, result.ptr() );
 			return result;
 		}
 
-		static inline int const * getPointer( Type const & p_value )
+		static inline int const * getPointer( Type const & value )
 		{
-			return p_value.constPtr();
+			return value.constPtr();
 		}
 
-		static inline int * getPointer( Type & p_value )
+		static inline int * getPointer( Type & value )
 		{
-			return p_value.ptr();
+			return value.ptr();
 		}
 	};
 
 	template<>
-	struct ElementTyper< ElementType::eIVec3 >
+	struct ElementTyper< ParticleFormat::eVec3i >
 	{
 		using Type = castor::Point3i;
 
-		static inline Type parse( castor::String const & p_value )
+		static inline Type parse( castor::String const & value )
 		{
 			Type result;
-			ParseArray< int, 3 >( p_value, result.ptr() );
+			ParseArray< int, 3 >( value, result.ptr() );
 			return result;
 		}
 
-		static inline int const * getPointer( Type const & p_value )
+		static inline int const * getPointer( Type const & value )
 		{
-			return p_value.constPtr();
+			return value.constPtr();
 		}
 
-		static inline int * getPointer( Type & p_value )
+		static inline int * getPointer( Type & value )
 		{
-			return p_value.ptr();
+			return value.ptr();
 		}
 	};
 
 	template<>
-	struct ElementTyper< ElementType::eIVec4 >
+	struct ElementTyper< ParticleFormat::eVec4i >
 	{
 		using Type = castor::Point4i;
 
-		static inline Type parse( castor::String const & p_value )
+		static inline Type parse( castor::String const & value )
 		{
 			Type result;
-			ParseArray< int, 4 >( p_value, result.ptr() );
+			ParseArray< int, 4 >( value, result.ptr() );
 			return result;
 		}
 
-		static inline int const * getPointer( Type const & p_value )
+		static inline int const * getPointer( Type const & value )
 		{
-			return p_value.constPtr();
+			return value.constPtr();
 		}
 
-		static inline int * getPointer( Type & p_value )
+		static inline int * getPointer( Type & value )
 		{
-			return p_value.ptr();
+			return value.ptr();
 		}
 	};
 
 	template<>
-	struct ElementTyper< ElementType::eUInt >
+	struct ElementTyper< ParticleFormat::eUInt >
 	{
 		using Type = uint32_t;
 
-		static inline Type parse( castor::String const & p_value )
+		static inline Type parse( castor::String const & value )
 		{
 			Type result;
-			castor::string::parse( p_value, result );
+			castor::string::parse( value, result );
 			return result;
 		}
 
-		static inline uint32_t const * getPointer( Type const & p_value )
+		static inline uint32_t const * getPointer( Type const & value )
 		{
-			return &p_value;
+			return &value;
 		}
 
-		static inline uint32_t * getPointer( Type & p_value )
+		static inline uint32_t * getPointer( Type & value )
 		{
-			return &p_value;
+			return &value;
 		}
 	};
 
 	template<>
-	struct ElementTyper< ElementType::eUIVec2 >
+	struct ElementTyper< ParticleFormat::eVec2ui >
 	{
 		using Type = castor::Point2ui;
 
-		static inline Type parse( castor::String const & p_value )
+		static inline Type parse( castor::String const & value )
 		{
 			Type result;
-			ParseArray< uint32_t, 2 >( p_value, result.ptr() );
+			ParseArray< uint32_t, 2 >( value, result.ptr() );
 			return result;
 		}
 
-		static inline uint32_t const * getPointer( Type const & p_value )
+		static inline uint32_t const * getPointer( Type const & value )
 		{
-			return p_value.constPtr();
+			return value.constPtr();
 		}
 
-		static inline uint32_t * getPointer( Type & p_value )
+		static inline uint32_t * getPointer( Type & value )
 		{
-			return p_value.ptr();
+			return value.ptr();
 		}
 	};
 
 	template<>
-	struct ElementTyper< ElementType::eUIVec3 >
+	struct ElementTyper< ParticleFormat::eVec3ui >
 	{
 		using Type = castor::Point3ui;
 
-		static inline Type parse( castor::String const & p_value )
+		static inline Type parse( castor::String const & value )
 		{
 			Type result;
-			ParseArray< uint32_t, 3 >( p_value, result.ptr() );
+			ParseArray< uint32_t, 3 >( value, result.ptr() );
 			return result;
 		}
 
-		static inline uint32_t const * getPointer( Type const & p_value )
+		static inline uint32_t const * getPointer( Type const & value )
 		{
-			return p_value.constPtr();
+			return value.constPtr();
 		}
 
-		static inline uint32_t * getPointer( Type & p_value )
+		static inline uint32_t * getPointer( Type & value )
 		{
-			return p_value.ptr();
+			return value.ptr();
 		}
 	};
 
 	template<>
-	struct ElementTyper< ElementType::eUIVec4 >
+	struct ElementTyper< ParticleFormat::eVec4ui >
 	{
 		using Type = castor::Point4ui;
 
-		static inline Type parse( castor::String const & p_value )
+		static inline Type parse( castor::String const & value )
 		{
 			Type result;
-			ParseArray< uint32_t, 4 >( p_value, result.ptr() );
+			ParseArray< uint32_t, 4 >( value, result.ptr() );
 			return result;
 		}
 
-		static inline uint32_t const * getPointer( Type const & p_value )
+		static inline uint32_t const * getPointer( Type const & value )
 		{
-			return p_value.constPtr();
+			return value.constPtr();
 		}
 
-		static inline uint32_t * getPointer( Type & p_value )
+		static inline uint32_t * getPointer( Type & value )
 		{
-			return p_value.ptr();
-		}
-	};
-
-	template<>
-	struct ElementTyper< ElementType::eMat2 >
-	{
-		using Type = castor::Matrix2x2f;
-
-		static inline Type parse( castor::String const & p_value )
-		{
-			Type result;
-			ParseArray< float, 4 >( p_value, result.ptr() );
-			return result;
-		}
-
-		static inline float const * getPointer( Type const & p_value )
-		{
-			return p_value.constPtr();
-		}
-
-		static inline float * getPointer( Type & p_value )
-		{
-			return p_value.ptr();
+			return value.ptr();
 		}
 	};
 
-	template<>
-	struct ElementTyper< ElementType::eMat3 >
+	template< ParticleFormat Type >
+	inline typename ElementTyper< Type >::Type parseValue( castor::String const & value )
 	{
-		using Type = castor::Matrix3x3f;
-
-		static inline Type parse( castor::String const & p_value )
-		{
-			Type result;
-			ParseArray< float, 9 >( p_value, result.ptr() );
-			return result;
-		}
-
-		static inline float const * getPointer( Type const & p_value )
-		{
-			return p_value.constPtr();
-		}
-
-		static inline float * getPointer( Type & p_value )
-		{
-			return p_value.ptr();
-		}
-	};
-
-	template<>
-	struct ElementTyper< ElementType::eMat4 >
-	{
-		using Type = castor::Matrix4x4f;
-
-		static inline Type parse( castor::String const & p_value )
-		{
-			Type result;
-			ParseArray< float, 16 >( p_value, result.ptr() );
-			return result;
-		}
-
-		static inline float const * getPointer( Type const & p_value )
-		{
-			return p_value.constPtr();
-		}
-
-		static inline float * getPointer( Type & p_value )
-		{
-			return p_value.ptr();
-		}
-	};
-
-	template< ElementType Type >
-	inline typename ElementTyper< Type >::Type parseValue( castor::String const & p_value )
-	{
-		return ElementTyper< Type >::parse( p_value );
+		return ElementTyper< Type >::parse( value );
 	}
 
-	inline void parseValue( castor::String const & p_value, ElementType p_type, Particle & p_particle, uint32_t p_index )
+	inline void parseValue( castor::String const & textValue
+		, ParticleFormat type
+		, Particle & particle
+		, uint32_t index )
 	{
-		switch ( p_type )
+		switch ( type )
 		{
-		case ElementType::eFloat:
+		case ParticleFormat::eFloat:
 			{
-				auto value = parseValue< ElementType::eFloat >( p_value );
-				p_particle.setValue< ElementType::eFloat >( p_index, value );
+				auto value = parseValue< ParticleFormat::eFloat >( textValue );
+				particle.setValue< ParticleFormat::eFloat >( index, value );
 			}
 			break;
 
-		case ElementType::eVec2:
+		case ParticleFormat::eVec2f:
 			{
-				auto value = parseValue< ElementType::eVec2 >( p_value );
-				p_particle.setValue< ElementType::eVec2 >( p_index, value );
+				auto value = parseValue< ParticleFormat::eVec2f >( textValue );
+				particle.setValue< ParticleFormat::eVec2f >( index, value );
 			}
 			break;
 
-		case ElementType::eVec3:
+		case ParticleFormat::eVec3f:
 			{
-				auto value = parseValue< ElementType::eVec3 >( p_value );
-				p_particle.setValue< ElementType::eVec3 >( p_index, value );
+				auto value = parseValue< ParticleFormat::eVec3f >( textValue );
+				particle.setValue< ParticleFormat::eVec3f >( index, value );
 			}
 			break;
 
-		case ElementType::eVec4:
+		case ParticleFormat::eVec4f:
 			{
-				auto value = parseValue< ElementType::eVec4 >( p_value );
-				p_particle.setValue< ElementType::eVec4 >( p_index, value );
+				auto value = parseValue< ParticleFormat::eVec4f >( textValue );
+				particle.setValue< ParticleFormat::eVec4f >( index, value );
 			}
 			break;
 
-		case ElementType::eColour:
+		case ParticleFormat::eInt:
 			{
-				auto value = parseValue< ElementType::eColour >( p_value );
-				p_particle.setValue< ElementType::eColour >( p_index, value );
+				auto value = parseValue< ParticleFormat::eInt >( textValue );
+				particle.setValue< ParticleFormat::eInt >( index, value );
 			}
 			break;
 
-		case ElementType::eInt:
+		case ParticleFormat::eVec2i:
 			{
-				auto value = parseValue< ElementType::eInt >( p_value );
-				p_particle.setValue< ElementType::eInt >( p_index, value );
+				auto value = parseValue< ParticleFormat::eVec2i >( textValue );
+				particle.setValue< ParticleFormat::eVec2i >( index, value );
 			}
 			break;
 
-		case ElementType::eIVec2:
+		case ParticleFormat::eVec3i:
 			{
-				auto value = parseValue< ElementType::eIVec2 >( p_value );
-				p_particle.setValue< ElementType::eIVec2 >( p_index, value );
+				auto value = parseValue< ParticleFormat::eVec3i >( textValue );
+				particle.setValue< ParticleFormat::eVec3i >( index, value );
 			}
 			break;
 
-		case ElementType::eIVec3:
+		case ParticleFormat::eVec4i:
 			{
-				auto value = parseValue< ElementType::eIVec3 >( p_value );
-				p_particle.setValue< ElementType::eIVec3 >( p_index, value );
+				auto value = parseValue< ParticleFormat::eVec4i >( textValue );
+				particle.setValue< ParticleFormat::eVec4i >( index, value );
 			}
 			break;
 
-		case ElementType::eIVec4:
+		case ParticleFormat::eUInt:
 			{
-				auto value = parseValue< ElementType::eIVec4 >( p_value );
-				p_particle.setValue< ElementType::eIVec4 >( p_index, value );
+				auto value = parseValue< ParticleFormat::eUInt >( textValue );
+				particle.setValue< ParticleFormat::eUInt >( index, value );
 			}
 			break;
 
-		case ElementType::eUInt:
+		case ParticleFormat::eVec2ui:
 			{
-				auto value = parseValue< ElementType::eUInt >( p_value );
-				p_particle.setValue< ElementType::eUInt >( p_index, value );
+				auto value = parseValue< ParticleFormat::eVec2ui >( textValue );
+				particle.setValue< ParticleFormat::eVec2ui >( index, value );
 			}
 			break;
 
-		case ElementType::eUIVec2:
+		case ParticleFormat::eVec3ui:
 			{
-				auto value = parseValue< ElementType::eUIVec2 >( p_value );
-				p_particle.setValue< ElementType::eUIVec2 >( p_index, value );
+				auto value = parseValue< ParticleFormat::eVec3ui >( textValue );
+				particle.setValue< ParticleFormat::eVec3ui >( index, value );
 			}
 			break;
 
-		case ElementType::eUIVec3:
+		case ParticleFormat::eVec4ui:
 			{
-				auto value = parseValue< ElementType::eUIVec3 >( p_value );
-				p_particle.setValue< ElementType::eUIVec3 >( p_index, value );
-			}
-			break;
-
-		case ElementType::eUIVec4:
-			{
-				auto value = parseValue< ElementType::eUIVec4 >( p_value );
-				p_particle.setValue< ElementType::eUIVec4 >( p_index, value );
-			}
-			break;
-
-		case ElementType::eMat2:
-		{
-			auto value = parseValue< ElementType::eMat2 > (p_value);
-			p_particle.setValue< ElementType::eMat2 > (p_index, value);
-		}
-		break;
-
-		case ElementType::eMat3:
-		{
-			auto value = parseValue< ElementType::eMat3 > (p_value);
-			p_particle.setValue< ElementType::eMat3 > (p_index, value);
-		}
-		break;
-
-		case ElementType::eMat4:
-			{
-				auto value = parseValue< ElementType::eMat4 >( p_value );
-				p_particle.setValue< ElementType::eMat4 >( p_index, value );
+				auto value = parseValue< ParticleFormat::eVec4ui >( textValue );
+				particle.setValue< ParticleFormat::eVec4ui >( index, value );
 			}
 			break;
 		}
 	}
 
-	template< ElementType Type >
-	inline void Particle::setValue( uint32_t p_index, typename ElementTyper< Type >::Type const & p_value )
+	template< ParticleFormat Type >
+	inline void Particle::setValue( uint32_t index, typename ElementTyper< Type >::Type const & value )
 	{
-		REQUIRE( p_index < m_description.size() );
-		auto it = m_description.begin() + p_index;
+		REQUIRE( index < m_description.size() );
+		auto it = m_description.begin() + index;
 		REQUIRE( it->m_dataType == Type );
-		std::memcpy( &m_data[it->m_offset], ElementTyper< Type >::getPointer( p_value ), sizeof( p_value ) );
+		std::memcpy( &m_data[it->m_offset], ElementTyper< Type >::getPointer( value ), sizeof( value ) );
 	}
 
-	template< ElementType Type >
-	inline typename ElementTyper< Type >::Type Particle::getValue( uint32_t p_index )const
+	template< ParticleFormat Type >
+	inline typename ElementTyper< Type >::Type Particle::getValue( uint32_t index )const
 	{
-		REQUIRE( p_index < m_description.size() );
-		auto it = m_description.begin() + p_index;
+		REQUIRE( index < m_description.size() );
+		auto it = m_description.begin() + index;
 		REQUIRE( it->m_dataType == Type );
 		typename ElementTyper< Type >::Type result{};
 		std::memcpy( ElementTyper< Type >::getPointer( result ), &m_data[it->m_offset], sizeof( result ) );

@@ -1,11 +1,10 @@
 #include "RenderPass.hpp"
 
+#include "Castor3DPrerequisites.hpp"
 #include "Engine.hpp"
-
+#include "Material/Material.hpp"
 #include "Material/Pass.hpp"
 #include "Mesh/Submesh.hpp"
-#include "Mesh/Buffer/GeometryBuffers.hpp"
-#include "Mesh/Buffer/VertexBuffer.hpp"
 #include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderNode/RenderNode_Render.hpp"
@@ -14,10 +13,13 @@
 #include "Scene/Geometry.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/SceneNode.hpp"
-#include "Shader/ShaderStorageBuffer.hpp"
-#include "Shader/UniformBuffer.hpp"
+#include "Scene/Animation/AnimatedSkeleton.hpp"
+#include "Shader/PassBuffer/PassBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
+
+#include <Buffer/Buffer.hpp>
+#include <Buffer/VertexBuffer.hpp>
 
 #include <GlslSource.hpp>
 
@@ -34,54 +36,12 @@ namespace castor3d
 			, MapType & nodes
 			, FuncType function )
 		{
-			for ( auto itPipelines : nodes )
+			for ( auto & itPipelines : nodes )
 			{
-				itPipelines.first->apply();
-
-				for ( auto itPass : itPipelines.second )
+				for ( auto & itPass : itPipelines.second )
 				{
-					for ( auto itSubmeshes : itPass.second )
+					for ( auto & itSubmeshes : itPass.second )
 					{
-						doBindPassOpacityMap( itSubmeshes.second[0].m_passNode
-							, itSubmeshes.second[0].m_passNode.m_pass );
-
-						function( *itPipelines.first
-							, *itPass.first
-							, *itSubmeshes.first
-							, itSubmeshes.first->getInstantiation()
-							, itSubmeshes.second );
-
-						doUnbindPassOpacityMap( itSubmeshes.second[0].m_passNode
-							, itSubmeshes.second[0].m_passNode.m_pass );
-					}
-				}
-			}
-		}
-
-		template< typename MapType, typename FuncType >
-		inline void doTraverseNodes( RenderPass const & pass
-			, MapType & nodes
-			, Scene & scene
-			, ShadowMapLightTypeArray & shadowMaps
-			, FuncType function )
-		{
-			for ( auto itPipelines : nodes )
-			{
-				itPipelines.first->apply();
-
-				for ( auto itPass : itPipelines.second )
-				{
-					for ( auto itSubmeshes : itPass.second )
-					{
-						EnvironmentMap * envMap = nullptr;
-						doBindPass( details::getParentNode( itSubmeshes.second[0].m_instance )
-							, itSubmeshes.second[0].m_passNode
-							, scene
-							, *itPipelines.first
-							, shadowMaps
-							, itSubmeshes.second[0].m_modelUbo
-							, envMap );
-
 						function( *itPipelines.first
 							, *itPass.first
 							, *itSubmeshes.first
@@ -98,57 +58,14 @@ namespace castor3d
 			, MapType & nodes
 			, FuncType function )
 		{
-			for ( auto itPipelines : nodes )
+			for ( auto & itPipelines : nodes )
 			{
 				pass.updatePipeline( *itPipelines.first );
-				itPipelines.first->apply();
 
-				for ( auto itPass : itPipelines.second )
+				for ( auto & itPass : itPipelines.second )
 				{
-					for ( auto itSubmeshes : itPass.second )
+					for ( auto & itSubmeshes : itPass.second )
 					{
-						doBindPassOpacityMap( itSubmeshes.second[0].m_passNode
-							, itSubmeshes.second[0].m_passNode.m_pass );
-
-						function( *itPipelines.first
-							, *itPass.first
-							, *itSubmeshes.first
-							, itSubmeshes.first->getInstantiation()
-							, itSubmeshes.second );
-
-						doUnbindPassOpacityMap( itSubmeshes.second[0].m_passNode
-							, itSubmeshes.second[0].m_passNode.m_pass );
-					}
-				}
-			}
-		}
-
-		template< typename MapType, typename FuncType >
-		inline void doTraverseNodes( RenderPass const & pass
-			, Camera const & camera
-			, MapType & nodes
-			, Scene & scene
-			, ShadowMapLightTypeArray & shadowMaps
-			, FuncType function )
-		{
-			for ( auto itPipelines : nodes )
-			{
-				pass.updatePipeline( *itPipelines.first );
-				itPipelines.first->apply();
-
-				for ( auto itPass : itPipelines.second )
-				{
-					for ( auto itSubmeshes : itPass.second )
-					{
-						EnvironmentMap * envMap = nullptr;
-						doBindPass( details::getParentNode( itSubmeshes.second[0].m_instance )
-							, itSubmeshes.second[0].m_passNode
-							, scene
-							, *itPipelines.first
-							, shadowMaps
-							, itSubmeshes.second[0].m_modelUbo
-							, envMap );
-
 						function( *itPipelines.first
 							, *itPass.first
 							, *itSubmeshes.first
@@ -163,45 +80,9 @@ namespace castor3d
 		inline void doRenderNonInstanced( RenderPass const & pass
 			, MapType & nodes )
 		{
-			for ( auto itPipelines : nodes )
+			for ( auto & itPipelines : nodes )
 			{
-				itPipelines.first->apply();
-
-				for ( auto & renderNode : itPipelines.second )
-				{
-					doBindPassOpacityMap( renderNode.m_passNode
-						, renderNode.m_passNode.m_pass );
-
-					doRenderNodeNoPass( renderNode );
-
-					doUnbindPassOpacityMap( renderNode.m_passNode
-						, renderNode.m_passNode.m_pass );
-				}
-			}
-		}
-
-		template< typename MapType >
-		inline void doRenderNonInstanced( RenderPass const & pass
-			, MapType & nodes
-			, Scene & scene
-			, ShadowMapLightTypeArray & shadowMaps )
-		{
-			for ( auto itPipelines : nodes )
-			{
-				itPipelines.first->apply();
-
-				for ( auto & renderNode : itPipelines.second )
-				{
-					EnvironmentMap * envMap = nullptr;
-					doBindPass( details::getParentNode( renderNode.m_instance )
-						, renderNode.m_passNode
-						, scene
-						, *itPipelines.first
-						, shadowMaps
-						, renderNode.m_modelUbo
-						, envMap );
-					doRenderNode( renderNode );
-				}
+				pass.updatePipeline( *itPipelines.first );
 			}
 		}
 
@@ -210,21 +91,9 @@ namespace castor3d
 			, Camera const & camera
 			, MapType & nodes )
 		{
-			for ( auto itPipelines : nodes )
+			for ( auto & itPipelines : nodes )
 			{
 				pass.updatePipeline( *itPipelines.first );
-				itPipelines.first->apply();
-
-				for ( auto & renderNode : itPipelines.second )
-				{
-					doBindPassOpacityMap( renderNode.m_passNode
-						, renderNode.m_passNode.m_pass );
-
-					doRenderNodeNoPass( renderNode );
-
-					doUnbindPassOpacityMap( renderNode.m_passNode
-						, renderNode.m_passNode.m_pass );
-				}
 			}
 		}
 
@@ -232,26 +101,11 @@ namespace castor3d
 		inline void doRenderNonInstanced( RenderPass const & pass
 			, Camera const & camera
 			, MapType & nodes
-			, Scene & scene
-			, ShadowMapLightTypeArray & shadowMaps )
+			, Scene & scene )
 		{
-			for ( auto itPipelines : nodes )
+			for ( auto & itPipelines : nodes )
 			{
 				pass.updatePipeline( *itPipelines.first );
-				itPipelines.first->apply();
-
-				for ( auto & renderNode : itPipelines.second )
-				{
-					EnvironmentMap * envMap = nullptr;
-					doBindPass( details::getParentNode( renderNode.m_instance )
-						, renderNode.m_passNode
-						, scene
-						, *itPipelines.first
-						, shadowMaps
-						, renderNode.m_modelUbo
-						, envMap );
-					doRenderNode( renderNode );
-				}
 			}
 		}
 
@@ -260,28 +114,16 @@ namespace castor3d
 			, Camera const & camera
 			, MapType & nodes
 			, Scene & scene
-			, ShadowMapLightTypeArray & shadowMaps
 			, RenderInfo & info )
 		{
-			for ( auto itPipelines : nodes )
+			for ( auto & itPipelines : nodes )
 			{
 				pass.updatePipeline( *itPipelines.first );
-				itPipelines.first->apply();
 
 				for ( auto & renderNode : itPipelines.second )
 				{
-					EnvironmentMap * envMap = nullptr;
-					doBindPass( details::getParentNode( renderNode.m_instance )
-						, renderNode.m_passNode
-						, scene
-						, *itPipelines.first
-						, shadowMaps
-						, renderNode.m_modelUbo
-						, envMap );
-
-					doRenderNode( renderNode );
-					info.m_visibleFaceCount += details::getPrimitiveCount( renderNode.m_data );
-					info.m_visibleVertexCount += details::getVertexCount( renderNode.m_data );
+					info.m_visibleFaceCount += details::getPrimitiveCount( renderNode->data );
+					info.m_visibleVertexCount += details::getVertexCount( renderNode->data );
 					++info.m_drawCalls;
 					++info.m_visibleObjectsCount;
 				}
@@ -290,101 +132,124 @@ namespace castor3d
 
 		template< typename ArrayT >
 		uint32_t copyNodesMatrices( ArrayT const & renderNodes
-			, VertexBuffer & matrixBuffer )
+			, std::vector< InstantiationData > & matrixBuffer )
 		{
 			auto const mtxSize = sizeof( float ) * 16;
-			auto const stride = matrixBuffer.getDeclaration().stride();
-			auto const count = std::min( matrixBuffer.getSize() / stride, uint32_t( renderNodes.size() ) );
-			REQUIRE( count <= renderNodes.size() );
-			auto buffer = matrixBuffer.getData();
+			auto const stride = sizeof( InstantiationData );
+			auto const count = std::min( uint32_t( matrixBuffer.size() )
+				, uint32_t( renderNodes.size() ) );
+			auto buffer = matrixBuffer.data();
 			auto it = renderNodes.begin();
 			auto i = 0u;
 
 			while ( i < count )
 			{
-				std::memcpy( buffer, it->m_sceneNode.getDerivedTransformationMatrix().constPtr(), mtxSize );
-				auto id = it->m_passNode.m_pass.getId() - 1;
-				std::memcpy( buffer + mtxSize, &id, sizeof( int ) );
-				buffer += stride;
+				auto & node = *it;
+				buffer->m_matrix = node.sceneNode.getDerivedTransformationMatrix();
+				buffer->m_material = node.passNode.pass.getId();
+				++buffer;
 				++i;
 				++it;
 			}
 
-			matrixBuffer.upload( 0u, stride * count, matrixBuffer.getData() );
 			return count;
 		}
 
 		template< typename ArrayT >
 		uint32_t copyNodesMatrices( ArrayT const & renderNodes
 			, Camera const & camera
-			, VertexBuffer & matrixBuffer )
+			, std::vector< InstantiationData > & matrixBuffer )
 		{
 			auto const mtxSize = sizeof( float ) * 16;
-			auto const stride = matrixBuffer.getDeclaration().stride();
-			auto const count = std::min( matrixBuffer.getSize() / stride, uint32_t( renderNodes.size() ) );
-			REQUIRE( count <= renderNodes.size() );
-			auto buffer = matrixBuffer.getData();
+			auto const stride = sizeof( InstantiationData );
+			auto const count = std::min( uint32_t( matrixBuffer.size() )
+				, uint32_t( renderNodes.size() ) );
+			auto buffer = matrixBuffer.data();
 			auto it = renderNodes.begin();
 			auto i = 0u;
 
 			while ( i < count )
 			{
-				if ( it->m_sceneNode.isDisplayable()
-					&& it->m_sceneNode.isVisible()
-					&& camera.isVisible( it->m_instance, it->m_data ) )
+				auto & node = *it;
+				if ( node->sceneNode.isDisplayable()
+					&& node->sceneNode.isVisible()
+					&& camera.isVisible( node->instance, node->data ) )
 				{
-					std::memcpy( buffer, it->m_sceneNode.getDerivedTransformationMatrix().constPtr(), mtxSize );
-					auto id = it->m_passNode.m_pass.getId() - 1;
-					std::memcpy( buffer + mtxSize, &id, sizeof( int ) );
-					buffer += stride;
+					buffer->m_matrix = node->sceneNode.getDerivedTransformationMatrix();
+					buffer->m_material = node->passNode.pass.getId();
+					++buffer;
 				}
 				++i;
 				++it;
 			}
 
-			matrixBuffer.upload( 0u, stride * count, matrixBuffer.getData() );
 			return count;
 		}
 	}
 
 	//*********************************************************************************************
 
-	RenderPass::RenderPass( String const & name
+	RenderPass::RenderPass( String const & category
+		, String const & name
+		, Engine & engine )
+		: OwnedBy< Engine >{ engine }
+		, Named{ name }
+		, m_renderSystem{ *engine.getRenderSystem() }
+		, m_category{ category }
+		, m_oit{ true }
+		, m_renderQueue{ *this, true, nullptr }
+		, m_opaque{ true }
+		, m_matrixUbo{ engine }
+		, m_sceneUbo{ engine }
+	{
+	}
+
+	RenderPass::RenderPass( String const & category
+		, String const & name
+		, Engine & engine
+		, bool oit )
+		: OwnedBy< Engine >{ engine }
+		, Named{ name }
+		, m_renderSystem{ *engine.getRenderSystem() }
+		, m_category{ category }
+		, m_oit{ oit }
+		, m_renderQueue{ *this, false, nullptr }
+		, m_opaque{ false }
+		, m_matrixUbo{ engine }
+		, m_sceneUbo{ engine }
+	{
+	}
+
+	RenderPass::RenderPass( String const & category
+		, String const & name
 		, Engine & engine
 		, SceneNode const * ignored )
 		: OwnedBy< Engine >{ engine }
 		, Named{ name }
 		, m_renderSystem{ *engine.getRenderSystem() }
+		, m_category{ category }
 		, m_oit{ true }
 		, m_renderQueue{ *this, true, ignored }
 		, m_opaque{ true }
 		, m_matrixUbo{ engine }
-		, m_modelMatrixUbo{ engine }
 		, m_sceneUbo{ engine }
-		, m_modelUbo{ engine }
-		, m_billboardUbo{ engine }
-		, m_skinningUbo{ engine }
-		, m_morphingUbo{ engine }
 	{
 	}
 
-	RenderPass::RenderPass( String const & name
+	RenderPass::RenderPass( String const & category
+		, String const & name
 		, Engine & engine
 		, bool oit
 		, SceneNode const * ignored )
 		: OwnedBy< Engine >{ engine }
 		, Named{ name }
 		, m_renderSystem{ *engine.getRenderSystem() }
+		, m_category{ category }
 		, m_oit{ oit }
 		, m_renderQueue{ *this, false, ignored }
 		, m_opaque{ false }
 		, m_matrixUbo{ engine }
-		, m_modelMatrixUbo{ engine }
 		, m_sceneUbo{ engine }
-		, m_modelUbo{ engine }
-		, m_billboardUbo{ engine }
-		, m_skinningUbo{ engine }
-		, m_morphingUbo{ engine }
 	{
 	}
 
@@ -394,28 +259,23 @@ namespace castor3d
 
 	bool RenderPass::initialise( Size const & size )
 	{
-		m_timer = std::make_shared< RenderPassTimer >( *getEngine(), getName(), getName() );
+		m_timer = std::make_shared< RenderPassTimer >( *getEngine(), m_category, getName() );
+		m_matrixUbo.initialise();
+		m_sceneUbo.initialise();
+		m_sceneUbo.setWindowSize( size );
+		m_size = size;
 		return doInitialise( size );
 	}
 
 	void RenderPass::cleanup()
 	{
-		m_skinningUbo.getUbo().cleanup();
-		m_morphingUbo.getUbo().cleanup();
-		m_billboardUbo.getUbo().cleanup();
-		m_modelUbo.getUbo().cleanup();
-		m_modelMatrixUbo.getUbo().cleanup();
-		m_matrixUbo.getUbo().cleanup();
-		m_sceneUbo.getUbo().cleanup();
+		m_matrixUbo.cleanup();
+		m_sceneUbo.cleanup();
+		m_renderPass.reset();
 		doCleanup();
-
-		for ( auto & buffers : m_geometryBuffers )
-		{
-			buffers->cleanup();
-		}
-
-		m_geometryBuffers.clear();
 		m_timer.reset();
+		m_backPipelines.clear();
+		m_frontPipelines.clear();
 	}
 
 	void RenderPass::update( RenderQueueArray & queues )
@@ -451,7 +311,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, ComparisonFunc alphaFunc )const
+		, renderer::CompareOp alphaFunc )const
 	{
 		glsl::Shader result;
 
@@ -485,12 +345,14 @@ namespace castor3d
 
 	void RenderPass::preparePipeline( BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
-		, ComparisonFunc alphaFunc
+		, renderer::CompareOp alphaFunc
 		, PassFlags & passFlags
 		, TextureChannels & textureFlags
 		, ProgramFlags & programFlags
 		, SceneFlags & sceneFlags
-		, bool twoSided )
+		, renderer::PrimitiveTopology topology
+		, bool twoSided
+		, renderer::VertexLayoutCRefArray const & layouts )
 	{
 		doUpdateFlags( passFlags
 			, textureFlags
@@ -526,9 +388,11 @@ namespace castor3d
 					, passFlags
 					, textureFlags
 					, programFlags
-					, sceneFlags };
-				doPrepareFrontPipeline( *frontProgram, flags );
-				doPrepareBackPipeline( *backProgram, flags );
+					, sceneFlags
+					, topology
+					, alphaFunc };
+				doPrepareFrontPipeline( frontProgram, layouts, flags );
+				doPrepareBackPipeline( backProgram, layouts, flags );
 			}
 			else
 			{
@@ -537,7 +401,9 @@ namespace castor3d
 					, passFlags
 					, textureFlags
 					, programFlags
-					, sceneFlags };
+					, sceneFlags
+					, topology
+					, alphaFunc };
 
 				if ( twoSided || checkFlag( textureFlags, TextureChannel::eOpacity ) )
 				{
@@ -547,31 +413,33 @@ namespace castor3d
 						, sceneFlags
 						, alphaFunc
 						, true );
-					doPrepareFrontPipeline( *frontProgram, flags );
+					doPrepareFrontPipeline( frontProgram, layouts, flags );
 				}
 
-				doPrepareBackPipeline( *backProgram, flags );
+				doPrepareBackPipeline( backProgram, layouts, flags );
 			}
 		}
 	}
 
 	RenderPipeline * RenderPass::getPipelineFront( BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
-		, ComparisonFunc alphaFunc
+		, renderer::CompareOp alphaFunc
 		, PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
-		, SceneFlags const & sceneFlags )const
+		, SceneFlags const & sceneFlags
+		, renderer::PrimitiveTopology topology )const
 	{
 		if ( m_opaque )
 		{
 			alphaBlendMode = BlendMode::eNoBlend;
 		}
 
-		auto it = m_frontPipelines.find( { colourBlendMode, alphaBlendMode, passFlags, textureFlags, programFlags, sceneFlags } );
+		auto & pipelines = doGetFrontPipelines();
+		auto it = pipelines.find( { colourBlendMode, alphaBlendMode, passFlags, textureFlags, programFlags, sceneFlags, topology, alphaFunc } );
 		RenderPipeline * result{ nullptr };
 
-		if ( it != m_frontPipelines.end() )
+		if ( it != pipelines.end() )
 		{
 			result = it->second.get();
 		}
@@ -581,21 +449,23 @@ namespace castor3d
 
 	RenderPipeline * RenderPass::getPipelineBack( BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
-		, ComparisonFunc alphaFunc
+		, renderer::CompareOp alphaFunc
 		, PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
-		, SceneFlags const & sceneFlags )const
+		, SceneFlags const & sceneFlags
+		, renderer::PrimitiveTopology topology )const
 	{
 		if ( m_opaque )
 		{
 			alphaBlendMode = BlendMode::eNoBlend;
 		}
 
-		auto it = m_backPipelines.find( { colourBlendMode, alphaBlendMode, passFlags, textureFlags, programFlags, sceneFlags } );
+		auto & pipelines = doGetBackPipelines();
+		auto it = pipelines.find( { colourBlendMode, alphaBlendMode, passFlags, textureFlags, programFlags, sceneFlags, topology, alphaFunc } );
 		RenderPipeline * result{ nullptr };
 
-		if ( it != m_backPipelines.end() )
+		if ( it != pipelines.end() )
 		{
 			result = it->second.get();
 		}
@@ -609,21 +479,24 @@ namespace castor3d
 		, Geometry & primitive
 		, AnimatedSkeleton & skeleton )
 	{
-		auto buffers = pipeline.getGeometryBuffers( submesh );
-		m_geometryBuffers.insert( buffers );
+		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this() );
+		auto & scene = *primitive.getScene();
+		auto geometryEntry = scene.getGeometryCache().getUbos( primitive, submesh, pass );
+		auto animationEntry = scene.getAnimatedObjectGroupCache().getUbos( skeleton );
 
 		return SkinningRenderNode
 		{
 			pipeline,
 			doCreatePassRenderNode( pass, pipeline ),
-			m_modelMatrixUbo,
-			m_modelUbo,
-			*buffers,
+			geometryEntry.modelMatrixUbo,
+			geometryEntry.modelUbo,
+			geometryEntry.pickingUbo,
+			buffers,
 			*primitive.getParent(),
 			submesh,
 			primitive,
 			skeleton,
-			m_skinningUbo
+			animationEntry.skinningUbo
 		};
 	}
 
@@ -633,21 +506,24 @@ namespace castor3d
 		, Geometry & primitive
 		, AnimatedMesh & mesh )
 	{
-		auto buffers = pipeline.getGeometryBuffers( submesh );
-		m_geometryBuffers.insert( buffers );
+		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this() );
+		auto & scene = *primitive.getScene();
+		auto geometryEntry = scene.getGeometryCache().getUbos( primitive, submesh, pass );
+		auto animationEntry = scene.getAnimatedObjectGroupCache().getUbos( mesh );
 
 		return MorphingRenderNode
 		{
 			pipeline,
 			doCreatePassRenderNode( pass, pipeline ),
-			m_modelMatrixUbo,
-			m_modelUbo,
-			*buffers,
+			geometryEntry.modelMatrixUbo,
+			geometryEntry.modelUbo,
+			geometryEntry.pickingUbo,
+			buffers,
 			*primitive.getParent(),
 			submesh,
 			primitive,
 			mesh,
-			m_morphingUbo
+			animationEntry.morphingUbo
 		};
 	}
 
@@ -656,16 +532,18 @@ namespace castor3d
 		, Submesh & submesh
 		, Geometry & primitive )
 	{
-		auto buffers = pipeline.getGeometryBuffers( submesh );
-		m_geometryBuffers.insert( buffers );
+		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this() );
+		auto & scene = *primitive.getScene();
+		auto entry = scene.getGeometryCache().getUbos( primitive, submesh, pass );
 
 		return StaticRenderNode
 		{
 			pipeline,
 			doCreatePassRenderNode( pass, pipeline ),
-			m_modelMatrixUbo,
-			m_modelUbo,
-			*buffers,
+			entry.modelMatrixUbo,
+			entry.modelUbo,
+			entry.pickingUbo,
+			buffers,
 			*primitive.getParent(),
 			submesh,
 			primitive,
@@ -676,19 +554,21 @@ namespace castor3d
 		, RenderPipeline & pipeline
 		, BillboardBase & billboard )
 	{
-		auto buffers = pipeline.getGeometryBuffers( billboard );
-		m_geometryBuffers.insert( buffers );
+		auto & buffers = billboard.getGeometryBuffers();
+		auto & scene = billboard.getParentScene();
+		auto entry = scene.getBillboardPools().getUbos( billboard, pass );
 
 		return BillboardRenderNode
 		{
 			pipeline,
 			doCreatePassRenderNode( pass, pipeline ),
-			m_modelMatrixUbo,
-			m_modelUbo,
-			*buffers,
+			entry.modelMatrixUbo,
+			entry.modelUbo,
+			entry.pickingUbo,
+			entry.billboardUbo,
+			buffers,
 			*billboard.getNode(),
-			billboard,
-			m_billboardUbo,
+			billboard
 		};
 	}
 
@@ -708,13 +588,376 @@ namespace castor3d
 			, sceneFlags );
 	}
 
+	renderer::ColourBlendState RenderPass::createBlendState( BlendMode colourBlendMode
+		, BlendMode alphaBlendMode
+		, uint32_t attachesCount )
+	{
+		renderer::ColourBlendStateAttachment attach;
+
+		switch ( colourBlendMode )
+		{
+		case BlendMode::eNoBlend:
+			attach.srcColorBlendFactor = renderer::BlendFactor::eOne;
+			attach.dstColorBlendFactor = renderer::BlendFactor::eZero;
+			break;
+
+		case BlendMode::eAdditive:
+			attach.blendEnable = true;
+			attach.srcColorBlendFactor = renderer::BlendFactor::eOne;
+			attach.dstColorBlendFactor = renderer::BlendFactor::eOne;
+			break;
+
+		case BlendMode::eMultiplicative:
+			attach.blendEnable = true;
+			attach.srcColorBlendFactor = renderer::BlendFactor::eZero;
+			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcColour;
+			break;
+
+		case BlendMode::eInterpolative:
+			attach.blendEnable = true;
+			attach.srcColorBlendFactor = renderer::BlendFactor::eSrcColour;
+			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcColour;
+			break;
+
+		default:
+			attach.blendEnable = true;
+			attach.srcColorBlendFactor = renderer::BlendFactor::eSrcColour;
+			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcColour;
+			break;
+		}
+
+		switch ( alphaBlendMode )
+		{
+		case BlendMode::eNoBlend:
+			attach.srcAlphaBlendFactor = renderer::BlendFactor::eOne;
+			attach.dstAlphaBlendFactor = renderer::BlendFactor::eZero;
+			break;
+
+		case BlendMode::eAdditive:
+			attach.blendEnable = true;
+			attach.srcAlphaBlendFactor = renderer::BlendFactor::eOne;
+			attach.dstAlphaBlendFactor = renderer::BlendFactor::eOne;
+			break;
+
+		case BlendMode::eMultiplicative:
+			attach.blendEnable = true;
+			attach.srcAlphaBlendFactor = renderer::BlendFactor::eZero;
+			attach.dstAlphaBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
+			attach.srcColorBlendFactor = renderer::BlendFactor::eZero;
+			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
+			break;
+
+		case BlendMode::eInterpolative:
+			attach.blendEnable = true;
+			attach.srcAlphaBlendFactor = renderer::BlendFactor::eSrcAlpha;
+			attach.dstAlphaBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
+			attach.srcColorBlendFactor = renderer::BlendFactor::eSrcAlpha;
+			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
+			break;
+
+		default:
+			attach.blendEnable = true;
+			attach.srcAlphaBlendFactor = renderer::BlendFactor::eSrcAlpha;
+			attach.dstAlphaBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
+			attach.srcColorBlendFactor = renderer::BlendFactor::eSrcAlpha;
+			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
+			break;
+		}
+
+		renderer::ColourBlendState state;
+
+		for ( auto i = 0u; i < attachesCount; ++i )
+		{
+			state.attachs.push_back( attach );
+		}
+
+		return state;
+	}
+
+	void RenderPass::initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		, BillboardRenderNode & node )
+	{
+		auto & layout = descriptorPool.getLayout();
+		uint32_t index = 0u;
+		node.uboDescriptorSet = descriptorPool.createDescriptorSet( 0u );
+		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.uboDescriptorSet
+			, layout.getBinding( index++ ) );
+
+		if ( checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eLighting ) )
+		{
+			node.uboDescriptorSet->createBinding( layout.getBinding( LightBufferIndex )
+				, node.sceneNode.getScene()->getLightCache().getBuffer()
+				, node.sceneNode.getScene()->getLightCache().getView() );
+		}
+
+		node.uboDescriptorSet->createBinding( layout.getBinding( MatrixUbo::BindingPoint )
+			, m_matrixUbo.getUbo() );
+		node.uboDescriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
+			, m_sceneUbo.getUbo() );
+
+		if ( !checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
+		{
+			node.uboDescriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
+				, node.modelMatrixUbo.buffer->getBuffer()
+				, node.modelMatrixUbo.offset
+				, 1u );
+		}
+
+		node.uboDescriptorSet->createBinding( layout.getBinding( ModelUbo::BindingPoint )
+			, node.modelUbo.buffer->getBuffer()
+			, node.modelUbo.offset
+			, 1u );
+		node.uboDescriptorSet->createBinding( layout.getBinding( BillboardUbo::BindingPoint )
+			, node.billboardUbo.buffer->getBuffer()
+			, node.billboardUbo.offset
+			, 1u );
+		doFillUboDescriptor( layout, index, node );
+		node.uboDescriptorSet->update();
+	}
+
+	void RenderPass::initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		, MorphingRenderNode & node )
+	{
+		auto & layout = descriptorPool.getLayout();
+		uint32_t index = 0u;
+		node.uboDescriptorSet = descriptorPool.createDescriptorSet( 0u );
+		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.uboDescriptorSet
+			, layout.getBinding( index++ ) );
+
+		if ( checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eLighting ) )
+		{
+			node.uboDescriptorSet->createBinding( layout.getBinding( LightBufferIndex )
+				, node.sceneNode.getScene()->getLightCache().getBuffer()
+				, node.sceneNode.getScene()->getLightCache().getView() );
+		}
+
+		node.uboDescriptorSet->createBinding( layout.getBinding( MatrixUbo::BindingPoint )
+			, m_matrixUbo.getUbo() );
+		node.uboDescriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
+			, m_sceneUbo.getUbo() );
+
+		if ( !checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
+		{
+			node.uboDescriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
+				, node.modelMatrixUbo.buffer->getBuffer()
+				, node.modelMatrixUbo.offset
+				, 1u );
+		}
+
+		node.uboDescriptorSet->createBinding( layout.getBinding( ModelUbo::BindingPoint )
+			, node.modelUbo.buffer->getBuffer()
+			, node.modelUbo.offset
+			, 1u );
+		node.uboDescriptorSet->createBinding( layout.getBinding( MorphingUbo::BindingPoint )
+			, node.morphingUbo.buffer->getBuffer()
+			, node.morphingUbo.offset
+			, 1u );
+		doFillUboDescriptor( layout, index, node );
+		node.uboDescriptorSet->update();
+	}
+
+	void RenderPass::initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		, SkinningRenderNode & node )
+	{
+		auto & layout = descriptorPool.getLayout();
+		uint32_t index = 0u;
+		node.uboDescriptorSet = descriptorPool.createDescriptorSet( 0u );
+		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.uboDescriptorSet
+			, layout.getBinding( index++ ) );
+
+		if ( checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eLighting ) )
+		{
+			node.uboDescriptorSet->createBinding( layout.getBinding( LightBufferIndex )
+				, node.sceneNode.getScene()->getLightCache().getBuffer()
+				, node.sceneNode.getScene()->getLightCache().getView() );
+		}
+
+		node.uboDescriptorSet->createBinding( layout.getBinding( MatrixUbo::BindingPoint )
+			, m_matrixUbo.getUbo() );
+		node.uboDescriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
+			, m_sceneUbo.getUbo() );
+
+		if ( !checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
+		{
+			node.uboDescriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
+				, node.modelMatrixUbo.buffer->getBuffer()
+				, node.modelMatrixUbo.offset
+				, 1u );
+		}
+
+		node.uboDescriptorSet->createBinding( layout.getBinding( ModelUbo::BindingPoint )
+			, node.modelUbo.buffer->getBuffer()
+			, node.modelUbo.offset
+			, 1u );
+
+		if ( checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
+		{
+			node.data.getInstantiatedBones().getInstancedBonesBuffer().createBinding( *node.uboDescriptorSet
+				, layout.getBinding( SkinningUbo::BindingPoint ) );
+		}
+		else
+		{
+			node.uboDescriptorSet->createBinding( layout.getBinding( SkinningUbo::BindingPoint )
+				, node.skinningUbo.buffer->getBuffer()
+				, node.skinningUbo.offset
+				, 1u );
+		}
+
+		doFillUboDescriptor( layout, index, node );
+		node.uboDescriptorSet->update();
+	}
+
+	void RenderPass::initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		, StaticRenderNode & node )
+	{
+		auto & layout = descriptorPool.getLayout();
+		uint32_t index = 0u;
+		node.uboDescriptorSet = descriptorPool.createDescriptorSet( 0u );
+		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.uboDescriptorSet
+			, layout.getBinding( PassBufferIndex ) );
+
+		if ( checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eLighting ) )
+		{
+			node.uboDescriptorSet->createBinding( layout.getBinding( LightBufferIndex )
+				, node.sceneNode.getScene()->getLightCache().getBuffer()
+				, node.sceneNode.getScene()->getLightCache().getView() );
+		}
+
+		node.uboDescriptorSet->createBinding( layout.getBinding( MatrixUbo::BindingPoint )
+			, m_matrixUbo.getUbo() );
+		node.uboDescriptorSet->createBinding( layout.getBinding( SceneUbo::BindingPoint )
+			, m_sceneUbo.getUbo() );
+
+		if ( !checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
+		{
+			node.uboDescriptorSet->createBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
+				, node.modelMatrixUbo.buffer->getBuffer()
+				, node.modelMatrixUbo.offset
+				, 1u );
+		}
+
+		node.uboDescriptorSet->createBinding( layout.getBinding( ModelUbo::BindingPoint )
+			, node.modelUbo.buffer->getBuffer()
+			, node.modelUbo.offset
+			, 1u );
+		doFillUboDescriptor( layout, index, node );
+		node.uboDescriptorSet->update();
+	}
+
+	void RenderPass::initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		, SubmeshSkinninRenderNodesByPassMap & nodes )
+	{
+		for ( auto & passNodes : nodes )
+		{
+			for ( auto & submeshNodes : passNodes.second )
+			{
+				initialiseUboDescriptor( descriptorPool, submeshNodes.second[0] );
+			}
+		}
+	}
+
+	void RenderPass::initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		, SubmeshStaticRenderNodesByPassMap & nodes )
+	{
+		for ( auto & passNodes : nodes )
+		{
+			for ( auto & submeshNodes : passNodes.second )
+			{
+				initialiseUboDescriptor( descriptorPool, submeshNodes.second[0] );
+			}
+		}
+	}
+
+	void RenderPass::initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		, BillboardRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
+	{
+		auto & layout = descriptorPool.getLayout();
+		uint32_t index = MinBufferIndex;
+		node.texDescriptorSet = descriptorPool.createDescriptorSet( 1u );
+		doFillTextureDescriptor( layout, index, node, shadowMaps );
+		node.texDescriptorSet->update();
+	}
+
+	void RenderPass::initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		, MorphingRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
+	{
+		auto & layout = descriptorPool.getLayout();
+		uint32_t index = MinBufferIndex;
+		node.texDescriptorSet = descriptorPool.createDescriptorSet( 1u );
+		doFillTextureDescriptor( layout, index, node, shadowMaps );
+		node.texDescriptorSet->update();
+	}
+
+	void RenderPass::initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		, SkinningRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
+	{
+		auto & layout = descriptorPool.getLayout();
+		uint32_t index = MinBufferIndex;
+		node.texDescriptorSet = descriptorPool.createDescriptorSet( 1u );
+		doFillTextureDescriptor( layout, index, node, shadowMaps );
+		node.texDescriptorSet->update();
+	}
+
+	void RenderPass::initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		, StaticRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
+	{
+		auto & layout = descriptorPool.getLayout();
+		uint32_t index = MinBufferIndex;
+		node.texDescriptorSet = descriptorPool.createDescriptorSet( 1u );
+		doFillTextureDescriptor( layout, index, node, shadowMaps );
+		node.texDescriptorSet->update();
+	}
+
+	void RenderPass::initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		, SubmeshSkinninRenderNodesByPassMap & nodes
+		, ShadowMapLightTypeArray const & shadowMaps )
+	{
+		for ( auto & passNodes : nodes )
+		{
+			for ( auto & submeshNodes : passNodes.second )
+			{
+				Pass & pass = submeshNodes.second[0].passNode.pass;
+
+				if ( submeshNodes.second[0].pipeline.hasDescriptorPool( 1u ) )
+				{
+					initialiseTextureDescriptor( descriptorPool
+						, submeshNodes.second[0]
+						, shadowMaps );
+				}
+			}
+		}
+	}
+
+	void RenderPass::initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		, SubmeshStaticRenderNodesByPassMap & nodes
+		, ShadowMapLightTypeArray const & shadowMaps )
+	{
+		for ( auto & passNodes : nodes )
+		{
+			for ( auto & submeshNodes : passNodes.second )
+			{
+				Pass & pass = submeshNodes.second[0].passNode.pass;
+
+				if ( submeshNodes.second[0].pipeline.hasDescriptorPool( 1u ) )
+				{
+					initialiseTextureDescriptor( descriptorPool
+						, submeshNodes.second[0]
+						, shadowMaps );
+				}
+			}
+		}
+	}
+
 	PassRenderNode RenderPass::doCreatePassRenderNode( Pass & pass
 		, RenderPipeline & pipeline )
 	{
 		return PassRenderNode
 		{
 			pass,
-			pipeline.getProgram(),
 		};
 	}
 
@@ -728,7 +971,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, ComparisonFunc alphaFunc
+		, renderer::CompareOp alphaFunc
 		, bool invertNormals )const
 	{
 		return getEngine()->getShaderProgramCache().getAutomaticProgram( *this
@@ -741,14 +984,14 @@ namespace castor3d
 	}
 
 	uint32_t RenderPass::doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
-		, VertexBuffer & matrixBuffer )const
+		, std::vector< InstantiationData > & matrixBuffer )const
 	{
 		return copyNodesMatrices( renderNodes
 			, matrixBuffer );
 	}
 
 	uint32_t RenderPass::doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
-		, VertexBuffer & matrixBuffer
+		, std::vector< InstantiationData > & matrixBuffer
 		, RenderInfo & info )const
 	{
 		auto count = copyNodesMatrices( renderNodes
@@ -758,14 +1001,14 @@ namespace castor3d
 	}
 
 	uint32_t RenderPass::doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
-		, VertexBuffer & matrixBuffer )const
+		, std::vector< InstantiationData > & matrixBuffer )const
 	{
 		return copyNodesMatrices( renderNodes
 			, matrixBuffer );
 	}
 
 	uint32_t RenderPass::doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
-		, VertexBuffer & matrixBuffer
+		, std::vector< InstantiationData > & matrixBuffer
 		, RenderInfo & info )const
 	{
 		auto count = copyNodesMatrices( renderNodes
@@ -774,18 +1017,18 @@ namespace castor3d
 		return count;
 	}
 
-	uint32_t RenderPass::doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
+	uint32_t RenderPass::doCopyNodesMatrices( StaticRenderNodePtrArray const & renderNodes
 		, Camera const & camera
-		, VertexBuffer & matrixBuffer )const
+		, std::vector< InstantiationData > & matrixBuffer )const
 	{
 		return copyNodesMatrices( renderNodes
 			, camera
 			, matrixBuffer );
 	}
 
-	uint32_t RenderPass::doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
+	uint32_t RenderPass::doCopyNodesMatrices( StaticRenderNodePtrArray const & renderNodes
 		, Camera const & camera
-		, VertexBuffer & matrixBuffer
+		, std::vector< InstantiationData > & matrixBuffer
 		, RenderInfo & info )const
 	{
 		auto count = copyNodesMatrices( renderNodes
@@ -795,18 +1038,18 @@ namespace castor3d
 		return count;
 	}
 
-	uint32_t RenderPass::doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
+	uint32_t RenderPass::doCopyNodesMatrices( SkinningRenderNodePtrArray const & renderNodes
 		, Camera const & camera
-		, VertexBuffer & matrixBuffer )const
+		, std::vector< InstantiationData > & matrixBuffer )const
 	{
 		return copyNodesMatrices( renderNodes
 			, camera
 			, matrixBuffer );
 	}
 
-	uint32_t RenderPass::doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
+	uint32_t RenderPass::doCopyNodesMatrices( SkinningRenderNodePtrArray const & renderNodes
 		, Camera const & camera
-		, VertexBuffer & matrixBuffer
+		, std::vector< InstantiationData > & matrixBuffer
 		, RenderInfo & info )const
 	{
 		auto count = copyNodesMatrices( renderNodes
@@ -817,31 +1060,31 @@ namespace castor3d
 	}
 
 	uint32_t RenderPass::doCopyNodesBones( SkinningRenderNodeArray const & renderNodes
-		, ShaderStorageBuffer & bonesBuffer )const
+		, ShaderBuffer & bonesBuffer )const
 	{
 		uint32_t const mtxSize = sizeof( float ) * 16;
 		uint32_t const stride = mtxSize * 400u;
 		auto const count = std::min( bonesBuffer.getSize() / stride, uint32_t( renderNodes.size() ) );
 		REQUIRE( count <= renderNodes.size() );
-		auto buffer = bonesBuffer.getData();
+		auto buffer = bonesBuffer.getPtr();
 		auto it = renderNodes.begin();
 		auto i = 0u;
 
 		while ( i < count )
 		{
 			auto & node = *it;
-			node.m_skeleton.fillBuffer( buffer );
+			node.skeleton.fillBuffer( buffer );
 			buffer += stride;
 			++i;
 			++it;
 		}
 
-		bonesBuffer.upload( 0u, stride * count, bonesBuffer.getData() );
+		bonesBuffer.update( 0u, stride * count );
 		return count;
 	}
 
 	uint32_t RenderPass::doCopyNodesBones( SkinningRenderNodeArray const & renderNodes
-		, ShaderStorageBuffer & bonesBuffer
+		, ShaderBuffer & bonesBuffer
 		, RenderInfo & info )const
 	{
 		auto count = doCopyNodesBones( renderNodes, bonesBuffer );
@@ -849,7 +1092,42 @@ namespace castor3d
 		return count;
 	}
 
-	void RenderPass::doRender( SubmeshStaticRenderNodesByPipelineMap & nodes )const
+	uint32_t RenderPass::doCopyNodesBones( SkinningRenderNodePtrArray const & renderNodes
+		, Camera const & camera
+		, ShaderBuffer & bonesBuffer )const
+	{
+		uint32_t const mtxSize = sizeof( float ) * 16;
+		uint32_t const stride = mtxSize * 400u;
+		auto const count = std::min( bonesBuffer.getSize() / stride, uint32_t( renderNodes.size() ) );
+		REQUIRE( count <= renderNodes.size() );
+		auto buffer = bonesBuffer.getPtr();
+		auto it = renderNodes.begin();
+		auto i = 0u;
+
+		while ( i < count )
+		{
+			auto & node = *it;
+			node->skeleton.fillBuffer( buffer );
+			buffer += stride;
+			++i;
+			++it;
+		}
+
+		bonesBuffer.update( 0u, stride * count );
+		return count;
+	}
+
+	uint32_t RenderPass::doCopyNodesBones( SkinningRenderNodePtrArray const & renderNodes
+		, Camera const & camera
+		, ShaderBuffer & bonesBuffer
+		, RenderInfo & info )const
+	{
+		auto count = doCopyNodesBones( renderNodes, camera, bonesBuffer );
+		info.m_visibleObjectsCount += count;
+		return count;
+	}
+
+	void RenderPass::doUpdate( SubmeshStaticRenderNodesByPipelineMap & nodes )const
 	{
 		doTraverseNodes( *this
 			, nodes
@@ -859,38 +1137,19 @@ namespace castor3d
 				, InstantiationComponent & instantiation
 				, StaticRenderNodeArray & renderNodes )
 			{
-				if ( !renderNodes.empty() && instantiation.hasMatrixBuffer() )
+				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
+
+				if ( !renderNodes.empty()
+					&& it != instantiation.end()
+					&& it->second.buffer )
 				{
-					uint32_t count = doCopyNodesMatrices( renderNodes
-						, instantiation.getMatrixBuffer() );
-					submesh.drawInstanced( renderNodes[0].m_buffers, count );
+					doCopyNodesMatrices( renderNodes
+						, it->second.data );
 				}
 			} );
 	}
 
-	void RenderPass::doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
-		, ShadowMapLightTypeArray & shadowMaps )const
-	{
-		doTraverseNodes( *this
-			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps
-			, [this]( RenderPipeline & pipeline
-				, Pass & pass
-				, Submesh & submesh
-				, InstantiationComponent & instantiation
-				, StaticRenderNodeArray & renderNodes )
-			{
-				if ( !renderNodes.empty() && instantiation.hasMatrixBuffer() )
-				{
-					uint32_t count = doCopyNodesMatrices( renderNodes
-						, instantiation.getMatrixBuffer() );
-					submesh.drawInstanced( renderNodes[0].m_buffers, count );
-				}
-			} );
-	}
-
-	void RenderPass::doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes
 		, Camera const & camera )const
 	{
 		doTraverseNodes( *this
@@ -900,63 +1159,44 @@ namespace castor3d
 				, Pass & pass
 				, Submesh & submesh
 				, InstantiationComponent & instantiation
-				, StaticRenderNodeArray & renderNodes )
+				, StaticRenderNodePtrArray & renderNodes )
 			{
-				if ( !renderNodes.empty() && instantiation.hasMatrixBuffer() )
+				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
+
+				if ( !renderNodes.empty()
+					&& it != instantiation.end()
+					&& it->second.buffer )
 				{
-					uint32_t count = doCopyNodesMatrices( renderNodes
+					doCopyNodesMatrices( renderNodes
 						, camera
-						, instantiation.getMatrixBuffer() );
-					submesh.drawInstanced( renderNodes[0].m_buffers, count );
+						, it->second.data );
 				}
 			} );
 	}
 
-	void RenderPass::doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes
 		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps )const
-	{
-		doTraverseNodes( *this
-			, camera
-			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps
-			, [this, &camera]( RenderPipeline & pipeline
-				, Pass & pass
-				, Submesh & submesh
-				, InstantiationComponent & instantiation
-				, StaticRenderNodeArray & renderNodes )
-			{
-				if ( !renderNodes.empty() && instantiation.hasMatrixBuffer() )
-				{
-					uint32_t count = doCopyNodesMatrices( renderNodes
-						, camera
-						, instantiation.getMatrixBuffer() );
-					submesh.drawInstanced( renderNodes[0].m_buffers, count );
-				}
-			} );
-	}
-
-	void RenderPass::doRender( SubmeshStaticRenderNodesByPipelineMap & nodes
-		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps
 		, RenderInfo & info )const
 	{
 		doTraverseNodes( *this
 			, camera
 			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps
-			, [this, &info]( RenderPipeline & pipeline
+			, [this, &camera, &info]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, InstantiationComponent & instantiation
-				, StaticRenderNodeArray & renderNodes )
+				, StaticRenderNodePtrArray & renderNodes )
 			{
-				if ( !renderNodes.empty() && instantiation.hasMatrixBuffer() )
+				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
+
+				if ( !renderNodes.empty()
+					&& it != instantiation.end()
+					&& it->second.buffer )
 				{
-					uint32_t count = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer(), info );
-					submesh.drawInstanced( renderNodes[0].m_buffers, count );
+					uint32_t count = doCopyNodesMatrices( renderNodes
+						, camera
+						, it->second.data
+						, info );
 					info.m_visibleFaceCount += submesh.getFaceCount() * count;
 					info.m_visibleVertexCount += submesh.getPointsCount() * count;
 					++info.m_drawCalls;
@@ -964,22 +1204,13 @@ namespace castor3d
 			} );
 	}
 
-	void RenderPass::doRender( StaticRenderNodesByPipelineMap & nodes )const
+	void RenderPass::doUpdate( StaticRenderNodesByPipelineMap & nodes )const
 	{
 		doRenderNonInstanced( *this
 			, nodes );
 	}
 
-	void RenderPass::doRender( StaticRenderNodesByPipelineMap & nodes
-		, ShadowMapLightTypeArray & shadowMaps )const
-	{
-		doRenderNonInstanced( *this
-			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps );
-	}
-
-	void RenderPass::doRender( StaticRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( StaticRenderNodesPtrByPipelineMap & nodes
 		, Camera const & camera )const
 	{
 		doRenderNonInstanced( *this
@@ -987,46 +1218,22 @@ namespace castor3d
 			, nodes );
 	}
 
-	void RenderPass::doRender( StaticRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( StaticRenderNodesPtrByPipelineMap & nodes
 		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps )const
-	{
-		doRenderNonInstanced( *this
-			, camera
-			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps );
-	}
-
-	void RenderPass::doRender( StaticRenderNodesByPipelineMap & nodes
-		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps
 		, RenderInfo & info )const
 	{
 		doRenderNonInstanced( *this
 			, camera
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps
 			, info );
 	}
 
-	void RenderPass::doRender( SkinningRenderNodesByPipelineMap & nodes )const
+	void RenderPass::doUpdate( SkinningRenderNodesByPipelineMap & nodes )const
 	{
-		doRenderNonInstanced( *this
-			, nodes );
 	}
 
-	void RenderPass::doRender( SkinningRenderNodesByPipelineMap & nodes
-		, ShadowMapLightTypeArray & shadowMaps )const
-	{
-		doRenderNonInstanced( *this
-			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps );
-	}
-
-	void RenderPass::doRender( SkinningRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes
 		, Camera const & camera )const
 	{
 		doRenderNonInstanced( *this
@@ -1034,31 +1241,18 @@ namespace castor3d
 			, nodes );
 	}
 
-	void RenderPass::doRender( SkinningRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes
 		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps )const
-	{
-		doRenderNonInstanced( *this
-			, camera
-			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps );
-	}
-
-	void RenderPass::doRender( SkinningRenderNodesByPipelineMap & nodes
-		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps
 		, RenderInfo & info )const
 	{
 		doRenderNonInstanced( *this
 			, camera
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps
 			, info );
 	}
 
-	void RenderPass::doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes )const
+	void RenderPass::doUpdate( SubmeshSkinningRenderNodesByPipelineMap & nodes )const
 	{
 		doTraverseNodes( *this
 			, nodes
@@ -1069,132 +1263,71 @@ namespace castor3d
 				, SkinningRenderNodeArray & renderNodes )
 			{
 				auto & instantiatedBones = submesh.getInstantiatedBones();
+				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
 
 				if ( !renderNodes.empty()
-					&& instantiatedBones.hasInstancedBonesBuffer()
-					&& instantiation.hasMatrixBuffer() )
+					&& it != instantiation.end()
+					&& it->second.buffer
+					&& instantiatedBones.hasInstancedBonesBuffer() )
 				{
-					uint32_t count1 = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer() );
+					uint32_t count1 = doCopyNodesMatrices( renderNodes, it->second.data );
 					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
 					REQUIRE( count1 == count2 );
-					instantiatedBones.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
-					submesh.drawInstanced( renderNodes[0].m_buffers, count1 );
 				}
 			} );
 	}
 
-	void RenderPass::doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
-		, ShadowMapLightTypeArray & shadowMaps )const
-	{
-		doTraverseNodes( *this
-			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps
-			, [this]( RenderPipeline & pipeline
-				, Pass & pass
-				, Submesh & submesh
-				, InstantiationComponent & instantiation
-				, SkinningRenderNodeArray & renderNodes )
-			{
-				auto & instantiatedBones = submesh.getInstantiatedBones();
-
-				if ( !renderNodes.empty()
-					&& instantiatedBones.hasInstancedBonesBuffer()
-					&& instantiation.hasMatrixBuffer() )
-				{
-					uint32_t count1 = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer() );
-					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
-					REQUIRE( count1 == count2 );
-					instantiatedBones.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
-					submesh.drawInstanced( renderNodes[0].m_buffers, count1 );
-				}
-			} );
-	}
-
-	void RenderPass::doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes
 		, Camera const & camera )const
 	{
 		doTraverseNodes( *this
 			, camera
 			, nodes
-			, [this]( RenderPipeline & pipeline
+			, [this, &camera]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, InstantiationComponent & instantiation
-				, SkinningRenderNodeArray & renderNodes )
+				, SkinningRenderNodePtrArray & renderNodes )
 			{
 				auto & instantiatedBones = submesh.getInstantiatedBones();
+				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
 
 				if ( !renderNodes.empty()
-					&& instantiatedBones.hasInstancedBonesBuffer()
-					&& instantiation.hasMatrixBuffer() )
+					&& it != instantiation.end()
+					&& it->second.buffer
+					&& instantiatedBones.hasInstancedBonesBuffer() )
 				{
-					uint32_t count1 = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer() );
-					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
+					uint32_t count1 = doCopyNodesMatrices( renderNodes, camera, it->second.data );
+					uint32_t count2 = doCopyNodesBones( renderNodes, camera, instantiatedBones.getInstancedBonesBuffer() );
 					REQUIRE( count1 == count2 );
-					instantiatedBones.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
-					submesh.drawInstanced( renderNodes[0].m_buffers, count1 );
 				}
 			} );
 	}
 
-	void RenderPass::doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes
 		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps )const
-	{
-		doTraverseNodes( *this
-			, camera
-			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps
-			, [this]( RenderPipeline & pipeline
-				, Pass & pass
-				, Submesh & submesh
-				, InstantiationComponent & instantiation
-				, SkinningRenderNodeArray & renderNodes )
-			{
-				auto & instantiatedBones = submesh.getInstantiatedBones();
-
-				if ( !renderNodes.empty()
-					&& instantiatedBones.hasInstancedBonesBuffer()
-					&& instantiation.hasMatrixBuffer() )
-				{
-					uint32_t count1 = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer() );
-					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
-					REQUIRE( count1 == count2 );
-					instantiatedBones.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
-					submesh.drawInstanced( renderNodes[0].m_buffers, count1 );
-				}
-			} );
-	}
-
-	void RenderPass::doRender( SubmeshSkinningRenderNodesByPipelineMap & nodes
-		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps
 		, RenderInfo & info )const
 	{
 		doTraverseNodes( *this
 			, camera
 			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps
-			, [this, &info]( RenderPipeline & pipeline
+			, [this, &camera, &info]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, InstantiationComponent & instantiation
-				, SkinningRenderNodeArray & renderNodes )
+				, SkinningRenderNodePtrArray & renderNodes )
 			{
 				auto & instantiatedBones = submesh.getInstantiatedBones();
+				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
 
 				if ( !renderNodes.empty()
-					&& instantiatedBones.hasInstancedBonesBuffer()
-					&& instantiation.hasMatrixBuffer() )
+					&& it != instantiation.end()
+					&& it->second.buffer
+					&& instantiatedBones.hasInstancedBonesBuffer() )
 				{
-					uint32_t count1 = doCopyNodesMatrices( renderNodes, instantiation.getMatrixBuffer(), info );
-					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer(), info );
+					uint32_t count1 = doCopyNodesMatrices( renderNodes, camera, it->second.data, info );
+					uint32_t count2 = doCopyNodesBones( renderNodes, camera, instantiatedBones.getInstancedBonesBuffer(), info );
 					REQUIRE( count1 == count2 );
-					instantiatedBones.getInstancedBonesBuffer().bindTo( SkinningUbo::BindingPoint );
-					submesh.drawInstanced( renderNodes[0].m_buffers, count1 );
 					info.m_visibleFaceCount += submesh.getFaceCount() * count1;
 					info.m_visibleVertexCount += submesh.getPointsCount() * count1;
 					++info.m_drawCalls;
@@ -1202,22 +1335,11 @@ namespace castor3d
 			} );
 	}
 
-	void RenderPass::doRender( MorphingRenderNodesByPipelineMap & nodes )const
+	void RenderPass::doUpdate( MorphingRenderNodesByPipelineMap & nodes )const
 	{
-		doRenderNonInstanced( *this
-			, nodes );
 	}
 
-	void RenderPass::doRender( MorphingRenderNodesByPipelineMap & nodes
-		, ShadowMapLightTypeArray & shadowMaps )const
-	{
-		doRenderNonInstanced( *this
-			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps );
-	}
-
-	void RenderPass::doRender( MorphingRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes
 		, Camera const & camera )const
 	{
 		doRenderNonInstanced( *this
@@ -1225,46 +1347,22 @@ namespace castor3d
 			, nodes );
 	}
 
-	void RenderPass::doRender( MorphingRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes
 		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps )const
-	{
-		doRenderNonInstanced( *this
-			, camera
-			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps );
-	}
-
-	void RenderPass::doRender( MorphingRenderNodesByPipelineMap & nodes
-		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps
 		, RenderInfo & info )const
 	{
 		doRenderNonInstanced( *this
 			, camera
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps
 			, info );
 	}
 
-	void RenderPass::doRender( BillboardRenderNodesByPipelineMap & nodes )const
+	void RenderPass::doUpdate( BillboardRenderNodesByPipelineMap & nodes )const
 	{
-		doRenderNonInstanced( *this
-			, nodes );
 	}
 
-	void RenderPass::doRender( BillboardRenderNodesByPipelineMap & nodes
-		, ShadowMapLightTypeArray & shadowMaps )const
-	{
-		doRenderNonInstanced( *this
-			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps );
-	}
-
-	void RenderPass::doRender( BillboardRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes
 		, Camera const & camera )const
 	{
 		doRenderNonInstanced( *this
@@ -1272,28 +1370,172 @@ namespace castor3d
 			, nodes );
 	}
 
-	void RenderPass::doRender( BillboardRenderNodesByPipelineMap & nodes
+	void RenderPass::doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes
 		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps )const
-	{
-		doRenderNonInstanced( *this
-			, camera
-			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps );
-	}
-
-	void RenderPass::doRender( BillboardRenderNodesByPipelineMap & nodes
-		, Camera const & camera
-		, ShadowMapLightTypeArray & shadowMaps
 		, RenderInfo & info )const
 	{
 		doRenderNonInstanced( *this
 			, camera
 			, nodes
 			, *getEngine()->getRenderSystem()->getTopScene()
-			, shadowMaps
 			, info );
+	}
+
+	void RenderPass::doUpdateUbos( Camera const & camera
+		, Point2r const & jitter )
+	{
+		auto jitterProjSpace = jitter * 2.0_r;
+		jitterProjSpace[0] /= camera.getWidth();
+		jitterProjSpace[1] /= camera.getHeight();
+		m_matrixUbo.update( camera.getView()
+			, camera.getViewport().getProjection()
+			, jitterProjSpace );
+	}
+
+	std::map< PipelineFlags, RenderPipelineUPtr > & RenderPass::doGetFrontPipelines()
+	{
+		return getEngine()->isTopDown()
+			? m_frontPipelines
+			: m_backPipelines;
+	}
+
+	std::map< PipelineFlags, RenderPipelineUPtr > & RenderPass::doGetBackPipelines()
+	{
+		return getEngine()->isTopDown()
+			? m_backPipelines
+			: m_frontPipelines;
+	}
+
+	std::map< PipelineFlags, RenderPipelineUPtr > const & RenderPass::doGetFrontPipelines()const
+	{
+		return getEngine()->isTopDown()
+			? m_frontPipelines
+			: m_backPipelines;
+	}
+
+	std::map< PipelineFlags, RenderPipelineUPtr > const & RenderPass::doGetBackPipelines()const
+	{
+		return getEngine()->isTopDown()
+			? m_backPipelines
+			: m_frontPipelines;
+	}
+
+	void RenderPass::doPrepareFrontPipeline( ShaderProgramSPtr program
+		, renderer::VertexLayoutCRefArray const & layouts
+		, PipelineFlags const & flags )
+	{
+		auto & pipelines = doGetFrontPipelines();
+
+		if ( pipelines.find( flags ) == pipelines.end() )
+		{
+			auto dsState = doCreateDepthStencilState( flags );
+			auto bdState = doCreateBlendState( flags );
+			auto & pipeline = *pipelines.emplace( flags
+				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
+					, std::move( dsState )
+					, renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eFront }
+					, std::move( bdState )
+					, renderer::MultisampleState{}
+					, program
+					, flags ) ).first->second;
+			pipeline.setVertexLayouts( layouts );
+			pipeline.setViewport( { m_size.getWidth(), m_size.getHeight(), 0, 0 } );
+			pipeline.setScissor( { 0, 0, m_size.getWidth(), m_size.getHeight() } );
+
+			getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+				, [this, &pipeline, flags]()
+				{
+					auto uboBindings = doCreateUboBindings( flags );
+					auto texBindings = doCreateTextureBindings( flags );
+					auto uboLayout = getCurrentDevice( *this ).createDescriptorSetLayout( std::move( uboBindings ) );
+					auto texLayout = getCurrentDevice( *this ).createDescriptorSetLayout( std::move( texBindings ) );
+					std::vector< renderer::DescriptorSetLayoutPtr > layouts;
+					layouts.emplace_back( std::move( uboLayout ) );
+					layouts.emplace_back( std::move( texLayout ) );
+					pipeline.setDescriptorSetLayouts( std::move( layouts ) );
+					pipeline.initialise( getRenderPass() );
+				} ) );
+		}
+	}
+
+	void RenderPass::doPrepareBackPipeline( ShaderProgramSPtr program
+		, renderer::VertexLayoutCRefArray const & layouts
+		, PipelineFlags const & flags )
+	{
+		auto & pipelines = doGetBackPipelines();
+
+		if ( pipelines.find( flags ) == pipelines.end() )
+		{
+			auto dsState = doCreateDepthStencilState( flags );
+			auto bdState = doCreateBlendState( flags );
+			auto & pipeline = *pipelines.emplace( flags
+				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
+					, std::move( dsState )
+					, renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eBack }
+					, std::move( bdState )
+					, renderer::MultisampleState{}
+					, program
+					, flags ) ).first->second;
+			pipeline.setVertexLayouts( layouts );
+			pipeline.setViewport( { m_size.getWidth(), m_size.getHeight(), 0, 0 } );
+			pipeline.setScissor( { 0, 0, m_size.getWidth(), m_size.getHeight() } );
+
+			getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+				, [this, &pipeline, flags]()
+				{
+					auto uboBindings = doCreateUboBindings( flags );
+					auto texBindings = doCreateTextureBindings( flags );
+					auto uboLayout = getCurrentDevice( *this ).createDescriptorSetLayout( std::move( uboBindings ) );
+					auto texLayout = getCurrentDevice( *this ).createDescriptorSetLayout( std::move( texBindings ) );
+					std::vector< renderer::DescriptorSetLayoutPtr > layouts;
+					layouts.emplace_back( std::move( uboLayout ) );
+					layouts.emplace_back( std::move( texLayout ) );
+					pipeline.setDescriptorSetLayouts( std::move( layouts ) );
+					pipeline.initialise( getRenderPass() );
+				} ) );
+		}
+	}
+
+	renderer::DescriptorSetLayoutBindingArray RenderPass::doCreateUboBindings( PipelineFlags const & flags )const
+	{
+		renderer::DescriptorSetLayoutBindingArray uboBindings;
+
+		if ( !checkFlag( flags.programFlags, ProgramFlag::eDepthPass ) )
+		{
+			uboBindings.emplace_back( getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding() );
+		}
+
+		if ( checkFlag( flags.programFlags, ProgramFlag::eLighting ) )
+		{
+			uboBindings.emplace_back( LightBufferIndex, renderer::DescriptorType::eUniformTexelBuffer, renderer::ShaderStageFlag::eFragment );
+		}
+
+		uboBindings.emplace_back( MatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+		uboBindings.emplace_back( SceneUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
+		uboBindings.emplace_back( ModelMatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+		uboBindings.emplace_back( ModelUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
+
+		if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
+		{
+			uboBindings.push_back( SkinningUbo::createLayoutBinding( SkinningUbo::BindingPoint, flags.programFlags ) );
+		}
+
+		if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
+		{
+			uboBindings.emplace_back( MorphingUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+		}
+
+		if ( checkFlag( flags.programFlags, ProgramFlag::ePicking ) )
+		{
+			uboBindings.emplace_back( PickingUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
+		{
+			uboBindings.emplace_back( BillboardUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+		}
+
+		return uboBindings;
 	}
 
 	glsl::Shader RenderPass::doGetVertexShaderSource( PassFlags const & passFlags
@@ -1305,53 +1547,73 @@ namespace castor3d
 		using namespace glsl;
 		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 		// Vertex inputs
-		auto position = writer.declAttribute< Vec4 >( ShaderProgram::Position );
-		auto normal = writer.declAttribute< Vec3 >( ShaderProgram::Normal );
-		auto tangent = writer.declAttribute< Vec3 >( ShaderProgram::Tangent );
-		auto bitangent = writer.declAttribute< Vec3 >( ShaderProgram::Bitangent );
-		auto texture = writer.declAttribute< Vec3 >( ShaderProgram::Texture );
-		auto bone_ids0 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds0
+		auto position = writer.declAttribute< Vec4 >( cuT( "position" )
+			, RenderPass::VertexInputs::PositionLocation );
+		auto normal = writer.declAttribute< Vec3 >( cuT( "normal" )
+			, RenderPass::VertexInputs::NormalLocation );
+		auto tangent = writer.declAttribute< Vec3 >( cuT( "tangent" )
+			, RenderPass::VertexInputs::TangentLocation );
+		auto texture = writer.declAttribute< Vec3 >( cuT( "texcoord" )
+			, RenderPass::VertexInputs::TextureLocation );
+		auto bone_ids0 = writer.declAttribute< IVec4 >( cuT( "bone_ids0" )
+			, RenderPass::VertexInputs::BoneIds0Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds1
+		auto bone_ids1 = writer.declAttribute< IVec4 >( cuT( "bone_ids1" )
+			, RenderPass::VertexInputs::BoneIds1Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = writer.declAttribute< Vec4 >( ShaderProgram::Weights0
+		auto weights0 = writer.declAttribute< Vec4 >( cuT( "weights0" )
+			, RenderPass::VertexInputs::Weights0Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = writer.declAttribute< Vec4 >( ShaderProgram::Weights1
+		auto weights1 = writer.declAttribute< Vec4 >( cuT( "weights1" )
+			, RenderPass::VertexInputs::Weights1Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto transform = writer.declAttribute< Mat4 >( ShaderProgram::Transform
+		auto transform = writer.declAttribute< Mat4 >( cuT( "transform" )
+			, RenderPass::VertexInputs::TransformLocation
 			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-		auto material = writer.declAttribute< Int >( ShaderProgram::Material
+		auto material = writer.declAttribute< Int >( cuT( "material" )
+			, RenderPass::VertexInputs::MaterialLocation
 			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = writer.declAttribute< Vec4 >( ShaderProgram::Position2
+		auto position2 = writer.declAttribute< Vec4 >( cuT( "position2" )
+			, RenderPass::VertexInputs::Position2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto normal2 = writer.declAttribute< Vec3 >( ShaderProgram::Normal2
+		auto normal2 = writer.declAttribute< Vec3 >( cuT( "normal2" )
+			, RenderPass::VertexInputs::Normal2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto tangent2 = writer.declAttribute< Vec3 >( ShaderProgram::Tangent2
+		auto tangent2 = writer.declAttribute< Vec3 >( cuT( "tangent2" )
+			, RenderPass::VertexInputs::Tangent2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto bitangent2 = writer.declAttribute< Vec3 >( ShaderProgram::Bitangent2
+		auto texture2 = writer.declAttribute< Vec3 >( cuT( "texture2" )
+			, RenderPass::VertexInputs::Texture2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto texture2 = writer.declAttribute< Vec3 >( ShaderProgram::Texture2
-			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
+		auto gl_InstanceID( writer.declBuiltin< Int >( writer.getInstanceID() ) );
 
-		UBO_MATRIX( writer );
-		UBO_MODEL_MATRIX( writer );
-		UBO_SCENE( writer );
-		UBO_MODEL( writer );
-		SkinningUbo::declare( writer, programFlags );
-		UBO_MORPHING( writer, programFlags );
+		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
+		UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
+		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
+		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
+		SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, programFlags );
+		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, programFlags );
 
 		// Outputs
-		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );
-		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
-		auto vtx_tangentSpaceViewPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
-		auto vtx_normal = writer.declOutput< Vec3 >( cuT( "vtx_normal" ) );
-		auto vtx_tangent = writer.declOutput< Vec3 >( cuT( "vtx_tangent" ) );
-		auto vtx_bitangent = writer.declOutput< Vec3 >( cuT( "vtx_bitangent" ) );
-		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ) );
-		auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" ) );
-		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" ) );
-		auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" )
+			, RenderPass::VertexOutputs::WorldPositionLocation );
+		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" )
+			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
+		auto vtx_tangentSpaceViewPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" )
+			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
+		auto vtx_normal = writer.declOutput< Vec3 >( cuT( "vtx_normal" )
+			, RenderPass::VertexOutputs::NormalLocation );
+		auto vtx_tangent = writer.declOutput< Vec3 >( cuT( "vtx_tangent" )
+			, RenderPass::VertexOutputs::TangentLocation );
+		auto vtx_bitangent = writer.declOutput< Vec3 >( cuT( "vtx_bitangent" )
+			, RenderPass::VertexOutputs::BitangentLocation );
+		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" )
+			, RenderPass::VertexOutputs::TextureLocation );
+		auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" )
+			, RenderPass::VertexOutputs::InstanceLocation );
+		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
+			, RenderPass::VertexOutputs::MaterialLocation );
+		auto out = gl_PerVertex{ writer };
 
 		std::function< void() > main = [&]()
 		{
@@ -1422,12 +1684,12 @@ namespace castor3d
 			vtx_tangent = normalize( glsl::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
 			vtx_instance = gl_InstanceID;
-			gl_Position = c3d_projection * v4Vertex;
+			out.gl_Position() = c3d_projection * v4Vertex;
 
 			auto tbn = writer.declLocale( cuT( "tbn" )
 				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
 			vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
-			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition;
+			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition.xyz();
 		};
 
 		writer.implementFunction< void >( cuT( "main" ), main );

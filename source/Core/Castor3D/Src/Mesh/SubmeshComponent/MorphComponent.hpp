@@ -6,8 +6,6 @@ See LICENSE file in root folder
 
 #include "SubmeshComponent.hpp"
 
-#include "Mesh/Buffer/VertexBuffer.hpp"
-
 namespace castor3d
 {
 	/*!
@@ -41,16 +39,19 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
-		C3D_API void gather( VertexBufferArray & buffers )override;
+		C3D_API void gather( MaterialSPtr material
+			, renderer::BufferCRefArray & buffers
+			, std::vector< uint64_t > & offsets
+			, renderer::VertexLayoutCRefArray & layouts )override;
 		/**
 		 *\~english
 		 *\return		The VertexBuffer.
 		 *\~french
 		 *\return		Le VertexBuffer.
 		 */
-		inline VertexBuffer const & getAnimationBuffer()const
+		inline renderer::VertexBuffer< InterleavedVertex > const & getAnimationBuffer()const
 		{
-			return m_animBuffer;
+			return *m_animBuffer;
 		}
 		/**
 		 *\~english
@@ -58,14 +59,24 @@ namespace castor3d
 		 *\~french
 		 *\return		Le VertexBuffer.
 		 */
-		inline VertexBuffer & getAnimationBuffer()
+		inline renderer::VertexBuffer< InterleavedVertex > & getAnimationBuffer()
 		{
-			return m_animBuffer;
+			return *m_animBuffer;
+		}
+		/**
+		 *\~english
+		 *\return		The animated vertex buffer data.
+		 *\~french
+		 *\return		Les données du tampon de sommets animés.
+		 */
+		inline InterleavedVertexArray & getData()
+		{
+			return m_data;
 		}
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
 		 */
-		inline ProgramFlags getProgramFlags()const override
+		inline ProgramFlags getProgramFlags( MaterialSPtr material )const override
 		{
 			return ProgramFlag::eMorphing;
 		}
@@ -78,11 +89,12 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const Name;
+		C3D_API static uint32_t constexpr BindingPoint = 1u;
 
 	private:
-		//!\~english	The animated vertex buffer.
-		//!\~french		Le tampon de sommets animés.
-		VertexBuffer m_animBuffer;
+		renderer::VertexBufferPtr< InterleavedVertex > m_animBuffer;
+		renderer::VertexLayoutPtr m_animLayout;
+		InterleavedVertexArray m_data;
 	};
 }
 

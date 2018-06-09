@@ -14,6 +14,7 @@ See LICENSE file in root folder
 #include <Design/OwnedBy.hpp>
 
 #include <map>
+#include <locale>
 
 namespace glsl
 {
@@ -23,22 +24,32 @@ namespace glsl
 		bool m_hasConstantsBuffers;
 		bool m_hasTextureBuffers;
 		bool m_hasShaderStorageBuffers;
+		bool m_hasPushConstants;
+		bool m_zeroToOneDepth;
+		bool m_isTopDown;
+		bool m_hasInstanceIndex;
+		bool m_hasVertexIndex;
+		bool m_hasSpecialisationConstants;
 	};
 
 	class GlslWriter
 	{
 		friend struct IndentBlock;
+		friend class Pcb;
 		friend class Ubo;
 		friend class Ssbo;
 
 	public:
 		GlslWriter_API GlslWriter( GlslWriterConfig const & p_config );
-		GlslWriter_API GlslWriter( GlslWriter const & rhs );
-		GlslWriter_API GlslWriter & operator=( GlslWriter const & rhs );
 		GlslWriter_API void registerName( castor::String const & name, TypeName type );
 		GlslWriter_API void checkNameExists( castor::String const & name, TypeName type );
 		GlslWriter_API void inlineComment( castor::String const & comment );
 		GlslWriter_API void multilineComment( castor::String const & comment );
+		GlslWriter_API void enableExtension( castor::String const & name, uint32_t inCoreVersion );
+		GlslWriter_API castor::String getInstanceID();
+		GlslWriter_API castor::String getVertexID();
+		GlslWriter_API Vec2 adjustTexCoords( Vec2 const & texcoords );
+		GlslWriter_API Vec4 rendererScalePosition( Vec4 const & position );
 
 		inline uint32_t getShaderLanguageVersion()const
 		{
@@ -58,6 +69,21 @@ namespace glsl
 		inline bool hasShaderStorageBuffers()const
 		{
 			return m_config.m_hasShaderStorageBuffers;
+		}
+
+		inline bool hasPushConstants()const
+		{
+			return m_config.m_hasPushConstants;
+		}
+
+		inline bool isZeroToOneDepth()const
+		{
+			return m_config.m_zeroToOneDepth;
+		}
+
+		inline bool isTopDown()const
+		{
+			return m_config.m_isTopDown;
 		}
 
 		inline bool hasTexelFetch()const
@@ -87,6 +113,7 @@ namespace glsl
 		inline void registerSampler( castor::String const & name
 			, TypeName type
 			, uint32_t binding
+			, uint32_t set
 			, uint32_t count
 			, bool enabled = true )
 		{
@@ -94,11 +121,12 @@ namespace glsl
 
 			if ( enabled )
 			{
-				m_shader.registerSampler( name, type, binding, count );
+				m_shader.registerSampler( name, type, binding, set, count );
 			}
 		}
 
 		inline void registerUniform( castor::String const & name
+			, uint32_t location
 			, TypeName type
 			, uint32_t count
 			, bool enabled = true )
@@ -107,29 +135,32 @@ namespace glsl
 
 			if ( enabled )
 			{
-				m_shader.registerUniform( name, type, count );
+				m_shader.registerUniform( name, location, type, count );
 			}
 		}
 
 		inline void registerAttribute( castor::String const & name
+			, uint32_t location
 			, TypeName type )
 		{
 			registerName( name, type );
-			m_shader.registerAttribute( name, type );
+			m_shader.registerAttribute( name, location, type );
 		}
 
 		inline void registerInput( castor::String const & name
+			, uint32_t location
 			, TypeName type )
 		{
 			registerName( name, type );
-			m_shader.registerInput( name, type );
+			m_shader.registerInput( name, location, type );
 		}
 
 		inline void registerOutput( castor::String const & name
+			, uint32_t location
 			, TypeName type )
 		{
 			registerName( name, type );
-			m_shader.registerOutput( name, type );
+			m_shader.registerOutput( name, location, type );
 		}
 
 		GlslWriter_API Shader finalise();
@@ -151,6 +182,11 @@ namespace glsl
 		GlslWriter_API void outputGeometryLayout( castor::String const & p_layout, uint32_t p_count );
 		GlslWriter_API void outputVertexCount( uint32_t p_count );
 		GlslWriter_API void returnStmt();
+		/**
+		*name
+		*	Texture sampling / fetching.
+		*/
+		/**@{*/
 		GlslWriter_API Vec4 texture( Sampler1D const & p_sampler, Float const & p_value );
 		GlslWriter_API Vec4 texture( Sampler1D const & p_sampler, Float const & p_value, Float const & p_lod );
 		GlslWriter_API Vec4 texture( Sampler2D const & p_sampler, Vec2 const & p_value );
@@ -265,68 +301,125 @@ namespace glsl
 		GlslWriter_API Optional< Float > textureOffset( Optional< Sampler2DArrayShadow > const & p_sampler, Vec4 const & p_value, IVec2 const & p_offset, Float const & p_lod );
 		GlslWriter_API Optional< Float > textureLodOffset( Optional< Sampler1DArrayShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod, Int const & p_offset );
 		GlslWriter_API Optional< Float > textureLodOffset( Optional< Sampler2DArrayShadow > const & p_sampler, Vec4 const & p_value, Float const & p_lod, IVec2 const & p_offset );
-
+		/**@}*/
 		template< typename T > void writeAssign( Type const & p_lhs, Optional< T > const & rhs );
 		template< typename RetType, typename FuncType, typename ... Params > inline Function< RetType, Params... > implementFunction( castor::String const & name, FuncType p_function, Params && ... p_params );
 		template< typename RetType > void returnStmt( RetType const & p_return );
 		template< typename ExprType > ExprType paren( ExprType const p_expr );
 		template< typename ExprType > ExprType ternary( Type const & p_condition, ExprType const & p_left, ExprType const & p_right );
 		template< typename T > inline T cast( Type const & p_from );
+		/**
+		*name
+		*	Constant declaration (#define name value).
+		*/
+		/**@{*/
 		template< typename T > inline T declConstant( castor::String const & name, T const & rhs );
 		template< typename T > inline Optional< T > declConstant( castor::String const & name, T const & rhs, bool enabled );
+		/**
+		*name
+		*	Specialisation constant declaration.
+		*/
+		/**@{*/
+		template< typename T > inline T declSpecConstant( castor::String const & name, uint32_t location, T const & rhs );
+		template< typename T > inline Optional< T > declSpecConstant( castor::String const & name, uint32_t location, T const & rhs, bool enabled );
+		/**@}*/
+		/**
+		*name
+		*	Sampler declaration.
+		*/
+		/**@{*/
 		template< typename T > inline T declSampler( castor::String const & name, uint32_t binding );
+		template< typename T > inline T declSampler( castor::String const & name, uint32_t binding, uint32_t set );
 		template< typename T > inline Optional< T > declSampler( castor::String const & name, uint32_t binding, bool enabled );
-		template< typename T > inline Array< T > declSampler( castor::String const & name, uint32_t binding, uint32_t dimension );
-		template< typename T > inline Optional< Array< T > > declSampler( castor::String const & name, uint32_t binding, uint32_t dimension, bool enabled );
-		template< typename T > inline T declAttribute( castor::String const & name );
-		template< typename T > inline T declOutput( castor::String const & name );
-		template< typename T > inline T declInput( castor::String const & name );
+		template< typename T > inline Optional< T > declSampler( castor::String const & name, uint32_t binding, uint32_t set, bool enabled );
+		template< typename T > inline Array< T > declSamplerArray( castor::String const & name, uint32_t binding, uint32_t dimension );
+		template< typename T > inline Array< T > declSamplerArray( castor::String const & name, uint32_t binding, uint32_t set, uint32_t dimension );
+		template< typename T > inline Optional< Array< T > > declSamplerArray( castor::String const & name, uint32_t binding, uint32_t dimension, bool enabled );
+		template< typename T > inline Optional< Array< T > > declSamplerArray( castor::String const & name, uint32_t binding, uint32_t set, uint32_t dimension, bool enabled );
+		/**@}*/
+		/**
+		*name
+		*	Uniform declaration.
+		*/
+		/**@{*/
+		template< typename T > inline T declUniform( castor::String const & name, uint32_t location );
+		template< typename T > inline T declUniform( castor::String const & name, uint32_t location, T const & rhs );
+		template< typename T > inline Optional< T > declUniform( castor::String const & name, uint32_t location, bool enabled );
+		template< typename T > inline Optional< T > declUniform( castor::String const & name, uint32_t location, bool enabled, T const & rhs );
+		template< typename T > inline Array< T > declUniformArray( castor::String const & name, uint32_t location, uint32_t dimension );
+		template< typename T > inline Array< T > declUniformArray( castor::String const & name, uint32_t location );
+		template< typename T > inline Array< T > declUniformArray( castor::String const & name, uint32_t location, uint32_t dimension, std::vector< T > const & rhs );
+		template< typename T > inline Optional< Array< T > > declUniformArray( castor::String const & name, uint32_t location, uint32_t dimension, bool enabled );
+		template< typename T > inline Optional< Array< T > > declUniformArray( castor::String const & name, uint32_t location, bool enabled );
+		template< typename T > inline Optional< Array< T > > declUniformArray( castor::String const & name, uint32_t location, uint32_t dimension, bool enabled, std::vector< T > const & rhs );
+		/**@}*/
+		/**
+		*name
+		*	Input declaration.
+		*/
+		/**@{*/
+		template< typename T > inline T declAttribute( castor::String const & name, uint32_t location );
+		template< typename T > inline Optional< T > declAttribute( castor::String const & name, uint32_t location, bool enabled );
+		template< typename T > inline Array< T > declAttributeArray( castor::String const & name, uint32_t location, uint32_t dimension );
+		template< typename T > inline Optional< Array< T > > declAttributeArray( castor::String const & name, uint32_t location, uint32_t dimension, bool enabled );
+
+		template< typename T > inline T declInput( castor::String const & name, uint32_t location );
+		template< typename T > inline Optional< T > declInput( castor::String const & name, uint32_t location, bool enabled );
+		template< typename T > inline Array< T > declInputArray( castor::String const & name, uint32_t location, uint32_t dimension );
+		template< typename T > inline Array< T > declInputArray( castor::String const & name, uint32_t location );
+		template< typename T > inline Optional< Array< T > > declInputArray( castor::String const & name, uint32_t location, uint32_t dimension, bool enabled );
+		template< typename T > inline Optional< Array< T > > declInputArray( castor::String const & name, uint32_t location, bool enabled );
+		/**@}*/
+		/**
+		*name
+		*	Output declaration.
+		*/
+		/**@{*/
+		template< typename T > inline T declFragData( castor::String const & name, uint32_t location );
+		template< typename T > inline T declOutput( castor::String const & name, uint32_t location );
+		template< typename T > inline Array< T > declOutputArray( castor::String const & name, uint32_t location, uint32_t dimension );
+		template< typename T > inline Array< T > declOutputArray( castor::String const & name, uint32_t location );
+		template< typename T > inline Optional< T > declOutput( castor::String const & name, uint32_t location, bool enabled );
+		template< typename T > inline Optional< Array< T > > declOutputArray( castor::String const & name, uint32_t location, uint32_t dimension, bool enabled );
+		template< typename T > inline Optional< Array< T > > declOutputArray( castor::String const & name, uint32_t location, bool enabled );
+		/**@}*/
+		/**
+		*name
+		*	Locale variable declaration.
+		*/
+		/**@{*/
 		template< typename T > inline T declLocale( castor::String const & name );
 		template< typename T > inline T declLocale( castor::String const & name, T const & rhs );
-		template< typename T > inline T declBuiltin( castor::String const & name );
-		template< typename T > inline T getBuiltin( castor::String const & name );
-		template< typename T > inline T declUniform( castor::String const & name );
-		template< typename T > inline T declUniform( castor::String const & name, T const & rhs );
-		template< typename T > inline T declFragData( castor::String const & name, uint32_t p_index );
-		template< typename T > inline Array< T > declAttribute( castor::String const & name, uint32_t dimension );
-		template< typename T > inline Array< T > declOutput( castor::String const & name, uint32_t dimension );
-		template< typename T > inline Array< T > declOutputArray( castor::String const & name );
-		template< typename T > inline Array< T > declInput( castor::String const & name, uint32_t dimension );
-		template< typename T > inline Array< T > declInputArray( castor::String const & name );
-		template< typename T > inline Array< T > declLocale( castor::String const & name, uint32_t dimension );
-		template< typename T > inline Array< T > declLocale( castor::String const & name, uint32_t dimension, T const & rhs );
-		template< typename T > inline Array< T > declBuiltin( castor::String const & name, uint32_t dimension );
-		template< typename T > inline Array< T > declBuiltinArray( castor::String const & name );
-		template< typename T > inline Array< T > getBuiltin( castor::String const & name, uint32_t dimension );
-		template< typename T > inline Array< T > getBuiltinArray( castor::String const & name );
-		template< typename T > inline Array< T > declUniform( castor::String const & name, uint32_t dimension );
-		template< typename T > inline Array< T > declUniformArray( castor::String const & name );
-		template< typename T > inline Array< T > declUniform( castor::String const & name, uint32_t dimension, std::vector< T > const & rhs );
-		template< typename T > inline Optional< T > declAttribute( castor::String const & name, bool enabled );
-		template< typename T > inline Optional< T > declOutput( castor::String const & name, bool enabled );
-		template< typename T > inline Optional< T > declInput( castor::String const & name, bool enabled );
 		template< typename T > inline Optional< T > declLocale( castor::String const & name, bool enabled );
 		template< typename T > inline Optional< T > declLocale( castor::String const & name, Optional< T > const & rhs );
 		template< typename T > inline Optional< T > declLocale( castor::String const & name, bool enabled, T const & rhs );
+		template< typename T > inline Array< T > declLocaleArray( castor::String const & name, uint32_t dimension );
+		template< typename T > inline Array< T > declLocaleArray( castor::String const & name, uint32_t dimension, std::vector< T > const & rhs );
+		template< typename T > inline Optional< Array< T > > declLocaleArray( castor::String const & name, uint32_t dimension, bool enabled );
+		template< typename T > inline Optional< Array< T > > declLocaleArray( castor::String const & name, uint32_t dimension, bool enabled, std::vector< T > const & rhs );
+		/**@}*/
+		/**
+		*name
+		*	Built-in variable declaration.
+		*/
+		/**@{*/
+		template< typename T > inline T declBuiltin( castor::String const & name );
 		template< typename T > inline Optional< T > declBuiltin( castor::String const & name, bool enabled );
-		template< typename T > inline Optional< T > getBuiltin( castor::String const & name, bool enabled );
-		template< typename T > inline Optional< T > declUniform( castor::String const & name, bool enabled );
-		template< typename T > inline Optional< T > declUniform( castor::String const & name, bool enabled, T const & rhs );
-		template< typename T > inline Optional< Array< T > > declAttribute( castor::String const & name, uint32_t dimension, bool enabled );
-		template< typename T > inline Optional< Array< T > > declOutput( castor::String const & name, uint32_t dimension, bool enabled );
-		template< typename T > inline Optional< Array< T > > declOutputArray( castor::String const & name, bool enabled );
-		template< typename T > inline Optional< Array< T > > declInput( castor::String const & name, uint32_t dimension, bool enabled );
-		template< typename T > inline Optional< Array< T > > declInputArray( castor::String const & name, bool enabled );
-		template< typename T > inline Optional< Array< T > > declLocale( castor::String const & name, uint32_t dimension, bool enabled );
-		template< typename T > inline Optional< Array< T > > declLocale( castor::String const & name, uint32_t dimension, bool enabled, T const & rhs );
-		template< typename T > inline Optional< Array< T > > declBuiltin( castor::String const & name, uint32_t dimension, bool enabled );
+		template< typename T > inline Array< T > declBuiltinArray( castor::String const & name, uint32_t dimension );
+		template< typename T > inline Array< T > declBuiltinArray( castor::String const & name );
+		template< typename T > inline Optional< Array< T > > declBuiltinArray( castor::String const & name, uint32_t dimension, bool enabled );
 		template< typename T > inline Optional< Array< T > > declBuiltinArray( castor::String const & name, bool enabled );
-		template< typename T > inline Optional< Array< T > > getBuiltin( castor::String const & name, uint32_t dimension, bool enabled );
-		template< typename T > inline Optional< Array< T > > getBuiltinArray( castor::String const & name, bool enabled );
-		template< typename T > inline Optional< Array< T > > declUniform( castor::String const & name, uint32_t dimension, bool enabled );
-		template< typename T > inline Optional< Array< T > > declUniformArray( castor::String const & namedimension, bool enabled );
-		template< typename T > inline Optional< Array< T > > declUniform( castor::String const & name, uint32_t dimension, bool enabled, std::vector< T > const & rhs );
 
+		template< typename T > inline T getBuiltin( castor::String const & name );
+		template< typename T > inline Optional< T > getBuiltin( castor::String const & name, bool enabled );
+		template< typename T > inline Array< T > getBuiltinArray( castor::String const & name );
+		template< typename T > inline Optional< Array< T > > getBuiltinArray( castor::String const & name, bool enabled );
+		/**@}*/
+		/**
+		*name
+		*	Stream operators.
+		*/
+		/**@{*/
 		GlslWriter_API GlslWriter & operator<<( Version const & rhs );
 		GlslWriter_API GlslWriter & operator<<( Attribute const & rhs );
 		GlslWriter_API GlslWriter & operator<<( In const & rhs );
@@ -340,6 +433,7 @@ namespace glsl
 		GlslWriter_API GlslWriter & operator<<( Endi const & rhs );
 		GlslWriter_API GlslWriter & operator<<( castor::String const & rhs );
 		GlslWriter_API GlslWriter & operator<<( uint32_t const & rhs );
+		/**@}*/
 
 	private:
 		std::map< castor::String, TypeName > m_registered;

@@ -1,45 +1,54 @@
 #include "RenderWindow.hpp"
 
-#include "FrameBuffer/BackBuffers.hpp"
+#include "Miscellaneous/PickingPass.hpp"
 #include "Render/RenderLoop.hpp"
 #include "Render/RenderTarget.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "RenderToTexture/RenderQuad.hpp"
 #include "Texture/TextureLayout.hpp"
+
+#include <Buffer/StagingBuffer.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
+#include <RenderPass/RenderSubpass.hpp>
+#include <RenderPass/RenderSubpassState.hpp>
+#include <Shader/ShaderProgram.hpp>
+
+#include <GlslSource.hpp>
 
 using namespace castor;
 
 namespace castor3d
 {
-	RenderWindow::TextWriter::TextWriter( String const & p_tabs )
-		: castor::TextWriter< RenderWindow >{ p_tabs }
+	RenderWindow::TextWriter::TextWriter( String const & tabs )
+		: castor::TextWriter< RenderWindow >{ tabs }
 	{
 	}
 
-	bool RenderWindow::TextWriter::operator()( RenderWindow const & p_window, TextFile & p_file )
+	bool RenderWindow::TextWriter::operator()( RenderWindow const & window, TextFile & file )
 	{
-		Logger::logInfo( m_tabs + cuT( "Writing Window " ) + p_window.getName() );
-		bool result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "window \"" ) + p_window.getName() + cuT( "\"\n" ) ) > 0
-						&& p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+		Logger::logInfo( m_tabs + cuT( "Writing Window " ) + window.getName() );
+		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "window \"" ) + window.getName() + cuT( "\"\n" ) ) > 0
+						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 		castor::TextWriter< RenderWindow >::checkError( result, "RenderWindow name" );
 
 		if ( result )
 		{
-			result = p_file.print( 256, cuT( "%s\tvsync %s\n" ), m_tabs.c_str(), p_window.getVSync() ? cuT( "true" ) : cuT( "false" ) ) > 0;
+			result = file.print( 256, cuT( "%s\tvsync %s\n" ), m_tabs.c_str(), window.isVSyncEnabled() ? cuT( "true" ) : cuT( "false" ) ) > 0;
 			castor::TextWriter< RenderWindow >::checkError( result, "RenderWindow vsync" );
 		}
 
 		if ( result )
 		{
-			result = p_file.print( 256, cuT( "%s\tfullscreen %s\n" ), m_tabs.c_str(), p_window.isFullscreen() ? cuT( "true" ) : cuT( "false" ) ) > 0;
+			result = file.print( 256, cuT( "%s\tfullscreen %s\n" ), m_tabs.c_str(), window.isFullscreen() ? cuT( "true" ) : cuT( "false" ) ) > 0;
 			castor::TextWriter< RenderWindow >::checkError( result, "RenderWindow fullscreen" );
 		}
 
-		if ( result && p_window.getRenderTarget() )
+		if ( result && window.getRenderTarget() )
 		{
-			result = RenderTarget::TextWriter( m_tabs + cuT( "\t" ) )( *p_window.getRenderTarget(), p_file );
+			result = RenderTarget::TextWriter( m_tabs + cuT( "\t" ) )( *window.getRenderTarget(), file );
 		}
 
-		p_file.writeText( m_tabs + cuT( "}\n" ) );
+		file.writeText( m_tabs + cuT( "}\n" ) );
 		return result;
 	}
 
@@ -47,19 +56,19 @@ namespace castor3d
 
 	uint32_t RenderWindow::s_nbRenderWindows = 0;
 
-	RenderWindow::RenderWindow( String const & p_name, Engine & engine )
+	RenderWindow::RenderWindow( String const & name
+		, Engine & engine )
 		: OwnedBy< Engine >{ engine }
-		, Named{ p_name }
+		, Named{ name }
 		, m_index{ s_nbRenderWindows++ }
-		, m_wpListener{ engine.getFrameListenerCache().add( cuT( "RenderWindow_" ) + string::toString( m_index ) ) }
-		, m_backBuffers{ engine.getRenderSystem()->createBackBuffers() }
-		, m_pickingPass{ std::make_unique< PickingPass >( engine ) }
+		, m_listener{ engine.getFrameListenerCache().add( cuT( "RenderWindow_" ) + string::toString( m_index ) ) }
+		, m_pickingPass{ std::make_shared< PickingPass >( engine ) }
 	{
 	}
 
 	RenderWindow::~RenderWindow()
 	{
-		FrameListenerSPtr pListener( m_wpListener.lock() );
+		auto listener = getListener();
 		getEngine()->getFrameListenerCache().remove( cuT( "RenderWindow_" ) + string::toString( m_index ) );
 		auto target = m_renderTarget.lock();
 
@@ -71,42 +80,88 @@ namespace castor3d
 		m_pickingPass.reset();
 	}
 
-	bool RenderWindow::initialise( Size const & p_size, WindowHandle const & p_handle )
+	bool RenderWindow::initialise( Size const & size
+		, renderer::WindowHandle && handle )
 	{
-		m_size = p_size;
-		m_handle = p_handle;
+		m_size = size;
 
-		if ( m_handle )
+		if ( handle )
 		{
-			getEngine()->getRenderLoop().createContext( *this );
-			m_initialised = m_context && m_context->isInitialised();
+			getEngine()->getRenderLoop().createDevice( std::move( handle ), *this );
+			m_initialised = m_device != nullptr;
 
 			if ( m_initialised )
 			{
-				m_context->setCurrent();
-				m_backBuffers->initialise( getSize(), getPixelFormat() );
-
+				m_device->enable();
+				getEngine()->getMaterialCache().initialise( getEngine()->getMaterialsType() );
+				m_swapChain = m_device->createSwapChain( { size.getWidth(), size.getHeight() } );
 				SceneSPtr scene = getScene();
+				static renderer::ClearColorValue clear{ 1.0f, 1.0f, 0.0f, 1.0f };
+				m_swapChain->setClearColour( clear );
+				m_swapChainReset = m_swapChain->onReset.connect( [this]()
+				{
+					doResetSwapChain();
+				} );
+
 				RenderTargetSPtr target = getRenderTarget();
 
-				if ( scene )
+				if ( !target )
 				{
-					m_backBuffers->setClearColour( RgbaColour::fromRGBA( toRGBAFloat( scene->getBackgroundColour() ) ) );
-				}
-				else
-				{
-					m_backBuffers->setClearColour( RgbaColour::fromComponents( 0.5, 0.5, 0.5, 1.0 ) );
+					CASTOR_EXCEPTION( "No render target for render window." );
 				}
 
-				if ( target )
-				{
-					target->initialise( 1 );
-					m_saveBuffer = PxBufferBase::create( target->getSize(), target->getPixelFormat() );
-				}
+				// Create the render pass.
+				renderer::RenderPassCreateInfo renderPass;
+				renderPass.flags = 0u;
 
+				renderPass.attachments.resize( 1u );
+				renderPass.attachments[0].format = m_swapChain->getFormat();
+				renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+				renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+				renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+				renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+				renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+				renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+				renderPass.attachments[0].finalLayout = renderer::ImageLayout::ePresentSrc;
+
+				renderPass.subpasses.resize( 1u );
+				renderPass.subpasses[0].flags = 0u;
+				renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
+				renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
+
+				renderPass.dependencies.resize( 2u );
+				renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+				renderPass.dependencies[0].dstSubpass = 0u;
+				renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
+				renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite | renderer::AccessFlag::eColourAttachmentRead;
+				renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+				renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+				renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+				renderPass.dependencies[1].srcSubpass = 0u;
+				renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+				renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite | renderer::AccessFlag::eColourAttachmentRead;
+				renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eMemoryRead;
+				renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+				renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
+				renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+				m_renderPass = m_device->createRenderPass( renderPass );
+
+				target->initialise();
 				m_pickingPass->initialise( target->getSize() );
-				m_context->endCurrent();
+
+				doCreateSwapChainDependent();
+				doPrepareFrames();
+
+				m_transferCommandBuffer = m_device->getGraphicsCommandPool().createCommandBuffer();
+				m_saveBuffer = PxBufferBase::create( target->getSize(), convert( target->getPixelFormat() ) );
+				m_stagingBuffer = std::make_unique< renderer::StagingBuffer >( *m_device
+					, renderer::BufferTarget::eTransferDst
+					, m_saveBuffer->size() );
+				m_device->disable();
 				m_initialised = true;
+				m_dirty = false;
 			}
 		}
 
@@ -117,113 +172,108 @@ namespace castor3d
 	{
 		m_initialised = false;
 
-		if ( m_context )
+		if ( m_device )
 		{
-			auto context = getEngine()->getRenderSystem()->getCurrentContext();
+			bool hasCurrent = getEngine()->getRenderSystem()->hasCurrentDevice();
 
-			if ( context != m_context.get() )
+			if ( hasCurrent
+				&& &getCurrentDevice( *this ) != m_device.get() )
 			{
-				m_context->setCurrent();
+				auto & device = getCurrentDevice( *this );
+				device.disable();
+				doCleanup( true );
+				device.enable();
+			}
+			else
+			{
+				doCleanup( !hasCurrent );
 			}
 
-			m_pickingPass->cleanup();
-			RenderTargetSPtr target = getRenderTarget();
-
-			if ( target )
-			{
-				target->cleanup();
-			}
-
-			if ( context != m_context.get() )
-			{
-				m_context->endCurrent();
-			}
-
-			if ( m_context != getEngine()->getRenderSystem()->getMainContext() )
-			{
-				m_context->cleanup();
-			}
-
-			if ( context && context != m_context.get() )
-			{
-				context->setCurrent();
-			}
-
-			m_context.reset();
+			getEngine()->getRenderSystem()->unregisterDevice( *m_device );
+			m_device.reset();
 		}
 	}
 
-	void RenderWindow::render( bool p_bForce )
+	void RenderWindow::render( bool force )
 	{
 		if ( m_initialised )
 		{
-			Engine * engine = getEngine();
 			RenderTargetSPtr target = getRenderTarget();
-			m_context->setCurrent();
 
 			if ( target && target->isInitialised() )
 			{
+				m_device->enable();
+
 				if ( m_toSave )
 				{
+					ByteArray data;
+					m_stagingBuffer->downloadTextureData( *m_transferCommandBuffer
+						, m_saveBuffer->ptr()
+						, m_saveBuffer->size()
+						, target->getTexture().getTexture()->getDefaultView() );
 					auto texture = target->getTexture().getTexture();
-					auto buffer = texture->lock( AccessType::eRead );
-
-					if ( buffer )
-					{
-						std::memcpy( m_saveBuffer->ptr(), buffer, m_saveBuffer->size() );
-					}
-
-					texture->unlock( false );
 					m_toSave = false;
 				}
 
-				if ( isUsingStereo() && abs( getIntraOcularDistance() ) > std::numeric_limits< real >::epsilon() && engine->getRenderSystem()->getGpuInformations().isStereoAvailable() )
+				auto resources = m_swapChain->getResources();
+#if C3D_DebugPicking
+				m_pickingPass->pick( Position{}, *target->getCamera() );
+#endif
+
+				if ( resources )
 				{
-					//doRender( WindowBuffer::eBackLeft, target->getTextureLEye() );
-					//doRender( WindowBuffer::eBackRight, target->getTextureREye() );
+					auto res = m_device->getGraphicsQueue().submit( { *m_commandBuffers[resources->getBackBuffer()] }
+						, { resources->getImageAvailableSemaphore(), target->getSemaphore() }
+						, { renderer::PipelineStageFlag::eColourAttachmentOutput, renderer::PipelineStageFlag::eColourAttachmentOutput }
+						, { resources->getRenderingFinishedSemaphore() }
+						, &resources->getFence() );
+					m_device->waitIdle();
+					m_swapChain->present( *resources );
 				}
 				else
 				{
-					doRender( WindowBuffer::eBack, target->getTexture() );
+					std::cerr << "Can't render" << std::endl;
 				}
-			}
 
-			m_context->endCurrent();
-			m_context->swapBuffers();
+				m_device->disable();
+			}
 		}
 	}
 
-	void RenderWindow::resize( int x, int y )
+	void RenderWindow::resize( uint32_t x, uint32_t y )
 	{
-		resize( Size( x, y ) );
+		resize( { x, y } );
 	}
 
-	void RenderWindow::resize( Size const & p_size )
+	void RenderWindow::resize( Size const & size )
 	{
-		m_size = p_size;
+		m_size = size;
 
-		if ( m_initialised )
+		if ( m_initialised && !m_dirty )
 		{
-			m_wpListener.lock()->postEvent( makeFunctorEvent( EventType::ePreRender, [this]()
+			m_dirty = true;
+			getListener()->postEvent( makeFunctorEvent( EventType::ePreRender, [this]()
 			{
-				doUpdateSize();
+				m_device->waitIdle();
+				m_swapChain->reset( { m_size.getWidth(), m_size.getHeight() } );
+				m_dirty = false;
 			} ) );
 		}
 	}
 
-	void RenderWindow::setCamera( CameraSPtr p_pCamera )
+	void RenderWindow::setCamera( CameraSPtr camera )
 	{
 		RenderTargetSPtr target = getRenderTarget();
 
 		if ( target )
 		{
-			target->setCamera( p_pCamera );
+			target->setCamera( camera );
 		}
 	}
 
-	void RenderWindow::updateFullScreen( bool p_value )
+	void RenderWindow::enableFullScreen( bool value )
 	{
-		m_bFullscreen = p_value;
+		m_fullscreen = value;
 	}
 
 	SceneSPtr RenderWindow::getScene()const
@@ -265,19 +315,19 @@ namespace castor3d
 		return result;
 	}
 
-	void RenderWindow::setViewportType( ViewportType val )
+	void RenderWindow::setViewportType( ViewportType value )
 	{
 		RenderTargetSPtr target = getRenderTarget();
 
 		if ( target )
 		{
-			target->setViewportType( val );
+			target->setViewportType( value );
 		}
 	}
 
-	PixelFormat RenderWindow::getPixelFormat()const
+	renderer::Format RenderWindow::getPixelFormat()const
 	{
-		PixelFormat result = PixelFormat( -1 );
+		renderer::Format result = renderer::Format::eUndefined;
 		RenderTargetSPtr target = getRenderTarget();
 
 		if ( target )
@@ -288,23 +338,23 @@ namespace castor3d
 		return result;
 	}
 
-	void RenderWindow::setPixelFormat( PixelFormat val )
+	void RenderWindow::setPixelFormat( renderer::Format value )
 	{
 		RenderTargetSPtr target = getRenderTarget();
 
 		if ( target )
 		{
-			target->setPixelFormat( val );
+			target->setPixelFormat( value );
 		}
 	}
 
-	void RenderWindow::setScene( SceneSPtr p_scene )
+	void RenderWindow::setScene( SceneSPtr value )
 	{
 		RenderTargetSPtr target = getRenderTarget();
 
 		if ( target )
 		{
-			target->setScene( p_scene );
+			target->setScene( value );
 		}
 	}
 
@@ -321,13 +371,13 @@ namespace castor3d
 		return result;
 	}
 
-	void RenderWindow::setStereo( bool p_bStereo )
+	void RenderWindow::setStereo( bool value )
 	{
 		RenderTargetSPtr target = getRenderTarget();
 
 		if ( target )
 		{
-			//l_target->setStereo( p_bStereo );
+			//l_target->setStereo( value );
 		}
 	}
 
@@ -344,13 +394,13 @@ namespace castor3d
 		return result;
 	}
 
-	void RenderWindow::setIntraOcularDistance( real p_rIao )
+	void RenderWindow::setIntraOcularDistance( real value )
 	{
 		RenderTargetSPtr target = getRenderTarget();
 
 		if ( target )
 		{
-			//l_target->setIntraOcularDistance( p_rIao );
+			//l_target->setIntraOcularDistance( value );
 		}
 	}
 
@@ -359,17 +409,187 @@ namespace castor3d
 		return m_size;
 	}
 
-	void RenderWindow::doRender( WindowBuffer p_eTargetBuffer, TextureUnit const & p_texture )
+	void RenderWindow::addPickingScene( Scene & scene )
 	{
-		auto texture = p_texture.getTexture();
-		m_backBuffers->bind( p_eTargetBuffer, FrameBufferTarget::eDraw );
-		m_backBuffers->clear( BufferComponent::eColour );
-		m_context->renderTexture( m_size, *texture );
-		m_backBuffers->unbind();
+		auto camera = getCamera();
+
+		if ( camera )
+		{
+			m_pickingPass->addScene( scene, *camera );
+		}
 	}
 
-	void RenderWindow::doUpdateSize()
+	PickNodeType RenderWindow::pick( castor::Position const & position )
 	{
-		m_backBuffers->resize( getSize() );
+		PickNodeType result = PickNodeType::eNone;
+		auto camera = getCamera();
+
+		if ( camera )
+		{
+			result = m_pickingPass->pick( position, *camera );
+		}
+
+		return result;
+	}
+
+	GeometrySPtr RenderWindow::getPickedGeometry()const
+	{
+		return m_pickingPass->getPickedGeometry();
+	}
+
+	BillboardBaseSPtr RenderWindow::getPickedBillboard()const
+	{
+		return m_pickingPass->getPickedBillboard();
+	}
+
+	SubmeshSPtr RenderWindow::getPickedSubmesh()const
+	{
+		return m_pickingPass->getPickedSubmesh();
+	}
+
+	uint32_t RenderWindow::getPickedFace()const
+	{
+		return m_pickingPass->getPickedFace();
+	}
+
+	void RenderWindow::doCreateProgram()
+	{
+		auto & renderSystem = *getEngine()->getRenderSystem();
+		glsl::Shader vtx;
+		{
+			using namespace glsl;
+			auto writer = renderSystem.createGlslWriter();
+
+			// Shader inputs
+			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
+			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
+
+			// Shader outputs
+			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto out = gl_PerVertex{ writer };
+
+			writer.implementFunction< void >( cuT( "main" ), [&]()
+			{
+				vtx_texture = texcoord;
+				out.gl_Position() = writer.rendererScalePosition( vec4( position, 0.0, 1.0 ) );
+			} );
+			vtx = writer.finalise();
+		}
+
+		glsl::Shader pxl;
+		{
+			using namespace glsl;
+			auto writer = renderSystem.createGlslWriter();
+
+			// Shader inputs
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 0u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+
+			// Shader outputs
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+
+			writer.implementFunction< void >( cuT( "main" ), [&]()
+			{
+				pxl_fragColor = vec4( texture( c3d_mapDiffuse, vtx_texture ).xyz(), 1.0 );
+			} );
+			pxl = writer.finalise();
+		}
+
+		m_program.clear();
+		m_program.push_back( { m_device->createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
+		m_program.push_back( { m_device->createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
+		m_program[0].module->loadShader( vtx.getSource() );
+		m_program[1].module->loadShader( pxl.getSource() );
+	}
+
+	void RenderWindow::doCreateSwapChainDependent()
+	{
+		RenderTargetSPtr target = getRenderTarget();
+		m_renderQuad = std::make_unique< RenderQuad >( *getEngine()->getRenderSystem()
+			, false
+			, false );
+		doCreateProgram();
+		m_renderQuad->createPipeline( renderer::Extent2D{ m_size[0], m_size[1] }
+			, castor::Position{}
+			, m_program
+#if C3D_DebugPicking
+			, m_pickingPass->getResult()
+#else
+			, target->getTexture().getTexture()->getDefaultView()
+#endif
+			, *m_renderPass
+			, {}
+			, {} );
+	}
+
+	bool RenderWindow::doPrepareFrames()
+	{
+		bool result{ true };
+		m_commandBuffers = m_swapChain->createCommandBuffers();
+		m_frameBuffers = m_swapChain->createFrameBuffers( *m_renderPass );
+
+		for ( uint32_t i = 0u; i < m_commandBuffers.size() && result; ++i )
+		{
+			auto & frameBuffer = *m_frameBuffers[i];
+			auto & commandBuffer = *m_commandBuffers[i];
+
+			if ( commandBuffer.begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
+			{
+				commandBuffer.beginRenderPass( *m_renderPass
+					, frameBuffer
+					, { m_swapChain->getClearColour() }
+					, renderer::SubpassContents::eInline );
+				m_renderQuad->registerFrame( commandBuffer );
+				commandBuffer.endRenderPass();
+
+				result = commandBuffer.end();
+
+				if ( !result )
+				{
+					std::cerr << "Command buffers recording failed" << std::endl;
+				}
+			}
+		}
+
+		return result;
+	}
+
+	void RenderWindow::doResetSwapChain()
+	{
+		doCreateSwapChainDependent();
+		doPrepareFrames();
+	}
+
+	void RenderWindow::doCleanup( bool enableDevice )
+	{
+		if ( enableDevice )
+		{
+			m_device->enable();
+		}
+
+		m_device->waitIdle();
+		m_pickingPass->cleanup();
+		m_overlayRenderer.reset();
+		RenderTargetSPtr target = getRenderTarget();
+
+		if ( target )
+		{
+			target->cleanup();
+		}
+
+		m_renderQuad.reset();
+		m_program.clear();
+		m_swapChainReset.disconnect();
+		m_commandBuffers.clear();
+		m_frameBuffers.clear();
+		m_transferCommandBuffer.reset();
+		m_stagingBuffer.reset();
+		m_renderPass.reset();
+		m_swapChain.reset();
+
+		if ( enableDevice )
+		{
+			m_device->disable();
+		}
 	}
 }

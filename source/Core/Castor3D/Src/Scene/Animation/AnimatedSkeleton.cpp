@@ -6,7 +6,6 @@
 #include "Mesh/Skeleton/Skeleton.hpp"
 #include "Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp"
 #include "Scene/Animation/Skeleton/SkeletonAnimationInstanceObject.hpp"
-#include "Shader/Uniform/Uniform.hpp"
 
 using namespace castor;
 
@@ -16,7 +15,7 @@ namespace castor3d
 		, Skeleton & skeleton
 		, Mesh & mesh
 		, Geometry & geometry )
-		: AnimatedObject{ name }
+		: AnimatedObject{ AnimationType::eSkeleton, name }
 		, m_skeleton{ skeleton }
 		, m_mesh{ mesh }
 		, m_geometry{ geometry }
@@ -35,7 +34,7 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedSkeleton::fillShader( Uniform4x4r & variable )const
+	void AnimatedSkeleton::fillShader( castor::Matrix4x4f * variable )const
 	{
 		Skeleton & skeleton = m_skeleton;
 		uint32_t i{ 0u };
@@ -44,7 +43,7 @@ namespace castor3d
 		{
 			for ( auto bone : skeleton )
 			{
-				variable.setValue( skeleton.getGlobalInverseTransform(), i++ );
+				variable[i++] = skeleton.getGlobalInverseTransform();
 			}
 		}
 		else
@@ -63,7 +62,7 @@ namespace castor3d
 					}
 				}
 
-				variable.setValue( final, i++ );
+				variable[i++] = final;
 			}
 		}
 	}

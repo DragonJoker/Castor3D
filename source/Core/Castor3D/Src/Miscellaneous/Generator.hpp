@@ -33,7 +33,7 @@ namespace castor3d
 			mutable std::recursive_mutex m_mutex;
 
 		public:
-			C3D_API Thread( Generator * p_parent, uint32_t p_index, int iWidth, int iTop, int iBottom, int iTotalHeight, castor::UbPixel const & p_pxColour );
+			C3D_API Thread( Generator * parent, uint32_t index, int iWidth, int iTop, int iBottom, int iTotalHeight, castor::UbPixel const & pxColour );
 			C3D_API virtual ~Thread();
 
 			C3D_API void run();
@@ -75,7 +75,7 @@ namespace castor3d
 			}
 
 		private:
-			static uint32_t StEntry( Generator::Thread * p_pThis );
+			static uint32_t StEntry( Generator::Thread * pThis );
 		};
 
 	protected:
@@ -93,7 +93,7 @@ namespace castor3d
 		Engine * m_engine{ nullptr };
 
 	public:
-		C3D_API Generator( Engine * engine, int p_width, int p_height );
+		C3D_API Generator( Engine * engine, int width, int height );
 		C3D_API virtual ~Generator();
 
 		C3D_API virtual bool Step();
@@ -106,14 +106,14 @@ namespace castor3d
 
 		C3D_API bool AllEnded();
 		C3D_API void Suspend();
-		C3D_API void setSize( int p_iWidth, int p_iHeight );
-		C3D_API void setSize( castor::Point2i const & p_size );
+		C3D_API void setSize( int iWidth, int iHeight );
+		C3D_API void setSize( castor::Point2i const & size );
 		C3D_API void saveFrame();
 
 		template <class ThreadClass>
-		ThreadClass * CreateThread( int iWidth, int iTop, int iBottom, int iTotalHeight, castor::UbPixel const & p_pxColour )
+		ThreadClass * CreateThread( int iWidth, int iTop, int iBottom, int iTotalHeight, castor::UbPixel const & pxColour )
 		{
-			ThreadClass * pThread = new ThreadClass( this, m_arraySlaveThreads.size(), m_iWidth, iTop, iBottom, iTotalHeight, p_pxColour );
+			ThreadClass * pThread = new ThreadClass( this, m_arraySlaveThreads.size(), m_iWidth, iTop, iBottom, iTotalHeight, pxColour );
 			m_arraySlaveThreads.push_back( pThread );
 			return pThread;
 		}
@@ -157,7 +157,7 @@ namespace castor3d
 		{
 			return uint32_t( m_arraySlaveThreads.size() );
 		}
-		C3D_API castor::Point2i _loadImage( castor::String const & p_strImagePath, castor::Image & p_pImage );
+		C3D_API castor::Point2i _loadImage( castor::String const & strImagePath, castor::Image & pImage );
 		C3D_API void _subrender();
 		C3D_API void _saveFrame();
 	};

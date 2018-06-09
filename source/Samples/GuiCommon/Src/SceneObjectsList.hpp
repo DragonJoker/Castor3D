@@ -19,28 +19,45 @@ namespace GuiCommon
 		using GeometrySubmeshIdMap = std::map< castor3d::GeometrySPtr, SubmeshIdMap >;
 
 	public:
-		SceneObjectsList( PropertiesContainer * p_propertiesHolder, wxWindow * p_parent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
+		SceneObjectsList( PropertiesContainer * propertiesHolder
+			, wxWindow * parent
+			, wxPoint const & ptPos = wxDefaultPosition
+			, wxSize const & size = wxDefaultSize );
 		~SceneObjectsList();
 
-		void loadScene( castor3d::Engine * engine, castor3d::SceneSPtr p_scene );
+		void loadScene( castor3d::Engine * engine
+			, castor3d::SceneSPtr scene );
 		void unloadScene();
-		void select( castor3d::GeometrySPtr geometry, castor3d::SubmeshSPtr submesh );
+		void select( castor3d::GeometrySPtr geometry
+			, castor3d::SubmeshSPtr submesh );
 
 	protected:
-		void doAddSubmesh( castor3d::GeometrySPtr geometry, castor3d::SubmeshSPtr submesh, wxTreeItemId id );
-		void doAddRenderWindow( wxTreeItemId p_id, castor3d::RenderWindowSPtr p_window );
-		void doAddGeometry( wxTreeItemId p_id, castor3d::Geometry & p_geometry );
-		void doAddCamera( wxTreeItemId p_id, castor3d::Camera & p_camera );
-		void doAddLight( wxTreeItemId p_id, castor3d::Light & p_light );
-		void doAddBillboard( wxTreeItemId p_id, castor3d::BillboardList & p_billboard );
-		void doAddNode( wxTreeItemId p_id, castor3d::SceneNodeSPtr p_node );
-		void doAddAnimatedObjectGroup( wxTreeItemId p_id, castor3d::AnimatedObjectGroupSPtr p_group );
-		void doAddOverlay( wxTreeItemId p_id, castor3d::OverlayCategorySPtr p_overlay );
+		void doAddSubmesh( castor3d::GeometrySPtr geometry
+			, castor3d::SubmeshSPtr submesh
+			, wxTreeItemId id );
+		void doAddSkeleton( castor3d::Skeleton const & skeleton
+			, wxTreeItemId id );
+		void doAddRenderWindow( wxTreeItemId id
+			, castor3d::RenderWindowSPtr window );
+		void doAddGeometry( wxTreeItemId id
+			, castor3d::Geometry & geometry );
+		void doAddCamera( wxTreeItemId id
+			, castor3d::Camera & camera );
+		void doAddLight( wxTreeItemId id
+			, castor3d::Light & light );
+		void doAddBillboard( wxTreeItemId id
+			, castor3d::BillboardList & billboard );
+		void doAddNode( wxTreeItemId id
+			, castor3d::SceneNodeSPtr node );
+		void doAddAnimatedObjectGroup( wxTreeItemId id
+			, castor3d::AnimatedObjectGroupSPtr group );
+		void doAddOverlay( wxTreeItemId id
+			, castor3d::OverlayCategorySPtr overlay );
 
 		DECLARE_EVENT_TABLE()
-		void OnClose( wxCloseEvent & p_event );
-		void OnSelectItem( wxTreeEvent & p_event );
-		void OnMouseRButtonUp( wxTreeEvent & p_event );
+		void onClose( wxCloseEvent & event );
+		void onSelectItem( wxTreeEvent & event );
+		void onMouseRButtonUp( wxTreeEvent & event );
 
 	private:
 		castor3d::SceneWPtr m_scene;

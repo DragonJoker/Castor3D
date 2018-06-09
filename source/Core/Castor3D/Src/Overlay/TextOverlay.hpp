@@ -32,9 +32,9 @@ namespace castor3d
 		*/
 		struct Vertex
 		{
-			float coords[2];
-			float text[2];
-			float texture[2];
+			castor::Point2f coords;
+			castor::Point2f text;
+			castor::Point2f texture;
 		};
 		DECLARE_VECTOR( Vertex, Vertex );
 		/*!
@@ -108,6 +108,10 @@ namespace castor3d
 		 */
 		C3D_API static OverlayCategorySPtr create();
 		/**
+		 *\copydoc	castor3d::OverlayCategory::accept
+		 */
+		C3D_API void accept( OverlayVisitor & visitor )const override;
+		/**
 		 *\copydoc		castor3d::OverlayCategory::createTextWriter
 		 */
 		C3D_API std::unique_ptr < OverlayCategory::TextWriter > createTextWriter( castor::String const & tabs )override
@@ -116,7 +120,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the text font
+		 *\brief		Sets the text font
 		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit la police du texte
@@ -131,7 +135,7 @@ namespace castor3d
 		 *\brief		Récupère le nom de la police.
 		 *\return		La valeur.
 		 */
-		C3D_API castor::String const & getFontName()const
+		inline castor::String const & getFontName()const
 		{
 			return getFontTexture()->getFontName();
 		}
@@ -141,7 +145,7 @@ namespace castor3d
 		 *\~french
 		 *\return		\p true si cette incrustation a changé.
 		 */
-		C3D_API bool isChanged()const override
+		inline bool isChanged()const override
 		{
 			return m_textChanged;
 		}
@@ -154,6 +158,16 @@ namespace castor3d
 		inline FontTextureSPtr getFontTexture()const
 		{
 			return m_fontTexture.lock();
+		}
+		/**
+		 *\~english
+		 *\return		\p true if this overlay's font has changed.
+		 *\~french
+		 *\return		\p true si la police de cette incrustation a changé.
+		 */
+		inline bool isFontChanged()const
+		{
+			return m_fontChanged;
 		}
 		/**
 		 *\~english
@@ -181,7 +195,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the overlay text
+		 *\brief		Sets the overlay text
 		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit le texte de l'incrustation
@@ -194,7 +208,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the overlay text
+		 *\brief		Sets the overlay text
 		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit le texte de l'incrustation
@@ -218,7 +232,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets text wrapping mode
+		 *\brief		Sets text wrapping mode
 		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit le mode de découpe du texte
@@ -409,28 +423,11 @@ namespace castor3d
 		using TextureCoordinates = std::array< float, 2 >;
 		DECLARE_VECTOR( TextureCoordinates, TextureCoords );
 		/**
-		 *\~english
-		 *\brief		Draws the overlay
-		 *\param[in]	renderer	The renderer used to draw this overlay
-		 *\~french
-		 *\brief		Dessine l'incrustation
-		 *\param[in]	renderer	Le renderer utilisé pour dessiner cette incrustation
+		 *\copydoc	castor3d::OverlayCategory::doUpdate
 		 */
-		C3D_API void doRender( OverlayRendererSPtr renderer )override;
+		C3D_API void doUpdate( OverlayRenderer const & renderer )override;
 		/**
-		 *\~english
-		 *\brief		Updates the overlay position, size...
-		 *\~french
-		 *\brief		Met à jour la position, taille...
-		 */
-		C3D_API void doUpdate()override;
-		/**
-		 *\~english
-		 *\brief		Updates the vertex buffer.
-		 *\param[in]	size	The render target size.
-		 *\~french
-		 *\brief		Met à jour le tampon de sommets.
-		 *\param[in]	size	Les dimensions de la cible de rendu.
+		 *\copydoc	castor3d::OverlayCategory::doUpdateBuffer
 		 */
 		C3D_API void doUpdateBuffer( castor::Size const & size )override;
 		/**
@@ -540,45 +537,20 @@ namespace castor3d
 		C3D_API void doAlignVertically( double height
 			, DisplayableLineArray & lines );
 
-	protected:
-		//!\~english	The vertex buffer data.
-		//!\~french		Les données du tampon de sommets.
+	private:
 		VertexArray m_arrayVtx;
-		//!\~english	The current overlay caption.
-		//!\~french		Le texte courant de l'incrustation.
 		castor::String m_currentCaption;
-		//!\~english	The previous overlay caption.
-		//!\~french		Le texte précédent de l'incrustation.
 		castor::String m_previousCaption;
-		//!\~english	The texture associated to the overlay font.
-		//!\~french		La texture associée à la police de l'incrustation.
 		FontTextureWPtr m_fontTexture;
-		//!\~english	The wrapping mode.
-		//!\~french		Le mode de découpe du texte.
+		bool m_fontChanged{ true };
 		TextWrappingMode m_wrappingMode{ TextWrappingMode::eNone };
-		//!\~english	The lines spacing mode.
-		//!\~french		Le mode d'espacement des lignes.
 		TextLineSpacingMode m_lineSpacingMode{ TextLineSpacingMode::eOwnHeight };
-		//!\~english	The horizontal alignment.
-		//!\~french		L'alignement horizontal du texte.
 		HAlign m_hAlign{ HAlign::eLeft };
-		//!\~english	The vertical alignment.
-		//!\~french		L'alignement vertical du texte.
 		VAlign m_vAlign{ VAlign::eCenter };
-		//!\~english	Tells if the text (caption, wrap mode, or alignments) has changed.
-		//!\~french		Dit si le texte (contenu, mode de découpe, alignements) a changé.
 		bool m_textChanged{ true };
-		//!\~english	The size (in spaces) of tabulation character.
-		//!\~french		La taille (en espaces) du caractère de tabulation.
 		uint32_t m_tabSize{ 4 };
-		//!\~english	The connection to the FontTexture changed notification signal.
-		//!\~french		La connexion au signal de notification de changement de la texture.
 		FontTexture::OnChanged::connection m_connection;
-		//!\~english	The text texture mapping mode.
-		//!\~french		Le mode de mappage de texture du texte.
 		TextTexturingMode m_texturingMode{ TextTexturingMode::eText };
-		//!\~english	The text texture coordinates buffer data.
-		//!\~french		Les données du tampon de coordonnées de texture du texte.
 		TextureCoordsArray m_arrayTextTexture;
 	};
 }

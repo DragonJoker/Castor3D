@@ -26,25 +26,23 @@ namespace castor3d
 		: public castor::OwnedBy< Engine >
 	{
 	public:
-		using CubeMatrices = std::array< castor::Matrix4x4r, size_t (CubeMapFace::eCount) >;
-		using CubeColourAttachment = std::array< TextureAttachmentSPtr, size_t (CubeMapFace::eCount) >;
-		using CubeCameras = std::array< CameraSPtr, size_t (CubeMapFace::eCount) >;
-		using CubeDepthAttachment = RenderBufferAttachmentSPtr;
-		using EnvironmentMapPasses = std::array< std::unique_ptr< EnvironmentMapPass >, size_t (CubeMapFace::eCount) >;
+		using CubeMatrices = std::array< castor::Matrix4x4r, size_t( CubeMapFace::eCount ) >;
+		using CubeCameras = std::array< CameraSPtr, size_t( CubeMapFace::eCount ) >;
+		using EnvironmentMapPasses = std::array< std::unique_ptr< EnvironmentMapPass >, size_t( CubeMapFace::eCount ) >;
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine	The engine.
-		 *\param[in]	p_node		The scene node.
+		 *\param[in]	node	The scene node.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
-		 *\param[in]	p_node		Le noeud de scène.
+		 *\param[in]	node	Le noeud de scène.
 		 */
 		C3D_API EnvironmentMap( Engine & engine
-			, SceneNode & p_node );
+			, SceneNode & node );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -70,20 +68,20 @@ namespace castor3d
 		 *\~english
 		 *\brief		Updates the passes.
 		 *\remarks		Gather the render queues, for further update.
-		 *\param[out]	p_queues	Receives the render queues needed for the rendering of the frame.
+		 *\param[out]	queues	Receives the render queues needed for the rendering of the frame.
 		 *\~french
 		 *\brief		Met à jour les passes.
 		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
-		 *\param[out]	p_queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
+		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API void update( RenderQueueArray & p_queues );
+		C3D_API void update( RenderQueueArray & queues );
 		/**
 		 *\~english
 		 *\brief		Renders the environment map.
 		 *\~french
 		 *\brief		Dessine la texture d'environnement.
 		 */
-		C3D_API void render();
+		C3D_API renderer::Semaphore const & render( renderer::Semaphore const & toWait );
 		/**
 		 *\~english
 		 *\brief		Dumps the environment map on screen.
@@ -96,85 +94,58 @@ namespace castor3d
 		 */
 		C3D_API void debugDisplay( castor::Size const & size, uint32_t index );
 		/**
-		 *\~english
-		 *\return		The reflection map.
-		 *\~english
-		 *\return		La texture d'environnement.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline TextureUnit & getTexture()
 		{
 			return m_environmentMap;
 		}
-		/**
-		 *\~english
-		 *\return		The reflection map.
-		 *\~english
-		 *\return		La texture d'environnement.
-		 */
+
 		inline TextureUnit const & getTexture()const
 		{
 			return m_environmentMap;
 		}
-		/**
-		 *\~english
-		 *\return		The reflection map dimensions.
-		 *\~english
-		 *\return		Les dimensions de la texture d'environnement.
-		 */
-		inline castor::Size getSize()const
+
+		inline renderer::TextureView & getDepthView()
+		{
+			return *m_depthBufferView;
+		}
+
+		inline renderer::TextureView const & getDepthView()const
+		{
+			return *m_depthBufferView;
+		}
+
+		inline renderer::Extent3D const & getSize()const
 		{
 			return m_environmentMap.getTexture()->getDimensions();
 		}
-		/**
-		 *\~english
-		 *\return		The reflection map index.
-		 *\~english
-		 *\return		L'indice de la texture d'environnement.
-		 */
+
 		inline uint32_t getIndex()const
 		{
 			return m_index;
 		}
+		/**@}*/
 
 	private:
-		//!\~english	The target size.
-		//!\~french		Les dimensions de la cible.
 		static uint32_t m_count;
-		//!\~english	The attach between depth buffer and main frame buffer.
-		//!\~french		L'attache entre le tampon de profondeur et le tampon principal.
-		CubeDepthAttachment m_depthAttach;
-		//!\~english	The depth buffer.
-		//!\~french		Le tampon de profondeur.
-		DepthStencilRenderBufferSPtr m_depthBuffer;
-		//!\~english	The attach between colour buffer and main frame buffer.
-		//!\~french		L'attache entre le tampon de couleur et le tampon principal.
-		CubeColourAttachment m_colourAttachs;
-		//!\~english	The reflection mapping texture.
-		//!\~french		La texture de reflcetion mapping.
 		TextureUnit m_environmentMap;
-		//!\~english	The frame buffer.
-		//!\~french		Le tampon d'image.
-		FrameBufferSPtr m_frameBuffer;
-		//!\~english	The node.
-		//!\~french		Le noeud.
+		renderer::TexturePtr m_depthBuffer;
+		renderer::TextureViewPtr m_depthBufferView;
+		renderer::RenderPassPtr m_renderPass;
+		renderer::DescriptorSetPoolPtr m_backgroundDescriptorPool;
 		SceneNode const & m_node;
-		//!\~english	The connection to node changed signal.
-		//!\~french		La connexion au signal de changement du noeud.
 		OnSceneNodeChangedConnection m_onNodeChanged;
-		//!\~english	The view matrices for the render of each cube face.
-		//!\~french		Les matrices vue pour le dessin de chaque face du cube.
 		CubeMatrices m_matrices;
-		//!\~english	The target size.
-		//!\~french		Les dimensions de la cible.
 		castor::Size m_size;
-		//!\~english	The target size.
-		//!\~french		Les dimensions de la cible.
 		uint32_t m_index{ 0u };
-		//!\~english	The render pass for each cube face.
-		//!\~french		La passe de rendu pour chaque face du cube.
 		EnvironmentMapPasses m_passes;
-		//!\~english	The render call count (1 of 5 triggers an actual render).
-		//!\~french		Le nombre d'appels à la fonction de rendu (1 sur 5 effectue réellement un rendu).
 		uint32_t m_render = 0u;
 	};
 }

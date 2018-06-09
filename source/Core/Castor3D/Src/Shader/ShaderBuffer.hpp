@@ -4,8 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_ShaderBuffer_H___
 #define ___C3D_ShaderBuffer_H___
 
-#include "Shader/ShaderStorageBuffer.hpp"
-#include "Texture/TextureUnit.hpp"
+#include "Castor3DPrerequisites.hpp"
+
+#include <Buffer/UniformBuffer.hpp>
 
 namespace castor3d
 {
@@ -51,31 +52,55 @@ namespace castor3d
 		C3D_API void update();
 		/**
 		 *\~english
-		 *\brief		Binds the buffer.
-		 *\param[in]	index	The binding point.
+		 *\brief		Updates the buffer.
 		 *\~french
-		 *\brief		Active le tampon.
-		 *\param[in]	index	Le point d'activation.
+		 *\brief		Met à jour le tampon.
 		 */
-		C3D_API void bind( uint32_t index )const;
+		C3D_API void update( uint32_t offset, uint32_t size );
 		/**
 		 *\~english
-		 *\return		The pointer the buffer.
+		 *\brief		Creates the descriptor set layout binding at given point.
+		 *\param[in]	index	The binding point index.
+		 *\~french
+		 *\brief		Crée une attache de layout de set de descripteurs au point donné.
+		 *\param[in]	index	L'indice du point d'attache.
+		 */
+		C3D_API renderer::DescriptorSetLayoutBinding createLayoutBinding( uint32_t index = 0u )const;
+		/**
+		 *\~english
+		 *\brief		Creates the descriptor set binding at given point.
+		 *\param[in]	binding	The descriptor set layout binding.
+		 *\~french
+		 *\brief		Crée une attache de set de descripteurs au point donné.
+		 *\param[in]	binding	L'attache de layout de set de descripteurs.
+		 */
+		C3D_API void createBinding( renderer::DescriptorSet & descriptorSet
+			, renderer::DescriptorSetLayoutBinding const & binding )const;
+		/**
+		 *\~english
+		 *\return		The pointer to the buffer.
 		 *\~french
 		 *\brief		Le pointeur sur le tampon.
 		 */
-		C3D_API uint8_t * ptr();
+		inline uint8_t * getPtr()
+		{
+			return m_data.data();
+		}
+		/**
+		 *\~english
+		 *\return		The buffer size.
+		 *\~french
+		 *\brief		La taille du tampon.
+		 */
+		inline uint32_t getSize()
+		{
+			return uint32_t( m_data.size() );
+		}
 
-	protected:
-		//!\~english	The SSBO.
-		//!\~french		Le SSBO.
-		ShaderStorageBufferUPtr m_ssbo;
-		//!\~english	The TBO.
-		//!\~french		Le TBO.
-		TextureUnit m_tbo;
-		//!\~english	The TBO's buffer.
-		//!\~french		Le tampon du TBO.
-		castor::PxBufferBaseSPtr m_buffer;
+	private:
+		renderer::BufferBasePtr m_buffer;
+		renderer::BufferViewPtr m_bufferView;
+		renderer::ByteArray m_data;
 	};
 }
 

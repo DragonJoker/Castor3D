@@ -197,12 +197,16 @@ namespace castor
 
 		std::wostream & operator<<( std::wostream & p_stream, Backtrace const & p_backtrace )
 		{
+			static std::locale const loc{ "C" };
+			p_stream.imbue( loc );
 			doShowBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
 			return p_stream;
 		}
 
 		std::ostream & operator<<( std::ostream & p_stream, Backtrace const & p_backtrace )
 		{
+			static std::locale const loc{ "C" };
+			p_stream.imbue( loc );
 			doShowBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
 			return p_stream;
 		}

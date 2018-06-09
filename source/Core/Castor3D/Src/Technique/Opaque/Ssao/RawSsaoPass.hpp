@@ -4,11 +4,13 @@ See LICENSE file in root folder
 #ifndef ___C3D_RawSsaoPass_H___
 #define ___C3D_RawSsaoPass_H___
 
-#include "SsaoConfigUbo.hpp"
-#include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Render/RenderInfo.hpp"
+#include "Technique/RenderTechniqueVisitor.hpp"
+#include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Technique/Opaque/LightPass.hpp"
 #include "Texture/TextureUnit.hpp"
+
+#include <GlslShader.hpp>
 
 namespace castor3d
 {
@@ -29,24 +31,29 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine			The engine.
-		 *\param[in]	size			The render area dimensions.
-		 *\param[in]	config			The SSAO configuration.
-		 *\param[in]	matrixUbo		The matrices UBO.
-		 *\param[in]	ssaoConfigUbo	The SSAO configuration UBO.
+		 *\param[in]	engine					The engine.
+		 *\param[in]	size					The render area dimensions.
+		 *\param[in]	config					The SSAO configuration.
+		 *\param[in]	matrixUbo				The matrices UBO.
+		 *\param[in]	ssaoConfigUbo			The SSAO configuration UBO.
+		 *\param[in]	linearisedDepthBuffer	The linearised depth buffer.
+		 *\param[in]	normals					The normals buffer.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine			Le moteur.
-		 *\param[in]	size			Les dimensions de la zone de rendu.
-		 *\param[in]	config			La configuration du SSAO.
-		 *\param[in]	matrixUbo		L'UBO des matrices.
-		 *\param[in]	ssaoConfigUbo	L'UBO de configuration du SSAO.
+		 *\param[in]	engine					Le moteur.
+		 *\param[in]	size					Les dimensions de la zone de rendu.
+		 *\param[in]	config					La configuration du SSAO.
+		 *\param[in]	matrixUbo				L'UBO des matrices.
+		 *\param[in]	ssaoConfigUbo			L'UBO de configuration du SSAO.
+		 *\param[in]	linearisedDepthBuffer	Le tampon de profondeur linéarisé.
+		 *\param[in]	normals					Le tampon de normales.
 		 */
 		RawSsaoPass( Engine & engine
-			, castor::Size const & size
+			, renderer::Extent2D const & size
 			, SsaoConfig const & config
-			, MatrixUbo & matrixUbo
-			, SsaoConfigUbo & ssaoConfigUbo );
+			, SsaoConfigUbo & ssaoConfigUbo
+			, TextureUnit const & linearisedDepthBuffer
+			, renderer::TextureView const & normals );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -57,36 +64,52 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders the SSAO pass on currently bound framebuffer.
-		 *\param[in]	linearisedDepthBuffer	The linearised depth buffer.
-		 *\param[in]	normals					The normals buffer.
 		 *\~french
 		 *\brief		Dessine la passe SSAO sur le tampon d'image actif.
-		 *\param[in]	linearisedDepthBuffer	Le tampon de profondeur linéarisé.
-		 *\param[in]	normals					Le tampon de normales.
 		 */
-		void compute( TextureUnit const & linearisedDepthBuffer
-			, TextureUnit const & normals );
+		renderer::Semaphore const & compute( renderer::Semaphore const & toWait )const;
 		/**
-		 *\~english
-		 *\return		The SSAO pass result.
-		 *\~french
-		 *\return		Le résultat de la passe SSAO.
+		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
+		C3D_API void accept( SsaoConfig & config
+			, RenderTechniqueVisitor & visitor );
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline TextureUnit const & getResult()const
 		{
 			return m_result;
 		}
+		/**@}*/
 
 	private:
 		Engine & m_engine;
-		MatrixUbo & m_matrixUbo;
 		SsaoConfigUbo & m_ssaoConfigUbo;
-		castor::Size m_size;
+		TextureUnit const & m_linearisedDepthBuffer;
+		renderer::TextureView const & m_normals;
+		renderer::Extent2D m_size;
 		TextureUnit m_result;
-		ShaderProgramSPtr m_program;
-		RenderPipelineUPtr m_pipeline;
-		FrameBufferSPtr m_fbo;
-		TextureAttachmentSPtr m_resultAttach;
+		glsl::Shader m_vertexShader;
+		glsl::Shader m_pixelShader;
+		renderer::ShaderStageStateArray m_program;
+		renderer::SamplerPtr m_sampler;
+		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
+		renderer::DescriptorSetPoolPtr m_descriptorPool;
+		renderer::DescriptorSetPtr m_descriptor;
+		renderer::PipelineLayoutPtr m_pipelineLayout;
+		renderer::RenderPassPtr m_renderPass;
+		renderer::FrameBufferPtr m_frameBuffer;
+		renderer::VertexBufferPtr< NonTexturedQuad > m_vertexBuffer;
+		renderer::VertexLayoutPtr m_vertexLayout;
+		renderer::PipelinePtr m_pipeline;
+		renderer::CommandBufferPtr m_commandBuffer;
+		renderer::SemaphorePtr m_finished;
 		RenderPassTimerSPtr m_timer;
 
 	};

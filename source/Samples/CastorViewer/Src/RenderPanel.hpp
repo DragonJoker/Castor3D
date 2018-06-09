@@ -61,6 +61,16 @@ namespace CastorViewer
 			return m_renderWindow.lock();
 		}
 
+		inline void disableWindowResize()
+		{
+			m_resizeWindow = false;
+		}
+
+		inline void enableWindowResize()
+		{
+			m_resizeWindow = true;
+		}
+
 	private:
 		void doResetTimers();
 		void doStartMovement();
@@ -121,6 +131,7 @@ namespace CastorViewer
 		bool m_mouseLeftDown{ false };
 		bool m_mouseRightDown{ false };
 		bool m_mouseMiddleDown{ false };
+		bool m_resizeWindow{ true };
 		std::atomic_bool m_movementStarted{ false };
 		wxTimer * m_timers[eTIMER_ID_COUNT];
 		castor3d::RenderWindowWPtr m_renderWindow;

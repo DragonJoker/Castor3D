@@ -74,6 +74,10 @@ namespace castor3d
 		 */
 		C3D_API uint32_t getCount()const override;
 		/**
+		 *\copydoc		castor3d::IndexMapping::getComponentsCount
+		 */
+		C3D_API uint32_t getComponentsCount()const override;
+		/**
 		 *\copydoc		castor3d::IndexMapping::sortByDistance
 		 */
 		C3D_API void sortByDistance( castor::Point3r const & cameraPosition )override;
@@ -158,6 +162,7 @@ namespace castor3d
 	private:
 		void doCleanup()override;
 		void doFill()override;
+		void doUpload()override;
 
 	public:
 		C3D_API static castor::String const Name;
@@ -166,9 +171,6 @@ namespace castor3d
 		//!\~english	The lines in the submesh.
 		//!\~french		Le tableau de lignes.
 		LineArray m_lines;
-		//!\~english	The lines count.
-		//!\~french		Le nombre de lignes.
-		uint32_t m_lineCount{ 0u };
 		//!\~english	The transformed camera position at last sort.
 		//!\~french		La position transformée de la caméra au dernier tri.
 		castor::Point3r m_cameraPosition;

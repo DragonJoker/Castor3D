@@ -13,8 +13,8 @@ namespace castor3d
 	{
 		const String PhongLightingModel::Name = cuT( "phong" );
 
-		PhongLightingModel::PhongLightingModel( ShadowType shadows, GlslWriter & writer )
-			: LightingModel{ shadows, writer }
+		PhongLightingModel::PhongLightingModel( GlslWriter & writer )
+			: LightingModel{ writer }
 		{
 		}
 
@@ -145,14 +145,16 @@ namespace castor3d
 					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
 						, 1.0_f );
 
-					if ( m_shadows != ShadowType::eNone )
+					IF( m_writer, light.m_lightBase().m_shadowType() != Int( int( ShadowType::eNone ) ) )
 					{
-						shadowFactor = 1.0_f - min( receivesShadows
-							, m_shadowModel->computeDirectionalShadow( light.m_transform()
+						shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+							, m_shadowModel->computeDirectionalShadow( light.m_lightBase().m_shadowType()
+								, light.m_transform()
 								, fragmentIn.m_vertex
 								, lightDirection
 								, fragmentIn.m_normal ) );
 					}
+					FI;
 
 					doComputeLight( light.m_lightBase()
 						, worldEye
@@ -161,6 +163,23 @@ namespace castor3d
 						, shadowFactor
 						, fragmentIn
 						, output );
+
+					IF( m_writer, light.m_lightBase().m_shadowType() != Int( int( ShadowType::eNone ) )
+						&& light.m_lightBase().m_volumetricSteps() != 0_ui )
+					{
+						m_shadowModel->computeVolumetric( light.m_lightBase().m_shadowType()
+							, fragmentIn.m_vertex
+							, worldEye
+							, light.m_transform()
+							, light.m_direction()
+							, light.m_lightBase().m_colour()
+							, light.m_lightBase().m_intensity()
+							, light.m_lightBase().m_volumetricSteps()
+							, light.m_lightBase().m_volumetricScattering()
+							, output );
+					}
+					FI
+
 					parentOutput.m_diffuse += output.m_diffuse;
 					parentOutput.m_specular += output.m_specular;
 				}
@@ -197,19 +216,21 @@ namespace castor3d
 					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
 						, 1.0_f );
 
-					if ( m_shadows != ShadowType::eNone )
+					IF( m_writer, light.m_lightBase().m_shadowType() != Int( int( ShadowType::eNone ) ) )
 					{
-						IF( m_writer, light.m_index() >= 0_i )
+						IF( m_writer, light.m_lightBase().m_index() >= 0_i )
 						{
-							shadowFactor = 1.0_f - min( receivesShadows
-								, m_shadowModel->computePointShadow( fragmentIn.m_vertex
+							shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+								, m_shadowModel->computePointShadow( light.m_lightBase().m_shadowType()
+									, fragmentIn.m_vertex
 									, light.m_position().xyz()
 									, fragmentIn.m_normal
 									, light.m_lightBase().m_farPlane()
-									, light.m_index() ) );
+									, light.m_lightBase().m_index() ) );
 						}
 						FI;
 					}
+					FI;
 
 					doComputeLight( light.m_lightBase()
 						, worldEye
@@ -262,21 +283,23 @@ namespace castor3d
 
 					IF( m_writer, spotFactor > light.m_cutOff() )
 					{
-						auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" ), Float( 1 ) );
+						auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" ), 1.0_f );
 
-						if ( m_shadows != ShadowType::eNone )
+						IF( m_writer, light.m_lightBase().m_shadowType() != Int( int( ShadowType::eNone ) ) )
 						{
-							IF( m_writer, light.m_index() >= 0_i )
+							IF( m_writer, light.m_lightBase().m_index() >= 0_i )
 							{
-								shadowFactor = 1.0_f - min( receivesShadows
-									, m_shadowModel->computeSpotShadow( light.m_transform()
+								shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+									, m_shadowModel->computeSpotShadow( light.m_lightBase().m_shadowType()
+										, light.m_transform()
 										, fragmentIn.m_vertex
 										, lightToVertex
 										, fragmentIn.m_normal
-										, light.m_index() ) );
+										, light.m_lightBase().m_index() ) );
 							}
 							FI;
 						}
+						FI;
 
 						doComputeLight( light.m_lightBase()
 							, worldEye
@@ -307,11 +330,75 @@ namespace castor3d
 				, output );
 		}
 
-		void PhongLightingModel::doDeclareComputeOnePointLight()
+		void PhongLightingModel::doDeclareComputeOneDirectionalLight( ShadowType shadowType
+			, bool volumetric )
+		{
+			OutputComponents output{ m_writer };
+			m_computeDirectional = m_writer.implementFunction< Void >( cuT( "computeDirectionalLight" )
+				, [this, shadowType, volumetric]( DirectionalLight const & light
+					, Vec3 const & worldEye
+					, Float const & shininess
+					, Int const & receivesShadows
+					, FragmentInput const & fragmentIn
+					, OutputComponents & parentOutput )
+				{
+					OutputComponents output
+					{
+						m_writer.declLocale( cuT( "lightDiffuse" ), vec3( 0.0_f ) ),
+						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
+					};
+					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
+						, normalize( light.m_direction().xyz() ) );
+					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
+						, 1.0_f );
+
+					if ( shadowType != ShadowType::eNone )
+					{
+						shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+							, m_shadowModel->computeDirectionalShadow( light.m_transform()
+								, fragmentIn.m_vertex
+								, lightDirection
+								, fragmentIn.m_normal ) );
+					}
+
+					doComputeLight( light.m_lightBase()
+						, worldEye
+						, lightDirection
+						, shininess
+						, shadowFactor
+						, fragmentIn
+						, output );
+
+					if ( shadowType != ShadowType::eNone && volumetric )
+					{
+						m_shadowModel->computeVolumetric( fragmentIn.m_vertex
+							, worldEye
+							, light.m_transform()
+							, light.m_direction()
+							, light.m_lightBase().m_colour()
+							, light.m_lightBase().m_intensity()
+							, light.m_lightBase().m_volumetricSteps()
+							, light.m_lightBase().m_volumetricScattering()
+							, output );
+					}
+
+					parentOutput.m_diffuse += output.m_diffuse;
+					parentOutput.m_specular += output.m_specular;
+				}
+				, DirectionalLight( &m_writer, cuT( "light" ) )
+				, InVec3( &m_writer, cuT( "worldEye" ) )
+				, InFloat( &m_writer, cuT( "shininess" ) )
+				, InInt( &m_writer, cuT( "receivesShadows" ) )
+				, FragmentInput{ m_writer }
+				, output );
+		}
+
+		void PhongLightingModel::doDeclareComputeOnePointLight( ShadowType shadowType
+			, bool volumetric )
 		{
 			OutputComponents output{ m_writer };
 			m_computeOnePoint = m_writer.implementFunction< Void >( cuT( "computePointLight" )
-				, [this]( PointLight const & light
+				, [this, shadowType]( PointLight const & light
 					, Vec3 const & worldEye
 					, Float const & shininess
 					, Int const & receivesShadows
@@ -332,9 +419,9 @@ namespace castor3d
 					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
 						, 1.0_f );
 
-					if ( m_shadows != ShadowType::eNone )
+					if ( shadowType != ShadowType::eNone )
 					{
-						shadowFactor = 1.0_f - min( receivesShadows
+						shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
 							, m_shadowModel->computePointShadow( fragmentIn.m_vertex
 								, light.m_position().xyz()
 								, fragmentIn.m_normal
@@ -365,11 +452,12 @@ namespace castor3d
 				, output );
 		}
 
-		void PhongLightingModel::doDeclareComputeOneSpotLight()
+		void PhongLightingModel::doDeclareComputeOneSpotLight( ShadowType shadowType
+			, bool volumetric )
 		{
 			OutputComponents output{ m_writer };
 			m_computeOneSpot = m_writer.implementFunction< Void >( cuT( "computeSpotLight" )
-				, [this]( SpotLight const & light
+				, [this, shadowType]( SpotLight const & light
 					, Vec3 const & worldEye
 					, Float const & shininess
 					, Int const & receivesShadows
@@ -394,9 +482,9 @@ namespace castor3d
 					{
 						auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" ), Float( 1 ) );
 
-						if ( m_shadows != ShadowType::eNone )
+						if ( shadowType != ShadowType::eNone )
 						{
-							shadowFactor = 1.0_f - min( receivesShadows
+							shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
 								, m_shadowModel->computeSpotShadow( light.m_transform()
 									, fragmentIn.m_vertex
 									, lightToVertex

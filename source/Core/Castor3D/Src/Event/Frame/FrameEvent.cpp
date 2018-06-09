@@ -6,12 +6,12 @@ using namespace castor;
 
 namespace castor3d
 {
-	FrameEvent::FrameEvent( EventType p_type )
-		: m_type( p_type )
+	FrameEvent::FrameEvent( EventType type )
+		: m_type( type )
 	{
 #if !defined( NDEBUG )
 
-		StringStream stream;
+		castor::StringStream stream = castor::makeStringStream();
 		stream << Debug::Backtrace{ 20 };
 		m_stackTrace = stream.str();
 

@@ -1,4 +1,4 @@
-﻿#include "FileParser.hpp"
+#include "FileParser.hpp"
 
 namespace castor
 {
@@ -245,14 +245,14 @@ namespace castor
 
 	void FileParser::parseError( String const & p_error )
 	{
-		StringStream error;
+		StringStream error{ makeStringStream() };
 		error << cuT( "Error, line #" ) << m_context->m_line << cuT( ": Directive <" ) << doGetSectionsStack() << cuT( ">: " ) << p_error;
 		Logger::logError( error.str() );
 	}
 
 	void FileParser::parseWarning( String const & p_warning )
 	{
-		StringStream error;
+		StringStream error{ makeStringStream() };
 		error << cuT( "Warning, line #" ) << m_context->m_line << cuT( ": Directive <" ) << doGetSectionsStack() << cuT( ">: " ) << p_warning;
 		Logger::logWarning( error.str() );
 	}
@@ -496,7 +496,7 @@ namespace castor
 
 	String FileParser::doGetSectionsStack()
 	{
-		StringStream sections;
+		StringStream sections{ makeStringStream() };
 
 		if ( m_context && m_context->m_sections.size() > 1 )
 		{

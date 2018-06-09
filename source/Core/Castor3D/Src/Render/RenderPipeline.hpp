@@ -6,20 +6,20 @@ See LICENSE file in root folder
 
 #include "Castor3DPrerequisites.hpp"
 
-#include "State/BlendState.hpp"
-#include "State/DepthStencilState.hpp"
-#include "State/MultisampleState.hpp"
-#include "State/RasteriserState.hpp"
+#include <Descriptor/DescriptorSetLayout.hpp>
+#include <Descriptor/DescriptorSetPool.hpp>
+#include <Pipeline/ColourBlendState.hpp>
+#include <Pipeline/DepthStencilState.hpp>
+#include <Pipeline/MultisampleState.hpp>
+#include <Pipeline/RasterisationState.hpp>
+#include <Pipeline/Scissor.hpp>
+#include <Pipeline/VertexLayout.hpp>
+#include <Pipeline/Viewport.hpp>
 
-#include <Math/SquareMatrix.hpp>
 #include <Design/OwnedBy.hpp>
-
-#include <stack>
-#include <unordered_map>
 
 namespace castor3d
 {
-	static const uint32_t C3D_MAX_TEXTURE_MATRICES = 4;
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.6.1.0
@@ -34,276 +34,205 @@ namespace castor3d
 	class RenderPipeline
 		: public castor::OwnedBy< RenderSystem >
 	{
-	private:
-		using MatrixStack = std::stack< castor::Matrix4x4r >;
-		using ShaderObjectset = std::set< ShaderObjectSPtr >;
-		using BindingArray = std::vector< std::reference_wrapper< UniformBufferBinding > >;
-
 	public:
 		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	renderSystem	The parent RenderSystem.
-		 *\param[in]	dsState			The depth stencil state.
-		 *\param[in]	rsState			The rateriser state.
-		 *\param[in]	blState			The blend state.
-		 *\param[in]	msState			The multisample state.
-		 *\param[in]	program			The shader program.
-		 *\param[in]	flags			The creation flags.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	renderSystem	Le RenderSystem parent.
-		 *\param[in]	dsState			L'état de stencil et profondeur.
-		 *\param[in]	rsState			L'état de rastériseur.
-		 *\param[in]	blState			L'état de mélange.
-		 *\param[in]	msState			L'état de multi-échantillonnage.
-		 *\param[in]	program			Le programme shader.
-		 *\param[in]	flags			Les indicateurs de création.
-		 */
+		*\~english
+		*\brief
+		*	Constructor.
+		*\param[in] renderSystem
+		*	The parent RenderSystem.
+		*\param[in] dsState
+		*	The depth stencil state.
+		*\param[in] rsState
+		*	The rateriser state.
+		*\param[in] blState
+		*	The blend state.
+		*\param[in] msState
+		*	The multisample state.
+		*\param[in] program
+		*	The shader program.
+		*\param[in] flags
+		*	The creation flags.
+		*\~french
+		*\brief
+		*	Constructeur.
+		*\param[in] renderSystem
+		*	Le RenderSystem parent.
+		*\param[in] dsState
+		*	L'état de stencil et profondeur.
+		*\param[in] rsState
+		*	L'état de rastériseur.
+		*\param[in] blState
+		*	L'état de mélange.
+		*\param[in] msState
+		*	L'état de multi-échantillonnage.
+		*\param[in] program
+		*	Le programme shader.
+		*\param[in] flags
+		*	Les indicateurs de création.
+		*/
 		C3D_API explicit RenderPipeline( RenderSystem & renderSystem
-			, DepthStencilState && dsState
-			, RasteriserState && rsState
-			, BlendState && blState
-			, MultisampleState && msState
-			, ShaderProgram & program
+			, renderer::DepthStencilState && dsState
+			, renderer::RasterisationState && rsState
+			, renderer::ColourBlendState && blState
+			, renderer::MultisampleState && msState
+			, ShaderProgramSPtr program
 			, PipelineFlags const & flags );
 		/**
-		 *\~english
-		 *\brief		Denstructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API virtual ~RenderPipeline();
+		*\~english
+		*\brief
+		*	Denstructor.
+		*\~french
+		*\brief
+		*	Destructeur.
+		*/
+		C3D_API ~RenderPipeline();
 		/**
-		 *\~english
-		 *\brief		Cleans up the pipeline.
-		 *\~french
-		 *\brief		Nettoie le pipeline.
-		 */
+		*\~english
+		*\brief
+		*	Initialises the pipeline.
+		*\param[in] renderPass
+		*	The render pass to which this pipeline is bound.
+		*\~french
+		*\brief
+		*	Initialise le pipeline.
+		*\param[in] renderPass
+		*	La passe de rendu à laquelle ce pipeline est lié.
+		*/
+		C3D_API void initialise( renderer::RenderPass const & renderPass );
+		/**
+		*\~english
+		*\brief
+		*	Cleans up the pipeline.
+		*\~french
+		*\brief
+		*	Nettoie le pipeline.
+		*/
 		C3D_API void cleanup();
 		/**
-		 *\~english
-		 *\brief		Applies the pipeline.
-		 *\~french
-		 *\brief		Applique le pipeline.
-		 */
-		C3D_API virtual void apply()const = 0;
+		*\~english
+		*\brief
+		*	Creates the descriptor pools for \p maxSets descriptor sets per descriptor set layout.
+		*\param[in] maxSets
+		*	The number of descriptor sets to be allocatable by the pools, per layout.
+		*\~french
+		*\brief
+		*	Crée les pools de descripteurs pour \p maxSets ensembles de descripteurs par layout d'ensemble de descripteurs.
+		*\param[in] maxSets
+		*	Le nombre d'ensembles de descripteurs allouables par les pools, par layout.
+		*/
+		C3D_API void createDescriptorPools( uint32_t maxSets );
 		/**
-		 *\~english
-		 *\brief		adds a uniform buffer to the pipeline.
-		 *\remarks		Creates the binding for this uniform buffer, using the pipeline's program.
-		 *\~french
-		 *\brief		Ajoute un tampon d'uniformes à ce pipeline.
-		 *\remarks		Crée le binding pour ce tampon, en utilisant le programme de ce pipeline.
-		 */
-		C3D_API void addUniformBuffer( UniformBuffer & ubo );
-		/**
-		 *\~english
-		 *\brief		Retrieves a GeometryBuffers for given submesh.
-		 *\param[in]	submesh	The submesh.
-		 *\~french
-		 *\brief		Récupère un GeometryBuffers pour le sous-maillage donné.
-		 *\param[in]	submesh	Le sous-maillage.
-		 */
-		C3D_API GeometryBuffersSPtr getGeometryBuffers( Submesh & submesh );
-		/**
-		 *\~english
-		 *\brief		Retrieves a GeometryBuffers for given billboard.
-		 *\param[in]	billboard	The billboard.
-		 *\~french
-		 *\brief		Récupère un GeometryBuffers pour le billboard donné.
-		 *\param[in]	billboard	Le billboard.
-		 */
-		C3D_API GeometryBuffersSPtr getGeometryBuffers( BillboardBase & billboard );
-		/**
-		 *\~english
-		 *\return		The shader program.
-		 *\~french
-		 *\return		Le programme shader.
-		 */
-		inline ShaderProgram const & getProgram()const
+		*\~english
+		*name
+		*	Mutators.
+		*\remarks
+		*	They must be called before any call to initialise().
+		*\~french
+		*name
+		*	Mutateurs.
+		*\remarks
+		*	Ils doivent être appelés avant l'appel à initialise().
+		**/
+		/**@{*/
+		inline void setVertexLayouts( std::vector< renderer::VertexLayout > layouts )
 		{
-			return m_program;
+			REQUIRE( !m_pipeline );
+			m_vertexLayouts = std::move( layouts );
 		}
-		/**
-		 *\~english
-		 *\return		The shader program.
-		 *\~french
-		 *\return		Le programme shader.
-		 */
-		inline ShaderProgram & getProgram()
+
+		inline void setVertexLayouts( renderer::VertexLayoutCRefArray const & layouts )
 		{
-			return m_program;
+			REQUIRE( !m_pipeline );
+			for ( auto & layout : layouts )
+			{
+				m_vertexLayouts.push_back( layout.get() );
+			}
 		}
-		/**
-		 *\~english
-		 *\return		The uniform buffer bindings.
-		 *\~french
-		 *\return		Les bindings des tampons de variables uniformes.
-		 */
-		inline BindingArray const & getBindings()const
+
+		inline void setDescriptorSetLayouts( std::vector< renderer::DescriptorSetLayoutPtr > && layouts )
 		{
-			return m_bindings;
+			REQUIRE( !m_pipeline );
+			m_descriptorLayouts = std::move( layouts );
 		}
+
+		inline void setPushConstantRanges( renderer::PushConstantRangeCRefArray const & pushConstantRanges )
+		{
+			REQUIRE( !m_pipeline );
+			m_pushConstantRanges = pushConstantRanges;
+		}
+
+		inline void setViewport( renderer::Viewport const & viewport )
+		{
+			REQUIRE( !m_pipeline );
+			m_viewport = std::make_unique< renderer::Viewport >( viewport );
+		}
+
+		inline void setScissor( renderer::Scissor const & scissor )
+		{
+			REQUIRE( !m_pipeline );
+			m_scissor = std::make_unique< renderer::Scissor >( scissor );
+		}
+		/**@}*/
 		/**
-		 *\~english
-		 *\return		The creation flags.
-		 *\~french
-		 *\return		Les indicateurs de création.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		**/
+		/**@{*/
 		inline PipelineFlags const & getFlags()const
 		{
 			return m_flags;
 		}
-		/**
-		 *\~english
-		 *\return		The count of textures used by the program.
-		 *\~french
-		 *\return		Le nombre de textures utilisées par le programme.
-		 */
-		inline uint32_t getTexturesCount()
+
+		inline renderer::Pipeline const & getPipeline()const
 		{
-			return m_textureCount;
+			REQUIRE( m_pipeline );
+			return *m_pipeline;
 		}
-		/**
-		 *\~english
-		 *\return		The directional lights shadow maps frame variable.
-		 *\~french
-		 *\return		La variable shader des maps d'ombres pour les lumières directionnelles.
-		 */
-		inline PushUniform1s & getDirectionalShadowMapsVariable()
+
+		inline renderer::PipelineLayout const & getPipelineLayout()const
 		{
-			REQUIRE( m_directionalShadowMaps );
-			return *m_directionalShadowMaps;
+			REQUIRE( m_pipelineLayout );
+			return *m_pipelineLayout;
 		}
-		/**
-		 *\~english
-		 *\return		The spot lights shadow maps frame variable.
-		 *\~french
-		 *\return		La variable shader des maps d'ombres pour les lumières spots.
-		 */
-		inline PushUniform1s & getSpotShadowMapsVariable()
+
+		inline renderer::DescriptorSetLayout const & getDescriptorSetLayout( uint32_t index )const
 		{
-			REQUIRE( m_spotShadowMaps );
-			return *m_spotShadowMaps;
+			REQUIRE( index < m_descriptorLayouts.size() );
+			return *m_descriptorLayouts[index];
 		}
-		/**
-		 *\~english
-		 *\return		The point lights shadow maps frame variable.
-		 *\~french
-		 *\return		La variable shader des maps d'ombres pour les lumières ponctuelles.
-		 */
-		inline PushUniform1s & getPointShadowMapsVariable()
+
+		inline bool hasDescriptorPool( uint32_t index )const
 		{
-			REQUIRE( m_pointShadowMaps );
-			return *m_pointShadowMaps;
+			return index < m_descriptorPools.size();
 		}
-		/**
-		 *\~english
-		 *\return		The reflection map frame variable.
-		 *\~french
-		 *\return		La variable shader de la reflection map.
-		 */
-		inline PushUniform1s & getEnvironmentMapVariable()
+
+		inline renderer::DescriptorSetPool const & getDescriptorPool( uint32_t index )const
 		{
-			REQUIRE( m_environmentMap );
-			return *m_environmentMap;
+			REQUIRE( index < m_descriptorPools.size() );
+			return *m_descriptorPools[index];
 		}
-		/**
-		 *\~english
-		 *\return		The irradiance map frame variable.
-		 *\~french
-		 *\return		La variable shader de la texture d'irradiance.
-		 */
-		inline PushUniform1s & getIrradianceMapVariable()
-		{
-			REQUIRE( m_irradianceMap );
-			return *m_irradianceMap;
-		}
-		/**
-		 *\~english
-		 *\return		The irradiance map frame variable.
-		 *\~french
-		 *\return		La variable shader de la texture d'irradiance.
-		 */
-		inline PushUniform1s & getPrefilteredMapVariable()
-		{
-			REQUIRE( m_prefilteredMap );
-			return *m_prefilteredMap;
-		}
-		/**
-		 *\~english
-		 *\return		The BRDF map frame variable.
-		 *\~french
-		 *\return		La variable shader de la texture de BRDF.
-		 */
-		inline PushUniform1s & getBrdfMapVariable()
-		{
-			REQUIRE( m_brdfMap );
-			return *m_brdfMap;
-		}
+		/**@}*/
 
 	private:
-		void doInitialiseGeometryBuffers( Submesh & submesh
-			, GeometryBuffersSPtr geometryBuffers );
-		void doInitialiseGeometryBuffers( BillboardBase & billboard
-			, GeometryBuffersSPtr geometryBuffers );
-
-	public:
-		C3D_API static const castor::String MtxTexture[C3D_MAX_TEXTURE_MATRICES];
-
-	protected:
-		//!\~english	The depth stencil state.
-		//!\~french		L'état de stencil et profondeur.
-		DepthStencilState m_dsState;
-		//!\~english	The rateriser state.
-		//!\~french		L'état de rastériseur.
-		RasteriserState m_rsState;
-		//!\~english	The blend state.
-		//!\~french		L'état de mélange.
-		BlendState m_blState;
-		//!\~english	The muultisampling state.
-		//!\~french		L'état de multi-échantillonnage.
-		MultisampleState m_msState;
-		//!\~english	The shader program.
-		//!\~french		Le programme shader.
-		ShaderProgram & m_program;
-		//!\~english	The directional lights shadow maps frame variable.
-		//!\~french		La variable shader pour les maps d'ombres des lumières directionnelles.
-		PushUniform1sSPtr m_directionalShadowMaps;
-		//!\~english	The spot lights shadow maps frame variable.
-		//!\~french		La variable shader pour les maps d'ombres des lumières spot.
-		PushUniform1sSPtr m_spotShadowMaps;
-		//!\~english	The point lights shadow maps frame variable.
-		//!\~french		La variable shader pour les maps d'ombres des lumières ponctuelles.
-		PushUniform1sSPtr m_pointShadowMaps;
-		//!\~english	The environment map frame variable.
-		//!\~french		La variable shader pour la texture d'environnement.
-		PushUniform1sSPtr m_environmentMap;
-		//!\~english	The irradiance map frame variable.
-		//!\~french		La variable shader pour la texture d'irradiance.
-		PushUniform1sSPtr m_irradianceMap;
-		//!\~english	The prefiltered environment map frame variable.
-		//!\~french		La variable shader pour la texture d'environnement préfiltrée.
-		PushUniform1sSPtr m_prefilteredMap;
-		//!\~english	The BRDF map frame variable.
-		//!\~french		La variable shader pour la texture de BRDF.
-		PushUniform1sSPtr m_brdfMap;
-		//!\~english	The creation flags.
-		//!\~french		Les indicateurs de création.
+		renderer::DepthStencilState m_dsState;
+		renderer::RasterisationState m_rsState;
+		renderer::ColourBlendState m_blState;
+		renderer::MultisampleState m_msState;
+		ShaderProgramSPtr m_program;
 		PipelineFlags m_flags;
-		//!\~english	The count of textures used by the program.
-		//!\~french		Le nombre de textures utilisées par le programme.
-		uint32_t m_textureCount{ 0u };
-		//!\~english	The uniform buffer bindings.
-		//!\~french		Les bindings de tampons d'uniformes.
-		BindingArray m_bindings;
-		//!\~english	The GeometryBuffers used with this pipeline.
-		//!\~french		Les GeometryBuffers utilisés avec ce pipeline.
-		std::unordered_map< Submesh *, GeometryBuffersSPtr > m_meshGeometryBuffers;
-		//!\~english	The GeometryBuffers used with this pipeline.
-		//!\~french		Les GeometryBuffers utilisés avec ce pipeline.
-		std::unordered_map< BillboardBase *, GeometryBuffersSPtr > m_billboardGeometryBuffers;
+		std::vector< renderer::VertexLayout > m_vertexLayouts;
+		std::vector< renderer::DescriptorSetLayoutPtr > m_descriptorLayouts;
+		std::vector< renderer::DescriptorSetPoolPtr > m_descriptorPools;
+		renderer::PushConstantRangeCRefArray m_pushConstantRanges;
+		std::unique_ptr< renderer::Viewport > m_viewport;
+		std::unique_ptr< renderer::Scissor > m_scissor;
+		renderer::PipelineLayoutPtr m_pipelineLayout;
+		renderer::PipelinePtr m_pipeline;
 	};
 }
 

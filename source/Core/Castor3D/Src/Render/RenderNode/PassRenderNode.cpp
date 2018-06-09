@@ -2,8 +2,14 @@
 
 #include "Material/Pass.hpp"
 #include "Shader/ShaderProgram.hpp"
-#include "Shader/UniformBuffer.hpp"
+#include "Castor3DPrerequisites.hpp"
+#include "Texture/Sampler.hpp"
+#include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
+
+#include <Descriptor/DescriptorSet.hpp>
+#include <Descriptor/DescriptorSetLayout.hpp>
+#include <Descriptor/DescriptorSetPool.hpp>
 
 using namespace castor;
 
@@ -11,59 +17,154 @@ namespace castor3d
 {
 	namespace
 	{
-		void doGetTexture( Pass const & p_pass
-			, ShaderProgram const & p_program
-			, TextureChannel p_channel
-			, String const & p_name
-			, PassRenderNode & p_node )
+		void doBindTexture( TextureUnitSPtr texture
+			, renderer::DescriptorSetLayout const & layout
+			, renderer::DescriptorSet & descriptorSet
+			, uint32_t & index )
 		{
-			TextureUnitSPtr unit = p_pass.getTextureUnit( p_channel );
-
-			if ( unit )
+			if ( texture )
 			{
-				auto variable = p_program.findUniform< UniformType::eSampler >( p_name, ShaderType::ePixel );
+				descriptorSet.createBinding( layout.getBinding( index++ )
+					, texture->getTexture()->getDefaultView()
+					, texture->getSampler()->getSampler() );
+			}
+		}
 
-				if ( variable )
-				{
-					p_node.m_textures.emplace( unit->getIndex(), *variable );
-				}
+		void doBindTexture( TextureUnitSPtr texture
+			, renderer::DescriptorSetLayout const & layout
+			, renderer::WriteDescriptorSetArray & writes
+			, uint32_t & index )
+		{
+			if ( texture )
+			{
+				writes.push_back( renderer::WriteDescriptorSet
+					{
+						index++,
+						0u,
+						1u,
+						renderer::DescriptorType::eCombinedImageSampler,
+						{
+							{
+								texture->getSampler()->getSampler(),
+								texture->getTexture()->getDefaultView(),
+								renderer::ImageLayout::eShaderReadOnlyOptimal
+							},
+						},
+						{},
+						{}
+					} );
 			}
 		}
 	}
 
-	PassRenderNode::PassRenderNode( Pass & p_pass
-		, ShaderProgram const & p_program )
-		: m_pass{ p_pass }
+	PassRenderNode::PassRenderNode( Pass & pass )
+		: pass{ pass }
 	{
-		switch ( p_pass.getType() )
+	}
+
+	void PassRenderNode::fillDescriptor( renderer::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, renderer::DescriptorSet & descriptorSet
+		, bool opacityOnly )
+	{
+		if ( opacityOnly )
 		{
-		case MaterialType::eLegacy:
-			doGetTexture( p_pass, p_program, TextureChannel::eDiffuse, ShaderProgram::MapDiffuse, *this );
-			doGetTexture( p_pass, p_program, TextureChannel::eSpecular, ShaderProgram::MapSpecular, *this );
-			doGetTexture( p_pass, p_program, TextureChannel::eGloss, ShaderProgram::MapGloss, *this );
-			break;
-
-		case MaterialType::ePbrMetallicRoughness:
-			doGetTexture( p_pass, p_program, TextureChannel::eAlbedo, ShaderProgram::MapAlbedo, *this );
-			doGetTexture( p_pass, p_program, TextureChannel::eMetallic, ShaderProgram::MapMetallic, *this );
-			doGetTexture( p_pass, p_program, TextureChannel::eRoughness, ShaderProgram::MapRoughness, *this );
-			break;
-
-		case MaterialType::ePbrSpecularGlossiness:
-			doGetTexture( p_pass, p_program, TextureChannel::eAlbedo, ShaderProgram::MapDiffuse, *this );
-			doGetTexture( p_pass, p_program, TextureChannel::eSpecular, ShaderProgram::MapSpecular, *this );
-			doGetTexture( p_pass, p_program, TextureChannel::eGloss, ShaderProgram::MapGloss, *this );
-			break;
-
-		default:
-			FAILURE( "Unsupported material type" );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eOpacity )
+				, layout
+				, descriptorSet
+				, index );
 		}
+		else
+		{
+			doBindTexture( pass.getTextureUnit( TextureChannel::eDiffuse )
+				, layout
+				, descriptorSet
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eSpecular )
+				, layout
+				, descriptorSet
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eGloss )
+				, layout
+				, descriptorSet
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eNormal )
+				, layout
+				, descriptorSet
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eOpacity )
+				, layout
+				, descriptorSet
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eHeight )
+				, layout
+				, descriptorSet
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eAmbientOcclusion )
+				, layout
+				, descriptorSet
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eEmissive )
+				, layout
+				, descriptorSet
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eTransmittance )
+				, layout
+				, descriptorSet
+				, index );
+		}
+	}
 
-		doGetTexture( p_pass, p_program, TextureChannel::eAmbientOcclusion, ShaderProgram::MapAmbientOcclusion, *this );
-		doGetTexture( p_pass, p_program, TextureChannel::eEmissive, ShaderProgram::MapEmissive, *this );
-		doGetTexture( p_pass, p_program, TextureChannel::eOpacity, ShaderProgram::MapOpacity, *this );
-		doGetTexture( p_pass, p_program, TextureChannel::eHeight, ShaderProgram::MapHeight, *this );
-		doGetTexture( p_pass, p_program, TextureChannel::eNormal, ShaderProgram::MapNormal, *this );
-		doGetTexture( p_pass, p_program, TextureChannel::eTransmittance, ShaderProgram::MapTransmittance, *this );
+	void PassRenderNode::fillDescriptor( renderer::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, renderer::WriteDescriptorSetArray & writes
+		, bool opacityOnly )
+	{
+		if ( opacityOnly )
+		{
+			doBindTexture( pass.getTextureUnit( TextureChannel::eOpacity )
+				, layout
+				, writes
+				, index );
+		}
+		else
+		{
+			doBindTexture( pass.getTextureUnit( TextureChannel::eDiffuse )
+				, layout
+				, writes
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eSpecular )
+				, layout
+				, writes
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eGloss )
+				, layout
+				, writes
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eNormal )
+				, layout
+				, writes
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eOpacity )
+				, layout
+				, writes
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eHeight )
+				, layout
+				, writes
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eAmbientOcclusion )
+				, layout
+				, writes
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eEmissive )
+				, layout
+				, writes
+				, index );
+			doBindTexture( pass.getTextureUnit( TextureChannel::eTransmittance )
+				, layout
+				, writes
+				, index );
+		}
 	}
 }

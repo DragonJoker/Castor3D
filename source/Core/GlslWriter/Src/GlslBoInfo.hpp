@@ -11,20 +11,23 @@ namespace glsl
 	template< typename LayoutType >
 	struct BoInfo
 	{
-		BoInfo( LayoutType p_layout, uint32_t p_bind )
-			: m_layout{ p_layout }
-			, m_bind{ p_bind }
+		BoInfo( LayoutType layout
+			, uint32_t bind
+			, uint32_t set )
+			: m_layout{ layout }
+			, m_bind{ bind }
+			, m_set{ set }
 		{
 		}
 
-		inline void registerMember( castor::String const & p_name, TypeName p_type )
+		inline void registerMember( castor::String const & name, TypeName type )
 		{
-			m_members.emplace( p_name, p_type );
+			m_members.emplace( name, type );
 		}
 		
-		inline TypeName getMemberType( castor::String const & p_name )const
+		inline TypeName getMemberType( castor::String const & name )const
 		{
-			return m_members.at( p_name );
+			return m_members.at( name );
 		}
 
 		inline LayoutType getLayout()const
@@ -37,9 +40,15 @@ namespace glsl
 			return m_bind;
 		}
 
+		inline uint32_t getSetPoint()const
+		{
+			return m_set;
+		}
+
 	private:
 		LayoutType m_layout;
 		uint32_t m_bind;
+		uint32_t m_set;
 		std::map< castor::String, TypeName > m_members;
 	};
 }

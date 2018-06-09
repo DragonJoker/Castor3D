@@ -1,4 +1,4 @@
-﻿#include "CastorUtilsPixelFormatTest.hpp"
+#include "CastorUtilsPixelFormatTest.hpp"
 
 #include <Graphics/PixelBuffer.hpp>
 
@@ -228,7 +228,6 @@ namespace
 			convertPixel< PixelFormat::eA8L8 >( source );
 			convertPixel< PixelFormat::eAL32F >( source );
 			convertPixel< PixelFormat::eA1R5G5B5 >( source );
-			convertPixel< PixelFormat::eA4R4G4B4 >( source );
 			convertPixel< PixelFormat::eR5G6B5 >( source );
 			convertPixel< PixelFormat::eR8G8B8 >( source );
 			convertPixel< PixelFormat::eA8R8G8B8 >( source );
@@ -251,7 +250,6 @@ namespace
 			stream << "Source pixel : " << source;
 			Logger::logTrace( stream );
 			convertPixel< PixelFormat::eD16 >( source );
-			convertPixel< PixelFormat::eD24 >( source );
 			convertPixel< PixelFormat::eD32 >( source );
 			convertPixel< PixelFormat::eD24S8 >( source );
 			convertPixel< PixelFormat::eS8 >( source );
@@ -328,7 +326,6 @@ namespace
 			convertBuffer< PixelFormat::eA8L8 >( source );
 			convertBuffer< PixelFormat::eAL32F >( source );
 			convertBuffer< PixelFormat::eA1R5G5B5 >( source );
-			convertBuffer< PixelFormat::eA4R4G4B4 >( source );
 			convertBuffer< PixelFormat::eR5G6B5 >( source );
 			convertBuffer< PixelFormat::eR8G8B8 >( source );
 			convertBuffer< PixelFormat::eA8R8G8B8 >( source );
@@ -366,7 +363,6 @@ namespace
 			stream << "Source buffer : " << *source;
 			Logger::logTrace( stream );
 			convertBuffer< PixelFormat::eD16 >( source );
-			convertBuffer< PixelFormat::eD24 >( source );
 			convertBuffer< PixelFormat::eD32 >( source );
 			convertBuffer< PixelFormat::eD24S8 >( source );
 			Logger::logTrace( StringStream() << std::endl );
@@ -401,7 +397,6 @@ namespace
 			stream << "Source buffer : " << *source;
 			Logger::logTrace( stream );
 			convertBuffer< PixelFormat::eD16 >( source );
-			convertBuffer< PixelFormat::eD24 >( source );
 			convertBuffer< PixelFormat::eD32 >( source );
 			convertBuffer< PixelFormat::eD24S8 >( source );
 			convertBuffer< PixelFormat::eS8 >( source );
@@ -470,14 +465,12 @@ namespace Testing
 		CheckPixelConversions< PixelFormat::eA8L8 >();
 		CheckPixelConversions< PixelFormat::eAL32F >();
 		CheckPixelConversions< PixelFormat::eA1R5G5B5 >();
-		CheckPixelConversions< PixelFormat::eA4R4G4B4 >();
 		CheckPixelConversions< PixelFormat::eR5G6B5 >();
 		CheckPixelConversions< PixelFormat::eR8G8B8 >();
 		CheckPixelConversions< PixelFormat::eA8R8G8B8 >();
 		CheckPixelConversions< PixelFormat::eRGB32F >();
 		CheckPixelConversions< PixelFormat::eRGBA32F >();
 		CheckPixelConversions< PixelFormat::eD16 >();
-		CheckPixelConversions< PixelFormat::eD24 >();
 		CheckPixelConversions< PixelFormat::eD32 >();
 		CheckPixelConversions< PixelFormat::eD24S8 >();
 		CheckPixelConversions< PixelFormat::eS8 >();
@@ -490,14 +483,12 @@ namespace Testing
 		CheckBufferConversions< PixelFormat::eA8L8 >();
 		CheckBufferConversions< PixelFormat::eAL32F >();
 		CheckBufferConversions< PixelFormat::eA1R5G5B5 >();
-		CheckBufferConversions< PixelFormat::eA4R4G4B4 >();
 		CheckBufferConversions< PixelFormat::eR5G6B5 >();
 		CheckBufferConversions< PixelFormat::eR8G8B8 >();
 		CheckBufferConversions< PixelFormat::eA8R8G8B8 >();
 		CheckBufferConversions< PixelFormat::eRGB32F >();
 		CheckBufferConversions< PixelFormat::eRGBA32F >();
 		CheckBufferConversions< PixelFormat::eD16 >();
-		CheckBufferConversions< PixelFormat::eD24 >();
 		CheckBufferConversions< PixelFormat::eD32 >();
 		CheckBufferConversions< PixelFormat::eD24S8 >();
 		CheckBufferConversions< PixelFormat::eS8 >();

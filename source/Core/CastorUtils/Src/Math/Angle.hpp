@@ -327,6 +327,16 @@ namespace castor
 		 *\return		Une référence sur cet angle
 		 */
 		inline AngleT< Type > & operator/=( double p_rhs )noexcept;
+		/**
+		 *\~english
+		*\return		The angle value, in radians.
+		 *\~french
+		*\return		La valeur de l'angle, en radians.
+		*/
+		explicit inline operator Type()const noexcept
+		{
+			return m_radians;
+		}
 
 	private:
 		//!\~english The angle value	\~french La valeur de l'angle

@@ -4,10 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_FinalCombinePass_H___
 #define ___C3D_FinalCombinePass_H___
 
-#include "Shader/Ubos/MatrixUbo.hpp"
 #include "Shader/Ubos/GpInfoUbo.hpp"
 #include "Shader/Ubos/SceneUbo.hpp"
+#include "Technique/RenderTechniqueVisitor.hpp"
 #include "TransparentPass.hpp"
+
+#include <GlslShader.hpp>
 
 namespace castor3d
 {
@@ -26,55 +28,33 @@ namespace castor3d
 		FinalCombineProgram & operator=( FinalCombineProgram const & rhs ) = delete;
 		FinalCombineProgram( FinalCombineProgram && rhs ) = default;
 		FinalCombineProgram & operator=( FinalCombineProgram && rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	vbo			The vertex buffer containing the quad.
-		 *\param[in]	matrixUbo	The matrix UBO.
-		 *\param[in]	sceneUbo	The scene UBO.
-		 *\param[in]	gpInfoUbo	The geometry pass UBO.
-		 *\param[in]	fogType		The fog type.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	vbo			Le tampon de sommets contenant le quad.
-		 *\param[in]	matrixUbo	L'UBO des matrices.
-		 *\param[in]	sceneUbo	L'UBO de la scène.
-		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
-		 *\param[in]	fogType		Le type de brouillard.
-		 */
 		FinalCombineProgram( Engine & engine
-			, VertexBuffer & vbo
-			, MatrixUbo & matrixUbo
-			, SceneUbo & sceneUbo
-			, GpInfoUbo & gpInfoUbo
+			, renderer::RenderPass const & renderPass
+			, RenderPassTimer & timer
+			, renderer::DescriptorSetLayout const & uboLayout
+			, renderer::DescriptorSetLayout const & texLayout
+			, renderer::VertexLayout const & vtxLayout
 			, FogType fogType );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
 		~FinalCombineProgram();
-		/**
-		 *\~english
-		 *\brief		Applies the program.
-		 *\~french
-		 *\brief		Applique le programme.
-		 */
-		void render( VertexBuffer const & vbo )const;
+		void prepare( renderer::FrameBuffer const & frameBuffer
+			, renderer::DescriptorSet const & uboDescriptorSet
+			, renderer::DescriptorSet const & texDescriptorSet
+			, renderer::BufferBase const & vbo );
+		void accept( RenderTechniqueVisitor & visitor );
+		inline renderer::CommandBuffer const & getCommandBuffer()const
+		{
+			REQUIRE( m_commandBuffer );
+			return *m_commandBuffer;
+		}
 
 	private:
-		//!\~english	The shader program.
-		//!\~french		Le shader program.
-		ShaderProgramSPtr m_program;
-		//!\~english	The geometry buffers.
-		//!\~french		Les tampons de géométrie.
-		GeometryBuffersSPtr m_geometryBuffers;
-		//!\~english	The render pipeline.
-		//!\~french		Le pipeline de rendu.
-		RenderPipelineUPtr m_pipeline;
+		RenderPassTimer & m_timer;
+		renderer::RenderPass const & m_renderPass;
+		glsl::Shader m_vertexShader;
+		glsl::Shader m_pixelShader;
+		renderer::PipelineLayoutPtr m_pipelineLayout;
+		renderer::PipelinePtr m_pipeline;
+		renderer::CommandBufferPtr m_commandBuffer;
 	};
 	//!\~english	An array of FinalCombineProgram, one per fog type.
 	//!\~french		Un tableau de FinalCombineProgram, un par type de brouillard.
@@ -105,7 +85,9 @@ namespace castor3d
 		 */
 		FinalCombinePass( Engine & engine
 			, castor::Size const & size
-			, SceneUbo & sceneUbo );
+			, SceneUbo & sceneUbo
+			, WeightedBlendTextures const & wbResult
+			, renderer::TextureView const & colourView );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -115,54 +97,54 @@ namespace castor3d
 		~FinalCombinePass();
 		/**
 		 *\~english
-		 *\brief		Renders the combination on given framebuffer.
-		 *\param[in]	wbResult	The weighted blend pass result.
-		 *\param[in]	frameBuffer	The target framebuffer.
+		 *\brief		Updates the UBOs.
 		 *\param[in]	camera		The viewing camera.
 		 *\param[in]	invViewProj	The inverse view projection matrix.
 		 *\param[in]	invView		The inverse view matrix.
 		 *\param[in]	invProj		The inverse projection matrix.
-		 *\param[in]	fogType		The fog type.
 		 *\~french
-		 *\brief		Dessine la combinaison sur le tampon d'image donné.
-		 *\param[in]	wbResult	Le résultat de la passe de weighted blend.
-		 *\param[in]	frameBuffer	Le tampon d'image cible.
+		 *\brief		Met à jour les UBOs.
 		 *\param[in]	camera		La caméra.
 		 *\param[in]	invViewProj	La matrice vue projection inversée.
 		 *\param[in]	invView		La matrice vue inversée.
 		 *\param[in]	invProj		La matrice projection inversée.
-		 *\param[in]	fogType		Le type de brouillard.
 		 */
-		void render( WeightedBlendPassResult const & wbResult
-			, FrameBuffer const & frameBuffer
-			, Camera const & camera
-			, castor::Matrix4x4r const & invViewProj
-			, castor::Matrix4x4r const & invView
-			, castor::Matrix4x4r const & invProj
-			, FogType fogType );
+		void update( Camera const & camera
+			, Matrix4x4r const & invViewProj
+			, Matrix4x4r const & invView
+			, Matrix4x4r const & invProj );
+		/**
+		 *\~english
+		 *\brief		Renders the combine pass.
+		 *\~french
+		 *\brief		Dessine la passe de combinaison.
+		 */
+		renderer::Semaphore const & render( FogType fogType
+			, renderer::Semaphore const & toWait );
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		void accept( RenderTechniqueVisitor & visitor );
 
 	private:
-		//!\~english	The render size.
-		//!\~french		La taille du rendu.
 		castor::Size m_size;
-		//!\~english	The render viewport.
-		//!\~french		La viewport du rendu.
-		Viewport m_viewport;
-		//!\~english	The vertex buffer.
-		//!\~french		Le tampon de sommets.
-		VertexBufferSPtr m_vertexBuffer;
-		//!\~english	The matrices uniform buffer.
-		//!\~french		Le tampon d'uniformes contenant les matrices.
-		MatrixUbo m_matrixUbo;
-		//!\~english	The scene uniform buffer.
-		//!\~french		Le tampon d'uniformes contenant les informations de la scène.
+		Engine & m_engine;
 		SceneUbo & m_sceneUbo;
-		//!\~english	The blend pass informations.
-		//!\~french		Les informations de la passe de mélange.
 		GpInfoUbo m_gpInfo;
-		//!\~english	The shader program.
-		//!\~french		Le shader program.
+		SamplerSPtr m_sampler;
+		renderer::VertexBufferPtr< TexturedQuad > m_vertexBuffer;
+		renderer::VertexLayoutPtr m_vertexLayout;
+		renderer::DescriptorSetLayoutPtr m_uboDescriptorLayout;
+		renderer::DescriptorSetPoolPtr m_uboDescriptorPool;
+		renderer::DescriptorSetPtr m_uboDescriptorSet;
+		renderer::DescriptorSetLayoutPtr m_texDescriptorLayout;
+		renderer::DescriptorSetPoolPtr m_texDescriptorPool;
+		renderer::DescriptorSetPtr m_texDescriptorSet;
+		renderer::RenderPassPtr m_renderPass;
+		RenderPassTimerSPtr m_timer;
 		FinalCombinePrograms m_programs;
+		renderer::FrameBufferPtr m_frameBuffer;
+		renderer::SemaphorePtr m_semaphore;
 	};
 }
 

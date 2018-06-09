@@ -142,13 +142,13 @@ namespace castor3d
 				this->m_initialise( result );
 				this->m_elements.insert( p_name, result );
 				m_attach( result, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
-				castor::Logger::logDebug( castor::StringStream() << INFO_CACHE_CREATED_OBJECT << this->getObjectTypeName() << cuT( ": " ) << p_name );
+				castor::Logger::logDebug( castor::makeStringStream() << INFO_CACHE_CREATED_OBJECT << this->getObjectTypeName() << cuT( ": " ) << p_name );
 				this->onChanged();
 			}
 			else
 			{
 				result = this->m_elements.find( p_name );
-				castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << this->getObjectTypeName() << cuT( ": " ) << p_name );
+				castor::Logger::logWarning( castor::makeStringStream() << WARNING_CACHE_DUPLICATE_OBJECT << this->getObjectTypeName() << cuT( ": " ) << p_name );
 			}
 
 			return result;

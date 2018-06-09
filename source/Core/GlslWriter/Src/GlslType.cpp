@@ -1,4 +1,4 @@
-﻿#include "GlslType.hpp"
+#include "GlslType.hpp"
 
 #include "GlslWriter.hpp"
 
@@ -14,8 +14,8 @@ namespace glsl
 	{
 	}
 
-	Type::Type( String const & p_type, GlslWriter * p_writer, String const & p_name )
-		: Expr( p_writer )
+	Type::Type( String const & p_type, GlslWriter * writer, String const & p_name )
+		: Expr( writer )
 		, m_name( p_name )
 		, m_type( p_type )
 	{
@@ -76,97 +76,97 @@ namespace glsl
 
 	Type & Type::operator+=( Type const & p_type )
 	{
-		*m_writer << castor::String{ *this } << cuT( " += " ) << String( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " += " ) << String( p_type ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	Type & Type::operator-=( Type const & p_type )
 	{
-		*m_writer << castor::String{ *this } << cuT( " -= " ) << String( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " -= " ) << String( p_type ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	Type & Type::operator*=( Type const & p_type )
 	{
-		*m_writer << castor::String{ *this } << cuT( " *= " ) << String( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " *= " ) << String( p_type ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	Type & Type::operator/=( Type const & p_type )
 	{
-		*m_writer << castor::String{ *this } << cuT( " /= " ) << String( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " /= " ) << String( p_type ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	Type & Type::operator+=( Optional< Type > const & p_type )
 	{
-		*m_writer << castor::String{ *this } << cuT( " += " ) << String( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " += " ) << String( p_type ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	Type & Type::operator-=( Optional< Type > const & p_type )
 	{
-		*m_writer << castor::String{ *this } << cuT( " -= " ) << String( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " -= " ) << String( p_type ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	Type & Type::operator*=( Optional< Type > const & p_type )
 	{
-		*m_writer << castor::String{ *this } << cuT( " *= " ) << String( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " *= " ) << String( p_type ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	Type & Type::operator/=( Optional< Type > const & p_type )
 	{
-		*m_writer << castor::String{ *this } << cuT( " /= " ) << String( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " /= " ) << String( p_type ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	Type & Type::operator+=( float p_type )
 	{
-		*m_writer << castor::String{ *this } << cuT( " += " ) << string::toString( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " += " ) << string::toString( p_type, Expr::getLocale() ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	Type & Type::operator-=( float p_type )
 	{
-		*m_writer << castor::String{ *this } << cuT( " -= " ) << string::toString( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " -= " ) << string::toString( p_type, Expr::getLocale() ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	Type & Type::operator*=( float p_type )
 	{
-		*m_writer << castor::String{ *this } << cuT( " *= " ) << string::toString( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " *= " ) << string::toString( p_type, Expr::getLocale() ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	Type & Type::operator/=( float p_type )
 	{
-		*m_writer << castor::String{ *this } << cuT( " /= " ) << string::toString( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " /= " ) << string::toString( p_type, Expr::getLocale() ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	Type & Type::operator+=( int p_type )
 	{
-		*m_writer << castor::String{ *this } << cuT( " += " ) << string::toString( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " += " ) << string::toString( p_type, 10, Expr::getLocale() ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	Type & Type::operator-=( int p_type )
 	{
-		*m_writer << castor::String{ *this } << cuT( " -= " ) << string::toString( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " -= " ) << string::toString( p_type, 10, Expr::getLocale() ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	Type & Type::operator*=( int p_type )
 	{
-		*m_writer << castor::String{ *this } << cuT( " *= " ) << string::toString( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " *= " ) << string::toString( p_type, 10, Expr::getLocale() ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
 	Type & Type::operator/=( int p_type )
 	{
-		*m_writer << castor::String{ *this } << cuT( " /= " ) << string::toString( p_type ) << cuT( ";" ) << Endl();
+		*m_writer << castor::String{ *this } << cuT( " /= " ) << string::toString( p_type, 10, Expr::getLocale() ) << cuT( ";" ) << glsl::endl;
 		return *this;
 	}
 
@@ -180,8 +180,9 @@ namespace glsl
 	String paramToString( castor::String & p_sep, Type const & p_value )
 	{
 		StringStream stream;
+		stream.imbue( Expr::getLocale() );
 		stream << p_sep << p_value.m_type << p_value.m_name;
-		p_sep = cuT( ",\n\t" );
+		p_sep = cuT( ",\n    " );
 		return String( stream.str() );
 	}
 

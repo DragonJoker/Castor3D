@@ -1,19 +1,18 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_SUBMESH_H___
-#define ___C3D_SUBMESH_H___
+#ifndef ___C3D_Submesh_H___
+#define ___C3D_Submesh_H___
 
 #include "Castor3DPrerequisites.hpp"
-#include "Mesh.hpp"
-#include "VertexGroup.hpp"
-#include "Mesh/Buffer/VertexBuffer.hpp"
-#include "Mesh/Buffer/IndexBuffer.hpp"
 
+#include "Mesh/Mesh.hpp"
+#include "Mesh/VertexGroup.hpp"
 #include "Mesh/Skeleton/VertexBoneData.hpp"
-#include "Mesh/Buffer/BufferDeclaration.hpp"
 
 #include <Design/OwnedBy.hpp>
+
+#include <Buffer/VertexBuffer.hpp>
 
 namespace castor3d
 {
@@ -70,12 +69,19 @@ namespace castor3d
 		 */
 		C3D_API void initialise();
 		/**
-		 *\~english
-		 *\brief		Cleans the submesh
-		 *\~french
-		 *\brief		Nettoie le sous-maillage
-		 */
+		*\~english
+		*\brief		Cleans the submesh
+		*\~french
+		*\brief		Nettoie le sous-maillage
+		*/
 		C3D_API void cleanup();
+		/**
+		*\~english
+		*\brief		Updates the buffers.
+		*\~french
+		*\brief		Met à jour les tampons.
+		*/
+		C3D_API void update();
 		/**
 		 *\~english
 		 *\brief		Computes the containers (cube and sphere)
@@ -131,7 +137,7 @@ namespace castor3d
 		 *\param[in]	z	Coordonnée Y
 		 *\return		Le vertex créé
 		 */
-		C3D_API BufferElementGroupSPtr addPoint( real x, real y, real z );
+		C3D_API InterleavedVertex addPoint( real x, real y, real z );
 		/**
 		 *\~english
 		 *\brief		Adds a vertex to my list
@@ -142,7 +148,7 @@ namespace castor3d
 		 *\param[in]	value	Le point
 		 *\return		Le vertex créé
 		 */
-		C3D_API BufferElementGroupSPtr addPoint( castor::Point3r const & value );
+		C3D_API InterleavedVertex addPoint( castor::Point3r const & value );
 		/**
 		 *\~english
 		 *\brief		Creates and Adds a vertex to my list
@@ -153,7 +159,16 @@ namespace castor3d
 		 *\param[in]	value	Les coordonnées du point
 		 *\return		Le vertex créé
 		 */
-		C3D_API BufferElementGroupSPtr addPoint( real * value );
+		C3D_API InterleavedVertex addPoint( real * value );
+		/**
+		 *\~english
+		 *\brief		Adds a vertex to the list.
+		 *\param[in]	value	The vertex.
+		 *\~french
+		 *\brief		Ajoute un sommet à la liste.
+		 *\param[in]	value	Le sommet.
+		 */
+		C3D_API void addPoint( InterleavedVertex const & value );
 		/**
 		 *\~english
 		 *\brief		Adds a points list to my list.
@@ -166,26 +181,6 @@ namespace castor3d
 		 */
 		C3D_API void addPoints( InterleavedVertex const * const begin
 			, InterleavedVertex const * const end );
-		/**
-		 *\~english
-		 *\brief		Draws the submesh.
-		 *\param[in]	geometryBuffers	The geometry buffers used to draw this submesh.
-		 *\~french
-		 *\brief		Dessine le sous-maillage.
-		 *\param[in]	geometryBuffers	Les tampons de géométrie utilisés pour dessiner ce sous-maillage.
-		 */
-		C3D_API void draw( GeometryBuffers const & geometryBuffers );
-		/**
-		 *\~english
-		 *\brief		Draws the submesh.
-		 *\param[in]	geometryBuffers	The geometry buffers used to draw this submesh.
-		 *\param[in]	count			The instances count.
-		 *\~french
-		 *\brief		Dessine le sous-maillage.
-		 *\param[in]	geometryBuffers	Les tampons de géométrie utilisés pour dessiner ce sous-maillage.
-		 *\param[in]	count			Le nombre d'instances.
-		 */
-		C3D_API void drawInstanced( GeometryBuffers const & geometryBuffers, uint32_t count );
 		/**
 		 *\~english
 		 *\brief		Generates normals and tangents
@@ -208,7 +203,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les indicateurs de shader.
 		 */
-		C3D_API ProgramFlags getProgramFlags()const;
+		C3D_API ProgramFlags getProgramFlags( MaterialSPtr material )const;
 		/**
 		 *\~english
 		 *\brief		Sets the material.
@@ -227,12 +222,12 @@ namespace castor3d
 			, MaterialSPtr newMaterial
 			, bool update );
 		/**
-		 *\~english
-		 *\brief		Gathers buffers that need to go in a VAO.
-		 *\~french
-		 *\brief		Récupère les tampons qui doivent aller dans un VAO.
-		 */
-		C3D_API void gatherBuffers( VertexBufferArray & buffers );
+		*\~english
+		*\return		The geometry buffers for given material.
+		*\~french
+		*\return		Les tampons de géométrie associés au materiau donné.
+		*/
+		C3D_API GeometryBuffers const & getGeometryBuffers( MaterialSPtr material )const;
 		/**
 		 *\~english
 		 *\brief		Adds a points list to my list
@@ -254,13 +249,6 @@ namespace castor3d
 		inline void addPoints( std::array< InterleavedVertex, Count > const & vertices );
 		/**
 		 *\~english
-		 *\return		The skeleton.
-		 *\~french
-		 *\return		Le squelette.
-		 */
-		inline SkeletonSPtr getSkeleton()const;
-		/**
-		 *\~english
 		 *\brief		Sets the material
 		 *\param[in]	material	The new value
 		 *\~french
@@ -268,133 +256,6 @@ namespace castor3d
 		 *\param[in]	material	La nouvelle valeur
 		 */
 		inline void setDefaultMaterial( MaterialSPtr material );
-		/**
-		 *\~english
-		 *\brief		Retrieves the point at given index
-		 *\param[in]	index	The index
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le point à l'index donné
-		 *\param[in]	index	L'index
-		 *\return		La valeur
-		 */
-		inline BufferElementGroupSPtr operator[]( uint32_t index )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the point at given index
-		 *\param[in]	index	The index
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le point à l'index donné
-		 *\param[in]	index	L'index
-		 *\return		La valeur
-		 */
-		inline BufferElementGroupSPtr getPoint( uint32_t index )const;
-		/**
-		 *\~english
-		 *\return		The material.
-		 *\~french
-		 *\return		Le matériau.
-		 */
-		inline MaterialSPtr getDefaultMaterial()const;
-		/**
-		 *\~english
-		 *\return		The cube bounding box.
-		 *\~french
-		 *\return		La bounding box cube.
-		 */
-		inline castor::BoundingBox const & getBoundingBox()const;
-		/**
-		 *\~english
-		 *\return		The cube bounding box.
-		 *\~french
-		 *\return		La bounding box cube.
-		 */
-		inline castor::BoundingBox & getBoundingBox();
-		/**
-		 *\~english
-		 *\return		The sphere bounding box.
-		 *\~french
-		 *\return		La bounding box sphère.
-		 */
-		inline castor::BoundingSphere const & getBoundingSphere()const;
-		/**
-		 *\~english
-		 *\return		The sphere bounding box.
-		 *\~french
-		 *\return		La bounding box sphère.
-		 */
-		inline castor::BoundingSphere & getBoundingSphere();
-		/**
-		 *\~english
-		 *\return		The points array.
-		 *\~french
-		 *\return		Le tableau de points.
-		 */
-		inline VertexPtrArray const & getPoints()const;
-		/**
-		 *\~english
-		 *\return		The points array.
-		 *\~french
-		 *\return		Le tableau de points.
-		 */
-		inline VertexPtrArray & getPoints();
-		/**
-		 *\~english
-		 *\return		The VertexBuffer.
-		 *\~french
-		 *\return		Le VertexBuffer.
-		 */
-		inline VertexBuffer const & getVertexBuffer()const;
-		/**
-		 *\~english
-		 *\return		The VertexBuffer.
-		 *\~french
-		 *\return		Le VertexBuffer.
-		 */
-		inline VertexBuffer & getVertexBuffer();
-		/**
-		 *\~english
-		 *\return		The IndexBuffer.
-		 *\~french
-		 *\return		L'IndexBuffer.
-		 */
-		inline IndexBuffer const & getIndexBuffer()const;
-		/**
-		 *\~english
-		 *\return		The IndexBuffer.
-		 *\~french
-		 *\return		L'IndexBuffer.
-		 */
-		inline IndexBuffer & getIndexBuffer();
-		/**
-		 *\~english
-		 *\return		The initialisation status.
-		 *\~french
-		 *\return		Le statut d'initialisation.
-		 */
-		inline bool isInitialised()const;
-		/**
-		 *\~english
-		 *\return		The parent mesh.
-		 *\~french
-		 *\return		Le maillage parent.
-		 */
-		inline Mesh const & getParent()const;
-		/**
-		 *\~english
-		 *\return		The parent mesh.
-		 *\~french
-		 *\return		Le maillage parent.
-		 */
-		inline Mesh & getParent();
-		/**
-		 *\~english
-		 *\return		The submesh ID.
-		 *\~french
-		 *\return		L'ID du sous-maillage.
-		 */
-		inline uint32_t getId()const;
 		/**
 		 *\~english
 		 *\brief		Sets the submesh to be updated.
@@ -413,13 +274,11 @@ namespace castor3d
 		inline void setIndexMapping( IndexMappingSPtr mapping );
 		/**
 		 *\~english
-		 *\brief		Checks if a component exists.
-		 *\param[in]	name		The component name.
+		 *\return		The index mapping.
 		 *\~french
-		 *\brief		Vérifie si un composant existe.
-		 *\param[in]	name		Le nom du composant.
+		 *\return		Le mappage d'indices.
 		 */
-		inline bool hasComponent( castor::String const & name )const;
+		inline IndexMapping const & getIndexMapping()const;
 		/**
 		 *\~english
 		 *\brief		Adds a component.
@@ -444,207 +303,87 @@ namespace castor3d
 		inline void addComponent( std::shared_ptr< T > component );
 		/**
 		 *\~english
-		 *\brief		Finds a component.
-		 *\param[in]	name	The component name.
-		 *\return		The component, nullptr if not found.
-		 *\~french
-		 *\brief		Trouve un composant.
-		 *\param[in]	name	Le nom du composant.
-		 *return		Le composant, nullptr si non trouvé.
-		 */
-		inline SubmeshComponentSPtr getComponent( castor::String const & name )const;
-		/**
-		 *\~english
-		 *\brief		Finds a component.
-		 *\return		The component, nullptr if not found.
-		 *\~french
-		 *\brief		Trouve un composant.
-		 *return		Le composant, nullptr si non trouvé.
-		 */
-		template< typename T >
-		inline std::shared_ptr< T > getComponent()const;
-		/**
-		 *\~english
-		 *return		The instantiation component.
-		 *\~french
-		 *return		Le composant d'instantiation.
-		 */
-		inline InstantiationComponent & getInstantiation();
-		/**
-		 *\~english
-		 *return		The instantiation component.
-		 *\~french
-		 *return		Le composant d'instantiation.
-		 */
-		inline InstantiationComponent const & getInstantiation()const;
-		/**
-		 *\~english
-		 *return		The instantiation component.
-		 *\~french
-		 *return		Le composant d'instantiation.
-		 */
-		inline BonesInstantiationComponent & getInstantiatedBones();
-		/**
-		 *\~english
-		 *return		The instantiation component.
-		 *\~french
-		 *return		Le composant d'instantiation.
-		 */
-		inline BonesInstantiationComponent const & getInstantiatedBones()const;
-		/**
-		 *\~english
-		 *return		The components.
-		 *\~french
-		 *return		Les composants.
-		 */
-		inline SubmeshComponentStrMap const & getComponents()const;
-		/**
-		 *\~english
-		 *\return		The topology.
-		 *\~french
-		 *\return		La topologie.
-		 */
-		inline Topology getTopology()const;
-		/**
-		 *\~english
 		 *\brief		Sets the topology.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la topologie.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setTopology( Topology value );
+		inline void setTopology( renderer::PrimitiveTopology value );
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		inline SkeletonSPtr getSkeleton()const;
+		inline InterleavedVertex const & operator[]( uint32_t index )const;
+		inline InterleavedVertex & operator[]( uint32_t index );
+		inline InterleavedVertex const & getPoint( uint32_t index )const;
+		inline InterleavedVertex & getPoint( uint32_t index );
+		inline MaterialSPtr getDefaultMaterial()const;
+		inline castor::BoundingBox const & getBoundingBox()const;
+		inline castor::BoundingBox & getBoundingBox();
+		inline castor::BoundingSphere const & getBoundingSphere()const;
+		inline castor::BoundingSphere & getBoundingSphere();
+		inline InterleavedVertexArray const & getPoints()const;
+		inline InterleavedVertexArray & getPoints();
+		inline renderer::VertexBuffer< InterleavedVertex > const & getVertexBuffer()const;
+		inline renderer::VertexBuffer< InterleavedVertex > & getVertexBuffer();
+		inline renderer::VertexLayout const & getVertexLayout()const;
+		inline renderer::Buffer< uint32_t > const & getIndexBuffer()const;
+		inline renderer::Buffer< uint32_t > & getIndexBuffer();
+		inline bool isInitialised()const;
+		inline Mesh const & getParent()const;
+		inline Mesh & getParent();
+		inline uint32_t getId()const;
+		inline bool hasComponent( castor::String const & name )const;
+		inline SubmeshComponentSPtr getComponent( castor::String const & name )const;
+		template< typename T >
+		inline std::shared_ptr< T > getComponent()const;
+		inline InstantiationComponent & getInstantiation();
+		inline InstantiationComponent const & getInstantiation()const;
+		inline BonesInstantiationComponent & getInstantiatedBones();
+		inline BonesInstantiationComponent const & getInstantiatedBones()const;
+		inline SubmeshComponentStrMap const & getComponents()const;
+		inline renderer::PrimitiveTopology getTopology()const;
 
 	private:
 		void doGenerateVertexBuffer();
 
-	private:
-		//!\~english	The submesh ID.
-		//!\~french		L'id du sbmesh.
-		uint32_t m_id{ 0 };
-		//!\~english	The shader program flags.
-		//!\~french		Les indicateurs pour le shader.
-		ProgramFlags m_programFlags{ 0u };
-		//!\~english	Tells the VBOs have been generated.
-		//!\~french		Dit que les VBOs ont été générés.
-		bool m_generated{ false };
-		//!\~english	Tells the VBOs have been initialised.
-		//!\~french		Dit que les VBOs ont été initialisés.
-		bool m_initialised{ false };
-		//!\~english	Tells the VAO needs reininitialisation.
-		//!\~french		Dit que le VAO a besoin d'être réinitialisé.
-		bool m_dirty{ true };
-		//!\~english	The vertex buffer.
-		//!\~french		Le tampon de sommets.
-		VertexBuffer m_vertexBuffer;
-		//!\~english	The index buffer.
-		//!\~french		Le tampon d'indices.
-		IndexBuffer m_indexBuffer;
-		//!\~english	The Material assigned at creation.
-		//!\~french		Le Materiau affecté à la création.
-		MaterialWPtr m_defaultMaterial;
-		//!\~english	The combo box container.
-		//!\~french		Le conteneur boîte.
-		castor::BoundingBox m_box;
-		//!\~english	The spheric container.
-		//!\~french		Le conteneur sphère.
-		castor::BoundingSphere m_sphere;
-		//!\~english	The vertex data array.
-		//!\~french		Le tableau de données des sommets.
-		BytePtrList m_pointsData;
-		//!\~english	The vertex pointer array.
-		//!\~french		Le tableau de sommets.
-		VertexPtrArray m_points;
-		//!\~english	The parent mesh.
-		//!\~french		Le maillage parent.
-		Mesh & m_parentMesh;
-		//!\~english	The submesh components.
-		//!\~french		Les composants du sous-maillage.
-		SubmeshComponentStrMap m_components;
-		//!\~english	The instantiation component.
-		//!\~french		Le composant d'instantiation.
-		InstantiationComponentSPtr m_instantiation;
-		//!\~english	The instantiated bones component.
-		//!\~french		Le composant d'os instantiaciés.
-		BonesInstantiationComponentSPtr m_instantiatedBones;
-		//!\~english	The index mapping component.
-		//!\~french		Le composant de mappage d'indices.
-		IndexMappingSPtr m_indexMapping;
-		//!\~english	The draw topology.
-		//!\\~french	La topologie de dessin.
-		Topology m_topology{ Topology::eTriangles };
+	public:
+		static uint32_t constexpr Position = 0u;
+		static uint32_t constexpr Normal = 1u;
+		static uint32_t constexpr Tangent = 2u;
+		static uint32_t constexpr Bitangent = 3u;
+		static uint32_t constexpr Texture = 4u;
 
-		friend class GeometryBuffers;
+	private:
+		Mesh & m_parentMesh;
+		uint32_t m_id;
+		MaterialWPtr m_defaultMaterial;
+		castor::BoundingBox m_box;
+		castor::BoundingSphere m_sphere;
+		InterleavedVertexArray m_points;
+		SubmeshComponentStrMap m_components;
+		InstantiationComponentSPtr m_instantiation;
+		BonesInstantiationComponentSPtr m_instantiatedBones;
+		IndexMappingSPtr m_indexMapping;
+		ProgramFlags m_programFlags{ 0u };
+		bool m_generated{ false };
+		bool m_initialised{ false };
+		bool m_dirty{ true };
+		renderer::PrimitiveTopology m_topology{ renderer::PrimitiveTopology::eTriangleList };
+		renderer::VertexBufferPtr< InterleavedVertex > m_vertexBuffer;
+		renderer::VertexLayoutPtr m_vertexLayout;
+		renderer::BufferPtr< uint32_t > m_indexBuffer;
+		mutable std::map< MaterialSPtr, GeometryBuffers > m_geometryBuffers;
+
 		friend class BinaryWriter< Submesh >;
 		friend class BinaryParser< Submesh >;
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date 		28/05/2016
-	\~english
-	\brief		Helper structure to find ChunkType from a type.
-	\remarks	Specialisation for Submesh.
-	\~french
-	\brief		Classe d'aide pour récupéer un ChunkType depuis un type.
-	\remarks	Spécialisation pour Submesh.
-	*/
-	template<>
-	struct ChunkTyper< Submesh >
-	{
-		static ChunkType const Value = ChunkType::eSubmesh;
-	};
-	/*!
-	\author		Sylvain DOREMUS
-	\date		14/02/2010
-	\~english
-	\brief		MovableObject loader
-	\~english
-	\brief		Loader de MovableObject
-	*/
-	template<>
-	class BinaryWriter< Submesh >
-		: public BinaryWriterBase< Submesh >
-	{
-	private:
-		/**
-		 *\~english
-		 *\brief		Function used to fill the chunk from specific data.
-		 *\param[in]	p_obj	The object to write.
-		 *\return		\p false if any error occured.
-		 *\~french
-		 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
-		 *\param[in]	p_obj	L'objet à écrire.
-		 *\return		\p false si une erreur quelconque est arrivée.
-		 */
-		C3D_API bool doWrite( Submesh const & p_obj )override;
-	};
-	/*!
-	\author		Sylvain DOREMUS
-	\date		14/02/2010
-	\~english
-	\brief		MovableObject loader
-	\~english
-	\brief		Loader de MovableObject
-	*/
-	template<>
-	class BinaryParser< Submesh >
-		: public BinaryParserBase< Submesh >
-	{
-	private:
-		/**
-		 *\~english
-		 *\brief		Function used to retrieve specific data from the chunk
-		 *\param[out]	p_obj	The object to read
-		 *\param[in]	p_chunk	The chunk containing data
-		 *\return		\p false if any error occured
-		 *\~french
-		 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-		 *\param[out]	p_obj	L'objet à lire
-		 *\param[in]	p_chunk	Le chunk contenant les données
-		 *\return		\p false si une erreur quelconque est arrivée
-		 */
-		C3D_API bool doParse( Submesh & p_obj )override;
 	};
 }
 

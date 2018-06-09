@@ -4,7 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_SkinningUbo_H___
 #define ___C3D_SkinningUbo_H___
 
-#include "Shader/UniformBuffer.hpp"
+#include "Castor3DPrerequisites.hpp"
+
+#include <Buffer/UniformBuffer.hpp>
 
 namespace castor3d
 {
@@ -19,6 +21,12 @@ namespace castor3d
 	*/
 	class SkinningUbo
 	{
+	public:
+		struct Configuration
+		{
+			castor::Matrix4x4f bonesMatrix[400];
+		};
+
 	public:
 		/**
 		 *\~english
@@ -50,6 +58,20 @@ namespace castor3d
 		C3D_API ~SkinningUbo();
 		/**
 		 *\~english
+		 *\brief		Initialises the UBO.
+		 *\~french
+		 *\brief		Initialise l'UBO.
+		 */
+		C3D_API void initialise();
+		/**
+		 *\~english
+		 *\brief		Cleanup function.
+		 *\~french
+		 *\brief		Fonction de nettoyage.
+		 */
+		C3D_API void cleanup();
+		/**
+		 *\~english
 		 *\brief		Updates the UBO from given values.
 		 *\param[in]	skeleton	The overlay's material index.
 		 *\~french
@@ -61,13 +83,29 @@ namespace castor3d
 		 *\~english
 		 *\brief		Declares the GLSL variables needed to compute skinning in vertex shader.
 		 *\param[in]	writer	The GLSL writer.
+		 *\param[in]	set		The descriptor set index.
 		 *\param[in]	flags	The program flags.
 		 *\~french
 		 *\brief		Déclare les variables nécessaires au calcul du skinning dans le vertex shader.
 		 *\param[in]	writer	Le GLSL writer.
+		 *\param[in]	set		L'index du descriptor set.
 		 *\param[in]	flags	Les indicateurs du programme.
 		 */
 		C3D_API static void declare( glsl::GlslWriter & writer
+			, uint32_t binding
+			, uint32_t set
+			, ProgramFlags const & flags );
+		/**
+		 *\~english
+		 *\brief		Creates the descriptor set layout binding for the skinning UBO/SSBO.
+		 *\param[in]	binding	The descriptor binding index.
+		 *\param[in]	flags	The program flags.
+		 *\~french
+		 *\brief		Crée l'attache de layout de descripteur pour l'UBO/SSBO de skinning.
+		 *\param[in]	binding	L'index d'attache du descripteur.
+		 *\param[in]	flags	Les indicateurs du programme.
+		 */
+		C3D_API static renderer::DescriptorSetLayoutBinding createLayoutBinding( uint32_t binding
 			, ProgramFlags const & flags );
 		/**
 		 *\~english
@@ -89,19 +127,19 @@ namespace castor3d
 		 *\~french
 		 *\name			getters.
 		 */
-		inline UniformBuffer & getUbo()
+		inline renderer::UniformBuffer< Configuration > & getUbo()
 		{
-			return m_ubo;
+			return *m_ubo;
 		}
 
-		inline UniformBuffer const & getUbo()const
+		inline renderer::UniformBuffer< Configuration > const & getUbo()const
 		{
-			return m_ubo;
+			return *m_ubo;
 		}
 		/**@}*/
 
 	public:
-		static constexpr uint32_t BindingPoint = 5u;
+		C3D_API static uint32_t const BindingPoint;
 		//!\~english	Name of the skinning animation frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les données d'animation de skinning.
 		C3D_API static castor::String const BufferSkinning;
@@ -110,12 +148,8 @@ namespace castor3d
 		C3D_API static castor::String const Bones;
 
 	private:
-		//!\~english	The UBO.
-		//!\~french		L'UBO.
-		UniformBuffer m_ubo;
-		//!\~english	The bones matrices uniform variable.
-		//!\~french		Le variable uniforme contenant les matrices des os.
-		Uniform4x4f & m_bonesMatrix;
+		Engine & m_engine;
+		renderer::UniformBufferPtr< Configuration > m_ubo;
 	};
 }
 

@@ -4,7 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_HdrConfigUbo_H___
 #define ___C3D_HdrConfigUbo_H___
 
-#include "Shader/UniformBuffer.hpp"
+#include "HDR/HdrConfig.hpp"
+
+#include <Buffer/UniformBuffer.hpp>
 
 namespace castor3d
 {
@@ -50,13 +52,27 @@ namespace castor3d
 		C3D_API ~HdrConfigUbo();
 		/**
 		 *\~english
+		 *\brief		Initialises the UBO.
+		 *\~french
+		 *\brief		Initialise l'UBO.
+		 */
+		C3D_API void initialise();
+		/**
+		 *\~english
+		 *\brief		Cleanup function.
+		 *\~french
+		 *\brief		Fonction de nettoyage.
+		 */
+		C3D_API void cleanup();
+		/**
+		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_config	The HDR configuration.
+		 *\param[in]	config	The HDR configuration.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_config	La configuration HDR.
+		 *\param[in]	config	La configuration HDR.
 		 */
-		C3D_API void update( HdrConfig const & p_config )const;
+		C3D_API void update( HdrConfig const & config )const;
 		/**
 		 *\~english
 		 *\name			getters.
@@ -64,19 +80,19 @@ namespace castor3d
 		 *\name			getters.
 		 */
 		/**@{*/
-		inline UniformBuffer & getUbo()
+		inline renderer::UniformBuffer< HdrConfig > & getUbo()
 		{
-			return m_ubo;
+			return *m_ubo;
 		}
 
-		inline UniformBuffer const & getUbo()const
+		inline renderer::UniformBuffer< HdrConfig > const & getUbo()const
 		{
-			return m_ubo;
+			return *m_ubo;
 		}
 		/**@}*/
 
 	public:
-		static constexpr uint32_t BindingPoint = 8u;
+		C3D_API static uint32_t const BindingPoint;
 		//!\~english	Name of the HDR configuration frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant la configuration du HDR.
 		C3D_API static castor::String const BufferHdrConfig;
@@ -88,20 +104,16 @@ namespace castor3d
 		C3D_API static castor::String const Gamma;
 
 	private:
-		//!\~english	The UBO.
-		//!\~french		L'UBO.
-		UniformBuffer m_ubo;
-		//!\~english	The shadow receiver matrix variable.
-		//!\~french		La variable de la réception d'ombres.
-		Uniform1f & m_exposure;
-		//!\~english	The material index matrix variable.
-		//!\~french		La variable de l'indice du matériau.
-		Uniform1f & m_gamma;
+		Engine & m_engine;
+		renderer::UniformBufferPtr< HdrConfig > m_ubo;
 	};
 }
 
-#define UBO_HDR_CONFIG( Writer )\
-	Ubo hdrConfig{ writer, castor3d::HdrConfigUbo::BufferHdrConfig, castor3d::HdrConfigUbo::BindingPoint };\
+#define UBO_HDR_CONFIG( writer, binding, set )\
+	Ubo hdrConfig{ writer\
+		, castor3d::HdrConfigUbo::BufferHdrConfig\
+		, binding\
+		, set };\
 	auto c3d_exposure = hdrConfig.declMember< Float >( castor3d::HdrConfigUbo::Exposure );\
 	auto c3d_gamma = hdrConfig.declMember< Float >( castor3d::HdrConfigUbo::Gamma );\
 	hdrConfig.end()

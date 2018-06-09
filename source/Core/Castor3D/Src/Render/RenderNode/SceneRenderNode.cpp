@@ -1,7 +1,7 @@
 ﻿#include "SceneRenderNode.hpp"
 
 #include "Shader/ShaderProgram.hpp"
-#include "Shader/UniformBuffer.hpp"
+#include "Castor3DPrerequisites.hpp"
 
 namespace castor3d
 {

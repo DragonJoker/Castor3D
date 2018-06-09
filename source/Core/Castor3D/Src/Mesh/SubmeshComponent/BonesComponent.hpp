@@ -4,11 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_BonesComponent_H___
 #define ___C3D_BonesComponent_H___
 
-#include "Binary/BinaryParser.hpp"
-#include "Binary/BinaryWriter.hpp"
 #include "Mesh/Skeleton/VertexBoneData.hpp"
 #include "Mesh/SubmeshComponent/SubmeshComponent.hpp"
-#include "Mesh/Buffer/VertexBuffer.hpp"
 
 namespace castor3d
 {
@@ -46,14 +43,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		adds bone datas.
-		 *\param[in]	p_begin	The bones data begin.
-		 *\param[in]	p_end	The bones data end.
+		 *\param[in]	begin	The bones data begin.
+		 *\param[in]	end		The bones data end.
 		 *\~french
 		 *\brief		Ajoute des données de bones.
-		 *\param[in]	p_begin	Le début des données de bones.
-		 *\param[in]	p_end	La fin des données de bones.
+		 *\param[in]	begin	Le début des données de bones.
+		 *\param[in]	end		La fin des données de bones.
 		 */
-		C3D_API void addBoneDatas( VertexBoneData const * const p_begin, VertexBoneData const * const p_end );
+		C3D_API void addBoneDatas( VertexBoneData const * const begin
+			, VertexBoneData const * const end );
 		/**
 		 *\~english
 		 *\return		The skeleton.
@@ -64,31 +62,34 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
-		C3D_API void gather( VertexBufferArray & buffers )override;
+		C3D_API void gather( MaterialSPtr material
+			, renderer::BufferCRefArray & buffers
+			, std::vector< uint64_t > & offsets
+			, renderer::VertexLayoutCRefArray & layouts )override;
 		/**
 		 *\~english
 		 *\brief		adds bone datas.
-		 *\param[in]	p_boneData	The bone datas.
+		 *\param[in]	boneData	The bone datas.
 		 *\~french
 		 *\brief		Ajoute des données de bones.
-		 *\param[in]	p_boneData	Les données de bones.
+		 *\param[in]	boneData	Les données de bones.
 		 */
-		inline void addBoneDatas( std::vector< VertexBoneData > const & p_boneData )
+		inline void addBoneDatas( std::vector< VertexBoneData > const & boneData )
 		{
-			addBoneDatas( p_boneData.data(), p_boneData.data() + p_boneData.size() );
+			addBoneDatas( boneData.data(), boneData.data() + boneData.size() );
 		}
 		/**
 		 *\~english
 		 *\brief		adds bone datas.
-		 *\param[in]	p_boneData	The bone datas.
+		 *\param[in]	boneData	The bone datas.
 		 *\~french
 		 *\brief		Ajoute des données de bones.
-		 *\param[in]	p_boneData	Les données de bones.
+		 *\param[in]	boneData	Les données de bones.
 		 */
 		template< size_t Count >
-		inline void addBoneDatas( std::array< VertexBoneData, Count > const & p_boneData )
+		inline void addBoneDatas( std::array< VertexBoneData, Count > const & boneData )
 		{
-			addBoneDatas( p_boneData.data(), p_boneData.data() + p_boneData.size() );
+			addBoneDatas( boneData.data(), boneData.data() + boneData.size() );
 		}
 		/**
 		 *\~english
@@ -98,7 +99,7 @@ namespace castor3d
 		 */
 		inline bool hasBoneData()const
 		{
-			return !m_bonesData.empty();
+			return !m_bones.empty();
 		}
 		/**
 		 *\~english
@@ -106,7 +107,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les données d'os.
 		 */
-		inline VertexPtrArray const & getBonesData()const
+		inline VertexBoneDataArray const & getBonesData()const
 		{
 			return m_bones;
 		}
@@ -116,9 +117,9 @@ namespace castor3d
 		 *\~french
 		 *\return		Le VertexBuffer des bones.
 		 */
-		inline VertexBuffer const & getBonesBuffer()const
+		inline renderer::VertexBuffer< VertexBoneData > const & getBonesBuffer()const
 		{
-			return m_bonesBuffer;
+			return *m_bonesBuffer;
 		}
 		/**
 		 *\~english
@@ -126,14 +127,14 @@ namespace castor3d
 		 *\~french
 		 *\return		Le VertexBuffer des bones.
 		 */
-		inline VertexBuffer & getBonesBuffer()
+		inline renderer::VertexBuffer< VertexBoneData > & getBonesBuffer()
 		{
-			return m_bonesBuffer;
+			return *m_bonesBuffer;
 		}
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
 		 */
-		inline ProgramFlags getProgramFlags()const override
+		inline ProgramFlags getProgramFlags( MaterialSPtr material )const override
 		{
 			return hasBoneData()
 				? ProgramFlag::eSkinning
@@ -148,82 +149,15 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const Name;
+		C3D_API static uint32_t constexpr BindingPoint = 3u;
 
 	private:
-		//!\~english	The bone data buffer (animation).
-		//!\~french		Le tampon de données de bones (animation).
-		VertexBuffer m_bonesBuffer;
-		//!\~english	The bones data array.
-		//!\~french		Le tableau de données des bones.
-		BytePtrList m_bonesData;
-		//!\~english	The bones pointer array.
-		//!\~french		Le tableau de bones.
-		VertexPtrArray m_bones;
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date		09/11/2017
-	\~english
-	\brief		Helper structure to find ChunkType from a type.
-	\remarks	Specialisation for BonesComponent.
-	\~french
-	\brief		Classe d'aide pour récupéer un ChunkType depuis un type.
-	\remarks	Spécialisation pour BonesComponent.
-	*/
-	template<>
-	struct ChunkTyper< BonesComponent >
-	{
-		static ChunkType const Value = ChunkType::eBonesComponent;
-	};
-	/*!
-	\author		Sylvain DOREMUS
-	\date		09/11/2017
-	\~english
-	\brief		BonesComponent loader.
-	\~english
-	\brief		Loader de BonesComponent.
-	*/
-	template<>
-	class BinaryWriter< BonesComponent >
-		: public BinaryWriterBase< BonesComponent >
-	{
-	private:
-		/**
-		 *\~english
-		 *\brief		Function used to fill the chunk from specific data.
-		 *\param[in]	obj	The object to write.
-		 *\return		\p false if any error occured.
-		 *\~french
-		 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
-		 *\param[in]	obj	L'objet à écrire.
-		 *\return		\p false si une erreur quelconque est arrivée.
-		 */
-		C3D_API bool doWrite( BonesComponent const & obj )override;
-	};
-	/*!
-	\author		Sylvain DOREMUS
-	\date		09/11/2017
-	\~english
-	\brief		BonesComponent loader.
-	\~english
-	\brief		Loader de BonesComponent.
-	*/
-	template<>
-	class BinaryParser< BonesComponent >
-		: public BinaryParserBase< BonesComponent >
-	{
-	private:
-		/**
-		 *\~english
-		 *\brief		Function used to retrieve specific data from the chunk.
-		 *\param[out]	obj	The object to read.
-		 *\return		\p false if any error occured.
-		 *\~french
-		 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk.
-		 *\param[out]	obj	L'objet à lire.
-		 *\return		\p false si une erreur quelconque est arrivée.
-		 */
-		C3D_API bool doParse( BonesComponent & obj )override;
+		renderer::VertexBufferPtr< VertexBoneData > m_bonesBuffer;
+		renderer::VertexLayoutPtr m_bonesLayout;
+		VertexBoneDataArray m_bones;
+
+		friend class BinaryWriter< BonesComponent >;
+		friend class BinaryParser< BonesComponent >;
 	};
 }
 

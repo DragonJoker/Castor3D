@@ -70,14 +70,14 @@ namespace castor
 
 					if ( !::SetConsoleWindowInfo( m_screenBuffer, TRUE, &windowRect ) )
 					{
-						StringStream text;
+						StringStream text{ makeStringStream() };
 						text << cuT( "Couldn't set console window size (0x" ) << std::hex << std::setw( 8 ) << std::right << std::setfill( '0' ) << ::GetLastError() << ")";
 						writeText( text.str(), true );
 					}
 				}
 				else
 				{
-					StringStream text;
+					StringStream text{ makeStringStream() };
 					text << cuT( "Couldn't set console screenbuffer size (0x" ) << std::hex << std::setw( 8 ) << std::right << std::setfill( '0' ) << ::GetLastError() << ")";
 					writeText( text.str(), true );
 				}
@@ -115,15 +115,21 @@ namespace castor
 			::SetConsoleTextAttribute( m_screenBuffer, p_attributes );
 		}
 
-		void writeText( String p_text, bool p_newLine )
+		void writeText( String text, bool newLine )
 		{
 			if ( ::IsDebuggerPresent() )
 			{
-				std::wstring_convert< std::codecvt_utf8_utf16< wchar_t >, wchar_t > conversion;
-				auto converted = conversion.from_bytes( p_text );
-				::OutputDebugStringW( converted.c_str() );
+				int length = MultiByteToWideChar( CP_UTF8, 0u, text.c_str(), -1, nullptr, 0u );
 
-				if ( p_newLine )
+				if ( length > 0 )
+				{
+					std::vector< wchar_t > buffer( size_t( length + 1 ), wchar_t{} );
+					MultiByteToWideChar( CP_UTF8, 0u, text.c_str(), -1, buffer.data(), length );
+					std::wstring converted{ buffer.begin(), buffer.end() };
+					::OutputDebugStringW( converted.c_str() );
+				}
+
+				if ( newLine )
 				{
 					::OutputDebugStringW( L"\n" );
 				}
@@ -136,9 +142,9 @@ namespace castor
 				// Manually managed screen buffer.
 				csbiInfo.dwCursorPosition.X = 0;
 				DWORD written = 0;
-				::WriteConsole( m_screenBuffer, p_text.c_str(), DWORD( p_text.size() ), &written, nullptr );
+				::WriteConsoleA( m_screenBuffer, text.c_str(), DWORD( text.size() ), &written, nullptr );
 
-				if ( p_newLine )
+				if ( newLine )
 				{
 					SHORT offsetY = SHORT( 1 + written / csbiInfo.dwSize.X );
 
@@ -161,7 +167,7 @@ namespace castor
 						fill.Char.AsciiChar = ' ';
 						fill.Char.UnicodeChar = L' ';
 						// Scroll
-						::ScrollConsoleScreenBuffer( m_screenBuffer, &scrollRect, nullptr, coordDest, &fill );
+						::ScrollConsoleScreenBufferA( m_screenBuffer, &scrollRect, nullptr, coordDest, &fill );
 					}
 					else
 					{
@@ -177,12 +183,12 @@ namespace castor
 				// Automatically managed screen buffer.
 				DWORD written = 0;
 
-				if ( p_newLine )
+				if ( newLine )
 				{
-					p_text += cuT( "\n" );
+					text += cuT( "\n" );
 				}
 
-				::WriteConsole( m_screenBuffer, p_text.c_str(), DWORD( p_text.size() ), &written, nullptr );
+				::WriteConsoleA( m_screenBuffer, text.c_str(), DWORD( text.size() ), &written, nullptr );
 			}
 		}
 

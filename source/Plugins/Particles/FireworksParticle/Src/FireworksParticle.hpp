@@ -12,15 +12,20 @@ namespace Fireworks
 		: public castor3d::CpuParticleSystem
 	{
 	public:
-		explicit ParticleSystem( castor3d::ParticleSystem & p_parent );
+		explicit ParticleSystem( castor3d::ParticleSystem & parent );
 		virtual ~ParticleSystem();
-		static castor3d::CpuParticleSystemUPtr create( castor3d::ParticleSystem & p_parent );
-		void emitParticle( float p_type, castor::Point3f const & p_position, castor::Point3f const & p_velocity, float p_age );
+		static castor3d::CpuParticleSystemUPtr create( castor3d::ParticleSystem & parent );
+		void emitParticle( float type
+			, castor::Point3f const & position
+			, castor::Point3f const & velocity
+			, float age );
 		/**
 		 *\copydoc		castor3d::CpuParticleSystem::update
 		 */
-		uint32_t update( castor::Milliseconds const & p_time
-			, castor::Milliseconds const & p_totalTime )override;
+		uint32_t update( castor3d::RenderPassTimer & timer
+			, castor::Milliseconds const & time
+			, castor::Milliseconds const & totalTime
+			, uint32_t index )override;
 
 	private:
 		/**
@@ -38,6 +43,10 @@ namespace Fireworks
 
 	private:
 		uint32_t m_firstUnused{ 1u };
+		castor3d::ParticleDeclaration::iterator m_type;
+		castor3d::ParticleDeclaration::iterator m_position;
+		castor3d::ParticleDeclaration::iterator m_velocity;
+		castor3d::ParticleDeclaration::iterator m_age;
 	};
 }
 

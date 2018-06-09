@@ -1,12 +1,8 @@
-﻿#include "Render/GlRenderSystem.hpp"
+#include "GlRenderSystem.hpp"
 
 #include <Engine.hpp>
 #include <Plugin/RendererPlugin.hpp>
 #include <Render/RenderSystemFactory.hpp>
-
-using namespace GlRender;
-using namespace castor3d;
-using namespace castor;
 
 extern "C"
 {
@@ -22,19 +18,19 @@ extern "C"
 
 	C3D_Gl_API void getName( char const ** p_name )
 	{
-		*p_name = GlRenderSystem::Name.c_str();
+		*p_name = GlRender::RenderSystem::Name.c_str();
 	}
 
 	C3D_Gl_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
 	{
 		auto plugin = static_cast< castor3d::RendererPlugin * >( p_plugin );
-		plugin->setRendererType( GlRenderSystem::Type );
-		engine->getRenderSystemFactory().registerType( GlRenderSystem::Type
-			, &GlRenderSystem::create );
+		plugin->setRendererType( GlRender::RenderSystem::Type );
+		engine->getRenderSystemFactory().registerType( GlRender::RenderSystem::Type
+			, &GlRender::RenderSystem::create );
 	}
 
 	C3D_Gl_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->getRenderSystemFactory().unregisterType( GlRenderSystem::Type );
+		engine->getRenderSystemFactory().unregisterType( GlRender::RenderSystem::Type );
 	}
 }

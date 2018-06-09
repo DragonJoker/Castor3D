@@ -38,9 +38,8 @@ namespace castor3d
 				auto component = submesh.getComponent< BonesComponent >();
 				uint32_t index = 0u;
 
-				for ( auto & data : component->getBonesData() )
+				for ( auto & boneData : component->getBonesData() )
 				{
-					auto boneData = BonedVertex::getBones( data );
 					Matrix4x4r transform{ 1.0_r };
 
 					if ( boneData.m_weights[0] > 0 )
@@ -62,8 +61,7 @@ namespace castor3d
 						}
 					}
 
-					Coords3r cposition;
-					Vertex::getPosition( submesh.getPoint( index ), cposition );
+					auto & cposition = submesh.getPoint( index ).pos;
 					Point4r position{ cposition[0], cposition[1], cposition[2], 1.0_r };
 					position = transform * position;
 					min[0] = std::min( min[0], position[0] );

@@ -18,9 +18,7 @@ See LICENSE file in root folder
 #include "Cache/ParticleSystemCache.hpp"
 #include "Cache/SamplerCache.hpp"
 
-#include "HDR/HdrConfig.hpp"
-#include "RenderToTexture/TextureProjection.hpp"
-#include "Scene/ColourSkybox.hpp"
+#include "Scene/Background/Background.hpp"
 #include "Scene/Fog.hpp"
 #include "Scene/Shadow.hpp"
 
@@ -69,7 +67,8 @@ namespace castor3d
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( castor::String const & tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs
+				, castor::Path const & materialsFile = castor::Path{} );
 			/**
 			 *\~english
 			 *\brief		Writes a scene into a text file
@@ -81,6 +80,9 @@ namespace castor3d
 			 *\param[in]	file	Le fichier
 			 */
 			C3D_API bool operator()( Scene const & scene, castor::TextFile & file )override;
+
+		private:
+			castor::Path const & m_materialsFile;
 		};
 
 	public:
@@ -118,17 +120,6 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		Renders the scene background (skybox or image).
-		 *\param[in]	size	The target dimensions.
-		 *\param[in]	camera	The current camera.
-		 *\~french
-		 *\brief		Rend l'arrière plan de la scène (skybox ou image).
-		 *\param[in]	size	Les dimensions de la cible.
-		 *\param[in]	camera	La caméra courante.
-		 */
-		C3D_API void renderBackground( castor::Size const & size, Camera const & camera );
-		/**
-		 *\~english
 		 *\brief		Updates the scene before render.
 		 *\~french
 		 *\brief		Met à jour la scène avant le rendu.
@@ -136,24 +127,20 @@ namespace castor3d
 		C3D_API void update();
 		/**
 		 *\~english
-		 *\brief		Sets the background image for the scene
-		 *\param[in]	folder		The folder containing the image.
-		 *\param[in]	relative	The image file path, relative to \p folder.
+		 *\brief		Updates the scene device dependant stuff.
 		 *\~french
-		 *\brief		Définit l'image de fond pour la scène
-		 *\param[in]	folder		Le dossier contenant l'image.
-		 *\param[in]	relative	Le chemin d'accès à l'image, relatif à \p folder.
+		 *\brief		Met à jour les objets de scène dépendant du device.
 		 */
-		C3D_API bool setBackground( castor::Path const & folder, castor::Path const & relative );
+		C3D_API void updateDeviceDependent( Camera const & camera );
 		/**
 		 *\~english
-		 *\brief		Sets the skybox for the scene.
-		 *\param[in]	skybox	The skybox.
+		 *\brief		Sets the background for the scene.
+		 *\param[in]	value	The new value.
 		 *\~french
-		 *\brief		Définit la skybox de la scène.
-		 *\param[in]	skybox	La skybox.
+		 *\brief		Définit le fond de la scène.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		C3D_API bool setForeground( SkyboxUPtr && skybox );
+		C3D_API void setBackground( SceneBackgroundSPtr value );
 		/**
 		 *\~english
 		 *\brief		Imports a scene from an foreign file
@@ -239,317 +226,176 @@ namespace castor3d
 		C3D_API EnvironmentMap & getEnvironmentMap( SceneNode const & node );
 		/**
 		 *\~english
-		 *\return		the IBL textures for given node, the skybox's one if no environment map exists for this SceneNode.
+		 *\remarks		Call hasEnvironmentMap before calling this function (since this one returns a reference to an existing EnvironmentMap).
+		 *\return		Retrieves the reflection map for given node.
 		 *\param[in]	node	The scene node.
 		 *\~french
-		 *\return		Les textures d'IBL pour le noeud donné, celles de la skybox si aucune EnvironmentMap n'existe pour ce noeud.
+		 *\remarks		Appelez hasEnvironmentMap avant d'appeler cette fonction (celle-ci retournant une référence sur une EnvironmentMap existante)
+		 *\return		Récupère la reflection map pour le noeud donné.
 		 *\param[in]	node	Le noeud de scène.
 		 */
-		C3D_API IblTextures const & getIbl( SceneNode const & node )const;
+		C3D_API EnvironmentMap const & getEnvironmentMap( SceneNode const & node )const;
 		/**
-		 *\~english
-		 *\return		The skybox.
-		 *\~french
-		 *\return		La skybox.
-		 */
-		C3D_API Skybox const & getSkybox()const;
-		/**
-		 *\~english
-		 *\return		The reflection maps list.
-		 *\~french
-		 *\return		La liste des reflection maps.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		inline SceneBackground const & getBackground()const
+		{
+			return *m_background;
+		}
+
+		inline SceneBackground & getBackground()
+		{
+			return *m_background;
+		}
+
+		inline SceneBackground const & getColourBackground()const
+		{
+			return *m_colourBackground;
+		}
+
+		inline SceneBackground & getColourBackground()
+		{
+			return *m_colourBackground;
+		}
+
 		inline std::vector< std::reference_wrapper< EnvironmentMap > > & getEnvironmentMaps()
 		{
 			return m_reflectionMapsArray;
 		}
-		/**
-		 *\~english
-		 *\return		The reflection maps list.
-		 *\~french
-		 *\return		La liste des reflection maps.
-		 */
+
 		inline std::vector< std::reference_wrapper< EnvironmentMap > > const & getEnvironmentMaps()const
 		{
 			return m_reflectionMapsArray;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the background colour
-		 *\param[in]	value	The new colour
-		 *\~french
-		 *\brief		Définit la couleur du fond
-		 *\param[in]	value	La nouvelle couleur
-		 */
-		inline void setBackgroundColour( castor::RgbColour const & value )
-		{
-			m_backgroundColour = value;
-		}
-		/**
-		 *\~english
-		 *\return		The background colour
-		 *\~french
-		 *\return		La couleur du fond
-		 */
+
 		inline castor::RgbColour const & getBackgroundColour()const
 		{
 			return m_backgroundColour;
 		}
-		/**
-		 *\~english
-		 *\return		The root node
-		 *\~french
-		 *\return		Le node racine
-		 */
+
 		inline SceneNodeSPtr getRootNode()const
 		{
 			return m_rootNode;
 		}
-		/**
-		 *\~english
-		 *\return		The cameras root node.
-		 *\~french
-		 *\return		Le node racine des caméras.
-		 */
+
 		inline SceneNodeSPtr getCameraRootNode()const
 		{
 			return m_rootCameraNode;
 		}
-		/**
-		 *\~english
-		 *\return		The objects root node
-		 *\~french
-		 *\return		Le node racine des objets.
-		 */
+
 		inline SceneNodeSPtr getObjectRootNode()const
 		{
 			return m_rootObjectNode;
 		}
-		/**
-		 *\~english
-		 *\return		The scene background image.
-		 *\~french
-		 *\return		L'image de fond de la scène.
-		 */
-		inline TextureLayoutSPtr getBackgroundImage()const
-		{
-			return m_backgroundImage;
-		}
-		/**
-		 *\~english
-		 *\return		The scene change status.
-		 *\~french
-		 *\return		Le statut de changement de la scène.
-		 */
+
 		inline bool hasChanged()const
 		{
 			return m_changed;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the scene changed status to \p true.
-		 *\~french
-		 *\brief		Définit le statut de changement de la scène to \p true.
-		 */
-		inline void setChanged()
-		{
-			m_changed = true;
-			onChanged( *this );
-		}
-		/**
-		 *\~english
-		 *\return		The ambient light colour
-		 *\~french
-		 *\return		La couleur de la lumière ambiante
-		 */
+
 		inline castor::RgbColour const & getAmbientLight()const
 		{
 			return m_ambientLight;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the ambient light colour.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit la couleur de la lumière ambiante.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setAmbientLight( castor::RgbColour const & value )
-		{
-			m_ambientLight = value;
-		}
-		/**
-		 *\~english
-		 *\return		\p true if the skybox is defined.
-		 *\~french
-		 *\return		\p true si la skybox est définie.
-		 */
-		inline bool hasSkybox()const
-		{
-			return m_skybox != nullptr;
-		}
-		/**
-		 *\~english
-		 *\return		The fog's parameters.
-		 *\~french
-		 *\return		Les paramètres du brouillard.
-		 */
+
 		inline Fog const & getFog()const
 		{
 			return m_fog;
 		}
-		/**
-		 *\~english
-		 *\return		The fog's parameters.
-		 *\~french
-		 *\return		Les paramètres du brouillard.
-		 */
+
 		inline Fog & getFog()
 		{
 			return m_fog;
 		}
-		/**
-		 *\~english
-		 *\return		The shadows parameters.
-		 *\~french
-		 *\return		Les paramètres des ombres.
-		 */
-		inline Shadow const & getShadow()const
-		{
-			return m_shadow;
-		}
-		/**
-		 *\~english
-		 *\return		The shadows parameters.
-		 *\~french
-		 *\return		Les paramètres des ombres.
-		 */
-		inline Shadow & getShadow()
-		{
-			return m_shadow;
-		}
-		/**
-		 *\~english
-		 *\return		The materials type.
-		 *\~french
-		 *\return		Le type des matériaux.
-		 */
+
 		inline MaterialType getMaterialsType()const
 		{
 			return getEngine()->getMaterialsType();
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the materials type.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit le type des matériaux.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setMaterialsType( MaterialType value )
-		{
-			getEngine()->setMaterialsType( value );
-		}
-		/**
-		 *\~english
-		 *\return		The scene's frame listener.
-		 *\~french
-		 *\return		Le frame listener de la scène.
-		 */
+
 		inline FrameListener const & getListener()const
 		{
 			REQUIRE( !m_listener.expired() );
 			return *m_listener.lock();
 		}
-		/**
-		 *\~english
-		 *\return		The scene's frame listener.
-		 *\~french
-		 *\return		Le frame listener de la scène.
-		 */
+
 		inline FrameListener & getListener()
 		{
 			REQUIRE( !m_listener.expired() );
 			return *m_listener.lock();
 		}
-		/**
-		 *\~english
-		 *\return		\p true if the scene is initialised.
-		 *\~french
-		 *\return		\p true si la scène est initialisée.
-		 */
+
 		inline bool isInitialised()const
 		{
 			return m_initialised;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the exposure value.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit la valeur de l'exposition.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setExposure( float value )
-		{
-			m_config.setExposure( value );
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the gamma correction value.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit la valeur de la correction gamma.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setGamma( float value )
-		{
-			m_config.setGamma( value );
-		}
-		/**
-		 *\~english
-		 *\return		The HDR configuration.
-		 *\~french
-		 *\return		La configuration HDR.
-		 */
-		inline HdrConfig const & getHdrConfig()const
-		{
-			return m_config;
-		}
-		/**
-		 *\~english
-		 *\return		Tells if the scene needs a subsurface scattering pass.
-		 *\~french
-		 *\return		Dit si la scène a besoin d'une passe de subsurface scattering.
-		 */
+
 		inline bool needsSubsurfaceScattering()const
 		{
 			return m_needsSubsurfaceScattering;
 		}
-		/**
-		 *\~english
-		 *\return		Tells if the scene has opaque objects.
-		 *\~french
-		 *\return		Dit si la scène a des objets opaques.
-		 */
+
 		inline bool hasOpaqueObjects()const
 		{
 			return m_hasOpaqueObjects;
 		}
-		/**
-		 *\~english
-		 *\return		Tells if the scene has opaque objects.
-		 *\~french
-		 *\return		Dit si la scène a des objets opaques.
-		 */
+
 		inline bool hasTransparentObjects()const
 		{
 			return m_hasTransparentObjects;
 		}
 
+		inline BillboardUboPools const & getBillboardPools()const
+		{
+			return m_billboardPools;
+		}
+
+		inline BillboardUboPools & getBillboardPools()
+		{
+			return m_billboardPools;
+		}
+
+		C3D_API renderer::SemaphoreCRefArray getRenderTargetsSemaphores()const;
+		/**@}*/
+		/**
+		*\~english
+		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		*/
+		/**@{*/
+		inline void setBackgroundColour( castor::RgbColour const & value )
+		{
+			m_backgroundColour = value;
+		}
+
+		inline void setChanged()
+		{
+			m_changed = true;
+			onChanged( *this );
+		}
+
+		inline void setAmbientLight( castor::RgbColour const & value )
+		{
+			m_ambientLight = value;
+		}
+
+		inline void setMaterialsType( MaterialType value )
+		{
+			getEngine()->setMaterialsType( value );
+		}
+		/**@}*/
+
 	private:
 		void doUpdateAnimations();
-		void doUpdateNoSkybox();
 		void doUpdateMaterials();
 		void onMaterialChanged( Material const & material );
 
@@ -562,113 +408,38 @@ namespace castor3d
 		mutable OnSceneUpdate onUpdate;
 
 	private:
-		//!\~english	Tells if the scene is initialised.
-		//!\~french		Dit si la scène est initialisée.
 		bool m_initialised{ false };
-		//!\~english	The root node
-		//!\~french		Le noeud père de tous les noeuds de la scène
 		SceneNodeSPtr m_rootNode;
-		//!\~english	The root node used only for cameras (used to ease the use of cameras)
-		//!\~french		Le noeud père de tous les noeuds de caméra
 		SceneNodeSPtr m_rootCameraNode;
-		//!\~english	The root node for every object other than camera (used to ease the use of cameras)
-		//!\~french		Le noeud père de tous les noeuds d'objet
 		SceneNodeSPtr m_rootObjectNode;
-		//!\~english	The scene nodes cache.
-		//!\~french		Le cache de noeuds de scène.
 		DECLARE_OBJECT_CACHE_MEMBER( sceneNode, SceneNode );
-		//!\~english	The camera cache.
-		//!\~french		Le cache de caméras.
 		DECLARE_OBJECT_CACHE_MEMBER( camera, Camera );
-		//!\~english	The lights cache.
-		//!\~french		Le cache de lumières.
 		DECLARE_OBJECT_CACHE_MEMBER( light, Light );
-		//!\~english	The geometies cache.
-		//!\~french		Le cache de géométries.
 		DECLARE_OBJECT_CACHE_MEMBER( geometry, Geometry );
-		//!\~english	The billboards cache.
-		//!\~french		Le cache de billboards.
 		DECLARE_OBJECT_CACHE_MEMBER( billboard, BillboardList );
-		//!\~english	The particle systems cache.
-		//!\~french		Le cache de systèmes de particules.
 		DECLARE_OBJECT_CACHE_MEMBER( particleSystem, ParticleSystem );
-		//!\~english	The meshes cache.
-		//!\~french		Le cache de maillages.
 		DECLARE_CACHE_MEMBER( mesh, Mesh );
-		//!\~english	The animated objects groups cache.
-		//!\~french		Le cache de groupes d'objets animés.
 		DECLARE_CACHE_MEMBER( animatedObjectGroup, AnimatedObjectGroup );
-		//!\~english	The overlays view.
-		//!\~french		La vue sur le incrustations de la scène.
 		DECLARE_CACHE_VIEW_MEMBER( overlay, Overlay, EventType::ePreRender );
-		//!\~english	The scene materials view.
-		//!\~french		La vue sur les matériaux de la scène.
 		DECLARE_CACHE_VIEW_MEMBER( material, Material, EventType::ePreRender );
-		//!\~english	The scene samplers view.
-		//!\~french		La vue sur les échantillonneurs de la scène.
 		DECLARE_CACHE_VIEW_MEMBER( sampler, Sampler, EventType::ePreRender );
-		//!\~english	The scene fonts view.
-		//!\~french		La vue sur les polices de la scène.
 		DECLARE_CACHE_VIEW_MEMBER_CU( font, Font, EventType::ePreRender );
-		//!\~english	Tells if the scene has changed, id est if a geometry has been created or added to it => Vertex buffers need to be generated
-		//!\~french		Dit si la scène a changé (si des géométries ont besoin d'être initialisées, essentiellement).
+		BillboardUboPools m_billboardPools;
 		bool m_changed{ false };
-		//!\~english	Ambient light color
-		//!\~french		Couleur de la lumière ambiante
 		castor::RgbColour m_ambientLight;
-		//!\~english	The scene background colour
-		//!\~french		La couleur de fond de la scène
 		castor::RgbColour m_backgroundColour;
-		//!\~english	The background image
-		//!\~french		L'image de fond
-		TextureLayoutSPtr m_backgroundImage;
-		//!\~english	The skybox
-		//!\~french		La skybox
-		SkyboxUPtr m_skybox;
-		//!\~english	The skybox for background colour.
-		//!\~french		La skybox pour la couleur de fond.
-		ColourSkybox m_backgroundColourSkybox;
-		//!\~english	The LightCategory factory.
-		//!\~french		La fabrique de LightCategory.
+		SceneBackgroundSPtr m_background;
+		SceneBackgroundSPtr m_colourBackground;
 		LightFactory m_lightFactory;
-		//!\~english	The fog's parameters.
-		//!\~french		Les paramètres de brouillard.
 		Fog m_fog;
-		//!\~english	The shadows parameters.
-		//!\~french		Les paramètres des ombres.
-		Shadow m_shadow;
-		//!\~english	The pipeline used to render the background image, if any.
-		//!\~french		Le pipeline utilisé pour le rendu de l'image de fond, s'il y en a une.
-		std::unique_ptr< TextureProjection > m_colour;
-		//!\~english	The frame listener for the scene.
-		//!\~french		Le frame listener pour la scène.
 		FrameListenerWPtr m_listener;
-		//!\~english	The scene's reflection maps.
-		//!\~french		Les reflection maps de la scène.
 		std::map< SceneNode const *, std::unique_ptr< EnvironmentMap > > m_reflectionMaps;
-		//!\~english	The scene's reflection maps.
-		//!\~french		Les reflection maps de la scène.
 		std::vector< std::reference_wrapper< EnvironmentMap > > m_reflectionMapsArray;
-		//!\~english	The HDR configuration.
-		//!\~french		La configuration HDR.
-		HdrConfig m_config;
-		//!\~english	The pool used to update the animations.
-		//!\~french		Le pool de mise à jour des animations.
 		castor::ThreadPool m_animationUpdater;
-		//!\~english	Tells if the scene needs a subsurface scattering pass.
-		//!\~french		Dit si la scène a besoin d'une passe de subsurface scattering.
 		bool m_needsSubsurfaceScattering{ false };
-		//!\~english	Tells if the scene has opaque objects.
-		//!\~french		Dit si la scène a des objets opaques.
 		bool m_hasOpaqueObjects{ false };
-		//!\~english	Tells if the scene has transparent objects.
-		//!\~french		Dit si la scène a des objets transparents.
 		bool m_hasTransparentObjects{ false };
-		//!\~english	The connections to the material changed signals.
-		//!\~french		Les connections aux signaux de matériau changé.
 		std::map< MaterialSPtr, OnMaterialChangedConnection > m_materialsListeners;
-		//!\~english	Tells if the materials hav changed since last update.
-		//!\~french		Dit si les matériaux ont changé depuis la dernière mise à jour.
 		bool m_dirtyMaterials{ true };
 
 	public:

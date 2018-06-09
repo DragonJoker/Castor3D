@@ -1,4 +1,6 @@
-﻿#include "KawaseUbo.hpp"
+#include "KawaseUbo.hpp"
+
+#include "LightStreaksPostEffect.hpp"
 
 #include <Engine.hpp>
 
@@ -15,34 +17,40 @@ namespace light_streaks
 	String const KawaseUbo::Pass = cuT( "c3d_passCount" );
 
 	KawaseUbo::KawaseUbo( Engine & engine )
-		: m_ubo{ KawaseUbo::Name
-			, *engine.getRenderSystem()
-			, KawaseUbo::BindingPoint }
-		, m_pixelSize{ m_ubo.createUniform< UniformType::eVec2f >( KawaseUbo::PixelSize ) }
-		, m_direction{ m_ubo.createUniform< UniformType::eVec2f >( KawaseUbo::Direction ) }
-		, m_samples{ m_ubo.createUniform< UniformType::eInt >( KawaseUbo::Samples ) }
-		, m_attenuation{ m_ubo.createUniform< UniformType::eFloat >( KawaseUbo::Attenuation ) }
-		, m_pass{ m_ubo.createUniform< UniformType::eInt >( KawaseUbo::Pass ) }
+		: m_engine{ engine }
 	{
-		m_samples->setValue( 4 );
-		m_attenuation->setValue( 0.9f );
 	}
 
-	KawaseUbo::~KawaseUbo()
+	void KawaseUbo::initialise()
 	{
-		m_ubo.cleanup();
+		m_ubo = renderer::makeUniformBuffer< Configuration >( getCurrentDevice( m_engine )
+			, PostEffect::Count * 3u
+			, 0u
+			, renderer::MemoryPropertyFlag::eHostVisible );
 	}
 
-	void KawaseUbo::update( Size const & size
-		, Point2f const & direction
+	void KawaseUbo::cleanup()
+	{
+		m_ubo.reset();
+	}
+
+	void KawaseUbo::update( uint32_t index
+		, renderer::Extent2D const & size
+		, castor::Point2f const & direction
 		, uint32_t pass )
 	{
-		Point2f pixelSize{ 1.0f / size.getWidth(), 1.0f / size.getHeight() };
-		m_pixelSize->setValue( pixelSize );
-		m_direction->setValue( direction );
-		m_pass->setValue( int( pass ) );
-		m_ubo.update();
-		m_ubo.bindTo( KawaseUbo::BindingPoint );
+		Point2f pixelSize{ 1.0f / size.width, 1.0f / size.height };
+		auto & data = m_ubo->getData( index );
+		data.samples = 4;
+		data.attenuation = 0.9f;
+		data.pixelSize = pixelSize;
+		data.direction = direction;
+		data.pass = int( pass );
+	}
+
+	void KawaseUbo::upload()
+	{
+		m_ubo->upload( 0u, uint32_t( m_ubo->getDatas().size() ) );
 	}
 
 	//************************************************************************************************

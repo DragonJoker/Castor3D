@@ -86,11 +86,58 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::render
 		 */
-		C3D_API void render( RenderInfo & info
-			, ShadowMapLightTypeArray & shadowMaps
+		void initialiseRenderPass( renderer::TextureView const & colourView
+			, renderer::TextureView const & depthView
+			, castor::Size const & size
+			, bool clear );
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::render
+		 */
+		C3D_API void update( RenderInfo & info
 			, castor::Point2r const & jitter )override;
+		/**
+		 *\~english
+		 *\brief		Renders nodes.
+		 *\param[out]	toWait	The semaphore to wait for.
+		 *\~french
+		 *\brief		Dessine les noeuds.
+		 *\param[out]	toWait	Le sémaphore à attendre.
+		 */
+		renderer::Semaphore const & render( renderer::Semaphore const & toWait );
+
+	protected:
+		/**
+		 *\copydoc		castor3d::RenderPass::doCleanup
+		 */
+		C3D_API virtual void doCleanup()override;
 
 	private:
+		/**
+		 *\copydoc		castor3d::RenderPass::doCreateUboBindings
+		 */
+		C3D_API renderer::DescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
+		 */
+		C3D_API renderer::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
+		 */
+		C3D_API void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, BillboardListRenderNode & nodes
+			, ShadowMapLightTypeArray const & shadowMaps )override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
+		 */
+		C3D_API void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, SubmeshRenderNode & nodes
+			, ShadowMapLightTypeArray const & shadowMaps )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
@@ -106,7 +153,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const override;
+			, renderer::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */
@@ -114,15 +161,20 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const override;
+			, renderer::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
 		 */
-		glsl::Shader doGetPbrSGPixelShaderSource( PassFlags const & passFlags
+		C3D_API glsl::Shader doGetPbrSGPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const override;
+			, renderer::CompareOp alphaFunc )const override;
+
+	protected:
+		renderer::FrameBufferPtr m_frameBuffer;
+		renderer::CommandBufferPtr m_nodesCommands;
+		renderer::FencePtr m_fence;
 	};
 }
 

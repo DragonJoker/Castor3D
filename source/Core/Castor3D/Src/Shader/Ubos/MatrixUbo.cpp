@@ -1,14 +1,15 @@
 #include "MatrixUbo.hpp"
 
 #include "Engine.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Shader/ShaderProgram.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Render/RenderSystem.hpp"
+
+#include <Buffer/UniformBuffer.hpp>
 
 using namespace castor;
 
 namespace castor3d
 {
+	uint32_t const MatrixUbo::BindingPoint = 2u;
 	String const MatrixUbo::BufferMatrix = cuT( "Matrices" );
 	String const MatrixUbo::Projection = cuT( "c3d_projection" );
 	String const MatrixUbo::CurView = cuT( "c3d_curView" );
@@ -16,49 +17,60 @@ namespace castor3d
 	String const MatrixUbo::CurViewProj = cuT( "c3d_curViewProj" );
 	String const MatrixUbo::PrvViewProj = cuT( "c3d_prvViewProj" );
 	String const MatrixUbo::InvProjection = cuT( "c3d_invProjection" );
-	String const MatrixUbo::CurJitter = cuT( "c3d_curJitter" );
-	String const MatrixUbo::PrvJitter = cuT( "c3d_prvJitter" );
+	String const MatrixUbo::Jitter = cuT( "c3d_jitter" );
 
 	MatrixUbo::MatrixUbo( Engine & engine )
-		: m_ubo{ MatrixUbo::BufferMatrix
-			, *engine.getRenderSystem()
-			, MatrixUbo ::BindingPoint }
-		, m_projection{ *m_ubo.createUniform< UniformType::eMat4x4r >( MatrixUbo::Projection ) }
-		, m_invProjection{ *m_ubo.createUniform< UniformType::eMat4x4r >( MatrixUbo::InvProjection ) }
-		, m_curView{ *m_ubo.createUniform< UniformType::eMat4x4r >( MatrixUbo::CurView ) }
-		, m_prvView{ *m_ubo.createUniform< UniformType::eMat4x4r >( MatrixUbo::PrvView ) }
-		, m_curViewProj{ *m_ubo.createUniform< UniformType::eMat4x4r >( MatrixUbo::CurViewProj ) }
-		, m_prvViewProj{ *m_ubo.createUniform< UniformType::eMat4x4r >( MatrixUbo::PrvViewProj ) }
-		, m_curJitter{ *m_ubo.createUniform< UniformType::eVec2f >( MatrixUbo::CurJitter ) }
-		, m_prvJitter{ *m_ubo.createUniform< UniformType::eVec2f >( MatrixUbo::PrvJitter ) }
+		: m_engine{ engine }
 	{
+		if ( engine.getRenderSystem()->hasCurrentDevice() )
+		{
+			initialise();
+		}
 	}
 
 	MatrixUbo::~MatrixUbo()
 	{
 	}
 
+	void MatrixUbo::initialise()
+	{
+		if ( !m_ubo )
+		{
+			auto & device = getCurrentDevice( m_engine );
+			m_ubo = renderer::makeUniformBuffer< Configuration >( device
+				, 1u
+				, renderer::BufferTarget::eTransferDst
+				, renderer::MemoryPropertyFlag::eHostVisible );
+		}
+	}
+
+	void MatrixUbo::cleanup()
+	{
+		m_ubo.reset();
+	}
+
 	void MatrixUbo::update( Matrix4x4r const & view
 		, Matrix4x4r const & projection
 		, Point2r const & jitter )const
 	{
-		m_prvView.setValue( m_curView.getValue() );
-		m_prvViewProj.setValue( m_curViewProj.getValue() );
-		m_prvJitter.setValue( Point2r{ m_curJitter.getValue() } );
-		m_curView.setValue( view );
-		m_projection.setValue( projection );
-		m_curViewProj.setValue( projection * view );
-		m_invProjection.setValue( projection.getInverse() );
-		m_curJitter.setValue( jitter );
-		m_ubo.update();
-		m_ubo.bindTo( MatrixUbo::BindingPoint );
+		REQUIRE( m_ubo );
+		auto & configuration = m_ubo->getData( 0u );
+		configuration.prvView = configuration.curView;
+		configuration.prvViewProj = configuration.curViewProj;
+		configuration.curView = view;
+		configuration.projection = projection;
+		configuration.curViewProj = projection * view;
+		configuration.invProjection = projection.getInverse();
+		configuration.jitter = jitter;
+		m_ubo->upload();
 	}
 
 	void MatrixUbo::update( Matrix4x4r const & projection )const
 	{
-		m_projection.setValue( projection );
-		m_invProjection.setValue( projection.getInverse() );
-		m_ubo.update();
-		m_ubo.bindTo( MatrixUbo::BindingPoint );
+		REQUIRE( m_ubo );
+		auto & configuration = m_ubo->getData( 0u );
+		configuration.projection = projection;
+		configuration.invProjection = projection.getInverse();
+		m_ubo->upload();
 	}
 }

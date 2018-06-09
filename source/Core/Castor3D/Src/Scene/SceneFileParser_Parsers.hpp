@@ -10,7 +10,6 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	// Root parsers
-	DECLARE_ATTRIBUTE_PARSER( parserRootMtlFile )
 	DECLARE_ATTRIBUTE_PARSER( parserRootScene )
 	DECLARE_ATTRIBUTE_PARSER( parserRootFont )
 	DECLARE_ATTRIBUTE_PARSER( parserRootMaterial )
@@ -36,6 +35,7 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserRenderTargetPostEffect )
 	DECLARE_ATTRIBUTE_PARSER( parserRenderTargetToneMapping )
 	DECLARE_ATTRIBUTE_PARSER( parserRenderTargetSsao )
+	DECLARE_ATTRIBUTE_PARSER( parserRenderTargetHdrConfig )
 	DECLARE_ATTRIBUTE_PARSER( parserRenderTargetEnd )
 
 	// Sampler parsers
@@ -49,6 +49,7 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserSamplerVWrapMode )
 	DECLARE_ATTRIBUTE_PARSER( parserSamplerWWrapMode )
 	DECLARE_ATTRIBUTE_PARSER( parserSamplerBorderColour )
+	DECLARE_ATTRIBUTE_PARSER( parserSamplerAnisotropicFiltering )
 	DECLARE_ATTRIBUTE_PARSER( parserSamplerMaxAnisotropy )
 	DECLARE_ATTRIBUTE_PARSER( parserSamplerComparisonMode )
 	DECLARE_ATTRIBUTE_PARSER( parserSamplerComparisonFunc )
@@ -76,7 +77,6 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserSceneFogType )
 	DECLARE_ATTRIBUTE_PARSER( parserSceneFogDensity )
 	DECLARE_ATTRIBUTE_PARSER( parserSceneParticleSystem )
-	DECLARE_ATTRIBUTE_PARSER( parserSceneHdrConfig )
 	DECLARE_ATTRIBUTE_PARSER( parserMesh )
 
 	// ParticleSystem parsers
@@ -85,7 +85,6 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserParticleSystemMaterial )
 	DECLARE_ATTRIBUTE_PARSER( parserParticleSystemDimensions )
 	DECLARE_ATTRIBUTE_PARSER( parserParticleSystemParticle )
-	DECLARE_ATTRIBUTE_PARSER( parserParticleSystemTFShader )
 	DECLARE_ATTRIBUTE_PARSER( parserParticleSystemCSShader )
 
 	// Particle parsers
@@ -100,7 +99,13 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserLightAttenuation )
 	DECLARE_ATTRIBUTE_PARSER( parserLightCutOff )
 	DECLARE_ATTRIBUTE_PARSER( parserLightExponent )
-	DECLARE_ATTRIBUTE_PARSER( parserLightShadowProducer )
+	DECLARE_ATTRIBUTE_PARSER( parserLightShadows )
+
+	// Shadows parsers
+	DECLARE_ATTRIBUTE_PARSER( parserShadowsProducer )
+	DECLARE_ATTRIBUTE_PARSER( parserShadowsFilter )
+	DECLARE_ATTRIBUTE_PARSER( parserShadowsVolumetricSteps )
+	DECLARE_ATTRIBUTE_PARSER( parserShadowsVolumetricScatteringFactor )
 
 	// Scene node parsers
 	DECLARE_ATTRIBUTE_PARSER( parserNodeParent )
@@ -171,6 +176,7 @@ namespace castor3d
 
 	// Texture Unit Parsers
 	DECLARE_ATTRIBUTE_PARSER( parserUnitImage )
+	DECLARE_ATTRIBUTE_PARSER( parserUnitLevelsCount )
 	DECLARE_ATTRIBUTE_PARSER( parserUnitRenderTarget )
 	DECLARE_ATTRIBUTE_PARSER( parserUnitChannel )
 	DECLARE_ATTRIBUTE_PARSER( parserUnitSampler )
@@ -188,10 +194,7 @@ namespace castor3d
 
 	// Shader Program Parsers
 	DECLARE_ATTRIBUTE_PARSER( parserShaderProgramFile )
-	DECLARE_ATTRIBUTE_PARSER( parserShaderProgramSampler )
-	DECLARE_ATTRIBUTE_PARSER( parserGeometryInputType )
-	DECLARE_ATTRIBUTE_PARSER( parserGeometryOutputType )
-	DECLARE_ATTRIBUTE_PARSER( parserGeometryOutputVtxCount )
+	DECLARE_ATTRIBUTE_PARSER( parserShaderGroupSizes )
 
 	// Shader Program UBO Parsers
 	DECLARE_ATTRIBUTE_PARSER( parserShaderUboShaders )
@@ -281,6 +284,7 @@ namespace castor3d
 
 	// Skybox parsers
 	DECLARE_ATTRIBUTE_PARSER( parserSkyboxEqui )
+	DECLARE_ATTRIBUTE_PARSER( parserSkyboxCross )
 	DECLARE_ATTRIBUTE_PARSER( parserSkyboxLeft )
 	DECLARE_ATTRIBUTE_PARSER( parserSkyboxRight )
 	DECLARE_ATTRIBUTE_PARSER( parserSkyboxTop )

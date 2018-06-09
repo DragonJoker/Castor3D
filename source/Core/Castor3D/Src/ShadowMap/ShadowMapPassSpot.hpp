@@ -51,9 +51,9 @@ namespace castor3d
 			, Light & light
 			, uint32_t index )override;
 		/**
-		 *\copydoc		castor3d::ShadowMapPass::render
+		 *\copydoc		castor3d::ShadowMapPass::updateDeviceDependent
 		 */
-		void render( uint32_t index )override;
+		void updateDeviceDependent( uint32_t index )override;
 		/**
 		 *\~english
 		 *\return		The camera.
@@ -75,33 +75,48 @@ namespace castor3d
 		 */
 		void doCleanup()override;
 		/**
+		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
+		 */
+		void doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, BillboardListRenderNode & node )override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
+		 */
+		void doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, SubmeshRenderNode & node )override;
+		/**
 		 *\copydoc		castor3d::RenderPass::doUpdate
 		 */
 		void doUpdate( RenderQueueArray & queues )override;
 		/**
-		 *\copydoc		castor3d::ShadowMapPass::doPreparePipeline
+		 *\copydoc		castor3d::RenderPass::doCreateUboBindings
 		 */
-		void doPreparePipeline( ShaderProgram & p_program
-			, PipelineFlags const & p_flags )override;
+		renderer::DescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
+		 */
+		renderer::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doCreateBlendState
+		 */
+		renderer::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
 
 	public:
-		static castor::String const ShadowMapUbo;
-		static castor::String const FarPlane;
-		static uint32_t constexpr UboBindingPoint = 8u;
-		static uint32_t constexpr TextureSize = 512;
+		C3D_API static castor::String const ShadowMapUbo;
+		C3D_API static castor::String const FarPlane;
+		C3D_API static uint32_t const UboBindingPoint;
+		C3D_API static uint32_t const TextureSize;
+
+		struct Configuration
+		{
+			float farPlane;
+		};
 
 	private:
-		//!\~english	The camera created from the light.
-		//!\~french		La caméra créée à partir de la lumière.
 		CameraSPtr m_camera;
-		//!\~english	The shadow map configuration data UBO.
-		//!\~french		L'UBO de données de configuration de shadow map.
-		UniformBuffer m_shadowConfig;
-		//!\~english	The variable holding the camera's far plane.
-		//!\~french		La variable contenant la position du plan éloigné de la caméra.
-		Uniform1f & m_farPlane;
-		//!\~english	The view matrix.
-		//!\~french		La matrice vue.
+		renderer::UniformBufferPtr< Configuration > m_shadowConfig;
 		castor::Matrix4x4r m_view;
 	};
 }

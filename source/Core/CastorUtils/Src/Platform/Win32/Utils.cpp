@@ -34,42 +34,56 @@ namespace castor
 			}
 		}
 
-		bool getScreenSize( uint32_t p_screen, castor::Size & p_size )
+		bool getScreenSize( uint32_t p_screen, Size & p_size )
 		{
 			stSCREEN screen = { p_screen, 0, p_size };
 			BOOL bRet = ::EnumDisplayMonitors( nullptr, nullptr, MonitorEnum, WPARAM( &screen ) );
 			return true;
 		}
 
-		castor::String getLastErrorText()
+		String getLastErrorText()
 		{
-			DWORD dwError = ::GetLastError();
-			String strReturn = cuT( "0x" ) + string::toString( dwError, 16 );
+			uint32_t errorCode = ::GetLastError();
+			StringStream stream = makeStringStream();
+			stream << cuT( "0x" ) << std::hex << errorCode;
 
-			if ( dwError != ERROR_SUCCESS )
+			if ( errorCode != ERROR_SUCCESS )
 			{
-				LPWSTR szError = nullptr;
+				LPWSTR errorText = nullptr;
 
-				if ( ::FormatMessageW( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, nullptr, dwError, 0, LPWSTR( &szError ), 0, nullptr ) != 0 )
+				if ( ::FormatMessageW( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM
+					, nullptr
+					, errorCode
+					, 0
+					, LPWSTR( &errorText )
+					, 0
+					, nullptr ) != 0 )
 				{
-					std::wstring_convert< std::codecvt_utf8_utf16< wchar_t >, wchar_t > conversion;
-					String converted = conversion.to_bytes( szError );
-					strReturn += cuT( " (" ) + converted + cuT( ")" );
-					string::replace( strReturn, cuT( "\r" ), cuT( "" ) );
-					string::replace( strReturn, cuT( "\n" ), cuT( "" ) );
-					::LocalFree( szError );
+					int length = WideCharToMultiByte( CP_UTF8, 0u, errorText, -1, nullptr, 0u, 0u, 0u );
+
+					if ( length > 0 )
+					{
+						String converted( size_t( length ), 0 );
+						WideCharToMultiByte( CP_UTF8, 0u, errorText, -1, converted.data(), length, 0u, 0u );
+						string::replace( converted, "\r", String{} );
+						string::replace( converted, "\n", String{} );
+						stream << cuT( " (" ) << converted.c_str() << cuT( ")" );
+					}
 				}
 				else
 				{
-					strReturn += cuT( " (Unable to retrieve error text)" );
+					stream << cuT( " (Unable to retrieve error text)" );
 				}
 			}
 			else
 			{
-				strReturn += cuT( " (No error)" );
+				stream << cuT( " (No error)" );
 			}
 
-			return strReturn;
+			auto result = stream.str();
+			string::replace( result, cuT( "\r" ), cuT( "" ) );
+			string::replace( result, cuT( "\n" ), cuT( "" ) );
+			return result;
 		}
 	}
 

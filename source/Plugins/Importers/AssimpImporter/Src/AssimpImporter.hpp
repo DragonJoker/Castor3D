@@ -19,7 +19,6 @@ See LICENSE file in root folder
 #include <Mesh/Mesh.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Vertex.hpp>
-#include <Mesh/Buffer/Buffer.hpp>
 #include <Mesh/Skeleton/Skeleton.hpp>
 #include <Miscellaneous/Parameter.hpp>
 #include <Miscellaneous/Version.hpp>

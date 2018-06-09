@@ -16,9 +16,10 @@
 #include <Material/SpecularGlossinessPbrPass.hpp>
 #include <Mesh/Submesh.hpp>
 #include <ShadowMap/ShadowMapPass.hpp>
-#include <Miscellaneous/WindowHandle.hpp>
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderWindow.hpp>
+
+#include <Core/WindowHandle.hpp>
 
 using namespace castor3d;
 using namespace castor;
@@ -162,8 +163,7 @@ namespace CastorViewer
 					m_keyboardEvent = std::make_unique< KeyboardEvent >( window );
 
 					{
-						auto lock = makeUniqueLock( scene->getCameraCache() );
-						window->getPickingPass().addScene( *scene, *( scene->getCameraCache().begin()->second ) );
+						window->addPickingScene( *scene );
 					}
 
 					m_camera = camera;
@@ -362,7 +362,7 @@ namespace CastorViewer
 
 			if ( geometry )
 			{
-				m_cubeManager->displayObject( *geometry );
+				m_cubeManager->displayObject( *geometry, *submesh );
 			}
 
 			m_selectedGeometry = geometry;
@@ -528,7 +528,10 @@ namespace CastorViewer
 
 		if ( window )
 		{
-			window->resize( p_event.GetSize().x, p_event.GetSize().y );
+			if ( m_resizeWindow )
+			{
+				window->resize( p_event.GetSize().x, p_event.GetSize().y );
+			}
 		}
 		else
 		{
@@ -784,12 +787,12 @@ namespace CastorViewer
 					{
 						Camera & camera = *window->getCamera();
 						camera.update();
-						auto type = window->getPickingPass().pick( Position{ int( x ), int( y ) }, camera );
+						auto type = window->pick( Position{ int( x ), int( y ) } );
 
-						if ( type != PickingPass::NodeType::eNone
-							&& type != PickingPass::NodeType::eBillboard )
+						if ( type != PickNodeType::eNone
+							&& type != PickNodeType::eBillboard )
 						{
-							doUpdateSelectedGeometry( window->getPickingPass().getPickedGeometry(), window->getPickingPass().getPickedSubmesh() );
+							doUpdateSelectedGeometry( window->getPickedGeometry(), window->getPickedSubmesh() );
 						}
 						else
 						{
@@ -845,14 +848,12 @@ namespace CastorViewer
 				auto y = m_oldY;
 				m_listener->postEvent( makeFunctorEvent( EventType::ePreRender, [this, window, x, y]()
 				{
-					Camera & camera = *window->getCamera();
-					camera.update();
-					auto type = window->getPickingPass().pick( Position{ int( x ), int( y ) }, camera );
+					auto type = window->pick( Position{ int( x ), int( y ) } );
 
-					if ( type != PickingPass::NodeType::eNone
-						&& type != PickingPass::NodeType::eBillboard )
+					if ( type != PickNodeType::eNone
+						&& type != PickNodeType::eBillboard )
 					{
-						doUpdateSelectedGeometry( window->getPickingPass().getPickedGeometry(), window->getPickingPass().getPickedSubmesh() );
+						doUpdateSelectedGeometry( window->getPickedGeometry(), window->getPickedSubmesh() );
 					}
 					else
 					{
@@ -949,7 +950,7 @@ namespace CastorViewer
 				}
 				else if ( m_mouseRightDown )
 				{
-					m_currentState->addScalarVelocity( Point3r{ deltaX, deltaY, 0.0_r } );
+					m_currentState->addScalarVelocity( Point3r{ deltaX, -deltaY, 0.0_r } );
 				}
 			}
 		}

@@ -4,17 +4,17 @@ using namespace castor;
 
 namespace castor3d
 {
-	Particle::Particle( BufferDeclaration const & p_description, StrStrMap const & p_defaultValues )
-		: m_description{ p_description }
+	Particle::Particle( ParticleDeclaration const & description, StrStrMap const & defaultValues )
+		: m_description{ description }
 	{
-		m_data.resize( p_description.stride() );
+		m_data.resize( description.stride() );
 		uint32_t index{ 0u };
 
 		for ( auto element : m_description )
 		{
-			auto it = p_defaultValues.find( element.m_name );
+			auto it = defaultValues.find( element.m_name );
 
-			if ( it != p_defaultValues.end() && !it->second.empty() )
+			if ( it != defaultValues.end() && !it->second.empty() )
 			{
 				parseValue( it->second, element.m_dataType, *this, index );
 			}
@@ -23,33 +23,33 @@ namespace castor3d
 		}
 	}
 
-	Particle::Particle( BufferDeclaration const & p_description )
-		: m_description{ p_description }
+	Particle::Particle( ParticleDeclaration const & description )
+		: m_description{ description }
 	{
-		m_data.resize( p_description.stride() );
+		m_data.resize( description.stride() );
 	}
 
-	Particle::Particle( Particle const & p_rhs )
-		: m_description{ p_rhs.m_description }
-		, m_data{ p_rhs.m_data }
-	{
-	}
-
-	Particle::Particle( Particle && p_rhs )
-		: m_description{ p_rhs.m_description }
-		, m_data{ std::move( p_rhs.m_data ) }
+	Particle::Particle( Particle const & rhs )
+		: m_description{ rhs.m_description }
+		, m_data{ rhs.m_data }
 	{
 	}
 
-	Particle & Particle::operator=( Particle const & p_rhs )
+	Particle::Particle( Particle && rhs )
+		: m_description{ rhs.m_description }
+		, m_data{ std::move( rhs.m_data ) }
 	{
-		m_data = p_rhs.m_data;
+	}
+
+	Particle & Particle::operator=( Particle const & rhs )
+	{
+		m_data = rhs.m_data;
 		return *this;
 	}
 
-	Particle & Particle::operator=( Particle && p_rhs )
+	Particle & Particle::operator=( Particle && rhs )
 	{
-		m_data = std::move( p_rhs.m_data );
+		m_data = std::move( rhs.m_data );
 		return *this;
 	}
 }

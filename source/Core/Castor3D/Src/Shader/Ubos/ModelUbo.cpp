@@ -1,42 +1,64 @@
-﻿#include "ModelUbo.hpp"
+#include "ModelUbo.hpp"
 
 #include "Engine.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Render/RenderSystem.hpp"
+
+#include <Buffer/UniformBuffer.hpp>
 
 using namespace castor;
 
 namespace castor3d
 {
+	uint32_t const ModelUbo::BindingPoint = 5u;
 	String const ModelUbo::BufferModel = cuT( "Model" );
 	String const ModelUbo::ShadowReceiver = cuT( "c3d_shadowReceiver" );
 	String const ModelUbo::MaterialIndex = cuT( "c3d_materialIndex" );
 	String const ModelUbo::EnvironmentIndex = cuT( "c3d_envMapIndex" );
 
 	ModelUbo::ModelUbo( Engine & engine )
-		: m_ubo{ ModelUbo::BufferModel
-			, *engine.getRenderSystem()
-			, ModelUbo::BindingPoint }
-		, m_shadowReceiver{ *m_ubo.createUniform< UniformType::eInt >( ModelUbo::ShadowReceiver ) }
-		, m_materialIndex{ *m_ubo.createUniform< UniformType::eInt >( ModelUbo::MaterialIndex ) }
-		, m_environmentIndex{ *m_ubo.createUniform< UniformType::eInt >( ModelUbo::EnvironmentIndex ) }
+		: m_engine{ engine }
 	{
+		if ( engine.getRenderSystem()->hasCurrentDevice() )
+		{
+			initialise();
+		}
 	}
 
 	ModelUbo::~ModelUbo()
 	{
 	}
 
-	void ModelUbo::setEnvMapIndex( uint32_t p_value )
+	void ModelUbo::initialise()
 	{
-		m_environmentIndex.setValue( int( p_value ) );
+		if ( !m_ubo )
+		{
+			auto & device = getCurrentDevice( m_engine );
+			m_ubo = renderer::makeUniformBuffer< Configuration >( device
+				, 1u
+				, renderer::BufferTarget::eTransferDst
+				, renderer::MemoryPropertyFlag::eHostVisible );
+		}
 	}
 
-	void ModelUbo::update( bool p_shadowReceiver
-		, uint32_t p_materialIndex )const
+	void ModelUbo::cleanup()
 	{
-		m_shadowReceiver.setValue( p_shadowReceiver ? 1 : 0 );
-		m_materialIndex.setValue( p_materialIndex - 1 );
-		m_ubo.update();
-		m_ubo.bindTo( ModelUbo::BindingPoint );
+		m_ubo.reset();
+	}
+
+	void ModelUbo::setEnvMapIndex( uint32_t value )
+	{
+		REQUIRE( m_ubo );
+		auto & configuration = m_ubo->getData( 0u );
+		configuration.environmentIndex = int32_t( value );
+	}
+
+	void ModelUbo::update( bool shadowReceiver
+		, uint32_t materialIndex )const
+	{
+		REQUIRE( m_ubo );
+		auto & configuration = m_ubo->getData( 0u );
+		configuration.shadowReceiver = shadowReceiver ? 1 : 0;
+		configuration.materialIndex = materialIndex - 1;
+		m_ubo->upload();
 	}
 }

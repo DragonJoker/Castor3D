@@ -1,4 +1,4 @@
-﻿#include "Version.hpp"
+#include "Version.hpp"
 
 using namespace castor;
 
@@ -67,7 +67,7 @@ namespace castor3d
 
 	castor::String & operator<<( castor::String & p_stream, castor3d::Version const & p_version )
 	{
-		StringStream stream;
+		StringStream stream( makeStringStream() );
 		stream << p_version;
 		return p_stream += stream.str();
 	}

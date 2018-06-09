@@ -51,7 +51,7 @@ namespace Testing
 	template< typename T >
 	inline void randomInit( T * p_pData1, T * p_pData2, uint32_t size )
 	{
-		std::random_device generator;
+		static std::random_device generator;
 		std::uniform_real_distribution< T > distribution( T( 0.0 ), T( 1.0 ) );
 
 		for ( uint32_t i = 0; i < size; ++i )
@@ -64,7 +64,7 @@ namespace Testing
 	template< typename T >
 	inline void randomInit( T * p_pData, uint32_t size )
 	{
-		std::random_device generator;
+		static std::random_device generator;
 		std::uniform_real_distribution< T > distribution( T( 0.0 ), T( 1.0 ) );
 
 		for ( uint32_t i = 0; i < size; ++i )

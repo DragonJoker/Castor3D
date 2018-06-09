@@ -19,6 +19,7 @@ namespace GuiCommon
 	*/
 	class SceneTreeItemProperty
 		: public TreeItemProperty
+		, public wxEvtHandler
 	{
 	public:
 		/**
@@ -31,7 +32,8 @@ namespace GuiCommon
 		 *\param[in]	editable	Dit si les propriétés sont modifiables
 		 *\param[in]	scene		L'objet cible
 		 */
-		SceneTreeItemProperty( bool editable
+		SceneTreeItemProperty( wxWindow * parent
+			, bool editable
 			, castor3d::Scene & scene );
 		/**
 		 *\~english
@@ -64,15 +66,12 @@ namespace GuiCommon
 		virtual void doPropertyChange( wxPropertyGridEvent & event );
 
 	private:
-		wxPGProperty * doCreateTextureImageProperty( wxString const & name
-			, castor3d::TextureLayoutSPtr texture );
 		void onDebugOverlaysChange( bool const & value );
 		void onAmbientLightChange( castor::RgbColour const & value );
-		void onBackgroundColourChange( castor::RgbColour const & value );
-		void onBackgroundImageChange( castor::String const & value );
 
 	private:
 		castor3d::Scene & m_scene;
+		wxWindow * m_parent;
 	};
 }
 

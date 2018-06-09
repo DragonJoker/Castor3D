@@ -34,9 +34,12 @@ namespace castor3d
 	//*********************************************************************************************
 
 	PointLightPass::Program::Program( Engine & engine
+		, PointLightPass & lightPass
 		, glsl::Shader const & vtx
-		, glsl::Shader const & pxl )
-		: MeshLightPass::Program{ engine, vtx, pxl }
+		, glsl::Shader const & pxl
+		, bool hasShadows )
+		: MeshLightPass::Program{ engine, vtx, pxl, hasShadows }
+		, m_lightPass{ lightPass }
 	{
 	}
 
@@ -47,28 +50,55 @@ namespace castor3d
 	void PointLightPass::Program::doBind( Light const & light )
 	{
 		auto & pointLight = *light.getPointLight();
-		m_lightAttenuation->setValue( pointLight.getAttenuation() );
-		m_lightPosition->setValue( light.getParent()->getDerivedPosition() );
+		auto & data = m_lightPass.m_ubo->getData( 0u );
+		data.base.colourIndex = castor::Point4f{ light.getColour()[0], light.getColour()[1], light.getColour()[2], 0.0f };
+		data.base.intensityFarPlane = castor::Point4f{ light.getIntensity()[0], light.getIntensity()[1], light.getFarPlane(), 0.0f };
+		data.base.volumetric = castor::Point4f{ light.getVolumetricSteps(), light.getVolumetricScatteringFactor(), 0.0f, 0.0f };
+		auto position = light.getParent()->getDerivedPosition();
+		data.position = castor::Point4f{ position[0], position[1], position[2], 0.0f };
+		data.attenuation = castor::Point4f{ pointLight.getAttenuation()[0], pointLight.getAttenuation()[1], pointLight.getAttenuation()[2], 0.0f };
+		m_lightPass.m_ubo->upload();
 	}
 
 	//*********************************************************************************************
 
 	PointLightPass::PointLightPass( Engine & engine
-		, FrameBuffer & frameBuffer
-		, FrameBufferAttachment & depthAttach
+		, renderer::TextureView const & depthView
+		, renderer::TextureView const & diffuseView
+		, renderer::TextureView const & specularView
 		, GpInfoUbo & gpInfoUbo
 		, bool p_shadows )
 		: MeshLightPass{ engine
-			, frameBuffer
-			, depthAttach
+			, depthView
+			, diffuseView
+			, specularView
 			, gpInfoUbo
 			, LightType::ePoint
-			, p_shadows }
+		, p_shadows }
+		, m_ubo{ renderer::makeUniformBuffer< Config >( getCurrentDevice( engine )
+			, 1u
+			, renderer::BufferTarget::eTransferDst
+			, renderer::MemoryPropertyFlag::eHostVisible ) }
 	{
+		m_baseUbo = &m_ubo->getUbo();
 	}
 
 	PointLightPass::~PointLightPass()
 	{
+	}
+
+	void PointLightPass::accept( RenderTechniqueVisitor & visitor )
+	{
+		String name = cuT( "PointLight" );
+
+		if ( m_shadows )
+		{
+			name += cuT( " Shadow" );
+		}
+
+		visitor.visit( name
+			, renderer::ShaderStageFlag::eFragment
+			, m_pixelShader );
 	}
 
 	Point3fArray PointLightPass::doGenerateVertices()const
@@ -92,10 +122,13 @@ namespace castor3d
 		return model;
 	}
 
-	LightPass::ProgramPtr PointLightPass::doCreateProgram( glsl::Shader const & vtx
-		, glsl::Shader const & pxl )const
+	LightPass::ProgramPtr PointLightPass::doCreateProgram()
 	{
-		return std::make_unique< Program >( m_engine, vtx, pxl );
+		return std::make_unique< Program >( m_engine
+			, *this
+			, m_vertexShader
+			, m_pixelShader
+			, m_shadows );
 	}
 
 	//*********************************************************************************************

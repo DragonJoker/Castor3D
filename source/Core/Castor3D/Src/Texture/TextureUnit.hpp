@@ -1,10 +1,13 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
-#ifndef ___CU_TEXTURE_UNIT_H___
-#define ___CU_TEXTURE_UNIT_H___
+#ifndef ___C3D_TextureUnit_H___
+#define ___C3D_TextureUnit_H___
+#pragma once
 
 #include "Castor3DPrerequisites.hpp"
+
+#include <Descriptor/WriteDescriptorSet.hpp>
 
 #include <Design/OwnedBy.hpp>
 
@@ -94,7 +97,7 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		sets the texture.
+		 *\brief		Sets the texture.
 		 *\param[in]	texture	The texture.
 		 *\~french
 		 *\brief		Definit la texture.
@@ -103,32 +106,18 @@ namespace castor3d
 		C3D_API void setTexture( TextureLayoutSPtr texture );
 		/**
 		 *\~english
-		 *\brief		Applies the texture unit.
-		 *\~french
-		 *\brief		Applique la texture.
-		 */
-		C3D_API void bind()const;
-		/**
-		 *\~english
-		 *\brief		Removes the texture unit from the stack, in order not to interfere with other ones.
-		 *\~french
-		 *\brief		Désactive la texture.
-		 */
-		C3D_API void unbind()const;
-		/**
-		 *\~english
 		 *\return		The texture dimension.
 		 *\~french
 		 *\return		La dimension de la texture.
 		 */
-		C3D_API TextureType getType()const;
+		C3D_API renderer::TextureType getType()const;
 		/**
 		 *\~english
 		 *\return		The texture.
 		 *\~french
 		 *\return		La texture.
 		 */
-		inline castor3d::TextureLayoutSPtr getTexture()const
+		inline TextureLayoutSPtr getTexture()const
 		{
 			return m_texture;
 		}
@@ -146,7 +135,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the texture channel.
+		 *\brief		Sets the texture channel.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le canal de la texture.
@@ -158,29 +147,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\return		The unit index.
-		 *\~french
-		 *\return		L'index de l'unité.
-		 */
-		inline uint32_t getIndex()const
-		{
-			return m_index;
-		}
-		/**
-		 *\~english
-		 *\brief		sets the unit index.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit l'index de l'unité.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setIndex( uint32_t value )
-		{
-			m_index = value;
-		}
-		/**
-		 *\~english
-		 *\brief		sets the target holding the texture.
+		 *\brief		Sets the target holding the texture.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la cible contenant la texture.
@@ -224,7 +191,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the auto mipmaps generation status.
+		 *\brief		Sets the auto mipmaps generation status.
 		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le statut d'auto génération des mipmaps.
@@ -254,52 +221,28 @@ namespace castor3d
 		{
 			return m_renderTarget.lock();
 		}
+		/**
+		 *\~english
+		 *\return		The descriptor used for the texture.
+		 *\~french
+		 *\return		Le descripteur utilisé pour la texture.
+		 */
+		inline renderer::WriteDescriptorSet getDescriptor()const
+		{
+			return m_descriptor;
+		}
 
 	private:
 		friend class TextureRenderer;
-		//!\~english	The unit index inside it's pass.
-		//!\~french		L'index de l'unité dans sa passe.
-		uint32_t m_index;
-		//!\see TextureChannel
-		//\~english		The unit channel inside it's pass.
-		//!\~french		Le canal de l'unité dans sa passe.
 		TextureChannel m_channel;
-		//!\~english	The unit transformations.
-		//!\~french		Les transformations de l'unité.
 		castor::Matrix4x4r m_transformations;
-		//!\~english	The unit texture.
-		//!\~french		La texture de l'unité.
 		TextureLayoutSPtr m_texture;
-		//!\~english	The render target used to compute the texture, if this unit is a render target.
-		//!\~french		La render target utilisée pour générer la texture si cette unité est une render target.
 		RenderTargetWPtr m_renderTarget;
-		//!\~english	The sampler state assigned to this unit.
-		//!\~french		Le sampler state affecté à cette unité.
 		SamplerWPtr m_sampler;
-		//!\~english	Tells mipmaps must be regenerated after each texture data change.
-		//!\~french		Dit que les mipmaps doivent être regénérés après chaque changement des données de la texture.
 		bool m_autoMipmaps;
-		//!\~english	Tells the texture data has changed.
-		//!\~french		Dit que les données de la texture ont changé.
+		renderer::WriteDescriptorSet m_descriptor;
 		mutable bool m_changed;
 	};
-	/**
-	 *\~english
-	 *\brief			Stream operator.
-	 *\param[in,out]	streamOut	The stream receiving texture's data.
-	 *\param[in]		texture		The input texture.
-	 *\return			A reference to the stream.
-	 *\~french
-	 *\brief			Opérateur de flux.
-	 *\param[in,out]	streamOut	Le flux qui reçoit les données de la texture.
-	 *\param[in]		texture		La texture.
-	 *\return			Une référence sur le flux.
-	 */
-	inline std::ostream & operator<<( std::ostream & streamOut, TextureUnitSPtr const & texture )
-	{
-		streamOut << texture->getIndex();
-		return streamOut;
-	}
 }
 
 #endif

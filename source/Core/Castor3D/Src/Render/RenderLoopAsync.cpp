@@ -15,17 +15,21 @@ namespace castor3d
 	static const char * CALL_PAUSE_RENDERING = "Can't call Pause on a paused render loop";
 	static const char * CALL_RESUME_RENDERING = "Can't call Resume on a non paused render loop";
 
-	RenderLoopAsync::RenderLoopAsync( Engine & engine, uint32_t p_wantedFPS )
-		: RenderLoop( engine, p_wantedFPS, true )
-		, m_mainLoopThread( nullptr )
-		, m_paused( false )
-		, m_ended( false )
-		, m_rendering( false )
-		, m_createContext( false )
-		, m_created( false )
-		, m_interrupted( false )
+	RenderLoopAsync::RenderLoopAsync( Engine & engine, uint32_t wantedFPS )
+		: RenderLoop{ engine, wantedFPS, true }
+		, m_mainLoopThread{ nullptr }
+		, m_paused{ false }
+		, m_ended{ false }
+		, m_rendering{ false }
+		, m_createContext{ false }
+		, m_created{ false }
+		, m_interrupted{ false }
+		, m_handle{ nullptr }
 	{
-		m_mainLoopThread.reset( new std::thread( std::bind( &RenderLoopAsync::doMainLoop, this ) ) );
+		m_mainLoopThread = std::make_unique< std::thread >( [this]()
+		{
+			doMainLoop();
+		} );
 	}
 
 	RenderLoopAsync::~RenderLoopAsync()
@@ -61,7 +65,7 @@ namespace castor3d
 		return m_paused;
 	}
 
-	void RenderLoopAsync::updateVSync( bool p_enable )
+	void RenderLoopAsync::enableVSync( bool p_enable )
 	{
 		using type = decltype( m_savedTime );
 		static auto zero = type::zero();
@@ -141,13 +145,15 @@ namespace castor3d
 		}
 	}
 
-	ContextSPtr RenderLoopAsync::doCreateMainContext( RenderWindow & p_window )
+	renderer::DevicePtr RenderLoopAsync::doCreateMainDevice( renderer::WindowHandle && handle
+		, RenderWindow & window )
 	{
-		ContextSPtr result;
+		renderer::DevicePtr result;
 
 		if ( !m_createContext )
 		{
-			doSetWindow( &p_window );
+			doSetHandle( std::move( handle ) );
+			doSetWindow( &window );
 			m_createContext = true;
 
 			while ( !isInterrupted() && !isCreated() )
@@ -157,7 +163,7 @@ namespace castor3d
 
 			m_createContext = false;
 			doSetWindow( nullptr );
-			result = m_renderSystem.getMainContext();
+			result = m_renderSystem.getMainDevice();
 		}
 
 		return result;
@@ -187,11 +193,15 @@ namespace castor3d
 				if ( !isInterrupted() && m_createContext && !isCreated() )
 				{
 					// On nous a demandé de créer le contexte principal, on le crée
-					ContextSPtr context = doCreateContext( *doGetWindow() );
+					auto device = doCreateDevice( std::move( doGetHandle() ), *doGetWindow() );
 
-					if ( context )
+					if ( device )
 					{
-						m_renderSystem.setMainContext( context );
+						m_renderSystem.setMainDevice( device );
+						device->enable();
+						GpuInformations info;
+						m_renderSystem.initialise( std::move( info ) );
+						device->disable();
 						m_created = true;
 					}
 					else
@@ -232,6 +242,18 @@ namespace castor3d
 			m_frameEnded = true;
 			m_ended = true;
 		}
+	}
+
+	void RenderLoopAsync::doSetHandle( renderer::WindowHandle && handle )
+	{
+		auto lock = makeUniqueLock( m_mutexWindow );
+		m_handle = std::move( handle );
+	}
+
+	renderer::WindowHandle & RenderLoopAsync::doGetHandle()
+	{
+		auto lock = makeUniqueLock( m_mutexWindow );
+		return m_handle;
 	}
 
 	void RenderLoopAsync::doSetWindow( RenderWindow * p_window )

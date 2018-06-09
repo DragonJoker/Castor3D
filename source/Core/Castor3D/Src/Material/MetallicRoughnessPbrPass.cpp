@@ -1,22 +1,6 @@
-﻿#include "MetallicRoughnessPbrPass.hpp"
+#include "MetallicRoughnessPbrPass.hpp"
 
-#include "Engine.hpp"
-#include "Cache/CameraCache.hpp"
-#include "Cache/MaterialCache.hpp"
-#include "Cache/ShaderCache.hpp"
-
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderNode/RenderNode.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Scene/SceneNode.hpp"
-#include "Shader/UniformBuffer.hpp"
 #include "Shader/PassBuffer/PassBuffer.hpp"
-#include "Shader/ShaderProgram.hpp"
-#include "State/BlendState.hpp"
-#include "Texture/TextureLayout.hpp"
-#include "Texture/TextureUnit.hpp"
-
-#include <Log/Logger.hpp>
 
 using namespace castor;
 
@@ -46,7 +30,7 @@ namespace castor3d
 		if ( result && pass.getRoughness() != 1 )
 		{
 			result = file.writeText( m_tabs + cuT( "\troughness " )
-				+ string::toString( pass.getRoughness() )
+				+ string::toString( pass.getRoughness(), std::locale{ "C" } )
 				+ cuT( "\n" ) ) > 0;
 			castor::TextWriter< MetallicRoughnessPbrPass >::checkError( result, "MetallicRoughnessPbrPass roughness" );
 		}
@@ -54,7 +38,7 @@ namespace castor3d
 		if ( result && pass.getMetallic() != 0 )
 		{
 			result = file.writeText( m_tabs + cuT( "\tmetallic " )
-				+ string::toString( pass.getMetallic() )
+				+ string::toString( pass.getMetallic(), std::locale{ "C" } )
 				+ cuT( "\n" ) ) > 0;
 			castor::TextWriter< MetallicRoughnessPbrPass >::checkError( result, "MetallicRoughnessPbrPass reflectance" );
 		}
@@ -84,9 +68,9 @@ namespace castor3d
 	{
 	}
 
-	void MetallicRoughnessPbrPass::accept( PassBuffer & p_buffer )const
+	void MetallicRoughnessPbrPass::accept( PassBuffer & buffer )const
 	{
-		p_buffer.visit( *this );
+		buffer.visit( *this );
 	}
 
 	void MetallicRoughnessPbrPass::doInitialise()

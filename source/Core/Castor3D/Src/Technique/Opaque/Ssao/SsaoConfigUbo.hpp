@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_SsaoConfigUbo_H___
 #define ___C3D_SsaoConfigUbo_H___
 
-#include "Shader/UniformBuffer.hpp"
+#include "Technique/RenderTechniqueVisitor.hpp"
 
 namespace castor3d
 {
@@ -19,6 +19,59 @@ namespace castor3d
 	*/
 	class SsaoConfigUbo
 	{
+	private:
+		struct Configuration
+		{
+			//   vec4(-2.0f / (width*P[0][0]),
+			//		  -2.0f / (height*P[1][1]),
+			//		  ( 1.0f - P[0][2]) / P[0][0],
+			//		  ( 1.0f + P[1][2]) / P[1][1])
+			//
+			//	where P is the projection matrix that maps camera space points
+			//	to [-1, 1] x [-1, 1].  That is, SsaoConfigUbo::getProjectUnitMatrix().
+			castor::Point4f projInfo;
+			castor::Matrix4x4f invViewMatrix;
+			// Integer number of samples to take at each pixel.
+			int32_t numSamples;
+			// This is the number of turns around the circle that the spiral pattern makes.
+			// This should be prime to prevent taps from lining up.
+			int32_t numSpiralTurns;
+			// The height in pixels of a 1m object if viewed from 1m away.
+			// You can compute it from your projection matrix.  The actual value is just
+			// a scale factor on radius; you can simply hardcode this to a constant (~500)
+			// and make your radius value unitless (...but resolution dependent.)
+			float projScale;
+			// World-space AO radius in scene units (r).  e.g., 1.0m.
+			float radius;
+			// 1 / radius.
+			float invRadius;
+			// Squared radius.
+			float radius2;
+			// 1 / (squared radius).
+			float invRadius2;
+			// Bias to avoid AO in smooth corners, e.g., 0.01m.
+			float bias;
+			// intensity.
+			float intensity;
+			// intensity / radius ^ 6.
+			float intensityDivR6;
+			// Used for preventing AO computation on the sky (at infinite depth) and defining the CS Z to bilateral depth key scaling.
+			// This need not match the real far plane.
+			float farPlaneZ;
+			// Increase to make depth edges crisper. Decrease to reduce flicker.
+			float edgeSharpness;
+			// Step in 2-pixel intervals since we already blurred against neighbors in the
+			// first AO pass.  This constant can be increased while R decreases to improve
+			// performance at the expense of some dithering artifacts.
+			// 
+			// Morgan found that a scale of 3 left a 1-pixel checkerboard grid that was
+			// unobjectionable after shading was applied but eliminated most temporal incoherence
+			// from using small numbers of sample taps.
+			int32_t blurStepSize;
+			// Filter radius in pixels. This will be multiplied by blurStepSize.
+			int32_t blurRadius;
+		};
+
 	public:
 		/**
 		*\~english
@@ -50,6 +103,20 @@ namespace castor3d
 		C3D_API ~SsaoConfigUbo();
 		/**
 		 *\~english
+		 *\brief		Initialises the UBO.
+		 *\~french
+		 *\brief		Initialise l'UBO.
+		 */
+		C3D_API void initialise();
+		/**
+		 *\~english
+		 *\brief		Cleanup function.
+		 *\~french
+		 *\brief		Fonction de nettoyage.
+		 */
+		C3D_API void cleanup();
+		/**
+		 *\~english
 		 *\brief		Updates the UBO content.
 		 *\param[in]	config	The SSAO configuration.
 		 *\param[in]	camera	The viewing camera.
@@ -62,18 +129,18 @@ namespace castor3d
 			, Camera const & camera );
 		/**
 		 *\~english
-		 *\name			getters.
+		 *\name			Getters.
 		 *\~french
-		 *\name			getters.
+		 *\name			Accesseurs.
 		 */
-		inline UniformBuffer & getUbo()
+		inline renderer::UniformBuffer< Configuration > & getUbo()
 		{
-			return m_ubo;
+			return *m_ubo;
 		}
 
-		inline UniformBuffer const & getUbo()const
+		inline renderer::UniformBuffer< Configuration > const & getUbo()const
 		{
-			return m_ubo;
+			return *m_ubo;
 		}
 		/**@}*/
 
@@ -98,60 +165,15 @@ namespace castor3d
 		C3D_API static castor::String const InvViewMatrix;
 
 	private:
-		UniformBuffer m_ubo;
-		// Integer number of samples to take at each pixel.
-		Uniform1i & m_numSamples;
-		// This is the number of turns around the circle that the spiral pattern makes.
-		// This should be prime to prevent taps from lining up.
-		Uniform1i & m_numSpiralTurns;
-		// The height in pixels of a 1m object if viewed from 1m away.
-		// You can compute it from your projection matrix.  The actual value is just
-		// a scale factor on radius; you can simply hardcode this to a constant (~500)
-		// and make your radius value unitless (...but resolution dependent.)
-		Uniform1f & m_projScale;
-		// World-space AO radius in scene units (r).  e.g., 1.0m.
-		Uniform1f & m_radius;
-		// 1 / radius.
-		Uniform1f & m_invRadius;
-		// Squared radius.
-		Uniform1f & m_radius2;
-		// 1 / (squared radius).
-		Uniform1f & m_invRadius2;
-		// Bias to avoid AO in smooth corners, e.g., 0.01m.
-		Uniform1f & m_bias;
-		// intensity.
-		Uniform1f & m_intensity;
-		// intensity / radius ^ 6.
-		Uniform1f & m_intensityDivR6;
-		// Used for preventing AO computation on the sky (at infinite depth) and defining the CS Z to bilateral depth key scaling.
-		// This need not match the real far plane.
-		Uniform1f & m_farPlaneZ;
-		// Increase to make depth edges crisper. Decrease to reduce flicker.
-		Uniform1f & m_edgeSharpness;
-		// Step in 2-pixel intervals since we already blurred against neighbors in the
-		// first AO pass.  This constant can be increased while R decreases to improve
-		// performance at the expense of some dithering artifacts.
-		// 
-		// Morgan found that a scale of 3 left a 1-pixel checkerboard grid that was
-		// unobjectionable after shading was applied but eliminated most temporal incoherence
-		// from using small numbers of sample taps.
-		Uniform1i & m_blurStepSize;
-		// Filter radius in pixels. This will be multiplied by blurStepSize.
-		Uniform1i & m_blurRadius;
-		//   vec4(-2.0f / (width*P[0][0]),
-		//		  -2.0f / (height*P[1][1]),
-		//		  ( 1.0f - P[0][2]) / P[0][0],
-		//		  ( 1.0f + P[1][2]) / P[1][1])
-		//
-		//	where P is the projection matrix that maps camera space points
-		//	to [-1, 1] x [-1, 1].  That is, GCamera::getProjectUnit().
-		Uniform4f & m_projInfo;
-		Uniform4x4f & m_invViewMatrix;
+		Engine & m_engine;
+		renderer::UniformBufferPtr< Configuration > m_ubo;
 	};
 }
 
-#define UBO_SSAO_CONFIG( Writer )\
-	glsl::Ubo ssaoConfig{ Writer, castor3d::SsaoConfigUbo::BufferSsaoConfig, castor3d::SsaoConfigUbo::BindingPoint };\
+#define UBO_SSAO_CONFIG( Writer, Binding, Set )\
+	glsl::Ubo ssaoConfig{ Writer, castor3d::SsaoConfigUbo::BufferSsaoConfig, Binding, Set };\
+	auto c3d_projInfo = ssaoConfig.declMember< glsl::Vec4 >( castor3d::SsaoConfigUbo::ProjInfo );\
+	auto c3d_worldToCamera = ssaoConfig.declMember< glsl::Mat4 >( castor3d::SsaoConfigUbo::InvViewMatrix );\
 	auto c3d_numSamples = ssaoConfig.declMember< glsl::Int >( castor3d::SsaoConfigUbo::NumSamples );\
 	auto c3d_numSpiralTurns = ssaoConfig.declMember< glsl::Int >( castor3d::SsaoConfigUbo::NumSpiralTurns );\
 	auto c3d_projScale = ssaoConfig.declMember< glsl::Float >( castor3d::SsaoConfigUbo::ProjScale );\
@@ -166,8 +188,6 @@ namespace castor3d
 	auto c3d_edgeSharpness = ssaoConfig.declMember< glsl::Float >( castor3d::SsaoConfigUbo::EdgeSharpness );\
 	auto c3d_blurStepSize = ssaoConfig.declMember< glsl::Int >( castor3d::SsaoConfigUbo::BlurStepSize );\
 	auto c3d_blurRadius = ssaoConfig.declMember< glsl::Int >( castor3d::SsaoConfigUbo::BlurRadius );\
-	auto c3d_projInfo = ssaoConfig.declMember< glsl::Vec4 >( castor3d::SsaoConfigUbo::ProjInfo );\
-	auto c3d_worldToCamera = ssaoConfig.declMember< glsl::Mat4 >( castor3d::SsaoConfigUbo::InvViewMatrix );\
 	ssaoConfig.end()
 
 #endif

@@ -56,18 +56,12 @@ namespace castor3d
 		, m_frustum{ m_viewport }
 		, m_invertX{ invertX }
 	{
-		if ( scene.getEngine()->getRenderSystem()->getCurrentContext() )
-		{
-			m_viewport.initialise();
-		}
-		else
-		{
-			scene.getListener().postEvent( makeInitialiseEvent( m_viewport ) );
-		}
-
 		if ( node )
 		{
-			m_notifyIndex = node->onChanged.connect( std::bind( &Camera::onNodeChanged, this, std::placeholders::_1 ) );
+			m_notifyIndex = node->onChanged.connect( [this]( SceneNode const & node )
+				{
+					onNodeChanged( node );
+				} );
 			onNodeChanged( *node );
 		}
 	}
@@ -97,7 +91,10 @@ namespace castor3d
 
 			if ( node )
 			{
-				m_notifyIndex = node->onChanged.connect( std::bind( &Camera::onNodeChanged, this, std::placeholders::_1 ) );
+				m_notifyIndex = node->onChanged.connect( [this]( SceneNode const & node )
+					{
+						onNodeChanged( node );
+					} );
 				onNodeChanged( *node );
 			}
 		}
@@ -130,15 +127,10 @@ namespace castor3d
 					matrix::scale( m_view, Point3f{ -1.0f, 1.0f, 1.0f } );
 				}
 
-				m_frustum.update( position, right, up, front );
+				m_frustum.update( m_viewport.getProjection(), m_view );
 				m_nodeChanged = false;
 			}
 		}
-	}
-
-	void Camera::apply()const
-	{
-		m_viewport.apply();
 	}
 
 	void Camera::resize( uint32_t width, uint32_t height )

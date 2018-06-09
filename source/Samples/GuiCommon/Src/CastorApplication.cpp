@@ -20,8 +20,12 @@
 #include "xpms/animated_object_sel.xpm"
 #include "xpms/animation.xpm"
 #include "xpms/animation_sel.xpm"
+#include "xpms/background.xpm"
+#include "xpms/background_sel.xpm"
 #include "xpms/billboard.xpm"
 #include "xpms/billboard_sel.xpm"
+#include "xpms/bone.xpm"
+#include "xpms/bone_sel.xpm"
 #include "xpms/border_panel.xpm"
 #include "xpms/border_panel_sel.xpm"
 #include "xpms/camera.xpm"
@@ -47,12 +51,16 @@
 #include "xpms/panel_sel.xpm"
 #include "xpms/point.xpm"
 #include "xpms/point_sel.xpm"
+#include "xpms/post_effect.xpm"
+#include "xpms/post_effect_sel.xpm"
 #include "xpms/render_target.xpm"
 #include "xpms/render_target_sel.xpm"
 #include "xpms/render_window.xpm"
 #include "xpms/render_window_sel.xpm"
 #include "xpms/scene.xpm"
 #include "xpms/scene_sel.xpm"
+#include "xpms/skeleton.xpm"
+#include "xpms/skeleton_sel.xpm"
 #include "xpms/spot.xpm"
 #include "xpms/spot_sel.xpm"
 #include "xpms/submesh.xpm"
@@ -61,6 +69,8 @@
 #include "xpms/text_sel.xpm"
 #include "xpms/texture.xpm"
 #include "xpms/texture_sel.xpm"
+#include "xpms/tone_mapping.xpm"
+#include "xpms/tone_mapping_sel.xpm"
 #include "xpms/viewport.xpm"
 #include "xpms/viewport_sel.xpm"
 
@@ -169,11 +179,14 @@ namespace GuiCommon
 	bool CastorApplication::doParseCommandLine()
 	{
 		wxCmdLineParser parser( wxApp::argc, wxApp::argv );
-		parser.AddSwitch( wxT( "h" ), wxT( "help" ), _( "Displays this help" ) );
-		parser.AddOption( wxT( "l" ), wxT( "log" ), _( "Defines log level" ), wxCMD_LINE_VAL_NUMBER );
+		parser.AddSwitch( wxT( "h" ), wxT( "help" ), _( "Displays this help." ) );
+		parser.AddSwitch( wxT( "v" ), wxT( "validate" ), _( "Enables rendering API validation." ) );
+		parser.AddOption( wxT( "l" ), wxT( "log" ), _( "Defines log level." ), wxCMD_LINE_VAL_NUMBER );
 		parser.AddParam( _( "The initial scene file" ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
-		parser.AddSwitch( wxT( "opengl" ), wxEmptyString, _( "Defines the renderer to OpenGl" ) );
-		parser.AddSwitch( wxT( "test" ), wxEmptyString, _( "Defines the renderer to Test" ) );
+		parser.AddSwitch( wxT( "opengl3" ), wxEmptyString, _( "Defines the renderer to OpenGl 3.x." ) );
+		parser.AddSwitch( wxT( "opengl4" ), wxEmptyString, _( "Defines the renderer to OpenGl 4.x." ) );
+		parser.AddSwitch( wxT( "vulkan" ), wxEmptyString, _( "Defines the renderer to Vulkan." ) );
+		parser.AddSwitch( wxT( "test" ), wxEmptyString, _( "Defines the renderer to Test." ) );
 		bool result = parser.Parse( false ) == 0;
 
 		// S'il y avait des erreurs ou "-h" ou "--help", on affiche l'aide et on sort
@@ -198,13 +211,21 @@ namespace GuiCommon
 			}
 
 			Logger::initialise( eLogLevel );
+			m_validation = parser.Found( wxT( 'v' ) );
 
-			if ( parser.Found( wxT( "opengl" ) ) )
+			if ( parser.Found( wxT( "opengl3" ) ) )
 			{
-				m_rendererType = cuT( "opengl" );
+				m_rendererType = cuT( "opengl3" );
 			}
-
-			if ( parser.Found( wxT( "test" ) ) )
+			else if ( parser.Found( wxT( "opengl4" ) ) )
+			{
+				m_rendererType = cuT( "opengl4" );
+			}
+			else if ( parser.Found( wxT( "vulkan" ) ) )
+			{
+				m_rendererType = cuT( "vulkan" );
+			}
+			else if ( parser.Found( wxT( "test" ) ) )
 			{
 				m_rendererType = cuT( "test" );
 			}
@@ -222,32 +243,32 @@ namespace GuiCommon
 
 	bool CastorApplication::doInitialiseLocale( SplashScreen & p_splashScreen )
 	{
-		p_splashScreen.Step( _( "Loading language" ), 1 );
-		long lLanguage = wxLANGUAGE_DEFAULT;
-		Path pathCurrent = File::getExecutableDirectory().getPath();
+		//p_splashScreen.Step( _( "Loading language" ), 1 );
+		//long lLanguage = wxLANGUAGE_DEFAULT;
+		//Path pathCurrent = File::getExecutableDirectory().getPath();
 
-		// load language if possible, fall back to english otherwise
-		if ( wxLocale::IsAvailable( lLanguage ) )
-		{
-			m_locale = std::make_unique< wxLocale >( lLanguage, wxLOCALE_LOAD_DEFAULT );
-			// add locale search paths
-			m_locale->AddCatalogLookupPathPrefix( pathCurrent / cuT( "share" ) / m_internalName );
-			m_locale->AddCatalog( m_internalName );
+		//// load language if possible, fall back to english otherwise
+		//if ( wxLocale::IsAvailable( lLanguage ) )
+		//{
+		//	m_locale = std::make_unique< wxLocale >( lLanguage, wxLOCALE_LOAD_DEFAULT );
+		//	// add locale search paths
+		//	m_locale->AddCatalogLookupPathPrefix( pathCurrent / cuT( "share" ) / m_internalName );
+		//	m_locale->AddCatalog( m_internalName );
 
-			if ( !m_locale->IsOk() )
-			{
-				std::cerr << "Selected language is wrong" << std::endl;
-				lLanguage = wxLANGUAGE_ENGLISH;
-				m_locale = std::make_unique< wxLocale >( lLanguage );
-			}
-		}
-		else
-		{
-			std::cerr << "The selected language is not supported by your system."
-					  << "Try installing support for this language." << std::endl;
-			lLanguage = wxLANGUAGE_ENGLISH;
-			m_locale = std::make_unique< wxLocale >( lLanguage );
-		}
+		//	if ( !m_locale->IsOk() )
+		//	{
+		//		std::cerr << "Selected language is wrong" << std::endl;
+		//		lLanguage = wxLANGUAGE_ENGLISH;
+		//		m_locale = std::make_unique< wxLocale >( lLanguage );
+		//	}
+		//}
+		//else
+		//{
+		//	std::cerr << "The selected language is not supported by your system."
+		//			  << "Try installing support for this language." << std::endl;
+		//	lLanguage = wxLANGUAGE_ENGLISH;
+		//	m_locale = std::make_unique< wxLocale >( lLanguage );
+		//}
 
 		return true;
 	}
@@ -264,7 +285,7 @@ namespace GuiCommon
 		Logger::setFileName( Engine::getEngineDirectory() / ( m_internalName + cuT( ".log" ) ) );
 		Logger::logInfo( m_internalName + cuT( " - Start" ) );
 
-		m_castor = new Engine();
+		m_castor = new Engine{ m_internalName, m_validation };
 		doloadPlugins( p_splashScreen );
 
 		p_splashScreen.Step( _( "Initialising Castor3D" ), 1 );
@@ -323,8 +344,12 @@ namespace GuiCommon
 		ImagesLoader::addBitmap( eBMP_ANIMATED_OBJECT_SEL, animated_object_sel_xpm );
 		ImagesLoader::addBitmap( eBMP_ANIMATION, animation_xpm );
 		ImagesLoader::addBitmap( eBMP_ANIMATION_SEL, animation_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_BONE, bone_xpm );
+		ImagesLoader::addBitmap( eBMP_BONE_SEL, bone_sel_xpm );
 		ImagesLoader::addBitmap( eBMP_SCENE, scene_xpm );
 		ImagesLoader::addBitmap( eBMP_SCENE_SEL, scene_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_SKELETON, skeleton_xpm );
+		ImagesLoader::addBitmap( eBMP_SKELETON_SEL, skeleton_sel_xpm );
 		ImagesLoader::addBitmap( eBMP_NODE, node_xpm );
 		ImagesLoader::addBitmap( eBMP_NODE_SEL, node_sel_xpm );
 		ImagesLoader::addBitmap( eBMP_CAMERA, camera_xpm );
@@ -355,6 +380,10 @@ namespace GuiCommon
 		ImagesLoader::addBitmap( eBMP_BILLBOARD_SEL, billboard_sel_xpm );
 		ImagesLoader::addBitmap( eBMP_VIEWPORT, viewport_xpm );
 		ImagesLoader::addBitmap( eBMP_VIEWPORT_SEL, viewport_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_POST_EFFECT, post_effect_xpm );
+		ImagesLoader::addBitmap( eBMP_POST_EFFECT_SEL, post_effect_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_TONE_MAPPING, tone_mapping_xpm );
+		ImagesLoader::addBitmap( eBMP_TONE_MAPPING_SEL, tone_mapping_sel_xpm );
 		ImagesLoader::addBitmap( eBMP_RENDER_TARGET, render_target_xpm );
 		ImagesLoader::addBitmap( eBMP_RENDER_TARGET_SEL, render_target_sel_xpm );
 		ImagesLoader::addBitmap( eBMP_RENDER_WINDOW, render_window_xpm );
@@ -363,6 +392,8 @@ namespace GuiCommon
 		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_SEL, frame_variable_sel_xpm );
 		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_BUFFER, frame_variable_buffer_xpm );
 		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL, frame_variable_buffer_sel_xpm );
+		ImagesLoader::addBitmap( eBMP_BACKGROUND, background_xpm );
+		ImagesLoader::addBitmap( eBMP_BACKGROUND_SEL, background_sel_xpm );
 		ImagesLoader::addBitmap( eBMP_COLLAPSE_ALL, collapse_all_xpm );
 		ImagesLoader::addBitmap( eBMP_EXPAND_ALL, expand_all_xpm );
 		doLoadAppImages();

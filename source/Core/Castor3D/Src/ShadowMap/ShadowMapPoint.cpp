@@ -2,24 +2,26 @@
 
 #include "Engine.hpp"
 #include "Cache/SamplerCache.hpp"
-#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
-#include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/RenderBufferAttachment.hpp"
-#include "FrameBuffer/TextureAttachment.hpp"
 #include "Mesh/Submesh.hpp"
-#include "Mesh/Buffer/VertexBuffer.hpp"
+#include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/Light/Light.hpp"
 #include "Scene/Light/PointLight.hpp"
-#include "Shader/UniformBuffer.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Castor3DPrerequisites.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
 #include "ShadowMap/ShadowMapPassPoint.hpp"
 #include "Texture/Sampler.hpp"
-#include "Texture/TextureImage.hpp"
+#include "Texture/TextureView.hpp"
 #include "Texture/TextureLayout.hpp"
+
+#include <Image/Texture.hpp>
+#include <Image/TextureView.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
+#include <Shader/ShaderProgram.hpp>
 
 #include <GlslSource.hpp>
 
@@ -33,7 +35,7 @@ namespace castor3d
 {
 	namespace
 	{
-		TextureUnit doInitialisePointShadow( Engine & engine
+		TextureUnit doInitialiseVariance( Engine & engine
 			, Size const & size )
 		{
 			String const name = cuT( "ShadowMap_Point_Shadow" );
@@ -46,20 +48,30 @@ namespace castor3d
 			else
 			{
 				sampler = engine.getSamplerCache().add( name );
-				sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-				sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-				sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-				sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-				sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
-				sampler->setBorderColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueWhite ) );
+				sampler->setMinFilter( renderer::Filter::eLinear );
+				sampler->setMagFilter( renderer::Filter::eLinear );
+				sampler->setWrapS( renderer::WrapMode::eClampToEdge );
+				sampler->setWrapT( renderer::WrapMode::eClampToEdge );
+				sampler->setWrapR( renderer::WrapMode::eClampToEdge );
+				sampler->setBorderColour( renderer::BorderColour::eFloatOpaqueWhite );
 			}
 
+			renderer::ImageCreateInfo image{};
+			image.flags = renderer::ImageCreateFlag::eCubeCompatible;
+			image.arrayLayers = 6u;
+			image.extent.width = size.getWidth();
+			image.extent.height = size.getHeight();
+			image.extent.depth = 1u;
+			image.imageType = renderer::TextureType::e2D;
+			image.mipLevels = 1u;
+			image.samples = renderer::SampleCountFlag::e1;
+			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+			image.format = ShadowMapPoint::VarianceFormat;
+
+			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
+				, image
+				, renderer::MemoryPropertyFlag::eDeviceLocal );
 			TextureUnit unit{ engine };
-			auto texture = engine.getRenderSystem()->createTexture( TextureType::eCube
-				, AccessType::eNone
-				, AccessType::eRead | AccessType::eWrite
-				, PixelFormat::eAL32F
-				, size );
 			unit.setTexture( texture );
 			unit.setSampler( sampler );
 
@@ -71,7 +83,7 @@ namespace castor3d
 			return unit;
 		}
 
-		TextureUnit doInitialisePointDepth( Engine & engine
+		TextureUnit doInitialiseDepth( Engine & engine
 			, Size const & size )
 		{
 			String const name = cuT( "ShadowMap_Point_Depth" );
@@ -84,20 +96,30 @@ namespace castor3d
 			else
 			{
 				sampler = engine.getSamplerCache().add( name );
-				sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-				sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-				sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-				sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-				sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
-				sampler->setBorderColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueWhite ) );
+				sampler->setMinFilter( renderer::Filter::eLinear );
+				sampler->setMagFilter( renderer::Filter::eLinear );
+				sampler->setWrapS( renderer::WrapMode::eClampToEdge );
+				sampler->setWrapT( renderer::WrapMode::eClampToEdge );
+				sampler->setWrapR( renderer::WrapMode::eClampToEdge );
+				sampler->setBorderColour( renderer::BorderColour::eFloatOpaqueWhite );
 			}
 
+			renderer::ImageCreateInfo image{};
+			image.flags = renderer::ImageCreateFlag::eCubeCompatible;
+			image.arrayLayers = 6u;
+			image.extent.width = size.getWidth();
+			image.extent.height = size.getHeight();
+			image.extent.depth = 1u;
+			image.imageType = renderer::TextureType::e2D;
+			image.mipLevels = 1u;
+			image.samples = renderer::SampleCountFlag::e1;
+			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+			image.format = ShadowMapPoint::LinearDepthFormat;
+
+			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
+				, image
+				, renderer::MemoryPropertyFlag::eDeviceLocal );
 			TextureUnit unit{ engine };
-			auto texture = engine.getRenderSystem()->createTexture( TextureType::eCube
-				, AccessType::eNone
-				, AccessType::eRead | AccessType::eWrite
-				, PixelFormat::eL32F
-				, size );
 			unit.setTexture( texture );
 			unit.setSampler( sampler );
 
@@ -113,9 +135,16 @@ namespace castor3d
 	ShadowMapPoint::ShadowMapPoint( Engine & engine
 		, Scene & scene )
 		: ShadowMap{ engine
-			, doInitialisePointShadow( engine, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } )
-			, doInitialisePointDepth( engine, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } )
-			, std::make_shared< ShadowMapPassPoint >( engine, scene, *this ) }
+			, doInitialiseVariance( engine, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } )
+			, doInitialiseDepth( engine, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } )
+			, {
+				std::make_shared< ShadowMapPassPoint >( engine, scene, *this ),
+				std::make_shared< ShadowMapPassPoint >( engine, scene, *this ),
+				std::make_shared< ShadowMapPassPoint >( engine, scene, *this ),
+				std::make_shared< ShadowMapPassPoint >( engine, scene, *this ),
+				std::make_shared< ShadowMapPassPoint >( engine, scene, *this ),
+				std::make_shared< ShadowMapPassPoint >( engine, scene, *this ),
+			} }
 	{
 	}
 
@@ -128,75 +157,144 @@ namespace castor3d
 		, Light & light
 		, uint32_t index )
 	{
-		m_pass->update( camera, queues, light, index );
+		m_shadowType = light.getShadowType();
+
+		for ( auto & pass : m_passes )
+		{
+			pass->update( camera, queues, light, index );
+		}
 	}
 
-	void ShadowMapPoint::render()
+	renderer::Semaphore const & ShadowMapPoint::render( renderer::Semaphore const & toWait )
 	{
-		m_pass->startTimer();
+		static float constexpr component = std::numeric_limits< float >::max();
+		static renderer::ClearColorValue const white{ component, component, component, component };
+		static renderer::DepthStencilClearValue const zero{ 1.0f, 0 };
+		auto & timer = m_passes[0]->getTimer();
+		timer.start();
 
-		for ( uint32_t face = 0u; face < 6u; ++face )
+		for ( size_t face = 0u; face < m_passes.size(); ++face )
 		{
-			m_frameBuffer->bind( FrameBufferTarget::eDraw );
-			m_colourAttach[face]->attach( AttachmentPoint::eColour, 0u );
-			m_linearAttach[face]->attach( AttachmentPoint::eColour, 1u );
-			REQUIRE( m_frameBuffer->isComplete() );
-			m_frameBuffer->setDrawBuffers( { m_colourAttach[face], m_linearAttach[face] } );
-			m_frameBuffer->clear( BufferComponent::eDepth | BufferComponent::eColour );
-			m_pass->render( face );
-			m_frameBuffer->unbind();
+			m_passes[face]->updateDeviceDependent( uint32_t( face ) );
 		}
 
-		m_pass->stopTimer();
+		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
+		{
+			timer.notifyPassRender();
+			timer.beginPass( *m_commandBuffer );
+
+			for ( size_t face = 0u; face < m_passes.size(); ++face )
+			{
+				auto & pass = m_passes[face];
+				auto & renderPass = pass->getRenderPass();
+				auto & frameBuffer = m_frameBuffers[face];
+
+				m_commandBuffer->beginRenderPass( renderPass
+					, *frameBuffer.frameBuffer
+					, { zero, white, white }
+					, renderer::SubpassContents::eSecondaryCommandBuffers );
+				m_commandBuffer->executeCommands( { pass->getCommandBuffer() } );
+				m_commandBuffer->endRenderPass();
+			}
+
+			timer.endPass( *m_commandBuffer );
+			m_commandBuffer->end();
+		}
+
+		auto & device = getCurrentDevice( *this );
+		device.getGraphicsQueue().submit( *m_commandBuffer
+			, toWait
+			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, *m_finished
+			, nullptr );
+		timer.stop();
+		return *m_finished;
 	}
 
-	void ShadowMapPoint::debugDisplay( castor::Size const & size, uint32_t index )
+	void ShadowMapPoint::debugDisplay( renderer::RenderPass const & renderPass
+		, renderer::FrameBuffer const & frameBuffer
+		, castor::Size const & size, uint32_t index )
 	{
-		Size displaySize{ 128u, 128u };
-		Position position{ int32_t( displaySize.getWidth() * 4 * index), int32_t( displaySize.getHeight() * 4 ) };
-		getEngine()->getRenderSystem()->getCurrentContext()->renderVarianceCube( position
-			, displaySize
-			, *m_shadowMap.getTexture() );
-		position = Position{ int32_t( displaySize.getWidth() * 4 * ( index + 2 ) ), int32_t( displaySize.getHeight() * 4 ) };
-		getEngine()->getRenderSystem()->getCurrentContext()->renderDepthCube( position
-			, displaySize
-			, *m_linearMap.getTexture() );
+		//Size displaySize{ 128u, 128u };
+		//Position position{ int32_t( displaySize.getWidth() * 4 * index), int32_t( displaySize.getHeight() * 4 ) };
+		//getEngine()->getRenderSystem()->getCurrentDevice()->renderVarianceCube( position
+		//	, displaySize
+		//	, *m_shadowMap.getTexture() );
+		//position = Position{ int32_t( displaySize.getWidth() * 4 * ( index + 2 ) ), int32_t( displaySize.getHeight() * 4 ) };
+		//getEngine()->getRenderSystem()->getCurrentDevice()->renderDepthCube( position
+		//	, displaySize
+		//	, *m_linearMap.getTexture() );
 	}
 
 	void ShadowMapPoint::doInitialise()
 	{
-		constexpr float component = std::numeric_limits< float >::max();
-		m_frameBuffer->setClearColour( component, component, component, component );
-		auto texture = m_shadowMap.getTexture();
-		int i = 0;
+		renderer::Extent2D size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize };
+		auto & device = getCurrentDevice( *this );
 
-		for ( auto & attach : m_colourAttach )
+		renderer::ImageCreateInfo depth{};
+		depth.arrayLayers = 1u;
+		depth.extent.width = size.width;
+		depth.extent.height = size.height;
+		depth.extent.depth = 1u;
+		depth.imageType = renderer::TextureType::e2D;
+		depth.mipLevels = 1u;
+		depth.samples = renderer::SampleCountFlag::e1;
+		depth.usage = renderer::ImageUsageFlag::eDepthStencilAttachment;
+		depth.format = ShadowMapPoint::RawDepthFormat;
+		m_depthTexture = device.createTexture( depth, renderer::MemoryPropertyFlag::eDeviceLocal );
+
+		renderer::ImageViewCreateInfo depthView;
+		depthView.format = depth.format;
+		depthView.viewType = renderer::TextureViewType::e2D;
+		depthView.subresourceRange.aspectMask = renderer::ImageAspectFlag::eDepth;
+		depthView.subresourceRange.baseArrayLayer = 0u;
+		depthView.subresourceRange.layerCount = 1u;
+		depthView.subresourceRange.baseMipLevel = 0u;
+		depthView.subresourceRange.levelCount = 1u;
+		m_depthView = m_depthTexture->createView( depthView );
+
+		auto & variance = m_shadowMap.getTexture()->getTexture();
+		auto & linear = m_linearMap.getTexture()->getTexture();
+		uint32_t face = 0u;
+
+		for ( auto & frameBuffer : m_frameBuffers )
 		{
-			attach = m_frameBuffer->createAttachment( texture, CubeMapFace( i++ ) );
-			attach->setTarget( TextureType::eTwoDimensions );
+			auto & pass = m_passes[face];
+			auto & renderPass = pass->getRenderPass();
+			frameBuffer.varianceView = variance.createView( renderer::TextureViewType::e2D
+				, variance.getFormat()
+				, 0u
+				, 1u
+				, face
+				, 1u );
+			frameBuffer.linearView = linear.createView( renderer::TextureViewType::e2D
+				, linear.getFormat()
+				, 0u
+				, 1u
+				, face
+				, 1u );;
+			renderer::FrameBufferAttachmentArray attaches;
+			attaches.emplace_back( *( renderPass.getAttachments().begin() + 0u ), *m_depthView );
+			attaches.emplace_back( *( renderPass.getAttachments().begin() + 1u ), *frameBuffer.linearView );
+			attaches.emplace_back( *( renderPass.getAttachments().begin() + 2u ), *frameBuffer.varianceView );
+			frameBuffer.frameBuffer = renderPass.createFrameBuffer( size, std::move( attaches ) );
+			++face;
 		}
 
-		i = 0;
-		texture = m_linearMap.getTexture();
-
-		for ( auto & attach : m_linearAttach )
-		{
-			attach = m_frameBuffer->createAttachment( texture, CubeMapFace( i++ ) );
-			attach->setTarget( TextureType::eTwoDimensions );
-		}
+		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 	}
 
 	void ShadowMapPoint::doCleanup()
 	{
-		for ( auto & attach : m_colourAttach )
+		for ( auto & frameBuffer : m_frameBuffers )
 		{
-			attach.reset();
+			frameBuffer.frameBuffer.reset();
+			frameBuffer.varianceView.reset();
+			frameBuffer.linearView = nullptr;
 		}
 
-		for ( auto & attach : m_linearAttach )
-		{
-			attach.reset();
-		}
+		m_depthView.reset();
+		m_depthTexture.reset();
 	}
 
 	void ShadowMapPoint::doUpdateFlags( PassFlags & passFlags
@@ -211,7 +309,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, ComparisonFunc alphaFunc )const
+		, renderer::CompareOp alphaFunc )const
 	{
 		using namespace glsl;
 		GlslWriter writer = getEngine()->getRenderSystem()->createGlslWriter();
@@ -222,18 +320,23 @@ namespace castor3d
 		auto c3d_farPlane( shadowMap.declMember< Float >( ShadowMapPassPoint::FarPlane ) );
 		shadowMap.end();
 
-		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
-		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ) );
-		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ) );
-		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( ShaderProgram::MapOpacity
+		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" )
+			, RenderPass::VertexOutputs::WorldPositionLocation );
+		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" )
+			, RenderPass::VertexOutputs::TextureLocation );
+		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
+			, RenderPass::VertexOutputs::MaterialLocation );
+		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( cuT( "c3d_mapOpacity" )
+			, MinBufferIndex
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eOpacity ) ) );
 
 		auto materials = shader::createMaterials( writer, passFlags );
 		materials->declare();
 
 		// Fragment Outputs
-		auto pxl_depth = writer.declFragData< Vec2 >( cuT( "pxl_depth" ), 0u );
-		auto pxl_linear = writer.declFragData< Float >( cuT( "pxl_linear" ), 1u );
+		auto pxl_linear = writer.declFragData< Float >( cuT( "pxl_linear" ), 0u );
+		auto pxl_variance = writer.declFragData< Vec2 >( cuT( "pxl_variance" ), 1u );
 
 		auto main = [&]()
 		{
@@ -246,14 +349,14 @@ namespace castor3d
 			auto depth = writer.declLocale( cuT( "depth" )
 				, length( vtx_worldPosition - c3d_wordLightPosition ) );
 			pxl_linear = depth / c3d_farPlane;
-			pxl_depth.x() = pxl_linear;
-			pxl_depth.y() = pxl_linear * pxl_linear;
+			pxl_variance.x() = pxl_linear;
+			pxl_variance.y() = pxl_linear * pxl_linear;
 
 			auto dx = writer.declLocale( cuT( "dx" )
 				, dFdx( pxl_linear ) );
 			auto dy = writer.declLocale( cuT( "dy" )
 				, dFdy( pxl_linear ) );
-			pxl_depth.y() += 0.25_f * writer.paren( dx * dx + dy * dy );
+			pxl_variance.y() += 0.25_f * writer.paren( dx * dx + dy * dy );
 		};
 
 		writer.implementFunction< void >( cuT( "main" ), main );

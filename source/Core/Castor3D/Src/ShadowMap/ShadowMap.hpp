@@ -1,10 +1,9 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_ShadowMap_H___
 #define ___C3D_ShadowMap_H___
 
-#include "Mesh/Buffer/GeometryBuffers.hpp"
 #include "Texture/TextureUnit.hpp"
 
 #include <Design/OwnedBy.hpp>
@@ -30,18 +29,18 @@ namespace castor3d
 		 *\param[in]	engine		The engine.
 		 *\param[in]	shadowMap	The shadow map.
 		 *\param[in]	linearMap	The linear depth map.
-		 *\param[in]	pass		The pass used to render map.
+		 *\param[in]	passes		The passes used to render map.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
 		 *\param[in]	shadowMap	La texture d'ombres.
 		 *\param[in]	linearMap	La texture de profondeur linéaire.
-		 *\param[in]	pass		La passe utilisée pour rendre cette texture.
+		 *\param[in]	passes		Les passes utilisées pour rendre cette texture.
 		 */
 		C3D_API ShadowMap( Engine & engine
 			, TextureUnit && shadowMap
 			, TextureUnit && linearMap
-			, ShadowMapPassSPtr pass );
+			, std::vector< ShadowMapPassSPtr > passes );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -89,7 +88,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dessine la shadow map de la lumière donnée.
 		 */
-		C3D_API virtual void render() = 0;
+		C3D_API virtual renderer::Semaphore const & render( renderer::Semaphore const & toWait ) = 0;
 		/**
 		 *\~english
 		 *\brief		Dumps the shadow map on screen.
@@ -100,7 +99,9 @@ namespace castor3d
 		 *\param[in]	size	Les dimensions d'affichage.
 		 *\param[in]	index	L'indice de la texture d'ombres (pour calculer sa position).
 		 */
-		C3D_API virtual void debugDisplay( castor::Size const & size, uint32_t index ) = 0;
+		C3D_API virtual void debugDisplay( renderer::RenderPass const & renderPass
+			, renderer::FrameBuffer const & frameBuffer
+			, castor::Size const & size, uint32_t index ) = 0;
 		/**
 		 *\copydoc		castor3d::RenderPass::updateFlags
 		 */
@@ -130,47 +131,36 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const;
+			, renderer::CompareOp alphaFunc )const;
 		/**
-		 *\~english
-		 *\return		The shadow map.
-		 *\~english
-		 *\return		La texture d'ombres.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline TextureUnit & getTexture()
 		{
 			return m_shadowMap;
 		}
-		/**
-		 *\~english
-		 *\return		The shadow map.
-		 *\~english
-		 *\return		La texture d'ombres.
-		 */
+
 		inline TextureUnit const & getTexture()const
 		{
 			return m_shadowMap;
 		}
-		/**
-		 *\~english
-		 *\return		The linear depth map.
-		 *\~english
-		 *\return		La texture de profondeur linéaire.
-		 */
-		inline TextureUnit & getDepth()
+
+		inline TextureUnit & getLinearDepth()
 		{
 			return m_linearMap;
 		}
-		/**
-		 *\~english
-		 *\return		The linear depth map.
-		 *\~english
-		 *\return		La texture de profondeur linéaire.
-		 */
-		inline TextureUnit const & getDepth()const
+
+		inline TextureUnit const & getLinearDepth()const
 		{
 			return m_linearMap;
 		}
+		/**@}*/
 
 	private:
 		/**
@@ -218,7 +208,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const = 0;
+			, renderer::CompareOp alphaFunc )const = 0;
 
 	protected:
 		/**
@@ -239,26 +229,19 @@ namespace castor3d
 		 */
 		void doDiscardAlpha( glsl::GlslWriter & writer
 			, TextureChannels const & textureFlags
-			, ComparisonFunc alphaFunc
+			, renderer::CompareOp alphaFunc
 			, glsl::Int const & material
 			, shader::Materials const & materials )const;
 
 	protected:
-		//!\~english	The frame buffer.
-		//!\~french		Le tampon d'image.
-		FrameBufferSPtr m_frameBuffer;
-		//!\~english	The geometry buffer.
-		//!\~french		Les tampons de géométrie.
-		std::set< GeometryBuffersSPtr > m_geometryBuffers;
-		//!\~english	The shadow mapping passes used during the render.
-		//!\~french		Les passes de shadow mapping utilisées pendant le rendu.
-		ShadowMapPassSPtr m_pass;
-		//!\~english	The shadow map texture.
-		//!\~french		La texture de mappage d'ombres.
+		renderer::CommandBufferPtr m_commandBuffer;
+		renderer::FencePtr m_fence;
+		std::set< std::reference_wrapper< GeometryBuffers > > m_geometryBuffers;
+		std::vector< ShadowMapPassSPtr > m_passes;
 		TextureUnit m_shadowMap;
-		//!\~english	The linear depth texture.
-		//!\~french		La texture de profondeur linéaire.
 		TextureUnit m_linearMap;
+		renderer::SemaphorePtr m_finished;
+		bool m_initialised{ false };
 	};
 }
 

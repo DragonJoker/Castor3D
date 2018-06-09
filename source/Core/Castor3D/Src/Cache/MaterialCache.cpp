@@ -1,10 +1,10 @@
 #include "MaterialCache.hpp"
 
 #include "Engine.hpp"
+#include "Event/Frame/FunctorEvent.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Material/Material.hpp"
 #include "Material/Pass.hpp"
-#include "Scene/SceneFileParser.hpp"
 #include "Shader/PassBuffer/LegacyPassBuffer.hpp"
 #include "Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp"
 #include "Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp"
@@ -20,39 +20,46 @@ namespace castor3d
 
 	void MaterialCache::initialise( MaterialType type )
 	{
-		auto lock = makeUniqueLock( m_elements );
-
-		if ( !m_elements.has( Material::DefaultMaterialName ) )
+		if ( !m_passBuffer )
 		{
-			m_defaultMaterial = m_produce( Material::DefaultMaterialName, type );
-			m_defaultMaterial->createPass();
-			m_defaultMaterial->getPass( 0 )->setTwoSided( true );
-		}
-		else
-		{
-			m_defaultMaterial = m_elements.find( Material::DefaultMaterialName );
-			getEngine()->postEvent( makeInitialiseEvent( *m_defaultMaterial ) );
-		}
+			auto lock = makeUniqueLock( m_elements );
 
-		switch ( type )
-		{
-		case MaterialType::eLegacy:
-			m_passBuffer = std::make_shared< LegacyPassBuffer >( *getEngine(), shader::MaxMaterialsCount );
-			break;
+			if ( !m_elements.has( Material::DefaultMaterialName ) )
+			{
+				m_defaultMaterial = m_produce( Material::DefaultMaterialName, type );
+				m_defaultMaterial->createPass();
+				m_defaultMaterial->getPass( 0 )->setTwoSided( true );
+			}
+			else
+			{
+				m_defaultMaterial = m_elements.find( Material::DefaultMaterialName );
+				getEngine()->postEvent( makeInitialiseEvent( *m_defaultMaterial ) );
+			}
 
-		case MaterialType::ePbrMetallicRoughness:
-			m_passBuffer = std::make_shared< MetallicRoughnessPassBuffer >( *getEngine(), shader::MaxMaterialsCount );
-			break;
+			switch ( type )
+			{
+			case MaterialType::eLegacy:
+				m_passBuffer = std::make_shared< LegacyPassBuffer >( *getEngine(), shader::MaxMaterialsCount );
+				break;
 
-		case MaterialType::ePbrSpecularGlossiness:
-			m_passBuffer = std::make_shared< SpecularGlossinessPassBuffer >( *getEngine(), shader::MaxMaterialsCount );
-			break;
+			case MaterialType::ePbrMetallicRoughness:
+				m_passBuffer = std::make_shared< MetallicRoughnessPassBuffer >( *getEngine(), shader::MaxMaterialsCount );
+				break;
+
+			case MaterialType::ePbrSpecularGlossiness:
+				m_passBuffer = std::make_shared< SpecularGlossinessPassBuffer >( *getEngine(), shader::MaxMaterialsCount );
+				break;
+			}
 		}
 	}
 
 	void MaterialCache::cleanup()
 	{
-		m_passBuffer.reset();
+		getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
+			, [this]()
+			{
+				m_passBuffer.reset();
+			} ) );
 		auto lock = castor::makeUniqueLock( m_elements );
 
 		for ( auto it : m_elements )
@@ -99,7 +106,7 @@ namespace castor3d
 
 			if ( m_elements.has( name ) )
 			{
-				castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
+				castor::Logger::logWarning( castor::makeStringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
 				result = m_elements.find( name );
 			}
 			else
@@ -109,7 +116,7 @@ namespace castor3d
 		}
 		else
 		{
-			castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_NULL_OBJECT << getObjectTypeName() << cuT( ": " ) );
+			castor::Logger::logWarning( castor::makeStringStream() << WARNING_CACHE_NULL_OBJECT << getObjectTypeName() << cuT( ": " ) );
 		}
 
 		for ( auto & pass : *result )
@@ -133,12 +140,12 @@ namespace castor3d
 			result = m_produce( name, type );
 			m_initialise( result );
 			m_elements.insert( name, result );
-			castor::Logger::logDebug( castor::StringStream() << INFO_CACHE_CREATED_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
+			castor::Logger::logDebug( castor::makeStringStream() << INFO_CACHE_CREATED_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
 		}
 		else
 		{
 			result = m_elements.find( name );
-			castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
+			castor::Logger::logWarning( castor::makeStringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
 		}
 
 		for ( auto & pass : *result )
@@ -163,48 +170,5 @@ namespace castor3d
 			names.push_back( it->first );
 			it++;
 		}
-	}
-
-	bool MaterialCache::write( TextFile & file )const
-	{
-		auto lockA = makeUniqueLock( m_elements );
-		{
-			auto lockB = makeUniqueLock( getEngine()->getSamplerCache() );
-			getEngine()->getSamplerCache().lock();
-
-			for ( auto it : getEngine()->getSamplerCache() )
-			{
-				Sampler::TextWriter( String{} )( *it.second, file );
-			}
-		}
-
-		bool result = true;
-		auto it = m_elements.begin();
-		bool first = true;
-
-		while ( result && it != m_elements.end() )
-		{
-			if ( first )
-			{
-				first = false;
-			}
-			else
-			{
-				file.writeText( cuT( "\n" ) );
-			}
-
-			result = Material::TextWriter( String() )( * it->second, file );
-			++it;
-		}
-
-		return result;
-	}
-
-	bool MaterialCache::read( Path const & path )
-	{
-		auto lock = makeUniqueLock( m_elements );
-		SceneFileParser parser( *getEngine() );
-		parser.parseFile( path );
-		return true;
 	}
 }

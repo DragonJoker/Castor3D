@@ -4,14 +4,14 @@ using namespace castor;
 
 namespace castor3d
 {
-	VersionException::VersionException( Version const & p_given, Version const & p_expected, char const * p_strFile, char const * p_strFunction, uint32_t p_uiLine )
-		:	Exception( "", p_strFile, p_strFunction, p_uiLine )
+	VersionException::VersionException( Version const & given, Version const & expected, char const * strFile, char const * strFunction, uint32_t uiLine )
+		:	Exception( "", strFile, strFunction, uiLine )
 	{
 		std::stringstream stream;
 		stream << "Expected version [";
-		stream << p_expected;
+		stream << expected;
 		stream << "] but got version [";
-		stream << p_given;
+		stream << given;
 		stream << "] - Incompatible versions";
 		m_description = stream.str();
 		Logger::logDebug( m_description );

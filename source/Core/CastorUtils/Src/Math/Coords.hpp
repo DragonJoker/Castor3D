@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___CASTOR_COORDS_H___
@@ -128,6 +128,7 @@ namespace castor
 		Coords();
 		Coords( Coords const & rhs );
 		Coords( Coords && rhs );
+		explicit Coords( Point< T, Count > & rhs );
 		explicit Coords( T * rhs );
 		~Coords();
 		/**@}*/

@@ -1,6 +1,6 @@
 #include "RenderSystem.hpp"
 
-#include "Render/Context.hpp"
+#include <Core/Renderer.hpp>
 
 #include <GlslSource.hpp>
 
@@ -8,10 +8,13 @@ using namespace castor;
 
 namespace castor3d
 {
-	RenderSystem::RenderSystem( Engine & engine, String const & p_name )
+	RenderSystem::RenderSystem( Engine & engine
+		, String const & name
+		, bool topDown )
 		: OwnedBy< Engine >{ engine }
-		, m_name{ p_name }
+		, m_name{ name }
 		, m_initialised{ false }
+		, m_topDown{ topDown }
 		, m_gpuInformations{}
 		, m_gpuBufferPool{ *this }
 	{
@@ -19,15 +22,41 @@ namespace castor3d
 
 	RenderSystem::~RenderSystem()
 	{
-		m_mainContext.reset();
 	}
 
 	void RenderSystem::initialise( GpuInformations && p_informations )
 	{
 		m_gpuInformations = std::move( p_informations );
-		doInitialise();
-		m_gpuInformations.updateMaxShaderModel();
-		REQUIRE( m_gpuInformations.getMaxShaderModel() >= ShaderModel::eModel2 );
+
+		if ( !m_initialised )
+		{
+			auto & device = *getMainDevice();
+			StringStream stream( makeStringStream() );
+			stream << ( device.getProperties().apiVersion >> 22 ) << cuT( "." ) << ( ( device.getProperties().apiVersion >> 12 ) & 0x0FFF );
+
+			m_gpuInformations.setRenderer( device.getProperties().deviceName );
+			m_gpuInformations.setVersion( stream.str() );
+			m_gpuInformations.setShaderLanguageVersion( device.getShaderVersion() );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eConstantsBuffers, true );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eTextureBuffers, true );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eInstancing, true );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eAccumulationBuffer, true );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eNonPowerOfTwoTextures, true );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eAtomicCounterBuffers, true );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eImmutableTextureStorage, true );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eShaderStorageBuffers, device.getRenderer().getFeatures().hasStorageBuffers );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eTransformFeedback, false );
+
+			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eCompute, device.getRenderer().getFeatures().hasComputeShaders );
+			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eTessellationControl, device.getFeatures().tessellationShader );
+			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eTessellationEvaluation, device.getFeatures().tessellationShader );
+			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eGeometry, device.getFeatures().geometryShader );
+			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eFragment, true );
+			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eVertex, true );
+
+			m_initialised = true;
+		}
+
 		Logger::logInfo( cuT( "Vendor: " ) + m_gpuInformations.getVendor() );
 		Logger::logInfo( cuT( "Renderer: " ) + m_gpuInformations.getRenderer() );
 		Logger::logInfo( cuT( "Version: " ) + m_gpuInformations.getVersion() );
@@ -36,13 +65,7 @@ namespace castor3d
 
 	void RenderSystem::cleanup()
 	{
-		if ( m_mainContext )
-		{
-			m_mainContext->cleanup();
-			m_mainContext.reset();
-		}
-
-		doCleanup();
+		m_mainDevice.reset();
 
 #if C3D_TRACE_OBJECTS
 
@@ -51,9 +74,24 @@ namespace castor3d
 #endif
 	}
 
-	void RenderSystem::cleanupPool()
+	void RenderSystem::registerDevice( renderer::Device & device )
 	{
-		m_gpuBufferPool.cleanup();
+		m_deviceEnabledConnections.emplace( &device
+			, device.onEnabled.connect( [this]( renderer::Device const & device )
+			{
+				m_currentDevice = &device;
+			} ) );
+		m_deviceDisabledConnections.emplace( &device
+			, device.onDisabled.connect( [this]( renderer::Device const & device )
+			{
+				m_currentDevice = nullptr;
+			} ) );
+	}
+
+	void RenderSystem::unregisterDevice( renderer::Device & device )
+	{
+		m_deviceEnabledConnections.erase( &device );
+		m_deviceDisabledConnections.erase( &device );
 	}
 
 	void RenderSystem::pushScene( Scene * p_scene )
@@ -66,11 +104,11 @@ namespace castor3d
 		m_stackScenes.pop();
 	}
 
-	Scene * RenderSystem::getTopScene()
+	Scene * RenderSystem::getTopScene()const
 	{
 		Scene * result = nullptr;
 
-		if ( m_stackScenes.size() )
+		if ( !m_stackScenes.empty() )
 		{
 			result = m_stackScenes.top();
 		}
@@ -83,46 +121,71 @@ namespace castor3d
 		return glsl::GlslWriter{ glsl::GlslWriterConfig{ m_gpuInformations.getShaderLanguageVersion()
 			, m_gpuInformations.hasConstantsBuffers()
 			, m_gpuInformations.hasTextureBuffers()
-			, m_gpuInformations.hasShaderStorageBuffers() } };
+			, m_gpuInformations.hasShaderStorageBuffers()
+			, false } };
 	}
 
-	void RenderSystem::setCurrentContext( Context * p_context )
-	{
-		m_currentContexts[std::this_thread::get_id()] = p_context;
-	}
-
-	Context * RenderSystem::getCurrentContext()
-	{
-		Context * result{ nullptr };
-		auto it = m_currentContexts.find( std::this_thread::get_id() );
-
-		if ( it != m_currentContexts.end() )
-		{
-			result = it->second;
-		}
-
-		return result;
-	}
-
-	GpuBufferOffset RenderSystem::getBuffer( BufferType type
+	GpuBufferOffset RenderSystem::getBuffer( renderer::BufferTarget type
 		, uint32_t size
-		, BufferAccessType accessType
-		, BufferAccessNature accessNature )
+		, renderer::MemoryPropertyFlags flags )
 	{
 		return m_gpuBufferPool.getGpuBuffer( type
 			, size
-			, accessType
-			, accessNature );
+			, flags );
 	}
 
-	void RenderSystem::putBuffer( BufferType type
-		, BufferAccessType accessType
-		, BufferAccessNature accessNature
+	void RenderSystem::putBuffer( renderer::BufferTarget type
 		, GpuBufferOffset const & bufferOffset )
 	{
 		m_gpuBufferPool.putGpuBuffer( type
-			, accessType
-			, accessNature
 			, bufferOffset );
+	}
+
+	void RenderSystem::cleanupPool()
+	{
+		m_gpuBufferPool.cleanup();
+	}
+	
+	renderer::DevicePtr RenderSystem::createDevice( renderer::WindowHandle && handle
+		, uint32_t gpu )
+	{
+		renderer::DevicePtr result = m_renderer->createDevice( m_renderer->createConnection( gpu, std::move( handle ) ) );
+		registerDevice( *result );
+		return result;
+	}
+
+	castor::Matrix4x4r RenderSystem::getFrustum( float left
+		, float right
+		, float bottom
+		, float top
+		, float zNear
+		, float zFar )const
+	{
+		return convert( m_renderer->frustum( left, right, bottom, top, zNear, zFar ) );
+	}
+
+	castor::Matrix4x4r RenderSystem::getPerspective( float radiansFovY
+		, float aspect
+		, float zNear
+		, float zFar )const
+	{
+		return convert( m_renderer->perspective( radiansFovY, aspect, zNear, zFar ) );
+	}
+
+	castor::Matrix4x4r RenderSystem::getOrtho( float left
+		, float right
+		, float bottom
+		, float top
+		, float zNear
+		, float zFar )const
+	{
+		return convert( m_renderer->ortho( left, right, bottom, top, zNear, zFar ) );
+	}
+
+	castor::Matrix4x4r RenderSystem::getInfinitePerspective( float radiansFovY
+		, float aspect
+		, float zNear )const
+	{
+		return convert( m_renderer->infinitePerspective( radiansFovY, aspect, zNear ) );
 	}
 }

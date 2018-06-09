@@ -48,6 +48,13 @@ namespace castor3d
 		C3D_API virtual uint32_t getCount()const = 0;
 		/**
 		 *\~english
+		 *\return		The components count in an element.
+		 *\~french
+		 *\return		Le nombre de composantes d'un élément.
+		 */
+		C3D_API virtual uint32_t getComponentsCount()const = 0;
+		/**
+		 *\~english
 		 *\brief		Sorts the face from farthest to nearest from the camera
 		 *\param[in]	cameraPosition	The camera position, relative to submesh
 		 *\~french
@@ -67,13 +74,16 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
-		inline void gather( VertexBufferArray & buffers )override
+		inline void gather( MaterialSPtr material
+			, renderer::BufferCRefArray & buffers
+			, std::vector< uint64_t > & offsets
+			, renderer::VertexLayoutCRefArray & layouts )override
 		{
 		}
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
 		 */
-		inline ProgramFlags getProgramFlags()const override
+		inline ProgramFlags getProgramFlags( MaterialSPtr material )const override
 		{
 			return ProgramFlags{};
 		}

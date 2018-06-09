@@ -2,19 +2,21 @@
 
 #include "Engine.hpp"
 
-#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
-#include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/RenderBufferAttachment.hpp"
-#include "FrameBuffer/TextureAttachment.hpp"
-#include "Mesh/Vertex.hpp"
-#include "Mesh/Buffer/Buffer.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Scene/Scene.hpp"
-#include "Scene/Skybox.hpp"
-#include "PBR/IblTextures.hpp"
-#include "Shader/ShaderProgram.hpp"
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureLayout.hpp"
+#include <Buffer/VertexBuffer.hpp>
+#include <Command/CommandBuffer.hpp>
+#include <Image/TextureView.hpp>
+#include <Pipeline/DepthStencilState.hpp>
+#include <Pipeline/InputAssemblyState.hpp>
+#include <Pipeline/Scissor.hpp>
+#include <Pipeline/VertexLayout.hpp>
+#include <Pipeline/Viewport.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
+#include <RenderPass/RenderSubpass.hpp>
+#include <RenderPass/RenderSubpassState.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
+#include <Shader/ShaderProgram.hpp>
+#include <Sync/Fence.hpp>
 
 #include <GlslSource.hpp>
 
@@ -23,143 +25,153 @@ using namespace castor;
 namespace castor3d
 {
 	BrdfPrefilter::BrdfPrefilter( Engine & engine
-		, castor::Size const & size )
-		: OwnedBy< Engine >{ engine }
-		, m_matrixUbo{ engine }
-		, m_viewport{ engine }
-		, m_bufferVertex
+		, castor::Size const & size
+		, renderer::TextureView const & dstTexture )
+		: m_renderSystem{ *engine.getRenderSystem() }
+	{
+		auto & device = getCurrentDevice( m_renderSystem );
+
+		// Initialise the vertex buffer.
+		m_vertexBuffer = renderer::makeVertexBuffer< TexturedQuad >( device
+			, 1u
+			, 0u
+			, renderer::MemoryPropertyFlag::eHostVisible );
+
+		if ( auto buffer = m_vertexBuffer->lock( 0u, 1u, renderer::MemoryMapFlag::eWrite ) )
 		{
+			*buffer =
 			{
-				0, 0,
-				1, 1,
-				0, 1,
-				0, 0,
-				1, 0,
-				1, 1
-			}
-		}
-		, m_declaration
-		{
-			{
-				BufferElementDeclaration{ ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec2 }
-			}
-		}
-		, m_size{ size }
-	{
-		uint32_t i = 0;
-
-		for ( auto & vertex : m_arrayVertex )
-		{
-			vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_bufferVertex.data() )[i++ * m_declaration.stride()] );
+				{
+					{ Point2f{ -1.0, -1.0 }, Point2f{ 0.0, 0.0 } },
+					{ Point2f{ -1.0, +1.0 }, Point2f{ 0.0, 1.0 } },
+					{ Point2f{ +1.0, -1.0 }, Point2f{ 1.0, 0.0 } },
+					{ Point2f{ +1.0, -1.0 }, Point2f{ 1.0, 0.0 } },
+					{ Point2f{ -1.0, +1.0 }, Point2f{ 0.0, 1.0 } },
+					{ Point2f{ +1.0, +1.0 }, Point2f{ 1.0, 1.0 } },
+				}
+			};
+			m_vertexBuffer->flush( 0u, 1u );
+			m_vertexBuffer->unlock();
 		}
 
-		m_viewport.initialise();
-		m_viewport.resize( m_size );
-		m_viewport.update();
-		auto & program = *doCreateProgram();
-		auto & renderSystem = *engine.getRenderSystem();
-		program.initialise();
-		m_vertexBuffer = std::make_shared< VertexBuffer >( engine
-			, m_declaration );
-		m_vertexBuffer->resize( uint32_t( m_arrayVertex.size()
-			* m_declaration.stride() ) );
-		m_vertexBuffer->linkCoords( m_arrayVertex.begin()
-			, m_arrayVertex.end() );
-		m_vertexBuffer->initialise( BufferAccessType::eStatic
-			, BufferAccessNature::eDraw );
-		m_geometryBuffers = renderSystem.createGeometryBuffers( Topology::eTriangles
-			, program );
-		m_geometryBuffers->initialise( { *m_vertexBuffer }
-		, nullptr );
+		// Initialise the vertex layout.
+		m_vertexLayout = renderer::makeLayout< TexturedQuad::Vertex >( 0u );
+		m_vertexLayout->createAttribute( 0u
+			, renderer::Format::eR32G32_SFLOAT
+			, offsetof( TexturedQuad::Vertex, position ) );
+		m_vertexLayout->createAttribute( 1u
+			, renderer::Format::eR32G32_SFLOAT
+			, offsetof( TexturedQuad::Vertex, texture ) );
 
-		DepthStencilState dsState;
-		dsState.setDepthTest( false );
-		dsState.setDepthMask( WritingMask::eZero );
-		m_pipeline = renderSystem.createRenderPipeline( std::move( dsState )
-			, RasteriserState{}
-			, BlendState{}
-			, MultisampleState{}
-			, program
-			, PipelineFlags{} );
-		m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
+		// Create the render pass.
+		renderer::RenderPassCreateInfo createInfo{};
+		createInfo.flags = 0u;
 
-		m_frameBuffer = renderSystem.createFrameBuffer();
+		createInfo.attachments.resize( 1u );
+		createInfo.attachments[0].format = dstTexture.getFormat();
+		createInfo.attachments[0].samples = renderer::SampleCountFlag::e1;
+		createInfo.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+		createInfo.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+		createInfo.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		createInfo.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		createInfo.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+		createInfo.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
 
-		m_depthBuffer = m_frameBuffer->createDepthStencilRenderBuffer( PixelFormat::eD24 );
-		m_depthBuffer->create();
-		m_depthBuffer->initialise( m_size );
-		m_depthAttach = m_frameBuffer->createAttachment( m_depthBuffer );
+		renderer::AttachmentReference colourReference;
+		colourReference.attachment = 0u;
+		colourReference.layout = renderer::ImageLayout::eColourAttachmentOptimal;
 
-		m_frameBuffer->initialise();
-		m_frameBuffer->bind();
-		m_frameBuffer->attach( AttachmentPoint::eDepth, m_depthAttach );
-		REQUIRE( m_frameBuffer->isComplete() );
-		m_frameBuffer->unbind();
+		createInfo.subpasses.resize( 1u );
+		createInfo.subpasses[0].flags = 0u;
+		createInfo.subpasses[0].colorAttachments = { colourReference };
+
+		createInfo.dependencies.resize( 2u );
+		createInfo.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		createInfo.dependencies[0].dstSubpass = 0u;
+		createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		createInfo.dependencies[1].srcSubpass = 0u;
+		createInfo.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+		createInfo.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		createInfo.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		createInfo.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		createInfo.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		m_renderPass = device.createRenderPass( createInfo );
+
+		// Initialise the frame buffer.
+		renderer::FrameBufferAttachmentArray attaches;
+		attaches.emplace_back( *( m_renderPass->getAttachments().begin() ), dstTexture );
+		m_frameBuffer = m_renderPass->createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
+			, std::move( attaches ) );
+
+		// Initialise the pipeline.
+		m_pipelineLayout = device.createPipelineLayout();
+		m_pipeline = m_pipelineLayout->createPipeline( renderer::GraphicsPipelineCreateInfo{
+			doCreateProgram(),
+			*m_renderPass,
+			renderer::VertexInputState::create( *m_vertexLayout ),
+			renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleList },
+			renderer::RasterisationState{},
+			renderer::MultisampleState{},
+			renderer::ColourBlendState::createDefault(),
+			{},
+			renderer::DepthStencilState{ 0u, false, false },
+			std::nullopt,
+			renderer::Viewport{ size.getWidth(), size.getHeight(), 0, 0, },
+			renderer::Scissor{ 0, 0, size.getWidth(), size.getHeight() },
+		} );
+
+		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 	}
 
-	BrdfPrefilter::~BrdfPrefilter()
+	void BrdfPrefilter::render()
 	{
-		m_frameBuffer->bind();
-		m_frameBuffer->detachAll();
-		m_frameBuffer->unbind();
-		m_frameBuffer->cleanup();
-		m_frameBuffer.reset();
-		m_depthAttach.reset();
-		m_depthBuffer->cleanup();
-		m_depthBuffer->destroy();
-		m_depthBuffer.reset();
-		m_pipeline->cleanup();
-		m_pipeline.reset();
-		m_vertexBuffer->cleanup();
-		m_vertexBuffer.reset();
-		m_geometryBuffers->cleanup();
-		m_geometryBuffers.reset();
-		m_viewport.cleanup();
-		m_matrixUbo.getUbo().cleanup();
+		auto & device = getCurrentDevice( m_renderSystem );
+		auto fence = device.createFence();
 
-		for ( auto & vertex : m_arrayVertex )
+		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
 		{
-			vertex.reset();
+			m_commandBuffer->beginRenderPass( *m_renderPass
+				, *m_frameBuffer
+				, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
+				, renderer::SubpassContents::eInline );
+			m_commandBuffer->bindPipeline( *m_pipeline );
+			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+			m_commandBuffer->draw( 6u );
+			m_commandBuffer->endRenderPass();
+			m_commandBuffer->end();
 		}
+
+		device.getGraphicsQueue().submit( *m_commandBuffer, fence.get() );
+		fence->wait( renderer::FenceTimeout );
+		device.getGraphicsQueue().waitIdle();
 	}
 
-	void BrdfPrefilter::render( TextureLayoutSPtr dstTexture )
+	renderer::ShaderStageStateArray BrdfPrefilter::doCreateProgram()
 	{
-		m_viewport.apply();
-		m_frameBuffer->bind( FrameBufferTarget::eDraw );
-		auto attach = m_frameBuffer->createAttachment( dstTexture );
-		attach->setLayer( 0 );
-		attach->setTarget( TextureType::eTwoDimensions );
-		attach->attach( AttachmentPoint::eColour, 0u );
-		m_frameBuffer->setDrawBuffer( attach );
-		REQUIRE( m_frameBuffer->isComplete() );
-		m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth );
-		m_matrixUbo.update( m_viewport.getProjection() );
-		m_pipeline->apply();
-		m_geometryBuffers->draw( uint32_t( m_arrayVertex.size() ), 0u );
-		m_frameBuffer->unbind();
-	}
-
-	ShaderProgramSPtr BrdfPrefilter::doCreateProgram()
-	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
 		glsl::Shader vtx;
 		{
 			using namespace glsl;
-			GlslWriter writer{ renderSystem.createGlslWriter() };
+			GlslWriter writer{ m_renderSystem.createGlslWriter() };
 
 			// Inputs
-			auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
-			UBO_MATRIX( writer );
+			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
+			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
 
 			// Outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
-			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto out = gl_PerVertex{ writer };
 
 			std::function< void() > main = [&]()
 			{
-				vtx_texture = position;
-				gl_Position = c3d_projection * vec4( position.x(), position.y(), 0.0, 1.0 );
+				vtx_texture = texcoord;
+				out.gl_Position() = writer.rendererScalePosition( vec4( position, 0.0, 1.0 ) );
 			};
 
 			writer.implementFunction< void >( cuT( "main" ), main );
@@ -169,19 +181,19 @@ namespace castor3d
 		glsl::Shader pxl;
 		{
 			using namespace glsl;
-			GlslWriter writer{ renderSystem.createGlslWriter() };
+			GlslWriter writer{ m_renderSystem.createGlslWriter() };
 
 			// Inputs
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			// Outputs
-			auto pxl_fragColor = writer.declOutput< Vec2 >( cuT( "pxl_FragColor" ) );
+			auto pxl_fragColor = writer.declFragData< Vec2 >( cuT( "pxl_FragColor" ), 0u );
 
 			auto radicalInverse = writer.implementFunction< Float >( cuT( "RadicalInverse_VdC" )
-				, [&]( UInt const & p_bits )
+				, [&]( UInt const & inBits )
 				{
 					auto bits = writer.declLocale( cuT( "bits" )
-						, p_bits );
+						, inBits );
 					bits = writer.paren( bits << 16u ) | writer.paren( bits >> 16u );
 					bits = writer.paren( writer.paren( bits & 0x55555555_ui ) << 1u ) | writer.paren( writer.paren( bits & 0xAAAAAAAA_ui ) >> 1u );
 					bits = writer.paren( writer.paren( bits & 0x33333333_ui ) << 2u ) | writer.paren( writer.paren( bits & 0xCCCCCCCC_ui ) >> 2u );
@@ -189,31 +201,31 @@ namespace castor3d
 					bits = writer.paren( writer.paren( bits & 0x00FF00FF_ui ) << 8u ) | writer.paren( writer.paren( bits & 0xFF00FF00_ui ) >> 8u );
 					writer.returnStmt( writer.cast< Float >( bits ) * 2.3283064365386963e-10 ); // / 0x100000000
 				}
-				, InUInt{ &writer, cuT( "p_bits" ) } );
+				, InUInt{ &writer, cuT( "inBits" ) } );
 
 			auto hammersley = writer.implementFunction< Vec2 >( cuT( "Hammersley" )
-				, [&]( UInt const & p_i
-					, UInt const & p_n )
+				, [&]( UInt const & i
+					, UInt const & n )
 				{
-					writer.returnStmt( vec2( writer.cast< Float >( p_i ) / writer.cast< Float >( p_n ), radicalInverse( p_i ) ) );
+					writer.returnStmt( vec2( writer.cast< Float >( i ) / writer.cast< Float >( n ), radicalInverse( i ) ) );
 				}
-				, InUInt{ &writer, cuT( "p_i" ) }
-				, InUInt{ &writer, cuT( "p_n" ) } );
+				, InUInt{ &writer, cuT( "i" ) }
+				, InUInt{ &writer, cuT( "n" ) } );
 
 			auto importanceSample = writer.implementFunction< Vec3 >( cuT( "ImportanceSampleGGX" )
-				, [&]( Vec2 const & p_xi
-					, Vec3 const & p_n
-					, Float const & p_roughness )
+				, [&]( Vec2 const & xi
+					, Vec3 const & n
+					, Float const & roughness )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
 					auto constexpr PI = 3.1415926535897932384626433832795028841968;
 					auto a = writer.declLocale( cuT( "a" )
-						, p_roughness * p_roughness );
+						, roughness * roughness );
 
 					auto phi = writer.declLocale( cuT( "phi" )
-						, 2.0_f * PI * p_xi.x() );
+						, 2.0_f * PI * xi.x() );
 					auto cosTheta = writer.declLocale( cuT( "cosTheta" )
-						, sqrt( writer.paren( 1.0 - p_xi.y() ) / writer.paren( 1.0 + writer.paren( a * a - 1.0 ) * p_xi.y() ) ) );
+						, sqrt( writer.paren( 1.0 - xi.y() ) / writer.paren( 1.0 + writer.paren( a * a - 1.0 ) * xi.y() ) ) );
 					auto sinTheta = writer.declLocale( cuT( "sinTheta" )
 						, sqrt( 1.0 - cosTheta * cosTheta ) );
 
@@ -225,66 +237,66 @@ namespace castor3d
 
 					// from tangent-space vector to world-space sample vector
 					auto up = writer.declLocale( cuT( "up" )
-						, writer.ternary( glsl::abs( p_n.z() ) < 0.999, vec3( 0.0_f, 0.0, 1.0 ), vec3( 1.0_f, 0.0, 0.0 ) ) );
+						, writer.ternary( glsl::abs( n.z() ) < 0.999, vec3( 0.0_f, 0.0, 1.0 ), vec3( 1.0_f, 0.0, 0.0 ) ) );
 					auto tangent = writer.declLocale( cuT( "tangent" )
-						, normalize( cross( up, p_n ) ) );
+						, normalize( cross( up, n ) ) );
 					auto bitangent = writer.declLocale( cuT( "bitangent" )
-						, cross( p_n, tangent ) );
+						, cross( n, tangent ) );
 
 					auto sampleVec = writer.declLocale( cuT( "sampleVec" )
-						, tangent * H.x() + bitangent * H.y() + p_n * H.z() );
+						, tangent * H.x() + bitangent * H.y() + n * H.z() );
 					writer.returnStmt( normalize( sampleVec ) );
 				}
-				, InVec2{ &writer, cuT( "p_xi" ) }
-				, InVec3{ &writer, cuT( "p_n" ) }
-				, InFloat{ &writer, cuT( "p_roughness" ) } );
+				, InVec2{ &writer, cuT( "xi" ) }
+				, InVec3{ &writer, cuT( "n" ) }
+				, InFloat{ &writer, cuT( "roughness" ) } );
 
 			auto geometrySchlickGGX = writer.implementFunction< Float >( cuT( "GeometrySchlickGGX" )
-				, [&]( Float const & p_product
-					, Float const & p_roughness )
+				, [&]( Float const & product
+					, Float const & roughness )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
 					auto r = writer.declLocale( cuT( "r" )
-						, p_roughness );
+						, roughness );
 					auto k = writer.declLocale( cuT( "k" )
 						, writer.paren( r * r ) / 2.0_f );
 
 					auto nominator = writer.declLocale( cuT( "num" )
-						, p_product );
+						, product );
 					auto denominator = writer.declLocale( cuT( "denom" )
-						, p_product * writer.paren( 1.0_f - k ) + k );
+						, product * writer.paren( 1.0_f - k ) + k );
 
 					writer.returnStmt( nominator / denominator );
 				}
-				, InFloat( &writer, cuT( "p_product" ) )
-				, InFloat( &writer, cuT( "p_roughness" ) ) );
+				, InFloat( &writer, cuT( "product" ) )
+				, InFloat( &writer, cuT( "roughness" ) ) );
 
 			auto geometrySmith = writer.implementFunction< Float >( cuT( "GeometrySmith" )
-				, [&]( Float const & p_NdotV
-					, Float const & p_NdotL
-					, Float const & p_roughness )
+				, [&]( Float const & NdotV
+					, Float const & NdotL
+					, Float const & roughness )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
 					auto ggx2 = writer.declLocale( cuT( "ggx2" )
-						, geometrySchlickGGX( p_NdotV, p_roughness ) );
+						, geometrySchlickGGX( NdotV, roughness ) );
 					auto ggx1 = writer.declLocale( cuT( "ggx1" )
-						, geometrySchlickGGX( p_NdotL, p_roughness ) );
+						, geometrySchlickGGX( NdotL, roughness ) );
 
 					writer.returnStmt( ggx1 * ggx2 );
 				}
-				, InFloat( &writer, cuT( "p_NdotV" ) )
-				, InFloat( &writer, cuT( "p_NdotL" ) )
-				, InFloat( &writer, cuT( "p_roughness" ) ) );
+				, InFloat( &writer, cuT( "NdotV" ) )
+				, InFloat( &writer, cuT( "NdotL" ) )
+				, InFloat( &writer, cuT( "roughness" ) ) );
 
 			auto integrateBRDF = writer.implementFunction< Vec2 >( cuT( "IntegrateBRDF" )
-				, [&]( Float const & p_NdotV
-					, Float const & p_roughness )
+				, [&]( Float const & NdotV
+					, Float const & roughness )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
 					auto V = writer.declLocale< Vec3 >( cuT( "V" ) );
-					V.x() = sqrt( 1.0 - p_NdotV * p_NdotV );
+					V.x() = sqrt( 1.0 - NdotV * NdotV );
 					V.y() = 0.0_f;
-					V.z() = p_NdotV;
+					V.z() = NdotV;
 					auto N = writer.declLocale( cuT( "N" )
 						, vec3( 0.0_f, 0.0, 1.0 ) );
 
@@ -296,12 +308,12 @@ namespace castor3d
 					auto sampleCount = writer.declLocale( cuT( "sampleCount" )
 						, 1024_ui );
 
-					FOR( writer, UInt, i, 0, "i < sampleCount", "++i" )
+					FOR( writer, UInt, i, 0u, "i < sampleCount", "++i" )
 					{
 						auto xi = writer.declLocale( cuT( "xi" )
 							, hammersley( i, sampleCount ) );
 						auto H = writer.declLocale( cuT( "H" )
-							, importanceSample( xi, N, p_roughness ) );
+							, importanceSample( xi, N, roughness ) );
 						auto L = writer.declLocale( cuT( "L" )
 							, normalize( vec3( 2.0_f ) * dot( V, H ) * H - V ) );
 
@@ -315,9 +327,9 @@ namespace castor3d
 						IF( writer, "NdotL > 0.0" )
 						{
 							auto G = writer.declLocale( cuT( "G" )
-								, geometrySmith( p_NdotV, max( dot( N, L ), 0.0 ), p_roughness ) );
+								, geometrySmith( NdotV, max( dot( N, L ), 0.0 ), roughness ) );
 							auto G_Vis = writer.declLocale( cuT( "G_Vis" )
-								, writer.paren( G * VdotH ) / writer.paren( NdotH * p_NdotV ) );
+								, writer.paren( G * VdotH ) / writer.paren( NdotH * NdotV ) );
 							auto Fc = writer.declLocale( cuT( "Fc" )
 								, pow( 1.0 - VdotH, 5.0_f ) );
 
@@ -332,25 +344,25 @@ namespace castor3d
 					B /= writer.cast< Float >( sampleCount );
 					writer.returnStmt( vec2( A, B ) );
 				}
-				, InFloat( &writer, cuT( "p_NdotV" ) )
-				, InFloat( &writer, cuT( "p_roughness" ) ) );
+				, InFloat( &writer, cuT( "NdotV" ) )
+				, InFloat( &writer, cuT( "roughness" ) ) );
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					pxl_fragColor.xy() = integrateBRDF( vtx_texture.x(), vtx_texture.y() );
+					pxl_fragColor.xy() = integrateBRDF( vtx_texture.x(), 1.0_f - vtx_texture.y() );
 				} );
 
 			pxl = writer.finalise();
 		}
 
-		auto & cache = getEngine()->getShaderProgramCache();
-		auto program = cache.getNewProgram( false );
-		program->createObject( ShaderType::eVertex );
-		program->createObject( ShaderType::ePixel );
-		program->setSource( ShaderType::eVertex, vtx );
-		program->setSource( ShaderType::ePixel, pxl );
-		program->initialise();
+		renderer::ShaderStageStateArray program
+		{
+			{ getCurrentDevice( m_renderSystem ).createShaderModule( renderer::ShaderStageFlag::eVertex ) },
+			{ getCurrentDevice( m_renderSystem ).createShaderModule( renderer::ShaderStageFlag::eFragment ) }
+		};
+		program[0].module->loadShader( vtx.getSource() );
+		program[1].module->loadShader( pxl.getSource() );
 		return program;
 	}
 }

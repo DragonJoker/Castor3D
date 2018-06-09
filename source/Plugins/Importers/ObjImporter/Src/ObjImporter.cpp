@@ -19,7 +19,6 @@
 #include <Mesh/SubmeshComponent/Face.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Vertex.hpp>
-#include <Mesh/Buffer/Buffer.hpp>
 #include <Miscellaneous/Version.hpp>
 #include <Plugin/Plugin.hpp>
 #include <Render/RenderSystem.hpp>
@@ -44,9 +43,9 @@ namespace Obj
 			size_t index1 = faceVtx.find( '/' );
 			std::string components = faceVtx.substr( 0, index1 );
 			uint32_t iv = string::toInt( components ) - 1;
-			vit->m_pos[0] = allvtx[iv][0];
-			vit->m_pos[1] = allvtx[iv][1];
-			vit->m_pos[2] = allvtx[iv][2];
+			vit->pos[0] = allvtx[iv][0];
+			vit->pos[1] = allvtx[iv][1];
+			vit->pos[2] = allvtx[iv][2];
 
 			++index1;
 			size_t index2 = faceVtx.find( '/', index1 );
@@ -55,8 +54,8 @@ namespace Obj
 			if ( !components.empty() )
 			{
 				uint32_t ivt = string::toInt( components ) - 1;
-				vit->m_tex[0] = alltex[ivt][0];
-				vit->m_tex[1] = alltex[ivt][1];
+				vit->tex[0] = alltex[ivt][0];
+				vit->tex[1] = alltex[ivt][1];
 			}
 
 			if ( index2 != std::string::npos )
@@ -67,9 +66,9 @@ namespace Obj
 				if ( !components.empty() )
 				{
 					uint32_t ivn = string::toInt( components ) - 1;
-					vit->m_nml[0] = allnml[ivn][0];
-					vit->m_nml[1] = allnml[ivn][1];
-					vit->m_nml[2] = allnml[ivn][2];
+					vit->nml[0] = allnml[ivn][0];
+					vit->nml[1] = allnml[ivn][1];
+					vit->nml[2] = allnml[ivn][2];
 				}
 			}
 		}
@@ -180,10 +179,10 @@ namespace Obj
 		m_mapOffsets[&pass] = offset;
 		m_mapScales[&pass] = scale;
 		m_mapTurbulences[&pass] = turbulence;
-		Logger::logDebug( StringStream() << cuT( "-	Texture :    " ) + value );
-		Logger::logDebug( StringStream() << cuT( "-	Offset :     " ) << offset );
-		Logger::logDebug( StringStream() << cuT( "-	Scale :      " ) << scale );
-		Logger::logDebug( StringStream() << cuT( "-	Turbulence : " ) << turbulence );
+		Logger::logDebug( makeStringStream() << cuT( "-	Texture :    " ) + value );
+		Logger::logDebug( makeStringStream() << cuT( "-	Offset :     " ) << offset );
+		Logger::logDebug( makeStringStream() << cuT( "-	Scale :      " ) << scale );
+		Logger::logDebug( makeStringStream() << cuT( "-	Turbulence : " ) << turbulence );
 
 		if ( !value.empty() )
 		{
@@ -632,7 +631,7 @@ namespace Obj
 			{
 				arraySplitted = string::split( strLine, cuT( " " ), 1 );
 
-				if ( arraySplitted.size() >= 1 )
+				if ( !arraySplitted.empty() )
 				{
 					section = arraySplitted[0];
 
@@ -693,6 +692,7 @@ namespace Obj
 					{
 						// Diffuse colour
 						StringStream stream( value );
+						stream.imbue( castor3d::Engine::getLocale() );
 						stream >> components[0] >> components[1] >> components[2];
 						pass->setDiffuse( castor::RgbColour::fromComponents( components[0], components[1], components[2]) );
 					}
@@ -700,6 +700,7 @@ namespace Obj
 					{
 						// Specular colour
 						StringStream stream( value );
+						stream.imbue( castor3d::Engine::getLocale() );
 						stream >> components[0] >> components[1] >> components[2];
 						pass->setSpecular( castor::RgbColour::fromComponents( components[0], components[1], components[2] ) );
 					}

@@ -37,13 +37,12 @@ namespace castor3d
 	//*********************************************************************************************
 	
 	SpotLightPass::Program::Program( Engine & engine
+		, SpotLightPass & lightPass
 		, glsl::Shader const & vtx
-		, glsl::Shader const & pxl )
-		: MeshLightPass::Program{ engine, vtx, pxl }
-		, m_lightDirection{ m_program->createUniform< UniformType::eVec3f >( cuT( "light.m_direction" ), ShaderType::ePixel ) }
-		, m_lightTransform{ m_program->createUniform< UniformType::eMat4x4f >( cuT( "light.m_transform" ), ShaderType::ePixel ) }
-		, m_lightExponent{ m_program->createUniform< UniformType::eFloat >( cuT( "light.m_exponent" ), ShaderType::ePixel ) }
-		, m_lightCutOff{ m_program->createUniform< UniformType::eFloat >( cuT( "light.m_cutOff" ), ShaderType::ePixel ) }
+		, glsl::Shader const & pxl
+		, bool hasShadows )
+		: MeshLightPass::Program{ engine, vtx, pxl, hasShadows }
+		, m_lightPass{ lightPass }
 	{
 	}
 
@@ -54,32 +53,59 @@ namespace castor3d
 	void SpotLightPass::Program::doBind( Light const & light )
 	{
 		auto & spotLight = *light.getSpotLight();
-		m_lightAttenuation->setValue( spotLight.getAttenuation() );
-		m_lightPosition->setValue( light.getParent()->getDerivedPosition() );
-		m_lightExponent->setValue( spotLight.getExponent() );
-		m_lightCutOff->setValue( spotLight.getCutOff().cos() );
-		m_lightDirection->setValue( spotLight.getDirection() );
-		m_lightTransform->setValue( spotLight.getLightSpaceTransform() );
+		auto & data = m_lightPass.m_ubo->getData( 0u );
+		data.base.colourIndex = castor::Point4f{ light.getColour()[0], light.getColour()[1], light.getColour()[2], 0.0f };
+		data.base.intensityFarPlane = castor::Point4f{ light.getIntensity()[0], light.getIntensity()[1], light.getFarPlane(), 0.0f };
+		data.base.volumetric = castor::Point4f{ light.getVolumetricSteps(), light.getVolumetricScatteringFactor(), 0.0f, 0.0f };
+		auto position = light.getParent()->getDerivedPosition();
+		data.position = castor::Point4f{ position[0], position[1], position[2], 0.0f };
+		data.attenuation = castor::Point4f{ spotLight.getAttenuation()[0], spotLight.getAttenuation()[1], spotLight.getAttenuation()[2], 0.0f };
+		data.exponentCutOff[0] = spotLight.getExponent();
+		data.exponentCutOff[1] = spotLight.getCutOff().cos();
+		data.direction = castor::Point4f{ spotLight.getDirection()[0], spotLight.getDirection()[1], spotLight.getDirection()[2], 0.0f };
+		data.transform = spotLight.getLightSpaceTransform();
+		m_lightPass.m_ubo->upload();
 	}
 
 	//*********************************************************************************************
 
 	SpotLightPass::SpotLightPass( Engine & engine
-		, FrameBuffer & frameBuffer
-		, FrameBufferAttachment & depthAttach
+		, renderer::TextureView const & depthView
+		, renderer::TextureView const & diffuseView
+		, renderer::TextureView const & specularView
 		, GpInfoUbo & gpInfoUbo
 		, bool hasShadows )
 		: MeshLightPass{ engine
-			, frameBuffer
-			, depthAttach
+			, depthView
+			, diffuseView
+			, specularView
 			, gpInfoUbo
 			, LightType::eSpot
 			, hasShadows }
+		, m_ubo{ renderer::makeUniformBuffer< Config >( getCurrentDevice( m_engine )
+			, 1u
+			, renderer::BufferTarget::eTransferDst
+			, renderer::MemoryPropertyFlag::eHostVisible ) }
 	{
+		m_baseUbo = &m_ubo->getUbo();
 	}
 
 	SpotLightPass::~SpotLightPass()
 	{
+	}
+
+	void SpotLightPass::accept( RenderTechniqueVisitor & visitor )
+	{
+		String name = cuT( "SpotLight" );
+
+		if ( m_shadows )
+		{
+			name += cuT( " Shadow" );
+		}
+
+		visitor.visit( name
+			, renderer::ShaderStageFlag::eFragment
+			, m_pixelShader );
 	}
 
 	Point3fArray SpotLightPass::doGenerateVertices()const
@@ -103,10 +129,13 @@ namespace castor3d
 		return model;
 	}
 
-	LightPass::ProgramPtr SpotLightPass::doCreateProgram( glsl::Shader const & vtx
-		, glsl::Shader const & pxl )const
+	LightPass::ProgramPtr SpotLightPass::doCreateProgram()
 	{
-		return std::make_unique< Program >( m_engine, vtx, pxl );
+		return std::make_unique< Program >( m_engine
+			, *this
+			, m_vertexShader
+			, m_pixelShader
+			, m_shadows );
 	}
 
 	//*********************************************************************************************

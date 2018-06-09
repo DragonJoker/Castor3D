@@ -8,6 +8,8 @@ See LICENSE file in root folder
 #include "Cache/ObjectCache.hpp"
 #include "Texture/TextureUnit.hpp"
 
+#include <Buffer/BufferView.hpp>
+
 namespace castor3d
 {
 	using LightsRefArray = std::vector< Light * >;
@@ -116,7 +118,7 @@ namespace castor3d
 		C3D_API void initialise();
 		/**
 		 *\~english
-		 *\brief		sets all the elements to be cleaned up.
+		 *\brief		Sets all the elements to be cleaned up.
 		 *\~french
 		 *\brief		Met tous les éléments à nettoyer.
 		 */
@@ -176,18 +178,24 @@ namespace castor3d
 		C3D_API void updateLightsTexture( Camera const & camera )const;
 		/**
 		 *\~english
-		 *\brief		Binds the lights texture.
+		 *\return		The texture buffer.
 		 *\~french
-		 *\brief		Active la texture de sources lumineuses.
+		 *\return		Le tampon de la texture.
 		 */
-		C3D_API void bindLights()const;
+		C3D_API renderer::Buffer< castor::Point4f > const & getBuffer()const
+		{
+			return *m_textureBuffer;
+		}
 		/**
 		 *\~english
-		 *\brief		Unbinds the lights texture.
+		 *\return		The texture view.
 		 *\~french
-		 *\brief		Désactive la texture de sources lumineuses.
+		 *\return		La vue de la texture.
 		 */
-		C3D_API void unbindLights()const;
+		C3D_API renderer::BufferView const & getView()const
+		{
+			return *m_textureView;
+		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the count of the lights of given type.
@@ -221,20 +229,11 @@ namespace castor3d
 		void onLightChanged( Light & light );
 
 	private:
-		//!\~english	The lights sorted by light type.
-		//!\~french		Les lumières, triées par type de lumière.
 		LightsMap m_typeSortedLights;
-		//!\~english	The lights texture.
-		//!\~french		La texture contenant les lumières.
-		TextureUnit m_lightsTexture;
-		//!\~english	The lights texture buffer.
-		//!\~french		Le tampon de la texture contenant les lumières.
-		castor::PxBufferBaseSPtr m_lightsBuffer;
-		//!\~english	The light sources that need to be updated.
-		//!\~french		Les sources lumineuses ayant besoin d'être mises à jour.
+		mutable castor::Point4fArray m_lightsBuffer;
+		renderer::BufferPtr< castor::Point4f > m_textureBuffer;
+		renderer::BufferViewPtr m_textureView;
 		LightsRefArray m_dirtyLights;
-		//!\~english	The connections to light source modified signal.
-		//!\~french		Les connexions au signal de source lumineuse modifiée.
 		std::map< Light *, OnLightChangedConnection > m_connections;
 	};
 	using LightCache = ObjectCache< Light, castor::String >;

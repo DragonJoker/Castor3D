@@ -31,6 +31,8 @@ See LICENSE file in root folder
 
 #include <GlslWriterPrerequisites.hpp>
 
+#include <RendererPrerequisites.hpp>
+
 namespace castor3d
 {
 	using castor::real;
@@ -143,129 +145,6 @@ namespace castor3d
 	};
 	/*!
 	\author		Sylvain DOREMUS
-	\version	0.7.0.0
-	\date		12/11/2012
-	\~english
-	\brief		Frame buffer components enumeration
-	\~french
-	\brief		Enumération des composantes de tampon d'image
-	*/
-	enum class BufferComponent
-		: uint8_t
-	{
-		eNone = 0,
-		eColour = 1 << 0,
-		eDepth = 1 << 1,
-		eStencil = 1 << 2,
-	};
-	IMPLEMENT_FLAGS( BufferComponent )
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.7.0.0
-	\date		12/11/2012
-	\~english
-	\brief		Frame buffer components enumeration
-	\~french
-	\brief		Enumération des composantes de tampon d'image
-	*/
-	enum class WindowBuffer
-		: uint8_t
-	{
-		eNone,
-		eFrontLeft,
-		eFrontRight,
-		eBackLeft,
-		eBackRight,
-		eFront,
-		eBack,
-		eLeft,
-		eRight,
-		eFrontAndBack,
-		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
-	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.7.0.0
-	\date		12/11/2012
-	\~english
-	\brief		Frame buffer binding targets enumeration
-	\~french
-	\brief		Enumération des cibles d'activation de tampon d'image
-	*/
-	enum class FrameBufferTarget
-		: uint8_t
-	{
-		//!\~english	Frame buffer is bound as a target for draws.
-		//!\~french		Le tampon d'image est activé en tant que cible pour les rendus.
-		eDraw,
-		//!\~english	Frame buffer is bound as a target for reads.
-		//!\~french		Le tampon d'image est activé en tant que cible pour les lectures.
-		eRead,
-		//!\~english	Frame buffer is bound as a target for reads and draws.
-		//!\~french		Le tampon d'image est activé en tant que cible pour les lectures et les rendus.
-		eBoth,
-		CASTOR_SCOPED_ENUM_BOUNDS( eDraw )
-	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.7.0.0
-	\date		12/11/2012
-	\~english
-	\brief		Frame buffer binding modes enumeration
-	\~french
-	\brief		Enumération des modes d'activation de tampon d'image
-	*/
-	enum class FrameBufferMode
-		: uint8_t
-	{
-		//!\~english	Frame buffer is bound for configuration.
-		//!\~french		Le tampon d'image est activé pour configuration.
-		eConfig,
-		//!\~english	Frame buffer is bound and FrameBuffer::setDrawBuffers is called automatically.
-		//!\~french		Le tampon d'image est activé et FrameBuffer::SetDrawBuffers est appelée automatiquement.
-		eAutomatic,
-		//!\~english	Frame buffer is bound and user must call FrameBuffer::SetDrawBuffers if he wants.
-		//!\~french		Le tampon d'image est activé et l'utilisateur doit appeler FrameBuffer::SetDrawBuffers s'il veut.
-		eManual,
-		CASTOR_SCOPED_ENUM_BOUNDS( eConfig )
-	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.7.0.0
-	\date		12/11/2012
-	\~english
-	\brief		Frame buffer attachment points enumeration
-	\~french
-	\brief		Enumération des points d'attache pour un tampon d'image
-	*/
-	enum class AttachmentPoint
-		: uint8_t
-	{
-		eNone,
-		eColour,
-		eDepth,
-		eStencil,
-		eDepthStencil,
-		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
-	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.8.0.0
-	\date		11/10/2015
-	\~english
-	\brief		Frame buffer attachment types enumeration.
-	\~french
-	\brief		Enumération des types d'attache pour un tampon d'image.
-	*/
-	enum class AttachmentType
-		: uint8_t
-	{
-		eTexture,
-		eBuffer,
-		CASTOR_SCOPED_ENUM_BOUNDS( eTexture )
-	};
-	/*!
-	\author		Sylvain DOREMUS
 	\~english
 	\brief		The  viewport projection types enumeration
 	\~french
@@ -368,129 +247,12 @@ namespace castor3d
 		ePostRender,
 		CASTOR_SCOPED_ENUM_BOUNDS( ePreRender )
 	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0.0
-	\date		23/05/2013
-	\~english
-	\brief		Culled faces enumeration.
-	\~french
-	\brief		Enumération des faces supprimées.
-	*/
-	enum class Culling
-		: uint8_t
-	{
-		//!\~english	No face culled.
-		//!\~french		Aucune face supprimée.
-		eNone,
-		//!\~english	Front faces are culled.
-		//!\~french		Faces avant supprimées.
-		eFront,
-		//!\~english	Back face are culled.
-		//!\~french		Faces arrière supprimées.
-		eBack,
-		//!\~english	Back and front faces are culled.
-		//!\~french		Faces avant et arrière supprimées.
-		eFrontAndBack,
-		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0.0
-	\date		23/05/2013
-	\~english
-	\brief		Polygon rasterisation modes enumeration
-	\~french
-	\brief		Enumération des mode de rastérisation des polygones
-	*/
-	enum class FillMode
-		: uint8_t
-	{
-		//!\~english	Polygon vertices that are marked as the start of a boundary edge are drawn as points.
-		//!\~french		Les vertices marquant les arêtes sont dessinés en tant que points.
-		ePoint,
-		//!\~english	Boundary edges of the polygon are drawn as line segments.
-		//!\~french		Les arêtes du polygone sont dessinées en tant que segments.
-		eLine,
-		//!\~english	The interior of the polygon is filled.
-		//!\~french		L'intérieur du polygone est rempli.
-		eSolid,
-		CASTOR_SCOPED_ENUM_BOUNDS( ePoint )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.8.0
-	\date		16/03/2016
-	\~english
-	\brief		GPU query supported types enumeration.
-	\~french
-	\brief		Enumération des types de requêtes GPU supportés.
-	*/
-	enum class QueryType
-		: uint32_t
-	{
-		eTimeElapsed,
-		eSamplesPassed,
-		eAnySamplesPassed,
-		ePrimitivesGenerated,
-		eTransformFeedbackPrimitivesWritten,
-		eAnySamplesPassedConservative,
-		eTimestamp,
-		CASTOR_SCOPED_ENUM_BOUNDS( eTimeElapsed )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.8.0
-	\date		16/03/2016
-	\~english
-	\brief		GPU query supported informations enumeration.
-	\~french
-	\brief		Enumération des informations de requêtes GPU supportés.
-	*/
-	enum class QueryInfo
-		: uint32_t
-	{
-		eResult,
-		eResultAvailable,
-		eResultNoWait,
-		CASTOR_SCOPED_ENUM_BOUNDS( eResult )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.8.0
-	\date		16/03/2016
-	\~english
-	\brief		Supported memory barriers enumeration.
-	\~french
-	\brief		Enumération des types de barrières supportées.
-	*/
-	enum class MemoryBarrier
-		: uint32_t
-	{
-		eVertexBuffer = 0x01 << 0,
-		eIndexBuffer = 0x01 << 1,
-		eUniformBuffer = 0x01 << 2,
-		eAtomicCounterBuffer = 0x01 << 3,
-		eQueryBuffer = 0x01 << 4,
-		eShaderStorageBuffer = 0x01 << 5,
-		eTextureFetch = 0x01 << 6,
-		eTextureUpdate = 0x01 << 7,
-		eFrameBuffer = 0x01 << 8,
-		ePixelBuffer = 0x01 << 9,
-		eAll = 0xFFFFFFFF,
-	};
-	IMPLEMENT_FLAGS( MemoryBarrier )
 
-	class WindowHandle;
-	class RenderBuffer;
-	class ColourRenderBuffer;
-	class DepthStencilRenderBuffer;
-	class FrameBufferAttachment;
-	class RenderBufferAttachment;
-	class TextureAttachment;
-	class FrameBuffer;
-	class BackBuffers;
-	class IWindowHandle;
+	template< class TParsed >
+	class BinaryWriter;
+	template< class TParsed >
+	class BinaryParser;
+
 	class DebugOverlays;
 	class Engine;
 	class Plugin;
@@ -505,7 +267,6 @@ namespace castor3d
 	class FrameListener;
 	class Version;
 	class Parameters;
-	class GpuQuery;
 	class PickingPass;
 	class TransformFeedback;
 	class ComputePipeline;
@@ -513,14 +274,6 @@ namespace castor3d
 	class RenderPassTimer;
 	class GaussianBlur;
 
-	DECLARE_SMART_PTR( RenderBuffer );
-	DECLARE_SMART_PTR( ColourRenderBuffer );
-	DECLARE_SMART_PTR( DepthStencilRenderBuffer );
-	DECLARE_SMART_PTR( FrameBufferAttachment );
-	DECLARE_SMART_PTR( RenderBufferAttachment );
-	DECLARE_SMART_PTR( TextureAttachment );
-	DECLARE_SMART_PTR( FrameBuffer );
-	DECLARE_SMART_PTR( BackBuffers );
 	DECLARE_SMART_PTR( Engine );
 	DECLARE_SMART_PTR( Plugin );
 	DECLARE_SMART_PTR( RendererPlugin );
@@ -531,36 +284,45 @@ namespace castor3d
 	DECLARE_SMART_PTR( ParticlePlugin );
 	DECLARE_SMART_PTR( FrameEvent );
 	DECLARE_SMART_PTR( FrameListener );
-	DECLARE_SMART_PTR( IWindowHandle );
-	DECLARE_SMART_PTR( GpuQuery );
 	DECLARE_SMART_PTR( PickingPass );
 	DECLARE_SMART_PTR( TransformFeedback );
 	DECLARE_SMART_PTR( ComputePipeline );
 	DECLARE_SMART_PTR( RenderPassTimer );
 	DECLARE_SMART_PTR( GaussianBlur );
 
+	castor::Matrix4x4f convert( std::array< float, 16 > const & value );
+	renderer::ClearColorValue convert( castor::RgbaColour const & value );
+	castor::RgbaColour convert( renderer::ClearColorValue const & value );
+
 	using ParticleFactory = castor::Factory< CpuParticleSystem, castor::String, CpuParticleSystemUPtr, std::function< CpuParticleSystemUPtr( ParticleSystem & ) > >;
 
 	/*!
-	\author 	Sylvain DOREMUS
-	\date 		04/02/2016
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to specialise a cache behaviour.
-	*\remarks	Must hold:
-				<ul>
-				<li>Name: The element type name.</li>
-				<li>Producer: The element creation function prototype.</li>
-				<li>Merger: The prototype of the function use to merge a cache element into another cache.</li>
-				</ul>
-	\~french
-	\brief		Structure permettant de spécialiser le comportement d'un cache.
-	*\remarks	doit contenir:
-				<ul>
-				<li>Name: Le nom du type d'élément.</li>
-				<li>Producer: Le prototype de la fonction de création d'un élément.</li>
-				<li>Merger: Le prototype de la fonction pour fusionner un élément d'un cache dans un autre cache.</li>
-				</ul>
+	*\author
+	*	Sylvain DOREMUS
+	*\date
+	*	04/02/2016
+	*\version
+	*	0.8.0
+	*\~english
+	*\brief
+	*	Helper structure to specialise a cache behaviour.
+	*\remarks
+	*	Must hold:
+	*	<ul>
+	*	<li>Name: The element type name.</li>
+	*	<li>Producer: The element creation function prototype.</li>
+	*	<li>Merger: The prototype of the function use to merge a cache element into another cache.</li>
+	*	</ul>
+	*\~french
+	*\brief
+	*	Structure permettant de spécialiser le comportement d'un cache.
+	*\remarks
+	*	Doit contenir:
+	*	<ul>
+	*	<li>Name: Le nom du type d'élément.</li>
+	*	<li>Producer: Le prototype de la fonction de création d'un élément.</li>
+	*	<li>Merger: Le prototype de la fonction pour fusionner un élément d'un cache dans un autre cache.</li>
+	*	</ul>
 	*/
 	template< typename ElementType, typename KeyType >
 	struct CacheTraits;
@@ -603,25 +365,32 @@ namespace castor3d
 	DECLARE_SMART_PTR( RenderWindowCache );
 
 	/*!
-	\author 	Sylvain DOREMUS
-	\date 		04/02/2016
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to specialise a cache behaviour.
-	*\remarks	Must hold:
-				<ul>
-				<li>Name: The element type name.</li>
-				<li>Producer: The element creation function prototype.</li>
-				<li>Merger: The prototype of the function use to merge a cache element into another cache.</li>
-				</ul>
-	\~french
-	\brief		Structure permettant de spécialiser le comportement d'un cache.
-	*\remarks	doit contenir:
-				<ul>
-				<li>Name: Le nom du type d'élément.</li>
-				<li>Producer: Le prototype de la fonction de création d'un élément.</li>
-				<li>Merger: Le prototype de la fonction pour fusionner un élément d'un cache dans un autre cache.</li>
-				</ul>
+	*\author
+	*	Sylvain DOREMUS
+	*\date
+	*	04/02/2016
+	*\version
+	*	0.8.0
+	*\~english
+	*\brief
+	*	Helper structure to specialise a cache behaviour.
+	*\remarks
+	*	Must hold:
+	*	<ul>
+	*	<li>Name: The element type name.</li>
+	*	<li>Producer: The element creation function prototype.</li>
+	*	<li>Merger: The prototype of the function use to merge a cache element into another cache.</li>
+	*	</ul>
+	*\~french
+	*\brief
+	*	Structure permettant de spécialiser le comportement d'un cache.
+	*\remarks
+	*	Doit contenir:
+	*	<ul>
+	*	<li>Name: Le nom du type d'élément.</li>
+	*	<li>Producer: Le prototype de la fonction de création d'un élément.</li>
+	*	<li>Merger: Le prototype de la fonction pour fusionner un élément d'un cache dans un autre cache.</li>
+	*	</ul>
 	*/
 	template< typename ElementType, typename KeyType >
 	struct ObjectCacheTraits;
@@ -638,12 +407,8 @@ namespace castor3d
 	template< typename ElementType, typename KeyType >
 	class ObjectCache;
 
-	using AnimatedObjectGroupCache = Cache< AnimatedObjectGroup, castor::String >;
-	using BillboardListCache = ObjectCache< BillboardList, castor::String >;
 	using CameraCache = ObjectCache< Camera, castor::String >;
 
-	DECLARE_SMART_PTR( AnimatedObjectGroupCache );
-	DECLARE_SMART_PTR( BillboardListCache );
 	DECLARE_SMART_PTR( CameraCache );
 
 	template< typename ResourceType, typename CacheType, EventType EventType >
@@ -653,8 +418,6 @@ namespace castor3d
 	DECLARE_VECTOR( real, Real );
 	//! RenderWindow pointer array
 	DECLARE_VECTOR( RenderWindowSPtr, RenderWindowPtr );
-	//! RenderBuffer pointer array
-	DECLARE_VECTOR( RenderBufferSPtr, RenderBufferPtr );
 	//! FrameEvent pointer array
 	DECLARE_VECTOR( FrameEventUPtr, FrameEventPtr );
 	//! FrameListener pointer map, sorted by name
@@ -767,5 +530,27 @@ namespace castor3d
 DECLARED_EXPORTED_OWNED_BY( C3D_API, castor3d::Engine, Engine )
 DECLARED_EXPORTED_OWNED_BY( C3D_API, castor3d::RenderSystem, RenderSystem )
 DECLARED_EXPORTED_OWNED_BY( C3D_API, castor3d::Scene, Scene )
+
+namespace castor3d
+{
+	C3D_API renderer::Device const & getCurrentDevice( RenderSystem const & obj );
+	C3D_API renderer::Device const & getCurrentDevice( Engine const & obj );
+	C3D_API renderer::Device const & getCurrentDevice( Scene const & obj );
+
+	inline renderer::Device const & getCurrentDevice( castor::OwnedBy< RenderSystem > const & obj )
+	{
+		return getCurrentDevice( *obj.getRenderSystem() );
+	}
+
+	inline renderer::Device const & getCurrentDevice( castor::OwnedBy< Engine > const & obj )
+	{
+		return getCurrentDevice( *obj.getEngine() );
+	}
+
+	inline renderer::Device const & getCurrentDevice( castor::OwnedBy< Scene > const & obj )
+	{
+		return getCurrentDevice( *obj.getScene() );
+	}
+}
 
 #endif

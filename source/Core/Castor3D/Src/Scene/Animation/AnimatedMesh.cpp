@@ -13,7 +13,7 @@ namespace castor3d
 	AnimatedMesh::AnimatedMesh( String const & name
 		, Mesh & mesh
 		, Geometry & geometry )
-		: AnimatedObject{ name }
+		: AnimatedObject{ AnimationType::eMesh, name }
 		, m_mesh{ mesh }
 		, m_geometry{ geometry }
 	{

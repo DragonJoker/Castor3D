@@ -4,12 +4,14 @@ See LICENSE file in root folder
 #ifndef ___C3D_RadianceComputer_H___
 #define ___C3D_RadianceComputer_H___
 
-#include "Render/Viewport.hpp"
+#include "RenderToTexture/RenderCube.hpp"
+#include "Texture/Sampler.hpp"
 
-#include "Mesh/Buffer/BufferDeclaration.hpp"
-#include "Shader/Ubos/MatrixUbo.hpp"
+#include <Image/TextureView.hpp>
+#include <RenderPass/FrameBuffer.hpp>
+#include <RenderPass/RenderPass.hpp>
 
-#include <Design/OwnedBy.hpp>
+#include <array>
 
 namespace castor3d
 {
@@ -18,96 +20,72 @@ namespace castor3d
 	\date		02/03/2017
 	\version	0.9.0
 	\~english
-	\brief		Class used to render colour equirectangular textures to cube maps.
+	\brief		Computes the radiance map from an environment map.
 	\~french
-	\brief		Classe utilisée pour rendre les textures couleur équirectangulaires dans des cube maps.
+	\brief		Calcule la texture de radiance pour une texture d'environnement donnée.
 	*/
 	class RadianceComputer
-		: public castor::OwnedBy< Engine >
+		: private RenderCube
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\param[in]	size	The render size.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	size		The render size.
+		 *\param[in]	srcTexture	The cube texture source.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	size	La taille du rendu.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	size		La taille du rendu.
+		 *\param[in]	srcTexture	La texture cube source.
 		 */
 		C3D_API explicit RadianceComputer( Engine & engine
-			, castor::Size const & size );
+			, castor::Size const & size
+			, renderer::Texture const & srcTexture );
 		/**
 		 *\~english
-		 *\brief		Destructor.
+		 *\brief		Computes the radiance map.
 		 *\~french
-		 *\brief		Destructeur.
+		 *\brief		Calcule la texture de radiance.
 		 */
-		C3D_API ~RadianceComputer();
+		C3D_API void render();
 		/**
-		 *\~english
-		 *\brief		Renders the wanted equirectangular 2D texture to given cube texture.
-		 *\param[in]	srcTexture	The cube texture source.
-		 *\param[in]	dstTexture	The cube texture destination.
-		 *\~french
-		 *\brief		Dessine a texture equirectangulaire 2D donnée dans la texture cube donnée.
-		 *\param[in]	srcTexture	La texture cube source.
-		 *\param[in]	dstTexture	La texture cube destination.
-		 */
-		C3D_API void render( TextureLayout const & srcTexture
-			, TextureLayoutSPtr dstTexture );
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		inline renderer::TextureView const & getResult()const
+		{
+			return *m_resultView;
+		}
+
+		inline renderer::Sampler const & getSampler()const
+		{
+			return m_sampler->getSampler();
+		}
+		/**@}*/
 
 	private:
-		/**
-		 *\~english
-		 *\brief		Creates the render a 2D texture shader program.
-		 *\return		The program.
-		 *\~french
-		 *\brief		Crée le programme shader de dessin de texture 2D.
-		 *\return		Le programme.
-		 */
-		ShaderProgramSPtr doCreateProgram();
+		struct RenderPass
+		{
+			renderer::TextureViewPtr dstView;
+			renderer::FrameBufferPtr frameBuffer;
+		};
+		using RenderPasses = std::array< RenderPass, 6 >;
 
-	private:
-		//!\~english	The uniform buffer containing matrices data.
-		//!\~french		Le tampon d'uniformes contenant les données de matrices.
-		MatrixUbo m_matrixUbo;
-		//!\~english	The resulting dimensions.
-		//!\~french		Les dimensions du résultat.
-		castor::Size m_size;
-		//!\~english	The Viewport used when rendering a texture into to a frame buffer.
-		//!\~french		Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
-		Viewport m_viewport;
-		//!	6 (faces) * 6 (vertex) * 3 (vertex position)
-		std::array< castor::real, 6 * 6 * 3 > m_bufferVertex;
-		//!\~english	Buffer elements declaration.
-		//!\~french		Déclaration des éléments d'un vertex.
-		castor3d::BufferDeclaration m_declaration;
-		//!\~english	Vertex array (quad definition).
-		//!\~french		Tableau de vertex (définition du quad).
-		std::array< castor3d::BufferElementGroupSPtr, 36 > m_arrayVertex;
-		//!\~english	The vertex buffer.
-		//!\~french		Le tampon de sommets.
-		VertexBufferSPtr m_vertexBuffer;
-		//!\~english	The GeometryBuffers used when rendering a texture to the frame buffer.
-		//!\~french		Le GeometryBuffers utilisé lors du dessin d'une texture dans le tampon d'image.
-		GeometryBuffersSPtr m_geometryBuffers;
-		//!\~english	The pipeline used to render a texture in the framebuffer.
-		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image.
-		RenderPipelineUPtr m_pipeline;
-		//!\~english	The frame buffer.
-		//!\~french		Le tampon d'image.
-		FrameBufferSPtr m_frameBuffer;
-		//!\~english	The depth buffer.
-		//!\~french		Le tampon de profondeur.
-		DepthStencilRenderBufferSPtr m_depthBuffer;
-		//!\~english	The depth buffer attach.
-		//!\~french		L'attache du tampon de profondeur.
-		RenderBufferAttachmentSPtr m_depthAttach;
-		//!\~english	The sampler for the texture.
-		//!\~french		Le sampler pour la texture.
+		RenderSystem & m_renderSystem;
+		renderer::TexturePtr m_result;
+		renderer::TextureViewPtr m_resultView;
 		SamplerSPtr m_sampler;
+		renderer::TextureViewPtr m_srcView;
+		renderer::RenderPassPtr m_renderPass;
+		RenderPasses m_renderPasses;
+		renderer::CommandBufferPtr m_commandBuffer;
 	};
 }
 

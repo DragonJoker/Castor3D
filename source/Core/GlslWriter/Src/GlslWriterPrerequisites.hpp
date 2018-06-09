@@ -43,7 +43,7 @@ namespace glsl
 	class GlslWriter;
 	class Shader;
 	class KeywordsBase;
-	template< int Version, class Enable = void >
+	template< int Version, bool IsVulkan, class Enable = void >
 	class Keywords;
 
 	enum class TypeName
@@ -206,12 +206,14 @@ namespace glsl
 	DECLARE_GLSL_PARAMETER( Sampler2D );
 	DECLARE_GLSL_PARAMETER( Sampler3D );
 	DECLARE_GLSL_PARAMETER( SamplerCube );
+	DECLARE_GLSL_PARAMETER( Sampler2DRect );
 	DECLARE_GLSL_PARAMETER( Sampler1DArray );
 	DECLARE_GLSL_PARAMETER( Sampler2DArray );
 	DECLARE_GLSL_PARAMETER( SamplerCubeArray );
 	DECLARE_GLSL_PARAMETER( Sampler1DShadow );
 	DECLARE_GLSL_PARAMETER( Sampler2DShadow );
 	DECLARE_GLSL_PARAMETER( SamplerCubeShadow );
+	DECLARE_GLSL_PARAMETER( Sampler2DRectShadow );
 	DECLARE_GLSL_PARAMETER( Sampler1DArrayShadow );
 	DECLARE_GLSL_PARAMETER( Sampler2DArrayShadow );
 	DECLARE_GLSL_PARAMETER( SamplerCubeArrayShadow );
@@ -249,7 +251,7 @@ namespace glsl
 	};
 	struct Layout
 	{
-		int m_index;
+		int m_location;
 	};
 	struct Uniform
 	{
@@ -258,9 +260,16 @@ namespace glsl
 	static Endi endi;
 	static Endl endl;
 
-	GlslWriter_API void writeLine( GlslWriter & p_writer, castor::String const & p_line );
-	GlslWriter_API void registerName( GlslWriter & p_writer, castor::String const & p_name, TypeName p_type );
-	GlslWriter_API void checkNameExists( GlslWriter & p_writer, castor::String const & p_name, TypeName p_type );
+	GlslWriter_API void writeLine( GlslWriter & writer, castor::String const & p_line );
+	GlslWriter_API void registerName( GlslWriter & writer, castor::String const & p_name, TypeName p_type );
+	GlslWriter_API void checkNameExists( GlslWriter & writer, castor::String const & p_name, TypeName p_type );
+	GlslWriter_API void registerUniform( GlslWriter & writer
+		, castor::String const & name
+		, uint32_t location
+		, TypeName type
+		, uint32_t count
+		, bool enabled = true );
+	GlslWriter_API bool hasPushConstants( GlslWriter const & writer );
 }
 
 #include "GlslWriterPrerequisites.inl"

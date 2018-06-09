@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_CACHE_H___
@@ -80,7 +80,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets all the elements to be cleaned up.
+		 *\brief		Sets all the elements to be cleaned up.
 		 *\~french
 		 *\brief		Met tous les éléments à nettoyer.
 		 */
@@ -152,7 +152,7 @@ namespace castor3d
 
 				if ( m_elements.has( name ) )
 				{
-					castor::Logger::logWarning( castor::StringStream()
+					castor::Logger::logWarning( castor::makeStringStream()
 						<< WARNING_CACHE_DUPLICATE_OBJECT
 						<< getObjectTypeName()
 						<< cuT( ": " )
@@ -166,7 +166,7 @@ namespace castor3d
 			}
 			else
 			{
-				castor::Logger::logWarning( castor::StringStream()
+				castor::Logger::logWarning( castor::makeStringStream()
 					<< WARNING_CACHE_NULL_OBJECT
 					<< getObjectTypeName() );
 			}
@@ -197,7 +197,7 @@ namespace castor3d
 					, std::forward< Parameters >( parameters )... );
 				m_initialise( result );
 				m_elements.insert( name, result );
-				castor::Logger::logDebug( castor::StringStream()
+				castor::Logger::logDebug( castor::makeStringStream()
 					<< INFO_CACHE_CREATED_OBJECT
 					<< getObjectTypeName()
 					<< cuT( ": " ) << name );
@@ -205,7 +205,7 @@ namespace castor3d
 			else
 			{
 				result = m_elements.find( name );
-				castor::Logger::logWarning( castor::StringStream()
+				castor::Logger::logWarning( castor::makeStringStream()
 					<< WARNING_CACHE_DUPLICATE_OBJECT
 					<< getObjectTypeName()
 					<< cuT( ": " )

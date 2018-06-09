@@ -55,7 +55,7 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\brief		sets the exposure value.
+		 *\brief		Sets the exposure value.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit la valeur de l'exposition.
@@ -67,7 +67,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the gamma correction value.
+		 *\brief		Sets the gamma correction value.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit la valeur de la correction gamma.
@@ -94,6 +94,26 @@ namespace castor3d
 		 *\return		La valeur de la correction gamma.
 		 */
 		inline float getGamma()const
+		{
+			return m_gamma;
+		}
+		/**
+		 *\~english
+		 *\return		The exposure value.
+		 *\~french
+		 *\return		La valeur de l'exposition.
+		 */
+		inline float & getExposure()
+		{
+			return m_exposure;
+		}
+		/**
+		 *\~english
+		 *\return		The gamma correction value.
+		 *\~french
+		 *\return		La valeur de la correction gamma.
+		 */
+		inline float & getGamma()
 		{
 			return m_gamma;
 		}

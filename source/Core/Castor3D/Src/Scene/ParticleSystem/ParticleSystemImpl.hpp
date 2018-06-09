@@ -47,14 +47,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_type		The implementation type.
-		 *\param[in]	p_parent	The parent particle system.
+		 *\param[in]	type		The implementation type.
+		 *\param[in]	parent	The parent particle system.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_type		Le type d'implémentation.
-		 *\param[in]	p_parent	Le système de particules parent.
+		 *\param[in]	type		Le type d'implémentation.
+		 *\param[in]	parent	Le système de particules parent.
 		 */
-		C3D_API ParticleSystemImpl( Type p_type, ParticleSystem & p_parent );
+		C3D_API ParticleSystemImpl( Type type, ParticleSystem & parent );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -81,32 +81,34 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		adds a particle variable.
-		 *\param[in]	p_name			The variable name.
-		 *\param[in]	p_type			The variable type.
-		 *\param[in]	p_defaultValue	The variable default value.
+		 *\param[in]	name			The variable name.
+		 *\param[in]	type			The variable type.
+		 *\param[in]	defaultValue	The variable default value.
 		 *\~french
 		 *\brief		Ajoute une variable de particule.
-		 *\param[in]	p_name			Le nom de la variable.
-		 *\param[in]	p_type			Le type de la variable.
-		 *\param[in]	p_defaultValue	La valeur par défaut de la variable.
+		 *\param[in]	name			Le nom de la variable.
+		 *\param[in]	type			Le type de la variable.
+		 *\param[in]	defaultValue	La valeur par défaut de la variable.
 		 */
-		C3D_API virtual void addParticleVariable( castor::String const & p_name
-			, ElementType p_type
-			, castor::String const & p_defaultValue ) = 0;
+		C3D_API virtual void addParticleVariable( castor::String const & name
+			, ParticleFormat type
+			, castor::String const & defaultValue ) = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the particles.
-		 *\param[in]	p_time	The time elapsed since last update.
-		 *\param[in]	p_total	The total elapsed time.
+		 *\param[in]	time	The time elapsed since last update.
+		 *\param[in]	total	The total elapsed time.
 		 *\return		The particles count.
 		 *\~french
 		 *\brief		Met à jour les particules.
-		 *\param[in]	p_time	Le temps écoulé depuis la dernière mise à jour.
-		 *\param[in]	p_total	Le temps total écoulé.
+		 *\param[in]	time	Le temps écoulé depuis la dernière mise à jour.
+		 *\param[in]	total	Le temps total écoulé.
 		 *\return		Le nombre de particules.
 		 */
-		C3D_API virtual uint32_t update( castor::Milliseconds const & p_time
-			, castor::Milliseconds const & p_total ) = 0;
+		C3D_API virtual uint32_t update( RenderPassTimer & timer
+			, castor::Milliseconds const & time
+			, castor::Milliseconds const & total
+			, uint32_t index ) = 0;
 		/**
 		 *\~english
 		 *\return		The implementation type.

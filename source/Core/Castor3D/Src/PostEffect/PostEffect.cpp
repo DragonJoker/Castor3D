@@ -2,80 +2,27 @@
 
 #include "Engine.hpp"
 
-#include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/TextureAttachment.hpp"
 #include "Render/RenderTarget.hpp"
-
 #include "Texture/TextureLayout.hpp"
+
+#include <Command/CommandBuffer.hpp>
+#include <RenderPass/FrameBuffer.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <Sync/ImageMemoryBarrier.hpp>
 
 using namespace castor;
 namespace castor3d
 {
-	//*********************************************************************************************
-
-	PostEffect::PostEffectSurface::PostEffectSurface( Engine & engine )
-		: m_colourTexture( engine )
-	{
-	}
-
-	bool PostEffect::PostEffectSurface::initialise( RenderTarget & renderTarget
-		, Size const & size
-		, uint32_t index
-		, SamplerSPtr sampler
-		, PixelFormat format )
-	{
-		m_size = size;
-		m_colourTexture.setIndex( index );
-
-		m_fbo = renderTarget.getEngine()->getRenderSystem()->createFrameBuffer();
-		auto colourTexture = renderTarget.getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
-			, AccessType::eRead
-			, AccessType::eRead | AccessType::eWrite
-			, format
-			, size );
-
-		m_colourTexture.setSampler( sampler );
-		colourTexture->getImage().initialiseSource();
-		m_colourAttach = m_fbo->createAttachment( colourTexture );
-
-		m_colourTexture.setTexture( colourTexture );
-		m_colourTexture.initialise();
-		m_fbo->initialise();
-		m_fbo->setClearColour( RgbaColour::fromPredefined( PredefinedRgbaColour::eOpaqueBlack ) );
-
-		m_fbo->bind();
-		m_fbo->attach( AttachmentPoint::eColour, 0, m_colourAttach, colourTexture->getType() );
-		m_fbo->setDrawBuffer( m_colourAttach );
-		bool result = m_fbo->isComplete();
-		REQUIRE( result );
-		m_fbo->unbind();
-
-		return result;
-	}
-
-	void PostEffect::PostEffectSurface::cleanup()
-	{
-		m_fbo->bind();
-		m_fbo->detachAll();
-		m_fbo->unbind();
-		m_fbo->cleanup();
-
-		m_colourTexture.cleanup();
-		m_fbo->cleanup();
-
-		m_fbo.reset();
-		m_colourAttach.reset();
-	}
-
-	//*********************************************************************************************
-
 	PostEffect::PostEffect( String const & name
+		, castor::String const & fullName
 		, RenderTarget & renderTarget
 		, RenderSystem & renderSystem
 		, Parameters const & CU_PARAM_UNUSED( parameters )
 		, bool postToneMapping )
 		: OwnedBy< RenderSystem >{ renderSystem }
 		, Named{ name }
+		, m_fullName{ fullName }
 		, m_renderTarget{ renderTarget }
 		, m_postToneMapping{ postToneMapping }
 	{
@@ -90,5 +37,69 @@ namespace castor3d
 		return doWriteInto( p_file );
 	}
 
-	//*********************************************************************************************
+	bool PostEffect::initialise( TextureLayout const & texture )
+	{
+		m_target = &texture;
+		auto name = m_fullName;
+		name = castor::string::replace( name, cuT( "PostEffect" ), castor::String{} );
+		name = castor::string::replace( name, cuT( "Post Effect" ), castor::String{} );
+		m_timer = std::make_unique< RenderPassTimer >( *getRenderSystem()->getEngine()
+			, ( m_postToneMapping
+				? String{ cuT( "sRGB PostEffect" ) }
+				: String{ cuT( "HDR PostEffect" ) } )
+			, name
+			, m_passesCount );
+		auto result = doInitialise( *m_timer );
+		ENSURE( m_result != nullptr );
+		return result;
+	}
+
+	void PostEffect::cleanup()
+	{
+		m_commands.clear();
+		doCleanup();
+		m_timer.reset();
+	}
+
+	void PostEffect::start()
+	{
+		m_timer->start();
+		m_currentPass = 0u;
+	}
+
+	void PostEffect::notifyPassRender()
+	{
+		m_timer->notifyPassRender( m_currentPass++ );
+	}
+
+	void PostEffect::stop()
+	{
+		m_timer->stop();
+	}
+
+	void PostEffect::update( castor::Nanoseconds const & elapsedTime )
+	{
+	}
+
+	void PostEffect::doCopyResultToTarget( renderer::TextureView const & result
+		, renderer::CommandBuffer & commandBuffer )
+	{
+		// Put result image in transfer source layout.
+		commandBuffer.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+			, renderer::PipelineStageFlag::eTransfer
+			, result.makeTransferSource( renderer::ImageLayout::eColourAttachmentOptimal
+				, renderer::AccessFlag::eColourAttachmentWrite ) );
+		// Put target image in transfer destination layout.
+		commandBuffer.memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
+			, renderer::PipelineStageFlag::eTransfer
+			, m_target->getDefaultView().makeTransferDestination( renderer::ImageLayout::eUndefined, 0u ) );
+		// Copy result to target.
+		commandBuffer.copyImage( result
+			, m_target->getDefaultView() );
+		// Put target image in fragment shader input layout.
+		commandBuffer.memoryBarrier( renderer::PipelineStageFlag::eTransfer
+			, renderer::PipelineStageFlag::eFragmentShader
+			, m_target->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eTransferDstOptimal
+				, renderer::AccessFlag::eTransferWrite ) );
+	}
 }

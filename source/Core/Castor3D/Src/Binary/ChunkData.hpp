@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_CHUNK_DATA_H___
 #define ___C3D_CHUNK_DATA_H___
 
-
 #include "Mesh/VertexGroup.hpp"
 #include "Mesh/SubmeshComponent/FaceIndices.hpp"
+#include "Mesh/SubmeshComponent/LineIndices.hpp"
 #include "Mesh/Skeleton/VertexBoneData.hpp"
 
 #include <Data/Endianness.hpp>
@@ -21,6 +21,16 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	// Version 1.3 and before
+	template< typename T >
+	struct OldInterleavedVertexT
+	{
+		castor::Point3< T > pos;
+		castor::Point3< T > nml;
+		castor::Point3< T > tan;
+		castor::Point3< T > bin;
+		castor::Point3< T > tex;
+	};
 	/**
 	 *\~english
 	 *\brief		Retrieves the beginning of the buffer for given value.
@@ -857,7 +867,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -869,7 +879,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -881,7 +891,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -893,7 +903,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -908,7 +918,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -923,7 +933,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -938,7 +948,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -953,7 +963,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -968,7 +978,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -983,7 +993,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -998,7 +1008,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1013,7 +1023,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1028,7 +1038,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1047,7 +1057,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1066,7 +1076,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1085,7 +1095,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1104,7 +1114,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1123,7 +1133,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1142,7 +1152,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1157,7 +1167,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1175,7 +1185,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1193,7 +1203,34 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
+	 *\param[in,out]	p_value	The value.
+	 *\~french
+	 *\brief			Met la valeur donnée en big endian.
+	 *\param[in,out]	p_value	La valeur.
+	 */
+	template< typename T >
+	static inline void prepareChunkData( OldInterleavedVertexT< T > & p_value )
+	{
+		if ( !castor::isBigEndian() )
+		{
+			castor::switchEndianness( p_value.pos[0] );
+			castor::switchEndianness( p_value.pos[1] );
+			castor::switchEndianness( p_value.pos[2] );
+			castor::switchEndianness( p_value.nml[0] );
+			castor::switchEndianness( p_value.nml[1] );
+			castor::switchEndianness( p_value.nml[2] );
+			castor::switchEndianness( p_value.tan[0] );
+			castor::switchEndianness( p_value.tan[1] );
+			castor::switchEndianness( p_value.tan[2] );
+			castor::switchEndianness( p_value.tex[0] );
+			castor::switchEndianness( p_value.tex[1] );
+			castor::switchEndianness( p_value.tex[2] );
+		}
+	}
+	/**
+	 *\~english
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1204,26 +1241,23 @@ namespace castor3d
 	{
 		if ( !castor::isBigEndian() )
 		{
-			castor::switchEndianness( p_value.m_pos[0] );
-			castor::switchEndianness( p_value.m_pos[1] );
-			castor::switchEndianness( p_value.m_pos[2] );
-			castor::switchEndianness( p_value.m_nml[0] );
-			castor::switchEndianness( p_value.m_nml[1] );
-			castor::switchEndianness( p_value.m_nml[2] );
-			castor::switchEndianness( p_value.m_tan[0] );
-			castor::switchEndianness( p_value.m_tan[1] );
-			castor::switchEndianness( p_value.m_tan[2] );
-			castor::switchEndianness( p_value.m_bin[0] );
-			castor::switchEndianness( p_value.m_bin[1] );
-			castor::switchEndianness( p_value.m_bin[2] );
-			castor::switchEndianness( p_value.m_tex[0] );
-			castor::switchEndianness( p_value.m_tex[1] );
-			castor::switchEndianness( p_value.m_tex[2] );
+			castor::switchEndianness( p_value.pos[0] );
+			castor::switchEndianness( p_value.pos[1] );
+			castor::switchEndianness( p_value.pos[2] );
+			castor::switchEndianness( p_value.nml[0] );
+			castor::switchEndianness( p_value.nml[1] );
+			castor::switchEndianness( p_value.nml[2] );
+			castor::switchEndianness( p_value.tan[0] );
+			castor::switchEndianness( p_value.tan[1] );
+			castor::switchEndianness( p_value.tan[2] );
+			castor::switchEndianness( p_value.tex[0] );
+			castor::switchEndianness( p_value.tex[1] );
+			castor::switchEndianness( p_value.tex[2] );
 		}
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1240,7 +1274,7 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1257,7 +1291,23 @@ namespace castor3d
 	}
 	/**
 	 *\~english
-	 *\brief			sets given value to big endian.
+	 *\brief			Sets given value to big endian.
+	 *\param[in,out]	p_value	The value.
+	 *\~french
+	 *\brief			Met la valeur donnée en big endian.
+	 *\param[in,out]	p_value	La valeur.
+	 */
+	static inline void prepareChunkData( LineIndices & p_value )
+	{
+		if ( !castor::isBigEndian() )
+		{
+			castor::switchEndianness( p_value.m_index[0] );
+			castor::switchEndianness( p_value.m_index[1] );
+		}
+	}
+	/**
+	 *\~english
+	 *\brief			Sets given value to big endian.
 	 *\param[in,out]	p_value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
@@ -1267,22 +1317,22 @@ namespace castor3d
 	{
 		if ( !castor::isBigEndian() )
 		{
-			castor::switchEndianness( p_value.m_ids[0] );
-			castor::switchEndianness( p_value.m_ids[1] );
-			castor::switchEndianness( p_value.m_ids[2] );
-			castor::switchEndianness( p_value.m_ids[3] );
-			castor::switchEndianness( p_value.m_ids[4] );
-			castor::switchEndianness( p_value.m_ids[5] );
-			castor::switchEndianness( p_value.m_ids[6] );
-			castor::switchEndianness( p_value.m_ids[7] );
-			castor::switchEndianness( p_value.m_weights[0] );
-			castor::switchEndianness( p_value.m_weights[1] );
-			castor::switchEndianness( p_value.m_weights[2] );
-			castor::switchEndianness( p_value.m_weights[3] );
-			castor::switchEndianness( p_value.m_weights[4] );
-			castor::switchEndianness( p_value.m_weights[5] );
-			castor::switchEndianness( p_value.m_weights[6] );
-			castor::switchEndianness( p_value.m_weights[7] );
+			castor::switchEndianness( p_value.m_ids.data[0] );
+			castor::switchEndianness( p_value.m_ids.data[1] );
+			castor::switchEndianness( p_value.m_ids.data[2] );
+			castor::switchEndianness( p_value.m_ids.data[3] );
+			castor::switchEndianness( p_value.m_ids.data[4] );
+			castor::switchEndianness( p_value.m_ids.data[5] );
+			castor::switchEndianness( p_value.m_ids.data[6] );
+			castor::switchEndianness( p_value.m_ids.data[7] );
+			castor::switchEndianness( p_value.m_weights.data[0] );
+			castor::switchEndianness( p_value.m_weights.data[1] );
+			castor::switchEndianness( p_value.m_weights.data[2] );
+			castor::switchEndianness( p_value.m_weights.data[3] );
+			castor::switchEndianness( p_value.m_weights.data[4] );
+			castor::switchEndianness( p_value.m_weights.data[5] );
+			castor::switchEndianness( p_value.m_weights.data[6] );
+			castor::switchEndianness( p_value.m_weights.data[7] );
 		}
 	}
 }

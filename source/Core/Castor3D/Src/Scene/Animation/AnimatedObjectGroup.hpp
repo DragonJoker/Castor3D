@@ -150,7 +150,7 @@ namespace castor3d
 		C3D_API void addAnimation( castor::String const & name );
 		/**
 		 *\~english
-		 *\brief		sets the loop status of wanted animation.
+		 *\brief		Sets the loop status of wanted animation.
 		 *\param[in]	name		The name of the animation.
 		 *\param[in]	p_looped	The status.
 		 *\~french
@@ -162,7 +162,7 @@ namespace castor3d
 			, bool p_looped );
 		/**
 		 *\~english
-		 *\brief		sets the time scale of wanted animation.
+		 *\brief		Sets the time scale of wanted animation.
 		 *\param[in]	name	The name of the animation.
 		 *\param[in]	scale	The scale.
 		 *\~french
@@ -247,6 +247,12 @@ namespace castor3d
 		{
 			return m_objects;
 		}
+
+	public:
+		OnAnimatedSkeletonChange onSkeletonAdded;
+		OnAnimatedSkeletonChange onSkeletonRemoved;
+		OnAnimatedMeshChange onMeshAdded;
+		OnAnimatedMeshChange onMeshRemoved;
 
 	private:
 		//!<\~english	The list of animations.

@@ -7,90 +7,58 @@
 using namespace castor;
 using namespace glsl;
 
+#define C3D_DebugLightBuffer 0
+
 namespace castor3d
 {
 	namespace shader
 	{
 		//***********************************************************************************************
 
-		String paramToString( String & p_sep, FragmentInput const & p_value )
+		String paramToString( String & sep, FragmentInput const & value )
 		{
-			StringStream result;
-			result << paramToString( p_sep, p_value.m_vertex );
-			result << paramToString( p_sep, p_value.m_normal );
+			StringStream result{ makeStringStream() };
+			result << paramToString( sep, value.m_vertex );
+			result << paramToString( sep, value.m_normal );
 			return result.str();
 		}
 
-		String paramToString( String & p_sep, OutputComponents const & p_value )
+		String toString( FragmentInput const & value )
 		{
-			StringStream result;
-			result << paramToString( p_sep, p_value.m_diffuse );
-			result << paramToString( p_sep, p_value.m_specular );
-			return result.str();
-		}
-
-		String toString( FragmentInput const & p_value )
-		{
-			StringStream result;
-			result << toString( p_value.m_vertex ) << ", ";
-			result << toString( p_value.m_normal );
-			return result.str();
-		}
-
-		String toString( OutputComponents const & p_value )
-		{
-			StringStream result;
-			result << toString( p_value.m_diffuse ) << ", ";
-			result << toString( p_value.m_specular );
+			StringStream result{ makeStringStream() };
+			result << toString( value.m_vertex ) << ", ";
+			result << toString( value.m_normal );
 			return result.str();
 		}
 
 		//***********************************************************************************************
 
-		FragmentInput::FragmentInput( GlslWriter & p_writer )
-			: m_vertex{ &p_writer, cuT( "inVertex" ) }
-			, m_normal{ &p_writer, cuT( "inNormal" ) }
+		FragmentInput::FragmentInput( GlslWriter & writer )
+			: m_vertex{ &writer, cuT( "inVertex" ) }
+			, m_normal{ &writer, cuT( "inNormal" ) }
 		{
 		}
 
-		FragmentInput::FragmentInput( InVec3 const & p_v3Vertex
-			, InVec3 const & p_v3Normal )
-			: m_vertex{ p_v3Vertex }
-			, m_normal{ p_v3Normal }
-		{
-		}
-
-		//***********************************************************************************************
-
-		OutputComponents::OutputComponents( GlslWriter & p_writer )
-			: m_diffuse{ &p_writer, cuT( "outDiffuse" ) }
-			, m_specular{ &p_writer, cuT( "outSpecular" ) }
-		{
-		}
-
-		OutputComponents::OutputComponents( InOutVec3 const & p_v3Diffuse
-			, InOutVec3 const & p_v3Specular )
-			: m_diffuse{ p_v3Diffuse }
-			, m_specular{ p_v3Specular }
+		FragmentInput::FragmentInput( InVec3 const & v3Vertex
+			, InVec3 const & v3Normal )
+			: m_vertex{ v3Vertex }
+			, m_normal{ v3Normal }
 		{
 		}
 
 		//***********************************************************************************************
 
-		LightingModel::LightingModel( ShadowType p_shadows, GlslWriter & p_writer )
-			: m_shadows{ p_shadows }
-			, m_writer{ p_writer }
-			, m_shadowModel{ std::make_shared< Shadow >( p_writer ) }
+		uint32_t const LightingModel::UboBindingPoint = 6u;
+
+		LightingModel::LightingModel( GlslWriter & writer )
+			: m_writer{ writer }
+			, m_shadowModel{ std::make_shared< Shadow >( writer ) }
 		{
 		}
 
 		void LightingModel::declareModel( uint32_t & index )
 		{
-			if ( m_shadows != ShadowType::eNone )
-			{
-				m_shadowModel->declare( m_shadows, index );
-			}
-
+			m_shadowModel->declare( index );
 			doDeclareLight();
 			doDeclareDirectionalLight();
 			doDeclarePointLight();
@@ -105,43 +73,52 @@ namespace castor3d
 			doDeclareComputeSpotLight();
 		}
 
-		void LightingModel::declareDirectionalModel( uint32_t & index )
+		void LightingModel::declareDirectionalModel( ShadowType shadows
+			, bool volumetric
+			, uint32_t & index )
 		{
-			if ( m_shadows != ShadowType::eNone )
+			if ( shadows != ShadowType::eNone )
 			{
-				m_shadowModel->declareDirectional( m_shadows, index );
+				m_shadowModel->declareDirectional( shadows, index );
 			}
 
 			doDeclareLight();
 			doDeclareDirectionalLight();
+			doDeclareDirectionalLightUbo();
 			doDeclareModel();
-			doDeclareComputeDirectionalLight();
+			doDeclareComputeOneDirectionalLight( shadows, volumetric );
 		}
 
-		void LightingModel::declarePointModel( uint32_t & index )
+		void LightingModel::declarePointModel( ShadowType shadows
+			, bool volumetric
+			, uint32_t & index )
 		{
-			if ( m_shadows != ShadowType::eNone )
+			if ( shadows != ShadowType::eNone )
 			{
-				m_shadowModel->declarePoint( m_shadows, index );
+				m_shadowModel->declarePoint( shadows, index );
 			}
 
 			doDeclareLight();
 			doDeclarePointLight();
+			doDeclarePointLightUbo();
 			doDeclareModel();
-			doDeclareComputeOnePointLight();
+			doDeclareComputeOnePointLight( shadows, volumetric );
 		}
 
-		void LightingModel::declareSpotModel( uint32_t & index )
+		void LightingModel::declareSpotModel( ShadowType shadows
+			, bool volumetric
+			, uint32_t & index )
 		{
-			if ( m_shadows != ShadowType::eNone )
+			if ( shadows != ShadowType::eNone )
 			{
-				m_shadowModel->declareSpot( m_shadows, index );
+				m_shadowModel->declareSpot( shadows, index );
 			}
 
 			doDeclareLight();
 			doDeclareSpotLight();
+			doDeclareSpotLightUbo();
 			doDeclareModel();
-			doDeclareComputeOneSpotLight();
+			doDeclareComputeOneSpotLight( shadows, volumetric );
 		}
 
 		DirectionalLight LightingModel::getDirectionalLight( Int const & index )const
@@ -162,9 +139,9 @@ namespace castor3d
 		void LightingModel::doDeclareLight()
 		{
 			Struct lightDecl = m_writer.getStruct( cuT( "Light" ) );
-			lightDecl.declMember< Vec3 >( cuT( "m_colour" ) );
-			lightDecl.declMember< Vec2 >( cuT( "m_intensity" ) );
-			lightDecl.declMember< Float >( cuT( "m_farPlane" ) );
+			lightDecl.declMember< Vec4 >( cuT( "m_colourIndex" ) );
+			lightDecl.declMember< Vec4 >( cuT( "m_intensityFarPlane" ) );
+			lightDecl.declMember< Vec4 >( cuT( "m_volumetric" ) );
 			lightDecl.end();
 		}
 
@@ -172,7 +149,7 @@ namespace castor3d
 		{
 			Struct lightDecl = m_writer.getStruct( cuT( "DirectionalLight" ) );
 			lightDecl.declMember< Light >( cuT( "m_lightBase" ) );
-			lightDecl.declMember< Vec3 >( cuT( "m_direction" ) );
+			lightDecl.declMember< Vec4 >( cuT( "m_direction" ) );
 			lightDecl.declMember< Mat4 >( cuT( "m_transform" ) );
 			lightDecl.end();
 		}
@@ -181,9 +158,8 @@ namespace castor3d
 		{
 			Struct lightDecl = m_writer.getStruct( cuT( "PointLight" ) );
 			lightDecl.declMember< Light >( cuT( "m_lightBase" ) );
-			lightDecl.declMember< Vec3 >( cuT( "m_position" ) );
-			lightDecl.declMember< Vec3 >( cuT( "m_attenuation" ) );
-			lightDecl.declMember< Int >( cuT( "m_index" ) );
+			lightDecl.declMember< Vec4 >( cuT( "m_position" ) );
+			lightDecl.declMember< Vec4 >( cuT( "m_attenuation" ) );
 			lightDecl.end();
 		}
 
@@ -191,14 +167,33 @@ namespace castor3d
 		{
 			Struct lightDecl = m_writer.getStruct( cuT( "SpotLight" ) );
 			lightDecl.declMember< Light >( cuT( "m_lightBase" ) );
-			lightDecl.declMember< Vec3 >( cuT( "m_position" ) );
-			lightDecl.declMember< Vec3 >( cuT( "m_attenuation" ) );
-			lightDecl.declMember< Int >( cuT( "m_index" ) );
-			lightDecl.declMember< Vec3 >( cuT( "m_direction" ) );
-			lightDecl.declMember< Float >( cuT( "m_exponent" ) );
-			lightDecl.declMember< Float >( cuT( "m_cutOff" ) );
+			lightDecl.declMember< Vec4 >( cuT( "m_position" ) );
+			lightDecl.declMember< Vec4 >( cuT( "m_attenuation" ) );
+			lightDecl.declMember< Vec4 >( cuT( "m_direction" ) );
+			lightDecl.declMember< Vec4 >( cuT( "m_exponentCutOff" ) );
 			lightDecl.declMember< Mat4 >( cuT( "m_transform" ) );
 			lightDecl.end();
+		}
+
+		void LightingModel::doDeclareDirectionalLightUbo()
+		{
+			Ubo lightUbo{ m_writer, cuT( "LightUbo" ), UboBindingPoint, 0u };
+			lightUbo.declMember< DirectionalLight >( cuT( "c3d_light" ) );
+			lightUbo.end();
+		}
+
+		void LightingModel::doDeclarePointLightUbo()
+		{
+			Ubo lightUbo{ m_writer, cuT( "LightUbo" ), UboBindingPoint, 0u };
+			lightUbo.declMember< PointLight >( cuT( "c3d_light" ) );
+			lightUbo.end();
+		}
+
+		void LightingModel::doDeclareSpotLightUbo()
+		{
+			Ubo lightUbo{ m_writer, cuT( "LightUbo" ), UboBindingPoint, 0u };
+			lightUbo.declMember< SpotLight >( cuT( "c3d_light" ) );
+			lightUbo.end();
 		}
 
 		void LightingModel::doDeclareGetBaseLight()
@@ -206,33 +201,34 @@ namespace castor3d
 			auto get = [this]( Int const & index )
 			{
 				auto result = m_writer.declLocale< Light >( cuT( "result" ) );
-
+#if C3D_DebugLightBuffer
+				result.m_colourIndex() = vec4( 1.0_f, 1.0, 1.0, -1.0 );
+				result.m_intensityFarPlane() = vec4( 0.8_f, 1.0, 1.0, 0.0 );
+#else
 				if ( m_writer.hasTexelFetch() )
 				{
 					if ( m_writer.hasTextureBuffers() )
 					{
 						auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
 						auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) );
-						result.m_colour() = texelFetch( c3d_sLights, offset++ ).rgb();
-						auto intensityFarPlane = m_writer.declLocale( cuT( "intensityFarPlane" ), texelFetch( c3d_sLights, offset++ ) );
-						result.m_intensity() = intensityFarPlane.rg();
-						result.m_farPlane() = intensityFarPlane.b();
+						result.m_colourIndex() = texelFetch( c3d_sLights, offset++ );
+						result.m_intensityFarPlane() = texelFetch( c3d_sLights, offset++ );
+						result.m_volumetric() = texelFetch( c3d_sLights, offset++ );
 					}
 					else
 					{
 						auto c3d_sLights = m_writer.getBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
 						auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) );
-						result.m_colour() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
-						auto intensityFarPlane = m_writer.declLocale( cuT( "intensityFarPlane" ), texelFetch( c3d_sLights, offset++, 0 ) );
-						result.m_intensity() = intensityFarPlane.rg();
-						result.m_farPlane() = intensityFarPlane.b();
+						result.m_colourIndex() = texelFetch( c3d_sLights, offset++, 0 );
+						result.m_intensityFarPlane() = texelFetch( c3d_sLights, offset++, 0 );
+						result.m_volumetric() = texelFetch( c3d_sLights, offset++, 0 );
 					}
 				}
 				else
 				{
 					CASTOR_EXCEPTION( "TBOS are required" );
 				}
-
+#endif
 				m_writer.returnStmt( result );
 			};
 			m_writer.implementFunction< Light >( cuT( "getBaseLight" ), get, Int( &m_writer, cuT( "index" ) ) );
@@ -246,36 +242,43 @@ namespace castor3d
 					DirectionalLight result = m_writer.declLocale< DirectionalLight >( cuT( "result" ) );
 					result.m_lightBase() = getBaseLight( index );
 
+#if C3D_DebugLightBuffer
+					result.m_direction() = vec3( 0.0_f, -0.7071068287, 0.7071067691 );
+					result.m_transform() = mat4( vec4( 1.0_f, 0.0, 0.0, 0.0 )
+						, vec4( 0.0_f, 1.0, 0.0, 0.0 )
+						, vec4( 0.0_f, 0.0, 1.0, 0.0 )
+						, vec4( 0.0_f, 0.0, 0.0, 1.0 ) );
+#else
 					if ( m_writer.hasTexelFetch() )
 					{
 						if ( m_writer.hasTextureBuffers() )
 						{
 							auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
 							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-							result.m_direction() = texelFetch( c3d_sLights, offset++ ).rgb();
-							auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++ ) );
-							auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++ ) );
-							auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++ ) );
-							auto v4MtxCol4 = m_writer.declLocale( cuT( "v4MtxCol4" ), texelFetch( c3d_sLights, offset++ ) );
-							result.m_transform() = mat4( v4MtxCol1, v4MtxCol2, v4MtxCol3, v4MtxCol4 );
+							result.m_direction() = normalize( texelFetch( c3d_sLights, offset++ ).rgb() );
+							result.m_transform() = mat4( texelFetch( c3d_sLights, offset + 0_i )
+								, texelFetch( c3d_sLights, offset + 1_i )
+								, texelFetch( c3d_sLights, offset + 2_i )
+								, texelFetch( c3d_sLights, offset + 3_i ) );
+							offset += 4_i;
 						}
 						else
 						{
 							auto c3d_sLights = m_writer.getBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
 							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-							result.m_direction() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
-							auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++, 0 ) );
-							auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++, 0 ) );
-							auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++, 0 ) );
-							auto v4MtxCol4 = m_writer.declLocale( cuT( "v4MtxCol4" ), texelFetch( c3d_sLights, offset++, 0 ) );
-							result.m_transform() = mat4( v4MtxCol1, v4MtxCol2, v4MtxCol3, v4MtxCol4 );
+							result.m_direction() = normalize( texelFetch( c3d_sLights, offset++, 0 ).rgb() );
+							result.m_transform() = mat4( texelFetch( c3d_sLights, offset + 0_i, 0 )
+								, texelFetch( c3d_sLights, offset + 1_i, 0 )
+								, texelFetch( c3d_sLights, offset + 2_i, 0 )
+								, texelFetch( c3d_sLights, offset + 3_i, 0 ) );
+							offset += 4_i;
 						}
 					}
 					else
 					{
 						CASTOR_EXCEPTION( "TBOS are required" );
 					}
-
+#endif
 					m_writer.returnStmt( result );
 				}
 				, InInt{ &m_writer, cuT( "index" ) } );
@@ -295,18 +298,14 @@ namespace castor3d
 						{
 							auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
 							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-							auto v4PosIndex = m_writer.declLocale( cuT( "v4PosIndex" ), texelFetch( c3d_sLights, offset++ ) );
-							result.m_position() = v4PosIndex.rgb();
-							result.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
+							result.m_position() = texelFetch( c3d_sLights, offset++ ).rgb();
 							result.m_attenuation() = texelFetch( c3d_sLights, offset++ ).rgb();
 						}
 						else
 						{
 							auto c3d_sLights = m_writer.getBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
 							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-							auto v4PosIndex = m_writer.declLocale( cuT( "v4PosIndex" ), texelFetch( c3d_sLights, offset++, 0 ) );
-							result.m_position() = v4PosIndex.rgb();
-							result.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
+							result.m_position() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
 							result.m_attenuation() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
 						}
 					}
@@ -334,38 +333,28 @@ namespace castor3d
 						{
 							auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
 							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-							auto v4PosIndex = m_writer.declLocale( cuT( "v4PosIndex" ), texelFetch( c3d_sLights, offset++ ) );
-							result.m_position() = v4PosIndex.rgb();
-							result.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
+							result.m_position() = texelFetch( c3d_sLights, offset++ ).rgb();
 							result.m_attenuation() = texelFetch( c3d_sLights, offset++ ).rgb();
 							result.m_direction() = normalize( texelFetch( c3d_sLights, offset++ ).rgb() );
-							auto v2Spot = m_writer.declLocale( cuT( "v2Spot" ), texelFetch( c3d_sLights, offset++ ).rg() );
-							result.m_exponent() = v2Spot.x();
-							result.m_cutOff() = v2Spot.y();
-							auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++ ) );
-							auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++ ) );
-							auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++ ) );
-							auto v4MtxCol4 = m_writer.declLocale( cuT( "v4MtxCol4" ), texelFetch( c3d_sLights, offset++ ) );
-							result.m_transform() = mat4( v4MtxCol1, v4MtxCol2, v4MtxCol3, v4MtxCol4 );
+							result.m_exponentCutOff() = texelFetch( c3d_sLights, offset++ );
+							result.m_transform() = mat4( texelFetch( c3d_sLights, offset + 0_i )
+								, texelFetch( c3d_sLights, offset + 1_i )
+								, texelFetch( c3d_sLights, offset + 2_i )
+								, texelFetch( c3d_sLights, offset + 3_i ) );
 						}
 						else
 						{
 							auto c3d_sLights = m_writer.getBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
 							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-							auto v4PosIndex = m_writer.declLocale( cuT( "v4PosIndex" ), texelFetch( c3d_sLights, offset++, 0 ) );
-							result.m_position() = v4PosIndex.rgb();
-							result.m_index() = m_writer.cast< Int >( v4PosIndex.a() );
+							result.m_position() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
 							result.m_attenuation() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
 							result.m_direction() = normalize( texelFetch( c3d_sLights, offset++, 0 ).rgb() );
-							auto v2Spot = m_writer.declLocale( cuT( "v2Spot" ), texelFetch( c3d_sLights, offset++, 0 ).rg() );
-							result.m_exponent() = v2Spot.x();
-							result.m_cutOff() = v2Spot.y();
-							auto v4MtxCol1 = m_writer.declLocale( cuT( "v4MtxCol1" ), texelFetch( c3d_sLights, offset++, 0 ) );
-							auto v4MtxCol2 = m_writer.declLocale( cuT( "v4MtxCol2" ), texelFetch( c3d_sLights, offset++, 0 ) );
-							auto v4MtxCol3 = m_writer.declLocale( cuT( "v4MtxCol3" ), texelFetch( c3d_sLights, offset++, 0 ) );
-							auto v4MtxCol4 = m_writer.declLocale( cuT( "v4MtxCol4" ), texelFetch( c3d_sLights, offset++, 0 ) );
-							result.m_transform() = mat4( v4MtxCol1, v4MtxCol2, v4MtxCol3, v4MtxCol4 );
-							result.m_index() = m_writer.cast< Int >( texelFetch( c3d_sLights, offset++, 0 ).r() );
+							result.m_exponentCutOff() = texelFetch( c3d_sLights, offset++, 0 );
+							result.m_transform() = mat4( texelFetch( c3d_sLights, offset + 0_i, 0 )
+								, texelFetch( c3d_sLights, offset + 1_i, 0 )
+								, texelFetch( c3d_sLights, offset + 2_i, 0 )
+								, texelFetch( c3d_sLights, offset + 3_i, 0 ) );
+							offset += 4_i;
 						}
 					}
 					else
@@ -378,9 +367,9 @@ namespace castor3d
 				, InInt{ &m_writer, cuT( "index" ) } );
 		}
 
-		Light LightingModel::getBaseLight( Type const & p_value )const
+		Light LightingModel::getBaseLight( Type const & value )const
 		{
-			return writeFunctionCall< Light >( &m_writer, cuT( "getBaseLight" ), p_value );
+			return writeFunctionCall< Light >( &m_writer, cuT( "getBaseLight" ), value );
 		}
 	}
 }

@@ -1,4 +1,4 @@
-﻿#include <Log/Logger.hpp>
+#include <Log/Logger.hpp>
 
 #include <Engine.hpp>
 #include <Cache/TargetCache.hpp>
@@ -32,17 +32,17 @@ extern "C"
 
 	C3D_Bloom_API void getName( char const ** p_name )
 	{
-		*p_name = Bloom::BloomPostEffect::Name.c_str();
+		*p_name = Bloom::PostEffect::Name.c_str();
 	}
 
 	C3D_Bloom_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
 	{
-		engine->getRenderTargetCache().getPostEffectFactory().registerType( Bloom::BloomPostEffect::Type
-			, &Bloom::BloomPostEffect::create );
+		engine->getRenderTargetCache().getPostEffectFactory().registerType( Bloom::PostEffect::Type
+			, &Bloom::PostEffect::create );
 	}
 
 	C3D_Bloom_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->getRenderTargetCache().getPostEffectFactory().unregisterType( Bloom::BloomPostEffect::Type );
+		engine->getRenderTargetCache().getPostEffectFactory().unregisterType( Bloom::PostEffect::Type );
 	}
 }

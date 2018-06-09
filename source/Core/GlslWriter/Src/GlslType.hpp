@@ -14,7 +14,7 @@ namespace glsl
 		: public Expr
 	{
 		GlslWriter_API Type( castor::String const & p_type );
-		GlslWriter_API Type( castor::String const & p_type, GlslWriter * p_writer, castor::String const & p_name = castor::String() );
+		GlslWriter_API Type( castor::String const & p_type, GlslWriter * writer, castor::String const & p_name = castor::String() );
 		GlslWriter_API Type( Type && p_rhs );
 		GlslWriter_API Type( Type const & p_rhs );
 		GlslWriter_API virtual ~Type();
@@ -47,6 +47,12 @@ namespace glsl
 		T result( p_value.m_writer );
 		result.m_value << cuT( "-( " ) + castor::String( p_value ) << cuT( " )" );
 		return result;
+	}
+
+	template< typename T >
+	T const & operator+( T const & p_value )
+	{
+		return p_value;
 	}
 
 	GlslWriter_API castor::String toString( Type const & p_value );

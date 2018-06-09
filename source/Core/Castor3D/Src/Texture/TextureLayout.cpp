@@ -2,6 +2,11 @@
 
 #include "Engine.hpp"
 
+#include <Miscellaneous/BitSize.hpp>
+
+#include <Image/Texture.hpp>
+#include <Image/TextureView.hpp>
+
 using namespace castor;
 
 namespace castor3d
@@ -10,162 +15,128 @@ namespace castor3d
 
 	namespace
 	{
-		size_t getImagesCount( TextureType type, uint32_t depth )
+		renderer::TextureViewType getSubviewType( renderer::TextureType type
+			, renderer::ImageCreateFlags flags
+			, uint32_t arrayLayers )
 		{
-			size_t result = depth;
+			renderer::TextureType result = type;
 
-			if ( type == TextureType::eCube || type == TextureType::eCubeArray )
+			switch ( result )
 			{
-				result *= size_t( CubeMapFace::eCount );
-			}
+			case renderer::TextureType::e1D:
+				if ( arrayLayers > 1 )
+				{
+					return renderer::TextureViewType::e1DArray;
+				}
+				return renderer::TextureViewType::e1D;
 
-			return result;
-		}
+			case renderer::TextureType::e2D:
+				if ( arrayLayers > 1 )
+				{
+					if ( checkFlag( flags, renderer::ImageCreateFlag::eCubeCompatible ) )
+					{
+						REQUIRE( ( arrayLayers % 6 ) == 0 );
+						return renderer::TextureViewType::eCube;
+					}
 
-		TextureStorageType getStorageType( TextureType type )
-		{
-			TextureStorageType result = TextureStorageType::eCount;
+					return renderer::TextureViewType::e2DArray;
+				}
 
-			switch ( type )
-			{
-			case TextureType::eBuffer:
-				result = TextureStorageType::eBuffer;
-				break;
+				return renderer::TextureViewType::e2D;
 
-			case TextureType::eOneDimension:
-				result = TextureStorageType::eOneDimension;
-				break;
-
-			case TextureType::eOneDimensionArray:
-				result = TextureStorageType::eOneDimensionArray;
-				break;
-
-			case TextureType::eTwoDimensions:
-				result = TextureStorageType::eTwoDimensions;
-				break;
-
-			case TextureType::eTwoDimensionsArray:
-				result = TextureStorageType::eTwoDimensionsArray;
-				break;
-
-			case TextureType::eTwoDimensionsMS:
-				result = TextureStorageType::eTwoDimensionsMS;
-				break;
-
-			case TextureType::eThreeDimensions:
-				result = TextureStorageType::eThreeDimensions;
-				break;
-
-			case TextureType::eCube:
-				result = TextureStorageType::eCubeMap;
-				break;
-
-			case TextureType::eCubeArray:
-				result = TextureStorageType::eCubeMapArray;
-				break;
+			case renderer::TextureType::e3D:
+				return renderer::TextureViewType::e3D;
 
 			default:
-				FAILURE( "The given texture type doesn't have any associated storage type" );
-				CASTOR_EXCEPTION( cuT( "The given texture type doesn't have any associated storage type" ) );
-				break;
+				FAILURE( "Unsupported texture type." );
+				return renderer::TextureViewType::e2D;
 			}
+		}
 
-			return result;
+		renderer::ImageViewCreateInfo getSubviewCreateInfos( renderer::ImageCreateInfo const & info
+			, uint32_t baseArrayLayer
+			, uint32_t arrayLayers
+			, uint32_t baseMipLevel
+			, uint32_t levelCount )
+		{
+			renderer::ImageViewCreateInfo view{};
+			view.format = info.format;
+			view.viewType = getSubviewType( info.imageType, info.flags, arrayLayers );
+			view.subresourceRange.aspectMask = renderer::getAspectMask( info.format );
+			view.subresourceRange.baseArrayLayer = baseArrayLayer;
+			view.subresourceRange.layerCount = arrayLayers;
+			view.subresourceRange.baseMipLevel = baseMipLevel;
+			view.subresourceRange.levelCount = levelCount;
+			return view;
+		}
+
+		TextureViewUPtr createSubview( TextureLayout & layout
+			, renderer::ImageCreateInfo const & info
+			, uint32_t baseArrayLayer
+			, uint32_t arrayLayers )
+		{
+			return std::make_unique< TextureView >( layout
+				, getSubviewCreateInfos( info, baseArrayLayer, arrayLayers, 0u, info.mipLevels )
+				, 0u );
+		}
+
+		TextureViewUPtr createMipSubview( TextureLayout & layout
+			, renderer::ImageCreateInfo const & info
+			, uint32_t baseMipLevel
+			, uint32_t levelCount )
+		{
+			return std::make_unique< TextureView >( layout
+				, getSubviewCreateInfos( info, 0u, info.arrayLayers, baseMipLevel, levelCount )
+				, 0u );
+		}
+
+		uint32_t getMaxMipLevels( uint32_t mipLevels
+			, renderer::Extent3D const & extent )
+		{
+			auto min = std::min( extent.width, extent.height );
+			auto bitSize = uint32_t( castor::getBitSize( min ) );
+			return std::min( bitSize, mipLevels );
 		}
 	}
 
 	//************************************************************************************************
 
 	TextureLayout::TextureLayout( RenderSystem & renderSystem
-		, TextureType type
-		, AccessTypes const & cpuAccess
-		, AccessTypes const & gpuAccess )
+		, renderer::ImageCreateInfo info
+		, renderer::MemoryPropertyFlags memoryProperties )
 		: OwnedBy< RenderSystem >{ renderSystem }
-		, m_type{ type }
-		, m_images{ getImagesCount( type, 1 ) }
-		, m_cpuAccess{ cpuAccess }
-		, m_gpuAccess{ gpuAccess }
+		, m_info{ std::move( info ) }
+		, m_properties{ memoryProperties }
+		, m_defaultView{ createSubview( *this, m_info, 0u, m_info.arrayLayers ) }
 	{
-		uint32_t index = 0u;
+		uint32_t max = std::max( m_info.arrayLayers, m_info.extent.depth );
 
-		for ( auto & image : m_images )
+		if ( max > 1u )
 		{
-			image = std::make_unique< TextureImage >( *this, index++ );
+			m_views.resize( max );
+			uint32_t index = 0u;
+
+			for ( auto & view : m_views )
+			{
+				view = createSubview( *this, m_info, index, 1u );
+				++index;
+			}
 		}
-	}
-
-	TextureLayout::TextureLayout( RenderSystem & renderSystem
-		, TextureType type
-		, AccessTypes const & cpuAccess
-		, AccessTypes const & gpuAccess
-		, uint32_t mipmapCount )
-		: OwnedBy< RenderSystem >{ renderSystem }
-		, m_type{ type }
-		, m_images{ getImagesCount( type, 1 ) }
-		, m_cpuAccess{ cpuAccess }
-		, m_gpuAccess{ gpuAccess }
-		, m_mipmapCount{ mipmapCount }
-	{
-		uint32_t index = 0u;
-
-		for ( auto & image : m_images )
+		else if ( info.mipLevels > 1u )
 		{
-			image = std::make_unique< TextureImage >( *this, index++ );
+			m_views.resize( info.mipLevels );
+			uint32_t index = 0u;
+
+			for ( auto & view : m_views )
+			{
+				view = createMipSubview( *this, m_info, index, 1u );
+				++index;
+			}
 		}
-	}
-
-	TextureLayout::TextureLayout( RenderSystem & renderSystem
-		, TextureType type
-		, AccessTypes const & cpuAccess
-		, AccessTypes const & gpuAccess
-		, PixelFormat format
-		, Size const & size )
-		: OwnedBy< RenderSystem >{ renderSystem }
-		, m_type{ type }
-		, m_images{ getImagesCount( type, 1 ) }
-		, m_cpuAccess{ cpuAccess }
-		, m_gpuAccess{ gpuAccess }
-		, m_format{ format }
-		, m_size{ size }
-	{
-		REQUIRE( m_type != TextureType::eThreeDimensions
-				 && m_type != TextureType::eOneDimensionArray
-				 && m_type != TextureType::eTwoDimensionsArray
-				 && m_type != TextureType::eTwoDimensionsMSArray
-				 && m_type != TextureType::eCubeArray );
-		uint32_t index = 0u;
-
-		for ( auto & image : m_images )
+		else
 		{
-			image = std::make_unique< TextureImage >( *this, index++ );
-		}
-	}
-
-	TextureLayout::TextureLayout( RenderSystem & renderSystem
-		, TextureType type
-		, AccessTypes const & cpuAccess
-		, AccessTypes const & gpuAccess
-		, PixelFormat format
-		, Point3ui const & size )
-		: OwnedBy< RenderSystem >{ renderSystem }
-		, m_type{ type }
-		, m_images{ getImagesCount( type, size[2] ) }
-		, m_cpuAccess{ cpuAccess }
-		, m_gpuAccess{ gpuAccess }
-		, m_format{ format }
-		, m_size{ size[0], size[1] }
-		, m_depth{ size[2] }
-	{
-		REQUIRE( m_type == TextureType::eThreeDimensions
-				 || m_type == TextureType::eOneDimensionArray
-				 || m_type == TextureType::eTwoDimensionsArray
-				 || m_type == TextureType::eTwoDimensionsMSArray
-				 || m_type == TextureType::eCubeArray );
-		uint32_t index = 0u;
-
-		for ( auto & image : m_images )
-		{
-			image = std::make_unique< TextureImage >( *this, index++ );
+			m_views.resize( 1u );
+			m_views.back() = createSubview( *this, m_info, 0u, 1u );
 		}
 	}
 
@@ -177,16 +148,26 @@ namespace castor3d
 	{
 		if ( !m_initialised )
 		{
-			bool result = doInitialise();
+			m_info.usage |= renderer::ImageUsageFlag::eTransferDst;
 
-			if ( result )
+			if ( m_info.mipLevels > 1u )
 			{
-				doBind( 0 );
-				result = doCreateStorage( getStorageType( m_type ) );
-				doUnbind( 0 );
+				m_info.usage |= renderer::ImageUsageFlag::eTransferSrc;
+			}
+			else if ( m_info.mipLevels == 0 )
+			{
+				m_info.mipLevels = 1u;
 			}
 
-			m_initialised = result;
+			m_texture = getCurrentDevice( *this ).createTexture( m_info, m_properties );
+			m_defaultView->initialise();
+
+			for ( auto & view : m_views )
+			{
+				view->initialise();
+			}
+
+			m_initialised = m_texture != nullptr;
 		}
 
 		return m_initialised;
@@ -196,176 +177,106 @@ namespace castor3d
 	{
 		if ( m_initialised )
 		{
-			m_storage.reset();
-			doCleanup();
+			for ( auto & view : m_views )
+			{
+				view->cleanup();
+			}
+
+			m_defaultView->cleanup();
+			m_texture.reset();
 		}
 
 		m_initialised = false;
 	}
 
-	void TextureLayout::bind( uint32_t index )const
+	void TextureLayout::generateMipmaps()const
 	{
-		REQUIRE( m_initialised );
-		doBind( index );
-		REQUIRE( m_storage );
-		m_storage->bind( index );
-	}
-
-	void TextureLayout::unbind( uint32_t index )const
-	{
-		REQUIRE( m_initialised );
-		REQUIRE( m_storage );
-		m_storage->unbind( index );
-		doUnbind( index );
-	}
-
-	void TextureLayout::resize( Size const & size )
-	{
-		REQUIRE( m_type != TextureType::eThreeDimensions
-				 && m_type != TextureType::eOneDimensionArray
-				 && m_type != TextureType::eTwoDimensionsArray
-				 && m_type != TextureType::eTwoDimensionsMSArray
-				 && m_type != TextureType::eCubeArray );
-
-		doResetStorage();
-
-		for ( auto & image : m_images )
+		if ( m_info.mipLevels > 1u )
 		{
-			image->resize( size );
+			REQUIRE( m_texture );
+			m_texture->generateMipmaps();
 		}
-	}
-
-	void TextureLayout::resize( Point3ui const & size )
-	{
-		REQUIRE( m_type == TextureType::eThreeDimensions
-				 || m_type == TextureType::eOneDimensionArray
-				 || m_type == TextureType::eTwoDimensionsArray
-				 || m_type == TextureType::eTwoDimensionsMSArray
-				 || m_type == TextureType::eCubeArray );
-
-		doResetStorage();
-
-		for ( auto & image : m_images )
-		{
-			image->resize( size );
-		}
-	}
-
-	uint8_t * TextureLayout::lock( AccessTypes const & lock )
-	{
-		doBind( 0u );
-		REQUIRE( m_storage );
-		return m_storage->lock( lock );
-	}
-
-	void TextureLayout::unlock( bool p_modified )
-	{
-		REQUIRE( m_storage );
-		m_storage->unlock( p_modified );
-		doUnbind( 0u );
-	}
-
-	uint8_t * TextureLayout::lock( AccessTypes const & lock
-		, uint32_t index )
-	{
-		REQUIRE( m_storage );
-		return m_storage->lock( lock, index );
-	}
-
-	void TextureLayout::unlock( bool modified
-		, uint32_t index )
-	{
-		REQUIRE( m_storage );
-		m_storage->unlock( modified, index );
 	}
 
 	void TextureLayout::setSource( Path const & folder
 		, Path const & relative )
 	{
-		m_images[0]->initialiseSource( folder, relative );
-		auto buffer = m_images[0]->getBuffer();
-
-		if ( m_size != buffer->dimensions()
-			 || m_format != buffer->format() )
-		{
-			m_size = buffer->dimensions();
-			m_format = buffer->format();
-		}
+		m_defaultView->initialiseSource( folder, relative );
 	}
 
 	void TextureLayout::setSource( PxBufferBaseSPtr buffer )
 	{
-		auto & image = m_images[0];
-
-		if ( !image->hasSource() )
+		if ( !m_defaultView->hasSource() )
 		{
-			image->initialiseSource( buffer );
+			m_defaultView->initialiseSource( buffer );
 		}
 		else
 		{
-			image->setBuffer( buffer );
-		}
-
-		buffer = image->getBuffer();
-
-		if ( m_size != buffer->dimensions()
-			 || m_format != buffer->format() )
-		{
-			m_size = buffer->dimensions();
-			m_format = buffer->format();
+			m_defaultView->setBuffer( buffer );
 		}
 	}
 
 	void TextureLayout::doUpdateFromFirstImage( castor::Size const & size
-		, castor::PixelFormat format )
+		, renderer::Format format )
 	{
-		if ( m_size == Size{}
-			|| m_size != size
-			|| m_format != format )
+		if ( m_info.extent == renderer::Extent3D{}
+			|| m_info.extent.width != size.getWidth()
+			|| m_info.extent.height != size.getHeight()
+			|| m_info.format != format )
 		{
-			m_size = size;
-			m_format = format;
-		}
-	}
+			m_info.extent.width = size.getWidth();
+			m_info.extent.height = size.getHeight();
+			m_info.extent.depth = 1u;
+			m_info.format = format;
+			auto mipLevels = m_info.mipLevels;
 
-	bool TextureLayout::doResetStorage()
-	{
-		bool result = true;
-
-		if ( m_storage )
-		{
-			auto type = m_storage->getType();
-			m_storage.reset();
-			result = doCreateStorage( type );
-		}
-
-		return result;
-	}
-
-	bool TextureLayout::doCreateStorage( TextureStorageType type )
-	{
-		bool result = false;
-
-		if ( !m_storage )
-		{
-			try
+			if ( m_info.mipLevels > 1u )
 			{
-				m_storage = getRenderSystem()->createTextureStorage( type
-					, *this
-					, m_cpuAccess
-					, m_gpuAccess );
-				result = true;
+				m_info.mipLevels = getMaxMipLevels( m_info.mipLevels
+					, m_info.extent );
 			}
-			catch ( std::exception & p_exc )
+
+			m_defaultView->doUpdate( getSubviewCreateInfos( m_info, 0u, m_info.arrayLayers, 0u, m_info.mipLevels ) );
+
+			if ( m_views.size() == 1 )
 			{
-				Logger::logError( StringStream()
-					<< cuT( "TextureImage::Initialise - Error encountered while allocating storage: " )
-					<< string::stringCast< xchar >( p_exc.what() ) );
+				m_views.back()->doUpdate( getSubviewCreateInfos( m_info, 0u, 1u, 0u, 1u ) );
+			}
+			else if ( mipLevels > 1u )
+			{
+				m_info.usage |= renderer::ImageUsageFlag::eTransferSrc;
+
+				if ( m_info.mipLevels != mipLevels )
+				{
+					auto it = m_views.begin();
+					uint32_t index = 0u;
+
+					while ( it != m_views.end() )
+					{
+						auto & view = *it;
+
+						if ( view->getBaseMipLevel() >= m_info.mipLevels )
+						{
+							it = m_views.erase( it );
+						}
+						else
+						{
+							view->doUpdate( getSubviewCreateInfos( m_info, 0u, 1u, index++, 1u ) );
+							++it;
+						}
+					}
+				}
+				else
+				{
+					uint32_t index = 0u;
+
+					for ( auto & view : m_views )
+					{
+						view->doUpdate( getSubviewCreateInfos( m_info, 0u, 1u, index++, 1u ) );
+					}
+				}
 			}
 		}
-
-		ENSURE( m_storage );
-		return result;
 	}
 
 	//************************************************************************************************

@@ -52,8 +52,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::render
 		 */
-		void render( RenderInfo & info
-			, ShadowMapLightTypeArray & shadowMaps
+		void update( RenderInfo & info
 			, castor::Point2r const & jitter )override;
 
 	private:
@@ -69,19 +68,31 @@ namespace castor3d
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const override;
 		/**
+		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
+		 */
+		C3D_API void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, BillboardListRenderNode & nodes
+			, ShadowMapLightTypeArray const & shadowMaps )override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
+		 */
+		C3D_API void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, SubmeshRenderNode & nodes
+			, ShadowMapLightTypeArray const & shadowMaps )override;
+		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
 		C3D_API void doUpdatePipeline( RenderPipeline & pipeline)const override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
+		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
 		 */
-		C3D_API void doPrepareFrontPipeline( ShaderProgram & program
-			, PipelineFlags const & flags )override;
+		renderer::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
+		 *\copydoc		castor3d::RenderPass::doCreateBlendState
 		 */
-		C3D_API void doPrepareBackPipeline( ShaderProgram & program
-			, PipelineFlags const & flags )override;
+		renderer::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
@@ -104,7 +115,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const override;
+			, renderer::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */
@@ -112,7 +123,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const override;
+			, renderer::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
 		 */
@@ -120,7 +131,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const override;
+			, renderer::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPixelShaderSource
 		 */
@@ -128,15 +139,11 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const;
+			, renderer::CompareOp alphaFunc )const;
 
 	private:
-		//!\~english	The frame buffer.
-		//!\~french		Le tampon d'image.
-		FrameBufferSPtr m_frameBuffer;
-		//!\~english	The attach between depth buffer and frame buffer.
-		//!\~french		L'attache entre le tampon profondeur et le tampon d'image.
-		TextureAttachmentSPtr m_depthAttach;
+		renderer::RenderPassPtr m_renderPass;
+		renderer::FrameBufferPtr m_frameBuffer;
 	};
 }
 

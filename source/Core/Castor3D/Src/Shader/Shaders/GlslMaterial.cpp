@@ -336,7 +336,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto c3d_materials = m_writer.declSampler< SamplerBuffer >( cuT( "c3d_materials" ), 0u );
+				auto c3d_materials = m_writer.declSampler< SamplerBuffer >( cuT( "c3d_materials" ), 0u, 0u );
 				m_getMaterial = m_writer.implementFunction< LegacyMaterial >( cuT( "getMaterial" )
 					, [this, &c3d_materials]( Int const & index )
 					{
@@ -364,25 +364,19 @@ namespace castor3d
 			if ( m_writer.hasShaderStorageBuffers() )
 			{
 				auto tmp = m_writer.getBuiltinArray< LegacyMaterial >( cuT( "c3d_materials" ) );
-				return tmp[index];
+				return tmp[index - 1];
 			}
 			else
 			{
-				return m_getMaterial( index );
+				return m_getMaterial( index - 1 );
 			}
 		}
 
 		BaseMaterialUPtr LegacyMaterials::getBaseMaterial( Int const & index )const
 		{
-			if ( m_writer.hasShaderStorageBuffers() )
-			{
-				auto tmp = m_writer.getBuiltinArray< LegacyMaterial >( cuT( "c3d_materials" ) );
-				return std::make_unique< LegacyMaterial >( tmp[index] );
-			}
-			else
-			{
-				return std::make_unique< LegacyMaterial >( m_getMaterial( index ) );
-			}
+			auto material = m_writer.declLocale( cuT( "material" )
+				, getMaterial( index ) );
+			return std::make_unique< LegacyMaterial >( material );
 		}
 
 		//*********************************************************************************************
@@ -404,7 +398,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto c3d_materials = m_writer.declSampler< SamplerBuffer >( cuT( "c3d_materials" ), 0u );
+				auto c3d_materials = m_writer.declSampler< SamplerBuffer >( cuT( "c3d_materials" ), 0u, 0u );
 				m_getMaterial = m_writer.implementFunction< MetallicRoughnessMaterial >( cuT( "getMaterial" )
 					, [this, &c3d_materials]( Int const & index )
 					{
@@ -432,11 +426,11 @@ namespace castor3d
 			if ( m_writer.hasShaderStorageBuffers() )
 			{
 				auto tmp = m_writer.getBuiltinArray< MetallicRoughnessMaterial >( cuT( "c3d_materials" ) );
-				return tmp[index];
+				return tmp[index - 1];
 			}
 			else
 			{
-				return m_getMaterial( index );
+				return m_getMaterial( index - 1 );
 			}
 		}
 
@@ -466,7 +460,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto c3d_materials = m_writer.declSampler< SamplerBuffer >( cuT( "c3d_materials" ), 0u );
+				auto c3d_materials = m_writer.declSampler< SamplerBuffer >( cuT( "c3d_materials" ), 0u, 0u );
 				m_getMaterial = m_writer.implementFunction< SpecularGlossinessMaterial >( cuT( "getMaterial" )
 					, [this, &c3d_materials]( Int const & index )
 					{
@@ -494,25 +488,19 @@ namespace castor3d
 			if ( m_writer.hasShaderStorageBuffers() )
 			{
 				auto tmp = m_writer.getBuiltinArray< SpecularGlossinessMaterial >( cuT( "c3d_materials" ) );
-				return tmp[index];
+				return tmp[index - 1];
 			}
 			else
 			{
-				return m_getMaterial( index );
+				return m_getMaterial( index - 1 );
 			}
 		}
 
 		BaseMaterialUPtr PbrSGMaterials::getBaseMaterial( Int const & index )const
 		{
-			if ( m_writer.hasShaderStorageBuffers() )
-			{
-				auto tmp = m_writer.getBuiltinArray< SpecularGlossinessMaterial >( cuT( "c3d_materials" ) );
-				return std::make_unique< SpecularGlossinessMaterial >( tmp[index] );
-			}
-			else
-			{
-				return std::make_unique< SpecularGlossinessMaterial >( m_getMaterial( index ) );
-			}
+			auto material = m_writer.declLocale( cuT( "material" )
+				, getMaterial( index ) );
+			return std::make_unique< SpecularGlossinessMaterial >( material );
 		}
 
 		//*********************************************************************************************

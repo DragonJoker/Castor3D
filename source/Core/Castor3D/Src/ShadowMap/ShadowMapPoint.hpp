@@ -51,11 +51,13 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMap::render
 		 */
-		void render()override;
+		renderer::Semaphore const & render( renderer::Semaphore const & toWait )override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::debugDisplay
 		 */
-		void debugDisplay( castor::Size const & size, uint32_t index )override;
+		void debugDisplay( renderer::RenderPass const & renderPass
+			, renderer::FrameBuffer const & frameBuffer
+			, castor::Size const & size, uint32_t index )override;
 		/**
 		 *\~english
 		 *\return		The shadow map.
@@ -100,16 +102,24 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const override;
+			, renderer::CompareOp alphaFunc )const override;
+
+	public:
+		static renderer::Format constexpr VarianceFormat = renderer::Format::eR32G32_SFLOAT;
+		static renderer::Format constexpr LinearDepthFormat = renderer::Format::eR32_SFLOAT;
+		static renderer::Format constexpr RawDepthFormat = renderer::Format::eD24_UNORM_S8_UINT;
 
 	private:
-		using CubeAttachment = std::array< TextureAttachmentSPtr, size_t( CubeMapFace::eCount ) >;
-		//!\~english	The attach between depth buffer and main frame buffer.
-		//!\~french		L'attache entre le tampon de profondeur et le tampon principal.
-		CubeAttachment m_linearAttach;
-		//!\~english	The attach between colour buffer and main frame buffer.
-		//!\~french		L'attache entre le tampon de couleur et le tampon principal.
-		CubeAttachment m_colourAttach;
+		struct FrameBuffer
+		{
+			renderer::FrameBufferPtr frameBuffer;
+			renderer::TextureViewPtr varianceView;
+			renderer::TextureViewPtr linearView;
+		};
+		renderer::TexturePtr m_depthTexture;
+		renderer::TextureViewPtr m_depthView;
+		std::array< FrameBuffer, 6u > m_frameBuffers;
+		ShadowType m_shadowType;
 	};
 }
 

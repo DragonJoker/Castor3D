@@ -14,27 +14,23 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - g++-5
+      - g++-8
 
 env:
   global:
-    - COMPILER=g++-5
-  matrix:
-    - CU_TEST=true CU_IMPORTERS=false CU_DIVIDERS=false CU_POSTFXS=false CU_TONEMAPS=false CU_GENERICS=false CU_PARTICLES=false CU_GENERATORS=false CU_RENDERERS=false CU_SAMPLES=false
-    - CU_TEST=false CU_IMPORTERS=true CU_DIVIDERS=false CU_POSTFXS=false CU_TONEMAPS=false CU_GENERICS=false CU_PARTICLES=false CU_GENERATORS=false CU_RENDERERS=false CU_SAMPLES=false
-    - CU_TEST=false CU_IMPORTERS=false CU_DIVIDERS=true CU_POSTFXS=false CU_TONEMAPS=false CU_GENERICS=false CU_PARTICLES=false CU_GENERATORS=false CU_RENDERERS=false CU_SAMPLES=false
-    - CU_TEST=false CU_IMPORTERS=false CU_DIVIDERS=false CU_POSTFXS=true CU_TONEMAPS=false CU_GENERICS=false CU_PARTICLES=false CU_GENERATORS=false CU_RENDERERS=false CU_SAMPLES=false
-    - CU_TEST=false CU_IMPORTERS=false CU_DIVIDERS=false CU_POSTFXS=false CU_TONEMAPS=true CU_GENERICS=false CU_PARTICLES=false CU_GENERATORS=false CU_RENDERERS=false CU_SAMPLES=false
-    - CU_TEST=false CU_IMPORTERS=false CU_DIVIDERS=false CU_POSTFXS=false CU_TONEMAPS=false CU_GENERICS=true CU_PARTICLES=false CU_GENERATORS=false CU_RENDERERS=false CU_SAMPLES=false
-    - CU_TEST=false CU_IMPORTERS=false CU_DIVIDERS=false CU_POSTFXS=false CU_TONEMAPS=false CU_GENERICS=false CU_PARTICLES=true CU_GENERATORS=false CU_RENDERERS=false CU_SAMPLES=false
-    - CU_TEST=false CU_IMPORTERS=false CU_DIVIDERS=false CU_POSTFXS=false CU_TONEMAPS=false CU_GENERICS=false CU_PARTICLES=false CU_GENERATORS=true CU_RENDERERS=false CU_SAMPLES=false
-    - CU_TEST=false CU_IMPORTERS=false CU_DIVIDERS=false CU_POSTFXS=false CU_TONEMAPS=false CU_GENERICS=false CU_PARTICLES=false CU_GENERATORS=false CU_RENDERERS=true CU_SAMPLES=false
-    - CU_TEST=false CU_IMPORTERS=false CU_DIVIDERS=false CU_POSTFXS=false CU_TONEMAPS=false CU_GENERICS=false CU_PARTICLES=false CU_GENERATORS=false CU_RENDERERS=false CU_SAMPLES=true
+    - COMPILER=g++-8
+
+git:
+    submodules: false
+
+before_install:
+    - git submodule update --init -- "source/CMake"
+    - git submodule update --init -- "source/external/RendererLib"
 
 before_script:
   - sudo apt-get update -qq
   - sudo apt-get install libc6-dev
-  - sudo apt-get install gcc-5-multilib g++-5-multilib
+  - sudo apt-get install gcc-8-multilib g++-8-multilib
   - sudo apt-get install cmake
   - sudo apt-get install libfreeimage-dev
   - sudo apt-get install libfreetype6-dev
@@ -43,14 +39,14 @@ before_script:
   - sudo apt-get install libassimp-dev
   - sudo apt-get install libwxgtk3.0-dev
   - sudo apt-get install libgtk2.0-dev
-  - export CXX="g++-5"
-  - export CC="gcc-5"
+  - export CXX="g++-8"
+  - export CC="gcc-8"
 
 script:
   - mkdir -p build
-  - cp ./travis/build.sh ./build
   - cd build
-  - sh ./build.sh
+  - cmake -DCMAKE_BUILD_TYPE=Release ../source -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DCASTOR_BUILDGRP_DIVIDER=ON -DCASTOR_BUILDGRP_GENERATOR=ON -DCASTOR_BUILDGRP_GENERIC=ON -DCASTOR_BUILDGRP_IMPORTER=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_PARTICLES=ON -DCASTOR_BUILDGRP_POSTFX=ON -DCASTOR_BUILDGRP_RENDERER=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_TONEMAPS=ON
+  - make -j4
 
 branches:
   only:

@@ -1,14 +1,9 @@
 #include "ReinhardToneMapping.hpp"
 
 #include <Engine.hpp>
-#include <Cache/ShaderCache.hpp>
 #include <Miscellaneous/Parameter.hpp>
-#include <Render/Context.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Shader/Ubos/HdrConfigUbo.hpp>
-#include <Shader/UniformBuffer.hpp>
-#include <Shader/ShaderProgram.hpp>
-#include <Texture/TextureLayout.hpp>
 
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
@@ -19,11 +14,13 @@ using namespace castor3d;
 
 namespace Reinhard
 {
-	String ToneMapping::Name = cuT( "reinhard" );
+	String ToneMapping::Type = cuT( "reinhard" );
+	String ToneMapping::Name = cuT( "Reinhard Tone Mapping" );
 
 	ToneMapping::ToneMapping( Engine & engine
+		, HdrConfig & hdrConfig
 		, Parameters const & parameters )
-		: castor3d::ToneMapping{ Name, engine, parameters }
+		: castor3d::ToneMapping{ Type, Name, engine, hdrConfig, parameters }
 	{
 	}
 
@@ -32,9 +29,12 @@ namespace Reinhard
 	}
 
 	ToneMappingSPtr ToneMapping::create( Engine & engine
+		, HdrConfig & hdrConfig
 		, Parameters const & parameters )
 	{
-		return std::make_shared< ToneMapping >( engine, parameters );
+		return std::make_shared< ToneMapping >( engine
+			, hdrConfig
+			, parameters );
 	}
 
 	glsl::Shader ToneMapping::doCreate()
@@ -44,9 +44,9 @@ namespace Reinhard
 			auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 
 			// Shader inputs
-			UBO_HDR_CONFIG( writer );
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
+			UBO_HDR_CONFIG( writer, 0u, 0u );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			// Shader outputs
 			auto pxl_rgb = writer.declFragData< Vec4 >( cuT( "pxl_rgb" ), 0 );

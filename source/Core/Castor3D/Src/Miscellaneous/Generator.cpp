@@ -8,14 +8,14 @@ using namespace castor;
 
 //*************************************************************************************************
 
-Generator::Thread::Thread( Generator * p_parent, uint32_t p_index, int iWidth, int iTop, int iBottom, int iTotalHeight, UbPixel const & p_pxColour )
-	: m_parent( p_parent )
-	, m_index( p_index )
+Generator::Thread::Thread( Generator * parent, uint32_t index, int iWidth, int iTop, int iBottom, int iTotalHeight, UbPixel const & pxColour )
+	: m_parent( parent )
+	, m_index( index )
 	, m_iWidth( iWidth )
 	, m_iBottom( iBottom )
 	, m_iTop( iTop )
 	, m_iHeight( iTotalHeight )
-	, m_pxColour( p_pxColour )
+	, m_pxColour( pxColour )
 	, m_pThread()
 {
 }
@@ -39,9 +39,9 @@ void Generator::Thread::wait()
 	m_pThread->join();
 }
 
-uint32_t Generator::Thread::StEntry( Generator::Thread * p_pThis )
+uint32_t Generator::Thread::StEntry( Generator::Thread * pThis )
 {
-	return p_pThis->Entry();
+	return pThis->Entry();
 }
 
 int Generator::Thread::Entry()
@@ -65,11 +65,11 @@ int Generator::Thread::Entry()
 
 //*************************************************************************************************
 
-Generator::Generator( Engine * engine, int p_width, int p_height )
-	: m_iWidth( p_width )
-	, m_iHeight( p_height )
-	, m_frontBuffer( Size( p_width, p_height ) )
-	, m_backBuffer( Size( p_width, p_height ) )
+Generator::Generator( Engine * engine, int width, int height )
+	: m_iWidth( width )
+	, m_iHeight( height )
+	, m_frontBuffer( Size( width, height ) )
+	, m_backBuffer( Size( width, height ) )
 	, m_engine( engine )
 {
 	//uint8_t tmp[] = { 255, 255, 255, 255 };
@@ -114,11 +114,11 @@ bool Generator::Step()
 void Generator::setRed( uint8_t val )
 {
 	m_pxColour[0] = val;
-	std::for_each( m_arraySlaveThreads.begin(), m_arraySlaveThreads.end(), [&]( Thread * p_pThread )
+	std::for_each( m_arraySlaveThreads.begin(), m_arraySlaveThreads.end(), [&]( Thread * pThread )
 	{
-		if ( p_pThread )
+		if ( pThread )
 		{
-			p_pThread->setRed( val );
+			pThread->setRed( val );
 		}
 	} );
 }
@@ -126,11 +126,11 @@ void Generator::setRed( uint8_t val )
 void Generator::setGreen( uint8_t val )
 {
 	m_pxColour[1] = val;
-	std::for_each( m_arraySlaveThreads.begin(), m_arraySlaveThreads.end(), [&]( Thread * p_pThread )
+	std::for_each( m_arraySlaveThreads.begin(), m_arraySlaveThreads.end(), [&]( Thread * pThread )
 	{
-		if ( p_pThread )
+		if ( pThread )
 		{
-			p_pThread->setGreen( val );
+			pThread->setGreen( val );
 		}
 	} );
 }
@@ -138,11 +138,11 @@ void Generator::setGreen( uint8_t val )
 void Generator::setBlue( uint8_t val )
 {
 	m_pxColour[2] = val;
-	std::for_each( m_arraySlaveThreads.begin(), m_arraySlaveThreads.end(), [&]( Thread * p_pThread )
+	std::for_each( m_arraySlaveThreads.begin(), m_arraySlaveThreads.end(), [&]( Thread * pThread )
 	{
-		if ( p_pThread )
+		if ( pThread )
 		{
-			p_pThread->setBlue( val );
+			pThread->setBlue( val );
 		}
 	} );
 }
@@ -154,28 +154,29 @@ void Generator::swapBuffers()
 
 void Generator::InitialiseStep()
 {
-	std::for_each( m_arraySlaveThreads.begin(), m_arraySlaveThreads.end(), [&]( Thread * p_pThread )
+	for ( auto & thread : m_arraySlaveThreads )
 	{
-		if ( p_pThread )
+		if ( thread )
 		{
-			p_pThread->Relaunch();
+			thread->Relaunch();
 		}
-	} );
+	}
 }
 
 void Generator::ClearAllThreads()
 {
-	std::for_each( m_arraySlaveThreads.begin(), m_arraySlaveThreads.end(), [&]( Thread *& p_pThread )
+	for ( auto & thread : m_arraySlaveThreads )
 	{
-		Generator::Thread * pThread = p_pThread;
-		p_pThread = nullptr;
+		Generator::Thread * pThread = thread;
+		thread = nullptr;
 
 		if ( pThread )
 		{
 			pThread->wait();
 			delete pThread;
 		}
-	} );
+	}
+
 	m_arraySlaveThreads.clear();
 }
 
@@ -205,9 +206,9 @@ void Generator::doCleanup()
 	m_backBuffer.clear();
 }
 
-Point2i Generator::_loadImage( String const & p_strImagePath, Image & CU_PARAM_UNUSED( p_image ) )
+Point2i Generator::_loadImage( String const & strImagePath, Image & CU_PARAM_UNUSED( image ) )
 {
-	ImageSPtr pImage = m_engine->getImageCache().add( p_strImagePath, Path{ p_strImagePath } );
+	ImageSPtr pImage = m_engine->getImageCache().add( strImagePath, Path{ strImagePath } );
 	return Point2i( pImage->getWidth(), pImage->getHeight() );
 }
 

@@ -1,14 +1,9 @@
 #include "Uncharted2ToneMapping.hpp"
 
 #include <Engine.hpp>
-#include <Cache/ShaderCache.hpp>
 #include <Miscellaneous/Parameter.hpp>
-#include <Render/Context.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Shader/Ubos/HdrConfigUbo.hpp>
-#include <Shader/UniformBuffer.hpp>
-#include <Shader/ShaderProgram.hpp>
-#include <Texture/TextureLayout.hpp>
 
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
@@ -19,11 +14,13 @@ using namespace castor3d;
 
 namespace Uncharted2
 {
-	String ToneMapping::Name = cuT( "uncharted2" );
+	String ToneMapping::Type = cuT( "uncharted2" );
+	String ToneMapping::Name = cuT( "Uncharted 2 Tone Mapping" );
 
 	ToneMapping::ToneMapping( Engine & engine
+		, HdrConfig & hdrConfig
 		, Parameters const & parameters )
-		: castor3d::ToneMapping{ Name, engine, parameters }
+		: castor3d::ToneMapping{ Type, Name, engine, hdrConfig, parameters }
 	{
 	}
 
@@ -32,9 +29,12 @@ namespace Uncharted2
 	}
 
 	ToneMappingSPtr ToneMapping::create( Engine & engine
+		, HdrConfig & hdrConfig
 		, Parameters const & parameters )
 	{
-		return std::make_shared< ToneMapping >( engine, parameters );
+		return std::make_shared< ToneMapping >( engine
+			, hdrConfig
+			, parameters );
 	}
 
 	glsl::Shader ToneMapping::doCreate()
@@ -44,9 +44,9 @@ namespace Uncharted2
 			auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 
 			// Shader inputs
-			UBO_HDR_CONFIG( writer );
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
+			UBO_HDR_CONFIG( writer, 0u, 0u );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			// Shader outputs
 			auto pxl_rgb = writer.declFragData< Vec4 >( cuT( "pxl_rgb" ), 0 );
@@ -54,19 +54,28 @@ namespace Uncharted2
 			glsl::Utils utils{ writer };
 			utils.declareApplyGamma();
 
-			static float constexpr A = 0.15f;
-			static float constexpr B = 0.50f;
-			static float constexpr C = 0.10f;
-			static float constexpr D = 0.20f;
-			static float constexpr E = 0.02f;
-			static float constexpr F = 0.30f;
-			static float constexpr W = 11.2f;
+			static float constexpr ShoulderStrength = 0.15f;
+			static float constexpr LinearStrength = 0.50f;
+			static float constexpr LinearAngle = 0.10f;
+			static float constexpr ToeStrength = 0.20f;
+			static float constexpr ToeNumerator = 0.02f;
+			static float constexpr ToeDenominator = 0.30f;
+			static float constexpr LinearWhitePointValue = 11.2f;
+			static float constexpr ExposureBias = 2.0f;
 
 			auto uncharted2ToneMap = writer.implementFunction< Vec3 >( cuT( "uncharted2ToneMap" )
 				, [&]( Vec3 const & x )
 				{
-					writer.returnStmt( writer.paren( writer.paren( x * writer.paren( x * A + C * B ) + D * E )
-						/ writer.paren( x * writer.paren( x * A + B ) + D * F ) ) - E / F );
+					writer.returnStmt( writer.paren(
+							writer.paren(
+								x
+								* writer.paren( x * ShoulderStrength + LinearAngle * LinearStrength )
+								+ ToeStrength * ToeNumerator )
+							/ writer.paren(
+								x
+								* writer.paren( x * ShoulderStrength + LinearStrength )
+								+ ToeStrength * ToeDenominator ) )
+						- ToeNumerator / ToeDenominator );
 				}
 				, InVec3{ &writer, cuT( "x" ) } );
 
@@ -74,13 +83,13 @@ namespace Uncharted2
 			{
 				auto hdrColor = writer.declLocale( cuT( "hdrColor" )
 					, texture( c3d_mapDiffuse, vtx_texture ).rgb() );
-				hdrColor *= vec3( 16.0_f ); // Hardcoded Exposure Adjustment.
+				hdrColor *= vec3( Float( ExposureBias ) ); // Hardcoded Exposure Adjustment.
 
 				auto current = writer.declLocale( cuT( "current" )
 					, uncharted2ToneMap( hdrColor * c3d_exposure ) );
 
 				auto whiteScale = writer.declLocale( cuT( "whiteScale" )
-					, vec3( 1.0_f ) * uncharted2ToneMap( vec3( Float( W ) ) ) );
+					, vec3( 1.0_f ) / uncharted2ToneMap( vec3( Float( LinearWhitePointValue ) ) ) );
 				auto colour = writer.declLocale( cuT( "colour" )
 					, current * whiteScale );
 

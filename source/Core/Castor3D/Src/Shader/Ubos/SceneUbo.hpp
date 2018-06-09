@@ -4,7 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_SceneUbo_H___
 #define ___C3D_SceneUbo_H___
 
-#include "Shader/UniformBuffer.hpp"
+#include "Castor3DPrerequisites.hpp"
+
+#include <Buffer/UniformBuffer.hpp>
 
 namespace castor3d
 {
@@ -19,6 +21,20 @@ namespace castor3d
 	*/
 	class SceneUbo
 	{
+	private:
+		struct Configuration
+		{
+			castor::Point4f ambientLight;
+			castor::Point4f backgroundColour;
+			castor::Point4i lightsCount;
+			castor::Point4f cameraPos;
+			castor::Point2i windowSize;
+			float cameraNearPlane;
+			float cameraFarPlane;
+			int32_t fogType;
+			float fogDensity;
+		};
+
 	public:
 		/**
 		 *\~english
@@ -50,59 +66,82 @@ namespace castor3d
 		C3D_API ~SceneUbo();
 		/**
 		 *\~english
-		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_camera	The current camera.
+		 *\brief		Initialises the UBO.
 		 *\~french
-		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_camera	La camera actuelle.
+		 *\brief		Initialise l'UBO.
 		 */
-		C3D_API void updateCameraPosition( Camera const & p_camera )const;
+		C3D_API void initialise();
+		/**
+		 *\~english
+		 *\brief		Cleanup function.
+		 *\~french
+		 *\brief		Fonction de nettoyage.
+		 */
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_camera	The current camera.
-		 *\param[in]	p_fog		The fog configuration.
+		 *\param[in]	camera	The current camera.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_camera	La camera actuelle.
-		 *\param[in]	p_fog		La configuration du brouillard.
+		 *\param[in]	camera	La camera actuelle.
 		 */
-		C3D_API void update( Camera const & p_camera
-			, Fog const & p_fog )const;
+		C3D_API void updateCameraPosition( Camera const & camera )const;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_scene		The rendered scene.
-		 *\param[in]	p_camera	The current camera.
-		 *\param[in]	p_lights	The lights are updated too.
+		 *\param[in]	camera	The current camera.
+		 *\param[in]	fog		The fog configuration.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_scene		La scène dessinée.
-		 *\param[in]	p_camera	La camera actuelle.
-		 *\param[in]	p_lights	Les sources lumineuses sont mises à jour elles aussi.
+		 *\param[in]	camera	La camera actuelle.
+		 *\param[in]	fog		La configuration du brouillard.
 		 */
-		C3D_API void update( Scene const & p_scene
-			, Camera const & p_camera
-			, bool p_lights = true )const;
+		C3D_API void update( Camera const & camera
+			, Fog const & fog )const;
+		/**
+		 *\~english
+		 *\brief		Updates the UBO from given values.
+		 *\param[in]	scene	The rendered scene.
+		 *\param[in]	camera	The current camera.
+		 *\param[in]	lights	The lights are updated too.
+		 *\~french
+		 *\brief		Met à jour l'UBO avec les valeurs données.
+		 *\param[in]	scene	La scène dessinée.
+		 *\param[in]	camera	La camera actuelle.
+		 *\param[in]	lights	Les sources lumineuses sont mises à jour elles aussi.
+		 */
+		C3D_API void update( Scene const & scene
+			, Camera const & camera
+			, bool lights = true )const;
+		/**
+		 *\~english
+		 *\brief		Updates the UBO from given values.
+		 *\param[in]	window	The window dimensions.
+		 *\~french
+		 *\brief		Met à jour l'UBO avec les valeurs données.
+		 *\param[in]	window	Les dimensions de la fenêtre.
+		 */
+		C3D_API void setWindowSize( castor::Size const & window )const;
 		/**
 		 *\~english
 		 *\name			getters.
 		 *\~french
 		 *\name			getters.
 		 */
-		inline UniformBuffer & getUbo()
+		inline renderer::UniformBuffer< Configuration > & getUbo()
 		{
-			return m_ubo;
+			return *m_ubo;
 		}
 
-		inline UniformBuffer const & getUbo()const
+		inline renderer::UniformBuffer< Configuration > const & getUbo()const
 		{
-			return m_ubo;
+			return *m_ubo;
 		}
 		/**@}*/
 
 	public:
-		static constexpr uint32_t BindingPoint = 3u;
+		C3D_API static uint32_t const BindingPoint;
 		//!\~english	Name of the scene frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les données de scène.
 		C3D_API static castor::String const BufferScene;
@@ -118,6 +157,9 @@ namespace castor3d
 		//!\~english	Name of the camera position frame variable.
 		//!\~french		Nom de la frame variable contenant la position de la caméra.
 		C3D_API static castor::String const CameraPos;
+		//!\~english	Name of the window dimensions frame variable.
+		//!\~french		Nom de la frame variable contenant les dimensions de la fenêtre.
+		C3D_API static castor::String const WindowSize;
 		//!\~english	Name of the camera near plane frame variable.
 		//!\~french		Nom de la frame variable contenant la valeur du plan proche de la caméra.
 		C3D_API static castor::String const CameraNearPlane;
@@ -132,42 +174,21 @@ namespace castor3d
 		C3D_API static castor::String const FogDensity;
 
 	private:
-		//!\~english	The UBO.
-		//!\~french		L'UBO.
-		UniformBuffer m_ubo;
-		//!\~english	The ambient light.
-		//!\~french		La luminosité ambiante.
-		Uniform4f & m_ambientLight;
-		//!\~english	The background colour.
-		//!\~french		La couleur de fond.
-		Uniform4f & m_backgroundColour;
-		//!\~english	The lights counts.
-		//!\~french		Les comptes des lumières.
-		Uniform4i & m_lightsCount;
-		//!\~english	The camera position.
-		//!\~french		La position de la caméra.
-		Uniform3f & m_cameraPos;
-		//!\~english	The camera far plane value.
-		//!\~french		La valeur du plan éloigné de la caméra.
-		Uniform1f & m_cameraNearPlane;
-		//!\~english	The camera far plane value.
-		//!\~french		La valeur du plan éloigné de la caméra.
-		Uniform1f & m_cameraFarPlane;
-		//!\~english	The fog type.
-		//!\~french		Le type de brouillard.
-		Uniform1i & m_fogType;
-		//!\~english	The fog density.
-		//!\~french		La densité du brouillard.
-		Uniform1f & m_fogDensity;
+		Engine & m_engine;
+		renderer::UniformBufferPtr< Configuration > m_ubo;
 	};
 }
 
-#define UBO_SCENE( Writer )\
-	glsl::Ubo scene{ writer, castor3d::SceneUbo::BufferScene, castor3d::SceneUbo::BindingPoint };\
+#define UBO_SCENE( writer, binding, set )\
+	glsl::Ubo scene{ writer\
+		, castor3d::SceneUbo::BufferScene\
+		, binding\
+		, set };\
 	auto c3d_ambientLight = scene.declMember< glsl::Vec4 >( castor3d::SceneUbo::AmbientLight );\
 	auto c3d_backgroundColour = scene.declMember< glsl::Vec4 >( castor3d::SceneUbo::BackgroundColour );\
 	auto c3d_lightsCount = scene.declMember< glsl::IVec4 >( castor3d::SceneUbo::LightsCount );\
-	auto c3d_cameraPosition = scene.declMember< glsl::Vec3 >( castor3d::SceneUbo::CameraPos );\
+	auto c3d_cameraPosition = scene.declMember< glsl::Vec4 >( castor3d::SceneUbo::CameraPos );\
+	auto c3d_windowSize = scene.declMember< glsl::IVec2 >( castor3d::SceneUbo::WindowSize );\
 	auto c3d_cameraNearPlane = scene.declMember< glsl::Float >( castor3d::SceneUbo::CameraNearPlane ); \
 	auto c3d_cameraFarPlane = scene.declMember< glsl::Float >( castor3d::SceneUbo::CameraFarPlane );\
 	auto c3d_fogType = scene.declMember< glsl::Int >( castor3d::SceneUbo::FogType );\

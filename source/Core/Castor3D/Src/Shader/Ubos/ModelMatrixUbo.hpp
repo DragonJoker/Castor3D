@@ -4,7 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_ModelMatrixUbo_H___
 #define ___C3D_ModelMatrixUbo_H___
 
-#include "Shader/UniformBuffer.hpp"
+#include "Castor3DPrerequisites.hpp"
+
+#include <Buffer/UniformBuffer.hpp>
 
 namespace castor3d
 {
@@ -19,6 +21,13 @@ namespace castor3d
 	*/
 	class ModelMatrixUbo
 	{
+	public:
+		struct Configuration
+		{
+			castor::Matrix4x4f model;
+			castor::Matrix4x4f normal;
+		};
+
 	public:
 		/**
 		 *\~english
@@ -50,6 +59,20 @@ namespace castor3d
 		C3D_API ~ModelMatrixUbo();
 		/**
 		 *\~english
+		 *\brief		Initialises the UBO.
+		 *\~french
+		 *\brief		Initialise l'UBO.
+		 */
+		C3D_API void initialise();
+		/**
+		 *\~english
+		 *\brief		Cleanup function.
+		 *\~french
+		 *\brief		Fonction de nettoyage.
+		 */
+		C3D_API void cleanup();
+		/**
+		 *\~english
 		 *\brief		Updates the UBO from given values.
 		 *\param[in]	model	The new model matrix.
 		 *\~french
@@ -75,38 +98,35 @@ namespace castor3d
 		 *\~french
 		 *\name			getters.
 		 */
-		inline UniformBuffer & getUbo()
+		inline renderer::UniformBuffer< Configuration > & getUbo()
 		{
-			return m_ubo;
+			return *m_ubo;
 		}
 
-		inline UniformBuffer const & getUbo()const
+		inline renderer::UniformBuffer< Configuration > const & getUbo()const
 		{
-			return m_ubo;
+			return *m_ubo;
 		}
 		/**@}*/
 
 	public:
-		static constexpr uint32_t BindingPoint = 2u;
+		C3D_API static const uint32_t BindingPoint;
 		C3D_API static castor::String const BufferModelMatrix;
 		C3D_API static castor::String const MtxModel;
 		C3D_API static castor::String const MtxNormal;
 
 	private:
-		//!\~english	The UBO.
-		//!\~french		L'UBO.
-		UniformBuffer m_ubo;
-		//!\~english	The view matrix variable.
-		//!\~french		La variable de la matrice vue.
-		Uniform4x4f & m_model;
-		//!\~english	The projection matrix variable.
-		//!\~french		La variable de la matrice projection.
-		Uniform4x4f & m_normal;
+		Engine & m_engine;
+		renderer::UniformBufferPtr< Configuration > m_ubo;
 	};
 }
 
-#define UBO_MODEL_MATRIX( Writer )\
-	glsl::Ubo modelMatrices{ writer, castor3d::ModelMatrixUbo::BufferModelMatrix, castor3d::ModelMatrixUbo::BindingPoint };\
+#define UBO_MODEL_MATRIX( writer, binding, set )\
+	glsl::Ubo modelMatrices{ writer\
+		, castor3d::ModelMatrixUbo::BufferModelMatrix\
+		, binding\
+		, set\
+		, glsl::Ubo::Layout::eStd140 };\
 	auto c3d_mtxModel = modelMatrices.declMember< glsl::Mat4 >( castor3d::ModelMatrixUbo::MtxModel );\
 	auto c3d_mtxNormal = modelMatrices.declMember< glsl::Mat4 >( castor3d::ModelMatrixUbo::MtxNormal );\
 	modelMatrices.end()

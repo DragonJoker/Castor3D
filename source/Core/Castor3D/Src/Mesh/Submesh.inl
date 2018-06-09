@@ -93,15 +93,15 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	inline void Submesh::addPoints( std::vector< InterleavedVertex > const & p_vertices )
+	inline void Submesh::addPoints( std::vector< InterleavedVertex > const & vertices )
 	{
-		addPoints( p_vertices.data(), p_vertices.data() + p_vertices.size() );
+		addPoints( vertices.data(), vertices.data() + vertices.size() );
 	}
 
 	template< size_t Count >
-	inline void Submesh::addPoints( std::array< InterleavedVertex, Count > const & p_vertices )
+	inline void Submesh::addPoints( std::array< InterleavedVertex, Count > const & vertices )
 	{
-		addPoints( p_vertices.data(), p_vertices.data() + p_vertices.size() );
+		addPoints( vertices.data(), vertices.data() + vertices.size() );
 	}
 
 	inline SkeletonSPtr Submesh::getSkeleton()const
@@ -109,22 +109,34 @@ namespace castor3d
 		return getParent().getSkeleton();
 	}
 
-	inline void Submesh::setDefaultMaterial( MaterialSPtr p_mat )
+	inline void Submesh::setDefaultMaterial( MaterialSPtr mat )
 	{
-		m_defaultMaterial = p_mat;
-		setMaterial( nullptr, p_mat, false );
+		m_defaultMaterial = mat;
+		setMaterial( nullptr, mat, false );
 	}
 
-	inline BufferElementGroupSPtr Submesh::operator[]( uint32_t p_index )const
+	inline InterleavedVertex const & Submesh::operator[]( uint32_t index )const
 	{
-		REQUIRE( p_index < m_points.size() );
-		return m_points[p_index];
+		REQUIRE( index < m_points.size() );
+		return m_points[index];
 	}
 
-	inline BufferElementGroupSPtr Submesh::getPoint( uint32_t p_index )const
+	inline InterleavedVertex & Submesh::operator[]( uint32_t index )
 	{
-		REQUIRE( p_index < m_points.size() );
-		return m_points[p_index];
+		REQUIRE( index < m_points.size() );
+		return m_points[index];
+	}
+
+	inline InterleavedVertex const & Submesh::getPoint( uint32_t index )const
+	{
+		REQUIRE( index < m_points.size() );
+		return m_points[index];
+	}
+
+	inline InterleavedVertex & Submesh::getPoint( uint32_t index )
+	{
+		REQUIRE( index < m_points.size() );
+		return m_points[index];
 	}
 
 	inline MaterialSPtr Submesh::getDefaultMaterial()const
@@ -152,34 +164,39 @@ namespace castor3d
 		return m_sphere;
 	}
 
-	inline VertexPtrArray const & Submesh::getPoints()const
+	inline InterleavedVertexArray const & Submesh::getPoints()const
 	{
 		return m_points;
 	}
 
-	inline VertexPtrArray & Submesh::getPoints()
+	inline InterleavedVertexArray & Submesh::getPoints()
 	{
 		return m_points;
 	}
 
-	inline VertexBuffer const & Submesh::getVertexBuffer()const
+	inline renderer::VertexBuffer< InterleavedVertex > const & Submesh::getVertexBuffer()const
 	{
-		return m_vertexBuffer;
+		return *m_vertexBuffer;
 	}
 
-	inline VertexBuffer & Submesh::getVertexBuffer()
+	inline renderer::VertexBuffer< InterleavedVertex > & Submesh::getVertexBuffer()
 	{
-		return m_vertexBuffer;
+		return *m_vertexBuffer;
 	}
 
-	inline IndexBuffer const & Submesh::getIndexBuffer()const
+	inline renderer::VertexLayout const & Submesh::getVertexLayout()const
 	{
-		return m_indexBuffer;
+		return *m_vertexLayout;
 	}
 
-	inline IndexBuffer & Submesh::getIndexBuffer()
+	inline renderer::Buffer< uint32_t > const & Submesh::getIndexBuffer()const
 	{
-		return m_indexBuffer;
+		return *m_indexBuffer;
+	}
+
+	inline renderer::Buffer< uint32_t > & Submesh::getIndexBuffer()
+	{
+		return *m_indexBuffer;
 	}
 
 	inline bool Submesh::isInitialised()const
@@ -217,6 +234,12 @@ namespace castor3d
 
 		m_indexMapping = mapping;
 		m_components.emplace( mapping->getType(), mapping );
+	}
+
+	inline IndexMapping const & Submesh::getIndexMapping()const
+	{
+		REQUIRE( m_indexMapping );
+		return *m_indexMapping;
 	}
 
 	inline bool Submesh::hasComponent( castor::String const & name )const
@@ -284,14 +307,14 @@ namespace castor3d
 		return m_components;
 	}
 
-	inline Topology Submesh::getTopology()const
+	inline renderer::PrimitiveTopology Submesh::getTopology()const
 	{
 		return m_topology;
 	}
 
-	inline void Submesh::setTopology( Topology p_value )
+	inline void Submesh::setTopology( renderer::PrimitiveTopology value )
 	{
-		m_topology = p_value;
+		m_topology = value;
 	}
 
 	//*********************************************************************************************

@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_MorphingRenderNode_H___
 
 #include "ObjectRenderNode.hpp"
+#include "Shader/Ubos/MorphingUbo.hpp"
 
 namespace castor3d
 {
@@ -19,23 +20,24 @@ namespace castor3d
 	struct MorphingRenderNode
 		: public SubmeshRenderNode
 	{
-		C3D_API MorphingRenderNode( RenderPipeline & p_pipeline
-			, PassRenderNode && p_passNode
-			, ModelMatrixUbo & p_modelMatrixBuffer
-			, ModelUbo & p_modelBuffer
-			, GeometryBuffers & p_buffers
-			, SceneNode & p_sceneNode
-			, DataType & p_data
-			, InstanceType & p_instance
-			, AnimatedMesh & p_mesh
-			, MorphingUbo & p_morphingUbo );
+		C3D_API MorphingRenderNode( RenderPipeline & pipeline
+			, PassRenderNode && passNode
+			, UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixBuffer
+			, UniformBufferOffset< ModelUbo::Configuration > modelBuffer
+			, UniformBufferOffset< PickingUbo::Configuration > pickingBuffer
+			, GeometryBuffers const & buffers
+			, SceneNode & sceneNode
+			, DataType & data
+			, InstanceType & instance
+			, AnimatedMesh & mesh
+			, UniformBufferOffset< MorphingUbo::Configuration > morphingUbo );
 
 		//!\~english	The animated mesh.
 		//!\~french		Le maillage animé.
-		AnimatedMesh & m_mesh;
+		AnimatedMesh & mesh;
 		//!\~english	The morphing UBO.
 		//!\~french		L'UBO de morphing.
-		MorphingUbo & m_morphingUbo;
+		UniformBufferOffset< MorphingUbo::Configuration > morphingUbo;
 	};
 }
 

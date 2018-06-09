@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SubmeshComponent_H___
@@ -90,14 +90,17 @@ namespace castor3d
 		 *\~french
 		 *\brief		Récupère les tampons qui doivent aller dans un VAO.
 		 */
-		C3D_API virtual void gather( VertexBufferArray & buffers ) = 0;
+		C3D_API virtual void gather( MaterialSPtr material
+			, renderer::BufferCRefArray & buffers
+			, std::vector< uint64_t > & offsets
+			, renderer::VertexLayoutCRefArray & layouts ) = 0;
 		/**
 		 *\~english
 		 *\return		The shader program flags.
 		 *\~french
 		 *\return		Les indicateurs de shader.
 		 */
-		C3D_API virtual ProgramFlags getProgramFlags()const = 0;
+		C3D_API virtual ProgramFlags getProgramFlags( MaterialSPtr material )const = 0;
 		/**
 		 *\~english
 		 *\return		The component type name.

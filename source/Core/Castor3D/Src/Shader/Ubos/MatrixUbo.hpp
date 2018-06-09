@@ -4,7 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_MatrixUbo_H___
 #define ___C3D_MatrixUbo_H___
 
-#include "Shader/UniformBuffer.hpp"
+#include "Castor3DPrerequisites.hpp"
+
+#include <Buffer/UniformBuffer.hpp>
 
 namespace castor3d
 {
@@ -19,13 +21,27 @@ namespace castor3d
 	*/
 	class MatrixUbo
 	{
+	private:
+		struct Configuration
+		{
+			castor::Matrix4x4f projection;
+			castor::Matrix4x4f invProjection;
+			castor::Matrix4x4f curView;
+			castor::Matrix4x4f prvView;
+			castor::Matrix4x4f curViewProj;
+			castor::Matrix4x4f prvViewProj;
+			castor::Point2f jitter;
+		};
+
 	public:
 		/**
-		 *\~english
-		 *\name			Copy/Move construction/assignment operation.
-		 *\~french
-		 *\name			Constructeurs/Opérateurs d'affectation par copie/déplacement.
-		 */
+		*\~english
+		*\name
+		*	Copy/Move construction/assignment operation.
+		*\~french
+		*\name
+		*	Constructeurs/Opérateurs d'affectation par copie/déplacement.
+		*/
 		/**@{*/
 		C3D_API MatrixUbo( MatrixUbo const & ) = delete;
 		C3D_API MatrixUbo & operator=( MatrixUbo const & ) = delete;
@@ -48,6 +64,20 @@ namespace castor3d
 		 *\brief		Destructeur
 		 */
 		C3D_API ~MatrixUbo();
+		/**
+		 *\~english
+		 *\brief		Initialises the UBO.
+		 *\~french
+		 *\brief		Initialise l'UBO.
+		 */
+		C3D_API void initialise();
+		/**
+		 *\~english
+		 *\brief		Cleanup function.
+		 *\~french
+		 *\brief		Fonction de nettoyage.
+		 */
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -80,19 +110,19 @@ namespace castor3d
 		 *\~french
 		 *\name			getters.
 		 */
-		inline UniformBuffer & getUbo()
+		inline renderer::UniformBuffer< Configuration > & getUbo()
 		{
-			return m_ubo;
+			return *m_ubo;
 		}
 
-		inline UniformBuffer const & getUbo()const
+		inline renderer::UniformBuffer< Configuration > const & getUbo()const
 		{
-			return m_ubo;
+			return *m_ubo;
 		}
 		/**@}*/
 
 	public:
-		static uint32_t constexpr BindingPoint = 1u;
+		C3D_API static uint32_t const BindingPoint;
 		C3D_API static castor::String const BufferMatrix;
 		C3D_API static castor::String const Projection;
 		C3D_API static castor::String const CurView;
@@ -100,50 +130,26 @@ namespace castor3d
 		C3D_API static castor::String const CurViewProj;
 		C3D_API static castor::String const PrvViewProj;
 		C3D_API static castor::String const InvProjection;
-		C3D_API static castor::String const CurJitter;
-		C3D_API static castor::String const PrvJitter;
+		C3D_API static castor::String const Jitter;
 
 	private:
-		//!\~english	The UBO.
-		//!\~french		L'UBO.
-		UniformBuffer m_ubo;
-		//!\~english	The projection matrix variable.
-		//!\~french		La variable de la matrice projection.
-		Uniform4x4f & m_projection;
-		//!\~english	The inverse projection matrix variable.
-		//!\~french		La variable de la matrice projection inverse.
-		Uniform4x4f & m_invProjection;
-		//!\~english	The current view matrix variable.
-		//!\~french		La variable de la matrice vue courante.
-		Uniform4x4f & m_curView;
-		//!\~english	The previous view matrix variable.
-		//!\~french		La variable de la matrice vue précédente.
-		Uniform4x4f & m_prvView;
-		//!\~english	The current view projection matrix variable.
-		//!\~french		La variable de la matrice vue projection courante.
-		Uniform4x4f & m_curViewProj;
-		//!\~english	The previous view projection matrix variable.
-		//!\~french		La variable de la matrice vue projection précédente.
-		Uniform4x4f & m_prvViewProj;
-		//!\~english	The current jittering value variable.
-		//!\~french		La variable de la valeur de jittering courante.
-		Uniform2f & m_curJitter;
-		//!\~english	The previous jittering value variable.
-		//!\~french		La variable de la valeur de jittering précédente.
-		Uniform2f & m_prvJitter;
+		Engine & m_engine;
+		renderer::UniformBufferPtr< Configuration > m_ubo;
 	};
 }
 
-#define UBO_MATRIX( Writer )\
-	glsl::Ubo matrices{ writer, castor3d::MatrixUbo::BufferMatrix, castor3d::MatrixUbo::BindingPoint };\
+#define UBO_MATRIX( writer, binding, set )\
+	glsl::Ubo matrices{ writer\
+		, castor3d::MatrixUbo::BufferMatrix\
+		, binding\
+		, set };\
 	auto c3d_projection = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::Projection );\
 	auto c3d_invProjection = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::InvProjection );\
 	auto c3d_curView = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::CurView );\
 	auto c3d_prvView = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::PrvView );\
 	auto c3d_curViewProj = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::CurViewProj );\
 	auto c3d_prvViewProj = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::PrvViewProj );\
-	auto c3d_curJitter = matrices.declMember< glsl::Vec2 >( castor3d::MatrixUbo::CurJitter );\
-	auto c3d_prvJitter = matrices.declMember< glsl::Vec2 >( castor3d::MatrixUbo::PrvJitter );\
+	auto c3d_jitter = matrices.declMember< glsl::Vec2 >( castor3d::MatrixUbo::Jitter );\
 	matrices.end()
 
 #endif

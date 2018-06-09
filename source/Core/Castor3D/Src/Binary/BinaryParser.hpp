@@ -22,7 +22,23 @@ namespace castor3d
 	template< class TParsed >
 	class BinaryParserBase
 	{
+		template< typename T >
+		friend class BinaryParserBase;
+
 	public:
+		/**
+		 *\~english
+		 *\brief		Creates a binary parser.
+		 *\~french
+		 *\brief		Crée un parser binaire.
+		 */
+		template< typename T >
+		inline BinaryParser< T > createBinaryParser()
+		{
+			BinaryParser< T > parser;
+			parser.m_fileVersion = m_fileVersion;
+			return parser;
+		}
 		/**
 		 *\~english
 		 *\brief		From file reader function
@@ -104,6 +120,12 @@ namespace castor3d
 				{
 					m_chunk->resetParse();
 					result = doParse_v1_2( p_obj );
+				}
+
+				if ( result )
+				{
+					m_chunk->resetParse();
+					result = doParse_v1_3( p_obj );
 				}
 
 				if ( result )
@@ -196,6 +218,44 @@ namespace castor3d
 
 			return result;
 		}
+		/**
+		 *\~english
+		 *\brief		From chunk reader function
+		 *\param[out]	p_obj	The object to read
+		 *\param[in]	p_chunk	The chunk
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Fonction de lecture à partir d'un chunk
+		 *\param[out]	p_obj	L'objet à lire
+		 *\param[in]	p_chunk	Le chunk
+		 *\return		\p false si une erreur quelconque est arrivée
+		 */
+		inline bool parse_v1_3( TParsed & p_obj, BinaryChunk & p_chunk )
+		{
+			bool result = true;
+
+			if ( p_chunk.getChunkType() == ChunkTyper< TParsed >::Value )
+			{
+				m_chunk = &p_chunk;
+			}
+			else
+			{
+				castor::Logger::logError( cuT( "Not a valid chunk for parsed type." ) );
+				result = false;
+			}
+
+			if ( result )
+			{
+				result = doParse_v1_3( p_obj );
+
+				if ( !result )
+				{
+					m_chunk->endParse();
+				}
+			}
+
+			return result;
+		}
 
 	protected:
 		/**
@@ -238,7 +298,7 @@ namespace castor3d
 
 					if ( result )
 					{
-					  Version fileVersion{ int( CMSH_VERSION_MAJOR( version ) )
+						m_fileVersion = Version{ int( CMSH_VERSION_MAJOR( version ) )
 							, int( CMSH_VERSION_MINOR( version ) )
 							, int( CMSH_VERSION_REVISION( version ) ) };
 						version = CMSH_VERSION;
@@ -246,10 +306,10 @@ namespace castor3d
 							, int( CMSH_VERSION_MINOR( version ) )
 							, int( CMSH_VERSION_REVISION( version ) ) };
 
-						if ( fileVersion < latestVersion )
+						if ( m_fileVersion < latestVersion )
 						{
-							castor::Logger::logWarning( castor::StringStream{} << cuT( "This file is using version " )
-								<< fileVersion
+							castor::Logger::logWarning( castor::makeStringStream() << cuT( "This file is using version " )
+								<< m_fileVersion
 								<< cuT( ", consider upgrading it to version " )
 								<< latestVersion
 								<< cuT( "." ) );
@@ -419,14 +479,29 @@ namespace castor3d
 		{
 			return true;
 		}
+		/**
+		 *\~english
+		 *\brief		Chunk reader function from a chunk of version 1.1.
+		 *\param[out]	p_obj	The object to read
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Fonction de lecture à partir d'un chunk en version 1.1.
+		 *\param[out]	p_obj	L'objet à lire
+		 *\return		\p false si une erreur quelconque est arrivée
+		 */
+		C3D_API virtual bool doParse_v1_3( TParsed & p_obj )
+		{
+			return true;
+		}
 
 	protected:
 		//!\~english	The writer's chunk.
 		//!\~french		Le chunk du writer.
 		BinaryChunk * m_chunk{ nullptr };
+		//!\~english	The chunk version from the file.
+		//!\~french		La version du chunk dans le fichier.
+		mutable Version m_fileVersion;
 	};
-	template< class TParsed >
-	class BinaryParser;
 }
 
 #endif

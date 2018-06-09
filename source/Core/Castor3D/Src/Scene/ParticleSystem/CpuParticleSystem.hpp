@@ -4,8 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_CpuParticleSystem_H___
 #define ___C3D_CpuParticleSystem_H___
 
-#include "ParticleSystemImpl.hpp"
 #include "Particle.hpp"
+#include "ParticleDeclaration.hpp"
+#include "ParticleSystemImpl.hpp"
 
 namespace castor3d
 {
@@ -26,12 +27,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_parent	The parent particle system.
+		 *\param[in]	parent	The parent particle system.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_parent	Le système de particules parent.
+		 *\param[in]	parent	Le système de particules parent.
 		 */
-		C3D_API explicit CpuParticleSystem( ParticleSystem & p_parent );
+		C3D_API explicit CpuParticleSystem( ParticleSystem & parent );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -50,7 +51,9 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ParticleSystemImpl::addParticleVariable
 		 */
-		C3D_API void addParticleVariable( castor::String const & p_name, ElementType p_type, castor::String const & p_defaultValue )override;
+		C3D_API void addParticleVariable( castor::String const & name
+			, ParticleFormat type
+			, castor::String const & defaultValue )override;
 
 	private:
 		/**
@@ -73,7 +76,7 @@ namespace castor3d
 	protected:
 		//!\~english	The particle's elements description.
 		//!\~french		La description des éléments d'une particule.
-		BufferDeclaration m_inputs;
+		ParticleDeclaration m_inputs;
 		//!\~english	The particles.
 		//!\~french		Les particules.
 		ParticleArray m_particles;

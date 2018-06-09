@@ -1,10 +1,8 @@
-﻿#include "Material.hpp"
+#include "Material.hpp"
 
 #include "LegacyPass.hpp"
 #include "MetallicRoughnessPbrPass.hpp"
 #include "SpecularGlossinessPbrPass.hpp"
-
-#include "Scene/SceneFileParser.hpp"
 
 using namespace castor;
 
@@ -120,9 +118,10 @@ namespace castor3d
 		}
 
 		REQUIRE( newPass );
-		m_passListeners.emplace( newPass, newPass->onChanged.connect( std::bind( &Material::onPassChanged
-			, this
-			, std::placeholders::_1 ) ) );
+		m_passListeners.emplace( newPass, newPass->onChanged.connect( [this]( Pass const & pass )
+			{
+				onPassChanged( pass );
+			} ) );
 		m_passes.push_back( newPass );
 		onChanged( *this );
 		return newPass;

@@ -1,9 +1,9 @@
-﻿#include "InstantiationComponent.hpp"
+#include "InstantiationComponent.hpp"
 
 #include "Event/Frame/FrameListener.hpp"
 #include "Mesh/Submesh.hpp"
+#include "Render/RenderPass.hpp"
 #include "Scene/Scene.hpp"
-#include "Shader/ShaderProgram.hpp"
 
 using namespace castor;
 
@@ -27,34 +27,51 @@ namespace castor3d
 
 	uint32_t InstantiationComponent::ref( MaterialSPtr material )
 	{
-		auto it = m_instanceCount.find( material );
+		auto it = find( material );
 
-		if ( it == m_instanceCount.end() )
+		if ( it == end() )
 		{
-			m_instanceCount[material] = 0;
-			it = m_instanceCount.find( material );
+			it = m_instances.emplace( material, Data{ 0u, nullptr } ).first;
 		}
 
-		return it->second++;
+		auto & data = it->second;
+		auto result = data.count++;
+
+		if ( data.count >= m_threshold )
+		{
+			data.data.resize( data.count );
+			getOwner()->getScene()->getListener().postEvent( makeFunctorEvent( EventType::eQueueRender
+				, [this]()
+			{
+				doFill();
+			} ) );
+		}
+
+		return result;
 	}
 
 	uint32_t InstantiationComponent::unref( MaterialSPtr material )
 	{
-		auto it = m_instanceCount.find( material );
+		auto it = find( material );
 		uint32_t result{ 0u };
 
-		if ( it != m_instanceCount.end() )
+		if ( it != end() )
 		{
-			result = it->second;
+			auto & data = it->second;
+			result = data.count;
 
-			if ( it->second )
+			if ( data.count )
 			{
-				it->second--;
+				data.count--;
 			}
 
-			if ( !it->second )
+			if ( data.count < m_threshold )
 			{
-				m_instanceCount.erase( it );
+				getOwner()->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePreRender
+					, [&data]()
+				{
+					data.buffer.reset();
+				} ) );
 			}
 		}
 
@@ -64,11 +81,11 @@ namespace castor3d
 	uint32_t InstantiationComponent::getRefCount( MaterialSPtr material )const
 	{
 		uint32_t result = 0;
-		auto it = m_instanceCount.find( material );
+		auto it = find( material );
 
-		if ( it != m_instanceCount.end() )
+		if ( it != end() )
 		{
-			result = it->second;
+			result = it->second.count;
 		}
 
 		return result;
@@ -78,19 +95,27 @@ namespace castor3d
 	{
 		uint32_t count = 0;
 
-		for ( auto & it : m_instanceCount )
+		for ( auto & it : m_instances )
 		{
-			count = std::max( count, it.second );
+			count = std::max( count, it.second.count );
 		}
 
 		return count;
 	}
 
-	void InstantiationComponent::gather( VertexBufferArray & buffers )
+	void InstantiationComponent::gather( MaterialSPtr material
+		, renderer::BufferCRefArray & buffers
+		, std::vector< uint64_t > & offsets
+		, renderer::VertexLayoutCRefArray & layouts )
 	{
-		if ( m_matrixBuffer )
+		auto it = m_instances.find( material );
+
+		if ( it != m_instances.end()
+			&& it->second.buffer )
 		{
-			buffers.emplace_back( *m_matrixBuffer );
+			buffers.emplace_back( it->second.buffer->getBuffer() );
+			offsets.emplace_back( 0u );
+			layouts.emplace_back( *m_matrixLayout );
 		}
 	}
 
@@ -105,55 +130,52 @@ namespace castor3d
 			unref( oldMaterial );
 		}
 
-		auto count = ref( newMaterial ) + 1;
-
-		if ( count > oldCount && update )
-		{
-			if ( count < m_threshold )
-			{
-				// We remove the matrix buffer which is unneeded.
-				getOwner()->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePreRender
-					, [this]()
-					{
-						if ( m_matrixBuffer )
-						{
-							m_matrixBuffer->cleanup();
-							m_matrixBuffer.reset();
-						}
-					} ) );
-			}
-			else
-			{
-				getOwner()->getScene()->getListener().postEvent( makeFunctorEvent( EventType::eQueueRender
-					, [this]()
-					{
-						doFill();
-					} ) );
-			}
-		}
+		ref( newMaterial );
 	}
 
 	bool InstantiationComponent::doInitialise()
 	{
 		bool result = true;
 
-		if ( getMaxRefCount() > 1 )
+		if ( getMaxRefCount() >= m_threshold )
 		{
-			if ( !m_matrixBuffer )
+			if ( !m_matrixLayout )
 			{
-				m_matrixBuffer = std::make_unique< VertexBuffer >( *getOwner()->getScene()->getEngine()
-					, BufferDeclaration
-					{
-						{
-							BufferElementDeclaration{ ShaderProgram::Transform, uint32_t( ElementUsage::eTransform ), ElementType::eMat4, 0, 1 },
-							BufferElementDeclaration{ ShaderProgram::Material, uint32_t( ElementUsage::eMatIndex ), ElementType::eInt, 64, 1 },
-						}
-					} );
+				m_matrixLayout = renderer::makeLayout< InstantiationData >( BindingPoint
+					, renderer::VertexInputRate::eInstance );
+				m_matrixLayout->createAttribute( RenderPass::VertexInputs::TransformLocation + 0u
+					, renderer::Format::eR32G32B32A32_SFLOAT
+					, offsetof( InstantiationData, m_matrix ) + 0u * sizeof( Point4f ) );
+				m_matrixLayout->createAttribute( RenderPass::VertexInputs::TransformLocation + 1u
+					, renderer::Format::eR32G32B32A32_SFLOAT
+					, offsetof( InstantiationData, m_matrix ) + 1u * sizeof( Point4f ) );
+				m_matrixLayout->createAttribute( RenderPass::VertexInputs::TransformLocation + 2u
+					, renderer::Format::eR32G32B32A32_SFLOAT
+					, offsetof( InstantiationData, m_matrix ) + 2u * sizeof( Point4f ) );
+				m_matrixLayout->createAttribute( RenderPass::VertexInputs::TransformLocation + 3u
+					, renderer::Format::eR32G32B32A32_SFLOAT
+					, offsetof( InstantiationData, m_matrix ) + 3u * sizeof( Point4f ) );
+				m_matrixLayout->createAttribute( RenderPass::VertexInputs::MaterialLocation
+					, renderer::Format::eR32_SINT
+					, offsetof( InstantiationData, m_material ) );
+			}
+
+			auto & device = getCurrentDevice( *getOwner() );
+
+			for ( auto & data : m_instances )
+			{
+				if ( data.second.count >= m_threshold )
+				{
+					data.second.buffer = renderer::makeVertexBuffer< InstantiationData >( device
+						, data.second.count
+						, 0u
+						, renderer::MemoryPropertyFlag::eHostVisible );
+				}
 			}
 		}
 		else
 		{
-			m_matrixBuffer.reset();
+			doCleanup();
 		}
 
 		return result;
@@ -161,46 +183,32 @@ namespace castor3d
 
 	void InstantiationComponent::doCleanup()
 	{
-		if ( m_matrixBuffer )
+		m_matrixLayout.reset();
+
+		for ( auto & data : m_instances )
 		{
-			m_matrixBuffer->cleanup();
+			data.second.buffer.reset();
 		}
 	}
 
 	void InstantiationComponent::doFill()
 	{
-		if ( m_matrixBuffer )
-		{
-			auto count = getMaxRefCount();
-
-			if ( count )
-			{
-				VertexBuffer & matrixBuffer = *m_matrixBuffer;
-				uint32_t size = count * matrixBuffer.getDeclaration().stride();
-
-				if ( matrixBuffer.getSize() != size )
-				{
-					matrixBuffer.resize( size );
-				}
-			}
-			else
-			{
-				m_matrixBuffer.reset();
-			}
-
-			if ( m_matrixBuffer )
-			{
-				m_matrixBuffer->initialise( BufferAccessType::eDynamic
-					, BufferAccessNature::eDraw );
-			}
-		}
 	}
 
 	void InstantiationComponent::doUpload()
 	{
-		if ( m_matrixBuffer )
+		for ( auto & data : m_instances )
 		{
-			m_matrixBuffer->upload();
+			if ( data.second.buffer
+				&& data.second.count )
+			{
+				if ( auto * buffer = data.second.buffer->lock( 0, data.second.count, renderer::MemoryMapFlag::eWrite ) )
+				{
+					std::copy( data.second.data.begin(), data.second.data.end(), buffer );
+					data.second.buffer->flush( 0u, data.second.count );
+					data.second.buffer->unlock();
+				}
+			}
 		}
 	}
 }

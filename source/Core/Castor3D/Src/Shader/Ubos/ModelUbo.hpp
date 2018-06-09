@@ -4,7 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_ModelUbo_H___
 #define ___C3D_ModelUbo_H___
 
-#include "Shader/UniformBuffer.hpp"
+#include "Castor3DPrerequisites.hpp"
+
+#include <Buffer/UniformBuffer.hpp>
 
 namespace castor3d
 {
@@ -19,6 +21,14 @@ namespace castor3d
 	*/
 	class ModelUbo
 	{
+	public:
+		struct Configuration
+		{
+			int32_t shadowReceiver;
+			int32_t materialIndex;
+			int32_t environmentIndex;
+		};
+
 	public:
 		/**
 		 *\~english
@@ -50,6 +60,20 @@ namespace castor3d
 		C3D_API ~ModelUbo();
 		/**
 		 *\~english
+		 *\brief		Initialises the UBO.
+		 *\~french
+		 *\brief		Initialise l'UBO.
+		 */
+		C3D_API void initialise();
+		/**
+		 *\~english
+		 *\brief		Cleanup function.
+		 *\~french
+		 *\brief		Fonction de nettoyage.
+		 */
+		C3D_API void cleanup();
+		/**
+		 *\~english
 		 *\brief		Updates the UBO from given values.
 		 *\param[in]	p_shadowReceiver	Tells if the model receives shadows.
 		 *\param[in]	p_materialIndex		The material index.
@@ -62,7 +86,7 @@ namespace castor3d
 			, uint32_t p_materialIndex )const;
 		/**
 		 *\~english
-		 *\brief		sets the environment map index value.
+		 *\brief		Sets the environment map index value.
 		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit la valeur de l'indice de la texture d'environnement.
@@ -76,19 +100,19 @@ namespace castor3d
 		 *\name			getters.
 		 */
 		/**@{*/
-		inline UniformBuffer & getUbo()
+		inline renderer::UniformBuffer< Configuration > & getUbo()
 		{
-			return m_ubo;
+			return *m_ubo;
 		}
 
-		inline UniformBuffer const & getUbo()const
+		inline renderer::UniformBuffer< Configuration > const & getUbo()const
 		{
-			return m_ubo;
+			return *m_ubo;
 		}
 		/**@}*/
 
 	public:
-		static constexpr uint32_t BindingPoint = 4u;
+		C3D_API static uint32_t const BindingPoint;
 		//!\~english	Name of the model frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les données de modèle.
 		C3D_API static castor::String const BufferModel;
@@ -103,23 +127,17 @@ namespace castor3d
 		C3D_API static castor::String const EnvironmentIndex;
 
 	private:
-		//!\~english	The UBO.
-		//!\~french		L'UBO.
-		UniformBuffer m_ubo;
-		//!\~english	The shadow receiver matrix variable.
-		//!\~french		La variable de la réception d'ombres.
-		Uniform1i & m_shadowReceiver;
-		//!\~english	The material index matrix variable.
-		//!\~french		La variable de l'indice du matériau.
-		Uniform1i & m_materialIndex;
-		//!\~english	The environment map index matrix variable.
-		//!\~french		La variable de l'indice de la texture d'environnement.
-		Uniform1i & m_environmentIndex;
+		Engine & m_engine;
+		renderer::UniformBufferPtr< Configuration > m_ubo;
 	};
 }
 
-#define UBO_MODEL( Writer )\
-	glsl::Ubo model{ writer, castor3d::ModelUbo::BufferModel, castor3d::ModelUbo::BindingPoint };\
+#define UBO_MODEL( writer, binding, set )\
+	glsl::Ubo model{ writer\
+		, castor3d::ModelUbo::BufferModel\
+		, binding\
+		, set\
+		, glsl::Ubo::Layout::eStd140 };\
 	auto c3d_shadowReceiver = model.declMember< glsl::Int >( castor3d::ModelUbo::ShadowReceiver );\
 	auto c3d_materialIndex = model.declMember< glsl::Int >( castor3d::ModelUbo::MaterialIndex );\
 	auto c3d_envMapIndex = model.declMember< glsl::Int >( castor3d::ModelUbo::EnvironmentIndex );\

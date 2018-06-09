@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_DeferredDirectionalLightPass_H___
@@ -47,8 +47,10 @@ namespace castor3d
 			 *\param[in]	pxl		Le source du fagment shader.
 			 */
 			Program( Engine & engine
+				, DirectionalLightPass & pass
 				, glsl::Shader const & vtx
-				, glsl::Shader const & pxl );
+				, glsl::Shader const & pxl
+				, bool hasShadows );
 			/**
 			 *\~english
 			 *\brief		Destructor.
@@ -61,19 +63,16 @@ namespace castor3d
 			/**
 			 *\copydoc		castor3d::LightPass::Program::doCreatePipeline
 			 */
-			virtual RenderPipelineUPtr doCreatePipeline( bool blend )override;
+			renderer::PipelinePtr doCreatePipeline( renderer::VertexLayout const & vertexLayout
+				, renderer::RenderPass const & renderPass
+				, bool blend )override;
 			/**
 			 *\copydoc		castor3d::LightPass::Program::doBind
 			 */
 			void doBind( Light const & light )override;
 
 		private:
-			//!\~english	The variable containing the light direction.
-			//!\~french		La variable contenant la direction de la lumière.
-			PushUniform3fSPtr m_lightDirection;
-			//!\~english	The variable containing the light space transformation matrix.
-			//!\~french		La variable contenant la matrice de transformation de la lumière.
-			PushUniform4x4fSPtr m_lightTransform;
+			DirectionalLightPass & m_lightPass;
 		};
 
 	public:
@@ -94,36 +93,26 @@ namespace castor3d
 		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
 		DirectionalLightPass( Engine & engine
-			, FrameBuffer & frameBuffer
-			, FrameBufferAttachment & depthAttach
+			, renderer::TextureView const & depthView
+			, renderer::TextureView const & diffuseView
+			, renderer::TextureView const & specularView
 			, GpInfoUbo & gpInfoUbo
 			, bool hasShadows );
 		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		~DirectionalLightPass();
-		/**
-		 *\~english
-		 *\brief		Initialises the light pass.
-		 *\param[in]	scene		The scene.
-		 *\param[in]	sceneUbo	The scene UBO.
-		 *\~french
-		 *\brief		Initialise la passe d'éclairage.
-		 *\param[in]	scene		La scène.
-		 *\param[in]	sceneUbo	L'UBO de scène.
+		 *\copydoc		castor3d::LightPass::initialise
 		 */
 		void initialise( Scene const & scene
-			, SceneUbo & sceneUbo )override;
+			, GeometryPassResult const & gp
+			, SceneUbo & sceneUbo
+			, RenderPassTimer & timer )override;
 		/**
-		 *\~english
-		 *\brief		Cleans up the light pass.
-		 *\~french
-		 *\brief		Nettoie la passe d'éclairage.
+		 *\copydoc		castor3d::LightPass::cleanup
 		 */
 		void cleanup()override;
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		void accept( RenderTechniqueVisitor & visitor )override;
 		/**
 		 *\~english
 		 *\return		The number of primitives to draw.
@@ -132,15 +121,13 @@ namespace castor3d
 		 */
 		uint32_t getCount()const override;
 
-	protected:
+	private:
 		/**
 		 *\copydoc		castor3d::LightPass::doUpdate
 		 */
 		void doUpdate( castor::Size const & size
 			, Light const & light
 			, Camera const & camera )override;
-
-	private:
 		/**
 		 *\copydoc		castor3d::LightPass::doGetVertexShaderSource
 		 */
@@ -148,12 +135,20 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::LightPass::doCreateProgram
 		 */
-		LightPass::ProgramPtr doCreateProgram( glsl::Shader const & vtx
-			, glsl::Shader const & pxl )const override;
+		LightPass::ProgramPtr doCreateProgram()override;
 
 	private:
-		//!\~english	The viewport used when rendering is done.
-		//!\~french		Le viewport utilisé pour rendre la cible sur sa cible (fenêtre ou texture).
+		struct Config
+		{
+			LightPass::Config base;
+			//!\~english	The variable containing the light direction.
+			//!\~french		La variable contenant la direction de la lumière.
+			castor::Point4f direction;
+			//!\~english	The variable containing the light space transformation matrix.
+			//!\~french		La variable contenant la matrice de transformation de la lumière.
+			castor::Matrix4x4f transform;
+		};
+		renderer::UniformBufferPtr< Config > m_ubo;
 		Viewport m_viewport;
 	};
 }

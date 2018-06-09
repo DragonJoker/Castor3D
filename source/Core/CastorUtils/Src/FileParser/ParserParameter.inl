@@ -1,4 +1,4 @@
-﻿#include "Miscellaneous/Utils.hpp"
+#include "Miscellaneous/Utils.hpp"
 #include "Log/Logger.hpp"
 #include "Graphics/PixelFormat.hpp"
 #include "FileParserContext.hpp"
@@ -79,12 +79,12 @@ namespace castor
 			}
 			else
 			{
-				Logger::logWarning( StringStream() << cuT( "Couldn't parse from " ) << params );
+				Logger::logWarning( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params );
 			}
 		}
 		catch ( std::exception & p_exc )
 		{
-			Logger::logError( StringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
+			Logger::logError( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
 		}
 
 		return result;
@@ -118,7 +118,7 @@ namespace castor
 				if ( value < range.min()
 					|| value > range.max() )
 				{
-					Logger::logWarning( StringStream{} << cuT( "Value " ) << value << cuT( " is outside of range [" ) << range.min() << cuT( ", " ) << range.max() << cuT( "]" ) );
+					Logger::logWarning( castor::makeStringStream() << cuT( "Value " ) << value << cuT( " is outside of range [" ) << range.min() << cuT( ", " ) << range.max() << cuT( "]" ) );
 					value = range.clamp( value );
 				}
 			}
@@ -580,12 +580,12 @@ namespace castor
 					}
 					else
 					{
-						Logger::logWarning( StringStream() << cuT( "Couldn't parse from " ) << params );
+						Logger::logWarning( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params );
 					}
 				}
 				catch ( std::exception & p_exc )
 				{
-					Logger::logError( StringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
+					Logger::logError( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
 				}
 
 				return result;
@@ -690,12 +690,12 @@ namespace castor
 					}
 					else
 					{
-						Logger::logWarning( StringStream() << cuT( "Couldn't parse from " ) << params );
+						Logger::logWarning( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params );
 					}
 				}
 				catch ( std::exception & p_exc )
 				{
-					Logger::logError( StringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
+					Logger::logError( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
 				}
 
 				return result;
@@ -785,12 +785,12 @@ namespace castor
 					}
 					else
 					{
-						Logger::logWarning( StringStream() << cuT( "Couldn't parse from " ) << params );
+						Logger::logWarning( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params );
 					}
 				}
 				catch ( std::exception & p_exc )
 				{
-					Logger::logError( StringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
+					Logger::logError( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
 				}
 
 				return result;
@@ -895,12 +895,12 @@ namespace castor
 					}
 					else
 					{
-						Logger::logWarning( StringStream() << cuT( "Couldn't parse from " ) << params );
+						Logger::logWarning( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params );
 					}
 				}
 				catch ( std::exception & p_exc )
 				{
-					Logger::logError( StringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
+					Logger::logError( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
 				}
 
 				return result;

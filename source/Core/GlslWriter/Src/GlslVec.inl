@@ -1,4 +1,4 @@
-﻿namespace glsl
+namespace glsl
 {
 	//*****************************************************************************************
 
@@ -117,8 +117,8 @@
 	}
 
 	template< typename ValueT >
-	inline Vec2T< ValueT >::Vec2T( GlslWriter * p_writer, castor::String const & p_name )
-		: Type( details::Vec2Traits< ValueT >::getName(), p_writer, p_name )
+	inline Vec2T< ValueT >::Vec2T( GlslWriter * writer, castor::String const & p_name )
+		: Type( details::Vec2Traits< ValueT >::getName(), writer, p_name )
 	{
 	}
 
@@ -149,7 +149,7 @@
 	template< typename ValueT >
 	inline ValueT Vec2T< ValueT >::operator[]( int const & p_rhs )const
 	{
-		ValueT result{ m_writer, castor::String( *this ) + cuT( "[" ) + castor::string::toString( p_rhs ) + cuT( "]" ) };
+		ValueT result{ m_writer, castor::String( *this ) + cuT( "[" ) + castor::string::toString( p_rhs, 10, Expr::getLocale() ) + cuT( "]" ) };
 		return result;
 	}
 
@@ -170,8 +170,8 @@
 	}
 
 	template< typename ValueT >
-	inline Vec3T< ValueT >::Vec3T( GlslWriter * p_writer, castor::String const & p_name )
-		: Type( details::Vec3Traits< ValueT >::getName(), p_writer, p_name )
+	inline Vec3T< ValueT >::Vec3T( GlslWriter * writer, castor::String const & p_name )
+		: Type( details::Vec3Traits< ValueT >::getName(), writer, p_name )
 	{
 	}
 
@@ -202,7 +202,7 @@
 	template< typename ValueT >
 	inline ValueT Vec3T< ValueT >::operator[]( int const & p_rhs )const
 	{
-		ValueT result{ m_writer, castor::String( *this ) + cuT( "[" ) + castor::string::toString( p_rhs ) + cuT( "]" ) };
+		ValueT result{ m_writer, castor::String( *this ) + cuT( "[" ) + castor::string::toString( p_rhs, 10, Expr::getLocale() ) + cuT( "]" ) };
 		return result;
 	}
 
@@ -223,8 +223,8 @@
 	}
 
 	template< typename ValueT >
-	inline Vec4T< ValueT >::Vec4T( GlslWriter * p_writer, castor::String const & p_name )
-		: Type( details::Vec4Traits< ValueT >::getName(), p_writer, p_name )
+	inline Vec4T< ValueT >::Vec4T( GlslWriter * writer, castor::String const & p_name )
+		: Type( details::Vec4Traits< ValueT >::getName(), writer, p_name )
 	{
 	}
 
@@ -255,7 +255,7 @@
 	template< typename ValueT >
 	inline ValueT Vec4T< ValueT >::operator[]( int const & p_rhs )const
 	{
-		ValueT result{ m_writer, castor::String( *this ) + cuT( "[" ) + castor::string::toString( p_rhs ) + cuT( "]" ) };
+		ValueT result{ m_writer, castor::String( *this ) + cuT( "[" ) + castor::string::toString( p_rhs, 10, Expr::getLocale() ) + cuT( "]" ) };
 		return result;
 	}
 

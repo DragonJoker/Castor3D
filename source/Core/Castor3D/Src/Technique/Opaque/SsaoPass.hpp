@@ -5,17 +5,15 @@ See LICENSE file in root folder
 #define ___C3D_DeferredSsaoPass_H___
 
 #include "LightPass.hpp"
-
-#include "Technique/Opaque/Ssao/BlurPass.hpp"
-#include "Technique/Opaque/Ssao/LineariseDepthPass.hpp"
-#include "Technique/Opaque/Ssao/SsaoConfig.hpp"
-#include "Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
-#include "Technique/Opaque/Ssao/RawSsaoPass.hpp"
-#include "Render/RenderInfo.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
+#include "Technique/RenderTechniqueVisitor.hpp"
 
 namespace castor3d
 {
+	class SsaoConfigUbo;
+	class SsaoBlurPass;
+	class LineariseDepthPass;
+	class RawSsaoPass;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.10.0
@@ -34,15 +32,21 @@ namespace castor3d
 		 *\param[in]	engine		The engine.
 		 *\param[in]	size		The render area dimensions.
 		 *\param[in]	config		The SSAO configuration.
+		 *\param[in]	gpResult	The geometry pass result.
+		 *\param[in]	viewport	The viewport containing depth bounds.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
 		 *\param[in]	size		Les dimensions de la zone de rendu.
 		 *\param[in]	config		La configuration du SSAO.
+		 *\param[in]	gpResult	Le résultat de la geometry pass.
+		 *\param[in]	viewport	Le viewport contenant les bornes de profondeur.
 		 */
 		SsaoPass( Engine & engine
-			, castor::Size const & size
-			, SsaoConfig const & config );
+			, renderer::Extent2D const & size
+			, SsaoConfig & config
+			, GeometryPassResult const & gpResult
+			, Viewport const & viewport );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -52,16 +56,22 @@ namespace castor3d
 		~SsaoPass();
 		/**
 		 *\~english
-		 *\brief		Renders the SSAO pass on currently bound framebuffer.
-		 *\param[in]	gpResult	The geometry pass result.
-		 *\param[in]	camera		The viewing camera.
+		 *\brief		Updates the configuration UBO.
 		 *\~french
-		 *\brief		Dessine la passe SSAO sur le tampon d'image donné.
-		 *\param[in]	gpResult	Le résultat de la geometry pass.
-		 *\param[in]	camera		La caméra de rendu.
+		 *\brief		Met à jour l'UBO de configuration.
 		 */
-		void render( GeometryPassResult const & gpResult
-			, Camera const & camera );
+		void update( Camera const & camera );
+		/**
+		 *\~english
+		 *\brief		Renders the SSAO pass.
+		 *\~french
+		 *\brief		Dessine la passe SSAO.
+		 */
+		renderer::Semaphore const & render( renderer::Semaphore const & toWait )const;
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		void accept( RenderTechniqueVisitor & visitor );
 		/**
 		 *\~english
 		 *\return		The SSAO pass result.
@@ -72,13 +82,13 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		SsaoConfig const & m_config;
+		SsaoConfig & m_config;
 		MatrixUbo m_matrixUbo;
-		SsaoConfigUbo m_ssaoConfigUbo;
-		LineariseDepthPass m_linearisePass;
-		RawSsaoPass m_rawSsaoPass;
-		SsaoBlurPass m_horizontalBlur;
-		SsaoBlurPass m_verticalBlur;
+		std::shared_ptr< SsaoConfigUbo > m_ssaoConfigUbo;
+		std::shared_ptr< LineariseDepthPass > m_linearisePass;
+		std::shared_ptr< RawSsaoPass > m_rawSsaoPass;
+		std::shared_ptr< SsaoBlurPass > m_horizontalBlur;
+		std::shared_ptr< SsaoBlurPass > m_verticalBlur;
 	};
 }
 

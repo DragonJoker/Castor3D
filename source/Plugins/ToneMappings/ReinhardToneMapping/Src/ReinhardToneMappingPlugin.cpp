@@ -1,4 +1,4 @@
-﻿#include "ReinhardToneMapping.hpp"
+#include "ReinhardToneMapping.hpp"
 
 #include <Log/Logger.hpp>
 
@@ -33,18 +33,17 @@ extern "C"
 
 	C3D_ReinhardToneMapping_API void getName( char const ** p_name )
 	{
-		static castor::String const Name = cuT( "Reinhard Tone Mapping" );
-		*p_name = Name.c_str();
+		*p_name = ToneMapping::Name.c_str();
 	}
 
 	C3D_ReinhardToneMapping_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
 	{
-		engine->getRenderTargetCache().getToneMappingFactory().registerType( ToneMapping::Name
+		engine->getRenderTargetCache().getToneMappingFactory().registerType( ToneMapping::Type
 			, &ToneMapping::create );
 	}
 
 	C3D_ReinhardToneMapping_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->getRenderTargetCache().getToneMappingFactory().unregisterType( ToneMapping::Name );
+		engine->getRenderTargetCache().getToneMappingFactory().unregisterType( ToneMapping::Type );
 	}
 }

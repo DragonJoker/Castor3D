@@ -20,8 +20,7 @@ namespace glsl
 		GlslWriter_API void declareLineariseDepth();
 		GlslWriter_API void declareGetMapNormal();
 		GlslWriter_API void declareFresnelSchlick();
-		GlslWriter_API void declareComputeMetallicIBL();
-		GlslWriter_API void declareComputeSpecularIBL();
+		GlslWriter_API void declareComputeIBL();
 		GlslWriter_API Vec2 calcTexCoord( Vec2 const & renderSize );
 		GlslWriter_API Vec3 calcVSPosition( Vec2 const & uv
 			, Float const & depth
@@ -97,22 +96,13 @@ namespace glsl
 			, InVec3
 			, InVec3
 			, InVec3
+			, InVec3
 			, InFloat
-			, InFloat
-			, InVec3
-			, InParam< SamplerCube >
-			, InParam< SamplerCube >
-			, InParam< Sampler2D > > m_computeMetallicIBL;
-		Function< Vec3
-			, InVec3
-			, InVec3
-			, InVec3
-			, InVec3
 			, InFloat
 			, InVec3
 			, InParam< SamplerCube >
 			, InParam< SamplerCube >
-			, InParam< Sampler2D > > m_computeSpecularIBL;
+			, InParam< Sampler2D > > m_computeIBL;
 	};
 }
 

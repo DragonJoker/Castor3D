@@ -1,12 +1,16 @@
-﻿#include "BillboardList.hpp"
+#include "BillboardList.hpp"
 
 #include "Engine.hpp"
 
 #include "Event/Frame/FrameListener.hpp"
 #include "Material/Material.hpp"
-#include "Mesh/Buffer/Buffer.hpp"
+#include "Buffer/Buffer.hpp"
+#include "Render/RenderSystem.hpp"
 #include "Scene/Scene.hpp"
 #include "Shader/ShaderProgram.hpp"
+
+#include <Buffer/VertexBuffer.hpp>
+#include <Pipeline/VertexLayout.hpp>
 
 #include <Design/ArrayView.hpp>
 
@@ -40,7 +44,9 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = file.print( 256, cuT( "%s\tdimensions %d %d\n" ), m_tabs.c_str(), obj.getDimensions()[0], obj.getDimensions()[1] ) > 0;
+			result = file.writeText( m_tabs + cuT( "\tdimensions " )
+				+ string::toString( obj.getDimensions()[0], std::locale{ "C" } ) + cuT( " " )
+				+ string::toString( obj.getDimensions()[1], std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 			MovableObject::TextWriter::checkError( result, "BillboardList dimensions" );
 		}
 
@@ -52,7 +58,10 @@ namespace castor3d
 
 			for ( auto const & point : obj )
 			{
-				result &= file.print( 256, cuT( "%s\t\tpos %f %f %f" ), m_tabs.c_str(), point[0], point[1], point[2] ) > 0;
+				result = file.writeText( m_tabs + cuT( "\t\tpos " )
+					+ string::toString( point[0], std::locale{ "C" } ) + cuT( " " )
+					+ string::toString( point[1], std::locale{ "C" } ) + cuT( " " )
+					+ string::toString( point[2], std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				MovableObject::TextWriter::checkError( result, "BillboardList position" );
 			}
 
@@ -71,17 +80,12 @@ namespace castor3d
 
 	BillboardBase::BillboardBase( Scene & scene
 		, SceneNodeSPtr node
-		, VertexBufferSPtr vertexBuffer )
-		: m_vertexBuffer{ vertexBuffer }
+		, renderer::VertexLayoutPtr && vertexLayout
+		, renderer::VertexBufferBasePtr && vertexBuffer )
+		: m_vertexLayout{ std::move( vertexLayout ) }
+		, m_vertexBuffer{ vertexBuffer ? std::move( vertexBuffer ) : nullptr }
 		, m_scene{ scene }
 		, m_node{ node }
-		, m_quad( std::make_unique< VertexBuffer >( *scene.getEngine(), BufferDeclaration
-		{
-			{
-				BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec3 ),
-				BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::eTexCoords ), ElementType::eVec2 ),
-			}
-		} ) )
 	{
 	}
 
@@ -94,39 +98,40 @@ namespace castor3d
 		if ( !m_initialised )
 		{
 			m_count = count;
-			uint32_t stride = m_vertexBuffer->getDeclaration().stride();
-
-			if ( m_vertexBuffer->getSize() < uint32_t( count * stride ) )
+			Quad vertices
 			{
-				m_vertexBuffer->resize( uint32_t( count * stride ) );
+				Vertex{ castor::Point3f{ -0.5f, -0.5f, 1.0f }, castor::Point2f{ 0.0f, 0.0f } },
+				Vertex{ castor::Point3f{ -0.5f, +0.5f, 1.0f }, castor::Point2f{ 0.0f, 1.0f } },
+				Vertex{ castor::Point3f{ +0.5f, -0.5f, 1.0f }, castor::Point2f{ 1.0f, 0.0f } },
+				Vertex{ castor::Point3f{ +0.5f, +0.5f, 1.0f }, castor::Point2f{ 1.0f, 1.0f } },
+			};
+			auto & device = getCurrentDevice( m_scene );
+			m_quadBuffer = renderer::makeVertexBuffer< Quad >( device
+				, 1u
+				, renderer::BufferTarget::eTransferDst
+				, renderer::MemoryPropertyFlag::eHostVisible );
+
+			if ( auto buffer = m_quadBuffer->lock( 0u, 1u, renderer::MemoryMapFlag::eWrite ) )
+			{
+				*buffer = vertices;
+				m_quadBuffer->flush( 0u, 1u );
+				m_quadBuffer->unlock();
 			}
 
-			m_initialised = m_vertexBuffer->initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+			m_quadLayout = renderer::makeLayout< Vertex >( 0u, renderer::VertexInputRate::eVertex );
+			m_quadLayout->createAttribute( 0u, renderer::Format::eR32G32B32_SFLOAT, offsetof( Vertex, position ) );
+			m_quadLayout->createAttribute( 1u, renderer::Format::eR32G32_SFLOAT, offsetof( Vertex, texcoord ) );
 
-			if ( m_initialised )
-			{
-				std::array< std::array< float, 5 >, 4 > vertices
-				{
-					{
-						std::array< float, 5 >{ { -0.5f, 0.5f, 1.0f, 0.0f, 1.0f } },
-						std::array< float, 5 >{ { -0.5f, -0.5f, 1.0f, 0.0f, 0.0f } },
-						std::array< float, 5 >{ { 0.5f, -0.5f, 1.0f, 1.0f, 0.0f } },
-						std::array< float, 5 >{ { 0.5f, 0.5f, 1.0f, 1.0f, 1.0f } },
-					}
-				};
+			renderer::BufferCRefArray buffers;
+			std::vector< uint64_t > offsets;
+			renderer::VertexLayoutCRefArray layouts;
+			doGatherBuffers( buffers, offsets, layouts );
 
-				stride = m_quad->getDeclaration().stride();
-				m_quad->resize( 4 * stride );
-				auto buffer = m_quad->getData();
-
-				for ( auto & vertex : vertices )
-				{
-					std::memcpy( buffer, vertex.data(), stride );
-					buffer += stride;
-				}
-
-				m_initialised = m_quad->initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
-			}
+			m_geometryBuffers.vbo = buffers;
+			m_geometryBuffers.vboOffsets = offsets;
+			m_geometryBuffers.layouts = layouts;
+			m_geometryBuffers.vtxCount = 4u;
+			m_initialised = true;
 		}
 
 		return m_initialised;
@@ -137,20 +142,18 @@ namespace castor3d
 		if ( m_initialised )
 		{
 			m_initialised = false;
-			m_quad->cleanup();
-			m_vertexBuffer->cleanup();
+			m_geometryBuffers.vbo.clear();
+			m_geometryBuffers.vboOffsets.clear();
+			m_geometryBuffers.layouts.clear();
+			m_geometryBuffers.ibo = nullptr;
+			m_geometryBuffers.iboOffset = 0u;
+			m_geometryBuffers.idxCount = 0u;
+			m_geometryBuffers.vtxCount = 0u;
+			m_quadLayout.reset();
+			m_quadBuffer.reset();
+			m_vertexLayout.reset();
+			m_vertexBuffer.reset();
 		}
-	}
-
-	void BillboardBase::draw( GeometryBuffers const & geometryBuffers )
-	{
-		if ( m_needUpdate )
-		{
-			update();
-			m_needUpdate = false;
-		}
-
-		geometryBuffers.drawInstanced( 4, 0u, m_count );
 	}
 
 	void BillboardBase::sortByDistance( Point3r const & cameraPosition )
@@ -163,11 +166,11 @@ namespace castor3d
 	{
 		if ( m_count )
 		{
-			m_vertexBuffer->bind();
-			uint32_t stride = m_vertexBuffer->getDeclaration().stride();
-			auto gpuBuffer = m_vertexBuffer->lock( 0, m_count * stride, AccessType::eRead | AccessType::eWrite );
+			uint32_t stride = m_vertexLayout->getStride();
 
-			if ( gpuBuffer )
+			if ( auto gpuBuffer = m_vertexBuffer->getBuffer().lock( 0
+				, m_count * stride
+				, renderer::MemoryMapFlag::eRead | renderer::MemoryMapFlag::eWrite ) )
 			{
 				struct Element
 				{
@@ -251,10 +254,9 @@ namespace castor3d
 					Logger::logError( std::stringstream() << "Submesh::SortFaces - Error: " << p_exc.what());
 				}
 
-				m_vertexBuffer->unlock();
+				m_vertexBuffer->getBuffer().flush( 0u, m_count * stride );
+				m_vertexBuffer->getBuffer().unlock();
 			}
-
-			m_vertexBuffer->unbind();
 		}
 	}
 
@@ -275,10 +277,49 @@ namespace castor3d
 		return result;
 	}
 
-	void BillboardBase::gatherBuffers( VertexBufferArray & buffers )
+	void BillboardBase::setMaterial( MaterialSPtr value )
 	{
-		buffers.emplace_back( *m_quad );
-		buffers.emplace_back( *m_vertexBuffer );
+		MaterialSPtr oldMaterial = getMaterial();
+
+		if ( oldMaterial != value )
+		{
+			m_material = value;
+
+			if ( oldMaterial )
+			{
+				onMaterialChanged( *this, oldMaterial, value );
+			}
+		}
+	}
+
+	void BillboardBase::setCount( uint32_t value )
+	{
+		if ( m_count != value )
+		{
+			m_count = value;
+			getParentScene().setChanged();
+		}
+	}
+
+	void BillboardBase::doGatherBuffers( renderer::BufferCRefArray & buffers
+		, std::vector< uint64_t > & offsets
+		, renderer::VertexLayoutCRefArray & layouts )
+	{
+		buffers.emplace_back( m_vertexBuffer->getBuffer() );
+		offsets.emplace_back( 0u );
+		layouts.emplace_back( *m_vertexLayout );
+		buffers.emplace_back( m_quadBuffer->getBuffer() );
+		offsets.emplace_back( 0u );
+		layouts.emplace_back( *m_quadLayout );
+	}
+
+	//*************************************************************************************************
+
+	renderer::VertexLayoutPtr doCreateLayout( renderer::Device const & device )
+	{
+		renderer::VertexLayoutPtr result = renderer::makeLayout< castor::Point3f >( 1u, renderer::VertexInputRate::eInstance );
+		result->createAttribute( 2u, renderer::Format::eR32G32B32_SFLOAT, 0u );
+		return result;
 	}
 
 	//*************************************************************************************************
@@ -292,11 +333,7 @@ namespace castor3d
 			, parent )
 		, BillboardBase{ scene
 			, parent
-			, std::make_shared< VertexBuffer >( *scene.getEngine()
-				, BufferDeclaration
-				{
-					{ BufferElementDeclaration( cuT( "center" ), uint32_t( 0u ), ElementType::eVec3, 0u, 1u ) }
-				} ) }
+			, nullptr }
 	{
 	}
 
@@ -306,20 +343,41 @@ namespace castor3d
 
 	bool BillboardList::initialise()
 	{
-		uint32_t stride = m_vertexBuffer->getDeclaration().stride();
-		m_vertexBuffer->resize( uint32_t( m_arrayPositions.size() * stride ) );
-		uint8_t * buffer = m_vertexBuffer->getData();
-
-		for ( auto & pos : m_arrayPositions )
+		if ( !m_vertexLayout
+			|| !m_vertexBuffer
+			|| m_arrayPositions.size() != m_vertexBuffer->getSize() )
 		{
-			std::memcpy( buffer, pos.constPtr(), stride );
-			buffer += stride;
+			if ( !m_vertexLayout )
+			{
+				m_vertexLayout = doCreateLayout( getCurrentDevice( m_scene ) );
+			}
+
+			uint32_t stride = m_vertexLayout->getStride();
+			auto & device = getCurrentDevice( m_scene );
+			m_vertexBuffer = renderer::makeVertexBuffer< castor::Point3f >( device
+				, uint32_t( m_arrayPositions.size() )
+				, renderer::BufferTarget::eTransferDst
+				, renderer::MemoryPropertyFlag::eHostVisible );
+
+			if ( auto * buffer = m_vertexBuffer->getBuffer().lock( 0u
+				, uint32_t( stride * m_arrayPositions.size() )
+				, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateRange ) )
+			{
+				for ( auto & pos : m_arrayPositions )
+				{
+					std::memcpy( buffer, pos.constPtr(), stride );
+					buffer += stride;
+				}
+
+				m_vertexBuffer->getBuffer().flush( 0u, uint32_t( stride * m_arrayPositions.size() ) );
+				m_vertexBuffer->getBuffer().unlock();
+			}
 		}
 
 		return BillboardBase::initialise( uint32_t( m_arrayPositions.size() ) );
 	}
 
-	void BillboardList::RemovePoint( uint32_t index )
+	void BillboardList::removePoint( uint32_t index )
 	{
 		if ( index < m_arrayPositions.size() )
 		{

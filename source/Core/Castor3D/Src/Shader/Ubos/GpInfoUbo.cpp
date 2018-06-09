@@ -1,12 +1,16 @@
 #include "GpInfoUbo.hpp"
 
 #include "Engine.hpp"
+#include "Render/RenderSystem.hpp"
 #include "Scene/Camera.hpp"
+
+#include <Buffer/UniformBuffer.hpp>
 
 using namespace castor;
 
 namespace castor3d
 {
+	uint32_t const GpInfoUbo::BindingPoint = 5u;
 	const String GpInfoUbo::GPInfo = cuT( "GPInfo" );
 	const String GpInfoUbo::InvViewProj = cuT( "c3d_mtxInvViewProj" );
 	const String GpInfoUbo::InvView = cuT( "c3d_mtxInvView" );
@@ -16,37 +20,50 @@ namespace castor3d
 	const String GpInfoUbo::RenderSize = cuT( "c3d_renderSize" );
 
 	GpInfoUbo::GpInfoUbo( Engine & engine )
-		: m_ubo{ GpInfoUbo::GPInfo
-			, *engine.getRenderSystem()
-			, GpInfoUbo::BindingPoint }
-		, m_invViewProjUniform{ m_ubo.createUniform< UniformType::eMat4x4f >( GpInfoUbo::InvViewProj ) }
-		, m_invViewUniform{ m_ubo.createUniform< UniformType::eMat4x4f >( GpInfoUbo::InvView ) }
-		, m_invProjUniform{ m_ubo.createUniform< UniformType::eMat4x4f >( GpInfoUbo::InvProj ) }
-		, m_gViewUniform{ m_ubo.createUniform< UniformType::eMat4x4f >( GpInfoUbo::View ) }
-		, m_gProjUniform{ m_ubo.createUniform< UniformType::eMat4x4f >( GpInfoUbo::Proj ) }
-		, m_renderSize{ m_ubo.createUniform< UniformType::eVec2f >( GpInfoUbo::RenderSize ) }
+		: m_engine{ engine }
 	{
+		if ( engine.getRenderSystem()->hasCurrentDevice() )
+		{
+			initialise();
+		}
 	}
 
 	GpInfoUbo::~GpInfoUbo()
 	{
-		m_ubo.cleanup();
 	}
 
-	void GpInfoUbo::update( Size const & p_size
-		, Camera const & p_camera
-		, Matrix4x4r const & p_invViewProj
-		, Matrix4x4r const & p_invView
-		, Matrix4x4r const & p_invProj )
+	void GpInfoUbo::initialise()
 	{
-		m_invViewProjUniform->setValue( p_invViewProj );
-		m_invViewUniform->setValue( p_invView );
-		m_invProjUniform->setValue( p_invProj );
-		m_gViewUniform->setValue( p_camera.getView() );
-		m_gProjUniform->setValue( p_camera.getViewport().getProjection() );
-		m_renderSize->setValue( Point2f( p_size.getWidth(), p_size.getHeight() ) );
-		m_ubo.update();
-		m_ubo.bindTo( GpInfoUbo::BindingPoint );
+		if ( !m_ubo )
+		{
+			auto & device = getCurrentDevice( m_engine );
+			m_ubo = renderer::makeUniformBuffer< Configuration >( device
+				, 1u
+				, renderer::BufferTarget::eTransferDst
+				, renderer::MemoryPropertyFlag::eHostVisible );
+		}
+	}
+
+	void GpInfoUbo::cleanup()
+	{
+		m_ubo.reset();
+	}
+
+	void GpInfoUbo::update( Size const & renderSize
+		, Camera const & camera
+		, Matrix4x4r const & invViewProj
+		, Matrix4x4r const & invView
+		, Matrix4x4r const & invProj )
+	{
+		REQUIRE( m_ubo );
+		auto & configuration = m_ubo->getData( 0u );
+		configuration.invViewProj = invViewProj;
+		configuration.invView = invView;
+		configuration.invProj = invProj;
+		configuration.gView = camera.getView();
+		configuration.gProj = camera.getViewport().getProjection();
+		configuration.renderSize = Point2f( renderSize.getWidth(), renderSize.getHeight() );
+		m_ubo->upload();
 	}
 
 	//************************************************************************************************

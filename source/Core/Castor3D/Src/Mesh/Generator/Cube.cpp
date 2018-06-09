@@ -1,4 +1,4 @@
-﻿#include "Cube.hpp"
+#include "Cube.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
@@ -61,135 +61,110 @@ namespace castor3d
 			CptNegatif++;
 		}
 
-		BufferElementGroupSPtr vertex;
-		SubmeshSPtr pSubmesh1 = p_mesh.createSubmesh();
-		SubmeshSPtr pSubmesh2 = p_mesh.createSubmesh();
-		SubmeshSPtr pSubmesh3 = p_mesh.createSubmesh();
-		SubmeshSPtr pSubmesh4 = p_mesh.createSubmesh();
-		SubmeshSPtr pSubmesh5 = p_mesh.createSubmesh();
-		SubmeshSPtr pSubmesh6 = p_mesh.createSubmesh();
-		//Calcul des coordonnées des 8 sommets du pavé
-		vertex = pSubmesh1->addPoint( m_width / 2, -m_height / 2, m_depth / 2 );
-		Vertex::setTexCoord( vertex, 1.0, 0.0 );
-		Vertex::setNormal( vertex, 0.0, 0.0, 1.0 );
-		vertex = pSubmesh1->addPoint( -m_width / 2, -m_height / 2, m_depth / 2 );
-		Vertex::setTexCoord( vertex, 0.0, 0.0 );
-		Vertex::setNormal( vertex, 0.0, 0.0, 1.0 );
-		vertex = pSubmesh1->addPoint( -m_width / 2,  m_height / 2, m_depth / 2 );
-		Vertex::setTexCoord( vertex, 0.0, 1.0 );
-		Vertex::setNormal( vertex, 0.0, 0.0, 1.0 );
-		vertex = pSubmesh1->addPoint( m_width / 2,  m_height / 2, m_depth / 2 );
-		Vertex::setTexCoord( vertex, 1.0, 1.0 );
-		Vertex::setNormal( vertex, 0.0, 0.0, 1.0 );
-		vertex = pSubmesh2->addPoint( -m_width / 2, -m_height / 2, -m_depth / 2 );
-		Vertex::setTexCoord( vertex, 1.0, 0.0 );
-		Vertex::setNormal( vertex, 0.0, 0.0, -1.0 );
-		vertex = pSubmesh2->addPoint( m_width / 2, -m_height / 2, -m_depth / 2 );
-		Vertex::setTexCoord( vertex, 0.0, 0.0 );
-		Vertex::setNormal( vertex, 0.0, 0.0, -1.0 );
-		vertex = pSubmesh2->addPoint( m_width / 2,  m_height / 2, -m_depth / 2 );
-		Vertex::setTexCoord( vertex, 0.0, 1.0 );
-		Vertex::setNormal( vertex, 0.0, 0.0, -1.0 );
-		vertex = pSubmesh2->addPoint( -m_width / 2,  m_height / 2, -m_depth / 2 );
-		Vertex::setTexCoord( vertex, 1.0, 1.0 );
-		Vertex::setNormal( vertex, 0.0, 0.0, -1.0 );
-		vertex = pSubmesh3->addPoint( -m_width / 2, -m_height / 2, m_depth / 2 );
-		Vertex::setTexCoord( vertex, 1.0, 0.0 );
-		Vertex::setNormal( vertex, -1.0, 0.0, 0.0 );
-		vertex = pSubmesh3->addPoint( -m_width / 2, -m_height / 2, -m_depth / 2 );
-		Vertex::setTexCoord( vertex, 0.0, 0.0 );
-		Vertex::setNormal( vertex, -1.0, 0.0, 0.0 );
-		vertex = pSubmesh3->addPoint( -m_width / 2,  m_height / 2, -m_depth / 2 );
-		Vertex::setTexCoord( vertex, 0.0, 1.0 );
-		Vertex::setNormal( vertex, -1.0, 0.0, 0.0 );
-		vertex = pSubmesh3->addPoint( -m_width / 2,  m_height / 2, m_depth / 2 );
-		Vertex::setTexCoord( vertex, 1.0, 1.0 );
-		Vertex::setNormal( vertex, -1.0, 0.0, 0.0 );
-		vertex = pSubmesh4->addPoint( m_width / 2, -m_height / 2, -m_depth / 2 );
-		Vertex::setTexCoord( vertex, 1.0, 0.0 );
-		Vertex::setNormal( vertex, 1.0, 0.0, 0.0 );
-		vertex = pSubmesh4->addPoint( m_width / 2, -m_height / 2, m_depth / 2 );
-		Vertex::setTexCoord( vertex, 0.0, 0.0 );
-		Vertex::setNormal( vertex, 1.0, 0.0, 0.0 );
-		vertex = pSubmesh4->addPoint( m_width / 2,  m_height / 2,  m_depth / 2 );
-		Vertex::setTexCoord( vertex, 0.0, 1.0 );
-		Vertex::setNormal( vertex, 1.0, 0.0, 0.0 );
-		vertex = pSubmesh4->addPoint( m_width / 2,  m_height / 2, -m_depth / 2 );
-		Vertex::setTexCoord( vertex, 1.0, 1.0 );
-		Vertex::setNormal( vertex, 1.0, 0.0, 0.0 );
-		vertex = pSubmesh5->addPoint( -m_width / 2, -m_height / 2, m_depth / 2 );
-		Vertex::setTexCoord( vertex, 1.0, 0.0 );
-		Vertex::setNormal( vertex, 0.0, -1.0, 0.0 );
-		vertex = pSubmesh5->addPoint( m_width / 2, -m_height / 2, m_depth / 2 );
-		Vertex::setTexCoord( vertex, 0.0, 0.0 );
-		Vertex::setNormal( vertex, 0.0, -1.0, 0.0 );
-		vertex = pSubmesh5->addPoint( m_width / 2, -m_height / 2, -m_depth / 2 );
-		Vertex::setTexCoord( vertex, 0.0, 1.0 );
-		Vertex::setNormal( vertex, 0.0, -1.0, 0.0 );
-		vertex = pSubmesh5->addPoint( -m_width / 2, -m_height / 2, -m_depth / 2 );
-		Vertex::setTexCoord( vertex, 1.0, 1.0 );
-		Vertex::setNormal( vertex, 0.0, -1.0, 0.0 );
-		vertex = pSubmesh6->addPoint( -m_width / 2,  m_height / 2, -m_depth / 2 );
-		Vertex::setTexCoord( vertex, 1.0, 0.0 );
-		Vertex::setNormal( vertex, 0.0, 1.0, 0.0 );
-		vertex = pSubmesh6->addPoint( m_width / 2,  m_height / 2, -m_depth / 2 );
-		Vertex::setTexCoord( vertex, 0.0, 0.0 );
-		Vertex::setNormal( vertex, 0.0, 1.0, 0.0 );
-		vertex = pSubmesh6->addPoint( m_width / 2,  m_height / 2, m_depth / 2 );
-		Vertex::setTexCoord( vertex, 0.0, 1.0 );
-		Vertex::setNormal( vertex, 0.0, 1.0, 0.0 );
-		vertex = pSubmesh6->addPoint( -m_width / 2,  m_height / 2, m_depth / 2 );
-		Vertex::setTexCoord( vertex, 1.0, 1.0 );
-		Vertex::setNormal( vertex, 0.0, 1.0, 0.0 );
+		SubmeshSPtr submesh1 = p_mesh.createSubmesh();
+		SubmeshSPtr submesh2 = p_mesh.createSubmesh();
+		SubmeshSPtr submesh3 = p_mesh.createSubmesh();
+		SubmeshSPtr submesh4 = p_mesh.createSubmesh();
+		SubmeshSPtr submesh5 = p_mesh.createSubmesh();
+		SubmeshSPtr submesh6 = p_mesh.createSubmesh();
+		static Point3f const zero;
 
-		auto mapping1 = std::make_shared< TriFaceMapping >( *pSubmesh1 );
-		auto mapping2 = std::make_shared< TriFaceMapping >( *pSubmesh2 );
-		auto mapping3 = std::make_shared< TriFaceMapping >( *pSubmesh3 );
-		auto mapping4 = std::make_shared< TriFaceMapping >( *pSubmesh4 );
-		auto mapping5 = std::make_shared< TriFaceMapping >( *pSubmesh5 );
-		auto mapping6 = std::make_shared< TriFaceMapping >( *pSubmesh6 );
+		// Face avant
+		submesh1->addPoints( {
+			{ Point3f{ +m_width / 2, -m_height / 2, +m_depth / 2 }, Point3f{ 0.0, 0.0, 1.0 }, zero, Point3f{ 1.0, 0.0, 0.0 } },
+			{ Point3f{ -m_width / 2, -m_height / 2, +m_depth / 2 }, Point3f{ 0.0, 0.0, 1.0 }, zero, Point3f{ 0.0, 0.0, 0.0 } },
+			{ Point3f{ -m_width / 2, +m_height / 2, +m_depth / 2 }, Point3f{ 0.0, 0.0, 1.0 }, zero, Point3f{ 0.0, 1.0, 0.0 } },
+			{ Point3f{ +m_width / 2, +m_height / 2, +m_depth / 2 }, Point3f{ 0.0, 0.0, 1.0 }, zero, Point3f{ 1.0, 1.0, 0.0 } },
+		} );
+
+		// Face arrière
+		submesh2->addPoints( {
+			{ Point3f{ -m_width / 2, -m_height / 2, -m_depth / 2 }, Point3f{ 0.0, 0.0, -1.0 }, zero, Point3f{ 1.0, 0.0, 0.0 } },
+			{ Point3f{ +m_width / 2, -m_height / 2, -m_depth / 2 }, Point3f{ 0.0, 0.0, -1.0 }, zero, Point3f{ 0.0, 0.0, 0.0 } },
+			{ Point3f{ +m_width / 2, +m_height / 2, -m_depth / 2 }, Point3f{ 0.0, 0.0, -1.0 }, zero, Point3f{ 0.0, 1.0, 0.0 } },
+			{ Point3f{ -m_width / 2, +m_height / 2, -m_depth / 2 }, Point3f{ 0.0, 0.0, -1.0 }, zero, Point3f{ 1.0, 1.0, 0.0 } },
+		} );
+
+		// Face gauche
+		submesh3->addPoints( {
+			{ Point3f{ -m_width / 2, -m_height / 2, +m_depth / 2 }, Point3f{ -1.0, 0.0, 0.0 }, zero, Point3f{ 1.0, 0.0, 0.0 } },
+			{ Point3f{ -m_width / 2, -m_height / 2, -m_depth / 2 }, Point3f{ -1.0, 0.0, 0.0 }, zero, Point3f{ 0.0, 0.0, 0.0 } },
+			{ Point3f{ -m_width / 2, +m_height / 2, -m_depth / 2 }, Point3f{ -1.0, 0.0, 0.0 }, zero, Point3f{ 0.0, 1.0, 0.0 } },
+			{ Point3f{ -m_width / 2, +m_height / 2, +m_depth / 2 }, Point3f{ -1.0, 0.0, 0.0 }, zero, Point3f{ 1.0, 1.0, 0.0 } },
+		} );
+
+		// Face droite
+		submesh4->addPoints( {
+			{ Point3f{ +m_width / 2, -m_height / 2, -m_depth / 2 }, Point3f{ 1.0, 0.0, 0.0 }, zero, Point3f{ 1.0, 0.0, 0.0 } },
+			{ Point3f{ +m_width / 2, -m_height / 2, +m_depth / 2 }, Point3f{ 1.0, 0.0, 0.0 }, zero, Point3f{ 0.0, 0.0, 0.0 } },
+			{ Point3f{ +m_width / 2, +m_height / 2, +m_depth / 2 }, Point3f{ 1.0, 0.0, 0.0 }, zero, Point3f{ 0.0, 1.0, 0.0 } },
+			{ Point3f{ +m_width / 2, +m_height / 2, -m_depth / 2 }, Point3f{ 1.0, 0.0, 0.0 }, zero, Point3f{ 1.0, 1.0, 0.0 } },
+		} );
+
+		// Face bas
+		submesh5->addPoints( {
+			{ Point3f{ -m_width / 2, -m_height / 2, +m_depth / 2 }, Point3f{ 0.0, -1.0, 0.0 }, zero, Point3f{ 1.0, 0.0, 0.0 } },
+			{ Point3f{ +m_width / 2, -m_height / 2, +m_depth / 2 }, Point3f{ 0.0, -1.0, 0.0 }, zero, Point3f{ 0.0, 0.0, 0.0 } },
+			{ Point3f{ +m_width / 2, -m_height / 2, -m_depth / 2 }, Point3f{ 0.0, -1.0, 0.0 }, zero, Point3f{ 0.0, 1.0, 0.0 } },
+			{ Point3f{ -m_width / 2, -m_height / 2, -m_depth / 2 }, Point3f{ 0.0, -1.0, 0.0 }, zero, Point3f{ 1.0, 1.0, 0.0 } },
+		} );
+
+		// Face haut
+		submesh6->addPoints( {
+			{ Point3f{ -m_width / 2, m_height / 2, -m_depth / 2 }, Point3f{ 0.0, 1.0, 0.0 }, zero, Point3f{ 1.0, 0.0, 0.0 } },
+			{ Point3f{ +m_width / 2, m_height / 2, -m_depth / 2 }, Point3f{ 0.0, 1.0, 0.0 }, zero, Point3f{ 0.0, 0.0, 0.0 } },
+			{ Point3f{ +m_width / 2, m_height / 2, +m_depth / 2 }, Point3f{ 0.0, 1.0, 0.0 }, zero, Point3f{ 0.0, 1.0, 0.0 } },
+			{ Point3f{ -m_width / 2, m_height / 2, +m_depth / 2 }, Point3f{ 0.0, 1.0, 0.0 }, zero, Point3f{ 1.0, 1.0, 0.0 } },
+		} );
+
+		auto mapping1 = std::make_shared< TriFaceMapping >( *submesh1 );
+		auto mapping2 = std::make_shared< TriFaceMapping >( *submesh2 );
+		auto mapping3 = std::make_shared< TriFaceMapping >( *submesh3 );
+		auto mapping4 = std::make_shared< TriFaceMapping >( *submesh4 );
+		auto mapping5 = std::make_shared< TriFaceMapping >( *submesh5 );
+		auto mapping6 = std::make_shared< TriFaceMapping >( *submesh6 );
 
 		if ( CptNegatif == 1 || CptNegatif == 3 )
 		{
 			// Faces du bas
-			mapping1->addFace( 0, 1, 2 );
-			mapping1->addFace( 2, 3, 0 );
+			mapping1->addFace( 0, 2, 1 );
+			mapping1->addFace( 2, 0, 3 );
 			// Faces du haut
-			mapping2->addFace( 0, 1, 2 );
-			mapping2->addFace( 2, 3, 0 );
+			mapping2->addFace( 0, 2, 1 );
+			mapping2->addFace( 2, 0, 3 );
 			// Faces de derrière
-			mapping3->addFace( 0, 1, 2 );
-			mapping3->addFace( 2, 3, 0 );
+			mapping3->addFace( 0, 2, 1 );
+			mapping3->addFace( 2, 0, 3 );
 			// Faces de devant
-			mapping4->addFace( 0, 1, 2 );
-			mapping4->addFace( 2, 3, 0 );
+			mapping4->addFace( 0, 2, 1 );
+			mapping4->addFace( 2, 0, 3 );
 			// Faces de droite
-			mapping5->addFace( 0, 1, 2 );
-			mapping5->addFace( 2, 3, 0 );
+			mapping5->addFace( 0, 2, 1 );
+			mapping5->addFace( 2, 0, 3 );
 			// Faces de gauche
-			mapping6->addFace( 0, 1, 2 );
-			mapping6->addFace( 2, 3, 0 );
+			mapping6->addFace( 0, 2, 1 );
+			mapping6->addFace( 2, 0, 3 );
 		}
 		else
 		{
 			// Faces du bas
-			mapping1->addFace( 3, 2, 1 );
-			mapping1->addFace( 1, 0, 3 );
+			mapping1->addFace( 3, 1, 2 );
+			mapping1->addFace( 1, 3, 0 );
 			// Faces du haut
-			mapping2->addFace( 3, 2, 1 );
-			mapping2->addFace( 1, 0, 3 );
+			mapping2->addFace( 3, 1, 2 );
+			mapping2->addFace( 1, 3, 0 );
 			// Faces de derrière
-			mapping3->addFace( 3, 2, 1 );
-			mapping3->addFace( 1, 0, 3 );
+			mapping3->addFace( 3, 1, 2 );
+			mapping3->addFace( 1, 3, 0 );
 			// Faces de devant
-			mapping4->addFace( 3, 2, 1 );
-			mapping4->addFace( 1, 0, 3 );
+			mapping4->addFace( 3, 1, 2 );
+			mapping4->addFace( 1, 3, 0 );
 			// Faces de droite
-			mapping5->addFace( 3, 2, 1 );
-			mapping5->addFace( 1, 0, 3 );
+			mapping5->addFace( 3, 1, 2 );
+			mapping5->addFace( 1, 3, 0 );
 			// Faces de gauche
-			mapping6->addFace( 3, 2, 1 );
-			mapping6->addFace( 1, 0, 3 );
+			mapping6->addFace( 3, 1, 2 );
+			mapping6->addFace( 1, 3, 0 );
 		}
 
 		mapping1->computeTangentsFromNormals();
@@ -199,12 +174,12 @@ namespace castor3d
 		mapping5->computeTangentsFromNormals();
 		mapping6->computeTangentsFromNormals();
 
-		pSubmesh1->setIndexMapping( mapping1 );
-		pSubmesh2->setIndexMapping( mapping2 );
-		pSubmesh3->setIndexMapping( mapping3 );
-		pSubmesh4->setIndexMapping( mapping4 );
-		pSubmesh5->setIndexMapping( mapping5 );
-		pSubmesh6->setIndexMapping( mapping6 );
+		submesh1->setIndexMapping( mapping1 );
+		submesh2->setIndexMapping( mapping2 );
+		submesh3->setIndexMapping( mapping3 );
+		submesh4->setIndexMapping( mapping4 );
+		submesh5->setIndexMapping( mapping5 );
+		submesh6->setIndexMapping( mapping6 );
 
 		p_mesh.computeContainers();
 	}

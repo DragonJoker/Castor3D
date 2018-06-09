@@ -10,7 +10,6 @@ See LICENSE file in root folder
 #include <FileParser/FileParserContext.hpp>
 
 #include "Mesh/Submesh.hpp"
-#include "Scene/Skybox.hpp"
 #include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Material/SubsurfaceScattering.hpp"
 
@@ -46,7 +45,7 @@ namespace castor3d
 		eTextureUnit = MAKE_SECTION_NAME( 'U', 'N', 'I', 'T' ),
 		eRenderTarget = MAKE_SECTION_NAME( 'R', 'T', 'G', 'R' ),
 		eShaderProgram = MAKE_SECTION_NAME( 'G', 'L', 'S', 'L' ),
-		eShaderObject = MAKE_SECTION_NAME( 'S', 'P', 'G', 'M' ),
+		shaderStage = MAKE_SECTION_NAME( 'S', 'P', 'G', 'M' ),
 		eShaderUBO = MAKE_SECTION_NAME( 'S', 'U', 'B', 'O' ),
 		eUBOVariable = MAKE_SECTION_NAME( 'S', 'U', 'B', 'V' ),
 		eBillboard = MAKE_SECTION_NAME( 'B', 'L', 'B', 'd' ),
@@ -60,6 +59,7 @@ namespace castor3d
 		eSubsurfaceScattering = MAKE_SECTION_NAME( 'S', 'S', 'S', 'G' ),
 		eTransmittanceProfile = MAKE_SECTION_NAME( 'T', 'R', 'P', 'R' ),
 		eHdrConfig = MAKE_SECTION_NAME( 'H', 'D', 'R', 'C' ),
+		eShadows = MAKE_SECTION_NAME( 'S', 'H', 'D', 'W' ),
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -94,35 +94,36 @@ namespace castor3d
 		C3D_API void initialise();
 
 	public:
-		SceneSPtr pScene;
-		RenderWindowSPtr pWindow;
-		SceneNodeSPtr pSceneNode;
-		GeometrySPtr pGeometry;
-		MeshSPtr pMesh;
-		SubmeshSPtr pSubmesh;
-		LightSPtr pLight;
-		CameraSPtr pCamera;
-		MaterialSPtr pMaterial;
-		SamplerSPtr pSampler;
-		RenderTargetSPtr pRenderTarget;
+		SceneSPtr scene;
+		RenderWindowSPtr window;
+		SceneNodeSPtr sceneNode;
+		GeometrySPtr geometry;
+		MeshSPtr mesh;
+		SubmeshSPtr submesh;
+		LightSPtr light;
+		CameraSPtr camera;
+		MaterialSPtr material;
+		SamplerSPtr sampler;
+		RenderTargetSPtr renderTarget;
 		LegacyPassSPtr legacyPass;
 		MetallicRoughnessPbrPassSPtr pbrMRPass;
 		SpecularGlossinessPbrPassSPtr pbrSGPass;
 		PassSPtr pass;
-		TextureUnitSPtr pTextureUnit;
-		ShaderProgramSPtr pShaderProgram;
-		ShaderType eShaderObject;
-		UniformBufferUPtr pUniformBuffer;
-		UniformSPtr pUniform;
-		PushUniform1sSPtr pSamplerUniform;
-		OverlaySPtr pOverlay;
-		BillboardListSPtr pBillboards;
-		int iFace1;
-		int iFace2;
-		LightType eLightType;
-		MeshType eMeshType;
-		Topology ePrimitiveType;
-		ViewportSPtr pViewport;
+		renderer::ImageCreateInfo imageInfo;
+		TextureUnitSPtr textureUnit;
+		ShaderProgramSPtr shaderProgram;
+		castor::PxBufferBaseSPtr buffer;
+		castor::Path folder;
+		castor::Path relative;
+		renderer::ShaderStageFlag shaderStage;
+		renderer::UniformBufferBasePtr uniformBuffer;
+		OverlaySPtr overlay;
+		BillboardListSPtr billboards;
+		int face1;
+		int face2;
+		LightType lightType;
+		renderer::PrimitiveTopology primitiveType;
+		ViewportSPtr viewport;
 		castor::String strName;
 		castor::String strName2;
 		castor::Path path;
@@ -151,10 +152,11 @@ namespace castor3d
 		AnimatedObjectSPtr pAnimMesh;
 		AnimatedObjectSPtr pAnimMovable;
 		AnimationInstanceRPtr pAnimation;
-		SkyboxUPtr pSkybox;
+		SceneBackgroundSPtr pBackground;
 		ParticleSystemSPtr particleSystem;
 		SsaoConfig ssaoConfig;
 		SubsurfaceScatteringUPtr subsurfaceScattering;
+		std::shared_ptr< SkyboxBackground > skybox;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -260,8 +262,10 @@ namespace castor3d
 		UIntStrMap m_mapPrimitiveOutputTypes;
 		UIntStrMap m_mapModels;
 		UIntStrMap m_mapViewportModes;
-		UIntStrMap m_mapInterpolationModes;
+		UIntStrMap m_mapFilters;
+		UIntStrMap m_mapMipmapModes;
 		UIntStrMap m_mapWrappingModes;
+		UIntStrMap m_mapBorderColours;
 		UIntStrMap m_mapShaderTypes;
 		UIntStrMap m_mapVariableTypes;
 		UIntStrMap m_mapElementTypes;
@@ -279,6 +283,7 @@ namespace castor3d
 		UIntStrMap m_mapBillboardTypes;
 		UIntStrMap m_mapBillboardSizes;
 		UIntStrMap m_mapMaterialTypes;
+		UIntStrMap m_mapShadowFilters;
 	};
 }
 

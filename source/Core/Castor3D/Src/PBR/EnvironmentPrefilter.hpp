@@ -1,16 +1,18 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_EnvironmentPrefilter_H___
 #define ___C3D_EnvironmentPrefilter_H___
 
-#include "Render/Viewport.hpp"
+#include "RenderToTexture/RenderCube.hpp"
+#include "Texture/Sampler.hpp"
 
-#include "Mesh/Buffer/BufferDeclaration.hpp"
-#include "Shader/Ubos/MatrixUbo.hpp"
-#include "Shader/UniformBuffer.hpp"
+#include <Buffer/PushConstantsBuffer.hpp>
+#include <Image/TextureView.hpp>
+#include <RenderPass/FrameBuffer.hpp>
+#include <RenderPass/RenderPass.hpp>
 
-#include <Design/OwnedBy.hpp>
+#include <array>
 
 namespace castor3d
 {
@@ -19,102 +21,94 @@ namespace castor3d
 	\date		02/03/2017
 	\version	0.9.0
 	\~english
-	\brief		Class used to render colour equirectangular textures to cube maps.
+	\brief		Prefilters an environment map, by generating its mipmap levels.
 	\~french
-	\brief		Classe utilisée pour rendre les textures couleur équirectangulaires dans des cube maps.
+	\brief		Préfiltre une texture d'environnement, en générant ses différents niveaux de mipmap.
 	*/
 	class EnvironmentPrefilter
-		: public castor::OwnedBy< Engine >
 	{
+	private:
+		class MipRenderCube
+			: public RenderCube
+		{
+		public:
+			MipRenderCube( RenderSystem & renderSystem
+				, renderer::RenderPass const & renderPass
+				, uint32_t mipLevel
+				, renderer::Extent2D const & originalSize
+				, renderer::Extent2D const & size
+				, renderer::TextureView const & srcView
+				, renderer::Texture const & dstTexture
+				, SamplerSPtr sampler );
+			void registerFrames();
+			void render();
+
+		private:
+			struct FrameBuffer
+			{
+				renderer::TextureViewPtr dstView;
+				renderer::FrameBufferPtr frameBuffer;
+			};
+			renderer::Device const & m_device;
+			renderer::RenderPass const & m_renderPass;
+			renderer::CommandBufferPtr m_commandBuffer;
+			renderer::FencePtr m_fence;
+			SamplerSPtr m_sampler;
+			std::array< FrameBuffer, 6u > m_frameBuffers;
+		};
+
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\param[in]	size	The render size.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	size		The render size.
+		 *\param[in]	srcTexture	The cube texture source.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	size	La taille du rendu.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	size		La taille du rendu.
+		 *\param[in]	srcTexture	La texture cube source.
 		 */
 		C3D_API explicit EnvironmentPrefilter( Engine & engine
-			, castor::Size const & size );
+			, castor::Size const & size
+			, renderer::Texture const & srcTexture
+			, SamplerSPtr sampler );
 		/**
 		 *\~english
-		 *\brief		Destructor.
+		 *\brief		Generates the mipmap levels.
 		 *\~french
-		 *\brief		Destructeur.
+		 *\brief		Génère les niveaux de mipmap.
 		 */
-		C3D_API ~EnvironmentPrefilter();
+		C3D_API void render();
 		/**
-		 *\~english
-		 *\brief		Renders the wanted equirectangular 2D texture to given cube texture.
-		 *\param[in]	srcTexture	The cube texture source.
-		 *\param[in]	dstTexture	The cube texture destination.
-		 *\~french
-		 *\brief		Dessine a texture equirectangulaire 2D donnée dans la texture cube donnée.
-		 *\param[in]	srcTexture	La texture cube source.
-		 *\param[in]	dstTexture	La texture cube destination.
-		 */
-		C3D_API void render( TextureLayout const & srcTexture
-			, TextureLayoutSPtr dstTexture );
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		inline renderer::TextureView const & getResult()const
+		{
+			return *m_resultView;
+		}
+
+		inline renderer::Sampler const & getSampler()const
+		{
+			return m_sampler->getSampler();
+		}
+		/**@}*/
 
 	private:
-		/**
-		 *\~english
-		 *\brief		Creates the render a 2D texture shader program.
-		 *\return		The program.
-		 *\~french
-		 *\brief		Crée le programme shader de dessin de texture 2D.
-		 *\return		Le programme.
-		 */
-		ShaderProgramSPtr doCreateProgram();
-
-	private:
-		//!\~english	The uniform buffer containing matrices data.
-		//!\~french		Le tampon d'uniformes contenant les données de matrices.
-		MatrixUbo m_matrixUbo;
-		//!\~english	The resulting dimensions.
-		//!\~french		Les dimensions du résultat.
-		castor::Size m_size;
-		//!\~english	The Viewport used when rendering a texture into to a frame buffer.
-		//!\~french		Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
-		Viewport m_viewport;
-		//!	6 (faces) * 6 (vertex) * 3 (vertex position)
-		std::array< castor::real, 6 * 6 * 3 > m_bufferVertex;
-		//!\~english	Buffer elements declaration.
-		//!\~french		Déclaration des éléments d'un vertex.
-		castor3d::BufferDeclaration m_declaration;
-		//!\~english	Vertex array (quad definition).
-		//!\~french		Tableau de vertex (définition du quad).
-		std::array< castor3d::BufferElementGroupSPtr, 36 > m_arrayVertex;
-		//!\~english	The vertex buffer.
-		//!\~french		Le tampon de sommets.
-		VertexBufferSPtr m_vertexBuffer;
-		//!\~english	The GeometryBuffers used when rendering a texture to the frame buffer.
-		//!\~french		Le GeometryBuffers utilisé lors du dessin d'une texture dans le tampon d'image.
-		GeometryBuffersSPtr m_geometryBuffers;
-		//!\~english	The pipeline used to render a texture in the framebuffer.
-		//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image.
-		RenderPipelineUPtr m_pipeline;
-		//!\~english	The frame buffer.
-		//!\~french		Le tampon d'image.
-		FrameBufferSPtr m_frameBuffer;
-		//!\~english	The depth buffer.
-		//!\~french		Le tampon de profondeur.
-		DepthStencilRenderBufferSPtr m_depthBuffer;
-		//!\~english	The depth buffer attach.
-		//!\~french		L'attache du tampon de profondeur.
-		RenderBufferAttachmentSPtr m_depthAttach;
-		//!\~english	The sampler for the texture.
-		//!\~french		Le sampler pour la texture.
+		RenderSystem & m_renderSystem;
+		renderer::TextureViewPtr m_srcView;
+		renderer::TexturePtr m_result;
+		renderer::TextureViewPtr m_resultView;
 		SamplerSPtr m_sampler;
-		//!\~english	The configuration UBO.
-		//!\~french		L'UBO de configuration.
-		UniformBuffer m_configUbo;
-		//!\~english	The roughness variable.
-		//!\~french		La variable pour la roughness.
-		Uniform1f & m_roughnessUniform;
+		renderer::RenderPassPtr m_renderPass;
+		std::vector< std::unique_ptr< MipRenderCube > > m_renderPasses;
 	};
 }
 

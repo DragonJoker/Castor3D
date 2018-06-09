@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_EXCEPTION_H___
 #define ___CASTOR_EXCEPTION_H___
 
+#include "CastorUtilsPrerequisites.hpp"
 #include <string>
 #include <sstream>
 #include <cstdint>
@@ -28,26 +29,31 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Specified constructor
-		 *\param[in]	p_description	The exception description
-		 *\param[in]	p_file			The file name
-		 *\param[in]	p_function		The function name
-		 *\param[in]	p_line			The line number
+		 *\param[in]	description	The exception description
+		 *\param[in]	file		The file name
+		 *\param[in]	function	The function name
+		 *\param[in]	line		The line number
 		 *\~french
 		 *\brief		Constructeur spécifié
-		 *\param[in]	p_description	La description de l'exception
-		 *\param[in]	p_file			Le nom du fichier
-		 *\param[in]	p_function		Le nom de la fonction
-		 *\param[in]	p_line			Le numéro de ligne
+		 *\param[in]	description	La description de l'exception
+		 *\param[in]	file		Le nom du fichier
+		 *\param[in]	function	Le nom de la fonction
+		 *\param[in]	line		Le numéro de ligne
 		 */
-		Exception( std::string const & p_description
-			, char const * p_file
-			, char const * p_function
-			, uint32_t p_line )
-			: m_line( p_line )
-			, m_description( p_description )
-			, m_filename( p_file ? p_file : "" )
-			, m_functionName( p_function ? p_function : "" )
+		Exception( std::string const & description
+			, char const * file
+			, char const * function
+			, uint32_t line )
+			: m_line( line )
+			, m_description( description )
+			, m_filename( file ? file : "" )
+			, m_functionName( function ? function : "" )
 		{
+			static std::locale const loc{ "C" };
+			std::stringstream stream;
+			stream.imbue( loc );
+			stream << Debug::Backtrace{};
+			m_callStack = stream.str();
 		}
 		/**
 		 *\~english
@@ -128,59 +134,62 @@ namespace castor
 		 */
 		inline std::string getFullDescription()const throw()
 		{
-			std::string strReturn;
-			std::string strSep;
+			static std::locale const loc{ "C" };
+			std::string result;
 
 			if ( !m_filename.empty() )
 			{
-				strReturn += m_filename + " ";
+				result += m_filename + " ";
 			}
 			else
 			{
-				strReturn += "<Unknown file> ";
+				result += "<Unknown file> ";
 			}
 
 			if ( !m_functionName.empty() )
 			{
-				strReturn += m_functionName + " ";
+				result += m_functionName + " ";
 			}
 			else
 			{
-				strReturn += "<Unknown function> ";
+				result += "<Unknown function> ";
 			}
 
 			if ( m_line )
 			{
 				std::stringstream stream;
+				stream.imbue( loc );
 				stream << m_line;
-				strReturn += stream.str() + " : ";
+				result += stream.str() + " : ";
 			}
 			else
 			{
-				strReturn += "<Unknown line> : ";
+				result += "<Unknown line> : ";
 			}
 
 			if ( !m_description.empty() )
 			{
-				strReturn += m_description;
+				result += m_description;
 			}
 			else
 			{
-				strReturn += "<Unknown exception> : ";
+				result += "<Unknown exception> : ";
 			}
 
-			return strReturn;
+			if ( !m_callStack.empty() )
+			{
+				result += "\n" + m_callStack;
+			}
+
+			return result;
 		}
 
 	protected:
-		//!\~english The line number	\~french Le numéro de ligne
 		uint32_t m_line;
-		//!\~english The exception description	\~french La description de l'exception
 		std::string m_description;
-		//!\~english The file name	\~french Le nom du fichier
 		std::string m_filename;
-		//!\~english The function name	\~french Le nom de la fonction
 		std::string m_functionName;
+		std::string m_callStack;
 	};
 }
 /*!

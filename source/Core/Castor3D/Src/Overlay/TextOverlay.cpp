@@ -142,6 +142,11 @@ namespace castor3d
 		return std::make_shared< TextOverlay >();
 	}
 
+	void TextOverlay::accept( OverlayVisitor & visitor )const
+	{
+		visitor.visit( *this );
+	}
+
 	void TextOverlay::setFont( String const & p_strFont )
 	{
 		// Récupération / Création de la police
@@ -174,8 +179,9 @@ namespace castor3d
 		m_textChanged = true;
 	}
 
-	void TextOverlay::doUpdate()
+	void TextOverlay::doUpdate( OverlayRenderer const & renderer )
 	{
+		m_fontChanged = false;
 		FontTextureSPtr fontTexture = getFontTexture();
 
 		if ( !fontTexture )
@@ -204,17 +210,14 @@ namespace castor3d
 
 			fontTexture->update();
 
-			getOverlay().getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, [fontTexture]()
-			{
-				fontTexture->cleanup();
-				fontTexture->initialise();
-			} ) );
+			getOverlay().getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
+				, [this, fontTexture]()
+				{
+					m_fontChanged = true;
+					fontTexture->cleanup();
+					fontTexture->initialise();
+				} ) );
 		}
-	}
-
-	void TextOverlay::doRender( OverlayRendererSPtr p_renderer )
-	{
-		p_renderer->drawText( *this );
 	}
 
 	void TextOverlay::doUpdateBuffer( Size const & p_size
@@ -243,7 +246,7 @@ namespace castor3d
 					m_arrayVtx.reserve( m_previousCaption.size() * 6 );
 
 					DisplayableLineArray lines = doPrepareText( p_size, size );
-					Size const & texDim = fontTexture->getTexture()->getDimensions();
+					Size const & texDim = { fontTexture->getTexture()->getDimensions().width, fontTexture->getTexture()->getDimensions().height };
 
 					for ( auto const & line : lines )
 					{
@@ -305,10 +308,10 @@ namespace castor3d
 									//
 									// Fill buffer
 									//
-									TextOverlay::Vertex const vertexTR = { { float( right ) / p_size.getWidth(), float( top ) / p_size.getHeight() },    { fontUvRight, fontUvTop },    { texUvRight, texUvTop } };
-									TextOverlay::Vertex const vertexTL = { { float( left ) / p_size.getWidth(),  float( top ) / p_size.getHeight() },    { fontUvLeft,  fontUvTop },    { texUvLeft,  texUvTop } };
-									TextOverlay::Vertex const vertexBL = { { float( left ) / p_size.getWidth(),  float( bottom ) / p_size.getHeight() }, { fontUvLeft,  fontUvBottom }, { texUvLeft,  texUvBottom } };
-									TextOverlay::Vertex const vertexBR = { { float( right ) / p_size.getWidth(), float( bottom ) / p_size.getHeight() }, { fontUvRight, fontUvBottom }, { texUvRight, texUvBottom } };
+									TextOverlay::Vertex const vertexTR = { Point2f{ float( right ) / p_size.getWidth(), float( top ) / p_size.getHeight() },    Point2f{ fontUvRight, fontUvTop },    Point2f{ texUvRight, texUvTop } };
+									TextOverlay::Vertex const vertexTL = { Point2f{ float( left ) / p_size.getWidth(),  float( top ) / p_size.getHeight() },    Point2f{ fontUvLeft,  fontUvTop },    Point2f{ texUvLeft,  texUvTop } };
+									TextOverlay::Vertex const vertexBL = { Point2f{ float( left ) / p_size.getWidth(),  float( bottom ) / p_size.getHeight() }, Point2f{ fontUvLeft,  fontUvBottom }, Point2f{ texUvLeft,  texUvBottom } };
+									TextOverlay::Vertex const vertexBR = { Point2f{ float( right ) / p_size.getWidth(), float( bottom ) / p_size.getHeight() }, Point2f{ fontUvRight, fontUvBottom }, Point2f{ texUvRight, texUvBottom } };
 
 									m_arrayVtx.push_back( vertexBL );
 									m_arrayVtx.push_back( vertexBR );
@@ -461,7 +464,7 @@ namespace castor3d
 
 			if ( charSize[0] > 0 )
 			{
-				p_line.m_characters.push_back( { Point2d{ p_left, 0.0 }, charSize, glyph } );
+				p_line.m_characters.emplace_back( Point2d{ p_left, 0.0 }, charSize, glyph );
 			}
 
 			p_left += charSize[0];

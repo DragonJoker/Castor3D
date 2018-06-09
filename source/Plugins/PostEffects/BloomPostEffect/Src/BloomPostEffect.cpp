@@ -2,28 +2,24 @@
 
 #include <Engine.hpp>
 #include <Cache/SamplerCache.hpp>
-#include <Cache/ShaderCache.hpp>
-
-#include <FrameBuffer/BackBuffers.hpp>
-#include <FrameBuffer/FrameBufferAttachment.hpp>
-#include <FrameBuffer/TextureAttachment.hpp>
 #include <Mesh/Vertex.hpp>
-#include <Mesh/Buffer/BufferDeclaration.hpp>
-#include <Mesh/Buffer/BufferElementDeclaration.hpp>
-#include <Mesh/Buffer/GeometryBuffers.hpp>
-#include <Mesh/Buffer/VertexBuffer.hpp>
 #include <Miscellaneous/Parameter.hpp>
-#include <Render/Context.hpp>
-#include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
-#include <Render/RenderWindow.hpp>
-#include <Render/Viewport.hpp>
-#include <Shader/UniformBuffer.hpp>
-#include <Shader/ShaderProgram.hpp>
+#include <Render/RenderPassTimer.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
-#include <Texture/TextureUnit.hpp>
+
+#include <Buffer/VertexBuffer.hpp>
+#include <Image/Texture.hpp>
+#include <Image/TextureView.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
+#include <RenderPass/SubpassDependency.hpp>
+#include <RenderPass/SubpassDescription.hpp>
+#include <Shader/ShaderProgram.hpp>
+#include <Sync/ImageMemoryBarrier.hpp>
 
 #include <Graphics/Image.hpp>
 
@@ -32,510 +28,209 @@
 #include <GlslSource.hpp>
 
 using namespace castor;
-using namespace castor3d;
 
 namespace Bloom
 {
 	namespace
 	{
-		glsl::Shader getVertexProgram( RenderSystem * renderSystem )
-		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
-
-			UBO_MATRIX( writer );
-
-			// Shader inputs
-			Vec2 position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
-
-			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
-			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
-
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				vtx_texture = position;
-				gl_Position = c3d_projection * vec4( position.xy(), 0.0, 1.0 );
-			} );
-			return writer.finalise();
-		}
-
-		glsl::Shader getHiPassProgram( RenderSystem * renderSystem )
-		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
-
-			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse, MinTextureIndex );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
-
-			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
-
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				pxl_fragColor = vec4( texture( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz(), 1.0 );
-				auto maxComponent = writer.declLocale( cuT( "maxComponent" ), glsl::max( pxl_fragColor.r(), pxl_fragColor.g() ) );
-				maxComponent = glsl::max( maxComponent, pxl_fragColor.b() );
-
-				IF( writer, maxComponent > 1.0_f )
-				{
-					pxl_fragColor.xyz() /= maxComponent;
-				}
-				ELSE
-				{
-					pxl_fragColor.xyz() = vec3( 0.0_f, 0.0_f, 0.0_f );
-				}
-				FI;
-			} );
-			return writer.finalise();
-		}
-
-		glsl::Shader getCombineProgram( RenderSystem * renderSystem )
-		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
-
-			// Shader inputs
-			auto index = MinTextureIndex;
-			auto c3d_mapPass0 = writer.declSampler< Sampler2D >( BloomPostEffect::CombineMapPass0, index++ );
-			auto c3d_mapPass1 = writer.declSampler< Sampler2D >( BloomPostEffect::CombineMapPass1, index++ );
-			auto c3d_mapPass2 = writer.declSampler< Sampler2D >( BloomPostEffect::CombineMapPass2, index++ );
-			auto c3d_mapPass3 = writer.declSampler< Sampler2D >( BloomPostEffect::CombineMapPass3, index++ );
-			auto c3d_mapScene = writer.declSampler< Sampler2D >( BloomPostEffect::CombineMapScene, index++ );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
-
-			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
-
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				pxl_fragColor = texture( c3d_mapPass0, vtx_texture );
-				pxl_fragColor += texture( c3d_mapPass1, vtx_texture );
-				pxl_fragColor += texture( c3d_mapPass2, vtx_texture );
-				pxl_fragColor += texture( c3d_mapPass3, vtx_texture );
-				pxl_fragColor += texture( c3d_mapScene, vtx_texture );
-			} );
-			return writer.finalise();
-		}
+		static uint32_t constexpr BaseFilterCount = 4u;
+		static uint32_t constexpr BaseKernelSize = 5u;
 	}
 
 	//*********************************************************************************************
 
-	String const BloomPostEffect::Type = cuT( "bloom" );
-	String const BloomPostEffect::Name = cuT( "Bloom PostEffect" );
-	String const BloomPostEffect::CombineMapPass0 = cuT( "c3d_mapPass0" );
-	String const BloomPostEffect::CombineMapPass1 = cuT( "c3d_mapPass1" );
-	String const BloomPostEffect::CombineMapPass2 = cuT( "c3d_mapPass2" );
-	String const BloomPostEffect::CombineMapPass3 = cuT( "c3d_mapPass3" );
-	String const BloomPostEffect::CombineMapScene = cuT( "c3d_mapScene" );
+	String const PostEffect::Type = cuT( "bloom" );
+	String const PostEffect::Name = cuT( "Bloom PostEffect" );
 
-	BloomPostEffect::BloomPostEffect( RenderTarget & p_renderTarget
-		, RenderSystem & renderSystem
-		, Parameters const & p_param )
-		: PostEffect( BloomPostEffect::Type
-			, p_renderTarget
+	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
+		, castor3d::RenderSystem & renderSystem
+		, castor3d::Parameters const & params )
+		: castor3d::PostEffect{ PostEffect::Type
+			, PostEffect::Name
+			, renderTarget
 			, renderSystem
-			, p_param )
-		, m_viewport{ *renderSystem.getEngine() }
-		, m_size( 5u )
-		, m_matrixUbo{ *renderSystem.getEngine() }
-		, m_declaration(
-		{
-			BufferElementDeclaration( ShaderProgram::Position
-				, uint32_t( ElementUsage::ePosition )
-				, ElementType::eVec2 ),
-		} )
-		, m_hiPassSurfaces(
-		{
-			{
-				PostEffectSurface{ *renderSystem.getEngine() },
-				PostEffectSurface{ *renderSystem.getEngine() },
-				PostEffectSurface{ *renderSystem.getEngine() },
-				PostEffectSurface{ *renderSystem.getEngine() }
-			}
-		} )
-		, m_blurSurfaces(
-		{
-			{
-				PostEffectSurface{ *renderSystem.getEngine() },
-				PostEffectSurface{ *renderSystem.getEngine() },
-				PostEffectSurface{ *renderSystem.getEngine() },
-				PostEffectSurface{ *renderSystem.getEngine() }
-			}
-		} )
-		, m_combineSurface{ *renderSystem.getEngine() }
+			, params }
+		, m_blurKernelSize{ BaseKernelSize }
+		, m_blurPassesCount{ BaseFilterCount }
 	{
 		String count;
 
-		if ( p_param.get( cuT( "Size" ), count ) )
+		if ( params.get( cuT( "Size" ), count ) )
 		{
-			m_size = uint32_t( string::toLong( count ) );
+			m_blurKernelSize = uint32_t( string::toLong( count ) );
 		}
 
-		real pBuffer[] =
+		if ( params.get( cuT( "Passes" ), count ) )
 		{
-			0, 0,
-			1, 1,
-			0, 1,
-			0, 0,
-			1, 0,
-			1, 1,
-		};
-
-		std::memcpy( m_buffer, pBuffer, sizeof( pBuffer ) );
-		uint32_t i = 0;
-
-		for ( auto & vertex : m_vertices )
-		{
-			vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_buffer )[i++ * m_declaration.stride()] );
+			m_blurPassesCount = uint32_t( string::toLong( count ) );
 		}
 
-		m_linearSampler = doCreateSampler( true );
-		m_nearestSampler = doCreateSampler( false );
+		m_passesCount = m_blurPassesCount * 2u + 2u;
 	}
 
-	BloomPostEffect::~BloomPostEffect()
+	castor3d::PostEffectSPtr PostEffect::create( castor3d::RenderTarget & renderTarget
+		, castor3d::RenderSystem & renderSystem
+		, castor3d::Parameters const & params )
 	{
-	}
-
-	PostEffectSPtr BloomPostEffect::create( RenderTarget & p_renderTarget
-		, RenderSystem & renderSystem
-		, Parameters const & p_param )
-	{
-		return std::make_shared< BloomPostEffect >( p_renderTarget
+		return std::make_shared< PostEffect >( renderTarget
 			, renderSystem
-			, p_param );
+			, params );
 	}
 
-	bool BloomPostEffect::initialise()
+	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
-		m_viewport.initialise();
-		bool result = doInitialiseHiPassProgram();
-		Size size = m_renderTarget.getSize();
+		visitor.visit( cuT( "HiPass" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_hiPass->getVertexShader() );
+		visitor.visit( cuT( "HiPass" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_hiPass->getPixelShader() );
 
-		if ( result )
-		{
-			result = doInitialiseCombineProgram();
-		}
+#if !Bloom_DebugHiPass
+		visitor.visit( cuT( "BlurX" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_blurXPass->getVertexShader() );
+		visitor.visit( cuT( "BlurX" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_blurXPass->getPixelShader() );
 
-		uint32_t index = MinTextureIndex;
+		visitor.visit( cuT( "BlurY" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_blurYPass->getVertexShader() );
+		visitor.visit( cuT( "BlurY" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_blurYPass->getPixelShader() );
 
-		for ( auto & surface : m_hiPassSurfaces )
-		{
-			size.getWidth() >>= 1;
-			size.getHeight() >>= 1;
-			surface.initialise( m_renderTarget
-				, size
-				, index++
-				, m_linearSampler );
-		}
+		visitor.visit( cuT( "Combine" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_combinePass->getVertexShader() );
+		visitor.visit( cuT( "Combine" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_combinePass->getPixelShader() );
 
-		size = m_renderTarget.getSize();
-		index = MinTextureIndex;
-
-		for ( auto & surface : m_blurSurfaces )
-		{
-			size.getWidth() >>= 1;
-			size.getHeight() >>= 1;
-			surface.initialise( m_renderTarget
-				, size
-				, index++
-				, m_nearestSampler );
-		}
-
-		size = m_renderTarget.getSize();
-		m_combineSurface.initialise( m_renderTarget
-			, size
-			, 0u
-			, m_nearestSampler );
-
-		if ( result )
-		{
-			m_blur = std::make_shared< GaussianBlur >( *getRenderSystem()->getEngine()
-				, size
-				, m_hiPassSurfaces[0].m_colourTexture.getTexture()->getPixelFormat()
-				, m_size );
-		}
-
-		return result;
-	}
-
-	void BloomPostEffect::cleanup()
-	{
-		m_matrixUbo.getUbo().cleanup();
-		m_blur.reset();
-
-		m_vertexBuffer->cleanup();
-		m_vertexBuffer.reset();
-		m_geometryBuffers->cleanup();
-		m_geometryBuffers.reset();
-
-		m_combineSurface.cleanup();
-
-		for ( auto & surface : m_blurSurfaces )
-		{
-			surface.cleanup();
-		}
-
-		for ( auto & surface : m_hiPassSurfaces )
-		{
-			surface.cleanup();
-		}
-
-		m_viewport.cleanup();
-
-		m_combinePipeline->cleanup();
-		m_combinePipeline.reset();
-
-		m_hiPassPipeline->cleanup();
-		m_hiPassPipeline.reset();
-	}
-
-	bool BloomPostEffect::apply( FrameBuffer & p_framebuffer )
-	{
-		auto attach = p_framebuffer.getAttachment( AttachmentPoint::eColour, 0 );
-
-		if ( attach && attach->getAttachmentType() == AttachmentType::eTexture )
-		{
-			auto const & texture = *std::static_pointer_cast< TextureAttachment >( attach )->getTexture();
-
-			doHiPassFilter( texture );
-			doDownSample( texture );
-
-			for ( uint32_t i = 1; i < m_hiPassSurfaces.size(); ++i )
-			{
-				m_blur->blur( m_hiPassSurfaces[i].m_colourTexture.getTexture()
-					, m_blurSurfaces[i].m_colourTexture.getTexture() );
-			}
-
-#if 0
-
-			for ( auto & surface : m_hiPassSurfaces )
-			{
-				auto pxbuffer = surface.m_colourTexture.getTexture()->getImage().getBuffer();
-
-				if ( pxbuffer )
-				{
-					if ( surface.m_colourTexture.getTexture()->bind( 0 ) )
-					{
-						auto buffer = surface.m_colourTexture.getTexture()->lock( AccessType::eRead );
-
-						if ( buffer )
-						{
-							std::memcpy( pxbuffer->ptr(), buffer, pxbuffer->size() );
-							surface.m_colourTexture.getTexture()->unlock( false );
-							StringStream name;
-							name << Engine::getEngineDirectory() << cuT( "\\Bloom_" ) << ( void * )pxbuffer.get() << cuT( "_Blur.png" );
-							Image::BinaryWriter()( Image( cuT( "tmp" ), *pxbuffer ), Path( name.str() ) );
-						}
-
-						surface.m_colourTexture.getTexture()->unbind( 0 );
-					}
-				}
-			}
-
+		visitor.visit( cuT( "Kernel Size" )
+			, m_blurKernelSize );
 #endif
-			doCombine( texture );
+	}
 
-			p_framebuffer.bind( FrameBufferTarget::eDraw );
-			getRenderSystem()->getCurrentContext()->renderTexture( texture.getDimensions()
-				, *m_combineSurface.m_colourTexture.getTexture() );
-			p_framebuffer.unbind();
+	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
+	{
+		auto & device = getCurrentDevice( *this );
+		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
+
+#if !Bloom_DebugHiPass
+		// Create vertex buffer
+		m_vertexBuffer = renderer::makeVertexBuffer< castor3d::NonTexturedQuad >( device
+			, 1u
+			, 0u
+			, renderer::MemoryPropertyFlag::eHostVisible );
+
+		if ( auto data = m_vertexBuffer->lock( 0u, 1u, renderer::MemoryMapFlag::eWrite ) )
+		{
+			castor3d::NonTexturedQuad buffer
+			{
+				{ 
+					Point2f{ -1.0, -1.0 },
+					Point2f{ -1.0, +1.0 },
+					Point2f{ +1.0, -1.0 },
+					Point2f{ +1.0, -1.0 },
+					Point2f{ -1.0, +1.0 },
+					Point2f{ +1.0, +1.0 }
+				},
+			};
+			*data = buffer;
+			m_vertexBuffer->flush( 0u, 1u );
+			m_vertexBuffer->unlock();
 		}
 
+		auto format = m_target->getPixelFormat();
+		renderer::ImageCreateInfo image{};
+		image.flags = 0u;
+		image.arrayLayers = 1u;
+		image.extent.width = size.width >> 1;
+		image.extent.height = size.height >> 1;
+		image.extent.depth = 1u;
+		image.format = format;
+		image.imageType = renderer::TextureType::e2D;
+		image.initialLayout = renderer::ImageLayout::eUndefined;
+		image.mipLevels = m_blurPassesCount;
+		image.samples = renderer::SampleCountFlag::e1;
+		image.sharingMode = renderer::SharingMode::eExclusive;
+		image.tiling = renderer::ImageTiling::eOptimal;
+		image.usage = renderer::ImageUsageFlag::eColourAttachment
+			| renderer::ImageUsageFlag::eSampled;
+		m_blurTexture = std::make_shared< castor3d::TextureLayout >( *getRenderSystem()
+			, image
+			, renderer::MemoryPropertyFlag::eDeviceLocal );
+		m_blurTexture->initialise();
+#endif
+
+		m_hiPass = std::make_unique< HiPass >( *getRenderSystem()
+			, m_target->getPixelFormat()
+			, m_target->getDefaultView()
+			, size
+			, m_blurPassesCount );
+#if !Bloom_DebugHiPass
+		m_blurXPass = std::make_unique< BlurPass >( *getRenderSystem()
+			, m_target->getPixelFormat()
+			, m_hiPass->getResult()
+			, *m_blurTexture
+			, size
+			, m_blurKernelSize
+			, m_blurPassesCount
+			, false );
+		m_blurYPass = std::make_unique< BlurPass >( *getRenderSystem()
+			, m_target->getPixelFormat()
+			, *m_blurTexture
+			, m_hiPass->getResult()
+			, size
+			, m_blurKernelSize
+			, m_blurPassesCount
+			, true );
+		m_combinePass = std::make_unique< CombinePass >( *getRenderSystem()
+			, m_target->getPixelFormat()
+			, m_target->getDefaultView()
+			, m_hiPass->getResult().getDefaultView()
+			, size
+			, m_blurPassesCount );
+#endif
+		m_commands.emplace_back( std::move( m_hiPass->getCommands( timer ) ) );
+
+#if !Bloom_DebugHiPass
+		for ( auto & command : m_blurXPass->getCommands( timer, *m_vertexBuffer ) )
+		{
+			m_commands.emplace_back( std::move( command ) );
+		}
+
+		for ( auto & command : m_blurYPass->getCommands( timer, *m_vertexBuffer ) )
+		{
+			m_commands.emplace_back( std::move( command ) );
+		}
+
+		m_commands.emplace_back( std::move( m_combinePass->getCommands( timer, *m_vertexBuffer ) ) );
+#endif
+
+#if Bloom_DebugHiPass
+		m_result = &m_hiPass->getResult();
+#else
+		m_result = &m_combinePass->getResult();
+#endif
 		return true;
 	}
 
-	bool BloomPostEffect::doWriteInto( TextFile & p_file )
+	void PostEffect::doCleanup()
 	{
-		return p_file.writeText( cuT( " -Size=" ) + string::toString( m_size ) ) > 0;
+		m_combinePass.reset();
+		m_blurXPass.reset();
+		m_blurYPass.reset();
+		m_hiPass.reset();
+		m_blurTexture.reset();
+		m_vertexBuffer.reset();
 	}
 
-	void BloomPostEffect::doHiPassFilter( TextureLayout const & p_origin )
+	bool PostEffect::doWriteInto( TextFile & file )
 	{
-		auto source = &m_hiPassSurfaces[0];
-		source->m_fbo->bind( FrameBufferTarget::eDraw );
-		source->m_fbo->clear( BufferComponent::eColour );
-		getRenderSystem()->getCurrentContext()->renderTexture( source->m_size
-			, p_origin
-			, *m_hiPassPipeline
-			, m_matrixUbo );
-		source->m_fbo->unbind();
-	}
-
-	void BloomPostEffect::doDownSample( TextureLayout const & p_origin )
-	{
-		auto context = getRenderSystem()->getCurrentContext();
-		auto source = &m_hiPassSurfaces[0];
-
-		for ( uint32_t i = 1; i < m_hiPassSurfaces.size(); ++i )
-		{
-			auto destination = &m_hiPassSurfaces[i];
-			destination->m_fbo->bind( FrameBufferTarget::eDraw );
-			destination->m_fbo->clear( BufferComponent::eColour );
-			context->renderTexture( destination->m_size
-				, *source->m_colourTexture.getTexture() );
-			destination->m_fbo->unbind();
-			source = destination;
-		}
-	}
-
-	void BloomPostEffect::doCombine( TextureLayout const & p_origin )
-	{
-		m_combineSurface.m_fbo->bind( FrameBufferTarget::eDraw );
-		m_combineSurface.m_fbo->clear( BufferComponent::eColour );
-		m_viewport.resize( p_origin.getDimensions() );
-		m_viewport.update();
-		m_viewport.apply();
-
-		auto const & texture0 = m_hiPassSurfaces[0].m_colourTexture;
-		auto const & texture1 = m_hiPassSurfaces[1].m_colourTexture;
-		auto const & texture2 = m_hiPassSurfaces[2].m_colourTexture;
-		auto const & texture3 = m_hiPassSurfaces[3].m_colourTexture;
-		m_matrixUbo.update( m_viewport.getProjection() );
-		m_combinePipeline->apply();
-
-		texture0.bind();
-		texture1.bind();
-		texture2.bind();
-		texture3.bind();
-		p_origin.bind( MinTextureIndex + 4 );
-		m_linearSampler->bind( MinTextureIndex + 4 );
-
-		m_geometryBuffers->draw( uint32_t( m_vertices.size() ), 0u );
-
-		texture0.unbind();
-		texture1.unbind();
-		texture2.unbind();
-		texture3.unbind();
-		p_origin.unbind( MinTextureIndex + 4 );
-		m_linearSampler->unbind( MinTextureIndex + 4 );
-
-		m_combineSurface.m_fbo->unbind();
-
-		m_combineSurface.m_colourTexture.bind();
-		m_combineSurface.m_colourTexture.getTexture()->generateMipmaps();
-		m_combineSurface.m_colourTexture.unbind();
-	}
-
-	SamplerSPtr BloomPostEffect::doCreateSampler( bool p_linear )
-	{
-		String name = cuT( "BloomSampler_" );
-		InterpolationMode mode;
-
-		if ( p_linear )
-		{
-			name += cuT( "Linear" );
-			mode = InterpolationMode::eLinear;
-		}
-		else
-		{
-			name += cuT( "Nearest" );
-			mode = InterpolationMode::eNearest;
-		}
-
-		SamplerSPtr sampler;
-
-		if ( !m_renderTarget.getEngine()->getSamplerCache().has( name ) )
-		{
-			sampler = m_renderTarget.getEngine()->getSamplerCache().add( name );
-			sampler->setInterpolationMode( InterpolationFilter::eMin, mode );
-			sampler->setInterpolationMode( InterpolationFilter::eMag, mode );
-			sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-			sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-			sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
-		}
-		else
-		{
-			sampler = m_renderTarget.getEngine()->getSamplerCache().find( name );
-		}
-
-		return sampler;
-	}
-
-	bool BloomPostEffect::doInitialiseHiPassProgram()
-	{
-		auto & cache = getRenderSystem()->getEngine()->getShaderProgramCache();
-		auto const vertex = getVertexProgram( getRenderSystem() );
-		auto const hipass = getHiPassProgram( getRenderSystem() );
-
-		ShaderProgramSPtr program = cache.getNewProgram( false );
-		program->createObject( ShaderType::eVertex );
-		program->createObject( ShaderType::ePixel );
-		program->createUniform < UniformType::eSampler >( ShaderProgram::MapDiffuse
-			, ShaderType::ePixel )->setValue( MinTextureIndex );
-		program->setSource( ShaderType::eVertex, vertex );
-		program->setSource( ShaderType::ePixel, hipass );
-		bool result = program->initialise();
-
-		if ( result )
-		{
-			DepthStencilState dsstate;
-			dsstate.setDepthTest( false );
-			dsstate.setDepthMask( WritingMask::eZero );
-			m_hiPassPipeline = getRenderSystem()->createRenderPipeline( std::move( dsstate )
-				, RasteriserState{}
-				, BlendState{}
-				, MultisampleState{}
-				, *program
-				, PipelineFlags{} );
-			m_hiPassPipeline->addUniformBuffer( m_matrixUbo.getUbo() );
-		}
-
-		return result;
-	}
-
-	bool BloomPostEffect::doInitialiseCombineProgram()
-	{
-		auto & cache = getRenderSystem()->getEngine()->getShaderProgramCache();
-		auto const vertex = getVertexProgram( getRenderSystem() );
-		auto const combine = getCombineProgram( getRenderSystem() );
-
-		ShaderProgramSPtr program = cache.getNewProgram( false );
-		program->createObject( ShaderType::eVertex );
-		program->createObject( ShaderType::ePixel );
-		program->createUniform< UniformType::eSampler >( BloomPostEffect::CombineMapPass0
-			, ShaderType::ePixel )->setValue( MinTextureIndex + 0 );
-		program->createUniform< UniformType::eSampler >( BloomPostEffect::CombineMapPass1
-			, ShaderType::ePixel )->setValue( MinTextureIndex + 1 );
-		program->createUniform< UniformType::eSampler >( BloomPostEffect::CombineMapPass2
-			, ShaderType::ePixel )->setValue( MinTextureIndex + 2 );
-		program->createUniform< UniformType::eSampler >( BloomPostEffect::CombineMapPass3
-			, ShaderType::ePixel )->setValue( MinTextureIndex + 3 );
-		program->createUniform< UniformType::eSampler >( BloomPostEffect::CombineMapScene
-			, ShaderType::ePixel )->setValue( MinTextureIndex + 4 );
-
-		program->setSource( ShaderType::eVertex, vertex );
-		program->setSource( ShaderType::ePixel, combine );
-		bool result = program->initialise();
-
-		if ( result )
-		{
-			m_vertexBuffer = std::make_shared< VertexBuffer >( *getRenderSystem()->getEngine()
-				, m_declaration );
-			m_vertexBuffer->resize( uint32_t( m_vertices.size() * m_declaration.stride() ) );
-			m_vertexBuffer->linkCoords( m_vertices.begin(), m_vertices.end() );
-			m_vertexBuffer->initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
-			m_geometryBuffers = getRenderSystem()->createGeometryBuffers( Topology::eTriangles
-				, *program );
-			result = m_geometryBuffers->initialise( { *m_vertexBuffer }, nullptr );
-		}
-
-		if ( result )
-		{
-			DepthStencilState dsstate;
-			dsstate.setDepthTest( false );
-			dsstate.setDepthMask( WritingMask::eZero );
-			m_combinePipeline = getRenderSystem()->createRenderPipeline( std::move( dsstate )
-				, RasteriserState{}
-				, BlendState{}
-				, MultisampleState{}
-				, *program
-				, PipelineFlags{} );
-			m_combinePipeline->addUniformBuffer( m_matrixUbo.getUbo() );
-		}
-
-		return result;
+		return file.writeText( cuT( " -Size=" ) + string::toString( m_blurKernelSize, std::locale{ "C" } )
+			+ cuT( " -Passes=" ) + string::toString( m_blurPassesCount, std::locale{ "C" } ) ) > 0;
 	}
 }

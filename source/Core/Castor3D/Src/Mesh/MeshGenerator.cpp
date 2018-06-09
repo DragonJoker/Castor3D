@@ -13,8 +13,8 @@ using namespace castor;
 
 namespace castor3d
 {
-	MeshGenerator::MeshGenerator( String const & p_meshType )
-		: m_meshType{ p_meshType }
+	MeshGenerator::MeshGenerator( String const & meshType )
+		: m_meshType{ meshType }
 	{
 	}
 
@@ -27,25 +27,25 @@ namespace castor3d
 		return std::make_shared< MeshGenerator >( cuT( "custom" ) );
 	}
 
-	void MeshGenerator::generate( Mesh & p_mesh, Parameters const & p_parameters )
+	void MeshGenerator::generate( Mesh & mesh, Parameters const & parameters )
 	{
-		doGenerate( p_mesh, p_parameters );
+		doGenerate( mesh, parameters );
 
-		for ( auto submesh : p_mesh )
+		for ( auto submesh : mesh )
 		{
-			p_mesh.getScene()->getListener().postEvent( makeInitialiseEvent( *submesh ) );
+			mesh.getScene()->getListener().postEvent( makeInitialiseEvent( *submesh ) );
 		}
 	}
 
-	void MeshGenerator::computeNormals( Mesh & p_mesh, bool p_reverted )
+	void MeshGenerator::computeNormals( Mesh & mesh, bool reverted )
 	{
-		for ( auto submesh : p_mesh )
+		for ( auto submesh : mesh )
 		{
-			submesh->computeNormals( p_reverted );
+			submesh->computeNormals( reverted );
 		}
 	}
 
-	void MeshGenerator::doGenerate( Mesh & CU_PARAM_UNUSED( p_mesh ), Parameters const &  CU_PARAM_UNUSED( p_parameters ) )
+	void MeshGenerator::doGenerate( Mesh & CU_PARAM_UNUSED( mesh ), Parameters const &  CU_PARAM_UNUSED( parameters ) )
 	{
 	}
 }

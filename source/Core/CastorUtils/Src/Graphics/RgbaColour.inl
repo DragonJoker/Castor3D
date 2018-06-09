@@ -1,4 +1,4 @@
-﻿#include "Data/BinaryFile.hpp"
+#include "Data/BinaryFile.hpp"
 #include "Data/TextFile.hpp"
 #include "Math/Math.hpp"
 #include "Miscellaneous/StringUtils.hpp"
@@ -53,7 +53,7 @@ namespace castor
 	bool RgbaColourT< ComponentType >::TextWriter::operator()( RgbaColourT< ComponentType > const & colour
 		, TextFile & file )
 	{
-		StringStream streamWord;
+		StringStream streamWord{ castor::makeStringStream() };
 		streamWord.setf( std::ios::boolalpha );
 		streamWord.setf( std::ios::showpoint );
 
@@ -233,6 +233,22 @@ namespace castor
 		{
 			m_arrayComponents[i].link( &m_arrayValues[i] );
 		}
+	}
+
+	template< typename ComponentType >
+	RgbaColourT< ComponentType >::RgbaColourT( float r, float g, float b, float a )
+		: m_arrayValues()
+		, m_arrayComponents()
+	{
+		for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
+		{
+			m_arrayComponents[i].link( &m_arrayValues[i] );
+		}
+
+		m_arrayComponents[size_t( RgbaComponent::eRed )] = r;
+		m_arrayComponents[size_t( RgbaComponent::eGreen )] = g;
+		m_arrayComponents[size_t( RgbaComponent::eBlue )] = b;
+		m_arrayComponents[size_t( RgbaComponent::eAlpha )] = a;
 	}
 
 	template< typename ComponentType >

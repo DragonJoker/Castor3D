@@ -133,27 +133,13 @@ namespace castor3d
 		 */
 		C3D_API void computeTangentsFromNormals();
 		/**
-		 *\~english
-		 *\brief		Computes tangent for each vertex of the submesh.
-		 *\remarks		This function supposes bitangents and normals are defined.
-		 *\~french
-		 *\brief		Calcule la tangente pour chaque vertex du sous-maillage.
-		 *\remarks		Cette fonction suppose que les bitangentes et les normales sont définies.
-		 */
-		C3D_API void computeTangentsFromBitangents();
-		/**
-		 *\~english
-		 *\brief		Computes bitangent for each vertex of the submesh.
-		 *\remarks		This function supposes the tangents and normals are defined.
-		 *\~french
-		 *\brief		Calcule la bitangente pour chaque vertex du sous-maillage.
-		 *\remarks		Cette fonction suppose que les tangentes et les normales sont définies.
-		 */
-		C3D_API void computeBitangents();
-		/**
 		 *\copydoc		castor3d::IndexMapping::getCount
 		 */
 		C3D_API uint32_t getCount()const override;
+		/**
+		 *\copydoc		castor3d::IndexMapping::getComponentsCount
+		 */
+		C3D_API uint32_t getComponentsCount()const override;
 		/**
 		 *\copydoc		castor3d::IndexMapping::sortByDistance
 		 */
@@ -239,6 +225,7 @@ namespace castor3d
 	private:
 		void doCleanup()override;
 		void doFill()override;
+		void doUpload()override;
 
 	public:
 		C3D_API static castor::String const Name;
@@ -247,9 +234,6 @@ namespace castor3d
 		//!\~english	The faces in the submesh.
 		//!\~french		Le tableau de faces.
 		FaceArray m_faces;
-		//!\~english	The face count.
-		//!\~french		Le nombre de faces.
-		uint32_t m_faceCount{ 0u };
 		//!\~english	Tells if normals exist or need to be computed.
 		//!\~french		Dit si les normales existent ou doivent être calculées.
 		bool m_hasNormals{ false };

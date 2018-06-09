@@ -11,85 +11,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	//*************************************************************************************************
-
-	bool BinaryWriter< Bone >::doWrite( Bone const & obj )
-	{
-		bool result = true;
-
-		if ( result )
-		{
-			result = doWriteChunk( obj.getName(), ChunkType::eName, m_chunk );
-		}
-
-		if ( result )
-		{
-			result = doWriteChunk( obj.getOffsetMatrix(), ChunkType::eBoneOffsetMatrix, m_chunk );
-		}
-
-		if ( obj.getParent() )
-		{
-			result = doWriteChunk( obj.getParent()->getName(), ChunkType::eBoneParentName, m_chunk );
-		}
-
-		return result;
-	}
-
-	//*************************************************************************************************
-
-	bool BinaryParser< Bone >::doParse( Bone & obj )
-	{
-		bool result = true;
-		BoneSPtr bone;
-		String name;
-		BinaryChunk chunk;
-		auto & skeleton = obj.m_skeleton;
-
-		while ( result && doGetSubChunk( chunk ) )
-		{
-			switch ( chunk.getChunkType() )
-			{
-			case ChunkType::eName:
-				result = doParseChunk( name, chunk );
-
-				if ( result )
-				{
-					obj.setName( name );
-				}
-
-				break;
-
-			case ChunkType::eBoneOffsetMatrix:
-				result = doParseChunk( obj.m_offset, chunk );
-				break;
-
-			case ChunkType::eBoneParentName:
-				result = doParseChunk( name, chunk );
-
-				if ( result )
-				{
-					auto parent = skeleton.findBone( name );
-
-					if ( parent )
-					{
-						parent->addChild( obj.shared_from_this() );
-						obj.setParent( parent );
-					}
-					else
-					{
-						result = false;
-					}
-				}
-
-				break;
-			}
-		}
-
-		return result;
-	}
-
-	//*************************************************************************************************
-
 	Bone::Bone( Skeleton & skeleton
 		, Matrix4x4r const & offset )
 		: Named{ cuEmptyString }
@@ -132,17 +53,15 @@ namespace castor3d
 				auto component = submesh->getComponent< BonesComponent >();
 				uint32_t i = 0u;
 
-				for ( auto & data : component->getBonesData() )
+				for ( auto & boneData : component->getBonesData() )
 				{
-					auto boneData = BonedVertex::getBones( data );
-					auto it = std::find( boneData.m_ids.begin()
-						, boneData.m_ids.end()
+					auto it = std::find( boneData.m_ids.data.begin()
+						, boneData.m_ids.data.end()
 						, boneIndex );
 
-					if ( it != boneData.m_ids.end() )
+					if ( it != boneData.m_ids.data.end() )
 					{
-						Coords3r position;
-						Vertex::getPosition( submesh->getPoint( i ), position );
+						auto position = submesh->getPoint( i ).pos;
 						min[0] = std::min( min[0], position[0] );
 						min[1] = std::min( min[1], position[1] );
 						min[2] = std::min( min[2], position[2] );

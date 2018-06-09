@@ -1,4 +1,5 @@
-cmake_minimum_required( VERSION 2.8 )
+cmake_minimum_required( VERSION 3.1 )
+cmake_policy( VERSION 3.1 )
 
 #--------------------------------------------------------------------------------------------------
 #	Initial configurations
@@ -8,9 +9,9 @@ set( MAIN_PROJECT_NAME "Castor3D" )
 
 # Set project version numbers
 set( VERSION_MAJOR 0 )
-set( VERSION_MINOR 10 )
+set( VERSION_MINOR 11 )
 set( VERSION_BUILD 0 )
-set( VERSION_YEAR 2016 )
+set( VERSION_YEAR 2018 )
 
 # Used to look for external modules
 set( CMAKE_MODULE_PATH
@@ -19,6 +20,9 @@ set( CMAKE_MODULE_PATH
 	${CMAKE_SOURCE_DIR}/CMake/Toolchains
 )
 set( CMAKE_TEMPLATES_DIR ${CMAKE_SOURCE_DIR}/CMake/Templates )
+
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 # Experimental Precompiled headers support for GCC
 include( PCHSupport )
 
@@ -52,6 +56,8 @@ if ( EXISTS ${CMAKE_SOURCE_DIR}/../dependencies/${COMPILER_FOLDER}/${PROJECTS_PL
 	set( FreeImage_ROOT_DIR ${DEPENDENCIES_DIR}/FreeImage )
 	set( FbxSDK_ROOT_DIR ${DEPENDENCIES_DIR}/FbxSDK )
 	set( ASSIMP_ROOT_DIR ${DEPENDENCIES_DIR}/assimp )
+	set( glslang_ROOT_DIR ${DEPENDENCIES_DIR}/glslang )
+	set( SPIRV_ROOT_DIR ${DEPENDENCIES_DIR}/glslang )
 	set( GLM_ROOT_DIR ${DEPENDENCIES_DIR}/glm )
 	set( FFMPEG_DIR ${DEPENDENCIES_DIR}/ffmpeg )
 	set( OpenCV_DIR ${DEPENDENCIES_DIR}/opencv )
@@ -71,7 +77,7 @@ if ( CMAKE_COMPILER_IS_GNUCXX )
 	DumpCompilerVersion( Castor_COMPILER_VERSION )
 	msg_debug( "GCC version : ${Castor_COMPILER_VERSION}" )
 	if ( ${Castor_COMPILER_VERSION} LESS "49" )
-		message( FATAL_ERROR "Your compiler is too old, consider an update." )
+		message( FATAL_ERROR "Your compiler is too old (${Castor_COMPILER_VERSION}), consider an update." )
 	else ()
 		set( Boost_FOUND TRUE )
 	endif ()
@@ -89,15 +95,27 @@ else ()
 	message( FATAL_ERROR "Unsupported compiler." )
 endif ()
 
+add_compile_options( $<$<CXX_COMPILER_ID:MSVC>:/MP> )
+
 find_package( Doxygen )
 
 #--------------------------------------------------------------------------------------------------
 #	Adding include dirs to include search path
 #--------------------------------------------------------------------------------------------------
-include_directories( Core/CastorUtils/Src )
-include_directories( Core/Castor3D/Src )
-include_directories( Core/GlslWriter/Src )
-include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Core/Castor3D/Src )
+set( RENDERERLIB_DIR external/RendererLib/source/Renderer )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/external/FreeType/include )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/external/FreeType/include/freetype )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/Core/CastorUtils/Src )
+include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Core/CastorUtils/Src )
+
+set( Castor3DIncludeDirs
+	${CMAKE_CURRENT_SOURCE_DIR}/${RENDERERLIB_DIR}/Renderer/Src
+	${CMAKE_CURRENT_BINARY_DIR}/${RENDERERLIB_DIR}/Renderer/Src
+	${CMAKE_CURRENT_SOURCE_DIR}/Core/GlslWriter/Src
+	${CMAKE_CURRENT_BINARY_DIR}/Core/GlslWriter/Src
+	${CMAKE_CURRENT_SOURCE_DIR}/Core/Castor3D/Src
+	${CMAKE_CURRENT_BINARY_DIR}/Core/Castor3D/Src
+)
 
 if( Boost_FOUND )
 	include_directories( ${Boost_INCLUDE_DIRS} )
@@ -130,6 +148,11 @@ set( CastorMinLibraries
 
 set( CastorBinsDependencies
 	CastorUtils
+)
+
+set( Castor3DBinsDependencies
+	${CastorBinsDependencies}
+	Renderer
 	Castor3D
 )
 
@@ -155,17 +178,18 @@ add_definitions(
 
 option( CASTOR_BUILDGRP_TEST "Build test projects" FALSE )
 option( CASTOR_BUILDGRP_SETUP "Build setup projects" FALSE )
+option( CASTOR_BUILD_CASTOR3D "Build Castor3D" TRUE )
 
 # Small macro to add subdirectory files to current target source and header files
 macro( parse_subdir_files _FOLDER _GROUP )
 	file( GLOB _FOLDER_HEADER_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/${_FOLDER}/*.h
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/${_FOLDER}/*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/${_FOLDER}/*.inl
+		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.h
+		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.inl
  )
 	file( GLOB _FOLDER_SOURCE_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/${_FOLDER}/*.c
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/${_FOLDER}/*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.c
+		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.cpp
  )
 	source_group( "Header Files\\${_GROUP}" FILES ${_FOLDER_HEADER_FILES} )
 	source_group( "Source Files\\${_GROUP}" FILES ${_FOLDER_SOURCE_FILES} )
@@ -184,6 +208,17 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			add_subdirectory( Interop )
 		endif ()
 		add_subdirectory( Tools )
+
+		add_subdirectory( external/FreeType )
+		if ( ${CASTOR_BUILD_CASTOR3D} )
+			if ( NOT CASTOR_BUILDGRP_RENDERER )
+				set( RENDERER_BUILD_RENDERER_PLUGINS FALSE )
+			else ()
+				set( RENDERER_BUILD_RENDERER_PLUGINS TRUE )
+				set( RENDERER_STATIC_RENDERER_PLUGINS TRUE )
+			endif ()
+			add_subdirectory( ${RENDERERLIB_DIR} )
+		endif ()
 
 		CoreInit()
 		if ( ${CASTOR_BUILD_CASTOR3D} )

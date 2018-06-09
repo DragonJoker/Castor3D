@@ -4,8 +4,11 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderTechniquePass_H___
 #define ___C3D_RenderTechniquePass_H___
 
+#include "Technique/RenderTechniqueVisitor.hpp"
 #include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Render/RenderPass.hpp"
+
+#include <Sync/Semaphore.hpp>
 
 namespace castor3d
 {
@@ -40,7 +43,8 @@ namespace castor3d
 		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 *\param[in]	config		La configuration du SSAO.
 		 */
-		C3D_API RenderTechniquePass( castor::String const & name
+		C3D_API RenderTechniquePass( castor::String const & category
+			, castor::String const & name
 			, Scene const & scene
 			, Camera * camera
 			, bool environment
@@ -66,7 +70,8 @@ namespace castor3d
 		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 *\param[in]	config		La configuration du SSAO.
 		 */
-		C3D_API RenderTechniquePass( castor::String const & name
+		C3D_API RenderTechniquePass( castor::String const & category
+			, castor::String const & name
 			, Scene & scene
 			, Camera * camera
 			, bool oit
@@ -84,65 +89,81 @@ namespace castor3d
 		C3D_API virtual ~RenderTechniquePass();
 		/**
 		 *\~english
+		 *\brief		Visitor acceptance function.
+		 *\~french
+		 *\brief		Fonction d'acceptation de visiteur.
+		 */
+		C3D_API virtual void accept( RenderTechniqueVisitor & visitor );
+		/**
+		 *\~english
 		 *\brief		Render function.
 		 *\param[out]	info		Receives the render informations.
-		 *\param[out]	shadowMaps	The shadow maps.
-		 *\param[out]	jitter		The jittering value.
+		 *\param[in]	jitter		The jittering value.
 		 *\~french
 		 *\brief		Fonction de rendu.
 		 *\param[out]	info		Reçoit les informations de rendu.
-		 *\param[out]	shadowMaps	Les textures d'ombres.
-		 *\param[out]	jitter		La valeur de jittering.
+		 *\param[in]	jitter		La valeur de jittering.
 		 */
-		C3D_API virtual void render( RenderInfo & info
-			, ShadowMapLightTypeArray & shadowMaps
+		C3D_API virtual void update( RenderInfo & info
 			, castor::Point2r const & jitter ) = 0;
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		inline renderer::Semaphore const & getSemaphore()const
+		{
+			REQUIRE( m_finished );
+			return *m_finished;
+		}
+		/**@}*/
+
+	public:
+		using RenderPass::update;
 
 	protected:
 		/**
 		 *\~english
 		 *\brief		Render function.
 		 *\param[out]	info		Receives the render informations.
-		 *\param[out]	shadowMaps	The shadow maps.
-		 *\param[out]	jitter		The jittering value.
+		 *\param[in]	jitter		The jittering value.
 		 *\~french
 		 *\brief		Fonction de rendu.
 		 *\param[out]	info		Reçoit les informations de rendu.
-		 *\param[out]	shadowMaps	Les textures d'ombres.
-		 *\param[out]	jitter		La valeur de jittering.
+		 *\param[in]	jitter		La valeur de jittering.
 		 */
-		C3D_API void doRender( RenderInfo & info
-			, ShadowMapLightTypeArray & shadowMaps
+		C3D_API void doUpdate( RenderInfo & info
 			, castor::Point2r const & jitter = castor::Point2r{} );
+		/**
+		 *\copydoc		castor3d::RenderPass::doCleanup
+		 */
+		C3D_API virtual void doCleanup()override;
 
 	private:
 		/**
 		 *\~english
 		 *\brief			Renders render nodes.
-		 *\param[in]		p_nodes		The scene render nodes.
+		 *\param[in]		nodes		The scene render nodes.
 		 *\param			camera		The viewing camera.
-		 *\param[in]		shadowMaps	The shadows maps.
 		 *\param[in, out]	count		Receives the rendered nodes count.
 		 *\~french
 		 *\brief			Dessine les noeuds de rendu.
-		 *\param[in]		p_nodes		Les noeuds de rendu de la scène.
+		 *\param[in]		nodes		Les noeuds de rendu de la scène.
 		 *\param			camera		La caméra regardant la scène.
-		 *\param[in]		shadowMaps	Les textures d'ombres.
 		 *\param[in, out]	count		Reçouit le nombre de noeuds dessinés.
 		 */
-		C3D_API void doRenderNodes( SceneRenderNodes & p_nodes
+		C3D_API void doUpdateNodes( SceneCulledRenderNodes & nodes
 			, Camera const & camera
-			, ShadowMapLightTypeArray & shadowMaps
 			, castor::Point2r const & jitter
 			, RenderInfo & info )const;
 		/**
 		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */
 		C3D_API bool doInitialise( castor::Size const & size )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doCleanup
-		 */
-		C3D_API void doCleanup()override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdate
 		 */
@@ -162,36 +183,57 @@ namespace castor3d
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const override;
 		/**
+		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
+		 */
+		C3D_API void doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, BillboardListRenderNode & nodes )override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
+		 */
+		C3D_API void doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, SubmeshRenderNode & nodes )override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
+		 */
+		C3D_API void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, BillboardListRenderNode & nodes
+			, ShadowMapLightTypeArray const & shadowMaps )override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
+		 */
+		C3D_API void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, SubmeshRenderNode & nodes
+			, ShadowMapLightTypeArray const & shadowMaps )override;
+		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
 		C3D_API void doUpdatePipeline( RenderPipeline & pipeline )const override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
+		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
 		 */
-		C3D_API void doPrepareFrontPipeline( ShaderProgram & program
-			, PipelineFlags const & flags )override;
+		renderer::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
+		 *\copydoc		castor3d::RenderPass::doCreateBlendState
 		 */
-		C3D_API void doPrepareBackPipeline( ShaderProgram & program
-			, PipelineFlags const & flags )override;
+		renderer::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
 
 	protected:
-		//!\~english	The rendered scne.
-		//!\~french		La scène rendue.
+		/**
+		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
+		 */
+		renderer::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
+
+	protected:
 		Scene const & m_scene;
-		//!\~english	The viewer camera, if any.
-		//!\~french		La caméra, s'il y en a une.
 		Camera * m_camera{ nullptr };
-		//!\~english	The scene render node.
-		//!\~french		Le noeud de rendu de la scène.
 		SceneRenderNode m_sceneNode;
-		//!\~english	Tells if the pass is used for an environment map rendering.
-		//!\~french		Dit si la passe est utilisée pour le rendu d'une texture d'environnement.
 		bool m_environment{ false };
-		//!\~english	The SSAO configuration.
-		//!\~french		La configuration du SSAO.
 		SsaoConfig m_ssaoConfig;
+		renderer::SemaphorePtr m_finished;
 	};
 }
 

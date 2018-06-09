@@ -7,12 +7,12 @@ See LICENSE file in root folder
 #include "HDR/ToneMapping.hpp"
 #include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Render/RenderInfo.hpp"
-#include "Texture/TextureUnit.hpp"
+#include "ShadowMap/ShadowMap.hpp"
 #include "Technique/DepthPass.hpp"
-#include "Technique/RenderTechniqueFbo.hpp"
+#include "Technique/RenderTechniqueVisitor.hpp"
 #include "Technique/Opaque/DeferredRendering.hpp"
 #include "Technique/Transparent/WeightedBlendRendering.hpp"
-#include "ShadowMap/ShadowMap.hpp"
+#include "Texture/TextureUnit.hpp"
 
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
@@ -70,14 +70,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
-		 *\param[in]	index		The base texture index.
 		 *\return		\p true if ok.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
-		 *\param[in]	index		L'index de texture de base.
 		 *\return		\p true if ok.
 		 */
-		C3D_API bool initialise( uint32_t & index );
+		C3D_API bool initialise();
 		/**
 		 *\~english
 		 *\brief		Cleanup function
@@ -108,8 +106,8 @@ namespace castor3d
 		 *\param[out]	velocity	Reçoit le rendu des vélocités.
 		 *\param[out]	info		Reçoit les informations de rendu.
 		 */
-		C3D_API void render( castor::Point2r const & jitter
-			, TextureUnit const & velocity
+		C3D_API renderer::Semaphore const & render( castor::Point2r const & jitter
+			, renderer::SemaphoreCRefArray const & waitSemaphores
 			, RenderInfo & info );
 		/**
 		 *\~english
@@ -128,137 +126,117 @@ namespace castor3d
 		 */
 		C3D_API void debugDisplay( castor::Size const & size )const;
 		/**
-		 *\~english
-		 *\return		The render area dimensions.
-		 *\~french
-		 *\return		Les dimensions de la zone de rendu.
-		 */
+		*\~english
+		*\brief		Visitor acceptance function.
+		*\~french
+		*\brief		Fonction d'acceptation de visiteur.
+		*/
+		C3D_API void accept( RenderTechniqueVisitor & visitor );
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline castor::Size const & getSize()const
 		{
 			return m_size;
 		}
-		/**
-		 *\~english
-		 *\return		The colour texture holding the render's result.
-		 *\~french
-		 *\return		La texture de couleurs contenant le résultat du rendu.
-		 */
+
 		inline TextureLayout const & getResult()const
 		{
-			REQUIRE( m_frameBuffer.m_colourTexture );
-			return *m_frameBuffer.m_colourTexture;
+			REQUIRE( m_colourTexture );
+			return *m_colourTexture;
 		}
-		/**
-		 *\~english
-		 *\return		The depth texture holding the render's result.
-		 *\~french
-		 *\return		La texture de profondeurs contenant le résultat du rendu.
-		 */
+
 		inline TextureLayout const & getDepth()const
 		{
-			REQUIRE( m_frameBuffer.m_colourTexture );
-			return *m_frameBuffer.m_depthBuffer;
+			REQUIRE( m_depthBuffer );
+			return *m_depthBuffer;
 		}
-		/**
-		 *\~english
-		 *\return		The opaque nodes render pass.
-		 *\~french
-		 *\return		La passe de rendu des noeuds opaques.
-		 */
+
 		inline RenderTechniquePass const & getOpaquePass()const
 		{
 			REQUIRE( m_opaquePass );
 			return *m_opaquePass;
 		}
-		/**
-		 *\~english
-		 *\return		The transparent nodes render pass.
-		 *\~french
-		 *\return		La passe de rendu des noeuds transparents.
-		 */
+
 		inline RenderTechniquePass const & getTransparentPass()const
 		{
 			REQUIRE( m_transparentPass );
 			return *m_transparentPass;
 		}
-		/**
-		 *\~english
-		 *\return		\p true if the samples count is greater than 1.
-		 *\~french
-		 *\return		\p true si le nombre d'échantillons est plus grand que 1.
-		 */
+
+		inline ShadowMapLightTypeArray const & getShadowMaps()const
+		{
+			return m_allShadowMaps;
+		}
+
+		inline renderer::Semaphore const & getSemaphore()const
+		{
+			REQUIRE( m_signalFinished );
+			return *m_signalFinished;
+		}
+
 		inline bool isMultisampling()const
 		{
 			return false;
 		}
+		/**@}*/
 
 	public:
 		using ShadowMapArray = std::vector< ShadowMapUPtr >;
 
 	private:
 		void doInitialiseShadowMaps();
+		void doInitialiseBackgroundPass();
+		void doInitialiseOpaquePass();
+		void doInitialiseTransparentPass();
+		void doInitialiseDebugPass();
 		void doCleanupShadowMaps();
 		void doUpdateShadowMaps( RenderQueueArray & queues );
-		void doRenderShadowMaps();
-		void doRenderEnvironmentMaps();
-		void doRenderOpaque( castor::Point2r const & jitter
-			, TextureUnit const & velocity
-			, RenderInfo & info );
 		void doUpdateParticles( RenderInfo & info );
-		void doRenderTransparent( castor::Point2r const & jitter
-			, TextureUnit const & velocity
-			, RenderInfo & info );
-		void doApplyPostEffects();
+		renderer::Semaphore const & doRenderShadowMaps( renderer::Semaphore const & semaphore );
+		renderer::Semaphore const & doRenderEnvironmentMaps( renderer::Semaphore const & semaphore );
+		renderer::Semaphore const & doRenderBackground( renderer::SemaphoreCRefArray const & semaphores );
+		renderer::Semaphore const & doRenderOpaque( castor::Point2r const & jitter
+			, RenderInfo & info
+			, renderer::Semaphore const & semaphore );
+		renderer::Semaphore const & doRenderTransparent( castor::Point2r const & jitter
+			, RenderInfo & info
+			, renderer::Semaphore const & semaphore );
 
 	private:
-		//!\~english	The technique intialisation status.
-		//!\~french		Le statut d'initialisation de la technique.
 		bool m_initialised;
-		//!\~english	The parent render target.
-		//!\~french		La render target parente.
 		RenderTarget & m_renderTarget;
-		//!\~english	The render system.
-		//!\~french		Le render system.
 		RenderSystem & m_renderSystem;
-		//!\~english	The render area dimension.
-		//!\~french		Les dimensions de l'aire de rendu.
 		castor::Size m_size;
-		//!\~english	The HDR frame buffer.
-		//!\~french		Le tampon d'image HDR.
-		RenderTechniqueFbo m_frameBuffer;
-		//!\~english	The pass used to render opaque nodes.
-		//!\~french		La passe utilisée pour dessiner les noeuds opaques.
+		TextureLayoutSPtr m_colourTexture;
+		TextureLayoutSPtr m_depthBuffer;
 		std::unique_ptr< RenderTechniquePass > m_opaquePass;
-		//!\~english	The pass used to render transparent nodes.
-		//!\~french		La passe utilisée pour dessiner les noeuds transparents.
 		std::unique_ptr< RenderTechniquePass > m_transparentPass;
-		//!\~english	The SSAO configuration.
-		//!\~french		La configuration du SSAO.
 		SsaoConfig m_ssaoConfig;
-		//!\~english	The deferred rendering used for opaque meshes.
-		//!\~french		Le rendu différé utilisé pour les maillages opaques.
+		HdrConfigUbo m_hdrConfigUbo;
 		std::unique_ptr< DeferredRendering > m_deferredRendering;
-		//!\~english	The weighted blend rendering used for transparent meshes.
-		//!\~french		Le rendu weighted blend utilisé pour les maillages transparents.
 		std::unique_ptr< WeightedBlendRendering > m_weightedBlendRendering;
-		//!\~english	The particles timer.
-		//!\~french		Le timer de particules.
 		RenderPassTimerSPtr m_particleTimer;
-		//!\~english	The post effect timer.
-		//!\~french		Le timer d'effets post-rendu.
-		RenderPassTimerSPtr m_postFxTimer;
-		//!\~english	The directional lights shadow maps.
-		//!\~french		Les textures d'ombres pour les lumières directionnelles.
-		ShadowMapArray m_directionalShadowMaps;
-		//!\~english	The point lights shadow maps.
-		//!\~french		Les textures d'ombres pour les lumières omni-directionnelles.
+		ShadowMapUPtr m_directionalShadowMap;
 		ShadowMapArray m_pointShadowMaps;
-		//!\~english	The spot lights shadow maps.
-		//!\~french		Les textures d'ombres pour les lumières projecteurs.
 		ShadowMapArray m_spotShadowMaps;
-		//!\~english	The active shadow maps.
-		//!\~french		Les textures d'ombres actives.
+		ShadowMapLightTypeArray m_allShadowMaps;
 		ShadowMapLightTypeArray m_activeShadowMaps;
+		renderer::SemaphorePtr m_signalFinished;
+		renderer::RenderPassPtr m_bgRenderPass;
+		renderer::FrameBufferPtr m_bgFrameBuffer;
+		renderer::CommandBufferPtr m_bgCommandBuffer;
+		renderer::CommandBufferPtr m_cbgCommandBuffer;
+		renderer::RenderPassPtr m_debugRenderPass;
+		renderer::FrameBufferPtr m_debugFrameBuffer;
+		OnBackgroundChangedConnection m_onBgChanged;
+		OnBackgroundChangedConnection m_onCBgChanged;
 	};
 }
 

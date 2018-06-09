@@ -1,14 +1,18 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_GaussianBlur_H___
 #define ___C3D_GaussianBlur_H___
 
-#include "Render/Viewport.hpp"
-#include "Shader/Ubos/MatrixUbo.hpp"
+#include "RenderToTexture/RenderQuad.hpp"
 #include "Texture/TextureUnit.hpp"
 
+#include <Buffer/UniformBuffer.hpp>
+#include <RenderPass/FrameBuffer.hpp>
+#include <RenderPass/RenderPass.hpp>
+
 #include <Design/OwnedBy.hpp>
+#include <GlslShader.hpp>
 
 namespace castor3d
 {
@@ -29,80 +33,149 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine		The engine.
+		 *\param[in]	texture		The texture.
 		 *\param[in]	textureSize	The render area dimensions.
 		 *\param[in]	format		The pixel format for the textures to blur.
 		 *\param[in]	kernelSize	The kernel coefficients count.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
+		 *\param[in]	texture		La texture.
 		 *\param[in]	textureSize	Les dimensions de la zone de rendu.
 		 *\param[in]	format		Le format de pixel des textures à flouter.
 		 *\param[in]	kernelSize	Le nombre de coefficients du kernel.
 		 */
 		C3D_API GaussianBlur( Engine & engine
-			, castor::Size const & textureSize
-			, castor::PixelFormat format
+			, renderer::TextureView const & texture
+			, renderer::Extent2D const & textureSize
+			, renderer::Format format
 			, uint32_t kernelSize );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~GaussianBlur();
-		/**
-		 *\~english
 		 *\brief		Blurs given texture.
-		 *\param[in]	texture	The texture.
 		 *\~french
-		 *\brief		Applique le flou sur la texture donnée.
-		 *\param[in]	texture	La texture.
+		 *\brief		Applique le flou sur la texture.
 		 */
-		C3D_API void blur( TextureLayoutSPtr texture );
+		C3D_API renderer::Semaphore const & blur( renderer::Semaphore const & toWait );
 		/**
-		 *\~english
-		 *\brief		Blurs given texture using given intermediate texture.
-		 *\param[in]	texture			The texture to blur.
-		 *\param[in]	intermediate	The intermediate texture.
-		 *\~french
-		 *\brief		Applique le flou sur la texture donnée en utilisant la texture intermédiaire donnée.
-		 *\param[in]	texture			La texture à flouter.
-		 *\param[in]	intermediate	La texture indtermédiaire.
-		 */
-		C3D_API void blur( TextureLayoutSPtr texture
-			, TextureLayoutSPtr intermediate );
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		**/
+		/**@{*/
+		inline renderer::RenderPass const & getRenderPass()const
+		{
+			REQUIRE( m_renderPass );
+			return *m_renderPass;
+		}
+
+		inline renderer::FrameBuffer const & getBlurXFrameBuffer()const
+		{
+			REQUIRE( m_blurXFbo );
+			return *m_blurXFbo;
+		}
+
+		inline renderer::FrameBuffer const & getBlurYFrameBuffer()const
+		{
+			REQUIRE( m_blurYFbo );
+			return *m_blurYFbo;
+		}
+
+		inline renderer::CommandBuffer const & getBlurXCommandBuffer()const
+		{
+			return m_blurXQuad.getCommandBuffer();
+		}
+
+		inline renderer::CommandBuffer const & getBlurYCommandBuffer()const
+		{
+			return m_blurYQuad.getCommandBuffer();
+		}
+
+		inline glsl::Shader const & getBlurXVertexShader()const
+		{
+			return m_blurXVertexShader;
+		}
+
+		inline glsl::Shader const & getBlurXPixelShader()const
+		{
+			return m_blurXPixelShader;
+		}
+
+		inline glsl::Shader const & getBlurYVertexShader()const
+		{
+			return m_blurYVertexShader;
+		}
+
+		inline glsl::Shader const & getBlurYPixelShader()const
+		{
+			return m_blurYPixelShader;
+		}
+		/**@}*/
 
 	private:
-		void doBlur( TextureLayoutSPtr source
-			, TextureLayoutSPtr destination
-			, TextureAttachmentSPtr attach
-			, RenderPipeline & pipeline );
-		bool doInitialiseBlurXProgram( Engine & engine );
-		bool doInitialiseBlurYProgram( Engine & engine );
+		bool doInitialiseBlurXProgram();
+		bool doInitialiseBlurYProgram();
 
 	public:
-		static castor::String const Config;
-		static castor::String const Coefficients;
-		static castor::String const CoefficientsCount;
-		static castor::String const TextureSize;
-		static constexpr uint32_t MaxCoefficients{ 64u };
+		C3D_API static castor::String const Config;
+		C3D_API static castor::String const Coefficients;
+		C3D_API static castor::String const CoefficientsCount;
+		C3D_API static castor::String const TextureSize;
+		C3D_API static constexpr uint32_t MaxCoefficients{ 60u };
+
+		struct Configuration
+		{
+			castor::Point2f textureSize;
+			uint32_t blurCoeffsCount;
+			uint32_t dump; // to keep a 16 byte alignment.
+			std::array< castor::Point4f, GaussianBlur::MaxCoefficients / 4u > blurCoeffs; // We then allow for 60 coeffs max, to have a 256 bytes struct.
+		};
 
 	private:
-		castor::Size m_size;
-		MatrixUbo m_matrixUbo;
-		AttachmentPoint m_point;
-		TextureUnit m_colour;
-		FrameBufferSPtr m_fbo;
-		TextureAttachmentSPtr m_colourAttach;
+		class RenderQuad
+			: public castor3d::RenderQuad
+		{
+		public:
+			RenderQuad( RenderSystem & renderSystem
+				, renderer::TextureView const & src
+				, renderer::TextureView const & dst
+				, renderer::UniformBuffer< Configuration > const & blurUbo
+				, renderer::Format format
+				, renderer::Extent2D const & size );
+
+		private:
+			virtual void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
+				, renderer::DescriptorSet & descriptorSet );
+
+			renderer::TextureView const & m_srcView;
+			renderer::TextureView const & m_dstView;
+			renderer::UniformBuffer< Configuration > const & m_blurUbo;
+		};
+
+		renderer::TextureView const & m_source;
+		renderer::Extent2D m_size;
+		renderer::Format m_format;
+		TextureUnit m_intermediate;
 
 		std::vector< float > m_kernel;
-		castor3d::UniformBuffer m_blurUbo;
-		castor3d::Uniform1uiSPtr m_blurCoeffCount;
-		castor3d::Uniform1fSPtr m_blurCoeffs;
-		castor3d::Uniform2fSPtr m_blurSize;
-
-		castor3d::RenderPipelineUPtr m_blurXPipeline;
-		castor3d::RenderPipelineUPtr m_blurYPipeline;
+		renderer::CommandBufferPtr m_horizCommandBuffer;
+		renderer::CommandBufferPtr m_verticCommandBuffer;
+		renderer::SemaphorePtr m_horizSemaphore;
+		renderer::SemaphorePtr m_verticSemaphore;
+		renderer::UniformBufferPtr< Configuration > m_blurUbo;
+		renderer::RenderPassPtr m_renderPass;
+		renderer::FrameBufferPtr m_blurXFbo;
+		glsl::Shader m_blurXVertexShader;
+		glsl::Shader m_blurXPixelShader;
+		RenderQuad m_blurXQuad;
+		renderer::RenderPassPtr m_blurYPass;
+		renderer::FrameBufferPtr m_blurYFbo;
+		glsl::Shader m_blurYVertexShader;
+		glsl::Shader m_blurYPixelShader;
+		RenderQuad m_blurYQuad;
 
 
 	};

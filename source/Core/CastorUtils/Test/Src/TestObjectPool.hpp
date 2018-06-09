@@ -534,7 +534,6 @@ namespace Testing
 			std::cout << "  ****************************************" << std::endl << std::endl;
 			std::cout << "Total time : " << std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - time ).count() << "ms" << std::endl << std::endl;
 			std::cout << "********************************************************************************" << std::endl;
-			Clock::now();
 			std::cout << std::endl;
 		}
 
@@ -555,7 +554,6 @@ namespace Testing
 			std::cout << "  ****************************************" << std::endl << std::endl;
 			std::cout << "Total time : " << std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - time ).count() << "ms" << std::endl << std::endl;
 			std::cout << "********************************************************************************" << std::endl;
-			Clock::now();
 			std::cout << std::endl;
 		}
 	}
@@ -579,7 +577,6 @@ namespace Testing
 			std::cout << "  ****************************************" << std::endl << std::endl;
 			std::cout << "Total time : " << std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - time ).count() << "ms" << std::endl << std::endl;
 			std::cout << "********************************************************************************" << std::endl;
-			Clock::now();
 			std::cout << std::endl;
 		}
 
@@ -600,7 +597,6 @@ namespace Testing
 			std::cout << "  ****************************************" << std::endl << std::endl;
 			std::cout << "Total time : " << std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - time ).count() << "ms" << std::endl << std::endl;
 			std::cout << "********************************************************************************" << std::endl;
-			Clock::now();
 			std::cout << std::endl;
 		}
 	}
@@ -655,7 +651,6 @@ namespace Testing
 			std::cout << "  ****************************************" << std::endl << std::endl;
 			std::cout << "Total time : " << std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - time ).count() << "ms" << std::endl << std::endl;
 			std::cout << "********************************************************************************" << std::endl;
-			Clock::now();
 			std::cout << std::endl;
 		}
 
@@ -676,7 +671,6 @@ namespace Testing
 			std::cout << "  ****************************************" << std::endl << std::endl;
 			std::cout << "Total time : " << std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - time ).count() << "ms" << std::endl << std::endl;
 			std::cout << "********************************************************************************" << std::endl;
-			Clock::now();
 			std::cout << std::endl;
 		}
 	}
@@ -700,7 +694,6 @@ namespace Testing
 			std::cout << "  ****************************************" << std::endl << std::endl;
 			std::cout << "Total time : " << std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - time ).count() << "ms" << std::endl << std::endl;
 			std::cout << "********************************************************************************" << std::endl;
-			Clock::now();
 			std::cout << std::endl;
 		}
 
@@ -721,7 +714,6 @@ namespace Testing
 			std::cout << "  ****************************************" << std::endl << std::endl;
 			std::cout << "Total time : " << std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - time ).count() << "ms" << std::endl << std::endl;
 			std::cout << "********************************************************************************" << std::endl;
-			Clock::now();
 			std::cout << std::endl;
 		}
 	}
@@ -743,7 +735,6 @@ namespace Testing
 			std::cout << "  ****************************************" << std::endl << std::endl;
 			std::cout << "Total time : " << std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - time ).count() << "ms" << std::endl << std::endl;
 			std::cout << "********************************************************************************" << std::endl;
-			Clock::now();
 			std::cout << std::endl;
 		}
 
@@ -762,7 +753,6 @@ namespace Testing
 			std::cout << "  ****************************************" << std::endl << std::endl;
 			std::cout << "Total time : " << std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - time ).count() << "ms" << std::endl << std::endl;
 			std::cout << "********************************************************************************" << std::endl;
-			Clock::now();
 			std::cout << std::endl;
 		}
 	}

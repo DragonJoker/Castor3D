@@ -20,23 +20,24 @@ namespace castor3d
 	struct SkinningRenderNode
 		: public SubmeshRenderNode
 	{
-		C3D_API SkinningRenderNode( RenderPipeline & p_pipeline
-			, PassRenderNode && p_passNode
-			, ModelMatrixUbo & p_modelMatrixBuffer
-			, ModelUbo & p_modelBuffer
-			, GeometryBuffers & p_buffers
-			, SceneNode & p_sceneNode
-			, DataType & p_data
-			, InstanceType & p_instance
-			, AnimatedSkeleton & p_skeleton
-			, SkinningUbo & p_skinningUbo );
+		C3D_API SkinningRenderNode( RenderPipeline & pipeline
+			, PassRenderNode && passNode
+			, UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixBuffer
+			, UniformBufferOffset< ModelUbo::Configuration > modelBuffer
+			, UniformBufferOffset< PickingUbo::Configuration > pickingBuffer
+			, GeometryBuffers const & buffers
+			, SceneNode & sceneNode
+			, DataType & data
+			, InstanceType & instance
+			, AnimatedSkeleton & skeleton
+			, UniformBufferOffset < SkinningUbo::Configuration > skinningUbo );
 
 		//!\~english	The animated skeleton.
 		//!\~french		Le squelette animé.
-		AnimatedSkeleton & m_skeleton;
+		AnimatedSkeleton & skeleton;
 		//!\~english	The animation UBO.
 		//!\~french		L'UBO d'animation.
-		SkinningUbo & m_skinningUbo;
+		UniformBufferOffset< SkinningUbo::Configuration > skinningUbo;
 	};
 }
 

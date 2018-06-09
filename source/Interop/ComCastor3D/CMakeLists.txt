@@ -6,7 +6,7 @@ if ( MSVC )
 	if ( ATL_FOUND )
 		message( STATUS "+ Found ATL" )
 		set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-		set( ${PROJECT_NAME}_VERSION_MINOR 10 )
+		set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 		set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 		configure_file( 
@@ -15,9 +15,7 @@ if ( MSVC )
 			NEWLINE_STYLE LF
 		)
 
-		include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D )
-		include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils )
-		include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
+		include_directories( ${Castor3DIncludeDirs} )
 		include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/Src )
 		include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/Src/Castor3D )
 		include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/Src/CastorUtils )

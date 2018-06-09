@@ -1,9 +1,13 @@
 #include "DebugOverlays.hpp"
 
 #include "Engine.hpp"
+#include "Event/Frame/FunctorEvent.hpp"
 #include "Overlay/PanelOverlay.hpp"
 #include "Overlay/TextOverlay.hpp"
 #include "Render/RenderPassTimer.hpp"
+
+#include <Core/Device.hpp>
+#include <Miscellaneous/QueryPool.hpp>
 
 #include <iomanip>
 
@@ -105,7 +109,6 @@ namespace castor3d
 	//*********************************************************************************************
 
 	DebugOverlays::RenderPassOverlays::RenderPassOverlays( castor::String const & category
-		, uint32_t index
 		, OverlayCache & cache )
 		: m_cache{ cache }
 	{
@@ -139,7 +142,7 @@ namespace castor3d
 			, nullptr
 			, m_panel->getOverlay().shared_from_this() )->getTextOverlay();
 
-		m_panel->setPixelPosition( Position{ 330, int32_t( 40 * index ) } );
+		m_panel->setPixelPosition( Position{ 330, 0u } );
 		m_titlePanel->setPixelPosition( Position{ 0, 0 } );
 		m_titleText->setPixelPosition( Position{ 10, 0 } );
 		m_cpuName->setPixelPosition( Position{ 10, 20 } );
@@ -175,7 +178,7 @@ namespace castor3d
 		m_gpuValue->setMaterial( materials.find( cuT( "White" ) ) );
 
 		m_titleText->setVAlign( VAlign::eCenter );
-		m_titleText->setHAlign( HAlign::eCenter );
+		m_titleText->setHAlign( HAlign::eLeft );
 
 		m_panel->setVisible( true );
 		m_titlePanel->setVisible( true );
@@ -184,6 +187,11 @@ namespace castor3d
 		m_gpuName->setVisible( true );
 		m_cpuValue->setVisible( true );
 		m_gpuValue->setVisible( true );
+	}
+
+	void DebugOverlays::RenderPassOverlays::initialise( uint32_t index )
+	{
+		m_panel->setPixelPosition( Position{ 330, int32_t( 40 * index ) } );
 	}
 
 	DebugOverlays::RenderPassOverlays::~RenderPassOverlays()
@@ -210,9 +218,9 @@ namespace castor3d
 		auto it = std::find_if( m_timers.begin()
 			, m_timers.end()
 			, [&timer]( auto const & lookup )
-		{
-			return &lookup.get() == &timer;
-		} );
+			{
+				return &lookup.get() == &timer;
+			} );
 
 		if ( it != m_timers.end() )
 		{
@@ -234,9 +242,17 @@ namespace castor3d
 			timer.get().reset();
 		}
 
-		m_cpuValue->setCaption( StringStream{} << cpu );
-		m_gpuValue->setCaption( StringStream{} << gpu );
+		m_cpuValue->setCaption( makeStringStream() << cpu );
+		m_gpuValue->setCaption( makeStringStream() << gpu );
 		return gpu;
+	}
+
+	void DebugOverlays::RenderPassOverlays::retrieveGpuTime()
+	{
+		for ( auto & timer : m_timers )
+		{
+			timer.get().retrieveGpuTime();
+		}
 	}
 
 	void DebugOverlays::RenderPassOverlays::setVisible( bool visible )
@@ -276,10 +292,21 @@ namespace castor3d
 
 		m_externalTime = m_frameTimer.getElapsed();
 		m_renderInfo = RenderInfo{};
+
+		if ( m_dirty )
+		{
+			uint32_t index = 0u;
+
+			for ( auto & renderPass : m_renderPasses )
+			{
+				renderPass.second.initialise( index++ );
+			}
+		}
+
 		return m_renderInfo;
 	}
 
-	void DebugOverlays::registerTimer( RenderPassTimer & timer )
+	uint32_t DebugOverlays::registerTimer( RenderPassTimer & timer )
 	{
 		auto & cache = getEngine()->getOverlayCache();
 		auto fullName = getFullName( timer );
@@ -288,17 +315,18 @@ namespace castor3d
 		if ( it == m_renderPasses.end() )
 		{
 			it = m_renderPasses.emplace( fullName
-				, RenderPassOverlays{ fullName
-					, uint32_t( m_renderPasses.size() )
-					, cache } ).first;
+				, RenderPassOverlays{ fullName, cache } ).first;
 			it->second.setVisible( m_visible );
 		}
 
 		it->second.addTimer( std::ref( timer ) );
+		m_dirty = true;
+		return m_queriesCount++;
 	}
 
 	void DebugOverlays::unregisterTimer( RenderPassTimer & timer )
 	{
+		m_dirty = true;
 		auto fullName = getFullName( timer );
 		auto it = m_renderPasses.find( fullName );
 
@@ -356,6 +384,11 @@ namespace castor3d
 	{
 		if ( m_visible )
 		{
+			for ( auto & renderPass : m_renderPasses )
+			{
+				renderPass.second.retrieveGpuTime();
+			}
+
 			m_gpuTime += m_taskTimer.getElapsed();
 		}
 	}

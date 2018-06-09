@@ -1,20 +1,58 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_FilmGrainPostEffect___
 #define ___C3D_FilmGrainPostEffect___
 
-#include <Mesh/Buffer/BufferDeclaration.hpp>
 #include <PostEffect/PostEffect.hpp>
+#include <PostEffect/PostEffectSurface.hpp>
+#include <RenderToTexture/RenderQuad.hpp>
 #include <Texture/TextureUnit.hpp>
-#include <Render/Viewport.hpp>
-#include <Shader/Ubos/MatrixUbo.hpp>
 #include <Miscellaneous/PreciseTimer.hpp>
+
+#include <GlslShader.hpp>
 
 namespace film_grain
 {
-	static const uint32_t FILTER_COUNT = 4;
-	static const uint32_t KERNEL_SIZE = 3;
+	class RenderQuad
+		: public castor3d::RenderQuad
+	{
+	private:
+		struct Configuration
+		{
+			castor::Point2f m_pixelSize;
+			float m_noiseIntensity;
+			float m_exposure;
+			float m_time;
+		};
+
+	public:
+		explicit RenderQuad( castor3d::RenderSystem & renderSystem
+			, renderer::Extent2D const & size );
+		void update( castor::Nanoseconds const & time );
+
+		inline renderer::UniformBuffer< Configuration > const & getUbo()const
+		{
+			return *m_configUbo;
+		}
+
+		inline renderer::UniformBuffer< Configuration > & getUbo()
+		{
+			return *m_configUbo;
+		}
+
+	private:
+		void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
+			, renderer::DescriptorSet & descriptorSet )override;
+
+	private:
+		uint64_t m_time{ 0ull };
+		renderer::Extent2D m_size;
+		renderer::UniformBufferPtr< Configuration > m_configUbo;
+		castor3d::SamplerSPtr m_sampler;
+		renderer::TexturePtr m_noise;
+		renderer::TextureViewPtr m_noiseView;
+	};
 
 	class PostEffect
 		: public castor3d::PostEffect
@@ -28,44 +66,40 @@ namespace film_grain
 			, castor3d::RenderSystem & renderSystem
 			, castor3d::Parameters const & params );
 		/**
-		 *\copydoc		castor3d::PostEffect::Initialise
+		 *\copydoc		castor3d::PostEffect::update
 		 */
-		bool initialise() override;
+		void update( castor::Nanoseconds const & elapsedTime )override;
 		/**
-		 *\copydoc		castor3d::PostEffect::Cleanup
+		 *\copydoc		castor3d::PostEffect::accept
 		 */
-		void cleanup() override;
-		/**
-		 *\copydoc		castor3d::PostEffect::Apply
-		 */
-		bool apply( castor3d::FrameBuffer & framebuffer ) override;
+		void accept( castor3d::PipelineVisitorBase & visitor )override;
 
 	private:
+		/**
+		 *\copydoc		castor3d::PostEffect::doInitialise
+		 */
+		bool doInitialise( castor3d::RenderPassTimer const & timer )override;
+		/**
+		 *\copydoc		castor3d::PostEffect::doCleanup
+		 */
+		void doCleanup()override;
 		/**
 		 *\copydoc		castor3d::PostEffect::doWriteInto
 		 */
 		bool doWriteInto( castor::TextFile & file ) override;
-		void doGenerateNoiseTexture();
 
 	public:
 		static castor::String Type;
 		static castor::String Name;
 
 	private:
-		castor3d::PushUniform1sSPtr m_mapSrc;
-		castor3d::PushUniform1sSPtr m_mapNoise;
-		castor3d::SamplerSPtr m_sampler2D;
-		castor3d::SamplerSPtr m_sampler3D;
-		castor3d::RenderPipelineSPtr m_pipeline;
-		castor3d::MatrixUbo m_matrixUbo;
-		PostEffectSurface m_surface;
-		castor3d::TextureUnit m_noise;
-		castor3d::UniformBuffer m_configUbo;
-		castor3d::Uniform2f & m_pixelSize;
-		castor3d::Uniform1f & m_noiseIntensity;
-		castor3d::Uniform1f & m_exposure;
-		castor3d::Uniform1f & m_time;
+		castor3d::SamplerSPtr m_sampler;
+		castor3d::PostEffectSurface m_surface;
 		castor::PreciseTimer m_timer;
+		renderer::RenderPassPtr m_renderPass;
+		std::unique_ptr< RenderQuad > m_quad;
+		glsl::Shader m_vertexShader;
+		glsl::Shader m_pixelShader;
 	};
 }
 

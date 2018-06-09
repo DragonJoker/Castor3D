@@ -4,38 +4,63 @@ See LICENSE file in root folder
 #ifndef ___C3D_GrayScalePostEffect___
 #define ___C3D_GrayScalePostEffect___
 
-#include <Mesh/Buffer/BufferDeclaration.hpp>
 #include <PostEffect/PostEffect.hpp>
+#include <PostEffect/PostEffectSurface.hpp>
 #include <Texture/TextureUnit.hpp>
 #include <Render/Viewport.hpp>
 #include <Shader/Ubos/MatrixUbo.hpp>
 
+#include <GlslShader.hpp>
+
+#include <Design/ChangeTracked.hpp>
+
 namespace GrayScale
 {
-	static const uint32_t FILTER_COUNT = 4;
-	static const uint32_t KERNEL_SIZE = 3;
-
-	class GrayScalePostEffect
+	class PostEffect
 		: public castor3d::PostEffect
 	{
+	private:
+		class Quad
+			: public castor3d::RenderQuad
+		{
+		public:
+			Quad( castor3d::RenderSystem & renderSystem
+				, renderer::UniformBuffer< castor::Point3f > const & configUbo );
+
+		private:
+			void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
+				, renderer::DescriptorSet & descriptorSet );
+
+		private:
+			renderer::UniformBuffer< castor::Point3f > const & m_configUbo;
+		};
+
 	public:
-		GrayScalePostEffect( castor3d::RenderTarget & p_renderTarget, castor3d::RenderSystem & renderSystem, castor3d::Parameters const & p_param );
-		~GrayScalePostEffect();
-		static castor3d::PostEffectSPtr create( castor3d::RenderTarget & p_renderTarget, castor3d::RenderSystem & renderSystem, castor3d::Parameters const & p_param );
+		PostEffect( castor3d::RenderTarget & renderTarget
+			, castor3d::RenderSystem & renderSystem
+			, castor3d::Parameters const & params );
+		~PostEffect();
+		static castor3d::PostEffectSPtr create( castor3d::RenderTarget & renderTarget
+			, castor3d::RenderSystem & renderSystem
+			, castor3d::Parameters const & params );
 		/**
-		 *\copydoc		castor3d::PostEffect::Initialise
+		 *\copydoc		castor3d::PostEffect::update
 		 */
-		bool initialise() override;
+		void update( castor::Nanoseconds const & elapsedTime )override;
 		/**
-		 *\copydoc		castor3d::PostEffect::Cleanup
+		 *\copydoc		castor3d::PostEffect::accept
 		 */
-		void cleanup() override;
-		/**
-		 *\copydoc		castor3d::PostEffect::Apply
-		 */
-		bool apply( castor3d::FrameBuffer & p_framebuffer ) override;
+		void accept( castor3d::PipelineVisitorBase & visitor )override;
 
 	private:
+		/**
+		*\copydoc		castor3d::PostEffect::doInitialise
+		*/
+		bool doInitialise( castor3d::RenderPassTimer const & timer ) override;
+		/**
+		*\copydoc		castor3d::PostEffect::doCleanup
+		*/
+		void doCleanup() override;
 		/**
 		 *\copydoc		castor3d::PostEffect::doWriteInto
 		 */
@@ -46,10 +71,13 @@ namespace GrayScale
 		static castor::String Name;
 
 	private:
-		castor3d::SamplerSPtr m_sampler;
-		castor3d::RenderPipelineSPtr m_pipeline;
-		castor3d::MatrixUbo m_matrixUbo;
-		PostEffectSurface m_surface;
+		castor3d::PostEffectSurface m_surface;
+		renderer::RenderPassPtr m_renderPass;
+		renderer::UniformBufferPtr< castor::Point3f > m_configUbo;
+		std::unique_ptr< Quad > m_quad;
+		castor::ChangeTracked< castor::Point3f > m_factors{ castor::Point3f{ 0.2126f, 0.7152f, 0.0722f } };
+		glsl::Shader m_vertexShader;
+		glsl::Shader m_pixelShader;
 	};
 }
 

@@ -555,9 +555,7 @@ namespace castor
 		//! Tells if the thread must be stopped
 		std::atomic_bool m_stopped;
 		//! Event raised when the thread is ended
-		std::condition_variable m_threadEnded;
-		//! Mutex used to wait for the thread end
-		std::mutex m_mutexThreadEnded;
+		std::atomic_bool m_threadEnded;
 	};
 }
 

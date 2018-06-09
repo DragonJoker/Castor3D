@@ -4,3 +4,6 @@
 [submodule "dependencies"]
 	path = dependencies
 	url = https://github.com/DragonJoker/Castor3DDeps.git
+[submodule "source/external/RendererLib"]
+	path = source/external/RendererLib
+	url = https://github.com/DragonJoker/RendererLib.git

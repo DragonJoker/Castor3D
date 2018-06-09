@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_PHONG_DIVIDER___
@@ -33,7 +33,7 @@ namespace Phong
 	*/
 	struct Patch
 	{
-		Patch( Plane const & p_p1, Plane const & p_p2, Plane const & p_p3 );
+		Patch( Plane const & p1, Plane const & p2, Plane const & p3 );
 
 		Plane const & pi;
 		Plane const & pj;
@@ -60,7 +60,10 @@ namespace Phong
 		/**
 		 *\copydoc		castor3d::Subdivider::Subdivide
 		 */
-		void subdivide( castor3d::SubmeshSPtr p_submesh, int p_occurences, bool p_generateBuffers = true, bool p_threaded = false )override;
+		void subdivide( castor3d::SubmeshSPtr submesh
+			, int occurences
+			, bool generateBuffers
+			, bool threaded )override;
 
 	private:
 		/**
@@ -79,11 +82,11 @@ namespace Phong
 			, castor::real v0
 			, castor::real u2
 			, castor::real v2
-			, int p_occurences
-			, Patch const & p_patch );
-		castor3d::BufferElementGroupSPtr doComputePoint( castor::real u
+			, int occurences
+			, Patch const & patch );
+		castor3d::SubmeshVertex & doComputePoint( castor::real u
 			, castor::real v
-			, Patch const & p_patch );
+			, Patch const & patch );
 
 	public:
 		static castor::String const Name;

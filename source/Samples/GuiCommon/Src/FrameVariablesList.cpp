@@ -8,10 +8,6 @@
 #include <Engine.hpp>
 #include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
-#include <Shader/Uniform/Uniform.hpp>
-#include <Shader/UniformBuffer.hpp>
-#include <Shader/UniformBufferBinding.hpp>
-#include <Shader/ShaderProgram.hpp>
 
 #include <wx/imaglist.h>
 
@@ -38,12 +34,14 @@ namespace GuiCommon
 		eID_FRAME_VARIABLE_BUFFER_SEL,
 	}	eID;
 
-	FrameVariablesList::FrameVariablesList( PropertiesContainer * p_propertiesHolder
-		, wxWindow * p_parent
-		, wxPoint const & p_ptPos
-		, wxSize const & p_size )
-		: wxTreeCtrl( p_parent, wxID_ANY, p_ptPos, p_size, wxTR_DEFAULT_STYLE | wxTR_HIDE_ROOT | wxNO_BORDER )
-		, m_propertiesHolder( p_propertiesHolder )
+	FrameVariablesList::FrameVariablesList( Engine * engine
+		, PropertiesContainer * propertiesHolder
+		, wxWindow * parent
+		, wxPoint const & ptPos
+		, wxSize const & size )
+		: wxTreeCtrl( parent, wxID_ANY, ptPos, size, wxTR_DEFAULT_STYLE | wxTR_HIDE_ROOT | wxNO_BORDER )
+		, m_engine{ engine }
+		, m_propertiesHolder( propertiesHolder )
 	{
 		wxBusyCursor wait;
 		ImagesLoader::addBitmap( eBMP_FRAME_VARIABLE, frame_variable_xpm );
@@ -79,111 +77,76 @@ namespace GuiCommon
 
 	FrameVariablesList::~FrameVariablesList()
 	{
-		UnloadVariables();
+		unloadVariables();
 	}
 
-	void FrameVariablesList::LoadVariables( ShaderType p_type
-		, ShaderProgramSPtr p_program
-		, RenderPipeline & p_pipeline )
+	void FrameVariablesList::loadVariables( renderer::ShaderStageFlag stage
+		, std::vector< UniformBufferValues > & ubos )
 	{
-		m_program = p_program;
 		wxTreeItemId root = AddRoot( _( "Root" ) );
 
-		for ( auto & binding : p_pipeline.getBindings() )
+		for ( auto & ubo : ubos )
 		{
-			doAddBuffer( root, *binding.get().getOwner() );
-		}
-
-		if ( p_program->getObjectStatus( p_type ) != ShaderStatus::edontExist )
-		{
-			for ( auto variable : p_program->getUniforms( p_type ) )
+			if ( checkFlag( ubo.stages, stage ) )
 			{
-				doAddVariable( root, variable, p_type );
+				doAddBuffer( root, ubo );
 			}
 		}
 	}
 
-	void FrameVariablesList::UnloadVariables()
+	void FrameVariablesList::unloadVariables()
 	{
 		DeleteAllItems();
 	}
 
-	void FrameVariablesList::doAddBuffer( wxTreeItemId p_id
-		, UniformBuffer & p_buffer )
+	void FrameVariablesList::doAddBuffer( wxTreeItemId id
+		, UniformBufferValues & buffer )
 	{
-		wxTreeItemId id = AppendItem( p_id, p_buffer.getName()
+		wxTreeItemId bufferId = AppendItem( id, buffer.name
 			, eID_FRAME_VARIABLE_BUFFER
 			, eID_FRAME_VARIABLE_BUFFER_SEL
-			, new FrameVariableBufferTreeItemProperty( m_program.lock()->getRenderSystem()->getEngine()
+			, new FrameVariableBufferTreeItemProperty( m_engine
 				, m_propertiesHolder->IsEditable()
-				, p_buffer ) );
+				, buffer ) );
 
-		for ( auto variable : p_buffer )
+		for ( auto & uniform : buffer.uniforms )
 		{
-			doAddVariable( id, variable, p_buffer );
+			doAddVariable( bufferId, *uniform );
 		}
 	}
 
-	void FrameVariablesList::doAddVariable( wxTreeItemId p_id
-		, UniformSPtr p_variable
-		, UniformBuffer & p_buffer )
+	void FrameVariablesList::doAddVariable( wxTreeItemId id
+		, UniformValueBase & uniform )
 	{
-		wxString displayName = p_variable->getName();
-
-		if ( p_variable->getOccCount() > 1 )
-		{
-			displayName << wxT( "[" ) << p_variable->getOccCount() << wxT( "]" );
-		}
-
-		AppendItem( p_id
-			, displayName
+		AppendItem( id
+			, uniform.getName()
 			, eID_FRAME_VARIABLE
 			, eID_FRAME_VARIABLE_SEL
-			, new FrameVariableTreeItemProperty( m_propertiesHolder->IsEditable()
-				, p_variable
-				, p_buffer ) );
-	}
-
-	void FrameVariablesList::doAddVariable( wxTreeItemId p_id
-		, PushUniformSPtr p_variable
-		, ShaderType p_type )
-	{
-		wxString displayName = p_variable->getBaseUniform().getName();
-
-		if ( p_variable->getBaseUniform().getOccCount() > 1 )
-		{
-			displayName << wxT( "[" ) << p_variable->getBaseUniform().getOccCount() << wxT( "]" );
-		}
-
-		AppendItem( p_id
-			, displayName
-			, eID_FRAME_VARIABLE
-			, eID_FRAME_VARIABLE_SEL
-			, new FrameVariableTreeItemProperty( m_propertiesHolder->IsEditable()
-				, p_variable
-				, p_type ) );
+			, new FrameVariableTreeItemProperty( m_engine
+				, m_propertiesHolder->IsEditable()
+				, uniform ) );
 	}
 
 	BEGIN_EVENT_TABLE( FrameVariablesList, wxTreeCtrl )
-		EVT_CLOSE( FrameVariablesList::OnClose )
-		EVT_TREE_SEL_CHANGED( wxID_ANY, FrameVariablesList::OnSelectItem )
-		EVT_TREE_ITEM_RIGHT_CLICK( wxID_ANY, FrameVariablesList::OnMouseRButtonUp )
+		EVT_CLOSE( FrameVariablesList::onClose )
+		EVT_TREE_SEL_CHANGED( wxID_ANY, FrameVariablesList::onSelectItem )
+		EVT_TREE_ITEM_RIGHT_CLICK( wxID_ANY, FrameVariablesList::onMouseRButtonUp )
 	END_EVENT_TABLE()
 
-	void FrameVariablesList::OnClose( wxCloseEvent & p_event )
+	void FrameVariablesList::onClose( wxCloseEvent & p_event )
 	{
-		UnloadVariables();
+		unloadVariables();
 		p_event.Skip();
 	}
 
-	void FrameVariablesList::OnSelectItem( wxTreeEvent & p_event )
+	void FrameVariablesList::onSelectItem( wxTreeEvent & p_event )
 	{
 		TreeItemProperty * data = reinterpret_cast< TreeItemProperty * >( p_event.GetClientObject() );
 		m_propertiesHolder->setPropertyData( data );
 		p_event.Skip();
 	}
 
-	void FrameVariablesList::OnMouseRButtonUp( wxTreeEvent & p_event )
+	void FrameVariablesList::onMouseRButtonUp( wxTreeEvent & p_event )
 	{
 	}
 }

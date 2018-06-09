@@ -13,27 +13,37 @@ using namespace castor;
 
 SceneFileContext::SceneFileContext( Path const & path, SceneFileParser * parser )
 	: FileParserContext( path )
-	, pWindow()
-	, pSceneNode()
-	, pGeometry()
-	, pMesh()
-	, pSubmesh()
-	, pLight()
-	, pCamera()
-	, pMaterial()
+	, window()
+	, sceneNode()
+	, geometry()
+	, mesh()
+	, submesh()
+	, light()
+	, camera()
+	, material()
 	, pass()
 	, legacyPass()
-	, pTextureUnit()
-	, pShaderProgram()
-	, eShaderObject( ShaderType::eCount )
-	, pUniform()
-	, pOverlay( nullptr )
-	, iFace1( -1 )
-	, iFace2( -1 )
-	, eLightType( LightType::eCount )
-	, eMeshType( MeshType::eCount )
-	, ePrimitiveType( Topology::eCount )
-	, pViewport( nullptr )
+	, imageInfo
+	{
+		0u,
+		renderer::TextureType::e2D,
+		renderer::Format::eUndefined,
+		{ 1u, 1u, 1u },
+		0u,
+		1u,
+		renderer::SampleCountFlag::e1,
+		renderer::ImageTiling::eOptimal,
+		renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst
+	}
+	, textureUnit()
+	, shaderProgram()
+	, shaderStage( renderer::ShaderStageFlag( 0u ) )
+	, overlay( nullptr )
+	, face1( -1 )
+	, face2( -1 )
+	, lightType( LightType::eCount )
+	, primitiveType( renderer::PrimitiveTopology::eCount )
+	, viewport( nullptr )
 	, strName()
 	, strName2()
 	, uiUInt16( 0 )
@@ -49,39 +59,49 @@ SceneFileContext::SceneFileContext( Path const & path, SceneFileParser * parser 
 
 void SceneFileContext::initialise()
 {
-	pScene.reset();
+	scene.reset();
 	pass.reset ();
 	legacyPass.reset();
-	pOverlay = nullptr;
-	iFace1 = -1;
-	iFace2 = -1;
-	eLightType = LightType::eCount;
-	eMeshType = MeshType::eCount;
-	ePrimitiveType = Topology::eCount;
+	overlay = nullptr;
+	face1 = -1;
+	face2 = -1;
+	lightType = LightType::eCount;
+	primitiveType = renderer::PrimitiveTopology::eCount;
 	uiUInt16 = 0;
 	uiUInt32 = 0;
 	uiUInt64 = 0;
 	bBool1 = false;
 	bBool2 = false;
 	m_pGeneralParentMaterial = nullptr;
-	pViewport = nullptr;
-	eShaderObject = ShaderType::eCount;
-	pWindow.reset();
-	pSceneNode.reset();
-	pGeometry.reset();
-	pMesh.reset();
-	pSubmesh.reset();
-	pLight.reset();
-	pCamera.reset();
-	pMaterial.reset();
-	pTextureUnit.reset();
-	pShaderProgram.reset();
-	pUniform.reset();
-	pSampler.reset();
+	viewport = nullptr;
+	shaderStage = renderer::ShaderStageFlag( 0u );
+	window.reset();
+	sceneNode.reset();
+	geometry.reset();
+	mesh.reset();
+	submesh.reset();
+	light.reset();
+	camera.reset();
+	material.reset();
+	textureUnit.reset();
+	shaderProgram.reset();
+	sampler.reset();
 	strName.clear();
 	strName2.clear();
 	mapScenes.clear();
 	subsurfaceScattering.reset();
+	imageInfo =
+	{
+		0u,
+		renderer::TextureType::e2D,
+		renderer::Format::eUndefined,
+		{ 1u, 1u, 1u },
+		0u,
+		1u,
+		renderer::SampleCountFlag::e1,
+		renderer::ImageTiling::eOptimal,
+		renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst
+	};
 }
 
 //****************************************************************************************************
@@ -90,53 +110,40 @@ SceneFileParser::SceneFileParser( Engine & engine )
 	: OwnedBy< Engine >( engine )
 	, FileParser( uint32_t( CSCNSection::eRoot ) )
 {
-	m_mapBlendFactors[cuT( "zero" )] = uint32_t( BlendOperand::eZero );
-	m_mapBlendFactors[cuT( "one" )] = uint32_t( BlendOperand::eOne );
-	m_mapBlendFactors[cuT( "src_colour" )] = uint32_t( BlendOperand::eSrcColour );
-	m_mapBlendFactors[cuT( "inv_src_colour" )] = uint32_t( BlendOperand::eInvSrcColour );
-	m_mapBlendFactors[cuT( "dst_colour" )] = uint32_t( BlendOperand::eDstColour );
-	m_mapBlendFactors[cuT( "inv_dst_colour" )] = uint32_t( BlendOperand::eInvDstColour );
-	m_mapBlendFactors[cuT( "src_alpha" )] = uint32_t( BlendOperand::eSrcAlpha );
-	m_mapBlendFactors[cuT( "inv_src_alpha" )] = uint32_t( BlendOperand::eInvSrcAlpha );
-	m_mapBlendFactors[cuT( "dst_alpha" )] = uint32_t( BlendOperand::eDstAlpha );
-	m_mapBlendFactors[cuT( "inv_dst_alpha" )] = uint32_t( BlendOperand::eInvDstAlpha );
-	m_mapBlendFactors[cuT( "constant" )] = uint32_t( BlendOperand::eConstant );
-	m_mapBlendFactors[cuT( "inv_constant" )] = uint32_t( BlendOperand::eInvConstant );
-	m_mapBlendFactors[cuT( "src_alpha_sat" )] = uint32_t( BlendOperand::eSrcAlphaSaturate );
-	m_mapBlendFactors[cuT( "src1_colour" )] = uint32_t( BlendOperand::eSrc1Colour );
-	m_mapBlendFactors[cuT( "inv_src1_colour" )] = uint32_t( BlendOperand::eInvSrc1Colour );
-	m_mapBlendFactors[cuT( "src1_alpha" )] = uint32_t( BlendOperand::eSrc1Alpha );
-	m_mapBlendFactors[cuT( "inv_src1_alpha" )] = uint32_t( BlendOperand::eInvSrc1Alpha );
+	m_mapBlendFactors[cuT( "zero" )] = uint32_t( renderer::BlendFactor::eZero );
+	m_mapBlendFactors[cuT( "one" )] = uint32_t( renderer::BlendFactor::eOne );
+	m_mapBlendFactors[cuT( "src_colour" )] = uint32_t( renderer::BlendFactor::eSrcColour );
+	m_mapBlendFactors[cuT( "inv_src_colour" )] = uint32_t( renderer::BlendFactor::eInvSrcColour );
+	m_mapBlendFactors[cuT( "dst_colour" )] = uint32_t( renderer::BlendFactor::eDstColour );
+	m_mapBlendFactors[cuT( "inv_dst_colour" )] = uint32_t( renderer::BlendFactor::eInvDstColour );
+	m_mapBlendFactors[cuT( "src_alpha" )] = uint32_t( renderer::BlendFactor::eSrcAlpha );
+	m_mapBlendFactors[cuT( "inv_src_alpha" )] = uint32_t( renderer::BlendFactor::eInvSrcAlpha );
+	m_mapBlendFactors[cuT( "dst_alpha" )] = uint32_t( renderer::BlendFactor::eDstAlpha );
+	m_mapBlendFactors[cuT( "inv_dst_alpha" )] = uint32_t( renderer::BlendFactor::eInvDstAlpha );
+	m_mapBlendFactors[cuT( "src_alpha_sat" )] = uint32_t( renderer::BlendFactor::eSrcAlphaSaturate );
+	m_mapBlendFactors[cuT( "src1_colour" )] = uint32_t( renderer::BlendFactor::eSrc1Colour );
+	m_mapBlendFactors[cuT( "inv_src1_colour" )] = uint32_t( renderer::BlendFactor::eInvSrc1Colour );
+	m_mapBlendFactors[cuT( "src1_alpha" )] = uint32_t( renderer::BlendFactor::eSrc1Alpha );
+	m_mapBlendFactors[cuT( "inv_src1_alpha" )] = uint32_t( renderer::BlendFactor::eInvSrc1Alpha );
 
-	m_mapTypes[cuT( "1d" )] = uint32_t( TextureType::eOneDimension );
-	m_mapTypes[cuT( "2d" )] = uint32_t( TextureType::eTwoDimensions );
-	m_mapTypes[cuT( "3d" )] = uint32_t( TextureType::eThreeDimensions );
+	m_mapTypes[cuT( "1d" )] = uint32_t( renderer::TextureType::e1D );
+	m_mapTypes[cuT( "2d" )] = uint32_t( renderer::TextureType::e2D );
+	m_mapTypes[cuT( "3d" )] = uint32_t( renderer::TextureType::e3D );
 
-	m_mapComparisonFuncs[cuT( "always" )] = uint32_t( ComparisonFunc::eAlways );
-	m_mapComparisonFuncs[cuT( "less" )] = uint32_t( ComparisonFunc::eLess );
-	m_mapComparisonFuncs[cuT( "less_or_equal" )] = uint32_t( ComparisonFunc::eLEqual );
-	m_mapComparisonFuncs[cuT( "equal" )] = uint32_t( ComparisonFunc::eEqual );
-	m_mapComparisonFuncs[cuT( "not_equal" )] = uint32_t( ComparisonFunc::eNEqual );
-	m_mapComparisonFuncs[cuT( "greater_or_equal" )] = uint32_t( ComparisonFunc::eGEqual );
-	m_mapComparisonFuncs[cuT( "greater" )] = uint32_t( ComparisonFunc::eGreater );
-	m_mapComparisonFuncs[cuT( "never" )] = uint32_t( ComparisonFunc::eNever );
+	m_mapComparisonFuncs[cuT( "always" )] = uint32_t( renderer::CompareOp::eAlways );
+	m_mapComparisonFuncs[cuT( "less" )] = uint32_t( renderer::CompareOp::eLess );
+	m_mapComparisonFuncs[cuT( "less_or_equal" )] = uint32_t( renderer::CompareOp::eLessEqual );
+	m_mapComparisonFuncs[cuT( "equal" )] = uint32_t( renderer::CompareOp::eEqual );
+	m_mapComparisonFuncs[cuT( "not_equal" )] = uint32_t( renderer::CompareOp::eNotEqual );
+	m_mapComparisonFuncs[cuT( "greater_or_equal" )] = uint32_t( renderer::CompareOp::eGreaterEqual );
+	m_mapComparisonFuncs[cuT( "greater" )] = uint32_t( renderer::CompareOp::eGreater );
+	m_mapComparisonFuncs[cuT( "never" )] = uint32_t( renderer::CompareOp::eNever );
 
-	m_mapTextureArguments[cuT( "texture" )] = uint32_t( BlendSource::eTexture );
-	m_mapTextureArguments[cuT( "texture0" )] = uint32_t( BlendSource::eTexture0 );
-	m_mapTextureArguments[cuT( "texture1" )] = uint32_t( BlendSource::eTexture1 );
-	m_mapTextureArguments[cuT( "texture2" )] = uint32_t( BlendSource::eTexture2 );
-	m_mapTextureArguments[cuT( "texture3" )] = uint32_t( BlendSource::eTexture3 );
-	m_mapTextureArguments[cuT( "constant" )] = uint32_t( BlendSource::eConstant );
-	m_mapTextureArguments[cuT( "diffuse" )] = uint32_t( BlendSource::eDiffuse );
-	m_mapTextureArguments[cuT( "previous" )] = uint32_t( BlendSource::ePrevious );
-
-	m_mapTextureBlendModes[cuT( "none" )] = uint32_t( TextureBlendFunc::eNoBlend );
-	m_mapTextureBlendModes[cuT( "first_arg" )] = uint32_t( TextureBlendFunc::eFirstArg );
-	m_mapTextureBlendModes[cuT( "add" )] = uint32_t( TextureBlendFunc::eAdd );
-	m_mapTextureBlendModes[cuT( "add_signed" )] = uint32_t( TextureBlendFunc::eAddSigned );
-	m_mapTextureBlendModes[cuT( "modulate" )] = uint32_t( TextureBlendFunc::eModulate );
-	m_mapTextureBlendModes[cuT( "interpolate" )] = uint32_t( TextureBlendFunc::eInterpolate );
-	m_mapTextureBlendModes[cuT( "subtract" )] = uint32_t( TextureBlendFunc::eSubtract );
+	m_mapTextureBlendModes[cuT( "add" )] = uint32_t( renderer::BlendOp::eAdd );
+	m_mapTextureBlendModes[cuT( "min" )] = uint32_t( renderer::BlendOp::eMin );
+	m_mapTextureBlendModes[cuT( "max" )] = uint32_t( renderer::BlendOp::eMax );
+	m_mapTextureBlendModes[cuT( "subtract" )] = uint32_t( renderer::BlendOp::eSubtract );
+	m_mapTextureBlendModes[cuT( "rev_subtract" )] = uint32_t( renderer::BlendOp::eReverseSubtract );
 
 	m_mapTextureChannels[cuT( "diffuse" )] = uint32_t( TextureChannel::eDiffuse );
 	m_mapTextureChannels[cuT( "normal" )] = uint32_t( TextureChannel::eNormal );
@@ -157,126 +164,66 @@ SceneFileParser::SceneFileParser( Engine & engine )
 	m_mapLightTypes[cuT( "spot" )] = uint32_t( LightType::eSpot );
 	m_mapLightTypes[cuT( "directional" )] = uint32_t( LightType::eDirectional );
 
-	m_mapPrimitiveTypes[cuT( "points" )] = uint32_t( Topology::ePoints );
-	m_mapPrimitiveTypes[cuT( "lines" )] = uint32_t( Topology::eLines );
-	m_mapPrimitiveTypes[cuT( "line_loop" )] = uint32_t( Topology::eLineLoop );
-	m_mapPrimitiveTypes[cuT( "line_strip" )] = uint32_t( Topology::eLineStrip );
-	m_mapPrimitiveTypes[cuT( "triangles" )] = uint32_t( Topology::eTriangles );
-	m_mapPrimitiveTypes[cuT( "triangle_strip" )] = uint32_t( Topology::eTriangleStrips );
-	m_mapPrimitiveTypes[cuT( "triangle_fan" )] = uint32_t( Topology::eTriangleFan );
+	m_mapPrimitiveTypes[cuT( "points" )] = uint32_t( renderer::PrimitiveTopology::ePointList );
+	m_mapPrimitiveTypes[cuT( "lines" )] = uint32_t( renderer::PrimitiveTopology::eLineList );
+	m_mapPrimitiveTypes[cuT( "lines_adj" )] = uint32_t( renderer::PrimitiveTopology::eLineListWithAdjacency );
+	m_mapPrimitiveTypes[cuT( "line_strip" )] = uint32_t( renderer::PrimitiveTopology::eLineStrip );
+	m_mapPrimitiveTypes[cuT( "line_strip_adj" )] = uint32_t( renderer::PrimitiveTopology::eLineStripWithAdjacency );
+	m_mapPrimitiveTypes[cuT( "triangles" )] = uint32_t( renderer::PrimitiveTopology::eTriangleList );
+	m_mapPrimitiveTypes[cuT( "triangles_adj" )] = uint32_t( renderer::PrimitiveTopology::eTriangleListWithAdjacency );
+	m_mapPrimitiveTypes[cuT( "triangle_strip" )] = uint32_t( renderer::PrimitiveTopology::eTriangleStrip );
+	m_mapPrimitiveTypes[cuT( "triangle_strip_adj" )] = uint32_t( renderer::PrimitiveTopology::eTriangleStripWithAdjacency );
+	m_mapPrimitiveTypes[cuT( "triangle_fan" )] = uint32_t( renderer::PrimitiveTopology::eTriangleFan );
 
-	m_mapPrimitiveOutputTypes[cuT( "points" )] = uint32_t( Topology::ePoints );
-	m_mapPrimitiveOutputTypes[cuT( "line_strip" )] = uint32_t( Topology::eLineStrip );
-	m_mapPrimitiveOutputTypes[cuT( "triangle_strip" )] = uint32_t( Topology::eTriangleStrips );
-
-	m_mapModels[cuT( "sm_1" )] = uint32_t( ShaderModel::eModel1 );
-	m_mapModels[cuT( "sm_2" )] = uint32_t( ShaderModel::eModel2 );
-	m_mapModels[cuT( "sm_3" )] = uint32_t( ShaderModel::eModel3 );
-	m_mapModels[cuT( "sm_4" )] = uint32_t( ShaderModel::eModel4 );
-	m_mapModels[cuT( "sm_5" )] = uint32_t( ShaderModel::eModel5 );
+	m_mapPrimitiveOutputTypes[cuT( "points" )] = uint32_t( renderer::PrimitiveTopology::ePointList );
+	m_mapPrimitiveOutputTypes[cuT( "line_strip" )] = uint32_t( renderer::PrimitiveTopology::eLineStrip );
+	m_mapPrimitiveOutputTypes[cuT( "triangle_strip" )] = uint32_t( renderer::PrimitiveTopology::eTriangleStrip );
 
 	m_mapViewportModes[cuT( "ortho" )] = uint32_t( ViewportType::eOrtho );
 	m_mapViewportModes[cuT( "perspective" )] = uint32_t( ViewportType::ePerspective );
 	m_mapViewportModes[cuT( "frustum" )] = uint32_t( ViewportType::eFrustum );
 
-	m_mapInterpolationModes[cuT( "nearest" )] = uint32_t( InterpolationMode::eNearest );
-	m_mapInterpolationModes[cuT( "linear" )] = uint32_t( InterpolationMode::eLinear );
+	m_mapFilters[cuT( "nearest" )] = uint32_t( renderer::Filter::eNearest );
+	m_mapFilters[cuT( "linear" )] = uint32_t( renderer::Filter::eLinear );
 
-	m_mapWrappingModes[cuT( "repeat" )] = uint32_t( WrapMode::eRepeat );
-	m_mapWrappingModes[cuT( "mirrored_repeat" )] = uint32_t( WrapMode::eMirroredRepeat );
-	m_mapWrappingModes[cuT( "clamp_to_border" )] = uint32_t( WrapMode::eClampToBorder );
-	m_mapWrappingModes[cuT( "clamp_to_edge" )] = uint32_t( WrapMode::eClampToEdge );
+	m_mapMipmapModes[cuT( "none" )] = uint32_t( renderer::MipmapMode::eNone );
+	m_mapMipmapModes[cuT( "nearest" )] = uint32_t( renderer::MipmapMode::eNearest );
+	m_mapMipmapModes[cuT( "linear" )] = uint32_t( renderer::MipmapMode::eLinear );
 
-	m_mapShaderTypes[cuT( "vertex" )] = uint32_t( ShaderTypeFlag::eVertex );
-	m_mapShaderTypes[cuT( "hull" )] = uint32_t( ShaderTypeFlag::eHull );
-	m_mapShaderTypes[cuT( "domain" )] = uint32_t( ShaderTypeFlag::eDomain );
-	m_mapShaderTypes[cuT( "geometry" )] = uint32_t( ShaderTypeFlag::eGeometry );
-	m_mapShaderTypes[cuT( "pixel" )] = uint32_t( ShaderTypeFlag::ePixel );
-	m_mapShaderTypes[cuT( "compute" )] = uint32_t( ShaderTypeFlag::eCompute );
+	m_mapWrappingModes[cuT( "repeat" )] = uint32_t( renderer::WrapMode::eRepeat );
+	m_mapWrappingModes[cuT( "mirrored_repeat" )] = uint32_t( renderer::WrapMode::eMirroredRepeat );
+	m_mapWrappingModes[cuT( "clamp_to_border" )] = uint32_t( renderer::WrapMode::eClampToBorder );
+	m_mapWrappingModes[cuT( "clamp_to_edge" )] = uint32_t( renderer::WrapMode::eClampToEdge );
 
-	m_mapVariableTypes[cuT( "bool" )] = uint32_t( UniformType::eBool );
-	m_mapVariableTypes[cuT( "int" )] = uint32_t( UniformType::eInt );
-	m_mapVariableTypes[cuT( "uint" )] = uint32_t( UniformType::eUInt );
-	m_mapVariableTypes[cuT( "float" )] = uint32_t( UniformType::eFloat );
-	m_mapVariableTypes[cuT( "double" )] = uint32_t( UniformType::eDouble );
-	m_mapVariableTypes[cuT( "sampler" )] = uint32_t( UniformType::eSampler );
-	m_mapVariableTypes[cuT( "vec2b" )] = uint32_t( UniformType::eVec2b );
-	m_mapVariableTypes[cuT( "vec3b" )] = uint32_t( UniformType::eVec3b );
-	m_mapVariableTypes[cuT( "vec4b" )] = uint32_t( UniformType::eVec4b );
-	m_mapVariableTypes[cuT( "vec2i" )] = uint32_t( UniformType::eVec2i );
-	m_mapVariableTypes[cuT( "vec3i" )] = uint32_t( UniformType::eVec3i );
-	m_mapVariableTypes[cuT( "vec4i" )] = uint32_t( UniformType::eVec4i );
-	m_mapVariableTypes[cuT( "vec2ui" )] = uint32_t( UniformType::eVec2ui );
-	m_mapVariableTypes[cuT( "vec3ui" )] = uint32_t( UniformType::eVec3ui );
-	m_mapVariableTypes[cuT( "vec4ui" )] = uint32_t( UniformType::eVec4ui );
-	m_mapVariableTypes[cuT( "vec2f" )] = uint32_t( UniformType::eVec2f );
-	m_mapVariableTypes[cuT( "vec3f" )] = uint32_t( UniformType::eVec3f );
-	m_mapVariableTypes[cuT( "vec4f" )] = uint32_t( UniformType::eVec4f );
-	m_mapVariableTypes[cuT( "vec2d" )] = uint32_t( UniformType::eVec2d );
-	m_mapVariableTypes[cuT( "vec3d" )] = uint32_t( UniformType::eVec3d );
-	m_mapVariableTypes[cuT( "vec4d" )] = uint32_t( UniformType::eVec4d );
-	m_mapVariableTypes[cuT( "mat2x2b" )] = uint32_t( UniformType::eMat2x2b );
-	m_mapVariableTypes[cuT( "mat2x3b" )] = uint32_t( UniformType::eMat2x3b );
-	m_mapVariableTypes[cuT( "mat2x4b" )] = uint32_t( UniformType::eMat2x4b );
-	m_mapVariableTypes[cuT( "mat3x2b" )] = uint32_t( UniformType::eMat3x2b );
-	m_mapVariableTypes[cuT( "mat3x3b" )] = uint32_t( UniformType::eMat3x3b );
-	m_mapVariableTypes[cuT( "mat3x4b" )] = uint32_t( UniformType::eMat3x4b );
-	m_mapVariableTypes[cuT( "mat4x2b" )] = uint32_t( UniformType::eMat4x2b );
-	m_mapVariableTypes[cuT( "mat4x3b" )] = uint32_t( UniformType::eMat4x3b );
-	m_mapVariableTypes[cuT( "mat4x4b" )] = uint32_t( UniformType::eMat4x4b );
-	m_mapVariableTypes[cuT( "mat2x2i" )] = uint32_t( UniformType::eMat2x2i );
-	m_mapVariableTypes[cuT( "mat2x3i" )] = uint32_t( UniformType::eMat2x3i );
-	m_mapVariableTypes[cuT( "mat2x4i" )] = uint32_t( UniformType::eMat2x4i );
-	m_mapVariableTypes[cuT( "mat3x2i" )] = uint32_t( UniformType::eMat3x2i );
-	m_mapVariableTypes[cuT( "mat3x3i" )] = uint32_t( UniformType::eMat3x3i );
-	m_mapVariableTypes[cuT( "mat3x4i" )] = uint32_t( UniformType::eMat3x4i );
-	m_mapVariableTypes[cuT( "mat4x2i" )] = uint32_t( UniformType::eMat4x2i );
-	m_mapVariableTypes[cuT( "mat4x3i" )] = uint32_t( UniformType::eMat4x3i );
-	m_mapVariableTypes[cuT( "mat4x4i" )] = uint32_t( UniformType::eMat4x4i );
-	m_mapVariableTypes[cuT( "mat2x2ui" )] = uint32_t( UniformType::eMat2x2ui );
-	m_mapVariableTypes[cuT( "mat2x3ui" )] = uint32_t( UniformType::eMat2x3ui );
-	m_mapVariableTypes[cuT( "mat2x4ui" )] = uint32_t( UniformType::eMat2x4ui );
-	m_mapVariableTypes[cuT( "mat3x2ui" )] = uint32_t( UniformType::eMat3x2ui );
-	m_mapVariableTypes[cuT( "mat3x3ui" )] = uint32_t( UniformType::eMat3x3ui );
-	m_mapVariableTypes[cuT( "mat3x4ui" )] = uint32_t( UniformType::eMat3x4ui );
-	m_mapVariableTypes[cuT( "mat4x2ui" )] = uint32_t( UniformType::eMat4x2ui );
-	m_mapVariableTypes[cuT( "mat4x3ui" )] = uint32_t( UniformType::eMat4x3ui );
-	m_mapVariableTypes[cuT( "mat4x4ui" )] = uint32_t( UniformType::eMat4x4ui );
-	m_mapVariableTypes[cuT( "mat2x2f" )] = uint32_t( UniformType::eMat2x2f );
-	m_mapVariableTypes[cuT( "mat2x3f" )] = uint32_t( UniformType::eMat2x3f );
-	m_mapVariableTypes[cuT( "mat2x4f" )] = uint32_t( UniformType::eMat2x4f );
-	m_mapVariableTypes[cuT( "mat3x2f" )] = uint32_t( UniformType::eMat3x2f );
-	m_mapVariableTypes[cuT( "mat3x3f" )] = uint32_t( UniformType::eMat3x3f );
-	m_mapVariableTypes[cuT( "mat3x4f" )] = uint32_t( UniformType::eMat3x4f );
-	m_mapVariableTypes[cuT( "mat4x2f" )] = uint32_t( UniformType::eMat4x2f );
-	m_mapVariableTypes[cuT( "mat4x3f" )] = uint32_t( UniformType::eMat4x3f );
-	m_mapVariableTypes[cuT( "mat4x4f" )] = uint32_t( UniformType::eMat4x4f );
-	m_mapVariableTypes[cuT( "mat2x2d" )] = uint32_t( UniformType::eMat2x2d );
-	m_mapVariableTypes[cuT( "mat2x3d" )] = uint32_t( UniformType::eMat2x3d );
-	m_mapVariableTypes[cuT( "mat2x4d" )] = uint32_t( UniformType::eMat2x4d );
-	m_mapVariableTypes[cuT( "mat3x2d" )] = uint32_t( UniformType::eMat3x2d );
-	m_mapVariableTypes[cuT( "mat3x3d" )] = uint32_t( UniformType::eMat3x3d );
-	m_mapVariableTypes[cuT( "mat3x4d" )] = uint32_t( UniformType::eMat3x4d );
-	m_mapVariableTypes[cuT( "mat4x2d" )] = uint32_t( UniformType::eMat4x2d );
-	m_mapVariableTypes[cuT( "mat4x3d" )] = uint32_t( UniformType::eMat4x3d );
-	m_mapVariableTypes[cuT( "mat4x4d" )] = uint32_t( UniformType::eMat4x4d );
+	m_mapBorderColours[cuT( "float_transparent_black" )] = uint32_t( renderer::BorderColour::eFloatTransparentBlack );
+	m_mapBorderColours[cuT( "int_transparent_black" )] = uint32_t( renderer::BorderColour::eIntTransparentBlack );
+	m_mapBorderColours[cuT( "float_opaque_black" )] = uint32_t( renderer::BorderColour::eFloatOpaqueBlack );
+	m_mapBorderColours[cuT( "int_opaque_black" )] = uint32_t( renderer::BorderColour::eIntOpaqueBlack );
+	m_mapBorderColours[cuT( "float_opaque_white" )] = uint32_t( renderer::BorderColour::eFloatOpaqueWhite );
+	m_mapBorderColours[cuT( "int_opaque_white" )] = uint32_t( renderer::BorderColour::eIntOpaqueWhite );
 
-	m_mapElementTypes[cuT( "int" )] = uint32_t( ElementType::eInt );
-	m_mapElementTypes[cuT( "uint" )] = uint32_t( ElementType::eUInt );
-	m_mapElementTypes[cuT( "float" )] = uint32_t( ElementType::eFloat );
-	m_mapElementTypes[cuT( "colour" )] = uint32_t( ElementType::eColour );
-	m_mapElementTypes[cuT( "vec2i" )] = uint32_t( ElementType::eIVec2 );
-	m_mapElementTypes[cuT( "vec3i" )] = uint32_t( ElementType::eIVec3 );
-	m_mapElementTypes[cuT( "vec4i" )] = uint32_t( ElementType::eIVec4 );
-	m_mapElementTypes[cuT( "vec2ui" )] = uint32_t( ElementType::eUIVec2 );
-	m_mapElementTypes[cuT( "vec3ui" )] = uint32_t( ElementType::eUIVec3 );
-	m_mapElementTypes[cuT( "vec4ui" )] = uint32_t( ElementType::eUIVec4 );
-	m_mapElementTypes[cuT( "vec2f" )] = uint32_t( ElementType::eVec2 );
-	m_mapElementTypes[cuT( "vec3f" )] = uint32_t( ElementType::eVec3 );
-	m_mapElementTypes[cuT( "vec4f" )] = uint32_t( ElementType::eVec4 );
-	m_mapElementTypes[cuT( "mat2f" )] = uint32_t( ElementType::eMat2 );
-	m_mapElementTypes[cuT( "mat3f" )] = uint32_t( ElementType::eMat3 );
-	m_mapElementTypes[cuT( "mat4f" )] = uint32_t( ElementType::eMat4 );
+	m_mapShaderTypes[cuT( "vertex" )] = uint32_t( renderer::ShaderStageFlag::eVertex );
+	m_mapShaderTypes[cuT( "tess_control" )] = uint32_t( renderer::ShaderStageFlag::eTessellationControl );
+	m_mapShaderTypes[cuT( "tess_eval" )] = uint32_t( renderer::ShaderStageFlag::eTessellationEvaluation );
+	m_mapShaderTypes[cuT( "geometry" )] = uint32_t( renderer::ShaderStageFlag::eGeometry );
+	m_mapShaderTypes[cuT( "fragment" )] = uint32_t( renderer::ShaderStageFlag::eFragment );
+	m_mapShaderTypes[cuT( "compute" )] = uint32_t( renderer::ShaderStageFlag::eCompute );
+
+	m_mapVariableTypes[cuT( "int" )] = uint32_t( ParticleFormat::eInt );
+	m_mapVariableTypes[cuT( "uint" )] = uint32_t( ParticleFormat::eUInt );
+	m_mapVariableTypes[cuT( "float" )] = uint32_t( ParticleFormat::eFloat );
+	m_mapVariableTypes[cuT( "vec2i" )] = uint32_t( ParticleFormat::eVec2i );
+	m_mapVariableTypes[cuT( "vec3i" )] = uint32_t( ParticleFormat::eVec3i );
+	m_mapVariableTypes[cuT( "vec4i" )] = uint32_t( ParticleFormat::eVec4i );
+	m_mapVariableTypes[cuT( "vec2ui" )] = uint32_t( ParticleFormat::eVec2ui );
+	m_mapVariableTypes[cuT( "vec3ui" )] = uint32_t( ParticleFormat::eVec3ui );
+	m_mapVariableTypes[cuT( "vec4ui" )] = uint32_t( ParticleFormat::eVec4ui );
+	m_mapVariableTypes[cuT( "vec2f" )] = uint32_t( ParticleFormat::eVec2f );
+	m_mapVariableTypes[cuT( "vec3f" )] = uint32_t( ParticleFormat::eVec3f );
+	m_mapVariableTypes[cuT( "vec4f" )] = uint32_t( ParticleFormat::eVec4f );
+	m_mapVariableTypes[cuT( "mat2x2f" )] = uint32_t( ParticleFormat::eMat2f );
+	m_mapVariableTypes[cuT( "mat3x3f" )] = uint32_t( ParticleFormat::eMat3f );
+	m_mapVariableTypes[cuT( "mat4x4f" )] = uint32_t( ParticleFormat::eMat4f );
 
 	m_mapMovables[cuT( "camera" )] = uint32_t( MovableType::eCamera );
 	m_mapMovables[cuT( "light" )] = uint32_t( MovableType::eLight );
@@ -317,8 +264,8 @@ SceneFileParser::SceneFileParser( Engine & engine )
 	m_fogTypes[cuT( "exponential" )] = uint32_t( FogType::eExponential );
 	m_fogTypes[cuT( "squared_exponential" )] = uint32_t( FogType::eSquaredExponential );
 
-	m_mapComparisonModes[cuT( "none" )] = uint32_t( ComparisonMode::eNone );
-	m_mapComparisonModes[cuT( "ref_to_texture" )] = uint32_t( ComparisonMode::eRefToTexture );
+	m_mapComparisonModes[cuT( "none" )] = uint32_t( false );
+	m_mapComparisonModes[cuT( "ref_to_texture" )] = uint32_t( true );
 
 	m_mapBillboardTypes[cuT( "cylindrical" )] = uint32_t( BillboardType::eCylindrical );
 	m_mapBillboardTypes[cuT( "spherical" )] = uint32_t( BillboardType::eSpherical );
@@ -329,6 +276,10 @@ SceneFileParser::SceneFileParser( Engine & engine )
 	m_mapMaterialTypes[cuT( "legacy" )] = uint32_t( MaterialType::eLegacy );
 	m_mapMaterialTypes[cuT( "pbr_metallic_roughness" )] = uint32_t( MaterialType::ePbrMetallicRoughness );
 	m_mapMaterialTypes[cuT( "pbr_specular_glossiness" )] = uint32_t( MaterialType::ePbrSpecularGlossiness );
+
+	m_mapShadowFilters[cuT( "raw" )] = uint32_t( ShadowType::eRaw );
+	m_mapShadowFilters[cuT( "pcf" )] = uint32_t( ShadowType::ePCF );
+	m_mapShadowFilters[cuT( "variance" )] = uint32_t( ShadowType::eVariance );
 }
 
 SceneFileParser::~SceneFileParser()
@@ -407,7 +358,6 @@ void SceneFileParser::doInitialiseParser( Path const & path )
 		m_context = context;
 	}
 
-	addParser( uint32_t( CSCNSection::eRoot ), cuT( "mtl_file" ), parserRootMtlFile, { makeParameter< ParameterType::ePath >() } );
 	addParser( uint32_t( CSCNSection::eRoot ), cuT( "scene" ), parserRootScene, { makeParameter< ParameterType::eName >() } );
 	addParser( uint32_t( CSCNSection::eRoot ), cuT( "font" ), parserRootFont, { makeParameter< ParameterType::eName >() } );
 	addParser( uint32_t( CSCNSection::eRoot ), cuT( "material" ), parserRootMaterial, { makeParameter< ParameterType::eName >() } );
@@ -431,18 +381,20 @@ void SceneFileParser::doInitialiseParser( Path const & path )
 	addParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "postfx" ), parserRenderTargetPostEffect, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eText >() } );
 	addParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "tone_mapping" ), parserRenderTargetToneMapping, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eText >() } );
 	addParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "ssao" ), parserRenderTargetSsao );
+	addParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "hdr_config" ), parserRenderTargetHdrConfig );
 	addParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "}" ), parserRenderTargetEnd );
 
-	addParser( uint32_t( CSCNSection::eSampler ), cuT( "min_filter" ), parserSamplerMinFilter, { makeParameter< ParameterType::eCheckedText >( m_mapInterpolationModes ) } );
-	addParser( uint32_t( CSCNSection::eSampler ), cuT( "mag_filter" ), parserSamplerMagFilter, { makeParameter< ParameterType::eCheckedText >( m_mapInterpolationModes ) } );
-	addParser( uint32_t( CSCNSection::eSampler ), cuT( "mip_filter" ), parserSamplerMipFilter, { makeParameter< ParameterType::eCheckedText >( m_mapInterpolationModes ) } );
+	addParser( uint32_t( CSCNSection::eSampler ), cuT( "min_filter" ), parserSamplerMinFilter, { makeParameter< ParameterType::eCheckedText >( m_mapFilters ) } );
+	addParser( uint32_t( CSCNSection::eSampler ), cuT( "mag_filter" ), parserSamplerMagFilter, { makeParameter< ParameterType::eCheckedText >( m_mapFilters ) } );
+	addParser( uint32_t( CSCNSection::eSampler ), cuT( "mip_filter" ), parserSamplerMipFilter, { makeParameter< ParameterType::eCheckedText >( m_mapMipmapModes ) } );
 	addParser( uint32_t( CSCNSection::eSampler ), cuT( "min_lod" ), parserSamplerMinLod, { makeParameter< ParameterType::eFloat >() } );
 	addParser( uint32_t( CSCNSection::eSampler ), cuT( "max_lod" ), parserSamplerMaxLod, { makeParameter< ParameterType::eFloat >() } );
 	addParser( uint32_t( CSCNSection::eSampler ), cuT( "lod_bias" ), parserSamplerLodBias, { makeParameter< ParameterType::eFloat >() } );
 	addParser( uint32_t( CSCNSection::eSampler ), cuT( "u_wrap_mode" ), parserSamplerUWrapMode, { makeParameter< ParameterType::eCheckedText >( m_mapWrappingModes ) } );
 	addParser( uint32_t( CSCNSection::eSampler ), cuT( "v_wrap_mode" ), parserSamplerVWrapMode, { makeParameter< ParameterType::eCheckedText >( m_mapWrappingModes ) } );
 	addParser( uint32_t( CSCNSection::eSampler ), cuT( "w_wrap_mode" ), parserSamplerWWrapMode, { makeParameter< ParameterType::eCheckedText >( m_mapWrappingModes ) } );
-	addParser( uint32_t( CSCNSection::eSampler ), cuT( "border_colour" ), parserSamplerBorderColour, { makeParameter< ParameterType::eRgbaColour >() } );
+	addParser( uint32_t( CSCNSection::eSampler ), cuT( "border_colour" ), parserSamplerBorderColour, { makeParameter< ParameterType::eCheckedText >( m_mapBorderColours ) } );
+	addParser( uint32_t( CSCNSection::eSampler ), cuT( "anisotropic_filtering" ), parserSamplerAnisotropicFiltering, { makeParameter< ParameterType::eBool >() } );
 	addParser( uint32_t( CSCNSection::eSampler ), cuT( "max_anisotropy" ), parserSamplerMaxAnisotropy, { makeParameter< ParameterType::eFloat >() } );
 	addParser( uint32_t( CSCNSection::eSampler ), cuT( "comparison_mode" ), parserSamplerComparisonMode, { makeParameter< ParameterType::eCheckedText >( m_mapComparisonModes ) } );
 	addParser( uint32_t( CSCNSection::eSampler ), cuT( "comparison_func" ), parserSamplerComparisonFunc, { makeParameter< ParameterType::eCheckedText >( m_mapComparisonFuncs ) } );
@@ -470,17 +422,15 @@ void SceneFileParser::doInitialiseParser( Path const & path )
 	addParser( uint32_t( CSCNSection::eScene ), cuT( "fog_density" ), parserSceneFogDensity, { makeParameter< ParameterType::eFloat >() } );
 	addParser( uint32_t( CSCNSection::eScene ), cuT( "particle_system" ), parserSceneParticleSystem, { makeParameter< ParameterType::eName >() } );
 	addParser( uint32_t( CSCNSection::eScene ), cuT( "mesh" ), parserMesh, { makeParameter< ParameterType::eName >() } );
-	addParser( uint32_t( CSCNSection::eScene ), cuT( "hdr_config" ), parserSceneHdrConfig );
 
 	addParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "parent" ), parserParticleSystemParent, { makeParameter< ParameterType::eName >() } );
 	addParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "particles_count" ), parserParticleSystemCount, { makeParameter< ParameterType::eUInt32 >() } );
 	addParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "material" ), parserParticleSystemMaterial, { makeParameter< ParameterType::eName >() } );
 	addParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "dimensions" ), parserParticleSystemDimensions, { makeParameter< ParameterType::ePoint2F >() } );
 	addParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "particle" ), parserParticleSystemParticle );
-	addParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "tf_shader_program" ), parserParticleSystemTFShader );
 	addParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "cs_shader_program" ), parserParticleSystemCSShader );
 
-	addParser( uint32_t( CSCNSection::eParticle ), cuT( "variable" ), parserParticleVariable, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eCheckedText >( m_mapElementTypes ), makeParameter< ParameterType::eText >() } );
+	addParser( uint32_t( CSCNSection::eParticle ), cuT( "variable" ), parserParticleVariable, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eCheckedText >( m_mapVariableTypes ), makeParameter< ParameterType::eText >() } );
 	addParser( uint32_t( CSCNSection::eParticle ), cuT( "type" ), parserParticleType, { makeParameter< ParameterType::eName >() } );
 
 	addParser( uint32_t( CSCNSection::eLight ), cuT( "parent" ), parserLightParent, { makeParameter< ParameterType::eName >() } );
@@ -490,7 +440,12 @@ void SceneFileParser::doInitialiseParser( Path const & path )
 	addParser( uint32_t( CSCNSection::eLight ), cuT( "attenuation" ), parserLightAttenuation, { makeParameter< ParameterType::ePoint3F >() } );
 	addParser( uint32_t( CSCNSection::eLight ), cuT( "cut_off" ), parserLightCutOff, { makeParameter< ParameterType::eFloat >() } );
 	addParser( uint32_t( CSCNSection::eLight ), cuT( "exponent" ), parserLightExponent, { makeParameter< ParameterType::eFloat >() } );
-	addParser( uint32_t( CSCNSection::eLight ), cuT( "shadow_producer" ), parserLightShadowProducer, { makeParameter< ParameterType::eBool >() } );
+	addParser( uint32_t( CSCNSection::eLight ), cuT( "shadows" ), parserLightShadows );
+
+	addParser( uint32_t( CSCNSection::eShadows ), cuT( "producer" ), parserShadowsProducer, { makeParameter< ParameterType::eBool >() } );
+	addParser( uint32_t( CSCNSection::eShadows ), cuT( "filter" ), parserShadowsFilter, { makeParameter< ParameterType::eCheckedText >( m_mapShadowFilters ) } );
+	addParser( uint32_t( CSCNSection::eShadows ), cuT( "volumetric_steps" ), parserShadowsVolumetricSteps, { makeParameter< ParameterType::eUInt32 >() } );
+	addParser( uint32_t( CSCNSection::eShadows ), cuT( "volumetric_scattering" ), parserShadowsVolumetricScatteringFactor, { makeParameter< ParameterType::eFloat >() } );
 
 	addParser( uint32_t( CSCNSection::eNode ), cuT( "parent" ), parserNodeParent, { makeParameter< ParameterType::eName >() } );
 	addParser( uint32_t( CSCNSection::eNode ), cuT( "position" ), parserNodePosition, { makeParameter< ParameterType::ePoint3F >() } );
@@ -553,6 +508,7 @@ void SceneFileParser::doInitialiseParser( Path const & path )
 	addParser( uint32_t( CSCNSection::ePass ), cuT( "}" ), parserPassEnd );
 
 	addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "image" ), parserUnitImage, { makeParameter< ParameterType::ePath >() } );
+	addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "levels_count" ), parserUnitLevelsCount, { makeParameter< ParameterType::eUInt32 >() } );
 	addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "render_target" ), parserUnitRenderTarget );
 	addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "channel" ), parserUnitChannel, { makeParameter< ParameterType::eCheckedText >( m_mapTextureChannels ) } );
 	addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "sampler" ), parserUnitSampler, { makeParameter< ParameterType::eName >() } );
@@ -567,11 +523,8 @@ void SceneFileParser::doInitialiseParser( Path const & path )
 	addParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "constants_buffer" ), parserConstantsBuffer, { makeParameter< ParameterType::eName >() } );
 	addParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "}" ), parserShaderEnd );
 
-	addParser( uint32_t( CSCNSection::eShaderObject ), cuT( "file" ), parserShaderProgramFile, { makeParameter< ParameterType::eCheckedText >( m_mapModels ), makeParameter< ParameterType::ePath >() } );
-	addParser( uint32_t( CSCNSection::eShaderObject ), cuT( "sampler" ), parserShaderProgramSampler, { makeParameter< ParameterType::eName >() } );
-	addParser( uint32_t( CSCNSection::eShaderObject ), cuT( "input_type" ), parserGeometryInputType, { makeParameter< ParameterType::eCheckedText >( m_mapPrimitiveTypes ) } );
-	addParser( uint32_t( CSCNSection::eShaderObject ), cuT( "output_type" ), parserGeometryOutputType, { makeParameter< ParameterType::eCheckedText >( m_mapPrimitiveOutputTypes ) } );
-	addParser( uint32_t( CSCNSection::eShaderObject ), cuT( "output_vtx_count" ), parserGeometryOutputVtxCount, { makeParameter< ParameterType::eUInt8 >() } );
+	addParser( uint32_t( CSCNSection::shaderStage ), cuT( "file" ), parserShaderProgramFile, { makeParameter< ParameterType::ePath >() } );
+	addParser( uint32_t( CSCNSection::shaderStage ), cuT( "group_sizes" ), parserShaderGroupSizes, { makeParameter< ParameterType::ePoint3I >() } );
 
 	addParser( uint32_t( CSCNSection::eShaderUBO ), cuT( "shaders" ), parserShaderUboShaders, { makeParameter< ParameterType::eBitwiseOred32BitsCheckedText >( m_mapShaderTypes ) } );
 	addParser( uint32_t( CSCNSection::eShaderUBO ), cuT( "variable" ), parserShaderUboVariable, { makeParameter< ParameterType::eName >() } );
@@ -665,7 +618,8 @@ void SceneFileParser::doInitialiseParser( Path const & path )
 	addParser( uint32_t( CSCNSection::eAnimation ), cuT( "scale" ), parserAnimationScale, { makeParameter< ParameterType::eFloat >() } );
 	addParser( uint32_t( CSCNSection::eAnimation ), cuT( "}" ), parserAnimationEnd );
 
-	addParser( uint32_t( CSCNSection::eSkybox ), cuT( "equirectangular" ), parserSkyboxEqui, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eSize >() } );
+	addParser( uint32_t( CSCNSection::eSkybox ), cuT( "equirectangular" ), parserSkyboxEqui, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eUInt32 >() } );
+	addParser( uint32_t( CSCNSection::eSkybox ), cuT( "cross" ), parserSkyboxCross, { makeParameter< ParameterType::ePath >() } );
 	addParser( uint32_t( CSCNSection::eSkybox ), cuT( "left" ), parserSkyboxLeft, { makeParameter< ParameterType::ePath >() } );
 	addParser( uint32_t( CSCNSection::eSkybox ), cuT( "right" ), parserSkyboxRight, { makeParameter< ParameterType::ePath >() } );
 	addParser( uint32_t( CSCNSection::eSkybox ), cuT( "top" ), parserSkyboxTop, { makeParameter< ParameterType::ePath >() } );
@@ -720,7 +674,7 @@ void SceneFileParser::doCleanupParser()
 		m_mapScenes.insert( std::make_pair( it->first,  it->second ) );
 	}
 
-	m_renderWindow = context->pWindow;
+	m_renderWindow = context->window;
 }
 
 bool SceneFileParser::doDiscardParser( String const & line )
@@ -822,7 +776,7 @@ String SceneFileParser::doGetSectionName( uint32_t section )
 		result = cuT( "gl_shader_program" );
 		break;
 
-	case CSCNSection::eShaderObject:
+	case CSCNSection::shaderStage:
 		result = cuT( "shader_object" );
 		break;
 

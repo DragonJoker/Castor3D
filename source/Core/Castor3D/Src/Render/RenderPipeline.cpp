@@ -2,76 +2,49 @@
 
 #include "Engine.hpp"
 #include "Event/Frame/FunctorEvent.hpp"
-#include "Mesh/Buffer/GeometryBuffers.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/Camera.hpp"
-#include "Shader/UniformBufferBinding.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Shader/Program.hpp"
+#include "Shader/Shaders/GlslShadow.hpp"
+
+#include <Descriptor/DescriptorSetLayout.hpp>
+#include <Pipeline/InputAssemblyState.hpp>
+#include <Pipeline/Pipeline.hpp>
+#include <Pipeline/PipelineLayout.hpp>
+#include <Pipeline/ShaderStageState.hpp>
 
 #include <GlslSource.hpp>
-#include "Shader/Shaders/GlslShadow.hpp"
 
 using namespace castor;
 
 namespace castor3d
 {
-	//*************************************************************************************************
-
-	const String RenderPipeline::MtxTexture[C3D_MAX_TEXTURE_MATRICES] =
-	{
-		cuT( "c3d_mtxTexture0" ),
-		cuT( "c3d_mtxTexture1" ),
-		cuT( "c3d_mtxTexture2" ),
-		cuT( "c3d_mtxTexture3" ),
-	};
-
-	//*************************************************************************************************
-
 	RenderPipeline::RenderPipeline( RenderSystem & renderSystem
-		, DepthStencilState && p_dsState
-		, RasteriserState && p_rsState
-		, BlendState && p_blState
-		, MultisampleState && p_msState
-		, ShaderProgram & p_program
-		, PipelineFlags const & p_flags )
+		, renderer::DepthStencilState && dsState
+		, renderer::RasterisationState && rsState
+		, renderer::ColourBlendState && blState
+		, renderer::MultisampleState && msState
+		, ShaderProgramSPtr program
+		, PipelineFlags const & flags )
 		: OwnedBy< RenderSystem >{ renderSystem }
-		, m_dsState{ std::move( p_dsState ) }
-		, m_rsState{ std::move( p_rsState ) }
-		, m_blState{ std::move( p_blState ) }
-		, m_msState{ std::move( p_msState ) }
-		, m_program{ p_program }
-		, m_flags( p_flags )
+		, m_dsState{ std::move( dsState ) }
+		, m_rsState{ std::move( rsState ) }
+		, m_blState{ std::move( blState ) }
+		, m_msState{ std::move( msState ) }
+		, m_program{ std::move( program ) }
+		, m_flags( flags )
 	{
-		auto textures = m_flags.m_textureFlags & uint16_t( TextureChannel::eAll );
-
-		while ( textures )
+		if ( !renderSystem.isTopDown() )
 		{
-			m_textureCount++;
-
-			while ( !( textures & 0x01 ) )
+			if ( m_rsState.cullMode == renderer::CullModeFlag::eFront )
 			{
-				textures >>= 1;
+				m_rsState.cullMode = renderer::CullModeFlag::eBack;
 			}
-
-			textures >>= 1;
-		}
-
-		if ( m_program.hasObject( ShaderType::ePixel ) )
-		{
-			m_directionalShadowMaps = m_program.findUniform< UniformType::eSampler >( shader::Shadow::MapShadowDirectional, ShaderType::ePixel );
-			m_spotShadowMaps = m_program.findUniform< UniformType::eSampler >( shader::Shadow::MapShadowSpot, ShaderType::ePixel );
-			m_pointShadowMaps = m_program.findUniform< UniformType::eSampler >( shader::Shadow::MapShadowPoint, ShaderType::ePixel );
-			m_environmentMap = m_program.findUniform< UniformType::eSampler >( ShaderProgram::MapEnvironment, ShaderType::ePixel );
-
-			if ( ( checkFlag( m_flags.m_passFlags, PassFlag::ePbrMetallicRoughness )
-					|| checkFlag( m_flags.m_passFlags, PassFlag::ePbrSpecularGlossiness ) )
-				&& checkFlag( m_flags.m_programFlags, ProgramFlag::eLighting ) )
+			else
 			{
-				m_irradianceMap = m_program.findUniform< UniformType::eSampler >( ShaderProgram::MapIrradiance, ShaderType::ePixel );
-				m_prefilteredMap = m_program.findUniform< UniformType::eSampler >( ShaderProgram::MapPrefiltered, ShaderType::ePixel );
-				m_brdfMap = m_program.findUniform< UniformType::eSampler >( ShaderProgram::MapBrdf, ShaderType::ePixel );
+				m_rsState.cullMode = renderer::CullModeFlag::eFront;
 			}
 		}
 	}
@@ -80,97 +53,76 @@ namespace castor3d
 	{
 	}
 
+	void RenderPipeline::initialise( renderer::RenderPass const & renderPass )
+	{
+		renderer::VertexLayoutCRefArray vertexLayouts;
+
+		for ( auto & layout : m_vertexLayouts )
+		{
+			vertexLayouts.emplace_back( layout );
+		}
+
+		renderer::DescriptorSetLayoutCRefArray descriptorLayouts;
+
+		for ( auto & descriptorLayout : m_descriptorLayouts )
+		{
+			if ( !descriptorLayout->getBindings().empty() )
+			{
+				descriptorLayouts.emplace_back( *descriptorLayout );
+			}
+		}
+
+		renderer::GraphicsPipelineCreateInfo createInfo
+		{
+			m_program->getStates(),
+			renderPass,
+			renderer::VertexInputState::create( vertexLayouts ),
+			renderer::InputAssemblyState{ m_flags.topology },
+			m_rsState,
+			m_msState,
+			m_blState,
+		};
+		createInfo.depthStencilState = m_dsState;
+
+		if ( m_viewport )
+		{
+			createInfo.viewport = *m_viewport;
+		}
+		else
+		{
+			createInfo.dynamicStates.push_back( renderer::DynamicState::eViewport );
+		}
+
+		if ( m_scissor )
+		{
+			createInfo.scissor = *m_scissor;
+		}
+		else
+		{
+			createInfo.dynamicStates.push_back( renderer::DynamicState::eScissor );
+		}
+
+		m_pipelineLayout = getCurrentDevice( *this ).createPipelineLayout( descriptorLayouts
+			, m_pushConstantRanges );
+		m_pipeline = m_pipelineLayout->createPipeline( createInfo );
+	}
+
 	void RenderPipeline::cleanup()
 	{
-		m_program.cleanup();
-		m_meshGeometryBuffers.clear();
-		m_billboardGeometryBuffers.clear();
+		m_pipeline.reset();
+		m_pipelineLayout.reset();
 	}
 
-	void RenderPipeline::addUniformBuffer( UniformBuffer & p_ubo )
+	void RenderPipeline::createDescriptorPools( uint32_t maxSets )
 	{
-		m_bindings.push_back( std::ref( p_ubo.createBinding( m_program ) ) );
-	}
+		m_descriptorPools.clear();
 
-	GeometryBuffersSPtr RenderPipeline::getGeometryBuffers( Submesh & submesh )
-	{
-		GeometryBuffersSPtr geometryBuffers;
-		auto it = m_meshGeometryBuffers.find( &submesh );
-
-		if ( it == m_meshGeometryBuffers.end() )
+		for ( auto & descriptorLayout : m_descriptorLayouts )
 		{
-			geometryBuffers = getRenderSystem()->createGeometryBuffers( submesh.getTopology()
-				, m_program );
-			m_meshGeometryBuffers.emplace( &submesh, geometryBuffers );
-			doInitialiseGeometryBuffers( submesh, geometryBuffers );
-		}
-		else
-		{
-			geometryBuffers = it->second;
-		}
-
-		return geometryBuffers;
-	}
-
-	GeometryBuffersSPtr RenderPipeline::getGeometryBuffers( BillboardBase & billboard )
-	{
-		GeometryBuffersSPtr geometryBuffers;
-		auto it = m_billboardGeometryBuffers.find( &billboard );
-
-		if ( it == m_billboardGeometryBuffers.end() )
-		{
-			geometryBuffers = getRenderSystem()->createGeometryBuffers( Topology::eTriangleFan
-				, m_program );
-			m_billboardGeometryBuffers.emplace( &billboard, geometryBuffers );
-			doInitialiseGeometryBuffers( billboard, geometryBuffers );
-		}
-		else
-		{
-			geometryBuffers = it->second;
-		}
-
-		return geometryBuffers;
-	}
-
-	void RenderPipeline::doInitialiseGeometryBuffers( Submesh & submesh
-		, GeometryBuffersSPtr geometryBuffers )
-	{
-		VertexBufferArray buffers;
-		submesh.gatherBuffers( buffers );
-
-		if ( getRenderSystem()->getCurrentContext() )
-		{
-			geometryBuffers->initialise( buffers, &submesh.getIndexBuffer() );
-		}
-		else
-		{
-			getRenderSystem()->getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-				, [geometryBuffers, &submesh, buffers]()
+			if ( !descriptorLayout->getBindings().empty() )
 			{
-				geometryBuffers->initialise( buffers, &submesh.getIndexBuffer() );
-			} ) );
+				m_descriptorPools.emplace_back( descriptorLayout->createPool( maxSets ) );
+			}
 		}
 	}
-
-	void RenderPipeline::doInitialiseGeometryBuffers( BillboardBase & billboard
-		, GeometryBuffersSPtr geometryBuffers )
-	{
-		VertexBufferArray buffers;
-		billboard.gatherBuffers( buffers );
-
-		if ( getRenderSystem()->getCurrentContext() )
-		{
-			geometryBuffers->initialise( buffers, nullptr );
-		}
-		else
-		{
-			getRenderSystem()->getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-				, [geometryBuffers, buffers]()
-			{
-				geometryBuffers->initialise( buffers, nullptr );
-			} ) );
-		}
-	}
-
-	//*************************************************************************************************
 }

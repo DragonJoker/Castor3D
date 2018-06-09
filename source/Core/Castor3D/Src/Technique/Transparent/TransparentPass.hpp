@@ -26,11 +26,12 @@ namespace castor3d
 		eDepth,
 		eAccumulation,
 		eRevealage,
+		eVelocity,
 		CASTOR_SCOPED_ENUM_BOUNDS( eDepth ),
 	};
 	//!\~english	The weighted blend pass result.
 	//!\~french		Le résultat de la passe de weighted blend.
-	using WeightedBlendPassResult = std::array< TextureUnitUPtr, size_t( WbTexture::eCount ) >;
+	using WeightedBlendTextures = std::array< renderer::TextureViewCRef, size_t( WbTexture::eCount ) >;
 	/**
 	 *\~english
 	 *\brief		Retrieve the name for given texture enum value.
@@ -52,7 +53,7 @@ namespace castor3d
 	 *\param[in]	texture	La valeur.
 	 *\return		Le nom.
 	 */
-	castor::PixelFormat getTextureFormat( WbTexture texture );
+	renderer::Format getTextureFormat( WbTexture texture );
 	/**
 	 *\~english
 	 *\brief		Retrieve the attachment point for given texture enum value.
@@ -63,7 +64,7 @@ namespace castor3d
 	 *\param[in]	texture	La valeur.
 	 *\return		Le nom.
 	 */
-	AttachmentPoint getTextureAttachmentPoint( WbTexture texture );
+	renderer::ImageAspectFlags getTextureAttachmentPoint( WbTexture texture );
 	/**
 	 *\~english
 	 *\brief		Retrieve the attachment index for given texture enum value.
@@ -113,23 +114,74 @@ namespace castor3d
 		 */
 		virtual ~TransparentPass();
 		/**
+		 *\~english
+		 *\brief		Initialises the render pass.
+		 *\~french
+		 *\brief		Initialise la passe de rendu.
+		 */
+		void initialiseRenderPass( WeightedBlendTextures const & wbpResult );
+		/**
 		 *\copydoc		castor3d::RenderTechniquePass::render
 		 */
-		void render( RenderInfo & info
-			, ShadowMapLightTypeArray & shadowMaps
+		void update( RenderInfo & info
 			, castor::Point2r const & jitter )override;
+		/**
+		 *\~english
+		 *\brief		Renders transparent nodes.
+		 *\~french
+		 *\brief		Dessine les noeuds transparents.
+		 */
+		renderer::Semaphore const & render( renderer::Semaphore const & toWait );
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		C3D_API void accept( RenderTechniqueVisitor & visitor );
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		inline void setDepthFormat( renderer::Format value )
+		{
+			m_depthFormat = value;
+		}
+		/**@}*/
 
 	private:
 		/**
-		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
+		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */
-		void doPrepareFrontPipeline( ShaderProgram & program
-			, PipelineFlags const & flags )override;
+		bool doInitialise( castor::Size const & size )override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
+		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
 		 */
-		void doPrepareBackPipeline( ShaderProgram & program
-			, PipelineFlags const & flags )override;
+		renderer::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doCreateBlendState
+		 */
+		renderer::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
+		 */
+		void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, BillboardListRenderNode & nodes
+			, ShadowMapLightTypeArray const & shadowMaps )override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
+		 */
+		void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, SubmeshRenderNode & nodes
+			, ShadowMapLightTypeArray const & shadowMaps )override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
+		 */
+		renderer::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
@@ -145,7 +197,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const override;
+			, renderer::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */
@@ -153,7 +205,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const override;
+			, renderer::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
 		 */
@@ -161,13 +213,16 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const override;
+			, renderer::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
 		void doUpdatePipeline( RenderPipeline & pipeline )const override;
-		void doCompletePipeline( PipelineFlags const & flags
-			, RenderPipeline & pipeline );
+
+	private:
+		renderer::Format m_depthFormat;
+		renderer::CommandBufferPtr m_nodesCommands;
+		renderer::FrameBufferPtr m_frameBuffer;
 	};
 }
 

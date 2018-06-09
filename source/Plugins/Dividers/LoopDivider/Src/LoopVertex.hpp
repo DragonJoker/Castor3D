@@ -17,61 +17,64 @@ namespace Loop
 	*/
 	class Vertex
 	{
-	private:
-		castor3d::BufferElementGroupSPtr m_ptPoint;
-		EdgePtrUIntMap m_mapEdges;
-
 	public:
-		explicit Vertex( castor3d::BufferElementGroupSPtr p_point );
-		~Vertex();
+		Vertex( castor3d::SubmeshVertex vertex );
 
-		bool hasEdge( uint32_t p_index );
-		EdgeSPtr getEdge( uint32_t p_index );
-		void addEdge( EdgeSPtr p_pEdge, uint32_t p_index );
-		void removeEdge( uint32_t p_index );
+		bool hasEdge( uint32_t index );
+		EdgeSPtr getEdge( uint32_t index );
+		void addEdge( EdgeSPtr edge, uint32_t index );
+		void removeEdge( uint32_t index );
 
 		/**@name Accessors */
 		//@{
-		inline castor3d::BufferElementGroupSPtr getPoint()const
+		inline castor3d::InterleavedVertex const & getPoint()const
 		{
-			return m_ptPoint;
+			return m_vertex.m_vertex;
+		}
+		inline castor3d::InterleavedVertex & getPoint()
+		{
+			return m_vertex.m_vertex;
 		}
 		inline uint32_t getIndex()const
 		{
-			return m_ptPoint->getIndex();
+			return m_vertex.m_index;
 		}
 		inline uint32_t size()const
 		{
-			return uint32_t( m_mapEdges.size() );
+			return uint32_t( m_edges.size() );
 		}
 		inline EdgePtrUIntMap::iterator begin()
 		{
-			return m_mapEdges.begin();
+			return m_edges.begin();
 		}
 		inline EdgePtrUIntMap::const_iterator begin()const
 		{
-			return m_mapEdges.begin();
+			return m_edges.begin();
 		}
 		inline EdgePtrUIntMap::iterator end()
 		{
-			return m_mapEdges.end();
+			return m_edges.end();
 		}
 		inline EdgePtrUIntMap::const_iterator end()const
 		{
-			return m_mapEdges.end();
+			return m_edges.end();
 		}
 		inline void erase( EdgePtrUIntMap::iterator p_it )
 		{
-			m_mapEdges.erase( p_it );
+			m_edges.erase( p_it );
 		}
 		inline void clear()
 		{
-			m_mapEdges.clear();
+			m_edges.clear();
 		}
 		//@}
+
+	private:
+		castor3d::SubmeshVertex m_vertex;
+		EdgePtrUIntMap m_edges;
 	};
 }
 
-castor::String & operator << ( castor::String & p_stream, Loop::Vertex const & p_vertex );
+castor::String & operator<<( castor::String & stream, Loop::Vertex const & vertex );
 
 #endif

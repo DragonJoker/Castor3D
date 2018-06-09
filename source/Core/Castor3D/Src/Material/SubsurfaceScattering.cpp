@@ -1,4 +1,4 @@
-﻿#include "SubsurfaceScattering.hpp"
+#include "SubsurfaceScattering.hpp"
 
 using namespace castor;
 
@@ -21,7 +21,7 @@ namespace castor3d
 			if ( result )
 			{
 				result = file.writeText( m_tabs + cuT( "\tstrength " )
-					+ string::toString( obj.getStrength() )
+					+ string::toString( obj.getStrength(), std::locale{ "C" } )
 					+ cuT( "\n" ) ) > 0;
 				castor::TextWriter< SubsurfaceScattering >::checkError( result, "SubsurfaceScattering strength" );
 			}
@@ -29,7 +29,7 @@ namespace castor3d
 			if ( result )
 			{
 				result = file.writeText( m_tabs + cuT( "\tgaussian_width " )
-					+ string::toString( obj.getGaussianWidth() )
+					+ string::toString( obj.getGaussianWidth(), std::locale{ "C" } )
 					+ cuT( "\n" ) ) > 0;
 				castor::TextWriter< SubsurfaceScattering >::checkError( result, "SubsurfaceScattering Gaussian width" );
 			}

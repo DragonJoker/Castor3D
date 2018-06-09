@@ -1,4 +1,4 @@
-﻿#include "RenderLoopSync.hpp"
+#include "RenderLoopSync.hpp"
 
 #include "RenderSystem.hpp"
 
@@ -12,8 +12,9 @@ namespace castor3d
 	static const char * CALL_RESUME_RENDERING = "Can't call Resume in a synchronous render loop";
 	static const char * RLS_UNKNOWN_EXCEPTION = "Unknown exception";
 
-	RenderLoopSync::RenderLoopSync( Engine & engine, uint32_t p_wantedFPS )
-		: RenderLoop( engine, p_wantedFPS, true )
+	RenderLoopSync::RenderLoopSync( Engine & engine
+		, uint32_t wantedFPS )
+		: RenderLoop( engine, wantedFPS, true )
 		, m_active( true )
 	{
 	}
@@ -70,13 +71,18 @@ namespace castor3d
 		CASTOR_EXCEPTION( CALL_END_RENDERING );
 	}
 
-	ContextSPtr RenderLoopSync::doCreateMainContext( RenderWindow & p_window )
+	renderer::DevicePtr RenderLoopSync::doCreateMainDevice( renderer::WindowHandle && handle
+		, RenderWindow & window )
 	{
-		ContextSPtr result = doCreateContext( p_window );
+		auto result = doCreateDevice( std::move( handle ), window );
 
 		if ( result )
 		{
-			m_renderSystem.setMainContext( result );
+			m_renderSystem.setMainDevice( result );
+			result->enable();
+			GpuInformations info;
+			m_renderSystem.initialise( std::move( info ) );
+			result->disable();
 		}
 
 		return result;

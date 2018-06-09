@@ -6,9 +6,11 @@ See LICENSE file in root folder
 
 #include "ParticleSystemImpl.hpp"
 
-#include "Mesh/Buffer/BufferDeclaration.hpp"
-#include "Shader/UniformBuffer.hpp"
+#include "Scene/ParticleSystem/ParticleDeclaration.hpp"
 #include "Texture/TextureUnit.hpp"
+
+#include <Pipeline/ShaderStageState.hpp>
+#include <Pipeline/VertexLayout.hpp>
 
 namespace castor3d
 {
@@ -28,12 +30,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_parent	The parent particle system.
+		 *\param[in]	parent	The parent particle system.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_parent	Le système de particules parent.
+		 *\param[in]	parent	Le système de particules parent.
 		 */
-		C3D_API explicit ComputeParticleSystem( ParticleSystem & p_parent );
+		C3D_API explicit ComputeParticleSystem( ParticleSystem & parent );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -52,21 +54,35 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ParticleSystemImpl::update
 		 */
-		C3D_API uint32_t update( castor::Milliseconds const & p_time
-			, castor::Milliseconds const & p_total )override;
+		C3D_API uint32_t update( RenderPassTimer & timer
+			, castor::Milliseconds const & time
+			, castor::Milliseconds const & total
+			, uint32_t index )override;
 		/**
 		 *\copydoc		castor3d::ParticleSystemImpl::addParticleVariable
 		 */
-		C3D_API void addParticleVariable( castor::String const & p_name, ElementType p_type, castor::String const & p_defaultValue )override;
+		C3D_API void addParticleVariable( castor::String const & name, ParticleFormat type, castor::String const & defaultValue )override;
 		/**
 		 *\~english
 		 *\brief		Defines the program used to update the particles.
-		 *\param[in]	p_program	The program.
+		 *\param[in]	programFile	The program file path.
 		 *\~french
 		 *\brief		Définit le programme utilisé pour mettre à jour les particules.
-		 *\param[in]	p_program	Le programme.
+		 *\param[in]	programFile	Le chemin d'accès au fichier du programme.
 		 */
-		C3D_API void setUpdateProgram( ShaderProgramSPtr p_program );
+		C3D_API void setUpdateProgram( ShaderProgramSPtr program );
+		/**
+		 *\~english
+		 *\brief		Defines the workgroup sizes, as defined inside the compute shader.
+		 *\param[in]	sizes	The sizes.
+		 *\~french
+		 *\brief		Définit les dimensions des groupes de travail, tels que définis dans le compute shader.
+		 *\param[in]	sizes	Les dimensions.
+		 */
+		inline void setGroupSizes( castor::Point3i sizes )
+		{
+			m_worgGroupSizes = sizes;
+		}
 		/**
 		 *\~english
 		 *\return		\p false if the update program has not been set.
@@ -75,109 +91,52 @@ namespace castor3d
 		 */
 		inline bool hasUpdateProgram()const
 		{
-			return m_updateProgram != nullptr;
+			return m_program != nullptr;
 		}
 		/**
 		 *\~english
-		 *\return		\p false if the update program has not been set.
+		 *\return		The update program.
 		 *\~french
-		 *\return		\p false si le programme de mise à jour n'a pas été défini.
+		 *\return		Le programme de mise à jour.
 		 */
 		inline ShaderProgram const & getUpdateProgram()const
 		{
-			REQUIRE( m_updateProgram );
-			return *m_updateProgram;
+			return *m_program;
 		}
 
 	private:
-		/**
-		 *\~english
-		 *\brief		Initialises the shader storage buffer holding the particles data.
-		 *\return		\p false on failure.
-		 *\~french
-		 *\brief		Initialise le tampon de stockage shader contenant les données des particules.
-		 *\return		\p false en cas d'échec.
-		 */
 		bool doInitialiseParticleStorage();
-		/**
-		 *\~english
-		 *\brief		Creates the storage buffer containing random values.
-		 *\return		\p false on failure.
-		 *\~french
-		 *\brief		Crée le tampon de stockage contenant des valeurs aléatoires.
-		 *\return		\p false en cas d'échec.
-		 */
 		bool doCreateRandomStorage();
-		/**
-		 *\~english
-		 *\brief		Creates the pipeline used to run the shader.
-		 *\return		\p false on failure.
-		 *\~french
-		 *\brief		Crée le pipeline utilisé pour lancer le shader.
-		 *\return		\p false en cas d'échec.
-		 */
 		bool doInitialisePipeline();
+		void doPrepareCommandBuffers();
 
 	protected:
-		//!\~english	The particle's elements description.
-		//!\~french		La description des éléments d'une particule.
-		BufferDeclaration m_inputs;
-		//!\~english	The program used to update the transform buffer.
-		//!\~french		Le programme utilisé pour mettre à jour le tampon de transformation.
-		ShaderProgramSPtr m_updateProgram;
-		//!\~english	The frame variable buffer holding particle system related variables.
-		//!\~french		Le tampon de variables contenant les variables relatives au système de particules.
-		UniformBuffer m_ubo;
-		//!\~english	The UBO binding to the update program.
-		//!\~french		Le binding de l'UBO avec le programme.
-		UniformBufferBindingRPtr m_binding;
-		//!\~english	The frame variable holding time since last update.
-		//!\~french		La variable de frame contenant le temps écoulé depuis la dernière mise à jour.
-		Uniform1fSPtr m_deltaTime;
-		//!\~english	The frame variable holding total elapsed time.
-		//!\~french		La variable de frame contenant le temps total écoulé.
-		Uniform1fSPtr m_time;
-		//!\~english	The frame variable holding the maximum particles count.
-		//!\~french		La variable de frame contenant le nombre maximal de particules.
-		Uniform1uiSPtr m_maxParticleCount;
-		//!\~english	The frame variable holding the current particles count.
-		//!\~french		La variable de frame contenant le nombre actuel de particules.
-		Uniform1uiSPtr m_currentParticleCount;
-		//!\~english	The frame variable holding the particles emitter position.
-		//!\~french		La variable de frame contenant la position de l'émetteur de particules.
-		Uniform3fSPtr m_emitterPosition;
-		//!\~english	The frame variable holding the launches lifetime.
-		//!\~french		La variable de frame contenant la durée de vie des lanceurs.
-		Uniform1fSPtr m_launcherLifetime;
-		//!\~english	The frame variable holding the shells lifetime.
-		//!\~french		La variable de frame contenant la durée de vie des particules.
-		Uniform1fSPtr m_shellLifetime;
-		//!\~english	The frame variable holding the secondary shells lifetime.
-		//!\~french		La variable de frame contenant la durée de vie des particules secondaires.
-		Uniform1fSPtr m_secondaryShellLifetime;
-		//!\~english	The storage buffers holding the particles.
-		//!\~french		Les tampons de stockage contenant les particules.
-		std::array< ShaderStorageBufferSPtr, 2 > m_particlesStorages;
-		//!\~english	The storage buffer containing random directions.
-		//!\~french		Le tampon de stockage contenant des directions aléatoires.
-		ShaderStorageBufferSPtr m_randomStorage;
-		//!\~english	The current particles count.
-		//!\~french		Le nombre actuel de particules.
+		struct Configuration
+		{
+			float deltaTime;
+			float time;
+			uint32_t maxParticleCount;
+			uint32_t currentParticleCount;
+			castor::Point3f emitterPosition;
+		};
+
+	protected:
+		ParticleDeclaration m_inputs;
+		ShaderProgramSPtr m_program;
+		renderer::UniformBufferPtr< Configuration > m_ubo;
+		std::array< renderer::BufferPtr< uint8_t >, 2 > m_particlesStorages;
+		renderer::BufferPtr< uint32_t > m_generatedCountBuffer;
+		renderer::BufferPtr< castor::Point4f > m_randomStorage;
+		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
+		renderer::PipelineLayoutPtr m_pipelineLayout;
+		renderer::ComputePipelinePtr m_pipeline;
+		renderer::DescriptorSetPoolPtr m_descriptorPool;
+		std::array< renderer::DescriptorSetPtr, 2u > m_descriptorSets;
+		renderer::CommandBufferPtr m_commandBuffer;
+		renderer::FencePtr m_fence;
 		uint32_t m_particlesCount{ 0u };
-		//!\~english	The computing workgroup size.
-		//!\~french		La taille d'un groupe de travail.
-		uint32_t m_worgGroupSize{ 128u };
-		//!\~english	The compute pipeline.
-		//!\~french		Le pipeline de calcul.
-		ComputePipelineUPtr m_computePipeline;
-		//!\~english	The buffer containing the number of particles generated in one pass.
-		//!\~french		Le tampon contenant le nombre de particules générées en une passe.
-		AtomicCounterBufferSPtr m_generatedCountBuffer;
-		//!\~english	The index of the input particle storage.
-		//!\~french		L'indice du stockage de particules d'entrée.
+		castor::Point3i m_worgGroupSizes{ 128, 1, 1 };
 		uint32_t m_in{ 0 };
-		//!\~english	The index of the output particle storage.
-		//!\~french		L'indice du stockage de particules de sortie.
 		uint32_t m_out{ 1 };
 	};
 }

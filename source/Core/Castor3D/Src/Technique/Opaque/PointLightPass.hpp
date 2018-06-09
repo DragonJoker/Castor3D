@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_DeferredPointLightPass_H___
@@ -47,8 +47,10 @@ namespace castor3d
 			 *\param[in]	pxl		Le source du fagment shader.
 			 */
 			Program( Engine & engine
+				, PointLightPass & lightPass
 				, glsl::Shader const & vtx
-				, glsl::Shader const & pxl );
+				, glsl::Shader const & pxl
+				, bool hasShadows );
 			/**
 			 *\~english
 			 *\brief		Destructor.
@@ -62,6 +64,9 @@ namespace castor3d
 			 *\copydoc		castor3d::LightPass::Program::doBind
 			 */
 			void doBind( Light const & light )override;
+
+		private:
+			PointLightPass & m_lightPass;
 		};
 
 	public:
@@ -82,8 +87,9 @@ namespace castor3d
 		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
 		PointLightPass( Engine & engine
-			, FrameBuffer & frameBuffer
-			, FrameBufferAttachment & depthAttach
+			, renderer::TextureView const & depthView
+			, renderer::TextureView const & diffuseView
+			, renderer::TextureView const & specularView
 			, GpInfoUbo & gpInfoUbo
 			, bool hasShadows );
 		/**
@@ -93,13 +99,16 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		~PointLightPass();
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		void accept( RenderTechniqueVisitor & visitor )override;
 
 	private:
 		/**
 		 *\copydoc		castor3d::LightPass::doCreateProgram
 		 */
-		LightPass::ProgramPtr doCreateProgram( glsl::Shader const & vtx
-			, glsl::Shader const & pxl )const override;
+		LightPass::ProgramPtr doCreateProgram()override;
 		/**
 		 *\copydoc		castor3d::MeshLightPass::doGenerateVertices
 		 */
@@ -109,6 +118,19 @@ namespace castor3d
 		 */
 		castor::Matrix4x4r doComputeModelMatrix( Light const & light
 			, Camera const & camera )const override;
+
+	private:
+		struct Config
+		{
+			LightPass::Config base;
+			//!\~english	The variable containing the light position.
+			//!\~french		La variable contenant la position de la lumière.
+			castor::Point4f position;
+			//!\~english	The variable containing the light attenuation (RGB) and index (A).
+			//!\~french		La variable contenant l'atténuation de la lumière (RGB) et son index (A).
+			castor::Point4f attenuation;
+		};
+		renderer::UniformBufferPtr< Config > m_ubo;
 	};
 }
 

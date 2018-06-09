@@ -82,7 +82,63 @@ namespace castor
 		}
 
 		template< typename T >
-		inline String toString( T const & p_value, int p_base, std::locale const & p_locale )
+		inline String toString( T const & p_value, std::locale const & p_locale )
+		{
+			StringStream result;
+			result.imbue( p_locale );
+			result << p_value;
+			return result.str();
+		}
+
+		inline String toString( uint8_t p_value, int p_base, std::locale const & p_locale )
+		{
+			StringStream result;
+			result.imbue( p_locale );
+			result << manip::xbase( p_base ) << p_value;
+			return result.str();
+		}
+
+		inline String toString( int16_t p_value, int p_base, std::locale const & p_locale )
+		{
+			StringStream result;
+			result.imbue( p_locale );
+			result << manip::xbase( p_base ) << p_value;
+			return result.str();
+		}
+
+		inline String toString( uint16_t p_value, int p_base, std::locale const & p_locale )
+		{
+			StringStream result;
+			result.imbue( p_locale );
+			result << manip::xbase( p_base ) << p_value;
+			return result.str();
+		}
+
+		inline String toString( int32_t p_value, int p_base, std::locale const & p_locale )
+		{
+			StringStream result;
+			result.imbue( p_locale );
+			result << manip::xbase( p_base ) << p_value;
+			return result.str();
+		}
+
+		inline String toString( uint32_t p_value, int p_base, std::locale const & p_locale )
+		{
+			StringStream result;
+			result.imbue( p_locale );
+			result << manip::xbase( p_base ) << p_value;
+			return result.str();
+		}
+
+		inline String toString( int64_t p_value, int p_base, std::locale const & p_locale )
+		{
+			StringStream result;
+			result.imbue( p_locale );
+			result << manip::xbase( p_base ) << p_value;
+			return result.str();
+		}
+
+		inline String toString( uint64_t p_value, int p_base, std::locale const & p_locale )
 		{
 			StringStream result;
 			result.imbue( p_locale );

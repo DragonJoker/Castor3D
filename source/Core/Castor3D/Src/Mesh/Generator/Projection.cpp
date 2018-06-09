@@ -1,4 +1,4 @@
-﻿#include "Projection.hpp"
+#include "Projection.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
@@ -16,7 +16,7 @@ Projection::Projection()
 
 Projection::~Projection()
 {
-	m_pPattern.reset();
+	//m_pPattern.reset();
 }
 
 MeshGeneratorSPtr Projection::create()
@@ -24,19 +24,19 @@ MeshGeneratorSPtr Projection::create()
 	return std::make_shared< Projection >();
 }
 
-void Projection::setPoints( Point3rPatternSPtr p_pPattern, Point3r const & p_vAxis, bool p_bClosed )
-{
-	m_pPattern = p_pPattern;
-	m_bClosed = p_bClosed;
-	m_vAxis = p_vAxis;
-	point::normalise( m_vAxis );
-	m_vAxis = m_vAxis * m_fDepth;
-}
+//void Projection::setPoints( Point3rPatternSPtr pPattern, Point3r const & vAxis, bool bClosed )
+//{
+//	m_pPattern = pPattern;
+//	m_bClosed = bClosed;
+//	m_vAxis = vAxis;
+//	point::normalise( m_vAxis );
+//	m_vAxis = m_vAxis * m_fDepth;
+//}
 
-void Projection::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
+void Projection::doGenerate( Mesh & mesh, Parameters const & parameters )
 {
-	//m_uiNbFaces = p_faces[0];
-	//m_fDepth = p_dimensions[0];
+	//m_uiNbFaces = faces[0];
+	//m_fDepth = dimensions[0];
 	//uint32_t uiNbElem = m_pPattern->getSize();
 	//real fTotalDistance = 0.0;
 	//Point3r ptDiff;
@@ -108,5 +108,5 @@ void Projection::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 	//	}
 	//}
 
-	//p_mesh.computeContainers();
+	//mesh.computeContainers();
 }

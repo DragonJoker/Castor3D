@@ -25,13 +25,14 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine		The engine.
-		 *\param[in]	p_wantedFPS		The wanted FPS count.
+		 *\param[in]	wantedFPS	The wanted FPS count.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
-		 *\param[in]	p_wantedFPS		Le nombre voulu du FPS.
+		 *\param[in]	wantedFPS	Le nombre voulu du FPS.
 		 */
-		C3D_API RenderLoopSync( Engine & engine, uint32_t p_wantedFPS = 100 );
+		C3D_API RenderLoopSync( Engine & engine
+			, uint32_t wantedFPS = 100 );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -62,9 +63,10 @@ namespace castor3d
 
 	private:
 		/**
-		 *\copydoc		castor3d::RenderLoop::doCreateMainContext
+		 *\copydoc		castor3d::RenderLoop::doCreateMainDevice
 		 */
-		C3D_API ContextSPtr doCreateMainContext( RenderWindow & p_window )override;
+		C3D_API renderer::DevicePtr doCreateMainDevice( renderer::WindowHandle && handle
+			, RenderWindow & window )override;
 
 	private:
 		//!\~english Tells if the render loop is active.	\~french Dit si la boucle de rendu est active.

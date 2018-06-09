@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_PASS_H___
@@ -90,20 +90,6 @@ namespace castor3d
 		 *\brief		Nettoie la passe et toutes ses dépendances.
 		 */
 		C3D_API void cleanup();
-		/**
-		 *\~english
-		 *\brief		Binds the pass' textures.
-		 *\~french
-		 *\brief		Active les textures de la passe.
-		 */
-		C3D_API void bindTextures();
-		/**
-		 *\~english
-		 *\brief		Unbinds the pass' textures.
-		 *\~french
-		 *\brief		Désactive les textures de la passe.
-		 */
-		C3D_API void unbindTextures();
 		/**
 		 *\~english
 		 *\brief		adds a texture unit.
@@ -470,7 +456,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La fonction d'alpha.
 		 */
-		inline castor3d::ComparisonFunc getAlphaFunc()const
+		inline renderer::CompareOp getAlphaFunc()const
 		{
 			return m_alphaFunc;
 		}
@@ -482,7 +468,7 @@ namespace castor3d
 		 *\brief		Définit la fonction d'alpha.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setAlphaFunc( castor3d::ComparisonFunc value )
+		inline void setAlphaFunc( renderer::CompareOp value )
 		{
 			m_alphaFunc = value;
 			onChanged( *this );
@@ -593,9 +579,7 @@ namespace castor3d
 		 *\param[in]		opacityImage	Le canal alpha de opacitySource.
 		 *\param[in,out]	index			L'index de la texture.
 		 */
-		void doPrepareOpacity( TextureUnitSPtr opacitySource
-			, castor::PxBufferBaseSPtr opacityImage
-			, uint32_t & index );
+		void doPrepareOpacity( uint32_t & index );
 		/**
 		 *\~english
 		 *\brief		Updates the texture flags depending on the texture units.
@@ -613,7 +597,7 @@ namespace castor3d
 		 *\param[in]	channel	Le canal de texture.
 		 *\param[in]	format	Le format de pixels voulu.
 		 */
-		void doReduceTexture( TextureChannel channel, castor::PixelFormat format );
+		void doReduceTexture( TextureChannel channel, renderer::Format format );
 
 	private:
 		void onSssChanged( SubsurfaceScattering const & sss );
@@ -660,7 +644,7 @@ namespace castor3d
 		float m_alphaValue{ 0.0f };
 		//!\~english	The alpha function for alpha comparison.
 		//!\~french		La fonction d'alpha utilisée lors de la comparaison d'alpha.
-		ComparisonFunc m_alphaFunc{ ComparisonFunc::eAlways };
+		renderer::CompareOp m_alphaFunc{ renderer::CompareOp::eAlways };
 		//!\~english	Tells if the pass' textures are reduced.
 		//!\~french		Dit si les textures de la passe sont réduites.
 		bool m_texturesReduced{ false };

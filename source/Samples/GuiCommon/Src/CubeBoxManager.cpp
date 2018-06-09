@@ -27,23 +27,24 @@ namespace GuiCommon
 	{
 		MeshSPtr doCreateCubeMesh( String const name
 			, Scene & scene
-			, PredefinedRgbColour const & colour )
+			, RgbColour const & colour
+			, String const & colourName )
 		{
 			auto result = scene.getMeshCache().add( name );
 			result->setSerialisable( false );
 			auto submesh = result->createSubmesh();
-			InterleavedVertexArray vertex
+			static InterleavedVertexArray const vertex
 			{
-				InterleavedVertex{ { -1, -1, -1 } },
-				InterleavedVertex{ { -1, +1, -1 } },
-				InterleavedVertex{ { +1, +1, -1 } },
-				InterleavedVertex{ { +1, -1, -1 } },
-				InterleavedVertex{ { -1, -1, +1 } },
-				InterleavedVertex{ { -1, +1, +1 } },
-				InterleavedVertex{ { +1, +1, +1 } },
-				InterleavedVertex{ { +1, -1, +1 } },
+				InterleavedVertex::createP( Point3f{ -1, -1, -1 } ),
+				InterleavedVertex::createP( Point3f{ -1, +1, -1 } ),
+				InterleavedVertex::createP( Point3f{ +1, +1, -1 } ),
+				InterleavedVertex::createP( Point3f{ +1, -1, -1 } ),
+				InterleavedVertex::createP( Point3f{ -1, -1, +1 } ),
+				InterleavedVertex::createP( Point3f{ -1, +1, +1 } ),
+				InterleavedVertex::createP( Point3f{ +1, +1, +1 } ),
+				InterleavedVertex::createP( Point3f{ +1, -1, +1 } ),
 			};
-			submesh->setTopology( Topology::eLines );
+			submesh->setTopology( renderer::PrimitiveTopology::eLineList );
 			submesh->addPoints( vertex );
 			auto mapping = std::make_shared< LinesMapping >( *submesh );
 			LineIndices lines[]
@@ -64,7 +65,7 @@ namespace GuiCommon
 			mapping->addLineGroup( lines );
 			submesh->setIndexMapping( mapping );
 			MaterialSPtr material;
-			String matName = cuT( "BBox_" ) + getPredefinedName( colour );
+			String matName = cuT( "BBox_" ) + colourName;
 
 			if ( !scene.getEngine()->getMaterialCache().has( matName ) )
 			{
@@ -74,16 +75,32 @@ namespace GuiCommon
 				switch ( scene.getMaterialsType() )
 				{
 				case MaterialType::eLegacy:
-					std::static_pointer_cast< LegacyPass >( pass )->setDiffuse( RgbColour::fromPredefined( colour ) );
-					std::static_pointer_cast< LegacyPass >( pass )->setAmbient( 1.0f );
+					{
+						auto & legacy = *std::static_pointer_cast< LegacyPass >( pass );
+						legacy.setDiffuse( colour );
+						legacy.setSpecular( colour );
+						legacy.setAmbient( 1.0f );
+					}
 					break;
 
 				case MaterialType::ePbrMetallicRoughness:
-					std::static_pointer_cast< MetallicRoughnessPbrPass >( pass )->setAlbedo( RgbColour::fromPredefined( colour ) );
+					{
+						auto & pbrmr = *std::static_pointer_cast< MetallicRoughnessPbrPass >( pass );
+						pbrmr.setAlbedo( colour );
+						pbrmr.setRoughness( 1.0f );
+						pbrmr.setMetallic( 0.0f );
+						pbrmr.setEmissive( 1.0f );
+					}
 					break;
 
 				case MaterialType::ePbrSpecularGlossiness:
-					std::static_pointer_cast< SpecularGlossinessPbrPass >( pass )->setDiffuse( RgbColour::fromPredefined( colour ) );
+					{
+						auto & pbrsg = *std::static_pointer_cast< SpecularGlossinessPbrPass >( pass );
+						pbrsg.setDiffuse( colour );
+						pbrsg.setSpecular( colour );
+						pbrsg.setGlossiness( 0.0f );
+						pbrsg.setEmissive( 1.0f );
+					}
 					break;
 				}
 			}
@@ -101,10 +118,11 @@ namespace GuiCommon
 
 	CubeBoxManager::CubeBoxManager( Scene & scene )
 		: m_scene{ scene }
-		, m_obbMesh{ doCreateCubeMesh( cuT( "CubeBox_OBB" ), scene, PredefinedRgbColour::eRed ) }
-		, m_obbSubmesh{ doCreateCubeMesh( cuT( "CubeBox_OBB_Submesh" ), scene, PredefinedRgbColour::eBlue ) }
-		, m_obbBone{ doCreateCubeMesh( cuT( "CubeBox_OBB_Bone" ), scene, PredefinedRgbColour::eDarkBlue ) }
-		, m_aabbMesh{ doCreateCubeMesh( cuT( "CubeBox_AABB" ), scene, PredefinedRgbColour::eGreen ) }
+		, m_obbMesh{ doCreateCubeMesh( cuT( "CubeBox_OBB" ), scene, RgbColour::fromPredefined( PredefinedRgbColour::eRed ), cuT( "Red" ) ) }
+		, m_obbSubmesh{ doCreateCubeMesh( cuT( "CubeBox_OBB_Submesh" ), scene, RgbColour::fromPredefined( PredefinedRgbColour::eBlue ), cuT( "Blue" ) ) }
+		, m_obbSelectedSubmesh{ doCreateCubeMesh( cuT( "CubeBox_OBB_SelectedSubmesh" ), scene, RgbColour::fromComponents( 1.0f, 1.0f, 0.0f ), cuT( "Yellow" ) ) }
+		, m_obbBone{ doCreateCubeMesh( cuT( "CubeBox_OBB_Bone" ), scene, RgbColour::fromPredefined( PredefinedRgbColour::eDarkBlue ), cuT( "DarkBlue" ) ) }
+		, m_aabbMesh{ doCreateCubeMesh( cuT( "CubeBox_AABB" ), scene, RgbColour::fromPredefined( PredefinedRgbColour::eGreen ), cuT( "Green" ) ) }
 	{
 	}
 
@@ -119,18 +137,21 @@ namespace GuiCommon
 		m_aabbMesh.reset();
 		m_obbMesh.reset();
 		m_obbBone.reset();
+		m_obbSelectedSubmesh.reset();
 		m_obbSubmesh.reset();
 		m_aabbNode.reset();
 		m_obbNode.reset();
 	}
 
-	void CubeBoxManager::displayObject( Geometry const & object )
+	void CubeBoxManager::displayObject( Geometry const & object
+		, castor3d::Submesh const & submesh )
 	{
 		Engine * engine = m_scene.getEngine();
 		engine->postEvent( makeFunctorEvent( EventType::ePostRender
-			, [this, &object]()
+			, [this, &object, &submesh]()
 			{
 				m_object = &object;
+				m_submesh = &submesh;
 				m_obbNode = doAddBB( m_obbMesh
 					, m_obbMesh->getName()
 					, object.getParent()
@@ -139,18 +160,26 @@ namespace GuiCommon
 					, m_aabbMesh->getName()
 					, m_scene.getObjectRootNode()
 					, m_object->getBoundingBox() );
+				m_obbSelectedSubmeshNode = doAddBB( m_obbSelectedSubmesh
+					, m_obbMesh->getName() + string::toString( submesh.getId() )
+					, object.getParent()
+					, m_object->getBoundingBox( submesh ) );
 
 				for ( auto & submesh : *m_object->getMesh() )
 				{
-					m_obbSubmeshNodes.push_back( doAddBB( m_obbSubmesh
-						, m_obbMesh->getName() + string::toString( submesh->getId() )
-						, object.getParent()
-						, m_object->getBoundingBox( *submesh ) ) );
+					if ( submesh.get() != m_submesh )
+					{
+						m_obbSubmeshNodes.push_back( doAddBB( m_obbSubmesh
+							, m_obbMesh->getName() + string::toString( submesh->getId() )
+							, object.getParent()
+							, m_object->getBoundingBox( *submesh ) ) );
+					}
 				}
 
-				m_sceneConnection = m_scene.onUpdate.connect( std::bind( &CubeBoxManager::onSceneUpdate
-					, this
-					, std::placeholders::_1 ) );
+				m_sceneConnection = m_scene.onUpdate.connect( [this]( Scene const & scene )
+					{
+						onSceneUpdate( scene );
+					} );
 			} ) );
 	}
 
@@ -164,13 +193,17 @@ namespace GuiCommon
 				m_sceneConnection.disconnect();
 				doRemoveBB( m_obbMesh->getName(), m_obbNode );
 				doRemoveBB( m_aabbMesh->getName(), m_aabbNode );
+				doRemoveBB( m_obbSelectedSubmesh->getName(), m_obbSelectedSubmeshNode );
 				uint32_t i = 0u;
 
 				for ( auto & submesh : *m_object->getMesh() )
 				{
-					doRemoveBB( m_obbMesh->getName() + string::toString( submesh->getId() )
-						, m_obbSubmeshNodes[i] );
-					i++;
+					if ( submesh.get() != m_submesh )
+					{
+						doRemoveBB( m_obbMesh->getName() + string::toString( submesh->getId() )
+							, m_obbSubmeshNodes[i] );
+						i++;
+					}
 				}
 
 				i = 0u;
@@ -183,9 +216,11 @@ namespace GuiCommon
 
 				m_obbBoneNodes.clear();
 				m_obbSubmeshNodes.clear();
+				m_obbSelectedSubmeshNode = nullptr;
 				m_obbNode.reset();
 				m_aabbNode.reset();
 				m_object = nullptr;
+				m_submesh = nullptr;
 			} ) );
 	}
 
@@ -238,34 +273,42 @@ namespace GuiCommon
 		m_obbNode->setPosition( obb.getCenter() );
 		m_obbNode->update();
 		uint32_t i = 0u;
+		auto & sobb = m_object->getBoundingBox( *m_submesh );
+		m_obbSelectedSubmeshNode->setScale( sobb.getDimensions() / 2.0_r );
+		m_obbSelectedSubmeshNode->setPosition( sobb.getCenter() );
+		m_obbSelectedSubmeshNode->update();
 
 		for ( auto & submesh : *m_object->getMesh() )
 		{
-			auto & sobb = m_object->getBoundingBox( *submesh );
-			m_obbSubmeshNodes[i]->setScale( sobb.getDimensions() / 2.0_r );
-			m_obbSubmeshNodes[i]->setPosition( sobb.getCenter() );
-			m_obbSubmeshNodes[i]->update();
-			++i;
+			if ( submesh.get() != m_submesh )
+			{
+				auto & sobb = m_object->getBoundingBox( *submesh );
+				m_obbSubmeshNodes[i]->setScale( sobb.getDimensions() / 2.0_r );
+				m_obbSubmeshNodes[i]->setPosition( sobb.getCenter() );
+				m_obbSubmeshNodes[i]->update();
+				++i;
+			}
 		}
 
 		auto aabb = obb.getAxisAligned( m_obbNode->getParent()->getDerivedTransformationMatrix() );
 		auto aabbMin = aabb.getMin();
 		auto aabbMax = aabb.getMax();
 		auto aabbSubmesh = m_aabbMesh->getSubmesh( 0u );
-		Vertex::setPosition( *aabbSubmesh->getPoint( 0u ), aabbMin[0], aabbMin[1], aabbMin[2] );
-		Vertex::setPosition( *aabbSubmesh->getPoint( 1u ), aabbMin[0], aabbMax[1], aabbMin[2] );
-		Vertex::setPosition( *aabbSubmesh->getPoint( 2u ), aabbMax[0], aabbMax[1], aabbMin[2] );
-		Vertex::setPosition( *aabbSubmesh->getPoint( 3u ), aabbMax[0], aabbMin[1], aabbMin[2] );
-		Vertex::setPosition( *aabbSubmesh->getPoint( 4u ), aabbMin[0], aabbMin[1], aabbMax[2] );
-		Vertex::setPosition( *aabbSubmesh->getPoint( 5u ), aabbMin[0], aabbMax[1], aabbMax[2] );
-		Vertex::setPosition( *aabbSubmesh->getPoint( 6u ), aabbMax[0], aabbMax[1], aabbMax[2] );
-		Vertex::setPosition( *aabbSubmesh->getPoint( 7u ), aabbMax[0], aabbMin[1], aabbMax[2] );
+		aabbSubmesh->getPoint( 0u ).pos = Point3f( aabbMin[0], aabbMin[1], aabbMin[2] );
+		aabbSubmesh->getPoint( 1u ).pos = Point3f( aabbMin[0], aabbMax[1], aabbMin[2] );
+		aabbSubmesh->getPoint( 2u ).pos = Point3f( aabbMax[0], aabbMax[1], aabbMin[2] );
+		aabbSubmesh->getPoint( 3u ).pos = Point3f( aabbMax[0], aabbMin[1], aabbMin[2] );
+		aabbSubmesh->getPoint( 4u ).pos = Point3f( aabbMin[0], aabbMin[1], aabbMax[2] );
+		aabbSubmesh->getPoint( 5u ).pos = Point3f( aabbMin[0], aabbMax[1], aabbMax[2] );
+		aabbSubmesh->getPoint( 6u ).pos = Point3f( aabbMax[0], aabbMax[1], aabbMax[2] );
+		aabbSubmesh->getPoint( 7u ).pos = Point3f( aabbMax[0], aabbMin[1], aabbMax[2] );
+		aabbSubmesh->needsUpdate();
 
 		Engine * engine = m_scene.getEngine();
 		engine->postEvent( makeFunctorEvent( EventType::ePreRender
 			, [this, aabbSubmesh]()
 			{
-				aabbSubmesh->getVertexBuffer().upload();
+				aabbSubmesh->update();
 			} ) );
 	}
 }

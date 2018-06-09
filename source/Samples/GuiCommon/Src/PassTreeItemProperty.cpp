@@ -1,4 +1,4 @@
-﻿#include "PassTreeItemProperty.hpp"
+#include "PassTreeItemProperty.hpp"
 
 #include "ShaderDialog.hpp"
 
@@ -8,6 +8,8 @@
 #include <Material/LegacyPass.hpp>
 #include <Material/MetallicRoughnessPbrPass.hpp>
 #include <Material/SpecularGlossinessPbrPass.hpp>
+#include <Render/RenderWindow.hpp>
+#include <Technique/RenderTechnique.hpp>
 
 #include "AdditionalProperties.hpp"
 #include "PointProperties.hpp"
@@ -35,13 +37,384 @@ namespace GuiCommon
 		static wxString PROPERTY_PASS_SHADER = _( "Shader" );
 		static wxString PROPERTY_PASS_REFRACTION = _( "Refraction" );
 		static wxString PROPERTY_PASS_GLOSSINESS = _( "Glossiness" );
-		static wxString PROPERTY_PASS_EDIT_SHADER = _( "Edit Shader..." );
+		static wxString PROPERTY_PASS_EDIT_SHADER = _( "View Shaders..." );
+
+		class PassShaderGatherer
+			: public castor3d::RenderTechniqueVisitor
+		{
+		private:
+			PassShaderGatherer( PassFlags passFlags
+				, TextureChannels textureFlags
+				, SceneFlags sceneFlags
+				, Scene const & scene
+				, renderer::CompareOp alphaFunc
+				, ShaderSources & sources )
+				: castor3d::RenderTechniqueVisitor{ std::move( passFlags )
+					, std::move( textureFlags )
+					, std::move( sceneFlags )
+					, scene
+					, alphaFunc }
+				, m_sources{ sources }
+			{
+			}
+
+		public:
+			static ShaderSources submit( Pass const & pass
+				, Scene const & scene )
+			{
+				ShaderSources result;
+				PassShaderGatherer vis{ pass.getPassFlags()
+					, pass.getTextureFlags()
+					, scene.getFlags()
+					, scene
+					, pass.getAlphaFunc()
+					, result };
+				auto & engine = *pass.getOwner()->getEngine();
+				auto lock = castor::makeUniqueLock( engine.getRenderWindowCache() );
+				auto it = engine.getRenderWindowCache().begin();
+
+				if ( it != engine.getRenderWindowCache().end()
+					&& it->second->getRenderTarget() )
+				{
+					RenderTechniqueSPtr technique = it->second->getRenderTarget()->getTechnique();
+
+					if ( technique )
+					{
+						technique->accept( vis );
+					}
+				}
+
+				return result;
+			}
+
+		private:
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlag type
+				, castor::String const & shader )override
+			{
+				doGetSource( name ).sources[type] = shader;
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlag type
+				, glsl::Shader const & shader )override
+			{
+				doGetSource( name ).sources[type] = shader.getSource();
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, float & value )override
+			{
+				doVisit( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, int32_t & value )override
+			{
+				doVisit( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, uint32_t & value )override
+			{
+				doVisit( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::Point2f & value )override
+			{
+				doVisit( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::Point2i & value )override
+			{
+				doVisit( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::Point2ui & value )override
+			{
+				doVisit( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::Point3f & value )override
+			{
+				doVisit( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::Point3i & value )override
+			{
+				doVisit( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::Point3ui & value )override
+			{
+				doVisit( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::Point4f & value )override
+			{
+				doVisit( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::Point4i & value )override
+			{
+				doVisit( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::Point4ui & value )override
+			{
+				doVisit( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::Matrix4x4f & value )override
+			{
+				doVisit( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< float > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< int32_t > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< uint32_t > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< castor::Point2f > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< castor::Point2i > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< castor::Point2ui > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< castor::Point3f > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< castor::Point3i > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< castor::Point3ui > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< castor::Point4f > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< castor::Point4i > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< castor::Point4ui > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
+			void visit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< castor::Matrix4x4f > & value )override
+			{
+				doVisitTracked( name, shaders, ubo, uniform, value );
+			}
+
+		private:
+			ShaderSource & doGetSource( castor::String const & name )
+			{
+				auto it = std::find_if( m_sources.begin()
+					, m_sources.end()
+					, [&name]( ShaderSource const & lookup )
+					{
+						return lookup.name == name;
+					} );
+
+				if ( it != m_sources.end() )
+				{
+					return *it;
+				}
+
+				ShaderSource source{ name };
+				m_sources.emplace_back( std::move( source ) );
+				return m_sources.back();
+			}
+
+			UniformBufferValues & doGetUbo( ShaderSource & source
+				, renderer::ShaderStageFlags stages
+				, castor::String const & name )
+			{
+				auto it = std::find_if( source.ubos.begin()
+					, source.ubos.end()
+					, [&name, &stages]( UniformBufferValues const & lookup )
+					{
+						return lookup.name == name
+							&& lookup.stages == stages;
+					} );
+
+				if ( it != source.ubos.end() )
+				{
+					return *it;
+				}
+
+				UniformBufferValues ubo{ name, stages };
+				source.ubos.emplace_back( std::move( ubo ) );
+				return source.ubos.back();
+			}
+
+			template< typename T >
+			void doVisit( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, T & value )
+			{
+				auto & source = doGetSource( name );
+				auto & uboValues = doGetUbo( source, shaders, ubo );
+				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value ) );
+			}
+
+			template< typename T >
+			void doVisitTracked( castor::String const & name
+				, renderer::ShaderStageFlags shaders
+				, castor::String const & ubo
+				, castor::String const & uniform
+				, castor::ChangeTracked< T > & value )
+			{
+				auto & source = doGetSource( name );
+				auto & uboValues = doGetUbo( source, shaders, ubo );
+				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value ) );
+			}
+
+		private:
+			ShaderSources & m_sources;
+		};
 	}
 
-	PassTreeItemProperty::PassTreeItemProperty( bool p_editable, PassSPtr p_pass, Scene & p_scene )
-		: TreeItemProperty( p_pass->getOwner()->getEngine(), p_editable, ePROPERTY_DATA_TYPE_PASS )
-		, m_pass( p_pass )
-		, m_scene( p_scene )
+	PassTreeItemProperty::PassTreeItemProperty( bool editable
+		, PassSPtr pass
+		, Scene & scene
+		, wxWindow * parent )
+		: TreeItemProperty{ pass->getOwner()->getEngine(), editable, ePROPERTY_DATA_TYPE_PASS }
+		, m_pass{ pass }
+		, m_scene{ scene }
+		, m_parent{ parent }
 	{
 		PROPERTY_CATEGORY_PASS = _( "Pass: " );
 		PROPERTY_PASS_DIFFUSE = _( "Diffuse" );
@@ -56,7 +429,7 @@ namespace GuiCommon
 		PROPERTY_PASS_METALLIC = _( "Metallic" );
 		PROPERTY_PASS_SHADER = _( "Shader" );
 		PROPERTY_PASS_GLOSSINESS = _( "Glossiness" );
-		PROPERTY_PASS_EDIT_SHADER = _( "Edit Shader..." );
+		PROPERTY_PASS_EDIT_SHADER = _( "View Shaders..." );
 
 		CreateTreeItemMenu();
 	}
@@ -338,10 +711,11 @@ namespace GuiCommon
 	bool PassTreeItemProperty::OnEditShader( wxPGProperty * p_property )
 	{
 		PassSPtr pass = getPass();
-		ShaderDialog * editor = new ShaderDialog( m_scene
-			, IsEditable()
-			, nullptr
-			, *pass );
+		ShaderSources sources = PassShaderGatherer::submit( *pass, m_scene );
+		ShaderDialog * editor = new ShaderDialog{ pass->getOwner()->getEngine()
+			, std::move( sources )
+			, pass->getOwner()->getName() + string::toString( pass->getId(), 10, std::locale{ "C" } )
+			, m_parent };
 		editor->Show();
 		return false;
 	}

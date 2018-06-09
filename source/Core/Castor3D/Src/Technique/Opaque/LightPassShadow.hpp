@@ -13,10 +13,7 @@ See LICENSE file in root folder
 
 #include "Engine.hpp"
 #include "Scene/Light/Light.hpp"
-#include "Render/Context.hpp"
 #include "Render/RenderSystem.hpp"
-#include "Shader/ShaderProgram.hpp"
-#include "Shader/Uniform/PushUniform.hpp"
 #include "Texture/TextureUnit.hpp"
 #include "Texture/Sampler.hpp"
 
@@ -306,34 +303,11 @@ namespace castor3d
 			 *\param[in]	pxl		Le source du fagment shader.
 			 */
 			Program( Engine & engine
+				, LightPassShadow & lightPass
 				, glsl::Shader const & vtx
 				, glsl::Shader const & pxl )
-				: my_program_type( engine, vtx, pxl )
+				: my_program_type( engine, lightPass, vtx, pxl, true )
 			{
-			}
-			/**
-			 *\~english
-			 *\return		The shadow map index from the program.
-			 *\~french
-			 *\return		L'indice de la texture d'ombres, dans le programme.
-			 */
-			inline uint32_t getShadowMapIndex()const
-			{
-				auto uniform = this->m_program->template findUniform< UniformType::eSampler >( my_traits::getShadowMapName()
-					, ShaderType::ePixel );
-				return uint32_t( uniform ? uniform->getValue() : ~0 );
-			}
-			/**
-			 *\~english
-			 *\return		The depth map index from the program.
-			 *\~french
-			 *\return		L'indice de la texture de profondeur, dans le programme.
-			 */
-			inline uint32_t getDepthMapIndex()const
-			{
-				auto uniform = this->m_program->template findUniform< UniformType::eSampler >( my_traits::getDepthMapName()
-					, ShaderType::ePixel );
-				return uint32_t( uniform ? uniform->getValue() : ~0 );
 			}
 		};
 
@@ -353,12 +327,14 @@ namespace castor3d
 		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
 		 */
 		LightPassShadow( Engine & engine
-			, FrameBuffer & frameBuffer
-			, FrameBufferAttachment & depthAttach
+			, renderer::TextureView const & depthView
+			, renderer::TextureView const & diffuseView
+			, renderer::TextureView const & specularView
 			, GpInfoUbo & gpInfoUbo )
 			: my_pass_type{ engine
-				, frameBuffer
-				, depthAttach
+				, depthView
+				, diffuseView
+				, specularView
 				, gpInfoUbo
 				, true }
 		{
@@ -366,48 +342,26 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::LightPass::render
 		 */
-		void render( castor::Size const & size
-			, GeometryPassResult const & gp
-			, Light const & light
-			, Camera const & camera
-			, bool first
-			, ShadowMap * shadowMapOpt )override
+		renderer::Semaphore const & render( uint32_t index
+			, renderer::Semaphore const & toWait
+			, TextureUnit * shadowMapOpt )override
 		{
-			my_pass_type::doUpdate( size
-				, light
-				, camera );
-			auto & shadowMapTexture = shadowMapOpt->getTexture();
-			auto & shadowMapDepth = shadowMapOpt->getDepth();
-			shadowMapTexture.setIndex( this->m_shadowMapIndex );
-			shadowMapDepth.setIndex( this->m_depthMapIndex );
-			this->m_program->bind( light );
-			shadowMapTexture.bind();
-			shadowMapDepth.bind();
-			my_pass_type::doRender( size
-				, gp
-				, first );
-			shadowMapDepth.unbind();
-			shadowMapTexture.unbind();
+			this->doPrepareCommandBuffer( *this->m_pipeline, shadowMapOpt, !index );
+			return my_pass_type::render( index, toWait, nullptr );
 		}
 
 	private:
 		/**
 		 *\copydoc		castor3d::LightPass::doCreateProgram
 		 */
-		typename LightPass::ProgramPtr doCreateProgram( glsl::Shader const & vtx
-			, glsl::Shader const & pxl )const override
+		typename LightPass::ProgramPtr doCreateProgram()override
 		{
 			auto result = std::make_unique< LightPassShadow::Program >( this->m_engine
-				, vtx
-				, pxl );
-			m_shadowMapIndex = result->getShadowMapIndex();
-			m_depthMapIndex = result->getDepthMapIndex();
+				, *this
+				, this->m_vertexShader
+				, this->m_pixelShader );
 			return result;
 		}
-
-	private:
-		mutable uint32_t m_shadowMapIndex{ 0u };
-		mutable uint32_t m_depthMapIndex{ 0u };
 	};
 	//!\~english	The directional lights light pass with shadows.
 	//!\~french		La passe d'éclairage avec ombres pour les lumières directionnelles.

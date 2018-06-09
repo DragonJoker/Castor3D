@@ -14,7 +14,6 @@ namespace castor3d
 		if ( !m_initialised || m_dirty )
 		{
 			m_initialised = doInitialise();
-			m_dirty = !m_initialised;
 		}
 
 		return m_initialised;
@@ -41,6 +40,7 @@ namespace castor3d
 		if ( m_dirty )
 		{
 			doUpload();
+			m_dirty = false;
 		}
 	}
 

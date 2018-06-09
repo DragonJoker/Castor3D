@@ -19,7 +19,10 @@ namespace castor3d
 	\~french
 	\brief		Fabrique de mappage de tons.
 	*/
-	using ToneMappingFactory = castor::Factory< ToneMapping, castor::String, ToneMappingSPtr, std::function< ToneMappingSPtr( Engine &, Parameters const & ) > >;
+	using ToneMappingFactory = castor::Factory< ToneMapping
+		, castor::String
+		, ToneMappingSPtr
+		, std::function< ToneMappingSPtr( Engine &, HdrConfig &, Parameters const & ) > >;
 }
 
 #endif

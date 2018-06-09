@@ -47,8 +47,9 @@ namespace castor3d
 		LightingPass( Engine & engine
 			, castor::Size const & size
 			, Scene const & scene
+			, GeometryPassResult const & gpResult
 			, OpaquePass & opaque
-			, FrameBufferAttachment & depthAttach
+			, renderer::TextureView const & depthView
 			, SceneUbo & sceneUbo
 			, GpInfoUbo & gpInfoUbo );
 		/**
@@ -72,10 +73,15 @@ namespace castor3d
 		 *\param[in]	gp		Le résultat de la geometry pass.
 		 *\param[out]	info	Les informations de rendu.
 		 */
-		bool render( Scene const & scene
+		renderer::Semaphore const & render( Scene const & scene
 			, Camera const & camera
 			, GeometryPassResult const & gp
+			, renderer::Semaphore const & toWait
 			, RenderInfo & info );
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		void accept( RenderTechniqueVisitor & visitor );
 		/**
 		 *\~english
 		 *\return		The light pass diffuse result.
@@ -98,39 +104,22 @@ namespace castor3d
 		}
 
 	private:
-		void doRenderLights( Scene const & scene
+		renderer::Semaphore const & doRenderLights( Scene const & scene
 			, Camera const & camera
 			, LightType type
 			, GeometryPassResult const & gp
-			, bool & first
+			, renderer::Semaphore const & toWait
+			, uint32_t & index
 			, RenderInfo & info );
 
 	private:
 		castor::Size const m_size;
-		//!\~english	The lighting pass diffuse result.
-		//!\~french		L'éclairage diffus de la passe d'éclairage.
 		TextureUnit m_diffuse;
-		//!\~english	The lighting pass specular result.
-		//!\~french		L'éclairage spéculaire de la passe d'éclairage.
 		TextureUnit m_specular;
-		//!\~english	The target FBO.
-		//!\~french		Le FBO cible.
-		FrameBufferSPtr m_frameBuffer;
-		//!\~english	The attachment between diffuse result and the frame buffer.
-		//!\~french		L'attache entre le résultat diffus et le tampon d'images.
-		TextureAttachmentSPtr m_diffuseAttach;
-		//!\~english	The attachment between specular result and the frame buffer.
-		//!\~french		L'attache entre le résultat spéculaire et le tampon d'images.
-		TextureAttachmentSPtr m_specularAttach;
-		//!\~english	The light passes.
-		//!\~french		Les passes de lumière.
 		LightPasses m_lightPass;
-		//!\~english	The light passes, with shadows.
-		//!\~french		Les passes de lumière, avec ombres.
 		LightPasses m_lightPassShadow;
-		//!\~english	The render pass timer.
-		//!\~french		Le timer de la passe de rendu.
 		RenderPassTimerSPtr m_timer;
+		renderer::FencePtr m_fence;
 	};
 }
 

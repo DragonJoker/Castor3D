@@ -5,12 +5,7 @@ project( CastorUtils )
 include( Doxygen )
 include( AndroidNdkModules )
 
-if ( ANDROID )
-	set( FREETYPE_FOUND TRUE )
-	set( FREETYPE_LIBRARIES FreeType )
-else ()
-	find_package( Freetype )
-endif ()
+set( FREETYPE_LIBRARIES FreeType )
 
 if ( MSW )
 	find_package( ZLIB 1.2.7 )
@@ -28,10 +23,6 @@ if( NOT WIN32 )
 	find_package( X11 )
 endif()
 
-if( FREETYPE_FOUND )
-	message( STATUS "+ Found FreeType (version ${FREETYPE_VERSION_STRING})" )
-endif()
-
 if( ZLIB_FOUND )
 	message( STATUS "+ Found Zlib (version ${ZLIB_VERSION_STRING})" )
 endif()
@@ -40,13 +31,9 @@ if( FREEIMAGE_FOUND )
 	message( STATUS "+ Found FreeImage (version ${FreeImage_VERSION_STRING})" )
 endif()
 
-if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND )
+if( FREEIMAGE_FOUND AND ZLIB_FOUND )
 	if ( ANDROID )
-		include_directories(
-			${CMAKE_SOURCE_DIR}/Core/FreeType/include
-			${CMAKE_SOURCE_DIR}/Core/FreeType/include/freetype
-			${ANDROID_NDK}/sources
-		)
+		include_directories( ${ANDROID_NDK}/sources )
 		android_ndk_import_module_cpufeatures()
 		set( CastorMinLibraries
 			${CastorMinLibraries}
@@ -55,16 +42,6 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND )
 			cpufeatures
 		)
 	else ()
-		# Don't ask me why, in Windows x64 it is different from other builds...
-		if ( ${FREETYPE_INCLUDE_DIR_ft2build} STREQUAL ${FREETYPE_INCLUDE_DIR_freetype2} )
-			set( FREETYPE_INCLUDE_DIR_freetype2 ${FREETYPE_INCLUDE_DIR_freetype2}/freetype CACHE STRING "" FORCE )
-			set( FREETYPE_INCLUDE_DIRS
-				${FREETYPE_INCLUDE_DIRS}
-				${FREETYPE_INCLUDE_DIR_freetype2}
-			)
-		endif ()
-
-		include_directories( ${FREETYPE_INCLUDE_DIRS} )
 		include_directories( ${FreeImage_INCLUDE_DIR} )
 	endif ()
 
@@ -138,7 +115,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND )
 
 	set( ${PROJECT_NAME}_DESCRIPTION "${MAIN_PROJECT_NAME} Utils" )
 	set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-	set( ${PROJECT_NAME}_VERSION_MINOR 10 )
+	set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 	set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 	if( PROJECTS_USE_PRECOMPILED_HEADERS )
@@ -191,23 +168,23 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND )
 		target_link_libraries( ${PROJECT_NAME} dl )
 	endif ()
 
-	parse_subdir_files( Align "Align" )
-	parse_subdir_files( Config "Config" )
-	parse_subdir_files( Data "Data" )
-	parse_subdir_files( Data/MiniZip "Data\\\\MiniZip" )
-	parse_subdir_files( Design "Design" )
-	parse_subdir_files( Exception "Exception" )
-	parse_subdir_files( FileParser "FileParser" )
-	parse_subdir_files( Graphics "Graphics" )
-	parse_subdir_files( Log "Log" )
-	parse_subdir_files( Math "Math" )
-	parse_subdir_files( Miscellaneous "Miscellaneous" )
-	parse_subdir_files( Multithreading "Multithreading" )
-	parse_subdir_files( Pool "Pool" )
-	parse_subdir_files( Stream "Stream" )
-	parse_subdir_files( Platform/Win32 "Platform\\\\Win32" )
-	parse_subdir_files( Platform/Android "Platform\\\\Android" )
-	parse_subdir_files( Platform/Linux "Platform\\\\Linux" )
+	parse_subdir_files( Src/Align "Align" )
+	parse_subdir_files( Src/Config "Config" )
+	parse_subdir_files( Src/Data "Data" )
+	parse_subdir_files( Src/Data/MiniZip "Data\\\\MiniZip" )
+	parse_subdir_files( Src/Design "Design" )
+	parse_subdir_files( Src/Exception "Exception" )
+	parse_subdir_files( Src/FileParser "FileParser" )
+	parse_subdir_files( Src/Graphics "Graphics" )
+	parse_subdir_files( Src/Log "Log" )
+	parse_subdir_files( Src/Math "Math" )
+	parse_subdir_files( Src/Miscellaneous "Miscellaneous" )
+	parse_subdir_files( Src/Multithreading "Multithreading" )
+	parse_subdir_files( Src/Pool "Pool" )
+	parse_subdir_files( Src/Stream "Stream" )
+	parse_subdir_files( Src/Platform/Win32 "Platform\\\\Win32" )
+	parse_subdir_files( Src/Platform/Android "Platform\\\\Android" )
+	parse_subdir_files( Src/Platform/Linux "Platform\\\\Linux" )
 
 	file( GLOB CASTOR_Config_HEADER_FILES
 		${CMAKE_CURRENT_BINARY_DIR}/Src/*config*.hpp
@@ -241,10 +218,6 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND )
 			endif ()
 		else ()
 			copy_dll( ${PROJECT_NAME} ${ZLIB_LIBRARY} ${ZLIB_LIBRARY} )
-		endif ()
-
-		if ( ${PROJECTS_PLATFORM} STREQUAL "x86" )
-			copy_dll( ${PROJECT_NAME} ${FREETYPE_LIBRARY} ${FREETYPE_LIBRARY} 6 )
 		endif ()
 		copy_dll( ${PROJECT_NAME} ${FreeImage_LIBRARIES} ${FreeImage_LIBRARIES} )
 	endif ()

@@ -24,6 +24,8 @@ namespace castor3d
 	class RenderTargetCache
 		: public castor::OwnedBy< Engine >
 	{
+		DECLARE_VECTOR( RenderTargetSPtr, RenderTarget );
+		DECLARE_ARRAY( RenderTargetArray, TargetType::eCount, TargetType );
 	public:
 		/**
 		 *\~english
@@ -78,45 +80,39 @@ namespace castor3d
 		 */
 		C3D_API void clear();
 		/**
-		 *\~english
-		 *\return		The ToneMapping factory.
-		 *\~french
-		 *\return		La fabrique de ToneMapping.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline ToneMappingFactory const & getToneMappingFactory()const
 		{
 			return m_toneMappingFactory;
 		}
-		/**
-		 *\~english
-		 *\return		The ToneMapping factory.
-		 *\~french
-		 *\return		La fabrique de ToneMapping.
-		 */
+
 		inline ToneMappingFactory & getToneMappingFactory()
 		{
 			return m_toneMappingFactory;
 		}
-		/**
-		 *\~english
-		 *\return		The PostEffect factory.
-		 *\~french
-		 *\return		La fabrique de PostEffect.
-		 */
+
 		inline PostEffectFactory const & getPostEffectFactory()const
 		{
 			return m_postEffectFactory;
 		}
-		/**
-		 *\~english
-		 *\return		The PostEffect factory.
-		 *\~french
-		 *\return		La fabrique de PostEffect.
-		 */
+
 		inline PostEffectFactory & getPostEffectFactory()
 		{
 			return m_postEffectFactory;
 		}
+
+		inline RenderTargetArray const & getRenderTargets( TargetType type )
+		{
+			return m_renderTargets[size_t( type )];
+		}
+		/**@}*/
 		/**
 		 *\~english
 		 *\brief		Locks the collection mutex
@@ -139,8 +135,6 @@ namespace castor3d
 		}
 
 	private:
-		DECLARE_VECTOR( RenderTargetSPtr, RenderTarget );
-		DECLARE_ARRAY( RenderTargetArray, TargetType::eCount, TargetType );
 		//!\~english	The render targets sorted by target type.
 		//!\~french		Les cibles de rendu, triées par type de cible de rendu.
 		TargetTypeArray m_renderTargets;

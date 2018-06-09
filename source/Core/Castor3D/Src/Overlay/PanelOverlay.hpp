@@ -88,6 +88,10 @@ namespace castor3d
 		 */
 		C3D_API static OverlayCategorySPtr create();
 		/**
+		 *\copydoc	castor3d::OverlayCategory::accept
+		 */
+		C3D_API void accept( OverlayVisitor & visitor )const override;
+		/**
 		 *\copydoc		castor3d::OverlayCategory::createTextWriter
 		 */
 		C3D_API std::unique_ptr < OverlayCategory::TextWriter > createTextWriter( castor::String const & tabs )override
@@ -109,21 +113,7 @@ namespace castor3d
 
 	protected:
 		/**
-		 *\~english
-		 *\brief		Draws the overlay
-		 *\param[in]	renderer	The renderer used to draw this overlay
-		 *\~french
-		 *\brief		Dessine l'incrustation
-		 *\param[in]	renderer	Le renderer utilisé pour dessiner cette incrustation
-		 */
-		C3D_API void doRender( OverlayRendererSPtr renderer )override;
-		/**
-		 *\~english
-		 *\brief		Updates the vertex buffer.
-		 *\param[in]	size	The render target size.
-		 *\~french
-		 *\brief		Met à jour le tampon de sommets.
-		 *\param[in]	size	Les dimensions de la cible de rendu.
+		 *\copydoc	castor3d::OverlayCategory::doUpdateBuffer
 		 */
 		C3D_API void doUpdateBuffer( castor::Size const & size )override;
 

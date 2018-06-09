@@ -2,108 +2,30 @@
 
 #include "LightPass.hpp"
 
-#include <Engine.hpp>
-#include <Render/RenderPipeline.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Render/RenderTarget.hpp>
-#include <Shader/ShaderProgram.hpp>
-#include <Texture/Sampler.hpp>
-#include <Texture/TextureImage.hpp>
-#include <Texture/TextureLayout.hpp>
+#include "Engine.hpp"
+#include "Cache/MaterialCache.hpp"
+#include "Render/RenderPipeline.hpp"
+#include "Render/RenderSystem.hpp"
+#include "Render/RenderTarget.hpp"
+#include "Shader/PassBuffer/PassBuffer.hpp"
+#include "Shader/Program.hpp"
+#include "Technique/Opaque/GeometryPassResult.hpp"
+#include "Texture/Sampler.hpp"
+#include "Texture/TextureView.hpp"
+#include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
 
 #include "Shader/Shaders/GlslMaterial.hpp"
 
+#include <RenderPass/RenderPassCreateInfo.hpp>
+
 using namespace castor;
 using namespace castor3d;
 
 namespace castor3d
 {
-	namespace
-	{
-		inline BlendState doCreateBlendState( BlendMode colourBlendMode
-			, BlendMode alphaBlendMode )
-		{
-			BlendState state;
-			bool blend = false;
-
-			switch ( colourBlendMode )
-			{
-			case BlendMode::eNoBlend:
-				state.setRgbSrcBlend( BlendOperand::eOne );
-				state.setRgbDstBlend( BlendOperand::eZero );
-				break;
-
-			case BlendMode::eAdditive:
-				blend = true;
-				state.setRgbSrcBlend( BlendOperand::eOne );
-				state.setRgbDstBlend( BlendOperand::eOne );
-				break;
-
-			case BlendMode::eMultiplicative:
-				blend = true;
-				state.setRgbSrcBlend( BlendOperand::eZero );
-				state.setRgbDstBlend( BlendOperand::eInvSrcColour );
-				break;
-
-			case BlendMode::eInterpolative:
-				blend = true;
-				state.setRgbSrcBlend( BlendOperand::eSrcColour );
-				state.setRgbDstBlend( BlendOperand::eInvSrcColour );
-				break;
-
-			default:
-				blend = true;
-				state.setRgbSrcBlend( BlendOperand::eSrcColour );
-				state.setRgbDstBlend( BlendOperand::eInvSrcColour );
-				break;
-			}
-
-			switch ( alphaBlendMode )
-			{
-			case BlendMode::eNoBlend:
-				state.setAlphaSrcBlend( BlendOperand::eOne );
-				state.setAlphaDstBlend( BlendOperand::eZero );
-				break;
-
-			case BlendMode::eAdditive:
-				blend = true;
-				state.setAlphaSrcBlend( BlendOperand::eOne );
-				state.setAlphaDstBlend( BlendOperand::eOne );
-				break;
-
-			case BlendMode::eMultiplicative:
-				blend = true;
-				state.setAlphaSrcBlend( BlendOperand::eZero );
-				state.setAlphaDstBlend( BlendOperand::eInvSrcAlpha );
-				state.setRgbSrcBlend( BlendOperand::eZero );
-				state.setRgbDstBlend( BlendOperand::eInvSrcAlpha );
-				break;
-
-			case BlendMode::eInterpolative:
-				blend = true;
-				state.setAlphaSrcBlend( BlendOperand::eSrcAlpha );
-				state.setAlphaDstBlend( BlendOperand::eInvSrcAlpha );
-				state.setRgbSrcBlend( BlendOperand::eSrcAlpha );
-				state.setRgbDstBlend( BlendOperand::eInvSrcAlpha );
-				break;
-
-			default:
-				blend = true;
-				state.setAlphaSrcBlend( BlendOperand::eSrcAlpha );
-				state.setAlphaDstBlend( BlendOperand::eInvSrcAlpha );
-				state.setRgbSrcBlend( BlendOperand::eSrcAlpha );
-				state.setRgbDstBlend( BlendOperand::eInvSrcAlpha );
-				break;
-			}
-
-			state.enableBlend( blend );
-			return state;
-		}
-	}
-
 	String const OpaquePass::Output1 = cuT( "c3d_output1" );
 	String const OpaquePass::Output2 = cuT( "c3d_output2" );
 	String const OpaquePass::Output3 = cuT( "c3d_output3" );
@@ -113,7 +35,8 @@ namespace castor3d
 	OpaquePass::OpaquePass( Scene & scene
 		, Camera * camera
 		, SsaoConfig const & config )
-		: castor3d::RenderTechniquePass{ cuT( "Opaque pass" )
+		: castor3d::RenderTechniquePass{ cuT( "Opaque" )
+			, cuT( "Geometry pass" )
 			, scene
 			, camera
 			, false
@@ -126,13 +49,227 @@ namespace castor3d
 	{
 	}
 
-	void OpaquePass::render( RenderInfo & info
-		, ShadowMapLightTypeArray & shadowMaps
+	void OpaquePass::initialiseRenderPass( GeometryPassResult const & gpResult )
+	{
+		auto & device = getCurrentDevice( *this );
+		renderer::RenderPassCreateInfo renderPass;
+		renderPass.flags = 0u;
+
+		renderPass.subpasses.resize( 1u );
+		renderPass.subpasses[0].flags = 0u;
+		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
+		renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
+
+		renderPass.attachments.resize( gpResult.getViews().size() );
+		renderPass.attachments[0].format = gpResult.getViews()[0]->getFormat();
+		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+
+		for ( size_t i = 1u; i < gpResult.getViews().size(); ++i )
+		{
+			renderPass.attachments[i].format = gpResult.getViews()[i]->getFormat();
+			renderPass.attachments[i].loadOp = renderer::AttachmentLoadOp::eClear;
+			renderPass.attachments[i].storeOp = renderer::AttachmentStoreOp::eStore;
+			renderPass.attachments[i].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+			renderPass.attachments[i].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+			renderPass.attachments[i].samples = renderer::SampleCountFlag::e1;
+			renderPass.attachments[i].initialLayout = renderer::ImageLayout::eUndefined;
+			renderPass.attachments[i].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+
+			renderPass.subpasses[0].colorAttachments.push_back( { uint32_t( i ), renderer::ImageLayout::eColourAttachmentOptimal } );
+		}
+
+		renderPass.dependencies.resize( 2u );
+		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].dstSubpass = 0u;
+		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		renderPass.dependencies[1].srcSubpass = 0u;
+		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		m_renderPass = device.createRenderPass( renderPass );
+		renderer::FrameBufferAttachmentArray attaches;
+
+		for ( size_t i = 0u; i < gpResult.getViews().size(); ++i )
+		{
+			attaches.emplace_back( *( m_renderPass->getAttachments().begin() + i ), *gpResult.getViews()[i] );
+		}
+
+		m_frameBuffer = m_renderPass->createFrameBuffer( { gpResult[0].getDimensions().width, gpResult[0].getDimensions().height }
+			, std::move( attaches ) );
+		m_nodesCommands = device.getGraphicsCommandPool().createCommandBuffer();
+	}
+
+	void OpaquePass::accept( RenderTechniqueVisitor & visitor )
+	{
+		auto shaderProgram = getEngine()->getShaderProgramCache().getAutomaticProgram( *this
+			, visitor.getPassFlags()
+			, visitor.getTextureFlags()
+			, ProgramFlags{}
+			, visitor.getSceneFlags()
+			, visitor.getAlphaFunc()
+			, false );
+		visitor.visit( cuT( "Object" )
+			, renderer::ShaderStageFlag::eVertex
+			, shaderProgram->getSource( renderer::ShaderStageFlag::eVertex ) );
+		visitor.visit( cuT( "Object" )
+			, renderer::ShaderStageFlag::eFragment
+			, shaderProgram->getSource( renderer::ShaderStageFlag::eFragment ) );
+	}
+
+	void OpaquePass::update( RenderInfo & info
 		, Point2r const & jitter )
 	{
-		doRender( info
-			, shadowMaps
-			, jitter );
+		doUpdate( info, jitter );
+	}
+
+	renderer::Semaphore const & OpaquePass::render( renderer::Semaphore const & toWait )
+	{
+		static renderer::ClearValueArray const clearValues
+		{
+			renderer::DepthStencilClearValue{ 1.0, 0 },
+			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
+			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
+			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
+			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
+			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
+		};
+
+		auto * result = &toWait;
+		auto & timer = getTimer();
+		auto & device = getCurrentDevice( *this );
+		timer.start();
+
+		if ( m_nodesCommands->begin() )
+		{
+			timer.beginPass( *m_nodesCommands );
+			timer.notifyPassRender();
+			m_nodesCommands->beginRenderPass( getRenderPass()
+				, *m_frameBuffer
+				, clearValues
+				, renderer::SubpassContents::eSecondaryCommandBuffers );
+			m_nodesCommands->executeCommands( { getCommandBuffer() } );
+			m_nodesCommands->endRenderPass();
+			timer.endPass( *m_nodesCommands );
+			m_nodesCommands->end();
+
+			device.getGraphicsQueue().submit( *m_nodesCommands
+				, *result
+				, renderer::PipelineStageFlag::eColourAttachmentOutput
+				, getSemaphore()
+				, nullptr );
+			result = &getSemaphore();
+		}
+
+		timer.stop();
+		return *result;
+	}
+
+	renderer::DescriptorSetLayoutBindingArray OpaquePass::doCreateUboBindings( PipelineFlags const & flags )const
+	{
+		renderer::DescriptorSetLayoutBindingArray uboBindings;
+
+		if ( !checkFlag( flags.programFlags, ProgramFlag::eDepthPass ) )
+		{
+			uboBindings.emplace_back( getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding() );
+		}
+
+		uboBindings.emplace_back( MatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
+		uboBindings.emplace_back( SceneUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
+
+		if ( !checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
+		{
+			uboBindings.emplace_back( ModelMatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+		}
+
+		uboBindings.emplace_back( ModelUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
+
+		if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
+		{
+			uboBindings.push_back( SkinningUbo::createLayoutBinding( SkinningUbo::BindingPoint, flags.programFlags ) );
+		}
+
+		if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
+		{
+			uboBindings.emplace_back( MorphingUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+		}
+
+		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
+		{
+			uboBindings.emplace_back( BillboardUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+		}
+
+		return uboBindings;
+	}
+
+	renderer::DescriptorSetLayoutBindingArray OpaquePass::doCreateTextureBindings( PipelineFlags const & flags )const
+	{
+		auto index = MinBufferIndex;
+		renderer::DescriptorSetLayoutBindingArray textureBindings;
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eDiffuse ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eSpecular ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eGloss ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eNormal ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		bool opacityMap = checkFlag( flags.textureFlags, TextureChannel::eOpacity )
+			&& flags.alphaFunc != renderer::CompareOp::eAlways;
+
+		if ( opacityMap )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eHeight ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eAmbientOcclusion ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eEmissive ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		if ( checkFlag( flags.textureFlags, TextureChannel::eTransmittance ) )
+		{
+			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		}
+
+		return textureBindings;
 	}
 
 	void OpaquePass::doUpdateFlags( PassFlags & passFlags
@@ -141,7 +278,6 @@ namespace castor3d
 		, SceneFlags & sceneFlags )const
 	{
 		remFlag( programFlags, ProgramFlag::eLighting );
-		remFlag( sceneFlags, SceneFlag::eShadowFilterPcf );
 	}
 
 	glsl::Shader OpaquePass::doGetVertexShaderSource( PassFlags const & passFlags
@@ -150,58 +286,83 @@ namespace castor3d
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
 	{
+		// Since their vertex attribute locations overlap, we must not have both set at the same time.
+		REQUIRE( ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? 1 : 0 )
+			+ ( checkFlag( programFlags, ProgramFlag::eMorphing ) ? 1 : 0 ) < 2 );
 		using namespace glsl;
 		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
 		// Vertex inputs
-		auto position = writer.declAttribute< Vec4 >( ShaderProgram::Position );
-		auto normal = writer.declAttribute< Vec3 >( ShaderProgram::Normal );
-		auto tangent = writer.declAttribute< Vec3 >( ShaderProgram::Tangent );
-		auto bitangent = writer.declAttribute< Vec3 >( ShaderProgram::Bitangent );
-		auto texture = writer.declAttribute< Vec3 >( ShaderProgram::Texture );
-		auto bone_ids0 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds0
+		auto position = writer.declAttribute< Vec4 >( cuT( "position" )
+			, RenderPass::VertexInputs::PositionLocation );
+		auto normal = writer.declAttribute< Vec3 >( cuT( "normal" )
+			, RenderPass::VertexInputs::NormalLocation );
+		auto tangent = writer.declAttribute< Vec3 >( cuT( "tangent" )
+			, RenderPass::VertexInputs::TangentLocation );
+		auto texture = writer.declAttribute< Vec3 >( cuT( "texcoord" )
+			, RenderPass::VertexInputs::TextureLocation );
+		auto bone_ids0 = writer.declAttribute< IVec4 >( cuT( "bone_ids0" )
+			, RenderPass::VertexInputs::BoneIds0Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = writer.declAttribute< IVec4 >( ShaderProgram::BoneIds1
+		auto bone_ids1 = writer.declAttribute< IVec4 >( cuT( "bone_ids1" )
+			, RenderPass::VertexInputs::BoneIds1Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = writer.declAttribute< Vec4 >( ShaderProgram::Weights0
+		auto weights0 = writer.declAttribute< Vec4 >( cuT( "weights0" )
+			, RenderPass::VertexInputs::Weights0Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = writer.declAttribute< Vec4 >( ShaderProgram::Weights1
+		auto weights1 = writer.declAttribute< Vec4 >( cuT( "weights1" )
+			, RenderPass::VertexInputs::Weights1Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto transform = writer.declAttribute< Mat4 >( ShaderProgram::Transform
+		auto transform = writer.declAttribute< Mat4 >( cuT( "transform" )
+			, RenderPass::VertexInputs::TransformLocation
 			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-		auto material = writer.declAttribute< Int >( ShaderProgram::Material
+		auto material = writer.declAttribute< Int >( cuT( "material" )
+			, RenderPass::VertexInputs::MaterialLocation
 			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = writer.declAttribute< Vec4 >( ShaderProgram::Position2
+		auto position2 = writer.declAttribute< Vec4 >( cuT( "position2" )
+			, RenderPass::VertexInputs::Position2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto normal2 = writer.declAttribute< Vec3 >( ShaderProgram::Normal2
+		auto normal2 = writer.declAttribute< Vec3 >( cuT( "normal2" )
+			, RenderPass::VertexInputs::Normal2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto tangent2 = writer.declAttribute< Vec3 >( ShaderProgram::Tangent2
+		auto tangent2 = writer.declAttribute< Vec3 >( cuT( "tangent2" )
+			, RenderPass::VertexInputs::Tangent2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto bitangent2 = writer.declAttribute< Vec3 >( ShaderProgram::Bitangent2
+		auto texture2 = writer.declAttribute< Vec3 >( cuT( "texture2" )
+			, RenderPass::VertexInputs::Texture2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto texture2 = writer.declAttribute< Vec3 >( ShaderProgram::Texture2
-			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto gl_InstanceID( writer.declBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
+		auto gl_InstanceID( writer.declBuiltin< Int >( writer.getInstanceID() ) );
 
-		UBO_MATRIX( writer );
-		UBO_MODEL_MATRIX( writer );
-		UBO_SCENE( writer );
-		UBO_MODEL( writer );
-		SkinningUbo::declare( writer, programFlags );
-		UBO_MORPHING( writer, programFlags );
+		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
+		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
+		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0u );
+		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
+		SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0u, programFlags );
+		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0u, programFlags );
 
 		// Outputs
-		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );
-		auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" ) );
-		auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" ) );
-		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
-		auto vtx_tangentSpaceViewPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
-		auto vtx_normal = writer.declOutput< Vec3 >( cuT( "vtx_normal" ) );
-		auto vtx_tangent = writer.declOutput< Vec3 >( cuT( "vtx_tangent" ) );
-		auto vtx_bitangent = writer.declOutput< Vec3 >( cuT( "vtx_bitangent" ) );
-		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ) );
-		auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" ) );
-		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" ) );
-		auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" )
+			, RenderPass::VertexOutputs::WorldPositionLocation );
+		auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" )
+			, RenderPass::VertexOutputs::CurPositionLocation );
+		auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" )
+			, RenderPass::VertexOutputs::PrvPositionLocation );
+		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" )
+			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
+		auto vtx_tangentSpaceViewPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" )
+			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
+		auto vtx_normal = writer.declOutput< Vec3 >( cuT( "vtx_normal" )
+			, RenderPass::VertexOutputs::NormalLocation );
+		auto vtx_tangent = writer.declOutput< Vec3 >( cuT( "vtx_tangent" )
+			, RenderPass::VertexOutputs::TangentLocation );
+		auto vtx_bitangent = writer.declOutput< Vec3 >( cuT( "vtx_bitangent" )
+			, RenderPass::VertexOutputs::BitangentLocation );
+		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" )
+			, RenderPass::VertexOutputs::TextureLocation );
+		auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" )
+			, RenderPass::VertexOutputs::InstanceLocation );
+		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
+			, RenderPass::VertexOutputs::MaterialLocation );
+		auto out = gl_PerVertex{ writer };
 
 		std::function< void() > main = [&]()
 		{
@@ -218,27 +379,21 @@ namespace castor3d
 			{
 				auto mtxModel = writer.declLocale( cuT( "mtxModel" )
 					, SkinningUbo::computeTransform( writer, programFlags ) );
-				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
-					, transpose( inverse( mat3( mtxModel ) ) ) );
 			}
 			else if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
 				auto mtxModel = writer.declLocale( cuT( "mtxModel" )
 					, transform );
-				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
-					, transpose( inverse( mat3( mtxModel ) ) ) );
 			}
 			else
 			{
 				auto mtxModel = writer.declLocale( cuT( "mtxModel" )
 					, c3d_mtxModel );
-				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
-					, transpose( inverse( mat3( mtxModel ) ) ) );
-				//auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
-				//	, mat3( c3d_mtxNormal ) );
 			}
 
 			auto mtxModel = writer.declBuiltin< Mat4 >( cuT( "mtxModel" ) );
+			auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
+				, transpose( inverse( mat3( mtxModel ) ) ) );
 
 			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
@@ -262,8 +417,7 @@ namespace castor3d
 			vtx_worldPosition = curPosition.xyz();
 			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
 				, c3d_prvViewProj * curPosition );
-			gl_Position = c3d_curViewProj * curPosition;
-			auto mtxNormal = writer.getBuiltin< Mat3 >( cuT( "mtxNormal" ) );
+			out.gl_Position() = c3d_curViewProj * curPosition;
 
 			if ( invertNormals )
 			{
@@ -283,14 +437,14 @@ namespace castor3d
 			// (note that for providing the jitter in non-homogeneous projection space,
 			//  pixel coordinates (screen space) need to multiplied by two in the C++
 			//  code)
-			gl_Position.xy() -= c3d_curJitter * gl_Position.w();
-			prvPosition.xy() -= c3d_prvJitter * gl_Position.w();
+			out.gl_Position().xy() -= c3d_jitter * out.gl_Position().w();
+			prvPosition.xy() -= c3d_jitter * out.gl_Position().w();
 
 			auto tbn = writer.declLocale( cuT( "tbn" )
 				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
 			vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
-			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition;
-			vtx_curPosition = gl_Position.xyw();
+			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition.xyz();
+			vtx_curPosition = out.gl_Position().xyw();
 			vtx_prvPosition = prvPosition.xyw();
 			// Positions in projection space are in [-1, 1] range, while texture
 			// coordinates are in [0, 1] range. So, we divide by 2 to get velocities in
@@ -307,7 +461,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, ComparisonFunc alphaFunc )const
+		, renderer::CompareOp alphaFunc )const
 	{
 		using namespace glsl;
 		GlslWriter writer = getEngine()->getRenderSystem()->createGlslWriter();
@@ -316,53 +470,76 @@ namespace castor3d
 		materials.declare();
 
 		// UBOs
-		UBO_MATRIX( writer );
-		UBO_SCENE( writer );
-		UBO_MODEL( writer );
+		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
+		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
+		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
 
 		// Fragment Inputs
-		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
-		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" ) );
-		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" ) );
-		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
-		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
-		auto vtx_normal = writer.declInput< Vec3 >( cuT( "vtx_normal" ) );
-		auto vtx_tangent = writer.declInput< Vec3 >( cuT( "vtx_tangent" ) );
-		auto vtx_bitangent = writer.declInput< Vec3 >( cuT( "vtx_bitangent" ) );
-		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ) );
-		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" ) );
-		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ) );
+		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" )
+			, RenderPass::VertexOutputs::WorldPositionLocation );
+		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" )
+			, RenderPass::VertexOutputs::CurPositionLocation );
+		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" )
+			, RenderPass::VertexOutputs::PrvPositionLocation );
+		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" )
+			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
+		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" )
+			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
+		auto vtx_normal = writer.declInput< Vec3 >( cuT( "vtx_normal" )
+			, RenderPass::VertexOutputs::NormalLocation );
+		auto vtx_tangent = writer.declInput< Vec3 >( cuT( "vtx_tangent" )
+			, RenderPass::VertexOutputs::TangentLocation );
+		auto vtx_bitangent = writer.declInput< Vec3 >( cuT( "vtx_bitangent" )
+			, RenderPass::VertexOutputs::BitangentLocation );
+		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" )
+			, RenderPass::VertexOutputs::TextureLocation );
+		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" )
+			, RenderPass::VertexOutputs::InstanceLocation );
+		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
+			, RenderPass::VertexOutputs::MaterialLocation );
 
-		auto index = MinTextureIndex;
-		auto c3d_mapDiffuse( writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse
+		auto index = MinBufferIndex;
+		auto c3d_mapDiffuse( writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" )
 			, checkFlag( textureFlags, TextureChannel::eDiffuse ) ? index++ : 0u
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eDiffuse ) ) );
-		auto c3d_mapSpecular( writer.declSampler< Sampler2D >( ShaderProgram::MapSpecular
+		auto c3d_mapSpecular( writer.declSampler< Sampler2D >( cuT( "c3d_mapSpecular" )
 			, checkFlag( textureFlags, TextureChannel::eSpecular ) ? index++ : 0u
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eSpecular ) ) );
-		auto c3d_mapGloss( writer.declSampler< Sampler2D >( ShaderProgram::MapGloss
+		auto c3d_mapGloss( writer.declSampler< Sampler2D >( cuT( "c3d_mapGloss" )
 			, checkFlag( textureFlags, TextureChannel::eGloss ) ? index++ : 0u
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eGloss ) ) );
-		auto c3d_mapNormal( writer.declSampler< Sampler2D >( ShaderProgram::MapNormal
+		auto c3d_mapNormal( writer.declSampler< Sampler2D >( cuT( "c3d_mapNormal" )
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ? index++ : 0u
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ) );
-		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( ShaderProgram::MapOpacity
-			, ( checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) ? index++ : 0u
-			, checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) );
-		auto c3d_mapHeight( writer.declSampler< Sampler2D >( ShaderProgram::MapHeight
+		bool opacityMap = checkFlag( textureFlags, TextureChannel::eOpacity )
+			&& alphaFunc != renderer::CompareOp::eAlways;
+		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( cuT( "c3d_mapOpacity" )
+			, opacityMap ? index++ : 0u
+			, 1u
+			, opacityMap ) );
+		auto c3d_mapHeight( writer.declSampler< Sampler2D >( cuT( "c3d_mapHeight" )
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ? index++ : 0u
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
-		auto c3d_mapAmbientOcclusion( writer.declSampler< Sampler2D >( ShaderProgram::MapAmbientOcclusion
+		auto c3d_mapAmbientOcclusion( writer.declSampler< Sampler2D >( cuT( "c3d_mapAmbientOcclusion" )
 			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ? index++ : 0u
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ) );
-		auto c3d_mapEmissive( writer.declSampler< Sampler2D >( ShaderProgram::MapEmissive
+		auto c3d_mapEmissive( writer.declSampler< Sampler2D >( cuT( "c3d_mapEmissive" )
 			, checkFlag( textureFlags, TextureChannel::eEmissive ) ? index++ : 0u
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eEmissive ) ) );
-		auto c3d_mapTransmittance( writer.declSampler< Sampler2D >( ShaderProgram::MapTransmittance
+		auto c3d_mapTransmittance( writer.declSampler< Sampler2D >( cuT( "c3d_mapTransmittance" )
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ? index++ : 0u
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ) );
-		auto c3d_heightScale( writer.declUniform< Float >( cuT( "c3d_heightScale" )
-			, checkFlag( textureFlags, TextureChannel::eHeight ), 0.1_f ) );
+		auto c3d_heightScale( writer.declConstant< Float >( cuT( "c3d_heightScale" )
+			, 0.1_f
+			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
 
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
@@ -395,7 +572,7 @@ namespace castor3d
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
-			if ( alphaFunc != ComparisonFunc::eAlways )
+			if ( alphaFunc != renderer::CompareOp::eAlways )
 			{
 				auto alpha = writer.declLocale( cuT( "alpha" )
 					, material.m_opacity() );
@@ -411,18 +588,18 @@ namespace castor3d
 					, material.m_alphaRef() );
 			}
 
+			auto gamma = writer.declLocale( cuT( "gamma" )
+				, material.m_gamma() );
 			auto normal = writer.declLocale( cuT( "normal" )
 				, normalize( vtx_normal ) );
 			auto diffuse = writer.declLocale( cuT( "diffuse" )
-				, material.m_diffuse() );
+				, utils.removeGamma( gamma, material.m_diffuse() ) );
 			auto specular = writer.declLocale( cuT( "specular" )
 				, material.m_specular() );
 			auto matShininess = writer.declLocale( cuT( "matShininess" )
 				, material.m_shininess() );
 			auto emissive = writer.declLocale( cuT( "emissive" )
 				, vec3( material.m_emissive() ) );
-			auto gamma = writer.declLocale( cuT( "gamma" )
-				, material.m_gamma() );
 			shader::legacy::computePreLightingMapContributions( writer
 				, normal
 				, matShininess
@@ -480,7 +657,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, ComparisonFunc alphaFunc )const
+		, renderer::CompareOp alphaFunc )const
 	{
 		using namespace glsl;
 		GlslWriter writer = getEngine()->getRenderSystem()->createGlslWriter();
@@ -489,53 +666,76 @@ namespace castor3d
 		materials.declare();
 
 		// UBOs
-		UBO_MATRIX( writer );
-		UBO_SCENE( writer );
-		UBO_MODEL( writer );
+		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
+		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
+		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
 
 		// Fragment Inputs
-		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
-		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" ) );
-		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" ) );
-		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
-		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
-		auto vtx_normal = writer.declInput< Vec3 >( cuT( "vtx_normal" ) );
-		auto vtx_tangent = writer.declInput< Vec3 >( cuT( "vtx_tangent" ) );
-		auto vtx_bitangent = writer.declInput< Vec3 >( cuT( "vtx_bitangent" ) );
-		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ) );
-		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" ) );
-		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ) );
+		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" )
+			, RenderPass::VertexOutputs::WorldPositionLocation );
+		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" )
+			, RenderPass::VertexOutputs::CurPositionLocation );
+		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" )
+			, RenderPass::VertexOutputs::PrvPositionLocation );
+		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" )
+			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
+		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" )
+			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
+		auto vtx_normal = writer.declInput< Vec3 >( cuT( "vtx_normal" )
+			, RenderPass::VertexOutputs::NormalLocation );
+		auto vtx_tangent = writer.declInput< Vec3 >( cuT( "vtx_tangent" )
+			, RenderPass::VertexOutputs::TangentLocation );
+		auto vtx_bitangent = writer.declInput< Vec3 >( cuT( "vtx_bitangent" )
+			, RenderPass::VertexOutputs::BitangentLocation );
+		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" )
+			, RenderPass::VertexOutputs::TextureLocation );
+		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" )
+			, RenderPass::VertexOutputs::InstanceLocation );
+		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
+			, RenderPass::VertexOutputs::MaterialLocation );
 
-		auto index = MinTextureIndex;
-		auto c3d_mapAlbedo( writer.declSampler< Sampler2D >( ShaderProgram::MapAlbedo
+		auto index = MinBufferIndex;
+		auto c3d_mapAlbedo( writer.declSampler< Sampler2D >( cuT( "c3d_mapAlbedo" )
 			, checkFlag( textureFlags, TextureChannel::eAlbedo ) ? index++ : 0u
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eAlbedo ) ) );
-		auto c3d_mapRoughness( writer.declSampler< Sampler2D >( ShaderProgram::MapRoughness
+		auto c3d_mapRoughness( writer.declSampler< Sampler2D >( cuT( "c3d_mapRoughness" )
 			, checkFlag( textureFlags, TextureChannel::eRoughness ) ? index++ : 0u
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eRoughness ) ) );
-		auto c3d_mapMetallic( writer.declSampler< Sampler2D >( ShaderProgram::MapMetallic
+		auto c3d_mapMetallic( writer.declSampler< Sampler2D >( cuT( "c3d_mapMetallic" )
 			, checkFlag( textureFlags, TextureChannel::eMetallic ) ? index++ : 0u
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eMetallic ) ) );
-		auto c3d_mapNormal( writer.declSampler< Sampler2D >( ShaderProgram::MapNormal
+		auto c3d_mapNormal( writer.declSampler< Sampler2D >( cuT( "c3d_mapNormal" )
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ? index++ : 0u
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ) );
-		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( ShaderProgram::MapOpacity
-			, checkFlag( textureFlags, TextureChannel::eOpacity ) ? index++ : 0u
-			, checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) );
-		auto c3d_mapHeight( writer.declSampler< Sampler2D >( ShaderProgram::MapHeight
+		bool opacityMap = checkFlag( textureFlags, TextureChannel::eOpacity )
+			&& alphaFunc != renderer::CompareOp::eAlways;
+		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( cuT( "c3d_mapOpacity" )
+			, opacityMap ? index++ : 0u
+			, 1u
+			, opacityMap ) );
+		auto c3d_mapHeight( writer.declSampler< Sampler2D >( cuT( "c3d_mapHeight" )
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ? index++ : 0u
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
-		auto c3d_mapAmbientOcclusion( writer.declSampler< Sampler2D >( ShaderProgram::MapAmbientOcclusion
+		auto c3d_mapAmbientOcclusion( writer.declSampler< Sampler2D >( cuT( "c3d_mapAmbientOcclusion" )
 			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ? index++ : 0u
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ) );
-		auto c3d_mapEmissive( writer.declSampler< Sampler2D >( ShaderProgram::MapEmissive
+		auto c3d_mapEmissive( writer.declSampler< Sampler2D >( cuT( "c3d_mapEmissive" )
 			, checkFlag( textureFlags, TextureChannel::eEmissive ) ? index++ : 0u
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eEmissive ) ) );
-		auto c3d_mapTransmittance( writer.declSampler< Sampler2D >( ShaderProgram::MapTransmittance
+		auto c3d_mapTransmittance( writer.declSampler< Sampler2D >( cuT( "c3d_mapTransmittance" )
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ? index++ : 0u
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ) );
-		auto c3d_heightScale = writer.declUniform< Float >( cuT( "c3d_heightScale" )
-			, checkFlag( textureFlags, TextureChannel::eHeight ), 0.1_f );
+		auto c3d_heightScale( writer.declConstant< Float >( cuT( "c3d_heightScale" )
+			, 0.1_f
+			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
 
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
@@ -573,7 +773,7 @@ namespace castor3d
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
-			if ( alphaFunc != ComparisonFunc::eAlways )
+			if ( alphaFunc != renderer::CompareOp::eAlways )
 			{
 				auto alpha = writer.declLocale( cuT( "alpha" )
 					, material.m_opacity() );
@@ -658,62 +858,85 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, ComparisonFunc alphaFunc )const
+		, renderer::CompareOp alphaFunc )const
 	{
 		using namespace glsl;
 		GlslWriter writer = getEngine()->getRenderSystem()->createGlslWriter();
 
 		// UBOs
-		UBO_MATRIX( writer );
-		UBO_SCENE( writer );
-		UBO_MODEL( writer );
+		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
+		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
+		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
 
 		// Fragment Inputs
-		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
-		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" ) );
-		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" ) );
-		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" ) );
-		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" ) );
-		auto vtx_normal = writer.declInput< Vec3 >( cuT( "vtx_normal" ) );
-		auto vtx_tangent = writer.declInput< Vec3 >( cuT( "vtx_tangent" ) );
-		auto vtx_bitangent = writer.declInput< Vec3 >( cuT( "vtx_bitangent" ) );
-		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ) );
-		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" ) );
-		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ) );
+		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" )
+			, RenderPass::VertexOutputs::WorldPositionLocation );
+		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" )
+			, RenderPass::VertexOutputs::CurPositionLocation );
+		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" )
+			, RenderPass::VertexOutputs::PrvPositionLocation );
+		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" )
+			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
+		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" )
+			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
+		auto vtx_normal = writer.declInput< Vec3 >( cuT( "vtx_normal" )
+			, RenderPass::VertexOutputs::NormalLocation );
+		auto vtx_tangent = writer.declInput< Vec3 >( cuT( "vtx_tangent" )
+			, RenderPass::VertexOutputs::TangentLocation );
+		auto vtx_bitangent = writer.declInput< Vec3 >( cuT( "vtx_bitangent" )
+			, RenderPass::VertexOutputs::BitangentLocation );
+		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" )
+			, RenderPass::VertexOutputs::TextureLocation );
+		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" )
+			, RenderPass::VertexOutputs::InstanceLocation );
+		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
+			, RenderPass::VertexOutputs::MaterialLocation );
 
 		shader::PbrSGMaterials materials{ writer };
 		materials.declare();
 
-		auto index = MinTextureIndex;
-		auto c3d_mapDiffuse( writer.declSampler< Sampler2D >( ShaderProgram::MapDiffuse
+		auto index = MinBufferIndex;
+		auto c3d_mapDiffuse( writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" )
 			, checkFlag( textureFlags, TextureChannel::eDiffuse ) ? index++ : 0u
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eDiffuse ) ) );
-		auto c3d_mapSpecular( writer.declSampler< Sampler2D >( ShaderProgram::MapSpecular
+		auto c3d_mapSpecular( writer.declSampler< Sampler2D >( cuT( "c3d_mapSpecular" )
 			, checkFlag( textureFlags, TextureChannel::eSpecular ) ? index++ : 0u
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eSpecular ) ) );
-		auto c3d_mapGlossiness( writer.declSampler< Sampler2D >( ShaderProgram::MapGloss
+		auto c3d_mapGlossiness( writer.declSampler< Sampler2D >( cuT( "c3d_mapGloss" )
 			, checkFlag( textureFlags, TextureChannel::eGloss ) ? index++ : 0u
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eGloss ) ) );
-		auto c3d_mapNormal( writer.declSampler< Sampler2D >( ShaderProgram::MapNormal
+		auto c3d_mapNormal( writer.declSampler< Sampler2D >( cuT( "c3d_mapNormal" )
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ? index++ : 0u
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ) );
-		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( ShaderProgram::MapOpacity
-			, checkFlag( textureFlags, TextureChannel::eOpacity ) ? index++ : 0u
-			, checkFlag( textureFlags, TextureChannel::eOpacity ) && alphaFunc != ComparisonFunc::eAlways ) );
-		auto c3d_mapHeight( writer.declSampler< Sampler2D >( ShaderProgram::MapHeight
+		bool opacityMap = checkFlag( textureFlags, TextureChannel::eOpacity )
+			&& alphaFunc != renderer::CompareOp::eAlways;
+		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( cuT( "c3d_mapOpacity" )
+			, opacityMap ? index++ : 0u
+			, 1u
+			, opacityMap ) );
+		auto c3d_mapHeight( writer.declSampler< Sampler2D >( cuT( "c3d_mapHeight" )
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ? index++ : 0u
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
-		auto c3d_mapAmbientOcclusion( writer.declSampler< Sampler2D >( ShaderProgram::MapAmbientOcclusion
+		auto c3d_mapAmbientOcclusion( writer.declSampler< Sampler2D >( cuT( "c3d_mapAmbientOcclusion" )
 			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ? index++ : 0u
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eAmbientOcclusion ) ) );
-		auto c3d_mapEmissive( writer.declSampler< Sampler2D >( ShaderProgram::MapEmissive
+		auto c3d_mapEmissive( writer.declSampler< Sampler2D >( cuT( "c3d_mapEmissive" )
 			, checkFlag( textureFlags, TextureChannel::eEmissive ) ? index++ : 0u
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eEmissive ) ) );
-		auto c3d_mapTransmittance( writer.declSampler< Sampler2D >( ShaderProgram::MapTransmittance
+		auto c3d_mapTransmittance( writer.declSampler< Sampler2D >( cuT( "c3d_mapTransmittance" )
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ? index++ : 0u
+			, 1u
 			, checkFlag( textureFlags, TextureChannel::eTransmittance ) ) );
-		auto c3d_heightScale = writer.declUniform< Float >( cuT( "c3d_heightScale" )
-			, checkFlag( textureFlags, TextureChannel::eHeight ), 0.1_f );
+		auto c3d_heightScale( writer.declConstant< Float >( cuT( "c3d_heightScale" )
+			, 0.1_f
+			, checkFlag( textureFlags, TextureChannel::eHeight ) ) );
 
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
@@ -751,7 +974,7 @@ namespace castor3d
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
-			if ( alphaFunc != ComparisonFunc::eAlways )
+			if ( alphaFunc != renderer::CompareOp::eAlways )
 			{
 				auto alpha = writer.declLocale( cuT( "alpha" )
 					, material.m_opacity() );
@@ -837,97 +1060,13 @@ namespace castor3d
 	{
 	}
 
-	void OpaquePass::doPrepareFrontPipeline( ShaderProgram & program
-		, PipelineFlags const & flags )
+	renderer::DepthStencilState OpaquePass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
-		auto it = m_frontPipelines.find( flags );
-
-		if ( it == m_frontPipelines.end() )
-		{
-			DepthStencilState dsState;
-			dsState.setDepthTest( true );
-			dsState.setDepthMask( WritingMask::eAll );
-			RasteriserState rsState;
-			rsState.setCulledFaces( Culling::eFront );
-			auto & pipeline = *m_frontPipelines.emplace( flags
-				, getEngine()->getRenderSystem()->createRenderPipeline( std::move( dsState )
-					, std::move( rsState )
-					, doCreateBlendState( flags.m_colourBlendMode, flags.m_alphaBlendMode )
-					, MultisampleState{}
-					, program
-					, flags ) ).first->second;
-
-			getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-				, [this, &pipeline, flags]()
-				{
-					pipeline.addUniformBuffer( m_matrixUbo.getUbo() );
-					pipeline.addUniformBuffer( m_modelMatrixUbo.getUbo() );
-					pipeline.addUniformBuffer( m_sceneUbo.getUbo() );
-					pipeline.addUniformBuffer( m_modelUbo.getUbo() );
-
-					if ( checkFlag( flags.m_programFlags, ProgramFlag::eBillboards ) )
-					{
-						pipeline.addUniformBuffer( m_billboardUbo.getUbo() );
-					}
-
-					if ( checkFlag( flags.m_programFlags, ProgramFlag::eSkinning )
-						&& !checkFlag( flags.m_programFlags, ProgramFlag::eInstantiation ) )
-					{
-						pipeline.addUniformBuffer( m_skinningUbo.getUbo() );
-					}
-
-					if ( checkFlag( flags.m_programFlags, ProgramFlag::eMorphing ) )
-					{
-						pipeline.addUniformBuffer( m_morphingUbo.getUbo() );
-					}
-				} ) );
-		}
+		return renderer::DepthStencilState{ 0u, true, true };
 	}
 
-	void OpaquePass::doPrepareBackPipeline( ShaderProgram & program
-		, PipelineFlags const & flags )
+	renderer::ColourBlendState OpaquePass::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		auto it = m_backPipelines.find( flags );
-
-		if ( it == m_backPipelines.end() )
-		{
-			DepthStencilState dsState;
-			dsState.setDepthTest( true );
-			dsState.setDepthMask( WritingMask::eAll );
-			RasteriserState rsState;
-			rsState.setCulledFaces( Culling::eBack );
-			auto & pipeline = *m_backPipelines.emplace( flags
-				, getEngine()->getRenderSystem()->createRenderPipeline( std::move( dsState )
-				, std::move( rsState )
-				, doCreateBlendState( flags.m_colourBlendMode, flags.m_alphaBlendMode )
-					, MultisampleState{}
-				, program
-				, flags ) ).first->second;
-
-			getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-				, [this, &pipeline, flags]()
-				{
-					pipeline.addUniformBuffer( m_matrixUbo.getUbo() );
-					pipeline.addUniformBuffer( m_modelMatrixUbo.getUbo() );
-					pipeline.addUniformBuffer( m_sceneUbo.getUbo() );
-					pipeline.addUniformBuffer( m_modelUbo.getUbo() );
-
-					if ( checkFlag( flags.m_programFlags, ProgramFlag::eBillboards ) )
-					{
-						pipeline.addUniformBuffer( m_billboardUbo.getUbo() );
-					}
-
-					if ( checkFlag( flags.m_programFlags, ProgramFlag::eSkinning )
-						&& !checkFlag( flags.m_programFlags, ProgramFlag::eInstantiation ) )
-					{
-						pipeline.addUniformBuffer( m_skinningUbo.getUbo() );
-					}
-
-					if ( checkFlag( flags.m_programFlags, ProgramFlag::eMorphing ) )
-					{
-						pipeline.addUniformBuffer( m_morphingUbo.getUbo() );
-					}
-				} ) );
-		}
+		return RenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 5u );
 	}
 }

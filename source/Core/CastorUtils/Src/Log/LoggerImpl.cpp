@@ -9,8 +9,8 @@ namespace castor
 {
 	class LoggerImpl;
 
-	LoggerImpl::LoggerImpl( LogType p_level )
-		: m_console{ std::make_unique< ProgramConsole >( p_level < LogType::eInfo ) }
+	LoggerImpl::LoggerImpl( LogType level )
+		: m_console{ std::make_unique< ProgramConsole >( level < LogType::eInfo ) }
 	{
 	}
 
@@ -31,16 +31,16 @@ namespace castor
 	{
 	}
 
-	void LoggerImpl::registerCallback( LogCallback p_pfnCallback, void * p_pCaller )
+	void LoggerImpl::registerCallback( LogCallback callback, void * caller )
 	{
 		std::lock_guard< std::mutex > lock( m_mutexCallbacks );
-		m_mapCallbacks[p_pCaller] = p_pfnCallback;
+		m_mapCallbacks[caller] = callback;
 	}
 
-	void LoggerImpl::unregisterCallback( void * p_pCaller )
+	void LoggerImpl::unregisterCallback( void * caller )
 	{
 		std::lock_guard< std::mutex > lock( m_mutexCallbacks );
-		auto it = m_mapCallbacks.find( p_pCaller );
+		auto it = m_mapCallbacks.find( caller );
 
 		if ( it != m_mapCallbacks.end() )
 		{
@@ -48,22 +48,22 @@ namespace castor
 		}
 	}
 
-	void LoggerImpl::setFileName( String const & p_logFilePath, LogType p_eLogType )
+	void LoggerImpl::setFileName( String const & logFilePath, LogType logType )
 	{
-		if ( p_eLogType == LogType::eCount )
+		if ( logType == LogType::eCount )
 		{
 			for ( auto & path : m_logFilePath )
 			{
-				path = p_logFilePath;
+				path = logFilePath;
 			}
 		}
 		else
 		{
-			m_logFilePath[size_t( p_eLogType )] = p_logFilePath;
+			m_logFilePath[size_t( logType )] = logFilePath;
 		}
 
 		FILE * file;
-		castor::fileOpen( file, string::stringCast< char >( p_logFilePath ).c_str(), "w" );
+		castor::fileOpen( file, string::stringCast< char >( logFilePath ).c_str(), "w" );
 
 		if ( file )
 		{
@@ -71,30 +71,34 @@ namespace castor
 		}
 	}
 
-	void LoggerImpl::printMessage( LogType logLevel, std::string const & message, bool p_newLine )
+	void LoggerImpl::printMessage( LogType logLevel, std::string const & message, bool newLine )
 	{
-		doPrintMessage( logLevel, string::stringCast< xchar >( message ), p_newLine );
+		doPrintMessage( logLevel, string::stringCast< xchar >( message ), newLine );
 	}
 
-	void LoggerImpl::printMessage( LogType logLevel, std::wstring const & message, bool p_newLine )
+	void LoggerImpl::printMessage( LogType logLevel, std::wstring const & message, bool newLine )
 	{
-		doPrintMessage( logLevel, string::stringCast< xchar >( message ), p_newLine );
+		doPrintMessage( logLevel, string::stringCast< xchar >( message ), newLine );
 	}
 
-	void LoggerImpl::logMessageQueue( MessageQueue const & p_queue )
+	void LoggerImpl::logMessageQueue( MessageQueue const & queue )
 	{
-		std::tm dtToday = { 0 };
-		time_t tTime;
-		time( &tTime );
-		castor::getLocaltime( &dtToday, &tTime );
-		char buffer[33] = { 0 };
-		strftime( buffer, 32, "%Y-%m-%d %H:%M:%S", &dtToday );
-		String timeStamp = string::stringCast< xchar >( buffer );
-		StringStream logs[size_t( LogType::eCount )];
+		std::time_t endTime = std::chrono::system_clock::to_time_t( std::chrono::system_clock::now() );
+		std::string time = std::ctime( &endTime );
+		string::replace( time, "\n", std::string{} );
+		String timeStamp = string::stringCast< xchar >( time );
+		StringStream logs[size_t( LogType::eCount )]
+		{
+			makeStringStream(),
+			makeStringStream(),
+			makeStringStream(),
+			makeStringStream(),
+			makeStringStream(),
+		};
 
 		try
 		{
-			for ( auto & message : p_queue )
+			for ( auto & message : queue )
 			{
 				StringStream & stream = logs[size_t( message.m_type )];
 				String toLog = message.m_message;
@@ -137,13 +141,13 @@ namespace castor
 				}
 			}
 		}
-		catch ( std::exception & )
+		catch ( std::exception & /*exc*/ )
 		{
-			//m_pConsole->print( cuT( "Couldn't open log file : " ) + CStrUtils::toString( exc.what() ), true );
+			//m_console->print( cuT( "Couldn't open log file : " ) + string::stringCast< xchar >( exc.what() ), true );
 		}
 	}
 
-	void LoggerImpl::doPrintMessage( LogType logLevel, String const & message, bool p_newLine )
+	void LoggerImpl::doPrintMessage( LogType logLevel, String const & message, bool newLine )
 	{
 		if ( message.find( cuT( '\n' ) ) != String::npos )
 		{
@@ -156,24 +160,24 @@ namespace castor
 				++it;
 			}
 
-			doPrintLine( *it, logLevel, p_newLine );
+			doPrintLine( *it, logLevel, newLine );
 		}
 		else
 		{
-			doPrintLine( message, logLevel, p_newLine );
+			doPrintLine( message, logLevel, newLine );
 		}
 	}
 
-	void LoggerImpl::doPrintLine( String const & line, LogType logLevel, bool p_newLine )
+	void LoggerImpl::doPrintLine( String const & line, LogType logLevel, bool newLine )
 	{
 		m_console->beginLog( logLevel );
-		m_console->print( line, p_newLine );
+		m_console->print( line, newLine );
 	}
 
-	void LoggerImpl::doLogLine( String const & timestamp, String const & line, StringStream & stream, LogType logLevel, bool p_newLine )
+	void LoggerImpl::doLogLine( String const & timestamp, String const & line, StringStream & stream, LogType logLevel, bool newLine )
 	{
 #if defined( NDEBUG )
-		doPrintLine( line, logLevel, p_newLine );
+		doPrintLine( line, logLevel, newLine );
 #endif
 
 		{
@@ -183,11 +187,11 @@ namespace castor
 			{
 				for ( auto it : m_mapCallbacks )
 				{
-					it.second( line, logLevel, p_newLine );
+					it.second( line, logLevel, newLine );
 				}
 			}
 		}
 
-		stream << timestamp << cuT( " - " ) << m_headers[size_t( logLevel )] << line << ( p_newLine ? "\n" : "" );
+		stream << timestamp << cuT( " - " ) << m_headers[size_t( logLevel )] << line << ( newLine ? "\n" : "" );
 	}
 }

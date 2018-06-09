@@ -5,11 +5,16 @@ See LICENSE file in root folder
 #define ___C3D_LineariseDepthPass_H___
 
 #include "Render/Viewport.hpp"
+#include "Technique/RenderTechniqueVisitor.hpp"
 #include "Texture/TextureUnit.hpp"
+
+#include <Buffer/PushConstantsBuffer.hpp>
+#include <Miscellaneous/PushConstantRange.hpp>
+
+#include <GlslShader.hpp>
 
 namespace castor3d
 {
-	class MatrixUbo;
 	class SsaoConfigUbo;
 	/*!
 	\author		Sylvain DOREMUS
@@ -28,19 +33,22 @@ namespace castor3d
 		 *\brief		Constructor.
 		 *\param[in]	engine			The engine.
 		 *\param[in]	size			The render area dimensions.
-		 *\param[in]	matrixUbo		The matrices UBO.
 		 *\param[in]	ssaoConfigUbo	The SSAO configuration UBO.
+		 *\param[in]	depthBuffer		The non linearised depth buffer.
+		 *\param[in]	viewport		The viewport from which clip infos are retrieved.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine			Le moteur.
 		 *\param[in]	size			Les dimensions de la zone de rendu.
-		 *\param[in]	matrixUbo		L'UBO des matrices.
 		 *\param[in]	ssaoConfigUbo	L'UBO de configuration SSAO.
+		 *\param[in]	depthBuffer		Le tampon de profondeur non linéarisé.
+		 *\param[in]	viewport		Le viewport depuis lequel on récupère les information de clip.
 		 */
 		LineariseDepthPass( Engine & engine
-			, castor::Size const & size
-			, MatrixUbo & matrixUbo
-			, SsaoConfigUbo & ssaoConfigUbo );
+			, renderer::Extent2D const & size
+			, SsaoConfigUbo & ssaoConfigUbo
+			, renderer::TextureView const & depthBuffer
+			, Viewport const & viewport );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -50,51 +58,101 @@ namespace castor3d
 		~LineariseDepthPass();
 		/**
 		 *\~english
-		 *\brief		Linearises given depth buffer.
-		 *\param[in]	depthBuffer	The non linearised depth buffer.
-		 *\param[in]	viewport	The viewport from which clip infos are retrieved.
+		 *\brief		Linearises depth buffer.
 		 *\~french
-		 *\brief		Linéarise le tampon de profondeur donné.
-		 *\param[in]	depthBuffer	Le tampon de profondeur non linéarisé.
-		 *\param[in]	viewport	Le viewport depuis lequel on récupère les information de clip.
+		 *\brief		Linéarise le tampon de profondeur.
 		 */
-		void linearise( TextureUnit const & depthBuffer
-			, Viewport const & viewport );
+		renderer::Semaphore const & linearise( renderer::Semaphore const & toWait )const;
 		/**
-		 *\~english
-		 *\return		The linearised depth buffer.
-		 *\~french
-		 *\return		Le tampon de profondeur linéarisé.
+		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
+		C3D_API void accept( RenderTechniqueVisitor & visitor );
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline TextureUnit const & getResult()const
 		{
 			return m_result;
 		}
+		/**@}*/
 
 	private:
 		void doInitialiseLinearisePass();
 		void doInitialiseMinifyPass();
 		void doCleanupLinearisePass();
 		void doCleanupMinifyPass();
+		void doPrepareFrame();
 
 	public:
 		static constexpr uint32_t MaxMipLevel = 5u;
 
 	private:
 		Engine & m_engine;
-		MatrixUbo & m_matrixUbo;
 		SsaoConfigUbo & m_ssaoConfigUbo;
-		castor::Size m_size;
-		ShaderProgramSPtr m_lineariseProgram;
-		PushUniform3fSPtr m_clipInfo;
-		RenderPipelineUPtr m_linearisePipeline;
-		ShaderProgramSPtr m_minifyProgram;
-		PushUniform1iSPtr m_previousLevel;
-		RenderPipelineUPtr m_minifyPipeline;
+		renderer::TextureView const & m_depthBuffer;
+		renderer::Extent2D m_size;
 		TextureUnit m_result;
-		std::array< FrameBufferSPtr, MaxMipLevel + 1u > m_fbos;
-		std::array< TextureAttachmentSPtr, MaxMipLevel + 1u > m_resultAttaches;
 		RenderPassTimerSPtr m_timer;
+		renderer::RenderPassPtr m_renderPass;
+		renderer::VertexBufferPtr< NonTexturedQuad > m_vertexBuffer;
+		renderer::VertexLayoutPtr m_vertexLayout;
+		renderer::SamplerPtr m_lineariseSampler;
+		renderer::SamplerPtr m_minifySampler;
+		renderer::CommandBufferPtr m_commandBuffer;
+		renderer::SemaphorePtr m_finished;
+		/**
+		*name
+		*	Linearisation.
+		*/
+		/**@{*/
+		glsl::Shader m_lineariseVertexShader;
+		glsl::Shader m_linearisePixelShader;
+		renderer::ShaderStageStateArray m_lineariseProgram;
+		renderer::TextureViewPtr m_linearisedView;
+		renderer::FrameBufferPtr m_lineariseFrameBuffer;
+		renderer::DescriptorSetLayoutPtr m_lineariseDescriptorLayout;
+		renderer::DescriptorSetPoolPtr m_lineariseDescriptorPool;
+		renderer::DescriptorSetPtr m_lineariseDescriptor;
+		renderer::PipelineLayoutPtr m_linearisePipelineLayout;
+		renderer::PipelinePtr m_linearisePipeline;
+		renderer::PushConstantsBuffer< castor::Point3f > m_clipInfo;
+		/**@}*/
+		/**
+		*name
+		*	Minification.
+		*/
+		/**@{*/
+		struct MinifyPipeline
+		{
+			struct Configuration
+			{
+				castor::Point2i textureSize;
+				int previousLevel;
+			};
+
+			renderer::TextureView const * sourceView;
+			renderer::TextureViewPtr targetView;
+			renderer::DescriptorSetPtr descriptor;
+			renderer::FrameBufferPtr frameBuffer;
+			renderer::PushConstantsBufferPtr< Configuration > previousLevel;
+			renderer::PushConstantRange pushConstants;
+			renderer::PipelinePtr pipeline;
+		};
+
+		glsl::Shader m_minifyVertexShader;
+		glsl::Shader m_minifyPixelShader;
+		renderer::ShaderStageStateArray m_minifyProgram;
+		renderer::DescriptorSetLayoutPtr m_minifyDescriptorLayout;
+		renderer::PipelineLayoutPtr m_minifyPipelineLayout;
+		renderer::DescriptorSetPoolPtr m_minifyDescriptorPool;
+		std::array< MinifyPipeline, MaxMipLevel > m_minifyPipelines;
+		/**@}*/
 
 	};
 }

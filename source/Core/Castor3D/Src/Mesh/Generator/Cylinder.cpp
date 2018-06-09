@@ -1,4 +1,4 @@
-﻿#include "Cylinder.hpp"
+#include "Cylinder.hpp"
 
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
@@ -58,29 +58,31 @@ namespace castor3d
 			uint32_t i = 0;
 			real rCosRot = cos( angleRotation );
 			real rSinRot = sin( angleRotation );
-			BufferElementGroupSPtr vertex;
-			real rCos = real( 1 );
-			real rSin = real( 0 );
-			real rSinT = real( 0 );
+			real rCos = 1.0_r;
+			real rSin = 0.0_r;
+			real rSinT = 0.0_r;
+			InterleavedVertexArray topVertex;
+			InterleavedVertexArray baseVertex;
+			InterleavedVertexArray sideVertex;
 
 			for ( uint32_t i = 0; i <= m_nbFaces; ++i )
 			{
 				if ( i < m_nbFaces )
 				{
-					vertex = submeshBase.addPoint(	m_radius * rCos,	-m_height / 2,	m_radius * rSin );
-					Vertex::setNormal( vertex, 0.0, -1.0, 0.0 );
-					Vertex::setTexCoord( vertex,	( 1 + rCos ) / 2,	( 1 + rSin ) / 2 );
-					vertex = submeshTop.addPoint(	m_radius * rCos,	 m_height / 2,	m_radius * rSinT );
-					Vertex::setNormal( vertex, 0.0, 1.0, 0.0 );
-					Vertex::setTexCoord( vertex,	( 1 + rCos ) / 2,	( 1 + rSinT ) / 2 );
+					baseVertex.push_back( InterleavedVertex::createPNT( Point3f{ m_radius * rCos, -m_height / 2, m_radius * rSin }
+						, Point3f{ 0.0, -1.0, 0.0 }
+						, Point2f{ ( 1 + rCos ) / 2, ( 1 + rSin ) / 2 } ) );
+					topVertex.push_back( InterleavedVertex::createPNT( Point3f{ m_radius * rCos, m_height / 2, m_radius * rSinT }
+						, Point3f{ 0.0, 1.0, 0.0 }
+						, Point2f{ ( 1 + rCos ) / 2, ( 1 + rSinT ) / 2 } ) );
 				}
 
-				vertex = submeshSide.addPoint(	m_radius * rCos,	-m_height / 2,	m_radius * rSin );
-				Vertex::setTexCoord( vertex,	real( 1.0 ) - real( i ) / m_nbFaces,	real( 0.0 ) );
-				Vertex::setNormal( vertex, rCos, rSin, 0.0 );
-				vertex = submeshSide.addPoint(	m_radius * rCos,	 m_height / 2,	m_radius * rSin );
-				Vertex::setNormal( vertex, rCos, rSin, 0.0 );
-				Vertex::setTexCoord( vertex,	real( 1.0 ) - real( i ) / m_nbFaces,	real( 1.0 ) );
+				sideVertex.push_back( InterleavedVertex::createPNT( Point3f{ m_radius * rCos, -m_height / 2, m_radius * rSin }
+					, Point3f{ -rCos, -rSin, 0.0 }
+					, Point2f{ real( 1.0 ) - real( i ) / m_nbFaces, real( 0.0 ) } ) );
+				sideVertex.push_back( InterleavedVertex::createPNT( Point3f{ m_radius * rCos, m_height / 2, m_radius * rSin }
+					, Point3f{ -rCos, -rSin, 0.0 }
+					, Point2f{ real( 1.0 ) - real( i ) / m_nbFaces, real( 1.0 ) } ) );
 
 				const real newCos = rCosRot * rCos - rSinRot * rSin;
 				const real newSin = rSinRot * rCos + rCosRot * rSin;
@@ -89,11 +91,19 @@ namespace castor3d
 				rSinT = -newSin;
 			}
 
+			auto topCenterIndex = uint32_t( topVertex.size() );
+			auto bottomCenterIndex = uint32_t( baseVertex.size() );
 			FaceSPtr pFace;
-			BufferElementGroupSPtr ptTopCenter = submeshTop.addPoint( 0.0, m_height / 2, 0.0 );
-			BufferElementGroupSPtr ptBottomCenter = submeshBase.addPoint( 0.0, -m_height / 2, 0.0 );
-			Vertex::setTexCoord( ptTopCenter, 0.5, 0.5 );
-			Vertex::setTexCoord( ptBottomCenter, 0.5, 0.5 );
+			topVertex.push_back( InterleavedVertex::createPNT( Point3f{ 0.0, m_height / 2, 0.0 }
+				, Point3f{ 0.0, 1.0, 0.0 }
+				, Point2f{ 0.5, 0.5 } ) );
+			baseVertex.push_back( InterleavedVertex::createPNT( Point3f{ 0.0, -m_height / 2, 0.0 }
+				, Point3f{ 0.0, -1.0, 0.0 }
+				, Point2f{ 0.5, 0.5 } ) );
+
+			submeshTop.addPoints( topVertex );
+			submeshBase.addPoints( baseVertex );
+			submeshSide.addPoints( sideVertex );
 
 			//RECONSTITION DES FACES
 			if ( m_height < 0 )
@@ -105,21 +115,21 @@ namespace castor3d
 			for ( i = 0; i < m_nbFaces - 1; i++ )
 			{
 				//Composition du bas
-				indexMappingBase->addFace( submeshBase[i]->getIndex(), submeshBase[i + 1]->getIndex(), ptBottomCenter->getIndex() );
+				indexMappingBase->addFace( i + 1, i, bottomCenterIndex );
 				//Composition du dessus
-				indexMappingTop->addFace( ptTopCenter->getIndex(), submeshTop[i]->getIndex(), submeshTop[i + 1]->getIndex() );
+				indexMappingTop->addFace( i, topCenterIndex, i + 1 );
 			}
 
 			//Composition du bas
-			indexMappingBase->addFace( submeshBase[m_nbFaces - 1]->getIndex(), submeshBase[0]->getIndex(), ptBottomCenter->getIndex() );
+			indexMappingBase->addFace( 0, m_nbFaces - 1, bottomCenterIndex );
 			//Composition du dessus
-			indexMappingTop->addFace( ptTopCenter->getIndex(), submeshTop[m_nbFaces - 1]->getIndex(), submeshTop[0]->getIndex() );
+			indexMappingTop->addFace( m_nbFaces - 1, topCenterIndex, 0 );
 
-			//Composition des càtàs
+			//Composition des côtés
 			for ( i = 0; i < 2 * m_nbFaces; i += 2 )
 			{
-				indexMappingSide->addFace( submeshSide[i + 0]->getIndex(), submeshSide[i + 1]->getIndex(), submeshSide[i + 2]->getIndex() );
-				indexMappingSide->addFace( submeshSide[i + 1]->getIndex(), submeshSide[i + 3]->getIndex(), submeshSide[i + 2]->getIndex() );
+				indexMappingSide->addFace( i + 1, i + 0, i + 2 );
+				indexMappingSide->addFace( i + 3, i + 1, i + 2 );
 			}
 
 			indexMappingBase->computeTangentsFromNormals();

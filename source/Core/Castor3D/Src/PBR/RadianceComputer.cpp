@@ -1,17 +1,16 @@
 #include "RadianceComputer.hpp"
 
 #include "Engine.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
 
-#include "FrameBuffer/DepthStencilRenderBuffer.hpp"
-#include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/RenderBufferAttachment.hpp"
-#include "FrameBuffer/TextureAttachment.hpp"
-#include "Mesh/Vertex.hpp"
-#include "Mesh/Buffer/Buffer.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
+
+#include <Image/Texture.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
+#include <Shader/ShaderProgram.hpp>
+#include <Sync/Fence.hpp>
 
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
@@ -20,270 +19,266 @@ using namespace castor;
 
 namespace castor3d
 {
-	RadianceComputer::RadianceComputer( Engine & engine
-		, castor::Size const & size )
-		: OwnedBy< Engine >{ engine }
-		, m_matrixUbo{ engine }
-		, m_viewport{ engine }
-		, m_bufferVertex
+	//*********************************************************************************************
+
+	namespace
+	{
+		renderer::TexturePtr doCreateRadianceTexture( RenderSystem const & renderSystem
+			, Size const & size )
 		{
+			auto & device = getCurrentDevice( renderSystem );
+			renderer::ImageCreateInfo image{};
+			image.flags = renderer::ImageCreateFlag::eCubeCompatible;
+			image.arrayLayers = 6u;
+			image.extent.width = size.getWidth();
+			image.extent.height = size.getHeight();
+			image.extent.depth = 1u;
+			image.format = renderer::Format::eR32G32B32A32_SFLOAT;
+			image.imageType = renderer::TextureType::e2D;
+			image.initialLayout = renderer::ImageLayout::eUndefined;
+			image.mipLevels = 1u;
+			image.samples = renderer::SampleCountFlag::e1;
+			image.sharingMode = renderer::SharingMode::eExclusive;
+			image.tiling = renderer::ImageTiling::eOptimal;
+			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+			return device.createTexture( image
+				, renderer::MemoryPropertyFlag::eDeviceLocal );
+		}
+
+		SamplerSPtr doCreateSampler( Engine & engine )
+		{
+			SamplerSPtr result;
+			auto name = cuT( "IblTexturesRadiance" );
+
+			if ( engine.getSamplerCache().has( name ) )
 			{
-				-1, +1, -1, /**/+1, -1, -1, /**/-1, -1, -1, /**/+1, -1, -1, /**/-1, +1, -1, /**/+1, +1, -1,
-				-1, -1, +1, /**/-1, +1, -1, /**/-1, -1, -1, /**/-1, +1, -1, /**/-1, -1, +1, /**/-1, +1, +1,
-				+1, -1, -1, /**/+1, +1, +1, /**/+1, -1, +1, /**/+1, +1, +1, /**/+1, -1, -1, /**/+1, +1, -1,
-				-1, -1, +1, /**/+1, +1, +1, /**/-1, +1, +1, /**/+1, +1, +1, /**/-1, -1, +1, /**/+1, -1, +1,
-				-1, +1, -1, /**/+1, +1, +1, /**/+1, +1, -1, /**/+1, +1, +1, /**/-1, +1, -1, /**/-1, +1, +1,
-				-1, -1, -1, /**/+1, -1, -1, /**/-1, -1, +1, /**/+1, -1, -1, /**/+1, -1, +1, /**/-1, -1, +1,
+				result = engine.getSamplerCache().find( name );
 			}
-		}
-		, m_declaration
-		{
+			else
 			{
-				BufferElementDeclaration{ ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec3 }
+				result = engine.getSamplerCache().create( name );
+				result->setMinFilter( renderer::Filter::eLinear );
+				result->setMagFilter( renderer::Filter::eLinear );
+				result->setWrapS( renderer::WrapMode::eClampToEdge );
+				result->setWrapT( renderer::WrapMode::eClampToEdge );
+				result->setWrapR( renderer::WrapMode::eClampToEdge );
+				engine.getSamplerCache().add( name, result );
 			}
-		}
-		, m_size{ size }
-	{
-		uint32_t i = 0;
 
-		for ( auto & vertex : m_arrayVertex )
-		{
-			vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_bufferVertex.data() )[i++ * m_declaration.stride()] );
+			result->initialise();
+			return result;
 		}
 
-		m_viewport.initialise();
-		m_viewport.setPerspective( 90.0_degrees, 1.0_r, 0.1_r, 10.0_r );
-		m_viewport.resize( m_size );
-		m_viewport.update();
-		auto & program = *doCreateProgram();
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		m_vertexBuffer = std::make_shared< VertexBuffer >( *getEngine()
-			, m_declaration );
-		m_vertexBuffer->resize( uint32_t( m_arrayVertex.size()
-			* m_declaration.stride() ) );
-		m_vertexBuffer->linkCoords( m_arrayVertex.begin(),
-			m_arrayVertex.end() );
-		m_vertexBuffer->initialise( BufferAccessType::eStatic
-			, BufferAccessNature::eDraw );
-		m_geometryBuffers = renderSystem.createGeometryBuffers( Topology::eTriangles
-			, program );
-		m_geometryBuffers->initialise( { *m_vertexBuffer }
-		, nullptr );
-
-		DepthStencilState dsState;
-		dsState.setDepthFunc( DepthFunc::eLEqual );
-		dsState.setDepthTest( false );
-		dsState.setDepthMask( WritingMask::eAll );
-
-		RasteriserState rsState;
-		rsState.setCulledFaces( Culling::eFront );
-
-		m_pipeline = renderSystem.createRenderPipeline( std::move( dsState )
-			, std::move( rsState )
-			, BlendState{}
-			, MultisampleState{}
-			, program
-			, PipelineFlags{} );
-		m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
-
-		m_frameBuffer = renderSystem.createFrameBuffer();
-
-		m_depthBuffer = m_frameBuffer->createDepthStencilRenderBuffer( PixelFormat::eD24 );
-		m_depthBuffer->create();
-		m_depthBuffer->initialise( m_size );
-		m_depthAttach = m_frameBuffer->createAttachment( m_depthBuffer );
-
-		m_frameBuffer->initialise();
-		m_frameBuffer->bind();
-		m_frameBuffer->attach( AttachmentPoint::eDepth, m_depthAttach );
-		REQUIRE( m_frameBuffer->isComplete() );
-		m_frameBuffer->unbind();
-
-		if ( !getEngine()->getSamplerCache().has( cuT( "RadianceComputer" ) ) )
+		renderer::TextureViewPtr doCreateSrcView( renderer::Texture const & texture )
 		{
-			m_sampler = getEngine()->getSamplerCache().add( cuT( "RadianceComputer" ) );
-			m_sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-			m_sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-			m_sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-			m_sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-			m_sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
-			m_sampler->initialise();
+			return texture.createView( renderer::TextureViewType::eCube
+				, texture.getFormat()
+				, 0u
+				, 1u
+				, 0u
+				, 6u );
 		}
-		else
-		{
-			m_sampler = getEngine()->getSamplerCache().find( cuT( "RadianceComputer" ) );
-		}
-	}
 
-	RadianceComputer::~RadianceComputer()
-	{
-		m_sampler.reset();
-		m_frameBuffer->bind();
-		m_frameBuffer->detachAll();
-		m_frameBuffer->unbind();
-		m_frameBuffer->cleanup();
-		m_frameBuffer.reset();
-		m_depthAttach.reset();
-		m_depthBuffer->cleanup();
-		m_depthBuffer->destroy();
-		m_depthBuffer.reset();
-		m_pipeline->cleanup();
-		m_pipeline.reset();
-		m_vertexBuffer->cleanup();
-		m_vertexBuffer.reset();
-		m_geometryBuffers->cleanup();
-		m_geometryBuffers.reset();
-		m_viewport.cleanup();
-		m_matrixUbo.getUbo().cleanup();
-
-		for ( auto & vertex : m_arrayVertex )
+		renderer::ShaderStageStateArray doCreateProgram( RenderSystem & renderSystem )
 		{
-			vertex.reset();
-		}
-	}
-
-	void RadianceComputer::render( TextureLayout const & srcTexture
-		, TextureLayoutSPtr dstTexture )
-	{
-		static Matrix4x4r const views[] =
-		{
-			matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +1.0f, +0.0f, +0.0f }, Point3r{ 0.0f, -1.0f, +0.0f } ),
-			matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ -1.0f, +0.0f, +0.0f }, Point3r{ 0.0f, -1.0f, +0.0f } ),
-			matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, +1.0f, +0.0f }, Point3r{ 0.0f, +0.0f, +1.0f } ),
-			matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, -1.0f, +0.0f }, Point3r{ 0.0f, +0.0f, -1.0f } ),
-			matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, +0.0f, +1.0f }, Point3r{ 0.0f, -1.0f, +0.0f } ),
-			matrix::lookAt( Point3r{ 0.0f, 0.0f, 0.0f }, Point3r{ +0.0f, +0.0f, -1.0f }, Point3r{ 0.0f, -1.0f, +0.0f } )
-		};
-		REQUIRE( dstTexture->getDimensions() == m_size );
-		std::array< FrameBufferAttachmentSPtr, 6 > attachs
-		{
+			glsl::Shader vtx;
 			{
-				m_frameBuffer->createAttachment( dstTexture, CubeMapFace::ePositiveX ),
-				m_frameBuffer->createAttachment( dstTexture, CubeMapFace::eNegativeX ),
-				m_frameBuffer->createAttachment( dstTexture, CubeMapFace::ePositiveY ),
-				m_frameBuffer->createAttachment( dstTexture, CubeMapFace::eNegativeY ),
-				m_frameBuffer->createAttachment( dstTexture, CubeMapFace::ePositiveZ ),
-				m_frameBuffer->createAttachment( dstTexture, CubeMapFace::eNegativeZ ),
-			}
-		};
+				using namespace glsl;
+				GlslWriter writer{ renderSystem.createGlslWriter() };
 
-		m_viewport.apply();
-		m_frameBuffer->bind( FrameBufferTarget::eDraw );
-		srcTexture.bind( MinTextureIndex );
-		m_sampler->bind( MinTextureIndex );
+				// Inputs
+				auto position = writer.declAttribute< Vec3 >( cuT( "position" ), 0u );
+				Ubo matrix{ writer, cuT( "Matrix" ), 0u, 0u };
+				auto c3d_viewProjection = matrix.declMember< Mat4 >( cuT( "c3d_viewProjection" ) );
+				matrix.end();
 
-		for ( uint32_t i = 0u; i < 6u; ++i )
-		{
-			attachs[i]->attach( AttachmentPoint::eColour, 0u );
-			m_frameBuffer->setDrawBuffer( attachs[i] );
-			m_frameBuffer->clear( BufferComponent::eColour | BufferComponent::eDepth );
-			REQUIRE( m_frameBuffer->isComplete() );
-			m_matrixUbo.update( views[i], m_viewport.getProjection() );
-			m_pipeline->apply();
-			m_geometryBuffers->draw( uint32_t( m_arrayVertex.size() ), 0u );
-		}
+				// Outputs
+				auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ), 0u );
+				auto out = gl_PerVertex{ writer };
 
-		m_sampler->unbind( MinTextureIndex );
-		srcTexture.unbind( MinTextureIndex );
-		m_frameBuffer->unbind();
-	}
-
-	ShaderProgramSPtr RadianceComputer::doCreateProgram()
-	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		glsl::Shader vtx;
-		{
-			using namespace glsl;
-			GlslWriter writer{ renderSystem.createGlslWriter() };
-
-			// Inputs
-			auto position = writer.declAttribute< Vec3 >( ShaderProgram::Position );
-			UBO_MATRIX( writer );
-
-			// Outputs
-			auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ) );
-			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
-
-			std::function< void() > main = [&]()
-			{
-				vtx_worldPosition = position;
-				auto view = writer.declLocale( cuT( "normal" )
-					, mat4( mat3( c3d_curView ) ) );
-				gl_Position = writer.paren( c3d_projection * view * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
-			};
-
-			writer.implementFunction< void >( cuT( "main" ), main );
-			vtx = writer.finalise();
-		}
-
-		glsl::Shader pxl;
-		{
-			using namespace glsl;
-			GlslWriter writer{ renderSystem.createGlslWriter() };
-
-			// Inputs
-			auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ) );
-			auto c3d_mapDiffuse = writer.declSampler< SamplerCube >( ShaderProgram::MapDiffuse, MinTextureIndex );
-
-			// Outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_FragColor" ) );
-
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				// From https://learnopengl.com/#!PBR/Lighting
-				// the sample direction equals the hemisphere's orientation 
-				auto normal = writer.declLocale( cuT( "normal" )
-					, normalize( vtx_worldPosition ) );
-
-				auto irradiance = writer.declLocale( cuT( "irradiance" )
-					, vec3( 0.0_f ) );
-
-				auto up = writer.declLocale( cuT( "up" )
-					, vec3( 0.0_f, 1.0, 0.0 ) );
-				auto right = writer.declLocale( cuT( "right" )
-					, cross( up, normal ) );
-				up = cross( normal, right );
-
-				auto sampleDelta = writer.declLocale( cuT( "sampleDelta" )
-					, 0.025_f );
-				auto nrSamples = writer.declLocale( cuT( "nrSamples" )
-					, 0_i );
-				auto PI = writer.declLocale( cuT( "PI" )
-					, 3.14159265359_f );
-
-				FOR( writer, Float, phi, 0.0, "phi < 2.0 * PI", "phi += sampleDelta" )
+				std::function< void() > main = [&]()
 				{
-					FOR( writer, Float, theta, 0.0, "theta < 0.5 * PI", "theta += sampleDelta" )
-					{
-						// spherical to cartesian (in tangent space)
-						auto tangentSample = writer.declLocale( cuT( "tangentSample" )
-							, vec3( sin( theta ) * cos( phi ), sin( theta ) * sin( phi ), cos( theta ) ) );
-						// tangent space to world
-						auto sampleVec = writer.declLocale( cuT( "sampleVec" )
-							, right * tangentSample.x() + up * tangentSample.y() + normal * tangentSample.z() );
+					vtx_worldPosition = position;
+					out.gl_Position() = writer.paren( c3d_viewProjection * vec4( position, 1.0 ) ).xyww();
+				};
 
-						irradiance += texture( c3d_mapDiffuse, sampleVec ).rgb() * cos( theta ) * sin( theta );
-						nrSamples = nrSamples + 1;
+				writer.implementFunction< void >( cuT( "main" ), main );
+				vtx = writer.finalise();
+			}
+
+			glsl::Shader pxl;
+			{
+				using namespace glsl;
+				GlslWriter writer{ renderSystem.createGlslWriter() };
+
+				// Inputs
+				auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ), 0u );
+				auto c3d_mapDiffuse = writer.declSampler< SamplerCube >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
+
+				// Outputs
+				auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_FragColor" ), 0u );
+
+				writer.implementFunction< void >( cuT( "main" ), [&]()
+				{
+					// From https://learnopengl.com/#!PBR/Lighting
+					// the sample direction equals the hemisphere's orientation 
+					auto normal = writer.declLocale( cuT( "normal" )
+						, normalize( vtx_worldPosition ) );
+
+					auto irradiance = writer.declLocale( cuT( "irradiance" )
+						, vec3( 0.0_f ) );
+
+					auto up = writer.declLocale( cuT( "up" )
+						, vec3( 0.0_f, 1.0, 0.0 ) );
+					auto right = writer.declLocale( cuT( "right" )
+						, cross( up, normal ) );
+					up = cross( normal, right );
+
+					auto sampleDelta = writer.declLocale( cuT( "sampleDelta" )
+						, 0.025_f );
+					auto nrSamples = writer.declLocale( cuT( "nrSamples" )
+						, 0_i );
+					auto PI = writer.declLocale( cuT( "PI" )
+						, 3.14159265359_f );
+
+					FOR( writer, Float, phi, 0.0, "phi < 2.0 * PI", "phi += sampleDelta" )
+					{
+						FOR( writer, Float, theta, 0.0, "theta < 0.5 * PI", "theta += sampleDelta" )
+						{
+							// spherical to cartesian (in tangent space)
+							auto tangentSample = writer.declLocale( cuT( "tangentSample" )
+								, vec3( sin( theta ) * cos( phi ), sin( theta ) * sin( phi ), cos( theta ) ) );
+							// tangent space to world
+							auto sampleVec = writer.declLocale( cuT( "sampleVec" )
+								, right * tangentSample.x() + up * tangentSample.y() + normal * tangentSample.z() );
+
+							irradiance += texture( c3d_mapDiffuse, sampleVec ).rgb() * cos( theta ) * sin( theta );
+							nrSamples = nrSamples + 1;
+						}
+						ROF;
 					}
 					ROF;
-				}
-				ROF;
 
-				irradiance = irradiance * PI * writer.paren( 1.0_f / writer.cast< Float >( nrSamples ) );
-				pxl_fragColor = vec4( irradiance, 1.0 );
-			} );
+					irradiance = irradiance * PI * writer.paren( 1.0_f / writer.cast< Float >( nrSamples ) );
+					pxl_fragColor = vec4( irradiance, 1.0 );
+				} );
 
-			pxl = writer.finalise();
+				pxl = writer.finalise();
+			}
+
+			renderer::ShaderStageStateArray program
+			{
+				{ getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eVertex ) },
+				{ getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eFragment ) }
+			};
+			program[0].module->loadShader( vtx.getSource() );
+			program[1].module->loadShader( pxl.getSource() );
+			return program;
 		}
 
-		auto & cache = getEngine()->getShaderProgramCache();
-		auto program = cache.getNewProgram( false );
-		program->createObject( ShaderType::eVertex );
-		program->createObject( ShaderType::ePixel );
-		program->setSource( ShaderType::eVertex, vtx );
-		program->setSource( ShaderType::ePixel, pxl );
-		program->createUniform< UniformType::eSampler >( ShaderProgram::MapDiffuse, ShaderType::ePixel )->setValue( MinTextureIndex );
-		program->initialise();
-		return program;
+		renderer::RenderPassPtr doCreateRenderPass( RenderSystem const & renderSystem
+			, renderer::Format format )
+		{
+			auto & device = getCurrentDevice( renderSystem );
+			renderer::RenderPassCreateInfo createInfo{};
+			createInfo.flags = 0u;
+
+			createInfo.attachments.resize( 1u );
+			createInfo.attachments[0].format = format;
+			createInfo.attachments[0].samples = renderer::SampleCountFlag::e1;
+			createInfo.attachments[0].loadOp = renderer::AttachmentLoadOp::eDontCare;
+			createInfo.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+			createInfo.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+			createInfo.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+			createInfo.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+			createInfo.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+
+			renderer::AttachmentReference colourReference;
+			colourReference.attachment = 0u;
+			colourReference.layout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+			createInfo.subpasses.resize( 1u );
+			createInfo.subpasses[0].flags = 0u;
+			createInfo.subpasses[0].colorAttachments = { colourReference };
+
+			createInfo.dependencies.resize( 1u );
+			createInfo.dependencies[0].srcSubpass = 0u;
+			createInfo.dependencies[0].dstSubpass = renderer::ExternalSubpass;
+			createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
+			createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+			createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+			return device.createRenderPass( createInfo );
+		}
 	}
+
+	//*********************************************************************************************
+
+	RadianceComputer::RadianceComputer( Engine & engine
+		, Size const & size
+		, renderer::Texture const & srcTexture )
+		: RenderCube{ *engine.getRenderSystem(), false }
+		, m_renderSystem{ *engine.getRenderSystem() }
+		, m_result{ doCreateRadianceTexture( m_renderSystem, size ) }
+		, m_resultView{ m_result->createView( renderer::TextureViewType::eCube, m_result->getFormat(), 0u, m_result->getMipmapLevels(), 0u, 6u ) }
+		, m_sampler{ doCreateSampler( engine ) }
+		, m_srcView{ doCreateSrcView( srcTexture ) }
+		, m_renderPass{ doCreateRenderPass( m_renderSystem, m_result->getFormat() ) }
+	{
+		auto & dstTexture = *m_result;
+		auto & device = getCurrentDevice( m_renderSystem );
+		
+		for ( auto face = 0u; face < 6u; ++face )
+		{
+			auto & facePass = m_renderPasses[face];
+
+			// Create the views.
+			facePass.dstView = dstTexture.createView( renderer::TextureViewType::e2D
+				, dstTexture.getFormat()
+				, 0u
+				, 1u
+				, face
+				, 1u );
+			// Initialise the frame buffer.
+			renderer::FrameBufferAttachmentArray attaches;
+			attaches.emplace_back( *( m_renderPass->getAttachments().begin() ), *facePass.dstView );
+			facePass.frameBuffer = m_renderPass->createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
+				, std::move( attaches ) );
+		}
+
+		auto program = doCreateProgram( m_renderSystem );
+		createPipelines( { size.getWidth(), size.getHeight() }
+			, Position{}
+			, program
+			, *m_srcView
+			, *m_renderPass
+			, {} );
+
+		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+		m_commandBuffer->begin();
+
+		for ( auto face = 0u; face < 6u; ++face )
+		{
+			auto & facePass = m_renderPasses[face];
+			m_commandBuffer->beginRenderPass( *m_renderPass
+				, *facePass.frameBuffer
+				, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
+				, renderer::SubpassContents::eInline );
+			registerFrame( *m_commandBuffer, face );
+			m_commandBuffer->endRenderPass();
+		}
+
+		m_commandBuffer->end();
+	}
+
+	void RadianceComputer::render()
+	{
+		auto & device = getCurrentDevice( m_renderSystem );
+		device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
+		device.getGraphicsQueue().waitIdle();
+	}
+
+	//*********************************************************************************************
 }

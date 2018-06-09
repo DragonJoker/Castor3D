@@ -74,10 +74,10 @@ namespace castor3d
 	{
 		addFace( a, b, c );
 		addFace( a, c, d );
-		Vertex::setTexCoord( *getOwner()->getPoint( a ), minUV[0], minUV[1] );
-		Vertex::setTexCoord( *getOwner()->getPoint( b ), maxUV[0], minUV[1] );
-		Vertex::setTexCoord( *getOwner()->getPoint( c ), maxUV[0], maxUV[1] );
-		Vertex::setTexCoord( *getOwner()->getPoint( d ), minUV[0], maxUV[1] );
+		getOwner()->getPoint( a ).tex = Point3f{ minUV[0], minUV[1], 0.0f };
+		getOwner()->getPoint( b ).tex = Point3f{ maxUV[0], minUV[1], 0.0f };
+		getOwner()->getPoint( c ).tex = Point3f{ maxUV[0], maxUV[1], 0.0f };
+		getOwner()->getPoint( d ).tex = Point3f{ minUV[0], maxUV[1], 0.0f };
 	}
 
 	void TriFaceMapping::clearFaces()
@@ -118,19 +118,14 @@ namespace castor3d
 			, *this );
 	}
 
-	void TriFaceMapping::computeTangentsFromBitangents()
-	{
-		SubmeshUtils::computeTangentsFromBitangents( *getOwner() );
-	}
-
-	void TriFaceMapping::computeBitangents()
-	{
-		SubmeshUtils::computeBitangents( *getOwner() );
-	}
-
 	uint32_t TriFaceMapping::getCount()const
 	{
-		return m_faceCount;
+		return uint32_t( m_faces.size() );
+	}
+
+	uint32_t TriFaceMapping::getComponentsCount()const
+	{
+		return 3u;
 	}
 
 	void TriFaceMapping::sortByDistance( Point3r const & cameraPosition )
@@ -142,35 +137,34 @@ namespace castor3d
 			if ( m_cameraPosition != cameraPosition )
 			{
 				if ( getOwner()->isInitialised()
-					&& !getOwner()->getVertexBuffer().isEmpty()
-					&& !getOwner()->getIndexBuffer().isEmpty() )
+					&& getOwner()->getVertexBuffer().getCount()
+					&& getOwner()->getIndexBuffer().getCount() )
 				{
-					IndexBuffer & indices = getOwner()->getIndexBuffer();
-					VertexBuffer & vertices = getOwner()->getVertexBuffer();
+					auto & indices = getOwner()->getIndexBuffer();
+					auto & vertices = getOwner()->getVertexBuffer();
 
-					vertices.bind();
-					indices.bind();
 					m_cameraPosition = cameraPosition;
-					uint32_t indexSize = indices.getSize();
-					uint32_t * index = indices.lock( 0, indexSize, AccessType::eRead | AccessType::eWrite );
+					uint32_t indexSize = indices.getCount();
 
-					if ( index )
+					if ( uint32_t * index = reinterpret_cast< uint32_t * >( indices.getBuffer().lock( 0
+						, uint32_t( indexSize * sizeof( uint32_t ) )
+						, renderer::MemoryMapFlag::eRead | renderer::MemoryMapFlag::eWrite ) ) )
 					{
-						uint32_t stride = vertices.getDeclaration().stride();
-						uint8_t * vertex = vertices.getData();
 						FaceDistArray arraySorted;
 						arraySorted.reserve( indexSize / 3 );
 
-						if ( vertex )
+						if ( InterleavedVertex * vertex = vertices.lock( 0
+							, vertices.getCount()
+							, renderer::MemoryMapFlag::eRead ) )
 						{
 							for ( uint32_t * it = index + 0; it < index + indexSize; it += 3 )
 							{
 								double dDistance = 0.0;
-								Coords3r vtx1( reinterpret_cast< real * >( &vertex[it[0] * stride] ) );
+								auto & vtx1 = vertex[it[0]].pos;
 								dDistance += point::lengthSquared( vtx1 - cameraPosition );
-								Coords3r vtx2( reinterpret_cast< real * >( &vertex[it[1] * stride] ) );
+								auto & vtx2 = vertex[it[1]].pos;
 								dDistance += point::lengthSquared( vtx2 - cameraPosition );
-								Coords3r vtx3( reinterpret_cast< real * >( &vertex[it[2] * stride] ) );
+								auto & vtx3 = vertex[it[2]].pos;
 								dDistance += point::lengthSquared( vtx3 - cameraPosition );
 								arraySorted.push_back( FaceDistance{ { it[0], it[1], it[2] }, dDistance } );
 							}
@@ -183,19 +177,20 @@ namespace castor3d
 								*index++ = face.m_index[1];
 								*index++ = face.m_index[2];
 							}
+
+							indices.getBuffer().flush( 0u, vertices.getCount() );
+							indices.getBuffer().unlock();
 						}
 
-						indices.unlock();
+						indices.getBuffer().flush( 0u, uint32_t( indexSize * sizeof( uint32_t ) ) );
+						indices.getBuffer().unlock();
 					}
-
-					indices.unbind();
-					vertices.unbind();
 				}
 			}
 		}
-		catch ( Exception const & p_exc )
+		catch ( Exception const & exc )
 		{
-			Logger::logError( std::stringstream() << "Submesh::SortFaces - Error: " << p_exc.what() );
+			Logger::logError( std::stringstream() << "Submesh::SortFaces - Error: " << exc.what() );
 		}
 	}
 
@@ -206,32 +201,33 @@ namespace castor3d
 
 	void TriFaceMapping::doFill()
 	{
+	}
+
+	void TriFaceMapping::doUpload()
+	{
 		auto count = uint32_t( m_faces.size() * 3 );
-		IndexBuffer & indexBuffer = getOwner()->getIndexBuffer();
 
 		if ( count )
 		{
-			m_faceCount = uint32_t( m_faces.size() );
+			auto & indexBuffer = getOwner()->getIndexBuffer();
 
-			if ( indexBuffer.getSize() != count )
+			if ( auto * buffer = indexBuffer.lock( 0, count, renderer::MemoryMapFlag::eWrite ) )
 			{
-				indexBuffer.resize( count );
+				for ( auto const & face : m_faces )
+				{
+					*buffer = face[0];
+					++buffer;
+					*buffer = face[1];
+					++buffer;
+					*buffer = face[2];
+					++buffer;
+				}
+
+				indexBuffer.flush( 0u, count );
+				indexBuffer.unlock();
 			}
 
-			uint32_t index = 0;
-
-			for ( auto const & face : m_faces )
-			{
-				indexBuffer[index++] = face[0];
-				indexBuffer[index++] = face[1];
-				indexBuffer[index++] = face[2];
-			}
-
-			m_faces.clear();
-		}
-		else
-		{
-			REQUIRE( m_faceCount * 3 == indexBuffer.getSize() );
+			//m_faces.clear();
 		}
 	}
 }

@@ -4,8 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_DeferredRendering_H___
 #define ___C3D_DeferredRendering_H___
 
+#include "Technique/Opaque/GeometryPassResult.hpp"
 #include "Technique/Opaque/LightingPass.hpp"
 #include "Technique/Opaque/ReflectionPass.hpp"
+#include "Technique/Opaque/SsaoPass.hpp"
 #include "Technique/Opaque/SubsurfaceScatteringPass.hpp"
 
 namespace castor3d
@@ -44,11 +46,13 @@ namespace castor3d
 		 */
 		DeferredRendering( Engine & engine
 			, OpaquePass & opaquePass
-			, FrameBuffer & frameBuffer
-			, TextureAttachment & depthAttach
+			, TextureLayoutSPtr depthTexture
+			, TextureLayoutSPtr velocityTexture
+			, TextureLayoutSPtr resultTexture
 			, castor::Size const & size
-			, Scene const & scene
-			, SsaoConfig const & config );
+			, Scene & scene
+			, Viewport const & viewport
+			, SsaoConfig & config );
 		/**
 		 *\~english
 		 *\brief		Destroys deferred rendering related stuff.
@@ -58,79 +62,63 @@ namespace castor3d
 		~DeferredRendering();
 		/**
 		 *\~english
+		 *\brief		Updates opaque pass.
+		 *\param[out]	info		Receives the render informations.
+		 *\param[out]	scene		The rendered scene.
+		 *\param[out]	camera		The viewer camera.
+		 *\param[out]	jitter		The jittering value.
+		 *\~french
+		 *\brief		Met à jour la passe opaque.
+		 *\param[out]	info		Reçoit les informations de rendu.
+		 *\param[out]	scene		La scène rendue.
+		 *\param[out]	camera		La caméra par laquelle la scène est rendue.
+		 *\param[out]	jitter		La valeur de jittering.
+		 */
+		void update( RenderInfo & info
+			, Scene const & scene
+			, Camera const & camera
+			, castor::Point2r const & jitter );
+		/**
+		 *\~english
 		 *\brief		Renders opaque nodes.
 		 *\param[out]	info		Receives the render informations.
 		 *\param[out]	scene		The rendered scene.
 		 *\param[out]	camera		The viewer camera.
-		 *\param[out]	shadowMaps	The shadow maps.
-		 *\param[out]	jitter		The jittering value.
-		 *\param[out]	velocity	The velocity texture.
 		 *\~french
 		 *\brief		Dessine les noeuds opaques.
 		 *\param[out]	info		Reçoit les informations de rendu.
 		 *\param[out]	scene		La scène rendue.
 		 *\param[out]	camera		La caméra par laquelle la scène est rendue.
-		 *\param[out]	shadowMaps	Les textures d'ombres.
-		 *\param[out]	jitter		La valeur de jittering.
-		 *\param[out]	velocity	La texture de vélocité.
 		 */
-		void render( RenderInfo & info
+		renderer::Semaphore const & render( RenderInfo & info
 			, Scene const & scene
 			, Camera const & camera
-			, ShadowMapLightTypeArray & shadowMaps
-			, castor::Point2r const & jitter
-			, TextureUnit const & velocity );
+			, renderer::Semaphore const & toWait );
 		/**
 		 *\~english
 		 *\brief		Displays debug data on screen.
 		 *\~french
 		 *\brief		Dessine les données de débogage sur l'écran.
 		 */
-		void debugDisplay()const;
+		void debugDisplay( renderer::RenderPass const & renderPass
+			, renderer::FrameBuffer const & frameBuffer )const;
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		void accept( RenderTechniqueVisitor & visitor );
 
 	private:
-		using GeometryBufferTextures = std::array< TextureUnitUPtr, size_t( DsTexture::eCount ) >;
-		using GeometryBufferAttachs = std::array< TextureAttachmentSPtr, size_t( DsTexture::eCount ) >;
-
-		//!\~english	The engine.
-		//!\~french		Le moteur.
 		Engine & m_engine;
-		//!\~english	The SSAO configuration.
-		//!\~french		La configuration du SSAO.
-		SsaoConfig const & m_ssaoConfig;
-		//!\~english	The pass used to render opaque nodes.
-		//!\~french		La passe utilisée pour dessiner les noeuds opaques.
+		SsaoConfig & m_ssaoConfig;
 		OpaquePass & m_opaquePass;
-		//!\~english	The target framebuffer.
-		//!\~french		Le tampon d'image ciblé.
-		FrameBuffer & m_frameBuffer;
-		//!\~english	The target framebuffer's depth attachment.
-		//!\~french		L'attache profondeur du tampon d'image ciblé.
-		TextureAttachment & m_depthAttach;
-		//!\~english	The render area dimension.
-		//!\~french		Les dimensions de l'aire de rendu.
 		castor::Size m_size;
-		//!\~english	The geometry pass informations.
-		//!\~french		Les informations de la passe de géométrie.
 		GpInfoUbo m_gpInfoUbo;
-		//!\~english	The fog pass.
-		//!\~french		La passe de brouillard.
 		std::unique_ptr< LightingPass > m_lightingPass;
-		//!\~english	The reflection pass.
-		//!\~french		La passe de réflexion.
-		std::unique_ptr< ReflectionPass > m_reflection;
-		//!\~english	The reflection pass.
-		//!\~french		La passe de réflexion.
+		std::unique_ptr< SsaoPass > m_ssao;
 		std::unique_ptr< SubsurfaceScatteringPass > m_subsurfaceScattering;
-		//!\~english	The various textures for deferred shading.
-		//!\~french		Les diverses textures pour le deferred shading.
-		GeometryBufferTextures m_geometryPassResult;
-		//!\~english	The deferred shading frame buffer.
-		//!\~french		Le tampon d'image pour le deferred shading.
-		FrameBufferSPtr m_geometryPassFrameBuffer;
-		//!\~english	The attachments between textures and deferred shading frame buffer.
-		//!\~french		Les attaches entre les textures et le tampon deferred shading.
-		GeometryBufferAttachs m_geometryPassTexAttachs;
+		std::vector< std::unique_ptr< ReflectionPass > > m_reflection;
+		GeometryPassResult m_geometryPassResult;
+		std::vector< renderer::TexturePtr > m_results;
 	};
 }
 

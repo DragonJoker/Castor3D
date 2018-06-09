@@ -1,9 +1,13 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_POST_EFFECT_H___
-#define ___C3D_POST_EFFECT_H___
+#ifndef ___C3D_PostEffect_H___
+#define ___C3D_PostEffect_H___
 
+#include "Miscellaneous/PipelineVisitor.hpp"
+
+#include "Render/RenderPassTimer.hpp"
+#include "Render/RenderTarget.hpp"
 #include "Texture/TextureUnit.hpp"
 
 #include <Design/Named.hpp>
@@ -11,6 +15,19 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	struct CommandsSemaphore
+	{
+		CommandsSemaphore( renderer::CommandBufferPtr && commandBuffer
+			, renderer::SemaphorePtr && semaphore )
+			: commandBuffer{ std::move( commandBuffer ) }
+			, semaphore{ std::move( semaphore ) }
+		{
+		}
+
+		renderer::CommandBufferPtr commandBuffer;
+		renderer::SemaphorePtr semaphore;
+	};
+	using CommandsSemaphoreArray = std::vector< CommandsSemaphore >;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.7.0.0
@@ -28,77 +45,12 @@ namespace castor3d
 		: public castor::OwnedBy< RenderSystem >
 		, public castor::Named
 	{
-	protected:
-		/*!
-		\author		Sylvain DOREMUS
-		\version	0.9.0
-		\date		03/07/2016
-		\~english
-		\brief		Post render effect surface structure.
-		\remark		Holds basic informations for a possible post effect surface: framebuffer and colour texture.
-		\~french
-		\brief		Surface pour effet post rendu.
-		\remark		Contient les informations basiques de surface d'un effet: framebuffer, texture de couleur.
-		*/
-		struct PostEffectSurface
-		{
-			/**
-			 *\~english
-			 *\brief		Constructor.
-			 *\param[in]	engine	The engine.
-			 *\~french
-			 *\brief		Constructeur.
-			 *\param[in]	engine	Le moteur.
-			 */
-			C3D_API explicit PostEffectSurface( castor3d::Engine & engine );
-			/**
-			 *\~english
-			 *\brief		Initialises the surface.
-			 *\param[in]	renderTarget	The render target to which is attached this effect.
-			 *\param[in]	size			The surface size.
-			 *\param[in]	index			The surface index.
-			 *\param[in]	sampler			The surface sampler.
-			 *\param[in]	format			The surface pixel format.
-			 *\~french
-			 *\brief		Initialise la surface.
-			 *\param[in]	renderTarget	La cible de rendu sur laquelle cet effet s'applique.
-			 *\param[in]	size			Les dimensions de la surface.
-			 *\param[in]	index			L'index de la surface.
-			 *\param[in]	sampler			L'échantillonneur de la surface.
-			 *\param[in]	format			Le format des pixels de la surface.
-			 */
-			C3D_API bool initialise( castor3d::RenderTarget & renderTarget
-				, castor::Size const & size
-				, uint32_t index
-				, castor3d::SamplerSPtr sampler
-				, castor::PixelFormat format = castor::PixelFormat::eRGBA32F );
-			/**
-			 *\~english
-			 *\brief		Cleans up the surface.
-			 *\~french
-			 *\brief		Nettoie la surface.
-			 */
-			C3D_API void cleanup();
-
-			//!\~english	The surface framebuffer.
-			//!\~french		Le framebuffer de la surface.
-			castor3d::FrameBufferSPtr m_fbo;
-			//!\~english	The surface colour texture.
-			//!\~french		La texture couleur de la surface.
-			castor3d::TextureUnit m_colourTexture;
-			//!\~english	The attach between framebuffer and texture.
-			//!\~french		L'attache entre la texture et le framebuffer.
-			castor3d::TextureAttachmentSPtr m_colourAttach;
-			//!\~english	The surface dimensions.
-			//!\~french		Les dimensions de la surface.
-			castor::Size m_size;
-		};
-
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	name			The effect name.
+		 *\param[in]	fullName		The effect full (fancy) name.
 		 *\param[in]	renderTarget	The render target to which is attached this effect.
 		 *\param[in]	renderSystem	The render system.
 		 *\param[in]	parameters		The optional parameters.
@@ -106,12 +58,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	name			Le nom de l'effet.
+		 *\param[in]	fullName		Le nom complet (et joli) de l'effet.
 		 *\param[in]	renderTarget	La cible de rendu sur laquelle cet effet s'applique.
 		 *\param[in]	renderSystem	Le render system.
 		 *\param[in]	parameters		Les paramètres optionnels.
 		 *\param[in]	postToneMapping	Dit si l'effet s'applique après le mappage de tons.
 		 */
 		C3D_API PostEffect( castor::String const & name
+			, castor::String const & fullName
 			, RenderTarget & renderTarget
 			, RenderSystem & renderSystem
 			, Parameters const & parameters
@@ -140,37 +94,103 @@ namespace castor3d
 		 *\brief		Fonction d'initialisation.
 		 *\return		\p true if ok.
 		 */
-		C3D_API virtual bool initialise() = 0;
+		C3D_API bool initialise( TextureLayout const & texture );
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
 		 */
-		C3D_API virtual void cleanup() = 0;
+		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief			Render function, applies the effect to the given framebuffer.
-		 *\param[in,out]	framebuffer	The framebuffer.
-		 *\return			\p true if ok.
+		 *\brief		Starts rendering the effect.
 		 *\~french
-		 *\brief			Fonction de rendu, applique l'effet au tampon d'image donné.
-		 *\param[in,out]	framebuffer	Le tampon d'image.
-		 *\return			\p true si tout s'est bien passé.
+		 *\brief		Démarre le rendu de l'effet.
 		 */
-		C3D_API virtual bool apply( FrameBuffer & framebuffer ) = 0;
+		C3D_API void start();
 		/**
 		 *\~english
-		 *\return		\p true if the effect applies after tone mapping.
+		 *\brief		Notifies a pass render.
 		 *\~french
-		 *\brief		\p true si l'effet s'applique après le mappage de tons.
+		 *\brief		Notifie le rendu d'une passe.
 		 */
+		C3D_API void notifyPassRender();
+		/**
+		 *\~english
+		 *\brief		Ends rendering the effect.
+		 *\~french
+		 *\brief		Termine le rendu de l'effet.
+		 */
+		C3D_API void stop();
+		/**
+		 *\~english
+		 *\brief		Updated needed data.
+		 *\param[in]	elapsedTime	The time elapsed since last frame, in seconds.
+		 *\~french
+		 *\brief		Met à jour les données en ayant besoin.
+		 *\param[in]	elapsedTime	Le temps écoulé depuis la dernière frame, en secondes.
+		 */
+		C3D_API virtual void update( castor::Nanoseconds const & elapsedTime );
+		/**
+		 *\~english
+		 *\brief		Visitor acceptance function.
+		 *\~french
+		 *\brief		Fonction d'acceptation de visiteur.
+		 */
+		C3D_API virtual void accept( PipelineVisitorBase & visitor ) = 0;
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		**/
+		/**@{*/
+		inline CommandsSemaphoreArray const & getCommands()const
+		{
+			return m_commands;
+		}
+
 		inline bool isAfterToneMapping()const
 		{
 			return m_postToneMapping;
 		}
 
+		inline TextureLayout const & getResult()const
+		{
+			REQUIRE( m_result );
+			return *m_result;
+		}
+
+		inline castor::String const & getFullName()const
+		{
+			return m_fullName;
+		}
+		/**@}*/
+
+	protected:
+		C3D_API void doCopyResultToTarget( renderer::TextureView const & result
+			, renderer::CommandBuffer & commandBuffer );
+
 	private:
+		/**
+		 *\~english
+		 *\brief		Initialisation function.
+		 *\return		\p true if ok.
+		 *\~french
+		 *\brief		Fonction d'initialisation.
+		 *\return		\p true if ok.
+		 */
+		C3D_API virtual bool doInitialise( RenderPassTimer const & timer ) = 0;
+		/**
+		 *\~english
+		 *\brief		Cleanup function.
+		 *\~french
+		 *\brief		Fonction de nettoyage.
+		 */
+		C3D_API virtual void doCleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Writes the effect into a text file.
@@ -182,12 +202,15 @@ namespace castor3d
 		C3D_API virtual bool doWriteInto( castor::TextFile & file ) = 0;
 
 	protected:
-		//!\~english	The render target to which this effect is attached.
-		//!\~french		La cible de rendu à laquelle est attachée cet effet.
+		castor::String m_fullName;
 		RenderTarget & m_renderTarget;
-		//!\~english	Tells if the effect applies after tone mapping.
-		//!\~french		Dit si l'effet s'applique après le mappage de tons.
+		uint32_t m_passesCount{ 1u };
+		uint32_t m_currentPass{ 0u };
+		std::unique_ptr< RenderPassTimer > m_timer;
 		bool m_postToneMapping{ false };
+		TextureLayout const * m_target{ nullptr };
+		CommandsSemaphoreArray m_commands;
+		TextureLayout const * m_result{ nullptr };
 	};
 }
 

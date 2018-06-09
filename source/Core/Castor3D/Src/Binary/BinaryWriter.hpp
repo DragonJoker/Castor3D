@@ -94,7 +94,7 @@ namespace castor3d
 
 			if ( result )
 			{
-				castor::StringStream stream;
+				castor::StringStream stream{ castor::makeStringStream() };
 				stream << cuT( "Castor 3D - Version " ) << castor3d::Version{};
 				result = doWriteChunk( stream.str(), ChunkType::eName, chunk );
 			}

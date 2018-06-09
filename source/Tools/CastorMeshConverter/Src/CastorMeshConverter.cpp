@@ -1,28 +1,36 @@
 #include <Engine.hpp>
-#include <Plugin/RendererPlugin.hpp>
-#include <Scene/Scene.hpp>
 
+#include <Binary/BinaryMesh.hpp>
+#include <Binary/BinarySkeleton.hpp>
 #include <Material/Material.hpp>
 #include <Mesh/Mesh.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Skeleton/Skeleton.hpp>
+#include <Plugin/RendererPlugin.hpp>
+#include <Scene/Scene.hpp>
 
 using StringArray = std::vector< std::string >;
 
 struct Options
 {
 	castor::Path input;
-	castor::Path output;
+	castor::String output;
+	bool split{ false };
+	uint32_t submesh{ 0u };
+	bool recenter{ false };
 };
 
 void printUsage()
 {
 	std::cout << "Castor Mesh Converter is a tool that allows you to convert any mesh file to the CMSH files." << std::endl;
 	std::cout << "Usage:" << std::endl;
-	std::cout << "CastorMeshConverter FILE [-o NAME]" << std::endl;
+	std::cout << "CastorMeshConverter FILE [-o NAME] [-s] [-r]" << std::endl;
 	std::cout << "Options:" << std::endl;
 	std::cout << "  -o NAME     Allows you to specify the output file name." << std::endl;
 	std::cout << "              NAME can omit the extension." << std::endl << std::endl;
+	std::cout << "  -s          Splits the mesh per material." << std::endl;
+	std::cout << "  -r          Recenters the submesh in its bounding box." << std::endl;
+	std::cout << "              Only useful whe -s is specified" << std::endl;
 }
 
 bool doParseArgs( int argc
@@ -52,8 +60,8 @@ bool doParseArgs( int argc
 		return false;
 	}
 
-	it = std::find( args.begin(), args.end(), "-o" );
 	options.input = castor::Path{ castor::string::stringCast< xchar >( args[0] ) };
+	it = std::find( args.begin(), args.end(), "-o" );
 
 	if ( it == args.end() )
 	{
@@ -67,13 +75,13 @@ bool doParseArgs( int argc
 	}
 	else
 	{
-		options.output = castor::Path{ *it };
-
-		if ( options.output.getExtension().empty() )
-		{
-			options.output += cuT( "." ) + options.input.getExtension();
-		}
+		options.output = *it;
 	}
+
+	it = std::find( args.begin(), args.end(), "-s" );
+	options.split = it != args.end();
+	it = std::find( args.begin(), args.end(), "-r" );
+	options.recenter = it != args.end();
 
 	return true;
 }
@@ -143,7 +151,7 @@ bool doInitialiseEngine( castor3d::Engine & engine )
 			, renderers.end()
 			, []( std::pair< castor::String, castor3d::PluginSPtr > const & pair )
 		{
-			return pair.first.find( "Test" ) != castor::String::npos;
+			return pair.first.find( "Vk" ) != castor::String::npos;
 		} );
 
 		if ( renderer != renderers.end() )
@@ -188,82 +196,25 @@ bool writeView( ViewType const & view
 	return result;
 }
 
-template< typename T >
+template< bool Split, typename T >
+struct ObjectWriter;
+
+template< bool Split, typename T >
 bool doWriteObject( castor::Path const & path
-	, T const & object );
-
-bool doPostWrite( castor::Path const & path
-	, castor3d::Mesh const & mesh )
-{
-	auto skeleton = mesh.getSkeleton();
-	bool result = true;
-	auto name = path.getFileName();
-	auto folder = path.getPath();
-
-	if ( skeleton )
-	{
-		auto newPath = folder / ( name + cuT( ".cskl" ) );
-		result = doWriteObject( newPath, *skeleton );
-	}
-
-	if ( result )
-	{
-		auto & scene = *mesh.getScene();
-		auto newPath = folder / ( name + cuT( "Materials.cscn" ) );
-		castor::TextFile file{ newPath, castor::File::OpenMode::eWrite };
-		result = writeView< castor3d::Material >( scene.getMaterialView()
-			, file );
-	}
-
-	if ( result )
-	{
-		auto & scene = *mesh.getScene();
-		auto newPath = folder / ( name + cuT( "Integration.cscn" ) );
-		castor::TextFile file{ newPath, castor::File::OpenMode::eWrite };
-		file.writeText( cuT( "object \"" ) + name + cuT( "\"\n" ) );
-		file.writeText( cuT( "{\n" ) );
-		file.writeText( cuT( "\tmesh \"" ) + name + cuT( "\"\n" ) );
-		file.writeText( cuT( "\tmaterials\n" ) );
-		file.writeText( cuT( "\t{\n" ) );
-		uint32_t index = 0u;
-
-		for ( auto & submesh : mesh )
-		{
-			file.writeText( cuT( "\t\tmaterial " ) + castor::string::toString( index++ ) + cuT( "\"" ) + submesh->getDefaultMaterial()->getName() + cuT( "\"\n" ) );
-		}
-
-		file.writeText( cuT( "\t}\n" ) );
-		file.writeText( cuT( "}\n" ) );
-		result = writeView< castor3d::Material >( scene.getMaterialView()
-			, file );
-	}
-
-	return result;
-}
-
-bool doPostWrite( castor::Path const & path
-	, castor3d::Skeleton const & skeleton )
-{
-	return true;
-}
-
-template< typename T >
-bool doWriteObject( castor::Path const & path
-	, T const & object )
+	, T const & object
+	, Options options )
 {
 	bool result = false;
+	auto meshFolder = path / cuT( "Meshes" );
+
+	if ( !castor::File::directoryExists( meshFolder ) )
+	{
+		castor::File::directoryCreate( meshFolder );
+	}
 
 	try
 	{
-		auto newPath = path.getPath() / ( path.getFileName() + cuT( ".cmsh" ) );
-		castor::BinaryFile file{ newPath, castor::File::OpenMode::eWrite };
-		castor3d::BinaryWriter< T > writer;
-		result = writer.write( object, file );
-
-		if ( result )
-		{
-			result = doPostWrite( path, object );
-		}
+		ObjectWriter< Split, T >{}( meshFolder, object, options );
 	}
 	catch ( castor::Exception & exc )
 	{
@@ -280,6 +231,254 @@ bool doWriteObject( castor::Path const & path
 
 	return result;
 }
+
+template< bool Split, typename T >
+struct ObjectPostWriter;
+
+template<>
+struct ObjectPostWriter< false, castor3d::Mesh >
+{
+	bool operator()( castor::Path const & path
+		, castor3d::Mesh const & object
+		, Options const & options )
+	{
+		auto skeleton = object.getSkeleton();
+		bool result = true;
+
+		if ( skeleton )
+		{
+			result = doWriteObject< false >( path, *skeleton, options );
+		}
+
+		if ( result )
+		{
+			auto materialsFolder = path / cuT( "Materials" );
+
+			if ( !castor::File::directoryExists( materialsFolder ) )
+			{
+				castor::File::directoryCreate( materialsFolder );
+			}
+
+			auto & scene = *object.getScene();
+			auto newPath = materialsFolder / ( options.output + cuT( ".cscn" ) );
+			castor::TextFile file{ newPath, castor::File::OpenMode::eWrite };
+			result = writeView< castor3d::Material >( scene.getMaterialView()
+				, file );
+		}
+
+		if ( result && !options.split )
+		{
+			auto newPath = path / ( options.output + cuT( "Integration.cscn" ) );
+			castor::TextFile file{ newPath, castor::File::OpenMode::eWrite };
+			result = file.writeText( cuT( "\tmesh \"" ) + options.output + cuT( "\"\n" ) )
+				&& file.writeText( cuT( "\t{\n" ) )
+				&& file.writeText( cuT( "\t\timport \"Meshes/" ) + options.output + cuT( ".cmsh\"\n" ) )
+				&& file.writeText( cuT( "\t}\n" ) )
+				&& file.writeText( cuT( "\tscene_node \"" ) + options.output + cuT( "\"\n" ) )
+				&& file.writeText( cuT( "\t{\n" ) )
+				&& file.writeText( cuT( "\t\tposition 0.0 0.0 0.0\n" ) )
+				&& file.writeText( cuT( "\t}\n" ) )
+				&& file.writeText( cuT( "\tobject \"" ) + options.output + cuT( "\"\n" ) )
+				&& file.writeText( cuT( "\t{\n" ) )
+				&& file.writeText( cuT( "\t\tparent \"" ) + options.output + cuT( "\"\n" ) )
+				&& file.writeText( cuT( "\t\tmesh \"" ) + options.output + cuT( "\"\n" ) )
+				&& file.writeText( cuT( "\t\tmaterials\n" ) )
+				&& file.writeText( cuT( "\t\t{\n\n" ) );
+			uint32_t index = 0u;
+
+			for ( auto & submesh : object )
+			{
+				result &= file.writeText( cuT( "\t\tmaterial " ) + castor::string::toString( index++, std::locale{ "C" } ) + cuT( " \"" ) + submesh->getDefaultMaterial()->getName() + cuT( "\"\n" ) );
+			}
+
+			result &= file.writeText( cuT( "\t}\n" ) );
+			result &= file.writeText( cuT( "}\n" ) );
+		}
+
+		return result;
+	}
+};
+
+template<>
+struct ObjectPostWriter< true, castor3d::Mesh >
+{
+	bool operator()( castor::Path const & path
+		, castor3d::Mesh const & object
+		, Options const & options )
+	{
+		auto name = options.output + cuT( "_" ) + castor::string::toString( options.submesh, std::locale{ "C" } );
+		auto newPath = path / ( options.output + cuT( "Integration.cscn" ) );
+		auto & submesh = *object.getSubmesh( 0u );
+		castor::Point3f position;
+			
+		if ( options.recenter )
+		{
+			position = submesh.getBoundingBox().getCenter();
+		}
+
+		auto stream = castor::makeStringStream();
+		stream << position[0] << cuT( " " ) << position[1] << cuT( " " ) << position[2];
+
+		castor::TextFile file{ newPath, castor::File::OpenMode::eAppend };
+		return file.writeText( cuT( "\tmesh \"" ) + name + cuT( "\"\n" ) )
+			&& file.writeText( cuT( "\t{\n" ) )
+			&& file.writeText( cuT( "\t\timport \"Meshes/" ) + name + cuT( ".cmsh\"\n" ) )
+			&& file.writeText( cuT( "\t}\n" ) )
+			&& file.writeText( cuT( "\tscene_node \"" ) + name + cuT( "\"\n" ) )
+			&& file.writeText( cuT( "\t{\n" ) )
+			&& file.writeText( cuT( "\t\tposition " ) + stream.str() + cuT( "\n" ) )
+			&& file.writeText( cuT( "\t}\n" ) )
+			&& file.writeText( cuT( "\tobject \"" ) + name + cuT( "\"\n" ) )
+			&& file.writeText( cuT( "\t{\n" ) )
+			&& file.writeText( cuT( "\t\tparent \"" ) + name + cuT( "\"\n" ) )
+			&& file.writeText( cuT( "\t\tmesh \"" ) + name + cuT( "\"\n" ) )
+			&& file.writeText( cuT( "\t\tmaterial \"" ) + object.getSubmesh( 0u )->getDefaultMaterial()->getName() + cuT( "\"\n" ) )
+			&& file.writeText( cuT( "\t}\n\n" ) );
+	}
+};
+
+template< bool Split >
+struct ObjectPostWriter< Split, castor3d::Skeleton >
+{
+	bool operator()( castor::Path const & path
+		, castor3d::Skeleton const & object
+		, Options const & options )
+	{
+		return true;
+	}
+};
+
+template< bool Split, typename T >
+bool doPostWrite( castor::Path const & path
+	, T const & object
+	, Options const & options )
+{
+	return ObjectPostWriter< Split, T >{}( path, object, options );
+}
+
+template<>
+struct ObjectWriter< false, castor3d::Mesh >
+{
+	bool operator()( castor::Path const & path
+		, castor3d::Mesh const & object
+		, Options options )
+	{
+		auto newPath = path / ( options.output + cuT( ".cmsh" ) );
+		castor::BinaryFile file{ newPath, castor::File::OpenMode::eWrite };
+		castor3d::BinaryWriter< castor3d::Mesh > writer;
+		auto result = writer.write( object, file );
+
+		if ( result )
+		{
+			result = doPostWrite< false >( path, object, options );
+		}
+
+		return result;
+	}
+};
+
+template<>
+struct ObjectWriter< true, castor3d::Mesh >
+{
+	bool operator()( castor::Path const & path
+		, castor3d::Mesh const & object
+		, Options options )
+	{
+		bool result = true;
+		uint32_t index = 0u;
+		auto dstFilePath = path / ( options.output + cuT( "Integration.cscn" ) );
+
+		if ( castor::File::fileExists( dstFilePath ) )
+		{
+			castor::File::deleteFile( dstFilePath );
+		}
+
+		for ( auto & srcSubmesh : object )
+		{
+			if ( result )
+			{
+				auto name = options.output + cuT( "_" ) + castor::string::toString( index, std::locale{ "C" } );
+				auto newPath = path / ( name + cuT( ".cmsh" ) );
+				auto mesh = std::make_unique< castor3d::Mesh >( name, *object.getScene() );
+
+				if ( auto skeleton = object.getSkeleton() )
+				{
+					mesh->setSkeleton( skeleton );
+				}
+
+				auto dstSubmesh = mesh->createSubmesh();
+				dstSubmesh->setDefaultMaterial( srcSubmesh->getDefaultMaterial() );
+				dstSubmesh->addPoints( srcSubmesh->getPoints() );
+				auto & indexMapping = srcSubmesh->getIndexMapping();
+				castor3d::SubmeshComponentSPtr indexMappingComponent;
+
+				for ( auto & component : srcSubmesh->getComponents() )
+				{
+					if ( component.second.get() != &indexMapping )
+					{
+						dstSubmesh->addComponent( component.first, component.second );
+					}
+					else
+					{
+						dstSubmesh->setIndexMapping( std::static_pointer_cast< castor3d::IndexMapping >( component.second ) );
+					}
+				}
+
+				dstSubmesh->computeContainers();
+
+				if ( options.recenter )
+				{
+					castor::Point3f position = dstSubmesh->getBoundingBox().getCenter();
+
+					for ( auto & point : dstSubmesh->getPoints() )
+					{
+						point.pos -= position;
+					}
+				}
+
+				castor::BinaryFile file{ newPath, castor::File::OpenMode::eWrite };
+				castor3d::BinaryWriter< castor3d::Mesh > writer;
+				result = writer.write( *mesh, file );
+
+				if ( result )
+				{
+					options.submesh = index;
+					result = doPostWrite< true >( path.getPath(), *mesh, options );
+				}
+			}
+
+			++index;
+		}
+
+		if ( result )
+		{
+			result = doPostWrite< false >( path.getPath(), object, options );
+		}
+
+		return result;
+	}
+};
+
+template< bool Split >
+struct ObjectWriter< Split, castor3d::Skeleton >
+{
+	bool operator()( castor::Path const & path
+		, castor3d::Skeleton const & object
+		, Options options )
+	{
+		auto newPath = path / ( options.output + cuT( ".cskl" ) );
+		castor::BinaryFile file{ newPath, castor::File::OpenMode::eWrite };
+		castor3d::BinaryWriter< castor3d::Skeleton > writer;
+		auto result = writer.write( object, file );
+
+		if ( result )
+		{
+			result = doPostWrite< false >( path, object, options );
+		}
+
+		return result;
+	}
+};
 
 int main( int argc, char * argv[] )
 {
@@ -310,7 +509,7 @@ int main( int argc, char * argv[] )
 #endif
 
 		castor::Logger::setFileName( castor::File::getExecutableDirectory() / cuT( "Tests.log" ) );
-		castor3d::Engine engine;
+		castor3d::Engine engine{ cuT( "MeshConverter" ), false };
 
 		if ( doInitialiseEngine( engine ) )
 		{
@@ -338,12 +537,22 @@ int main( int argc, char * argv[] )
 
 			if ( mesh )
 			{
-				for ( auto & submesh : *mesh )
+				name = castor::Path{ options.output };
+				auto rootFolder = path.getPath() / name;
+
+				if ( !castor::File::directoryExists( rootFolder ) )
 				{
-					submesh->initialise();
+					castor::File::directoryCreate( rootFolder );
 				}
 
-				doWriteObject( path, *mesh );
+				if ( options.split )
+				{
+					doWriteObject< true >( rootFolder, *mesh, options );
+				}
+				else
+				{
+					doWriteObject< false >( rootFolder, *mesh, options );
+				}
 			}
 
 			engine.cleanup();

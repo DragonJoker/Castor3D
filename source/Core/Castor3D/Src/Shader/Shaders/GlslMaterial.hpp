@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___GLSL_Materials_H___
@@ -13,7 +13,7 @@ namespace castor3d
 	namespace shader
 	{
 		static uint32_t constexpr MaxMaterialsCount = 2000u;
-		static int constexpr MaxMaterialComponentsCount = 6;
+		static int constexpr MaxMaterialComponentsCount = 15;
 		castor::String const PassBufferName = cuT( "Materials" );
 
 		class LegacyMaterials;

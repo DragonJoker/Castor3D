@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_OVERLAY_CATEGORY_H___
 #define ___C3D_OVERLAY_CATEGORY_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "OverlayVisitor.hpp"
 
 #include <Graphics/Position.hpp>
 #include <Graphics/Size.hpp>
@@ -34,8 +34,8 @@ namespace castor3d
 		*/
 		struct Vertex
 		{
-			float coords[2];
-			float texture[2];
+			castor::Point2f coords;
+			castor::Point2f texture;
 		};
 		DECLARE_VECTOR( Vertex, Vertex );
 		/*!
@@ -122,17 +122,17 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour la position, taille...
 		 */
-		C3D_API void update();
+		C3D_API void update( OverlayRenderer const & renderer );
 		/**
 		 *\~english
 		 *\brief		Draws the overlay
 		 *\~french
 		 *\brief		Dessine l'incrustation
 		 */
-		C3D_API void render();
+		C3D_API virtual void accept( OverlayVisitor & renderer )const = 0;
 		/**
 		 *\~english
-		 *\brief		sets the material
+		 *\brief		Sets the material
 		 *\param[in]	material	The new value
 		 *\~french
 		 *\brief		Définit le matériau
@@ -223,7 +223,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the overlay position
+		 *\brief		Sets the overlay position
 		 *\param[in]	position	The new value
 		 *\~french
 		 *\brief		Définit la position de l'incrustation
@@ -236,7 +236,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the overlay size
+		 *\brief		Sets the overlay size
 		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit la taille de l'incrustation
@@ -429,7 +429,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the overlay
+		 *\brief		Sets the overlay
 		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit l'incrustation
@@ -441,7 +441,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the visibility status
+		 *\brief		Sets the visibility status
 		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit le statut de visibilité
@@ -453,7 +453,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the overlay position
+		 *\brief		Sets the overlay position
 		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit la position de l'incrustation
@@ -466,7 +466,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the overlay size
+		 *\brief		Sets the overlay size
 		 *\param[in]	value	The new value
 		 *\~french
 		 *\brief		Définit la taille de l'incrustation
@@ -479,7 +479,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the overlay order
+		 *\brief		Sets the overlay order
 		 *\param[in]	index	The new index
 		 *\param[in]	level	The new level
 		 *\~french
@@ -494,7 +494,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the overlay UV
+		 *\brief		Sets the overlay UV
 		 *\param[in]	value	The new value (left, top, right and bottom)
 		 *\~french
 		 *\brief		Définit Les UV de l'incrustation
@@ -524,37 +524,28 @@ namespace castor3d
 		 *\~french
 		 *\return		La taille de l'écran ou du parent.
 		 */
-		castor::Point2d doGetTotalSize()const;
+		castor::Point2d doGetTotalSize( OverlayRenderer const & renderer )const;
 		/**
 		 *\~english
 		 *\brief		Updates the overlay position, taking care of wanted pixel position.
 		 *\~french
 		 *\brief		Met à jour la position de l'incrustation, en prenant en compte la la position en pixel voulue.
 		 */
-		virtual void doUpdatePosition();
+		virtual void doUpdatePosition( OverlayRenderer const & renderer );
 		/**
 		 *\~english
 		 *\brief		Updates the overlay size, taking care of wanted pixel size.
 		 *\~french
 		 *\brief		Met à jour la taille de l'incrustation, en prenant en compte la taille en pixel voulue.
 		 */
-		virtual void doUpdateSize();
-		/**
-		 *\~english
-		 *\brief		Draws the overlay
-		 *\param[in]	renderer	The renderer used to draw this overlay
-		 *\~french
-		 *\brief		Dessine l'incrustation
-		 *\param[in]	renderer	Le renderer utilisé pour dessiner cette incrustation
-		 */
-		virtual void doRender( OverlayRendererSPtr renderer ) = 0;
+		virtual void doUpdateSize( OverlayRenderer const & renderer );
 		/**
 		 *\~english
 		 *\brief		Updates the overlay position, size...
 		 *\~french
 		 *\brief		Met à jour la position, taille...
 		 */
-		virtual void doUpdate() {}
+		virtual void doUpdate( OverlayRenderer const & renderer ) {}
 		/**
 		 *\~english
 		 *\brief		Updates the vertex buffer.

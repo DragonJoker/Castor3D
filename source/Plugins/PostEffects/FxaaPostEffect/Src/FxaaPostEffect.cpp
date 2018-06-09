@@ -4,33 +4,26 @@
 #include <Cache/SamplerCache.hpp>
 #include <Cache/ShaderCache.hpp>
 
-#include <FrameBuffer/BackBuffers.hpp>
-#include <FrameBuffer/FrameBufferAttachment.hpp>
-#include <FrameBuffer/TextureAttachment.hpp>
-#include <Mesh/Vertex.hpp>
-#include <Mesh/Buffer/BufferDeclaration.hpp>
-#include <Mesh/Buffer/BufferElementDeclaration.hpp>
-#include <Mesh/Buffer/GeometryBuffers.hpp>
-#include <Mesh/Buffer/VertexBuffer.hpp>
 #include <Miscellaneous/Parameter.hpp>
-#include <Render/Context.hpp>
-#include <Render/RenderPipeline.hpp>
+#include <Render/RenderPassTimer.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
-#include <Render/RenderWindow.hpp>
-#include <Render/Viewport.hpp>
-#include <Shader/UniformBuffer.hpp>
-#include <Shader/Ubos/MatrixUbo.hpp>
-#include <Shader/ShaderProgram.hpp>
-#include <State/BlendState.hpp>
-#include <State/RasteriserState.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
-#include <numeric>
+#include <Image/Texture.hpp>
+#include <Image/TextureView.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
+#include <RenderPass/RenderSubpass.hpp>
+#include <RenderPass/RenderSubpassState.hpp>
+#include <Shader/ShaderProgram.hpp>
+#include <Sync/ImageMemoryBarrier.hpp>
 
 #include <GlslSource.hpp>
+
+#include <numeric>
 
 using namespace castor;
 
@@ -38,53 +31,44 @@ namespace fxaa
 {
 	namespace
 	{
-		static String const FxaaUbo = cuT( "FxaaUbo" );
-		static String const SubpixShift = cuT( "c3d_fSubpixShift" );
-		static String const RenderTargetWidth = cuT( "c3d_fRenderTargetWidth" );
-		static String const RenderTargetHeight = cuT( "c3d_fRenderTargetHeight" );
-		static String const SpanMax = cuT( "c3d_fSpanMax" );
-		static String const ReduceMul = cuT( "c3d_fReduceMul" );
 		static String const PosPos = cuT( "vtx_posPos" );
 
-		glsl::Shader getVertexProgram( castor3d::RenderSystem * renderSystem )
+		glsl::Shader getFxaaVertexProgram( castor3d::RenderSystem * renderSystem )
 		{
 			using namespace glsl;
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			UBO_MATRIX( writer );
-			UBO_FXAA( writer );
-			auto position = writer.declAttribute< Vec2 >( castor3d::ShaderProgram::Position );
+			UBO_FXAA( writer, 0u, 0u );
+			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
+			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ) );
-			auto vtx_posPos = writer.declOutput< Vec4 >( PosPos );
-			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto vtx_posPos = writer.declOutput< Vec4 >( PosPos, 1u );
+			auto out = gl_PerVertex{ writer };
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					auto invTargetSize = writer.declLocale( cuT( "invTargetSize" )
-						, vec2( 1.0 / c3d_renderSize.x(), 1.0 / c3d_renderSize.y() ) );
-					vtx_texture = position;
-					gl_Position = c3d_projection * vec4( position.xy(), 0.0, 1.0 );
+					vtx_texture = texcoord;
+					out.gl_Position() = vec4( position.xy(), 0.0, 1.0 );
 					vtx_posPos.xy() = position.xy();
-					vtx_posPos.zw() = position.xy() - writer.paren( invTargetSize * writer.paren( 0.5 + c3d_subpixShift ) );
+					vtx_posPos.zw() = position.xy() - writer.paren( c3d_pixelSize * writer.paren( 0.5 + c3d_subpixShift ) );
 				} );
 			return writer.finalise();
 		}
 
-		glsl::Shader getFragmentProgram( castor3d::RenderSystem * renderSystem )
+		glsl::Shader getFxaaFragmentProgram( castor3d::RenderSystem * renderSystem )
 		{
 			using namespace glsl;
 			GlslWriter writer = renderSystem->createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( castor3d::ShaderProgram::MapDiffuse, castor3d::MinTextureIndex );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ) );
-			auto vtx_posPos = writer.declInput< Vec4 >( PosPos );
-
-			UBO_FXAA( writer );
+			UBO_FXAA( writer, 0u, 0u );
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto vtx_posPos = writer.declInput< Vec4 >( PosPos, 1u );
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
@@ -94,9 +78,6 @@ namespace fxaa
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					auto invTargetSize = writer.declLocale( cuT( "invTargetSize" )
-						, vec2( 1.0 / c3d_renderSize.x(), 1.0 / c3d_renderSize.y() ) );
-
 					auto rgbNW = writer.declLocale( cuT( "rgbNW" )
 						, textureLodOffset( c3d_mapDiffuse, vtx_texture, 0.0_f, ivec2( -1_i, -1_i ) ).rgb() );
 					auto rgbNE = writer.declLocale( cuT( "rgbNE" )
@@ -136,16 +117,25 @@ namespace fxaa
 						, 1.0 / ( min( glsl::abs( dir.x() ), glsl::abs( dir.y() ) ) + dirReduce ) );
 					dir = min( vec2( c3d_spanMax, c3d_spanMax )
 						, max( vec2( -c3d_spanMax, -c3d_spanMax )
-							, dir * rcpDirMin ) ) * invTargetSize;
+							, dir * rcpDirMin ) ) * c3d_pixelSize;
+
+					auto texcoord0 = writer.declLocale( cuT( "texcoord0" )
+						, vtx_texture + dir * writer.paren( 1.0_f / 3.0_f - 0.5_f ) );
+					auto texcoord1 = writer.declLocale( cuT( "texcoord1" )
+						, vtx_texture + dir * writer.paren( 2.0_f / 3.0_f - 0.5_f ) );
 
 					auto rgbA = writer.declLocale( cuT( "rgbA" )
-						, writer.paren( texture( c3d_mapDiffuse, vtx_texture + dir * writer.paren( 1.0_f / 3.0_f - 0.5_f ), 0.0_f ).rgb()
-								+ texture( c3d_mapDiffuse, vtx_texture + dir * writer.paren( 2.0_f / 3.0_f - 0.5_f ), 0.0_f ).rgb() )
+						, writer.paren( texture( c3d_mapDiffuse, texcoord0, 0.0_f ).rgb()
+								+ texture( c3d_mapDiffuse, texcoord1, 0.0_f ).rgb() )
 							* writer.paren( 1.0_f / 2.0_f ) );
+
+					texcoord0 = vtx_texture + dir * writer.paren( 0.0_f / 3.0_f - 0.5_f );
+					texcoord1 = vtx_texture + dir * writer.paren( 3.0_f / 3.0_f - 0.5_f );
+
 					auto rgbB = writer.declLocale( cuT( "rgbB" )
 						, writer.paren( rgbA * 1.0_f / 2.0_f )
-							+ writer.paren( texture( c3d_mapDiffuse, vtx_texture + dir * writer.paren( 0.0_f / 3.0_f - 0.5_f ), 0.0_f ).rgb()
-									+ texture( c3d_mapDiffuse, vtx_texture + dir * writer.paren( 3.0_f / 3.0_f - 0.5_f ), 0.0_f ).rgb() )
+							+ writer.paren( texture( c3d_mapDiffuse, texcoord0, 0.0_f ).rgb()
+									+ texture( c3d_mapDiffuse, texcoord1, 0.0_f ).rgb() )
 								* writer.paren( 1.0_f / 4.0_f ) );
 					auto lumaB = writer.declLocale( cuT( "lumaB" )
 						, dot( rgbB, luma ) );
@@ -159,33 +149,57 @@ namespace fxaa
 
 	//*********************************************************************************************
 
+	RenderQuad::RenderQuad( castor3d::RenderSystem & renderSystem
+		, Size const & size )
+		: castor3d::RenderQuad{ renderSystem, false, false }
+		, m_fxaaUbo{ *renderSystem.getEngine(), size }
+	{
+	}
+
+	void RenderQuad::update( float subpixShift
+		, float spanMax
+		, float reduceMul )
+	{
+		m_fxaaUbo.update( subpixShift
+			, spanMax
+			, reduceMul );
+	}
+
+	void RenderQuad::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
+		, renderer::DescriptorSet & descriptorSet )
+	{
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
+			, m_fxaaUbo.getUbo() );
+	}
+
+	//*********************************************************************************************
+
 	String PostEffect::Type = cuT( "fxaa" );
 	String PostEffect::Name = cuT( "FXAA PostEffect" );
 
-	PostEffect::PostEffect( castor3d::RenderTarget & p_renderTarget
+	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
 		, castor3d::RenderSystem & renderSystem
-		, castor3d::Parameters const & p_parameters )
+		, castor3d::Parameters const & parameters )
 		: castor3d::PostEffect{ PostEffect::Type
-			, p_renderTarget
+			, PostEffect::Name
+			, renderTarget
 			, renderSystem
-			, p_parameters }
+			, parameters }
 		, m_surface{ *renderSystem.getEngine() }
-		, m_matrixUbo{ *renderSystem.getEngine() }
-		, m_fxaaUbo{ *renderSystem.getEngine() }
 	{
 		String param;
 
-		if ( p_parameters.get( cuT( "SubpixShift" ), param ) )
+		if ( parameters.get( cuT( "SubpixShift" ), param ) )
 		{
 			m_subpixShift = string::toFloat( param );
 		}
 
-		if ( p_parameters.get( cuT( "MaxSpan" ), param ) )
+		if ( parameters.get( cuT( "MaxSpan" ), param ) )
 		{
 			m_spanMax = string::toFloat( param );
 		}
 
-		if ( p_parameters.get( cuT( "ReduceMul" ), param ) )
+		if ( parameters.get( cuT( "ReduceMul" ), param ) )
 		{
 			m_reduceMul = string::toFloat( param );
 		}
@@ -195,11 +209,11 @@ namespace fxaa
 		if ( !m_renderTarget.getEngine()->getSamplerCache().has( name ) )
 		{
 			m_sampler = m_renderTarget.getEngine()->getSamplerCache().add( name );
-			m_sampler->setInterpolationMode( castor3d::InterpolationFilter::eMin, castor3d::InterpolationMode::eNearest );
-			m_sampler->setInterpolationMode( castor3d::InterpolationFilter::eMag, castor3d::InterpolationMode::eNearest );
-			m_sampler->setWrappingMode( castor3d::TextureUVW::eU, castor3d::WrapMode::eClampToBorder );
-			m_sampler->setWrappingMode( castor3d::TextureUVW::eV, castor3d::WrapMode::eClampToBorder );
-			m_sampler->setWrappingMode( castor3d::TextureUVW::eW, castor3d::WrapMode::eClampToBorder );
+			m_sampler->setMinFilter( renderer::Filter::eNearest );
+			m_sampler->setMagFilter( renderer::Filter::eNearest );
+			m_sampler->setWrapS( renderer::WrapMode::eClampToBorder );
+			m_sampler->setWrapT( renderer::WrapMode::eClampToBorder );
+			m_sampler->setWrapR( renderer::WrapMode::eClampToBorder );
 		}
 		else
 		{
@@ -211,80 +225,178 @@ namespace fxaa
 	{
 	}
 
-	castor3d::PostEffectSPtr PostEffect::create( castor3d::RenderTarget & p_renderTarget
+	castor3d::PostEffectSPtr PostEffect::create( castor3d::RenderTarget & renderTarget
 		, castor3d::RenderSystem & renderSystem
-		, castor3d::Parameters const & p_param )
+		, castor3d::Parameters const & params )
 	{
-		return std::make_shared< PostEffect >( p_renderTarget, renderSystem, p_param );
+		return std::make_shared< PostEffect >( renderTarget, renderSystem, params );
 	}
 
-	bool PostEffect::initialise()
+	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
-		auto & cache = getRenderSystem()->getEngine()->getShaderProgramCache();
-		Size size = m_renderTarget.getSize();
-
-		auto vertex = getVertexProgram( getRenderSystem() );
-		auto fragment = getFragmentProgram( getRenderSystem() );
-
-		auto program = cache.getNewProgram( false );
-		program->createObject( castor3d::ShaderType::eVertex );
-		program->createObject( castor3d::ShaderType::ePixel );
-		program->createUniform< castor3d::UniformType::eSampler >( castor3d::ShaderProgram::MapDiffuse
-			, castor3d::ShaderType::ePixel )->setValue( castor3d::MinTextureIndex );
-		program->setSource( castor3d::ShaderType::eVertex, vertex );
-		program->setSource( castor3d::ShaderType::ePixel, fragment );
-		program->initialise();
-
-		castor3d::DepthStencilState dsstate;
-		dsstate.setDepthTest( false );
-		dsstate.setDepthMask( castor3d::WritingMask::eZero );
-		castor3d::RasteriserState rsstate;
-		rsstate.setCulledFaces( castor3d::Culling::eBack );
-		m_pipeline = getRenderSystem()->createRenderPipeline( std::move( dsstate )
-			, std::move( rsstate )
-			, castor3d::BlendState{}
-			, castor3d::MultisampleState{}
-			, *program
-			, castor3d::PipelineFlags{} );
-		m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
-		m_pipeline->addUniformBuffer( m_fxaaUbo.getUbo() );
-
-		return m_surface.initialise( m_renderTarget, size, 0, m_sampler );
+		visitor.visit( cuT( "FXAA" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_vertexShader );
+		visitor.visit( cuT( "FXAA" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_pixelShader );
+		visitor.visit( cuT( "FXAA" )
+			, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment
+			, cuT( "FXAA" )
+			, cuT( "SubPixShift" )
+			, m_subpixShift );
+		visitor.visit( cuT( "FXAA" )
+			, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment
+			, cuT( "FXAA" )
+			, cuT( "SpanMax" )
+			, m_spanMax );
+		visitor.visit( cuT( "FXAA" )
+			, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment
+			, cuT( "FXAA" )
+			, cuT( "ReduceMul" )
+			, m_reduceMul );
 	}
 
-	void PostEffect::cleanup()
+	void PostEffect::update( castor::Nanoseconds const & elapsedTime )
 	{
-		m_matrixUbo.getUbo().cleanup();
-		m_fxaaUbo.getUbo().cleanup();
-		m_surface.cleanup();
-	}
-
-	bool PostEffect::apply( castor3d::FrameBuffer & p_framebuffer )
-	{
-		auto attach = p_framebuffer.getAttachment( castor3d::AttachmentPoint::eColour, 0 );
-
-		if ( attach && attach->getAttachmentType() == castor3d::AttachmentType::eTexture )
+		if ( m_subpixShift.isDirty()
+			|| m_spanMax.isDirty()
+			|| m_reduceMul.isDirty() )
 		{
-			m_fxaaUbo.update( attach->getBuffer()->dimensions()
-				, m_subpixShift
+			m_fxaaQuad->update( m_subpixShift
 				, m_spanMax
 				, m_reduceMul );
-			m_pipeline->apply();
-			m_surface.m_fbo->bind( castor3d::FrameBufferTarget::eDraw );
-			auto texture = std::static_pointer_cast< castor3d::TextureAttachment >( attach )->getTexture();
-			m_surface.m_fbo->clear( castor3d::BufferComponent::eColour );
-			getRenderSystem()->getCurrentContext()->renderTexture( m_surface.m_size
-				, *texture
-				, *m_pipeline
-				, m_matrixUbo );
-			m_surface.m_fbo->unbind();
+			m_subpixShift.reset();
+			m_spanMax.reset();
+			m_reduceMul.reset();
+		}
+	}
 
-			p_framebuffer.bind( castor3d::FrameBufferTarget::eDraw );
-			getRenderSystem()->getCurrentContext()->renderTexture( texture->getDimensions(), *m_surface.m_colourTexture.getTexture() );
-			p_framebuffer.unbind();
+	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
+	{
+		m_sampler->initialise();
+
+		auto & device = getCurrentDevice( *this );
+		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
+
+		// Create the render pass.
+		renderer::RenderPassCreateInfo renderPass;
+		renderPass.flags = 0u;
+
+		renderPass.attachments.resize( 1u );
+		renderPass.attachments[0].format = m_target->getPixelFormat();
+		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+		renderPass.subpasses.resize( 1u );
+		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
+		renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
+
+		renderPass.dependencies.resize( 2u );
+		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].dstSubpass = 0u;
+		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		renderPass.dependencies[1].srcSubpass = 0u;
+		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		m_renderPass = device.createRenderPass( renderPass );
+
+		// Create the FXAA quad renderer.
+		renderer::DescriptorSetLayoutBindingArray bindings
+		{
+			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment },
+		};
+		m_vertexShader = getFxaaVertexProgram( getRenderSystem() );
+		m_pixelShader = getFxaaFragmentProgram( getRenderSystem() );
+
+		renderer::ShaderStageStateArray stages;
+		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
+		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
+		stages[0].module->loadShader( m_vertexShader.getSource() );
+		stages[1].module->loadShader( m_pixelShader.getSource() );
+
+		m_fxaaQuad = std::make_unique< RenderQuad >( *getRenderSystem()
+			, castor::Size{ size.width, size.height } );
+		m_fxaaQuad->createPipeline( size
+			, Position{}
+			, stages
+			, m_target->getDefaultView()
+			, *m_renderPass
+			, bindings
+			, {} );
+
+		// Initialise the surface.
+		auto result = m_surface.initialise( *m_renderPass
+			, castor::Size{ size.width, size.height }
+			, m_target->getPixelFormat() );
+		castor3d::CommandsSemaphore commands
+		{
+			device.getGraphicsCommandPool().createCommandBuffer(),
+			device.createSemaphore()
+		};
+		auto & cmd = *commands.commandBuffer;
+
+		if ( result )
+		{
+			// Initialise the command buffer.
+			if ( cmd.begin() )
+			{
+				auto & targetImage = m_target->getTexture();
+				auto & targetView = m_target->getDefaultView();
+				auto & surfaceImage = m_surface.colourTexture->getTexture();
+				auto & surfaceView = m_surface.colourTexture->getDefaultView();
+
+				timer.beginPass( cmd );
+
+				// Put target image in shader input layout.
+				cmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+					, renderer::PipelineStageFlag::eFragmentShader
+					, targetView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+
+				// Render the effect.
+				cmd.beginRenderPass( *m_renderPass
+					, *m_surface.frameBuffer
+					, { renderer::ClearColorValue{} }
+					, renderer::SubpassContents::eInline );
+				m_fxaaQuad->registerFrame( cmd );
+				cmd.endRenderPass();
+
+				timer.endPass( cmd );
+				cmd.end();
+				m_commands.emplace_back( std::move( commands ) );
+			}
 		}
 
-		return true;
+		m_fxaaQuad->update( m_subpixShift
+			, m_spanMax
+			, m_reduceMul );
+		m_subpixShift.reset();
+		m_spanMax.reset();
+		m_reduceMul.reset();
+		m_result = m_surface.colourTexture.get();
+		return result;
+	}
+
+	void PostEffect::doCleanup()
+	{
+		m_fxaaQuad.reset();
+		m_surface.cleanup();
+		m_renderPass.reset();
 	}
 
 	bool PostEffect::doWriteInto( TextFile & p_file )

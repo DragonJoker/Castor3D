@@ -47,8 +47,10 @@ namespace castor3d
 			 *\param[in]	pxl		Le source du fagment shader.
 			 */
 			Program( Engine & engine
+				, SpotLightPass & lightPass
 				, glsl::Shader const & vtx
-				, glsl::Shader const & pxl );
+				, glsl::Shader const & pxl
+				, bool hasShadows );
 			/**
 			 *\~english
 			 *\brief		Destructor.
@@ -64,18 +66,7 @@ namespace castor3d
 			void doBind( Light const & light )override;
 
 		private:
-			//!\~english	The variable containing the light direction.
-			//!\~french		La variable contenant la direction de la lumière.
-			PushUniform3fSPtr m_lightDirection;
-			//!\~english	The variable containing the light exponent.
-			//!\~french		La variable contenant l'exposant de la lumière.
-			PushUniform1fSPtr m_lightExponent;
-			//!\~english	The variable containing the light cut off.
-			//!\~french		La variable contenant l'angle du cône de la lumière.
-			PushUniform1fSPtr m_lightCutOff;
-			//!\~english	The variable containing the light space transformation matrix.
-			//!\~french		La variable contenant la matrice de transformation de la lumière.
-			PushUniform4x4fSPtr m_lightTransform;
+			SpotLightPass & m_lightPass;
 		};
 
 	public:
@@ -96,8 +87,9 @@ namespace castor3d
 		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
 		SpotLightPass( Engine & engine
-			, FrameBuffer & frameBuffer
-			, FrameBufferAttachment & depthAttach
+			, renderer::TextureView const & depthView
+			, renderer::TextureView const & diffuseView
+			, renderer::TextureView const & specularView
 			, GpInfoUbo & gpInfoUbo
 			, bool hasShadows );
 		/**
@@ -107,13 +99,16 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		~SpotLightPass();
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		void accept( RenderTechniqueVisitor & visitor )override;
 
 	private:
 		/**
 		 *\copydoc		castor3d::LightPass::doCreateProgram
 		 */
-		LightPass::ProgramPtr doCreateProgram( glsl::Shader const & vtx
-			, glsl::Shader const & pxl )const override;
+		LightPass::ProgramPtr doCreateProgram()override;
 		/**
 		 *\copydoc		castor3d::MeshLightPass::doGenerateVertices
 		 */
@@ -123,6 +118,28 @@ namespace castor3d
 		 */
 		castor::Matrix4x4r doComputeModelMatrix( Light const & light
 			, Camera const & camera )const override;
+
+	private:
+		struct Config
+		{
+			LightPass::Config base;
+			//!\~english	The variable containing the light position (RGB).
+			//!\~french		La variable contenant la position de la lumière (RGB).
+			castor::Point4f position;
+			//!\~english	The variable containing the light attenuation (RGB) and index (A).
+			//!\~french		La variable contenant l'atténuation de la lumière (RGB) et son index (A).
+			castor::Point4f attenuation;
+			//!\~english	The variable containing the light direction (RGB).
+			//!\~french		La variable contenant la direction de la lumière (RGB).
+			castor::Point4f direction;
+			//!\~english	The variable containing the light exponent (R) and cutoff (G).
+			//!\~french		La variable contenant l'exposant de la lumière (R) et l'angle de son cône (G).
+			castor::Point4f exponentCutOff;
+			//!\~english	The variable containing the light space transformation matrix.
+			//!\~french		La variable contenant la matrice de transformation de la lumière.
+			castor::Matrix4x4f transform;
+		};
+		renderer::UniformBufferPtr< Config > m_ubo;
 	};
 }
 

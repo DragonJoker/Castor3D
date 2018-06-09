@@ -106,10 +106,6 @@ namespace castor
 			result = std::make_shared< PxBuffer< PixelFormat::eL8 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case PixelFormat::eL16F32F:
-			result = std::make_shared< PxBuffer< PixelFormat::eL16F32F > >( p_size, p_buffer, p_eBufferFormat );
-			break;
-
 		case PixelFormat::eL32F:
 			result = std::make_shared< PxBuffer< PixelFormat::eL32F > >( p_size, p_buffer, p_eBufferFormat );
 			break;
@@ -118,20 +114,12 @@ namespace castor
 			result = std::make_shared< PxBuffer< PixelFormat::eA8L8 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case PixelFormat::eAL16F32F:
-			result = std::make_shared< PxBuffer< PixelFormat::eAL16F32F > >( p_size, p_buffer, p_eBufferFormat );
-			break;
-
 		case PixelFormat::eAL32F:
 			result = std::make_shared< PxBuffer< PixelFormat::eAL32F > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
 		case PixelFormat::eA1R5G5B5:
 			result = std::make_shared< PxBuffer< PixelFormat::eA1R5G5B5 > >( p_size, p_buffer, p_eBufferFormat );
-			break;
-
-		case PixelFormat::eA4R4G4B4:
-			result = std::make_shared< PxBuffer< PixelFormat::eA4R4G4B4 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
 		case PixelFormat::eR5G6B5:
@@ -178,14 +166,6 @@ namespace castor
 			result = std::make_shared< PxBuffer< PixelFormat::eRGBA16F > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case PixelFormat::eRGB16F32F:
-			result = std::make_shared< PxBuffer< PixelFormat::eRGB16F32F > >( p_size, p_buffer, p_eBufferFormat );
-			break;
-
-		case PixelFormat::eRGBA16F32F:
-			result = std::make_shared< PxBuffer< PixelFormat::eRGBA16F32F > >( p_size, p_buffer, p_eBufferFormat );
-			break;
-
 		case PixelFormat::eRGB32F:
 			result = std::make_shared< PxBuffer< PixelFormat::eRGB32F > >( p_size, p_buffer, p_eBufferFormat );
 			break;
@@ -206,16 +186,8 @@ namespace castor
 			result = std::make_shared< PxBuffer< PixelFormat::eDXTC5 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case PixelFormat::eYUY2:
-			result = std::make_shared< PxBuffer< PixelFormat::eYUY2 > >( p_size, p_buffer, p_eBufferFormat );
-			break;
-
 		case PixelFormat::eD16:
 			result = std::make_shared< PxBuffer< PixelFormat::eD16 > >( p_size, p_buffer, p_eBufferFormat );
-			break;
-
-		case PixelFormat::eD24:
-			result = std::make_shared< PxBuffer< PixelFormat::eD24 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
 		case PixelFormat::eD24S8:
@@ -232,10 +204,6 @@ namespace castor
 
 		case PixelFormat::eD32FS8:
 			result = std::make_shared< PxBuffer< PixelFormat::eD32FS8 > >( p_size, p_buffer, p_eBufferFormat );
-			break;
-
-		case PixelFormat::eS1:
-			result = std::make_shared< PxBuffer< PixelFormat::eS1 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
 		case PixelFormat::eS8:

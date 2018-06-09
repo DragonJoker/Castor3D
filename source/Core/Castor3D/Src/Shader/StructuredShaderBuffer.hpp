@@ -101,10 +101,10 @@ namespace castor3d
 		ElementTypeTraits m_traits;
 		//!\~english	The current elements.
 		//!\~french		Les éléments actuels.
-		std::vector< ElementType * > m_elements;
+		std::vector< renderer::AttributeFormat * > m_elements;
 		//!\~english	The modified elements.
 		//!\~french		Les éléments modifiés.
-		std::vector< ElementType const * > m_dirty;
+		std::vector< renderer::AttributeFormat const * > m_dirty;
 		//!\~english	The maximum element count.
 		//!\~french		Le nombre maximal d'éléments.
 		uint32_t const m_maxElemCount;

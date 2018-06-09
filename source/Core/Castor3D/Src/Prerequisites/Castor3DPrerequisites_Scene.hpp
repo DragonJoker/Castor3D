@@ -9,33 +9,41 @@ namespace castor3d
 	/**@name Scene */
 	//@{
 
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date		31/05/2016
-	\~english
-	\brief		Shadow filter types enumeration.
-	\~french
-	\brief		Enumération des types de filtrage des ombres.
+	/**
+	*\version
+	*	0.9.0
+	*\~english
+	*\brief
+	*	Shadow filter types enumeration.
+	*\~french
+	*\brief
+	*	Enumération des types de filtrage des ombres.
 	*/
 	enum class ShadowType
 	{
 		//!\~english	No shadows at all.
 		//!\~french		Pas d'ombres du tout.
 		eNone,
+		//!\~english	No filtering.
+		//!\~french		Pas de filtrage.
+		eRaw,
 		//!\~english	PCF filtering.
 		//!\~french		Filtrage PCF.
 		ePCF,
+		//!\~english	Variance shadow mapping.
+		//!\~french		Filtrage par variance.
+		eVariance,
 		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
 	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date		31/05/2016
-	\~english
-	\brief		Fog types enumeration.
-	\~french
-	\brief		Enumération des types de brouillard.
+	/**
+	*\version
+	*	0.9.0
+	*\~english
+	*\brief
+	*	Fog types enumeration.
+	*\~french
+	*\brief
+	*	Enumération des types de brouillard.
 	*/
 	enum class FogType
 	{
@@ -54,14 +62,15 @@ namespace castor3d
 		eSquaredExponential,
 		CASTOR_SCOPED_ENUM_BOUNDS( eDisabled )
 	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date		08/03/2017
-	\~english
-	\brief		Scene flags enumeration.
-	\~french
-	\brief		Enumération des indicateurs de scène.
+	/**
+	*\version
+	*	0.9.0
+	*\~english
+	*\brief
+	*	Scene flags enumeration.
+	*\~french
+	*\brief
+	*	Enumération des indicateurs de scène.
 	*/
 	enum class SceneFlag
 		: uint16_t
@@ -77,43 +86,53 @@ namespace castor3d
 		eFogExponential = 0x002,
 		//!\~english	Squared exponential fog.
 		//!\~french		Brouillard exponentiel au carré.
-		eFogSquaredExponential = 0x003,
-		//!\~english	PCF filtering.
-		//!\~french		Filtrage PCF.
-		eShadowFilterPcf = 0x004,
+		eFogSquaredExponential = 0x004,
 		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
 	};
 	IMPLEMENT_FLAGS( SceneFlag )
 	/**
-	 *\~english
-	 *\brief		Gives the shadow filter type matching the given flags.
-	 *\param[in]	p_flags	The scene flags.
-	 *\return		The shadow filter type.
-	 *\~french
-	 *\brief		Récupère le type de filtrage d'ombres correspondant aux indicateurs donnés.
-	 *\param[in]	p_flags	Les indicateurs de scène.
-	 *\return		Le type de filtrage d'ombres.
-	 */
-	C3D_API ShadowType getShadowType( SceneFlags const & p_flags );
+	*\~english
+	*\brief
+	*	Gives the fog type matching the given flags.
+	*\param[in] flags
+	*	The scene flags.
+	*\return
+	*	The fog type.
+	*\~french
+	*\brief
+	*	Récupère le type de brouillard correspondant aux indicateurs donnés.
+	*\param[in] flags
+	*	Les indicateurs de scène.
+	*\return
+	*	Le type de brouillard.
+	*/
+	C3D_API FogType getFogType( SceneFlags const & flags );
 	/**
-	 *\~english
-	 *\brief		Gives the fog type matching the given flags.
-	 *\param[in]	p_flags	The scene flags.
-	 *\return		The fog type.
-	 *\~french
-	 *\brief		Récupère le type de brouillard correspondant aux indicateurs donnés.
-	 *\param[in]	p_flags	Les indicateurs de scène.
-	 *\return		Le type de brouillard.
-	 */
-	C3D_API FogType getFogType( SceneFlags const & p_flags );
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date		16/11/2016
-	\~english
-	\brief		Billboard rendering types enumeration.
-	\~french
-	\brief		Enumération des types de rendu des billboards.
+	*\version
+	*	0.11.0
+	*\~english
+	*\brief
+	*	Scene background types enumeration.
+	*\~french
+	*\brief
+	*	Enumération des types de fond de scène.
+	*/
+	enum class BackgroundType
+	{
+		eColour,
+		eImage,
+		eSkybox,
+		CASTOR_SCOPED_ENUM_BOUNDS( eColour )
+	};
+	/**
+	*\version
+	*	0.9.0
+	*\~english
+	*\brief
+	*	Billboard rendering types enumeration.
+	*\~french
+	*\brief
+	*	Enumération des types de rendu des billboards.
 	*/
 	enum class BillboardType
 	{
@@ -125,14 +144,15 @@ namespace castor3d
 		eCylindrical,
 		CASTOR_SCOPED_ENUM_BOUNDS( eSpherical )
 	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date		16/11/2016
-	\~english
-	\brief		Billboard sizing types enumeration.
-	\~french
-	\brief		Enumération des types de dimensions des billboards.
+	/**
+	*\version
+	*	0.9.0
+	*\~english
+	*\brief
+	*	Billboard sizing types enumeration.
+	*\~french
+	*\brief
+	*	Enumération des types de dimensions des billboards.
 	*/
 	enum class BillboardSize
 	{
@@ -145,12 +165,35 @@ namespace castor3d
 		CASTOR_SCOPED_ENUM_BOUNDS( eDynamic )
 	};
 
+	enum class ParticleFormat
+	{
+		eInt,
+		eVec2i,
+		eVec3i,
+		eVec4i,
+		eUInt,
+		eVec2ui,
+		eVec3ui,
+		eVec4ui,
+		eFloat,
+		eVec2f,
+		eVec3f,
+		eVec4f,
+		eMat2f,
+		eMat3f,
+		eMat4f,
+	};
+
 	class Scene;
 	class SceneLoader;
 	class SceneNode;
 	class SceneFileContext;
 	class SceneFileParser;
-	class Skybox;
+	class SceneBackground;
+	class SkyboxBackground;
+	class ColourBackground;
+	class ImageBackground;
+	class BackgroundVisitor;
 	class ParticleSystemImpl;
 	class ParticleSystem;
 	class CpuParticleSystem;
@@ -176,7 +219,7 @@ namespace castor3d
 	DECLARE_SMART_PTR( Scene );
 	DECLARE_SMART_PTR( SceneFileContext );
 	DECLARE_SMART_PTR( SceneFileParser );
-	DECLARE_SMART_PTR( Skybox );
+	DECLARE_SMART_PTR( SceneBackground );
 	DECLARE_SMART_PTR( ParticleSystem );
 	DECLARE_SMART_PTR( ParticleSystemImpl );
 	DECLARE_SMART_PTR( CpuParticleSystem );
@@ -236,6 +279,22 @@ namespace castor3d
 	using SubmeshBoundingBoxMap = std::map< Submesh const *, castor::BoundingBox >;
 	using SubmeshBoundingSphereMap = std::map< Submesh const *, castor::BoundingSphere >;
 	using SubmeshMaterialMap = std::map< Submesh const *, MaterialWPtr >;
+
+	using OnSubmeshMaterialChangedFunction = std::function< void( Geometry const &, Submesh const &, MaterialSPtr oldMaterial, MaterialSPtr newMaterial) >;
+	using OnSubmeshMaterialChanged = castor::Signal< OnSubmeshMaterialChangedFunction >;
+	using OnSubmeshMaterialChangedConnection = OnSubmeshMaterialChanged::connection;
+
+	using OnBillboardMaterialChangedFunction = std::function< void( BillboardBase const &, MaterialSPtr oldMaterial, MaterialSPtr newMaterial ) >;
+	using OnBillboardMaterialChanged = castor::Signal< OnBillboardMaterialChangedFunction >;
+	using OnBillboardMaterialChangedConnection = OnBillboardMaterialChanged::connection;
+
+	using OnAnimatedSkeletonChangeFunction = std::function< void( AnimatedObjectGroup const &, AnimatedSkeleton const & ) >;
+	using OnAnimatedSkeletonChange = castor::Signal< OnAnimatedSkeletonChangeFunction >;
+	using OnAnimatedSkeletonChangeConnection = OnAnimatedSkeletonChange::connection;
+
+	using OnAnimatedMeshChangeFunction = std::function< void( AnimatedObjectGroup const &, AnimatedMesh const & ) >;
+	using OnAnimatedMeshChange = castor::Signal< OnAnimatedMeshChangeFunction >;
+	using OnAnimatedMeshChangeConnection = OnAnimatedMeshChange::connection;
 
 	//@}
 }

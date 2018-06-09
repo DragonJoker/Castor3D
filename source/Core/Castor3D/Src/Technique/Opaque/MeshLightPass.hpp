@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_DeferredMeshLightPass_H___
@@ -50,7 +50,8 @@ namespace castor3d
 			 */
 			Program( Engine & engine
 				, glsl::Shader const & vtx
-				, glsl::Shader const & pxl );
+				, glsl::Shader const & pxl
+				, bool hasShadows );
 			/**
 			 *\~english
 			 *\brief		Destructor.
@@ -63,15 +64,9 @@ namespace castor3d
 			/**
 			 *\copydoc		castor3d::LightPass::Program::doCreatePipeline
 			 */
-			RenderPipelineUPtr doCreatePipeline( bool blend )override;
-
-		protected:
-			//!\~english	The variable containing the light position.
-			//!\~french		La variable contenant la position de la lumière.
-			PushUniform3fSPtr m_lightPosition;
-			//!\~english	The variable containing the light attenuation.
-			//!\~french		La variable contenant l'atténuation de la lumière.
-			PushUniform3fSPtr m_lightAttenuation;
+			renderer::PipelinePtr doCreatePipeline( renderer::VertexLayout const & vertexLayout
+				, renderer::RenderPass const & renderPass
+				, bool blend )override;
 		};
 
 	public:
@@ -94,8 +89,9 @@ namespace castor3d
 		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
 		MeshLightPass( Engine & engine
-			, FrameBuffer & frameBuffer
-			, FrameBufferAttachment & depthAttach
+			, renderer::TextureView const & depthView
+			, renderer::TextureView const & diffuseView
+			, renderer::TextureView const & specularView
 			, GpInfoUbo & gpInfoUbo
 			, LightType type
 			, bool hasShadows );
@@ -117,7 +113,9 @@ namespace castor3d
 		 *\param[in]	sceneUbo	L'UBO de scène.
 		 */
 		void initialise( Scene const & scene
-			, SceneUbo & sceneUbo )override;
+			, GeometryPassResult const & gp
+			, SceneUbo & sceneUbo
+			, RenderPassTimer & timer )override;
 		/**
 		 *\~english
 		 *\brief		Cleans up the light pass.
@@ -127,21 +125,28 @@ namespace castor3d
 		void cleanup()override;
 		/**
 		 *\~english
+		 *\brief		Renders the light pass.
+		 *\~french
+		 *\brief		Dessine la passe de rendu.
+		 */
+		renderer::Semaphore const & render( uint32_t index
+			, renderer::Semaphore const & toWait
+			, TextureUnit * shadowMapOpt )override;
+		/**
+		 *\~english
 		 *\return		The number of primitives to draw.
 		 *\~french
 		 *\return		Le nombre de primitives à dessiner.
 		 */
 		uint32_t getCount()const override;
 
-	protected:
+	private:
 		/**
 		 *\copydoc		castor3d::LightPass::doUpdate
 		 */
 		void doUpdate( castor::Size const & size
 			, Light const & light
 			, Camera const & camera )override;
-
-	private:
 		/**
 		 *\copydoc		castor3d::LightPass::doGetVertexShaderSource
 		 */

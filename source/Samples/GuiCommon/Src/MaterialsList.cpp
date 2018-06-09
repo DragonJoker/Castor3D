@@ -128,7 +128,8 @@ namespace GuiCommon
 			, eBMP_PASS_SEL - eBMP_MATERIAL
 			, new PassTreeItemProperty( m_propertiesHolder->IsEditable()
 				, p_pass
-				, *m_scene ) );
+				, *m_scene
+				, this ) );
 		uint32_t index = 0;
 
 		for ( auto unit : *p_pass )

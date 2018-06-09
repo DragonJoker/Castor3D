@@ -5,7 +5,7 @@ namespace castor
 {
 	//*************************************************************************************************
 
-	namespace
+	namespace details
 	{
 		template< typename T, uint32_t TCount, uint32_t Index, typename U, typename ... Values >
 		void construct( Point< T, TCount > & result, U current, Values ... );
@@ -33,6 +33,49 @@ namespace castor
 				construct< T, TCount, Index + 1, Values... >( result, values... );
 			}
 		}
+
+		template< typename SrcType, typename DstType, uint32_t SrcCount, uint32_t DstCount >
+		struct DataCopier
+		{
+			static uint32_t constexpr MinCount = MinValue< SrcCount, DstCount >::value;
+
+			void operator()( SrcType const * src
+				, DstType * dst )
+			{
+				for ( uint32_t i = 0; i < MinCount; i++ )
+				{
+					dst[i] = DstType( src[i] );
+				}
+
+				if ( DstCount > MinCount )
+				{
+					for ( uint32_t i = MinCount; i < DstCount; ++i )
+					{
+						dst[i] = DstType{};
+					}
+				}
+			}
+		};
+
+		template< typename Type, uint32_t SrcCount, uint32_t DstCount >
+		struct DataCopier< Type, Type, SrcCount, DstCount >
+		{
+			static uint32_t constexpr MinCount = MinValue< SrcCount, DstCount >::value;
+
+			void operator()( Type const * src
+				, Type * dst )
+			{
+				std::copy( src, src + MinCount, dst );
+
+				if ( DstCount > MinCount )
+				{
+					for ( uint32_t i = MinCount; i < DstCount; ++i )
+					{
+						dst[i] = Type{};
+					}
+				}
+			}
+		};
 	}
 
 	//*************************************************************************************************
@@ -74,7 +117,7 @@ namespace castor
 	template< typename T, uint32_t TCount >
 	bool Point< T, TCount >::TextWriter::operator()( Point< T, TCount > const & object, TextFile & file )
 	{
-		StringStream streamWord;
+		StringStream streamWord{ castor::makeStringStream() };
 
 		for ( uint32_t i = 0; i < TCount; ++i )
 		{
@@ -95,8 +138,8 @@ namespace castor
 
 	template< typename T, uint32_t TCount >
 	Point< T, TCount >::Point()
+		: m_coords{}
 	{
-		PointDataHolder< T, TCount >::initialise();
 	}
 
 	template< typename T, uint32_t TCount >
@@ -104,80 +147,50 @@ namespace castor
 	{
 		if ( !rhs )
 		{
-			PointDataHolder< T, TCount >::initialise();
+			std::memset( m_coords.data()
+				, 0
+				, binary_size );
 		}
 		else
 		{
-			std::memcpy( this->m_coords, rhs, binary_size );
+			std::copy( rhs
+				, rhs + TCount
+				, m_coords.begin() );
 		}
 	}
 
 	template< typename T, uint32_t TCount >
 	Point< T, TCount >::Point( Point< T, TCount > const & rhs )
 	{
-		std::memcpy( this->m_coords, rhs.m_coords, binary_size );
+		std::copy( rhs.begin()
+			, rhs.end()
+			, m_coords.begin() );
 	}
 
 	template< typename T, uint32_t TCount >
 	Point< T, TCount >::Point( Point< T, TCount > && rhs )
 	{
-		std::memcpy( this->m_coords, rhs.m_coords, binary_size );
-		rhs.initialise();
-	}
-
-	template< typename T, uint32_t TCount >
-	inline Point< T, TCount >::~Point()
-	{
+		std::copy( rhs.begin()
+			, rhs.end()
+			, m_coords.begin() );
 	}
 
 	template< typename T, uint32_t TCount >
 	template< typename U, uint32_t UCount >
 	Point< T, TCount >::Point( Point< U, UCount > const & rhs )
 	{
-		if ( std::is_same< T, U >::value )
-		{
-			std::memcpy( this->m_coords, rhs.constPtr(), Point< U, MinValue< TCount, UCount >::value >::binary_size );
-		}
-		else
-		{
-			for ( uint32_t i = 0; i < MinValue< TCount, UCount >::value; i++ )
-			{
-				this->m_coords[i] = T( rhs[i] );
-			}
-		}
-
-		if ( TCount > UCount )
-		{
-			for ( uint32_t i = UCount; i < TCount; ++i )
-			{
-				this->m_coords[i] = T{};
-			}
-		}
+		static uint32_t constexpr MinCount = MinValue< TCount, UCount >::value;
+		details::DataCopier< U, T, UCount, TCount > copier;
+		copier( rhs.constPtr(), ptr() );
 	}
 
 	template< typename T, uint32_t TCount >
 	template< typename U, uint32_t UCount >
 	Point< T, TCount >::Point( Coords< U, UCount > const & rhs )
 	{
-		if ( std::is_same< T, U >::value )
-		{
-			std::memcpy( this->m_coords, rhs.constPtr(), Point< U, MinValue< TCount, UCount >::value >::binary_size );
-		}
-		else
-		{
-			for ( uint32_t i = 0; i < MinValue< TCount, UCount >::value; i++ )
-			{
-				this->m_coords[i] = T( rhs[i] );
-			}
-		}
-
-		if ( TCount > UCount )
-		{
-			for ( uint32_t i = UCount; i < TCount; ++i )
-			{
-				this->m_coords[i] = T{};
-			}
-		}
+		static uint32_t constexpr MinCount = MinValue< TCount, UCount >::value;
+		details::DataCopier< U, T, UCount, TCount > copier;
+		copier( rhs.constPtr(), ptr() );
 	}
 
 	template< typename T, uint32_t TCount >
@@ -186,13 +199,15 @@ namespace castor
 	{
 		if ( !rhs )
 		{
-			PointDataHolder< T, TCount >::initialise();
+			std::memset( m_coords.data()
+				, 0
+				, binary_size );
 		}
 		else
 		{
 			for ( uint32_t i = 0; i < TCount; i++ )
 			{
-				this->m_coords[i] = T( rhs[i] );
+				m_coords[i] = T( rhs[i] );
 			}
 		}
 	}
@@ -200,15 +215,17 @@ namespace castor
 	template< typename T, uint32_t TCount >
 	template< typename ValueA, typename ValueB, typename ... Values >
 	Point< T, TCount >::Point( ValueA a, ValueB b, Values ... values )
+		: m_coords{}
 	{
-		PointDataHolder< T, TCount >::initialise();
-		construct< T, TCount, 0, ValueA, ValueB, Values... >( *this, a, b, values... );
+		details::construct< T, TCount, 0, ValueA, ValueB, Values... >( *this, a, b, values... );
 	}
 
 	template< typename T, uint32_t TCount >
 	inline Point< T, TCount > & Point< T, TCount >::operator=( Point< T, TCount > const & rhs )
 	{
-		std::memcpy( this->m_coords, rhs.m_coords, binary_size );
+		std::copy( rhs.begin()
+			, rhs.end()
+			, m_coords.begin() );
 		return *this;
 	}
 
@@ -217,8 +234,9 @@ namespace castor
 	{
 		if ( this != &rhs )
 		{
-			std::memcpy( this->m_coords, rhs.m_coords, binary_size );
-			rhs.initialise();
+			std::copy( rhs.begin()
+				, rhs.end()
+				, m_coords.begin() );
 		}
 
 		return *this;
@@ -325,7 +343,7 @@ namespace castor
 	{
 		for ( uint32_t i = 0; i < TCount; i++ )
 		{
-			std::swap( this->m_coords[i], rhs.m_coords[i] );
+			std::swap( m_coords[i], rhs.m_coords[i] );
 		}
 	}
 
@@ -334,7 +352,7 @@ namespace castor
 	{
 		for ( uint32_t i = 0; i < TCount / 2; i++ )
 		{
-			std::swap( this->m_coords[i], this->m_coords[TCount - 1 - i] );
+			std::swap( m_coords[i], m_coords[TCount - 1 - i] );
 		}
 	}
 
@@ -343,7 +361,7 @@ namespace castor
 	{
 		for ( uint32_t i = 0; i < TCount; i++ )
 		{
-			result[i] = this->m_coords[i];
+			result[i] = m_coords[i];
 		}
 	}
 
@@ -351,14 +369,14 @@ namespace castor
 	T const & Point< T, TCount >::at( uint32_t index )const
 	{
 		REQUIRE( index < TCount );
-		return this->m_coords[index];
+		return m_coords[index];
 	}
 
 	template< typename T, uint32_t TCount >
 	T & Point< T, TCount >::at( uint32_t index )
 	{
 		REQUIRE( index < TCount );
-		return this->m_coords[index];
+		return m_coords[index];
 	}
 
 	//*************************************************************************************************
@@ -863,7 +881,7 @@ namespace castor
 template< typename T, uint32_t TCount >
 inline castor::String & operator<<( castor::String & out, castor::Point< T, TCount > const & in )
 {
-	castor::StringStream stream;
+	castor::StringStream stream{ castor::makeStringStream() };
 	stream << in;
 	out += stream.str();
 	return out;

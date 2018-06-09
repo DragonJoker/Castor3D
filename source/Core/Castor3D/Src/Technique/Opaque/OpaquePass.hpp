@@ -45,13 +45,38 @@ namespace castor3d
 		 */
 		virtual ~OpaquePass();
 		/**
+		 *\~english
+		 *\brief		Initialises the render pass.
+		 *\~french
+		 *\brief		Initialise la passe de rendu.
+		 */
+		void initialiseRenderPass( GeometryPassResult const & gpResult );
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		void accept( RenderTechniqueVisitor & visitor )override;
+		/**
 		 *\copydoc		castor3d::RenderTechniquePass::render
 		 */
-		void render( RenderInfo & info
-			, ShadowMapLightTypeArray & shadowMaps
+		void update( RenderInfo & info
 			, castor::Point2r const & jitter )override;
+		/**
+		 *\~english
+		 *\brief		Renders transparent nodes.
+		 *\~french
+		 *\brief		Dessine les noeuds transparents.
+		 */
+		renderer::Semaphore const & render( renderer::Semaphore const & toWait );
 
 	private:
+		/**
+		*\copydoc		castor3d::RenderPass::doCreateUboBindings
+		*/
+		renderer::DescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
+		 */
+		renderer::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdateFlags
 		 */
@@ -74,7 +99,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const override;
+			, renderer::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */
@@ -82,7 +107,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const override;
+			, renderer::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
 		 */
@@ -90,21 +115,19 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const override;
+			, renderer::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
 		void doUpdatePipeline( RenderPipeline & pipeline )const override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
+		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
 		 */
-		C3D_API void doPrepareFrontPipeline( ShaderProgram & program
-			, PipelineFlags const & flags )override;
+		renderer::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
+		 *\copydoc		castor3d::RenderPass::doCreateBlendState
 		 */
-		C3D_API void doPrepareBackPipeline( ShaderProgram & program
-			, PipelineFlags const & flags )override;
+		renderer::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
 
 	private:
 		static castor::String const Output1;
@@ -112,6 +135,9 @@ namespace castor3d
 		static castor::String const Output3;
 		static castor::String const Output4;
 		static castor::String const Output5;
+
+		renderer::FrameBufferPtr m_frameBuffer;
+		renderer::CommandBufferPtr m_nodesCommands;
 	};
 }
 

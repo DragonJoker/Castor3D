@@ -1,42 +1,32 @@
 #include "GlslWriter.hpp"
 
 #include "GlslVec.hpp"
+#include "GlslIntrinsics.hpp"
 
 #include <Log/Logger.hpp>
 
 namespace glsl
 {
-	GlslWriter::GlslWriter( GlslWriterConfig const & p_config )
-		: m_keywords( glsl::KeywordsBase::get( p_config ) )
+	GlslWriter::GlslWriter( GlslWriterConfig const & config )
+		: m_keywords( glsl::KeywordsBase::get( config ) )
 		, m_uniform( cuT( "uniform " ) )
-		, m_config( p_config )
+		, m_config( config )
 	{
+		m_stream.imbue( Expr::getLocale() );
 		*this << glsl::Version() << endl;
 
 #if !defined( NDEBUG )
 		*this << "#pragma optimize(off)" << endl;
 		*this << "#pragma debug(on)" << endl;
 #endif
-	}
 
-	GlslWriter::GlslWriter( GlslWriter const & p_rhs )
-		: m_keywords( glsl::KeywordsBase::get( p_rhs.m_config ) )
-		, m_attributeIndex( p_rhs.m_attributeIndex )
-		, m_layoutIndex( p_rhs.m_layoutIndex )
-		, m_uniform( p_rhs.m_uniform )
-		, m_config( p_rhs.m_config )
-	{
-		m_stream << p_rhs.m_stream.str();
-	}
-
-	GlslWriter & GlslWriter::operator=( GlslWriter const & p_rhs )
-	{
-		m_attributeIndex = p_rhs.m_attributeIndex;
-		m_layoutIndex = p_rhs.m_layoutIndex;
-		m_uniform = p_rhs.m_uniform;
-		m_config = p_rhs.m_config;
-		m_stream << p_rhs.m_stream.str();
-		return *this;
+		if ( m_config.m_shaderLanguageVersion < 430 )
+		{
+			*this << "#extension GL_ARB_explicit_attrib_location : enable" << endl;
+			*this << "#extension GL_ARB_explicit_uniform_location : enable" << endl;
+			*this << "#extension GL_ARB_separate_shader_objects : enable" << endl;
+			*this << "#extension GL_ARB_shading_language_420pack : enable" << endl;
+		}
 	}
 
 	void GlslWriter::registerName( castor::String const & p_name, TypeName p_type )
@@ -67,12 +57,62 @@ namespace glsl
 
 	void GlslWriter::inlineComment( castor::String const & comment )
 	{
-		m_stream << cuT( "//" ) << comment << std::endl;
+		m_stream << cuT( "// " ) << comment << std::endl;
 	}
 
 	void GlslWriter::multilineComment( castor::String const & comment )
 	{
 		m_stream << cuT( "/*" ) << comment << "*/" << std::endl;
+	}
+
+	void GlslWriter::enableExtension( castor::String const & name, uint32_t inCoreVersion )
+	{
+		if ( getShaderLanguageVersion() < inCoreVersion
+			|| !inCoreVersion )
+		{
+			m_stream << "#extension " << name << ": enable" << std::endl;
+		}
+	}
+
+	castor::String GlslWriter::getInstanceID()
+	{
+		if ( m_config.m_hasInstanceIndex )
+		{
+			return cuT( "gl_InstanceIndex" );
+		}
+		else
+		{
+			return cuT( "gl_InstanceID" );
+		}
+	}
+
+	castor::String GlslWriter::getVertexID()
+	{
+		if ( m_config.m_hasVertexIndex )
+		{
+			return cuT( "gl_VertexIndex" );
+		}
+		else
+		{
+			return cuT( "gl_VertexID" );
+		}
+	}
+
+	Vec2 GlslWriter::adjustTexCoords( Vec2 const & texcoords )
+	{
+		if ( m_config.m_isTopDown )
+		{
+			return vec2( texcoords.x(), 1.0_f - texcoords.y() );
+		}
+
+		return texcoords;
+	}
+
+	Vec4 GlslWriter::rendererScalePosition( Vec4 const & position )
+	{
+		return writeFunctionCall< Vec4 >( this
+			, cuT( "rendererScalePosition" )
+			, position );
 	}
 
 	Shader GlslWriter::finalise()
@@ -88,17 +128,17 @@ namespace glsl
 
 	void GlslWriter::writeAssign( Type const & p_lhs, int const & p_rhs )
 	{
-		m_stream << castor::String( p_lhs ) << cuT( " = " ) << castor::string::toString( p_rhs ) << cuT( ";" ) << std::endl;
+		m_stream << castor::String( p_lhs ) << cuT( " = " ) << castor::string::toString( p_rhs, 10, Expr::getLocale() ) << cuT( ";" ) << std::endl;
 	}
 
 	void GlslWriter::writeAssign( Type const & p_lhs, unsigned int const & p_rhs )
 	{
-		m_stream << castor::String( p_lhs ) << cuT( " = " ) << castor::string::toString( p_rhs ) << cuT( "u;" ) << std::endl;
+		m_stream << castor::String( p_lhs ) << cuT( " = " ) << castor::string::toString( p_rhs, 10, Expr::getLocale() ) << cuT( "u;" ) << std::endl;
 	}
 
 	void GlslWriter::writeAssign( Type const & p_lhs, float const & p_rhs )
 	{
-		m_stream << castor::String( p_lhs ) << cuT( " = " ) << castor::string::toString( p_rhs ) << cuT( ";" ) << std::endl;
+		m_stream << castor::String( p_lhs ) << cuT( " = " ) << castor::string::toString( p_rhs, Expr::getLocale() ) << cuT( ";" ) << std::endl;
 	}
 
 	void GlslWriter::forStmt( Type && p_init, Expr const & p_cond, Expr const & p_incr, std::function< void() > p_function )
@@ -797,7 +837,7 @@ namespace glsl
 
 	GlslWriter & GlslWriter::operator<<( Layout const & p_rhs )
 	{
-		m_stream << m_keywords->getLayout( p_rhs.m_index );
+		m_stream << m_keywords->getLayout( p_rhs.m_location );
 		return *this;
 	}
 

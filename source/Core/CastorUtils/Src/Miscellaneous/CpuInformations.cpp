@@ -73,56 +73,56 @@ namespace castor
 	{
 	}
 
-	std::ostream & operator<<( std::ostream & p_stream, CpuInformations const & p_object )
+	std::ostream & operator<<( std::ostream & stream, CpuInformations const & object )
 	{
-		auto support = []( bool p_supported )
+		auto support = []( bool supported )
 		{
-			return ( p_supported ? "supported" : "not supported" );
+			return ( supported ? "supported" : "not supported" );
 		};
 
-		p_stream << "CPU informations:" << std::endl;
-		p_stream << "    Vendor: " << p_object.getVendor() << std::endl;
-		p_stream << "    Core count: " << p_object.getCoreCount() << std::endl;
-		p_stream << "    ADX: " << support( p_object.ADX() ) << std::endl;
-		p_stream << "    AES: " << support( p_object.AES() ) << std::endl;
-		p_stream << "    AVX: " << support( p_object.AVX() ) << std::endl;
-		p_stream << "    AVX2: " << support( p_object.AVX2() ) << std::endl;
-		p_stream << "    AVX512CD: " << support( p_object.AVX512CD() ) << std::endl;
-		p_stream << "    AVX512ER: " << support( p_object.AVX512ER() ) << std::endl;
-		p_stream << "    AVX512F: " << support( p_object.AVX512F() ) << std::endl;
-		p_stream << "    AVX512PF: " << support( p_object.AVX512PF() ) << std::endl;
-		p_stream << "    BMI1: " << support( p_object.BMI1() ) << std::endl;
-		p_stream << "    BMI2: " << support( p_object.BMI2() ) << std::endl;
-		p_stream << "    CLFSH: " << support( p_object.CLFSH() ) << std::endl;
-		p_stream << "    CMPXCHG16B: " << support( p_object.CMPXCHG16B() ) << std::endl;
-		p_stream << "    CX8: " << support( p_object.CX8() ) << std::endl;
-		p_stream << "    ERMS: " << support( p_object.ERMS() ) << std::endl;
-		p_stream << "    F16C: " << support( p_object.F16C() ) << std::endl;
-		p_stream << "    FMA: " << support( p_object.FMA() ) << std::endl;
-		p_stream << "    FSGSBASE: " << support( p_object.FSGSBASE() ) << std::endl;
-		p_stream << "    FXSR: " << support( p_object.FXSR() ) << std::endl;
-		p_stream << "    HLE: " << support( p_object.HLE() ) << std::endl;
-		p_stream << "    INVPCID: " << support( p_object.INVPCID() ) << std::endl;
-		p_stream << "    MMX: " << support( p_object.MMX() ) << std::endl;
-		p_stream << "    MONITOR: " << support( p_object.MONITOR() ) << std::endl;
-		p_stream << "    MOVBE: " << support( p_object.MOVBE() ) << std::endl;
-		p_stream << "    MSR: " << support( p_object.MSR() ) << std::endl;
-		p_stream << "    OSXSAVE: " << support( p_object.OSXSAVE() ) << std::endl;
-		p_stream << "    PCLMULQDQ: " << support( p_object.PCLMULQDQ() ) << std::endl;
-		p_stream << "    POPCNT: " << support( p_object.POPCNT() ) << std::endl;
-		p_stream << "    PREFETCHWT1: " << support( p_object.PREFETCHWT1() ) << std::endl;
-		p_stream << "    RDRAND: " << support( p_object.RDRAND() ) << std::endl;
-		p_stream << "    RDSEED: " << support( p_object.RDSEED() ) << std::endl;
-		p_stream << "    RTM: " << support( p_object.RTM() ) << std::endl;
-		p_stream << "    SEP: " << support( p_object.SEP() ) << std::endl;
-		p_stream << "    SHA: " << support( p_object.SHA() ) << std::endl;
-		p_stream << "    SSE: " << support( p_object.SSE() ) << std::endl;
-		p_stream << "    SSE2: " << support( p_object.SSE2() ) << std::endl;
-		p_stream << "    SSE3: " << support( p_object.SSE3() ) << std::endl;
-		p_stream << "    SSE4.1: " << support( p_object.SSE41() ) << std::endl;
-		p_stream << "    SSE4.2: " << support( p_object.SSE42() ) << std::endl;
-		p_stream << "    SSSE3: " << support( p_object.SSSE3() ) << std::endl;
-		p_stream << "    XSAVE: " << support( p_object.XSAVE() );
-		return p_stream;
+		stream << "CPU informations:" << std::endl;
+		stream << "    Vendor: " << object.getVendor() << std::endl;
+		stream << "    Core count: " << object.getCoreCount() << std::endl;
+		stream << "    ADX: " << support( object.ADX() ) << std::endl;
+		stream << "    AES: " << support( object.AES() ) << std::endl;
+		stream << "    AVX: " << support( object.AVX() ) << std::endl;
+		stream << "    AVX2: " << support( object.AVX2() ) << std::endl;
+		stream << "    AVX512CD: " << support( object.AVX512CD() ) << std::endl;
+		stream << "    AVX512ER: " << support( object.AVX512ER() ) << std::endl;
+		stream << "    AVX512F: " << support( object.AVX512F() ) << std::endl;
+		stream << "    AVX512PF: " << support( object.AVX512PF() ) << std::endl;
+		stream << "    BMI1: " << support( object.BMI1() ) << std::endl;
+		stream << "    BMI2: " << support( object.BMI2() ) << std::endl;
+		stream << "    CLFSH: " << support( object.CLFSH() ) << std::endl;
+		stream << "    CMPXCHG16B: " << support( object.CMPXCHG16B() ) << std::endl;
+		stream << "    CX8: " << support( object.CX8() ) << std::endl;
+		stream << "    ERMS: " << support( object.ERMS() ) << std::endl;
+		stream << "    F16C: " << support( object.F16C() ) << std::endl;
+		stream << "    FMA: " << support( object.FMA() ) << std::endl;
+		stream << "    FSGSBASE: " << support( object.FSGSBASE() ) << std::endl;
+		stream << "    FXSR: " << support( object.FXSR() ) << std::endl;
+		stream << "    HLE: " << support( object.HLE() ) << std::endl;
+		stream << "    INVPCID: " << support( object.INVPCID() ) << std::endl;
+		stream << "    MMX: " << support( object.MMX() ) << std::endl;
+		stream << "    MONITOR: " << support( object.MONITOR() ) << std::endl;
+		stream << "    MOVBE: " << support( object.MOVBE() ) << std::endl;
+		stream << "    MSR: " << support( object.MSR() ) << std::endl;
+		stream << "    OSXSAVE: " << support( object.OSXSAVE() ) << std::endl;
+		stream << "    PCLMULQDQ: " << support( object.PCLMULQDQ() ) << std::endl;
+		stream << "    POPCNT: " << support( object.POPCNT() ) << std::endl;
+		stream << "    PREFETCHWT1: " << support( object.PREFETCHWT1() ) << std::endl;
+		stream << "    RDRAND: " << support( object.RDRAND() ) << std::endl;
+		stream << "    RDSEED: " << support( object.RDSEED() ) << std::endl;
+		stream << "    RTM: " << support( object.RTM() ) << std::endl;
+		stream << "    SEP: " << support( object.SEP() ) << std::endl;
+		stream << "    SHA: " << support( object.SHA() ) << std::endl;
+		stream << "    SSE: " << support( object.SSE() ) << std::endl;
+		stream << "    SSE2: " << support( object.SSE2() ) << std::endl;
+		stream << "    SSE3: " << support( object.SSE3() ) << std::endl;
+		stream << "    SSE4.1: " << support( object.SSE41() ) << std::endl;
+		stream << "    SSE4.2: " << support( object.SSE42() ) << std::endl;
+		stream << "    SSSE3: " << support( object.SSSE3() ) << std::endl;
+		stream << "    XSAVE: " << support( object.XSAVE() );
+		return stream;
 	}
 }

@@ -8,8 +8,8 @@ namespace castor3d
 {
 	//*************************************************************************************************
 
-	Animable::Animable( Scene & p_scene )
-		: OwnedBy< Scene >{ p_scene }
+	Animable::Animable( Scene & scene )
+		: OwnedBy< Scene >{ scene }
 	{
 	}
 
@@ -22,38 +22,38 @@ namespace castor3d
 		m_animations.clear();
 	}
 
-	bool Animable::hasAnimation( castor::String const & p_name )const
+	bool Animable::hasAnimation( castor::String const & name )const
 	{
-		return m_animations.find( p_name ) != m_animations.end();
+		return m_animations.find( name ) != m_animations.end();
 	}
 
-	Animation const & Animable::getAnimation( castor::String const & p_name )const
+	Animation const & Animable::getAnimation( castor::String const & name )const
 	{
-		auto it = m_animations.find( p_name );
+		auto it = m_animations.find( name );
 
 		if ( it == m_animations.end() )
 		{
-			CASTOR_EXCEPTION( cuT( "No animation named " ) + p_name );
+			CASTOR_EXCEPTION( cuT( "No animation named " ) + name );
 		}
 
 		return *it->second;
 	}
 
-	Animation & Animable::getAnimation( castor::String const & p_name )
+	Animation & Animable::getAnimation( castor::String const & name )
 	{
-		auto it = m_animations.find( p_name );
+		auto it = m_animations.find( name );
 
 		if ( it == m_animations.end() )
 		{
-			CASTOR_EXCEPTION( cuT( "No animation named " ) + p_name );
+			CASTOR_EXCEPTION( cuT( "No animation named " ) + name );
 		}
 
 		return *it->second;
 	}
 
-	void Animable::doAddAnimation( AnimationSPtr && p_animation )
+	void Animable::doAddAnimation( AnimationSPtr && animation )
 	{
-		m_animations[p_animation->getName()] = std::move( p_animation );
+		m_animations[animation->getName()] = std::move( animation );
 	}
 
 	//*************************************************************************************************

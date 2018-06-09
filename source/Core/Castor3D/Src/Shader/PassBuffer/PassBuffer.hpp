@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_PassBuffer_H___
@@ -63,11 +63,21 @@ namespace castor3d
 		C3D_API void update();
 		/**
 		 *\~english
-		 *\brief		Binds the buffer.
+		 *\brief		Creates the descriptor set layout binding.
 		 *\~french
-		 *\brief		Active le tampon.
+		 *\brief		Crée une attache de layout de set de descripteurs.
 		 */
-		C3D_API void bind()const;
+		C3D_API renderer::DescriptorSetLayoutBinding createLayoutBinding()const;
+		/**
+		 *\~english
+		 *\brief		Creates the descriptor set binding at given point.
+		 *\param[in]	binding	The descriptor set layout binding.
+		 *\~french
+		 *\brief		Crée une attache de set de descripteurs au point donné.
+		 *\param[in]	binding	L'attache de layout de set de descripteurs.
+		 */
+		C3D_API void createBinding( renderer::DescriptorSet & descriptorSet
+			, renderer::DescriptorSetLayoutBinding const & binding )const;
 		/**
 		 *\~english
 		 *\brief		Puts the pass data into the buffer.
@@ -95,6 +105,16 @@ namespace castor3d
 		 *\param[in]	pass	La passe.
 		 */
 		C3D_API virtual void visit( SpecularGlossinessPbrPass const & pass );
+		/**
+		 *\~english
+		 *\return		The pointer to the buffer.
+		 *\~french
+		 *\brief		Le pointeur sur le tampon.
+		 */
+		inline uint8_t * getPtr()
+		{
+			return m_buffer.getPtr();
+		}
 
 	public:
 		/*!
@@ -139,7 +159,7 @@ namespace castor3d
 		};
 		//!\~english	Extended data size.
 		//!\~french		La taille des données étendues.
-		static constexpr uint32_t ExtendedDataSize = sizeof( RgbaColour ) * 2;
+		static constexpr uint32_t ExtendedDataSize = sizeof( RgbaColour ) * 11;
 
 	protected:
 		C3D_API void doVisitExtended( Pass const & pass

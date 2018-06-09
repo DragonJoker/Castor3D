@@ -4,13 +4,18 @@ See LICENSE file in root folder
 #ifndef ___C3D_TONE_MAPPING_H___
 #define ___C3D_TONE_MAPPING_H___
 
+#include "ToneMappingVisitor.hpp"
+
 #include "Render/RenderInfo.hpp"
-#include "Shader/UniformBuffer.hpp"
+#include "RenderToTexture/RenderQuad.hpp"
+#include "Castor3DPrerequisites.hpp"
 #include "Shader/Ubos/HdrConfigUbo.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
 
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
+
+#include <GlslShader.hpp>
 
 namespace castor3d
 {
@@ -26,22 +31,27 @@ namespace castor3d
 	class ToneMapping
 		: public castor::OwnedBy< Engine >
 		, public castor::Named
+		, private RenderQuad
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Specified constructor.
 		 *\param[in]	name		The tone mapping name.
+		 *\param[in]	fullName	The tone mapping full (fancy) name.
 		 *\param[in]	engine		The engine.
 		 *\param[in]	parameters	The implementation specific parameters.
 		 *\~french
 		 *\brief		Constructeur spécifié.
 		 *\param[in]	name		Le nom du mappage de tons.
+		 *\param[in]	fullName	Le nom complet (et joli) du mappage de tons.
 		 *\param[in]	engine		Le moteur.
 		 *\param[in]	parameters	Les paramètres spécifiques à l'implémentation.
 		 */
 		C3D_API ToneMapping( castor::String const & name
+			, castor::String const & fullName
 			, Engine & engine
+			, HdrConfig & config
 			, Parameters const & parameters );
 		/**
 		 *\~english
@@ -56,7 +66,9 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise le shader de mappage de tons.
 		 */
-		C3D_API bool initialise();
+		C3D_API bool initialise( castor::Size const & size
+			, TextureLayout const & source
+			, renderer::RenderPass const & renderPass );
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
@@ -72,22 +84,37 @@ namespace castor3d
 		 *\brief		Met à jour le tone mapping.
 		 *\param[in]	config	La configuration HDR.
 		 */
-		C3D_API void update( HdrConfig const & config );
+		C3D_API void update();
 		/**
 		 *\~english
-		 *\brief		Applies the tone mapping for given HDR texture.
-		 *\param[in]	size	The target dimensions.
-		 *\param[in]	texture	The HDR texture.
-		 *\param[in]	info	Receives the render information.
-		 *\~english
-		 *\brief		Applique le mappage de tons pour la texture HDR donnée.
-		 *\param[in]	size	Les dimensions de la cible.
-		 *\param[in]	texture	La texture HDR.
-		 *\param[in]	info	Reçoit les informations de rendu.
+		 *\brief		Visitor acceptance function.
+		 *\~french
+		 *\brief		Fonction d'acceptation de visiteur.
 		 */
-		C3D_API void apply( castor::Size const & size
-			, TextureLayout const & texture
-			, RenderInfo & info );
+		C3D_API virtual void accept( ToneMappingVisitor & visitor );
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		**/
+		/**@{*/
+		inline renderer::Semaphore const & getSemaphore()const
+		{
+			REQUIRE( m_signalFinished );
+			return *m_signalFinished;
+		}
+
+		inline castor::String const & getFullName()const
+		{
+			return m_fullName;
+		}
+		/**@}*/
+
+	public:
+		using RenderQuad::registerFrame;
 
 	private:
 		/**
@@ -116,22 +143,17 @@ namespace castor3d
 		 */
 		C3D_API virtual void doUpdate() = 0;
 
+	private:
+		C3D_API void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
+			, renderer::DescriptorSet & descriptorSet )override;
+
 	protected:
-		//!\~english	The matrix data UBO.
-		//!\~french		L'UBO de données de matrices.
-		MatrixUbo m_matrixUbo;
-		//!\~english	The configuration data UBO.
-		//!\~french		L'UBO de données de configuration.
-		HdrConfigUbo m_configUbo;
-		//!\~english	The tone mapping shader program.
-		//!\~french		Le shader de mappage de ton.
-		RenderPipelineUPtr m_pipeline;
-		//!\~english	The pipeline used to render the tone mapping.
-		//!\~french		Le pipeline utilisé pour le rendu du mappage de tons.
-		RenderColourToTextureUPtr m_colour;
-		//!\~english	The render pass timer.
-		//!\~french		Le timer de passe de rendu.
-		RenderPassTimerSPtr m_timer;
+		castor::String m_fullName;
+		HdrConfig & m_config;
+		HdrConfigUbo m_hdrConfigUbo;
+		renderer::SemaphorePtr m_signalFinished;
+		glsl::Shader m_vertexShader;
+		glsl::Shader m_pixelShader;
 	};
 }
 

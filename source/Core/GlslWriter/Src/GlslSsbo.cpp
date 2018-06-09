@@ -5,17 +5,19 @@
 
 namespace glsl
 {
-	Ssbo::Ssbo( GlslWriter & p_writer
-		, castor::String const & p_name
-		, uint32_t p_bind
-		, Ssbo::Layout p_layout )
-		: m_writer( p_writer )
-		, m_name( p_name )
-		, m_block( nullptr )
-		, m_info{ p_layout, p_bind }
+	Ssbo::Ssbo( GlslWriter & writer
+		, castor::String const & name
+		, uint32_t bind
+		, uint32_t set
+		, Ssbo::Layout layout )
+		: m_writer{ writer }
+		, m_name{ name }
+		, m_block{ nullptr }
+		, m_info{ layout, bind, set }
 	{
+		m_stream.imbue( Expr::getLocale() );
 		m_stream << std::endl;
-		m_stream << m_writer.m_keywords->getLayout( p_layout, p_bind ) << cuT( "buffer " ) << p_name << std::endl;
+		m_stream << m_writer.m_keywords->getSsboLayout( layout, bind, set ) << cuT( "buffer " ) << name << std::endl;
 		m_block = std::make_unique< IndentBlock >( m_stream );
 	}
 

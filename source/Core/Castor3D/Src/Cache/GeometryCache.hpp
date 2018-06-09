@@ -1,11 +1,14 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_GEOMETRY_CACHE_H___
-#define ___C3D_GEOMETRY_CACHE_H___
+#ifndef ___C3D_GeometryCache_H___
+#define ___C3D_GeometryCache_H___
 
+#include "Buffer/UniformBufferPool.hpp"
 #include "Cache/ObjectCache.hpp"
-#include "Render/RenderInfo.hpp"
+#include "Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Shader/Ubos/ModelUbo.hpp"
+#include "Shader/Ubos/PickingUbo.hpp"
 
 namespace castor3d
 {
@@ -45,6 +48,15 @@ namespace castor3d
 		: public ObjectCacheBase< Geometry, castor::String >
 	{
 	public:
+		struct PoolsEntry
+		{
+			Geometry const & geometry;
+			Submesh const & submesh;
+			Pass const & pass;
+			UniformBufferOffset< ModelUbo::Configuration > modelUbo;
+			UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixUbo;
+			UniformBufferOffset< PickingUbo::Configuration > pickingUbo;
+		};
 		using MyObjectCache = ObjectCacheBase< Geometry, castor::String >;
 		using MyObjectCacheTraits = typename MyObjectCacheType::MyObjectCacheTraits;
 		using Element = typename MyObjectCacheType::Element;
@@ -61,41 +73,41 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine			The engine.
-		 *\param[in]	p_scene				The scene.
-		 *\param[in]	p_rootNode			The root node.
-		 *\param[in]	p_rootCameraNode	The cameras root node.
-		 *\param[in]	p_rootObjectNode	The objects root node.
-		 *\param[in]	p_produce			The element producer.
-		 *\param[in]	p_initialise		The element initialiser.
-		 *\param[in]	p_clean				The element cleaner.
-		 *\param[in]	p_merge				The element collection merger.
-		 *\param[in]	p_attach			The element attacher (to a scene node).
-		 *\param[in]	p_detach			The element detacher (from a scene node).
+		 *\param[in]	scene			The scene.
+		 *\param[in]	rootNode		The root node.
+		 *\param[in]	rootCameraNode	The cameras root node.
+		 *\param[in]	rootObjectNode	The objects root node.
+		 *\param[in]	produce			The element producer.
+		 *\param[in]	initialise		The element initialiser.
+		 *\param[in]	clean			The element cleaner.
+		 *\param[in]	merge			The element collection merger.
+		 *\param[in]	attach			The element attacher (to a scene node).
+		 *\param[in]	detach			The element detacher (from a scene node).
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine			Le moteur.
-		 *\param[in]	p_scene				La scène.
-		 *\param[in]	p_rootNode			Le noeud racine.
-		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
-		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
-		 *\param[in]	p_produce			Le créateur d'objet.
-		 *\param[in]	p_initialise		L'initialiseur d'objet.
-		 *\param[in]	p_clean				Le nettoyeur d'objet.
-		 *\param[in]	p_merge				Le fusionneur de collection d'objets.
-		 *\param[in]	p_attach			L'attacheur d'objet (à un noeud de scène).
-		 *\param[in]	p_detach			Le détacheur d'objet (d'un noeud de scène).
+		 *\param[in]	scene			La scène.
+		 *\param[in]	rootNode		Le noeud racine.
+		 *\param[in]	rootCameraNode	Le noeud racine des caméras.
+		 *\param[in]	rootObjectNode	Le noeud racine des objets.
+		 *\param[in]	produce			Le créateur d'objet.
+		 *\param[in]	initialise		L'initialiseur d'objet.
+		 *\param[in]	clean			Le nettoyeur d'objet.
+		 *\param[in]	merge			Le fusionneur de collection d'objets.
+		 *\param[in]	attach			L'attacheur d'objet (à un noeud de scène).
+		 *\param[in]	detach			Le détacheur d'objet (d'un noeud de scène).
 		 */
 		C3D_API ObjectCache( Engine & engine
-			, Scene & p_scene
-			, SceneNodeSPtr p_rootNode
-			, SceneNodeSPtr p_rootCameraNode
-			, SceneNodeSPtr p_rootObjectNode
-			, Producer && p_produce
-			, Initialiser && p_initialise = Initialiser{}
-			, Cleaner && p_clean = Cleaner{}
-			, Merger && p_merge = Merger{}
-			, Attacher && p_attach = Attacher{}
-			, Detacher && p_detach = Detacher{} );
+			, Scene & scene
+			, SceneNodeSPtr rootNode
+			, SceneNodeSPtr rootCameraNode
+			, SceneNodeSPtr rootObjectNode
+			, Producer && produce
+			, Initialiser && initialise = Initialiser{}
+			, Cleaner && clean = Cleaner{}
+			, Merger && merge = Merger{}
+			, Attacher && attach = Attacher{}
+			, Detacher && detach = Detacher{} );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -109,33 +121,105 @@ namespace castor3d
 		 *\~french
 		 *\return		Le nombre d'objets
 		 */
-		C3D_API void fillInfo( RenderInfo & p_info )const;
+		C3D_API void fillInfo( RenderInfo & info )const;
+		/**
+		 *\~english
+		 *\brief		Updates the UBO pools data.
+		 *\~french
+		 *\brief		Met à jour le contenu des pools d'UBO.
+		 */
+		C3D_API void update();
+		/**
+		 *\~english
+		 *\brief		Updates the UBO pools in VRAM.
+		 *\~french
+		 *\brief		Met à jour les pools d'UBO en VRAM.
+		 */
+		C3D_API void uploadUbos()const;
+		/**
+		 *\~english
+		 *\brief		Updates the picking UBO pools in VRAM.
+		 *\~french
+		 *\brief		Met à jour les pools d'UBO de picking en VRAM.
+		 */
+		C3D_API void uploadPickingUbos()const;
+		/**
+		 *\~english
+		 *\brief		Cleans up the UBO pools.
+		 *\~french
+		 *\brief		Nettoie les pools d'UBO.
+		 */
+		C3D_API void cleanupUbos();
+		/**
+		 *\~english
+		 *\return		The UBOs for given geometry, submesh and pass.
+		 *\~french
+		 *\brief		Les UBOs pour la géométrie, le sous-maillage et la passe donnés.
+		 */
+		C3D_API PoolsEntry getUbos( Geometry const & geometry
+			, Submesh const & submesh
+			, Pass const & pass )const;
+		/**
+		 *\~english
+		 *\brief		Flushes the collection.
+		 *\~french
+		 *\brief		Vide la collection.
+		 */
+		C3D_API void clear();
+		/**
+		 *\~english
+		 *\brief		Adds an object.
+		 *\param[in]	element	The object.
+		 *\~french
+		 *\brief		Ajoute un objet.
+		 *\param[in]	element	L'objet.
+		 */
+		C3D_API void add( ElementPtr element );
 		/**
 		 *\~english
 		 *\brief		Creates an object.
-		 *\param[in]	p_name		The object name.
-		 *\param[in]	p_parent	The parent scene node.
-		 *\param[in]	p_mesh		The mesh.
+		 *\param[in]	name	The object name.
+		 *\param[in]	parent	The parent scene node.
+		 *\param[in]	mesh	The mesh.
 		 *\return		The created object.
 		 *\~french
 		 *\brief		Crée un objet.
-		 *\param[in]	p_name		Le nom d'objet.
-		 *\param[in]	p_parent	Le noeud de scène parent.
-		 *\param[in]	p_mesh		Le maillage.
+		 *\param[in]	name	Le nom d'objet.
+		 *\param[in]	parent	Le noeud de scène parent.
+		 *\param[in]	mesh	Le maillage.
 		 *\return		L'objet créé.
 		 */
-		inline ElementPtr add( Key const & p_name, SceneNodeSPtr p_parent, MeshSPtr p_mesh )
-		{
-			return MyObjectCache::add( p_name, p_parent, p_mesh );
-		}
+		C3D_API ElementPtr add( Key const & name
+			, SceneNodeSPtr parent
+			, MeshSPtr mesh );
+		/**
+		 *\~english
+		 *\brief		Removes an object, given a name.
+		 *\param[in]	name	The object name.
+		 *\~french
+		 *\brief		Retire un objet à partir d'un nom.
+		 *\param[in]	name	Le nom d'objet.
+		 */
+		C3D_API void remove( Key const & name );
 
 	private:
-		//!\~english	The total faces count.
-		//!\~french		Le nombre total de faces.
+		PoolsEntry doCreateEntry( Geometry const & geometry
+			, Submesh const & submesh
+			, Pass const & pass );
+		void doRemoveEntry( Geometry const & geometry
+			, Submesh const & submesh
+			, Pass const & pass );
+		void doRegister( Geometry & geometry );
+		void doUnregister( Geometry & geometry );
+
+	private:
 		uint32_t m_faceCount{ 0 };
-		//!\~english	The total vertex count.
-		//!\~french		Le nombre total de sommets.
 		uint32_t m_vertexCount{ 0 };
+		std::map< size_t, PoolsEntry > m_entries;
+		std::map< Geometry *, OnSubmeshMaterialChangedConnection > m_connections;
+		UniformBufferPool< ModelUbo::Configuration > m_modelUboPool;
+		UniformBufferPool< ModelMatrixUbo::Configuration > m_modelMatrixUboPool;
+		UniformBufferPool< PickingUbo::Configuration > m_pickingUboPool;
 	};
 	using GeometryCache = ObjectCache< Geometry, castor::String >;
 	DECLARE_SMART_PTR( GeometryCache );

@@ -14,9 +14,9 @@ namespace castor3d
 	\version	0.9.0
 	\date		30/08/2016
 	\~english
-	\brief		Shadow mapping implementation for spot lights.
+	\brief		Shadow mapping implementation for directional lights.
 	\~french
-	\brief		Implémentation du mappage d'ombres pour les lumières spot.
+	\brief		Implémentation du mappage d'ombres pour les lumières directionnelles.
 	*/
 	class ShadowMapDirectional
 		: public ShadowMap
@@ -51,11 +51,27 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMap::render
 		 */
-		void render()override;
+		renderer::Semaphore const & render( renderer::Semaphore const & toWait )override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::debugDisplay
 		 */
-		void debugDisplay( castor::Size const & size, uint32_t index )override;
+		void debugDisplay( renderer::RenderPass const & renderPass
+			, renderer::FrameBuffer const & frameBuffer
+			, castor::Size const & size, uint32_t index )override;
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Setters.
+		*/
+		/**@{*/
+		inline renderer::TextureView const & getDepthView()const
+		{
+			return *m_depthView;
+		}
+		/**@}*/
 
 	private:
 		/**
@@ -80,17 +96,18 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const override;
+			, renderer::CompareOp alphaFunc )const override;
+
+	public:
+		static renderer::Format constexpr VarianceFormat = renderer::Format::eR32G32_SFLOAT;
+		static renderer::Format constexpr LinearDepthFormat = renderer::Format::eR32_SFLOAT;
+		static renderer::Format constexpr RawDepthFormat = renderer::Format::eD24_UNORM_S8_UINT;
 
 	private:
-		//!\~english	The attach between variance map and main frame buffer.
-		//!\~french		L'attache entre la texture de variance et le tampon principal.
-		TextureAttachmentSPtr m_varianceAttach;
-		//!\~english	The attach between linear depth buffer and main frame buffer.
-		//!\~french		L'attache entre le tampon de profondeur linéaire et le tampon principal.
-		TextureAttachmentSPtr m_linearAttach;
-		//!\~english	The Gaussian blur pass.
-		//!\~french		La passe de flou Gaussien.
+		renderer::TexturePtr m_depthTexture;
+		renderer::TextureViewPtr m_depthView;
+		renderer::FrameBufferPtr m_frameBuffer;
+		ShadowType m_shadowType;
 		std::unique_ptr< GaussianBlur > m_blur;
 	};
 }

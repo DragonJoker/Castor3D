@@ -5,8 +5,8 @@ namespace glsl
 	{
 	}
 
-	Void::Void( GlslWriter * p_writer )
-		: Type( cuT( "void " ), p_writer, castor::String() )
+	Void::Void( GlslWriter * writer )
+		: Type( cuT( "void " ), writer, castor::String() )
 	{
 	}
 }

@@ -6,5 +6,6 @@ See LICENSE file in root folder
 
 #include "GlslIntrinsics.hpp"
 #include "GlslWriter.hpp"
+#include "GlslPerVertex.hpp"
 
 #endif

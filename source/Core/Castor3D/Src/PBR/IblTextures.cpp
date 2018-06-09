@@ -6,187 +6,178 @@
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
+#include <Buffer/UniformBuffer.hpp>
+#include <Buffer/VertexBuffer.hpp>
+#include <Image/Texture.hpp>
+#include <Image/TextureView.hpp>
+#include <Pipeline/DepthStencilState.hpp>
+#include <Pipeline/Scissor.hpp>
+#include <Pipeline/VertexLayout.hpp>
+#include <Pipeline/Viewport.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
+#include <RenderPass/RenderSubpass.hpp>
+#include <RenderPass/RenderSubpassState.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
+#include <Shader/ShaderProgram.hpp>
+
+#include <Graphics/Image.hpp>
+
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
 
 using namespace castor;
 using namespace glsl;
 
+#define C3D_GenerateBRDFIntegration 0
+
 namespace castor3d
 {
 	namespace
 	{
-		TextureUnit doCreateRadianceTexture( Engine & engine )
+		renderer::TexturePtr doCreatePrefilteredBrdf( RenderSystem const & renderSystem
+			, Size const & size )
 		{
-			auto texture = engine.getRenderSystem()->createTexture( TextureType::eCube
-				, AccessType::eNone
-				, AccessType::eRead | AccessType::eWrite
-				, PixelFormat::eRGB32F
-				, Size{ 32u, 32u } );
-			SamplerSPtr sampler;
-			auto name = cuT( "IblTexturesRadiance" );
+			auto & device = getCurrentDevice( renderSystem );
+			renderer::ImageCreateInfo image{};
+			image.flags = 0u;
+			image.arrayLayers = 1u;
+			image.extent.width = size.getWidth();
+			image.extent.height = size.getHeight();
+			image.extent.depth = 1u;
+#if !C3D_GenerateBRDFIntegration
+			image.format = renderer::Format::eR8G8B8A8_UNORM;
+#else
+			image.format = renderer::Format::eR32G32B32A32_SFLOAT;
+#endif
+			image.imageType = renderer::TextureType::e2D;
+			image.initialLayout = renderer::ImageLayout::eUndefined;
+			image.mipLevels = 1u;
+			image.samples = renderer::SampleCountFlag::e1;
+			image.sharingMode = renderer::SharingMode::eExclusive;
+			image.tiling = renderer::ImageTiling::eOptimal;
+			image.usage = renderer::ImageUsageFlag::eColourAttachment
+#if !C3D_GenerateBRDFIntegration
+				| renderer::ImageUsageFlag::eTransferDst
+#endif
+				| renderer::ImageUsageFlag::eSampled;
+			return device.createTexture( image
+				, renderer::MemoryPropertyFlag::eDeviceLocal );
+		}
 
-			if ( engine.getSamplerCache().has( name ) )
+#if !C3D_GenerateBRDFIntegration
+		renderer::TextureViewPtr doCreatePrefilteredBrdfView( Engine & engine
+			, renderer::Texture const & texture )
+		{
+			PxBufferBaseSPtr buffer;
+
+			if ( engine.getImageCache().has( cuT( "BRDF" ) ) )
 			{
-				sampler = engine.getSamplerCache().find( name );
+				auto image = engine.getImageCache().find( cuT( "BRDF" ) );
+				buffer = image->getPixels();
 			}
 			else
 			{
-				sampler = engine.getSamplerCache().create( name );
-				sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-				sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-				sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-				sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-				sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
-				engine.getSamplerCache().add( name, sampler );
+				auto imagePath = Engine::getEngineDirectory() / cuT( "Core" ) / cuT( "brdf.png" );
+				auto image = engine.getImageCache().add( cuT( "BRDF" ), imagePath );
+				buffer = image->getPixels();
 			}
 
-			TextureUnit result{ engine };
-			result.setTexture( texture );
-			result.setSampler( sampler );
-			result.setIndex( MinTextureIndex + 6u );
+			buffer = PxBufferBase::create( buffer->dimensions()
+				, PixelFormat::eA8R8G8B8
+				, buffer->constPtr()
+				, buffer->format() );
+			auto result = texture.createView( renderer::TextureViewType::e2D, texture.getFormat() );
+			auto & device = getCurrentDevice( engine );
+			renderer::StagingBuffer stagingBuffer{ device, 0u, buffer->size() };
+			auto commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+			stagingBuffer.uploadTextureData( *commandBuffer
+				, buffer->constPtr()
+				, buffer->size()
+				, *result );
 			return result;
 		}
+#endif
 
-		TextureUnit doCreatePrefilteredTexture( Engine & engine )
+		SamplerSPtr doCreateSampler( Engine & engine )
 		{
-			auto texture = engine.getRenderSystem()->createTexture( TextureType::eCube
-				, AccessType::eNone
-				, AccessType::eRead | AccessType::eWrite
-				, PixelFormat::eRGB32F
-				, Size{ 128u, 128u } );
-			SamplerSPtr sampler;
-			auto name = cuT( "IblTexturesPrefiltered" );
-
-			if ( engine.getSamplerCache().has( name ) )
-			{
-				sampler = engine.getSamplerCache().find( name );
-			}
-			else
-			{
-				sampler = engine.getSamplerCache().create( name );
-				sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-				sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-				sampler->setInterpolationMode( InterpolationFilter::eMip, InterpolationMode::eLinear );
-				sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-				sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-				sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
-				engine.getSamplerCache().add( name, sampler );
-			}
-
-			TextureUnit result{ engine };
-			result.setTexture( texture );
-			result.setSampler( sampler );
-			result.setIndex( MinTextureIndex + 7u );
-			return result;
-		}
-
-		TextureUnit doCreatePrefilteredBrdf( Engine & engine )
-		{
-			auto texture = engine.getRenderSystem()->createTexture( TextureType::eTwoDimensions
-				, AccessType::eNone
-				, AccessType::eRead | AccessType::eWrite
-				, PixelFormat::eAL16F32F
-				, Size{ 512u, 512u } );
-			SamplerSPtr sampler;
+			SamplerSPtr result;
 			auto name = cuT( "IblTexturesBRDF" );
 
 			if ( engine.getSamplerCache().has( name ) )
 			{
-				sampler = engine.getSamplerCache().find( name );
+				result = engine.getSamplerCache().find( name );
 			}
 			else
 			{
-				sampler = engine.getSamplerCache().create( name );
-				sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-				sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-				sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-				sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-				sampler->setWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
-				engine.getSamplerCache().add( name, sampler );
+				result = engine.getSamplerCache().create( name );
+				result->setMinFilter( renderer::Filter::eLinear );
+				result->setMagFilter( renderer::Filter::eLinear );
+				result->setWrapS( renderer::WrapMode::eClampToEdge );
+				result->setWrapT( renderer::WrapMode::eClampToEdge );
+				result->setWrapR( renderer::WrapMode::eClampToEdge );
+				engine.getSamplerCache().add( name, result );
 			}
 
-			TextureUnit result{ engine };
-			result.setTexture( texture );
-			result.setSampler( sampler );
-			result.setIndex( MinTextureIndex + 8u );
+			result->initialise();
 			return result;
 		}
 	}
 
 	//************************************************************************************************
 
-	IblTextures::IblTextures( Scene & scene )
+	IblTextures::IblTextures( Scene & scene
+		, renderer::Texture const & source
+		, SamplerSPtr sampler )
 		: OwnedBy< Scene >{ scene }
-		, m_radianceTexture{ doCreateRadianceTexture( *scene.getEngine() ) }
-		, m_prefilteredEnvironment{ doCreatePrefilteredTexture( *scene.getEngine() ) }
-		, m_prefilteredBrdf{ doCreatePrefilteredBrdf( *scene.getEngine() ) }
-		, m_radianceComputer{ *scene.getEngine(), m_radianceTexture.getTexture()->getDimensions() }
-		, m_environmentPrefilter{ *scene.getEngine(), m_prefilteredEnvironment.getTexture()->getDimensions() }
+		, m_prefilteredBrdf{ doCreatePrefilteredBrdf( *scene.getEngine()->getRenderSystem(), Size{ 512u, 512u } ) }
+#if !C3D_GenerateBRDFIntegration
+		, m_prefilteredBrdfView{ doCreatePrefilteredBrdfView( *scene.getEngine(), *m_prefilteredBrdf ) }
+#else
+		, m_prefilteredBrdfView{ m_prefilteredBrdf->createView( renderer::TextureViewType::e2D, m_prefilteredBrdf->getFormat() ) }
+#endif
+		, m_sampler{ doCreateSampler( *scene.getEngine() ) }
+		, m_radianceComputer{ *scene.getEngine(), Size{ 32u, 32u }, source }
+		, m_environmentPrefilter{ *scene.getEngine(), Size{ 128u, 128u }, source, std::move( sampler ) }
 	{
-		auto texture = m_radianceTexture.getTexture();
-		texture->getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource();
-		texture->getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource();
-		texture->getImage( uint32_t( CubeMapFace::ePositiveY ) ).initialiseSource();
-		texture->getImage( uint32_t( CubeMapFace::eNegativeY ) ).initialiseSource();
-		texture->getImage( uint32_t( CubeMapFace::ePositiveZ ) ).initialiseSource();
-		texture->getImage( uint32_t( CubeMapFace::eNegativeZ ) ).initialiseSource();
-		m_radianceTexture.initialise();
-		m_radianceTexture.getSampler()->initialise();
-
-		texture = m_prefilteredEnvironment.getTexture();
-		texture->getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource();
-		texture->getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource();
-		texture->getImage( uint32_t( CubeMapFace::ePositiveY ) ).initialiseSource();
-		texture->getImage( uint32_t( CubeMapFace::eNegativeY ) ).initialiseSource();
-		texture->getImage( uint32_t( CubeMapFace::ePositiveZ ) ).initialiseSource();
-		texture->getImage( uint32_t( CubeMapFace::eNegativeZ ) ).initialiseSource();
-		m_prefilteredEnvironment.initialise();
-		m_prefilteredEnvironment.getSampler()->initialise();
-		texture->bind( MinTextureIndex );
-		texture->generateMipmaps();
-		texture->unbind( MinTextureIndex );
-
-		texture = m_prefilteredBrdf.getTexture();
-		texture->getImage().initialiseSource();
-		m_prefilteredBrdf.initialise();
-		m_prefilteredBrdf.getSampler()->initialise();
-
-		BrdfPrefilter filter{ *scene.getEngine(), m_prefilteredBrdf.getTexture()->getDimensions() };
-		filter.render( m_prefilteredBrdf.getTexture() );
+#if C3D_GenerateBRDFIntegration
+		BrdfPrefilter filter{ *scene.getEngine()
+			, { m_prefilteredBrdf->getDimensions().width, m_prefilteredBrdf->getDimensions().height }
+			, *m_prefilteredBrdfView };
+		filter.render();
+#endif
 	}
 
 	IblTextures::~IblTextures()
 	{
-		m_radianceTexture.cleanup();
-		m_prefilteredEnvironment.cleanup();
-		m_prefilteredBrdf.cleanup();
+		m_prefilteredBrdfView.reset();
+		m_prefilteredBrdf.reset();
 	}
 
-	void IblTextures::update( TextureLayout const & source )
+	void IblTextures::update()
 	{
-		m_radianceComputer.render( source, m_radianceTexture.getTexture() );
-		m_environmentPrefilter.render( source, m_prefilteredEnvironment.getTexture() );
+		m_radianceComputer.render();
+		m_environmentPrefilter.render();
 	}
 
 	void IblTextures::debugDisplay( Size const & renderSize )const
 	{
-		int width = int( m_prefilteredBrdf.getTexture()->getWidth() );
-		int height = int( m_prefilteredBrdf.getTexture()->getHeight() );
+		int width = int( m_prefilteredBrdf->getDimensions().width );
+		int height = int( m_prefilteredBrdf->getDimensions().height );
 		int left = 0u;
 		int top = renderSize.getHeight() - height;
 		auto size = Size( width, height );
-		auto & context = *getScene()->getEngine()->getRenderSystem()->getCurrentContext();
-		context.renderTexture( Position{ left, top }
-			, size
-			, *m_prefilteredBrdf.getTexture() );
-		left += 512;
-		context.renderTextureCube( Position{ left, top }
-			, Size( width / 4, height / 4u )
-			, *m_prefilteredEnvironment.getTexture() );
-		left += 512;
-		context.renderTextureCube( Position{ left, top }
-			, Size( width / 4, height / 4u )
-			, *m_radianceTexture.getTexture() );
+		//auto & context = *getScene()->getEngine()->getRenderSystem()->getCurrentContext();
+		//context.renderTexture( Position{ left, top }
+		//	, size
+		//	, *m_prefilteredBrdf.getTexture() );
+		//left += 512;
+		//context.renderTextureCube( Position{ left, top }
+		//	, Size( width / 4, height / 4u )
+		//	, *m_prefilteredEnvironment.getTexture() );
+		//left += 512;
+		//context.renderTextureCube( Position{ left, top }
+		//	, Size( width / 4, height / 4u )
+		//	, *m_radianceTexture.getTexture() );
 	}
 }

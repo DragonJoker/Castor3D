@@ -40,7 +40,7 @@ namespace castor
 			}
 			else
 			{
-				castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << cuT( "Image: " ) << p_name );
+				castor::Logger::logWarning( castor::makeStringStream() << WARNING_CACHE_DUPLICATE_OBJECT << cuT( "Image: " ) << p_name );
 			}
 		}
 		else
@@ -51,7 +51,7 @@ namespace castor
 			{
 				result = std::make_shared< Image >( p_name, p_path );
 				Collection< Image, String >::insert( p_name, result );
-				castor::Logger::logDebug( castor::StringStream() << INFO_CACHE_CREATED_OBJECT << cuT( "Image: " ) << p_name );
+				castor::Logger::logDebug( castor::makeStringStream() << INFO_CACHE_CREATED_OBJECT << cuT( "Image: " ) << p_name );
 			}
 			else
 			{
@@ -77,14 +77,14 @@ namespace castor
 			}
 			else
 			{
-				castor::Logger::logWarning( castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << cuT( "Image: " ) << p_name );
+				castor::Logger::logWarning( castor::makeStringStream() << WARNING_CACHE_DUPLICATE_OBJECT << cuT( "Image: " ) << p_name );
 			}
 		}
 		else
 		{
 			result = std::make_shared< Image >( p_name, p_size, p_format );
 			Collection< Image, String >::insert( p_name, result );
-			castor::Logger::logDebug( castor::StringStream() << INFO_CACHE_CREATED_OBJECT << cuT( "Image: " ) << p_name );
+			castor::Logger::logDebug( castor::makeStringStream() << INFO_CACHE_CREATED_OBJECT << cuT( "Image: " ) << p_name );
 		}
 
 		return result;

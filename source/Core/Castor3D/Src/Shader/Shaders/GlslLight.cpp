@@ -34,19 +34,54 @@ namespace castor3d
 			return *this;
 		}
 
+		Vec4 Light::m_colourIndex()const
+		{
+			return Vec4( m_writer, m_name + cuT( ".m_colourIndex" ) );
+		}
+
+		Vec4 Light::m_intensityFarPlane()const
+		{
+			return Vec4( m_writer, String( *this ) + cuT( ".m_intensityFarPlane" ) );
+		}
+
+		Vec4 Light::m_volumetric()const
+		{
+			return Vec4( m_writer, String( *this ) + cuT( ".m_volumetric" ) );
+		}
+
 		Vec3 Light::m_colour()const
 		{
-			return Vec3( m_writer, m_name + cuT( ".m_colour" ) );
+			return Vec3( m_writer, m_name + cuT( ".m_colourIndex.xyz" ) );
 		}
 
 		Vec2 Light::m_intensity()const
 		{
-			return Vec2( m_writer, String( *this ) + cuT( ".m_intensity" ) );
+			return Vec2( m_writer, String( *this ) + cuT( ".m_intensityFarPlane.xy" ) );
 		}
 
 		Float Light::m_farPlane()const
 		{
-			return Float( m_writer, String( *this ) + cuT( ".m_farPlane" ) );
+			return Float( m_writer, String( *this ) + cuT( ".m_intensityFarPlane.z" ) );
+		}
+
+		Int Light::m_shadowType()const
+		{
+			return Int( m_writer, cuT( "int( " ) + String( *this ) + cuT( ".m_intensityFarPlane.w )" ) );
+		}
+
+		Int Light::m_index()const
+		{
+			return Int( m_writer, cuT( "int( " ) + String( *this ) + cuT( ".m_colourIndex.w )" ) );
+		}
+
+		UInt Light::m_volumetricSteps()const
+		{
+			return UInt( m_writer, cuT( "uint( " ) + String( *this ) + cuT( ".m_volumetric.x )" ) );
+		}
+
+		Float Light::m_volumetricScattering()const
+		{
+			return Int( m_writer, cuT( "int( " ) + String( *this ) + cuT( ".m_volumetric.y )" ) );
 		}
 
 		//*********************************************************************************************
@@ -83,7 +118,7 @@ namespace castor3d
 
 		Vec3 DirectionalLight::m_direction()const
 		{
-			return Vec3( m_writer, String( *this ) + cuT( ".m_direction" ) );
+			return Vec3( m_writer, String( *this ) + cuT( ".m_direction.xyz" ) );
 		}
 
 		Mat4 DirectionalLight::m_transform()const
@@ -125,17 +160,12 @@ namespace castor3d
 
 		Vec3 PointLight::m_position()const
 		{
-			return Vec3( m_writer, String( *this ) + cuT( ".m_position" ) );
+			return Vec3( m_writer, String( *this ) + cuT( ".m_position.xyz" ) );
 		}
 
 		Vec3 PointLight::m_attenuation()const
 		{
-			return Vec3( m_writer, String( *this ) + cuT( ".m_attenuation" ) );
-		}
-
-		Int PointLight::m_index()const
-		{
-			return Int( m_writer, String( *this ) + cuT( ".m_index" ) );
+			return Vec3( m_writer, String( *this ) + cuT( ".m_attenuation.xyz" ) );
 		}
 
 		//*********************************************************************************************
@@ -172,37 +202,37 @@ namespace castor3d
 
 		Vec3 SpotLight::m_position()const
 		{
-			return Vec3( m_writer, String( *this ) + cuT( ".m_position" ) );
-		}
-
-		Vec3 SpotLight::m_attenuation()const
-		{
-			return Vec3( m_writer, String( *this ) + cuT( ".m_attenuation" ) );
+			return Vec3( m_writer, String( *this ) + cuT( ".m_position.xyz" ) );
 		}
 
 		Vec3 SpotLight::m_direction()const
 		{
-			return Vec3( m_writer, String( *this ) + cuT( ".m_direction" ) );
+			return Vec3( m_writer, String( *this ) + cuT( ".m_direction.xyz" ) );
+		}
+
+		Vec3 SpotLight::m_attenuation()const
+		{
+			return Vec3( m_writer, String( *this ) + cuT( ".m_attenuation.xyz" ) );
+		}
+
+		Vec4 SpotLight::m_exponentCutOff()const
+		{
+			return Vec4( m_writer, String( *this ) + cuT( ".m_exponentCutOff" ) );
 		}
 
 		Float SpotLight::m_exponent()const
 		{
-			return Float( m_writer, String( *this ) + cuT( ".m_exponent" ) );
+			return Float( m_writer, String( *this ) + cuT( ".m_exponentCutOff.x" ) );
 		}
 
 		Float SpotLight::m_cutOff()const
 		{
-			return Float( m_writer, String( *this ) + cuT( ".m_cutOff" ) );
+			return Float( m_writer, String( *this ) + cuT( ".m_exponentCutOff.y" ) );
 		}
 
 		Mat4 SpotLight::m_transform()const
 		{
 			return Mat4( m_writer, String( *this ) + cuT( ".m_transform" ) );
-		}
-
-		Int SpotLight::m_index()const
-		{
-			return Int( m_writer, String( *this ) + cuT( ".m_index" ) );
 		}
 
 		//*********************************************************************************************

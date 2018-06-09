@@ -300,20 +300,30 @@ namespace GuiCommon
 		} );
 	}
 
-	void TextureTreeItemProperty::OnImageChange( castor::String const & p_value )
+	void TextureTreeItemProperty::OnImageChange( castor::String const & value )
 	{
 		TextureUnitSPtr unit = getTexture();
 
-		doApplyChange( [p_value, unit]()
+		doApplyChange( [value, unit]()
 		{
-			if ( File::fileExists( Path{ p_value } ) )
+			Path path{ value };
+
+			if ( File::fileExists( path ) )
 			{
 				// Absolute path
 				unit->setAutoMipmaps( true );
-				auto texture = unit->getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions
-					, AccessType::eRead
-					, AccessType::eRead );
-				texture->getImage().initialiseSource( Path{}, Path{ p_value } );
+
+				renderer::ImageCreateInfo image{};
+				image.imageType = renderer::TextureType::e2D;
+				image.extent.depth = 1u;
+				image.arrayLayers = 1u;
+				image.mipLevels = 1u;
+				image.usage = renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst;
+
+				auto texture = std::make_shared< TextureLayout >( *unit->getEngine()->getRenderSystem()
+					, image
+					, renderer::MemoryPropertyFlag::eHostVisible );
+				texture->getImage().initialiseSource( Path{}, path );
 				unit->setTexture( texture );
 				unit->initialise();
 			}

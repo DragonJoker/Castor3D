@@ -1,7 +1,8 @@
 #include "CmshImporter.hpp"
 
 #include "Engine.hpp"
-
+#include "Binary/BinaryMesh.hpp"
+#include "Binary/BinarySkeleton.hpp"
 #include "Mesh/Mesh.hpp"
 #include "Mesh/Skeleton/Skeleton.hpp"
 #include "Scene/Scene.hpp"

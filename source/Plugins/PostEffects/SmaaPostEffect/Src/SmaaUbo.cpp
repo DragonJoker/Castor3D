@@ -1,4 +1,4 @@
-﻿#include "SmaaUbo.hpp"
+#include "SmaaUbo.hpp"
 
 #include <Engine.hpp>
 
@@ -9,18 +9,36 @@ namespace smaa
 {
 	namespace constants
 	{
-		const String PixelSize = cuT( "c3d_pixelSize" );
-		const String Threshold = cuT( "c3d_threshold" );
-		const String PredicationScale = cuT( "c3d_predicationScale" );
-		const String PredicationThreshold = cuT( "c3d_predicationThreshold" );
-		const String PredicationStrength = cuT( "c3d_predicationStrength" );
-		const String MaxSearchSteps = cuT( "c3d_maxSearchSteps" );
-		const String MaxSearchStepsDiag = cuT( "c3d_maxSearchStepsDiag" );
+		// General
+		const String RenderTargetMetrics = cuT( "SMAA_RT_METRICS" );
+
+		// Edge detection
+		const String Predication = cuT( "SMAA_PREDICATION" );
+		const String Threshold = cuT( "SMAA_THRESHOLD" );
+		const String LocalContrastAdaptationFactor = cuT( "SMAA_LOCAL_CONTRAST_ADAPTATION_FACTOR" );
+		const String DepthThreshold = cuT( "SMAA_DEPTH_THRESHOLD" );
+		const String PredicationScale = cuT( "SMAA_PREDICATION_SCALE" );
+		const String PredicationThreshold = cuT( "SMAA_PREDICATION_THRESHOLD" );
+		const String PredicationStrength = cuT( "SMAA_PREDICATION_STRENGTH" );
+
+		// Blending weights calculation
+		const String MaxSearchSteps = cuT( "SMAA_MAX_SEARCH_STEPS" );
+		const String DisableDiagDetection = cuT( "SMAA_DISABLE_DIAG_DETECTION" );
+		const String MaxSearchStepsDiag = cuT( "SMAA_MAX_SEARCH_STEPS_DIAG" );
+		const String AreaTexMaxDistanceDiag = cuT( "SMAA_AREATEX_MAX_DISTANCE_DIAG" );
+		const String AreaTexPixelSize = cuT( "SMAA_AREATEX_PIXEL_SIZE" );
+		const String AreaTexSubtexSize = cuT( "SMAA_AREATEX_SUBTEX_SIZE" );
+		const String AreaTexMaxDistance = cuT( "SMAA_AREATEX_MAX_DISTANCE" );
+		const String SearchTexSize = cuT( "SMAA_SEARCHTEX_SIZE" );
+		const String SearchTexPackedSize = cuT( "SMAA_SEARCHTEX_PACKED_SIZE" );
+		const String DisableCornerDetection = cuT( "SMAA_DISABLE_CORNER_DETECTION" );
+		const String CornerRoundingNorm = cuT( "SMAA_CORNER_ROUNDING_NORM" );
+		const String CornerRounding = cuT( "SMAA_CORNER_ROUNDING" );
+
+		// Reprojection
+		const String Reprojection = cuT( "SMAA_REPROJECTION" );
+		const String ReprojectionWeightScale = cuT( "SMAA_REPROJECTION_WEIGHT_SCALE" );
+
 		const String SubsampleIndices = cuT( "c3d_subsampleIndices" );
-		const String AreaTexPixelSize = cuT( "c3d_areaTexPixelSize" );
-		const String AreaTexSubtexSize = cuT( "c3d_areaTexSubtexSize" );
-		const String AreaTexMaxDistance = cuT( "c3d_areaTexMaxDistance" );
-		const String AreaTexMaxDistanceDiag = cuT( "c3d_areaTexMaxDistanceDiag" );
-		const String CornerRounding = cuT( "c3d_cornerRounding" );
 	}
 }

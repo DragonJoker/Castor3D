@@ -5,12 +5,21 @@ See LICENSE file in root folder
 #define ___C3D_DeferredReflectionPass_H___
 
 #include "LightPass.hpp"
-#include "SsaoPass.hpp"
 #include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Render/RenderInfo.hpp"
-#include "Shader/Ubos/SceneUbo.hpp"
-#include "Shader/Ubos/GpInfoUbo.hpp"
 #include "Shader/Ubos/HdrConfigUbo.hpp"
+#include "Technique/RenderTechniqueVisitor.hpp"
+
+#include <Buffer/VertexBuffer.hpp>
+#include <Descriptor/DescriptorSet.hpp>
+#include <Descriptor/DescriptorSetLayout.hpp>
+#include <Descriptor/DescriptorSetPool.hpp>
+#include <Pipeline/Pipeline.hpp>
+#include <Pipeline/PipelineLayout.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <RenderPass/FrameBuffer.hpp>
+
+#include <GlslShader.hpp>
 
 namespace castor3d
 {
@@ -30,65 +39,61 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	size		The render size.
-		 *\param[in]	sceneUbo	The scene UBO.
-		 *\param[in]	gpInfoUbo	The geometry pass UBO.
-		 *\param[in]	config		The SSAO configuration.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	size		Les dimensions du rendu.
-		 *\param[in]	sceneUbo	L'UBO de la scène.
-		 *\param[in]	gpInfoUbo	L'UBO de la passe géométrique.
-		 *\param[in]	config		La configuration du SSAO.
-		 */
-		ReflectionPass( Engine & engine
-			, castor::Size const & size
-			, SceneUbo & sceneUbo
-			, GpInfoUbo & gpInfoUbo
-			, SsaoConfig const & config );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		~ReflectionPass();
-		/**
-		 *\~english
-		 *\brief		Renders the reflection mapping.
+		 *\param[in]	engine			The engine.
+		 *\param[in]	scene			The rendered scene.
 		 *\param[in]	gp				The geometry pass result.
 		 *\param[in]	lightDiffuse	The diffuse result of the lighting pass.
 		 *\param[in]	lightSpecular	The specular result of the lighting pass.
-		 *\param[in]	scene			The rendered scene.
-		 *\param[in]	camera			The viewing camera.
-		 *\param[in]	frameBuffer		The target frame buffer.
+		 *\param[in]	result			The texture receiving the result.
+		 *\param[in]	sceneUbo		The scene UBO.
+		 *\param[in]	gpInfoUbo		The geometry pass UBO.
+		 *\param[in]	config			The SSAO configuration.
+		 *\param[in]	viewport		The viewport holding depth bounds.
 		 *\~french
-		 *\brief		Dessine le mapping de réflexion.
+		 *\brief		Constructeur.
+		 *\param[in]	engine			Le moteur.
+		 *\param[in]	scene			La scène rendue.
 		 *\param[in]	gp				Le résultat de la passe géométrique.
 		 *\param[in]	lightDiffuse	Le résultat diffus de la passe d'éclairage.
 		 *\param[in]	lightSpecular	Le résultat spéculaire de la passe d'éclairage.
-		 *\param[in]	scene			La scène rendue.
-		 *\param[in]	camera			La caméra de rendu.
-		 *\param[in]	frameBuffer		Le tampon d'image cible.
+		 *\param[in]	result			La texture recevant le résultat.
+		 *\param[in]	sceneUbo		L'UBO de la scène.
+		 *\param[in]	gpInfoUbo		L'UBO de la passe géométrique.
+		 *\param[in]	config			La configuration du SSAO.
+		 *\param[in]	viewport		Le viewport contenant les bornes profondeur.
 		 */
-		void render( GeometryPassResult & gp
-			, TextureUnit const & lightDiffuse
-			, TextureUnit const & lightSpecular
-			, Scene const & scene
-			, Camera const & camera
-			, FrameBuffer const & frameBuffer );
+		ReflectionPass( Engine & engine
+			, Scene & scene
+			, GeometryPassResult const & gp
+			, renderer::TextureView const & lightDiffuse
+			, renderer::TextureView const & lightSpecular
+			, renderer::TextureView const & result
+			, SceneUbo & sceneUbo
+			, GpInfoUbo & gpInfoUbo
+			, renderer::TextureView const * ssao
+			, Viewport const & viewport );
 		/**
 		 *\~english
-		 *\return		The SSAO texture.
+		 *\brief		Updates the configuration UBO.
+		 *\param[in]	camera	The viewing camera.
 		 *\~french
-		 *\return		La texture SSAO.
+		 *\brief		Met à jour l'UBO de configuration.
+		 *\param[in]	camera	La caméra de rendu.
 		 */
-		inline TextureLayout const & getSsao()const
-		{
-			return *m_ssao.getResult().getTexture();
-		}
+		void update( Camera const & camera );
+		/**
+		 *\~english
+		 *\brief		Renders the reflection mapping.
+		 *\param[in]	toWait	The semaphore to wait.
+		 *\~french
+		 *\brief		Dessine le mapping de réflexion.
+		 *\param[in]	toWait	Le sémaphore à attendre.
+		 */
+		renderer::Semaphore const & render( renderer::Semaphore const & toWait )const;
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		C3D_API void accept( RenderTechniqueVisitor & visitor );
 
 	private:
 		struct ProgramPipeline
@@ -97,92 +102,57 @@ namespace castor3d
 			ProgramPipeline( ProgramPipeline && ) = default;
 			ProgramPipeline & operator=( ProgramPipeline const & ) = delete;
 			ProgramPipeline & operator=( ProgramPipeline && ) = default;
-			/**
-			 *\~english
-			 *\brief		Constructor.
-			 *\param[in]	engine		The engine.
-			 *\param[in]	vbo			The vertex buffer.
-			 *\param[in]	matrixUbo	The matrix UBO.
-			 *\param[in]	sceneUbo	The scene UBO.
-			 *\param[in]	gpInfoUbo	The geometry pass UBO.
-			 *\param[in]	hasSsao		The SSAO enabled status.
-			 *\param[in]	fogType		The fog type.
-			 *\param[in]	matType		The materials type.
-			 *\~french
-			 *\brief		Constructeur.
-			 *\param[in]	engine		Le moteur.
-			 *\param[in]	vbo			Le tampon de sommets.
-			 *\param[in]	matrixUbo	L'UBO des matrices.
-			 *\param[in]	sceneUbo	L'UBO de la scène.
-			 *\param[in]	gpInfoUbo	L'UBO de la passe géométrique.
-			 *\param[in]	hasSsao		Le statut d'activation du SSAO.
-			 *\param[in]	fogType		Le type de brouillard.
-			 *\param[in]	matType		Le type de matériaux.
-			 */
 			ProgramPipeline( Engine & engine
-				, VertexBuffer & vbo
-				, MatrixUbo & matrixUbo
-				, SceneUbo & sceneUbo
-				, GpInfoUbo & gpInfoUbo
-				, bool hasSsao
+				, renderer::DescriptorSetLayout const & uboLayout
+				, renderer::DescriptorSetLayout const & texLayout
+				, renderer::RenderPass const & renderPass
+				, renderer::TextureView const * ssao
+				, renderer::Extent2D const & size
 				, FogType fogType
 				, MaterialType matType );
-			/**
-			 *\~english
-			 *\brief		Destructor.
-			 *\~french
-			 *\brief		Destructeur.
-			 */
-			~ProgramPipeline();
-			/**
-			 *\~english
-			 *\brief		Applique le programme.
-			 *\param[in]	vbo	The vertex buffer.
-			 *\~french
-			 *\brief		Applies the program.
-			 *\param[in]	vbo	Le tampon de sommets.
-			 */
-			void render( VertexBuffer const & vbo );
-			//!\~english	The shader program.
-			//!\~french		Le shader program.
-			ShaderProgramSPtr m_program;
-			//!\~english	The geometry buffers.
-			//!\~french		Les tampons de géométrie.
-			GeometryBuffersSPtr m_geometryBuffers;
-			//!\~english	The render pipeline.
-			//!\~french		Le pipeline de rendu.
-			RenderPipelineUPtr m_pipeline;
+			void updateCommandBuffer( renderer::VertexBufferBase & vbo
+				, renderer::DescriptorSet const & uboSet
+				, renderer::DescriptorSet const & texSet
+				, renderer::FrameBuffer const & frameBuffer
+				, RenderPassTimer & timer );
+			void accept( RenderTechniqueVisitor & visitor );
+
+			renderer::RenderPass const * m_renderPass;
+			glsl::Shader m_vertexShader;
+			glsl::Shader m_pixelShader;
+			renderer::ShaderStageStateArray m_program;
+			renderer::PipelineLayoutPtr m_pipelineLayout;
+			renderer::PipelinePtr m_pipeline;
+			renderer::CommandBufferPtr m_commandBuffer;
 		};
-		//!\~english	An array of CombineProgram, one per fog type.
-		//!\~french		Un tableau de CombineProgram, un par type de brouillard.
 		using ReflectionPrograms = std::array< ProgramPipeline, size_t( FogType::eCount ) >;
-		//!\~english	The render size.
-		//!\~french		La taille du rendu.
-		castor::Size m_size;
-		//!\~english	The render viewport.
-		//!\~french		La viewport du rendu.
-		Viewport m_viewport;
-		//!\~english	The vertex buffer.
-		//!\~french		Le tampon de sommets.
-		VertexBufferSPtr m_vertexBuffer;
-		//!\~english	The matrices uniform buffer.
-		//!\~french		Le tampon d'uniformes contenant les matrices.
-		MatrixUbo m_matrixUbo;
-		//!\~english	The geometry pass informations.
-		//!\~french		Les informations de la passe de géométrie.
+
+	private:
+		renderer::Device const & m_device;
+		Scene const & m_scene;
 		GpInfoUbo & m_gpInfoUbo;
-		//!\~english	The shader program.
-		//!\~french		Le shader program.
-		ReflectionPrograms m_programs;
-		//!\~english	The render pass timer.
-		//!\~french		Le timer de la passe de rendu.
+		renderer::TextureView const * m_ssaoResult;
+		renderer::Extent2D m_size;
+		Viewport m_viewport;
+		SamplerSPtr m_sampler;
+		GeometryPassResult const & m_geometryPassResult;
+		renderer::TextureView const & m_lightDiffuse;
+		renderer::TextureView const & m_lightSpecular;
+		renderer::VertexBufferBasePtr m_vertexBuffer;
+		renderer::DescriptorSetLayoutPtr m_uboDescriptorLayout;
+		renderer::DescriptorSetPoolPtr m_uboDescriptorPool;
+		renderer::DescriptorSetPtr m_uboDescriptorSet;
+		renderer::DescriptorSetLayoutPtr m_texDescriptorLayout;
+		renderer::DescriptorSetPoolPtr m_texDescriptorPool;
+		renderer::DescriptorSetPtr m_texDescriptorSet;
+		renderer::WriteDescriptorSetArray m_texDescriptorWrites;
+		renderer::RenderPassPtr m_renderPass;
+		renderer::FrameBufferPtr m_frameBuffer;
+		renderer::SemaphorePtr m_finished;
+		renderer::FencePtr m_fence;
 		RenderPassTimerSPtr m_timer;
-		//!\~english	Tells if SSAO is to be used in lighting pass.
-		//!\~french		Dit si le SSAO doit être utilisé dans la light pass.
+		ReflectionPrograms m_programs;
 		bool m_ssaoEnabled{ false };
-		//!\~english	The SSAO pass.
-		//!\~french		La passe SSAO.
-		SsaoPass m_ssao;
 	};
 }
 

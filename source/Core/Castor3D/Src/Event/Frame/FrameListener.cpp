@@ -5,8 +5,8 @@ using namespace castor;
 
 namespace castor3d
 {
-	FrameListener::FrameListener( String const & p_name )
-		: Named( p_name )
+	FrameListener::FrameListener( String const & name )
+		: Named( name )
 	{
 	}
 
@@ -28,17 +28,17 @@ namespace castor3d
 		doFlush();
 	}
 
-	void FrameListener::postEvent( FrameEventUPtr && p_event )
+	void FrameListener::postEvent( FrameEventUPtr && event )
 	{
 		auto lock = castor::makeUniqueLock( m_mutex );
-		m_events[size_t( p_event->getType() )].push_back( std::move( p_event ) );
+		m_events[size_t( event->getType() )].push_back( std::move( event ) );
 	}
 
-	bool FrameListener::fireEvents( EventType p_type )
+	bool FrameListener::fireEvents( EventType type )
 	{
 		m_mutex.lock();
 		FrameEventPtrArray arrayEvents;
-		std::swap( arrayEvents, m_events[size_t( p_type )] );
+		std::swap( arrayEvents, m_events[size_t( type )] );
 		m_mutex.unlock();
 		bool result = true;
 
@@ -52,30 +52,30 @@ namespace castor3d
 				}
 			}
 		}
-		catch ( Exception & p_exc )
+		catch ( Exception & exc )
 		{
-			Logger::logError( StringStream() << cuT( "Encountered exception while processing events: " ) << string::stringCast< xchar >( p_exc.getFullDescription() ) );
+			Logger::logError( castor::makeStringStream() << cuT( "Encountered exception while processing events: " ) << string::stringCast< xchar >( exc.getFullDescription() ) );
 			result = false;
 		}
-		catch ( std::exception & p_exc )
+		catch ( std::exception & exc )
 		{
-			Logger::logError( StringStream() << cuT( "Encountered exception while processing events: " ) << string::stringCast< xchar >( p_exc.what() ) );
+			Logger::logError( castor::makeStringStream() << cuT( "Encountered exception while processing events: " ) << string::stringCast< xchar >( exc.what() ) );
 			result = false;
 		}
 		catch ( ... )
 		{
-			Logger::logError( StringStream() << cuT( "Encountered exception while processing events" ) );
+			Logger::logError( castor::makeStringStream() << cuT( "Encountered exception while processing events" ) );
 			result = false;
 		}
 
 		return result;
 	}
 
-	void FrameListener::flushEvents( EventType p_type )
+	void FrameListener::flushEvents( EventType type )
 	{
 		m_mutex.lock();
 		FrameEventPtrArray arrayEvents;
-		std::swap( arrayEvents, m_events[size_t( p_type )] );
+		std::swap( arrayEvents, m_events[size_t( type )] );
 		m_mutex.unlock();
 	}
 }

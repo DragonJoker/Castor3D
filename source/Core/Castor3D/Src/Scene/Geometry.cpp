@@ -47,23 +47,30 @@ namespace castor3d
 
 			if ( result )
 			{
-				result = file.writeText( m_tabs + cuT( "\tmaterials\n" ) ) > 0
-						   && file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0;
-				castor::TextWriter< Geometry >::checkError( result, "Geometry materials" );
-
-				if ( result )
+				if ( geometry.getMesh()->getSubmeshCount() == 1 )
 				{
-					uint16_t index{ 0u };
-
-					for ( auto submesh : *geometry.getMesh() )
-					{
-						result &= file.writeText( m_tabs + cuT( "\t\tmaterial " ) + string::toString( index++ ) + cuT( " \"" ) + geometry.getMaterial( *submesh )->getName() + cuT( "\"\n" ) ) > 0;
-						castor::TextWriter< Geometry >::checkError( result, "Geometry material" );
-					}
+					result = file.writeText( m_tabs + cuT( "\tmaterial " ) + cuT( " \"" ) + geometry.getMaterial( *geometry.getMesh()->getSubmesh( 0u ) )->getName() + cuT( "\"\n" ) ) > 0;
+				}
+				else
+				{
+					result = file.writeText( m_tabs + cuT( "\tmaterials\n" ) ) > 0
+						&& file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0;
+					castor::TextWriter< Geometry >::checkError( result, "Geometry materials" );
 
 					if ( result )
 					{
-						result = file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
+						uint16_t index{ 0u };
+
+						for ( auto submesh : *geometry.getMesh() )
+						{
+							result &= file.writeText( m_tabs + cuT( "\t\tmaterial " ) + string::toString( index++ ) + cuT( " \"" ) + geometry.getMaterial( *submesh )->getName() + cuT( "\"\n" ) ) > 0;
+							castor::TextWriter< Geometry >::checkError( result, "Geometry material" );
+						}
+
+						if ( result )
+						{
+							result = file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
+						}
 					}
 				}
 			}
@@ -103,9 +110,8 @@ namespace castor3d
 				faceCount += nbFaces;
 				vertexCount += nbVertex;
 				mesh->computeContainers();
-				Logger::logInfo( StringStream()
-					<< cuT( "Geometry [" ) << getName() 
-					<< cuT( "] - NbVertex: " ) << nbVertex 
+				Logger::logInfo( makeStringStream() << cuT( "Geometry [" ) << getName()
+					<< cuT( "] - NbVertex: " ) << nbVertex
 					<< cuT( ", NbFaces: " ) << nbFaces );
 				m_listCreated = mesh->getSubmeshCount() > 0;
 			}
@@ -164,6 +170,8 @@ namespace castor3d
 				{
 					getScene()->createEnvironmentMap( *getParent() );
 				}
+
+				onMaterialChanged( *this, submesh, oldMaterial, material );
 			}
 		}
 		else

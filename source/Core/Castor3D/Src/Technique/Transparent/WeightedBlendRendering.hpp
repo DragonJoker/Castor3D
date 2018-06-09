@@ -41,41 +41,42 @@ namespace castor3d
 		 */
 		WeightedBlendRendering( Engine & engine
 			, TransparentPass & transparentPass
-			, FrameBuffer & frameBuffer
-			, TextureAttachment & depthAttach
+			, renderer::TextureView const & depthView
+			, renderer::TextureView const & colourView
+			, TextureLayoutSPtr velocityTexture
 			, castor::Size const & size
 			, Scene const & scene );
-		/**
-		 *\~english
-		 *\brief		Destroys deferred rendering related stuff.
-		 *\~french
-		 *\brief		Détruit les données liées au deferred rendering.
-		 */
-		~WeightedBlendRendering();
 		/**
 		 *\~english
 		 *\brief		Renders opaque nodes.
 		 *\param[out]	info		Receives the render informations.
 		 *\param[out]	scene		The rendered scene.
 		 *\param[out]	camera		The viewer camera.
-		 *\param[out]	shadowMaps	The shadow maps.
 		 *\param[out]	jitter		The jittering value.
-		 *\param[out]	velocity	The velocity texture.
 		 *\~french
 		 *\brief		Dessine les noeuds opaques.
 		 *\param[out]	info		Reçoit les informations de rendu.
 		 *\param[out]	scene		La scène rendue.
 		 *\param[out]	camera		La caméra par laquelle la scène est rendue.
-		 *\param[out]	shadowMaps	Les textures d'ombres.
 		 *\param[out]	jitter		La valeur de jittering.
-		 *\param[out]	velocity	La texture de vélocité.
 		 */
-		void render( RenderInfo & info
+		void update( RenderInfo & info
 			, Scene const & scene
 			, Camera const & camera
-			, ShadowMapLightTypeArray & shadowMaps
-			, castor::Point2r const & jitter
-			, TextureUnit const & velocity );
+			, castor::Point2r const & jitter );
+		/**
+		 *\~english
+		 *\brief		Renders opaque nodes.
+		 *\param[out]	info	Receives the render informations.
+		 *\param[out]	scene	The rendered scene.
+		 *\~french
+		 *\brief		Dessine les noeuds opaques.
+		 *\param[out]	info	Reçoit les informations de rendu.
+		 *\param[out]	scene	La scène rendue.
+		 */
+		renderer::Semaphore const & render( RenderInfo & info
+			, Scene const & scene
+			, renderer::Semaphore const & toWait );
 		/**
 		 *\~english
 		 *\brief		Displays debug data on screen.
@@ -84,44 +85,21 @@ namespace castor3d
 		 */
 		void debugDisplay();
 		/**
-		 *\~english
-		 *\return		The intermediate framebuffer.
-		 *\~french
-		 *\return		Le tampon d'image intermédiaire.
+		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
-		inline FrameBuffer & getFbo()
-		{
-			return *m_weightedBlendPassFrameBuffer;
-		}
+		void accept( RenderTechniqueVisitor & visitor );
 
 	private:
-		using WeightedBlendTextures = std::array< TextureUnitUPtr, size_t( WbTexture::eCount ) >;
-		using WeightedBlendAttachs = std::array< TextureAttachmentSPtr, size_t( WbTexture::eCount ) >;
-
-		//!\~english	The engine.
-		//!\~french		Le moteur.
 		Engine & m_engine;
-		//!\~english	The pass used to render transparent nodes.
-		//!\~french		La passe utilisée pour dessiner les noeuds transparents.
 		TransparentPass & m_transparentPass;
-		//!\~english	The target framebuffer.
-		//!\~french		Le tampon d'image ciblé.
-		FrameBuffer & m_frameBuffer;
-		//!\~english	The render area dimension.
-		//!\~french		Les dimensions de l'aire de rendu.
 		castor::Size m_size;
-		//!\~english	The opaque and transparent passes combination pass.
-		//!\~french		La passe de combinaison des passes opaque et transparente.
-		std::unique_ptr< FinalCombinePass > m_finalCombinePass;
-		//!\~english	The various textures for weighted blend.
-		//!\~french		Les diverses textures pour le weighted blend.
+		renderer::TextureViewPtr m_depthView;
+		renderer::TexturePtr m_accumulation;
+		renderer::TextureViewPtr m_accumulationView;
+		renderer::TexturePtr m_revealage;
+		renderer::TextureViewPtr m_revealageView;
 		WeightedBlendTextures m_weightedBlendPassResult;
-		//!\~english	The weighted blend frame buffer.
-		//!\~french		Le tampon d'image pour le weighted blend.
-		FrameBufferSPtr m_weightedBlendPassFrameBuffer;
-		//!\~english	The attachments between textures and weighted blend frame buffer.
-		//!\~french		Les attaches entre les textures et le tampon weighted blend.
-		WeightedBlendAttachs m_weightedBlendPassTexAttachs;
+		FinalCombinePass m_finalCombinePass;
 	};
 }
 

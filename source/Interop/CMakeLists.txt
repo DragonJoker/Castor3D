@@ -81,8 +81,8 @@ function( InteropBuild )
 			PARENT_SCOPE
 		)
 
-		set( CastorBinsDependencies
-			${CastorBinsDependencies}
+		set( Castor3DBinsDependencies
+			${Castor3DBinsDependencies}
 			PARENT_SCOPE
 		)
 	endif ()
@@ -110,8 +110,8 @@ function( InteropSummary msg msgtest )
 endfunction( InteropSummary )
 
 function( InteropSetup )
-if ( ${CASTOR_BUILDGRP_INTEROP} )
-	cpack_add_component_group( Interoperability
+	if ( ${CASTOR_BUILDGRP_INTEROP} )
+		cpack_add_component_group( Interoperability
 			DESCRIPTION "Bindings to use Castor3D in other languages (C# and Python yet)"
 		)
 

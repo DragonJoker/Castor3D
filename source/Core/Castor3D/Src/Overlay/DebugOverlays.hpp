@@ -104,11 +104,13 @@ namespace castor3d
 		 *\~english
 		 *\brief		Registers a render pass timer.
 		 *\param[in]	timer	The timer to register.
+		 *\return		The query ID.
 		 *\~french
 		 *\brief		Enregistre un timer de passe de rendu.
 		 *\param[in]	timer	Le timer à enregistrer.
+		 *\return		L'ID de la requête.
 		 */
-		void registerTimer( RenderPassTimer & timer );
+		uint32_t registerTimer( RenderPassTimer & timer );
 		/**
 		 *\~english
 		 *\brief		Unregisters a render pass timer.
@@ -118,6 +120,16 @@ namespace castor3d
 		 *\param[in]	timer	Le timer à désenregistrer.
 		 */
 		void unregisterTimer( RenderPassTimer & timer );
+		/**
+		 *\~english
+		 *\return		The debug overlays shown status.
+		 *\~french
+		 *\return		Le statut d'affichage des incrustations de débogage.
+		 */
+		inline bool isShown()const
+		{
+			return m_visible;
+		}
 
 	private:
 		void doCreateDebugPanel( OverlayCache & cache );
@@ -212,11 +224,12 @@ namespace castor3d
 			RenderPassOverlays( RenderPassOverlays && ) = default;
 			RenderPassOverlays & operator=( RenderPassOverlays && ) = default;
 			RenderPassOverlays( castor::String const & category
-				, uint32_t index
 				, OverlayCache & cache );
 			~RenderPassOverlays();
+			void initialise( uint32_t index );
 			void addTimer( RenderPassTimer & timer );
 			bool removeTimer( RenderPassTimer & timer );
+			void retrieveGpuTime();
 			castor::Nanoseconds update();
 			void setVisible( bool visible );
 
@@ -259,6 +272,9 @@ namespace castor3d
 		castor::Nanoseconds m_averageTime{ 0 };
 		std::locale m_timesLocale;
 		RenderInfo m_renderInfo;
+		renderer::QueryPoolPtr m_queries;
+		uint32_t m_queriesCount{ 0u };
+		bool m_dirty{ false };
 	};
 }
 

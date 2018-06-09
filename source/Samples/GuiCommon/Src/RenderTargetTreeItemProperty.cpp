@@ -1,5 +1,7 @@
 #include "RenderTargetTreeItemProperty.hpp"
 
+#include "ShaderDialog.hpp"
+
 #include <Render/RenderTarget.hpp>
 
 #include "AdditionalProperties.hpp"
@@ -13,13 +15,18 @@ namespace GuiCommon
 	namespace
 	{
 		static wxString PROPERTY_CATEGORY_RENDER_TARGET = _( "Render Target: " );
+		static wxString PROPERTY_RENDER_TARGET_SHADER = _( "Shader" );
+		static wxString PROPERTY_RENDER_TARGET_EDIT_SHADER = _( "View Shaders..." );
 	}
 
-	RenderTargetTreeItemProperty::RenderTargetTreeItemProperty( bool p_editable, RenderTargetSPtr p_target )
-		: TreeItemProperty( p_target->getEngine(), p_editable, ePROPERTY_DATA_TYPE_RENDER_TARGET )
-		, m_target( p_target )
+	RenderTargetTreeItemProperty::RenderTargetTreeItemProperty( bool editable
+		, RenderTargetSPtr target )
+		: TreeItemProperty( target->getEngine(), editable, ePROPERTY_DATA_TYPE_RENDER_TARGET )
+		, m_target( target )
 	{
 		PROPERTY_CATEGORY_RENDER_TARGET = _( "Render Target: " );
+		PROPERTY_RENDER_TARGET_SHADER = _( "Shader" );
+		PROPERTY_RENDER_TARGET_EDIT_SHADER = _( "View Shaders..." );
 
 		CreateTreeItemMenu();
 	}
@@ -28,7 +35,8 @@ namespace GuiCommon
 	{
 	}
 
-	void RenderTargetTreeItemProperty::doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void RenderTargetTreeItemProperty::doCreateProperties( wxPGEditor * editor
+		, wxPropertyGrid * grid )
 	{
 		RenderTargetSPtr target = getRenderTarget();
 
@@ -40,14 +48,19 @@ namespace GuiCommon
 				_( "Texture" )
 			};
 
-			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_RENDER_TARGET + TARGETS[size_t( target->getTargetType() )] ) );
+			grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_RENDER_TARGET + TARGETS[size_t( target->getTargetType() )] ) );
+
+			for ( auto & postEffect : target->getHDRPostEffects() )
+			{
+				grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_RENDER_TARGET + TARGETS[size_t( target->getTargetType() )] ) );
+			}
 		}
 	}
 
-	void RenderTargetTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
+	void RenderTargetTreeItemProperty::doPropertyChange( wxPropertyGridEvent & event )
 	{
 		RenderTargetSPtr target = getRenderTarget();
-		wxPGProperty * property = p_event.GetProperty();
+		wxPGProperty * property = event.GetProperty();
 
 		if ( property && target )
 		{

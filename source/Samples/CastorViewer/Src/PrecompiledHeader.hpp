@@ -74,7 +74,6 @@ See LICENSE file in root folder
 #	include <Event/Frame/FrameListener.hpp>
 #	include <Material/Material.hpp>
 #	include <Material/Pass.hpp>
-#	include <Mesh/Buffer/Buffer.hpp>
 #	include <Mesh/SubmeshComponent/Face.hpp>
 #	include <Mesh/Mesh.hpp>
 #	include <Mesh/Submesh.hpp>
@@ -94,8 +93,6 @@ See LICENSE file in root folder
 #	include <Scene/Light/Light.hpp>
 #	include <Scene/Light/PointLight.hpp>
 #	include <Scene/Light/SpotLight.hpp>
-#	include <Shader/Uniform/Uniform.hpp>
-#	include <Shader/ShaderProgram.hpp>
 #	include <Texture/Sampler.hpp>
 #	include <Texture/TextureUnit.hpp>
 

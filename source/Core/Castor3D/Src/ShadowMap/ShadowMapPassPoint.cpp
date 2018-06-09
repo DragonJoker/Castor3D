@@ -1,13 +1,18 @@
 #include "ShadowMapPassPoint.hpp"
 
 #include "Mesh/Submesh.hpp"
-#include "Mesh/Buffer/VertexBuffer.hpp"
+#include "Buffer/VertexBuffer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/Light/PointLight.hpp"
-#include "Shader/ShaderProgram.hpp"
-#include "Texture/TextureImage.hpp"
+#include "Shader/Program.hpp"
+#include "Shader/PassBuffer/PassBuffer.hpp"
+#include "ShadowMap/ShadowMapPoint.hpp"
+#include "Technique/RenderTechniquePass.hpp"
+#include "Texture/TextureView.hpp"
 
 #include <Graphics/Image.hpp>
+
+#include <RenderPass/RenderPassCreateInfo.hpp>
 
 using namespace castor;
 
@@ -15,23 +20,25 @@ namespace castor3d
 {
 	namespace
 	{
-		void doUpdateShadowMatrices( Point3r const & p_position
-			, std::array< Matrix4x4r, size_t( CubeMapFace::eCount ) > & p_matrices )
+		void doUpdateShadowMatrices( Point3r const & position
+			, std::array< Matrix4x4r, size_t( CubeMapFace::eCount ) > & matrices )
 		{
-			p_matrices =
+			matrices =
 			{
 				{
-					matrix::lookAt( p_position, p_position + Point3r{ +1, +0, +0 }, Point3r{ +0, -1, +0 } ),// Positive X
-					matrix::lookAt( p_position, p_position + Point3r{ -1, +0, +0 }, Point3r{ +0, -1, +0 } ),// Negative X
-					matrix::lookAt( p_position, p_position + Point3r{ +0, +1, +0 }, Point3r{ +0, +0, +1 } ),// Positive Y
-					matrix::lookAt( p_position, p_position + Point3r{ +0, -1, +0 }, Point3r{ +0, +0, -1 } ),// Negative Y
-					matrix::lookAt( p_position, p_position + Point3r{ +0, +0, +1 }, Point3r{ +0, -1, +0 } ),// Positive Z
-					matrix::lookAt( p_position, p_position + Point3r{ +0, +0, -1 }, Point3r{ +0, -1, +0 } ),// Negative Z
+					matrix::lookAt( position, position + Point3r{ +1, +0, +0 }, Point3r{ +0, -1, +0 } ),// Positive X
+					matrix::lookAt( position, position + Point3r{ -1, +0, +0 }, Point3r{ +0, -1, +0 } ),// Negative X
+					matrix::lookAt( position, position + Point3r{ +0, +1, +0 }, Point3r{ +0, +0, +1 } ),// Positive Y
+					matrix::lookAt( position, position + Point3r{ +0, -1, +0 }, Point3r{ +0, +0, -1 } ),// Negative Y
+					matrix::lookAt( position, position + Point3r{ +0, +0, +1 }, Point3r{ +0, -1, +0 } ),// Positive Z
+					matrix::lookAt( position, position + Point3r{ +0, +0, -1 }, Point3r{ +0, -1, +0 } ),// Negative Z
 				}
 			};
 		}
 	}
 
+	uint32_t const ShadowMapPassPoint::TextureSize = 1024;
+	uint32_t const ShadowMapPassPoint::UboBindingPoint = 10u;
 	String const ShadowMapPassPoint::ShadowMapUbo = cuT( "ShadowMap" );
 	String const ShadowMapPassPoint::WorldLightPosition = cuT( "c3d_worldLightPosition" );
 	String const ShadowMapPassPoint::FarPlane = cuT( "c3d_farPlane" );
@@ -40,12 +47,7 @@ namespace castor3d
 		, Scene & scene
 		, ShadowMap const & shadowMap )
 		: ShadowMapPass{ engine, scene, shadowMap }
-		, m_shadowConfig{ ShadowMapUbo
-			, *engine.getRenderSystem()
-			, 8u }
 		, m_viewport{ engine }
-		, m_worldLightPosition{ *m_shadowConfig.createUniform< UniformType::eVec3f >( WorldLightPosition ) }
-		, m_farPlane{ *m_shadowConfig.createUniform< UniformType::eFloat >( FarPlane ) }
 	{
 		m_renderQueue.initialise( scene );
 	}
@@ -64,101 +66,152 @@ namespace castor3d
 			, m_viewport
 			, index );
 		doUpdateShadowMatrices( position, m_matrices );
-		m_worldLightPosition.setValue( position );
-		m_farPlane.setValue( m_viewport.getFar() );
+		auto & config = m_shadowConfig->getData();
+		config.worldLightPosition = position;
+		config.farPlane = m_viewport.getFar();
 		doUpdate( queues );
 	}
 
-	void ShadowMapPassPoint::render( uint32_t index )
+	void ShadowMapPassPoint::updateDeviceDependent( uint32_t index )
 	{
 		if ( m_initialised )
 		{
-			m_shadowConfig.update();
-			m_shadowConfig.bindTo( UboBindingPoint );
-			m_viewport.apply();
+			m_shadowConfig->upload();
 			m_matrixUbo.update( m_matrices[index], m_projection );
-			doRenderNodes( m_renderQueue.getRenderNodes() );
+			doUpdateNodes( m_renderQueue.getAllRenderNodes() );
 		}
 	}
 
-	void ShadowMapPassPoint::doRenderNodes( SceneRenderNodes & p_nodes )
+	void ShadowMapPassPoint::doUpdateNodes( SceneRenderNodes & nodes )
 	{
-		RenderPass::doRender( p_nodes.m_instantiatedStaticNodes.m_backCulled );
-		RenderPass::doRender( p_nodes.m_staticNodes.m_backCulled );
-		RenderPass::doRender( p_nodes.m_skinnedNodes.m_backCulled );
-		RenderPass::doRender( p_nodes.m_instantiatedSkinnedNodes.m_backCulled );
-		RenderPass::doRender( p_nodes.m_morphingNodes.m_backCulled );
-		RenderPass::doRender( p_nodes.m_billboardNodes.m_backCulled );
+		RenderPass::doUpdate( nodes.instancedStaticNodes.backCulled );
+		RenderPass::doUpdate( nodes.staticNodes.backCulled );
+		RenderPass::doUpdate( nodes.skinnedNodes.backCulled );
+		RenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled );
+		RenderPass::doUpdate( nodes.morphingNodes.backCulled );
+		RenderPass::doUpdate( nodes.billboardNodes.backCulled );
 	}
 
-	bool ShadowMapPassPoint::doInitialise( Size const & p_size )
+	bool ShadowMapPassPoint::doInitialise( Size const & size )
 	{
-		real const aspect = real( p_size.getWidth() ) / p_size.getHeight();
+		auto & device = getCurrentDevice( *this );
+		real const aspect = real( size.getWidth() ) / size.getHeight();
 		real const near = 1.0_r;
 		real const far = 2000.0_r;
-		matrix::perspective( m_projection, 90.0_degrees, aspect, near, far );
+		m_projection = getEngine()->getRenderSystem()->getPerspective( ( 90.0_degrees ).radians(), aspect, near, far );
 
-		m_viewport.resize( p_size );
-		m_viewport.initialise();
+		// Create the render pass.
+		renderer::RenderPassCreateInfo renderPass;
+		renderPass.flags = 0u;
+
+		renderPass.attachments.resize( 3u );
+		renderPass.attachments[0].format = ShadowMapPoint::RawDepthFormat;
+		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+
+		renderPass.attachments[1].format = ShadowMapPoint::LinearDepthFormat;
+		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[1].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[1].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+		renderPass.attachments[2].format = ShadowMapPoint::VarianceFormat;
+		renderPass.attachments[2].loadOp = renderer::AttachmentLoadOp::eClear;
+		renderPass.attachments[2].storeOp = renderer::AttachmentStoreOp::eStore;
+		renderPass.attachments[2].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[2].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[2].samples = renderer::SampleCountFlag::e1;
+		renderPass.attachments[2].initialLayout = renderer::ImageLayout::eUndefined;
+		renderPass.attachments[2].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+		renderPass.subpasses.resize( 1u );
+		renderPass.subpasses[0].flags = 0u;
+		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
+		renderPass.subpasses[0].colorAttachments.push_back( { 1u, renderer::ImageLayout::eColourAttachmentOptimal } );
+		renderPass.subpasses[0].colorAttachments.push_back( { 2u, renderer::ImageLayout::eColourAttachmentOptimal } );
+		renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
+
+		renderPass.dependencies.resize( 2u );
+		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].dstSubpass = 0u;
+		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		renderPass.dependencies[1].srcSubpass = 0u;
+		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+		m_renderPass = device.createRenderPass( renderPass );
+
+		m_shadowConfig = renderer::makeUniformBuffer< Configuration >( device
+			, 1u
+			, 0u
+			, renderer::MemoryPropertyFlag::eHostVisible | renderer::MemoryPropertyFlag::eHostCoherent );
+
+		m_viewport.resize( size );
+		m_renderQueue.initialise( m_scene );
 		return true;
 	}
 
 	void ShadowMapPassPoint::doCleanup()
 	{
-		m_viewport.cleanup();
-		m_matrixUbo.getUbo().cleanup();
-		m_shadowConfig.cleanup();
+		m_renderQueue.cleanup();
+		m_matrixUbo.cleanup();
+		m_shadowConfig.reset();
 		m_onNodeChanged.disconnect();
 	}
 
-	void ShadowMapPassPoint::doUpdate( RenderQueueArray & p_queues )
+	void ShadowMapPassPoint::doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, BillboardListRenderNode & node )
 	{
-		p_queues.emplace_back( m_renderQueue );
+		node.uboDescriptorSet->createBinding( layout.getBinding( ShadowMapPassPoint::UboBindingPoint )
+			, *m_shadowConfig );
 	}
 
-	void ShadowMapPassPoint::doPreparePipeline( ShaderProgram & program
-		, PipelineFlags const & flags )
+	void ShadowMapPassPoint::doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, SubmeshRenderNode & node )
 	{
-		if ( m_backPipelines.find( flags ) == m_backPipelines.end() )
-		{
-			RasteriserState rsState;
-			rsState.setCulledFaces( Culling::eNone );
-			DepthStencilState dsState;
-			dsState.setDepthTest( true );
-			auto & pipeline = *m_backPipelines.emplace( flags
-				, getEngine()->getRenderSystem()->createRenderPipeline( std::move( dsState )
-					, std::move( rsState )
-					, BlendState{}
-					, MultisampleState{}
-					, program
-					, flags ) ).first->second;
+		node.uboDescriptorSet->createBinding( layout.getBinding( ShadowMapPassPoint::UboBindingPoint )
+			, *m_shadowConfig );
+	}
 
-			getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-				, [this, &pipeline, flags]()
-				{
-					pipeline.addUniformBuffer( m_matrixUbo.getUbo() );
-					pipeline.addUniformBuffer( m_modelUbo.getUbo() );
-					pipeline.addUniformBuffer( m_modelMatrixUbo.getUbo() );
-					pipeline.addUniformBuffer( m_shadowConfig );
+	void ShadowMapPassPoint::doUpdate( RenderQueueArray & queues )
+	{
+		queues.emplace_back( m_renderQueue );
+	}
 
-					if ( checkFlag( flags.m_programFlags, ProgramFlag::eBillboards ) )
-					{
-						pipeline.addUniformBuffer( m_billboardUbo.getUbo() );
-					}
+	renderer::DescriptorSetLayoutBindingArray ShadowMapPassPoint::doCreateUboBindings( PipelineFlags const & flags )const
+	{
+		auto uboBindings = RenderPass::doCreateUboBindings( flags );
+		uboBindings.emplace_back( ShadowMapPassPoint::UboBindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment );
+		m_initialised = true;
+		return uboBindings;
+	}
 
-					if ( checkFlag( flags.m_programFlags, ProgramFlag::eSkinning )
-						&& !checkFlag( flags.m_programFlags, ProgramFlag::eInstantiation ) )
-					{
-						pipeline.addUniformBuffer( m_skinningUbo.getUbo() );
-					}
+	renderer::DepthStencilState ShadowMapPassPoint::doCreateDepthStencilState( PipelineFlags const & flags )const
+	{
+		return renderer::DepthStencilState{ 0u, true, true };
+	}
 
-					if ( checkFlag( flags.m_programFlags, ProgramFlag::eMorphing ) )
-					{
-						pipeline.addUniformBuffer( m_morphingUbo.getUbo() );
-					}
-
-					m_initialised = true;
-				} ) );
-		}
+	renderer::ColourBlendState ShadowMapPassPoint::doCreateBlendState( PipelineFlags const & flags )const
+	{
+		return RenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 2u );
 	}
 }

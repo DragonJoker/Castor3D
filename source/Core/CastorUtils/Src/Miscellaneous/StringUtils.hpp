@@ -408,7 +408,112 @@ namespace castor
 		 *\return		Le String contenant la valeur
 		 */
 		template< typename T >
-		inline String toString( T const & p_value, int p_base = 10, std::locale const & p_locale = std::locale( std::locale(), new manip::BaseNumPut< xchar >() ) );
+		inline String toString( T const & p_value, std::locale const & p_locale = std::locale( std::locale(), new manip::BaseNumPut< xchar >() ) );
+		/**
+		 *\~english
+		 *\brief		Puts a value into a String
+		 *\param[in]	p_value		The value
+		 *\param[in]	p_base		The numeric base
+		 *\param[in]	p_locale	The locale used in the conversion
+		 *\return		The String containing the value
+		 *\~french
+		 *\brief		Met une valeur dans un String
+		 *\param[in]	p_value		La valeur
+		 *\param[in]	p_base		La base numérique
+		 *\param[in]	p_locale	La locale utilisée dans la conversion
+		 *\return		Le String contenant la valeur
+		 */
+		inline String toString( uint8_t p_value, int p_base = 10, std::locale const & p_locale = std::locale( std::locale(), new manip::BaseNumPut< xchar >() ) );
+		/**
+		 *\~english
+		 *\brief		Puts a value into a String
+		 *\param[in]	p_value		The value
+		 *\param[in]	p_base		The numeric base
+		 *\param[in]	p_locale	The locale used in the conversion
+		 *\return		The String containing the value
+		 *\~french
+		 *\brief		Met une valeur dans un String
+		 *\param[in]	p_value		La valeur
+		 *\param[in]	p_base		La base numérique
+		 *\param[in]	p_locale	La locale utilisée dans la conversion
+		 *\return		Le String contenant la valeur
+		 */
+		inline String toString( int16_t p_value, int p_base = 10, std::locale const & p_locale = std::locale( std::locale(), new manip::BaseNumPut< xchar >() ) );
+		/**
+		 *\~english
+		 *\brief		Puts a value into a String
+		 *\param[in]	p_value		The value
+		 *\param[in]	p_base		The numeric base
+		 *\param[in]	p_locale	The locale used in the conversion
+		 *\return		The String containing the value
+		 *\~french
+		 *\brief		Met une valeur dans un String
+		 *\param[in]	p_value		La valeur
+		 *\param[in]	p_base		La base numérique
+		 *\param[in]	p_locale	La locale utilisée dans la conversion
+		 *\return		Le String contenant la valeur
+		 */
+		inline String toString( uint16_t p_value, int p_base = 10, std::locale const & p_locale = std::locale( std::locale(), new manip::BaseNumPut< xchar >() ) );
+		/**
+		 *\~english
+		 *\brief		Puts a value into a String
+		 *\param[in]	p_value		The value
+		 *\param[in]	p_base		The numeric base
+		 *\param[in]	p_locale	The locale used in the conversion
+		 *\return		The String containing the value
+		 *\~french
+		 *\brief		Met une valeur dans un String
+		 *\param[in]	p_value		La valeur
+		 *\param[in]	p_base		La base numérique
+		 *\param[in]	p_locale	La locale utilisée dans la conversion
+		 *\return		Le String contenant la valeur
+		 */
+		inline String toString( int32_t p_value, int p_base = 10, std::locale const & p_locale = std::locale( std::locale(), new manip::BaseNumPut< xchar >() ) );
+		/**
+		 *\~english
+		 *\brief		Puts a value into a String
+		 *\param[in]	p_value		The value
+		 *\param[in]	p_base		The numeric base
+		 *\param[in]	p_locale	The locale used in the conversion
+		 *\return		The String containing the value
+		 *\~french
+		 *\brief		Met une valeur dans un String
+		 *\param[in]	p_value		La valeur
+		 *\param[in]	p_base		La base numérique
+		 *\param[in]	p_locale	La locale utilisée dans la conversion
+		 *\return		Le String contenant la valeur
+		 */
+		inline String toString( uint32_t p_value, int p_base = 10, std::locale const & p_locale = std::locale( std::locale(), new manip::BaseNumPut< xchar >() ) );
+		/**
+		 *\~english
+		 *\brief		Puts a value into a String
+		 *\param[in]	p_value		The value
+		 *\param[in]	p_base		The numeric base
+		 *\param[in]	p_locale	The locale used in the conversion
+		 *\return		The String containing the value
+		 *\~french
+		 *\brief		Met une valeur dans un String
+		 *\param[in]	p_value		La valeur
+		 *\param[in]	p_base		La base numérique
+		 *\param[in]	p_locale	La locale utilisée dans la conversion
+		 *\return		Le String contenant la valeur
+		 */
+		inline String toString( int64_t p_value, int p_base = 10, std::locale const & p_locale = std::locale( std::locale(), new manip::BaseNumPut< xchar >() ) );
+		/**
+		 *\~english
+		 *\brief		Puts a value into a String
+		 *\param[in]	p_value		The value
+		 *\param[in]	p_base		The numeric base
+		 *\param[in]	p_locale	The locale used in the conversion
+		 *\return		The String containing the value
+		 *\~french
+		 *\brief		Met une valeur dans un String
+		 *\param[in]	p_value		La valeur
+		 *\param[in]	p_base		La base numérique
+		 *\param[in]	p_locale	La locale utilisée dans la conversion
+		 *\return		Le String contenant la valeur
+		 */
+		inline String toString( uint64_t p_value, int p_base = 10, std::locale const & p_locale = std::locale( std::locale(), new manip::BaseNumPut< xchar >() ) );
 		/**
 		 *\~english
 		 *\brief		Casts a string value in another string type
@@ -492,8 +597,14 @@ namespace castor
 			\brief		Un itérateur sur une chaîne UTF-8
 			*/
 			class iterator
-				: public std::iterator< std::bidirectional_iterator_tag, char32_t, std::string::difference_type, const char32_t *, const char32_t & >
 			{
+			public:
+				using iterator_category = std::bidirectional_iterator_tag;
+				using value_type = char32_t;
+				using difference_type = std::string::difference_type;
+				using pointer = const char32_t *;
+				using reference = const char32_t &;
+
 			public:
 				/**
 				 *\~english
@@ -698,8 +809,14 @@ namespace castor
 			\brief		Un itérateur sur une chaîne UTF-8
 			*/
 			class const_iterator
-				: public std::iterator< std::bidirectional_iterator_tag, char32_t, std::string::difference_type, const char32_t *, const char32_t & >
 			{
+			public:
+				using iterator_category = std::bidirectional_iterator_tag;
+				using value_type = char32_t;
+				using difference_type = std::string::difference_type;
+				using pointer = const char32_t *;
+				using reference = const char32_t &;
+
 			public:
 				/**
 				 *\~english

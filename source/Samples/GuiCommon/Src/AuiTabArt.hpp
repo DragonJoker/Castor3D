@@ -24,7 +24,7 @@ namespace GuiCommon
 		// DrawTab() draws an individual tab.
 		//
 		// dc       - output dc
-		// in_rect  - rectangle the tab should be confined to
+		// inRect   - rectangle the tab should be confined to
 		// caption  - tab's caption
 		// active   - whether or not the tab is active
 		// out_rect - actual output rectangle
@@ -37,6 +37,25 @@ namespace GuiCommon
 			, wxRect * outTabRect
 			, wxRect * outButtonRect
 			, int * xExtent )override;
+		// DrawButton() draws a button.
+		//
+		// dc          - output dc
+		// inRect      - rectangle the tab should be confined to
+		// caption     - tab's caption
+		// bitmapId    - The bitmap to draw, from the bitmaps list
+		// buttonState - The button state
+		// orientation - The button orientation
+		// outRect     - actual output rectangle
+		void DrawButton( wxDC & dc
+			, wxWindow * wnd
+			, const wxRect & inRect
+			, int bitmapId
+			, int buttonState
+			, int orientation
+			, wxRect * outRect )override;
+
+	private:
+		wxColour m_disabledColour;
 	};
 }
 

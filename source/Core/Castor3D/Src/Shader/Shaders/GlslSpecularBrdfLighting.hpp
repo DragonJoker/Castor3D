@@ -14,8 +14,7 @@ namespace castor3d
 			: public LightingModel
 		{
 		public:
-			C3D_API SpecularBrdfLightingModel( ShadowType shadows
-				, glsl::GlslWriter & writer );
+			C3D_API SpecularBrdfLightingModel( glsl::GlslWriter & writer );
 			C3D_API void computeCombined( glsl::Vec3 const & worldEye
 				, glsl::Vec3 const & diffuse
 				, glsl::Vec3 const & specular
@@ -49,12 +48,16 @@ namespace castor3d
 				, OutputComponents & output )const;
 
 		protected:
-			void doDeclareModel();
+			void doDeclareModel()override;
 			void doDeclareComputeDirectionalLight()override;
 			void doDeclareComputePointLight()override;
 			void doDeclareComputeSpotLight()override;
-			void doDeclareComputeOnePointLight()override;
-			void doDeclareComputeOneSpotLight()override;
+			void doDeclareComputeOneDirectionalLight( ShadowType shadowType
+				, bool volumetric )override;
+			void doDeclareComputeOnePointLight( ShadowType shadowType
+				, bool volumetric )override;
+			void doDeclareComputeOneSpotLight( ShadowType shadowType
+				, bool volumetric )override;
 
 			void doComputeLight( Light const & light
 				, glsl::Vec3 const & worldEye

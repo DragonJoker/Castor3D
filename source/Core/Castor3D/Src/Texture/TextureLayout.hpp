@@ -4,7 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_TEXTURE_LAYOUT_H___
 #define ___C3D_TEXTURE_LAYOUT_H___
 
-#include "TextureImage.hpp"
+#include "TextureView.hpp"
+
+#include <Image/ImageCreateInfo.hpp>
+#include <Image/Texture.hpp>
 
 namespace castor3d
 {
@@ -19,191 +22,31 @@ namespace castor3d
 	class TextureLayout
 		: public castor::OwnedBy< RenderSystem >
 	{
-		friend class TextureImage;
+		friend class TextureView;
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	type			The texture type.
-		 *\param[in]	renderSystem	The render system.
-		 *\param[in]	cpuAccess		The required CPU access (combination of AccessType).
-		 *\param[in]	gpuAccess		The required GPU access (combination of AccessType).
+		 *\param[in]	renderSystem		The render system.
+		 *\param[in]	info				The image informations.
+		 *\param[in]	memoryProperties	The required memory properties.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	type			Le type de texture.
-		 *\param[in]	renderSystem	Le render system.
-		 *\param[in]	cpuAccess		Les accès requis pour le CPU (combinaison de AccessType).
-		 *\param[in]	gpuAccess		Les accès requis pour le GPU (combinaison de AccessType).
+		 *\param[in]	renderSystem		Le render system.
+		 *\param[in]	info				Les informations de l'image.
+		 *\param[in]	memoryProperties	Les propriétés requise pour la mémoire.
 		 */
 		C3D_API TextureLayout( RenderSystem & renderSystem
-			, TextureType type
-			, AccessTypes const & cpuAccess
-			, AccessTypes const & gpuAccess );
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	type			The texture type.
-		 *\param[in]	renderSystem	The render system.
-		 *\param[in]	cpuAccess		The required CPU access (combination of AccessType).
-		 *\param[in]	gpuAccess		The required GPU access (combination of AccessType).
-		 *\param[in]	mipmapCount		The mipmap count for the texture.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	type			Le type de texture.
-		 *\param[in]	renderSystem	Le render system.
-		 *\param[in]	cpuAccess		Les accès requis pour le CPU (combinaison de AccessType).
-		 *\param[in]	gpuAccess		Les accès requis pour le GPU (combinaison de AccessType).
-		 *\param[in]	mipmapCount		Le nombre de mipmaps de la texture.
-		 */
-		C3D_API TextureLayout( RenderSystem & renderSystem
-			, TextureType type
-			, AccessTypes const & cpuAccess
-			, AccessTypes const & gpuAccess
-			, uint32_t mipmapCount );
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	type			The texture type.
-		 *\param[in]	renderSystem	The render system.
-		 *\param[in]	cpuAccess		The required CPU access (combination of AccessType).
-		 *\param[in]	gpuAccess		The required GPU access (combination of AccessType).
-		 *\param[in]	format			The texture format.
-		 *\param[in]	size			The texture dimensions.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	type			Le type de texture.
-		 *\param[in]	renderSystem	Le render system.
-		 *\param[in]	cpuAccess		Les accès requis pour le CPU (combinaison de AccessType).
-		 *\param[in]	gpuAccess		Les accès requis pour le GPU (combinaison de AccessType).
-		 *\param[in]	format			Le format de la texture.
-		 *\param[in]	size			Les dimensions de la texture.
-		 */
-		C3D_API TextureLayout( RenderSystem & renderSystem
-			, TextureType type
-			, AccessTypes const & cpuAccess
-			, AccessTypes const & gpuAccess
-			, castor::PixelFormat format
-			, castor::Size const & size );
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	type			The texture type.
-		 *\param[in]	renderSystem	The render system.
-		 *\param[in]	cpuAccess		The required CPU access (combination of AccessType).
-		 *\param[in]	gpuAccess		The required GPU access (combination of AccessType).
-		 *\param[in]	format			The texture format.
-		 *\param[in]	size			The texture dimensions.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	type			Le type de texture.
-		 *\param[in]	renderSystem	Le render system.
-		 *\param[in]	cpuAccess		Les accès requis pour le CPU (combinaison de AccessType).
-		 *\param[in]	gpuAccess		Les accès requis pour le GPU (combinaison de AccessType).
-		 *\param[in]	format			Le format de la texture.
-		 *\param[in]	size			Les dimensions de la texture.
-		 */
-		C3D_API TextureLayout( RenderSystem & renderSystem
-			, TextureType type
-			, AccessTypes const & cpuAccess
-			, AccessTypes const & gpuAccess
-			, castor::PixelFormat format
-			, castor::Point3ui const & size );
+			, renderer::ImageCreateInfo info
+			, renderer::MemoryPropertyFlags memoryProperties );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~TextureLayout();
-		/**
-		 *\~english
-		 *\brief		Activation function, to tell the GPU it is active
-		 *\param[in]	index	The texture index
-		 *\~french
-		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
-		 *\param[in]	index	L'index de texture
-		 */
-		C3D_API void bind( uint32_t index )const;
-		/**
-		 *\~english
-		 *\brief		Deactivation function, to tell the GPU it is inactive
-		 *\param[in]	index	The texture index
-		 *\~french
-		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
-		 *\param[in]	index	L'index de texture
-		 */
-		C3D_API void unbind( uint32_t index )const;
-		/**
-		 *\~english
-		 *\brief		Resizes the texture buffer
-		 *\param[in]	size	The new size
-		 *\~french
-		 *\brief		Redimensionne le buffer de la texture
-		 *\param[in]	size	La nouvelle taille
-		 */
-		C3D_API void resize( castor::Size const & size );
-		/**
-		 *\~english
-		 *\brief		Resizes the 3D texture buffer
-		 *\param[in]	size	The new size
-		 *\~french
-		 *\brief		Redimensionne le buffer de la texture 3D
-		 *\param[in]	size	La nouvelle taille
-		 */
-		C3D_API void resize( castor::Point3ui const & size );
-		/**
-		 *\~english
-		 *\brief		Locks layout buffer from GPU, allowing modifications into it.
-		 *\remarks		Binds the texture.
-		 *\param[in]	lock	Defines the lock mode (r, w, rw), combination of AccessType.
-		 *\return		The image buffer.
-		 *\~french
-		 *\brief		Locke le buffer du layout à partir du GPU, permettant des modification dessus.
-		 *\remarks		Active la texture.
-		 *\param[in]	lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de AccessType.
-		 *\return		Le buffer de l'image.
-		 */
-		C3D_API uint8_t * lock( AccessTypes const & lock );
-		/**
-		 *\~english
-		 *\brief		Unlocks image buffer from GPU.
-		 *\remarks		Unbinds the texture.
-		 *\param[in]	modified	Tells if the buffer has been modified, so modifications are uploaded to GPU.
-		 *\~french
-		 *\brief		Délocke le buffer de l'image à partir du GPU.
-		 *\remarks		Désactive la texture.
-		 *\param[in]	modified	Dit si le buffer a été modifié, afin que les modifications soient mises sur le GPU.
-		 */
-		C3D_API void unlock( bool modified );
-		/**
-		 *\~english
-		 *\brief		Locks image buffer from GPU, allowing modifications into it.
-		 *\remarks		The texture must be bound.
-		 *\param[in]	lock	Defines the lock mode (r, w, rw), combination of AccessType.
-		 *\param[in]	index	The image index.
-		 *\return		The image buffer.
-		 *\~french
-		 *\brief		Locke le buffer de l'image à partir du GPU, permettant des modification dessus.
-		 *\remarks		La texture doit être activée.
-		 *\param[in]	lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de AccessType.
-		 *\param[in]	index	L'index de l'image.
-		 *\return		Le buffer de l'image.
-		 */
-		C3D_API uint8_t * lock( AccessTypes const & lock, uint32_t index );
-		/**
-		 *\~english
-		 *\brief		Unlocks image buffer from GPU.
-		 *\remarks		The texture must be bound.
-		 *\param[in]	modified	Tells if the buffer has been modified, so modifications are uploaded to GPU.
-		 *\param[in]	index		The image index.
-		 *\~french
-		 *\brief		Délocke le buffer de l'image à partir du GPU.
-		 *\remarks		La texture doit être activée.
-		 *\param[in]	modified	Dit si le buffer a été modifié, afin que les modifications soient mises sur le GPU.
-		 *\param[in]	index		L'index de l'image.
-		 */
-		C3D_API void unlock( bool modified, uint32_t index );
+		C3D_API ~TextureLayout();
 		/**
 		 *\~english
 		 *\brief		Defines the texture buffer from an image file.
@@ -227,18 +70,18 @@ namespace castor3d
 		C3D_API void setSource( castor::PxBufferBaseSPtr buffer );
 		/**
 		 *\~english
-		 *\brief		Initialisation function.
+		 *\brief		Initialises the texture and all its views.
 		 *\return		\p true if OK.
 		 *\~french
-		 *\brief		Fonction d'initialisation.
+		 *\brief		Initialise la texture et toutes ses vues.
 		 *\return		\p true si tout s'est bien passé.
 		 */
 		C3D_API bool initialise();
 		/**
 		 *\~english
-		 *\brief		Cleanup function
+		 *\brief		Cleans up the texture and all its views.
 		 *\~french
-		 *\brief		Fonction de nettoyage
+		 *\brief		Nettoie la texture et toutes ses vues.
 		 */
 		C3D_API void cleanup();
 		/**
@@ -247,266 +90,127 @@ namespace castor3d
 		 *\~french
 		 *\brief		Génère les mipmaps de la texture
 		 */
-		C3D_API virtual void generateMipmaps()const = 0;
+		C3D_API void generateMipmaps()const;
 		/**
-		 *\~english
-		 *\return		The initialisation status.
-		 *\~french
-		 *\return		Le statut d'initialisation.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		**/
+		/**@{*/
 		inline bool isInitialised()const
 		{
 			return m_initialised;
 		}
-		/**
-		 *\~english
-		 *\return		The texture type.
-		 *\~french
-		 *\return		Le type de texture.
-		 */
-		inline TextureType getType()const
+
+		inline renderer::TextureType getType()const
 		{
-			return m_type;
+			return m_info.imageType;
 		}
-		/**
-		 *\~english
-		 *\param[in]	index	The image index.
-		 *\return		The texture image.
-		 *\~french
-		 *\param[in]	index	L'index de l'image.
-		 *\return		L'image de la texture.
-		 */
-		inline TextureImage const & getImage( size_t index = 0 )const
+
+		inline renderer::Texture const & getTexture()const
 		{
-			REQUIRE( index < m_images.size() && m_images[index] );
-			return *m_images[index];
+			REQUIRE( m_texture );
+			return *m_texture;
 		}
-		/**
-		 *\~english
-		 *\param[in]	index	The image index.
-		 *\return		The texture image.
-		 *\~french
-		 *\param[in]	index	L'index de l'image.
-		 *\return		L'image de la texture.
-		 */
-		inline TextureImage & getImage( size_t index = 0 )
+
+		inline TextureView const & getImage( size_t index = 0u )const
 		{
-			REQUIRE( index < m_images.size() && m_images[index] );
-			return *m_images[index];
+			REQUIRE( index < m_views.size() && m_views[index] );
+			return *m_views[index];
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image width
-		 *\return		The width
-		 *\~french
-		 *\brief		Récupère la largeur de l'image de la texture
-		 *\return		La largeur
-		 */
+
+		inline TextureView & getImage( size_t index = 0u )
+		{
+			REQUIRE( index < m_views.size() && m_views[index] );
+			return *m_views[index];
+		}
+
+		inline TextureView const & getDefaultImage()const
+		{
+			REQUIRE( m_defaultView );
+			return *m_defaultView;
+		}
+
+		inline TextureView & getDefaultImage()
+		{
+			REQUIRE( m_defaultView );
+			return *m_defaultView;
+		}
+
+		inline renderer::TextureView const & getDefaultView()const
+		{
+			return m_defaultView->getView();
+		}
+
 		inline uint32_t getWidth()const
 		{
-			return m_size.getWidth();
+			return m_info.extent.width;
 		}
-		/**
-		 *\~english
-		 *\return		The texture image height.
-		 *\~french
-		 *\return		La hauteur de l'image de la texture.
-		 */
+
 		inline uint32_t getHeight()const
 		{
-			return m_size.getHeight();
+			return m_info.extent.height;
 		}
-		/**
-		 *\~english
-		 *\return		The mimap count.
-		 *\~french
-		 *\return		Le nombre de mipmaps.
-		 */
-		inline uint32_t getMipmapCount()const
-		{
-			return m_mipmapCount;
-		}
-		/**
-		 *\~english
-		 *\return		The image image dimensions.
-		 *\~french
-		 *\return		Les dimensions de l'image de la texture.
-		 */
-		inline castor::Size const & getDimensions()const
-		{
-			return m_size;
-		}
-		/**
-		 *\~english
-		 *\return		The texture pixel format.
-		 *\~french
-		 *\return		Le format des pixels de la texture.
-		 */
-		inline castor::PixelFormat getPixelFormat()const
-		{
-			return m_format;
-		}
-		/**
-		 *\~english
-		 *\return		The texture depth, 1 if not 3D.
-		 *\~french
-		 *\return		La profondeur de la texture, 1 si pas 3D.
-		 */
+
 		inline uint32_t getDepth()const
 		{
-			return m_type == TextureType::eThreeDimensions ? m_depth : 1;
+			return m_info.extent.depth;
 		}
-		/**
-		 *\~english
-		 *\return		The texture layer count, 1 if not array.
-		 *\~french
-		 *\return		Le nombre de couches de la texture, 1 si pas tableau.
-		 */
+
+		inline uint32_t getMipmapCount()const
+		{
+			return m_info.mipLevels;
+		}
+
+		inline renderer::Extent3D const & getDimensions()const
+		{
+			return m_info.extent;
+		}
+
+		inline renderer::Format getPixelFormat()const
+		{
+			return m_info.format;
+		}
+
 		inline uint32_t getLayersCount()const
 		{
-			return ( m_type == TextureType::eTwoDimensionsArray
-					|| m_type == TextureType::eOneDimensionArray
-					|| m_type == TextureType::eCubeArray )
-				? m_depth
-				: 1;
+			return m_info.arrayLayers;
 		}
-		/**
-		 *\~english
-		 *\return		An iterator to the images beginning.
-		 *\~french
-		 *\return		Un itérateur sur le début des images.
-		 */
+
 		inline auto begin()
 		{
-			return m_images.begin();
+			return m_views.begin();
 		}
-		/**
-		 *\~english
-		 *\return		An iterator to the images beginning.
-		 *\~french
-		 *\return		Un itérateur sur le début des images.
-		 */
+
 		inline auto begin()const
 		{
-			return m_images.begin();
+			return m_views.begin();
 		}
-		/**
-		 *\~english
-		 *\return		An iterator to the images end.
-		 *\~french
-		 *\return		Un itérateur sur la fin des images.
-		 */
+
 		inline auto end()
 		{
-			return m_images.end();
+			return m_views.end();
 		}
-		/**
-		 *\~english
-		 *\return		An iterator to the images end.
-		 *\~french
-		 *\return		Un itérateur sur la fin des images.
-		 */
+
 		inline auto end()const
 		{
-			return m_images.end();
+			return m_views.end();
 		}
+		/**@}*/
 
 	private:
-		/**
-		 *\~english
-		 *\brief		Updates the size and format from first loaded image.
-		 *\param[in]	size	The image size.
-		 *\param[in]	format	The image format.
-		 *\~french
-		 *\brief		Met à jour les dimensions et le format, depuis la première image chargée.
-		 *\param[in]	size	Les dimensions de l'image.
-		 *\param[in]	format	Le format des pixels de l'image.
-		 */
-		void doUpdateFromFirstImage( castor::Size const & size, castor::PixelFormat format );
-		/**
-		 *\~english
-		 *\brief		Reinitialises the storage.
-		 *\remarks		If the storage was not created, does nothing.
-		 *\~french
-		 *\brief		Réinitialise le stockage.
-		 *\remarks		Ne fait rien si le stockage n'avait pas été créé.
-		 */
-		bool doResetStorage();
-		/**
-		 *\~english
-		 *\brief		Initialises the GPU storage.
-		 *\param[in]	type	The storage type.
-		 *\return		\p true if OK.
-		 *\~french
-		 *\brief		Initialise le stockage GPU.
-		 *\param[in]	type	Le type de stockage.
-		 *\return		\p true si tout s'est bien passé.
-		 */
-		bool doCreateStorage( TextureStorageType type );
+		void doUpdateFromFirstImage( castor::Size const & size, renderer::Format format );
 
 	private:
-		/**
-		 *\~english
-		 *\brief		Initialisation function.
-		 *\return		\p true if OK.
-		 *\~french
-		 *\brief		Fonction d'initialisation.
-		 *\return		\p true si tout s'est bien passé.
-		 */
-		C3D_API virtual bool doInitialise() = 0;
-		/**
-		 *\~english
-		 *\brief		Cleanup function
-		 *\~french
-		 *\brief		Fonction de nettoyage
-		 */
-		C3D_API virtual void doCleanup() = 0;
-		/**
-		 *\~english
-		 *\brief		API specific binding function
-		 *\~french
-		 *\brief		Activation spécifique selon l'API
-		 */
-		C3D_API virtual void doBind( uint32_t index )const = 0;
-		/**
-		 *\~english
-		 *\brief		API specific unbinding function
-		 *\~french
-		 *\brief		Désactivation spécifique selon l'API
-		 */
-		C3D_API virtual void doUnbind( uint32_t index )const = 0;
-
-	protected:
-		//!\~english	Initialisation status
-		//!\~french		Statut d'initialisation
 		bool m_initialised{ false };
-		//!\~english	Texture type.
-		//!\~french		Type de texture.
-		TextureType m_type;
-		//!\~english	The texture GPU storage.
-		//!\~french		Le stockage GPU de la texture.
-		TextureStorageUPtr m_storage;
-		//!\~english	The texture images.
-		//!\~french		Les images de la texture.
-		std::vector< TextureImageUPtr > m_images;
-		//!\~english	The required CPU access (combination of AccessType).
-		//!\~french		Les accès requis pour le CPU (combinaison de AccessType).
-		AccessTypes m_cpuAccess;
-		//!\~english	The required GPU access (combination of AccessType).
-		//!\~french		Les accès requis pour le GPU (combinaison de AccessType).
-		AccessTypes m_gpuAccess;
-		//!\~english	The teture dimensions.
-		//!\~french		Les dimensions de la texture.
-		castor::Size m_size;
-		//!\~english	The texture pixels' format.
-		//!\~french		Le format des pixels de la texture.
-		castor::PixelFormat m_format;
-		//!\~english	The texture's depth or layers count.
-		//!\~french		La profondeur ou nombre de couches de la texture.
-		uint32_t m_depth{ 1 };
-		//!\~english	The texture's mipmap count.
-		//!\~french		Le nombre de mipmaps de la texture.
-		uint32_t m_mipmapCount{ ~( 0u ) };
+		renderer::ImageCreateInfo m_info;
+		renderer::MemoryPropertyFlags m_properties;
+		std::vector< TextureViewUPtr > m_views;
+		TextureViewUPtr m_defaultView;
+		renderer::TexturePtr m_texture;
 	};
 }
 

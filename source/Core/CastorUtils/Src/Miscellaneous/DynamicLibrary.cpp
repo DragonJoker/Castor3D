@@ -2,67 +2,65 @@
 
 namespace castor
 {
-	DynamicLibrary::DynamicLibrary()throw()
-		: m_pLibrary( nullptr )
-		, m_pathLibrary( )
+	DynamicLibrary::DynamicLibrary( Path const & pathFile )noexcept
+		: m_library( nullptr )
+		, m_pathLibrary( pathFile )
 	{
+		doOpen();
 	}
 
-	DynamicLibrary::DynamicLibrary( DynamicLibrary const & p_lib )throw()
-		: m_pLibrary( nullptr )
-		, m_pathLibrary( )
+	DynamicLibrary::DynamicLibrary( String const & pathFile )noexcept
+		: DynamicLibrary( Path{ pathFile } )
 	{
-		if ( p_lib.m_pLibrary )
+		doOpen();
+	}
+
+	DynamicLibrary::DynamicLibrary( DynamicLibrary const & lib )noexcept
+		: m_library( nullptr )
+		, m_pathLibrary( lib.m_pathLibrary )
+	{
+		if ( lib.m_library )
 		{
-			open( p_lib.m_pathLibrary );
+			doOpen();
 		}
 	}
 
-	DynamicLibrary::DynamicLibrary( DynamicLibrary && p_lib )throw()
-		: m_pLibrary( std::move( p_lib.m_pLibrary ) )
-		, m_pathLibrary( std::move( p_lib.m_pathLibrary ) )
+	DynamicLibrary::DynamicLibrary( DynamicLibrary && lib )noexcept
+		: m_library( std::move( lib.m_library ) )
+		, m_pathLibrary( std::move( lib.m_pathLibrary ) )
 	{
-		p_lib.m_pLibrary = nullptr;
-		p_lib.m_pathLibrary.clear();
+		lib.m_library = nullptr;
+		lib.m_pathLibrary.clear();
 	}
 
-	DynamicLibrary::~DynamicLibrary()throw()
+	DynamicLibrary::~DynamicLibrary()noexcept
 	{
 		doClose();
 	}
 
-	DynamicLibrary & DynamicLibrary::operator =( DynamicLibrary const & p_lib )
+	DynamicLibrary & DynamicLibrary::operator =( DynamicLibrary const & lib )
 	{
 		doClose();
 
-		if ( p_lib.m_pLibrary )
+		if ( lib.m_library )
 		{
-			open( p_lib.m_pathLibrary );
+			m_pathLibrary = lib.m_pathLibrary;
+			doOpen();
 		}
 
 		return *this;
 	}
 
-	DynamicLibrary & DynamicLibrary::operator =( DynamicLibrary && p_lib )
+	DynamicLibrary & DynamicLibrary::operator =( DynamicLibrary && lib )
 	{
-		if ( this != &p_lib )
+		if ( this != &lib )
 		{
-			m_pLibrary = std::move( p_lib.m_pLibrary );
-			m_pathLibrary = std::move( p_lib.m_pathLibrary );
-			p_lib.m_pLibrary = nullptr;
-			p_lib.m_pathLibrary.clear();
+			m_library = std::move( lib.m_library );
+			m_pathLibrary = std::move( lib.m_pathLibrary );
+			lib.m_library = nullptr;
+			lib.m_pathLibrary.clear();
 		}
 
 		return *this;
-	}
-
-	bool DynamicLibrary::open( xchar const * p_name )throw()
-	{
-		return open( Path( p_name ) );
-	}
-
-	bool DynamicLibrary::open( String const & p_name )throw()
-	{
-		return open( Path( p_name ) );
 	}
 }

@@ -25,20 +25,20 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_critical		Tells if the exception is critical
-		 *\param[in]	p_description	The exception description
-		 *\param[in]	p_file			The file
-		 *\param[in]	p_function		The function
-		 *\param[in]	p_line			The file line
+		 *\param[in]	critical	Tells if the exception is critical
+		 *\param[in]	description	The exception description
+		 *\param[in]	file		The file
+		 *\param[in]	function	The function
+		 *\param[in]	line		The file line
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_critical		Dit si l'exception est critique
-		 *\param[in]	p_description	La description de l'exception
-		 *\param[in]	p_file			Le fichier
-		 *\param[in]	p_function		La fonction
-		 *\param[in]	p_line			La ligne dans le fichier
+		 *\param[in]	critical	Dit si l'exception est critique
+		 *\param[in]	description	La description de l'exception
+		 *\param[in]	file		Le fichier
+		 *\param[in]	function	La fonction
+		 *\param[in]	line		La ligne dans le fichier
 		 */
-		C3D_API PluginException( bool p_critical, std::string const & p_description, char const * p_file, char const * p_function, uint32_t p_line );
+		C3D_API PluginException( bool critical, std::string const & description, char const * file, char const * function, uint32_t line );
 		/**
 		 *\~english
 		 *\brief		Destructor

@@ -4,8 +4,6 @@ See LICENSE file in root folder
 #ifndef ___C3D_SkeletonAnimationInstanceObject_H___
 #define ___C3D_SkeletonAnimationInstanceObject_H___
 
-#include "Binary/BinaryParser.hpp"
-#include "Binary/BinaryWriter.hpp"
 #include "Animation/Interpolator.hpp"
 
 #include <Math/SquareMatrix.hpp>

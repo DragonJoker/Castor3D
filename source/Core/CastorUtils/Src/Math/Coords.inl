@@ -1,4 +1,4 @@
-﻿#include "PointOperators.hpp"
+#include "PointOperators.hpp"
 #include <cstring>
 #include <numeric>
 
@@ -43,7 +43,7 @@ namespace castor
 	template< typename T, uint32_t Count >
 	bool Coords< T, Count >::TextWriter::operator()( Coords< T, Count > const & object, TextFile & file )
 	{
-		StringStream streamWord;
+		StringStream streamWord{ castor::makeStringStream() };
 		streamWord.setf( std::ios::boolalpha );
 		streamWord.setf( std::ios::showpoint );
 
@@ -88,6 +88,12 @@ namespace castor
 	{
 		m_coords = std::move( rhs.m_coords );
 		rhs.m_coords = nullptr;
+	}
+
+	template< typename T, uint32_t Count >
+	Coords< T, Count >::Coords( Point< T, Count > & rhs )
+		: m_coords( rhs.ptr() )
+	{
 	}
 
 	template< typename T, uint32_t Count >
@@ -536,7 +542,7 @@ namespace castor
 template< typename T, uint32_t Count >
 inline castor::String & operator<<( castor::String & out, castor::Coords< T, Count > const & in )
 {
-	castor::StringStream stream;
+	castor::StringStream stream{ castor::makeStringStream() };
 	stream << in;
 	out += stream.str();
 	return out;

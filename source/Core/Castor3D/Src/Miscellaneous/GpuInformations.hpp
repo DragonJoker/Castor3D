@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_GPU_INFORMATIONS_H___
 #define ___C3D_GPU_INFORMATIONS_H___
 
-#include "Render/Context.hpp"
+#include "Castor3DPrerequisites.hpp"
 
 #include <Design/OwnedBy.hpp>
 
@@ -69,100 +69,19 @@ namespace castor3d
 	\~french
 	\brief		Indicateurs de caractérisituqes du GPU.
 	*/
-	enum class GpuMin
-		: uint32_t
-	{
-		eMapBufferAlignment,
-		eProgramTexelOffset,
-
-		CASTOR_SCOPED_ENUM_BOUNDS( eMapBufferAlignment )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		04/05/2016
-	\version	0.9.0
-	\~english
-	\brief		All supported GPU feature flags.
-	\~french
-	\brief		Indicateurs de caractérisituqes du GPU.
-	*/
 	enum class GpuMax
 		: uint32_t
 	{
-		eShaderStorageBufferBindings,
-
-		eVertexShaderStorageBlocks,
-		eVertexAtomicCounters,
-		eVertexAttribs,
-		eVertexOutputComponents,
-		eVertexTextureImageUnits,
-		eVertexUniformComponents,
-		eVertexUniformBlocks,
-		eVertexUniformVectors,
-		eVertexCombinedUniformComponents,
-
-		eGeometryAtomicCounters,
-		eGeometryShaderStorageBlocks,
-		eGeometryInputComponents,
-		eGeometryOutputComponents,
-		eGeometryTextureImageUnits,
-		eGeometryUniformComponents,
-		eGeometryUniformBlocks,
-		eGeometryCombinedUniformComponents,
-
-		eTessControlAtomicCounters,
-		eTessControlShaderStorageBlocks,
-
-		eTessEvaluationAtomicCounters,
-		eTessEvaluationShaderStorageBlocks,
-
-		eComputeAtomicCounters,
-		eComputeAtomicCounterBuffers,
-		eComputeShaderStorageBlocks,
-		eComputeTextureImageUnits,
-		eComputeUniformComponents,
-		eComputeUniformBlocks,
-		eComputeCombinedUniformComponents,
-		eComputeWorkGroupInvocations,
-		eComputeWorkGroupCount,
-		eComputeWorkGroupSize,
-
-		eFragmentAtomicCounters,
-		eFragmentShaderStorageBlocks,
-		eFragmentInputComponents,
-		eFragmentUniformComponents,
-		eFragmentUniformBlocks,
-		eFragmentUniformVectors,
-		eFragmentCombinedUniformComponents,
-
-		eCombinedAtomicCounters,
-		eCombinedShaderStorageBlocks,
-
-		eDebugGroupStackDepth,
-		eLabelLength,
-		eIntegerSamples,
-		eProgramTexelOffset,
-		eServerWaitTimeout,
-		eSampleMaskWords,
-		eSamples,
-
 		eTexture3DSize,
 		eTextureRectangleSize,
 		eTextureCubeMapSize,
 		eTextureBufferSize,
 		eTextureSize,
-		eTextureImageUnits,
 		eTextureLodBias,
 
 		eArrayTextureLayers,
 		eClipDistances,
-		eColourTextureSamples,
-		eDepthTextureSamples,
 
-		eCombinedTextureImageUnits,
-		eCombinedUniformBlocks,
-		eDrawBuffers,
-		eDualSourceDrawBuffers,
 		eElementIndices,
 		eElementVertices,
 
@@ -170,21 +89,14 @@ namespace castor3d
 		eFramebufferHeight,
 		eFramebufferLayers,
 		eFramebufferSamples,
-		eRenderbufferSize,
 
-		eUniformBufferBindings,
-		eUniformBlockSize,
-		eUniformLocations,
-
-		eVaryingComponents,
-		eVaryingVectors,
-		eVaryingFloats,
+		eUniformBufferSize,
 
 		eViewportWidth,
 		eViewportHeight,
 		eViewports,
 
-		CASTOR_SCOPED_ENUM_BOUNDS( eShaderStorageBufferBindings )
+		CASTOR_SCOPED_ENUM_BOUNDS( eTexture3DSize )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -207,31 +119,30 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 */
 		inline GpuInformations()
+			: m_useShader
+			{
+				{ renderer::ShaderStageFlag::eVertex, false },
+				{ renderer::ShaderStageFlag::eTessellationControl, false },
+				{ renderer::ShaderStageFlag::eTessellationEvaluation, false },
+				{ renderer::ShaderStageFlag::eGeometry, false },
+				{ renderer::ShaderStageFlag::eFragment, false },
+				{ renderer::ShaderStageFlag::eCompute, false },
+			}
 		{
 			for ( auto i = 0u; i < uint32_t( GpuMax::eCount ); ++i )
 			{
 				m_maxValues.insert( { GpuMax( i ), std::numeric_limits< int32_t >::lowest() } );
 			}
-
-			for ( auto i = 0u; i < uint32_t( GpuMin::eCount ); ++i )
-			{
-				m_minValues.insert( { GpuMin( i ), std::numeric_limits< int32_t >::max() } );
-			}
-
-			for ( auto & value : m_useShader )
-			{
-				value = false;
-			}
 		}
 		/**
 		 *\~english
-		 *\brief		adds a supported feature.
+		 *\brief		Adds a supported feature.
 		 *\~french
 		 *\brief		Ajoute une caractéristique supportée.
 		 */
-		inline void addFeature( GpuFeature p_feature )
+		inline void addFeature( GpuFeature feature )
 		{
-			m_features |= uint32_t( p_feature );
+			addFlag( m_features, feature );
 		}
 		/**
 		 *\~english
@@ -239,9 +150,9 @@ namespace castor3d
 		 *\~french
 		 *\brief		Enlève une caractéristique supportée.
 		 */
-		inline void removeFeature( GpuFeature p_feature )
+		inline void removeFeature( GpuFeature feature )
 		{
-			m_features &= ~uint32_t( p_feature );
+			remFlag( m_features, feature );
 		}
 		/**
 		 *\~english
@@ -249,9 +160,11 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour le support d'une caractéristique.
 		 */
-		inline void updateFeature( GpuFeature p_feature, bool p_supported )
+		inline void updateFeature( GpuFeature feature, bool supported )
 		{
-			p_supported ? addFeature( p_feature ) : removeFeature( p_feature );
+			supported
+				? addFeature( feature )
+				: removeFeature( feature );
 		}
 		/**
 		 *\~english
@@ -259,9 +172,9 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dit si la caractéristique est supportée.
 		 */
-		inline bool hasFeature( GpuFeature p_feature )const
+		inline bool hasFeature( GpuFeature feature )const
 		{
-			return GpuFeature( m_features & uint32_t( p_feature ) ) == p_feature;
+			return checkFlag( m_features, feature );
 		}
 		/**
 		 *\~english
@@ -335,82 +248,29 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Checks support for given shader model.
-		 *\param[in]	p_model	The shader model.
-		 *\return		\p false if the given model is not supported by current API.
-		 *\~french
-		 *\brief		Vérifie le support d'un modèle de shaders.
-		 *\param[in]	p_model	Le modèle de shaders.
-		 *\return		\p false si le modèle donné n'est pas supporté par l'API actuelle.
-		 */
-		inline bool checkSupport( ShaderModel p_model )const
-		{
-			return p_model <= m_maxShaderModel;
-		}
-		/**
-		 *\~english
-		 *\return		The maximum supported shader model.
-		 *\~french
-		 *\return		Le modèle de shader maximal supporté.
-		 */
-		inline ShaderModel getMaxShaderModel()const
-		{
-			return m_maxShaderModel;
-		}
-		/**
-		 *\~english
-		 *\return		The maximum supported shader model.
-		 *\~french
-		 *\return		Le modèle de shader maximal supporté.
-		 */
-		inline void updateMaxShaderModel()
-		{
-			if ( m_useShader[size_t( ShaderType::eCompute )] )
-			{
-				m_maxShaderModel = ShaderModel::eModel5;
-			}
-			else if ( m_useShader[size_t( ShaderType::eHull )] )
-			{
-				m_maxShaderModel = ShaderModel::eModel4;
-			}
-			else if ( m_useShader[size_t( ShaderType::eGeometry )] )
-			{
-				m_maxShaderModel = ShaderModel::eModel3;
-			}
-			else if ( m_useShader[size_t( ShaderType::ePixel )] )
-			{
-				m_maxShaderModel = ShaderModel::eModel2;
-			}
-			else
-			{
-				m_maxShaderModel = ShaderModel::eModel1;
-			}
-		}
-		/**
-		 *\~english
-		 *\param[in]	p_type	The shader type.
+		 *\param[in]	type	The shader type.
 		 *\return		The shader type support status.
 		 *\~french
-		 *\param[in]	p_type	Le type de shader.
+		 *\param[in]	type	Le type de shader.
 		 *\return		Le statut du support du type de shader.
 		 */
-		inline bool hasShaderType( ShaderType p_type )const
+		inline bool hasShaderType( renderer::ShaderStageFlag type )const
 		{
-			return m_useShader[size_t( p_type )];
+			return m_useShader.at( type );
 		}
 		/**
 		 *\~english
 		 *\brief		Defines the support for given shader type.
-		 *\param[in]	p_type	The shader type.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	type	The shader type.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le support du type de shader donné.
-		 *\param[in]	p_type	Le type de shader.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	type	Le type de shader.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void useShaderType( ShaderType p_type, bool p_value )
+		inline void useShaderType( renderer::ShaderStageFlag type, bool value )
 		{
-			m_useShader[size_t( p_type )] = p_value;
+			m_useShader[type] = value;
 		}
 		/**
 		 *\~english
@@ -425,62 +285,38 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Defines the shader language version.
-		 *\param[in]	p_value	The version.
+		 *\param[in]	value	The version.
 		 *\~french
 		 *\brief		Définit la version du langage shader.
-		 *\param[in]	p_value	La version.
+		 *\param[in]	value	La version.
 		 */
-		inline void setShaderLanguageVersion( uint32_t p_value )
+		inline void setShaderLanguageVersion( uint32_t value )
 		{
-			m_shaderLanguageVersion = p_value;
+			m_shaderLanguageVersion = value;
 		}
 		/**
 		 *\~english
-		 *\param[in]	p_index	The index.
-		 *\return		The minimum value for given index.
-		 *\~french
-		 *\param[in]	p_index	L'index.
-		 *\return		La valeur minimale pour l'index défini.
-		 */
-		inline int32_t getMinValue( GpuMin p_index )const
-		{
-			return m_minValues.find( p_index )->second;
-		}
-		/**
-		 *\~english
-		 *\param[in]	p_index	The index.
-		 *\param[in]	p_value	The minimum value for given index.
-		 *\~french
-		 *\param[in]	p_index	L'index.
-		 *\param[in]	p_value	La valeur minimale pour l'index défini.
-		 */
-		inline void setMinValue( GpuMin p_index, int32_t p_value )
-		{
-			m_minValues[p_index] = p_value;
-		}
-		/**
-		 *\~english
-		 *\param[in]	p_index	The index.
+		 *\param[in]	index	The index.
 		 *\return		The maximum value for given index.
 		 *\~french
-		 *\param[in]	p_index	L'index.
+		 *\param[in]	index	L'index.
 		 *\return		La valeur maximale pour l'index défini.
 		 */
-		inline int32_t getMaxValue( GpuMax p_index )const
+		inline int32_t getMaxValue( GpuMax index )const
 		{
-			return m_maxValues.find( p_index )->second;
+			return m_maxValues.find( index )->second;
 		}
 		/**
 		 *\~english
-		 *\param[in]	p_index	The index.
-		 *\param[in]	p_value	The maximum value for given index.
+		 *\param[in]	index	The index.
+		 *\param[in]	value	The maximum value for given index.
 		 *\~french
-		 *\param[in]	p_index	L'index.
-		 *\param[in]	p_value	La valeur maximale pour l'index défini.
+		 *\param[in]	index	L'index.
+		 *\param[in]	value	La valeur maximale pour l'index défini.
 		 */
-		inline void setMaxValue( GpuMax p_index, int32_t p_value )
+		inline void setMaxValue( GpuMax index, int32_t value )
 		{
-			m_maxValues[p_index] = p_value;
+			m_maxValues[index] = value;
 		}
 		/**
 		 *\~english
@@ -494,13 +330,13 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\param[in]	p_value	The total VRAM size.
+		 *\param[in]	value	The total VRAM size.
 		 *\~french
-		 *\param[in]	p_value	La taille totale de la VRAM.
+		 *\param[in]	value	La taille totale de la VRAM.
 		 */
-		inline void setTotalMemorySize( uint32_t p_value )
+		inline void setTotalMemorySize( uint32_t value )
 		{
-			m_totalMemorySize = p_value;
+			m_totalMemorySize = value;
 		}
 		/**
 		 *\~english
@@ -514,13 +350,13 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\param[in]	p_value	The GPU vendor name.
+		 *\param[in]	value	The GPU vendor name.
 		 *\~french
-		 *\param[in]	p_value	Le nom du vendeur du GPU.
+		 *\param[in]	value	Le nom du vendeur du GPU.
 		 */
-		inline void setVendor( castor::String const & p_value )
+		inline void setVendor( castor::String const & value )
 		{
-			m_vendor = p_value;
+			m_vendor = value;
 		}
 		/**
 		 *\~english
@@ -534,13 +370,13 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\param[in]	p_value	The GPU platform.
+		 *\param[in]	value	The GPU platform.
 		 *\~french
-		 *\param[in]	p_value	Le type de GPU.
+		 *\param[in]	value	Le type de GPU.
 		 */
-		inline void setRenderer( castor::String const & p_value )
+		inline void setRenderer( castor::String const & value )
 		{
-			m_renderer = p_value;
+			m_renderer = value;
 		}
 		/**
 		 *\~english
@@ -554,35 +390,23 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\param[in]	p_value	The rendering API version.
+		 *\param[in]	value	The rendering API version.
 		 *\~french
-		 *\param[in]	p_value	La version de l'API de rendu.
+		 *\param[in]	value	La version de l'API de rendu.
 		 */
-		inline void setVersion( castor::String const & p_value )
+		inline void setVersion( castor::String const & value )
 		{
-			m_version = p_value;
+			m_version = value;
 		}
 
-	protected:
-		//!\~english Combination of GpuFeature.	\~french Combinaisond e GpuFeature.
-		uint32_t m_features{ false };
-		//!\~english The maximum supported shader model.	\~french Le modèle de shader maximum supporté.
-		ShaderModel m_maxShaderModel{ ShaderModel::eMin };
-		//!\~english The shader language version.	\~french La version du langage de shader.
+	private:
+		GpuFeatures m_features{ 0u };
 		uint32_t m_shaderLanguageVersion{ 0 };
-		//!\~english Tells which types of shaders are supported	\~french Dit quel type de shaders sont supportés
-		std::array< bool, size_t( ShaderType::eCount ) > m_useShader;
-		//!\~english The minimum values.	\~french Les valeurs minimales.
-		std::map< GpuMin, int32_t > m_minValues;
-		//!\~english The maximum values.	\~french Les valeurs maximales.
+		std::map< renderer::ShaderStageFlag, bool > m_useShader;
 		std::map< GpuMax, int32_t > m_maxValues;
-		//!\~english The total VRAM size.	\~french La taille totale de la VRAM.
 		uint32_t m_totalMemorySize;
-		//!\~english The GPU vendor name.	\~french Le nom du vendeur du GPU.
 		castor::String m_vendor;
-		//!\~english The GPU platform.	\~french Le type de GPU.
 		castor::String m_renderer;
-		//!\~english The rendering API version.	\~french La version de l'API de rendu.
 		castor::String m_version;
 	};
 }

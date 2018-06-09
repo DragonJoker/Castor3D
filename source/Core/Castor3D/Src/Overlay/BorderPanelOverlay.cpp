@@ -10,49 +10,49 @@ using namespace castor;
 
 namespace castor3d
 {
-	BorderPanelOverlay::TextWriter::TextWriter( String const & p_tabs, BorderPanelOverlay const * p_category )
-		: OverlayCategory::TextWriter{ p_tabs }
-		, m_category{ p_category }
+	BorderPanelOverlay::TextWriter::TextWriter( String const & tabs, BorderPanelOverlay const * category )
+		: OverlayCategory::TextWriter{ tabs }
+		, m_category{ category }
 	{
 	}
 
-	bool BorderPanelOverlay::TextWriter::operator()( BorderPanelOverlay const & p_overlay, TextFile & p_file )
+	bool BorderPanelOverlay::TextWriter::operator()( BorderPanelOverlay const & overlay, TextFile & file )
 	{
-		Logger::logInfo( m_tabs + cuT( "Writing BorderPanelOverlay " ) + p_overlay.getOverlayName() );
-		bool result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "border_panel_overlay \"" ) + p_overlay.getOverlay().getName() + cuT( "\"\n" ) ) > 0
-						&& p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+		Logger::logInfo( m_tabs + cuT( "Writing BorderPanelOverlay " ) + overlay.getOverlayName() );
+		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "border_panel_overlay \"" ) + overlay.getOverlay().getName() + cuT( "\"\n" ) ) > 0
+						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 		OverlayCategory::TextWriter::checkError( result, "BorderPanelOverlay name" );
 
 		if ( result )
 		{
-			result = p_file.writeText( m_tabs + cuT( "\tborder_size " ) ) > 0
-					   && Point4d::TextWriter{ String{} }( p_overlay.getBorderSize(), p_file )
-					   && p_file.writeText( cuT( "\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\tborder_size " ) ) > 0
+					   && Point4d::TextWriter{ String{} }( overlay.getBorderSize(), file )
+					   && file.writeText( cuT( "\n" ) ) > 0;
 			OverlayCategory::TextWriter::checkError( result, "BorderPanelOverlay borders size" );
 		}
 
-		if ( result && p_overlay.getBorderMaterial() )
+		if ( result && overlay.getBorderMaterial() )
 		{
-			result = p_file.writeText( m_tabs + cuT( "\tborder_material \"" ) + p_overlay.getBorderMaterial()->getName() + cuT( "\"\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\tborder_material \"" ) + overlay.getBorderMaterial()->getName() + cuT( "\"\n" ) ) > 0;
 			OverlayCategory::TextWriter::checkError( result, "BorderPanelOverlay borders material" );
 		}
 
 		if ( result )
 		{
-			result = OverlayCategory::TextWriter{ m_tabs }( p_overlay, p_file );
+			result = OverlayCategory::TextWriter{ m_tabs }( overlay, file );
 		}
 
 		if ( result )
 		{
-			result = p_file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return result;
 	}
 
-	bool BorderPanelOverlay::TextWriter::writeInto( castor::TextFile & p_file )
+	bool BorderPanelOverlay::TextWriter::writeInto( castor::TextFile & file )
 	{
-		return ( *this )( *m_category, p_file );
+		return ( *this )( *m_category, file );
 	}
 
 	//*************************************************************************************************
@@ -76,13 +76,18 @@ namespace castor3d
 		return std::make_shared< BorderPanelOverlay >();
 	}
 
-	void BorderPanelOverlay::setBorderMaterial( MaterialSPtr p_material )
+	void BorderPanelOverlay::accept( OverlayVisitor & visitor )const
 	{
-		m_pBorderMaterial = p_material;
+		visitor.visit( *this );
+	}
 
-		if ( p_material )
+	void BorderPanelOverlay::setBorderMaterial( MaterialSPtr material )
+	{
+		m_pBorderMaterial = material;
+
+		if ( material )
 		{
-			m_strBorderMatName = p_material->getName();
+			m_strBorderMatName = material->getName();
 		}
 		else
 		{
@@ -90,143 +95,133 @@ namespace castor3d
 		}
 	}
 
-	void BorderPanelOverlay::doUpdateSize()
+	void BorderPanelOverlay::doUpdateSize( OverlayRenderer const & renderer )
 	{
-		OverlayCategory::doUpdateSize();
-		OverlayRendererSPtr renderer = getOverlay().getEngine()->getOverlayCache().getRenderer();
+		OverlayCategory::doUpdateSize( renderer );
 
-		if ( renderer )
+		if ( isSizeChanged() || isChanged() || renderer.isSizeChanged() )
 		{
-			if ( isSizeChanged() || isChanged() || renderer->isSizeChanged() )
+			OverlaySPtr parent = getOverlay().getParent();
+			Size sz = renderer.getSize();
+			Point2d totalSize( sz.getWidth(), sz.getHeight() );
+
+			if ( parent )
 			{
-				OverlaySPtr parent = getOverlay().getParent();
-				Size sz = renderer->getSize();
-				Point2d totalSize( sz.getWidth(), sz.getHeight() );
+				Point2d parentSize = parent->getAbsoluteSize();
+				totalSize[0] = parentSize[0] * totalSize[0];
+				totalSize[1] = parentSize[1] * totalSize[1];
+			}
 
-				if ( parent )
-				{
-					Point2d parentSize = parent->getAbsoluteSize();
-					totalSize[0] = parentSize[0] * totalSize[0];
-					totalSize[1] = parentSize[1] * totalSize[1];
-				}
+			Rectangle sizes = getBorderPixelSize();
+			Point4d ptSizes = getBorderSize();
+			bool changed = m_borderChanged;
 
-				Rectangle sizes = getBorderPixelSize();
-				Point4d ptSizes = getBorderSize();
-				bool changed = m_borderChanged;
+			if ( sizes.left() )
+			{
+				changed |= ptSizes[0] != double( sizes.left() ) / totalSize[0];
+				ptSizes[0] = sizes.left() / totalSize[0];
+			}
 
-				if ( sizes.left() )
-				{
-					changed |= ptSizes[0] != double( sizes.left() ) / totalSize[0];
-					ptSizes[0] = sizes.left() / totalSize[0];
-				}
+			if ( sizes.top() )
+			{
+				changed |= ptSizes[1] != double(  sizes.top() ) / totalSize[1];
+				ptSizes[1] = sizes.top() / totalSize[1];
+			}
 
-				if ( sizes.top() )
-				{
-					changed |= ptSizes[1] != double(  sizes.top() ) / totalSize[1];
-					ptSizes[1] = sizes.top() / totalSize[1];
-				}
+			if ( sizes.right() )
+			{
+				changed |= ptSizes[2] != double( sizes.right() ) / totalSize[0];
+				ptSizes[2] = sizes.right() / totalSize[0];
+			}
 
-				if ( sizes.right() )
-				{
-					changed |= ptSizes[2] != double( sizes.right() ) / totalSize[0];
-					ptSizes[2] = sizes.right() / totalSize[0];
-				}
+			if ( sizes.bottom() )
+			{
+				changed |= ptSizes[3] != double( sizes.bottom() ) / totalSize[1];
+				ptSizes[3] = sizes.bottom() / totalSize[1];
+			}
 
-				if ( sizes.bottom() )
-				{
-					changed |= ptSizes[3] != double( sizes.bottom() ) / totalSize[1];
-					ptSizes[3] = sizes.bottom() / totalSize[1];
-				}
-
-				if ( changed )
-				{
-					setBorderSize( ptSizes );
-				}
+			if ( changed )
+			{
+				setBorderSize( ptSizes );
 			}
 		}
 	}
 
-	Rectangle BorderPanelOverlay::getAbsoluteBorderSize( castor::Size const & p_size )const
+	Rectangle BorderPanelOverlay::getAbsoluteBorderSize( castor::Size const & size )const
 	{
-		Point4d size = getAbsoluteBorderSize();
+		Point4d absoluteSize = getAbsoluteBorderSize();
 
 		return Rectangle(
-				   int32_t( size[0] * p_size.getWidth() ),
-				   int32_t( size[1] * p_size.getHeight() ),
-				   int32_t( size[2] * p_size.getWidth() ),
-				   int32_t( size[3] * p_size.getHeight() )
+				   int32_t( absoluteSize[0] * size.getWidth() ),
+				   int32_t( absoluteSize[1] * size.getHeight() ),
+				   int32_t( absoluteSize[2] * size.getWidth() ),
+				   int32_t( absoluteSize[3] * size.getHeight() )
 			   );
 	}
 
 	Point4d BorderPanelOverlay::getAbsoluteBorderSize()const
 	{
-		Point4d size = getBorderSize();
+		Point4d absoluteSize = getBorderSize();
 		OverlaySPtr parent = getOverlay().getParent();
 
 		if ( parent )
 		{
 			Point2d parentSize = parent->getAbsoluteSize();
-			size[0] *= parentSize[0];
-			size[1] *= parentSize[1];
-			size[2] *= parentSize[0];
-			size[3] *= parentSize[1];
+			absoluteSize[0] *= parentSize[0];
+			absoluteSize[1] *= parentSize[1];
+			absoluteSize[2] *= parentSize[0];
+			absoluteSize[3] *= parentSize[1];
 		}
 
-		return size;
+		return absoluteSize;
 	}
 
-	void BorderPanelOverlay::doRender( OverlayRendererSPtr p_renderer )
+	void BorderPanelOverlay::doUpdateBuffer( Size const & size )
 	{
-		p_renderer->drawBorderPanel( *this );
-	}
-
-	void BorderPanelOverlay::doUpdateBuffer( Size const & p_size )
-	{
-		Position pos = getAbsolutePosition( p_size );
-		Size size = getAbsoluteSize( p_size );
-		Rectangle sizes = getAbsoluteBorderSize( p_size );
+		Size absoluteSize = getAbsoluteSize( size );
+		Rectangle absoluteBorderSize = getAbsoluteBorderSize( size );
 
 		int32_t centerL = 0;
 		int32_t centerT = 0;
-		int32_t centerR = size.getWidth();
-		int32_t centerB = size.getHeight();
+		int32_t centerR = absoluteSize.getWidth();
+		int32_t centerB = absoluteSize.getHeight();
 
 		if ( m_borderPosition == BorderPosition::eInternal )
 		{
-			centerL += sizes.left();
-			centerT += sizes.top();
-			centerR -= sizes.right();
-			centerB -= sizes.bottom();
+			centerL += absoluteBorderSize.left();
+			centerT += absoluteBorderSize.top();
+			centerR -= absoluteBorderSize.right();
+			centerB -= absoluteBorderSize.bottom();
 		}
 		else if ( m_borderPosition == BorderPosition::eMiddle )
 		{
-			centerL += sizes.left() / 2;
-			centerT += sizes.top() / 2;
-			centerR -= sizes.right() / 2;
-			centerB -= sizes.bottom() / 2;
+			centerL += absoluteBorderSize.left() / 2;
+			centerT += absoluteBorderSize.top() / 2;
+			centerR -= absoluteBorderSize.right() / 2;
+			centerB -= absoluteBorderSize.bottom() / 2;
 		}
 
-		int32_t borderL = centerL - sizes.left();
-		int32_t borderT = centerT - sizes.top();
-		int32_t borderR = centerR + sizes.right();
-		int32_t borderB = centerB + sizes.bottom();
+		int32_t borderL = centerL - absoluteBorderSize.left();
+		int32_t borderT = centerT - absoluteBorderSize.top();
+		int32_t borderR = centerR + absoluteBorderSize.right();
+		int32_t borderB = centerB + absoluteBorderSize.bottom();
 
-		real borderUvLL = real( m_borderOuterUv[0] );
-		real borderUvTT = real( m_borderOuterUv[1] );
-		real borderUvML = real( m_borderInnerUv[0] );
-		real borderUvMT = real( m_borderInnerUv[1] );
-		real borderUvMR = real( m_borderInnerUv[2] );
-		real borderUvMB = real( m_borderInnerUv[3] );
-		real borderUvRR = real( m_borderOuterUv[2] );
-		real borderUvBB = real( m_borderOuterUv[3] );
+		auto borderUvLL = real( m_borderOuterUv[0] );
+		auto borderUvTT = real( m_borderOuterUv[1] );
+		auto borderUvML = real( m_borderInnerUv[0] );
+		auto borderUvMT = real( m_borderInnerUv[1] );
+		auto borderUvMR = real( m_borderInnerUv[2] );
+		auto borderUvMB = real( m_borderInnerUv[3] );
+		auto borderUvRR = real( m_borderOuterUv[2] );
+		auto borderUvBB = real( m_borderOuterUv[3] );
 
 		// Center
-		OverlayCategory::Vertex vertex0 = { { float( centerL ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, { real( m_uv[0] ), real( m_uv[3] ) } };
-		OverlayCategory::Vertex vertex1 = { { float( centerL ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, { real( m_uv[0] ), real( m_uv[1] ) } };
-		OverlayCategory::Vertex vertex2 = { { float( centerR ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, { real( m_uv[2] ), real( m_uv[1] ) } };
-		OverlayCategory::Vertex vertex3 = { { float( centerL ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, { real( m_uv[0] ), real( m_uv[3] ) } };
-		OverlayCategory::Vertex vertex4 = { { float( centerR ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, { real( m_uv[2] ), real( m_uv[1] ) } };
-		OverlayCategory::Vertex vertex5 = { { float( centerR ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, { real( m_uv[2] ), real( m_uv[3] ) } };
+		OverlayCategory::Vertex vertex0 = { Point2f{ float( centerL ) / size.getWidth(), float( centerT ) / size.getHeight() }, Point2f{ real( m_uv[0] ), real( m_uv[3] ) } };
+		OverlayCategory::Vertex vertex1 = { Point2f{ float( centerL ) / size.getWidth(), float( centerB ) / size.getHeight() }, Point2f{ real( m_uv[0] ), real( m_uv[1] ) } };
+		OverlayCategory::Vertex vertex2 = { Point2f{ float( centerR ) / size.getWidth(), float( centerB ) / size.getHeight() }, Point2f{ real( m_uv[2] ), real( m_uv[1] ) } };
+		OverlayCategory::Vertex vertex3 = { Point2f{ float( centerL ) / size.getWidth(), float( centerT ) / size.getHeight() }, Point2f{ real( m_uv[0] ), real( m_uv[3] ) } };
+		OverlayCategory::Vertex vertex4 = { Point2f{ float( centerR ) / size.getWidth(), float( centerB ) / size.getHeight() }, Point2f{ real( m_uv[2] ), real( m_uv[1] ) } };
+		OverlayCategory::Vertex vertex5 = { Point2f{ float( centerR ) / size.getWidth(), float( centerT ) / size.getHeight() }, Point2f{ real( m_uv[2] ), real( m_uv[3] ) } };
 		m_arrayVtx[0] = vertex0;
 		m_arrayVtx[1] = vertex1;
 		m_arrayVtx[2] = vertex2;
@@ -236,12 +231,12 @@ namespace castor3d
 
 		// Corner Top Left
 		uint32_t index = 0;
-		OverlayCategory::Vertex cornerTL0 = { { float( borderL ) / p_size.getWidth(), float( borderT ) / p_size.getHeight() }, { borderUvLL, borderUvTT } };
-		OverlayCategory::Vertex cornerTL1 = { { float( borderL ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, { borderUvLL, borderUvMT } };
-		OverlayCategory::Vertex cornerTL2 = { { float( centerL ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, { borderUvML, borderUvMT } };
-		OverlayCategory::Vertex cornerTL3 = { { float( borderL ) / p_size.getWidth(), float( borderT ) / p_size.getHeight() }, { borderUvLL, borderUvTT } };
-		OverlayCategory::Vertex cornerTL4 = { { float( centerL ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, { borderUvML, borderUvMT } };
-		OverlayCategory::Vertex cornerTL5 = { { float( centerL ) / p_size.getWidth(), float( borderT ) / p_size.getHeight() }, { borderUvML, borderUvTT } };
+		OverlayCategory::Vertex cornerTL0 = { Point2f{ float( borderL ) / size.getWidth(), float( borderT ) / size.getHeight() }, Point2f{ borderUvLL, borderUvTT } };
+		OverlayCategory::Vertex cornerTL1 = { Point2f{ float( borderL ) / size.getWidth(), float( centerT ) / size.getHeight() }, Point2f{ borderUvLL, borderUvMT } };
+		OverlayCategory::Vertex cornerTL2 = { Point2f{ float( centerL ) / size.getWidth(), float( centerT ) / size.getHeight() }, Point2f{ borderUvML, borderUvMT } };
+		OverlayCategory::Vertex cornerTL3 = { Point2f{ float( borderL ) / size.getWidth(), float( borderT ) / size.getHeight() }, Point2f{ borderUvLL, borderUvTT } };
+		OverlayCategory::Vertex cornerTL4 = { Point2f{ float( centerL ) / size.getWidth(), float( centerT ) / size.getHeight() }, Point2f{ borderUvML, borderUvMT } };
+		OverlayCategory::Vertex cornerTL5 = { Point2f{ float( centerL ) / size.getWidth(), float( borderT ) / size.getHeight() }, Point2f{ borderUvML, borderUvTT } };
 		m_arrayVtxBorder[index++] = cornerTL0;
 		m_arrayVtxBorder[index++] = cornerTL1;
 		m_arrayVtxBorder[index++] = cornerTL2;
@@ -250,12 +245,12 @@ namespace castor3d
 		m_arrayVtxBorder[index++] = cornerTL5;
 
 		// Border Top
-		OverlayCategory::Vertex borderT0 = { { float( centerL ) / p_size.getWidth(), float( borderT ) / p_size.getHeight() }, { borderUvML, borderUvTT } };
-		OverlayCategory::Vertex borderT1 = { { float( centerL ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, { borderUvML, borderUvMT } };
-		OverlayCategory::Vertex borderT2 = { { float( centerR ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, { borderUvMR, borderUvMT } };
-		OverlayCategory::Vertex borderT3 = { { float( centerL ) / p_size.getWidth(), float( borderT ) / p_size.getHeight() }, { borderUvML, borderUvTT } };
-		OverlayCategory::Vertex borderT4 = { { float( centerR ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, { borderUvMR, borderUvMT } };
-		OverlayCategory::Vertex borderT5 = { { float( centerR ) / p_size.getWidth(), float( borderT ) / p_size.getHeight() }, { borderUvMR, borderUvTT } };
+		OverlayCategory::Vertex borderT0 = { Point2f{ float( centerL ) / size.getWidth(), float( borderT ) / size.getHeight() }, Point2f{ borderUvML, borderUvTT } };
+		OverlayCategory::Vertex borderT1 = { Point2f{ float( centerL ) / size.getWidth(), float( centerT ) / size.getHeight() }, Point2f{ borderUvML, borderUvMT } };
+		OverlayCategory::Vertex borderT2 = { Point2f{ float( centerR ) / size.getWidth(), float( centerT ) / size.getHeight() }, Point2f{ borderUvMR, borderUvMT } };
+		OverlayCategory::Vertex borderT3 = { Point2f{ float( centerL ) / size.getWidth(), float( borderT ) / size.getHeight() }, Point2f{ borderUvML, borderUvTT } };
+		OverlayCategory::Vertex borderT4 = { Point2f{ float( centerR ) / size.getWidth(), float( centerT ) / size.getHeight() }, Point2f{ borderUvMR, borderUvMT } };
+		OverlayCategory::Vertex borderT5 = { Point2f{ float( centerR ) / size.getWidth(), float( borderT ) / size.getHeight() }, Point2f{ borderUvMR, borderUvTT } };
 		m_arrayVtxBorder[index++] = borderT0;
 		m_arrayVtxBorder[index++] = borderT1;
 		m_arrayVtxBorder[index++] = borderT2;
@@ -264,12 +259,12 @@ namespace castor3d
 		m_arrayVtxBorder[index++] = borderT5;
 
 		// Corner Top Right
-		OverlayCategory::Vertex cornerTR0 = { { float( centerR ) / p_size.getWidth(), float( borderT ) / p_size.getHeight() }, { borderUvMR, borderUvTT } };
-		OverlayCategory::Vertex cornerTR1 = { { float( centerR ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, { borderUvMR, borderUvMT } };
-		OverlayCategory::Vertex cornerTR2 = { { float( borderR ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, { borderUvRR, borderUvMT } };
-		OverlayCategory::Vertex cornerTR3 = { { float( centerR ) / p_size.getWidth(), float( borderT ) / p_size.getHeight() }, { borderUvMR, borderUvTT } };
-		OverlayCategory::Vertex cornerTR4 = { { float( borderR ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, { borderUvRR, borderUvMT } };
-		OverlayCategory::Vertex cornerTR5 = { { float( borderR ) / p_size.getWidth(), float( borderT ) / p_size.getHeight() }, { borderUvRR, borderUvTT } };
+		OverlayCategory::Vertex cornerTR0 = { Point2f{ float( centerR ) / size.getWidth(), float( borderT ) / size.getHeight() }, Point2f{ borderUvMR, borderUvTT } };
+		OverlayCategory::Vertex cornerTR1 = { Point2f{ float( centerR ) / size.getWidth(), float( centerT ) / size.getHeight() }, Point2f{ borderUvMR, borderUvMT } };
+		OverlayCategory::Vertex cornerTR2 = { Point2f{ float( borderR ) / size.getWidth(), float( centerT ) / size.getHeight() }, Point2f{ borderUvRR, borderUvMT } };
+		OverlayCategory::Vertex cornerTR3 = { Point2f{ float( centerR ) / size.getWidth(), float( borderT ) / size.getHeight() }, Point2f{ borderUvMR, borderUvTT } };
+		OverlayCategory::Vertex cornerTR4 = { Point2f{ float( borderR ) / size.getWidth(), float( centerT ) / size.getHeight() }, Point2f{ borderUvRR, borderUvMT } };
+		OverlayCategory::Vertex cornerTR5 = { Point2f{ float( borderR ) / size.getWidth(), float( borderT ) / size.getHeight() }, Point2f{ borderUvRR, borderUvTT } };
 		m_arrayVtxBorder[index++] = cornerTR0;
 		m_arrayVtxBorder[index++] = cornerTR1;
 		m_arrayVtxBorder[index++] = cornerTR2;
@@ -278,12 +273,12 @@ namespace castor3d
 		m_arrayVtxBorder[index++] = cornerTR5;
 
 		// Border Left
-		OverlayCategory::Vertex borderL0 = { { float( borderL ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, { borderUvLL, borderUvMT } };
-		OverlayCategory::Vertex borderL1 = { { float( borderL ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, { borderUvLL, borderUvMB } };
-		OverlayCategory::Vertex borderL2 = { { float( centerL ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, { borderUvML, borderUvMB } };
-		OverlayCategory::Vertex borderL3 = { { float( borderL ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, { borderUvLL, borderUvMT } };
-		OverlayCategory::Vertex borderL4 = { { float( centerL ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, { borderUvML, borderUvMB } };
-		OverlayCategory::Vertex borderL5 = { { float( centerL ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, { borderUvML, borderUvMT } };
+		OverlayCategory::Vertex borderL0 = { Point2f{ float( borderL ) / size.getWidth(), float( centerT ) / size.getHeight() }, Point2f{ borderUvLL, borderUvMT } };
+		OverlayCategory::Vertex borderL1 = { Point2f{ float( borderL ) / size.getWidth(), float( centerB ) / size.getHeight() }, Point2f{ borderUvLL, borderUvMB } };
+		OverlayCategory::Vertex borderL2 = { Point2f{ float( centerL ) / size.getWidth(), float( centerB ) / size.getHeight() }, Point2f{ borderUvML, borderUvMB } };
+		OverlayCategory::Vertex borderL3 = { Point2f{ float( borderL ) / size.getWidth(), float( centerT ) / size.getHeight() }, Point2f{ borderUvLL, borderUvMT } };
+		OverlayCategory::Vertex borderL4 = { Point2f{ float( centerL ) / size.getWidth(), float( centerB ) / size.getHeight() }, Point2f{ borderUvML, borderUvMB } };
+		OverlayCategory::Vertex borderL5 = { Point2f{ float( centerL ) / size.getWidth(), float( centerT ) / size.getHeight() }, Point2f{ borderUvML, borderUvMT } };
 		m_arrayVtxBorder[index++] = borderL0;
 		m_arrayVtxBorder[index++] = borderL1;
 		m_arrayVtxBorder[index++] = borderL2;
@@ -292,12 +287,12 @@ namespace castor3d
 		m_arrayVtxBorder[index++] = borderL5;
 
 		// Border Right
-		OverlayCategory::Vertex borderR0 = { { float( centerR ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, { borderUvMR, borderUvMT } };
-		OverlayCategory::Vertex borderR1 = { { float( centerR ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, { borderUvMR, borderUvMB } };
-		OverlayCategory::Vertex borderR2 = { { float( borderR ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, { borderUvRR, borderUvMB } };
-		OverlayCategory::Vertex borderR3 = { { float( centerR ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, { borderUvMR, borderUvMT } };
-		OverlayCategory::Vertex borderR4 = { { float( borderR ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, { borderUvRR, borderUvMB } };
-		OverlayCategory::Vertex borderR5 = { { float( borderR ) / p_size.getWidth(), float( centerT ) / p_size.getHeight() }, { borderUvRR, borderUvMT } };
+		OverlayCategory::Vertex borderR0 = { Point2f{ float( centerR ) / size.getWidth(), float( centerT ) / size.getHeight() }, Point2f{ borderUvMR, borderUvMT } };
+		OverlayCategory::Vertex borderR1 = { Point2f{ float( centerR ) / size.getWidth(), float( centerB ) / size.getHeight() }, Point2f{ borderUvMR, borderUvMB } };
+		OverlayCategory::Vertex borderR2 = { Point2f{ float( borderR ) / size.getWidth(), float( centerB ) / size.getHeight() }, Point2f{ borderUvRR, borderUvMB } };
+		OverlayCategory::Vertex borderR3 = { Point2f{ float( centerR ) / size.getWidth(), float( centerT ) / size.getHeight() }, Point2f{ borderUvMR, borderUvMT } };
+		OverlayCategory::Vertex borderR4 = { Point2f{ float( borderR ) / size.getWidth(), float( centerB ) / size.getHeight() }, Point2f{ borderUvRR, borderUvMB } };
+		OverlayCategory::Vertex borderR5 = { Point2f{ float( borderR ) / size.getWidth(), float( centerT ) / size.getHeight() }, Point2f{ borderUvRR, borderUvMT } };
 		m_arrayVtxBorder[index++] = borderR0;
 		m_arrayVtxBorder[index++] = borderR1;
 		m_arrayVtxBorder[index++] = borderR2;
@@ -306,12 +301,12 @@ namespace castor3d
 		m_arrayVtxBorder[index++] = borderR5;
 
 		// Corner Bottom Left
-		OverlayCategory::Vertex cornerBL0 = { { float( borderL ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, { borderUvLL, borderUvMB } };
-		OverlayCategory::Vertex cornerBL1 = { { float( borderL ) / p_size.getWidth(), float( borderB ) / p_size.getHeight() }, { borderUvLL, borderUvBB } };
-		OverlayCategory::Vertex cornerBL2 = { { float( centerL ) / p_size.getWidth(), float( borderB ) / p_size.getHeight() }, { borderUvML, borderUvBB } };
-		OverlayCategory::Vertex cornerBL3 = { { float( borderL ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, { borderUvLL, borderUvMB } };
-		OverlayCategory::Vertex cornerBL4 = { { float( centerL ) / p_size.getWidth(), float( borderB ) / p_size.getHeight() }, { borderUvML, borderUvBB } };
-		OverlayCategory::Vertex cornerBL5 = { { float( centerL ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, { borderUvML, borderUvMB } };
+		OverlayCategory::Vertex cornerBL0 = { Point2f{ float( borderL ) / size.getWidth(), float( centerB ) / size.getHeight() }, Point2f{ borderUvLL, borderUvMB } };
+		OverlayCategory::Vertex cornerBL1 = { Point2f{ float( borderL ) / size.getWidth(), float( borderB ) / size.getHeight() }, Point2f{ borderUvLL, borderUvBB } };
+		OverlayCategory::Vertex cornerBL2 = { Point2f{ float( centerL ) / size.getWidth(), float( borderB ) / size.getHeight() }, Point2f{ borderUvML, borderUvBB } };
+		OverlayCategory::Vertex cornerBL3 = { Point2f{ float( borderL ) / size.getWidth(), float( centerB ) / size.getHeight() }, Point2f{ borderUvLL, borderUvMB } };
+		OverlayCategory::Vertex cornerBL4 = { Point2f{ float( centerL ) / size.getWidth(), float( borderB ) / size.getHeight() }, Point2f{ borderUvML, borderUvBB } };
+		OverlayCategory::Vertex cornerBL5 = { Point2f{ float( centerL ) / size.getWidth(), float( centerB ) / size.getHeight() }, Point2f{ borderUvML, borderUvMB } };
 		m_arrayVtxBorder[index++] = cornerBL0;
 		m_arrayVtxBorder[index++] = cornerBL1;
 		m_arrayVtxBorder[index++] = cornerBL2;
@@ -320,12 +315,12 @@ namespace castor3d
 		m_arrayVtxBorder[index++] = cornerBL5;
 
 		// Border Bottom
-		OverlayCategory::Vertex borderB0 = { { float( centerL ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, { borderUvML, borderUvMB } };
-		OverlayCategory::Vertex borderB1 = { { float( centerL ) / p_size.getWidth(), float( borderB ) / p_size.getHeight() }, { borderUvML, borderUvBB } };
-		OverlayCategory::Vertex borderB2 = { { float( centerR ) / p_size.getWidth(), float( borderB ) / p_size.getHeight() }, { borderUvMR, borderUvBB } };
-		OverlayCategory::Vertex borderB3 = { { float( centerL ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, { borderUvML, borderUvMB } };
-		OverlayCategory::Vertex borderB4 = { { float( centerR ) / p_size.getWidth(), float( borderB ) / p_size.getHeight() }, { borderUvMR, borderUvBB } };
-		OverlayCategory::Vertex borderB5 = { { float( centerR ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, { borderUvMR, borderUvMB } };
+		OverlayCategory::Vertex borderB0 = { Point2f{ float( centerL ) / size.getWidth(), float( centerB ) / size.getHeight() }, Point2f{ borderUvML, borderUvMB } };
+		OverlayCategory::Vertex borderB1 = { Point2f{ float( centerL ) / size.getWidth(), float( borderB ) / size.getHeight() }, Point2f{ borderUvML, borderUvBB } };
+		OverlayCategory::Vertex borderB2 = { Point2f{ float( centerR ) / size.getWidth(), float( borderB ) / size.getHeight() }, Point2f{ borderUvMR, borderUvBB } };
+		OverlayCategory::Vertex borderB3 = { Point2f{ float( centerL ) / size.getWidth(), float( centerB ) / size.getHeight() }, Point2f{ borderUvML, borderUvMB } };
+		OverlayCategory::Vertex borderB4 = { Point2f{ float( centerR ) / size.getWidth(), float( borderB ) / size.getHeight() }, Point2f{ borderUvMR, borderUvBB } };
+		OverlayCategory::Vertex borderB5 = { Point2f{ float( centerR ) / size.getWidth(), float( centerB ) / size.getHeight() }, Point2f{ borderUvMR, borderUvMB } };
 		m_arrayVtxBorder[index++] = borderB0;
 		m_arrayVtxBorder[index++] = borderB1;
 		m_arrayVtxBorder[index++] = borderB2;
@@ -334,12 +329,12 @@ namespace castor3d
 		m_arrayVtxBorder[index++] = borderB5;
 
 		// Corner Bottom Right
-		OverlayCategory::Vertex cornerBR0 = { { float( centerR ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, { borderUvMR, borderUvMB } };
-		OverlayCategory::Vertex cornerBR1 = { { float( centerR ) / p_size.getWidth(), float( borderB ) / p_size.getHeight() }, { borderUvMR, borderUvBB } };
-		OverlayCategory::Vertex cornerBR2 = { { float( borderR ) / p_size.getWidth(), float( borderB ) / p_size.getHeight() }, { borderUvRR, borderUvBB } };
-		OverlayCategory::Vertex cornerBR3 = { { float( centerR ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, { borderUvMR, borderUvMB } };
-		OverlayCategory::Vertex cornerBR4 = { { float( borderR ) / p_size.getWidth(), float( borderB ) / p_size.getHeight() }, { borderUvRR, borderUvBB } };
-		OverlayCategory::Vertex cornerBR5 = { { float( borderR ) / p_size.getWidth(), float( centerB ) / p_size.getHeight() }, { borderUvRR, borderUvMB } };
+		OverlayCategory::Vertex cornerBR0 = { Point2f{ float( centerR ) / size.getWidth(), float( centerB ) / size.getHeight() }, Point2f{ borderUvMR, borderUvMB } };
+		OverlayCategory::Vertex cornerBR1 = { Point2f{ float( centerR ) / size.getWidth(), float( borderB ) / size.getHeight() }, Point2f{ borderUvMR, borderUvBB } };
+		OverlayCategory::Vertex cornerBR2 = { Point2f{ float( borderR ) / size.getWidth(), float( borderB ) / size.getHeight() }, Point2f{ borderUvRR, borderUvBB } };
+		OverlayCategory::Vertex cornerBR3 = { Point2f{ float( centerR ) / size.getWidth(), float( centerB ) / size.getHeight() }, Point2f{ borderUvMR, borderUvMB } };
+		OverlayCategory::Vertex cornerBR4 = { Point2f{ float( borderR ) / size.getWidth(), float( borderB ) / size.getHeight() }, Point2f{ borderUvRR, borderUvBB } };
+		OverlayCategory::Vertex cornerBR5 = { Point2f{ float( borderR ) / size.getWidth(), float( centerB ) / size.getHeight() }, Point2f{ borderUvRR, borderUvMB } };
 		m_arrayVtxBorder[index++] = cornerBR0;
 		m_arrayVtxBorder[index++] = cornerBR1;
 		m_arrayVtxBorder[index++] = cornerBR2;

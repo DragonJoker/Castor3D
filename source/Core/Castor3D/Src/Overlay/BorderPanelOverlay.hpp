@@ -92,6 +92,10 @@ namespace castor3d
 		 */
 		C3D_API static OverlayCategorySPtr create();
 		/**
+		 *\copydoc	castor3d::OverlayCategory::accept
+		 */
+		C3D_API void accept( OverlayVisitor & visitor )const override;
+		/**
 		 *\copydoc		castor3d::OverlayCategory::createTextWriter
 		 */
 		C3D_API std::unique_ptr < OverlayCategory::TextWriter > createTextWriter( castor::String const & tabs )override
@@ -100,7 +104,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the border material
+		 *\brief		Sets the border material
 		 *\param[in]	material	The new value
 		 *\~french
 		 *\brief		Définit le matériau des bords
@@ -236,7 +240,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the left border thickness
+		 *\brief		Sets the left border thickness
 		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord gauche
@@ -249,7 +253,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the top border thickness
+		 *\brief		Sets the top border thickness
 		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord haut
@@ -262,7 +266,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the right border thickness
+		 *\brief		Sets the right border thickness
 		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord droit
@@ -275,7 +279,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the bottom border thickness
+		 *\brief		Sets the bottom border thickness
 		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord bas
@@ -288,7 +292,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the borders thicknesses
+		 *\brief		Sets the borders thicknesses
 		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur des bords
@@ -374,7 +378,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the left border thickness
+		 *\brief		Sets the left border thickness
 		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord gauche
@@ -387,7 +391,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the top border thickness
+		 *\brief		Sets the top border thickness
 		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord haut
@@ -400,7 +404,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the right border thickness
+		 *\brief		Sets the right border thickness
 		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord droit
@@ -413,7 +417,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the bottom border thickness
+		 *\brief		Sets the bottom border thickness
 		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord bas
@@ -426,7 +430,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the borders thicknesses
+		 *\brief		Sets the borders thicknesses
 		 *\param[in]	size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur des bords
@@ -451,7 +455,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the border position
+		 *\brief		Sets the border position
 		 *\param[in]	position	The new value
 		 *\~french
 		 *\brief		Définit la position de la bordure
@@ -475,7 +479,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the borders outer part UV
+		 *\brief		Sets the borders outer part UV
 		 *\param[in]	value	The new value (left, top, right and bottom)
 		 *\~french
 		 *\brief		Définit Les UV de la partie extérieure de la bordure
@@ -499,7 +503,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		sets the borders inner part UV
+		 *\brief		Sets the borders inner part UV
 		 *\param[in]	value	The new value (left, top, right and bottom)
 		 *\~french
 		 *\brief		Définit Les UV de la partie intérieure de la bordure
@@ -525,15 +529,6 @@ namespace castor3d
 	protected:
 		/**
 		 *\~english
-		 *\brief		Draws the overlay
-		 *\param[in]	renderer	The renderer used to draw this overlay
-		 *\~french
-		 *\brief		Dessine l'incrustation
-		 *\param[in]	renderer	Le renderer utilisé pour dessiner cette incrustation
-		 */
-		C3D_API void doRender( OverlayRendererSPtr renderer )override;
-		/**
-		 *\~english
 		 *\brief		Updates the vertex buffer.
 		 *\param[in]	size	The render target size.
 		 *\~french
@@ -547,7 +542,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour la taille de l'incrustation, en prenant en compte la taille en pixel voulue.
 		 */
-		C3D_API void doUpdateSize()override;
+		C3D_API void doUpdateSize( OverlayRenderer const & renderer )override;
 
 	protected:
 		//!\~english	The border material.

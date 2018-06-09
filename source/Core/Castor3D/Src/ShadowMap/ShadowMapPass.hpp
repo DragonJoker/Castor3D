@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_SHADOW_MAP_PASS_H___
 #define ___C3D_SHADOW_MAP_PASS_H___
 
-#include "Mesh/Buffer/BufferDeclaration.hpp"
+#include <Pipeline/VertexLayout.hpp>
 #include "Render/RenderPass.hpp"
 #include "Render/Viewport.hpp"
 #include "Scene/Camera.hpp"
@@ -50,21 +50,6 @@ namespace castor3d
 		C3D_API ~ShadowMapPass();
 		/**
 		 *\~english
-		 *\brief		Starts the timers.
-		 *\~french
-		 *\brief		Démarre les timers.
-		 */
-		C3D_API void startTimer();
-		/**
-		 *\~english
-		 *\brief		Stops the timers.
-		 *\~french
-		 *\brief
-		 *\brief		Arrête les timers.
-		 */
-		C3D_API void stopTimer();
-		/**
-		 *\~english
 		 *\brief		Updates the render pass.
 		 *\remarks		Gather the render queues, for further update.
 		 *\param[in]	camera	The viewer camera.
@@ -85,27 +70,36 @@ namespace castor3d
 			, uint32_t index ) = 0;
 		/**
 		 *\~english
-		 *\brief		Render function.
+		 *\brief		Updates device dependent data.
 		 *\param[in]	index	The render index.
 		 *\~french
-		 *\brief		Fonction de rendu.
+		 *\brief		Met à jour les données dépendantes du device.
 		 *\param[in]	index	L'indice du rendu.
 		 */
-		C3D_API virtual void render( uint32_t index = 0 ) = 0;
+		C3D_API virtual void updateDeviceDependent( uint32_t index = 0 ) = 0;
+
+		inline RenderPassTimer & getTimer()
+		{
+			return *m_timer;
+		}
 
 	protected:
 		/**
 		 *\~english
-		 *\brief		Renders the given nodes.
-		 *\param		nodes	The nodes to render.
+		 *\brief		Updates the given nodes.
+		 *\param		nodes	The nodes.
 		 *\param		camera	The viewing camera.
 		 *\~french
-		 *\brief		Dessine les noeuds donnés.
-		 *\param		nodes	Les noeuds à dessiner.
+		 *\brief		Met à jour les noeuds donnés.
+		 *\param		nodes	Les noeuds.
 		 *\param		camera	La caméra regardant la scène.
 		 */
-		void doRenderNodes( SceneRenderNodes & nodes
+		void doUpdateNodes( SceneCulledRenderNodes & nodes
 			, Camera const & camera );
+		/**
+		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
+		 */
+		renderer::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 
 	private:
 		/**
@@ -123,27 +117,23 @@ namespace castor3d
 		 */
 		virtual void doCleanup()= 0;
 		/**
-		 *\~english
-		 *\brief		Prepares the pipeline, culling back faces.
-		 *\~french
-		 *\brief		Prépare le pipeline de rendu, en supprimant les faces arrière.
+		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
 		 */
-		virtual void doPreparePipeline( ShaderProgram & program
-			, PipelineFlags const & flags );
+		void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, BillboardListRenderNode & nodes
+			, ShadowMapLightTypeArray const & shadowMaps )override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
+		 */
+		void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, SubmeshRenderNode & nodes
+			, ShadowMapLightTypeArray const & shadowMaps )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
 		void doUpdatePipeline( RenderPipeline & pipeline )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
-		 */
-		void doPrepareFrontPipeline( ShaderProgram & program
-			, PipelineFlags const & flags )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doPrepareBackPipeline
-		 */
-		void doPrepareBackPipeline( ShaderProgram & program
-			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
@@ -166,7 +156,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const override;
+			, renderer::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */
@@ -174,7 +164,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const override;
+			, renderer::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
 		 */
@@ -182,18 +172,12 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ComparisonFunc alphaFunc )const override;
+			, renderer::CompareOp alphaFunc )const override;
 
 	protected:
-		//!\~english	The scene.
-		//!\~french		La scène.
 		Scene & m_scene;
-		//!\~english	The parent shadow map.
-		//!\~french		La shadow map parente.
 		ShadowMap const & m_shadowMap;
-		//!\~english	Tells if the pass is initialised.
-		//!\~french		Dit si la passe est initialisée.
-		bool m_initialised{ false };
+		mutable bool m_initialised{ false };
 	};
 }
 

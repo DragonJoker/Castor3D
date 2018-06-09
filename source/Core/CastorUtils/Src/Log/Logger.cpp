@@ -153,6 +153,7 @@ namespace castor
 		m_wclog = new LogStreambuf< wchar_t, DebugLogStreambufTraits< wchar_t > >( std::wclog );
 		m_initialised = false;
 		m_stopped = true;
+		m_threadEnded = true;
 	}
 
 	Logger::~Logger()
@@ -551,6 +552,7 @@ namespace castor
 	void Logger::doInitialiseThread()
 	{
 		m_stopped = false;
+		m_threadEnded = false;
 		m_logThread = std::thread( [this]()
 		{
 			while ( !m_initialised && !m_stopped )
@@ -569,10 +571,7 @@ namespace castor
 				doFlushQueue();
 			}
 
-			{
-				auto lock = makeUniqueLock( m_mutexThreadEnded );
-				m_threadEnded.notify_all();
-			}
+			m_threadEnded = true;
 		} );
 	}
 
@@ -581,10 +580,12 @@ namespace castor
 		if ( !m_stopped )
 		{
 			m_stopped = true;
+
+			while ( !m_threadEnded )
 			{
-				auto lock = makeUniqueLock( m_mutexThreadEnded );
-				m_threadEnded.wait( lock );
+				std::this_thread::sleep_for( 1_ms );
 			}
+
 			m_logThread.join();
 		}
 	}

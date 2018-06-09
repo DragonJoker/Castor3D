@@ -3,25 +3,40 @@
 #include "LineariseDepthPass.hpp"
 
 #include "Engine.hpp"
-#include "FrameBuffer/FrameBuffer.hpp"
-#include "FrameBuffer/TextureAttachment.hpp"
-#include "Mesh/Buffer/BufferElementGroup.hpp"
-#include "Mesh/Buffer/GeometryBuffers.hpp"
-#include "Mesh/Buffer/VertexBuffer.hpp"
 #include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/Camera.hpp"
-#include "Shader/ShaderProgram.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
-#include "State/BlendState.hpp"
-#include "State/DepthStencilState.hpp"
-#include "State/MultisampleState.hpp"
-#include "State/RasteriserState.hpp"
 #include "Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
+
+#include <Buffer/VertexBuffer.hpp>
+#include <Command/CommandBuffer.hpp>
+#include <Command/Queue.hpp>
+#include <Core/Device.hpp>
+#include <Descriptor/DescriptorSet.hpp>
+#include <Descriptor/DescriptorSetLayout.hpp>
+#include <Descriptor/DescriptorSetLayoutBinding.hpp>
+#include <Descriptor/DescriptorSetPool.hpp>
+#include <Image/Texture.hpp>
+#include <Image/TextureView.hpp>
+#include <Pipeline/ColourBlendState.hpp>
+#include <Pipeline/DepthStencilState.hpp>
+#include <Pipeline/InputAssemblyState.hpp>
+#include <Pipeline/MultisampleState.hpp>
+#include <Pipeline/Pipeline.hpp>
+#include <Pipeline/PipelineLayout.hpp>
+#include <Pipeline/RasterisationState.hpp>
+#include <Pipeline/ShaderStageState.hpp>
+#include <Pipeline/VertexInputState.hpp>
+#include <Pipeline/VertexLayout.hpp>
+#include <RenderPass/FrameBuffer.hpp>
+#include <RenderPass/FrameBufferAttachment.hpp>
+#include <RenderPass/RenderPass.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
 
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
@@ -45,17 +60,15 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			UBO_MATRIX( writer );
-			auto position = writer.declAttribute< Vec2 >( ShaderProgram::Position );
-			auto texture = writer.declAttribute< Vec2 >( ShaderProgram::Texture );
+			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
 
 			// Shader outputs
-			auto gl_Position = writer.declBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto out = gl_PerVertex{ writer };
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					gl_Position = c3d_projection * vec4( position, 0.0, 1.0 );
+					out.gl_Position() = writer.rendererScalePosition( vec4( position, 0.0, 1.0 ) );
 				} );
 			return writer.finalise();
 		}
@@ -66,7 +79,7 @@ namespace castor3d
 			auto & renderSystem = *engine.getRenderSystem();
 			using namespace glsl;
 			auto writer = renderSystem.createGlslWriter();
-			auto index = MinTextureIndex;
+			auto index = MinBufferIndex;
 
 			// If using depth mip levels, the log of the maximum pixel offset before we need to switch to a lower
 			// miplevel to maintain reasonable spatial locality in the cache
@@ -84,19 +97,18 @@ namespace castor3d
 
 			//////////////////////////////////////////////////
 
+			UBO_SSAO_CONFIG( writer, 0u, 0u );
 			// Negative, "linear" values in world-space units
-			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), index++ );
+			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), 1u, 0u );
 
 			/** Same size as result buffer, do not offset by guard band when reading from it */
-			auto c3d_mapNormal = writer.declSampler< Sampler2D >( cuT( "c3d_mapNormal" ), index++, config.m_useNormalsBuffer );
-			auto c3d_readMultiplyFirst = writer.declUniform( cuT( "c3d_readMultiplyFirst" ), config.m_useNormalsBuffer, vec4( 2.0_f ) );
-			auto c3d_readAddSecond = writer.declUniform( cuT( "c3d_readAddSecond" ), config.m_useNormalsBuffer, vec4( 1.0_f ) );
-
-			UBO_SSAO_CONFIG( writer );
+			auto c3d_mapNormal = writer.declSampler< Sampler2D >( cuT( "c3d_mapNormal" ), 2u, 0u, config.m_useNormalsBuffer );
+			auto c3d_readMultiplyFirst = writer.declConstant( cuT( "c3d_readMultiplyFirst" ), vec4( 2.0_f ), config.m_useNormalsBuffer );
+			auto c3d_readAddSecond = writer.declConstant( cuT( "c3d_readAddSecond" ), vec4( 1.0_f ), config.m_useNormalsBuffer );
 
 			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
 
-			auto pxl_fragColor = writer.declOutput< Vec3 >( cuT( "pxl_fragColor" ) );
+			auto pxl_fragColor = writer.declOutput< Vec3 >( cuT( "pxl_fragColor" ), 0u );
 
 #define visibility      pxl_fragColor.r()
 #define bilateralKey    pxl_fragColor.g()
@@ -480,39 +492,50 @@ namespace castor3d
 			return writer.finalise();
 		}
 
-		ShaderProgramSPtr doGetProgram( Engine & engine
-			, SsaoConfig const & config )
+		renderer::ShaderStageStateArray doGetProgram( Engine & engine
+			, SsaoConfig const & config
+			, glsl::Shader & vertexShader
+			, glsl::Shader & pixelShader )
 		{
-			auto vtx = doGetVertexProgram( engine );
-			auto pxl = doGetPixelProgram( engine, config );
-			ShaderProgramSPtr program = engine.getShaderProgramCache().getNewProgram( false );
-			program->createObject( ShaderType::eVertex );
-			program->createObject( ShaderType::ePixel );
-			program->setSource( ShaderType::eVertex, vtx );
-			program->setSource( ShaderType::ePixel, pxl );
-			program->initialise();
+			auto & device = getCurrentDevice( engine );
+			vertexShader = doGetVertexProgram( engine );
+			pixelShader = doGetPixelProgram( engine, config );
+			renderer::ShaderStageStateArray program
+			{
+				{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
+				{ device.createShaderModule( renderer::ShaderStageFlag::eFragment ) },
+			};
+			program[0].module->loadShader( vertexShader.getSource() );
+			program[1].module->loadShader( pixelShader.getSource() );
 			return program;
 		}
 
-		RenderPipelineUPtr doCreatePipeline( Engine & engine
-			, ShaderProgram & program )
+		renderer::PipelinePtr doCreatePipeline( renderer::PipelineLayout const & layout
+			, renderer::ShaderStageStateArray program
+			, renderer::RenderPass const & renderPass
+			, renderer::VertexLayout const & vertexLayout
+			, renderer::Extent2D const & size )
 		{
-			DepthStencilState dsstate;
-			dsstate.setDepthTest( false );
-			dsstate.setDepthMask( WritingMask::eZero );
-			RasteriserState rsstate;
-			rsstate.setCulledFaces( Culling::eNone );
-			return engine.getRenderSystem()->createRenderPipeline( std::move( dsstate )
-				, std::move( rsstate )
-				, BlendState{}
-				, MultisampleState{}
-				, program
-				, PipelineFlags{} );
+			return layout.createPipeline(
+			{
+				program,
+				renderPass,
+				renderer::VertexInputState::create( vertexLayout ),
+				renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleList },
+				renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eNone },
+				renderer::MultisampleState{},
+				renderer::ColourBlendState::createDefault(),
+				{},
+				renderer::DepthStencilState{ 0u, false, false, },
+				std::nullopt,
+				renderer::Viewport{ size.width, size.height, 0, 0 },
+				renderer::Scissor{ 0, 0, size.width, size.height }
+			} );
 		}
 
 		SamplerSPtr doCreateSampler( Engine & engine
 			, String const & name
-			, WrapMode mode )
+			, renderer::WrapMode mode )
 		{
 			SamplerSPtr sampler;
 
@@ -523,86 +546,259 @@ namespace castor3d
 			else
 			{
 				sampler = engine.getSamplerCache().add( name );
-				sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eNearest );
-				sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eNearest );
-				sampler->setWrappingMode( TextureUVW::eU, mode );
-				sampler->setWrappingMode( TextureUVW::eV, mode );
+				sampler->setMinFilter( renderer::Filter::eNearest );
+				sampler->setMagFilter( renderer::Filter::eNearest );
+				sampler->setWrapS( mode );
+				sampler->setWrapT( mode );
 			}
 
 			return sampler;
+		}
+
+		TextureUnit doCreateTexture( Engine & engine, renderer::Extent2D const & size )
+		{
+			auto & renderSystem = *engine.getRenderSystem();
+			auto sampler = doCreateSampler( engine, cuT( "SSAORaw_Result" ), renderer::WrapMode::eClampToEdge );
+
+			renderer::ImageCreateInfo image{};
+			image.arrayLayers = 1u;
+			image.extent.width = size.width;
+			image.extent.height = size.height;
+			image.extent.depth = 1u;
+			image.format = renderer::Format::eR32G32B32A32_SFLOAT;
+			image.imageType = renderer::TextureType::e2D;
+			image.mipLevels = 1u;
+			image.samples = renderer::SampleCountFlag::e1;
+			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+
+			auto ssaoResult = std::make_shared< TextureLayout >( renderSystem
+				, image
+				, renderer::MemoryPropertyFlag::eDeviceLocal );
+			TextureUnit result{ engine };
+			result.setTexture( ssaoResult );
+			result.setSampler( sampler );
+			result.initialise();
+			return result;
+		}
+		
+		renderer::RenderPassPtr doCreateRenderPass( Engine & engine )
+		{
+			auto & renderSystem = *engine.getRenderSystem();
+			auto & device = getCurrentDevice( renderSystem );
+
+			// Create the render pass.
+			renderer::RenderPassCreateInfo renderPass;
+			renderPass.flags = 0u;
+
+			renderPass.attachments.resize( 1u );
+			renderPass.attachments[0].format = renderer::Format::eR32G32B32A32_SFLOAT;
+			renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
+			renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
+			renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
+			renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+			renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
+			renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
+			renderPass.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+
+			renderPass.subpasses.resize( 1u );
+			renderPass.subpasses[0].flags = 0u;
+			renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
+			renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
+
+			renderPass.dependencies.resize( 2u );
+			renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+			renderPass.dependencies[0].dstSubpass = 0u;
+			renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
+			renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+			renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+			renderPass.dependencies[1].srcSubpass = 0u;
+			renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
+			renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
+			renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
+			renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+			renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+
+			return device.createRenderPass( renderPass );
+		}
+
+		renderer::FrameBufferPtr doCreateFrameBuffer( renderer::RenderPass const & renderPass
+			, TextureUnit const & texture )
+		{
+			renderer::FrameBufferAttachmentArray attaches;
+			attaches.emplace_back( *( renderPass.getAttachments().begin() ), texture.getTexture()->getDefaultView() );
+			auto size = texture.getTexture()->getDimensions();
+			return renderPass.createFrameBuffer( renderer::Extent2D{ size.width, size.height }
+				, std::move( attaches ) );
+		}
+
+		renderer::VertexBufferPtr< NonTexturedQuad > doCreateVertexBuffer( Engine & engine )
+		{
+			auto & renderSystem = *engine.getRenderSystem();
+			auto & device = getCurrentDevice( renderSystem );
+			auto result = renderer::makeVertexBuffer< NonTexturedQuad >( device
+				, 1u
+				, 0u
+				, renderer::MemoryPropertyFlag::eHostVisible );
+
+			if ( auto buffer = result->lock( 0u
+				, 1u
+				, renderer::MemoryMapFlag::eInvalidateRange | renderer::MemoryMapFlag::eWrite ) )
+			{
+				*buffer = NonTexturedQuad
+				{
+					{
+						{ Point2f{ -1.0, -1.0 } },
+						{ Point2f{ -1.0, +1.0 } },
+						{ Point2f{ +1.0, -1.0 } },
+						{ Point2f{ +1.0, -1.0 } },
+						{ Point2f{ -1.0, +1.0 } },
+						{ Point2f{ +1.0, +1.0 } },
+					}
+				};
+				result->flush( 0u, 1u );
+				result->unlock();
+			}
+
+			return result;
+		}
+
+		renderer::VertexLayoutPtr doCreateVertexLayout( Engine & engine )
+		{
+			auto result = renderer::makeLayout< NonTexturedQuad::Vertex >( 0u );
+			result->createAttribute( 0u, renderer::Format::eR32G32_SFLOAT, offsetof( NonTexturedQuad::Vertex, position ) );
+			return result;
+		}
+
+		renderer::DescriptorSetLayoutPtr doCreateDescriptorLayout( Engine & engine )
+		{
+			auto & renderSystem = *engine.getRenderSystem();
+			auto & device = getCurrentDevice( renderSystem );
+			renderer::DescriptorSetLayoutBindingArray bindings
+			{
+				{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
+				{ 1u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
+				{ 2u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
+			};
+			return device.createDescriptorSetLayout( std::move( bindings ) );
+		}
+
+		renderer::DescriptorSetPtr doCreateDescriptor( renderer::DescriptorSetPool & pool
+			, renderer::DescriptorSetLayout const & layout
+			, SsaoConfigUbo & ssaoConfigUbo
+			, TextureUnit const & linearisedDepthBuffer
+			, renderer::TextureView const & normals
+			, renderer::Sampler const & sampler )
+		{
+			auto result = pool.createDescriptorSet();
+			result->createBinding( layout.getBinding( 0u )
+				, ssaoConfigUbo.getUbo()
+				, 0u
+				, 1u );
+			result->createBinding( layout.getBinding( 1u )
+				, linearisedDepthBuffer.getTexture()->getDefaultView()
+				, linearisedDepthBuffer.getSampler()->getSampler() );
+			result->createBinding( layout.getBinding( 2u )
+				, normals
+				, sampler );
+			result->update();
+			return result;
 		}
 	}
 
 	//*********************************************************************************************
 
 	RawSsaoPass::RawSsaoPass( Engine & engine
-		, Size const & size
+		, renderer::Extent2D const & size
 		, SsaoConfig const & config
-		, MatrixUbo & matrixUbo
-		, SsaoConfigUbo & ssaoConfigUbo )
+		, SsaoConfigUbo & ssaoConfigUbo
+		, TextureUnit const & linearisedDepthBuffer
+		, renderer::TextureView const & normals )
 		: m_engine{ engine }
-		, m_matrixUbo{ matrixUbo }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
+		, m_linearisedDepthBuffer{ linearisedDepthBuffer }
+		, m_normals{ normals }
 		, m_size{ size }
-		, m_result{ engine }
-		, m_program{ doGetProgram( engine, config ) }
-		, m_pipeline{ doCreatePipeline( engine, *m_program ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "SSAO" ), cuT( "Raw AO" ) ) }
+		, m_result{ doCreateTexture( m_engine, m_size ) }
+		, m_program{ doGetProgram( m_engine, config, m_vertexShader, m_pixelShader ) }
+		, m_sampler{ getCurrentDevice( m_engine ).createSampler( renderer::WrapMode::eClampToEdge
+			, renderer::WrapMode::eClampToEdge
+			, renderer::WrapMode::eClampToEdge
+			, renderer::Filter::eNearest
+			, renderer::Filter::eNearest ) }
+		, m_descriptorLayout{ doCreateDescriptorLayout( m_engine ) }
+		, m_descriptorPool{ m_descriptorLayout->createPool( 1u ) }
+		, m_descriptor{ doCreateDescriptor( *m_descriptorPool, *m_descriptorLayout, ssaoConfigUbo, linearisedDepthBuffer, normals, *m_sampler ) }
+		, m_pipelineLayout{ getCurrentDevice( m_engine ).createPipelineLayout( *m_descriptorLayout ) }
+		, m_renderPass{ doCreateRenderPass( m_engine ) }
+		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_result ) }
+		, m_vertexBuffer{ doCreateVertexBuffer( m_engine ) }
+		, m_vertexLayout{ doCreateVertexLayout( m_engine ) }
+		, m_pipeline{ doCreatePipeline( *m_pipelineLayout, m_program, *m_renderPass, *m_vertexLayout, size ) }
+		, m_commandBuffer{ getCurrentDevice( m_engine ).getGraphicsCommandPool().createCommandBuffer() }
+		, m_finished{ getCurrentDevice( m_engine ).createSemaphore() }
+		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "SSAO" ), cuT( "Raw AO" ) ) }
 	{
-		auto & renderSystem = *m_engine.getRenderSystem();
-		auto sampler = doCreateSampler( m_engine, cuT( "SSAORaw_Result" ), WrapMode::eClampToEdge );
-		auto ssaoResult = renderSystem.createTexture( TextureType::eTwoDimensions
-			, AccessType::eNone
-			, AccessType::eRead | AccessType::eWrite );
-		ssaoResult->setSource( PxBufferBase::create( m_size
-			, PixelFormat::eRGB32F ) );
-		m_result.setTexture( ssaoResult );
-		m_result.setSampler( sampler );
-		m_result.setIndex( MinTextureIndex );
-		m_result.initialise();
+		static renderer::ClearColorValue const colour{ 1.0, 1.0, 1.0, 1.0 };
 
-		m_fbo = renderSystem.createFrameBuffer();
-		m_fbo->initialise();
-		m_fbo->setClearColour( RgbaColour::fromPredefined(PredefinedRgbaColour::eOpaqueWhite ) );
-
-		m_resultAttach = m_fbo->createAttachment( ssaoResult );
-		m_fbo->bind();
-		m_fbo->attach( AttachmentPoint::eColour, 0u, m_resultAttach, ssaoResult->getType() );
-		m_fbo->setDrawBuffer( m_resultAttach );
-		ENSURE( m_fbo->isComplete() );
-		m_fbo->unbind();
-
-		m_pipeline->addUniformBuffer( m_matrixUbo.getUbo() );
-		m_pipeline->addUniformBuffer( m_ssaoConfigUbo.getUbo() );
+		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
+		{
+			m_timer->beginPass( *m_commandBuffer );
+			m_commandBuffer->beginRenderPass( *m_renderPass
+				, *m_frameBuffer
+				, { colour }
+				, renderer::SubpassContents::eInline );
+			m_commandBuffer->bindPipeline( *m_pipeline );
+			m_commandBuffer->bindDescriptorSet( *m_descriptor, *m_pipelineLayout );
+			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+			m_commandBuffer->draw( 6u );
+			m_commandBuffer->endRenderPass();
+			m_timer->endPass( *m_commandBuffer );
+			m_commandBuffer->end();
+		}
 	}
 
 	RawSsaoPass::~RawSsaoPass()
 	{
-		m_resultAttach.reset();
-		m_fbo->cleanup();
-		m_fbo.reset();
-		m_pipeline->cleanup();
+		m_timer.reset();
+		m_commandBuffer.reset();
 		m_pipeline.reset();
-		m_program.reset();
-		m_ssaoConfigUbo.getUbo().cleanup();
-		m_matrixUbo.getUbo().cleanup();
+		m_pipelineLayout.reset();
+		m_sampler.reset();
+		m_vertexLayout.reset();
+		m_vertexBuffer.reset();
+		m_frameBuffer.reset();
+		m_renderPass.reset();
 		m_result.cleanup();
 	}
 
-	void RawSsaoPass::compute( TextureUnit const & linearisedDepthBuffer
-		, TextureUnit const & normals )
+	renderer::Semaphore const & RawSsaoPass::compute( renderer::Semaphore const & toWait )const
 	{
+		auto & renderSystem = *m_engine.getRenderSystem();
+		auto & device = getCurrentDevice( renderSystem );
 		m_timer->start();
-		m_fbo->bind( FrameBufferTarget::eDraw );
-		m_fbo->clear( BufferComponent::eColour );
-		normals.getTexture()->bind( MinTextureIndex + 1 );
-		normals.getSampler()->bind( MinTextureIndex + 1 );
-		m_pipeline->apply();
-		m_engine.getRenderSystem()->getCurrentContext()->renderTexture( m_size
-			, *linearisedDepthBuffer.getTexture()
-			, *m_pipeline
-			, m_matrixUbo );
-		m_fbo->unbind();
+		m_timer->notifyPassRender();
+		device.getGraphicsQueue().submit( *m_commandBuffer
+			, toWait
+			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, *m_finished
+			, nullptr );
 		m_timer->stop();
+		return *m_finished.get();
+	}
+
+	void RawSsaoPass::accept( SsaoConfig & config
+		, RenderTechniqueVisitor & visitor )
+	{
+		visitor.visit( cuT( "SSAO - Raw" )
+			, renderer::ShaderStageFlag::eVertex
+			, m_vertexShader );
+		visitor.visit( cuT( "SSAO - Raw" )
+			, renderer::ShaderStageFlag::eFragment
+			, m_pixelShader );
+		config.accept( cuT( "SSAO - Raw" ), visitor );
 	}
 }

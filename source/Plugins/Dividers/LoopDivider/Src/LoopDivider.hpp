@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_LOOP_DIVIDER_H___
@@ -34,17 +34,17 @@ namespace Loop
 		 */
 		VertexSPtr addPoint( castor::real x, castor::real y, castor::real z );
 		/**
-		 * adds a vertex to my list
-		 *\param[in]	p_v	The vertex to add
+		 * Adds a vertex to my list
+		 *\param[in]	v	The vertex to add
 		 *\return	The vertex
 		 */
-		VertexSPtr addPoint( castor::Point3r const & p_v );
+		VertexSPtr addPoint( castor::Point3r const & v );
 		/**
 		 * Creates and adds a vertex to my list
-		 *\param[in]	p_v	The vertex coordinates
+		 *\param[in]	v	The vertex coordinates
 		 *\return	The created vertex
 		 */
-		VertexSPtr addPoint( castor::real * p_v );
+		VertexSPtr addPoint( castor::real * v );
 
 		inline castor3d::SubmeshSPtr getSubmesh()const
 		{
@@ -72,7 +72,7 @@ namespace Loop
 		static castor::String const Type;
 
 	private:
-		VertexPtrUIntMap m_mapVertex;
+		VertexPtrUIntMap m_vertices;
 		FaceEdgesPtrArray m_facesEdges;
 		std::shared_ptr< castor3d::TriFaceMapping > m_indexMapping;
 	};

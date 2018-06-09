@@ -12,22 +12,38 @@ using namespace castor;
 
 namespace castor3d
 {
-	FontTexture::FontTexture( Engine & engine, FontSPtr p_font )
+	FontTexture::FontTexture( Engine & engine, FontSPtr font )
 		: OwnedBy< Engine >( engine )
-		, m_font( p_font )
+		, m_font( font )
 	{
-		uint32_t const maxWidth = p_font->getMaxWidth();
-		uint32_t const maxHeight = p_font->getMaxHeight();
-		uint32_t const count = uint32_t( std::ceil( std::distance( p_font->begin(), p_font->end() ) / 16.0 ) );
+		uint32_t const maxWidth = font->getMaxWidth();
+		uint32_t const maxHeight = font->getMaxHeight();
+		uint32_t const count = uint32_t( std::ceil( std::distance( font->begin(), font->end() ) / 16.0 ) );
 
-		SamplerSPtr sampler = getEngine()->getSamplerCache().add( p_font->getName() );
-		sampler->setWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
-		sampler->setWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
-		sampler->setInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-		sampler->setInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+		SamplerSPtr sampler = getEngine()->getSamplerCache().add( font->getName() );
+		sampler->setWrapS( renderer::WrapMode::eClampToEdge );
+		sampler->setWrapT( renderer::WrapMode::eClampToEdge );
+		sampler->setMinFilter( renderer::Filter::eLinear );
+		sampler->setMagFilter( renderer::Filter::eLinear );
 		m_sampler = sampler;
-		m_texture = getEngine()->getRenderSystem()->createTexture( TextureType::eTwoDimensions, AccessType::eWrite, AccessType::eRead, PixelFormat::eL8, Size{ maxWidth * 16, maxHeight * count } );
-		m_texture->getImage().initialiseSource();
+		renderer::ImageCreateInfo image{};
+		image.flags = 0u;
+		image.arrayLayers = 1u;
+		image.extent.width = maxWidth * 16;
+		image.extent.height = maxHeight * count;
+		image.extent.depth = 1u;
+		image.format = renderer::Format::eR8_UNORM;
+		image.imageType = renderer::TextureType::e2D;
+		image.initialLayout = renderer::ImageLayout::eUndefined;
+		image.mipLevels = 1u;
+		image.samples = renderer::SampleCountFlag::e1;
+		image.sharingMode = renderer::SharingMode::eExclusive;
+		image.tiling = renderer::ImageTiling::eOptimal;
+		image.usage = renderer::ImageUsageFlag::eTransferDst | renderer::ImageUsageFlag::eSampled;
+		m_texture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
+			, image
+			, renderer::MemoryPropertyFlag::eDeviceLocal );
+		m_texture->getDefaultImage().initialiseSource();
 	}
 
 	FontTexture::~FontTexture()
@@ -37,9 +53,7 @@ namespace castor3d
 	void FontTexture::initialise()
 	{
 		m_texture->initialise();
-		m_texture->bind( MinTextureIndex );
 		m_texture->generateMipmaps();
-		m_texture->unbind( MinTextureIndex );
 		onChanged( *this );
 	}
 
@@ -53,7 +67,7 @@ namespace castor3d
 			uint32_t const maxHeight = font->getMaxHeight();
 			uint32_t const count = uint32_t( std::ceil( std::distance( font->begin(), font->end() ) / 16.0 ) );
 			Size size{ maxWidth * 16, maxHeight * count };
-			auto & image = m_texture->getImage();
+			auto & image = m_texture->getDefaultImage();
 			image.initialiseSource( PxBufferBase::create( Size( maxWidth * 16, maxHeight * count ), PixelFormat::eL8 ) );
 
 			auto it = font->begin();
@@ -106,13 +120,13 @@ namespace castor3d
 		return getFont()->getName();
 	}
 
-	Position const & FontTexture::getGlyphPosition( char32_t p_char )const
+	Position const & FontTexture::getGlyphPosition( char32_t glyphChar )const
 	{
-		GlyphPositionMapConstIt it = m_glyphsPositions.find( p_char );
+		GlyphPositionMapConstIt it = m_glyphsPositions.find( glyphChar );
 
 		if ( it == m_glyphsPositions.end() )
 		{
-			CASTOR_EXCEPTION( std::string( "No loaded glyph for character " ) + string::stringCast< char >( string::toString( p_char ) ) );
+			CASTOR_EXCEPTION( std::string( "No loaded glyph for character " ) + string::stringCast< char >( string::toString( glyphChar ) ) );
 		}
 
 		return it->second;

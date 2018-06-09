@@ -83,9 +83,9 @@ namespace C3dAssimp
 
 			for ( auto & vertex : vertices )
 			{
-				vertex.m_pos[0] = real( aiMesh.mVertices[index].x );
-				vertex.m_pos[1] = real( aiMesh.mVertices[index].y );
-				vertex.m_pos[2] = real( aiMesh.mVertices[index].z );
+				vertex.pos[0] = real( aiMesh.mVertices[index].x );
+				vertex.pos[1] = real( aiMesh.mVertices[index].y );
+				vertex.pos[2] = real( aiMesh.mVertices[index].z );
 				++index;
 			}
 
@@ -95,9 +95,9 @@ namespace C3dAssimp
 
 				for ( auto & vertex : vertices )
 				{
-					vertex.m_nml[0] = real( aiMesh.mNormals[index].x );
-					vertex.m_nml[1] = real( aiMesh.mNormals[index].y );
-					vertex.m_nml[2] = real( aiMesh.mNormals[index].z );
+					vertex.nml[0] = real( aiMesh.mNormals[index].x );
+					vertex.nml[1] = real( aiMesh.mNormals[index].y );
+					vertex.nml[2] = real( aiMesh.mNormals[index].z );
 					++index;
 				}
 			}
@@ -108,19 +108,9 @@ namespace C3dAssimp
 
 				for ( auto & vertex : vertices )
 				{
-					vertex.m_tan[0] = real( aiMesh.mTangents[index].x );
-					vertex.m_tan[1] = real( aiMesh.mTangents[index].y );
-					vertex.m_tan[2] = real( aiMesh.mTangents[index].z );
-					++index;
-				}
-
-				index = 0u;
-
-				for ( auto & vertex : vertices )
-				{
-					vertex.m_bin[0] = real( aiMesh.mBitangents[index].x );
-					vertex.m_bin[1] = real( aiMesh.mBitangents[index].y );
-					vertex.m_bin[2] = real( aiMesh.mBitangents[index].z );
+					vertex.tan[0] = real( aiMesh.mTangents[index].x );
+					vertex.tan[1] = real( aiMesh.mTangents[index].y );
+					vertex.tan[2] = real( aiMesh.mTangents[index].z );
 					++index;
 				}
 			}
@@ -131,9 +121,9 @@ namespace C3dAssimp
 
 				for ( auto & vertex : vertices )
 				{
-					vertex.m_tex[0] = real( aiMesh.mTextureCoords[0][index].x );
-					vertex.m_tex[1] = real( aiMesh.mTextureCoords[0][index].y );
-					vertex.m_tex[2] = real( aiMesh.mTextureCoords[0][index].z );
+					vertex.tex[0] = real( aiMesh.mTextureCoords[0][index].x );
+					vertex.tex[1] = real( aiMesh.mTextureCoords[0][index].y );
+					vertex.tex[2] = real( aiMesh.mTextureCoords[0][index].z );
 					++index;
 				}
 			}
@@ -622,7 +612,7 @@ namespace C3dAssimp
 			{
 				if ( face.mNumIndices == 3 )
 				{
-					mapping->addFace( face.mIndices[0], face.mIndices[1], face.mIndices[2] );
+					mapping->addFace( face.mIndices[0], face.mIndices[2], face.mIndices[1] );
 				}
 			}
 
