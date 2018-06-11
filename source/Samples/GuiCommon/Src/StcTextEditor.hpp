@@ -71,9 +71,9 @@ namespace GuiCommon
 			: public wxTextCompleter
 		{
 		public:
-			TextAutoCompleter( wxArrayString const & p_keywords );
-			virtual bool Start( wxString const & p_prefix );
-			virtual wxString GetNext();
+			TextAutoCompleter( wxArrayString const & keywords );
+			bool Start( wxString const & prefix )override;
+			wxString GetNext()override;
 
 		private:
 			std::set< wxString > m_keywords;
@@ -83,86 +83,92 @@ namespace GuiCommon
 #endif
 
 	public:
-		StcTextEditor( StcContext & p_context, wxWindow * p_parent, wxWindowID p_id = wxID_ANY, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize, long p_lStyle = wxVSCROLL );
+		StcTextEditor( StcContext & context
+			, wxWindow * parent
+			, wxWindowID id = wxID_ANY
+			, wxPoint const & pos = wxDefaultPosition
+			, wxSize const & size = wxDefaultSize
+			, long style = wxVSCROLL );
 		virtual ~StcTextEditor();
 
-		bool LoadFile();
-		bool LoadFile( wxString const & p_strFilename );
-		bool SaveFile();
-		bool SaveFile( wxString const & p_strFilename );
-		void setText( wxString const & p_strSource );
+		bool loadFile();
+		bool loadFile( wxString const & filename );
+		bool saveFile();
+		bool saveFile( wxString const & filename );
+		void setText( wxString const & source );
 		bool isModified();
-		wxString DeterminePrefs( wxString const & p_strFilename );
-		bool InitializePrefs( wxString const & p_strFilename );
+		wxString determinePrefs( wxString const & filename );
+		bool initializePrefs( wxString const & filename );
 
 		inline wxString getFileName()
 		{
-			return m_strFilename;
+			return m_filename;
 		}
 
-		inline void setFilename( wxString const & p_strFilename )
+		inline void setFilename( wxString const & filename )
 		{
-			m_strFilename = p_strFilename;
+			m_filename = filename;
 		}
 
 		inline LanguageInfoPtr getLanguageInfo()
 		{
-			return m_pLanguage;
+			return m_language;
 		}
 
 	private:
-		bool Usersettings( wxString const & p_strFilename );
+		void doInitialiseBaseColours( wxColour const & bgColour
+			, wxColour const & fgColour );
 
 	private:
 		DECLARE_EVENT_TABLE()
-		void OnSize( wxSizeEvent & p_event );
-		void OnEditRedo( wxCommandEvent & p_event );
-		void OnEditUndo( wxCommandEvent & p_event );
-		void OnEditClear( wxCommandEvent & p_event );
-		void OnEditCut( wxCommandEvent & p_event );
-		void OnEditCopy( wxCommandEvent & p_event );
-		void OnEditPaste( wxCommandEvent & p_event );
-		void OnFind( wxCommandEvent & p_event );
-		void OnFindNext( wxCommandEvent & p_event );
-		void OnReplace( wxCommandEvent & p_event );
-		void OnReplaceNext( wxCommandEvent & p_event );
-		void OnBraceMatch( wxCommandEvent & p_event );
-		void OnGoto( wxCommandEvent & p_event );
-		void OnEditIndentInc( wxCommandEvent & p_event );
-		void OnEditIndentRed( wxCommandEvent & p_event );
-		void OnEditSelectAll( wxCommandEvent & p_event );
-		void OnEditSelectLine( wxCommandEvent & p_event );
-		void OnHilightLang( wxCommandEvent & p_event );
-		void OnDisplayEOL( wxCommandEvent & p_event );
-		void OnIndentGuide( wxCommandEvent & p_event );
-		void OnLineNumber( wxCommandEvent & p_event );
-		void OnLongLineOn( wxCommandEvent & p_event );
-		void OnWhiteSpace( wxCommandEvent & p_event );
-		void OnFoldToggle( wxCommandEvent & p_event );
-		void OnsetOverType( wxCommandEvent & p_event );
-		void OnsetReadOnly( wxCommandEvent & p_event );
-		void OnWrapmodeOn( wxCommandEvent & p_event );
-		void OnUseCharset( wxCommandEvent & p_event );
-		void OnChangeCase( wxCommandEvent & p_event );
-		void OnConvertEOL( wxCommandEvent & p_event );
-		void OnMarginClick( wxStyledTextEvent & p_event );
-		void OnCharAdded( wxStyledTextEvent & p_event );
-		void OnKey( wxStyledTextEvent & p_event );
+		void onSize( wxSizeEvent & event );
+		void onEditRedo( wxCommandEvent & event );
+		void onEditUndo( wxCommandEvent & event );
+		void onEditClear( wxCommandEvent & event );
+		void onEditCut( wxCommandEvent & event );
+		void onEditCopy( wxCommandEvent & event );
+		void onEditPaste( wxCommandEvent & event );
+		void onFind( wxCommandEvent & event );
+		void onFindNext( wxCommandEvent & event );
+		void onReplace( wxCommandEvent & event );
+		void onReplaceNext( wxCommandEvent & event );
+		void onBraceMatch( wxCommandEvent & event );
+		void onGoto( wxCommandEvent & event );
+		void onEditIndentInc( wxCommandEvent & event );
+		void onEditIndentRed( wxCommandEvent & event );
+		void onEditSelectAll( wxCommandEvent & event );
+		void onEditSelectLine( wxCommandEvent & event );
+		void onHighlightLang( wxCommandEvent & event );
+		void onDisplayEOL( wxCommandEvent & event );
+		void onIndentGuide( wxCommandEvent & event );
+		void onLineNumber( wxCommandEvent & event );
+		void onLongLineOn( wxCommandEvent & event );
+		void onWhiteSpace( wxCommandEvent & event );
+		void onFoldToggle( wxCommandEvent & event );
+		void onSetOverType( wxCommandEvent & event );
+		void onSetReadOnly( wxCommandEvent & event );
+		void onWrapmodeOn( wxCommandEvent & event );
+		void onUseCharset( wxCommandEvent & event );
+		void onChangeCase( wxCommandEvent & event );
+		void onConvertEOL( wxCommandEvent & event );
+		void onMarginClick( wxStyledTextEvent & event );
+		void onCharAdded( wxStyledTextEvent & event );
+		void onKey( wxStyledTextEvent & event );
 
 	private:
-		wxString m_strFilename;
-		wxString m_strCurrentWord;
-		LanguageInfoPtr m_pLanguage;
-		int m_iLineNrID;
-		int m_iLineNrMargin;
-		int m_iFoldingID;
-		int m_iFoldingMargin;
-		int m_iDividerID;
+		wxString m_filename;
+		wxString m_currentWord;
+		LanguageInfoPtr m_language;
 		StcContext & m_context;
-		int m_iTabSpaces;
-		bool m_bUseTabs;
-		bool m_bTabIndents;
-		bool m_bBackspaceUnindents;
+		int m_lineNrID;
+		int m_lineNrMargin;
+		int m_foldingID;
+		int m_foldingMargin;
+		int m_dividerID;
+		int m_tabSpaces;
+		bool m_useTabs;
+		bool m_tabIndents;
+		bool m_backspaceUnindents;
 	};
 }
 

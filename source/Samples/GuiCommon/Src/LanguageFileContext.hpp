@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___GUICOMMON_LANGUAGE_FILE_CONTEXT_H___
@@ -27,15 +27,13 @@ namespace GuiCommon
 		explicit LanguageFileContext( castor::Path const & path );
 
 	public:
-		LanguageInfoPtr pCurrentLanguage;
-		StyleInfoPtr pCurrentStyle;
+		LanguageInfoPtr currentLanguage;
+		StyleInfo * currentStyle{ nullptr };
 		castor::UIntStrMap mapFoldFlags;
 		castor::UIntStrMap mapTypes;
-		castor::UIntStrMap mapLexers;
 		castor::String strName;
-		eSTC_TYPE eStyle;
-		eSTC_TYPE eType;
-		castor::StringArray arrayWords;
+		castor::StringArray keywords;
+		uint32_t index;
 	};
 }
 

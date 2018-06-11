@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___GUICOMMON_LANGUAGE_FILE_PARSER_H___
@@ -23,9 +23,8 @@ namespace GuiCommon
 	{
 		eRoot = MAKE_SECTION_NAME( 'R', 'O', 'O', 'T' ),
 		eLanguage = MAKE_SECTION_NAME( 'L', 'A', 'N', 'G' ),
-		eSection = MAKE_SECTION_NAME( 'S', 'E', 'C', 'T' ),
+		eKeywords = MAKE_SECTION_NAME( 'K', 'W', 'R', 'D' ),
 		eStyle = MAKE_SECTION_NAME( 'S', 'T', 'Y', 'L' ),
-		eList = MAKE_SECTION_NAME( 'L', 'I', 'S', 'T' ),
 	};
 	/*!
 	\author Sylvain DOREMUS
@@ -65,17 +64,15 @@ namespace GuiCommon
 	DECLARE_ATTRIBUTE_PARSER( Language_Pattern )
 	DECLARE_ATTRIBUTE_PARSER( Language_Lexer )
 	DECLARE_ATTRIBUTE_PARSER( Language_FoldFlags )
-	DECLARE_ATTRIBUTE_PARSER( Language_Section )
+	DECLARE_ATTRIBUTE_PARSER( Language_Keywords )
 	DECLARE_ATTRIBUTE_PARSER( Language_Style )
+	DECLARE_ATTRIBUTE_PARSER( Language_FontName )
+	DECLARE_ATTRIBUTE_PARSER( Language_FontSize )
 	DECLARE_ATTRIBUTE_PARSER( Style_Type )
 	DECLARE_ATTRIBUTE_PARSER( Style_FgColour )
 	DECLARE_ATTRIBUTE_PARSER( Style_BgColour )
-	DECLARE_ATTRIBUTE_PARSER( Style_FontName )
 	DECLARE_ATTRIBUTE_PARSER( Style_FontStyle )
-	DECLARE_ATTRIBUTE_PARSER( Style_FontSize )
-	DECLARE_ATTRIBUTE_PARSER( Section_Type )
-	DECLARE_ATTRIBUTE_PARSER( Section_List )
-	DECLARE_ATTRIBUTE_PARSER( Section_End )
+	DECLARE_ATTRIBUTE_PARSER( Keywords_End )
 }
 
 #endif

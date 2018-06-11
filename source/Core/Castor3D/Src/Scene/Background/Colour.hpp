@@ -87,7 +87,7 @@ namespace castor3d
 
 		inline castor::HdrRgbColour const & getColour()const
 		{
-			return m_colour;
+			return m_colour.value();
 		}
 		/**@}*/
 
