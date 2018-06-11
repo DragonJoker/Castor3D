@@ -30,12 +30,12 @@ namespace castor
 		value |= value >> 16;
 		value |= value >> 32;
 		return bitPatternToLog2[(value * multiplicator) >> 57];
-	};
+	}
 
 	inline int getBitSize( uint32_t value )
 	{
 		return getBitSize( uint64_t( value ) );
-	};
+	}
 }
 
 #endif

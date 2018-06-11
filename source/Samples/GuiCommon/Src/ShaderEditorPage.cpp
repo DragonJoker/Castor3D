@@ -60,8 +60,6 @@ namespace GuiCommon
 		wxSize size = GetClientSize();
 		// The editor
 		m_editor = new StcTextEditor( m_stcContext, this, wxID_ANY, wxDefaultPosition, size );
-		m_editor->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-		m_editor->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		m_editor->Show();
 #if wxMAJOR_VERSION >= 3 || ( wxMAJOR_VERSION == 2 && wxMINOR_VERSION >= 9 )
 		m_editor->AlwaysShowScrollbars( true, true );
@@ -139,7 +137,7 @@ namespace GuiCommon
 		arrayChoices.push_back( wxCOMBO_NEW );
 		m_editor->setText( m_source );
 		m_editor->SetReadOnly( !m_canEdit );
-		m_editor->InitializePrefs( m_editor->DeterminePrefs( extension ) );
+		m_editor->initializePrefs( m_editor->determinePrefs( extension ) );
 
 		// Load frame variables list
 		m_frameVariablesList->loadVariables( m_stage, m_ubos );

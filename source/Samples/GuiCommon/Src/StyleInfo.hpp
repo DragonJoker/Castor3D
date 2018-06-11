@@ -67,91 +67,18 @@ namespace GuiCommon
 	*/
 	class StyleInfo
 	{
-	private:
-		wxString m_name;
-		wxString m_strForeground;
-		wxString m_strBackground;
-		wxString m_strFontName;
-		int m_iFontSize;
-		int m_iFontStyle;
-		int m_iLetterCase;
-
 	public:
-		StyleInfo( wxString const & p_name, wxString const & p_strForeground, wxString const & p_strBackground, wxString const & p_strFontName, int p_iFontsize, int p_iFontstyle, int p_iLetterCase );
-		StyleInfo( StyleInfo const & p_infos );
-		StyleInfo & operator =( StyleInfo const & p_infos );
-		virtual ~StyleInfo();
+		StyleInfo( wxColour const & foreground
+			, wxColour const & background
+			, int fontstyle
+			, int letterCase );
 
-		inline int getLetterCase()const
-		{
-			return m_iLetterCase;
-		}
-
-		inline int getFontStyle()const
-		{
-			return m_iFontStyle;
-		}
-
-		inline int getFontSize()const
-		{
-			return m_iFontSize;
-		}
-
-		inline wxString	const & getFontName()const
-		{
-			return m_strFontName;
-		}
-
-		inline wxString	const & getBackground()const
-		{
-			return m_strBackground;
-		}
-
-		inline wxString	const & getForeground()const
-		{
-			return m_strForeground;
-		}
-
-		inline wxString	const & getName()const
-		{
-			return m_name;
-		}
-
-		inline void setName( wxString const & val )
-		{
-			m_name = val;
-		}
-
-		inline void setForeground( wxString const & val )
-		{
-			m_strForeground = val;
-		}
-
-		inline void setBackground( wxString const & val )
-		{
-			m_strBackground = val;
-		}
-
-		inline void setFontName( wxString const & val )
-		{
-			m_strFontName = val;
-		}
-
-		inline void setFontSize( int val )
-		{
-			m_iFontSize = val;
-		}
-
-		inline void setFontStyle( int val )
-		{
-			m_iFontStyle = val;
-		}
-
-		inline void setLetterCase( int val )
-		{
-			m_iLetterCase = val;
-		}
+		wxColour foreground;
+		wxColour background;
+		int fontStyle{ 0 };
+		int letterCase{ 0 };
 	};
+	DECLARE_MAP( int, StyleInfo, StyleInfo );
 }
 
 #endif

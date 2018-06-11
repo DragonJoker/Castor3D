@@ -5,121 +5,13 @@ See LICENSE file in root folder
 #define ___GUICOMMON_LANGUAGE_INFO_H___
 
 #include "GuiCommonPrerequisites.hpp"
+#include "StyleInfo.hpp"
 
 #include <wx/stc/stc.h>
 
 namespace GuiCommon
 {
 	static const wxString DEFAULT_LANGUAGE = wxT( "<default>" );
-	/*!
-	\author Sylvain DOREMUS
-	\version 0.6.1.0
-	\date 19/10/2011
-	\~english
-	\brief Lexers enumeration
-	\~french
-	\brief Enumération des lexers
-	*/
-	typedef enum eSTC_LEX
-	{
-		eSTC_LEX_CONTAINER	= wxSTC_LEX_CONTAINER,
-		eSTC_LEX_NULL		= wxSTC_LEX_NULL,
-		eSTC_LEX_PYTHON		= wxSTC_LEX_PYTHON,
-		eSTC_LEX_CPP		= wxSTC_LEX_CPP,
-		eSTC_LEX_HTML		= wxSTC_LEX_HTML,
-		eSTC_LEX_XML		= wxSTC_LEX_XML,
-		eSTC_LEX_PERL		= wxSTC_LEX_PERL,
-		eSTC_LEX_SQL		= wxSTC_LEX_SQL,
-		eSTC_LEX_VB			= wxSTC_LEX_VB,
-		eSTC_LEX_PROPERTIES	= wxSTC_LEX_PROPERTIES,
-		eSTC_LEX_ERRORLIST	= wxSTC_LEX_ERRORLIST,
-		eSTC_LEX_MAKEFILE	= wxSTC_LEX_MAKEFILE,
-		eSTC_LEX_BATCH		= wxSTC_LEX_BATCH,
-		eSTC_LEX_XCODE		= wxSTC_LEX_XCODE,
-		eSTC_LEX_LATEX		= wxSTC_LEX_LATEX,
-		eSTC_LEX_LUA		= wxSTC_LEX_LUA,
-		eSTC_LEX_DIFF		= wxSTC_LEX_DIFF,
-		eSTC_LEX_CONF		= wxSTC_LEX_CONF,
-		eSTC_LEX_PASCAL		= wxSTC_LEX_PASCAL,
-		eSTC_LEX_AVE		= wxSTC_LEX_AVE,
-		eSTC_LEX_ADA		= wxSTC_LEX_ADA,
-		eSTC_LEX_LISP		= wxSTC_LEX_LISP,
-		eSTC_LEX_RUBY		= wxSTC_LEX_RUBY,
-		eSTC_LEX_EIFFEL		= wxSTC_LEX_EIFFEL,
-		eSTC_LEX_TCL		= wxSTC_LEX_TCL,
-		eSTC_LEX_NNCRONTAB	= wxSTC_LEX_NNCRONTAB,
-		eSTC_LEX_BULLANT	= wxSTC_LEX_BULLANT,
-		eSTC_LEX_VBSCRIPT	= wxSTC_LEX_VBSCRIPT,
-		eSTC_LEX_BAAN		= wxSTC_LEX_BAAN,
-		eSTC_LEX_MATLAB		= wxSTC_LEX_MATLAB,
-		eSTC_LEX_SCRIPTOL	= wxSTC_LEX_SCRIPTOL,
-		eSTC_LEX_ASM		= wxSTC_LEX_ASM,
-		eSTC_LEX_FORTRAN	= wxSTC_LEX_FORTRAN,
-		eSTC_LEX_F77		= wxSTC_LEX_F77,
-		eSTC_LEX_CSS		= wxSTC_LEX_CSS,
-		eSTC_LEX_POV		= wxSTC_LEX_POV,
-		eSTC_LEX_LOUT		= wxSTC_LEX_LOUT,
-		eSTC_LEX_ESCRIPT	= wxSTC_LEX_ESCRIPT,
-		eSTC_LEX_PS			= wxSTC_LEX_PS,
-		eSTC_LEX_NSIS		= wxSTC_LEX_NSIS,
-		eSTC_LEX_MMIXAL		= wxSTC_LEX_MMIXAL,
-		eSTC_LEX_CLW		= wxSTC_LEX_CLW,
-		eSTC_LEX_LOT		= wxSTC_LEX_LOT,
-		eSTC_LEX_YAML		= wxSTC_LEX_YAML,
-		eSTC_LEX_TEX		= wxSTC_LEX_TEX,
-		eSTC_LEX_METAPOST	= wxSTC_LEX_METAPOST,
-		eSTC_LEX_POWERBASIC	= wxSTC_LEX_POWERBASIC,
-		eSTC_LEX_FORTH		= wxSTC_LEX_FORTH,
-		eSTC_LEX_ERLANG		= wxSTC_LEX_ERLANG,
-		eSTC_LEX_OCTAVE		= wxSTC_LEX_OCTAVE,
-		eSTC_LEX_MSSQL		= wxSTC_LEX_MSSQL,
-		eSTC_LEX_VERILOG	= wxSTC_LEX_VERILOG,
-		eSTC_LEX_KIX		= wxSTC_LEX_KIX,
-		eSTC_LEX_GUI4CLI	= wxSTC_LEX_GUI4CLI,
-		eSTC_LEX_SPECMAN	= wxSTC_LEX_SPECMAN,
-		eSTC_LEX_AU3		= wxSTC_LEX_AU3,
-		eSTC_LEX_APDL		= wxSTC_LEX_APDL,
-		eSTC_LEX_BASH		= wxSTC_LEX_BASH,
-		eSTC_LEX_ASN1		= wxSTC_LEX_ASN1,
-		eSTC_LEX_VHDL		= wxSTC_LEX_VHDL,
-		eSTC_LEX_CAML		= wxSTC_LEX_CAML,
-		eSTC_LEX_BLITZBASIC	= wxSTC_LEX_BLITZBASIC,
-		eSTC_LEX_PUREBASIC	= wxSTC_LEX_PUREBASIC,
-		eSTC_LEX_HASKELL	= wxSTC_LEX_HASKELL,
-		eSTC_LEX_PHPSCRIPT	= wxSTC_LEX_PHPSCRIPT,
-		eSTC_LEX_TADS3		= wxSTC_LEX_TADS3,
-		eSTC_LEX_REBOL		= wxSTC_LEX_REBOL,
-		eSTC_LEX_SMALLTALK	= wxSTC_LEX_SMALLTALK,
-		eSTC_LEX_FLAGSHIP	= wxSTC_LEX_FLAGSHIP,
-		eSTC_LEX_CSOUND		= wxSTC_LEX_CSOUND,
-		eSTC_LEX_FREEBASIC	= wxSTC_LEX_FREEBASIC,
-		eSTC_LEX_INNOSETUP	= wxSTC_LEX_INNOSETUP,
-		eSTC_LEX_OPAL		= wxSTC_LEX_OPAL,
-		eSTC_LEX_SPICE		= wxSTC_LEX_SPICE,
-#if wxVERSION_NUMBER >= 2900
-		eSTC_LEX_D			= wxSTC_LEX_D,
-		eSTC_LEX_CMAKE		= wxSTC_LEX_CMAKE,
-		eSTC_LEX_GAP		= wxSTC_LEX_GAP,
-		eSTC_LEX_PLM		= wxSTC_LEX_PLM,
-		eSTC_LEX_PROGRESS	= wxSTC_LEX_PROGRESS,
-		eSTC_LEX_ABAQUS		= wxSTC_LEX_ABAQUS,
-		eSTC_LEX_ASYMPTOTE	= wxSTC_LEX_ASYMPTOTE,
-		eSTC_LEX_R			= wxSTC_LEX_R,
-		eSTC_LEX_MAGIK		= wxSTC_LEX_MAGIK,
-		eSTC_LEX_POWERSHELL	= wxSTC_LEX_POWERSHELL,
-		eSTC_LEX_MYSQL		= wxSTC_LEX_MYSQL,
-		eSTC_LEX_PO			= wxSTC_LEX_PO,
-		eSTC_LEX_TAL		= wxSTC_LEX_TAL,
-		eSTC_LEX_COBOL		= wxSTC_LEX_COBOL,
-		eSTC_LEX_TACL		= wxSTC_LEX_TACL,
-		eSTC_LEX_SORCUS		= wxSTC_LEX_SORCUS,
-		eSTC_LEX_POWERPRO	= wxSTC_LEX_POWERPRO,
-		eSTC_LEX_NIMROD		= wxSTC_LEX_NIMROD,
-		eSTC_LEX_SML		= wxSTC_LEX_SML,
-		eSTC_LEX_MARKDOWN	= wxSTC_LEX_MARKDOWN,
-#endif
-		eSTC_LEX_COUNT,
-	}	eSTC_LEX;
 	/*!
 	\author Sylvain DOREMUS
 	\version 0.6.1.0
@@ -132,35 +24,34 @@ namespace GuiCommon
 	class LanguageInfo
 	{
 	private:
-		typedef std::array< castor::String, eSTC_TYPE_COUNT > WordArray;
-
-	private:
-		castor::String m_name;
-		castor::String m_strFilePattern;
-		WordArray m_arrayWords;
-		eSTC_LEX m_eLexerID;
-		int m_iFoldFlags;
-		StyleInfoPtrArray m_arrayStyles;
+		typedef std::array< castor::String, 9u > WordArray;
 
 	public:
 		LanguageInfo();
 		virtual ~LanguageInfo();
 
-		void setWords( eSTC_TYPE p_type, castor::StringArray const & p_arrayWords );
+		void setKeywords( uint32_t index
+			, castor::StringArray const & keywords );
 
 		inline int getFoldFlags()const
 		{
-			return m_iFoldFlags;
+			return m_foldFlags;
 		}
 
-		inline castor::String const & getWords( eSTC_TYPE p_type )const
+		inline int32_t getFontSize()const
 		{
-			return m_arrayWords[p_type];
+			return m_fontSize;
+		}
+
+		inline castor::String const & getKeywords( uint32_t index )const
+		{
+			REQUIRE( index < 9 );
+			return m_keywords[index];
 		}
 
 		inline castor::String const & getFilePattern()const
 		{
-			return m_strFilePattern;
+			return m_filePattern;
 		}
 
 		inline castor::String const & getName()const
@@ -168,40 +59,59 @@ namespace GuiCommon
 			return m_name;
 		}
 
-		inline eSTC_LEX getLexerID()const
+		inline castor::String const & getFontName()const
 		{
-			return m_eLexerID;
+			return m_fontName;
 		}
 
-		inline StyleInfoPtr & getStyle( eSTC_TYPE p_type )
+		inline StyleInfo & getStyle( int type )
 		{
-			return m_arrayStyles[p_type];
+			return m_styles.at( type );
 		}
 
-		inline StyleInfoPtr const & getStyle( eSTC_TYPE p_type )const
+		inline StyleInfo const & getStyle( int type )const
 		{
-			return m_arrayStyles[p_type];
+			return m_styles.at( type );
 		}
 
-		inline void setLexer( eSTC_LEX p_eLexer )
+		inline StyleInfoMap const & getStyles()const
 		{
-			m_eLexerID = p_eLexer;
+			return m_styles;
 		}
 
-		inline void setName( castor::String const & p_strVal )
+		inline void setName( castor::String const & name )
 		{
-			m_name = p_strVal;
+			m_name = name;
 		}
 
-		inline void setFilePattern( castor::String const & p_strVal )
+		inline void setFontName( castor::String const & name )
 		{
-			m_strFilePattern = p_strVal;
+			m_fontName = name;
 		}
 
-		inline void setFoldFlags( int p_iFlags )
+		inline void setFilePattern( castor::String const & pattern )
 		{
-			m_iFoldFlags = p_iFlags;
+			m_filePattern = pattern;
 		}
+
+		inline void setFoldFlags( int flags )
+		{
+			m_foldFlags = flags;
+		}
+
+		inline void setFontSize( int32_t size )
+		{
+			m_fontSize = size;
+		}
+
+	private:
+		castor::String m_name;
+		castor::String m_filePattern;
+		WordArray m_keywords;
+		int m_foldFlags{ 0 };
+		int32_t m_fontSize{ 10 };
+		castor::String m_fontName;
+		StyleInfoMap m_styles;
 	};
 }
 

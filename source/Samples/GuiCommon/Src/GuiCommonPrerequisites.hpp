@@ -10,51 +10,6 @@ See LICENSE file in root folder
 
 namespace GuiCommon
 {
-	/*!
-	\author Sylvain DOREMUS
-	\version 0.6.1.0
-	\date 19/10/2011
-	\~english
-	\brief Word and symbol type enumeration
-	\~french
-	\brief Enumération des différents types de mots et symboles
-	*/
-	typedef enum eSTC_TYPE
-	{
-		eSTC_TYPE_DEFAULT,
-		eSTC_TYPE_WORD1,
-		eSTC_TYPE_WORD2,
-		eSTC_TYPE_WORD3,
-		eSTC_TYPE_WORD4,
-		eSTC_TYPE_WORD5,
-		eSTC_TYPE_WORD6,
-		eSTC_TYPE_COMMENT,
-		eSTC_TYPE_COMMENT_DOC,
-		eSTC_TYPE_COMMENT_LINE,
-		eSTC_TYPE_COMMENT_SPECIAL,
-		eSTC_TYPE_CHARACTER,
-		eSTC_TYPE_CHARACTER_EOL,
-		eSTC_TYPE_STRING,
-		eSTC_TYPE_STRING_EOL,
-		eSTC_TYPE_DELIMITER,
-		eSTC_TYPE_PUNCTUATION,
-		eSTC_TYPE_OPERATOR,
-		eSTC_TYPE_BRACE,
-		eSTC_TYPE_COMMAND,
-		eSTC_TYPE_IDENTIFIER,
-		eSTC_TYPE_LABEL,
-		eSTC_TYPE_NUMBER,
-		eSTC_TYPE_PARAMETER,
-		eSTC_TYPE_REGEX,
-		eSTC_TYPE_UUID,
-		eSTC_TYPE_VALUE,
-		eSTC_TYPE_PREPROCESSOR,
-		eSTC_TYPE_SCRIPT,
-		eSTC_TYPE_ERROR,
-		eSTC_TYPE_UNDEFINED,
-		eSTC_TYPE_COUNT
-	}	eSTC_TYPE;
-
 	typedef enum eBMP
 	{
 		eBMP_ANIMATED_OBJECTGROUP,
@@ -161,7 +116,6 @@ namespace GuiCommon
 	DECLARE_MAP( uint32_t, wxImage *, ImageId );
 	DECLARE_VECTOR( thread_sptr, ThreadPtr );
 	DECLARE_VECTOR( LanguageInfoPtr, LanguageInfoPtr );
-	DECLARE_ARRAY( StyleInfoPtr, eSTC_TYPE_COUNT, StyleInfoPtr );
 
 	static const wxColour PANEL_BACKGROUND_COLOUR = wxColour( 30, 30, 30 );
 	static const wxColour PANEL_FOREGROUND_COLOUR = wxColour( 220, 220, 220 );

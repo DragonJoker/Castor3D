@@ -4,63 +4,9 @@
 
 #include <wx/filename.h>
 
+#include <algorithm>
+
 using namespace GuiCommon;
-
-//*************************************************************************************************
-
-struct LexerStylesAssoc
-{
-	int m_iStyles[eSTC_TYPE_COUNT];
-
-	explicit LexerStylesAssoc( eSTC_LEX p_eLex )
-	{
-		memset( m_iStyles, 0, sizeof( m_iStyles ) );
-
-		if ( p_eLex == eSTC_LEX_CPP )
-		{
-			int iStyles[eSTC_TYPE_COUNT] =
-			{
-				wxSTC_C_DEFAULT,		//eSTC_TYPE_DEFAULT
-				wxSTC_C_WORD,			//eSTC_TYPE_WORD1
-				wxSTC_C_WORD2,			//eSTC_TYPE_WORD2
-				wxSTC_C_DEFAULT,		//eSTC_TYPE_WORD3
-				wxSTC_C_GLOBALCLASS,	//eSTC_TYPE_WORD4
-				wxSTC_C_DEFAULT,		//eSTC_TYPE_WORD5
-				wxSTC_C_DEFAULT,		//eSTC_TYPE_WORD6
-				wxSTC_C_COMMENT,		//eSTC_TYPE_COMMENT
-				wxSTC_C_COMMENTDOC,		//eSTC_TYPE_COMMENT_DOC
-				wxSTC_C_COMMENTLINE,	//eSTC_TYPE_COMMENT_LINE
-				wxSTC_C_DEFAULT,		//eSTC_TYPE_COMMENT_SPECIAL
-				wxSTC_C_CHARACTER,		//eSTC_TYPE_CHARACTER
-				wxSTC_C_DEFAULT,		//eSTC_TYPE_CHARACTER_EOL
-				wxSTC_C_STRING,			//eSTC_TYPE_STRING
-				wxSTC_C_STRINGEOL,		//eSTC_TYPE_STRING_EOL
-				wxSTC_C_DEFAULT,		//eSTC_TYPE_DELIMITER
-				wxSTC_C_DEFAULT,		//eSTC_TYPE_PUNCTUATION
-				wxSTC_C_OPERATOR,		//eSTC_TYPE_OPERATOR
-				wxSTC_C_DEFAULT,		//eSTC_TYPE_BRACE
-				wxSTC_C_DEFAULT,		//eSTC_TYPE_COMMAND
-				wxSTC_C_IDENTIFIER,		//eSTC_TYPE_IDENTIFIER
-				wxSTC_C_DEFAULT,		//eSTC_TYPE_LABEL
-				wxSTC_C_NUMBER,			//eSTC_TYPE_NUMBER
-				wxSTC_C_DEFAULT,		//eSTC_TYPE_PARAMETER
-				wxSTC_C_REGEX,			//eSTC_TYPE_REGEX
-				wxSTC_C_UUID,			//eSTC_TYPE_UUID
-				wxSTC_C_DEFAULT,		//eSTC_TYPE_VALUE
-				wxSTC_C_PREPROCESSOR,	//eSTC_TYPE_PREPROCESSOR
-				wxSTC_C_DEFAULT,		//eSTC_TYPE_SCRIPT
-				wxSTC_C_DEFAULT,		//eSTC_TYPE_ERROR
-				wxSTC_C_DEFAULT,		//eSTC_TYPE_UNDEFINED
-			};
-			memcpy( m_iStyles, iStyles, sizeof( iStyles ) );
-		}
-	}
-
-	inline int operator []( uint32_t p_index )
-	{
-		return m_iStyles[p_index];
-	}
-};
 
 //*************************************************************************************************
 
@@ -114,119 +60,119 @@ wxString StcTextEditor::TextAutoCompleter::GetNext()
 #endif
 //*************************************************************************************************
 
-StcTextEditor::StcTextEditor( StcContext & p_context, wxWindow * p_parent, wxWindowID p_id, wxPoint const & p_ptPos, wxSize const & p_size, long p_lStyle )
-	:	wxStyledTextCtrl( p_parent, p_id, p_ptPos, p_size, p_lStyle )
-	, m_context( p_context )
-	, m_strFilename( wxEmptyString )
-	, m_iLineNrID( 0 )
-	, m_iDividerID( 1 )
-	, m_iFoldingID( 2 )
-	, m_pLanguage()
-	, m_iTabSpaces( 4 )
-	, m_bUseTabs( true )
-	, m_bTabIndents( true )
-	, m_bBackspaceUnindents( true )
+StcTextEditor::StcTextEditor( StcContext & context
+	, wxWindow * parent
+	, wxWindowID id
+	, wxPoint const & pos
+	, wxSize const & size
+	, long style )
+	: wxStyledTextCtrl( parent, id, pos, size, style )
+	, m_context( context )
+	, m_filename( wxEmptyString )
+	, m_lineNrID( 0 )
+	, m_dividerID( 1 )
+	, m_foldingID( 2 )
+	, m_language()
+	, m_tabSpaces( 4 )
+	, m_useTabs( true )
+	, m_tabIndents( true )
+	, m_backspaceUnindents( true )
 {
-	wxFont font( 10, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL );
-	SetTabWidth( m_iTabSpaces );
-	SetSelAlpha( 127 );
-	SetSelBackground( true, wxColour( 51, 153, 255, 127 ) );
-	SetFoldMarginColour( true, PANEL_BACKGROUND_COLOUR );
-	SetFoldMarginHiColour( true, PANEL_BACKGROUND_COLOUR );
-	StyleSetBackground( wxSTC_STYLE_DEFAULT, PANEL_BACKGROUND_COLOUR );
-	StyleSetForeground( wxSTC_STYLE_DEFAULT, PANEL_FOREGROUND_COLOUR );
-	StyleSetBackground( wxSTC_C_COMMENT, PANEL_BACKGROUND_COLOUR );
-	SetViewEOL( m_context.getDisplayEOLEnable() );
-	SetIndentationGuides( m_context.getIndentGuideEnable() );
-	SetEdgeMode( m_context.getLongLineOnEnable() ? wxSTC_EDGE_LINE : wxSTC_EDGE_NONE );
+	SetTabWidth( m_tabSpaces );
+
+	SetViewEOL( m_context.displayEOLEnable );
+	SetIndentationGuides( m_context.indentGuideEnable );
+	SetEdgeMode( m_context.longLineOnEnable ? wxSTC_EDGE_LINE : wxSTC_EDGE_NONE );
 	SetWhitespaceForeground( true, ACTIVE_TAB_COLOUR );
 	SetViewWhiteSpace( wxSTC_WS_VISIBLEALWAYS );
-	SetOvertype( m_context.getOverTypeInitial() );
-	SetReadOnly( m_context.getReadOnlyInitial() );
-	SetWrapMode( m_context.getWrapModeInitial() ? wxSTC_WRAP_WORD : wxSTC_WRAP_NONE );
-	StyleSetFont( wxSTC_STYLE_DEFAULT, font );
-	InitializePrefs( DEFAULT_LANGUAGE );
+	SetOvertype( m_context.overTypeInitial );
+	SetReadOnly( m_context.readOnlyInitial );
+	SetWrapMode( m_context.wrapModeInitial ? wxSTC_WRAP_WORD : wxSTC_WRAP_NONE );
 	// set visibility
 	SetVisiblePolicy( wxSTC_VISIBLE_STRICT | wxSTC_VISIBLE_SLOP, 1 );
 	SetXCaretPolicy( wxSTC_CARET_EVEN | wxSTC_VISIBLE_STRICT | wxSTC_CARET_SLOP, 1 );
 	SetYCaretPolicy( wxSTC_CARET_EVEN | wxSTC_VISIBLE_STRICT | wxSTC_CARET_SLOP, 1 );
-	// markers
-	MarkerDefine( wxSTC_MARKNUM_FOLDER, wxSTC_MARK_DOTDOTDOT, wxT( "BLACK" ), wxT( "BLACK" ) );
-	MarkerDefine( wxSTC_MARKNUM_FOLDEROPEN, wxSTC_MARK_ARROWDOWN, wxT( "BLACK" ), wxT( "BLACK" ) );
-	MarkerDefine( wxSTC_MARKNUM_FOLDERSUB, wxSTC_MARK_EMPTY, wxT( "BLACK" ), wxT( "BLACK" ) );
-	MarkerDefine( wxSTC_MARKNUM_FOLDEREND, wxSTC_MARK_DOTDOTDOT, wxT( "BLACK" ), wxT( "WHITE" ) );
-	MarkerDefine( wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_ARROWDOWN, wxT( "BLACK" ), wxT( "WHITE" ) );
-	MarkerDefine( wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_EMPTY, wxT( "BLACK" ), wxT( "BLACK" ) );
-	MarkerDefine( wxSTC_MARKNUM_FOLDERTAIL, wxSTC_MARK_EMPTY, wxT( "BLACK" ), wxT( "BLACK" ) );
 	// miscellaneous
-	m_iLineNrMargin = TextWidth( wxSTC_STYLE_LINENUMBER, wxT( "_999999" ) );
-	m_iFoldingMargin = 16;
+	m_lineNrMargin = TextWidth( wxSTC_STYLE_LINENUMBER, wxT( "_999999" ) );
+	m_foldingMargin = 16;
 	CmdKeyClear( wxSTC_KEY_TAB, 0 ); // this is done by the menu accelerator key
 	SetLayoutCache( wxSTC_CACHE_PAGE );
+
+	initializePrefs( DEFAULT_LANGUAGE );
 }
 
 StcTextEditor::~StcTextEditor()
 {
 }
 
-bool StcTextEditor::LoadFile()
+bool StcTextEditor::loadFile()
 {
 	bool result = false;
 #if wxUSE_FILEDLG
 
-	if ( ! m_strFilename )
+	if ( ! m_filename )
 	{
-		wxFileDialog dlg( this, _( "open file" ), wxEmptyString, wxEmptyString, _( "Any file (*)|*" ), wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
+		wxFileDialog dlg( this
+			, _( "Open file" )
+			, wxEmptyString
+			, wxEmptyString
+			, _( "Any file (*)|*" )
+			, wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
 
 		if ( dlg.ShowModal() != wxID_OK )
 		{
 			return false;
 		}
 
-		m_strFilename = dlg.GetPath();
+		m_filename = dlg.GetPath();
 	}
 
-	result = LoadFile( m_strFilename );
+	result = LoadFile( m_filename );
 #endif
 	return result;
 }
 
-bool StcTextEditor::LoadFile( wxString const & p_strFilename )
+bool StcTextEditor::loadFile( wxString const & filename )
 {
-	if ( ! p_strFilename.empty() )
+	if ( !filename.empty() )
 	{
-		m_strFilename = p_strFilename;
+		m_filename = filename;
 	}
 
 	wxStyledTextCtrl::ClearAll();
 	wxStyledTextCtrl::SetEOLMode( wxSTC_EOL_LF );
-	wxStyledTextCtrl::LoadFile( m_strFilename );
+	wxStyledTextCtrl::LoadFile( m_filename );
 	wxStyledTextCtrl::ConvertEOLs( wxSTC_EOL_LF );
 	wxStyledTextCtrl::EmptyUndoBuffer();
-	wxFileName fileName( m_strFilename );
-	InitializePrefs( DeterminePrefs( fileName.GetFullName() ) );
+	wxFileName filePath( m_filename );
+	initializePrefs( determinePrefs( filePath.GetFullName() ) );
 	return true;
 }
 
-void StcTextEditor::setText( wxString const & p_strSource )
+void StcTextEditor::setText( wxString const & source )
 {
 	wxStyledTextCtrl::ClearAll();
 	wxStyledTextCtrl::SetEOLMode( wxSTC_EOL_LF );
-	wxStyledTextCtrl::SetText( p_strSource );
+	wxStyledTextCtrl::SetText( source );
 	wxStyledTextCtrl::ConvertEOLs( wxSTC_EOL_LF );
 	wxStyledTextCtrl::EmptyUndoBuffer();
 }
 
-bool StcTextEditor::SaveFile()
+bool StcTextEditor::saveFile()
 {
 	bool result = false;
 #if wxUSE_FILEDLG
 
 	if ( isModified() )
 	{
-		if ( !m_strFilename )
+		if ( !m_filename )
 		{
-			wxFileDialog dlg( this, _( "Save file" ), wxEmptyString, wxEmptyString, _( "Any file (*)|*" ), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+			wxFileDialog dlg( this
+				, _( "Save file" )
+				, wxEmptyString
+				, wxEmptyString
+				, _( "Any file (*)|*" )
+				, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
 			if ( dlg.ShowModal() != wxID_OK )
 			{
@@ -235,7 +181,7 @@ bool StcTextEditor::SaveFile()
 			else
 			{
 				result = true;
-				m_strFilename = dlg.GetPath();
+				m_filename = dlg.GetPath();
 			}
 		}
 		else
@@ -245,7 +191,7 @@ bool StcTextEditor::SaveFile()
 
 		if ( result )
 		{
-			result = SaveFile( m_strFilename );
+			result = SaveFile( m_filename );
 		}
 	}
 	else
@@ -257,13 +203,13 @@ bool StcTextEditor::SaveFile()
 	return result;
 }
 
-bool StcTextEditor::SaveFile( wxString const & p_strFilename )
+bool StcTextEditor::saveFile( wxString const & filename )
 {
 	bool result = true;
 
 	if ( isModified() )
 	{
-		result = wxStyledTextCtrl::SaveFile( p_strFilename );
+		result = wxStyledTextCtrl::SaveFile( filename );
 	}
 
 	return result;
@@ -274,143 +220,116 @@ bool StcTextEditor::isModified()
 	return ( GetModify() && !GetReadOnly() );
 }
 
-wxString StcTextEditor::DeterminePrefs( wxString const & p_strFilename )
+wxString StcTextEditor::determinePrefs( wxString const & filename )
 {
-	LanguageInfoPtr pCurInfo;
-	wxString strReturn;
-	wxString strFilepattern;
-	wxString strCur;
+	wxString result;
 
-	for ( LanguageInfoPtrArrayConstIt it = m_context.begin(); it != m_context.end() && strReturn.empty(); ++it )
+	for ( auto currInfo : m_context )
 	{
-		pCurInfo = * it;
-		strFilepattern = pCurInfo->getFilePattern();
-		strFilepattern.Lower();
-
-		while ( ! strFilepattern.empty() && strReturn.empty() )
+		if ( result.empty() )
 		{
-			strCur = strFilepattern.BeforeFirst( ';' );
+			wxString filepattern = make_wxString( currInfo->getFilePattern() );
+			filepattern.Lower();
 
-			if ( ( strCur == p_strFilename ) || ( strCur == ( p_strFilename.BeforeLast( '.' ) + wxT( ".*" ) ) ) || ( strCur == ( wxT( "*." ) + p_strFilename.AfterLast( '.' ) ) ) )
+			while ( !filepattern.empty() && result.empty() )
 			{
-				strReturn = pCurInfo->getName();
-			}
-			else
-			{
-				strFilepattern = strFilepattern.AfterFirst( ';' );
+				auto strCur = filepattern.BeforeFirst( ';' );
+
+				if ( ( strCur == filename )
+					|| ( strCur == ( filename.BeforeLast( '.' ) + wxT( ".*" ) ) )
+					|| ( strCur == ( wxT( "*." ) + filename.AfterLast( '.' ) ) ) )
+				{
+					result = currInfo->getName();
+				}
+				else
+				{
+					filepattern = filepattern.AfterFirst( ';' );
+				}
 			}
 		}
 	}
 
-	return strReturn;
+	return result;
 }
 
-bool StcTextEditor::InitializePrefs( wxString const & p_name )
+bool StcTextEditor::initializePrefs( wxString const & name )
 {
-	StyleClearAll();
-	LanguageInfoPtr pCurInfo;
-	bool bFound = false;
+	// Set margin for line numbers
+	SetMarginType( m_lineNrID, wxSTC_MARGIN_NUMBER );
+	SetMarginWidth( m_lineNrID, 50 );
+	SetLexer( wxSTC_LEX_CPP );
 
-	for ( LanguageInfoPtrArrayConstIt it = m_context.begin(); it != m_context.end() && ! bFound; ++it )
-	{
-		pCurInfo = * it;
-
-		if ( pCurInfo->getName().c_str() == p_name )
+	auto it = std::find_if( m_context.begin()
+		, m_context.end()
+		, [&name]( LanguageInfoPtr lookup )
 		{
-			bFound = true;
-		}
+			return lookup->getName().c_str() == name;
+		} );
+
+	if ( it == m_context.end() )
+	{
+		wxFont font( 10
+			, wxFONTFAMILY_MODERN
+			, wxFONTSTYLE_NORMAL
+			, wxFONTWEIGHT_NORMAL
+			, false );
+		StyleSetFont( wxSTC_STYLE_DEFAULT, font );
+		doInitialiseBaseColours( PANEL_BACKGROUND_COLOUR, PANEL_FOREGROUND_COLOUR );
 	}
-
-	if ( bFound )
+	else
 	{
-		wxString defaultFgColour = pCurInfo->getStyle( eSTC_TYPE_DEFAULT )->getForeground();
-		wxString defaultBgColour = pCurInfo->getStyle( eSTC_TYPE_DEFAULT )->getBackground();
-		// set lexer and language
-		SetLexer( pCurInfo->getLexerID() );
-		m_pLanguage = pCurInfo;
-		// set margin for line numbers
-		SetMarginType( m_iLineNrID, wxSTC_MARGIN_NUMBER );
-		SetMarginWidth( m_iLineNrID, 50 );
+		m_language = *it;
+		auto defaultFgColour = m_language->getStyle( wxSTC_C_DEFAULT ).foreground;
+		auto defaultBgColour = m_language->getStyle( wxSTC_C_DEFAULT ).background;
+		wxFont font( m_language->getFontSize()
+			, wxFONTFAMILY_MODERN
+			, wxFONTSTYLE_NORMAL
+			, wxFONTWEIGHT_NORMAL
+			, false
+			, make_wxString( m_language->getFontName() ) );
+		StyleSetFont( wxSTC_STYLE_DEFAULT, font );
+		doInitialiseBaseColours( defaultBgColour, defaultFgColour );
 
-		// default fonts for all styles!
-		for ( int i = 0; i < wxSTC_STYLE_LASTPREDEFINED; i++ )
-		{
-			wxFont font( 10, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL );
-			StyleSetFont( i, font );
-		}
-
-		// set common styles
-		StyleSetForeground( wxSTC_STYLE_LINENUMBER, defaultFgColour );
-		StyleSetBackground( wxSTC_STYLE_LINENUMBER, defaultBgColour );
-		StyleSetForeground( wxSTC_STYLE_DEFAULT, defaultFgColour );
-		StyleSetBackground( wxSTC_STYLE_DEFAULT, defaultBgColour );
-		StyleSetForeground( wxSTC_STYLE_CONTROLCHAR, defaultFgColour );
-		StyleSetBackground( wxSTC_STYLE_CONTROLCHAR, defaultBgColour );
-		StyleSetForeground( wxSTC_STYLE_BRACELIGHT, wxColour( wxT( "DARK GREEN" ) ) );
-		StyleSetBackground( wxSTC_STYLE_BRACELIGHT, defaultBgColour );
-		StyleSetForeground( wxSTC_STYLE_BRACEBAD, wxColour( wxT( "DARK RED" ) ) );
-		StyleSetBackground( wxSTC_STYLE_BRACEBAD, defaultBgColour );
-		StyleSetBackground( wxSTC_STYLE_INDENTGUIDE, defaultBgColour );
-		StyleSetBackground( wxSTC_STYLE_CALLTIP, defaultBgColour );
-		StyleSetBackground( wxSTC_STYLE_LASTPREDEFINED, defaultBgColour );
-		MarkerSetBackground( wxSTC_MARKNUM_FOLDER, defaultBgColour );
-		MarkerSetForeground( wxSTC_MARKNUM_FOLDER, defaultFgColour );
-		MarkerSetBackground( wxSTC_MARKNUM_FOLDEROPEN, defaultBgColour );
-		MarkerSetForeground( wxSTC_MARKNUM_FOLDEROPEN, defaultFgColour );
-		MarkerSetBackground( wxSTC_MARKNUM_FOLDERSUB, defaultBgColour );
-		MarkerSetForeground( wxSTC_MARKNUM_FOLDERSUB, defaultFgColour );
-		MarkerSetBackground( wxSTC_MARKNUM_FOLDEREND, defaultBgColour );
-		MarkerSetForeground( wxSTC_MARKNUM_FOLDEREND, defaultFgColour );
-		MarkerSetBackground( wxSTC_MARKNUM_FOLDEROPENMID, defaultBgColour );
-		MarkerSetForeground( wxSTC_MARKNUM_FOLDEROPENMID, defaultFgColour );
-		MarkerSetBackground( wxSTC_MARKNUM_FOLDERMIDTAIL, defaultBgColour );
-		MarkerSetForeground( wxSTC_MARKNUM_FOLDERMIDTAIL, defaultFgColour );
-		MarkerSetBackground( wxSTC_MARKNUM_FOLDERTAIL, defaultBgColour );
-		MarkerSetForeground( wxSTC_MARKNUM_FOLDERTAIL, defaultFgColour );
 		wxArrayString keywords;
 
 		// initialize settings
-		if ( m_context.getSyntaxEnable() )
+		if ( m_context.syntaxEnable )
 		{
-			int iNbKeywords = 0;
-			LexerStylesAssoc lexerAssoc( pCurInfo->getLexerID() );
-
-			for ( int j = eSTC_TYPE_DEFAULT; j < eSTC_TYPE_COUNT; ++j )
+			for ( auto & styleIt : m_language->getStyles() )
 			{
-				eSTC_TYPE type = eSTC_TYPE( j );
-				int iStyle = lexerAssoc[type];
-				StyleInfoPtr const & stCurType = pCurInfo->getStyle( type );
-				wxFont font( stCurType->getFontSize(), wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, stCurType->getFontName() );
-				StyleSetFont( iStyle, font );
+				StyleInfo const & styleInfo = styleIt.second;
+				int style = styleIt.first;
 
-				if ( !stCurType->getForeground().empty() )
+				if ( styleInfo.foreground.IsOk() )
 				{
-					StyleSetForeground( iStyle, stCurType->getForeground() );
+					StyleSetForeground( style, styleInfo.foreground );
 				}
 
-				if ( !stCurType->getBackground().empty() )
+				if ( styleInfo.background.IsOk() )
 				{
-					StyleSetBackground( iStyle, stCurType->getBackground() );
+					StyleSetBackground( style, styleInfo.background );
 				}
 
-				StyleSetBold( iStyle, ( stCurType->getFontStyle() & eSTC_STYLE_BOLD ) >  0 );
-				StyleSetItalic( iStyle, ( stCurType->getFontStyle() & eSTC_STYLE_ITALIC ) >  0 );
-				StyleSetUnderline( iStyle, ( stCurType->getFontStyle() & eSTC_STYLE_UNDERL ) >  0 );
-				StyleSetVisible( iStyle, ( stCurType->getFontStyle() & eSTC_STYLE_HIDDEN ) == 0 );
-				StyleSetCase( iStyle, ( stCurType->getLetterCase() ) );
+				StyleSetBold( style, ( styleInfo.fontStyle & eSTC_STYLE_BOLD ) > 0 );
+				StyleSetItalic( style, ( styleInfo.fontStyle & eSTC_STYLE_ITALIC ) > 0 );
+				StyleSetUnderline( style, ( styleInfo.fontStyle & eSTC_STYLE_UNDERL ) > 0 );
+				StyleSetVisible( style, ( styleInfo.fontStyle & eSTC_STYLE_HIDDEN ) == 0 );
+				StyleSetCase( style, ( styleInfo.letterCase ) );
+			}
 
-				if ( ! pCurInfo->getWords( type ).empty() )
+			for ( auto index = 0; index < 9; ++index )
+			{
+				castor::String words = m_language->getKeywords( index );
+
+				if ( !words.empty() )
 				{
-					castor::String words = pCurInfo->getWords( type );
-					SetKeyWords( iNbKeywords, words.c_str() );
+					SetKeyWords( index, words.c_str() );
 					castor::StringArray array = castor::string::split( words, cuT( " \t\n\r" ), -1, false );
 
-					for ( castor::StringArray::iterator it = array.begin(); it != array.end(); ++it )
+					for ( auto keyword : array )
 					{
-						keywords.push_back( *it );
+						keywords.push_back( keyword );
 					}
-
-					++iNbKeywords;
 				}
 			}
 		}
@@ -419,105 +338,170 @@ bool StcTextEditor::InitializePrefs( wxString const & p_name )
 		AutoComplete( new TextAutoCompleter( keywords ) );
 #endif
 		// set margin as unused
-		SetMarginType( m_iDividerID, wxSTC_MARGIN_SYMBOL );
-		SetMarginWidth( m_iDividerID, 0 );
-		SetMarginSensitive( m_iDividerID, false );
+		SetMarginType( m_dividerID, wxSTC_MARGIN_SYMBOL );
+		SetMarginWidth( m_dividerID, 0 );
+		SetMarginSensitive( m_dividerID, false );
 		// folding
-		SetMarginType( m_iFoldingID, wxSTC_MARGIN_SYMBOL );
-		SetMarginMask( m_iFoldingID, wxSTC_MASK_FOLDERS );
-		StyleSetBackground( m_iFoldingID, defaultBgColour );
-		SetMarginWidth( m_iFoldingID, 0 );
-		SetMarginSensitive( m_iFoldingID, false );
+		SetMarginType( m_foldingID, wxSTC_MARGIN_SYMBOL );
+		SetMarginMask( m_foldingID, wxSTC_MASK_FOLDERS );
+		StyleSetBackground( m_foldingID, defaultBgColour );
+		SetMarginWidth( m_foldingID, 0 );
+		SetMarginSensitive( m_foldingID, false );
 
-		if ( m_context.getFoldEnable() )
+		if ( m_context.foldEnable )
 		{
-			SetMarginWidth( m_iFoldingID, ( ( pCurInfo->getFoldFlags() != 0 ) ? m_iFoldingMargin : 0 ) );
-			SetMarginSensitive( m_iFoldingID, ( ( pCurInfo->getFoldFlags() != 0 ) ) );
-			SetProperty( wxT( "fold" ), ( ( pCurInfo->getFoldFlags() != 0 ) ? wxT( "1" ) : wxT( "0" ) ) );
-			SetProperty( wxT( "fold.comment" ), ( ( pCurInfo->getFoldFlags() & eSTC_FOLD_COMMENT ) > 0 ? wxT( "1" ) : wxT( "0" ) ) );
-			SetProperty( wxT( "fold.compact" ), ( ( pCurInfo->getFoldFlags() & eSTC_FOLD_COMPACT ) > 0 ? wxT( "1" ) : wxT( "0" ) ) );
-			SetProperty( wxT( "fold.preprocessor" ), ( ( pCurInfo->getFoldFlags() & eSTC_FOLD_PREPROC ) > 0	? wxT( "1" ) : wxT( "0" ) ) );
-			SetProperty( wxT( "fold.html" ), ( ( pCurInfo->getFoldFlags() & eSTC_FOLD_HTML ) > 0	? wxT( "1" ) : wxT( "0" ) ) );
-			SetProperty( wxT( "fold.html.preprocessor" ), ( ( pCurInfo->getFoldFlags() & eSTC_FOLD_HTMLPREP ) > 0	? wxT( "1" ) : wxT( "0" ) ) );
-			SetProperty( wxT( "fold.comment.python" ), ( ( pCurInfo->getFoldFlags() & eSTC_FOLD_COMMENTPY ) > 0	? wxT( "1" ) : wxT( "0" ) ) );
-			SetProperty( wxT( "fold.quotes.python" ), ( ( pCurInfo->getFoldFlags() & eSTC_FOLD_QUOTESPY ) > 0	? wxT( "1" ) : wxT( "0" ) ) );
+			SetMarginWidth( m_foldingID, ( ( m_language->getFoldFlags() != 0 ) ? m_foldingMargin : 0 ) );
+			SetMarginSensitive( m_foldingID, ( ( m_language->getFoldFlags() != 0 ) ) );
+			SetProperty( wxT( "fold" ), ( ( m_language->getFoldFlags() != 0 ) ? wxT( "1" ) : wxT( "0" ) ) );
+			SetProperty( wxT( "fold.comment" ), ( ( m_language->getFoldFlags() & eSTC_FOLD_COMMENT ) > 0 ? wxT( "1" ) : wxT( "0" ) ) );
+			SetProperty( wxT( "fold.compact" ), ( ( m_language->getFoldFlags() & eSTC_FOLD_COMPACT ) > 0 ? wxT( "1" ) : wxT( "0" ) ) );
+			SetProperty( wxT( "fold.preprocessor" ), ( ( m_language->getFoldFlags() & eSTC_FOLD_PREPROC ) > 0	? wxT( "1" ) : wxT( "0" ) ) );
+			SetProperty( wxT( "fold.html" ), ( ( m_language->getFoldFlags() & eSTC_FOLD_HTML ) > 0	? wxT( "1" ) : wxT( "0" ) ) );
+			SetProperty( wxT( "fold.html.preprocessor" ), ( ( m_language->getFoldFlags() & eSTC_FOLD_HTMLPREP ) > 0	? wxT( "1" ) : wxT( "0" ) ) );
+			SetProperty( wxT( "fold.comment.python" ), ( ( m_language->getFoldFlags() & eSTC_FOLD_COMMENTPY ) > 0	? wxT( "1" ) : wxT( "0" ) ) );
+			SetProperty( wxT( "fold.quotes.python" ), ( ( m_language->getFoldFlags() & eSTC_FOLD_QUOTESPY ) > 0	? wxT( "1" ) : wxT( "0" ) ) );
 		}
 
 		SetFoldFlags( wxSTC_FOLDFLAG_LINEBEFORE_CONTRACTED | wxSTC_FOLDFLAG_LINEAFTER_CONTRACTED );
 		// set spaces and indention
-		SetTabWidth( m_iTabSpaces );
-		SetUseTabs( m_bUseTabs );
-		SetTabIndents( m_bTabIndents );
-		SetBackSpaceUnIndents( m_bBackspaceUnindents );
-		SetIndent( m_context.getIndentEnable() ? m_iTabSpaces : 0 );
+		SetTabWidth( m_tabSpaces );
+		SetUseTabs( m_useTabs );
+		SetTabIndents( m_tabIndents );
+		SetBackSpaceUnIndents( m_backspaceUnindents );
+		SetIndent( m_context.indentEnable ? m_tabSpaces : 0 );
 		// others
-		SetViewEOL( m_context.getDisplayEOLEnable() );
-		SetIndentationGuides( m_context.getIndentGuideEnable() );
+		SetViewEOL( m_context.displayEOLEnable );
+		SetIndentationGuides( m_context.indentGuideEnable );
 		SetEdgeColumn( 80 );
-		SetEdgeMode( m_context.getLongLineOnEnable() ? wxSTC_EDGE_LINE : wxSTC_EDGE_NONE );
-		SetViewWhiteSpace( m_context.getWhiteSpaceEnable() ? wxSTC_WS_VISIBLEALWAYS : wxSTC_WS_INVISIBLE );
-		SetOvertype( m_context.getOverTypeInitial() );
-		SetReadOnly( m_context.getReadOnlyInitial() );
-		SetWrapMode( m_context.getWrapModeInitial() ? wxSTC_WRAP_WORD : wxSTC_WRAP_NONE );
+		SetEdgeMode( m_context.longLineOnEnable ? wxSTC_EDGE_LINE : wxSTC_EDGE_NONE );
+		SetViewWhiteSpace( m_context.whiteSpaceEnable ? wxSTC_WS_VISIBLEALWAYS : wxSTC_WS_INVISIBLE );
+		SetOvertype( m_context.overTypeInitial );
+		SetReadOnly( m_context.readOnlyInitial );
+		SetWrapMode( m_context.wrapModeInitial ? wxSTC_WRAP_WORD : wxSTC_WRAP_NONE );
 	}
 
-	return bFound;
+	return it != m_context.end();
+}
+
+void StcTextEditor::doInitialiseBaseColours( wxColour const & bgColour
+	, wxColour const & fgColour )
+{
+	SetBackgroundColour( bgColour );
+	SetForegroundColour( fgColour );
+	SetSelAlpha( 127 );
+	SetSelBackground( true, wxColour( 51, 153, 255, 127 ) );
+	SetFoldMarginColour( true, bgColour );
+	SetFoldMarginHiColour( true, bgColour );
+	StyleSetBackground( wxSTC_STYLE_DEFAULT, bgColour );
+	StyleSetForeground( wxSTC_STYLE_DEFAULT, fgColour );
+	StyleClearAll();
+
+	SetCaretForeground( fgColour );
+
+	MarkerDefine( wxSTC_MARKNUM_FOLDER, wxSTC_MARK_DOTDOTDOT, fgColour, bgColour );
+	MarkerDefine( wxSTC_MARKNUM_FOLDEROPEN, wxSTC_MARK_ARROWDOWN, fgColour, bgColour );
+	MarkerDefine( wxSTC_MARKNUM_FOLDERSUB, wxSTC_MARK_EMPTY, fgColour, bgColour );
+	MarkerDefine( wxSTC_MARKNUM_FOLDEREND, wxSTC_MARK_DOTDOTDOT, fgColour, bgColour );
+	MarkerDefine( wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_ARROWDOWN, fgColour, bgColour );
+	MarkerDefine( wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_EMPTY, fgColour, bgColour );
+	MarkerDefine( wxSTC_MARKNUM_FOLDERTAIL, wxSTC_MARK_EMPTY, fgColour, bgColour );
+
+	MarkerSetBackground( wxSTC_MARKNUM_FOLDER, bgColour );
+	MarkerSetForeground( wxSTC_MARKNUM_FOLDER, fgColour );
+	MarkerSetBackground( wxSTC_MARKNUM_FOLDEROPEN, bgColour );
+	MarkerSetForeground( wxSTC_MARKNUM_FOLDEROPEN, fgColour );
+	MarkerSetBackground( wxSTC_MARKNUM_FOLDERSUB, bgColour );
+	MarkerSetForeground( wxSTC_MARKNUM_FOLDERSUB, fgColour );
+	MarkerSetBackground( wxSTC_MARKNUM_FOLDEREND, bgColour );
+	MarkerSetForeground( wxSTC_MARKNUM_FOLDEREND, fgColour );
+	MarkerSetBackground( wxSTC_MARKNUM_FOLDEROPENMID, bgColour );
+	MarkerSetForeground( wxSTC_MARKNUM_FOLDEROPENMID, fgColour );
+	MarkerSetBackground( wxSTC_MARKNUM_FOLDERMIDTAIL, bgColour );
+	MarkerSetForeground( wxSTC_MARKNUM_FOLDERMIDTAIL, fgColour );
+	MarkerSetBackground( wxSTC_MARKNUM_FOLDERTAIL, bgColour );
+	MarkerSetForeground( wxSTC_MARKNUM_FOLDERTAIL, fgColour );
+
+	// set common styles
+	StyleSetBackground( wxSTC_STYLE_LINENUMBER, bgColour );
+	StyleSetForeground( wxSTC_STYLE_LINENUMBER, fgColour );
+	StyleSetBackground( wxSTC_STYLE_CONTROLCHAR, bgColour );
+	StyleSetForeground( wxSTC_STYLE_CONTROLCHAR, fgColour );
+	StyleSetBackground( wxSTC_STYLE_BRACELIGHT, bgColour );
+	StyleSetForeground( wxSTC_STYLE_BRACELIGHT, wxColour( wxT( "DARK GREEN" ) ) );
+	StyleSetBackground( wxSTC_STYLE_BRACEBAD, bgColour );
+	StyleSetForeground( wxSTC_STYLE_BRACEBAD, wxColour( wxT( "DARK RED" ) ) );
+	StyleSetBackground( wxSTC_STYLE_INDENTGUIDE, bgColour );
+	StyleSetBackground( wxSTC_STYLE_CALLTIP, bgColour );
+	StyleSetBackground( wxSTC_STYLE_LASTPREDEFINED, bgColour );
+
+	StyleSetBackground( wxSTC_C_DEFAULT, bgColour );
+	StyleSetForeground( wxSTC_C_DEFAULT, fgColour );
+	StyleSetBackground( wxSTC_C_COMMENT, bgColour );
+	StyleSetBackground( wxSTC_C_COMMENTLINE, bgColour );
+	StyleSetBackground( wxSTC_C_COMMENTDOC, bgColour );
+	StyleSetBackground( wxSTC_C_COMMENTLINEDOC, bgColour );
+	StyleSetBackground( wxSTC_C_COMMENTDOCKEYWORD, bgColour );
+	StyleSetBackground( wxSTC_C_COMMENTDOCKEYWORDERROR, bgColour );
+	StyleSetBackground( wxSTC_C_PREPROCESSORCOMMENT, bgColour );
+	StyleSetBackground( wxSTC_C_PREPROCESSORCOMMENTDOC, bgColour );
 }
 
 BEGIN_EVENT_TABLE( StcTextEditor, wxStyledTextCtrl )
-	EVT_SIZE( StcTextEditor::OnSize )
-	EVT_MENU( wxID_CLEAR, StcTextEditor::OnEditClear )
-	EVT_MENU( wxID_CUT, StcTextEditor::OnEditCut )
-	EVT_MENU( wxID_COPY, StcTextEditor::OnEditCopy )
-	EVT_MENU( wxID_PASTE, StcTextEditor::OnEditPaste )
-	EVT_MENU( gcID_INDENTINC, StcTextEditor::OnEditIndentInc )
-	EVT_MENU( gcID_INDENTRED, StcTextEditor::OnEditIndentRed )
-	EVT_MENU( wxID_SELECTALL, StcTextEditor::OnEditSelectAll )
-	EVT_MENU( gcID_SELECTLINE, StcTextEditor::OnEditSelectLine )
-	EVT_MENU( wxID_REDO, StcTextEditor::OnEditRedo )
-	EVT_MENU( wxID_UNDO, StcTextEditor::OnEditUndo )
-	EVT_MENU( wxID_FIND, StcTextEditor::OnFind )
-	EVT_MENU( gcID_FINDNEXT, StcTextEditor::OnFindNext )
-	EVT_MENU( gcID_REPLACE, StcTextEditor::OnReplace )
-	EVT_MENU( gcID_REPLACENEXT, StcTextEditor::OnReplaceNext )
-	EVT_MENU( gcID_BRACEMATCH, StcTextEditor::OnBraceMatch )
-	EVT_MENU( gcID_GOTO, StcTextEditor::OnGoto )
-	EVT_MENU_RANGE( gcID_HILIGHTFIRST, gcID_HILIGHTLAST, StcTextEditor::OnHilightLang )
-	EVT_MENU( gcID_DISPLAYEOL, StcTextEditor::OnDisplayEOL )
-	EVT_MENU( gcID_INDENTGUIDE, StcTextEditor::OnIndentGuide )
-	EVT_MENU( gcID_LINENUMBER, StcTextEditor::OnLineNumber )
-	EVT_MENU( gcID_LONGLINEON, StcTextEditor::OnLongLineOn )
-	EVT_MENU( gcID_WHITESPACE, StcTextEditor::OnWhiteSpace )
-	EVT_MENU( gcID_FOLDTOGGLE, StcTextEditor::OnFoldToggle )
-	EVT_MENU( gcID_OVERTYPE, StcTextEditor::OnsetOverType )
-	EVT_MENU( gcID_READONLY, StcTextEditor::OnsetReadOnly )
-	EVT_MENU( gcID_WRAPMODEON, StcTextEditor::OnWrapmodeOn )
-	EVT_MENU( gcID_CHARSETANSI, StcTextEditor::OnUseCharset )
-	EVT_MENU( gcID_CHARSETMAC, StcTextEditor::OnUseCharset )
-	EVT_MENU( gcID_CHANGELOWER, StcTextEditor::OnChangeCase )
-	EVT_MENU( gcID_CHANGEUPPER, StcTextEditor::OnChangeCase )
-	EVT_MENU( gcID_CONVERTCR, StcTextEditor::OnConvertEOL )
-	EVT_MENU( gcID_CONVERTCRLF, StcTextEditor::OnConvertEOL )
-	EVT_MENU( gcID_CONVERTLF, StcTextEditor::OnConvertEOL )
-	EVT_STC_MARGINCLICK( wxID_ANY, StcTextEditor::OnMarginClick )
-	EVT_STC_CHARADDED( wxID_ANY, StcTextEditor::OnCharAdded )
-	EVT_STC_KEY( wxID_ANY , StcTextEditor::OnKey )
+	EVT_SIZE( StcTextEditor::onSize )
+	EVT_MENU( wxID_CLEAR, StcTextEditor::onEditClear )
+	EVT_MENU( wxID_CUT, StcTextEditor::onEditCut )
+	EVT_MENU( wxID_COPY, StcTextEditor::onEditCopy )
+	EVT_MENU( wxID_PASTE, StcTextEditor::onEditPaste )
+	EVT_MENU( gcID_INDENTINC, StcTextEditor::onEditIndentInc )
+	EVT_MENU( gcID_INDENTRED, StcTextEditor::onEditIndentRed )
+	EVT_MENU( wxID_SELECTALL, StcTextEditor::onEditSelectAll )
+	EVT_MENU( gcID_SELECTLINE, StcTextEditor::onEditSelectLine )
+	EVT_MENU( wxID_REDO, StcTextEditor::onEditRedo )
+	EVT_MENU( wxID_UNDO, StcTextEditor::onEditUndo )
+	EVT_MENU( wxID_FIND, StcTextEditor::onFind )
+	EVT_MENU( gcID_FINDNEXT, StcTextEditor::onFindNext )
+	EVT_MENU( gcID_REPLACE, StcTextEditor::onReplace )
+	EVT_MENU( gcID_REPLACENEXT, StcTextEditor::onReplaceNext )
+	EVT_MENU( gcID_BRACEMATCH, StcTextEditor::onBraceMatch )
+	EVT_MENU( gcID_GOTO, StcTextEditor::onGoto )
+	EVT_MENU_RANGE( gcID_HILIGHTFIRST, gcID_HILIGHTLAST, StcTextEditor::onHighlightLang )
+	EVT_MENU( gcID_DISPLAYEOL, StcTextEditor::onDisplayEOL )
+	EVT_MENU( gcID_INDENTGUIDE, StcTextEditor::onIndentGuide )
+	EVT_MENU( gcID_LINENUMBER, StcTextEditor::onLineNumber )
+	EVT_MENU( gcID_LONGLINEON, StcTextEditor::onLongLineOn )
+	EVT_MENU( gcID_WHITESPACE, StcTextEditor::onWhiteSpace )
+	EVT_MENU( gcID_FOLDTOGGLE, StcTextEditor::onFoldToggle )
+	EVT_MENU( gcID_OVERTYPE, StcTextEditor::onSetOverType )
+	EVT_MENU( gcID_READONLY, StcTextEditor::onSetReadOnly )
+	EVT_MENU( gcID_WRAPMODEON, StcTextEditor::onWrapmodeOn )
+	EVT_MENU( gcID_CHARSETANSI, StcTextEditor::onUseCharset )
+	EVT_MENU( gcID_CHARSETMAC, StcTextEditor::onUseCharset )
+	EVT_MENU( gcID_CHANGELOWER, StcTextEditor::onChangeCase )
+	EVT_MENU( gcID_CHANGEUPPER, StcTextEditor::onChangeCase )
+	EVT_MENU( gcID_CONVERTCR, StcTextEditor::onConvertEOL )
+	EVT_MENU( gcID_CONVERTCRLF, StcTextEditor::onConvertEOL )
+	EVT_MENU( gcID_CONVERTLF, StcTextEditor::onConvertEOL )
+	EVT_STC_MARGINCLICK( wxID_ANY, StcTextEditor::onMarginClick )
+	EVT_STC_CHARADDED( wxID_ANY, StcTextEditor::onCharAdded )
+	EVT_STC_KEY( wxID_ANY , StcTextEditor::onKey )
 END_EVENT_TABLE()
 
 
-void StcTextEditor::OnSize( wxSizeEvent & p_event )
+void StcTextEditor::onSize( wxSizeEvent & event )
 {
-	int x = GetClientSize().x + ( m_context.getLineNumberEnable() ? m_iLineNrMargin : 0 ) + ( m_context.getFoldEnable() ? m_iFoldingMargin : 0 );
+	int x = GetClientSize().x
+		+ ( m_context.lineNumberEnable ? m_lineNrMargin : 0 )
+		+ ( m_context.foldEnable ? m_foldingMargin : 0 );
 
 	if ( x > 0 )
 	{
 		SetScrollWidth( x );
 	}
 
-	p_event.Skip();
+	event.Skip();
 }
 
-void StcTextEditor::OnEditRedo( wxCommandEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onEditRedo( wxCommandEvent & WXUNUSED( event ) )
 {
 	if ( CanRedo() )
 	{
@@ -525,7 +509,7 @@ void StcTextEditor::OnEditRedo( wxCommandEvent & WXUNUSED( p_event ) )
 	}
 }
 
-void StcTextEditor::OnEditUndo( wxCommandEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onEditUndo( wxCommandEvent & WXUNUSED( event ) )
 {
 	if ( CanUndo() )
 	{
@@ -533,7 +517,7 @@ void StcTextEditor::OnEditUndo( wxCommandEvent & WXUNUSED( p_event ) )
 	}
 }
 
-void StcTextEditor::OnEditClear( wxCommandEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onEditClear( wxCommandEvent & WXUNUSED( event ) )
 {
 	if ( !GetReadOnly() )
 	{
@@ -541,12 +525,12 @@ void StcTextEditor::OnEditClear( wxCommandEvent & WXUNUSED( p_event ) )
 	}
 }
 
-void StcTextEditor::OnKey( wxStyledTextEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onKey( wxStyledTextEvent & WXUNUSED( event ) )
 {
 	wxMessageBox( wxT( "OnKey" ) );
 }
 
-void StcTextEditor::OnEditCut( wxCommandEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onEditCut( wxCommandEvent & WXUNUSED( event ) )
 {
 	if ( !GetReadOnly() && ( GetSelectionEnd() - GetSelectionStart() ) > 0 )
 	{
@@ -554,7 +538,7 @@ void StcTextEditor::OnEditCut( wxCommandEvent & WXUNUSED( p_event ) )
 	}
 }
 
-void StcTextEditor::OnEditCopy( wxCommandEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onEditCopy( wxCommandEvent & WXUNUSED( event ) )
 {
 	if ( GetSelectionEnd() - GetSelectionStart() > 0 )
 	{
@@ -562,7 +546,7 @@ void StcTextEditor::OnEditCopy( wxCommandEvent & WXUNUSED( p_event ) )
 	}
 }
 
-void StcTextEditor::OnEditPaste( wxCommandEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onEditPaste( wxCommandEvent & WXUNUSED( event ) )
 {
 	if ( CanPaste() )
 	{
@@ -570,140 +554,140 @@ void StcTextEditor::OnEditPaste( wxCommandEvent & WXUNUSED( p_event ) )
 	}
 }
 
-void StcTextEditor::OnFind( wxCommandEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onFind( wxCommandEvent & WXUNUSED( event ) )
 {
 }
 
-void StcTextEditor::OnFindNext( wxCommandEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onFindNext( wxCommandEvent & WXUNUSED( event ) )
 {
 }
 
-void StcTextEditor::OnReplace( wxCommandEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onReplace( wxCommandEvent & WXUNUSED( event ) )
 {
 }
 
-void StcTextEditor::OnReplaceNext( wxCommandEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onReplaceNext( wxCommandEvent & WXUNUSED( event ) )
 {
 }
 
-void StcTextEditor::OnBraceMatch( wxCommandEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onBraceMatch( wxCommandEvent & WXUNUSED( event ) )
 {
-	int iMin = GetCurrentPos();
-	int iMax = BraceMatch( iMin );
+	int min = GetCurrentPos();
+	int max = BraceMatch( min );
 
-	if ( iMax > ( iMin + 1 ) )
+	if ( max > ( min + 1 ) )
 	{
-		BraceHighlight( iMin + 1, iMax );
-		SetSelection( iMin + 1, iMax );
+		BraceHighlight( min + 1, max );
+		SetSelection( min + 1, max );
 	}
 	else
 	{
-		BraceBadLight( iMin );
+		BraceBadLight( min );
 	}
 }
 
-void StcTextEditor::OnGoto( wxCommandEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onGoto( wxCommandEvent & WXUNUSED( event ) )
 {
 }
 
-void StcTextEditor::OnEditIndentInc( wxCommandEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onEditIndentInc( wxCommandEvent & WXUNUSED( event ) )
 {
 	CmdKeyExecute( wxSTC_CMD_TAB );
 }
 
-void StcTextEditor::OnEditIndentRed( wxCommandEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onEditIndentRed( wxCommandEvent & WXUNUSED( event ) )
 {
 	CmdKeyExecute( wxSTC_CMD_DELETEBACK );
 }
 
-void StcTextEditor::OnEditSelectAll( wxCommandEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onEditSelectAll( wxCommandEvent & WXUNUSED( event ) )
 {
 	SetSelection( 0, GetTextLength() );
 }
 
-void StcTextEditor::OnEditSelectLine( wxCommandEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onEditSelectLine( wxCommandEvent & WXUNUSED( event ) )
 {
-	int iLineStart = PositionFromLine( GetCurrentLine() );
-	int iLineEnd = PositionFromLine( GetCurrentLine() + 1 );
-	SetSelection( iLineStart, iLineEnd );
+	int lineStart = PositionFromLine( GetCurrentLine() );
+	int lineEnd = PositionFromLine( GetCurrentLine() + 1 );
+	SetSelection( lineStart, lineEnd );
 }
 
-void StcTextEditor::OnHilightLang( wxCommandEvent & p_event )
+void StcTextEditor::onHighlightLang( wxCommandEvent & event )
 {
-	InitializePrefs( ( *( m_context.begin() + ( p_event.GetId() - gcID_HILIGHTFIRST ) ) )->getName() );
+	initializePrefs( ( *( m_context.begin() + ( event.GetId() - gcID_HILIGHTFIRST ) ) )->getName() );
 }
 
-void StcTextEditor::OnDisplayEOL( wxCommandEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onDisplayEOL( wxCommandEvent & WXUNUSED( event ) )
 {
 	SetViewEOL( !GetViewEOL() );
 }
 
-void StcTextEditor::OnIndentGuide( wxCommandEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onIndentGuide( wxCommandEvent & WXUNUSED( event ) )
 {
 	SetIndentationGuides( !GetIndentationGuides() );
 }
 
-void StcTextEditor::OnLineNumber( wxCommandEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onLineNumber( wxCommandEvent & WXUNUSED( event ) )
 {
-	SetMarginWidth( m_iLineNrID, GetMarginWidth( m_iLineNrID ) == 0 ? m_iLineNrMargin : 0 );
+	SetMarginWidth( m_lineNrID, GetMarginWidth( m_lineNrID ) == 0 ? m_lineNrMargin : 0 );
 }
 
-void StcTextEditor::OnLongLineOn( wxCommandEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onLongLineOn( wxCommandEvent & WXUNUSED( event ) )
 {
 	SetEdgeMode( GetEdgeMode() == 0 ? wxSTC_EDGE_LINE : wxSTC_EDGE_NONE );
 }
 
-void StcTextEditor::OnWhiteSpace( wxCommandEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onWhiteSpace( wxCommandEvent & WXUNUSED( event ) )
 {
 	SetViewWhiteSpace( GetViewWhiteSpace() == 0 ? wxSTC_WS_VISIBLEALWAYS : wxSTC_WS_INVISIBLE );
 }
 
-void StcTextEditor::OnFoldToggle( wxCommandEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onFoldToggle( wxCommandEvent & WXUNUSED( event ) )
 {
 	ToggleFold( GetFoldParent( GetCurrentLine() ) );
 }
 
-void StcTextEditor::OnsetOverType( wxCommandEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onSetOverType( wxCommandEvent & WXUNUSED( event ) )
 {
 	SetOvertype( !GetOvertype() );
 }
 
-void StcTextEditor::OnsetReadOnly( wxCommandEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onSetReadOnly( wxCommandEvent & WXUNUSED( event ) )
 {
 	SetReadOnly( !GetReadOnly() );
 }
 
-void StcTextEditor::OnWrapmodeOn( wxCommandEvent & WXUNUSED( p_event ) )
+void StcTextEditor::onWrapmodeOn( wxCommandEvent & WXUNUSED( event ) )
 {
 	SetWrapMode( GetWrapMode() == 0 ? wxSTC_WRAP_WORD : wxSTC_WRAP_NONE );
 }
 
-void StcTextEditor::OnUseCharset( wxCommandEvent & p_event )
+void StcTextEditor::onUseCharset( wxCommandEvent & event )
 {
-	int iCharset = GetCodePage();
+	int charset = GetCodePage();
 
-	switch ( p_event.GetId() )
+	switch ( event.GetId() )
 	{
 	case gcID_CHARSETANSI:
-		iCharset = wxSTC_CHARSET_ANSI;
+		charset = wxSTC_CHARSET_ANSI;
 		break;
 
 	case gcID_CHARSETMAC:
-		iCharset = wxSTC_CHARSET_ANSI;
+		charset = wxSTC_CHARSET_ANSI;
 		break;
 	}
 
 	for ( int i = 0; i < wxSTC_STYLE_LASTPREDEFINED; ++i )
 	{
-		StyleSetCharacterSet( i, iCharset );
+		StyleSetCharacterSet( i, charset );
 	}
 
-	SetCodePage( iCharset );
+	SetCodePage( charset );
 }
 
-void StcTextEditor::OnChangeCase( wxCommandEvent & p_event )
+void StcTextEditor::onChangeCase( wxCommandEvent & event )
 {
-	switch ( p_event.GetId() )
+	switch ( event.GetId() )
 	{
 	case gcID_CHANGELOWER:
 		CmdKeyExecute( wxSTC_CMD_LOWERCASE );
@@ -715,61 +699,61 @@ void StcTextEditor::OnChangeCase( wxCommandEvent & p_event )
 	}
 }
 
-void StcTextEditor::OnConvertEOL( wxCommandEvent & p_event )
+void StcTextEditor::onConvertEOL( wxCommandEvent & event )
 {
-	int iEolMode = GetEOLMode();
+	int eolMode = GetEOLMode();
 
-	switch ( p_event.GetId() )
+	switch ( event.GetId() )
 	{
 	case gcID_CONVERTCR:
-		iEolMode = wxSTC_EOL_CR;
+		eolMode = wxSTC_EOL_CR;
 		break;
 
 	case gcID_CONVERTCRLF:
-		iEolMode = wxSTC_EOL_CRLF;
+		eolMode = wxSTC_EOL_CRLF;
 		break;
 
 	case gcID_CONVERTLF:
-		iEolMode = wxSTC_EOL_LF;
+		eolMode = wxSTC_EOL_LF;
 		break;
 	}
 
-	ConvertEOLs( iEolMode );
-	SetEOLMode( iEolMode );
+	ConvertEOLs( eolMode );
+	SetEOLMode( eolMode );
 }
 
-void StcTextEditor::OnMarginClick( wxStyledTextEvent & p_event )
+void StcTextEditor::onMarginClick( wxStyledTextEvent & event )
 {
-	if ( p_event.GetMargin() == 2 )
+	if ( event.GetMargin() == 2 )
 	{
-		int iLineClick = LineFromPosition( p_event.GetPosition() );
-		int iLevelClick = GetFoldLevel( iLineClick );
+		int lineClick = LineFromPosition( event.GetPosition() );
+		int levelClick = GetFoldLevel( lineClick );
 
-		if ( ( iLevelClick & wxSTC_FOLDLEVELHEADERFLAG ) > 0 )
+		if ( ( levelClick & wxSTC_FOLDLEVELHEADERFLAG ) > 0 )
 		{
-			ToggleFold( iLineClick );
+			ToggleFold( lineClick );
 		}
 	}
 }
 
-void StcTextEditor::OnCharAdded( wxStyledTextEvent & p_event )
+void StcTextEditor::onCharAdded( wxStyledTextEvent & event )
 {
-	char chr = ( char )p_event.GetKey();
-	int iCurrentLine = GetCurrentLine();
+	char chr = ( char )event.GetKey();
+	int currentLine = GetCurrentLine();
 
 	if ( chr == '\n' )
 	{
-		int iLineInd = 0;
+		int lineInd = 0;
 
-		if ( iCurrentLine > 0 )
+		if ( currentLine > 0 )
 		{
-			iLineInd = GetLineIndentation( iCurrentLine - 1 );
+			lineInd = GetLineIndentation( currentLine - 1 );
 		}
 
-		if ( iLineInd != 0 )
+		if ( lineInd != 0 )
 		{
-			SetLineIndentation( iCurrentLine, iLineInd );
-			GotoPos( PositionFromLine( iCurrentLine ) + iLineInd );
+			SetLineIndentation( currentLine, lineInd );
+			GotoPos( PositionFromLine( currentLine ) + lineInd );
 		}
 	}
 }
