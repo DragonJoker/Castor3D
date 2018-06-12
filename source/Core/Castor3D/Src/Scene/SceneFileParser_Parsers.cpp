@@ -4799,7 +4799,7 @@ namespace castor3d
 			{
 				uint32_t value;
 				p_params[0]->get( value );
-				parsingContext->ssaoConfig.m_blurRadius = value;
+				parsingContext->ssaoConfig.m_blurRadius = makeRangedValue( int32_t( value ), 1, 6 );
 			}
 		}
 		else

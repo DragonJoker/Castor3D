@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "Castor3DPrerequisites.hpp"
 
 #include <Design/ChangeTracked.hpp>
+#include <Math/RangedValue.hpp>
 
 namespace castor3d
 {
@@ -78,6 +79,12 @@ namespace castor3d
 			, castor::Point4ui & value ) = 0;
 		virtual void visit( castor::String const & name
 			, castor::Matrix4x4f & value ) = 0;
+		virtual void visit( castor::String const & name
+			, castor::RangedValue< float > & value ) = 0;
+		virtual void visit( castor::String const & name
+			, castor::RangedValue< int32_t > & value ) = 0;
+		virtual void visit( castor::String const & name
+			, castor::RangedValue< uint32_t > & value ) = 0;
 		/**@}*/
 		/**
 		*\~english
@@ -157,6 +164,21 @@ namespace castor3d
 			, renderer::ShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
+			, castor::RangedValue< float > & value ) = 0;
+		virtual void visit( castor::String const & name
+			, renderer::ShaderStageFlags shaders
+			, castor::String const & ubo
+			, castor::String const & uniform
+			, castor::RangedValue< int32_t > & value ) = 0;
+		virtual void visit( castor::String const & name
+			, renderer::ShaderStageFlags shaders
+			, castor::String const & ubo
+			, castor::String const & uniform
+			, castor::RangedValue< uint32_t > & value ) = 0;
+		virtual void visit( castor::String const & name
+			, renderer::ShaderStageFlags shaders
+			, castor::String const & ubo
+			, castor::String const & uniform
 			, castor::ChangeTracked< float > & value ) = 0;
 		virtual void visit( castor::String const & name
 			, renderer::ShaderStageFlags shaders
@@ -218,6 +240,21 @@ namespace castor3d
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::ChangeTracked< castor::Matrix4x4f > & value ) = 0;
+		virtual void visit( castor::String const & name
+			, renderer::ShaderStageFlags shaders
+			, castor::String const & ubo
+			, castor::String const & uniform
+			, castor::ChangeTracked< castor::RangedValue< float > > & value ) = 0;
+		virtual void visit( castor::String const & name
+			, renderer::ShaderStageFlags shaders
+			, castor::String const & ubo
+			, castor::String const & uniform
+			, castor::ChangeTracked< castor::RangedValue< int32_t > > & value ) = 0;
+		virtual void visit( castor::String const & name
+			, renderer::ShaderStageFlags shaders
+			, castor::String const & ubo
+			, castor::String const & uniform
+			, castor::ChangeTracked< castor::RangedValue< uint32_t > > & value ) = 0;
 		/**@}*/
 	};
 	/*!
@@ -329,6 +366,21 @@ namespace castor3d
 			, castor::Matrix4x4f & value )override
 		{
 		}
+
+		virtual void visit( castor::String const & name
+			, castor::RangedValue< float > & value )override
+		{
+		}
+
+		virtual void visit( castor::String const & name
+			, castor::RangedValue< int32_t > & value )override
+		{
+		}
+
+		virtual void visit( castor::String const & name
+			, castor::RangedValue< uint32_t > & value )override
+		{
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -442,6 +494,31 @@ namespace castor3d
 			, castor::Matrix4x4f & value )override
 		{
 		}
+
+		virtual void visit( castor::String const & name
+			, renderer::ShaderStageFlags shaders
+			, castor::String const & ubo
+			, castor::String const & uniform
+			, castor::RangedValue< float > & value )override
+		{
+		}
+
+		virtual void visit( castor::String const & name
+			, renderer::ShaderStageFlags shaders
+			, castor::String const & ubo
+			, castor::String const & uniform
+			, castor::RangedValue< int32_t > & value )override
+		{
+		}
+
+		virtual void visit( castor::String const & name
+			, renderer::ShaderStageFlags shaders
+			, castor::String const & ubo
+			, castor::String const & uniform
+			, castor::RangedValue< uint32_t > & value )override
+		{
+		}
+
 		virtual void visit( castor::String const & name
 			, renderer::ShaderStageFlags shaders
 			, castor::String const & ubo
@@ -543,6 +620,30 @@ namespace castor3d
 			, castor::String const & ubo
 			, castor::String const & uniform
 			, castor::ChangeTracked< castor::Matrix4x4f > & value )override
+		{
+		}
+
+		virtual void visit( castor::String const & name
+			, renderer::ShaderStageFlags shaders
+			, castor::String const & ubo
+			, castor::String const & uniform
+			, castor::ChangeTracked< castor::RangedValue< float > > & value )override
+		{
+		}
+
+		virtual void visit( castor::String const & name
+			, renderer::ShaderStageFlags shaders
+			, castor::String const & ubo
+			, castor::String const & uniform
+			, castor::ChangeTracked< castor::RangedValue< int32_t > > & value )override
+		{
+		}
+
+		virtual void visit( castor::String const & name
+			, renderer::ShaderStageFlags shaders
+			, castor::String const & ubo
+			, castor::String const & uniform
+			, castor::ChangeTracked< castor::RangedValue< uint32_t > > & value )override
 		{
 		}
 		/**@}*/

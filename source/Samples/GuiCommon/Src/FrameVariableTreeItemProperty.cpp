@@ -33,12 +33,53 @@ namespace GuiCommon
 		static wxString PROPERTY_TYPE_UIVEC4 = wxT( "uivec4" );
 		static wxString PROPERTY_TYPE_MAT4  = wxT( "mat4x4" );
 
-		wxPGProperty * doBuildValueProperty( wxString const & name
+		wxPGProperty * doBuildTrackedValueProperty( wxString const & name
 			, UniformValueBase const & uniform )
 		{
 			wxPGProperty * result = nullptr;
 
-			if ( uniform.isTracked() )
+			if ( uniform.isRanged() )
+			{
+				switch ( uniform.getType() )
+				{
+				case UniformType::eInt:
+					{
+						auto rangedUniform = static_cast< UniformValue< castor::ChangeTracked< castor::RangedValue< int32_t > > > const & >( uniform );
+						result = new wxIntProperty( name
+							, name
+							, rangedUniform.getValue().value().value() );
+						result->SetEditor( wxT( "SpinCtrl" ) );
+						result->SetAttribute( wxT( "Min" ), rangedUniform.getValue().value().range().min() );
+						result->SetAttribute( wxT( "Max" ), rangedUniform.getValue().value().range().max() );
+					}
+					break;
+
+				case UniformType::eUInt:
+					{
+						auto rangedUniform = static_cast< UniformValue< castor::ChangeTracked< castor::RangedValue< uint32_t > > > const & >( uniform );
+						result = new wxUIntProperty( name
+							, name
+							, rangedUniform.getValue().value().value() );
+						result->SetEditor( wxT( "SpinCtrl" ) );
+						result->SetAttribute( wxT( "Min" ), int32_t( rangedUniform.getValue().value().range().min() ) );
+						result->SetAttribute( wxT( "Max" ), int32_t( rangedUniform.getValue().value().range().max() ) );
+					}
+					break;
+
+				case UniformType::eFloat:
+					{
+						auto rangedUniform = static_cast< UniformValue< castor::ChangeTracked< castor::RangedValue< float > > > const & >( uniform );
+						result = new wxFloatProperty( name
+							, name
+							, rangedUniform.getValue().value().value() );
+						result->SetEditor( wxT( "SpinCtrl" ) );
+						result->SetAttribute( wxT( "Min" ), rangedUniform.getValue().value().range().min() );
+						result->SetAttribute( wxT( "Max" ), rangedUniform.getValue().value().range().max() );
+					}
+					break;
+				}
+			}
+			else
 			{
 				switch ( uniform.getType() )
 				{
@@ -92,6 +133,79 @@ namespace GuiCommon
 
 				case UniformType::eMat4f:
 					result = new Matrix4fProperty( GC_POINT_1234, GC_POINT_1234, name, name, static_cast< UniformValue< castor::ChangeTracked< Matrix4x4f > > const & >( uniform ).getValue() );
+					break;
+				}
+			}
+
+			return result;
+		}
+
+		wxPGProperty * doBuildUntrackedValueProperty( wxString const & name
+			, UniformValueBase const & uniform )
+		{
+			wxPGProperty * result = nullptr;
+
+			if ( uniform.isRanged() )
+			{
+				switch ( uniform.getType() )
+				{
+				case UniformType::eInt:
+					{
+						auto rangedUniform = static_cast< UniformValue< castor::RangedValue< int32_t > > const & >( uniform );
+						result = new wxIntProperty( name
+							, name
+							, rangedUniform.getValue().value() );
+						result->SetEditor( wxT( "SpinCtrl" ) );
+						result->SetAttribute( wxT( "Min" ), rangedUniform.getValue().range().min() );
+						result->SetAttribute( wxT( "Max" ), rangedUniform.getValue().range().max() );
+					}
+					break;
+
+				case UniformType::eUInt:
+					{
+						auto rangedUniform = static_cast< UniformValue< castor::RangedValue< uint32_t > > const & >( uniform );
+						result = new wxUIntProperty( name
+							, name
+							, rangedUniform.getValue().value() );
+						result->SetEditor( wxT( "SpinCtrl" ) );
+						result->SetAttribute( wxT( "Min" ), int32_t( rangedUniform.getValue().range().min() ) );
+						result->SetAttribute( wxT( "Max" ), int32_t( rangedUniform.getValue().range().max() ) );
+					}
+					break;
+
+				case UniformType::eFloat:
+					{
+						auto rangedUniform = static_cast< UniformValue< castor::RangedValue< float > > const & >( uniform );
+						result = new wxFloatProperty( name
+							, name
+							, rangedUniform.getValue().value() );
+						result->SetEditor( wxT( "SpinCtrl" ) );
+						result->SetAttribute( wxT( "Min" ), rangedUniform.getValue().range().min() );
+						result->SetAttribute( wxT( "Max" ), rangedUniform.getValue().range().max() );
+					}
+					break;
+				}
+				switch ( uniform.getType() )
+				{
+				case UniformType::eInt:
+					result = new wxIntProperty( name
+						, name
+						, static_cast< UniformValue< castor::RangedValue< int32_t > > const & >( uniform ).getValue() );
+					result->SetEditor( wxT( "SpinCtrl" ) );
+					break;
+
+				case UniformType::eUInt:
+					result = new wxUIntProperty( name
+						, name
+						, static_cast< UniformValue< castor::RangedValue< uint32_t > > const & >( uniform ).getValue() );
+					result->SetEditor( wxT( "SpinCtrl" ) );
+					break;
+
+				case UniformType::eFloat:
+					result = new wxFloatProperty( name
+						, name
+						, static_cast< UniformValue< castor::RangedValue< float > > const & >( uniform ).getValue() );
+					result->SetEditor( wxT( "SpinCtrl" ) );
 					break;
 				}
 			}
@@ -156,10 +270,53 @@ namespace GuiCommon
 			return result;
 		}
 
-		void doSetValue( UniformValueBase & uniform
+		wxPGProperty * doBuildValueProperty( wxString const & name
+			, UniformValueBase const & uniform )
+		{
+			wxPGProperty * result = nullptr;
+
+			if ( uniform.isTracked() )
+			{
+				result = doBuildTrackedValueProperty( name, uniform );
+			}
+			else
+			{
+				result = doBuildUntrackedValueProperty( name, uniform );
+			}
+
+			return result;
+		}
+
+		void doSetTrackedValue( UniformValueBase & uniform
 			, wxVariant const & value )
 		{
-			if ( uniform.isTracked() )
+			if ( uniform.isRanged() )
+			{
+				switch ( uniform.getType() )
+				{
+				case UniformType::eInt:
+					{
+						auto & rangedUniform = static_cast< UniformValue< castor::ChangeTracked< castor::RangedValue< int32_t > > > & >( uniform );
+						rangedUniform.getValue() = castor::RangedValue< int32_t >( getValue< int32_t >( value ), rangedUniform.getValue().value().range() );
+					}
+					break;
+
+				case UniformType::eUInt:
+					{
+						auto & rangedUniform = static_cast< UniformValue< castor::ChangeTracked< castor::RangedValue< uint32_t > > > & >( uniform );
+						rangedUniform.getValue() = castor::RangedValue< uint32_t >( getValue< uint32_t >( value ), rangedUniform.getValue().value().range() );
+					}
+					break;
+
+				case UniformType::eFloat:
+					{
+						auto & rangedUniform = static_cast< UniformValue< castor::ChangeTracked< castor::RangedValue< float > > > & >( uniform );
+						rangedUniform.getValue() = castor::RangedValue< float >( getValue< float >( value ), rangedUniform.getValue().value().range() );
+					}
+					break;
+				}
+			}
+			else
 			{
 				switch ( uniform.getType() )
 				{
@@ -214,6 +371,38 @@ namespace GuiCommon
 				case UniformType::eMat4f:
 					static_cast< UniformValue< castor::ChangeTracked< castor::Matrix4x4f > > & >( uniform ).getValue() = matrixRefFromVariant< float, 4 >( value );
 					break;
+				}
+			}
+		}
+
+		void doSetUntrackedValue( UniformValueBase & uniform
+			, wxVariant const & value )
+		{
+			if ( uniform.isRanged() )
+			{
+				switch ( uniform.getType() )
+				{
+				case UniformType::eInt:
+					{
+						auto & rangedUniform = static_cast< UniformValue< castor::RangedValue< int32_t > > & >( uniform );
+						rangedUniform.getValue() = castor::RangedValue< int32_t >( getValue< int32_t >( value ), rangedUniform.getValue().range() );
+					}
+					break;
+
+				case UniformType::eUInt:
+					{
+						auto & rangedUniform = static_cast< UniformValue< castor::RangedValue< uint32_t > > & >( uniform );
+						rangedUniform.getValue() = castor::RangedValue< uint32_t >( getValue< uint32_t >( value ), rangedUniform.getValue().range() );
+					}
+					break;
+
+				case UniformType::eFloat:
+					{
+						auto & rangedUniform = static_cast< UniformValue< castor::RangedValue< float > > & >( uniform );
+						rangedUniform.getValue() = castor::RangedValue< float >( getValue< float >( value ), rangedUniform.getValue().range() );
+					}
+					break;
+
 				}
 			}
 			else
@@ -272,6 +461,19 @@ namespace GuiCommon
 					static_cast< UniformValue< castor::Matrix4x4f > & >( uniform ).getValue() = matrixRefFromVariant< float, 4 >( value );
 					break;
 				}
+			}
+		}
+
+		void doSetValue( UniformValueBase & uniform
+			, wxVariant const & value )
+		{
+			if ( uniform.isTracked() )
+			{
+				doSetTrackedValue( uniform, value );
+			}
+			else
+			{
+				doSetUntrackedValue( uniform, value );
 			}
 		}
 	}
