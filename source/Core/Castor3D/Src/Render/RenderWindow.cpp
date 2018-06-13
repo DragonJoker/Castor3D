@@ -78,6 +78,13 @@ namespace castor3d
 		}
 
 		m_pickingPass.reset();
+
+		if ( m_device != getEngine()->getRenderSystem()->getMainDevice() )
+		{
+			getEngine()->getRenderSystem()->unregisterDevice( *m_device );
+		}
+
+		m_device.reset();
 	}
 
 	bool RenderWindow::initialise( Size const & size
@@ -188,9 +195,6 @@ namespace castor3d
 			{
 				doCleanup( !hasCurrent );
 			}
-
-			getEngine()->getRenderSystem()->unregisterDevice( *m_device );
-			m_device.reset();
 		}
 	}
 

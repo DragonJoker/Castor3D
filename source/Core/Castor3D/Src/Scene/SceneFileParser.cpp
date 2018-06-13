@@ -54,6 +54,11 @@ SceneFileContext::SceneFileContext( Path const & path, SceneFileParser * parser 
 	, m_pGeneralParentMaterial( nullptr )
 	, mapScenes()
 	, m_pParser( parser )
+	, createMaterial{ true }
+	, passIndex{ 0u }
+	, createPass{ true }
+	, unitIndex{ 0u }
+	, createUnit{ true }
 {
 }
 
@@ -102,6 +107,11 @@ void SceneFileContext::initialise()
 		renderer::ImageTiling::eOptimal,
 		renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst
 	};
+	createMaterial = true;
+	passIndex = 0u;
+	createPass = true;
+	unitIndex = 0u;
+	createUnit = true;
 }
 
 //****************************************************************************************************

@@ -11,11 +11,11 @@
 #include <Animation/Skeleton/SkeletonAnimation.hpp>
 #include <Animation/Skeleton/SkeletonAnimationBone.hpp>
 #include <Animation/Skeleton/SkeletonAnimationNode.hpp>
+#include <Binary/BinaryMesh.hpp>
+#include <Binary/BinarySkeleton.hpp>
 #include <Cache/CacheView.hpp>
 #include <Mesh/Importer.hpp>
 #include <Mesh/Submesh.hpp>
-#include <Mesh/Buffer/IndexBuffer.hpp>
-#include <Mesh/Buffer/VertexBuffer.hpp>
 #include <Mesh/Skeleton/Bone.hpp>
 #include <Mesh/Skeleton/Skeleton.hpp>
 #include <Miscellaneous/Parameter.hpp>
@@ -74,7 +74,7 @@ namespace Testing
 				for ( auto const & it : p_scene.getMeshCache() )
 				{
 					auto mesh = it.second;
-					Path path{ folder / subfolder / it.first + cuT( ".cmsh" ) };
+					Path path{ folder / subfolder / it.second->getName() + cuT( ".cmsh" ) };
 					BinaryFile file{ path, File::OpenMode::eWrite };
 					result &= BinaryWriter< Mesh >{}.write( *mesh, file );
 
@@ -82,7 +82,7 @@ namespace Testing
 
 					if ( result && skeleton )
 					{
-						BinaryFile file{ folder / subfolder / ( it.first + cuT( ".cskl" ) ), File::OpenMode::eWrite };
+						BinaryFile file{ folder / subfolder / ( it.second->getName() + cuT( ".cskl" ) ), File::OpenMode::eWrite };
 						result = BinaryWriter< Skeleton >{}.write( *skeleton, file );
 					}
 				}
@@ -127,6 +127,19 @@ namespace Testing
 
 			windows.unlock();
 			return window;
+		}
+
+		void cleanup( SceneSPtr & scene
+			, RenderWindowSPtr & window )
+		{
+			auto & engine = *scene->getEngine();
+			scene->cleanup();
+			window->cleanup();
+			engine.getRenderLoop().renderSyncFrame();
+			engine.getSceneCache().remove( scene->getName() );
+			engine.getRenderWindowCache().remove( window->getName() );
+			window.reset();
+			scene.reset();
 		}
 	}
 
@@ -177,7 +190,8 @@ namespace Testing
 
 		if ( window )
 		{
-			window->initialise( Size{ 800, 600 }, WindowHandle{ std::make_shared< TestWindowHandle >() } );
+			window->initialise( Size{ 800, 600 }, renderer::WindowHandle{ std::make_unique< TestWindowHandle >() } );
+			m_engine.getRenderLoop().renderSyncFrame();
 			m_engine.getRenderLoop().renderSyncFrame();
 		}
 
@@ -199,20 +213,8 @@ namespace Testing
 		auto dstWindow = getWindow( m_engine, dst->getName(), false );
 		CT_CHECK( dstWindow != nullptr );
 		File::directoryDelete( Path{ cuT( "TestScene" ) } );
-		src->cleanup();
-		srcWindow->cleanup();
-		m_engine.getRenderLoop().renderSyncFrame();
-		m_engine.getSceneCache().remove( src->getName() );
-		m_engine.getRenderWindowCache().remove( srcWindow->getName() );
-		srcWindow.reset();
-		src.reset();
-		dst->cleanup();
-		dstWindow->cleanup();
-		m_engine.getRenderLoop().renderSyncFrame();
-		m_engine.getSceneCache().remove( dst->getName() );
-		m_engine.getRenderWindowCache().remove( dstWindow->getName() );
-		dstWindow.reset();
-		dst.reset();
-		DeCleanupEngine();
+		cleanup( dst, dstWindow );
+		cleanup( src, srcWindow );
+		doCleanupEngine();
 	}
 }

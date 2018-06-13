@@ -1,4 +1,4 @@
-﻿/* See LICENSE file in root folder */
+/* See LICENSE file in root folder */
 #ifndef ___CastorTest_UnitTest___
 #define ___CastorTest_UnitTest___
 
@@ -61,7 +61,21 @@ namespace Testing
 
 		std::for_each( p_value.first, p_value.first + p_value.second, [&stream]( T const & p_val )
 		{
-			stream << " " << p_val;
+			stream << " " << toString( p_val );
+		} );
+
+		return stream.str();
+	}
+
+	template< typename T >
+	inline std::string toString( std::pair< T *, uint32_t > const & p_value )
+	{
+		std::stringstream stream;
+		stream << p_value.second << ": ";
+
+		std::for_each( p_value.first, p_value.first + p_value.second, [&stream]( T const & p_val )
+		{
+			stream << " " << toString( p_val );
 		} );
 
 		return stream.str();
@@ -512,6 +526,19 @@ namespace Testing
 
 		template< typename T >
 		inline bool compare( std::pair< T const *, uint32_t > const & p_a, std::pair< T const *, uint32_t > p_b )
+		{
+			bool result = p_a.second == p_b.second;
+
+			if ( result )
+			{
+				result = std::memcmp( p_a.first, p_b.first, p_a.second * sizeof( T ) ) == 0;
+			}
+
+			return result;
+		}
+
+		template< typename T >
+		inline bool compare( std::pair< T *, uint32_t > const & p_a, std::pair< T *, uint32_t > p_b )
 		{
 			bool result = p_a.second == p_b.second;
 
