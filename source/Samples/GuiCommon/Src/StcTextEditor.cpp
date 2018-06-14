@@ -443,7 +443,9 @@ void StcTextEditor::doInitialiseBaseColours( wxColour const & bgColour
 	StyleSetBackground( wxSTC_C_COMMENTDOCKEYWORD, bgColour );
 	StyleSetBackground( wxSTC_C_COMMENTDOCKEYWORDERROR, bgColour );
 	StyleSetBackground( wxSTC_C_PREPROCESSORCOMMENT, bgColour );
+#if wxCHECK_VERSION( 3, 1, 0 )
 	StyleSetBackground( wxSTC_C_PREPROCESSORCOMMENTDOC, bgColour );
+#endif
 }
 
 BEGIN_EVENT_TABLE( StcTextEditor, wxStyledTextCtrl )

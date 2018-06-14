@@ -61,13 +61,7 @@ namespace Testing
 		parameters.add( cuT( "depth" ), cuT( "1.0" ) );
 		m_engine.getMeshFactory().create( cuT( "cube" ) )->generate( *src, parameters );
 
-		auto device = m_engine.getRenderSystem()->createDevice( renderer::WindowHandle{ std::make_unique< TestWindowHandle >() }, 0u );
-		device->enable();
 		doTestMesh( src );
-		device->disable();
-		m_engine.getRenderSystem()->unregisterDevice( *device );
-		device.reset();
-		doCleanupEngine();
 	}
 
 	void BinaryExportTest::ImportExport()
@@ -105,17 +99,13 @@ namespace Testing
 			}
 		}
 
-		auto device = m_engine.getRenderSystem()->createDevice( renderer::WindowHandle{ std::make_unique< TestWindowHandle >() }, 0u );
-		device->enable();
 		doTestMesh( src );
-		device->disable();
-		m_engine.getRenderSystem()->unregisterDevice( *device );
-		device.reset();
-		doCleanupEngine();
 	}
 
 	void BinaryExportTest::doTestMesh( MeshSPtr & src )
 	{
+		auto device = m_engine.getRenderSystem()->createDevice( renderer::WindowHandle{ std::make_unique< TestWindowHandle >() }, 0u );
+		device->enable();
 		Scene & scene = *src->getScene();
 		String name = src->getName();
 		Path path{ name + cuT( ".cmsh" ) };
@@ -173,6 +163,10 @@ namespace Testing
 		dst->cleanup();
 		src.reset();
 		dst.reset();
+		device->disable();
+		m_engine.getRenderSystem()->unregisterDevice( *device );
+		device.reset();
+		doCleanupEngine();
 	}
 
 	//*********************************************************************************************

@@ -9,7 +9,6 @@
 #	include <gtk/gtk.h>
 #endif
 
-#include <Miscellaneous/PlatformWindowHandle.hpp>
 #include <Engine.hpp>
 
 namespace castortd

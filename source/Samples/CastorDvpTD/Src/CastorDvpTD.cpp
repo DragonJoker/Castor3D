@@ -11,7 +11,7 @@ namespace castortd
 							 , cuT( "Castor Tower Defense" )
 							 , 7
 							 , castor3d::Version{ CastorDvpTD_VERSION_MAJOR, CastorDvpTD_VERSION_MINOR, CastorDvpTD_VERSION_BUILD }
-							 , cuT( "opengl" ) }
+							 , cuT( "opengl4" ) }
 	{
 	}
 
