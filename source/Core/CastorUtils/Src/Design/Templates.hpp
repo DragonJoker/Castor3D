@@ -29,14 +29,14 @@ namespace castor
 		template< typename U >
 		struct CallTraitsHelper< U, true >
 		{
-			typedef U const & const_param_type;
-			typedef U & param_type;
+			using ConstParamType = U const &;
+			using ParamType = U &;
 		};
 		template< typename U >
 		struct CallTraitsHelper< U, false >
 		{
-			typedef U const const_param_type;
-			typedef U param_type;
+			using ConstParamType = U const;
+			using ParamType = U;
 		};
 
 	public:
@@ -49,8 +49,8 @@ namespace castor
 		\~french
 		\brief		Typedef sur la meilleure façon de passer T en paramètre : valeur ou référence constante
 		*/
-		typedef typename CallTraitsHelper < T, ( sizeof( T ) > sizeof( void * ) ) >::const_param_type const_param_type;
-		typedef typename CallTraitsHelper < T, ( sizeof( T ) > sizeof( void * ) ) >::param_type param_type;
+		using ConstParamType = typename CallTraitsHelper < T, ( sizeof( T ) > sizeof( void * ) ) >::ConstParamType;
+		using ParamType = typename CallTraitsHelper < T, ( sizeof( T ) > sizeof( void * ) ) >::ParamType;
 	};
 	/*!
 	\author		Sylvain DOREMUS

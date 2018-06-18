@@ -421,6 +421,52 @@ namespace castor3d
 			}
 		}
 
+		struct AnimatedObjects
+		{
+			AnimatedMeshSPtr mesh;
+			AnimatedSkeletonSPtr skeleton;
+		};
+
+		AnimatedObjects doAdjustFlags( ProgramFlags & programFlags
+			, TextureChannels const & textureFlags
+			, PassFlags const & passFlags
+			, SceneFlags const & sceneFlags
+			, Scene const & scene
+			, Pass const & pass
+			, RenderPass const & renderPass
+			, castor::String const & name )
+		{
+			auto submeshFlags = programFlags;
+			remFlag( programFlags, ProgramFlag::eSkinning );
+			remFlag( programFlags, ProgramFlag::eMorphing );
+			auto mesh = std::static_pointer_cast< AnimatedMesh >( doFindAnimatedObject( scene, name + cuT( "_Mesh" ) ) );
+			auto skeleton = std::static_pointer_cast< AnimatedSkeleton >( doFindAnimatedObject( scene, name + cuT( "_Skeleton" ) ) );
+
+			if ( skeleton && checkFlag( submeshFlags, ProgramFlag::eSkinning ) )
+			{
+				addFlag( programFlags, ProgramFlag::eSkinning );
+			}
+
+			if ( mesh )
+			{
+				addFlag( programFlags, ProgramFlag::eMorphing );
+			}
+
+			if ( checkFlag( submeshFlags, ProgramFlag::eInstantiation )
+				&& !checkFlag( programFlags, ProgramFlag::eMorphing )
+				&& ( !pass.hasAlphaBlending() || renderPass.isOrderIndependent() )
+				&& !pass.hasEnvironmentMapping() )
+			{
+				addFlag( programFlags, ProgramFlag::eInstantiation );
+			}
+			else
+			{
+				remFlag( programFlags, ProgramFlag::eInstantiation );
+			}
+
+			return { mesh, skeleton };
+		}
+
 		void doSortRenderNodes( RenderPass & renderPass
 			, bool opaque
 			, SceneNode const * ignored
@@ -459,57 +505,37 @@ namespace castor3d
 						{
 							for ( auto pass : *material )
 							{
-								auto programFlags = submesh->getProgramFlags( material );
-								auto sceneFlags = scene.getFlags();
-								auto passFlags = pass->getPassFlags();
-								auto submeshFlags = programFlags;
-								remFlag( programFlags, ProgramFlag::eSkinning );
-								remFlag( programFlags, ProgramFlag::eMorphing );
-								auto skeleton = std::static_pointer_cast< AnimatedSkeleton >( doFindAnimatedObject( scene, primitive.first + cuT( "_Skeleton" ) ) );
-								auto mesh = std::static_pointer_cast< AnimatedMesh >( doFindAnimatedObject( scene, primitive.first + cuT( "_Mesh" ) ) );
-
-								if ( skeleton && checkFlag( submeshFlags, ProgramFlag::eSkinning ) )
-								{
-									addFlag( programFlags, ProgramFlag::eSkinning );
-								}
-
-								if ( mesh )
-								{
-									addFlag( programFlags, ProgramFlag::eMorphing );
-								}
-
 								pass->prepareTextures();
-
-								if ( checkFlag( submeshFlags, ProgramFlag::eInstantiation )
-									&& !checkFlag( programFlags, ProgramFlag::eMorphing )
-									&& ( !pass->hasAlphaBlending() || renderPass.isOrderIndependent() )
-									&& !pass->hasEnvironmentMapping() )
-								{
-									addFlag( programFlags, ProgramFlag::eInstantiation );
-								}
-								else
-								{
-									remFlag( programFlags, ProgramFlag::eInstantiation );
-								}
-
-								auto textureFlags = pass->getTextureFlags();
-								renderPass.preparePipeline( pass->getColourBlendMode()
-									, pass->getAlphaBlendMode()
-									, pass->getAlphaFunc()
-									, passFlags
-									, textureFlags
-									, programFlags
-									, sceneFlags
-									, submesh->getTopology()
-									, pass->IsTwoSided()
-									, submesh->getGeometryBuffers( material ).layouts );
+								auto passFlags = pass->getPassFlags();
 
 								if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) != opaque )
 								{
+									auto programFlags = submesh->getProgramFlags( material );
+									auto sceneFlags = scene.getFlags();
+									auto textureFlags = pass->getTextureFlags();
+									auto animated = doAdjustFlags( programFlags
+										, textureFlags
+										, passFlags
+										, sceneFlags
+										, scene
+										, *pass
+										, renderPass
+										, primitive.first );
+									renderPass.preparePipeline( pass->getColourBlendMode()
+										, pass->getAlphaBlendMode()
+										, pass->getAlphaFunc()
+										, passFlags
+										, textureFlags
+										, programFlags
+										, sceneFlags
+										, submesh->getTopology()
+										, pass->IsTwoSided()
+										, submesh->getGeometryBuffers( material ).layouts );
+
 									if ( !isShadowMapProgram( programFlags )
 										|| primitive.second->isShadowCaster() )
 									{
-										if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
+										if ( animated.skeleton )
 										{
 											doAddSkinningNode( renderPass
 												, passFlags
@@ -519,11 +545,11 @@ namespace castor3d
 												, *pass
 												, *submesh
 												, *primitive.second
-												, *skeleton
+												, *animated.skeleton
 												, nodes.skinnedNodes
 												, nodes.instancedSkinnedNodes );
 										}
-										else if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
+										else if ( animated.mesh )
 										{
 											doAddMorphingNode( renderPass
 												, passFlags
@@ -533,7 +559,7 @@ namespace castor3d
 												, *pass
 												, *submesh
 												, *primitive.second
-												, *mesh
+												, *animated.mesh
 												, nodes.morphingNodes );
 										}
 										else
@@ -556,22 +582,6 @@ namespace castor3d
 					}
 				}
 			}
-
-			renderPass.getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
-				, [&renderPass, &nodes, shadowMaps]()
-				{
-					doInitialiseNodes( renderPass, nodes.staticNodes.frontCulled, shadowMaps );
-					doInitialiseNodes( renderPass, nodes.staticNodes.backCulled, shadowMaps );
-					doInitialiseNodes( renderPass, nodes.skinnedNodes.frontCulled, shadowMaps );
-					doInitialiseNodes( renderPass, nodes.skinnedNodes.backCulled, shadowMaps );
-					doInitialiseNodes( renderPass, nodes.morphingNodes.frontCulled, shadowMaps );
-					doInitialiseNodes( renderPass, nodes.morphingNodes.backCulled, shadowMaps );
-
-					doInitialiseInstancedNodes( renderPass, nodes.instancedStaticNodes.frontCulled, shadowMaps );
-					doInitialiseInstancedNodes( renderPass, nodes.instancedStaticNodes.backCulled, shadowMaps );
-					doInitialiseInstancedNodes( renderPass, nodes.instancedSkinnedNodes.frontCulled, shadowMaps );
-					doInitialiseInstancedNodes( renderPass, nodes.instancedSkinnedNodes.backCulled, shadowMaps );
-				} ) );
 		}
 
 		void doSortRenderNodes( RenderPass & renderPass
@@ -645,13 +655,6 @@ namespace castor3d
 					}
 				}
 			}
-
-			renderPass.getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
-				, [&renderPass, &nodes, shadowMaps]()
-				{
-					doInitialiseNodes( renderPass, nodes.frontCulled, shadowMaps );
-					doInitialiseNodes( renderPass, nodes.backCulled, shadowMaps );
-				} ) );
 		}
 
 		GeometryBuffers const & getGeometryBuffers( Submesh const & submesh
@@ -1170,6 +1173,31 @@ namespace castor3d
 			, m_renderNodes->scene
 			, m_renderNodes->billboardNodes
 			, shadowMaps );
+
+		auto & renderPass = *getOwner();
+		auto & nodes = *m_renderNodes;
+		renderPass.getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+			, [&renderPass, &nodes, shadowMaps]()
+			{
+				doInitialiseNodes( renderPass, nodes.staticNodes.frontCulled, shadowMaps );
+				doInitialiseNodes( renderPass, nodes.staticNodes.backCulled, shadowMaps );
+				doInitialiseNodes( renderPass, nodes.skinnedNodes.frontCulled, shadowMaps );
+				doInitialiseNodes( renderPass, nodes.skinnedNodes.backCulled, shadowMaps );
+				doInitialiseNodes( renderPass, nodes.morphingNodes.frontCulled, shadowMaps );
+				doInitialiseNodes( renderPass, nodes.morphingNodes.backCulled, shadowMaps );
+
+				doInitialiseInstancedNodes( renderPass, nodes.instancedStaticNodes.frontCulled, shadowMaps );
+				doInitialiseInstancedNodes( renderPass, nodes.instancedStaticNodes.backCulled, shadowMaps );
+				doInitialiseInstancedNodes( renderPass, nodes.instancedSkinnedNodes.frontCulled, shadowMaps );
+				doInitialiseInstancedNodes( renderPass, nodes.instancedSkinnedNodes.backCulled, shadowMaps );
+			} ) );
+		auto & bbNodes = m_renderNodes->billboardNodes;
+		renderPass.getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+			, [&renderPass, &bbNodes, shadowMaps]()
+			{
+				doInitialiseNodes( renderPass, bbNodes.frontCulled, shadowMaps );
+				doInitialiseNodes( renderPass, bbNodes.backCulled, shadowMaps );
+			} ) );
 	}
 
 	void RenderQueue::onSceneChanged( Scene const & scene )

@@ -13,6 +13,29 @@ namespace castor
 		static const xchar * INFO_CACHE_CREATED_OBJECT = cuT( "Cache::create - Created " );
 		static const xchar * WARNING_CACHE_DUPLICATE_OBJECT = cuT( "Cache::create - Duplicate " );
 		static const xchar * WARNING_CACHE_NULL_OBJECT = cuT( "Cache::Insert - nullptr " );
+
+		inline void doReportCreation( castor::String const & name )
+		{
+			castor::Logger::logTrace( castor::makeStringStream()
+				<< INFO_CACHE_CREATED_OBJECT
+				<< cuT( "Image: " )
+				<< name );
+		}
+
+		inline void doReportDuplicate( castor::String const & name )
+		{
+			castor::Logger::logWarning( castor::makeStringStream()
+				<< WARNING_CACHE_DUPLICATE_OBJECT
+				<< cuT( "Image: " )
+				<< name );
+		}
+
+		inline void doReportNull()
+		{
+			castor::Logger::logWarning( castor::makeStringStream()
+				<< WARNING_CACHE_NULL_OBJECT
+				<< cuT( "Image" ) );
+		}
 	}
 
 	//*********************************************************************************************
@@ -40,7 +63,7 @@ namespace castor
 			}
 			else
 			{
-				castor::Logger::logWarning( castor::makeStringStream() << WARNING_CACHE_DUPLICATE_OBJECT << cuT( "Image: " ) << p_name );
+				doReportDuplicate( p_name );
 			}
 		}
 		else
@@ -51,7 +74,7 @@ namespace castor
 			{
 				result = std::make_shared< Image >( p_name, p_path );
 				Collection< Image, String >::insert( p_name, result );
-				castor::Logger::logDebug( castor::makeStringStream() << INFO_CACHE_CREATED_OBJECT << cuT( "Image: " ) << p_name );
+				doReportCreation( p_name );
 			}
 			else
 			{
@@ -77,14 +100,14 @@ namespace castor
 			}
 			else
 			{
-				castor::Logger::logWarning( castor::makeStringStream() << WARNING_CACHE_DUPLICATE_OBJECT << cuT( "Image: " ) << p_name );
+				doReportDuplicate( p_name );
 			}
 		}
 		else
 		{
 			result = std::make_shared< Image >( p_name, p_size, p_format );
 			Collection< Image, String >::insert( p_name, result );
-			castor::Logger::logDebug( castor::makeStringStream() << INFO_CACHE_CREATED_OBJECT << cuT( "Image: " ) << p_name );
+			doReportCreation( p_name );
 		}
 
 		return result;

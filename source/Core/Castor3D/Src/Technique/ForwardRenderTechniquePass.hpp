@@ -46,6 +46,7 @@ namespace castor3d
 		C3D_API ForwardRenderTechniquePass( castor::String const & name
 			, Scene & scene
 			, Camera * camera
+			, MatrixUbo const & matrixUbo
 			, bool environment
 			, SceneNode const * ignored
 			, SsaoConfig const & config );
@@ -72,6 +73,7 @@ namespace castor3d
 		C3D_API ForwardRenderTechniquePass( castor::String const & name
 			, Scene & scene
 			, Camera * camera
+			, MatrixUbo const & matrixUbo
 			, bool oit
 			, bool environment
 			, SceneNode const * ignored

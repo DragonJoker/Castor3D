@@ -6,6 +6,7 @@
 #include "HDR/ToneMapping.hpp"
 #include "Overlay/OverlayRenderer.hpp"
 #include "Render/RenderPassTimer.hpp"
+#include "Render/Culling/FrustumCuller.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
 #include "Shader/PassBuffer/PassBuffer.hpp"
@@ -278,6 +279,8 @@ namespace castor3d
 
 			m_signalReady = device.createSemaphore();
 			m_fence = device.createFence( renderer::FenceCreateFlag::eSignaled );
+
+			m_culler = std::make_unique< FrustumCuller >( *getScene(), *getCamera() );
 		}
 	}
 
@@ -286,6 +289,8 @@ namespace castor3d
 		if ( m_initialised )
 		{
 			m_initialised = false;
+			m_culler.reset();
+
 			m_fence.reset();
 			m_signalReady.reset();
 
@@ -332,6 +337,12 @@ namespace castor3d
 		}
 	}
 
+	void RenderTarget::update()
+	{
+		REQUIRE( m_culler );
+		m_culler->compute();
+	}
+
 	void RenderTarget::render( RenderInfo & info )
 	{
 		SceneSPtr scene = getScene();
@@ -368,8 +379,25 @@ namespace castor3d
 
 	void RenderTarget::setCamera( CameraSPtr camera )
 	{
-		m_camera = camera;
-		camera->resize( m_size );
+		auto myCamera = getCamera();
+
+		if ( myCamera != camera )
+		{
+			m_camera = camera;
+			camera->resize( m_size );
+			m_culler = std::make_unique< FrustumCuller >( *getScene(), *getCamera() );
+		}
+	}
+
+	void RenderTarget::setScene( SceneSPtr scene )
+	{
+		auto myScene = getScene();
+
+		if ( myScene != scene )
+		{
+			m_scene = scene;
+			m_culler.reset();
+		}
 	}
 
 	void RenderTarget::setToneMappingType( String const & name
@@ -497,7 +525,7 @@ namespace castor3d
 		m_velocityTexture.setTexture( velocityTexture );
 		m_velocityTexture.setSampler( getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + string::toString( m_index ) + cuT( "_Point" ) ) );
 		m_velocityTexture.getTexture()->getDefaultImage().initialiseSource();
-		return m_velocityTexture.getTexture()->initialise();
+		return m_velocityTexture.initialise();
 	}
 
 	bool RenderTarget::doInitialiseTechnique()

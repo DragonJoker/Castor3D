@@ -49,21 +49,23 @@ namespace castor3d
 		: OwnedBy< EnvironmentMap >{ reflectionMap }
 		, m_node{ node }
 		, m_camera{ doCreateCamera( *node ) }
+		, m_matrixUbo{ *reflectionMap.getEngine() }
 		, m_opaquePass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "environment_opaque" )
 			, *node->getScene()
 			, m_camera.get()
+			, m_matrixUbo
 			, true
 			, &objectNode
 			, SsaoConfig{} ) }
 		, m_transparentPass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "environment_transparent" )
 			, *node->getScene()
 			, m_camera.get()
+			, m_matrixUbo
 			, true
 			, true
 			, &objectNode
 			, SsaoConfig{} ) }
 		, m_mtxView{ m_camera->getView() }
-		, m_matrixUbo{ *reflectionMap.getEngine() }
 		, m_modelMatrixUbo{ *reflectionMap.getEngine() }
 		, m_hdrConfigUbo{ *reflectionMap.getEngine() }
 	{

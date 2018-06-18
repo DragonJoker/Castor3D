@@ -238,6 +238,8 @@ namespace castor
 	template< typename T, uint32_t Count >
 	class Coords;
 	class BoundingBox;
+	template< typename BlockType = uint32_t >
+	class DynamicBitset;
 	class File;
 	class FileParser;
 	class FileParserContext;

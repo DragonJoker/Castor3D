@@ -130,6 +130,26 @@ namespace castor3d
 
 			return unit;
 		}
+
+		std::vector< ShadowMap::PassAndUbo > createPasses( Engine & engine
+			, Scene & scene
+			, ShadowMap & shadowMap )
+		{
+			std::vector< ShadowMap::PassAndUbo > result;
+
+			for ( auto i = 0u; i < 6u; ++i )
+			{
+				ShadowMap::PassAndUbo passUbo
+				{
+					std::make_unique< MatrixUbo >( engine ),
+					nullptr
+				};
+				passUbo.pass = std::make_shared< ShadowMapPassPoint >( engine, *passUbo.matrixUbo, scene, shadowMap );
+				result.emplace_back( std::move( passUbo ) );
+			}
+
+			return result;
+		}
 	}
 
 	ShadowMapPoint::ShadowMapPoint( Engine & engine
@@ -137,14 +157,7 @@ namespace castor3d
 		: ShadowMap{ engine
 			, doInitialiseVariance( engine, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } )
 			, doInitialiseDepth( engine, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } )
-			, {
-				std::make_shared< ShadowMapPassPoint >( engine, scene, *this ),
-				std::make_shared< ShadowMapPassPoint >( engine, scene, *this ),
-				std::make_shared< ShadowMapPassPoint >( engine, scene, *this ),
-				std::make_shared< ShadowMapPassPoint >( engine, scene, *this ),
-				std::make_shared< ShadowMapPassPoint >( engine, scene, *this ),
-				std::make_shared< ShadowMapPassPoint >( engine, scene, *this ),
-			} }
+			, createPasses( engine, scene, *this ) }
 	{
 	}
 
@@ -161,7 +174,7 @@ namespace castor3d
 
 		for ( auto & pass : m_passes )
 		{
-			pass->update( camera, queues, light, index );
+			pass.pass->update( camera, queues, light, index );
 		}
 	}
 
@@ -170,12 +183,12 @@ namespace castor3d
 		static float constexpr component = std::numeric_limits< float >::max();
 		static renderer::ClearColorValue const white{ component, component, component, component };
 		static renderer::DepthStencilClearValue const zero{ 1.0f, 0 };
-		auto & timer = m_passes[0]->getTimer();
+		auto & timer = m_passes[0].pass->getTimer();
 		timer.start();
 
 		for ( size_t face = 0u; face < m_passes.size(); ++face )
 		{
-			m_passes[face]->updateDeviceDependent( uint32_t( face ) );
+			m_passes[face].pass->updateDeviceDependent( uint32_t( face ) );
 		}
 
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
@@ -186,14 +199,14 @@ namespace castor3d
 			for ( size_t face = 0u; face < m_passes.size(); ++face )
 			{
 				auto & pass = m_passes[face];
-				auto & renderPass = pass->getRenderPass();
+				auto & renderPass = pass.pass->getRenderPass();
 				auto & frameBuffer = m_frameBuffers[face];
 
 				m_commandBuffer->beginRenderPass( renderPass
 					, *frameBuffer.frameBuffer
 					, { zero, white, white }
 					, renderer::SubpassContents::eSecondaryCommandBuffers );
-				m_commandBuffer->executeCommands( { pass->getCommandBuffer() } );
+				m_commandBuffer->executeCommands( { pass.pass->getCommandBuffer() } );
 				m_commandBuffer->endRenderPass();
 			}
 
@@ -260,7 +273,7 @@ namespace castor3d
 		for ( auto & frameBuffer : m_frameBuffers )
 		{
 			auto & pass = m_passes[face];
-			auto & renderPass = pass->getRenderPass();
+			auto & renderPass = pass.pass->getRenderPass();
 			frameBuffer.varianceView = variance.createView( renderer::TextureViewType::e2D
 				, variance.getFormat()
 				, 0u

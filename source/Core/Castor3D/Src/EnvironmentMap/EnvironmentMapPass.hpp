@@ -100,6 +100,7 @@ namespace castor3d
 		renderer::RenderPass const * m_renderPass{ nullptr };
 		renderer::CommandBufferPtr m_backgroundCommands;
 		renderer::DescriptorSetPtr m_backgroundDescriptorSet;
+		MatrixUbo m_matrixUbo;
 		std::unique_ptr< ForwardRenderTechniquePass > m_opaquePass;
 		std::unique_ptr< ForwardRenderTechniquePass > m_transparentPass;
 		renderer::CommandBufferPtr m_commandBuffer;
@@ -107,7 +108,6 @@ namespace castor3d
 		renderer::FencePtr m_fence;
 		castor::Matrix4x4f m_mtxView;
 		castor::Matrix4x4f m_mtxModel;
-		MatrixUbo m_matrixUbo;
 		ModelMatrixUbo m_modelMatrixUbo;
 		HdrConfigUbo m_hdrConfigUbo;
 	};

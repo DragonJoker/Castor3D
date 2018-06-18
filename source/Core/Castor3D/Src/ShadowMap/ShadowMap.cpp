@@ -33,7 +33,7 @@ namespace castor3d
 	ShadowMap::ShadowMap( Engine & engine
 		, TextureUnit && shadowMap
 		, TextureUnit && linearMap
-		, std::vector< ShadowMapPassSPtr > passes )
+		, std::vector< PassAndUbo > && passes )
 		: OwnedBy< Engine >{ engine }
 		, m_shadowMap{ std::move( shadowMap ) }
 		, m_linearMap{ std::move( linearMap ) }
@@ -57,7 +57,8 @@ namespace castor3d
 
 			for ( auto & pass : m_passes )
 			{
-				result &= pass->initialise( { size.width, size.height } );
+				pass.matrixUbo->initialise();
+				result &= pass.pass->initialise( { size.width, size.height } );
 			}
 
 			if ( result )
@@ -76,7 +77,8 @@ namespace castor3d
 	{
 		for ( auto & pass : m_passes )
 		{
-			pass->cleanup();
+			pass.pass->cleanup();
+			pass.matrixUbo->cleanup();
 		}
 
 		if ( m_initialised )

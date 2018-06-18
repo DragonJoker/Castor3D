@@ -29,7 +29,8 @@ namespace castor3d
 		, public castor::Named
 	{
 	public:
-		//!\~english The total number of scene nodes	\~french Le nombre total de noeuds de scène
+		//!\~english	The total number of scene nodes.
+		//!\~french		Le nombre total de noeuds de scène.
 		static uint64_t Count;
 		/*!
 		\author Sylvain DOREMUS
@@ -545,6 +546,16 @@ namespace castor3d
 		{
 			return m_mtxChanged || m_derivedMtxChanged;
 		}
+		/**
+		 *\~english
+		 *\return		The scene node ID.
+		 *\~french
+		 *\return		L'ID du noeud.
+		 */
+		inline uint64_t getId()const
+		{
+			return m_id;
+		}
 
 	private:
 		void doComputeMatrix();
@@ -561,42 +572,20 @@ namespace castor3d
 		//!\~french		Signal utilisé pour notifier aux objets attachés que le noeud a changé.
 		OnSceneNodeChanged onChanged;
 
-	protected:
-		//!\~english	Tells if it is displayable. A node is displayable if his parent is either displayable or the root node.
-		//!\~french		Dit si le noeud est affichable. Il est affichable si son parent est le noeud racine ou s'il est affichable.
+	private:
+		static uint64_t CurrentId;
+		uint64_t m_id;
 		bool m_displayable;
-		//!\~english	The visible status. If a node is hidden, all objects attached to it are hidden.
-		//!\~french		Le statut de visibilité. Si un noeud est caché, tous les objets qui y sont attachés sont cachés aussi.
 		bool m_visible{ true };
-		//!\~english  T	he relative orientation of the node.
-		//!\~french		L'orientation du noeud, relative au parent.
 		castor::Quaternion m_orientation;
-		//!\~english	The relative position of the node.
-		//!\~french		La position du noeud, relative au parent.
 		castor::Point3r m_position{ 0.0_r, 0.0_r, 0.0_r };
-		//!\~english	The relative scale transform value of the node.
-		//!\~french		La mise à l'échelle du noeud, relative au parent.
 		castor::Point3r m_scale{ 1.0_r, 1.0_r, 1.0_r };
-		//!\~english	The reative transformation matrix.
-		//!\~french		La matrice de transformation, relative au parent.
 		castor::Matrix4x4r m_transform{ 1.0_r };
-		//!\~english	Tells the relative transformation matrix needs recomputation.
-		//!\~french		Dit si la matrice de transformation relative doit être recalculée.
 		bool m_mtxChanged{ true };
-		//!\~english	The absolute transformation matrix.
-		//!\~french		la matrice de transformation absolue.
 		castor::Matrix4x4r m_derivedTransform{ 1.0_r };
-		//!\~english	Tells the absolute transformation matrix needs recomputation.
-		//!\~french		Dit si la matrice de transformation absolue doit être recalculée.
 		bool m_derivedMtxChanged{ true };
-		//!\~english	This node's parent.
-		//!\~french		Le noeud parent.
 		SceneNodeWPtr m_parent;
-		//!\~english	This node's childs.
-		//!\~french		Les enfants de ce noeud.
 		SceneNodePtrStrMap m_children;
-		//!\~english	This node's attached objects.
-		//!\~french		Les objets attachés à ce noeud.
 		MovableObjectArray m_objects;
 	};
 }

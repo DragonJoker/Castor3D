@@ -119,11 +119,13 @@ namespace castor3d
 
 	TransparentPass::TransparentPass( Scene & scene
 		, Camera * camera
+		, MatrixUbo const & matrixUbo
 		, SsaoConfig const & config )
 		: castor3d::RenderTechniquePass{ cuT( "Transparent" )
 			, cuT( "Accumulation" )
 			, scene
 			, camera
+			, matrixUbo
 			, true
 			, false
 			, nullptr
@@ -227,7 +229,6 @@ namespace castor3d
 	void TransparentPass::update( RenderInfo & info
 		, Point2r const & jitter )
 	{
-		doUpdate( info, jitter );
 	}
 
 	renderer::Semaphore const & TransparentPass::render( renderer::Semaphore const & toWait )
@@ -577,10 +578,8 @@ namespace castor3d
 			, RenderPass::VertexOutputs::WorldPositionLocation );
 		auto vtx_viewPosition = writer.declOutput< Vec3 >( cuT( "vtx_viewPosition" )
 			, RenderPass::VertexOutputs::ViewPositionLocation );
-		auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" )
-			, RenderPass::VertexOutputs::CurPositionLocation );
-		auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" )
-			, RenderPass::VertexOutputs::PrvPositionLocation );
+		auto vtx_motionVector = writer.declOutput< Vec2 >( cuT( "vtx_motionVector" )
+			, RenderPass::VertexOutputs::MotionVectorLocation );
 		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" )
 			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
 		auto vtx_tangentSpaceViewPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" )
@@ -652,7 +651,7 @@ namespace castor3d
 			vtx_worldPosition = curPosition.xyz();
 			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
 				, c3d_prvViewProj * curPosition );
-			out.gl_Position() = c3d_curViewProj * curPosition;
+			curPosition = c3d_curViewProj * curPosition;
 
 			if ( invertNormals )
 			{
@@ -667,24 +666,28 @@ namespace castor3d
 			vtx_tangent = normalize( glsl::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
 			vtx_instance = gl_InstanceID;
+
+			auto tbn = writer.declLocale( cuT( "tbn" ), transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
+			vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
+			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition.xyz();
+
 			// Convert the jitter from non-homogeneous coordiantes to homogeneous
 			// coordinates and add it:
 			// (note that for providing the jitter in non-homogeneous projection space,
 			//  pixel coordinates (screen space) need to multiplied by two in the C++
 			//  code)
-			out.gl_Position().xy() -= c3d_jitter * out.gl_Position().w();
-			prvPosition.xy() -= c3d_jitter * out.gl_Position().w();
+			curPosition.xy() -= c3d_jitter * curPosition.w();
+			prvPosition.xy() -= c3d_jitter * prvPosition.w();
+			out.gl_Position() = curPosition;
 
-			auto tbn = writer.declLocale( cuT( "tbn" ), transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
-			vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
-			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition.xyz();
-			vtx_curPosition = out.gl_Position().xyw();
-			vtx_prvPosition = prvPosition.xyw();
+			curPosition.xy() /= curPosition.w();
+			prvPosition.xy() /= prvPosition.w();
 			// Positions in projection space are in [-1, 1] range, while texture
 			// coordinates are in [0, 1] range. So, we divide by 2 to get velocities in
 			// the scale (and flip the y axis):
-			vtx_curPosition.xy() *= vec2( 0.5_f, -0.5 );
-			vtx_prvPosition.xy() *= vec2( 0.5_f, -0.5 );
+			curPosition.xy() *= vec2( 0.5_f, -0.5 );
+			prvPosition.xy() *= vec2( 0.5_f, -0.5 );
+			vtx_motionVector = curPosition.xy() - prvPosition.xy();
 		};
 
 		writer.implementFunction< void >( cuT( "main" ), main );
@@ -710,10 +713,8 @@ namespace castor3d
 			, RenderPass::VertexOutputs::WorldPositionLocation );
 		auto vtx_viewPosition = writer.declInput< Vec3 >( cuT( "vtx_viewPosition" )
 			, RenderPass::VertexOutputs::ViewPositionLocation );
-		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" )
-			, RenderPass::VertexOutputs::CurPositionLocation );
-		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" )
-			, RenderPass::VertexOutputs::PrvPositionLocation );
+		auto vtx_motionVector = writer.declInput< Vec2 >( cuT( "vtx_motionVector" )
+			, RenderPass::VertexOutputs::MotionVectorLocation );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" )
 			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
 		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" )
@@ -965,14 +966,9 @@ namespace castor3d
 			//auto weight = writer.declLocale( cuT( "weight" )
 			//	, clamp( a * a * a * 1e8 * b * b * b, 1e-2, 3e2 ) );
 
-			auto curPosition = writer.declLocale( cuT( "curPosition" )
-				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
-			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
-				, vtx_prvPosition.xy() / vtx_prvPosition.z() );
-
 			pxl_accumulation = vec4( colour * alpha, alpha ) * weight;
 			pxl_revealage = alpha;
-			pxl_velocity.xy() = curPosition - prvPosition;
+			pxl_velocity.xy() = vtx_motionVector;
 		} );
 
 		return writer.finalise();
@@ -997,10 +993,8 @@ namespace castor3d
 			, RenderPass::VertexOutputs::WorldPositionLocation );
 		auto vtx_viewPosition = writer.declInput< Vec3 >( cuT( "vtx_viewPosition" )
 			, RenderPass::VertexOutputs::ViewPositionLocation );
-		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" )
-			, RenderPass::VertexOutputs::CurPositionLocation );
-		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" )
-			, RenderPass::VertexOutputs::PrvPositionLocation );
+		auto vtx_motionVector = writer.declInput< Vec2 >( cuT( "vtx_motionVector" )
+			, RenderPass::VertexOutputs::MotionVectorLocation );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" )
 			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
 		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" )
@@ -1237,14 +1231,9 @@ namespace castor3d
 			//auto weight = writer.declLocale( cuT( "weight" )
 			//	, clamp( a * a * a * 1e8 * b * b * b, 1e-2, 3e2 ) );
 
-			auto curPosition = writer.declLocale( cuT( "curPosition" )
-				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
-			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
-				, vtx_prvPosition.xy() / vtx_prvPosition.z() );
-
 			pxl_accumulation = vec4( colour * alpha, alpha ) * weight;
 			pxl_revealage = alpha;
-			pxl_velocity.xy() = curPosition - prvPosition;
+			pxl_velocity.xy() = vtx_motionVector;
 		} );
 
 		return writer.finalise();
@@ -1269,10 +1258,8 @@ namespace castor3d
 			, RenderPass::VertexOutputs::WorldPositionLocation );
 		auto vtx_viewPosition = writer.declInput< Vec3 >( cuT( "vtx_viewPosition" )
 			, RenderPass::VertexOutputs::ViewPositionLocation );
-		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" )
-			, RenderPass::VertexOutputs::CurPositionLocation );
-		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" )
-			, RenderPass::VertexOutputs::PrvPositionLocation );
+		auto vtx_motionVector = writer.declInput< Vec2 >( cuT( "vtx_motionVector" )
+			, RenderPass::VertexOutputs::MotionVectorLocation );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" )
 			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
 		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" )
@@ -1507,14 +1494,9 @@ namespace castor3d
 			//auto weight = writer.declLocale( cuT( "weight" )
 			//	, clamp( a * a * a * 1e8 * b * b * b, 1e-2, 3e2 ) );
 
-			auto curPosition = writer.declLocale( cuT( "curPosition" )
-				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
-			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
-				, vtx_prvPosition.xy() / vtx_prvPosition.z() );
-
 			pxl_accumulation = vec4( colour * alpha, alpha ) * weight;
 			pxl_revealage = alpha;
-			pxl_velocity.xy() = curPosition - prvPosition;
+			pxl_velocity.xy() = vtx_motionVector;
 		} );
 
 		return writer.finalise();

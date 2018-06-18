@@ -105,6 +105,7 @@ namespace castor3d
 		 */
 		TransparentPass( Scene & scene
 			, Camera * camera
+			, MatrixUbo const & matrixUbo
 			, SsaoConfig const & config );
 		/**
 		 *\~english

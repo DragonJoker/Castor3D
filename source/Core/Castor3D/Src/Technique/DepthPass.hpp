@@ -40,6 +40,7 @@ namespace castor3d
 		DepthPass( castor::String const & name
 			, Scene const & scene
 			, Camera & camera
+			, MatrixUbo const & matrixUbo
 			, SsaoConfig const & ssaoConfig
 			, TextureLayoutSPtr depthBuffer );
 		/**

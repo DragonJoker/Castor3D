@@ -84,7 +84,8 @@ namespace castor3d
 		 */
 		C3D_API RenderPass( castor::String const & category
 			, castor::String const & name
-			, Engine & engine );
+			, Engine & engine
+			, MatrixUbo const & matrixUbo );
 		/**
 		 *\~english
 		 *\brief		Constructor for transparent nodes.
@@ -100,6 +101,7 @@ namespace castor3d
 		C3D_API RenderPass( castor::String const & category
 			, castor::String const & name
 			, Engine & engine
+			, MatrixUbo const & matrixUbo
 			, bool oit );
 		/**
 		 *\~english
@@ -116,6 +118,7 @@ namespace castor3d
 		C3D_API RenderPass( castor::String const & category
 			, castor::String const & name
 			, Engine & engine
+			, MatrixUbo const & matrixUbo
 			, SceneNode const * ignored );
 		/**
 		 *\~english
@@ -134,6 +137,7 @@ namespace castor3d
 		C3D_API RenderPass( castor::String const & category
 			, castor::String const & name
 			, Engine & engine
+			, MatrixUbo const & matrixUbo
 			, bool oit
 			, SceneNode const * ignored );
 
@@ -620,7 +624,12 @@ namespace castor3d
 			return m_sceneUbo;
 		}
 
-		inline MatrixUbo & getMatrixUbo()
+		inline SceneUbo const & getSceneUbo()const
+		{
+			return m_sceneUbo;
+		}
+
+		inline MatrixUbo const & getMatrixUbo()const
 		{
 			return m_matrixUbo;
 		}
@@ -1455,26 +1464,25 @@ namespace castor3d
 		{
 			static uint32_t constexpr WorldPositionLocation = 0u;
 			static uint32_t constexpr ViewPositionLocation = 1u;
-			static uint32_t constexpr CurPositionLocation = 2u;
-			static uint32_t constexpr PrvPositionLocation = 3u;
-			static uint32_t constexpr TangentSpaceFragPositionLocation = 4u;
-			static uint32_t constexpr TangentSpaceViewPositionLocation = 5u;
-			static uint32_t constexpr NormalLocation = 6u;
-			static uint32_t constexpr TangentLocation = 7u;
-			static uint32_t constexpr BitangentLocation = 8u;
-			static uint32_t constexpr TextureLocation = 9u;
-			static uint32_t constexpr InstanceLocation = 10u;
-			static uint32_t constexpr MaterialLocation = 11u;
+			static uint32_t constexpr MotionVectorLocation = 2u;
+			static uint32_t constexpr TangentSpaceFragPositionLocation = 3u;
+			static uint32_t constexpr TangentSpaceViewPositionLocation = 4u;
+			static uint32_t constexpr NormalLocation = 5u;
+			static uint32_t constexpr TangentLocation = 6u;
+			static uint32_t constexpr BitangentLocation = 7u;
+			static uint32_t constexpr TextureLocation = 8u;
+			static uint32_t constexpr InstanceLocation = 9u;
+			static uint32_t constexpr MaterialLocation = 10u;
 		};
 
 	protected:
 		RenderSystem & m_renderSystem;
+		MatrixUbo const & m_matrixUbo;
 		castor::String m_category;
 		RenderQueue m_renderQueue;
 		bool m_opaque{ false };
 		bool m_oit{ false };
 		SceneUbo m_sceneUbo;
-		MatrixUbo m_matrixUbo;
 		renderer::RenderPassPtr m_renderPass;
 		RenderPassTimerSPtr m_timer;
 		castor::Size m_size;

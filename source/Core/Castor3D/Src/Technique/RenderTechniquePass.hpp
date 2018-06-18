@@ -47,6 +47,7 @@ namespace castor3d
 			, castor::String const & name
 			, Scene const & scene
 			, Camera * camera
+			, MatrixUbo const & matrixUbo
 			, bool environment
 			, SceneNode const * ignored
 			, SsaoConfig const & config );
@@ -74,6 +75,7 @@ namespace castor3d
 			, castor::String const & name
 			, Scene & scene
 			, Camera * camera
+			, MatrixUbo const & matrixUbo
 			, bool oit
 			, bool environment
 			, SceneNode const * ignored

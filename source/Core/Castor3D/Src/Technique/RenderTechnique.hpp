@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "HDR/ToneMapping.hpp"
 #include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Render/RenderInfo.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
 #include "ShadowMap/ShadowMap.hpp"
 #include "Technique/DepthPass.hpp"
 #include "Technique/RenderTechniqueVisitor.hpp"
@@ -158,6 +159,11 @@ namespace castor3d
 			return *m_depthBuffer;
 		}
 
+		inline MatrixUbo const & getMatrixUbo()const
+		{
+			return m_matrixUbo;
+		}
+
 		inline RenderTechniquePass const & getOpaquePass()const
 		{
 			REQUIRE( m_opaquePass );
@@ -179,6 +185,11 @@ namespace castor3d
 		{
 			REQUIRE( m_signalFinished );
 			return *m_signalFinished;
+		}
+
+		inline RenderTarget const & getRenderTarget()const
+		{
+			return m_renderTarget;
 		}
 
 		inline bool isMultisampling()const
@@ -216,6 +227,7 @@ namespace castor3d
 		castor::Size m_size;
 		TextureLayoutSPtr m_colourTexture;
 		TextureLayoutSPtr m_depthBuffer;
+		MatrixUbo m_matrixUbo;
 		std::unique_ptr< RenderTechniquePass > m_opaquePass;
 		std::unique_ptr< RenderTechniquePass > m_transparentPass;
 		SsaoConfig m_ssaoConfig;
@@ -235,6 +247,8 @@ namespace castor3d
 		renderer::CommandBufferPtr m_cbgCommandBuffer;
 		renderer::RenderPassPtr m_debugRenderPass;
 		renderer::FrameBufferPtr m_debugFrameBuffer;
+		renderer::StagingBufferPtr m_stagingBuffer;
+		renderer::CommandBufferPtr m_uploadCommandBuffer;
 		OnBackgroundChangedConnection m_onBgChanged;
 		OnBackgroundChangedConnection m_onCBgChanged;
 	};

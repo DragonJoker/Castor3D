@@ -123,6 +123,21 @@ namespace castor3d
 
 			return unit;
 		}
+
+		std::vector< ShadowMap::PassAndUbo > createPass( Engine & engine
+			, Scene & scene
+			, ShadowMap & shadowMap )
+		{
+			std::vector< ShadowMap::PassAndUbo > result;
+			ShadowMap::PassAndUbo passUbo
+			{
+				std::make_unique< MatrixUbo >( engine ),
+				nullptr
+			};
+			passUbo.pass = std::make_shared< ShadowMapPassSpot >( engine, *passUbo.matrixUbo, scene, shadowMap );
+			result.emplace_back( std::move( passUbo ) );
+			return result;
+		}
 	}
 
 	ShadowMapSpot::ShadowMapSpot( Engine & engine
@@ -130,7 +145,7 @@ namespace castor3d
 		: ShadowMap{ engine
 			, doInitialiseVariance( engine, Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize } )
 			, doInitialiseLinearDepth( engine, Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize } )
-			, { std::make_shared< ShadowMapPassSpot >( engine, scene, *this ) } }
+			, createPass( engine, scene, *this ) }
 	{
 	}
 
@@ -144,27 +159,27 @@ namespace castor3d
 		, uint32_t index )
 	{
 		m_shadowType = light.getShadowType();
-		m_passes[0]->update( camera, queues, light, index );
+		m_passes[0].pass->update( camera, queues, light, index );
 	}
 
 	renderer::Semaphore const & ShadowMapSpot::render( renderer::Semaphore const & toWait )
 	{
 		static renderer::ClearColorValue const black{ 0.0f, 0.0f, 0.0f, 1.0f };
 		static renderer::DepthStencilClearValue const zero{ 1.0f, 0 };
-		m_passes[0]->updateDeviceDependent();
+		m_passes[0].pass->updateDeviceDependent();
 		auto & pass = m_passes[0];
-		auto & timer = pass->getTimer();
+		auto & timer = pass.pass->getTimer();
 		timer.start();
 
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
 		{
 			timer.notifyPassRender();
 			timer.beginPass( *m_commandBuffer );
-			m_commandBuffer->beginRenderPass( pass->getRenderPass()
+			m_commandBuffer->beginRenderPass( pass.pass->getRenderPass()
 				, *m_frameBuffer
 				, { zero, black, black }
 			, renderer::SubpassContents::eSecondaryCommandBuffers );
-			m_commandBuffer->executeCommands( { pass->getCommandBuffer() } );
+			m_commandBuffer->executeCommands( { pass.pass->getCommandBuffer() } );
 			m_commandBuffer->endRenderPass();
 			timer.endPass( *m_commandBuffer );
 			m_commandBuffer->end();
@@ -234,7 +249,7 @@ namespace castor3d
 		depthView.subresourceRange.levelCount = 1u;
 		m_depthView = m_depthTexture->createView( depthView );
 
-		auto & renderPass = m_passes[0]->getRenderPass();
+		auto & renderPass = m_passes[0].pass->getRenderPass();
 		renderer::FrameBufferAttachmentArray attaches;
 		attaches.emplace_back( *( renderPass.getAttachments().begin() + 0u ), *m_depthView );
 		attaches.emplace_back( *( renderPass.getAttachments().begin() + 1u ), m_linearMap.getTexture()->getDefaultView() );

@@ -27,12 +27,14 @@ namespace castor3d
 	DepthPass::DepthPass( String const & name
 		, Scene const & scene
 		, Camera & camera
+		, MatrixUbo const & matrixUbo
 		, SsaoConfig const & ssaoConfig
 		, TextureLayoutSPtr depthBuffer )
 		: RenderTechniquePass{ name
 			, name
 			, scene
 			, &camera
+			, matrixUbo
 			, false
 			, nullptr
 			, ssaoConfig }
@@ -191,10 +193,12 @@ namespace castor3d
 		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, programFlags );
 
 		// Outputs
-		auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" ), RenderPass::VertexOutputs::CurPositionLocation );
-		auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" ), RenderPass::VertexOutputs::PrvPositionLocation );
-		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ), RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" ), RenderPass::VertexOutputs::MaterialLocation );
+		auto vtx_motionVector = writer.declOutput< Vec2 >( cuT( "vtx_motionVector" )
+			, RenderPass::VertexOutputs::MotionVectorLocation );
+		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" )
+			, RenderPass::VertexOutputs::TextureLocation );
+		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
+			, RenderPass::VertexOutputs::MaterialLocation );
 		auto out = gl_PerVertex{ writer };
 
 		writer.implementFunction< void >( cuT( "main" )
@@ -242,21 +246,25 @@ namespace castor3d
 				curPosition = mtxModel * curPosition;
 				auto prvPosition = writer.declLocale( cuT( "prvPosition" )
 					, c3d_prvViewProj * curPosition );
-				out.gl_Position() = c3d_curViewProj * curPosition;
+				curPosition = c3d_curViewProj * curPosition;
+
 				// Convert the jitter from non-homogeneous coordiantes to homogeneous
 				// coordinates and add it:
 				// (note that for providing the jitter in non-homogeneous projection space,
 				//  pixel coordinates (screen space) need to multiplied by two in the C++
 				//  code)
-				out.gl_Position().xy() -= c3d_jitter * out.gl_Position().w();
-				prvPosition.xy() -= c3d_jitter * out.gl_Position().w();
-				vtx_curPosition = out.gl_Position().xyw();
-				vtx_prvPosition = prvPosition.xyw();
+				curPosition.xy() -= c3d_jitter * curPosition.w();
+				prvPosition.xy() -= c3d_jitter * prvPosition.w();
+				out.gl_Position() = curPosition;
+
+				curPosition.xy() /= curPosition.w();
+				prvPosition.xy() /= prvPosition.w();
 				// Positions in projection space are in [-1, 1] range, while texture
 				// coordinates are in [0, 1] range. So, we divide by 2 to get velocities in
 				// the scale (and flip the y axis):
-				vtx_curPosition.xy() *= vec2( 0.5_f, -0.5 );
-				vtx_prvPosition.xy() *= vec2( 0.5_f, -0.5 );
+				curPosition.xy() *= vec2( 0.5_f, -0.5 );
+				prvPosition.xy() *= vec2( 0.5_f, -0.5 );
+				vtx_motionVector = curPosition.xy() - prvPosition.xy();
 			} );
 
 		return writer.finalise();
@@ -319,10 +327,12 @@ namespace castor3d
 		GlslWriter writer = getEngine()->getRenderSystem()->createGlslWriter();
 
 		// Intputs
-		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" ), RenderPass::VertexOutputs::CurPositionLocation );
-		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" ), RenderPass::VertexOutputs::PrvPositionLocation );
-		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ), RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" ), RenderPass::VertexOutputs::MaterialLocation );
+		auto vtx_motionVector = writer.declInput< Vec2 >( cuT( "vtx_motionVector" )
+			, RenderPass::VertexOutputs::MotionVectorLocation );
+		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" )
+			, RenderPass::VertexOutputs::TextureLocation );
+		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
+			, RenderPass::VertexOutputs::MaterialLocation );
 		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( cuT( "c3d_mapOpacity" )
 			, 0u
 			, 1u

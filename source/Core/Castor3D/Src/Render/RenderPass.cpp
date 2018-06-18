@@ -191,15 +191,16 @@ namespace castor3d
 
 	RenderPass::RenderPass( String const & category
 		, String const & name
-		, Engine & engine )
+		, Engine & engine
+		, MatrixUbo const & matrixUbo )
 		: OwnedBy< Engine >{ engine }
 		, Named{ name }
 		, m_renderSystem{ *engine.getRenderSystem() }
+		, m_matrixUbo{ matrixUbo }
 		, m_category{ category }
 		, m_oit{ true }
 		, m_renderQueue{ *this, true, nullptr }
 		, m_opaque{ true }
-		, m_matrixUbo{ engine }
 		, m_sceneUbo{ engine }
 	{
 	}
@@ -207,15 +208,16 @@ namespace castor3d
 	RenderPass::RenderPass( String const & category
 		, String const & name
 		, Engine & engine
+		, MatrixUbo const & matrixUbo
 		, bool oit )
 		: OwnedBy< Engine >{ engine }
 		, Named{ name }
 		, m_renderSystem{ *engine.getRenderSystem() }
+		, m_matrixUbo{ matrixUbo }
 		, m_category{ category }
 		, m_oit{ oit }
 		, m_renderQueue{ *this, false, nullptr }
 		, m_opaque{ false }
-		, m_matrixUbo{ engine }
 		, m_sceneUbo{ engine }
 	{
 	}
@@ -223,15 +225,16 @@ namespace castor3d
 	RenderPass::RenderPass( String const & category
 		, String const & name
 		, Engine & engine
+		, MatrixUbo const & matrixUbo
 		, SceneNode const * ignored )
 		: OwnedBy< Engine >{ engine }
 		, Named{ name }
 		, m_renderSystem{ *engine.getRenderSystem() }
+		, m_matrixUbo{ matrixUbo }
 		, m_category{ category }
 		, m_oit{ true }
 		, m_renderQueue{ *this, true, ignored }
 		, m_opaque{ true }
-		, m_matrixUbo{ engine }
 		, m_sceneUbo{ engine }
 	{
 	}
@@ -239,16 +242,17 @@ namespace castor3d
 	RenderPass::RenderPass( String const & category
 		, String const & name
 		, Engine & engine
+		, MatrixUbo const & matrixUbo
 		, bool oit
 		, SceneNode const * ignored )
 		: OwnedBy< Engine >{ engine }
 		, Named{ name }
 		, m_renderSystem{ *engine.getRenderSystem() }
+		, m_matrixUbo{ matrixUbo }
 		, m_category{ category }
 		, m_oit{ oit }
 		, m_renderQueue{ *this, false, ignored }
 		, m_opaque{ false }
-		, m_matrixUbo{ engine }
 		, m_sceneUbo{ engine }
 	{
 	}
@@ -260,7 +264,6 @@ namespace castor3d
 	bool RenderPass::initialise( Size const & size )
 	{
 		m_timer = std::make_shared< RenderPassTimer >( *getEngine(), m_category, getName() );
-		m_matrixUbo.initialise();
 		m_sceneUbo.initialise();
 		m_sceneUbo.setWindowSize( size );
 		m_size = size;
@@ -269,7 +272,6 @@ namespace castor3d
 
 	void RenderPass::cleanup()
 	{
-		m_matrixUbo.cleanup();
 		m_sceneUbo.cleanup();
 		m_renderPass.reset();
 		doCleanup();

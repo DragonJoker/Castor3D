@@ -164,7 +164,7 @@ namespace smaa
 
 		if ( m_config.data.mode == Mode::eT2X )
 		{
-			++m_passesCount;
+			m_passesCount += m_config.maxSubsampleIndices;
 		}
 	}
 
@@ -385,7 +385,7 @@ namespace smaa
 		auto & copyCmd = *copyCommands.commandBuffer;
 
 		copyCmd.begin();
-		timer.beginPass( copyCmd, passIndex++ );
+		timer.beginPass( copyCmd, passIndex );
 		copyCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 			, renderer::PipelineStageFlag::eFragmentShader
 			, m_smaaResult->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
@@ -395,9 +395,10 @@ namespace smaa
 			, renderer::SubpassContents::eInline );
 		copyQuad->registerFrame( copyCmd );
 		copyCmd.endRenderPass();
-		timer.endPass( copyCmd, 4u );
+		timer.endPass( copyCmd, passIndex );
 		copyCmd.end();
 		result.emplace_back( std::move( copyCommands ) );
+		++passIndex;
 
 		return result;
 	}

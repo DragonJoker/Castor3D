@@ -96,10 +96,12 @@ namespace castor3d
 	//*************************************************************************************************
 
 	uint64_t SceneNode::Count = 0;
+	uint64_t SceneNode::CurrentId = 0;
 
 	SceneNode::SceneNode( String const & name, Scene & scene )
 		: OwnedBy< Scene >{ scene }
 		, Named{ name }
+		, m_id{ CurrentId++ }
 		, m_displayable{ name == cuT( "RootNode" ) }
 	{
 		if ( m_name.empty() )

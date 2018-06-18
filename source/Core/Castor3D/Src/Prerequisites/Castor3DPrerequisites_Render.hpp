@@ -181,6 +181,7 @@ namespace castor3d
 	class RenderTarget;
 	class RenderTechnique;
 	class RenderWindow;
+	class SceneCuller;
 	class ShadowMap;
 	class ShadowMapPass;
 	class TextureProjection;
@@ -217,6 +218,7 @@ namespace castor3d
 	DECLARE_SMART_PTR( RenderTarget );
 	DECLARE_SMART_PTR( RenderTechnique );
 	DECLARE_SMART_PTR( RenderWindow );
+	DECLARE_SMART_PTR( SceneCuller );
 	DECLARE_SMART_PTR( ShadowMap );
 	DECLARE_SMART_PTR( ShadowMapPass );
 	DECLARE_SMART_PTR( TextureProjection );

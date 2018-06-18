@@ -44,9 +44,10 @@ namespace castor3d
 	String const ShadowMapPassPoint::FarPlane = cuT( "c3d_farPlane" );
 
 	ShadowMapPassPoint::ShadowMapPassPoint( Engine & engine
+		, MatrixUbo const & matrixUbo
 		, Scene & scene
 		, ShadowMap const & shadowMap )
-		: ShadowMapPass{ engine, scene, shadowMap }
+		: ShadowMapPass{ engine, matrixUbo, scene, shadowMap }
 		, m_viewport{ engine }
 	{
 		m_renderQueue.initialise( scene );
@@ -171,7 +172,6 @@ namespace castor3d
 	void ShadowMapPassPoint::doCleanup()
 	{
 		m_renderQueue.cleanup();
-		m_matrixUbo.cleanup();
 		m_shadowConfig.reset();
 		m_onNodeChanged.disconnect();
 	}

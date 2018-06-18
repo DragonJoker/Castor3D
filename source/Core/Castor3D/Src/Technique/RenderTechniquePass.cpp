@@ -43,10 +43,11 @@ namespace castor3d
 		, String const & name
 		, Scene const & scene
 		, Camera * camera
+		, MatrixUbo const & matrixUbo
 		, bool environment
 		, SceneNode const * ignored
 		, SsaoConfig const & config )
-		: RenderPass{ category, name, *scene.getEngine(), ignored }
+		: RenderPass{ category, name, *scene.getEngine(), matrixUbo, ignored }
 		, m_scene{ scene }
 		, m_camera{ camera }
 		, m_sceneNode{}
@@ -59,11 +60,12 @@ namespace castor3d
 		, String const & name
 		, Scene & scene
 		, Camera * camera
+		, MatrixUbo const & matrixUbo
 		, bool oit
 		, bool environment
 		, SceneNode const * ignored
 		, SsaoConfig const & config )
-		: RenderPass{ category, name, *scene.getEngine(), oit, ignored }
+		: RenderPass{ category, name, *scene.getEngine(), matrixUbo, oit, ignored }
 		, m_scene{ scene }
 		, m_camera{ camera }
 		, m_sceneNode{}

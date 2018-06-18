@@ -36,6 +36,7 @@ namespace castor3d
 		 */
 		OpaquePass( Scene & scene
 			, Camera * camera
+			, MatrixUbo const & matrixUbo
 			, SsaoConfig const & config );
 		/**
 		 *\~english

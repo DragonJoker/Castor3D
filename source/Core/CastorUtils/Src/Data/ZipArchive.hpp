@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___CASTOR_ZIP_ARCHIVE_H___
 
 #include "File.hpp"
-#include <set>
+#include <list>
 
 namespace castor
 {
@@ -22,7 +22,7 @@ namespace castor
 	{
 	public:
 		struct Folder;
-		typedef std::list< Folder > FolderList;
+		using FolderList = std::list< Folder >;
 
 		struct Folder
 		{
