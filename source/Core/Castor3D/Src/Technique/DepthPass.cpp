@@ -193,8 +193,10 @@ namespace castor3d
 		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, programFlags );
 
 		// Outputs
-		auto vtx_motionVector = writer.declOutput< Vec2 >( cuT( "vtx_motionVector" )
-			, RenderPass::VertexOutputs::MotionVectorLocation );
+		auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" )
+			, RenderPass::VertexOutputs::CurPositionLocation );
+		auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" )
+			, RenderPass::VertexOutputs::PrvPositionLocation );
 		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" )
 			, RenderPass::VertexOutputs::TextureLocation );
 		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
@@ -257,14 +259,13 @@ namespace castor3d
 				prvPosition.xy() -= c3d_jitter * prvPosition.w();
 				out.gl_Position() = curPosition;
 
-				curPosition.xy() /= curPosition.w();
-				prvPosition.xy() /= prvPosition.w();
+				vtx_curPosition = curPosition.xyw();
+				vtx_prvPosition = prvPosition.xyw();
 				// Positions in projection space are in [-1, 1] range, while texture
 				// coordinates are in [0, 1] range. So, we divide by 2 to get velocities in
 				// the scale (and flip the y axis):
-				curPosition.xy() *= vec2( 0.5_f, -0.5 );
-				prvPosition.xy() *= vec2( 0.5_f, -0.5 );
-				vtx_motionVector = curPosition.xy() - prvPosition.xy();
+				vtx_curPosition.xy() *= vec2( 0.5_f, -0.5 );
+				vtx_prvPosition.xy() *= vec2( 0.5_f, -0.5 );
 			} );
 
 		return writer.finalise();
@@ -327,8 +328,10 @@ namespace castor3d
 		GlslWriter writer = getEngine()->getRenderSystem()->createGlslWriter();
 
 		// Intputs
-		auto vtx_motionVector = writer.declInput< Vec2 >( cuT( "vtx_motionVector" )
-			, RenderPass::VertexOutputs::MotionVectorLocation );
+		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" )
+			, RenderPass::VertexOutputs::CurPositionLocation );
+		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" )
+			, RenderPass::VertexOutputs::PrvPositionLocation );
 		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" )
 			, RenderPass::VertexOutputs::TextureLocation );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )

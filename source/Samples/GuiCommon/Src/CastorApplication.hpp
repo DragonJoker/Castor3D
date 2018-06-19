@@ -119,6 +119,16 @@ namespace GuiCommon
 		}
 		/**
 		 *\~english
+		 *\return		The unlimited FPS status.
+		 *\~french
+		 *\return		Le statut de FPS non limitées.
+		 */
+		inline bool isUnlimitedFps()const
+		{
+			return m_unlimitedFps;
+		}
+		/**
+		 *\~english
 		 *\return		The splash screen
 		 *\~french
 		 *\return		Le splash screen
@@ -197,6 +207,7 @@ namespace GuiCommon
 		SplashScreen * m_splashScreen;
 		castor3d::Version m_version;
 		bool m_validation{ false };
+		bool m_unlimitedFps{ false };
 	};
 }
 

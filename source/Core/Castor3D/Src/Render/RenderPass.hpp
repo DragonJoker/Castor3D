@@ -1464,15 +1464,16 @@ namespace castor3d
 		{
 			static uint32_t constexpr WorldPositionLocation = 0u;
 			static uint32_t constexpr ViewPositionLocation = 1u;
-			static uint32_t constexpr MotionVectorLocation = 2u;
-			static uint32_t constexpr TangentSpaceFragPositionLocation = 3u;
-			static uint32_t constexpr TangentSpaceViewPositionLocation = 4u;
-			static uint32_t constexpr NormalLocation = 5u;
-			static uint32_t constexpr TangentLocation = 6u;
-			static uint32_t constexpr BitangentLocation = 7u;
-			static uint32_t constexpr TextureLocation = 8u;
-			static uint32_t constexpr InstanceLocation = 9u;
-			static uint32_t constexpr MaterialLocation = 10u;
+			static uint32_t constexpr CurPositionLocation = 2u;
+			static uint32_t constexpr PrvPositionLocation = 3u;
+			static uint32_t constexpr TangentSpaceFragPositionLocation = 4u;
+			static uint32_t constexpr TangentSpaceViewPositionLocation = 5u;
+			static uint32_t constexpr NormalLocation = 6u;
+			static uint32_t constexpr TangentLocation = 7u;
+			static uint32_t constexpr BitangentLocation = 8u;
+			static uint32_t constexpr TextureLocation = 9u;
+			static uint32_t constexpr InstanceLocation = 10u;
+			static uint32_t constexpr MaterialLocation = 11u;
 		};
 
 	protected:
