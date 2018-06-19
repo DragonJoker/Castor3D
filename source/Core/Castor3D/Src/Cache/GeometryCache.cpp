@@ -113,7 +113,9 @@ namespace castor3d
 		{
 			auto & entry = pair.second;
 
-			if ( entry.geometry.getParent() )
+			if ( entry.geometry.getParent()
+				&& bool( entry.modelUbo )
+				&& bool( entry.modelMatrixUbo ) )
 			{
 				auto & modelData = entry.modelUbo.getData();
 				modelData.shadowReceiver = entry.geometry.isShadowReceiver();

@@ -341,6 +341,10 @@ namespace castor3d
 	{
 		REQUIRE( m_culler );
 		m_culler->compute();
+
+		auto & camera = *getCamera();
+		camera.resize( m_size );
+		camera.update();
 	}
 
 	void RenderTarget::render( RenderInfo & info )

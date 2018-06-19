@@ -127,60 +127,6 @@ namespace castor3d
 		C3D_API void update();
 		/**
 		 *\~english
-		 *\brief		Resizes the viewport
-		 *\param[in]	width, height	Display window size
-		 *\~french
-		 *\brief		Redimensionne le viewport
-		 *\param[in]	width, height	Dimensions de la fenêtre d'affichage
-		 */
-		C3D_API void resize( uint32_t width, uint32_t height );
-		/**
-		 *\~english
-		 *\brief		Resizes the viewport
-		 *\param[in]	size	Display window size
-		 *\~french
-		 *\brief		Redimensionne le viewport
-		 *\param[in]	size	Dimensions de la fenêtre d'affichage
-		 */
-		C3D_API void resize( castor::Size const & size );
-		/**
-		 *\~english
-		 *\brief		Retrieves the viewport type
-		 *\return		The viewport type
-		 *\~french
-		 *\brief		Récupère le type de viewport
-		 *\return		Le type de viewport
-		 */
-		C3D_API ViewportType getViewportType()const;
-		/**
-		 *\~english
-		 *\brief		Sets the viewport type
-		 *\param[in]	value	The viewport type
-		 *\~french
-		 *\brief		Définit le type de viewport
-		 *\param[in]	value	Le type de viewport
-		 */
-		C3D_API void setViewportType( ViewportType value );
-		/**
-		 *\~english
-		 *\brief		Retrieves the viewport width
-		 *\return		The width
-		 *\~french
-		 *\brief		Récupère la largeur du viewport
-		 *\return		La largeur
-		 */
-		C3D_API uint32_t getWidth()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the viewport height
-		 *\return		The height
-		 *\~french
-		 *\brief		Récupère la hauteur du viewport
-		 *\return		La hauteur
-		 */
-		C3D_API uint32_t getHeight()const;
-		/**
-		 *\~english
 		 *\brief		Checks if a submesh is visible, through a geometry.
 		 *\param[in]	geometry	The geometry.
 		 *\param[in]	submesh		The submesh.
@@ -239,51 +185,52 @@ namespace castor3d
 		 */
 		C3D_API bool isVisible( castor::Point3r const & point )const;
 		/**
-		 *\~english
-		 *\brief		Retrieves the Viewport
-		 *\return		The Viewport
-		 *\~french
-		 *\brief		Récupère le Viewport
-		 *\return		Le Viewport
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline Viewport const & getViewport()const
 		{
 			return m_viewport;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the Viewport
-		 *\return		The Viewport
-		 *\~french
-		 *\brief		Récupère le Viewport
-		 *\return		Le Viewport
-		 */
+
 		inline Viewport & getViewport()
 		{
 			return m_viewport;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the view matrix
-		 *\~french
-		 *\brief		Récupère la matrice de vue
-		 */
+
 		inline castor::Matrix4x4r const & getView()const
 		{
 			return m_view;
 		}
+
+		C3D_API ViewportType getViewportType()const;
+		C3D_API castor::Size const & getSize()const;
+		C3D_API uint32_t getWidth()const;
+		C3D_API uint32_t getHeight()const;
+		/**@}*/
 		/**
-		 *\~english
-		 *\brief		Sets the view matrix.
-		 *\param[in]	view	The new value.
-		 *\~french
-		 *\brief		Définit la matrice de vue.
-		 *\param[in]	view	La nouvelle valeur.
-		 */
+		*\~english
+		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		*/
+		/**@{*/
 		inline void setView( castor::Matrix4x4r const & view )
 		{
 			m_view = view;
 		}
+
+		C3D_API void resize( uint32_t width, uint32_t height );
+		C3D_API void resize( castor::Size const & size );
+		C3D_API void setViewportType( ViewportType value );
+		/**@}*/
 
 	private:
 		void onNodeChanged( SceneNode const & node );

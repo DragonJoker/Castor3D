@@ -4,11 +4,16 @@
 
 #include "Event/Frame/FrameListener.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
+#include "Mesh/Submesh.hpp"
 #include "Scene/Geometry.hpp"
 #include "Scene/Scene.hpp"
 
 #include <Graphics/BoundingBox.hpp>
 #include <Graphics/BoundingSphere.hpp>
+
+#if C3D_DebugFrustum
+extern bool C3D_DebugFrustumDisplay;
+#endif
 
 using namespace castor;
 
@@ -127,7 +132,8 @@ namespace castor3d
 					matrix::scale( m_view, Point3f{ -1.0f, 1.0f, 1.0f } );
 				}
 
-				m_frustum.update( m_viewport.getProjection(), m_view );
+				//m_frustum.update( m_viewport.getProjection(), m_view );
+				m_frustum.update( position, right, up, front );
 				m_nodeChanged = false;
 			}
 		}
@@ -140,12 +146,20 @@ namespace castor3d
 
 	void Camera::resize( Size const & size )
 	{
-		m_viewport.resize( size );
+		if ( m_viewport.getSize() != size )
+		{
+			m_viewport.resize( size );
+		}
 	}
 
 	ViewportType Camera::getViewportType()const
 	{
 		return m_viewport.getType();
+	}
+
+	Size const & Camera::getSize()const
+	{
+		return m_viewport.getSize();
 	}
 
 	uint32_t Camera::getWidth()const
@@ -165,12 +179,27 @@ namespace castor3d
 
 	bool Camera::isVisible( Geometry const & geometry, Submesh const & submesh )const
 	{
+#if C3D_DebugFrustum
+		//C3D_DebugFrustumDisplay = geometry.getName() == cuT( "buisson_droit_8" );
+
+		if ( C3D_DebugFrustumDisplay )
+		{
+			std::clog << cuT( "Geometry: " ) << geometry.getName() << cuT( " - Submesh: " ) << submesh.getId();
+		}
+#endif
 		auto & sceneNode = *geometry.getParent();
-		return m_frustum.isVisible( geometry.getBoundingSphere( submesh )
+		auto result = m_frustum.isVisible( geometry.getBoundingSphere( submesh )
 				, sceneNode.getDerivedTransformationMatrix()
 				, sceneNode.getDerivedScale() )
 			&& m_frustum.isVisible( geometry.getBoundingBox( submesh )
 				, sceneNode.getDerivedTransformationMatrix() );
+#if C3D_DebugFrustum
+		if ( C3D_DebugFrustumDisplay )
+		{
+			std::clog << std::endl;
+		}
+#endif
+		return result;
 	}
 
 	bool Camera::isVisible( BoundingBox const & box

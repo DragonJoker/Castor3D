@@ -42,9 +42,9 @@ namespace castor3d
 			data.data.resize( data.count );
 			getOwner()->getScene()->getListener().postEvent( makeFunctorEvent( EventType::eQueueRender
 				, [this]()
-			{
-				doFill();
-			} ) );
+				{
+					doFill();
+				} ) );
 		}
 
 		return result;
@@ -69,9 +69,9 @@ namespace castor3d
 			{
 				getOwner()->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePreRender
 					, [&data]()
-				{
-					data.buffer.reset();
-				} ) );
+					{
+						data.buffer.reset();
+					} ) );
 			}
 		}
 

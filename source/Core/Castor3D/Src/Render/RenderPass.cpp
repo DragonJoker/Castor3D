@@ -171,14 +171,9 @@ namespace castor3d
 			while ( i < count )
 			{
 				auto & node = *it;
-				if ( node->sceneNode.isDisplayable()
-					&& node->sceneNode.isVisible()
-					&& camera.isVisible( node->instance, node->data ) )
-				{
-					buffer->m_matrix = node->sceneNode.getDerivedTransformationMatrix();
-					buffer->m_material = node->passNode.pass.getId();
-					++buffer;
-				}
+				buffer->m_matrix = node->sceneNode.getDerivedTransformationMatrix();
+				buffer->m_material = node->passNode.pass.getId();
+				++buffer;
 				++i;
 				++it;
 			}

@@ -252,7 +252,7 @@ namespace castor3d
 			auto & device = getCurrentDevice( *this );
 			m_stagingBuffer = std::make_unique< renderer::StagingBuffer >( device
 				, renderer::BufferTarget::eTransferSrc
-				, uint32_t( sizeof( MatrixUbo::Configuration ) ) );
+				, m_matrixUbo.getUbo().getAlignedSize() );
 			m_uploadCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 
 			doInitialiseShadowMaps();
@@ -319,8 +319,6 @@ namespace castor3d
 		auto & scene = *m_renderTarget.getScene();
 		auto & camera = *m_renderTarget.getCamera();
 		scene.getLightCache().updateLightsTexture( camera );
-		camera.resize( m_size );
-		camera.update();
 		scene.updateDeviceDependent( camera );
 
 		// Update part

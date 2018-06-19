@@ -7,6 +7,7 @@
 #include "OpenClBench.hpp"
 #include "CastorUtilsArrayViewTest.hpp"
 #include "CastorUtilsBuddyAllocatorTest.hpp"
+#include "CastorUtilsDynamicBitsetTest.hpp"
 #include "CastorUtilsMatrixTest.hpp"
 #include "CastorUtilsPixelFormatTest.hpp"
 #include "CastorUtilsStringTest.hpp"
@@ -38,6 +39,7 @@ int main( int argc, char const * argv[] )
 #if defined( CASTOR_USE_OCL )
 	Testing::registerType( std::make_unique< Testing::OpenCLBench >() );
 #endif
+	Testing::registerType( std::make_unique< Testing::CastorUtilsDynamicBitsetTest >() );
 	Testing::registerType( std::make_unique< Testing::CastorUtilsBuddyAllocatorTest >() );
 	Testing::registerType( std::make_unique< Testing::CastorUtilsSignalTest >() );
 	Testing::registerType( std::make_unique< Testing::CastorUtilsWorkerThreadTest >() );

@@ -26,43 +26,43 @@ namespace castor3d
 
 	void FrustumCuller::doCullGeometries()
 	{
-		doClear();
-		auto & camera = getCamera();
-		auto & scene = getScene();
-		auto lock = makeUniqueLock( scene.getGeometryCache() );
+		//doClear();
+		//auto & camera = getCamera();
+		//auto & scene = getScene();
+		//auto lock = makeUniqueLock( scene.getGeometryCache() );
 
-		for ( auto primitive : scene.getGeometryCache() )
-		{
-			if ( primitive.second->getParent()->isVisible()
-				&& primitive.second->getMesh() )
-			{
-				auto mesh = primitive.second->getMesh();
+		//for ( auto primitive : scene.getGeometryCache() )
+		//{
+		//	if ( primitive.second->getParent()->isVisible()
+		//		&& primitive.second->getMesh() )
+		//	{
+		//		auto mesh = primitive.second->getMesh();
 
-				for ( auto submesh : *mesh )
-				{
-					auto material = primitive.second->getMaterial( *submesh );
+		//		for ( auto submesh : *mesh )
+		//		{
+		//			auto material = primitive.second->getMaterial( *submesh );
 
-					if ( material )
-					{
-						auto node = primitive.second->getParent();
-						auto visibility = camera.isVisible( submesh->getBoundingSphere()
-							, node->getDerivedTransformationMatrix()
-							, node->getDerivedScale() )
-							&& camera.isVisible( submesh->getBoundingBox()
-								, node->getDerivedTransformationMatrix() );
+		//			if ( material )
+		//			{
+		//				auto node = primitive.second->getParent();
+		//				auto visibility = camera.isVisible( submesh->getBoundingSphere()
+		//					, node->getDerivedTransformationMatrix()
+		//					, node->getDerivedScale() )
+		//					&& camera.isVisible( submesh->getBoundingBox()
+		//						, node->getDerivedTransformationMatrix() );
 
-						if ( material->hasAlphaBlending() )
-						{
-							m_transparentSubmeshes.emplace_back( CulledSubmesh{ *submesh, *node } );
-						}
-						else
-						{
-							m_opaqueSubmeshes.emplace_back( CulledSubmesh{ *submesh, *node } );
-						}
-					}
-				}
-			}
-		}
+		//				if ( material->hasAlphaBlending() )
+		//				{
+		//					m_transparentSubmeshes.emplace_back( CulledSubmesh{ *submesh, *node } );
+		//				}
+		//				else
+		//				{
+		//					m_opaqueSubmeshes.emplace_back( CulledSubmesh{ *submesh, *node } );
+		//				}
+		//			}
+		//		}
+		//	}
+		//}
 	}
 
 	void FrustumCuller::doCullBillboards()

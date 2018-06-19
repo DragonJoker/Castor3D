@@ -442,7 +442,7 @@ namespace castor3d
 			auto mesh = std::static_pointer_cast< AnimatedMesh >( doFindAnimatedObject( scene, name + cuT( "_Mesh" ) ) );
 			auto skeleton = std::static_pointer_cast< AnimatedSkeleton >( doFindAnimatedObject( scene, name + cuT( "_Skeleton" ) ) );
 
-			if ( skeleton && checkFlag( submeshFlags, ProgramFlag::eSkinning ) )
+			if ( skeleton )
 			{
 				addFlag( programFlags, ProgramFlag::eSkinning );
 			}
@@ -767,8 +767,7 @@ namespace castor3d
 			for ( auto & node : renderNodes )
 			{
 				if ( node.sceneNode.isDisplayable()
-					&& node.sceneNode.isVisible()
-					&& camera.isVisible( node.instance, node.data ) )
+					&& node.sceneNode.isVisible() )
 				{
 					doAddRenderNode( pass, pipeline, &node, submesh, outputNodes );
 					++count;
@@ -789,8 +788,7 @@ namespace castor3d
 				for ( auto & node : pipelines.second )
 				{
 					if ( node.sceneNode.isDisplayable()
-						&& node.sceneNode.isVisible()
-						&& camera.isVisible( node.instance, node.data ) )
+						&& node.sceneNode.isVisible() )
 					{
 						doAddRenderNode( *pipelines.first, &node, outputNodes );
 						doAddRenderNodeCommand( *pipelines.first, node, commandBuffer );
@@ -837,7 +835,12 @@ namespace castor3d
 				}
 			}
 
-			doAddRenderNodeCommand( pass, pipeline, renderNodes[0], submesh, commandBuffer, count );
+			doAddRenderNodeCommand( pass
+				, pipeline
+				, renderNodes[0]
+				, submesh
+				, commandBuffer
+				, count );
 		}
 
 		template< typename MapType >

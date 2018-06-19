@@ -26,6 +26,11 @@ namespace castor3d
 		renderer::MemoryPropertyFlags flags;
 		uint32_t offset;
 
+		explicit operator bool()const
+		{
+			return buffer->hasBuffer();
+		}
+
 		T const & getData()const
 		{
 			return buffer->getBuffer().getData( offset );

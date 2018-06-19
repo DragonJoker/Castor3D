@@ -128,6 +128,18 @@ namespace castor3d
 		/**
 		*\~english
 		*\return
+		*	\p false if the internal buffer doesn't exist.
+		*\~french
+		*\return
+		*	\p false si le tampon interne n'existe pas.
+		*/
+		inline bool hasBuffer()const
+		{
+			return m_buffer != nullptr;
+		}
+		/**
+		*\~english
+		*\return
 		*	The internal buffer.
 		*\~french
 		*\return

@@ -409,7 +409,9 @@ namespace castor3d
 				if ( it != component.end()
 					&& it->second.buffer )
 				{
-					doCopyNodesMatrices( renderNodes, camera, it->second.data );
+					doCopyNodesMatrices( renderNodes
+						, camera
+						, it->second.data );
 				}
 			} );
 	}
