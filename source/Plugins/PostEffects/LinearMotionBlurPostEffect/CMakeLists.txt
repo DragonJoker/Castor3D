@@ -6,7 +6,7 @@ set( Castor3DBinsDependencies
 	PARENT_SCOPE
 )
 
-set( ${PROJECT_NAME}_DESCRIPTION "Motion Blur Post Effect" )
+set( ${PROJECT_NAME}_DESCRIPTION "Linear Motion Blur Post Effect" )
 set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 1 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
