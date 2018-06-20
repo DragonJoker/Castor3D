@@ -315,9 +315,33 @@ namespace motion_blur
 		m_surface.cleanup();
 	}
 
-	bool PostEffect::doWriteInto( castor::TextFile & file )
+	bool PostEffect::doWriteInto( castor::TextFile & file, String const & tabs )
 	{
-		return true;
+		static Configuration const ref;
+		auto result = file.writeText( cuT( "\n" ) + tabs + Type + cuT( "\n" ) ) > 0
+			&& file.writeText( tabs + cuT( "{\n" ) ) > 0;
+
+		if ( result && m_configuration.vectorDivider != ref.vectorDivider )
+		{
+			result = file.writeText( tabs + cuT( "\tvectorDivider " ) + string::toString( m_configuration.vectorDivider, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+		}
+
+		if ( result && m_configuration.samplesCount != ref.samplesCount )
+		{
+			result = file.writeText( tabs + cuT( "\tsamples " ) + string::toString( m_configuration.samplesCount, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+		}
+
+		if ( result && !m_fpsScale )
+		{
+			result = file.writeText( tabs + cuT( "\tfpsScale false\n" ) ) > 0;
+		}
+
+		if ( result )
+		{
+			result = file.writeText( tabs + cuT( "}\n" ) ) > 0;
+		}
+
+		return result;
 	}
 
 	//*********************************************************************************************

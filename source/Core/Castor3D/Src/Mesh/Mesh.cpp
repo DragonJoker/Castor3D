@@ -3,6 +3,7 @@
 #include "Engine.hpp"
 
 #include "Animation/Mesh/MeshAnimation.hpp"
+#include "Material/Material.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Skeleton/Skeleton.hpp"
 
@@ -23,9 +24,47 @@ namespace castor3d
 		Logger::logInfo( m_tabs + cuT( "Writing Mesh " ) + object.getName() );
 		auto result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "mesh \"" ) + object.getName() + cuT( "\"\n" ) ) > 0
 			&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0
-			&& file.writeText( m_tabs + cuT( "\timport \"Meshes/" ) + object.getName() + cuT( ".cmsh\"\n" ) ) > 0
-			&& file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
+			&& file.writeText( m_tabs + cuT( "\timport \"Meshes/" ) + object.getName() + cuT( ".cmsh\"\n" ) ) > 0;
 		castor::TextWriter< Mesh >::checkError( result, "Mesh" );
+
+		if ( result )
+		{
+			auto it = std::find_if( object.begin()
+				, object.end()
+				, []( SubmeshSPtr lookup )
+				{
+					return lookup->getDefaultMaterial() != nullptr;
+				} );
+
+			if ( it != object.end() )
+			{
+				if ( object.getSubmeshCount() == 1 )
+				{
+					result = file.writeText( m_tabs + cuT( "\tdefault_material \"" ) + object.getSubmesh( 0u )->getDefaultMaterial()->getName() + cuT( "\"\n" ) ) > 0;
+				}
+				else
+				{
+					result = file.writeText( m_tabs + cuT( "\tdefault_materials\n" ) ) > 0
+						&& file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0;
+
+					for ( auto & submesh : object )
+					{
+						if ( submesh->getDefaultMaterial() )
+						{
+							result = file.writeText( m_tabs + cuT( "\t\tmaterial " ) + string::toString( submesh->getId(), std::locale{ "C" } ) + cuT( " \"" ) + submesh->getDefaultMaterial()->getName() + cuT( "\"\n" ) ) > 0;
+						}
+					}
+
+					result = file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
+				}
+			}
+		}
+
+		if ( result )
+		{
+			result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
+		}
+
 		return result;
 	}
 

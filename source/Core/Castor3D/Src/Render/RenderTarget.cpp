@@ -85,33 +85,28 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = HdrConfig::TextWriter( m_tabs + cuT( "\t" ) )( target.getHdrConfig(), file );
-		}
-
-		if ( result )
-		{
 			for ( auto const & effect : target.m_hdrPostEffects )
 			{
-				result = file.writeText( m_tabs + cuT( "\tpostfx \"" ) + effect->getName() + cuT( "\"" ) )
-						   && effect->writeInto( file )
-						   && file.writeText( cuT( "\n" ) ) > 0;
+				result = effect->writeInto( file, m_tabs + cuT( "\t" ) ) && file.writeText( cuT( "\n" ) ) > 0;
 				castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget post effect" );
 			}
 		}
 
 		if ( result )
-			if ( result )
+		{
+			for ( auto const & effect : target.m_srgbPostEffects )
 			{
-				for ( auto const & effect : target.m_srgbPostEffects )
-				{
-					result = file.writeText( m_tabs + cuT( "\tpostfx \"" ) + effect->getName() + cuT( "\"" ) )
-						&& effect->writeInto( file )
-						&& file.writeText( cuT( "\n" ) ) > 0;
-					castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget post effect" );
-				}
+				result = effect->writeInto( file, m_tabs + cuT( "\t" ) ) && file.writeText( cuT( "\n" ) ) > 0;
+				castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget post effect" );
 			}
+		}
 
+		if ( result )
+		{
+			result = HdrConfig::TextWriter( m_tabs + cuT( "\t" ) )( target.getHdrConfig(), file );
+		}
 
+		if ( result )
 		{
 			result = SsaoConfig::TextWriter{ m_tabs + cuT( "\t" ) }( target.m_ssaoConfig, file );
 		}
@@ -211,6 +206,7 @@ namespace castor3d
 	{
 		if ( !m_initialised )
 		{
+			m_culler = std::make_unique< FrustumCuller >( *getScene(), *getCamera() );
 			auto & renderSystem = *getEngine()->getRenderSystem();
 			auto & device = getCurrentDevice( renderSystem );
 			doInitialiseRenderPass();
@@ -279,8 +275,6 @@ namespace castor3d
 
 			m_signalReady = device.createSemaphore();
 			m_fence = device.createFence( renderer::FenceCreateFlag::eSignaled );
-
-			m_culler = std::make_unique< FrustumCuller >( *getScene(), *getCamera() );
 		}
 	}
 
@@ -339,12 +333,12 @@ namespace castor3d
 
 	void RenderTarget::update()
 	{
-		REQUIRE( m_culler );
-		m_culler->compute();
-
 		auto & camera = *getCamera();
 		camera.resize( m_size );
 		camera.update();
+
+		REQUIRE( m_culler );
+		m_culler->compute();
 	}
 
 	void RenderTarget::render( RenderInfo & info )

@@ -60,6 +60,7 @@ namespace castor3d
 		eTransmittanceProfile = MAKE_SECTION_NAME( 'T', 'R', 'P', 'R' ),
 		eHdrConfig = MAKE_SECTION_NAME( 'H', 'D', 'R', 'C' ),
 		eShadows = MAKE_SECTION_NAME( 'S', 'H', 'D', 'W' ),
+		eMeshDefaultMaterials = MAKE_SECTION_NAME( 'M', 'M', 'T', 'L' ),
 	};
 	/*!
 	\author		Sylvain DOREMUS

@@ -12,6 +12,7 @@
 #include <Sync/ImageMemoryBarrier.hpp>
 
 using namespace castor;
+
 namespace castor3d
 {
 	PostEffect::PostEffect( String const & name
@@ -32,9 +33,9 @@ namespace castor3d
 	{
 	}
 
-	bool PostEffect::writeInto( castor::TextFile & p_file )
+	bool PostEffect::writeInto( castor::TextFile & file, castor::String const & tabs )
 	{
-		return doWriteInto( p_file );
+		return doWriteInto( file, tabs );
 	}
 
 	bool PostEffect::initialise( TextureLayout const & texture )

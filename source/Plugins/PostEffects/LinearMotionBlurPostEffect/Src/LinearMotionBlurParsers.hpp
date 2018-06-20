@@ -20,6 +20,7 @@ namespace motion_blur
 	DECLARE_ATTRIBUTE_PARSER( parserMotionBlur )
 	DECLARE_ATTRIBUTE_PARSER( parserDivider )
 	DECLARE_ATTRIBUTE_PARSER( parserSamples )
+	DECLARE_ATTRIBUTE_PARSER( parserFpsScale )
 	DECLARE_ATTRIBUTE_PARSER( parserMotionBlurEnd )
 }
 

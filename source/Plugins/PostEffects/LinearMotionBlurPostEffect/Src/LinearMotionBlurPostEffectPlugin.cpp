@@ -57,6 +57,7 @@ namespace
 
 		addParser( result, uint32_t( motion_blur::MotionBlurSection::eRoot ), cuT( "vectorDivider" ), &motion_blur::parserDivider, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		addParser( result, uint32_t( motion_blur::MotionBlurSection::eRoot ), cuT( "samples" ), &motion_blur::parserSamples, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		addParser( result, uint32_t( motion_blur::MotionBlurSection::eRoot ), cuT( "fpsScale" ), &motion_blur::parserFpsScale, { castor::makeParameter< castor::ParameterType::eBool >() } );
 		addParser( result, uint32_t( motion_blur::MotionBlurSection::eRoot ), cuT( "}" ), &motion_blur::parserMotionBlurEnd );
 
 		return result;

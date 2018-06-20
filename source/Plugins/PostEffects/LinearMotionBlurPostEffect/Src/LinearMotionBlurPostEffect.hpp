@@ -74,7 +74,7 @@ namespace motion_blur
 		/**
 		 *\copydoc		castor3d::PostEffect::doWriteInto
 		 */
-		bool doWriteInto( castor::TextFile & p_file )override;
+		bool doWriteInto( castor::TextFile & file, castor::String const & tabs )override;
 
 	public:
 		static castor::String Type;
@@ -91,7 +91,7 @@ namespace motion_blur
 		glsl::Shader m_vertexShader;
 		glsl::Shader m_pixelShader;
 		TimePoint m_saved;
-		bool m_fpsScale;
+		bool m_fpsScale{ true };
 	};
 }
 

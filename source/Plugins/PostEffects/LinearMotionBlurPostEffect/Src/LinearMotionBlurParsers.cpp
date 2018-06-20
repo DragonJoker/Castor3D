@@ -17,6 +17,7 @@ namespace motion_blur
 	{
 		castor3d::Engine * engine{ nullptr };
 		Configuration data;
+		bool fpsScale;
 	};
 
 	ParserContext & getParserContext( castor::FileParserContextSPtr context )
@@ -66,6 +67,23 @@ namespace motion_blur
 	}
 	END_ATTRIBUTE()
 
+	IMPLEMENT_ATTRIBUTE_PARSER( parserFpsScale )
+	{
+		auto & context = getParserContext( p_context );
+
+		if ( p_params.empty() )
+		{
+			PARSING_ERROR( "Missing parameter" );
+		}
+		else
+		{
+			bool value{ 0u };
+			p_params[0]->get( value );
+			context.fpsScale = value;
+		}
+	}
+	END_ATTRIBUTE()
+
 	IMPLEMENT_ATTRIBUTE_PARSER( parserMotionBlurEnd )
 	{
 		auto & context = getParserContext( p_context );
@@ -74,6 +92,7 @@ namespace motion_blur
 		castor3d::Parameters parameters;
 		parameters.add( cuT( "vectorDivider" ), context.data.vectorDivider );
 		parameters.add( cuT( "samplesCount" ), context.data.samplesCount );
+		parameters.add( cuT( "fpsScale" ), context.fpsScale );
 
 		auto effect = engine->getRenderTargetCache().getPostEffectFactory().create( PostEffect::Type
 			, *parsingContext->renderTarget

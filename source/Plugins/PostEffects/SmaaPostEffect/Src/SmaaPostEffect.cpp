@@ -146,6 +146,86 @@ namespace smaa
 
 	//*********************************************************************************************
 
+	castor::String getName( Mode mode )
+	{
+		castor::String result;
+
+		switch ( mode )
+		{
+		case Mode::e1X:
+			result = cuT( "1X" );
+			break;
+
+		case Mode::eT2X:
+			result = cuT( "T2X" );
+			break;
+
+		case Mode::eS2X:
+			result = cuT( "S2X" );
+			break;
+
+		case Mode::e4X:
+			result = cuT( "4X" );
+			break;
+		}
+
+		return result;
+	}
+
+	castor::String getName( Preset preset )
+	{
+		castor::String result;
+
+		switch ( preset )
+		{
+		case Preset::eLow:
+			result = cuT( "low" );
+			break;
+
+		case Preset::eMedium:
+			result = cuT( "medium" );
+			break;
+
+		case Preset::eHigh:
+			result = cuT( "high" );
+			break;
+
+		case Preset::eUltra:
+			result = cuT( "ultra" );
+			break;
+
+		case Preset::eCustom:
+			result = cuT( "custom" );
+			break;
+		}
+
+		return result;
+	}
+
+	castor::String getName( EdgeDetectionType detection )
+	{
+		castor::String result;
+
+		switch ( detection )
+		{
+		case EdgeDetectionType::eDepth:
+			result = cuT( "depth" );
+			break;
+
+		case EdgeDetectionType::eColour:
+			result = cuT( "colour" );
+			break;
+
+		case EdgeDetectionType::eLuma:
+			result = cuT( "luma" );
+			break;
+		}
+
+		return result;
+	}
+
+	//*********************************************************************************************
+
 	String PostEffect::Type = cuT( "smaa" );
 	String PostEffect::Name = cuT( "SMAA PostEffect" );
 
@@ -403,9 +483,86 @@ namespace smaa
 		return result;
 	}
 
-	bool PostEffect::doWriteInto( TextFile & p_file )
+	bool PostEffect::doWriteInto( TextFile & p_file, String const & tabs )
 	{
-		return true;
+		static SmaaConfig::Data const ref;
+		auto result = p_file.writeText( cuT( "\n" ) + tabs + Type + cuT( "\n" ) ) > 0
+			&& p_file.writeText( tabs + cuT( "{\n" ) ) > 0;
+
+		if ( result )
+		{
+			result = p_file.writeText( tabs + cuT( "\tmode " ) + smaa::getName( m_config.data.mode ) + cuT( "\n" ) ) > 0;
+		}
+
+		if ( result )
+		{
+			result = p_file.writeText( tabs + cuT( "\tpreset " ) + smaa::getName( m_config.data.preset ) + cuT( "\n" ) ) > 0;
+
+			if ( result && m_config.data.preset == Preset::eCustom )
+			{
+				result = p_file.writeText( tabs + cuT( "\tthreshold" ) + string::toString( m_config.data.threshold, std::locale{ "C" } ) + cuT( "\n" ) ) > 0
+					&& p_file.writeText( tabs + cuT( "\tmaxSearchSteps " ) + string::toString( m_config.data.maxSearchSteps, std::locale{ "C" } ) + cuT( "\n" ) ) > 0
+					&& p_file.writeText( tabs + cuT( "\tmaxSearchStepsDiag " ) + string::toString( m_config.data.maxSearchStepsDiag, std::locale{ "C" } ) + cuT( "\n" ) ) > 0
+					&& p_file.writeText( tabs + cuT( "\tcornerRounding " ) + string::toString( m_config.data.cornerRounding, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+			}
+		}
+
+		if ( result )
+		{
+			result = p_file.writeText( tabs + cuT( "\tedgeDetection " ) + smaa::getName( m_config.data.edgeDetection ) + cuT( "\n" ) ) > 0;
+		}
+
+		if ( result && m_config.data.disableDiagonalDetection != ref.disableDiagonalDetection )
+		{
+			result = p_file.writeText( tabs + cuT( "\tdisableDiagonalDetection true\n" ) ) > 0;
+		}
+
+		if ( result && m_config.data.disableCornerDetection != ref.disableCornerDetection )
+		{
+			result = p_file.writeText( tabs + cuT( "\tdisableCornerDetection true\n" ) ) > 0;
+		}
+
+		if ( result && m_config.data.enablePredication != ref.enablePredication )
+		{
+			result = p_file.writeText( tabs + cuT( "\tpredication true\n" ) ) > 0;
+
+			if ( result && m_config.data.predicationScale != ref.predicationScale )
+			{
+				result = p_file.writeText( tabs + cuT( "\tpredicationScale " ) + string::toString( m_config.data.predicationScale, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+			}
+
+			if ( result && m_config.data.predicationStrength != ref.predicationStrength )
+			{
+				result = p_file.writeText( tabs + cuT( "\tpredicationStrength " ) + string::toString( m_config.data.predicationStrength, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+			}
+
+			if ( result && m_config.data.predicationThreshold != ref.predicationThreshold )
+			{
+				result = p_file.writeText( tabs + cuT( "\tpredicationThreshold " ) + string::toString( m_config.data.predicationThreshold, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+			}
+		}
+
+		if ( result && m_config.data.enableReprojection != ref.enableReprojection )
+		{
+			result = p_file.writeText( tabs + cuT( "\treprojection true\n" ) ) > 0;
+
+			if ( result && m_config.data.reprojectionWeightScale != ref.reprojectionWeightScale )
+			{
+				result = p_file.writeText( tabs + cuT( "\treprojectionWeightScale " ) + string::toString( m_config.data.reprojectionWeightScale, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+			}
+		}
+
+		if ( result && m_config.data.localContrastAdaptationFactor != ref.localContrastAdaptationFactor )
+		{
+			result = p_file.writeText( tabs + cuT( "\tlocalContrastAdaptationFactor " ) + string::toString( m_config.data.localContrastAdaptationFactor, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+		}
+
+		if ( result )
+		{
+			result = p_file.writeText( tabs + cuT( "}\n" ) ) > 0;
+		}
+
+		return result;
 	}
 
 	renderer::Texture const * PostEffect::doGetPredicationTexture()

@@ -317,6 +317,12 @@ namespace castor3d
 			return *m_culler;
 		}
 
+		inline SceneCuller & getCuller()
+		{
+			REQUIRE( m_culler );
+			return *m_culler;
+		}
+
 		inline HdrConfig const & getHdrConfig()const
 		{
 			return m_hdrConfig;

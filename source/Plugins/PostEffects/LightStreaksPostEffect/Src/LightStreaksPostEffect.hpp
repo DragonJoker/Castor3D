@@ -45,7 +45,7 @@ namespace light_streaks
 		/**
 		 *\copydoc		castor3d::PostEffect::doWriteInto
 		 */
-		virtual bool doWriteInto( castor::TextFile & file );
+		virtual bool doWriteInto( castor::TextFile & file, castor::String const & tabs );
 
 	public:
 		static castor::String const Type;

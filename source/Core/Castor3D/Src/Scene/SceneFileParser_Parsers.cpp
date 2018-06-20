@@ -1816,9 +1816,10 @@ namespace castor3d
 
 				if ( cache.has( name ) )
 				{
+					MaterialSPtr material = cache.find( name );
+
 					for ( auto submesh : *parsingContext->geometry->getMesh() )
 					{
-						MaterialSPtr material = cache.find( name );
 						parsingContext->geometry->setMaterial( *submesh, material );
 					}
 				}
@@ -2199,11 +2200,51 @@ namespace castor3d
 	}
 	END_ATTRIBUTE()
 
+	IMPLEMENT_ATTRIBUTE_PARSER( parserMeshDefaultMaterial )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->mesh )
+		{
+			PARSING_ERROR( cuT( "No Mesh initialised." ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			auto & cache = parsingContext->m_pParser->getEngine()->getMaterialCache();
+			String name;
+			p_params[0]->get( name );
+
+			if ( cache.has( name ) )
+			{
+				MaterialSPtr material = cache.find( name );
+
+				for ( auto submesh : *parsingContext->mesh )
+				{
+					submesh->setDefaultMaterial( material );
+				}
+			}
+			else
+			{
+				PARSING_ERROR( cuT( "Material " ) + name + cuT( " does not exist" ) );
+			}
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserMeshDefaultMaterials )
+	{
+	}
+	END_ATTRIBUTE_PUSH( CSCNSection::eMeshDefaultMaterials )
+
 	IMPLEMENT_ATTRIBUTE_PARSER( parserMeshEnd )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->mesh )
+		if ( !parsingContext->mesh )
+		{
+			PARSING_ERROR( cuT( "No Mesh initialised." ) );
+		}
+		else
 		{
 			if ( parsingContext->geometry )
 			{
@@ -2212,6 +2253,48 @@ namespace castor3d
 
 			parsingContext->mesh.reset();
 		}
+	}
+	END_ATTRIBUTE_POP()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserMeshDefaultMaterialsMaterial )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->mesh )
+		{
+			PARSING_ERROR( cuT( "No Mesh initialised." ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			auto & cache = parsingContext->m_pParser->getEngine()->getMaterialCache();
+			String name;
+			uint16_t index;
+			p_params[0]->get( index );
+			p_params[1]->get( name );
+
+			if ( cache.has( name ) )
+			{
+				if ( parsingContext->mesh->getSubmeshCount() > index )
+				{
+					SubmeshSPtr submesh = parsingContext->mesh->getSubmesh( index );
+					MaterialSPtr material = cache.find( name );
+					submesh->setDefaultMaterial( material );
+				}
+				else
+				{
+					PARSING_ERROR( cuT( "Submesh index is too high" ) );
+				}
+			}
+			else
+			{
+				PARSING_ERROR( cuT( "Material " ) + name + cuT( " does not exist" ) );
+			}
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserMeshDefaultMaterialsEnd )
+	{
 	}
 	END_ATTRIBUTE_POP()
 
