@@ -115,17 +115,17 @@ namespace castor3d
 		}
 
 		// Compute planes' corners
-		Point3r nc{ position + front * near };
-		Point3r fc{ position + front * far };
+		Point3r nearC{ position + front * near };
+		Point3r farC{ position + front * far };
 		std::array< castor::Point3r, size_t( FrustumCorner::eCount ) > corners;
-		corners[size_t( FrustumCorner::eFarLeftBottom )] = fc - up * farH - right * farW;
-		corners[size_t( FrustumCorner::eFarLeftTop )] = fc + up * farH - right * farW;
-		corners[size_t( FrustumCorner::eFarRightTop )] = fc + up * farH + right * farW;
-		corners[size_t( FrustumCorner::eFarRightBottom )] = fc - up * farH + right * farW;
-		corners[size_t( FrustumCorner::eNearLeftBottom )] = nc - up * nearH - right * nearW;
-		corners[size_t( FrustumCorner::eNearLeftTop )] = nc + up * nearH - right * nearW;
-		corners[size_t( FrustumCorner::eNearRightTop )] = nc + up * nearH + right * nearW;
-		corners[size_t( FrustumCorner::eNearRightBottom )] = nc - up * nearH + right * nearW;
+		corners[size_t( FrustumCorner::eFarLeftBottom )] = farC - up * farH - right * farW;
+		corners[size_t( FrustumCorner::eFarLeftTop )] = farC + up * farH - right * farW;
+		corners[size_t( FrustumCorner::eFarRightTop )] = farC + up * farH + right * farW;
+		corners[size_t( FrustumCorner::eFarRightBottom )] = farC - up * farH + right * farW;
+		corners[size_t( FrustumCorner::eNearLeftBottom )] = nearC - up * nearH - right * nearW;
+		corners[size_t( FrustumCorner::eNearLeftTop )] = nearC + up * nearH - right * nearW;
+		corners[size_t( FrustumCorner::eNearRightTop )] = nearC + up * nearH + right * nearW;
+		corners[size_t( FrustumCorner::eNearRightBottom )] = nearC - up * nearH + right * nearW;
 
 		// Fill planes
 		m_planes[size_t( FrustumPlane::eBottom )].set( corners[size_t( FrustumCorner::eNearLeftBottom )]
