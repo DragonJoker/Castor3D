@@ -21,19 +21,23 @@ namespace castor3d
 	public:
 		struct CulledSubmesh
 		{
-			Submesh const & submesh;
-			SceneNode const & sceneNode;
+			Geometry & instance;
+			Submesh & data;
+			MaterialSPtr material;
+			SceneNode & sceneNode;
 		};
 		
 		struct CulledBillboard
 		{
-			BillboardBase const & billboard;
-			SceneNode const & sceneNode;
+			BillboardBase & instance;
+			BillboardBase & data;
+			MaterialSPtr material;
+			SceneNode & sceneNode;
 		};
 
 	public:
 		C3D_API SceneCuller( Scene const & scene
-			, Camera const & camera );
+			, Camera * camera );
 		C3D_API virtual ~SceneCuller() = default;
 		C3D_API virtual void compute() = 0;
 
@@ -42,9 +46,21 @@ namespace castor3d
 			return m_scene;
 		}
 
+		inline bool hasCamera()const
+		{
+			return m_camera != nullptr;
+		}
+
 		inline Camera const & getCamera()const
 		{
-			return m_camera;
+			REQUIRE( hasCamera() );
+			return *m_camera;
+		}
+
+		inline Camera & getCamera()
+		{
+			REQUIRE( hasCamera() );
+			return *m_camera;
 		}
 
 		inline bool isChanged()const
@@ -71,7 +87,7 @@ namespace castor3d
 
 	private:
 		Scene const & m_scene;
-		Camera const & m_camera;
+		Camera * m_camera;
 
 	protected:
 		bool m_changed{ true };

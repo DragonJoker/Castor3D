@@ -3,7 +3,7 @@
 namespace castor3d
 {
 	SceneCuller::SceneCuller( Scene const & scene
-		, Camera const & camera )
+		, Camera * camera )
 		: m_scene{ scene }
 		, m_camera{ camera }
 	{

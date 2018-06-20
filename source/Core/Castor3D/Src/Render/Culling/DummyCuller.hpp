@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_FrustumCuller_H___
-#define ___C3D_FrustumCuller_H___
+#ifndef ___C3D_DummyCuller_H___
+#define ___C3D_DummyCuller_H___
 
 #include "Render/Culling/SceneCuller.hpp"
 
@@ -16,12 +16,11 @@ namespace castor3d
 	*\brief
 	*	Elimine les noeuds par rapport à un frustum.
 	*/
-	class FrustumCuller
+	class DummyCuller
 		: public SceneCuller
 	{
 	public:
-		C3D_API FrustumCuller( Scene const & scene
-			, Camera & camera );
+		C3D_API DummyCuller( Scene const & scene );
 		C3D_API void compute()override;
 
 	private:
