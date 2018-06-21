@@ -278,7 +278,7 @@ namespace castor3d
 
 		writer.implementFunction< void >( cuT( "main" ), [&]()
 		{
-			out.gl_Position() = c3d_projection * c3d_curView * c3d_mtxModel * vec4( vertex, 1.0_f );
+			out.gl_Position() = c3d_projection * c3d_curView * c3d_curMtxModel * vec4( vertex, 1.0_f );
 		} );
 
 		return writer.finalise();

@@ -32,15 +32,13 @@ namespace castor3d
 	String const OpaquePass::Output4 = cuT( "c3d_output4" );
 	String const OpaquePass::Output5 = cuT( "c3d_output5" );
 
-	OpaquePass::OpaquePass( Scene & scene
-		, Camera * camera
-		, MatrixUbo const & matrixUbo
+	OpaquePass::OpaquePass( MatrixUbo const & matrixUbo
+		, SceneCuller & culler
 		, SsaoConfig const & config )
 		: castor3d::RenderTechniquePass{ cuT( "Opaque" )
 			, cuT( "Geometry pass" )
-			, scene
-			, camera
 			, matrixUbo
+			, culler
 			, false
 			, nullptr
 			, config }
@@ -142,19 +140,19 @@ namespace castor3d
 		{
 			auto & camera = *m_camera;
 
-			RenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled, camera );
-			RenderPass::doUpdate( nodes.staticNodes.frontCulled, camera );
-			RenderPass::doUpdate( nodes.skinnedNodes.frontCulled, camera );
-			RenderPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled, camera );
-			RenderPass::doUpdate( nodes.morphingNodes.frontCulled, camera );
-			RenderPass::doUpdate( nodes.billboardNodes.frontCulled, camera );
+			RenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled );
+			RenderPass::doUpdate( nodes.staticNodes.frontCulled );
+			RenderPass::doUpdate( nodes.skinnedNodes.frontCulled );
+			RenderPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled );
+			RenderPass::doUpdate( nodes.morphingNodes.frontCulled );
+			RenderPass::doUpdate( nodes.billboardNodes.frontCulled );
 
-			RenderPass::doUpdate( nodes.instancedStaticNodes.backCulled, camera, info );
-			RenderPass::doUpdate( nodes.staticNodes.backCulled, camera, info );
-			RenderPass::doUpdate( nodes.skinnedNodes.backCulled, camera, info );
-			RenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, camera );
-			RenderPass::doUpdate( nodes.morphingNodes.backCulled, camera, info );
-			RenderPass::doUpdate( nodes.billboardNodes.backCulled, camera, info );
+			RenderPass::doUpdate( nodes.instancedStaticNodes.backCulled, info );
+			RenderPass::doUpdate( nodes.staticNodes.backCulled, info );
+			RenderPass::doUpdate( nodes.skinnedNodes.backCulled, info );
+			RenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, info );
+			RenderPass::doUpdate( nodes.morphingNodes.backCulled, info );
+			RenderPass::doUpdate( nodes.billboardNodes.backCulled, info );
 		}
 	}
 
@@ -398,23 +396,30 @@ namespace castor3d
 
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 			{
-				auto mtxModel = writer.declLocale( cuT( "mtxModel" )
+				auto curMtxModel = writer.declLocale( cuT( "curMtxModel" )
 					, SkinningUbo::computeTransform( writer, programFlags ) );
+				auto prvMtxModel = writer.declLocale( cuT( "prvMtxModel" )
+					, curMtxModel );
 			}
 			else if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
-				auto mtxModel = writer.declLocale( cuT( "mtxModel" )
+				auto curMtxModel = writer.declLocale( cuT( "curMtxModel" )
 					, transform );
+				auto prvMtxModel = writer.declLocale( cuT( "prvMtxModel" )
+					, curMtxModel );
 			}
 			else
 			{
-				auto mtxModel = writer.declLocale( cuT( "mtxModel" )
-					, c3d_mtxModel );
+				auto curMtxModel = writer.declLocale( cuT( "curMtxModel" )
+					, c3d_curMtxModel );
+				auto prvMtxModel = writer.declLocale( cuT( "prvMtxModel" )
+					, c3d_prvMtxModel );
 			}
 
-			auto mtxModel = writer.declBuiltin< Mat4 >( cuT( "mtxModel" ) );
+			auto curMtxModel = writer.declBuiltin< Mat4 >( cuT( "curMtxModel" ) );
+			auto prvMtxModel = writer.declBuiltin< Mat4 >( cuT( "prvMtxModel" ) );
 			auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
-				, transpose( inverse( mat3( mtxModel ) ) ) );
+				, transpose( inverse( mat3( curMtxModel ) ) ) );
 
 			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
@@ -434,10 +439,11 @@ namespace castor3d
 			}
 
 			vtx_texture = v3Texture;
-			curPosition = mtxModel * curPosition;
-			vtx_worldPosition = curPosition.xyz();
 			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
-				, c3d_prvViewProj * curPosition );
+				, prvMtxModel * curPosition );
+			curPosition = curMtxModel * curPosition;
+			vtx_worldPosition = curPosition.xyz();
+			prvPosition = c3d_prvViewProj * prvPosition;
 			curPosition = c3d_curViewProj * curPosition;
 
 			if ( invertNormals )

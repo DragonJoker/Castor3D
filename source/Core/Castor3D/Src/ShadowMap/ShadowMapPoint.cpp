@@ -3,6 +3,7 @@
 #include "Engine.hpp"
 #include "Cache/SamplerCache.hpp"
 #include "Mesh/Submesh.hpp"
+#include "Render/Culling/DummyCuller.hpp"
 #include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
@@ -131,21 +132,26 @@ namespace castor3d
 			return unit;
 		}
 
-		std::vector< ShadowMap::PassAndUbo > createPasses( Engine & engine
+		std::vector< ShadowMap::PassData > createPasses( Engine & engine
 			, Scene & scene
 			, ShadowMap & shadowMap )
 		{
-			std::vector< ShadowMap::PassAndUbo > result;
+			std::vector< ShadowMap::PassData > result;
 
 			for ( auto i = 0u; i < 6u; ++i )
 			{
-				ShadowMap::PassAndUbo passUbo
+				ShadowMap::PassData passData
 				{
 					std::make_unique< MatrixUbo >( engine ),
-					nullptr
+					nullptr,
+					std::make_unique< DummyCuller >( scene ),
+					nullptr,
 				};
-				passUbo.pass = std::make_shared< ShadowMapPassPoint >( engine, *passUbo.matrixUbo, scene, shadowMap );
-				result.emplace_back( std::move( passUbo ) );
+				passData.pass = std::make_shared< ShadowMapPassPoint >( engine
+					, *passData.matrixUbo
+					, *passData.culler
+					, shadowMap );
+				result.emplace_back( std::move( passData ) );
 			}
 
 			return result;

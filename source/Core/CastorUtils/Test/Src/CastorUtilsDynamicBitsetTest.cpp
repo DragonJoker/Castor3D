@@ -19,17 +19,17 @@ namespace Testing
 
 	void CastorUtilsDynamicBitsetTest::doRegisterTests()
 	{
-		doRegisterTest( "DynamicBitsetSizeTest", std::bind( &CastorUtilsDynamicBitsetTest::size, this ) );
-		doRegisterTest( "DynamicBitsetInitValueTest", std::bind( &CastorUtilsDynamicBitsetTest::initValue, this ) );
-		doRegisterTest( "DynamicBitsetLeftShiftTest", std::bind( &CastorUtilsDynamicBitsetTest::leftShift, this ) );
-		doRegisterTest( "DynamicBitsetRightShiftTest", std::bind( &CastorUtilsDynamicBitsetTest::rightShift, this ) );
-		doRegisterTest( "DynamicBitsetAndTest", std::bind( &CastorUtilsDynamicBitsetTest::and, this ) );
-		doRegisterTest( "DynamicBitsetOrTest", std::bind( &CastorUtilsDynamicBitsetTest::or, this ) );
-		doRegisterTest( "DynamicBitsetXorTest", std::bind( &CastorUtilsDynamicBitsetTest::xor, this ) );
-		doRegisterTest( "DynamicBitsetSetTest", std::bind( &CastorUtilsDynamicBitsetTest::set, this ) );
+		doRegisterTest( "DynamicBitsetSizeTest", std::bind( &CastorUtilsDynamicBitsetTest::sizeTest, this ) );
+		doRegisterTest( "DynamicBitsetInitValueTest", std::bind( &CastorUtilsDynamicBitsetTest::initValueTest, this ) );
+		doRegisterTest( "DynamicBitsetLeftShiftTest", std::bind( &CastorUtilsDynamicBitsetTest::leftShiftTest, this ) );
+		doRegisterTest( "DynamicBitsetRightShiftTest", std::bind( &CastorUtilsDynamicBitsetTest::rightShiftTest, this ) );
+		doRegisterTest( "DynamicBitsetAndTest", std::bind( &CastorUtilsDynamicBitsetTest::andTest, this ) );
+		doRegisterTest( "DynamicBitsetOrTest", std::bind( &CastorUtilsDynamicBitsetTest::orTest, this ) );
+		doRegisterTest( "DynamicBitsetXorTest", std::bind( &CastorUtilsDynamicBitsetTest::xorTest, this ) );
+		doRegisterTest( "DynamicBitsetSetTest", std::bind( &CastorUtilsDynamicBitsetTest::setTest, this ) );
 	}
 
-	void CastorUtilsDynamicBitsetTest::size()
+	void CastorUtilsDynamicBitsetTest::sizeTest()
 	{
 		{
 			DynamicBitset bitset{ 8u };
@@ -48,7 +48,7 @@ namespace Testing
 		}
 	}
 
-	void CastorUtilsDynamicBitsetTest::initValue()
+	void CastorUtilsDynamicBitsetTest::initValueTest()
 	{
 		{
 			DynamicBitset bitset{ 8u };
@@ -91,7 +91,7 @@ namespace Testing
 		}
 	}
 
-	void CastorUtilsDynamicBitsetTest::leftShift()
+	void CastorUtilsDynamicBitsetTest::leftShiftTest()
 	{
 		{
 			DynamicBitset bitset{ cuT( "011011010101010101010010101010101010110110" ) };
@@ -110,7 +110,7 @@ namespace Testing
 		}
 	}
 
-	void CastorUtilsDynamicBitsetTest::rightShift()
+	void CastorUtilsDynamicBitsetTest::rightShiftTest()
 	{
 		{
 			DynamicBitset bitset{ cuT( "011011010101010101010010101010101010110110" ) };
@@ -129,7 +129,7 @@ namespace Testing
 		}
 	}
 
-	void CastorUtilsDynamicBitsetTest::and()
+	void CastorUtilsDynamicBitsetTest::andTest()
 	{
 		{
 			DynamicBitset lhs{ cuT( "011011010101010101010010101010101010110110" ) };
@@ -145,7 +145,7 @@ namespace Testing
 		}
 	}
 
-	void CastorUtilsDynamicBitsetTest::or()
+	void CastorUtilsDynamicBitsetTest::orTest()
 	{
 		{
 			DynamicBitset lhs{ cuT( "011011010101010101010010101010101010110110" ) };
@@ -155,7 +155,7 @@ namespace Testing
 		}
 	}
 
-	void CastorUtilsDynamicBitsetTest::xor()
+	void CastorUtilsDynamicBitsetTest::xorTest()
 	{
 		{
 			DynamicBitset lhs{ cuT( "011011010101010101010010101010101010110110" ) };
@@ -172,7 +172,7 @@ namespace Testing
 		}
 	}
 
-	void CastorUtilsDynamicBitsetTest::set()
+	void CastorUtilsDynamicBitsetTest::setTest()
 	{
 		{
 			DynamicBitset value{ cuT( "011011010101010101010010101010101010110110" ) };

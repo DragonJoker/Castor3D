@@ -1,6 +1,7 @@
 #include "EnvironmentMapPass.hpp"
 
 #include "EnvironmentMap/EnvironmentMap.hpp"
+#include "Render/Culling/DummyCuller.hpp"
 #include "Render/Viewport.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
@@ -49,18 +50,17 @@ namespace castor3d
 		: OwnedBy< EnvironmentMap >{ reflectionMap }
 		, m_node{ node }
 		, m_camera{ doCreateCamera( *node ) }
+		, m_culler{ std::make_unique< DummyCuller >( *m_camera->getScene() ) }
 		, m_matrixUbo{ *reflectionMap.getEngine() }
 		, m_opaquePass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "environment_opaque" )
-			, *node->getScene()
-			, m_camera.get()
 			, m_matrixUbo
+			, *m_culler
 			, true
 			, &objectNode
 			, SsaoConfig{} ) }
 		, m_transparentPass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "environment_transparent" )
-			, *node->getScene()
-			, m_camera.get()
 			, m_matrixUbo
+			, *m_culler
 			, true
 			, true
 			, &objectNode
@@ -166,6 +166,7 @@ namespace castor3d
 		m_camera->update();
 		castor::matrix::setTranslate( m_mtxModel, position );
 		castor::matrix::scale( m_mtxModel, Point3r{ 1, -1, 1 } );
+		m_culler->compute();
 		static_cast< RenderTechniquePass & >( *m_opaquePass ).update( queues );
 		static_cast< RenderTechniquePass & >( *m_transparentPass ).update( queues );
 	}

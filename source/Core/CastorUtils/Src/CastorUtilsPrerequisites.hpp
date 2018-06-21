@@ -238,8 +238,8 @@ namespace castor
 	template< typename T, uint32_t Count >
 	class Coords;
 	class BoundingBox;
-	template< typename BlockType = uint32_t >
-	class DynamicBitset;
+	template< typename BlockType >
+	class DynamicBitsetT;
 	class File;
 	class FileParser;
 	class FileParserContext;
@@ -309,14 +309,8 @@ namespace castor
 	class LoggerImpl;
 	class ProgramConsole;
 
-	/*!
-	\author		Sylvain DOREMUS
-	\~english
-	\brief		Typedef over a buffer of pixels in format A8R8G8B8
-	\~french
-	\brief		Typedef sur un buffer de pixels au format A8R8G8B8
-	*/
 	using PixelBuffer = PxBuffer< PixelFormat::eA8R8G8B8 >;
+	using DynamicBitset = DynamicBitsetT< uint32_t >;
 
 	template< typename T > using Point2 = Point< T, 2 >;
 	template< typename T > using Point3 = Point< T, 3 >;

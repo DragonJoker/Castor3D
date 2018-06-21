@@ -1,7 +1,11 @@
 #include "Render/RenderSystem.hpp"
 
+#include "Render/RenderPassTimer.hpp"
+
 #include <Buffer/StagingBuffer.hpp>
+#include <Command/CommandBuffer.hpp>
 #include <Core/Device.hpp>
+#include <Sync/BufferMemoryBarrier.hpp>
 
 #include <algorithm>
 
@@ -70,13 +74,47 @@ namespace castor3d
 	inline void UniformBuffer< T >::upload( renderer::StagingBuffer & stagingBuffer
 		, renderer::CommandBuffer const & commandBuffer
 		, uint32_t offset
-		, renderer::PipelineStageFlags flags )const
+		, renderer::PipelineStageFlags flags
+		, RenderPassTimer const & timer
+		, uint32_t index )const
 	{
-		stagingBuffer.uploadUniformData( commandBuffer
-			, getBuffer().getDatas()
-			, offset
-			, getBuffer()
-			, flags );
+		auto elemAlignedSize = getBuffer().getAlignedSize();
+		auto data = getBuffer().getDatas().data();
+
+		if ( auto dest = stagingBuffer.getBuffer().lock( 0u
+			, m_count * elemAlignedSize
+			, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateBuffer ) )
+		{
+			auto buffer = dest;
+
+			for ( auto & data : getBuffer().getDatas() )
+			{
+				std::memcpy( buffer, &data, sizeof( T ) );
+				buffer += elemAlignedSize;
+			}
+
+			stagingBuffer.getBuffer().flush( 0u, m_count * elemAlignedSize );
+			stagingBuffer.getBuffer().unlock();
+		}
+
+		commandBuffer.begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
+		timer.beginPass( commandBuffer, index );
+		commandBuffer.memoryBarrier( renderer::PipelineStageFlag::eTransfer
+			, renderer::PipelineStageFlag::eTransfer
+			, stagingBuffer.getBuffer().makeTransferSource() );
+		auto srcStageFlags = getBuffer().getUbo().getBuffer().getCompatibleStageFlags();
+		commandBuffer.memoryBarrier( srcStageFlags
+			, renderer::PipelineStageFlag::eTransfer
+			, getBuffer().getUbo().getBuffer().makeTransferDestination() );
+		commandBuffer.copyBuffer( stagingBuffer.getBuffer()
+			, getBuffer().getUbo().getBuffer()
+			, elemAlignedSize * m_count
+			, elemAlignedSize * offset );
+		commandBuffer.memoryBarrier( renderer::PipelineStageFlag::eTransfer
+			, flags
+			, getBuffer().getUbo().getBuffer().makeUniformBufferInput() );
+		timer.endPass( commandBuffer, index );
+		commandBuffer.end();
 	}
 
 	template< typename T >

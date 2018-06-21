@@ -6,6 +6,7 @@
 #include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
+#include "Render/Culling/FrustumCuller.hpp"
 #include "Scene/Light/Light.hpp"
 #include "Scene/Light/DirectionalLight.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
@@ -126,18 +127,35 @@ namespace castor3d
 			return unit;
 		}
 
-		std::vector< ShadowMap::PassAndUbo > createPass( Engine & engine
+		std::vector< ShadowMap::PassData > createPass( Engine & engine
 			, Scene & scene
 			, ShadowMap & shadowMap )
 		{
-			std::vector< ShadowMap::PassAndUbo > result;
-			ShadowMap::PassAndUbo passUbo
+			std::vector< ShadowMap::PassData > result;
+			auto const width = ShadowMapPassDirectional::TextureSize;
+			auto const height = ShadowMapPassDirectional::TextureSize;
+			auto const w = float( width );
+			auto const h = float( height );
+			Viewport viewport{ engine };
+			viewport.setOrtho( -w / 2, w / 2, -h / 2, h / 2, -5120.0_r, 5120.0_r );
+			viewport.resize( { width, height } );
+			viewport.update();
+			ShadowMap::PassData passData
 			{
 				std::make_unique< MatrixUbo >( engine ),
-				nullptr
+				std::make_shared< Camera >( cuT( "ShadowMapDirectional" )
+					, scene
+					, scene.getCameraRootNode()
+					, std::move( viewport ) ),
+				nullptr,
+				nullptr,
 			};
-			passUbo.pass = std::make_shared< ShadowMapPassDirectional >( engine, *passUbo.matrixUbo, scene, shadowMap );
-			result.emplace_back( std::move( passUbo ) );
+			passData.culler = std::make_unique< FrustumCuller >( scene, *passData.camera );
+			passData.pass = std::make_shared< ShadowMapPassDirectional >( engine
+				, *passData.matrixUbo
+				, *passData.culler
+				, shadowMap );
+			result.emplace_back( std::move( passData ) );
 			return result;
 		}
 	}

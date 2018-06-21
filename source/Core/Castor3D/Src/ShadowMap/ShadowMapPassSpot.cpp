@@ -20,9 +20,9 @@ namespace castor3d
 
 	ShadowMapPassSpot::ShadowMapPassSpot( Engine & engine
 		, MatrixUbo const & matrixUbo
-		, Scene & scene
+		, SceneCuller & culler
 		, ShadowMap const & shadowMap )
-		: ShadowMapPass{ engine, matrixUbo, scene, shadowMap }
+		: ShadowMapPass{ engine, matrixUbo, culler, shadowMap }
 	{
 	}
 
@@ -36,36 +36,29 @@ namespace castor3d
 		, uint32_t index )
 	{
 		light.updateShadow( light.getParent()->getDerivedPosition()
-			, m_camera->getViewport()
+			, getCuller().getCamera().getViewport()
 			, index );
-		m_camera->attachTo( light.getParent() );
-		m_camera->update();
+		getCuller().getCamera().attachTo( light.getParent() );
+		getCuller().getCamera().update();
 		auto & data = m_shadowConfig->getData();
 		data.farPlane = light.getSpotLight()->getFarPlane();
-		queues.emplace_back( m_renderQueue );
+		doUpdate( queues );
 	}
 
 	void ShadowMapPassSpot::updateDeviceDependent( uint32_t index )
 	{
-		if ( m_camera && m_initialised )
+		if ( m_initialised )
 		{
 			m_shadowConfig->upload();
-			m_matrixUbo.update( m_camera->getView()
-				, m_camera->getViewport().getProjection() );
-			doUpdateNodes( m_renderQueue.getCulledRenderNodes(), *m_camera );
+			m_matrixUbo.update( getCuller().getCamera().getView()
+				, getCuller().getCamera().getViewport().getProjection() );
+			doUpdateNodes( m_renderQueue.getCulledRenderNodes() );
 		}
 	}
 
 	bool ShadowMapPassSpot::doInitialise( Size const & size )
 	{
 		auto & device = getCurrentDevice( *this );
-		Viewport viewport{ *getEngine() };
-		m_camera = std::make_shared< Camera >( cuT( "ShadowMapSpot" )
-			, m_scene
-			, m_scene.getCameraRootNode()
-			, std::move( viewport ) );
-		m_camera->resize( size );
-
 
 		// Create the render pass.
 		renderer::RenderPassCreateInfo renderPass;
@@ -130,7 +123,6 @@ namespace castor3d
 			, 0u
 			, renderer::MemoryPropertyFlag::eHostVisible | renderer::MemoryPropertyFlag::eHostCoherent );
 
-		m_renderQueue.initialise( m_scene, *m_camera );
 		return true;
 	}
 
@@ -138,8 +130,7 @@ namespace castor3d
 	{
 		m_renderQueue.cleanup();
 		m_shadowConfig.reset();
-		m_camera->detach();
-		m_camera.reset();
+		getCuller().getCamera().detach();
 	}
 
 	void ShadowMapPassSpot::doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
@@ -160,6 +151,7 @@ namespace castor3d
 
 	void ShadowMapPassSpot::doUpdate( RenderQueueArray & queues )
 	{
+		getCuller().compute();
 		queues.emplace_back( m_renderQueue );
 	}
 

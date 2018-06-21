@@ -33,7 +33,7 @@ namespace castor3d
 	ShadowMap::ShadowMap( Engine & engine
 		, TextureUnit && shadowMap
 		, TextureUnit && linearMap
-		, std::vector< PassAndUbo > && passes )
+		, std::vector< PassData > && passes )
 		: OwnedBy< Engine >{ engine }
 		, m_shadowMap{ std::move( shadowMap ) }
 		, m_linearMap{ std::move( linearMap ) }
@@ -234,7 +234,7 @@ namespace castor3d
 			else
 			{
 				auto mtxModel = writer.declLocale< Mat4 >( cuT( "mtxModel" )
-					, c3d_mtxModel );
+					, c3d_curMtxModel );
 			}
 
 			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )

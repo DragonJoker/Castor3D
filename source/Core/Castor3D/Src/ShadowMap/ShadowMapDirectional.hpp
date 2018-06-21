@@ -104,6 +104,7 @@ namespace castor3d
 		static renderer::Format constexpr RawDepthFormat = renderer::Format::eD24_UNORM_S8_UINT;
 
 	private:
+		CameraSPtr m_camera;
 		renderer::TexturePtr m_depthTexture;
 		renderer::TextureViewPtr m_depthView;
 		renderer::FrameBufferPtr m_frameBuffer;

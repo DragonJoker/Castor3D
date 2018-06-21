@@ -40,7 +40,7 @@ namespace castor3d
 		 */
 		C3D_API ShadowMapPass( Engine & engine
 			, MatrixUbo const & matrixUbo
-			, Scene & scene
+			, SceneCuller & culler
 			, ShadowMap const & shadowMap );
 		/**
 		 *\~english
@@ -95,8 +95,7 @@ namespace castor3d
 		 *\param		nodes	Les noeuds.
 		 *\param		camera	La caméra regardant la scène.
 		 */
-		void doUpdateNodes( SceneCulledRenderNodes & nodes
-			, Camera const & camera );
+		void doUpdateNodes( SceneCulledRenderNodes & nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
 		 */
@@ -176,7 +175,6 @@ namespace castor3d
 			, renderer::CompareOp alphaFunc )const override;
 
 	protected:
-		Scene & m_scene;
 		ShadowMap const & m_shadowMap;
 		mutable bool m_initialised{ false };
 	};

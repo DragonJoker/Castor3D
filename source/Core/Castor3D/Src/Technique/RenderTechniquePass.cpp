@@ -41,15 +41,14 @@ namespace castor3d
 
 	RenderTechniquePass::RenderTechniquePass( String const & category
 		, String const & name
-		, Scene const & scene
-		, Camera * camera
 		, MatrixUbo const & matrixUbo
+		, SceneCuller & culler
 		, bool environment
 		, SceneNode const * ignored
 		, SsaoConfig const & config )
-		: RenderPass{ category, name, *scene.getEngine(), matrixUbo, ignored }
-		, m_scene{ scene }
-		, m_camera{ camera }
+		: RenderPass{ category, name, *culler.getScene().getEngine(), matrixUbo, culler, ignored }
+		, m_scene{ culler.getScene() }
+		, m_camera{ culler.hasCamera() ? &culler.getCamera() : nullptr }
 		, m_sceneNode{}
 		, m_environment{ environment }
 		, m_ssaoConfig{ config }
@@ -58,16 +57,15 @@ namespace castor3d
 
 	RenderTechniquePass::RenderTechniquePass( String const & category
 		, String const & name
-		, Scene & scene
-		, Camera * camera
 		, MatrixUbo const & matrixUbo
+		, SceneCuller & culler
 		, bool oit
 		, bool environment
 		, SceneNode const * ignored
 		, SsaoConfig const & config )
-		: RenderPass{ category, name, *scene.getEngine(), matrixUbo, oit, ignored }
-		, m_scene{ scene }
-		, m_camera{ camera }
+		: RenderPass{ category, name, *culler.getScene().getEngine(), matrixUbo, culler, oit, ignored }
+		, m_scene{ culler.getScene() }
+		, m_camera{ culler.hasCamera() ? &culler.getCamera() : nullptr }
 		, m_sceneNode{}
 		, m_environment{ environment }
 		, m_ssaoConfig{ config }
@@ -118,7 +116,6 @@ namespace castor3d
 		, Point2r const & jitter )
 	{
 		doUpdateNodes( m_renderQueue.getCulledRenderNodes()
-			, *m_camera
 			, jitter
 			, info );
 		doUpdateUbos( *m_camera
@@ -126,41 +123,30 @@ namespace castor3d
 	}
 
 	void RenderTechniquePass::doUpdateNodes( SceneCulledRenderNodes & nodes
-		, Camera const & camera
 		, Point2r const & jitter
 		, RenderInfo & info )const
 	{
 		if ( nodes.hasNodes() )
 		{
-			RenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled, camera );
-			RenderPass::doUpdate( nodes.staticNodes.frontCulled, camera );
-			RenderPass::doUpdate( nodes.skinnedNodes.frontCulled, camera );
-			RenderPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled, camera );
-			RenderPass::doUpdate( nodes.morphingNodes.frontCulled, camera );
-			RenderPass::doUpdate( nodes.billboardNodes.frontCulled, camera );
+			RenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled );
+			RenderPass::doUpdate( nodes.staticNodes.frontCulled );
+			RenderPass::doUpdate( nodes.skinnedNodes.frontCulled );
+			RenderPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled );
+			RenderPass::doUpdate( nodes.morphingNodes.frontCulled );
+			RenderPass::doUpdate( nodes.billboardNodes.frontCulled );
 
-			RenderPass::doUpdate( nodes.instancedStaticNodes.backCulled, camera, info );
-			RenderPass::doUpdate( nodes.staticNodes.backCulled, camera, info );
-			RenderPass::doUpdate( nodes.skinnedNodes.backCulled, camera, info );
-			RenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, camera );
-			RenderPass::doUpdate( nodes.morphingNodes.backCulled, camera, info );
-			RenderPass::doUpdate( nodes.billboardNodes.backCulled, camera, info );
+			RenderPass::doUpdate( nodes.instancedStaticNodes.backCulled, info );
+			RenderPass::doUpdate( nodes.staticNodes.backCulled, info );
+			RenderPass::doUpdate( nodes.skinnedNodes.backCulled, info );
+			RenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, info );
+			RenderPass::doUpdate( nodes.morphingNodes.backCulled, info );
+			RenderPass::doUpdate( nodes.billboardNodes.backCulled, info );
 		}
 	}
 
 	bool RenderTechniquePass::doInitialise( Size const & CU_PARAM_UNUSED( size ) )
 	{
 		m_finished = getCurrentDevice( *this ).createSemaphore();
-
-		if ( m_camera )
-		{
-			m_renderQueue.initialise( m_scene, *m_camera );
-		}
-		else
-		{
-			m_renderQueue.initialise( m_scene );
-		}
-
 		return true;
 	}
 

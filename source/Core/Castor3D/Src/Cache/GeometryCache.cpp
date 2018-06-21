@@ -10,6 +10,7 @@
 #include "Mesh/Mesh.hpp"
 #include "Mesh/Skeleton/Skeleton.hpp"
 #include "Render/RenderInfo.hpp"
+#include "Render/RenderPassTimer.hpp"
 #include "Scene/Geometry.hpp"
 #include "Scene/Scene.hpp"
 
@@ -85,6 +86,18 @@ namespace castor3d
 		, m_modelMatrixUboPool{ *engine.getRenderSystem() }
 		, m_pickingUboPool{ *engine.getRenderSystem() }
 	{
+		getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+			, [this]()
+			{
+				m_updateTimer = std::make_shared< RenderPassTimer >( *getEngine()
+					, cuT( "Update" )
+					, cuT( "Model UBOs" )
+					, 3u );
+				m_updatePickingTimer = std::make_shared< RenderPassTimer >( *getEngine()
+					, cuT( "Update" )
+					, cuT( "Picking UBOs" )
+					, 1u );
+			} ) );
 	}
 
 	GeometryCache::~ObjectCache()
@@ -128,20 +141,41 @@ namespace castor3d
 				}
 
 				auto & modelMatrixData = entry.modelMatrixUbo.getData();
-				modelMatrixData.model = entry.geometry.getParent()->getDerivedTransformationMatrix();
+				modelMatrixData.prvModel = modelMatrixData.curModel;
+				modelMatrixData.curModel = entry.geometry.getParent()->getDerivedTransformationMatrix();
 			}
 		}
 	}
 
 	void GeometryCache::uploadUbos()const
 	{
-		m_modelUboPool.upload();
-		m_modelMatrixUboPool.upload();
+		auto count = m_modelUboPool.getBufferCount()
+			+ m_modelMatrixUboPool.getBufferCount()
+			+ m_pickingUboPool.getBufferCount();
+		m_updateTimer->updateCount( std::max( count, 3u ) );
+
+		if ( count )
+		{
+			m_updateTimer->start();
+			uint32_t index = 0u;
+			m_modelUboPool.upload( *m_updateTimer, index );
+			index += std::max( m_modelUboPool.getBufferCount(), 1u );
+			m_modelMatrixUboPool.upload( *m_updateTimer, index );
+			m_updateTimer->stop();
+		}
 	}
 
 	void GeometryCache::uploadPickingUbos()const
 	{
-		m_pickingUboPool.upload();
+		auto count = m_pickingUboPool.getBufferCount();
+		m_updatePickingTimer->updateCount( std::max( count, 1u ) );
+
+		if ( count )
+		{
+			m_updatePickingTimer->start();
+			m_pickingUboPool.upload( *m_updatePickingTimer, 0u );
+			m_updatePickingTimer->stop();
+		}
 	}
 
 	void GeometryCache::cleanupUbos()
@@ -170,6 +204,12 @@ namespace castor3d
 		}
 
 		m_entries.clear();
+
+		getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+			, [this]()
+			{
+				m_updateTimer.reset();
+			} ) );
 	}
 
 	void GeometryCache::add( ElementPtr element )

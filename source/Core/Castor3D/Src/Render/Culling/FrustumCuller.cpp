@@ -1,13 +1,8 @@
 #include "FrustumCuller.hpp"
 
-#include "Material/Material.hpp"
-#include "Mesh/Mesh.hpp"
 #include "Mesh/Submesh.hpp"
-#include "Scene/BillboardList.hpp"
 #include "Scene/Camera.hpp"
-#include "Scene/Geometry.hpp"
-#include "Scene/Scene.hpp"
-#include "Scene/ParticleSystem/ParticleSystem.hpp"
+#include "Scene/SceneNode.hpp"
 
 namespace castor3d
 {
@@ -17,62 +12,33 @@ namespace castor3d
 	{
 	}
 
-	void FrustumCuller::compute()
-	{
-		doCullGeometries();
-		doCullBillboards();
-		doCullParticles();
-	}
-
 	void FrustumCuller::doCullGeometries()
 	{
-		doClear();
 		auto & camera = getCamera();
-		auto & scene = getScene();
-		auto lock = makeUniqueLock( scene.getGeometryCache() );
 
-		for ( auto primitive : scene.getGeometryCache() )
+		for ( auto & node : m_allOpaqueSubmeshes )
 		{
-			if ( primitive.second )
+			auto visible = node.sceneNode.isDisplayable()
+				&& node.sceneNode.isVisible()
+				&& ( node.data.getInstantiation().isInstanced( node.material )
+					|| camera.isVisible( node.instance, node.data ) );
+
+			if ( visible )
 			{
-				auto & geometry = *primitive.second;
-				auto & node = *geometry.getParent();
+				m_culledOpaqueSubmeshes.push_back( &node );
+			}
+		}
 
-				if ( node.isDisplayable()
-					&& node.isVisible()
-					&& primitive.second->getMesh() )
-				{
-					auto & mesh = *geometry.getMesh();
+		for ( auto & node : m_allTransparentSubmeshes )
+		{
+			auto visible = node.sceneNode.isDisplayable()
+				&& node.sceneNode.isVisible()
+				&& ( node.data.getInstantiation().isInstanced( node.material )
+				|| camera.isVisible( node.instance, node.data ) );
 
-					for ( auto submesh : mesh )
-					{
-						auto material = geometry.getMaterial( *submesh );
-
-						if ( material )
-						{
-							auto visible = submesh->getInstantiation().isInstanced( material )
-								|| camera.isVisible( geometry, *submesh );
-
-							if ( visible )
-							{
-								if ( material->hasAlphaBlending() )
-								{
-									m_transparentSubmeshes.emplace_back( CulledSubmesh{ geometry
-										, *submesh
-										, material
-										, node } );
-								}
-								else
-								{
-									m_opaqueSubmeshes.emplace_back( CulledSubmesh{ geometry
-										, *submesh
-										, material
-										, node } );
-								}
-							}
-						}
-					}
-				}
+			if ( visible )
+			{
+				m_culledTransparentSubmeshes.push_back( &node );
 			}
 		}
 	}
@@ -80,78 +46,26 @@ namespace castor3d
 	void FrustumCuller::doCullBillboards()
 	{
 		auto & camera = getCamera();
-		auto & scene = getScene();
-		auto lock = makeUniqueLock( scene.getBillboardListCache() );
 
-		for ( auto billboard : scene.getBillboardListCache() )
+		for ( auto & node : m_allOpaqueBillboards )
 		{
-			if ( billboard.second )
+			auto visible = node.sceneNode.isDisplayable()
+				&& node.sceneNode.isVisible();
+
+			if ( visible )
 			{
-				auto & billboards = *billboard.second;
-				auto & node = *billboards.getParent();
-
-				if ( node.isDisplayable() && node.isVisible() )
-				{
-					MaterialSPtr material( billboards.getMaterial() );
-
-					if ( material )
-					{
-						if ( material->hasAlphaBlending() )
-						{
-							m_transparentBillboards.emplace_back( CulledBillboard{ billboards
-								, billboards
-								, material
-								, node } );
-						}
-						else
-						{
-							m_opaqueBillboards.emplace_back( CulledBillboard{ billboards
-								, billboards
-								, material
-								, node } );
-						}
-					}
-				}
+				m_culledOpaqueBillboards.push_back( &node );
 			}
 		}
-	}
 
-	void FrustumCuller::doCullParticles()
-	{
-		auto & camera = getCamera();
-		auto & scene = getScene();
-		auto lock = makeUniqueLock( scene.getParticleSystemCache() );
-
-		for ( auto particleSystem : scene.getParticleSystemCache() )
+		for ( auto & node : m_allTransparentBillboards )
 		{
-			if ( particleSystem.second
-				&& particleSystem.second->getBillboards() )
+			auto visible = node.sceneNode.isDisplayable()
+				&& node.sceneNode.isVisible();
+
+			if ( visible )
 			{
-				auto & billboards = *particleSystem.second->getBillboards();
-				auto & node = *particleSystem.second->getParent();
-
-				if ( node.isDisplayable() && node.isVisible() )
-				{
-					MaterialSPtr material( particleSystem.second->getMaterial() );
-
-					if ( material )
-					{
-						if ( material->hasAlphaBlending() )
-						{
-							m_transparentBillboards.emplace_back( CulledBillboard{ billboards
-								, billboards
-								, material
-								, node } );
-						}
-						else
-						{
-							m_opaqueBillboards.emplace_back( CulledBillboard{ billboards
-								, billboards
-								, material
-								, node } );
-						}
-					}
-				}
+				m_culledTransparentBillboards.push_back( &node );
 			}
 		}
 	}

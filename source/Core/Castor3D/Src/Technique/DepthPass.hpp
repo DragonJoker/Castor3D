@@ -38,9 +38,8 @@ namespace castor3d
 		 *\param[in]	depthBuffer	Le tampon de profondeur cible.
 		 */
 		DepthPass( castor::String const & name
-			, Scene const & scene
-			, Camera & camera
 			, MatrixUbo const & matrixUbo
+			, SceneCuller & culler
 			, SsaoConfig const & ssaoConfig
 			, TextureLayoutSPtr depthBuffer );
 		/**

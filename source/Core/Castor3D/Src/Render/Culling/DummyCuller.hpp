@@ -21,12 +21,10 @@ namespace castor3d
 	{
 	public:
 		C3D_API DummyCuller( Scene const & scene );
-		C3D_API void compute()override;
 
 	private:
-		void doCullGeometries();
-		void doCullBillboards();
-		void doCullParticles();
+		void doCullGeometries()override;
+		void doCullBillboards()override;
 	};
 }
 

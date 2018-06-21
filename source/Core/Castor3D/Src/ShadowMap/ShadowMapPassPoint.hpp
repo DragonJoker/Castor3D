@@ -38,7 +38,7 @@ namespace castor3d
 		 */
 		C3D_API ShadowMapPassPoint( Engine & engine
 			, MatrixUbo const & matrixUbo
-			, Scene & scene
+			, SceneCuller & culler
 			, ShadowMap const & shadowMap );
 		/**
 		 *\~english
@@ -60,7 +60,7 @@ namespace castor3d
 		void updateDeviceDependent( uint32_t index )override;
 
 	protected:
-		void doUpdateNodes( SceneRenderNodes & nodes );
+		void doUpdateNodes( SceneCulledRenderNodes & nodes );
 
 	private:
 		/**

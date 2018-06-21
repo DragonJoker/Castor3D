@@ -37,7 +37,8 @@ namespace castor3d
 		 *\param[in]	engine	Le moteur.
 		 */
 		C3D_API explicit PickingPass( Engine & engine
-			, MatrixUbo const & matrixUbo );
+			, MatrixUbo const & matrixUbo
+			, SceneCuller & culler );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -115,39 +116,27 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doRender
 		 */
-		void doUpdate( Scene const & scene
-			, Camera const & camera
-			, SubmeshStaticRenderNodesPtrByPipelineMap & nodes );
+		void doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doRender
 		 */
-		void doUpdate( Scene const & scene
-			, Camera const & camera
-			, StaticRenderNodesPtrByPipelineMap & nodes );
+		void doUpdate( StaticRenderNodesPtrByPipelineMap & nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doRenderAnimatedSubmeshes
 		 */
-		void doUpdate( Scene const & scene
-			, Camera const & camera
-			, SkinningRenderNodesPtrByPipelineMap & nodes );
+		void doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doRender
 		 */
-		void doUpdate( Scene const & scene
-			, Camera const & camera
-			, SubmeshSkinningRenderNodesPtrByPipelineMap & nodes );
+		void doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doRenderAnimatedSubmeshes
 		 */
-		void doUpdate( Scene const & scene
-			, Camera const & camera
-			, MorphingRenderNodesPtrByPipelineMap & nodes );
+		void doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doRender
 		 */
-		void doUpdate( Scene const & scene
-			, Camera const & camera
-			, BillboardRenderNodesPtrByPipelineMap & nodes );
+		void doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes );
 		/**
 		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */

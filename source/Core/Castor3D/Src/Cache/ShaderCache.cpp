@@ -268,12 +268,14 @@ namespace castor3d
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto bbcenter = writer.declLocale( cuT( "bbcenter" )
-					, writer.paren( c3d_mtxModel * vec4( center, 1.0 ) ).xyz() );
-				auto toCamera = writer.declLocale( cuT( "toCamera" )
-					, c3d_cameraPosition.xyz() - bbcenter );
-				toCamera.y() = 0.0_f;
-				toCamera = normalize( toCamera );
+				auto curBbcenter = writer.declLocale( cuT( "curBbcenter" )
+					, writer.paren( c3d_curMtxModel * vec4( center, 1.0 ) ).xyz() );
+				auto prvBbcenter = writer.declLocale( cuT( "prvBbcenter" )
+					, writer.paren( c3d_prvMtxModel * vec4( center, 1.0 ) ).xyz() );
+				auto curToCamera = writer.declLocale( cuT( "curToCamera" )
+					, c3d_cameraPosition.xyz() - curBbcenter );
+				curToCamera.y() = 0.0_f;
+				curToCamera = normalize( curToCamera );
 				auto right = writer.declLocale( cuT( "right" )
 					, vec3( c3d_curView[0][0], c3d_curView[1][0], c3d_curView[2][0] ) );
 				auto up = writer.declLocale( cuT( "up" )
@@ -286,7 +288,7 @@ namespace castor3d
 				}
 
 				vtx_material = c3d_materialIndex;
-				vtx_normal = toCamera;
+				vtx_normal = curToCamera;
 				vtx_tangent = up;
 				vtx_bitangent = right;
 
@@ -299,16 +301,17 @@ namespace castor3d
 					height = c3d_dimensions.y() / c3d_windowSize.y();
 				}
 
-				vtx_worldPosition = bbcenter
+				vtx_worldPosition = curBbcenter
 					+ right * position.x() * width
 					+ up * position.y() * height;
+				auto prvPosition = writer.declLocale( cuT( "prvPosition" )
+					, vec4( prvBbcenter + right * position.x() * width + up * position.y() * height, 1.0 ) );
 
 				vtx_texture = vec3( texture, 0.0 );
 				vtx_instance = gl_InstanceID;
 				auto curPosition = writer.declLocale( cuT( "curPosition" )
-					, writer.paren( c3d_curView * vec4( vtx_worldPosition, 1.0 ) ) );
-				auto prvPosition = writer.declLocale( cuT( "prvPosition" )
-					, writer.paren( c3d_prvView * vec4( vtx_worldPosition, 1.0 ) ) );
+					, c3d_curView * vec4( vtx_worldPosition, 1.0 ) );
+				prvPosition = c3d_prvView * vec4( prvPosition, 1.0 );
 				curPosition = c3d_projection * curPosition;
 				prvPosition = c3d_projection * prvPosition;
 

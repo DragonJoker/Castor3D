@@ -61,8 +61,8 @@ namespace castor3d
 		Point3f position{ target };
 		Point3f up{ 0, 1, 0 };
 		orientation.transform( up, up );
-		matrix::lookAt( m_lightSpace, position, position + m_direction, up );
-		m_lightSpace = viewport.getProjection() * m_lightSpace;
+		matrix::lookAt( m_lightSpaceView, position, position + m_direction, up );
+		m_lightSpace = viewport.getProjection() * m_lightSpaceView;
 		m_farPlane = viewport.getFar() - viewport.getNear();
 	}
 

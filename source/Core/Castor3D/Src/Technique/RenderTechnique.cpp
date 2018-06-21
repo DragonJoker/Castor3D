@@ -153,29 +153,25 @@ namespace castor3d
 		, m_renderSystem{ renderSystem }
 		, m_matrixUbo{ *renderSystem.getEngine() }
 #if C3D_UseDeferredRendering
-		, m_opaquePass{ std::make_unique< OpaquePass >( *renderTarget.getScene()
-			, renderTarget.getCamera().get()
-			, m_matrixUbo
+		, m_opaquePass{ std::make_unique< OpaquePass >( m_matrixUbo
+			, renderTarget.getCuller()
 			, config ) }
 #else
 		, m_opaquePass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "opaque_pass" )
-			, *renderTarget.getScene()
-			, renderTarget.getCamera().get()
 			, m_matrixUbo
+			, renderTarget.getCuller()
 			, false
 			, nullptr
 			, config ) }
 #endif
 #if C3D_UseWeightedBlendedRendering
-		, m_transparentPass{ std::make_unique< TransparentPass >( *renderTarget.getScene()
-			, renderTarget.getCamera().get()
-			, m_matrixUbo
+		, m_transparentPass{ std::make_unique< TransparentPass >( m_matrixUbo
+			, renderTarget.getCuller()
 			, config ) }
 #else
-		, m_transparentPass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "forward_transparent" )
-			, *renderTarget.getScene()
-			, renderTarget.getCamera().get()
+		, m_transparentPass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "transparent_pass" )
 			, m_matrixUbo
+			, renderTarget.getCuller()
 			, false
 			, false
 			, false

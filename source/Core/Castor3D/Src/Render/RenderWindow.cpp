@@ -155,7 +155,9 @@ namespace castor3d
 				m_renderPass = m_device->createRenderPass( renderPass );
 
 				target->initialise();
-				m_pickingPass = std::make_shared< PickingPass >( *getEngine(), target->getTechnique()->getMatrixUbo() );
+				m_pickingPass = std::make_shared< PickingPass >( *getEngine()
+					, target->getTechnique()->getMatrixUbo()
+					, target->getCuller() );
 				m_pickingPass->initialise( target->getSize() );
 
 				doCreateSwapChainDependent();

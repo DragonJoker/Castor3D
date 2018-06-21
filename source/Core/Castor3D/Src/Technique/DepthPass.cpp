@@ -25,16 +25,14 @@ using namespace castor3d;
 namespace castor3d
 {
 	DepthPass::DepthPass( String const & name
-		, Scene const & scene
-		, Camera & camera
 		, MatrixUbo const & matrixUbo
+		, SceneCuller & culler
 		, SsaoConfig const & ssaoConfig
 		, TextureLayoutSPtr depthBuffer )
 		: RenderTechniquePass{ name
 			, name
-			, scene
-			, &camera
 			, matrixUbo
+			, culler
 			, false
 			, nullptr
 			, ssaoConfig }
@@ -224,7 +222,7 @@ namespace castor3d
 				else
 				{
 					auto mtxModel = writer.declLocale( cuT( "mtxModel" )
-						, c3d_mtxModel );
+						, c3d_curMtxModel );
 				}
 
 				if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )

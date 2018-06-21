@@ -5,9 +5,13 @@ See LICENSE file in root folder
 #define ___C3D_SceneCuller_H___
 
 #include "Castor3DPrerequisites.hpp"
+#include <Design/Signal.hpp>
 
 namespace castor3d
 {
+	using SceneCullerSignalFunction = std::function< void( SceneCuller const & ) >;
+	using SceneCullerSignal = castor::Signal< SceneCullerSignalFunction >;
+	using SceneCullerSignalConnection = castor::Connection< SceneCullerSignal >;
 	/**
 	*\~english
 	*\brief
@@ -39,7 +43,7 @@ namespace castor3d
 		C3D_API SceneCuller( Scene const & scene
 			, Camera * camera );
 		C3D_API virtual ~SceneCuller() = default;
-		C3D_API virtual void compute() = 0;
+		C3D_API void compute();
 
 		inline Scene const & getScene()const
 		{
@@ -63,38 +67,75 @@ namespace castor3d
 			return *m_camera;
 		}
 
-		inline bool isChanged()const
+		inline bool areAllChanged()const
 		{
-			return m_changed;
+			return m_allChanged;
 		}
 
-		inline std::vector< CulledSubmesh > const & getSubmeshes( bool opaque )const
+		inline bool areCulledChanged()const
 		{
-			return opaque
-				? m_opaqueSubmeshes
-				: m_transparentSubmeshes;
+			return m_culledChanged;
 		}
 
-		inline std::vector< CulledBillboard > const & getBillboards( bool opaque )const
+		inline std::vector< CulledSubmesh > const & getAllSubmeshes( bool opaque )const
 		{
 			return opaque
-				? m_opaqueBillboards
-				: m_transparentBillboards;
+				? m_allOpaqueSubmeshes
+				: m_allTransparentSubmeshes;
 		}
 
-	protected:
-		void doClear();
+		inline std::vector< CulledBillboard > const & getAllBillboards( bool opaque )const
+		{
+			return opaque
+				? m_allOpaqueBillboards
+				: m_allTransparentBillboards;
+		}
+
+		inline std::vector< CulledSubmesh * > const & getCulledSubmeshes( bool opaque )const
+		{
+			return opaque
+				? m_culledOpaqueSubmeshes
+				: m_culledTransparentSubmeshes;
+		}
+
+		inline std::vector< CulledBillboard * > const & getCulledBillboards( bool opaque )const
+		{
+			return opaque
+				? m_culledOpaqueBillboards
+				: m_culledTransparentBillboards;
+		}
+
+	public:
+		mutable SceneCullerSignal onCompute;
+
+	private:
+		void onSceneChanged( Scene const & scene );
+		void onCameraChanged( Camera const & camera );
+		void doListGeometries();
+		void doListBillboards();
+		void doListParticles();
+		virtual void doCullGeometries() = 0;
+		virtual void doCullBillboards() = 0;
 
 	private:
 		Scene const & m_scene;
 		Camera * m_camera;
 
 	protected:
-		bool m_changed{ true };
-		std::vector< CulledSubmesh > m_opaqueSubmeshes;
-		std::vector< CulledSubmesh > m_transparentSubmeshes;
-		std::vector< CulledBillboard > m_opaqueBillboards;
-		std::vector< CulledBillboard > m_transparentBillboards;
+		bool m_allChanged{ true };
+		bool m_culledChanged{ true };
+		bool m_sceneDirty{ true };
+		bool m_cameraDirty{ true };
+		std::vector< CulledSubmesh > m_allOpaqueSubmeshes;
+		std::vector< CulledSubmesh > m_allTransparentSubmeshes;
+		std::vector< CulledBillboard > m_allOpaqueBillboards;
+		std::vector< CulledBillboard > m_allTransparentBillboards;
+		std::vector< CulledSubmesh * > m_culledOpaqueSubmeshes;
+		std::vector< CulledSubmesh * > m_culledTransparentSubmeshes;
+		std::vector< CulledBillboard * > m_culledOpaqueBillboards;
+		std::vector< CulledBillboard * > m_culledTransparentBillboards;
+		OnSceneChangedConnection m_sceneChanged;
+		OnCameraChangedConnection m_cameraChanged;
 	};
 }
 

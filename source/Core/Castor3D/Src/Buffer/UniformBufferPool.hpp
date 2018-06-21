@@ -87,7 +87,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour tous les tampons GPU en VRAM.
 		 */
-		void upload()const;
+		void upload( RenderPassTimer & timer, uint32_t index )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a uniform buffer.
@@ -110,6 +110,13 @@ namespace castor3d
 		 *\param[in]	bufferOffset	Le tampon à libérer.
 		 */
 		void putBuffer( UniformBufferOffset< T > const & bufferOffset );
+		/**
+		 *\~english
+		 *\return		The pool buffers count.
+		 *\~french
+		 *\return		Le nombre de tampons du pool.
+		 */
+		uint32_t getBufferCount()const;
 
 	private:
 		typename BufferArray::iterator doFindBuffer( BufferArray & array );
@@ -119,6 +126,7 @@ namespace castor3d
 		uint32_t m_maxSize{ 0u };
 		renderer::StagingBufferPtr m_stagingBuffer;
 		renderer::CommandBufferPtr m_uploadCommandBuffer;
+		renderer::FencePtr m_uploadFence;
 		std::map< uint32_t, BufferArray > m_buffers;
 	};
 }

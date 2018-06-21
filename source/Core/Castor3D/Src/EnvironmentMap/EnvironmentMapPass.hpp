@@ -95,6 +95,7 @@ namespace castor3d
 	private:
 		SceneNodeSPtr m_node;
 		CameraSPtr m_camera;
+		SceneCullerUPtr m_culler;
 		renderer::TextureViewPtr m_envView;
 		renderer::FrameBufferPtr m_frameBuffer;
 		renderer::RenderPass const * m_renderPass{ nullptr };

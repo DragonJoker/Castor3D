@@ -52,30 +52,6 @@ namespace castor3d
 			}
 		}
 
-		template< typename MapType, typename FuncType >
-		inline void doTraverseNodes( RenderPass const & pass
-			, Camera const & camera
-			, MapType & nodes
-			, FuncType function )
-		{
-			for ( auto & itPipelines : nodes )
-			{
-				pass.updatePipeline( *itPipelines.first );
-
-				for ( auto & itPass : itPipelines.second )
-				{
-					for ( auto & itSubmeshes : itPass.second )
-					{
-						function( *itPipelines.first
-							, *itPass.first
-							, *itSubmeshes.first
-							, itSubmeshes.first->getInstantiation()
-							, itSubmeshes.second );
-					}
-				}
-			}
-		}
-
 		template< typename MapType >
 		inline void doRenderNonInstanced( RenderPass const & pass
 			, MapType & nodes )
@@ -88,32 +64,7 @@ namespace castor3d
 
 		template< typename MapType >
 		inline void doRenderNonInstanced( RenderPass const & pass
-			, Camera const & camera
-			, MapType & nodes )
-		{
-			for ( auto & itPipelines : nodes )
-			{
-				pass.updatePipeline( *itPipelines.first );
-			}
-		}
-
-		template< typename MapType >
-		inline void doRenderNonInstanced( RenderPass const & pass
-			, Camera const & camera
 			, MapType & nodes
-			, Scene & scene )
-		{
-			for ( auto & itPipelines : nodes )
-			{
-				pass.updatePipeline( *itPipelines.first );
-			}
-		}
-
-		template< typename MapType >
-		inline void doRenderNonInstanced( RenderPass const & pass
-			, Camera const & camera
-			, MapType & nodes
-			, Scene & scene
 			, RenderInfo & info )
 		{
 			for ( auto & itPipelines : nodes )
@@ -130,8 +81,8 @@ namespace castor3d
 			}
 		}
 
-		template< typename ArrayT >
-		uint32_t copyNodesMatrices( ArrayT const & renderNodes
+		template< typename NodeT >
+		uint32_t copyNodesMatrices( std::vector< NodeT > const & renderNodes
 			, std::vector< InstantiationData > & matrixBuffer )
 		{
 			auto const mtxSize = sizeof( float ) * 16;
@@ -155,9 +106,8 @@ namespace castor3d
 			return count;
 		}
 
-		template< typename ArrayT >
-		uint32_t copyNodesMatrices( ArrayT const & renderNodes
-			, Camera const & camera
+		template< typename NodeT >
+		uint32_t copyNodesMatrices( std::vector< NodeT * > const & renderNodes
 			, std::vector< InstantiationData > & matrixBuffer )
 		{
 			auto const mtxSize = sizeof( float ) * 16;
@@ -187,11 +137,13 @@ namespace castor3d
 	RenderPass::RenderPass( String const & category
 		, String const & name
 		, Engine & engine
-		, MatrixUbo const & matrixUbo )
+		, MatrixUbo const & matrixUbo
+		, SceneCuller & culler )
 		: OwnedBy< Engine >{ engine }
 		, Named{ name }
 		, m_renderSystem{ *engine.getRenderSystem() }
 		, m_matrixUbo{ matrixUbo }
+		, m_culler{ culler }
 		, m_category{ category }
 		, m_oit{ true }
 		, m_renderQueue{ *this, true, nullptr }
@@ -204,11 +156,13 @@ namespace castor3d
 		, String const & name
 		, Engine & engine
 		, MatrixUbo const & matrixUbo
+		, SceneCuller & culler
 		, bool oit )
 		: OwnedBy< Engine >{ engine }
 		, Named{ name }
 		, m_renderSystem{ *engine.getRenderSystem() }
 		, m_matrixUbo{ matrixUbo }
+		, m_culler{ culler }
 		, m_category{ category }
 		, m_oit{ oit }
 		, m_renderQueue{ *this, false, nullptr }
@@ -221,11 +175,13 @@ namespace castor3d
 		, String const & name
 		, Engine & engine
 		, MatrixUbo const & matrixUbo
+		, SceneCuller & culler
 		, SceneNode const * ignored )
 		: OwnedBy< Engine >{ engine }
 		, Named{ name }
 		, m_renderSystem{ *engine.getRenderSystem() }
 		, m_matrixUbo{ matrixUbo }
+		, m_culler{ culler }
 		, m_category{ category }
 		, m_oit{ true }
 		, m_renderQueue{ *this, true, ignored }
@@ -238,12 +194,14 @@ namespace castor3d
 		, String const & name
 		, Engine & engine
 		, MatrixUbo const & matrixUbo
+		, SceneCuller & culler
 		, bool oit
 		, SceneNode const * ignored )
 		: OwnedBy< Engine >{ engine }
 		, Named{ name }
 		, m_renderSystem{ *engine.getRenderSystem() }
 		, m_matrixUbo{ matrixUbo }
+		, m_culler{ culler }
 		, m_category{ category }
 		, m_oit{ oit }
 		, m_renderQueue{ *this, false, ignored }
@@ -848,7 +806,7 @@ namespace castor3d
 		{
 			for ( auto & submeshNodes : passNodes.second )
 			{
-				initialiseUboDescriptor( descriptorPool, submeshNodes.second[0] );
+				initialiseUboDescriptor( descriptorPool, submeshNodes.second.begin()->second );
 			}
 		}
 	}
@@ -860,7 +818,7 @@ namespace castor3d
 		{
 			for ( auto & submeshNodes : passNodes.second )
 			{
-				initialiseUboDescriptor( descriptorPool, submeshNodes.second[0] );
+				initialiseUboDescriptor( descriptorPool, submeshNodes.second.begin()->second );
 			}
 		}
 	}
@@ -917,12 +875,12 @@ namespace castor3d
 		{
 			for ( auto & submeshNodes : passNodes.second )
 			{
-				Pass & pass = submeshNodes.second[0].passNode.pass;
+				Pass & pass = submeshNodes.second.begin()->second.passNode.pass;
 
-				if ( submeshNodes.second[0].pipeline.hasDescriptorPool( 1u ) )
+				if ( submeshNodes.second.begin()->second.pipeline.hasDescriptorPool( 1u ) )
 				{
 					initialiseTextureDescriptor( descriptorPool
-						, submeshNodes.second[0]
+						, submeshNodes.second.begin()->second
 						, shadowMaps );
 				}
 			}
@@ -937,12 +895,12 @@ namespace castor3d
 		{
 			for ( auto & submeshNodes : passNodes.second )
 			{
-				Pass & pass = submeshNodes.second[0].passNode.pass;
+				Pass & pass = submeshNodes.second.begin()->second.passNode.pass;
 
-				if ( submeshNodes.second[0].pipeline.hasDescriptorPool( 1u ) )
+				if ( submeshNodes.second.begin()->second.pipeline.hasDescriptorPool( 1u ) )
 				{
 					initialiseTextureDescriptor( descriptorPool
-						, submeshNodes.second[0]
+						, submeshNodes.second.begin()->second
 						, shadowMaps );
 				}
 			}
@@ -980,117 +938,41 @@ namespace castor3d
 			, invertNormals );
 	}
 
-	uint32_t RenderPass::doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
-		, std::vector< InstantiationData > & matrixBuffer )const
-	{
-		return copyNodesMatrices( renderNodes
-			, matrixBuffer );
-	}
-
-	uint32_t RenderPass::doCopyNodesMatrices( StaticRenderNodeArray const & renderNodes
-		, std::vector< InstantiationData > & matrixBuffer
-		, RenderInfo & info )const
-	{
-		auto count = copyNodesMatrices( renderNodes
-			, matrixBuffer );
-		info.m_visibleObjectsCount += count;
-		return count;
-	}
-
-	uint32_t RenderPass::doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
-		, std::vector< InstantiationData > & matrixBuffer )const
-	{
-		return copyNodesMatrices( renderNodes
-			, matrixBuffer );
-	}
-
-	uint32_t RenderPass::doCopyNodesMatrices( SkinningRenderNodeArray const & renderNodes
-		, std::vector< InstantiationData > & matrixBuffer
-		, RenderInfo & info )const
-	{
-		auto count = copyNodesMatrices( renderNodes
-			, matrixBuffer );
-		info.m_visibleObjectsCount += count;
-		return count;
-	}
-
 	uint32_t RenderPass::doCopyNodesMatrices( StaticRenderNodePtrArray const & renderNodes
-		, Camera const & camera
 		, std::vector< InstantiationData > & matrixBuffer )const
 	{
 		return copyNodesMatrices( renderNodes
-			, camera
 			, matrixBuffer );
 	}
 
 	uint32_t RenderPass::doCopyNodesMatrices( StaticRenderNodePtrArray const & renderNodes
-		, Camera const & camera
 		, std::vector< InstantiationData > & matrixBuffer
 		, RenderInfo & info )const
 	{
 		auto count = copyNodesMatrices( renderNodes
-			, camera
 			, matrixBuffer );
 		info.m_visibleObjectsCount += count;
 		return count;
 	}
 
 	uint32_t RenderPass::doCopyNodesMatrices( SkinningRenderNodePtrArray const & renderNodes
-		, Camera const & camera
 		, std::vector< InstantiationData > & matrixBuffer )const
 	{
 		return copyNodesMatrices( renderNodes
-			, camera
 			, matrixBuffer );
 	}
 
 	uint32_t RenderPass::doCopyNodesMatrices( SkinningRenderNodePtrArray const & renderNodes
-		, Camera const & camera
 		, std::vector< InstantiationData > & matrixBuffer
 		, RenderInfo & info )const
 	{
 		auto count = copyNodesMatrices( renderNodes
-			, camera
 			, matrixBuffer );
-		info.m_visibleObjectsCount += count;
-		return count;
-	}
-
-	uint32_t RenderPass::doCopyNodesBones( SkinningRenderNodeArray const & renderNodes
-		, ShaderBuffer & bonesBuffer )const
-	{
-		uint32_t const mtxSize = sizeof( float ) * 16;
-		uint32_t const stride = mtxSize * 400u;
-		auto const count = std::min( bonesBuffer.getSize() / stride, uint32_t( renderNodes.size() ) );
-		REQUIRE( count <= renderNodes.size() );
-		auto buffer = bonesBuffer.getPtr();
-		auto it = renderNodes.begin();
-		auto i = 0u;
-
-		while ( i < count )
-		{
-			auto & node = *it;
-			node.skeleton.fillBuffer( buffer );
-			buffer += stride;
-			++i;
-			++it;
-		}
-
-		bonesBuffer.update( 0u, stride * count );
-		return count;
-	}
-
-	uint32_t RenderPass::doCopyNodesBones( SkinningRenderNodeArray const & renderNodes
-		, ShaderBuffer & bonesBuffer
-		, RenderInfo & info )const
-	{
-		auto count = doCopyNodesBones( renderNodes, bonesBuffer );
 		info.m_visibleObjectsCount += count;
 		return count;
 	}
 
 	uint32_t RenderPass::doCopyNodesBones( SkinningRenderNodePtrArray const & renderNodes
-		, Camera const & camera
 		, ShaderBuffer & bonesBuffer )const
 	{
 		uint32_t const mtxSize = sizeof( float ) * 16;
@@ -1115,44 +997,19 @@ namespace castor3d
 	}
 
 	uint32_t RenderPass::doCopyNodesBones( SkinningRenderNodePtrArray const & renderNodes
-		, Camera const & camera
 		, ShaderBuffer & bonesBuffer
 		, RenderInfo & info )const
 	{
-		auto count = doCopyNodesBones( renderNodes, camera, bonesBuffer );
+		auto count = doCopyNodesBones( renderNodes, bonesBuffer );
 		info.m_visibleObjectsCount += count;
 		return count;
 	}
 
-	void RenderPass::doUpdate( SubmeshStaticRenderNodesByPipelineMap & nodes )const
+	void RenderPass::doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes )const
 	{
 		doTraverseNodes( *this
 			, nodes
 			, [this]( RenderPipeline & pipeline
-				, Pass & pass
-				, Submesh & submesh
-				, InstantiationComponent & instantiation
-				, StaticRenderNodeArray & renderNodes )
-			{
-				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
-
-				if ( !renderNodes.empty()
-					&& it != instantiation.end()
-					&& it->second.buffer )
-				{
-					doCopyNodesMatrices( renderNodes
-						, it->second.data );
-				}
-			} );
-	}
-
-	void RenderPass::doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes
-		, Camera const & camera )const
-	{
-		doTraverseNodes( *this
-			, camera
-			, nodes
-			, [this, &camera]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, InstantiationComponent & instantiation
@@ -1165,20 +1022,17 @@ namespace castor3d
 					&& it->second.buffer )
 				{
 					doCopyNodesMatrices( renderNodes
-						, camera
 						, it->second.data );
 				}
 			} );
 	}
 
 	void RenderPass::doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes
-		, Camera const & camera
 		, RenderInfo & info )const
 	{
 		doTraverseNodes( *this
-			, camera
 			, nodes
-			, [this, &camera, &info]( RenderPipeline & pipeline
+			, [this, &info]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, InstantiationComponent & instantiation
@@ -1191,7 +1045,6 @@ namespace castor3d
 					&& it->second.buffer )
 				{
 					uint32_t count = doCopyNodesMatrices( renderNodes
-						, camera
 						, it->second.data
 						, info );
 					info.m_visibleFaceCount += submesh.getFaceCount() * count;
@@ -1201,55 +1054,35 @@ namespace castor3d
 			} );
 	}
 
-	void RenderPass::doUpdate( StaticRenderNodesByPipelineMap & nodes )const
+	void RenderPass::doUpdate( StaticRenderNodesPtrByPipelineMap & nodes )const
 	{
 		doRenderNonInstanced( *this
 			, nodes );
 	}
 
 	void RenderPass::doUpdate( StaticRenderNodesPtrByPipelineMap & nodes
-		, Camera const & camera )const
-	{
-		doRenderNonInstanced( *this
-			, camera
-			, nodes );
-	}
-
-	void RenderPass::doUpdate( StaticRenderNodesPtrByPipelineMap & nodes
-		, Camera const & camera
 		, RenderInfo & info )const
 	{
 		doRenderNonInstanced( *this
-			, camera
 			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
 			, info );
 	}
 
-	void RenderPass::doUpdate( SkinningRenderNodesByPipelineMap & nodes )const
-	{
-	}
-
-	void RenderPass::doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes
-		, Camera const & camera )const
+	void RenderPass::doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes )const
 	{
 		doRenderNonInstanced( *this
-			, camera
 			, nodes );
 	}
 
 	void RenderPass::doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes
-		, Camera const & camera
 		, RenderInfo & info )const
 	{
 		doRenderNonInstanced( *this
-			, camera
 			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
 			, info );
 	}
 
-	void RenderPass::doUpdate( SubmeshSkinningRenderNodesByPipelineMap & nodes )const
+	void RenderPass::doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes )const
 	{
 		doTraverseNodes( *this
 			, nodes
@@ -1257,7 +1090,7 @@ namespace castor3d
 				, Pass & pass
 				, Submesh & submesh
 				, InstantiationComponent & instantiation
-				, SkinningRenderNodeArray & renderNodes )
+				, SkinningRenderNodePtrArray & renderNodes )
 			{
 				auto & instantiatedBones = submesh.getInstantiatedBones();
 				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
@@ -1275,40 +1108,11 @@ namespace castor3d
 	}
 
 	void RenderPass::doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes
-		, Camera const & camera )const
-	{
-		doTraverseNodes( *this
-			, camera
-			, nodes
-			, [this, &camera]( RenderPipeline & pipeline
-				, Pass & pass
-				, Submesh & submesh
-				, InstantiationComponent & instantiation
-				, SkinningRenderNodePtrArray & renderNodes )
-			{
-				auto & instantiatedBones = submesh.getInstantiatedBones();
-				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
-
-				if ( !renderNodes.empty()
-					&& it != instantiation.end()
-					&& it->second.buffer
-					&& instantiatedBones.hasInstancedBonesBuffer() )
-				{
-					uint32_t count1 = doCopyNodesMatrices( renderNodes, camera, it->second.data );
-					uint32_t count2 = doCopyNodesBones( renderNodes, camera, instantiatedBones.getInstancedBonesBuffer() );
-					REQUIRE( count1 == count2 );
-				}
-			} );
-	}
-
-	void RenderPass::doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes
-		, Camera const & camera
 		, RenderInfo & info )const
 	{
 		doTraverseNodes( *this
-			, camera
 			, nodes
-			, [this, &camera, &info]( RenderPipeline & pipeline
+			, [this, &info]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, InstantiationComponent & instantiation
@@ -1322,8 +1126,8 @@ namespace castor3d
 					&& it->second.buffer
 					&& instantiatedBones.hasInstancedBonesBuffer() )
 				{
-					uint32_t count1 = doCopyNodesMatrices( renderNodes, camera, it->second.data, info );
-					uint32_t count2 = doCopyNodesBones( renderNodes, camera, instantiatedBones.getInstancedBonesBuffer(), info );
+					uint32_t count1 = doCopyNodesMatrices( renderNodes, it->second.data, info );
+					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer(), info );
 					REQUIRE( count1 == count2 );
 					info.m_visibleFaceCount += submesh.getFaceCount() * count1;
 					info.m_visibleVertexCount += submesh.getPointsCount() * count1;
@@ -1332,49 +1136,31 @@ namespace castor3d
 			} );
 	}
 
-	void RenderPass::doUpdate( MorphingRenderNodesByPipelineMap & nodes )const
-	{
-	}
-
-	void RenderPass::doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes
-		, Camera const & camera )const
+	void RenderPass::doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes )const
 	{
 		doRenderNonInstanced( *this
-			, camera
 			, nodes );
 	}
 
 	void RenderPass::doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes
-		, Camera const & camera
 		, RenderInfo & info )const
 	{
 		doRenderNonInstanced( *this
-			, camera
 			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
 			, info );
 	}
 
-	void RenderPass::doUpdate( BillboardRenderNodesByPipelineMap & nodes )const
-	{
-	}
-
-	void RenderPass::doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes
-		, Camera const & camera )const
+	void RenderPass::doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes )const
 	{
 		doRenderNonInstanced( *this
-			, camera
 			, nodes );
 	}
 
 	void RenderPass::doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes
-		, Camera const & camera
 		, RenderInfo & info )const
 	{
 		doRenderNonInstanced( *this
-			, camera
 			, nodes
-			, *getEngine()->getRenderSystem()->getTopScene()
 			, info );
 	}
 
@@ -1622,26 +1408,29 @@ namespace castor3d
 				, vec4( tangent, 0.0 ) );
 			auto v3Texture = writer.declLocale( cuT( "v3Texture" )
 				, texture );
-			auto mtxModel = writer.declLocale< Mat4 >( cuT( "mtxModel" ) );
+			auto curMtxModel = writer.declLocale< Mat4 >( cuT( "curMtxModel" ) );
+			auto prvMtxModel = writer.declLocale< Mat4 >( cuT( "prvMtxModel" ) );
 
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 			{
-				mtxModel = SkinningUbo::computeTransform( writer, programFlags );
-				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
-					, transpose( inverse( mat3( mtxModel ) ) ) );
+				curMtxModel = SkinningUbo::computeTransform( writer, programFlags );
+				prvMtxModel = curMtxModel;
 			}
 			else if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
-				mtxModel = transform;
-				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
-					, transpose( inverse( mat3( mtxModel ) ) ) );
+				curMtxModel = transform;
+				prvMtxModel = curMtxModel;
 			}
 			else
 			{
-				mtxModel = c3d_mtxModel;
-				auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
-					, mat3( c3d_mtxNormal ) );
+				curMtxModel = c3d_curMtxModel;
+				prvMtxModel = c3d_prvMtxModel;
 			}
+
+			auto curMtxNormal = writer.declLocale( cuT( "curMtxNormal" )
+				, transpose( inverse( mat3( curMtxModel ) ) ) );
+			auto prvMtxNormal = writer.declLocale( cuT( "prvMtxNormal" )
+				, transpose( inverse( mat3( prvMtxModel ) ) ) );
 
 			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
@@ -1663,7 +1452,7 @@ namespace castor3d
 			}
 
 			vtx_texture = v3Texture;
-			v4Vertex = mtxModel * v4Vertex;
+			v4Vertex = curMtxModel * v4Vertex;
 			vtx_worldPosition = v4Vertex.xyz();
 			v4Vertex = c3d_curView * v4Vertex;
 			auto mtxNormal = writer.getBuiltin< Mat3 >( cuT( "mtxNormal" ) );

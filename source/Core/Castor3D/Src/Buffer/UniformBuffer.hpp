@@ -106,7 +106,9 @@ namespace castor3d
 		inline void upload( renderer::StagingBuffer & stagingBuffer
 			, renderer::CommandBuffer const & commandBuffer
 			, uint32_t offset
-			, renderer::PipelineStageFlags flags )const;
+			, renderer::PipelineStageFlags flags
+			, RenderPassTimer const & timer
+			, uint32_t index )const;
 		/**
 		 *\~english
 		 *\brief		Transfers data from the GPU buffer to RAM.

@@ -29,6 +29,8 @@ using namespace castor;
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
 	namespace
 	{
 		void doBindTexture( renderer::TextureView const & view
@@ -79,18 +81,18 @@ namespace castor3d
 		}
 	}
 
+	//*********************************************************************************************
+
 	ForwardRenderTechniquePass::ForwardRenderTechniquePass( String const & name
-		, Scene & scene
-		, Camera * camera
 		, MatrixUbo const & matrixUbo
+		, SceneCuller & culler
 		, bool environment
 		, SceneNode const * ignored
 		, SsaoConfig const & config )
 		: RenderTechniquePass{ name
 			, name
-			, scene
-			, camera
 			, matrixUbo
+			, culler
 			, environment
 			, ignored
 			, config }
@@ -98,18 +100,16 @@ namespace castor3d
 	}
 
 	ForwardRenderTechniquePass::ForwardRenderTechniquePass( String const & name
-		, Scene & scene
-		, Camera * camera
 		, MatrixUbo const & matrixUbo
+		, SceneCuller & culler
 		, bool oit
 		, bool environment
 		, SceneNode const * ignored
 		, SsaoConfig const & config )
 		: RenderTechniquePass{ name
 			, name
-			, scene
-			, camera
 			, matrixUbo
+			, culler
 			, oit
 			, environment
 			, ignored
@@ -588,23 +588,30 @@ namespace castor3d
 
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 			{
-				auto mtxModel = writer.declLocale( cuT( "mtxModel" )
+				auto curMtxModel = writer.declLocale( cuT( "curMtxModel" )
 					, SkinningUbo::computeTransform( writer, programFlags ) );
+				auto prvMtxModel = writer.declLocale( cuT( "prvMtxModel" )
+					, curMtxModel );
 			}
 			else if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
-				auto mtxModel = writer.declLocale( cuT( "mtxModel" )
+				auto curMtxModel = writer.declLocale( cuT( "curMtxModel" )
 					, transform );
+				auto prvMtxModel = writer.declLocale( cuT( "prvMtxModel" )
+					, curMtxModel );
 			}
 			else
 			{
-				auto mtxModel = writer.declLocale( cuT( "mtxModel" )
-					, c3d_mtxModel );
+				auto curMtxModel = writer.declLocale( cuT( "curMtxModel" )
+					, c3d_curMtxModel );
+				auto prvMtxModel = writer.declLocale( cuT( "prvMtxModel" )
+					, c3d_prvMtxModel );
 			}
 
-			auto mtxModel = writer.declBuiltin< Mat4 >( cuT( "mtxModel" ) );
+			auto curMtxModel = writer.declBuiltin< Mat4 >( cuT( "curMtxModel" ) );
+			auto prvMtxModel = writer.declBuiltin< Mat4 >( cuT( "prvMtxModel" ) );
 			auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
-				, transpose( inverse( mat3( mtxModel ) ) ) );
+				, transpose( inverse( mat3( curMtxModel ) ) ) );
 
 			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
@@ -624,10 +631,11 @@ namespace castor3d
 			}
 
 			vtx_texture = v3Texture;
-			curPosition = mtxModel * curPosition;
-			vtx_worldPosition = curPosition.xyz();
 			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
-				, c3d_prvView * curPosition );
+				, prvMtxModel * curPosition );
+			curPosition = curMtxModel * curPosition;
+			vtx_worldPosition = curPosition.xyz();
+			prvPosition = c3d_prvView * curPosition;
 			curPosition = c3d_curView * curPosition;
 			vtx_viewPosition = curPosition.xyz();
 
@@ -644,8 +652,8 @@ namespace castor3d
 			vtx_tangent = normalize( glsl::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
 			vtx_instance = gl_InstanceID;
-			curPosition = c3d_projection * curPosition;
 			prvPosition = c3d_projection * prvPosition;
+			curPosition = c3d_projection * curPosition;
 
 			auto tbn = writer.declLocale( cuT( "tbn" )
 				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
@@ -1606,4 +1614,6 @@ namespace castor3d
 
 		return writer.finalise();
 	}
+
+	//*********************************************************************************************
 }

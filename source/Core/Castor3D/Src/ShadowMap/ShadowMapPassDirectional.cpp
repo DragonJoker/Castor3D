@@ -28,9 +28,9 @@ namespace castor3d
 
 	ShadowMapPassDirectional::ShadowMapPassDirectional( Engine & engine
 		, MatrixUbo const & matrixUbo
-		, Scene & scene
+		, SceneCuller & culler
 		, ShadowMap const & shadowMap )
-		: ShadowMapPass{ engine, matrixUbo, scene, shadowMap }
+		: ShadowMapPass{ engine, matrixUbo, culler, shadowMap }
 	{
 	}
 
@@ -45,35 +45,20 @@ namespace castor3d
 	{
 		auto cameraNode = camera.getParent();
 		auto lightNode = light.getParent();
-		m_camera->attachTo( light.getParent() );
-		m_camera->update();
+		auto & myCamera = getCuller().getCamera();
+		myCamera.attachTo( light.getParent() );
+		myCamera.update();
 		light.updateShadow( cameraNode->getDerivedPosition()
-			, m_camera->getViewport()
+			, myCamera.getViewport()
 			, index );
-
-		auto position = cameraNode->getDerivedPosition();
-		auto const & orientation = lightNode->getDerivedOrientation();
-		Point3r right{ 1.0_r, 0.0_r, 0.0_r };
-		Point3r up{ 0.0_r, 1.0_r, 0.0_r };
-		orientation.transform( right, right );
-		orientation.transform( up, up );
-		Point3r front{ point::cross( right, up ) };
-		up = point::cross( front, right );
-
-		// Update view matrix
-		matrix::lookAt( m_view, position, position + front, up );
-
-		if ( light.getDirectionalLight()->getFarPlane() != m_farPlane )
-		{
-			m_farPlane = light.getDirectionalLight()->getFarPlane();
-		}
-
+		m_view = light.getDirectionalLight()->getLightSpaceView();
+		m_farPlane = light.getDirectionalLight()->getFarPlane();
 		doUpdate( queues );
 	}
 
 	void ShadowMapPassDirectional::updateDeviceDependent( uint32_t index )
 	{
-		if ( m_camera && m_initialised )
+		if ( m_initialised )
 		{
 			auto & config = m_shadowConfig->getData();
 
@@ -84,24 +69,14 @@ namespace castor3d
 			}
 
 			m_matrixUbo.update( m_view
-				, m_camera->getViewport().getProjection() );
-			doUpdateNodes( m_renderQueue.getCulledRenderNodes(), *m_camera );
+				, getCuller().getCamera().getViewport().getProjection() );
+			doUpdateNodes( m_renderQueue.getCulledRenderNodes() );
 		}
 	}
 
 	bool ShadowMapPassDirectional::doInitialise( Size const & size )
 	{
 		auto & device = getCurrentDevice( *this );
-		Viewport viewport{ *getEngine() };
-		auto w = float( size.getWidth() );
-		auto h = float( size.getHeight() );
-		viewport.setOrtho( -w / 2, w / 2, -h / 2, h / 2, -5120.0_r, 5120.0_r );
-		viewport.update();
-		m_camera = std::make_shared< Camera >( cuT( "ShadowMapDirectional" )
-			, m_scene
-			, m_scene.getCameraRootNode()
-			, std::move( viewport ) );
-		m_camera->resize( size );
 
 		// Create the render pass.
 		renderer::RenderPassCreateInfo renderPass;
@@ -166,7 +141,6 @@ namespace castor3d
 			, 0u
 			, renderer::MemoryPropertyFlag::eHostVisible | renderer::MemoryPropertyFlag::eHostCoherent );
 
-		m_renderQueue.initialise( m_scene, *m_camera );
 		return true;
 	}
 
@@ -174,8 +148,7 @@ namespace castor3d
 	{
 		m_renderQueue.cleanup();
 		m_shadowConfig.reset();
-		m_camera->detach();
-		m_camera.reset();
+		getCuller().getCamera().detach();
 	}
 
 	void ShadowMapPassDirectional::doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
@@ -196,6 +169,7 @@ namespace castor3d
 
 	void ShadowMapPassDirectional::doUpdate( RenderQueueArray & queues )
 	{
+		getCuller().compute();
 		queues.emplace_back( m_renderQueue );
 	}
 

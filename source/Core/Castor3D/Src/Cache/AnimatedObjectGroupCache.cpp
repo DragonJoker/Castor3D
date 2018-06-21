@@ -33,6 +33,14 @@ namespace castor3d
 		, m_skinningUboPool{ *engine.getRenderSystem() }
 		, m_morphingUboPool{ *engine.getRenderSystem() }
 	{
+		getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+			, [this]()
+			{
+				m_updateTimer = std::make_shared< RenderPassTimer >( *getEngine()
+					, cuT( "Update" )
+					, cuT( "Animation UBOs" )
+					, 2u );
+			} ) );
 	}
 
 	AnimatedObjectGroupCache::~Cache()
@@ -62,8 +70,19 @@ namespace castor3d
 
 	void AnimatedObjectGroupCache::uploadUbos()
 	{
-		m_skinningUboPool.upload();
-		m_morphingUboPool.upload();
+		auto count = m_skinningUboPool.getBufferCount()
+			+ m_morphingUboPool.getBufferCount();
+		m_updateTimer->updateCount( std::max( count, 2u ) );
+
+		if ( count )
+		{
+			m_updateTimer->start();
+			uint32_t index = 0u;
+			m_skinningUboPool.upload( *m_updateTimer, index );
+			index += std::max( m_skinningUboPool.getBufferCount(), 1u );
+			m_morphingUboPool.upload( *m_updateTimer, index );
+			m_updateTimer->stop();
+		}
 	}
 
 	void AnimatedObjectGroupCache::cleanupUbos()

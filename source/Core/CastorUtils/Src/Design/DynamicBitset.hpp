@@ -17,7 +17,7 @@ namespace castor
 	*	Classe de bitset dynamique, avec un type de bloc configurable.
 	*/
 	template< typename BlockType >
-	class DynamicBitset
+	class DynamicBitsetT
 	{
 		class Bit;
 
@@ -31,11 +31,11 @@ namespace castor
 		*	Construction/Destruction.
 		*/
 		/**@{*/
-		inline DynamicBitset();
-		inline explicit DynamicBitset( size_t size, bool value = false );
-		inline explicit DynamicBitset( String const & bits );
-		inline explicit DynamicBitset( char const * bits );
-		inline DynamicBitset( char const * bits, size_t size );
+		inline DynamicBitsetT();
+		inline explicit DynamicBitsetT( size_t size, bool value = false );
+		inline explicit DynamicBitsetT( String const & bits );
+		inline explicit DynamicBitsetT( char const * bits );
+		inline DynamicBitsetT( char const * bits, size_t size );
 		/**@}*/
 		/**
 		*\~english
@@ -78,12 +78,12 @@ namespace castor
 		*	Opérations bit à bit.
 		*/
 		/**@{*/
-		inline DynamicBitset & operator<<=( int value );
-		inline DynamicBitset & operator>>=( int value );
-		inline DynamicBitset & operator&=( DynamicBitset const & value );
-		inline DynamicBitset & operator|=( DynamicBitset const & value );
-		inline DynamicBitset & operator^=( DynamicBitset const & value );
-		inline DynamicBitset operator~()const;
+		inline DynamicBitsetT & operator<<=( int value );
+		inline DynamicBitsetT & operator>>=( int value );
+		inline DynamicBitsetT & operator&=( DynamicBitsetT const & value );
+		inline DynamicBitsetT & operator|=( DynamicBitsetT const & value );
+		inline DynamicBitsetT & operator^=( DynamicBitsetT const & value );
+		inline DynamicBitsetT operator~()const;
 		/**@}*/
 		inline String toString()const;
 
@@ -108,11 +108,11 @@ namespace castor
 	*/
 	/**@{*/
 	template< typename BlockType >
-	inline bool operator==( DynamicBitset< BlockType > const & lhs
-		, DynamicBitset< BlockType > const & rhs );
+	inline bool operator==( DynamicBitsetT< BlockType > const & lhs
+		, DynamicBitsetT< BlockType > const & rhs );
 	template< typename BlockType >
-	inline bool operator!=( DynamicBitset< BlockType > const & lhs
-		, DynamicBitset< BlockType > const & rhs );
+	inline bool operator!=( DynamicBitsetT< BlockType > const & lhs
+		, DynamicBitsetT< BlockType > const & rhs );
 	/**@}*/
 	/**
 	*\~english
@@ -124,20 +124,20 @@ namespace castor
 	*/
 	/**@{*/
 	template< typename BlockType >
-	inline DynamicBitset< BlockType > operator<<( DynamicBitset< BlockType > const & lhs
+	inline DynamicBitsetT< BlockType > operator<<( DynamicBitsetT< BlockType > const & lhs
 		, int rhs );
 	template< typename BlockType >
-	inline DynamicBitset< BlockType > operator>>( DynamicBitset< BlockType > const & lhs
+	inline DynamicBitsetT< BlockType > operator>>( DynamicBitsetT< BlockType > const & lhs
 		, int rhs );
 	template< typename BlockType >
-	inline DynamicBitset< BlockType > operator&( DynamicBitset< BlockType > const & lhs
-		, DynamicBitset< BlockType > const & rhs );
+	inline DynamicBitsetT< BlockType > operator&( DynamicBitsetT< BlockType > const & lhs
+		, DynamicBitsetT< BlockType > const & rhs );
 	template< typename BlockType >
-	inline DynamicBitset< BlockType > operator|( DynamicBitset< BlockType > const & lhs
-		, DynamicBitset< BlockType > const & rhs );
+	inline DynamicBitsetT< BlockType > operator|( DynamicBitsetT< BlockType > const & lhs
+		, DynamicBitsetT< BlockType > const & rhs );
 	template< typename BlockType >
-	inline DynamicBitset< BlockType > operator^( DynamicBitset< BlockType > const & lhs
-		, DynamicBitset< BlockType > const & rhs );
+	inline DynamicBitsetT< BlockType > operator^( DynamicBitsetT< BlockType > const & lhs
+		, DynamicBitsetT< BlockType > const & rhs );
 	/**@}*/
 	/**
 	*\~english
@@ -148,9 +148,9 @@ namespace castor
 	*	Bit dynamique, avec un type de bloc configurable.
 	*/
 	template< typename BlockType >
-	class DynamicBitset< BlockType >::Bit
+	class DynamicBitsetT< BlockType >::Bit
 	{
-		friend DynamicBitset< BlockType >;
+		friend DynamicBitsetT< BlockType >;
 
 	private:
 		inline Bit( BlockType & block
@@ -190,11 +190,11 @@ namespace castor
 	*/
 	/**@{*/
 	template< typename BlockType >
-	inline bool operator==( typename DynamicBitset< BlockType >::Bit const & lhs
-		, typename DynamicBitset< BlockType >::Bit const & rhs );
+	inline bool operator==( typename DynamicBitsetT< BlockType >::Bit const & lhs
+		, typename DynamicBitsetT< BlockType >::Bit const & rhs );
 	template< typename BlockType >
-	inline bool operator!=( typename DynamicBitset< BlockType >::Bit const & lhs
-		, typename DynamicBitset< BlockType >::Bit const & rhs );
+	inline bool operator!=( typename DynamicBitsetT< BlockType >::Bit const & lhs
+		, typename DynamicBitsetT< BlockType >::Bit const & rhs );
 	/**@}*/
 	/**
 	*\~english
@@ -206,13 +206,13 @@ namespace castor
 	*/
 	/**@{*/
 	template< typename BlockType >
-	typename DynamicBitset< BlockType >::Bit operator|( typename DynamicBitset< BlockType >::Bit const & lhs
+	typename DynamicBitsetT< BlockType >::Bit operator|( typename DynamicBitsetT< BlockType >::Bit const & lhs
 		, bool rhs );
 	template< typename BlockType >
-	typename DynamicBitset< BlockType >::Bit operator&( typename DynamicBitset< BlockType >::Bit const & lhs
+	typename DynamicBitsetT< BlockType >::Bit operator&( typename DynamicBitsetT< BlockType >::Bit const & lhs
 		, bool rhs );
 	template< typename BlockType >
-	typename DynamicBitset< BlockType >::Bit operator^( typename DynamicBitset< BlockType >::Bit const & lhs
+	typename DynamicBitsetT< BlockType >::Bit operator^( typename DynamicBitsetT< BlockType >::Bit const & lhs
 		, bool rhs );
 	/**@}*/
 }

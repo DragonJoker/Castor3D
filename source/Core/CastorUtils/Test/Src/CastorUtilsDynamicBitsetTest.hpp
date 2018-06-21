@@ -17,14 +17,14 @@ namespace Testing
 		void doRegisterTests()override;
 
 	private:
-		void size();
-		void initValue();
-		void leftShift();
-		void rightShift();
-		void or();
-		void and();
-		void xor();
-		void set();
+		void sizeTest();
+		void initValueTest();
+		void leftShiftTest();
+		void rightShiftTest();
+		void orTest();
+		void andTest();
+		void xorTest();
+		void setTest();
 	};
 }
 

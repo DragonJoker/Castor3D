@@ -220,6 +220,8 @@ namespace castor3d
 		UniformBufferPool< ModelUbo::Configuration > m_modelUboPool;
 		UniformBufferPool< ModelMatrixUbo::Configuration > m_modelMatrixUboPool;
 		UniformBufferPool< PickingUbo::Configuration > m_pickingUboPool;
+		RenderPassTimerSPtr m_updateTimer;
+		RenderPassTimerSPtr m_updatePickingTimer;
 	};
 	using GeometryCache = ObjectCache< Geometry, castor::String >;
 	DECLARE_SMART_PTR( GeometryCache );

@@ -24,9 +24,11 @@ namespace castor3d
 		: public castor::OwnedBy< Engine >
 	{
 	public:
-		struct PassAndUbo
+		struct PassData
 		{
 			std::unique_ptr< MatrixUbo > matrixUbo;
+			CameraSPtr camera;
+			SceneCullerUPtr culler;
 			ShadowMapPassSPtr pass;
 		};
 
@@ -48,7 +50,7 @@ namespace castor3d
 		C3D_API ShadowMap( Engine & engine
 			, TextureUnit && shadowMap
 			, TextureUnit && linearMap
-			, std::vector< PassAndUbo > && passes );
+			, std::vector< PassData > && passes );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -245,7 +247,7 @@ namespace castor3d
 		renderer::CommandBufferPtr m_commandBuffer;
 		renderer::FencePtr m_fence;
 		std::set< std::reference_wrapper< GeometryBuffers > > m_geometryBuffers;
-		std::vector< PassAndUbo > m_passes;
+		std::vector< PassData > m_passes;
 		TextureUnit m_shadowMap;
 		TextureUnit m_linearMap;
 		renderer::SemaphorePtr m_finished;

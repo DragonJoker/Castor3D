@@ -98,7 +98,7 @@ namespace castor3d
 		auto bone_ids1 = writer.getBuiltin< IVec4 >( cuT( "bone_ids1" ) );
 		auto weights0 = writer.getBuiltin< Vec4 >( cuT( "weights0" ) );
 		auto weights1 = writer.getBuiltin< Vec4 >( cuT( "weights1" ) );
-		auto c3d_mtxModel = writer.getBuiltin< glsl::Mat4 >( ModelMatrixUbo::MtxModel );
+		auto c3d_curMtxModel = writer.getBuiltin< glsl::Mat4 >( ModelMatrixUbo::CurMtxModel );
 		auto c3d_mtxBones = writer.getBuiltinArray< glsl::Mat4 >( SkinningUbo::Bones );
 		auto mtxBoneTransform = writer.declLocale< Mat4 >( cuT( "mtxBoneTransform" ) );
 
@@ -128,7 +128,7 @@ namespace castor3d
 			mtxBoneTransform += c3d_mtxBones[bone_ids1[1_i]] * weights1[1_i];
 			mtxBoneTransform += c3d_mtxBones[bone_ids1[2_i]] * weights1[2_i];
 			mtxBoneTransform += c3d_mtxBones[bone_ids1[3_i]] * weights1[3_i];
-			mtxBoneTransform = c3d_mtxModel * mtxBoneTransform;
+			mtxBoneTransform = c3d_curMtxModel * mtxBoneTransform;
 		}
 
 		return mtxBoneTransform;

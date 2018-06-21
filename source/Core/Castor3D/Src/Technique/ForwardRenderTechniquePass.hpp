@@ -44,9 +44,8 @@ namespace castor3d
 		 *\param[in]	config		La configuration du SSAO.
 		 */
 		C3D_API ForwardRenderTechniquePass( castor::String const & name
-			, Scene & scene
-			, Camera * camera
 			, MatrixUbo const & matrixUbo
+			, SceneCuller & culler
 			, bool environment
 			, SceneNode const * ignored
 			, SsaoConfig const & config );
@@ -71,9 +70,8 @@ namespace castor3d
 		 *\param[in]	config		La configuration du SSAO.
 		 */
 		C3D_API ForwardRenderTechniquePass( castor::String const & name
-			, Scene & scene
-			, Camera * camera
 			, MatrixUbo const & matrixUbo
+			, SceneCuller & culler
 			, bool oit
 			, bool environment
 			, SceneNode const * ignored

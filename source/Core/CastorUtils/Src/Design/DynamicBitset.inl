@@ -23,13 +23,13 @@ namespace castor
 		template< typename BlockType >
 		size_t getBlockIndex( size_t index )
 		{
-			return index / DynamicBitset< BlockType >::bitsPerBlock;
+			return index / DynamicBitsetT< BlockType >::bitsPerBlock;
 		}
 
 		template< typename BlockType >
 		size_t getBitIndex( size_t index )
 		{
-			static constexpr size_t bitMask = DynamicBitset< BlockType >::bitsPerBlock - 1u;
+			static constexpr size_t bitMask = DynamicBitsetT< BlockType >::bitsPerBlock - 1u;
 			return index & bitMask;
 		}
 
@@ -43,31 +43,31 @@ namespace castor
 	//*************************************************************************
 
 	template< typename BlockType >
-	inline DynamicBitset< BlockType >::DynamicBitset()
+	inline DynamicBitsetT< BlockType >::DynamicBitsetT()
 		: m_bitCount{ 0u }
 	{
 	}
 
 	template< typename BlockType >
-	inline DynamicBitset< BlockType >::DynamicBitset( size_t size, bool value )
+	inline DynamicBitsetT< BlockType >::DynamicBitsetT( size_t size, bool value )
 	{
 		resize( size, value );
 	}
 
 	template< typename BlockType >
-	inline DynamicBitset< BlockType >::DynamicBitset( String const & bits )
-		: DynamicBitset{ bits.data(), bits.size() }
+	inline DynamicBitsetT< BlockType >::DynamicBitsetT( String const & bits )
+		: DynamicBitsetT{ bits.data(), bits.size() }
 	{
 	}
 
 	template< typename BlockType >
-	inline DynamicBitset< BlockType >::DynamicBitset( char const * bits )
-		: DynamicBitset{ bits, std::strlen( bits ) }
+	inline DynamicBitsetT< BlockType >::DynamicBitsetT( char const * bits )
+		: DynamicBitsetT{ bits, std::strlen( bits ) }
 	{
 	}
 
 	template< typename BlockType >
-	inline DynamicBitset< BlockType >::DynamicBitset( char const * bits
+	inline DynamicBitsetT< BlockType >::DynamicBitsetT( char const * bits
 		, size_t size )
 		: m_blocks( details::getBlockCount< BlockType >( size ), BlockType{} )
 		, m_bitCount{ size }
@@ -80,7 +80,7 @@ namespace castor
 	}
 
 	template< typename BlockType >
-	inline void DynamicBitset< BlockType >::set( size_t bit, bool value )
+	inline void DynamicBitsetT< BlockType >::set( size_t bit, bool value )
 	{
 		REQUIRE( bit < m_bitCount );
 
@@ -93,7 +93,7 @@ namespace castor
 	}
 
 	template< typename BlockType >
-	inline bool DynamicBitset< BlockType >::get( size_t bit )const
+	inline bool DynamicBitsetT< BlockType >::get( size_t bit )const
 	{
 		REQUIRE( bit < m_bitCount );
 		return ( m_blocks[details::getBlockIndex< BlockType >( bit )] & details::makeBitMask< BlockType >( details::getBitIndex< BlockType >( bit ) ) )
@@ -102,14 +102,14 @@ namespace castor
 	}
 
 	template< typename BlockType >
-	inline BlockType DynamicBitset< BlockType >::getBlock( size_t index )const
+	inline BlockType DynamicBitsetT< BlockType >::getBlock( size_t index )const
 	{
 		REQUIRE( index < m_blocks.size() );
 		return m_blocks[index];
 	}
 
 	template< typename BlockType >
-	inline void DynamicBitset< BlockType >::reset()
+	inline void DynamicBitsetT< BlockType >::reset()
 	{
 		static constexpr BlockType zero{};
 		std::fill( m_blocks.begin()
@@ -118,7 +118,7 @@ namespace castor
 	}
 
 	template< typename BlockType >
-	inline void DynamicBitset< BlockType >::resize( size_t size, bool value )
+	inline void DynamicBitsetT< BlockType >::resize( size_t size, bool value )
 	{
 		size_t lastBlockIndex = m_blocks.size() - 1u;
 		m_blocks.resize( details::getBlockCount< BlockType >( size ), ( value ? fullBitMask : BlockType{} ) );
@@ -134,25 +134,25 @@ namespace castor
 	}
 
 	template< typename BlockType >
-	inline size_t DynamicBitset< BlockType >::getSize()const
+	inline size_t DynamicBitsetT< BlockType >::getSize()const
 	{
 		return m_bitCount;
 	}
 
 	template< typename BlockType >
-	inline size_t DynamicBitset< BlockType >::getBlockCount()const
+	inline size_t DynamicBitsetT< BlockType >::getBlockCount()const
 	{
 		return m_blocks.size();
 	}
 
 	template< typename BlockType >
-	inline bool DynamicBitset< BlockType >::none()const
+	inline bool DynamicBitsetT< BlockType >::none()const
 	{
 		return !any();
 	}
 
 	template< typename BlockType >
-	inline bool DynamicBitset< BlockType >::any()const
+	inline bool DynamicBitsetT< BlockType >::any()const
 	{
 		return m_blocks.end() != std::find_if( m_blocks.begin()
 			, m_blocks.end()
@@ -163,7 +163,7 @@ namespace castor
 	}
 
 	template< typename BlockType >
-	inline bool DynamicBitset< BlockType >::all()const
+	inline bool DynamicBitsetT< BlockType >::all()const
 	{
 		bool result = false;
 
@@ -184,20 +184,20 @@ namespace castor
 	}
 
 	template< typename BlockType >
-	inline typename DynamicBitset< BlockType >::Bit DynamicBitset< BlockType >::operator[]( size_t index )
+	inline typename DynamicBitsetT< BlockType >::Bit DynamicBitsetT< BlockType >::operator[]( size_t index )
 	{
 		return Bit{ m_blocks[details::getBlockIndex< BlockType >( index )]
 			, details::makeBitMask< BlockType >( details::getBitIndex< BlockType >( index ) ) };
 	}
 
 	template< typename BlockType >
-	inline bool DynamicBitset< BlockType >::operator[]( size_t index )const
+	inline bool DynamicBitsetT< BlockType >::operator[]( size_t index )const
 	{
 		return get( index );
 	}
 
 	template< typename BlockType >
-	inline DynamicBitset< BlockType > & DynamicBitset< BlockType >::operator<<=( int value )
+	inline DynamicBitsetT< BlockType > & DynamicBitsetT< BlockType >::operator<<=( int value )
 	{
 		if ( value )
 		{
@@ -250,7 +250,7 @@ namespace castor
 	}
 
 	template< typename BlockType >
-	inline DynamicBitset< BlockType > & DynamicBitset< BlockType >::operator>>=( int value )
+	inline DynamicBitsetT< BlockType > & DynamicBitsetT< BlockType >::operator>>=( int value )
 	{
 		if ( value )
 		{
@@ -303,7 +303,7 @@ namespace castor
 	}
 
 	template< typename BlockType >
-	inline DynamicBitset< BlockType > & DynamicBitset< BlockType >::operator&=( DynamicBitset const & value )
+	inline DynamicBitsetT< BlockType > & DynamicBitsetT< BlockType >::operator&=( DynamicBitsetT const & value )
 	{
 		std::pair< size_t, size_t > minmax = std::minmax( getBlockCount(), value.getBlockCount() );
 		m_blocks.resize( minmax.second );
@@ -324,10 +324,10 @@ namespace castor
 	}
 
 	template< typename BlockType >
-	inline DynamicBitset< BlockType > & DynamicBitset< BlockType >::operator|=( DynamicBitset const & value )
+	inline DynamicBitsetT< BlockType > & DynamicBitsetT< BlockType >::operator|=( DynamicBitsetT< BlockType > const & value )
 	{
-		DynamicBitset const & greater = ( getSize() > value.getSize() ) ? *this : value;
-		DynamicBitset const & lesser = ( getSize() > value.getSize() ) ? value : *this;
+		DynamicBitsetT const & greater = ( getSize() > value.getSize() ) ? *this : value;
+		DynamicBitsetT const & lesser = ( getSize() > value.getSize() ) ? value : *this;
 
 		size_t maxBlockCount = greater.getBlockCount();
 		size_t minBlockCount = lesser.getBlockCount();
@@ -349,10 +349,10 @@ namespace castor
 	}
 
 	template< typename BlockType >
-	inline DynamicBitset< BlockType > & DynamicBitset< BlockType >::operator^=( DynamicBitset const & value )
+	inline DynamicBitsetT< BlockType > & DynamicBitsetT< BlockType >::operator^=( DynamicBitsetT< BlockType > const & value )
 	{
-		DynamicBitset const & greater = ( getSize() > value.getSize() ) ? *this : value;
-		DynamicBitset const & lesser = ( getSize() > value.getSize() ) ? value : *this;
+		DynamicBitsetT const & greater = ( getSize() > value.getSize() ) ? *this : value;
+		DynamicBitsetT const & lesser = ( getSize() > value.getSize() ) ? value : *this;
 
 		size_t maxBlockCount = greater.getBlockCount();
 		size_t minBlockCount = lesser.getBlockCount();
@@ -374,9 +374,9 @@ namespace castor
 	}
 
 	template< typename BlockType >
-	inline DynamicBitset< BlockType > DynamicBitset< BlockType >::operator~()const
+	inline DynamicBitsetT< BlockType > DynamicBitsetT< BlockType >::operator~()const
 	{
-		DynamicBitset result;
+		DynamicBitsetT result;
 
 		for ( auto & block : result.m_blocks )
 		{
@@ -388,7 +388,7 @@ namespace castor
 	}
 
 	template< typename BlockType >
-	inline String DynamicBitset< BlockType >::toString()const
+	inline String DynamicBitsetT< BlockType >::toString()const
 	{
 		String result( m_bitCount, '0' );
 
@@ -401,7 +401,7 @@ namespace castor
 	}
 
 	template< typename BlockType >
-	void DynamicBitset< BlockType >::doResetExtraBits()
+	void DynamicBitsetT< BlockType >::doResetExtraBits()
 	{
 		auto mask = doGetLastBlockMask();
 
@@ -412,7 +412,7 @@ namespace castor
 	}
 
 	template< typename BlockType >
-	BlockType DynamicBitset< BlockType >::doGetLastBlockMask() const
+	BlockType DynamicBitsetT< BlockType >::doGetLastBlockMask() const
 	{
 		return ( BlockType{ 1u } << details::getBitIndex< BlockType >( m_bitCount ) ) - 1u;
 	}
@@ -420,11 +420,11 @@ namespace castor
 	//*************************************************************************
 
 	template< typename BlockType >
-	inline bool operator==( DynamicBitset< BlockType > const & lhs
-		, DynamicBitset< BlockType > const & rhs )
+	inline bool operator==( DynamicBitsetT< BlockType > const & lhs
+		, DynamicBitsetT< BlockType > const & rhs )
 	{
-		DynamicBitset< BlockType > const & greater = ( lhs.getSize() > rhs.getSize() ) ? lhs : rhs;
-		DynamicBitset< BlockType > const & lesser = ( lhs.getSize() > rhs.getSize() ) ? rhs : lhs;
+		DynamicBitsetT< BlockType > const & greater = ( lhs.getSize() > rhs.getSize() ) ? lhs : rhs;
+		DynamicBitsetT< BlockType > const & lesser = ( lhs.getSize() > rhs.getSize() ) ? rhs : lhs;
 		size_t maxBlockCount = greater.getBlockCount();
 		size_t minBlockCount = lesser.getBlockCount();
 		bool result = true;
@@ -443,53 +443,53 @@ namespace castor
 	}
 
 	template< typename BlockType >
-	inline bool operator!=( DynamicBitset< BlockType > const & lhs
-		, DynamicBitset< BlockType > const & rhs )
+	inline bool operator!=( DynamicBitsetT< BlockType > const & lhs
+		, DynamicBitsetT< BlockType > const & rhs )
 	{
 		return !( lhs == rhs );
 	}
 
 	template< typename BlockType >
-	inline DynamicBitset< BlockType > operator<<( DynamicBitset< BlockType > const & lhs
+	inline DynamicBitsetT< BlockType > operator<<( DynamicBitsetT< BlockType > const & lhs
 		, int rhs )
 	{
-		DynamicBitset< BlockType > result{ lhs };
+		DynamicBitsetT< BlockType > result{ lhs };
 		result <<= rhs;
 		return result;
 	}
 
 	template< typename BlockType >
-	inline DynamicBitset< BlockType > operator>>( DynamicBitset< BlockType > const & lhs
+	inline DynamicBitsetT< BlockType > operator>>( DynamicBitsetT< BlockType > const & lhs
 		, int rhs )
 	{
-		DynamicBitset< BlockType > result{ lhs };
+		DynamicBitsetT< BlockType > result{ lhs };
 		result >>= rhs;
 		return result;
 	}
 
 	template< typename BlockType >
-	inline DynamicBitset< BlockType > operator&( DynamicBitset< BlockType > const & lhs
-		, DynamicBitset< BlockType > const & rhs )
+	inline DynamicBitsetT< BlockType > operator&( DynamicBitsetT< BlockType > const & lhs
+		, DynamicBitsetT< BlockType > const & rhs )
 	{
-		DynamicBitset< BlockType > result{ lhs };
+		DynamicBitsetT< BlockType > result{ lhs };
 		result &= rhs;
 		return result;
 	}
 
 	template< typename BlockType >
-	inline DynamicBitset< BlockType > operator|( DynamicBitset< BlockType > const & lhs
-		, DynamicBitset< BlockType > const & rhs )
+	inline DynamicBitsetT< BlockType > operator|( DynamicBitsetT< BlockType > const & lhs
+		, DynamicBitsetT< BlockType > const & rhs )
 	{
-		DynamicBitset< BlockType > result{ lhs };
+		DynamicBitsetT< BlockType > result{ lhs };
 		result |= rhs;
 		return result;
 	}
 
 	template< typename BlockType >
-	inline DynamicBitset< BlockType > operator^( DynamicBitset< BlockType > const & lhs
-		, DynamicBitset< BlockType > const & rhs )
+	inline DynamicBitsetT< BlockType > operator^( DynamicBitsetT< BlockType > const & lhs
+		, DynamicBitsetT< BlockType > const & rhs )
 	{
-		DynamicBitset< BlockType > result{ lhs };
+		DynamicBitsetT< BlockType > result{ lhs };
 		result ^= rhs;
 		return result;
 	}
@@ -497,7 +497,7 @@ namespace castor
 	//*************************************************************************
 
 	template< typename BlockType >
-	inline typename DynamicBitset< BlockType >::Bit & DynamicBitset< BlockType >::Bit::operator=( bool val )
+	inline typename DynamicBitsetT< BlockType >::Bit & DynamicBitsetT< BlockType >::Bit::operator=( bool val )
 	{
 		m_block = val
 			? m_block | m_mask
@@ -506,14 +506,14 @@ namespace castor
 	}
 
 	template< typename BlockType >
-	inline typename DynamicBitset< BlockType >::Bit & DynamicBitset< BlockType >::Bit::operator=( DynamicBitset< BlockType >::Bit const & bit )
+	inline typename DynamicBitsetT< BlockType >::Bit & DynamicBitsetT< BlockType >::Bit::operator=( DynamicBitsetT< BlockType >::Bit const & bit )
 	{
 		set( bit );
 		return *this;
 	}
 
 	template< typename BlockType >
-	inline void DynamicBitset< BlockType >::Bit::set( bool value )
+	inline void DynamicBitsetT< BlockType >::Bit::set( bool value )
 	{
 		// https://graphics.stanford.edu/~seander/bithacks.html#ConditionalSetOrClearBitsWithoutBranching
 		m_block = ( m_block & ~m_mask ) | ( -value & m_mask );
@@ -521,14 +521,14 @@ namespace castor
 
 	template< typename BlockType >
 	template< bool BadCall >
-	inline void * DynamicBitset< BlockType >::Bit::operator&()const
+	inline void * DynamicBitsetT< BlockType >::Bit::operator&()const
 	{
 		static_assert( !BadCall, "Taking the address of a bit in a bitset is impossible." );
 		return nullptr;
 	}
 
 	template< typename BlockType >
-	DynamicBitset< BlockType >::Bit::operator bool()const
+	DynamicBitsetT< BlockType >::Bit::operator bool()const
 	{
 		return ( m_block & m_mask )
 			? true
@@ -536,21 +536,21 @@ namespace castor
 	}
 
 	template< typename BlockType >
-	inline typename DynamicBitset< BlockType >::Bit & DynamicBitset< BlockType >::Bit::operator|=( bool value )
+	inline typename DynamicBitsetT< BlockType >::Bit & DynamicBitsetT< BlockType >::Bit::operator|=( bool value )
 	{
 		set( ( value ) ? true : bool( *this ) );
 		return *this;
 	}
 
 	template< typename BlockType >
-	inline typename DynamicBitset< BlockType >::Bit & DynamicBitset< BlockType >::Bit::operator&=( bool value )
+	inline typename DynamicBitsetT< BlockType >::Bit & DynamicBitsetT< BlockType >::Bit::operator&=( bool value )
 	{
 		set( ( value ) ? bool( *this ) : false );
 		return *this;
 	}
 
 	template< typename BlockType >
-	inline typename DynamicBitset< BlockType >::Bit & DynamicBitset< BlockType >::Bit::operator^=( bool value )
+	inline typename DynamicBitsetT< BlockType >::Bit & DynamicBitsetT< BlockType >::Bit::operator^=( bool value )
 	{
 		set( ( value ) ? !bool( *this ) : bool( *this ) );
 		return *this;
@@ -559,42 +559,42 @@ namespace castor
 	//*************************************************************************
 
 	template< typename BlockType >
-	inline bool operator==( typename DynamicBitset< BlockType >::Bit const & lhs
-		, typename DynamicBitset< BlockType >::Bit const & rhs )
+	inline bool operator==( typename DynamicBitsetT< BlockType >::Bit const & lhs
+		, typename DynamicBitsetT< BlockType >::Bit const & rhs )
 	{
 		return bool( lhs ) == bool( rhs );
 	}
 
 	template< typename BlockType >
-	inline bool operator!=( typename DynamicBitset< BlockType >::Bit const & lhs
-		, typename DynamicBitset< BlockType >::Bit const & rhs )
+	inline bool operator!=( typename DynamicBitsetT< BlockType >::Bit const & lhs
+		, typename DynamicBitsetT< BlockType >::Bit const & rhs )
 	{
 		return bool( lhs ) != bool( rhs );
 	}
 
 	template< typename BlockType >
-	typename DynamicBitset< BlockType >::Bit operator|( typename DynamicBitset< BlockType >::Bit const & lhs
+	typename DynamicBitsetT< BlockType >::Bit operator|( typename DynamicBitsetT< BlockType >::Bit const & lhs
 		, bool rhs )
 	{
-		typename DynamicBitset< BlockType >::Bit result{ lhs };
+		typename DynamicBitsetT< BlockType >::Bit result{ lhs };
 		result |= rhs;
 		return result;
 	}
 
 	template< typename BlockType >
-	typename DynamicBitset< BlockType >::Bit operator&( typename DynamicBitset< BlockType >::Bit const & lhs
+	typename DynamicBitsetT< BlockType >::Bit operator&( typename DynamicBitsetT< BlockType >::Bit const & lhs
 		, bool rhs )
 	{
-		typename DynamicBitset< BlockType >::Bit result{ lhs };
+		typename DynamicBitsetT< BlockType >::Bit result{ lhs };
 		result &= rhs;
 		return result;
 	}
 
 	template< typename BlockType >
-	typename DynamicBitset< BlockType >::Bit operator^( typename DynamicBitset< BlockType >::Bit const & lhs
+	typename DynamicBitsetT< BlockType >::Bit operator^( typename DynamicBitsetT< BlockType >::Bit const & lhs
 		, bool rhs )
 	{
-		typename DynamicBitset< BlockType >::Bit result{ lhs };
+		typename DynamicBitsetT< BlockType >::Bit result{ lhs };
 		result ^= rhs;
 		return result;
 	}

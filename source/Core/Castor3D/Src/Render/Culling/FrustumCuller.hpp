@@ -22,12 +22,10 @@ namespace castor3d
 	public:
 		C3D_API FrustumCuller( Scene const & scene
 			, Camera & camera );
-		C3D_API void compute()override;
 
 	private:
-		void doCullGeometries();
-		void doCullBillboards();
-		void doCullParticles();
+		void doCullGeometries()override;
+		void doCullBillboards()override;
 	};
 }
 

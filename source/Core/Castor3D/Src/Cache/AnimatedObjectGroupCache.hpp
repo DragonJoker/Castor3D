@@ -192,6 +192,7 @@ namespace castor3d
 		std::map< AnimatedObjectGroup *, OnAnimatedMeshChangeConnection > m_meshRemovedConnections;
 		UniformBufferPool< SkinningUbo::Configuration > m_skinningUboPool;
 		UniformBufferPool< MorphingUbo::Configuration > m_morphingUboPool;
+		RenderPassTimerSPtr m_updateTimer;
 	};
 	using AnimatedObjectGroupCache = Cache< AnimatedObjectGroup, castor::String >;
 	DECLARE_SMART_PTR( AnimatedObjectGroupCache );
