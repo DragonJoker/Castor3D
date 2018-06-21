@@ -3,6 +3,7 @@
 #include "Engine.hpp"
 #include "Render/RenderSystem.hpp"
 
+#include <Buffer/StagingBuffer.hpp>
 #include <Buffer/UniformBuffer.hpp>
 
 using namespace castor;
@@ -63,6 +64,28 @@ namespace castor3d
 		configuration.invProjection = projection.getInverse();
 		configuration.jitter = jitter;
 		m_ubo->upload();
+	}
+
+	void MatrixUbo::update( Matrix4x4r const & view
+		, Matrix4x4r const & projection
+		, Point2r const & jitter
+		, renderer::StagingBuffer & stagingBuffer
+		, renderer::CommandBuffer const & commandBuffer )const
+	{
+		REQUIRE( m_ubo );
+		auto & configuration = m_ubo->getData( 0u );
+		configuration.prvView = configuration.curView;
+		configuration.prvViewProj = configuration.curViewProj;
+		configuration.curView = view;
+		configuration.projection = projection;
+		configuration.curViewProj = projection * view;
+		configuration.invProjection = projection.getInverse();
+		configuration.jitter = jitter;
+		stagingBuffer.uploadUniformData( commandBuffer
+			, &configuration
+			, 1u
+			, 0u
+			, *m_ubo );
 	}
 
 	void MatrixUbo::update( Matrix4x4r const & projection )const

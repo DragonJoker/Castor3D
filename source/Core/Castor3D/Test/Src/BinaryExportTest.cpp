@@ -10,11 +10,11 @@
 #include <Animation/Skeleton/SkeletonAnimation.hpp>
 #include <Animation/Skeleton/SkeletonAnimationBone.hpp>
 #include <Animation/Skeleton/SkeletonAnimationNode.hpp>
+#include <Binary/BinaryMesh.hpp>
+#include <Binary/BinarySkeleton.hpp>
 #include <Cache/CacheView.hpp>
 #include <Mesh/Importer.hpp>
 #include <Mesh/Submesh.hpp>
-#include <Mesh/Buffer/IndexBuffer.hpp>
-#include <Mesh/Buffer/VertexBuffer.hpp>
 #include <Mesh/Skeleton/Bone.hpp>
 #include <Mesh/Skeleton/Skeleton.hpp>
 #include <Miscellaneous/Parameter.hpp>
@@ -104,6 +104,8 @@ namespace Testing
 
 	void BinaryExportTest::doTestMesh( MeshSPtr & src )
 	{
+		auto device = m_engine.getRenderSystem()->createDevice( renderer::WindowHandle{ std::make_unique< TestWindowHandle >() }, 0u );
+		device->enable();
 		Scene & scene = *src->getScene();
 		String name = src->getName();
 		Path path{ name + cuT( ".cmsh" ) };
@@ -157,9 +159,14 @@ namespace Testing
 		File::deleteFile( path );
 		scene.cleanup();
 		m_engine.getRenderLoop().renderSyncFrame();
+		src->cleanup();
+		dst->cleanup();
 		src.reset();
 		dst.reset();
-		DeCleanupEngine();
+		device->disable();
+		m_engine.getRenderSystem()->unregisterDevice( *device );
+		device.reset();
+		doCleanupEngine();
 	}
 
 	//*********************************************************************************************

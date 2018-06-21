@@ -64,7 +64,7 @@ namespace castor
 		m_last.m_key = std::move( TKey() );
 	}
 	template< typename TObj, typename TKey >
-	inline typename Collection< TObj, TKey >::TObjSPtr Collection< TObj, TKey >::find( key_param_type p_key )const
+	inline typename Collection< TObj, TKey >::TObjSPtr Collection< TObj, TKey >::find( KeyParamType p_key )const
 	{
 		auto lock( makeUniqueLock( m_mutex ) );
 		TObjSPtr result;
@@ -88,7 +88,7 @@ namespace castor
 		return m_objects.size();
 	}
 	template< typename TObj, typename TKey >
-	inline bool Collection< TObj, TKey >::insert( key_param_type p_key, TObjSPtr p_element )
+	inline bool Collection< TObj, TKey >::insert( KeyParamType p_key, TObjSPtr p_element )
 	{
 		auto lock( makeUniqueLock( m_mutex ) );
 		TObjPtrMapIt it = m_objects.find( p_key );
@@ -97,7 +97,7 @@ namespace castor
 		if ( it == m_objects.end() )
 		{
 			m_last.m_key = std::move( TKey() );
-			m_objects.insert( value_type( p_key, p_element ) );
+			m_objects.emplace( p_key, p_element );
 			doInitLast();
 			result = true;
 		}
@@ -109,14 +109,14 @@ namespace castor
 		return result;
 	}
 	template< typename TObj, typename TKey >
-	inline bool Collection< TObj, TKey >::has( key_param_type p_key )const
+	inline bool Collection< TObj, TKey >::has( KeyParamType p_key )const
 	{
 		auto lock( makeUniqueLock( m_mutex ) );
 		doUpdateLast( p_key );
 		return m_last.m_result != m_objects.end();
 	}
 	template< typename TObj, typename TKey >
-	inline typename Collection< TObj, TKey >::TObjSPtr Collection< TObj, TKey >::erase( key_param_type p_key )
+	inline typename Collection< TObj, TKey >::TObjSPtr Collection< TObj, TKey >::erase( KeyParamType p_key )
 	{
 		auto lock( makeUniqueLock( m_mutex ) );
 		TObjSPtr ret;
@@ -140,7 +140,7 @@ namespace castor
 	}
 
 	template< typename TObj, typename TKey >
-	void Collection< TObj, TKey >::doUpdateLast( key_param_type p_key )const
+	void Collection< TObj, TKey >::doUpdateLast( KeyParamType p_key )const
 	{
 		if ( m_last.m_key != p_key )
 		{

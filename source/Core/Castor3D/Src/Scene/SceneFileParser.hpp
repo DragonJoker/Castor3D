@@ -60,6 +60,7 @@ namespace castor3d
 		eTransmittanceProfile = MAKE_SECTION_NAME( 'T', 'R', 'P', 'R' ),
 		eHdrConfig = MAKE_SECTION_NAME( 'H', 'D', 'R', 'C' ),
 		eShadows = MAKE_SECTION_NAME( 'S', 'H', 'D', 'W' ),
+		eMeshDefaultMaterials = MAKE_SECTION_NAME( 'M', 'M', 'T', 'L' ),
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -103,14 +104,19 @@ namespace castor3d
 		LightSPtr light;
 		CameraSPtr camera;
 		MaterialSPtr material;
+		bool createMaterial;
+		uint32_t passIndex;
 		SamplerSPtr sampler;
 		RenderTargetSPtr renderTarget;
 		LegacyPassSPtr legacyPass;
 		MetallicRoughnessPbrPassSPtr pbrMRPass;
 		SpecularGlossinessPbrPassSPtr pbrSGPass;
 		PassSPtr pass;
+		bool createPass;
+		uint32_t unitIndex;
 		renderer::ImageCreateInfo imageInfo;
 		TextureUnitSPtr textureUnit;
+		bool createUnit;
 		ShaderProgramSPtr shaderProgram;
 		castor::PxBufferBaseSPtr buffer;
 		castor::Path folder;

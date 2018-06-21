@@ -67,6 +67,13 @@ namespace castor3d
 		~SsaoBlurPass();
 		/**
 		 *\~english
+		 *\brief		Updates the blur configuration UBO.
+		 *\~french
+		 *\brief		Met à jour l'UBO de configuration du flou.
+		 */
+		void update()const;
+		/**
+		 *\~english
 		 *\brief		Applies the blur.
 		 *\~french
 		 *\brief		Applique le flou.
@@ -112,6 +119,7 @@ namespace castor3d
 		renderer::TextureView const & m_normals;
 		glsl::Shader m_vertexShader;
 		glsl::Shader m_pixelShader;
+		SsaoConfig const & m_config;
 		renderer::ShaderStageStateArray m_program;
 		renderer::Extent2D m_size;
 		TextureUnit m_result;

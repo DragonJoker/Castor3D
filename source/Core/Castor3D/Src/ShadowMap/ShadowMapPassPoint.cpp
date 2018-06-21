@@ -44,12 +44,12 @@ namespace castor3d
 	String const ShadowMapPassPoint::FarPlane = cuT( "c3d_farPlane" );
 
 	ShadowMapPassPoint::ShadowMapPassPoint( Engine & engine
-		, Scene & scene
+		, MatrixUbo const & matrixUbo
+		, SceneCuller & culler
 		, ShadowMap const & shadowMap )
-		: ShadowMapPass{ engine, scene, shadowMap }
+		: ShadowMapPass{ engine, matrixUbo, culler, shadowMap }
 		, m_viewport{ engine }
 	{
-		m_renderQueue.initialise( scene );
 	}
 
 	ShadowMapPassPoint::~ShadowMapPassPoint()
@@ -78,11 +78,11 @@ namespace castor3d
 		{
 			m_shadowConfig->upload();
 			m_matrixUbo.update( m_matrices[index], m_projection );
-			doUpdateNodes( m_renderQueue.getAllRenderNodes() );
+			doUpdateNodes( m_renderQueue.getCulledRenderNodes() );
 		}
 	}
 
-	void ShadowMapPassPoint::doUpdateNodes( SceneRenderNodes & nodes )
+	void ShadowMapPassPoint::doUpdateNodes( SceneCulledRenderNodes & nodes )
 	{
 		RenderPass::doUpdate( nodes.instancedStaticNodes.backCulled );
 		RenderPass::doUpdate( nodes.staticNodes.backCulled );
@@ -164,14 +164,12 @@ namespace castor3d
 			, renderer::MemoryPropertyFlag::eHostVisible | renderer::MemoryPropertyFlag::eHostCoherent );
 
 		m_viewport.resize( size );
-		m_renderQueue.initialise( m_scene );
 		return true;
 	}
 
 	void ShadowMapPassPoint::doCleanup()
 	{
 		m_renderQueue.cleanup();
-		m_matrixUbo.cleanup();
 		m_shadowConfig.reset();
 		m_onNodeChanged.disconnect();
 	}
@@ -194,6 +192,7 @@ namespace castor3d
 
 	void ShadowMapPassPoint::doUpdate( RenderQueueArray & queues )
 	{
+		getCuller().compute();
 		queues.emplace_back( m_renderQueue );
 	}
 

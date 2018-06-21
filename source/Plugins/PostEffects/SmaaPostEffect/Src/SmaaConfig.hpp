@@ -45,6 +45,7 @@ namespace smaa
 
 			if ( value == cuT( "low" ) )
 			{
+				data.preset = Preset::eLow;
 				data.threshold = 0.15f;
 				data.maxSearchSteps = 4;
 				data.maxSearchStepsDiag = 0;
@@ -52,6 +53,7 @@ namespace smaa
 			}
 			else if ( value == cuT( "medium" ) )
 			{
+				data.preset = Preset::eMedium;
 				data.threshold = 0.1f;
 				data.maxSearchSteps = 8;
 				data.maxSearchStepsDiag = 0;
@@ -59,6 +61,7 @@ namespace smaa
 			}
 			else if ( value == cuT( "high" ) )
 			{
+				data.preset = Preset::eHigh;
 				data.threshold = 0.1f;
 				data.maxSearchSteps = 16;
 				data.maxSearchStepsDiag = 8;
@@ -66,6 +69,7 @@ namespace smaa
 			}
 			else if ( value == cuT( "ultra" ) )
 			{
+				data.preset = Preset::eUltra;
 				data.threshold = 0.05f;
 				data.maxSearchSteps = 32;
 				data.maxSearchStepsDiag = 16;
@@ -73,6 +77,7 @@ namespace smaa
 			}
 			else if ( value == cuT( "custom" ) )
 			{
+				data.preset = Preset::eCustom;
 				parameters.get( cuT( "threshold" ), data.threshold );
 				parameters.get( cuT( "maxSearchSteps" ), data.maxSearchSteps );
 				parameters.get( cuT( "maxSearchStepsDiag" ), data.maxSearchStepsDiag );
@@ -113,6 +118,7 @@ namespace smaa
 			parameters.get( cuT( "enablePredication" ), data.enablePredication );
 			parameters.get( cuT( "predicationScale" ), data.predicationScale );
 			parameters.get( cuT( "predicationStrength" ), data.predicationStrength );
+			parameters.get( cuT( "predicationThreshold" ), data.predicationThreshold );
 
 			switch ( data.mode )
 			{
@@ -178,6 +184,7 @@ namespace smaa
 		struct Data
 		{
 			Mode mode{ Mode::e1X };
+			Preset preset{ Preset::eHigh };
 			EdgeDetectionType edgeDetection{ EdgeDetectionType::eLuma };
 			bool enableReprojection{ false };
 			bool enablePredication{ false };

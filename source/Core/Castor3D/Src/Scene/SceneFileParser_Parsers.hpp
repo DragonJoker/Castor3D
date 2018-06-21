@@ -132,7 +132,13 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserMeshImport )
 	DECLARE_ATTRIBUTE_PARSER( parserMeshMorphImport )
 	DECLARE_ATTRIBUTE_PARSER( parserMeshDivide )
+	DECLARE_ATTRIBUTE_PARSER( parserMeshDefaultMaterial )
+	DECLARE_ATTRIBUTE_PARSER( parserMeshDefaultMaterials )
 	DECLARE_ATTRIBUTE_PARSER( parserMeshEnd )
+
+	// Object Materials Parsers
+	DECLARE_ATTRIBUTE_PARSER( parserMeshDefaultMaterialsMaterial )
+	DECLARE_ATTRIBUTE_PARSER( parserMeshDefaultMaterialsEnd )
 
 	// Submesh Parsers
 	DECLARE_ATTRIBUTE_PARSER( parserSubmeshVertex )

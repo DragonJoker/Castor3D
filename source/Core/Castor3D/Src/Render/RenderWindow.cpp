@@ -4,6 +4,7 @@
 #include "Render/RenderLoop.hpp"
 #include "Render/RenderTarget.hpp"
 #include "RenderToTexture/RenderQuad.hpp"
+#include "Technique/RenderTechnique.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <Buffer/StagingBuffer.hpp>
@@ -62,7 +63,6 @@ namespace castor3d
 		, Named{ name }
 		, m_index{ s_nbRenderWindows++ }
 		, m_listener{ engine.getFrameListenerCache().add( cuT( "RenderWindow_" ) + string::toString( m_index ) ) }
-		, m_pickingPass{ std::make_shared< PickingPass >( engine ) }
 	{
 	}
 
@@ -77,7 +77,13 @@ namespace castor3d
 			getEngine()->getRenderTargetCache().remove( target );
 		}
 
-		m_pickingPass.reset();
+		if ( getEngine()->getRenderSystem()->hasMainDevice()
+			&& m_device != getEngine()->getRenderSystem()->getMainDevice() )
+		{
+			getEngine()->getRenderSystem()->unregisterDevice( *m_device );
+		}
+
+		m_device.reset();
 	}
 
 	bool RenderWindow::initialise( Size const & size
@@ -149,6 +155,9 @@ namespace castor3d
 				m_renderPass = m_device->createRenderPass( renderPass );
 
 				target->initialise();
+				m_pickingPass = std::make_shared< PickingPass >( *getEngine()
+					, target->getTechnique()->getMatrixUbo()
+					, target->getCuller() );
 				m_pickingPass->initialise( target->getSize() );
 
 				doCreateSwapChainDependent();
@@ -188,9 +197,6 @@ namespace castor3d
 			{
 				doCleanup( !hasCurrent );
 			}
-
-			getEngine()->getRenderSystem()->unregisterDevice( *m_device );
-			m_device.reset();
 		}
 	}
 
@@ -569,6 +575,7 @@ namespace castor3d
 
 		m_device->waitIdle();
 		m_pickingPass->cleanup();
+		m_pickingPass.reset();
 		m_overlayRenderer.reset();
 		RenderTargetSPtr target = getRenderTarget();
 

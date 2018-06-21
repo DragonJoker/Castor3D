@@ -40,11 +40,11 @@ function( RenderersBuild )
 		endif ()
 	endif ()
 
-	# if ( ${CASTOR_BUILDGRP_TEST} )
-		# set( Build ${Trs} )
-		# add_subdirectory( Plugins/Renderers/TestRenderSystem )
-		# set( Trs ${Build} PARENT_SCOPE )
-	# endif()
+	if ( ${CASTOR_BUILDGRP_TEST} )
+		set( Build ${Trs} )
+		add_subdirectory( Plugins/Renderers/TestRenderSystem )
+		set( Trs ${Build} PARENT_SCOPE )
+	endif()
 
 	set( CastorMinLibraries
 		${CastorMinLibraries}
@@ -61,14 +61,10 @@ function( RenderersSummary msg_in msgtest_in )
 	set( msg_tmp "\n\nRenderers :" )
 
 	if ( ${CASTOR_BUILD_PLUGINS} AND ${CASTOR_BUILDGRP_RENDERER} )
-		set( msg_tmp "${msg_tmp}\n    OpenGL               ${Ogl}" )
-		set( msg_tmp "${msg_tmp}\n    OpenGL 3.2           ${Ogl3}" )
-		set( msg_tmp "${msg_tmp}\n    OpenGL ES 3.0        ${OglES3}" )
+		set( msg_tmp "${msg_tmp}\n    OpenGL 4.X           ${Ogl}" )
+		set( msg_tmp "${msg_tmp}\n    OpenGL 3.X           ${Ogl3}" )
 		set( msg_tmp "${msg_tmp}\n    Vulkan               ${Vkn}" )
-
-		if ( ${CASTOR_BUILDGRP_TEST} )
-			set( msgtest_tmp "${msgtest_tmp}\n    OpenGL Test          ${OglT}" )
-		endif ()
+		set( msg_tmp "${msg_tmp}\n    Test                 ${Trs}" )
 	endif ()
 
 	SET( msg "${msg_in}${msg_tmp}" PARENT_SCOPE )
@@ -113,23 +109,6 @@ function( RenderersSetup )
 				DESCRIPTION "Development files for Gl3RenderSystem."
 				GROUP Development
 				DEPENDS Gl3RenderSystem CastorUtils_dev Castor3D_dev
-				INSTALL_TYPES Developer Full
-			)
-		endif ()
-		if( ${CASTOR_BUILD_RENDERER_OGL_ES3} )
-			cpack_add_component( GlES3RenderSystem
-				DISPLAY_NAME "GlES3RenderSystem"
-				DESCRIPTION "Enables OpenGL ES 3.0 rendering API in Castor3D."
-				REQUIRED
-				GROUP Renderers
-				DEPENDS Castor3D
-				INSTALL_TYPES Minimal Full
-			)
-			cpack_add_component( GlES3RenderSystem_dev
-				DISPLAY_NAME "GlES3RenderSystem SDK"
-				DESCRIPTION "Development files for GlES3RenderSystem."
-				GROUP Development
-				DEPENDS GlES3RenderSystem CastorUtils_dev Castor3D_dev
 				INSTALL_TYPES Developer Full
 			)
 		endif ()

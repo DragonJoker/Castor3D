@@ -836,15 +836,18 @@ namespace castor3d
 
 	void Scene::update()
 	{
-		m_rootNode->update();
-		doUpdateAnimations();
-		doUpdateMaterials();
-		getLightCache().update();
-		getGeometryCache().update();
-		m_billboardPools.update();
-		getAnimatedObjectGroupCache().update();
-		onUpdate( *this );
-		m_changed = false;
+		if ( m_initialised )
+		{
+			m_rootNode->update();
+			doUpdateAnimations();
+			doUpdateMaterials();
+			getLightCache().update();
+			getGeometryCache().update();
+			m_billboardPools.update();
+			getAnimatedObjectGroupCache().update();
+			onUpdate( *this );
+			m_changed = false;
+		}
 	}
 
 	void Scene::updateDeviceDependent( Camera const & camera )

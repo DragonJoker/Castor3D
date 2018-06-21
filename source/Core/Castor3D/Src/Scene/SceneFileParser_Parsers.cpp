@@ -843,7 +843,10 @@ namespace castor3d
 		else
 		{
 			p_params[0]->get( parsingContext->strName );
-			parsingContext->material = parsingContext->scene->getMaterialView().add( parsingContext->strName, parsingContext->scene->getMaterialsType() );
+			auto & view = parsingContext->scene->getMaterialView();
+			parsingContext->createMaterial = !view.has( parsingContext->strName );
+			parsingContext->material = view.add( parsingContext->strName, parsingContext->scene->getMaterialsType() );
+			parsingContext->passIndex = 0u;
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eMaterial )
@@ -1150,7 +1153,7 @@ namespace castor3d
 			String value;
 			p_params[0]->get( value );
 			parsingContext->strName = value;
-			parsingContext->uiUInt32 = 0;
+			parsingContext->uiUInt32 = 0u;
 			parsingContext->sceneNode.reset();
 			parsingContext->material.reset();
 		}
@@ -1813,9 +1816,10 @@ namespace castor3d
 
 				if ( cache.has( name ) )
 				{
+					MaterialSPtr material = cache.find( name );
+
 					for ( auto submesh : *parsingContext->geometry->getMesh() )
 					{
-						MaterialSPtr material = cache.find( name );
 						parsingContext->geometry->setMaterial( *submesh, material );
 					}
 				}
@@ -2196,11 +2200,51 @@ namespace castor3d
 	}
 	END_ATTRIBUTE()
 
+	IMPLEMENT_ATTRIBUTE_PARSER( parserMeshDefaultMaterial )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->mesh )
+		{
+			PARSING_ERROR( cuT( "No Mesh initialised." ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			auto & cache = parsingContext->m_pParser->getEngine()->getMaterialCache();
+			String name;
+			p_params[0]->get( name );
+
+			if ( cache.has( name ) )
+			{
+				MaterialSPtr material = cache.find( name );
+
+				for ( auto submesh : *parsingContext->mesh )
+				{
+					submesh->setDefaultMaterial( material );
+				}
+			}
+			else
+			{
+				PARSING_ERROR( cuT( "Material " ) + name + cuT( " does not exist" ) );
+			}
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserMeshDefaultMaterials )
+	{
+	}
+	END_ATTRIBUTE_PUSH( CSCNSection::eMeshDefaultMaterials )
+
 	IMPLEMENT_ATTRIBUTE_PARSER( parserMeshEnd )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( parsingContext->mesh )
+		if ( !parsingContext->mesh )
+		{
+			PARSING_ERROR( cuT( "No Mesh initialised." ) );
+		}
+		else
 		{
 			if ( parsingContext->geometry )
 			{
@@ -2209,6 +2253,48 @@ namespace castor3d
 
 			parsingContext->mesh.reset();
 		}
+	}
+	END_ATTRIBUTE_POP()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserMeshDefaultMaterialsMaterial )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->mesh )
+		{
+			PARSING_ERROR( cuT( "No Mesh initialised." ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			auto & cache = parsingContext->m_pParser->getEngine()->getMaterialCache();
+			String name;
+			uint16_t index;
+			p_params[0]->get( index );
+			p_params[1]->get( name );
+
+			if ( cache.has( name ) )
+			{
+				if ( parsingContext->mesh->getSubmeshCount() > index )
+				{
+					SubmeshSPtr submesh = parsingContext->mesh->getSubmesh( index );
+					MaterialSPtr material = cache.find( name );
+					submesh->setDefaultMaterial( material );
+				}
+				else
+				{
+					PARSING_ERROR( cuT( "Submesh index is too high" ) );
+				}
+			}
+			else
+			{
+				PARSING_ERROR( cuT( "Material " ) + name + cuT( " does not exist" ) );
+			}
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserMeshDefaultMaterialsEnd )
+	{
 	}
 	END_ATTRIBUTE_POP()
 
@@ -2620,7 +2706,18 @@ namespace castor3d
 
 		if ( parsingContext->material )
 		{
-			parsingContext->pass = parsingContext->material->createPass();
+			if ( parsingContext->createMaterial
+				|| parsingContext->material->getPassCount() < parsingContext->passIndex )
+			{
+				parsingContext->pass = parsingContext->material->createPass();
+				parsingContext->createPass = true;
+
+			}
+			else
+			{
+				parsingContext->pass = parsingContext->material->getPass( parsingContext->passIndex );
+				parsingContext->createPass = false;
+			}
 
 			switch ( parsingContext->pass->getType() )
 			{
@@ -2640,6 +2737,10 @@ namespace castor3d
 				PARSING_ERROR( "Unsupported pass type." );
 				break;
 			}
+
+			++parsingContext->passIndex;
+			parsingContext->unitIndex = 0u;
+			parsingContext->createUnit = true;
 		}
 		else
 		{
@@ -2867,8 +2968,19 @@ namespace castor3d
 
 		if ( parsingContext->pass )
 		{
-			parsingContext->uiUInt32 = 1u;
-			parsingContext->textureUnit = std::make_shared< TextureUnit >( *parsingContext->m_pParser->getEngine() );
+			if ( parsingContext->createPass
+				|| parsingContext->pass->getTextureUnitsCount() < parsingContext->unitIndex )
+			{
+				parsingContext->textureUnit = std::make_shared< TextureUnit >( *parsingContext->m_pParser->getEngine() );
+				parsingContext->createUnit = true;
+			}
+			else
+			{
+				parsingContext->createUnit = false;
+				parsingContext->textureUnit = parsingContext->pass->getTextureUnit( parsingContext->unitIndex );
+			}
+
+			++parsingContext->unitIndex;
 		}
 		else
 		{
@@ -3158,82 +3270,85 @@ namespace castor3d
 						parsingContext->imageInfo.mipLevels = 20;
 					}
 
-					auto texture = std::make_shared< TextureLayout >( *parsingContext->m_pParser->getEngine()->getRenderSystem()
-						, parsingContext->imageInfo
-						, renderer::MemoryPropertyFlag::eDeviceLocal );
-					texture->setSource( parsingContext->folder, parsingContext->relative );
-					parsingContext->buffer = texture->getDefaultImage().getBuffer();
-					parsingContext->imageInfo =
+					if ( parsingContext->createUnit )
 					{
-						0u,
-						renderer::TextureType::e2D,
-						renderer::Format::eUndefined,
-						{ 1u, 1u, 1u },
-						0u,
-						1u,
-						renderer::SampleCountFlag::e1,
-						renderer::ImageTiling::eOptimal,
-						renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst
-					};
-
-					if ( parsingContext->strName == cuT( "r" ) )
-					{
-						auto srcFormat = parsingContext->buffer->format();
-						auto dstFormat = ( ( srcFormat == PixelFormat::eR8G8B8
-							|| srcFormat == PixelFormat::eB8G8R8
-							|| srcFormat == PixelFormat::eR8G8B8_SRGB
-							|| srcFormat == PixelFormat::eB8G8R8_SRGB
-							|| srcFormat == PixelFormat::eA8R8G8B8
-							|| srcFormat == PixelFormat::eA8B8G8R8
-							|| srcFormat == PixelFormat::eA8R8G8B8_SRGB
-							|| srcFormat == PixelFormat::eA8B8G8R8_SRGB )
-							? PixelFormat::eL8
-							: ( ( srcFormat == PixelFormat::eRGB16F
-								|| srcFormat == PixelFormat::eRGBA16F )
-								? PixelFormat::eL16F
-								: ( ( srcFormat == PixelFormat::eRGB32F
-									|| srcFormat == PixelFormat::eRGBA32F )
-									? PixelFormat::eL32F
-									: srcFormat ) ) );
-						parsingContext->buffer = PxBufferBase::create( parsingContext->buffer->dimensions()
-							, dstFormat
-							, parsingContext->buffer->constPtr()
-							, srcFormat );
-					}
-					else if ( parsingContext->strName == cuT( "a" ) )
-					{
-						auto tmp = PF::extractAlpha( parsingContext->buffer );
-						parsingContext->buffer = tmp;
-					}
-					else
-					{
-						auto srcFormat = parsingContext->buffer->format();
-						auto dstFormat = ( srcFormat == PixelFormat::eR8G8B8
-							? PixelFormat::eA8R8G8B8
-							: ( srcFormat == PixelFormat::eB8G8R8
-								? PixelFormat::eA8B8G8R8
-								: ( srcFormat == PixelFormat::eR8G8B8_SRGB
-									? PixelFormat::eA8R8G8B8_SRGB
-									: ( srcFormat == PixelFormat::eB8G8R8_SRGB
-										? PixelFormat::eA8B8G8R8_SRGB
-										: ( srcFormat == PixelFormat::eRGB16F
-											? PixelFormat::eRGBA16F
-											: ( srcFormat == PixelFormat::eRGB32F
-												? PixelFormat::eRGBA32F
-												: srcFormat ) ) ) ) ) );
-
-						if ( srcFormat != dstFormat )
+						auto texture = std::make_shared< TextureLayout >( *parsingContext->m_pParser->getEngine()->getRenderSystem()
+							, parsingContext->imageInfo
+							, renderer::MemoryPropertyFlag::eDeviceLocal );
+						texture->setSource( parsingContext->folder, parsingContext->relative );
+						parsingContext->buffer = texture->getDefaultImage().getBuffer();
+						parsingContext->imageInfo =
 						{
+							0u,
+							renderer::TextureType::e2D,
+							renderer::Format::eUndefined,
+							{ 1u, 1u, 1u },
+							0u,
+							1u,
+							renderer::SampleCountFlag::e1,
+							renderer::ImageTiling::eOptimal,
+							renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst
+						};
+
+						if ( parsingContext->strName == cuT( "r" ) )
+						{
+							auto srcFormat = parsingContext->buffer->format();
+							auto dstFormat = ( ( srcFormat == PixelFormat::eR8G8B8
+								|| srcFormat == PixelFormat::eB8G8R8
+								|| srcFormat == PixelFormat::eR8G8B8_SRGB
+								|| srcFormat == PixelFormat::eB8G8R8_SRGB
+								|| srcFormat == PixelFormat::eA8R8G8B8
+								|| srcFormat == PixelFormat::eA8B8G8R8
+								|| srcFormat == PixelFormat::eA8R8G8B8_SRGB
+								|| srcFormat == PixelFormat::eA8B8G8R8_SRGB )
+								? PixelFormat::eL8
+								: ( ( srcFormat == PixelFormat::eRGB16F
+									|| srcFormat == PixelFormat::eRGBA16F )
+									? PixelFormat::eL16F
+									: ( ( srcFormat == PixelFormat::eRGB32F
+										|| srcFormat == PixelFormat::eRGBA32F )
+										? PixelFormat::eL32F
+										: srcFormat ) ) );
 							parsingContext->buffer = PxBufferBase::create( parsingContext->buffer->dimensions()
 								, dstFormat
 								, parsingContext->buffer->constPtr()
 								, srcFormat );
 						}
-					}
+						else if ( parsingContext->strName == cuT( "a" ) )
+						{
+							auto tmp = PF::extractAlpha( parsingContext->buffer );
+							parsingContext->buffer = tmp;
+						}
+						else
+						{
+							auto srcFormat = parsingContext->buffer->format();
+							auto dstFormat = ( srcFormat == PixelFormat::eR8G8B8
+								? PixelFormat::eA8R8G8B8
+								: ( srcFormat == PixelFormat::eB8G8R8
+									? PixelFormat::eA8B8G8R8
+									: ( srcFormat == PixelFormat::eR8G8B8_SRGB
+										? PixelFormat::eA8R8G8B8_SRGB
+										: ( srcFormat == PixelFormat::eB8G8R8_SRGB
+											? PixelFormat::eA8B8G8R8_SRGB
+											: ( srcFormat == PixelFormat::eRGB16F
+												? PixelFormat::eRGBA16F
+												: ( srcFormat == PixelFormat::eRGB32F
+													? PixelFormat::eRGBA32F
+													: srcFormat ) ) ) ) ) );
 
-					texture->getDefaultImage().setBuffer( parsingContext->buffer );
-					parsingContext->textureUnit->setTexture( texture );
-					parsingContext->pass->addTextureUnit( parsingContext->textureUnit );
+							if ( srcFormat != dstFormat )
+							{
+								parsingContext->buffer = PxBufferBase::create( parsingContext->buffer->dimensions()
+									, dstFormat
+									, parsingContext->buffer->constPtr()
+									, srcFormat );
+							}
+						}
+
+						texture->getDefaultImage().setBuffer( parsingContext->buffer );
+						parsingContext->textureUnit->setTexture( texture );
+						parsingContext->pass->addTextureUnit( parsingContext->textureUnit );
+					}
 				}
 			}
 		}
@@ -4799,7 +4914,7 @@ namespace castor3d
 			{
 				uint32_t value;
 				p_params[0]->get( value );
-				parsingContext->ssaoConfig.m_blurRadius = value;
+				parsingContext->ssaoConfig.m_blurRadius = makeRangedValue( int32_t( value ), 1, 6 );
 			}
 		}
 		else

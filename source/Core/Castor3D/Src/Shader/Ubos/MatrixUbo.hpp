@@ -21,7 +21,7 @@ namespace castor3d
 	*/
 	class MatrixUbo
 	{
-	private:
+	public:
 		struct Configuration
 		{
 			castor::Matrix4x4f projection;
@@ -93,6 +93,23 @@ namespace castor3d
 		C3D_API void update( castor::Matrix4x4r const & view
 			, castor::Matrix4x4r const & projection
 			, castor::Point2r const & jitter = castor::Point2r{} )const;
+		/**
+		 *\~english
+		 *\brief		Updates the UBO from given values.
+		 *\param[in]	view		The new view matrix.
+		 *\param[in]	projection	The new projection matrix.
+		 *\param[in]	jitter		The jittering value.
+		 *\~french
+		 *\brief		Met à jour l'UBO avec les valeurs données.
+		 *\param[in]	view		La nouvelle matrice de vue.
+		 *\param[in]	projection	La nouvelle matrice de projection.
+		 *\param[in]	jitter		La valeur de jittering.
+		 */
+		C3D_API void update( castor::Matrix4x4r const & view
+			, castor::Matrix4x4r const & projection
+			, castor::Point2r const & jitter
+			, renderer::StagingBuffer & stagingBuffer
+			, renderer::CommandBuffer const & commandBuffer )const;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.

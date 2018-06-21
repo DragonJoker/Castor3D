@@ -8,6 +8,8 @@ See LICENSE file in root folder
 
 #include <Math/PlaneEquation.hpp>
 
+#define C3D_DebugFrustum 0
+
 namespace castor3d
 {
 	/*!

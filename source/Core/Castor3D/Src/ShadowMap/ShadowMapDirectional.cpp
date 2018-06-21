@@ -6,6 +6,7 @@
 #include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
+#include "Render/Culling/FrustumCuller.hpp"
 #include "Scene/Light/Light.hpp"
 #include "Scene/Light/DirectionalLight.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
@@ -125,6 +126,38 @@ namespace castor3d
 
 			return unit;
 		}
+
+		std::vector< ShadowMap::PassData > createPass( Engine & engine
+			, Scene & scene
+			, ShadowMap & shadowMap )
+		{
+			std::vector< ShadowMap::PassData > result;
+			auto const width = ShadowMapPassDirectional::TextureSize;
+			auto const height = ShadowMapPassDirectional::TextureSize;
+			auto const w = float( width );
+			auto const h = float( height );
+			Viewport viewport{ engine };
+			viewport.setOrtho( -w / 2, w / 2, -h / 2, h / 2, -5120.0_r, 5120.0_r );
+			viewport.resize( { width, height } );
+			viewport.update();
+			ShadowMap::PassData passData
+			{
+				std::make_unique< MatrixUbo >( engine ),
+				std::make_shared< Camera >( cuT( "ShadowMapDirectional" )
+					, scene
+					, scene.getCameraRootNode()
+					, std::move( viewport ) ),
+				nullptr,
+				nullptr,
+			};
+			passData.culler = std::make_unique< FrustumCuller >( scene, *passData.camera );
+			passData.pass = std::make_shared< ShadowMapPassDirectional >( engine
+				, *passData.matrixUbo
+				, *passData.culler
+				, shadowMap );
+			result.emplace_back( std::move( passData ) );
+			return result;
+		}
 	}
 
 	ShadowMapDirectional::ShadowMapDirectional( Engine & engine
@@ -132,7 +165,7 @@ namespace castor3d
 		: ShadowMap{ engine
 			, doInitialiseVariance( engine, Size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize } )
 			, doInitialiseLinearDepth( engine, Size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize } )
-			, { std::make_shared< ShadowMapPassDirectional >( engine, scene, *this ) } }
+			, createPass( engine, scene, *this ) }
 	{
 	}
 
@@ -146,26 +179,26 @@ namespace castor3d
 		, uint32_t index )
 	{
 		m_shadowType = light.getShadowType();
-		m_passes[0]->update( camera, queues, light, index );
+		m_passes[0].pass->update( camera, queues, light, index );
 	}
 
 	renderer::Semaphore const & ShadowMapDirectional::render( renderer::Semaphore const & toWait )
 	{
 		static renderer::ClearColorValue const black{ 0.0f, 0.0f, 0.0f, 1.0f };
 		static renderer::DepthStencilClearValue const zero{ 1.0f, 0 };
-		m_passes[0]->updateDeviceDependent();
-		auto & timer = m_passes[0]->getTimer();
+		m_passes[0].pass->updateDeviceDependent();
+		auto & timer = m_passes[0].pass->getTimer();
 		timer.start();
 
 		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
 		{
 			timer.notifyPassRender();
 			timer.beginPass( *m_commandBuffer );
-			m_commandBuffer->beginRenderPass( m_passes[0]->getRenderPass()
+			m_commandBuffer->beginRenderPass( m_passes[0].pass->getRenderPass()
 				, *m_frameBuffer
 				, { zero, black, black }
 				, renderer::SubpassContents::eSecondaryCommandBuffers );
-			m_commandBuffer->executeCommands( { m_passes[0]->getCommandBuffer() } );
+			m_commandBuffer->executeCommands( { m_passes[0].pass->getCommandBuffer() } );
 			m_commandBuffer->endRenderPass();
 			timer.endPass( *m_commandBuffer );
 			m_commandBuffer->end();
@@ -236,7 +269,7 @@ namespace castor3d
 		depthView.subresourceRange.levelCount = 1u;
 		m_depthView = m_depthTexture->createView( depthView );
 
-		auto & renderPass = m_passes[0]->getRenderPass();
+		auto & renderPass = m_passes[0].pass->getRenderPass();
 		renderer::FrameBufferAttachmentArray attaches;
 		attaches.emplace_back( *( renderPass.getAttachments().begin() + 0u ), *m_depthView );
 		attaches.emplace_back( *( renderPass.getAttachments().begin() + 1u ), m_linearMap.getTexture()->getDefaultView() );

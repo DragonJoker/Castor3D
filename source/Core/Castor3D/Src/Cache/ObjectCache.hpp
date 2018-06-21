@@ -161,8 +161,8 @@ namespace castor3d
 
 				if ( m_elements.has( name ) )
 				{
-					castor::Logger::logWarning( castor::makeStringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
 					result = m_elements.find( name );
+					doReportDuplicate( name );
 				}
 				else
 				{
@@ -172,7 +172,7 @@ namespace castor3d
 			}
 			else
 			{
-				castor::Logger::logWarning( castor::makeStringStream() << WARNING_CACHE_NULL_OBJECT << getObjectTypeName() << cuT( ": " ) );
+				doReportNull();
 			}
 
 			return result;
@@ -204,13 +204,13 @@ namespace castor3d
 				m_initialise( result );
 				m_elements.insert( name, result );
 				m_attach( result, parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
-				castor::Logger::logDebug( castor::makeStringStream() << INFO_CACHE_CREATED_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
+				doReportCreation( name );
 				onChanged();
 			}
 			else
 			{
 				result = m_elements.find( name );
-				castor::Logger::logWarning( castor::makeStringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
+				doReportDuplicate( name );
 			}
 
 			return result;
@@ -429,6 +429,32 @@ namespace castor3d
 		inline auto end()const
 		{
 			return m_elements.end();
+		}
+
+	protected:
+		inline void doReportCreation( castor::String const & name )
+		{
+			castor::Logger::logTrace( castor::makeStringStream()
+				<< INFO_CACHE_CREATED_OBJECT
+				<< getObjectTypeName()
+				<< cuT( ": " )
+				<< name );
+		}
+
+		inline void doReportDuplicate( castor::String const & name )
+		{
+			castor::Logger::logWarning( castor::makeStringStream()
+				<< WARNING_CACHE_DUPLICATE_OBJECT
+				<< getObjectTypeName()
+				<< cuT( ": " )
+				<< name );
+		}
+
+		inline void doReportNull()
+		{
+			castor::Logger::logWarning( castor::makeStringStream()
+				<< WARNING_CACHE_NULL_OBJECT
+				<< getObjectTypeName() );
 		}
 
 	public:

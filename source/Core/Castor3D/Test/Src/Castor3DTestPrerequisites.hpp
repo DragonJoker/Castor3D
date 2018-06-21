@@ -5,15 +5,14 @@
 #include <UnitTest.hpp>
 #include <Benchmark.hpp>
 
-#include <Render/TestRenderSystem.hpp>
-#include <Miscellaneous/WindowHandle.hpp>
+#include <Core/WindowHandle.hpp>
 
 #include "Castor3DTestCommon.hpp"
 
 namespace Testing
 {
 	class TestWindowHandle
-		: public castor3d::IWindowHandle
+		: public renderer::IWindowHandle
 	{
 	public:
 		TestWindowHandle()

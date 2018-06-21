@@ -30,9 +30,9 @@ namespace castor
 	public:
 		DECLARE_SMART_PTR( TObj );
 		DECLARE_TPL_MAP( TKey, TObjSPtr, TObjPtr );
-		typedef typename TObjPtrMap::value_type value_type;
+		typedef typename TObjPtrMap::value_type ValueType;
 		//!\~english Typedef over the key param type	\~french Typedef sur le type de la clef en paramètre de fonction
-		typedef typename CallTraits< TKey >::const_param_type key_param_type;
+		typedef typename CallTraits< TKey >::ConstParamType KeyParamType;
 
 	private:
 		struct Search
@@ -55,7 +55,7 @@ namespace castor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~Collection();
+		~Collection();
 		/**
 		 *\~english
 		 *\brief		Locks the collection mutex
@@ -130,7 +130,7 @@ namespace castor
 		 *\param[in]	p_key	La clef
 		 *\return		L'objet trouvé s'il existe, \p null_ptr sinon
 		 */
-		inline TObjSPtr find( key_param_type p_key )const;
+		inline TObjSPtr find( KeyParamType p_key )const;
 		/**
 		 *\~english
 		 *\brief		Gives the collected objects count
@@ -152,7 +152,7 @@ namespace castor
 		 *\param[in]	p_element	L'élément à insérer
 		 *\return		\p false si un élément est déjà associé à la clef
 		 */
-		inline bool insert( key_param_type p_key, TObjSPtr p_element );
+		inline bool insert( KeyParamType p_key, TObjSPtr p_element );
 		/**
 		 *\~english
 		 *\brief		Tests if there is an element associated to the key
@@ -163,7 +163,7 @@ namespace castor
 		 *\param[in]	p_key	La clef à tester
 		 *\return		Le résultat du test
 		 */
-		inline bool has( key_param_type p_key )const;
+		inline bool has( KeyParamType p_key )const;
 		/**
 		 *\~english
 		 *\brief		Removes the element associated to the given key from the collection
@@ -174,7 +174,7 @@ namespace castor
 		 *\param[in]	p_key	La clef
 		 *\return		L'élément associé, null_ptr sinon
 		 */
-		inline TObjSPtr erase( key_param_type p_key );
+		inline TObjSPtr erase( KeyParamType p_key );
 
 	protected:
 		/**
@@ -192,7 +192,7 @@ namespace castor
 		 *\brief		Met à jour la dernière recherche, en effectuant la recherche dans la map.
 		 *\param[in]	p_key	La clef à tester.
 		 */
-		inline void doUpdateLast( key_param_type p_key )const;
+		inline void doUpdateLast( KeyParamType p_key )const;
 
 	private:
 		TObjPtrMap m_objects;

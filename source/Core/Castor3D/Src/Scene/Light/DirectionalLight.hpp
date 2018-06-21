@@ -126,6 +126,16 @@ namespace castor3d
 		 *\~french
 		 *\return		La matrice de transformation de la lumière.
 		 */
+		inline castor::Matrix4x4f const & getLightSpaceView()const
+		{
+			return m_lightSpaceView;
+		}
+		/**
+		 *\~english
+		 *\return		The light space transformation matrix.
+		 *\~french
+		 *\return		La matrice de transformation de la lumière.
+		 */
 		inline castor::Matrix4x4f const & getLightSpaceTransform()const
 		{
 			return m_lightSpace;
@@ -142,12 +152,9 @@ namespace castor3d
 		C3D_API void doBind( castor::Point4f * buffer )const override;
 
 	private:
-		//!\~english	The light source direction.
-		//!\~french		La direction de la source lumineuse.
 		castor::Point3f m_direction;
-		//!\~english	The light source space transformation matrix.
-		//!\~french		La matrice de transformation vers l'espace de la source lumineuse.
 		mutable castor::Matrix4x4f m_lightSpace;
+		mutable castor::Matrix4x4f m_lightSpaceView;
 	};
 }
 

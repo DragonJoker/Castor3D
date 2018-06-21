@@ -246,26 +246,40 @@ namespace castor3d
 			UBO_BILLBOARD( writer, BillboardUbo::BindingPoint, 0 );
 
 			// Shader outputs
-			uint32_t location{ 0u };
-			auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ), RenderPass::VertexOutputs::WorldPositionLocation );
-			auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" ), RenderPass::VertexOutputs::CurPositionLocation );
-			auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" ), RenderPass::VertexOutputs::PrvPositionLocation );
-			auto vtx_normal = writer.declOutput< Vec3 >( cuT( "vtx_normal" ), RenderPass::VertexOutputs::NormalLocation );
-			auto vtx_tangent = writer.declOutput< Vec3 >( cuT( "vtx_tangent" ), RenderPass::VertexOutputs::TangentLocation );
-			auto vtx_bitangent = writer.declOutput< Vec3 >( cuT( "vtx_bitangent" ), RenderPass::VertexOutputs::BitangentLocation );
-			auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ), RenderPass::VertexOutputs::TextureLocation );
-			auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" ), RenderPass::VertexOutputs::InstanceLocation );
-			auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" ), RenderPass::VertexOutputs::MaterialLocation );
+			auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" )
+				, RenderPass::VertexOutputs::WorldPositionLocation );
+			auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" )
+				, RenderPass::VertexOutputs::CurPositionLocation );
+			auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" )
+				, RenderPass::VertexOutputs::PrvPositionLocation );
+			auto vtx_normal = writer.declOutput< Vec3 >( cuT( "vtx_normal" )
+				, RenderPass::VertexOutputs::NormalLocation );
+			auto vtx_tangent = writer.declOutput< Vec3 >( cuT( "vtx_tangent" )
+				, RenderPass::VertexOutputs::TangentLocation );
+			auto vtx_bitangent = writer.declOutput< Vec3 >( cuT( "vtx_bitangent" )
+				, RenderPass::VertexOutputs::BitangentLocation );
+			auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" )
+				, RenderPass::VertexOutputs::TextureLocation );
+			auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" )
+				, RenderPass::VertexOutputs::InstanceLocation );
+			auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
+				, RenderPass::VertexOutputs::MaterialLocation );
 			auto out = gl_PerVertex{ writer };
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto bbcenter = writer.declLocale( cuT( "bbcenter" ), writer.paren( c3d_mtxModel * vec4( center, 1.0 ) ).xyz() );
-				auto toCamera = writer.declLocale( cuT( "toCamera" ), c3d_cameraPosition.xyz() - bbcenter );
-				toCamera.y() = 0.0_f;
-				toCamera = normalize( toCamera );
-				auto right = writer.declLocale( cuT( "right" ), vec3( c3d_curView[0][0], c3d_curView[1][0], c3d_curView[2][0] ) );
-				auto up = writer.declLocale( cuT( "up" ), vec3( c3d_curView[0][1], c3d_curView[1][1], c3d_curView[2][1] ) );
+				auto curBbcenter = writer.declLocale( cuT( "curBbcenter" )
+					, writer.paren( c3d_curMtxModel * vec4( center, 1.0 ) ).xyz() );
+				auto prvBbcenter = writer.declLocale( cuT( "prvBbcenter" )
+					, writer.paren( c3d_prvMtxModel * vec4( center, 1.0 ) ).xyz() );
+				auto curToCamera = writer.declLocale( cuT( "curToCamera" )
+					, c3d_cameraPosition.xyz() - curBbcenter );
+				curToCamera.y() = 0.0_f;
+				curToCamera = normalize( curToCamera );
+				auto right = writer.declLocale( cuT( "right" )
+					, vec3( c3d_curView[0][0], c3d_curView[1][0], c3d_curView[2][0] ) );
+				auto up = writer.declLocale( cuT( "up" )
+					, vec3( c3d_curView[0][1], c3d_curView[1][1], c3d_curView[2][1] ) );
 
 				if ( !checkFlag( programFlags, ProgramFlag::eSpherical ) )
 				{
@@ -274,7 +288,7 @@ namespace castor3d
 				}
 
 				vtx_material = c3d_materialIndex;
-				vtx_normal = toCamera;
+				vtx_normal = curToCamera;
 				vtx_tangent = up;
 				vtx_bitangent = right;
 
@@ -287,20 +301,36 @@ namespace castor3d
 					height = c3d_dimensions.y() / c3d_windowSize.y();
 				}
 
-				vtx_worldPosition = bbcenter
+				vtx_worldPosition = curBbcenter
 					+ right * position.x() * width
 					+ up * position.y() * height;
+				auto prvPosition = writer.declLocale( cuT( "prvPosition" )
+					, vec4( prvBbcenter + right * position.x() * width + up * position.y() * height, 1.0 ) );
 
 				vtx_texture = vec3( texture, 0.0 );
 				vtx_instance = gl_InstanceID;
 				auto curPosition = writer.declLocale( cuT( "curPosition" )
-					, writer.paren( c3d_curView * vec4( vtx_worldPosition, 1.0 ) ).xyz() );
-				auto prvPosition = writer.declLocale( cuT( "prvPosition" )
-					, writer.paren( c3d_prvView * vec4( vtx_worldPosition, 1.0 ) ) );
-				out.gl_Position() = c3d_projection * vec4( curPosition, 1.0 );
+					, c3d_curView * vec4( vtx_worldPosition, 1.0 ) );
+				prvPosition = c3d_prvView * vec4( prvPosition, 1.0 );
+				curPosition = c3d_projection * curPosition;
 				prvPosition = c3d_projection * prvPosition;
-				vtx_curPosition = out.gl_Position().xyw();
+
+				// Convert the jitter from non-homogeneous coordiantes to homogeneous
+				// coordinates and add it:
+				// (note that for providing the jitter in non-homogeneous projection space,
+				//  pixel coordinates (screen space) need to multiplied by two in the C++
+				//  code)
+				curPosition.xy() -= c3d_jitter * curPosition.w();
+				prvPosition.xy() -= c3d_jitter * prvPosition.w();
+				out.gl_Position() = curPosition;
+
+				vtx_curPosition = curPosition.xyw();
 				vtx_prvPosition = prvPosition.xyw();
+				// Positions in projection space are in [-1, 1] range, while texture
+				// coordinates are in [0, 1] range. So, we divide by 2 to get velocities in
+				// the scale (and flip the y axis):
+				vtx_curPosition.xy() *= vec2( 0.5_f, -0.5 );
+				vtx_prvPosition.xy() *= vec2( 0.5_f, -0.5 );
 			} );
 
 			vtxShader = writer.finalise();

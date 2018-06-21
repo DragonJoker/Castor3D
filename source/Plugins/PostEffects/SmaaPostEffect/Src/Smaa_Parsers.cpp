@@ -13,87 +13,6 @@
 
 namespace smaa
 {
-	namespace
-	{
-		castor::String doGetName( Mode mode )
-		{
-			castor::String result;
-
-			switch ( mode )
-			{
-			case Mode::e1X:
-				result = cuT( "1X" );
-				break;
-
-			case Mode::eT2X:
-				result = cuT( "T2X" );
-				break;
-
-			case Mode::eS2X:
-				result = cuT( "S2X" );
-				break;
-
-			case Mode::e4X:
-				result = cuT( "4X" );
-				break;
-			}
-
-			return result;
-		}
-
-		castor::String doGetName( Preset preset )
-		{
-			castor::String result;
-
-			switch ( preset )
-			{
-			case Preset::eLow:
-				result = cuT( "low" );
-				break;
-
-			case Preset::eMedium:
-				result = cuT( "medium" );
-				break;
-
-			case Preset::eHigh:
-				result = cuT( "high" );
-				break;
-
-			case Preset::eUltra:
-				result = cuT( "ultra" );
-				break;
-
-			case Preset::eCustom:
-				result = cuT( "custom" );
-				break;
-			}
-
-			return result;
-		}
-
-		castor::String doGetName( EdgeDetectionType detection )
-		{
-			castor::String result;
-
-			switch ( detection )
-			{
-			case EdgeDetectionType::eDepth:
-				result = cuT( "depth" );
-				break;
-
-			case EdgeDetectionType::eColour:
-				result = cuT( "colour" );
-				break;
-
-			case EdgeDetectionType::eLuma:
-				result = cuT( "luma" );
-				break;
-			}
-
-			return result;
-		}
-	}
-
 	struct ParserContext
 	{
 		castor3d::Engine * engine{ nullptr };
@@ -345,21 +264,37 @@ namespace smaa
 	}
 	END_ATTRIBUTE()
 
+	IMPLEMENT_ATTRIBUTE_PARSER( parserPredicationThreshold )
+	{
+		auto & context = getParserContext( p_context );
+
+		if ( p_params.empty() )
+		{
+			PARSING_ERROR( "Missing parameter" );
+		}
+		else
+		{
+			p_params[0]->get( context.data.predicationThreshold );
+		}
+	}
+	END_ATTRIBUTE()
+
 	IMPLEMENT_ATTRIBUTE_PARSER( parserSmaaEnd )
 	{
 		auto & context = getParserContext( p_context );
 		auto engine = context.engine;
 		auto parsingContext = std::static_pointer_cast< castor3d::SceneFileContext >( p_context );
 		castor3d::Parameters parameters;
-		parameters.add( cuT( "mode" ), doGetName( context.data.mode ) );
-		parameters.add( cuT( "preset" ), doGetName( context.preset ) );
-		parameters.add( cuT( "edgeDetection" ), doGetName( context.data.edgeDetection ) );
+		parameters.add( cuT( "mode" ), getName( context.data.mode ) );
+		parameters.add( cuT( "preset" ), getName( context.preset ) );
+		parameters.add( cuT( "edgeDetection" ), getName( context.data.edgeDetection ) );
 		parameters.add( cuT( "disableDiagonalDetection" ), context.data.disableDiagonalDetection );
 		parameters.add( cuT( "disableCornerDetection" ), context.data.disableCornerDetection );
 		parameters.add( cuT( "localContrastAdaptationFactor" ), context.data.localContrastAdaptationFactor );
 		parameters.add( cuT( "enablePredication" ), context.data.enablePredication );
 		parameters.add( cuT( "predicationScale" ), context.data.predicationScale );
 		parameters.add( cuT( "predicationStrength" ), context.data.predicationStrength );
+		parameters.add( cuT( "predicationThreshold" ), context.data.predicationThreshold );
 
 		if ( context.preset == Preset::eCustom )
 		{

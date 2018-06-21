@@ -438,9 +438,9 @@ namespace light_streaks
 		m_renderPass.reset();
 	}
 
-	bool PostEffect::doWriteInto( castor::TextFile & file )
+	bool PostEffect::doWriteInto( castor::TextFile & file, castor::String const & tabs )
 	{
-		return true;
+		return file.writeText( tabs + cuT( "postfx \"" ) + Type + cuT( "\"" ) ) > 0;
 	}
 
 	castor3d::SamplerSPtr PostEffect::doCreateSampler( bool p_linear )

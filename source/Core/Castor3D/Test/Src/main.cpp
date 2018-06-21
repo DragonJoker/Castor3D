@@ -1,15 +1,18 @@
 #include "Castor3DTestPrerequisites.hpp"
 
-#include <Log/Logger.hpp>
-#include <Data/File.hpp>
+#include "BinaryExportTest.hpp"
+#include "SceneExportTest.hpp"
+
+#include <TestRenderSystem.hpp>
 
 #include <Engine.hpp>
 #include <Cache/PluginCache.hpp>
 
 #include <BenchManager.hpp>
 
-#include "BinaryExportTest.hpp"
-#include "SceneExportTest.hpp"
+#include <Log/Logger.hpp>
+#include <Data/File.hpp>
+
 
 using namespace castor;
 using namespace castor3d;
@@ -94,7 +97,7 @@ namespace
 			File::directoryCreate( Engine::getEngineDirectory() );
 		}
 
-		std::unique_ptr< Engine > result = std::make_unique< Engine >();
+		std::unique_ptr< Engine > result = std::make_unique< Engine >( cuT( "Castor3DTest" ), true );
 		doloadPlugins( *result );
 
 		auto renderers = result->getPluginCache().getPlugins( PluginType::eRenderer );
@@ -104,7 +107,7 @@ namespace
 			CASTOR_EXCEPTION( "No renderer plug-ins" );
 		}
 
-		if ( result->loadRenderer( TestRender::TestRenderSystem::Type ) )
+		if ( result->loadRenderer( TestRender::RenderSystem::Type ) )
 		{
 			result->initialise( 1, false );
 		}

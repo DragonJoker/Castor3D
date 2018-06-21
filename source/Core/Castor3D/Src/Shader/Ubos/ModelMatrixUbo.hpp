@@ -24,8 +24,10 @@ namespace castor3d
 	public:
 		struct Configuration
 		{
-			castor::Matrix4x4f model;
-			castor::Matrix4x4f normal;
+			castor::Matrix4x4f prvModel;
+			castor::Matrix4x4f prvNormal;
+			castor::Matrix4x4f curModel;
+			castor::Matrix4x4f curNormal;
 		};
 
 	public:
@@ -112,8 +114,10 @@ namespace castor3d
 	public:
 		C3D_API static const uint32_t BindingPoint;
 		C3D_API static castor::String const BufferModelMatrix;
-		C3D_API static castor::String const MtxModel;
-		C3D_API static castor::String const MtxNormal;
+		C3D_API static castor::String const PrvMtxModel;
+		C3D_API static castor::String const PrvMtxNormal;
+		C3D_API static castor::String const CurMtxModel;
+		C3D_API static castor::String const CurMtxNormal;
 
 	private:
 		Engine & m_engine;
@@ -127,8 +131,10 @@ namespace castor3d
 		, binding\
 		, set\
 		, glsl::Ubo::Layout::eStd140 };\
-	auto c3d_mtxModel = modelMatrices.declMember< glsl::Mat4 >( castor3d::ModelMatrixUbo::MtxModel );\
-	auto c3d_mtxNormal = modelMatrices.declMember< glsl::Mat4 >( castor3d::ModelMatrixUbo::MtxNormal );\
+	auto c3d_prvMtxModel = modelMatrices.declMember< glsl::Mat4 >( castor3d::ModelMatrixUbo::PrvMtxModel );\
+	auto c3d_prvMtxNormal = modelMatrices.declMember< glsl::Mat4 >( castor3d::ModelMatrixUbo::PrvMtxNormal );\
+	auto c3d_curMtxModel = modelMatrices.declMember< glsl::Mat4 >( castor3d::ModelMatrixUbo::CurMtxModel );\
+	auto c3d_curMtxNormal = modelMatrices.declMember< glsl::Mat4 >( castor3d::ModelMatrixUbo::CurMtxNormal );\
 	modelMatrices.end()
 
 #endif

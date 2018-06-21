@@ -436,7 +436,15 @@ namespace CastorViewer
 
 		try
 		{
-			wxGetApp().getCastor()->initialise( CASTOR_WANTED_FPS, CASTOR3D_THREADED );
+			if ( !wxGetApp().isUnlimitedFps() )
+			{
+				wxGetApp().getCastor()->initialise( CASTOR_WANTED_FPS, CASTOR3D_THREADED );
+			}
+			else
+			{
+				wxGetApp().getCastor()->initialise( 1000u, CASTOR3D_THREADED );
+			}
+
 			Logger::logInfo( cuT( "Castor3D Initialised" ) );
 
 			if ( !CASTOR3D_THREADED && !m_timer )

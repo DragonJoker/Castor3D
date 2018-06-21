@@ -6,6 +6,7 @@
 #include "Event/Frame/FunctorEvent.hpp"
 #include "Material/Material.hpp"
 #include "Material/Pass.hpp"
+#include "Render/RenderPassTimer.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/Scene.hpp"
 
@@ -32,6 +33,14 @@ namespace castor3d
 		, m_billboardUboPool{ renderSystem }
 		, m_pickingUboPool{ renderSystem }
 	{
+		renderSystem.getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+			, [this, &renderSystem]()
+			{
+				m_updateTimer = std::make_shared< RenderPassTimer >( *renderSystem.getEngine()
+					, cuT( "Update" )
+					, cuT( "Billboard UBOs" )
+					, 4u );
+			} ) );
 	}
 
 	void BillboardUboPools::update()
@@ -43,7 +52,8 @@ namespace castor3d
 			modelData.shadowReceiver = entry.billboard.isShadowReceiver();
 			modelData.materialIndex = entry.pass.getId();
 			auto & modelMatrixData = entry.modelMatrixUbo.getData();
-			modelMatrixData.model = entry.billboard.getNode()->getDerivedTransformationMatrix();
+			modelMatrixData.prvModel = modelMatrixData.curModel;
+			modelMatrixData.curModel = entry.billboard.getNode()->getDerivedTransformationMatrix();
 			auto & billboardData = entry.billboardUbo.getData();
 			billboardData.dimensions = entry.billboard.getDimensions();
 		}
@@ -51,10 +61,25 @@ namespace castor3d
 
 	void BillboardUboPools::uploadUbos()
 	{
-		m_modelUboPool.upload();
-		m_modelMatrixUboPool.upload();
-		m_billboardUboPool.upload();
-		m_pickingUboPool.upload();
+		auto count = m_modelUboPool.getBufferCount()
+			+ m_modelMatrixUboPool.getBufferCount()
+			+ m_billboardUboPool.getBufferCount()
+			+ m_pickingUboPool.getBufferCount();
+		m_updateTimer->updateCount( std::max( count, 4u ) );
+
+		if ( count )
+		{
+			m_updateTimer->start();
+			uint32_t index = 0u;
+			m_modelUboPool.upload( *m_updateTimer, index );
+			index += std::max( m_modelUboPool.getBufferCount(), 1u );
+			m_modelMatrixUboPool.upload( *m_updateTimer, index );
+			index += std::max( m_modelMatrixUboPool.getBufferCount(), 1u );
+			m_billboardUboPool.upload( *m_updateTimer, index );
+			index += std::max( m_billboardUboPool.getBufferCount(), 1u );
+			m_pickingUboPool.upload( *m_updateTimer, index );
+			m_updateTimer->stop();
+		}
 	}
 
 	void BillboardUboPools::cleanupUbos()

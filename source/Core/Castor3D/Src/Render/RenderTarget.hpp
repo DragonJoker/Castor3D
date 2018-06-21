@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "Miscellaneous/Parameter.hpp"
 #include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Render/RenderInfo.hpp"
+#include "Render/Culling/SceneCuller.hpp"
 #include "RenderToTexture/RenderQuad.hpp"
 #include "Texture/TextureUnit.hpp"
 
@@ -125,6 +126,13 @@ namespace castor3d
 		C3D_API ~RenderTarget();
 		/**
 		 *\~english
+		 *\brief		Updates culling.
+		 *\~french
+		 *\brief		Met à jour le culling.
+		 */
+		C3D_API void update();
+		/**
+		 *\~english
 		 *\brief		Renders one frame.
 		 *\param[out]	info	Receives the render informations.
 		 *\~french
@@ -193,6 +201,15 @@ namespace castor3d
 		 *\param[in]	camera	La nouvelle caméra.
 		 */
 		C3D_API void setCamera( CameraSPtr camera );
+		/**
+		 *\~english
+		 *\brief		Sets the scene.
+		 *\param[in]	scene	The new scene.
+		 *\~french
+		 *\brief		Définit la scène.
+		 *\param[in]	scene	La nouvelle scène.
+		 */
+		C3D_API void setScene( SceneSPtr scene );
 		/**
 		 *\~english
 		 *\brief		Sets the tone mapping implementation type.
@@ -294,6 +311,18 @@ namespace castor3d
 			return *m_signalFinished;
 		}
 
+		inline SceneCuller const & getCuller()const
+		{
+			REQUIRE( m_culler );
+			return *m_culler;
+		}
+
+		inline SceneCuller & getCuller()
+		{
+			REQUIRE( m_culler );
+			return *m_culler;
+		}
+
 		inline HdrConfig const & getHdrConfig()const
 		{
 			return m_hdrConfig;
@@ -311,11 +340,6 @@ namespace castor3d
 		inline void setTechnique( RenderTechniqueSPtr technique )
 		{
 			m_renderTechnique = technique;
-		}
-
-		inline void setScene( SceneSPtr scene )
-		{
-			m_scene = scene;
 		}
 
 		inline void setSsaoConfig( SsaoConfig const & config )
@@ -407,6 +431,7 @@ namespace castor3d
 		renderer::Semaphore const * m_signalFinished{ nullptr };
 		renderer::FencePtr m_fence;
 		castor::PreciseTimer m_timer;
+		SceneCullerUPtr m_culler;
 	};
 }
 

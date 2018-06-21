@@ -33,6 +33,7 @@ namespace smaa
 	DECLARE_ATTRIBUTE_PARSER( parserLocalContrastAdaptationFactor )
 	DECLARE_ATTRIBUTE_PARSER( parserPredicationScale )
 	DECLARE_ATTRIBUTE_PARSER( parserPredicationStrength )
+	DECLARE_ATTRIBUTE_PARSER( parserPredicationThreshold )
 	DECLARE_ATTRIBUTE_PARSER( parserSmaaEnd )
 }
 

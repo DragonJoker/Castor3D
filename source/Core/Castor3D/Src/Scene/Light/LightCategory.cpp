@@ -63,7 +63,7 @@ namespace castor3d
 
 		if ( result && p_light.getLight().isShadowProducer() )
 		{
-			result = p_file.writeText( m_tabs + cuT( "\tshadow\n" ) ) > 0
+			result = p_file.writeText( m_tabs + cuT( "\tshadows\n" ) ) > 0
 				&& p_file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0
 				&& p_file.writeText( m_tabs + cuT( "\t\tproducer true\n" ) ) > 0
 				&& p_file.writeText( m_tabs + cuT( "\t\tfilter " ) + filter[p_light.getLight().getShadowType()] + cuT( "\n" ) ) > 0;

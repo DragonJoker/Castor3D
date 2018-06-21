@@ -32,13 +32,13 @@ namespace castor3d
 	String const OpaquePass::Output4 = cuT( "c3d_output4" );
 	String const OpaquePass::Output5 = cuT( "c3d_output5" );
 
-	OpaquePass::OpaquePass( Scene & scene
-		, Camera * camera
+	OpaquePass::OpaquePass( MatrixUbo const & matrixUbo
+		, SceneCuller & culler
 		, SsaoConfig const & config )
 		: castor3d::RenderTechniquePass{ cuT( "Opaque" )
 			, cuT( "Geometry pass" )
-			, scene
-			, camera
+			, matrixUbo
+			, culler
 			, false
 			, nullptr
 			, config }
@@ -134,7 +134,26 @@ namespace castor3d
 	void OpaquePass::update( RenderInfo & info
 		, Point2r const & jitter )
 	{
-		doUpdate( info, jitter );
+		auto & nodes = m_renderQueue.getCulledRenderNodes();
+
+		if ( nodes.hasNodes() )
+		{
+			auto & camera = *m_camera;
+
+			RenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled );
+			RenderPass::doUpdate( nodes.staticNodes.frontCulled );
+			RenderPass::doUpdate( nodes.skinnedNodes.frontCulled );
+			RenderPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled );
+			RenderPass::doUpdate( nodes.morphingNodes.frontCulled );
+			RenderPass::doUpdate( nodes.billboardNodes.frontCulled );
+
+			RenderPass::doUpdate( nodes.instancedStaticNodes.backCulled, info );
+			RenderPass::doUpdate( nodes.staticNodes.backCulled, info );
+			RenderPass::doUpdate( nodes.skinnedNodes.backCulled, info );
+			RenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, info );
+			RenderPass::doUpdate( nodes.morphingNodes.backCulled, info );
+			RenderPass::doUpdate( nodes.billboardNodes.backCulled, info );
+		}
 	}
 
 	renderer::Semaphore const & OpaquePass::render( renderer::Semaphore const & toWait )
@@ -377,23 +396,30 @@ namespace castor3d
 
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 			{
-				auto mtxModel = writer.declLocale( cuT( "mtxModel" )
+				auto curMtxModel = writer.declLocale( cuT( "curMtxModel" )
 					, SkinningUbo::computeTransform( writer, programFlags ) );
+				auto prvMtxModel = writer.declLocale( cuT( "prvMtxModel" )
+					, curMtxModel );
 			}
 			else if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
-				auto mtxModel = writer.declLocale( cuT( "mtxModel" )
+				auto curMtxModel = writer.declLocale( cuT( "curMtxModel" )
 					, transform );
+				auto prvMtxModel = writer.declLocale( cuT( "prvMtxModel" )
+					, curMtxModel );
 			}
 			else
 			{
-				auto mtxModel = writer.declLocale( cuT( "mtxModel" )
-					, c3d_mtxModel );
+				auto curMtxModel = writer.declLocale( cuT( "curMtxModel" )
+					, c3d_curMtxModel );
+				auto prvMtxModel = writer.declLocale( cuT( "prvMtxModel" )
+					, c3d_prvMtxModel );
 			}
 
-			auto mtxModel = writer.declBuiltin< Mat4 >( cuT( "mtxModel" ) );
+			auto curMtxModel = writer.declBuiltin< Mat4 >( cuT( "curMtxModel" ) );
+			auto prvMtxModel = writer.declBuiltin< Mat4 >( cuT( "prvMtxModel" ) );
 			auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
-				, transpose( inverse( mat3( mtxModel ) ) ) );
+				, transpose( inverse( mat3( curMtxModel ) ) ) );
 
 			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
@@ -413,11 +439,12 @@ namespace castor3d
 			}
 
 			vtx_texture = v3Texture;
-			curPosition = mtxModel * curPosition;
-			vtx_worldPosition = curPosition.xyz();
 			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
-				, c3d_prvViewProj * curPosition );
-			out.gl_Position() = c3d_curViewProj * curPosition;
+				, prvMtxModel * curPosition );
+			curPosition = curMtxModel * curPosition;
+			vtx_worldPosition = curPosition.xyz();
+			prvPosition = c3d_prvViewProj * prvPosition;
+			curPosition = c3d_curViewProj * curPosition;
 
 			if ( invertNormals )
 			{
@@ -432,19 +459,22 @@ namespace castor3d
 			vtx_tangent = normalize( glsl::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
 			vtx_instance = gl_InstanceID;
-			// Convert the jitter from non-homogeneous coordiantes to homogeneous
-			// coordinates and add it:
-			// (note that for providing the jitter in non-homogeneous projection space,
-			//  pixel coordinates (screen space) need to multiplied by two in the C++
-			//  code)
-			out.gl_Position().xy() -= c3d_jitter * out.gl_Position().w();
-			prvPosition.xy() -= c3d_jitter * out.gl_Position().w();
 
 			auto tbn = writer.declLocale( cuT( "tbn" )
 				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
 			vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
 			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition.xyz();
-			vtx_curPosition = out.gl_Position().xyw();
+
+			// Convert the jitter from non-homogeneous coordiantes to homogeneous
+			// coordinates and add it:
+			// (note that for providing the jitter in non-homogeneous projection space,
+			//  pixel coordinates (screen space) need to multiplied by two in the C++
+			//  code)
+			curPosition.xy() -= c3d_jitter * curPosition.w();
+			prvPosition.xy() -= c3d_jitter * prvPosition.w();
+			out.gl_Position() = curPosition;
+
+			vtx_curPosition = curPosition.xyw();
 			vtx_prvPosition = prvPosition.xyw();
 			// Positions in projection space are in [-1, 1] range, while texture
 			// coordinates are in [0, 1] range. So, we divide by 2 to get velocities in

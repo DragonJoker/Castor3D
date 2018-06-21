@@ -85,7 +85,7 @@ namespace castor3d
 		 *\brief		Ecrit l'effet dans un fichier texte.
 		 *\param[in]	file	Le fichier.
 		 */
-		C3D_API bool writeInto( castor::TextFile & file );
+		C3D_API bool writeInto( castor::TextFile & file, castor::String const & tabs );
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
@@ -199,7 +199,7 @@ namespace castor3d
 		 *\brief		Ecrit l'effet dans un fichier texte.
 		 *\param[in]	file	Le fichier.
 		 */
-		C3D_API virtual bool doWriteInto( castor::TextFile & file ) = 0;
+		C3D_API virtual bool doWriteInto( castor::TextFile & file, castor::String const & tabs ) = 0;
 
 	protected:
 		castor::String m_fullName;

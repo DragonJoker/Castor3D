@@ -41,7 +41,7 @@ namespace Bloom
 		/**
 		 *\copydoc		castor3d::PostEffect::doWriteInto
 		 */
-		bool doWriteInto( castor::TextFile & file )override;
+		bool doWriteInto( castor::TextFile & file, castor::String const & tabs )override;
 
 	public:
 		static castor::String const Type;

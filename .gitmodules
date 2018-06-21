@@ -7,3 +7,6 @@
 [submodule "source/external/RendererLib"]
 	path = source/external/RendererLib
 	url = https://github.com/DragonJoker/RendererLib.git
+[submodule "source/external/FreeImage"]
+	path = source/external/FreeImage
+	url = https://github.com/DragonJoker/FreeImage.git

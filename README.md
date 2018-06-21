@@ -7,9 +7,9 @@
 Castor3D
 ========
 
-Castor3D is a 3D engine written in C++ 14.
+Castor3D is a 3D engine written in C++ 17.
 It works on Windows and also on GNU/Linux.
-It uses OpenGL (with GLSL).
+It relies on RendererLib as a rendering API, allowing Vulkan, OpenGL 3.X and OpenGL 4.X.
 It is still a work in progress, feel free to contribute!
 
 Features
@@ -19,11 +19,12 @@ Features
 - Normal mapping.
 - Parallax Occlusion mapping.
 - Screen Space Ambient Occlusion (using Scalable Ambiant Obscurance implementation).
-- Shadow Mapping (using Variance Shadow Maps).
+- Shadow Mapping (allowing to choose between Raw, PCF or Variance Shadow Maps).
 - Reflection/Refraction Mapping.
 - PBR rendering (Metallic and Specular workflows), and Legacy rendering.
 - HDR rendering with various tone mapping operators.
 - Screen Space Subsurface Scattering (without backlit transmittance yet).
+- Volumetric Light Scattering for directional light source projecting shadows.
 - Scene graph.
 - Modular architecture through plug-ins.
 - Shaders are generated automatically from material and pass configuration.
@@ -33,7 +34,9 @@ Implemented Plug-ins
 --------------------
 
 **Renderers**
-- GlRenderSystem.
+- VkRenderSystem.
+- Gl3RenderSystem.
+- Gl4RenderSystem.
 
 **Importers**
 - ASSIMP: Multiple format mesh importer.
@@ -52,6 +55,7 @@ Implemented Plug-ins
 - LightStreaks (using Kawase Light Streaks).
 - FXAA Antialiasing.
 - SMAA Antialiasing (1X and T2X so far).
+- Linear Motion Blur.
 
 **Generators**
 - DiamondSquareTerrain: to generate terrains inside Castor3D scenes, using diamond-quare algorithm.
@@ -66,12 +70,19 @@ Implemented Plug-ins
 - ReinhardToneMapping: Reinhard tone mapping.
 - Uncharted2ToneMapping: Uncharted 2 tone mapping.
 
+Other applications
+------------------
+- CastorViewer: A scene viewer based on Castor3D.
+- CastorMeshConverter: A converter from various mesh files to Castor3D mesh format.
+- CastorMeshUpgrader: Upgrades from earlier versions of Castor3D mesh format to the latest one.
+- ImgConverter: Allows you to convert any image file type to XPM or ICO.
+
 
 ![Sponza](http://dragonjoker.github.com/Castor3D/img/Sponza-PBR-Bloom-small.png)
 ![Cerberus](http://dragonjoker.github.com/Castor3D/img/Cerberus-PBR-small.png)
-![Park](http://dragonjoker.github.com/Castor3D/img/Park-Legacy-small.png)
-![Park](http://dragonjoker.github.com/Castor3D/img/Park-PBR-small.png)
-![Nyra](http://dragonjoker.github.com/Castor3D/img/Nyra-PBR-MR-small.png)
+![Park, Legacy](http://DragonJoker.github.com/Castor3D/img/Park-Legacy-small.png)
+![Park, PBR](http://DragonJoker.github.com/Castor3D/img/Park-PBR-small.png)
+![Nyra, PBR](http://DragonJoker.github.com/Castor3D/img/Nyra-PBR-MR-small.png)
 
 Links
 -----

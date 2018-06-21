@@ -181,6 +181,7 @@ namespace GuiCommon
 		wxCmdLineParser parser( wxApp::argc, wxApp::argv );
 		parser.AddSwitch( wxT( "h" ), wxT( "help" ), _( "Displays this help." ) );
 		parser.AddSwitch( wxT( "v" ), wxT( "validate" ), _( "Enables rendering API validation." ) );
+		parser.AddSwitch( wxT( "u" ), wxT( "unlimited" ), _( "Disables FPS limit." ) );
 		parser.AddOption( wxT( "l" ), wxT( "log" ), _( "Defines log level." ), wxCMD_LINE_VAL_NUMBER );
 		parser.AddParam( _( "The initial scene file" ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
 		parser.AddSwitch( wxT( "opengl3" ), wxEmptyString, _( "Defines the renderer to OpenGl 3.x." ) );
@@ -212,6 +213,7 @@ namespace GuiCommon
 
 			Logger::initialise( eLogLevel );
 			m_validation = parser.Found( wxT( 'v' ) );
+			m_unlimitedFps = parser.Found( wxT( 'u' ) );
 
 			if ( parser.Found( wxT( "opengl3" ) ) )
 			{

@@ -108,6 +108,7 @@ namespace castor3d
 		UniformBufferPool< ModelMatrixUbo::Configuration > m_modelMatrixUboPool;
 		UniformBufferPool< BillboardUbo::Configuration > m_billboardUboPool;
 		UniformBufferPool< PickingUbo::Configuration > m_pickingUboPool;
+		RenderPassTimerSPtr m_updateTimer;
 	};
 }
 

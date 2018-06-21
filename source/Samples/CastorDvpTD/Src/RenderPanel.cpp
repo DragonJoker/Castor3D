@@ -11,6 +11,7 @@
 #include <Miscellaneous/Ray.hpp>
 #include <Render/RenderWindow.hpp>
 #include <Scene/Camera.hpp>
+#include <Scene/Geometry.hpp>
 #include <Scene/Scene.hpp>
 #include <Scene/SceneNode.hpp>
 #include <Texture/TextureUnit.hpp>
@@ -82,7 +83,7 @@ namespace castortd
 				{
 					auto lock = makeUniqueLock( scene->getCameraCache() );
 					auto camera = scene->getCameraCache().begin()->second;
-					p_window->getPickingPass().addScene( *scene, *camera );
+					p_window->addPickingScene( *scene );
 					m_cameraState = std::make_unique< GuiCommon::NodeState >( scene->getListener(), camera->getParent(), true );
 					m_timers[size_t( TimerID::eMouse )]->Start( 30 );
 				}
@@ -492,12 +493,12 @@ namespace castortd
 				{
 					Camera & camera = *window->getCamera();
 					camera.update();
-					auto type = window->getPickingPass().pick( Position{ int( m_x ), int( m_y ) }, camera );
+					auto type = window->pick( Position{ int( m_x ), int( m_y ) } );
 
-					if ( type != PickingPass::NodeType::eNone
-						&& type != PickingPass::NodeType::eBillboard )
+					if ( type != PickNodeType::eNone
+						&& type != PickNodeType::eBillboard )
 					{
-						doUpdateSelectedGeometry( window->getPickingPass().getPickedGeometry() );
+						doUpdateSelectedGeometry( window->getPickedGeometry() );
 					}
 					else
 					{

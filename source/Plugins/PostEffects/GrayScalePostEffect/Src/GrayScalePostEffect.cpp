@@ -272,9 +272,9 @@ namespace GrayScale
 		m_configUbo.reset();
 	}
 
-	bool PostEffect::doWriteInto( castor::TextFile & file )
+	bool PostEffect::doWriteInto( castor::TextFile & file, castor::String const & tabs )
 	{
-		return true;
+		return file.writeText( tabs + cuT( "postfx \"" ) + Type + cuT( "\"" ) ) > 0;
 	}
 
 	//*********************************************************************************************

@@ -54,12 +54,6 @@ function( CoreBuild )
 			add_subdirectory( Core/Castor3D/Test )
 			set( C3DT ${Build} PARENT_SCOPE )
 		endif()
-
-		if ( CASTOR_BUILDGRP_RENDERER AND CASTOR_BUILD_TEST_RENDERER )
-			set( Build ${RdrT} )
-			add_subdirectory( Core/Renderer/Test )
-			set( RdrT ${Build} PARENT_SCOPE )
-		endif()
 	endif()
 
 	set( CastorMinLibraries

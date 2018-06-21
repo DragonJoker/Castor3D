@@ -270,29 +270,29 @@ struct ObjectPostWriter< false, castor3d::Mesh >
 		{
 			auto newPath = path / ( options.output + cuT( "Integration.cscn" ) );
 			castor::TextFile file{ newPath, castor::File::OpenMode::eWrite };
-			result = file.writeText( cuT( "\tmesh \"" ) + options.output + cuT( "\"\n" ) )
-				&& file.writeText( cuT( "\t{\n" ) )
-				&& file.writeText( cuT( "\t\timport \"Meshes/" ) + options.output + cuT( ".cmsh\"\n" ) )
-				&& file.writeText( cuT( "\t}\n" ) )
-				&& file.writeText( cuT( "\tscene_node \"" ) + options.output + cuT( "\"\n" ) )
-				&& file.writeText( cuT( "\t{\n" ) )
-				&& file.writeText( cuT( "\t\tposition 0.0 0.0 0.0\n" ) )
-				&& file.writeText( cuT( "\t}\n" ) )
-				&& file.writeText( cuT( "\tobject \"" ) + options.output + cuT( "\"\n" ) )
-				&& file.writeText( cuT( "\t{\n" ) )
-				&& file.writeText( cuT( "\t\tparent \"" ) + options.output + cuT( "\"\n" ) )
-				&& file.writeText( cuT( "\t\tmesh \"" ) + options.output + cuT( "\"\n" ) )
-				&& file.writeText( cuT( "\t\tmaterials\n" ) )
-				&& file.writeText( cuT( "\t\t{\n\n" ) );
+			result = file.writeText( cuT( "\tmesh \"" ) + options.output + cuT( "\"\n" ) ) > 0
+				&& file.writeText( cuT( "\t{\n" ) ) > 0
+				&& file.writeText( cuT( "\t\timport \"Meshes/" ) + options.output + cuT( ".cmsh\"\n" ) ) > 0
+				&& file.writeText( cuT( "\t}\n" ) ) > 0
+				&& file.writeText( cuT( "\tscene_node \"" ) + options.output + cuT( "\"\n" ) ) > 0
+				&& file.writeText( cuT( "\t{\n" ) ) > 0
+				&& file.writeText( cuT( "\t\tposition 0.0 0.0 0.0\n" ) ) > 0
+				&& file.writeText( cuT( "\t}\n" ) ) > 0
+				&& file.writeText( cuT( "\tobject \"" ) + options.output + cuT( "\"\n" ) ) > 0
+				&& file.writeText( cuT( "\t{\n" ) ) > 0
+				&& file.writeText( cuT( "\t\tparent \"" ) + options.output + cuT( "\"\n" ) ) > 0
+				&& file.writeText( cuT( "\t\tmesh \"" ) + options.output + cuT( "\"\n" ) ) > 0
+				&& file.writeText( cuT( "\t\tmaterials\n" ) ) > 0
+				&& file.writeText( cuT( "\t\t{\n\n" ) ) > 0;
 			uint32_t index = 0u;
 
 			for ( auto & submesh : object )
 			{
-				result &= file.writeText( cuT( "\t\tmaterial " ) + castor::string::toString( index++, std::locale{ "C" } ) + cuT( " \"" ) + submesh->getDefaultMaterial()->getName() + cuT( "\"\n" ) );
+				result &= file.writeText( cuT( "\t\tmaterial " ) + castor::string::toString( index++, std::locale{ "C" } ) + cuT( " \"" ) + submesh->getDefaultMaterial()->getName() + cuT( "\"\n" ) ) > 0;
 			}
 
-			result &= file.writeText( cuT( "\t}\n" ) );
-			result &= file.writeText( cuT( "}\n" ) );
+			result &= file.writeText( cuT( "\t}\n" ) ) > 0
+				&& file.writeText( cuT( "}\n" ) ) > 0;
 		}
 
 		return result;

@@ -41,8 +41,6 @@ namespace castor3d
 	{
 #if defined( NDEBUG )
 		m_enableValidation = false;
-#else
-		Debug::initialise();
 #endif
 
 		auto dummy = []( auto element )
@@ -231,14 +229,14 @@ namespace castor3d
 		// and eventually the  plug-ins.
 		m_pluginCache->clear();
 		Image::cleanupImageLib();
-
-#if !defined( NDEBUG )
-		Debug::cleanup();
-#endif
 	}
 
 	void Engine::initialise( uint32_t wanted, bool threaded )
 	{
+#if !defined( NDEBUG )
+		Debug::initialise();
+#endif
+
 		m_threaded = threaded;
 
 		if ( m_renderSystem )
@@ -331,6 +329,10 @@ namespace castor3d
 			m_shaderCache->clear();
 			m_techniqueCache->clear();
 		}
+
+#if !defined( NDEBUG )
+		Debug::cleanup();
+#endif
 	}
 
 	bool Engine::loadRenderer( String const & type )

@@ -399,8 +399,8 @@ namespace fxaa
 		m_renderPass.reset();
 	}
 
-	bool PostEffect::doWriteInto( TextFile & p_file )
+	bool PostEffect::doWriteInto( TextFile & file, String const & tabs )
 	{
-		return true;
+		return file.writeText( tabs + cuT( "postfx \"" ) + Type + cuT( "\"" ) ) > 0;
 	}
 }

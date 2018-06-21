@@ -37,14 +37,14 @@ namespace castor3d
 		auto & data = it->second;
 		auto result = data.count++;
 
-		if ( data.count >= m_threshold )
+		if ( doCheckInstanced( data.count ) )
 		{
 			data.data.resize( data.count );
 			getOwner()->getScene()->getListener().postEvent( makeFunctorEvent( EventType::eQueueRender
 				, [this]()
-			{
-				doFill();
-			} ) );
+				{
+					doFill();
+				} ) );
 		}
 
 		return result;
@@ -65,13 +65,13 @@ namespace castor3d
 				data.count--;
 			}
 
-			if ( data.count < m_threshold )
+			if ( !doCheckInstanced( data.count ) )
 			{
 				getOwner()->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePreRender
 					, [&data]()
-				{
-					data.buffer.reset();
-				} ) );
+					{
+						data.buffer.reset();
+					} ) );
 			}
 		}
 
@@ -137,7 +137,7 @@ namespace castor3d
 	{
 		bool result = true;
 
-		if ( getMaxRefCount() >= m_threshold )
+		if ( doCheckInstanced( getMaxRefCount() ) )
 		{
 			if ( !m_matrixLayout )
 			{
@@ -164,7 +164,7 @@ namespace castor3d
 
 			for ( auto & data : m_instances )
 			{
-				if ( data.second.count >= m_threshold )
+				if ( doCheckInstanced( data.second.count ) )
 				{
 					data.second.buffer = renderer::makeVertexBuffer< InstantiationData >( device
 						, data.second.count

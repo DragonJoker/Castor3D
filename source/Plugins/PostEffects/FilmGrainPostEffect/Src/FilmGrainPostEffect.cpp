@@ -442,8 +442,8 @@ namespace film_grain
 		m_surface.cleanup();
 	}
 
-	bool PostEffect::doWriteInto( TextFile & file )
+	bool PostEffect::doWriteInto( TextFile & file, String const & tabs )
 	{
-		return true;
+		return file.writeText( tabs + cuT( "postfx \"" ) + Type + cuT( "\"" ) ) > 0;
 	}
 }

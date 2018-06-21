@@ -87,6 +87,18 @@ namespace castor3d
 		C3D_API uint32_t getRefCount( MaterialSPtr material )const;
 		/**
 		 *\~english
+		 *\param[in]	material	The material.
+		 *\return		\p true if the instance count for given material is greater than the threshold.
+		 *\~french
+		 *\param[in]	material	Le matériau.
+		 *\return		\p true si le nombre d'instances pour le matériau donné est plus grand que le seuil.
+		 */
+		inline bool isInstanced( MaterialSPtr material )const
+		{
+			return getRefCount( material ) >= getThreshold();
+		}
+		/**
+		 *\~english
 		 *\return		The maximum instances count, amongst all materials.
 		 *\~french
 		 *\return		Le nombre moximum d'instances, tous matériaux confondus,
@@ -154,6 +166,10 @@ namespace castor3d
 		void doCleanup()override;
 		void doFill()override;
 		void doUpload()override;
+		inline bool doCheckInstanced( uint32_t count )const
+		{
+			return count >= getThreshold();
+		}
 
 	public:
 		C3D_API static castor::String const Name;

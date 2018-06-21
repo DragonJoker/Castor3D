@@ -150,7 +150,7 @@ namespace castor3d
 
 			if ( m_elements.has( name ) )
 			{
-				castor::Logger::logWarning( castor::makeStringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
+				doReportDuplicate( name );
 				result = m_elements.find( name );
 				m_dirtyLights.emplace_back( result.get() );
 				m_connections.emplace( result.get()
@@ -167,7 +167,7 @@ namespace castor3d
 		}
 		else
 		{
-			castor::Logger::logWarning( castor::makeStringStream() << WARNING_CACHE_NULL_OBJECT << getObjectTypeName() << cuT( ": " ) );
+			doReportNull();
 		}
 
 		return result;
@@ -184,7 +184,7 @@ namespace castor3d
 			m_initialise( result );
 			m_elements.insert( name, result );
 			m_attach( result, parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
-			castor::Logger::logDebug( castor::makeStringStream() << INFO_CACHE_CREATED_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
+			doReportCreation( name );
 			m_dirtyLights.emplace_back( result.get() );
 			m_connections.emplace( result.get()
 				, result->onChanged.connect( [this]( Light & light )
@@ -196,7 +196,7 @@ namespace castor3d
 		else
 		{
 			result = m_elements.find( name );
-			castor::Logger::logWarning( castor::makeStringStream() << WARNING_CACHE_DUPLICATE_OBJECT << getObjectTypeName() << cuT( ": " ) << name );
+			doReportDuplicate( name );
 		}
 
 		return result;

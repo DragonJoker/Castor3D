@@ -1,7 +1,9 @@
 #include "Engine.hpp"
 #include "Render/RenderSystem.hpp"
 
+#include <Command/CommandBuffer.hpp>
 #include <Core/Device.hpp>
+#include <Sync/Fence.hpp>
 
 namespace castor3d
 {
@@ -25,7 +27,7 @@ namespace castor3d
 	}
 
 	template< typename T >
-	void UniformBufferPool< T >::upload()const
+	void UniformBufferPool< T >::upload( RenderPassTimer & timer, uint32_t index )const
 	{
 		for ( auto & bufferIt : m_buffers )
 		{
@@ -34,7 +36,15 @@ namespace castor3d
 				buffer->upload( *m_stagingBuffer
 					, *m_uploadCommandBuffer
 					, 0u
-					, renderer::PipelineStageFlag::eVertexShader );
+					, renderer::PipelineStageFlag::eVertexShader
+					, timer
+					, index );
+				timer.notifyPassRender( index );
+				m_uploadFence->reset();
+				getCurrentDevice( *getRenderSystem() ).getGraphicsQueue().submit( *m_uploadCommandBuffer
+					, m_uploadFence.get() );
+				m_uploadFence->wait( renderer::FenceTimeout );
+				++index;
 			}
 		}
 	}
@@ -76,8 +86,10 @@ namespace castor3d
 				getRenderSystem()->getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
 					, [this]()
 					{
-						m_uploadCommandBuffer = getCurrentDevice( *getRenderSystem() ).getGraphicsCommandPool().createCommandBuffer();
-						m_stagingBuffer = std::make_unique< renderer::StagingBuffer >( getCurrentDevice( *getRenderSystem() )
+						auto & device = getCurrentDevice( *getRenderSystem() );
+						m_uploadCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+						m_uploadFence = device.createFence( renderer::FenceCreateFlag::eSignaled );
+						m_stagingBuffer = std::make_unique< renderer::StagingBuffer >( device
 							, renderer::BufferTarget::eTransferSrc
 							, m_maxSize );
 					} ) );
@@ -117,6 +129,19 @@ namespace castor3d
 			} );
 		REQUIRE( itB != it->second.end() );
 		( *itB )->deallocate( bufferOffset.offset );
+	}
+
+	template< typename T >
+	uint32_t UniformBufferPool< T >::getBufferCount()const
+	{
+		uint32_t result = 0u;
+
+		for ( auto & bufferIt : m_buffers )
+		{
+			result += uint32_t( bufferIt.second.size() );
+		}
+
+		return result;
 	}
 
 	template< typename T >

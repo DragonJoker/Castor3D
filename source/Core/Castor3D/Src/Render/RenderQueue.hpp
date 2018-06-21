@@ -120,9 +120,6 @@ namespace castor3d
 		//!\~english	The scene.
 		//!\~french		La scène.
 		Scene const & scene;
-		//!\~english	The camera.
-		//!\~french		La caméra.
-		Camera const & camera;
 		//!\~english	The static render nodes, sorted by shader program.
 		//!\~french		Les noeuds de rendu statiques, triés par programme shader.
 		StaticNodesMap staticNodes;
@@ -142,10 +139,8 @@ namespace castor3d
 		//!\~french		Les noeuds de rendu de billboards, triés par programme shader.
 		BillboardNodesMap billboardNodes;
 
-		inline SceneCulledRenderNodes( Scene const & scene
-			, Camera const & camera )
+		inline SceneCulledRenderNodes( Scene const & scene )
 			: scene{ scene }
-			, camera{ camera }
 		{
 		}
 
@@ -197,26 +192,6 @@ namespace castor3d
 			, SceneNode const * ignored );
 		/**
 		 *\~english
-		 *\brief		Plugs the render queue to given scene and camera.
-		 *\param[in]	scene	The scene.
-		 *\param[in]	camera	The camera.
-		 *\~french
-		 *\brief		Branche la file de rendu à la scène et à la caméra données.
-		 *\param[in]	scene	La scène.
-		 *\param[in]	camera	La caméra.
-		 */
-		C3D_API void initialise( Scene const & scene, Camera & camera );
-		/**
-		 *\~english
-		 *\brief		Plugs the render queue to given scene.
-		 *\param[in]	scene	The scene.
-		 *\~french
-		 *\brief		Branche la file de rendu à la scène donnée.
-		 *\param[in]	scene	La scène.
-		 */
-		C3D_API void initialise( Scene const & scene );
-		/**
-		 *\~english
 		 *\brief		Cleans the queue up.
 		 *\~french
 		 *\brief		Nettoie la file de rendu.
@@ -257,32 +232,30 @@ namespace castor3d
 
 		inline bool hasNodes()const
 		{
-			return m_culledRenderNodes
-				? m_culledRenderNodes->hasNodes()
-				: ( m_renderNodes
-					? m_renderNodes->hasNodes()
-					: false );
+			return ( m_renderNodes
+				? m_renderNodes->hasNodes()
+				: false );
 		}
 		/**@}*/
 
 	private:
-		void doPrepareAllNodesCommandBuffer();
-		void doPrepareCulledNodesCommandBuffer();
-		void doSortRenderNodes( ShadowMapLightTypeArray & shadowMaps );
-		void onSceneChanged( Scene const & scene );
-		void onCameraChanged( Camera const & camera );
+		void doInitialise( Scene const & scene, Camera const & camera );
+		void doInitialise( Scene const & scene );
+		void doPrepareCommandBuffer();
+		void doParseAllRenderNodes( ShadowMapLightTypeArray & shadowMaps );
+		void doParseCulledRenderNodes();
+		void doOnCullerCompute( SceneCuller const & culler );
 
 	private:
+		SceneCuller const & m_culler;
+		SceneCullerSignalConnection m_onCullerCompute;
 		bool m_opaque;
 		SceneNode const * m_ignoredNode{ nullptr };
 		std::unique_ptr< SceneRenderNodes > m_renderNodes;
 		std::unique_ptr< SceneCulledRenderNodes > m_culledRenderNodes;
 		renderer::CommandBufferPtr m_commandBuffer;
-		bool m_changed{ true };
-		bool m_isSceneChanged{ true };
-		OnSceneChangedConnection m_sceneChanged;
-		OnCameraChangedConnection m_cameraChanged;
-		Camera * m_camera{ nullptr };
+		bool m_allChanged;
+		bool m_culledChanged;
 	};
 }
 

@@ -13,6 +13,10 @@ See LICENSE file in root folder
 
 namespace smaa
 {
+	castor::String getName( Mode mode );
+	castor::String getName( Preset preset );
+	castor::String getName( EdgeDetectionType detection );
+
 	class PostEffect
 		: public castor3d::PostEffect
 	{
@@ -45,7 +49,7 @@ namespace smaa
 		/**
 		 *\copydoc		castor3d::PostEffect::doWriteInto
 		 */
-		bool doWriteInto( castor::TextFile & file )override;
+		bool doWriteInto( castor::TextFile & file, castor::String const & tabs )override;
 
 		renderer::Texture const * doGetPredicationTexture();
 		renderer::TextureView const * doGetVelocityView();

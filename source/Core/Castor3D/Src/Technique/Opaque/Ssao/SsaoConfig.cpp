@@ -80,7 +80,7 @@ namespace castor3d
 
 			if ( result )
 			{
-				result = p_file.writeText( m_tabs + cuT( "\tblur_radius " ) + string::toString( p_object.m_blurRadius, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				result = p_file.writeText( m_tabs + cuT( "\tblur_radius " ) + string::toString( p_object.m_blurRadius.value().value(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig blur radius" );
 			}
 
@@ -106,7 +106,7 @@ namespace castor3d
 		visitor.visit( name
 			, renderer::ShaderStageFlag::eFragment
 			, cuT( "SSAO" )
-			, cuT( "Bias" )
+			, cuT( "Intensity" )
 			, m_intensity );
 		visitor.visit( name
 			, renderer::ShaderStageFlag::eFragment

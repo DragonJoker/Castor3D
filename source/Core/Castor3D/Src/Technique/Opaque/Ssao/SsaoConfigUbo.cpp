@@ -150,7 +150,7 @@ namespace castor3d
 		configuration.farPlaneZ = farZ;
 		configuration.edgeSharpness = config.m_edgeSharpness;
 		configuration.blurStepSize = config.m_blurStepSize;
-		configuration.blurRadius = config.m_blurRadius;
+		configuration.blurRadius = config.m_blurRadius.value().value();
 		configuration.projInfo = castor::Point4f
 		{
 			-2.0f / ( viewport.getWidth() * proj[0][0] ),

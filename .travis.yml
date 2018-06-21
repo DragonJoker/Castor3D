@@ -21,11 +21,11 @@ env:
     - COMPILER=g++-8
 
 git:
-    submodules: false
+  submodules: false
 
 before_install:
-    - git submodule update --init -- "source/CMake"
-    - git submodule update --init -- "source/external/RendererLib"
+  - git submodule update --init -- "source/CMake"
+  - git submodule update --init -- "source/external/RendererLib"
 
 before_script:
   - sudo apt-get update -qq

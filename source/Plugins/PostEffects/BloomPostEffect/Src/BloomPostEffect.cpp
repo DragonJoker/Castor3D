@@ -228,9 +228,9 @@ namespace Bloom
 		m_vertexBuffer.reset();
 	}
 
-	bool PostEffect::doWriteInto( TextFile & file )
+	bool PostEffect::doWriteInto( TextFile & file, String const & tabs )
 	{
-		return file.writeText( cuT( " -Size=" ) + string::toString( m_blurKernelSize, std::locale{ "C" } )
+		return file.writeText( tabs + cuT( "postfx \"" ) + Type + cuT( "\" -Size=" ) + string::toString( m_blurKernelSize, std::locale{ "C" } )
 			+ cuT( " -Passes=" ) + string::toString( m_blurPassesCount, std::locale{ "C" } ) ) > 0;
 	}
 }

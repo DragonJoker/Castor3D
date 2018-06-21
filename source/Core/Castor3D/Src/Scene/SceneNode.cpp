@@ -23,12 +23,12 @@ namespace castor3d
 			|| node.getName() == cuT( "CameraRootNode" );
 
 		if ( node.getName() != cuT( "RootNode" )
-			 && node.getName() != cuT( "ObjectRootNode" )
-			 && node.getName() != cuT( "CameraRootNode" ) )
+			&& node.getName() != cuT( "ObjectRootNode" )
+			&& node.getName() != cuT( "CameraRootNode" ) )
 		{
 			Logger::logInfo( m_tabs + cuT( "Writing Node " ) + node.getName() );
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "scene_node \"" ) + node.getName() + cuT( "\"\n" ) ) > 0
-					   && file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+				&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 			castor::TextWriter< SceneNode >::checkError( result, "Node name" );
 
 			if ( result
@@ -41,7 +41,7 @@ namespace castor3d
 				castor::TextWriter< SceneNode >::checkError( result, "Node parent name" );
 			}
 
-			if ( result )
+			if ( result && node.getOrientation() != Quaternion::identity() )
 			{
 				result = file.print( 256, cuT( "%s\torientation " ), m_tabs.c_str() ) > 0
 						   && Quaternion::TextWriter( String() )( node.getOrientation(), file )
@@ -49,7 +49,7 @@ namespace castor3d
 				castor::TextWriter< SceneNode >::checkError( result, "Node orientation" );
 			}
 
-			if ( result )
+			if ( result && node.getPosition() != Point3r{} )
 			{
 				result = file.print( 256, cuT( "%s\tposition " ), m_tabs.c_str() ) > 0
 						   && Point3r::TextWriter( String() )( node.getPosition(), file )
@@ -57,7 +57,7 @@ namespace castor3d
 				castor::TextWriter< SceneNode >::checkError( result, "Node position" );
 			}
 
-			if ( result )
+			if ( result && node.getScale() != Point3r{ 1, 1, 1 } )
 			{
 				result = file.print( 256, cuT( "%s\tscale " ), m_tabs.c_str() ) > 0
 						   && Point3r::TextWriter( String() )( node.getScale(), file )
@@ -96,10 +96,12 @@ namespace castor3d
 	//*************************************************************************************************
 
 	uint64_t SceneNode::Count = 0;
+	uint64_t SceneNode::CurrentId = 0;
 
 	SceneNode::SceneNode( String const & name, Scene & scene )
 		: OwnedBy< Scene >{ scene }
 		, Named{ name }
+		, m_id{ CurrentId++ }
 		, m_displayable{ name == cuT( "RootNode" ) }
 	{
 		if ( m_name.empty() )

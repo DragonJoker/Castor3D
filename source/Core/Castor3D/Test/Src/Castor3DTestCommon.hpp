@@ -336,7 +336,7 @@ namespace Testing
 	inline std::string toString< castor3d::SubmeshComponent >( castor3d::SubmeshComponent const & p_value )
 	{
 		std::string result = castor::string::stringCast< char >( p_value.getType() );
-		result += ", " + toString( p_value.getProgramFlags() );
+		//result += ", " + toString( p_value.getProgramFlags() );
 		return result;
 	}
 
@@ -344,6 +344,18 @@ namespace Testing
 	inline std::string toString< castor3d::BonesComponent >( castor3d::BonesComponent const & p_value )
 	{
 		return std::string{ "castor3d::BonesComponent" };
+	}
+
+	template<>
+	inline std::string toString< castor3d::VertexBoneData >( castor3d::VertexBoneData const & p_value )
+	{
+		return std::string{ "castor3d::VertexBoneData" };
+	}
+
+	template<>
+	inline std::string toString< castor3d::InterleavedVertex >( castor3d::InterleavedVertex const & p_value )
+	{
+		return std::string{ "castor3d::InterleavedVertex" };
 	}
 
 	//*********************************************************************************************
@@ -356,7 +368,7 @@ namespace Testing
 			, castor3d::Engine & engine );
 
 	protected:
-		void DeCleanupEngine();
+		void doCleanupEngine();
 		using TestCase::compare;
 		bool compare( castor::Angle const & p_a, castor::Angle const & p_b );
 		bool compare( castor::Quaternion const & p_a, castor::Quaternion const & p_b );

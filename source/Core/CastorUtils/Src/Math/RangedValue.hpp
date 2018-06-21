@@ -191,6 +191,30 @@ namespace castor
 	 *\name Opérateurs logiques.
 	 */
 	/**@{*/
+	namespace details
+	{
+		template< typename T >
+		struct Equal
+		{
+			inline bool operator()( RangedValue< T > const & p_lhs
+				, RangedValue< T > const & p_rhs )const noexcept
+			{
+				static constexpr auto eps = std::numeric_limits< T >::epsilon();
+				return std::abs( p_lhs.value() - p_rhs.value() ) < eps;
+			}
+		};
+
+		template<>
+		struct Equal< uint32_t >
+		{
+			inline bool operator()( RangedValue< uint32_t > const & p_lhs
+				, RangedValue< uint32_t > const & p_rhs )const noexcept
+			{
+				return p_lhs.value() == p_rhs.value();
+			}
+		};
+	}
+
 	template< typename T >
 	inline bool operator==( RangedValue< T > const & p_lhs
 		, T const & p_rhs )noexcept
@@ -281,8 +305,8 @@ namespace castor
 	inline bool operator==( RangedValue< T > const & p_lhs
 		, RangedValue< T > const & p_rhs )noexcept
 	{
-		static constexpr auto eps = std::numeric_limits< T >::epsilon();
-		return std::abs( p_lhs.value() - p_rhs.value() ) < eps;
+		static const details::Equal< T > equals;
+		return equals( p_lhs, p_rhs );
 	}
 
 	template< typename T >

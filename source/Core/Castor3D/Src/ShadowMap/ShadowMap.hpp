@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_ShadowMap_H___
 
 #include "Texture/TextureUnit.hpp"
+#include "Shader/Ubos/MatrixUbo.hpp"
 
 #include <Design/OwnedBy.hpp>
 
@@ -23,6 +24,15 @@ namespace castor3d
 		: public castor::OwnedBy< Engine >
 	{
 	public:
+		struct PassData
+		{
+			std::unique_ptr< MatrixUbo > matrixUbo;
+			CameraSPtr camera;
+			SceneCullerUPtr culler;
+			ShadowMapPassSPtr pass;
+		};
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -40,7 +50,7 @@ namespace castor3d
 		C3D_API ShadowMap( Engine & engine
 			, TextureUnit && shadowMap
 			, TextureUnit && linearMap
-			, std::vector< ShadowMapPassSPtr > passes );
+			, std::vector< PassData > && passes );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -237,7 +247,7 @@ namespace castor3d
 		renderer::CommandBufferPtr m_commandBuffer;
 		renderer::FencePtr m_fence;
 		std::set< std::reference_wrapper< GeometryBuffers > > m_geometryBuffers;
-		std::vector< ShadowMapPassSPtr > m_passes;
+		std::vector< PassData > m_passes;
 		TextureUnit m_shadowMap;
 		TextureUnit m_linearMap;
 		renderer::SemaphorePtr m_finished;

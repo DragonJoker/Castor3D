@@ -6,6 +6,7 @@
 #include "HDR/ToneMapping.hpp"
 #include "Overlay/OverlayRenderer.hpp"
 #include "Render/RenderPassTimer.hpp"
+#include "Render/Culling/FrustumCuller.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
 #include "Shader/PassBuffer/PassBuffer.hpp"
@@ -84,33 +85,28 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = HdrConfig::TextWriter( m_tabs + cuT( "\t" ) )( target.getHdrConfig(), file );
-		}
-
-		if ( result )
-		{
 			for ( auto const & effect : target.m_hdrPostEffects )
 			{
-				result = file.writeText( m_tabs + cuT( "\tpostfx \"" ) + effect->getName() + cuT( "\"" ) )
-						   && effect->writeInto( file )
-						   && file.writeText( cuT( "\n" ) ) > 0;
+				result = effect->writeInto( file, m_tabs + cuT( "\t" ) ) && file.writeText( cuT( "\n" ) ) > 0;
 				castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget post effect" );
 			}
 		}
 
 		if ( result )
-			if ( result )
+		{
+			for ( auto const & effect : target.m_srgbPostEffects )
 			{
-				for ( auto const & effect : target.m_srgbPostEffects )
-				{
-					result = file.writeText( m_tabs + cuT( "\tpostfx \"" ) + effect->getName() + cuT( "\"" ) )
-						&& effect->writeInto( file )
-						&& file.writeText( cuT( "\n" ) ) > 0;
-					castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget post effect" );
-				}
+				result = effect->writeInto( file, m_tabs + cuT( "\t" ) ) && file.writeText( cuT( "\n" ) ) > 0;
+				castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget post effect" );
 			}
+		}
 
+		if ( result )
+		{
+			result = HdrConfig::TextWriter( m_tabs + cuT( "\t" ) )( target.getHdrConfig(), file );
+		}
 
+		if ( result )
 		{
 			result = SsaoConfig::TextWriter{ m_tabs + cuT( "\t" ) }( target.m_ssaoConfig, file );
 		}
@@ -210,6 +206,7 @@ namespace castor3d
 	{
 		if ( !m_initialised )
 		{
+			m_culler = std::make_unique< FrustumCuller >( *getScene(), *getCamera() );
 			auto & renderSystem = *getEngine()->getRenderSystem();
 			auto & device = getCurrentDevice( renderSystem );
 			doInitialiseRenderPass();
@@ -286,6 +283,8 @@ namespace castor3d
 		if ( m_initialised )
 		{
 			m_initialised = false;
+			m_culler.reset();
+
 			m_fence.reset();
 			m_signalReady.reset();
 
@@ -332,6 +331,16 @@ namespace castor3d
 		}
 	}
 
+	void RenderTarget::update()
+	{
+		auto & camera = *getCamera();
+		camera.resize( m_size );
+		camera.update();
+
+		REQUIRE( m_culler );
+		m_culler->compute();
+	}
+
 	void RenderTarget::render( RenderInfo & info )
 	{
 		SceneSPtr scene = getScene();
@@ -368,8 +377,25 @@ namespace castor3d
 
 	void RenderTarget::setCamera( CameraSPtr camera )
 	{
-		m_camera = camera;
-		camera->resize( m_size );
+		auto myCamera = getCamera();
+
+		if ( myCamera != camera )
+		{
+			m_camera = camera;
+			camera->resize( m_size );
+			m_culler = std::make_unique< FrustumCuller >( *getScene(), *getCamera() );
+		}
+	}
+
+	void RenderTarget::setScene( SceneSPtr scene )
+	{
+		auto myScene = getScene();
+
+		if ( myScene != scene )
+		{
+			m_scene = scene;
+			m_culler.reset();
+		}
 	}
 
 	void RenderTarget::setToneMappingType( String const & name
@@ -497,7 +523,7 @@ namespace castor3d
 		m_velocityTexture.setTexture( velocityTexture );
 		m_velocityTexture.setSampler( getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + string::toString( m_index ) + cuT( "_Point" ) ) );
 		m_velocityTexture.getTexture()->getDefaultImage().initialiseSource();
-		return m_velocityTexture.getTexture()->initialise();
+		return m_velocityTexture.initialise();
 	}
 
 	bool RenderTarget::doInitialiseTechnique()

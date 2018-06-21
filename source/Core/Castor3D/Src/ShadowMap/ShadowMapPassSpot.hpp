@@ -34,7 +34,8 @@ namespace castor3d
 		 *\param[in]	shadowMap	La shadow map parente.
 		 */
 		C3D_API ShadowMapPassSpot( Engine & engine
-			, Scene & scene
+			, MatrixUbo const & matrixUbo
+			, SceneCuller & culler
 			, ShadowMap const & shadowMap );
 		/**
 		 *\~english
@@ -54,16 +55,6 @@ namespace castor3d
 		 *\copydoc		castor3d::ShadowMapPass::updateDeviceDependent
 		 */
 		void updateDeviceDependent( uint32_t index )override;
-		/**
-		 *\~english
-		 *\return		The camera.
-		 *\~french
-		 *\return		La caméra.
-		 */
-		inline CameraSPtr getCamera()const
-		{
-			return m_camera;
-		}
 
 	private:
 		/**
@@ -115,7 +106,6 @@ namespace castor3d
 		};
 
 	private:
-		CameraSPtr m_camera;
 		renderer::UniformBufferPtr< Configuration > m_shadowConfig;
 		castor::Matrix4x4r m_view;
 	};

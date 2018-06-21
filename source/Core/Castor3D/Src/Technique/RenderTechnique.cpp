@@ -151,26 +151,27 @@ namespace castor3d
 		, Named{ name }
 		, m_renderTarget{ renderTarget }
 		, m_renderSystem{ renderSystem }
+		, m_matrixUbo{ *renderSystem.getEngine() }
 #if C3D_UseDeferredRendering
-		, m_opaquePass{ std::make_unique< OpaquePass >( *renderTarget.getScene()
-			, renderTarget.getCamera().get()
+		, m_opaquePass{ std::make_unique< OpaquePass >( m_matrixUbo
+			, renderTarget.getCuller()
 			, config ) }
 #else
 		, m_opaquePass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "opaque_pass" )
-			, *renderTarget.getScene()
-			, renderTarget.getCamera().get()
+			, m_matrixUbo
+			, renderTarget.getCuller()
 			, false
 			, nullptr
 			, config ) }
 #endif
 #if C3D_UseWeightedBlendedRendering
-		, m_transparentPass{ std::make_unique< TransparentPass >( *renderTarget.getScene()
-			, renderTarget.getCamera().get()
+		, m_transparentPass{ std::make_unique< TransparentPass >( m_matrixUbo
+			, renderTarget.getCuller()
 			, config ) }
 #else
-		, m_transparentPass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "forward_transparent" )
-			, *renderTarget.getScene()
-			, renderTarget.getCamera().get()
+		, m_transparentPass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "transparent_pass" )
+			, m_matrixUbo
+			, renderTarget.getCuller()
 			, false
 			, false
 			, false
@@ -242,6 +243,13 @@ namespace castor3d
 				, renderer::ImageUsageFlag::eDepthStencilAttachment );
 			m_signalFinished = getCurrentDevice( *this ).createSemaphore();
 			m_hdrConfigUbo.initialise();
+			m_matrixUbo.initialise();
+
+			auto & device = getCurrentDevice( *this );
+			m_stagingBuffer = std::make_unique< renderer::StagingBuffer >( device
+				, renderer::BufferTarget::eTransferSrc
+				, m_matrixUbo.getUbo().getAlignedSize() );
+			m_uploadCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 
 			doInitialiseShadowMaps();
 			doInitialiseBackgroundPass();
@@ -272,6 +280,9 @@ namespace castor3d
 		m_hdrConfigUbo.cleanup();
 		m_transparentPass->cleanup();
 		m_opaquePass->cleanup();
+		m_matrixUbo.cleanup();
+		m_uploadCommandBuffer.reset();
+		m_stagingBuffer.reset();
 		m_initialised = false;
 		m_depthBuffer->cleanup();
 		m_colourTexture->cleanup();
@@ -285,6 +296,7 @@ namespace castor3d
 
 	void RenderTechnique::update( RenderQueueArray & queues )
 	{
+		m_renderTarget.update();
 		m_opaquePass->update( queues );
 		m_transparentPass->update( queues );
 		doUpdateShadowMaps( queues );
@@ -303,12 +315,18 @@ namespace castor3d
 		auto & scene = *m_renderTarget.getScene();
 		auto & camera = *m_renderTarget.getCamera();
 		scene.getLightCache().updateLightsTexture( camera );
-		camera.resize( m_size );
-		camera.update();
 		scene.updateDeviceDependent( camera );
 
 		// Update part
 		doUpdateParticles( info );
+		auto jitterProjSpace = jitter * 2.0_r;
+		jitterProjSpace[0] /= camera.getWidth();
+		jitterProjSpace[1] /= camera.getHeight();
+		m_matrixUbo.update( camera.getView()
+			, camera.getViewport().getProjection()
+			, jitterProjSpace
+			, *m_stagingBuffer
+			, *m_uploadCommandBuffer );
 		m_hdrConfigUbo.update( m_renderTarget.getHdrConfig() );
 		auto * semaphore = &doRenderBackground( waitSemaphores );
 		semaphore = &doRenderEnvironmentMaps( *semaphore );
@@ -319,21 +337,19 @@ namespace castor3d
 		m_deferredRendering->update( info
 			, scene
 			, camera
-			//, m_activeShadowMaps
 			, jitter );
 
 #else
 
 		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).update( info
-			//, m_activeShadowMaps
 			, jitter );
+
 #endif
 #if C3D_UseWeightedBlendedRendering
 
 		m_weightedBlendRendering->update( info
 			, scene
 			, camera
-			//, m_activeShadowMaps
 			, jitter );
 
 #endif

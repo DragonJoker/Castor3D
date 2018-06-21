@@ -60,6 +60,9 @@ namespace castor3d
 	void SsaoPass::update( Camera const & camera )
 	{
 		m_ssaoConfigUbo->update( m_config, camera );
+		m_horizontalBlur->update();
+		m_verticalBlur->update();
+		m_config.m_blurRadius.reset();
 	}
 
 	renderer::Semaphore const & SsaoPass::render( renderer::Semaphore const & toWait )const

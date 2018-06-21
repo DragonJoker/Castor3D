@@ -34,7 +34,8 @@ namespace castor3d
 		 *\param[in]	shadowMap	La shadow map parente.
 		 */
 		C3D_API ShadowMapPassDirectional( Engine & engine
-			, Scene & scene
+			, MatrixUbo const & matrixUbo
+			, SceneCuller & culler
 			, ShadowMap const & shadowMap );
 		/**
 		 *\~english
@@ -105,7 +106,6 @@ namespace castor3d
 		};
 
 	private:
-		CameraSPtr m_camera;
 		renderer::UniformBufferPtr< Configuration > m_shadowConfig;
 		float m_farPlane;
 		castor::Matrix4x4r m_view;

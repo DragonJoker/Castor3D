@@ -103,8 +103,8 @@ namespace castor3d
 		 *\param[in]	camera	La caméra pour cette technique (peut être nulle).
 		 *\param[in]	config	La configuration du SSAO.
 		 */
-		TransparentPass( Scene & scene
-			, Camera * camera
+		TransparentPass( MatrixUbo const & matrixUbo
+			, SceneCuller & culler
 			, SsaoConfig const & config );
 		/**
 		 *\~english

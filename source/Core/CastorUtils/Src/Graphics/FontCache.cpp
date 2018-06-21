@@ -14,6 +14,29 @@ namespace castor
 		static const xchar * INFO_CACHE_CREATED_OBJECT = cuT( "Cache::create - Created " );
 		static const xchar * WARNING_CACHE_DUPLICATE_OBJECT = cuT( "Cache::create - Duplicate " );
 		static const xchar * WARNING_CACHE_NULL_OBJECT = cuT( "Cache::Insert - nullptr " );
+
+		inline void doReportCreation( castor::String const & name )
+		{
+			castor::Logger::logTrace( castor::makeStringStream()
+				<< INFO_CACHE_CREATED_OBJECT
+				<< cuT( "Font: " )
+				<< name );
+		}
+
+		inline void doReportDuplicate( castor::String const & name )
+		{
+			castor::Logger::logWarning( castor::makeStringStream()
+				<< WARNING_CACHE_DUPLICATE_OBJECT
+				<< cuT( "Font: " )
+				<< name );
+		}
+
+		inline void doReportNull()
+		{
+			castor::Logger::logWarning( castor::makeStringStream()
+				<< WARNING_CACHE_NULL_OBJECT
+				<< cuT( "Font" ) );
+		}
 	}
 
 	//*********************************************************************************************
@@ -60,7 +83,7 @@ namespace castor
 		if ( Collection< Font, String >::has( p_name ) )
 		{
 			result = Collection< Font, String >::find( p_name );
-			Logger::logWarning( makeStringStream() << WARNING_CACHE_DUPLICATE_OBJECT << cuT( "Font: " ) << p_name );
+			doReportDuplicate( p_name );
 		}
 		else
 		{
@@ -69,7 +92,7 @@ namespace castor
 			if ( File::fileExists( p_path ) )
 			{
 				result = std::make_shared< Font >( p_name, p_height, p_path );
-				Logger::logDebug( makeStringStream() << INFO_CACHE_CREATED_OBJECT << cuT( "Font: " ) << p_name );
+				doReportCreation( p_name );
 				Collection< Font, String >::insert( p_name, result );
 
 				if ( m_paths.find( name ) == m_paths.end() )
@@ -104,7 +127,7 @@ namespace castor
 		if ( Collection< Font, String >::has( p_name ) )
 		{
 			result = Collection< Font, String >::find( p_name );
-			Logger::logWarning( makeStringStream() << WARNING_CACHE_DUPLICATE_OBJECT << cuT( "Font: " ) << p_name );
+			doReportDuplicate( p_name );
 		}
 		else
 		{

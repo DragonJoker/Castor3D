@@ -45,8 +45,8 @@ namespace castor3d
 		 */
 		C3D_API RenderTechniquePass( castor::String const & category
 			, castor::String const & name
-			, Scene const & scene
-			, Camera * camera
+			, MatrixUbo const & matrixUbo
+			, SceneCuller & culler
 			, bool environment
 			, SceneNode const * ignored
 			, SsaoConfig const & config );
@@ -72,8 +72,8 @@ namespace castor3d
 		 */
 		C3D_API RenderTechniquePass( castor::String const & category
 			, castor::String const & name
-			, Scene & scene
-			, Camera * camera
+			, MatrixUbo const & matrixUbo
+			, SceneCuller & culler
 			, bool oit
 			, bool environment
 			, SceneNode const * ignored
@@ -157,7 +157,6 @@ namespace castor3d
 		 *\param[in, out]	count		Reçouit le nombre de noeuds dessinés.
 		 */
 		C3D_API void doUpdateNodes( SceneCulledRenderNodes & nodes
-			, Camera const & camera
 			, castor::Point2r const & jitter
 			, RenderInfo & info )const;
 		/**

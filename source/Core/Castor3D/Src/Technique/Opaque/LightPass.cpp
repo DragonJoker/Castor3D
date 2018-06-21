@@ -470,13 +470,13 @@ namespace castor3d
 			m_timer->endPass( *m_commandBuffer, index );
 			m_commandBuffer->end();
 
-			m_fence->reset();
+			//m_fence->reset();
 			device.getGraphicsQueue().submit( *m_commandBuffer
 				, *result
 				, renderer::PipelineStageFlag::eColourAttachmentOutput
 				, *m_signalReady
-				, m_fence.get() );
-			m_fence->wait( renderer::FenceTimeout );
+				, nullptr );// m_fence.get() );
+			//m_fence->wait( renderer::FenceTimeout );
 			result = m_signalReady.get();
 		}
 

@@ -92,7 +92,7 @@ namespace castor3d
 		uint32_t m_blurStepSize{ 2u };
 		//!\~english	Filter radius in pixels. This will be multiplied by m_blurStepSize.
 		//!\~english	Rayon du filtre en pixels. Sera multiplié par m_blurStepSize.
-		uint32_t m_blurRadius{ 4u };
+		castor::ChangeTracked< castor::RangedValue< int32_t > > m_blurRadius{ { 4, castor::makeRange( 1, 6 ) } };
 	};
 }
 

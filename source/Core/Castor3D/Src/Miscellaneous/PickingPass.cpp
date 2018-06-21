@@ -27,6 +27,8 @@ using namespace castor;
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
 	namespace
 	{
 		static String const Picking = cuT( "Picking" );
@@ -72,7 +74,6 @@ namespace castor3d
 
 		template< bool Opaque, typename MapType >
 		inline void doUpdateNonInstanced( RenderPass const & pass
-			, Scene const & scene
 			, PickNodeType type
 			, MapType & nodes )
 		{
@@ -223,10 +224,19 @@ namespace castor3d
 		static int constexpr PickingOffset = int( PickingWidth / 2 );
 	}
 
+	//*********************************************************************************************
+
 	uint32_t const PickingPass::UboBindingPoint = 7u;
 
-	PickingPass::PickingPass( Engine & engine )
-		: RenderPass{ cuT( "Picking" ), cuT( "Picking" ), engine, nullptr }
+	PickingPass::PickingPass( Engine & engine
+		, MatrixUbo const & matrixUbo
+		, SceneCuller & culler )
+		: RenderPass{ cuT( "Picking" )
+			, cuT( "Picking" )
+			, engine
+			, matrixUbo
+			, culler
+			, nullptr }
 	{
 	}
 
@@ -236,9 +246,6 @@ namespace castor3d
 
 	void PickingPass::addScene( Scene & scene, Camera & camera )
 	{
-		auto itScn = m_scenes.emplace( &scene, CameraQueueMap{} ).first;
-		auto itCam = itScn->second.emplace( &camera, RenderQueue{ *this, m_opaque, nullptr } ).first;
-		itCam->second.initialise( scene, camera );
 	}
 
 	PickNodeType PickingPass::pick( Position const & position
@@ -248,37 +255,28 @@ namespace castor3d
 		m_geometry.reset();
 		m_submesh.reset();
 		m_face = 0u;
-
-		auto itScn = m_scenes.find( camera.getScene() );
-
-		if ( itScn != m_scenes.end() )
-		{
-			auto itCam = itScn->second.find( &camera );
-
-			if ( itCam != itScn->second.end() )
-			{
-				ShadowMapLightTypeArray shadowMaps;
-				itCam->second.update( shadowMaps );
-				doUpdateNodes( itCam->second.getCulledRenderNodes() );
-				auto pixel = doFboPick( position, camera, itCam->second.getCommandBuffer() );
-				result = doPick( pixel, itCam->second.getCulledRenderNodes() );
-			}
-		}
-
+		auto & myCamera = getCuller().getCamera();
+		ShadowMapLightTypeArray shadowMaps;
+		m_renderQueue.update( shadowMaps );
+		doUpdateNodes( m_renderQueue.getCulledRenderNodes() );
+		auto pixel = doFboPick( position, myCamera, m_renderQueue.getCommandBuffer() );
+		result = doPick( pixel, m_renderQueue.getCulledRenderNodes() );
 		return result;
 	}
 
 	void PickingPass::doUpdateNodes( SceneCulledRenderNodes & nodes )
 	{
-		m_matrixUbo.update( nodes.camera.getView()
-			, nodes.camera.getViewport().getProjection() );
-		doUpdate( nodes.scene, nodes.camera, nodes.instancedStaticNodes.backCulled );
-		doUpdate( nodes.scene, nodes.camera, nodes.staticNodes.backCulled );
-		doUpdate( nodes.scene, nodes.camera, nodes.skinnedNodes.backCulled );
-		doUpdate( nodes.scene, nodes.camera, nodes.instancedSkinnedNodes.backCulled );
-		doUpdate( nodes.scene, nodes.camera, nodes.morphingNodes.backCulled );
-		doUpdate( nodes.scene, nodes.camera, nodes.billboardNodes.backCulled );
-		nodes.scene.getGeometryCache().uploadPickingUbos();
+		auto & myCamera = getCuller().getCamera();
+		auto & myScene = getCuller().getScene();
+		m_matrixUbo.update( myCamera.getView()
+			, myCamera.getViewport().getProjection() );
+		doUpdate( nodes.instancedStaticNodes.backCulled );
+		doUpdate( nodes.staticNodes.backCulled );
+		doUpdate( nodes.skinnedNodes.backCulled );
+		doUpdate( nodes.instancedSkinnedNodes.backCulled );
+		doUpdate( nodes.morphingNodes.backCulled );
+		doUpdate( nodes.billboardNodes.backCulled );
+		myScene.getGeometryCache().uploadPickingUbos();
 	}
 
 	Point4f PickingPass::doFboPick( Position const & position
@@ -382,14 +380,12 @@ namespace castor3d
 		return result;
 	}
 
-	void PickingPass::doUpdate( Scene const & scene
-		, Camera const & camera
-		, SubmeshStaticRenderNodesPtrByPipelineMap & nodes )
+	void PickingPass::doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes )
 	{
 		doTraverseNodes< true >( *this
 			, nodes
 			, PickNodeType::eInstantiatedStatic
-			, [&scene, &camera, this]( RenderPipeline & pipeline
+			, [this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, InstantiationComponent & component
@@ -400,39 +396,32 @@ namespace castor3d
 				if ( it != component.end()
 					&& it->second.buffer )
 				{
-					doCopyNodesMatrices( renderNodes, camera, it->second.data );
+					doCopyNodesMatrices( renderNodes
+						, it->second.data );
 				}
 			} );
 	}
 
-	void PickingPass::doUpdate( Scene const & scene
-		, Camera const & camera
-		, StaticRenderNodesPtrByPipelineMap & nodes )
+	void PickingPass::doUpdate( StaticRenderNodesPtrByPipelineMap & nodes )
 	{
 		doUpdateNonInstanced< true >( *this
-			, scene
 			, PickNodeType::eStatic
 			, nodes );
 	}
 
-	void PickingPass::doUpdate( Scene const & scene
-		, Camera const & camera
-		, SkinningRenderNodesPtrByPipelineMap & nodes )
+	void PickingPass::doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes )
 	{
 		doUpdateNonInstanced< true >( *this
-			, scene
 			, PickNodeType::eSkinning
 			, nodes );
 	}
 	
-	void PickingPass::doUpdate( Scene const & scene
-		, Camera const & camera
-		, SubmeshSkinningRenderNodesPtrByPipelineMap & nodes )
+	void PickingPass::doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes )
 	{
 		doTraverseNodes< true >( *this
 			, nodes
 			, PickNodeType::eInstantiatedSkinning
-			, [&scene, &camera, this]( RenderPipeline & pipeline
+			, [this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, InstantiationComponent & component
@@ -446,27 +435,21 @@ namespace castor3d
 					&& it->second.buffer
 					&& instantiatedBones.hasInstancedBonesBuffer() )
 				{
-					doCopyNodesBones( renderNodes, camera, instantiatedBones.getInstancedBonesBuffer() );
+					doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
 				}
 			} );
 	}
 
-	void PickingPass::doUpdate( Scene const & scene
-		, Camera const & camera
-		, MorphingRenderNodesPtrByPipelineMap & nodes )
+	void PickingPass::doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes )
 	{
 		doUpdateNonInstanced< true >( *this
-			, scene
 			, PickNodeType::eMorphing
 			, nodes );
 	}
 
-	void PickingPass::doUpdate( Scene const & scene
-		, Camera const & camera
-		, BillboardRenderNodesPtrByPipelineMap & nodes )
+	void PickingPass::doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes )
 	{
 		doUpdateNonInstanced< true >( *this
-			, scene
 			, PickNodeType::eBillboard
 			, nodes );
 	}
@@ -745,7 +728,7 @@ namespace castor3d
 			}
 			else
 			{
-				mtxModel = c3d_mtxModel;
+				mtxModel = c3d_curMtxModel;
 			}
 
 			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
@@ -892,4 +875,6 @@ namespace castor3d
 		, PipelineFlags const & flags )
 	{
 	}
+
+	//*********************************************************************************************
 }

@@ -51,9 +51,7 @@ endif ()
 if ( EXISTS ${CMAKE_SOURCE_DIR}/../dependencies/${COMPILER_FOLDER}/${PROJECTS_PLATFORM}/ )
 	message( STATUS "Found dependencies folder, fetching libraries from it" )
 	get_filename_component( DEPENDENCIES_DIR ${CMAKE_SOURCE_DIR}/../dependencies/${COMPILER_FOLDER}/${PROJECTS_PLATFORM} REALPATH )
-	set( ENV{FREETYPE_DIR} ${DEPENDENCIES_DIR}/freetype )
 	set( ZLIB_ROOT ${DEPENDENCIES_DIR}/zlib )
-	set( FreeImage_ROOT_DIR ${DEPENDENCIES_DIR}/FreeImage )
 	set( FbxSDK_ROOT_DIR ${DEPENDENCIES_DIR}/FbxSDK )
 	set( ASSIMP_ROOT_DIR ${DEPENDENCIES_DIR}/assimp )
 	set( glslang_ROOT_DIR ${DEPENDENCIES_DIR}/glslang )
@@ -103,10 +101,13 @@ find_package( Doxygen )
 #	Adding include dirs to include search path
 #--------------------------------------------------------------------------------------------------
 set( RENDERERLIB_DIR external/RendererLib/source/Renderer )
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/external/FreeType/include )
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/external/FreeType/include/freetype )
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/Core/CastorUtils/Src )
-include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Core/CastorUtils/Src )
+include_directories(
+	${CMAKE_CURRENT_SOURCE_DIR}/external/FreeImage/include
+	${CMAKE_CURRENT_SOURCE_DIR}/external/FreeType/include
+	${CMAKE_CURRENT_SOURCE_DIR}/external/FreeType/include/freetype
+	${CMAKE_CURRENT_SOURCE_DIR}/Core/CastorUtils/Src
+	${CMAKE_CURRENT_BINARY_DIR}/Core/CastorUtils/Src
+)
 
 set( Castor3DIncludeDirs
 	${CMAKE_CURRENT_SOURCE_DIR}/${RENDERERLIB_DIR}/Renderer/Src
@@ -168,6 +169,7 @@ if( MSVC )
 	set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zm300" )
 	# Copy Rebracer.xml file so we can use Rebracer extension to uniformise code formatting
 	file( COPY ${CMAKE_SOURCE_DIR}/../data/VS/Rebracer.xml DESTINATION ${CMAKE_BINARY_DIR} )
+	add_definitions( -D_CRT_SECURE_NO_WARNINGS )
 endif()
 
 add_definitions(
@@ -209,7 +211,18 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 		endif ()
 		add_subdirectory( Tools )
 
-		add_subdirectory( external/FreeType )
+		if ( WIN32 )
+			add_subdirectory( external/FreeType )
+			set_property( TARGET FreeType PROPERTY FOLDER "External" )
+			if ( "${PROJECTS_PLATFORM}" STREQUAL "x64" )
+				add_definitions( -D__LP64__ )
+			endif ()
+			add_definitions( -DFREEIMAGE_LIB )
+			add_definitions( -DOPJ_STATIC )
+			add_definitions( -DLIBRAW_NODLL )
+			add_subdirectory( external/FreeImage )
+			set_property( TARGET FreeImage PROPERTY FOLDER "External" )
+		endif ()
 		if ( ${CASTOR_BUILD_CASTOR3D} )
 			if ( NOT CASTOR_BUILDGRP_RENDERER )
 				set( RENDERER_BUILD_RENDERER_PLUGINS FALSE )
@@ -218,6 +231,13 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 				set( RENDERER_STATIC_RENDERER_PLUGINS TRUE )
 			endif ()
 			add_subdirectory( ${RENDERERLIB_DIR} )
+			set_property( TARGET Renderer PROPERTY FOLDER "External/Renderer" )
+			if ( CASTOR_BUILDGRP_RENDERER )
+				set_property( TARGET GlRenderer PROPERTY FOLDER "External/Renderer" )
+				set_property( TARGET Gl3Renderer PROPERTY FOLDER "External/Renderer" )
+				set_property( TARGET TestRenderer PROPERTY FOLDER "External/Renderer" )
+				set_property( TARGET VkRenderer PROPERTY FOLDER "External/Renderer" )
+			endif ()
 		endif ()
 
 		CoreInit()

@@ -903,7 +903,7 @@ inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType
 	{
 		out << in[0];
 
-		for ( uint32_t i = 0; i < TCount; i++ )
+		for ( uint32_t i = 1; i < TCount; i++ )
 		{
 			out << "\t" << in[i];
 		}

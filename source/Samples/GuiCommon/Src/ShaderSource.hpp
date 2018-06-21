@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "GuiCommonPrerequisites.hpp"
 
 #include <Design/ChangeTracked.hpp>
+#include <Math/RangedValue.hpp>
 
 #include <wx/propgrid/propgrid.h>
 
@@ -122,10 +123,12 @@ namespace GuiCommon
 	protected:
 		UniformValueBase( wxString const & name
 			, UniformType type
-			, bool isTracked )
+			, bool isTracked
+			, bool isRanged )
 			: m_name{ name }
 			, m_type{ type }
 			, m_isTracked{ isTracked }
+			, m_isRanged{ isRanged }
 		{
 		}
 
@@ -149,62 +152,136 @@ namespace GuiCommon
 			return m_isTracked;
 		}
 
+		inline bool isRanged()const
+		{
+			return m_isRanged;
+		}
+
 	private:
 		wxString m_name;
 		UniformType m_type;
 		bool m_isTracked;
+		bool m_isRanged;
 	};
 
 	template< typename T >
 	class UniformValue
 		: public UniformValueBase
 	{
+		using ValueType = T;
+		using RefType = ValueType &;
+		using ConstRefType = ValueType const &;
+
 	public:
 		UniformValue( wxString const & name
-			, T & value )
-			: UniformValueBase{ name, UniformTyper< T >::value, false }
+			, RefType value )
+			: UniformValueBase{ name, UniformTyper< ValueType >::value, false, false }
 			, m_value{ value }
 		{
 		}
 
-		inline T const & getValue()const
+		inline ConstRefType getValue()const
 		{
 			return m_value;
 		}
 
-		inline T & getValue()
+		inline RefType getValue()
 		{
 			return m_value;
 		}
 
 	private:
-		T & m_value;
+		RefType m_value;
 	};
 
 	template< typename T >
 	class UniformValue< castor::ChangeTracked< T > >
 		: public UniformValueBase
 	{
+		using ValueType = T;
+		using RefType = castor::ChangeTracked< ValueType > & ;
+		using ConstRefType = ValueType const &;
+
 	public:
 		UniformValue( wxString const & name
-			, castor::ChangeTracked< T > & value )
-			: UniformValueBase{ name, UniformTyper< T >::value, true }
+			, RefType & value )
+			: UniformValueBase{ name, UniformTyper< ValueType >::value, true, false }
 			, m_value{ value }
 		{
 		}
 
-		inline T const & getValue()const
+		inline ConstRefType getValue()const
 		{
 			return m_value.value();
 		}
 
-		inline castor::ChangeTracked< T > & getValue()
+		inline RefType getValue()
 		{
 			return m_value;
 		}
 
 	private:
-		castor::ChangeTracked< T > & m_value;
+		RefType m_value;
+	};
+
+	template< typename T >
+	class UniformValue< castor::RangedValue< T > >
+		: public UniformValueBase
+	{
+		using ValueType = T;
+		using RefType = castor::RangedValue< ValueType > &;
+		using ConstRefType = ValueType const &;
+
+	public:
+		UniformValue( wxString const & name
+			, RefType value )
+			: UniformValueBase{ name, UniformTyper< ValueType >::value, false, true }
+			, m_value{ value }
+		{
+		}
+
+		inline ConstRefType getValue()const
+		{
+			return m_value.value();
+		}
+
+		inline RefType getValue()
+		{
+			return m_value;
+		}
+
+	private:
+		RefType m_value;
+	};
+
+	template< typename T >
+	class UniformValue< castor::ChangeTracked< castor::RangedValue< T > > >
+		: public UniformValueBase
+	{
+		using ValueType = T;
+		using RefType = castor::ChangeTracked< castor::RangedValue< ValueType > > &;
+		using ConstRefType = ValueType const &;
+
+	public:
+		UniformValue( wxString const & name
+			, RefType value )
+			: UniformValueBase{ name, UniformTyper< ValueType >::value, true, true }
+			, m_value{ value }
+		{
+		}
+
+		inline ConstRefType getValue()const
+		{
+			return m_value.value().value();
+		}
+
+		inline RefType getValue()
+		{
+			return m_value;
+		}
+
+	private:
+		RefType m_value;
 	};
 
 	template< typename T >
