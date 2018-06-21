@@ -161,7 +161,7 @@ namespace castor
 		}
 
 	public:
-		inline Bit( Bit const & bit ) = default;
+		inline explicit Bit( Bit const & bit ) = default;
 		inline Bit & operator=( bool val );
 		inline Bit & operator=( Bit const & bit );
 

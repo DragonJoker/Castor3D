@@ -506,7 +506,6 @@ namespace castor3d
 			, ShadowMapLightTypeArray const & shadowMaps )
 		{
 			auto & scene = nodes.scene;
-			bool shadows{ scene.hasShadows() };
 
 			for ( auto & culledNode : renderPass.getCuller().getAllSubmeshes( opaque ) )
 			{
@@ -601,8 +600,6 @@ namespace castor3d
 			, RenderNodesT< BillboardRenderNode, BillboardRenderNodesByPipelineMap > & nodes
 			, ShadowMapLightTypeArray & shadowMaps )
 		{
-			bool shadows{ scene.hasShadows() };
-
 			for ( auto & culledNode : renderPass.getCuller().getAllBillboards( opaque ) )
 			{
 				auto & billboard = culledNode.data;

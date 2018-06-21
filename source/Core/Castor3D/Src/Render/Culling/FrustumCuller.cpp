@@ -45,8 +45,6 @@ namespace castor3d
 
 	void FrustumCuller::doCullBillboards()
 	{
-		auto & camera = getCamera();
-
 		for ( auto & node : m_allOpaqueBillboards )
 		{
 			auto visible = node.sceneNode.isDisplayable()
