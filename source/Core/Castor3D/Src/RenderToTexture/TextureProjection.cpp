@@ -152,16 +152,15 @@ namespace castor3d
 	void TextureProjection::update( Camera const & camera )
 	{
 		static Matrix3x3r const Identity{ 1.0f };
-		auto const & viewport = camera.getViewport();
 		auto node = camera.getParent();
 		matrix::setTranslate( m_mtxModel, node->getDerivedPosition() );
 		m_matrixUbo.update( camera.getView()
-			, viewport.getProjection() );
+			, camera.getProjection() );
 		m_modelMatrixUbo.update( m_mtxModel, Identity );
 
-		if ( m_size != viewport.getSize() )
+		if ( m_size != camera.getSize() )
 		{
-			m_size = viewport.getSize();
+			m_size = camera.getSize();
 			doPrepareFrame();
 		}
 	}

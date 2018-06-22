@@ -84,8 +84,8 @@ namespace castor3d
 		, Point2r const & jitter )
 	{
 		auto invView = camera.getView().getInverse().getTransposed();
-		auto invProj = camera.getViewport().getProjection().getInverse();
-		auto invViewProj = ( camera.getViewport().getProjection() * camera.getView() ).getInverse();
+		auto invProj = camera.getProjection().getInverse();
+		auto invViewProj = ( camera.getProjection() * camera.getView() ).getInverse();
 
 		m_transparentPass.getSceneUbo().update( camera, scene.getFog() );
 		m_finalCombinePass.update( camera

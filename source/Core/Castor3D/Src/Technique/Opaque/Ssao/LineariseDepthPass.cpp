@@ -4,6 +4,7 @@
 #include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
+#include "Scene/Camera.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
 #include "Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
@@ -326,8 +327,7 @@ namespace castor3d
 	LineariseDepthPass::LineariseDepthPass( Engine & engine
 		, renderer::Extent2D const & size
 		, SsaoConfigUbo & ssaoConfigUbo
-		, renderer::TextureView const & depthBuffer
-		, Viewport const & viewport )
+		, renderer::TextureView const & depthBuffer )
 		: m_engine{ engine }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_depthBuffer{ depthBuffer }
@@ -353,18 +353,8 @@ namespace castor3d
 		, m_lineariseProgram{ doGetLineariseProgram( m_engine, m_lineariseVertexShader, m_linearisePixelShader ) }
 		, m_minifyProgram{ doGetMinifyProgram( m_engine, m_minifyVertexShader, m_minifyPixelShader ) }
 	{
-		auto z_f = viewport.getFar();
-		auto z_n = viewport.getNear();
-		auto clipInfo = std::isinf( z_f )
-			? Point3f{ z_n, -1.0f, 1.0f }
-			: Point3f{ z_n * z_f, z_n - z_f, z_f };
-		// result = clipInfo[0] / ( clipInfo[1] * depth + clipInfo[2] );
-		// depth = 0 => result = z_n
-		// depth = 1 => result = z_f
-		*m_clipInfo.getData() = clipInfo;
 		doInitialiseLinearisePass();
 		doInitialiseMinifyPass();
-		doPrepareFrame();
 	}
 
 	LineariseDepthPass::~LineariseDepthPass()
@@ -374,6 +364,25 @@ namespace castor3d
 		m_renderPass.reset();
 		m_timer.reset();
 		m_result.cleanup();
+	}
+
+	void LineariseDepthPass::update( Camera const & camera )
+	{
+		auto z_f = camera.getFar();
+		auto z_n = camera.getNear();
+		auto clipInfo = std::isinf( z_f )
+			? Point3f{ z_n, -1.0f, 1.0f }
+			: Point3f{ z_n * z_f, z_n - z_f, z_f };
+		// result = clipInfo[0] / ( clipInfo[1] * depth + clipInfo[2] );
+		// depth = 0 => result = z_n
+		// depth = 1 => result = z_f
+		m_clipInfoValue = clipInfo;
+
+		if ( m_clipInfoValue.isDirty() )
+		{
+			*m_clipInfo.getData() = m_clipInfoValue;
+			doPrepareFrame();
+		}
 	}
 
 	renderer::Semaphore const & LineariseDepthPass::linearise( renderer::Semaphore const & toWait )const

@@ -8,10 +8,12 @@ See LICENSE file in root folder
 #include "Technique/RenderTechniqueVisitor.hpp"
 #include "Texture/TextureUnit.hpp"
 
+#include <GlslShader.hpp>
+
+#include <Design/ChangeTracked.hpp>
+
 #include <Buffer/PushConstantsBuffer.hpp>
 #include <Miscellaneous/PushConstantRange.hpp>
-
-#include <GlslShader.hpp>
 
 namespace castor3d
 {
@@ -47,8 +49,7 @@ namespace castor3d
 		LineariseDepthPass( Engine & engine
 			, renderer::Extent2D const & size
 			, SsaoConfigUbo & ssaoConfigUbo
-			, renderer::TextureView const & depthBuffer
-			, Viewport const & viewport );
+			, renderer::TextureView const & depthBuffer );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -56,6 +57,13 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		~LineariseDepthPass();
+		/**
+		 *\~english
+		 *\brief		Updates clip info.
+		 *\~french
+		 *\brief		Met à jour les informations de clipping.
+		 */
+		void update( Camera const & camera );
 		/**
 		 *\~english
 		 *\brief		Linearises depth buffer.
@@ -122,6 +130,7 @@ namespace castor3d
 		renderer::PipelineLayoutPtr m_linearisePipelineLayout;
 		renderer::PipelinePtr m_linearisePipeline;
 		renderer::PushConstantsBuffer< castor::Point3f > m_clipInfo;
+		castor::ChangeTracked< castor::Point3f > m_clipInfoValue;
 		/**@}*/
 		/**
 		*name

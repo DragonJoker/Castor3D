@@ -15,18 +15,18 @@ namespace castor3d
 	namespace
 	{
 		castor::Matrix4x4f getProjectUnitMatrix( renderer::Device const & device
-			, Viewport const & viewport )
+			, Camera const & camera )
 		{
 			// Uses double precision because the division operations may otherwise 
 			// significantly hurt prevision.
-			double const screenWidth( viewport.getWidth() );
-			double const screenHeight( viewport.getHeight() );
+			double const screenWidth( camera.getWidth() );
+			double const screenHeight( camera.getHeight() );
 
-			double y = double( -viewport.getNear() ) * ( viewport.getFovY() / 2 ).tan();
+			double y = double( -camera.getNear() ) * ( camera.getFovY() / 2 ).tan();
 			double x = y * ( screenWidth / screenHeight );
 
-			float n = -viewport.getNear();
-			float f = -viewport.getFar();
+			float n = -camera.getNear();
+			float f = -camera.getFar();
 
 			// Scale the pixel offset relative to the (non-square!) pixels in the unit frustum
 			auto r = float( x );
@@ -91,7 +91,6 @@ namespace castor3d
 		, Camera const & camera )
 	{
 		auto & device = getCurrentDevice( m_engine );
-		auto & viewport = camera.getViewport();
 		int numSpiralTurns = 0;
 
 #define NUM_PRECOMPUTED 100
@@ -122,19 +121,19 @@ namespace castor3d
 
 #undef NUM_PRECOMPUTED
 
-		float const scale = std::abs( 2.0f * ( viewport.getFovY() * 0.5f ).tan() );
+		float const scale = std::abs( 2.0f * ( camera.getFovY() * 0.5f ).tan() );
 		float const radius = config.m_radius;
 		float const invRadius = 1 / radius;
 		float const radius2 = radius * radius;
 		float const invRadius2 = 1.0f / radius2;
 		float const intersityDivR6 = config.m_intensity / std::pow( radius, 6.0f );
-		float const projScale = std::abs( viewport.getHeight() / scale );
+		float const projScale = std::abs( camera.getHeight() / scale );
 		float const MIN_AO_SS_RADIUS = 1.0f;
 		// Second parameter of max is just solving for Z coordinate at which we hit MIN_AO_SS_RADIUS
-		float farZ = std::max( viewport.getFar(), -projScale * radius / MIN_AO_SS_RADIUS );
+		float farZ = std::max( camera.getFar(), -projScale * radius / MIN_AO_SS_RADIUS );
 		// Hack because setting farZ lower results in banding artefacts on some scenes, should tune later.
 		farZ = std::min( farZ, -1000.0f );
-		auto const proj = getProjectUnitMatrix( device, viewport );
+		auto const proj = getProjectUnitMatrix( device, camera );
 
 		auto & configuration = m_ubo->getData( 0u );
 		configuration.numSamples = config.m_numSamples;
@@ -153,8 +152,8 @@ namespace castor3d
 		configuration.blurRadius = config.m_blurRadius.value().value();
 		configuration.projInfo = castor::Point4f
 		{
-			-2.0f / ( viewport.getWidth() * proj[0][0] ),
-			-2.0f / ( viewport.getHeight() * proj[1][1] ),
+			-2.0f / ( camera.getWidth() * proj[0][0] ),
+			-2.0f / ( camera.getHeight() * proj[1][1] ),
 			( 1.0f - proj[0][2] ) / proj[0][0],
 			( 1.0f - proj[1][2] ) / proj[1][1]
 		};

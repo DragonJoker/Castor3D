@@ -257,7 +257,7 @@ namespace castor3d
 		, Camera const & camera )
 	{
 		auto model = doComputeModelMatrix( light, camera );
-		m_matrixUbo.update( camera.getView(), camera.getViewport().getProjection() );
+		m_matrixUbo.update( camera.getView(), camera.getProjection() );
 		m_modelMatrixUbo.update( model );
 		m_pipeline->program->bind( light );
 	}

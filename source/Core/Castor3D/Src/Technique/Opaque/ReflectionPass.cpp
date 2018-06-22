@@ -1064,8 +1064,7 @@ namespace castor3d
 		, renderer::TextureView const & result
 		, SceneUbo & sceneUbo
 		, GpInfoUbo & gpInfoUbo
-		, renderer::TextureView const * ssao
-		, Viewport const & viewport )
+		, renderer::TextureView const * ssao )
 		: OwnedBy< Engine >{ engine }
 		, m_device{ getCurrentDevice( engine ) }
 		, m_scene{ scene }

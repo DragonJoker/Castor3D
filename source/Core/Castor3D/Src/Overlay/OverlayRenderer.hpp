@@ -93,12 +93,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Begins the overlays preparation.
-		 *\param[in]	viewport	The render window viewport.
+		 *\param[in]	camera	The render window camera.
 		 *\~french
 		 *\brief		Commence la préparation des incrustations.
-		 *\param[in]	viewport	Le viewport de la fenêtre de rendu.
+		 *\param[in]	camera	La caméra de la fenêtre de rendu.
 		 */
-		C3D_API void beginPrepare( Viewport const & viewport
+		C3D_API void beginPrepare( Camera const & camera
 			, RenderPassTimer const & timer
 			, renderer::Semaphore const & toWait );
 		/**

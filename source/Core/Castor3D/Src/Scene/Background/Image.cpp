@@ -180,12 +180,11 @@ namespace castor3d
 
 	void ImageBackground::doUpdate( Camera const & camera )
 	{
-		auto const & viewport = camera.getViewport();
-		m_sizeUbo->getData() = Point2f{ viewport.getWidth()
-			, viewport.getHeight() };
+		m_sizeUbo->getData() = Point2f{ camera.getWidth()
+			, camera.getHeight() };
 		m_sizeUbo->upload();
 		m_matrixUbo.update( camera.getView()
-			, viewport.getProjection() );
+			, camera.getProjection() );
 	}
 
 	void ImageBackground::doInitialiseDescriptorLayout()

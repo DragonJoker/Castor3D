@@ -221,7 +221,7 @@ namespace castor3d
 			return m_far.value();
 		}
 
-		inline castor::Angle getFovY()const
+		inline castor::Angle const & getFovY()const
 		{
 			return m_fovY.value();
 		}

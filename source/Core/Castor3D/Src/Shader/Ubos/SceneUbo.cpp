@@ -72,8 +72,8 @@ namespace castor3d
 		auto & configuration = m_ubo->getData( 0u );
 		configuration.fogType = int( fog.getType() );
 		configuration.fogDensity = fog.getDensity();
-		configuration.cameraNearPlane = camera.getViewport().getNear();
-		configuration.cameraFarPlane = camera.getViewport().getFar();
+		configuration.cameraNearPlane = camera.getNear();
+		configuration.cameraFarPlane = camera.getFar();
 		updateCameraPosition( camera );
 	}
 

@@ -323,7 +323,7 @@ namespace castor3d
 		jitterProjSpace[0] /= camera.getWidth();
 		jitterProjSpace[1] /= camera.getHeight();
 		m_matrixUbo.update( camera.getView()
-			, camera.getViewport().getProjection()
+			, camera.getProjection()
 			, jitterProjSpace
 			, *m_stagingBuffer
 			, *m_uploadCommandBuffer );
@@ -555,7 +555,6 @@ namespace castor3d
 			, m_colourTexture
 			, m_renderTarget.getSize()
 			, *m_renderTarget.getScene()
-			, m_renderTarget.getCamera()->getViewport()
 			, m_ssaoConfig );
 
 #else

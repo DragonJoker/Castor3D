@@ -153,7 +153,7 @@ namespace castor3d
 
 		auto node = camera.getParent();
 		m_viewport.setPerspective( 45.0_degrees
-			, camera.getViewport().getRatio()
+			, camera.getRatio()
 			, 0.1f
 			, 2.0f );
 		m_viewport.update();

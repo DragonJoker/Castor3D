@@ -33,20 +33,17 @@ namespace castor3d
 		 *\param[in]	size		The render area dimensions.
 		 *\param[in]	config		The SSAO configuration.
 		 *\param[in]	gpResult	The geometry pass result.
-		 *\param[in]	viewport	The viewport containing depth bounds.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
 		 *\param[in]	size		Les dimensions de la zone de rendu.
 		 *\param[in]	config		La configuration du SSAO.
 		 *\param[in]	gpResult	Le résultat de la geometry pass.
-		 *\param[in]	viewport	Le viewport contenant les bornes de profondeur.
 		 */
 		SsaoPass( Engine & engine
 			, renderer::Extent2D const & size
 			, SsaoConfig & config
-			, GeometryPassResult const & gpResult
-			, Viewport const & viewport );
+			, GeometryPassResult const & gpResult );
 		/**
 		 *\~english
 		 *\brief		Destructor.

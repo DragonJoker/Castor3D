@@ -227,7 +227,7 @@ namespace castor3d
 				{
 					if ( light->isShadowProducer() && light->getShadowMap() )
 					{
-						lightPassShadow.update( camera.getViewport().getSize()
+						lightPassShadow.update( camera.getSize()
 							, *light
 							, camera );
 						result = &lightPassShadow.render( index
@@ -236,7 +236,7 @@ namespace castor3d
 					}
 					else
 					{
-						lightPass.update( camera.getViewport().getSize()
+						lightPass.update( camera.getSize()
 							, *light
 							, camera );
 						result = &lightPass.render( index

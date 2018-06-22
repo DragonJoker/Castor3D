@@ -805,7 +805,7 @@ namespace castor3d
 		m_overlaysTimer->start();
 		{
 			auto lock = makeUniqueLock( getEngine()->getOverlayCache() );
-			m_overlayRenderer->beginPrepare( camera.getViewport()
+			m_overlayRenderer->beginPrepare( camera
 				, *m_overlaysTimer
 				, *result );
 			auto preparer = m_overlayRenderer->getPreparer();

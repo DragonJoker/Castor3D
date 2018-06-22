@@ -17,8 +17,7 @@ namespace castor3d
 	SsaoPass::SsaoPass( Engine & engine
 		, renderer::Extent2D const & size
 		, SsaoConfig & config
-		, GeometryPassResult const & gpResult
-		, Viewport const & viewport )
+		, GeometryPassResult const & gpResult )
 		: m_engine{ engine }
 		, m_config{ config }
 		, m_matrixUbo{ engine }
@@ -26,8 +25,7 @@ namespace castor3d
 		, m_linearisePass{ std::make_shared< LineariseDepthPass >( engine
 			, size
 			, *m_ssaoConfigUbo
-			, *gpResult.getViews()[size_t( DsTexture::eDepth )]
-			, viewport ) }
+			, *gpResult.getViews()[size_t( DsTexture::eDepth )] ) }
 		, m_rawSsaoPass{ std::make_shared< RawSsaoPass >( engine
 			, size
 			, config
@@ -60,6 +58,7 @@ namespace castor3d
 	void SsaoPass::update( Camera const & camera )
 	{
 		m_ssaoConfigUbo->update( m_config, camera );
+		m_linearisePass->update( camera );
 		m_horizontalBlur->update();
 		m_verticalBlur->update();
 		m_config.m_blurRadius.reset();
