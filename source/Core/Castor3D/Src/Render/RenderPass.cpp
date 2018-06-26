@@ -1171,7 +1171,7 @@ namespace castor3d
 		jitterProjSpace[0] /= camera.getWidth();
 		jitterProjSpace[1] /= camera.getHeight();
 		m_matrixUbo.update( camera.getView()
-			, camera.getViewport().getProjection()
+			, camera.getProjection()
 			, jitterProjSpace );
 	}
 

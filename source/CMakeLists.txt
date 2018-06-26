@@ -51,16 +51,11 @@ endif ()
 if ( EXISTS ${CMAKE_SOURCE_DIR}/../dependencies/${COMPILER_FOLDER}/${PROJECTS_PLATFORM}/ )
 	message( STATUS "Found dependencies folder, fetching libraries from it" )
 	get_filename_component( DEPENDENCIES_DIR ${CMAKE_SOURCE_DIR}/../dependencies/${COMPILER_FOLDER}/${PROJECTS_PLATFORM} REALPATH )
-	set( ZLIB_ROOT ${DEPENDENCIES_DIR}/zlib )
-	set( FbxSDK_ROOT_DIR ${DEPENDENCIES_DIR}/FbxSDK )
 	set( ASSIMP_ROOT_DIR ${DEPENDENCIES_DIR}/assimp )
 	set( glslang_ROOT_DIR ${DEPENDENCIES_DIR}/glslang )
 	set( SPIRV_ROOT_DIR ${DEPENDENCIES_DIR}/glslang )
 	set( GLM_ROOT_DIR ${DEPENDENCIES_DIR}/glm )
 	set( FFMPEG_DIR ${DEPENDENCIES_DIR}/ffmpeg )
-	set( OpenCV_DIR ${DEPENDENCIES_DIR}/opencv )
-	set( OpenCV_LIBRARY_DIR ${DEPENDENCIES_DIR}/opencv/lib )
-	set( OpenCV_LIB_DIR_OPT ${DEPENDENCIES_DIR}/opencv/lib )
 
 	if ( EXISTS ${DEPENDENCIES_DIR}/wxWidgets )
 		set( wxWidgets_ROOT_DIR ${DEPENDENCIES_DIR}/wxWidgets CACHE PATH "wxWidgets root directory" )
@@ -76,18 +71,13 @@ if ( CMAKE_COMPILER_IS_GNUCXX )
 	msg_debug( "GCC version : ${Castor_COMPILER_VERSION}" )
 	if ( ${Castor_COMPILER_VERSION} LESS "49" )
 		message( FATAL_ERROR "Your compiler is too old (${Castor_COMPILER_VERSION}), consider an update." )
-	else ()
-		set( Boost_FOUND TRUE )
 	endif ()
 elseif ( ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang" )
 	DumpCompilerVersion( Castor_COMPILER_VERSION )
 	msg_debug( "clang version : ${Castor_COMPILER_VERSION}" )
-	set( Boost_FOUND TRUE )
 elseif ( MSVC )
 	if ( MSVC60 OR MSVC70 OR MSVC71 OR MSVC80 OR MSVC10 OR MSVC11 OR MSVC12 )
 		message( FATAL_ERROR "Your compiler is too old, consider an update." )
-	else ()
-		set( Boost_FOUND TRUE )
 	endif ()
 else ()
 	message( FATAL_ERROR "Unsupported compiler." )
@@ -102,9 +92,6 @@ find_package( Doxygen )
 #--------------------------------------------------------------------------------------------------
 set( RENDERERLIB_DIR external/RendererLib/source/Renderer )
 include_directories(
-	${CMAKE_CURRENT_SOURCE_DIR}/external/FreeImage/include
-	${CMAKE_CURRENT_SOURCE_DIR}/external/FreeType/include
-	${CMAKE_CURRENT_SOURCE_DIR}/external/FreeType/include/freetype
 	${CMAKE_CURRENT_SOURCE_DIR}/Core/CastorUtils/Src
 	${CMAKE_CURRENT_BINARY_DIR}/Core/CastorUtils/Src
 )
@@ -118,10 +105,6 @@ set( Castor3DIncludeDirs
 	${CMAKE_CURRENT_BINARY_DIR}/Core/Castor3D/Src
 )
 
-if( Boost_FOUND )
-	include_directories( ${Boost_INCLUDE_DIRS} )
-	message( STATUS "+ Found Boost" )
-endif()
 if( DOXYGEN_FOUND )
 	message( STATUS "+ Found Doxygen (version ${DOXYGEN_VERSION})" )
 endif ()
@@ -198,197 +181,192 @@ macro( parse_subdir_files _FOLDER _GROUP )
 endmacro()
 
 if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
-	if( Boost_FOUND )
-		if ( CASTOR_BUILDGRP_TEST )
-			enable_testing()
+	if ( CASTOR_BUILDGRP_TEST )
+		enable_testing()
+	endif ()
+
+	add_subdirectory( Core )
+	if ( ${CASTOR_BUILD_CASTOR3D} )
+		add_subdirectory( Plugins )
+		add_subdirectory( Samples )
+		add_subdirectory( Interop )
+	endif ()
+	add_subdirectory( Tools )
+
+	add_subdirectory( external/zlib )
+	set_property( TARGET zlib PROPERTY FOLDER "External" )
+
+	add_subdirectory( external/FreeType )
+	set_property( TARGET FreeType PROPERTY FOLDER "External" )
+
+	if ( "${PROJECTS_PLATFORM}" STREQUAL "x64" )
+		add_definitions( -D__LP64__ )
+	endif ()
+	add_definitions( -DFREEIMAGE_LIB )
+	add_definitions( -DOPJ_STATIC )
+	add_definitions( -DLIBRAW_NODLL )
+	add_subdirectory( external/FreeImage )
+	set_property( TARGET FreeImage PROPERTY FOLDER "External" )
+	
+	if ( ${CASTOR_BUILD_CASTOR3D} )
+		if ( NOT CASTOR_BUILDGRP_RENDERER )
+			set( RENDERER_BUILD_RENDERER_PLUGINS FALSE )
+		else ()
+			set( RENDERER_BUILD_RENDERER_PLUGINS TRUE )
+			set( RENDERER_STATIC_RENDERER_PLUGINS TRUE )
+		endif ()
+		add_subdirectory( ${RENDERERLIB_DIR} )
+		set_property( TARGET Renderer PROPERTY FOLDER "External/Renderer" )
+		if ( CASTOR_BUILDGRP_RENDERER )
+			set_property( TARGET GlRenderer PROPERTY FOLDER "External/Renderer" )
+			set_property( TARGET Gl3Renderer PROPERTY FOLDER "External/Renderer" )
+			set_property( TARGET TestRenderer PROPERTY FOLDER "External/Renderer" )
+			set_property( TARGET VkRenderer PROPERTY FOLDER "External/Renderer" )
+		endif ()
+	endif ()
+
+	CoreInit()
+	if ( ${CASTOR_BUILD_CASTOR3D} )
+		PluginsInit()
+		SamplesInit()
+		InteropInit()
+	endif ()
+	ToolsInit()
+	
+	CoreBuild()
+	if ( ${CASTOR_BUILD_CASTOR3D} )
+		PluginsBuild()
+		SamplesBuild()
+		InteropBuild()
+	endif ()
+	ToolsBuild()
+
+	set( msg "\nCastor following projects will be built" )
+	set( msgtest "Test projects :" )
+	CoreSummary( ${msg} ${msgtest} )
+	if ( ${CASTOR_BUILD_CASTOR3D} )
+		PluginsSummary( ${msg} ${msgtest} )
+		SamplesSummary( ${msg} ${msgtest} )
+		InteropSummary( ${msg} ${msgtest} )
+	endif ()
+	ToolsSummary( ${msg} ${msgtest} )
+	message( STATUS "${msg}\n" )
+	if( ${CASTOR_BUILDGRP_TEST} )
+		message( STATUS "${msgtest}\n" )
+	endif ()
+
+	if ( ${CASTOR_BUILDGRP_SETUP} )
+		if ( ( "${PROJECTS_PACKAGE_WIX}" STREQUAL "ON" ) OR ( "${PROJECTS_PACKAGE_DEB}" STREQUAL "ON" ) OR ( "${PROJECTS_PACKAGE_RPM}" STREQUAL "ON" ) )
+			get_filename_component( PARENT_DIR ${CMAKE_SOURCE_DIR} PATH )
+			file( MAKE_DIRECTORY "${PROJECTS_SETUP_OUTPUT_DIR}/${CMAKE_BUILD_TYPE}" )
+			set( CPACK_PACKAGE_NAME "Castor3D" )
+			set( CPACK_PACKAGE_VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_BUILD}" )
+			set( CPACK_PACKAGE_DESCRIPTION_SUMMARY "Castor3D Engine" )
+			set( CPACK_PACKAGE_DESCRIPTION "Allows Castor3D developments" )
+			set( CPACK_PACKAGE_RELEASE 1 )
+			set( CPACK_PACKAGE_CONTACT "dragonjoker59@hotmail.com" )
+			set( CPACK_PACKAGE_VENDOR "DragonJoker" )
+			set( CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_PACKAGE_RELEASE}.${PROJECTS_PLATFORM}" )
+			set( CPACK_OUTPUT_FILE_PREFIX "${PROJECTS_SETUP_OUTPUT_DIR}/${CMAKE_BUILD_TYPE}" )
+			configure_file( ${PARENT_DIR}/LICENSE ${CMAKE_BINARY_DIR}/LICENSE.txt COPYONLY )
+			set( CPACK_RESOURCE_FILE_LICENSE "${CMAKE_BINARY_DIR}/LICENSE.txt" )
+			set( CMAKE_SYSTEM_ARCHITECTURE ${PROJECTS_PLATFORM} )
+
+			if ( "${PROJECTS_PACKAGE_WIX}" STREQUAL "ON" )
+				set( CPACK_GENERATOR "WIX" )
+				set( CPACK_PACKAGE_INSTALL_DIRECTORY "Castor3D" )
+				set( CPACK_WIX_UPGRADE_GUID "42BDC578-D000-4995-A2F7-3C94B618CBF3" )
+				set( CPACK_WIX_PRODUCT_GUID "02ACFE05-CFCE-4E1D-85DA-59A068DDCF70" )
+				set( CPACK_WIX_PRODUCT_ICON "${PARENT_DIR}/install/castor.ico" )
+				set( CPACK_WIX_UI_DIALOG "${PARENT_DIR}/install/dialog.bmp" )
+				set( CPACK_WIX_UI_BANNER "${PARENT_DIR}/install/banner.bmp" )
+				set( CPACK_WIX_PROGRAM_MENU_FOLDER "Castor3D" )
+				set( CPACK_WIX_CULTURES "fr-FR;en-EN" )
+				include(CPack)
+			elseif ( "${PROJECTS_PACKAGE_DEB}" STREQUAL "ON" )
+				set( CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX} )
+				set( CPACK_DEB_COMPONENT_INSTALL ON )
+				set( CPACK_GENERATOR "DEB" )
+				set( CPACK_DEBIAN_PACKAGE_MAINTAINER "Sylvain Doremus" )
+				set( CPACK_DEBIAN_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_DEPENDS}libfreetype6 (>= 2.5.2), libfreeimage3 (>= 3.15.4), zlib1g (>= 1.2.8)" )
+				set( CPACK_DEBIAN_PACKAGE_ARCHITECTURE "${CMAKE_SYSTEM_ARCHITECTURE}" )
+				set( CPACK_DEBIAN_PACKAGE_SECTION "devel" )
+				set( CPACK_DEBIAN_PACKAGE_PRIORITY "optional" )
+				include(CPack)
+			elseif ( "${PROJECTS_PACKAGE_RPM}" STREQUAL "ON" )
+				set( ${Castor_PACKAGE_DIR} ${CMAKE_BINARY_DIR}/_CPack_Packages/Linux/RPM )
+				set( CPACK_RPM_COMPONENT_INSTALL ON )
+				set( CPACK_RPM_PACKAGE_SUMMARY "Castor3D" )
+				set( CPACK_RPM_PACKAGE_ARCHITECTURE "${CMAKE_SYSTEM_ARCHITECTURE}" )
+				set( CPACK_RPM_PACKAGE_GROUP "Development/Tools/Other" )
+				set( CPACK_RPM_PACKAGE_LICENSE "MIT" )
+				set( CPACK_RPM_SPEC_MORE_DEFINE "%define _rpmdir ${Castor_PACKAGE_DIR}" )
+				set( CPACK_RPM_SPEC_MORE_DEFINE "%define _rpmfilename ${CPACK_PACKAGE_FILE_NAME}.rpm" )
+				set( CPACK_RPM_SPEC_MORE_DEFINE "%define _unpackaged_files_terminate_build 0" )
+				set( CPACK_RPM_SPEC_MORE_DEFINE "%define _topdir ${Castor_PACKAGE_DIR}" )
+				include(CPack)
+			endif()
 		endif ()
 
-		add_subdirectory( Core )
+		cpack_add_install_type( Minimal )
+		cpack_add_install_type( Developer )
+		cpack_add_install_type( Full )
+
+		cpack_add_component_group( Main
+			EXPANDED
+			DISPLAY_NAME "Main"
+			DESCRIPTION "Main components to run Castor3D."
+		)
+
+		cpack_add_component_group( Core
+			DISPLAY_NAME "Core libraries"
+			DESCRIPTION "Base libraries needed to use Castor3D."
+			PARENT_GROUP Main
+		)
+
+		cpack_add_component_group( Plugins
+			DISPLAY_NAME "Plugins"
+			DESCRIPTION "Plugins usable in Castor3D."
+			PARENT_GROUP Main
+		)
+
+		cpack_add_component_group( Tools
+			DISPLAY_NAME "Tools"
+			DESCRIPTION "Some tools"
+			PARENT_GROUP Main
+		)
+
+		cpack_add_component_group( Samples
+			DISPLAY_NAME "Samples"
+			DESCRIPTION "Sample applications and scenes using Castor3D."
+			PARENT_GROUP Main
+		)
+
+		cpack_add_component_group( Development
+			DISPLAY_NAME "Development"
+			DESCRIPTION "All the tools needed to develop a project using Castor3D."
+		)
+
+		cpack_add_component_group( Test
+			DISPLAY_NAME "Test"
+			DESCRIPTION "Applications used to perform regression and performance tests."
+			PARENT_GROUP Development
+		)
+
+		cpack_add_component_group( Documentation
+			DISPLAY_NAME "Documentation"
+			DESCRIPTION "Projects documentations"
+			PARENT_GROUP Development
+		)
+
+		CoreSetup()
 		if ( ${CASTOR_BUILD_CASTOR3D} )
-			add_subdirectory( Plugins )
-			add_subdirectory( Samples )
-			add_subdirectory( Interop )
+			PluginsSetup()
+			SamplesSetup()
+			InteropSetup()
 		endif ()
-		add_subdirectory( Tools )
-
-		if ( WIN32 )
-			add_subdirectory( external/FreeType )
-			set_property( TARGET FreeType PROPERTY FOLDER "External" )
-			if ( "${PROJECTS_PLATFORM}" STREQUAL "x64" )
-				add_definitions( -D__LP64__ )
-			endif ()
-			add_definitions( -DFREEIMAGE_LIB )
-			add_definitions( -DOPJ_STATIC )
-			add_definitions( -DLIBRAW_NODLL )
-			add_subdirectory( external/FreeImage )
-			set_property( TARGET FreeImage PROPERTY FOLDER "External" )
-		endif ()
-		if ( ${CASTOR_BUILD_CASTOR3D} )
-			if ( NOT CASTOR_BUILDGRP_RENDERER )
-				set( RENDERER_BUILD_RENDERER_PLUGINS FALSE )
-			else ()
-				set( RENDERER_BUILD_RENDERER_PLUGINS TRUE )
-				set( RENDERER_STATIC_RENDERER_PLUGINS TRUE )
-			endif ()
-			add_subdirectory( ${RENDERERLIB_DIR} )
-			set_property( TARGET Renderer PROPERTY FOLDER "External/Renderer" )
-			if ( CASTOR_BUILDGRP_RENDERER )
-				set_property( TARGET GlRenderer PROPERTY FOLDER "External/Renderer" )
-				set_property( TARGET Gl3Renderer PROPERTY FOLDER "External/Renderer" )
-				set_property( TARGET TestRenderer PROPERTY FOLDER "External/Renderer" )
-				set_property( TARGET VkRenderer PROPERTY FOLDER "External/Renderer" )
-			endif ()
-		endif ()
-
-		CoreInit()
-		if ( ${CASTOR_BUILD_CASTOR3D} )
-			PluginsInit()
-			SamplesInit()
-			InteropInit()
-		endif ()
-		ToolsInit()
-		
-		CoreBuild()
-		if ( ${CASTOR_BUILD_CASTOR3D} )
-			PluginsBuild()
-			SamplesBuild()
-			InteropBuild()
-		endif ()
-		ToolsBuild()
-
-		set( msg "\nCastor following projects will be built" )
-		set( msgtest "Test projects :" )
-		CoreSummary( ${msg} ${msgtest} )
-		if ( ${CASTOR_BUILD_CASTOR3D} )
-			PluginsSummary( ${msg} ${msgtest} )
-			SamplesSummary( ${msg} ${msgtest} )
-			InteropSummary( ${msg} ${msgtest} )
-		endif ()
-		ToolsSummary( ${msg} ${msgtest} )
-		message( STATUS "${msg}\n" )
-		if( ${CASTOR_BUILDGRP_TEST} )
-			message( STATUS "${msgtest}\n" )
-		endif ()
-
-		if ( ${CASTOR_BUILDGRP_SETUP} )
-			if ( ( "${PROJECTS_PACKAGE_WIX}" STREQUAL "ON" ) OR ( "${PROJECTS_PACKAGE_DEB}" STREQUAL "ON" ) OR ( "${PROJECTS_PACKAGE_RPM}" STREQUAL "ON" ) )
-				get_filename_component( PARENT_DIR ${CMAKE_SOURCE_DIR} PATH )
-				file( MAKE_DIRECTORY "${PROJECTS_SETUP_OUTPUT_DIR}/${CMAKE_BUILD_TYPE}" )
-				set( CPACK_PACKAGE_NAME "Castor3D" )
-				set( CPACK_PACKAGE_VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_BUILD}" )
-				set( CPACK_PACKAGE_DESCRIPTION_SUMMARY "Castor3D Engine" )
-				set( CPACK_PACKAGE_DESCRIPTION "Allows Castor3D developments" )
-				set( CPACK_PACKAGE_RELEASE 1 )
-				set( CPACK_PACKAGE_CONTACT "dragonjoker59@hotmail.com" )
-				set( CPACK_PACKAGE_VENDOR "DragonJoker" )
-				set( CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_PACKAGE_RELEASE}.${PROJECTS_PLATFORM}" )
-				set( CPACK_OUTPUT_FILE_PREFIX "${PROJECTS_SETUP_OUTPUT_DIR}/${CMAKE_BUILD_TYPE}" )
-				configure_file( ${PARENT_DIR}/LICENSE ${CMAKE_BINARY_DIR}/LICENSE.txt COPYONLY )
-				set( CPACK_RESOURCE_FILE_LICENSE "${CMAKE_BINARY_DIR}/LICENSE.txt" )
-				set( CMAKE_SYSTEM_ARCHITECTURE ${PROJECTS_PLATFORM} )
-
-				if ( "${PROJECTS_PACKAGE_WIX}" STREQUAL "ON" )
-					set( CPACK_GENERATOR "WIX" )
-					set( CPACK_PACKAGE_INSTALL_DIRECTORY "Castor3D" )
-					set( CPACK_WIX_UPGRADE_GUID "42BDC578-D000-4995-A2F7-3C94B618CBF3" )
-					set( CPACK_WIX_PRODUCT_GUID "02ACFE05-CFCE-4E1D-85DA-59A068DDCF70" )
-					set( CPACK_WIX_PRODUCT_ICON "${PARENT_DIR}/install/castor.ico" )
-					set( CPACK_WIX_UI_DIALOG "${PARENT_DIR}/install/dialog.bmp" )
-					set( CPACK_WIX_UI_BANNER "${PARENT_DIR}/install/banner.bmp" )
-					set( CPACK_WIX_PROGRAM_MENU_FOLDER "Castor3D" )
-					set( CPACK_WIX_CULTURES "fr-FR;en-EN" )
-					include(CPack)
-				elseif ( "${PROJECTS_PACKAGE_DEB}" STREQUAL "ON" )
-					set( CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX} )
-					set( CPACK_DEB_COMPONENT_INSTALL ON )
-					set( CPACK_GENERATOR "DEB" )
-					set( CPACK_DEBIAN_PACKAGE_MAINTAINER "Sylvain Doremus" )
-					set( CPACK_DEBIAN_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_DEPENDS}libfreetype6 (>= 2.5.2), libfreeimage3 (>= 3.15.4), zlib1g (>= 1.2.8)" )
-					set( CPACK_DEBIAN_PACKAGE_ARCHITECTURE "${CMAKE_SYSTEM_ARCHITECTURE}" )
-					set( CPACK_DEBIAN_PACKAGE_SECTION "devel" )
-					set( CPACK_DEBIAN_PACKAGE_PRIORITY "optional" )
-					include(CPack)
-				elseif ( "${PROJECTS_PACKAGE_RPM}" STREQUAL "ON" )
-					set( ${Castor_PACKAGE_DIR} ${CMAKE_BINARY_DIR}/_CPack_Packages/Linux/RPM )
-					set( CPACK_RPM_COMPONENT_INSTALL ON )
-					set( CPACK_RPM_PACKAGE_SUMMARY "Castor3D" )
-					set( CPACK_RPM_PACKAGE_ARCHITECTURE "${CMAKE_SYSTEM_ARCHITECTURE}" )
-					set( CPACK_RPM_PACKAGE_GROUP "Development/Tools/Other" )
-					set( CPACK_RPM_PACKAGE_LICENSE "MIT" )
-					set( CPACK_RPM_SPEC_MORE_DEFINE "%define _rpmdir ${Castor_PACKAGE_DIR}" )
-					set( CPACK_RPM_SPEC_MORE_DEFINE "%define _rpmfilename ${CPACK_PACKAGE_FILE_NAME}.rpm" )
-					set( CPACK_RPM_SPEC_MORE_DEFINE "%define _unpackaged_files_terminate_build 0" )
-					set( CPACK_RPM_SPEC_MORE_DEFINE "%define _topdir ${Castor_PACKAGE_DIR}" )
-					include(CPack)
-				endif()
-			endif ()
-
-			cpack_add_install_type( Minimal )
-			cpack_add_install_type( Developer )
-			cpack_add_install_type( Full )
-
-			cpack_add_component_group( Main
-				EXPANDED
-				DISPLAY_NAME "Main"
-				DESCRIPTION "Main components to run Castor3D."
-			)
-
-			cpack_add_component_group( Core
-				DISPLAY_NAME "Core libraries"
-				DESCRIPTION "Base libraries needed to use Castor3D."
-				PARENT_GROUP Main
-			)
-
-			cpack_add_component_group( Plugins
-				DISPLAY_NAME "Plugins"
-				DESCRIPTION "Plugins usable in Castor3D."
-				PARENT_GROUP Main
-			)
-
-			cpack_add_component_group( Tools
-				DISPLAY_NAME "Tools"
-				DESCRIPTION "Some tools"
-				PARENT_GROUP Main
-			)
-
-			cpack_add_component_group( Samples
-				DISPLAY_NAME "Samples"
-				DESCRIPTION "Sample applications and scenes using Castor3D."
-				PARENT_GROUP Main
-			)
-
-			cpack_add_component_group( Development
-				DISPLAY_NAME "Development"
-				DESCRIPTION "All the tools needed to develop a project using Castor3D."
-			)
-
-			cpack_add_component_group( Test
-				DISPLAY_NAME "Test"
-				DESCRIPTION "Applications used to perform regression and performance tests."
-				PARENT_GROUP Development
-			)
-
-			cpack_add_component_group( Documentation
-				DISPLAY_NAME "Documentation"
-				DESCRIPTION "Projects documentations"
-				PARENT_GROUP Development
-			)
-
-			CoreSetup()
-			if ( ${CASTOR_BUILD_CASTOR3D} )
-				PluginsSetup()
-				SamplesSetup()
-				InteropSetup()
-			endif ()
-			ToolsSetup()
-		endif ()
-	else()
-		set( msg "Castor projects can't be built because of following missing libraries :" )
-		if( Boost_NEEDED AND NOT Boost_FOUND )
-			set( msg "${msg}\n\tBoost thread" )
-		endif()
-		message( SEND_ERROR ${msg} )
-	endif()
+		ToolsSetup()
+	endif ()
 else()
 	message( SEND_ERROR "Please select a build type (Debug or Release)" )
 endif()

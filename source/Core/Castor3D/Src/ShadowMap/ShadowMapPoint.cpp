@@ -190,35 +190,33 @@ namespace castor3d
 		static renderer::ClearColorValue const white{ component, component, component, component };
 		static renderer::DepthStencilClearValue const zero{ 1.0f, 0 };
 		auto & timer = m_passes[0].pass->getTimer();
-		timer.start();
+		auto timerBlock = timer.start();
 
 		for ( size_t face = 0u; face < m_passes.size(); ++face )
 		{
 			m_passes[face].pass->updateDeviceDependent( uint32_t( face ) );
 		}
 
-		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
+		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
+		timer.notifyPassRender();
+		timer.beginPass( *m_commandBuffer );
+
+		for ( size_t face = 0u; face < m_passes.size(); ++face )
 		{
-			timer.notifyPassRender();
-			timer.beginPass( *m_commandBuffer );
+			auto & pass = m_passes[face];
+			auto & renderPass = pass.pass->getRenderPass();
+			auto & frameBuffer = m_frameBuffers[face];
 
-			for ( size_t face = 0u; face < m_passes.size(); ++face )
-			{
-				auto & pass = m_passes[face];
-				auto & renderPass = pass.pass->getRenderPass();
-				auto & frameBuffer = m_frameBuffers[face];
-
-				m_commandBuffer->beginRenderPass( renderPass
-					, *frameBuffer.frameBuffer
-					, { zero, white, white }
-					, renderer::SubpassContents::eSecondaryCommandBuffers );
-				m_commandBuffer->executeCommands( { pass.pass->getCommandBuffer() } );
-				m_commandBuffer->endRenderPass();
-			}
-
-			timer.endPass( *m_commandBuffer );
-			m_commandBuffer->end();
+			m_commandBuffer->beginRenderPass( renderPass
+				, *frameBuffer.frameBuffer
+				, { zero, white, white }
+				, renderer::SubpassContents::eSecondaryCommandBuffers );
+			m_commandBuffer->executeCommands( { pass.pass->getCommandBuffer() } );
+			m_commandBuffer->endRenderPass();
 		}
+
+		timer.endPass( *m_commandBuffer );
+		m_commandBuffer->end();
 
 		auto & device = getCurrentDevice( *this );
 		device.getGraphicsQueue().submit( *m_commandBuffer
@@ -226,7 +224,7 @@ namespace castor3d
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
 			, nullptr );
-		timer.stop();
+
 		return *m_finished;
 	}
 

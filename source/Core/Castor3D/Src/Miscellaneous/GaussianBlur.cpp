@@ -370,45 +370,44 @@ namespace castor3d
 		doInitialiseBlurXProgram();
 		doInitialiseBlurYProgram();
 
-		if ( m_horizCommandBuffer->begin() )
-		{
-			m_horizCommandBuffer->beginRenderPass( *m_renderPass
-				, *m_blurXFbo
-				, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
-			, renderer::SubpassContents::eSecondaryCommandBuffers );
-			m_horizCommandBuffer->executeCommands( { m_blurXQuad.getCommandBuffer() } );
-			m_horizCommandBuffer->endRenderPass();
-			m_horizCommandBuffer->end();
-		}
+		m_horizCommandBuffer->begin();
+		m_horizCommandBuffer->beginRenderPass( *m_renderPass
+			, *m_blurXFbo
+			, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
+		, renderer::SubpassContents::eSecondaryCommandBuffers );
+		m_horizCommandBuffer->executeCommands( { m_blurXQuad.getCommandBuffer() } );
+		m_horizCommandBuffer->endRenderPass();
+		m_horizCommandBuffer->end();
 
-		if ( m_verticCommandBuffer->begin() )
-		{
-			m_verticCommandBuffer->beginRenderPass( *m_renderPass
-				, *m_blurYFbo
-				, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
-			, renderer::SubpassContents::eSecondaryCommandBuffers );
-			m_verticCommandBuffer->executeCommands( { m_blurYQuad.getCommandBuffer() } );
-			m_verticCommandBuffer->endRenderPass();
-			m_verticCommandBuffer->end();
-		}
+		m_verticCommandBuffer->begin();
+		m_verticCommandBuffer->beginRenderPass( *m_renderPass
+			, *m_blurYFbo
+			, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
+		, renderer::SubpassContents::eSecondaryCommandBuffers );
+		m_verticCommandBuffer->executeCommands( { m_blurYQuad.getCommandBuffer() } );
+		m_verticCommandBuffer->endRenderPass();
+		m_verticCommandBuffer->end();
 	}
 
 	renderer::Semaphore const & GaussianBlur::blur( renderer::Semaphore const & toWait )
 	{
 		auto * result = &toWait;
 		auto & device = getCurrentDevice( *this );
+
 		device.getGraphicsQueue().submit( *m_horizCommandBuffer
 			, *result
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_horizSemaphore
 			, nullptr );
 		result = m_horizSemaphore.get();
+
 		device.getGraphicsQueue().submit( *m_verticCommandBuffer
 			, *result
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_verticSemaphore
 			, nullptr );
 		result = m_verticSemaphore.get();
+
 		return *result;
 	}
 

@@ -188,21 +188,19 @@ namespace castor3d
 		static renderer::DepthStencilClearValue const zero{ 1.0f, 0 };
 		m_passes[0].pass->updateDeviceDependent();
 		auto & timer = m_passes[0].pass->getTimer();
-		timer.start();
+		auto timerBlock = timer.start();
 
-		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
-		{
-			timer.notifyPassRender();
-			timer.beginPass( *m_commandBuffer );
-			m_commandBuffer->beginRenderPass( m_passes[0].pass->getRenderPass()
-				, *m_frameBuffer
-				, { zero, black, black }
-				, renderer::SubpassContents::eSecondaryCommandBuffers );
-			m_commandBuffer->executeCommands( { m_passes[0].pass->getCommandBuffer() } );
-			m_commandBuffer->endRenderPass();
-			timer.endPass( *m_commandBuffer );
-			m_commandBuffer->end();
-		}
+		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
+		timer.notifyPassRender();
+		timer.beginPass( *m_commandBuffer );
+		m_commandBuffer->beginRenderPass( m_passes[0].pass->getRenderPass()
+			, *m_frameBuffer
+			, { zero, black, black }
+			, renderer::SubpassContents::eSecondaryCommandBuffers );
+		m_commandBuffer->executeCommands( { m_passes[0].pass->getCommandBuffer() } );
+		m_commandBuffer->endRenderPass();
+		timer.endPass( *m_commandBuffer );
+		m_commandBuffer->end();
 
 		auto & device = getCurrentDevice( *this );
 		auto * result = &toWait;
@@ -218,7 +216,6 @@ namespace castor3d
 			result = &m_blur->blur( *result );
 		}
 
-		timer.stop();
 		return *result;
 	}
 

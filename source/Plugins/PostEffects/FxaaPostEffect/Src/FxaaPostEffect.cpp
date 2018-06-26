@@ -354,32 +354,30 @@ namespace fxaa
 		if ( result )
 		{
 			// Initialise the command buffer.
-			if ( cmd.begin() )
-			{
-				auto & targetImage = m_target->getTexture();
-				auto & targetView = m_target->getDefaultView();
-				auto & surfaceImage = m_surface.colourTexture->getTexture();
-				auto & surfaceView = m_surface.colourTexture->getDefaultView();
+			auto & targetImage = m_target->getTexture();
+			auto & targetView = m_target->getDefaultView();
+			auto & surfaceImage = m_surface.colourTexture->getTexture();
+			auto & surfaceView = m_surface.colourTexture->getDefaultView();
 
-				timer.beginPass( cmd );
+			cmd.begin();
+			timer.beginPass( cmd );
 
-				// Put target image in shader input layout.
-				cmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-					, renderer::PipelineStageFlag::eFragmentShader
-					, targetView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+			// Put target image in shader input layout.
+			cmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+				, renderer::PipelineStageFlag::eFragmentShader
+				, targetView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
 
-				// Render the effect.
-				cmd.beginRenderPass( *m_renderPass
-					, *m_surface.frameBuffer
-					, { renderer::ClearColorValue{} }
-					, renderer::SubpassContents::eInline );
-				m_fxaaQuad->registerFrame( cmd );
-				cmd.endRenderPass();
+			// Render the effect.
+			cmd.beginRenderPass( *m_renderPass
+				, *m_surface.frameBuffer
+				, { renderer::ClearColorValue{} }
+				, renderer::SubpassContents::eInline );
+			m_fxaaQuad->registerFrame( cmd );
+			cmd.endRenderPass();
 
-				timer.endPass( cmd );
-				cmd.end();
-				m_commands.emplace_back( std::move( commands ) );
-			}
+			timer.endPass( cmd );
+			cmd.end();
+			m_commands.emplace_back( std::move( commands ) );
 		}
 
 		m_fxaaQuad->update( m_subpixShift

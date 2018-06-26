@@ -204,31 +204,29 @@ namespace smaa
 		};
 		auto & neighbourhoodBlendingCmd = *neighbourhoodBlendingCommands.commandBuffer;
 
-		if ( neighbourhoodBlendingCmd.begin() )
+		neighbourhoodBlendingCmd.begin();
+		timer.beginPass( neighbourhoodBlendingCmd, passIndex );
+		// Put blending weights image in shader input layout.
+		neighbourhoodBlendingCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+			, renderer::PipelineStageFlag::eFragmentShader
+			, m_blendView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+
+		if ( m_velocityView )
 		{
-			timer.beginPass( neighbourhoodBlendingCmd, passIndex );
-			// Put blending weights image in shader input layout.
+			// Put velocity image in shader input layout.
 			neighbourhoodBlendingCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
-				, m_blendView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
-
-			if ( m_velocityView )
-			{
-				// Put velocity image in shader input layout.
-				neighbourhoodBlendingCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-					, renderer::PipelineStageFlag::eFragmentShader
-					, m_velocityView->makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
-			}
-
-			neighbourhoodBlendingCmd.beginRenderPass( *m_renderPass
-				, *m_surfaces[index].frameBuffer
-				, { renderer::ClearColorValue{} }
-				, renderer::SubpassContents::eInline );
-			registerFrame( neighbourhoodBlendingCmd );
-			neighbourhoodBlendingCmd.endRenderPass();
-			timer.endPass( neighbourhoodBlendingCmd, passIndex );
-			neighbourhoodBlendingCmd.end();
+				, m_velocityView->makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
 		}
+
+		neighbourhoodBlendingCmd.beginRenderPass( *m_renderPass
+			, *m_surfaces[index].frameBuffer
+			, { renderer::ClearColorValue{} }
+			, renderer::SubpassContents::eInline );
+		registerFrame( neighbourhoodBlendingCmd );
+		neighbourhoodBlendingCmd.endRenderPass();
+		timer.endPass( neighbourhoodBlendingCmd, passIndex );
+		neighbourhoodBlendingCmd.end();
 
 		return std::move( neighbourhoodBlendingCommands );
 	}

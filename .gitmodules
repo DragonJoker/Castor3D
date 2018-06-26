@@ -10,3 +10,6 @@
 [submodule "source/external/FreeImage"]
 	path = source/external/FreeImage
 	url = https://github.com/DragonJoker/FreeImage.git
+[submodule "source/external/zlib"]
+	path = source/external/zlib
+	url = https://github.com/DragonJoker/zlib.git

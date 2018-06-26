@@ -181,21 +181,19 @@ namespace castor3d
 		m_passes[0].pass->updateDeviceDependent();
 		auto & pass = m_passes[0];
 		auto & timer = pass.pass->getTimer();
-		timer.start();
+		auto timerBlock = timer.start();
 
-		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
-		{
-			timer.notifyPassRender();
-			timer.beginPass( *m_commandBuffer );
-			m_commandBuffer->beginRenderPass( pass.pass->getRenderPass()
-				, *m_frameBuffer
-				, { zero, black, black }
+		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
+		timer.notifyPassRender();
+		timer.beginPass( *m_commandBuffer );
+		m_commandBuffer->beginRenderPass( pass.pass->getRenderPass()
+			, *m_frameBuffer
+			, { zero, black, black }
 			, renderer::SubpassContents::eSecondaryCommandBuffers );
-			m_commandBuffer->executeCommands( { pass.pass->getCommandBuffer() } );
-			m_commandBuffer->endRenderPass();
-			timer.endPass( *m_commandBuffer );
-			m_commandBuffer->end();
-		}
+		m_commandBuffer->executeCommands( { pass.pass->getCommandBuffer() } );
+		m_commandBuffer->endRenderPass();
+		timer.endPass( *m_commandBuffer );
+		m_commandBuffer->end();
 
 		auto & device = getCurrentDevice( *this );
 		auto * result = &toWait;
@@ -211,7 +209,6 @@ namespace castor3d
 			result = &m_blur->blur( *result );
 		}
 
-		timer.stop();
 		return *result;
 	}
 

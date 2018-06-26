@@ -195,26 +195,24 @@ namespace smaa
 		};
 		auto & reprojectCmd = *reprojectCommands.commandBuffer;
 
-		if ( reprojectCmd.begin() )
-		{
-			timer.beginPass( reprojectCmd, passIndex );
-			// Put neighbourhood images in shader input layout.
-			reprojectCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-				, renderer::PipelineStageFlag::eFragmentShader
-				, m_currentColourView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
-			reprojectCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-				, renderer::PipelineStageFlag::eFragmentShader
-				, m_previousColourView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+		reprojectCmd.begin();
+		timer.beginPass( reprojectCmd, passIndex );
+		// Put neighbourhood images in shader input layout.
+		reprojectCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+			, renderer::PipelineStageFlag::eFragmentShader
+			, m_currentColourView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+		reprojectCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+			, renderer::PipelineStageFlag::eFragmentShader
+			, m_previousColourView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
 
-			reprojectCmd.beginRenderPass( *m_renderPass
-				, *m_surface.frameBuffer
-				, { renderer::ClearColorValue{} }
-				, renderer::SubpassContents::eInline );
-			registerFrame( reprojectCmd );
-			reprojectCmd.endRenderPass();
-			timer.endPass( reprojectCmd, passIndex );
-			reprojectCmd.end();
-		}
+		reprojectCmd.beginRenderPass( *m_renderPass
+			, *m_surface.frameBuffer
+			, { renderer::ClearColorValue{} }
+			, renderer::SubpassContents::eInline );
+		registerFrame( reprojectCmd );
+		reprojectCmd.endRenderPass();
+		timer.endPass( reprojectCmd, passIndex );
+		reprojectCmd.end();
 
 		return std::move( reprojectCommands );
 	}

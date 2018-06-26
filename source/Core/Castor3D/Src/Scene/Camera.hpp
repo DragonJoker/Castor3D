@@ -184,7 +184,7 @@ namespace castor3d
 			return m_viewport.getProjection();
 		}
 
-		inline ViewportType Camera::getViewportType()const
+		inline ViewportType getViewportType()const
 		{
 			return m_viewport.getType();
 		}

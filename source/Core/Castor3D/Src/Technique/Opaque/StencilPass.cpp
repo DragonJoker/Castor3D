@@ -163,22 +163,20 @@ namespace castor3d
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
 		m_finished = device.createSemaphore();
 
-		if ( m_commandBuffer->begin() )
-		{
-			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
-				, renderer::PipelineStageFlag::eEarlyFragmentTests
-				, m_depthView.makeDepthStencilAttachment( renderer::ImageLayout::eUndefined, 0u ) );
-			m_commandBuffer->beginRenderPass( *m_renderPass
-				, *m_frameBuffer
-				, { renderer::DepthStencilClearValue{ 1.0, 0 } }
-				, renderer::SubpassContents::eInline );
-			m_commandBuffer->bindPipeline( *m_pipeline );
-			m_commandBuffer->bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
-			m_commandBuffer->bindVertexBuffer( 0u, vbo.getBuffer(), 0u );
-			m_commandBuffer->draw( vbo.getSize() / vertexLayout.getStride() );
-			m_commandBuffer->endRenderPass();
-			m_commandBuffer->end();
-		}
+		m_commandBuffer->begin();
+		m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
+			, renderer::PipelineStageFlag::eEarlyFragmentTests
+			, m_depthView.makeDepthStencilAttachment( renderer::ImageLayout::eUndefined, 0u ) );
+		m_commandBuffer->beginRenderPass( *m_renderPass
+			, *m_frameBuffer
+			, { renderer::DepthStencilClearValue{ 1.0, 0 } }
+			, renderer::SubpassContents::eInline );
+		m_commandBuffer->bindPipeline( *m_pipeline );
+		m_commandBuffer->bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
+		m_commandBuffer->bindVertexBuffer( 0u, vbo.getBuffer(), 0u );
+		m_commandBuffer->draw( vbo.getSize() / vertexLayout.getStride() );
+		m_commandBuffer->endRenderPass();
+		m_commandBuffer->end();
 	}
 
 	void StencilPass::cleanup()
@@ -198,12 +196,16 @@ namespace castor3d
 	renderer::Semaphore const & StencilPass::render( renderer::Semaphore const & toWait )
 	{
 		auto & device = getCurrentDevice( m_engine );
+		auto * result = &toWait;
+
 		device.getGraphicsQueue().submit( *m_commandBuffer
-			, toWait
+			, *result
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
 			, nullptr );
-		return *m_finished;
+		result = m_finished.get();
+
+		return *result;
 	}
 
 	//*********************************************************************************************

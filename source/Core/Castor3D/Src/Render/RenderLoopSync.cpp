@@ -2,6 +2,8 @@
 
 #include "RenderSystem.hpp"
 
+#include <Core/Exception.hpp>
+
 using namespace castor;
 
 namespace castor3d
@@ -38,14 +40,19 @@ namespace castor3d
 			{
 				doRenderFrame();
 			}
-			catch ( Exception & p_exc )
+			catch ( renderer::Exception & exc )
 			{
-				Logger::logError( p_exc.getFullDescription() );
+				Logger::logError( String{ cuT( "RenderLoop - " ) } +exc.what() );
 				m_active = false;
 			}
-			catch ( std::exception & p_exc )
+			catch ( castor::Exception & exc )
 			{
-				Logger::logError( p_exc.what() );
+				Logger::logError( exc.getFullDescription() );
+				m_active = false;
+			}
+			catch ( std::exception & exc )
+			{
+				Logger::logError( exc.what() );
 				m_active = false;
 			}
 			catch ( ... )

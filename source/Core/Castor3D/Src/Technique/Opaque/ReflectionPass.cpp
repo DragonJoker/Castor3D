@@ -1027,21 +1027,19 @@ namespace castor3d
 	{
 		static renderer::ClearColorValue const clear{ 0.0, 0.0, 0.0, 0.0 };
 
-		if ( m_commandBuffer->begin() )
-		{
-			timer.beginPass( *m_commandBuffer );
-			m_commandBuffer->beginRenderPass( *m_renderPass
-				, frameBuffer
-				, { clear }
-				, renderer::SubpassContents::eInline );
-			m_commandBuffer->bindPipeline( *m_pipeline );
-			m_commandBuffer->bindDescriptorSets( { uboSet, texSet }, *m_pipelineLayout );
-			m_commandBuffer->bindVertexBuffer( 0u, vbo.getBuffer(), 0u );
-			m_commandBuffer->draw( 6u );
-			m_commandBuffer->endRenderPass();
-			timer.endPass( *m_commandBuffer );
-			m_commandBuffer->end();
-		}
+		m_commandBuffer->begin();
+		timer.beginPass( *m_commandBuffer );
+		m_commandBuffer->beginRenderPass( *m_renderPass
+			, frameBuffer
+			, { clear }
+			, renderer::SubpassContents::eInline );
+		m_commandBuffer->bindPipeline( *m_pipeline );
+		m_commandBuffer->bindDescriptorSets( { uboSet, texSet }, *m_pipelineLayout );
+		m_commandBuffer->bindVertexBuffer( 0u, vbo.getBuffer(), 0u );
+		m_commandBuffer->draw( 6u );
+		m_commandBuffer->endRenderPass();
+		timer.endPass( *m_commandBuffer );
+		m_commandBuffer->end();
 	}
 
 	void ReflectionPass::ProgramPipeline::accept( RenderTechniqueVisitor & visitor )
@@ -1169,17 +1167,18 @@ namespace castor3d
 	renderer::Semaphore const & ReflectionPass::render( renderer::Semaphore const & toWait )const
 	{
 		auto * result = &toWait;
-		m_timer->start();
+		auto timerBlock = m_timer->start();
 		m_timer->notifyPassRender();
 		auto index = size_t( m_scene.getFog().getType() );
 		auto & program = m_programs[index];
+
 		m_device.getGraphicsQueue().submit( *program.m_commandBuffer
 			, *result
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
 			, nullptr );
-		m_timer->stop();
 		result = m_finished.get();
+
 		return *result;
 	}
 

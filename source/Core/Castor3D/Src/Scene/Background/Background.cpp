@@ -137,25 +137,21 @@ namespace castor3d
 		REQUIRE( m_initialised );
 		renderer::ClearColorValue colour;
 		renderer::DepthStencilClearValue depth{ 1.0, 0 };
-		auto result = commandBuffer.begin();
+		commandBuffer.begin();
+		m_timer->beginPass( commandBuffer );
+		commandBuffer.beginRenderPass( renderPass
+			, frameBuffer
+			, { depth, colour }
+			, renderer::SubpassContents::eInline );
+		doPrepareFrame( commandBuffer
+			, size
+			, renderPass
+			, *m_descriptorSet );
+		commandBuffer.endRenderPass();
+		m_timer->endPass( commandBuffer );
+		commandBuffer.end();
 
-		if ( result )
-		{
-			m_timer->beginPass( commandBuffer );
-			commandBuffer.beginRenderPass( renderPass
-				, frameBuffer
-				, { depth, colour }
-				, renderer::SubpassContents::eInline );
-			doPrepareFrame( commandBuffer
-				, size
-				, renderPass
-				, *m_descriptorSet );
-			commandBuffer.endRenderPass();
-			m_timer->endPass( commandBuffer );
-			result = commandBuffer.end();
-		}
-
-		return result;
+		return true;
 	}
 
 	bool SceneBackground::prepareFrame( renderer::CommandBuffer & commandBuffer
@@ -175,7 +171,7 @@ namespace castor3d
 		, renderer::DescriptorSet const & descriptorSet )const
 	{
 		REQUIRE( m_initialised );
-		auto result = commandBuffer.begin( renderer::CommandBufferUsageFlag::eRenderPassContinue
+		commandBuffer.begin( renderer::CommandBufferUsageFlag::eRenderPassContinue
 			, renderer::CommandBufferInheritanceInfo
 			{
 				&renderPass,
@@ -185,17 +181,13 @@ namespace castor3d
 				0u,
 				0u
 			} );
+		doPrepareFrame( commandBuffer
+			, size
+			, renderPass
+			, descriptorSet );
+		commandBuffer.end();
 
-		if ( result )
-		{
-			doPrepareFrame( commandBuffer
-				, size
-				, renderPass
-				, descriptorSet );
-			result = commandBuffer.end();
-		}
-
-		return result;
+		return true;
 	}
 
 	void SceneBackground::initialiseDescriptorSet( MatrixUbo const & matrixUbo
@@ -214,19 +206,14 @@ namespace castor3d
 			, m_sampler.lock()->getSampler() );
 	}
 
-	void SceneBackground::start()
+	RenderPassTimerBlock SceneBackground::start()
 	{
-		m_timer->start();
+		return m_timer->start();
 	}
 
 	void SceneBackground::notifyPassRender()
 	{
 		m_timer->notifyPassRender();
-	}
-
-	void SceneBackground::stop()
-	{
-		m_timer->stop();
 	}
 
 	void SceneBackground::notifyChanged()

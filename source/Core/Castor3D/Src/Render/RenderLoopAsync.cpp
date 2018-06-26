@@ -4,6 +4,7 @@
 
 #include <Miscellaneous/PreciseTimer.hpp>
 #include <Design/ScopeGuard.hpp>
+#include <Core/Exception.hpp>
 
 using namespace castor;
 
@@ -230,15 +231,21 @@ namespace castor3d
 				m_ended = true;
 			}
 		}
-		catch ( castor::Exception & p_exc )
+		catch ( renderer::Exception & exc )
 		{
-			Logger::logError( cuT( "RenderLoop - " ) + p_exc.getFullDescription() );
+			Logger::logError( String{ cuT( "RenderLoop - " ) } + exc.what() );
 			m_frameEnded = true;
 			m_ended = true;
 		}
-		catch ( std::exception & p_exc )
+		catch ( castor::Exception & exc )
 		{
-			Logger::logError( std::string( "RenderLoop - " ) + p_exc.what() );
+			Logger::logError( cuT( "RenderLoop - " ) + exc.getFullDescription() );
+			m_frameEnded = true;
+			m_ended = true;
+		}
+		catch ( std::exception & exc )
+		{
+			Logger::logError( std::string( "RenderLoop - " ) + exc.what() );
 			m_frameEnded = true;
 			m_ended = true;
 		}

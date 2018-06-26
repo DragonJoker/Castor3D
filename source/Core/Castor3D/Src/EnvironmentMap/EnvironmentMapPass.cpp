@@ -214,6 +214,7 @@ namespace castor3d
 			, *m_finished
 			, nullptr );
 		result = m_finished.get();
+
 		return *result;
 	}
 }

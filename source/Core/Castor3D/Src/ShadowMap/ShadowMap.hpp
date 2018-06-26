@@ -248,9 +248,9 @@ namespace castor3d
 		renderer::FencePtr m_fence;
 		std::set< std::reference_wrapper< GeometryBuffers > > m_geometryBuffers;
 		std::vector< PassData > m_passes;
+		renderer::SemaphorePtr m_finished;
 		TextureUnit m_shadowMap;
 		TextureUnit m_linearMap;
-		renderer::SemaphorePtr m_finished;
 		bool m_initialised{ false };
 	};
 }

@@ -205,7 +205,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Démarre le timer CPU, réinitialise le temps GPU.
 		 */
-		C3D_API void start();
+		C3D_API RenderPassTimerBlock start();
 		/**
 		 *\~english
 		 *\brief		Notifies the given pass render.
@@ -213,14 +213,6 @@ namespace castor3d
 		 *\brief		Notifie le rendu de la passe donnée.
 		 */
 		C3D_API void notifyPassRender();
-		/**
-		 *\~english
-		 *\brief		Stops the CPU timer.
-		 *\~french
-		 *\brief
-		 *\brief		Arrête le timer CPU.
-		 */
-		C3D_API void stop();
 		/**
 		*\~english
 		*\return

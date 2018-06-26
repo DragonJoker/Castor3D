@@ -444,41 +444,39 @@ namespace castor3d
 		auto result = &toWait;
 		auto & device = getCurrentDevice( m_engine );
 
-		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
+		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
+		m_timer->beginPass( *m_commandBuffer, index );
+		m_timer->notifyPassRender( index );
+
+		if ( !index )
 		{
-			m_timer->beginPass( *m_commandBuffer, index );
-			m_timer->notifyPassRender( index );
-
-			if ( !index )
-			{
-				m_commandBuffer->beginRenderPass( *m_firstRenderPass.renderPass
-					, *m_firstRenderPass.frameBuffer
-					, { clearDepthStencil, clearColour, clearColour }
-					, renderer::SubpassContents::eSecondaryCommandBuffers );
-				m_commandBuffer->executeCommands( { *m_pipeline->firstCommandBuffer } );
-			}
-			else
-			{
-				m_commandBuffer->beginRenderPass( *m_blendRenderPass.renderPass
-					, *m_blendRenderPass.frameBuffer
-					, { clearDepthStencil, clearColour, clearColour }
-					, renderer::SubpassContents::eSecondaryCommandBuffers );
-				m_commandBuffer->executeCommands( { *m_pipeline->blendCommandBuffer } );
-			}
-
-			m_commandBuffer->endRenderPass();
-			m_timer->endPass( *m_commandBuffer, index );
-			m_commandBuffer->end();
-
-			//m_fence->reset();
-			device.getGraphicsQueue().submit( *m_commandBuffer
-				, *result
-				, renderer::PipelineStageFlag::eColourAttachmentOutput
-				, *m_signalReady
-				, nullptr );// m_fence.get() );
-			//m_fence->wait( renderer::FenceTimeout );
-			result = m_signalReady.get();
+			m_commandBuffer->beginRenderPass( *m_firstRenderPass.renderPass
+				, *m_firstRenderPass.frameBuffer
+				, { clearDepthStencil, clearColour, clearColour }
+				, renderer::SubpassContents::eSecondaryCommandBuffers );
+			m_commandBuffer->executeCommands( { *m_pipeline->firstCommandBuffer } );
 		}
+		else
+		{
+			m_commandBuffer->beginRenderPass( *m_blendRenderPass.renderPass
+				, *m_blendRenderPass.frameBuffer
+				, { clearDepthStencil, clearColour, clearColour }
+				, renderer::SubpassContents::eSecondaryCommandBuffers );
+			m_commandBuffer->executeCommands( { *m_pipeline->blendCommandBuffer } );
+		}
+
+		m_commandBuffer->endRenderPass();
+		m_timer->endPass( *m_commandBuffer, index );
+		m_commandBuffer->end();
+
+		//m_fence->reset();
+		device.getGraphicsQueue().submit( *m_commandBuffer
+			, *result
+			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, *m_signalReady
+			, nullptr );// m_fence.get() );
+		//m_fence->wait( renderer::FenceTimeout );
+		result = m_signalReady.get();
 
 		return *result;
 	}
@@ -647,7 +645,7 @@ namespace castor3d
 			pipeline.textureDescriptorSet->update();
 		}
 
-		if ( commandBuffer.begin( renderer::CommandBufferUsageFlag::eRenderPassContinue
+		commandBuffer.begin( renderer::CommandBufferUsageFlag::eRenderPassContinue
 			, renderer::CommandBufferInheritanceInfo
 			{
 				renderPass.renderPass.get(),
@@ -656,15 +654,13 @@ namespace castor3d
 				false,
 				0u,
 				0u
-			} ) )
-		{
-			commandBuffer.setViewport( { { 0, 0 }, dimensions } );
-			commandBuffer.setScissor( { { 0, 0 }, dimensions } );
-			commandBuffer.bindDescriptorSets( { *pipeline.uboDescriptorSet, *pipeline.textureDescriptorSet }, pipeline.program->getPipelineLayout() );
-			commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-			pipeline.program->render( commandBuffer, getCount(), first, m_offset );
-			commandBuffer.end();
-		}
+			} );
+		commandBuffer.setViewport( { { 0, 0 }, dimensions } );
+		commandBuffer.setScissor( { { 0, 0 }, dimensions } );
+		commandBuffer.bindDescriptorSets( { *pipeline.uboDescriptorSet, *pipeline.textureDescriptorSet }, pipeline.program->getPipelineLayout() );
+		commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+		pipeline.program->render( commandBuffer, getCount(), first, m_offset );
+		commandBuffer.end();
 	}
 	
 	glsl::Shader LightPass::doGetLegacyPixelShaderSource( SceneFlags const & sceneFlags

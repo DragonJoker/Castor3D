@@ -665,153 +665,137 @@ namespace light_streaks
 			device.createSemaphore()
 		};
 		auto & hiPassCmd = *hiPassCommands.commandBuffer;
-		bool result = hiPassCmd.begin();
+		hiPassCmd.begin();
+		timer.beginPass( hiPassCmd, 0u );
+		// Put target image in fragment shader input layout.
+		hiPassCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+			, renderer::PipelineStageFlag::eFragmentShader
+			, m_target->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eColourAttachmentOptimal
+				, renderer::AccessFlag::eColourAttachmentWrite ) );
 
-		if ( result )
-		{
-			timer.beginPass( hiPassCmd, 0u );
-			// Put target image in fragment shader input layout.
-			hiPassCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-				, renderer::PipelineStageFlag::eFragmentShader
-				, m_target->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eColourAttachmentOptimal
-					, renderer::AccessFlag::eColourAttachmentWrite ) );
+		// Hi-pass.
+		hiPassCmd.beginRenderPass( *m_renderPass
+			, *hiPassSurface.frameBuffer
+			, clearValues[0]
+			, renderer::SubpassContents::eInline );
+		hiPassCmd.setViewport( { hiPassSurface.image->getWidth(), hiPassSurface.image->getHeight(), 0, 0, } );
+		hiPassCmd.setScissor( { 0, 0, hiPassSurface.image->getWidth(), hiPassSurface.image->getHeight() } );
+		hiPassCmd.bindPipeline( *m_pipelines.hiPass.pipeline );
+		hiPassCmd.bindDescriptorSet( *hiPassSurface.descriptorSets.back(),
+			*m_pipelines.hiPass.layout.pipelineLayout );
+		hiPassCmd.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+		hiPassCmd.draw( 6u );
+		hiPassCmd.endRenderPass();
+		// Put source image in transfer source layout
+		hiPassCmd.memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
+			, renderer::PipelineStageFlag::eTransfer
+			, hiPassSurface.image->getDefaultView().makeTransferSource( renderer::ImageLayout::eUndefined, 0u ) );
+		timer.endPass( hiPassCmd, 0u );
+		hiPassCmd.end();
+		m_commands.emplace_back( std::move( hiPassCommands ) );
 
-			// Hi-pass.
-			hiPassCmd.beginRenderPass( *m_renderPass
-				, *hiPassSurface.frameBuffer
-				, clearValues[0]
-				, renderer::SubpassContents::eInline );
-			hiPassCmd.setViewport( { hiPassSurface.image->getWidth(), hiPassSurface.image->getHeight(), 0, 0, } );
-			hiPassCmd.setScissor( { 0, 0, hiPassSurface.image->getWidth(), hiPassSurface.image->getHeight() } );
-			hiPassCmd.bindPipeline( *m_pipelines.hiPass.pipeline );
-			hiPassCmd.bindDescriptorSet( *hiPassSurface.descriptorSets.back(),
-				*m_pipelines.hiPass.layout.pipelineLayout );
-			hiPassCmd.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-			hiPassCmd.draw( 6u );
-			hiPassCmd.endRenderPass();
-			// Put source image in transfer source layout
-			hiPassCmd.memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
-				, renderer::PipelineStageFlag::eTransfer
-				, hiPassSurface.image->getDefaultView().makeTransferSource( renderer::ImageLayout::eUndefined, 0u ) );
-			timer.endPass( hiPassCmd, 0u );
-			result = hiPassCmd.end();
-			m_commands.emplace_back( std::move( hiPassCommands ) );
-		}
-
+		// Copy Hi pass result to other Hi pass surfaces
 		castor3d::CommandsSemaphore copyCommands
 		{
 			device.getGraphicsCommandPool().createCommandBuffer(),
 			device.createSemaphore()
 		};
 		auto & copyCmd = *copyCommands.commandBuffer;
-		result = copyCmd.begin();
-
-		if ( result )
+		copyCmd.begin();
+		timer.beginPass( copyCmd, 1u );
+		for ( uint32_t i = 1u; i < Count; ++i )
 		{
-			timer.beginPass( copyCmd, 1u );
-			// Copy Hi pass result to other Hi pass surfaces
-			for ( uint32_t i = 1u; i < Count; ++i )
-			{
-				// Put destination image in transfer destination layout
-				copyCmd.memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
-					, renderer::PipelineStageFlag::eTransfer
-					, m_pipelines.hiPass.surfaces[i].image->getDefaultView().makeTransferDestination( renderer::ImageLayout::eUndefined, 0u ) );
-				copyCmd.copyImage( hiPassSurface.image->getDefaultView()
-					, m_pipelines.hiPass.surfaces[i].image->getDefaultView() );
-				// Put back destination image in shader input layout
-				copyCmd.memoryBarrier( renderer::PipelineStageFlag::eTransfer
-					, renderer::PipelineStageFlag::eFragmentShader
-					, m_pipelines.hiPass.surfaces[i].image->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eTransferDstOptimal
-						, renderer::AccessFlag::eTransferWrite ) );
-			}
-
-			timer.endPass( copyCmd, 1u );
-			copyCmd.end();
-			m_commands.emplace_back( std::move( copyCommands ) );
+			// Put destination image in transfer destination layout
+			copyCmd.memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
+				, renderer::PipelineStageFlag::eTransfer
+				, m_pipelines.hiPass.surfaces[i].image->getDefaultView().makeTransferDestination( renderer::ImageLayout::eUndefined, 0u ) );
+			copyCmd.copyImage( hiPassSurface.image->getDefaultView()
+				, m_pipelines.hiPass.surfaces[i].image->getDefaultView() );
+			// Put back destination image in shader input layout
+			copyCmd.memoryBarrier( renderer::PipelineStageFlag::eTransfer
+				, renderer::PipelineStageFlag::eFragmentShader
+				, m_pipelines.hiPass.surfaces[i].image->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eTransferDstOptimal
+					, renderer::AccessFlag::eTransferWrite ) );
 		}
 
+		timer.endPass( copyCmd, 1u );
+		copyCmd.end();
+		m_commands.emplace_back( std::move( copyCommands ) );
+
+		// Kawase blur passes.
 		castor3d::CommandsSemaphore kawaseCommands
 		{
 			device.getGraphicsCommandPool().createCommandBuffer(),
 			device.createSemaphore()
 		};
 		auto & kawaseCmd = *kawaseCommands.commandBuffer;
-		result = kawaseCmd.begin();
-
-		if ( result )
+		kawaseCmd.begin();
+		timer.beginPass( kawaseCmd, 2u );
+		for ( uint32_t i = 0u; i < Count; ++i )
 		{
-			timer.beginPass( kawaseCmd, 2u );
-			// Kawase blur passes.
-			for ( uint32_t i = 0u; i < Count; ++i )
+			auto * source = &m_pipelines.hiPass.surfaces[i];
+			auto * destination = &m_pipelines.kawase.surfaces[i];
+			auto & kawaseSurface = m_pipelines.kawase.surfaces[i];
+
+			for ( uint32_t j = 0u; j < 3u; ++j )
 			{
-				auto * source = &m_pipelines.hiPass.surfaces[i];
-				auto * destination = &m_pipelines.kawase.surfaces[i];
-				auto & kawaseSurface = m_pipelines.kawase.surfaces[i];
-
-				for ( uint32_t j = 0u; j < 3u; ++j )
-				{
-					// Put source image in shader input layout
-					kawaseCmd.memoryBarrier( renderer::PipelineStageFlag::eTransfer
-						, renderer::PipelineStageFlag::eFragmentShader
-						, source->image->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
-
-					kawaseCmd.beginRenderPass( *m_renderPass
-						, *destination->frameBuffer
-						, clearValues[i]
-						, renderer::SubpassContents::eInline );
-					kawaseCmd.setViewport( { destination->image->getWidth(), destination->image->getHeight(), 0, 0, } );
-					kawaseCmd.setScissor( { 0, 0, destination->image->getWidth(), destination->image->getHeight() } );
-					kawaseCmd.bindPipeline( *m_pipelines.kawase.pipeline );
-					kawaseCmd.bindDescriptorSet( *kawaseSurface.descriptorSets[j],
-						*m_pipelines.kawase.layout.pipelineLayout );
-					kawaseCmd.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-					kawaseCmd.draw( 6u );
-					kawaseCmd.endRenderPass();
-					std::swap( destination, source );
-				}
-
-				// Put Kawase surface's general view in fragment shader input layout.
+				// Put source image in shader input layout
 				kawaseCmd.memoryBarrier( renderer::PipelineStageFlag::eTransfer
 					, renderer::PipelineStageFlag::eFragmentShader
-					, kawaseSurface.image->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+					, source->image->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+
+				kawaseCmd.beginRenderPass( *m_renderPass
+					, *destination->frameBuffer
+					, clearValues[i]
+					, renderer::SubpassContents::eInline );
+				kawaseCmd.setViewport( { destination->image->getWidth(), destination->image->getHeight(), 0, 0, } );
+				kawaseCmd.setScissor( { 0, 0, destination->image->getWidth(), destination->image->getHeight() } );
+				kawaseCmd.bindPipeline( *m_pipelines.kawase.pipeline );
+				kawaseCmd.bindDescriptorSet( *kawaseSurface.descriptorSets[j],
+					*m_pipelines.kawase.layout.pipelineLayout );
+				kawaseCmd.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+				kawaseCmd.draw( 6u );
+				kawaseCmd.endRenderPass();
+				std::swap( destination, source );
 			}
 
-			timer.endPass( kawaseCmd, 2u );
-			kawaseCmd.end();
-			m_commands.emplace_back( std::move( kawaseCommands ) );
+			// Put Kawase surface's general view in fragment shader input layout.
+			kawaseCmd.memoryBarrier( renderer::PipelineStageFlag::eTransfer
+				, renderer::PipelineStageFlag::eFragmentShader
+				, kawaseSurface.image->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
 		}
 
+		timer.endPass( kawaseCmd, 2u );
+		kawaseCmd.end();
+		m_commands.emplace_back( std::move( kawaseCommands ) );
+
+		// Combine pass.
 		castor3d::CommandsSemaphore combineCommands
 		{
 			device.getGraphicsCommandPool().createCommandBuffer(),
 			device.createSemaphore()
 		};
 		auto & combineCmd = *combineCommands.commandBuffer;
-		result = combineCmd.begin();
+		combineCmd.begin();
+		timer.beginPass( combineCmd, 3u );
+		auto & combineSurface = m_pipelines.combine.surfaces.back();
+		combineCmd.beginRenderPass( *m_renderPass
+			, *combineSurface.frameBuffer
+			, clearValues[Count]
+			, renderer::SubpassContents::eInline );
+		combineCmd.setViewport( { size.width, size.height, 0, 0, } );
+		combineCmd.setScissor( { 0, 0, size.width, size.height } );
+		combineCmd.bindPipeline( *m_pipelines.combine.pipeline );
+		combineCmd.bindDescriptorSet( *combineSurface.descriptorSets.back()
+			, *m_pipelines.combine.layout.pipelineLayout );
+		combineCmd.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+		combineCmd.draw( 6u );
+		combineCmd.endRenderPass();
 
-		if ( result )
-		{
-			timer.beginPass( combineCmd, 3u );
-			// Combine pass.
-			auto & combineSurface = m_pipelines.combine.surfaces.back();
-			combineCmd.beginRenderPass( *m_renderPass
-				, *combineSurface.frameBuffer
-				, clearValues[Count]
-				, renderer::SubpassContents::eInline );
-			combineCmd.setViewport( { size.width, size.height, 0, 0, } );
-			combineCmd.setScissor( { 0, 0, size.width, size.height } );
-			combineCmd.bindPipeline( *m_pipelines.combine.pipeline );
-			combineCmd.bindDescriptorSet( *combineSurface.descriptorSets.back()
-				, *m_pipelines.combine.layout.pipelineLayout );
-			combineCmd.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-			combineCmd.draw( 6u );
-			combineCmd.endRenderPass();
+		timer.endPass( combineCmd, 3u );
+		combineCmd.end();
+		m_commands.emplace_back( std::move( combineCommands ) );
 
-			timer.endPass( combineCmd, 3u );
-			result = combineCmd.end();
-			m_commands.emplace_back( std::move( combineCommands ) );
-		}
-
-		return result;
+		return true;
 	}
 }

@@ -262,30 +262,27 @@ namespace castor3d
 		auto * result = &toWait;
 		auto & timer = getTimer();
 		auto & device = getCurrentDevice( *this );
-		timer.start();
+		auto timerBlock = timer.start();
 
-		if ( m_nodesCommands->begin() )
-		{
-			timer.beginPass( *m_nodesCommands );
-			timer.notifyPassRender();
-			m_nodesCommands->beginRenderPass( *m_renderPass
-				, *m_frameBuffer
-				, clearValues
-				, renderer::SubpassContents::eSecondaryCommandBuffers );
-			m_nodesCommands->executeCommands( { getCommandBuffer() } );
-			m_nodesCommands->endRenderPass();
-			timer.endPass( *m_nodesCommands );
-			m_nodesCommands->end();
+		m_nodesCommands->begin();
+		timer.beginPass( *m_nodesCommands );
+		timer.notifyPassRender();
+		m_nodesCommands->beginRenderPass( *m_renderPass
+			, *m_frameBuffer
+			, clearValues
+			, renderer::SubpassContents::eSecondaryCommandBuffers );
+		m_nodesCommands->executeCommands( { getCommandBuffer() } );
+		m_nodesCommands->endRenderPass();
+		timer.endPass( *m_nodesCommands );
+		m_nodesCommands->end();
 
-			device.getGraphicsQueue().submit( *m_nodesCommands
-				, *result
-				, renderer::PipelineStageFlag::eColourAttachmentOutput
-				, getSemaphore()
-				, nullptr );
-			result = &getSemaphore();
-		}
+		device.getGraphicsQueue().submit( *m_nodesCommands
+			, *result
+			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, getSemaphore()
+			, nullptr );
+		result = &getSemaphore();
 
-		timer.stop();
 		return *result;
 	}
 

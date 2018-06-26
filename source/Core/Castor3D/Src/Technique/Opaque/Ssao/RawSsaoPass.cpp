@@ -744,21 +744,19 @@ namespace castor3d
 	{
 		static renderer::ClearColorValue const colour{ 1.0, 1.0, 1.0, 1.0 };
 
-		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
-		{
-			m_timer->beginPass( *m_commandBuffer );
-			m_commandBuffer->beginRenderPass( *m_renderPass
-				, *m_frameBuffer
-				, { colour }
-				, renderer::SubpassContents::eInline );
-			m_commandBuffer->bindPipeline( *m_pipeline );
-			m_commandBuffer->bindDescriptorSet( *m_descriptor, *m_pipelineLayout );
-			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-			m_commandBuffer->draw( 6u );
-			m_commandBuffer->endRenderPass();
-			m_timer->endPass( *m_commandBuffer );
-			m_commandBuffer->end();
-		}
+		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse );
+		m_timer->beginPass( *m_commandBuffer );
+		m_commandBuffer->beginRenderPass( *m_renderPass
+			, *m_frameBuffer
+			, { colour }
+			, renderer::SubpassContents::eInline );
+		m_commandBuffer->bindPipeline( *m_pipeline );
+		m_commandBuffer->bindDescriptorSet( *m_descriptor, *m_pipelineLayout );
+		m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+		m_commandBuffer->draw( 6u );
+		m_commandBuffer->endRenderPass();
+		m_timer->endPass( *m_commandBuffer );
+		m_commandBuffer->end();
 	}
 
 	RawSsaoPass::~RawSsaoPass()
@@ -779,15 +777,18 @@ namespace castor3d
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = getCurrentDevice( renderSystem );
-		m_timer->start();
+		auto timerBlock = m_timer->start();
 		m_timer->notifyPassRender();
+		auto * result = &toWait;
+
 		device.getGraphicsQueue().submit( *m_commandBuffer
 			, toWait
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
 			, nullptr );
-		m_timer->stop();
-		return *m_finished.get();
+		result = m_finished.get();
+
+		return *result;
 	}
 
 	void RawSsaoPass::accept( SsaoConfig & config

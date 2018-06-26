@@ -161,13 +161,13 @@ namespace castor
 		}
 
 	public:
-		inline explicit Bit( Bit const & bit ) = default;
+		inline Bit( Bit const & bit ) = default;
 		inline Bit & operator=( bool val );
 		inline Bit & operator=( Bit const & bit );
 
 		inline void set( bool val = true );
 
-		template<bool BadCall = true>
+		template< bool BadCall = true >
 		inline void * operator&() const;
 
 		explicit operator bool()const;

@@ -8,14 +8,48 @@ See LICENSE file in root folder
 
 namespace glsl
 {
+	//***********************************************************************************************
+
+	template< typename T >
+	struct ParamTranslater
+	{
+		using Type = T;
+	};
+
+	template< typename T >
+	struct ParamTranslater< InParam< T > >
+	{
+		using Type = T const &;
+	};
+
+	template< typename T >
+	struct ParamTranslater< OutParam< T > >
+	{
+		using Type = T;
+	};
+
+	template< typename T >
+	struct ParamTranslater< InOutParam< T > >
+	{
+		using Type = T;
+	};
+
+	//***********************************************************************************************
+
 	template< typename ... ValuesT >
 	inline GlslWriter * findWriter( ValuesT const & ... values );
 
 	template< typename RetT, typename ... ParamsT >
-	inline RetT writeFunctionCall( GlslWriter * writer, castor::String const & p_name, ParamsT const & ... p_params );
+	inline RetT writeFunctionCall( GlslWriter * writer
+		, castor::String const & name
+		, ParamsT const & ... params );
 
 	template< typename Return, typename ... Params >
-	inline void writeFunctionHeader( GlslWriter & writer, castor::String const & p_name, Params && ... p_params );
+	inline void writeFunctionHeader( GlslWriter & writer
+		, castor::String const & name
+		, Params && ... params );
+
+	//***********************************************************************************************
 
 	template< typename RetT, typename ... ParamsT >
 	struct Function
@@ -29,6 +63,8 @@ namespace glsl
 		GlslWriter * m_writer{ nullptr };
 		castor::String m_name;
 	};
+
+	//***********************************************************************************************
 }
 
 #include "GlslFunction.inl"

@@ -387,21 +387,19 @@ namespace Bloom
 			renderer::CommandBufferPtr commandBuffer = m_device.getGraphicsCommandPool().createCommandBuffer( true );
 			auto & cmd = *commandBuffer;
 
-			if ( cmd.begin() )
-			{
-				timer.beginPass( cmd, 1u + ( m_isVertical ? 1u : 0u ) * m_blurPassesCount + i );
-				cmd.beginRenderPass( *m_renderPass
-					, *blur.frameBuffer
-					, { renderer::ClearColorValue{ 0.0, 0.0, 0.0, 0.0 } }
-				, renderer::SubpassContents::eInline );
-				cmd.bindPipeline( *blur.pipeline );
-				cmd.bindDescriptorSet( *blur.descriptorSet, *m_pipelineLayout );
-				cmd.bindVertexBuffer( 0u, vertexBuffer.getBuffer(), 0u );
-				cmd.draw( 6u );
-				cmd.endRenderPass();
-				timer.endPass( cmd, 1u + ( m_isVertical ? 1u : 0u ) * m_blurPassesCount + i );
-				cmd.end();
-			}
+			cmd.begin();
+			timer.beginPass( cmd, 1u + ( m_isVertical ? 1u : 0u ) * m_blurPassesCount + i );
+			cmd.beginRenderPass( *m_renderPass
+				, *blur.frameBuffer
+				, { renderer::ClearColorValue{ 0.0, 0.0, 0.0, 0.0 } }
+			, renderer::SubpassContents::eInline );
+			cmd.bindPipeline( *blur.pipeline );
+			cmd.bindDescriptorSet( *blur.descriptorSet, *m_pipelineLayout );
+			cmd.bindVertexBuffer( 0u, vertexBuffer.getBuffer(), 0u );
+			cmd.draw( 6u );
+			cmd.endRenderPass();
+			timer.endPass( cmd, 1u + ( m_isVertical ? 1u : 0u ) * m_blurPassesCount + i );
+			cmd.end();
 
 			result.emplace_back( std::move( commandBuffer ), m_device.createSemaphore() );
 		}

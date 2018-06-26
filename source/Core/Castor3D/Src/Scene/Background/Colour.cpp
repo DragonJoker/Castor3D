@@ -114,21 +114,17 @@ namespace castor3d
 		if ( result )
 		{
 			m_cmdCopy = device.getGraphicsCommandPool().createCommandBuffer( true );
-			result = m_cmdCopy->begin();
-
-			if ( result )
-			{
-				m_cmdCopy->memoryBarrier( renderer::PipelineStageFlag::eTopOfPipe
-					, renderer::PipelineStageFlag::eTransfer
-					, m_texture->getDefaultView().makeTransferDestination( renderer::ImageLayout::eUndefined, 0u ) );
-				m_cmdCopy->copyToImage( m_copyRegions
-					, m_stagingBuffer->getBuffer()
-					, m_texture->getTexture() );
-				m_cmdCopy->memoryBarrier( renderer::PipelineStageFlag::eTransfer
-					, renderer::PipelineStageFlag::eFragmentShader
-					, m_texture->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eTransferDstOptimal, renderer::AccessFlag::eTransferWrite ) );
-				result = m_cmdCopy->end();
-			}
+			m_cmdCopy->begin();
+			m_cmdCopy->memoryBarrier( renderer::PipelineStageFlag::eTopOfPipe
+				, renderer::PipelineStageFlag::eTransfer
+				, m_texture->getDefaultView().makeTransferDestination( renderer::ImageLayout::eUndefined, 0u ) );
+			m_cmdCopy->copyToImage( m_copyRegions
+				, m_stagingBuffer->getBuffer()
+				, m_texture->getTexture() );
+			m_cmdCopy->memoryBarrier( renderer::PipelineStageFlag::eTransfer
+				, renderer::PipelineStageFlag::eFragmentShader
+				, m_texture->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eTransferDstOptimal, renderer::AccessFlag::eTransferWrite ) );
+			m_cmdCopy->end();
 		}
 
 		doUpdateColour();
@@ -176,8 +172,10 @@ namespace castor3d
 			m_stagingBuffer->flush( 0u, 256u );
 			m_stagingBuffer->unlock();
 			auto & device = getCurrentDevice( *this );
+
 			device.getGraphicsQueue().submit( *m_cmdCopy, nullptr );
 			device.getGraphicsQueue().waitIdle();
+
 			m_colour.reset();
 		}
 	}

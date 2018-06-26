@@ -74,14 +74,12 @@ namespace castor3d
 		, uint32_t dstOffset
 		, uint32_t size )const
 	{
-		if ( commandBuffer.begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
-		{
-			commandBuffer.copyBuffer( src.getBuffer().getBuffer()
-				, getBuffer().getBuffer()
-				, size
-				, srcOffset );
-			commandBuffer.end();
-		}
+		commandBuffer.begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
+		commandBuffer.copyBuffer( src.getBuffer().getBuffer()
+			, getBuffer().getBuffer()
+			, size
+			, srcOffset );
+		commandBuffer.end();
 	}
 
 	void GpuBuffer::upload( renderer::StagingBuffer & stagingBuffer

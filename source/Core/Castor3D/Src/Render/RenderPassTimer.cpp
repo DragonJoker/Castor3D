@@ -11,6 +11,40 @@ using namespace castor;
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
+	RenderPassTimerBlock::RenderPassTimerBlock( RenderPassTimer & timer )
+		: m_timer{ &timer }
+	{
+	}
+
+	RenderPassTimerBlock::RenderPassTimerBlock( RenderPassTimerBlock && rhs )
+		: m_timer{ rhs.m_timer }
+	{
+		rhs.m_timer = nullptr;
+	}
+
+	RenderPassTimerBlock & RenderPassTimerBlock::operator=( RenderPassTimerBlock && rhs )
+	{
+		if ( this != &rhs )
+		{
+			m_timer = rhs.m_timer;
+			rhs.m_timer = nullptr;
+		}
+
+		return *this;
+	}
+
+	RenderPassTimerBlock::~RenderPassTimerBlock()
+	{
+		if ( m_timer )
+		{
+			m_timer->stop();
+		}
+	}
+
+	//*********************************************************************************************
+
 	RenderPassTimer::RenderPassTimer( Engine & engine
 		, String const & category
 		, String const & name
@@ -39,9 +73,10 @@ namespace castor3d
 		m_timerQuery.reset();
 	}
 
-	void RenderPassTimer::start()
+	RenderPassTimerBlock RenderPassTimer::start()
 	{
 		m_cpuTimer.getElapsed();
+		return RenderPassTimerBlock{ *this };
 	}
 
 	void RenderPassTimer::notifyPassRender( uint32_t passIndex )
@@ -110,4 +145,6 @@ namespace castor3d
 			, 0u );
 		m_startedPasses.resize( m_passesCount );
 	}
+
+	//*********************************************************************************************
 }

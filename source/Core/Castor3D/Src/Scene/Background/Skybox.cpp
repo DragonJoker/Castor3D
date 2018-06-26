@@ -475,6 +475,7 @@ namespace castor3d
 		}
 
 		commandBuffer->end();
+
 		device.getGraphicsQueue().submit( *commandBuffer, nullptr );
 		device.getGraphicsQueue().waitIdle();
 

@@ -235,36 +235,34 @@ namespace castor3d
 
 		if ( hasNodes() )
 		{
-			getEngine()->setPerObjectLighting( true );
-			getTimer().start();
-			auto & device = getCurrentDevice( *this );
 			static renderer::ClearValueArray const clearValues
 			{
 				renderer::DepthStencilClearValue{ 1.0, 0 },
 				renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
 			};
 
-			if ( m_nodesCommands->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
-			{
-				getTimer().beginPass( *m_nodesCommands );
-				getTimer().notifyPassRender();
-				m_nodesCommands->beginRenderPass( getRenderPass()
-					, *m_frameBuffer
-					, clearValues
-					, renderer::SubpassContents::eSecondaryCommandBuffers );
-				m_nodesCommands->executeCommands( { getCommandBuffer() } );
-				m_nodesCommands->endRenderPass();
-				getTimer().endPass( *m_nodesCommands );
-				m_nodesCommands->end();
-				device.getGraphicsQueue().submit( { *m_nodesCommands }
-					, { *result }
-					, { renderer::PipelineStageFlag::eColourAttachmentOutput }
-					, { getSemaphore() }
-					, nullptr );
-				result = &getSemaphore();
-			}
+			getEngine()->setPerObjectLighting( true );
+			auto timerBlock = getTimer().start();
+			auto & device = getCurrentDevice( *this );
 
-			getTimer().stop();
+			m_nodesCommands->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
+			getTimer().beginPass( *m_nodesCommands );
+			getTimer().notifyPassRender();
+			m_nodesCommands->beginRenderPass( getRenderPass()
+				, *m_frameBuffer
+				, clearValues
+				, renderer::SubpassContents::eSecondaryCommandBuffers );
+			m_nodesCommands->executeCommands( { getCommandBuffer() } );
+			m_nodesCommands->endRenderPass();
+			getTimer().endPass( *m_nodesCommands );
+			m_nodesCommands->end();
+
+			device.getGraphicsQueue().submit( { *m_nodesCommands }
+				, { *result }
+				, { renderer::PipelineStageFlag::eColourAttachmentOutput }
+				, { getSemaphore() }
+				, nullptr );
+			result = &getSemaphore();
 		}
 
 		return *result;

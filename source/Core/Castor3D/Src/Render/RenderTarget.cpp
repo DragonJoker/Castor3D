@@ -562,11 +562,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = m_toneMappingCommandBuffer->begin();
-		}
-
-		if ( result )
-		{
+			m_toneMappingCommandBuffer->begin();
 			m_toneMappingTimer->beginPass( *m_toneMappingCommandBuffer );
 			// Put render technique image in shader input layout.
 			m_toneMappingCommandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
@@ -583,7 +579,7 @@ namespace castor3d
 				, renderer::PipelineStageFlag::eColourAttachmentOutput
 				, m_renderTechnique->getResult().getDefaultView().makeColourAttachment( renderer::ImageLayout::eUndefined, 0u ) );
 			m_toneMappingTimer->endPass( *m_toneMappingCommandBuffer );
-			result = m_toneMappingCommandBuffer->end();
+			m_toneMappingCommandBuffer->end();
 		}
 
 		return result;
@@ -754,12 +750,13 @@ namespace castor3d
 
 			for ( auto effect : effects )
 			{
-				effect->start();
+				auto timerBlock = effect->start();
 				effect->update( elapsedTime );
 
 				for ( auto & commands : effect->getCommands() )
 				{
 					effect->notifyPassRender();
+
 					queue.submit( *commands.commandBuffer
 						, *result
 						, renderer::PipelineStageFlag::eColourAttachmentOutput
@@ -767,8 +764,6 @@ namespace castor3d
 						, nullptr );
 					result = commands.semaphore.get();
 				}
-
-				effect->stop();
 			}
 
 			queue.submit( *copyCommandBuffer
@@ -785,16 +780,17 @@ namespace castor3d
 	renderer::Semaphore const & RenderTarget::doApplyToneMapping( renderer::Semaphore const & toWait )
 	{
 		auto & queue = getCurrentDevice( *this ).getGraphicsQueue();
-		m_toneMappingTimer->start();
+		auto timerBlock = m_toneMappingTimer->start();
 		m_toneMappingTimer->notifyPassRender();
 		auto * result = &toWait;
+
 		queue.submit( *m_toneMappingCommandBuffer
 			, *result
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, m_toneMapping->getSemaphore()
 			, nullptr );
-		m_toneMappingTimer->stop();
 		result = &m_toneMapping->getSemaphore();
+
 		return *result;
 	}
 
@@ -802,7 +798,7 @@ namespace castor3d
 		, Camera const & camera )
 	{
 		auto * result = &toWait;
-		m_overlaysTimer->start();
+		auto timerBlock = m_overlaysTimer->start();
 		{
 			auto lock = makeUniqueLock( getEngine()->getOverlayCache() );
 			m_overlayRenderer->beginPrepare( camera
@@ -827,7 +823,6 @@ namespace castor3d
 			m_overlayRenderer->render( *m_overlaysTimer );
 			result = &m_overlayRenderer->getSemaphore();
 		}
-		m_overlaysTimer->stop();
 		return *result;
 	}
 
@@ -835,12 +830,14 @@ namespace castor3d
 	{
 		auto & queue = getCurrentDevice( *this ).getGraphicsQueue();
 		auto * result = &toWait;
+
 		queue.submit( *m_flipCommands
 			, *result
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_flipFinished
 			, nullptr );
 		result = m_flipFinished.get();
+
 		return *result;
 	}
 }

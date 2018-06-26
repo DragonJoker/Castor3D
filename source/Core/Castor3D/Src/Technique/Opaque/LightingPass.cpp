@@ -155,7 +155,7 @@ namespace castor3d
 
 		if ( !cache.isEmpty() )
 		{
-			m_timer->start();
+			auto timerBlock = m_timer->start();
 			auto lock = makeUniqueLock( cache );
 			auto count = cache.getLightsCount( LightType::eDirectional )
 				+ cache.getLightsCount( LightType::ePoint )
@@ -188,7 +188,6 @@ namespace castor3d
 				, *result
 				, index
 				, info );
-			m_timer->stop();
 		}
 
 		return *result;

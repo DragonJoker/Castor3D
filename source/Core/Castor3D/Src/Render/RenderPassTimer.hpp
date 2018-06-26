@@ -13,6 +13,28 @@ namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
+	\version	0.11.0
+	\date		26/06/2018
+	\~english
+	\brief		Allows stopping a RenderPassTimer when an instance of this class goes out of scope.
+	\~french
+	\brief		Permet d'arrêter un RenderPassTimer lorsqu'une instance de cette classe sort du scope courant.
+	*/
+	class RenderPassTimerBlock
+	{
+	public:
+		C3D_API RenderPassTimerBlock( RenderPassTimer & timer );
+		C3D_API RenderPassTimerBlock( RenderPassTimerBlock && rhs );
+		C3D_API RenderPassTimerBlock & operator=( RenderPassTimerBlock && rhs );
+		C3D_API RenderPassTimerBlock( RenderPassTimerBlock const & ) = delete;
+		C3D_API RenderPassTimerBlock & operator=( RenderPassTimerBlock const & ) = delete;
+		C3D_API ~RenderPassTimerBlock();
+
+	private:
+		RenderPassTimer * m_timer;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
 	\version	0.10.0
 	\date		24/07/2017
 	\~english
@@ -23,6 +45,8 @@ namespace castor3d
 	class RenderPassTimer
 		: public castor::Named
 	{
+		friend class RenderPassTimerBlock;
+
 	public:
 		/**
 		 *\~english
@@ -55,7 +79,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Démarre le timer CPU, réinitialise le temps GPU.
 		 */
-		C3D_API void start();
+		C3D_API RenderPassTimerBlock start();
 		/**
 		 *\~english
 		 *\brief		Notifies the given pass render.
@@ -63,13 +87,6 @@ namespace castor3d
 		 *\brief		Notifie le rendu de la passe donnée.
 		 */
 		C3D_API void notifyPassRender( uint32_t passIndex = 0u );
-		/**
-		 *\~english
-		 *\brief		Stops the CPU timer.
-		 *\~french
-		 *\brief		Arrête le timer CPU.
-		 */
-		C3D_API void stop();
 		/**
 		 *\~english
 		 *\brief		Reset the timer's times.
@@ -136,6 +153,15 @@ namespace castor3d
 			return m_category;
 		}
 		/**@}*/
+
+	private:
+		/**
+		 *\~english
+		 *\brief		Stops the CPU timer.
+		 *\~french
+		 *\brief		Arrête le timer CPU.
+		 */
+		void stop();
 
 	private:
 		Engine & m_engine;

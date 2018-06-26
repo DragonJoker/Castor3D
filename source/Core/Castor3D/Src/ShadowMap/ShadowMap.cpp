@@ -54,6 +54,7 @@ namespace castor3d
 			m_shadowMap.initialise();
 			m_linearMap.initialise();
 			auto size = m_shadowMap.getTexture()->getDimensions();
+			auto & device = getCurrentDevice( *this );
 
 			for ( auto & pass : m_passes )
 			{
@@ -63,9 +64,8 @@ namespace castor3d
 
 			if ( result )
 			{
+				m_finished = device.createSemaphore();
 				doInitialise();
-				m_finished = getCurrentDevice( *this ).createSemaphore();
-				m_fence = getCurrentDevice( *this ).createFence( renderer::FenceCreateFlag::eSignaled );
 				m_initialised = true;
 			}
 		}
@@ -75,6 +75,8 @@ namespace castor3d
 
 	void ShadowMap::cleanup()
 	{
+		m_finished.reset();
+
 		for ( auto & pass : m_passes )
 		{
 			pass.pass->cleanup();
@@ -84,7 +86,6 @@ namespace castor3d
 		if ( m_initialised )
 		{
 			m_initialised = false;
-			m_finished.reset();
 			doCleanup();
 			m_shadowMap.cleanup();
 			m_linearMap.cleanup();

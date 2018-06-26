@@ -128,30 +128,28 @@ namespace smaa
 		};
 		auto & edgeDetectionCmd = *edgeDetectionCommands.commandBuffer;
 
-		if ( edgeDetectionCmd.begin() )
+		edgeDetectionCmd.begin();
+		timer.beginPass( edgeDetectionCmd, passIndex );
+		// Put source image in shader input layout.
+		edgeDetectionCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+			, renderer::PipelineStageFlag::eFragmentShader
+			, m_colourView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+
+		if ( m_predicationView )
 		{
-			timer.beginPass( edgeDetectionCmd, passIndex );
-			// Put source image in shader input layout.
 			edgeDetectionCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
-				, m_colourView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
-
-			if ( m_predicationView )
-			{
-				edgeDetectionCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-					, renderer::PipelineStageFlag::eFragmentShader
-					, m_predicationView->makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
-			}
-
-			edgeDetectionCmd.beginRenderPass( *m_renderPass
-				, *m_surface.frameBuffer
-				, { renderer::ClearColorValue{ 0.0, 0.0, 0.0, 0.0 }, renderer::DepthStencilClearValue{ 1.0f, 0 } }
-				, renderer::SubpassContents::eInline );
-			registerFrame( edgeDetectionCmd );
-			edgeDetectionCmd.endRenderPass();
-			timer.endPass( edgeDetectionCmd, passIndex );
-			edgeDetectionCmd.end();
+				, m_predicationView->makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
 		}
+
+		edgeDetectionCmd.beginRenderPass( *m_renderPass
+			, *m_surface.frameBuffer
+			, { renderer::ClearColorValue{ 0.0, 0.0, 0.0, 0.0 }, renderer::DepthStencilClearValue{ 1.0f, 0 } }
+			, renderer::SubpassContents::eInline );
+		registerFrame( edgeDetectionCmd );
+		edgeDetectionCmd.endRenderPass();
+		timer.endPass( edgeDetectionCmd, passIndex );
+		edgeDetectionCmd.end();
 
 		return std::move( edgeDetectionCommands );
 	}
