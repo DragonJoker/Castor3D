@@ -110,9 +110,9 @@ namespace castor3d
 
 		static constexpr uint32_t SpotShadowMapCount = 10u;
 		static constexpr uint32_t PointShadowMapCount = 6u;
+		static constexpr uint32_t DirectionalMaxCascadesCount = 4u;
 		static constexpr int BaseLightComponentsCount = 3;
-		static constexpr int MaxLightComponentsCount = 14;
-		static constexpr float LightComponentsOffset = MaxLightComponentsCount * 0.001f;
+		static constexpr int MaxLightComponentsCount = 21;
 
 
 		class Shadow;
@@ -150,7 +150,14 @@ namespace castor3d
 				, SceneFlags const & sceneFlags );
 
 			C3D_API std::shared_ptr< PhongLightingModel > createLightingModel( glsl::GlslWriter & writer
-				, uint32_t & index );
+				, uint32_t & index
+				, uint32_t maxCascades );
+
+			C3D_API std::shared_ptr< PhongLightingModel > createLightingModel( glsl::GlslWriter & writer
+				, ShadowType shadows
+				, bool volumetric
+				, uint32_t & index
+				, uint32_t maxCascades );
 
 			C3D_API std::shared_ptr< PhongLightingModel > createLightingModel( glsl::GlslWriter & writer
 				, LightType light
@@ -181,7 +188,14 @@ namespace castor3d
 					, SceneFlags const & sceneFlags );
 
 				C3D_API std::shared_ptr< MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
-					, uint32_t & index );
+					, uint32_t & index
+					, uint32_t maxCascades );
+
+				C3D_API std::shared_ptr< MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
+					, ShadowType shadows
+					, bool volumetric
+					, uint32_t & index
+					, uint32_t maxCascades );
 
 				C3D_API std::shared_ptr< MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
 					, LightType light
@@ -210,7 +224,14 @@ namespace castor3d
 					, SceneFlags const & sceneFlags );
 
 				C3D_API std::shared_ptr< SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
-					, uint32_t & index );
+					, uint32_t & index
+					, uint32_t maxCascades );
+
+				C3D_API std::shared_ptr< SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
+					, ShadowType shadows
+					, bool volumetric
+					, uint32_t & index
+					, uint32_t maxCascades );
 
 				C3D_API std::shared_ptr< SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
 					, LightType light

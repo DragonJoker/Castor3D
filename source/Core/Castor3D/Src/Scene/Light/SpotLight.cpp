@@ -1,6 +1,8 @@
 #include "SpotLight.hpp"
 
 #include "Render/Viewport.hpp"
+#include "Scene/Camera.hpp"
+#include "Scene/Light/Light.hpp"
 #include "Technique/Opaque/LightPass.hpp"
 
 #include <Graphics/PixelBuffer.hpp>
@@ -167,8 +169,7 @@ namespace castor3d
 		m_cutOff.reset();
 	}
 
-	void SpotLight::updateShadow( Point3r const & target
-		, Viewport & viewport
+	void SpotLight::updateShadow( Camera & lightCamera
 		, int32_t index )
 	{
 		auto node = getLight().getParent();
@@ -178,14 +179,13 @@ namespace castor3d
 		Point3f up{ 0, 1, 0 };
 		orientation.transform( up, up );
 		matrix::lookAt( m_lightSpace, position, position + m_direction, up );
-		m_lightSpace = viewport.getProjection() * m_lightSpace;
-		m_shadowMapIndex = index;
-
-		viewport.setPerspective( getCutOff() * 2
-			, viewport.getRatio()
+		lightCamera.getViewport().setPerspective( getCutOff() * 2
+			, lightCamera.getRatio()
 			, 0.5_r
 			, m_farPlane );
-		viewport.update();
+		lightCamera.getViewport().update();
+		m_lightSpace = lightCamera.getProjection() * m_lightSpace;
+		m_shadowMapIndex = index;
 	}
 
 	void SpotLight::doBind( Point4f * buffer )const

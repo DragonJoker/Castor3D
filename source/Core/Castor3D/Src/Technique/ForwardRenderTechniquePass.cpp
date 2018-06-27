@@ -783,7 +783,8 @@ namespace castor3d
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		auto lighting = shader::legacy::createLightingModel( writer
-			, index );
+			, index
+			, getCuller().getScene().getDirectionalShadowCascades() );
 		shader::PhongReflectionModel reflections{ writer };
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
@@ -871,7 +872,7 @@ namespace castor3d
 			lighting->computeCombined( worldEye
 				, matShininess
 				, c3d_shadowReceiver
-				, shader::FragmentInput( vtx_worldPosition, normal )
+				, shader::FragmentInput( vtx_viewPosition, vtx_worldPosition, normal )
 				, output );
 			auto ambientOcclusion = writer.declLocale( cuT( "ambientOcclusion" )
 				, 1.0_f );
@@ -1060,7 +1061,8 @@ namespace castor3d
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		auto lighting = shader::pbr::mr::createLightingModel( writer
-			, index );
+			, index
+			, getCuller().getScene().getDirectionalShadowCascades() );
 		shader::MetallicPbrReflectionModel reflections{ writer };
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
@@ -1159,7 +1161,7 @@ namespace castor3d
 				, matMetallic
 				, matRoughness
 				, c3d_shadowReceiver
-				, shader::FragmentInput( vtx_worldPosition, normal )
+				, shader::FragmentInput( vtx_viewPosition, vtx_worldPosition, normal )
 				, output );
 
 			if ( checkFlag( textureFlags, TextureChannel::eReflection )
@@ -1393,7 +1395,8 @@ namespace castor3d
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		auto lighting = shader::pbr::sg::createLightingModel( writer
-			, index );
+			, index
+			, getCuller().getScene().getDirectionalShadowCascades() );
 		shader::SpecularPbrReflectionModel reflections{ writer };
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
@@ -1492,7 +1495,7 @@ namespace castor3d
 				, matSpecular
 				, matGlossiness
 				, c3d_shadowReceiver
-				, shader::FragmentInput( vtx_worldPosition, normal )
+				, shader::FragmentInput( vtx_viewPosition, vtx_worldPosition, normal )
 				, output );
 			
 			if ( checkFlag( textureFlags, TextureChannel::eReflection )

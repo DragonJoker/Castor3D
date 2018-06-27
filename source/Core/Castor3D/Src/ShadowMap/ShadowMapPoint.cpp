@@ -189,8 +189,9 @@ namespace castor3d
 		static float constexpr component = std::numeric_limits< float >::max();
 		static renderer::ClearColorValue const white{ component, component, component, component };
 		static renderer::DepthStencilClearValue const zero{ 1.0f, 0 };
-		auto & timer = m_passes[0].pass->getTimer();
-		auto timerBlock = timer.start();
+		auto & myTimer = m_passes[0].pass->getTimer();
+		auto timerBlock = myTimer.start();
+		auto * result = &toWait;
 
 		for ( size_t face = 0u; face < m_passes.size(); ++face )
 		{
@@ -198,34 +199,36 @@ namespace castor3d
 		}
 
 		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
-		timer.notifyPassRender();
-		timer.beginPass( *m_commandBuffer );
 
 		for ( size_t face = 0u; face < m_passes.size(); ++face )
 		{
 			auto & pass = m_passes[face];
+			auto & timer = pass.pass->getTimer();
 			auto & renderPass = pass.pass->getRenderPass();
 			auto & frameBuffer = m_frameBuffers[face];
 
+			timer.notifyPassRender();
+			timer.beginPass( *m_commandBuffer );
 			m_commandBuffer->beginRenderPass( renderPass
 				, *frameBuffer.frameBuffer
 				, { zero, white, white }
 				, renderer::SubpassContents::eSecondaryCommandBuffers );
 			m_commandBuffer->executeCommands( { pass.pass->getCommandBuffer() } );
 			m_commandBuffer->endRenderPass();
+			timer.endPass( *m_commandBuffer );
 		}
 
-		timer.endPass( *m_commandBuffer );
 		m_commandBuffer->end();
-
 		auto & device = getCurrentDevice( *this );
+
 		device.getGraphicsQueue().submit( *m_commandBuffer
-			, toWait
+			, *result
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
 			, nullptr );
+		result = m_finished.get();
 
-		return *m_finished;
+		return *result;
 	}
 
 	void ShadowMapPoint::debugDisplay( renderer::RenderPass const & renderPass
@@ -289,7 +292,7 @@ namespace castor3d
 				, 0u
 				, 1u
 				, face
-				, 1u );;
+				, 1u );
 			renderer::FrameBufferAttachmentArray attaches;
 			attaches.emplace_back( *( renderPass.getAttachments().begin() + 0u ), *m_depthView );
 			attaches.emplace_back( *( renderPass.getAttachments().begin() + 1u ), *frameBuffer.linearView );

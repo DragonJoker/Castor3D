@@ -36,7 +36,9 @@ namespace castor3d
 {
 	namespace
 	{
-		TextureUnit doInitialiseVariance( Engine & engine, Size const & size )
+		TextureUnit doInitialiseVariance( Engine & engine
+			, Size const & size
+			, uint32_t cascadeCount )
 		{
 			String const name = cuT( "ShadowMap_Directional_Variance" );
 			SamplerSPtr sampler;
@@ -57,7 +59,7 @@ namespace castor3d
 			}
 
 			renderer::ImageCreateInfo image{};
-			image.arrayLayers = 1u;
+			image.arrayLayers = cascadeCount;
 			image.extent.width = size.getWidth();
 			image.extent.height = size.getHeight();
 			image.extent.depth = 1u;
@@ -82,7 +84,9 @@ namespace castor3d
 			return unit;
 		}
 
-		TextureUnit doInitialiseLinearDepth( Engine & engine, Size const & size )
+		TextureUnit doInitialiseLinearDepth( Engine & engine
+			, Size const & size
+			, uint32_t cascadeCount )
 		{
 			String const name = cuT( "ShadowMap_Directional_Depth" );
 			SamplerSPtr sampler;
@@ -102,7 +106,7 @@ namespace castor3d
 			}
 
 			renderer::ImageCreateInfo image{};
-			image.arrayLayers = 1u;
+			image.arrayLayers = cascadeCount;
 			image.extent.width = size.getWidth();
 			image.extent.height = size.getHeight();
 			image.extent.depth = 1u;
@@ -127,9 +131,10 @@ namespace castor3d
 			return unit;
 		}
 
-		std::vector< ShadowMap::PassData > createPass( Engine & engine
+		std::vector< ShadowMap::PassData > createPasses( Engine & engine
 			, Scene & scene
-			, ShadowMap & shadowMap )
+			, ShadowMap & shadowMap
+			, uint32_t cascadeCount )
 		{
 			std::vector< ShadowMap::PassData > result;
 			auto const width = ShadowMapPassDirectional::TextureSize;
@@ -140,32 +145,42 @@ namespace castor3d
 			viewport.setOrtho( -w / 2, w / 2, -h / 2, h / 2, -5120.0_r, 5120.0_r );
 			viewport.resize( { width, height } );
 			viewport.update();
-			ShadowMap::PassData passData
+
+			for ( uint32_t cascade = 0u; cascade < cascadeCount; ++cascade )
 			{
-				std::make_unique< MatrixUbo >( engine ),
-				std::make_shared< Camera >( cuT( "ShadowMapDirectional" )
-					, scene
-					, scene.getCameraRootNode()
-					, std::move( viewport ) ),
-				nullptr,
-				nullptr,
-			};
-			passData.culler = std::make_unique< FrustumCuller >( scene, *passData.camera );
-			passData.pass = std::make_shared< ShadowMapPassDirectional >( engine
-				, *passData.matrixUbo
-				, *passData.culler
-				, shadowMap );
-			result.emplace_back( std::move( passData ) );
+				ShadowMap::PassData passData
+				{
+					std::make_unique< MatrixUbo >( engine ),
+					std::make_shared< Camera >( cuT( "ShadowMapDirectional_" ) + string::toString( cascade + 1, std::locale{ "C" } )
+						, scene
+						, scene.getCameraRootNode()
+						, std::move( viewport )
+						, true ),
+					nullptr,
+					nullptr,
+				};
+				passData.culler = std::make_unique< FrustumCuller >( scene, *passData.camera );
+				passData.pass = std::make_shared< ShadowMapPassDirectional >( engine
+					, *passData.matrixUbo
+					, *passData.culler
+					, shadowMap
+					, cascade );
+				result.emplace_back( std::move( passData ) );
+			}
+
 			return result;
 		}
 	}
 
 	ShadowMapDirectional::ShadowMapDirectional( Engine & engine
-		, Scene & scene )
+		, Scene & scene
+		, uint32_t cascades )
 		: ShadowMap{ engine
-			, doInitialiseVariance( engine, Size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize } )
-			, doInitialiseLinearDepth( engine, Size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize } )
-			, createPass( engine, scene, *this ) }
+			, doInitialiseVariance( engine, Size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize }, cascades )
+			, doInitialiseLinearDepth( engine, Size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize }, cascades )
+			, createPasses( engine, scene, *this, cascades ) }
+		, m_frameBuffers( m_passes.size() )
+		, m_cascades{ cascades }
 	{
 	}
 
@@ -179,29 +194,46 @@ namespace castor3d
 		, uint32_t index )
 	{
 		m_shadowType = light.getShadowType();
-		m_passes[0].pass->update( camera, queues, light, index );
+
+		for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
+		{
+			m_passes[cascade].pass->update( camera, queues, light, cascade );
+		}
 	}
 
 	renderer::Semaphore const & ShadowMapDirectional::render( renderer::Semaphore const & toWait )
 	{
 		static renderer::ClearColorValue const black{ 0.0f, 0.0f, 0.0f, 1.0f };
 		static renderer::DepthStencilClearValue const zero{ 1.0f, 0 };
-		m_passes[0].pass->updateDeviceDependent();
-		auto & timer = m_passes[0].pass->getTimer();
-		auto timerBlock = timer.start();
+		auto & myTimer = m_passes[0].pass->getTimer();
+		auto timerBlock = myTimer.start();
+
+		for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
+		{
+			m_passes[cascade].pass->updateDeviceDependent( cascade );
+		}
 
 		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
-		timer.notifyPassRender();
-		timer.beginPass( *m_commandBuffer );
-		m_commandBuffer->beginRenderPass( m_passes[0].pass->getRenderPass()
-			, *m_frameBuffer
-			, { zero, black, black }
-			, renderer::SubpassContents::eSecondaryCommandBuffers );
-		m_commandBuffer->executeCommands( { m_passes[0].pass->getCommandBuffer() } );
-		m_commandBuffer->endRenderPass();
-		timer.endPass( *m_commandBuffer );
-		m_commandBuffer->end();
 
+		for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
+		{
+			auto & pass = m_passes[cascade];
+			auto & timer = pass.pass->getTimer();
+			auto & renderPass = pass.pass->getRenderPass();
+			auto & frameBuffer = m_frameBuffers[cascade];
+
+			timer.notifyPassRender();
+			timer.beginPass( *m_commandBuffer );
+			m_commandBuffer->beginRenderPass( pass.pass->getRenderPass()
+				, *frameBuffer.frameBuffer
+				, { zero, black, black }
+				, renderer::SubpassContents::eSecondaryCommandBuffers );
+			m_commandBuffer->executeCommands( { pass.pass->getCommandBuffer() } );
+			m_commandBuffer->endRenderPass();
+			timer.endPass( *m_commandBuffer );
+		}
+
+		m_commandBuffer->end();
 		auto & device = getCurrentDevice( *this );
 		auto * result = &toWait;
 		device.getGraphicsQueue().submit( *m_commandBuffer
@@ -213,9 +245,11 @@ namespace castor3d
 
 		if ( m_shadowType == ShadowType::eVariance )
 		{
-			result = &m_blur->blur( *result );
+			for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
+			{
+				result = &m_frameBuffers[cascade].blur->blur( *result );
+			}
 		}
-
 		return *result;
 	}
 
@@ -239,19 +273,15 @@ namespace castor3d
 			, *m_linearMap.getTexture() );
 	}
 
-	void ShadowMapDirectional::doInitialise()
+	void ShadowMapDirectional::doInitialiseDepth()
 	{
-		renderer::Extent2D size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize };
+		renderer::Extent2D const size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize };
 		auto & device = getCurrentDevice( *this );
 
 		renderer::ImageCreateInfo depth{};
-		depth.arrayLayers = 1u;
 		depth.extent.width = size.width;
 		depth.extent.height = size.height;
-		depth.extent.depth = 1u;
 		depth.imageType = renderer::TextureType::e2D;
-		depth.mipLevels = 1u;
-		depth.samples = renderer::SampleCountFlag::e1;
 		depth.usage = renderer::ImageUsageFlag::eDepthStencilAttachment;
 		depth.format = ShadowMapDirectional::RawDepthFormat;
 		m_depthTexture = device.createTexture( depth, renderer::MemoryPropertyFlag::eDeviceLocal );
@@ -260,32 +290,58 @@ namespace castor3d
 		depthView.format = depth.format;
 		depthView.viewType = renderer::TextureViewType::e2D;
 		depthView.subresourceRange.aspectMask = renderer::ImageAspectFlag::eDepth;
-		depthView.subresourceRange.baseArrayLayer = 0u;
-		depthView.subresourceRange.layerCount = 1u;
-		depthView.subresourceRange.baseMipLevel = 0u;
-		depthView.subresourceRange.levelCount = 1u;
 		m_depthView = m_depthTexture->createView( depthView );
+	}
 
-		auto & renderPass = m_passes[0].pass->getRenderPass();
-		renderer::FrameBufferAttachmentArray attaches;
-		attaches.emplace_back( *( renderPass.getAttachments().begin() + 0u ), *m_depthView );
-		attaches.emplace_back( *( renderPass.getAttachments().begin() + 1u ), m_linearMap.getTexture()->getDefaultView() );
-		attaches.emplace_back( *( renderPass.getAttachments().begin() + 2u ), m_shadowMap.getTexture()->getDefaultView() );
-		m_frameBuffer = renderPass.createFrameBuffer( size, std::move( attaches ) );
+	void ShadowMapDirectional::doInitialiseFramebuffers()
+	{
+		renderer::Extent2D const size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize };
+		auto & variance = m_shadowMap.getTexture()->getTexture();
+		auto & linear = m_linearMap.getTexture()->getTexture();
 
-		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+		renderer::ImageViewCreateInfo varianceView;
+		varianceView.format = variance.getFormat();
+		varianceView.viewType = renderer::TextureViewType::e2D;
+		varianceView.subresourceRange.aspectMask = renderer::ImageAspectFlag::eColour;
 
-		m_blur = std::make_unique< GaussianBlur >( *getEngine()
-			, m_shadowMap.getTexture()->getDefaultView()
-			, size
-			, m_shadowMap.getTexture()->getPixelFormat()
-			, 5u );
+		renderer::ImageViewCreateInfo linearView;
+		linearView.format = linear.getFormat();
+		linearView.viewType = renderer::TextureViewType::e2D;
+		linearView.subresourceRange.aspectMask = renderer::ImageAspectFlag::eColour;
+
+		for ( uint32_t cascade = 0u; cascade < m_passes.size(); ++cascade )
+		{
+			auto & pass = m_passes[cascade];
+			auto & renderPass = pass.pass->getRenderPass();
+			auto & frameBuffer = m_frameBuffers[cascade];
+			varianceView.subresourceRange.baseArrayLayer = cascade;
+			linearView.subresourceRange.baseArrayLayer = cascade;
+			frameBuffer.varianceView = variance.createView( varianceView );
+			frameBuffer.linearView = linear.createView( linearView );
+			renderer::FrameBufferAttachmentArray attaches;
+			attaches.emplace_back( *( renderPass.getAttachments().begin() + 0u ), *m_depthView );
+			attaches.emplace_back( *( renderPass.getAttachments().begin() + 1u ), *frameBuffer.linearView );
+			attaches.emplace_back( *( renderPass.getAttachments().begin() + 2u ), *frameBuffer.varianceView );
+			frameBuffer.frameBuffer = renderPass.createFrameBuffer( size, std::move( attaches ) );
+
+			frameBuffer.blur = std::make_unique< GaussianBlur >( *getEngine()
+				, *frameBuffer.varianceView
+				, size
+				, variance.getFormat()
+				, 5u );
+		}
+	}
+
+	void ShadowMapDirectional::doInitialise()
+	{
+		doInitialiseDepth();
+		doInitialiseFramebuffers();
+		m_commandBuffer = getCurrentDevice( *this ).getGraphicsCommandPool().createCommandBuffer();
 	}
 
 	void ShadowMapDirectional::doCleanup()
 	{
-		m_blur.reset();
-		m_frameBuffer.reset();
+		m_frameBuffers.clear();
 		m_depthView.reset();
 		m_depthTexture.reset();
 	}

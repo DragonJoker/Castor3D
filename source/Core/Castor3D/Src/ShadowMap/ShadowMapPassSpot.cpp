@@ -35,11 +35,11 @@ namespace castor3d
 		, Light & light
 		, uint32_t index )
 	{
-		light.updateShadow( light.getParent()->getDerivedPosition()
-			, getCuller().getCamera().getViewport()
+		auto & myCamera = getCuller().getCamera();
+		light.getSpotLight()->updateShadow( myCamera
 			, index );
-		getCuller().getCamera().attachTo( light.getParent() );
-		getCuller().getCamera().update();
+		myCamera.attachTo( light.getParent() );
+		myCamera.update();
 		auto & data = m_shadowConfig->getData();
 		data.farPlane = light.getSpotLight()->getFarPlane();
 		doUpdate( queues );
@@ -50,8 +50,8 @@ namespace castor3d
 		if ( m_initialised )
 		{
 			m_shadowConfig->upload();
-			m_matrixUbo.update( getCuller().getCamera().getView()
-				, getCuller().getCamera().getViewport().getProjection() );
+		auto & myCamera = getCuller().getCamera();
+			m_matrixUbo.update( myCamera.getView(), myCamera.getProjection() );
 			doUpdateNodes( m_renderQueue.getCulledRenderNodes() );
 		}
 	}

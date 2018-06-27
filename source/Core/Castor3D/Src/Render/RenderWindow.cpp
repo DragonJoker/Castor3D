@@ -235,7 +235,7 @@ namespace castor3d
 							, { renderer::PipelineStageFlag::eColourAttachmentOutput, renderer::PipelineStageFlag::eColourAttachmentOutput }
 							, { resources->getRenderingFinishedSemaphore() }
 							, &resources->getFence() );
-						m_device->waitIdle();
+						m_device->getGraphicsQueue().waitIdle();
 						m_swapChain->present( *resources );
 					}
 					catch ( renderer::Exception & exc )

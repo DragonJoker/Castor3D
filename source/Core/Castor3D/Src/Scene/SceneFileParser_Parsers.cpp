@@ -43,6 +43,7 @@
 #include "Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Scene/Background/Image.hpp"
 #include "Scene/Background/Skybox.hpp"
+#include "Scene/Light/DirectionalLight.hpp"
 #include "Scene/Light/PointLight.hpp"
 #include "Scene/Light/SpotLight.hpp"
 #include "Shader/Program.hpp"
@@ -1185,6 +1186,23 @@ namespace castor3d
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eMesh )
+
+	IMPLEMENT_ATTRIBUTE_PARSER( parserDirectionalShadowCascades )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !parsingContext->scene )
+		{
+			PARSING_ERROR( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			uint32_t value;
+			p_params[0]->get( value );
+			parsingContext->scene->setDirectionalShadowCascades( value );
+		}
+	}
+	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( parserParticleSystemParent )
 	{

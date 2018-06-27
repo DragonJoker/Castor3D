@@ -171,8 +171,23 @@ namespace castor3d
 		data.base.colourIndex = castor::Point4f{ light.getColour()[0], light.getColour()[1], light.getColour()[2], 0.0f };
 		data.base.intensityFarPlane = castor::Point4f{ light.getIntensity()[0], light.getIntensity()[1], light.getFarPlane(), 0.0f };
 		data.base.volumetric = castor::Point4f{ light.getVolumetricSteps(), light.getVolumetricScatteringFactor(), 0.0f, 0.0f };
-		data.direction = castor::Point4f{ directionalLight.getDirection()[0], directionalLight.getDirection()[1], directionalLight.getDirection()[2], 0.0f };
-		data.transform = directionalLight.getLightSpaceTransform();
+		data.direction = castor::Point4f{ directionalLight.getDirection()[0]
+			, directionalLight.getDirection()[1]
+			, directionalLight.getDirection()[2]
+			, float( light.getScene()->getDirectionalShadowCascades() ) };
+
+		for ( auto i = 0u; i < light.getScene()->getDirectionalShadowCascades(); ++i )
+		{
+			data.transform[i] = directionalLight.getLightSpaceTransform( i );
+			data.splitDepths[i] = directionalLight.getSplitDepth( i );
+		}
+
+		for ( auto i = light.getScene()->getDirectionalShadowCascades(); i < shader::DirectionalMaxCascadesCount; ++i )
+		{
+			data.transform[i] = Matrix4x4f{ 1.0f };
+			data.splitDepths[i] = 0.0f;
+		}
+
 		m_lightPass.m_ubo->upload();
 	}
 

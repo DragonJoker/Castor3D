@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_DIRECTIONAL_LIGHT_H___
 #define ___C3D_DIRECTIONAL_LIGHT_H___
 
-#include "Light.hpp"
+#include "LightCategory.hpp"
 
 namespace castor3d
 {
@@ -23,6 +23,13 @@ namespace castor3d
 		: public LightCategory
 	{
 	public:
+		struct Cascade
+		{
+			castor::Matrix4x4f viewMatrix;
+			castor::Matrix4x4f projMatrix;
+			castor::Matrix4x4f viewProjMatrix;
+			float splitDepth;
+		};
 		/*!
 		\author 	Sylvain DOREMUS
 		\date 		14/02/2010
@@ -100,46 +107,40 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::LightCategory::updateShadow
 		 */
-		C3D_API void updateShadow( castor::Point3r const & target
-			, Viewport & viewport
-			, int32_t index = -1 )override;
+		C3D_API void updateShadow( Camera const & sceneCamera
+			, Camera & lightCamera
+			, int32_t cascadeIndex );
 		/**
 		 *\copydoc		castor3d::LightCategory::createTextWriter
 		 */
-		C3D_API std::unique_ptr < LightCategory::TextWriter > createTextWriter( castor::String const & tabs )override
+		C3D_API std::unique_ptr< LightCategory::TextWriter > createTextWriter( castor::String const & tabs )override
 		{
 			return std::make_unique< TextWriter >( tabs, this );
 		}
 		/**
-		 *\~english
-		 *\return		The light source direction.
-		 *\~french
-		 *\return		La direction de la source lumineuse.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline castor::Point3f const & getDirection()const
 		{
 			return m_direction;
 		}
-		/**
-		 *\~english
-		 *\return		The light space transformation matrix.
-		 *\~french
-		 *\return		La matrice de transformation de la lumière.
-		 */
-		inline castor::Matrix4x4f const & getLightSpaceView()const
+		
+		inline float getSplitDepth( uint32_t cascadeIndex )const
 		{
-			return m_lightSpaceView;
+			return m_cascades[cascadeIndex].splitDepth;
 		}
-		/**
-		 *\~english
-		 *\return		The light space transformation matrix.
-		 *\~french
-		 *\return		La matrice de transformation de la lumière.
-		 */
-		inline castor::Matrix4x4f const & getLightSpaceTransform()const
+
+		inline castor::Matrix4x4f const & getLightSpaceTransform( uint32_t cascadeIndex )const
 		{
-			return m_lightSpace;
+			return m_cascades[cascadeIndex].viewProjMatrix;
 		}
+		/**@}*/
 
 	private:
 		/**
@@ -153,8 +154,7 @@ namespace castor3d
 
 	private:
 		castor::Point3f m_direction;
-		mutable castor::Matrix4x4f m_lightSpace;
-		mutable castor::Matrix4x4f m_lightSpaceView;
+		std::vector< Cascade > m_cascades;
 	};
 }
 

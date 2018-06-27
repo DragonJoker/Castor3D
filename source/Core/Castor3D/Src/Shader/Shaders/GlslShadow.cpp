@@ -69,9 +69,12 @@ namespace castor3d
 		{
 		}
 
-		void Shadow::declare( uint32_t & index )
+		void Shadow::declare( uint32_t & index
+			, uint32_t maxCascades )
 		{
-			auto c3d_mapShadowDirectional = m_writer.declSampler< Sampler2D >( MapShadowDirectional, index++, 1u );
+			auto c3d_maxCascadeCount = m_writer.declConstant( cuT( "c3d_maxCascadeCount" )
+				, UInt( DirectionalMaxCascadesCount ) );
+			auto c3d_mapShadowDirectional = m_writer.declSampler< Sampler2DArray >( MapShadowDirectional, index++, 1u );
 			auto c3d_mapShadowSpot = m_writer.declSamplerArray< Sampler2D >( MapShadowSpot, index, 1u, SpotShadowMapCount );
 			index += SpotShadowMapCount;
 			auto c3d_mapShadowPoint = m_writer.declSamplerArray< SamplerCube >( MapShadowPoint, index, 1u, PointShadowMapCount );
@@ -79,6 +82,8 @@ namespace castor3d
 			doDeclareGetRandom();
 			doDeclareTextureProj();
 			doDeclareFilterPCF();
+			doDeclareTextureProjCascade();
+			doDeclareFilterPCFCascade();
 			doDeclareGetShadowOffset();
 			doDeclareChebyshevUpperBound();
 			doDeclareGetLightSpacePosition();
@@ -89,22 +94,25 @@ namespace castor3d
 		}
 
 		void Shadow::declareDirectional( ShadowType type
-			, uint32_t & index )
+			, uint32_t & index
+			, uint32_t maxCascades )
 		{
-			auto c3d_mapShadowDirectional = m_writer.declSampler< Sampler2D >( MapShadowDirectional, index++, 1u );
+			auto c3d_maxCascadeCount = m_writer.declConstant( cuT( "c3d_maxCascadeCount" )
+				, UInt( DirectionalMaxCascadesCount ) );
+			auto c3d_mapShadowDirectional = m_writer.declSampler< Sampler2DArray >( MapShadowDirectional, index++, 1u );
 			doDeclareGetRandom();
 
 			switch ( type )
 			{
 			case ShadowType::eRaw:
 				doDeclareGetShadowOffset();
-				doDeclareTextureProj();
+				doDeclareTextureProjCascade();
 				break;
 
 			case ShadowType::ePCF:
 				doDeclareGetShadowOffset();
-				doDeclareTextureProj();
-				doDeclareFilterPCF();
+				doDeclareTextureProjCascade();
+				doDeclareFilterPCFCascade();
 				break;
 
 			case ShadowType::eVariance:
@@ -177,12 +185,14 @@ namespace castor3d
 			, Mat4 const & lightMatrix
 			, Vec3 const & worldSpacePosition
 			, Vec3 const & lightDirection
+			, UInt const & cascadeIndex
 			, Vec3 const & normal )
 		{
 			return m_computeDirectional( shadowType
 				, lightMatrix
 				, worldSpacePosition
 				, lightDirection
+				, cascadeIndex
 				, normal );
 		}
 
@@ -221,6 +231,7 @@ namespace castor3d
 			, Vec3 const & eyePosition
 			, Mat4 const & lightMatrix
 			, Vec3 const & lightDirection
+			, UInt const & cascadeIndex
 			, Vec3 const & lightColour
 			, Vec2 const & lightIntensity
 			, UInt const & lightVolumetricSteps
@@ -232,6 +243,7 @@ namespace castor3d
 				, eyePosition
 				, lightMatrix
 				, lightDirection
+				, cascadeIndex
 				, lightColour
 				, lightIntensity
 				, lightVolumetricSteps
@@ -243,11 +255,13 @@ namespace castor3d
 		Float Shadow::computeDirectionalShadow( Mat4 const & lightMatrix
 			, Vec3 const & worldSpacePosition
 			, Vec3 const & lightDirection
+			, UInt const & cascadeIndex
 			, Vec3 const & normal )
 		{
 			return m_computeOneDirectional( lightMatrix
 				, worldSpacePosition
 				, lightDirection
+				, cascadeIndex
 				, normal );
 		}
 
@@ -277,6 +291,7 @@ namespace castor3d
 			, Vec3 const & eyePosition
 			, Mat4 const & lightMatrix
 			, Vec3 const & lightDirection
+			, UInt const & cascadeIndex
 			, Vec3 const & lightColour
 			, Vec2 const & lightIntensity
 			, UInt const & lightVolumetricSteps
@@ -287,6 +302,7 @@ namespace castor3d
 				, eyePosition
 				, lightMatrix
 				, lightDirection
+				, cascadeIndex
 				, lightColour
 				, lightIntensity
 				, lightVolumetricSteps
@@ -334,6 +350,30 @@ namespace castor3d
 		{
 			return m_filterPCF( lightSpacePosition
 				, shadowMap
+				, bias );
+		}
+
+		Float Shadow::textureProjCascade( Vec4 const & lightSpacePosition
+			, Vec2 const & offset
+			, Sampler2DArray const & shadowMap
+			, UInt const & cascadeIndex
+			, Float const & bias )
+		{
+			return m_textureProjCascade( lightSpacePosition
+				, offset
+				, shadowMap
+				, cascadeIndex
+				, bias );
+		}
+
+		Float Shadow::filterPCFCascade( Vec4 const & lightSpacePosition
+			, Sampler2DArray const & shadowMap
+			, UInt const & cascadeIndex
+			, Float const & bias )
+		{
+			return m_filterPCFCascade( lightSpacePosition
+				, shadowMap
+				, cascadeIndex
 				, bias );
 		}
 
@@ -480,6 +520,91 @@ namespace castor3d
 				, InFloat{ &m_writer, cuT( "bias" ) } );
 		}
 
+		void Shadow::doDeclareTextureProjCascade()
+		{
+			m_textureProjCascade = m_writer.implementFunction< Float >( cuT( "textureProjCascade" )
+				, [this]( Vec4 const & lightSpacePosition
+					, Vec2 const & offset
+					, Sampler2DArray const & shadowMap
+					, UInt const & cascadeIndex
+					, Float const & bias )
+				{
+					auto shadow = m_writer.declLocale( cuT( "shadow" )
+						, 1.0_f );
+					auto shadowCoord = m_writer.declLocale( cuT( "shadowCoord" )
+						, lightSpacePosition );
+
+					IF( m_writer, shadowCoord.z() > -1.0_f && shadowCoord.z() < 1.0_f )
+					{
+						auto uv = m_writer.declLocale( cuT( "uv" )
+							, shadowCoord.st() + offset );
+						auto dist = m_writer.declLocale( cuT( "dist" )
+							, texture( shadowMap, vec3( uv, m_writer.cast< Float >( cascadeIndex ) ) ).r() );
+
+						IF( m_writer, shadowCoord.w() > 0 )
+						{
+							shadow = step( shadowCoord.z() - bias, dist );
+						}
+						FI;
+					}
+					FI;
+
+					m_writer.returnStmt( shadow );
+				}
+				, InVec4{ &m_writer, cuT( "lightSpacePosition" ) }
+				, InVec2{ &m_writer, cuT( "offset" ) }
+				, InSampler2DArray{ &m_writer, cuT( "shadowMap" ) }
+				, InUInt{ &m_writer, cuT( "cascadeIndex" ) }
+				, InFloat{ &m_writer, cuT( "bias" ) } );
+		}
+
+		void Shadow::doDeclareFilterPCFCascade()
+		{
+			m_filterPCFCascade = m_writer.implementFunction< Float >( cuT( "filterPCFCascade" )
+				, [this]( Vec4 const & lightSpacePosition
+					, Sampler2DArray const & shadowMap
+					, UInt const & cascadeIndex
+					, Float const & bias )
+				{
+					auto texDim = m_writer.declLocale( cuT( "texDim" )
+						, textureSize( shadowMap, 0 ) );
+					auto scale = m_writer.declLocale( cuT( "scale" )
+						, 1.0_f );
+					auto dx = m_writer.declLocale( cuT( "dx" )
+						, scale * 1.0_f / m_writer.cast< Float >( texDim.x() ) );
+					auto dy = m_writer.declLocale( cuT( "dy" )
+						, scale * 1.0_f / m_writer.cast< Float >( texDim.y() ) );
+
+					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
+						, 0.0_f );
+					auto count = m_writer.declLocale( cuT( "count" )
+						, 0_i );
+					auto range = m_writer.declLocale( cuT( "range" )
+						, 1_i );
+
+					FOR( m_writer, Int, x, -range, "x <= range", "x++" )
+					{
+						FOR( m_writer, Int, y, -range, "y <= range", "y++" )
+						{
+							shadowFactor += textureProjCascade( lightSpacePosition
+								, vec2( dx * x, dy * y )
+								, shadowMap
+								, cascadeIndex
+								, bias );
+							count = count + 1_i;
+						}
+						ROF;
+					}
+					ROF;
+
+					m_writer.returnStmt( shadowFactor / count );
+				}
+				, InVec4{ &m_writer, cuT( "lightSpacePosition" ) }
+				, InSampler2DArray{ &m_writer, cuT( "shadowMap" ) }
+				, InUInt{ &m_writer, cuT( "cascadeIndex" ) }
+				, InFloat{ &m_writer, cuT( "bias" ) } );
+		}
+
 		void Shadow::doDeclareGetLightSpacePosition()
 		{
 			m_getLightSpacePosition = m_writer.implementFunction< Vec4 >( cuT( "getLightSpacePosition" )
@@ -489,7 +614,7 @@ namespace castor3d
 					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
 						, lightMatrix * vec4( worldSpacePosition, 1.0_f ) );
 					auto projCoords = m_writer.declLocale( cuT( "projCoords" )
-						, lightSpacePosition / lightSpacePosition.w() );
+						, lightSpacePosition );
 					projCoords.x() = glsl::fma( projCoords.x(), 0.5_f, 0.5_f );
 					projCoords.y() = glsl::fma( projCoords.y(), 0.5_f, 0.5_f );
 
@@ -498,7 +623,7 @@ namespace castor3d
 						projCoords.z() = glsl::fma( projCoords.z(), 0.5_f, 0.5_f );
 					}
 
-					m_writer.returnStmt( projCoords );
+					m_writer.returnStmt( projCoords / lightSpacePosition.w() );
 				}
 				, InMat4( &m_writer, cuT( "lightMatrix" ) )
 				, InVec3( &m_writer, cuT( "worldSpacePosition" ) ) );
@@ -511,9 +636,10 @@ namespace castor3d
 					, Mat4 const & lightMatrix
 					, Vec3 const & worldSpacePosition
 					, Vec3 const & lightDirection
+					, UInt const & cascadeIndex
 					, Vec3 const & normal )
 				{
-					auto c3d_mapShadowDirectional = m_writer.getBuiltin< Sampler2D >( Shadow::MapShadowDirectional );
+					auto c3d_mapShadowDirectional = m_writer.getBuiltin< Sampler2DArray >( Shadow::MapShadowDirectional );
 					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
 						, getLightSpacePosition( lightMatrix, worldSpacePosition ) );
 
@@ -524,9 +650,10 @@ namespace castor3d
 								, lightDirection
 								, Float( minRawDirectionalOffset )
 								, Float( maxRawDirectionalSlopeOffset ) ) );
-						m_writer.returnStmt( textureProj( lightSpacePosition
+						m_writer.returnStmt( textureProjCascade( lightSpacePosition
 							, vec2( 0.0_f )
 							, c3d_mapShadowDirectional
+							, cascadeIndex
 							, bias ) );
 					}
 					ELSEIF( m_writer, shadowType == Int( int( ShadowType::ePCF ) ) )
@@ -536,14 +663,16 @@ namespace castor3d
 								, lightDirection
 								, Float( minPcfDirectionalOffset )
 								, Float( maxPcfDirectionalSlopeOffset ) ) );
-						m_writer.returnStmt( filterPCF( lightSpacePosition
+						m_writer.returnStmt( filterPCFCascade( lightSpacePosition
 							, c3d_mapShadowDirectional
+							, cascadeIndex
 							, bias ) );
 					}
 					ELSEIF( m_writer, shadowType == Int( int( ShadowType::eVariance ) ) )
 					{
 						auto moments = m_writer.declLocale( cuT( "moments" )
-							, texture( c3d_mapShadowDirectional, lightSpacePosition.xy() ).xy() );
+							, texture( c3d_mapShadowDirectional
+								, vec3( lightSpacePosition.xy(), m_writer.cast< Float >( cascadeIndex ) ) ).xy() );
 						m_writer.returnStmt( chebyshevUpperBound( moments
 							, lightSpacePosition.z()
 							, Float( varianceDirectionalMin )
@@ -555,6 +684,7 @@ namespace castor3d
 				, InMat4( &m_writer, cuT( "lightMatrix" ) )
 				, InVec3( &m_writer, cuT( "worldSpacePosition" ) )
 				, InVec3( &m_writer, cuT( "lightDirection" ) )
+				, InUInt( &m_writer, cuT( "cascadeIndex" ) )
 				, InVec3( &m_writer, cuT( "normal" ) ) );
 		}
 
@@ -729,6 +859,7 @@ namespace castor3d
 					, Vec3 const & eyePosition
 					, Mat4 const & lightMatrix
 					, Vec3 const & lightDirection
+					, UInt const & cascadeIndex
 					, Vec3 const & lightColour
 					, Vec2 const & lightIntensity
 					, UInt const & lightVolumetricSteps
@@ -779,7 +910,7 @@ namespace castor3d
 
 					FOR( m_writer, Int, i, 0, "i < int( lightVolumetricSteps )", "++i" )
 					{
-						IF ( m_writer, m_computeDirectional( shadowType, lightMatrix, currentPosition, lightDirection, vec3( 0.0_f ) ) < 0.5_f )
+						IF ( m_writer, m_computeDirectional( shadowType, lightMatrix, currentPosition, lightDirection, cascadeIndex, vec3( 0.0_f ) ) < 0.5_f )
 						{
 							volumetric += scattering;
 						}
@@ -798,6 +929,7 @@ namespace castor3d
 				, InVec3{ &m_writer, cuT( "eyePosition" ) }
 				, InMat4{ &m_writer, cuT( "lightMatrix" ) }
 				, InVec3{ &m_writer, cuT( "lightDirection" ) }
+				, InUInt{ &m_writer, cuT( "cascadeIndex" ) }
 				, InVec3{ &m_writer, cuT( "lightColour" ) }
 				, InVec2{ &m_writer, cuT( "lightIntensity" ) }
 				, InUInt{ &m_writer, cuT( "lightVolumetricSteps" ) }
@@ -811,9 +943,10 @@ namespace castor3d
 				, [this, type]( Mat4 const & lightMatrix
 					, Vec3 const & worldSpacePosition
 					, Vec3 const & lightDirection
+					, UInt const & cascadeIndex
 					, Vec3 const & normal )
 				{
-					auto c3d_mapShadowDirectional = m_writer.getBuiltin< Sampler2D >( Shadow::MapShadowDirectional );
+					auto c3d_mapShadowDirectional = m_writer.getBuiltin< Sampler2DArray >( Shadow::MapShadowDirectional );
 					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
 						, getLightSpacePosition( lightMatrix, worldSpacePosition ) );
 
@@ -824,9 +957,10 @@ namespace castor3d
 								, lightDirection
 								, Float( minRawDirectionalOffset )
 								, Float( maxRawDirectionalSlopeOffset ) ) );
-						m_writer.returnStmt( textureProj( lightSpacePosition
+						m_writer.returnStmt( textureProjCascade( lightSpacePosition
 							, vec2( 0.0_f )
 							, c3d_mapShadowDirectional
+							, cascadeIndex
 							, bias ) );
 					}
 					else if ( type == ShadowType::ePCF )
@@ -836,14 +970,16 @@ namespace castor3d
 								, lightDirection
 								, Float( minPcfDirectionalOffset )
 								, Float( maxPcfDirectionalSlopeOffset ) ) );
-						m_writer.returnStmt( filterPCF( lightSpacePosition
+						m_writer.returnStmt( filterPCFCascade( lightSpacePosition
 							, c3d_mapShadowDirectional
+							, cascadeIndex
 							, bias ) );
 					}
 					else if ( type == ShadowType::eVariance )
 					{
 						auto moments = m_writer.declLocale( cuT( "moments" )
-							, texture( c3d_mapShadowDirectional, lightSpacePosition.xy() ).xy() );
+							, texture( c3d_mapShadowDirectional
+								, vec3( lightSpacePosition.xy(), m_writer.cast< Float >( cascadeIndex ) ) ).xy() );
 						m_writer.returnStmt( chebyshevUpperBound( moments
 							, lightSpacePosition.z()
 							, Float( varianceDirectionalMin )
@@ -853,6 +989,7 @@ namespace castor3d
 				, InParam< Mat4 >( &m_writer, cuT( "lightMatrix" ) )
 				, InVec3( &m_writer, cuT( "worldSpacePosition" ) )
 				, InVec3( &m_writer, cuT( "lightDirection" ) )
+				, InUInt( &m_writer, cuT( "cascadeIndex" ) )
 				, InVec3( &m_writer, cuT( "normal" ) ) );
 		}
 
@@ -1016,6 +1153,7 @@ namespace castor3d
 					, Vec3 const & eyePosition
 					, Mat4 const & lightMatrix
 					, Vec3 const & lightDirection
+					, UInt const & cascadeIndex
 					, Vec3 const & lightColour
 					, Vec2 const & lightIntensity
 					, UInt const & lightVolumetricSteps
@@ -1066,7 +1204,7 @@ namespace castor3d
 
 					FOR( m_writer, Int, i, 0, "i < int( lightVolumetricSteps )", "++i" )
 					{
-						IF ( m_writer, m_computeOneDirectional( lightMatrix, currentPosition, lightDirection, vec3( 0.0_f ) ) > 0.5_f )
+						IF ( m_writer, m_computeOneDirectional( lightMatrix, currentPosition, lightDirection, cascadeIndex, vec3( 0.0_f ) ) > 0.5_f )
 						{
 							volumetric += scattering;
 						}
@@ -1084,6 +1222,7 @@ namespace castor3d
 				, InVec3{ &m_writer, cuT( "eyePosition" ) }
 				, InMat4{ &m_writer, cuT( "lightMatrix" ) }
 				, InVec3{ &m_writer, cuT( "lightDirection" ) }
+				, InUInt{ &m_writer, cuT( "cascadeIndex" ) }
 				, InVec3{ &m_writer, cuT( "lightColour" ) }
 				, InVec2{ &m_writer, cuT( "lightIntensity" ) }
 				, InUInt{ &m_writer, cuT( "lightVolumetricSteps" ) }

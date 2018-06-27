@@ -361,6 +361,11 @@ namespace castor3d
 			return m_billboardPools;
 		}
 
+		inline uint32_t getDirectionalShadowCascades()const
+		{
+			return m_directionalShadowCascades;
+		}
+
 		C3D_API renderer::SemaphoreCRefArray getRenderTargetsSemaphores()const;
 		/**@}*/
 		/**
@@ -391,6 +396,12 @@ namespace castor3d
 		inline void setMaterialsType( MaterialType value )
 		{
 			getEngine()->setMaterialsType( value );
+		}
+
+		inline void setDirectionalShadowCascades( uint32_t value )
+		{
+			REQUIRE( value <= shader::DirectionalMaxCascadesCount );
+			m_directionalShadowCascades = value;
 		}
 		/**@}*/
 
@@ -441,6 +452,7 @@ namespace castor3d
 		bool m_hasTransparentObjects{ false };
 		std::map< MaterialSPtr, OnMaterialChangedConnection > m_materialsListeners;
 		bool m_dirtyMaterials{ true };
+		uint32_t m_directionalShadowCascades{ 4u };
 
 	public:
 		//!\~english	The cameras root node name.

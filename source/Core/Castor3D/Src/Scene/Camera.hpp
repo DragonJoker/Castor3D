@@ -181,7 +181,9 @@ namespace castor3d
 
 		inline castor::Matrix4x4r const & getProjection()const
 		{
-			return m_viewport.getProjection();
+			return m_ownProjection
+				? m_projection
+				: m_viewport.getProjection();
 		}
 
 		inline ViewportType getViewportType()const
@@ -257,6 +259,7 @@ namespace castor3d
 		inline void setView( castor::Matrix4x4r const & view )
 		{
 			m_view = view;
+			onChanged( *this );
 		}
 
 		void resize( uint32_t width, uint32_t height )
@@ -269,12 +272,14 @@ namespace castor3d
 			if ( m_viewport.getSize() != size )
 			{
 				m_viewport.resize( size );
+				onChanged( *this );
 			}
 		}
 
 		inline void setViewportType( ViewportType value )
 		{
 			m_viewport.updateType( value );
+			onChanged( *this );
 		}
 		/**@}*/
 

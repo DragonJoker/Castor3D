@@ -15,10 +15,12 @@ namespace castor3d
 		struct FragmentInput
 		{
 			C3D_API explicit FragmentInput( glsl::GlslWriter & writer );
-			C3D_API FragmentInput( glsl::InVec3 const & vertex
-				, glsl::InVec3 const & normal );
-			glsl::InVec3 m_vertex;
-			glsl::InVec3 m_normal;
+			C3D_API FragmentInput( glsl::InVec3 const & viewVertex
+				, glsl::InVec3 const & worldVertex
+				, glsl::InVec3 const & worldNormal );
+			glsl::InVec3 m_viewVertex;
+			glsl::InVec3 m_worldVertex;
+			glsl::InVec3 m_worldNormal;
 		};
 
 		C3D_API castor::String paramToString( castor::String & sep
@@ -30,10 +32,12 @@ namespace castor3d
 		{
 		public:
 			C3D_API LightingModel( glsl::GlslWriter & writer );
-			C3D_API void declareModel( uint32_t & index );
+			C3D_API void declareModel( uint32_t & index
+				, uint32_t maxCascades );
 			C3D_API void declareDirectionalModel( ShadowType shadows
 				, bool volumetric
-				, uint32_t & index );
+				, uint32_t & index
+				, uint32_t maxCascades );
 			C3D_API void declarePointModel( ShadowType shadows
 				, bool volumetric
 				, uint32_t & index );

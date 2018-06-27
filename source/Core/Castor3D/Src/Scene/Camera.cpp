@@ -153,6 +153,7 @@ namespace castor3d
 		{
 			m_projection = projection;
 			updateFrustum();
+			onChanged( *this );
 		}
 	}
 

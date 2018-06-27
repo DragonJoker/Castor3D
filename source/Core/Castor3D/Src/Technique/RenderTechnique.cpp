@@ -186,7 +186,8 @@ namespace castor3d
 		m_spotShadowMaps.resize( shader::SpotShadowMapCount );
 
 		m_directionalShadowMap = std::make_unique< ShadowMapDirectional >( *renderTarget.getEngine()
-			, *renderTarget.getScene() );
+			, *renderTarget.getScene()
+			, renderTarget.getScene()->getDirectionalShadowCascades() );
 		m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( std::ref( *m_directionalShadowMap ) );
 
 		for ( auto & shadowMap : m_pointShadowMaps )
@@ -356,7 +357,7 @@ namespace castor3d
 
 		// Render part
 		semaphore = &doRenderOpaque( jitter, info, *semaphore );
-		semaphore = &doRenderTransparent( jitter, info, *semaphore );
+		//semaphore = &doRenderTransparent( jitter, info, *semaphore );
 		return *semaphore;
 	}
 

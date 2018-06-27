@@ -281,10 +281,25 @@ namespace castor3d
 			}
 
 			std::shared_ptr< PhongLightingModel > createLightingModel( glsl::GlslWriter & writer
-				, uint32_t & index )
+				, uint32_t & index
+				, uint32_t maxCascades )
 			{
 				auto result = std::make_shared< PhongLightingModel >( writer );
-				result->declareModel( index );
+				result->declareModel( index, maxCascades );
+				return result;
+			}
+
+			std::shared_ptr< PhongLightingModel > createLightingModel( glsl::GlslWriter & writer
+				, ShadowType shadows
+				, bool volumetric
+				, uint32_t & index
+				, uint32_t maxCascades )
+			{
+				auto result = std::make_shared< PhongLightingModel >( writer );
+				result->declareDirectionalModel( shadows
+					, volumetric
+					, index
+					, maxCascades );
 				return result;
 			}
 
@@ -299,7 +314,7 @@ namespace castor3d
 				switch ( lightType )
 				{
 				case LightType::eDirectional:
-					result->declareDirectionalModel( shadows, volumetric, index );
+					FAILURE( "Directional light model should use the other overload" );
 					break;
 
 				case LightType::ePoint:
@@ -408,10 +423,25 @@ namespace castor3d
 				}
 
 				std::shared_ptr< MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
-					, uint32_t & index )
+					, uint32_t & index
+					, uint32_t maxCascades )
 				{
 					auto result = std::make_shared< MetallicBrdfLightingModel >( writer );
-					result->declareModel( index );
+					result->declareModel( index, maxCascades );
+					return result;
+				}
+
+				std::shared_ptr< MetallicBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
+					, ShadowType shadows
+					, bool volumetric
+					, uint32_t & index
+					, uint32_t maxCascades )
+				{
+					auto result = std::make_shared< MetallicBrdfLightingModel >( writer );
+					result->declareDirectionalModel( shadows
+						, volumetric
+						, index
+						, maxCascades );
 					return result;
 				}
 
@@ -426,7 +456,7 @@ namespace castor3d
 					switch ( lightType )
 					{
 					case LightType::eDirectional:
-						result->declareDirectionalModel( shadows, volumetric, index );
+						FAILURE( "Directional light model should use the other overload" );
 						break;
 
 					case LightType::ePoint:
@@ -532,10 +562,25 @@ namespace castor3d
 				}
 
 				std::shared_ptr< SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
-					, uint32_t & index )
+					, uint32_t & index
+					, uint32_t maxCascades )
 				{
 					auto result = std::make_shared< SpecularBrdfLightingModel >( writer );
-					result->declareModel( index );
+					result->declareModel( index, maxCascades );
+					return result;
+				}
+
+				std::shared_ptr< SpecularBrdfLightingModel > createLightingModel( glsl::GlslWriter & writer
+					, ShadowType shadows
+					, bool volumetric
+					, uint32_t & index
+					, uint32_t maxCascades )
+				{
+					auto result = std::make_shared< SpecularBrdfLightingModel >( writer );
+					result->declareDirectionalModel( shadows
+						, volumetric
+						, index
+						, maxCascades );
 					return result;
 				}
 
@@ -550,7 +595,7 @@ namespace castor3d
 					switch ( lightType )
 					{
 					case LightType::eDirectional:
-						result->declareDirectionalModel( shadows, volumetric, index );
+						FAILURE( "Directional light model should use the other overload" );
 						break;
 
 					case LightType::ePoint:

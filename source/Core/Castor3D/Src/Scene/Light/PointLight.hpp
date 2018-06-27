@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_POINT_LIGHT_H___
 #define ___C3D_POINT_LIGHT_H___
 
-#include "Light.hpp"
+#include "LightCategory.hpp"
 
 #include <Design/ChangeTracked.hpp>
 
@@ -106,9 +106,8 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::LightCategory::updateShadow
 		 */
-		C3D_API void updateShadow( castor::Point3r const & target
-			, Viewport & viewport
-			, int32_t index = -1 )override;
+		C3D_API void updateShadow( Viewport & viewport
+			, int32_t index = -1 );
 		/**
 		 *\copydoc		castor3d::LightCategory::createTextWriter
 		 */

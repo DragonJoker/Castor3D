@@ -116,14 +116,39 @@ namespace castor3d
 			return Light( m_writer, m_name + cuT( ".m_lightBase" ) );
 		}
 
-		Vec3 DirectionalLight::m_direction()const
+		Vec4 DirectionalLight::m_directionCount()const
 		{
-			return Vec3( m_writer, String( *this ) + cuT( ".m_direction.xyz" ) );
+			return Vec4( m_writer, String( *this ) + cuT( ".m_directionCount" ) );
 		}
 
-		Mat4 DirectionalLight::m_transform()const
+		Array< Mat4 > DirectionalLight::m_transforms()const
 		{
-			return Mat4( m_writer, String( *this ) + cuT( ".m_transform" ) );
+			return Array< Mat4 >( m_writer, String( *this ) + cuT( ".m_transforms" ), DirectionalMaxCascadesCount );
+		}
+
+		Vec4 DirectionalLight::m_splitDepths()const
+		{
+			return Vec4( m_writer, String( *this ) + cuT( ".m_splitDepths" ) );
+		}
+
+		Vec3 DirectionalLight::m_direction()const
+		{
+			return Vec3( m_writer, String( *this ) + cuT( ".m_directionCount.xyz" ) );
+		}
+
+		UInt DirectionalLight::m_cascadeCount()const
+		{
+			return UInt( m_writer, cuT( "uint( " ) + String( *this ) + cuT( ".m_directionCount.w )" ) );
+		}
+
+		Mat4 DirectionalLight::m_transform( UInt const & cascadeIndex )const
+		{
+			return Mat4( m_writer, String( *this ) + cuT( ".m_transforms[" ) + String( cascadeIndex ) + cuT( "]" ) );
+		}
+
+		Float DirectionalLight::m_splitDepth( UInt const & cascadeIndex )const
+		{
+			return Mat4( m_writer, String( *this ) + cuT( ".m_splitDepths[" ) + String( cascadeIndex ) + cuT( "]" ) );
 		}
 
 		//*********************************************************************************************
