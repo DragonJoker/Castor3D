@@ -281,16 +281,11 @@ namespace castor3d
 		renderer::ImageCreateInfo depth{};
 		depth.extent.width = size.width;
 		depth.extent.height = size.height;
+		depth.arrayLayers = m_cascades;
 		depth.imageType = renderer::TextureType::e2D;
 		depth.usage = renderer::ImageUsageFlag::eDepthStencilAttachment;
 		depth.format = ShadowMapDirectional::RawDepthFormat;
 		m_depthTexture = device.createTexture( depth, renderer::MemoryPropertyFlag::eDeviceLocal );
-
-		renderer::ImageViewCreateInfo depthView;
-		depthView.format = depth.format;
-		depthView.viewType = renderer::TextureViewType::e2D;
-		depthView.subresourceRange.aspectMask = renderer::ImageAspectFlag::eDepth;
-		m_depthView = m_depthTexture->createView( depthView );
 	}
 
 	void ShadowMapDirectional::doInitialiseFramebuffers()
@@ -298,6 +293,7 @@ namespace castor3d
 		renderer::Extent2D const size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize };
 		auto & variance = m_shadowMap.getTexture()->getTexture();
 		auto & linear = m_linearMap.getTexture()->getTexture();
+		auto & depth = *m_depthTexture;
 
 		renderer::ImageViewCreateInfo varianceView;
 		varianceView.format = variance.getFormat();
@@ -309,17 +305,24 @@ namespace castor3d
 		linearView.viewType = renderer::TextureViewType::e2D;
 		linearView.subresourceRange.aspectMask = renderer::ImageAspectFlag::eColour;
 
+		renderer::ImageViewCreateInfo depthView;
+		depthView.format = depth.getFormat();
+		depthView.viewType = renderer::TextureViewType::e2D;
+		depthView.subresourceRange.aspectMask = renderer::ImageAspectFlag::eDepth;
+
 		for ( uint32_t cascade = 0u; cascade < m_passes.size(); ++cascade )
 		{
 			auto & pass = m_passes[cascade];
 			auto & renderPass = pass.pass->getRenderPass();
 			auto & frameBuffer = m_frameBuffers[cascade];
+			depthView.subresourceRange.baseArrayLayer = cascade;
 			varianceView.subresourceRange.baseArrayLayer = cascade;
 			linearView.subresourceRange.baseArrayLayer = cascade;
+			frameBuffer.depthView = depth.createView( depthView );
 			frameBuffer.varianceView = variance.createView( varianceView );
 			frameBuffer.linearView = linear.createView( linearView );
 			renderer::FrameBufferAttachmentArray attaches;
-			attaches.emplace_back( *( renderPass.getAttachments().begin() + 0u ), *m_depthView );
+			attaches.emplace_back( *( renderPass.getAttachments().begin() + 0u ), *frameBuffer.depthView );
 			attaches.emplace_back( *( renderPass.getAttachments().begin() + 1u ), *frameBuffer.linearView );
 			attaches.emplace_back( *( renderPass.getAttachments().begin() + 2u ), *frameBuffer.varianceView );
 			frameBuffer.frameBuffer = renderPass.createFrameBuffer( size, std::move( attaches ) );
@@ -342,7 +345,6 @@ namespace castor3d
 	void ShadowMapDirectional::doCleanup()
 	{
 		m_frameBuffers.clear();
-		m_depthView.reset();
 		m_depthTexture.reset();
 	}
 

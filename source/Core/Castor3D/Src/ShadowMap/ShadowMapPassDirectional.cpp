@@ -49,7 +49,8 @@ namespace castor3d
 		auto & myCamera = getCuller().getCamera();
 		light.getDirectionalLight()->updateShadow( camera
 			, myCamera
-			, index );
+			, index
+			, getCuller().getMinCastersZ() );
 		m_farPlane = std::abs( light.getDirectionalLight()->getSplitDepth( index ) );
 		doUpdate( queues );
 	}

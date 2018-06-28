@@ -20,7 +20,8 @@ namespace castor3d
 	{
 		std::vector< DirectionalLight::Cascade > doComputeCascades( Camera const & camera
 			, DirectionalLight const & light
-			, uint32_t cascades )
+			, uint32_t cascades
+			, float minCastersZ )
 		{
 			auto & renderSystem = *light.getLight().getScene()->getEngine()->getRenderSystem();
 			std::vector< DirectionalLight::Cascade > result( cascades );
@@ -107,7 +108,7 @@ namespace castor3d
 
 				// Store split distance and matrix in cascade
 				matrix::lookAt( result[i].viewMatrix, frustumCenter - lightDir * -minExtents[2], frustumCenter, Point3f( 0.0f, 1.0f, 0.0f ) );
-				result[i].projMatrix = renderSystem.getOrtho( minExtents[0], maxExtents[0], minExtents[1], maxExtents[1], 0.0f, maxExtents[2] - minExtents[2] );
+				result[i].projMatrix = renderSystem.getOrtho( minExtents[0], maxExtents[0], minExtents[1], maxExtents[1], minCastersZ, maxExtents[2] - minExtents[2] );
 				result[i].viewProjMatrix = result[i].projMatrix * result[i].viewMatrix;
 				result[i].splitDepth = ( near + splitDist * clipRange ) * -1.0f;
 				lastSplitDist = cascadeSplits[i];
@@ -167,7 +168,8 @@ namespace castor3d
 
 	void DirectionalLight::updateShadow( Camera const & viewCamera
 		, Camera & lightCamera
-		, int32_t cascadeIndex )
+		, int32_t cascadeIndex
+		, float minCastersZ )
 	{
 		if ( cascadeIndex < m_cascades.size() )
 		{
@@ -175,7 +177,8 @@ namespace castor3d
 			{
 				m_cascades = doComputeCascades( viewCamera
 					, *this
-					, uint32_t( m_cascades.size() ) );
+					, uint32_t( m_cascades.size() )
+					, minCastersZ );
 			}
 
 			auto & cascade = m_cascades[cascadeIndex];
@@ -201,16 +204,19 @@ namespace castor3d
 
 		for ( uint32_t i = 0u; i < m_cascades.size(); ++i )
 		{
-			doCopyComponent( m_cascades[i].viewProjMatrix, buffer );
 			splitDepths[i] = m_cascades[i].splitDepth;
+		}
+
+		doCopyComponent( splitDepths, buffer );
+
+		for ( uint32_t i = 0u; i < m_cascades.size(); ++i )
+		{
+			doCopyComponent( m_cascades[i].viewProjMatrix, buffer );
 		}
 
 		for ( auto i = uint32_t( m_cascades.size() ); i < shader::DirectionalMaxCascadesCount; ++i )
 		{
 			doCopyComponent( Matrix4x4f{ .0f }, buffer );
-			splitDepths[i] = 0.0f;
 		}
-
-		doCopyComponent( splitDepths, buffer );
 	}
 }

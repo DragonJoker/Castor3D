@@ -45,6 +45,11 @@ namespace castor3d
 		C3D_API virtual ~SceneCuller() = default;
 		C3D_API void compute();
 
+		inline float getMinCastersZ()
+		{
+			return m_minCullersZ;
+		}
+
 		inline Scene const & getScene()const
 		{
 			return m_scene;
@@ -126,6 +131,7 @@ namespace castor3d
 		bool m_culledChanged{ true };
 		bool m_sceneDirty{ true };
 		bool m_cameraDirty{ true };
+		float m_minCullersZ{ 0.0f };
 		std::vector< CulledSubmesh > m_allOpaqueSubmeshes;
 		std::vector< CulledSubmesh > m_allTransparentSubmeshes;
 		std::vector< CulledBillboard > m_allOpaqueBillboards;

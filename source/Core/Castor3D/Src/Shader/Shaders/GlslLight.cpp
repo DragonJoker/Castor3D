@@ -148,7 +148,7 @@ namespace castor3d
 
 		Float DirectionalLight::m_splitDepth( UInt const & cascadeIndex )const
 		{
-			return Mat4( m_writer, String( *this ) + cuT( ".m_splitDepths[" ) + String( cascadeIndex ) + cuT( "]" ) );
+			return m_splitDepths()[cascadeIndex];
 		}
 
 		//*********************************************************************************************

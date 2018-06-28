@@ -72,6 +72,9 @@ namespace castor3d
 		void Shadow::declare( uint32_t & index
 			, uint32_t maxCascades )
 		{
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
+			m_writer.inlineComment( cuT( "// SHADOWS" ) );
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
 			auto c3d_maxCascadeCount = m_writer.declConstant( cuT( "c3d_maxCascadeCount" )
 				, UInt( DirectionalMaxCascadesCount ) );
 			auto c3d_mapShadowDirectional = m_writer.declSampler< Sampler2DArray >( MapShadowDirectional, index++, 1u );
@@ -97,6 +100,9 @@ namespace castor3d
 			, uint32_t & index
 			, uint32_t maxCascades )
 		{
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
+			m_writer.inlineComment( cuT( "// SHADOWS" ) );
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
 			auto c3d_maxCascadeCount = m_writer.declConstant( cuT( "c3d_maxCascadeCount" )
 				, UInt( DirectionalMaxCascadesCount ) );
 			auto c3d_mapShadowDirectional = m_writer.declSampler< Sampler2DArray >( MapShadowDirectional, index++, 1u );
@@ -128,6 +134,9 @@ namespace castor3d
 		void Shadow::declarePoint( ShadowType type
 			, uint32_t & index )
 		{
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
+			m_writer.inlineComment( cuT( "// SHADOWS" ) );
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
 			auto c3d_mapShadowPoint = m_writer.declSampler< SamplerCube >( MapShadowPoint, index++, 1u );
 			doDeclareGetRandom();
 
@@ -156,6 +165,9 @@ namespace castor3d
 		void Shadow::declareSpot( ShadowType type
 			, uint32_t & index )
 		{
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
+			m_writer.inlineComment( cuT( "// SHADOWS" ) );
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
 			auto c3d_mapShadowSpot = m_writer.declSampler< Sampler2D >( MapShadowSpot, index++, 1u );
 			doDeclareGetRandom();
 

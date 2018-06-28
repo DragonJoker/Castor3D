@@ -65,6 +65,9 @@ namespace castor3d
 			, uint32_t maxCascades )
 		{
 			m_shadowModel->declare( index, maxCascades );
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
+			m_writer.inlineComment( cuT( "// LIGHTS" ) );
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
 			doDeclareLight();
 			doDeclareDirectionalLight();
 			doDeclarePointLight();
@@ -73,6 +76,9 @@ namespace castor3d
 			doDeclareGetDirectionalLight();
 			doDeclareGetPointLight();
 			doDeclareGetSpotLight();
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
+			m_writer.inlineComment( cuT( "// LIGHTING" ) );
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
 			doDeclareModel();
 			doDeclareComputeDirectionalLight();
 			doDeclareComputePointLight();
@@ -89,9 +95,15 @@ namespace castor3d
 				m_shadowModel->declareDirectional( shadows, index, maxCascades );
 			}
 
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
+			m_writer.inlineComment( cuT( "// LIGHTS" ) );
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
 			doDeclareLight();
 			doDeclareDirectionalLight();
 			doDeclareDirectionalLightUbo();
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
+			m_writer.inlineComment( cuT( "// LIGHTING" ) );
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
 			doDeclareModel();
 			doDeclareComputeOneDirectionalLight( shadows, volumetric );
 		}
@@ -105,9 +117,15 @@ namespace castor3d
 				m_shadowModel->declarePoint( shadows, index );
 			}
 
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
+			m_writer.inlineComment( cuT( "// LIGHTS" ) );
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
 			doDeclareLight();
 			doDeclarePointLight();
 			doDeclarePointLightUbo();
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
+			m_writer.inlineComment( cuT( "// LIGHTING" ) );
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
 			doDeclareModel();
 			doDeclareComputeOnePointLight( shadows, volumetric );
 		}
@@ -121,9 +139,15 @@ namespace castor3d
 				m_shadowModel->declareSpot( shadows, index );
 			}
 
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
+			m_writer.inlineComment( cuT( "// LIGHTS" ) );
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
 			doDeclareLight();
 			doDeclareSpotLight();
 			doDeclareSpotLightUbo();
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
+			m_writer.inlineComment( cuT( "// LIGHTING" ) );
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
 			doDeclareModel();
 			doDeclareComputeOneSpotLight( shadows, volumetric );
 		}
@@ -157,8 +181,8 @@ namespace castor3d
 			Struct lightDecl = m_writer.getStruct( cuT( "DirectionalLight" ) );
 			lightDecl.declMember< Light >( cuT( "m_lightBase" ) );
 			lightDecl.declMember< Vec4 >( cuT( "m_directionCount" ) );
-			lightDecl.declMember< Mat4 >( cuT( "m_transforms" ), DirectionalMaxCascadesCount );
 			lightDecl.declMember< Vec4 >( cuT( "m_splitDepths" ) );
+			lightDecl.declMember< Mat4 >( cuT( "m_transforms" ), DirectionalMaxCascadesCount );
 			lightDecl.end();
 		}
 
@@ -213,24 +237,13 @@ namespace castor3d
 				result.m_colourIndex() = vec4( 1.0_f, 1.0, 1.0, -1.0 );
 				result.m_intensityFarPlane() = vec4( 0.8_f, 1.0, 1.0, 0.0 );
 #else
-				if ( m_writer.hasTexelFetch() )
+				if ( m_writer.hasTextureBuffers() )
 				{
-					if ( m_writer.hasTextureBuffers() )
-					{
-						auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
-						auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) );
-						result.m_colourIndex() = texelFetch( c3d_sLights, offset++ );
-						result.m_intensityFarPlane() = texelFetch( c3d_sLights, offset++ );
-						result.m_volumetric() = texelFetch( c3d_sLights, offset++ );
-					}
-					else
-					{
-						auto c3d_sLights = m_writer.getBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
-						auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) );
-						result.m_colourIndex() = texelFetch( c3d_sLights, offset++, 0 );
-						result.m_intensityFarPlane() = texelFetch( c3d_sLights, offset++, 0 );
-						result.m_volumetric() = texelFetch( c3d_sLights, offset++, 0 );
-					}
+					auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
+					auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) );
+					result.m_colourIndex() = texelFetch( c3d_sLights, offset++ );
+					result.m_intensityFarPlane() = texelFetch( c3d_sLights, offset++ );
+					result.m_volumetric() = texelFetch( c3d_sLights, offset++ );
 				}
 				else
 				{
@@ -259,42 +272,23 @@ namespace castor3d
 						, vec4( 0.0_f, 0.0, 1.0, 0.0 )
 						, vec4( 0.0_f, 0.0, 0.0, 1.0 ) );
 #else
-					if ( m_writer.hasTexelFetch() )
+					if ( m_writer.hasTextureBuffers() )
 					{
-						if ( m_writer.hasTextureBuffers() )
+						auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
+						auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
+						auto c3d_maxCascadeCount = m_writer.declBuiltin< UInt >( cuT( "c3d_maxCascadeCount" ) );
+						result.m_directionCount() = texelFetch( c3d_sLights, offset++ );
+						result.m_direction() = normalize( result.m_direction() );
+						result.m_splitDepths() = texelFetch( c3d_sLights, offset++ );
+						FOR( m_writer, UInt, i, 0u, "i < c3d_maxCascadeCount", "++i" )
 						{
-							auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
-							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-							auto c3d_maxCascadeCount = m_writer.declBuiltin< UInt >( cuT( "c3d_maxCascadeCount" ) );
-							result.m_directionCount() = normalize( texelFetch( c3d_sLights, offset++ ) );
-							FOR( m_writer, UInt, i, 0u, "i < c3d_maxCascadeCount", "++i" )
-							{
-								auto col0 = m_writer.declLocale( cuT( "col0" ), texelFetch( c3d_sLights, offset++ ) );
-								auto col1 = m_writer.declLocale( cuT( "col1" ), texelFetch( c3d_sLights, offset++ ) );
-								auto col2 = m_writer.declLocale( cuT( "col2" ), texelFetch( c3d_sLights, offset++ ) );
-								auto col3 = m_writer.declLocale( cuT( "col3" ), texelFetch( c3d_sLights, offset++ ) );
-								result.m_transform( i ) = mat4( col0, col1, col2, col3 );
-							}
-							ROF;
-							result.m_splitDepths() = normalize( texelFetch( c3d_sLights, offset++ ) );
+							auto col0 = m_writer.declLocale( cuT( "col0" ), texelFetch( c3d_sLights, offset++ ) );
+							auto col1 = m_writer.declLocale( cuT( "col1" ), texelFetch( c3d_sLights, offset++ ) );
+							auto col2 = m_writer.declLocale( cuT( "col2" ), texelFetch( c3d_sLights, offset++ ) );
+							auto col3 = m_writer.declLocale( cuT( "col3" ), texelFetch( c3d_sLights, offset++ ) );
+							result.m_transform( i ) = mat4( col0, col1, col2, col3 );
 						}
-						else
-						{
-							auto c3d_sLights = m_writer.getBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
-							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-							auto c3d_maxCascadeCount = m_writer.declBuiltin< UInt >( cuT( "c3d_maxCascadeCount" ) );
-							result.m_direction() = normalize( texelFetch( c3d_sLights, offset++, 0 ).rgb() );
-							FOR( m_writer, UInt, i, 0u, "i < c3d_maxCascadeCount", "++i" )
-							{
-								auto col0 = m_writer.declLocale( cuT( "col0" ), texelFetch( c3d_sLights, offset++, 0 ) );
-								auto col1 = m_writer.declLocale( cuT( "col1" ), texelFetch( c3d_sLights, offset++, 0 ) );
-								auto col2 = m_writer.declLocale( cuT( "col2" ), texelFetch( c3d_sLights, offset++, 0 ) );
-								auto col3 = m_writer.declLocale( cuT( "col3" ), texelFetch( c3d_sLights, offset++, 0 ) );
-								result.m_transform( i ) = mat4( col0, col1, col2, col3 );
-							}
-							ROF;
-							result.m_splitDepths() = normalize( texelFetch( c3d_sLights, offset++, 0 ) );
-						}
+						ROF;
 					}
 					else
 					{
@@ -314,22 +308,12 @@ namespace castor3d
 					PointLight result = m_writer.declLocale< PointLight >( cuT( "result" ) );
 					result.m_lightBase() = getBaseLight( index );
 
-					if ( m_writer.hasTexelFetch() )
+					if ( m_writer.hasTextureBuffers() )
 					{
-						if ( m_writer.hasTextureBuffers() )
-						{
-							auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
-							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-							result.m_position() = texelFetch( c3d_sLights, offset++ ).rgb();
-							result.m_attenuation() = texelFetch( c3d_sLights, offset++ ).rgb();
-						}
-						else
-						{
-							auto c3d_sLights = m_writer.getBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
-							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-							result.m_position() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
-							result.m_attenuation() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
-						}
+						auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
+						auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
+						result.m_position() = texelFetch( c3d_sLights, offset++ ).rgb();
+						result.m_attenuation() = texelFetch( c3d_sLights, offset++ ).rgb();
 					}
 					else
 					{
@@ -349,35 +333,18 @@ namespace castor3d
 					SpotLight result = m_writer.declLocale< SpotLight >( cuT( "result" ) );
 					result.m_lightBase() = getBaseLight( index );
 
-					if ( m_writer.hasTexelFetch() )
+					if ( m_writer.hasTextureBuffers() )
 					{
-						if ( m_writer.hasTextureBuffers() )
-						{
-							auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
-							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-							result.m_position() = texelFetch( c3d_sLights, offset++ ).rgb();
-							result.m_attenuation() = texelFetch( c3d_sLights, offset++ ).rgb();
-							result.m_direction() = normalize( texelFetch( c3d_sLights, offset++ ).rgb() );
-							result.m_exponentCutOff() = texelFetch( c3d_sLights, offset++ );
-							result.m_transform() = mat4( texelFetch( c3d_sLights, offset + 0_i )
-								, texelFetch( c3d_sLights, offset + 1_i )
-								, texelFetch( c3d_sLights, offset + 2_i )
-								, texelFetch( c3d_sLights, offset + 3_i ) );
-						}
-						else
-						{
-							auto c3d_sLights = m_writer.getBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
-							auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
-							result.m_position() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
-							result.m_attenuation() = texelFetch( c3d_sLights, offset++, 0 ).rgb();
-							result.m_direction() = normalize( texelFetch( c3d_sLights, offset++, 0 ).rgb() );
-							result.m_exponentCutOff() = texelFetch( c3d_sLights, offset++, 0 );
-							result.m_transform() = mat4( texelFetch( c3d_sLights, offset + 0_i, 0 )
-								, texelFetch( c3d_sLights, offset + 1_i, 0 )
-								, texelFetch( c3d_sLights, offset + 2_i, 0 )
-								, texelFetch( c3d_sLights, offset + 3_i, 0 ) );
-							offset += 4_i;
-						}
+						auto c3d_sLights = m_writer.getBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
+						auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
+						result.m_position() = texelFetch( c3d_sLights, offset++ ).rgb();
+						result.m_attenuation() = texelFetch( c3d_sLights, offset++ ).rgb();
+						result.m_direction() = normalize( texelFetch( c3d_sLights, offset++ ).rgb() );
+						result.m_exponentCutOff() = texelFetch( c3d_sLights, offset++ );
+						result.m_transform() = mat4( texelFetch( c3d_sLights, offset + 0_i )
+							, texelFetch( c3d_sLights, offset + 1_i )
+							, texelFetch( c3d_sLights, offset + 2_i )
+							, texelFetch( c3d_sLights, offset + 3_i ) );
 					}
 					else
 					{

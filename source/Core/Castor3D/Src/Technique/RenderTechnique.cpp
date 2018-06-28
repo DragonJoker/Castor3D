@@ -357,7 +357,7 @@ namespace castor3d
 
 		// Render part
 		semaphore = &doRenderOpaque( jitter, info, *semaphore );
-		//semaphore = &doRenderTransparent( jitter, info, *semaphore );
+		semaphore = &doRenderTransparent( jitter, info, *semaphore );
 		return *semaphore;
 	}
 

@@ -14,6 +14,9 @@ namespace castor3d
 		PhongReflectionModel::PhongReflectionModel( GlslWriter & writer )
 			: m_writer{ writer }
 		{
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
+			m_writer.inlineComment( cuT( "// REFLECTIONS" ) );
+			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
 			doDeclareComputeIncident();
 			doDeclareComputeRefl();
 			doDeclareComputeRefr();

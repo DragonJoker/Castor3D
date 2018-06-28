@@ -36,6 +36,7 @@ namespace castor3d
 
 		if ( m_allChanged )
 		{
+			m_minCullersZ = std::numeric_limits< float >::max();
 			m_allOpaqueSubmeshes.clear();
 			m_allTransparentSubmeshes.clear();
 			m_allOpaqueBillboards.clear();
@@ -115,6 +116,32 @@ namespace castor3d
 									, node } );
 							}
 						}
+					}
+
+					if ( m_camera )
+					{
+						auto & aabbMin = mesh.getBoundingBox().getMin();
+						auto & aabbMax = mesh.getBoundingBox().getMax();
+						auto & camera = getCamera();
+						castor::Point3r corners[8]
+						{
+							castor::Point3r{ aabbMin[0], aabbMin[1], aabbMin[2] },
+							castor::Point3r{ aabbMin[0], aabbMin[1], aabbMax[2] },
+							castor::Point3r{ aabbMin[0], aabbMax[1], aabbMin[2] },
+							castor::Point3r{ aabbMin[0], aabbMax[1], aabbMax[2] },
+							castor::Point3r{ aabbMax[0], aabbMin[1], aabbMin[2] },
+							castor::Point3r{ aabbMax[0], aabbMin[1], aabbMax[2] },
+							castor::Point3r{ aabbMax[0], aabbMax[1], aabbMin[2] },
+							castor::Point3r{ aabbMax[0], aabbMax[1], aabbMax[2] },
+						};
+						for ( auto & corner : corners )
+						{
+							m_minCullersZ = std::min( m_minCullersZ, ( camera.getView() * node.getDerivedTransformationMatrix() * corner )[2] );
+						}
+					}
+					else
+					{
+						m_minCullersZ = std::min( m_minCullersZ, -mesh.getBoundingSphere().getRadius() );
 					}
 				}
 			}

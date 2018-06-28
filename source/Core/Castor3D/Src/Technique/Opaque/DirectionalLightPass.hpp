@@ -144,12 +144,12 @@ namespace castor3d
 			//!\~english	The variable containing the light direction.
 			//!\~french		La variable contenant la direction de la lumière.
 			castor::Point4f direction;
-			//!\~english	The variable containing the light space transformation matrices.
-			//!\~french		La variable contenant les matrices de transformations de la lumière.
-			std::array< castor::Matrix4x4f, shader::DirectionalMaxCascadesCount > transform;
 			//!\~english	The variable containing the light's split depths.
 			//!\~french		La variable contenant les profondeurs des cascades de la lumière.
 			castor::Point4f splitDepths;
+			//!\~english	The variable containing the light space transformation matrices.
+			//!\~french		La variable contenant les matrices de transformations de la lumière.
+			std::array< castor::Matrix4x4f, shader::DirectionalMaxCascadesCount > transform;
 		};
 		renderer::UniformBufferPtr< Config > m_ubo;
 		Viewport m_viewport;

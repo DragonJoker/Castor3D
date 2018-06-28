@@ -180,9 +180,9 @@ namespace castor3d
 					IF( m_writer, light.m_lightBase().m_shadowType() != Int( int( ShadowType::eNone ) ) )
 					{
 						// Get cascade index for the current fragment's view position
-						FOR( m_writer, UInt, i, 0u, cuT( "i < uint( min( c3d_maxCascadeCount, uint( light.m_directionCount.w ) ) - 1u )" ), cuT( "++i" ) )
+						FOR( m_writer, UInt, i, 0u, cuT( "i < uint( max( min( c3d_maxCascadeCount, uint( light.m_directionCount.w ) ), 1u ) - 1u )" ), cuT( "++i" ) )
 						{
-							IF( m_writer, fragmentIn.m_viewVertex.z() < light.m_splitDepth( i ) )
+							IF( m_writer, -fragmentIn.m_viewVertex.z() < light.m_splitDepth( i ) )
 							{
 								cascadeIndex = i + 1;
 							}

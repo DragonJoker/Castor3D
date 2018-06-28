@@ -109,7 +109,8 @@ namespace castor3d
 		 */
 		C3D_API void updateShadow( Camera const & sceneCamera
 			, Camera & lightCamera
-			, int32_t cascadeIndex );
+			, int32_t cascadeIndex
+			, float minCastersZ );
 		/**
 		 *\copydoc		castor3d::LightCategory::createTextWriter
 		 */

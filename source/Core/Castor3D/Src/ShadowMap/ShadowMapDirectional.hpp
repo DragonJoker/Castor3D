@@ -96,13 +96,13 @@ namespace castor3d
 		struct FrameBuffer
 		{
 			renderer::FrameBufferPtr frameBuffer;
+			renderer::TextureViewPtr depthView;
 			renderer::TextureViewPtr varianceView;
 			renderer::TextureViewPtr linearView;
 			std::unique_ptr< GaussianBlur > blur;
 		};
 		CameraSPtr m_camera;
 		renderer::TexturePtr m_depthTexture;
-		renderer::TextureViewPtr m_depthView;
 		std::vector< FrameBuffer > m_frameBuffers;
 		ShadowType m_shadowType;
 		uint32_t m_cascades;

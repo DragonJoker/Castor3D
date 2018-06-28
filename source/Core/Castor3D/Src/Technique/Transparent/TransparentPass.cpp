@@ -667,6 +667,7 @@ namespace castor3d
 			vtx_worldPosition = curPosition.xyz();
 			prvPosition = c3d_prvViewProj * prvPosition;
 			curPosition = c3d_curViewProj * curPosition;
+			vtx_viewPosition = curPosition.xyz();
 
 			if ( invertNormals )
 			{

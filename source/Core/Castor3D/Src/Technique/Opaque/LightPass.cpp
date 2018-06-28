@@ -752,7 +752,7 @@ namespace castor3d
 			auto depth = writer.declLocale( cuT( "depth" )
 				, texture( c3d_mapDepth, texCoord, 0.0_f ).x() );
 			auto vsPosition = writer.declLocale( cuT( "vsPosition" )
-				, utils.calcVSPosition( texCoord, depth, c3d_mtxInvView ) );
+				, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
 			auto wsPosition = writer.declLocale( cuT( "wsPosition" )
 				, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
@@ -1161,7 +1161,7 @@ namespace castor3d
 			auto depth = writer.declLocale( cuT( "depth" )
 				, texture( c3d_mapDepth, texCoord, 0.0_f ).x() );
 			auto vsPosition = writer.declLocale( cuT( "vsPosition" )
-				, utils.calcVSPosition( texCoord, depth, c3d_mtxInvView ) );
+				, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
 			auto wsPosition = writer.declLocale( cuT( "wsPosition" )
 				, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
