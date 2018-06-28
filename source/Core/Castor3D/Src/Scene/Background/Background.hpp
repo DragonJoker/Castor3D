@@ -4,11 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_SceneBackground_H___
 #define ___C3D_SceneBackground_H___
 
+#include "PBR/IblTextures.hpp"
+#include "Render/RenderPassTimer.hpp"
 #include "Render/Viewport.hpp"
 #include "Shader/Ubos/HdrConfigUbo.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
 #include "Shader/Ubos/ModelMatrixUbo.hpp"
-#include "PBR/IblTextures.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
 

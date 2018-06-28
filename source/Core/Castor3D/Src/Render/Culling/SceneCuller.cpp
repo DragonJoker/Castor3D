@@ -120,8 +120,8 @@ namespace castor3d
 
 					if ( m_camera )
 					{
-						auto & aabbMin = mesh.getBoundingBox().getMin();
-						auto & aabbMax = mesh.getBoundingBox().getMax();
+						auto aabbMin = mesh.getBoundingBox().getMin();
+						auto aabbMax = mesh.getBoundingBox().getMax();
 						auto & camera = getCamera();
 						castor::Point3r corners[8]
 						{

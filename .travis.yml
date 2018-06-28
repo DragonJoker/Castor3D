@@ -26,6 +26,8 @@ git:
 before_install:
   - git submodule update --init -- "source/CMake"
   - git submodule update --init -- "source/external/RendererLib"
+  - git submodule update --init -- "source/external/FreeImage"
+  - git submodule update --init -- "source/external/zlib"
 
 before_script:
   - sudo apt-get update -qq

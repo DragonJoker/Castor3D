@@ -1,7 +1,6 @@
 #include "Scene/Background/Background.hpp"
 
 #include "Engine.hpp"
-#include "Render/RenderPassTimer.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
