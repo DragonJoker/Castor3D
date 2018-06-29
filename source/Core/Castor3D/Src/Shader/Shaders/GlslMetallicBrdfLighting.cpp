@@ -184,7 +184,7 @@ namespace castor3d
 						{
 							IF( m_writer, -fragmentIn.m_viewVertex.z() < light.m_splitDepth( i ) )
 							{
-								cascadeIndex = i + 1;
+								cascadeIndex = i + 1_ui;
 							}
 							FI;
 						}
@@ -444,7 +444,7 @@ namespace castor3d
 						{
 							IF( m_writer, fragmentIn.m_viewVertex.z() < light.m_splitDepth( i ) )
 							{
-								cascadeIndex = i + 1;
+								cascadeIndex = i + 1_ui;
 							}
 							FI;
 						}
