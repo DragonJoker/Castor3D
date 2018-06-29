@@ -411,9 +411,9 @@ namespace film_grain
 		};
 		auto & cmd = *commands.commandBuffer;
 
-		if ( result
-			&& cmd.begin() )
+		if ( result )
 		{
+			cmd.begin();
 			timer.beginPass( cmd );
 			// Put image in the right state for rendering.
 			cmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput

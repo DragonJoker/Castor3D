@@ -186,7 +186,8 @@ namespace castor3d
 		m_spotShadowMaps.resize( shader::SpotShadowMapCount );
 
 		m_directionalShadowMap = std::make_unique< ShadowMapDirectional >( *renderTarget.getEngine()
-			, *renderTarget.getScene() );
+			, *renderTarget.getScene()
+			, renderTarget.getScene()->getDirectionalShadowCascades() );
 		m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( std::ref( *m_directionalShadowMap ) );
 
 		for ( auto & shadowMap : m_pointShadowMaps )
@@ -323,7 +324,7 @@ namespace castor3d
 		jitterProjSpace[0] /= camera.getWidth();
 		jitterProjSpace[1] /= camera.getHeight();
 		m_matrixUbo.update( camera.getView()
-			, camera.getViewport().getProjection()
+			, camera.getProjection()
 			, jitterProjSpace
 			, *m_stagingBuffer
 			, *m_uploadCommandBuffer );
@@ -555,7 +556,6 @@ namespace castor3d
 			, m_colourTexture
 			, m_renderTarget.getSize()
 			, *m_renderTarget.getScene()
-			, m_renderTarget.getCamera()->getViewport()
 			, m_ssaoConfig );
 
 #else
@@ -684,7 +684,7 @@ namespace castor3d
 				m_particleTimer->updateCount( 2u * cache.getObjectCount() );
 			}
 
-			m_particleTimer->start();
+			auto timerBlock = m_particleTimer->start();
 			uint32_t index = 0u;
 
 			for ( auto & particleSystem : cache )
@@ -694,8 +694,6 @@ namespace castor3d
 				m_particleTimer->notifyPassRender( index++ );
 				info.m_particlesCount += particleSystem.second->getParticlesCount();
 			}
-
-			m_particleTimer->stop();
 		}
 	}
 
@@ -735,27 +733,25 @@ namespace castor3d
 		{
 			auto & background = m_renderTarget.getScene()->getColourBackground();
 			auto & bgSemaphore = background.getSemaphore();
-			background.start();
+			auto timerBlock = background.start();
 			background.notifyPassRender();
 			queue.submit( { *m_cbgCommandBuffer }
 				, semaphores
 				, stages
 				, { bgSemaphore }
 				, nullptr );
-			background.stop();
 			return bgSemaphore;
 		}
 
 		auto & background = m_renderTarget.getScene()->getBackground();
 		auto & bgSemaphore = background.getSemaphore();
-		background.start();
+		auto timerBlock = background.start();
 		background.notifyPassRender();
 		queue.submit( { *m_bgCommandBuffer }
 			, semaphores
 			, stages
 			, { bgSemaphore }
 			, nullptr );
-		background.stop();
 		return bgSemaphore;
 
 	}

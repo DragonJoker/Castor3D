@@ -7,6 +7,8 @@
 using namespace castor;
 using namespace glsl;
 
+#define C3D_DebugCascades 0
+
 namespace castor3d
 {
 	namespace shader
@@ -141,18 +143,32 @@ namespace castor3d
 						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
 					};
 					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
-						, normalize( light.m_direction().xyz() ) );
+						, normalize( light.m_direction() ) );
 					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
 						, 1.0_f );
+					auto cascadeIndex = m_writer.declLocale( cuT( "cascadeIndex" )
+						, UInt( 0u ) );
 
 					IF( m_writer, light.m_lightBase().m_shadowType() != Int( int( ShadowType::eNone ) ) )
 					{
+						// Get cascade index for the current fragment's view position
+						FOR( m_writer, UInt, i, 0u, cuT( "i < uint( max( min( c3d_maxCascadeCount, uint( light.m_directionCount.w ) ), 1u ) - 1u )" ), cuT( "++i" ) )
+						{
+							IF( m_writer, -fragmentIn.m_viewVertex.z() < light.m_splitDepth( i ) )
+							{
+								cascadeIndex = i + 1_ui;
+							}
+							FI;
+						}
+						ROF;
+
 						shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
 							, m_shadowModel->computeDirectionalShadow( light.m_lightBase().m_shadowType()
-								, light.m_transform()
-								, fragmentIn.m_vertex
+								, light.m_transform( cascadeIndex )
+								, fragmentIn.m_worldVertex
 								, lightDirection
-								, fragmentIn.m_normal ) );
+								, cascadeIndex
+								, fragmentIn.m_worldNormal ) );
 					}
 					FI;
 
@@ -168,17 +184,44 @@ namespace castor3d
 						&& light.m_lightBase().m_volumetricSteps() != 0_ui )
 					{
 						m_shadowModel->computeVolumetric( light.m_lightBase().m_shadowType()
-							, fragmentIn.m_vertex
+							, fragmentIn.m_worldVertex
 							, worldEye
-							, light.m_transform()
+							, light.m_transform( cascadeIndex )
 							, light.m_direction()
+							, cascadeIndex
 							, light.m_lightBase().m_colour()
 							, light.m_lightBase().m_intensity()
 							, light.m_lightBase().m_volumetricSteps()
 							, light.m_lightBase().m_volumetricScattering()
 							, output );
 					}
-					FI
+					FI;
+
+#if C3D_DebugCascades
+					IF( m_writer, light.m_lightBase().m_shadowType() != Int( int( ShadowType::eNone ) ) )
+					{
+						IF( m_writer, cascadeIndex == 0 )
+						{
+							output.m_diffuse.rgb() = vec3( 1.0_f, 0.25f, 0.25f );
+						}
+						ELSEIF( m_writer, cascadeIndex == 1 )
+						{
+							output.m_diffuse.rgb() = vec3( 0.25_f, 1.0f, 0.25f );
+						}
+						ELSEIF( m_writer, cascadeIndex == 2 )
+						{
+							output.m_diffuse.rgb() = vec3( 0.25_f, 0.25f, 1.0f );
+						}
+						ELSE
+						{
+							output.m_diffuse.rgb() = vec3( 1.0_f, 1.0f, 0.25f );
+						}
+						FI;
+
+						output.m_specular.rgb() = output.m_diffuse.rgb();
+					}
+					FI;
+#endif
 
 					parentOutput.m_diffuse += output.m_diffuse;
 					parentOutput.m_specular += output.m_specular;
@@ -208,7 +251,7 @@ namespace castor3d
 						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
 					};
 					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
-						, fragmentIn.m_vertex - light.m_position().xyz() );
+						, fragmentIn.m_worldVertex - light.m_position().xyz() );
 					auto distance = m_writer.declLocale( cuT( "distance" )
 						, length( lightToVertex ) );
 					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
@@ -222,9 +265,9 @@ namespace castor3d
 						{
 							shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
 								, m_shadowModel->computePointShadow( light.m_lightBase().m_shadowType()
-									, fragmentIn.m_vertex
+									, fragmentIn.m_worldVertex
 									, light.m_position().xyz()
-									, fragmentIn.m_normal
+									, fragmentIn.m_worldNormal
 									, light.m_lightBase().m_farPlane()
 									, light.m_lightBase().m_index() ) );
 						}
@@ -273,7 +316,7 @@ namespace castor3d
 						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
 					};
 					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
-						, fragmentIn.m_vertex - light.m_position().xyz() );
+						, fragmentIn.m_worldVertex - light.m_position().xyz() );
 					auto distance = m_writer.declLocale( cuT( "distance" )
 						, length( lightToVertex ) );
 					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
@@ -292,9 +335,9 @@ namespace castor3d
 								shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
 									, m_shadowModel->computeSpotShadow( light.m_lightBase().m_shadowType()
 										, light.m_transform()
-										, fragmentIn.m_vertex
+										, fragmentIn.m_worldVertex
 										, lightToVertex
-										, fragmentIn.m_normal
+										, fragmentIn.m_worldNormal
 										, light.m_lightBase().m_index() ) );
 							}
 							FI;
@@ -348,17 +391,32 @@ namespace castor3d
 						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
 					};
 					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
-						, normalize( light.m_direction().xyz() ) );
+						, normalize( light.m_direction() ) );
 					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
 						, 1.0_f );
+					auto cascadeIndex = m_writer.declLocale( cuT( "cascadeIndex" )
+						, shadowType != ShadowType::eNone
+						, UInt( 0u ) );
 
 					if ( shadowType != ShadowType::eNone )
 					{
+						// Get cascade index for the current fragment's view position
+						FOR( m_writer, UInt, i, 0u, cuT( "i < uint( min( c3d_maxCascadeCount, uint( light.m_directionCount.w ) ) - 1u )" ), cuT( "++i" ) )
+						{
+							IF( m_writer, fragmentIn.m_viewVertex.z() < light.m_splitDepth( i ) )
+							{
+								cascadeIndex = i + 1_ui;
+							}
+							FI;
+						}
+						ROF;
+
 						shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-							, m_shadowModel->computeDirectionalShadow( light.m_transform()
-								, fragmentIn.m_vertex
+							, m_shadowModel->computeDirectionalShadow( light.m_transform( cascadeIndex )
+								, fragmentIn.m_worldVertex
 								, lightDirection
-								, fragmentIn.m_normal ) );
+								, cascadeIndex
+								, fragmentIn.m_worldNormal ) );
 					}
 
 					doComputeLight( light.m_lightBase()
@@ -371,16 +429,42 @@ namespace castor3d
 
 					if ( shadowType != ShadowType::eNone && volumetric )
 					{
-						m_shadowModel->computeVolumetric( fragmentIn.m_vertex
+						m_shadowModel->computeVolumetric( fragmentIn.m_worldVertex
 							, worldEye
-							, light.m_transform()
+							, light.m_transform( cascadeIndex )
 							, light.m_direction()
+							, cascadeIndex
 							, light.m_lightBase().m_colour()
 							, light.m_lightBase().m_intensity()
 							, light.m_lightBase().m_volumetricSteps()
 							, light.m_lightBase().m_volumetricScattering()
 							, output );
 					}
+
+#if C3D_DebugCascades
+					if ( shadowType != ShadowType::eNone )
+					{
+						IF( m_writer, cascadeIndex == 0 )
+						{
+							output.m_diffuse.rgb() = vec3( 1.0_f, 0.25f, 0.25f );
+						}
+						ELSEIF( m_writer, cascadeIndex == 1 )
+						{
+							output.m_diffuse.rgb() = vec3( 0.25_f, 1.0f, 0.25f );
+						}
+						ELSEIF( m_writer, cascadeIndex == 2 )
+						{
+							output.m_diffuse.rgb() = vec3( 0.25_f, 0.25f, 1.0f );
+						}
+						ELSE
+						{
+							output.m_diffuse.rgb() = vec3( 1.0_f, 1.0f, 0.25f );
+						}
+						FI;
+
+						output.m_specular.rgb() = output.m_diffuse.rgb();
+					}
+#endif
 
 					parentOutput.m_diffuse += output.m_diffuse;
 					parentOutput.m_specular += output.m_specular;
@@ -411,7 +495,7 @@ namespace castor3d
 						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
 					};
 					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
-						, fragmentIn.m_vertex - light.m_position().xyz() );
+						, fragmentIn.m_worldVertex - light.m_position().xyz() );
 					auto distance = m_writer.declLocale( cuT( "distance" )
 						, length( lightToVertex ) );
 					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
@@ -422,9 +506,9 @@ namespace castor3d
 					if ( shadowType != ShadowType::eNone )
 					{
 						shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-							, m_shadowModel->computePointShadow( fragmentIn.m_vertex
+							, m_shadowModel->computePointShadow( fragmentIn.m_worldVertex
 								, light.m_position().xyz()
-								, fragmentIn.m_normal
+								, fragmentIn.m_worldNormal
 								, light.m_lightBase().m_farPlane() ) );
 					}
 
@@ -470,7 +554,7 @@ namespace castor3d
 						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
 					};
 					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
-						, fragmentIn.m_vertex - light.m_position().xyz() );
+						, fragmentIn.m_worldVertex - light.m_position().xyz() );
 					auto distance = m_writer.declLocale( cuT( "distance" )
 						, length( lightToVertex ) );
 					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
@@ -486,9 +570,9 @@ namespace castor3d
 						{
 							shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
 								, m_shadowModel->computeSpotShadow( light.m_transform()
-									, fragmentIn.m_vertex
+									, fragmentIn.m_worldVertex
 									, lightToVertex
-									, fragmentIn.m_normal ) );
+									, fragmentIn.m_worldNormal ) );
 						}
 
 						doComputeLight( light.m_lightBase()
@@ -534,14 +618,14 @@ namespace castor3d
 					, FragmentInput const & fragmentIn
 					, OutputComponents & output )
 				{
-					auto diffuseFactor = m_writer.declLocale( cuT( "diffuseFactor" ), dot( fragmentIn.m_normal, -lightDirection ) );
+					auto diffuseFactor = m_writer.declLocale( cuT( "diffuseFactor" ), dot( fragmentIn.m_worldNormal, -lightDirection ) );
 
 					IF( m_writer, diffuseFactor > 0.0_f )
 					{
 						auto vertexToEye = m_writer.declLocale( cuT( "vertexToEye" )
-							, normalize( worldEye - fragmentIn.m_vertex ) );
+							, normalize( worldEye - fragmentIn.m_worldVertex ) );
 						auto lightReflect = m_writer.declLocale( cuT( "lightReflect" )
-							, normalize( reflect( lightDirection, fragmentIn.m_normal ) ) );
+							, normalize( reflect( lightDirection, fragmentIn.m_worldNormal ) ) );
 						auto specularFactor = m_writer.declLocale( cuT( "specularFactor" )
 							, max( dot( vertexToEye, lightReflect ), 0.0 ) );
 						output.m_diffuse = p_shadowFactor * light.m_colour() * light.m_intensity().x() * diffuseFactor;

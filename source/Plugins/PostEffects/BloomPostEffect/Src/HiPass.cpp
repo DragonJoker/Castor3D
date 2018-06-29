@@ -180,28 +180,26 @@ namespace Bloom
 		};
 		auto & cmd = *commands.commandBuffer;
 
-		if ( cmd.begin() )
-		{
-			timer.beginPass( cmd, 0u );
+		cmd.begin();
+		timer.beginPass( cmd, 0u );
 
-			// Put target image in shader input layout.
-			cmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-				, renderer::PipelineStageFlag::eFragmentShader
-				, m_sceneView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+		// Put target image in shader input layout.
+		cmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+			, renderer::PipelineStageFlag::eFragmentShader
+			, m_sceneView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
 
-			cmd.beginRenderPass( *m_renderPass
-				, *m_surface.frameBuffer
-				, { renderer::ClearColorValue{} }
-				, renderer::SubpassContents::eInline );
-			registerFrame( cmd );
-			cmd.endRenderPass();
+		cmd.beginRenderPass( *m_renderPass
+			, *m_surface.frameBuffer
+			, { renderer::ClearColorValue{} }
+			, renderer::SubpassContents::eInline );
+		registerFrame( cmd );
+		cmd.endRenderPass();
 #if !Bloom_DebugHiPass
-			m_surface.colourTexture->getTexture().generateMipmaps( cmd );
+		m_surface.colourTexture->getTexture().generateMipmaps( cmd );
 #endif
 
-			timer.endPass( cmd, 0u );
-			cmd.end();
-		}
+		timer.endPass( cmd, 0u );
+		cmd.end();
 
 		return commands;
 	}

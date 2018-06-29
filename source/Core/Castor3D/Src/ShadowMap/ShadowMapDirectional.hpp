@@ -33,7 +33,8 @@ namespace castor3d
 		 *\param[in]	scene	La scène.
 		 */
 		ShadowMapDirectional( Engine & engine
-			, Scene & scene );
+			, Scene & scene
+			, uint32_t cascades );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -58,22 +59,10 @@ namespace castor3d
 		void debugDisplay( renderer::RenderPass const & renderPass
 			, renderer::FrameBuffer const & frameBuffer
 			, castor::Size const & size, uint32_t index )override;
-		/**
-		*\~english
-		*name
-		*	Getters.
-		*\~french
-		*name
-		*	Setters.
-		*/
-		/**@{*/
-		inline renderer::TextureView const & getDepthView()const
-		{
-			return *m_depthView;
-		}
-		/**@}*/
 
 	private:
+		void doInitialiseDepth();
+		void doInitialiseFramebuffers();
 		/**
 		 *\copydoc		castor3d::ShadowMap::doInitialise
 		 */
@@ -104,12 +93,19 @@ namespace castor3d
 		static renderer::Format constexpr RawDepthFormat = renderer::Format::eD24_UNORM_S8_UINT;
 
 	private:
+		struct FrameBuffer
+		{
+			renderer::FrameBufferPtr frameBuffer;
+			renderer::TextureViewPtr depthView;
+			renderer::TextureViewPtr varianceView;
+			renderer::TextureViewPtr linearView;
+			std::unique_ptr< GaussianBlur > blur;
+		};
 		CameraSPtr m_camera;
 		renderer::TexturePtr m_depthTexture;
-		renderer::TextureViewPtr m_depthView;
-		renderer::FrameBufferPtr m_frameBuffer;
+		std::vector< FrameBuffer > m_frameBuffers;
 		ShadowType m_shadowType;
-		std::unique_ptr< GaussianBlur > m_blur;
+		uint32_t m_cascades;
 	};
 }
 

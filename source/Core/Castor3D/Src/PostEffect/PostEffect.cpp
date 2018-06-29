@@ -62,20 +62,15 @@ namespace castor3d
 		m_timer.reset();
 	}
 
-	void PostEffect::start()
+	RenderPassTimerBlock PostEffect::start()
 	{
-		m_timer->start();
 		m_currentPass = 0u;
+		return m_timer->start();
 	}
 
 	void PostEffect::notifyPassRender()
 	{
 		m_timer->notifyPassRender( m_currentPass++ );
-	}
-
-	void PostEffect::stop()
-	{
-		m_timer->stop();
 	}
 
 	void PostEffect::update( castor::Nanoseconds const & elapsedTime )

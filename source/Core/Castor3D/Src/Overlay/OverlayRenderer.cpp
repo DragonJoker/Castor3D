@@ -8,6 +8,7 @@
 #include "Material/Material.hpp"
 #include "Material/Pass.hpp"
 #include "Render/RenderPipeline.hpp"
+#include "Scene/Camera.hpp"
 #include "Shader/PassBuffer/PassBuffer.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -422,17 +423,17 @@ namespace castor3d
 		m_finished.reset();
 	}
 
-	void OverlayRenderer::beginPrepare( Viewport const & viewport
+	void OverlayRenderer::beginPrepare( Camera const & camera
 		, RenderPassTimer const & timer
 		, renderer::Semaphore const & toWait )
 	{
-		auto size = viewport.getSize();
+		auto size = camera.getSize();
 
 		if ( m_size != size )
 		{
 			m_sizeChanged = true;
 			m_size = size;
-			m_matrixUbo.update( viewport.getEngine().getRenderSystem()->getOrtho( 0.0f
+			m_matrixUbo.update( getRenderSystem()->getOrtho( 0.0f
 				, float( m_size.getWidth() )
 				, 0.0f
 				, float( m_size.getHeight() )

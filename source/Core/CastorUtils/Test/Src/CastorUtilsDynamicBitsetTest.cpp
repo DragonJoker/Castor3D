@@ -178,12 +178,12 @@ namespace Testing
 			DynamicBitset value{ cuT( "011011010101010101010010101010101010110110" ) };
 
 			value.set( 0 );
-			CT_CHECK( value[0] );
+			CT_CHECK( bool( value[0] ) );
 			value.set( 0, false );
 			CT_CHECK( !value[0] );
 
 			value.set( 3 );
-			CT_CHECK( value[3] );
+			CT_CHECK( bool( value[3] ) );
 			value.set( 3, false );
 			CT_CHECK( !value[3] );
 		}

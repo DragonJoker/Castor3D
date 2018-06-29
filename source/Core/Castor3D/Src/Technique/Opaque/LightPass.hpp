@@ -655,6 +655,7 @@ namespace castor3d
 		};
 
 		Engine & m_engine;
+		Scene const * m_scene{ nullptr };
 		RenderPassTimer * m_timer{ nullptr };
 		renderer::UniformBufferBase const * m_baseUbo{ nullptr };
 		bool m_shadows;

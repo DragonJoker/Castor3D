@@ -29,7 +29,8 @@ namespace castor3d
 	ShadowMapPassDirectional::ShadowMapPassDirectional( Engine & engine
 		, MatrixUbo const & matrixUbo
 		, SceneCuller & culler
-		, ShadowMap const & shadowMap )
+		, ShadowMap const & shadowMap
+		, uint32_t cascadeIndex )
 		: ShadowMapPass{ engine, matrixUbo, culler, shadowMap }
 	{
 	}
@@ -46,13 +47,11 @@ namespace castor3d
 		auto cameraNode = camera.getParent();
 		auto lightNode = light.getParent();
 		auto & myCamera = getCuller().getCamera();
-		myCamera.attachTo( light.getParent() );
-		myCamera.update();
-		light.updateShadow( cameraNode->getDerivedPosition()
-			, myCamera.getViewport()
-			, index );
-		m_view = light.getDirectionalLight()->getLightSpaceView();
-		m_farPlane = light.getDirectionalLight()->getFarPlane();
+		light.getDirectionalLight()->updateShadow( camera
+			, myCamera
+			, index
+			, getCuller().getMinCastersZ() );
+		m_farPlane = std::abs( light.getDirectionalLight()->getSplitDepth( index ) );
 		doUpdate( queues );
 	}
 
@@ -68,8 +67,9 @@ namespace castor3d
 				m_shadowConfig->upload();
 			}
 
-			m_matrixUbo.update( m_view
-				, getCuller().getCamera().getViewport().getProjection() );
+			auto & myCamera = getCuller().getCamera();
+			m_matrixUbo.update( myCamera.getView()
+				, myCamera.getProjection() );
 			doUpdateNodes( m_renderQueue.getCulledRenderNodes() );
 		}
 	}

@@ -27,22 +27,24 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises deferred rendering related stuff.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	opaquePass	The opaque nodes render pass.
-		 *\param[in]	frameBuffer	The target frame buffer.
-		 *\param[in]	depthAttach	The attach between depth buffer and the frame buffer.
-		 *\param[in]	size		The render dimensions.
-		 *\param[in]	scene		The rendered scene.
-		 *\param[in]	config		The SSAO configuration.
+		 *\param[in]	engine			The engine.
+		 *\param[in]	opaquePass		The opaque nodes render pass.
+		 *\param[in]	depthTexture	The render target depth texture.
+		 *\param[in]	velocityTexture	The render target velocity texture.
+		 *\param[in]	resultTexture	The render technique texture.
+		 *\param[in]	size			The render dimensions.
+		 *\param[in]	scene			The rendered scene.
+		 *\param[in]	config			The SSAO configuration.
 		 *\~french
 		 *\brief		Initialise les données liées au deferred rendering.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	opaquePass	La passe de rendu des noeuds opaques.
-		 *\param[in]	frameBuffer	Le tampon d'image cible.
-		 *\param[in]	depthAttach	L'attache entre le tampon de profondeur et le tampon d'image.
-		 *\param[in]	size		Les dimensions du rendu.
-		 *\param[in]	scene		La scène rendue.
-		 *\param[in]	config		La configuration du SSAO.
+		 *\param[in]	engine			Le moteur.
+		 *\param[in]	opaquePass		La passe de rendu des noeuds opaques.
+		 *\param[in]	depthTexture	La texture de profondeur de la cible de rendu.
+		 *\param[in]	velocityTexture	La texture de vélocité de la cible de rendu.
+		 *\param[in]	resultTexture	La texture de la technique de rendu.
+		 *\param[in]	size			Les dimensions du rendu.
+		 *\param[in]	scene			La scène rendue.
+		 *\param[in]	config			La configuration du SSAO.
 		 */
 		DeferredRendering( Engine & engine
 			, OpaquePass & opaquePass
@@ -51,7 +53,6 @@ namespace castor3d
 			, TextureLayoutSPtr resultTexture
 			, castor::Size const & size
 			, Scene & scene
-			, Viewport const & viewport
 			, SsaoConfig & config );
 		/**
 		 *\~english

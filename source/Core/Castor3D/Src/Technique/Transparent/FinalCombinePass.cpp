@@ -415,23 +415,21 @@ namespace castor3d
 		, renderer::DescriptorSet const & texDescriptorSet
 		, renderer::BufferBase const & vbo )
 	{
-		if ( m_commandBuffer->begin() )
-		{
-			m_timer.beginPass( *m_commandBuffer );
-			m_commandBuffer->beginRenderPass( m_renderPass
-				, frameBuffer
-				, { renderer::ClearColorValue{} }
-				, renderer::SubpassContents::eInline );
-			m_commandBuffer->bindPipeline( *m_pipeline );
-			m_commandBuffer->setViewport( { renderer::Offset2D{}, frameBuffer.getDimensions() } );
-			m_commandBuffer->setScissor( { renderer::Offset2D{}, frameBuffer.getDimensions() } );
-			m_commandBuffer->bindDescriptorSets( { uboDescriptorSet, texDescriptorSet }, *m_pipelineLayout );
-			m_commandBuffer->bindVertexBuffer( 0u, vbo, 0u );
-			m_commandBuffer->draw( 6u );
-			m_commandBuffer->endRenderPass();
-			m_timer.endPass( *m_commandBuffer );
-			m_commandBuffer->end();
-		}
+		m_commandBuffer->begin();
+		m_timer.beginPass( *m_commandBuffer );
+		m_commandBuffer->beginRenderPass( m_renderPass
+			, frameBuffer
+			, { renderer::ClearColorValue{} }
+			, renderer::SubpassContents::eInline );
+		m_commandBuffer->bindPipeline( *m_pipeline );
+		m_commandBuffer->setViewport( { renderer::Offset2D{}, frameBuffer.getDimensions() } );
+		m_commandBuffer->setScissor( { renderer::Offset2D{}, frameBuffer.getDimensions() } );
+		m_commandBuffer->bindDescriptorSets( { uboDescriptorSet, texDescriptorSet }, *m_pipelineLayout );
+		m_commandBuffer->bindVertexBuffer( 0u, vbo, 0u );
+		m_commandBuffer->draw( 6u );
+		m_commandBuffer->endRenderPass();
+		m_timer.endPass( *m_commandBuffer );
+		m_commandBuffer->end();
 	}
 
 	void FinalCombineProgram::accept( RenderTechniqueVisitor & visitor )
@@ -506,15 +504,18 @@ namespace castor3d
 		, renderer::Semaphore const & toWait )
 	{
 		auto & program = m_programs[size_t( fogType )];
-		m_timer->start();
+		auto timerBlock = m_timer->start();
 		m_timer->notifyPassRender();
+		auto * result = &toWait;
+
 		getCurrentDevice( m_engine ).getGraphicsQueue().submit( program.getCommandBuffer()
-			, toWait
+			, *result
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_semaphore
 			, nullptr );
-		m_timer->stop();
-		return *m_semaphore;
+		result = m_semaphore.get();
+
+		return *result;
 	}
 
 	void FinalCombinePass::accept( RenderTechniqueVisitor & visitor )

@@ -78,6 +78,7 @@ namespace castor3d
 	DECLARE_ATTRIBUTE_PARSER( parserSceneFogDensity )
 	DECLARE_ATTRIBUTE_PARSER( parserSceneParticleSystem )
 	DECLARE_ATTRIBUTE_PARSER( parserMesh )
+	DECLARE_ATTRIBUTE_PARSER( parserDirectionalShadowCascades )
 
 	// ParticleSystem parsers
 	DECLARE_ATTRIBUTE_PARSER( parserParticleSystemParent )

@@ -41,9 +41,11 @@ namespace castor3d
 					, index );
 				timer.notifyPassRender( index );
 				m_uploadFence->reset();
+
 				getCurrentDevice( *getRenderSystem() ).getGraphicsQueue().submit( *m_uploadCommandBuffer
 					, m_uploadFence.get() );
 				m_uploadFence->wait( renderer::FenceTimeout );
+
 				++index;
 			}
 		}

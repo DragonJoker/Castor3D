@@ -169,17 +169,16 @@ language "glsl"
 		uimage2DMSArray
 		struct
 		std140
-		std130
+		std430
 		row_major
 		column_major
 		binding
-		offset
+		set
 		align
 		location
 		component
-		index
 		triangles
-		quades
+		quads
 		isolines
 		equal_spacing
 		fractional_even_spacing
@@ -296,6 +295,12 @@ language "glsl"
 		using
 		filter
 		Light
+		DirectionalLight
+		PointLight
+		SpotLight
+		LegacyMaterial
+		MetallicRoughnessMaterial
+		SpecularGlossinessMaterial
 	}
 	keywords 2
 	{

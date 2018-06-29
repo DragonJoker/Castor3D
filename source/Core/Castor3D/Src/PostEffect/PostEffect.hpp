@@ -108,7 +108,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Démarre le rendu de l'effet.
 		 */
-		C3D_API void start();
+		C3D_API RenderPassTimerBlock start();
 		/**
 		 *\~english
 		 *\brief		Notifies a pass render.
@@ -116,13 +116,6 @@ namespace castor3d
 		 *\brief		Notifie le rendu d'une passe.
 		 */
 		C3D_API void notifyPassRender();
-		/**
-		 *\~english
-		 *\brief		Ends rendering the effect.
-		 *\~french
-		 *\brief		Termine le rendu de l'effet.
-		 */
-		C3D_API void stop();
 		/**
 		 *\~english
 		 *\brief		Updated needed data.

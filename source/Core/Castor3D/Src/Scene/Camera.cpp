@@ -55,11 +55,11 @@ namespace castor3d
 		, Scene & scene
 		, SceneNodeSPtr node
 		, Viewport && viewport
-		, bool invertX )
+		, bool ownProjMtx )
 		: MovableObject{ name, scene, MovableType::eCamera, node }
 		, m_viewport{ std::move( viewport ) }
 		, m_frustum{ m_viewport }
-		, m_invertX{ invertX }
+		, m_ownProjection{ ownProjMtx }
 	{
 		if ( node )
 		{
@@ -74,12 +74,12 @@ namespace castor3d
 	Camera::Camera( String const & name
 		, Scene & scene
 		, SceneNodeSPtr node
-		, bool invertX )
+		, bool ownProjMtx )
 		: Camera{ name
 			, scene
 			, node
 			, Viewport{ *scene.getEngine() }
-			, invertX }
+			, ownProjMtx }
 	{
 	}
 
@@ -105,13 +105,26 @@ namespace castor3d
 		}
 	}
 
+	void Camera::updateFrustum()
+	{
+		if ( !m_ownProjection )
+		{
+			m_frustum.update( m_viewport.getProjection(), m_view );
+		}
+		else
+		{
+			m_frustum.update( m_projection, m_view );
+		}
+	}
+
 	void Camera::update()
 	{
-		bool modified = m_viewport.update();
 		SceneNodeSPtr node = getParent();
 
 		if ( node )
 		{
+			bool modified = m_viewport.update();
+
 			if ( modified || m_nodeChanged )
 			{
 				node->getTransformationMatrix();
@@ -126,54 +139,22 @@ namespace castor3d
 
 				// Update view matrix
 				matrix::lookAt( m_view, position, position + front, up );
-
-				if ( m_invertX )
-				{
-					matrix::scale( m_view, Point3f{ -1.0f, 1.0f, 1.0f } );
-				}
-
-				m_frustum.update( m_viewport.getProjection(), m_view );
+				updateFrustum();
 				m_nodeChanged = false;
 			}
 		}
 	}
 
-	void Camera::resize( uint32_t width, uint32_t height )
+	void Camera::setProjection( castor::Matrix4x4r const & projection )
 	{
-		resize( Size( width, height ) );
-	}
+		REQUIRE( m_ownProjection );
 
-	void Camera::resize( Size const & size )
-	{
-		if ( m_viewport.getSize() != size )
+		if ( m_projection != projection )
 		{
-			m_viewport.resize( size );
+			m_projection = projection;
+			updateFrustum();
+			onChanged( *this );
 		}
-	}
-
-	ViewportType Camera::getViewportType()const
-	{
-		return m_viewport.getType();
-	}
-
-	Size const & Camera::getSize()const
-	{
-		return m_viewport.getSize();
-	}
-
-	uint32_t Camera::getWidth()const
-	{
-		return m_viewport.getWidth();
-	}
-
-	uint32_t Camera::getHeight()const
-	{
-		return m_viewport.getHeight();
-	}
-
-	void Camera::setViewportType( ViewportType value )
-	{
-		m_viewport.updateType( value );
 	}
 
 	bool Camera::isVisible( Geometry const & geometry, Submesh const & submesh )const
@@ -199,27 +180,6 @@ namespace castor3d
 		}
 #endif
 		return result;
-	}
-
-	bool Camera::isVisible( BoundingBox const & box
-		, Matrix4x4r const & transformations )const
-	{
-		return m_frustum.isVisible( box
-			, transformations );
-	}
-
-	bool Camera::isVisible( castor::BoundingSphere const & sphere
-		, Matrix4x4r const & transformations
-		, Point3r const & scale )const
-	{
-		return m_frustum.isVisible( sphere
-			, transformations
-			, scale );
-	}
-
-	bool Camera::isVisible( Point3r const & point )const
-	{
-		return m_frustum.isVisible( point );
 	}
 
 	void Camera::onNodeChanged( SceneNode const & node )

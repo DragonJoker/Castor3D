@@ -48,7 +48,6 @@ namespace castor3d
 		 *\param[in]	sceneUbo		The scene UBO.
 		 *\param[in]	gpInfoUbo		The geometry pass UBO.
 		 *\param[in]	config			The SSAO configuration.
-		 *\param[in]	viewport		The viewport holding depth bounds.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine			Le moteur.
@@ -60,7 +59,6 @@ namespace castor3d
 		 *\param[in]	sceneUbo		L'UBO de la scène.
 		 *\param[in]	gpInfoUbo		L'UBO de la passe géométrique.
 		 *\param[in]	config			La configuration du SSAO.
-		 *\param[in]	viewport		Le viewport contenant les bornes profondeur.
 		 */
 		ReflectionPass( Engine & engine
 			, Scene & scene
@@ -70,8 +68,7 @@ namespace castor3d
 			, renderer::TextureView const & result
 			, SceneUbo & sceneUbo
 			, GpInfoUbo & gpInfoUbo
-			, renderer::TextureView const * ssao
-			, Viewport const & viewport );
+			, renderer::TextureView const * ssao );
 		/**
 		 *\~english
 		 *\brief		Updates the configuration UBO.

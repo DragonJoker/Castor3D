@@ -178,7 +178,7 @@ namespace castor3d
 		m_opaquePass->update( info, {} );
 		m_transparentPass->update( info, {} );
 		m_matrixUbo.update( m_camera->getView()
-			, m_camera->getViewport().getProjection() );
+			, m_camera->getProjection() );
 		m_modelMatrixUbo.update( m_mtxModel );
 		renderer::Semaphore const * result = &toWait;
 
@@ -214,6 +214,7 @@ namespace castor3d
 			, *m_finished
 			, nullptr );
 		result = m_finished.get();
+
 		return *result;
 	}
 }

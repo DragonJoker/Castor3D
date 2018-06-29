@@ -303,7 +303,11 @@ namespace glsl
 		GlslWriter_API Optional< Float > textureLodOffset( Optional< Sampler2DArrayShadow > const & p_sampler, Vec4 const & p_value, Float const & p_lod, IVec2 const & p_offset );
 		/**@}*/
 		template< typename T > void writeAssign( Type const & p_lhs, Optional< T > const & rhs );
-		template< typename RetType, typename FuncType, typename ... Params > inline Function< RetType, Params... > implementFunction( castor::String const & name, FuncType p_function, Params && ... p_params );
+		template< typename RetType
+			, typename ... Params >
+		inline Function< RetType, Params... > implementFunction( castor::String const & name
+			, std::function< void( typename ParamTranslater< Params >::Type... ) > const & function
+			, Params && ... params );
 		template< typename RetType > void returnStmt( RetType const & p_return );
 		template< typename ExprType > ExprType paren( ExprType const p_expr );
 		template< typename ExprType > ExprType ternary( Type const & p_condition, ExprType const & p_left, ExprType const & p_right );

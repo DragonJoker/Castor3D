@@ -58,7 +58,7 @@ namespace castor3d
 						, position - normal * 0.005 );
 					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
 						, writeFunctionCall< Vec3 >( &m_writer, cuT( "getLightSpacePosition" )
-							, light.m_transform()
+							, light.m_transform( 0u )
 							, shrinkedPos ) );
 					auto shadowDepth = m_writer.declLocale( cuT( "d1" )
 						, texture( c3d_mapDepthDirectional, lightSpacePosition.xy() ).r() );

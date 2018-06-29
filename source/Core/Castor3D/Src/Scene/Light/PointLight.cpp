@@ -1,6 +1,7 @@
 #include "PointLight.hpp"
 
 #include "Render/Viewport.hpp"
+#include "Scene/Light/Light.hpp"
 #include "Technique/Opaque/LightPass.hpp"
 
 using namespace castor;
@@ -161,12 +162,11 @@ namespace castor3d
 		m_attenuation.reset();
 	}
 
-	void PointLight::updateShadow( Point3r const & p_target
-		, Viewport & p_viewport
-		, int32_t p_index )
+	void PointLight::updateShadow( Viewport & viewport
+		, int32_t index )
 	{
-		m_shadowMapIndex = p_index;
-		p_viewport.updateFar( m_farPlane );
+		m_shadowMapIndex = index;
+		viewport.updateFar( m_farPlane );
 	}
 
 	void PointLight::doBind( Point4f * buffer )const

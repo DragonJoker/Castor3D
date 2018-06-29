@@ -54,15 +54,6 @@ namespace castor3d
 		m_category->update();
 	}
 
-	void Light::updateShadow( Point3r const & target
-		, Viewport & viewport
-		, int32_t index )
-	{
-		m_category->updateShadow( target
-			, viewport
-			, index );
-	}
-
 	void Light::bind( Point4f * buffer )
 	{
 		m_category->bind( buffer );

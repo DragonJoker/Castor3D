@@ -62,8 +62,7 @@ namespace castor3d
 		, uint32_t index )
 	{
 		auto position = light.getParent()->getDerivedPosition();
-		light.updateShadow( position
-			, m_viewport
+		light.getPointLight()->updateShadow( m_viewport
 			, index );
 		doUpdateShadowMatrices( position, m_matrices );
 		auto & config = m_shadowConfig->getData();

@@ -235,36 +235,34 @@ namespace castor3d
 
 		if ( hasNodes() )
 		{
-			getEngine()->setPerObjectLighting( true );
-			getTimer().start();
-			auto & device = getCurrentDevice( *this );
 			static renderer::ClearValueArray const clearValues
 			{
 				renderer::DepthStencilClearValue{ 1.0, 0 },
 				renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
 			};
 
-			if ( m_nodesCommands->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
-			{
-				getTimer().beginPass( *m_nodesCommands );
-				getTimer().notifyPassRender();
-				m_nodesCommands->beginRenderPass( getRenderPass()
-					, *m_frameBuffer
-					, clearValues
-					, renderer::SubpassContents::eSecondaryCommandBuffers );
-				m_nodesCommands->executeCommands( { getCommandBuffer() } );
-				m_nodesCommands->endRenderPass();
-				getTimer().endPass( *m_nodesCommands );
-				m_nodesCommands->end();
-				device.getGraphicsQueue().submit( { *m_nodesCommands }
-					, { *result }
-					, { renderer::PipelineStageFlag::eColourAttachmentOutput }
-					, { getSemaphore() }
-					, nullptr );
-				result = &getSemaphore();
-			}
+			getEngine()->setPerObjectLighting( true );
+			auto timerBlock = getTimer().start();
+			auto & device = getCurrentDevice( *this );
 
-			getTimer().stop();
+			m_nodesCommands->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
+			getTimer().beginPass( *m_nodesCommands );
+			getTimer().notifyPassRender();
+			m_nodesCommands->beginRenderPass( getRenderPass()
+				, *m_frameBuffer
+				, clearValues
+				, renderer::SubpassContents::eSecondaryCommandBuffers );
+			m_nodesCommands->executeCommands( { getCommandBuffer() } );
+			m_nodesCommands->endRenderPass();
+			getTimer().endPass( *m_nodesCommands );
+			m_nodesCommands->end();
+
+			device.getGraphicsQueue().submit( { *m_nodesCommands }
+				, { *result }
+				, { renderer::PipelineStageFlag::eColourAttachmentOutput }
+				, { getSemaphore() }
+				, nullptr );
+			result = &getSemaphore();
 		}
 
 		return *result;
@@ -785,7 +783,8 @@ namespace castor3d
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		auto lighting = shader::legacy::createLightingModel( writer
-			, index );
+			, index
+			, getCuller().getScene().getDirectionalShadowCascades() );
 		shader::PhongReflectionModel reflections{ writer };
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
@@ -873,7 +872,7 @@ namespace castor3d
 			lighting->computeCombined( worldEye
 				, matShininess
 				, c3d_shadowReceiver
-				, shader::FragmentInput( vtx_worldPosition, normal )
+				, shader::FragmentInput( vtx_viewPosition, vtx_worldPosition, normal )
 				, output );
 			auto ambientOcclusion = writer.declLocale( cuT( "ambientOcclusion" )
 				, 1.0_f );
@@ -1062,7 +1061,8 @@ namespace castor3d
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		auto lighting = shader::pbr::mr::createLightingModel( writer
-			, index );
+			, index
+			, getCuller().getScene().getDirectionalShadowCascades() );
 		shader::MetallicPbrReflectionModel reflections{ writer };
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
@@ -1161,7 +1161,7 @@ namespace castor3d
 				, matMetallic
 				, matRoughness
 				, c3d_shadowReceiver
-				, shader::FragmentInput( vtx_worldPosition, normal )
+				, shader::FragmentInput( vtx_viewPosition, vtx_worldPosition, normal )
 				, output );
 
 			if ( checkFlag( textureFlags, TextureChannel::eReflection )
@@ -1395,7 +1395,8 @@ namespace castor3d
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		auto lighting = shader::pbr::sg::createLightingModel( writer
-			, index );
+			, index
+			, getCuller().getScene().getDirectionalShadowCascades() );
 		shader::SpecularPbrReflectionModel reflections{ writer };
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
@@ -1494,7 +1495,7 @@ namespace castor3d
 				, matSpecular
 				, matGlossiness
 				, c3d_shadowReceiver
-				, shader::FragmentInput( vtx_worldPosition, normal )
+				, shader::FragmentInput( vtx_viewPosition, vtx_worldPosition, normal )
 				, output );
 			
 			if ( checkFlag( textureFlags, TextureChannel::eReflection )

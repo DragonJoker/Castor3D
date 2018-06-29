@@ -204,6 +204,7 @@ namespace castor3d
 			device.getComputeQueue().submit( *m_commandBuffer, m_fence.get() );
 			m_fence->wait( renderer::FenceTimeout );
 			m_fence->reset();
+
 			m_commandBuffer->reset();
 		}
 

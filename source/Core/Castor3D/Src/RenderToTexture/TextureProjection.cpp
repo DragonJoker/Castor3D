@@ -136,32 +136,29 @@ namespace castor3d
 		*m_sizePushConstant.getData() = Point2f{ m_size.getWidth()
 			, m_size.getHeight() };
 
-		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eRenderPassContinue ) )
-		{
-			m_commandBuffer->bindPipeline( *m_pipeline );
-			m_commandBuffer->setViewport( { m_size.getWidth(), m_size.getHeight(), 0, 0 } );
-			m_commandBuffer->setScissor( { 0, 0, m_size.getWidth(), m_size.getHeight() } );
-			m_commandBuffer->bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
-			m_commandBuffer->pushConstants( *m_pipelineLayout, m_sizePushConstant );
-			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-			m_commandBuffer->draw( 36u );
-			m_commandBuffer->end();
-		}
+		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eRenderPassContinue );
+		m_commandBuffer->bindPipeline( *m_pipeline );
+		m_commandBuffer->setViewport( { m_size.getWidth(), m_size.getHeight(), 0, 0 } );
+		m_commandBuffer->setScissor( { 0, 0, m_size.getWidth(), m_size.getHeight() } );
+		m_commandBuffer->bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
+		m_commandBuffer->pushConstants( *m_pipelineLayout, m_sizePushConstant );
+		m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+		m_commandBuffer->draw( 36u );
+		m_commandBuffer->end();
 	}
 
 	void TextureProjection::update( Camera const & camera )
 	{
 		static Matrix3x3r const Identity{ 1.0f };
-		auto const & viewport = camera.getViewport();
 		auto node = camera.getParent();
 		matrix::setTranslate( m_mtxModel, node->getDerivedPosition() );
 		m_matrixUbo.update( camera.getView()
-			, viewport.getProjection() );
+			, camera.getProjection() );
 		m_modelMatrixUbo.update( m_mtxModel, Identity );
 
-		if ( m_size != viewport.getSize() )
+		if ( m_size != camera.getSize() )
 		{
-			m_size = viewport.getSize();
+			m_size = camera.getSize();
 			doPrepareFrame();
 		}
 	}

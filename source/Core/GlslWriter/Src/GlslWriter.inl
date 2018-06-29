@@ -82,16 +82,16 @@ namespace glsl
 		}
 	}
 
-	template< typename RetType, typename FuncType, typename ... Params >
+	template< typename RetType, typename ... Params >
 	inline Function< RetType, Params... > GlslWriter::implementFunction( castor::String const & name
-		, FuncType function
+		, std::function< void( typename ParamTranslater< Params >::Type... ) > const & function
 		, Params && ... params )
 	{
 		m_stream << std::endl;
 		writeFunctionHeader< RetType >( *this, name, params... );
 		{
 			IndentBlock block( *this );
-			function( std::forward< Params && > ( params )... );
+			function( std::forward< Params && >( params )... );
 		}
 		m_stream << std::endl;
 		return Function< RetType, Params... >{ this, name };

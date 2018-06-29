@@ -126,7 +126,6 @@ namespace castor3d
 				, InIVec2{ &writer, cuT( "ssCenter" ) }
 				, InVec4{ &writer, cuT( "projInfo" ) } );
 
-
 			auto getTapInformation = writer.implementFunction< Void >( cuT( "getTapInformation" )
 				, [&]( IVec2 const & tapLoc
 					, Float tapKey
@@ -490,18 +489,16 @@ namespace castor3d
 		auto & device = getCurrentDevice( m_renderSystem );
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 
-		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
-		{
-			m_timer->beginPass( *m_commandBuffer );
-			m_commandBuffer->beginRenderPass( *m_renderPass
-				, *m_fbo
-				, { colour }
-				, renderer::SubpassContents::eInline );
-			registerFrame( *m_commandBuffer );
-			m_timer->endPass( *m_commandBuffer );
-			m_commandBuffer->endRenderPass();
-			m_commandBuffer->end();
-		}
+		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse );
+		m_timer->beginPass( *m_commandBuffer );
+		m_commandBuffer->beginRenderPass( *m_renderPass
+			, *m_fbo
+			, { colour }
+			, renderer::SubpassContents::eInline );
+		registerFrame( *m_commandBuffer );
+		m_timer->endPass( *m_commandBuffer );
+		m_commandBuffer->endRenderPass();
+		m_commandBuffer->end();
 	}
 
 	SsaoBlurPass::~SsaoBlurPass()
@@ -567,16 +564,19 @@ namespace castor3d
 
 	renderer::Semaphore const & SsaoBlurPass::blur( renderer::Semaphore const & toWait )const
 	{
-		m_timer->start();
+		auto timerBlock = m_timer->start();
 		m_timer->notifyPassRender();
+		auto * result = &toWait;
 		auto & device = getCurrentDevice( m_renderSystem );
+
 		device.getGraphicsQueue().submit( *m_commandBuffer
-			, toWait
+			, *result
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
 			, nullptr );
-		m_timer->stop();
-		return *m_finished;
+		result = m_finished.get();
+
+		return *result;
 	}
 
 	void SsaoBlurPass::accept( bool horizontal

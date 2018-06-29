@@ -51,7 +51,6 @@ namespace castor3d
 		, TextureLayoutSPtr resultTexture
 		, Size const & size
 		, Scene & scene
-		, Viewport const & viewport
 		, SsaoConfig & config )
 		: m_engine{ engine }
 		, m_ssaoConfig{ config }
@@ -74,8 +73,7 @@ namespace castor3d
 		m_ssao = std::make_unique< SsaoPass >( engine
 			, renderer::Extent2D{ m_size.getWidth(), m_size.getHeight() }
 			, m_ssaoConfig
-			, m_geometryPassResult
-			, viewport );
+			, m_geometryPassResult );
 		m_subsurfaceScattering = std::make_unique< SubsurfaceScatteringPass >( engine
 			, m_gpInfoUbo
 			, m_opaquePass.getSceneUbo()
@@ -90,8 +88,7 @@ namespace castor3d
 			, resultTexture->getDefaultView()
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
-			, m_ssaoConfig.m_enabled ? &m_ssao->getResult().getTexture()->getDefaultView() : nullptr
-			, viewport ) );
+			, m_ssaoConfig.m_enabled ? &m_ssao->getResult().getTexture()->getDefaultView() : nullptr ) );
 		m_reflection.emplace_back( std::make_unique< ReflectionPass >( engine
 			, scene
 			, m_geometryPassResult
@@ -100,8 +97,7 @@ namespace castor3d
 			, resultTexture->getDefaultView()
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
-			, m_ssaoConfig.m_enabled ? &m_ssao->getResult().getTexture()->getDefaultView() : nullptr
-			, viewport ) );
+			, m_ssaoConfig.m_enabled ? &m_ssao->getResult().getTexture()->getDefaultView() : nullptr ) );
 	}
 
 	DeferredRendering::~DeferredRendering()
@@ -118,8 +114,8 @@ namespace castor3d
 		, Point2r const & jitter )
 	{
 		auto invView = camera.getView().getInverse().getTransposed();
-		auto invProj = camera.getViewport().getProjection().getInverse();
-		auto invViewProj = ( camera.getViewport().getProjection() * camera.getView() ).getInverse();
+		auto invProj = camera.getProjection().getInverse();
+		auto invViewProj = ( camera.getProjection() * camera.getView() ).getInverse();
 		m_opaquePass.getSceneUbo().update( scene, camera );
 		m_gpInfoUbo.update( m_size
 			, camera

@@ -135,18 +135,16 @@ namespace castor3d
 		auto & device = getCurrentDevice( m_renderSystem );
 		auto fence = device.createFence();
 
-		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
-		{
-			m_commandBuffer->beginRenderPass( *m_renderPass
-				, *m_frameBuffer
-				, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
-				, renderer::SubpassContents::eInline );
-			m_commandBuffer->bindPipeline( *m_pipeline );
-			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-			m_commandBuffer->draw( 6u );
-			m_commandBuffer->endRenderPass();
-			m_commandBuffer->end();
-		}
+		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
+		m_commandBuffer->beginRenderPass( *m_renderPass
+			, *m_frameBuffer
+			, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
+			, renderer::SubpassContents::eInline );
+		m_commandBuffer->bindPipeline( *m_pipeline );
+		m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+		m_commandBuffer->draw( 6u );
+		m_commandBuffer->endRenderPass();
+		m_commandBuffer->end();
 
 		device.getGraphicsQueue().submit( *m_commandBuffer, fence.get() );
 		fence->wait( renderer::FenceTimeout );

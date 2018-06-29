@@ -704,31 +704,34 @@ namespace castor3d
 
 	void SubsurfaceScatteringPass::prepare()
 	{
-		if ( m_commandBuffer->begin() )
-		{
-			m_timer->beginPass( *m_commandBuffer );
-			for ( size_t i{ 0u }; i < m_blurResults.size(); ++i )
-			{
-				m_blurX[i].prepareFrame( *m_commandBuffer );
-				m_blurY[i].prepareFrame( *m_commandBuffer );
-			}
+		m_commandBuffer->begin();
+		m_timer->beginPass( *m_commandBuffer );
 
-			m_combine.prepareFrame( *m_commandBuffer );
-			m_timer->endPass( *m_commandBuffer );
-			m_commandBuffer->end();
+		for ( size_t i{ 0u }; i < m_blurResults.size(); ++i )
+		{
+			m_blurX[i].prepareFrame( *m_commandBuffer );
+			m_blurY[i].prepareFrame( *m_commandBuffer );
 		}
+
+		m_combine.prepareFrame( *m_commandBuffer );
+		m_timer->endPass( *m_commandBuffer );
+		m_commandBuffer->end();
 	}
 
 	renderer::Semaphore const & SubsurfaceScatteringPass::render( renderer::Semaphore const & toWait )const
 	{
 		auto & device = getCurrentDevice( *this );
+		auto timerBlock = m_timer->start();
 		m_timer->notifyPassRender();
+		auto * result = &toWait;
+
 		device.getGraphicsQueue().submit( *m_commandBuffer
-			, toWait
+			, *result
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
 			, nullptr );
-		return *m_finished;
+		result = m_finished.get();
+		return *result;
 	}
 
 	void SubsurfaceScatteringPass::debugDisplay( castor::Size const & size )const

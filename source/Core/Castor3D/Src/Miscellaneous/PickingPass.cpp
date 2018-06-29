@@ -269,7 +269,7 @@ namespace castor3d
 		auto & myCamera = getCuller().getCamera();
 		auto & myScene = getCuller().getScene();
 		m_matrixUbo.update( myCamera.getView()
-			, myCamera.getViewport().getProjection() );
+			, myCamera.getProjection() );
 		doUpdate( nodes.instancedStaticNodes.backCulled );
 		doUpdate( nodes.staticNodes.backCulled );
 		doUpdate( nodes.skinnedNodes.backCulled );
@@ -289,32 +289,30 @@ namespace castor3d
 			renderer::DepthStencilClearValue{ 1.0f, 0 }
 		};
 
-		if ( m_commandBuffer->begin() )
-		{
-			m_commandBuffer->beginRenderPass( *m_renderPass
-				, *m_frameBuffer
-				, clearValues
-				, renderer::SubpassContents::eSecondaryCommandBuffers );
-			m_commandBuffer->executeCommands( { commandBuffer } );
-			m_commandBuffer->endRenderPass();
+		m_commandBuffer->begin();
+		m_commandBuffer->beginRenderPass( *m_renderPass
+			, *m_frameBuffer
+			, clearValues
+			, renderer::SubpassContents::eSecondaryCommandBuffers );
+		m_commandBuffer->executeCommands( { commandBuffer } );
+		m_commandBuffer->endRenderPass();
 
-			m_copyRegion.imageOffset.x = int32_t( position.x() - PickingOffset );
-			m_copyRegion.imageOffset.y = int32_t( camera.getHeight() - position.y() - PickingOffset );
+		m_copyRegion.imageOffset.x = int32_t( position.x() - PickingOffset );
+		m_copyRegion.imageOffset.y = int32_t( camera.getHeight() - position.y() - PickingOffset );
 
 #if !C3D_DebugPicking
-			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
-				, renderer::PipelineStageFlag::eTransfer
-				, m_stagingBuffer->getBuffer().makeTransferDestination() );
-			m_commandBuffer->copyToBuffer( m_copyRegion
-				, *m_colourTexture
-				, m_stagingBuffer->getBuffer() );
-			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
-				, renderer::PipelineStageFlag::eTransfer
-				, m_stagingBuffer->getBuffer().makeMemoryTransitionBarrier( renderer::AccessFlag::eMemoryRead ) );
+		m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
+			, renderer::PipelineStageFlag::eTransfer
+			, m_stagingBuffer->getBuffer().makeTransferDestination() );
+		m_commandBuffer->copyToBuffer( m_copyRegion
+			, *m_colourTexture
+			, m_stagingBuffer->getBuffer() );
+		m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
+			, renderer::PipelineStageFlag::eTransfer
+			, m_stagingBuffer->getBuffer().makeMemoryTransitionBarrier( renderer::AccessFlag::eMemoryRead ) );
 #endif
 
-			m_commandBuffer->end();
-		}
+		m_commandBuffer->end();
 
 		auto & device = getCurrentDevice( *this );
 		renderer::FencePtr fence = device.createFence();

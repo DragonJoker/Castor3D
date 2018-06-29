@@ -262,30 +262,27 @@ namespace castor3d
 		auto * result = &toWait;
 		auto & timer = getTimer();
 		auto & device = getCurrentDevice( *this );
-		timer.start();
+		auto timerBlock = timer.start();
 
-		if ( m_nodesCommands->begin() )
-		{
-			timer.beginPass( *m_nodesCommands );
-			timer.notifyPassRender();
-			m_nodesCommands->beginRenderPass( *m_renderPass
-				, *m_frameBuffer
-				, clearValues
-				, renderer::SubpassContents::eSecondaryCommandBuffers );
-			m_nodesCommands->executeCommands( { getCommandBuffer() } );
-			m_nodesCommands->endRenderPass();
-			timer.endPass( *m_nodesCommands );
-			m_nodesCommands->end();
+		m_nodesCommands->begin();
+		timer.beginPass( *m_nodesCommands );
+		timer.notifyPassRender();
+		m_nodesCommands->beginRenderPass( *m_renderPass
+			, *m_frameBuffer
+			, clearValues
+			, renderer::SubpassContents::eSecondaryCommandBuffers );
+		m_nodesCommands->executeCommands( { getCommandBuffer() } );
+		m_nodesCommands->endRenderPass();
+		timer.endPass( *m_nodesCommands );
+		m_nodesCommands->end();
 
-			device.getGraphicsQueue().submit( *m_nodesCommands
-				, *result
-				, renderer::PipelineStageFlag::eColourAttachmentOutput
-				, getSemaphore()
-				, nullptr );
-			result = &getSemaphore();
-		}
+		device.getGraphicsQueue().submit( *m_nodesCommands
+			, *result
+			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, getSemaphore()
+			, nullptr );
+		result = &getSemaphore();
 
-		timer.stop();
 		return *result;
 	}
 
@@ -670,6 +667,7 @@ namespace castor3d
 			vtx_worldPosition = curPosition.xyz();
 			prvPosition = c3d_prvViewProj * prvPosition;
 			curPosition = c3d_curViewProj * curPosition;
+			vtx_viewPosition = curPosition.xyz();
 
 			if ( invertNormals )
 			{
@@ -813,7 +811,8 @@ namespace castor3d
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		auto lighting = shader::legacy::createLightingModel( writer
-			, index );
+			, index
+			, getCuller().getScene().getDirectionalShadowCascades() );
 		shader::PhongReflectionModel reflections{ writer };
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
@@ -879,7 +878,7 @@ namespace castor3d
 			lighting->computeCombined( worldEye
 				, matShininess
 				, c3d_shadowReceiver
-				, shader::FragmentInput( vtx_worldPosition, normal )
+				, shader::FragmentInput( vtx_viewPosition, vtx_worldPosition, normal )
 				, output );
 
 			shader::legacy::computePostLightingMapContributions( writer
@@ -1108,7 +1107,8 @@ namespace castor3d
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		auto lighting = shader::pbr::mr::createLightingModel( writer
-			, index );
+			, index
+			, getCuller().getScene().getDirectionalShadowCascades() );
 		glsl::Utils utils{ writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
@@ -1189,7 +1189,7 @@ namespace castor3d
 				, matMetallic
 				, matRoughness
 				, c3d_shadowReceiver
-				, shader::FragmentInput( vtx_worldPosition, normal )
+				, shader::FragmentInput( vtx_viewPosition, vtx_worldPosition, normal )
 				, output );
 
 			shader::pbr::mr::computePostLightingMapContributions( writer
@@ -1379,7 +1379,8 @@ namespace castor3d
 		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		auto lighting = shader::pbr::sg::createLightingModel( writer
-			, index );
+			, index
+			, getCuller().getScene().getDirectionalShadowCascades() );
 		glsl::Utils utils{ writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
@@ -1467,7 +1468,7 @@ namespace castor3d
 				, matSpecular
 				, matGlossiness
 				, c3d_shadowReceiver
-				, shader::FragmentInput( vtx_worldPosition, normal )
+				, shader::FragmentInput( vtx_viewPosition, vtx_worldPosition, normal )
 				, output );
 
 			ambient *= occlusion * utils.computeSpecularIBL( normal

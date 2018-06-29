@@ -47,8 +47,13 @@ namespace castor3d
 				, castor::String const & name = castor::String() );
 			C3D_API DirectionalLight & operator=( DirectionalLight const & rhs );
 			C3D_API Light m_lightBase()const;
+			C3D_API glsl::Vec4 m_directionCount()const;
+			C3D_API glsl::Array< glsl::Mat4 > m_transforms()const;
+			C3D_API glsl::Vec4 m_splitDepths()const;
 			C3D_API glsl::Vec3 m_direction()const;
-			C3D_API glsl::Mat4 m_transform()const;
+			C3D_API glsl::UInt m_cascadeCount()const;
+			C3D_API glsl::Mat4 m_transform( glsl::UInt const & cascadeIndex )const;
+			C3D_API glsl::Float m_splitDepth( glsl::UInt const & cascadeIndex )const;
 
 			template< typename T >
 			inline DirectionalLight & operator=( T const & rhs )

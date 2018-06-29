@@ -444,41 +444,39 @@ namespace castor3d
 		auto result = &toWait;
 		auto & device = getCurrentDevice( m_engine );
 
-		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit ) )
+		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
+		m_timer->beginPass( *m_commandBuffer, index );
+		m_timer->notifyPassRender( index );
+
+		if ( !index )
 		{
-			m_timer->beginPass( *m_commandBuffer, index );
-			m_timer->notifyPassRender( index );
-
-			if ( !index )
-			{
-				m_commandBuffer->beginRenderPass( *m_firstRenderPass.renderPass
-					, *m_firstRenderPass.frameBuffer
-					, { clearDepthStencil, clearColour, clearColour }
-					, renderer::SubpassContents::eSecondaryCommandBuffers );
-				m_commandBuffer->executeCommands( { *m_pipeline->firstCommandBuffer } );
-			}
-			else
-			{
-				m_commandBuffer->beginRenderPass( *m_blendRenderPass.renderPass
-					, *m_blendRenderPass.frameBuffer
-					, { clearDepthStencil, clearColour, clearColour }
-					, renderer::SubpassContents::eSecondaryCommandBuffers );
-				m_commandBuffer->executeCommands( { *m_pipeline->blendCommandBuffer } );
-			}
-
-			m_commandBuffer->endRenderPass();
-			m_timer->endPass( *m_commandBuffer, index );
-			m_commandBuffer->end();
-
-			//m_fence->reset();
-			device.getGraphicsQueue().submit( *m_commandBuffer
-				, *result
-				, renderer::PipelineStageFlag::eColourAttachmentOutput
-				, *m_signalReady
-				, nullptr );// m_fence.get() );
-			//m_fence->wait( renderer::FenceTimeout );
-			result = m_signalReady.get();
+			m_commandBuffer->beginRenderPass( *m_firstRenderPass.renderPass
+				, *m_firstRenderPass.frameBuffer
+				, { clearDepthStencil, clearColour, clearColour }
+				, renderer::SubpassContents::eSecondaryCommandBuffers );
+			m_commandBuffer->executeCommands( { *m_pipeline->firstCommandBuffer } );
 		}
+		else
+		{
+			m_commandBuffer->beginRenderPass( *m_blendRenderPass.renderPass
+				, *m_blendRenderPass.frameBuffer
+				, { clearDepthStencil, clearColour, clearColour }
+				, renderer::SubpassContents::eSecondaryCommandBuffers );
+			m_commandBuffer->executeCommands( { *m_pipeline->blendCommandBuffer } );
+		}
+
+		m_commandBuffer->endRenderPass();
+		m_timer->endPass( *m_commandBuffer, index );
+		m_commandBuffer->end();
+
+		//m_fence->reset();
+		device.getGraphicsQueue().submit( *m_commandBuffer
+			, *result
+			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, *m_signalReady
+			, nullptr );// m_fence.get() );
+		//m_fence->wait( renderer::FenceTimeout );
+		result = m_signalReady.get();
 
 		return *result;
 	}
@@ -492,6 +490,7 @@ namespace castor3d
 		, ModelMatrixUbo * modelMatrixUbo
 		, RenderPassTimer & timer )
 	{
+		m_scene = &scene;
 		m_timer = &timer;
 		m_geometryPassResult = &gp;
 		SceneFlags sceneFlags{ scene.getFlags() };
@@ -647,7 +646,7 @@ namespace castor3d
 			pipeline.textureDescriptorSet->update();
 		}
 
-		if ( commandBuffer.begin( renderer::CommandBufferUsageFlag::eRenderPassContinue
+		commandBuffer.begin( renderer::CommandBufferUsageFlag::eRenderPassContinue
 			, renderer::CommandBufferInheritanceInfo
 			{
 				renderPass.renderPass.get(),
@@ -656,15 +655,13 @@ namespace castor3d
 				false,
 				0u,
 				0u
-			} ) )
-		{
-			commandBuffer.setViewport( { { 0, 0 }, dimensions } );
-			commandBuffer.setScissor( { { 0, 0 }, dimensions } );
-			commandBuffer.bindDescriptorSets( { *pipeline.uboDescriptorSet, *pipeline.textureDescriptorSet }, pipeline.program->getPipelineLayout() );
-			commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-			pipeline.program->render( commandBuffer, getCount(), first, m_offset );
-			commandBuffer.end();
-		}
+			} );
+		commandBuffer.setViewport( { { 0, 0 }, dimensions } );
+		commandBuffer.setScissor( { { 0, 0 }, dimensions } );
+		commandBuffer.bindDescriptorSets( { *pipeline.uboDescriptorSet, *pipeline.textureDescriptorSet }, pipeline.program->getPipelineLayout() );
+		commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+		pipeline.program->render( commandBuffer, getCount(), first, m_offset );
+		commandBuffer.end();
 	}
 	
 	glsl::Shader LightPass::doGetLegacyPixelShaderSource( SceneFlags const & sceneFlags
@@ -697,16 +694,22 @@ namespace castor3d
 		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 1 );
 
 		// Utility functions
-		auto lighting = shader::legacy::createLightingModel( writer
-			, lightType
-			, shadowType
-			, volumetric
-			, index );
+		auto lighting = lightType == LightType::eDirectional
+			? shader::legacy::createLightingModel( writer
+				, shadowType
+				, volumetric
+				, index
+				, m_scene->getDirectionalShadowCascades() )
+			: shader::legacy::createLightingModel( writer
+				, lightType
+				, shadowType
+				, volumetric
+				, index );
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
 		utils.declareCalcTexCoord();
-		utils.declareCalcWSPosition();
 		utils.declareCalcVSPosition();
+		utils.declareCalcWSPosition();
 		declareDecodeReceiver( writer );
 		shader::LegacyMaterials materials{ writer };
 		materials.declare();
@@ -748,6 +751,8 @@ namespace castor3d
 				, c3d_cameraPosition.xyz() );
 			auto depth = writer.declLocale( cuT( "depth" )
 				, texture( c3d_mapDepth, texCoord, 0.0_f ).x() );
+			auto vsPosition = writer.declLocale( cuT( "vsPosition" )
+				, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
 			auto wsPosition = writer.declLocale( cuT( "wsPosition" )
 				, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
@@ -769,7 +774,7 @@ namespace castor3d
 						, eye
 						, shininess
 						, shadowReceiver
-						, shader::FragmentInput( wsPosition, wsNormal )
+						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
 						, output );
 #if !C3D_DISABLE_SSSSS_TRANSMITTANCE
 					lightDiffuse += sss.compute( material
@@ -790,7 +795,7 @@ namespace castor3d
 						, eye
 						, shininess
 						, shadowReceiver
-						, shader::FragmentInput( wsPosition, wsNormal )
+						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
 						, output );
 #if !C3D_DISABLE_SSSSS_TRANSMITTANCE
 					lightDiffuse += sss.compute( material
@@ -811,7 +816,7 @@ namespace castor3d
 						, eye
 						, shininess
 						, shadowReceiver
-						, shader::FragmentInput( wsPosition, wsNormal )
+						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
 						, output );
 #if !C3D_DISABLE_SSSSS_TRANSMITTANCE
 					lightDiffuse += sss.compute( material
@@ -862,14 +867,21 @@ namespace castor3d
 		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 1 );
 
 		// Utility functions
-		auto lighting = shader::pbr::mr::createLightingModel( writer
-			, lightType
-			, shadowType
-			, volumetric
-			, index );
+		auto lighting = lightType == LightType::eDirectional
+			? shader::pbr::mr::createLightingModel( writer
+				, shadowType
+				, volumetric
+				, index
+				, m_scene->getDirectionalShadowCascades() )
+			: shader::pbr::mr::createLightingModel( writer
+				, lightType
+				, shadowType
+				, volumetric
+				, index );
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
 		utils.declareCalcTexCoord();
+		utils.declareCalcVSPosition();
 		utils.declareCalcWSPosition();
 		declareDecodeReceiver( writer );
 		shader::PbrMRMaterials materials{ writer };
@@ -913,6 +925,8 @@ namespace castor3d
 				, c3d_cameraPosition.xyz() );
 			auto depth = writer.declLocale( cuT( "depth" )
 				, texture( c3d_mapDepth, texCoord, 0.0_f ).x() );
+			auto vsPosition = writer.declLocale( cuT( "vsPosition" )
+				, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
 			auto wsPosition = writer.declLocale( cuT( "wsPosition" )
 				, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
@@ -938,7 +952,7 @@ namespace castor3d
 						, metallic
 						, roughness
 						, shadowReceiver
-						, shader::FragmentInput( wsPosition, wsNormal )
+						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
 						, output );
 					lightDiffuse += sss.compute( material
 						, light
@@ -961,7 +975,7 @@ namespace castor3d
 						, metallic
 						, roughness
 						, shadowReceiver
-						, shader::FragmentInput( wsPosition, wsNormal )
+						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
 						, output );
 #endif
 				}
@@ -1002,7 +1016,7 @@ namespace castor3d
 						, metallic
 						, roughness
 						, shadowReceiver
-						, shader::FragmentInput( wsPosition, wsNormal )
+						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
 						, output );
 #endif
 				}
@@ -1020,7 +1034,7 @@ namespace castor3d
 						, metallic
 						, roughness
 						, shadowReceiver
-						, shader::FragmentInput( wsPosition, wsNormal )
+						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
 						, output );
 					lightDiffuse += sss.compute( material
 						, light
@@ -1043,7 +1057,7 @@ namespace castor3d
 						, metallic
 						, roughness
 						, shadowReceiver
-						, shader::FragmentInput( wsPosition, wsNormal )
+						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
 						, output );
 #endif
 				}
@@ -1083,14 +1097,21 @@ namespace castor3d
 			: ShadowType::eNone;
 
 		// Utility functions
-		auto lighting = shader::pbr::sg::createLightingModel( writer
-			, lightType
-			, shadowType
-			, volumetric
-			, index );
+		auto lighting = lightType == LightType::eDirectional
+			? shader::pbr::sg::createLightingModel( writer
+				, shadowType
+				, volumetric
+				, index
+				, m_scene->getDirectionalShadowCascades() )
+			: shader::pbr::sg::createLightingModel( writer
+				, lightType
+				, shadowType
+				, volumetric
+				, index );
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		glsl::Utils utils{ writer };
 		utils.declareCalcTexCoord();
+		utils.declareCalcVSPosition();
 		utils.declareCalcWSPosition();
 		shader::PbrSGMaterials materials{ writer };
 		materials.declare();
@@ -1139,6 +1160,8 @@ namespace castor3d
 				, c3d_cameraPosition.xyz() );
 			auto depth = writer.declLocale( cuT( "depth" )
 				, texture( c3d_mapDepth, texCoord, 0.0_f ).x() );
+			auto vsPosition = writer.declLocale( cuT( "vsPosition" )
+				, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
 			auto wsPosition = writer.declLocale( cuT( "wsPosition" )
 				, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
@@ -1162,7 +1185,7 @@ namespace castor3d
 						, specular
 						, glossiness
 						, shadowReceiver
-						, shader::FragmentInput( wsPosition, wsNormal )
+						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
 						, output );
 #if !C3D_DISABLE_SSSSS_TRANSMITTANCE
 					lightDiffuse += sss.compute( material
@@ -1185,7 +1208,7 @@ namespace castor3d
 						, specular
 						, glossiness
 						, shadowReceiver
-						, shader::FragmentInput( wsPosition, wsNormal )
+						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
 						, output );
 #if !C3D_DISABLE_SSSSS_TRANSMITTANCE
 					lightDiffuse += sss.compute( material
@@ -1208,7 +1231,7 @@ namespace castor3d
 						, specular
 						, glossiness
 						, shadowReceiver
-						, shader::FragmentInput( wsPosition, wsNormal )
+						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
 						, output );
 #if !C3D_DISABLE_SSSSS_TRANSMITTANCE
 					lightDiffuse += sss.compute( material

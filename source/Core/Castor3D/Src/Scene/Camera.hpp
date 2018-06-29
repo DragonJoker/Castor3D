@@ -70,38 +70,38 @@ namespace castor3d
 		 *\param[in]	scene		The parent scene.
 		 *\param[in]	node		The parent scene node.
 		 *\param[in]	viewport	Viewport to copy.
-		 *\param[in]	invertX		Tells if the X axis is inverted.
+		 *\param[in]	ownProjMtx	Tells if the projection matrix is held by the viewport \p false, or not \p true.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	name		Le nom de la caméra.
 		 *\param[in]	scene		La scène parente.
 		 *\param[in]	node		Le noeud de scène parent.
 		 *\param[in]	viewport	Viewport à copier.
-		 *\param[in]	invertX		Dit si l'axe des X est inversé.
+		 *\param[in]	ownProjMtx	Dit si la matrice de projection est définie par le viewport \p false, ou pas \p true.
 		 */
 		C3D_API Camera( castor::String const & name
 			, Scene & scene
 			, SceneNodeSPtr const node
 			, Viewport && viewport
-			, bool invertX = false );
+			, bool ownProjMtx = false );
 		/**
 		 *\~english
 		 *\brief		Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport.
 		 *\param[in]	name		The camera name.
 		 *\param[in]	scene		The parent scene.
 		 *\param[in]	node		The parent scene node.
-		 *\param[in]	invertX		Tells if the X axis is inverted.
+		 *\param[in]	ownProjMtx	Tells if the projection matrix is held by the viewport \p false, or not \p true.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	name		Le nom de la caméra.
 		 *\param[in]	scene		La scène parente.
 		 *\param[in]	node		SceneNode parent.
-		 *\param[in]	invertX		Dit si l'axe des X est inversé.
+		 *\param[in]	ownProjMtx	Dit si la matrice de projection est définie par le viewport \p false, ou pas \p true.
 		 */
 		C3D_API Camera( castor::String const & name
 			, Scene & scene
 			, SceneNodeSPtr const node
-			, bool invertX = false );
+			, bool ownProjMtx = false );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -120,11 +120,27 @@ namespace castor3d
 		C3D_API void attachTo( SceneNodeSPtr node )override;
 		/**
 		 *\~english
-		 *\brief		Updates the viewport, the frustum...
+		 *\brief		Updates the frustum.
 		 *\~french
-		 *\brief		Met à jour le viewport, frustum...
+		 *\brief		Met à jour le frustum.
+		 */
+		C3D_API void updateFrustum();
+		/**
+		 *\~english
+		 *\brief		Updates the viewport, the view matrix, and the frustum.
+		 *\~french
+		 *\brief		Met à jour le viewport, la matrice de vue et le frustum.
 		 */
 		C3D_API void update();
+		/**
+		 *\~english
+		 *\brief		Sets the projection matrix, updates the viewport and the frustum.
+		 *\param[in]	projection	The projection matrix.
+		 *\~french
+		 *\brief		Définit la matrice de projection, met à jour le viewport et le frustum.
+		 *\param[in]	projection	La matrice de projection.
+		 */
+		C3D_API void setProjection( castor::Matrix4x4r const & projection );
 		/**
 		 *\~english
 		 *\brief		Checks if a submesh is visible, through a geometry.
@@ -139,51 +155,6 @@ namespace castor3d
 		 *\return		\p false si le sous-maillage n'est pas visible.
 		 */
 		C3D_API bool isVisible( Geometry const & geometry, Submesh const & submesh )const;
-		/**
-		 *\~english
-		 *\brief		Checks if given BoundingBox is in the view frustum
-		 *\param[in]	box				The BoundingBox
-		 *\param[in]	transformations	The BoundingBox transformations matrix
-		 *\return		\p false if the BoundingBox is completely out of the view frustum
-		 *\~french
-		 *\brief
-		 *\brief		Vérifie si la BoundingBox donnée est dans le frustum de vue
-		 *\param[in]	box				La BoundingBox
-		 *\param[in]	transformations	La matrice de transformations de la BoundingBox
-		 *\return		\p false si la BoundingBox est complètement en dehors du frustum de vue
-		 */
-		C3D_API bool isVisible( castor::BoundingBox const & box
-			, castor::Matrix4x4r const & transformations )const;
-		/**
-		 *\~english
-		 *\brief		Checks if given BoundingSphere is in the view frustum.
-		 *\param[in]	sphere			The BoundingSphere.
-		 *\param[in]	transformations	The BoundingSphere transformations matrix.
-		 *\param[in]	scale			The scale for the BoundingSphere.
-		 *\return		\p false if the BoundingSphere is completely out of the view frustum.
-		 *\~french
-		 *\brief
-		 *\brief		Vérifie si la SphereBox donnée est dans le frustum de vue.
-		 *\param[in]	sphere			La BoundingSphere.
-		 *\param[in]	transformations	La matrice de transformations de la BoundingSphere.
-		 *\param[in]	scale			L'échelle de la BoundingSphere.
-		 *\return		\p false si la BoundingSphere est complètement en dehors du frustum de vue.
-		 */
-		C3D_API bool isVisible( castor::BoundingSphere const & sphere
-			, castor::Matrix4x4r const & transformations
-			, castor::Point3r const & scale )const;
-		/**
-		 *\~english
-		 *\brief		Checks if given point is in the view frustum
-		 *\param[in]	point	The point
-		 *\return		\p false if the point out of the view frustum
-		 *\~french
-		 *\brief
-		 *\brief		Vérifie si le point donné est dans le frustum de vue
-		 *\param[in]	point	Le point
-		 *\return		\p false si le point en dehors du frustum de vue
-		 */
-		C3D_API bool isVisible( castor::Point3r const & point )const;
 		/**
 		*\~english
 		*name
@@ -208,10 +179,73 @@ namespace castor3d
 			return m_view;
 		}
 
-		C3D_API ViewportType getViewportType()const;
-		C3D_API castor::Size const & getSize()const;
-		C3D_API uint32_t getWidth()const;
-		C3D_API uint32_t getHeight()const;
+		inline castor::Matrix4x4r const & getProjection()const
+		{
+			return m_ownProjection
+				? m_projection
+				: m_viewport.getProjection();
+		}
+
+		inline ViewportType getViewportType()const
+		{
+			return m_viewport.getType();
+		}
+
+		inline castor::Size const & getSize()const
+		{
+			return m_viewport.getSize();
+		}
+
+		inline uint32_t getWidth()const
+		{
+			return m_viewport.getWidth();
+		}
+
+		inline uint32_t getHeight()const
+		{
+			return m_viewport.getHeight();
+		}
+
+		inline float getNear()const
+		{
+			return m_viewport.getNear();
+		}
+
+		inline float getFar()const
+		{
+			return m_viewport.getFar();
+		}
+
+		inline float getRatio()const
+		{
+			return m_viewport.getRatio();
+		}
+
+		inline castor::Angle const & getFovY()const
+		{
+			return m_viewport.getFovY();
+		}
+
+		bool isVisible( castor::BoundingBox const & box
+			, castor::Matrix4x4r const & transformations )const
+		{
+			return m_frustum.isVisible( box
+				, transformations );
+		}
+
+		bool isVisible( castor::BoundingSphere const & sphere
+			, castor::Matrix4x4r const & transformations
+			, castor::Point3r const & scale )const
+		{
+			return m_frustum.isVisible( sphere
+				, transformations
+				, scale );
+		}
+
+		bool isVisible( castor::Point3r const & point )const
+		{
+			return m_frustum.isVisible( point );
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -225,11 +259,28 @@ namespace castor3d
 		inline void setView( castor::Matrix4x4r const & view )
 		{
 			m_view = view;
+			onChanged( *this );
 		}
 
-		C3D_API void resize( uint32_t width, uint32_t height );
-		C3D_API void resize( castor::Size const & size );
-		C3D_API void setViewportType( ViewportType value );
+		void resize( uint32_t width, uint32_t height )
+		{
+			resize( castor::Size( width, height ) );
+		}
+
+		inline void resize( castor::Size const & size )
+		{
+			if ( m_viewport.getSize() != size )
+			{
+				m_viewport.resize( size );
+				onChanged( *this );
+			}
+		}
+
+		inline void setViewportType( ViewportType value )
+		{
+			m_viewport.updateType( value );
+			onChanged( *this );
+		}
 		/**@}*/
 
 	private:
@@ -242,21 +293,12 @@ namespace castor3d
 
 	private:
 		friend class Scene;
-		//!\~english	The viewport of the camera.
-		//!\~french		Le viewport de la caméra.
 		Viewport m_viewport;
-		//!\~english	The view frustum.
-		//!\~french		Le frustum de vue.
 		Frustum m_frustum;
-		//!\~english	The view matrix.
-		//!\~french		La matrice vue.
 		castor::Matrix4x4r m_view;
-		//!\~english	Tells if the X axis is inverted.
-		//!\~french		Dit si l'axe des X est inversé.
-		bool m_invertX;
-		//!\~english	Tells if the parent node has changed.
-		//!\~french		Dit si le noeud parent a changé.
 		bool m_nodeChanged{ true };
+		bool m_ownProjection{ false };
+		castor::Matrix4x4r m_projection;
 	};
 }
 

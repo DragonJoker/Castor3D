@@ -4,11 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_SceneBackground_H___
 #define ___C3D_SceneBackground_H___
 
+#include "PBR/IblTextures.hpp"
+#include "Render/RenderPassTimer.hpp"
 #include "Render/Viewport.hpp"
 #include "Shader/Ubos/HdrConfigUbo.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
 #include "Shader/Ubos/ModelMatrixUbo.hpp"
-#include "PBR/IblTextures.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
 
@@ -205,7 +206,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Démarre le timer CPU, réinitialise le temps GPU.
 		 */
-		C3D_API void start();
+		C3D_API RenderPassTimerBlock start();
 		/**
 		 *\~english
 		 *\brief		Notifies the given pass render.
@@ -213,14 +214,6 @@ namespace castor3d
 		 *\brief		Notifie le rendu de la passe donnée.
 		 */
 		C3D_API void notifyPassRender();
-		/**
-		 *\~english
-		 *\brief		Stops the CPU timer.
-		 *\~french
-		 *\brief
-		 *\brief		Arrête le timer CPU.
-		 */
-		C3D_API void stop();
 		/**
 		*\~english
 		*\return

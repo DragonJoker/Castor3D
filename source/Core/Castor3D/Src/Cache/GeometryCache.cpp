@@ -156,12 +156,11 @@ namespace castor3d
 
 		if ( count )
 		{
-			m_updateTimer->start();
+			auto timerBlock = m_updateTimer->start();
 			uint32_t index = 0u;
 			m_modelUboPool.upload( *m_updateTimer, index );
 			index += std::max( m_modelUboPool.getBufferCount(), 1u );
 			m_modelMatrixUboPool.upload( *m_updateTimer, index );
-			m_updateTimer->stop();
 		}
 	}
 
@@ -172,9 +171,8 @@ namespace castor3d
 
 		if ( count )
 		{
-			m_updatePickingTimer->start();
+			auto timerBlock = m_updatePickingTimer->start();
 			m_pickingUboPool.upload( *m_updatePickingTimer, 0u );
-			m_updatePickingTimer->stop();
 		}
 	}
 

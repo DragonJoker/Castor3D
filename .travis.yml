@@ -26,24 +26,22 @@ git:
 before_install:
   - git submodule update --init -- "source/CMake"
   - git submodule update --init -- "source/external/RendererLib"
+  - git submodule update --init -- "source/external/FreeImage"
+  - git submodule update --init -- "source/external/zlib"
 
 before_script:
   - sudo apt-get update -qq
   - sudo apt-get install libc6-dev
   - sudo apt-get install gcc-8-multilib g++-8-multilib
   - sudo apt-get install cmake
-  - sudo apt-get install libfreeimage-dev
-  - sudo apt-get install libfreetype6-dev
-  - sudo apt-get install zlib1g-dev
-  - sudo apt-get install libassimp-dev
   - export CXX="g++-8"
   - export CC="gcc-8"
 
 script:
   - mkdir -p build
   - cd build
-  - cmake -DCMAKE_BUILD_TYPE=Release ../source -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DCASTOR_BUILDGRP_DIVIDER=OFF -DCASTOR_BUILDGRP_GENERATOR=OFF -DCASTOR_BUILDGRP_GENERIC=OFF -DCASTOR_BUILDGRP_IMPORTER=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_PARTICLES=OFF -DCASTOR_BUILDGRP_POSTFX=ON -DCASTOR_BUILDGRP_RENDERER=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_TONEMAPS=ON
-  - make -j2
+  - cmake -DCMAKE_BUILD_TYPE=Release ../source -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DCASTOR_BUILDGRP_DIVIDER=OFF -DCASTOR_BUILDGRP_GENERATOR=OFF -DCASTOR_BUILDGRP_GENERIC=OFF -DCASTOR_BUILDGRP_IMPORTER=OFF -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_PARTICLES=OFF -DCASTOR_BUILDGRP_POSTFX=OFF -DCASTOR_BUILDGRP_RENDERER=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_TONEMAPS=OFF
+  - make -j4
 
 branches:
   only:

@@ -893,7 +893,7 @@ namespace castor3d
 	{
 		auto & camera = m_culler.getCamera();
 
-		if ( m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eRenderPassContinue
+		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eRenderPassContinue
 			, renderer::CommandBufferInheritanceInfo
 			{
 				&getOwner()->getRenderPass(),
@@ -902,79 +902,78 @@ namespace castor3d
 				false,
 				0u,
 				0u
-			} ) )
-		{
-			doTraverseNodes( m_culledRenderNodes->instancedStaticNodes.frontCulled
-				, [this]( RenderPipeline & pipeline
-					, Pass & pass
-					, Submesh & submesh
-					, auto & nodes )
-				{
-					doAddRenderNodesCommands( *m_commandBuffer
-						, pipeline
-						, pass
-						, submesh
-						, nodes );
-				} );
-			doTraverseNodes( m_culledRenderNodes->instancedStaticNodes.backCulled
-				, [this]( RenderPipeline & pipeline
-					, Pass & pass
-					, Submesh & submesh
-					, auto & nodes )
-				{
-					doAddRenderNodesCommands< StaticRenderNodePtrArray >( *m_commandBuffer
-						, pipeline
-						, pass
-						, submesh
-						, nodes );
-				} );
-			doTraverseNodes( m_culledRenderNodes->instancedSkinnedNodes.frontCulled
-				, [this]( RenderPipeline & pipeline
-					, Pass & pass
-					, Submesh & submesh
-					, auto & nodes )
-				{
-					doAddRenderNodesCommands< SkinningRenderNodePtrArray >( *m_commandBuffer
-						, pipeline
-						, pass
-						, submesh
-						, nodes );
-				} );
-			doTraverseNodes( m_culledRenderNodes->instancedSkinnedNodes.backCulled
-				, [this]( RenderPipeline & pipeline
-					, Pass & pass
-					, Submesh & submesh
-					, auto & nodes )
-				{
-					doAddRenderNodesCommands< SkinningRenderNodePtrArray >( *m_commandBuffer
-						, pipeline
-						, pass
-						, submesh
-						, nodes );
-				} );
+			} );
 
-			doParseRenderNodesCommands( m_culledRenderNodes->staticNodes.frontCulled
-				, *m_commandBuffer );
-			doParseRenderNodesCommands( m_culledRenderNodes->staticNodes.backCulled
-				, *m_commandBuffer );
+		doTraverseNodes( m_culledRenderNodes->instancedStaticNodes.frontCulled
+			, [this]( RenderPipeline & pipeline
+				, Pass & pass
+				, Submesh & submesh
+				, auto & nodes )
+			{
+				doAddRenderNodesCommands( *m_commandBuffer
+					, pipeline
+					, pass
+					, submesh
+					, nodes );
+			} );
+		doTraverseNodes( m_culledRenderNodes->instancedStaticNodes.backCulled
+			, [this]( RenderPipeline & pipeline
+				, Pass & pass
+				, Submesh & submesh
+				, auto & nodes )
+			{
+				doAddRenderNodesCommands< StaticRenderNodePtrArray >( *m_commandBuffer
+					, pipeline
+					, pass
+					, submesh
+					, nodes );
+			} );
+		doTraverseNodes( m_culledRenderNodes->instancedSkinnedNodes.frontCulled
+			, [this]( RenderPipeline & pipeline
+				, Pass & pass
+				, Submesh & submesh
+				, auto & nodes )
+			{
+				doAddRenderNodesCommands< SkinningRenderNodePtrArray >( *m_commandBuffer
+					, pipeline
+					, pass
+					, submesh
+					, nodes );
+			} );
+		doTraverseNodes( m_culledRenderNodes->instancedSkinnedNodes.backCulled
+			, [this]( RenderPipeline & pipeline
+				, Pass & pass
+				, Submesh & submesh
+				, auto & nodes )
+			{
+				doAddRenderNodesCommands< SkinningRenderNodePtrArray >( *m_commandBuffer
+					, pipeline
+					, pass
+					, submesh
+					, nodes );
+			} );
 
-			doParseRenderNodesCommands( m_culledRenderNodes->skinnedNodes.frontCulled
-				, *m_commandBuffer );
-			doParseRenderNodesCommands( m_culledRenderNodes->skinnedNodes.backCulled
-				, *m_commandBuffer );
+		doParseRenderNodesCommands( m_culledRenderNodes->staticNodes.frontCulled
+			, *m_commandBuffer );
+		doParseRenderNodesCommands( m_culledRenderNodes->staticNodes.backCulled
+			, *m_commandBuffer );
 
-			doParseRenderNodesCommands( m_culledRenderNodes->morphingNodes.frontCulled
-				, *m_commandBuffer );
-			doParseRenderNodesCommands( m_culledRenderNodes->morphingNodes.backCulled
-				, *m_commandBuffer );
+		doParseRenderNodesCommands( m_culledRenderNodes->skinnedNodes.frontCulled
+			, *m_commandBuffer );
+		doParseRenderNodesCommands( m_culledRenderNodes->skinnedNodes.backCulled
+			, *m_commandBuffer );
 
-			doParseRenderNodesCommands( m_culledRenderNodes->billboardNodes.frontCulled
-				, *m_commandBuffer );
-			doParseRenderNodesCommands( m_culledRenderNodes->billboardNodes.backCulled
-				, *m_commandBuffer );
+		doParseRenderNodesCommands( m_culledRenderNodes->morphingNodes.frontCulled
+			, *m_commandBuffer );
+		doParseRenderNodesCommands( m_culledRenderNodes->morphingNodes.backCulled
+			, *m_commandBuffer );
 
-			m_commandBuffer->end();
-		}
+		doParseRenderNodesCommands( m_culledRenderNodes->billboardNodes.frontCulled
+			, *m_commandBuffer );
+		doParseRenderNodesCommands( m_culledRenderNodes->billboardNodes.backCulled
+			, *m_commandBuffer );
+
+		m_commandBuffer->end();
 	}
 
 	void RenderQueue::doParseAllRenderNodes( ShadowMapLightTypeArray & shadowMaps )

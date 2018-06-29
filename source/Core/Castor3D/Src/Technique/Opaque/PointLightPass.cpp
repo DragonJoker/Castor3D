@@ -111,7 +111,7 @@ namespace castor3d
 	{
 		auto lightPos = light.getParent()->getDerivedPosition();
 		auto camPos = camera.getParent()->getDerivedPosition();
-		auto far = camera.getViewport().getFar();
+		auto far = camera.getFar();
 		auto scale = doCalcPointLightBSphere( *light.getPointLight()
 			, float( far - point::distance( lightPos, camPos ) - ( far / 50.0f ) ) );
 		Matrix4x4r model{ 1.0f };

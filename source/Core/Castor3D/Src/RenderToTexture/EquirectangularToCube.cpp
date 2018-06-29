@@ -207,6 +207,7 @@ namespace castor3d
 
 			m_device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
 			m_device.getGraphicsQueue().waitIdle();
+
 			++face;
 		}
 	}

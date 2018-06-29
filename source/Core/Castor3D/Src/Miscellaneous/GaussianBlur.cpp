@@ -11,6 +11,7 @@
 
 #include <Buffer/UniformBuffer.hpp>
 #include <Buffer/VertexBuffer.hpp>
+#include <Core/Renderer.hpp>
 #include <Descriptor/DescriptorSet.hpp>
 #include <Descriptor/DescriptorSetLayout.hpp>
 #include <Descriptor/DescriptorSetPool.hpp>
@@ -89,6 +90,49 @@ namespace castor3d
 					offset += base;
 					pxl_fragColor += c3d_coefficients[i / 4_ui][i % 4_ui] * texture( c3d_mapDiffuse, vtx_texture - offset );
 					pxl_fragColor += c3d_coefficients[i / 4_ui][i % 4_ui] * texture( c3d_mapDiffuse, vtx_texture + offset );
+				}
+				ROF;
+
+				if ( isDepth )
+				{
+					gl_FragDepth = pxl_fragColor.r();
+				}
+			} );
+			return writer.finalise();
+		}
+
+		glsl::Shader getBlurXProgramLayer( RenderSystem & renderSystem
+			, bool isDepth
+			, uint32_t layer )
+		{
+			using namespace glsl;
+			auto writer = renderSystem.createGlslWriter();
+
+			// Shader inputs
+			Ubo config{ writer, GaussianBlur::Config, 0u, 0u };
+			auto c3d_textureSize = config.declMember< Vec2 >( GaussianBlur::TextureSize );
+			auto c3d_coefficientsCount = config.declMember< UInt >( GaussianBlur::CoefficientsCount );
+			auto c3d_dump = config.declMember< UInt >( cuT( "c3d_dump" ) ); // to keep a 16 byte alignment.
+			auto c3d_coefficients = config.declMember< Vec4 >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients / 4 );
+			config.end();
+			auto c3d_mapDiffuse = writer.declSampler< Sampler2DArray >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+
+			// Shader outputs
+			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0u );
+			auto gl_FragDepth = writer.declBuiltin< Float >( cuT( "gl_FragDepth" ), isDepth );
+
+			writer.implementFunction< void >( cuT( "main" ), [&]()
+			{
+				auto base = writer.declLocale( cuT( "base" ), vec2( 1.0_f, 0 ) / c3d_textureSize );
+				auto offset = writer.declLocale( cuT( "offset" ), vec2( 0.0_f, 0 ) );
+				pxl_fragColor = texture( c3d_mapDiffuse, vec3( vtx_texture, Float( float( layer ) ) ) ) * c3d_coefficients[0][0];
+
+				FOR( writer, UInt, i, 1u, cuT( "i < c3d_coefficientsCount" ), cuT( "++i" ) )
+				{
+					offset += base;
+					pxl_fragColor += c3d_coefficients[i / 4_ui][i % 4_ui] * texture( c3d_mapDiffuse, vec3( vtx_texture - offset, Float( float( layer ) ) ) );
+					pxl_fragColor += c3d_coefficients[i / 4_ui][i % 4_ui] * texture( c3d_mapDiffuse, vec3( vtx_texture + offset, Float( float( layer ) ) ) );
 				}
 				ROF;
 
@@ -370,45 +414,44 @@ namespace castor3d
 		doInitialiseBlurXProgram();
 		doInitialiseBlurYProgram();
 
-		if ( m_horizCommandBuffer->begin() )
-		{
-			m_horizCommandBuffer->beginRenderPass( *m_renderPass
-				, *m_blurXFbo
-				, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
-			, renderer::SubpassContents::eSecondaryCommandBuffers );
-			m_horizCommandBuffer->executeCommands( { m_blurXQuad.getCommandBuffer() } );
-			m_horizCommandBuffer->endRenderPass();
-			m_horizCommandBuffer->end();
-		}
+		m_horizCommandBuffer->begin();
+		m_horizCommandBuffer->beginRenderPass( *m_renderPass
+			, *m_blurXFbo
+			, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
+		, renderer::SubpassContents::eSecondaryCommandBuffers );
+		m_horizCommandBuffer->executeCommands( { m_blurXQuad.getCommandBuffer() } );
+		m_horizCommandBuffer->endRenderPass();
+		m_horizCommandBuffer->end();
 
-		if ( m_verticCommandBuffer->begin() )
-		{
-			m_verticCommandBuffer->beginRenderPass( *m_renderPass
-				, *m_blurYFbo
-				, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
-			, renderer::SubpassContents::eSecondaryCommandBuffers );
-			m_verticCommandBuffer->executeCommands( { m_blurYQuad.getCommandBuffer() } );
-			m_verticCommandBuffer->endRenderPass();
-			m_verticCommandBuffer->end();
-		}
+		m_verticCommandBuffer->begin();
+		m_verticCommandBuffer->beginRenderPass( *m_renderPass
+			, *m_blurYFbo
+			, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
+		, renderer::SubpassContents::eSecondaryCommandBuffers );
+		m_verticCommandBuffer->executeCommands( { m_blurYQuad.getCommandBuffer() } );
+		m_verticCommandBuffer->endRenderPass();
+		m_verticCommandBuffer->end();
 	}
 
 	renderer::Semaphore const & GaussianBlur::blur( renderer::Semaphore const & toWait )
 	{
 		auto * result = &toWait;
 		auto & device = getCurrentDevice( *this );
+
 		device.getGraphicsQueue().submit( *m_horizCommandBuffer
 			, *result
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_horizSemaphore
 			, nullptr );
 		result = m_horizSemaphore.get();
+
 		device.getGraphicsQueue().submit( *m_verticCommandBuffer
 			, *result
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_verticSemaphore
 			, nullptr );
 		result = m_verticSemaphore.get();
+
 		return *result;
 	}
 
@@ -416,7 +459,18 @@ namespace castor3d
 	{
 		auto & device = getCurrentDevice( *this );
 		m_blurXVertexShader = getVertexProgram( *getEngine()->getRenderSystem() );
-		m_blurXPixelShader = getBlurXProgram( *getEngine()->getRenderSystem(), renderer::isDepthFormat( m_format ) );
+
+		if ( m_source.getTexture().getLayerCount() > 1u
+			&& !device.getRenderer().getFeatures().hasImageTexture )
+		{
+			m_blurXPixelShader = getBlurXProgramLayer( *getEngine()->getRenderSystem()
+				, renderer::isDepthFormat( m_format )
+				, m_source.getSubResourceRange().baseArrayLayer );
+		}
+		else
+		{
+			m_blurXPixelShader = getBlurXProgram( *getEngine()->getRenderSystem(), renderer::isDepthFormat( m_format ) );
+		}
 
 		renderer::ShaderStageStateArray program
 		{

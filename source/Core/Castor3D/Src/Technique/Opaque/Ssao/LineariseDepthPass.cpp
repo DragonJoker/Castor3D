@@ -4,6 +4,7 @@
 #include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
+#include "Scene/Camera.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
 #include "Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
@@ -326,8 +327,7 @@ namespace castor3d
 	LineariseDepthPass::LineariseDepthPass( Engine & engine
 		, renderer::Extent2D const & size
 		, SsaoConfigUbo & ssaoConfigUbo
-		, renderer::TextureView const & depthBuffer
-		, Viewport const & viewport )
+		, renderer::TextureView const & depthBuffer )
 		: m_engine{ engine }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_depthBuffer{ depthBuffer }
@@ -353,18 +353,8 @@ namespace castor3d
 		, m_lineariseProgram{ doGetLineariseProgram( m_engine, m_lineariseVertexShader, m_linearisePixelShader ) }
 		, m_minifyProgram{ doGetMinifyProgram( m_engine, m_minifyVertexShader, m_minifyPixelShader ) }
 	{
-		auto z_f = viewport.getFar();
-		auto z_n = viewport.getNear();
-		auto clipInfo = std::isinf( z_f )
-			? Point3f{ z_n, -1.0f, 1.0f }
-			: Point3f{ z_n * z_f, z_n - z_f, z_f };
-		// result = clipInfo[0] / ( clipInfo[1] * depth + clipInfo[2] );
-		// depth = 0 => result = z_n
-		// depth = 1 => result = z_f
-		*m_clipInfo.getData() = clipInfo;
 		doInitialiseLinearisePass();
 		doInitialiseMinifyPass();
-		doPrepareFrame();
 	}
 
 	LineariseDepthPass::~LineariseDepthPass()
@@ -376,19 +366,41 @@ namespace castor3d
 		m_result.cleanup();
 	}
 
+	void LineariseDepthPass::update( Camera const & camera )
+	{
+		auto z_f = camera.getFar();
+		auto z_n = camera.getNear();
+		auto clipInfo = std::isinf( z_f )
+			? Point3f{ z_n, -1.0f, 1.0f }
+			: Point3f{ z_n * z_f, z_n - z_f, z_f };
+		// result = clipInfo[0] / ( clipInfo[1] * depth + clipInfo[2] );
+		// depth = 0 => result = z_n
+		// depth = 1 => result = z_f
+		m_clipInfoValue = clipInfo;
+
+		if ( m_clipInfoValue.isDirty() )
+		{
+			*m_clipInfo.getData() = m_clipInfoValue;
+			doPrepareFrame();
+		}
+	}
+
 	renderer::Semaphore const & LineariseDepthPass::linearise( renderer::Semaphore const & toWait )const
 	{
-		m_timer->start();
+		auto timerBlock = m_timer->start();
 		m_timer->notifyPassRender();
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = getCurrentDevice( renderSystem );
+		auto * result = &toWait;
+
 		device.getGraphicsQueue().submit( *m_commandBuffer
-			, toWait
+			, *result
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
 			, nullptr );
-		m_timer->stop();
-		return *m_finished;
+		result = m_finished.get();
+
+		return *result;
 	}
 
 	void LineariseDepthPass::accept( RenderTechniqueVisitor & visitor )
@@ -550,50 +562,48 @@ namespace castor3d
 	{
 		static renderer::ClearColorValue const colour{ 0.0, 0.0, 0.0, 0.0 };
 
-		if ( m_commandBuffer->begin() )
-		{
-			m_timer->beginPass( *m_commandBuffer );
+		m_commandBuffer->begin();
+		m_timer->beginPass( *m_commandBuffer );
 
-			// Linearisation pass.
+		// Linearisation pass.
+		m_commandBuffer->beginRenderPass( *m_renderPass
+			, *m_lineariseFrameBuffer
+			, { colour }
+			, renderer::SubpassContents::eInline );
+		m_commandBuffer->bindPipeline( *m_linearisePipeline );
+		m_commandBuffer->bindDescriptorSet( *m_lineariseDescriptor, *m_linearisePipelineLayout );
+		m_commandBuffer->pushConstants( *m_linearisePipelineLayout, m_clipInfo );
+		m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+		m_commandBuffer->draw( 6u );
+		m_commandBuffer->endRenderPass();
+		m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+			, renderer::PipelineStageFlag::eFragmentShader
+			, m_linearisedView->makeShaderInputResource( renderer::ImageLayout::eColourAttachmentOptimal
+				, renderer::AccessFlag::eColourAttachmentWrite ) );
+
+		// Minification passes.
+		for ( auto & pipeline : m_minifyPipelines )
+		{
+			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
+				, renderer::PipelineStageFlag::eColourAttachmentOutput
+				, pipeline.targetView->makeColourAttachment( renderer::ImageLayout::eUndefined, 0u ) );
 			m_commandBuffer->beginRenderPass( *m_renderPass
-				, *m_lineariseFrameBuffer
+				, *pipeline.frameBuffer
 				, { colour }
 				, renderer::SubpassContents::eInline );
-			m_commandBuffer->bindPipeline( *m_linearisePipeline );
-			m_commandBuffer->bindDescriptorSet( *m_lineariseDescriptor, *m_linearisePipelineLayout );
-			m_commandBuffer->pushConstants( *m_linearisePipelineLayout, m_clipInfo );
+			m_commandBuffer->bindPipeline( *pipeline.pipeline );
+			m_commandBuffer->bindDescriptorSet( *pipeline.descriptor, *m_minifyPipelineLayout );
+			m_commandBuffer->pushConstants( *m_minifyPipelineLayout, *pipeline.previousLevel );
 			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 			m_commandBuffer->draw( 6u );
 			m_commandBuffer->endRenderPass();
 			m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
 				, renderer::PipelineStageFlag::eFragmentShader
-				, m_linearisedView->makeShaderInputResource( renderer::ImageLayout::eColourAttachmentOptimal
+				, pipeline.targetView->makeShaderInputResource( renderer::ImageLayout::eColourAttachmentOptimal
 					, renderer::AccessFlag::eColourAttachmentWrite ) );
-
-			// Minification passes.
-			for ( auto & pipeline : m_minifyPipelines )
-			{
-				m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
-					, renderer::PipelineStageFlag::eColourAttachmentOutput
-					, pipeline.targetView->makeColourAttachment( renderer::ImageLayout::eUndefined, 0u ) );
-				m_commandBuffer->beginRenderPass( *m_renderPass
-					, *pipeline.frameBuffer
-					, { colour }
-					, renderer::SubpassContents::eInline );
-				m_commandBuffer->bindPipeline( *pipeline.pipeline );
-				m_commandBuffer->bindDescriptorSet( *pipeline.descriptor, *m_minifyPipelineLayout );
-				m_commandBuffer->pushConstants( *m_minifyPipelineLayout, *pipeline.previousLevel );
-				m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-				m_commandBuffer->draw( 6u );
-				m_commandBuffer->endRenderPass();
-				m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-					, renderer::PipelineStageFlag::eFragmentShader
-					, pipeline.targetView->makeShaderInputResource( renderer::ImageLayout::eColourAttachmentOptimal
-						, renderer::AccessFlag::eColourAttachmentWrite ) );
-			}
-
-			m_timer->endPass( *m_commandBuffer );
-			m_commandBuffer->end();
 		}
+
+		m_timer->endPass( *m_commandBuffer );
+		m_commandBuffer->end();
 	}
 }

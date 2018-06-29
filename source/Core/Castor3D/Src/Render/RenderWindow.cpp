@@ -228,13 +228,25 @@ namespace castor3d
 
 				if ( resources )
 				{
-					auto res = m_device->getGraphicsQueue().submit( { *m_commandBuffers[resources->getBackBuffer()] }
-						, { resources->getImageAvailableSemaphore(), target->getSemaphore() }
-						, { renderer::PipelineStageFlag::eColourAttachmentOutput, renderer::PipelineStageFlag::eColourAttachmentOutput }
-						, { resources->getRenderingFinishedSemaphore() }
-						, &resources->getFence() );
-					m_device->waitIdle();
-					m_swapChain->present( *resources );
+					try
+					{
+						m_device->getGraphicsQueue().submit( { *m_commandBuffers[resources->getBackBuffer()] }
+							, { resources->getImageAvailableSemaphore(), target->getSemaphore() }
+							, { renderer::PipelineStageFlag::eColourAttachmentOutput, renderer::PipelineStageFlag::eColourAttachmentOutput }
+							, { resources->getRenderingFinishedSemaphore() }
+							, &resources->getFence() );
+						m_device->getGraphicsQueue().waitIdle();
+						m_swapChain->present( *resources );
+					}
+					catch ( renderer::Exception & exc )
+					{
+						std::cerr << "Can't render: " << exc.what() << std::endl;
+
+						if ( exc.getResult() == renderer::Result::eErrorDeviceLost )
+						{
+							m_initialised = false;
+						}
+					}
 				}
 				else
 				{
@@ -539,22 +551,15 @@ namespace castor3d
 			auto & frameBuffer = *m_frameBuffers[i];
 			auto & commandBuffer = *m_commandBuffers[i];
 
-			if ( commandBuffer.begin( renderer::CommandBufferUsageFlag::eSimultaneousUse ) )
-			{
-				commandBuffer.beginRenderPass( *m_renderPass
-					, frameBuffer
-					, { m_swapChain->getClearColour() }
-					, renderer::SubpassContents::eInline );
-				m_renderQuad->registerFrame( commandBuffer );
-				commandBuffer.endRenderPass();
+			commandBuffer.begin( renderer::CommandBufferUsageFlag::eSimultaneousUse );
+			commandBuffer.beginRenderPass( *m_renderPass
+				, frameBuffer
+				, { m_swapChain->getClearColour() }
+				, renderer::SubpassContents::eInline );
+			m_renderQuad->registerFrame( commandBuffer );
+			commandBuffer.endRenderPass();
 
-				result = commandBuffer.end();
-
-				if ( !result )
-				{
-					std::cerr << "Command buffers recording failed" << std::endl;
-				}
-			}
+			commandBuffer.end();
 		}
 
 		return result;

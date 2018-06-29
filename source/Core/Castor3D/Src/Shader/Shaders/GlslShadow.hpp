@@ -37,9 +37,11 @@ namespace castor3d
 
 		public:
 			C3D_API explicit Shadow( glsl::GlslWriter & writer );
-			C3D_API void declare( uint32_t & index );
+			C3D_API void declare( uint32_t & index
+				, uint32_t maxCascades );
 			C3D_API void declareDirectional( ShadowType type
-				, uint32_t & index );
+				, uint32_t & index
+				, uint32_t maxCascades );
 			C3D_API void declarePoint( ShadowType type
 				, uint32_t & index );
 			C3D_API void declareSpot( ShadowType type
@@ -48,6 +50,7 @@ namespace castor3d
 				, glsl::Mat4 const & lightMatrix
 				, glsl::Vec3 const & worldSpacePosition
 				, glsl::Vec3 const & lightDirection
+				, glsl::UInt const & cascadeIndex
 				, glsl::Vec3 const & normal );
 			C3D_API glsl::Float computeSpotShadow( glsl::Int const & shadowType
 				, glsl::Mat4 const & lightMatrix
@@ -66,6 +69,7 @@ namespace castor3d
 				, glsl::Vec3 const & eyePosition
 				, glsl::Mat4 const & lightMatrix
 				, glsl::Vec3 const & lightDirection
+				, glsl::UInt const & cascadeIndex
 				, glsl::Vec3 const & lightColour
 				, glsl::Vec2 const & lightIntensity
 				, glsl::UInt const & lightVolumetricSteps
@@ -74,6 +78,7 @@ namespace castor3d
 			C3D_API glsl::Float computeDirectionalShadow( glsl::Mat4 const & lightMatrix
 				, glsl::Vec3 const & worldSpacePosition
 				, glsl::Vec3 const & lightDirection
+				, glsl::UInt const & cascadeIndex
 				, glsl::Vec3 const & normal );
 			C3D_API glsl::Float computeSpotShadow( glsl::Mat4 const & lightMatrix
 				, glsl::Vec3 const & worldSpacePosition
@@ -87,6 +92,7 @@ namespace castor3d
 				, glsl::Vec3 const & eyePosition
 				, glsl::Mat4 const & lightMatrix
 				, glsl::Vec3 const & lightDirection
+				, glsl::UInt const & cascadeIndex
 				, glsl::Vec3 const & lightColour
 				, glsl::Vec2 const & lightIntensity
 				, glsl::UInt const & lightVolumetricSteps
@@ -109,6 +115,15 @@ namespace castor3d
 			glsl::Float filterPCF( glsl::Vec4 const & lightSpacePosition
 				, glsl::Sampler2D const & shadowMap
 				, glsl::Float const & bias );
+			glsl::Float textureProjCascade( glsl::Vec4 const & lightSpacePosition
+				, glsl::Vec2 const & offset
+				, glsl::Sampler2DArray const & shadowMap
+				, glsl::UInt const & cascadeIndex
+				, glsl::Float const & bias );
+			glsl::Float filterPCFCascade( glsl::Vec4 const & lightSpacePosition
+				, glsl::Sampler2DArray const & shadowMap
+				, glsl::UInt const & cascadeIndex
+				, glsl::Float const & bias );
 			glsl::Vec4 getLightSpacePosition( glsl::Mat4 const & lightMatrix
 				, glsl::Vec3 const & worldSpacePosition );
 
@@ -118,6 +133,8 @@ namespace castor3d
 			void doDeclareChebyshevUpperBound();
 			void doDeclareTextureProj();
 			void doDeclareFilterPCF();
+			void doDeclareTextureProjCascade();
+			void doDeclareFilterPCFCascade();
 			void doDeclareGetLightSpacePosition();
 			void doDeclareComputeDirectionalShadow();
 			void doDeclareComputeSpotShadow();
@@ -151,6 +168,17 @@ namespace castor3d
 				, glsl::InFloat
 				, glsl::InFloat
 				, glsl::InFloat > m_chebyshevUpperBound;
+			glsl::Function< glsl::Float
+				, glsl::InVec4
+				, glsl::InVec2
+				, glsl::InSampler2DArray
+				, glsl::InUInt
+				, glsl::InFloat > m_textureProjCascade;
+			glsl::Function< glsl::Float
+				, glsl::InVec4
+				, glsl::InSampler2DArray
+				, glsl::InUInt
+				, glsl::InFloat > m_filterPCFCascade;
 			glsl::Function< glsl::Vec4
 				, glsl::InMat4
 				, glsl::InVec3 > m_getLightSpacePosition;
@@ -159,6 +187,7 @@ namespace castor3d
 				, glsl::InMat4
 				, glsl::InVec3
 				, glsl::InVec3
+				, glsl::InUInt
 				, glsl::InVec3 > m_computeDirectional;
 			glsl::Function< glsl::Float
 				, glsl::InInt
@@ -180,6 +209,7 @@ namespace castor3d
 				, glsl::InVec3
 				, glsl::InMat4
 				, glsl::InVec3
+				, glsl::InUInt
 				, glsl::InVec3
 				, glsl::InVec2
 				, glsl::InUInt
@@ -189,6 +219,7 @@ namespace castor3d
 				, glsl::InMat4
 				, glsl::InVec3
 				, glsl::InVec3
+				, glsl::InUInt
 				, glsl::InVec3 > m_computeOneDirectional;
 			glsl::Function< glsl::Float
 				, glsl::InMat4
@@ -205,6 +236,7 @@ namespace castor3d
 				, glsl::InVec3
 				, glsl::InMat4
 				, glsl::InVec3
+				, glsl::InUInt
 				, glsl::InVec3
 				, glsl::InVec2
 				, glsl::InUInt

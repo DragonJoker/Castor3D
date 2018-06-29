@@ -275,23 +275,21 @@ namespace smaa
 		};
 		auto & blendingWeightCmd = *blendingWeightCommands.commandBuffer;
 
-		if ( blendingWeightCmd.begin() )
-		{
-			timer.beginPass( blendingWeightCmd, passIndex );
-			// Put edge detection image in shader input layout.
-			blendingWeightCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-				, renderer::PipelineStageFlag::eFragmentShader
-				, m_edgeDetectionView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+		blendingWeightCmd.begin();
+		timer.beginPass( blendingWeightCmd, passIndex );
+		// Put edge detection image in shader input layout.
+		blendingWeightCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
+			, renderer::PipelineStageFlag::eFragmentShader
+			, m_edgeDetectionView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
 
-			blendingWeightCmd.beginRenderPass( *m_renderPass
-				, *m_surface.frameBuffer
-				, { renderer::ClearColorValue{}, renderer::DepthStencilClearValue{ 1.0f, 0 } }
-				, renderer::SubpassContents::eInline );
-			registerFrame( blendingWeightCmd );
-			blendingWeightCmd.endRenderPass();
-			timer.endPass( blendingWeightCmd, passIndex );
-			blendingWeightCmd.end();
-		}
+		blendingWeightCmd.beginRenderPass( *m_renderPass
+			, *m_surface.frameBuffer
+			, { renderer::ClearColorValue{}, renderer::DepthStencilClearValue{ 1.0f, 0 } }
+			, renderer::SubpassContents::eInline );
+		registerFrame( blendingWeightCmd );
+		blendingWeightCmd.endRenderPass();
+		timer.endPass( blendingWeightCmd, passIndex );
+		blendingWeightCmd.end();
 
 		return std::move( blendingWeightCommands );
 	}
