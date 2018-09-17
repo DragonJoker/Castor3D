@@ -18,15 +18,13 @@ namespace std
 
 //*********************************************************************************************
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*********************************************************************************************
 
 	template< typename T >
-	DebugOverlays::DebugPanel< T >::DebugPanel( String const & name
-		, String const & label
+	DebugOverlays::DebugPanel< T >::DebugPanel( castor::String const & name
+		, castor::String const & label
 		, PanelOverlaySPtr panel
 		, OverlayCache & cache
 		, T const & value )
@@ -43,11 +41,11 @@ namespace castor3d
 			, nullptr
 			, panel->getOverlay().shared_from_this() )->getTextOverlay();
 
-		m_label->setPixelPosition( Position{ 10, 0 } );
-		m_value->setPixelPosition( Position{ 200, 0 } );
+		m_label->setPixelPosition( castor::Position{ 10, 0 } );
+		m_value->setPixelPosition( castor::Position{ 200, 0 } );
 
-		m_label->setPixelSize( Size{ 190, 20 } );
-		m_value->setPixelSize( Size{ 110, 20 } );
+		m_label->setPixelSize( castor::Size{ 190, 20 } );
+		m_value->setPixelSize( castor::Size{ 110, 20 } );
 
 		m_label->setFont( cuT( "Arial20" ) );
 		m_value->setFont( cuT( "Arial20" ) );
@@ -81,8 +79,8 @@ namespace castor3d
 	template< typename T >
 	void DebugOverlays::DebugPanel< T >::updatePosition( int y )
 	{
-		m_value->setPixelPosition( Position{ 200, y } );
-		m_label->setPixelPosition( Position{ 10, y } );
+		m_value->setPixelPosition( castor::Position{ 200, y } );
+		m_label->setPixelPosition( castor::Position{ 10, y } );
 	}
 
 	template< typename T >
@@ -110,10 +108,10 @@ namespace castor3d
 	{
 		auto & materials = m_cache.getEngine()->getMaterialCache();
 
-		m_titlePanel->setPixelSize( Size{ 320, 20 } );
+		m_titlePanel->setPixelSize( castor::Size{ 320, 20 } );
 		m_titlePanel->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ) );
 
-		m_titleText->setPixelSize( Size{ 300, 20 } );
+		m_titleText->setPixelSize( castor::Size{ 300, 20 } );
 		m_titleText->setVAlign( VAlign::eCenter );
 		m_titleText->setHAlign( HAlign::eCenter );
 		m_titleText->setMaterial( materials.find( cuT( "White" ) ) );
@@ -151,8 +149,8 @@ namespace castor3d
 	template< typename T >
 	int DebugOverlays::DebugPanels< T >::updatePosition( int y )
 	{
-		m_titlePanel->setPixelPosition( Position{ 0, y } );
-		m_titleText->setPixelPosition( Position{ 10, 0 } );
+		m_titlePanel->setPixelPosition( castor::Position{ 0, y } );
+		m_titleText->setPixelPosition( castor::Position{ 10, 0 } );
 		y += 20;
 
 		for ( auto & panel : m_panels )
