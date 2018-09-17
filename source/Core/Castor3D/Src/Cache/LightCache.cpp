@@ -25,6 +25,11 @@ using namespace castor;
 
 namespace castor3d
 {
+	namespace
+	{
+		static String const C3D_UniqueDirectionalLight = cuT( "Only one directional light is allowed." );
+	}
+
 	template<> const String ObjectCacheTraits< Light, String >::Name = cuT( "Light" );
 
 	namespace
@@ -146,23 +151,26 @@ namespace castor3d
 
 		if ( element )
 		{
-			auto lock = castor::makeUniqueLock( m_elements );
+			if ( doCheckUniqueDirectionalLight( element->getLightType() ) )
+			{
+				auto lock = castor::makeUniqueLock( m_elements );
 
-			if ( m_elements.has( name ) )
-			{
-				doReportDuplicate( name );
-				result = m_elements.find( name );
-				m_dirtyLights.emplace_back( result.get() );
-				m_connections.emplace( result.get()
-					, result->onChanged.connect( [this]( Light & light )
-						{
-							onLightChanged( light );
-						} ) );
-			}
-			else
-			{
-				m_elements.insert( name, element );
-				onChanged();
+				if ( m_elements.has( name ) )
+				{
+					doReportDuplicate( name );
+					result = m_elements.find( name );
+					m_dirtyLights.emplace_back( result.get() );
+					m_connections.emplace( result.get()
+						, result->onChanged.connect( [this]( Light & light )
+							{
+								onLightChanged( light );
+							} ) );
+				}
+				else
+				{
+					m_elements.insert( name, element );
+					onChanged();
+				}
 			}
 		}
 		else
@@ -180,18 +188,21 @@ namespace castor3d
 
 		if ( !m_elements.has( name ) )
 		{
-			result = m_produce( name, parent, type );
-			m_initialise( result );
-			m_elements.insert( name, result );
-			m_attach( result, parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
-			doReportCreation( name );
-			m_dirtyLights.emplace_back( result.get() );
-			m_connections.emplace( result.get()
-				, result->onChanged.connect( [this]( Light & light )
-					{
-						onLightChanged( light );
-					} ) );
-			onChanged();
+			if ( doCheckUniqueDirectionalLight( type ) )
+			{
+				result = m_produce( name, parent, type );
+				m_initialise( result );
+				m_elements.insert( name, result );
+				m_attach( result, parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
+				doReportCreation( name );
+				m_dirtyLights.emplace_back( result.get() );
+				m_connections.emplace( result.get()
+					, result->onChanged.connect( [this]( Light & light )
+						{
+							onLightChanged( light );
+						} ) );
+				onChanged();
+			}
 		}
 		else
 		{
@@ -269,5 +280,18 @@ namespace castor3d
 	void ObjectCache< Light, castor::String >::onLightChanged( Light & light )
 	{
 		m_dirtyLights.emplace_back( &light );
+	}
+
+	bool ObjectCache< Light, castor::String >::doCheckUniqueDirectionalLight( LightType toAdd )
+	{
+		bool result = toAdd != LightType::eDirectional
+			|| getLightsCount( LightType::eDirectional ) == 0u;
+
+		if ( !result )
+		{
+			castor::Logger::logError( C3D_UniqueDirectionalLight );
+		}
+
+		return result;
 	}
 }

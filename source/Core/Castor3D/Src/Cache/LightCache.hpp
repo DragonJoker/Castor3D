@@ -227,6 +227,7 @@ namespace castor3d
 
 	private:
 		void onLightChanged( Light & light );
+		bool doCheckUniqueDirectionalLight( LightType toAdd );
 
 	private:
 		LightsMap m_typeSortedLights;
