@@ -2,10 +2,6 @@
 #include "ComLogger.hpp"
 #include "ComMesh.hpp"
 #include "ComSampler.hpp"
-#include "ComBlendState.hpp"
-#include "ComDepthStencilState.hpp"
-#include "ComMultisampleState.hpp"
-#include "ComRasteriserState.hpp"
 #include "ComRenderWindow.hpp"
 #include "ComScene.hpp"
 
@@ -88,13 +84,13 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CEngine::Create()
+	STDMETHODIMP CEngine::Create( BSTR appName, boolean enableValidation )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( !m_internal )
 		{
-			m_internal = new castor3d::Engine;
+			m_internal = new castor3d::Engine{ fromBstr( appName ), enableValidation == TRUE };
 			hr = S_OK;
 		}
 		else
@@ -325,82 +321,6 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "createSampler" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CEngine::CreateBlendState( /* [in] */ BSTR name, /* [out, retval] */ IBlendState ** pVal )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			if ( pVal )
-			{
-				hr = CBlendState::CreateInstance( pVal );
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "CreateBlendState" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CEngine::CreateDepthStencilState( /* [in] */ BSTR name, /* [out, retval] */ IDepthStencilState ** pVal )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			if ( pVal )
-			{
-				hr = CDepthStencilState::CreateInstance( pVal );
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "CreateDepthStencilState" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CEngine::CreateRasteriserState( /* [in] */ BSTR name, /* [out, retval] */ IRasteriserState ** pVal )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			if ( pVal )
-			{
-				hr = CRasteriserState::CreateInstance( pVal );
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "CreateRasteriserState" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CEngine::CreateMultisampleState( /* [in] */ BSTR name, /* [out, retval] */ IMultisampleState ** pVal )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			if ( pVal )
-			{
-				hr = CMultisampleState::CreateInstance( pVal );
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "CreateRasteriserState" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
 		}
 
 		return hr;

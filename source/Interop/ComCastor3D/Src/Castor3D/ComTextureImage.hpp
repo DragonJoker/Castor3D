@@ -5,7 +5,7 @@
 #include "ComSampler.hpp"
 #include "ComPixelBuffer.hpp"
 
-#include <Texture/TextureImage.hpp>
+#include <Texture/TextureView.hpp>
 
 namespace CastorCom
 {
@@ -18,8 +18,8 @@ namespace CastorCom
 	\~french
 	\brief		Cette classe définit un CTexture accessible depuis COM.
 	*/
-	class ATL_NO_VTABLE CTextureImage
-		:	COM_ATL_OBJECT( TextureImage )
+	class ATL_NO_VTABLE CTextureView
+		:	COM_ATL_OBJECT( TextureView )
 	{
 	public:
 		/**
@@ -28,40 +28,38 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		CTextureImage();
+		CTextureView();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		virtual ~CTextureImage();
+		virtual ~CTextureView();
 
-		inline castor3d::TextureImageSPtr getInternal()const
+		inline castor3d::TextureViewSPtr getInternal()const
 		{
 			return m_internal;
 		}
 
-		inline void setInternal( castor3d::TextureImageSPtr state )
+		inline void setInternal( castor3d::TextureViewSPtr state )
 		{
 			m_internal = state;
 		}
 
-		COM_PROPERTY_GET( Buffer, IPixelBuffer *, makeGetter( m_internal.get(), &castor3d::TextureImage::getBuffer ) );
+		COM_PROPERTY_GET( Buffer, IPixelBuffer *, makeGetter( m_internal.get(), &castor3d::TextureView::getBuffer ) );
 
-		STDMETHOD( Resize2D )( /* [in] */ unsigned int w, /* [in] */ unsigned int h );
-		STDMETHOD( Resize3D )( /* [in] */ unsigned int w, /* [in] */ unsigned int h, /* [in] */ unsigned int d );
 		STDMETHOD( StaticSource )( /* [in] */ IPixelBuffer * val );
 		STDMETHOD( Dynamic2DSource )( /* [in] */ unsigned int w, /* [in] */ unsigned int h, /* [in] */ ePIXEL_FORMAT format );
 		STDMETHOD( Dynamic3DSource )( /* [in] */ unsigned int w, /* [in] */ unsigned int h, /* [in] */ unsigned int d, /* [in] */ ePIXEL_FORMAT format );
 
 	private:
-		castor3d::TextureImageSPtr m_internal;
+		castor3d::TextureViewSPtr m_internal;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
-	OBJECT_ENTRY_AUTO( __uuidof( TextureImage ), CTextureImage );
+	OBJECT_ENTRY_AUTO( __uuidof( TextureView ), CTextureView );
 
-	DECLARE_VARIABLE_PTR_GETTER( TextureImage, castor3d, TextureImage );
+	DECLARE_VARIABLE_PTR_GETTER( TextureView, castor3d, TextureView );
 }
 
 #endif

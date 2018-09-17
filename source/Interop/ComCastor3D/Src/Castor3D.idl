@@ -25,7 +25,8 @@ import "ocidl.idl";
 
 // eLOG_TYPE
 [
-	uuid( EC3C4DA0-439C-4CD0-A879-001377785B0A )
+	uuid( EC3C4DA0-439C-4CD0-A879-001377785B0A ),
+	helpstring( "Castor Log levels enumeration." )
 ]
 typedef enum
 {
@@ -39,7 +40,8 @@ typedef enum
 
 // eINTERSECTION
 [
-	uuid( 906BC7B0-9600-4A6D-904B-55135066E57B )
+	uuid( 906BC7B0-9600-4A6D-904B-55135066E57B ),
+	helpstring( "Castor 2D Rectangle intersection results enumeration." )
 ]
 typedef enum
 {
@@ -51,219 +53,59 @@ typedef enum
 
 // ePIXEL_FORMAT
 [
-	uuid( A6264911-DB89-4B0B-902B-69E79A943979 )
+	uuid( A6264911-DB89-4B0B-902B-69E79A943979 ),
+	helpstring( "Castor Pixel formats enumeration." )
 ]
 typedef enum
 {
-	//!\~english	8 bits luminosity.
-	//!\~french		Luminosit� 8 bits.
 	ePIXEL_FORMAT_L8,
-	//!\~english	Half floats luminosity on VRAM, floats luminosity on RAM.
-	//!\~french		Luminosit� en half float en VRAM, et en float en RAM.
-	ePIXEL_FORMAT_L16F32F,
-	//!\~english	32 bits loats luminosity.
-	//!\~french		Luminosit� en float 32 bits.
+	ePIXEL_FORMAT_L16F,
 	ePIXEL_FORMAT_L32F,
-	//!\~english	16 bits alpha and luminosity.
-	//!\~french		Alpha et luminosit� 16 bits.
 	ePIXEL_FORMAT_A8L8,
-	//!\~english	Half floats alpha and luminosity on VRAM, floats alpha and luminosity on RAM.
-	//!\~french		Luminosit� et alpha en half float en VRAM, et en float en RAM.
-	ePIXEL_FORMAT_AL16F32F,
-	//!\~english	32 bits floats alpha and luminosity.
-	//!\~french		Luminosit� et alpha en float 32 bits.
+	ePIXEL_FORMAT_AL16F,
 	ePIXEL_FORMAT_AL32F,
-	//!\~english	16 bits 5551 ARGB.
-	//!\~french		16 bits 5551 ARGB.
 	ePIXEL_FORMAT_A1R5G5B5,
-	//!\~english	16 bits 4444 ARGB.
-	//!\~french		16 bits 4444 ARGB.
-	ePIXEL_FORMAT_A4R4G4B4,
-	//!\~english	16 bits 565 RGB.
-	//!\~french		16 bits 565 RGB.
 	ePIXEL_FORMAT_R5G6B5,
-	//!\~english	24 bits 888 RGB.
-	//!\~french		24 bits 888 RGB.
 	ePIXEL_FORMAT_R8G8B8,
-	//!\~english	24 bits 888 BGR.
-	//!\~french		24 bits 888 BGR.
 	ePIXEL_FORMAT_B8G8R8,
-	//!\~english	24 bits 888 RGB in sRGB colour space.
-	//!\~french		24 bits 888 RGB dans l'espace de couleurs sRGB.
 	ePIXEL_FORMAT_R8G8B8_SRGB,
-	//!\~english	24 bits 888 BGR in sRGB colour space.
-	//!\~french		24 bits 888 BGR dans l'espace de couleurs sRGB.
 	ePIXEL_FORMAT_B8G8R8_SRGB,
-	//!\~english	32 bits 8888 ARGB.
-	//!\~french		32 bits 8888 ARGB.
 	ePIXEL_FORMAT_A8R8G8B8,
-	//!\~english	32 bits 8888 ABGR.
-	//!\~french		32 bits 8888 ABGR.
 	ePIXEL_FORMAT_A8B8G8R8,
-	//!\~english	32 bits 8888 ARGB in sRGB colour space.
-	//!\~french		32 bits 8888 sRGB dans l'espace de couleurs sRGB.
 	ePIXEL_FORMAT_A8R8G8B8_SRGB,
-	//!\~english	32 bits 8888 ABGR in sRGB colour space.
-	//!\~french		32 bits 8888 ABGR dans l'espace de couleurs sRGB.
 	ePIXEL_FORMAT_A8B8G8R8_SRGB,
-	//!\~english	Half float RGB.
-	//!\~french		Half float RGB.
 	ePIXEL_FORMAT_RGB16F,
-	//!\~english	Half float ARGB.
-	//!\~french		Half float ARGB.
-	ePIXEL_FORMAT_ARGB16F,
-	//!\~english	Half float RGB on VRAM, Float RGB on RAM.
-	//!\~french		RGB en half float en VRAM, et en float en RAM.
-	ePIXEL_FORMAT_RGB16F32F,
-	//!\~english	Half float ARGB on VRAM, Float ARGB on RAM.
-	//!\~french		ARGB en half float en VRAM, et en float en RAM.
-	ePIXEL_FORMAT_ARGB16F32F,
-	//!\~english	32 bits float RGB.
-	//!\~french		RGB en flottants 32 bits.
+	ePIXEL_FORMAT_RGBA16F,
 	ePIXEL_FORMAT_RGB32F,
-	//!\~english	32 bits float ARGB.
-	//!\~french		ARGB en flottants 32 bits.
-	ePIXEL_FORMAT_ARGB32F,
-	//!\~english	DXT1 8 bits compressed format.
-	//!\~french		Format compress� DXT1 8 bits.
+	ePIXEL_FORMAT_RGBA32F,
 	ePIXEL_FORMAT_DXTC1,
-	//!\~english	DXT3 16 bits compressed format.
-	//!\~french		Format compress� DXT3 16 bits.
 	ePIXEL_FORMAT_DXTC3,
-	//!\~english	DXT5 16 bits compressed format.
-	//!\~french		Format compress� DXT5 16 bits.
 	ePIXEL_FORMAT_DXTC5,
-	//!\~english	YUY2 16 bits compressed format.
-	//!\~french		Format compress� YUY2 16 bits.
-	ePIXEL_FORMAT_YUY2,
-	//!\~english	Depth 16 bits.
-	//!\~french		Profondeur 16 bits.
 	ePIXEL_FORMAT_D16,
-	//!\~english	Depth 24 bits.
-	//!\~french		Profondeur 24 bits.
-	ePIXEL_FORMAT_D24,
-	//!\~english	Depth 24 bits, Stencil 8 bits.
-	//!\~french		Profondeur 24 bits, Stencil 8 bits.
 	ePIXEL_FORMAT_D24S8,
-	//!\~english	Depth 32 bits.
-	//!\~french		Profondeur 32 bits.
 	ePIXEL_FORMAT_D32,
-	//!\~english	Depth 32 bits floating point.
-	//!\~french		Profondeur en float 32 bits.
 	ePIXEL_FORMAT_D32F,
-	//!\~english	Stencil 1 bit.
-	//!\~french		Stencil 1 bit.
-	ePIXEL_FORMAT_S1,
-	//!\~english	Stencil 8 bits.
-	//!\~french		Stencil 8 bits.
+	ePIXEL_FORMAT_D32FS8,
 	ePIXEL_FORMAT_S8,
 	ePIXEL_FORMAT_COUNT,
 }	ePIXEL_FORMAT;
 
 // eRENDERER_TYPE
 [
-	uuid( 30F8D353-04EA-4041-A67C-C421945DF1D2 )
+	uuid( 30F8D353-04EA-4041-A67C-C421945DF1D2 ),
+	helpstring( "Castor3D supported renderer types enumeration." )
 ]
 typedef enum
 {
-	eRENDERER_TYPE_OPENGL,
+	eRENDERER_TYPE_OPENGL3,
+	eRENDERER_TYPE_OPENGL4,
+	eRENDERER_TYPE_VULKAN,
 }	eRENDERER_TYPE;
 
-// eBUFFER_COMPONENT
-[
-	uuid( B429F5EC-7A4E-41AF-BD64-E8926FDEC31F )
-]
-typedef enum
-{
-	eBUFFER_COMPONENT_NONE = 0,
-	eBUFFER_COMPONENT_COLOUR = 1 << 0,
-	eBUFFER_COMPONENT_DEPTH = 1 << 1,
-	eBUFFER_COMPONENT_STENCIL = 1 << 2,
-}	eBUFFER_COMPONENT;
-
 // eLIGHT_TYPE
 [
-	uuid( B8F60AF7-CDA2-417B-86B0-ADACD30A359E )
-]
-typedef enum
-{
-	eWINDOW_BUFFER_NONE,
-	eWINDOW_BUFFER_FRONT_LEFT,
-	eWINDOW_BUFFER_FRONT_RIGHT,
-	eWINDOW_BUFFER_BACK_LEFT,
-	eWINDOW_BUFFER_BACK_RIGHT,
-	eWINDOW_BUFFER_FRONT,
-	eWINDOW_BUFFER_BACK,
-	eWINDOW_BUFFER_LEFT,
-	eWINDOW_BUFFER_RIGHT,
-	eWINDOW_BUFFER_FRONT_AND_BACK,
-	eWINDOW_BUFFER_COUNT
-}	eWINDOW_BUFFER;
-
-// eFRAMEBUFFER_TARGET
-[
-	uuid( BC42B057-F8C3-4358-92D3-E81246E66475 )
-]
-typedef enum
-{
-	//!\~english	Frame buffer is bound as a target for draws.
-	//!\~french		Le tampon d'image est activé en tant que cible pour les rendus.
-	eFRAMEBUFFER_TARGET_DRAW,
-	//!\~english	Frame buffer is bound as a target for reads.
-	//!\~french		Le tampon d'image est activé en tant que cible pour les lectures.
-	eFRAMEBUFFER_TARGET_READ,
-	//!\~english	Frame buffer is bound as a target for reads and draws.
-	//!\~french		Le tampon d'image est activé en tant que cible pour les lectures et les rendus.
-	eFRAMEBUFFER_TARGET_BOTH,
-	eFRAMEBUFFER_TARGET_COUNT
-}	eFRAMEBUFFER_TARGET;
-
-// eFRAMEBUFFER_MODE
-[
-	uuid( 286C666E-985F-4458-A8B9-02F1C2625591 )
-]
-typedef enum
-{
-	//!\~english	Frame buffer is bound for configuration.
-	//!\~french		Le tampon d'image est activé pour configuration.
-	eFRAMEBUFFER_MODE_CONFIG,
-	//!\~english	Frame buffer is bound and FrameBuffer::setDrawBuffers is called automatically.
-	//!\~french		Le tampon d'image est activé et FrameBuffer::SetDrawBuffers est appelée automatiquement.
-	eFRAMEBUFFER_MODE_AUTOMATIC,
-	//!\~english	Frame buffer is bound and user must call FrameBuffer::SetDrawBuffers if he wants.
-	//!\~french		Le tampon d'image est activé et l'utilisateur doit appeler FrameBuffer::SetDrawBuffers s'il veut.
-	eFRAMEBUFFER_MODE_MANUAL,
-	eFRAMEBUFFER_MODE_COUNT
-}	eFRAMEBUFFER_MODE;
-
-// eATTACHMENT_POINT
-[
-	uuid( F8B71698-1A73-4E55-85F4-1A742AC72724 )
-]
-typedef enum
-{
-	eATTACHMENT_POINT_NONE,
-	eATTACHMENT_POINT_COLOUR,
-	eATTACHMENT_POINT_DEPTH,
-	eATTACHMENT_POINT_STENCIL,
-	eATTACHMENT_POINT_DEPTH_STENCIL,
-	eATTACHMENT_POINT_COUNT
-}	eATTACHMENT_POINT;
-
-// eATTACHMENT_TYPE
-[
-	uuid( 719F1318-C331-449F-AF26-CB87D2CF525E )
-]
-typedef enum
-{
-	eATTACHMENT_TYPE_TEXTURE,
-	EATTACHMENT_TYPE_BUFFER,
-	EATTACHMENT_TYPE_COUNT
-}	eATTACHMENT_TYPE;
-
-// eLIGHT_TYPE
-[
-	uuid( 084CFBD9-923F-40AD-8008-0BF71D274051 )
+	uuid( 084CFBD9-923F-40AD-8008-0BF71D274051 ),
+	helpstring( "Castor3D light types enumeration." )
 ]
 typedef enum
 {
@@ -274,7 +116,8 @@ typedef enum
 
 // eMOVABLE_TYPE
 [
-	uuid( 8A15F144-5401-40C1-BF16-126783598F51 )
+	uuid( 8A15F144-5401-40C1-BF16-126783598F51 ),
+	helpstring( "Castor3D movable types enumeration." )
 ]
 typedef enum
 {
@@ -287,7 +130,8 @@ typedef enum
 
 // eOVERLAY_TYPE
 [
-	uuid( A6E2293D-371E-4D83-9075-02778A546FA5 )
+	uuid( A6E2293D-371E-4D83-9075-02778A546FA5 ),
+	helpstring( "Castor3D overlay types enumeration." )
 ]
 typedef enum
 {
@@ -296,56 +140,10 @@ typedef enum
 	eOVERLAY_TYPE_TEXT,
 }	eOVERLAY_TYPE;
 
-// eTEXT_WRAPPING_MODE
-[
-	uuid( 41DE0D68-CE43-4601-8B75-63D193E2A74C )
-]
-typedef enum
-{
-	eTEXT_WRAPPING_MODE_NONE,
-	eTEXT_WRAPPING_MODE_BREAK,
-	eTEXT_WRAPPING_MODE_BREAK_WORDS,
-}	eTEXT_WRAPPING_MODE;
-
-// eHALIGN
-[
-	uuid( 9E5C0496-1EA0-498D-92E7-C595E6E10B69 )
-]
-typedef enum
-{
-	//!\~english	Aligned on the left.
-	//!\~french		Aligné à gauche.
-	eHALIGN_LEFT,
-	//!\~english	Centered horizontally.
-	//!\~french		Centré, horizontalement.
-	eHALIGN_CENTER,
-	//!\~english	Aligned on the right.
-	//!\~french		Aligné à droite.
-	eHALIGN_RIGHT,
-	eHALIGN_COUNT
-}	eHALIGN;
-
-// eVALIGN
-[
-	uuid( 9666971B-A992-45C8-A9FE-88CD97F878FC )
-]
-typedef enum
-{
-	//!\~english	Aligned on the top.
-	//!\~french		Aligné en haut.
-	eVALIGN_TOP,
-	//!\~english	Centered vertically.
-	//!\~french		Centré, verticalement.
-	eVALIGN_CENTER,
-	//!\~english	Aligned on the bottom.
-	//!\~french		Aligné en bas.
-	eVALIGN_BOTTOM,
-	eVALIGN_COUNT
-}	eVALIGN;
-
 // eBORDER_POSITION
 [
-	uuid( B78BF8F8-8A36-4AB4-B8C8-3AE85D9FD3F0 )
+	uuid( B78BF8F8-8A36-4AB4-B8C8-3AE85D9FD3F0 ),
+	helpstring( "Castor3D border positions enumeration." )
 ]
 typedef enum
 {
@@ -354,17 +152,65 @@ typedef enum
 	eBORDER_POSITION_EXTERNAL,
 }	eBORDER_POSITION;
 
-// eTEXT_TEXTURING_MODE
+// eTEXT_WRAPPING_MODE
 [
-	uuid( 5C5E8371-D047-4652-95E6-62AF189EF357 )
+	uuid( 41DE0D68-CE43-4601-8B75-63D193E2A74C ),
+	helpstring( "Castor3D text wrapping modes enumeration." )
 ]
 typedef enum
 {
-	//!\~english The texture is repeated on each character of the text.
-	//!\~french		\~french La texture est répétée sut chaque caractère du texte.
+	eTEXT_WRAPPING_MODE_NONE,
+	eTEXT_WRAPPING_MODE_BREAK,
+	eTEXT_WRAPPING_MODE_BREAK_WORDS,
+}	eTEXT_WRAPPING_MODE;
+
+// eTEXT_LINE_SPACING_MODE
+[
+	uuid( 7319C53A-C66B-49EE-BFE8-F43D6A824328 ),
+	helpstring( "Castor3D line spacing enumeration." )
+]
+typedef enum
+{
+	eTEXT_LINE_SPACING_MODE_OWN_HEIGHT,
+	eTEXT_LINE_SPACING_MODE_MAX_LINE_HEIGHT,
+	ETEXT_LINE_SPACING_MODE_MAX_FONT_HEIGHT,
+	eTEXT_LINE_SPACING_MODE_COUNT
+}	eTEXT_LINE_SPACING_MODE;
+
+// eHALIGN
+[
+	uuid( 9E5C0496-1EA0-498D-92E7-C595E6E10B69 ),
+	helpstring( "Castor3D text horizontal alignments enumeration." )
+]
+typedef enum
+{
+	eHALIGN_LEFT,
+	eHALIGN_CENTER,
+	eHALIGN_RIGHT,
+	eHALIGN_COUNT
+}	eHALIGN;
+
+// eVALIGN
+[
+	uuid( 9666971B-A992-45C8-A9FE-88CD97F878FC ),
+	helpstring( "Castor3D text vertical alignments enumeration." )
+]
+typedef enum
+{
+	eVALIGN_TOP,
+	eVALIGN_CENTER,
+	eVALIGN_BOTTOM,
+	eVALIGN_COUNT
+}	eVALIGN;
+
+// eTEXT_TEXTURING_MODE
+[
+	uuid( 5C5E8371-D047-4652-95E6-62AF189EF357 ),
+	helpstring( "Castor3D text texturing modes enumeration." )
+]
+typedef enum
+{
 	eTEXT_TEXTURING_MODE_LETTER,
-	//!\~english The texture is applied on the whole text.
-	//!\~french		\~french La texture est appliquée sur tout le texte.
 	eTEXT_TEXTURING_MODE_TEXT,
 	eTEXT_TEXTURING_MODE_COUNT
 }	eTEXT_TEXTURING_MODE;
@@ -381,153 +227,48 @@ typedef enum
 	eVIEWPORT_TYPE_COUNT,
 }	eVIEWPORT_TYPE;
 
-// eCULLING
-[
-	uuid( 554ABC06-2FF9-46DB-80BB-D5E80EDC5DBA )
-]
-typedef enum
-{
-	//!\~english	No face culled.
-	//!\~french		Aucune face supprimée.
-	eCULLING_NONE,
-	//!\~english	Front faces are culled.
-	//!\~french		Faces avant supprimées.
-	eCULLING_FRONT,
-	//!\~english	Back face are culled.
-	//!\~french		Faces arrière supprimées.
-	eCULLING_BACK,
-	//!\~english	Back and front faces are culled.
-	//!\~french		Faces avant et arrière supprimées.
-	eCULLING_FRONT_AND_BACK,
-	eCULLING_COUNT
-}	eCULLING;
-
-// eQUERY_TYPE
-[
-	uuid( 85903E12-A1C9-49F5-B5A9-2304FDDD38F6 )
-]
-typedef enum
-{
-	eQUERY_TYPE_TIME_ELAPSED,
-	eQUERY_TYPE_SAMPLES_PASSED,
-	eQUERY_TYPE_ANY_SAMPLES_PASSED,
-	eQUERY_TYPE_PRIMITIVES_GENERATED,
-	eQUERY_TYPE_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN,
-	eQUERY_TYPE_ANY_SAMPLES_PASSED_CONSERVATIVE,
-	eQUERY_TYPE_TIMESTAMP,
-	eQUERY_TYPE_COUNT
-}	eQUERY_TYPE;
-
-// eQUERY_INFO
-[
-	uuid( 7822D1F2-25D8-4A01-B7AE-9E8F6DE0F109 )
-]
-typedef enum
-{
-	eQUERY_INFO_RESULT,
-	eQUERY_INFO_RESULT_AVAILABLE,
-	eQUERY_INFO_RESULT_NO_WAIT,
-	eQUERY_INFO_COUNT
-}	eQUERY_INFO;
-
 // eANIMATION_TYPE
 [
-	uuid( 978995A1-5187-477B-B645-66FC3265DEE5 )
+	uuid( 978995A1-5187-477B-B645-66FC3265DEE5 ),
+	helpstring( "Castor3D Animable objects enumeration." )
 ]
 typedef enum
 {
-	//!\~english	Scene node animation.
-	//!\~french		Animation de noeud de scène.
 	eANIMATION_TYPE_MOVABLE,
-	//!\~english	Skeleton animation.
-	//!\~french		Animation de squelette.
 	eANIMATION_TYPE_SKELETON,
-	//!\~english	Submesh animation (morphing).
-	//!\~french		Animation de sous-maillage (morphing).
 	eANIMATION_TYPE_MESH,
 	eANIMATION_TYPE_COUNT
 }	eANIMATION_TYPE;
 
-// eINTERPOLATOR_TYPE
-[
-	uuid( 01426677-A58B-46DA-9685-EF18AD909C64 )
-]
-typedef enum
-{
-	//!\~english	No interpolation.
-	//!\~french		Pas d'interpolation.
-	eINTERPOLATOR_TYPE_NEAREST,
-	//!\~english	Linear mode.
-	//!\~french		Mode linéaire.
-	eINTERPOLATOR_TYPE_LINEAR,
-	eINTERPOLATOR_TYPE_COUNT
-}	eINTERPOLATOR_TYPE;
-
 // eANIMATION_STATE
 [
-	uuid( 7657DCA9-7009-43A9-949D-4A6CE59682CF )
+	uuid( 7657DCA9-7009-43A9-949D-4A6CE59682CF ),
+	helpstring( "Castor3D Animation states enumeration." )
 ]
 typedef enum
 {
-	//!\~english	Playing animation state.
-	//!\~french		Animation en cours de lecture.
 	eANIMATION_STATE_PLAYING,
-	//!\~english	Stopped animation state.
-	//!\~french		Animation stoppée.
 	eANIMATION_STATE_STOPPED,
-	//!\~english	Paused animation state.
-	//!\~french		Animation en pause.
 	eANIMATION_STATE_PAUSED,
 	eANIMATION_STATE_COUNT
 }	eANIMATION_STATE;
 
 // eSKELETON_ANIMATION_OBJECT_TYPE
 [
-	uuid( BCBC3FF1-78EE-4147-BC16-CEC568D93E81 )
+	uuid( BCBC3FF1-78EE-4147-BC16-CEC568D93E81 ),
+	helpstring( "Castor3D Skeleton animation objects enumeration." )
 ]
 typedef enum
 {
-	//!\~english	Node objects.
-	//!\~french		Objets noeud.
 	eSKELETON_ANIMATION_OBJECT_TYPE_NODE,
-	//!\~english	Bone objects.
-	//!\~french		Objets os.
 	eSKELETON_ANIMATION_OBJECT_TYPE_BONE,
 	eSKELETON_ANIMATION_OBJECT_TYPE_COUNT
 }	eSKELETON_ANIMATION_OBJECT_TYPE;
 
-// eTOPOLOGY
-[
-	uuid( 02DDE08E-075A-4047-9F32-44B0DE80257D )
-]
-typedef enum
-{
-	eTOPOLOGY_POINTS,
-	eTOPOLOGY_LINES,
-	eTOPOLOGY_LINE_LOOP,
-	eTOPOLOGY_LINE_STRIP,
-	eTOPOLOGY_TRIANGLES,
-	eTOPOLOGY_TRIANGLE_STRIPS,
-	eTOPOLOGY_TRIANGLE_FAN,
-}	eTOPOLOGY;
-
-// ePROJECTION_DIRECTION
-[
-	uuid( CA9AAB5D-C834-4C7A-A854-67EEB124DC4C )
-]
-typedef enum
-{
-	ePROJECTION_DIRECTION_FRONT,
-	ePROJECTION_DIRECTION_BACK,
-	ePROJECTION_DIRECTION_LEFT,
-	ePROJECTION_DIRECTION_RIGHT,
-	ePROJECTION_DIRECTION_TOP,
-	ePROJECTION_DIRECTION_BOTTOM,
-}	ePROJECTION_DIRECTION;
-
 // eTEXTURE_CHANNEL
 [
-	uuid( C0F75923-E03E-49B7-B7C9-EFAC55630B7F )
+	uuid( C0F75923-E03E-49B7-B7C9-EFAC55630B7F ),
+	helpstring( "Castor3D Texture channels enumeration." )
 ]
 typedef enum
 {
@@ -548,69 +289,10 @@ typedef enum
 	eTEXTURE_CHANNEL_ALL = 0x00000FFF,
 }	eTEXTURE_CHANNEL;
 
-// eTEXTURE_UVW
-[
-	uuid( B3599F8A-5429-4866-925E-0FE7B78D1F8A )
-]
-typedef enum
-{
-	eTEXTURE_UVW_U,
-	eTEXTURE_UVW_V,
-	eTEXTURE_UVW_W,
-	eTEXTURE_UVW_COUNT
-}	eTEXTURE_UVW;
-
-// eRGB_BLEND_FUNC
-[
-	uuid( 1A330154-AE9E-44E0-865F-BA0661671228 )
-]
-typedef enum
-{
-	eRGB_BLEND_FUNC_NONE,
-	eRGB_BLEND_FUNC_FIRST_ARG,
-	eRGB_BLEND_FUNC_ADD,
-	eRGB_BLEND_FUNC_ADD_SIGNED,
-	eRGB_BLEND_FUNC_MODULATE,
-	eRGB_BLEND_FUNC_INTERPOLATE,
-	eRGB_BLEND_FUNC_SUBTRACT,
-	eRGB_BLEND_FUNC_DOT3_RGB,
-	eRGB_BLEND_FUNC_DOT3_RGBA,
-}	eRGB_BLEND_FUNC;
-
-// eALPHA_BLEND_FUNC
-[
-	uuid( CF775A66-A035-449A-BEE1-E7F4B8070A9C )
-]
-typedef enum
-{
-	eALPHA_BLEND_FUNC_NONE,
-	eALPHA_BLEND_FUNC_FIRST_ARG,
-	eALPHA_BLEND_FUNC_ADD,
-	eALPHA_BLEND_FUNC_ADD_SIGNED,
-	eALPHA_BLEND_FUNC_MODULATE,
-	eALPHA_BLEND_FUNC_INTERPOLATE,
-	eALPHA_BLEND_FUNC_SUBSTRACT,
-}	eALPHA_BLEND_FUNC;
-
-// eBLEND_SOURCE
-[
-	uuid( 312C3EA5-F1C9-4192-B675-3CCFFFFDAAB4 )
-]
-typedef enum
-{
-	eBLEND_SOURCE_TEXTURE,
-	eBLEND_SOURCE_TEXTURE0,
-	eBLEND_SOURCE_TEXTURE1,
-	eBLEND_SOURCE_TEXTURE2,
-	eBLEND_SOURCE_TEXTURE3,
-	eBLEND_SOURCE_CONSTANT,
-	eBLEND_SOURCE_DIFFUSE,
-	eBLEND_SOURCE_PREVIOUS,
-}	eBLEND_SOURCE;
-
 // eCOMPARISON_FUNC
 [
-	uuid( 64B09ACE-F388-40FE-83BE-DB4A85BCB84E )
+	uuid( 64B09ACE-F388-40FE-83BE-DB4A85BCB84E ),
+	helpstring( "Castor3D Comparison functions enumeration." )
 ]
 typedef enum
 {
@@ -626,7 +308,8 @@ typedef enum
 
 // eTEXTURE_TYPE
 [
-	uuid( 7B89A147-BC55-40AC-B720-435B74348074 )
+	uuid( 7B89A147-BC55-40AC-B720-435B74348074 ),
+	helpstring( "Castor3D Texture types enumeration." )
 ]
 typedef enum
 {
@@ -643,77 +326,52 @@ typedef enum
 	eTEXTURE_TYPE_COUNT,
 }	eTEXTURE_TYPE;
 
-// eTEXTURE_STORAGE_TYPE
+// eBORDER_COLOUR
 [
-	uuid( 72CC163D-1BDB-463C-A554-3F3D076D5947 )
+	uuid( B8F60AF7-CDA2-417B-86B0-ADACD30A359E ),
+	helpstring( "Castor3D Border colours enumeration." )
 ]
 typedef enum
 {
-	eTEXTURE_STORAGE_TYPE_BUFFER,
-	eTEXTURE_STORAGE_TYPE_1D,
-	eTEXTURE_STORAGE_TYPE_1DARRAY,
-	eTEXTURE_STORAGE_TYPE_2D,
-	eTEXTURE_STORAGE_TYPE_2DARRAY,
-	eTEXTURE_STORAGE_TYPE_2DMS,
-	eTEXTURE_STORAGE_TYPE_3D,
-	eTEXTURE_STORAGE_TYPE_CUBE,
-	eTEXTURE_STORAGE_TYPE_CUBEARRAY,
-	eTEXTURE_STORAGE_TYPE_COUNT,
-}	eTEXTURE_STORAGE_TYPE;
+	eBORDER_COLOUR_FLOAT_TRANSPARENT_BLACK,
+	eBORDER_COLOUR_INT_TRANSPARENT_BLACK,
+	eBORDER_COLOUR_FLOAT_OPAQUE_BLACK,
+	eBORDER_COLOUR_INT_OPAQUE_BLACK,
+	eBORDER_COLOUR_FLOAT_OPAQUE_WHITE,
+	eBORDER_COLOUR_INT_OPAQUE_WHITE,
+	eBORDER_COLOUR_COUNT
+}	eBORDER_COLOUR;
 
-// eCUBE_MAP_FACE
+// eFILTER_MODE
 [
-	uuid( 1C5D2238-2BD3-471E-B94D-F3E54E933A23 )
+	uuid( D569C3E8-B4C6-454C-AB73-836D2D0489C3 ),
+	helpstring( "Castor3D Filter modes enumeration." )
 ]
 typedef enum
 {
-	//!\~english Face on positive X
-	//!\~french Face des X positifs.
-	eCUBE_MAP_FACE_POSITIVE_X,
-	//!\~english Face on negative X
-	//!\~french Face des X négatifs.
-	eCUBE_MAP_FACE_NEGATIVE_X,
-	//!\~english Face on positive Y
-	//!\~french Face des Y positifs.
-	eCUBE_MAP_FACE_POSITIVE_Y,
-	//!\~english Face on negative Y
-	//!\~french Face des Y négatifs.
-	eCUBE_MAP_FACE_NEGATIVE_Y,
-	//!\~english Face on positive Z
-	//!\~french Face des Z positifs.
-	eCUBE_MAP_FACE_POSITIVE_Z,
-	//!\~english Face on negative Z
-	//!\~french Face des Z négatifs.
-	eCUBE_MAP_FACE_NEGATIVE_Z,
-	eCUBE_MAP_FACE_COUNT
-}	eCUBE_MAP_FACE;
+	eFILTER_MODE_UNDEFINED,
+	eFILTER_MODE_NEAREST,
+	eFILTER_MODE_LINEAR,
+	eFILTER_MODE_COUNT,
+}	eFILTER_MODE;
 
-// eCOMPARISON_MODE
+// eMIPMAP_MODE
 [
-	uuid( 9479E854-B04C-4697-B807-2A9FF48E6F9F )
+	uuid( 3C873590-292E-4229-992A-95EAA46EC353 ),
+	helpstring( "Castor3D Mipmap modes enumeration." )
 ]
 typedef enum
 {
-	eCOMPARISON_MODE_NONE,
-	eCOMPARISON_MODE_REF_TO_TEXTURE,
-	eCOMPARISON_MODE_COUNT
-}	eCOMPARISON_MODE;
-
-// eINTERPOLATION_MODE
-[
-	uuid( D569C3E8-B4C6-454C-AB73-836D2D0489C3 )
-]
-typedef enum
-{
-	eINTERPOLATION_MODE_UNDEFINED,
-	eINTERPOLATION_MODE_NEAREST,
-	eINTERPOLATION_MODE_LINEAR,
-	eINTERPOLATION_MODE_COUNT,
-}	eINTERPOLATION_MODE;
+	eMIPMAP_MODE_UNDEFINED,
+	eMIPMAP_MODE_NEAREST,
+	eMIPMAP_MODE_LINEAR,
+	eMIPMAP_MODE_COUNT,
+}	eMIPMAP_MODE;
 
 // eWRAP_MODE
 [
-	uuid( 7F174FD6-49BC-4430-B8BB-1448FCD393D6 )
+	uuid( 7F174FD6-49BC-4430-B8BB-1448FCD393D6 ),
+	helpstring( "Castor3D Wrap modes enumeration." )
 ]
 typedef enum
 {
@@ -724,201 +382,63 @@ typedef enum
 	eWRAP_MODE_COUNT,
 }	eWRAP_MODE;
 
-// eINTERPOLATION_FILTER
+// eCOMPARE_OP
 [
-	uuid( 3C873590-292E-4229-992A-95EAA46EC353 )
+	uuid( 9479E854-B04C-4697-B807-2A9FF48E6F9F ),
+	helpstring( "Castor3D Compare operators enumeration." )
 ]
 typedef enum
 {
-	eINTERPOLATION_FILTER_MIN,
-	eINTERPOLATION_FILTER_MAG,
-	eINTERPOLATION_FILTER_MIP,
-	eINTERPOLATION_FILTER_COUNT,
-}	eINTERPOLATION_FILTER;
+	eCOMPARE_OP_NONE,
+	eCOMPARE_OP_REF_TO_TEXTURE,
+	eCOMPARE_OP_COUNT
+}	eCOMPARE_OP;
 
-// eBLEND_OP
+// ePASS_TYPE
 [
-	uuid( 3AAC5392-A4B1-467B-9CFA-1ADEE49FE94A )
+	uuid( F2C5A760-E42D-466D-B6BF-1FF2EEF233B7 ),
+	helpstring( "Castor3D Pass types enumeration." )
 ]
 typedef enum
 {
-	eBLEND_OP_ADD,
-	eBLEND_OP_SUBSTRACT,
-	eBLEND_OP_REV_SUBSTRACT,
-	eBLEND_OP_MIN,
-	eBLEND_OP_MAX,
-}	eBLEND_OP;
+	ePASS_TYPE_LEGACY,
+	ePASS_TYPE_METALLIC_ROUGHNESS,
+	ePASS_TYPE_SPECULAR_GLOSSINESS,
+	ePASS_TYPE_COUNT
+}	ePASS_TYPE;
 
-// eBLEND
+// eINDEX_MAPPING_TYPE
 [
-	uuid( 6795B6CF-D15D-46AC-AB59-E3151ECBDA14 )
+	uuid( E8CE3C3D-986E-408C-A4A4-558A59588432 ),
+	helpstring( "Castor3D IndexMapping types enumeration." )
 ]
 typedef enum
 {
-	eBLEND_ZERO,
-	eBLEND_ONE,
-	eBLEND_SRC_COLOUR,
-	eBLEND_INV_SRC_COLOUR,
-	eBLEND_DST_COLOUR,
-	eBLEND_INV_DST_COLOUR,
-	eBLEND_SRC_ALPHA,
-	eBLEND_INV_SRC_ALPHA,
-	eBLEND_DST_ALPHA,
-	eBLEND_INV_DST_ALPHA,
-	eBLEND_CONSTANT,
-	eBLEND_INV_CONSTANT,
-	eBLEND_SRC_ALPHA_SATURATE,
-	eBLEND_SRC1_COLOUR,
-	eBLEND_INV_SRC1_COLOUR,
-	eBLEND_SRC1_ALPHA,
-	eBLEND_INV_SRC1_ALPHA,
-}	eBLEND;
+	eINDEX_MAPPING_TYPE_FACE,
+	eINDEX_MAPPING_TYPE_LINE,
+	eINDEX_MAPPING_TYPE_COUNT
+}	eINDEX_MAPPING_TYPE;
 
-// eBLEND_MODE
+// eBACKGROUND_TYPE
 [
-	uuid( 6799C951-00BB-4213-8ECB-5D9E47549B22 )
+	uuid( BD1DB4CE-093B-4225-9632-F73A4F8F29FD ),
+	helpstring( "Castor3D Background types enumeration." )
 ]
 typedef enum
 {
-	//!\~english Order dependent blending.
-	//!\~french Mélange dépendant de l'ordre.
-	eBLEND_MODE_NONE,
-	//!\~english Order independent, add the components.
-	//!\~french Mélange indépendant de l'ordre, additionnant les composantes.
-	eBLEND_MODE_ADDITIVE,
-	//!\~english Order independent, multiply the components.
-	//!\~french Indépendant de l'ordre, multipliant les composantes.
-	eBLEND_MODE_MULTIPLICATIVE,
-	//!\~english Order dependent, interpolate the components.
-	//!\~french Indépendant de l'ordre, interpolant les composantes.
-	eBLEND_MODE_INTERPOLATIVE,
-	//!\~english Order independent, using A-buffer, not implemented yet.
-	//!\~french Indépendant de l'ordre, utilisant les A-Buffer (non implémenté).
-	eBLEND_MODE_A_BUFFER,
-	//!\~english Order independent, using depth peeling, not implemented yet.
-	//!\~french Indépendant de l'ordre, utilisant le pelage en profondeur (non implémenté).
-	eBLEND_MODE_DEPTH_PEELING,
-	eBLEND_MODE_COUNT
-}	eBLEND_MODE;
-
-// eDEPTH_FUNC
-[
-	uuid( 540E7F7C-6E6D-4C09-85F3-62237E92DC8E )
-]
-typedef enum
-{
-	eDEPTH_FUNC_NEVER,
-	eDEPTH_FUNC_LESS,
-	eDEPTH_FUNC_EQUAL,
-	eDEPTH_FUNC_LEQUAL,
-	eDEPTH_FUNC_GREATER,
-	eDEPTH_FUNC_NOTEQUAL,
-	eDEPTH_FUNC_GEQUAL,
-	eDEPTH_FUNC_ALWAYS,
-}	eDEPTH_FUNC;
-
-// eWRITING_MASK
-[
-	uuid( F2BE12B9-AECB-430A-8542-9BE953559A1E )
-]
-typedef enum
-{
-	eWRITING_MASK_ZERO,
-	eWRITING_MASK_ALL,
-}	eWRITING_MASK;
-
-// eSTENCIL_FUNC
-[
-	uuid( 479C15A3-B00E-462F-89FD-C3D1DBAE7BDE )
-]
-typedef enum
-{
-	eSTENCIL_FUNC_NEVER,
-	eSTENCIL_FUNC_LESS,
-	eSTENCIL_FUNC_EQUAL,
-	eSTENCIL_FUNC_LEQUAL,
-	eSTENCIL_FUNC_GREATER,
-	eSTENCIL_FUNC_NOTEQUAL,
-	eSTENCIL_FUNC_GEQUAL,
-	eSTENCIL_FUNC_ALWAYS,
-}	eSTENCIL_FUNC;
-
-// eSTENCIL_OP
-[
-	uuid( 274FBB17-6AD8-4EF5-AA05-239E9C327E86 )
-]
-typedef enum
-{
-	eSTENCIL_OP_KEEP,
-	eSTENCIL_OP_ZERO,
-	eSTENCIL_OP_REPLACE,
-	eSTENCIL_OP_INCR,
-	eSTENCIL_OP_INCR_WRAP,
-	eSTENCIL_OP_DECR,
-	eSTENCIL_OP_DECR_WRAP,
-	eSTENCIL_OP_INVERT,
-}	eSTENCIL_OP;
-
-// eFILL_MODE
-[
-	uuid( 7C2540A8-298D-4170-89A7-7D5CBF61A126 )
-]
-typedef enum
-{
-	eFILL_MODE_POINT,
-	eFILL_MODE_LINE,
-	eFILL_MODE_SOLID,
-}	eFILL_MODE;
-
-// eFACE
-[
-	uuid( C41A62D1-AC5F-4A2B-A902-9621F680FAF2 )
-]
-typedef enum
-{
-	eFACE_NONE,
-	eFACE_FRONT,
-	eFACE_BACK,
-	eFACE_FRONT_AND_BACK,
-}	eFACE;
-
-// eTEXT_LINE_SPACING_MODE
-[
-	uuid( 7319C53A-C66B-49EE-BFE8-F43D6A824328 )
-]
-typedef enum
-{
-	//!\~english	The height of each line is its own height.
-	//!\~french		La hauteur d'une ligne est sa propre hauteur.
-	eTEXT_LINE_SPACING_MODE_OWN_HEIGHT,
-	//!\~english	The height of the lines is the maximum height between them.
-	//!\~french		La hauteur des lignes est la plus grande hauteur parmi elles.
-	eTEXT_LINE_SPACING_MODE_MAX_LINE_HEIGHT,
-	//!\~english	The height of the lines is the maximum height from the font's characters.
-	//!\~french		La hauteur des lignes est la plus grande hauteur des caractères de la police.
-	ETEXT_LINE_SPACING_MODE_MAX_FONT_HEIGHT,
-	eTEXT_LINE_SPACING_MODE_COUNT
-}	eTEXT_LINE_SPACING_MODE;
-
-// eSHADER_TYPE
-[
-	uuid( D2095EB6-4629-4764-BA23-CDBC7359084A )
-]
-typedef enum
-{
-	eSHADER_TYPE_NONE = -1,
-	eSHADER_TYPE_VERTEX,
-	eSHADER_TYPE_HULL,
-	eSHADER_TYPE_DOMAIN,
-	eSHADER_TYPE_GEOMETRY,
-	eSHADER_TYPE_PIXEL,
-	eSHADER_TYPE_COMPUTE,
-}	eSHADER_TYPE;
+	eBACKGROUND_TYPE_COLOUR,
+	eBACKGROUND_TYPE_IMAGE,
+	eBACKGROUND_TYPE_SKYBOX,
+	eBACKGROUND_TYPE_COUNT
+}	eBACKGROUND_TYPE;
 
 interface IRgbaColour;
 interface IRgbColour;
+interface IHdrRgbaColour;
+interface IHdrRgbColour;
 interface IVector2D;
 interface IVector3D;
+interface IVector4D;
 interface IAngle;
 interface IQuaternion;
 interface IMatrix4x4;
@@ -964,7 +484,7 @@ interface IScene;
 // IRgbaColour
 [
 	uuid( CC83C7E1-7669-431D-B174-FB224CD9F0D6 ),
-	helpstring( "RGBA Colour interface" ),
+	helpstring( "Castor RGBA Colour interface" ),
 	dual,
 	oleautomation
 ]
@@ -985,7 +505,7 @@ interface IRgbaColour
 // IRgbColour
 [
 	uuid( E09F9926-CCEC-489E-99D0-1C0880866BA4 ),
-	helpstring( "RGB Colour interface" ),
+	helpstring( "Castor RGB Colour interface" ),
 	dual,
 	oleautomation
 ]
@@ -1004,7 +524,7 @@ interface IRgbColour
 // IHdrRgbaColour
 [
 	uuid( 6F382E53-FE95-48F2-869E-29899045C44D ),
-	helpstring( "RGBA HDR Colour interface" ),
+	helpstring( "Castor RGBA HDR Colour interface" ),
 	dual,
 	oleautomation
 ]
@@ -1025,7 +545,7 @@ interface IHdrRgbaColour
 // IHdrRgbColour
 [
 	uuid( 0DB28BF6-1F47-4552-A245-D921FCB86D26 ),
-	helpstring( "RGB HDR Colour interface" ),
+	helpstring( "Castor RGB HDR Colour interface" ),
 	dual,
 	oleautomation
 ]
@@ -1044,7 +564,7 @@ interface IHdrRgbColour
 // IVector2D
 [
 	uuid( B068FB7C-535D-4179-8C58-4E900E1D3265 ),
-	helpstring( "2D Vector interface" ),
+	helpstring( "Castor 2D Vector interface" ),
 	dual,
 	oleautomation
 ]
@@ -1057,16 +577,16 @@ interface IVector2D
 	[propget, id( 2 ), helpstring( "The Y coordinate" )] HRESULT Y( [out, retval] float * pVal );
 	[propput, id( 2 ), helpstring( "The Y coordinate" )] HRESULT Y( [in] float val );
 	// Methods
-	[id( 4 ), helpstring( "Negates each coordinate" )] HRESULT Negate();
-	[id( 5 ), helpstring( "Modifies Vector to make its length equal to 1" )] HRESULT Normalise();
-	[id( 6 ), helpstring( "Scalar product" )] HRESULT Dot( [in] IVector2D * val, [out, retval] float * pRet );
-	[id( 8 ), helpstring( "The vector length" )] HRESULT Length( [out, retval] float * pVal );
+	[id( 3 ), helpstring( "Negates each coordinate" )] HRESULT Negate();
+	[id( 4 ), helpstring( "Modifies Vector to make its length equal to 1" )] HRESULT Normalise();
+	[id( 5 ), helpstring( "Scalar product" )] HRESULT Dot( [in] IVector2D * val, [out, retval] float * pRet );
+	[id( 6 ), helpstring( "The vector length" )] HRESULT Length( [out, retval] float * pVal );
 };
 
 // IVector3D
 [
 	uuid( D57AB8FD-6CD1-4271-AFC8-C687A2208637 ),
-	helpstring( "3D Vector interface" ),
+	helpstring( "Castor 3D Vector interface" ),
 	dual,
 	oleautomation
 ]
@@ -1091,7 +611,7 @@ interface IVector3D
 // IVector4D
 [
 	uuid( 28A891B1-D29C-41F4-9C51-C6B4913DB0B9 ),
-	helpstring( "4D Vector interface" ),
+	helpstring( "Castor 4D Vector interface" ),
 	dual,
 	oleautomation
 ]
@@ -1117,7 +637,7 @@ interface IVector4D
 // IAngle
 [
 	uuid( 8C61B6CB-616A-4B2F-92BE-5A00511233EF ),
-	helpstring( "Angle interface" ),
+	helpstring( "Castor Angle interface" ),
 	dual,
 	oleautomation
 ]
@@ -1144,7 +664,7 @@ interface IAngle
 // IQuaternion
 [
 	uuid( B28DD02F-A3D5-48C1-89BB-E5B69B21455D ),
-	helpstring( "Quaternion interface" ),
+	helpstring( "Castor Quaternion interface" ),
 	dual,
 	oleautomation
 ]
@@ -1166,7 +686,7 @@ interface IQuaternion
 // IMatrix4x4
 [
 	uuid( 80CF5574-9CE8-4CF8-B402-F013A0A9BD4C ),
-	helpstring( "Square 4x4 matrix interface" ),
+	helpstring( "Castor Square 4x4 matrix interface" ),
 	dual,
 	oleautomation
 ]
@@ -1180,7 +700,7 @@ interface IMatrix4x4
 // IPosition
 [
 	uuid( AFBFFD86-1B3A-4217-900A-97E9B4CEB397 ),
-	helpstring( "2D Position interface" ),
+	helpstring( "Castor 2D Position interface" ),
 	dual,
 	oleautomation
 ]
@@ -1200,7 +720,7 @@ interface IPosition
 // ISize
 [
 	uuid( 8C3BBFE3-6894-4615-B19E-72243E7BF550 ),
-	helpstring( "2D Size interface" ),
+	helpstring( "Castor 2D Size interface" ),
 	dual,
 	oleautomation
 ]
@@ -1220,7 +740,7 @@ interface ISize
 // IRectangle
 [
 	uuid( 2E2DF1BB-83BE-4AEB-B183-6DEF2B7930B2 ),
-	helpstring( "2D Rectangle interface" ),
+	helpstring( "Castor 2D Rectangle interface" ),
 	dual,
 	oleautomation
 ]
@@ -1247,7 +767,7 @@ interface IRect
 // IGlyph
 [
 	uuid( D7252720-F639-4B97-8DF6-EAC59CF8A0B5 ),
-	helpstring( "Glyph interface" ),
+	helpstring( "Castor Glyph interface" ),
 	dual,
 	oleautomation
 ]
@@ -1320,7 +840,7 @@ interface IImage
 // ILogger
 [
 	uuid( 7C23A081-332D-40F2-B12E-2CBEDB5FB242 ),
-	helpstring( "Logger interface" ),
+	helpstring( "Castor Logger interface" ),
 	dual,
 	oleautomation
 ]
@@ -1336,128 +856,6 @@ interface ILogger
 	[id( 6 ), helpstring( "method LogInfo" )] HRESULT LogInfo( [in] BSTR msg );
 	[id( 7 ), helpstring( "method LogWarning" )] HRESULT LogWarning( [in] BSTR msg );
 	[id( 8 ), helpstring( "method LogError" )] HRESULT LogError( [in] BSTR msg );
-};
-
-// IBlendState
-[
-	uuid( 9F7F071A-18D5-403A-80C4-A934B85F35F7 ),
-	helpstring( "Castor3D BlendState interface" ),
-	dual,
-	oleautomation
-]
-interface IBlendState
-	: IDispatch
-{
-	[propget, id( 1 ), helpstring( "The independant blend enabled status" )] HRESULT IndependantBlendEnabled( [out, retval] boolean * pVal );
-	[propput, id( 1 ), helpstring( "The independant blend enabled status" )] HRESULT IndependantBlendEnabled( [in] boolean val );
-	[propget, id( 2 ), helpstring( "The blend factors" )] HRESULT BlendFactors( [out, retval] IRgbaColour ** pVal );
-	[propput, id( 2 ), helpstring( "The blend factors" )] HRESULT BlendFactors( [in] IRgbaColour * val );
-	[propget, id( 3 ), helpstring( "The blend enabled status, for nth unit" )] HRESULT BlendEnabled( [in] unsigned int index, [out, retval] boolean * pVal );
-	[propput, id( 3 ), helpstring( "The blend enabled status, for nth unit" )] HRESULT BlendEnabled( [in] unsigned int index, [in] boolean val );
-	[propget, id( 4 ), helpstring( "The source source RGB blend value, for nth unit" )] HRESULT RgbSrcBlend( [in] unsigned int index, [out, retval] eBLEND * pVal );
-	[propput, id( 4 ), helpstring( "The source source RGB blend value, for nth unit" )] HRESULT RgbSrcBlend( [in] unsigned int index, [in] eBLEND val );
-	[propget, id( 5 ), helpstring( "The source destination RGB blend value, for nth unit" )] HRESULT RgbDstBlend( [in] unsigned int index, [out, retval] eBLEND * pVal );
-	[propput, id( 5 ), helpstring( "The source destination RGB blend value, for nth unit" )] HRESULT RgbDstBlend( [in] unsigned int index, [in] eBLEND val );
-	[propget, id( 6 ), helpstring( "The RGB blend operator, for nth unit" )] HRESULT RgbBlendOp( [in] unsigned int index, [out, retval] eBLEND_OP * pVal );
-	[propput, id( 6 ), helpstring( "The RGB blend operator, for nth unit" )] HRESULT RgbBlendOp( [in] unsigned int index, [in] eBLEND_OP val );
-	[propget, id( 7 ), helpstring( "The source source Alpha blend value, for nth unit" )] HRESULT AlphaSrcBlend( [in] unsigned int index, [out, retval] eBLEND * pVal );
-	[propput, id( 7 ), helpstring( "The source source Alpha blend value, for nth unit" )] HRESULT AlphaSrcBlend( [in] unsigned int index, [in] eBLEND val );
-	[propget, id( 8 ), helpstring( "The source destination Alpha blend value, for nth unit" )] HRESULT AlphaDstBlend( [in] unsigned int index, [out, retval] eBLEND * pVal );
-	[propput, id( 8 ), helpstring( "The source destination Alpha blend value, for nth unit" )] HRESULT AlphaDstBlend( [in] unsigned int index, [in] eBLEND val );
-	[propget, id( 9 ), helpstring( "The Alpha blend operator, for nth unit" )] HRESULT AlphaBlendOp( [in] unsigned int index, [out, retval] eBLEND_OP * pVal );
-	[propput, id( 9 ), helpstring( "The Alpha blend operator, for nth unit" )] HRESULT AlphaBlendOp( [in] unsigned int index, [in] eBLEND_OP val );
-	[propget, id( 10 ), helpstring( "The render target write mask, for nth unit" )] HRESULT WriteMask( [in] unsigned int index, [out, retval] byte * pVal );
-	[propput, id( 10 ), helpstring( "The render target write mask, for nth unit" )] HRESULT WriteMask( [in] unsigned int index, [in] byte val );
-	[id( 11 ), helpstring( "The colour test mask" )] HRESULT SetColourMask( [in] eWRITING_MASK red, [in] eWRITING_MASK green, [in] eWRITING_MASK blue, [in] eWRITING_MASK alpha );
-};
-
-// IDepthStencilState
-[
-	uuid( 0BC058D9-CEB3-4155-AC8C-8642F6DAEE8C ),
-	helpstring( "Castor3D DepthStencilState interface" ),
-	dual,
-	oleautomation
-]
-interface IDepthStencilState
-	: IDispatch
-{
-	[propget, id( 1 ), helpstring( "The depth test enabled status" )] HRESULT DepthTest( [out, retval] boolean * pVal );
-	[propput, id( 1 ), helpstring( "The depth test enabled status" )] HRESULT DepthTest( [in] boolean val );
-	[propget, id( 2 ), helpstring( "The depth test function" )] HRESULT DepthFunc( [out, retval] eDEPTH_FUNC * pVal );
-	[propput, id( 2 ), helpstring( "The depth test function" )] HRESULT DepthFunc( [in] eDEPTH_FUNC val );
-	[propget, id( 3 ), helpstring( "The depth test mask" )] HRESULT DepthMask( [out, retval] eWRITING_MASK * pVal );
-	[propput, id( 3 ), helpstring( "The depth test mask" )] HRESULT DepthMask( [in] eWRITING_MASK val );
-	[propget, id( 4 ), helpstring( "The depth near distance" )] HRESULT DepthNear( [out, retval] double * pVal );
-	[propget, id( 5 ), helpstring( "The depth far distance" )] HRESULT DepthFar( [out, retval] double * pVal );
-	[propget, id( 6 ), helpstring( "The stencil test enabled status" )] HRESULT StencilTest( [out, retval] boolean * pVal );
-	[propput, id( 6 ), helpstring( "The stencil test enabled status" )] HRESULT StencilTest( [in] boolean val );
-	[propget, id( 7 ), helpstring( "The stencil test read mask" )] HRESULT StencilReadMask( [out, retval] unsigned long * pVal );
-	[propput, id( 7 ), helpstring( "The stencil test read mask" )] HRESULT StencilReadMask( [in] unsigned long val );
-	[propget, id( 8 ), helpstring( "The stencil test write mask" )] HRESULT StencilWriteMask( [out, retval] unsigned long * pVal );
-	[propput, id( 8 ), helpstring( "The stencil test write mask" )] HRESULT StencilWriteMask( [in] unsigned long val );
-	[propget, id( 9 ), helpstring( "The stencil test function, for the front faces" )] HRESULT StencilFrontFunc( [out, retval] eSTENCIL_FUNC * pVal );
-	[propput, id( 9 ), helpstring( "The stencil test function, for the front faces" )] HRESULT StencilFrontFunc( [in] eSTENCIL_FUNC val );
-	[propget, id( 10 ), helpstring( "The stencil test failed operation, for the front faces" )] HRESULT StencilFrontFailOp( [out, retval] eSTENCIL_OP * pVal );
-	[propput, id( 10 ), helpstring( "The stencil test failed operation, for the front faces" )] HRESULT StencilFrontFailOp( [in] eSTENCIL_OP val );
-	[propget, id( 11 ), helpstring( "The stencil test, depth test failed operation, for the front faces" )] HRESULT StencilFrontDepthFailOp( [out, retval] eSTENCIL_OP * pVal );
-	[propput, id( 11 ), helpstring( "The stencil test, depth test failed operation, for the front faces" )] HRESULT StencilFrontDepthFailOp( [in] eSTENCIL_OP val );
-	[propget, id( 12 ), helpstring( "The stencil test passed operation, for the front faces" )] HRESULT StencilFrontPassOp( [out, retval] eSTENCIL_OP * pVal );
-	[propput, id( 12 ), helpstring( "The stencil test passed operation, for the front faces" )] HRESULT StencilFrontPassOp( [in] eSTENCIL_OP val );
-	[propget, id( 13 ), helpstring( "The stencil test function, for the back faces" )] HRESULT StencilBackFunc( [out, retval] eSTENCIL_FUNC * pVal );
-	[propput, id( 13 ), helpstring( "The stencil test function, for the back faces" )] HRESULT StencilBackFunc( [in] eSTENCIL_FUNC val );
-	[propget, id( 14 ), helpstring( "The stencil test failed operation, for the back faces" )] HRESULT StencilBackFailOp( [out, retval] eSTENCIL_OP * pVal );
-	[propput, id( 14 ), helpstring( "The stencil test failed operation, for the back faces" )] HRESULT StencilBackFailOp( [in] eSTENCIL_OP val );
-	[propget, id( 15 ), helpstring( "The stencil test, depth test failed operation, for the back faces" )] HRESULT StencilBackDepthFailOp( [out, retval] eSTENCIL_OP * pVal );
-	[propput, id( 15 ), helpstring( "The stencil test, depth test failed operation, for the back faces" )] HRESULT StencilBackDepthFailOp( [in] eSTENCIL_OP val );
-	[propget, id( 16 ), helpstring( "The stencil test passed operation, for the back faces" )] HRESULT StencilBackPassOp( [out, retval] eSTENCIL_OP * pVal );
-	[propput, id( 16 ), helpstring( "The stencil test passed operation, for the back faces" )] HRESULT StencilBackPassOp( [in] eSTENCIL_OP val );
-	[id( 17 ), helpstring( "Sets the depth test range" )] HRESULT SetDepthRange( [in] double dnear, [in] double dfar );
-};
-
-// IMultisampleState
-[
-	uuid( 0845AF8D-C498-45B6-9E7A-6853F0C0A73A ),
-	helpstring( "Castor3D MultisampleState interface" ),
-	dual,
-	oleautomation
-]
-interface IMultisampleState
-	: IDispatch
-{
-	[propget, id( 1 ), helpstring( "The multisample enabled status" )] HRESULT Multisample( [out, retval] boolean * pVal );
-	[propput, id( 1 ), helpstring( "The multisample enabled status" )] HRESULT Multisample( [in] boolean val );
-	[propget, id( 2 ), helpstring( "The alpha to coverage enabled status" )] HRESULT AlphaToCoverageEnabled( [out, retval] boolean * pVal );
-	[propput, id( 2 ), helpstring( "The alpha to coverage enabled status" )] HRESULT AlphaToCoverageEnabled( [in] boolean val );
-	[propget, id( 3 ), helpstring( "The sample coverage mask" )] HRESULT SampleCoverageMask( [out, retval] unsigned int * pVal );
-	[propput, id( 3 ), helpstring( "The sample coverage mask" )] HRESULT SampleCoverageMask( [in] unsigned int val );
-};
-
-// IRasteriserState
-[
-	uuid( 7AE4EAFB-BF93-4CBB-A935-830CD3097F27 ),
-	helpstring( "Castor3D RasteriserState interface" ),
-	dual,
-	oleautomation
-]
-interface IRasteriserState
-	: IDispatch
-{
-	[propget, id( 1 ), helpstring( "The fill mode" )] HRESULT FillMode( [out, retval] eFILL_MODE * pVal );
-	[propput, id( 1 ), helpstring( "The fill mode" )] HRESULT FillMode( [in] eFILL_MODE val );
-	[propget, id( 2 ), helpstring( "The faces culled by rasteriser" )] HRESULT CulledFaces( [out, retval] eFACE * pVal );
-	[propput, id( 2 ), helpstring( "The faces culled by rasteriser" )] HRESULT CulledFaces( [in] eFACE val );
-	[propget, id( 3 ), helpstring( "The faces which are considered front facing (true => CCW, false => CW)" )] HRESULT FrontCCW( [out, retval] boolean * pVal );
-	[propput, id( 3 ), helpstring( "The faces which are considered front facing (true => CCW, false => CW)" )] HRESULT FrontCCW( [in] boolean val );
-	[propget, id( 4 ), helpstring( "The antialiased lines status" )] HRESULT AntialiasedLines( [out, retval] boolean * pVal );
-	[propput, id( 4 ), helpstring( "The antialiased lines status" )] HRESULT AntialiasedLines( [in] boolean val );
-	[propget, id( 5 ), helpstring( "The depth bias unit" )] HRESULT DepthBiasUnits( [out, retval] float * pVal );
-	[propput, id( 5 ), helpstring( "The depth bias unit" )] HRESULT DepthBiasUnits( [in] float val );
-	[propget, id( 6 ), helpstring( "The depth bias factor" )] HRESULT DepthBiasFactor( [out, retval] float * pVal );
-	[propput, id( 6 ), helpstring( "The depth bias factor" )] HRESULT DepthBiasFactor( [in] float val );
-	[propget, id( 7 ), helpstring( "The depth clipping enabled status" )] HRESULT DepthClipping( [out, retval] boolean * pVal );
-	[propput, id( 7 ), helpstring( "The depth clipping enabled status" )] HRESULT DepthClipping( [in] boolean val );
-	[propget, id( 8 ), helpstring( "The scissor test enabled status" )] HRESULT Scissor( [out, retval] boolean * pVal );
-	[propput, id( 8 ), helpstring( "The scissor test enabled status" )] HRESULT Scissor( [in] boolean val );
 };
 
 // IRenderTarget
@@ -1479,7 +877,7 @@ interface IRenderTarget
 	[propget, id( 4 ), helpstring( "The target pixel format" )] HRESULT PixelFormat( [out, retval] ePIXEL_FORMAT * pVal );
 	[propput, id( 4 ), helpstring( "The target pixel format" )] HRESULT PixelFormat( [in] ePIXEL_FORMAT val );
 	[propget, id( 5 ), helpstring( "The target size" )] HRESULT Size( [out, retval] ISize ** pVal );
-	[id( 6 ), helpstring( "Initialises the render target" ), local] HRESULT Initialise( [in] unsigned int index );
+	[id( 6 ), helpstring( "Initialises the render target" ), local] HRESULT Initialise();
 	[id( 7 ), helpstring( "Cleans the render target up" )] HRESULT Cleanup();
 };
 
@@ -1493,69 +891,46 @@ interface IRenderTarget
 interface ISampler
 	: IDispatch
 {
-	[propget, id( 2 ), helpstring( "The sampler min filter" )] HRESULT MinFilter( [out, retval] eINTERPOLATION_MODE * pVal );
-	[propput, id( 2 ), helpstring( "The sampler min filter" )] HRESULT MinFilter( [in] eINTERPOLATION_MODE val );
-	[propget, id( 3 ), helpstring( "The sampler mag filter" )] HRESULT MagFilter( [out, retval] eINTERPOLATION_MODE * pVal );
-	[propput, id( 3 ), helpstring( "The sampler mag filter" )] HRESULT MagFilter( [in] eINTERPOLATION_MODE val );
-	[propget, id( 4 ), helpstring( "The sampler mip filter" )] HRESULT MipFilter( [out, retval] eINTERPOLATION_MODE * pVal );
-	[propput, id( 4 ), helpstring( "The sampler mip filter" )] HRESULT MipFilter( [in] eINTERPOLATION_MODE val );
-	[propget, id( 5 ), helpstring( "The sampler U wrap mode" )] HRESULT UWrappingMode( [out, retval] eWRAP_MODE * pVal );
-	[propput, id( 5 ), helpstring( "The sampler U wrap mode" )] HRESULT UWrappingMode( [in] eWRAP_MODE val );
-	[propget, id( 6 ), helpstring( "The sampler V wrap mode" )] HRESULT VWrappingMode( [out, retval] eWRAP_MODE * pVal );
-	[propput, id( 6 ), helpstring( "The sampler V wrap mode" )] HRESULT VWrappingMode( [in] eWRAP_MODE val );
-	[propget, id( 7 ), helpstring( "The sampler W wrap mode" )] HRESULT WWrappingMode( [out, retval] eWRAP_MODE * pVal );
-	[propput, id( 7 ), helpstring( "The sampler W wrap mode" )] HRESULT WWrappingMode( [in] eWRAP_MODE val );
-	[propget, id( 8 ), helpstring( "The sampler max anisotropy" )] HRESULT MaxAnisotropy( [out, retval] float * pVal );
-	[propput, id( 8 ), helpstring( "The sampler max anisotropy" )] HRESULT MaxAnisotropy( [in] float val );
-	[propget, id( 9 ), helpstring( "The sampler min LOD" )] HRESULT MinLod( [out, retval] float * pVal );
-	[propput, id( 9 ), helpstring( "The sampler min LOD" )] HRESULT MinLod( [in] float val );
-	[propget, id( 10 ), helpstring( "The sampler max LOD" )] HRESULT MaxLod( [out, retval] float * pVal );
-	[propput, id( 10 ), helpstring( "The sampler max LOD" )] HRESULT MaxLod( [in] float val );
-	[propget, id( 11 ), helpstring( "The sampler LOD bias" )] HRESULT LodBias( [out, retval] float * pVal );
-	[propput, id( 11 ), helpstring( "The sampler LOD bias" )] HRESULT LodBias( [in] float val );
-	[propget, id( 12 ), helpstring( "The sampler border colour" )] HRESULT BorderColour( [out, retval] IRgbaColour ** pVal );
-	[propput, id( 12 ), helpstring( "The sampler border colour" )] HRESULT BorderColour( [in] IRgbaColour * val );
-	[id( 13 ), helpstring( "Initialises the sampler" )] HRESULT Initialise();
-	[id( 14 ), helpstring( "Cleans the sampler up" )] HRESULT Cleanup();
+	[propget, id( 1 ), helpstring( "The sampler min filter" )] HRESULT MinFilter( [out, retval] eFILTER_MODE * pVal );
+	[propput, id( 1 ), helpstring( "The sampler min filter" )] HRESULT MinFilter( [in] eFILTER_MODE val );
+	[propget, id( 2 ), helpstring( "The sampler mag filter" )] HRESULT MagFilter( [out, retval] eFILTER_MODE * pVal );
+	[propput, id( 2 ), helpstring( "The sampler mag filter" )] HRESULT MagFilter( [in] eFILTER_MODE val );
+	[propget, id( 3 ), helpstring( "The sampler mip filter" )] HRESULT MipmapMode( [out, retval] eMIPMAP_MODE * pVal );
+	[propput, id( 3 ), helpstring( "The sampler mip filter" )] HRESULT MipmapMode( [in] eMIPMAP_MODE val );
+	[propget, id( 4 ), helpstring( "The sampler U wrap mode" )] HRESULT WrapModeU( [out, retval] eWRAP_MODE * pVal );
+	[propput, id( 4 ), helpstring( "The sampler U wrap mode" )] HRESULT WrapModeU( [in] eWRAP_MODE val );
+	[propget, id( 5 ), helpstring( "The sampler V wrap mode" )] HRESULT WrapModeV( [out, retval] eWRAP_MODE * pVal );
+	[propput, id( 5 ), helpstring( "The sampler V wrap mode" )] HRESULT WrapModeV( [in] eWRAP_MODE val );
+	[propget, id( 6 ), helpstring( "The sampler W wrap mode" )] HRESULT WrapModeW( [out, retval] eWRAP_MODE * pVal );
+	[propput, id( 6 ), helpstring( "The sampler W wrap mode" )] HRESULT WrapModeW( [in] eWRAP_MODE val );
+	[propget, id( 7 ), helpstring( "The sampler max anisotropy" )] HRESULT MaxAnisotropy( [out, retval] float * pVal );
+	[propput, id( 7 ), helpstring( "The sampler max anisotropy" )] HRESULT MaxAnisotropy( [in] float val );
+	[propget, id( 8 ), helpstring( "The sampler min LOD" )] HRESULT MinLod( [out, retval] float * pVal );
+	[propput, id( 8 ), helpstring( "The sampler min LOD" )] HRESULT MinLod( [in] float val );
+	[propget, id( 9 ), helpstring( "The sampler max LOD" )] HRESULT MaxLod( [out, retval] float * pVal );
+	[propput, id( 9 ), helpstring( "The sampler max LOD" )] HRESULT MaxLod( [in] float val );
+	[propget, id( 10 ), helpstring( "The sampler LOD bias" )] HRESULT LodBias( [out, retval] float * pVal );
+	[propput, id( 10 ), helpstring( "The sampler LOD bias" )] HRESULT LodBias( [in] float val );
+	[propget, id( 11 ), helpstring( "The sampler border colour" )] HRESULT BorderColour( [out, retval] eBORDER_COLOUR * pVal );
+	[propput, id( 11 ), helpstring( "The sampler border colour" )] HRESULT BorderColour( [in] eBORDER_COLOUR val );
+	[id( 12 ), helpstring( "Initialises the sampler" )] HRESULT Initialise();
+	[id( 13 ), helpstring( "Cleans the sampler up" )] HRESULT Cleanup();
 };
 
-// ITextureImage
+// ITextureView
 [
 	uuid( AD4C78E2-277A-4F6E-A1BB-F94FEA78F4A5 ),
 	helpstring( "Castor3D TextureImage interface" ),
 	dual,
 	oleautomation
 ]
-interface ITextureImage
+interface ITextureView
 	: IDispatch
 {
 	[propget, id( 1 ), helpstring( "The texture image buffer" )] HRESULT Buffer( [out, retval] IPixelBuffer ** pVal );
-	[id( 2 ), helpstring( "Resizes the texture" )] HRESULT Resize2D( [in] unsigned int w, [in] unsigned int h );
-	[id( 3 ), helpstring( "Resizes the texture" )] HRESULT Resize3D( [in] unsigned int w, [in] unsigned int h, [in] unsigned int d );
 	[id( 4 ), helpstring( "Sets the image source" )] HRESULT StaticSource( [in] IPixelBuffer * val );
-	[id( 6 ), helpstring( "Sets the image source" )] HRESULT Dynamic2DSource( [in] unsigned int w, [in] unsigned int h, [in] ePIXEL_FORMAT format );
-	[id( 7 ), helpstring( "Sets the image source" )] HRESULT Dynamic3DSource( [in] unsigned int w, [in] unsigned int h, [in] unsigned int d, [in] ePIXEL_FORMAT format );
-};
-
-// ITextureStorage
-[
-	uuid( AAC77A3B-8A0E-430F-90DB-CAA6FE050722 ),
-	helpstring( "Castor3D TextureStorage interface" ),
-	dual,
-	oleautomation
-]
-interface ITextureStorage
-	: IDispatch
-{
-	[propget, id( 1 ), helpstring( "The texture image buffer" )] HRESULT Buffer( [out, retval] IPixelBuffer ** pVal );
-	[id( 2 ), helpstring( "Initialises the texture" )] HRESULT Initialise( [in] eTEXTURE_TYPE p_type, [in] unsigned int p_cpuAccess, [in] unsigned int p_gpuAccess );
-	[id( 3 ), helpstring( "Cleans the texture up" )] HRESULT Cleanup();
-	[id( 4 ), helpstring( "Resizes the texture" )] HRESULT Resize2D( [in] unsigned int w, [in] unsigned int h );
-	[id( 5 ), helpstring( "Resizes the texture" )] HRESULT Resize3D( [in] unsigned int w, [in] unsigned int h, [in] unsigned int d );
-	[id( 6 ), helpstring( "Sets the image source" )] HRESULT Static2DSource( [in] IPixelBuffer * val );
-	[id( 7 ), helpstring( "Sets the image source" )] HRESULT Static3DSource( [in] unsigned int w, [in] unsigned int h, [in] unsigned int d, [in] IPixelBuffer * val );
-	[id( 8 ), helpstring( "Sets the image source" )] HRESULT Dynamic2DSource( [in] unsigned int w, [in] unsigned int h, [in] ePIXEL_FORMAT format );
-	[id( 9 ), helpstring( "Sets the image source" )] HRESULT Dynamic3DSource( [in] unsigned int w, [in] unsigned int h, [in] unsigned int d, [in] ePIXEL_FORMAT format );
+	[id( 5 ), helpstring( "Sets the image source" )] HRESULT Dynamic2DSource( [in] unsigned int w, [in] unsigned int h, [in] ePIXEL_FORMAT format );
+	[id( 6 ), helpstring( "Sets the image source" )] HRESULT Dynamic3DSource( [in] unsigned int w, [in] unsigned int h, [in] unsigned int d, [in] ePIXEL_FORMAT format );
 };
 
 // ITextureLayout
@@ -1569,9 +944,9 @@ interface ITextureLayout
 	: IDispatch
 {
 	[propget, id( 1 ), helpstring( "The texture type" )] HRESULT Type( [out, retval] eTEXTURE_TYPE * pVal );
-	[propget, id( 2 ), helpstring( "The texture image" )] HRESULT Image( [in] unsigned int index, [out, retval] ITextureImage ** pVal );
-	[id( 6 ), helpstring( "Initialises the texture" )] HRESULT Initialise();
-	[id( 7 ), helpstring( "Cleans the texture up" )] HRESULT Cleanup();
+	[propget, id( 2 ), helpstring( "The texture image at given index" )] HRESULT Image( [in] unsigned int index, [out, retval] ITextureView ** pVal );
+	[id( 3 ), helpstring( "Initialises the texture" )] HRESULT Initialise();
+	[id( 4 ), helpstring( "Cleans the texture up" )] HRESULT Cleanup();
 };
 
 // ITextureUnit
@@ -1590,26 +965,9 @@ interface ITextureUnit
 	[propput, id( 2 ), helpstring( "The unit sampler" )] HRESULT Sampler( [in] ISampler * val );
 	[propget, id( 3 ), helpstring( "The texture channel" )] HRESULT Channel( [out, retval] eTEXTURE_CHANNEL * pVal );
 	[propput, id( 3 ), helpstring( "The texture channel" )] HRESULT Channel( [in] eTEXTURE_CHANNEL val );
-	[id( 5 ), helpstring( "Loads the texture image from a file" )] HRESULT LoadTexture( [in] BSTR path );
-};
-
-// IShaderProgram
-[
-	uuid( C6C6C1C0-6023-467F-B084-05C3CD8C4ADA ),
-	helpstring( "Castor3D ShaderProgram interface" ),
-	dual,
-	oleautomation
-]
-interface IShaderProgram
-	: IDispatch
-{
-	[propget, id( 1 ), helpstring( "Retrieves the shader source for the shader object of wanted type" )] HRESULT File( [in] eSHADER_TYPE target, [out, retval] BSTR * pVal );
-	[propput, id( 1 ), helpstring( "Sets the shader source for the shader object of wanted type" )] HRESULT File( [in] eSHADER_TYPE target, [in] BSTR val );
-	[propget, id( 2 ), helpstring( "Retrieves the shader source for the shader object of wanted type" )] HRESULT Source( [in] eSHADER_TYPE target, [out, retval] BSTR * pVal );
-	[propput, id( 2 ), helpstring( "Sets the shader source for the shader object of wanted type" )] HRESULT Source( [in] eSHADER_TYPE target, [in] BSTR val );
-	[id( 4 ), helpstring( "Initialises the shader program" )] HRESULT Initialise();
-	[id( 5 ), helpstring( "Cleans the shader program up" )] HRESULT Cleanup();
-	[id( 6 ), helpstring( "Creates the shader object of wanted type" )] HRESULT CreateObject( [in] eSHADER_TYPE val );
+	[id( 4 ), helpstring( "Loads the texture image from a file" )] HRESULT LoadTexture( [in] BSTR path );
+	[id( 5 ), helpstring( "Initialises the texture" )] HRESULT Initialise();
+	[id( 6 ), helpstring( "Cleans the texture up" )] HRESULT Cleanup();
 };
 
 // IPass
@@ -1635,10 +993,11 @@ interface IPass
 	[propget, id( 6 ), helpstring( "The pass alpha reference value" )] HRESULT AlphaRefValue( [out, retval] float * pVal );
 	[propput, id( 6 ), helpstring( "The pass alpha reference value" )] HRESULT AlphaRefValue( [in] float val );
 	[propget, id( 7 ), helpstring( "Retrieves the units count" )] HRESULT TextureUnitCount( [out, retval] unsigned int * pVal );
-	[id( 8 ), helpstring( "Creates a texture unit" )] HRESULT CreateTextureUnit( [out, retval] ITextureUnit ** pVal );
-	[id( 9 ), helpstring( "Retrieves the texture unit at given index" )] HRESULT GetTextureUnitByIndex( [in] unsigned int index, [out, retval] ITextureUnit ** pVal );
-	[id( 10 ), helpstring( "Destroys the texture unit" )] HRESULT DestroyTextureUnit( [in] ITextureUnit * val );
-	[id( 11 ), helpstring( "Retrieves the texture unit at given channel" )] HRESULT GetTextureUnitByChannel( [in] eTEXTURE_CHANNEL channel, [out, retval] ITextureUnit ** pVal );
+	[propget, id( 8 ), helpstring( "The pass type" )] HRESULT Type( [out, retval] ePASS_TYPE * pVal );
+	[id( 9 ), helpstring( "Creates a texture unit" )] HRESULT CreateTextureUnit( [out, retval] ITextureUnit ** pVal );
+	[id( 10 ), helpstring( "Retrieves the texture unit at given index" )] HRESULT GetTextureUnitByIndex( [in] unsigned int index, [out, retval] ITextureUnit ** pVal );
+	[id( 11 ), helpstring( "Destroys the texture unit" )] HRESULT DestroyTextureUnit( [in] ITextureUnit * val );
+	[id( 12 ), helpstring( "Retrieves the texture unit at given channel" )] HRESULT GetTextureUnitByChannel( [in] eTEXTURE_CHANNEL channel, [out, retval] ITextureUnit ** pVal );
 };
 
 // ILegacyPass
@@ -1715,6 +1074,47 @@ interface IMaterial
 	[id( 6 ), helpstring( "Destroys the given pass" )] HRESULT DestroyPass( [in] unsigned int val );
 };
 
+// IIndexMapping
+[
+	uuid( 3C6916EB-6D7F-489C-A157-248097C35BDB ),
+	helpstring( "Castor3D IndexMapping interface" ),
+	dual,
+	oleautomation
+]
+interface IIndexMapping
+	: IDispatch
+{
+	[propget, id( 1 ), helpstring( "The mapping type." )] HRESULT Type( [out, retval] eINDEX_MAPPING_TYPE * pVal );
+};
+
+// ITriFaceMapping
+[
+	uuid( B899E644-D40B-4203-89FD-7384D94B40F0 ),
+	helpstring( "Castor3D TriFaceMapping interface" ),
+	dual,
+	oleautomation
+]
+interface ITriFaceMapping
+	: IIndexMapping
+{
+	[propget, id( 2 ), helpstring( "The faces count" )] HRESULT FacesCount( [out, retval] unsigned int * pVal );
+	[id( 3 ), helpstring( "Adds a face to the mapping, defined by its vertex indices" )] HRESULT AddFace( [in] unsigned int x, [in] unsigned int y, [in] unsigned int z );
+};
+
+// ILinesMapping
+[
+	uuid( 17B24F1B-90F1-40FB-8CA4-E97A63642FF1 ),
+	helpstring( "Castor3D LinesMapping interface" ),
+	dual,
+	oleautomation
+]
+interface ILinesMapping
+	: IIndexMapping
+{
+	[propget, id( 2 ), helpstring( "The lines count" )] HRESULT LinesCount( [out, retval] unsigned int * pVal );
+	[id( 3 ), helpstring( "Adds a line to the mapping, defined by its vertex indices" )] HRESULT AddLine( [in] unsigned int x, [in] unsigned int y );
+};
+
 // ISubmesh
 [
 	uuid( 59DAC74D-1B5C-49BE-A404-96A18E117CC0 ),
@@ -1725,12 +1125,10 @@ interface IMaterial
 interface ISubmesh
 	: IDispatch
 {
-	[propget, id( 1 ), helpstring( "The faces count" )] HRESULT FaceCount( [out, retval] unsigned int * pVal );
-	[propget, id( 2 ), helpstring( "The points count" )] HRESULT PointsCount( [out, retval] unsigned int * pVal );
-	[propget, id( 3 ), helpstring( "The rendering topology" )] HRESULT Topology( [out, retval] eTOPOLOGY * pVal );
-	[propput, id( 3 ), helpstring( "The rendering topology" )] HRESULT Topology( [in] eTOPOLOGY val );
-	[id( 4 ), helpstring( "Adds a point to the submesh" )] HRESULT AddPoint( [in] IVector3D * val );
-	[id( 5 ), helpstring( "Adds a face to the submesh, defined by its vertex indices" )] HRESULT AddFace( [in] unsigned int x, [in] unsigned int y, [in] unsigned int z );
+	[propget, id( 1 ), helpstring( "The points count" )] HRESULT PointsCount( [out, retval] unsigned int * pVal );
+	[propget, id( 2 ), helpstring( "The index mapping" )] HRESULT IndexMapping( [out, retval] IIndexMapping ** pVal );
+	[propput, id( 2 ), helpstring( "The index mapping" )] HRESULT IndexMapping( [in] IIndexMapping * pVal );
+	[id( 3 ), helpstring( "Adds a point to the submesh" )] HRESULT AddPoint( [in] IVector3D * val );
 };
 
 // IMesh
@@ -1744,11 +1142,9 @@ interface IMesh
 	: IDispatch
 {
 	[propget, id( 1 ), helpstring( "The total mesh's submeshes count" )] HRESULT SubmeshCount( [out, retval] unsigned int * pVal );
-	[propget, id( 2 ), helpstring( "The total mesh's faces count" )] HRESULT FaceCount( [out, retval] unsigned int * pVal );
-	[propget, id( 3 ), helpstring( "The total mesh's vertices count" )] HRESULT VertexCount( [out, retval] unsigned int * pVal );
-	[id( 4 ), helpstring( "Retrieves the submesh at the given index" )] HRESULT GetSubmesh( [in] unsigned int val, [out, retval] ISubmesh ** pVal );
-	[id( 5 ), helpstring( "Creates a new submesh for this mesh" )] HRESULT CreateSubmesh( [out, retval] ISubmesh ** pVal );
-	[id( 6 ), helpstring( "Deletes the given submesh" )] HRESULT DeleteSubmesh( [in] ISubmesh * val );
+	[id( 2 ), helpstring( "Retrieves the submesh at the given index" )] HRESULT GetSubmesh( [in] unsigned int val, [out, retval] ISubmesh ** pVal );
+	[id( 3 ), helpstring( "Creates a new submesh for this mesh" )] HRESULT CreateSubmesh( [out, retval] ISubmesh ** pVal );
+	[id( 4 ), helpstring( "Deletes the given submesh" )] HRESULT DeleteSubmesh( [in] ISubmesh * val );
 };
 
 // IRenderWindow
@@ -1776,6 +1172,64 @@ interface IRenderWindow
 	[id( 12 ), helpstring( "MouseMouseRButtonUp event processing" )] HRESULT OnMouseRButtonUp( [in] IPosition * pos );
 };
 
+// ISceneBackground
+[
+	uuid( 6A1CFD87-AD16-4648-B5DD-F72E1D0C8A01 ),
+	helpstring( "Castor3D SceneBackground interface" ),
+	dual,
+	oleautomation
+]
+interface ISceneBackground
+	: IDispatch
+{
+	[propget, id( 1 ), helpstring( "The background type" )] HRESULT Type( [out, retval] eBACKGROUND_TYPE * pVal );
+};
+
+// IColourBackground
+[
+	uuid( 26BC338E-1C3A-429E-8255-D31918EB5714 ),
+	helpstring( "Castor3D ColourBackground interface" ),
+	dual,
+	oleautomation
+]
+interface IColourBackground
+	: ISceneBackground
+{
+};
+
+// IImageBackground
+[
+	uuid( 2131E254-B2E7-483B-9D9A-E9A57B75E908 ),
+	helpstring( "Castor3D ImageBackground interface" ),
+	dual,
+	oleautomation
+]
+interface IImageBackground
+	: ISceneBackground
+{
+	[propput, id( 2 ), helpstring( "The background image" )] HRESULT Image( [in] BSTR filePath );
+};
+
+// ISkyboxBackground
+[
+	uuid( 543A3315-BE59-4AE8-9DB2-570DC0095983 ),
+	helpstring( "Castor3D SkyboxBackground interface" ),
+	dual,
+	oleautomation
+]
+interface ISkyboxBackground
+	: ISceneBackground
+{
+	[propput, id( 2 ), helpstring( "The left face image" )] HRESULT LeftImage( [in] BSTR filePath );
+	[propput, id( 3 ), helpstring( "The right face image" )] HRESULT RightImage( [in] BSTR filePath );
+	[propput, id( 4 ), helpstring( "The top face image" )] HRESULT TopImage( [in] BSTR filePath );
+	[propput, id( 5 ), helpstring( "The bottom face image" )] HRESULT BottomImage( [in] BSTR filePath );
+	[propput, id( 6 ), helpstring( "The front face image" )] HRESULT FrontImage( [in] BSTR filePath );
+	[propput, id( 7 ), helpstring( "The back face image" )] HRESULT BackImage( [in] BSTR filePath );
+	[propput, id( 8 ), helpstring( "The cross image" )] HRESULT CrossImage( [in] BSTR filePath );
+	[id( 9 ), helpstring( "Loads an HDRi image" )] HRESULT LoadEquirectangularImage( [in] BSTR filePath, [in] unsigned int size );
+};
+
 // IScene
 [
 	uuid( 6684A9C0-CC49-41F3-B78D-9C34F294AF62 ),
@@ -1786,31 +1240,31 @@ interface IRenderWindow
 interface IScene
 	: IDispatch
 {
-	[propget, id( 1 ), helpstring( "The background colour" )] HRESULT BackgroundColour( [out, retval] IRgbColour ** pVal );
-	[propput, id( 1 ), helpstring( "The background colour" )] HRESULT BackgroundColour( [in] IRgbColour * val );
-	[propget, id( 2 ), helpstring( "The scene name" )] HRESULT Name( [out, retval] BSTR * pVal );
-	[propput, id( 2 ), helpstring( "The scene name" )] HRESULT Name( [in] BSTR val );
-	[propget, id( 3 ), helpstring( "The ambient light colour" )] HRESULT AmbientLight( [out, retval] IRgbColour ** pVal );
-	[propput, id( 3 ), helpstring( "The ambient light colour" )] HRESULT AmbientLight( [in] IRgbColour * val );
-	[propget, id( 8 ), helpstring( "The root scene node" )] HRESULT RootNode( [out, retval] ISceneNode ** pVal );
-	[propget, id( 9 ), helpstring( "The objects root scene node" )] HRESULT ObjectRootNode( [out, retval] ISceneNode ** pVal );
-	[propget, id( 10 ), helpstring( "The cameras root scene node" )] HRESULT CameraRootNode( [out, retval] ISceneNode ** pVal );
-	[id( 11 ), helpstring( "Clears the created objects maps" )] HRESULT ClearScene();
-	[id( 12 ), helpstring( "Sets the background image" )] HRESULT SetBackgroundImage( [in] BSTR path );
-	[id( 13 ), helpstring( "Creates a new scene node" )] HRESULT CreateSceneNode( [in] BSTR name, [in] ISceneNode * parent, [out, retval] ISceneNode ** pVal );
-	[id( 14 ), helpstring( "Creates a new geometry" )] HRESULT CreateGeometry( [in] BSTR name, [out, retval] IGeometry ** pVal );
-	[id( 15 ), helpstring( "Creates a new camera" )] HRESULT CreateCamera( [in] BSTR name, [in] int ww, [in] int wh, [in] ISceneNode * node, [out, retval] ICamera ** pVal );
-	[id( 16 ), helpstring( "Creates a new light" )] HRESULT CreateLight( [in] BSTR name, [in] ISceneNode * node, [in] eLIGHT_TYPE type, [out, retval] ILight ** pVal );
-	[id( 17 ), helpstring( "Retrieves the scene node with the given name" )] HRESULT GetNode( [in] BSTR name, [out, retval] ISceneNode ** pVal );
-	[id( 18 ), helpstring( "Retrieves the geometry with the given name" )] HRESULT GetGeometry( [in] BSTR name, [out, retval] IGeometry ** pVal );
-	[id( 19 ), helpstring( "Retrieves the light with the given name" )] HRESULT GetLight( [in] BSTR name, [out, retval] ILight ** pVal );
-	[id( 20 ), helpstring( "Retrieves the camera with the given name" )] HRESULT GetCamera( [in] BSTR name, [out, retval] ICamera ** pVal );
-	[id( 21 ), helpstring( "Removes the light with the given name" )] HRESULT RemoveLight( [in] ILight * light );
-	[id( 22 ), helpstring( "Removes the scene node with the given name" )] HRESULT RemoveNode( [in] ISceneNode * node );
-	[id( 23 ), helpstring( "Removes the geometry with the given name" )] HRESULT RemoveGeometry( [in] IGeometry * geometry );
-	[id( 24 ), helpstring( "Removes the camera with the given name" )] HRESULT RemoveCamera( [in] ICamera * camera );
-	[id( 25 ), helpstring( "Creates a mesh" )] HRESULT CreateMesh( [in] BSTR type, [in] BSTR name, [out, retval] IMesh ** pVal );
-	[id( 26 ), helpstring( "Retrieves the backround image" )] HRESULT GetBackgroundImage( [out, retval] ITextureLayout ** pVal );
+	[propget, id( 1 ), helpstring( "The background" )] HRESULT Background( [out, retval] ISceneBackground ** pVal );
+	[propput, id( 1 ), helpstring( "The background" )] HRESULT Background( [in] ISceneBackground * val );
+	[propget, id( 2 ), helpstring( "The background colour" )] HRESULT BackgroundColour( [out, retval] IRgbColour ** pVal );
+	[propput, id( 2 ), helpstring( "The background colour" )] HRESULT BackgroundColour( [in] IRgbColour * val );
+	[propget, id( 3 ), helpstring( "The scene name" )] HRESULT Name( [out, retval] BSTR * pVal );
+	[propput, id( 3 ), helpstring( "The scene name" )] HRESULT Name( [in] BSTR val );
+	[propget, id( 4 ), helpstring( "The ambient light colour" )] HRESULT AmbientLight( [out, retval] IRgbColour ** pVal );
+	[propput, id( 4 ), helpstring( "The ambient light colour" )] HRESULT AmbientLight( [in] IRgbColour * val );
+	[propget, id( 5 ), helpstring( "The root scene node" )] HRESULT RootNode( [out, retval] ISceneNode ** pVal );
+	[propget, id( 6 ), helpstring( "The objects root scene node" )] HRESULT ObjectRootNode( [out, retval] ISceneNode ** pVal );
+	[propget, id( 7 ), helpstring( "The cameras root scene node" )] HRESULT CameraRootNode( [out, retval] ISceneNode ** pVal );
+	[id( 8 ), helpstring( "Clears the created objects maps" )] HRESULT ClearScene();
+	[id( 9 ), helpstring( "Creates a new scene node" )] HRESULT CreateSceneNode( [in] BSTR name, [in] ISceneNode * parent, [out, retval] ISceneNode ** pVal );
+	[id( 10 ), helpstring( "Creates a new geometry" )] HRESULT CreateGeometry( [in] BSTR name, [out, retval] IGeometry ** pVal );
+	[id( 11 ), helpstring( "Creates a new camera" )] HRESULT CreateCamera( [in] BSTR name, [in] int ww, [in] int wh, [in] ISceneNode * node, [out, retval] ICamera ** pVal );
+	[id( 12 ), helpstring( "Creates a new light" )] HRESULT CreateLight( [in] BSTR name, [in] ISceneNode * node, [in] eLIGHT_TYPE type, [out, retval] ILight ** pVal );
+	[id( 13 ), helpstring( "Retrieves the scene node with the given name" )] HRESULT GetNode( [in] BSTR name, [out, retval] ISceneNode ** pVal );
+	[id( 14 ), helpstring( "Retrieves the geometry with the given name" )] HRESULT GetGeometry( [in] BSTR name, [out, retval] IGeometry ** pVal );
+	[id( 15 ), helpstring( "Retrieves the light with the given name" )] HRESULT GetLight( [in] BSTR name, [out, retval] ILight ** pVal );
+	[id( 16 ), helpstring( "Retrieves the camera with the given name" )] HRESULT GetCamera( [in] BSTR name, [out, retval] ICamera ** pVal );
+	[id( 17 ), helpstring( "Removes the light with the given name" )] HRESULT RemoveLight( [in] ILight * light );
+	[id( 18 ), helpstring( "Removes the scene node with the given name" )] HRESULT RemoveNode( [in] ISceneNode * node );
+	[id( 19 ), helpstring( "Removes the geometry with the given name" )] HRESULT RemoveGeometry( [in] IGeometry * geometry );
+	[id( 20 ), helpstring( "Removes the camera with the given name" )] HRESULT RemoveCamera( [in] ICamera * camera );
+	[id( 21 ), helpstring( "Creates a mesh" )] HRESULT CreateMesh( [in] BSTR type, [in] BSTR name, [out, retval] IMesh ** pVal );
 };
 
 // IAnimation
@@ -2024,7 +1478,7 @@ interface IOverlayCategory
 	oleautomation
 ]
 interface IPanelOverlay
-	: IDispatch
+	: IOverlayCategory
 {
 };
 
@@ -2036,18 +1490,18 @@ interface IPanelOverlay
 	oleautomation
 ]
 interface IBorderPanelOverlay
-	: IDispatch
+	: IOverlayCategory
 {
-	[propget, id( 1 ), helpstring( "The bottom border width" )] HRESULT LeftBorderSize( [out, retval] float * pVal );
-	[propput, id( 1 ), helpstring( "The bottom border width" )] HRESULT LeftBorderSize( [in] float val );
-	[propget, id( 2 ), helpstring( "The right border width" )] HRESULT RightBorderSize( [out, retval] float * pVal );
-	[propput, id( 2 ), helpstring( "The right border width" )] HRESULT RightBorderSize( [in] float val );
-	[propget, id( 3 ), helpstring( "The top border width" )] HRESULT TopBorderSize( [out, retval] float * pVal );
-	[propput, id( 3 ), helpstring( "The top border width" )] HRESULT TopBorderSize( [in] float val );
-	[propget, id( 4 ), helpstring( "The bottom border width" )] HRESULT BottomBorderSize( [out, retval] float * pVal );
-	[propput, id( 4 ), helpstring( "The bottom border width" )] HRESULT BottomBorderSize( [in] float val );
-	[propget, id( 5 ), helpstring( "The border material" )] HRESULT BorderMaterial( [out, retval] IMaterial ** pVal );
-	[propput, id( 5 ), helpstring( "The border material" )] HRESULT BorderMaterial( [in] IMaterial * val );
+	[propget, id( 11 ), helpstring( "The bottom border width" )] HRESULT LeftBorderSize( [out, retval] float * pVal );
+	[propput, id( 11 ), helpstring( "The bottom border width" )] HRESULT LeftBorderSize( [in] float val );
+	[propget, id( 12 ), helpstring( "The right border width" )] HRESULT RightBorderSize( [out, retval] float * pVal );
+	[propput, id( 12 ), helpstring( "The right border width" )] HRESULT RightBorderSize( [in] float val );
+	[propget, id( 13 ), helpstring( "The top border width" )] HRESULT TopBorderSize( [out, retval] float * pVal );
+	[propput, id( 13 ), helpstring( "The top border width" )] HRESULT TopBorderSize( [in] float val );
+	[propget, id( 14 ), helpstring( "The bottom border width" )] HRESULT BottomBorderSize( [out, retval] float * pVal );
+	[propput, id( 14 ), helpstring( "The bottom border width" )] HRESULT BottomBorderSize( [in] float val );
+	[propget, id( 15 ), helpstring( "The border material" )] HRESULT BorderMaterial( [out, retval] IMaterial ** pVal );
+	[propput, id( 15 ), helpstring( "The border material" )] HRESULT BorderMaterial( [in] IMaterial * val );
 };
 
 // ITextOverlay
@@ -2058,12 +1512,12 @@ interface IBorderPanelOverlay
 	oleautomation
 ]
 interface ITextOverlay
-	: IDispatch
+	: IOverlayCategory
 {
-	[propget, id( 1 ), helpstring( "The text font" )] HRESULT Font( [out, retval] BSTR * pVal );
-	[propput, id( 1 ), helpstring( "The text font" )] HRESULT Font( [in] BSTR val );
-	[propget, id( 2 ), helpstring( "The text caption" )] HRESULT Caption( [out, retval] BSTR * pVal );
-	[propput, id( 2 ), helpstring( "The text caption" )] HRESULT Caption( [in] BSTR val );
+	[propget, id( 11 ), helpstring( "The text font" )] HRESULT Font( [out, retval] BSTR * pVal );
+	[propput, id( 11 ), helpstring( "The text font" )] HRESULT Font( [in] BSTR val );
+	[propget, id( 12 ), helpstring( "The text caption" )] HRESULT Caption( [out, retval] BSTR * pVal );
+	[propput, id( 12 ), helpstring( "The text caption" )] HRESULT Caption( [in] BSTR val );
 };
 
 // IOverlay
@@ -2163,7 +1617,7 @@ interface IEngine
 	[propget, id( 1 ), helpstring( "Retrieves the plugins directory" )] HRESULT PluginsDirectory( [out, retval] BSTR * path );
 	[propget, id( 2 ), helpstring( "Retrieves engine directory" )] HRESULT EngineDirectory( [out, retval] BSTR * path );
 	[propget, id( 3 ), helpstring( "Retrieves data directory" )] HRESULT DataDirectory( [out, retval] BSTR * path );
-	[id( 11 ), helpstring( "Creates the engine" )] HRESULT Create();
+	[id( 11 ), helpstring( "Creates the engine" )] HRESULT Create( [in] BSTR appName, [in] boolean enableValidation );
 	[id( 12 ), helpstring( "Destroys the engine" )] HRESULT Destroy();
 	[id( 13 ), helpstring( "Initialises the engine" )] HRESULT Initialise( [in] int fps );
 	[id( 14 ), helpstring( "Cleans up the engine" )] HRESULT Cleanup();
@@ -2176,10 +1630,6 @@ interface IEngine
 	[id( 22 ), helpstring( "Creates a render window" )] HRESULT CreateRenderWindow( [in] BSTR name, [out, retval] IRenderWindow ** pVal );
 	[id( 23 ), helpstring( "Removes a render window" )] HRESULT RemoveWindow( [in] IRenderWindow * val );
 	[id( 24 ), helpstring( "Creates a sampler" )] HRESULT CreateSampler( [in] BSTR name, [out, retval] ISampler ** pVal );
-	[id( 25 ), helpstring( "Creates a blend state" )] HRESULT CreateBlendState( [in] BSTR name, [out, retval] IBlendState ** pVal );
-	[id( 26 ), helpstring( "Creates a depth stencil state" )] HRESULT CreateDepthStencilState( [in] BSTR name, [out, retval] IDepthStencilState ** pVal );
-	[id( 27 ), helpstring( "Creates a rasteriser state" )] HRESULT CreateRasteriserState( [in] BSTR name, [out, retval] IRasteriserState ** pVal );
-	[id( 28 ), helpstring( "Creates a multisample state" )] HRESULT CreateMultisampleState( [in] BSTR name, [out, retval] IMultisampleState ** pVal );
 	[id( 29 ), helpstring( "Removes the scene with the given name" )] HRESULT RemoveScene( [in] BSTR name );
 	[id( 30 ), helpstring( "Loads a scene file" )] HRESULT LoadScene( [in] BSTR name, [out, retval] IRenderWindow ** window );
 };
@@ -2357,42 +1807,6 @@ library Castor3D
 		[default] interface ILogger;
 	};
 
-	// BlendState
-	[
-		uuid( CA7E6B72-3130-4888-83D3-33BFBBA2B3FD )
-	]
-	coclass BlendState
-	{
-		[default] interface IBlendState;
-	}
-
-	// DepthStencilState
-	[
-		uuid( 8699BD20-FDE7-4FA9-9265-60B539CCE45D )
-	]
-	coclass DepthStencilState
-	{
-		[default] interface IDepthStencilState;
-	}
-
-	// MultisampleState
-	[
-		uuid( 3720BBC7-6B1D-454B-A062-677C4E2B365E )
-	]
-	coclass MultisampleState
-	{
-		[default] interface IMultisampleState;
-	}
-
-	// RasteriserState
-	[
-		uuid( 5880CD0C-969C-471D-8FD0-3F271A492D33 )
-	]
-	coclass RasteriserState
-	{
-		[default] interface IRasteriserState;
-	}
-
 	// Sampler
 	[
 		uuid( 98978C6B-C6FB-447C-A874-15068F900011 )
@@ -2402,13 +1816,13 @@ library Castor3D
 		[default] interface ISampler;
 	}
 
-	// TextureImage
+	// TextureView
 	[
 		uuid( 3CA68187-BD17-4E78-8D5C-B994DDA134BA )
 	]
-	coclass TextureImage
+	coclass TextureView
 	{
-		[default] interface ITextureImage;
+		[default] interface ITextureView;
 	}
 
 	// TextureLayout
@@ -2427,15 +1841,6 @@ library Castor3D
 	coclass TextureUnit
 	{
 		[default] interface ITextureUnit;
-	}
-
-	// ShaderProgram
-	[
-		uuid( B62FE384-D806-4DA7-B091-A7E260D95D7F )
-	]
-	coclass ShaderProgram
-	{
-		[default] interface IShaderProgram;
 	}
 
 	// Pass
@@ -2481,6 +1886,33 @@ library Castor3D
 	coclass Material
 	{
 		[default] interface IMaterial;
+	}
+
+	// IndexMapping
+	[
+		uuid( 56FAEA93-D2BC-4845-9F7C-A225044C7626 )
+	]
+	coclass IndexMapping
+	{
+		[default] interface IIndexMapping;
+	}
+
+	// TriFaceMapping
+	[
+		uuid( 3357AAE2-E50A-47AB-A0FE-83833CE2944C )
+	]
+	coclass TriFaceMapping
+	{
+		[default] interface ITriFaceMapping;
+	}
+
+	// LinesMapping
+	[
+		uuid( 93151A09-8DC0-491F-BCDE-1B58954B97C2 )
+	]
+	coclass LinesMapping
+	{
+		[default] interface ILinesMapping;
 	}
 
 	// Submesh
@@ -2652,6 +2084,42 @@ library Castor3D
 	coclass AnimatedObjectGroup
 	{
 		[default] interface IAnimatedObjectGroup;
+	};
+
+	// SceneBackground
+	[
+		uuid( 5CA94585-1FBC-466A-8A59-90733AD8DF1D )
+	]
+	coclass SceneBackground
+	{
+		[default] interface ISceneBackground;
+	};
+
+	// ColourBackground
+	[
+		uuid( F75EA477-3EFF-4254-B995-32A606A861F8 )
+	]
+	coclass ColourBackground
+	{
+		[default] interface IColourBackground;
+	};
+
+	// ImageBackground
+	[
+		uuid( 829D988E-BE04-421D-BE4B-DCE72A6C1E4E )
+	]
+	coclass ImageBackground
+	{
+		[default] interface IImageBackground;
+	};
+
+	// SkyboxBackground
+	[
+		uuid( 391A6B49-95D3-4B92-ACFC-058083FC06D2 )
+	]
+	coclass SkyboxBackground
+	{
+		[default] interface ISkyboxBackground;
 	};
 
 	// Scene

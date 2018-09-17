@@ -30,7 +30,7 @@ int _tmain( int argc, TCHAR * argv[] )
 			{
 				logger->LogInfo( _T( "ComCastor3DTest - Start" ) );
 				Castor3D::IEnginePtr engine = Castor3D::IEnginePtr( __uuidof( Castor3D::engine ) );
-				engine->Create();
+				engine->Create( _T( "ComCastor3DTest" ), false );
 				engine->Destroy();
 				logger->LogInfo( _T( "ComCastor3DTest - Finish" ) );
 			}

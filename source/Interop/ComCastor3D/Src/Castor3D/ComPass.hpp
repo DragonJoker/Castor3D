@@ -3,7 +3,6 @@
 #define __COMC3D_COM_PASS_H__
 
 #include "ComRgbColour.hpp"
-#include "ComShaderProgram.hpp"
 
 #include <Material/Pass.hpp>
 
@@ -47,6 +46,9 @@ namespace CastorCom
 			m_internal = pass;
 		}
 
+		COM_PROPERTY_GET( Type
+			, ePASS_TYPE
+			, makeGetter( m_internal.get(), &castor3d::Pass::getType ) );
 		COM_PROPERTY( Emissive
 			, float
 			, makeGetter( m_internal.get(), &castor3d::Pass::getEmissive )

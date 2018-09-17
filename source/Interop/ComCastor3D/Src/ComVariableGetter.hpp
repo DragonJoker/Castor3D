@@ -273,7 +273,7 @@ namespace CastorCom
 
 #define DECLARE_VARIABLE_REF_GETTER( ctype, nmspc, type )\
 	template< typename Class >\
-	struct VariableRefGetter< Class, castor::type >\
+	struct VariableRefGetter< Class, nmspc::type >\
 	{\
 		using Function = nmspc::type const &( Class::* )()const;\
 		VariableRefGetter( Class * instance, Function function )\
@@ -313,9 +313,9 @@ namespace CastorCom
 
 #define DECLARE_VARIABLE_PTR_GETTER( ctype, nmspc, type )\
 	template< typename Class >\
-	struct VariableGetter< Class, nmspc::type##SPtr >\
+	struct VariableGetter< Class, std::shared_ptr< nmspc::type > >\
 	{\
-		using Function = nmspc::type##SPtr( Class::* )()const;\
+		using Function = std::shared_ptr< nmspc::type >( Class::* )()const;\
 		VariableGetter( Class * instance, Function function )\
 			: m_instance( instance )\
 			, m_function( function )\

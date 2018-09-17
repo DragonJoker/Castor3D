@@ -55,7 +55,7 @@ namespace CastorCom
 
 		COM_PROPERTY_GET( Size, ISize *, makeGetter( m_internal.get(), &castor3d::RenderTarget::getSize ) );
 
-		STDMETHOD( Initialise )( /* [in] */ unsigned int index );
+		STDMETHOD( Initialise )();
 		STDMETHOD( Cleanup )();
 
 	private:

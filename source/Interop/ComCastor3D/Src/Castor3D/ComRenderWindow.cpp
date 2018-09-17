@@ -1,7 +1,8 @@
 #include "ComRenderWindow.hpp"
 
-#include <Miscellaneous/PlatformWindowHandle.hpp>
 #include <Event/UserInput/UserInputListener.hpp>
+
+#include <Core/PlatformWindowHandle.hpp>
 
 namespace CastorCom
 {
@@ -25,7 +26,10 @@ namespace CastorCom
 			{
 				try
 				{
-					*pVal = m_internal->initialise( *static_cast< CSize * >( size ), castor3d::WindowHandle( std::make_shared< castor3d::IMswWindowHandle >( HWND( val ) ) ) ) ? VARIANT_TRUE : VARIANT_FALSE;
+					*pVal = m_internal->initialise( *static_cast< CSize * >( size )
+						, renderer::WindowHandle{ std::make_unique< renderer::IMswWindowHandle >( ::GetModuleHandle( nullptr ), HWND( val ) ) } )
+							? VARIANT_TRUE
+							: VARIANT_FALSE;
 					hr = S_OK;
 				}
 				catch ( castor::Exception & p_exc )
