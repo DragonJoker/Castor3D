@@ -18,6 +18,7 @@ namespace glsl
 		GlslWriter_API void declareApplyGamma();
 		GlslWriter_API void declareRemoveGamma();
 		GlslWriter_API void declareLineariseDepth();
+		GlslWriter_API void declareComputeAccumulation();
 		GlslWriter_API void declareGetMapNormal();
 		GlslWriter_API void declareFresnelSchlick();
 		GlslWriter_API void declareComputeIBL();
@@ -36,6 +37,11 @@ namespace glsl
 			, Vec3 const & normal
 			, Vec3 const & position );
 		GlslWriter_API Float lineariseDepth( Float const & depth
+			, Float const & nearPlane
+			, Float const & farPlane );
+		GlslWriter_API Vec4 computeAccumulation( Float const & depth
+			, Vec3 const & colour
+			, Float const & alpha
 			, Float const & nearPlane
 			, Float const & farPlane );
 		GlslWriter_API Vec3 fresnelSchlick( Float const & product
@@ -88,6 +94,12 @@ namespace glsl
 			, InFloat
 			, InFloat
 			, InFloat > m_lineariseDepth;
+		Function< Vec4
+			, InFloat
+			, InVec3
+			, InFloat
+			, InFloat
+			, InFloat > m_computeAccumulation;
 		Function< Vec3
 			, InFloat
 			, InVec3

@@ -39,10 +39,10 @@ namespace smaa
 			GlslWriter writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			writeConstants( writer, config, renderTargetMetrics, true );
+			writeConstants( writer, config, renderTargetMetrics );
 			writer.declConstant( constants::MaxSearchSteps
 				, Int( config.data.maxSearchSteps ) );
-			writer << getSmaaShader();
+			writer << getBlendingWeightCalculationVS();
 
 			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
 			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
@@ -70,8 +70,8 @@ namespace smaa
 			using namespace glsl;
 			GlslWriter writer = renderSystem.createGlslWriter();
 
-			writeConstants( writer, config, renderTargetMetrics, false );
-			writer << getSmaaShader();
+			writeConstants( writer, config, renderTargetMetrics );
+			writer << getBlendingWeightCalculationPS();
 
 			// Shader inputs
 			glsl::Ubo ubo{ writer, cuT( "Subsample" ), 0u, 0u };

@@ -72,6 +72,8 @@ namespace castor3d
 			}
 		}
 
+		m_program->initialise();
+
 		renderer::GraphicsPipelineCreateInfo createInfo
 		{
 			m_program->getStates(),

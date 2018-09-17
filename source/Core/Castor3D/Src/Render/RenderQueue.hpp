@@ -239,8 +239,6 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doInitialise( Scene const & scene, Camera const & camera );
-		void doInitialise( Scene const & scene );
 		void doPrepareCommandBuffer();
 		void doParseAllRenderNodes( ShadowMapLightTypeArray & shadowMaps );
 		void doParseCulledRenderNodes();

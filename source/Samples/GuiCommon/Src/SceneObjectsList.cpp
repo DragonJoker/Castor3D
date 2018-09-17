@@ -159,7 +159,7 @@ namespace GuiCommon
 				, _( "Background" )
 				, eBMP_BACKGROUND
 				, eBMP_BACKGROUND_SEL
-				, new BackgroundTreeItemProperty( this, m_propertiesHolder->IsEditable(), scene->getBackground() ) );
+				, new BackgroundTreeItemProperty( this, m_propertiesHolder->IsEditable(), *scene->getBackground() ) );
 
 			scene->getEngine()->getRenderWindowCache().lock();
 

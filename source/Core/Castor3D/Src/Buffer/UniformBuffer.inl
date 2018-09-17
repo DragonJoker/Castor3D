@@ -9,8 +9,6 @@
 
 #include <algorithm>
 
-using namespace castor;
-
 namespace castor3d
 {
 	template< typename T >

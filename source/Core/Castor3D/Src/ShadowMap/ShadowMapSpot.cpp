@@ -97,6 +97,7 @@ namespace castor3d
 				sampler->setWrapS( renderer::WrapMode::eClampToEdge );
 				sampler->setWrapT( renderer::WrapMode::eClampToEdge );
 				sampler->setWrapR( renderer::WrapMode::eClampToEdge );
+				sampler->setBorderColour( renderer::BorderColour::eFloatOpaqueWhite );
 			}
 
 			renderer::ImageCreateInfo image{};
@@ -131,6 +132,7 @@ namespace castor3d
 		{
 			std::vector< ShadowMap::PassData > result;
 			Viewport viewport{ engine };
+			viewport.resize( Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize } );
 			ShadowMap::PassData passData
 			{
 				std::make_unique< MatrixUbo >( engine ),
@@ -141,7 +143,6 @@ namespace castor3d
 				nullptr,
 				nullptr,
 			};
-			passData.camera->resize( Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize } );
 			passData.culler = std::make_unique< FrustumCuller >( scene, *passData.camera );
 			passData.pass = std::make_shared< ShadowMapPassSpot >( engine
 				, *passData.matrixUbo

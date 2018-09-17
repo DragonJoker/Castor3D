@@ -40,7 +40,8 @@
 using namespace castor;
 using namespace castor3d;
 
-#define C3D_DISABLE_SSSSS_TRANSMITTANCE 1
+#define C3D_UseLightPassFence 0
+#define C3D_DisableSSSTransmittance 1
 
 namespace castor3d
 {
@@ -469,13 +470,21 @@ namespace castor3d
 		m_timer->endPass( *m_commandBuffer, index );
 		m_commandBuffer->end();
 
-		//m_fence->reset();
+#if C3D_UseLightPassFence
+		m_fence->reset();
 		device.getGraphicsQueue().submit( *m_commandBuffer
 			, *result
 			, renderer::PipelineStageFlag::eColourAttachmentOutput
 			, *m_signalReady
-			, nullptr );// m_fence.get() );
-		//m_fence->wait( renderer::FenceTimeout );
+			, m_fence.get() );
+		m_fence->wait( renderer::FenceTimeout );
+#else
+		device.getGraphicsQueue().submit( *m_commandBuffer
+			, *result
+			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, *m_signalReady
+			, nullptr );
+#endif
 		result = m_signalReady.get();
 
 		return *result;
@@ -502,10 +511,10 @@ namespace castor3d
 		{
 			auto shadowType = ShadowType( pipelineIndex % uint32_t( ShadowType::eCount ) );
 			bool volumetric = pipelineIndex >= uint32_t( ShadowType::eCount );
+			m_vertexShader = doGetVertexShaderSource( sceneFlags );
 
 			if ( scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness )
 			{
-				m_vertexShader = doGetVertexShaderSource( sceneFlags );
 				m_pixelShader = doGetPbrMRPixelShaderSource( sceneFlags
 					, lightType
 					, shadowType
@@ -513,7 +522,6 @@ namespace castor3d
 			}
 			else if ( scene.getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
 			{
-				m_vertexShader = doGetVertexShaderSource( sceneFlags );
 				m_pixelShader = doGetPbrSGPixelShaderSource( sceneFlags
 					, lightType
 					, shadowType
@@ -521,7 +529,6 @@ namespace castor3d
 			}
 			else
 			{
-				m_vertexShader = doGetVertexShaderSource( sceneFlags );
 				m_pixelShader = doGetLegacyPixelShaderSource( sceneFlags
 					, lightType
 					, shadowType
@@ -776,7 +783,7 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
 						, output );
-#if !C3D_DISABLE_SSSSS_TRANSMITTANCE
+#if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
 						, light
 						, texCoord
@@ -797,7 +804,7 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
 						, output );
-#if !C3D_DISABLE_SSSSS_TRANSMITTANCE
+#if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
 						, light
 						, texCoord
@@ -818,7 +825,7 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
 						, output );
-#if !C3D_DISABLE_SSSSS_TRANSMITTANCE
+#if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
 						, light
 						, texCoord
@@ -944,8 +951,8 @@ namespace castor3d
 				{
 					auto c3d_light = writer.getBuiltin< shader::DirectionalLight >( cuT( "c3d_light" ) );
 					auto light = writer.declLocale( cuT( "light" ), c3d_light );
-#if !C3D_DISABLE_SSSSS_TRANSMITTANCE
-#	if !C3D_DEBUG_SSS_TRANSMITTANCE
+#if !C3D_DisableSSSTransmittance
+#	if !C3D_DebugSSSTransmittance
 					lighting->compute( light
 						, eye
 						, albedo
@@ -985,8 +992,8 @@ namespace castor3d
 				{
 					auto c3d_light = writer.getBuiltin< shader::PointLight >( cuT( "c3d_light" ) );
 					auto light = writer.declLocale( cuT( "light" ), c3d_light );
-#if !C3D_DISABLE_SSSSS_TRANSMITTANCE
-#	if !C3D_DEBUG_SSS_TRANSMITTANCE
+#if !C3D_DisableSSSTransmittance
+#	if !C3D_DebugSSSTransmittance
 					lighting->compute( light
 						, eye
 						, albedo
@@ -1026,8 +1033,8 @@ namespace castor3d
 				{
 					auto c3d_light = writer.getBuiltin< shader::SpotLight >( cuT( "c3d_light" ) );
 					auto light = writer.declLocale( cuT( "light" ), c3d_light );
-#if !C3D_DISABLE_SSSSS_TRANSMITTANCE
-#	if !C3D_DEBUG_SSS_TRANSMITTANCE
+#if !C3D_DisableSSSTransmittance
+#	if !C3D_DebugSSSTransmittance
 					lighting->compute( light
 						, eye
 						, albedo
@@ -1187,7 +1194,7 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
 						, output );
-#if !C3D_DISABLE_SSSSS_TRANSMITTANCE
+#if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
 						, light
 						, texCoord
@@ -1210,7 +1217,7 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
 						, output );
-#if !C3D_DISABLE_SSSSS_TRANSMITTANCE
+#if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
 						, light
 						, texCoord
@@ -1233,7 +1240,7 @@ namespace castor3d
 						, shadowReceiver
 						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
 						, output );
-#if !C3D_DISABLE_SSSSS_TRANSMITTANCE
+#if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
 						, light
 						, texCoord

@@ -225,7 +225,7 @@ namespace castor3d
 	void ForwardRenderTechniquePass::update( RenderInfo & info
 		, Point2r const & jitter )
 	{
-		getSceneUbo().update( m_scene, *m_camera );
+		getSceneUbo().update( m_scene, m_camera );
 		doUpdate( info, jitter );
 	}
 
@@ -414,7 +414,7 @@ namespace castor3d
 
 		if ( node.passNode.pass.getType() != MaterialType::eLegacy )
 		{
-			auto & background = node.sceneNode.getScene()->getBackground();
+			auto & background = *node.sceneNode.getScene()->getBackground();
 
 			if ( background.hasIbl() )
 			{
@@ -461,7 +461,7 @@ namespace castor3d
 
 		if ( node.passNode.pass.getType() != MaterialType::eLegacy )
 		{
-			auto & background = node.sceneNode.getScene()->getBackground();
+			auto & background = *node.sceneNode.getScene()->getBackground();
 
 			if ( background.hasIbl() )
 			{

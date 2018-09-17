@@ -10,6 +10,8 @@
 
 #include <Graphics/Image.hpp>
 
+#define C3D_HasNonPOT 1
+
 using namespace castor;
 namespace castor3d
 {
@@ -334,14 +336,13 @@ namespace castor3d
 	{
 		bool result = false;
 
-		if ( !m_engine.getRenderSystem()->getGpuInformations().hasNonPowerOfTwoTextures() )
-		{
-			renderer::Extent3D adjustedExtent{ getNext2Pow( extent.width )
-				, getNext2Pow( extent.height )
-				, getNext2Pow( extent.depth ) };
-			result = adjustedExtent != extent;
-			extent = adjustedExtent;
-		}
+#if !C3D_HasNonPOT
+		renderer::Extent3D adjustedExtent{ getNext2Pow( extent.width )
+			, getNext2Pow( extent.height )
+			, getNext2Pow( extent.depth ) };
+		result = adjustedExtent != extent;
+		extent = adjustedExtent;
+#endif
 
 		return result;
 	}

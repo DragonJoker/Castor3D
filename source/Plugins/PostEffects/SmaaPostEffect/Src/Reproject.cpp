@@ -60,13 +60,13 @@ namespace smaa
 		{
 			using namespace glsl;
 			GlslWriter writer = renderSystem.createGlslWriter();
-			writeConstants( writer, config, renderTargetMetrics, false );
+			writeConstants( writer, config, renderTargetMetrics );
 			writer.declConstant( constants::Reprojection
 				, 1_i
 				, reprojection );
 			writer.declConstant( constants::ReprojectionWeightScale
 				, Float( config.data.reprojectionWeightScale ) );
-			writer << getSmaaShader();
+			writer << getResolvePS();
 
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );

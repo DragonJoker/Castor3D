@@ -73,24 +73,6 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		Connects to the device onEnabled/onDisabled signals.
-		 *\param[in]	device	The device to register.
-		 *\~french
-		 *\brief		Se connecte aux signaux onEnablle/onDisable du périphérique.
-		 *\param[in]	device	Le périphérique à enregistrer.
-		 */
-		C3D_API void registerDevice( renderer::Device & device );
-		/**
-		 *\~english
-		 *\brief		Disconnects from the device onEnabled/onDisabled signals.
-		 *\param[in]	device	The device to unregister.
-		 *\~french
-		 *\brief		Se déconnecte du signaux onEnablle/onDisable du périphérique.
-		 *\param[in]	device	Le périphérique à désenregistrer.
-		 */
-		C3D_API void unregisterDevice( renderer::Device & device );
-		/**
-		 *\~english
 		 *\brief		Pushes a scene on the stack
 		 *\param[in]	scene	The scene
 		 *\~french
@@ -299,6 +281,11 @@ namespace castor3d
 			return m_currentDevice;
 		}
 
+		inline void setCurrentDevice( renderer::Device const * device )
+		{
+			m_currentDevice = device;
+		}
+
 		inline bool hasCurrentDevice()const
 		{
 			return m_currentDevice != nullptr;
@@ -384,8 +371,6 @@ namespace castor3d
 		castor::String m_name;
 		castor::Nanoseconds m_gpuTime;
 		GpuBufferPool m_gpuBufferPool;
-		std::map< renderer::Device *, renderer::DeviceEnabledConnection > m_deviceEnabledConnections;
-		std::map< renderer::Device *, renderer::DeviceDisabledConnection > m_deviceDisabledConnections;
 		renderer::PhysicalDeviceMemoryProperties m_memoryProperties{};
 		renderer::PhysicalDeviceFeatures m_features{};
 		renderer::PhysicalDeviceProperties m_properties{};

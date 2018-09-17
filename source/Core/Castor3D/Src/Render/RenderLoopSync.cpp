@@ -86,10 +86,17 @@ namespace castor3d
 		if ( result )
 		{
 			m_renderSystem.setMainDevice( result );
-			result->enable();
+			auto guard = makeBlockGuard(
+				[this, &result]()
+				{
+					m_renderSystem.setCurrentDevice( result.get() );
+				},
+				[this]()
+				{
+					m_renderSystem.setCurrentDevice( nullptr );
+				} );
 			GpuInformations info;
 			m_renderSystem.initialise( std::move( info ) );
-			result->disable();
 		}
 
 		return result;

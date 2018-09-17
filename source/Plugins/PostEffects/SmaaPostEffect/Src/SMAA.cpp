@@ -4,10 +4,11 @@
 
 namespace smaa
 {
-	castor::String const & getSmaaShader()
+	namespace
 	{
-		static castor::String const result = castor::String{ R"(
-/**
+		castor::String const & getSmaaShaderHeader()
+		{
+			static castor::String const result = castor::String{ R"(/**
  * Copyright (C) 2013 Jorge Jimenez (jorge@iryoku.com)
  * Copyright (C) 2013 Jose I. Echevarria (joseignacioechevarria@gmail.com)
  * Copyright (C) 2013 Belen Masia (bmasia@unizar.es)
@@ -33,8 +34,7 @@ namespace smaa
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- */)" } + castor::String{ R"(
-
+ */
 
 /**
  *                  _______  ___  ___       ___           ___
@@ -48,7 +48,16 @@ namespace smaa
  *       S U B P I X E L   M O R P H O L O G I C A L   A N T I A L I A S I N G
  *
  *                         http://www.iryoku.com/smaa/
- *
+ */
+)"
+			};
+			return result;
+		}
+
+		castor::String const & getSmaaShaderExplanations()
+		{
+			static castor::String const result = castor::String{ R"(
+/**
  * Hi, welcome aboard!
  * 
  * Here you'll find instructions to get the shader up and running as fast as
@@ -300,8 +309,15 @@ namespace smaa
  * as we have to write all the pixels in the motion blur pass.
  *
  * That's it!
- */)" } +castor::String{ R"(
+ */
+)" };
+			return result;
+		}
 
+		castor::String getSmaaPresets()
+		{
+			return castor::String
+			{ R"(
 //-----------------------------------------------------------------------------
 // SMAA Presets
 
@@ -330,8 +346,15 @@ namespace smaa
 #define SMAA_MAX_SEARCH_STEPS 32
 #define SMAA_MAX_SEARCH_STEPS_DIAG 16
 #define SMAA_CORNER_ROUNDING 25
-#endif)" } +castor::String{ R"(
+#endif
+)"
+			};
+		}
 
+		castor::String getConfigurableDefines()
+		{
+			return castor::String
+			{ R"(
 //-----------------------------------------------------------------------------
 // Configurable Defines
 
@@ -499,8 +522,15 @@ namespace smaa
 #endif
 #ifndef SMAA_INCLUDE_PS
 #define SMAA_INCLUDE_PS 1
-#endif)" } +castor::String{ R"(
+#endif
+)"
+			};
+		}
 
+		castor::String getTextureAccessDefines()
+		{
+			return castor::String
+			{ R"(
 //-----------------------------------------------------------------------------
 // Texture Access Defines
 
@@ -518,8 +548,15 @@ namespace smaa
 
 #ifndef SMAA_DECODE_VELOCITY
 #define SMAA_DECODE_VELOCITY(sample) sample.rg
-#endif)" } +castor::String{ R"(
+#endif
+)"
+			};
+		}
 
+		castor::String getNonConfigurableDefines()
+		{
+			return castor::String
+			{ R"(
 //-----------------------------------------------------------------------------
 // Non-Configurable Defines
 
@@ -529,8 +566,15 @@ namespace smaa
 #define SMAA_AREATEX_SUBTEX_SIZE (1.0 / 7.0)
 #define SMAA_SEARCHTEX_SIZE float2(66.0, 33.0)
 #define SMAA_SEARCHTEX_PACKED_SIZE float2(64.0, 16.0)
-#define SMAA_CORNER_ROUNDING_NORM (float(SMAA_CORNER_ROUNDING) / 100.0))" } +castor::String{ R"(
+#define SMAA_CORNER_ROUNDING_NORM (float(SMAA_CORNER_ROUNDING) / 100.0)
+)"
+			};
+		}
 
+		castor::String getPortingFunctions()
+		{
+			return castor::String
+			{ R"(
 //-----------------------------------------------------------------------------
 // Porting Functions
 
@@ -597,9 +641,15 @@ SamplerState PointSampler { Filter = MIN_MAG_MIP_POINT; AddressU = Clamp; Addres
 
 #if !defined(SMAA_HLSL_3) && !defined(SMAA_HLSL_4) && !defined(SMAA_HLSL_4_1) && !defined(SMAA_GLSL_3) && !defined(SMAA_GLSL_4) && !defined(SMAA_CUSTOM_SL)
 #error you must define the shading language: SMAA_HLSL_*, SMAA_GLSL_* or SMAA_CUSTOM_SL
-#endif)" } +castor::String{ R"(
+#endif
+)"
+			};
+		}
 
-//-----------------------------------------------------------------------------
+		castor::String getMiscFunctions()
+		{
+			return castor::String
+			{ R"(//-----------------------------------------------------------------------------
 // Misc functions
 
 /**
@@ -641,13 +691,26 @@ void SMAAMovc(bool2 cond, inout float2 variable, float2 value) {
 void SMAAMovc(bool4 cond, inout float4 variable, float4 value) {
     SMAAMovc(cond.xy, variable.xy, value.xy);
     SMAAMovc(cond.zw, variable.zw, value.zw);
-})" } +castor::String{ R"(
+}
+)"
+			};
+		}
 
+		castor::String getSmaaCommon()
+		{
+			return getSmaaPresets()
+				+ getConfigurableDefines()
+				+ getTextureAccessDefines()
+				+ getNonConfigurableDefines()
+				+ getPortingFunctions()
+				+ getMiscFunctions();
+		}
+	}
 
-#if SMAA_INCLUDE_VS
-//-----------------------------------------------------------------------------
-// Vertex Shaders
-
+	castor::String getEdgeDetectionVS()
+	{
+		return getSmaaCommon() + castor::String
+		{ R"(
 /**
  * Edge Detection Vertex Shader
  */
@@ -657,7 +720,14 @@ void SMAAEdgeDetectionVS(float2 texcoord,
     offset[1] = mad(SMAA_RT_METRICS.xyxy, float4( 1.0, 0.0, 0.0,  1.0), texcoord.xyxy);
     offset[2] = mad(SMAA_RT_METRICS.xyxy, float4(-2.0, 0.0, 0.0, -2.0), texcoord.xyxy);
 }
+)"
+		};
+	}
 
+	castor::String getBlendingWeightCalculationVS()
+	{
+		return getSmaaCommon() + castor::String
+		{ R"(
 /**
  * Blend Weight Calculation Vertex Shader
  */
@@ -675,7 +745,14 @@ void SMAABlendingWeightCalculationVS(float2 texcoord,
                     float4(-2.0, 2.0, -2.0, 2.0) * float(SMAA_MAX_SEARCH_STEPS),
                     float4(offset[0].xz, offset[1].yw));
 }
+)"
+		};
+	}
 
+	castor::String getNeighborhoodBlendingVS()
+	{
+		return getSmaaCommon() + castor::String
+		{ R"(
 /**
  * Neighborhood Blending Vertex Shader
  */
@@ -683,12 +760,16 @@ void SMAANeighborhoodBlendingVS(float2 texcoord,
                                 out float4 offset) {
     offset = mad(SMAA_RT_METRICS.xyxy, float4( 1.0, 0.0, 0.0,  1.0), texcoord.xyxy);
 }
-#endif // SMAA_INCLUDE_VS)" } +castor::String{ R"(
+)"
+		};
+	}
 
-#if SMAA_INCLUDE_PS
+	castor::String getLumaEdgeDetectionPS()
+	{
+		return getSmaaCommon() + castor::String
+		{ R"(
 //-----------------------------------------------------------------------------
-// Edge Detection Pixel Shaders (First Pass)
-
+// Edge Detection Pixel Shader (First Pass)
 /**
  * Luma Edge Detection
  *
@@ -746,8 +827,17 @@ float2 SMAALumaEdgeDetectionPS(float2 texcoord,
     edges.xy *= step(finalDelta, SMAA_LOCAL_CONTRAST_ADAPTATION_FACTOR * delta.xy);
 
     return edges;
-})" } +castor::String{ R"(
+}
+)"
+		};
+	}
 
+	castor::String getColorEdgeDetectionPS()
+	{
+		return getSmaaCommon() + castor::String
+		{ R"(
+//-----------------------------------------------------------------------------
+// Edge Detection Pixel Shader (First Pass)
 /**
  * Color Edge Detection
  *
@@ -817,7 +907,16 @@ float2 SMAAColorEdgeDetectionPS(float2 texcoord,
 
     return edges;
 }
+)"
+		};
+	}
 
+	castor::String getDepthEdgeDetectionPS()
+	{
+		return getSmaaCommon() + castor::String
+		{ R"(
+//-----------------------------------------------------------------------------
+// Edge Detection Pixel Shader (First Pass)
 /**
  * Depth Edge Detection
  */
@@ -832,12 +931,17 @@ float2 SMAADepthEdgeDetectionPS(float2 texcoord,
         discard;
 
     return edges;
-})" } +castor::String{ R"(
+}
+)"
+		};
+	}
 
+	castor::String getBlendingWeightCalculationPS()
+	{
+		return getSmaaCommon() + castor::String
+		{ R"(
 //-----------------------------------------------------------------------------
 // Diagonal Search Functions
-
-#if !defined(SMAA_DISABLE_DIAG_DETECTION)
 
 /**
  * Allows to decode two binary values from a bilinear-filtered access.
@@ -992,8 +1096,7 @@ float2 SMAACalculateDiagWeights(SMAATexture2D(edgesTex), SMAATexture2D(areaTex),
 
     return weights;
 }
-#endif)" } +castor::String{ R"(
-
+)" } + castor::String{ R"(
 //-----------------------------------------------------------------------------
 // Horizontal/Vertical Search Functions
 
@@ -1109,8 +1212,8 @@ float2 SMAAArea(SMAATexture2D(areaTex), float2 dist, float e1, float e2, float o
 
     // Do it!
     return SMAA_AREATEX_SELECT(SMAASampleLevelZero(areaTex, texcoord));
-})" } +castor::String{ R"(
-
+}
+)" } + castor::String{ R"(
 //-----------------------------------------------------------------------------
 // Corner Detection Functions
 
@@ -1146,8 +1249,8 @@ void SMAADetectVerticalCornerPattern(SMAATexture2D(edgesTex), inout float2 weigh
 
     weights *= saturate(factor);
     #endif
-})" } +castor::String{ R"(
-
+}
+)" } + castor::String{ R"(
 //-----------------------------------------------------------------------------
 // Blending Weight Calculation Pixel Shader (Second Pass)
 
@@ -1253,8 +1356,15 @@ float4 SMAABlendingWeightCalculationPS(float2 texcoord,
     }
 
     return weights;
-})" } +castor::String{ R"(
+}
+)"
+		};
+	}
 
+	castor::String getNeighborhoodBlendingPS()
+	{
+		return getSmaaCommon() + castor::String
+		{ R"(
 //-----------------------------------------------------------------------------
 // Neighborhood Blending Pixel Shader (Third Pass)
 
@@ -1314,8 +1424,15 @@ float4 SMAANeighborhoodBlendingPS(float2 texcoord,
 
         return color;
     }
-})" } +castor::String{ R"(
+}
+)"
+		};
+	}
 
+	castor::String getResolvePS()
+	{
+		return getSmaaCommon() + castor::String
+		{ R"(
 //-----------------------------------------------------------------------------
 // Temporal Resolve Pixel Shader (Optional Pass)
 
@@ -1349,12 +1466,18 @@ float4 SMAAResolvePS(float2 texcoord,
     float4 previous = SMAASamplePoint(previousColorTex, texcoord);
     return lerp(current, previous, 0.5);
     #endif
-})" } +castor::String{ R"(
+}
+)"
+		};
+	}
 
+	castor::String getSeparatePS()
+	{
+		return getSmaaCommon() + castor::String
+		{ R"(
 //-----------------------------------------------------------------------------
 // Separate Multisamples Pixel Shader (Optional Pass)
 
-#ifdef SMAALoad
 void SMAASeparatePS(float4 position,
                     float2 texcoord,
                     out float4 target0,
@@ -1364,20 +1487,16 @@ void SMAASeparatePS(float4 position,
     target0 = SMAALoad(colorTexMS, pos, 0);
     target1 = SMAALoad(colorTexMS, pos, 1);
 }
-#endif)" } +castor::String{ R"(
-
-//-----------------------------------------------------------------------------
-#endif // SMAA_INCLUDE_PS
-)" };
-		return result;
+)"
+		};
 	}
 
 	void writeConstants( glsl::GlslWriter & writer
 		, SmaaConfig const & config
-		, castor::Point4f const & renderTargetMetrics
-		, bool vertexShader )
+		, castor::Point4f const & renderTargetMetrics )
 	{
 		using namespace glsl;
+		writer << getSmaaShaderHeader();
 
 		if ( writer.getShaderLanguageVersion() >= 400 )
 		{
@@ -1394,8 +1513,6 @@ void SMAASeparatePS(float4 position,
 		writer.declConstant( cuT( "SMAA_CORNER_ROUNDING" ), Int( config.data.cornerRounding ) );
 		writer.declConstant( cuT( "SMAA_PIXEL_SIZE" ), vec2( Float( renderTargetMetrics[0] ), renderTargetMetrics[1] ) );
 		writer.declConstant( cuT( "SMAA_RT_METRICS" ), vec4( Float( renderTargetMetrics[0] ), renderTargetMetrics[1], renderTargetMetrics[2], renderTargetMetrics[3] ) );
-		writer.declConstant( cuT( "SMAA_INCLUDE_PS" ), vertexShader ? 0_i : 1_i );
-		writer.declConstant( cuT( "SMAA_INCLUDE_VS" ), vertexShader ? 1_i : 0_i );
 		writer.declConstant( cuT( "SMAA_DISABLE_DIAG_DETECTION" ), config.data.disableDiagonalDetection ? 1_i : 0_i, config.data.disableDiagonalDetection );
 		writer.declConstant( cuT( "SMAA_DISABLE_CORNER_DETECTION" ), config.data.disableCornerDetection ? 1_i : 0_i, config.data.disableCornerDetection );
 	}

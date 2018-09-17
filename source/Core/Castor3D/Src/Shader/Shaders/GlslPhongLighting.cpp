@@ -8,6 +8,7 @@ using namespace castor;
 using namespace glsl;
 
 #define C3D_DebugCascades 0
+#define C3D_DebugSpotShadows 0
 
 namespace castor3d
 {
@@ -288,8 +289,13 @@ namespace castor3d
 							, glsl::fma( light.m_attenuation().y()
 								, distance
 								, light.m_attenuation().x() ) ) );
+#if C3D_DebugSpotShadows
+					parentOutput.m_diffuse += shadowFactor;
+					parentOutput.m_specular += shadowFactor;
+#else
 					parentOutput.m_diffuse += output.m_diffuse / attenuation;
 					parentOutput.m_specular += output.m_specular / attenuation;
+#endif
 				}
 				, PointLight( &m_writer, cuT( "light" ) )
 				, InVec3( &m_writer, cuT( "worldEye" ) )
@@ -323,47 +329,43 @@ namespace castor3d
 						, normalize( lightToVertex ) );
 					auto spotFactor = m_writer.declLocale( cuT( "spotFactor" )
 						, dot( lightDirection, light.m_direction() ) );
+					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
+						, 1.0_f - step( spotFactor, light.m_cutOff() ) );
 
-					IF( m_writer, spotFactor > light.m_cutOff() )
+					IF( m_writer, light.m_lightBase().m_shadowType() != Int( int( ShadowType::eNone ) ) )
 					{
-						auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" ), 1.0_f );
-
-						IF( m_writer, light.m_lightBase().m_shadowType() != Int( int( ShadowType::eNone ) ) )
+						IF( m_writer, light.m_lightBase().m_index() >= 0_i )
 						{
-							IF( m_writer, light.m_lightBase().m_index() >= 0_i )
-							{
-								shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-									, m_shadowModel->computeSpotShadow( light.m_lightBase().m_shadowType()
-										, light.m_transform()
-										, fragmentIn.m_worldVertex
-										, lightToVertex
-										, fragmentIn.m_worldNormal
-										, light.m_lightBase().m_index() ) );
-							}
-							FI;
+							shadowFactor *= max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+								, m_shadowModel->computeSpotShadow( light.m_lightBase().m_shadowType()
+									, light.m_transform()
+									, fragmentIn.m_worldVertex
+									, lightToVertex
+									, fragmentIn.m_worldNormal
+									, light.m_lightBase().m_index() ) );
 						}
 						FI;
-
-						doComputeLight( light.m_lightBase()
-							, worldEye
-							, lightDirection
-							, shininess
-							, shadowFactor
-							, fragmentIn
-							, output );
-						auto attenuation = m_writer.declLocale( cuT( "attenuation" )
-							, glsl::fma( light.m_attenuation().z()
-								, distance * distance
-								, glsl::fma( light.m_attenuation().y()
-									, distance
-									, light.m_attenuation().x() ) ) );
-						spotFactor = glsl::fma( m_writer.paren( spotFactor - 1.0_f )
-							, 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff() )
-							, 1.0_f );
-						parentOutput.m_diffuse += spotFactor * output.m_diffuse / attenuation;
-						parentOutput.m_specular += spotFactor * output.m_specular / attenuation;
 					}
 					FI;
+
+					doComputeLight( light.m_lightBase()
+						, worldEye
+						, lightDirection
+						, shininess
+						, shadowFactor
+						, fragmentIn
+						, output );
+					auto attenuation = m_writer.declLocale( cuT( "attenuation" )
+						, glsl::fma( light.m_attenuation().z()
+							, distance * distance
+							, glsl::fma( light.m_attenuation().y()
+								, distance
+								, light.m_attenuation().x() ) ) );
+					spotFactor = glsl::fma( m_writer.paren( spotFactor - 1.0_f )
+						, 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff() )
+						, 1.0_f );
+					parentOutput.m_diffuse += spotFactor * output.m_diffuse / attenuation;
+					parentOutput.m_specular += spotFactor * output.m_specular / attenuation;
 				}
 				, SpotLight( &m_writer, cuT( "light" ) )
 				, InVec3( &m_writer, cuT( "worldEye" ) )
@@ -561,42 +563,41 @@ namespace castor3d
 						, normalize( lightToVertex ) );
 					auto spotFactor = m_writer.declLocale( cuT( "spotFactor" )
 						, dot( lightDirection, light.m_direction() ) );
+					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
+						, 1.0_f - step( spotFactor, light.m_cutOff() ) );
 
-					IF( m_writer, spotFactor > light.m_cutOff() )
+					if ( shadowType != ShadowType::eNone )
 					{
-						auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" ), Float( 1 ) );
-
-						if ( shadowType != ShadowType::eNone )
-						{
-							shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-								, m_shadowModel->computeSpotShadow( light.m_transform()
-									, fragmentIn.m_worldVertex
-									, lightToVertex
-									, fragmentIn.m_worldNormal ) );
-						}
-
-						doComputeLight( light.m_lightBase()
-							, worldEye
-							, lightDirection
-							, shininess
-							, shadowFactor
-							, fragmentIn
-							, output );
-						auto attenuation = m_writer.declLocale( cuT( "attenuation" )
-							, glsl::fma( light.m_attenuation().z()
-								, distance * distance
-								, glsl::fma( light.m_attenuation().y()
-									, distance
-									, light.m_attenuation().x() ) ) );
-						spotFactor = glsl::fma( m_writer.paren( spotFactor - 1.0_f )
-							, 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff() )
-							, 1.0_f );
-						auto factor = m_writer.declLocale( cuT( "factor" )
-							, vec3( spotFactor ) );
-						parentOutput.m_diffuse += spotFactor * output.m_diffuse / attenuation;
-						parentOutput.m_specular += spotFactor * output.m_specular / attenuation;
+						shadowFactor *= max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+							, m_shadowModel->computeSpotShadow( light.m_transform()
+								, fragmentIn.m_worldVertex
+								, lightToVertex
+								, fragmentIn.m_worldNormal ) );
 					}
-					FI;
+
+					doComputeLight( light.m_lightBase()
+						, worldEye
+						, lightDirection
+						, shininess
+						, shadowFactor
+						, fragmentIn
+						, output );
+					auto attenuation = m_writer.declLocale( cuT( "attenuation" )
+						, glsl::fma( light.m_attenuation().z()
+							, distance * distance
+							, glsl::fma( light.m_attenuation().y()
+								, distance
+								, light.m_attenuation().x() ) ) );
+					spotFactor = glsl::fma( m_writer.paren( spotFactor - 1.0_f )
+						, 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff() )
+						, 1.0_f );
+#if C3D_DebugSpotShadows
+					parentOutput.m_diffuse += shadowFactor;
+					parentOutput.m_specular += shadowFactor;
+#else
+					parentOutput.m_diffuse += spotFactor * output.m_diffuse / attenuation;
+					parentOutput.m_specular += spotFactor * output.m_specular / attenuation;
+#endif
 				}
 				, SpotLight( &m_writer, cuT( "light" ) )
 				, InVec3( &m_writer, cuT( "worldEye" ) )
@@ -614,30 +615,27 @@ namespace castor3d
 					, Vec3 const & worldEye
 					, Vec3 const & lightDirection
 					, Float const & shininess
-					, Float const & p_shadowFactor
+					, Float const & shadowFactor
 					, FragmentInput const & fragmentIn
 					, OutputComponents & output )
 				{
 					auto diffuseFactor = m_writer.declLocale( cuT( "diffuseFactor" ), dot( fragmentIn.m_worldNormal, -lightDirection ) );
-
-					IF( m_writer, diffuseFactor > 0.0_f )
-					{
-						auto vertexToEye = m_writer.declLocale( cuT( "vertexToEye" )
-							, normalize( worldEye - fragmentIn.m_worldVertex ) );
-						auto lightReflect = m_writer.declLocale( cuT( "lightReflect" )
-							, normalize( reflect( lightDirection, fragmentIn.m_worldNormal ) ) );
-						auto specularFactor = m_writer.declLocale( cuT( "specularFactor" )
-							, max( dot( vertexToEye, lightReflect ), 0.0 ) );
-						output.m_diffuse = p_shadowFactor * light.m_colour() * light.m_intensity().x() * diffuseFactor;
-						output.m_specular = p_shadowFactor * light.m_colour() * light.m_intensity().y() * pow( specularFactor, max( shininess, 0.1_f ) );
-					}
-					FI;
+					auto stepFactor = m_writer.declLocale( cuT( "stepFactor" )
+						, 1.0_f - step( diffuseFactor, 0.0_f ) );
+					auto vertexToEye = m_writer.declLocale( cuT( "vertexToEye" )
+						, normalize( worldEye - fragmentIn.m_worldVertex ) );
+					auto lightReflect = m_writer.declLocale( cuT( "lightReflect" )
+						, normalize( reflect( lightDirection, fragmentIn.m_worldNormal ) ) );
+					auto specularFactor = m_writer.declLocale( cuT( "specularFactor" )
+						, max( dot( vertexToEye, lightReflect ), 0.0 ) );
+					output.m_diffuse = stepFactor * shadowFactor * light.m_colour() * light.m_intensity().x() * diffuseFactor;
+					output.m_specular = stepFactor * shadowFactor * light.m_colour() * light.m_intensity().y() * pow( specularFactor, max( shininess, 0.1_f ) );
 				}
 				, InLight( &m_writer, cuT( "light" ) )
 				, InVec3( &m_writer, cuT( "worldEye" ) )
 				, InVec3( &m_writer, cuT( "lightDirection" ) )
 				, InFloat( &m_writer, cuT( "shininess" ) )
-				, InFloat( &m_writer, cuT( "p_shadowFactor" ) )
+				, InFloat( &m_writer, cuT( "shadowFactor" ) )
 				, FragmentInput{ m_writer }
 				, output );
 		}

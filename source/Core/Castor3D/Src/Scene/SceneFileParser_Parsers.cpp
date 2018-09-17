@@ -1457,7 +1457,10 @@ namespace castor3d
 			uint32_t uiType;
 			p_params[0]->get( uiType );
 			parsingContext->lightType = LightType( uiType );
-			parsingContext->light = parsingContext->scene->getLightCache().add( parsingContext->strName, parsingContext->sceneNode, parsingContext->lightType );
+			auto & cache = parsingContext->scene->getLightCache();
+			parsingContext->light = cache.add( parsingContext->strName
+				, parsingContext->sceneNode
+				, parsingContext->lightType );
 		}
 	}
 	END_ATTRIBUTE()

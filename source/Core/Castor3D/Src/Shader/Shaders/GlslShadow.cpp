@@ -1,5 +1,8 @@
 #include "GlslShadow.hpp"
 
+#include "ShadowMap/ShadowMapPassDirectional.hpp"
+#include "ShadowMap/ShadowMapPassSpot.hpp"
+
 using namespace castor;
 using namespace glsl;
 
@@ -358,10 +361,12 @@ namespace castor3d
 
 		Float Shadow::filterPCF( Vec4 const & lightSpacePosition
 			, Sampler2D const & shadowMap
+			, glsl::Vec2 const & invTexDim
 			, Float const & bias )
 		{
 			return m_filterPCF( lightSpacePosition
 				, shadowMap
+				, invTexDim
 				, bias );
 		}
 
@@ -380,11 +385,13 @@ namespace castor3d
 
 		Float Shadow::filterPCFCascade( Vec4 const & lightSpacePosition
 			, Sampler2DArray const & shadowMap
+			, glsl::Vec2 const & invTexDim
 			, UInt const & cascadeIndex
 			, Float const & bias )
 		{
 			return m_filterPCFCascade( lightSpacePosition
 				, shadowMap
+				, invTexDim
 				, cascadeIndex
 				, bias );
 		}
@@ -465,7 +472,7 @@ namespace castor3d
 					auto shadowCoord = m_writer.declLocale( cuT( "shadowCoord" )
 						, lightSpacePosition );
 
-					IF( m_writer, shadowCoord.z() > -1.0_f && shadowCoord.z() < 1.0_f )
+					IF( m_writer, abs( shadowCoord.z() ) < 1.0_f )
 					{
 						auto uv = m_writer.declLocale( cuT( "uv" )
 							, shadowCoord.st() + offset );
@@ -493,16 +500,15 @@ namespace castor3d
 			m_filterPCF = m_writer.implementFunction< Float >( cuT( "filterPCF" )
 				, [this]( Vec4 const & lightSpacePosition
 					, Sampler2D const & shadowMap
+					, Vec2 const & invTexDim
 					, Float const & bias )
 				{
-					auto texDim = m_writer.declLocale( cuT( "texDim" )
-						, textureSize( shadowMap, 0 ) );
 					auto scale = m_writer.declLocale( cuT( "scale" )
 						, 1.0_f );
 					auto dx = m_writer.declLocale( cuT( "dx" )
-						, scale * 1.0_f / m_writer.cast< Float >( texDim.x() ) );
+						, scale * invTexDim.x() );
 					auto dy = m_writer.declLocale( cuT( "dy" )
-						, scale * 1.0_f / m_writer.cast< Float >( texDim.y() ) );
+						, scale * invTexDim.y() );
 
 					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
 						, 0.0_f );
@@ -529,6 +535,7 @@ namespace castor3d
 				}
 				, InVec4{ &m_writer, cuT( "lightSpacePosition" ) }
 				, InSampler2D{ &m_writer, cuT( "shadowMap" ) }
+				, InVec2{ &m_writer, cuT( "invTexDim" ) }
 				, InFloat{ &m_writer, cuT( "bias" ) } );
 		}
 
@@ -575,17 +582,16 @@ namespace castor3d
 			m_filterPCFCascade = m_writer.implementFunction< Float >( cuT( "filterPCFCascade" )
 				, [this]( Vec4 const & lightSpacePosition
 					, Sampler2DArray const & shadowMap
+					, Vec2 const & invTexDim
 					, UInt const & cascadeIndex
 					, Float const & bias )
 				{
-					auto texDim = m_writer.declLocale( cuT( "texDim" )
-						, textureSize( shadowMap, 0 ) );
 					auto scale = m_writer.declLocale( cuT( "scale" )
 						, 1.0_f );
 					auto dx = m_writer.declLocale( cuT( "dx" )
-						, scale * 1.0_f / m_writer.cast< Float >( texDim.x() ) );
+						, scale * invTexDim.x() );
 					auto dy = m_writer.declLocale( cuT( "dy" )
-						, scale * 1.0_f / m_writer.cast< Float >( texDim.y() ) );
+						, scale * invTexDim.y() );
 
 					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
 						, 0.0_f );
@@ -613,6 +619,7 @@ namespace castor3d
 				}
 				, InVec4{ &m_writer, cuT( "lightSpacePosition" ) }
 				, InSampler2DArray{ &m_writer, cuT( "shadowMap" ) }
+				, InVec2{ &m_writer, cuT( "invTexDim" ) }
 				, InUInt{ &m_writer, cuT( "cascadeIndex" ) }
 				, InFloat{ &m_writer, cuT( "bias" ) } );
 		}
@@ -677,6 +684,7 @@ namespace castor3d
 								, Float( maxPcfDirectionalSlopeOffset ) ) );
 						m_writer.returnStmt( filterPCFCascade( lightSpacePosition
 							, c3d_mapShadowDirectional
+							, vec2( Float( 1.0f / float( ShadowMapPassDirectional::TextureSize ) ) )
 							, cascadeIndex
 							, bias ) );
 					}
@@ -713,10 +721,11 @@ namespace castor3d
 					auto c3d_mapShadowSpot = m_writer.getBuiltinArray< Sampler2D >( Shadow::MapShadowSpot, SpotShadowMapCount );
 					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
 						, getLightSpacePosition( lightMatrix, worldSpacePosition ) );
+					lightSpacePosition.xy() += vec2( 0.5_f );
 
 					IF( m_writer, shadowType == Int( int( ShadowType::eRaw ) ) )
 					{
-						auto bias = m_writer.declLocale( cuT( "offset" )
+						auto bias = m_writer.declLocale( cuT( "bias" )
 							, getShadowOffset( normal
 								, lightDirection
 								, Float( minSpotOffset )
@@ -728,13 +737,14 @@ namespace castor3d
 					}
 					ELSEIF( m_writer, shadowType == Int( int( ShadowType::ePCF ) ) )
 					{
-						auto bias = m_writer.declLocale( cuT( "offset" )
+						auto bias = m_writer.declLocale( cuT( "bias" )
 							, getShadowOffset( normal
 								, lightDirection
 								, Float( minSpotOffset )
 								, Float( maxSpotSlopeOffset ) ) );
 						m_writer.returnStmt( filterPCF( lightSpacePosition
 							, c3d_mapShadowSpot[index]
+							, vec2( Float( 1.0f / float( ShadowMapPassSpot::TextureSize ) ) )
 							, bias ) );
 					}
 					ELSEIF( m_writer, shadowType == Int( int( ShadowType::eVariance ) ) )
@@ -984,6 +994,7 @@ namespace castor3d
 								, Float( maxPcfDirectionalSlopeOffset ) ) );
 						m_writer.returnStmt( filterPCFCascade( lightSpacePosition
 							, c3d_mapShadowDirectional
+							, vec2( Float( 1.0f / float( ShadowMapPassDirectional::TextureSize ) ) )
 							, cascadeIndex
 							, bias ) );
 					}
@@ -1016,6 +1027,7 @@ namespace castor3d
 					auto c3d_mapShadowSpot = m_writer.getBuiltin< Sampler2D >( Shadow::MapShadowSpot );
 					auto lightSpacePosition = m_writer.declLocale( cuT( "lightSpacePosition" )
 						, getLightSpacePosition( lightMatrix, worldSpacePosition ) );
+					lightSpacePosition.xy() += vec2( 0.5_f );
 
 					if ( type == ShadowType::eRaw )
 					{
@@ -1038,6 +1050,7 @@ namespace castor3d
 								, Float( maxSpotSlopeOffset ) ) );
 						m_writer.returnStmt( filterPCF( lightSpacePosition
 							, c3d_mapShadowSpot
+							, vec2( Float( 1.0f / float( ShadowMapPassSpot::TextureSize ) ) )
 							, bias ) );
 					}
 					else if ( type == ShadowType::eVariance )

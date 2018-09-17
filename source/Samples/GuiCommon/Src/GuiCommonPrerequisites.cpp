@@ -299,10 +299,10 @@ namespace GuiCommon
 		{
 #if defined( NDEBUG )
 
-			if ( file.find( castor::String( cuT( "d." ) ) + CASTOR_DLL_EXT ) == String::npos )
+			if ( file.find( castor::String( cuT( "d." ) ) + CASTOR_DLL_EXT ) == castor::String::npos )
 #else
 
-			if ( file.find( castor::String( cuT( "d." ) ) + CASTOR_DLL_EXT ) != String::npos )
+			if ( file.find( castor::String( cuT( "d." ) ) + CASTOR_DLL_EXT ) != castor::String::npos )
 
 #endif
 			{
@@ -349,7 +349,7 @@ namespace GuiCommon
 
 				for ( auto file : arrayFailed )
 				{
-					castor::Logger::logWarning( Path( file ).getFileName() );
+					castor::Logger::logWarning( castor::Path( file ).getFileName() );
 				}
 
 				arrayFailed.clear();

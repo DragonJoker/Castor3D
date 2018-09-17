@@ -38,6 +38,8 @@ using namespace castor;
 using namespace castor3d;
 
 #define C3D_DebugSSAO 0
+#define C3D_DebugDiffuseLighting 0
+#define C3D_DebugSpecularLighting 0
 
 namespace castor3d
 {
@@ -261,8 +263,14 @@ namespace castor3d
 					fog.applyFog( pxl_fragColor, length( position ), position.z() );
 				}
 
-#if C3D_DebugSSAO
+#if C3D_DebugDiffuseLighting
+				pxl_fragColor = vec4( lightDiffuse, 1.0 );
+#elif C3D_DebugSpecularLighting
+				pxl_fragColor = vec4( lightSpecular, 1.0 );
+#elif C3D_DebugSSAO
 				pxl_fragColor = vec4( vec3( occlusion ), 1.0 );
+#elif C3D_DebugSSSTransmittance
+				pxl_fragColor = vec4( lightDiffuse, 1.0 );
 #endif
 			} );
 			return writer.finalise();
@@ -478,11 +486,7 @@ namespace castor3d
 				}
 				FI;
 
-#if !C3D_DEBUG_SSS_TRANSMITTANCE
 				pxl_fragColor = vec4( lightDiffuse * albedo + lightSpecular + emissive + ambient, 1.0 );
-#else
-				pxl_fragColor = vec4( lightDiffuse, 1.0 );
-#endif
 
 				if ( fogType != FogType::eDisabled )
 				{
@@ -492,8 +496,14 @@ namespace castor3d
 					fog.applyFog( pxl_fragColor, length( position ), position.z() );
 				}
 
-#if C3D_DebugSSAO
+#if C3D_DebugDiffuseLighting
+				pxl_fragColor = vec4( lightDiffuse, 1.0 );
+#elif C3D_DebugSpecularLighting
+				pxl_fragColor = vec4( lightSpecular, 1.0 );
+#elif C3D_DebugSSAO
 				pxl_fragColor = vec4( vec3( occlusion ), 1.0 );
+#elif C3D_DebugSSSTransmittance
+				pxl_fragColor = vec4( lightDiffuse, 1.0 );
 #endif
 			} );
 			return writer.finalise();
@@ -709,11 +719,7 @@ namespace castor3d
 				}
 				FI;
 
-#if !C3D_DEBUG_SSS_TRANSMITTANCE
 				pxl_fragColor = vec4( lightDiffuse * diffuse + lightSpecular + emissive + ambient, 1.0 );
-#else
-				pxl_fragColor = vec4( lightDiffuse, 1.0 );
-#endif
 
 				if ( fogType != FogType::eDisabled )
 				{
@@ -723,8 +729,14 @@ namespace castor3d
 					fog.applyFog( pxl_fragColor, length( position ), position.z() );
 				}
 
-#if C3D_DebugSSAO
+#if C3D_DebugDiffuseLighting
+				pxl_fragColor = vec4( lightDiffuse, 1.0 );
+#elif C3D_DebugSpecularLighting
+				pxl_fragColor = vec4( lightSpecular, 1.0 );
+#elif C3D_DebugSSAO
 				pxl_fragColor = vec4( vec3( occlusion ), 1.0 );
+#elif C3D_DebugSSSTransmittance
+				pxl_fragColor = vec4( lightDiffuse, 1.0 );
 #endif
 			} );
 			return writer.finalise();
@@ -908,7 +920,7 @@ namespace castor3d
 
 			result.push_back( { index++, 0u, 1u, renderer::DescriptorType::eCombinedImageSampler, { { sampler->getSampler(), lightDiffuse, imgLayout } } } );
 			result.push_back( { index++, 0u, 1u, renderer::DescriptorType::eCombinedImageSampler, { { sampler->getSampler(), lightSpecular, imgLayout } } } );
-			auto & background = scene.getBackground();
+			auto & background = *scene.getBackground();
 
 			if ( matType != MaterialType::eLegacy
 				&& background.hasIbl() )

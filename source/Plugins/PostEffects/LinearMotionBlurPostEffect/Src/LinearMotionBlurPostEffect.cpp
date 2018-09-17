@@ -316,7 +316,7 @@ namespace motion_blur
 		m_surface.cleanup();
 	}
 
-	bool PostEffect::doWriteInto( castor::TextFile & file, String const & tabs )
+	bool PostEffect::doWriteInto( castor::TextFile & file, castor::String const & tabs )
 	{
 		static Configuration const ref;
 		auto result = file.writeText( cuT( "\n" ) + tabs + Type + cuT( "\n" ) ) > 0
@@ -324,12 +324,12 @@ namespace motion_blur
 
 		if ( result && m_configuration.vectorDivider != ref.vectorDivider )
 		{
-			result = file.writeText( tabs + cuT( "\tvectorDivider " ) + string::toString( m_configuration.vectorDivider, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+			result = file.writeText( tabs + cuT( "\tvectorDivider " ) + castor::string::toString( m_configuration.vectorDivider, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 		}
 
 		if ( result && m_configuration.samplesCount != ref.samplesCount )
 		{
-			result = file.writeText( tabs + cuT( "\tsamples " ) + string::toString( m_configuration.samplesCount, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+			result = file.writeText( tabs + cuT( "\tsamples " ) + castor::string::toString( m_configuration.samplesCount, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 		}
 
 		if ( result && !m_fpsScale )

@@ -97,7 +97,7 @@ namespace castor3d
 		 *\param[in]	camera	La camera actuelle.
 		 *\param[in]	fog		La configuration du brouillard.
 		 */
-		C3D_API void update( Camera const & camera
+		C3D_API void update( Camera const * camera
 			, Fog const & fog )const;
 		/**
 		 *\~english
@@ -112,7 +112,7 @@ namespace castor3d
 		 *\param[in]	lights	Les sources lumineuses sont mises à jour elles aussi.
 		 */
 		C3D_API void update( Scene const & scene
-			, Camera const & camera
+			, Camera const * camera
 			, bool lights = true )const;
 		/**
 		 *\~english

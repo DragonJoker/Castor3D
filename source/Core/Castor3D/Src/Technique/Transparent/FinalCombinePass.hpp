@@ -110,9 +110,9 @@ namespace castor3d
 		 *\param[in]	invProj		La matrice projection inversée.
 		 */
 		void update( Camera const & camera
-			, Matrix4x4r const & invViewProj
-			, Matrix4x4r const & invView
-			, Matrix4x4r const & invProj );
+			, castor::Matrix4x4r const & invViewProj
+			, castor::Matrix4x4r const & invView
+			, castor::Matrix4x4r const & invProj );
 		/**
 		 *\~english
 		 *\brief		Renders the combine pass.

@@ -184,7 +184,7 @@ namespace castor3d
 
 	void RenderTechniquePass::doUpdatePipeline( RenderPipeline & pipeline )const
 	{
-		m_sceneUbo.update( m_scene, *m_camera );
+		m_sceneUbo.update( m_scene, m_camera );
 	}
 
 	renderer::DepthStencilState RenderTechniquePass::doCreateDepthStencilState( PipelineFlags const & flags )const

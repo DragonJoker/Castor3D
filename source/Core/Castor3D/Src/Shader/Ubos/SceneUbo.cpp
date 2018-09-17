@@ -65,20 +65,24 @@ namespace castor3d
 		m_ubo->upload();
 	}
 
-	void SceneUbo::update( Camera const & camera
+	void SceneUbo::update( Camera const * camera
 		, Fog const & fog )const
 	{
 		REQUIRE( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );
 		configuration.fogType = int( fog.getType() );
 		configuration.fogDensity = fog.getDensity();
-		configuration.cameraNearPlane = camera.getNear();
-		configuration.cameraFarPlane = camera.getFar();
-		updateCameraPosition( camera );
+
+		if ( camera )
+		{
+			configuration.cameraNearPlane = camera->getNear();
+			configuration.cameraFarPlane = camera->getFar();
+			updateCameraPosition( *camera );
+		}
 	}
 
 	void SceneUbo::update( Scene const & scene
-		, Camera const & camera
+		, Camera const * camera
 		, bool lights )const
 	{
 		REQUIRE( m_ubo );

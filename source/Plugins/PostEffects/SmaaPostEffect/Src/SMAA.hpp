@@ -10,11 +10,19 @@ See LICENSE file in root folder
 
 namespace smaa
 {
-	castor::String const & getSmaaShader();
+	castor::String getEdgeDetectionVS();
+	castor::String getBlendingWeightCalculationVS();
+	castor::String getNeighborhoodBlendingVS();
+	castor::String getColorEdgeDetectionPS();
+	castor::String getLumaEdgeDetectionPS();
+	castor::String getDepthEdgeDetectionPS();
+	castor::String getBlendingWeightCalculationPS();
+	castor::String getNeighborhoodBlendingPS();
+	castor::String getResolvePS();
+	castor::String getSeparatePS();
 	void writeConstants( glsl::GlslWriter & writer
 		, SmaaConfig const & config
-		, castor::Point4f const & renderTargetMetrics
-		, bool vertexShader );
+		, castor::Point4f const & renderTargetMetrics );
 }
 
 #endif

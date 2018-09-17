@@ -371,7 +371,7 @@ namespace castor3d
 
 		if ( node.passNode.pass.getType() != MaterialType::eLegacy )
 		{
-			auto & background = node.sceneNode.getScene()->getBackground();
+			auto & background = *node.sceneNode.getScene()->getBackground();
 
 			if ( background.hasIbl() )
 			{
@@ -418,7 +418,7 @@ namespace castor3d
 
 		if ( node.passNode.pass.getType() != MaterialType::eLegacy )
 		{
-			auto & background = node.sceneNode.getScene()->getBackground();
+			auto & background = *node.sceneNode.getScene()->getBackground();
 
 			if ( background.hasIbl() )
 			{
@@ -819,6 +819,7 @@ namespace castor3d
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
 		utils.declareLineariseDepth();
+		utils.declareComputeAccumulation();
 
 		auto parallaxMapping = shader::declareParallaxMappingFunc( writer, textureFlags, programFlags );
 
@@ -950,41 +951,11 @@ namespace castor3d
 				alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
 			}
 
-			//// Naive
-			//auto depth = utils.lineariseDepth( gl_FragCoord.z(), c3d_invProjection );
-			//auto weight = writer.declLocale( cuT( "weight" ), 1.0_f - depth );
-
-			// (10)
-			auto depth = utils.lineariseDepth( gl_FragCoord.z()
+			pxl_accumulation = utils.computeAccumulation( gl_FragCoord.z()
+				, colour
+				, alpha
 				, c3d_cameraNearPlane
 				, c3d_cameraFarPlane );
-			auto weight = writer.declLocale( cuT( "weight" )
-				, max( pow( 1.0_f - depth, 3.0_f ) * 3e3, 1e-2 ) );
-
-			//// (9)
-			//auto weight = writer.declLocale( cuT( "weight" )
-			//	, max( min( 0.03_f / writer.paren( pow( glsl::abs( gl_FragCoord.z() ) / 200.0_f, 4.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
-
-			//// (8)
-			//auto weight = writer.declLocale( cuT( "weight" )
-			//	, max( min( 10.0_f / writer.paren( pow( glsl::abs( gl_FragCoord.z() ) / 200.0_f, 6.0_f ) + pow( glsl::abs( gl_FragCoord.z() ) / 10.0_f, 3.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
-
-			//// (7)
-			//auto weight = writer.declLocale( cuT( "weight" )
-			//	, max( min( 10.0_f / writer.paren( pow( glsl::abs( gl_FragCoord.z() ) / 200.0_f, 6.0_f ) + pow( glsl::abs( gl_FragCoord.z() ) / 5.0_f, 2.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
-
-			//// (other)
-			//auto a = writer.declLocale( cuT( "a" )
-			//	, min( alpha, 1.0 ) * 8.0 + 0.01 );
-			//auto b = writer.declLocale( cuT( "b" )
-			//	, -gl_FragCoord.z() * 0.95 + 1.0 );
-			///* If your scene has a lot of content very close to the far plane,
-			//then include this line (one rsqrt instruction):
-			//b /= sqrt(1e4 * abs(csZ)); */
-			//auto weight = writer.declLocale( cuT( "weight" )
-			//	, clamp( a * a * a * 1e8 * b * b * b, 1e-2, 3e2 ) );
-
-			pxl_accumulation = vec4( colour * alpha, alpha ) * weight;
 			pxl_revealage = alpha;
 			auto curPosition = writer.declLocale( cuT( "curPosition" )
 				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
@@ -1115,6 +1086,7 @@ namespace castor3d
 		utils.declareLineariseDepth();
 		utils.declareFresnelSchlick();
 		utils.declareComputeIBL();
+		utils.declareComputeAccumulation();
 
 		if ( checkFlag( textureFlags, TextureChannel::eNormal ) )
 		{
@@ -1222,41 +1194,11 @@ namespace castor3d
 				alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
 			}
 
-			//// Naive
-			//auto depth = utils.lineariseDepth( gl_FragCoord.z(), c3d_invProjection );
-			//auto weight = writer.declLocale( cuT( "weight" ), 1.0_f - depth );
-
-			// (10)
-			auto depth = utils.lineariseDepth( gl_FragCoord.z()
+			pxl_accumulation = utils.computeAccumulation( gl_FragCoord.z()
+				, colour
+				, alpha
 				, c3d_cameraNearPlane
 				, c3d_cameraFarPlane );
-			auto weight = writer.declLocale( cuT( "weight" )
-				, max( pow( 1.0_f - depth, 3.0_f ) * 3e3, 1e-2 ) );
-
-			//// (9)
-			//auto weight = writer.declLocale( cuT( "weight" )
-			//	, max( min( 0.03_f / writer.paren( pow( glsl::abs( gl_FragCoord.z() ) / 200.0_f, 4.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
-
-			//// (8)
-			//auto weight = writer.declLocale( cuT( "weight" )
-			//	, max( min( 10.0_f / writer.paren( pow( glsl::abs( gl_FragCoord.z() ) / 200.0_f, 6.0_f ) + pow( glsl::abs( gl_FragCoord.z() ) / 10.0_f, 3.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
-
-			//// (7)
-			//auto weight = writer.declLocale( cuT( "weight" )
-			//	, max( min( 10.0_f / writer.paren( pow( glsl::abs( gl_FragCoord.z() ) / 200.0_f, 6.0_f ) + pow( glsl::abs( gl_FragCoord.z() ) / 5.0_f, 2.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
-
-			//// (other)
-			//auto a = writer.declLocale( cuT( "a" )
-			//	, min( alpha, 1.0 ) * 8.0 + 0.01 );
-			//auto b = writer.declLocale( cuT( "b" )
-			//	, -gl_FragCoord.z() * 0.95 + 1.0 );
-			///* If your scene has a lot of content very close to the far plane,
-			//then include this line (one rsqrt instruction):
-			//b /= sqrt(1e4 * abs(csZ)); */
-			//auto weight = writer.declLocale( cuT( "weight" )
-			//	, clamp( a * a * a * 1e8 * b * b * b, 1e-2, 3e2 ) );
-
-			pxl_accumulation = vec4( colour * alpha, alpha ) * weight;
 			pxl_revealage = alpha;
 			auto curPosition = writer.declLocale( cuT( "curPosition" )
 				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
@@ -1387,6 +1329,7 @@ namespace castor3d
 		utils.declareLineariseDepth();
 		utils.declareFresnelSchlick();
 		utils.declareComputeIBL();
+		utils.declareComputeAccumulation();
 
 		if ( checkFlag( textureFlags, TextureChannel::eNormal ) )
 		{
@@ -1491,42 +1434,12 @@ namespace castor3d
 			{
 				alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
 			}
-
-			//// Naive
-			//auto depth = utils.lineariseDepth( gl_FragCoord.z(), c3d_invProjection );
-			//auto weight = writer.declLocale( cuT( "weight" ), 1.0_f - depth );
-
-			// (10)
-			auto depth = utils.lineariseDepth( gl_FragCoord.z()
+			
+			pxl_accumulation = utils.computeAccumulation( gl_FragCoord.z()
+				, colour
+				, alpha
 				, c3d_cameraNearPlane
 				, c3d_cameraFarPlane );
-			auto weight = writer.declLocale( cuT( "weight" )
-				, max( pow( 1.0_f - depth, 3.0_f ) * 3e3, 1e-2 ) );
-
-			//// (9)
-			//auto weight = writer.declLocale( cuT( "weight" )
-			//	, max( min( 0.03_f / writer.paren( pow( glsl::abs( gl_FragCoord.z() ) / 200.0_f, 4.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
-
-			//// (8)
-			//auto weight = writer.declLocale( cuT( "weight" )
-			//	, max( min( 10.0_f / writer.paren( pow( glsl::abs( gl_FragCoord.z() ) / 200.0_f, 6.0_f ) + pow( glsl::abs( gl_FragCoord.z() ) / 10.0_f, 3.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
-
-			//// (7)
-			//auto weight = writer.declLocale( cuT( "weight" )
-			//	, max( min( 10.0_f / writer.paren( pow( glsl::abs( gl_FragCoord.z() ) / 200.0_f, 6.0_f ) + pow( glsl::abs( gl_FragCoord.z() ) / 5.0_f, 2.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
-
-			//// (other)
-			//auto a = writer.declLocale( cuT( "a" )
-			//	, min( alpha, 1.0 ) * 8.0 + 0.01 );
-			//auto b = writer.declLocale( cuT( "b" )
-			//	, -gl_FragCoord.z() * 0.95 + 1.0 );
-			///* If your scene has a lot of content very close to the far plane,
-			//then include this line (one rsqrt instruction):
-			//b /= sqrt(1e4 * abs(csZ)); */
-			//auto weight = writer.declLocale( cuT( "weight" )
-			//	, clamp( a * a * a * 1e8 * b * b * b, 1e-2, 3e2 ) );
-
-			pxl_accumulation = vec4( colour * alpha, alpha ) * weight;
 			pxl_revealage = alpha;
 			auto curPosition = writer.declLocale( cuT( "curPosition" )
 				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
@@ -1540,6 +1453,6 @@ namespace castor3d
 
 	void TransparentPass::doUpdatePipeline( RenderPipeline & pipeline )const
 	{
-		m_sceneUbo.update( *m_camera->getScene(), *m_camera, true );
+		m_sceneUbo.update( *m_camera->getScene(), m_camera, true );
 	}
 }

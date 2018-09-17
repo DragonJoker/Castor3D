@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <GlslIntrinsics.hpp>
 
-#define C3D_DEBUG_SSS_TRANSMITTANCE 0
+#define C3D_DebugSSSTransmittance 0
 
 namespace castor3d
 {

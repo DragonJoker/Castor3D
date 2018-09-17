@@ -16,6 +16,8 @@
 
 #include <GlslSource.hpp>
 
+#include <Design/BlockGuard.hpp>
+
 using namespace castor;
 
 namespace castor3d
@@ -77,12 +79,6 @@ namespace castor3d
 			getEngine()->getRenderTargetCache().remove( target );
 		}
 
-		if ( getEngine()->getRenderSystem()->hasMainDevice()
-			&& m_device != getEngine()->getRenderSystem()->getMainDevice() )
-		{
-			getEngine()->getRenderSystem()->unregisterDevice( *m_device );
-		}
-
 		m_device.reset();
 	}
 
@@ -98,7 +94,15 @@ namespace castor3d
 
 			if ( m_initialised )
 			{
-				m_device->enable();
+				auto guard = makeBlockGuard(
+					[this]()
+					{
+						getEngine()->getRenderSystem()->setCurrentDevice( m_device.get() );
+					},
+					[this]()
+					{
+						getEngine()->getRenderSystem()->setCurrentDevice( nullptr );
+					} );
 				getEngine()->getMaterialCache().initialise( getEngine()->getMaterialsType() );
 				m_swapChain = m_device->createSwapChain( { size.getWidth(), size.getHeight() } );
 				SceneSPtr scene = getScene();
@@ -168,7 +172,6 @@ namespace castor3d
 				m_stagingBuffer = std::make_unique< renderer::StagingBuffer >( *m_device
 					, renderer::BufferTarget::eTransferDst
 					, m_saveBuffer->size() );
-				m_device->disable();
 				m_initialised = true;
 				m_dirty = false;
 			}
@@ -189,9 +192,16 @@ namespace castor3d
 				&& &getCurrentDevice( *this ) != m_device.get() )
 			{
 				auto & device = getCurrentDevice( *this );
-				device.disable();
+				auto guard = makeBlockGuard(
+					[this]()
+					{
+						getEngine()->getRenderSystem()->setCurrentDevice( nullptr );
+					},
+					[this, &device]()
+					{
+						getEngine()->getRenderSystem()->setCurrentDevice( &device );
+					} );
 				doCleanup( true );
-				device.enable();
 			}
 			else
 			{
@@ -208,7 +218,15 @@ namespace castor3d
 
 			if ( target && target->isInitialised() )
 			{
-				m_device->enable();
+				auto guard = makeBlockGuard(
+					[this]()
+					{
+						getEngine()->getRenderSystem()->setCurrentDevice( m_device.get() );
+					},
+					[this]()
+					{
+						getEngine()->getRenderSystem()->setCurrentDevice( nullptr );
+					} );
 
 				if ( m_toSave )
 				{
@@ -235,7 +253,8 @@ namespace castor3d
 							, { renderer::PipelineStageFlag::eColourAttachmentOutput, renderer::PipelineStageFlag::eColourAttachmentOutput }
 							, { resources->getRenderingFinishedSemaphore() }
 							, &resources->getFence() );
-						m_device->getGraphicsQueue().waitIdle();
+						resources->getFence().wait( renderer::FenceTimeout );
+						//m_device->getGraphicsQueue().waitIdle();
 						m_swapChain->present( *resources );
 					}
 					catch ( renderer::Exception & exc )
@@ -252,8 +271,6 @@ namespace castor3d
 				{
 					std::cerr << "Can't render" << std::endl;
 				}
-
-				m_device->disable();
 			}
 		}
 	}
@@ -575,7 +592,7 @@ namespace castor3d
 	{
 		if ( enableDevice )
 		{
-			m_device->enable();
+			getEngine()->getRenderSystem()->setCurrentDevice( m_device.get() );
 		}
 
 		m_device->waitIdle();
@@ -601,7 +618,7 @@ namespace castor3d
 
 		if ( enableDevice )
 		{
-			m_device->disable();
+			getEngine()->getRenderSystem()->setCurrentDevice( nullptr );
 		}
 	}
 }

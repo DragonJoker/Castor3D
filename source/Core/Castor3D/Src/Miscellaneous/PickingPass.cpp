@@ -811,6 +811,9 @@ namespace castor3d
 			}
 
 			pxl_fragColor = vec4( c3d_drawIndex, c3d_nodeIndex, vtx_instance, gl_PrimitiveID );
+#if C3D_DebugPicking
+			pxl_fragColor /= 255.0_f;
+#endif
 		} );
 
 		return writer.finalise();

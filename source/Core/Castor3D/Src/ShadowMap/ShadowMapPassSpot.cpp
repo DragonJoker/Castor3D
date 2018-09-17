@@ -14,7 +14,7 @@ using namespace castor;
 namespace castor3d
 {
 	uint32_t const ShadowMapPassSpot::UboBindingPoint = 10u;
-	uint32_t const ShadowMapPassSpot::TextureSize = 512;
+	uint32_t const ShadowMapPassSpot::TextureSize = 512u;
 	String const ShadowMapPassSpot::ShadowMapUbo = cuT( "ShadowMap" );
 	String const ShadowMapPassSpot::FarPlane = cuT( "c3d_farPlane" );
 
@@ -38,8 +38,6 @@ namespace castor3d
 		auto & myCamera = getCuller().getCamera();
 		light.getSpotLight()->updateShadow( myCamera
 			, index );
-		myCamera.attachTo( light.getParent() );
-		myCamera.update();
 		auto & data = m_shadowConfig->getData();
 		data.farPlane = light.getSpotLight()->getFarPlane();
 		doUpdate( queues );
@@ -50,7 +48,7 @@ namespace castor3d
 		if ( m_initialised )
 		{
 			m_shadowConfig->upload();
-		auto & myCamera = getCuller().getCamera();
+			auto & myCamera = getCuller().getCamera();
 			m_matrixUbo.update( myCamera.getView(), myCamera.getProjection() );
 			doUpdateNodes( m_renderQueue.getCulledRenderNodes() );
 		}

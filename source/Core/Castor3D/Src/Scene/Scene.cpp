@@ -199,7 +199,7 @@ namespace castor3d
 		{
 			Logger::logInfo( cuT( "Scene::write - Background" ) );
 			BackgroundTextWriter writer{ file, m_tabs + cuT( "\t" ) };
-			scene.getBackground().accept( writer );
+			scene.getBackground()->accept( writer );
 		}
 
 		if ( result && scene.getFog().getType() != FogType::eDisabled )

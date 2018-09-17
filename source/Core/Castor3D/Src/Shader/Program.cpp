@@ -137,22 +137,35 @@ namespace castor3d
 	{
 		auto & device = getCurrentDevice( *this );
 
-		auto loadShader = [this, &device]( renderer::ShaderStageFlag stage )
+		auto hasStage = [this]( renderer::ShaderStageFlag stage )
 		{
-			if ( hasSource( stage ) )
-			{
-				m_states.push_back( { device.createShaderModule( stage ) } );
-				m_states.back().module->loadShader( getSource( stage ) );
-			}
-			else if ( hasFile( stage ) )
-			{
-				m_states.push_back( { device.createShaderModule( stage ) } );
-				String source;
+			return m_states.end() != std::find_if( m_states.begin()
+				, m_states.end()
+				, [&stage]( renderer::ShaderStageState const & lookup )
 				{
-					TextFile file{ getFile( stage ), File::OpenMode::eRead };
-					file.copytoString( source );
+					return lookup.module->getStage() == stage;
+				} );
+		};
+
+		auto loadShader = [this, &hasStage, &device]( renderer::ShaderStageFlag stage )
+		{
+			if ( !hasStage( stage ) )
+			{
+				if ( hasSource( stage ) )
+				{
+					m_states.push_back( { device.createShaderModule( stage ) } );
+					m_states.back().module->loadShader( getSource( stage ) );
 				}
-				m_states.back().module->loadShader( source );
+				else if ( hasFile( stage ) )
+				{
+					m_states.push_back( { device.createShaderModule( stage ) } );
+					String source;
+					{
+						TextFile file{ getFile( stage ), File::OpenMode::eRead };
+						file.copytoString( source );
+					}
+					m_states.back().module->loadShader( source );
+				}
 			}
 		};
 

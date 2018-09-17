@@ -514,7 +514,7 @@ namespace castor3d
 		m_bgFrameBuffer = m_bgRenderPass->createFrameBuffer( { m_depthBuffer->getDimensions().width, m_depthBuffer->getDimensions().height }
 			, std::move( attaches ) );
 
-		auto & background = m_renderTarget.getScene()->getBackground();
+		auto & background = *m_renderTarget.getScene()->getBackground();
 		auto prepareBackground = [&background, this]()
 		{
 			background.initialise( *m_bgRenderPass, m_hdrConfigUbo );
@@ -743,7 +743,7 @@ namespace castor3d
 			return bgSemaphore;
 		}
 
-		auto & background = m_renderTarget.getScene()->getBackground();
+		auto & background = *m_renderTarget.getScene()->getBackground();
 		auto & bgSemaphore = background.getSemaphore();
 		auto timerBlock = background.start();
 		background.notifyPassRender();

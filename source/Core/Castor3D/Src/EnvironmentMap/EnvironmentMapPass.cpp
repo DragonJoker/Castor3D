@@ -1,7 +1,7 @@
 #include "EnvironmentMapPass.hpp"
 
 #include "EnvironmentMap/EnvironmentMap.hpp"
-#include "Render/Culling/DummyCuller.hpp"
+#include "Render/Culling/FrustumCuller.hpp"
 #include "Render/Viewport.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
@@ -50,7 +50,7 @@ namespace castor3d
 		: OwnedBy< EnvironmentMap >{ reflectionMap }
 		, m_node{ node }
 		, m_camera{ doCreateCamera( *node ) }
-		, m_culler{ std::make_unique< DummyCuller >( *m_camera->getScene() ) }
+		, m_culler{ std::make_unique< FrustumCuller >( *m_camera->getScene(), *m_camera ) }
 		, m_matrixUbo{ *reflectionMap.getEngine() }
 		, m_opaquePass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "environment_opaque" )
 			, m_matrixUbo

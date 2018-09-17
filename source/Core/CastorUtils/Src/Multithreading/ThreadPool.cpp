@@ -4,20 +4,20 @@
 
 namespace castor
 {
-	ThreadPool::ThreadPool( size_t p_count )
-		: m_count{ p_count }
+	ThreadPool::ThreadPool( size_t count )
+		: m_count{ count }
 	{
 		auto lock = makeUniqueLock( m_mutex );
-		m_available.reserve( p_count );
-		m_busy.reserve( p_count );
+		m_available.reserve( count );
+		m_busy.reserve( count );
 
-		for ( size_t i = 0u; i < p_count; ++i )
+		for ( size_t i = 0u; i < count; ++i )
 		{
 			m_available.push_back( std::make_unique< WorkerThread >() );
-			m_endConnections.push_back( m_available.back()->onEnded.connect( [this]( WorkerThread & p_worker )
-			{
-				doFreeWorker( p_worker );
-			} ) );
+			m_endConnections.push_back( m_available.back()->onEnded.connect( [this]( WorkerThread & worker )
+				{
+					doFreeWorker( worker );
+				} ) );
 		}
 	}
 
@@ -42,7 +42,7 @@ namespace castor
 		return m_busy.empty();
 	}
 
-	bool ThreadPool::waitAll( Milliseconds const & p_timeout )const
+	bool ThreadPool::waitAll( Milliseconds const & timeout )const
 	{
 		bool result = isFull();
 
@@ -57,7 +57,7 @@ namespace castor
 				result = isFull();
 				wait = std::chrono::duration_cast< Milliseconds >( std::chrono::high_resolution_clock::now() - begin );
 			}
-			while ( wait < p_timeout && !result );
+			while ( wait < timeout && !result );
 		}
 
 		return result;
@@ -87,10 +87,12 @@ namespace castor
 	void ThreadPool::doFreeWorker( WorkerThread & p_worker )
 	{
 		auto lock = makeUniqueLock( m_mutex );
-		auto it = std::find_if( m_busy.begin(), m_busy.end(), [&p_worker]( WorkerPtr const & worker )
-		{
-			return worker.get() == &p_worker;
-		} );
+		auto it = std::find_if( m_busy.begin()
+			, m_busy.end()
+			, [&p_worker]( WorkerPtr const & worker )
+			{
+				return worker.get() == &p_worker;
+			} );
 		m_available.push_back( std::move( *it ) );
 		m_busy.erase( it );
 	}

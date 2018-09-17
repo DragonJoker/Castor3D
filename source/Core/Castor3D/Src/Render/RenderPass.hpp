@@ -947,7 +947,7 @@ namespace castor3d
 		 *\brief		Met à jour les pools d'UBO en VRAM.
 		 */
 		void doUpdateUbos( Camera const & camera
-			, Point2r const & jitter );
+			, castor::Point2r const & jitter );
 		/**
 		*\~english
 		*\return

@@ -278,7 +278,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le mappage d'indices.
 		 */
-		inline IndexMapping const & getIndexMapping()const;
+		inline IndexMappingSPtr getIndexMapping()const;
 		/**
 		 *\~english
 		 *\brief		Adds a component.

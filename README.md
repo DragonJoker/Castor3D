@@ -25,6 +25,8 @@ Features
 - HDR rendering with various tone mapping operators.
 - Screen Space Subsurface Scattering (without backlit transmittance yet).
 - Volumetric Light Scattering for directional light source projecting shadows.
+- Cascaded Shadow Maps for directional light sources.
+- Frustum culling.
 - Scene graph.
 - Modular architecture through plug-ins.
 - Shaders are generated automatically from material and pass configuration.

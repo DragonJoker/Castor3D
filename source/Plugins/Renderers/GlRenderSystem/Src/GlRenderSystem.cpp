@@ -95,8 +95,8 @@ namespace GlRender
 	glsl::GlslWriter RenderSystem::createGlslWriter()
 	{
 		return glsl::GlslWriter{ glsl::GlslWriterConfig{ m_gpuInformations.getShaderLanguageVersion()
-			, m_gpuInformations.hasConstantsBuffers()
-			, m_gpuInformations.hasTextureBuffers()
+			, true
+			, true
 			, m_gpuInformations.hasShaderStorageBuffers()
 			, false
 			, false

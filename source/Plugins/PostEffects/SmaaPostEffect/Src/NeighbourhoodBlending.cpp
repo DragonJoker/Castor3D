@@ -35,8 +35,8 @@ namespace smaa
 		{
 			using namespace glsl;
 			GlslWriter writer = renderSystem.createGlslWriter();
-			writeConstants( writer, config, renderTargetMetrics, true );
-			writer << getSmaaShader();
+			writeConstants( writer, config, renderTargetMetrics );
+			writer << getNeighborhoodBlendingVS();
 
 			// Shader inputs
 			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
@@ -64,12 +64,12 @@ namespace smaa
 		{
 			using namespace glsl;
 			GlslWriter writer = renderSystem.createGlslWriter();
-			writeConstants( writer, config, renderTargetMetrics, false );
+			writeConstants( writer, config, renderTargetMetrics );
 			writer.declConstant( constants::Reprojection
 				, 1_i
 				, reprojection );
 
-			writer << getSmaaShader();
+			writer << getNeighborhoodBlendingPS();
 
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );

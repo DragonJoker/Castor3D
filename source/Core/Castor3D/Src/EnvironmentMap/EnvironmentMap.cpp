@@ -227,7 +227,7 @@ namespace castor3d
 		createInfo.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
 
 		m_renderPass = device.createRenderPass( createInfo );
-		auto & background = m_node.getScene()->getBackground();
+		auto & background = *m_node.getScene()->getBackground();
 		m_backgroundDescriptorPool = background.getDescriptorLayout().createPool( 6u );
 		uint32_t face = 0u;
 

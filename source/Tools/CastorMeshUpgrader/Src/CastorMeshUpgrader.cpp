@@ -5,6 +5,8 @@
 #include <Mesh/Mesh.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Skeleton/Skeleton.hpp>
+#include <Binary/BinarySkeleton.hpp>
+#include <Binary/BinaryMesh.hpp>
 
 using StringArray = std::vector< std::string >;
 
@@ -312,8 +314,8 @@ int main( int argc, char * argv[] )
 		castor::Logger::initialise( castor::LogType::eDebug );
 #endif
 
-		castor::Logger::setFileName( castor::File::getExecutableDirectory() / cuT( "Tests.log" ) );
-		castor3d::Engine engine;
+		castor::Logger::setFileName( castor::File::getExecutableDirectory() / cuT( "CastorMeshUpgrader.log" ) );
+		castor3d::Engine engine{ cuT( "CastorMeshUpgrader" ), false };
 
 		if ( doInitialiseEngine( engine ) )
 		{

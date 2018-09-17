@@ -111,6 +111,60 @@ namespace glsl
 			, InFloat{ &m_writer, cuT( "farPlane" ) } );
 	}
 
+	void Utils::declareComputeAccumulation()
+	{
+		m_computeAccumulation = m_writer.implementFunction< Vec4 >( cuT( "computeAccumulation" )
+			, [&]( Float const & depth
+				, Vec3 const & colour
+				, Float const & alpha
+				, Float const & nearPlane
+				, Float const & farPlane )
+			{
+				//// Naive
+				//auto z = utils.lineariseDepth( z
+				//	, nearPlane
+				//	, farPlane );
+				//auto weight = m_writer.declLocale( cuT( "weight" ), 1.0_f - z );
+
+				// (10)
+				auto z = lineariseDepth( depth
+					, nearPlane
+					, farPlane );
+				auto weight = m_writer.declLocale( cuT( "weight" )
+					, max( pow( 1.0_f - depth, 3.0_f ) * 3e3, 1e-2 ) );
+
+				//// (9)
+				//auto weight = m_writer.declLocale( cuT( "weight" )
+				//	, max( min( 0.03_f / writer.paren( pow( glsl::abs( z ) / 200.0_f, 4.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
+
+				//// (8)
+				//auto weight = m_writer.declLocale( cuT( "weight" )
+				//	, max( min( 10.0_f / writer.paren( pow( glsl::abs( z ) / 200.0_f, 6.0_f ) + pow( glsl::abs( z ) / 10.0_f, 3.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
+
+				//// (7)
+				//auto weight = m_writer.declLocale( cuT( "weight" )
+				//	, max( min( 10.0_f / writer.paren( pow( glsl::abs( z ) / 200.0_f, 6.0_f ) + pow( glsl::abs( z ) / 5.0_f, 2.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
+
+				//// (other)
+				//auto a = m_writer.declLocale( cuT( "a" )
+				//	, min( alpha, 1.0 ) * 8.0 + 0.01 );
+				//auto b = m_writer.declLocale( cuT( "b" )
+				//	, -z * 0.95 + 1.0 );
+				///* If your scene has a lot of content very close to the far plane,
+				//then include this line (one rsqrt instruction):
+				//b /= sqrt(1e4 * abs(csZ)); */
+				//auto weight = m_writer.declLocale( cuT( "weight" )
+				//	, clamp( a * a * a * 1e8 * b * b * b, 1e-2, 3e2 ) );
+
+				m_writer.returnStmt( vec4( colour * alpha, alpha ) * weight );
+			}
+			, InFloat{ &m_writer, cuT( "depth" ) }
+			, InVec3{ &m_writer, cuT( "colour" ) }
+			, InFloat{ &m_writer, cuT( "alpha" ) }
+			, InFloat{ &m_writer, cuT( "nearPlane" ) }
+			, InFloat{ &m_writer, cuT( "farPlane" ) } );
+	}
+
 	void Utils::declareGetMapNormal()
 	{
 		m_getMapNormal = m_writer.implementFunction< Vec3 >( cuT( "getMapNormal" )
@@ -275,6 +329,19 @@ namespace glsl
 		, Float const & farPlane )
 	{
 		return m_lineariseDepth( depth
+			, nearPlane
+			, farPlane );
+	}
+
+	Vec4 Utils::computeAccumulation( Float const & depth
+		, Vec3 const & colour
+		, Float const & alpha
+		, Float const & nearPlane
+		, Float const & farPlane )
+	{
+		return m_computeAccumulation( depth
+			, colour
+			, alpha
 			, nearPlane
 			, farPlane );
 	}

@@ -37,8 +37,8 @@ namespace smaa
 			GlslWriter writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			writeConstants( writer, config, renderTargetMetrics, true );
-			writer << getSmaaShader();
+			writeConstants( writer, config, renderTargetMetrics );
+			writer << getEdgeDetectionVS();
 
 			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
 			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );

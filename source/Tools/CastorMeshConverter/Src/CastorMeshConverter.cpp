@@ -409,7 +409,7 @@ struct ObjectWriter< true, castor3d::Mesh >
 				auto dstSubmesh = mesh->createSubmesh();
 				dstSubmesh->setDefaultMaterial( srcSubmesh->getDefaultMaterial() );
 				dstSubmesh->addPoints( srcSubmesh->getPoints() );
-				auto & indexMapping = srcSubmesh->getIndexMapping();
+				auto & indexMapping = *srcSubmesh->getIndexMapping();
 				castor3d::SubmeshComponentSPtr indexMappingComponent;
 
 				for ( auto & component : srcSubmesh->getComponents() )

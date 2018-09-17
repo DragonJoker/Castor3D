@@ -119,7 +119,7 @@ namespace castor3d
 	void RenderPassTimer::retrieveGpuTime()
 	{
 		static float const period = float( getCurrentDevice( m_engine ).getTimestampPeriod() );
-		m_gpuTime = Nanoseconds{};
+		m_gpuTime = 0_ns;
 
 		for ( uint32_t i = 0; i < m_passesCount; ++i )
 		{

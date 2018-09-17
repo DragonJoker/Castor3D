@@ -244,14 +244,9 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline SceneBackground const & getBackground()const
+		inline SceneBackgroundSPtr getBackground()const
 		{
-			return *m_background;
-		}
-
-		inline SceneBackground & getBackground()
-		{
-			return *m_background;
+			return m_background;
 		}
 
 		inline SceneBackground const & getColourBackground()const

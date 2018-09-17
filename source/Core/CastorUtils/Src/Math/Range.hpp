@@ -10,6 +10,11 @@ See LICENSE file in root folder
 #include <cmath>
 #include <limits>
 
+#ifdef min
+#	undef min
+#	undef max
+#endif
+
 namespace castor
 {
 	/*!
@@ -150,7 +155,7 @@ namespace castor
 		 *\~french
 		 *\return		La borne minimale.
 		 */
-		inline T const & min()const noexcept
+		inline T const & getMin()const noexcept
 		{
 			return m_min;
 		}
@@ -160,7 +165,7 @@ namespace castor
 		 *\~french
 		 *\return		La borne maximale.
 		 */
-		inline T const & max()const noexcept
+		inline T const & getMax()const noexcept
 		{
 			return m_max;
 		}

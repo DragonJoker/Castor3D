@@ -245,7 +245,7 @@ namespace castor3d
 					, data4.w() );
 				auto material = materials->getBaseMaterial( materialId );
 
-#if !C3D_DEBUG_SSS_TRANSMITTANCE
+#if !C3D_DebugSSSTransmittance
 				IF( writer, material->m_subsurfaceScatteringEnabled() == 0_i )
 				{
 					pxl_fragColor = original;

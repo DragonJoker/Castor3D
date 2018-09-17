@@ -228,7 +228,7 @@ namespace castor3d
 							auto d = m_writer.declLocale( cuT( "d" )
 								, glsl::abs( shadowDepth - lightSpacePosition.z() ) * lightFarPlane );
 
-#if C3D_DEBUG_SSS_TRANSMITTANCE
+#if C3D_DebugSSSTransmittance
 
 							auto dd = m_writer.declLocale( cuT( "dd" )
 								, -d * d );

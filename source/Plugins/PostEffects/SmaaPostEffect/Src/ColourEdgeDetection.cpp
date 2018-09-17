@@ -39,7 +39,7 @@ namespace smaa
 			writer.enableExtension( cuT( "GL_ARB_texture_gather" ), 400u );
 
 			// Shader inputs
-			writeConstants( writer, config, renderTargetMetrics, false );
+			writeConstants( writer, config, renderTargetMetrics );
 			writer.declConstant( constants::Threshold
 				, Float( config.data.threshold ) );
 			writer.declConstant( constants::LocalContrastAdaptationFactor
@@ -56,7 +56,7 @@ namespace smaa
 			writer.declConstant( constants::PredicationStrength
 				, Float( config.data.predicationStrength )
 				, predicationEnabled );
-			writer << getSmaaShader();
+			writer << getColorEdgeDetectionPS();
 
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 			auto vtx_offset = writer.declInputArray< Vec4 >( cuT( "vtx_offset" ), 1u, 3u );

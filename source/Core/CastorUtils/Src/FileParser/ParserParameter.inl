@@ -115,10 +115,10 @@ namespace castor
 		{
 			for ( auto & value : makeArrayView( values, values + count ) )
 			{
-				if ( value < range.min()
-					|| value > range.max() )
+				if ( value < range.getMin()
+					|| value > range.getMax() )
 				{
-					Logger::logWarning( castor::makeStringStream() << cuT( "Value " ) << value << cuT( " is outside of range [" ) << range.min() << cuT( ", " ) << range.max() << cuT( "]" ) );
+					Logger::logWarning( castor::makeStringStream() << cuT( "Value " ) << value << cuT( " is outside of range [" ) << range.getMin() << cuT( ", " ) << range.getMax() << cuT( "]" ) );
 					value = range.clamp( value );
 				}
 			}

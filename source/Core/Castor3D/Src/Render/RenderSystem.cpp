@@ -37,15 +37,8 @@ namespace castor3d
 			m_gpuInformations.setRenderer( device.getProperties().deviceName );
 			m_gpuInformations.setVersion( stream.str() );
 			m_gpuInformations.setShaderLanguageVersion( device.getShaderVersion() );
-			m_gpuInformations.updateFeature( castor3d::GpuFeature::eConstantsBuffers, true );
-			m_gpuInformations.updateFeature( castor3d::GpuFeature::eTextureBuffers, true );
-			m_gpuInformations.updateFeature( castor3d::GpuFeature::eInstancing, true );
-			m_gpuInformations.updateFeature( castor3d::GpuFeature::eAccumulationBuffer, true );
-			m_gpuInformations.updateFeature( castor3d::GpuFeature::eNonPowerOfTwoTextures, true );
-			m_gpuInformations.updateFeature( castor3d::GpuFeature::eAtomicCounterBuffers, true );
-			m_gpuInformations.updateFeature( castor3d::GpuFeature::eImmutableTextureStorage, true );
 			m_gpuInformations.updateFeature( castor3d::GpuFeature::eShaderStorageBuffers, device.getRenderer().getFeatures().hasStorageBuffers );
-			m_gpuInformations.updateFeature( castor3d::GpuFeature::eTransformFeedback, false );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eStereoRendering, false );
 
 			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eCompute, device.getRenderer().getFeatures().hasComputeShaders );
 			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eTessellationControl, device.getFeatures().tessellationShader );
@@ -74,26 +67,6 @@ namespace castor3d
 #endif
 	}
 
-	void RenderSystem::registerDevice( renderer::Device & device )
-	{
-		m_deviceEnabledConnections.emplace( &device
-			, device.onEnabled.connect( [this]( renderer::Device const & device )
-			{
-				m_currentDevice = &device;
-			} ) );
-		m_deviceDisabledConnections.emplace( &device
-			, device.onDisabled.connect( [this]( renderer::Device const & device )
-			{
-				m_currentDevice = nullptr;
-			} ) );
-	}
-
-	void RenderSystem::unregisterDevice( renderer::Device & device )
-	{
-		m_deviceEnabledConnections.erase( &device );
-		m_deviceDisabledConnections.erase( &device );
-	}
-
 	void RenderSystem::pushScene( Scene * p_scene )
 	{
 		m_stackScenes.push( p_scene );
@@ -119,8 +92,8 @@ namespace castor3d
 	glsl::GlslWriter RenderSystem::createGlslWriter()
 	{
 		return glsl::GlslWriter{ glsl::GlslWriterConfig{ m_gpuInformations.getShaderLanguageVersion()
-			, m_gpuInformations.hasConstantsBuffers()
-			, m_gpuInformations.hasTextureBuffers()
+			, true
+			, true
 			, m_gpuInformations.hasShaderStorageBuffers()
 			, false } };
 	}
@@ -150,7 +123,6 @@ namespace castor3d
 		, uint32_t gpu )
 	{
 		renderer::DevicePtr result = m_renderer->createDevice( m_renderer->createConnection( gpu, std::move( handle ) ) );
-		registerDevice( *result );
 		return result;
 	}
 

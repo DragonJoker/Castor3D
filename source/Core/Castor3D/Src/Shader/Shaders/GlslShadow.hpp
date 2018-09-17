@@ -114,6 +114,7 @@ namespace castor3d
 				, glsl::Float const & bias );
 			glsl::Float filterPCF( glsl::Vec4 const & lightSpacePosition
 				, glsl::Sampler2D const & shadowMap
+				, glsl::Vec2 const & invTexDim
 				, glsl::Float const & bias );
 			glsl::Float textureProjCascade( glsl::Vec4 const & lightSpacePosition
 				, glsl::Vec2 const & offset
@@ -122,6 +123,7 @@ namespace castor3d
 				, glsl::Float const & bias );
 			glsl::Float filterPCFCascade( glsl::Vec4 const & lightSpacePosition
 				, glsl::Sampler2DArray const & shadowMap
+				, glsl::Vec2 const & invTexDim
 				, glsl::UInt const & cascadeIndex
 				, glsl::Float const & bias );
 			glsl::Vec4 getLightSpacePosition( glsl::Mat4 const & lightMatrix
@@ -162,6 +164,7 @@ namespace castor3d
 			glsl::Function< glsl::Float
 				, glsl::InVec4
 				, glsl::InSampler2D
+				, glsl::InVec2
 				, glsl::InFloat > m_filterPCF;
 			glsl::Function < glsl::Float
 				, glsl::InVec2
@@ -177,6 +180,7 @@ namespace castor3d
 			glsl::Function< glsl::Float
 				, glsl::InVec4
 				, glsl::InSampler2DArray
+				, glsl::InVec2
 				, glsl::InUInt
 				, glsl::InFloat > m_filterPCFCascade;
 			glsl::Function< glsl::Vec4
