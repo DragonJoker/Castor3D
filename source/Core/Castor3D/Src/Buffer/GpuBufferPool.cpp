@@ -11,8 +11,8 @@ namespace castor3d
 {
 	namespace
 	{
-		uint32_t doMakeKey( renderer::BufferTarget target
-			, renderer::MemoryPropertyFlags flags )
+		uint32_t doMakeKey( ashes::BufferTarget target
+			, ashes::MemoryPropertyFlags flags )
 		{
 			return ( uint32_t( target ) << 0u )
 				| ( uint32_t( flags ) << 16u );
@@ -33,20 +33,20 @@ namespace castor3d
 		m_buffers.clear();
 	}
 
-	GpuBufferOffset GpuBufferPool::getGpuBuffer( renderer::BufferTarget target
+	GpuBufferOffset GpuBufferPool::getGpuBuffer( ashes::BufferTarget target
 		, uint32_t size
-		, renderer::MemoryPropertyFlags flags )
+		, ashes::MemoryPropertyFlags flags )
 	{
 		GpuBufferOffset result;
 
-		if ( target != renderer::BufferTarget::eIndexBuffer
-			&& target != renderer::BufferTarget::eVertexBuffer )
+		if ( target != ashes::BufferTarget::eIndexBuffer
+			&& target != ashes::BufferTarget::eVertexBuffer )
 		{
 			std::unique_ptr< GpuBuffer > buffer = std::make_unique< GpuBuffer >();
 			buffer->doInitialiseStorage( getCurrentDevice( *getRenderSystem() )
 				, size
-				, target | renderer::BufferTarget::eTransferDst
-				, renderer::MemoryPropertyFlag::eHostVisible );
+				, target | ashes::BufferTarget::eTransferDst
+				, ashes::MemoryPropertyFlag::eHostVisible );
 			m_nonSharedBuffers.emplace_back( std::move( buffer ) );
 			result.buffer = &m_nonSharedBuffers.back()->getBuffer().getBuffer();
 			result.offset = 0u;
@@ -99,11 +99,11 @@ namespace castor3d
 		return result;
 	}
 
-	void GpuBufferPool::putGpuBuffer( renderer::BufferTarget target
+	void GpuBufferPool::putGpuBuffer( ashes::BufferTarget target
 		, GpuBufferOffset const & bufferOffset )
 	{
-		if ( target != renderer::BufferTarget::eIndexBuffer
-			&& target != renderer::BufferTarget::eVertexBuffer )
+		if ( target != ashes::BufferTarget::eIndexBuffer
+			&& target != ashes::BufferTarget::eVertexBuffer )
 		{
 			auto it = std::find_if( m_nonSharedBuffers.begin()
 				, m_nonSharedBuffers.end()

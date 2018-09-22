@@ -27,7 +27,7 @@ namespace fxaa
 			, float span
 			, float reduce );
 
-		inline renderer::UniformBuffer< Configuration > & getUbo()
+		inline ashes::UniformBuffer< Configuration > & getUbo()
 		{
 			return *m_ubo;
 		}
@@ -40,7 +40,7 @@ namespace fxaa
 		static const castor::String PixelSize;
 
 	private:
-		renderer::UniformBufferPtr< Configuration > m_ubo;
+		ashes::UniformBufferPtr< Configuration > m_ubo;
 	};
 }
 

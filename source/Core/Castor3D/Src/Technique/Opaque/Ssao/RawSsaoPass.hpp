@@ -49,11 +49,11 @@ namespace castor3d
 		 *\param[in]	normals					Le tampon de normales.
 		 */
 		RawSsaoPass( Engine & engine
-			, renderer::Extent2D const & size
+			, ashes::Extent2D const & size
 			, SsaoConfig const & config
 			, SsaoConfigUbo & ssaoConfigUbo
 			, TextureUnit const & linearisedDepthBuffer
-			, renderer::TextureView const & normals );
+			, ashes::TextureView const & normals );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -67,7 +67,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dessine la passe SSAO sur le tampon d'image actif.
 		 */
-		renderer::Semaphore const & compute( renderer::Semaphore const & toWait )const;
+		ashes::Semaphore const & compute( ashes::Semaphore const & toWait )const;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -92,24 +92,24 @@ namespace castor3d
 		Engine & m_engine;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		TextureUnit const & m_linearisedDepthBuffer;
-		renderer::TextureView const & m_normals;
-		renderer::Extent2D m_size;
+		ashes::TextureView const & m_normals;
+		ashes::Extent2D m_size;
 		TextureUnit m_result;
 		glsl::Shader m_vertexShader;
 		glsl::Shader m_pixelShader;
-		renderer::ShaderStageStateArray m_program;
-		renderer::SamplerPtr m_sampler;
-		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
-		renderer::DescriptorSetPoolPtr m_descriptorPool;
-		renderer::DescriptorSetPtr m_descriptor;
-		renderer::PipelineLayoutPtr m_pipelineLayout;
-		renderer::RenderPassPtr m_renderPass;
-		renderer::FrameBufferPtr m_frameBuffer;
-		renderer::VertexBufferPtr< NonTexturedQuad > m_vertexBuffer;
-		renderer::VertexLayoutPtr m_vertexLayout;
-		renderer::PipelinePtr m_pipeline;
-		renderer::CommandBufferPtr m_commandBuffer;
-		renderer::SemaphorePtr m_finished;
+		ashes::ShaderStageStateArray m_program;
+		ashes::SamplerPtr m_sampler;
+		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
+		ashes::DescriptorSetPoolPtr m_descriptorPool;
+		ashes::DescriptorSetPtr m_descriptor;
+		ashes::PipelineLayoutPtr m_pipelineLayout;
+		ashes::RenderPassPtr m_renderPass;
+		ashes::FrameBufferPtr m_frameBuffer;
+		ashes::VertexBufferPtr< NonTexturedQuad > m_vertexBuffer;
+		ashes::VertexLayoutPtr m_vertexLayout;
+		ashes::PipelinePtr m_pipeline;
+		ashes::CommandBufferPtr m_commandBuffer;
+		ashes::SemaphorePtr m_finished;
 		RenderPassTimerSPtr m_timer;
 
 	};

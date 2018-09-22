@@ -38,10 +38,10 @@ namespace castor3d
 		if ( !m_ubo )
 		{
 			auto & device = getCurrentDevice( m_engine );
-			m_ubo = renderer::makeUniformBuffer< Configuration >( device
+			m_ubo = ashes::makeUniformBuffer< Configuration >( device
 				, 1u
-				, renderer::BufferTarget::eTransferDst
-				, renderer::MemoryPropertyFlag::eHostVisible );
+				, ashes::BufferTarget::eTransferDst
+				, ashes::MemoryPropertyFlag::eHostVisible );
 		}
 	}
 
@@ -69,8 +69,8 @@ namespace castor3d
 	void MatrixUbo::update( Matrix4x4r const & view
 		, Matrix4x4r const & projection
 		, Point2r const & jitter
-		, renderer::StagingBuffer & stagingBuffer
-		, renderer::CommandBuffer const & commandBuffer )const
+		, ashes::StagingBuffer & stagingBuffer
+		, ashes::CommandBuffer const & commandBuffer )const
 	{
 		REQUIRE( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );

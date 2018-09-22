@@ -180,13 +180,13 @@ namespace castor3d
 			}
 		}
 
-		renderer::TexturePtr createTexture( renderer::Device const & device
+		ashes::TexturePtr createTexture( ashes::Device const & device
 			, Size const & size
-			, renderer::Format format
-			, renderer::ImageUsageFlags usage
-			, renderer::MemoryPropertyFlag memory )
+			, ashes::Format format
+			, ashes::ImageUsageFlags usage
+			, ashes::MemoryPropertyFlag memory )
 		{
-			renderer::ImageCreateInfo image{};
+			ashes::ImageCreateInfo image{};
 			image.arrayLayers = 1u;
 			image.mipLevels = 1u;
 			image.extent.width = size.getWidth();
@@ -194,25 +194,25 @@ namespace castor3d
 			image.extent.depth = 1u;
 			image.flags = 0u;
 			image.format = format;
-			image.imageType = renderer::TextureType::e2D;
-			image.initialLayout = renderer::ImageLayout::eUndefined;
-			image.samples = renderer::SampleCountFlag::e1;
-			image.sharingMode = renderer::SharingMode::eExclusive;
-			image.tiling = renderer::ImageTiling::eOptimal;
+			image.imageType = ashes::TextureType::e2D;
+			image.initialLayout = ashes::ImageLayout::eUndefined;
+			image.samples = ashes::SampleCountFlag::e1;
+			image.sharingMode = ashes::SharingMode::eExclusive;
+			image.tiling = ashes::ImageTiling::eOptimal;
 			image.usage = usage;
 			return device.createTexture( image, memory );
 		}
 
-		renderer::TextureViewPtr createView( renderer::Texture const & texture )
+		ashes::TextureViewPtr createView( ashes::Texture const & texture )
 		{
-			renderer::ImageViewCreateInfo view;
+			ashes::ImageViewCreateInfo view;
 			view.format = texture.getFormat();
-			view.viewType = renderer::TextureViewType::e2D;
-			view.components.r = renderer::ComponentSwizzle::eIdentity;
-			view.components.g = renderer::ComponentSwizzle::eIdentity;
-			view.components.b = renderer::ComponentSwizzle::eIdentity;
-			view.components.a = renderer::ComponentSwizzle::eIdentity;
-			view.subresourceRange.aspectMask = renderer::getAspectMask( view.format );
+			view.viewType = ashes::TextureViewType::e2D;
+			view.components.r = ashes::ComponentSwizzle::eIdentity;
+			view.components.g = ashes::ComponentSwizzle::eIdentity;
+			view.components.b = ashes::ComponentSwizzle::eIdentity;
+			view.components.a = ashes::ComponentSwizzle::eIdentity;
+			view.subresourceRange.aspectMask = ashes::getAspectMask( view.format );
 			view.subresourceRange.baseArrayLayer = 0u;
 			view.subresourceRange.layerCount = 1u;
 			view.subresourceRange.baseMipLevel = 0u;
@@ -281,19 +281,19 @@ namespace castor3d
 
 	Point4f PickingPass::doFboPick( Position const & position
 		, Camera const & camera
-		, renderer::CommandBuffer const & commandBuffer )
+		, ashes::CommandBuffer const & commandBuffer )
 	{
-		static renderer::ClearValueArray clearValues
+		static ashes::ClearValueArray clearValues
 		{
-			renderer::ClearColorValue{ 0.0, 0.0, 0.0, 1.0 },
-			renderer::DepthStencilClearValue{ 1.0f, 0 }
+			ashes::ClearColorValue{ 0.0, 0.0, 0.0, 1.0 },
+			ashes::DepthStencilClearValue{ 1.0f, 0 }
 		};
 
 		m_commandBuffer->begin();
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
 			, clearValues
-			, renderer::SubpassContents::eSecondaryCommandBuffers );
+			, ashes::SubpassContents::eSecondaryCommandBuffers );
 		m_commandBuffer->executeCommands( { commandBuffer } );
 		m_commandBuffer->endRenderPass();
 
@@ -301,27 +301,27 @@ namespace castor3d
 		m_copyRegion.imageOffset.y = int32_t( camera.getHeight() - position.y() - PickingOffset );
 
 #if !C3D_DebugPicking
-		m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
-			, renderer::PipelineStageFlag::eTransfer
+		m_commandBuffer->memoryBarrier( ashes::PipelineStageFlag::eTransfer
+			, ashes::PipelineStageFlag::eTransfer
 			, m_stagingBuffer->getBuffer().makeTransferDestination() );
 		m_commandBuffer->copyToBuffer( m_copyRegion
 			, *m_colourTexture
 			, m_stagingBuffer->getBuffer() );
-		m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
-			, renderer::PipelineStageFlag::eTransfer
-			, m_stagingBuffer->getBuffer().makeMemoryTransitionBarrier( renderer::AccessFlag::eMemoryRead ) );
+		m_commandBuffer->memoryBarrier( ashes::PipelineStageFlag::eTransfer
+			, ashes::PipelineStageFlag::eTransfer
+			, m_stagingBuffer->getBuffer().makeMemoryTransitionBarrier( ashes::AccessFlag::eMemoryRead ) );
 #endif
 
 		m_commandBuffer->end();
 
 		auto & device = getCurrentDevice( *this );
-		renderer::FencePtr fence = device.createFence();
+		ashes::FencePtr fence = device.createFence();
 		device.getGraphicsQueue().submit( *m_commandBuffer, fence.get() );
-		fence->wait( renderer::FenceTimeout );
+		fence->wait( ashes::FenceTimeout );
 		device.waitIdle();
 
 #if !C3D_DebugPicking
-		if ( auto * data = m_stagingBuffer->lock( 0u, m_stagingBuffer->getCount(), renderer::MemoryMapFlag::eRead ) )
+		if ( auto * data = m_stagingBuffer->lock( 0u, m_stagingBuffer->getCount(), ashes::MemoryMapFlag::eRead ) )
 		{
 			std::copy( data, data + m_stagingBuffer->getCount(), m_buffer.begin() );
 			m_stagingBuffer->unlock();
@@ -459,11 +459,11 @@ namespace castor3d
 
 		m_colourTexture = createTexture( device
 			, size
-			, renderer::Format::eR32G32B32A32_SFLOAT
-			, renderer::ImageUsageFlag::eColourAttachment
-				| renderer::ImageUsageFlag::eTransferSrc
-				| renderer::ImageUsageFlag::eSampled
-			, renderer::MemoryPropertyFlag::eDeviceLocal );
+			, ashes::Format::eR32G32B32A32_SFLOAT
+			, ashes::ImageUsageFlag::eColourAttachment
+				| ashes::ImageUsageFlag::eTransferSrc
+				| ashes::ImageUsageFlag::eSampled
+			, ashes::MemoryPropertyFlag::eDeviceLocal );
 		m_colourView = createView( *m_colourTexture );
 
 		m_copyRegion.bufferImageHeight = 0u;
@@ -480,67 +480,67 @@ namespace castor3d
 
 		m_depthTexture = createTexture( device
 			, size
-			, renderer::Format::eD32_SFLOAT
-			, renderer::ImageUsageFlag::eDepthStencilAttachment
-			, renderer::MemoryPropertyFlag::eDeviceLocal );
+			, ashes::Format::eD32_SFLOAT
+			, ashes::ImageUsageFlag::eDepthStencilAttachment
+			, ashes::MemoryPropertyFlag::eDeviceLocal );
 		m_depthView = createView( *m_depthTexture );
 
-		m_stagingBuffer = renderer::makeBuffer< Point4f >( device
+		m_stagingBuffer = ashes::makeBuffer< Point4f >( device
 			, PickingWidth * PickingWidth
-			, renderer::BufferTarget::eTransferDst
-			, renderer::MemoryPropertyFlag::eHostVisible );
+			, ashes::BufferTarget::eTransferDst
+			, ashes::MemoryPropertyFlag::eHostVisible );
 
 		m_buffer.resize( PickingWidth * PickingWidth );
 
 		// Create the render pass.
-		renderer::RenderPassCreateInfo renderPass;
+		ashes::RenderPassCreateInfo renderPass;
 		renderPass.flags = 0u;
 
 		renderPass.attachments.resize( 2u );
 		renderPass.attachments[0].format = m_colourTexture->getFormat();
-		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
-		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eTransferSrcOptimal;
+		renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eClear;
+		renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
+		renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
+		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
+		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eTransferSrcOptimal;
 
 		renderPass.attachments[1].format = m_depthTexture->getFormat();
-		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eClear;
-		renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[1].initialLayout = renderer::ImageLayout::eUndefined;
-		renderPass.attachments[1].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+		renderPass.attachments[1].loadOp = ashes::AttachmentLoadOp::eClear;
+		renderPass.attachments[1].storeOp = ashes::AttachmentStoreOp::eStore;
+		renderPass.attachments[1].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[1].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[1].samples = ashes::SampleCountFlag::e1;
+		renderPass.attachments[1].initialLayout = ashes::ImageLayout::eUndefined;
+		renderPass.attachments[1].finalLayout = ashes::ImageLayout::eDepthStencilAttachmentOptimal;
 
 		renderPass.subpasses.resize( 1u );
 		renderPass.subpasses[0].flags = 0u;
-		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
-		renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
-		renderPass.subpasses[0].depthStencilAttachment = { 1u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
+		renderPass.subpasses[0].pipelineBindPoint = ashes::PipelineBindPoint::eGraphics;
+		renderPass.subpasses[0].colorAttachments.push_back( { 0u, ashes::ImageLayout::eColourAttachmentOptimal } );
+		renderPass.subpasses[0].depthStencilAttachment = { 1u, ashes::ImageLayout::eDepthStencilAttachmentOptimal };
 
 		renderPass.dependencies.resize( 2u );
-		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eTopOfPipe;
-		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
-		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+		renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eTopOfPipe;
+		renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eMemoryRead;
+		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 		renderPass.dependencies[1].srcSubpass = 0u;
-		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
-		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+		renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
+		renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 		m_renderPass = device.createRenderPass( renderPass );
 
-		renderer::FrameBufferAttachmentArray attachments;
+		ashes::FrameBufferAttachmentArray attachments;
 		attachments.emplace_back( *( m_renderPass->getAttachments().begin() + 0u ), *m_colourView );
 		attachments.emplace_back( *( m_renderPass->getAttachments().begin() + 1u ), *m_depthView );
 		m_frameBuffer = m_renderPass->createFrameBuffer( { size.getWidth(), size.getHeight() }
@@ -561,7 +561,7 @@ namespace castor3d
 		m_colourTexture.reset();
 	}
 
-	void PickingPass::doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
+	void PickingPass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, BillboardListRenderNode & node )
 	{
@@ -571,7 +571,7 @@ namespace castor3d
 			, 1u );
 	}
 
-	void PickingPass::doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
+	void PickingPass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, SubmeshRenderNode & node )
 	{
@@ -581,7 +581,7 @@ namespace castor3d
 			, 1u );
 	}
 
-	void PickingPass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+	void PickingPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, BillboardListRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
@@ -592,7 +592,7 @@ namespace castor3d
 			, true );
 	}
 
-	void PickingPass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+	void PickingPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
@@ -619,7 +619,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, renderer::CompareOp alphaFunc )const
+		, ashes::CompareOp alphaFunc )const
 	{
 		return doGetPixelShaderSource( passFlags
 			, textureFlags
@@ -632,7 +632,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, renderer::CompareOp alphaFunc )const
+		, ashes::CompareOp alphaFunc )const
 	{
 		return doGetPixelShaderSource( passFlags
 			, textureFlags
@@ -645,7 +645,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, renderer::CompareOp alphaFunc )const
+		, ashes::CompareOp alphaFunc )const
 	{
 		return doGetPixelShaderSource( passFlags
 			, textureFlags
@@ -761,7 +761,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, renderer::CompareOp alphaFunc )const
+		, ashes::CompareOp alphaFunc )const
 	{
 		using namespace glsl;
 		GlslWriter writer = m_renderSystem.createGlslWriter();
@@ -802,7 +802,7 @@ namespace castor3d
 					, alpha
 					, material->m_alphaRef() );
 			}
-			else if ( alphaFunc != renderer::CompareOp::eAlways )
+			else if ( alphaFunc != ashes::CompareOp::eAlways )
 			{
 				shader::applyAlphaFunc( writer
 					, alphaFunc
@@ -835,44 +835,44 @@ namespace castor3d
 	{
 	}
 
-	renderer::DescriptorSetLayoutBindingArray PickingPass::doCreateUboBindings( PipelineFlags const & flags )const
+	ashes::DescriptorSetLayoutBindingArray PickingPass::doCreateUboBindings( PipelineFlags const & flags )const
 	{
-		renderer::DescriptorSetLayoutBindingArray result = RenderPass::doCreateUboBindings( flags );
-		result.emplace_back( UboBindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment );
+		ashes::DescriptorSetLayoutBindingArray result = RenderPass::doCreateUboBindings( flags );
+		result.emplace_back( UboBindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment );
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
 		{
-			result.emplace_back( BillboardUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+			result.emplace_back( BillboardUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex );
 		}
 
 		return result;
 	}
 
-	renderer::DescriptorSetLayoutBindingArray PickingPass::doCreateTextureBindings( PipelineFlags const & flags )const
+	ashes::DescriptorSetLayoutBindingArray PickingPass::doCreateTextureBindings( PipelineFlags const & flags )const
 	{
 		auto index = MinBufferIndex;
-		renderer::DescriptorSetLayoutBindingArray textureBindings;
+		ashes::DescriptorSetLayoutBindingArray textureBindings;
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eOpacity ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		return textureBindings;
 	}
 
-	renderer::DepthStencilState PickingPass::doCreateDepthStencilState( PipelineFlags const & flags )const
+	ashes::DepthStencilState PickingPass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
-		return renderer::DepthStencilState{ 0u, true, true };
+		return ashes::DepthStencilState{ 0u, true, true };
 	}
 
-	renderer::ColourBlendState PickingPass::doCreateBlendState( PipelineFlags const & flags )const
+	ashes::ColourBlendState PickingPass::doCreateBlendState( PipelineFlags const & flags )const
 	{
 		return RenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u );
 	}
 
 	void PickingPass::doPrepareFrontPipeline( ShaderProgramSPtr program
-		, renderer::VertexLayoutCRefArray const & layouts
+		, ashes::VertexLayoutCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
 	}

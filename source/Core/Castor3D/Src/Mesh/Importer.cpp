@@ -158,20 +158,20 @@ namespace castor3d
 			{
 				TextureUnitSPtr unit = std::make_shared< TextureUnit >( *pass.getOwner()->getEngine() );
 				unit->setAutoMipmaps( true );
-				renderer::ImageCreateInfo createInfo{};
+				ashes::ImageCreateInfo createInfo{};
 				createInfo.flags = 0u;
 				createInfo.arrayLayers = 1u;
-				createInfo.imageType = renderer::TextureType::e2D;
-				createInfo.initialLayout = renderer::ImageLayout::eUndefined;
+				createInfo.imageType = ashes::TextureType::e2D;
+				createInfo.initialLayout = ashes::ImageLayout::eUndefined;
 				createInfo.mipLevels = 20u;
-				createInfo.samples = renderer::SampleCountFlag::e1;
-				createInfo.sharingMode = renderer::SharingMode::eExclusive;
-				createInfo.tiling = renderer::ImageTiling::eOptimal;
-				createInfo.usage = renderer::ImageUsageFlag::eSampled
-					| renderer::ImageUsageFlag::eTransferDst;
+				createInfo.samples = ashes::SampleCountFlag::e1;
+				createInfo.sharingMode = ashes::SharingMode::eExclusive;
+				createInfo.tiling = ashes::ImageTiling::eOptimal;
+				createInfo.usage = ashes::ImageUsageFlag::eSampled
+					| ashes::ImageUsageFlag::eTransferDst;
 				auto texture = std::make_shared < TextureLayout >( *getEngine()->getRenderSystem()
 					, createInfo
-					, renderer::MemoryPropertyFlag::eDeviceLocal );
+					, ashes::MemoryPropertyFlag::eDeviceLocal );
 				texture->setSource( folder, relative );
 				unit->setTexture( texture );
 				unit->setChannel( channel );

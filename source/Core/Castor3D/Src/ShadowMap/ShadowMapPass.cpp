@@ -47,14 +47,14 @@ namespace castor3d
 		}
 	}
 
-	renderer::DescriptorSetLayoutBindingArray ShadowMapPass::doCreateTextureBindings( PipelineFlags const & flags )const
+	ashes::DescriptorSetLayoutBindingArray ShadowMapPass::doCreateTextureBindings( PipelineFlags const & flags )const
 	{
 		auto index = MinBufferIndex;
-		renderer::DescriptorSetLayoutBindingArray textureBindings;
+		ashes::DescriptorSetLayoutBindingArray textureBindings;
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eOpacity ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		return textureBindings;
@@ -71,7 +71,7 @@ namespace castor3d
 			, sceneFlags );
 	}
 
-	void ShadowMapPass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+	void ShadowMapPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, BillboardListRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
@@ -82,7 +82,7 @@ namespace castor3d
 			, true );
 	}
 
-	void ShadowMapPass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+	void ShadowMapPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
@@ -125,7 +125,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, renderer::CompareOp alphaFunc )const
+		, ashes::CompareOp alphaFunc )const
 	{
 		return m_shadowMap.getPixelShaderSource( passFlags
 			, textureFlags
@@ -138,7 +138,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, renderer::CompareOp alphaFunc )const
+		, ashes::CompareOp alphaFunc )const
 	{
 		return m_shadowMap.getPixelShaderSource( passFlags
 			, textureFlags
@@ -151,7 +151,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, renderer::CompareOp alphaFunc )const
+		, ashes::CompareOp alphaFunc )const
 	{
 		return m_shadowMap.getPixelShaderSource( passFlags
 			, textureFlags

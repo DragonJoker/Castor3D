@@ -11,7 +11,7 @@
 #include "Scene/Background/Visitor.hpp"
 #include "EnvironmentMap/EnvironmentMap.hpp"
 #include "RenderToTexture/EquirectangularToCube.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Shader/Program.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
@@ -21,6 +21,7 @@
 #include <RenderPass/FrameBufferAttachment.hpp>
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
+#include <Shader/GlslToSpv.hpp>
 #include <Shader/ShaderModule.hpp>
 
 #include <GlslSource.hpp>
@@ -47,19 +48,19 @@ namespace castor3d
 
 		try
 		{
-			renderer::ImageCreateInfo image{};
+			ashes::ImageCreateInfo image{};
 			image.arrayLayers = 1u;
 			image.flags = 0u;
-			image.imageType = renderer::TextureType::e2D;
-			image.initialLayout = renderer::ImageLayout::eUndefined;
+			image.imageType = ashes::TextureType::e2D;
+			image.initialLayout = ashes::ImageLayout::eUndefined;
 			image.mipLevels = 1u;
-			image.samples = renderer::SampleCountFlag::e1;
-			image.sharingMode = renderer::SharingMode::eExclusive;
-			image.tiling = renderer::ImageTiling::eOptimal;
-			image.usage = renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst;
+			image.samples = ashes::SampleCountFlag::e1;
+			image.sharingMode = ashes::SharingMode::eExclusive;
+			image.tiling = ashes::ImageTiling::eOptimal;
+			image.usage = ashes::ImageUsageFlag::eSampled | ashes::ImageUsageFlag::eTransferDst;
 			auto texture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
 				, image
-				, renderer::MemoryPropertyFlag::eDeviceLocal );
+				, ashes::MemoryPropertyFlag::eDeviceLocal );
 			texture->setSource( folder, relative );
 			m_texture = texture;
 			notifyChanged();
@@ -78,7 +79,7 @@ namespace castor3d
 		visitor.visit( *this );
 	}
 
-	renderer::ShaderStageStateArray ImageBackground::doInitialiseShader()
+	ashes::ShaderStageStateArray ImageBackground::doInitialiseShader()
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		glsl::Shader vtx;
@@ -127,7 +128,7 @@ namespace castor3d
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
 				auto texcoord = writer.declLocale( cuT( "texcoord" )
-					, gl_FragCoord.xy() / c3d_size );
+					, writer.ashesBottomUpToTopDown( gl_FragCoord.xy() / c3d_size ) );
 				auto colour = writer.declLocale( cuT( "colour" )
 					, texture( c3d_mapDiffuse, texcoord ) );
 
@@ -137,38 +138,43 @@ namespace castor3d
 				}
 				else
 				{
-					pxl_FragColor = vec4( colour.xyz(), colour.w() );
+					pxl_FragColor = colour;
 				}
 			} );
 
 			pxl = writer.finalise();
 		}
 
-		renderer::ShaderStageStateArray program
+		auto & device = getCurrentDevice( renderSystem );
+		ashes::ShaderStageStateArray program
 		{
-			{ getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eVertex ) },
-			{ getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eFragment ) }
+			{ device.createShaderModule( ashes::ShaderStageFlag::eVertex ) },
+			{ device.createShaderModule( ashes::ShaderStageFlag::eFragment ) }
 		};
-		program[0].module->loadShader( vtx.getSource() );
-		program[1].module->loadShader( pxl.getSource() );
+		program[0].module->loadShader( compileGlslToSpv( device
+			, ashes::ShaderStageFlag::eVertex
+			, vtx.getSource() ) );
+		program[1].module->loadShader( compileGlslToSpv( device
+			, ashes::ShaderStageFlag::eFragment
+			, pxl.getSource() ) );
 		return program;
 	}
 
-	bool ImageBackground::doInitialise( renderer::RenderPass const & renderPass )
+	bool ImageBackground::doInitialise( ashes::RenderPass const & renderPass )
 	{
 		auto & device = getCurrentDevice( *this );
-		m_sizeUbo = renderer::makeUniformBuffer< Point2f >( device
+		m_sizeUbo = ashes::makeUniformBuffer< Point2f >( device
 			, 1u
 			, 0u
-			, renderer::MemoryPropertyFlag::eHostVisible );
-		m_hdr = m_texture->getPixelFormat() == renderer::Format::eR32_SFLOAT
-			|| m_texture->getPixelFormat() == renderer::Format::eR32G32_SFLOAT
-			|| m_texture->getPixelFormat() == renderer::Format::eR32G32B32_SFLOAT
-			|| m_texture->getPixelFormat() == renderer::Format::eR32G32B32A32_SFLOAT
-			|| m_texture->getPixelFormat() == renderer::Format::eR16_SFLOAT
-			|| m_texture->getPixelFormat() == renderer::Format::eR16G16_SFLOAT
-			|| m_texture->getPixelFormat() == renderer::Format::eR16G16B16_SFLOAT
-			|| m_texture->getPixelFormat() == renderer::Format::eR16G16B16A16_SFLOAT;
+			, ashes::MemoryPropertyFlag::eHostVisible );
+		m_hdr = m_texture->getPixelFormat() == ashes::Format::eR32_SFLOAT
+			|| m_texture->getPixelFormat() == ashes::Format::eR32G32_SFLOAT
+			|| m_texture->getPixelFormat() == ashes::Format::eR32G32B32_SFLOAT
+			|| m_texture->getPixelFormat() == ashes::Format::eR32G32B32A32_SFLOAT
+			|| m_texture->getPixelFormat() == ashes::Format::eR16_SFLOAT
+			|| m_texture->getPixelFormat() == ashes::Format::eR16G16_SFLOAT
+			|| m_texture->getPixelFormat() == ashes::Format::eR16G16B16_SFLOAT
+			|| m_texture->getPixelFormat() == ashes::Format::eR16G16B16A16_SFLOAT;
 		return m_texture->initialise();
 	}
 
@@ -190,13 +196,13 @@ namespace castor3d
 	void ImageBackground::doInitialiseDescriptorLayout()
 	{
 		auto & device = getCurrentDevice( *this );
-		renderer::DescriptorSetLayoutBindingArray setLayoutBindings
+		ashes::DescriptorSetLayoutBindingArray setLayoutBindings
 		{
-			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex },			// Matrix UBO
-			{ 1u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex },			// Model Matrix UBO
-			{ 2u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },			// HDR Config UBO
-			{ 3u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },			// Size UBO
-			{ 4u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// Image Map
+			{ 0u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex },			// Matrix UBO
+			{ 1u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex },			// Model Matrix UBO
+			{ 2u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment },			// HDR Config UBO
+			{ 3u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment },			// Size UBO
+			{ 4u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment },	// Image Map
 		};
 		m_descriptorLayout = device.createDescriptorSetLayout( std::move( setLayoutBindings ) );
 	}
@@ -204,7 +210,7 @@ namespace castor3d
 	void ImageBackground::initialiseDescriptorSet( MatrixUbo const & matrixUbo
 		, ModelMatrixUbo const & modelMatrixUbo
 		, HdrConfigUbo const & hdrConfigUbo
-		, renderer::DescriptorSet & descriptorSet )const
+		, ashes::DescriptorSet & descriptorSet )const
 	{
 		descriptorSet.createBinding( m_descriptorLayout->getBinding( 0u )
 			, matrixUbo.getUbo() );

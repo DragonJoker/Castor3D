@@ -3,7 +3,7 @@
 #include "Engine.hpp"
 #include "TextureLayout.hpp"
 
-#include <Buffer/StagingBuffer.hpp>
+#include <Image/StagingTexture.hpp>
 #include <Core/Device.hpp>
 #include <Image/Texture.hpp>
 #include <Miscellaneous/BufferImageCopy.hpp>
@@ -42,7 +42,7 @@ namespace castor3d
 			{
 				m_buffer = buffer;
 				m_format = convert( buffer->format() );
-				m_size = renderer::Extent3D{ buffer->dimensions()[0], buffer->dimensions()[1], 1u };
+				m_size = ashes::Extent3D{ buffer->dimensions()[0], buffer->dimensions()[1], 1u };
 			}
 
 		protected:
@@ -59,7 +59,7 @@ namespace castor3d
 				, PxBufferBaseSPtr buffer )
 				: StaticTextureSource{ engine }
 			{
-				auto size = renderer::Extent3D{ buffer->dimensions()[0], buffer->dimensions()[1], 1u };
+				auto size = ashes::Extent3D{ buffer->dimensions()[0], buffer->dimensions()[1], 1u };
 
 				if ( doAdjustDimensions( size ) )
 				{
@@ -72,7 +72,7 @@ namespace castor3d
 				}
 
 				m_format = convert( m_buffer->format() );
-				m_size = renderer::Extent3D{ m_buffer->dimensions().getWidth(), m_buffer->dimensions().getHeight(), 1u };
+				m_size = ashes::Extent3D{ m_buffer->dimensions().getWidth(), m_buffer->dimensions().getHeight(), 1u };
 			}
 
 			virtual uint32_t getDepth()const
@@ -185,7 +185,7 @@ namespace castor3d
 				}
 
 				m_format = convert( m_buffer->format() );
-				m_size = renderer::Extent3D{ m_buffer->dimensions().getWidth(), m_buffer->dimensions().getHeight(), 1u };
+				m_size = ashes::Extent3D{ m_buffer->dimensions().getWidth(), m_buffer->dimensions().getHeight(), 1u };
 			}
 
 		private:
@@ -204,7 +204,7 @@ namespace castor3d
 				, PxBufferBaseSPtr buffer )
 				: StaticTextureSource{ engine }
 			{
-				auto size = renderer::Extent3D{ dimensions[0], dimensions[1], dimensions[2] };
+				auto size = ashes::Extent3D{ dimensions[0], dimensions[1], dimensions[2] };
 
 				if ( doAdjustDimensions( size ) )
 				{
@@ -239,11 +239,11 @@ namespace castor3d
 		public:
 			DynamicTextureSource( Engine & engine
 				, Size const & dimensions
-				, renderer::Format format )
+				, ashes::Format format )
 				: TextureSource{ engine }
 			{
 				m_format = format;
-				m_size = renderer::Extent3D{ dimensions[0], dimensions[1], 1u };
+				m_size = ashes::Extent3D{ dimensions[0], dimensions[1], 1u };
 			}
 
 			bool isStatic()const override
@@ -253,7 +253,7 @@ namespace castor3d
 
 			inline PxBufferBaseSPtr getBuffer()const override
 			{
-				auto size = renderer::Extent3D{ m_buffer->dimensions()[0]
+				auto size = ashes::Extent3D{ m_buffer->dimensions()[0]
 					, m_buffer->dimensions()[1]
 					, m_buffer->dimensions()[2] };
 
@@ -268,7 +268,7 @@ namespace castor3d
 			inline void setBuffer( PxBufferBaseSPtr buffer ) override
 			{
 				m_format = convert( buffer->format() );
-				m_size = renderer::Extent3D{ buffer->dimensions()[0], buffer->dimensions()[1], 1u };
+				m_size = ashes::Extent3D{ buffer->dimensions()[0], buffer->dimensions()[1], 1u };
 			}
 
 		protected:
@@ -283,7 +283,7 @@ namespace castor3d
 		public:
 			Dynamic2DTextureSource( Engine & engine
 				, Size const & dimensions
-				, renderer::Format format )
+				, ashes::Format format )
 				: DynamicTextureSource{ engine, dimensions, format }
 			{
 				doAdjustDimensions( m_size );
@@ -309,7 +309,7 @@ namespace castor3d
 		public:
 			Dynamic3DTextureSource( Engine & engine
 				, Point3ui const & dimensions
-				, renderer::Format format )
+				, ashes::Format format )
 				: DynamicTextureSource{ engine, Size{ dimensions[0], dimensions[1] }, format }
 			{
 				m_size.depth = dimensions[2];
@@ -332,12 +332,12 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	bool TextureSource::doAdjustDimensions( renderer::Extent3D & extent )
+	bool TextureSource::doAdjustDimensions( ashes::Extent3D & extent )
 	{
 		bool result = false;
 
 #if !C3D_HasNonPOT
-		renderer::Extent3D adjustedExtent{ getNext2Pow( extent.width )
+		ashes::Extent3D adjustedExtent{ getNext2Pow( extent.width )
 			, getNext2Pow( extent.height )
 			, getNext2Pow( extent.depth ) };
 		result = adjustedExtent != extent;
@@ -362,7 +362,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	TextureView::TextureView( TextureLayout & layout
-		, renderer::ImageViewCreateInfo info
+		, ashes::ImageViewCreateInfo info
 		, uint32_t index )
 		: OwnedBy< TextureLayout >{ layout }
 		, m_index{ index }
@@ -377,11 +377,12 @@ namespace castor3d
 
 		if ( m_source && m_source->isStatic() )
 		{
-			renderer::StagingBuffer stagingBuffer{ device, 0u, m_source->getBuffer()->size() };
+			auto staging = device.createStagingTexture( m_source->getPixelFormat()
+				, { m_source->getDimensions().width, m_source->getDimensions().height } );
 			auto commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
-			stagingBuffer.uploadTextureData( *commandBuffer
+			staging->uploadTextureData( *commandBuffer
+				, m_source->getPixelFormat()
 				, m_source->getBuffer()->constPtr()
-				, m_source->getBuffer()->size()
 				, *m_view );
 		}
 
@@ -428,7 +429,7 @@ namespace castor3d
 
 	void TextureView::initialiseSource()
 	{
-		if ( getOwner()->getType() == renderer::TextureType::e3D )
+		if ( getOwner()->getType() == ashes::TextureType::e3D )
 		{
 			m_source = std::make_unique< Dynamic3DTextureSource >( *getOwner()->getRenderSystem()->getEngine()
 				, Point3ui{ getOwner()->getWidth()
@@ -457,7 +458,7 @@ namespace castor3d
 			, m_source->getPixelFormat() );
 	}
 
-	void TextureView::doUpdate( renderer::ImageViewCreateInfo info )
+	void TextureView::doUpdate( ashes::ImageViewCreateInfo info )
 	{
 		m_info = info;
 

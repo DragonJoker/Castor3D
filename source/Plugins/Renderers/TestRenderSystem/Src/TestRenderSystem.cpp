@@ -20,9 +20,9 @@ namespace TestRender
 	RenderSystem::RenderSystem( castor3d::Engine & engine
 		, castor::String const & appName
 		, bool enableValidation )
-		: castor3d::RenderSystem( engine, Name, false )
+		: castor3d::RenderSystem( engine, Name, true )
 	{
-		renderer::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
+		ashes::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
 		{
 			if ( newLine )
 			{
@@ -33,7 +33,7 @@ namespace TestRender
 				Logger::logDebugNoNL( msg );
 			}
 		} );
-		renderer::Logger::setInfoCallback( []( std::string const & msg, bool newLine )
+		ashes::Logger::setInfoCallback( []( std::string const & msg, bool newLine )
 		{
 			if ( newLine )
 			{
@@ -44,7 +44,7 @@ namespace TestRender
 				Logger::logInfoNoNL( msg );
 			}
 		} );
-		renderer::Logger::setWarningCallback( []( std::string const & msg, bool newLine )
+		ashes::Logger::setWarningCallback( []( std::string const & msg, bool newLine )
 		{
 			if ( newLine )
 			{
@@ -55,7 +55,7 @@ namespace TestRender
 				Logger::logWarningNoNL( msg );
 			}
 		} );
-		renderer::Logger::setErrorCallback( []( std::string const & msg, bool newLine )
+		ashes::Logger::setErrorCallback( []( std::string const & msg, bool newLine )
 		{
 			if ( newLine )
 			{
@@ -66,7 +66,7 @@ namespace TestRender
 				Logger::logErrorNoNL( msg );
 			}
 		} );
-		m_renderer.reset( createRenderer( renderer::Renderer::Configuration
+		m_renderer.reset( createRenderer( ashes::Renderer::Configuration
 		{
 			string::stringCast< char >( appName ),
 			"Castor3D",
@@ -100,7 +100,7 @@ namespace TestRender
 			, true
 			, true
 			, true
-			, true
+			, m_renderer->getClipDirection() == ashes::ClipDirection::eTopDown
 			, true
 			, true
 			, true } };

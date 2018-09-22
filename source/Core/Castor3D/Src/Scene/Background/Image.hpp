@@ -53,7 +53,7 @@ namespace castor3d
 		void initialiseDescriptorSet( MatrixUbo const & matrixUbo
 			, ModelMatrixUbo const & modelMatrixUbo
 			, HdrConfigUbo const & hdrConfigUbo
-			, renderer::DescriptorSet & descriptorSet )const override;
+			, ashes::DescriptorSet & descriptorSet )const override;
 		/**
 		*\copydoc	castor3d::SceneBackground::accept
 		*/
@@ -63,7 +63,7 @@ namespace castor3d
 		/**
 		*\copydoc	castor3d::SceneBackground::doInitialiseShader
 		*/
-		renderer::ShaderStageStateArray doInitialiseShader()override;
+		ashes::ShaderStageStateArray doInitialiseShader()override;
 		/**
 		*\copydoc	castor3d::SceneBackground::doInitialiseDescriptorLayout
 		*/
@@ -71,7 +71,7 @@ namespace castor3d
 		/**
 		*\copydoc	castor3d::SceneBackground::doInitialise
 		*/
-		bool doInitialise( renderer::RenderPass const & renderPass )override;
+		bool doInitialise( ashes::RenderPass const & renderPass )override;
 		/**
 		*\copydoc	castor3d::SceneBackground::doCleanup
 		*/
@@ -82,7 +82,7 @@ namespace castor3d
 		void doUpdate( Camera const & camera )override;
 
 	private:
-		renderer::UniformBufferPtr< castor::Point2f > m_sizeUbo;
+		ashes::UniformBufferPtr< castor::Point2f > m_sizeUbo;
 	};
 }
 

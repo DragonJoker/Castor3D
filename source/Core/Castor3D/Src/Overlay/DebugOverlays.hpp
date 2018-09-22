@@ -288,7 +288,7 @@ namespace castor3d
 		castor::Nanoseconds m_averageTime{ 0 };
 		std::locale m_timesLocale;
 		RenderInfo m_renderInfo;
-		renderer::QueryPoolPtr m_queries;
+		ashes::QueryPoolPtr m_queries;
 		uint32_t m_queriesCount{ 0u };
 		bool m_dirty{ false };
 	};

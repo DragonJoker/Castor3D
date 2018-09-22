@@ -23,10 +23,10 @@ namespace light_streaks
 
 	void KawaseUbo::initialise()
 	{
-		m_ubo = renderer::makeUniformBuffer< Configuration >( getCurrentDevice( m_engine )
+		m_ubo = ashes::makeUniformBuffer< Configuration >( getCurrentDevice( m_engine )
 			, PostEffect::Count * 3u
 			, 0u
-			, renderer::MemoryPropertyFlag::eHostVisible );
+			, ashes::MemoryPropertyFlag::eHostVisible );
 	}
 
 	void KawaseUbo::cleanup()
@@ -35,7 +35,7 @@ namespace light_streaks
 	}
 
 	void KawaseUbo::update( uint32_t index
-		, renderer::Extent2D const & size
+		, ashes::Extent2D const & size
 		, castor::Point2f const & direction
 		, uint32_t pass )
 	{

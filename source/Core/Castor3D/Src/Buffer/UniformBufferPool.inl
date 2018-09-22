@@ -36,7 +36,7 @@ namespace castor3d
 				buffer->upload( *m_stagingBuffer
 					, *m_uploadCommandBuffer
 					, 0u
-					, renderer::PipelineStageFlag::eVertexShader
+					, ashes::PipelineStageFlag::eVertexShader
 					, timer
 					, index );
 				timer.notifyPassRender( index );
@@ -44,7 +44,7 @@ namespace castor3d
 
 				getCurrentDevice( *getRenderSystem() ).getGraphicsQueue().submit( *m_uploadCommandBuffer
 					, m_uploadFence.get() );
-				m_uploadFence->wait( renderer::FenceTimeout );
+				m_uploadFence->wait( ashes::FenceTimeout );
 
 				++index;
 			}
@@ -52,7 +52,7 @@ namespace castor3d
 	}
 
 	template< typename T >
-	UniformBufferOffset< T > UniformBufferPool< T >::getBuffer( renderer::MemoryPropertyFlags flags )
+	UniformBufferOffset< T > UniformBufferPool< T >::getBuffer( ashes::MemoryPropertyFlags flags )
 	{
 		UniformBufferOffset< T > result;
 
@@ -90,9 +90,9 @@ namespace castor3d
 					{
 						auto & device = getCurrentDevice( *getRenderSystem() );
 						m_uploadCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
-						m_uploadFence = device.createFence( renderer::FenceCreateFlag::eSignaled );
-						m_stagingBuffer = std::make_unique< renderer::StagingBuffer >( device
-							, renderer::BufferTarget::eTransferSrc
+						m_uploadFence = device.createFence( ashes::FenceCreateFlag::eSignaled );
+						m_stagingBuffer = std::make_unique< ashes::StagingBuffer >( device
+							, ashes::BufferTarget::eTransferSrc
 							, m_maxSize );
 					} ) );
 			}

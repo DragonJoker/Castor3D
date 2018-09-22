@@ -38,20 +38,20 @@ namespace castor3d
 		TextureUnit doCreateTexture( Engine & engine
 			, Size const & size )
 		{
-			renderer::ImageCreateInfo image{};
+			ashes::ImageCreateInfo image{};
 			image.arrayLayers = 1u;
 			image.extent.width = size.getWidth();
 			image.extent.height = size.getHeight();
 			image.extent.depth = 1u;
-			image.imageType = renderer::TextureType::e2D;
+			image.imageType = ashes::TextureType::e2D;
 			image.mipLevels = 1u;
-			image.samples = renderer::SampleCountFlag::e1;
-			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
-			image.format = renderer::Format::eR16G16B16A16_SFLOAT;
+			image.samples = ashes::SampleCountFlag::e1;
+			image.usage = ashes::ImageUsageFlag::eColourAttachment | ashes::ImageUsageFlag::eSampled;
+			image.format = ashes::Format::eR16G16B16A16_SFLOAT;
 
 			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
 				, image
-				, renderer::MemoryPropertyFlag::eDeviceLocal );
+				, ashes::MemoryPropertyFlag::eDeviceLocal );
 			texture->getDefaultImage().initialiseSource();
 
 			TextureUnit result{ engine };
@@ -67,7 +67,7 @@ namespace castor3d
 		, Scene const & scene
 		, GeometryPassResult const & gpResult
 		, OpaquePass & opaque
-		, renderer::TextureView const & depthView
+		, ashes::TextureView const & depthView
 		, SceneUbo & sceneUbo
 		, GpInfoUbo & gpInfoUbo )
 		: m_size{ size }
@@ -144,14 +144,14 @@ namespace castor3d
 		m_specular.cleanup();
 	}
 
-	renderer::Semaphore const & LightingPass::render( Scene const & scene
+	ashes::Semaphore const & LightingPass::render( Scene const & scene
 		, Camera const & camera
 		, GeometryPassResult const & gp
-		, renderer::Semaphore const & toWait
+		, ashes::Semaphore const & toWait
 		, RenderInfo & info )
 	{
 		auto & cache = scene.getLightCache();
-		renderer::Semaphore const * result = &toWait;
+		ashes::Semaphore const * result = &toWait;
 
 		if ( !cache.isEmpty() )
 		{
@@ -203,11 +203,11 @@ namespace castor3d
 		m_lightPassShadow[size_t( LightType::eSpot )]->accept( visitor );
 	}
 
-	renderer::Semaphore const & LightingPass::doRenderLights( Scene const & scene
+	ashes::Semaphore const & LightingPass::doRenderLights( Scene const & scene
 		, Camera const & camera
 		, LightType p_type
 		, GeometryPassResult const & gp
-		, renderer::Semaphore const & toWait
+		, ashes::Semaphore const & toWait
 		, uint32_t & index
 		, RenderInfo & info )
 	{

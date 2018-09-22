@@ -17,6 +17,7 @@
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <Pipeline/DepthStencilState.hpp>
+#include <Shader/GlslToSpv.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
 #include <numeric>
@@ -65,12 +66,12 @@ namespace smaa
 	//*********************************************************************************************
 
 	DepthEdgeDetection::DepthEdgeDetection( castor3d::RenderTarget & renderTarget
-		, renderer::TextureView const & depthView
+		, ashes::TextureView const & depthView
 		, SmaaConfig const & config )
 		: EdgeDetection{ renderTarget, config }
 		, m_depthView{ depthView }
 	{
-		renderer::Extent2D size{ m_depthView.getTexture().getDimensions().width
+		ashes::Extent2D size{ m_depthView.getTexture().getDimensions().width
 			, m_depthView.getTexture().getDimensions().height };
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
 		m_pixelShader = doGetEdgeDetectionFP( *renderTarget.getEngine()->getRenderSystem()
@@ -93,14 +94,14 @@ namespace smaa
 		edgeDetectionCmd.begin();
 		timer.beginPass( edgeDetectionCmd, passIndex );
 		// Put source image in shader input layout.
-		edgeDetectionCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-			, renderer::PipelineStageFlag::eFragmentShader
-			, m_depthView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+		edgeDetectionCmd.memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
+			, ashes::PipelineStageFlag::eFragmentShader
+			, m_depthView.makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
 
 		edgeDetectionCmd.beginRenderPass( *m_renderPass
 			, *m_surface.frameBuffer
-			, { renderer::ClearColorValue{ 0.0, 0.0, 0.0, 0.0 }, renderer::DepthStencilClearValue{ 1.0f, 0 } }
-			, renderer::SubpassContents::eInline );
+			, { ashes::ClearColorValue{ 0.0, 0.0, 0.0, 0.0 }, ashes::DepthStencilClearValue{ 1.0f, 0 } }
+			, ashes::SubpassContents::eInline );
 		registerFrame( edgeDetectionCmd );
 		edgeDetectionCmd.endRenderPass();
 		timer.endPass( edgeDetectionCmd, passIndex );
@@ -111,21 +112,25 @@ namespace smaa
 
 	void DepthEdgeDetection::doInitialisePipeline()
 	{
-		renderer::Extent2D size{ m_depthView.getTexture().getDimensions().width
+		ashes::Extent2D size{ m_depthView.getTexture().getDimensions().width
 			, m_depthView.getTexture().getDimensions().height };
 		auto & device = getCurrentDevice( m_renderSystem );
-		renderer::ShaderStageStateArray stages;
-		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
-		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( m_vertexShader.getSource() );
-		stages[1].module->loadShader( m_pixelShader.getSource() );
+		ashes::ShaderStageStateArray stages;
+		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
+		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
+		stages[0].module->loadShader( castor3d::compileGlslToSpv( device
+			, ashes::ShaderStageFlag::eVertex
+			, m_vertexShader.getSource() ) );
+		stages[1].module->loadShader( castor3d::compileGlslToSpv( device
+			, ashes::ShaderStageFlag::eFragment
+			, m_pixelShader.getSource() ) );
 
-		renderer::DepthStencilState dsstate{ 0u, false, false };
+		ashes::DepthStencilState dsstate{ 0u, false, false };
 		dsstate.stencilTestEnable = true;
-		dsstate.front.passOp = renderer::StencilOp::eReplace;
+		dsstate.front.passOp = ashes::StencilOp::eReplace;
 		dsstate.front.reference = 1u;
 		dsstate.back = dsstate.front;
-		renderer::DescriptorSetLayoutBindingArray setLayoutBindings;
+		ashes::DescriptorSetLayoutBindingArray setLayoutBindings;
 		createPipeline( size
 			, castor::Position{}
 			, stages

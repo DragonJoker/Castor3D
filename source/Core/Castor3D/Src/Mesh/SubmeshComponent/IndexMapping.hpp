@@ -75,9 +75,9 @@ namespace castor3d
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
 		inline void gather( MaterialSPtr material
-			, renderer::BufferCRefArray & buffers
+			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
-			, renderer::VertexLayoutCRefArray & layouts )override
+			, ashes::VertexLayoutCRefArray & layouts )override
 		{
 		}
 		/**

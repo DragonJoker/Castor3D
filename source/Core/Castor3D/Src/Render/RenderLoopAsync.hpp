@@ -126,7 +126,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderLoop::doCreateMainDevice
 		 */
-		C3D_API renderer::DevicePtr doCreateMainDevice( renderer::WindowHandle && handle
+		C3D_API ashes::DevicePtr doCreateMainDevice( ashes::WindowHandle && handle
 			, RenderWindow & window )override;
 		/**
 		 *\~english
@@ -137,8 +137,8 @@ namespace castor3d
 		 *\remarks		Le contexte principal est créé ici, car OpenGL demande à chaque thread d'avoir son contexte.
 		 */
 		C3D_API void doMainLoop();
-		C3D_API void doSetHandle( renderer::WindowHandle && handle );
-		C3D_API renderer::WindowHandle & doGetHandle();
+		C3D_API void doSetHandle( ashes::WindowHandle && handle );
+		C3D_API ashes::WindowHandle & doGetHandle();
 		C3D_API void doSetWindow( RenderWindow * window );
 		C3D_API RenderWindow * doGetWindow()const;
 
@@ -153,7 +153,7 @@ namespace castor3d
 		std::atomic_bool m_interrupted;
 		mutable std::mutex m_mutexWindow;
 		RenderWindowRPtr m_window;
-		renderer::WindowHandle m_handle;
+		ashes::WindowHandle m_handle;
 		castor::Milliseconds m_savedTime{ 0 };
 	};
 }

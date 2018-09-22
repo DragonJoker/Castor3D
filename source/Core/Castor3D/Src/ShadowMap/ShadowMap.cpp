@@ -6,7 +6,7 @@
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/Light/Light.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Shader/Program.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
 #include "Shader/Ubos/ModelMatrixUbo.hpp"
@@ -135,7 +135,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, renderer::CompareOp alphaFunc )const
+		, ashes::CompareOp alphaFunc )const
 	{
 		return doGetPixelShaderSource( passFlags
 			, textureFlags
@@ -277,7 +277,7 @@ namespace castor3d
 
 	void ShadowMap::doDiscardAlpha( glsl::GlslWriter & writer
 		, TextureChannels const & textureFlags
-		, renderer::CompareOp alphaFunc
+		, ashes::CompareOp alphaFunc
 		, glsl::Int const & materialIndex
 		, shader::Materials const & materials )const
 	{
@@ -299,7 +299,7 @@ namespace castor3d
 				, alpha
 				, alphaRef );
 		}
-		else if ( alphaFunc != renderer::CompareOp::eAlways )
+		else if ( alphaFunc != ashes::CompareOp::eAlways )
 		{
 			auto material = materials.getBaseMaterial( materialIndex );
 			auto alpha = writer.declLocale( cuT( "alpha" )

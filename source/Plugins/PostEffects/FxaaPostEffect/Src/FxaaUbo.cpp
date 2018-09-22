@@ -12,10 +12,10 @@ namespace fxaa
 
 	FxaaUbo::FxaaUbo( castor3d::Engine & engine
 		, castor::Size const & size )
-		: m_ubo{ renderer::makeUniformBuffer< Configuration >( getCurrentDevice( engine )
+		: m_ubo{ ashes::makeUniformBuffer< Configuration >( getCurrentDevice( engine )
 			, 1u
 			, 0u
-			, renderer::MemoryPropertyFlag::eHostVisible | renderer::MemoryPropertyFlag::eHostCoherent ) }
+			, ashes::MemoryPropertyFlag::eHostVisible | ashes::MemoryPropertyFlag::eHostCoherent ) }
 	{
 		auto & data = m_ubo->getData();
 		data.pixelSize = castor::Point2f{ 1.0f / size.getWidth(), 1.0f / size.getHeight() };

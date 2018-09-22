@@ -91,7 +91,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc
+			, ashes::CompareOp alphaFunc
 			, bool invertNormals );
 		/**
 		 *\~english
@@ -202,7 +202,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc
+			, ashes::CompareOp alphaFunc
 			, bool invertNormals )const;
 		/**
 		 *\~english
@@ -231,7 +231,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc
+			, ashes::CompareOp alphaFunc
 			, bool invertNormals );
 		/**
 		 *\~english
@@ -258,7 +258,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const;
+			, ashes::CompareOp alphaFunc )const;
 		/**
 		 *\~english
 		 *\brief		adds a billboards shader program corresponding to given flags.
@@ -282,7 +282,7 @@ namespace castor3d
 			,TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc );
+			, ashes::CompareOp alphaFunc );
 
 	private:
 		DECLARE_MAP( uint64_t, ShaderProgramSPtr, ShaderProgramPtrUInt64 );
@@ -299,10 +299,10 @@ namespace castor3d
 	};
 	/**
 	 *\~english
-	 *\brief		Creates a renderer::ShaderProgram cache.
+	 *\brief		Creates a ashes::ShaderProgram cache.
 	 *\param[in]	engine	The engine.
 	 *\~french
-	 *\brief		Crée un cache de renderer::ShaderProgram.
+	 *\brief		Crée un cache de ashes::ShaderProgram.
 	 *\param[in]	engine	Le moteur.
 	 */
 	inline std::unique_ptr< ShaderProgramCache >

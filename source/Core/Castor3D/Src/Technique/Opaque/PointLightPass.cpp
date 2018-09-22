@@ -1,12 +1,12 @@
 #include "PointLightPass.hpp"
 
-#include <Engine.hpp>
-#include <Render/RenderPipeline.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Scene/Scene.hpp>
-#include <Scene/Camera.hpp>
-#include <Scene/Light/PointLight.hpp>
-#include <Shader/ShaderProgram.hpp>
+#include "Engine.hpp"
+#include "Render/RenderPipeline.hpp"
+#include "Render/RenderSystem.hpp"
+#include "Scene/Scene.hpp"
+#include "Scene/Camera.hpp"
+#include "Scene/Light/PointLight.hpp"
+#include "Shader/Program.hpp"
 
 #include <GlslSource.hpp>
 
@@ -63,9 +63,9 @@ namespace castor3d
 	//*********************************************************************************************
 
 	PointLightPass::PointLightPass( Engine & engine
-		, renderer::TextureView const & depthView
-		, renderer::TextureView const & diffuseView
-		, renderer::TextureView const & specularView
+		, ashes::TextureView const & depthView
+		, ashes::TextureView const & diffuseView
+		, ashes::TextureView const & specularView
 		, GpInfoUbo & gpInfoUbo
 		, bool p_shadows )
 		: MeshLightPass{ engine
@@ -75,10 +75,10 @@ namespace castor3d
 			, gpInfoUbo
 			, LightType::ePoint
 		, p_shadows }
-		, m_ubo{ renderer::makeUniformBuffer< Config >( getCurrentDevice( engine )
+		, m_ubo{ ashes::makeUniformBuffer< Config >( getCurrentDevice( engine )
 			, 1u
-			, renderer::BufferTarget::eTransferDst
-			, renderer::MemoryPropertyFlag::eHostVisible ) }
+			, ashes::BufferTarget::eTransferDst
+			, ashes::MemoryPropertyFlag::eHostVisible ) }
 	{
 		m_baseUbo = &m_ubo->getUbo();
 	}
@@ -97,7 +97,7 @@ namespace castor3d
 		}
 
 		visitor.visit( name
-			, renderer::ShaderStageFlag::eFragment
+			, ashes::ShaderStageFlag::eFragment
 			, m_pixelShader );
 	}
 

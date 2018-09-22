@@ -5,6 +5,9 @@ See LICENSE file in root folder
 #define ___CASTOR_STREAM_PREFIX_BUFFER_CACHE_H___
 
 #include "CastorUtilsPrerequisites.hpp"
+#include "Config/MultiThreadConfig.hpp"
+
+#include <atomic>
 
 namespace castor
 {
@@ -55,6 +58,7 @@ namespace castor
 			~BasicPrefixBufferManager()
 			{
 				--sm_instances;
+				auto lock = makeUniqueLock( m_mutex );
 
 				for ( auto buffer : m_list )
 				{
@@ -76,6 +80,7 @@ namespace castor
 			 */
 			bool insert( bos & o_s, bsb * b_s )
 			{
+				auto lock = makeUniqueLock( m_mutex );
 				return m_list.insert( std::make_pair( &o_s, b_s ) ).second;
 			}
 
@@ -89,6 +94,7 @@ namespace castor
 			 */
 			size_t size()
 			{
+				auto lock = makeUniqueLock( m_mutex );
 				return m_list.size();
 			}
 
@@ -102,6 +108,7 @@ namespace castor
 			 */
 			bsb * getBuffer( std::ios_base & io_s )
 			{
+				auto lock = makeUniqueLock( m_mutex );
 				const_iterator cb_iter( m_list.find( &io_s ) );
 
 				if ( cb_iter == m_list.end() )
@@ -125,6 +132,7 @@ namespace castor
 			bool erase( std::ios_base & io_s )
 			{
 				delete getBuffer( io_s );
+				auto lock = makeUniqueLock( m_mutex );
 				return ( m_list.erase( &io_s ) == 1 );
 			}
 
@@ -154,14 +162,19 @@ namespace castor
 			}
 
 		private:
-			//!\~english The instance count	\~french Le compte des instances
-			static int sm_instances;
-			//!\~english The associated elements list	\~french Les éléments associés
+			//!\~english	The instance count.
+			//!\~french		Le compte des instances.
+			static std::atomic_int sm_instances;
+			//!\~english	The associated elements list.
+			//\~french		Les éléments associés.
 			table_type m_list;
+			//!\~english	mutex protecting the associated elements list.
+			//!\~french		Le mutex protégeant les éléments associés.
+			std::mutex m_mutex;
 		};
 
 		template< typename prefix_type, typename char_type, typename traits >
-		int BasicPrefixBufferManager< prefix_type, char_type, traits >::sm_instances = 0;
+		std::atomic_int BasicPrefixBufferManager< prefix_type, char_type, traits >::sm_instances = 0;
 	}
 }
 

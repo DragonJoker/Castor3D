@@ -68,7 +68,7 @@ namespace castor3d
 		 *\param[in]	target			La vue de texture cible.
 		 */
 		C3D_API explicit OverlayRenderer( RenderSystem & renderSystem
-			, renderer::TextureView const & target );
+			, ashes::TextureView const & target );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -100,7 +100,7 @@ namespace castor3d
 		 */
 		C3D_API void beginPrepare( Camera const & camera
 			, RenderPassTimer const & timer
-			, renderer::Semaphore const & toWait );
+			, ashes::Semaphore const & toWait );
 		/**
 		 *\~english
 		 *\brief		Ends the overlays preparation.
@@ -124,7 +124,7 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		inline renderer::CommandBuffer const & getCommands()const
+		inline ashes::CommandBuffer const & getCommands()const
 		{
 			REQUIRE( m_commandBuffer );
 			return *m_commandBuffer;
@@ -145,7 +145,7 @@ namespace castor3d
 			return Preparer{ *this };
 		}
 
-		renderer::Semaphore const & getSemaphore()
+		ashes::Semaphore const & getSemaphore()
 		{
 			return *m_finished;
 		}
@@ -162,10 +162,10 @@ namespace castor3d
 
 		struct Pipeline
 		{
-			renderer::DescriptorSetLayoutPtr descriptorLayout;
-			renderer::DescriptorSetPoolPtr descriptorPool;
-			renderer::PipelineLayoutPtr pipelineLayout;
-			renderer::PipelinePtr pipeline;
+			ashes::DescriptorSetLayoutPtr descriptorLayout;
+			ashes::DescriptorSetPoolPtr descriptorPool;
+			ashes::PipelineLayoutPtr pipelineLayout;
+			ashes::PipelinePtr pipeline;
 		};
 
 		struct OverlayRenderNode
@@ -189,8 +189,8 @@ namespace castor3d
 			using MyBufferIndex = VertexBufferIndex< VertexT, CountT >;
 			using Quad = std::array< VertexT, CountT >;
 
-			VertexBufferPool( renderer::Device const & device
-				, renderer::VertexLayout const & declaration
+			VertexBufferPool( ashes::Device const & device
+				, ashes::VertexLayout const & declaration
 				, uint32_t count );
 			VertexBufferIndex< VertexT, CountT > allocate( OverlayRenderNode & node );
 			void deallocate( VertexBufferIndex< VertexT, CountT > const & index );
@@ -198,10 +198,10 @@ namespace castor3d
 
 			uint32_t const maxCount;
 			std::vector< Quad > data;
-			renderer::VertexLayout const & declaration;
-			renderer::VertexBufferPtr< Quad > buffer;
+			ashes::VertexLayout const & declaration;
+			ashes::VertexBufferPtr< Quad > buffer;
 			std::set< uint32_t > free;
-			renderer::UniformBufferPtr< Configuration > ubo;
+			ashes::UniformBufferPtr< Configuration > ubo;
 		};
 
 		template< typename VertexT, uint32_t CountT >
@@ -216,7 +216,7 @@ namespace castor3d
 			OverlayRenderNode & node;
 			uint32_t index;
 			OverlayGeometryBuffers geometryBuffers;
-			renderer::DescriptorSetPtr descriptorSet;
+			ashes::DescriptorSetPtr descriptorSet;
 			FontTexture::OnChanged::connection connection;
 		};
 
@@ -233,17 +233,17 @@ namespace castor3d
 			, Sampler const & sampler );
 		Pipeline & doGetPipeline( TextureChannels textureFlags
 			, std::map< uint32_t, Pipeline > & pipelines );
-		renderer::ShaderStageStateArray doCreateOverlayProgram( TextureChannels const & textureFlags );
-		renderer::DescriptorSetPtr doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
+		ashes::ShaderStageStateArray doCreateOverlayProgram( TextureChannels const & textureFlags );
+		ashes::DescriptorSetPtr doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
 			, TextureChannels textureFlags
 			, Pass const & pass
-			, renderer::UniformBuffer< Configuration > const & ubo
+			, ashes::UniformBuffer< Configuration > const & ubo
 			, uint32_t index
 			, bool update = true );
-		renderer::DescriptorSetPtr doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
+		ashes::DescriptorSetPtr doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
 			, TextureChannels textureFlags
 			, Pass const & pass
-			, renderer::UniformBuffer< Configuration > const & ubo
+			, ashes::UniformBuffer< Configuration > const & ubo
 			, uint32_t index
 			, TextureLayout const & texture
 			, Sampler const & sampler );
@@ -255,8 +255,8 @@ namespace castor3d
 			, Overlay const & overlay
 			, Pass const & pass
 			, OverlayRenderNode & node
-			, renderer::Device const & device
-			, renderer::VertexLayout const & layout
+			, ashes::Device const & device
+			, ashes::VertexLayout const & layout
 			, uint32_t maxCount )
 		{
 			auto hash = std::hash< Overlay const * >{}( &overlay );
@@ -290,21 +290,21 @@ namespace castor3d
 		}
 
 	private:
-		renderer::TextureView const & m_target;
-		renderer::CommandBufferPtr m_commandBuffer;
+		ashes::TextureView const & m_target;
+		ashes::CommandBufferPtr m_commandBuffer;
 		std::vector< std::unique_ptr< PanelVertexBufferPool > > m_panelVertexBuffers;
 		std::vector< std::unique_ptr< BorderPanelVertexBufferPool > > m_borderVertexBuffers;
 		std::vector< std::unique_ptr< TextVertexBufferPool > > m_textVertexBuffers;
 		std::map< size_t, PanelVertexBufferIndex > m_panelOverlays;
 		std::map< size_t, BorderPanelVertexBufferIndex > m_borderPanelOverlays;
 		std::map< size_t, TextVertexBufferIndex > m_textOverlays;
-		renderer::VertexLayoutPtr m_declaration;
-		renderer::VertexLayoutPtr m_textDeclaration;
+		ashes::VertexLayoutPtr m_declaration;
+		ashes::VertexLayoutPtr m_textDeclaration;
 		castor::Size m_size;
 		std::map< Pass const *, OverlayRenderNode > m_mapPanelNodes;
 		std::map< Pass const *, OverlayRenderNode > m_mapTextNodes;
-		renderer::RenderPassPtr m_renderPass;
-		renderer::FrameBufferPtr m_frameBuffer;
+		ashes::RenderPassPtr m_renderPass;
+		ashes::FrameBufferPtr m_frameBuffer;
 		std::map< uint32_t, Pipeline > m_panelPipelines;
 		std::map< uint32_t, Pipeline > m_textPipelines;
 		int m_previousBorderZIndex{ 0 };
@@ -313,9 +313,9 @@ namespace castor3d
 		castor::String m_previousCaption;
 		bool m_sizeChanged{ true };
 		MatrixUbo m_matrixUbo;
-		renderer::Semaphore const * m_toWait{ nullptr };
-		renderer::SemaphorePtr m_finished;
-		renderer::FencePtr m_fence;
+		ashes::Semaphore const * m_toWait{ nullptr };
+		ashes::SemaphorePtr m_finished;
+		ashes::FencePtr m_fence;
 	};
 }
 

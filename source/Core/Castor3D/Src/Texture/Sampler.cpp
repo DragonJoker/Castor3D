@@ -30,37 +30,37 @@ namespace castor3d
 
 			if ( result )
 			{
-				result = file.writeText( m_tabs + cuT( "\tmin_filter " ) + renderer::getName( sampler.getMinFilter() ) + cuT( "\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tmin_filter " ) + ashes::getName( sampler.getMinFilter() ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Sampler >::checkError( result, "Sampler min filter" );
 			}
 
 			if ( result )
 			{
-				result = file.writeText( m_tabs + cuT( "\tmag_filter " ) + renderer::getName( sampler.getMagFilter() ) + cuT( "\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tmag_filter " ) + ashes::getName( sampler.getMagFilter() ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Sampler >::checkError( result, "Sampler mag filter" );
 			}
 
-			if ( result && sampler.getMipFilter() != renderer::MipmapMode::eNone )
+			if ( result && sampler.getMipFilter() != ashes::MipmapMode::eNone )
 			{
-				result = file.writeText( m_tabs + cuT( "\tmip_filter " ) + renderer::getName( sampler.getMipFilter() ) + cuT( "\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tmip_filter " ) + ashes::getName( sampler.getMipFilter() ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Sampler >::checkError( result, "Sampler mip filter" );
 			}
 
 			if ( result )
 			{
-				result = file.writeText( m_tabs + cuT( "\tu_wrap_mode " ) + renderer::getName( sampler.getWrapS() ) + cuT( "\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tu_wrap_mode " ) + ashes::getName( sampler.getWrapS() ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Sampler >::checkError( result, "Sampler U wrap mode" );
 			}
 
 			if ( result )
 			{
-				result = file.writeText( m_tabs + cuT( "\tv_wrap_mode " ) + renderer::getName( sampler.getWrapT() ) + cuT( "\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tv_wrap_mode " ) + ashes::getName( sampler.getWrapT() ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Sampler >::checkError( result, "Sampler V wrap mode" );
 			}
 
 			if ( result )
 			{
-				result = file.writeText( m_tabs + cuT( "\tw_wrap_mode " ) + renderer::getName( sampler.getWrapR() ) + cuT( "\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tw_wrap_mode " ) + ashes::getName( sampler.getWrapR() ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Sampler >::checkError( result, "Sampler W wrap mode" );
 			}
 
@@ -83,22 +83,22 @@ namespace castor3d
 			}
 
 			if ( result
-				&& sampler.getCompareOp() != renderer::CompareOp::eNever
-				&& sampler.getCompareOp() != renderer::CompareOp::eAlways )
+				&& sampler.getCompareOp() != ashes::CompareOp::eNever
+				&& sampler.getCompareOp() != ashes::CompareOp::eAlways )
 			{
 				result = file.writeText( m_tabs + cuT( "\tcomparison_mode ref_to_texture\n" ) ) > 0;
 				castor::TextWriter< Sampler >::checkError( result, "Sampler comparison mode" );
 
 				if ( result )
 				{
-					result = file.writeText( m_tabs + cuT( "\tcomparison_func " ) + renderer::getName( sampler.getCompareOp() ) + cuT( "\n" ) ) > 0;
+					result = file.writeText( m_tabs + cuT( "\tcomparison_func " ) + ashes::getName( sampler.getCompareOp() ) + cuT( "\n" ) ) > 0;
 					castor::TextWriter< Sampler >::checkError( result, "Sampler comparison function" );
 				}
 			}
 
-			if ( result && sampler.getBorderColour() != renderer::BorderColour::eFloatOpaqueBlack )
+			if ( result && sampler.getBorderColour() != ashes::BorderColour::eFloatOpaqueBlack )
 			{
-				result = file.writeText( m_tabs + cuT( "\tborder_colour " ) + renderer::getName( sampler.getBorderColour() ) + cuT( "\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tborder_colour " ) + ashes::getName( sampler.getBorderColour() ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Sampler >::checkError( result, "Sampler border colour" );
 			}
 

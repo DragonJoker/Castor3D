@@ -52,57 +52,57 @@ namespace castor3d
 	void OpaquePass::initialiseRenderPass( GeometryPassResult const & gpResult )
 	{
 		auto & device = getCurrentDevice( *this );
-		renderer::RenderPassCreateInfo renderPass;
+		ashes::RenderPassCreateInfo renderPass;
 		renderPass.flags = 0u;
 
 		renderPass.subpasses.resize( 1u );
 		renderPass.subpasses[0].flags = 0u;
-		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
-		renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
+		renderPass.subpasses[0].pipelineBindPoint = ashes::PipelineBindPoint::eGraphics;
+		renderPass.subpasses[0].depthStencilAttachment = { 0u, ashes::ImageLayout::eDepthStencilAttachmentOptimal };
 
 		renderPass.attachments.resize( gpResult.getViews().size() );
 		renderPass.attachments[0].format = gpResult.getViews()[0]->getFormat();
-		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
-		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+		renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eClear;
+		renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
+		renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
+		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
+		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
 
 		for ( size_t i = 1u; i < gpResult.getViews().size(); ++i )
 		{
 			renderPass.attachments[i].format = gpResult.getViews()[i]->getFormat();
-			renderPass.attachments[i].loadOp = renderer::AttachmentLoadOp::eClear;
-			renderPass.attachments[i].storeOp = renderer::AttachmentStoreOp::eStore;
-			renderPass.attachments[i].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-			renderPass.attachments[i].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-			renderPass.attachments[i].samples = renderer::SampleCountFlag::e1;
-			renderPass.attachments[i].initialLayout = renderer::ImageLayout::eUndefined;
-			renderPass.attachments[i].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+			renderPass.attachments[i].loadOp = ashes::AttachmentLoadOp::eClear;
+			renderPass.attachments[i].storeOp = ashes::AttachmentStoreOp::eStore;
+			renderPass.attachments[i].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
+			renderPass.attachments[i].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
+			renderPass.attachments[i].samples = ashes::SampleCountFlag::e1;
+			renderPass.attachments[i].initialLayout = ashes::ImageLayout::eUndefined;
+			renderPass.attachments[i].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
 
-			renderPass.subpasses[0].colorAttachments.push_back( { uint32_t( i ), renderer::ImageLayout::eColourAttachmentOptimal } );
+			renderPass.subpasses[0].colorAttachments.push_back( { uint32_t( i ), ashes::ImageLayout::eColourAttachmentOptimal } );
 		}
 
 		renderPass.dependencies.resize( 2u );
-		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+		renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 		renderPass.dependencies[1].srcSubpass = 0u;
-		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
-		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+		renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
+		renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 		m_renderPass = device.createRenderPass( renderPass );
-		renderer::FrameBufferAttachmentArray attaches;
+		ashes::FrameBufferAttachmentArray attaches;
 
 		for ( size_t i = 0u; i < gpResult.getViews().size(); ++i )
 		{
@@ -124,11 +124,11 @@ namespace castor3d
 			, visitor.getAlphaFunc()
 			, false );
 		visitor.visit( cuT( "Object" )
-			, renderer::ShaderStageFlag::eVertex
-			, shaderProgram->getSource( renderer::ShaderStageFlag::eVertex ) );
+			, ashes::ShaderStageFlag::eVertex
+			, shaderProgram->getSource( ashes::ShaderStageFlag::eVertex ) );
 		visitor.visit( cuT( "Object" )
-			, renderer::ShaderStageFlag::eFragment
-			, shaderProgram->getSource( renderer::ShaderStageFlag::eFragment ) );
+			, ashes::ShaderStageFlag::eFragment
+			, shaderProgram->getSource( ashes::ShaderStageFlag::eFragment ) );
 	}
 
 	void OpaquePass::update( RenderInfo & info
@@ -156,16 +156,16 @@ namespace castor3d
 		}
 	}
 
-	renderer::Semaphore const & OpaquePass::render( renderer::Semaphore const & toWait )
+	ashes::Semaphore const & OpaquePass::render( ashes::Semaphore const & toWait )
 	{
-		static renderer::ClearValueArray const clearValues
+		static ashes::ClearValueArray const clearValues
 		{
-			renderer::DepthStencilClearValue{ 1.0, 0 },
-			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
-			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
-			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
-			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
-			renderer::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
+			ashes::DepthStencilClearValue{ 1.0, 0 },
+			ashes::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
+			ashes::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
+			ashes::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
+			ashes::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
+			ashes::ClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f },
 		};
 
 		auto * result = &toWait;
@@ -179,7 +179,7 @@ namespace castor3d
 		m_nodesCommands->beginRenderPass( getRenderPass()
 			, *m_frameBuffer
 			, clearValues
-			, renderer::SubpassContents::eSecondaryCommandBuffers );
+			, ashes::SubpassContents::eSecondaryCommandBuffers );
 		m_nodesCommands->executeCommands( { getCommandBuffer() } );
 		m_nodesCommands->endRenderPass();
 		timer.endPass( *m_nodesCommands );
@@ -187,7 +187,7 @@ namespace castor3d
 
 		device.getGraphicsQueue().submit( *m_nodesCommands
 			, *result
-			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, ashes::PipelineStageFlag::eColourAttachmentOutput
 			, getSemaphore()
 			, nullptr );
 		result = &getSemaphore();
@@ -195,24 +195,24 @@ namespace castor3d
 		return *result;
 	}
 
-	renderer::DescriptorSetLayoutBindingArray OpaquePass::doCreateUboBindings( PipelineFlags const & flags )const
+	ashes::DescriptorSetLayoutBindingArray OpaquePass::doCreateUboBindings( PipelineFlags const & flags )const
 	{
-		renderer::DescriptorSetLayoutBindingArray uboBindings;
+		ashes::DescriptorSetLayoutBindingArray uboBindings;
 
 		if ( !checkFlag( flags.programFlags, ProgramFlag::eDepthPass ) )
 		{
 			uboBindings.emplace_back( getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding() );
 		}
 
-		uboBindings.emplace_back( MatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
-		uboBindings.emplace_back( SceneUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
+		uboBindings.emplace_back( MatrixUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex | ashes::ShaderStageFlag::eFragment );
+		uboBindings.emplace_back( SceneUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex | ashes::ShaderStageFlag::eFragment );
 
 		if ( !checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
 		{
-			uboBindings.emplace_back( ModelMatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+			uboBindings.emplace_back( ModelMatrixUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex );
 		}
 
-		uboBindings.emplace_back( ModelUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
+		uboBindings.emplace_back( ModelUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex | ashes::ShaderStageFlag::eFragment );
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
 		{
@@ -221,68 +221,68 @@ namespace castor3d
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
 		{
-			uboBindings.emplace_back( MorphingUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+			uboBindings.emplace_back( MorphingUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex );
 		}
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
 		{
-			uboBindings.emplace_back( BillboardUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+			uboBindings.emplace_back( BillboardUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex );
 		}
 
 		return uboBindings;
 	}
 
-	renderer::DescriptorSetLayoutBindingArray OpaquePass::doCreateTextureBindings( PipelineFlags const & flags )const
+	ashes::DescriptorSetLayoutBindingArray OpaquePass::doCreateTextureBindings( PipelineFlags const & flags )const
 	{
 		auto index = MinBufferIndex;
-		renderer::DescriptorSetLayoutBindingArray textureBindings;
+		ashes::DescriptorSetLayoutBindingArray textureBindings;
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eDiffuse ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eSpecular ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eGloss ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eNormal ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		bool opacityMap = checkFlag( flags.textureFlags, TextureChannel::eOpacity )
-			&& flags.alphaFunc != renderer::CompareOp::eAlways;
+			&& flags.alphaFunc != ashes::CompareOp::eAlways;
 
 		if ( opacityMap )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eHeight ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eAmbientOcclusion ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eEmissive ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eTransmittance ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		return textureBindings;
@@ -488,7 +488,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, renderer::CompareOp alphaFunc )const
+		, ashes::CompareOp alphaFunc )const
 	{
 		using namespace glsl;
 		GlslWriter writer = getEngine()->getRenderSystem()->createGlslWriter();
@@ -543,7 +543,7 @@ namespace castor3d
 			, 1u
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ) );
 		bool opacityMap = checkFlag( textureFlags, TextureChannel::eOpacity )
-			&& alphaFunc != renderer::CompareOp::eAlways;
+			&& alphaFunc != ashes::CompareOp::eAlways;
 		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( cuT( "c3d_mapOpacity" )
 			, opacityMap ? index++ : 0u
 			, 1u
@@ -599,7 +599,7 @@ namespace castor3d
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
-			if ( alphaFunc != renderer::CompareOp::eAlways )
+			if ( alphaFunc != ashes::CompareOp::eAlways )
 			{
 				auto alpha = writer.declLocale( cuT( "alpha" )
 					, material.m_opacity() );
@@ -684,7 +684,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, renderer::CompareOp alphaFunc )const
+		, ashes::CompareOp alphaFunc )const
 	{
 		using namespace glsl;
 		GlslWriter writer = getEngine()->getRenderSystem()->createGlslWriter();
@@ -739,7 +739,7 @@ namespace castor3d
 			, 1u
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ) );
 		bool opacityMap = checkFlag( textureFlags, TextureChannel::eOpacity )
-			&& alphaFunc != renderer::CompareOp::eAlways;
+			&& alphaFunc != ashes::CompareOp::eAlways;
 		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( cuT( "c3d_mapOpacity" )
 			, opacityMap ? index++ : 0u
 			, 1u
@@ -800,7 +800,7 @@ namespace castor3d
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
-			if ( alphaFunc != renderer::CompareOp::eAlways )
+			if ( alphaFunc != ashes::CompareOp::eAlways )
 			{
 				auto alpha = writer.declLocale( cuT( "alpha" )
 					, material.m_opacity() );
@@ -885,7 +885,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, renderer::CompareOp alphaFunc )const
+		, ashes::CompareOp alphaFunc )const
 	{
 		using namespace glsl;
 		GlslWriter writer = getEngine()->getRenderSystem()->createGlslWriter();
@@ -940,7 +940,7 @@ namespace castor3d
 			, 1u
 			, checkFlag( textureFlags, TextureChannel::eNormal ) ) );
 		bool opacityMap = checkFlag( textureFlags, TextureChannel::eOpacity )
-			&& alphaFunc != renderer::CompareOp::eAlways;
+			&& alphaFunc != ashes::CompareOp::eAlways;
 		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( cuT( "c3d_mapOpacity" )
 			, opacityMap ? index++ : 0u
 			, 1u
@@ -1001,7 +1001,7 @@ namespace castor3d
 				texCoord.xy() = parallaxMapping( texCoord.xy(), viewDir );
 			}
 
-			if ( alphaFunc != renderer::CompareOp::eAlways )
+			if ( alphaFunc != ashes::CompareOp::eAlways )
 			{
 				auto alpha = writer.declLocale( cuT( "alpha" )
 					, material.m_opacity() );
@@ -1087,12 +1087,12 @@ namespace castor3d
 	{
 	}
 
-	renderer::DepthStencilState OpaquePass::doCreateDepthStencilState( PipelineFlags const & flags )const
+	ashes::DepthStencilState OpaquePass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
-		return renderer::DepthStencilState{ 0u, true, true };
+		return ashes::DepthStencilState{ 0u, true, true };
 	}
 
-	renderer::ColourBlendState OpaquePass::doCreateBlendState( PipelineFlags const & flags )const
+	ashes::ColourBlendState OpaquePass::doCreateBlendState( PipelineFlags const & flags )const
 	{
 		return RenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 5u );
 	}

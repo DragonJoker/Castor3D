@@ -35,48 +35,48 @@ namespace castor3d
 
 	namespace
 	{
-		void doBindTexture( renderer::TextureView const & view
-			, renderer::Sampler const & sampler
-			, renderer::WriteDescriptorSetArray & writes
+		void doBindTexture( ashes::TextureView const & view
+			, ashes::Sampler const & sampler
+			, ashes::WriteDescriptorSetArray & writes
 			, uint32_t & index )
 		{
-			writes.push_back( renderer::WriteDescriptorSet
+			writes.push_back( ashes::WriteDescriptorSet
 				{
 					index++,
 					0u,
 					1u,
-					renderer::DescriptorType::eCombinedImageSampler,
+					ashes::DescriptorType::eCombinedImageSampler,
 				{
 					{
 						sampler,
 						view,
-						renderer::ImageLayout::eShaderReadOnlyOptimal
+						ashes::ImageLayout::eShaderReadOnlyOptimal
 					},
 				}
 				} );
 		}
 
 		void doBindShadowMaps( ShadowMapRefArray const & shadowMaps
-			, renderer::WriteDescriptorSetArray & writes
+			, ashes::WriteDescriptorSetArray & writes
 			, uint32_t & index )
 		{
-			std::vector< renderer::DescriptorImageInfo > shadowMapWrites;
+			std::vector< ashes::DescriptorImageInfo > shadowMapWrites;
 
 			for ( auto & shadowMap : shadowMaps )
 			{
 				shadowMapWrites.push_back( {
 					shadowMap.get().getTexture().getSampler()->getSampler(),
 					shadowMap.get().getTexture().getTexture()->getDefaultView(),
-					renderer::ImageLayout::eShaderReadOnlyOptimal
+					ashes::ImageLayout::eShaderReadOnlyOptimal
 					} );
 			}
 
-			writes.push_back( renderer::WriteDescriptorSet
+			writes.push_back( ashes::WriteDescriptorSet
 				{
 					index,
 					0u,
 					uint32_t( shadowMapWrites.size() ),
-					renderer::DescriptorType::eCombinedImageSampler,
+					ashes::DescriptorType::eCombinedImageSampler,
 					shadowMapWrites
 				} );
 			index += uint32_t( shadowMapWrites.size() );
@@ -100,15 +100,15 @@ namespace castor3d
 		return Values[size_t( texture )];
 	}
 
-	renderer::Format getTextureFormat( WbTexture texture )
+	ashes::Format getTextureFormat( WbTexture texture )
 	{
-		static std::array< renderer::Format, size_t( WbTexture::eCount ) > Values
+		static std::array< ashes::Format, size_t( WbTexture::eCount ) > Values
 		{
 			{
-				renderer::Format::eD24_UNORM_S8_UINT,
-				renderer::Format::eR16G16B16A16_SFLOAT,
-				renderer::Format::eR16_SFLOAT,
-				renderer::Format::eR16G16B16A16_SFLOAT,
+				ashes::Format::eD24_UNORM_S8_UINT,
+				ashes::Format::eR16G16B16A16_SFLOAT,
+				ashes::Format::eR16_SFLOAT,
+				ashes::Format::eR16G16B16A16_SFLOAT,
 			}
 		};
 
@@ -139,79 +139,79 @@ namespace castor3d
 	{
 		auto & device = getCurrentDevice( *this );
 
-		renderer::RenderPassCreateInfo renderPass{};
+		ashes::RenderPassCreateInfo renderPass{};
 		renderPass.flags = 0u;
 
 		renderPass.attachments.resize( uint32_t( WbTexture::eCount ) );
 		renderPass.attachments[0].format = wbpResult[0].get().getFormat();
-		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
-		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
-		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+		renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
+		renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eLoad;
+		renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eDepthStencilAttachmentOptimal;
+		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eDepthStencilAttachmentOptimal;
 
 		renderPass.attachments[1].format = wbpResult[1].get().getFormat();
-		renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eClear;
-		renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[1].initialLayout = renderer::ImageLayout::eUndefined;
-		renderPass.attachments[1].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+		renderPass.attachments[1].samples = ashes::SampleCountFlag::e1;
+		renderPass.attachments[1].loadOp = ashes::AttachmentLoadOp::eClear;
+		renderPass.attachments[1].storeOp = ashes::AttachmentStoreOp::eStore;
+		renderPass.attachments[1].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[1].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[1].initialLayout = ashes::ImageLayout::eUndefined;
+		renderPass.attachments[1].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
 
 		renderPass.attachments[2].format = wbpResult[2].get().getFormat();
-		renderPass.attachments[2].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[2].loadOp = renderer::AttachmentLoadOp::eClear;
-		renderPass.attachments[2].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[2].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[2].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[2].initialLayout = renderer::ImageLayout::eUndefined;
-		renderPass.attachments[2].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+		renderPass.attachments[2].samples = ashes::SampleCountFlag::e1;
+		renderPass.attachments[2].loadOp = ashes::AttachmentLoadOp::eClear;
+		renderPass.attachments[2].storeOp = ashes::AttachmentStoreOp::eStore;
+		renderPass.attachments[2].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[2].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[2].initialLayout = ashes::ImageLayout::eUndefined;
+		renderPass.attachments[2].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
 
 		renderPass.attachments[3].format = wbpResult[3].get().getFormat();
-		renderPass.attachments[3].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[3].loadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[3].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[3].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[3].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[3].initialLayout = renderer::ImageLayout::eUndefined;
-		renderPass.attachments[3].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+		renderPass.attachments[3].samples = ashes::SampleCountFlag::e1;
+		renderPass.attachments[3].loadOp = ashes::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[3].storeOp = ashes::AttachmentStoreOp::eStore;
+		renderPass.attachments[3].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[3].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[3].initialLayout = ashes::ImageLayout::eUndefined;
+		renderPass.attachments[3].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
 
-		renderer::AttachmentReference colourReference;
+		ashes::AttachmentReference colourReference;
 		colourReference.attachment = 0u;
-		colourReference.layout = renderer::ImageLayout::eColourAttachmentOptimal;
+		colourReference.layout = ashes::ImageLayout::eColourAttachmentOptimal;
 
 		renderPass.subpasses.resize( 1u );
 		renderPass.subpasses[0].flags = 0u;
-		renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
+		renderPass.subpasses[0].depthStencilAttachment = { 0u, ashes::ImageLayout::eDepthStencilAttachmentOptimal };
 		renderPass.subpasses[0].colorAttachments =
 		{
-			{ 1u, renderer::ImageLayout::eColourAttachmentOptimal },
-			{ 2u, renderer::ImageLayout::eColourAttachmentOptimal },
-			{ 3u, renderer::ImageLayout::eColourAttachmentOptimal },
+			{ 1u, ashes::ImageLayout::eColourAttachmentOptimal },
+			{ 2u, ashes::ImageLayout::eColourAttachmentOptimal },
+			{ 3u, ashes::ImageLayout::eColourAttachmentOptimal },
 		};
 
 		renderPass.dependencies.resize( 2u );
-		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+		renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 		renderPass.dependencies[1].srcSubpass = 0u;
-		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
-		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+		renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
+		renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 		m_renderPass =  device.createRenderPass( renderPass );
-		renderer::FrameBufferAttachmentArray attaches;
+		ashes::FrameBufferAttachmentArray attaches;
 
 		for ( size_t i = 0u; i < wbpResult.size(); ++i )
 		{
@@ -249,14 +249,14 @@ namespace castor3d
 		}
 	}
 
-	renderer::Semaphore const & TransparentPass::render( renderer::Semaphore const & toWait )
+	ashes::Semaphore const & TransparentPass::render( ashes::Semaphore const & toWait )
 	{
-		static renderer::ClearValueArray const clearValues
+		static ashes::ClearValueArray const clearValues
 		{
-			renderer::DepthStencilClearValue{ 1.0, 0 },
-			renderer::ClearColorValue{ 0.0, 0.0, 0.0, 0.0 },
-			renderer::ClearColorValue{ 1.0, 1.0, 1.0, 1.0 },
-			renderer::ClearColorValue{},
+			ashes::DepthStencilClearValue{ 1.0, 0 },
+			ashes::ClearColorValue{ 0.0, 0.0, 0.0, 0.0 },
+			ashes::ClearColorValue{ 1.0, 1.0, 1.0, 1.0 },
+			ashes::ClearColorValue{},
 		};
 
 		auto * result = &toWait;
@@ -270,7 +270,7 @@ namespace castor3d
 		m_nodesCommands->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
 			, clearValues
-			, renderer::SubpassContents::eSecondaryCommandBuffers );
+			, ashes::SubpassContents::eSecondaryCommandBuffers );
 		m_nodesCommands->executeCommands( { getCommandBuffer() } );
 		m_nodesCommands->endRenderPass();
 		timer.endPass( *m_nodesCommands );
@@ -278,7 +278,7 @@ namespace castor3d
 
 		device.getGraphicsQueue().submit( *m_nodesCommands
 			, *result
-			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, ashes::PipelineStageFlag::eColourAttachmentOutput
 			, getSemaphore()
 			, nullptr );
 		result = &getSemaphore();
@@ -296,11 +296,11 @@ namespace castor3d
 			, visitor.getAlphaFunc()
 			, false );
 		visitor.visit( cuT( "Object" )
-			, renderer::ShaderStageFlag::eVertex
-			, shaderProgram->getSource( renderer::ShaderStageFlag::eVertex ) );
+			, ashes::ShaderStageFlag::eVertex
+			, shaderProgram->getSource( ashes::ShaderStageFlag::eVertex ) );
 		visitor.visit( cuT( "Object" )
-			, renderer::ShaderStageFlag::eFragment
-			, shaderProgram->getSource( renderer::ShaderStageFlag::eFragment ) );
+			, ashes::ShaderStageFlag::eFragment
+			, shaderProgram->getSource( ashes::ShaderStageFlag::eFragment ) );
 	}
 
 	bool TransparentPass::doInitialise( Size const & size )
@@ -309,53 +309,53 @@ namespace castor3d
 		return true;
 	}
 
-	renderer::DepthStencilState TransparentPass::doCreateDepthStencilState( PipelineFlags const & flags )const
+	ashes::DepthStencilState TransparentPass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
-		return renderer::DepthStencilState{ 0u, true, false };
+		return ashes::DepthStencilState{ 0u, true, false };
 	}
 
-	renderer::ColourBlendState TransparentPass::doCreateBlendState( PipelineFlags const & flags )const
+	ashes::ColourBlendState TransparentPass::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		renderer::ColourBlendState bdState;
-		bdState.attachs.push_back( renderer::ColourBlendStateAttachment
+		ashes::ColourBlendState bdState;
+		bdState.attachs.push_back( ashes::ColourBlendStateAttachment
 			{
 				true,
-				renderer::BlendFactor::eOne,
-				renderer::BlendFactor::eOne,
-				renderer::BlendOp::eAdd,
-				renderer::BlendFactor::eOne,
-				renderer::BlendFactor::eOne,
-				renderer::BlendOp::eAdd,
+				ashes::BlendFactor::eOne,
+				ashes::BlendFactor::eOne,
+				ashes::BlendOp::eAdd,
+				ashes::BlendFactor::eOne,
+				ashes::BlendFactor::eOne,
+				ashes::BlendOp::eAdd,
 			} );
-		bdState.attachs.push_back( renderer::ColourBlendStateAttachment
+		bdState.attachs.push_back( ashes::ColourBlendStateAttachment
 			{
 				true,
-				renderer::BlendFactor::eZero,
-				renderer::BlendFactor::eInvSrcColour,
-				renderer::BlendOp::eAdd,
-				renderer::BlendFactor::eZero,
-				renderer::BlendFactor::eInvSrcColour,
-				renderer::BlendOp::eAdd,
+				ashes::BlendFactor::eZero,
+				ashes::BlendFactor::eInvSrcColour,
+				ashes::BlendOp::eAdd,
+				ashes::BlendFactor::eZero,
+				ashes::BlendFactor::eInvSrcColour,
+				ashes::BlendOp::eAdd,
 			} );
-		bdState.attachs.push_back( renderer::ColourBlendStateAttachment
+		bdState.attachs.push_back( ashes::ColourBlendStateAttachment
 			{
 				false,
-				renderer::BlendFactor::eOne,
-				renderer::BlendFactor::eZero,
-				renderer::BlendOp::eAdd,
-				renderer::BlendFactor::eOne,
-				renderer::BlendFactor::eZero,
-				renderer::BlendOp::eAdd,
+				ashes::BlendFactor::eOne,
+				ashes::BlendFactor::eZero,
+				ashes::BlendOp::eAdd,
+				ashes::BlendFactor::eOne,
+				ashes::BlendFactor::eZero,
+				ashes::BlendOp::eAdd,
 			} );
 		return bdState;
 	}
 
-	void TransparentPass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+	void TransparentPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, BillboardListRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		renderer::WriteDescriptorSetArray writes;
+		ashes::WriteDescriptorSetArray writes;
 		node.passNode.fillDescriptor( layout
 			, index
 			, writes );
@@ -397,12 +397,12 @@ namespace castor3d
 		node.texDescriptorSet->setBindings( writes );
 	}
 
-	void TransparentPass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+	void TransparentPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		renderer::WriteDescriptorSetArray writes;
+		ashes::WriteDescriptorSetArray writes;
 		node.passNode.fillDescriptor( layout
 			, index
 			, writes );
@@ -444,74 +444,74 @@ namespace castor3d
 		node.texDescriptorSet->setBindings( writes );
 	}
 
-	renderer::DescriptorSetLayoutBindingArray TransparentPass::doCreateTextureBindings( PipelineFlags const & flags )const
+	ashes::DescriptorSetLayoutBindingArray TransparentPass::doCreateTextureBindings( PipelineFlags const & flags )const
 	{
 		auto index = MinBufferIndex;
-		renderer::DescriptorSetLayoutBindingArray textureBindings;
+		ashes::DescriptorSetLayoutBindingArray textureBindings;
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eDiffuse ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eSpecular ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eGloss ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eNormal ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eOpacity ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eHeight ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eAmbientOcclusion ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eEmissive ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eTransmittance ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eReflection )
 			|| checkFlag( flags.textureFlags, TextureChannel::eRefraction ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.passFlags, PassFlag::ePbrMetallicRoughness )
 			|| checkFlag( flags.passFlags, PassFlag::ePbrSpecularGlossiness ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );	// c3d_mapIrradiance
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );	// c3d_mapPrefiltered
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );	// c3d_mapBrdf
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );	// c3d_mapIrradiance
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );	// c3d_mapPrefiltered
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );	// c3d_mapBrdf
 		}
 
-		textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment, 1u );
-		textureBindings.emplace_back( index, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment, shader::SpotShadowMapCount );
+		textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment, 1u );
+		textureBindings.emplace_back( index, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment, shader::SpotShadowMapCount );
 		index += shader::SpotShadowMapCount;
-		textureBindings.emplace_back( index, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment, shader::PointShadowMapCount );
+		textureBindings.emplace_back( index, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment, shader::PointShadowMapCount );
 		index += shader::PointShadowMapCount;
 
 		return textureBindings;
@@ -713,7 +713,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, renderer::CompareOp alphaFunc )const
+		, ashes::CompareOp alphaFunc )const
 	{
 		using namespace glsl;
 		GlslWriter writer = m_renderSystem.createGlslWriter();
@@ -971,7 +971,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, renderer::CompareOp alphaFunc )const
+		, ashes::CompareOp alphaFunc )const
 	{
 		using namespace glsl;
 		GlslWriter writer = m_renderSystem.createGlslWriter();
@@ -1214,7 +1214,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, renderer::CompareOp alphaFunc )const
+		, ashes::CompareOp alphaFunc )const
 	{
 		using namespace glsl;
 		GlslWriter writer = m_renderSystem.createGlslWriter();

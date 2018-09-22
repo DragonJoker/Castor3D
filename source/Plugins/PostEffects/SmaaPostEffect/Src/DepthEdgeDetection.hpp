@@ -13,7 +13,7 @@ namespace smaa
 	{
 	public:
 		DepthEdgeDetection( castor3d::RenderTarget & renderTarget
-			, renderer::TextureView const & depthView
+			, ashes::TextureView const & depthView
 			, SmaaConfig const & config );
 		castor3d::CommandsSemaphore prepareCommands( castor3d::RenderPassTimer const & timer
 			, uint32_t passIndex )override;
@@ -22,7 +22,7 @@ namespace smaa
 		virtual void doInitialisePipeline()override;
 
 	private:
-		renderer::TextureView const & m_depthView;
+		ashes::TextureView const & m_depthView;
 	};
 }
 

@@ -7,7 +7,7 @@
 #include "Buffer/Buffer.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/Scene.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Shader/Program.hpp"
 
 #include <Buffer/VertexBuffer.hpp>
 #include <Pipeline/VertexLayout.hpp>
@@ -80,8 +80,8 @@ namespace castor3d
 
 	BillboardBase::BillboardBase( Scene & scene
 		, SceneNodeSPtr node
-		, renderer::VertexLayoutPtr && vertexLayout
-		, renderer::VertexBufferBasePtr && vertexBuffer )
+		, ashes::VertexLayoutPtr && vertexLayout
+		, ashes::VertexBufferBasePtr && vertexBuffer )
 		: m_vertexLayout{ std::move( vertexLayout ) }
 		, m_vertexBuffer{ vertexBuffer ? std::move( vertexBuffer ) : nullptr }
 		, m_scene{ scene }
@@ -106,25 +106,25 @@ namespace castor3d
 				Vertex{ castor::Point3f{ +0.5f, +0.5f, 1.0f }, castor::Point2f{ 1.0f, 1.0f } },
 			};
 			auto & device = getCurrentDevice( m_scene );
-			m_quadBuffer = renderer::makeVertexBuffer< Quad >( device
+			m_quadBuffer = ashes::makeVertexBuffer< Quad >( device
 				, 1u
-				, renderer::BufferTarget::eTransferDst
-				, renderer::MemoryPropertyFlag::eHostVisible );
+				, ashes::BufferTarget::eTransferDst
+				, ashes::MemoryPropertyFlag::eHostVisible );
 
-			if ( auto buffer = m_quadBuffer->lock( 0u, 1u, renderer::MemoryMapFlag::eWrite ) )
+			if ( auto buffer = m_quadBuffer->lock( 0u, 1u, ashes::MemoryMapFlag::eWrite ) )
 			{
 				*buffer = vertices;
 				m_quadBuffer->flush( 0u, 1u );
 				m_quadBuffer->unlock();
 			}
 
-			m_quadLayout = renderer::makeLayout< Vertex >( 0u, renderer::VertexInputRate::eVertex );
-			m_quadLayout->createAttribute( 0u, renderer::Format::eR32G32B32_SFLOAT, offsetof( Vertex, position ) );
-			m_quadLayout->createAttribute( 1u, renderer::Format::eR32G32_SFLOAT, offsetof( Vertex, texcoord ) );
+			m_quadLayout = ashes::makeLayout< Vertex >( 0u, ashes::VertexInputRate::eVertex );
+			m_quadLayout->createAttribute( 0u, ashes::Format::eR32G32B32_SFLOAT, offsetof( Vertex, position ) );
+			m_quadLayout->createAttribute( 1u, ashes::Format::eR32G32_SFLOAT, offsetof( Vertex, texcoord ) );
 
-			renderer::BufferCRefArray buffers;
+			ashes::BufferCRefArray buffers;
 			std::vector< uint64_t > offsets;
-			renderer::VertexLayoutCRefArray layouts;
+			ashes::VertexLayoutCRefArray layouts;
 			doGatherBuffers( buffers, offsets, layouts );
 
 			m_geometryBuffers.vbo = buffers;
@@ -170,7 +170,7 @@ namespace castor3d
 
 			if ( auto gpuBuffer = m_vertexBuffer->getBuffer().lock( 0
 				, m_count * stride
-				, renderer::MemoryMapFlag::eRead | renderer::MemoryMapFlag::eWrite ) )
+				, ashes::MemoryMapFlag::eRead | ashes::MemoryMapFlag::eWrite ) )
 			{
 				struct Element
 				{
@@ -301,9 +301,9 @@ namespace castor3d
 		}
 	}
 
-	void BillboardBase::doGatherBuffers( renderer::BufferCRefArray & buffers
+	void BillboardBase::doGatherBuffers( ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
-		, renderer::VertexLayoutCRefArray & layouts )
+		, ashes::VertexLayoutCRefArray & layouts )
 	{
 		buffers.emplace_back( m_vertexBuffer->getBuffer() );
 		offsets.emplace_back( 0u );
@@ -315,10 +315,10 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	renderer::VertexLayoutPtr doCreateLayout( renderer::Device const & device )
+	ashes::VertexLayoutPtr doCreateLayout( ashes::Device const & device )
 	{
-		renderer::VertexLayoutPtr result = renderer::makeLayout< castor::Point3f >( 1u, renderer::VertexInputRate::eInstance );
-		result->createAttribute( 2u, renderer::Format::eR32G32B32_SFLOAT, 0u );
+		ashes::VertexLayoutPtr result = ashes::makeLayout< castor::Point3f >( 1u, ashes::VertexInputRate::eInstance );
+		result->createAttribute( 2u, ashes::Format::eR32G32B32_SFLOAT, 0u );
 		return result;
 	}
 
@@ -354,14 +354,14 @@ namespace castor3d
 
 			uint32_t stride = m_vertexLayout->getStride();
 			auto & device = getCurrentDevice( m_scene );
-			m_vertexBuffer = renderer::makeVertexBuffer< castor::Point3f >( device
+			m_vertexBuffer = ashes::makeVertexBuffer< castor::Point3f >( device
 				, uint32_t( m_arrayPositions.size() )
-				, renderer::BufferTarget::eTransferDst
-				, renderer::MemoryPropertyFlag::eHostVisible );
+				, ashes::BufferTarget::eTransferDst
+				, ashes::MemoryPropertyFlag::eHostVisible );
 
 			if ( auto * buffer = m_vertexBuffer->getBuffer().lock( 0u
 				, uint32_t( stride * m_arrayPositions.size() )
-				, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateRange ) )
+				, ashes::MemoryMapFlag::eWrite | ashes::MemoryMapFlag::eInvalidateRange ) )
 			{
 				for ( auto & pos : m_arrayPositions )
 				{

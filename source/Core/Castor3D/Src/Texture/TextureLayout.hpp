@@ -38,8 +38,8 @@ namespace castor3d
 		 *\param[in]	memoryProperties	Les propriétés requise pour la mémoire.
 		 */
 		C3D_API TextureLayout( RenderSystem & renderSystem
-			, renderer::ImageCreateInfo info
-			, renderer::MemoryPropertyFlags memoryProperties );
+			, ashes::ImageCreateInfo info
+			, ashes::MemoryPropertyFlags memoryProperties );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -105,12 +105,12 @@ namespace castor3d
 			return m_initialised;
 		}
 
-		inline renderer::TextureType getType()const
+		inline ashes::TextureType getType()const
 		{
 			return m_info.imageType;
 		}
 
-		inline renderer::Texture const & getTexture()const
+		inline ashes::Texture const & getTexture()const
 		{
 			REQUIRE( m_texture );
 			return *m_texture;
@@ -140,7 +140,7 @@ namespace castor3d
 			return *m_defaultView;
 		}
 
-		inline renderer::TextureView const & getDefaultView()const
+		inline ashes::TextureView const & getDefaultView()const
 		{
 			return m_defaultView->getView();
 		}
@@ -165,12 +165,12 @@ namespace castor3d
 			return m_info.mipLevels;
 		}
 
-		inline renderer::Extent3D const & getDimensions()const
+		inline ashes::Extent3D const & getDimensions()const
 		{
 			return m_info.extent;
 		}
 
-		inline renderer::Format getPixelFormat()const
+		inline ashes::Format getPixelFormat()const
 		{
 			return m_info.format;
 		}
@@ -202,15 +202,15 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doUpdateFromFirstImage( castor::Size const & size, renderer::Format format );
+		void doUpdateFromFirstImage( castor::Size const & size, ashes::Format format );
 
 	private:
 		bool m_initialised{ false };
-		renderer::ImageCreateInfo m_info;
-		renderer::MemoryPropertyFlags m_properties;
+		ashes::ImageCreateInfo m_info;
+		ashes::MemoryPropertyFlags m_properties;
 		std::vector< TextureViewUPtr > m_views;
 		TextureViewUPtr m_defaultView;
-		renderer::TexturePtr m_texture;
+		ashes::TexturePtr m_texture;
 	};
 }
 

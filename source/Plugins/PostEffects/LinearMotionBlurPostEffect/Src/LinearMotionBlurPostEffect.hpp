@@ -33,16 +33,16 @@ namespace motion_blur
 		public:
 			Quad( castor3d::RenderSystem & renderSystem
 				, castor3d::TextureUnit const & velocity
-				, renderer::UniformBuffer< Configuration > const & ubo );
+				, ashes::UniformBuffer< Configuration > const & ubo );
 
 		private:
-			void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
-				, renderer::DescriptorSet & descriptorSet );
+			void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+				, ashes::DescriptorSet & descriptorSet );
 
 		private:
-			renderer::TextureView const & m_velocityView;
-			renderer::Sampler const & m_velocitySampler;
-			renderer::UniformBuffer< Configuration > const & m_ubo;
+			ashes::TextureView const & m_velocityView;
+			ashes::Sampler const & m_velocitySampler;
+			ashes::UniformBuffer< Configuration > const & m_ubo;
 		};
 
 	public:
@@ -84,10 +84,10 @@ namespace motion_blur
 		using Clock = std::chrono::high_resolution_clock;
 		using TimePoint = Clock::time_point;
 		castor3d::PostEffectSurface m_surface;
-		renderer::RenderPassPtr m_renderPass;
+		ashes::RenderPassPtr m_renderPass;
 		std::unique_ptr< Quad > m_quad;
 		Configuration m_configuration;
-		renderer::UniformBufferPtr< Configuration > m_ubo;
+		ashes::UniformBufferPtr< Configuration > m_ubo;
 		glsl::Shader m_vertexShader;
 		glsl::Shader m_pixelShader;
 		TimePoint m_saved;

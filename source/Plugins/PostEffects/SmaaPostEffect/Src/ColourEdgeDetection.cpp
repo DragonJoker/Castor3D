@@ -17,6 +17,7 @@
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <Pipeline/DepthStencilState.hpp>
+#include <Shader/GlslToSpv.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
 #include <numeric>
@@ -83,12 +84,12 @@ namespace smaa
 			return writer.finalise();
 		}
 
-		renderer::TextureViewPtr doCreatePredicationView( renderer::Texture const & texture )
+		ashes::TextureViewPtr doCreatePredicationView( ashes::Texture const & texture )
 		{
-			renderer::ImageViewCreateInfo view{};
+			ashes::ImageViewCreateInfo view{};
 			view.format = texture.getFormat();
-			view.viewType = renderer::TextureViewType::e2D;
-			view.subresourceRange.aspectMask = renderer::ImageAspectFlag::eDepth;
+			view.viewType = ashes::TextureViewType::e2D;
+			view.subresourceRange.aspectMask = ashes::ImageAspectFlag::eDepth;
 			view.subresourceRange.baseArrayLayer = 0u;
 			view.subresourceRange.layerCount = 1u;
 			view.subresourceRange.baseMipLevel = 0u;
@@ -100,14 +101,14 @@ namespace smaa
 	//*********************************************************************************************
 
 	ColourEdgeDetection::ColourEdgeDetection( castor3d::RenderTarget & renderTarget
-		, renderer::TextureView const & colourView
-		, renderer::Texture const * predication
+		, ashes::TextureView const & colourView
+		, ashes::Texture const * predication
 		, SmaaConfig const & config )
 		: EdgeDetection{ renderTarget, config }
 		, m_colourView{ colourView }
 		, m_predicationView{ predication ? doCreatePredicationView( *predication ) : nullptr }
 	{
-		renderer::Extent2D size{ m_colourView.getTexture().getDimensions().width
+		ashes::Extent2D size{ m_colourView.getTexture().getDimensions().width
 			, m_colourView.getTexture().getDimensions().height };
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
 		m_pixelShader = doGetEdgeDetectionFP( *renderTarget.getEngine()->getRenderSystem()
@@ -131,21 +132,21 @@ namespace smaa
 		edgeDetectionCmd.begin();
 		timer.beginPass( edgeDetectionCmd, passIndex );
 		// Put source image in shader input layout.
-		edgeDetectionCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-			, renderer::PipelineStageFlag::eFragmentShader
-			, m_colourView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+		edgeDetectionCmd.memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
+			, ashes::PipelineStageFlag::eFragmentShader
+			, m_colourView.makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
 
 		if ( m_predicationView )
 		{
-			edgeDetectionCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-				, renderer::PipelineStageFlag::eFragmentShader
-				, m_predicationView->makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+			edgeDetectionCmd.memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
+				, ashes::PipelineStageFlag::eFragmentShader
+				, m_predicationView->makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
 		}
 
 		edgeDetectionCmd.beginRenderPass( *m_renderPass
 			, *m_surface.frameBuffer
-			, { renderer::ClearColorValue{ 0.0, 0.0, 0.0, 0.0 }, renderer::DepthStencilClearValue{ 1.0f, 0 } }
-			, renderer::SubpassContents::eInline );
+			, { ashes::ClearColorValue{ 0.0, 0.0, 0.0, 0.0 }, ashes::DepthStencilClearValue{ 1.0f, 0 } }
+			, ashes::SubpassContents::eInline );
 		registerFrame( edgeDetectionCmd );
 		edgeDetectionCmd.endRenderPass();
 		timer.endPass( edgeDetectionCmd, passIndex );
@@ -156,26 +157,30 @@ namespace smaa
 
 	void ColourEdgeDetection::doInitialisePipeline()
 	{
-		renderer::Extent2D size{ m_colourView.getTexture().getDimensions().width
+		ashes::Extent2D size{ m_colourView.getTexture().getDimensions().width
 			, m_colourView.getTexture().getDimensions().height };
 		auto & device = getCurrentDevice( m_renderSystem );
-		renderer::ShaderStageStateArray stages;
-		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
-		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( m_vertexShader.getSource() );
-		stages[1].module->loadShader( m_pixelShader.getSource() );
+		ashes::ShaderStageStateArray stages;
+		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
+		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
+		stages[0].module->loadShader( castor3d::compileGlslToSpv( device
+			, ashes::ShaderStageFlag::eVertex
+			, m_vertexShader.getSource() ) );
+		stages[1].module->loadShader( castor3d::compileGlslToSpv( device
+			, ashes::ShaderStageFlag::eFragment
+			, m_pixelShader.getSource() ) );
 
-		renderer::DepthStencilState dsstate{ 0u, false, false };
+		ashes::DepthStencilState dsstate{ 0u, false, false };
 		dsstate.stencilTestEnable = true;
-		dsstate.front.passOp = renderer::StencilOp::eReplace;
+		dsstate.front.passOp = ashes::StencilOp::eReplace;
 		dsstate.front.reference = 1u;
 		dsstate.back = dsstate.front;
-		renderer::DescriptorSetLayoutBindingArray setLayoutBindings;
+		ashes::DescriptorSetLayoutBindingArray setLayoutBindings;
 		auto * view = &m_colourView;
 
 		if ( m_predicationView )
 		{
-			setLayoutBindings.emplace_back( 0u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			setLayoutBindings.emplace_back( 0u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 			view = m_predicationView.get();
 		}
 
@@ -189,8 +194,8 @@ namespace smaa
 			, dsstate );
 	}
 
-	void ColourEdgeDetection::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
-		, renderer::DescriptorSet & descriptorSet )
+	void ColourEdgeDetection::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+		, ashes::DescriptorSet & descriptorSet )
 	{
 		if ( m_predicationView )
 		{

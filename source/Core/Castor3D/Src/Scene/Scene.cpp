@@ -19,7 +19,7 @@
 #include "Scene/Background/Skybox.hpp"
 #include "Scene/Background/BackgroundTextWriter.hpp"
 #include "Scene/ParticleSystem/ParticleSystem.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Shader/Program.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
@@ -990,9 +990,9 @@ namespace castor3d
 		return *m_reflectionMaps.find( &node )->second;
 	}
 
-	renderer::SemaphoreCRefArray Scene::getRenderTargetsSemaphores()const
+	ashes::SemaphoreCRefArray Scene::getRenderTargetsSemaphores()const
 	{
-		renderer::SemaphoreCRefArray result;
+		ashes::SemaphoreCRefArray result;
 
 		for ( auto & target : getEngine()->getRenderTargetCache().getRenderTargets( TargetType::eTexture ) )
 		{

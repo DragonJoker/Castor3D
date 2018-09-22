@@ -12,6 +12,7 @@
 #include "Scene/Light/PointLight.hpp"
 #include "Castor3DPrerequisites.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
+#include "Shader/Program.hpp"
 #include "ShadowMap/ShadowMapPassPoint.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureView.hpp"
@@ -22,7 +23,6 @@
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
-#include <Shader/ShaderProgram.hpp>
 
 #include <GlslSource.hpp>
 
@@ -49,29 +49,29 @@ namespace castor3d
 			else
 			{
 				sampler = engine.getSamplerCache().add( name );
-				sampler->setMinFilter( renderer::Filter::eLinear );
-				sampler->setMagFilter( renderer::Filter::eLinear );
-				sampler->setWrapS( renderer::WrapMode::eClampToEdge );
-				sampler->setWrapT( renderer::WrapMode::eClampToEdge );
-				sampler->setWrapR( renderer::WrapMode::eClampToEdge );
-				sampler->setBorderColour( renderer::BorderColour::eFloatOpaqueWhite );
+				sampler->setMinFilter( ashes::Filter::eLinear );
+				sampler->setMagFilter( ashes::Filter::eLinear );
+				sampler->setWrapS( ashes::WrapMode::eClampToEdge );
+				sampler->setWrapT( ashes::WrapMode::eClampToEdge );
+				sampler->setWrapR( ashes::WrapMode::eClampToEdge );
+				sampler->setBorderColour( ashes::BorderColour::eFloatOpaqueWhite );
 			}
 
-			renderer::ImageCreateInfo image{};
-			image.flags = renderer::ImageCreateFlag::eCubeCompatible;
+			ashes::ImageCreateInfo image{};
+			image.flags = ashes::ImageCreateFlag::eCubeCompatible;
 			image.arrayLayers = 6u;
 			image.extent.width = size.getWidth();
 			image.extent.height = size.getHeight();
 			image.extent.depth = 1u;
-			image.imageType = renderer::TextureType::e2D;
+			image.imageType = ashes::TextureType::e2D;
 			image.mipLevels = 1u;
-			image.samples = renderer::SampleCountFlag::e1;
-			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+			image.samples = ashes::SampleCountFlag::e1;
+			image.usage = ashes::ImageUsageFlag::eColourAttachment | ashes::ImageUsageFlag::eSampled;
 			image.format = ShadowMapPoint::VarianceFormat;
 
 			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
 				, image
-				, renderer::MemoryPropertyFlag::eDeviceLocal );
+				, ashes::MemoryPropertyFlag::eDeviceLocal );
 			TextureUnit unit{ engine };
 			unit.setTexture( texture );
 			unit.setSampler( sampler );
@@ -97,29 +97,29 @@ namespace castor3d
 			else
 			{
 				sampler = engine.getSamplerCache().add( name );
-				sampler->setMinFilter( renderer::Filter::eLinear );
-				sampler->setMagFilter( renderer::Filter::eLinear );
-				sampler->setWrapS( renderer::WrapMode::eClampToEdge );
-				sampler->setWrapT( renderer::WrapMode::eClampToEdge );
-				sampler->setWrapR( renderer::WrapMode::eClampToEdge );
-				sampler->setBorderColour( renderer::BorderColour::eFloatOpaqueWhite );
+				sampler->setMinFilter( ashes::Filter::eLinear );
+				sampler->setMagFilter( ashes::Filter::eLinear );
+				sampler->setWrapS( ashes::WrapMode::eClampToEdge );
+				sampler->setWrapT( ashes::WrapMode::eClampToEdge );
+				sampler->setWrapR( ashes::WrapMode::eClampToEdge );
+				sampler->setBorderColour( ashes::BorderColour::eFloatOpaqueWhite );
 			}
 
-			renderer::ImageCreateInfo image{};
-			image.flags = renderer::ImageCreateFlag::eCubeCompatible;
+			ashes::ImageCreateInfo image{};
+			image.flags = ashes::ImageCreateFlag::eCubeCompatible;
 			image.arrayLayers = 6u;
 			image.extent.width = size.getWidth();
 			image.extent.height = size.getHeight();
 			image.extent.depth = 1u;
-			image.imageType = renderer::TextureType::e2D;
+			image.imageType = ashes::TextureType::e2D;
 			image.mipLevels = 1u;
-			image.samples = renderer::SampleCountFlag::e1;
-			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+			image.samples = ashes::SampleCountFlag::e1;
+			image.usage = ashes::ImageUsageFlag::eColourAttachment | ashes::ImageUsageFlag::eSampled;
 			image.format = ShadowMapPoint::LinearDepthFormat;
 
 			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
 				, image
-				, renderer::MemoryPropertyFlag::eDeviceLocal );
+				, ashes::MemoryPropertyFlag::eDeviceLocal );
 			TextureUnit unit{ engine };
 			unit.setTexture( texture );
 			unit.setSampler( sampler );
@@ -184,11 +184,11 @@ namespace castor3d
 		}
 	}
 
-	renderer::Semaphore const & ShadowMapPoint::render( renderer::Semaphore const & toWait )
+	ashes::Semaphore const & ShadowMapPoint::render( ashes::Semaphore const & toWait )
 	{
 		static float constexpr component = std::numeric_limits< float >::max();
-		static renderer::ClearColorValue const white{ component, component, component, component };
-		static renderer::DepthStencilClearValue const zero{ 1.0f, 0 };
+		static ashes::ClearColorValue const white{ component, component, component, component };
+		static ashes::DepthStencilClearValue const zero{ 1.0f, 0 };
 		auto & myTimer = m_passes[0].pass->getTimer();
 		auto timerBlock = myTimer.start();
 		auto * result = &toWait;
@@ -198,7 +198,7 @@ namespace castor3d
 			m_passes[face].pass->updateDeviceDependent( uint32_t( face ) );
 		}
 
-		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
+		m_commandBuffer->begin( ashes::CommandBufferUsageFlag::eOneTimeSubmit );
 
 		for ( size_t face = 0u; face < m_passes.size(); ++face )
 		{
@@ -212,7 +212,7 @@ namespace castor3d
 			m_commandBuffer->beginRenderPass( renderPass
 				, *frameBuffer.frameBuffer
 				, { zero, white, white }
-				, renderer::SubpassContents::eSecondaryCommandBuffers );
+				, ashes::SubpassContents::eSecondaryCommandBuffers );
 			m_commandBuffer->executeCommands( { pass.pass->getCommandBuffer() } );
 			m_commandBuffer->endRenderPass();
 			timer.endPass( *m_commandBuffer );
@@ -223,7 +223,7 @@ namespace castor3d
 
 		device.getGraphicsQueue().submit( *m_commandBuffer
 			, *result
-			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, ashes::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
 			, nullptr );
 		result = m_finished.get();
@@ -231,8 +231,8 @@ namespace castor3d
 		return *result;
 	}
 
-	void ShadowMapPoint::debugDisplay( renderer::RenderPass const & renderPass
-		, renderer::FrameBuffer const & frameBuffer
+	void ShadowMapPoint::debugDisplay( ashes::RenderPass const & renderPass
+		, ashes::FrameBuffer const & frameBuffer
 		, castor::Size const & size, uint32_t index )
 	{
 		//Size displaySize{ 128u, 128u };
@@ -248,25 +248,25 @@ namespace castor3d
 
 	void ShadowMapPoint::doInitialise()
 	{
-		renderer::Extent2D size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize };
+		ashes::Extent2D size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize };
 		auto & device = getCurrentDevice( *this );
 
-		renderer::ImageCreateInfo depth{};
+		ashes::ImageCreateInfo depth{};
 		depth.arrayLayers = 1u;
 		depth.extent.width = size.width;
 		depth.extent.height = size.height;
 		depth.extent.depth = 1u;
-		depth.imageType = renderer::TextureType::e2D;
+		depth.imageType = ashes::TextureType::e2D;
 		depth.mipLevels = 1u;
-		depth.samples = renderer::SampleCountFlag::e1;
-		depth.usage = renderer::ImageUsageFlag::eDepthStencilAttachment;
+		depth.samples = ashes::SampleCountFlag::e1;
+		depth.usage = ashes::ImageUsageFlag::eDepthStencilAttachment;
 		depth.format = ShadowMapPoint::RawDepthFormat;
-		m_depthTexture = device.createTexture( depth, renderer::MemoryPropertyFlag::eDeviceLocal );
+		m_depthTexture = device.createTexture( depth, ashes::MemoryPropertyFlag::eDeviceLocal );
 
-		renderer::ImageViewCreateInfo depthView;
+		ashes::ImageViewCreateInfo depthView;
 		depthView.format = depth.format;
-		depthView.viewType = renderer::TextureViewType::e2D;
-		depthView.subresourceRange.aspectMask = renderer::ImageAspectFlag::eDepth;
+		depthView.viewType = ashes::TextureViewType::e2D;
+		depthView.subresourceRange.aspectMask = ashes::ImageAspectFlag::eDepth;
 		depthView.subresourceRange.baseArrayLayer = 0u;
 		depthView.subresourceRange.layerCount = 1u;
 		depthView.subresourceRange.baseMipLevel = 0u;
@@ -281,19 +281,19 @@ namespace castor3d
 		{
 			auto & pass = m_passes[face];
 			auto & renderPass = pass.pass->getRenderPass();
-			frameBuffer.varianceView = variance.createView( renderer::TextureViewType::e2D
+			frameBuffer.varianceView = variance.createView( ashes::TextureViewType::e2D
 				, variance.getFormat()
 				, 0u
 				, 1u
 				, face
 				, 1u );
-			frameBuffer.linearView = linear.createView( renderer::TextureViewType::e2D
+			frameBuffer.linearView = linear.createView( ashes::TextureViewType::e2D
 				, linear.getFormat()
 				, 0u
 				, 1u
 				, face
 				, 1u );
-			renderer::FrameBufferAttachmentArray attaches;
+			ashes::FrameBufferAttachmentArray attaches;
 			attaches.emplace_back( *( renderPass.getAttachments().begin() + 0u ), *m_depthView );
 			attaches.emplace_back( *( renderPass.getAttachments().begin() + 1u ), *frameBuffer.linearView );
 			attaches.emplace_back( *( renderPass.getAttachments().begin() + 2u ), *frameBuffer.varianceView );
@@ -329,7 +329,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, renderer::CompareOp alphaFunc )const
+		, ashes::CompareOp alphaFunc )const
 	{
 		using namespace glsl;
 		GlslWriter writer = getEngine()->getRenderSystem()->createGlslWriter();

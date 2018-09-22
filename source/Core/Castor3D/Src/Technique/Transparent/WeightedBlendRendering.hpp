@@ -41,8 +41,8 @@ namespace castor3d
 		 */
 		WeightedBlendRendering( Engine & engine
 			, TransparentPass & transparentPass
-			, renderer::TextureView const & depthView
-			, renderer::TextureView const & colourView
+			, ashes::TextureView const & depthView
+			, ashes::TextureView const & colourView
 			, TextureLayoutSPtr velocityTexture
 			, castor::Size const & size
 			, Scene const & scene );
@@ -74,9 +74,9 @@ namespace castor3d
 		 *\param[out]	info	Reçoit les informations de rendu.
 		 *\param[out]	scene	La scène rendue.
 		 */
-		renderer::Semaphore const & render( RenderInfo & info
+		ashes::Semaphore const & render( RenderInfo & info
 			, Scene const & scene
-			, renderer::Semaphore const & toWait );
+			, ashes::Semaphore const & toWait );
 		/**
 		 *\~english
 		 *\brief		Displays debug data on screen.
@@ -93,11 +93,11 @@ namespace castor3d
 		Engine & m_engine;
 		TransparentPass & m_transparentPass;
 		castor::Size m_size;
-		renderer::TextureViewPtr m_depthView;
-		renderer::TexturePtr m_accumulation;
-		renderer::TextureViewPtr m_accumulationView;
-		renderer::TexturePtr m_revealage;
-		renderer::TextureViewPtr m_revealageView;
+		ashes::TextureViewPtr m_depthView;
+		ashes::TexturePtr m_accumulation;
+		ashes::TextureViewPtr m_accumulationView;
+		ashes::TexturePtr m_revealage;
+		ashes::TextureViewPtr m_revealageView;
 		WeightedBlendTextures m_weightedBlendPassResult;
 		FinalCombinePass m_finalCombinePass;
 	};

@@ -12,7 +12,7 @@
 namespace Testing
 {
 	class TestWindowHandle
-		: public renderer::IWindowHandle
+		: public ashes::IWindowHandle
 	{
 	public:
 		TestWindowHandle()

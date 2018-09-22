@@ -10,3 +10,6 @@
 [submodule "source/external/zlib"]
 	path = source/external/zlib
 	url = https://github.com/DragonJoker/zlib.git
+[submodule "source/external/Ashes"]
+	path = source/external/Ashes
+	url = https://github.com/DragonJoker/Ashes.git

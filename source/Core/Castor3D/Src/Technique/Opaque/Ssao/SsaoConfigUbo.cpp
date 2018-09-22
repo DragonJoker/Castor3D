@@ -14,7 +14,7 @@ namespace castor3d
 {
 	namespace
 	{
-		castor::Matrix4x4f getProjectUnitMatrix( renderer::Device const & device
+		castor::Matrix4x4f getProjectUnitMatrix( ashes::Device const & device
 			, Camera const & camera )
 		{
 			// Uses double precision because the division operations may otherwise 
@@ -76,10 +76,10 @@ namespace castor3d
 	void SsaoConfigUbo::initialise()
 	{
 		auto & device = getCurrentDevice( m_engine );
-		m_ubo = renderer::makeUniformBuffer< Configuration >( device
+		m_ubo = ashes::makeUniformBuffer< Configuration >( device
 			, 1u
-			, renderer::BufferTarget::eTransferDst
-			, renderer::MemoryPropertyFlag::eHostVisible );
+			, ashes::BufferTarget::eTransferDst
+			, ashes::MemoryPropertyFlag::eHostVisible );
 	}
 
 	void SsaoConfigUbo::cleanup()

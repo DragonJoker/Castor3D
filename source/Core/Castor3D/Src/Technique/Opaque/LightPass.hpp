@@ -64,7 +64,7 @@ namespace castor3d
 	 *\param[in]	texture	La valeur.
 	 *\return		Le nom.
 	 */
-	renderer::Format getTextureFormat( DsTexture texture );
+	ashes::Format getTextureFormat( DsTexture texture );
 	/**
 	 *\~english
 	 *\brief		Retrieve the attachment index for given texture enum value.
@@ -213,12 +213,12 @@ namespace castor3d
 	protected:
 		struct RenderPass
 		{
-			RenderPass( renderer::RenderPassPtr && renderPass
-				, renderer::TextureView const & depthView
-				, renderer::TextureView const & diffuseView
-				, renderer::TextureView const & specularView );
-			renderer::RenderPassPtr renderPass;
-			renderer::FrameBufferPtr frameBuffer;
+			RenderPass( ashes::RenderPassPtr && renderPass
+				, ashes::TextureView const & depthView
+				, ashes::TextureView const & diffuseView
+				, ashes::TextureView const & specularView );
+			ashes::RenderPassPtr renderPass;
+			ashes::FrameBufferPtr frameBuffer;
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -271,10 +271,10 @@ namespace castor3d
 			 *\param[in]	gpInfoUbo		L'UBO de la geometry pass.
 			 *\param[in]	modelMatrixUbo	L'UBO optionnel de matrices modèle.
 			 */
-			void initialise( renderer::VertexBufferBase & vbo
-				, renderer::VertexLayout const & vertexLayout
-				, renderer::RenderPass const & firstRenderPass
-				, renderer::RenderPass const & blendRenderPass
+			void initialise( ashes::VertexBufferBase & vbo
+				, ashes::VertexLayout const & vertexLayout
+				, ashes::RenderPass const & firstRenderPass
+				, ashes::RenderPass const & blendRenderPass
 				, MatrixUbo & matrixUbo
 				, SceneUbo & sceneUbo
 				, GpInfoUbo & gpInfoUbo
@@ -309,7 +309,7 @@ namespace castor3d
 			 *\param[in]	first	Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
 			 *\param[in]	offset	L'offset dans le VBO.
 			 */
-			void render( renderer::CommandBuffer & commandBuffer
+			void render( ashes::CommandBuffer & commandBuffer
 				, uint32_t count
 				, bool first
 				, uint32_t offset )const;
@@ -322,31 +322,31 @@ namespace castor3d
 			*	Accesseurs.
 			*/
 			/**@{*/
-			inline renderer::DescriptorSetLayout const & getUboDescriptorLayout()const
+			inline ashes::DescriptorSetLayout const & getUboDescriptorLayout()const
 			{
 				REQUIRE( m_uboDescriptorLayout );
 				return *m_uboDescriptorLayout;
 			}
 
-			inline renderer::DescriptorSetLayout const & getTextureDescriptorLayout()const
+			inline ashes::DescriptorSetLayout const & getTextureDescriptorLayout()const
 			{
 				REQUIRE( m_textureDescriptorLayout );
 				return *m_textureDescriptorLayout;
 			}
 
-			inline renderer::DescriptorSetPool const & getUboDescriptorPool()const
+			inline ashes::DescriptorSetPool const & getUboDescriptorPool()const
 			{
 				REQUIRE( m_uboDescriptorPool );
 				return *m_uboDescriptorPool;
 			}
 
-			inline renderer::DescriptorSetPool const & getTextureDescriptorPool()const
+			inline ashes::DescriptorSetPool const & getTextureDescriptorPool()const
 			{
 				REQUIRE( m_textureDescriptorPool );
 				return *m_textureDescriptorPool;
 			}
 
-			inline renderer::PipelineLayout const & getPipelineLayout()const
+			inline ashes::PipelineLayout const & getPipelineLayout()const
 			{
 				REQUIRE( m_pipelineLayout );
 				return *m_pipelineLayout;
@@ -364,8 +364,8 @@ namespace castor3d
 			 *\param[in]	blend	Dit si le pipeline doit activer le blending.
 			 *\return		Le pipeline créé.
 			 */
-			virtual renderer::PipelinePtr doCreatePipeline( renderer::VertexLayout const & vertexLayout
-				, renderer::RenderPass const & renderPass
+			virtual ashes::PipelinePtr doCreatePipeline( ashes::VertexLayout const & vertexLayout
+				, ashes::RenderPass const & renderPass
 				, bool blend ) = 0;
 			/**
 			 *\~english
@@ -379,14 +379,14 @@ namespace castor3d
 
 		public:
 			Engine & m_engine;
-			renderer::ShaderStageStateArray m_program;
-			renderer::DescriptorSetLayoutPtr m_uboDescriptorLayout;
-			renderer::DescriptorSetPoolPtr m_uboDescriptorPool;
-			renderer::DescriptorSetLayoutPtr m_textureDescriptorLayout;
-			renderer::DescriptorSetPoolPtr m_textureDescriptorPool;
-			renderer::PipelineLayoutPtr m_pipelineLayout;
-			renderer::PipelinePtr m_blendPipeline;
-			renderer::PipelinePtr m_firstPipeline;
+			ashes::ShaderStageStateArray m_program;
+			ashes::DescriptorSetLayoutPtr m_uboDescriptorLayout;
+			ashes::DescriptorSetPoolPtr m_uboDescriptorPool;
+			ashes::DescriptorSetLayoutPtr m_textureDescriptorLayout;
+			ashes::DescriptorSetPoolPtr m_textureDescriptorPool;
+			ashes::PipelineLayoutPtr m_pipelineLayout;
+			ashes::PipelinePtr m_blendPipeline;
+			ashes::PipelinePtr m_firstPipeline;
 			bool m_shadows;
 		};
 		using ProgramPtr = std::unique_ptr< Program >;
@@ -441,8 +441,8 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dessine la passe de rendu.
 		 */
-		virtual renderer::Semaphore const & render( uint32_t index
-			, renderer::Semaphore const & toWait
+		virtual ashes::Semaphore const & render( uint32_t index
+			, ashes::Semaphore const & toWait
 			, TextureUnit * shadowMapOpt );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
@@ -465,7 +465,7 @@ namespace castor3d
 		 */
 		virtual uint32_t getCount()const = 0;
 
-		inline renderer::Semaphore const & getSemaphore()const
+		inline ashes::Semaphore const & getSemaphore()const
 		{
 			REQUIRE( m_signalReady );
 			return *m_signalReady;
@@ -476,11 +476,11 @@ namespace castor3d
 		struct Pipeline
 		{
 			ProgramPtr program;
-			renderer::DescriptorSetPtr uboDescriptorSet;
-			renderer::WriteDescriptorSetArray textureWrites;
-			renderer::DescriptorSetPtr textureDescriptorSet;
-			renderer::CommandBufferPtr firstCommandBuffer;
-			renderer::CommandBufferPtr blendCommandBuffer;
+			ashes::DescriptorSetPtr uboDescriptorSet;
+			ashes::WriteDescriptorSetArray textureWrites;
+			ashes::DescriptorSetPtr textureDescriptorSet;
+			ashes::CommandBufferPtr firstCommandBuffer;
+			ashes::CommandBufferPtr blendCommandBuffer;
 		};
 		/**
 		 *\~english
@@ -499,11 +499,11 @@ namespace castor3d
 		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
 		LightPass( Engine & engine
-			, renderer::RenderPassPtr && firstRenderPass
-			, renderer::RenderPassPtr && blendRenderPass
-			, renderer::TextureView const & depthView
-			, renderer::TextureView const & diffuseView
-			, renderer::TextureView const & specularView
+			, ashes::RenderPassPtr && firstRenderPass
+			, ashes::RenderPassPtr && blendRenderPass
+			, ashes::TextureView const & depthView
+			, ashes::TextureView const & diffuseView
+			, ashes::TextureView const & specularView
 			, GpInfoUbo & gpInfoUbo
 			, bool hasShadows );
 		/**
@@ -525,8 +525,8 @@ namespace castor3d
 		void doInitialise( Scene const & scene
 			, GeometryPassResult const & gp
 			, LightType type
-			, renderer::VertexBufferBase & vbo
-			, renderer::VertexLayout const & vertexLayout
+			, ashes::VertexBufferBase & vbo
+			, ashes::VertexLayout const & vertexLayout
 			, SceneUbo & sceneUbo
 			, ModelMatrixUbo * modelMatrixUbo
 			, RenderPassTimer & timer );
@@ -657,23 +657,23 @@ namespace castor3d
 		Engine & m_engine;
 		Scene const * m_scene{ nullptr };
 		RenderPassTimer * m_timer{ nullptr };
-		renderer::UniformBufferBase const * m_baseUbo{ nullptr };
+		ashes::UniformBufferBase const * m_baseUbo{ nullptr };
 		bool m_shadows;
 		MatrixUbo m_matrixUbo;
 		RenderPass m_firstRenderPass;
 		RenderPass m_blendRenderPass;
 		glsl::Shader m_vertexShader;
 		glsl::Shader m_pixelShader;
-		renderer::CommandBufferPtr m_commandBuffer;
+		ashes::CommandBufferPtr m_commandBuffer;
 		std::array< Pipeline, size_t( ShadowType::eCount ) * 2u > m_pipelines; // * 2u for volumetric scattering or not.
 		Pipeline * m_pipeline{ nullptr };
 		SamplerSPtr m_sampler;
-		renderer::VertexBufferPtr< float > m_vertexBuffer;
-		renderer::VertexLayoutPtr m_vertexLayout;
+		ashes::VertexBufferPtr< float > m_vertexBuffer;
+		ashes::VertexLayoutPtr m_vertexLayout;
 		GpInfoUbo & m_gpInfoUbo;
 		uint32_t m_offset{ 0u };
-		renderer::SemaphorePtr m_signalReady;
-		renderer::FencePtr m_fence;
+		ashes::SemaphorePtr m_signalReady;
+		ashes::FencePtr m_fence;
 		GeometryPassResult const * m_geometryPassResult;
 	};
 }

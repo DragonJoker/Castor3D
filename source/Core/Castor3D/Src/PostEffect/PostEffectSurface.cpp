@@ -16,49 +16,49 @@ namespace castor3d
 	{
 		TextureLayoutSPtr doCreateTexture( RenderSystem & renderSystem
 			, Size const & size
-			, renderer::Format format
+			, ashes::Format format
 			, uint32_t mipLevels
 			, bool isDepthStencil )
 		{
 			TextureLayoutSPtr result;
-			renderer::ImageCreateInfo image{};
+			ashes::ImageCreateInfo image{};
 			image.flags = 0u;
 			image.arrayLayers = 1u;
 			image.extent.width = size[0];
 			image.extent.height = size[1];
 			image.extent.depth = 1u;
 			image.format = format;
-			image.imageType = renderer::TextureType::e2D;
-			image.initialLayout = renderer::ImageLayout::eUndefined;
+			image.imageType = ashes::TextureType::e2D;
+			image.initialLayout = ashes::ImageLayout::eUndefined;
 			image.mipLevels = mipLevels;
-			image.samples = renderer::SampleCountFlag::e1;
-			image.sharingMode = renderer::SharingMode::eExclusive;
-			image.tiling = renderer::ImageTiling::eOptimal;
-			image.usage = renderer::ImageUsageFlag::eTransferSrc;
+			image.samples = ashes::SampleCountFlag::e1;
+			image.sharingMode = ashes::SharingMode::eExclusive;
+			image.tiling = ashes::ImageTiling::eOptimal;
+			image.usage = ashes::ImageUsageFlag::eTransferSrc;
 			
 			if ( isDepthStencil )
 			{
-				image.usage |= renderer::ImageUsageFlag::eDepthStencilAttachment;
+				image.usage |= ashes::ImageUsageFlag::eDepthStencilAttachment;
 
-				if ( !renderer::isDepthOrStencilFormat( format ) )
+				if ( !ashes::isDepthOrStencilFormat( format ) )
 				{
-					image.usage |= renderer::ImageUsageFlag::eSampled;
+					image.usage |= ashes::ImageUsageFlag::eSampled;
 				}
 			}
 			else
 			{
-				image.usage |= renderer::ImageUsageFlag::eColourAttachment
-					| renderer::ImageUsageFlag::eSampled;
+				image.usage |= ashes::ImageUsageFlag::eColourAttachment
+					| ashes::ImageUsageFlag::eSampled;
 			}
 
 			if ( mipLevels > 1 )
 			{
-				image.usage |= renderer::ImageUsageFlag::eTransferDst;
+				image.usage |= ashes::ImageUsageFlag::eTransferDst;
 			}
 
 			return std::make_shared< TextureLayout >( renderSystem
 				, image
-				, renderer::MemoryPropertyFlag::eDeviceLocal );
+				, ashes::MemoryPropertyFlag::eDeviceLocal );
 		}
 	}
 
@@ -67,9 +67,9 @@ namespace castor3d
 	{
 	}
 
-	bool PostEffectSurface::initialise( renderer::RenderPass const & renderPass
+	bool PostEffectSurface::initialise( ashes::RenderPass const & renderPass
 		, Size const & size
-		, renderer::Format format
+		, ashes::Format format
 		, uint32_t mipLevels )
 	{
 		return initialise( renderPass
@@ -82,10 +82,10 @@ namespace castor3d
 			, nullptr );
 	}
 
-	bool PostEffectSurface::initialise( renderer::RenderPass const & renderPass
+	bool PostEffectSurface::initialise( ashes::RenderPass const & renderPass
 		, Size const & size
-		, renderer::Format colourFormat
-		, renderer::Format depthFormat )
+		, ashes::Format colourFormat
+		, ashes::Format depthFormat )
 	{
 		return initialise( renderPass
 			, size
@@ -101,7 +101,7 @@ namespace castor3d
 				, true ) );
 	}
 
-	bool PostEffectSurface::initialise( renderer::RenderPass const & renderPass
+	bool PostEffectSurface::initialise( ashes::RenderPass const & renderPass
 		, castor::Size const & size
 		, TextureLayoutSPtr colourTexture )
 	{
@@ -111,10 +111,10 @@ namespace castor3d
 			, nullptr );
 	}
 
-	bool PostEffectSurface::initialise( renderer::RenderPass const & renderPass
+	bool PostEffectSurface::initialise( ashes::RenderPass const & renderPass
 		, castor::Size const & size
 		, TextureLayoutSPtr colourTexture
-		, renderer::Format depthFormat )
+		, ashes::Format depthFormat )
 	{
 		return initialise( renderPass
 			, size
@@ -126,9 +126,9 @@ namespace castor3d
 				, true ) );
 	}
 
-	bool PostEffectSurface::initialise( renderer::RenderPass const & renderPass
+	bool PostEffectSurface::initialise( ashes::RenderPass const & renderPass
 		, castor::Size const & size
-		, renderer::Format colourFormat
+		, ashes::Format colourFormat
 		, TextureLayoutSPtr depthTexture )
 	{
 		return initialise( renderPass
@@ -141,13 +141,13 @@ namespace castor3d
 			, depthTexture );
 	}
 
-	bool PostEffectSurface::initialise( renderer::RenderPass const & renderPass
+	bool PostEffectSurface::initialise( ashes::RenderPass const & renderPass
 		, Size const & size
 		, TextureLayoutSPtr colourTexture
 		, TextureLayoutSPtr depthTexture )
 	{
 		this->size = size;
-		renderer::FrameBufferAttachmentArray attaches;
+		ashes::FrameBufferAttachmentArray attaches;
 		uint32_t index = 0u;
 
 		if ( colourTexture )
@@ -165,7 +165,7 @@ namespace castor3d
 			attaches.emplace_back( *( renderPass.getAttachments().begin() + index ), depthTexture->getDefaultView() );
 		}
 
-		frameBuffer = renderPass.createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
+		frameBuffer = renderPass.createFrameBuffer( ashes::Extent2D{ size.getWidth(), size.getHeight() }
 		, std::move( attaches ) );
 		return true;
 	}

@@ -28,7 +28,7 @@ namespace castor3d
 		struct Data
 		{
 			uint32_t count;
-			renderer::VertexBufferPtr< InstantiationData > buffer;
+			ashes::VertexBufferPtr< InstantiationData > buffer;
 			std::vector< InstantiationData > data;
 		};
 
@@ -108,9 +108,9 @@ namespace castor3d
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
 		C3D_API void gather( MaterialSPtr material
-			, renderer::BufferCRefArray & buffers
+			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
-			, renderer::VertexLayoutCRefArray & layouts )override;
+			, ashes::VertexLayoutCRefArray & layouts )override;
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::setMaterial
 		 */
@@ -177,7 +177,7 @@ namespace castor3d
 
 	private:
 		std::map< MaterialSPtr, Data > m_instances;
-		renderer::VertexLayoutPtr m_matrixLayout;
+		ashes::VertexLayoutPtr m_matrixLayout;
 		uint32_t m_threshold;
 	};
 }

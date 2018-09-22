@@ -29,8 +29,8 @@ namespace GuiCommon
 	public:
 		LanguageInfoPtr currentLanguage;
 		StyleInfo * currentStyle{ nullptr };
-		castor::UIntStrMap mapFoldFlags;
-		castor::UIntStrMap mapTypes;
+		castor::UInt32StrMap mapFoldFlags;
+		castor::UInt32StrMap mapTypes;
 		castor::String strName;
 		castor::StringArray keywords;
 		uint32_t index;

@@ -39,7 +39,7 @@ namespace smaa
 
 	protected:
 		SmaaConfig const & m_config;
-		renderer::RenderPassPtr m_renderPass;
+		ashes::RenderPassPtr m_renderPass;
 		castor3d::PostEffectSurface m_surface;
 		glsl::Shader m_vertexShader;
 		glsl::Shader m_pixelShader;

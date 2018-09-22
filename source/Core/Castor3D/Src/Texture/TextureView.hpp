@@ -83,7 +83,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les dimensions de la source.
 		 */
-		inline renderer::Extent3D getDimensions()const
+		inline ashes::Extent3D getDimensions()const
 		{
 			return m_size;
 		}
@@ -93,7 +93,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le format des pixels de la source.
 		 */
-		inline renderer::Format getPixelFormat()const
+		inline ashes::Format getPixelFormat()const
 		{
 			return m_format;
 		}
@@ -111,7 +111,7 @@ namespace castor3d
 		 *\param[in,out]	depth	La profondeur.
 		 *\return			\p true si les dimensions ont changé.
 		 */
-		bool doAdjustDimensions( renderer::Extent3D & size );
+		bool doAdjustDimensions( ashes::Extent3D & size );
 
 	protected:
 		//!\~english	The engine.
@@ -119,10 +119,10 @@ namespace castor3d
 		Engine & m_engine;
 		//!\~english	The source's pixel format.
 		//!\~french		Le format des pixels de la source.
-		renderer::Format m_format;
+		ashes::Format m_format;
 		//!\~english	The source's dimensions.
 		//!\~french		Les dimensions de la source.
-		renderer::Extent3D m_size;
+		ashes::Extent3D m_size;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -188,7 +188,7 @@ namespace castor3d
 		 *\param[in]	index	L'index de l'image dans son layout.
 		 */
 		C3D_API TextureView( TextureLayout & layout
-			, renderer::ImageViewCreateInfo info
+			, ashes::ImageViewCreateInfo info
 			, uint32_t index );
 		/**
 		 *\~english
@@ -282,7 +282,7 @@ namespace castor3d
 			return m_info.subresourceRange.baseMipLevel;
 		}
 
-		inline renderer::TextureView const & getView()const
+		inline ashes::TextureView const & getView()const
 		{
 			REQUIRE( m_view );
 			return *m_view;
@@ -290,13 +290,13 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		C3D_API void doUpdate( renderer::ImageViewCreateInfo info );
+		C3D_API void doUpdate( ashes::ImageViewCreateInfo info );
 
 	private:
 		uint32_t m_index;
-		renderer::ImageViewCreateInfo m_info;
+		ashes::ImageViewCreateInfo m_info;
 		std::unique_ptr< TextureSource > m_source;
-		renderer::TextureViewPtr m_view;
+		ashes::TextureViewPtr m_view;
 	};
 }
 

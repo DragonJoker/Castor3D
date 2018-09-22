@@ -148,11 +148,13 @@ namespace GuiCommon
 			catch ( Exception & exc )
 			{
 				Logger::logError( std::stringstream() << string::stringCast< char >( m_internalName ) << " - Initialisation failed : " << exc.getFullDescription() );
+				doCleanupCastor();
 				result = false;
 			}
 			catch ( std::exception & exc )
 			{
 				Logger::logError( std::stringstream() << string::stringCast< char >( m_internalName ) << " - Initialisation failed : " << exc.what() );
+				doCleanupCastor();
 				result = false;
 			}
 		}

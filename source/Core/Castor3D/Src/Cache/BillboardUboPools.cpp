@@ -160,10 +160,10 @@ namespace castor3d
 		{
 			billboard,
 			pass,
-			m_modelUboPool.getBuffer( renderer::MemoryPropertyFlag::eHostVisible ),
-			m_modelMatrixUboPool.getBuffer( renderer::MemoryPropertyFlag::eHostVisible ),
-			m_billboardUboPool.getBuffer( renderer::MemoryPropertyFlag::eHostVisible ),
-			m_pickingUboPool.getBuffer( renderer::MemoryPropertyFlag::eHostVisible ),
+			m_modelUboPool.getBuffer( ashes::MemoryPropertyFlag::eHostVisible ),
+			m_modelMatrixUboPool.getBuffer( ashes::MemoryPropertyFlag::eHostVisible ),
+			m_billboardUboPool.getBuffer( ashes::MemoryPropertyFlag::eHostVisible ),
+			m_pickingUboPool.getBuffer( ashes::MemoryPropertyFlag::eHostVisible ),
 		};
 	}
 

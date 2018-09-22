@@ -87,9 +87,9 @@ namespace castor3d
 		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
 		PointLightPass( Engine & engine
-			, renderer::TextureView const & depthView
-			, renderer::TextureView const & diffuseView
-			, renderer::TextureView const & specularView
+			, ashes::TextureView const & depthView
+			, ashes::TextureView const & diffuseView
+			, ashes::TextureView const & specularView
 			, GpInfoUbo & gpInfoUbo
 			, bool hasShadows );
 		/**
@@ -130,7 +130,7 @@ namespace castor3d
 			//!\~french		La variable contenant l'atténuation de la lumière (RGB) et son index (A).
 			castor::Point4f attenuation;
 		};
-		renderer::UniformBufferPtr< Config > m_ubo;
+		ashes::UniformBufferPtr< Config > m_ubo;
 	};
 }
 

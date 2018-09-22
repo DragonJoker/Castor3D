@@ -15,7 +15,7 @@ using namespace castor3d;
 namespace castor3d
 {
 	SsaoPass::SsaoPass( Engine & engine
-		, renderer::Extent2D const & size
+		, ashes::Extent2D const & size
 		, SsaoConfig & config
 		, GeometryPassResult const & gpResult )
 		: m_engine{ engine }
@@ -64,7 +64,7 @@ namespace castor3d
 		m_config.m_blurRadius.reset();
 	}
 
-	renderer::Semaphore const & SsaoPass::render( renderer::Semaphore const & toWait )const
+	ashes::Semaphore const & SsaoPass::render( ashes::Semaphore const & toWait )const
 	{
 		auto * result = &toWait;
 		result = &m_linearisePass->linearise( *result );

@@ -21,7 +21,7 @@ namespace GuiCommon
 			, wxSize const & size = wxDefaultSize );
 		~FrameVariablesList();
 
-		void loadVariables( renderer::ShaderStageFlag stage
+		void loadVariables( ashes::ShaderStageFlag stage
 			, std::vector< UniformBufferValues > & ubos );
 		void unloadVariables();
 

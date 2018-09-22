@@ -361,7 +361,7 @@ namespace castor3d
 			return m_directionalShadowCascades;
 		}
 
-		C3D_API renderer::SemaphoreCRefArray getRenderTargetsSemaphores()const;
+		C3D_API ashes::SemaphoreCRefArray getRenderTargetsSemaphores()const;
 		/**@}*/
 		/**
 		*\~english

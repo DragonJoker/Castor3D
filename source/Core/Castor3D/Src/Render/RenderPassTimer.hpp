@@ -100,7 +100,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Ecrit le timestamp pour le début de la passe.
 		 */
-		C3D_API void beginPass( renderer::CommandBuffer const & cmd
+		C3D_API void beginPass( ashes::CommandBuffer const & cmd
 			, uint32_t passIndex = 0u )const;
 		/**
 		 *\~english
@@ -108,7 +108,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Ecrit le timestamp pour la fin de la passe.
 		 */
-		C3D_API void endPass( renderer::CommandBuffer const & cmd
+		C3D_API void endPass( ashes::CommandBuffer const & cmd
 			, uint32_t passIndex = 0u )const;
 		/**
 		 *\~english
@@ -170,7 +170,7 @@ namespace castor3d
 		castor::PreciseTimer m_cpuTimer;
 		castor::Nanoseconds m_cpuTime;
 		castor::Nanoseconds m_gpuTime;
-		renderer::QueryPoolPtr m_timerQuery;
+		ashes::QueryPoolPtr m_timerQuery;
 		std::vector< bool > m_startedPasses;
 	};
 }

@@ -90,15 +90,15 @@ find_package( Doxygen )
 #--------------------------------------------------------------------------------------------------
 #	Adding include dirs to include search path
 #--------------------------------------------------------------------------------------------------
-set( RENDERERLIB_DIR external/RendererLib/source/Renderer )
+set( ASHES_DIR external/Ashes/source/Ashes )
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/Core/CastorUtils/Src
 	${CMAKE_CURRENT_BINARY_DIR}/Core/CastorUtils/Src
 )
 
 set( Castor3DIncludeDirs
-	${CMAKE_CURRENT_SOURCE_DIR}/${RENDERERLIB_DIR}/Renderer/Src
-	${CMAKE_CURRENT_BINARY_DIR}/${RENDERERLIB_DIR}/Renderer/Src
+	${CMAKE_CURRENT_SOURCE_DIR}/${ASHES_DIR}/Ashes/Src
+	${CMAKE_CURRENT_BINARY_DIR}/${ASHES_DIR}/Ashes/Src
 	${CMAKE_CURRENT_SOURCE_DIR}/Core/GlslWriter/Src
 	${CMAKE_CURRENT_BINARY_DIR}/Core/GlslWriter/Src
 	${CMAKE_CURRENT_SOURCE_DIR}/Core/Castor3D/Src
@@ -136,7 +136,7 @@ set( CastorBinsDependencies
 
 set( Castor3DBinsDependencies
 	${CastorBinsDependencies}
-	Renderer
+	Ashes
 	Castor3D
 )
 
@@ -210,18 +210,19 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 	
 	if ( ${CASTOR_BUILD_CASTOR3D} )
 		if ( NOT CASTOR_BUILDGRP_RENDERER )
-			set( RENDERER_BUILD_RENDERER_PLUGINS FALSE )
+			set( ASHES_BUILD_RENDERER_PLUGINS FALSE )
 		else ()
-			set( RENDERER_BUILD_RENDERER_PLUGINS TRUE )
-			set( RENDERER_STATIC_RENDERER_PLUGINS TRUE )
+			set( ASHES_BUILD_RENDERER_PLUGINS TRUE )
+			set( ASHES_STATIC_RENDERER_PLUGINS TRUE )
 		endif ()
-		add_subdirectory( ${RENDERERLIB_DIR} )
-		set_property( TARGET Renderer PROPERTY FOLDER "External/Renderer" )
+		add_subdirectory( ${ASHES_DIR} )
+		set_property( TARGET Ashes PROPERTY FOLDER "External/Ashes" )
 		if ( CASTOR_BUILDGRP_RENDERER )
-			set_property( TARGET GlRenderer PROPERTY FOLDER "External/Renderer" )
-			set_property( TARGET Gl3Renderer PROPERTY FOLDER "External/Renderer" )
-			set_property( TARGET TestRenderer PROPERTY FOLDER "External/Renderer" )
-			set_property( TARGET VkRenderer PROPERTY FOLDER "External/Renderer" )
+			set_property( TARGET D3D11Renderer PROPERTY FOLDER "External/Ashes" )
+			set_property( TARGET Gl4Renderer PROPERTY FOLDER "External/Ashes" )
+			set_property( TARGET Gl3Renderer PROPERTY FOLDER "External/Ashes" )
+			set_property( TARGET TestRenderer PROPERTY FOLDER "External/Ashes" )
+			set_property( TARGET VkRenderer PROPERTY FOLDER "External/Ashes" )
 		endif ()
 	endif ()
 

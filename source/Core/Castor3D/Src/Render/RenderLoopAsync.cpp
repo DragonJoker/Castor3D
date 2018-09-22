@@ -4,6 +4,7 @@
 
 #include <Miscellaneous/PreciseTimer.hpp>
 #include <Design/ScopeGuard.hpp>
+#include <Design/BlockGuard.hpp>
 #include <Core/Exception.hpp>
 
 using namespace castor;
@@ -146,10 +147,10 @@ namespace castor3d
 		}
 	}
 
-	renderer::DevicePtr RenderLoopAsync::doCreateMainDevice( renderer::WindowHandle && handle
+	ashes::DevicePtr RenderLoopAsync::doCreateMainDevice( ashes::WindowHandle && handle
 		, RenderWindow & window )
 	{
-		renderer::DevicePtr result;
+		ashes::DevicePtr result;
 
 		if ( !m_createContext )
 		{
@@ -238,7 +239,7 @@ namespace castor3d
 				m_ended = true;
 			}
 		}
-		catch ( renderer::Exception & exc )
+		catch ( ashes::Exception & exc )
 		{
 			Logger::logError( String{ cuT( "RenderLoop - " ) } + exc.what() );
 			m_frameEnded = true;
@@ -258,13 +259,13 @@ namespace castor3d
 		}
 	}
 
-	void RenderLoopAsync::doSetHandle( renderer::WindowHandle && handle )
+	void RenderLoopAsync::doSetHandle( ashes::WindowHandle && handle )
 	{
 		auto lock = makeUniqueLock( m_mutexWindow );
 		m_handle = std::move( handle );
 	}
 
-	renderer::WindowHandle & RenderLoopAsync::doGetHandle()
+	ashes::WindowHandle & RenderLoopAsync::doGetHandle()
 	{
 		auto lock = makeUniqueLock( m_mutexWindow );
 		return m_handle;

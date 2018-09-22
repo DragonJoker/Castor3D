@@ -6,12 +6,13 @@
 #include "RenderToTexture/RenderQuad.hpp"
 #include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Shader/Program.hpp"
 #include "Shader/Ubos/HdrConfigUbo.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <Descriptor/DescriptorSet.hpp>
 #include <Descriptor/DescriptorSetLayout.hpp>
+#include <Shader/GlslToSpv.hpp>
 
 #include <GlslSource.hpp>
 
@@ -40,7 +41,7 @@ namespace castor3d
 
 	bool ToneMapping::initialise( Size const & size
 		, TextureLayout const & source
-		, renderer::RenderPass const & renderPass )
+		, ashes::RenderPass const & renderPass )
 	{
 		m_hdrConfigUbo.initialise();
 		auto & renderSystem = *getEngine()->getRenderSystem();
@@ -67,16 +68,21 @@ namespace castor3d
 		}
 
 		m_pixelShader = doCreate();
-		renderer::ShaderStageStateArray program
+		auto & device = getCurrentDevice( renderSystem );
+		ashes::ShaderStageStateArray program
 		{
-			{ getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eVertex ) },
-			{ getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eFragment ) }
+			{ device.createShaderModule( ashes::ShaderStageFlag::eVertex ) },
+			{ device.createShaderModule( ashes::ShaderStageFlag::eFragment ) }
 		};
-		program[0].module->loadShader( m_vertexShader.getSource() );
-		program[1].module->loadShader( m_pixelShader.getSource() );
-		renderer::DescriptorSetLayoutBindingArray bindings
+		program[0].module->loadShader( compileGlslToSpv( device
+			, ashes::ShaderStageFlag::eVertex
+			, m_vertexShader.getSource() ) );
+		program[1].module->loadShader( compileGlslToSpv( device
+			, ashes::ShaderStageFlag::eFragment
+			, m_pixelShader.getSource() ) );
+		ashes::DescriptorSetLayoutBindingArray bindings
 		{
-			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
+			{ 0u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment },
 		};
 		createPipeline( { size[0], size[1] }
 			, Position{}
@@ -103,18 +109,18 @@ namespace castor3d
 	void ToneMapping::accept( ToneMappingVisitor & visitor )
 	{
 		visitor.visit( cuT( "ToneMapping" )
-			, renderer::ShaderStageFlag::eVertex
+			, ashes::ShaderStageFlag::eVertex
 			, m_vertexShader );
 		visitor.visit( cuT( "ToneMapping" )
-			, renderer::ShaderStageFlag::eFragment
+			, ashes::ShaderStageFlag::eFragment
 			, m_pixelShader );
 		visitor.visit( cuT( "ToneMapping" )
-			, renderer::ShaderStageFlag::eFragment
+			, ashes::ShaderStageFlag::eFragment
 			, m_config );
 	}
 
-	void ToneMapping::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
-		, renderer::DescriptorSet & descriptorSet )
+	void ToneMapping::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+		, ashes::DescriptorSet & descriptorSet )
 	{
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
 			, m_hdrConfigUbo.getUbo()

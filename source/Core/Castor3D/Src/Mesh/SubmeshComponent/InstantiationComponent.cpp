@@ -104,9 +104,9 @@ namespace castor3d
 	}
 
 	void InstantiationComponent::gather( MaterialSPtr material
-		, renderer::BufferCRefArray & buffers
+		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
-		, renderer::VertexLayoutCRefArray & layouts )
+		, ashes::VertexLayoutCRefArray & layouts )
 	{
 		auto it = m_instances.find( material );
 
@@ -141,22 +141,22 @@ namespace castor3d
 		{
 			if ( !m_matrixLayout )
 			{
-				m_matrixLayout = renderer::makeLayout< InstantiationData >( BindingPoint
-					, renderer::VertexInputRate::eInstance );
+				m_matrixLayout = ashes::makeLayout< InstantiationData >( BindingPoint
+					, ashes::VertexInputRate::eInstance );
 				m_matrixLayout->createAttribute( RenderPass::VertexInputs::TransformLocation + 0u
-					, renderer::Format::eR32G32B32A32_SFLOAT
+					, ashes::Format::eR32G32B32A32_SFLOAT
 					, offsetof( InstantiationData, m_matrix ) + 0u * sizeof( Point4f ) );
 				m_matrixLayout->createAttribute( RenderPass::VertexInputs::TransformLocation + 1u
-					, renderer::Format::eR32G32B32A32_SFLOAT
+					, ashes::Format::eR32G32B32A32_SFLOAT
 					, offsetof( InstantiationData, m_matrix ) + 1u * sizeof( Point4f ) );
 				m_matrixLayout->createAttribute( RenderPass::VertexInputs::TransformLocation + 2u
-					, renderer::Format::eR32G32B32A32_SFLOAT
+					, ashes::Format::eR32G32B32A32_SFLOAT
 					, offsetof( InstantiationData, m_matrix ) + 2u * sizeof( Point4f ) );
 				m_matrixLayout->createAttribute( RenderPass::VertexInputs::TransformLocation + 3u
-					, renderer::Format::eR32G32B32A32_SFLOAT
+					, ashes::Format::eR32G32B32A32_SFLOAT
 					, offsetof( InstantiationData, m_matrix ) + 3u * sizeof( Point4f ) );
 				m_matrixLayout->createAttribute( RenderPass::VertexInputs::MaterialLocation
-					, renderer::Format::eR32_SINT
+					, ashes::Format::eR32_SINT
 					, offsetof( InstantiationData, m_material ) );
 			}
 
@@ -166,10 +166,10 @@ namespace castor3d
 			{
 				if ( doCheckInstanced( data.second.count ) )
 				{
-					data.second.buffer = renderer::makeVertexBuffer< InstantiationData >( device
+					data.second.buffer = ashes::makeVertexBuffer< InstantiationData >( device
 						, data.second.count
 						, 0u
-						, renderer::MemoryPropertyFlag::eHostVisible );
+						, ashes::MemoryPropertyFlag::eHostVisible );
 				}
 			}
 		}
@@ -202,7 +202,7 @@ namespace castor3d
 			if ( data.second.buffer
 				&& data.second.count )
 			{
-				if ( auto * buffer = data.second.buffer->lock( 0, data.second.count, renderer::MemoryMapFlag::eWrite ) )
+				if ( auto * buffer = data.second.buffer->lock( 0, data.second.count, ashes::MemoryMapFlag::eWrite ) )
 				{
 					std::copy( data.second.data.begin(), data.second.data.end(), buffer );
 					data.second.buffer->flush( 0u, data.second.count );

@@ -267,7 +267,7 @@ namespace castor3d
 		 *\param[in]	alphaRef	La valeur de référence pour la comparaison alpha.
 		 */
 		C3D_API void applyAlphaFunc( glsl::GlslWriter & writer
-			, renderer::CompareOp alphaFunc
+			, ashes::CompareOp alphaFunc
 			, glsl::Float const & alpha
 			, glsl::Float const & alphaRef );
 

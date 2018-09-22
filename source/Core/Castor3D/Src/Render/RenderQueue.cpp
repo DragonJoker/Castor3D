@@ -19,7 +19,7 @@
 #include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 #include "Scene/ParticleSystem/ParticleSystem.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Shader/Program.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>
@@ -143,7 +143,7 @@ namespace castor3d
 			, SceneFlags const & sceneFlags
 			, Pass & pass
 			, NodesType & nodes
-			, renderer::PrimitiveTopology topology
+			, ashes::PrimitiveTopology topology
 			, CulledType const & culled
 			, CreatorFunc creator )
 		{
@@ -391,7 +391,7 @@ namespace castor3d
 				, sceneFlags
 				, pass
 				, nodes
-				, renderer::PrimitiveTopology::eTriangleStrip
+				, ashes::PrimitiveTopology::eTriangleStrip
 				, culled
 				, [&renderPass, &pass, &billboard]( RenderPipeline & pipeline )
 				{
@@ -619,7 +619,7 @@ namespace castor3d
 						, textureFlags
 						, programFlags
 						, sceneFlags
-						, renderer::PrimitiveTopology::eTriangleStrip
+						, ashes::PrimitiveTopology::eTriangleStrip
 						, pass->IsTwoSided()
 						, billboard.getGeometryBuffers().layouts );
 
@@ -655,7 +655,7 @@ namespace castor3d
 		template< typename NodeType >
 		void doAddRenderNodeCommand( RenderPipeline & pipeline
 			, NodeType const & node
-			, renderer::CommandBuffer const & commandBuffer
+			, ashes::CommandBuffer const & commandBuffer
 			, uint32_t instanceCount = 1u )
 		{
 			if ( instanceCount )
@@ -681,7 +681,7 @@ namespace castor3d
 				{
 					commandBuffer.bindIndexBuffer( *geometryBuffers.ibo
 						, geometryBuffers.iboOffset
-						, renderer::IndexType::eUInt32 );
+						, ashes::IndexType::eUInt32 );
 					commandBuffer.drawIndexed( geometryBuffers.idxCount
 						, instanceCount );
 				}
@@ -698,7 +698,7 @@ namespace castor3d
 			, RenderPipeline & pipeline
 			, NodeType const & node
 			, Submesh & object
-			, renderer::CommandBuffer const & commandBuffer
+			, ashes::CommandBuffer const & commandBuffer
 			, uint32_t instanceCount = 1u )
 		{
 			if ( instanceCount )
@@ -724,7 +724,7 @@ namespace castor3d
 				{
 					commandBuffer.bindIndexBuffer( *geometryBuffers.ibo
 						, geometryBuffers.iboOffset
-						, renderer::IndexType::eUInt32 );
+						, ashes::IndexType::eUInt32 );
 					commandBuffer.drawIndexed( geometryBuffers.idxCount
 						, instanceCount );
 				}
@@ -739,7 +739,7 @@ namespace castor3d
 		template< typename CulledMapType
 			, typename AllMapType >
 		void doAddRenderNodes( CulledMapType & outputNodes
-			, renderer::CommandBuffer const & commandBuffer
+			, ashes::CommandBuffer const & commandBuffer
 			, RenderPipeline & pipeline
 			, Pass & pass
 			, AllMapType & renderNodes
@@ -764,7 +764,7 @@ namespace castor3d
 		void doParseRenderNodes( MapType & inputNodes
 			, CulledMapType & outputNodes
 			, CulledArrayType const & culledNodes
-			, renderer::CommandBuffer const & commandBuffer )
+			, ashes::CommandBuffer const & commandBuffer )
 		{
 			for ( auto & pipelines : inputNodes )
 			{
@@ -783,7 +783,7 @@ namespace castor3d
 		}
 
 		template< typename CulledMapType >
-		void doAddRenderNodesCommands( renderer::CommandBuffer const & commandBuffer
+		void doAddRenderNodesCommands( ashes::CommandBuffer const & commandBuffer
 			, RenderPipeline & pipeline
 			, Pass & pass
 			, Submesh & submesh
@@ -799,7 +799,7 @@ namespace castor3d
 
 		template< typename MapType >
 		void doParseRenderNodesCommands( MapType & inputNodes
-			, renderer::CommandBuffer const & commandBuffer )
+			, ashes::CommandBuffer const & commandBuffer )
 		{
 			for ( auto & pipelines : inputNodes )
 			{
@@ -812,7 +812,7 @@ namespace castor3d
 
 		template<>
 		void doParseRenderNodesCommands( BillboardRenderNodesPtrByPipelineMap & inputNodes
-			, renderer::CommandBuffer const & commandBuffer )
+			, ashes::CommandBuffer const & commandBuffer )
 		{
 			for ( auto & pipelines : inputNodes )
 			{
@@ -879,8 +879,8 @@ namespace castor3d
 	{
 		auto & culledNodes = getCulledRenderNodes();
 
-		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eRenderPassContinue
-			, renderer::CommandBufferInheritanceInfo
+		m_commandBuffer->begin( ashes::CommandBufferUsageFlag::eRenderPassContinue
+			, ashes::CommandBufferInheritanceInfo
 			{
 				&getOwner()->getRenderPass(),
 				0u,

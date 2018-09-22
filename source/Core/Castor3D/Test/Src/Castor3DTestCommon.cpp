@@ -326,8 +326,8 @@ namespace Testing
 
 	bool C3DTestCase::compare( BonesComponent const & lhs, BonesComponent const & rhs )
 	{
-		auto * lhsData = lhs.getBonesBuffer().lock( 0u, lhs.getBonesBuffer().getCount(), renderer::MemoryMapFlag::eRead );
-		auto * rhsData = rhs.getBonesBuffer().lock( 0u, rhs.getBonesBuffer().getCount(), renderer::MemoryMapFlag::eRead );
+		auto * lhsData = lhs.getBonesBuffer().lock( 0u, lhs.getBonesBuffer().getCount(), ashes::MemoryMapFlag::eRead );
+		auto * rhsData = rhs.getBonesBuffer().lock( 0u, rhs.getBonesBuffer().getCount(), ashes::MemoryMapFlag::eRead );
 		auto result = CT_EQUAL( std::make_pair( lhsData, lhs.getBonesBuffer().getCount() )
 			, std::make_pair( rhsData, rhs.getBonesBuffer().getCount() ) );
 		lhs.getBonesBuffer().unlock();
@@ -351,14 +351,14 @@ namespace Testing
 	bool C3DTestCase::compare( Submesh const & lhs, Submesh const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getPointsCount(), rhs.getPointsCount() ) };
-		auto * lhsVtx = lhs.getVertexBuffer().lock( 0u, lhs.getVertexBuffer().getCount(), renderer::MemoryMapFlag::eRead );
-		auto * rhsVtx = rhs.getVertexBuffer().lock( 0u, rhs.getVertexBuffer().getCount(), renderer::MemoryMapFlag::eRead );
+		auto * lhsVtx = lhs.getVertexBuffer().lock( 0u, lhs.getVertexBuffer().getCount(), ashes::MemoryMapFlag::eRead );
+		auto * rhsVtx = rhs.getVertexBuffer().lock( 0u, rhs.getVertexBuffer().getCount(), ashes::MemoryMapFlag::eRead );
 		result &= CT_EQUAL( std::make_pair( lhsVtx, lhs.getVertexBuffer().getCount() )
 							  , std::make_pair( rhsVtx, rhs.getVertexBuffer().getCount() ) );
 		lhs.getVertexBuffer().unlock();
 		rhs.getVertexBuffer().unlock();
-		auto * lhsIdx = lhs.getIndexBuffer().lock( 0u, lhs.getIndexBuffer().getCount(), renderer::MemoryMapFlag::eRead );
-		auto * rhsIdx = rhs.getIndexBuffer().lock( 0u, rhs.getIndexBuffer().getCount(), renderer::MemoryMapFlag::eRead );
+		auto * lhsIdx = lhs.getIndexBuffer().lock( 0u, lhs.getIndexBuffer().getCount(), ashes::MemoryMapFlag::eRead );
+		auto * rhsIdx = rhs.getIndexBuffer().lock( 0u, rhs.getIndexBuffer().getCount(), ashes::MemoryMapFlag::eRead );
 		result &= CT_EQUAL( std::make_pair( lhsIdx, lhs.getIndexBuffer().getCount() )
 								, std::make_pair( rhsIdx, rhs.getIndexBuffer().getCount() ) );
 		lhs.getIndexBuffer().unlock();

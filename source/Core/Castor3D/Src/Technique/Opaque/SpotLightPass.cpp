@@ -1,14 +1,15 @@
 #include "SpotLightPass.hpp"
 
-#include <Engine.hpp>
-#include <Render/RenderPipeline.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Scene/Camera.hpp>
-#include <Scene/Scene.hpp>
-#include <Scene/Light/SpotLight.hpp>
-#include <Shader/ShaderProgram.hpp>
+#include "Engine.hpp"
+#include "Render/RenderPipeline.hpp"
+#include "Render/RenderSystem.hpp"
+#include "Scene/Camera.hpp"
+#include "Scene/Scene.hpp"
+#include "Scene/Light/SpotLight.hpp"
+#include "Shader/Program.hpp"
 
 #include <GlslSource.hpp>
+
 #include "Shader/Shaders/GlslLight.hpp"
 #include "Shader/Shaders/GlslShadow.hpp"
 
@@ -70,9 +71,9 @@ namespace castor3d
 	//*********************************************************************************************
 
 	SpotLightPass::SpotLightPass( Engine & engine
-		, renderer::TextureView const & depthView
-		, renderer::TextureView const & diffuseView
-		, renderer::TextureView const & specularView
+		, ashes::TextureView const & depthView
+		, ashes::TextureView const & diffuseView
+		, ashes::TextureView const & specularView
 		, GpInfoUbo & gpInfoUbo
 		, bool hasShadows )
 		: MeshLightPass{ engine
@@ -82,10 +83,10 @@ namespace castor3d
 			, gpInfoUbo
 			, LightType::eSpot
 			, hasShadows }
-		, m_ubo{ renderer::makeUniformBuffer< Config >( getCurrentDevice( m_engine )
+		, m_ubo{ ashes::makeUniformBuffer< Config >( getCurrentDevice( m_engine )
 			, 1u
-			, renderer::BufferTarget::eTransferDst
-			, renderer::MemoryPropertyFlag::eHostVisible ) }
+			, ashes::BufferTarget::eTransferDst
+			, ashes::MemoryPropertyFlag::eHostVisible ) }
 	{
 		m_baseUbo = &m_ubo->getUbo();
 	}
@@ -104,7 +105,7 @@ namespace castor3d
 		}
 
 		visitor.visit( name
-			, renderer::ShaderStageFlag::eFragment
+			, ashes::ShaderStageFlag::eFragment
 			, m_pixelShader );
 	}
 

@@ -65,7 +65,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderLoop::doCreateMainDevice
 		 */
-		C3D_API renderer::DevicePtr doCreateMainDevice( renderer::WindowHandle && handle
+		C3D_API ashes::DevicePtr doCreateMainDevice( ashes::WindowHandle && handle
 			, RenderWindow & window )override;
 
 	private:

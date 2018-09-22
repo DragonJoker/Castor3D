@@ -14,7 +14,7 @@ namespace castor3d
 	template< typename T >
 	inline UniformBuffer< T >::UniformBuffer( RenderSystem const & renderSystem
 		, uint32_t count
-		, renderer::MemoryPropertyFlags flags )
+		, ashes::MemoryPropertyFlags flags )
 		: m_renderSystem{ renderSystem }
 		, m_flags{ flags }
 		, m_count{ count }
@@ -34,9 +34,9 @@ namespace castor3d
 	inline void UniformBuffer< T >::initialise()
 	{
 		REQUIRE( m_renderSystem.hasCurrentDevice() );
-		m_buffer = renderer::makeUniformBuffer< T >( getCurrentDevice( m_renderSystem )
+		m_buffer = ashes::makeUniformBuffer< T >( getCurrentDevice( m_renderSystem )
 			, m_count
-			, renderer::BufferTarget::eTransferDst
+			, ashes::BufferTarget::eTransferDst
 			, m_flags );
 	}
 
@@ -69,10 +69,10 @@ namespace castor3d
 	}
 
 	template< typename T >
-	inline void UniformBuffer< T >::upload( renderer::StagingBuffer & stagingBuffer
-		, renderer::CommandBuffer const & commandBuffer
+	inline void UniformBuffer< T >::upload( ashes::StagingBuffer & stagingBuffer
+		, ashes::CommandBuffer const & commandBuffer
 		, uint32_t offset
-		, renderer::PipelineStageFlags flags
+		, ashes::PipelineStageFlags flags
 		, RenderPassTimer const & timer
 		, uint32_t index )const
 	{
@@ -81,7 +81,7 @@ namespace castor3d
 
 		if ( auto dest = stagingBuffer.getBuffer().lock( 0u
 			, m_count * elemAlignedSize
-			, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateBuffer ) )
+			, ashes::MemoryMapFlag::eWrite | ashes::MemoryMapFlag::eInvalidateBuffer ) )
 		{
 			auto buffer = dest;
 
@@ -95,20 +95,20 @@ namespace castor3d
 			stagingBuffer.getBuffer().unlock();
 		}
 
-		commandBuffer.begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
+		commandBuffer.begin( ashes::CommandBufferUsageFlag::eOneTimeSubmit );
 		timer.beginPass( commandBuffer, index );
-		commandBuffer.memoryBarrier( renderer::PipelineStageFlag::eTransfer
-			, renderer::PipelineStageFlag::eTransfer
+		commandBuffer.memoryBarrier( ashes::PipelineStageFlag::eTransfer
+			, ashes::PipelineStageFlag::eTransfer
 			, stagingBuffer.getBuffer().makeTransferSource() );
 		auto srcStageFlags = getBuffer().getUbo().getBuffer().getCompatibleStageFlags();
 		commandBuffer.memoryBarrier( srcStageFlags
-			, renderer::PipelineStageFlag::eTransfer
+			, ashes::PipelineStageFlag::eTransfer
 			, getBuffer().getUbo().getBuffer().makeTransferDestination() );
 		commandBuffer.copyBuffer( stagingBuffer.getBuffer()
 			, getBuffer().getUbo().getBuffer()
 			, elemAlignedSize * m_count
 			, elemAlignedSize * offset );
-		commandBuffer.memoryBarrier( renderer::PipelineStageFlag::eTransfer
+		commandBuffer.memoryBarrier( ashes::PipelineStageFlag::eTransfer
 			, flags
 			, getBuffer().getUbo().getBuffer().makeUniformBufferInput() );
 		timer.endPass( commandBuffer, index );
@@ -116,10 +116,10 @@ namespace castor3d
 	}
 
 	template< typename T >
-	inline void UniformBuffer< T >::download( renderer::StagingBuffer & stagingBuffer
-		, renderer::CommandBuffer const & commandBuffer
+	inline void UniformBuffer< T >::download( ashes::StagingBuffer & stagingBuffer
+		, ashes::CommandBuffer const & commandBuffer
 		, uint32_t offset
-		, renderer::PipelineStageFlags flags )const
+		, ashes::PipelineStageFlags flags )const
 	{
 		stagingBuffer.downloadUniformData( commandBuffer
 			, getBuffer().getDatas()

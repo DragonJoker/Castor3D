@@ -8,6 +8,7 @@
 
 #include <Buffer/UniformBuffer.hpp>
 #include <Buffer/VertexBuffer.hpp>
+#include <Image/StagingTexture.hpp>
 #include <Image/Texture.hpp>
 #include <Image/TextureView.hpp>
 #include <Pipeline/DepthStencilState.hpp>
@@ -19,7 +20,6 @@
 #include <RenderPass/RenderSubpass.hpp>
 #include <RenderPass/RenderSubpassState.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
-#include <Shader/ShaderProgram.hpp>
 
 #include <Graphics/Image.hpp>
 
@@ -35,39 +35,39 @@ namespace castor3d
 {
 	namespace
 	{
-		renderer::TexturePtr doCreatePrefilteredBrdf( RenderSystem const & renderSystem
+		ashes::TexturePtr doCreatePrefilteredBrdf( RenderSystem const & renderSystem
 			, Size const & size )
 		{
 			auto & device = getCurrentDevice( renderSystem );
-			renderer::ImageCreateInfo image{};
+			ashes::ImageCreateInfo image{};
 			image.flags = 0u;
 			image.arrayLayers = 1u;
 			image.extent.width = size.getWidth();
 			image.extent.height = size.getHeight();
 			image.extent.depth = 1u;
 #if !C3D_GenerateBRDFIntegration
-			image.format = renderer::Format::eR8G8B8A8_UNORM;
+			image.format = ashes::Format::eR8G8B8A8_UNORM;
 #else
-			image.format = renderer::Format::eR32G32B32A32_SFLOAT;
+			image.format = ashes::Format::eR32G32B32A32_SFLOAT;
 #endif
-			image.imageType = renderer::TextureType::e2D;
-			image.initialLayout = renderer::ImageLayout::eUndefined;
+			image.imageType = ashes::TextureType::e2D;
+			image.initialLayout = ashes::ImageLayout::eUndefined;
 			image.mipLevels = 1u;
-			image.samples = renderer::SampleCountFlag::e1;
-			image.sharingMode = renderer::SharingMode::eExclusive;
-			image.tiling = renderer::ImageTiling::eOptimal;
-			image.usage = renderer::ImageUsageFlag::eColourAttachment
+			image.samples = ashes::SampleCountFlag::e1;
+			image.sharingMode = ashes::SharingMode::eExclusive;
+			image.tiling = ashes::ImageTiling::eOptimal;
+			image.usage = ashes::ImageUsageFlag::eColourAttachment
 #if !C3D_GenerateBRDFIntegration
-				| renderer::ImageUsageFlag::eTransferDst
+				| ashes::ImageUsageFlag::eTransferDst
 #endif
-				| renderer::ImageUsageFlag::eSampled;
+				| ashes::ImageUsageFlag::eSampled;
 			return device.createTexture( image
-				, renderer::MemoryPropertyFlag::eDeviceLocal );
+				, ashes::MemoryPropertyFlag::eDeviceLocal );
 		}
 
 #if !C3D_GenerateBRDFIntegration
-		renderer::TextureViewPtr doCreatePrefilteredBrdfView( Engine & engine
-			, renderer::Texture const & texture )
+		ashes::TextureViewPtr doCreatePrefilteredBrdfView( Engine & engine
+			, ashes::Texture const & texture )
 		{
 			PxBufferBaseSPtr buffer;
 
@@ -87,13 +87,14 @@ namespace castor3d
 				, PixelFormat::eA8R8G8B8
 				, buffer->constPtr()
 				, buffer->format() );
-			auto result = texture.createView( renderer::TextureViewType::e2D, texture.getFormat() );
+			auto result = texture.createView( ashes::TextureViewType::e2D, texture.getFormat() );
 			auto & device = getCurrentDevice( engine );
-			renderer::StagingBuffer stagingBuffer{ device, 0u, buffer->size() };
+			auto staging = device.createStagingTexture( ashes::Format::eR8G8B8A8_UNORM
+				, { buffer->dimensions().getWidth(), buffer->dimensions().getHeight() } );
 			auto commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
-			stagingBuffer.uploadTextureData( *commandBuffer
+			staging->uploadTextureData( *commandBuffer
+				, ashes::Format::eR8G8B8A8_UNORM
 				, buffer->constPtr()
-				, buffer->size()
 				, *result );
 			return result;
 		}
@@ -111,11 +112,11 @@ namespace castor3d
 			else
 			{
 				result = engine.getSamplerCache().create( name );
-				result->setMinFilter( renderer::Filter::eLinear );
-				result->setMagFilter( renderer::Filter::eLinear );
-				result->setWrapS( renderer::WrapMode::eClampToEdge );
-				result->setWrapT( renderer::WrapMode::eClampToEdge );
-				result->setWrapR( renderer::WrapMode::eClampToEdge );
+				result->setMinFilter( ashes::Filter::eLinear );
+				result->setMagFilter( ashes::Filter::eLinear );
+				result->setWrapS( ashes::WrapMode::eClampToEdge );
+				result->setWrapT( ashes::WrapMode::eClampToEdge );
+				result->setWrapR( ashes::WrapMode::eClampToEdge );
 				engine.getSamplerCache().add( name, result );
 			}
 
@@ -127,14 +128,14 @@ namespace castor3d
 	//************************************************************************************************
 
 	IblTextures::IblTextures( Scene & scene
-		, renderer::Texture const & source
+		, ashes::Texture const & source
 		, SamplerSPtr sampler )
 		: OwnedBy< Scene >{ scene }
 		, m_prefilteredBrdf{ doCreatePrefilteredBrdf( *scene.getEngine()->getRenderSystem(), Size{ 512u, 512u } ) }
 #if !C3D_GenerateBRDFIntegration
 		, m_prefilteredBrdfView{ doCreatePrefilteredBrdfView( *scene.getEngine(), *m_prefilteredBrdf ) }
 #else
-		, m_prefilteredBrdfView{ m_prefilteredBrdf->createView( renderer::TextureViewType::e2D, m_prefilteredBrdf->getFormat() ) }
+		, m_prefilteredBrdfView{ m_prefilteredBrdf->createView( ashes::TextureViewType::e2D, m_prefilteredBrdf->getFormat() ) }
 #endif
 		, m_sampler{ doCreateSampler( *scene.getEngine() ) }
 		, m_radianceComputer{ *scene.getEngine(), Size{ 32u, 32u }, source }

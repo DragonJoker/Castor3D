@@ -74,7 +74,7 @@ namespace glsl
 			, [&]( Float const & gamma
 				, Vec3 const & hdr )
 			{
-				m_writer.returnStmt( pow( hdr, vec3( 1.0_f / gamma ) ) );
+				m_writer.returnStmt( pow( abs( hdr ), vec3( 1.0_f / gamma ) ) );
 			}
 			, InFloat{ &m_writer, cuT( "gamma" ) }
 			, InVec3{ &m_writer, cuT( "hdr" ) } );
@@ -86,7 +86,7 @@ namespace glsl
 			, [&]( Float const & gamma
 				, Vec3 const & srgb )
 			{
-				m_writer.returnStmt( pow( srgb, vec3( gamma ) ) );
+				m_writer.returnStmt( pow( abs( srgb ), vec3( gamma ) ) );
 			}
 			, InFloat{ &m_writer, cuT( "gamma" ) }
 			, InVec3{ &m_writer, cuT( "srgb" ) } );
@@ -131,7 +131,7 @@ namespace glsl
 					, nearPlane
 					, farPlane );
 				auto weight = m_writer.declLocale( cuT( "weight" )
-					, max( pow( 1.0_f - depth, 3.0_f ) * 3e3, 1e-2 ) );
+					, max( pow( clamp( 1.0_f - depth, 0.0, 1.0 ), 3.0_f ) * 3e3, 1e-2 ) );
 
 				//// (9)
 				//auto weight = m_writer.declLocale( cuT( "weight" )
@@ -210,7 +210,7 @@ namespace glsl
 				, Float const & roughness )
 			{
 				m_writer.returnStmt( glsl::fma( max( vec3( 1.0_f - roughness ), f0 ) - f0
-					, vec3( pow( 1.0_f - product, 5.0_f ) )
+					, vec3( pow( clamp( 1.0_f - product, 0.0, 1.0 ), 5.0_f ) )
 					, f0 ) );
 			}
 			, InFloat{ &m_writer, cuT( "product" ) }

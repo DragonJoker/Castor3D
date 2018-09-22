@@ -68,7 +68,7 @@ namespace castor3d
 		 */
 		C3D_API bool initialise( castor::Size const & size
 			, TextureLayout const & source
-			, renderer::RenderPass const & renderPass );
+			, ashes::RenderPass const & renderPass );
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
@@ -101,7 +101,7 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		inline renderer::Semaphore const & getSemaphore()const
+		inline ashes::Semaphore const & getSemaphore()const
 		{
 			REQUIRE( m_signalFinished );
 			return *m_signalFinished;
@@ -144,14 +144,14 @@ namespace castor3d
 		C3D_API virtual void doUpdate() = 0;
 
 	private:
-		C3D_API void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
-			, renderer::DescriptorSet & descriptorSet )override;
+		C3D_API void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+			, ashes::DescriptorSet & descriptorSet )override;
 
 	protected:
 		castor::String m_fullName;
 		HdrConfig & m_config;
 		HdrConfigUbo m_hdrConfigUbo;
-		renderer::SemaphorePtr m_signalFinished;
+		ashes::SemaphorePtr m_signalFinished;
 		glsl::Shader m_vertexShader;
 		glsl::Shader m_pixelShader;
 	};

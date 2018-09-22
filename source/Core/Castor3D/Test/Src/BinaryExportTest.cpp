@@ -104,7 +104,7 @@ namespace Testing
 
 	void BinaryExportTest::doTestMesh( MeshSPtr & src )
 	{
-		auto device = m_engine.getRenderSystem()->createDevice( renderer::WindowHandle{ std::make_unique< TestWindowHandle >() }, 0u );
+		auto device = m_engine.getRenderSystem()->createDevice( ashes::WindowHandle{ std::make_unique< TestWindowHandle >() }, 0u );
 		m_engine.getRenderSystem()->setCurrentDevice( device.get() );
 		Scene & scene = *src->getScene();
 		String name = src->getName();

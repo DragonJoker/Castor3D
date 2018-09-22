@@ -72,13 +72,13 @@ namespace castor3d
 		}
 	}
 
-	renderer::DescriptorSetLayoutBinding PassBuffer::createLayoutBinding()const
+	ashes::DescriptorSetLayoutBinding PassBuffer::createLayoutBinding()const
 	{
 		return m_buffer.createLayoutBinding( PassBufferIndex );
 	}
 
-	void PassBuffer::createBinding( renderer::DescriptorSet & descriptorSet
-		, renderer::DescriptorSetLayoutBinding const & binding )const
+	void PassBuffer::createBinding( ashes::DescriptorSet & descriptorSet
+		, ashes::DescriptorSetLayoutBinding const & binding )const
 	{
 		m_buffer.createBinding( descriptorSet, binding );
 	}

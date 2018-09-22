@@ -74,10 +74,10 @@ namespace castor3d
 		InstanceType & instance;
 		//!\~english	The UBO descriptor set for the object.
 		//!\~french		L'ensemble de descripteurs d'UBO pour l'objet.
-		renderer::DescriptorSetPtr uboDescriptorSet;
+		ashes::DescriptorSetPtr uboDescriptorSet;
 		//!\~english	The textures descriptor set for the object.
 		//!\~french		L'ensemble de descripteurs de textures pour l'objet.
-		renderer::DescriptorSetPtr texDescriptorSet;
+		ashes::DescriptorSetPtr texDescriptorSet;
 	};
 	using SubmeshRenderNode = ObjectRenderNode< Submesh, Geometry >;
 	using BillboardListRenderNode = ObjectRenderNode< BillboardBase, BillboardBase >;

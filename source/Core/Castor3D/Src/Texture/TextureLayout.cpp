@@ -15,54 +15,54 @@ namespace castor3d
 
 	namespace
 	{
-		renderer::TextureViewType getSubviewType( renderer::TextureType type
-			, renderer::ImageCreateFlags flags
+		ashes::TextureViewType getSubviewType( ashes::TextureType type
+			, ashes::ImageCreateFlags flags
 			, uint32_t arrayLayers )
 		{
-			renderer::TextureType result = type;
+			ashes::TextureType result = type;
 
 			switch ( result )
 			{
-			case renderer::TextureType::e1D:
+			case ashes::TextureType::e1D:
 				if ( arrayLayers > 1 )
 				{
-					return renderer::TextureViewType::e1DArray;
+					return ashes::TextureViewType::e1DArray;
 				}
-				return renderer::TextureViewType::e1D;
+				return ashes::TextureViewType::e1D;
 
-			case renderer::TextureType::e2D:
+			case ashes::TextureType::e2D:
 				if ( arrayLayers > 1 )
 				{
-					if ( checkFlag( flags, renderer::ImageCreateFlag::eCubeCompatible ) )
+					if ( checkFlag( flags, ashes::ImageCreateFlag::eCubeCompatible ) )
 					{
 						REQUIRE( ( arrayLayers % 6 ) == 0 );
-						return renderer::TextureViewType::eCube;
+						return ashes::TextureViewType::eCube;
 					}
 
-					return renderer::TextureViewType::e2DArray;
+					return ashes::TextureViewType::e2DArray;
 				}
 
-				return renderer::TextureViewType::e2D;
+				return ashes::TextureViewType::e2D;
 
-			case renderer::TextureType::e3D:
-				return renderer::TextureViewType::e3D;
+			case ashes::TextureType::e3D:
+				return ashes::TextureViewType::e3D;
 
 			default:
 				FAILURE( "Unsupported texture type." );
-				return renderer::TextureViewType::e2D;
+				return ashes::TextureViewType::e2D;
 			}
 		}
 
-		renderer::ImageViewCreateInfo getSubviewCreateInfos( renderer::ImageCreateInfo const & info
+		ashes::ImageViewCreateInfo getSubviewCreateInfos( ashes::ImageCreateInfo const & info
 			, uint32_t baseArrayLayer
 			, uint32_t arrayLayers
 			, uint32_t baseMipLevel
 			, uint32_t levelCount )
 		{
-			renderer::ImageViewCreateInfo view{};
+			ashes::ImageViewCreateInfo view{};
 			view.format = info.format;
 			view.viewType = getSubviewType( info.imageType, info.flags, arrayLayers );
-			view.subresourceRange.aspectMask = renderer::getAspectMask( info.format );
+			view.subresourceRange.aspectMask = ashes::getAspectMask( info.format );
 			view.subresourceRange.baseArrayLayer = baseArrayLayer;
 			view.subresourceRange.layerCount = arrayLayers;
 			view.subresourceRange.baseMipLevel = baseMipLevel;
@@ -71,7 +71,7 @@ namespace castor3d
 		}
 
 		TextureViewUPtr createSubview( TextureLayout & layout
-			, renderer::ImageCreateInfo const & info
+			, ashes::ImageCreateInfo const & info
 			, uint32_t baseArrayLayer
 			, uint32_t arrayLayers )
 		{
@@ -81,7 +81,7 @@ namespace castor3d
 		}
 
 		TextureViewUPtr createMipSubview( TextureLayout & layout
-			, renderer::ImageCreateInfo const & info
+			, ashes::ImageCreateInfo const & info
 			, uint32_t baseMipLevel
 			, uint32_t levelCount )
 		{
@@ -91,7 +91,7 @@ namespace castor3d
 		}
 
 		uint32_t getMaxMipLevels( uint32_t mipLevels
-			, renderer::Extent3D const & extent )
+			, ashes::Extent3D const & extent )
 		{
 			auto min = std::min( extent.width, extent.height );
 			auto bitSize = uint32_t( castor::getBitSize( min ) );
@@ -102,8 +102,8 @@ namespace castor3d
 	//************************************************************************************************
 
 	TextureLayout::TextureLayout( RenderSystem & renderSystem
-		, renderer::ImageCreateInfo info
-		, renderer::MemoryPropertyFlags memoryProperties )
+		, ashes::ImageCreateInfo info
+		, ashes::MemoryPropertyFlags memoryProperties )
 		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_info{ std::move( info ) }
 		, m_properties{ memoryProperties }
@@ -148,11 +148,11 @@ namespace castor3d
 	{
 		if ( !m_initialised )
 		{
-			m_info.usage |= renderer::ImageUsageFlag::eTransferDst;
+			m_info.usage |= ashes::ImageUsageFlag::eTransferDst;
 
 			if ( m_info.mipLevels > 1u )
 			{
-				m_info.usage |= renderer::ImageUsageFlag::eTransferSrc;
+				m_info.usage |= ashes::ImageUsageFlag::eTransferSrc;
 			}
 			else if ( m_info.mipLevels == 0 )
 			{
@@ -217,9 +217,9 @@ namespace castor3d
 	}
 
 	void TextureLayout::doUpdateFromFirstImage( castor::Size const & size
-		, renderer::Format format )
+		, ashes::Format format )
 	{
-		if ( m_info.extent == renderer::Extent3D{}
+		if ( m_info.extent == ashes::Extent3D{}
 			|| m_info.extent.width != size.getWidth()
 			|| m_info.extent.height != size.getHeight()
 			|| m_info.format != format )
@@ -244,7 +244,7 @@ namespace castor3d
 			}
 			else if ( mipLevels > 1u )
 			{
-				m_info.usage |= renderer::ImageUsageFlag::eTransferSrc;
+				m_info.usage |= ashes::ImageUsageFlag::eTransferSrc;
 
 				if ( m_info.mipLevels != mipLevels )
 				{

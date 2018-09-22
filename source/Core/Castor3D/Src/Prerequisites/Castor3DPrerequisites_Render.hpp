@@ -64,11 +64,11 @@ namespace castor3d
 	};
 	struct GeometryBuffers
 	{
-		renderer::BufferCRefArray vbo;
-		renderer::UInt64Array vboOffsets;
+		ashes::BufferCRefArray vbo;
+		ashes::UInt64Array vboOffsets;
 		uint32_t vtxCount;
-		renderer::VertexLayoutCRefArray layouts;
-		renderer::BufferBase const * ibo{ nullptr };
+		ashes::VertexLayoutCRefArray layouts;
+		ashes::BufferBase const * ibo{ nullptr };
 		uint64_t iboOffset;
 		uint32_t idxCount;
 	};
@@ -147,8 +147,8 @@ namespace castor3d
 		TextureChannels textureFlags;
 		ProgramFlags programFlags;
 		SceneFlags sceneFlags;
-		renderer::PrimitiveTopology topology;
-		renderer::CompareOp alphaFunc;
+		ashes::PrimitiveTopology topology;
+		ashes::CompareOp alphaFunc;
 	};
 
 	template< typename T >

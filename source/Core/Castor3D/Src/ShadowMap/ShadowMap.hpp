@@ -98,7 +98,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dessine la shadow map de la lumière donnée.
 		 */
-		C3D_API virtual renderer::Semaphore const & render( renderer::Semaphore const & toWait ) = 0;
+		C3D_API virtual ashes::Semaphore const & render( ashes::Semaphore const & toWait ) = 0;
 		/**
 		 *\~english
 		 *\brief		Dumps the shadow map on screen.
@@ -109,8 +109,8 @@ namespace castor3d
 		 *\param[in]	size	Les dimensions d'affichage.
 		 *\param[in]	index	L'indice de la texture d'ombres (pour calculer sa position).
 		 */
-		C3D_API virtual void debugDisplay( renderer::RenderPass const & renderPass
-			, renderer::FrameBuffer const & frameBuffer
+		C3D_API virtual void debugDisplay( ashes::RenderPass const & renderPass
+			, ashes::FrameBuffer const & frameBuffer
 			, castor::Size const & size, uint32_t index ) = 0;
 		/**
 		 *\copydoc		castor3d::RenderPass::updateFlags
@@ -141,7 +141,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const;
+			, ashes::CompareOp alphaFunc )const;
 		/**
 		*\~english
 		*name
@@ -218,7 +218,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const = 0;
+			, ashes::CompareOp alphaFunc )const = 0;
 
 	protected:
 		/**
@@ -239,16 +239,16 @@ namespace castor3d
 		 */
 		void doDiscardAlpha( glsl::GlslWriter & writer
 			, TextureChannels const & textureFlags
-			, renderer::CompareOp alphaFunc
+			, ashes::CompareOp alphaFunc
 			, glsl::Int const & material
 			, shader::Materials const & materials )const;
 
 	protected:
-		renderer::CommandBufferPtr m_commandBuffer;
-		renderer::FencePtr m_fence;
+		ashes::CommandBufferPtr m_commandBuffer;
+		ashes::FencePtr m_fence;
 		std::set< std::reference_wrapper< GeometryBuffers > > m_geometryBuffers;
 		std::vector< PassData > m_passes;
-		renderer::SemaphorePtr m_finished;
+		ashes::SemaphorePtr m_finished;
 		TextureUnit m_shadowMap;
 		TextureUnit m_linearMap;
 		bool m_initialised{ false };

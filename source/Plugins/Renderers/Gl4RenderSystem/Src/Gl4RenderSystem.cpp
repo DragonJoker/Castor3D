@@ -1,4 +1,4 @@
-#include "GlRenderSystem.hpp"
+#include "Gl4RenderSystem.hpp"
 
 #include <Engine.hpp>
 
@@ -12,7 +12,7 @@
 
 using namespace castor;
 
-namespace GlRender
+namespace Gl4Render
 {
 	String RenderSystem::Name = cuT( "OpenGL 4.x Renderer" );
 	String RenderSystem::Type = cuT( "opengl4" );
@@ -22,7 +22,7 @@ namespace GlRender
 		, bool enableValidation )
 		: castor3d::RenderSystem( engine, Name, false )
 	{
-		renderer::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
+		ashes::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
 		{
 			if ( newLine )
 			{
@@ -33,7 +33,7 @@ namespace GlRender
 				Logger::logDebugNoNL( msg );
 			}
 		} );
-		renderer::Logger::setInfoCallback( []( std::string const & msg, bool newLine )
+		ashes::Logger::setInfoCallback( []( std::string const & msg, bool newLine )
 		{
 			if ( newLine )
 			{
@@ -44,7 +44,7 @@ namespace GlRender
 				Logger::logInfoNoNL( msg );
 			}
 		} );
-		renderer::Logger::setWarningCallback( []( std::string const & msg, bool newLine )
+		ashes::Logger::setWarningCallback( []( std::string const & msg, bool newLine )
 		{
 			if ( newLine )
 			{
@@ -55,7 +55,7 @@ namespace GlRender
 				Logger::logWarningNoNL( msg );
 			}
 		} );
-		renderer::Logger::setErrorCallback( []( std::string const & msg, bool newLine )
+		ashes::Logger::setErrorCallback( []( std::string const & msg, bool newLine )
 		{
 			if ( newLine )
 			{
@@ -66,7 +66,7 @@ namespace GlRender
 				Logger::logErrorNoNL( msg );
 			}
 		} );
-		m_renderer.reset( createRenderer( renderer::Renderer::Configuration
+		m_renderer.reset( createRenderer( ashes::Renderer::Configuration
 		{
 			string::stringCast< char >( appName ),
 			"Castor3D",
@@ -98,11 +98,11 @@ namespace GlRender
 			, true
 			, true
 			, m_gpuInformations.hasShaderStorageBuffers()
-			, false
-			, false
-			, false
-			, false
-			, false
-			, m_renderer->getPhysicalDevice( 0u ).isSPIRVSupported() } };
+			, true
+			, true
+			, m_renderer->getClipDirection() == ashes::ClipDirection::eTopDown
+			, true
+			, true
+			, true } };
 	}
 }

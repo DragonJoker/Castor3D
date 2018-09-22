@@ -29,9 +29,9 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API BackgroundFramePreparator( renderer::CommandBuffer & commandBuffer
-			, renderer::RenderPass const & renderPass
-			, renderer::FrameBuffer const & frameBuffer );
+		C3D_API BackgroundFramePreparator( ashes::CommandBuffer & commandBuffer
+			, ashes::RenderPass const & renderPass
+			, ashes::FrameBuffer const & frameBuffer );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -68,7 +68,7 @@ namespace castor3d
 		C3D_API void visit( ImageBackground const & background )override;
 
 	private:
-		renderer::CommandBuffer & m_commandBuffer;
+		ashes::CommandBuffer & m_commandBuffer;
 	};
 }
 

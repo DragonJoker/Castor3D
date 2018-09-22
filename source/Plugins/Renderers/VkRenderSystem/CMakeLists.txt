@@ -12,8 +12,8 @@ set( ${PROJECT_NAME}_VERSION_MINOR 1 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 include_directories( ${Castor3DIncludeDirs} )
-include_directories( ${CMAKE_SOURCE_DIR}/${RENDERERLIB_DIR}/VkRenderer/Src )
-include_directories( ${CMAKE_BINARY_DIR}/${RENDERERLIB_DIR}/VkRenderer/Src )
+include_directories( ${CMAKE_SOURCE_DIR}/${ASHES_DIR}/VkRenderer/Src )
+include_directories( ${CMAKE_BINARY_DIR}/${ASHES_DIR}/VkRenderer/Src )
 include_directories( ${CMAKE_SOURCE_DIR}/Plugins/Renderers/VkRenderSystem/Src )
 
 add_target(

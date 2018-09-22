@@ -108,8 +108,8 @@ namespace castor3d
 		C3D_API void update( castor::Matrix4x4r const & view
 			, castor::Matrix4x4r const & projection
 			, castor::Point2r const & jitter
-			, renderer::StagingBuffer & stagingBuffer
-			, renderer::CommandBuffer const & commandBuffer )const;
+			, ashes::StagingBuffer & stagingBuffer
+			, ashes::CommandBuffer const & commandBuffer )const;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -127,12 +127,12 @@ namespace castor3d
 		 *\~french
 		 *\name			getters.
 		 */
-		inline renderer::UniformBuffer< Configuration > & getUbo()
+		inline ashes::UniformBuffer< Configuration > & getUbo()
 		{
 			return *m_ubo;
 		}
 
-		inline renderer::UniformBuffer< Configuration > const & getUbo()const
+		inline ashes::UniformBuffer< Configuration > const & getUbo()const
 		{
 			return *m_ubo;
 		}
@@ -151,7 +151,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		renderer::UniformBufferPtr< Configuration > m_ubo;
+		ashes::UniformBufferPtr< Configuration > m_ubo;
 	};
 }
 

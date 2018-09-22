@@ -266,12 +266,12 @@ namespace castor3d
 			return m_projection;
 		}
 
-		inline renderer::Viewport const & getViewport()const
+		inline ashes::Viewport const & getViewport()const
 		{
 			return m_viewport;
 		}
 
-		inline renderer::Scissor const & getScissor()const
+		inline ashes::Scissor const & getScissor()const
 		{
 			return m_scissor;
 		}
@@ -356,8 +356,8 @@ namespace castor3d
 		castor::Size m_size;
 		castor::Position m_position;
 		castor::Matrix4x4r m_projection;
-		renderer::Viewport m_viewport;
-		renderer::Scissor m_scissor;
+		ashes::Viewport m_viewport;
+		ashes::Scissor m_scissor;
 	};
 }
 

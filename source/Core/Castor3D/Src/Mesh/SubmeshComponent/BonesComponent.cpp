@@ -34,9 +34,9 @@ namespace castor3d
 	}
 
 	void BonesComponent::gather( MaterialSPtr material
-		, renderer::BufferCRefArray & buffers
+		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
-		, renderer::VertexLayoutCRefArray & layouts )
+		, ashes::VertexLayoutCRefArray & layouts )
 	{
 		buffers.emplace_back( m_bonesBuffer->getBuffer() );
 		offsets.emplace_back( 0u );
@@ -49,23 +49,23 @@ namespace castor3d
 
 		if ( !m_bonesBuffer || m_bonesBuffer->getCount() != m_bones.size() )
 		{
-			m_bonesBuffer = renderer::makeVertexBuffer< VertexBoneData >( device
+			m_bonesBuffer = ashes::makeVertexBuffer< VertexBoneData >( device
 				, uint32_t( m_bones.size() )
 				, 0u
-				, renderer::MemoryPropertyFlag::eHostVisible );
-			m_bonesLayout = renderer::makeLayout< VertexBoneData >( BindingPoint
-				, renderer::VertexInputRate::eVertex );
+				, ashes::MemoryPropertyFlag::eHostVisible );
+			m_bonesLayout = ashes::makeLayout< VertexBoneData >( BindingPoint
+				, ashes::VertexInputRate::eVertex );
 			m_bonesLayout->createAttribute( RenderPass::VertexInputs::BoneIds0Location
-				, renderer::Format::eR32G32B32A32_SINT
+				, ashes::Format::eR32G32B32A32_SINT
 				, offsetof( VertexBoneData::Ids::ids, id0 ) );
 			m_bonesLayout->createAttribute( RenderPass::VertexInputs::BoneIds1Location
-				, renderer::Format::eR32G32B32A32_SINT
+				, ashes::Format::eR32G32B32A32_SINT
 				, offsetof( VertexBoneData::Ids::ids, id1 ) );
 			m_bonesLayout->createAttribute( RenderPass::VertexInputs::Weights0Location
-				, renderer::Format::eR32G32B32A32_SFLOAT
+				, ashes::Format::eR32G32B32A32_SFLOAT
 				, sizeof( VertexBoneData::Ids ) + offsetof( VertexBoneData::Weights::weights, weight0 ) );
 			m_bonesLayout->createAttribute( RenderPass::VertexInputs::Weights1Location
-				, renderer::Format::eR32G32B32A32_SFLOAT
+				, ashes::Format::eR32G32B32A32_SFLOAT
 				, sizeof( VertexBoneData::Ids ) + offsetof( VertexBoneData::Weights::weights, weight1 ) );
 		}
 
@@ -89,7 +89,7 @@ namespace castor3d
 
 		if ( count )
 		{
-			if ( auto * buffer = m_bonesBuffer->lock( 0, count, renderer::MemoryMapFlag::eWrite ) )
+			if ( auto * buffer = m_bonesBuffer->lock( 0, count, ashes::MemoryMapFlag::eWrite ) )
 			{
 				std::copy( m_bones.begin(), m_bones.end(), buffer );
 				m_bonesBuffer->flush( 0u, count );

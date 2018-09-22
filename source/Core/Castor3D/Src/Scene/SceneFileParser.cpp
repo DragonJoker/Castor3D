@@ -26,23 +26,23 @@ SceneFileContext::SceneFileContext( Path const & path, SceneFileParser * parser 
 	, imageInfo
 	{
 		0u,
-		renderer::TextureType::e2D,
-		renderer::Format::eUndefined,
+		ashes::TextureType::e2D,
+		ashes::Format::eUndefined,
 		{ 1u, 1u, 1u },
 		0u,
 		1u,
-		renderer::SampleCountFlag::e1,
-		renderer::ImageTiling::eOptimal,
-		renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst
+		ashes::SampleCountFlag::e1,
+		ashes::ImageTiling::eOptimal,
+		ashes::ImageUsageFlag::eSampled | ashes::ImageUsageFlag::eTransferDst
 	}
 	, textureUnit()
 	, shaderProgram()
-	, shaderStage( renderer::ShaderStageFlag( 0u ) )
+	, shaderStage( ashes::ShaderStageFlag( 0u ) )
 	, overlay( nullptr )
 	, face1( -1 )
 	, face2( -1 )
 	, lightType( LightType::eCount )
-	, primitiveType( renderer::PrimitiveTopology::eCount )
+	, primitiveType( ashes::PrimitiveTopology::eCount )
 	, viewport( nullptr )
 	, strName()
 	, strName2()
@@ -71,7 +71,7 @@ void SceneFileContext::initialise()
 	face1 = -1;
 	face2 = -1;
 	lightType = LightType::eCount;
-	primitiveType = renderer::PrimitiveTopology::eCount;
+	primitiveType = ashes::PrimitiveTopology::eCount;
 	uiUInt16 = 0;
 	uiUInt32 = 0;
 	uiUInt64 = 0;
@@ -79,7 +79,7 @@ void SceneFileContext::initialise()
 	bBool2 = false;
 	m_pGeneralParentMaterial = nullptr;
 	viewport = nullptr;
-	shaderStage = renderer::ShaderStageFlag( 0u );
+	shaderStage = ashes::ShaderStageFlag( 0u );
 	window.reset();
 	sceneNode.reset();
 	geometry.reset();
@@ -98,14 +98,14 @@ void SceneFileContext::initialise()
 	imageInfo =
 	{
 		0u,
-		renderer::TextureType::e2D,
-		renderer::Format::eUndefined,
+		ashes::TextureType::e2D,
+		ashes::Format::eUndefined,
 		{ 1u, 1u, 1u },
 		0u,
 		1u,
-		renderer::SampleCountFlag::e1,
-		renderer::ImageTiling::eOptimal,
-		renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst
+		ashes::SampleCountFlag::e1,
+		ashes::ImageTiling::eOptimal,
+		ashes::ImageUsageFlag::eSampled | ashes::ImageUsageFlag::eTransferDst
 	};
 	createMaterial = true;
 	passIndex = 0u;
@@ -120,40 +120,40 @@ SceneFileParser::SceneFileParser( Engine & engine )
 	: OwnedBy< Engine >( engine )
 	, FileParser( uint32_t( CSCNSection::eRoot ) )
 {
-	m_mapBlendFactors[cuT( "zero" )] = uint32_t( renderer::BlendFactor::eZero );
-	m_mapBlendFactors[cuT( "one" )] = uint32_t( renderer::BlendFactor::eOne );
-	m_mapBlendFactors[cuT( "src_colour" )] = uint32_t( renderer::BlendFactor::eSrcColour );
-	m_mapBlendFactors[cuT( "inv_src_colour" )] = uint32_t( renderer::BlendFactor::eInvSrcColour );
-	m_mapBlendFactors[cuT( "dst_colour" )] = uint32_t( renderer::BlendFactor::eDstColour );
-	m_mapBlendFactors[cuT( "inv_dst_colour" )] = uint32_t( renderer::BlendFactor::eInvDstColour );
-	m_mapBlendFactors[cuT( "src_alpha" )] = uint32_t( renderer::BlendFactor::eSrcAlpha );
-	m_mapBlendFactors[cuT( "inv_src_alpha" )] = uint32_t( renderer::BlendFactor::eInvSrcAlpha );
-	m_mapBlendFactors[cuT( "dst_alpha" )] = uint32_t( renderer::BlendFactor::eDstAlpha );
-	m_mapBlendFactors[cuT( "inv_dst_alpha" )] = uint32_t( renderer::BlendFactor::eInvDstAlpha );
-	m_mapBlendFactors[cuT( "src_alpha_sat" )] = uint32_t( renderer::BlendFactor::eSrcAlphaSaturate );
-	m_mapBlendFactors[cuT( "src1_colour" )] = uint32_t( renderer::BlendFactor::eSrc1Colour );
-	m_mapBlendFactors[cuT( "inv_src1_colour" )] = uint32_t( renderer::BlendFactor::eInvSrc1Colour );
-	m_mapBlendFactors[cuT( "src1_alpha" )] = uint32_t( renderer::BlendFactor::eSrc1Alpha );
-	m_mapBlendFactors[cuT( "inv_src1_alpha" )] = uint32_t( renderer::BlendFactor::eInvSrc1Alpha );
+	m_mapBlendFactors[cuT( "zero" )] = uint32_t( ashes::BlendFactor::eZero );
+	m_mapBlendFactors[cuT( "one" )] = uint32_t( ashes::BlendFactor::eOne );
+	m_mapBlendFactors[cuT( "src_colour" )] = uint32_t( ashes::BlendFactor::eSrcColour );
+	m_mapBlendFactors[cuT( "inv_src_colour" )] = uint32_t( ashes::BlendFactor::eInvSrcColour );
+	m_mapBlendFactors[cuT( "dst_colour" )] = uint32_t( ashes::BlendFactor::eDstColour );
+	m_mapBlendFactors[cuT( "inv_dst_colour" )] = uint32_t( ashes::BlendFactor::eInvDstColour );
+	m_mapBlendFactors[cuT( "src_alpha" )] = uint32_t( ashes::BlendFactor::eSrcAlpha );
+	m_mapBlendFactors[cuT( "inv_src_alpha" )] = uint32_t( ashes::BlendFactor::eInvSrcAlpha );
+	m_mapBlendFactors[cuT( "dst_alpha" )] = uint32_t( ashes::BlendFactor::eDstAlpha );
+	m_mapBlendFactors[cuT( "inv_dst_alpha" )] = uint32_t( ashes::BlendFactor::eInvDstAlpha );
+	m_mapBlendFactors[cuT( "src_alpha_sat" )] = uint32_t( ashes::BlendFactor::eSrcAlphaSaturate );
+	m_mapBlendFactors[cuT( "src1_colour" )] = uint32_t( ashes::BlendFactor::eSrc1Colour );
+	m_mapBlendFactors[cuT( "inv_src1_colour" )] = uint32_t( ashes::BlendFactor::eInvSrc1Colour );
+	m_mapBlendFactors[cuT( "src1_alpha" )] = uint32_t( ashes::BlendFactor::eSrc1Alpha );
+	m_mapBlendFactors[cuT( "inv_src1_alpha" )] = uint32_t( ashes::BlendFactor::eInvSrc1Alpha );
 
-	m_mapTypes[cuT( "1d" )] = uint32_t( renderer::TextureType::e1D );
-	m_mapTypes[cuT( "2d" )] = uint32_t( renderer::TextureType::e2D );
-	m_mapTypes[cuT( "3d" )] = uint32_t( renderer::TextureType::e3D );
+	m_mapTypes[cuT( "1d" )] = uint32_t( ashes::TextureType::e1D );
+	m_mapTypes[cuT( "2d" )] = uint32_t( ashes::TextureType::e2D );
+	m_mapTypes[cuT( "3d" )] = uint32_t( ashes::TextureType::e3D );
 
-	m_mapComparisonFuncs[cuT( "always" )] = uint32_t( renderer::CompareOp::eAlways );
-	m_mapComparisonFuncs[cuT( "less" )] = uint32_t( renderer::CompareOp::eLess );
-	m_mapComparisonFuncs[cuT( "less_or_equal" )] = uint32_t( renderer::CompareOp::eLessEqual );
-	m_mapComparisonFuncs[cuT( "equal" )] = uint32_t( renderer::CompareOp::eEqual );
-	m_mapComparisonFuncs[cuT( "not_equal" )] = uint32_t( renderer::CompareOp::eNotEqual );
-	m_mapComparisonFuncs[cuT( "greater_or_equal" )] = uint32_t( renderer::CompareOp::eGreaterEqual );
-	m_mapComparisonFuncs[cuT( "greater" )] = uint32_t( renderer::CompareOp::eGreater );
-	m_mapComparisonFuncs[cuT( "never" )] = uint32_t( renderer::CompareOp::eNever );
+	m_mapComparisonFuncs[cuT( "always" )] = uint32_t( ashes::CompareOp::eAlways );
+	m_mapComparisonFuncs[cuT( "less" )] = uint32_t( ashes::CompareOp::eLess );
+	m_mapComparisonFuncs[cuT( "less_or_equal" )] = uint32_t( ashes::CompareOp::eLessEqual );
+	m_mapComparisonFuncs[cuT( "equal" )] = uint32_t( ashes::CompareOp::eEqual );
+	m_mapComparisonFuncs[cuT( "not_equal" )] = uint32_t( ashes::CompareOp::eNotEqual );
+	m_mapComparisonFuncs[cuT( "greater_or_equal" )] = uint32_t( ashes::CompareOp::eGreaterEqual );
+	m_mapComparisonFuncs[cuT( "greater" )] = uint32_t( ashes::CompareOp::eGreater );
+	m_mapComparisonFuncs[cuT( "never" )] = uint32_t( ashes::CompareOp::eNever );
 
-	m_mapTextureBlendModes[cuT( "add" )] = uint32_t( renderer::BlendOp::eAdd );
-	m_mapTextureBlendModes[cuT( "min" )] = uint32_t( renderer::BlendOp::eMin );
-	m_mapTextureBlendModes[cuT( "max" )] = uint32_t( renderer::BlendOp::eMax );
-	m_mapTextureBlendModes[cuT( "subtract" )] = uint32_t( renderer::BlendOp::eSubtract );
-	m_mapTextureBlendModes[cuT( "rev_subtract" )] = uint32_t( renderer::BlendOp::eReverseSubtract );
+	m_mapTextureBlendModes[cuT( "add" )] = uint32_t( ashes::BlendOp::eAdd );
+	m_mapTextureBlendModes[cuT( "min" )] = uint32_t( ashes::BlendOp::eMin );
+	m_mapTextureBlendModes[cuT( "max" )] = uint32_t( ashes::BlendOp::eMax );
+	m_mapTextureBlendModes[cuT( "subtract" )] = uint32_t( ashes::BlendOp::eSubtract );
+	m_mapTextureBlendModes[cuT( "rev_subtract" )] = uint32_t( ashes::BlendOp::eReverseSubtract );
 
 	m_mapTextureChannels[cuT( "diffuse" )] = uint32_t( TextureChannel::eDiffuse );
 	m_mapTextureChannels[cuT( "normal" )] = uint32_t( TextureChannel::eNormal );
@@ -174,50 +174,50 @@ SceneFileParser::SceneFileParser( Engine & engine )
 	m_mapLightTypes[cuT( "spot" )] = uint32_t( LightType::eSpot );
 	m_mapLightTypes[cuT( "directional" )] = uint32_t( LightType::eDirectional );
 
-	m_mapPrimitiveTypes[cuT( "points" )] = uint32_t( renderer::PrimitiveTopology::ePointList );
-	m_mapPrimitiveTypes[cuT( "lines" )] = uint32_t( renderer::PrimitiveTopology::eLineList );
-	m_mapPrimitiveTypes[cuT( "lines_adj" )] = uint32_t( renderer::PrimitiveTopology::eLineListWithAdjacency );
-	m_mapPrimitiveTypes[cuT( "line_strip" )] = uint32_t( renderer::PrimitiveTopology::eLineStrip );
-	m_mapPrimitiveTypes[cuT( "line_strip_adj" )] = uint32_t( renderer::PrimitiveTopology::eLineStripWithAdjacency );
-	m_mapPrimitiveTypes[cuT( "triangles" )] = uint32_t( renderer::PrimitiveTopology::eTriangleList );
-	m_mapPrimitiveTypes[cuT( "triangles_adj" )] = uint32_t( renderer::PrimitiveTopology::eTriangleListWithAdjacency );
-	m_mapPrimitiveTypes[cuT( "triangle_strip" )] = uint32_t( renderer::PrimitiveTopology::eTriangleStrip );
-	m_mapPrimitiveTypes[cuT( "triangle_strip_adj" )] = uint32_t( renderer::PrimitiveTopology::eTriangleStripWithAdjacency );
-	m_mapPrimitiveTypes[cuT( "triangle_fan" )] = uint32_t( renderer::PrimitiveTopology::eTriangleFan );
+	m_mapPrimitiveTypes[cuT( "points" )] = uint32_t( ashes::PrimitiveTopology::ePointList );
+	m_mapPrimitiveTypes[cuT( "lines" )] = uint32_t( ashes::PrimitiveTopology::eLineList );
+	m_mapPrimitiveTypes[cuT( "lines_adj" )] = uint32_t( ashes::PrimitiveTopology::eLineListWithAdjacency );
+	m_mapPrimitiveTypes[cuT( "line_strip" )] = uint32_t( ashes::PrimitiveTopology::eLineStrip );
+	m_mapPrimitiveTypes[cuT( "line_strip_adj" )] = uint32_t( ashes::PrimitiveTopology::eLineStripWithAdjacency );
+	m_mapPrimitiveTypes[cuT( "triangles" )] = uint32_t( ashes::PrimitiveTopology::eTriangleList );
+	m_mapPrimitiveTypes[cuT( "triangles_adj" )] = uint32_t( ashes::PrimitiveTopology::eTriangleListWithAdjacency );
+	m_mapPrimitiveTypes[cuT( "triangle_strip" )] = uint32_t( ashes::PrimitiveTopology::eTriangleStrip );
+	m_mapPrimitiveTypes[cuT( "triangle_strip_adj" )] = uint32_t( ashes::PrimitiveTopology::eTriangleStripWithAdjacency );
+	m_mapPrimitiveTypes[cuT( "triangle_fan" )] = uint32_t( ashes::PrimitiveTopology::eTriangleFan );
 
-	m_mapPrimitiveOutputTypes[cuT( "points" )] = uint32_t( renderer::PrimitiveTopology::ePointList );
-	m_mapPrimitiveOutputTypes[cuT( "line_strip" )] = uint32_t( renderer::PrimitiveTopology::eLineStrip );
-	m_mapPrimitiveOutputTypes[cuT( "triangle_strip" )] = uint32_t( renderer::PrimitiveTopology::eTriangleStrip );
+	m_mapPrimitiveOutputTypes[cuT( "points" )] = uint32_t( ashes::PrimitiveTopology::ePointList );
+	m_mapPrimitiveOutputTypes[cuT( "line_strip" )] = uint32_t( ashes::PrimitiveTopology::eLineStrip );
+	m_mapPrimitiveOutputTypes[cuT( "triangle_strip" )] = uint32_t( ashes::PrimitiveTopology::eTriangleStrip );
 
 	m_mapViewportModes[cuT( "ortho" )] = uint32_t( ViewportType::eOrtho );
 	m_mapViewportModes[cuT( "perspective" )] = uint32_t( ViewportType::ePerspective );
 	m_mapViewportModes[cuT( "frustum" )] = uint32_t( ViewportType::eFrustum );
 
-	m_mapFilters[cuT( "nearest" )] = uint32_t( renderer::Filter::eNearest );
-	m_mapFilters[cuT( "linear" )] = uint32_t( renderer::Filter::eLinear );
+	m_mapFilters[cuT( "nearest" )] = uint32_t( ashes::Filter::eNearest );
+	m_mapFilters[cuT( "linear" )] = uint32_t( ashes::Filter::eLinear );
 
-	m_mapMipmapModes[cuT( "none" )] = uint32_t( renderer::MipmapMode::eNone );
-	m_mapMipmapModes[cuT( "nearest" )] = uint32_t( renderer::MipmapMode::eNearest );
-	m_mapMipmapModes[cuT( "linear" )] = uint32_t( renderer::MipmapMode::eLinear );
+	m_mapMipmapModes[cuT( "none" )] = uint32_t( ashes::MipmapMode::eNone );
+	m_mapMipmapModes[cuT( "nearest" )] = uint32_t( ashes::MipmapMode::eNearest );
+	m_mapMipmapModes[cuT( "linear" )] = uint32_t( ashes::MipmapMode::eLinear );
 
-	m_mapWrappingModes[cuT( "repeat" )] = uint32_t( renderer::WrapMode::eRepeat );
-	m_mapWrappingModes[cuT( "mirrored_repeat" )] = uint32_t( renderer::WrapMode::eMirroredRepeat );
-	m_mapWrappingModes[cuT( "clamp_to_border" )] = uint32_t( renderer::WrapMode::eClampToBorder );
-	m_mapWrappingModes[cuT( "clamp_to_edge" )] = uint32_t( renderer::WrapMode::eClampToEdge );
+	m_mapWrappingModes[cuT( "repeat" )] = uint32_t( ashes::WrapMode::eRepeat );
+	m_mapWrappingModes[cuT( "mirrored_repeat" )] = uint32_t( ashes::WrapMode::eMirroredRepeat );
+	m_mapWrappingModes[cuT( "clamp_to_border" )] = uint32_t( ashes::WrapMode::eClampToBorder );
+	m_mapWrappingModes[cuT( "clamp_to_edge" )] = uint32_t( ashes::WrapMode::eClampToEdge );
 
-	m_mapBorderColours[cuT( "float_transparent_black" )] = uint32_t( renderer::BorderColour::eFloatTransparentBlack );
-	m_mapBorderColours[cuT( "int_transparent_black" )] = uint32_t( renderer::BorderColour::eIntTransparentBlack );
-	m_mapBorderColours[cuT( "float_opaque_black" )] = uint32_t( renderer::BorderColour::eFloatOpaqueBlack );
-	m_mapBorderColours[cuT( "int_opaque_black" )] = uint32_t( renderer::BorderColour::eIntOpaqueBlack );
-	m_mapBorderColours[cuT( "float_opaque_white" )] = uint32_t( renderer::BorderColour::eFloatOpaqueWhite );
-	m_mapBorderColours[cuT( "int_opaque_white" )] = uint32_t( renderer::BorderColour::eIntOpaqueWhite );
+	m_mapBorderColours[cuT( "float_transparent_black" )] = uint32_t( ashes::BorderColour::eFloatTransparentBlack );
+	m_mapBorderColours[cuT( "int_transparent_black" )] = uint32_t( ashes::BorderColour::eIntTransparentBlack );
+	m_mapBorderColours[cuT( "float_opaque_black" )] = uint32_t( ashes::BorderColour::eFloatOpaqueBlack );
+	m_mapBorderColours[cuT( "int_opaque_black" )] = uint32_t( ashes::BorderColour::eIntOpaqueBlack );
+	m_mapBorderColours[cuT( "float_opaque_white" )] = uint32_t( ashes::BorderColour::eFloatOpaqueWhite );
+	m_mapBorderColours[cuT( "int_opaque_white" )] = uint32_t( ashes::BorderColour::eIntOpaqueWhite );
 
-	m_mapShaderTypes[cuT( "vertex" )] = uint32_t( renderer::ShaderStageFlag::eVertex );
-	m_mapShaderTypes[cuT( "tess_control" )] = uint32_t( renderer::ShaderStageFlag::eTessellationControl );
-	m_mapShaderTypes[cuT( "tess_eval" )] = uint32_t( renderer::ShaderStageFlag::eTessellationEvaluation );
-	m_mapShaderTypes[cuT( "geometry" )] = uint32_t( renderer::ShaderStageFlag::eGeometry );
-	m_mapShaderTypes[cuT( "fragment" )] = uint32_t( renderer::ShaderStageFlag::eFragment );
-	m_mapShaderTypes[cuT( "compute" )] = uint32_t( renderer::ShaderStageFlag::eCompute );
+	m_mapShaderTypes[cuT( "vertex" )] = uint32_t( ashes::ShaderStageFlag::eVertex );
+	m_mapShaderTypes[cuT( "tess_control" )] = uint32_t( ashes::ShaderStageFlag::eTessellationControl );
+	m_mapShaderTypes[cuT( "tess_eval" )] = uint32_t( ashes::ShaderStageFlag::eTessellationEvaluation );
+	m_mapShaderTypes[cuT( "geometry" )] = uint32_t( ashes::ShaderStageFlag::eGeometry );
+	m_mapShaderTypes[cuT( "fragment" )] = uint32_t( ashes::ShaderStageFlag::eFragment );
+	m_mapShaderTypes[cuT( "compute" )] = uint32_t( ashes::ShaderStageFlag::eCompute );
 
 	m_mapVariableTypes[cuT( "int" )] = uint32_t( ParticleFormat::eInt );
 	m_mapVariableTypes[cuT( "uint" )] = uint32_t( ParticleFormat::eUInt );

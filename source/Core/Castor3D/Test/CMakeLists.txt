@@ -5,8 +5,8 @@ include_directories( ${CMAKE_CURRENT_BINARY_DIR}
 	${Castor3DIncludeDirs}
 	${CMAKE_SOURCE_DIR}/Core/CastorTest/Src
 	${CMAKE_BINARY_DIR}/Core/CastorTest/Src
-	${CMAKE_SOURCE_DIR}/${RENDERERLIB_DIR}/TestRenderer/Src
-	${CMAKE_BINARY_DIR}/${RENDERERLIB_DIR}/TestRenderer/Src
+	${CMAKE_SOURCE_DIR}/${ASHES_DIR}/TestRenderer/Src
+	${CMAKE_BINARY_DIR}/${ASHES_DIR}/TestRenderer/Src
 	${CMAKE_SOURCE_DIR}/Plugins/Renderers/TestRenderSystem/Src
 	${CMAKE_BINARY_DIR}/Plugins/Renderers/TestRenderSystem/Src
 )

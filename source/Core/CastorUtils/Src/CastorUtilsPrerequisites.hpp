@@ -379,9 +379,9 @@ namespace castor
 	DECLARE_COORD( uint32_t,	4, ui );
 	DECLARE_COORD( uint32_t,	3, ui );
 	DECLARE_COORD( uint32_t,	2, ui );
-	DECLARE_COORD( int,			4, i );
-	DECLARE_COORD( int,			3, i );
-	DECLARE_COORD( int,			2, i );
+	DECLARE_COORD( int32_t,		4, i );
+	DECLARE_COORD( int32_t,		3, i );
+	DECLARE_COORD( int32_t,		2, i );
 	DECLARE_COORD( real,		4, r );
 	DECLARE_COORD( real,		3, r );
 	DECLARE_COORD( real,		2, r );
@@ -416,9 +416,9 @@ namespace castor
 	DECLARE_CONST_COORD( uint32_t,	4, ui );
 	DECLARE_CONST_COORD( uint32_t,	3, ui );
 	DECLARE_CONST_COORD( uint32_t,	2, ui );
-	DECLARE_CONST_COORD( int,		4, i );
-	DECLARE_CONST_COORD( int,		3, i );
-	DECLARE_CONST_COORD( int,		2, i );
+	DECLARE_CONST_COORD( int32_t,	4, i );
+	DECLARE_CONST_COORD( int32_t,	3, i );
+	DECLARE_CONST_COORD( int32_t,	2, i );
 	DECLARE_CONST_COORD( real,		4, r );
 	DECLARE_CONST_COORD( real,		3, r );
 	DECLARE_CONST_COORD( real,		2, r );
@@ -435,9 +435,9 @@ namespace castor
 	DECLARE_SQMTX( bool,	4, b );
 	DECLARE_SQMTX( bool,	3, b );
 	DECLARE_SQMTX( bool,	2, b );
-	DECLARE_SQMTX( int,		4, i );
-	DECLARE_SQMTX( int,		3, i );
-	DECLARE_SQMTX( int,		2, i );
+	DECLARE_SQMTX( int32_t,	4, i );
+	DECLARE_SQMTX( int32_t,	3, i );
+	DECLARE_SQMTX( int32_t,	2, i );
 	DECLARE_SQMTX( uint32_t,4, ui );
 	DECLARE_SQMTX( uint32_t,3, ui );
 	DECLARE_SQMTX( uint32_t,2, ui );
@@ -457,12 +457,12 @@ namespace castor
 	DECLARE_MTX( bool,		3, 4, b );
 	DECLARE_MTX( bool,		4, 2, b );
 	DECLARE_MTX( bool,		4, 3, b );
-	DECLARE_MTX( int,		2, 3, i );
-	DECLARE_MTX( int,		2, 4, i );
-	DECLARE_MTX( int,		3, 2, i );
-	DECLARE_MTX( int,		3, 4, i );
-	DECLARE_MTX( int,		4, 2, i );
-	DECLARE_MTX( int,		4, 3, i );
+	DECLARE_MTX( int32_t,	2, 3, i );
+	DECLARE_MTX( int32_t,	2, 4, i );
+	DECLARE_MTX( int32_t,	3, 2, i );
+	DECLARE_MTX( int32_t,	3, 4, i );
+	DECLARE_MTX( int32_t,	4, 2, i );
+	DECLARE_MTX( int32_t,	4, 3, i );
 	DECLARE_MTX( uint32_t,	2, 3, ui );
 	DECLARE_MTX( uint32_t,	2, 4, ui );
 	DECLARE_MTX( uint32_t,	3, 2, ui );
@@ -501,16 +501,16 @@ namespace castor
 
 	DECLARE_VECTOR( uint8_t, Byte );
 	DECLARE_VECTOR( SphericalVertexSPtr, SphericalVertexPtr );
-	DECLARE_VECTOR( int, Int );
+	DECLARE_VECTOR( int32_t, Int32 );
 	DECLARE_VECTOR( String, String );
 	DECLARE_VECTOR( Path, Path );
 	DECLARE_VECTOR( ParserParameterBaseSPtr, ParserParameter );
-	DECLARE_MAP( String, uint32_t, UIntStr );
+	DECLARE_MAP( String, uint32_t, UInt32Str );
 	DECLARE_MAP( String, uint64_t, UInt64Str );
 	DECLARE_MAP( String, bool, BoolStr );
 	DECLARE_MAP( String, String, StrStr );
 	DECLARE_SET( String, Str );
-	DECLARE_MAP( uint32_t, String, StrUInt );
+	DECLARE_MAP( uint32_t, String, StrUInt32 );
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		27/08/2012

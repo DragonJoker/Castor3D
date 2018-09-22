@@ -90,7 +90,7 @@ namespace castor3d
 		{
 		public:
 			explicit TargetFbo( RenderTarget & renderTarget );
-			bool initialise( renderer::RenderPass & renderPass
+			bool initialise( ashes::RenderPass & renderPass
 				, castor::Size const & size );
 			void cleanup();
 
@@ -99,7 +99,7 @@ namespace castor3d
 			TextureUnit colourTexture;
 			//!\~english	The frame buffer.
 			//!\~french		Le tampon d'image.
-			renderer::FrameBufferPtr frameBuffer;
+			ashes::FrameBufferPtr frameBuffer;
 
 		private:
 			RenderTarget & renderTarget;
@@ -275,7 +275,7 @@ namespace castor3d
 			return m_velocityTexture;
 		}
 
-		inline renderer::Format getPixelFormat()const
+		inline ashes::Format getPixelFormat()const
 		{
 			return m_pixelFormat;
 		}
@@ -305,7 +305,7 @@ namespace castor3d
 			return m_toneMapping;
 		}
 
-		inline renderer::Semaphore const & getSemaphore()const
+		inline ashes::Semaphore const & getSemaphore()const
 		{
 			REQUIRE( m_signalFinished );
 			return *m_signalFinished;
@@ -347,7 +347,7 @@ namespace castor3d
 			m_ssaoConfig = config;
 		}
 
-		inline void setPixelFormat( renderer::Format value )
+		inline void setPixelFormat( ashes::Format value )
 		{
 			m_pixelFormat = value;
 		}
@@ -374,22 +374,22 @@ namespace castor3d
 		C3D_API bool doInitialiseVelocityTexture();
 		C3D_API bool doInitialiseTechnique();
 		C3D_API bool doInitialiseToneMapping();
-		C3D_API void doInitialiseCopyCommands( renderer::CommandBufferPtr & commandBuffer
-			, renderer::TextureView const & source
-			, renderer::TextureView const & target );
+		C3D_API void doInitialiseCopyCommands( ashes::CommandBufferPtr & commandBuffer
+			, ashes::TextureView const & source
+			, ashes::TextureView const & target );
 		C3D_API void doInitialiseFlip();
 		C3D_API void doRender( RenderInfo & info
 			, TargetFbo & fbo
 			, CameraSPtr camera );
-		C3D_API renderer::Semaphore const & doApplyPostEffects( renderer::Semaphore const & toWait
+		C3D_API ashes::Semaphore const & doApplyPostEffects( ashes::Semaphore const & toWait
 			, PostEffectPtrArray const & effects
-			, renderer::CommandBufferPtr const & copyCommandBuffer
-			, renderer::SemaphorePtr const & copyFinished
+			, ashes::CommandBufferPtr const & copyCommandBuffer
+			, ashes::SemaphorePtr const & copyFinished
 			, castor::Nanoseconds const & elapsedTime );
-		C3D_API renderer::Semaphore const & doApplyToneMapping( renderer::Semaphore const & toWait );
-		C3D_API renderer::Semaphore const & doRenderOverlays( renderer::Semaphore const & toWait
+		C3D_API ashes::Semaphore const & doApplyToneMapping( ashes::Semaphore const & toWait );
+		C3D_API ashes::Semaphore const & doRenderOverlays( ashes::Semaphore const & toWait
 			, Camera const & camera );
-		C3D_API renderer::Semaphore const & doFlip( renderer::Semaphore const & toWait );
+		C3D_API ashes::Semaphore const & doFlip( ashes::Semaphore const & toWait );
 
 	public:
 		//!\~english The render target default sampler name	\~french Le nom du sampler par défaut pour la cible de rendu
@@ -403,33 +403,33 @@ namespace castor3d
 		RenderTechniqueSPtr m_renderTechnique;
 		SceneWPtr m_scene;
 		CameraWPtr m_camera;
-		renderer::RenderPassPtr m_renderPass;
-		renderer::CommandBufferPtr m_toneMappingCommandBuffer;
+		ashes::RenderPassPtr m_renderPass;
+		ashes::CommandBufferPtr m_toneMappingCommandBuffer;
 		TargetFbo m_workFrameBuffer;
 		TargetFbo m_flippedFrameBuffer;
-		renderer::Format m_pixelFormat;
+		ashes::Format m_pixelFormat;
 		uint32_t m_index;
 		Parameters m_techniqueParameters;
 		PostEffectPtrArray m_hdrPostEffects;
-		renderer::CommandBufferPtr m_hdrCopyCommands;
-		renderer::SemaphorePtr m_hdrCopyFinished;
+		ashes::CommandBufferPtr m_hdrCopyCommands;
+		ashes::SemaphorePtr m_hdrCopyFinished;
 		HdrConfig m_hdrConfig;
 		ToneMappingSPtr m_toneMapping;
 		PostEffectPtrArray m_srgbPostEffects;
-		renderer::CommandBufferPtr m_srgbCopyCommands;
-		renderer::SemaphorePtr m_srgbCopyFinished;
+		ashes::CommandBufferPtr m_srgbCopyCommands;
+		ashes::SemaphorePtr m_srgbCopyFinished;
 		RenderPassTimerSPtr m_toneMappingTimer;
 		RenderPassTimerSPtr m_overlaysTimer;
 		std::unique_ptr< RenderQuad > m_flipQuad;
-		renderer::CommandBufferPtr m_flipCommands;
-		renderer::SemaphorePtr m_flipFinished;
+		ashes::CommandBufferPtr m_flipCommands;
+		ashes::SemaphorePtr m_flipFinished;
 		SsaoConfig m_ssaoConfig;
 		castor::Point2r m_jitter;
 		TextureUnit m_velocityTexture;
 		OverlayRendererSPtr m_overlayRenderer;
-		renderer::SemaphorePtr m_signalReady;
-		renderer::Semaphore const * m_signalFinished{ nullptr };
-		renderer::FencePtr m_fence;
+		ashes::SemaphorePtr m_signalReady;
+		ashes::Semaphore const * m_signalFinished{ nullptr };
+		ashes::FencePtr m_fence;
 		castor::PreciseTimer m_timer;
 		SceneCullerUPtr m_culler;
 	};

@@ -21,14 +21,14 @@
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
-#include <Buffer/StagingBuffer.hpp>
 #include <Buffer/UniformBuffer.hpp>
+#include <Image/StagingTexture.hpp>
 #include <Image/Texture.hpp>
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/RenderSubpass.hpp>
 #include <RenderPass/RenderSubpassState.hpp>
-#include <Shader/ShaderProgram.hpp>
+#include <Shader/GlslToSpv.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
 #include <GlslSource.hpp>
@@ -151,7 +151,7 @@ namespace film_grain
 	//*********************************************************************************************
 
 	RenderQuad::RenderQuad( castor3d::RenderSystem & renderSystem
-		, renderer::Extent2D const & size )
+		, ashes::Extent2D const & size )
 		: castor3d::RenderQuad{ renderSystem, false, false }
 		, m_size{ size }
 	{
@@ -161,12 +161,12 @@ namespace film_grain
 		if ( !m_renderSystem.getEngine()->getSamplerCache().has( name ) )
 		{
 			m_sampler = m_renderSystem.getEngine()->getSamplerCache().add( name );
-			m_sampler->setMinFilter( renderer::Filter::eLinear );
-			m_sampler->setMagFilter( renderer::Filter::eLinear );
-			m_sampler->setMipFilter( renderer::MipmapMode::eLinear );
-			m_sampler->setWrapS( renderer::WrapMode::eRepeat );
-			m_sampler->setWrapT( renderer::WrapMode::eRepeat );
-			m_sampler->setWrapR( renderer::WrapMode::eRepeat );
+			m_sampler->setMinFilter( ashes::Filter::eLinear );
+			m_sampler->setMagFilter( ashes::Filter::eLinear );
+			m_sampler->setMipFilter( ashes::MipmapMode::eLinear );
+			m_sampler->setWrapS( ashes::WrapMode::eRepeat );
+			m_sampler->setWrapT( ashes::WrapMode::eRepeat );
+			m_sampler->setWrapR( ashes::WrapMode::eRepeat );
 			m_sampler->initialise();
 		}
 		else
@@ -176,26 +176,26 @@ namespace film_grain
 
 		auto & device = getCurrentDevice( m_renderSystem );
 
-		renderer::ImageCreateInfo image{};
+		ashes::ImageCreateInfo image{};
 		image.flags = 0u;
 		image.arrayLayers = 1u;
 		image.extent.width = 512u;
 		image.extent.height = 512u;
 		image.extent.depth = NoiseMapCount;
-		image.format = renderer::Format::eR8G8B8A8_UNORM;
-		image.imageType = renderer::TextureType::e3D;
-		image.initialLayout = renderer::ImageLayout::eUndefined;
+		image.format = ashes::Format::eR8G8B8A8_UNORM;
+		image.imageType = ashes::TextureType::e3D;
+		image.initialLayout = ashes::ImageLayout::eUndefined;
 		image.mipLevels = 1u;
-		image.samples = renderer::SampleCountFlag::e1;
-		image.sharingMode = renderer::SharingMode::eExclusive;
-		image.tiling = renderer::ImageTiling::eOptimal;
-		image.usage = renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst;
-		m_noise = device.createTexture( image, renderer::MemoryPropertyFlag::eDeviceLocal );
+		image.samples = ashes::SampleCountFlag::e1;
+		image.sharingMode = ashes::SharingMode::eExclusive;
+		image.tiling = ashes::ImageTiling::eOptimal;
+		image.usage = ashes::ImageUsageFlag::eSampled | ashes::ImageUsageFlag::eTransferDst;
+		m_noise = device.createTexture( image, ashes::MemoryPropertyFlag::eDeviceLocal );
 
-		renderer::ImageViewCreateInfo imageView{};
+		ashes::ImageViewCreateInfo imageView{};
 		imageView.format = image.format;
-		imageView.viewType = renderer::TextureViewType::e3D;
-		imageView.subresourceRange.aspectMask = renderer::getAspectMask( imageView.format );
+		imageView.viewType = ashes::TextureViewType::e3D;
+		imageView.subresourceRange.aspectMask = ashes::getAspectMask( imageView.format );
 		imageView.subresourceRange.baseMipLevel = 0u;
 		imageView.subresourceRange.levelCount = 1u;
 		imageView.subresourceRange.baseArrayLayer = 0u;
@@ -214,31 +214,30 @@ namespace film_grain
 		};
 
 		uint32_t maxSize = buffers[0]->size();
-		renderer::StagingBuffer stagingBuffer{ device
-			, renderer::BufferTarget::eTransferSrc
-			, maxSize };
-		renderer::CommandBufferPtr cmdCopy = device.getGraphicsCommandPool().createCommandBuffer( true );
+		auto staging = device.createStagingTexture( m_noiseView->getFormat()
+			, { buffers[0]->dimensions().getWidth(), buffers[0]->dimensions().getHeight() } );
+		ashes::CommandBufferPtr cmdCopy = device.getGraphicsCommandPool().createCommandBuffer( true );
 
 		for ( uint32_t i = 0u; i < NoiseMapCount; ++i )
 		{
-			stagingBuffer.uploadTextureData( *cmdCopy
+			staging->uploadTextureData( *cmdCopy
 				, {
 					m_noiseView->getSubResourceRange().aspectMask,
 					m_noiseView->getSubResourceRange().baseMipLevel,
 					m_noiseView->getSubResourceRange().baseArrayLayer,
 					m_noiseView->getSubResourceRange().layerCount,
 				}
+				, m_noiseView->getFormat()
 				, { 0, 0, int32_t( i ) }
-				, { image.extent.width, image.extent.height, 1u }
+				, { image.extent.width, image.extent.height }
 				, buffers[i]->constPtr()
-				, buffers[i]->size()
 				, *m_noiseView );
 		}
 
-		m_configUbo = renderer::makeUniformBuffer< Configuration >( getCurrentDevice( m_renderSystem )
+		m_configUbo = ashes::makeUniformBuffer< Configuration >( getCurrentDevice( m_renderSystem )
 			, 1u
-			, renderer::BufferTarget::eTransferDst
-			, renderer::MemoryPropertyFlag::eHostVisible );
+			, ashes::BufferTarget::eTransferDst
+			, ashes::MemoryPropertyFlag::eHostVisible );
 		m_configUbo->getData( 0 ).m_pixelSize = Point2f{ m_size.width, m_size.height };
 		m_configUbo->getData( 0 ).m_noiseIntensity = 1.0f;
 		m_configUbo->getData( 0 ).m_exposure = 1.0f;
@@ -251,8 +250,8 @@ namespace film_grain
 		m_configUbo->upload();
 	}
 
-	void RenderQuad::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
-		, renderer::DescriptorSet & descriptorSet )
+	void RenderQuad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+		, ashes::DescriptorSet & descriptorSet )
 	{
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
 			, *m_configUbo
@@ -284,11 +283,11 @@ namespace film_grain
 		if ( !m_renderTarget.getEngine()->getSamplerCache().has( name ) )
 		{
 			m_sampler = m_renderTarget.getEngine()->getSamplerCache().add( name );
-			m_sampler->setMinFilter( renderer::Filter::eLinear );
-			m_sampler->setMagFilter( renderer::Filter::eLinear );
-			m_sampler->setWrapS( renderer::WrapMode::eRepeat );
-			m_sampler->setWrapT( renderer::WrapMode::eRepeat );
-			m_sampler->setWrapR( renderer::WrapMode::eRepeat );
+			m_sampler->setMinFilter( ashes::Filter::eLinear );
+			m_sampler->setMagFilter( ashes::Filter::eLinear );
+			m_sampler->setWrapS( ashes::WrapMode::eRepeat );
+			m_sampler->setWrapT( ashes::WrapMode::eRepeat );
+			m_sampler->setWrapR( ashes::WrapMode::eRepeat );
 		}
 		else
 		{
@@ -312,18 +311,18 @@ namespace film_grain
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
 		visitor.visit( cuT( "FilmGrain" )
-			, renderer::ShaderStageFlag::eVertex
+			, ashes::ShaderStageFlag::eVertex
 			, m_vertexShader );
 		visitor.visit( cuT( "FilmGrain" )
-			, renderer::ShaderStageFlag::eFragment
+			, ashes::ShaderStageFlag::eFragment
 			, m_pixelShader );
 		visitor.visit( cuT( "FilmGrain" )
-			, renderer::ShaderStageFlag::eFragment
+			, ashes::ShaderStageFlag::eFragment
 			, cuT( "FilmGrain" )
 			, cuT( "Exposure" )
 			, m_quad->getUbo().getData().m_exposure );
 		visitor.visit( cuT( "FilmGrain" )
-			, renderer::ShaderStageFlag::eFragment
+			, ashes::ShaderStageFlag::eFragment
 			, cuT( "FilmGrain" )
 			, cuT( "NoiseIntensity" )
 			, m_quad->getUbo().getData().m_noiseIntensity );
@@ -337,59 +336,63 @@ namespace film_grain
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
 	{
 		auto & device = getCurrentDevice( *this );
-		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
+		ashes::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
 		m_sampler->initialise();
 		m_vertexShader = getVertexProgram( getRenderSystem() );
 		m_pixelShader = getFragmentProgram( getRenderSystem() );
 
-		renderer::ShaderStageStateArray stages;
-		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
-		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( m_vertexShader.getSource() );
-		stages[1].module->loadShader( m_pixelShader.getSource() );
+		ashes::ShaderStageStateArray stages;
+		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
+		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
+		stages[0].module->loadShader( castor3d::compileGlslToSpv( device
+			, ashes::ShaderStageFlag::eVertex
+			, m_vertexShader.getSource() ) );
+		stages[1].module->loadShader( castor3d::compileGlslToSpv( device
+			, ashes::ShaderStageFlag::eFragment
+			, m_pixelShader.getSource() ) );
 
 		// Create the render pass.
-		renderer::RenderPassCreateInfo renderPass;
+		ashes::RenderPassCreateInfo renderPass;
 		renderPass.flags = 0u;
 
 		renderPass.attachments.resize( 1u );
 		renderPass.attachments[0].format = m_target->getPixelFormat();
-		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+		renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
+		renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
+		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
+		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eColourAttachmentOptimal;
 
 		renderPass.subpasses.resize( 1u );
 		renderPass.subpasses[0].flags = 0u;
-		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
-		renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
+		renderPass.subpasses[0].pipelineBindPoint = ashes::PipelineBindPoint::eGraphics;
+		renderPass.subpasses[0].colorAttachments.push_back( { 0u, ashes::ImageLayout::eColourAttachmentOptimal } );
 
 		renderPass.dependencies.resize( 2u );
-		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
-		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+		renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
+		renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 		renderPass.dependencies[1].srcSubpass = 0u;
-		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
-		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+		renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
+		renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 		m_renderPass = device.createRenderPass( renderPass );
 
-		renderer::DescriptorSetLayoutBindingArray bindings
+		ashes::DescriptorSetLayoutBindingArray bindings
 		{
-			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
-			{ 1u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
+			{ 0u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment },
+			{ 1u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment },
 		};
 
 		m_quad = std::make_unique< RenderQuad >( *getRenderSystem(), size );
@@ -416,14 +419,14 @@ namespace film_grain
 			cmd.begin();
 			timer.beginPass( cmd );
 			// Put image in the right state for rendering.
-			cmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-				, renderer::PipelineStageFlag::eFragmentShader
-				, m_target->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+			cmd.memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
+				, ashes::PipelineStageFlag::eFragmentShader
+				, m_target->getDefaultView().makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
 
 			cmd.beginRenderPass( *m_renderPass
 				, *m_surface.frameBuffer
-				, { renderer::ClearColorValue{} }
-				, renderer::SubpassContents::eInline );
+				, { ashes::ClearColorValue{} }
+				, ashes::SubpassContents::eInline );
 			m_quad->registerFrame( cmd );
 			cmd.endRenderPass();
 			timer.endPass( cmd );

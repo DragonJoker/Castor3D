@@ -10,7 +10,7 @@
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
 #include "Castor3DPrerequisites.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Shader/Program.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -121,12 +121,12 @@ namespace castor3d
 			, [this]()
 			{
 				auto & device = getCurrentDevice( *getScene() );
-				m_textureBuffer = renderer::makeBuffer< castor::Point4f >( device
+				m_textureBuffer = ashes::makeBuffer< castor::Point4f >( device
 					, uint32_t( m_lightsBuffer.size() )
-					, renderer::BufferTarget::eUniformTexelBuffer | renderer::BufferTarget::eTransferDst
-					, renderer::MemoryPropertyFlag::eHostVisible );
+					, ashes::BufferTarget::eUniformTexelBuffer | ashes::BufferTarget::eTransferDst
+					, ashes::MemoryPropertyFlag::eHostVisible );
 				m_textureView = device.createBufferView( m_textureBuffer->getBuffer()
-					, renderer::Format::eR32G32B32A32_SFLOAT
+					, ashes::Format::eR32G32B32A32_SFLOAT
 					, 0u
 					, uint32_t( m_lightsBuffer.size() * sizeof( Point4f ) ) );
 			} ) );
@@ -268,7 +268,7 @@ namespace castor3d
 		{
 			if ( auto * locked = m_textureBuffer->lock( 0u
 				, index
-				, renderer::MemoryMapFlag::eWrite | renderer::MemoryMapFlag::eInvalidateBuffer ) )
+				, ashes::MemoryMapFlag::eWrite | ashes::MemoryMapFlag::eInvalidateBuffer ) )
 			{
 				std::copy( m_lightsBuffer.begin(), m_lightsBuffer.begin() + index, locked );
 				m_textureBuffer->flush( 0u, index );

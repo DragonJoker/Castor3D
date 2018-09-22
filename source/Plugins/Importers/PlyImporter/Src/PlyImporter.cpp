@@ -57,7 +57,7 @@ namespace C3dPly
 	bool PlyImporter::doImportMesh( Mesh & p_mesh )
 	{
 		bool result{ false };
-		UIntArray faces;
+		UInt32Array faces;
 		RealArray sizes;
 		String name = m_fileName.getFileName();
 		String meshName = name.substr( 0, name.find_last_of( '.' ) );

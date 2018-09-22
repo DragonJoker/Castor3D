@@ -63,7 +63,7 @@ namespace
 		return result;
 	}
 
-	castor::StrUIntMap createSections()
+	castor::StrUInt32Map createSections()
 	{
 		return
 		{

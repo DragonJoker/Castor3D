@@ -59,67 +59,67 @@ namespace castor3d
 		auto & device = getCurrentDevice( *this );
 
 		// Create the render pass.
-		renderer::RenderPassCreateInfo renderPass;
+		ashes::RenderPassCreateInfo renderPass;
 		renderPass.flags = 0u;
 
 		renderPass.attachments.resize( 3u );
 		renderPass.attachments[0].format = ShadowMapSpot::RawDepthFormat;
-		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
-		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+		renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eClear;
+		renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
+		renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
+		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
+		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eDepthStencilAttachmentOptimal;
 
 		renderPass.attachments[1].format = ShadowMapSpot::LinearDepthFormat;
-		renderPass.attachments[1].loadOp = renderer::AttachmentLoadOp::eClear;
-		renderPass.attachments[1].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[1].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[1].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[1].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[1].initialLayout = renderer::ImageLayout::eUndefined;
-		renderPass.attachments[1].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+		renderPass.attachments[1].loadOp = ashes::AttachmentLoadOp::eClear;
+		renderPass.attachments[1].storeOp = ashes::AttachmentStoreOp::eStore;
+		renderPass.attachments[1].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[1].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[1].samples = ashes::SampleCountFlag::e1;
+		renderPass.attachments[1].initialLayout = ashes::ImageLayout::eUndefined;
+		renderPass.attachments[1].finalLayout = ashes::ImageLayout::eColourAttachmentOptimal;
 
 		renderPass.attachments[2].format = ShadowMapSpot::VarianceFormat;
-		renderPass.attachments[2].loadOp = renderer::AttachmentLoadOp::eClear;
-		renderPass.attachments[2].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[2].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[2].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[2].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[2].initialLayout = renderer::ImageLayout::eUndefined;
-		renderPass.attachments[2].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+		renderPass.attachments[2].loadOp = ashes::AttachmentLoadOp::eClear;
+		renderPass.attachments[2].storeOp = ashes::AttachmentStoreOp::eStore;
+		renderPass.attachments[2].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[2].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[2].samples = ashes::SampleCountFlag::e1;
+		renderPass.attachments[2].initialLayout = ashes::ImageLayout::eUndefined;
+		renderPass.attachments[2].finalLayout = ashes::ImageLayout::eColourAttachmentOptimal;
 
 		renderPass.subpasses.resize( 1u );
 		renderPass.subpasses[0].flags = 0u;
-		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
-		renderPass.subpasses[0].colorAttachments.push_back( { 1u, renderer::ImageLayout::eColourAttachmentOptimal } );
-		renderPass.subpasses[0].colorAttachments.push_back( { 2u, renderer::ImageLayout::eColourAttachmentOptimal } );
-		renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
+		renderPass.subpasses[0].pipelineBindPoint = ashes::PipelineBindPoint::eGraphics;
+		renderPass.subpasses[0].colorAttachments.push_back( { 1u, ashes::ImageLayout::eColourAttachmentOptimal } );
+		renderPass.subpasses[0].colorAttachments.push_back( { 2u, ashes::ImageLayout::eColourAttachmentOptimal } );
+		renderPass.subpasses[0].depthStencilAttachment = { 0u, ashes::ImageLayout::eDepthStencilAttachmentOptimal };
 
 		renderPass.dependencies.resize( 2u );
-		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
-		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+		renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
+		renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 		renderPass.dependencies[1].srcSubpass = 0u;
-		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
-		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+		renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
+		renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 		m_renderPass = device.createRenderPass( renderPass );
 
-		m_shadowConfig = renderer::makeUniformBuffer< Configuration >( device
+		m_shadowConfig = ashes::makeUniformBuffer< Configuration >( device
 			, 1u
 			, 0u
-			, renderer::MemoryPropertyFlag::eHostVisible | renderer::MemoryPropertyFlag::eHostCoherent );
+			, ashes::MemoryPropertyFlag::eHostVisible | ashes::MemoryPropertyFlag::eHostCoherent );
 
 		return true;
 	}
@@ -131,7 +131,7 @@ namespace castor3d
 		getCuller().getCamera().detach();
 	}
 
-	void ShadowMapPassSpot::doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
+	void ShadowMapPassSpot::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, BillboardListRenderNode & node )
 	{
@@ -139,7 +139,7 @@ namespace castor3d
 			, *m_shadowConfig );
 	}
 
-	void ShadowMapPassSpot::doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
+	void ShadowMapPassSpot::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, SubmeshRenderNode & node )
 	{
@@ -153,20 +153,20 @@ namespace castor3d
 		queues.emplace_back( m_renderQueue );
 	}
 
-	renderer::DescriptorSetLayoutBindingArray ShadowMapPassSpot::doCreateUboBindings( PipelineFlags const & flags )const
+	ashes::DescriptorSetLayoutBindingArray ShadowMapPassSpot::doCreateUboBindings( PipelineFlags const & flags )const
 	{
 		auto uboBindings = RenderPass::doCreateUboBindings( flags );
-		uboBindings.emplace_back( ShadowMapPassSpot::UboBindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment );
+		uboBindings.emplace_back( ShadowMapPassSpot::UboBindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment );
 		m_initialised = true;
 		return uboBindings;
 	}
 
-	renderer::DepthStencilState ShadowMapPassSpot::doCreateDepthStencilState( PipelineFlags const & flags )const
+	ashes::DepthStencilState ShadowMapPassSpot::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
-		return renderer::DepthStencilState{ 0u, true, true };
+		return ashes::DepthStencilState{ 0u, true, true };
 	}
 
-	renderer::ColourBlendState ShadowMapPassSpot::doCreateBlendState( PipelineFlags const & flags )const
+	ashes::ColourBlendState ShadowMapPassSpot::doCreateBlendState( PipelineFlags const & flags )const
 	{
 		return RenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 2u );
 	}

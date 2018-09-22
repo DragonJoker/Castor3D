@@ -163,29 +163,29 @@ function( CoreSetup )
 			INSTALL_TYPES Developer Full
 		)
 
-		cpack_add_component( Renderer
-			DISPLAY_NAME "Renderer"
+		cpack_add_component( Ashes
+			DISPLAY_NAME "Ashes"
 			DESCRIPTION "Base renderer API."
 			REQUIRED
 			GROUP Core
 			INSTALL_TYPES Minimal Full
 		)
-		cpack_add_component( Renderer_dev
-			DISPLAY_NAME "Renderer SDK"
-			DESCRIPTION "Development files for Renderer."
+		cpack_add_component( Ashes_dev
+			DISPLAY_NAME "Ashes SDK"
+			DESCRIPTION "Development files for Ashes."
 			GROUP Development
 			DEPENDS CastorUtils CastorUtils_dev
 			INSTALL_TYPES Developer Full
 		)
-		cpack_add_component( Renderer_French_Doc
-			DISPLAY_NAME "Renderer French help"
-			DESCRIPTION "Renderer French HTML documentation."
+		cpack_add_component( Ashes_French_Doc
+			DISPLAY_NAME "Ashes French help"
+			DESCRIPTION "Ashes French HTML documentation."
 			GROUP Documentation
 			INSTALL_TYPES Developer Full
 		)
-		cpack_add_component( Renderer_English_Doc
-			DISPLAY_NAME "Renderer English help"
-			DESCRIPTION "Renderer English HTML documentation."
+		cpack_add_component( Ashes_English_Doc
+			DISPLAY_NAME "Ashes English help"
+			DESCRIPTION "Ashes English HTML documentation."
 			GROUP Documentation
 			INSTALL_TYPES Developer Full
 		)

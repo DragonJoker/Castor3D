@@ -98,7 +98,7 @@ namespace castor3d
 		 *\return		\p false si un problème quelconque a été rencontré.
 		 */
 		C3D_API bool initialise( castor::Size const & size
-			, renderer::WindowHandle && handle );
+			, ashes::WindowHandle && handle );
 		/**
 		 *\~english
 		 *\brief		Cleans up the instance.
@@ -237,7 +237,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le format des pixels de la fenêtre.
 		 */
-		C3D_API renderer::Format getPixelFormat()const;
+		C3D_API ashes::Format getPixelFormat()const;
 		/**
 		 *\~english
 		 *\brief		Sets the window pixel format.
@@ -246,7 +246,7 @@ namespace castor3d
 		 *\brief		Définit le format des pixels de la fenêtre.
 		 *\param[in]	value	Le nouveau format des pixels de la fenêtre.
 		 */
-		C3D_API void setPixelFormat( renderer::Format value );
+		C3D_API void setPixelFormat( ashes::Format value );
 		/**
 		 *\~english
 		 *\brief		Adds a scene rendered through this technique.
@@ -293,7 +293,7 @@ namespace castor3d
 			return m_listener.lock();
 		}
 
-		inline renderer::Device const & getDevice()const
+		inline ashes::Device const & getDevice()const
 		{
 			REQUIRE( m_device );
 			return *m_device;
@@ -338,7 +338,7 @@ namespace castor3d
 			m_renderTarget = value;
 		}
 
-		inline void setDevice( renderer::DevicePtr value )
+		inline void setDevice( ashes::DevicePtr value )
 		{
 			m_device = std::move( value );
 		}
@@ -369,15 +369,15 @@ namespace castor3d
 	private:
 		static uint32_t s_nbRenderWindows;
 		uint32_t m_index;
-		renderer::DevicePtr m_device;
-		renderer::SwapChainPtr m_swapChain;
-		renderer::RenderPassPtr m_renderPass;
-		renderer::StagingBufferPtr m_stagingBuffer;
-		renderer::CommandBufferPtr m_transferCommandBuffer;
-		std::vector< renderer::FrameBufferPtr > m_frameBuffers;
-		renderer::CommandBufferPtrArray m_commandBuffers;
-		renderer::SignalConnection< renderer::SwapChain::OnReset > m_swapChainReset;
-		renderer::ShaderStageStateArray m_program;
+		ashes::DevicePtr m_device;
+		ashes::SwapChainPtr m_swapChain;
+		ashes::RenderPassPtr m_renderPass;
+		ashes::StagingTexturePtr m_stagingTexture;
+		ashes::CommandBufferPtr m_transferCommandBuffer;
+		std::vector< ashes::FrameBufferPtr > m_frameBuffers;
+		ashes::CommandBufferPtrArray m_commandBuffers;
+		ashes::SignalConnection< ashes::SwapChain::OnReset > m_swapChainReset;
+		ashes::ShaderStageStateArray m_program;
 		RenderQuadUPtr m_renderQuad;
 		RenderTargetWPtr m_renderTarget;
 		OverlayRendererSPtr m_overlayRenderer;

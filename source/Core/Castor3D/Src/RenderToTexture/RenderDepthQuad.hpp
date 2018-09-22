@@ -65,8 +65,8 @@ namespace castor3d
 		 *\param[in]	size		La taille du viewport de rendu.
 		 *\param[in]	texture		La texture.
 		 */
-		C3D_API void render( renderer::RenderPass const & renderPass
-			, renderer::FrameBuffer const & frameBuffer
+		C3D_API void render( ashes::RenderPass const & renderPass
+			, ashes::FrameBuffer const & frameBuffer
 			, castor::Position const & position
 			, castor::Size const & size
 			, TextureLayout const & texture );

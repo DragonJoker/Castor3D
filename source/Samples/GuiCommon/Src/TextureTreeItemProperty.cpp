@@ -313,16 +313,16 @@ namespace GuiCommon
 				// Absolute path
 				unit->setAutoMipmaps( true );
 
-				renderer::ImageCreateInfo image{};
-				image.imageType = renderer::TextureType::e2D;
+				ashes::ImageCreateInfo image{};
+				image.imageType = ashes::TextureType::e2D;
 				image.extent.depth = 1u;
 				image.arrayLayers = 1u;
 				image.mipLevels = 1u;
-				image.usage = renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst;
+				image.usage = ashes::ImageUsageFlag::eSampled | ashes::ImageUsageFlag::eTransferDst;
 
 				auto texture = std::make_shared< TextureLayout >( *unit->getEngine()->getRenderSystem()
 					, image
-					, renderer::MemoryPropertyFlag::eHostVisible );
+					, ashes::MemoryPropertyFlag::eHostVisible );
 				texture->getImage().initialiseSource( Path{}, path );
 				unit->setTexture( texture );
 				unit->initialise();

@@ -27,12 +27,12 @@ namespace light_streaks
 		void initialise();
 		void cleanup();
 		void update( uint32_t index
-			, renderer::Extent2D const & size
+			, ashes::Extent2D const & size
 			, castor::Point2f const & direction
 			, uint32_t pass );
 		void upload();
 
-		inline renderer::UniformBuffer< Configuration > & getUbo()
+		inline ashes::UniformBuffer< Configuration > & getUbo()
 		{
 			return *m_ubo;
 		}
@@ -47,7 +47,7 @@ namespace light_streaks
 
 	private:
 		castor3d::Engine & m_engine;
-		renderer::UniformBufferPtr< Configuration > m_ubo;
+		ashes::UniformBufferPtr< Configuration > m_ubo;
 	};
 }
 

@@ -68,7 +68,7 @@ namespace castor3d
 						Pour la boucles de rendu asynchrone, cela signifie que le thread appelant cette fonction sera sans contexte associé, prévenant l'appel de renderSyncFrame.
 		 *\param[in]	window	La fenêtre de rendu utilisée pour initialiser le contexte de rendu, recevra le contexte.
 		 */
-		C3D_API void createDevice( renderer::WindowHandle && handle
+		C3D_API void createDevice( ashes::WindowHandle && handle
 			, RenderWindow & window );
 		/**
 		 *\~english
@@ -191,7 +191,7 @@ namespace castor3d
 		 *\param[in]	window	La fenêtre de rendu utilisée pour initialiser le contexte de rendu, recevra le contexte.
 		 *\return		Le contexte créé, ou l'existant.
 		 */
-		C3D_API renderer::DevicePtr doCreateDevice( renderer::WindowHandle && handle
+		C3D_API ashes::DevicePtr doCreateDevice( ashes::WindowHandle && handle
 			, RenderWindow & window );
 		/**
 		 *\~english
@@ -208,7 +208,7 @@ namespace castor3d
 		 *\brief		Demande la création du contexte de rendu principal.
 		 *\param[in]	window	La fenêtre de rendu utilisée pour initialiser le contexte de rendu, recevra le contexte.
 		 */
-		C3D_API virtual renderer::DevicePtr doCreateMainDevice( renderer::WindowHandle && handle
+		C3D_API virtual ashes::DevicePtr doCreateMainDevice( ashes::WindowHandle && handle
 			, RenderWindow & window ) = 0;
 
 	private:

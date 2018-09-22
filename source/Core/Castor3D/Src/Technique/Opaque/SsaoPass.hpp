@@ -41,7 +41,7 @@ namespace castor3d
 		 *\param[in]	gpResult	Le résultat de la geometry pass.
 		 */
 		SsaoPass( Engine & engine
-			, renderer::Extent2D const & size
+			, ashes::Extent2D const & size
 			, SsaoConfig & config
 			, GeometryPassResult const & gpResult );
 		/**
@@ -64,7 +64,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dessine la passe SSAO.
 		 */
-		renderer::Semaphore const & render( renderer::Semaphore const & toWait )const;
+		ashes::Semaphore const & render( ashes::Semaphore const & toWait )const;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */

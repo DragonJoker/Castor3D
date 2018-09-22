@@ -15,6 +15,7 @@
 #include <RenderPass/FrameBufferAttachment.hpp>
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
+#include <Shader/GlslToSpv.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
 #include <GlslSource.hpp>
@@ -30,27 +31,27 @@ namespace castor3d
 
 	namespace
 	{
-		renderer::RenderPassPtr doCreateRenderPass( Engine const & engine
-			, renderer::TextureView const & depthView )
+		ashes::RenderPassPtr doCreateRenderPass( Engine const & engine
+			, ashes::TextureView const & depthView )
 		{
 			auto & device = getCurrentDevice( engine );
 
-			renderer::RenderPassCreateInfo renderPass;
+			ashes::RenderPassCreateInfo renderPass;
 			renderPass.flags = 0u;
 
 			renderPass.attachments.resize( 1u );
 			renderPass.attachments[0].format = depthView.getFormat();
-			renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eLoad;
-			renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
-			renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eClear;
-			renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eStore;
-			renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-			renderPass.attachments[0].initialLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
-			renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+			renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eLoad;
+			renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
+			renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eClear;
+			renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eStore;
+			renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
+			renderPass.attachments[0].initialLayout = ashes::ImageLayout::eDepthStencilAttachmentOptimal;
+			renderPass.attachments[0].finalLayout = ashes::ImageLayout::eDepthStencilAttachmentOptimal;
 
 			renderPass.subpasses.resize( 1u );
-			renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
-			renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
+			renderPass.subpasses[0].pipelineBindPoint = ashes::PipelineBindPoint::eGraphics;
+			renderPass.subpasses[0].depthStencilAttachment = { 0u, ashes::ImageLayout::eDepthStencilAttachmentOptimal };
 
 			return device.createRenderPass( renderPass );
 		}
@@ -80,7 +81,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	StencilPass::StencilPass( Engine const & engine
-		, renderer::TextureView const & depthView
+		, ashes::TextureView const & depthView
 		, MatrixUbo & matrixUbo
 		, ModelMatrixUbo & modelMatrixUbo )
 		: m_engine{ engine }
@@ -90,18 +91,18 @@ namespace castor3d
 	{
 	}
 
-	void StencilPass::initialise( renderer::VertexLayout const & vertexLayout
-		, renderer::VertexBufferBase & vbo )
+	void StencilPass::initialise( ashes::VertexLayout const & vertexLayout
+		, ashes::VertexBufferBase & vbo )
 	{
 		m_vbo = &vbo;
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = getCurrentDevice( renderSystem );
-		renderer::Extent2D size{ m_depthView.getTexture().getDimensions().width, m_depthView.getTexture().getDimensions().height };
+		ashes::Extent2D size{ m_depthView.getTexture().getDimensions().width, m_depthView.getTexture().getDimensions().height };
 
-		renderer::DescriptorSetLayoutBindingArray setLayoutBindings
+		ashes::DescriptorSetLayoutBindingArray setLayoutBindings
 		{
-			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex },
-			{ 1u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex },
+			{ 0u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex },
+			{ 1u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex },
 		};
 		m_descriptorLayout = device.createDescriptorSetLayout( std::move( setLayoutBindings ) );
 		m_pipelineLayout = device.createPipelineLayout( *m_descriptorLayout );
@@ -115,7 +116,7 @@ namespace castor3d
 		m_descriptorSet->update();
 
 		m_renderPass = doCreateRenderPass( m_engine, m_depthView );
-		renderer::FrameBufferAttachmentArray attaches
+		ashes::FrameBufferAttachmentArray attaches
 		{
 			{ *m_renderPass->getAttachments().begin(), m_depthView }
 		};
@@ -123,54 +124,56 @@ namespace castor3d
 
 		m_program =
 		{
-			{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
+			{ device.createShaderModule( ashes::ShaderStageFlag::eVertex ) },
 		};
-		m_program[0].module->loadShader( doGetVertexShader( renderSystem ).getSource() );
+		m_program[0].module->loadShader( compileGlslToSpv( device
+			, ashes::ShaderStageFlag::eVertex
+			, doGetVertexShader( renderSystem ).getSource() ) );
 
-		renderer::DepthStencilState dsstate;
+		ashes::DepthStencilState dsstate;
 		dsstate.depthTestEnable = true;
 		dsstate.depthWriteEnable = false;
 		dsstate.stencilTestEnable = true;
 		dsstate.back.compareMask = 0u;
 		dsstate.back.reference = 0u;
-		dsstate.back.compareOp = renderer::CompareOp::eAlways;
-		dsstate.back.failOp = renderer::StencilOp::eKeep;
-		dsstate.back.depthFailOp = renderer::StencilOp::eIncrementAndWrap;
-		dsstate.back.passOp = renderer::StencilOp::eKeep;
+		dsstate.back.compareOp = ashes::CompareOp::eAlways;
+		dsstate.back.failOp = ashes::StencilOp::eKeep;
+		dsstate.back.depthFailOp = ashes::StencilOp::eIncrementAndWrap;
+		dsstate.back.passOp = ashes::StencilOp::eKeep;
 		dsstate.front.compareMask = 0u;
 		dsstate.front.reference = 0u;
-		dsstate.front.compareOp = renderer::CompareOp::eAlways;
-		dsstate.front.failOp = renderer::StencilOp::eKeep;
-		dsstate.front.depthFailOp = renderer::StencilOp::eDecrementAndWrap;
-		dsstate.front.passOp = renderer::StencilOp::eKeep;
+		dsstate.front.compareOp = ashes::CompareOp::eAlways;
+		dsstate.front.failOp = ashes::StencilOp::eKeep;
+		dsstate.front.depthFailOp = ashes::StencilOp::eDecrementAndWrap;
+		dsstate.front.passOp = ashes::StencilOp::eKeep;
 
 		m_pipeline = m_pipelineLayout->createPipeline(
 		{
 			m_program,
 			*m_renderPass,
-			renderer::VertexInputState::create( vertexLayout ),
-			renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleList },
-			renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eNone },
-			renderer::MultisampleState{},
-			renderer::ColourBlendState::createDefault(),
+			ashes::VertexInputState::create( vertexLayout ),
+			ashes::InputAssemblyState{ ashes::PrimitiveTopology::eTriangleList },
+			ashes::RasterisationState{ 0u, false, false, ashes::PolygonMode::eFill, ashes::CullModeFlag::eNone },
+			ashes::MultisampleState{},
+			ashes::ColourBlendState::createDefault(),
 			{},
 			dsstate,
 			std::nullopt,
-			renderer::Viewport{ size.width, size.height, 0, 0 },
-			renderer::Scissor{ 0, 0, size.width, size.height },
+			ashes::Viewport{ size.width, size.height, 0, 0 },
+			ashes::Scissor{ 0, 0, size.width, size.height },
 		} );
 
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
 		m_finished = device.createSemaphore();
 
 		m_commandBuffer->begin();
-		m_commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
-			, renderer::PipelineStageFlag::eEarlyFragmentTests
-			, m_depthView.makeDepthStencilAttachment( renderer::ImageLayout::eUndefined, 0u ) );
+		m_commandBuffer->memoryBarrier( ashes::PipelineStageFlag::eFragmentShader
+			, ashes::PipelineStageFlag::eEarlyFragmentTests
+			, m_depthView.makeDepthStencilAttachment( ashes::ImageLayout::eUndefined, 0u ) );
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
-			, { renderer::DepthStencilClearValue{ 1.0, 0 } }
-			, renderer::SubpassContents::eInline );
+			, { ashes::DepthStencilClearValue{ 1.0, 0 } }
+			, ashes::SubpassContents::eInline );
 		m_commandBuffer->bindPipeline( *m_pipeline );
 		m_commandBuffer->bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
 		m_commandBuffer->bindVertexBuffer( 0u, vbo.getBuffer(), 0u );
@@ -193,14 +196,14 @@ namespace castor3d
 		m_descriptorLayout.reset();
 	}
 
-	renderer::Semaphore const & StencilPass::render( renderer::Semaphore const & toWait )
+	ashes::Semaphore const & StencilPass::render( ashes::Semaphore const & toWait )
 	{
 		auto & device = getCurrentDevice( m_engine );
 		auto * result = &toWait;
 
 		device.getGraphicsQueue().submit( *m_commandBuffer
 			, *result
-			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, ashes::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
 			, nullptr );
 		result = m_finished.get();

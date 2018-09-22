@@ -1,4 +1,4 @@
-project( GlRenderSystem )
+project( Gl4RenderSystem )
 
 set( Castor3DBinsDependencies 
 	${Castor3DBinsDependencies}
@@ -6,25 +6,25 @@ set( Castor3DBinsDependencies
 	PARENT_SCOPE
 )
 
-set( ${PROJECT_NAME}_DESCRIPTION "OpenGL Renderer" )
+set( ${PROJECT_NAME}_DESCRIPTION "OpenGL 4.2 Renderer" )
 set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 include_directories( ${Castor3DIncludeDirs} )
-include_directories( ${CMAKE_SOURCE_DIR}/${RENDERERLIB_DIR}/GlRenderer/Src )
-include_directories( ${CMAKE_BINARY_DIR}/${RENDERERLIB_DIR}/GlRenderer/Src )
+include_directories( ${CMAKE_SOURCE_DIR}/${ASHES_DIR}/Gl4Renderer/Src )
+include_directories( ${CMAKE_BINARY_DIR}/${ASHES_DIR}/Gl4Renderer/Src )
 include_directories( ${CMAKE_SOURCE_DIR}/Plugins/Renderers/GlRenderSystem/Src )
 
 add_target(
 	${PROJECT_NAME}
 	api_plugin
 	"Castor3D"
-	"${CastorMinLibraries};${OpenGlLibraries};GlRenderer"
-	"GlRenderSystemPch.hpp"
-	"GlRenderSystemPch.cpp"
-	"-DGlRenderer_STATIC"
-	"-DGlRenderer_STATIC"
+	"${CastorMinLibraries};${OpenGlLibraries};Gl4Renderer"
+	"Gl4RenderSystemPch.hpp"
+	"Gl4RenderSystemPch.cpp"
+	"-DGl4Renderer_STATIC"
+	"-DGl4Renderer_STATIC"
 )
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Renderers" )

@@ -210,7 +210,7 @@ namespace GuiCommon
 	 *\param[in]	p_window	La fenêtre
 	 *\return		Le WindowHandle créé
 	 */
-	renderer::WindowHandle makeWindowHandle( wxWindow * p_window );
+	ashes::WindowHandle makeWindowHandle( wxWindow * p_window );
 	/**
 	 *\~english
 	 *\brief		Loads a font glyphs using wxWidgets

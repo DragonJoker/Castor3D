@@ -68,13 +68,13 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
 		 */
-		void doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
+		void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, BillboardListRenderNode & node )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
 		 */
-		void doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
+		void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, SubmeshRenderNode & node )override;
 		/**
@@ -84,15 +84,15 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateUboBindings
 		 */
-		renderer::DescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
+		ashes::DescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
 		 */
-		renderer::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const override;
+		ashes::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateBlendState
 		 */
-		renderer::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
+		ashes::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
 
 	public:
 		C3D_API static castor::String const ShadowMapUbo;
@@ -106,7 +106,7 @@ namespace castor3d
 		};
 
 	private:
-		renderer::UniformBufferPtr< Configuration > m_shadowConfig;
+		ashes::UniformBufferPtr< Configuration > m_shadowConfig;
 		castor::Matrix4x4r m_view;
 	};
 }

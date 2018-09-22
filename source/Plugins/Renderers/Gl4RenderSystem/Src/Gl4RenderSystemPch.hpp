@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___Gl_PrecompiledHeader___
-#define ___Gl_PrecompiledHeader___
+#ifndef ___Gl4_PrecompiledHeader___
+#define ___Gl4_PrecompiledHeader___
 
 #include <config.hpp>
 
@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <iomanip>
 #include <iostream>
 
-#include "GlRenderSystemPrerequisites.hpp"
+#include "Gl4RenderSystemPrerequisites.hpp"
 
 #endif
 

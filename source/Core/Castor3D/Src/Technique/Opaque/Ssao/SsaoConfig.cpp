@@ -94,37 +94,37 @@ namespace castor3d
 		, RenderTechniqueVisitor & visitor )
 	{
 		visitor.visit( name
-			, renderer::ShaderStageFlag::eFragment
+			, ashes::ShaderStageFlag::eFragment
 			, cuT( "SSAO" )
 			, cuT( "Radius" )
 			, m_radius );
 		visitor.visit( name
-			, renderer::ShaderStageFlag::eFragment
+			, ashes::ShaderStageFlag::eFragment
 			, cuT( "SSAO" )
 			, cuT( "Bias" )
 			, m_bias );
 		visitor.visit( name
-			, renderer::ShaderStageFlag::eFragment
+			, ashes::ShaderStageFlag::eFragment
 			, cuT( "SSAO" )
 			, cuT( "Intensity" )
 			, m_intensity );
 		visitor.visit( name
-			, renderer::ShaderStageFlag::eFragment
+			, ashes::ShaderStageFlag::eFragment
 			, cuT( "SSAO" )
 			, cuT( "Samples" )
 			, m_numSamples );
 		visitor.visit( name
-			, renderer::ShaderStageFlag::eFragment
+			, ashes::ShaderStageFlag::eFragment
 			, cuT( "SSAO" )
 			, cuT( "Edge Sharpness" )
 			, m_edgeSharpness );
 		visitor.visit( name
-			, renderer::ShaderStageFlag::eFragment
+			, ashes::ShaderStageFlag::eFragment
 			, cuT( "SSAO" )
 			, cuT( "Blur Step Size" )
 			, m_blurStepSize );
 		visitor.visit( name
-			, renderer::ShaderStageFlag::eFragment
+			, ashes::ShaderStageFlag::eFragment
 			, cuT( "SSAO" )
 			, cuT( "Blur Radius" )
 			, m_blurRadius );

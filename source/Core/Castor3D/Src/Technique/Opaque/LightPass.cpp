@@ -23,6 +23,7 @@
 #include <Pipeline/RasterisationState.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
 #include <RenderPass/RenderPass.hpp>
+#include <Shader/GlslToSpv.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
 #include <GlslSource.hpp>
@@ -64,17 +65,17 @@ namespace castor3d
 		return Values[size_t( texture )];
 	}
 
-	renderer::Format getTextureFormat( DsTexture texture )
+	ashes::Format getTextureFormat( DsTexture texture )
 	{
-		static std::array< renderer::Format, size_t( DsTexture::eCount ) > Values
+		static std::array< ashes::Format, size_t( DsTexture::eCount ) > Values
 		{
 			{
-				renderer::Format::eD24_UNORM_S8_UINT,
-				renderer::Format::eR32G32B32A32_SFLOAT,
-				renderer::Format::eR16G16B16A16_SFLOAT,
-				renderer::Format::eR16G16B16A16_SFLOAT,
-				renderer::Format::eR16G16B16A16_SFLOAT,
-				renderer::Format::eR16G16B16A16_SFLOAT,
+				ashes::Format::eD24_UNORM_S8_UINT,
+				ashes::Format::eR32G32B32A32_SFLOAT,
+				ashes::Format::eR16G16B16A16_SFLOAT,
+				ashes::Format::eR16G16B16A16_SFLOAT,
+				ashes::Format::eR16G16B16A16_SFLOAT,
+				ashes::Format::eR16G16B16A16_SFLOAT,
 			}
 		};
 
@@ -274,18 +275,22 @@ namespace castor3d
 
 	namespace
 	{
-		renderer::ShaderStageStateArray doCreateProgram( Engine & engine
+		ashes::ShaderStageStateArray doCreateProgram( Engine & engine
 			, glsl::Shader const & vtx
 			, glsl::Shader const & pxl )
 		{
 			auto & device = getCurrentDevice( engine );
-			renderer::ShaderStageStateArray program
+			ashes::ShaderStageStateArray program
 			{
-				{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
-				{ device.createShaderModule( renderer::ShaderStageFlag::eFragment ) },
+				{ device.createShaderModule( ashes::ShaderStageFlag::eVertex ) },
+				{ device.createShaderModule( ashes::ShaderStageFlag::eFragment ) },
 			};
-			program[0].module->loadShader( vtx.getSource() );
-			program[1].module->loadShader( pxl.getSource() );
+			program[0].module->loadShader( compileGlslToSpv( device
+				, ashes::ShaderStageFlag::eVertex
+				, vtx.getSource() ) );
+			program[1].module->loadShader( compileGlslToSpv( device
+				, ashes::ShaderStageFlag::eFragment
+				, pxl.getSource() ) );
 			return program;
 		}
 	}
@@ -302,10 +307,10 @@ namespace castor3d
 	{
 	}
 
-	void LightPass::Program::initialise( renderer::VertexBufferBase & vbo
-		, renderer::VertexLayout const & vertexLayout
-		, renderer::RenderPass const & firstRenderPass
-		, renderer::RenderPass const & blendRenderPass
+	void LightPass::Program::initialise( ashes::VertexBufferBase & vbo
+		, ashes::VertexLayout const & vertexLayout
+		, ashes::RenderPass const & firstRenderPass
+		, ashes::RenderPass const & blendRenderPass
 		, MatrixUbo & matrixUbo
 		, SceneUbo & sceneUbo
 		, GpInfoUbo & gpInfoUbo
@@ -314,35 +319,35 @@ namespace castor3d
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = getCurrentDevice( renderSystem );
 
-		renderer::DescriptorSetLayoutBindingArray setLayoutBindings;
+		ashes::DescriptorSetLayoutBindingArray setLayoutBindings;
 		setLayoutBindings.emplace_back( m_engine.getMaterialCache().getPassBuffer().createLayoutBinding() );
-		setLayoutBindings.emplace_back( MatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
-		setLayoutBindings.emplace_back( SceneUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
-		setLayoutBindings.emplace_back( GpInfoUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
+		setLayoutBindings.emplace_back( MatrixUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex | ashes::ShaderStageFlag::eFragment );
+		setLayoutBindings.emplace_back( SceneUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex | ashes::ShaderStageFlag::eFragment );
+		setLayoutBindings.emplace_back( GpInfoUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex | ashes::ShaderStageFlag::eFragment );
 
 		if ( modelMatrixUbo )
 		{
-			setLayoutBindings.emplace_back( ModelMatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+			setLayoutBindings.emplace_back( ModelMatrixUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex );
 		}
 
-		setLayoutBindings.emplace_back( shader::LightingModel::UboBindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment );
+		setLayoutBindings.emplace_back( shader::LightingModel::UboBindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment );
 		m_uboDescriptorLayout = device.createDescriptorSetLayout( std::move( setLayoutBindings ) );
 		m_uboDescriptorPool = m_uboDescriptorLayout->createPool( 2u );
 		uint32_t index = MinBufferIndex;
 
-		setLayoutBindings = renderer::DescriptorSetLayoutBindingArray
+		setLayoutBindings = ashes::DescriptorSetLayoutBindingArray
 		{
-			{ index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
-			{ index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
-			{ index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
-			{ index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
-			{ index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
-			{ index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
+			{ index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment },
+			{ index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment },
+			{ index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment },
+			{ index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment },
+			{ index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment },
+			{ index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment },
 		};
 
 		if ( m_shadows )
 		{
-			setLayoutBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			setLayoutBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		m_textureDescriptorLayout = device.createDescriptorSetLayout( std::move( setLayoutBindings ) );
@@ -369,7 +374,7 @@ namespace castor3d
 		doBind( light );
 	}
 
-	void LightPass::Program::render( renderer::CommandBuffer & commandBuffer
+	void LightPass::Program::render( ashes::CommandBuffer & commandBuffer
 		, uint32_t count
 		, bool first
 		, uint32_t offset )const
@@ -388,13 +393,13 @@ namespace castor3d
 
 	//************************************************************************************************
 
-	LightPass::RenderPass::RenderPass( renderer::RenderPassPtr && renderPass
-		, renderer::TextureView const & depthView
-		, renderer::TextureView const & diffuseView
-		, renderer::TextureView const & specularView )
+	LightPass::RenderPass::RenderPass( ashes::RenderPassPtr && renderPass
+		, ashes::TextureView const & depthView
+		, ashes::TextureView const & diffuseView
+		, ashes::TextureView const & specularView )
 		: renderPass{ std::move( renderPass ) }
 	{
-		renderer::FrameBufferAttachmentArray attaches
+		ashes::FrameBufferAttachmentArray attaches
 		{
 			{ *( this->renderPass->getAttachments().begin() + 0u ), depthView },
 			{ *( this->renderPass->getAttachments().begin() + 1u ), diffuseView },
@@ -407,11 +412,11 @@ namespace castor3d
 	//************************************************************************************************
 
 	LightPass::LightPass( Engine & engine
-		, renderer::RenderPassPtr && firstRenderPass
-		, renderer::RenderPassPtr && blendRenderPass
-		, renderer::TextureView const & depthView
-		, renderer::TextureView const & diffuseView
-		, renderer::TextureView const & specularView
+		, ashes::RenderPassPtr && firstRenderPass
+		, ashes::RenderPassPtr && blendRenderPass
+		, ashes::TextureView const & depthView
+		, ashes::TextureView const & diffuseView
+		, ashes::TextureView const & specularView
 		, GpInfoUbo & gpInfoUbo
 		, bool hasShadows )
 		: m_engine{ engine }
@@ -422,7 +427,7 @@ namespace castor3d
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_sampler{ engine.getDefaultSampler() }
 		, m_signalReady{ getCurrentDevice( engine ).createSemaphore() }
-		, m_fence{ getCurrentDevice( engine ).createFence( renderer::FenceCreateFlag::eSignaled ) }
+		, m_fence{ getCurrentDevice( engine ).createFence( ashes::FenceCreateFlag::eSignaled ) }
 	{
 	}
 
@@ -435,17 +440,17 @@ namespace castor3d
 		doUpdate( size, light, camera );
 	}
 
-	renderer::Semaphore const & LightPass::render( uint32_t index
-		, renderer::Semaphore const & toWait
+	ashes::Semaphore const & LightPass::render( uint32_t index
+		, ashes::Semaphore const & toWait
 		, TextureUnit * shadowMapOpt )
 	{
-		static renderer::DepthStencilClearValue const clearDepthStencil{ 1.0, 1 };
-		static renderer::ClearColorValue const clearColour{ 0.0, 0.0, 0.0, 1.0 };
+		static ashes::DepthStencilClearValue const clearDepthStencil{ 1.0, 1 };
+		static ashes::ClearColorValue const clearColour{ 0.0, 0.0, 0.0, 1.0 };
 		REQUIRE( m_pipeline );
 		auto result = &toWait;
 		auto & device = getCurrentDevice( m_engine );
 
-		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eOneTimeSubmit );
+		m_commandBuffer->begin( ashes::CommandBufferUsageFlag::eOneTimeSubmit );
 		m_timer->beginPass( *m_commandBuffer, index );
 		m_timer->notifyPassRender( index );
 
@@ -454,7 +459,7 @@ namespace castor3d
 			m_commandBuffer->beginRenderPass( *m_firstRenderPass.renderPass
 				, *m_firstRenderPass.frameBuffer
 				, { clearDepthStencil, clearColour, clearColour }
-				, renderer::SubpassContents::eSecondaryCommandBuffers );
+				, ashes::SubpassContents::eSecondaryCommandBuffers );
 			m_commandBuffer->executeCommands( { *m_pipeline->firstCommandBuffer } );
 		}
 		else
@@ -462,7 +467,7 @@ namespace castor3d
 			m_commandBuffer->beginRenderPass( *m_blendRenderPass.renderPass
 				, *m_blendRenderPass.frameBuffer
 				, { clearDepthStencil, clearColour, clearColour }
-				, renderer::SubpassContents::eSecondaryCommandBuffers );
+				, ashes::SubpassContents::eSecondaryCommandBuffers );
 			m_commandBuffer->executeCommands( { *m_pipeline->blendCommandBuffer } );
 		}
 
@@ -474,14 +479,14 @@ namespace castor3d
 		m_fence->reset();
 		device.getGraphicsQueue().submit( *m_commandBuffer
 			, *result
-			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, ashes::PipelineStageFlag::eColourAttachmentOutput
 			, *m_signalReady
 			, m_fence.get() );
-		m_fence->wait( renderer::FenceTimeout );
+		m_fence->wait( ashes::FenceTimeout );
 #else
 		device.getGraphicsQueue().submit( *m_commandBuffer
 			, *result
-			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, ashes::PipelineStageFlag::eColourAttachmentOutput
 			, *m_signalReady
 			, nullptr );
 #endif
@@ -493,8 +498,8 @@ namespace castor3d
 	void LightPass::doInitialise( Scene const & scene
 		, GeometryPassResult const & gp
 		, LightType lightType
-		, renderer::VertexBufferBase & vbo
-		, renderer::VertexLayout const & vertexLayout
+		, ashes::VertexBufferBase & vbo
+		, ashes::VertexLayout const & vertexLayout
 		, SceneUbo & sceneUbo
 		, ModelMatrixUbo * modelMatrixUbo
 		, RenderPassTimer & timer )
@@ -570,26 +575,26 @@ namespace castor3d
 
 			pipeline.textureDescriptorSet = pipeline.program->getTextureDescriptorPool().createDescriptorSet( 1u );
 			auto & texLayout = pipeline.program->getTextureDescriptorLayout();
-			auto writeBinding = [&gp, this]( uint32_t index, renderer::ImageLayout layout )
+			auto writeBinding = [&gp, this]( uint32_t index, ashes::ImageLayout layout )
 			{
-				renderer::SamplerCRef sampler = std::ref( gp.getSampler() );
-				renderer::TextureViewCRef view = std::cref( *gp.getViews()[index - MinBufferIndex] );
-				return renderer::WriteDescriptorSet
+				ashes::SamplerCRef sampler = std::ref( gp.getSampler() );
+				ashes::TextureViewCRef view = std::cref( *gp.getViews()[index - MinBufferIndex] );
+				return ashes::WriteDescriptorSet
 				{
 					index,
 					0u,
 					1u,
-					renderer::DescriptorType::eCombinedImageSampler,
+					ashes::DescriptorType::eCombinedImageSampler,
 					{ { sampler, view, layout } }
 				};
 			};
 			uint32_t index = MinBufferIndex;
-			pipeline.textureWrites.push_back( writeBinding( index++, renderer::ImageLayout::eDepthStencilAttachmentOptimal ) );
-			pipeline.textureWrites.push_back( writeBinding( index++, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
-			pipeline.textureWrites.push_back( writeBinding( index++, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
-			pipeline.textureWrites.push_back( writeBinding( index++, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
-			pipeline.textureWrites.push_back( writeBinding( index++, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
-			pipeline.textureWrites.push_back( writeBinding( index++, renderer::ImageLayout::eShaderReadOnlyOptimal ) );
+			pipeline.textureWrites.push_back( writeBinding( index++, ashes::ImageLayout::eDepthStencilAttachmentOptimal ) );
+			pipeline.textureWrites.push_back( writeBinding( index++, ashes::ImageLayout::eShaderReadOnlyOptimal ) );
+			pipeline.textureWrites.push_back( writeBinding( index++, ashes::ImageLayout::eShaderReadOnlyOptimal ) );
+			pipeline.textureWrites.push_back( writeBinding( index++, ashes::ImageLayout::eShaderReadOnlyOptimal ) );
+			pipeline.textureWrites.push_back( writeBinding( index++, ashes::ImageLayout::eShaderReadOnlyOptimal ) );
+			pipeline.textureWrites.push_back( writeBinding( index++, ashes::ImageLayout::eShaderReadOnlyOptimal ) );
 
 			pipeline.textureDescriptorSet->setBindings( pipeline.textureWrites );
 			pipeline.textureDescriptorSet->update();
@@ -602,8 +607,8 @@ namespace castor3d
 						index++,
 						0u,
 						1u,
-						renderer::DescriptorType::eCombinedImageSampler,
-						{ { std::nullopt, std::nullopt, renderer::ImageLayout::eShaderReadOnlyOptimal } }
+						ashes::DescriptorType::eCombinedImageSampler,
+						{ { std::nullopt, std::nullopt, ashes::ImageLayout::eShaderReadOnlyOptimal } }
 					} );
 				pipeline.textureDescriptorSet->setBindings( pipeline.textureWrites );
 			}
@@ -647,14 +652,14 @@ namespace castor3d
 
 		if ( shadowMap )
 		{
-			renderer::WriteDescriptorSet & write = pipeline.textureDescriptorSet->getBinding( 6u );
+			ashes::WriteDescriptorSet & write = pipeline.textureDescriptorSet->getBinding( 6u );
 			write.imageInfo[0].imageView = std::ref( shadowMap->getTexture()->getDefaultView() );
 			write.imageInfo[0].sampler = std::ref( shadowMap->getSampler()->getSampler() );
 			pipeline.textureDescriptorSet->update();
 		}
 
-		commandBuffer.begin( renderer::CommandBufferUsageFlag::eRenderPassContinue
-			, renderer::CommandBufferInheritanceInfo
+		commandBuffer.begin( ashes::CommandBufferUsageFlag::eRenderPassContinue
+			, ashes::CommandBufferInheritanceInfo
 			{
 				renderPass.renderPass.get(),
 				0u,

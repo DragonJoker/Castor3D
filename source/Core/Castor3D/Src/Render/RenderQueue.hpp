@@ -225,7 +225,7 @@ namespace castor3d
 			return *m_culledRenderNodes;
 		}
 
-		inline renderer::CommandBuffer const & getCommandBuffer()const
+		inline ashes::CommandBuffer const & getCommandBuffer()const
 		{
 			return *m_commandBuffer;
 		}
@@ -251,7 +251,7 @@ namespace castor3d
 		SceneNode const * m_ignoredNode{ nullptr };
 		std::unique_ptr< SceneRenderNodes > m_renderNodes;
 		std::unique_ptr< SceneCulledRenderNodes > m_culledRenderNodes;
-		renderer::CommandBufferPtr m_commandBuffer;
+		ashes::CommandBufferPtr m_commandBuffer;
 		bool m_allChanged;
 		bool m_culledChanged;
 	};

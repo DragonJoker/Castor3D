@@ -67,7 +67,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Crée une attache de layout de set de descripteurs.
 		 */
-		C3D_API renderer::DescriptorSetLayoutBinding createLayoutBinding()const;
+		C3D_API ashes::DescriptorSetLayoutBinding createLayoutBinding()const;
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor set binding at given point.
@@ -76,8 +76,8 @@ namespace castor3d
 		 *\brief		Crée une attache de set de descripteurs au point donné.
 		 *\param[in]	binding	L'attache de layout de set de descripteurs.
 		 */
-		C3D_API void createBinding( renderer::DescriptorSet & descriptorSet
-			, renderer::DescriptorSetLayoutBinding const & binding )const;
+		C3D_API void createBinding( ashes::DescriptorSet & descriptorSet
+			, ashes::DescriptorSetLayoutBinding const & binding )const;
 		/**
 		 *\~english
 		 *\brief		Puts the pass data into the buffer.

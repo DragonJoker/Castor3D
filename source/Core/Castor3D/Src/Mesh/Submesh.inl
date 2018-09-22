@@ -174,27 +174,27 @@ namespace castor3d
 		return m_points;
 	}
 
-	inline renderer::VertexBuffer< InterleavedVertex > const & Submesh::getVertexBuffer()const
+	inline ashes::VertexBuffer< InterleavedVertex > const & Submesh::getVertexBuffer()const
 	{
 		return *m_vertexBuffer;
 	}
 
-	inline renderer::VertexBuffer< InterleavedVertex > & Submesh::getVertexBuffer()
+	inline ashes::VertexBuffer< InterleavedVertex > & Submesh::getVertexBuffer()
 	{
 		return *m_vertexBuffer;
 	}
 
-	inline renderer::VertexLayout const & Submesh::getVertexLayout()const
+	inline ashes::VertexLayout const & Submesh::getVertexLayout()const
 	{
 		return *m_vertexLayout;
 	}
 
-	inline renderer::Buffer< uint32_t > const & Submesh::getIndexBuffer()const
+	inline ashes::Buffer< uint32_t > const & Submesh::getIndexBuffer()const
 	{
 		return *m_indexBuffer;
 	}
 
-	inline renderer::Buffer< uint32_t > & Submesh::getIndexBuffer()
+	inline ashes::Buffer< uint32_t > & Submesh::getIndexBuffer()
 	{
 		return *m_indexBuffer;
 	}
@@ -306,12 +306,12 @@ namespace castor3d
 		return m_components;
 	}
 
-	inline renderer::PrimitiveTopology Submesh::getTopology()const
+	inline ashes::PrimitiveTopology Submesh::getTopology()const
 	{
 		return m_topology;
 	}
 
-	inline void Submesh::setTopology( renderer::PrimitiveTopology value )
+	inline void Submesh::setTopology( ashes::PrimitiveTopology value )
 	{
 		m_topology = value;
 	}

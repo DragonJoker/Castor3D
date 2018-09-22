@@ -1,7 +1,7 @@
 #include "PassRenderNode.hpp"
 
 #include "Material/Pass.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Shader/Program.hpp"
 #include "Castor3DPrerequisites.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -18,8 +18,8 @@ namespace castor3d
 	namespace
 	{
 		void doBindTexture( TextureUnitSPtr texture
-			, renderer::DescriptorSetLayout const & layout
-			, renderer::DescriptorSet & descriptorSet
+			, ashes::DescriptorSetLayout const & layout
+			, ashes::DescriptorSet & descriptorSet
 			, uint32_t & index )
 		{
 			if ( texture )
@@ -31,23 +31,23 @@ namespace castor3d
 		}
 
 		void doBindTexture( TextureUnitSPtr texture
-			, renderer::DescriptorSetLayout const & layout
-			, renderer::WriteDescriptorSetArray & writes
+			, ashes::DescriptorSetLayout const & layout
+			, ashes::WriteDescriptorSetArray & writes
 			, uint32_t & index )
 		{
 			if ( texture )
 			{
-				writes.push_back( renderer::WriteDescriptorSet
+				writes.push_back( ashes::WriteDescriptorSet
 					{
 						index++,
 						0u,
 						1u,
-						renderer::DescriptorType::eCombinedImageSampler,
+						ashes::DescriptorType::eCombinedImageSampler,
 						{
 							{
 								texture->getSampler()->getSampler(),
 								texture->getTexture()->getDefaultView(),
-								renderer::ImageLayout::eShaderReadOnlyOptimal
+								ashes::ImageLayout::eShaderReadOnlyOptimal
 							},
 						},
 						{},
@@ -62,9 +62,9 @@ namespace castor3d
 	{
 	}
 
-	void PassRenderNode::fillDescriptor( renderer::DescriptorSetLayout const & layout
+	void PassRenderNode::fillDescriptor( ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
-		, renderer::DescriptorSet & descriptorSet
+		, ashes::DescriptorSet & descriptorSet
 		, bool opacityOnly )
 	{
 		if ( opacityOnly )
@@ -115,9 +115,9 @@ namespace castor3d
 		}
 	}
 
-	void PassRenderNode::fillDescriptor( renderer::DescriptorSetLayout const & layout
+	void PassRenderNode::fillDescriptor( ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
-		, renderer::WriteDescriptorSetArray & writes
+		, ashes::WriteDescriptorSetArray & writes
 		, bool opacityOnly )
 	{
 		if ( opacityOnly )

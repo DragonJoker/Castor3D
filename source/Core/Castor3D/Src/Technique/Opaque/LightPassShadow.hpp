@@ -327,9 +327,9 @@ namespace castor3d
 		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
 		 */
 		LightPassShadow( Engine & engine
-			, renderer::TextureView const & depthView
-			, renderer::TextureView const & diffuseView
-			, renderer::TextureView const & specularView
+			, ashes::TextureView const & depthView
+			, ashes::TextureView const & diffuseView
+			, ashes::TextureView const & specularView
 			, GpInfoUbo & gpInfoUbo )
 			: my_pass_type{ engine
 				, depthView
@@ -342,8 +342,8 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::LightPass::render
 		 */
-		renderer::Semaphore const & render( uint32_t index
-			, renderer::Semaphore const & toWait
+		ashes::Semaphore const & render( uint32_t index
+			, ashes::Semaphore const & toWait
 			, TextureUnit * shadowMapOpt )override
 		{
 			this->doPrepareCommandBuffer( *this->m_pipeline, shadowMapOpt, !index );

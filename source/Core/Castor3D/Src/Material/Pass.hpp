@@ -456,7 +456,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La fonction d'alpha.
 		 */
-		inline renderer::CompareOp getAlphaFunc()const
+		inline ashes::CompareOp getAlphaFunc()const
 		{
 			return m_alphaFunc;
 		}
@@ -468,7 +468,7 @@ namespace castor3d
 		 *\brief		Définit la fonction d'alpha.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setAlphaFunc( renderer::CompareOp value )
+		inline void setAlphaFunc( ashes::CompareOp value )
 		{
 			m_alphaFunc = value;
 			onChanged( *this );
@@ -597,7 +597,7 @@ namespace castor3d
 		 *\param[in]	channel	Le canal de texture.
 		 *\param[in]	format	Le format de pixels voulu.
 		 */
-		void doReduceTexture( TextureChannel channel, renderer::Format format );
+		void doReduceTexture( TextureChannel channel, ashes::Format format );
 
 	private:
 		void onSssChanged( SubsurfaceScattering const & sss );
@@ -644,7 +644,7 @@ namespace castor3d
 		float m_alphaValue{ 0.0f };
 		//!\~english	The alpha function for alpha comparison.
 		//!\~french		La fonction d'alpha utilisée lors de la comparaison d'alpha.
-		renderer::CompareOp m_alphaFunc{ renderer::CompareOp::eAlways };
+		ashes::CompareOp m_alphaFunc{ ashes::CompareOp::eAlways };
 		//!\~english	Tells if the pass' textures are reduced.
 		//!\~french		Dit si les textures de la passe sont réduites.
 		bool m_texturesReduced{ false };

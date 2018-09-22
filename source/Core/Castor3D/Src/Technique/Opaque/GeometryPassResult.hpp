@@ -23,8 +23,8 @@ namespace castor3d
 	*/
 	class GeometryPassResult
 	{
-		using Textures = std::array< renderer::Texture const *, size_t( DsTexture::eCount ) >;
-		using Views = std::array< renderer::TextureViewPtr, size_t( DsTexture::eCount ) >;
+		using Textures = std::array< ashes::Texture const *, size_t( DsTexture::eCount ) >;
+		using Views = std::array< ashes::TextureViewPtr, size_t( DsTexture::eCount ) >;
 	public:
 		/**
 		*\~english
@@ -47,8 +47,8 @@ namespace castor3d
 		*	La texture de vélocité.
 		*/
 		C3D_API GeometryPassResult( Engine & engine
-			, renderer::Texture const & depthTexture
-			, renderer::Texture const & velocityTexture );
+			, ashes::Texture const & depthTexture
+			, ashes::Texture const & velocityTexture );
 		/**
 		*\~english
 		*name
@@ -58,7 +58,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline renderer::Texture const & operator[]( size_t index )const
+		inline ashes::Texture const & operator[]( size_t index )const
 		{
 			return *m_result[index];
 		}
@@ -78,12 +78,12 @@ namespace castor3d
 			return m_samplableViews;
 		}
 
-		inline renderer::TextureView const & getDepthStencilView()const
+		inline ashes::TextureView const & getDepthStencilView()const
 		{
 			return *m_depthStencilView;
 		}
 
-		inline renderer::Sampler const & getSampler()const
+		inline ashes::Sampler const & getSampler()const
 		{
 			return *m_sampler;
 		}
@@ -92,10 +92,10 @@ namespace castor3d
 	private:
 		Engine & m_engine;
 		Textures m_result;
-		std::vector< renderer::TexturePtr > m_owned;
+		std::vector< ashes::TexturePtr > m_owned;
 		Views m_samplableViews;
-		renderer::TextureViewPtr m_depthStencilView;
-		renderer::SamplerPtr m_sampler;
+		ashes::TextureViewPtr m_depthStencilView;
+		ashes::SamplerPtr m_sampler;
 	};
 }
 

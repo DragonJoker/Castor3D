@@ -65,7 +65,7 @@ namespace castor3d
 		 *\brief		Crée une attache de layout de set de descripteurs au point donné.
 		 *\param[in]	index	L'indice du point d'attache.
 		 */
-		C3D_API renderer::DescriptorSetLayoutBinding createLayoutBinding( uint32_t index = 0u )const;
+		C3D_API ashes::DescriptorSetLayoutBinding createLayoutBinding( uint32_t index = 0u )const;
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor set binding at given point.
@@ -74,8 +74,8 @@ namespace castor3d
 		 *\brief		Crée une attache de set de descripteurs au point donné.
 		 *\param[in]	binding	L'attache de layout de set de descripteurs.
 		 */
-		C3D_API void createBinding( renderer::DescriptorSet & descriptorSet
-			, renderer::DescriptorSetLayoutBinding const & binding )const;
+		C3D_API void createBinding( ashes::DescriptorSet & descriptorSet
+			, ashes::DescriptorSetLayoutBinding const & binding )const;
 		/**
 		 *\~english
 		 *\return		The pointer to the buffer.
@@ -98,9 +98,9 @@ namespace castor3d
 		}
 
 	private:
-		renderer::BufferBasePtr m_buffer;
-		renderer::BufferViewPtr m_bufferView;
-		renderer::ByteArray m_data;
+		ashes::BufferBasePtr m_buffer;
+		ashes::BufferViewPtr m_bufferView;
+		ashes::ByteArray m_data;
 	};
 }
 

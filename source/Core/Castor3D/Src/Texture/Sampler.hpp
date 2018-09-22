@@ -107,32 +107,32 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		inline renderer::WrapMode getWrapS()const
+		inline ashes::WrapMode getWrapS()const
 		{
 			return m_info.addressModeU;
 		}
 
-		inline renderer::WrapMode getWrapT()const
+		inline ashes::WrapMode getWrapT()const
 		{
 			return m_info.addressModeV;
 		}
 
-		inline renderer::WrapMode getWrapR()const
+		inline ashes::WrapMode getWrapR()const
 		{
 			return m_info.addressModeW;
 		}
 
-		inline renderer::Filter getMinFilter()const
+		inline ashes::Filter getMinFilter()const
 		{
 			return m_info.minFilter;
 		}
 
-		inline renderer::Filter getMagFilter()const
+		inline ashes::Filter getMagFilter()const
 		{
 			return m_info.magFilter;
 		}
 
-		inline renderer::MipmapMode getMipFilter()const
+		inline ashes::MipmapMode getMipFilter()const
 		{
 			return m_info.mipmapMode;
 		}
@@ -152,7 +152,7 @@ namespace castor3d
 			return m_info.mipLodBias;
 		}
 
-		inline renderer::BorderColour getBorderColour()const
+		inline ashes::BorderColour getBorderColour()const
 		{
 			return m_info.borderColor;
 		}
@@ -162,12 +162,12 @@ namespace castor3d
 			return m_info.maxAnisotropy;
 		}
 
-		inline renderer::CompareOp getCompareOp()const
+		inline ashes::CompareOp getCompareOp()const
 		{
 			return m_info.compareOp;
 		}
 
-		inline renderer::Sampler const & getSampler()const
+		inline ashes::Sampler const & getSampler()const
 		{
 			REQUIRE( m_sampler );
 			return *m_sampler;
@@ -186,32 +186,32 @@ namespace castor3d
 		*	ils ont un effet jusqu'à ce que initialise() soit appelée.
 		**/
 		/**@{*/
-		inline void setWrapS( renderer::WrapMode value )
+		inline void setWrapS( ashes::WrapMode value )
 		{
 			m_info.addressModeU = value;
 		}
 
-		inline void setWrapT( renderer::WrapMode value )
+		inline void setWrapT( ashes::WrapMode value )
 		{
 			m_info.addressModeV = value;
 		}
 
-		inline void setWrapR( renderer::WrapMode value )
+		inline void setWrapR( ashes::WrapMode value )
 		{
 			m_info.addressModeW = value;
 		}
 
-		inline void setMinFilter( renderer::Filter value )
+		inline void setMinFilter( ashes::Filter value )
 		{
 			m_info.minFilter = value;
 		}
 
-		inline void setMagFilter( renderer::Filter value )
+		inline void setMagFilter( ashes::Filter value )
 		{
 			m_info.magFilter = value;
 		}
 
-		inline void setMipFilter( renderer::MipmapMode value )
+		inline void setMipFilter( ashes::MipmapMode value )
 		{
 			m_mipmapIsSet = true;
 			m_info.mipmapMode = value;
@@ -232,7 +232,7 @@ namespace castor3d
 			m_info.mipLodBias = value;
 		}
 
-		inline void setBorderColour( renderer::BorderColour value )
+		inline void setBorderColour( ashes::BorderColour value )
 		{
 			m_info.borderColor = value;
 		}
@@ -247,7 +247,7 @@ namespace castor3d
 			m_info.maxAnisotropy = value;
 		}
 
-		inline void setCompareOp( renderer::CompareOp value )
+		inline void setCompareOp( ashes::CompareOp value )
 		{
 			m_info.compareOp = value;
 		}
@@ -259,26 +259,26 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		renderer::SamplerCreateInfo m_info
+		ashes::SamplerCreateInfo m_info
 		{
-			renderer::Filter::eNearest,
-			renderer::Filter::eNearest,
-			renderer::MipmapMode::eNone,
-			renderer::WrapMode::eClampToEdge,
-			renderer::WrapMode::eClampToEdge,
-			renderer::WrapMode::eClampToEdge,
+			ashes::Filter::eNearest,
+			ashes::Filter::eNearest,
+			ashes::MipmapMode::eNone,
+			ashes::WrapMode::eClampToEdge,
+			ashes::WrapMode::eClampToEdge,
+			ashes::WrapMode::eClampToEdge,
 			0.0f,
 			false,
 			1.0f,
 			false,
-			renderer::CompareOp::eNever,
+			ashes::CompareOp::eNever,
 			-1000.0f,
 			1000.0f,
-			renderer::BorderColour::eFloatOpaqueBlack,
+			ashes::BorderColour::eFloatOpaqueBlack,
 			false
 		};
 		bool m_mipmapIsSet{ false };
-		renderer::SamplerPtr m_sampler;
+		ashes::SamplerPtr m_sampler;
 	};
 }
 

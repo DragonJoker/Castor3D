@@ -223,7 +223,7 @@ namespace castor3d
 	//! Pass pointer array
 	DECLARE_VECTOR( PassSPtr, PassPtr );
 	//! uint32_t array
-	DECLARE_VECTOR( uint32_t, UInt );
+	DECLARE_VECTOR( uint32_t, UInt32 );
 	//! Material pointer map, sorted by name
 	DECLARE_MAP( castor::String, MaterialSPtr, MaterialPtrStr );
 	//! Material pointer map
@@ -239,8 +239,8 @@ namespace castor3d
 	using OnMaterialChanged = castor::Signal< OnMaterialChangedFunction >;
 	using OnMaterialChangedConnection = OnMaterialChanged::connection;
 
-	renderer::Format convert( castor::PixelFormat format );
-	castor::PixelFormat convert( renderer::Format format );
+	ashes::Format convert( castor::PixelFormat format );
+	castor::PixelFormat convert( ashes::Format format );
 
 	//@}
 }

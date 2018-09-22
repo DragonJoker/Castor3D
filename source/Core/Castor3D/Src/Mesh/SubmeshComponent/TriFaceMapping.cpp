@@ -148,14 +148,14 @@ namespace castor3d
 
 					if ( uint32_t * index = reinterpret_cast< uint32_t * >( indices.getBuffer().lock( 0
 						, uint32_t( indexSize * sizeof( uint32_t ) )
-						, renderer::MemoryMapFlag::eRead | renderer::MemoryMapFlag::eWrite ) ) )
+						, ashes::MemoryMapFlag::eRead | ashes::MemoryMapFlag::eWrite ) ) )
 					{
 						FaceDistArray arraySorted;
 						arraySorted.reserve( indexSize / 3 );
 
 						if ( InterleavedVertex * vertex = vertices.lock( 0
 							, vertices.getCount()
-							, renderer::MemoryMapFlag::eRead ) )
+							, ashes::MemoryMapFlag::eRead ) )
 						{
 							for ( uint32_t * it = index + 0; it < index + indexSize; it += 3 )
 							{
@@ -211,7 +211,7 @@ namespace castor3d
 		{
 			auto & indexBuffer = getOwner()->getIndexBuffer();
 
-			if ( auto * buffer = indexBuffer.lock( 0, count, renderer::MemoryMapFlag::eWrite ) )
+			if ( auto * buffer = indexBuffer.lock( 0, count, ashes::MemoryMapFlag::eWrite ) )
 			{
 				for ( auto const & face : m_faces )
 				{

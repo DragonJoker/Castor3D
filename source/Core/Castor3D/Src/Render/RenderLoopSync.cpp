@@ -4,6 +4,8 @@
 
 #include <Core/Exception.hpp>
 
+#include <Design/BlockGuard.hpp>
+
 using namespace castor;
 
 namespace castor3d
@@ -40,7 +42,7 @@ namespace castor3d
 			{
 				doRenderFrame();
 			}
-			catch ( renderer::Exception & exc )
+			catch ( ashes::Exception & exc )
 			{
 				Logger::logError( String{ cuT( "RenderLoop - " ) } +exc.what() );
 				m_active = false;
@@ -78,7 +80,7 @@ namespace castor3d
 		CASTOR_EXCEPTION( CALL_END_RENDERING );
 	}
 
-	renderer::DevicePtr RenderLoopSync::doCreateMainDevice( renderer::WindowHandle && handle
+	ashes::DevicePtr RenderLoopSync::doCreateMainDevice( ashes::WindowHandle && handle
 		, RenderWindow & window )
 	{
 		auto result = doCreateDevice( std::move( handle ), window );

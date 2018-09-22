@@ -40,12 +40,12 @@ namespace castor3d
 			m_gpuInformations.updateFeature( castor3d::GpuFeature::eShaderStorageBuffers, device.getRenderer().getFeatures().hasStorageBuffers );
 			m_gpuInformations.updateFeature( castor3d::GpuFeature::eStereoRendering, false );
 
-			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eCompute, device.getRenderer().getFeatures().hasComputeShaders );
-			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eTessellationControl, device.getFeatures().tessellationShader );
-			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eTessellationEvaluation, device.getFeatures().tessellationShader );
-			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eGeometry, device.getFeatures().geometryShader );
-			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eFragment, true );
-			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eVertex, true );
+			m_gpuInformations.useShaderType( ashes::ShaderStageFlag::eCompute, device.getRenderer().getFeatures().hasComputeShaders );
+			m_gpuInformations.useShaderType( ashes::ShaderStageFlag::eTessellationControl, device.getFeatures().tessellationShader );
+			m_gpuInformations.useShaderType( ashes::ShaderStageFlag::eTessellationEvaluation, device.getFeatures().tessellationShader );
+			m_gpuInformations.useShaderType( ashes::ShaderStageFlag::eGeometry, device.getFeatures().geometryShader );
+			m_gpuInformations.useShaderType( ashes::ShaderStageFlag::eFragment, true );
+			m_gpuInformations.useShaderType( ashes::ShaderStageFlag::eVertex, true );
 
 			m_initialised = true;
 		}
@@ -98,16 +98,16 @@ namespace castor3d
 			, false } };
 	}
 
-	GpuBufferOffset RenderSystem::getBuffer( renderer::BufferTarget type
+	GpuBufferOffset RenderSystem::getBuffer( ashes::BufferTarget type
 		, uint32_t size
-		, renderer::MemoryPropertyFlags flags )
+		, ashes::MemoryPropertyFlags flags )
 	{
 		return m_gpuBufferPool.getGpuBuffer( type
 			, size
 			, flags );
 	}
 
-	void RenderSystem::putBuffer( renderer::BufferTarget type
+	void RenderSystem::putBuffer( ashes::BufferTarget type
 		, GpuBufferOffset const & bufferOffset )
 	{
 		m_gpuBufferPool.putGpuBuffer( type
@@ -119,10 +119,10 @@ namespace castor3d
 		m_gpuBufferPool.cleanup();
 	}
 	
-	renderer::DevicePtr RenderSystem::createDevice( renderer::WindowHandle && handle
+	ashes::DevicePtr RenderSystem::createDevice( ashes::WindowHandle && handle
 		, uint32_t gpu )
 	{
-		renderer::DevicePtr result = m_renderer->createDevice( m_renderer->createConnection( gpu, std::move( handle ) ) );
+		ashes::DevicePtr result = m_renderer->createDevice( m_renderer->createConnection( gpu, std::move( handle ) ) );
 		return result;
 	}
 

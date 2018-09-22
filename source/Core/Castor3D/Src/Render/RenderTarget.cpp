@@ -23,6 +23,7 @@
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/SubpassDependency.hpp>
 #include <RenderPass/SubpassDescription.hpp>
+#include <Shader/GlslToSpv.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
 #include <Graphics/Image.hpp>
@@ -123,40 +124,40 @@ namespace castor3d
 	{
 	}
 
-	bool RenderTarget::TargetFbo::initialise( renderer::RenderPass & renderPass
+	bool RenderTarget::TargetFbo::initialise( ashes::RenderPass & renderPass
 		, Size const & size )
 	{
 		auto & renderSystem = *renderTarget.getEngine()->getRenderSystem();
 
 		SamplerSPtr sampler = renderTarget.getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + string::toString( renderTarget.m_index ) );
-		renderer::ImageCreateInfo createInfo{};
+		ashes::ImageCreateInfo createInfo{};
 		createInfo.flags = 0u;
 		createInfo.arrayLayers = 1u;
 		createInfo.extent.width = size.getWidth();
 		createInfo.extent.height = size.getHeight();
 		createInfo.extent.depth = 1u;
 		createInfo.format = renderTarget.getPixelFormat();
-		createInfo.imageType = renderer::TextureType::e2D;
-		createInfo.initialLayout = renderer::ImageLayout::eUndefined;
+		createInfo.imageType = ashes::TextureType::e2D;
+		createInfo.initialLayout = ashes::ImageLayout::eUndefined;
 		createInfo.mipLevels = 1u;
-		createInfo.samples = renderer::SampleCountFlag::e1;
-		createInfo.sharingMode = renderer::SharingMode::eExclusive;
-		createInfo.tiling = renderer::ImageTiling::eOptimal;
-		createInfo.usage = renderer::ImageUsageFlag::eColourAttachment
-			| renderer::ImageUsageFlag::eSampled
-			| renderer::ImageUsageFlag::eTransferDst
-			| renderer::ImageUsageFlag::eTransferSrc;
+		createInfo.samples = ashes::SampleCountFlag::e1;
+		createInfo.sharingMode = ashes::SharingMode::eExclusive;
+		createInfo.tiling = ashes::ImageTiling::eOptimal;
+		createInfo.usage = ashes::ImageUsageFlag::eColourAttachment
+			| ashes::ImageUsageFlag::eSampled
+			| ashes::ImageUsageFlag::eTransferDst
+			| ashes::ImageUsageFlag::eTransferSrc;
 		auto texture = std::make_shared< TextureLayout >( renderSystem
 			, createInfo
-			, renderer::MemoryPropertyFlag::eDeviceLocal );
+			, ashes::MemoryPropertyFlag::eDeviceLocal );
 		colourTexture.setTexture( texture );
 		colourTexture.setSampler( sampler );
 		colourTexture.getTexture()->getDefaultImage().initialiseSource();
 		colourTexture.getTexture()->initialise();
 
-		renderer::FrameBufferAttachmentArray attaches;
+		ashes::FrameBufferAttachmentArray attaches;
 		attaches.emplace_back( *renderPass.getAttachments().begin(), colourTexture.getTexture()->getDefaultView() );
-		frameBuffer = renderPass.createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
+		frameBuffer = renderPass.createFrameBuffer( ashes::Extent2D{ size.getWidth(), size.getHeight() }
 			, std::move( attaches ) );
 
 		return true;
@@ -176,7 +177,7 @@ namespace castor3d
 	RenderTarget::RenderTarget( Engine & engine, TargetType type )
 		: OwnedBy< Engine >{ engine }
 		, m_type{ type }
-		, m_pixelFormat{ renderer::Format::eR8G8B8A8_UNORM }
+		, m_pixelFormat{ ashes::Format::eR8G8B8A8_UNORM }
 		, m_initialised{ false }
 		, m_size{ Size{ 100u, 100u } }
 		, m_renderTechnique{}
@@ -190,12 +191,12 @@ namespace castor3d
 			, m_hdrConfig
 			, Parameters{} );
 		SamplerSPtr sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + string::toString( m_index ) );
-		sampler->setMinFilter( renderer::Filter::eLinear );
-		sampler->setMagFilter( renderer::Filter::eLinear );
+		sampler->setMinFilter( ashes::Filter::eLinear );
+		sampler->setMagFilter( ashes::Filter::eLinear );
 
 		sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + string::toString( m_index ) + cuT( "_Point" ) );
-		sampler->setMinFilter( renderer::Filter::eNearest );
-		sampler->setMagFilter( renderer::Filter::eNearest );
+		sampler->setMinFilter( ashes::Filter::eNearest );
+		sampler->setMagFilter( ashes::Filter::eNearest );
 	}
 
 	RenderTarget::~RenderTarget()
@@ -274,7 +275,7 @@ namespace castor3d
 			m_overlayRenderer->initialise();
 
 			m_signalReady = device.createSemaphore();
-			m_fence = device.createFence( renderer::FenceCreateFlag::eSignaled );
+			m_fence = device.createFence( ashes::FenceCreateFlag::eSignaled );
 		}
 	}
 
@@ -448,39 +449,39 @@ namespace castor3d
 
 	void RenderTarget::doInitialiseRenderPass()
 	{
-		renderer::RenderPassCreateInfo renderPass{};
+		ashes::RenderPassCreateInfo renderPass{};
 		renderPass.flags = 0u;
 
 		renderPass.attachments.resize( 1u );
 		renderPass.attachments[0].format = getPixelFormat();
-		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
-		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+		renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
+		renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eClear;
+		renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
+		renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
+		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
 
 		renderPass.subpasses.resize( 1u );
 		renderPass.subpasses[0].flags = 0u;
-		renderPass.subpasses[0].colorAttachments = { { 0u, renderer::ImageLayout::eColourAttachmentOptimal } };
+		renderPass.subpasses[0].colorAttachments = { { 0u, ashes::ImageLayout::eColourAttachmentOptimal } };
 
 		renderPass.dependencies.resize( 2u );
-		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
-		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite | renderer::AccessFlag::eColourAttachmentRead;
-		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
-		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+		renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eMemoryRead;
+		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eColourAttachmentWrite | ashes::AccessFlag::eColourAttachmentRead;
+		renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eBottomOfPipe;
+		renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 		renderPass.dependencies[1].srcSubpass = 0u;
-		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite | renderer::AccessFlag::eColourAttachmentRead;
-		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eMemoryRead;
-		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
-		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+		renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
+		renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite | ashes::AccessFlag::eColourAttachmentRead;
+		renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eMemoryRead;
+		renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eBottomOfPipe;
+		renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 		m_renderPass = getCurrentDevice( *this ).createRenderPass( renderPass );
 	}
@@ -503,23 +504,23 @@ namespace castor3d
 
 	bool RenderTarget::doInitialiseVelocityTexture()
 	{
-		renderer::ImageCreateInfo image{};
+		ashes::ImageCreateInfo image{};
 		image.flags = 0u;
 		image.arrayLayers = 1u;
 		image.extent.width = m_size.getWidth();
 		image.extent.height = m_size.getHeight();
 		image.extent.depth = 1u;
-		image.format = renderer::Format::eR16G16B16A16_SFLOAT;
-		image.imageType = renderer::TextureType::e2D;
-		image.initialLayout = renderer::ImageLayout::eUndefined;
+		image.format = ashes::Format::eR16G16B16A16_SFLOAT;
+		image.imageType = ashes::TextureType::e2D;
+		image.initialLayout = ashes::ImageLayout::eUndefined;
 		image.mipLevels = 1u;
-		image.samples = renderer::SampleCountFlag::e1;
-		image.sharingMode = renderer::SharingMode::eExclusive;
-		image.tiling = renderer::ImageTiling::eOptimal;
-		image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+		image.samples = ashes::SampleCountFlag::e1;
+		image.sharingMode = ashes::SharingMode::eExclusive;
+		image.tiling = ashes::ImageTiling::eOptimal;
+		image.usage = ashes::ImageUsageFlag::eColourAttachment | ashes::ImageUsageFlag::eSampled;
 		auto velocityTexture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
 			, image
-			, renderer::MemoryPropertyFlag::eDeviceLocal );
+			, ashes::MemoryPropertyFlag::eDeviceLocal );
 		m_velocityTexture.setTexture( velocityTexture );
 		m_velocityTexture.setSampler( getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + string::toString( m_index ) + cuT( "_Point" ) ) );
 		m_velocityTexture.getTexture()->getDefaultImage().initialiseSource();
@@ -558,26 +559,26 @@ namespace castor3d
 			, *m_renderPass );
 
 		m_toneMappingCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
-		renderer::ClearColorValue const clear{ 0.0f, 0.0f, 1.0f, 1.0f };
+		ashes::ClearColorValue const clear{ 0.0f, 0.0f, 1.0f, 1.0f };
 
 		if ( result )
 		{
 			m_toneMappingCommandBuffer->begin();
 			m_toneMappingTimer->beginPass( *m_toneMappingCommandBuffer );
 			// Put render technique image in shader input layout.
-			m_toneMappingCommandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-				, renderer::PipelineStageFlag::eFragmentShader
-				, m_renderTechnique->getResult().getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+			m_toneMappingCommandBuffer->memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
+				, ashes::PipelineStageFlag::eFragmentShader
+				, m_renderTechnique->getResult().getDefaultView().makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
 			m_toneMappingCommandBuffer->beginRenderPass( *m_renderPass
 				, *m_workFrameBuffer.frameBuffer
 				, { clear }
-				, renderer::SubpassContents::eInline );
+				, ashes::SubpassContents::eInline );
 			m_toneMapping->registerFrame( *m_toneMappingCommandBuffer );
 			m_toneMappingCommandBuffer->endRenderPass();
 			// Put render technique image back in colour attachment layout.
-			m_toneMappingCommandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-				, renderer::PipelineStageFlag::eColourAttachmentOutput
-				, m_renderTechnique->getResult().getDefaultView().makeColourAttachment( renderer::ImageLayout::eUndefined, 0u ) );
+			m_toneMappingCommandBuffer->memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
+				, ashes::PipelineStageFlag::eColourAttachmentOutput
+				, m_renderTechnique->getResult().getDefaultView().makeColourAttachment( ashes::ImageLayout::eUndefined, 0u ) );
 			m_toneMappingTimer->endPass( *m_toneMappingCommandBuffer );
 			m_toneMappingCommandBuffer->end();
 		}
@@ -585,9 +586,9 @@ namespace castor3d
 		return result;
 	}
 
-	void RenderTarget::doInitialiseCopyCommands( renderer::CommandBufferPtr & commandBuffer
-		, renderer::TextureView const & source
-		, renderer::TextureView const & target )
+	void RenderTarget::doInitialiseCopyCommands( ashes::CommandBufferPtr & commandBuffer
+		, ashes::TextureView const & source
+		, ashes::TextureView const & target )
 	{
 		auto & device = getCurrentDevice( *this );
 		commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
@@ -597,21 +598,21 @@ namespace castor3d
 		if ( &source != &target )
 		{
 			// Put source image in transfer source layout.
-			commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-				, renderer::PipelineStageFlag::eTransfer
-				, source.makeTransferSource( renderer::ImageLayout::eUndefined, 0u ) );
+			commandBuffer->memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
+				, ashes::PipelineStageFlag::eTransfer
+				, source.makeTransferSource( ashes::ImageLayout::eUndefined, 0u ) );
 			// Put target image in transfer destination layout.
-			commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
-				, renderer::PipelineStageFlag::eTransfer
-				, target.makeTransferDestination( renderer::ImageLayout::eUndefined, 0u ) );
+			commandBuffer->memoryBarrier( ashes::PipelineStageFlag::eFragmentShader
+				, ashes::PipelineStageFlag::eTransfer
+				, target.makeTransferDestination( ashes::ImageLayout::eUndefined, 0u ) );
 			// Copy source to target.
 			commandBuffer->copyImage( source, target );
 		}
 
 		// Put target image in fragment shader input layout.
-		commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-			, renderer::PipelineStageFlag::eFragmentShader
-			, target.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+		commandBuffer->memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
+			, ashes::PipelineStageFlag::eFragmentShader
+			, target.makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
 		commandBuffer->end();
 	}
 
@@ -633,11 +634,12 @@ namespace castor3d
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
 			auto out = gl_PerVertex{ writer };
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				vtx_texture = vec2( texcoord.x(), 1.0_f - texcoord.y() );
-				out.gl_Position() = vec4( position, 0.0, 1.0 );
-			} );
+			writer.implementFunction< void >( cuT( "main" )
+				, [&]()
+				{
+					vtx_texture = writer.ashesTopDownToBottomUp( texcoord );
+					out.gl_Position() = vec4( position, 0.0, 1.0 );
+				} );
 			vtx = writer.finalise();
 		}
 
@@ -660,11 +662,15 @@ namespace castor3d
 			pxl = writer.finalise();
 		}
 
-		renderer::ShaderStageStateArray program;
-		program.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
-		program.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-		program[0].module->loadShader( vtx.getSource() );
-		program[1].module->loadShader( pxl.getSource() );
+		ashes::ShaderStageStateArray program;
+		program.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
+		program.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
+		program[0].module->loadShader( compileGlslToSpv( device
+			, ashes::ShaderStageFlag::eVertex
+			, vtx.getSource() ) );
+		program[1].module->loadShader( compileGlslToSpv( device
+			, ashes::ShaderStageFlag::eFragment
+			, pxl.getSource() ) );
 
 		m_flipCommands = device.getGraphicsCommandPool().createCommandBuffer();
 		m_flipFinished = device.createSemaphore();
@@ -680,8 +686,8 @@ namespace castor3d
 		m_flipCommands->begin();
 		m_flipCommands->beginRenderPass( *m_renderPass
 			, *m_flippedFrameBuffer.frameBuffer
-			, { renderer::ClearColorValue{} }
-			, renderer::SubpassContents::eInline );
+			, { ashes::ClearColorValue{} }
+			, ashes::SubpassContents::eInline );
 		m_flipQuad->registerFrame( *m_flipCommands );
 		m_flipCommands->endRenderPass();
 		m_flipCommands->end();
@@ -694,7 +700,7 @@ namespace castor3d
 		auto elapsedTime = m_timer.getElapsed();
 		SceneSPtr scene = getScene();
 		m_toneMapping->update();
-		renderer::SemaphoreCRefArray signalsToWait;
+		ashes::SemaphoreCRefArray signalsToWait;
 		
 		if ( m_type == TargetType::eWindow )
 		{
@@ -736,10 +742,10 @@ namespace castor3d
 #endif
 	}
 
-	renderer::Semaphore const & RenderTarget::doApplyPostEffects( renderer::Semaphore const & toWait
+	ashes::Semaphore const & RenderTarget::doApplyPostEffects( ashes::Semaphore const & toWait
 		, PostEffectPtrArray const & effects
-		, renderer::CommandBufferPtr const & copyCommandBuffer
-		, renderer::SemaphorePtr const & copyFinished
+		, ashes::CommandBufferPtr const & copyCommandBuffer
+		, ashes::SemaphorePtr const & copyFinished
 		, castor::Nanoseconds const & elapsedTime )
 	{
 		auto * result = &toWait;
@@ -759,7 +765,7 @@ namespace castor3d
 
 					queue.submit( *commands.commandBuffer
 						, *result
-						, renderer::PipelineStageFlag::eColourAttachmentOutput
+						, ashes::PipelineStageFlag::eColourAttachmentOutput
 						, *commands.semaphore
 						, nullptr );
 					result = commands.semaphore.get();
@@ -768,7 +774,7 @@ namespace castor3d
 
 			queue.submit( *copyCommandBuffer
 				, *result
-				, renderer::PipelineStageFlag::eColourAttachmentOutput
+				, ashes::PipelineStageFlag::eColourAttachmentOutput
 				, *copyFinished
 				, nullptr );
 			result = copyFinished.get();
@@ -777,7 +783,7 @@ namespace castor3d
 		return *result;
 	}
 
-	renderer::Semaphore const & RenderTarget::doApplyToneMapping( renderer::Semaphore const & toWait )
+	ashes::Semaphore const & RenderTarget::doApplyToneMapping( ashes::Semaphore const & toWait )
 	{
 		auto & queue = getCurrentDevice( *this ).getGraphicsQueue();
 		auto timerBlock = m_toneMappingTimer->start();
@@ -786,7 +792,7 @@ namespace castor3d
 
 		queue.submit( *m_toneMappingCommandBuffer
 			, *result
-			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, ashes::PipelineStageFlag::eColourAttachmentOutput
 			, m_toneMapping->getSemaphore()
 			, nullptr );
 		result = &m_toneMapping->getSemaphore();
@@ -794,7 +800,7 @@ namespace castor3d
 		return *result;
 	}
 
-	renderer::Semaphore const & RenderTarget::doRenderOverlays( renderer::Semaphore const & toWait
+	ashes::Semaphore const & RenderTarget::doRenderOverlays( ashes::Semaphore const & toWait
 		, Camera const & camera )
 	{
 		auto * result = &toWait;
@@ -826,14 +832,14 @@ namespace castor3d
 		return *result;
 	}
 
-	renderer::Semaphore const & RenderTarget::doFlip( renderer::Semaphore const & toWait )
+	ashes::Semaphore const & RenderTarget::doFlip( ashes::Semaphore const & toWait )
 	{
 		auto & queue = getCurrentDevice( *this ).getGraphicsQueue();
 		auto * result = &toWait;
 
 		queue.submit( *m_flipCommands
 			, *result
-			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, ashes::PipelineStageFlag::eColourAttachmentOutput
 			, *m_flipFinished
 			, nullptr );
 		result = m_flipFinished.get();

@@ -69,7 +69,7 @@ namespace castor3d
 			} );
 	}
 
-	void RenderLoop::createDevice( renderer::WindowHandle && handle
+	void RenderLoop::createDevice( ashes::WindowHandle && handle
 		, RenderWindow & window )
 	{
 		if ( !m_renderSystem.hasMainDevice() )
@@ -116,10 +116,10 @@ namespace castor3d
 		return m_debugOverlays->isShown();
 	}
 
-	renderer::DevicePtr RenderLoop::doCreateDevice( renderer::WindowHandle && handle
+	ashes::DevicePtr RenderLoop::doCreateDevice( ashes::WindowHandle && handle
 		, RenderWindow & window )
 	{
-		renderer::DevicePtr result;
+		ashes::DevicePtr result;
 
 		try
 		{

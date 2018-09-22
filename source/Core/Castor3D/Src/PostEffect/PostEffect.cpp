@@ -77,25 +77,25 @@ namespace castor3d
 	{
 	}
 
-	void PostEffect::doCopyResultToTarget( renderer::TextureView const & result
-		, renderer::CommandBuffer & commandBuffer )
+	void PostEffect::doCopyResultToTarget( ashes::TextureView const & result
+		, ashes::CommandBuffer & commandBuffer )
 	{
 		// Put result image in transfer source layout.
-		commandBuffer.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-			, renderer::PipelineStageFlag::eTransfer
-			, result.makeTransferSource( renderer::ImageLayout::eColourAttachmentOptimal
-				, renderer::AccessFlag::eColourAttachmentWrite ) );
+		commandBuffer.memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
+			, ashes::PipelineStageFlag::eTransfer
+			, result.makeTransferSource( ashes::ImageLayout::eColourAttachmentOptimal
+				, ashes::AccessFlag::eColourAttachmentWrite ) );
 		// Put target image in transfer destination layout.
-		commandBuffer.memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
-			, renderer::PipelineStageFlag::eTransfer
-			, m_target->getDefaultView().makeTransferDestination( renderer::ImageLayout::eUndefined, 0u ) );
+		commandBuffer.memoryBarrier( ashes::PipelineStageFlag::eFragmentShader
+			, ashes::PipelineStageFlag::eTransfer
+			, m_target->getDefaultView().makeTransferDestination( ashes::ImageLayout::eUndefined, 0u ) );
 		// Copy result to target.
 		commandBuffer.copyImage( result
 			, m_target->getDefaultView() );
 		// Put target image in fragment shader input layout.
-		commandBuffer.memoryBarrier( renderer::PipelineStageFlag::eTransfer
-			, renderer::PipelineStageFlag::eFragmentShader
-			, m_target->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eTransferDstOptimal
-				, renderer::AccessFlag::eTransferWrite ) );
+		commandBuffer.memoryBarrier( ashes::PipelineStageFlag::eTransfer
+			, ashes::PipelineStageFlag::eFragmentShader
+			, m_target->getDefaultView().makeShaderInputResource( ashes::ImageLayout::eTransferDstOptimal
+				, ashes::AccessFlag::eTransferWrite ) );
 	}
 }

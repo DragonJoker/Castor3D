@@ -100,7 +100,7 @@ namespace castor3d
 			return m_face;
 		}
 
-		inline renderer::TextureView const & getResult()const
+		inline ashes::TextureView const & getResult()const
 		{
 			return *m_colourView;
 		}
@@ -110,7 +110,7 @@ namespace castor3d
 		void doUpdateNodes( SceneCulledRenderNodes & nodes );
 		castor::Point4f doFboPick( castor::Position const & position
 			, Camera const & camera
-			, renderer::CommandBuffer const & commandBuffer );
+			, ashes::CommandBuffer const & commandBuffer );
 		PickNodeType doPick( castor::Point4f const & pixel
 			, SceneCulledRenderNodes & nodes );
 		/**
@@ -148,26 +148,26 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
 		 */
-		void doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
+		void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, BillboardListRenderNode & node )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
 		 */
-		void doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
+		void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, SubmeshRenderNode & node )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
 		 */
-		void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+		void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, BillboardListRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
 		 */
-		void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+		void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, SubmeshRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
@@ -197,7 +197,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const override;
+			, ashes::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */
@@ -205,7 +205,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const override;
+			, ashes::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
 		 */
@@ -213,7 +213,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const override;
+			, ashes::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPixelShaderSource
 		 */
@@ -221,7 +221,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const;
+			, ashes::CompareOp alphaFunc )const;
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
@@ -229,24 +229,24 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateUboBindings
 		 */
-		renderer::DescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
+		ashes::DescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
 		 */
-		renderer::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
+		ashes::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
 		 */
-		renderer::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const override;
+		ashes::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateBlendState
 		 */
-		renderer::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
+		ashes::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
 		 */
 		void doPrepareFrontPipeline( ShaderProgramSPtr program
-			, renderer::VertexLayoutCRefArray const & layouts
+			, ashes::VertexLayoutCRefArray const & layouts
 			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdateFlags
@@ -262,14 +262,14 @@ namespace castor3d
 
 	private:
 		std::map< castor::String, GeometryWPtr > m_pickable;
-		renderer::TexturePtr m_colourTexture;
-		renderer::TexturePtr m_depthTexture;
-		renderer::TextureViewPtr m_colourView;
-		renderer::TextureViewPtr m_depthView;
-		renderer::FrameBufferPtr m_frameBuffer;
-		renderer::BufferImageCopy m_copyRegion;
-		renderer::CommandBufferPtr m_commandBuffer;
-		renderer::BufferPtr< castor::Point4f > m_stagingBuffer;
+		ashes::TexturePtr m_colourTexture;
+		ashes::TexturePtr m_depthTexture;
+		ashes::TextureViewPtr m_colourView;
+		ashes::TextureViewPtr m_depthView;
+		ashes::FrameBufferPtr m_frameBuffer;
+		ashes::BufferImageCopy m_copyRegion;
+		ashes::CommandBufferPtr m_commandBuffer;
+		ashes::BufferPtr< castor::Point4f > m_stagingBuffer;
 		std::map< Scene const *, CameraQueueMap > m_scenes;
 		GeometryWPtr m_geometry;
 		BillboardBaseWPtr m_billboard;

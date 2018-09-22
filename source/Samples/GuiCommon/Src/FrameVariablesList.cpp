@@ -80,7 +80,7 @@ namespace GuiCommon
 		unloadVariables();
 	}
 
-	void FrameVariablesList::loadVariables( renderer::ShaderStageFlag stage
+	void FrameVariablesList::loadVariables( ashes::ShaderStageFlag stage
 		, std::vector< UniformBufferValues > & ubos )
 	{
 		wxTreeItemId root = AddRoot( _( "Root" ) );

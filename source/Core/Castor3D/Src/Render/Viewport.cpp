@@ -198,7 +198,7 @@ namespace castor3d
 	void Viewport::resize( const castor::Size & value )
 	{
 		m_size = value;
-		m_viewport = renderer::Viewport{ m_size[0], m_size[1], 0, 0 };
-		m_scissor = renderer::Scissor{ 0, 0, m_size[0], m_size[1] };
+		m_viewport = ashes::Viewport{ m_size[0], m_size[1], 0, 0 };
+		m_scissor = ashes::Scissor{ 0, 0, m_size[0], m_size[1] };
 	}
 }

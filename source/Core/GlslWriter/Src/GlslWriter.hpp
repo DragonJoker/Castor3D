@@ -48,8 +48,10 @@ namespace glsl
 		GlslWriter_API void enableExtension( castor::String const & name, uint32_t inCoreVersion );
 		GlslWriter_API castor::String getInstanceID();
 		GlslWriter_API castor::String getVertexID();
-		GlslWriter_API Vec2 adjustTexCoords( Vec2 const & texcoords );
-		GlslWriter_API Vec4 rendererScalePosition( Vec4 const & position );
+		GlslWriter_API glsl::Vec2 ashesBottomUpToTopDown( glsl::Vec2 const & texCoord );
+		GlslWriter_API glsl::Vec2 ashesTopDownToBottomUp( glsl::Vec2 const & texCoord );
+		GlslWriter_API glsl::Vec3 ashesBottomUpToTopDown( glsl::Vec3 const & texCoord );
+		GlslWriter_API glsl::Vec3 ashesTopDownToBottomUp( glsl::Vec3 const & texCoord );
 
 		inline uint32_t getShaderLanguageVersion()const
 		{

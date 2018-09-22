@@ -63,13 +63,13 @@ namespace castor3d
 		*\param[in] program
 		*	Le programme shader.
 		*/
-		C3D_API void createPipeline( renderer::Extent2D const & size
+		C3D_API void createPipeline( ashes::Extent2D const & size
 			, castor::Position const & position
-			, renderer::ShaderStageStateArray const & program
-			, renderer::TextureView const & view
-			, renderer::RenderPass const & renderPass
-			, renderer::DescriptorSetLayoutBindingArray bindings
-			, renderer::PushConstantRangeCRefArray const & pushRanges );
+			, ashes::ShaderStageStateArray const & program
+			, ashes::TextureView const & view
+			, ashes::RenderPass const & renderPass
+			, ashes::DescriptorSetLayoutBindingArray bindings
+			, ashes::PushConstantRangeArray const & pushRanges );
 		/**
 		*\~english
 		*\brief
@@ -82,14 +82,14 @@ namespace castor3d
 		*\param[in] program
 		*	Le programme shader.
 		*/
-		C3D_API void createPipeline( renderer::Extent2D const & size
+		C3D_API void createPipeline( ashes::Extent2D const & size
 			, castor::Position const & position
-			, renderer::ShaderStageStateArray const & program
-			, renderer::TextureView const & view
-			, renderer::RenderPass const & renderPass
-			, renderer::DescriptorSetLayoutBindingArray bindings
-			, renderer::PushConstantRangeCRefArray const & pushRanges
-			, renderer::DepthStencilState dsState );
+			, ashes::ShaderStageStateArray const & program
+			, ashes::TextureView const & view
+			, ashes::RenderPass const & renderPass
+			, ashes::DescriptorSetLayoutBindingArray bindings
+			, ashes::PushConstantRangeArray const & pushRanges
+			, ashes::DepthStencilState dsState );
 		/**
 		*\~english
 		*\brief
@@ -107,7 +107,7 @@ namespace castor3d
 		*\brief
 		*	Prépare les commandes de dessin du quad.
 		*/
-		C3D_API void prepareFrame( renderer::RenderPass const & renderPass
+		C3D_API void prepareFrame( ashes::RenderPass const & renderPass
 			, uint32_t subpassIndex );
 		/**
 		*\~english
@@ -117,7 +117,7 @@ namespace castor3d
 		*\brief
 		*	Prépare les commandes de dessin du quad, dans le tampon de commandes donné.
 		*/
-		C3D_API void registerFrame( renderer::CommandBuffer & commandBuffer )const;
+		C3D_API void registerFrame( ashes::CommandBuffer & commandBuffer )const;
 		/**
 		*\~english
 		*\return
@@ -126,31 +126,31 @@ namespace castor3d
 		*\return
 		*	Le tampon de commandes de dessin du quad.
 		*/
-		inline renderer::CommandBuffer const & getCommandBuffer()const
+		inline ashes::CommandBuffer const & getCommandBuffer()const
 		{
 			REQUIRE( m_commandBuffer );
 			return *m_commandBuffer;
 		}
 
 	private:
-		C3D_API virtual void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
-			, renderer::DescriptorSet & descriptorSet );
-		C3D_API virtual void doRegisterFrame( renderer::CommandBuffer & commandBuffer )const;
+		C3D_API virtual void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+			, ashes::DescriptorSet & descriptorSet );
+		C3D_API virtual void doRegisterFrame( ashes::CommandBuffer & commandBuffer )const;
 
 	protected:
 		RenderSystem & m_renderSystem;
 		SamplerSPtr m_sampler;
-		renderer::PipelinePtr m_pipeline;
-		renderer::PipelineLayoutPtr m_pipelineLayout;
-		renderer::CommandBufferPtr m_commandBuffer;
+		ashes::PipelinePtr m_pipeline;
+		ashes::PipelineLayoutPtr m_pipelineLayout;
+		ashes::CommandBufferPtr m_commandBuffer;
 
 	private:
 		std::array< TexturedQuad::Vertex, 4u > m_vertexData;
-		renderer::VertexBufferPtr< TexturedQuad::Vertex > m_vertexBuffer;
-		renderer::DescriptorSetLayoutPtr m_descriptorSetLayout;
-		renderer::DescriptorSetPoolPtr m_descriptorSetPool;
-		renderer::DescriptorSetPtr m_descriptorSet;
-		renderer::TextureView const * m_sourceView{ nullptr };
+		ashes::VertexBufferPtr< TexturedQuad::Vertex > m_vertexBuffer;
+		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
+		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
+		ashes::DescriptorSetPtr m_descriptorSet;
+		ashes::TextureView const * m_sourceView{ nullptr };
 	};
 }
 

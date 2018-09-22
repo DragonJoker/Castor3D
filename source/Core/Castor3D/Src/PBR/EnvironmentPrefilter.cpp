@@ -8,7 +8,7 @@
 #include <Miscellaneous/PushConstantRange.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
-#include <Shader/ShaderProgram.hpp>
+#include <Shader/GlslToSpv.hpp>
 #include <Sync/Fence.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
@@ -23,26 +23,26 @@ namespace castor3d
 
 	namespace
 	{
-		renderer::TexturePtr doCreatePrefilteredTexture( RenderSystem const & renderSystem
+		ashes::TexturePtr doCreatePrefilteredTexture( RenderSystem const & renderSystem
 			, Size const & size )
 		{
 			auto & device = getCurrentDevice( renderSystem );
-			renderer::ImageCreateInfo image{};
-			image.flags = renderer::ImageCreateFlag::eCubeCompatible;
+			ashes::ImageCreateInfo image{};
+			image.flags = ashes::ImageCreateFlag::eCubeCompatible;
 			image.arrayLayers = 6u;
 			image.extent.width = size[0];
 			image.extent.height = size[1];
 			image.extent.depth = 1u;
-			image.format = renderer::Format::eR32G32B32A32_SFLOAT;
-			image.imageType = renderer::TextureType::e2D;
-			image.initialLayout = renderer::ImageLayout::eUndefined;
+			image.format = ashes::Format::eR32G32B32A32_SFLOAT;
+			image.imageType = ashes::TextureType::e2D;
+			image.initialLayout = ashes::ImageLayout::eUndefined;
 			image.mipLevels = glsl::Utils::MaxIblReflectionLod + 1;
-			image.samples = renderer::SampleCountFlag::e1;
-			image.sharingMode = renderer::SharingMode::eExclusive;
-			image.tiling = renderer::ImageTiling::eOptimal;
-			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+			image.samples = ashes::SampleCountFlag::e1;
+			image.sharingMode = ashes::SharingMode::eExclusive;
+			image.tiling = ashes::ImageTiling::eOptimal;
+			image.usage = ashes::ImageUsageFlag::eColourAttachment | ashes::ImageUsageFlag::eSampled;
 			return device.createTexture( image
-				, renderer::MemoryPropertyFlag::eDeviceLocal );
+				, ashes::MemoryPropertyFlag::eDeviceLocal );
 		}
 
 		SamplerSPtr doCreateSampler( Engine & engine
@@ -60,12 +60,12 @@ namespace castor3d
 			else
 			{
 				result = engine.getSamplerCache().create( name );
-				result->setMinFilter( renderer::Filter::eLinear );
-				result->setMagFilter( renderer::Filter::eLinear );
-				result->setMipFilter( renderer::MipmapMode::eLinear );
-				result->setWrapS( renderer::WrapMode::eClampToEdge );
-				result->setWrapT( renderer::WrapMode::eClampToEdge );
-				result->setWrapR( renderer::WrapMode::eClampToEdge );
+				result->setMinFilter( ashes::Filter::eLinear );
+				result->setMagFilter( ashes::Filter::eLinear );
+				result->setMipFilter( ashes::MipmapMode::eLinear );
+				result->setWrapS( ashes::WrapMode::eClampToEdge );
+				result->setWrapT( ashes::WrapMode::eClampToEdge );
+				result->setWrapR( ashes::WrapMode::eClampToEdge );
 				result->setMinLod( 0.0f );
 				result->setMaxLod( float( maxLod ) );
 				engine.getSamplerCache().add( name, result );
@@ -75,8 +75,8 @@ namespace castor3d
 			return result;
 		}
 
-		renderer::ShaderStageStateArray doCreateProgram( RenderSystem & renderSystem
-			, renderer::Extent2D const & size
+		ashes::ShaderStageStateArray doCreateProgram( RenderSystem & renderSystem
+			, ashes::Extent2D const & size
 			, uint32_t mipLevel )
 		{
 			glsl::Shader vtx;
@@ -274,36 +274,40 @@ namespace castor3d
 				pxl = writer.finalise();
 			}
 
-			renderer::ShaderStageStateArray program
+			ashes::ShaderStageStateArray program
 			{
-				{ getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eVertex ) },
-				{ getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eFragment ) }
+				{ getCurrentDevice( renderSystem ).createShaderModule( ashes::ShaderStageFlag::eVertex ) },
+				{ getCurrentDevice( renderSystem ).createShaderModule( ashes::ShaderStageFlag::eFragment ) }
 			};
-			program[0].module->loadShader( vtx.getSource() );
-			program[1].module->loadShader( pxl.getSource() );
+			program[0].module->loadShader( compileGlslToSpv( getCurrentDevice( renderSystem )
+				, ashes::ShaderStageFlag::eVertex
+				, vtx.getSource() ) );
+			program[1].module->loadShader( compileGlslToSpv( getCurrentDevice( renderSystem )
+				, ashes::ShaderStageFlag::eFragment
+				, pxl.getSource() ) );
 			return program;
 		}
 
-		renderer::RenderPassPtr doCreateRenderPass( RenderSystem const & renderSystem
-			, renderer::Format format )
+		ashes::RenderPassPtr doCreateRenderPass( RenderSystem const & renderSystem
+			, ashes::Format format )
 		{
 			auto & device = getCurrentDevice( renderSystem );
-			renderer::RenderPassCreateInfo createInfo{};
+			ashes::RenderPassCreateInfo createInfo{};
 			createInfo.flags = 0u;
 
 			createInfo.attachments.resize( 1u );
 			createInfo.attachments[0].format = format;
-			createInfo.attachments[0].samples = renderer::SampleCountFlag::e1;
-			createInfo.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
-			createInfo.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
-			createInfo.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-			createInfo.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-			createInfo.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-			createInfo.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+			createInfo.attachments[0].samples = ashes::SampleCountFlag::e1;
+			createInfo.attachments[0].loadOp = ashes::AttachmentLoadOp::eClear;
+			createInfo.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
+			createInfo.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
+			createInfo.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
+			createInfo.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
+			createInfo.attachments[0].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
 
-			renderer::AttachmentReference colourReference;
+			ashes::AttachmentReference colourReference;
 			colourReference.attachment = 0u;
-			colourReference.layout = renderer::ImageLayout::eColourAttachmentOptimal;
+			colourReference.layout = ashes::ImageLayout::eColourAttachmentOptimal;
 
 			createInfo.subpasses.resize( 1u );
 			createInfo.subpasses[0].flags = 0u;
@@ -311,12 +315,12 @@ namespace castor3d
 
 			createInfo.dependencies.resize( 1u );
 			createInfo.dependencies[0].srcSubpass = 0u;
-			createInfo.dependencies[0].dstSubpass = renderer::ExternalSubpass;
-			createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
-			createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-			createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+			createInfo.dependencies[0].dstSubpass = ashes::ExternalSubpass;
+			createInfo.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+			createInfo.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
+			createInfo.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+			createInfo.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
+			createInfo.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 			return device.createRenderPass( createInfo );
 		}
@@ -325,33 +329,33 @@ namespace castor3d
 	//*********************************************************************************************
 
 	EnvironmentPrefilter::MipRenderCube::MipRenderCube( RenderSystem & renderSystem
-		, renderer::RenderPass const & renderPass
+		, ashes::RenderPass const & renderPass
 		, uint32_t mipLevel
-		, renderer::Extent2D const & originalSize
-		, renderer::Extent2D const & size
-		, renderer::TextureView const & srcView
-		, renderer::Texture const & dstTexture
+		, ashes::Extent2D const & originalSize
+		, ashes::Extent2D const & size
+		, ashes::TextureView const & srcView
+		, ashes::Texture const & dstTexture
 		, SamplerSPtr sampler )
 		: RenderCube{ renderSystem, false, std::move( sampler ) }
 		, m_device{ getCurrentDevice( renderSystem ) }
 		, m_renderPass{ renderPass }
 		, m_commandBuffer{ m_device.getGraphicsCommandPool().createCommandBuffer() }
-		, m_fence{ m_device.createFence( renderer::FenceCreateFlag::eSignaled ) }
+		, m_fence{ m_device.createFence( ashes::FenceCreateFlag::eSignaled ) }
 	{
 		for ( auto face = 0u; face < 6u; ++face )
 		{
 			auto & facePass = m_frameBuffers[face];
 			// Create the views.
-			facePass.dstView = dstTexture.createView( renderer::TextureViewType::e2D
+			facePass.dstView = dstTexture.createView( ashes::TextureViewType::e2D
 				, dstTexture.getFormat()
 				, mipLevel
 				, 1u
 				, face
 				, 1u );
 			// Initialise the frame buffer.
-			renderer::FrameBufferAttachmentArray attaches;
+			ashes::FrameBufferAttachmentArray attaches;
 			attaches.emplace_back( *( renderPass.getAttachments().begin() ), *facePass.dstView );
-			facePass.frameBuffer = renderPass.createFrameBuffer( renderer::Extent2D{ size.width, size.height }
+			facePass.frameBuffer = renderPass.createFrameBuffer( ashes::Extent2D{ size.width, size.height }
 			, std::move( attaches ) );
 		}
 
@@ -372,8 +376,8 @@ namespace castor3d
 			auto & frameBuffer = m_frameBuffers[face];
 			m_commandBuffer->beginRenderPass( m_renderPass
 				, *frameBuffer.frameBuffer
-				, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
-				, renderer::SubpassContents::eInline );
+				, { ashes::ClearColorValue{ 0, 0, 0, 0 } }
+				, ashes::SubpassContents::eInline );
 			registerFrame( *m_commandBuffer, face );
 			m_commandBuffer->endRenderPass();
 		}
@@ -385,7 +389,7 @@ namespace castor3d
 	{
 		m_fence->reset();
 		m_device.getGraphicsQueue().submit( *m_commandBuffer, m_fence.get() );
-		m_fence->wait( renderer::FenceTimeout );
+		m_fence->wait( ashes::FenceTimeout );
 		m_device.waitIdle();
 	}
 
@@ -393,21 +397,21 @@ namespace castor3d
 
 	EnvironmentPrefilter::EnvironmentPrefilter( Engine & engine
 		, castor::Size const & size
-		, renderer::Texture const & srcTexture
+		, ashes::Texture const & srcTexture
 		, SamplerSPtr sampler )
 		: m_renderSystem{ *engine.getRenderSystem() }
-		, m_srcView{ srcTexture.createView( renderer::TextureViewType::eCube, srcTexture.getFormat(), 0u, srcTexture.getMipmapLevels(), 0u, 6u ) }
+		, m_srcView{ srcTexture.createView( ashes::TextureViewType::eCube, srcTexture.getFormat(), 0u, srcTexture.getMipmapLevels(), 0u, 6u ) }
 		, m_result{ doCreatePrefilteredTexture( m_renderSystem, size ) }
-		, m_resultView{ m_result->createView( renderer::TextureViewType::eCube, m_result->getFormat(), 0u, m_result->getMipmapLevels(), 0u, 6u ) }
+		, m_resultView{ m_result->createView( ashes::TextureViewType::eCube, m_result->getFormat(), 0u, m_result->getMipmapLevels(), 0u, 6u ) }
 		, m_sampler{ doCreateSampler( engine, m_result->getMipmapLevels() - 1u ) }
 		, m_renderPass{ doCreateRenderPass( m_renderSystem, m_result->getFormat() ) }
 	{
 		auto & dstTexture = *m_result;
-		renderer::Extent2D originalSize{ size.getWidth(), size.getHeight() };
+		ashes::Extent2D originalSize{ size.getWidth(), size.getHeight() };
 
 		for ( auto mipLevel = 0u; mipLevel < glsl::Utils::MaxIblReflectionLod + 1u; ++mipLevel )
 		{
-			renderer::Extent2D mipSize{ uint32_t( originalSize.width * std::pow( 0.5, mipLevel ) )
+			ashes::Extent2D mipSize{ uint32_t( originalSize.width * std::pow( 0.5, mipLevel ) )
 				, uint32_t( originalSize.height * std::pow( 0.5, mipLevel ) ) };
 			m_renderPasses.emplace_back( std::make_unique< MipRenderCube >( m_renderSystem
 				, *m_renderPass

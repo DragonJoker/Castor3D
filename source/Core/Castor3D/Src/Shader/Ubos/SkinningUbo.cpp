@@ -3,7 +3,7 @@
 #include "Engine.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/Animation/AnimatedSkeleton.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Shader/Program.hpp"
 #include "Shader/Ubos/ModelMatrixUbo.hpp"
 
 #include <Descriptor/DescriptorSetLayoutBinding.hpp>
@@ -36,10 +36,10 @@ namespace castor3d
 		if ( !m_ubo )
 		{
 			auto & device = getCurrentDevice( m_engine );
-			m_ubo = renderer::makeUniformBuffer< Configuration >( device
+			m_ubo = ashes::makeUniformBuffer< Configuration >( device
 				, 1u
-				, renderer::BufferTarget::eTransferDst
-				, renderer::MemoryPropertyFlag::eHostVisible );
+				, ashes::BufferTarget::eTransferDst
+				, ashes::MemoryPropertyFlag::eHostVisible );
 		}
 	}
 
@@ -77,17 +77,17 @@ namespace castor3d
 		}
 	}
 
-	renderer::DescriptorSetLayoutBinding SkinningUbo::createLayoutBinding( uint32_t binding
+	ashes::DescriptorSetLayoutBinding SkinningUbo::createLayoutBinding( uint32_t binding
 		, ProgramFlags const & flags )
 	{
 		REQUIRE( checkFlag( flags, ProgramFlag::eSkinning ) );
 
 		if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
 		{
-			return renderer::DescriptorSetLayoutBinding{ binding, renderer::DescriptorType::eStorageBuffer, renderer::ShaderStageFlag::eVertex };
+			return ashes::DescriptorSetLayoutBinding{ binding, ashes::DescriptorType::eStorageBuffer, ashes::ShaderStageFlag::eVertex };
 		}
 
-		return renderer::DescriptorSetLayoutBinding{ binding, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex };
+		return ashes::DescriptorSetLayoutBinding{ binding, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex };
 	}
 
 	glsl::Mat4 SkinningUbo::computeTransform( glsl::GlslWriter & writer

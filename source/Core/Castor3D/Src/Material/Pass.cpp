@@ -3,7 +3,7 @@
 #include "Engine.hpp"
 #include "Material/Material.hpp"
 #include "Render/RenderNode/PassRenderNode.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Shader/Program.hpp"
 #include "Texture/TextureLayout.hpp"
 
 using namespace castor;
@@ -81,16 +81,16 @@ namespace castor3d
 
 	bool Pass::TextWriter::operator()( Pass const & pass, TextFile & file )
 	{
-		static std::map< renderer::CompareOp, String > strAlphaFuncs
+		static std::map< ashes::CompareOp, String > strAlphaFuncs
 		{
-			{ renderer::CompareOp::eAlways, cuT( "always" ) },
-			{ renderer::CompareOp::eLess, cuT( "less" ) },
-			{ renderer::CompareOp::eLessEqual, cuT( "less_or_equal" ) },
-			{ renderer::CompareOp::eEqual, cuT( "equal" ) },
-			{ renderer::CompareOp::eNotEqual, cuT( "not_equal" ) },
-			{ renderer::CompareOp::eGreaterEqual, cuT( "greater_or_equal" ) },
-			{ renderer::CompareOp::eGreater, cuT( "greater" ) },
-			{ renderer::CompareOp::eNever, cuT( "never" ) },
+			{ ashes::CompareOp::eAlways, cuT( "always" ) },
+			{ ashes::CompareOp::eLess, cuT( "less" ) },
+			{ ashes::CompareOp::eLessEqual, cuT( "less_or_equal" ) },
+			{ ashes::CompareOp::eEqual, cuT( "equal" ) },
+			{ ashes::CompareOp::eNotEqual, cuT( "not_equal" ) },
+			{ ashes::CompareOp::eGreaterEqual, cuT( "greater_or_equal" ) },
+			{ ashes::CompareOp::eGreater, cuT( "greater" ) },
+			{ ashes::CompareOp::eNever, cuT( "never" ) },
 		};
 		static const String StrBlendModes[uint32_t( BlendMode::eCount )] =
 		{
@@ -130,7 +130,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			if ( pass.getAlphaFunc() != renderer::CompareOp::eAlways )
+			if ( pass.getAlphaFunc() != ashes::CompareOp::eAlways )
 			{
 				result = file.writeText( m_tabs + cuT( "\talpha_func " )
 					+ strAlphaFuncs[pass.getAlphaFunc()] + cuT( " " )
@@ -245,7 +245,7 @@ namespace castor3d
 	bool Pass::hasAlphaBlending()const
 	{
 		return ( checkFlag( m_textureFlags, TextureChannel::eOpacity ) || m_opacity < 1.0f )
-			&& getAlphaFunc() == renderer::CompareOp::eAlways;
+			&& getAlphaFunc() == ashes::CompareOp::eAlways;
 	}
 
 	void Pass::prepareTextures()
@@ -268,16 +268,16 @@ namespace castor3d
 
 			doReduceTexture( TextureChannel::eSpecular
 				, getType() == MaterialType::ePbrMetallicRoughness
-					? renderer::Format::eR8_UNORM
-					: renderer::Format::eR8G8B8A8_UNORM );
+					? ashes::Format::eR8_UNORM
+					: ashes::Format::eR8G8B8A8_UNORM );
 			doReduceTexture( TextureChannel::eGloss
-				, renderer::Format::eR8_UNORM );
+				, ashes::Format::eR8_UNORM );
 			doReduceTexture( TextureChannel::eHeight
-				, renderer::Format::eR8_UNORM );
+				, ashes::Format::eR8_UNORM );
 			doReduceTexture( TextureChannel::eAmbientOcclusion
-				, renderer::Format::eR8_UNORM );
+				, ashes::Format::eR8_UNORM );
 			doReduceTexture( TextureChannel::eTransmittance
-				, renderer::Format::eR8_UNORM );
+				, ashes::Format::eR8_UNORM );
 
 			auto unit = getTextureUnit( TextureChannel::eDiffuse );
 
@@ -290,14 +290,14 @@ namespace castor3d
 				else if ( unit->getTexture() )
 				{
 					auto format = unit->getTexture()->getPixelFormat();
-					m_needsGammaCorrection = format != renderer::Format::eR16_SFLOAT
-						&& format != renderer::Format::eR32_SFLOAT
-						&& format != renderer::Format::eR16G16_SFLOAT
-						&& format != renderer::Format::eR32G32_SFLOAT
-						&& format != renderer::Format::eR16G16B16_SFLOAT
-						&& format != renderer::Format::eR32G32B32_SFLOAT
-						&& format != renderer::Format::eR16G16B16A16_SFLOAT
-						&& format != renderer::Format::eR32G32B32A32_SFLOAT;
+					m_needsGammaCorrection = format != ashes::Format::eR16_SFLOAT
+						&& format != ashes::Format::eR32_SFLOAT
+						&& format != ashes::Format::eR16G16_SFLOAT
+						&& format != ashes::Format::eR32G32_SFLOAT
+						&& format != ashes::Format::eR16G16B16_SFLOAT
+						&& format != ashes::Format::eR32G32B32_SFLOAT
+						&& format != ashes::Format::eR16G16B16A16_SFLOAT
+						&& format != ashes::Format::eR32G32B32A32_SFLOAT;
 				}
 			}
 
@@ -316,7 +316,7 @@ namespace castor3d
 
 		if ( m_opacity < 1.0f
 			&& m_alphaBlendMode == BlendMode::eNoBlend
-			&& m_alphaFunc == renderer::CompareOp::eAlways )
+			&& m_alphaFunc == ashes::CompareOp::eAlways )
 		{
 			m_alphaBlendMode = BlendMode::eInterpolative;
 		}
@@ -335,7 +335,7 @@ namespace castor3d
 			result |= PassFlag::eAlphaBlending;
 		}
 
-		if ( getAlphaFunc() != renderer::CompareOp::eAlways )
+		if ( getAlphaFunc() != ashes::CompareOp::eAlways )
 		{
 			result |= PassFlag::eAlphaTest;
 		}
@@ -423,23 +423,23 @@ namespace castor3d
 				PxBufferBaseSPtr reduced = buffer;
 				PF::reduceToAlpha( reduced );
 				auto size = reduced->dimensions();
-				renderer::ImageCreateInfo createInfo{};
+				ashes::ImageCreateInfo createInfo{};
 				createInfo.flags = 0u;
 				createInfo.arrayLayers = 1u;
 				createInfo.extent.width = size.getWidth();
 				createInfo.extent.height = size.getHeight();
 				createInfo.extent.depth = 1u;
 				createInfo.format = convert( reduced->format() );
-				createInfo.imageType = renderer::TextureType::e2D;
-				createInfo.initialLayout = renderer::ImageLayout::eUndefined;
+				createInfo.imageType = ashes::TextureType::e2D;
+				createInfo.initialLayout = ashes::ImageLayout::eUndefined;
 				createInfo.mipLevels = 1u;
-				createInfo.samples = renderer::SampleCountFlag::e1;
-				createInfo.sharingMode = renderer::SharingMode::eExclusive;
-				createInfo.tiling = renderer::ImageTiling::eOptimal;
-				createInfo.usage = renderer::ImageUsageFlag::eSampled;
+				createInfo.samples = ashes::SampleCountFlag::e1;
+				createInfo.sharingMode = ashes::SharingMode::eExclusive;
+				createInfo.tiling = ashes::ImageTiling::eOptimal;
+				createInfo.usage = ashes::ImageUsageFlag::eSampled;
 				auto texture = std::make_shared< TextureLayout >( *getOwner()->getEngine()->getRenderSystem()
 					, createInfo
-					, renderer::MemoryPropertyFlag::eDeviceLocal );
+					, ashes::MemoryPropertyFlag::eDeviceLocal );
 				texture->setSource( reduced );
 				opacityMap->setTexture( texture );
 			}
@@ -486,7 +486,7 @@ namespace castor3d
 		}
 	}
 
-	void Pass::doReduceTexture( TextureChannel channel, renderer::Format format )
+	void Pass::doReduceTexture( TextureChannel channel, ashes::Format format )
 	{
 		auto unit = getTextureUnit( channel );
 

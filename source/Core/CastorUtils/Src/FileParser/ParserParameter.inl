@@ -956,7 +956,7 @@ namespace castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ParameterType::eCheckedText >::ParserParameter( UIntStrMap const & p_values )
+	inline ParserParameter< ParameterType::eCheckedText >::ParserParameter( UInt32StrMap const & p_values )
 		: ParserParameter< ParameterType::eUInt32 >()
 		, m_values( p_values )
 	{
@@ -1009,7 +1009,7 @@ namespace castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::ParserParameter( UIntStrMap const & p_values )
+	inline ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::ParserParameter( UInt32StrMap const & p_values )
 		: ParserParameter< ParameterType::eUInt32 >()
 		, m_values( p_values )
 	{

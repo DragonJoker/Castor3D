@@ -101,7 +101,7 @@ namespace castor3d
 		*\return
 		*	\p true if ok.
 		*/
-		C3D_API bool initialise( renderer::RenderPass const & renderPass
+		C3D_API bool initialise( ashes::RenderPass const & renderPass
 			, HdrConfigUbo const & hdrConfigUbo );
 		/**
 		*\~english
@@ -145,10 +145,10 @@ namespace castor3d
 		*\param[in] frameBuffer
 		*	Le tampon d'images dans laquelle le fond est dessiné.
 		*/
-		C3D_API bool prepareFrame( renderer::CommandBuffer & commandBuffer
+		C3D_API bool prepareFrame( ashes::CommandBuffer & commandBuffer
 			, castor::Size const & size
-			, renderer::RenderPass const & renderPass
-			, renderer::FrameBuffer const & frameBuffer );
+			, ashes::RenderPass const & renderPass
+			, ashes::FrameBuffer const & frameBuffer );
 		/**
 		*\~english
 		*\brief
@@ -165,9 +165,9 @@ namespace castor3d
 		*\param[in] renderPass
 		*	La passe de rendu dans laquelle le fond est dessiné.
 		*/
-		C3D_API bool prepareFrame( renderer::CommandBuffer & commandBuffer
+		C3D_API bool prepareFrame( ashes::CommandBuffer & commandBuffer
 			, castor::Size const & size
-			, renderer::RenderPass const & renderPass );
+			, ashes::RenderPass const & renderPass );
 		/**
 		*\~english
 		*\brief
@@ -184,10 +184,10 @@ namespace castor3d
 		*\param[in] renderPass
 		*	La passe de rendu dans laquelle le fond est dessiné.
 		*/
-		C3D_API bool prepareFrame( renderer::CommandBuffer & commandBuffer
+		C3D_API bool prepareFrame( ashes::CommandBuffer & commandBuffer
 			, castor::Size const & size
-			, renderer::RenderPass const & renderPass
-			, renderer::DescriptorSet const & descriptorSet )const;
+			, ashes::RenderPass const & renderPass
+			, ashes::DescriptorSet const & descriptorSet )const;
 		/**
 		*\~english
 		*\return
@@ -199,7 +199,7 @@ namespace castor3d
 		C3D_API virtual void initialiseDescriptorSet( MatrixUbo const & matrixUbo
 			, ModelMatrixUbo const & modelMatrixUbo
 			, HdrConfigUbo const & hdrConfigUbo
-			, renderer::DescriptorSet & descriptorSet )const;
+			, ashes::DescriptorSet & descriptorSet )const;
 		/**
 		 *\~english
 		 *\brief		Starts the CPU timer, resets GPU time.
@@ -245,7 +245,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline renderer::Semaphore const & getSemaphore()const
+		inline ashes::Semaphore const & getSemaphore()const
 		{
 			REQUIRE( m_semaphore );
 			return *m_semaphore;
@@ -278,13 +278,13 @@ namespace castor3d
 			return *m_texture;
 		}
 
-		inline renderer::Texture const & getImage()const
+		inline ashes::Texture const & getImage()const
 		{
 			REQUIRE( m_texture );
 			return m_texture->getTexture();
 		}
 
-		inline renderer::TextureView const & getView()const
+		inline ashes::TextureView const & getView()const
 		{
 			REQUIRE( m_texture );
 			return m_texture->getDefaultView();
@@ -301,31 +301,31 @@ namespace castor3d
 			return *m_ibl;
 		}
 
-		inline renderer::PipelineLayout const & getPipelineLayout()const
+		inline ashes::PipelineLayout const & getPipelineLayout()const
 		{
 			REQUIRE( m_pipelineLayout );
 			return *m_pipelineLayout;
 		}
 
-		inline renderer::Pipeline const & getPipeline()const
+		inline ashes::Pipeline const & getPipeline()const
 		{
 			REQUIRE( m_pipeline );
 			return *m_pipeline;
 		}
 
-		inline renderer::DescriptorSetLayout const & getDescriptorLayout()const
+		inline ashes::DescriptorSetLayout const & getDescriptorLayout()const
 		{
 			REQUIRE( m_descriptorLayout );
 			return *m_descriptorLayout;
 		}
 
-		inline renderer::VertexBuffer< Cube > const & getVertexBuffer()const
+		inline ashes::VertexBuffer< Cube > const & getVertexBuffer()const
 		{
 			REQUIRE( m_vertexBuffer );
 			return *m_vertexBuffer;
 		}
 
-		inline renderer::Buffer< uint16_t > const & getIndexBuffer()const
+		inline ashes::Buffer< uint16_t > const & getIndexBuffer()const
 		{
 			REQUIRE( m_indexBuffer );
 			return *m_indexBuffer;
@@ -349,10 +349,10 @@ namespace castor3d
 		*\param[in] renderPass
 		*	La passe de rendu dans laquelle le fond est dessiné.
 		*/
-		void doPrepareFrame( renderer::CommandBuffer & commandBuffer
+		void doPrepareFrame( ashes::CommandBuffer & commandBuffer
 			, castor::Size const & size
-			, renderer::RenderPass const & renderPass
-			, renderer::DescriptorSet const & descriptorSet )const;
+			, ashes::RenderPass const & renderPass
+			, ashes::DescriptorSet const & descriptorSet )const;
 		/**
 		*\~english
 		*\return
@@ -361,7 +361,7 @@ namespace castor3d
 		*\brief
 		*	Le programme shader utilisé pour dessiner le fond.
 		*/
-		virtual renderer::ShaderStageStateArray doInitialiseShader();
+		virtual ashes::ShaderStageStateArray doInitialiseShader();
 		/**
 		*\~english
 		*\return
@@ -383,7 +383,7 @@ namespace castor3d
 		*\return
 		*	\p true if ok.
 		*/
-		C3D_API virtual bool doInitialise( renderer::RenderPass const & renderPass ) = 0;
+		C3D_API virtual bool doInitialise( ashes::RenderPass const & renderPass ) = 0;
 		/**
 		*\~english
 		*\brief
@@ -412,8 +412,8 @@ namespace castor3d
 
 	private:
 		bool doInitialiseVertexBuffer();
-		bool doInitialisePipeline( renderer::ShaderStageStateArray program
-			, renderer::RenderPass const & renderPass
+		bool doInitialisePipeline( ashes::ShaderStageStateArray program
+			, ashes::RenderPass const & renderPass
 			, HdrConfigUbo const & hdrConfigUbo );
 
 	protected:
@@ -424,14 +424,14 @@ namespace castor3d
 		MatrixUbo m_matrixUbo;
 		ModelMatrixUbo m_modelMatrixUbo;
 		castor::Matrix4x4r m_mtxModel;
-		renderer::SemaphorePtr m_semaphore;
-		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
-		renderer::DescriptorSetPoolPtr m_descriptorPool;
-		renderer::DescriptorSetPtr m_descriptorSet;
-		renderer::PipelineLayoutPtr m_pipelineLayout;
-		renderer::PipelinePtr m_pipeline;
-		renderer::VertexBufferPtr< Cube > m_vertexBuffer;
-		renderer::BufferPtr< uint16_t > m_indexBuffer;
+		ashes::SemaphorePtr m_semaphore;
+		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
+		ashes::DescriptorSetPoolPtr m_descriptorPool;
+		ashes::DescriptorSetPtr m_descriptorSet;
+		ashes::PipelineLayoutPtr m_pipelineLayout;
+		ashes::PipelinePtr m_pipeline;
+		ashes::VertexBufferPtr< Cube > m_vertexBuffer;
+		ashes::BufferPtr< uint16_t > m_indexBuffer;
 		RenderPassTimerSPtr m_timer;
 		TextureLayoutSPtr m_texture;
 		SamplerWPtr m_sampler;

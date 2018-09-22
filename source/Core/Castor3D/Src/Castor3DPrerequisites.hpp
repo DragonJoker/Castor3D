@@ -31,14 +31,16 @@ See LICENSE file in root folder
 
 #include <GlslWriterPrerequisites.hpp>
 
-#include <RendererPrerequisites.hpp>
+#include <AshesPrerequisites.hpp>
 
 namespace castor3d
 {
 	using castor::real;
-	using castor::UIntStrMap;
+	using castor::UInt32StrMap;
 	using castor::UInt64StrMap;
 }
+
+#include "Castor3DConfig.hpp"
 
 #include "Prerequisites/Castor3DPrerequisites_Animation.hpp"
 #include "Prerequisites/Castor3DPrerequisites_Camera.hpp"
@@ -291,8 +293,8 @@ namespace castor3d
 	DECLARE_SMART_PTR( GaussianBlur );
 
 	castor::Matrix4x4f convert( std::array< float, 16 > const & value );
-	renderer::ClearColorValue convert( castor::RgbaColour const & value );
-	castor::RgbaColour convert( renderer::ClearColorValue const & value );
+	ashes::ClearColorValue convert( castor::RgbaColour const & value );
+	castor::RgbaColour convert( ashes::ClearColorValue const & value );
 
 	using ParticleFactory = castor::Factory< CpuParticleSystem, castor::String, CpuParticleSystemUPtr, std::function< CpuParticleSystemUPtr( ParticleSystem & ) > >;
 
@@ -533,21 +535,21 @@ DECLARED_EXPORTED_OWNED_BY( C3D_API, castor3d::Scene, Scene )
 
 namespace castor3d
 {
-	C3D_API renderer::Device const & getCurrentDevice( RenderSystem const & obj );
-	C3D_API renderer::Device const & getCurrentDevice( Engine const & obj );
-	C3D_API renderer::Device const & getCurrentDevice( Scene const & obj );
+	C3D_API ashes::Device const & getCurrentDevice( RenderSystem const & obj );
+	C3D_API ashes::Device const & getCurrentDevice( Engine const & obj );
+	C3D_API ashes::Device const & getCurrentDevice( Scene const & obj );
 
-	inline renderer::Device const & getCurrentDevice( castor::OwnedBy< RenderSystem > const & obj )
+	inline ashes::Device const & getCurrentDevice( castor::OwnedBy< RenderSystem > const & obj )
 	{
 		return getCurrentDevice( *obj.getRenderSystem() );
 	}
 
-	inline renderer::Device const & getCurrentDevice( castor::OwnedBy< Engine > const & obj )
+	inline ashes::Device const & getCurrentDevice( castor::OwnedBy< Engine > const & obj )
 	{
 		return getCurrentDevice( *obj.getEngine() );
 	}
 
-	inline renderer::Device const & getCurrentDevice( castor::OwnedBy< Scene > const & obj )
+	inline ashes::Device const & getCurrentDevice( castor::OwnedBy< Scene > const & obj )
 	{
 		return getCurrentDevice( *obj.getScene() );
 	}

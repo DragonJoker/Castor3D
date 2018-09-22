@@ -22,7 +22,7 @@ namespace Gl3Render
 		, bool enableValidation )
 		: castor3d::RenderSystem( engine, Name, false )
 	{
-		renderer::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
+		ashes::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
 		{
 			if ( newLine )
 			{
@@ -33,7 +33,7 @@ namespace Gl3Render
 				Logger::logDebugNoNL( msg );
 			}
 		} );
-		renderer::Logger::setInfoCallback( []( std::string const & msg, bool newLine )
+		ashes::Logger::setInfoCallback( []( std::string const & msg, bool newLine )
 		{
 			if ( newLine )
 			{
@@ -44,7 +44,7 @@ namespace Gl3Render
 				Logger::logInfoNoNL( msg );
 			}
 		} );
-		renderer::Logger::setWarningCallback( []( std::string const & msg, bool newLine )
+		ashes::Logger::setWarningCallback( []( std::string const & msg, bool newLine )
 		{
 			if ( newLine )
 			{
@@ -55,7 +55,7 @@ namespace Gl3Render
 				Logger::logWarningNoNL( msg );
 			}
 		} );
-		renderer::Logger::setErrorCallback( []( std::string const & msg, bool newLine )
+		ashes::Logger::setErrorCallback( []( std::string const & msg, bool newLine )
 		{
 			if ( newLine )
 			{
@@ -66,7 +66,7 @@ namespace Gl3Render
 				Logger::logErrorNoNL( msg );
 			}
 		} );
-		m_renderer.reset( createRenderer( renderer::Renderer::Configuration
+		m_renderer.reset( createRenderer( ashes::Renderer::Configuration
 		{
 			string::stringCast< char >( appName ),
 			"Castor3D",
@@ -94,15 +94,15 @@ namespace Gl3Render
 
 	glsl::GlslWriter RenderSystem::createGlslWriter()
 	{
-		return glsl::GlslWriter{ glsl::GlslWriterConfig{ m_gpuInformations.getShaderLanguageVersion()
+		return glsl::GlslWriter{ glsl::GlslWriterConfig{ 450
 			, true
 			, true
 			, m_gpuInformations.hasShaderStorageBuffers()
-			, false
-			, false
-			, false
-			, false
-			, false
-			, m_renderer->getPhysicalDevice( 0u ).isSPIRVSupported() } };
+			, true
+			, true
+			, m_renderer->getClipDirection() == ashes::ClipDirection::eTopDown
+			, true
+			, true
+			, true } };
 	}
 }

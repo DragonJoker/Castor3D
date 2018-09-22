@@ -115,7 +115,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline renderer::Semaphore const & getSemaphore()const
+		inline ashes::Semaphore const & getSemaphore()const
 		{
 			REQUIRE( m_finished );
 			return *m_finished;
@@ -184,26 +184,26 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
 		 */
-		C3D_API void doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
+		C3D_API void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, BillboardListRenderNode & nodes )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
 		 */
-		C3D_API void doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
+		C3D_API void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, SubmeshRenderNode & nodes )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
 		 */
-		C3D_API void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+		C3D_API void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, BillboardListRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
 		 */
-		C3D_API void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+		C3D_API void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, SubmeshRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
@@ -214,17 +214,17 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
 		 */
-		renderer::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const override;
+		ashes::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateBlendState
 		 */
-		renderer::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
+		ashes::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
 
 	protected:
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
 		 */
-		renderer::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
+		ashes::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 
 	protected:
 		Scene const & m_scene;
@@ -232,7 +232,7 @@ namespace castor3d
 		SceneRenderNode m_sceneNode;
 		bool m_environment{ false };
 		SsaoConfig m_ssaoConfig;
-		renderer::SemaphorePtr m_finished;
+		ashes::SemaphorePtr m_finished;
 	};
 }
 

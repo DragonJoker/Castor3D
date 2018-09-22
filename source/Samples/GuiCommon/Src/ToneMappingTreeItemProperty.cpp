@@ -40,18 +40,18 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlag type
+				, ashes::ShaderStageFlag type
 				, glsl::Shader const & shader )override
 			{
 				doGetSource( name ).sources[type] = shader.getSource();
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, HdrConfig & value )override
 			{
 				auto & source = doGetSource( name );
-				UniformBufferValues ubo{ wxT( "HdrConfig" ), renderer::ShaderStageFlag::eFragment };
+				UniformBufferValues ubo{ wxT( "HdrConfig" ), ashes::ShaderStageFlag::eFragment };
 				ubo.uniforms.emplace_back( makeUniformValue( wxT( "Exposure" ), value.getExposure() ) );
 				ubo.uniforms.emplace_back( makeUniformValue( wxT( "Gamma" ), value.getGamma() ) );
 				source.ubos.emplace_back( std::move( ubo ) );

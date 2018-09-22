@@ -182,11 +182,11 @@ namespace test_launcher
 				, output );
 		}
 
-		renderer::WindowHandle makeWindowHandle( wxWindow * window )
+		ashes::WindowHandle makeWindowHandle( wxWindow * window )
 		{
 #if defined( CASTOR_PLATFORM_WINDOWS )
 
-			return renderer::WindowHandle( std::make_unique< renderer::IMswWindowHandle >( ::GetModuleHandle( nullptr )
+			return ashes::WindowHandle( std::make_unique< ashes::IMswWindowHandle >( ::GetModuleHandle( nullptr )
 				, window->GetHandle() ) );
 
 #elif defined( CASTOR_PLATFORM_LINUX )
@@ -206,7 +206,7 @@ namespace test_launcher
 				}
 			}
 
-			return renderer::WindowHandle( std::make_unique< renderer::IXWindowHandle >( drawable, display ) );
+			return ashes::WindowHandle( std::make_unique< ashes::IXWindowHandle >( drawable, display ) );
 
 #endif
 		}

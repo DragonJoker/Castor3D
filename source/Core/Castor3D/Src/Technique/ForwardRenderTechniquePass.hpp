@@ -86,8 +86,8 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::render
 		 */
-		void initialiseRenderPass( renderer::TextureView const & colourView
-			, renderer::TextureView const & depthView
+		void initialiseRenderPass( ashes::TextureView const & colourView
+			, ashes::TextureView const & depthView
 			, castor::Size const & size
 			, bool clear );
 		/**
@@ -107,7 +107,7 @@ namespace castor3d
 		 *\brief		Dessine les noeuds.
 		 *\param[out]	toWait	Le sémaphore à attendre.
 		 */
-		renderer::Semaphore const & render( renderer::Semaphore const & toWait );
+		ashes::Semaphore const & render( ashes::Semaphore const & toWait );
 
 	protected:
 		/**
@@ -119,22 +119,22 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateUboBindings
 		 */
-		C3D_API renderer::DescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
+		C3D_API ashes::DescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
 		 */
-		C3D_API renderer::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
+		C3D_API ashes::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
 		 */
-		C3D_API void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+		C3D_API void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, BillboardListRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
 		 */
-		C3D_API void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+		C3D_API void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, SubmeshRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
@@ -153,7 +153,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const override;
+			, ashes::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */
@@ -161,7 +161,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const override;
+			, ashes::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
 		 */
@@ -169,12 +169,12 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const override;
+			, ashes::CompareOp alphaFunc )const override;
 
 	protected:
-		renderer::FrameBufferPtr m_frameBuffer;
-		renderer::CommandBufferPtr m_nodesCommands;
-		renderer::FencePtr m_fence;
+		ashes::FrameBufferPtr m_frameBuffer;
+		ashes::CommandBufferPtr m_nodesCommands;
+		ashes::FencePtr m_fence;
 	};
 }
 

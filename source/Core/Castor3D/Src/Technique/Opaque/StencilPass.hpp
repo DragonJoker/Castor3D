@@ -43,7 +43,7 @@ namespace castor3d
 		 *\param[in]	modelMatrixUbo	L'UBO des matrices modèle.
 		 */
 		StencilPass( Engine const & engine
-			, renderer::TextureView const & depthView
+			, ashes::TextureView const & depthView
 			, MatrixUbo & matrixUbo
 			, ModelMatrixUbo & modelMatrixUbo );
 		/**
@@ -54,8 +54,8 @@ namespace castor3d
 		 *\brief		Initialise le programme et son pipeline.
 		 *\param[in]	vbo	Le tampon de sommets contenant l'objet à dessiner.
 		 */
-		void initialise( renderer::VertexLayout const & vertexLayout
-			, renderer::VertexBufferBase & vbo );
+		void initialise( ashes::VertexLayout const & vertexLayout
+			, ashes::VertexBufferBase & vbo );
 		/**
 		*\~english
 		*\brief		Cleans up the program and its pipeline.
@@ -69,7 +69,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dessine la passe de stencil.
 		 */
-		renderer::Semaphore const & render( renderer::Semaphore const & toWait );
+		ashes::Semaphore const & render( ashes::Semaphore const & toWait );
 		/**
 		*\~english
 		*name
@@ -79,7 +79,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline renderer::Semaphore const & getSemaphore()const
+		inline ashes::Semaphore const & getSemaphore()const
 		{
 			REQUIRE( m_finished );
 			return *m_finished;
@@ -88,20 +88,20 @@ namespace castor3d
 
 	private:
 		Engine const & m_engine;
-		renderer::TextureView const & m_depthView;
+		ashes::TextureView const & m_depthView;
 		MatrixUbo & m_matrixUbo;
 		ModelMatrixUbo & m_modelMatrixUbo;
-		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
-		renderer::DescriptorSetPoolPtr m_descriptorPool;
-		renderer::DescriptorSetPtr m_descriptorSet;
-		renderer::RenderPassPtr m_renderPass;
-		renderer::FrameBufferPtr m_frameBuffer;
-		renderer::PipelineLayoutPtr m_pipelineLayout;
-		renderer::ShaderStageStateArray m_program;
-		renderer::PipelinePtr m_pipeline;
-		renderer::VertexBufferBase const * m_vbo{ nullptr };
-		renderer::CommandBufferPtr m_commandBuffer;
-		renderer::SemaphorePtr m_finished;
+		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
+		ashes::DescriptorSetPoolPtr m_descriptorPool;
+		ashes::DescriptorSetPtr m_descriptorSet;
+		ashes::RenderPassPtr m_renderPass;
+		ashes::FrameBufferPtr m_frameBuffer;
+		ashes::PipelineLayoutPtr m_pipelineLayout;
+		ashes::ShaderStageStateArray m_program;
+		ashes::PipelinePtr m_pipeline;
+		ashes::VertexBufferBase const * m_vbo{ nullptr };
+		ashes::CommandBufferPtr m_commandBuffer;
+		ashes::SemaphorePtr m_finished;
 	};
 }
 

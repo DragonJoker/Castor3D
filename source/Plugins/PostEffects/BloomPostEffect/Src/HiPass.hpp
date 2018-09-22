@@ -19,9 +19,9 @@ namespace Bloom
 	{
 	public:
 		HiPass( castor3d::RenderSystem & renderSystem
-			, renderer::Format format
-			, renderer::TextureView const & sceneView
-			, renderer::Extent2D size
+			, ashes::Format format
+			, ashes::TextureView const & sceneView
+			, ashes::Extent2D size
 			, uint32_t blurPassesCount );
 		castor3d::CommandsSemaphore getCommands( castor3d::RenderPassTimer const & timer )const;
 
@@ -41,11 +41,11 @@ namespace Bloom
 		}
 
 	private:
-		renderer::Device const & m_device;
-		renderer::TextureView const & m_sceneView;
+		ashes::Device const & m_device;
+		ashes::TextureView const & m_sceneView;
 		glsl::Shader m_vertexShader;
 		glsl::Shader m_pixelShader;
-		renderer::RenderPassPtr m_renderPass;
+		ashes::RenderPassPtr m_renderPass;
 		castor3d::PostEffectSurface m_surface;
 	};
 }

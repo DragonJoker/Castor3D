@@ -36,7 +36,7 @@ namespace castor3d
 		 */
 		C3D_API explicit BrdfPrefilter( Engine & engine
 			, castor::Size const & size
-			, renderer::TextureView const & dstTexture );
+			, ashes::TextureView const & dstTexture );
 		/**
 		 *\~english
 		 *\brief		Computes the convoluted BRDF.
@@ -52,17 +52,17 @@ namespace castor3d
 		 *\~french
 		 *\brief		Crée le programme shader de convolution.
 		 */
-		renderer::ShaderStageStateArray doCreateProgram();
+		ashes::ShaderStageStateArray doCreateProgram();
 
 	private:
 		RenderSystem & m_renderSystem;
-		renderer::VertexBufferPtr< TexturedQuad > m_vertexBuffer;
-		renderer::VertexLayoutPtr m_vertexLayout;
-		renderer::RenderPassPtr m_renderPass;
-		renderer::FrameBufferPtr m_frameBuffer;
-		renderer::PipelineLayoutPtr m_pipelineLayout;
-		renderer::PipelinePtr m_pipeline;
-		renderer::CommandBufferPtr m_commandBuffer;
+		ashes::VertexBufferPtr< TexturedQuad > m_vertexBuffer;
+		ashes::VertexLayoutPtr m_vertexLayout;
+		ashes::RenderPassPtr m_renderPass;
+		ashes::FrameBufferPtr m_frameBuffer;
+		ashes::PipelineLayoutPtr m_pipelineLayout;
+		ashes::PipelinePtr m_pipeline;
+		ashes::CommandBufferPtr m_commandBuffer;
 	};
 }
 

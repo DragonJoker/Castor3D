@@ -9,6 +9,7 @@
 #include <Buffer/StagingBuffer.hpp>
 #include <Command/CommandBufferInheritanceInfo.hpp>
 #include <Core/Device.hpp>
+#include <Shader/GlslToSpv.hpp>
 
 #include <GlslSource.hpp>
 #include <GlslUtils.hpp>
@@ -30,7 +31,7 @@ namespace castor3d
 	{
 	}
 
-	bool SceneBackground::initialise( renderer::RenderPass const & renderPass
+	bool SceneBackground::initialise( ashes::RenderPass const & renderPass
 		, HdrConfigUbo const & hdrConfigUbo )
 	{
 		m_semaphore = getCurrentDevice( *this ).createSemaphore();
@@ -46,17 +47,17 @@ namespace castor3d
 		else
 		{
 			sampler = getEngine()->getSamplerCache().add( name );
-			sampler->setMinFilter( renderer::Filter::eLinear );
-			sampler->setMagFilter( renderer::Filter::eLinear );
-			sampler->setWrapS( renderer::WrapMode::eClampToEdge );
-			sampler->setWrapT( renderer::WrapMode::eClampToEdge );
-			sampler->setWrapR( renderer::WrapMode::eClampToEdge );
+			sampler->setMinFilter( ashes::Filter::eLinear );
+			sampler->setMagFilter( ashes::Filter::eLinear );
+			sampler->setWrapS( ashes::WrapMode::eClampToEdge );
+			sampler->setWrapT( ashes::WrapMode::eClampToEdge );
+			sampler->setWrapR( ashes::WrapMode::eClampToEdge );
 			sampler->setMinLod( 0.0f );
 			sampler->setMaxLod( float( m_texture->getMipmapCount() - 1u ) );
 
 			if ( m_texture->getMipmapCount() > 1u )
 			{
-				sampler->setMipFilter( renderer::MipmapMode::eLinear );
+				sampler->setMipFilter( ashes::MipmapMode::eLinear );
 			}
 		}
 
@@ -128,20 +129,20 @@ namespace castor3d
 		}
 	}
 
-	bool SceneBackground::prepareFrame( renderer::CommandBuffer & commandBuffer
+	bool SceneBackground::prepareFrame( ashes::CommandBuffer & commandBuffer
 		, castor::Size const & size
-		, renderer::RenderPass const & renderPass
-		, renderer::FrameBuffer const & frameBuffer )
+		, ashes::RenderPass const & renderPass
+		, ashes::FrameBuffer const & frameBuffer )
 	{
 		REQUIRE( m_initialised );
-		renderer::ClearColorValue colour;
-		renderer::DepthStencilClearValue depth{ 1.0, 0 };
+		ashes::ClearColorValue colour;
+		ashes::DepthStencilClearValue depth{ 1.0, 0 };
 		commandBuffer.begin();
 		m_timer->beginPass( commandBuffer );
 		commandBuffer.beginRenderPass( renderPass
 			, frameBuffer
 			, { depth, colour }
-			, renderer::SubpassContents::eInline );
+			, ashes::SubpassContents::eInline );
 		doPrepareFrame( commandBuffer
 			, size
 			, renderPass
@@ -153,9 +154,9 @@ namespace castor3d
 		return true;
 	}
 
-	bool SceneBackground::prepareFrame( renderer::CommandBuffer & commandBuffer
+	bool SceneBackground::prepareFrame( ashes::CommandBuffer & commandBuffer
 		, castor::Size const & size
-		, renderer::RenderPass const & renderPass )
+		, ashes::RenderPass const & renderPass )
 	{
 		REQUIRE( m_initialised );
 		return prepareFrame( commandBuffer
@@ -164,14 +165,14 @@ namespace castor3d
 			, *m_descriptorSet );
 	}
 
-	bool SceneBackground::prepareFrame( renderer::CommandBuffer & commandBuffer
+	bool SceneBackground::prepareFrame( ashes::CommandBuffer & commandBuffer
 		, castor::Size const & size
-		, renderer::RenderPass const & renderPass
-		, renderer::DescriptorSet const & descriptorSet )const
+		, ashes::RenderPass const & renderPass
+		, ashes::DescriptorSet const & descriptorSet )const
 	{
 		REQUIRE( m_initialised );
-		commandBuffer.begin( renderer::CommandBufferUsageFlag::eRenderPassContinue
-			, renderer::CommandBufferInheritanceInfo
+		commandBuffer.begin( ashes::CommandBufferUsageFlag::eRenderPassContinue
+			, ashes::CommandBufferInheritanceInfo
 			{
 				&renderPass,
 				0u,
@@ -192,7 +193,7 @@ namespace castor3d
 	void SceneBackground::initialiseDescriptorSet( MatrixUbo const & matrixUbo
 		, ModelMatrixUbo const & modelMatrixUbo
 		, HdrConfigUbo const & hdrConfigUbo
-		, renderer::DescriptorSet & descriptorSet )const
+		, ashes::DescriptorSet & descriptorSet )const
 	{
 		descriptorSet.createBinding( m_descriptorLayout->getBinding( 0u )
 			, matrixUbo.getUbo() );
@@ -224,10 +225,10 @@ namespace castor3d
 		}
 	}
 
-	void SceneBackground::doPrepareFrame( renderer::CommandBuffer & commandBuffer
+	void SceneBackground::doPrepareFrame( ashes::CommandBuffer & commandBuffer
 		, castor::Size const & size
-		, renderer::RenderPass const & renderPass
-		, renderer::DescriptorSet const & descriptorSet )const
+		, ashes::RenderPass const & renderPass
+		, ashes::DescriptorSet const & descriptorSet )const
 	{
 		REQUIRE( m_initialised );
 		commandBuffer.bindPipeline( *m_pipeline );
@@ -235,11 +236,11 @@ namespace castor3d
 		commandBuffer.setScissor( { 0, 0, size.getWidth(), size.getHeight() } );
 		commandBuffer.bindDescriptorSet( descriptorSet, *m_pipelineLayout );
 		commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-		commandBuffer.bindIndexBuffer( m_indexBuffer->getBuffer(), 0u, renderer::IndexType::eUInt16 );
+		commandBuffer.bindIndexBuffer( m_indexBuffer->getBuffer(), 0u, ashes::IndexType::eUInt16 );
 		commandBuffer.drawIndexed( m_indexBuffer->getCount() );
 	}
 
-	renderer::ShaderStageStateArray SceneBackground::doInitialiseShader()
+	ashes::ShaderStageStateArray SceneBackground::doInitialiseShader()
 	{
 		using namespace glsl;
 		auto & renderSystem = *getEngine()->getRenderSystem();
@@ -304,23 +305,28 @@ namespace castor3d
 			pxl = writer.finalise();
 		}
 
-		renderer::ShaderStageStateArray result;
-		result.push_back( { getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
-		result.push_back( { getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-		result[0].module->loadShader( vtx.getSource() );
-		result[1].module->loadShader( pxl.getSource() );
+		auto & device = getCurrentDevice( renderSystem );
+		ashes::ShaderStageStateArray result;
+		result.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
+		result.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
+		result[0].module->loadShader( compileGlslToSpv( device
+			, ashes::ShaderStageFlag::eVertex
+			, vtx.getSource() ) );
+		result[1].module->loadShader( compileGlslToSpv( device
+			, ashes::ShaderStageFlag::eFragment
+			, pxl.getSource() ) );
 		return result;
 	}
 
 	void SceneBackground::doInitialiseDescriptorLayout()
 	{
 		auto & device = getCurrentDevice( *this );
-		renderer::DescriptorSetLayoutBindingArray setLayoutBindings
+		ashes::DescriptorSetLayoutBindingArray setLayoutBindings
 		{
-			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex },			// Matrix UBO
-			{ 1u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex },			// Model Matrix UBO
-			{ 2u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },			// HDR Config UBO
-			{ 3u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },	// Skybox Map
+			{ 0u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex },			// Matrix UBO
+			{ 1u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex },			// Model Matrix UBO
+			{ 2u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment },			// HDR Config UBO
+			{ 3u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment },	// Skybox Map
 		};
 		m_descriptorLayout = device.createDescriptorSetLayout( std::move( setLayoutBindings ) );
 	}
@@ -330,7 +336,7 @@ namespace castor3d
 		using castor::Point3f;
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = getCurrentDevice( renderSystem );
-		renderer::StagingBuffer stagingBuffer{ device, 0u, sizeof( Cube ) };
+		ashes::StagingBuffer stagingBuffer{ device, 0u, sizeof( Cube ) };
 		auto commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 
 		// Vertex Buffer
@@ -354,10 +360,10 @@ namespace castor3d
 				}
 			}
 		};
-		m_vertexBuffer = renderer::makeVertexBuffer< Cube >( device
+		m_vertexBuffer = ashes::makeVertexBuffer< Cube >( device
 			, 1u
-			, renderer::BufferTarget::eTransferDst
-			, renderer::MemoryPropertyFlag::eDeviceLocal );
+			, ashes::BufferTarget::eTransferDst
+			, ashes::MemoryPropertyFlag::eDeviceLocal );
 		stagingBuffer.uploadVertexData( *commandBuffer
 			, vertexData
 			, *m_vertexBuffer );
@@ -378,10 +384,10 @@ namespace castor3d
 			// Left
 			20, 21, 22, 22, 21, 23,
 		};
-		m_indexBuffer = renderer::makeBuffer< uint16_t >( device
+		m_indexBuffer = ashes::makeBuffer< uint16_t >( device
 			, uint32_t( indexData.size() )
-			, renderer::BufferTarget::eIndexBuffer | renderer::BufferTarget::eTransferDst
-			, renderer::MemoryPropertyFlag::eDeviceLocal );
+			, ashes::BufferTarget::eIndexBuffer | ashes::BufferTarget::eTransferDst
+			, ashes::MemoryPropertyFlag::eDeviceLocal );
 		stagingBuffer.uploadBufferData( *commandBuffer
 			, indexData
 			, *m_indexBuffer );
@@ -389,8 +395,8 @@ namespace castor3d
 		return true;
 	}
 
-	bool SceneBackground::doInitialisePipeline( renderer::ShaderStageStateArray program
-		, renderer::RenderPass const & renderPass
+	bool SceneBackground::doInitialisePipeline( ashes::ShaderStageStateArray program
+		, ashes::RenderPass const & renderPass
 		, HdrConfigUbo const & hdrConfigUbo )
 	{
 		auto & device = getCurrentDevice( *this );
@@ -409,21 +415,21 @@ namespace castor3d
 			, hdrConfigUbo
 			, *m_descriptorSet );
 		m_descriptorSet->update();
-		renderer::VertexInputState vertexInput;
-		vertexInput.vertexBindingDescriptions.push_back( { 0u, sizeof( castor::Point3f ), renderer::VertexInputRate::eVertex } );
-		vertexInput.vertexAttributeDescriptions.push_back( { 0u, 0u, renderer::Format::eR32G32B32_SFLOAT, 0u } );
+		ashes::VertexInputState vertexInput;
+		vertexInput.vertexBindingDescriptions.push_back( { 0u, sizeof( castor::Point3f ), ashes::VertexInputRate::eVertex } );
+		vertexInput.vertexAttributeDescriptions.push_back( { 0u, 0u, ashes::Format::eR32G32B32_SFLOAT, 0u } );
 
 		m_pipeline = m_pipelineLayout->createPipeline(
 		{
 			std::move( program ),
 			renderPass,
 			vertexInput,
-			renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleList },
-			renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eNone },
-			renderer::MultisampleState{},
-			renderer::ColourBlendState::createDefault(),
-			{ renderer::DynamicState::eViewport, renderer::DynamicState::eScissor },
-			renderer::DepthStencilState{ 0u, false, false, renderer::CompareOp::eLessEqual }
+			ashes::InputAssemblyState{ ashes::PrimitiveTopology::eTriangleList },
+			ashes::RasterisationState{ 0u, false, false, ashes::PolygonMode::eFill, ashes::CullModeFlag::eNone },
+			ashes::MultisampleState{},
+			ashes::ColourBlendState::createDefault(),
+			{ ashes::DynamicState::eViewport, ashes::DynamicState::eScissor },
+			ashes::DepthStencilState{ 0u, false, false, ashes::CompareOp::eLessEqual }
 		} );
 		return true;
 	}
