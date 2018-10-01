@@ -41,6 +41,8 @@ using namespace castor;
 
 namespace castor3d
 {
+	//*************************************************************************************************
+
 	RenderTarget::TextWriter::TextWriter( String const & tabs )
 		: castor::TextWriter< RenderTarget >{ tabs }
 	{
@@ -171,6 +173,23 @@ namespace castor3d
 
 	//*************************************************************************************************
 
+	RenderTarget::CombineQuad::CombineQuad( RenderSystem & renderSystem
+		, ashes::TextureView const & ovView )
+		: RenderQuad{ renderSystem, true }
+		, m_ovView{ ovView }
+	{
+	}
+
+	void RenderTarget::CombineQuad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+		, ashes::DescriptorSet & descriptorSet )
+	{
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
+			, m_ovView
+			, m_sampler->getSampler() );
+	}
+
+	//*************************************************************************************************
+	
 	uint32_t RenderTarget::sm_uiCount = 0;
 	const castor::String RenderTarget::DefaultSamplerName = cuT( "DefaultRTSampler" );
 
@@ -182,8 +201,9 @@ namespace castor3d
 		, m_size{ Size{ 100u, 100u } }
 		, m_renderTechnique{}
 		, m_index{ ++sm_uiCount }
-		, m_workFrameBuffer{ *this }
-		, m_flippedFrameBuffer{ *this }
+		, m_objectsFrameBuffer{ *this }
+		, m_overlaysFrameBuffer{ *this }
+		, m_combinedFrameBuffer{ *this }
 		, m_velocityTexture{ engine }
 	{
 		m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( cuT( "linear" )
@@ -252,7 +272,7 @@ namespace castor3d
 
 			if ( !m_srgbPostEffects.empty() )
 			{
-				auto const * sourceView = m_workFrameBuffer.colourTexture.getTexture().get();
+				auto const * sourceView = m_objectsFrameBuffer.colourTexture.getTexture().get();
 
 				for ( auto effect : m_srgbPostEffects )
 				{
@@ -265,13 +285,13 @@ namespace castor3d
 
 				doInitialiseCopyCommands( m_srgbCopyCommands
 					, sourceView->getDefaultView()
-					, m_workFrameBuffer.colourTexture.getTexture()->getDefaultView() );
+					, m_objectsFrameBuffer.colourTexture.getTexture()->getDefaultView() );
 				m_srgbCopyFinished = device.createSemaphore();
 			}
 
 			doInitialiseFlip();
 			m_overlayRenderer = std::make_shared< OverlayRenderer >( *getEngine()->getRenderSystem()
-				, m_flippedFrameBuffer.colourTexture.getTexture()->getDefaultView() );
+				, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView() );
 			m_overlayRenderer->initialise();
 
 			m_signalReady = device.createSemaphore();
@@ -289,9 +309,9 @@ namespace castor3d
 			m_fence.reset();
 			m_signalReady.reset();
 
-			m_flipQuad.reset();
-			m_flipCommands.reset();
-			m_flipFinished.reset();
+			m_combineQuad.reset();
+			m_combineCommands.reset();
+			m_combineFinished.reset();
 
 			m_toneMappingCommandBuffer.reset();
 			m_overlayRenderer->cleanup();
@@ -324,8 +344,9 @@ namespace castor3d
 			m_velocityTexture.setTexture( nullptr );
 
 			m_renderTechnique->cleanup();
-			m_workFrameBuffer.cleanup();
-			m_flippedFrameBuffer.cleanup();
+			m_overlaysFrameBuffer.cleanup();
+			m_objectsFrameBuffer.cleanup();
+			m_combinedFrameBuffer.cleanup();
 			m_renderTechnique.reset();
 			m_renderPass.reset();
 			getEngine()->getRenderTechniqueCache().remove( cuT( "RenderTargetTechnique_" ) + string::toString( m_index ) );
@@ -356,7 +377,7 @@ namespace castor3d
 				{
 					getEngine()->getRenderSystem()->pushScene( scene.get() );
 					scene->getGeometryCache().fillInfo( info );
-					doRender( info, m_workFrameBuffer, getCamera() );
+					doRender( info, m_objectsFrameBuffer, getCamera() );
 					getEngine()->getRenderSystem()->popScene();
 				}
 			}
@@ -488,14 +509,20 @@ namespace castor3d
 
 	bool RenderTarget::doInitialiseFrameBuffer()
 	{
-		auto result = m_workFrameBuffer.initialise( *m_renderPass
+		auto result = m_objectsFrameBuffer.initialise( *m_renderPass
 			, m_size );
-		m_size.set( m_workFrameBuffer.colourTexture.getTexture()->getDimensions().width
-			, m_workFrameBuffer.colourTexture.getTexture()->getDimensions().height );
+		auto & dimensions = m_objectsFrameBuffer.colourTexture.getTexture()->getDimensions();
+		m_size.set( dimensions.width, dimensions.height );
 
 		if ( result )
 		{
-			result = m_flippedFrameBuffer.initialise( *m_renderPass
+			result = m_overlaysFrameBuffer.initialise( *m_renderPass
+				, m_size );
+		}
+
+		if ( result )
+		{
+			result = m_combinedFrameBuffer.initialise( *m_renderPass
 				, m_size );
 		}
 
@@ -570,7 +597,7 @@ namespace castor3d
 				, ashes::PipelineStageFlag::eFragmentShader
 				, m_renderTechnique->getResult().getDefaultView().makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
 			m_toneMappingCommandBuffer->beginRenderPass( *m_renderPass
-				, *m_workFrameBuffer.frameBuffer
+				, *m_objectsFrameBuffer.frameBuffer
 				, { clear }
 				, ashes::SubpassContents::eInline );
 			m_toneMapping->registerFrame( *m_toneMappingCommandBuffer );
@@ -631,13 +658,22 @@ namespace castor3d
 			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto vtx_textureObjects = writer.declOutput< Vec2 >( cuT( "vtx_textureObjects" ), 0u );
+			auto vtx_textureOverlays = writer.declOutput< Vec2 >( cuT( "vtx_textureOverlays" ), 1u );
 			auto out = gl_PerVertex{ writer };
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					vtx_texture = writer.ashesTopDownToBottomUp( texcoord );
+					vtx_textureObjects = writer.ashesTopDownToBottomUp( texcoord );
+					vtx_textureOverlays = texcoord;
+
+					if ( getTargetType() != TargetType::eWindow )
+					{
+						vtx_textureObjects.y() = 1.0_f - vtx_textureObjects.y();
+						vtx_textureOverlays.y() = 1.0_f - vtx_textureOverlays.y();
+					}
+
 					out.gl_Position() = vec4( position, 0.0, 1.0 );
 				} );
 			vtx = writer.finalise();
@@ -649,16 +685,25 @@ namespace castor3d
 			auto writer = renderSystem.createGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 0u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto c3d_mapOverlays = writer.declSampler< Sampler2D >( cuT( "c3d_mapOverlays" ), 0u, 0u );
+			auto c3d_mapObjects = writer.declSampler< Sampler2D >( cuT( "c3d_mapObjects" ), 1u, 0u );
+			auto vtx_textureObjects = writer.declInput< Vec2 >( cuT( "vtx_textureObjects" ), 0u );
+			auto vtx_textureOverlays = writer.declInput< Vec2 >( cuT( "vtx_textureOverlays" ), 1u );
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				pxl_fragColor = vec4( texture( c3d_mapDiffuse, vtx_texture ).xyz(), 1.0 );
-			} );
+			writer.implementFunction< void >( cuT( "main" )
+				, [&]()
+				{
+					auto overlayColor = writer.declLocale( cuT( "overlayColor" )
+						, texture( c3d_mapOverlays, vtx_textureOverlays ) );
+					auto objectsColor = writer.declLocale( cuT( "objectsColor" )
+						, texture( c3d_mapObjects, vtx_textureObjects ) );
+					objectsColor.rgb() *= 1.0_f - overlayColor.a();
+					overlayColor.rgb() *= overlayColor.a();
+					pxl_fragColor = vec4( objectsColor.rgb() + overlayColor.rgb(), 1.0_f );
+				} );
 			pxl = writer.finalise();
 		}
 
@@ -672,25 +717,30 @@ namespace castor3d
 			, ashes::ShaderStageFlag::eFragment
 			, pxl.getSource() ) );
 
-		m_flipCommands = device.getGraphicsCommandPool().createCommandBuffer();
-		m_flipFinished = device.createSemaphore();
-		m_flipQuad = std::make_unique< RenderQuad >( renderSystem, true );
-		m_flipQuad->createPipeline( { m_size.getWidth(), m_size.getHeight() }
+		m_combineCommands = device.getGraphicsCommandPool().createCommandBuffer();
+		m_combineFinished = device.createSemaphore();
+		m_combineQuad = std::make_unique< CombineQuad >( renderSystem
+			, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView() );
+		ashes::DescriptorSetLayoutBindingArray bindings
+		{
+			{ 0, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment }
+		};
+		m_combineQuad->createPipeline( { m_size.getWidth(), m_size.getHeight() }
 			, Position{}
 			, program
-			, m_workFrameBuffer.colourTexture.getTexture()->getDefaultView()
+			, m_objectsFrameBuffer.colourTexture.getTexture()->getDefaultView()
 			, *m_renderPass
-			, {}
+			, bindings
 			, {} );
 
-		m_flipCommands->begin();
-		m_flipCommands->beginRenderPass( *m_renderPass
-			, *m_flippedFrameBuffer.frameBuffer
+		m_combineCommands->begin();
+		m_combineCommands->beginRenderPass( *m_renderPass
+			, *m_combinedFrameBuffer.frameBuffer
 			, { ashes::ClearColorValue{} }
 			, ashes::SubpassContents::eInline );
-		m_flipQuad->registerFrame( *m_flipCommands );
-		m_flipCommands->endRenderPass();
-		m_flipCommands->end();
+		m_combineQuad->registerFrame( *m_combineCommands );
+		m_combineCommands->endRenderPass();
+		m_combineCommands->end();
 	}
 
 	void RenderTarget::doRender( RenderInfo & info
@@ -729,11 +779,11 @@ namespace castor3d
 			, m_srgbCopyFinished
 			, elapsedTime );
 
-		// Put the result in bottom up (since all work has been done in top down).
-		m_signalFinished = &doFlip( *m_signalFinished );
-
 		// And now render overlays.
 		m_signalFinished = &doRenderOverlays( *m_signalFinished, *camera );
+
+		// Combine objects and overlays framebuffers, flipping them if necessary.
+		m_signalFinished = &doCombine( *m_signalFinished );
 
 #if DISPLAY_DEBUG
 
@@ -832,17 +882,17 @@ namespace castor3d
 		return *result;
 	}
 
-	ashes::Semaphore const & RenderTarget::doFlip( ashes::Semaphore const & toWait )
+	ashes::Semaphore const & RenderTarget::doCombine( ashes::Semaphore const & toWait )
 	{
 		auto & queue = getCurrentDevice( *this ).getGraphicsQueue();
 		auto * result = &toWait;
 
-		queue.submit( *m_flipCommands
+		queue.submit( *m_combineCommands
 			, *result
 			, ashes::PipelineStageFlag::eColourAttachmentOutput
-			, *m_flipFinished
+			, *m_combineFinished
 			, nullptr );
-		result = m_flipFinished.get();
+		result = m_combineFinished.get();
 
 		return *result;
 	}

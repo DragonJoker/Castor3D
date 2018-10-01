@@ -3,7 +3,7 @@ project( CastorTestLauncher )
 include_directories( ../GuiCommon/Src )
 
 set( ${PROJECT_NAME}_WXWIDGET 1 )
-set( ${PROJECT_NAME}_DESCRIPTION "Scene Viewer for ${MAIN_PROJECT_NAME}" )
+set( ${PROJECT_NAME}_DESCRIPTION "Test Scene Launcher for ${MAIN_PROJECT_NAME}" )
 set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 	1 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )

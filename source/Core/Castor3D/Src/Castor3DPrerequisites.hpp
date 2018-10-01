@@ -40,8 +40,6 @@ namespace castor3d
 	using castor::UInt64StrMap;
 }
 
-#include "Castor3DConfig.hpp"
-
 #include "Prerequisites/Castor3DPrerequisites_Animation.hpp"
 #include "Prerequisites/Castor3DPrerequisites_Camera.hpp"
 #include "Prerequisites/Castor3DPrerequisites_Geometry.hpp"

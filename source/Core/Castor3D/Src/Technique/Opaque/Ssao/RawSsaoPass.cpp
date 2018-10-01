@@ -648,10 +648,10 @@ namespace castor3d
 				, 1u
 				, 0u
 				, ashes::MemoryPropertyFlag::eHostVisible );
-
-			if ( auto buffer = result->lock( 0u
-				, 1u
-				, ashes::MemoryMapFlag::eInvalidateRange | ashes::MemoryMapFlag::eWrite ) )
+			
+			if ( auto buffer = reinterpret_cast< NonTexturedQuad * >( result->getBuffer().lock( 0u
+				, ~( 0ull )
+				, ashes::MemoryMapFlag::eInvalidateRange | ashes::MemoryMapFlag::eWrite ) ) )
 			{
 				*buffer = NonTexturedQuad
 				{
@@ -664,8 +664,8 @@ namespace castor3d
 						{ Point2f{ +1.0, +1.0 } },
 					}
 				};
-				result->flush( 0u, 1u );
-				result->unlock();
+				result->getBuffer().flush( 0u, ~( 0ull ) );
+				result->getBuffer().unlock();
 			}
 
 			return result;

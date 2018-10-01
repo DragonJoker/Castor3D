@@ -228,6 +228,7 @@ namespace castor3d
 			, ashes::MemoryPropertyFlags memoryFlags );
 
 	private:
+		ashes::Device const * m_device{ nullptr };
 		GpuBufferBuddyAllocatorUPtr m_allocator;
 		ashes::BufferPtr< uint8_t > m_buffer;
 	};

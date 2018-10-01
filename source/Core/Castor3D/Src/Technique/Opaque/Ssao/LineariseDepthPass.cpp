@@ -266,7 +266,7 @@ namespace castor3d
 			renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
 			renderPass.dependencies[0].dstSubpass = 0u;
 			renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
-			renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
+			renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
 			renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
 			renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
 			renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
@@ -301,9 +301,9 @@ namespace castor3d
 				, 0u
 				, ashes::MemoryPropertyFlag::eHostVisible );
 
-			if ( auto buffer = result->lock( 0u
-				, 1u
-				, ashes::MemoryMapFlag::eInvalidateRange | ashes::MemoryMapFlag::eWrite ) )
+			if ( auto buffer = reinterpret_cast< NonTexturedQuad * >( result->getBuffer().lock( 0u
+				, ~( 0ull )
+				, ashes::MemoryMapFlag::eInvalidateRange | ashes::MemoryMapFlag::eWrite ) ) )
 			{
 				*buffer = NonTexturedQuad
 				{
@@ -316,8 +316,8 @@ namespace castor3d
 						{ Point2f{ +1.0, +1.0 } },
 					}
 				};
-				result->flush( 0u, 1u );
-				result->unlock();
+				result->getBuffer().flush( 0u, ~( 0ull ) );
+				result->getBuffer().unlock();
 			}
 
 			return result;

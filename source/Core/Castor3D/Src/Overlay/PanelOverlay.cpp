@@ -1,7 +1,8 @@
 #include "PanelOverlay.hpp"
 
-#include "OverlayRenderer.hpp"
-#include "Overlay.hpp"
+#include "Engine.hpp"
+#include "Overlay/OverlayRenderer.hpp"
+#include "Overlay/Overlay.hpp"
 
 using namespace castor;
 
@@ -41,7 +42,7 @@ namespace castor3d
 	//*************************************************************************************************
 
 	PanelOverlay::PanelOverlay()
-		:	OverlayCategory( OverlayType::ePanel )
+		: OverlayCategory( OverlayType::ePanel )
 	{
 		m_arrayVtx.resize( 6 );
 	}
@@ -64,23 +65,21 @@ namespace castor3d
 	{
 		Size absoluteSize = getAbsoluteSize( size );
 
-		int32_t centerL = 0;
-		int32_t centerT = 0;
-		int32_t centerR = absoluteSize.getWidth();
-		int32_t centerB = absoluteSize.getHeight();
+		int32_t l = 0;
+		int32_t t = 0;
+		int32_t r = absoluteSize.getWidth();
+		int32_t b = absoluteSize.getHeight();
 
-		OverlayCategory::Vertex vertex0 = { Point2f{ float( centerL ) / size.getWidth(), float( centerT ) / size.getHeight() }, Point2f{ real( m_uv[0] ), real( m_uv[3] ) } };
-		OverlayCategory::Vertex vertex1 = { Point2f{ float( centerL ) / size.getWidth(), float( centerB ) / size.getHeight() }, Point2f{ real( m_uv[0] ), real( m_uv[1] ) } };
-		OverlayCategory::Vertex vertex2 = { Point2f{ float( centerR ) / size.getWidth(), float( centerB ) / size.getHeight() }, Point2f{ real( m_uv[2] ), real( m_uv[1] ) } };
-		OverlayCategory::Vertex vertex3 = { Point2f{ float( centerL ) / size.getWidth(), float( centerT ) / size.getHeight() }, Point2f{ real( m_uv[0] ), real( m_uv[3] ) } };
-		OverlayCategory::Vertex vertex4 = { Point2f{ float( centerR ) / size.getWidth(), float( centerB ) / size.getHeight() }, Point2f{ real( m_uv[2] ), real( m_uv[1] ) } };
-		OverlayCategory::Vertex vertex5 = { Point2f{ float( centerR ) / size.getWidth(), float( centerT ) / size.getHeight() }, Point2f{ real( m_uv[2] ), real( m_uv[3] ) } };
+		OverlayCategory::Vertex lt = { Point2f{ float( l ) / size.getWidth(), float( t ) / size.getHeight() }, Point2f{ real( m_uv[0] ), real( m_uv[3] ) } };
+		OverlayCategory::Vertex lb = { Point2f{ float( l ) / size.getWidth(), float( b ) / size.getHeight() }, Point2f{ real( m_uv[0] ), real( m_uv[1] ) } };
+		OverlayCategory::Vertex rb = { Point2f{ float( r ) / size.getWidth(), float( b ) / size.getHeight() }, Point2f{ real( m_uv[2] ), real( m_uv[1] ) } };
+		OverlayCategory::Vertex rt = { Point2f{ float( r ) / size.getWidth(), float( t ) / size.getHeight() }, Point2f{ real( m_uv[2] ), real( m_uv[3] ) } };
 
-		m_arrayVtx[0] = vertex0;
-		m_arrayVtx[1] = vertex1;
-		m_arrayVtx[2] = vertex2;
-		m_arrayVtx[3] = vertex3;
-		m_arrayVtx[4] = vertex4;
-		m_arrayVtx[5] = vertex5;
+		m_arrayVtx[0] = lt;
+		m_arrayVtx[1] = lb;
+		m_arrayVtx[2] = rb;
+		m_arrayVtx[3] = lt;
+		m_arrayVtx[4] = rb;
+		m_arrayVtx[5] = rt;
 	}
 }

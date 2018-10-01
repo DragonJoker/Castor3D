@@ -5,41 +5,15 @@ set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
-find_package( glslang )
-find_package( SPIRV )
+set( GlslangLibraries 
+	glslang
+	OGLCompiler
+	OSDependent
+	SPVRemapper
+	SPIRV )
 
-if ( glslang_FOUND AND SPIRV_FOUND )
-	set( CASTOR3D_GLSL_TO_SPV 1 )
-	message( STATUS "+ Found glslang (revision ${glslang_REVISION})" )
-	message( STATUS "+ Found SPIRV (version ${SPIRV_VERSION})" )
-	set( GlslangLibraries "" )
-	foreach( Lib ${glslang_LIBRARIES} )
-		if( GlslangLibraries )
-			set( GlslangLibraries "${GlslangLibraries}|${Lib}" )
-		else ()
-			set( GlslangLibraries "${Lib}" )
-		endif()
-	endforeach()
-	foreach( Lib ${SPIRV_LIBRARIES} )
-		if( GlslangLibraries )
-			set( GlslangLibraries "${GlslangLibraries}|${Lib}" )
-		else ()
-			set( GlslangLibraries "${Lib}" )
-		endif()
-	endforeach()
-	include_directories(
-		${glslang_INCLUDE_DIR}
-		${SPIRV_INCLUDE_DIR}
-	)
-
-else ()
-	set( CASTOR3D_GLSL_TO_SPV 0 )
-endif ()
-
-configure_file(
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/Castor3DConfig.hpp.in
-	${CMAKE_CURRENT_BINARY_DIR}/Src/Castor3DConfig.hpp
-	NEWLINE_STYLE LF
+include_directories(
+	${CMAKE_SOURCE_DIR}/external/glslang
 )
 
 configure_file(

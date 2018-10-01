@@ -229,8 +229,8 @@ namespace castor3d
 			, 0u
 			, ashes::MemoryPropertyFlag::eHostVisible );
 
-		if ( auto buffer = m_vertexBuffer->lock( 0u
-			, m_vertexBuffer->getCount()
+		if ( auto buffer = m_vertexBuffer->getBuffer().lock( 0u
+			, ~( 0ull )
 			, ashes::MemoryMapFlag::eInvalidateRange | ashes::MemoryMapFlag::eWrite ) )
 		{
 			float data[] =
@@ -243,8 +243,8 @@ namespace castor3d
 				+1.0f, +1.0f,
 			};
 			std::memcpy( buffer, data, sizeof( data ) );
-			m_vertexBuffer->flush( 0u, m_vertexBuffer->getCount() );
-			m_vertexBuffer->unlock();
+			m_vertexBuffer->getBuffer().flush( 0u, ~( 0ull ) );
+			m_vertexBuffer->getBuffer().unlock();
 		}
 
 		m_vertexLayout = ashes::makeLayout< Point2f >( 0u );

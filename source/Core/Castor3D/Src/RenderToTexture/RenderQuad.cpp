@@ -146,10 +146,10 @@ namespace castor3d
 		//	std::swap( dsState.front, dsState.back );
 		//}
 
-		if ( auto buffer = m_vertexBuffer->lock( 0u, 1u, ashes::MemoryMapFlag::eWrite ) )
+		if ( auto buffer = m_vertexBuffer->lock( 0u, 4u, ashes::MemoryMapFlag::eWrite ) )
 		{
 			std::copy( m_vertexData.begin(), m_vertexData.end(), buffer );
-			m_vertexBuffer->flush( 0u, 1u );
+			m_vertexBuffer->flush( 0u, 4u );
 			m_vertexBuffer->unlock();
 		}
 
@@ -233,7 +233,6 @@ namespace castor3d
 
 	void RenderQuad::registerFrame( ashes::CommandBuffer & commandBuffer )const
 	{
-		// Put source image in shader input layout.
 		commandBuffer.bindPipeline( *m_pipeline );
 		commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 		commandBuffer.bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );

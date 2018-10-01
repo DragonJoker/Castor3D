@@ -16,7 +16,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/Plugins/Renderers/GlES3RenderSystem/Src
 
 add_target(
 	${PROJECT_NAME}
-	api_plugin
+	plugin
 	"Castor3D"
 	"${CastorMinLibraries};EGL;GLESv3"
 	"GlES3RenderSystemPch.hpp"

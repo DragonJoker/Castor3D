@@ -375,6 +375,12 @@ namespace castor3d
 	{
 		Path pathReturn;
 		Path pathBin = File::getExecutableDirectory();
+
+		while ( pathBin.getFileName() != cuT( "bin" ) )
+		{
+			pathBin = pathBin.getPath();
+		}
+
 		Path pathUsr = pathBin.getPath();
 		pathReturn = pathUsr / cuT( "lib" ) / cuT( "Castor3D" );
 		return pathReturn;
@@ -389,6 +395,12 @@ namespace castor3d
 	{
 		Path pathReturn;
 		Path pathBin = File::getExecutableDirectory();
+
+		while ( pathBin.getFileName() != cuT( "bin" ) )
+		{
+			pathBin = pathBin.getPath();
+		}
+
 		Path pathUsr = pathBin.getPath();
 		pathReturn = pathUsr / cuT( "share" );
 		return pathReturn;

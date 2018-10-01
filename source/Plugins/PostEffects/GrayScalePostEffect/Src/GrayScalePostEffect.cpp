@@ -56,7 +56,7 @@ namespace GrayScale
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 				{
-					vtx_texture = texcoord;
+					vtx_texture = writer.ashesBottomUpToTopDown( texcoord );
 					out.gl_Position() = vec4( position, 0.0, 1.0 );
 				} );
 			return writer.finalise();

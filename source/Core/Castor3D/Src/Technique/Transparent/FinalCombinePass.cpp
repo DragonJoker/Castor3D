@@ -74,9 +74,9 @@ namespace castor3d
 				, ashes::BufferTarget::eTransferDst
 				, ashes::MemoryPropertyFlag::eHostVisible );
 
-			if ( auto buffer = result->lock( 0u
-				, 1u
-				, ashes::MemoryMapFlag::eWrite | ashes::MemoryMapFlag::eInvalidateRange ) )
+			if ( auto buffer = reinterpret_cast< TexturedQuad * >( result->getBuffer().lock( 0u
+				, ~( 0ull )
+				, ashes::MemoryMapFlag::eWrite | ashes::MemoryMapFlag::eInvalidateRange ) ) )
 			{
 				*buffer = TexturedQuad
 				{
@@ -89,8 +89,8 @@ namespace castor3d
 						{ Point2f{ +1.0, +1.0 }, Point2f{ 1.0, 1.0 } },
 					}
 				};
-				result->flush( 0u, 1u );
-				result->unlock();
+				result->getBuffer().flush( 0u, ~( 0ull ) );
+				result->getBuffer().unlock();
 			}
 
 			return result;

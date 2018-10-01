@@ -51,7 +51,7 @@ namespace fxaa
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					vtx_texture = texcoord;
+					vtx_texture = writer.ashesBottomUpToTopDown( texcoord );
 					out.gl_Position() = vec4( position.xy(), 0.0, 1.0 );
 					vtx_posPos.xy() = position.xy();
 					vtx_posPos.zw() = position.xy() - writer.paren( c3d_pixelSize * writer.paren( 0.5 + c3d_subpixShift ) );

@@ -99,7 +99,7 @@ namespace Gl4Render
 			, true
 			, m_gpuInformations.hasShaderStorageBuffers()
 			, true
-			, true
+			, false
 			, m_renderer->getClipDirection() == ashes::ClipDirection::eTopDown
 			, true
 			, true

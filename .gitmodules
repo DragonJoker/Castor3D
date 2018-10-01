@@ -13,3 +13,6 @@
 [submodule "source/external/Ashes"]
 	path = source/external/Ashes
 	url = https://github.com/DragonJoker/Ashes.git
+[submodule "source/external/glslang"]
+	path = source/external/glslang
+	url = https://github.com/KhronosGroup/glslang.git

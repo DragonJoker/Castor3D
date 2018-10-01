@@ -41,7 +41,7 @@
 using namespace castor;
 using namespace castor3d;
 
-#define C3D_UseLightPassFence 0
+#define C3D_UseLightPassFence 1
 #define C3D_DisableSSSTransmittance 1
 
 namespace castor3d

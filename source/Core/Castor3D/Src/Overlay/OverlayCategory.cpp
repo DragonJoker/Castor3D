@@ -152,9 +152,8 @@ namespace castor3d
 	Point2d OverlayCategory::getAbsolutePosition()const
 	{
 		Point2d position = getPosition();
-		OverlaySPtr parent = getOverlay().getParent();
 
-		if ( parent )
+		if ( auto parent = getOverlay().getParent() )
 		{
 			position *= parent->getAbsoluteSize();
 			position += parent->getAbsolutePosition();
@@ -166,9 +165,8 @@ namespace castor3d
 	Point2d OverlayCategory::getAbsoluteSize()const
 	{
 		Point2d size = getSize();
-		OverlaySPtr parent = getOverlay().getParent();
 
-		if ( parent )
+		if ( auto parent = getOverlay().getParent() )
 		{
 			size *= parent->getAbsoluteSize();
 		}

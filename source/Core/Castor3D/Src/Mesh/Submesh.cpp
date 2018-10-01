@@ -340,13 +340,13 @@ namespace castor3d
 					, ashes::MemoryPropertyFlag::eHostVisible );
 			}
 
-			if ( auto buffer = m_vertexBuffer->lock( 0u
-				, size
+			if ( auto buffer = m_vertexBuffer->getBuffer().lock( 0u
+				, ~( 0ull )
 				, ashes::MemoryMapFlag::eWrite ) )
 			{
-				std::copy( m_points.begin(), m_points.end(), buffer );
-				m_vertexBuffer->flush( 0u, size );
-				m_vertexBuffer->unlock();
+				std::memcpy( buffer, m_points.data(), m_points.size() * sizeof( InterleavedVertex ) );
+				m_vertexBuffer->getBuffer().flush( 0u, ~( 0ull ) );
+				m_vertexBuffer->getBuffer().unlock();
 			}
 
 			//m_points.clear();

@@ -22,6 +22,7 @@ namespace castor3d
 		, ashes::BufferTargets targets
 		, ashes::MemoryPropertyFlags memoryFlags )
 	{
+		m_device = &device;
 		m_allocator = std::make_unique< GpuBufferBuddyAllocator >( level, minBlockSize );
 		doInitialiseStorage( device
 			, uint32_t( m_allocator->getSize() )
@@ -48,19 +49,43 @@ namespace castor3d
 		, uint32_t size
 		, ashes::MemoryMapFlags const & flags )const
 	{
-		return m_buffer->getBuffer().lock( offset, size, flags );
+		auto size64 = ashes::getAlignedSize( size
+			, m_device->getProperties().limits.nonCoherentAtomSize );
+
+		if ( size64 > m_buffer->getBuffer().getSize() )
+		{
+			size64 = ~( 0ull );
+		}
+
+		return m_buffer->getBuffer().lock( offset, size64, flags );
 	}
 
 	void GpuBuffer::flush( uint32_t offset
 		, uint32_t size )const
 	{
-		return m_buffer->getBuffer().flush( offset, size );
+		auto size64 = ashes::getAlignedSize( size
+			, m_device->getProperties().limits.nonCoherentAtomSize );
+
+		if ( size64 > m_buffer->getBuffer().getSize() )
+		{
+			size64 = ~( 0ull );
+		}
+
+		return m_buffer->getBuffer().flush( offset, size64 );
 	}
 
 	void GpuBuffer::invalidate( uint32_t offset
 		, uint32_t size )const
 	{
-		return m_buffer->getBuffer().invalidate( offset, size );
+		auto size64 = ashes::getAlignedSize( size
+			, m_device->getProperties().limits.nonCoherentAtomSize );
+
+		if ( size64 > m_buffer->getBuffer().getSize() )
+		{
+			size64 = ~( 0ull );
+		}
+
+		return m_buffer->getBuffer().invalidate( offset, size64 );
 	}
 
 	void GpuBuffer::unlock()const

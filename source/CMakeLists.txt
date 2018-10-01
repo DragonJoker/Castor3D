@@ -193,6 +193,7 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 	endif ()
 	add_subdirectory( Tools )
 
+	set( ZLIB_SKIP_INSTALL 1 )
 	add_subdirectory( external/zlib )
 	set_property( TARGET zlib PROPERTY FOLDER "External" )
 
@@ -224,6 +225,68 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			set_property( TARGET TestRenderer PROPERTY FOLDER "External/Ashes" )
 			set_property( TARGET VkRenderer PROPERTY FOLDER "External/Ashes" )
 		endif ()
+
+		if ( MSVC )
+			install(
+				FILES
+					${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/lib/Ashes.lib
+				COMPONENT Ashes_dev
+				CONFIGURATIONS Release
+				EXPORT Ashes
+				ARCHIVE DESTINATION lib
+			)
+			install(
+				FILES
+					${PROJECTS_BINARIES_OUTPUT_DIR_RELWITHDEBINFO}/lib/Ashes.lib
+				COMPONENT Ashes_dev
+				CONFIGURATIONS RelWithDebInfo
+				ARCHIVE DESTINATION lib/RelWithDebInfo
+			)
+			install(
+				FILES
+					${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/Ashesd.lib
+				COMPONENT Ashes_dev
+				CONFIGURATIONS Debug
+				ARCHIVE DESTINATION lib/Debug
+			)
+		else ()
+			install(
+				FILES
+					${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/lib/libAshes.a
+				COMPONENT Ashes_dev
+				CONFIGURATIONS Release
+				EXPORT Ashes
+				ARCHIVE DESTINATION lib
+			)
+			install(
+				FILES
+					${PROJECTS_BINARIES_OUTPUT_DIR_RELWITHDEBINFO}/lib/libAshes.a
+				COMPONENT Ashes_dev
+				CONFIGURATIONS RelWithDebInfo
+				ARCHIVE DESTINATION lib/RelWithDebInfo
+			)
+			install(
+				FILES
+					${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/libAshesd.a
+				COMPONENT Ashes_dev
+				CONFIGURATIONS Debug
+				ARCHIVE DESTINATION lib/Debug
+			)
+		endif ()
+		target_install_headers( Ashes ${ASHES_DIR}/Ashes/Src )
+
+		set( ENABLE_GLSLANG_BINARIES FALSE CACHE BOOL "Builds glslangValidator and spirv-remap" FORCE )
+		set( ENABLE_AMD_EXTENSIONS FALSE CACHE BOOL "Enables support of AMD-specific extensions" FORCE )
+		set( ENABLE_NV_EXTENSIONS FALSE CACHE BOOL "Enables support of Nvidia-specific extensions" FORCE )
+		set( ENABLE_HLSL FALSE CACHE BOOL "Enables HLSL input support" FORCE )
+		set( BUILD_TESTING OFF )
+		set( SKIP_GLSLANG_INSTALL ON )
+		add_subdirectory( external/glslang )
+		set_property( TARGET glslang PROPERTY FOLDER "External/glslang" )
+		set_property( TARGET OGLCompiler PROPERTY FOLDER "External/glslang" )
+		set_property( TARGET OSDependent PROPERTY FOLDER "External/glslang" )
+		set_property( TARGET SPIRV PROPERTY FOLDER "External/glslang" )
+		set_property( TARGET SPVRemapper PROPERTY FOLDER "External/glslang" )
 	endif ()
 
 	CoreInit()

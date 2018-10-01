@@ -111,6 +111,31 @@ namespace GuiCommon
 
 			wxFont m_font;
 		};
+
+		castor::PathArray listPluginsFiles( castor::Path const & folder )
+		{
+			castor::PathArray files;
+			castor::File::listDirectoryFiles( folder, files );
+			castor::PathArray result;
+
+			// Exclude debug plug-in in release builds, and release plug-ins in debug builds
+			for ( auto file : files )
+			{
+#if defined( NDEBUG )
+
+				if ( file.find( castor::String( cuT( "d." ) ) + CASTOR_DLL_EXT ) == castor::String::npos )
+#else
+
+				if ( file.find( castor::String( cuT( "d." ) ) + CASTOR_DLL_EXT ) != castor::String::npos )
+
+#endif
+				{
+					result.push_back( file );
+				}
+			}
+
+			return result;
+		}
 	}
 
 	void CreateBitmapFromBuffer( uint8_t const * p_buffer, uint32_t p_width, uint32_t p_height, bool p_flip, wxBitmap & p_bitmap )
@@ -290,25 +315,25 @@ namespace GuiCommon
 
 	void loadPlugins( castor3d::Engine & engine )
 	{
-		castor::PathArray arrayFiles;
-		castor::File::listDirectoryFiles( Engine::getPluginsDirectory(), arrayFiles );
-		castor::PathArray arrayKept;
+		castor::PathArray arrayKept = listPluginsFiles( Engine::getPluginsDirectory() );
 
-		// Exclude debug plug-in in release builds, and release plug-ins in debug builds
-		for ( auto file : arrayFiles )
+#if !defined( NDEBUG )
+
+		// When debug is installed, plugins are installed in lib/Debug/Castor3D
+		if ( arrayKept.empty() )
 		{
-#if defined( NDEBUG )
+			castor::Path pathBin = castor::File::getExecutableDirectory();
 
-			if ( file.find( castor::String( cuT( "d." ) ) + CASTOR_DLL_EXT ) == castor::String::npos )
-#else
+			while ( pathBin.getFileName() != cuT( "bin" ) )
+			{
+				pathBin = pathBin.getPath();
+			}
 
-			if ( file.find( castor::String( cuT( "d." ) ) + CASTOR_DLL_EXT ) != castor::String::npos )
+			castor::Path pathUsr = pathBin.getPath();
+			arrayKept = listPluginsFiles( pathUsr / cuT( "lib" ) / cuT( "Debug" ) / cuT( "Castor3D" ) );
+		}
 
 #endif
-			{
-				arrayKept.push_back( file );
-			}
-		}
 
 		if ( !arrayKept.empty() )
 		{

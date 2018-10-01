@@ -104,6 +104,28 @@ namespace castor3d
 		private:
 			RenderTarget & renderTarget;
 		};
+		/*!
+		\version	0.11.0
+		\date		01/10/2018
+		\~english
+		\brief		Combines objects and overlays textures.
+		\~french
+		\brief		Combine les textures des incrustations et des objets.
+		*/
+		class CombineQuad
+			: public RenderQuad
+		{
+		public:
+			explicit CombineQuad( RenderSystem & renderSystem
+				, ashes::TextureView const & ovView );
+
+		private:
+			void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+				, ashes::DescriptorSet & descriptorSet )override;
+
+		private:
+			ashes::TextureView const & m_ovView;
+		};
 
 	public:
 		/**
@@ -267,7 +289,7 @@ namespace castor3d
 
 		inline TextureUnit const & getTexture()const
 		{
-			return m_flippedFrameBuffer.colourTexture;
+			return m_combinedFrameBuffer.colourTexture;
 		}
 
 		inline TextureUnit const & getVelocity()const
@@ -389,7 +411,7 @@ namespace castor3d
 		C3D_API ashes::Semaphore const & doApplyToneMapping( ashes::Semaphore const & toWait );
 		C3D_API ashes::Semaphore const & doRenderOverlays( ashes::Semaphore const & toWait
 			, Camera const & camera );
-		C3D_API ashes::Semaphore const & doFlip( ashes::Semaphore const & toWait );
+		C3D_API ashes::Semaphore const & doCombine( ashes::Semaphore const & toWait );
 
 	public:
 		//!\~english The render target default sampler name	\~french Le nom du sampler par défaut pour la cible de rendu
@@ -405,8 +427,9 @@ namespace castor3d
 		CameraWPtr m_camera;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::CommandBufferPtr m_toneMappingCommandBuffer;
-		TargetFbo m_workFrameBuffer;
-		TargetFbo m_flippedFrameBuffer;
+		TargetFbo m_objectsFrameBuffer;
+		TargetFbo m_overlaysFrameBuffer;
+		TargetFbo m_combinedFrameBuffer;
 		ashes::Format m_pixelFormat;
 		uint32_t m_index;
 		Parameters m_techniqueParameters;
@@ -420,9 +443,9 @@ namespace castor3d
 		ashes::SemaphorePtr m_srgbCopyFinished;
 		RenderPassTimerSPtr m_toneMappingTimer;
 		RenderPassTimerSPtr m_overlaysTimer;
-		std::unique_ptr< RenderQuad > m_flipQuad;
-		ashes::CommandBufferPtr m_flipCommands;
-		ashes::SemaphorePtr m_flipFinished;
+		std::unique_ptr< CombineQuad > m_combineQuad;
+		ashes::CommandBufferPtr m_combineCommands;
+		ashes::SemaphorePtr m_combineFinished;
 		SsaoConfig m_ssaoConfig;
 		castor::Point2r m_jitter;
 		TextureUnit m_velocityTexture;

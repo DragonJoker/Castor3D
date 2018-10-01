@@ -71,21 +71,11 @@ namespace Bloom
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto texcoords = writer.declLocale( cuT( "texcoords" )
-					, vtx_texture );
-
-				if ( writer.isTopDown() )
-				{
-					pxl_fragColor = texture( c3d_mapScene, vtx_texture );
-				}
-				else
-				{
-					pxl_fragColor = texture( c3d_mapScene, texcoords );
-				}
+				pxl_fragColor = texture( c3d_mapScene, writer.ashesBottomUpToTopDown( vtx_texture ) );
 
 				for ( uint32_t i = 0; i < blurPassesCount; ++i )
 				{
-					pxl_fragColor += texture( c3d_mapPasses, texcoords, Float( float( i ) ) );
+					pxl_fragColor += texture( c3d_mapPasses, vtx_texture, Float( float( i ) ) );
 				}
 			} );
 			return writer.finalise();

@@ -18,7 +18,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/Plugins/Renderers/D3D11RenderSystem/Src
 
 add_target(
 	${PROJECT_NAME}
-	api_plugin
+	plugin
 	"Castor3D"
 	"${CastorMinLibraries};D3D11Renderer"
 	"D3D11RenderSystemPch.hpp"

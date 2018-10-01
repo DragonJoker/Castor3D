@@ -202,11 +202,13 @@ namespace castor3d
 			if ( data.second.buffer
 				&& data.second.count )
 			{
-				if ( auto * buffer = data.second.buffer->lock( 0, data.second.count, ashes::MemoryMapFlag::eWrite ) )
+				if ( auto * buffer = reinterpret_cast< InstantiationData * >( data.second.buffer->getBuffer().lock( 0
+					, ~( 0ull )
+					, ashes::MemoryMapFlag::eWrite ) ) )
 				{
 					std::copy( data.second.data.begin(), data.second.data.end(), buffer );
-					data.second.buffer->flush( 0u, data.second.count );
-					data.second.buffer->unlock();
+					data.second.buffer->getBuffer().flush( 0u, ~( 0ull ) );
+					data.second.buffer->getBuffer().unlock();
 				}
 			}
 		}

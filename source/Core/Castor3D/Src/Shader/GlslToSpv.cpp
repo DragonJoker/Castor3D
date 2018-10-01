@@ -6,18 +6,14 @@ See LICENSE file in root folder.
 
 #include <Core/Device.hpp>
 
-# if Castor3D_GlslToSpv
-#	include <glslang/Public/ShaderLang.h>
-#	include <SPIRV/GlslangToSpv.h>
-#endif
+#include <glslang/Public/ShaderLang.h>
+#include <SPIRV/GlslangToSpv.h>
 
 #include <locale>
 #include <regex>
 
 namespace castor3d
 {
-#if Castor3D_GlslToSpv
-
 	namespace
 	{
 		struct BlockLocale
@@ -172,32 +168,20 @@ namespace castor3d
 		}
 	}
 
-#endif
-
 	void initialiseGlslang()
 	{
-#if Castor3D_GlslToSpv
-
 		glslang::InitializeProcess();
-
-#endif
 	}
 
 	void cleanupGlslang()
 	{
-#if Castor3D_GlslToSpv
-
 		glslang::FinalizeProcess();
-
-#endif
 	}
 
 	UInt32Array compileGlslToSpv( ashes::Device const & device
 		, ashes::ShaderStageFlag stage
 		, std::string const & shader )
 	{
-#if Castor3D_GlslToSpv
-
 		BlockLocale guard;
 		TBuiltInResource resources;
 		doInitResources( device, resources );
@@ -274,9 +258,9 @@ $&)" );
 
 		if ( !glshader.parse( &resources, 100, false, messages ) )
 		{
-			ashes::Logger::logError( glshader.getInfoLog() );
-			ashes::Logger::logError( glshader.getInfoDebugLog() );
-			ashes::Logger::logError( source );
+			castor::Logger::logError( glshader.getInfoLog() );
+			castor::Logger::logError( glshader.getInfoDebugLog() );
+			castor::Logger::logError( source );
 			throw std::runtime_error{ "Shader compilation failed." };
 		}
 
@@ -285,9 +269,9 @@ $&)" );
 
 		if ( !glprogram.link( messages ) )
 		{
-			ashes::Logger::logError( glprogram.getInfoLog() );
-			ashes::Logger::logError( glprogram.getInfoDebugLog() );
-			ashes::Logger::logError( source );
+			castor::Logger::logError( glprogram.getInfoLog() );
+			castor::Logger::logError( glprogram.getInfoDebugLog() );
+			castor::Logger::logError( source );
 			throw std::runtime_error{ "Shader linkage failed." };
 		}
 
@@ -295,12 +279,5 @@ $&)" );
 		glslang::GlslangToSpv( *glprogram.getIntermediate( glstage ), spirv );
 
 		return spirv;
-
-#else
-
-		throw std::runtime_error{ "SPIR-V compilation from GLSL is not supported." };
-		return ashes::UInt32Array{};
-
-#endif
 	}
 }

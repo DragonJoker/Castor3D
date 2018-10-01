@@ -72,10 +72,12 @@ namespace castor3d
 				, uint32_t( sizeof( data ) )
 				, 0u
 				, ashes::MemoryPropertyFlag::eHostVisible );
-			if ( auto * buffer = vertexBuffer->getBuffer().lock( 0u, vertexBuffer->getSize(), ashes::MemoryMapFlag::eWrite ) )
+			if ( auto * buffer = vertexBuffer->getBuffer().lock( 0u
+				, ~( 0ull )
+				, ashes::MemoryMapFlag::eWrite ) )
 			{
 				std::memcpy( buffer, data, sizeof( data ) );
-				vertexBuffer->getBuffer().flush( 0u, vertexBuffer->getSize() );
+				vertexBuffer->getBuffer().flush( 0u, ~( 0ull ) );
 				vertexBuffer->getBuffer().unlock();
 			}
 
@@ -144,7 +146,7 @@ namespace castor3d
 				, [&]()
 			{
 				auto lightResultTexcoord = writer.declLocale( cuT( "lightResultTexcoord" )
-					, vtx_texture );
+					, writer.ashesBottomUpToTopDown( vtx_texture ) );
 				auto texcoord = writer.declLocale( cuT( "texcoord" )
 					, lightResultTexcoord );
 				auto data5 = writer.declLocale( cuT( "data5" )
@@ -322,7 +324,7 @@ namespace castor3d
 				, [&]()
 			{
 				auto lightResultTexcoord = writer.declLocale( cuT( "lightResultTexcoord" )
-					, vtx_texture );
+					, writer.ashesBottomUpToTopDown( vtx_texture ) );
 				auto texcoord = writer.declLocale( cuT( "texcoord" )
 					, lightResultTexcoord );
 				auto data5 = writer.declLocale( cuT( "data5" )
@@ -555,7 +557,7 @@ namespace castor3d
 				, [&]()
 			{
 				auto lightResultTexcoord = writer.declLocale( cuT( "lightResultTexcoord" )
-					, vtx_texture );
+					, writer.ashesBottomUpToTopDown( vtx_texture ) );
 				auto texcoord = writer.declLocale( cuT( "texcoord" )
 					, lightResultTexcoord );
 				auto data5 = writer.declLocale( cuT( "data5" )

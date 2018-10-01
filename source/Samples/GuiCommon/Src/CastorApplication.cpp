@@ -189,6 +189,7 @@ namespace GuiCommon
 		parser.AddSwitch( wxT( "opengl3" ), wxEmptyString, _( "Defines the renderer to OpenGl 3.x." ) );
 		parser.AddSwitch( wxT( "opengl4" ), wxEmptyString, _( "Defines the renderer to OpenGl 4.x." ) );
 		parser.AddSwitch( wxT( "vulkan" ), wxEmptyString, _( "Defines the renderer to Vulkan." ) );
+		parser.AddSwitch( wxT( "direct3d11" ), wxEmptyString, _( "Defines the renderer to Direct3D 11." ) );
 		parser.AddSwitch( wxT( "test" ), wxEmptyString, _( "Defines the renderer to Test." ) );
 		bool result = parser.Parse( false ) == 0;
 
@@ -228,6 +229,10 @@ namespace GuiCommon
 			else if ( parser.Found( wxT( "vulkan" ) ) )
 			{
 				m_rendererType = cuT( "vulkan" );
+			}
+			else if ( parser.Found( wxT( "direct3d11" ) ) )
+			{
+				m_rendererType = cuT( "direct3d11" );
 			}
 			else if ( parser.Found( wxT( "test" ) ) )
 			{

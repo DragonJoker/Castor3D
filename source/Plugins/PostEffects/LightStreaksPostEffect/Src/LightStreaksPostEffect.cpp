@@ -146,12 +146,11 @@ namespace light_streaks
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto texcoordsKawase = writer.declLocale( cuT( "texcoordsKawase" ), vtx_texture );
-				pxl_fragColor = texture( c3d_mapScene, vec2( texcoordsKawase.x(), 1.0 - texcoordsKawase.y() ) );
-				pxl_fragColor += texture( c3d_mapKawase1, texcoordsKawase );
-				pxl_fragColor += texture( c3d_mapKawase2, texcoordsKawase );
-				pxl_fragColor += texture( c3d_mapKawase3, texcoordsKawase );
-				pxl_fragColor += texture( c3d_mapKawase4, texcoordsKawase );
+				pxl_fragColor = texture( c3d_mapScene, writer.ashesBottomUpToTopDown( vtx_texture ) );
+				pxl_fragColor += texture( c3d_mapKawase1, vtx_texture );
+				pxl_fragColor += texture( c3d_mapKawase2, vtx_texture );
+				pxl_fragColor += texture( c3d_mapKawase3, vtx_texture );
+				pxl_fragColor += texture( c3d_mapKawase4, vtx_texture );
 			} );
 			return writer.finalise();
 		}
