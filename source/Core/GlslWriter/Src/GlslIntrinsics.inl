@@ -554,17 +554,9 @@ namespace glsl
 	inline Value fma( Value const & a, Value const & b, Value const & c )
 	{
 		auto writer = findWriter( a, b, c );
-
-		if ( writer->getShaderLanguageVersion() < 400 )
-		{
-			Value result{ writer };
-			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
-			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
-		}
+		Value result{ writer };
+		result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+		return result;
 	}
 
 	template< typename Value >
@@ -572,16 +564,11 @@ namespace glsl
 	{
 		auto writer = findWriter( a, b, c );
 
-		if ( a.isEnabled()
-			&& writer->getShaderLanguageVersion() < 400 )
+		if ( a.isEnabled() )
 		{
 			Value result{ writer };
 			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
 			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
 		}
 	}
 
@@ -590,16 +577,11 @@ namespace glsl
 	{
 		auto writer = findWriter( a, b, c );
 
-		if ( b.isEnabled()
-			&& writer->getShaderLanguageVersion() < 400 )
+		if ( b.isEnabled() )
 		{
 			Value result{ writer };
 			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
 			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
 		}
 	}
 
@@ -608,16 +590,11 @@ namespace glsl
 	{
 		auto writer = findWriter( a, b, c );
 
-		if ( c.isEnabled()
-			&& writer->getShaderLanguageVersion() < 400 )
+		if ( c.isEnabled() )
 		{
 			Value result{ writer };
 			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
 			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
 		}
 	}
 
@@ -626,17 +603,11 @@ namespace glsl
 	{
 		auto writer = findWriter( a, b, c );
 
-		if ( a.isEnabled()
-			&& b.isEnabled()
-			&& writer->getShaderLanguageVersion() < 400 )
+		if ( a.isEnabled() && b.isEnabled() )
 		{
 			Value result{ writer };
 			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
 			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
 		}
 	}
 
@@ -645,17 +616,11 @@ namespace glsl
 	{
 		auto writer = findWriter( a, b, c );
 
-		if ( a.isEnabled()
-			&& c.isEnabled()
-			&& writer->getShaderLanguageVersion() < 400 )
+		if ( a.isEnabled() && c.isEnabled() )
 		{
 			Value result{ writer };
 			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
 			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
 		}
 	}
 
@@ -664,17 +629,11 @@ namespace glsl
 	{
 		auto writer = findWriter( a, b, c );
 
-		if ( b.isEnabled()
-			&& c.isEnabled()
-			&& writer->getShaderLanguageVersion() < 400 )
+		if ( b.isEnabled() && c.isEnabled() )
 		{
 			Value result{ writer };
 			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
 			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
 		}
 	}
 
@@ -683,20 +642,11 @@ namespace glsl
 	{
 		auto writer = findWriter( a, b, c );
 
-		if ( a.isEnabled()
-			&& b.isEnabled()
-			&& c.isEnabled() )
+		if ( a.isEnabled() && b.isEnabled() && c.isEnabled() )
 		{
-			if ( writer->getShaderLanguageVersion() < 400 )
-			{
-				Value result{ writer };
-				result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
-				return result;
-			}
-			else
-			{
-				return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
-			}
+			Value result{ writer };
+			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+			return result;
 		}
 	}
 
@@ -704,357 +654,189 @@ namespace glsl
 	inline Value fma( InParam< Value > const & a, Value const & b, Value const & c )
 	{
 		auto writer = findWriter( a, b, c );
-
-		if ( writer->getShaderLanguageVersion() < 400 )
-		{
-			Value result{ writer };
-			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
-			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
-		}
+		Value result{ writer };
+		result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+		return result;
 	}
 
 	template< typename Value >
 	inline Value fma( Value const & a, InParam< Value > const & b, Value const & c )
 	{
 		auto writer = findWriter( a, b, c );
-
-		if ( writer->getShaderLanguageVersion() < 400 )
-		{
-			Value result{ writer };
-			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
-			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
-		}
+		Value result{ writer };
+		result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+		return result;
 	}
 
 	template< typename Value >
 	inline Value fma( Value const & a, Value const & b, InParam< Value > const & c )
 	{
 		auto writer = findWriter( a, b, c );
-
-		if ( writer->getShaderLanguageVersion() < 400 )
-		{
-			Value result{ writer };
-			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
-			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
-		}
+		Value result{ writer };
+		result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+		return result;
 	}
 
 	template< typename Value >
 	inline Value fma( InParam< Value > const & a, InParam< Value > const & b, Value const & c )
 	{
 		auto writer = findWriter( a, b, c );
-
-		if ( writer->getShaderLanguageVersion() < 400 )
-		{
-			Value result{ writer };
-			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
-			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
-		}
+		Value result{ writer };
+		result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+		return result;
 	}
 
 	template< typename Value >
 	inline Value fma( InParam< Value > const & a, Value const & b, InParam< Value > const & c )
 	{
 		auto writer = findWriter( a, b, c );
-
-		if ( writer->getShaderLanguageVersion() < 400 )
-		{
-			Value result{ writer };
-			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
-			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
-		}
+		Value result{ writer };
+		result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+		return result;
 	}
 
 	template< typename Value >
 	inline Value fma( Value const & a, InParam< Value > const & b, InParam< Value > const & c )
 	{
 		auto writer = findWriter( a, b, c );
-
-		if ( writer->getShaderLanguageVersion() < 400 )
-		{
-			Value result{ writer };
-			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
-			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
-		}
+		Value result{ writer };
+		result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+		return result;
 	}
 
 	template< typename Value >
 	inline Value fma( InParam< Value > const & a, InParam< Value > const & b, InParam< Value > const & c )
 	{
 		auto writer = findWriter( a, b, c );
-
-		if ( writer->getShaderLanguageVersion() < 400 )
-		{
-			Value result{ writer };
-			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
-			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
-		}
+		Value result{ writer };
+		result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+		return result;
 	}
 
 	template< typename Value >
 	inline Value fma( OutParam< Value > const & a, Value const & b, Value const & c )
 	{
 		auto writer = findWriter( a, b, c );
-
-		if ( writer->getShaderLanguageVersion() < 400 )
-		{
-			Value result{ writer };
-			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
-			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
-		}
+		Value result{ writer };
+		result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+		return result;
 	}
 
 	template< typename Value >
 	inline Value fma( Value const & a, OutParam< Value > const & b, Value const & c )
 	{
 		auto writer = findWriter( a, b, c );
-
-		if ( writer->getShaderLanguageVersion() < 400 )
-		{
-			Value result{ writer };
-			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
-			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
-		}
+		Value result{ writer };
+		result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+		return result;
 	}
 
 	template< typename Value >
 	inline Value fma( Value const & a, Value const & b, OutParam< Value > const & c )
 	{
 		auto writer = findWriter( a, b, c );
-
-		if ( writer->getShaderLanguageVersion() < 400 )
-		{
-			Value result{ writer };
-			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
-			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
-		}
+		Value result{ writer };
+		result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+		return result;
 	}
 
 	template< typename Value >
 	inline Value fma( OutParam< Value > const & a, OutParam< Value > const & b, Value const & c )
 	{
 		auto writer = findWriter( a, b, c );
-
-		if ( writer->getShaderLanguageVersion() < 400 )
-		{
-			Value result{ writer };
-			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
-			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
-		}
+		Value result{ writer };
+		result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+		return result;
 	}
 
 	template< typename Value >
 	inline Value fma( OutParam< Value > const & a, Value const & b, OutParam< Value > const & c )
 	{
 		auto writer = findWriter( a, b, c );
-
-		if ( writer->getShaderLanguageVersion() < 400 )
-		{
-			Value result{ writer };
-			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
-			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
-		}
+		Value result{ writer };
+		result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+		return result;
 	}
 
 	template< typename Value >
 	inline Value fma( Value const & a, OutParam< Value > const & b, OutParam< Value > const & c )
 	{
 		auto writer = findWriter( a, b, c );
-
-		if ( writer->getShaderLanguageVersion() < 400 )
-		{
-			Value result{ writer };
-			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
-			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
-		}
+		Value result{ writer };
+		result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+		return result;
 	}
 
 	template< typename Value >
 	inline Value fma( OutParam< Value > const & a, OutParam< Value > const & b, OutParam< Value > const & c )
 	{
 		auto writer = findWriter( a, b, c );
-
-		if ( writer->getShaderLanguageVersion() < 400 )
-		{
-			Value result{ writer };
-			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
-			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
-		}
+		Value result{ writer };
+		result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+		return result;
 	}
 
 	template< typename Value >
 	inline Value fma( InOutParam< Value > const & a, Value const & b, Value const & c )
 	{
 		auto writer = findWriter( a, b, c );
-
-		if ( writer->getShaderLanguageVersion() < 400 )
-		{
-			Value result{ writer };
-			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
-			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
-		}
+		Value result{ writer };
+		result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+		return result;
 	}
 
 	template< typename Value >
 	inline Value fma( Value const & a, InOutParam< Value > const & b, Value const & c )
 	{
 		auto writer = findWriter( a, b, c );
-
-		if ( writer->getShaderLanguageVersion() < 400 )
-		{
-			Value result{ writer };
-			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
-			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
-		}
+		Value result{ writer };
+		result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+		return result;
 	}
 
 	template< typename Value >
 	inline Value fma( Value const & a, Value const & b, InOutParam< Value > const & c )
 	{
 		auto writer = findWriter( a, b, c );
-
-		if ( writer->getShaderLanguageVersion() < 400 )
-		{
-			Value result{ writer };
-			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
-			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
-		}
+		Value result{ writer };
+		result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+		return result;
 	}
 
 	template< typename Value >
 	inline Value fma( InOutParam< Value > const & a, InOutParam< Value > const & b, Value const & c )
 	{
 		auto writer = findWriter( a, b, c );
-
-		if ( writer->getShaderLanguageVersion() < 400 )
-		{
-			Value result{ writer };
-			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
-			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
-		}
+		Value result{ writer };
+		result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+		return result;
 	}
 
 	template< typename Value >
 	inline Value fma( InOutParam< Value > const & a, Value const & b, InOutParam< Value > const & c )
 	{
 		auto writer = findWriter( a, b, c );
-
-		if ( writer->getShaderLanguageVersion() < 400 )
-		{
-			Value result{ writer };
-			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
-			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
-		}
+		Value result{ writer };
+		result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+		return result;
 	}
 
 	template< typename Value >
 	inline Value fma( Value const & a, InOutParam< Value > const & b, InOutParam< Value > const & c )
 	{
 		auto writer = findWriter( a, b, c );
-
-		if ( writer->getShaderLanguageVersion() < 400 )
-		{
-			Value result{ writer };
-			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
-			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
-		}
+		Value result{ writer };
+		result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+		return result;
 	}
 
 	template< typename Value >
 	inline Value fma( InOutParam< Value > const & a, InOutParam< Value > const & b, InOutParam< Value > const & c )
 	{
 		auto writer = findWriter( a, b, c );
-
-		if ( writer->getShaderLanguageVersion() < 400 )
-		{
-			Value result{ writer };
-			result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
-			return result;
-		}
-		else
-		{
-			return writeFunctionCall< Value >( writer, cuT( "fma" ), a, b, c );
-		}
+		Value result{ writer };
+		result.m_value << cuT( "((" ) << toString( a ) << cuT( ") * (" ) << toString( b ) << cuT( ") + (" ) << toString( c ) << cuT( "))" );
+		return result;
 	}
 
 	//***********************************************************************************************

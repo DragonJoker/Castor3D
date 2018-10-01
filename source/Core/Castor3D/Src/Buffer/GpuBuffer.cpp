@@ -50,7 +50,7 @@ namespace castor3d
 		, ashes::MemoryMapFlags const & flags )const
 	{
 		auto size64 = ashes::getAlignedSize( size
-			, m_device->getProperties().limits.nonCoherentAtomSize );
+			, uint32_t( m_device->getProperties().limits.nonCoherentAtomSize ) );
 
 		if ( size64 > m_buffer->getBuffer().getSize() )
 		{
@@ -64,7 +64,7 @@ namespace castor3d
 		, uint32_t size )const
 	{
 		auto size64 = ashes::getAlignedSize( size
-			, m_device->getProperties().limits.nonCoherentAtomSize );
+			, uint32_t( m_device->getProperties().limits.nonCoherentAtomSize ) );
 
 		if ( size64 > m_buffer->getBuffer().getSize() )
 		{
@@ -78,7 +78,7 @@ namespace castor3d
 		, uint32_t size )const
 	{
 		auto size64 = ashes::getAlignedSize( size
-			, m_device->getProperties().limits.nonCoherentAtomSize );
+			, uint32_t( m_device->getProperties().limits.nonCoherentAtomSize ) );
 
 		if ( size64 > m_buffer->getBuffer().getSize() )
 		{
